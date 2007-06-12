@@ -81,16 +81,19 @@ sub breadcrumbs_list {
 }
 
 sub default_result_set {
+    # we want to follow our super's behavior of returning a new_result_set as
+    # a true default - this caused infinite loops before {rt 25330}
     my $self = shift;
-    $self->new_crumbs;
-    return $self->result_set;
+    return $self->new_crumbs ? $self->result_set : $self->new_result_set;
 }
 
 sub new_crumbs {
     my $self = shift;
-    foreach my $page ( $self->breadcrumb_pages ) {
+    my @pages = $self->breadcrumb_pages;
+    foreach my $page ( @pages ) {
         $self->push_result($page);
     }
+    return scalar @pages;
 }
 
 sub breadcrumb_pages {

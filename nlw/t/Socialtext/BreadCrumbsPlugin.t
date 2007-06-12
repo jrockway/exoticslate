@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 31;
+use Test::Socialtext tests => 32;
 fixtures( 'admin_no_pages', 'foobar_no_pages' );
 
 BEGIN {
@@ -49,6 +49,13 @@ display_and_check_crumbs( $foobar, 'Foobar Page 2',
 $admin->pages->new_from_name('page 2')->delete( user => $admin->current_user );
 display_and_check_crumbs( $admin, 'Page 3', [qw'page_3 page_1'] );
 
+wipe_out_trail_file($admin->breadcrumbs);
+is_deeply(
+    $admin->breadcrumbs->default_result_set(),
+    $admin->breadcrumbs->new_result_set(),
+    'When no .trail file is around, the default result set is the same as the new result set.'
+);
+
 sub display_and_check_crumbs {
     my $hub    = shift;
     my $title  = shift;
@@ -64,4 +71,9 @@ sub display_and_check_crumbs {
     for my $t (@$expect) {
         is( (shift @$crumbs)->{page_uri}, $t, "page uri in crumbs == '$t'" );
     }
+}
+
+sub wipe_out_trail_file {
+    my $breadcrumbs = shift;
+    unlink $breadcrumbs->_trail_filename;
 }

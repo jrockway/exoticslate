@@ -1,0 +1,30 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+
+use lib "$ENV{NLW_DIR}/lib";
+
+use Socialtext::Data;
+use Socialtext::Schema;
+
+my $dbh = Socialtext::Schema->LoadAndConnect()->driver()->handle();
+
+# First we clear out all the old data
+for my $class ( Socialtext::Data::Classes() ) {
+    eval "use $class";
+
+    my $sql =
+        'DELETE FROM ' . $dbh->quote_identifier( $class->table()->name() );
+    $dbh->do($sql);
+}
+
+Socialtext::AlzaboWrapper->ClearCache();
+
+# Then we repopulate requisite data
+for my $class ( Socialtext::Data::Classes() ) {
+    if ( $class->can('EnsureRequiredDataIsPresent') ) {
+        $class->EnsureRequiredDataIsPresent();
+    }
+}

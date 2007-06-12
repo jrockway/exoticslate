@@ -1,0 +1,29 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../lib";
+
+use Socialtext::Schema;
+
+# REVIEW It would be good if we could specify the DB to run against.
+print "Updating workspace ", Socialtext::AppConfig->db_schema_name, "\n";
+
+my $dbh = Socialtext::Schema->LoadAndConnect()->driver()->handle();
+
+$dbh->do( <<'EOSQL' );
+UPDATE "Workspace" SET homepage_is_dashboard = 'f'
+ WHERE workspace_id
+       IN ( SELECT workspace_id
+            FROM  "WorkspaceRolePermission" AS wrp,
+                  "Role" AS r,
+                  "Permission" AS p
+            WHERE r.name = 'guest'
+              AND p.name = 'read'
+              AND r.role_id = wrp.role_id
+              AND p.permission_id = wrp.permission_id
+           );
+EOSQL

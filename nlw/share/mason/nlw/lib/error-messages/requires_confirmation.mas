@@ -1,0 +1,17 @@
+<!-- @COPYRIGHT@ -->
+<span class="error">You need to confirm your email address to activate
+this account.
+<br/>
+You should have received an email with a confirmation
+link.</span>
+
+<form action="/nlw/submit/resend_confirmation" method="post">
+<input type="hidden" name="email_address" value="<% $email_address | h %>" />
+<input type="hidden" name="redirect_to" value="<% $redirect_to | h %>" />
+<input class="button" type="submit" value="Resend confirmation" />
+</form>
+
+<%args>
+$email_address
+$redirect_to => ''
+</%args>

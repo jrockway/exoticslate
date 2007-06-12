@@ -1,0 +1,41 @@
+INSTALL.suse -- SUSE-specific notes for Socialtext Open
+
+@COPYRIGHT@
+
+NOTE:  This file is not complete.  It's a scratch pad for notes as we
+work on porting.
+
+== Order of install ==
+
+Install Apache1
+
+    See docs/INSTALL.apache-perl
+
+Install OpenSSL
+
+Install Postgresql
+
+    postgresql
+    postgresql-server
+    postgresql-devel
+
+Create config
+
+    $ cd /usr/share/postgresql
+    $ cp pg_hba.conf.sample pg_hba.conf
+
+== Problems ==
+
+Crypt::SSLeay doesn't build OK on its own
+
+SOAP::Lite has special stuff we need
+
+
+== Packages ==
+
+apache2-prefork
+perl-Crypt-SSLeay
+
+** MAKE A PACKAGE LIST **
+
+The SOAP::Lite that is on SuSe 10.1 is 0.66, and we need at least 0.67.

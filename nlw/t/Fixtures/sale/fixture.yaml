@@ -1,0 +1,19 @@
+fixtures:
+  - alzabo
+
+workspaces:
+  sale:
+    title: Sale
+    extra_pages: 1
+    extra_users:
+      workspace_admin: [tester@socialtext.com]
+      member: [chester@socialtext.com]
+
+  exchange:
+    title: Exchange
+    extra_pages: 1
+    permission_set_name: public-authenticate-to-edit
+
+cache:
+  - WORKSPACES
+  - USERS

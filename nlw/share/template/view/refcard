@@ -1,0 +1,217 @@
+[%# @COPYRIGHT@ -%]
+[% PROCESS element/doctype %]
+<html>
+  <head>
+    <title>Socialtext Workspace Punctuation Help</title>
+    [% PROCESS css_links.html %]
+  </head>
+  <body id="st-refcard">
+    <div id="st-refcard-print-button">
+      [% PROCESS window_button label = 'Print This', method = 'print' %]
+    </div>
+
+[% refcard = [
+    {
+        html = '<b>bold words</b>',
+        text = '*bold words*',
+    },
+
+    {
+        html = '<i>italic words</i>',
+        text = '_italic words_',
+    },
+
+    {
+        html = '<del>strikeout</del>',
+        text = '-strikeout-',
+    },
+
+    {
+        html = '<tt>monospace</tt>',
+        text = '`monospace`',
+    },
+
+    {
+        html = '<table class="formatter_table"><tr><td>table</td><td>value</td></tr><tr><td>dinette</td><td>$75</td></tr></table>',
+        text = '|table|value|<br/>|dinette|$75|<br/>',
+    },
+
+    {
+        html = '<blockquote>indented<br>lines</blockquote>',
+        text = '&gt;indented<br>&gt;lines',
+    },
+
+    {
+        html = '<a href="./index.cgi?Page%20Link" title="[Page link]" target=_blank>Page Link</a>',
+        text = '[Page Link]',
+    },
+
+    {
+        html = '<a href="./index.cgi?Page%20Link" title="[Page link]" target=_blank>Link text</a>',
+        text = '"Link text" [Page Link]',
+    },
+
+    {
+        html = '<u>Page Link</u> to different-workspace',
+        text = '{link: different-workspace [Page Title]} to different-workspace',
+    },
+
+    {
+        html = 'Page section name',
+        text = '{section: Name}',
+    },
+
+    {
+        html = '<u>Link to section</u> in the same page',
+        text = '{link: Section} (note: headings are sections too)',
+    },
+
+    {
+        html = '<u>Link to section</u> of a different page',
+        text = '{link: [Page Title] Section}',
+    },
+
+    {
+        html = '<u>Link to section</u> of a page in another workspace',
+        text = '{link: another-workspace [Page Title] Section}',
+    },
+
+    {
+        html = '<a href="http://www.socialtext.com/" title="[external link]" target=_blank>http://www.socialtext.com/</a>',
+        text = 'http://www.socialtext.com/',
+    },
+
+    {
+        html = '<a href="mailto:info@socialtext.com/" title="[email link]">info@socialtext.com</a>',
+        text = 'info@socialtext.com',
+    },
+
+    {
+        html = '<a href="http://www.socialtext.com/" title="[external link]" target=_blank>Socialtext Home Page</a>',
+        text = '&quot;Socialtext Home Page&quot;&lt;http://www.socialtext.com&gt;',
+    },
+
+    {
+        html = '<a href="mailto:info@socialtext.com/" title="[email link]">Socialtext Email</a>',
+        text = '&quot;Socialtext Email&quot;&lt;mailto:info@socialtext.com&gt;',
+    },
+
+    {
+        html = '<img src="/static/images/logo-bar-12.gif" border=0 alt="[external image]">',
+        text = '&lt;http://www.socialtext.com/images/socialtext-140.gif&gt;',
+    },
+
+    {
+        html = '<hr>',
+        text = '----',
+    },
+
+    {
+        html = '<ul><li> item 1 <ul><li> subitem 1 </ul><li> item 2 </ul>',
+        text = '* item 1<br>** subitem 1<br>* item 2',
+    },
+
+    {
+        html = '<ol><li> item 1 <ol><li> subitem 1 </ol><li> item 2 </ol>',
+        text = '# item 1<br>## subitem 1<br># item 2',
+    },
+
+    {
+        html = '<h1>heading 1</h1>',
+        text = '^ heading 1',
+    },
+
+    {
+        html = '<h2>heading 2</h2>',
+        text = '^^ heading 2',
+    },
+
+    {
+        html = '<h3>heading 3</h3>',
+        text = '^^^ heading 3',
+    },
+
+    {
+        html = '<h4>heading 4</h4>',
+        text = '^^^^ heading 4',
+    },
+
+    {
+        html = '<h5>heading 5</h5>',
+        text = '^^^^^ heading 5',
+    },
+
+    {
+        html = '<h6>heading 6</h6>',
+        text = '^^^^^^ heading 6',
+    },
+
+    {
+        html = '<img src="/static/images/logo-bar-12.gif" border=0 alt="[image attachment]">',
+        text = '{image: logo-bar-12.gif} (image attached to page)',
+    },
+
+    {
+        html = '<img src="/static/images/logo-bar-12.gif" border=0 alt="[image attachment]">',
+        text = '{image: workspace [page name] logo-bar-12.gif} (image attached to a page in another workspace)',
+    },
+
+    {
+        html = '<a href="./proposal.pdf">proposal.pdf</a> on this page',
+        text = '{file: proposal.pdf} on this page',
+    },
+
+    {
+        html = '<a href="./proposal.pdf">proposal.pdf</a> on <u>page name</u>',
+        text = '{file: [page name] proposal.pdf} on [page name]',
+    },
+
+    {
+        html = 'My Weblog weblog',
+        text = '{weblog: My Weblog}',
+    },
+
+    {
+        html = 'Meeting notes category',
+        text = '{category: Meeting Notes}',
+    },
+
+    {
+        html = 'Yahoo user yahoouser presence',
+        text = 'Yahoo user ymsgr:yahoouser presence',
+    },
+
+    {
+        html = 'AOL user aimuser presence',
+        text = 'AOL user aim:aimuser presence',
+    },
+
+    {
+        html = 'Block of HTML',
+        text = '.html<br/>&lt;img src="http://mysite.com/offsite.jpg"&gt;<br/>.html',
+    },
+
+    {
+        html = 'Block of text with no *special* punctuation',
+        text = '.pre<br/>Block of text with no *special* punctuation<br/>.pre',
+    },
+
+    {
+        html = '<sup>&trade;</sup>',
+        text = '{tm}',
+    },
+
+    {
+        html = '*this text is not bold*',
+        text = '{{*this text is not bold*}}',
+    },
+] %]
+
+    <table class="st-refcard-table">
+      <tr class="st-refcard-table-row"><th>To Get This...</th><th>Type This</th></tr>
+      [% FOREACH row = refcard %]
+        <tr class="st-refcard-table-row"><td>[% row.html %]</td><td>[% row.text %]</td></tr>
+      [% END %]
+    </table>
+    </body>
+</html>

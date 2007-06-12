@@ -1,0 +1,20 @@
+fixtures:
+  - alzabo
+
+workspaces:
+  admin:
+    ordered_pages: 1
+  foobar:
+    ordered_pages: 1
+    extra_users:
+      - devnull2@socialtext.com
+      - devnull@urth.org
+  public:
+    ordered_pages: 1
+  auth-to-edit:
+    ordered_pages: 1
+  help: { }
+
+cache:
+  - WORKSPACES
+  - USERS

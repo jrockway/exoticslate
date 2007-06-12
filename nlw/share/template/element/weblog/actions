@@ -1,0 +1,20 @@
+[%# @COPYRIGHT@ -%]
+<div id="st-weblog-actionbar">
+    <div id="st-weblog-actionbar-chooseweblog">
+    <form action="[% script_name %]">
+      [% PROCESS choose_weblog %]
+    </form>
+    </div>
+</div>
+
+[% BLOCK choose_weblog %]
+  <span class="st-weblog-chooseprompt">Go to: </span>
+  <input type="hidden" name="action" value="weblog_display" />
+  <select name="category" onchange="this.form.submit()" id="page-control-category-selector">
+    [% FOREACH blog = blogs %]
+      <option[% IF blog.display == category %] selected="true"[% END %] value="[% blog.escape_html %]">[% blog.display | html %]</option>
+    [% END %]
+  </select>
+  <span class="st-spacer"/>
+[% END %]
+

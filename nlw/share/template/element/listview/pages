@@ -1,0 +1,96 @@
+[%# @COPYRIGHT@ -%]
+<table id="[% style %]-content" class="query-results-content">
+    <tr id="[% style %]-header-row" class="query-results-header-row">[% PROCESS listing_headers %]</tr>
+[%
+    FOREACH row = rows;
+      PROCESS listing_row page_uri    = row.page_uri,
+                          page_id     = row.page_id,
+                          odd         = loop.count % 2,
+                          summary     = row.Summary,
+                          subject     = row.Subject,
+                          from        = row.From,
+                          page_date   = row.DateLocal,
+                          disposition = row.disposition,
+                          revisions   = row.revision_count;
+    END;
+%]
+</table>
+
+[% BLOCK listing_row %]
+    <tr class="[% style %]-row query-results-row w-st-[% IF odd %]even[% ELSE %]odd[% END %]-row">
+        <td class="st-listview-select">
+            <input class="st-listview-selectpage-checkbox" type="checkbox" name="page_selected" value="[% page_id %]">
+        </td>
+    [% IF listview_extra_columns.watchlist %]
+        <td class="[% style %]-row-watchlist query-results-row-watchlist">
+           <img src="[% wiki.static_path %]/images/st/pagetools/watch-on-list.gif" alt="[% row.page_uri %]" class="watchlist-list-toggle" />
+        </td>
+    [% END %]
+        <td class="[% style %]-row-title query-results-row-title">
+            <a class="[% style %]-row-title-link query-results-row-title-link" href="[% script_name %]?[% page_uri %]" title="[% summary %]">[% subject | html %]</a>
+
+      [% IF row.attachments;
+             FOREACH attachment = row.attachments;
+             PROCESS attachment_link page_uri = row.page_uri,
+                                     id       = attachment.id,
+                                     filename = attachment.filename,
+                                     date     = attachment.DateLocal;
+             END;
+          END;
+      %]
+
+        </td>
+        <td class="[% style %]-row-last-edited-by query-results-row-last-edited-by">[% from %]</td>
+        <td class="[% style %]-row-date query-results-row-date">
+        [%
+           page_date;
+           IF row.attachments;
+               FOREACH attachment = row.attachments;
+                   PROCESS attachment_date date = attachment.DateLocal;
+               END;
+           END;
+        %]
+
+        </td>
+        <td class="[% style %]-row-revisions query-results-row-revisions">
+          <a href="[% script_name %]?action=revision_list;page_name=[% page_uri %]">[% revisions %]</a>
+        </td>
+    </tr>
+[% END %]
+
+[% BLOCK listing_headers %]
+    <th id="st-listview-header-select">
+        <input title="Select all pages" type="checkbox" id="st-listview-allpagescb"/>
+    </th>
+  [% IF listview_extra_columns.watchlist %]
+  <th id="[% style %]-header-watchlist" class="query-results-header-watchlist">
+
+  </th>
+  [% END %]
+  <th id="[% style %]-header-title" class="query-results-header-title">
+    [% PROCESS listing_header_link name = 'Title' field = 'Subject' %]
+  </th>
+  <th id="[% style %]-header-last-edited-by" class="query-results-header-last-edited-by">
+    [% PROCESS listing_header_link name = 'Last Edited By' field = 'From' %]
+  </th>
+  <th id="[% style %]-header-date" class="query-results-header-date">
+    [% PROCESS listing_header_link name = 'Date' field = 'Date' %]
+  </th>
+  <th id="[% style %]-header-revisions" class="query-results-header-revisions">
+    [% PROCESS listing_header_link name = 'Revisions' field = 'revision_count' %]
+  </th>
+[% END %]
+
+[% BLOCK listing_header_link %]
+  <a href="?[% predicate %];sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</a>
+[% END %]
+
+[% BLOCK attachment_link %]
+      <br/>
+      &#xbb; Attachment:
+      <a class="search-attachment-filename-link" href="[% script_name %]/[% filename %]?action=attachments_download;page_name=[% page_uri %];id=[% id %]">[% filename %]</a>
+[% END %]
+
+[% BLOCK attachment_date %]
+    <br/>[% date %]
+[% END %]

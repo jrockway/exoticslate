@@ -1,0 +1,10 @@
+fixtures:
+  - alzabo
+
+workspaces:
+  admin:
+    admin_can_impersonate: 1
+
+cache:
+  - WORKSPACES
+  - USERS

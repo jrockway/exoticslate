@@ -1,0 +1,464 @@
+Change log for Socialtext Open
+
+Released from osr-fix-install, synced with trunk at r2510
+
+2.11.6.1
+
+    [FEATURES]
+
+    This version introduces pluggability for authentication, allowing for
+    alternate challenge systems such as OpenID (coming soon) or alternate
+    credentials extraction systems.
+
+    Additionally, this version introduces export to word and pdf.  More 
+    information on this can be found on the following page:
+
+    https://www.socialtext.net/help/index.cgi?release_notes_for_socialtext_2_11_export_to_word_and_pdf
+
+    Instructions for using OpenID are here:
+ 
+    http://www.socialtext.net/open/index.cgi?howto_use_the_openid_authentication_plugin
+
+Synced with ST-based trunk -r14912
+
+2.5.0.2     Fri Dec 15 10:58:39 CST 2006
+
+    [FEATURES]
+
+    Socialtext Unplugged is a way of creating an "airplane" wiki that
+    allows a user to "unplug" some segment of pages from a wiki, take
+    them away offline, edit them, and resynch them back to the workspace
+    when the user returns to the Internet.
+
+    The code being released is of beta quality. It has been developed so
+    it is only available to those workspaces which have been configured
+    to use it.  The Socialtext Unplugged capability can be turned on in
+    a workspace with the following st-admin command:
+
+        st-admin set-workspace-config --workspace <workspace name> enable_unplugged 1
+
+    This will cause an unplug icon to be displayed on page displays,
+    recent changes lists, watchlist displays and some other page listing
+    screens. When the unplug icon is clicked, a zipped archive of those
+    pages will be saved to the user's computer. Inside that archive is
+    a file named index.html that, when opened, is a TiddlyWiki version
+    of the pages that were unplugged.
+
+    Socialtext Unplugged currently works best with Firefox.  The results
+    pages with Internet Explorer are a bit unclear, and Safari doesn't
+    work at all yet.
+
+    For more about Socialtext Unplugged, see the FAQ at
+    https://www.socialtext.net/exchange/index.cgi?socialtext_unplugged_faq
+
+
+    [FIXES]
+    Reversed the change in 2.3.0.1 that changes how config files are included.
+    Now, Apache Includes conf.d/*.conf as before.
+
+    Undeleting a page with utf8 characters in the title caused an app error.
+
+    Removed a stray period from the end of a line in the email template
+    so that the link works if you click it in all mail clients.
+
+    The "Duplicate page" popup now sets focus to the name field.
+
+    Nav bar was missing when invalid action returns to homepage.
+
+    Orphans list action now works correctly.
+
+    Rationalized link ordering in nav bar and list view.
+
+    Fixed incorrect instructions on My Workspaces interface page.
+
+    Images with a query string would not get displayed.
+    
+    Included Socialtext::InitFunctions
+
+    [INTERNALS]
+    Socialtext::WeblogUpdates was getting loaded into Apache
+    unnecessarily.
+
+    Setting of default values of server-admin and support-address are
+    now done in build/defaults.pl, instead of configure.
+
+    The t/*.t tests have been streamlined in some cases to use fewer test
+    fixtures.  All I did on this branch was review the tests and try to
+    make them use fewer fixtures. For example, there were several tests
+    using the "workspaces" fixture that only needed "admin" or "foobar".
+
+
+2.3.1.0     Mon Nov 27 11:57:18 CST 2006
+
+    This is an important update that fixes two big bugs in 2.3.0.1.
+
+    [FIXES]
+    File attachment uploads and page tagging didn't work because their
+    handlers were missing in the Apache config.
+
+    Fixed filename of the Excel worksheet extractor.
+
+    The ConfigureValues.pm file was getting created at the wrong time.
+
+    [ENHANCEMENTS]
+    XML::SAX is now optional, not required.  This saves two CPAN
+    distributions to install.
+
+
+2.3.0.1     Mon Nov 20 12:57:26 CST 2006
+
+    [FEATURES]
+
+    Tags may now be deleted.  Tags that are not used on any page are
+    automatically removed. To delete an unwanted tag, go to the list
+    of tags, view all pages with that tag, and remove the tag from any
+    pages that contain it.
+
+    Improved support for HTML email. When a user sends rich email to the
+    workspace, it is converted to formatted wikitext with inline images.
+
+    Brought back the option to see "recently viewed" and "what's new"
+    in sidebar boxes, temporarily removed in Socialtext 2.0.
+
+    Extensive new searching features for file attachments.  With optional
+    external programs installed, the Socialtext page indexer can also
+    index the contents of many different file types, including:
+        * Microsoft Word and Excel documents
+        * RTF, PDF and PostScript documents
+        * HTML documents
+        * MP3 audio
+        * generic XML documents
+        * compressed zip files
+
+    The REST API has been updated.  Primary new features include:
+        * /data/workspaces/:ws/homepage redirects to the current homepage
+          of the workspace
+        * /data/version contains the version number of the API
+        * page collections have better titles
+        * collections now support order=alpha
+        * attachments are sortable by name (alpha) and size
+        * utf8 path names are allowed
+        * JSON representation is available for PUTting pages (helps with
+          wiki imports)
+        * when retrieving a JSON representation of a workspace, admins get
+          a bunch of good info, non-admins get a small amount of information
+          (still useful)
+        * Dynamically generated WSDL file, instead of a statically
+          served file.
+
+    The list view that shows pages with a specific tag now enables
+    column sorting.
+
+    Reduced the size of headings.  Headings (H1-H6) are, in general, too
+    large. As a result users often resort to starting with H2 or H3. That
+    breaks any chance of meaningful hierarchical data in wikitext. Users
+    are breaking semantics to get desired look-and-feel.
+
+    We now show tags in revision views.
+
+    The parameters for Apache::SizeLimit are now set in the httpd.conf.
+    These are read by Socialtext::Handler::Cleanup at startup time.
+    No more hardcoded values in the .pm files.
+
+    Includes in the Apache *.conf files now include "[^.#]*", instead of
+    the more limiting "*.conf".
+
+    In the "Save As" box for downloading attachments, we now suggest
+    a filename.
+
+    [FIXES]
+    An old version of Text::Balanced was causing attachment indexing
+    to slow down because of the use of the $& special variable.  We now
+    require v1.99.0 of Text::Balanced that doesn't cause this problem.
+
+    User was able to add a tag while editing a page, which would stay
+    even if the page was canceled.
+
+    Tag deletion used to increment the revision number.
+
+    If you click on the "Your Watchlist" link on the dashboard, you are
+    taken to the watchlist page, but the Watchlist tab is not highlighted.
+    Now fixed.
+
+    Show "1 view" instead of "1 views".
+
+    Many other smaller fixes, and fixes in import-workspace and
+    export-workspace.
+
+
+    [DOCUMENTATION]
+    Added .html to the Edit Tips refcard page.
+
+    Added permissions note to the UPGRADE docs.  Thanks to Dobrica
+    Pavlinusic for catching the error.
+
+
+    [INTERNALS]
+    All config files are now generated with Template Toolkit, not
+    HTML::Mason.  This brings us a step closer to removing Mason from
+    Socialtext Open.
+
+    Removed unused /st-archive handler from Socialtext Open.
+
+    Added the --server-admin parameter to set the ServerAdmin parameter
+    in the Apache config.
+
+    Added the --support-address parameter to set the default support
+    address if it's not set in /etc/socialtext/socialtext.conf.
+
+    Removed dependency on File::Copy::Recursive.
+
+    Removed HTTP::BrowserDetect, replaced it with four lines of code in
+    two functions in Socialtext::BrowserDetect.  Saves 889K bytes of
+    memory usage in mod_perl.
+
+    Socialtext::Workspace::Importer no longer gets loaded in Apache,
+    since it's only used by the st-import-workspace utility.  Another 118K
+    saved.
+
+    All Perl and Javascript files now have copyright notices, plus
+    a t/copyright.t test to make sure new ones don't get added
+    without copyright.
+
+
+    [DEVELOPMENT]
+    Added an explicit --dev option to configure.  This is now available
+    as get_build_setting('dev').
+
+    Removed Apache::Reload as a prerequisite, unless you configure
+    with --dev.
+
+    dev-bin/list-module-deps now lets you pass --dev and --socialtext-open
+    options, which will load DevDeps.yaml and omit EnterpriseDeps.yaml,
+    respectively.
+
+    Added a test file so that all .t files have shebang lines, strict
+    and warnings.
+
+
+2.0.0.1     Sat Nov  4 23:15:06 CST 2006
+
+    Changes here are massive, since it includes all our Socialtext 2.0
+    improvements.  They won't all be listed here.
+
+    [FIXES]
+    Removed a warning in the error log if apache-perl wasn't forwarded.
+
+    [INTERNALS]
+    Added t/case-conflict.t to watch for filenames that differ only
+    in case.  This protects against conflicts on case-insensitive
+    filesystems like HFS on Mac OS X.
+
+    Updated all the Test::Socialtext-using programs to use the new
+    fixture()-as-a-function method of specifying fixtures.
+
+    Made the tests that use Test::MockObject skip_all if T::MO isn't
+    installed.  We don't want to make another module install requirement
+    for three tests.
+
+--- Socialtext 1.x ---
+
+1.10.7.4    Fri Sep 29 16:37:29 CDT 2006
+
+    [FIXES]
+    Fixed a potential problem with configure hanging.  Thanks, Luke Closs.
+
+    [ENHANCEMENTS]
+    The /etc/init.d/ scripts now work on Fedora Core.
+
+    You can now specify the locate of your Apache module directories with
+    --apache-perl-moduledir and --apache2-moduledir at ./configure time.
+    This also removes the directory hunting from gen-config.
+
+    Apache config no longer loads the mod_cgi module, since everything
+    goes through mod_perl anyway.
+
+    Removed more unused files that were only useful inside Socialtext
+    the company.
+
+    Removed all experimental code for FCGI and lighttpd.
+
+    [DOCUMENTATION]
+    Extensive docs on BSD now in docs/INSTALL.freebsd.  Thanks to
+    Jason Crome.
+
+
+1.10.7.1 Tue Sep 19 22:16:59 CDT 2006
+
+This release incoroporates some bug fixing work done on the main line
+of work inside Socialtext.  We're working towards some big new REST
+API improvements.
+
+    [ENHANCEMENTS]
+    Added st-admin --rename-workspace.
+
+    Added --no-export flag for st-admin delete-workspace.
+
+    Easier to understand sign-in/invitation emails
+
+    [FIXES]
+    The Apache status ExtendedStatus directive was in the wrong part of
+    the apache-perl config file.
+
+    Bug #19943: Deleted pages were showing up in searches.
+
+
+1.10.5.1 Fri Sep 15 23:44:09 CDT 2006
+
+This release works hard to improve portability and efficiency of memory
+usage.  Not everyone has a couple of gigs to throw at their wiki server,
+so we've been cleaning things up a bit.
+
+The /etc/init.d scripts should now work whether you're running a
+Debian-based distro, like Ubuntu, or a RedHat or SuSe distro.
+
+A reminder: If you're using Socialtext Open on a public site, please add
+it to https://www.socialtext.net/stoss/index.cgi?socialtext_open_sites.
+We'd love to see who's using Socialtext Open.
+
+
+    [THINGS THAT MAY BREAK YOUR CODE]
+
+    Removed the /etc/init.d/ceqlotron wrapper around /etc/init.d/st-apache
+    and /etc/init.d/ceqlotron.  If you already have a Socialtext install,
+    delete your /etc/init.d/socialtext, and instead use the st-apache
+    and ceqlotron init scripts directly.
+
+
+    [ENHANCEMENTS]
+    /etc/init.d scripts should now run whether your system uses
+    start-stop-daemon (Debian, Ubuntu), startproc (Red Hat, SuSe),
+    or neither.
+
+    Added /status and /perl-status URLs when configured with
+    --apache-status.
+
+    The user/group that ST runs on is now configurable with --st-user
+    and --st-group flags to configure.
+
+    No longer tries to load unused Apache modules: autoindex, status,
+    db_auth.
+
+    Removed unused handlers etc. from the Apache configurations.
+
+    Socialtext::Ceqltron was getting loaded by Apache when it shouldn't
+    have.
+
+    Updated the invitation email to not be so likely to trip spam
+    triggers.
+
+    st-admin --help is now much easier to read.
+
+
+    [FIXES]
+    Installer is smarter and won't try to install vim backup files
+    as scripts.
+
+    Added "bc" package to the required package lists.
+
+    Fixed some errors in the help documentation.
+
+    Many other little bug fixes.
+
+
+1.10.4.1    Wed Aug 30 15:25:13 CDT 2006
+
+Socialtext Open is a major new release, with a new REST API available,
+albeit in alpha stage.
+
+This also allows you take advantage of the Socialtext Conversion Toolbox
+(https://www.socialtext.net/stoss/index.cgi?socialtext_conversion_toolbox)
+for converting from other wiki packages.
+
+    [FIXES]
+    Fixed dependency on Test::Base.
+
+    [IMPROVEMENTS]
+    Removed dependencies on File::Find::Rule, Number::Compare and
+    Text::Glob.
+
+    Removed specific version dependency on Carp.
+
+    [INTERNALS]
+    Removed dependency on Socialtext::AppConfig in Socialtext::File.
+
+    Removed dev-bin/deptree.  It is now included in the CPAN
+    distribution Module::Depends::Tree.
+
+    Values defined by configure are now contained/restricted to
+    Socialtext::Build::ConfigureValues.
+
+    All calls to GetOptions() die if any invalid options are passed.
+
+
+1.10.0.5    Fri Aug 11 21:29:10 CDT 2006
+
+    [IMPROVEMENTS]
+    If --hostname is specific when calling ./configure, it is now
+    passed into /etc/socialtext/socialtext.conf as email_hostname and
+    web_hostname.
+
+    Removed the dependency on Plucene::Simple.  Plucene::Simple is now
+    integrated into Socialtext::Search::Plucene::Simple.
+
+    Removing Plucene::Simple also removed five dependent modules.
+
+
+1.10.0.4    Wed Aug  9 22:15:37 CDT 2006
+
+This is the first version we're not calling "beta".
+
+    [IMPROVEMENTS]
+    Removed 9 module dependencies, to help minimize install times.
+
+    [FIXED]
+    Fixed some tests that may have failed on some systems, depending on
+    if you had Image::Magick or elinks installed.
+
+    [DOCUMENTATION]
+    Added documentation to INSTALL about the test user and test
+    database that you need to have in Postgres.
+
+
+
+1.10.0.3-beta   Fri Aug  4 16:00:40 CDT 2006
+
+Configuration has changed slightly.  Now, if your HOSTNAME isn't fully
+qualified, you can specify it before calling ./configure.  It used to
+be you'd specify URL, but this is simpler, as in:
+
+    HOSTNAME=mywiki.mysite.com ./configure
+
+You only need to do this if your hostname is just the host's name, as in
+"mywiki".
+
+    [FIXES]
+    Fixed a problem with redirections in the Apache configuration file.
+    Also removed many extraneous mod_rewrite directives that aren't used
+    for Socialtext Open.  Thanks, David Singer.
+
+    The /var/run/socialtext directory is now created and given correct
+    permissions on install.  Thanks, David Singer.
+
+    Apache::SizeLimit is no longer required.
+
+    Fixed a performance issue with Recent Changes.
+
+
+1.10.0.2-beta   Thu Aug  3 15:00:19 CDT 2006
+
+    [FIXES]
+    Bug #1530704: Regex for URL doesn't allow dash in t/page-to-absolute.t
+
+    [FEATURES]
+    Updated to include features most recently in v1.10.1.1 on the
+    hosted service.
+
+    [DOCUMENTATION]
+    Updates to the INSTALL file.
+
+
+1.10.0.0-beta   Mon Jul 24 07:24:06 PDT 2006
+
+    The first public beta of Socialtext Open.
+

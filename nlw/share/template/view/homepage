@@ -1,0 +1,137 @@
+[% SET admin = checker.check_permission('admin_workspace') %]
+[% WRAPPER layout/html content_id = 'st-homepage' box_javascript = 0 subnav = 'element/wiki/subnav-dashboard' dropshadow = 1 %]
+
+<div id="st-wiki-logo">
+    <img id="st-wiki-logo-image" src="[% wiki.logo %]" />
+</div>
+
+<div id="st-user-greeting">
+    <div id="st-user-welcome">[% loc('Welcome, [_1].', user.username.replace('\s+$', '')) %]</div>
+    <div id="st-wiki-title-invite">
+      [% IF admin %]
+      <a href="?action=users_invitation"><b>Invite your colleagues</b></a> to this workspace.
+      [% END %]
+    </div>
+</div>
+
+<div style="vertical-align: 7px" id="st-wiki-title">
+    <div>
+    Dashboard: [% wiki.title %]
+    [% IF feeds.rss.changes %]
+        <a href="[% feeds.rss.changes.url %]"><img border="0" src="[% wiki.static_path %]/images/feed-icon-14x14.png"/></a>
+    [% END %]
+    [% IF hub.current_workspace.enable_unplugged %]
+    [% IF unplug_uri %]
+        <a title="[% unplug_phrase %]" href="[% unplug_uri %]"><img border="0" src="[% wiki.static_path %]/images/unplug-icon.png"/></a>
+    [% END %]
+    [% END %]
+    </div>
+    <div id="st-wiki-title-central-page-link">
+      Central page: <b><a href="index.cgi?[% wiki.central_page %]">[% wiki.title %]</a></b>
+    </div>
+
+
+
+
+</div>
+
+<table id="st-homepage-layout">
+    <tbody><tr><td class="st-homepage-layout-cell" id="st-homepage-layout-notes">
+<div id="st-homepage-notes">
+    [% INCLUDE notes %]
+</div>
+        </td><td class="st-homepage-layout-cell" id="st-homepage-layout-dashboard" align="right">
+
+<div id="st-homepage-dashboard">
+    [% INCLUDE dashboard %]
+</div>
+    </td></tr></tbody>
+</table>
+[% END %]
+
+[% BLOCK notes %]
+    <div id="st-group-notes" class="st-homepage-section">
+      [% IF checker.check_permission('edit') %]
+      <div class="st-homepage-notes-edit" id="st-group-notes-edit"><a id="st-group-notes-edit-link" href="[% group_notes.edit_path %];caller_action=homepage#edit" class="st-homepage-notes-edit-link">edit</a></div>
+      [% END %]
+      <div id="st-group-notes-title" class="st-homepage-section-title">
+          <a href="[% group_notes.view_path %]">Announcements and Links</a>
+      </div>
+      <div id="st-group-notes-content" class="st-homepage-notes-content">
+        [% group_notes.html %]
+      </div>
+    </div>
+
+    <div id="st-personal-notes" class="st-homepage-section">
+      [% IF checker.check_permission('edit') %]
+      <div class="st-homepage-notes-edit" id="st-personal-notes-edit"><a id="st-personal-notes-edit-link" href="[% personal_notes.edit_path %]#edit" class="st-homepage-notes-edit-link">edit</a></div>
+      [% END %]
+      <div id="st-personal-notes-title" class="st-homepage-section-title">
+          <a href="[% personal_notes.html ? personal_notes.view_path : personal_notes.edit_path %]">Your Notepad</a>
+      </div>
+      <div id="st-personal-notes-content" class="st-homepage-notes-content">
+  [% IF personal_notes.html %]
+        [% personal_notes.html %]
+  [% ELSE %]
+        <p>This is your personal notepad page. Edit it to your liking.</p>
+        <p>Other participants can see it, too, and can edit it to leave notes for you.</p>
+        <p>You can also put links here to pages you want to remember.</p>
+  [% END %]
+      </div>
+    </div>
+
+    <div id="st-dyk" class="st-homepage-section">
+      <div id="st-dyk-title" class="st-homepage-section-title">
+          Did you know?
+      </div>
+      <div id="st-dyk-content" class="st-homepage-notes-content">
+        <p>
+          <strong>Access a Community of Peers</strong>
+        </p>
+        <p>
+          As a Socialtext customer, you have access to the <a href="http://www.socialtext.net/exchange/">Socialtext Customer Exchange</a>.  It's where you can share tips and best practices with other Socialtext customers.
+        </p>
+      </div>
+    </div>
+[% END %]
+
+[% BLOCK dashboard %]
+    [% MACRO subrow_empty BLOCK %]
+        <td></td><td></td>
+    [% END %]
+
+    [% MACRO whats_new_rows BLOCK %]
+    <td colspan="2" class="st-homepage-simplelist-left"><a href="[% row.link %]" title="[% row.preview %]">[% row.title %]</a><div class="st-homepage-whatsnew-attribution">Last edited by <span class="st-homepage-whatsnew-author">[% row.author %]</span> on <span class="st-homepage-whatsnew-date">[% row.date %]</span></div></td>
+    [% END %]
+    [% MACRO whats_new_rows_sub BLOCK %]
+        <td><span class="st-homepage-simplelist-subleft">Last edited by [% row.author %]</span></td>
+        <td class="st-homepage-simplelist-subright">[% row.date %]</td>
+    [% END %]
+    [% MACRO new_page_button INCLUDE element/button id = 'st-newpage-link', label = 'New Page', href = '?action=new_page', tooltip='Click this button to create a new page'%]
+    [% INCLUDE element/homepage/simplelist
+         title          = "What's new in $wiki.title",
+         id             = 'st-whats-new',
+         row_handler    = 'whats_new_rows',
+         #subrow_handler = 'whats_new_rows_sub',
+         data           = whats_new.pages,
+         button         = (checker.check_permission('edit') ? 'new_page_button' : '')
+         title_href     = '?action=recent_changes'
+    %]
+
+    [% MACRO watchlist_rows BLOCK %]
+        <td colspan="2" class="st-homepage-simplelist-left"><a href="[% row.link %]" title="[% row.preview %]">[% row.title %]</a><div class="st-homepage-whatsnew-attribution">Last edited by <span class="st-homepage-whatsnew-author">[% row.author %]</span> on <span class="st-homepage-whatsnew-date">[% row.date %]</span></div></td>
+    [% END %]
+    [% UNLESS user.is_guest %]
+      [% INCLUDE element/homepage/simplelist title = "Your watchlist", id = 'st-watchlist', row_handler = 'watchlist_rows', subrow_handler = 'subrow_empty', data = watchlist.pages, title_href = '?action=display_watchlist' %]
+    [% END %]
+
+
+    [% MACRO wiki_rows BLOCK %]
+        <td class="st-homepage-simplelist-left"><a href="/[% row.name %]">[% row.title %]</a></td>
+        <td class="st-homepage-simplelist-right" nowrap="nowrap"><a href="/[% row.name %]/index.cgi?action=recent_changes">[% row.changes %] [% IF row.changes == 1; "change"; ELSE; "changes"; END %]</a></td>
+    [% END %]
+    [% MACRO new_wiki_button INCLUDE element/button id = 'st-newwiki-link', label = 'New Workspace', href = '?action=workspaces_create', tooltip='Click this button to create a new workspace' %]
+    [% INCLUDE element/homepage/simplelist title = "Your workspaces", id = 'st-wikis', row_handler = 'wiki_rows', subrow_handler = 'subrow_empty', data = wikis
+        button = admin ? 'new_wiki_button' : undef, title_href = '?action=workspaces_listall' %]
+[% END %]
+

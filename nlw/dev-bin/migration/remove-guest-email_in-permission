@@ -1,0 +1,131 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../lib";
+use Getopt::Long;
+
+use Socialtext::Workspace;
+use Socialtext::Permission;
+use Socialtext::Role;
+
+my $dryrun;
+GetOptions(
+    'dry-run' => \$dryrun
+) or die "\n";
+
+my $processed = 0;
+
+my %OldPermissionSets = (
+    'public' => {
+        guest              => [ qw( read edit comment email_in ) ],
+        authenticated_user => [ qw( read edit comment email_in ) ],
+        impersonator       => [ qw( impersonate read edit attachments comment delete email_in email_out ) ],
+        member             => [ qw( read edit attachments comment delete email_in email_out ) ],
+        workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
+    },
+    'member-only' => {
+        guest              => [ 'email_in' ],
+        authenticated_user => [ 'email_in' ],
+        impersonator       => [ qw( impersonate read edit attachments comment delete email_in email_out ) ],
+        member             => [ qw( read edit attachments comment delete email_in email_out ) ],
+        workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
+    },
+    'authenticated-user-only' => {
+        guest              => [ ],
+        authenticated_user => [ qw( read edit attachments comment delete email_in email_out ) ],
+        impersonator       => [ qw( impersonate read edit attachments comment delete email_in email_out ) ],
+        member             => [ qw( read edit attachments comment delete email_in email_out ) ],
+        workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
+    },
+    'public-read-only' => {
+        guest              => [ 'read' ],
+        authenticated_user => [ 'read' ],
+        impersonator       => [ qw( impersonate read edit attachments comment delete email_in email_out ) ],
+        member             => [ qw( read edit attachments comment delete email_in email_out ) ],
+        workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
+    },
+    'public-comment-only' => {
+        guest              => [ qw( read comment ) ],
+        authenticated_user => [ qw( read comment ) ],
+        impersonator       => [ qw( impersonate read edit attachments comment delete email_in email_out ) ],
+        member             => [ qw( read edit attachments comment delete email_in email_out ) ],
+        workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
+    },
+    'public-authenticate-to-edit' => {
+        guest              => [ qw( read edit_controls ) ],
+        authenticated_user => [ qw( read edit attachments comment delete email_in email_out ) ],
+        impersonator       => [ qw( impersonate read edit attachments comment delete email_in email_out ) ],
+        member             => [ qw( read edit attachments comment delete email_in email_out ) ],
+        workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
+    },
+    'intranet' => {
+        guest              => [ qw( read edit attachments comment delete email_in email_out ) ],
+        authenticated_user => [ qw( read edit attachments comment delete email_in email_out ) ],
+        impersonator       => [ qw( impersonate read edit attachments comment delete email_in email_out ) ],
+        member             => [ qw( read edit attachments comment delete email_in email_out ) ],
+        workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
+        },
+);
+
+# Stolen shamelessly from Socialtext::Workspace
+sub _perm_set_as_string {
+    my $set = shift;
+
+    my @parts;
+    # This particular string dumps nicely, the newlines are not
+    # special or anything.
+    for my $role ( sort keys %{$set} ) {
+        my $string = "$role: ";
+        $string .= join ', ', sort @{ $set->{$role} };
+
+        push @parts, $string;
+    }
+
+    return join "\n", @parts;
+}
+
+my %OldSetsAsStrings = 
+    map { $_ => _perm_set_as_string(
+            $OldPermissionSets{$_} ) }
+    keys %OldPermissionSets;
+
+my $workspaces = Socialtext::Workspace->All();
+
+my $role_of_concern = Socialtext::Role->new( name => 'guest' );
+my $permission_of_concern = Socialtext::Permission->new( name => 'email_in' );
+
+while ( my $workspace = $workspaces->next() ) {
+    # For each workspace, we want to check to see if its current
+    # permission set (as string) matches any of the old sets. If so, and
+    # it's not 'intranet', it needs to get adjusted
+    my %current_set = $workspace->current_permission_set();
+    my $current_set_string = _perm_set_as_string( \%current_set );
+    my $workspace_name = $workspace->name();
+
+    for my $name ( keys %OldSetsAsStrings ) {
+        if ( $OldSetsAsStrings{$name} eq $current_set_string && 
+            $name ne 'intranet' &&
+            $workspace->role_has_permission( 
+                role => $role_of_concern,
+                permission => $permission_of_concern )
+            ) {
+            $processed++;
+            my $rectify = $dryrun ? "Would rectify." : "Rectifying...";
+            printf "$workspace_name previously allowed guests to email_in. $rectify\n";
+            if ( !$dryrun ) {
+                $workspace->remove_permission( 
+                    permission => $permission_of_concern,
+                    role => $role_of_concern
+                );
+            }
+       }
+    }
+}
+
+if (! $processed ) {
+    printf "No workspaced required permissions changes.\n";
+}

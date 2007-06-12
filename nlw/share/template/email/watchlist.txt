@@ -1,0 +1,22 @@
+[% user.guess_real_name %],
+
+To stop receiving or change how often you receive emails about changes
+to your watchlist in [% workspace.title %], go to:
+
+ [% watchlist_preference_uri %]
+ 
+ --
+
+The following pages you are watching in [% workspace.title %] have recently changed:
+
+[%- FOR page = pages %]
+[% page.metadata.Subject %]
+  [%+ workspace.uri %]?[% page.uri %]
+ [%- IF include_editor %]
+  (by [% page.last_edited_by.best_full_name( workspace => workspace ) %] on [% page.metadata.Date %])
+ [%- END %]
+
+[%- END %]
+
+[% PROCESS 'email/standard-footer.txt'
+   support_link = 0 %]

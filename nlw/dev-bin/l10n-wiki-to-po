@@ -1,0 +1,88 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use FindBin qw/$Bin/;
+use lib "$Bin/../lib";
+use Socialtext::Wikil10n qw/load_existing_l10ns make_rester/;
+use Socialtext::System qw/shell_run/;
+use Socialtext::File qw/set_contents/;
+use JSON;
+
+my $r = make_rester();
+my $l10n = load_localizations();
+
+my $js_output = 'share/javascript/l10ns.js';
+my $is_js = qr#share/javascript#;
+create_perl_l10ns('share/l10n', $l10n);
+create_js_l10ns('share/javascript/l10ns.js', $l10n);
+exit;
+
+sub create_perl_l10ns {
+    my $dir      = shift;
+    my $l10n     = shift;
+
+    for my $locale (keys %$l10n) {
+        my $output = '';
+        my $dict = $l10n->{$locale};
+        for my $id (keys %$dict) {
+            my $l = $dict->{$id};
+            next if $l->{reference} =~ $is_js;
+            $output .= "#: $l->{reference}\n";
+            $output .= "#. $l->{other}\n" if $l->{other};
+            $output .= qq(msgid "$id"\nmsgstr "$l->{msgstr}"\n\n);
+        }
+
+        my $filename = "$dir/$locale.po";
+        set_contents($filename, $output);
+        print "Wrote $filename\n";
+    }
+}
+
+
+sub create_js_l10ns {
+    my $filename = shift;
+    my $l10n     = shift;
+
+    my $js_hash = {};
+    for my $locale (keys %$l10n) {
+        my $dict = $l10n->{$locale};
+        for my $id (keys %$dict) {
+            my $l = $dict->{$id};
+            next unless $l->{reference} =~ $is_js;
+            # keep the js small by skipping empties
+            next unless $l->{msgstr}; 
+            $js_hash->{$locale}{$id} = $l->{msgstr};
+        }
+    }
+    my $js_out = "var LocalizedStrings = " . objToJson($js_hash) . ";\n";
+    $js_out .= <<EOT;
+
+function loc(str) {
+    var locale = Socialtext.loc_lang;
+    var dict = LocalizedStrings[locale] || new Array;
+    return dict[str] || str;
+}
+
+EOT
+
+    print "Wrote $filename\n";
+    set_contents($filename, $js_out);
+    shell_run("cd share/javascript && make");
+}
+
+
+sub load_localizations {
+    my %items;
+    for my $page ($r->get_taggedpages('l10n')) {
+        my @tags = $r->get_pagetags($page);
+        my $locale;
+        for (@tags) {
+            $locale = $1 if m/^locale=(\w+)$/;
+        }
+        die "Could not find locale for page ($page)" unless $locale;
+        $items{$locale} = load_existing_l10ns($r, $page);
+    }
+    return \%items;
+}
+

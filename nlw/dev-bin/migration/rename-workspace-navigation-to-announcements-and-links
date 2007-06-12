@@ -1,0 +1,145 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../lib";
+
+use Getopt::Long;
+use Socialtext;
+use Socialtext::AppConfig;
+use Socialtext::Workspace;
+
+# REVIEW It would be good if we could specify the DB to run against.
+print "Updating workspace ", Socialtext::AppConfig->db_schema_name, "\n";
+
+my %opts;
+GetOptions(
+    'help'    => \$opts{help},
+    'dry-run' => \$opts{dryrun},
+    'delete'  => \$opts{delete},
+) || ( $opts{help} = 1 );
+
+if ( $opts{help} ) {
+    print <<USAGE ;
+USAGE: $0 [ OPTIONS ]
+
+    This script renames the 'Workspace Navigation' page to
+    'Announcements and Links'.  The old page is not deleted
+    until the script is run with --delete.
+
+OPTIONS
+
+    --dry-run        Don't actually change anything.
+    --delete         Delete the old pages.
+
+USAGE
+    exit;
+}
+
+
+my $workspaces = Socialtext::Workspace->All();
+while ( my $ws = $workspaces->next() ) {
+    rename_workspace_navigation($ws);
+}
+
+sub rename_workspace_navigation {
+    my $ws       = shift;
+    my $hub      = hub($ws);
+    my $old_page = get_old_page($hub) || return;
+
+    if ( $opts{delete} ) {
+        delete_old_page( $hub, $old_page );
+    }
+    else {
+        make_new_page( $hub, $old_page );
+    }
+}
+
+sub get_old_page {
+    my $hub = shift;
+
+    my $old_name = 'Workspace Navigation';
+    my $old_page = $hub->pages->new_from_name($old_name);
+    msg( "Loading", $hub, $old_page, 1 );
+    unless ( $old_page->exists ) {
+        print "  cannot find $old_name page.\n";
+        print "  looked in ", $old_page->file_path, "\n";
+        return;
+    }
+
+    return $old_page;
+}
+
+sub make_new_page {
+    my ( $hub, $old_page ) = @_;
+
+    my $new_name = 'Announcements and Links';
+
+    my $new_page = $hub->pages->new_from_name($new_name);
+    if ( $new_page->active() ) {
+        msg( "  an '$new_name' page already exists", $hub, $old_page, 1 );
+        return;
+    }
+
+    msg( "Making '$new_name' copy of", $hub, $old_page );
+
+    return if $opts{dryrun};
+
+    # Without this the attachment copying bits of
+    # ST::Page->duplicate() won't work.
+    $hub->pages->current($old_page);
+
+    $old_page->duplicate(
+        $hub->current_workspace,
+        $new_name,
+        'keep categories',
+        'keep attachments',
+    );
+}
+
+sub delete_old_page {
+    my ( $hub, $old_page ) = @_;
+
+    msg( "Deleting", $hub, $old_page );
+    unless ( $opts{dryrun} ) {
+        delete_attachments( $hub, $old_page );
+        $old_page->delete( user => $hub->current_user );
+    }
+}
+
+sub delete_attachments {
+    my ( $hub, $old_page ) = @_;
+    msg( "Deleting attachments on", $hub, $old_page );
+    for my $a ( get_attachments( $hub, $old_page ) ) {
+        $a->delete( user => $hub->current_user ) unless $opts{dryrun};
+    }
+}
+
+sub get_attachments {
+    my ( $hub, $old_page ) = @_;
+    return @{ $hub->attachments->all( page_id => $old_page->id ) };
+}
+
+sub msg {
+    my ( $type, $hub, $page, $never ) = @_;
+    print "SKIPPING (--dry-run): " if $opts{dryrun} and not $never;
+    print ucfirst($type) . " '"
+        . $page->title
+        . "' page for "
+        . $hub->current_workspace->name . ".\n";
+}
+
+sub hub {
+    my $ws = shift;
+    my $st = Socialtext->new;
+
+    $st->load_hub(
+        current_workspace => $ws,
+        current_user      => Socialtext::User->SystemUser(),
+    );
+    $st->hub->registry->load;
+
+    return $st->hub;
+}

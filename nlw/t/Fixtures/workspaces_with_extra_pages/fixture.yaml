@@ -1,0 +1,22 @@
+fixtures:
+  - alzabo
+  - sale
+
+workspaces:
+  admin:
+    extra_pages: 1
+    admin_can_impersonate: 1
+  foobar:
+    extra_pages: 1
+    extra_users:
+      member: [devnull@urth.org]
+      impersonator: [devnull2@socialtext.com]
+  public:
+    extra_pages: 1
+  auth-to-edit:
+    extra_pages: 1
+  help: { }
+
+cache:
+  - WORKSPACES
+  - USERS

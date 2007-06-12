@@ -1,0 +1,10 @@
+[%# @COPYRIGHT@ -%]
+[%
+  RETURN UNLESS hub.checker.check_permission('edit_controls') || hub.checker.check_permission('edit')
+%]
+<div class="sidebar-box-content-edit-link">
+  [% IF hub.checker.check_permission('edit_controls') AND NOT hub.checker.check_permission('edit') %]
+  <span class="edit-requires-login-label">Login +</span>
+  [% END %]
+  <a href="[% hub.weblog.page_edit_path %]#edit">edit</a>
+</div>

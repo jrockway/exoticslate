@@ -1,0 +1,20 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+use warnings;
+use strict;
+
+# Use this in place of other programs where you want to verify arguments
+# and/or input.
+
+# For etymology, see http://en.wikipedia.org/wiki/MacGuffin
+
+use YAML;
+use Readonly;
+
+Readonly my $FILE => "/tmp/macguffin-$<.yaml";
+
+open F, '>', $FILE or die "$FILE: $!";
+
+my $stdin = join '', <STDIN>;
+print F Dump({ARGV => \@ARGV, STDIN => $stdin}) or die "print '$FILE': $!";
+close F or die "close '$FILE': $!";

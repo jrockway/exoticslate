@@ -1,0 +1,39 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../lib";
+use Getopt::Long;
+
+use Socialtext::User;
+use Socialtext::Workspace;
+
+
+my $dryrun;
+GetOptions( 'dry-run' => \$dryrun );
+
+my $system_user = Socialtext::User->SystemUser();
+my $workspaces = Socialtext::Workspace->All();
+
+binmode STDOUT, ':utf8';
+
+while ( my $ws = $workspaces->next() ) {
+    my ( $main, $hub ) = $ws->_main_and_hub();
+
+    print 'Checking ', $ws->name(), " for empty categories ...\n";
+
+    my $cats = $hub->category();
+    for my $cat ( $cats->all_categories() ) {
+        next if $cats->page_count($cat);
+
+        print "  deleting $cat\n";
+
+        $cats->delete(
+            category => $cat,
+            user     => $system_user,
+        ) unless $dryrun;
+    }
+}

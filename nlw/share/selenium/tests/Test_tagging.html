@@ -1,0 +1,133 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Test_template</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Test_template</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/nlw/submit/logout</td>
+	<td>Logout before login</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/nlw/login.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>devnull1@socialtext.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>d3vnu11l</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Log in']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Home</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=New Page</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='st-newpage-pagename-edit']</td>
+	<td>javascript{new Date().getTime()}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Add tag</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>tagfield</td>
+	<td>foo</td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Save tag</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Save tag</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>foo [x]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>tagfield</td>
+	<td>foo bar</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Save tag</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>foo bar [x]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>tagfield</td>
+	<td>Foster City</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Save tag</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Foster City [x]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[@title='Remove foo bar tag from page']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>These tags have been removed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[@href='?action=category_display;category=foo;tag=/foo']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Tag: foo</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

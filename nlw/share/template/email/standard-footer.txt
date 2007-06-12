@@ -1,0 +1,6 @@
+-- 
+[% IF support_link %]
+If you have questions about this email, contact your wiki support at
+[% appconfig.support_address %].
+[% END %]
+Brought to you by Socialtext.

@@ -1,0 +1,19 @@
+<!-- @COPYRIGHT@ -->
+<%doc>
+Note that the login message is explicitly _not_ HTML-escaped, to allow
+for things like mailto links on the appliance.
+</%doc>
+
+<div id="login_message"><% $message %></div>
+<%args>
+$redirect
+</%args>
+<%init>
+my $message_file = Socialtext::AppConfig->login_message_file();
+
+return unless $message_file and -r $message_file and -f _;
+
+my $message = Socialtext::File::get_contents_utf8($message_file);
+
+$message =~ s/REDIRECT_TO/$redirect/g;
+</%init>

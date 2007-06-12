@@ -1,0 +1,19 @@
+Hello,
+
+[% inviting_user %] would like to ask you to invite new users into the
+[% workspace_title %] workspace:
+
+[% FOREACH user = invited_users %]
+    [% user %] [% END %]
+
+[% IF extra_text %]
+    [% extra_text %]
+[% END %]
+To invite these users into the workspace, visit the user invite page
+for the workspace and copy and paste the list above into the invite box.
+The User Invite page can be found at:
+
+[% url %]
+
+[% PROCESS 'email/standard-footer.txt'
+   support_link = 0 %]

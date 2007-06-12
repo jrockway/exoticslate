@@ -1,0 +1,37 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
+use Socialtext::Build qw(get_build_setting);
+use Socialtext::System qw(shell_run);
+use File::Spec::Functions qw(catfile);
+
+my $script_dir = get_build_setting("sharedir") . "/post-install";
+die "Could not find directory: $script_dir\n" unless -d $script_dir;
+
+run_scripts($script_dir);
+
+sub run_scripts {
+    my $dir = shift;
+    $Socialtext::System::SILENT_RUN = 1;
+    for my $script ( get_scripts($dir) ) {
+        shell_run($script);
+    }
+}
+
+sub get_scripts {
+    my $dir = shift;
+    opendir( my $dh, $dir) || die "Could not open $dir: $!\n";
+    my @scripts = grep { -x $_ && -r _ }
+                  map { catfile($dir, $_->[1]) }
+                  sort { $a->[0] <=> $b->[0] }
+                  map { /^(\d+)/; [$1, $_] }
+                  grep { /^\d+/ }
+                  readdir $dh;
+    closedir($dh) || die "Could not close $dir: $!\n";
+    return @scripts;
+}

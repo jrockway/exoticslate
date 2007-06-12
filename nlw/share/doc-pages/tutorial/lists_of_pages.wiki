@@ -1,0 +1,20 @@
+Subject: Lists of pages
+From: ken.pier@socialtext.com
+Date: 2006-10-24 22:07:37 GMT
+Received: from 127.0.0.1
+Revision: 11
+Category: Welcome
+Encoding: utf8
+
+Up: [Workspace Tour - Table of Contents]
+Back: [Project plans]
+
+Here are links to some of the pages in this workspace.
+
+| ^^^ Things you might find in a workspace
+
+> [Meeting Agendas]
+> [Project Plans]
+> [Conversations] |
+
+Now that I know about some of the things I can use a Workspace for, [how do I find my way around?]

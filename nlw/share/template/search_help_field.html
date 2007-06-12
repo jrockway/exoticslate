@@ -1,0 +1,34 @@
+[%# @COPYRIGHT@ -%]
+<p>
+  It looks like you are trying to search on a field in the search index.
+  At this time the fields available are:
+</p>
+
+<ul>
+  <li>title</li>
+  <li>category</li>
+</ul>
+
+<p>
+  You may search on a field by separating the field name from the
+  query with a colon, like this:
+</p>
+
+<pre>
+   title:hello
+   category:help
+</pre>
+
+<p>
+  If you try to search on a field that does not exist (<tt>link:hello</tt>)
+  or without a query (<tt>link:</tt>) you will see this message.
+</p>
+
+<p>
+  Your query was "[% self.cgi.search_term %]".
+</p>
+
+<p>
+  As we continue to develop the search system, the options you will
+  have and the interface you have to make use of them will improve.
+</p>

@@ -1,0 +1,41 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
+use Getopt::Long;
+use User::grent;
+use User::pwent;
+
+use Socialtext::EmailAlias;
+use Socialtext::Paths;
+use Socialtext::Workspace;
+
+my $User = 'www-data';
+my $Group = 'www-data';
+GetOptions(
+    'user=s'  => \$User,
+    'group=s' => \$Group,
+) or exit 1;
+
+my $user = getpwnam($User)   || die "bad user $User\n";
+my $group = getgrnam($Group) || die "bad group $Group\n";
+
+my $aliases_file = Socialtext::Paths::aliases_file();
+if (-e $aliases_file) {
+    unlink $aliases_file or die "Cannot unlink $aliases_file: $!";
+}
+
+my $workspaces = Socialtext::Workspace->All();
+
+
+while ( my $ws = $workspaces->next() ) {
+    Socialtext::EmailAlias::create_alias( $ws->name() );
+}
+
+chown $user->uid, $group->gid,
+    $aliases_file || die "unable to chown $aliases_file\n";

@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+rm -rf root/data/*/*
+rm -rf root/plugin/*/*/*

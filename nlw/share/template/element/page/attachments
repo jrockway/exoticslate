@@ -1,0 +1,23 @@
+[% ns = 'st-attachments' %]
+<div id="[% ns %]" class="st-page-box">
+    <div id="[% ns %]-title" class="st-page-box-title">Attachments</div>
+    <form onsubmit="return false;">
+    [% INCLUDE element/jst/template id='st-attachments-listtemplate', jst='attachment/name' %]
+    [% INCLUDE element/jst/template id='st-attachments-managetable', jst='attachment/managetable' %]
+    [% INCLUDE element/json id='st-attachments-files', json=initialattachments %]
+    </form>
+    <ul id="[% ns %]-listing" class="st-page-box-listing">
+    </ul>
+    [% IF checker.check_permission('attachments') %] 
+    <table id="[% ns %]-buttons">
+        <tr>
+            <td id="[% ns %]-buttons-uploadbutton">
+              [% INCLUDE element/button id="${ns}-uploadbutton", tooltip="Click this button to add a file to the page", label="Upload&nbsp;files" %]
+            </td>
+            <td id="[% ns %]-buttons-managebutton">
+              [% INCLUDE element/button id="${ns}-managebutton", tooltip="Click this button to manage files attached to the page", label="Manage&nbsp;files" %]
+            </td>
+        </tr>
+    </table>
+    [% END %]
+</div>

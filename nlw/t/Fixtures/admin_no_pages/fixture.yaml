@@ -1,0 +1,9 @@
+fixtures:
+  - alzabo
+
+workspaces:
+  admin: { }
+
+cache:
+  - WORKSPACES
+  - USERS

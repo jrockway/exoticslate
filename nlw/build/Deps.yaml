@@ -1,0 +1,147 @@
+# Only first-order dependencies should go in here.  If one of the Socialtext
+# program files doesn't do a "use" or "require" on a module, it shouldn't be
+# listed here.
+#
+# If your code doesn't require a specific minimum version of a module,
+# list "0" as the version.  Please do NOT include a non-zero version number
+# unless one is actually required.  It will be a false dependency, and we
+# will make people upgrade modules that they don't need to.
+---
+Algorithm::Diff: 1.1901
+# The change in 0.8902 to not use UNIVERSAL::isa exposed a bug in the
+# handling of an attempt to load a row which doesn't exist in the DBMS.
+Alzabo: 0.8903
+Apache::Constants: 1.09
+Apache::Request: 1.33
+Apache::Session: 1.81
+Apache::Session::Store::Postgres: 0
+Apache::Session::Wrapper: 0.31
+Apache::SubProcess: 0.03
+Apache::URI: 1.00
+Archive::Tar: 1.24
+Archive::Zip: 1.14
+Cache::FileCache: 0
+Carp: 0
+CGI: 3.08
+CGI::Cookie: 0
+Cache::FileCache: 0
+Carp: 0
+Class::AlzaboWrapper: 0.13
+Class::AlzaboWrapper::Cursor: 0
+Class::Field: 0.12
+Class::Singleton: 1.03
+Cwd: 3.07
+Data::Dumper: 2.121
+Data::UUID: 0.14
+Date::Format: 0
+DateTime: 0.28
+DateTime::Format::HTTP: 0.36
+DateTime::Format::Mail: 0.2901
+DateTime::Format::Pg: 0.10
+DateTime::Format::Strptime: 1.0700
+DBD::Pg: 1.43
+DB_File::Lock: 0.05
+DBI: 1.48
+Digest::MD5: 2.33
+Digest::SHA1: 0
+# 1.884 fixes major bugs in the output of ->format, which we use in ST::Workspace
+Email::Address: 1.884
+Email::MessageID: 1.31
+Email::MIME: 1.853
+Email::MIME::ContentType: 1.011
+Email::MIME::Creator: 1.451
+Email::MIME::Encodings: 1.3
+Email::MIME::Modifier: 1.44
+Email::MessageID: 1.35
+Email::Send: 2.05
+Email::Send::Sendmail: 0
+Email::Simple: 1.92
+Email::Valid: 0.15
+Encode: 2.10
+Exception::Class: 1.21
+Exporter: 0
+Fcntl: 1.05
+File::Basename: 2.72
+File::chdir: 0.06
+File::CounterFile: 1.04
+File::Find: 0
+File::Path: 1.06
+File::Slurp: 9999.09
+File::Spec: 3.07
+File::Spec::Unix: 1.5
+Filesys::DfPortable: 0
+File::Temp: 0.16
+FindBin: 1.44
+Getopt::Long: 0
+HTML::Entities: 1.32
+HTML::FillInForm: 1.05
+HTML::FormatRTF: 2.04
+HTML::Mason: 1.28
+HTML::Mason::Interp: 0
+HTML::PrettyPrinter: 0.03
+HTML::TreeBuilder: 3.13
+HTML::WikiConverter: 0.61
+HTML::WikiConverter::Socialtext: 0.03
+Imager: 0
+IO::File: 0
+IPC::Run: 0.79
+JSON: 1.07
+KinoSearch: 0.15
+LWP::UserAgent: 2.033
+Lingua::Stem::Snowball: 0.941
+List::MoreUtils: 0.10
+List::Util: 1.18
+Locale::Maketext::Simple: 0
+Log::Dispatch: 2.10
+Log::Dispatch::Screen: 1.17
+Log::Dispatch::Syslog: 1.18
+LWP::UserAgent: 2.033
+Mail::Address: 1.67
+MasonX::WebApp: 0
+MIME::Parser: 5.417
+MIME::Types: 1.15
+MLDBM: 2.01
+Params::Validate: 0.79
+Pod::Usage: 0
+POSIX: 1.08
+Readonly: 1.03
+Readonly::XS: 1.03
+# REST::Application >= 0.991 contains refactored tunneling code.  This removes the need
+# for the tunneling code in Socialtext, and makes Socialtext compatible with
+# the latests version of REST::Application.
+#
+# REST::Application >= 0.97 required to deal with error that used to
+# present when using a collection uri with a trailing / for example:
+# /data/workspaces/:ws/pages/
+REST::Application: 0.991
+RTF::Writer: 0
+Scalar::Util: 1.18
+SOAP::Lite: 0.67
+SOAP::Transport::HTTP: 0
+Storable: 2.15
+Sys::Hostname: 1.11
+Template: 2.14
+Template::Iterator::AlzaboWrapperCursor: 0.01
+Template::Plugin::FillInForm: 0.04
+Text::Autoformat: 0
+# Text::Balanced 1.99.1 is the first version to not use $&.  Although
+# Text::Balanced is not a first-order dependency, Alzabo uses it, and we
+# list it here to make sure we get the minimal acceptable version.
+Text::Balanced: 2.00
+Text::Flowed: 0.14
+Tie::IxHash: 1.21
+Time::HiRes: 1.73
+Time::Local: 1.11
+Time::Piece: 0
+Time::Piece::Range: 0
+# Part of URI
+URI::Escape: 3.28
+URI::FromHash: 0.02
+# Part of URI
+URI::QueryParam: 0
+User::pwent: 1.00
+XML::Atom: 0.22
+XML::Feed: 0.05
+XML::RSS: 1.05
+XML::SAX: 0.12
+YAML: 0.58

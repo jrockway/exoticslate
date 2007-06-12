@@ -1,0 +1,32 @@
+[% extra_text -%]
+
+Hi,
+
+I'm inviting you to join [% workspace_title %], one of our shared workspaces. [% UNLESS requires_confirmation %]Sign in using the information below:[% END %]
+
+[% IF requires_confirmation -%]
+Please click on this link to confirm your email address: [% confirmation_uri | html %]
+
+Once you have confirmed your account, you will receive a second email
+with login details.
+[% ELSE -%]
+web address: [% workspace_uri | html %]
+username: [% username | html %]
+
+[% IF appconfig.is_default('user_factories') %] 
+[% IF app_name; a = 'a'; ELSE; a = 'an'; END %]
+Because you already have [% a %] [% app_name %] account, the password is the
+same as the password you use for your other [% app_name %] workspaces. If
+you don't remember it, follow this link to select a new password:
+[% forgot_password_uri %]
+
+[% END %]
+You may want to keep this email for future reference.
+[% END -%]
+
+Thanks,
+
+[% inviting_user %]
+
+[% PROCESS 'email/standard-footer.txt'
+   support_link = 1 %]

@@ -1,0 +1,29 @@
+[%# @COPYRIGHT@ -%]
+[% PROCESS lite/header.html %]
+[% IF categories;
+        PROCESS category_list;
+   ELSE;
+     PROCESS recent_changes_link;
+     PROCESS lite/page_list.html;
+   END
+%]
+[% PROCESS lite/footer.html %]
+
+[% BLOCK category_list %]
+<ul>
+[% FOREACH category = categories %]
+<li><a href="/lite/category/[% workspace_name %]/[% category | uri | html %]">
+    [% category | html %]
+</a></li>
+[% END %]
+</ul>
+[% END %]
+
+[% BLOCK recent_changes_link %]
+<div>
+    <a href="/lite/changes/[% workspace_name %]/[% category | uri |html %]">
+        Recent changes in [% category | html %] category
+    </a>
+</div>
+<hr>
+[% END %]

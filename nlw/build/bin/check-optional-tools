@@ -1,0 +1,62 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+
+use File::Spec ();
+use YAML qw( LoadFile );
+use FindBin;
+
+my $deps = YAML::LoadFile( "$FindBin::Bin/../StringifyDeps.yaml" );
+
+my @missing;
+for my $type ( sort keys %$deps ) {
+    my $dep = $deps->{$type};
+
+    my $ok = 1;
+    if ( my $module = $dep->{CPAN} ) {
+        eval "use $module";
+        $ok = 0 if $@;
+    }
+    if ( my $program = $dep->{program} ) {
+        my $found = check_for_file_in_path( $program );
+        $ok = 0 if !$found;
+
+    }
+    push @missing, $type if !$ok;
+}
+
+exit 0 if !@missing;
+
+print <<'EOF';
+Socialtext's indexing is not limited to just wiki pages.  Our indexer
+can take advantage of other installed software to extract indexable
+text from files attached to your wiki pages.  Additional software you
+can install includes:
+EOF
+
+for my $type ( @missing ) {
+    my $dep = $deps->{$type};
+    if ( my $module = $dep->{CPAN} ) {
+        print "  * $module, a Perl module, ";
+    }
+    else {
+        my $program = $dep->{program};
+        my $package = $dep->{package};
+        print qq{  * $program, from Debian package "$package", };
+    }
+    print "for $type\n";
+}
+
+print "\n";
+
+exit 1;
+
+
+sub check_for_file_in_path {
+    my $file = shift;
+    foreach my $path ( split( ':', $ENV{PATH} ) ) {
+        return $path if ( -x File::Spec->catfile( $path, $file ) );
+    }
+    return 0;
+}

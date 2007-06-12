@@ -1,0 +1,117 @@
+[% MACRO server_common( apache_perl_port, for_ssl_vhost ) BLOCK %]
+[% IF config.is_appliance AND config.hostname_conf_exists %]
+    Include /etc/apache2/conf.d/hostname.conf
+[% ELSE %]
+    ServerName [% config.nlw_server_hostname %]
+    [% FOREACH alias in config.nlw_server_aliases %]
+    ServerAlias [% alias %]
+    [% END %]
+[% END %][%# is_appliance %]
+
+    ServerAdmin [% config.server_admin %]
+    DocumentRoot [% config.data_root_dir %]
+    ProxyRequests Off
+
+[% IF config.is_appliance %]
+    Alias /console/ /var/www/console/
+
+    <Directory /var/www/console>
+        Options FollowSymlinks
+    </Directory>
+
+    AddHandler cgi-script .cgi
+    <Location /console>
+        DirectoryIndex index.html index.cgi
+        SetHandler cgi-script
+        Options ExecCGI
+    </Location>
+[% END %]
+
+    <Proxy *>
+        Order deny,allow
+        Deny from all
+    </Proxy>
+
+    <Proxy http://localhost:*/*>
+        Order deny,allow
+        Allow from all
+    </Proxy>
+
+    ProxyPreserveHost On
+
+[%# The rewrite file must come before any of the redirect confs below %]
+[% PROCESS 'shared/rewrite.tt2' %]
+
+    # webplugin drop-ins should go in
+    # [% config.data_root_dir %]/webplugin/PLUGIN-NAME
+    # two directories are expected there, a cgi directory scripts
+    # and a static directory for static files
+    # URI paths would be /webplugin/cgi/PLUGIN-NAME/script.cgi for scripts
+    #     or /webplugin/PLUGIN-NAME/foo.html for static files and resources
+    ScriptAliasMatch ^/webplugin/cgi/([^/]+)(.*) [% config.data_root_dir %]/webplugin/$1/cgi$2
+    <LocationMatch "^/webplugin/cgi/[^/+].*">   
+        AllowOverride None
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    </LocationMatch>   
+
+    AliasMatch ^/webplugin/([^/]+)(.*) [% config.data_root_dir %]/webplugin/$1/static$2
+    <LocationMatch "^/webplugin/[^/+].*.*"> 
+        AllowOverride None
+        Options -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    </LocationMatch>
+
+    # This fixes a bug where images flash on mouseover in IE
+    ExpiresActive On
+    # Do not set ExpiresDefault!  That will cause firefox to cache redirects
+    ExpiresByType image/gif A86400
+    ExpiresByType image/jpeg A86400
+    ExpiresByType image/png A86400
+
+[% IF config.is_dev %]
+    Redirect 301 /favicon.ico http://www.socialtext.net/favicon.ico
+[% END %]
+[% END %][%# server_common %]
+
+[%# Real code starts %]
+ErrorDocument 502 /static/html/502.html
+
+[% IF config.custom_http_port -%]
+Listen [% config.custom_http_port %]
+[% END %]
+
+<VirtualHost *:[% config.ports.http %]>
+[% IF config.custom_http_port %]
+    RewriteEngine On
+    RewriteRule ^(.*) http://%{SERVER_NAME}:[% config.custom_http_port %]$1 [R,L,NE]
+</VirtualHost>
+
+<VirtualHost *:[% config.custom_http_port %]> 
+[% END %]
+[% IF config.ssl_only %]
+    RewriteEngine On
+    RewriteRule ^(.*) https://%{SERVER_NAME}:[% config.ports.https %]$1 [R,L,NE]
+</VirtualHost>
+
+<VirtualHost *:[% config.ports.https %]> 
+[% ELSE %]
+[%- server_common( config.apache_perl_port, 0 ) -%]
+</VirtualHost>
+    [%- IF config.use_ssl %]
+
+<VirtualHost _default_:[% config.ports.https %]>
+    [%- END %]
+[% END %]
+
+[% IF config.ssl_only or config.use_ssl %]
+    [% hi_port = config.apache_perl_port + 1000 %]
+    [% server_common( hi_port, 1 ) %]
+    SSLEngine on
+    SSLCertificateFile    [% config.ssl_base_dir %]/certs/[% config.nlw_server_hostname %].crt
+    SSLCertificateKeyFile [% config.ssl_base_dir %]/private/[% config.nlw_server_hostname %].key
+</VirtualHost>
+[% END %]
+

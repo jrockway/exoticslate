@@ -1,0 +1,55 @@
+[% PROCESS 'shared/common.tt2' %]
+
+[%# XXX Make a macro to wrap these with <IfModule>s %]
+# Load modules
+LoadModule rewrite_module       [% config.module_dir %]/mod_rewrite.so
+LoadModule cgi_module           [% config.module_dir %]/mod_cgi.so
+LoadModule expires_module       [% config.module_dir %]/mod_expires.so
+LoadModule headers_module       [% config.module_dir %]/mod_headers.so
+LoadModule proxy_module         [% config.module_dir %]/mod_proxy.so
+LoadModule proxy_http_module    [% config.module_dir %]/mod_proxy_http.so
+LoadModule ssl_module           [% config.module_dir %]/mod_ssl.so
+
+[% IF config.is_mac %]
+# These are compiled into the apache2 binary in the Debian
+# apache2 package - but mac users may need to tweak this somehow
+#
+# mod_access
+# mod_alias
+# mod_auth
+# mod_autoindex
+# mod_mime
+# mod_negotation
+# mod_setenvif
+# mod_so - always compiled in on all platforms, I believe
+# mod_status
+
+LoadModule authz_host_module    [% config.module_dir %]/mod_authz_host.so
+LoadModule status_module        [% config.module_dir %]/mod_status.so
+LoadModule mime_module          [% config.module_dir %]/mod_mime.so
+LoadModule log_config_module    [% config.module_dir %]/mod_log_config.so
+LoadModule alias_module         [% config.module_dir %]/mod_alias.so
+LoadModule setenvif_module      [% config.module_dir %]/mod_setenvif.so
+[% END %]
+
+<IfModule mod_ssl.c>
+    AddType application/x-x509-ca-cert .crt
+    AddType application/x-pkcs7-crl    .crl
+
+    SSLSessionCache  dbm:[% config.log_dir %]/ssl-cache
+    SSLSessionCacheTimeout  300
+    SSLMutex  default 
+
+    SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown downgrade-1.0 force-response-1.0
+</IfModule>
+
+Listen [% config.ports.http %]
+Listen [% config.ports.https %]
+
+NameVirtualHost *:[% config.ports.http %]
+
+Include [% config.apache2_etc_dir %]/auto-generated.d/*.conf
+
+[% IF !config.is_dev %]
+Include [% config.apache2_etc_dir %]/conf.d/*.conf
+[% END %]

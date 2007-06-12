@@ -1,0 +1,128 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Testing XPath</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Testing XPath</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/nlw/login.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=username</td>
+	<td>devnull1@socialtext.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=password</td>
+	<td>d3vnu11l</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=//input[@value='Log in']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/admin/index.cgi?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeXpath</td>
+	<td>count(id('st-whats-new-content')/table/tbody/tr)</td>
+	<td>original_whats_new_count</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Settings</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=What's New</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>recent_changes__sidebox_changes_depth</td>
+	<td>label=8</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>Button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Home</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertXpath</td>
+	<td>count(id('st-whats-new-content')/table/tbody/tr)</td>
+	<td>8</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Settings</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=What's New</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>recent_changes__sidebox_changes_depth</td>
+	<td>javascript{'label=' + storedVars['original_whats_new_count']}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>Button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Home</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertXpath</td>
+	<td>count(id('st-whats-new-content')/table/tbody/tr)</td>
+	<td>${original_whats_new_count}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Settings</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=What's New</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>recent_changes__sidebox_changes_depth</td>
+	<td>label=4</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>Button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Home</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

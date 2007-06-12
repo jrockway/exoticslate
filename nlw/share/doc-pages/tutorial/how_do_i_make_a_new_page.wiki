@@ -1,0 +1,21 @@
+Subject: How do I make a new page?
+From: seb.paquet@socialtext.com
+Date: 2006-10-24 13:08:08 GMT
+Received: from 127.0.0.1
+Revision: 25
+Category: Welcome
+Encoding: utf8
+
+Up: [Workspace Tour - Table of Contents]
+Back: [How do I make links?]
+
+Visit the *dashboard* and click on the *New Page* Button. You will see a new page to edit. Change the name of the page by editing the title in the field on top. Put the text of the page in the larger space below. Click the green *Save* button.
+>> http:base/images/docs/Create-New-Page.png
+
+You can also create a new page by making a link on an existing page. While editing, select the text to link and click on http:base/images/wikiwyg_icons/link.gif in the toolbar. You can also put the name of the page you wish to create in square brackets, like this: *{{[Title of New Page]}}*.
+
+After saving, the link will appear with a dashed underline, which means the link refers to page that does not exist. Whenever you click on a dashed link, you can create the missing page.
+
+To practice, try making a new page with your name as a title using either method.
+
+[Congratulations! You know how to use a workspace]

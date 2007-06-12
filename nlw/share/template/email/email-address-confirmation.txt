@@ -1,0 +1,15 @@
+Welcome to [% PROCESS system_name %].
+
+You signed up for a new account with our system and we need to confirm
+your email address. Please follow this link to confirm your address:
+
+  [% confirmation_uri %]
+
+We hope you enjoy using the Socialtext wiki.
+
+[% BLOCK system_name -%]
+[% IF appconfig.is_appliance %]Socialtext Appliance[% ELSE %]Socialtext[% END %]
+[%- END %]
+
+[% PROCESS 'email/standard-footer.txt'
+   support_link = 1 %]

@@ -1,0 +1,21 @@
+[%# @COPYRIGHT@ -%]
+[% save_button_value = 'Create' %]
+[% PROCESS element/settings/start %]
+<tr>
+  <td>
+    <div class="workspace-entry-header">Create A Weblog</div>
+    <div class="workspace-entry">
+      <div class="workspace-entry-p">
+        Please give your weblog a name. If the name you provide does
+        not end with "Blog" or "Weblog", the system will add "Blog" to
+        the name you provide. After you click "Save", you'll be taken
+        right to the new weblog.
+      </div>
+      <div class="settings-help">(required)</div>
+      <input type="text" name="weblog_title" value="Sample Weblog" size="50" />
+      <div class="settings-comment">Example: Sales Team Weblog</div>
+    </div>
+  </td>
+</tr>
+
+[% PROCESS  element/settings/end %]

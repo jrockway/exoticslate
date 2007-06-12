@@ -1,0 +1,160 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
+use Getopt::Long;
+use Socialtext;
+use Socialtext::AppConfig;
+use Socialtext::Paths;
+use Socialtext::User;
+use Socialtext::Workspace;
+
+my %opts;
+GetOptions( \%opts, 'verbose' ) or exit 1;
+
+my $user = Socialtext::User->SystemUser();
+# This doesn't read the filesystem because we want the list of pages
+# that were used when we switched over to using /help, and we may
+# add/remove help pages later before this script runs for a given
+# installation
+my @pages = map { chomp; $_ } <DATA>;
+my $data_dir = Socialtext::Paths::page_data_directory();
+
+opendir my $dh, $data_dir
+    or die "Cannot read $data_dir: $!";
+
+for my $ws_name ( grep { -d "$data_dir/$_" } readdir $dh ) {
+    next if $ws_name eq 'help' or $ws_name eq 'docs';
+
+    # Purging pages apparently causes us to leak memory,
+    # so we fork for each workspace in order to prevent
+    # insane process sizes.
+    if ( my $pid = fork ) {
+        wait;
+    }
+    else {
+        Socialtext::Schema->CheckDBH();
+        purge_pages($ws_name);
+        exit;
+    }
+}
+
+sub purge_pages {
+    my $ws_name = shift;
+
+    my $ws = Socialtext::Workspace->new( name => $ws_name );
+    return unless $ws;
+
+    my $nlw = Socialtext->new;
+    $nlw->load_hub(
+        current_user      => $user,
+        current_workspace => $ws,
+    );
+    $nlw->hub->registry->load;
+
+    print "Purging help pages in $ws_name\n"
+        if $opts{verbose};
+    PAGE:
+    for my $page_id (@pages) {
+        my $page = $nlw->hub->pages->new_page($page_id);
+
+        next unless $page->exists;
+        
+        my $revision_num = 0;
+        for my $revision_id (  sort { $a cmp $b } $page->all_revision_ids ) {
+            $revision_num++;
+            my $revision = $nlw->hub->pages->new_page( $page->id );
+            $revision->revision_id($revision_id);
+            my $from = $revision->metadata->From;
+            if ( $from and $from !~ /\@(?:socialtext\.(?:net|com)|sunir\.org)$/ ) {
+                next PAGE unless ( $revision_num == 1 or $revision->metadata->Control eq 'Deleted' );
+            }
+        }
+        
+        print " - ", $page->title, "\n"
+            if $opts{verbose};
+        
+        $page->purge();
+    }
+    print "\n" if $opts{verbose};
+}
+
+
+__DATA__
+advanced_formatting
+advanced_getting_around
+advanced_mode
+attached_files
+browse
+can_i_change_something
+categories
+changing_the_workspace
+click_links
+configure_settings
+congratulations_you_know_how_to_use_a_workspace
+connections
+conversations
+documents_that_people_are_working_on
+editing
+email
+expert_formatting
+help
+help_for_eventspace_administrators
+help_for_workspace_administrators
+how_do_i_find_my_way_around
+how_do_i_make_a_new_page
+how_do_i_make_links
+ie_mixed_content_instructions
+linking
+lists_of_pages
+log_in
+make_a_link
+meeting_agendas
+navigation_sidebar
+page_revision_history
+project_plans
+quick_start
+reading_the_workspace
+release_notes_for_socialtext_0_81
+release_notes_for_socialtext_0_82
+release_notes_for_socialtext_0_9
+release_notes_for_socialtext_1_0
+release_notes_for_socialtext_1_1
+release_notes_for_socialtext_1_2
+release_notes_for_socialtext_1_2_1
+release_notes_for_socialtext_1_2_2
+release_notes_for_socialtext_1_3
+release_notes_for_socialtext_1_4
+release_notes_for_socialtext_1_5_5
+release_notes_for_socialtext_1_5
+release_notes_for_socialtext_1_6_5
+release_notes_for_socialtext_1_6
+release_notes_for_socialtext_1_7_1
+release_notes_for_socialtext_1_7_2
+release_notes_for_socialtext_1_7
+release_notes_for_socialtext_1_8_2
+release_notes_for_socialtext_1_8_3
+release_notes_for_socialtext_1_8_4
+release_notes_for_socialtext_1_8_6
+release_notes_for_socialtext_1_8
+release_notes_for_socialtext_1_9_4
+release_notes_for_socialtext_1_9
+reports
+rss_tutorial
+searching
+simple_mode
+socialtext_announcements
+socialtext_announces_rss_support
+socialtext_document
+socialtext_releases_simple_editing
+start_here
+weblogs
+what_else_is_here
+what_if_i_make_a_mistake
+what_s_the_funny_punctuation
+workspace_tour_table_of_contents

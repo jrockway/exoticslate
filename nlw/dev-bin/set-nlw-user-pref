@@ -1,0 +1,69 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+
+use Data::Dumper;
+use File::Spec;
+use Getopt::Long;
+
+$Data::Dumper::Indent   = 1;
+$Data::Dumper::Terse    = 1;
+$Data::Dumper::Sortkeys = 1;
+
+my %opts;
+GetOptions(
+    'root:s'      => \$opts{root},
+    'workspace:s' => \$opts{workspace},
+    'pref:s'      => \$opts{pref},
+    'value:s'     => \$opts{value},
+) or exit 1;
+
+usage() if grep { not defined or not length } @opts{qw( workspace pref value )};
+
+$opts{root} ||= '/var/www/socialtext';
+
+my $pref_dir = File::Spec->catdir( $opts{root}, 'user', $opts{workspace} );
+die "No such workspace ($opts{workspace}) under $opts{root}\n"
+  unless -d $pref_dir;
+
+my ( $class_id, $pref_name ) = split /\:/, $opts{pref};
+die "Invalid preference ($opts{pref})" unless $class_id and $pref_name;
+
+opendir my $dh, $pref_dir
+  or die "Cannot read $pref_dir: $!";
+
+for my $user ( grep { not /^\./ } readdir $dh ) {
+    my $file = File::Spec->catfile( $pref_dir, $user, 'preferences', 'preferences.dd' );
+
+    my $prefs = {};
+    if ( -f $file ) {
+        $prefs =  do $file;
+    }
+
+    $prefs->{$class_id}{$pref_name} = $opts{value};
+
+    open my $fh, '>', $file
+      or die "Cannot write to $file: $!";
+    print $fh Data::Dumper::Dumper($prefs)
+      or die "Cannot write to $file: $!";
+    close $fh
+      or die "Cannot write to $file: $!";
+}
+
+sub usage {
+    print <<'EOF';
+
+ set-nlw-user-pref --workspace admin --pref backlinks:show_backlinks --value 50 [--root /foo/bar]
+
+ Given a workspace, a preference, and a value, this script will set
+ the preference to that value for all users of the specified
+ workspace.
+
+ The preference should be specified as "class_id:preference_name".
+
+EOF
+
+    exit;
+}

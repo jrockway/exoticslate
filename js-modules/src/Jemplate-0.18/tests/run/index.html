@@ -1,0 +1,25 @@
+<html>
+<head>
+    <title>Jemplate Testing</title>
+    <script type="text/javascript" src="lib/Test/Harness.js"></script>
+    <script type="text/javascript" src="lib/Test/Harness/Browser.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    var t = new Test.Harness.Browser();
+    
+    t.runTests(
+        "basics.t.html",
+        "default.t.html",
+        "directives.t.html",
+        "filters.t.html",
+        "hash.t.html",
+        "join.t.html",
+        "list.t.html",
+        "localise.t.html",
+        "stash.t.html",
+        "string.t.html"
+    );
+</script>
+</body>
+</html>

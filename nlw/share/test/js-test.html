@@ -1,0 +1,94 @@
+<!-- @COPYRIGHT@ -->
+<html>
+<head>
+<title></title>
+
+<script>
+function push_onload_function() { }
+</script>
+<script type="text/javascript" src="/static/javascript/main.js"></script>
+<script type="text/javascript" src="/static/javascript/xmlhttprequest.js"></script>
+<script type="text/javascript" src="/static/javascript/Wikiwyg.js"></script>
+<script type="text/javascript" src="/static/javascript/Wikiwyg/Toolbar.js"></script>
+<script type="text/javascript" src="/static/javascript/Wikiwyg/Preview.js"></script>
+<script type="text/javascript" src="/static/javascript/Wikiwyg/Wikitext.js"></script>
+
+<script type="text/javascript" src="/static/javascript/Wikiwyg/NLW.js"></script>
+
+
+<script>
+document.write('<body>Running javascript unit tests...<br />');
+
+{ // nlw_name_to_id tests
+    var tests = [
+        [ 'asdf'    , 'asdf' ],
+        [ '_asdf'   , 'asdf' ],
+        [ 'as_df'   , 'as_df' ],
+        [ 'asdf_'   , 'asdf' ],
+        [ 'a@#$sdf' , 'a_sdf' ], // XXX fails in safari
+        [ 'as > df' , 'as_df' ], // XXX fails in safari
+        [ 'as\ndf'  , 'as_df' ],
+        [ 'as[d]f'  , 'as_d_f' ],
+        [ 'as\u00FCf' , 'as%C3%BCf' ],
+        // TODO - Japanese, etc.
+        [ ''        , '' ],
+        [ '-:-'     , '_' ],
+        [ '0'       , '_' ]
+    ];
+    foreach(tests, function(test) {
+        assertEquals(nlw_name_to_id(test[0]), test[1], test[0]);
+    })
+}
+
+{ // cookie tests
+    assertEquals(getCookie('blurfl'), null, 'cookie empty by default');
+    setCookie('blurfl', 'xyzzy');
+    assertEquals(getCookie('blurfl'), 'xyzzy', 'cookies settable');
+    setCookie('smurfl', 'rstts');
+    assertEquals(getCookie('smurfl'), 'rstts', 'a different cookie settable');
+    assertEquals(getCookie('blurfl'), 'xyzzy', 'original cookie unharmed');
+    deleteCookie('blurfl');
+    assertEquals(getCookie('smurfl'), 'rstts', 'deletion is circumspect');
+    assertEquals(getCookie('blurfl'), null, 'cookies can be deleted');
+    deleteCookie('smurfl');
+    assertEquals(getCookie('smurfl'), null, 'cookies can be deleted');
+}
+
+proto = Wikiwyg.NLW.prototype;
+{ // table-input parse tests
+    var tests = [
+        // input, rows, cols, error
+        [ '3x3'      , true, [3,3] ],
+        [ '20x50'    , true, [20,50] ],
+        [ ' 20 X 50 ', true, [20,50] ],
+        [ 'mumble'   , false, WW_ERROR_TABLE_SPEC_BAD ],
+        [ '100x100'  , false, WW_ERROR_TABLE_SPEC_TOO_BIG ],
+        [ '5x0'      , false, WW_ERROR_TABLE_SPEC_HAS_ZERO ]
+    ];
+    foreach(tests, function(test) {
+        assertEquals(
+            proto.parse_input_as_table_spec(test[0]),
+            [ test[1], test[2] ],
+            test[0]
+        );
+    })
+}
+
+proto = eval(WW_SIMPLE_MODE).prototype;
+{ // Table-html-making tests
+    var cell = '<td style="width: 20px"></td>';
+    var row2 = '<tr>' + cell + cell + '</tr>';
+    var table2x2 = '<table><tbody>' + row2 + row2 + '</tbody></table>';
+    assertEquals(proto.make_table_html(2, 2), table2x2, '2x2 table');
+}
+
+proto = eval(WW_ADVANCED_MODE).prototype;
+{ // Table-html-making tests
+    var row = '| | | |\n';
+    assertEquals(proto.make_table_wikitext(2, 3), row+row, '2x3 table');
+}
+
+document.write('all tests complete!</body>');
+</script>
+
+</head>

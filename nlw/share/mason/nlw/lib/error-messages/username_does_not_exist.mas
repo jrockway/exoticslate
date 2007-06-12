@@ -1,0 +1,5 @@
+<!-- @COPYRIGHT@ -->
+<span class="error"><% $username | h %> is not registered as a user.  Try a different <% lc $App->username_label %>?</span>
+<%args>
+$username
+</%args>

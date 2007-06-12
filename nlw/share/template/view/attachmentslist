@@ -1,0 +1,69 @@
+[%# @COPYRIGHT@ -%]
+[% WRAPPER layout/html content_id = 'st-allfiles' box_javascript = 0 actions = 'element/listview/actionbar' subnav = 'element/wiki/subnav-listview' %]
+
+    <div id="st-page-wiki-title">[% wiki.title %]</div>
+    <div id="st-attachments-list-body">
+        <div>
+            <div id="st-list-title">All Files in [% wiki.title %]</div>
+            <div id="st-actions-bar-spacer-clear">&nbsp;</div>
+        </div>
+        [% IF checker.check_permission('delete') %]
+            <form action="[% script_name %]" method="post">
+        [% END %]
+            <table id="attachments-listall-table" class="standard-table">
+             <thead>
+              <tr>
+               <th></th>
+               <th>Filename</th>
+               <th>Page Title</th>
+               <th>Uploaded By</th>
+               <th>Date Uploaded</th>
+               <th>Size</th>
+              </tr>
+             </thead>
+             <tbody>
+        [% FOREACH row IN rows %]
+              <tr>
+               <td>
+          [% IF checker.check_permission('delete') %]
+                <input type="checkbox" name="selected" value="[% row.page.uri %],[% row.id %]" />
+          [% END %]
+               </td>
+               <td>[% row.link %]</td>
+               <td>[% row.page.link %]</td>
+               <td>[% row.user | html %]</td>
+               <td>[% row.date | html %]</td>
+               <td>[% row.size | html %]</td>
+              </tr>
+        [% END %]
+             </tbody>
+            </table>
+        [% IF checker.check_permission('delete') %]
+            [% IF rows.size %]
+                [% PROCESS element/formbutton name = "button" value = "Delete Selected Attachments" %]
+                <input type="hidden" name="action" value="attachments_delete" />
+                <input type="hidden" name="caller_action" value="[% hub.action %]" />
+            [% END %]
+            </form>
+        [% END %]
+    </div>
+    <script type="text/javascript">
+    /* REVIEW - there must be a better spot to put this, but where? */
+    /* This had to be moved to the end of the file to avoid IE browser race
+     * conditions */
+    /* It should be done onload */
+    new Widget.SortableTable( {
+        "tableId": "attachments-listall-table",
+        "initialSortColumn": 1,
+        "secondarySortColumn": 1,
+        "columnSpecs": [
+            { skip: true },
+            { sort: "text" },
+            { sort: "text" },
+            { sort: "text" },
+            { sort: "date" },
+            { sort: "number" }
+        ]
+    } );
+    </script>
+[% END %]

@@ -1,0 +1,30 @@
+[%# @COPYRIGHT@ -%]
+  <table id="[% settings_table_id %]">
+    <tr>
+      <td>
+        <p>
+          Congratulations! You have just created "[% workspace.title %]", a brand new
+          Socialtext Workspace.  You are the administrator.  The web address of the
+          new workspace is
+          <a href="/[% workspace.name %]/">[% workspace.uri %]</a>.
+        </p>
+        <p>
+          You're ready to jump to your new workspace, if you want to.  Choose your next step:
+        </p>
+        <ul>
+          <li><a href="/[% workspace.name %]/">Go to</a> the [% workspace.title %] home page</a>.</li>
+          <li><a href="/[% workspace.name %]/?action=users_invitation">Invite</a> other people to [% workspace.title %].</li>
+          <li>Review or change the settings for [% workspace.title %]:</li>
+	  <ul>
+	    <li><a href="/[% workspace.name %]/?action=workspaces_settings_appearance">Workspace Appearance</a></li>
+	    <li><a href="/[% workspace.name %]/?action=workspaces_settings_features">Workspace Features</a></li>
+	    <li><a href="/[% workspace.name %]/?action=workspaces_permissions">Workspace Privacy</a></li>
+	  </ul>
+        </ul>
+        <p>
+          Or you may continue to work in this workspace, and visit "[% workspace.title %]" later.
+        </p>
+      </td>
+    </tr>
+   </table>
+

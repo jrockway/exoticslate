@@ -1,0 +1,25 @@
+Subject: How do I find my way around?
+From: ken.pier@socialtext.com
+Date: 2006-10-24 22:15:02 GMT
+Received: from 127.0.0.1
+Revision: 19
+Category: Welcome
+Encoding: utf8
+
+Up: [Workspace Tour - Table of Contents]
+Back: [Lists of pages]
+
+* *"Home"* at the top left sends you to the dashboard or to the top page.
+>> http:base/images/docs/Navbar-Home.png
+
+
+* *Click links* to browse around through the pages.
+
+* Click *"What's new"* right next to *"Quick jump"* to see what's new and what has recently changed in the space.
+>> http:base/images/docs/View-Page-What's-new.png
+
+
+* *Search* from the top left to find pages with specific words in them.
+>> http:base/images/docs/Search.png
+
+Let's look at some more [advanced getting around]

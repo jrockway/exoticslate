@@ -1,0 +1,59 @@
+[%# @COPYRIGHT@ -%]
+
+[% IF extra_text %]
+[% extra_text -%]
+[% END %]
+
+<p>
+Hi,
+</p>
+
+<p>
+I'm inviting you to join [% workspace_title | html %], one of our
+shared workspaces.
+
+[% UNLESS requires_confirmation %]
+Sign in using the information below:
+[% END %]
+</p>
+
+[% IF requires_confirmation %]
+<p>
+Please <a href="[% confirmation_uri | html %]">click on this
+link</a> to confirm your email address.
+</p>
+
+<p>
+Once you have confirmed your account, you will receive a second email
+with login details.
+</p>
+[% ELSE %]
+<p>
+web address: <a href="[% workspace_uri | html %]">[% workspace_uri | html %]</a><br />
+username: [% username | html %]
+</p>
+
+[% IF appconfig.is_default('user_factories') %]
+[% IF app_name; a = 'a'; ELSE; a = 'an'; END %]
+<p>
+Because you already have [% a %] [% app_name %] account, the password is the
+same as the password you use for your other [% app_name %] workspaces. If
+you don't remember it, just <a href="[% forgot_password_uri %]">click
+here to select a new password</a>.
+</p>
+[% END %]
+<p>
+You may want to keep this email for future reference.
+</p>
+[% END %]
+
+<p>
+Thanks,
+</p>
+
+<p>
+[% inviting_user %]
+</p>
+
+[% PROCESS 'email/standard-footer.html'
+   support_link = 1 %]

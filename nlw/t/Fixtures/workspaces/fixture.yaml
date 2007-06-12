@@ -1,0 +1,16 @@
+fixtures:
+  - alzabo
+
+workspaces:
+  admin: { }
+  foobar:
+    extra_users:
+      member: [devnull@urth.org]
+      impersonator: [devnull2@socialtext.com]
+  public: { }
+  auth-to-edit: { }
+  help: { }
+
+cache:
+  - WORKSPACES
+  - USERS

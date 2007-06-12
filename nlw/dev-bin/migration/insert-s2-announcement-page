@@ -1,0 +1,148 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../lib";
+
+use Getopt::Long;
+
+use DateTime;
+use Socialtext::CategoryPlugin;
+use Socialtext::Page;
+use Socialtext::Pages;
+use Socialtext::Workspace;
+
+
+my %opts;
+GetOptions(
+    'help'    => \$opts{help},
+    'dry-run' => \$opts{dryrun},
+) || ( $opts{help} = 1 );
+
+if ( $opts{help} ) {
+    print <<USAGE ;
+USAGE: $0 [ OPTIONS ]
+
+    This script inserts an "S2 announcement" page into workspaces
+    which have not been modified since S2 was released to prod
+    (2006-10-29).
+
+OPTIONS
+
+    --dry-run        Don't actually change anything.
+
+USAGE
+    exit;
+}
+
+my $Title;
+my $Content;
+my $User;
+my $Cutoff;
+
+main();
+
+sub main {
+    set_page_vars();
+    set_cutoff();
+
+    my $workspaces = Socialtext::Workspace->All();
+
+    while ( my $ws = $workspaces->next ) {
+        my ( $main, $hub ) = $ws->_main_and_hub();
+
+        if ( workspace_is_unused_since_cutoff($hub) ) {
+            insert_s2_announcement_page( $hub, $ws->name() );
+        }
+        else {
+            print $ws->name(), " has been updated since the cutoff date.\n";
+        }
+    }
+}
+
+sub workspace_is_unused_since_cutoff {
+    my $hub = shift;
+
+    my $index = $hub->category->index->read('recent changes');
+    my @page_ids = sort { $index->{$b} cmp $index->{$a} } keys %$index;
+
+    my $page = $hub->pages->new_page( $page_ids[0] );
+
+    # Duh, can this happen? I dunno.
+    return 1 unless $page;
+
+    return $page->revision_id() < $Cutoff;
+}
+
+sub insert_s2_announcement_page {
+    my $hub     = shift;
+    my $ws_name = shift;
+
+    print "Inserting page into $ws_name\n";
+
+    return if $opts{dryrun};
+
+    $hub->current_user($User);
+
+    my $page = $hub->pages()->new_from_name($Title);
+
+    # This will be true for the exchange workspace, at least.
+    return if $page->active();
+
+    $page->update(
+        subject          => $Title,
+        content          => $Content,
+        revision         => 0,
+        original_page_id => $page->id(),
+    );
+}
+
+# This is a separate sub mostly to move the body text down here, out
+# of the way of the real code.
+sub set_page_vars {
+    $User = Socialtext::User->new(
+        email_address => 'ross.mayfield@socialtext.com' );
+
+    $Title = 'Socialtext 2.0 Released - Better looking and more usable';
+
+    $Content = <<'EOF';
+^^ Socialtext 2: Better looking and more usable
+
+Today Socialtext 2.0 was released on all Personal and Professional Workspaces. We had an extended beta period to enable our customers to adapt to what's new, plan transitions and solicit broader feedback. Thank you to all who participated.
+
+"PC Magazine reviewed the beta"<http://www.pcmag.com/article2/0,1895,2035722,00.asp>:
+
+> Socialtext 2.0, released in mid-September, is decidedly hip. Nowadays, all the hippest products allude to that indescribable entity called Web 2.0. Like the old Socialtext, this new version is a wonderfully convenient alternative to e-mail. It's a free-form Web site where colleagues can share ideas, plans, calendars, agendas, and documents - you name it. Rather than sifting through clogged Microsoft Outlook inboxes and wasting precious minutes on poorly organized conference calls, everyone can deal with almost everything at a central online location.
+
+> The new version is even easier to use. A "dashboard," a page for managing your wikis (the company says each user juggles about three), sits on the surface, giving you access to everything underneath. This brings a bit more order to the whole Socialtext experience but doesn’t hamper the free-form editing that makes wikis so useful.
+
+Socialtext 2 is intended to be more beautiful and more useful. The UI has been redesigned to be more clean and less cluttered. And we fixed a number of usability problems that got in the way of fast and productive wiki use. People have been telling us in testing that it makes Socialtext easier to use, and easier to get colleagues to start using. We hope you agree.
+
+^^^ Better navigation, and less clutter
+
+Socialtext 1 had accumulated many useful features to help you get around the workspace, but the interface was crowded, especially around the top menu and sidebar of each workspace page. The pages looked busy and cluttered, and the multitude of choices was confusing to many people. Useful features were hidden so that few people found them.
+
+For Socialtext 2.0, we pulled the user interface apart into separate sections that serve different purposes. A personal dashboard helps users orient themselves, and has jumping off points for further navigation. For reading and editing, pages are simpler and more streamlined, and provide easy access to page-related information like tags, attachments and backlinks. Lists of things like recently changed pages, tags, and files, are grouped in a common list view interface, to make it easier to browse the contents of the workspace quickly.
+
+The personal dashboard serves as "home" in private wikis by default. If you'd prefer a traditional "wiki home page", you can do that too. There's a settings for admins to set the home page.
+
+^^^ Tags and attachments
+
+It is very useful to be able to upload and refer to files, and to be able to tag pages to improve search and navigation. But these features were too hard to use. Socialtext 2 makes tagging and file upload easier.
+
+^^^ More usability improvements
+
+The "print" function is easier to find, and the rename action now takes fewer steps. When you make a new page, you can't overwrite an old page by accident.
+
+^^^ More detail
+
+For more detail about the improvements in S2, see {link: help [Release Notes for Socialtext 2.0]}.
+EOF
+}
+
+sub set_cutoff {
+    $Cutoff = DateTime->new( year => 2006, month => 10, day => 29 )->strftime('%Y%m%d%H%M%S');
+}

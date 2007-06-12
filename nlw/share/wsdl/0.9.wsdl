@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions 
+    name="NLWSOAP"
+    targetNamespace="urn:NLWSOAP"
+    xmlns:typens="urn:NLWSOAP"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+    <types>
+        <xsd:schema targetNamespace="urn:NLWSOAP"
+                xmlns="http://www.w3.org/2001/XMLSchema">
+        <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+
+            <xsd:complexType name="pageMetadata">
+                <xsd:all>
+                    <xsd:element name="subject"
+                        type="xsd:string"/>
+                    <xsd:element name="page_uri"
+                        type="xsd:string"/>
+                    <xsd:element name="date"
+                        type="xsd:string"/>
+                    <xsd:element name="author"
+                        type="xsd:string"/>
+                    <xsd:element name="revisions"
+                        type="xsd:int"/>
+                </xsd:all>
+            </xsd:complexType>
+
+            <xsd:complexType name="ArrayOf_pageMetadata">
+                <xsd:complexContent>
+                    <xsd:restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType"
+                                   wsdl:arrayType="typens:pageMetadata[]" />
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="pageFull">
+                <xsd:all>
+                    <xsd:element name="pageContent"
+                        type="xsd:string"/>
+                    <xsd:element name="subject"
+                        type="xsd:string"/>
+                    <xsd:element name="page_uri"
+                        type="xsd:string"/>
+                    <xsd:element name="date"
+                        type="xsd:string"/>
+                    <xsd:element name="author"
+                        type="xsd:string"/>
+                    <xsd:element name="revisions"
+                        type="xsd:int"/>
+                </xsd:all>
+            </xsd:complexType>
+
+        </xsd:schema>
+    </types>
+
+    <message name="heartBeatRequest">
+    </message>
+
+    <message name="heartBeatResponse">
+        <part name="heartBeatReturn" type="xsd:string">
+            <documentation>The local time at the server</documentation>
+        </part>
+    </message>
+
+    <message name="changesRequest">
+        <part name="key"       type="xsd:string"/>
+        <part name="category"  type="xsd:string"/>
+        <part name="count"     type="xsd:int"/>
+    </message>
+
+    <message name="changesResponse">
+        <part name="changesList" type="typens:ArrayOf_pageMetadata">
+            <documentation>A Collection of Changes</documentation>
+        </part>
+    </message>
+
+    <message name="searchRequest">
+        <part name="key"       type="xsd:string"/>
+        <part name="query"     type="xsd:string"/>
+    </message>
+
+    <message name="searchResponse">
+        <part name="searchList" type="typens:ArrayOf_pageMetadata">
+            <documentation>A Collection of Search Results</documentation>
+        </part>
+    </message>
+
+    <message name="getPageRequest">
+        <part name="key"       type="xsd:string"/>
+        <part name="pageName"  type="xsd:string"/>
+        <part name="format"    type="xsd:string"/>
+    </message>
+    <message name="getPageResponse">
+        <part name="page" type="typens:pageFull"/>
+    </message>
+
+    <message name="getAuthRequest">
+        <part name="username"  type="xsd:string"/>
+        <part name="password"  type="xsd:string"/>
+        <part name="workspace" type="xsd:string"/>
+        <part name="act_as"    type="xsd:string"/>
+    </message>
+    <message name="getAuthResponse">
+        <part name="token"      type="xsd:string"/>
+    </message>
+
+    <message name="setPageRequest">
+        <part name="key"       type="xsd:string"/>
+        <part name="pageName"  type="xsd:string"/>
+        <part name="content"   type="xsd:string"/>
+    </message>
+    <message name="setPageResponse">
+        <part name="page" type="typens:pageFull"/>
+    </message>
+
+    <portType name="NLWSOAPPort">
+
+        <operation name="heartBeat">
+            <documentation>Make sure things are working</documentation>
+            <input message="typens:heartBeatRequest" />
+            <output message="typens:heartBeatResponse" />
+        </operation>
+
+        <operation name="getChanges">
+            <documentation>Request a list of changes</documentation>
+            <input message="typens:changesRequest" />
+            <output message="typens:changesResponse" />
+        </operation>
+
+        <operation name="getSearch">
+            <documentation>Request a list of changes</documentation>
+            <input message="typens:searchRequest" />
+            <output message="typens:searchResponse" />
+        </operation>
+
+        <operation name="getPage">
+            <documentation>Request a single page</documentation>
+            <input message="typens:getPageRequest" />
+            <output message="typens:getPageResponse" />
+        </operation>
+
+        <operation name="getAuth">
+            <documentation>Request a single page</documentation>
+            <input message="typens:getAuthRequest" />
+            <output message="typens:getAuthResponse" />
+        </operation>
+
+        <operation name="setPage">
+            <documentation>Update a single page</documentation>
+            <input message="typens:setPageRequest" />
+            <output message="typens:setPageResponse" />
+        </operation>
+
+    </portType>
+
+    <binding name="NLWSOAPBinding" type="typens:NLWSOAPPort">
+        <soap:binding style="rpc"
+                      transport="http://schemas.xmlsoap.org/soap/http" />
+
+        <operation name="heartBeat">
+            <soap:operation soapAction="urn:NLWSOAP#heartBeat" />
+            <input>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="urn:NLWSOAP"
+                    use="encoded" />
+            </input>
+            <output>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="urn:NLWSOAP"
+                    use="encoded" />
+            </output>
+        </operation>
+
+        <operation name="getChanges">
+            <soap:operation soapAction="urn:NLWSOAP#getChanges" />
+            <input>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="urn:NLWSOAP"
+                    use="encoded" />
+            </input>
+            <output>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="urn:NLWSOAP"
+                    use="encoded" />
+            </output>
+        </operation>
+
+        <operation name="getSearch">
+            <soap:operation soapAction="urn:NLWSOAP#getSearch" />
+            <input>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="urn:NLWSOAP"
+                    use="encoded" />
+            </input>
+            <output>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="urn:NLWSOAP"
+                    use="encoded" />
+            </output>
+        </operation>
+
+        <operation name="getPage">
+            <soap:operation soapAction="urn:NLWSOAP#getPage" />
+            <input>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="urn:NLWSOAP"
+                    use="encoded" />
+            </input>
+            <output>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="urn:NLWSOAP"
+                    use="encoded" />
+            </output>
+        </operation>
+
+        <operation name="getAuth">
+            <soap:operation soapAction="urn:NLWSOAP#getAuth" />
+            <input>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="urn:NLWSOAP"
+                    use="encoded" />
+            </input>
+            <output>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="urn:NLWSOAP"
+                    use="encoded" />
+            </output>
+        </operation>
+
+        <operation name="setPage">
+            <soap:operation soapAction="urn:NLWSOAP#setPage" />
+            <input>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="urn:NLWSOAP"
+                    use="encoded" />
+            </input>
+            <output>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="urn:NLWSOAP"
+                    use="encoded" />
+            </output>
+        </operation>
+
+    </binding>
+
+    <service name="NLWSOAPService">
+        <port binding="typens:NLWSOAPBinding" name="NLWSOAPPort">
+            <soap:address location="@SOAP_SERVER@" />
+        </port>
+    </service>
+
+</definitions>

@@ -1,0 +1,108 @@
+    RewriteEngine On
+    # We need to be smart about re-escaping characters on the way to the
+    # backend server.  
+    RewriteMap escape int:escape
+
+[% IF config.confd_exists %]
+    # include file for rewrite rules on this system
+    Include conf.d/rewrite*
+[% END %]
+[% IF for_ssl_vhost %]
+    [% IF config.eu_httpsd_exists %]
+        # include file for redirecting for the remote proxies (https)
+        Include conf.d/eu-httpsd.conf
+        Include conf.d/asia-httpsd.conf
+    [% END %]
+[% ELSE %]
+    [% IF config.use_ssl && config.redirect_to_ssl %]
+        # include file for per-workspace redirection to ssl
+        Include conf.d/redirect-to-ssl
+    [% END %]
+    [% IF config.eu_httpd_exists %]
+        # include file to redirect for the remote proxies
+        Include conf.d/eu-httpd.conf
+        Include conf.d/asia-httpd.conf
+    [% END %]
+[% END %]
+
+[% IF config.apache_status %]
+    # Leave status URLs unmolested
+    RewriteRule    ^(/(perl-)?status)$  $1 [L]
+[% END %]
+[% IF not (config.is_appliance || config.is_dev || !config.apache_proxy) %]
+    RewriteCond    %{HTTP_HOST}  !^www.eu.socialtext.net$
+    RewriteCond    %{HTTP_HOST}  !^www.asia.socialtext.net$
+    RewriteCond    %{HTTP_HOST}  !^miki.socialtext.net$
+    Rewritecond    %{HTTP_HOST}  !^chalk.socialtext.net$
+    RewriteCond    %{HTTP_HOST}  !^[% config.nlw_server_hostname %]:?\d*$
+    RewriteRule    (.*)          http://[% config.nlw_server_hostname %]$1  [R,L,NE]
+[% END %]
+
+[% IF config.nlw_uri_is_ssl && !for_ssl_vhost %]
+    [% colon_port = config.ports.https == 443 ? '' : ':' _ config.ports.https %]
+    RewriteRule  (/nlw.*)  https://[% config.nlw_server_hostname %][% colon_port %]$1  [R,L,NE]
+[% END %]
+
+[% IF config.is_dev %]
+    # surface our selenium test runner in the static fs directory
+    RewriteRule    /test-selenium/(.*)           /static/selenium/$1 [PT,L]
+[% END %]
+
+    # We support /static/wsdl for backward compat., but WSDLs are not static
+    # files.  This rewrites the URL so it'll get sent to the backend.
+    RewriteRule ^/static/wsdl/(.+)   /wsdl/$1 [R,L]
+
+    # this first one is only here for sake of doc-pages, everything
+    # else should use /static
+    RewriteRule    /.*/base/(.+)            /static/$1  [R,L]
+    RewriteRule    ^/static/[\.0-9]+/(.+)$  /static/$1  [PT,L]
+
+[% IF not (config.is_appliance || !config.apache_proxy) %]
+    RewriteRule    ^/my/$        http://www.socialtext.net/
+[% END %]
+[% IF config.apache_proxy %]
+    RewriteRule    ^/control/           /nlw/control/  [R,L]
+[% END %]
+    # backwards compat for old-style /foo/member/index.cgi links
+    RewriteRule    ^(/\w+)/member/(.*)  $1/$2          [R,L]
+
+    RewriteRule    ^/lite/page/([^/]+)$ /lite/page/$1/ [R,L,NE]
+    RewriteRule    ^/$ /index.cgi  [R,L]
+
+[% IF config.is_dev %]
+    RewriteRule    !^/alzabo  -  [C]
+[% END %]
+    RewriteRule    !^/nlw    -  [C]
+    RewriteRule    !^/challenge - [C]
+    RewriteRule    !^/logos  -  [C]
+    RewriteRule    !^/favicon\.ico  -  [C]
+    RewriteRule    ^/([^/\.]+)/?$  /$1/index.cgi  [R,L,NE]
+    RewriteRule    ^/([^/\.]+)/member/?$  /$1/member/index.cgi  [R,L,NE]
+    RewriteRule    ^/([^/\.]+)/emailprefs$ /$1/index.cgi?action=preferences_settings&preferences_class_id=email_notify [R,L,NE,QSA]
+    RewriteRule    ^/([^/\.]+)/watchlistprefs$ /$1/index.cgi?action=preferences_settings&preferences_class_id=watchlist [R,L,NE,QSA]
+
+[% IF config.apache_proxy %]
+    # Not sure why DirectoryIndex does not work, but because of the
+    # way that directive works in Apache2 it probably doesn't matter
+    # anyway, as we would probably still require a rewrite rule to
+    # make sure the request got sent to the back end
+    RewriteRule    ^/nlw/control/?$         /nlw/control/index.html  [R,L]
+    RewriteRule    ^(/nlw/control/[^/]+)/$  $1 [R,L]
+[% END %]
+
+[% IF not config.single %]
+    # webplugin is supported for 'drop-in' third party apps
+    RewriteRule    !^/webplugin             -           [C]
+    RewriteRule    !^/static                -           [C]
+    RewriteRule    !^/logos                 -           [C]
+    RewriteRule    !^/favicon\.ico          -           [C]
+[% IF config.is_appliance %]
+    RewriteRule    !^/console               -           [C]
+[% END %]
+    RewriteRule    (.*)   http://localhost:[% apache_perl_port %]$1  [P,L]
+[% END %]
+
+    Alias /static  [% config.static_dir %]
+    <Location /static>
+        AddCharset UTF-8 .js
+    </Location>

@@ -1,0 +1,24 @@
+Subject: What else is here?
+From: sunir.shah@socialtext.com
+Date: 2006-06-23 21:23:21 GMT
+Received: from 127.0.0.1
+Revision: 15
+Category: Welcome
+Encoding: utf8
+
+Up: [Workspace Tour - Table of Contents]
+Back: [Start here]
+
+Again, you're looking at a page in a Socialtext Workspace. It provides a way to organize information and collaborate on the web.
+
+What else can be in a workspace? Perhaps another way people keep track of things, say a to-do list.
+
+| ^^^ Keith's To-do List
+
+* call Mary
+* work on the [Marketing Proposal]
+* pick up the kids at 4:45 today |
+
+Pages can contain links, as in the case of the words "Marketing Proposal" above.
+
+A workspace can also hold [documents that people are working on]...

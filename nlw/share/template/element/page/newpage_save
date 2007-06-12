@@ -1,0 +1,25 @@
+[% ns = 'st-newpage-save' %]
+<div id="[% ns %]">
+    <form onsubmit="return false;">
+    <div id="[% ns %]-overlay" class="popup-overlay"></div>
+    <div id="[% ns %]-interface">
+
+        <div id="[% ns %]-title">Save Page As</div>
+
+        <p id="[% ns %]-prompt">Enter a meaningful and distinctive title for your page.</p>
+        <p id="[% ns %]-field-pagename">
+            Page Title: <input id="[% ns %]-pagename" size="45" type="text" name="pagename"/>
+        </p>
+        <p id="[% ns %]-tip">Tip: You'll be able to find this page later by using the title you choose.</p>
+        <div id="[% ns %]-buttons">
+            <table width="100%" border="0">
+            <tr>
+            <td align="right">[% INCLUDE element/button id="${ns}-cancelbutton", label="Cancel" %]</td>
+            <td width="70px" align="right">[% INCLUDE element/button id="${ns}-savebutton", label="Save" %]</td>
+            </tr>
+            </table>
+        </div>
+    </div>
+    </form>
+</div>
+

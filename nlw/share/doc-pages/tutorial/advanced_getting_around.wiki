@@ -1,0 +1,17 @@
+Subject: Advanced Getting Around
+From: ken.pier@socialtext.com
+Date: 2006-10-24 21:56:12 GMT
+Received: from 127.0.0.1
+Revision: 21
+Category: Welcome
+Encoding: utf8
+
+Up: [Workspace Tour - Table of Contents]
+Back: [How do I find my way around?]
+
+Here are some more advanced workspace navigation techniques. If you like, you can go back to the basic page, called [How do I find my way around?]
+
+You can use tags to group pages that are related. Anyone can put a tag on a page by clicking the *Add tag* button in the sidebar. You can find pages with a given tag by clicking the tag if it appears in the sidebar, or by going to the dashboard, then clicking on the *"All tags"* link.
+>> http:base/images/docs/Navbar-All-tags.png
+
+Next: [Can I change something?]

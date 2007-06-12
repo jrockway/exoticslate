@@ -1,0 +1,34 @@
+[%# @COPYRIGHT@ -%]
+<div id="st-pagetools-revision-compare">
+    <ul class="st-revision-menu">
+        <li class="st-first">
+            [% INCLUDE element/ws_link
+                href = "${script_name}?${page_uri}",
+                id   = "st-back-to-current-revision-link",
+                name = "Back To Current Revision"
+            %]
+        </li>
+        <li>
+            [% INCLUDE element/ws_link
+                href = "${script_name}?action=revision_list;page_name=${page_uri}",
+                id   = "st-all-revisions-link",
+                name = "All Revisions"
+            %]
+        </li>
+        <li class="st-last">
+            [% IF mode == 'source' %]
+                [% INCLUDE element/ws_link
+                    href = "${script_name}?action=revision_compare;page_name=${page_uri};new_revision_id=${new_revision_id};old_revision_id=${old_revision_id}",
+                    id   = "st-view-formatted-link",
+                    name = "View Formatted"
+                %]
+            [% ELSE %]
+                [% INCLUDE element/ws_link
+                    href = "${script_name}?action=revision_compare;page_name=${page_uri};new_revision_id=${new_revision_id};old_revision_id=${old_revision_id};mode=source",
+                    id   = "st-view-unformatted-link",
+                    name = "Color View (Unformatted)"
+                %]
+            [% END %]
+        </li>
+    </ul>
+</div>

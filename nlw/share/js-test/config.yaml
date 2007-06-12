@@ -1,0 +1,10 @@
+index_title: Socialtext Javascript Testing
+import_libs:
+  - ../../js-modules/prototype/dist/prototype.js
+  - ../../js-modules/Ajax/lib/Ajax.js
+  - ../Test/Wikiwyg.js
+  - ../../javascript/main.js
+  - ../../js-modules/Wikiwyg/lib/Wikiwyg.js
+  - ../../js-modules/Wikiwyg/lib/Wikiwyg/Wikitext.js
+  - ../../js-modules/Wikiwyg/lib/Wikiwyg/Wysiwyg.js
+  - ../../javascript/Wikiwyg/Socialtext.js

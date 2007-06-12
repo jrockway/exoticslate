@@ -1,0 +1,36 @@
+[%# @COPYRIGHT@ -%]
+<html>
+    <head>
+         <title>Invitation Request</title>
+     </head>
+
+     <body>
+         Hello,
+         <p>
+[% inviting_user %] would like to ask you to invite new users into the
+[% workspace_title %] workspace:
+</p>
+<p>
+
+[% FOREACH user = invited_users %]
+[% user %]<br /> [% END %]
+</p>
+
+
+[% IF extra_text %]
+<p>
+[% extra_text %]
+</p>
+[% END %]
+<p>
+To invite these users into the workspace, visit the user invite page for the <br />
+workspace and copy and paste the list above into the invite box.  The User <br />
+Invite page can be found at:
+</p>
+
+<p>
+[% url %]
+</p>
+
+[% PROCESS 'email/standard-footer.html',
+   support_link = 0 %]

@@ -1,0 +1,21 @@
+[% ns = 'st-newpage-duplicate' %]
+<div id="[% ns %]">
+    <form onsubmit="return false;">
+    <div id="[% ns %]-overlay" class="popup-overlay"></div>
+    <div id="[% ns %]-interface">
+        <div id="[% ns %]-title">Page Already Exists</div>
+        <p class="[% ns %]-prompt">There is <span id="st-newpage-duplicate-emphasis">already a page</span> named <a id="[% ns %]-link" href="#" target="">XXX</a>. Would you like to:</p>
+        <p class="[% ns %]-option"><input type="radio" name="[% ns %]-option" id="[% ns %]-option-different" value="different"/> Save with a different name: <input id="[% ns %]-pagename" size="40" type="text" name="pagename"/></p>
+        <p class="[% ns %]-option"><input type="radio" name="[% ns %]-option" id="[% ns %]-option-suggest" value="suggest"/> Save the page with the name "<span id="[% ns %]-suggest">XXX</span>"</p>
+        <p class="[% ns %]-option"><input type="radio" name="[% ns %]-option" id="[% ns %]-option-append" value="append"/> Append your text to the bottom of the existing page named: "<span id="[% ns %]-appendname">XXX</span>"</p>
+        <div id="[% ns %]-buttons">
+            <table width="100%" border="0">
+            <tr>
+            <td align="right">[% INCLUDE element/button href="" id="${ns}-cancelbutton", label="Cancel" %]</td>
+            <td width="70px" align="right">[% INCLUDE element/button href="" id="${ns}-okbutton", label="Ok" %]</td>
+            </tr>
+            </table>
+        </div>
+    </div>
+    </form>
+</div>

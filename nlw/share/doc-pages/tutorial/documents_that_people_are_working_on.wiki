@@ -1,0 +1,22 @@
+Subject: Documents that people are working on
+From: sunir.shah@socialtext.com
+Date: 2006-06-23 21:22:59 GMT
+Received: from 127.0.0.1
+Revision: 9
+Category: Welcome
+Encoding: utf8
+
+Up: [Workspace Tour: Table of Contents]
+Back: [What else is here?]
+
+You could create a page in a workspace to collaborate on document drafts:
+
+| ^^^ Z-1000 Draft Marketing Collateral
+
+Acme Widgets is proud to present our new, advanced Z-1000 weed-trimmer and hair-styling widget. Its features include:
+
+* a newly-designed rotor with twice the weed-trimming power
+* 7 new hair-trimming attachments
+* special bulk-pricing options for schools and institutions |
+
+...not to mention to have [conversations] among team members.

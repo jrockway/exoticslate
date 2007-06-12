@@ -1,0 +1,20 @@
+Subject: How do I make links?
+From: seb.paquet@socialtext.com
+Date: 2006-10-24 13:06:59 GMT
+Received: from 127.0.0.1
+Revision: 15
+Category: Welcome
+Encoding: utf8
+
+Up: [Workspace Tour - Table of Contents]
+Back: [What's the funny punctuation?]
+
+Making links in Socialtext is very simple.
+
+To add a link to a page in the workspace, first *double-click* to enter editing mode. Alternatively, click the *Edit* button.
+
+Type the name of the page you want to link to, and turn it into a link simply by selecting it and clicking on http:base/images/wikiwyg_icons/link.gif in the toolbar.
+
+If you make a link to a page that doesn't exist yet, your link will appear with a dotted underline. When you click on the link, the page will be created.
+
+[How do I make a new page?]

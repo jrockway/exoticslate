@@ -1,0 +1,10 @@
+Subject: Announcements and Links
+From: dave.rolsky@socialtext.com
+Date: 2006-10-20 12:00:00 GMT
+Revision: 1
+
+This is a wiki. It has lots of pages that you can write on. Click on links to explore, and click *Home* to come back.
+
+If you'd like an introductory tour of Socialtext, [start here].
+
+The *[Announcements and Links]* page is the page that everyone on your team will see on their *Dashboard*. Here you can post announcements, leave notes, and link to useful resources.

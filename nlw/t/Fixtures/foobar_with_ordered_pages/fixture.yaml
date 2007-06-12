@@ -1,0 +1,10 @@
+fixtures:
+  - alzabo
+
+workspaces:
+  foobar:
+    ordered_pages: 1
+
+cache:
+  - WORKSPACES
+  - USERS

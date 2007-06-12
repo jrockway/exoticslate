@@ -1,0 +1,220 @@
+[% MACRO simple_handler( loc, handler ) BLOCK %]
+    <Location [% loc %]>
+        SetHandler  perl-script
+        PerlHandler +[% handler %]
+    </Location>
+[% END %][%# simple_handler() %]
+
+[% MACRO match_handler( locpattern, handler ) BLOCK %]
+    <LocationMatch [% locpattern %]>
+        SetHandler  perl-script
+        PerlHandler +[% handler %]
+    </LocationMatch>
+[% END %][%# match_handler() %]
+
+[% MACRO vhost_common( for_ssl_vhost ) BLOCK %]
+    ServerAdmin [% config.server_admin %]
+    DocumentRoot [% config.data_root_dir %]/docroot
+    PerlSetEnv HOME [% config.prefix_dir %]/var/www
+[% IF config.is_dev %]
+    PerlPassEnv NLW_APPCONFIG
+[% END %]
+    PerlSetEnv APACHE_LOG_DIR [% config.log_dir %]
+
+[% IF config.is_dev %]
+    # XXX - I suspect this is wrong
+    ErrorDocument 500 /nlw/errors/500.html
+
+    PerlSetVar ReloadAll Off
+    PerlSetVar ReloadModules "Socialtext::WebApp Socialtext::WebApp::* Socialtext::* Socialtext::MasonHandler Socialtext::Handler Socialtext::Handler::* Socialtext::RequestContext"
+    PerlInitHandler  +Apache::Reload
+[% END %]
+
+[% IF config.apache_status %]
+    # Status handlers
+    <Location /status>
+        SetHandler server-status
+        Order Deny,Allow
+        Deny from all
+        Allow from [% config.apache_status %]
+    </Location>
+    <Location /perl-status>
+        <Perl>
+            eval { require B::TerseSize };
+        </Perl>
+        SetHandler perl-script
+        PerlHandler +Apache::Status
+        PerlSetVar StatusOptionsAll On
+        PerlSetVar StatusTerseSizeMainSummary On
+        Order Deny,Allow
+        Deny from all
+        Allow from [% config.apache_status %]
+    </Location>
+[% END %]
+
+[% IF config.single %]
+    [% PROCESS 'shared/rewrite.tt2' %]
+[% END %]
+
+    PerlCleanupHandler  +Socialtext::Handler::Cleanup
+
+    <Location />
+        PerlInitHandler  +Socialtext::InitHandler
+    </Location>
+
+    [% simple_handler( '/data', 'Socialtext::Handler::REST' ) %]
+
+    Alias /nlw [% config.comp_root %]
+    [% simple_handler( '/nlw', 'Socialtext::MasonHandler' ) %]
+
+    <Location /challenge>
+        SetHandler perl-script
+        PerlHandler +Socialtext::Handler::Challenge
+    </Location>
+[% IF not config.socialtext_open %]
+    <Location /st-archive>
+        [%# A way for host customers to download stuff (workspace backups,
+        etc) in a way that requires authentication.  Only used on production. %]
+        Options FollowSymlinks
+        AuthName "Socialtext Authentication"
+        AuthType Basic
+        PerlAddVar SocialtextAuthenActions check_cookie
+        PerlAddVar SocialtextAuthenActions check_basic
+        PerlAddVar SocialtextAuthenActions http_401
+        PerlAuthenHandler +Socialtext::Apache::AuthenHandler
+        PerlSetEnv ST_AUTHZ_URL_BASE /st-archive/
+        PerlAuthzHandler +Socialtext::AuthzHandler
+        Require valid-workspace-membership
+    </Location>
+    <Location /nlw/control>
+        [%# Control panel %]
+        PerlAccessHandler  +Socialtext::AccessHandler::IsBusinessAdmin
+    </Location>
+[% END %]
+
+    # These are considered internal components (traditional Mason naming
+    # convention), where .html, etc, are publically viewable.
+    <LocationMatch "^/nlw/.*(handler|\.mas)$">
+        Deny from all
+    </LocationMatch>
+
+[% simple_handler( '/lite/page',      'Socialtext::Handler::Page::Lite' ) %]
+[% simple_handler( '/lite/changes',   'Socialtext::Handler::Changes::Lite' ) %]
+[% simple_handler( '/lite/search',    'Socialtext::Handler::Search::Lite' ) %]
+[% simple_handler( '/lite/category',  'Socialtext::Handler::Category::Lite' ) %]
+
+[% simple_handler( '/page',           'Socialtext::Handler::Page::Full' ) %]
+[% simple_handler( '/changes',        'Socialtext::Handler::Changes::Full' ) %]
+[% simple_handler( '/search',         'Socialtext::Handler::Search::Full' ) %]
+[% simple_handler( '/category',       'Socialtext::Handler::Category::Full' ) %]
+
+[% match_handler(  '^/page/[^/]+/[^/]+/attachments', 'Socialtext::Handler::Attachment' ) %]
+[% match_handler(  '^/page/[^/]+/[^/]+/tags',        'Socialtext::Handler::Tag' ) %]
+[% match_handler(  '^/index\.cgi',                   'Socialtext::Handler::App' ) %]
+
+    <LocationMatch "^/[^/]+/index\.cgi">
+        ErrorDocument 404 /index.cgi
+
+        SetHandler   perl-script
+        PerlHandler  +Socialtext::Handler::App
+    </LocationMatch>
+
+    <LocationMatch "^/[^/]+/member/index\.cgi">
+        ErrorDocument 404 /index.cgi
+
+        SetHandler   perl-script
+        PerlHandler  +Socialtext::Handler::App
+    </LocationMatch>
+
+    <Location /index.cgi>
+        SetHandler   perl-script
+        PerlInitHandler  +Socialtext::InitHandler
+        PerlHandler  +Socialtext::Handler::NoWorkspace
+    </Location>
+
+[% simple_handler( '/feed',           'Socialtext::Handler::Syndicate' ) %]
+[% simple_handler( '/noauth/feed',    'Socialtext::Handler::Syndicate' ) %]
+[% simple_handler( '/soap/0.9',       'Socialtext::SOAPServer' ) %]
+[% simple_handler( '/wsdl',           'Socialtext::Handler::WSDL' ) %]
+
+[% END %][%# MACRO vhost_common %]
+
+[%# Real code starts here %]
+# This file is the Socialtext-specific Apache configuration.  It is designed
+# to be Included from a parent configuration file.  You can use the
+# /etc/apache-perl/st-httpd.conf that we build for you, or, if you have other
+# server settings you prefer, you can Include it from your own
+# /etc/apache-perl/httpd.conf.
+# ---------------------------------------------------------------------------
+# You can set set the size limits for Apache processes by setting the
+# appropriate variables below.  These are passed through to Apache::SizeLimit
+# via Socialtext::Handler::Cleanup.
+# Set min/max sizes to pass to Apache::SizeLimit
+# See http://search.cpan.org/dist/Apache-SizeLimit/
+
+# This sets the maximum size of the Apache process, including both shared
+# and unshared memory.
+# PerlSetVar st_max_process_size 200000
+
+# These two are effectively meaningless if Apache::SizeLimit can't
+# determine the shared memory size for your platform.
+
+# This sets the maximum amount of unshared memory the process can use.
+PerlSetVar st_max_unshared_size 225000
+
+# This sets the minimum amount of shared memory the process must have.
+# PerlSetVar st_min_shared_size   70000
+
+[% PROCESS 'apache-perl/modules.tt2' %]
+[%- IF config.inc -%]
+    <Perl>
+        use lib
+    [%- FOREACH dirname IN config.inc %]
+            '[% dirname %]'[%- IF loop.last -%];[%- ELSE -%],[%- END -%]
+    [%- END %]
+    </Perl>
+[%- END -%]
+
+PerlSetEnv  NLW_CONFIG      [% config.nlw_config_file %]
+PerlSetEnv  MASON_COMP_ROOT [% config.comp_root %]
+PerlSetEnv  APACHE_LOG_DIR  [% config.log_dir %]
+[% IF ENV.HARNESS_ACTIVE %]
+PerlSetEnv  HARNESS_ACTIVE  [% ENV.HARNESS_ACTIVE %]
+[% END %]
+[%# REVIEW - hack to make Socialtext::Workspace->uri work in devs envs %]
+[% IF config.is_dev %]
+PerlSetEnv  NLW_FRONTEND_PORT  [% config.apache2_port %]
+PerlSetEnv  NLW_DEV_MODE  1
+[% END %]
+
+# These are the only modules we load with PerlModule.  All the other handlers
+# load via the PerlHandler +HandlerName mechanism.
+PerlModule  Socialtext::ModPerl
+
+
+<VirtualHost *:[% config.backend_port %]>
+[% IF !config.apache_proxy  %]
+    ServerName [% config.nlw_server_hostname %]
+[% END %]
+[% vhost_common( 0 ) %]
+</VirtualHost>
+
+[% IF config.apache_proxy %]
+<VirtualHost *:[% config.backend_port + 1000 %]>
+    PerlSetVar  NLWHTTPSRedirect  1
+[% vhost_common( 1 ) %]
+</VirtualHost>
+[% END %][%# config.apache_proxy %]
+
+[% IF config.eu_httpd_exists %]
+<VirtualHost 10.8.0.1:[% config.backend_port %]>
+    ServerName www.eu.socialtext.net
+[% vhost_common( 1 ) %]
+</VirtualHost>
+
+<VirtualHost 10.8.0.1:[% config.backend_port + 1000 %]>
+    ServerName www.eu.socialtext.net
+    PerlSetVar  NLWHTTPSRedirect  1
+[% vhost_common( 1 ) %]
+</VirtualHost>
+[% END %][%# config.eu_httpd_exists %]

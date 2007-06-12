@@ -1,0 +1,25 @@
+[%# @COPYRIGHT@ -%]
+[% ns = 'st-new-form-page' %]
+[% WRAPPER layout/html
+    content_id = $ns,
+    footer = undef,
+    box_javascript = '0',
+    dropshadow = 1,
+    subnav = undef
+%]
+    <div id="new_form_page_error_message_div">
+    </div>
+
+[% PROCESS new_form_page_instructions.html %]
+
+<div id='[% ns %]-form'>
+<form name='new_form_page_form' action="[% script_name %]" method="post">
+<input type="hidden" name="action" value="new_form_page_process" />
+<input type="hidden" name="form_id" value="[% form_id %]" />
+
+[% PROCESS new_form_page_query.html %]
+
+[% PROCESS new_form_page_buttons.html %]
+</form>
+</div>
+[% END %]

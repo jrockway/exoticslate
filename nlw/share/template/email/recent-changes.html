@@ -1,0 +1,40 @@
+[%# @COPYRIGHT@ -%]
+<html>
+<head>
+ <title>Recent changes in [% workspace.title | html %]</title>
+</head>
+
+<body>
+
+<p>
+[% user.guess_real_name | html %],
+</p>
+
+<p>
+To stop receiving or change how often you receive emails about changes
+to [% workspace.title | html %], you can
+<a href="[% preference_uri | html %]">change your preferences</a>.
+</p>
+
+<hr />
+
+<p>
+The following pages in [% workspace.title | html %] have recently changed:
+</p>
+
+<ul>
+[%- FOR page = pages %]
+ <li><a href="[% workspace.uri %]?[% page.uri %]">[% page.metadata.Subject %]</a>
+  [%- IF include_editor %]
+     <br />
+     (by [% page.last_edited_by.best_full_name( workspace => workspace ) | html %] on [% page.metadata.Date | html %])
+  [%- END %]
+ </li>
+[%- END %]
+</ul>
+
+[% PROCESS 'email/standard-footer.html',
+   support_link = 0 %]
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+[%# @COPYRIGHT@ -%]
+[% PROCESS lite/header.html %]
+[% PROCESS category_link %]
+[% PROCESS lite/page_list.html %]
+[% PROCESS lite/footer.html %]
+
+[% BLOCK category_link %]
+<div>
+    [% IF category == 'recent changes' %]
+    <a href="/lite/category/[% workspace_name %]/">
+        Filter by category
+    </a>
+    [% ELSE %]
+    <a href="/lite/category/[% workspace_name %]/[% category | uri |html %]">
+        All Pages in [% category | html %]
+    </a>
+    [% END %]
+</div>
+<hr>
+[% END %]

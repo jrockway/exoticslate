@@ -1,0 +1,21 @@
+<div class="st-wiki-nav"><div class="st-wiki-nav-right"><div class="st-wiki-nav-left"><div class="st-wiki-nav-content">
+    <div class="st-wiki-nav-actions">
+        <span id="st-wikinav-setting"><a href="?action=users_settings">Settings</a></span>
+        [% IF user.is_guest %]
+        <span id="st-wikinav-login"> - <a href="/challenge">Login</a></span>
+        <span id="st-wikinav-register"> - <a href="/nlw/register.html?redirect_to=[% hub.current_workspace.uri %]">Register</a></span>
+        [% ELSE %]
+        <span id="st-wikinav-logout"> - <a href="/nlw/submit/logout[% IF wiki.is_public %]?redirect_to=[% wiki.uri | html %][% END %]">Log out</a></span>
+        [% END %]
+        <span id="st-wikinav-help"> - <a href="/help/index.cgi?socialtext_documentation" target="_blank">Help</a>
+    </div>
+    <div id="st-home">
+        <a id="st-home-link" href="?">Home</a>
+    </div>
+    <form id="st-search-form" method="get" action="index.cgi">
+        <input id="st-search-term" type="text" name="search_term" value="New search" />
+        <input type="hidden" name="action" value="search" />
+        [% INCLUDE element/button href='#', id='st-search-submit', tooltip='Click this button to perform your search', label='Search' %]
+    </form>
+    <br clear="both" />
+</div></div></div></div>

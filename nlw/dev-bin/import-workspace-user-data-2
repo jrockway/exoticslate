@@ -1,0 +1,592 @@
+#!/usr/local/bin/perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
+use Alzabo::Runtime::UniqueRowCache;
+use DateTime::Format::Pg;
+use DB_File;
+use Encode;
+use Fcntl qw( O_RDONLY );
+use Getopt::Long;
+use MLDBM;
+use Socialtext;
+use Socialtext::AppConfig;
+use Socialtext::File;
+
+
+my %opts = (
+    root => '/var/www/socialtext',
+    users => 1,
+    workspaces => 1,
+);
+
+GetOptions(
+    'root:s'  => \$opts{root},
+    'help'    => \$opts{help},
+    'dry-run' => \$opts{dryrun},
+    'verbose' => \$opts{verbose},
+    'users!'   => \$opts{users},
+    'workspaces!' => \$opts{workspaces},
+    'start=s'     => \$opts{start},
+    'end=s'       => \$opts{end},
+) or die;
+
+if ( $opts{help} ) {
+    print <<'.' ;
+USAGE: import-workspace-user-data-2 [ OPTIONS ]
+
+    This script imports workspace, user, and account data into the DBMS
+
+OPTIONS
+
+    --root=/path/to/data        Specify directory where root of data directory is.
+    --verbose                   Produce extra noise.
+    --dry-run                   Don't actually change anything.
+                                If this is set, --verbose is automatically true.
+
+OPTIONS for reruns:
+    --no-users                  Don't import users
+    --no-workspaces             Don't import workspaces
+    --start                     User or workspace to start at.  Applies to BOTH.
+    --end                       User or workspace to end at.  Applies to BOTH.
+.
+    exit;
+}
+
+$opts{verbose} = 1 if $opts{dryrun};
+$| = 1 if $opts{verbose};
+
+my $filename = "$opts{root}/import.log";
+open( LOG, ">>", $filename ) or die "Can't create $filename: $!";
+msg( "-" x 80 );
+msg( "TIMER: Starting run at ", scalar localtime() );
+msg( "Changing to $opts{root}" );
+chdir $opts{root} or die "Cannot chdir to $opts{root}: $!";
+
+my %users_db;
+
+{
+    local $MLDBM::UseDB = 'DB_File';
+    tie %users_db, 'MLDBM', 'users.db', O_RDONLY, 0644
+        or die "Cannot tie to users.db: $!";
+}
+
+unless ( $opts{dryrun} ) {
+    require Socialtext::Account;
+    require Socialtext::User;
+    require Socialtext::Workspace;
+}
+
+update_user_data() if $opts{users};
+import_workspaces() if $opts{workspaces};
+
+msg( "TIMER: Ending run at ", scalar localtime() );
+msg( "=" x 80 );
+
+sub update_user_data {
+    for my $email ( sort keys %users_db ) {
+        next if $opts{start} && ( $email lt $opts{start} );
+        last if $opts{end} && ( $email gt $opts{end} );
+        msg( "User $email" );
+
+        next if $opts{dryrun};
+
+        my $user = user($email)
+            or next;
+
+        my $user_data = $users_db{ $email };
+        $user_data->{first_name} ||= '';
+        $user_data->{last_name}  ||= '';
+
+        my $creator = user( $user_data->{create_by} );
+        $creator ||= Socialtext::User->SystemUser();
+
+        my $username = username($user) || $email;
+
+        $user->update_store(
+            username   => $username,
+            first_name => Encode::encode( 'utf8', $user_data->{first_name} ),
+            last_name  => Encode::encode( 'utf8', $user_data->{last_name} )
+        );
+        $user->update_metadata(
+            created_by_user_id => $creator->user_id,
+            is_business_admin  => is_in_control($email),
+            is_technical_admin => is_in_admin($email),
+        );
+    }
+
+    return if $opts{dryrun};
+
+    # XXX - we seem to have a bunch of users that were imported at one
+    # time (by looking through htpasswd.db) who are _not_ in users.db
+    # - shocking!
+    my $dbh = Socialtext::Schema->LoadAndConnect()->driver()->handle();
+    $dbh->do( <<'EOF', {}, Socialtext::User->SystemUser()->user_id() );
+UPDATE "User"
+   SET created_by_user_id = ?
+ WHERE created_by_user_id IS NULL
+EOF
+}
+
+sub import_workspaces {
+    my %workspaces_db;
+
+    {
+        local $MLDBM::UseDB = 'DB_File';
+        tie %workspaces_db, 'MLDBM', 'workspaces.db', O_RDONLY, 0644
+            or die "Cannot tie to workspaces.db: $!";
+    }
+
+    for my $name ( sort keys %workspaces_db ) {
+        next if $opts{start} && ( $name lt $opts{start} );
+        last if $opts{end} && ( $name gt $opts{end} );
+
+        # REVIEW - if a workspace name is invalid, what should we do?
+        if ( $name =~ /[^\w-]/ ) {
+            msg( "ERROR: Invalid workspace name: [$name]" );
+            next;
+        }
+        if ( $name !~ /^.{3,30}$/ ) {
+            msg( "ERROR: Workspace must be 3-30 characters: [$name]" );
+            next;
+        }
+ 
+        # this will not be a workspace any more
+        next if $name eq 'control';
+
+        my $file = "$opts{root}/workspace/$name/config.yaml";
+        if ( ! -r $file ) {
+            msg( "ERROR: Can't read from $file" );
+            next;
+        }
+
+        my $yaml = File::Slurp::read_file( $file );
+        my $config = parse_pseudo_yaml($yaml);
+
+        my $ws;
+        if ( !$opts{dryrun} ) {
+            $ws = workspace($name);
+            if ( $ws ) {
+                msg("\nWorking with $name workspace.");
+            }
+            else {
+                msg("\nImporting $name workspace.");
+                eval { $ws = create_workspace( $name, $workspaces_db{$name}, $config ) };
+                if ( my $e = $@ ) {
+                    msg( "ERROR: Can't create $name workspace:\n$@" );
+                    next;
+                }
+            }
+        }
+
+        eval { set_permissions( $ws, $name, $config ) };
+        if ( my $e = $@ ) {
+            msg( "ERROR: Can't set permissions for $name workspace:\n$@" );
+            next;
+        }
+
+        eval { assign_user_roles( $ws, $name ) };
+        if ( my $e = $@ ) {
+            msg( "ERROR: Can't assign roles for $name workspace:\n$@" );
+            next;
+        }
+    } # for $name
+}
+
+sub create_workspace {
+    my $name    = shift;
+    my $ws_data = shift;
+    my $config  = shift;
+
+    my $account = account( $ws_data->{billing_account} )
+        unless $opts{dryrun};
+
+    my $creator;
+    unless ( $opts{dryrun} ) {
+        $creator = user( $ws_data->{create_by} );
+        $creator ||= Socialtext::User->SystemUser();
+    }
+
+    # Some workspaces on staging ended up with titles under 6
+    # characters somehow
+    if ( length $config->{wiki_title} < 2 ) {
+        $config->{wiki_title} .= ('-') x ( 2 - length $config->{wiki_title} );
+    }
+
+    $config->{wiki_title} =
+        Encode::decode( 'utf8',Encode::encode( 'utf8', $config->{wiki_title} ) );
+
+    my $skin_name = find_custom_skin($config);
+    if ( $opts{verbose} and $skin_name and $skin_name ne 'st' ) {
+        msg("  - skin: $skin_name" );
+    }
+
+    my $allow_html_wafl =
+        exists $config->{allow_html_wafl} && ! $config->{allow_html_wafl}
+        ? 0
+        : 1;
+
+    my $ws;
+    unless ( $opts{dryrun} ) {
+        $ws = eval {
+            Socialtext::Workspace->create(
+                name                       => $name,
+                title                      => $config->{wiki_title},
+                skip_default_pages         => 1,
+                email_addresses_are_hidden =>
+                    ( $config->{email_mask_string} ? 1 : 0 ),
+                unmasked_email_domain => ( $config->{email_unmasked_domain} or '' ),
+                prefers_incoming_html_email =>
+                    ( $config->{prefer_html_email} ? 1 : 0 ),
+                incoming_email_placement =>
+                    ( $config->{email_receive_append} or 'bottom' ),
+                allows_html_wafl => $allow_html_wafl,
+                http_proxy => ( $config->{http_ua_proxy} or '' ),
+                email_notify_is_enabled =>
+                    ( $config->{email_notify_enabled} ? 1 : 0 ),
+                sort_weblogs_by_create => (
+                           $config->{weblog_sort_order}
+                        && $config->{weblog_sort_order} eq 'create' ? 1 : 0
+                ),
+                external_links_open_new_window =>
+                    ( $config->{external_links_same_window} ? 0 : 1 ),
+                basic_search_only => ( $config->{use_basic_search} ? 1 : 0 ),
+                skin_name         => ( $skin_name || 'st' ),
+                ( $config->{header_logo_link}
+                  ? ( header_logo_link_uri => $config->{header_logo_link} )
+                  : () ),
+                ( $config->{workspace_title_label}
+                  ? ( custom_title_label => $config->{workspace_title_label} )
+                  : () ),
+                show_welcome_message_below_logo =>
+                    ( $config->{welcome_message_below_logo} ? 1 : 0 ),
+                show_title_below_logo =>
+                    ( $config->{workspace_title_below_logo} ? 1 : 0 ),
+                email_notification_from_address =>
+                    ( $config->{notification_email_address} or '' ),
+                comment_form_note_top =>
+                    ( $config->{comment_form_note_top} or '' ),
+                comment_form_note_bottom =>
+                    ( $config->{comment_form_note_bottom} or '' ),
+                comment_form_window_height =>
+                    ( $config->{comment_form_window_height} or 200 ),
+                creation_datetime => DateTime::Format::Pg->format_timestamptz(
+                    $ws_data->{create_time}
+                    ? DateTime->from_epoch( epoch => $ws_data->{create_time} )
+                    : DateTime->now()
+                ),
+                account_id         => $account->account_id,
+                created_by_user_id => $creator->user_id,
+            );
+        };
+
+        if ( my $e = $@ ) {
+            msg( "ERROR: $e" );
+            return;
+        }
+    }
+
+    if ( $config->{logo_url} &&
+            ( $config->{logo_url} !~ m{^/(?:static|images)} ) ) {
+
+        msg( "  Setting logo to $config->{logo_url}" );
+        eval { set_logo( $ws, $config->{logo_url} ) };
+        if ( my $e = $@ ) {
+            msg( "ERROR: Setting logo to $config->{logo_url} for $name\n  $e" );
+        }
+    }
+
+    if ( $config->{team_favorites} && ( $config->{team_favorites} ne 'Workspace Navigation' ) ) {
+        rename_team_favorites( $ws, $config->{team_favorites} );
+    }
+
+    return if $opts{dryrun};
+
+    if ( $config->{weblog_updates_url} and @{ $config->{weblog_updates_url} } ) {
+        $ws->set_ping_uris( uris => $config->{weblog_updates_url} );
+    }
+
+    if ( $config->{comment_form_custom_fields} and @{ $config->{comment_form_custom_fields} } ) {
+        $ws->set_comment_form_custom_fields( fields => $config->{comment_form_custom_fields} );
+    }
+    return $ws;
+}
+
+sub set_logo {
+    my $ws       = shift;
+    my $logo_uri = shift;
+
+    if ( $logo_uri =~ m{^/} ) {
+        my $file = Socialtext::File::catfile(
+                       $opts{root},
+                       'workspace',
+                        $logo_uri,
+                   );
+
+        if ( $opts{dryrun} ) {
+            msg( "  logo: $file");
+        }
+        else {
+            open my $fh, '<', $file
+                or die "Cannot read $file: $!";
+            $ws->set_logo_from_filehandle( filehandle => $fh, filename => $file );
+        }
+    }
+    else {
+        if ( $opts{dryrun} ) {
+            msg( "  logo: $logo_uri");
+        }
+        else {
+            $ws->set_logo_from_uri( uri => $logo_uri );
+        }
+    }
+}
+
+sub rename_team_favorites {
+    my $ws       = shift;
+    my $old_name = shift;
+
+    msg( "  renaming team favorites page from $old_name" );
+
+    return if $opts{dryrun};
+
+    my $nlw = Socialtext->new;
+    $nlw->load_hub(
+        current_workspace => $ws,
+        current_user      => Socialtext::User->SystemUser(),
+    );
+    $nlw->hub->registry->load;
+
+    my $old_page = $nlw->hub->pages->new_from_name($old_name);
+
+    unless ( $old_page->exists ) {
+        msg( "  cannot find page for custom workspace navigation!" );
+        msg( "  looked in ", $old_page->file_path );
+        return;
+    }
+
+    my $new_name = 'Workspace Navigation';
+
+    # more or less copied from Socialtext::EditPlugin
+    my $new_page = $nlw->hub->pages->new_from_name($new_name);
+    $new_page->id( Socialtext::Page->name_to_id($new_name) );
+
+    my $metadata = $new_page->metadata;
+    $metadata->Subject($new_name);
+    $metadata->Revision(0);
+    $metadata->Received(undef);
+    $metadata->loaded(1);
+
+    $new_page->content( $old_page->content );
+
+    $metadata->update( user => $nlw->hub->current_user );
+    $new_page->store( user => $nlw->hub->current_user );
+
+    $old_page->delete( user => $nlw->hub->current_user );
+}
+
+sub set_permissions {
+    my $ws = shift;
+    my $name = shift;
+    my $config = shift;
+
+    my $set_name =
+          $config->{is_self_register} || $config->{edit_login_label} ? 'public-authenticate-to-edit'
+        : $config->{comment_only_workspace} ? 'public-comment-only'
+        : $config->{view_only_workspace} ? 'public-read-only'
+        : $config->{all_members} ? 'authenticated-user-only'
+        : -d File::Spec->catdir( $opts{root}, 'workspace', $name, 'member' ) ? 'public'
+        : 'member-only';
+
+    msg( "  setting permissions to $set_name." );
+
+    return if $opts{dryrun};
+
+    $ws->set_permissions( set_name => $set_name );
+
+    if ( $config->{email_from_subscribers_only} ) {
+        msg( "  removing email_in for guests & authenticated users." );
+
+        $ws->remove_permission(
+            role       => Socialtext::Role->Guest(),
+            permission => Socialtext::Permission->new( name => 'email_in' ),
+        );
+        $ws->remove_permission(
+            role       => Socialtext::Role->AuthenticatedUser(),
+            permission => Socialtext::Permission->new( name => 'email_in' ),
+        );
+    }
+}
+
+sub assign_user_roles {
+    my $ws = shift;
+    my $name = shift;
+
+    return if $opts{dryrun};
+
+    msg( "  assigning user roles" );
+
+    my $htgroup_db = "htgroup/$name/htgroup.db";
+
+    my %htgroup_db;
+
+    {
+        local $MLDBM::UseDB = 'DB_File';
+        tie %htgroup_db, 'MLDBM', $htgroup_db, O_RDONLY, 0644
+            or die "Cannot tie to $htgroup_db: $!";
+    }
+
+    while ( my ( $email, $roles ) = each %htgroup_db ) {
+        my $user = user($email)
+            or next;
+
+        my $role =
+              $roles =~ /admin/
+            ? Socialtext::Role->WorkspaceAdmin()
+            : Socialtext::Role->Member();
+
+        $ws->assign_role_to_user( user => $user,
+                                  role => $role,
+                                  is_selected => is_selected( $name, $user->email_address ),
+                                );
+    }
+}
+
+sub account {
+    my $name = shift;
+
+    return if $opts{dryrun};
+
+    return Socialtext::Account->Unknown()
+        unless defined $name
+        and length $name;
+
+    if ( $name =~ /^(?:nlw-\d+|s\d+)$/i ) {
+        return Socialtext::Account->Unknown();
+    }
+
+    if ( $name =~ /^socialtext$/i ) {
+        return Socialtext::Account->Socialtext();
+    }
+
+    my $account = Socialtext::Account->new( name => $name );
+    return $account if $account;
+
+    msg( "Making new account $name." );
+    return Socialtext::Account->create( name => $name );
+}
+
+sub user {
+    my $email = shift;
+
+    return unless defined $email and length $email;
+
+    my $user = Socialtext::User->new( email_address => $email );
+
+    # This warning is pure noise based on how crappy our DB integrity
+    # was in the past.
+    #error("Cannot find user in DBMS for $email.\n")
+    #    unless $user;
+
+    return $user;
+}
+
+sub workspace {
+    my $name = shift;
+
+    return Socialtext::Workspace->new( name => $name );
+}
+
+sub find_custom_skin {
+    my $config = shift;
+
+    for my $path ( @{ $config->{custom_css_path} or [] } ) {
+        if ( $path =~ m{base/css/([^/]+)} ) {
+            return $1 eq 'new-design' ? 'nlw' : $1;
+        }
+    }
+
+    return '';
+}
+
+sub filename_from_path {
+    my $path = shift;
+
+    my @parts = split /\//, $path;
+    return $parts[-1];
+}
+
+# this is Socialtext::Config::parse_yaml, because our config files are not
+# actually valid YAML
+sub parse_pseudo_yaml {
+    my $yaml       = shift;
+    my $hash       = {};
+    my $latest_key = '';
+    for ( split /\n/, $yaml ) {
+        next if (/^#/);
+        if (/^-\s*(.*)$/) {
+            $hash->{$latest_key} = [] unless ref $hash->{$latest_key};
+            push @{ $hash->{$latest_key} }, $1;
+        }
+        elsif ( /(.*?)\s*:\s+(.*?)\s*$/ or /(.*?):()\s*$/ ) {
+            $hash->{$1} = $2;
+            $latest_key = $1;
+        }
+    }
+    return $hash;
+}
+
+my %Username;
+sub username {
+    my $user = shift;
+
+    return $user->email_address unless -f 'usernames.db';
+
+    read_usernames() unless keys %Username;
+
+    return $Username{ $user->email_address };
+}
+
+sub read_usernames {
+    tie my %u, 'DB_File', 'usernames.db', O_RDONLY, 0644
+        or die "Cannot tie to usernames.db: $!";
+
+    while ( my ( $username, $email ) = each %u ) {
+        $Username{$email} = $username;
+    }
+}
+
+my %Selected;
+sub is_selected {
+    my $ws = shift;
+    my $email = shift;
+
+    $Selected{$email} ||=
+        { map { $_ => 1 } @{ $users_db{$email}{selected_workspaces} or [] } };
+
+    return $Selected{$email}{$ws} ? 1 : 0;
+}
+
+sub is_in_control {
+    my $email = shift;
+
+    return 1 if grep { $_ eq 'control' } @{ $users_db{$email}{workspaces} };
+    return 0;
+}
+
+sub is_in_admin {
+    my $email = shift;
+
+    return 1 if grep { $_ eq 'admin' } @{ $users_db{$email}{workspaces} };
+    return 0;
+}
+
+sub msg {
+    print STDOUT @_, "\n" if $opts{verbose};
+    print LOG @_, "\n";
+}

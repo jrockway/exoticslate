@@ -1,0 +1,31 @@
+[%# @COPYRIGHT@ -%]
+<html>
+<head>
+ <title>Please confirm your email address</title>
+</head>
+
+<body>
+
+<p>
+Welcome to [% PROCESS system_name %].
+</p>
+
+<p>
+You signed up for a new account with our system and we need to confirm
+your email address.  Please <a href="[% confirmation_uri %]">click on
+this link to confirm your email address and choose a password.</a>
+</p>
+
+<p>
+We hope you enjoy using the Socialtext wiki.
+</p>
+
+[% BLOCK system_name -%]
+[% IF appconfig.is_appliance %]Socialtext Appliance[% ELSE %]Socialtext[% END %]
+[%- END %]
+
+[% PROCESS 'email/standard-footer.html'
+   support_link = 1 %]
+
+</body>
+</html>

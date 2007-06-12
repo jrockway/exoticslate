@@ -1,0 +1,14 @@
+{for t in tags}
+<li class="st-tags-tagline st-page-box-listing-entry">
+    <span class="${t.level}">
+        <a href="?action=category_display;category=${t.tag|uri_escape};tag=/${t.tag|uri_escape}"
+            class="st-tags-tagline-link">${t.tag}</a>
+    </span>
+    {if Socialtext.perms.edit}
+    <span class="st-tags-tagdelete">
+        <a href="#" onclick="Tags.deleteTag('${t.tag|escapespecial|quoter}'); return false"
+            title="Remove ${t.tag|h|quoter} tag from page" class="st-tags-tagdelete">[x]</a>
+    <span></>
+    {/if}
+</li>
+{/for}

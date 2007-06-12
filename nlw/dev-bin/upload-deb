@@ -1,0 +1,4 @@
+#!/bin/sh -ve
+# @COPYRIGHT@
+scp "$@" apt.socialtext.net:/home/apt/htdocs/binary
+ssh apt.socialtext.net 'cd ~apt/htdocs; ./update'

@@ -1,0 +1,37 @@
+<& /header.mas &>
+
+<div class="pane">
+
+<img id="logo" src="<% $App->static_path %>/images/logo-bar-18.gif" alt="logo"/>
+
+<div id="support_link"><a href="mailto:<% Socialtext::AppConfig->support_address() | h %>"><% Socialtext::AppConfig->support_address() | h %></a></div>
+
+<& /errors_and_messages.mas &>
+
+% $m->call_next;
+
+</div>
+
+<& /footer.mas &>
+
+<%init>
+$r->content_type('text/html');
+
+$App->css->push( 'base.css' );
+</%init>
+
+<%filter>
+# Cannot use $m when in_package ne 'HTML::Mason::Commands' - may be a
+# Mason bug?
+s/<!-- FILTER\((\w+)\) -->/HTML::Mason::Request->instance->scomp(".filter_$1")/eg;
+</%filter>
+
+<%def .filter_css>
+% for my $css ( $App->css->values ) {
+<link rel="stylesheet" type="text/css" href="<% $App->static_path %>/css/xhtml/<% $css %>" />
+% }
+</%def>
+
+<%method title>
+Socialtext
+</%method>

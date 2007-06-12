@@ -1,0 +1,13 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+
+# This should "just work" in dev-envs, and not be an issue in normal
+# installs.
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
+use Socialtext::CLI;
+
+Socialtext::CLI->new( argv => \@ARGV )->run();

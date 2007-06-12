@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+
+my $default_skin_path = "$ENV{HOME}/src/st/customer-skins";
+sub usage {
+    my $msg = shift || '';
+    die <<EOT;
+$msg
+
+USAGE: $0 [/path/to/customer/skins] [skin-name]
+Where:
+  /path/to/customer/skins defaults to $default_skin_path
+  skin-name defaults to all skins
+EOT
+}
+
+my $skin_path = shift || $default_skin_path;
+usage("$skin_path is not a directory!") unless -d $skin_path;
+my $skin_name = shift;
+
+my $nlw = "$ENV{HOME}/src/st/current/nlw";
+chdir $nlw or die "Can't chdir $nlw: $!";
+
+if ($skin_name) {
+    print "Linking skin $skin_name into $nlw\n";
+    link_skin($skin_name);
+}
+else {
+    my @skins = map { s#.+/##; $_ }
+                grep { -d $_ } 
+                glob("$skin_path/css/*");
+    link_skin($_) for @skins;
+}
+exit;
+
+
+sub link_skin {
+    my $name = shift;
+    for my $type (qw(css images javascript)) {
+        my $src = "$skin_path/$type/$name";
+        next unless -d $src;
+        my $dst = "share/$type/$name";
+        if (-e $dst) {
+            print "Symlink for $dst already exists... skipping\n";
+            next;
+        }
+        print "Symlinking $dst -> $src\n"; 
+        symlink $src => $dst or die "Can't symlink $src => $dst: $!";
+    }
+}

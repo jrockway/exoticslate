@@ -1,0 +1,7 @@
+{var lastIndex = matches.length-1}
+{for t in matches}
+ <a href="#" onclick="Tags.addTag('${t.tag|escapespecial|quoter}'); return false"
+   title="Add ${t.tag} to page"
+   class="st-tags-suggestion"
+>${t.tag}</a>{if t_index != lastIndex}, {/if}
+{/for}

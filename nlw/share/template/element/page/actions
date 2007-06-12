@@ -1,0 +1,56 @@
+[% USE html_encode %]
+<div id="st-editing-tools">
+  <div id="st-editing-tools-display">
+    [% IF checker.check_permission('edit') %]
+      [% INCLUDE element/colorbutton style='edit', label='Edit', href="#", tooltip='Click this button to edit the page' %]
+    [% ELSIF checker.check_permission('edit_controls') %]
+      [% INCLUDE element/colorbutton style='login-to-edit', label='Login + Edit', href=login_and_edit_path, tooltip='Click this button to edit the page' %]
+    [% END %]
+    [% IF checker.check_permission('comment') %]
+      [% SET comment_href = '#' %]
+      [% IF wiki.comment_by_email %]
+        [% comment_href = PROCESS element/comment_by_email_mailto
+                                  page_title = page.title,
+                                  wiki       = wiki %]
+      [% END %]
+      [% INCLUDE element/colorbutton style='comment', label='Comment', href=comment_href, tooltip='Click this button to add a comment to the page' %]
+    [% END %]
+  </div>
+</div>
+
+<div id="st-pagetools">
+    <ul class="level1">
+        <li>
+            <a title="Print this page" id="st-pagetools-print" href="JavaScript:window.print()">Print</a>
+        </li>
+        [% IF checker.check_permission('email_out') %]
+        <li>
+            <a title="Email this page" id="st-pagetools-email" href="?action=email_page_popup;page_name=[% page.id %]" onclick="query_popup('index.cgi?action=email_page_popup;page_name=[% page.id %]',690,580); return false;">Email</a>
+        </li>
+        [% END %]
+        <li class="submenu"><span id="st-pagetools-tools">Tools</span>
+            <ul class="level2">
+                [% IF checker.check_permission('edit') %]
+                <li class="first"><a onclick="query_popup('index.cgi?action=duplicate_popup;page_name=[% page.id %]',410,300); return false;" href="index.cgi?action=duplicate_popup;page_name=[% page.id %]">Duplicate Page</a></li>
+                <li><a onclick="query_popup('index.cgi?action=rename_popup;page_name=[% page.id %]',410,300); return false;" href="index.cgi?action=rename_popup;page_name=[% page.id %]">Rename Page</a></li>
+                [% END %]
+                [% IF checker.check_permission('delete') %]
+                <li [% current_user_workspace_count == 1 ? "class=\"separator\"":"" %]><a href="index.cgi?[% page.id %]" onclick="confirm_delete('[% page.id %]'); return false">Delete Page</a></li>
+                [% END %]
+                [% IF current_user_workspace_count > 1 %]
+                <li class="separator"><a href="index.cgi?action=copy_to_workspace_popup;page_name=[% page.id %]" onclick="query_popup('index.cgi?action=copy_to_workspace_popup;page_name=[% page.id %]'); return false;">Copy&nbsp;Page&nbsp;to&nbsp;Workspace</a></li>
+                [% END %]
+                [% IF checker.check_permission('email_in') %]
+                <li><a href="mailto:[% wiki.email_address %]" title="[% wiki.email_address %]">Email To This Workspace</a></li>
+                <li class="separator"><a href="mailto:[% wiki.email_address %]?subject=[% page.title | html_encode %]" title="To: [% wiki.email_address %] / subject: [% page.title | html_encode %]">Email To This Page</a></li>
+                [% END %]
+                <li><a href="index.cgi?action=display_html;page_name=[% page.id %]" target="_new">Export as HTML</a></li>
+                <li><a href="index.cgi/[% page.id %].pdf?action=pdf_export;page_selected=[% page.id %]" target="_new">Export to PDF</a></li>
+                <li><a href="index.cgi/[% page.id %].rtf?action=rtf_export;page_selected=[% page.id %]" target="_new">Export to Word</a></li>
+                [% FOREACH tool = tools.keys %]
+                <li class="separator"><a href="index.cgi?action=[% tools.$tool.0 %];page_name=[% page.id %]">[% tool %]</a></li>
+                [% END %]
+            </ul>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,25 @@
+Subject: Meeting agendas
+From: sunir.shah@socialtext.com
+Date: 2006-06-23 21:23:10 GMT
+Received: from 127.0.0.1
+Revision: 14
+Category: Welcome
+Encoding: utf8
+
+Up: [Workspace Tour - Table of Contents]
+Back: [Conversations]
+
+* Log the outline of an upcoming meeting or phone conference, and give the address out to participants.
+* Make links out to separate pages detailing issues as needed.
+* Update the agenda before the meeting, or on the fly during the meeting as new discussion points come up.
+
+| ^^^^ Project Widget Planning Meeting
+
+January 13, 2004
+Call-in number: 512-555-1212
+
+* [Widget Product Questions] - Bob
+* [Widget Performance Standards] - Akash
+* [Widget Production Issues] - Janice |
+
+...a Workspace can also help you with [project plans]...

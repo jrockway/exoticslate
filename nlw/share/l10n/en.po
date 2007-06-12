@@ -1,0 +1,15 @@
+#: share/template/view/homepage:9
+#. (user.username.replace('\s+$', '')
+msgid "Welcome, %1."
+msgstr ""
+
+#: lib/Socialtext/CLI.pm:420
+#. ($user->username, $new_locale)
+msgid "Locale for %1 is now %2"
+msgstr ""
+
+#: lib/Socialtext/CLI.pm:413
+#. ($new_locale)
+msgid "'%1' is not a valid locale"
+msgstr ""
+

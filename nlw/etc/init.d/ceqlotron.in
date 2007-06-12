@@ -1,0 +1,60 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+#
+# ceqlotron   Start/stop Socialtext ceqlotron daemon.
+
+use warnings;
+use strict;
+
+use Carp 'croak';
+use Readonly;
+use Socialtext::InitFunctions qw(
+    fork_and_exec_daemon_as_user system_or_die try_kill timeout_waitpid
+    succeed fail restart assert_absolute_paths
+);
+
+Readonly my $NAME      => 'ceqlotron';
+Readonly my $CEQLOTRON => '@PREFIX@@BINDIR@/ceqlotron';
+Readonly my $PIDFILE   => '@PREFIX@@PIDDIR@/ceqlotron.pid';
+Readonly my $LOGFILE   => '@PREFIX@@CEQLOTRON_LOGFILE@';
+Readonly my $USER      => '@ST_USER@';
+Readonly my @CEQ_START => ( $CEQLOTRON, "--output=$LOGFILE" );
+
+assert_absolute_paths(
+    'ceqltron'  => $CEQLOTRON,
+    'PID file'  => $PIDFILE,
+    'path file' => $LOGFILE,
+);
+
+my ( $uid, $gid ) = ( getpwnam $USER )[ 2, 3 ] or die "getwpnam $USER: $!";
+
+$| = 1;
+
+my $operation = shift || '';
+if ( $operation eq 'start' ) {
+    print "Starting $NAME... ";
+    system_or_die( 'touch', $LOGFILE );
+    chown $uid, $gid, $LOGFILE or die "chown $uid $gid $LOGFILE: $!\n";
+
+    if ((my $code = fork_and_exec_daemon_as_user( $USER, @CEQ_START )) == 0) {
+        succeed 'done.';
+    } else {
+        fail "nonzero exit: $code.";
+    }
+}
+elsif ( $operation eq 'stop' ) {
+    print "Stopping $NAME... ";
+    fail "$PIDFILE does not exist." unless -f $PIDFILE;
+    chomp( my $pid = `cat $PIDFILE` );
+    try_kill( 'TERM', $pid ) or fail 'already stopped.';
+    while ( !timeout_waitpid( $pid, 60 ) ) {
+        try_kill( 'INT', $pid ) or succeed 'done.';
+    }
+    succeed 'done.';
+}
+elsif ( $operation eq 'restart' ) {
+    restart();
+}
+else {
+    fail "Usage: $0 {start|stop|restart}";
+}

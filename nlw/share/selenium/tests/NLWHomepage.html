@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Test Open</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+  <tbody>
+    <tr>
+      <td rowspan="1" colspan="3">Verify NLW Homepage<br>
+      </td>
+    </tr>
+<tr>
+	<td>open</td>
+	<td>/nlw/login.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=username</td>
+	<td>devnull1@socialtext.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=password</td>
+	<td>d3vnu11l</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=//input[@value='Log in']</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/admin/index.cgi</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>What's new in</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=exact:Settings</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Admin Wiki Settings</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=exact:Help</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>This is an index of the help topics available.</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/help/index.cgi?action=category_display;category=Help;tag=/Help</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Tag: Help</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Advanced formatting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTitle</td>
+	<td>Advanced formatting / Socialtext Documentation</td>
+	<td></td>
+</tr>
+<!--This is a comment.  Aren't comments nice? Why so short a comment?-->
+<tr>
+	<td>clickAndWait</td>
+	<td>link=advanced mode</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>What's with the funny</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Home</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/admin</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

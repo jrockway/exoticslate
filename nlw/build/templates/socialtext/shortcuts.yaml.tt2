@@ -1,0 +1,9 @@
+rt: http://rt.socialtext.net/Ticket/Display.html?id=%s
+rtqueue: https://rt.socialtext.net:444/Search/Results.html?Order=ASC&Query=Queue='%s'%20AND%20(Status='open'%20OR%20Status='new')&Rows=50&OrderBy=id&Page=1
+google: http://www.google.com/search?q=%s
+fedex: http://www.fedex.com/Tracking?tracknumbers=%s
+stcal: https://calendar.socialtext.net:445/view_t.php?timeb=1&id=3&date=%s
+map: http://maps.google.com/maps?q=%s
+wikipedia: http://en.wikipedia.org/wiki/%s
+svn: https://repo.socialtext.net/listing.php?rev=%s&sc=1
+devlist: http://lists.socialtext.net/private/dev/%1/%2.html

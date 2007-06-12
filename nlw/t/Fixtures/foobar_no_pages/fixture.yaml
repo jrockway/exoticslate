@@ -1,0 +1,9 @@
+fixtures:
+  - alzabo
+
+workspaces:
+  foobar: { }
+
+cache:
+  - WORKSPACES
+  - USERS

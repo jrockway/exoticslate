@@ -1,0 +1,38 @@
+<!-- @COPYRIGHT@ -->
+<a href="<% $uri | h %>" title="Sort by <% lc $c | h %> in <% $sort_order_description{$sort_order} | h %> order"><% $c | h %></a>\
+<%once>
+my %sort_order_description = (
+    asc  => 'ascending',
+    desc => 'descending',
+);
+</%once>
+<%args>
+$order_by
+$prefix => ''
+$current_order_by
+$current_sort_order
+$default_sort_order => 'asc'
+</%args>
+<%init>
+my %query = ( order_by => $order_by );
+my $sort_order = $default_sort_order;
+
+if ( $current_order_by eq $order_by ) {
+    $sort_order = $current_sort_order eq 'asc' ? 'desc' : 'asc';
+}
+
+$query{sort_order} = $sort_order;
+
+if ($prefix) {
+    for my $k ( keys %query ) {
+        $query{ join '_', $prefix, $k } = delete $query{$k};
+    }
+}
+
+my $c = $m->content();
+
+my $uri = uri(
+    path  => $r->parsed_uri->path,
+    query => { %{ $m->request_args }, %query },
+);
+</%init>

@@ -1,0 +1,146 @@
+[% USE html_encode %]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>[% title || display_title %] / [% wiki.title %]</title>
+        <link rel="stylesheet" type="text/css" href="[% css.screen %]" media="screen" />
+        <link rel="stylesheet" type="text/css" href="[% css.print %]" media="print" />
+        <!--[if IE 6]>
+        <link rel="stylesheet" type="text/css" href="[% wiki.static_path %]/css/st/ie.css" media="screen" />
+        <![endif]-->
+        <!--[if gte IE 6]>
+        <link rel="stylesheet" type="text/css" href="[% wiki.static_path %]/css/st/ieprint.css" media="print" />
+        <![endif]-->
+        [% IF box_javascript %]
+            <link rel="stylesheet" type="text/css" href="[% css.wikiwyg %]" media="wikiwyg" />
+        [% END %]
+        [% IF feeds %]
+            [% IF feeds.rss %]
+                [% FOREACH feed IN feeds.rss %]
+        <link rel="alternate" type="application/rss+xml" title="[% feed.value.title | html_encode %]" href="[% feed.value.url %]" />
+                [% END %]
+            [% END %]
+
+            [% IF feeds.atom %]
+                [% FOREACH feed IN feeds.atom %]
+        <link rel="alternate" type="application/atom+xml" title="[% feed.value.title | html_encode %]" href="[% feed.value.url %]" />
+                [% END %]
+            [% END %]
+        [% END %]
+
+
+        [% INCLUDE "element/wiki/js-bootstrap" %]
+        <script type="text/javascript" charset="utf-8"
+            src="[% wiki.static_path %]/javascript/combined-source.js">
+        </script>
+        [% IF customjs_uri %]
+        <script type="text/javascript" charset="utf-8" src="[% customjs_uri %]"></script>
+        [% END %]
+
+    </head>
+    <body id="socialtext-wiki">
+        <table style="width: 100%;border-collapse: collapse"><tr><td><div id="st-display-mode-container" style="display: block;">
+            [% INCLUDE element/wiki/nav mode='display' %]
+            <div id="st-actions-bar">
+                [% INCLUDE $subnav IF subnav %]
+                <div id="st-custom-header"></div>
+                [% INCLUDE element/system_status IF wiki.system_status %]
+                <div id="st-actions-bar-spacer">&nbsp;</div>
+                [% IF actions %][% INCLUDE $actions %][% END %]
+                <div id="st-actions-bar-spacer-clear">&nbsp;</div>
+            </div>
+            <div id="st-content-border">
+            [% IF dropshadow.defined AND dropshadow %]
+                <div id="st-content-border-left"><div id="st-content-border-right"><div id="st-content-border-top"><div id="st-content-border-bottom">
+                <div id="st-content-border-left-top"><div id="st-content-border-right-top"><div id="st-content-border-left-bottom"><div id="st-content-border-right-bottom">
+            [% END %]
+                <div id="[% content_id %]" class="st-content">
+                    [% content %]
+                    <br style="clear: both;height: 1px" />
+                </div>
+            [% IF dropshadow.defined AND dropshadow %]
+                </div></div></div></div>
+                </div></div></div></div>
+            [% END %]
+            </div>
+            <div id="st-custom-footer"></div>
+            [% IF footer %]<div id="st-footer">[% INCLUDE $footer %]</div>[% END %]
+            <div id="st-socialtext-attribution">
+                <a href="http://socialtext.com" id="st-socialtext-attribution-link">
+                    <img id="st-socialtext-attribution-image"
+                         src="[% wiki.static_path %]/images/st/logo/socialtext-logo-152x26.gif"
+                         title="Socialtext v[% app_version | html_encode %]" />
+                </a>
+            </div>
+        </div>
+        <div id="st-edit-mode-container" style="display: none">
+            [% INCLUDE element/wiki/nav mode='edit' %]
+            <div id="st-edit-mode-view">
+                <div id="st-edit-mode-button-bar">
+                [% INCLUDE element/page/edit %]
+                </div>
+                <div id="st-edit-border">
+                [% IF dropshadow.defined AND dropshadow %]
+                    <div id="st-edit-border-left"><div id="st-edit-border-right"><div id="st-edit-border-top"><div id="st-edit-border-bottom">
+                    <div id="st-edit-border-left-top"><div id="st-edit-border-right-top"><div id="st-edit-border-left-bottom"><div id="st-edit-border-right-bottom">
+                [% END %]
+                    <div class="st-content">
+                    <div id="st-edit-mode-toolbar"
+                         style="clear:both; margin-top: 5px;">
+                        <div id="st-page-editing">
+                            <table id="st-editing-prefix-container"><tr><td>
+                            <div id="st-editing-title">
+                                Editing:
+                                [% IF is_new %]
+                                    <input type="text" size="65" id="st-newpage-pagename-edit" value="[% page.title | html_encode %]" onclick="Socialtext.clear_untitled(this)"/>
+                                [% ELSE %]
+                                    [% page.display_title %]
+                                [% END %]
+                            </div>
+                            <div id="st-page-editing-toolbar"></div>
+                            <div id="st-page-editing-uploadbutton">
+                                <img src="[% wiki.static_path %]/images/wikiwyg_icons/separator.gif" style="float: left" />
+                                [% INCLUDE element/button id="st-edit-mode-uploadbutton", tooltip='Click this button to upload a file to the page', label="Upload&nbsp;files" %]
+                            </div>
+                            <div id="st-page-editing-tagbutton">
+                                [% INCLUDE element/button id="st-edit-mode-tagbutton", tooltip='Click this button to add a tag to the page', label="Add&nbsp;tags" %]
+                            </div>
+                            </td></tr></table>
+                            <br style="clear: both; height: 1px;" />
+                            <form id="st-page-editing-form" name="st-page-editing-form" method="post" enctype="multipart/form-data" action="index.cgi">
+                                <input id="st-page-editing-pagename"  type="hidden" name="page_name" value="[% page.title |html_encode %]"/>
+                                <input id="st-page-editing-revisionid"  type="hidden" name="revision_id" value="[% page.revision_id %]" />
+                                <input id="st-page-editing-pagebody"  type="hidden" name="page_body" value="" />
+                                <input id="st-page-editing-action" type="hidden" name="action" value="edit_content" />
+                                <input id="st-page-editing-caller" type="hidden" name="caller_action" value="[% page.caller %]" />
+                                [% FOREACH tag = new_tags %]
+                                <input type="hidden" name="add_tag" value="[% tag %]" />
+                                [% END %]
+                                <input id="st-page-editing-append" type="hidden" name="append_mode" value="" />
+                                <textarea id="st-page-editing-pagebody-decoy" wrap="virtual" name="page_body_decoy"></textarea>
+                                <div style="display: none" id="st-page-editing-files"></div>
+                            </form>
+                            <iframe frameborder="0" id="st-page-editing-wysiwyg" src="[% wiki.static_path %]/html/blank.html"></iframe>
+                            <div id="st-page-preview"></div>
+                        </div>
+                    </div>
+                    <div id="wikiwyg-page-content">
+                    </div>
+                    <br style="clear: both; height: 1px" />
+                    </div>
+                [% IF dropshadow.defined AND dropshadow %]
+                    </div></div></div></div>
+                    </div></div></div></div>
+                [% END %]
+                </div>
+            </div>
+        </div></td></tr></table>
+[% INCLUDE element/page/attachment_attach_interface %]
+[% INCLUDE element/page/attachment_manage_interface %]
+[% INCLUDE element/page/newpage_save %]
+[% INCLUDE element/page/newpage_duplicate %]
+[% INCLUDE element/page/attachment_queue_interface %]
+[% INCLUDE element/page/tag_queue_interface %]
+[% INCLUDE element/page/raw_wikitext %]
+    </body>
+</html>

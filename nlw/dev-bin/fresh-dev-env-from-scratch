@@ -1,0 +1,46 @@
+#!/bin/bash -e
+# @COPYRIGHT@
+
+perl -MCwd -le'print "Running ", Cwd::abs_path(shift)' $0
+
+START_PORT=21000 # for SSL
+
+function rm_dir {
+   DIR=`bin/st-config echo $1`
+   if [ -d $DIR ]; then rm -r $DIR; fi
+}
+
+if [ "$1" = "--single" ]; then
+    FDEFS_PROXY=0
+else
+    FDEFS_PROXY=1
+fi
+
+cd $(dirname $0)/..
+
+set -x
+PORT=$(($START_PORT+$UID)) ./configure --dev=1 --apache-proxy=$FDEFS_PROXY --server-admin=support@socialtext.com
+set +x
+
+# Remove a bunch of stuff
+if [ -e t/tmp ]; then
+    dev-bin/nlwctl --test stop
+    rm -r t/tmp* &
+fi
+rm_dir "mason_data_dir";
+rm_dir "template_compile_dir";
+rm_dir "formatter_cache_dir";
+
+set -x
+NLWCTL_QUIET=1 dev-bin/nlwctl stop
+dev-bin/_fresh-dev-env
+
+if [ $FDEFS_PROXY = 0 ]; then
+    echo "Starting in single-Apache mode";
+    dev-bin/gen-config --root=$HOME/.nlw --ports-start-at=20000 --apache-proxy=$FDEFS_PROXY --socialtext-open=0;
+    dev-bin/nlwctl -c start;
+    dev-bin/nlwctl -1 start;
+else
+    echo "Starting in dual-Apache mode";
+    dev-bin/nlwctl start;
+fi

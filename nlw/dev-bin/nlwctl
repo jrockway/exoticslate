@@ -1,0 +1,163 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+
+use Cwd;
+use FindBin;
+use IO::File;
+use lib "$FindBin::Bin/../lib";
+
+use Getopt::Long;
+use Socialtext::ApacheDaemon;
+
+sub usage {
+    print <<END_OF_HELP;
+
+Usage: nlwctl [-h|--help|help]
+       nlwctl [OPTIONS] [VERB [VERB [...]]]
+
+Verbs: (start is the default verb if none is specified)
+  hup           send SIGHUP
+  ports         display all port numbers on STDOUT
+  start         start the server, or send SIGHUP if it's already running
+  stop          stop the server
+  restart       stop, then start
+
+Options:
+  -c                operate only on ceqlotron (there is no 'test' ceqlotron)
+  -t, --test        operate on live-test server rather than devel. server
+  -1                operate only on Apache 1 instance
+  -2                operate only on Apache 2 instance
+  -v, --verbose     extra verbosity
+
+If none of -c, -1, or -2 are specified, the verb acts on all three daemons.
+END_OF_HELP
+    exit 0;
+}
+
+my ( %apache_command, %ceqlotron_command, $apache2, $apache_perl );
+
+# Options
+my $use_test_server  = 0;
+my $apache1_please   = 0;
+my $apache2_please   = 0;
+my $ceqlotron_please = 0;
+
+my %OPTSPEC = (
+    'test|t'    => \$use_test_server,
+    'help|h'    => \&usage,
+    'verbose|v' => \$Socialtext::ApacheDaemon::Verbose,
+    c           => \$ceqlotron_please,
+    1           => \$apache1_please,
+    2           => \$apache2_please,
+);
+
+Getopt::Long::Configure('bundling');
+GetOptions(%OPTSPEC) or exit 1;
+
+usage() if grep { $_ eq 'help' } @ARGV;
+
+# start will HUP if already running.
+my @verbs = @ARGV ? @ARGV : ('start');
+
+# If you don't specify any of -c, -1, or -2, you get them all.
+$ceqlotron_please = $apache2_please = $apache1_please = 1
+    unless ( $ceqlotron_please || $apache2_please || $apache1_please );
+
+# This combination doesn't make sense.
+$ceqlotron_please = 0 if $use_test_server;
+
+my @apaches;
+if ( $apache2_please ) {
+    $apache2     = Socialtext::ApacheDaemon->new( name => 'apache2' );
+    push @apaches, $apache2;
+}
+if ( $apache1_please ) {
+    $apache_perl = Socialtext::ApacheDaemon->new( name => 'apache-perl' );
+    push @apaches, $apache_perl;
+}
+my $master_apache = $apaches[0];
+
+_update_conf_file_for_tests($_) foreach @apaches;
+dispatch();
+
+sub dispatch {
+    init_commands();
+
+    $master_apache->output_urls
+        if $master_apache;
+    foreach my $verb ( @verbs ) {
+        if ( my $cmd = $apache_command{$verb} ) {
+            $cmd->($_) for @apaches;
+            $ceqlotron_command{$verb}->() if $ceqlotron_please;
+        }
+        else {
+            warn "nlwctl: Skipping unknown command '$verb'.\n";
+            warn "        Known verbs: @{[ sort keys %apache_command ]}\n";
+        }
+    }
+}
+
+sub _update_conf_file_for_tests {
+    my $apache = shift;
+
+    my $conf_suffix
+        = 'etc/' . $apache->name . '/nlw-' . $apache->conf_filename;
+    my $conf_file =
+        $use_test_server
+        ? getcwd() . "/t/tmp/$conf_suffix"
+        : "$ENV{HOME}/.nlw/$conf_suffix";
+
+    if ( ! -r $conf_file ) {
+        print "Conf file $conf_file not found.\n";
+        exit 0;
+    }
+    $apache->conf_file($conf_file);
+}
+
+sub init_commands {
+    %apache_command = (
+        start   => sub { $_[0]->start },
+        stop    => sub { $_[0]->stop },
+        hup     => sub { $_[0]->hup },
+        restart => sub { $apache_command{$_}->(@_) for qw( stop start ) },
+        ports   => sub {
+            foreach my $port ($_[0]->ports) {
+                print "$port\n";
+            }
+        },
+    );
+    %ceqlotron_command = (
+        start   => sub {
+            $ceqlotron_command{stop}->(@_);
+            print "Starting ceqlotron.\n";
+            system "$FindBin::Bin/../bin/ceqlotron" and exit $?;
+        },
+        stop    => sub {
+            print "Stopping ceqlotron.\n";
+            # XXX: killall --wait is non-portable. Should we kill
+            # the pid represented in the ceqloton pid_file?
+            my $ceqlotron_pid = _ceqlotron_pid();
+            my $kill_count = kill 15, $ceqlotron_pid if $ceqlotron_pid;
+            print "Unable to kill ceqlotron\n" unless $kill_count;
+            print "Pid file said pid $ceqlotron_pid\n" if $ceqlotron_pid;
+        },
+        hup     => sub { },
+        restart => sub { $ceqlotron_command{$_}->(@_) for qw( stop start ) },
+        ports   => sub { },
+    );
+}
+
+# returns undef if there is no pid
+sub _ceqlotron_pid {
+    # If this called gen config should already have run, meaning
+    # Socialtext::AppConfig should survive without complaining.
+    require Socialtext::Paths;
+    my $pid_file = Socialtext::Paths::pid_file('ceqlotron');
+    my $fh = new IO::File;
+    $fh->open($pid_file) || return;
+    my $pid = $fh->getline;
+    chomp $pid;
+    return $pid;
+}

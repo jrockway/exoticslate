@@ -1,0 +1,294 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+use warnings;
+use strict;
+
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
+use Socialtext::Ceqlotron;
+
+use Getopt::Long;
+use Socialtext::Log 'st_log';
+use Socialtext::Paths;
+use Pod::Usage;
+use POSIX qw( :sys_wait_h :signal_h );
+use Readonly;
+
+# don't run as root
+die "$0 must not run as root" if $> == 0;
+
+Readonly my $PID_FILE => Socialtext::Paths::pid_file('ceqlotron');
+
+# Number of child processes we have running.
+my $RunningChildren = 0;
+
+# Whether or not an exit has been requested.
+my $ExitPlease = 0;
+
+# Have we ever gotten the lock?
+my $HaveEverGottenTheLock = 0;
+
+# Initialize and parse command-line switches.
+my ( $WantHelp, $RunInForeground, $OnlyOnce, $OutputTo ) = ( 0, 0, 0, '' );
+Getopt::Long::Configure('bundling');
+GetOptions(
+    'help|h'       => \$WantHelp,
+    'foreground|f' => \$RunInForeground,
+    'output|O=s'   => \$OutputTo,
+    'once|o'       => \$OnlyOnce,
+) or exit 1;
+
+pod2usage(verbose => 1) if $WantHelp;
+
+redirect_output();
+maybe_fork();
+log_start();
+install_signal_handlers();
+write_pid_file();
+main_loop();
+wait_until_children_less_than(1);
+exit_gracefully();
+
+sub with_sigchld_blocked(&);
+
+sub install_signal_handlers {
+    $SIG{TERM} = sub {
+        st_log->notice("ceqlotron caught SIGTERM.  Will exit ASAP.");
+        $ExitPlease = 1;
+    };
+    $SIG{INT} = \&exit_gracefully;
+    $SIG{CHLD} = \&reap;
+}
+
+sub exit_gracefully {
+    unless ($OnlyOnce) {
+        unlink $PID_FILE or die "Cannot unlink $PID_FILE: $!";
+    }
+    st_log->notice("ceqlotron exiting");
+    exit ( $HaveEverGottenTheLock ? 0 : 1 );
+}
+
+sub wait_until_children_less_than {
+    my ( $too_many ) = @_;
+    
+    with_sigchld_blocked {
+        while ($RunningChildren >= $too_many) {
+            st_log->debug(
+                "ceqlotron waiting for children to be under"
+                . " $too_many (currently $RunningChildren)"
+            );
+            if ( wait > 0 ) {
+                --$RunningChildren;
+            }
+        }
+    };
+    st_log->debug("ceqlotron fewer than $too_many children ok");
+}
+
+sub reap {
+    # XXX i am assuming, as perlipc implies, that the signal handler is
+    # uninstalled prior to entry here.  thus no need to mask SIGCHLD or worry
+    # about reentry.  also assuming that saved up SIGCHLD signals will get
+    # here after we reinstall the handler at the end.  but this should be
+    # confirmed.
+    while ( my $pid = waitpid( -1, WNOHANG ) ) {
+        last unless $pid > 0;
+
+        --$RunningChildren;
+        st_log->debug("ceqlotron reaped $pid - concurrency $RunningChildren");
+    }
+    # reinstall signal handler
+    $SIG{CHLD} = \&reap;
+}
+
+sub write_pid_file {
+    return if $OnlyOnce;
+
+    open my $pid_fh, '>', $PID_FILE or die "$PID_FILE: $!";
+    $pid_fh->print("$$\n") or die "write $PID_FILE: $!";
+    close $pid_fh or die "close $PID_FILE: $!";
+}
+
+sub main_loop {
+    Socialtext::Ceqlotron::ensure_queue_directory();
+    Socialtext::Ceqlotron::ensure_lock_file();
+    LOOP: while (1) {
+        if ( Socialtext::Ceqlotron::acquire_lock() ) {
+            $HaveEverGottenTheLock = 1;
+
+            fork_some_children();
+            Socialtext::Ceqlotron::release_lock();
+        }
+        last LOOP if $ExitPlease || $OnlyOnce;
+        sleep Socialtext::AppConfig->ceqlotron_period;
+    }
+}
+
+# Idea due to cdent.  At some point, a more elegant way to do this would be to
+# figure out how many children we want to fork (max_concurrency -
+# $RunningChildren), acquire the lock, grab and unlink up to that many events,
+# release the lock, then fork and go.  We will have the lock for much fewer
+# syscalls, so this will be faster.  Probably not a huge deal, but worth
+# considering.
+sub fork_some_children {
+    my $max_concurrency = Socialtext::AppConfig->ceqlotron_max_concurrency;
+
+    Socialtext::Ceqlotron::foreach_event( sub {
+        if (there_is_room()) {
+            run_event(@_);
+        } else {
+            st_log->debug("ceqlotron reached max concurrency: $max_concurrency");
+            Socialtext::Ceqlotron::last_event();
+        }
+    } );
+}
+
+sub run_event {
+    if ( Socialtext::Ceqlotron::_dispatch_symlink(@_) ) {
+        with_sigchld_blocked {    # To avoid a race on $RunningChildren.
+            ++$RunningChildren;
+            st_log->debug("ceqlotron fork - concurrency $RunningChildren");
+        }
+    }
+}
+
+sub there_is_room {
+    with_sigchld_blocked {
+        $RunningChildren < Socialtext::AppConfig->ceqlotron_max_concurrency
+    };
+}
+
+sub redirect_output {
+    if ($OutputTo) {
+        my $oldfh = select;
+        open STDOUT, '>>', $OutputTo or die "STDOUT > $OutputTo: $!";
+        select STDOUT; $| = 1;
+        open STDERR, '>>', $OutputTo or die "STDERR > $OutputTo: $!";
+        select STDERR; $| = 1;
+        select $oldfh;
+    }
+}
+
+sub maybe_fork {
+    return if $RunInForeground;
+
+    my $child_pid = fork;
+
+    if (! defined $child_pid) {
+        die "fork: $!";
+    }
+    elsif ($child_pid != 0) { # in the parent
+        exit 0;
+    }
+}
+
+sub log_start {
+    st_log->notice("ceqlotron starting");
+}
+
+sub with_sigchld_blocked(&) {
+    my ( $code ) = @_;
+
+    my $sigset = POSIX::SigSet->new(SIGCHLD);
+    my $old_sigset = POSIX::SigSet->new;
+
+    unless (defined sigprocmask(SIG_BLOCK, $sigset, $old_sigset)) {
+        die "block SIGCHLD: $!";
+    }
+    my $retval = &$code;
+    unless (defined sigprocmask(SIG_SETMASK, $old_sigset)) {
+        die "unblock SIGCHLD: $!";
+    }
+
+    return $retval;
+}
+
+=head1 NAME
+
+ceqlotron - Execute asynchronous processes triggered by change events.
+
+=head1 SYNOPSIS
+
+B<ceqlotron> [ OPTIONS ]
+
+=head1 DESCRIPTION
+
+Unless given the C<-f> or C<--foreground> options, C<ceqlotron> forks and runs
+as a daemon.  Unless given the C<-o> or C<--once> options, it runs until
+killed and writes its PID in C</var/run/socialtext/ceqlotron.pid>.
+
+Periodically, the daemon runs through the loop described below.  The default
+period for the loop is 5 seconds, but this can be overridden with the
+L<Socialtext::AppConfig> variable C<ceqlotron_period>.
+
+=head1 MAIN LOOP
+
+C<ceqlotron> uses L<Socialtext::AppConfig> to find the value
+C<change_event_queue_dir>.  If the regular file B<change_event_queue_dir>/lock
+does not exist, it is created.  C<ceqlotron> then attempts to acquire a lock
+on B<change_event_queue_dir>/lock using L<flock(2)> with LOCK_EX|LOCK_NB.  If
+this fails because another process already has the lock, then C<ceqlotron>
+exits the loop.
+
+If the lock is acquired, ceqlotron examines each symbolic link in
+B<change_event_queue_dir> and, for each symbolic link, forks and execs
+
+    st-admin workspace from_input,
+
+sends the text described in L<DISPATCH> on STDIN, and then unlinks the
+symlink.
+
+By default, C<ceqlotron> will not start more than 5 child processes at once.
+If a sixth process is needed, C<ceqlotron> waits until one of the children
+exits.  This value can be overridden with the L<Socialtext::AppConfig> variable
+C<ceqlotron_max_concurrency>.
+
+=head1 OPTIONS
+
+    -f,--foreground         If this option is given, ceqlotron stays
+                            in the foreground.
+    -o,--once               This causes ceqlotron to run through
+                            the MAIN LOOP only once.
+    -O,--output=FILE        Redirect stdout and stderr to FILE.
+    -h,--help               Show help.
+
+=head1 DISPATCH
+
+Different symbolic links produce different commands sent to nlw.
+
+=head2 Symlink to a page directory.
+
+    index_page page_id
+    weblog_ping page_id
+    email_notify
+    watchlist_email_notify
+
+=head2 Symlink to an attachment directory.
+
+    index_attachment attachment_id page_id
+
+=head2 Symlink to a workspace directory.
+
+    index_workspace
+
+=head1 SIGNALS
+
+    TERM        stop forking; exit gracefully as soon as all children
+                have exited
+    INT         exit gracefully immediately
+
+=head1 EXIT CODES
+
+    0       normal exit
+    1       ceqlotron was never able to acquire the lock
+    2       ceqlotron received an INT or TERM signal and exited
+            gracefully
+    255     exceptional error condition (there should be a diagnostic
+            message)
+
+=head1 SEE ALSO
+
+L<Socialtext::AppConfig>, L<nlw(1)>, L<ceq-stat(1)>, L<ceq-read(1)>
+
+=cut

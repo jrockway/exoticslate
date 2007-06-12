@@ -1,0 +1,67 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+
+use File::Basename 'dirname';
+use File::chdir;
+
+sub help {
+    print <<'END_HELP';
+USAGE:
+    fixtures [(list|ls)]
+    fixtures edit (yaml|generate|is-current) FIXTURE
+    fixtures cat (yaml|generate|is-current) FIXTURE
+    fixtures help
+
+    Everything but FIXTURE can be abbreviated to uniqueness.
+END_HELP
+}
+
+unshift @ARGV, 'list' if not @ARGV;
+
+dispatch_verb();
+
+sub dispatch_verb {
+    my $verb = shift @ARGV;
+
+       if ($verb =~ /^( l | li | lis | list | ls )$/ix) { list() }
+    elsif ($verb =~ /^( h | he | hel | help )$/ix)      { help() }
+    elsif ($verb =~ /^( c | ca | cat )$/ix)             { cat()  }
+    elsif ($verb =~ /^( e | ed | edi | edit )$/ix)      { edit() }
+    else { help() }
+}
+
+sub list {
+    my $dir = fixtures_dir();
+    local $CWD = $dir or die "chdir $dir: $!";
+    exec 'ls';
+    die "ls: $!";
+}
+
+sub cat { dispatch_object('cat') }
+
+sub edit { dispatch_object($ENV{EDITOR} || 'vi') }
+
+sub dispatch_object {
+    my $command = shift;
+    my $object = shift @ARGV;
+    my $fixture = shift @ARGV;
+
+    my $filepart = fixtures_dir() . "/$fixture/";
+
+    $filepart .=
+          $object =~ /^( y | ya | yam | yaml )$/ix
+            ? 'fixture.yaml'
+        : $object =~ /^g(?:e(?:n(?:e(?:r(?:a(?:t(?:e)?)?)?)?)?)?)?$/i
+            ? 'generate'
+        : $object =~ /^i(?:s(?:-(?:c(?:u(?:r(?:r(?:e(?:n(?:t)?)?)?)?)?)?)?)?)?/i
+            ? 'is-current'
+        :     help();
+
+    exec $command, $filepart;
+    die "exec $command $filepart: $!";
+}
+
+sub fixtures_dir { dirname($0) . '/../t/Fixtures' }

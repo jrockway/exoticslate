@@ -1,0 +1,64 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+#
+# st-apache       Start the Apache HTTP server with Socialtext configuration.
+
+use warnings;
+use strict;
+
+use Carp 'croak';
+use Readonly;
+use Socialtext::InitFunctions qw(
+    fork_and_exec_daemon_as_user system_or_die try_kill timeout_waitpid
+    succeed fail restart );
+
+Readonly my $NAME    => 'st-apache';
+Readonly my $CONF    => '@PREFIX@@HTTPD_CONFDIR@/st-httpd.conf';
+Readonly my $DAEMON  => '@HTTPD@';
+Readonly my @COMMAND => ($DAEMON, '-f', $CONF);
+Readonly my $PIDFILE => '@PREFIX@@HTTPD_PIDDIR@/st-apache-perl.pid';
+Readonly my $PERL    => '@PERL@';
+Readonly my $USER    => 'root';
+
+$ENV{LANG} = 'C';
+$ENV{PATH} = '/sbin:/bin:/usr/bin:/usr/local/bin';
+
+my $operation = shift || '';
+if ($operation eq 'start') {
+    print "Starting $NAME (Apache 1.3) web server... ";
+    if ((my $code = fork_and_exec_daemon_as_user( $USER, @COMMAND )) == 0) {
+        succeed 'done.';
+    }
+    else {
+        fail "nonzero exit: $code.";
+    }
+}
+elsif ($operation eq 'stop') {
+    print "Stopping $NAME (Apache 1.3) web server... ";
+    my $pid = get_pid();
+    try_kill( 15, $pid ) or fail 'already stopped.';
+    if (timeout_waitpid($pid, 300)) {
+        succeed 'done.';
+    }
+    else {
+        fail 'timed out waiting for exit.';
+    }
+}
+elsif ($operation eq 'restart') {
+    restart();
+}
+elsif ($operation =~ /^(?:force-)?reload$/) {
+    print "Signalling $NAME to reload...";
+    my $pid = get_pid();
+    try_kill("USR1", $pid) or fail 'no running process.';
+    succeed 'done.';
+}
+else {
+    fail "Usage: $0 {start|stop|restart}";
+}
+
+sub get_pid {
+    fail "$PIDFILE does not exist." unless -f $PIDFILE;
+    chomp( my $pid = `cat $PIDFILE` );
+    return $pid;
+}

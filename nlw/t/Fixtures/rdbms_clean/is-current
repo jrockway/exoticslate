@@ -1,0 +1,6 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+# This is never current because the whole point of this fixture is to
+# wipe the existing DBMS clean
+exit 1;

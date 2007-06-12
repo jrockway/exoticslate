@@ -1,0 +1,15 @@
+<!-- @COPYRIGHT@ -->
+<% $date | h %>
+<%args>
+$dt
+$infinity => 'never'
+</%args>
+<%init>
+my $date;
+if ( $dt->is_infinite ) {
+    $date = $infinity;
+}
+else {
+    $date = $dt->strftime( '%Y-%m-%d' );
+}
+</%init>

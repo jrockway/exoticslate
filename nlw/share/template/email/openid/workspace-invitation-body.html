@@ -1,0 +1,38 @@
+[%# @COPYRIGHT@ -%]
+
+[% IF extra_text %]
+[% extra_text -%]
+[% END %]
+
+<p>
+Hi,
+</p>
+
+<p>
+I'm inviting you to join [% workspace_title | html %], one of our
+shared workspaces.
+
+[% UNLESS requires_confirmation %]
+Sign in using the information below:
+<p>
+web address: <a href="[% workspace_uri | html %]">[% workspace_uri | html %]</a><br />
+username: [% username | html %]
+</p>
+
+You can sign into our system using OpenID.  On the Socialtext login screen, please input your OpenID into the indicated field and you will be redirected to the OpenID site to verify your identity.  Once you have verified your identity, you will be sent back to the Socialtext site and be able to access the workspace.
+
+<p>
+You may want to keep this email for future reference.
+</p>
+[% END %]
+
+<p>
+Thanks,
+</p>
+
+<p>
+[% inviting_user %]
+</p>
+
+[% PROCESS 'email/standard-footer.html'
+   support_link = 1 %]

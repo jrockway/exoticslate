@@ -1,0 +1,19 @@
+Subject: Start here
+From: ken.pier@socialtext.com
+Date: 2006-10-24 21:48:06 GMT
+Received: from 127.0.0.1
+Revision: 13
+Category: Welcome
+Encoding: utf8
+
+Up: [Workspace Tour - Table of Contents]
+
+Hi! This quick tour will help you get acquainted with your Socialtext Workspace. It's easy to do. After you've read each page, just click on the blue underlined link at the bottom to go to the next page -- sort of like turning the page in a book.
+
+A Socialtext Workspace is a way to work together on the web that's fast and fun.
+
+It's a flexible way for you and your team to organize information.
+
+Right now, the information you're looking at is a few paragraphs of text, like you could read in a newspaper or a book.
+
+[What else is here?]

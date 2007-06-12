@@ -1,0 +1,48 @@
+<div id="st-page-details">
+    [% IF page.revisions > 0 %]
+        <div id="st-attribution">
+          <span id="st-created">Created by <span class="st-username">[% page.created.author %]</span> on <span class="st-createdate">[% page.created.date %]</span>.</span>
+          [% IF page.revisions > 1 %]
+            <span id="st-update">Updated by <span class="st-username">[% page.updated.author %]</span> on <span class="st-updatedate">[% page.updated.date %]</span>.</span>
+          [% END %]
+          <div id="st-edit-actions-below-fold">
+              [% IF checker.check_permission('edit') %]
+              <a href="#" id="st-edit-actions-below-fold-edit">edit</a>
+              [% END %]
+              [% IF checker.check_permission('edit') AND checker.check_permission('comment') %]
+              -
+              [% END %]
+              [% IF wiki.comment_by_email %]
+                [% comment_href = PROCESS element/comment_by_email_mailto
+                                          page_title = page.title,
+                                          wiki       = wiki %]
+                <a href="[% comment_href %]" id="st-edit-actions-below-fold-comment">comment</a>
+              [% ELSIF checker.check_permission('comment') %]
+              <a href="#" id="st-edit-actions-below-fold-comment">comment</a>
+              [% END %]
+          </div>
+        </div>
+        <div id="st-page-stats">
+          [% INCLUDE rss_link %]
+          -
+          [% IF page.has_stats %]
+          <a href="?action=page_stats;page_id=[% page.id %]">[% page.views %] view[% page.views != 1 ? 's' : '' %]</a>
+          [% ELSE %]
+          [% page.views %] views
+          [% END %]
+          -
+          <a href="?action=revision_list;page_name=[% page.id %]" id="st-page-stats-revisions">[% page.revisions %] revision[% 's' IF page.revisions != 1 %]</a>
+        </div>
+
+    [% END %]
+</div>
+
+[% BLOCK rss_link %]
+[% IF feeds.rss %]
+<a href="[% feeds.rss.page.url %]"><img class="st-page-details-feed-icon" src="[% wiki.static_path %]/images/feed-icon-14x14.png"/></a>
+[% END %]
+[% IF enable_unplugged %]
+<a title="Click this button to save this page to your computer for offline use." href="?action=unplug;page_name=[% page.id %]"><img class="st-page-details-feed-icon" alt="Click this button to save this page to your computer for offline use." src="[% wiki.static_path %]/images/unplug-icon.png" /></a>
+[% END %]
+[% END %]
+

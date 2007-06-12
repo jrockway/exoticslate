@@ -1,0 +1,37 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+# This program dumps a list of all the files in the specified directories.
+
+use warnings;
+use strict;
+use File::Find;
+
+my $invert = 0;
+if ( $ARGV[0] eq '-v' ) {
+    $invert = 1;
+    shift @ARGV;
+}
+
+find( \&checker, @ARGV );
+
+sub checker {
+    if ( $_ eq '.svn' ) {
+        $File::Find::prune = 1;
+        return;
+    }
+
+    return if /~$/;
+    return if -d $_;
+
+    open( my $fh, '<', $_ ) or die "Can't open $_: $!\n";
+    my $firstline = <$fh>;
+    close $fh;
+
+    if ( $firstline && ( $firstline =~ m[#!.*perl] ) ) {
+        print $File::Find::name, "\n" unless $invert;
+    }
+    elsif ( $invert ) {
+        print $File::Find::name, "\n";
+    }
+}

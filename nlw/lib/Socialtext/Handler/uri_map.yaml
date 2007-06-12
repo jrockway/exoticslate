@@ -1,0 +1,222 @@
+--- !!omap
+- 
+    '/data/echo/:text':
+        'GET':
+            '*/*':           &default [Socialtext::Rest::Echo, GET_html]
+            'text/html':              *default
+            'application/json':       [Socialtext::Rest::Echo, GET_json]
+            'text/xml':               [Socialtext::Rest::Echo, GET_xml]
+            'text/x.socialtext-wiki': [Socialtext::Rest::Echo, GET_wikitext]
+        'POST':
+            '*/*':              [Socialtext::Rest::Echo, POST_js]
+            'text/xml':         [Socialtext::Rest::Echo, POST_xml]
+            'application/json': [Socialtext::Rest::Echo, POST_js]
+            'text/x.cowsay':    [Socialtext::Rest::Echo, POST_cowsay]
+        '*': [Socialtext::Rest::Echo, bad_method]
+-
+    /data/version:
+        GET:
+            '*/*':     &default [Socialtext::Rest::Version, GET_text]
+            text/plain:         *default
+            application/json:   [Socialtext::Rest::Version, GET_json]
+        '*': [Socialtext::Rest::Version, bad_method]
+-
+    '/data/workspaces/:ws/pages/:pname/tags/:tag':
+        'GET':   
+            '*/*':     &default [Socialtext::Rest::PageTag, GET_html]
+            'application/json': [Socialtext::Rest::PageTag, GET_json]
+            'text/html':        *default
+            'text/plain':       [Socialtext::Rest::PageTag, GET_text]
+        'PUT':    [Socialtext::Rest::PageTag, PUT]
+        'DELETE': [Socialtext::Rest::PageTag, DELETE]
+        '*':      [Socialtext::Rest::PageTag, bad_method]
+-
+    '/data/workspaces/:ws/pages/:pname/tags':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::PageTags, GET_html]
+            'text/html':        *default
+            'text/plain':       [Socialtext::Rest::PageTags, GET_text]
+            'application/json': [Socialtext::Rest::PageTags, GET_json]
+        'POST':
+            '*/*': &default [Socialtext::Rest::PageTags, POST_text]
+            'text/plain':   *default
+        '*': [Socialtext::Rest::PageTags, bad_method]
+-
+    '/data/workspaces/:ws/pages/:pname/revisions/:revision_id':
+        'GET':
+            '*/*':           &default [Socialtext::Rest::PageRevision, GET_html]
+            'text/html':              *default
+            'text/x.socialtext-wiki': [Socialtext::Rest::PageRevision, GET_wikitext]
+            'application/json':       [Socialtext::Rest::PageRevision, GET_json]
+        '*':      [Socialtext::Rest::PageRevision, bad_method]
+-
+    '/data/workspaces/:ws/pages/:pname/revisions':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::PageRevisions, GET_html]
+            'application/json': [Socialtext::Rest::PageRevisions, GET_json]
+            'text/html':        *default
+            'text/plain':       [Socialtext::Rest::PageRevisions, GET_text]
+        '*': [Socialtext::Rest::PageRevisions, bad_method]
+-
+    '/data/workspaces/:ws/pages/:pname/backlinks':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::Backlinks, GET_html]
+            'application/json': [Socialtext::Rest::Backlinks, GET_json]
+            'text/html':        *default
+            'text/plain':       [Socialtext::Rest::Backlinks, GET_text]
+        '*': [Socialtext::Rest::Backlinks, bad_method]
+-
+    '/data/workspaces/:ws/pages/:pname/frontlinks':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::Frontlinks, GET_html]
+            'application/json': [Socialtext::Rest::Frontlinks, GET_json]
+            'text/html':        *default
+            'text/plain':       [Socialtext::Rest::Frontlinks, GET_text]
+        '*': [Socialtext::Rest::Frontlinks, bad_method]
+-
+    '/data/workspaces/:ws/pages/:pname/comments':
+        'POST': 
+            'text/x.socialtext-wiki': [Socialtext::Rest::Comments, POST]
+            '*/*':                    [Socialtext::Rest::Comments, bad_type]
+        '*':    [Socialtext::Rest::Comments, bad_method]
+-
+    '/data/workspaces/:ws/pages/:pname/attachments':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::PageAttachments, GET_html]
+            'text/html':        *default
+            'application/json': [Socialtext::Rest::PageAttachments, GET_json]
+            'text/plain':       [Socialtext::Rest::PageAttachments, GET_text]
+        'POST':
+            '*/*': [Socialtext::Rest::PageAttachments, POST]
+        '*': [Socialtext::Rest::PageAttachments, bad_method]
+- 
+    '/data/workspaces/:ws/pages/:pname':
+        'GET':
+            '*/*':           &default [Socialtext::Rest::Page, GET_html]
+            'text/html':              *default
+            'text/x.socialtext-wiki': [Socialtext::Rest::Page, GET_wikitext]
+            'application/json':       [Socialtext::Rest::Page, GET_json]
+        'DELETE': [Socialtext::Rest::Page, DELETE]
+        'PUT':
+            'text/x.socialtext-wiki': [Socialtext::Rest::Page, PUT_wikitext]
+            'application/json':       [Socialtext::Rest::Page, PUT_json]
+            'text/html':              [Socialtext::Rest::Page, PUT_html]
+            '*/*':                    [Socialtext::Rest::Page, bad_type]
+        '*':      [Socialtext::Rest::Page, bad_method]
+- 
+    '/data/workspaces/:ws/homepage':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::HomePage, GET]
+        '*':      [Socialtext::Rest::HomePage, bad_method]
+- 
+    '/data/workspaces/:ws/breadcrumbs':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::BreadCrumbs, GET_html]
+            'application/json': [Socialtext::Rest::BreadCrumbs, GET_json]
+            'text/html':        *default
+            'text/plain':       [Socialtext::Rest::BreadCrumbs, GET_text]
+        '*':      [Socialtext::Rest::BreadCrumbs, bad_method]
+- 
+    '/data/workspaces/:ws/pages':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::Pages, GET_html]
+            'application/json': [Socialtext::Rest::Pages, GET_json]
+            'text/html':        *default
+            'text/plain':       [Socialtext::Rest::Pages, GET_text]
+        'POST':
+            '*/*':                    [Socialtext::Rest::Pages, bad_type]
+            'text/x.socialtext-wiki': [Socialtext::Rest::Pages, POST]
+        '*': [Socialtext::Rest::Pages, bad_method]
+- 
+    '/data/workspaces/:ws/tags/:tag/pages':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::TaggedPages, GET_html]
+            'application/json': [Socialtext::Rest::TaggedPages, GET_json]
+            'text/html':        *default
+            'text/plain':       [Socialtext::Rest::TaggedPages, GET_text]
+        '*': [Socialtext::Rest::TaggedPages, bad_method]
+-
+    '/data/workspaces/:ws/tags/:tag':
+        'GET':   
+            '*/*':     &default [Socialtext::Rest::WorkspaceTag, GET_html]
+            'application/json': [Socialtext::Rest::WorkspaceTag, GET_json]
+            'text/html':        *default
+            'text/plain':       [Socialtext::Rest::WorkspaceTag, GET_text]
+        'PUT':    [Socialtext::Rest::WorkspaceTag, PUT]
+        'DELETE': [Socialtext::Rest::WorkspaceTag, DELETE]
+        '*':      [Socialtext::Rest::WorkspaceTag, bad_method]
+-
+    '/data/workspaces/:ws/tags':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::WorkspaceTags, GET_html]
+            'text/html':        *default
+            'text/plain':       [Socialtext::Rest::WorkspaceTags, GET_text]
+            'application/json': [Socialtext::Rest::WorkspaceTags, GET_json]
+        'POST':
+            '*/*': &default [Socialtext::Rest::WorkspaceTags, POST_text]
+            'text/plain':   *default
+        '*': [Socialtext::Rest::WorkspaceTags, bad_method]
+-
+    '/data/workspaces/:ws/attachments/:attachment_id':
+        'GET':
+            '*/*': [Socialtext::Rest::Attachment, GET]
+        'DELETE':  [Socialtext::Rest::Attachment, DELETE]
+        '*': [Socialtext::Rest::Attachment, bad_method]
+-
+    '/data/workspaces/:ws/attachments':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::WorkspaceAttachments, GET_html]
+            'text/html':        *default
+            'application/json': [Socialtext::Rest::WorkspaceAttachments, GET_json]
+            'text/plain':       [Socialtext::Rest::WorkspaceAttachments, GET_text]
+        '*': [Socialtext::Rest::WorkspaceAttachments, bad_method]
+-
+    '/data/workspaces/:ws/users':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::WorkspaceUsers, GET_html]
+            'text/html':        *default
+            'application/json': [Socialtext::Rest::WorkspaceUsers, GET_json]
+        'POST':
+            '*/*':              [Socialtext::Rest::WorkspaceUsers, bad_type]
+            'application/json': [Socialtext::Rest::WorkspaceUsers, POST]
+        '*':                    [Socialtext::Rest::WorkspaceUsers, bad_method]
+-
+    '/data/workspaces/:ws':
+        'GET':   
+            '*/*':     &default [Socialtext::Rest::Workspace, GET_html]
+            'application/json': [Socialtext::Rest::Workspace, GET_json]
+            'text/html':        *default
+        '*':                    [Socialtext::Rest::Workspace, bad_method]
+-
+    '/data/workspaces':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::Workspaces, GET_html]
+            'application/json': [Socialtext::Rest::Workspaces, GET_json]
+            'text/html': *default
+            'text/plain':       [Socialtext::Rest::Workspaces, GET_text]
+        'POST':
+            '*/*':              [Socialtext::Rest::Workspaces, bad_type]
+            'application/json': [Socialtext::Rest::Workspaces, POST]
+        '*':                    [Socialtext::Rest::Workspaces, bad_method]
+-
+    '/data/users/:username':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::User, GET_html]
+            'application/json': [Socialtext::Rest::User, GET_json]
+            'text/html':        *default
+        '*':                    [Socialtext::Rest::User, bad_method]
+-
+    '/data/users':
+        'POST':
+            '*/*':              [Socialtext::Rest::Users, bad_type]
+            'application/json': [Socialtext::Rest::Users, POST]
+        '*':                    [Socialtext::Rest::Users, bad_method]
+-
+    '/data/accounts':
+        'POST':
+            '*/*':              [Socialtext::Rest::Accounts, bad_type]
+            'application/json': [Socialtext::Rest::Accounts, POST]
+        '*':                    [Socialtext::Rest::Accounts, bad_method]
+# REVIEW: what goes here?
+#    '/data':
+

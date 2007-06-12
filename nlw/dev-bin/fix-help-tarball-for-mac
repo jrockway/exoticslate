@@ -1,0 +1,11 @@
+#!/bin/sh
+
+ORIG_DIR=`pwd`;
+
+cd share/doc-pages/help;
+tar xfz help.tar.gz;
+rm -f help.tar.gz plugin/help/indexes/*;
+tar cfz help.tar.gz *;
+cd $ORIG_DIR;
+
+echo "Rejiggered the stupid tarball";

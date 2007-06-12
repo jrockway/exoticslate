@@ -1,0 +1,16 @@
+[%# @COPYRIGHT@ -%]
+[% PROCESS lite/header.html %]
+
+    <div>
+        <p>Somebody else made changes to the page while you were editing it.
+        Click <a href="[% page_uri %]">here</a> to go to the latest version
+        of the page. The text you just edited is shown below. You can copy
+        and paste your changes from there:</p>
+    <div>
+        <pre>
+[% content | html %]
+        </pre>
+    </div>
+
+[% PROCESS lite/footer.html %]
+

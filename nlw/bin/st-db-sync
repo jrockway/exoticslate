@@ -1,0 +1,11 @@
+#!/bin/bash
+# @COPYRIGHT@
+set -e
+
+abs_path()  { perl -MCwd -le "print Cwd::abs_path(shift)" $1; }
+
+DB_USER=`st-build-setting db-user`
+echo "Syncing DB Schema.";
+DIRNAME=$(abs_path `dirname $0`)
+sudo -u $DB_USER $DIRNAME/st-db --sync;
+sudo -u $DB_USER $DIRNAME/st-db --required-data;

@@ -1,0 +1,249 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use lib 'lib';
+use Data::Dumper;
+use File::Spec;
+use Getopt::Long;
+
+# These regexes and much of the _parse_version code was stolen from
+# Module::Build::ModuleInfo
+my $VARNAME_REGEXP = qr/ # match fully-qualified VERSION name
+  ([\$*])         # sigil - $ or *
+  (
+    (             # optional leading package name
+      (?:::|\')?  # possibly starting like just :: (ala $::VERSION)
+      (?:\w+(?:::|\'))*  # Foo::Bar:: ...
+    )?
+    VERSION
+  )\b
+/x;
+my $VERS_REGEXP = qr/ # match a VERSION definition
+  (?:
+    \(\s*$VARNAME_REGEXP\s*\) # with parens
+  |
+    $VARNAME_REGEXP           # without parens
+  )
+  \s*
+  =[^=~]  # = but not ==, nor =~
+/x;
+
+my %opts = process_opts();
+my %deps = LoadDeps( 'Deps.yaml' );
+
+if ( !$opts{'socialtext-open'} ) {
+    %deps = (%deps, LoadDeps( 'EnterpriseDeps.yaml' ));
+}
+if ( $opts{dev} ) {
+    %deps = (%deps, LoadDeps( 'DevDeps.yaml' ));
+}
+# A few optimizations to dump data early w/o doing anything.
+if ($opts{dump}) {
+    $Data::Dumper::Sortkeys = 1;
+    print Dumper(\%deps);
+    exit;
+}
+elsif ($opts{all} and not $opts{verbose}) {
+    print join("\n", sort keys %deps) . "\n";
+    exit;
+}
+my %results = get_version_info(\%deps);
+
+for my $module ( sort keys %results ) {
+    my $results = $results{$module};
+
+    if ( $opts{all} ) {
+        print_msg( $module, $results );
+    }
+    elsif ( $opts{satisfied} and $results->{status} eq 'ok' ) {
+        print_msg( $module, $results );
+    }
+    elsif ( $opts{unsatisfied} and $results->{status} ne 'ok' ) {
+        print_msg( $module, $results );
+    }
+}
+
+sub print_msg {
+    my $module = shift;
+    my $results = shift;
+
+    print $module;
+    if ( $opts{verbose} ) {
+        printf( 'wanted=%s have=%s status=%s', @{$results}{qw( wanted have status )} );
+    }
+    else {
+        print ' ', $results->{wanted};
+    }
+    print "\n";
+}
+
+sub get_version_info {
+    my $deps = shift;
+    my %results;
+
+    for my $module (sort keys %$deps) {
+        my $status = {
+            status => 'unknown',
+            wanted => $deps->{$module},
+        };
+
+        my $file = _find_module_file($module);
+        if ( !$file ) {
+            $status->{status} = 'not found';
+            $results{$module} = $status;
+            next;
+        }
+
+        my $ver = eval { _parse_version($file) } || 0;
+
+        if ($@) {
+            $status->{status} = "error parsing version: $@";
+            next;
+        }
+
+        $status->{have} = $ver;
+
+        if ( not $status->{wanted} ) {
+            $status->{status} = 'ok';
+        }
+        elsif ( $status->{have} ge $status->{wanted} ) {
+            $status->{status} = 'ok';
+        }
+        elsif ( $status->{have} lt $status->{wanted} ) {
+            $status->{status} = 'old';
+        }
+
+        $results{$module} = $status;
+    }
+
+    return %results;
+}
+
+sub _find_module_file {
+    my $module = shift;
+
+    my $file = File::Spec->catfile( split /::/, $module );
+    $file .= '.pm';
+
+    for my $lib (@INC) {
+        my $path = File::Spec->catfile( $lib, $file );
+        return $path if -f $path;
+    }
+}
+
+sub _parse_version {
+    my $file = shift;
+
+    open my $fh, '<', $file
+        or die "Cannot read $file: $!";
+
+    my ($line, $sig, $var);
+    while ( defined( $line = <$fh> ) ) {
+        next if $line =~ /^\s*#/;
+
+        if ( $line =~ $VERS_REGEXP ) {
+            ( $sig, $var ) = $2 ? ( $1, $2 ) : ( $4, $5 );
+            last;
+        }
+    }
+
+    return unless $var;
+
+    my $eval =
+        qq{package Socialtext::ListModuleDeps::_version;
+           no strict;
+           local $sig$var;
+           \$$var=undef; do {
+             $line
+           }; \$$var
+          };
+
+    local $^W;
+    my $result = eval $eval;
+    die "Error evaling version line '$line' in $file: $@\n" if $@;
+
+    return $result;
+}
+
+# Avoid YAML dependency here and parse the YAML file directly.
+# Could just use YAML.pm if we wanted to burden the user, but
+# we're slowly trying to get away from that.
+sub LoadDeps {
+    no strict;
+    my $file = shift;
+    $file = "build/$file";
+    open(my $fh, '<', $file) or die "Could not open $file: $!\n";
+
+    my $ref  = eval "\$deps = \x7B" . (
+        join " ", map {
+            s/: / => /;
+            s/#.+//;
+            s/\n/,/;
+            $_
+        } grep /^\s*[^#].*: /, <$fh>
+    ) . "\x7D";
+    die "Could not parse $file: $@\n" if $@;
+    delete $ref->{'MasonX::WebApp'}; # MasonX::WebApp causes dependency problems
+
+    return %$ref;
+}
+
+sub process_opts {
+    my %opts;
+    GetOptions(
+        'unsatisfied|u' => \$opts{unsatisfied},
+        'satisfied|s'   => \$opts{satisfied},
+        'all|a'         => \$opts{all},
+        'verbose|v'     => \$opts{verbose},
+        'dump|D'        => \$opts{dump},
+        'help|h'        => \$opts{help},
+        'dev=i'         => \$opts{dev},
+        'socialtext-open=i' => \$opts{'socialtext-open'},
+    ) or exit 1;
+
+    $opts{verbose} ||= 0;
+    $opts{unsatisfied} = 1 unless ( $opts{satisfied} || $opts{all} );
+    die usage() if $opts{help};
+    die usage('Choose one of -u, -s, or -a')
+        unless ( grep $_, map $opts{$_}, qw(unsatisfied satisfied all) ) < 2;
+    return %opts;
+}
+
+sub usage {
+    my $msg = shift;
+    print <<"USAGE";
+Usage: $0 [-h] [-v] [-f file] [-u | -s | -a]
+
+This program lists module dependencies.
+
+    -u
+    --unsatisfied
+        List only unsatisfied dependencies.  This is the default
+
+    -s
+    --satisfied
+        List only satisfied dependencies.
+
+    -a
+    --all
+        List all dependencies: both satisfied and unsatisifed
+
+    --dev
+        Include dependencies from build/DevDeps.yaml.
+
+    --socialtext-open=[0|1]
+        Don't include build/EnterpriseDeps.yaml.
+
+    -v --verbose
+        Print extra information about the dependencies.
+
+    -D --dump
+        Dump dependencies as a Perl hash in Data::Dumper format.
+
+    -h --help
+        This help.
+USAGE
+    print "\nError: $msg\n" if $msg;
+    exit 1;
+}

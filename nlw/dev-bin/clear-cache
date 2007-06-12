@@ -1,0 +1,5 @@
+#!/bin/sh
+# @COPYRIGHT@
+
+clear-cache-ttc;
+clear-cache-formatter;

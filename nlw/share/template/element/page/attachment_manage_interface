@@ -1,0 +1,31 @@
+[% ns = 'st-attachments-manage' %]
+<div id="st-attachments-manageinterface">
+    <form onsubmit="return false;">
+    <div id="[% ns %]-manageinterface-overlay" class="popup-overlay"></div>
+    <div id="[% ns %]-interface">
+        <div id="[% ns %]-filetable">
+            <table id="[% ns %]-filelisting">
+                <thead>
+                    <tr id="[% ns %]-fileheader">
+                        <td nowrap="nowrap"><input type="checkbox" name="selectall" id="[% ns %]-selectall" /></td>
+                        <td nowrap="nowrap">File Name</td>
+                        <td nowrap="nowrap">Author</td>
+                        <td nowrap="nowrap">Date Uploaded</td>
+                        <td nowrap="nowrap">Size</td>
+                    </tr>
+                </thead>
+                <tbody id="[% ns %]-body">
+                </tbody>
+            </table>
+        </div>
+        <div id="[% ns %]-close">
+            [% INCLUDE element/button id="${ns}-closebutton", label = "Close" %]
+        </div>
+        <div id="[% ns %]-delete">
+            [% INCLUDE element/button id="${ns}-deletebutton", label = "Delete Selected Files" %]
+            <span id="[% ns %]-deletemessage"></span>
+        </div>
+        <br />
+    </div>
+    </form>
+</div>

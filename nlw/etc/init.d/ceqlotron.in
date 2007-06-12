@@ -8,6 +8,9 @@ use strict;
 
 use Carp 'croak';
 use Readonly;
+use File::Path ();
+use File::Basename ();
+
 use Socialtext::InitFunctions qw(
     fork_and_exec_daemon_as_user system_or_die try_kill timeout_waitpid
     succeed fail restart assert_absolute_paths
@@ -33,6 +36,13 @@ $| = 1;
 my $operation = shift || '';
 if ( $operation eq 'start' ) {
     print "Starting $NAME... ";
+    
+    my $pidfile_dir = File::Basename::dirname($PIDFILE);
+    File::Path::mkpath( $pidfile_dir ) or
+        die "Can't make path $pidfile_dir: $!\n";
+    chown $uid, $gid, $pidfile_dir or 
+        die "Can't chown $uid $gid $pidfile_dir: $!\n";
+
     system_or_die( 'touch', $LOGFILE );
     chown $uid, $gid, $LOGFILE or die "chown $uid $gid $LOGFILE: $!\n";
 

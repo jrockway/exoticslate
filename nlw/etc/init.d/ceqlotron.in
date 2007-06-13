@@ -38,10 +38,12 @@ if ( $operation eq 'start' ) {
     print "Starting $NAME... ";
     
     my $pidfile_dir = File::Basename::dirname($PIDFILE);
-    File::Path::mkpath( $pidfile_dir ) or
-        die "Can't make path $pidfile_dir: $!\n";
-    chown $uid, $gid, $pidfile_dir or 
-        die "Can't chown $uid $gid $pidfile_dir: $!\n";
+    unless ( -e $pidfile_dir ) {
+        File::Path::mkpath($pidfile_dir)
+            or die "Can't make path $pidfile_dir: $!\n";
+        chown $uid, $gid, $pidfile_dir
+            or die "Can't chown $uid $gid $pidfile_dir: $!\n";
+    }
 
     system_or_die( 'touch', $LOGFILE );
     chown $uid, $gid, $LOGFILE or die "chown $uid $gid $LOGFILE: $!\n";

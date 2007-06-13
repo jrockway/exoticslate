@@ -56,11 +56,15 @@ if ( $operation eq 'start' ) {
 }
 elsif ( $operation eq 'stop' ) {
     print "Stopping $NAME... ";
-    fail "$PIDFILE does not exist." unless -f $PIDFILE;
-    chomp( my $pid = `cat $PIDFILE` );
-    try_kill( 'TERM', $pid ) or fail 'already stopped.';
-    while ( !timeout_waitpid( $pid, 60 ) ) {
-        try_kill( 'INT', $pid ) or succeed 'done.';
+    if ( -f $PIDFILE ) {
+        chomp( my $pid = `cat $PIDFILE` );
+        try_kill( 'TERM', $pid ) or fail 'already stopped.';
+        while ( !timeout_waitpid( $pid, 60 ) ) {
+            try_kill( 'INT', $pid ) or succeed 'done.';
+        }
+    }
+    else {
+        warn "$PIDFILE does not exist.\n";
     }
     succeed 'done.';
 }

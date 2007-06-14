@@ -1,4 +1,4 @@
-// BEGIN ../../../js-modules/src/Wikiwyg-09-26-06/lib/Wikiwyg/Debug.js
+// BEGIN ../../../js-modules/Wikiwyg-copy/lib/Wikiwyg/Debug.js
 /*==============================================================================
 This Wikiwyg mode supports a textarea editor with toolbar buttons.
 
@@ -3451,119 +3451,694 @@ Widget.SortableTable.prototype._removeCSSClass = function (elt, remove_class) {
 /*
 
 */
-// BEGIN JSON.js
-//------------------------------------------------------------------------------
-// JSON Support
-//------------------------------------------------------------------------------
+// BEGIN ../../../js-modules/Widget-Lightbox/lib/Widget/Lightbox.js
+JSAN.use("DOM.Events");
 
-/*
-Copyright (c) 2005 JSON.org
-*/
-var JSON = function () {
-    var m = {
-            '\b': '\\b',
-            '\t': '\\t',
-            '\n': '\\n',
-            '\f': '\\f',
-            '\r': '\\r',
-            '"' : '\\"',
-            '\\': '\\\\'
-        },
-        s = {
-            'boolean': function (x) {
-                return String(x);
-            },
-            number: function (x) {
-                return isFinite(x) ? String(x) : 'null';
-            },
-            string: function (x) {
-                if (/["\\\x00-\x1f]/.test(x)) {
-                    x = x.replace(/([\x00-\x1f\\"])/g, function(a, b) {
-                        var c = m[b];
-                        if (c) {
-                            return c;
-                        }
-                        c = b.charCodeAt();
-                        return '\\u00' +
-                            Math.floor(c / 16).toString(16) +
-                            (c % 16).toString(16);
-                    });
-                }
-                return '"' + x + '"';
-            },
-            object: function (x) {
-                if (x) {
-                    var a = [], b, f, i, l, v;
-                    if (x instanceof Array) {
-                        a[0] = '[';
-                        l = x.length;
-                        for (i = 0; i < l; i += 1) {
-                            v = x[i];
-                            f = s[typeof v];
-                            if (f) {
-                                v = f(v);
-                                if (typeof v == 'string') {
-                                    if (b) {
-                                        a[a.length] = ',';
-                                    }
-                                    a[a.length] = v;
-                                    b = true;
-                                }
-                            }
-                        }
-                        a[a.length] = ']';
-                    } else if (x instanceof Object) {
-                        a[0] = '{';
-                        for (i in x) {
-                            v = x[i];
-                            f = s[typeof v];
-                            if (f) {
-                                v = f(v);
-                                if (typeof v == 'string') {
-                                    if (b) {
-                                        a[a.length] = ',';
-                                    }
-                                    a.push(s.string(i), ':', v);
-                                    b = true;
-                                }
-                            }
-                        }
-                        a[a.length] = '}';
-                    } else {
-                        return;
-                    }
-                    return a.join('');
-                }
-                return 'null';
+if ( typeof Widget == "undefined" )
+    Widget = {};
+
+Widget.Lightbox = function(param) {
+    this.win = window;
+    this.doc = window.document;
+    this.contentHTML = "";
+    this.config = {
+        clickBackgroundToHide: true
+    };
+    if ( param ) {
+        if (param.divs ) {
+            this.divs = {};
+            for(var i in param.divs) {
+                this.divs[i] = param.divs[i]
             }
-        };
-    return {
-        copyright: '(c)2005 JSON.org',
-        license: 'http://www.crockford.com/JSON/license.html',
-        stringify: function (v) {
-            var f = s[typeof v];
-            if (f) {
-                v = f(v);
-                if (typeof v == 'string') {
-                    return v;
-                }
-            }
-            return null;
-        },
-        parse: function (text) {
-            try {
-                if (text.length > 5 * 1024) {
-                    return eval('(' + text + ')');
-                }
-                return !(/[^,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]/.test(
-                        text.replace(/"(\\.|[^"\\])*"/g, ''))) &&
-                    eval('(' + text + ')');
-            } catch (e) {
-                return false;
+            this.div = this.divs.wrapper;
+            this.div.style.display="none";
+        }
+        if ( param.effects ) {
+            this._effects = [];
+            for (var i=0; i<param.effects.length; i++) {
+                this._effects.push(param.effects[i]);
             }
         }
-    };
+        if (param.wrapperClassName) {
+            this.wrapperClassName = param.wrapperClassName;
+        }
+        else
+            this.wrapperClassName = '';
+
+        if (param.contentClassName) {
+            this.contentClassName = param.contentClassName;
+        }
+        else
+            this.contentClassName = '';
+    }
+    return this;
+}
+
+Widget.Lightbox.VERSION = '0.06';
+Widget.Lightbox.EXPORT = [];
+Widget.Lightbox.EXPORT_OK = [];
+Widget.Lightbox.EXPORT_TAGS = {};
+
+Widget.Lightbox.is_ie = function() {
+    ua = navigator.userAgent.toLowerCase();
+    is_ie = (
+        ua.indexOf("msie") != -1 &&
+        ua.indexOf("opera") == -1 &&
+        ua.indexOf("webtv") == -1
+    );
+    return is_ie;
 }();
+
+Widget.Lightbox.show = function(param) {
+    if ( typeof param == 'string' ) {
+        var box = new Widget.Lightbox;
+        box.content(param);
+        box.show();
+        return box;
+    }
+    else {
+        var box = new Widget.Lightbox(param);
+        box.show();
+        return box;
+    }
+}
+
+Widget.Lightbox.prototype.show = function(callback) {
+    var div = this.create();
+    if ( this.div.style.display== "none" )
+        this.div.style.display="block";
+    this.applyStyle();
+    this.applyHandlers();
+    this.applyEffects();
+
+    if ( typeof callback == 'function') {
+        callback(div);
+    }
+}
+
+Widget.Lightbox.prototype.hide = function() {
+    if (this.div.parentNode) {
+        this.div.style.display="none";
+        if (Widget.Lightbox.is_ie) {
+            document.body.scroll="yes"
+        }
+    }
+}
+
+Widget.Lightbox.prototype.content = function(content) {
+    if ( typeof content != 'undefined' ) {
+        this._content = content;
+    }
+    return this._content;
+}
+
+Widget.Lightbox.prototype.create = function() {
+    if (typeof this.div != 'undefined') {
+        return this.div;
+    }
+
+    var wrapperDiv = this.doc.createElement("div");
+    wrapperDiv.className = "jsan-widget-lightbox";
+
+    var contentDiv = this.doc.createElement("div");
+
+    if (this.contentClassName) {
+        contentDiv.className = this.contentClassName;
+    }
+    else {
+        contentDiv.className = "jsan-widget-lightbox-content";
+    }
+
+    if ( typeof this._content == 'object' ) {
+        if ( this._content.nodeType && this._content.nodeType == 1 ) {
+            contentDiv.appendChild( this._content );
+        }
+    }
+    else {
+        contentDiv.innerHTML = this._content;
+    }
+
+    var contentWrapperDiv = this.doc.createElement("div");
+    if (this.wrapperClassName) {
+        contentWrapperDiv.className = this.wrapperClassName;
+    }
+    else {
+        contentWrapperDiv.className = "jsan-widget-lightbox-content-wrapper";
+    }
+
+    var bgDiv = this.doc.createElement("div");
+    bgDiv.className = "jsan-widget-lightbox-background";
+
+    contentWrapperDiv.appendChild(contentDiv);
+
+    wrapperDiv.appendChild(bgDiv);
+    wrapperDiv.appendChild(contentWrapperDiv);
+
+    this.div = wrapperDiv;
+    this.divs = {
+        wrapper: wrapperDiv,
+        background: bgDiv,
+        content: contentDiv,
+        contentWrapper: contentWrapperDiv
+    };
+    wrapperDiv.style.display = "none";
+    this.doc.body.appendChild(this.div);
+    return this.div;
+}
+
+
+Widget.Lightbox.prototype.applyStyle = function() {
+    var divs = this.divs;
+    with(divs.wrapper.style) {
+        position= Widget.Lightbox.is_ie ? 'absolute': 'fixed';
+        top=0;
+        left=0;
+        width='100%';
+        height='100%';
+        padding=0;
+        margin=0;
+    }
+    with(divs.background.style) {
+        position= Widget.Lightbox.is_ie ? 'absolute': 'fixed';
+        background="#000";
+        opacity="0.5";
+        filter = "alpha(opacity=50)";
+        top=0;
+        left=0;
+        width="100%";
+        height="100%";
+        zIndex=2000;
+        padding=0;
+        margin=0;
+    }
+
+    divs.contentWrapper.style.position = Widget.Lightbox.is_ie ? 'absolute': 'fixed';
+
+    if (this.wrapperClassName) {
+        divs.contentWrapper.className = this.wrapperClassName;
+    }
+    else {
+        with(divs.contentWrapper.style) {
+            zIndex=2001;
+            padding=0;
+            background='#fff';
+            width='520px';
+            margin='100px auto';
+            border="1px outset #555";
+        }
+    }
+
+    with(divs.content.style) {
+        margin='5px';
+    }
+
+    var win_height = document.body.clientHeight;
+    var win_width = document.body.clientWidth;
+    var my_width = divs.content.offsetWidth;
+    var my_left = (win_width - my_width) /2;
+    my_left = (my_left < 0)? 0 : my_left + "px";
+    divs.contentWrapper.style.left = my_left;
+
+    if ( Widget.Lightbox.is_ie ) {
+        document.body.scroll="no";
+        divs.background.style.height = win_height;
+    }
+}
+
+Widget.Lightbox.prototype.applyHandlers = function(){
+    if(!this.div)
+        return;
+
+    var self = this;
+
+    if ( this.config.clickBackgroundToHide == true ) {
+        DOM.Events.addListener(this.divs.background, "click", function () {
+            self.hide();
+        });
+    }
+    if (Widget.Lightbox.is_ie) {
+        DOM.Events.addListener(window, "resize", function () {
+            self.applyStyle();
+        });
+    }
+}
+
+Widget.Lightbox.prototype.effects = function() {
+    if ( arguments.length > 0 ) {
+        this._effects = [];
+        for (var i=0; i<arguments.length; i++) {
+            this._effects.push(arguments[i]);
+        }
+    }
+    return this._effects;
+}
+
+Widget.Lightbox.prototype.applyEffects = function() {
+    if (!this._effects)
+        return;
+    for (var i=0;i<this._effects.length;i++) {
+        this.applyEffect(this._effects[i]);
+    }
+}
+
+Widget.Lightbox.prototype.applyEffect = function(effect) {
+    var func_name = "applyEffect" + effect;
+    if ( typeof this[func_name] == 'function') {
+        this[func_name]();
+    }
+}
+
+// Require Effect.RoundedCorners
+Widget.Lightbox.prototype.applyEffectRoundedCorners = function() {
+    divs = this.divs
+    if ( ! divs ) { return; }
+    if ( typeof Effect.RoundedCorners == 'undefined' ) { return; }
+    divs.contentWrapper.style.border="none";
+    var bs = divs.contentWrapper.getElementsByTagName("b");
+    for (var i = 0; i < bs.length; i++) {
+        if(bs[i].className.match(/rounded-corners-/)) {
+            return;
+        }
+    }
+    for (var i=1; i< 5; i++) {
+        Effect.RoundedCorners._Styles.push(
+            [ ".rounded-corners-" + i,
+              "opacity: 0.4",
+              "filter: alpha(opacity=40)"
+             ]
+        );
+    }
+
+    Effect.RoundedCorners._addStyles();
+    Effect.RoundedCorners._roundCorners(
+        divs.contentWrapper,
+        {   'top': true,
+            'bottom':true,
+            'color':'black'
+            }
+        );
+}
+
+// A Generator function for scriptaculous effects.
+;(function () {
+    var effects = ['Appear', 'Grow', 'BlindDown', 'Shake'];
+    for (var i=0; i<effects.length; i++) {
+        var name = "applyEffect" + effects[i];
+        Widget.Lightbox.prototype[name] = function(effect) {
+            return function() {
+                if ( ! this.divs ) { return; }
+                if ( typeof Effect[effect] == 'undefined' ) { return; }
+                if (effect != 'Shake')
+                    this.divs.contentWrapper.style.display="none";
+                Effect[effect](this.divs.contentWrapper, { duration: 2.0 });
+            }
+        }(effects[i]);
+    }
+})();
+
+
+
+/**
+
+*/
+// BEGIN ../../../js-modules/Widget-Lightbox/tests/lib/Effect/RoundedCorners.js
+JSAN.use("DOM.Ready");
+
+if ( typeof Effect == "undefined" ) Effect = {};
+
+Effect.RoundedCorners = {};
+
+Effect.RoundedCorners.VERSION = "0.12";
+
+Effect.RoundedCorners.roundCorners = function (params) {
+    if ( typeof params == "string" ) {
+        params = { "elementId": params };
+    }
+
+    if ( ! params["elementId"] ) {
+        throw new Error("Effect.RoundedCorners requires an elementId parameter");
+    }
+
+    Effect.RoundedCorners._addStyles();
+
+    if ( ! params.hasOwnProperty("top") ) {
+        params["top"] = true;
+    }
+
+    if ( ! params.hasOwnProperty("bottom") ) {
+        params["bottom"] = true;
+    }
+
+    var callback = function () {
+        var elt = document.getElementById( params.elementId );
+        if ( ! elt ) { return }
+        Effect.RoundedCorners._roundCorners( elt, params );
+    };
+    DOM.Ready.onDOMDone(callback);
+}
+
+Effect.RoundedCorners._roundCorners = function (elt, params) {
+    var color = params["color"];
+    if ( ! color ) {
+        var current_elt = elt.parentNode;
+        while ( current_elt && ( ! color || color == "transparent" ) ) {
+            try {
+                color = window.getComputedStyle( current_elt, null ).backgroundColor;
+            }
+            /* at least on Firefox calling getComputedStyle on the
+             * root HTML node seems to produce an error */
+            catch (e) {}
+            current_elt = current_elt.parentNode;
+        }
+
+        if ( color == undefined || color == "transparent" ) {
+            color = "white";
+        }
+    }
+
+    if ( params["top"] ) {
+        Effect.RoundedCorners._roundUpperCorners( elt, color );
+    }
+
+    if ( params["bottom"] ) {
+        Effect.RoundedCorners._roundBottomCorners( elt, color );
+    }
+
+}
+
+Effect.RoundedCorners._roundUpperCorners = function (elt, color) {
+    var container =
+       Effect.RoundedCorners._makeElements( color, [ "1", "2", "3", "4" ] );
+
+    elt.insertBefore( container, elt.firstChild );
+}
+
+Effect.RoundedCorners._roundBottomCorners = function (elt, color) {
+    var container =
+       Effect.RoundedCorners._makeElements( color, [ "4", "3", "2", "1" ] );
+
+    elt.appendChild(container);
+}
+
+var foo = 1;
+Effect.RoundedCorners._makeElements = function (color, order) {
+    var container = document.createElement("b");
+    container.className = "rounded-corners-container";
+
+    while ( order.length ) {
+        var b_tag = document.createElement("b");
+        b_tag.className = "rounded-corners-" + order.shift();
+        b_tag.style.backgroundColor = "transparent";
+        b_tag.style.borderColor = color;
+
+        container.appendChild(b_tag);
+    }
+
+    return container;
+}
+
+Effect.RoundedCorners._Styles = [
+    [ ".rounded-corners-container",
+      "display: block",
+      "background-color: transparent" ],
+
+    [ ".rounded-corners-container *",
+      "display: block",
+      "height: 1px",
+      "overflow: hidden",
+      "font-size: 1px",
+      "border-style: solid",
+      "border-width: 0px 1px"
+    ],
+
+    [ ".rounded-corners-1",
+      "border-left-width: 5px",
+      "border-right-width: 5px"
+    ],
+
+    [ ".rounded-corners-2",
+      "border-left-width: 3px",
+      "border-right-width: 3px"
+    ],
+
+    [ ".rounded-corners-3",
+      "border-left-width: 2px",
+      "border-right-width: 2px"
+    ],
+
+    [ ".rounded-corners-4",
+      "height: 2px"
+    ]
+];
+
+Effect.RoundedCorners._StylesAdded = 0;
+Effect.RoundedCorners._addStyles = function () {
+    if (Effect.RoundedCorners._StylesAdded) {
+        return;
+    }
+
+    var styles = Effect.RoundedCorners._Styles;
+    var style_string = "";
+
+    for ( var i = 0; i < styles.length; i++ ) {
+        var style = styles[i];
+
+        style_string =
+            style_string
+            + style.shift()
+            + " {\n  "
+            + style.join(";\n  ")
+            + ";\n}\n\n";
+    }
+
+    var style_elt = document.createElement("style");
+    style_elt.setAttribute("type", "text/css");
+
+    if ( style_elt.styleSheet ) { /* IE */
+        style_elt.styleSheet.cssText = style_string;
+    }
+    else { /* w3c */
+        var style_text = document.createTextNode(style_string);
+        style_elt.appendChild(style_text);
+    }
+
+    var head = document.getElementsByTagName("head")[0];
+    head.appendChild(style_elt);
+    
+    Effect.RoundedCorners._StylesAdded = 1;
+}
+
+/*
+
+*/
+// BEGIN md5.js
+/**
+*
+*  MD5 (Message-Digest Algorithm)
+*  http://www.webtoolkit.info/
+*
+**/
+
+var MD5 = function (string) {
+
+    function RotateLeft(lValue, iShiftBits) {
+        return (lValue<<iShiftBits) | (lValue>>>(32-iShiftBits));
+    }
+
+    function AddUnsigned(lX,lY) {
+        var lX4,lY4,lX8,lY8,lResult;
+        lX8 = (lX & 0x80000000);
+        lY8 = (lY & 0x80000000);
+        lX4 = (lX & 0x40000000);
+        lY4 = (lY & 0x40000000);
+        lResult = (lX & 0x3FFFFFFF)+(lY & 0x3FFFFFFF);
+        if (lX4 & lY4) {
+            return (lResult ^ 0x80000000 ^ lX8 ^ lY8);
+        }
+        if (lX4 | lY4) {
+            if (lResult & 0x40000000) {
+                return (lResult ^ 0xC0000000 ^ lX8 ^ lY8);
+            } else {
+                return (lResult ^ 0x40000000 ^ lX8 ^ lY8);
+            }
+        } else {
+            return (lResult ^ lX8 ^ lY8);
+        }
+    }
+
+    function F(x,y,z) { return (x & y) | ((~x) & z); }
+    function G(x,y,z) { return (x & z) | (y & (~z)); }
+    function H(x,y,z) { return (x ^ y ^ z); }
+    function I(x,y,z) { return (y ^ (x | (~z))); }
+
+    function FF(a,b,c,d,x,s,ac) {
+        a = AddUnsigned(a, AddUnsigned(AddUnsigned(F(b, c, d), x), ac));
+        return AddUnsigned(RotateLeft(a, s), b);
+    };
+
+    function GG(a,b,c,d,x,s,ac) {
+        a = AddUnsigned(a, AddUnsigned(AddUnsigned(G(b, c, d), x), ac));
+        return AddUnsigned(RotateLeft(a, s), b);
+    };
+
+    function HH(a,b,c,d,x,s,ac) {
+        a = AddUnsigned(a, AddUnsigned(AddUnsigned(H(b, c, d), x), ac));
+        return AddUnsigned(RotateLeft(a, s), b);
+    };
+
+    function II(a,b,c,d,x,s,ac) {
+        a = AddUnsigned(a, AddUnsigned(AddUnsigned(I(b, c, d), x), ac));
+        return AddUnsigned(RotateLeft(a, s), b);
+    };
+
+    function ConvertToWordArray(string) {
+        var lWordCount;
+        var lMessageLength = string.length;
+        var lNumberOfWords_temp1=lMessageLength + 8;
+        var lNumberOfWords_temp2=(lNumberOfWords_temp1-(lNumberOfWords_temp1 % 64))/64;
+        var lNumberOfWords = (lNumberOfWords_temp2+1)*16;
+        var lWordArray=Array(lNumberOfWords-1);
+        var lBytePosition = 0;
+        var lByteCount = 0;
+        while ( lByteCount < lMessageLength ) {
+            lWordCount = (lByteCount-(lByteCount % 4))/4;
+            lBytePosition = (lByteCount % 4)*8;
+            lWordArray[lWordCount] = (lWordArray[lWordCount] | (string.charCodeAt(lByteCount)<<lBytePosition));
+            lByteCount++;
+        }
+        lWordCount = (lByteCount-(lByteCount % 4))/4;
+        lBytePosition = (lByteCount % 4)*8;
+        lWordArray[lWordCount] = lWordArray[lWordCount] | (0x80<<lBytePosition);
+        lWordArray[lNumberOfWords-2] = lMessageLength<<3;
+        lWordArray[lNumberOfWords-1] = lMessageLength>>>29;
+        return lWordArray;
+    };
+
+    function WordToHex(lValue) {
+        var WordToHexValue="",WordToHexValue_temp="",lByte,lCount;
+        for (lCount = 0;lCount<=3;lCount++) {
+            lByte = (lValue>>>(lCount*8)) & 255;
+            WordToHexValue_temp = "0" + lByte.toString(16);
+            WordToHexValue = WordToHexValue + WordToHexValue_temp.substr(WordToHexValue_temp.length-2,2);
+        }
+        return WordToHexValue;
+    };
+
+    function Utf8Encode(string) {
+        string = string.replace(/\r\n/g,"\n");
+        var utftext = "";
+
+        for (var n = 0; n < string.length; n++) {
+
+            var c = string.charCodeAt(n);
+
+            if (c < 128) {
+                utftext += String.fromCharCode(c);
+            }
+            else if((c > 127) && (c < 2048)) {
+                utftext += String.fromCharCode((c >> 6) | 192);
+                utftext += String.fromCharCode((c & 63) | 128);
+            }
+            else {
+                utftext += String.fromCharCode((c >> 12) | 224);
+                utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                utftext += String.fromCharCode((c & 63) | 128);
+            }
+
+        }
+
+        return utftext;
+    };
+
+    var x=Array();
+    var k,AA,BB,CC,DD,a,b,c,d;
+    var S11=7, S12=12, S13=17, S14=22;
+    var S21=5, S22=9 , S23=14, S24=20;
+    var S31=4, S32=11, S33=16, S34=23;
+    var S41=6, S42=10, S43=15, S44=21;
+
+    string = Utf8Encode(string);
+
+    x = ConvertToWordArray(string);
+
+    a = 0x67452301; b = 0xEFCDAB89; c = 0x98BADCFE; d = 0x10325476;
+
+    for (k=0;k<x.length;k+=16) {
+        AA=a; BB=b; CC=c; DD=d;
+        a=FF(a,b,c,d,x[k+0], S11,0xD76AA478);
+        d=FF(d,a,b,c,x[k+1], S12,0xE8C7B756);
+        c=FF(c,d,a,b,x[k+2], S13,0x242070DB);
+        b=FF(b,c,d,a,x[k+3], S14,0xC1BDCEEE);
+        a=FF(a,b,c,d,x[k+4], S11,0xF57C0FAF);
+        d=FF(d,a,b,c,x[k+5], S12,0x4787C62A);
+        c=FF(c,d,a,b,x[k+6], S13,0xA8304613);
+        b=FF(b,c,d,a,x[k+7], S14,0xFD469501);
+        a=FF(a,b,c,d,x[k+8], S11,0x698098D8);
+        d=FF(d,a,b,c,x[k+9], S12,0x8B44F7AF);
+        c=FF(c,d,a,b,x[k+10],S13,0xFFFF5BB1);
+        b=FF(b,c,d,a,x[k+11],S14,0x895CD7BE);
+        a=FF(a,b,c,d,x[k+12],S11,0x6B901122);
+        d=FF(d,a,b,c,x[k+13],S12,0xFD987193);
+        c=FF(c,d,a,b,x[k+14],S13,0xA679438E);
+        b=FF(b,c,d,a,x[k+15],S14,0x49B40821);
+        a=GG(a,b,c,d,x[k+1], S21,0xF61E2562);
+        d=GG(d,a,b,c,x[k+6], S22,0xC040B340);
+        c=GG(c,d,a,b,x[k+11],S23,0x265E5A51);
+        b=GG(b,c,d,a,x[k+0], S24,0xE9B6C7AA);
+        a=GG(a,b,c,d,x[k+5], S21,0xD62F105D);
+        d=GG(d,a,b,c,x[k+10],S22,0x2441453);
+        c=GG(c,d,a,b,x[k+15],S23,0xD8A1E681);
+        b=GG(b,c,d,a,x[k+4], S24,0xE7D3FBC8);
+        a=GG(a,b,c,d,x[k+9], S21,0x21E1CDE6);
+        d=GG(d,a,b,c,x[k+14],S22,0xC33707D6);
+        c=GG(c,d,a,b,x[k+3], S23,0xF4D50D87);
+        b=GG(b,c,d,a,x[k+8], S24,0x455A14ED);
+        a=GG(a,b,c,d,x[k+13],S21,0xA9E3E905);
+        d=GG(d,a,b,c,x[k+2], S22,0xFCEFA3F8);
+        c=GG(c,d,a,b,x[k+7], S23,0x676F02D9);
+        b=GG(b,c,d,a,x[k+12],S24,0x8D2A4C8A);
+        a=HH(a,b,c,d,x[k+5], S31,0xFFFA3942);
+        d=HH(d,a,b,c,x[k+8], S32,0x8771F681);
+        c=HH(c,d,a,b,x[k+11],S33,0x6D9D6122);
+        b=HH(b,c,d,a,x[k+14],S34,0xFDE5380C);
+        a=HH(a,b,c,d,x[k+1], S31,0xA4BEEA44);
+        d=HH(d,a,b,c,x[k+4], S32,0x4BDECFA9);
+        c=HH(c,d,a,b,x[k+7], S33,0xF6BB4B60);
+        b=HH(b,c,d,a,x[k+10],S34,0xBEBFBC70);
+        a=HH(a,b,c,d,x[k+13],S31,0x289B7EC6);
+        d=HH(d,a,b,c,x[k+0], S32,0xEAA127FA);
+        c=HH(c,d,a,b,x[k+3], S33,0xD4EF3085);
+        b=HH(b,c,d,a,x[k+6], S34,0x4881D05);
+        a=HH(a,b,c,d,x[k+9], S31,0xD9D4D039);
+        d=HH(d,a,b,c,x[k+12],S32,0xE6DB99E5);
+        c=HH(c,d,a,b,x[k+15],S33,0x1FA27CF8);
+        b=HH(b,c,d,a,x[k+2], S34,0xC4AC5665);
+        a=II(a,b,c,d,x[k+0], S41,0xF4292244);
+        d=II(d,a,b,c,x[k+7], S42,0x432AFF97);
+        c=II(c,d,a,b,x[k+14],S43,0xAB9423A7);
+        b=II(b,c,d,a,x[k+5], S44,0xFC93A039);
+        a=II(a,b,c,d,x[k+12],S41,0x655B59C3);
+        d=II(d,a,b,c,x[k+3], S42,0x8F0CCC92);
+        c=II(c,d,a,b,x[k+10],S43,0xFFEFF47D);
+        b=II(b,c,d,a,x[k+1], S44,0x85845DD1);
+        a=II(a,b,c,d,x[k+8], S41,0x6FA87E4F);
+        d=II(d,a,b,c,x[k+15],S42,0xFE2CE6E0);
+        c=II(c,d,a,b,x[k+6], S43,0xA3014314);
+        b=II(b,c,d,a,x[k+13],S44,0x4E0811A1);
+        a=II(a,b,c,d,x[k+4], S41,0xF7537E82);
+        d=II(d,a,b,c,x[k+11],S42,0xBD3AF235);
+        c=II(c,d,a,b,x[k+2], S43,0x2AD7D2BB);
+        b=II(b,c,d,a,x[k+9], S44,0xEB86D391);
+        a=AddUnsigned(a,AA);
+        b=AddUnsigned(b,BB);
+        c=AddUnsigned(c,CC);
+        d=AddUnsigned(d,DD);
+    }
+
+    var temp = WordToHex(a)+WordToHex(b)+WordToHex(c)+WordToHex(d);
+
+    return temp.toLowerCase();
+}
 // BEGIN Cookie.js
 // Cookie handling functions
 
@@ -3699,6 +4274,81 @@ Array.prototype.deleteElementIgnoreCase = function(toDelete) {
             return;
         }
 }// BEGIN stlibrary.js
+// namespace placeholder
+if (typeof ST == 'undefined') {
+    ST = {};
+}
+
+ST.isRelative = function(node) {
+    return node.style.position == 'relative' || node.style.position == 'absolute' || node.style.position == 'fixed';
+}
+
+ST.getRadioValue = function(name) {
+    var nodes = document.getElementsByName(name);
+    for (var i=0; i < nodes.length; i++)
+        if (nodes[i].checked)
+            return nodes[i].value;
+    return '';
+}
+
+ST.setRadioValue = function(name, value) {
+    var nodes = document.getElementsByName(name);
+    for (var i=0; i < nodes.length; i++) {
+        if (nodes[i].value == value) {
+            nodes[i].checked = true;
+            return;
+        }
+    }
+}
+
+// Function from Javascript: The Definitive Guide
+ST.getDocumentX = function(e, is_relative) {
+    var x = 0;
+    while (e) {
+        x+= e.offsetLeft;
+        e = e.offsetParent;
+        if (e && is_relative && ST.isRelative(e))
+            e = null;
+    }
+    return x;
+}
+
+ST.getDocumentY = function(e, is_relative) {
+    var y = 0;
+    while (e) {
+        y += e.offsetTop;
+        e = e.offsetParent;
+        if (e && is_relative && ST.isRelative(e))
+            e = null;
+    }
+    return y;
+}
+
+/**
+ * A function used to extend one class with another
+ *
+ * @author Kevin Lindsey
+ * @version 1.0
+ *
+ * copyright 2006, Kevin Lindsey
+ *
+ *
+ * @param {Object} subClass
+ * 		The inheriting class, or subclass
+ * @param {Object} baseClass
+ * 		The class from which to inherit
+ */
+ST.extend = function(subClass, baseClass) {
+   function inheritance() {}
+   inheritance.prototype = baseClass.prototype;
+
+   subClass.prototype = new inheritance();
+   subClass.prototype.constructor = subClass;
+   subClass.baseConstructor = baseClass;
+   subClass.superClass = baseClass.prototype;
+}
+
+
 // Pop up a new HTML window
 function query_popup(url, width, height, left, top) {
     if (!width) width = 400;
@@ -3747,6 +4397,47 @@ if (typeof ST == 'undefined') {
 ST.Lightbox = function() {};
 
 ST.Lightbox.prototype = {
+    create: function(contentElement) {
+        var wrapper = document.createElement("div");
+        var overlay = document.createElement("div");
+        var content = document.createElement("div");
+
+        wrapper.appendChild(overlay);
+        wrapper.appendChild(content);
+
+        overlay.className = "popup-overlay";
+
+        content.className = "st-lightbox-content";
+        content.appendChild(contentElement);
+
+        this.wrapper = wrapper;
+        this.overlay = overlay;
+        this.content = content;
+
+        return this;
+    },
+    show: function() {
+        document.body.appendChild(this.wrapper);
+        this.center(this.overlay, this.content, this.wrapper);
+        with(this.wrapper.style) {
+            position = Wikiwyg.is_ie ? "absolute" :"fixed";
+            top = 0;
+            left = 0;
+            width = "100%";
+            height = "100%";
+        }
+        with(this.overlay.style) {
+            zIndex = 90;
+            position = Wikiwyg.is_ie ? "absolute" :"fixed";
+        }
+        with(this.content.style) {
+            zIndex = 2000;
+            position = Wikiwyg.is_ie ? "absolute" :"fixed";
+        }
+    },
+    close: function() {
+        document.body.removeChild(this.wrapper);
+    },
     center: function (overlayElement, element, parentElement) {
         try{
             element = $(element);
@@ -3801,6 +4492,2341 @@ ST.Lightbox.prototype = {
 
 };
 
+// BEGIN Jemplate.js
+/*------------------------------------------------------------------------------
+Jemplate - Template Toolkit for JavaScript
+
+DESCRIPTION - This module provides the runtime JavaScript support for
+compiled Jemplate templates.
+
+AUTHOR - Ingy döt Net <ingy@cpan.org>
+
+Copyright 2006 Ingy döt Net. All Rights Reserved.
+
+This module is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+------------------------------------------------------------------------------*/
+
+//------------------------------------------------------------------------------
+// Main Jemplate class
+//------------------------------------------------------------------------------
+
+if (typeof Jemplate == 'undefined') {
+    Jemplate = function() {
+        this.init.apply(this, arguments);
+    };
+}
+
+if (! Jemplate.templateMap)
+    Jemplate.templateMap = {};
+
+Jemplate.process = function() {
+    var jemplate = new Jemplate();
+    return jemplate.process.apply(jemplate, arguments);
+}
+
+proto = Jemplate.prototype;
+
+proto.init = function(config) {
+    this.config = config ||
+    {
+        AUTO_RESET: true,
+        BLOCKS: {},
+        CONTEXT: null,
+        DEBUG_UNDEF: false,
+        DEFAULT: null,
+        ERROR: null,
+        EVAL_JAVASCRIPT: false,
+        FILTERS: {},
+        INCLUDE_PATH: [''],
+        INTERPOLATE: false,
+        OUTPUT: null,
+        PLUGINS: {},
+        POST_PROCESS: [],
+        PRE_PROCESS: [],
+        PROCESS: null,
+        RECURSION: false,
+        STASH: null,
+        TOLERANT: null,
+        VARIABLES: {},
+        WRAPPER: []
+    };
+}
+
+proto.process = function(template, data, output) {
+    var context = this.config.CONTEXT || new Jemplate.Context();
+    context.config = this.config;
+
+    context.stash = this.config.STASH || new Jemplate.Stash();
+    context.stash.__config__ = this.config;
+
+    context.__filter__ = new Jemplate.Filter();
+    context.__filter__.config = this.config;
+
+    var result;
+
+    var proc = function(input) {
+        try {
+            result = context.process(template, input);
+        }
+        catch(e) {
+            if (! String(e).match(/Jemplate\.STOP\n/))
+                throw(e);
+            result = e.toString().replace(/Jemplate\.STOP\n/, '');
+        }
+
+        if (typeof output == 'undefined')
+            return result;
+        if (typeof output == 'function') {
+            output(result);
+            return;
+        }
+        if (typeof(output) == 'string' || output instanceof String) {
+            if (output.match(/^#[\w\-]+$/)) {
+                var id = output.replace(/^#/, '');
+                var element = document.getElementById(id);
+                if (typeof element == 'undefined')
+                    throw('No element found with id="' + id + '"');
+                element.innerHTML = result;
+                return;
+            }
+        }
+        else {
+            output.innerHTML = result;
+            return;
+        }
+
+        throw("Invalid arguments in call to Jemplate.process");
+
+        return 1;
+    }
+
+    if (typeof data == 'function')
+        data = data();
+    else if (typeof data == 'string') {
+        Ajax.get(data, function(r) { proc(JSON.parse(r)) });
+        return;
+    }
+
+    return proc(data);
+}
+
+//------------------------------------------------------------------------------
+// Jemplate.Context class
+//------------------------------------------------------------------------------
+if (typeof Jemplate.Context == 'undefined')
+    Jemplate.Context = function() {};
+
+proto = Jemplate.Context.prototype;
+
+proto.include = function(template, args) {
+    return this.process(template, args, true);
+}
+
+proto.process = function(template, args, localise) {
+    if (localise)
+        this.stash.clone(args);
+    else
+        this.stash.update(args);
+    var func = Jemplate.templateMap[template];
+    if (typeof func == 'undefined')
+        throw('No Jemplate template named "' + template + '" available');
+    var output = func(this);
+    if (localise)
+        this.stash.declone();
+    return output;
+}
+
+proto.set_error = function(error, output) {
+    this._error = [error, output];
+    return error;
+}
+
+proto.filter = function(text, name, args) {
+    if (name == 'null')
+        name = "null_filter";
+    if (typeof this.__filter__.filters[name] == "function")
+        return this.__filter__.filters[name](text, args, this);
+    else
+        throw "Unknown filter name ':" + name + "'";
+}
+
+//------------------------------------------------------------------------------
+// Jemplate.Filter class
+//------------------------------------------------------------------------------
+if (typeof Jemplate.Filter == 'undefined') {
+    Jemplate.Filter = function() { };
+}
+
+proto = Jemplate.Filter.prototype;
+
+proto.filters = {};
+
+proto.filters.null_filter = function(text) {
+    return '';
+}
+
+proto.filters.upper = function(text) {
+    return text.toUpperCase();
+}
+
+proto.filters.lower = function(text) {
+    return text.toLowerCase();
+}
+
+proto.filters.ucfirst = function(text) {
+    var first = text.charAt(0);
+    var rest = text.substr(1);
+    return first.toUpperCase() + rest;
+}
+
+proto.filters.lcfirst = function(text) {
+    var first = text.charAt(0);
+    var rest = text.substr(1);
+    return first.toLowerCase() + rest;
+}
+
+proto.filters.trim = function(text) {
+    return text.replace( /^\s+/g, "" ).replace( /\s+$/g, "" );
+}
+
+proto.filters.collapse = function(text) {
+    return text.replace( /^\s+/g, "" ).replace( /\s+$/g, "" ).replace(/\s+/, " ");
+}
+
+proto.filters.html = function(text) {
+    text = text.replace(/&/g, '&amp;');
+    text = text.replace(/</g, '&lt;');
+    text = text.replace(/>/g, '&gt;');
+    text = text.replace(/"/g, '&quot;'); // " end quote for emacs
+    return text;
+}
+
+proto.filters.html_para = function(text) {
+    var lines = text.split(/(?:\r?\n){2,}/);
+    return "<p>\n" + lines.join("\n</p>\n\n<p>\n") + "</p>\n";
+}
+
+proto.filters.html_break = function(text) {
+    return text.replace(/(\r?\n){2,}/g, "$1<br />$1<br />$1");
+}
+
+proto.filters.html_line_break = function(text) {
+    return text.replace(/(\r?\n)/g, "$1<br />$1");
+}
+
+proto.filters.uri = function(text) {
+    return encodeURI(text);
+}
+
+proto.filters.indent = function(text, args) {
+    var pad = args[0];
+    if (! text) return;
+    if (typeof pad == 'undefined')
+        pad = 4;
+
+    var finalpad = '';
+    if (typeof pad == 'number' || String(pad).match(/^\d$/)) {
+        for (var i = 0; i < pad; i++) {
+            finalpad += ' ';
+        }
+    } else {
+        finalpad = pad;
+    }
+    var output = text.replace(/^/gm, finalpad);
+    return output;
+}
+
+proto.filters.truncate = function(text, args) {
+    var len = args[0];
+    if (! text) return;
+    if (! len)
+        len = 32;
+    // This should probably be <=, but TT just uses <
+    if (text.length < len)
+        return text;
+    var newlen = len - 3;
+    return text.substr(0,newlen) + '...';
+}
+
+proto.filters.repeat = function(text, iter) {
+    if (! text) return;
+    if (! iter || iter == 0)
+        iter = 1;
+    if (iter == 1) return text
+
+    var output = text;
+    for (var i = 1; i < iter; i++) {
+        output += text;
+    }
+    return output;
+}
+
+proto.filters.replace = function(text, args) {
+    if (! text) return;
+    var re_search = args[0];
+    var text_replace = args[1];
+    if (! re_search)
+        re_search = '';
+    if (! text_replace)
+        text_replace = '';
+    var re = new RegExp(re_search, 'g');
+    return text.replace(re, text_replace);
+}
+
+//------------------------------------------------------------------------------
+// Jemplate.Stash class
+//------------------------------------------------------------------------------
+if (typeof Jemplate.Stash == 'undefined') {
+    Jemplate.Stash = function() {
+        this.data = {};
+    };
+}
+
+proto = Jemplate.Stash.prototype;
+
+proto.clone = function(args) {
+    var data = this.data;
+    this.data = {};
+    this.update(data);
+    this.update(args);
+    this.data._PARENT = data;
+}
+
+proto.declone = function(args) {
+    this.data = this.data._PARENT || this.data;
+}
+
+proto.update = function(args) {
+    if (typeof args == 'undefined') return;
+    for (var key in args) {
+        var value = args[key];
+        this.set(key, value);
+    }
+}
+
+proto.get = function(key) {
+    var root = this.data;
+    if (key instanceof Array) {
+        for (var i = 0; i < key.length; i += 2) {
+            var args = key.slice(i, i+2);
+            args.unshift(root);
+            value = this._dotop.apply(this, args);
+            if (typeof value == 'undefined')
+                break;
+            root = value;
+        }
+    }
+    else {
+        value = this._dotop(root, key);
+    }
+
+    if (typeof value == 'undefined') {
+        if (this.__config__.DEBUG_UNDEF)
+            throw("undefined value found while using DEGUG_UNDEF");
+        value = '';
+    }
+
+    return value;
+}
+
+proto.set = function(key, value, set_default) {
+    if (key instanceof Array) {
+        var data = this.get(key[0]) || {};
+        key = key[2];
+    }
+    else {
+        data = this.data;
+    }
+    if (! (set_default && (typeof data[key] != 'undefined')))
+        data[key] = value;
+}
+
+proto._dotop = function(root, item, args) {
+    if (typeof item == 'undefined' ||
+        typeof item == 'string' && item.match(/^[\._]/)) {
+        return undefined;
+    }
+
+    if ((! args) &&
+        (typeof root == 'object') &&
+        (!(root instanceof Array) || (typeof item == 'number')) &&
+        (typeof root[item] != 'undefined')) {
+        var value = root[item];
+        if (typeof value == 'function')
+            value = value();
+        return value;
+    }
+
+    if (typeof root == 'string' && this.string_functions[item])
+        return this.string_functions[item](root, args);
+    if (root instanceof Array && this.list_functions[item])
+        return this.list_functions[item](root, args);
+    if (typeof root == 'object' && this.hash_functions[item])
+        return this.hash_functions[item](root, args);
+    if (typeof root[item] == 'function')
+        return root[item].apply(root, args);
+
+    return undefined;
+}
+
+proto.string_functions = {};
+
+// chunk(size)     negative size chunks from end
+proto.string_functions.chunk = function(string, args) {
+    var size = args[0];
+    var list = new Array();
+    if (! size)
+        size = 1;
+    if (size < 0) {
+        size = 0 - size;
+        for (i = string.length - size; i >= 0; i = i - size)
+            list.unshift(string.substr(i, size));
+        if (string.length % size)
+            list.unshift(string.substr(0, string.length % size));
+    }
+    else
+        for (i = 0; i < string.length; i = i + size)
+            list.push(string.substr(i, size));
+    return list;
+}
+
+// defined         is value defined?
+proto.string_functions.defined = function(string) {
+    return 1;
+}
+
+// hash            treat as single-element hash with key value
+proto.string_functions.hash = function(string) {
+    return { 'value': string };
+}
+
+// length          length of string representation
+proto.string_functions.length = function(string) {
+    return string.length;
+}
+
+// list            treat as single-item list
+proto.string_functions.list = function(string) {
+    return [ string ];
+}
+
+// match(re)       get list of matches
+proto.string_functions.match = function(string, args) {
+    var regexp = new RegExp(args[0], 'gm');
+    var list = string.match(regexp);
+    return list;
+}
+
+// repeat(n)       repeated n times
+proto.string_functions.repeat = function(string, args) {
+    var n = args[0] || 1;
+    var output = '';
+    for (var i = 0; i < n; i++) {
+        output += string;
+    }
+    return output;
+}
+
+// replace(re, sub)    replace instances of re with sub
+proto.string_functions.replace = function(string, args) {
+    var regexp = new RegExp(args[0], 'gm');
+    var sub = args[1];
+    if (! sub)
+        sub  = '';
+    var output = string.replace(regexp, sub);
+    return output;
+}
+
+// search(re)      true if value matches re
+proto.string_functions.search = function(string, args) {
+    var regexp = new RegExp(args[0]);
+    return (string.search(regexp) >= 0) ? 1 : 0;
+}
+
+// size            returns 1, as if a single-item list
+proto.string_functions.size = function(string) {
+    return 1;
+}
+
+// split(re)       split string on re
+proto.string_functions.split = function(string, args) {
+    var regexp = new RegExp(args[0]);
+    var list = string.split(regexp);
+    return list;
+}
+
+
+
+proto.list_functions = {};
+
+proto.list_functions.join = function(list, args) {
+    return list.join(args[0]);
+};
+
+proto.list_functions.sort = function(list,key) {
+    if( typeof(key) != 'undefined' && key != "" ) {
+        // we probably have a list of hashes
+        // and need to sort based on hash key
+        return list.sort(
+            function(a,b) {
+                if( a[key] == b[key] ) {
+                    return 0;
+                }
+                else if( a[key] > b[key] ) {
+                    return 1;
+                }
+                else {
+                    return -1;
+                }
+            }
+        );
+    }
+    return list.sort();
+}
+
+proto.list_functions.nsort = function(list) {
+    return list.sort(function(a, b) { return (a-b) });
+}
+
+proto.list_functions.grep = function(list, args) {
+    var regexp = new RegExp(args[0]);
+    var result = [];
+    for (var i = 0; i < list.length; i++) {
+        if (list[i].match(regexp))
+            result.push(list[i]);
+    }
+    return result;
+}
+
+proto.list_functions.unique = function(list) {
+    var result = [];
+    var seen = {};
+    for (var i = 0; i < list.length; i++) {
+        var elem = list[i];
+        if (! seen[elem])
+            result.push(elem);
+        seen[elem] = true;
+    }
+    return result;
+}
+
+proto.list_functions.reverse = function(list) {
+    var result = [];
+    for (var i = list.length - 1; i >= 0; i--) {
+        result.push(list[i]);
+    }
+    return result;
+}
+
+proto.list_functions.merge = function(list, args) {
+    var result = [];
+    var push_all = function(elem) {
+        if (elem instanceof Array) {
+            for (var j = 0; j < elem.length; j++) {
+                result.push(elem[j]);
+            }
+        }
+        else {
+            result.push(elem);
+        }
+    }
+    push_all(list);
+    for (var i = 0; i < args.length; i++) {
+        push_all(args[i]);
+    }
+    return result;
+}
+
+proto.list_functions.slice = function(list, args) {
+    return list.slice(args[0], args[1]);
+}
+
+proto.list_functions.splice = function(list, args) {
+    if (args.length == 1)
+        return list.splice(args[0]);
+    if (args.length == 2)
+        return list.splice(args[0], args[1]);
+    if (args.length == 3)
+        return list.splice(args[0], args[1], args[2]);
+}
+
+proto.list_functions.push = function(list, args) {
+    list.push(args[0]);
+    return list;
+}
+
+proto.list_functions.pop = function(list) {
+    return list.pop();
+}
+
+proto.list_functions.unshift = function(list, args) {
+    list.unshift(args[0]);
+    return list;
+}
+
+proto.list_functions.shift = function(list) {
+    return list.shift();
+}
+
+proto.list_functions.first = function(list) {
+    return list[0];
+}
+
+proto.list_functions.size = function(list) {
+    return list.length;
+}
+
+proto.list_functions.max = function(list) {
+    return list.length - 1;
+}
+
+proto.list_functions.last = function(list) {
+    return list.slice(-1);
+}
+
+proto.hash_functions = {};
+
+
+// each            list of alternating keys/values
+proto.hash_functions.each = function(hash) {
+    var list = new Array();
+    for ( var key in hash )
+        list.push(key, hash[key]);
+    return list;
+}
+
+// exists(key)     does key exist?
+proto.hash_functions.exists = function(hash, args) {
+    return ( typeof( hash[args[0]] ) == "undefined" ) ? 0 : 1;
+}
+
+// FIXME proto.hash_functions.import blows everything up
+//
+// import(hash2)   import contents of hash2
+// import          import into current namespace hash
+//proto.hash_functions.import = function(hash, args) {
+//    var hash2 = args[0];
+//    for ( var key in hash2 )
+//        hash[key] = hash2[key];
+//    return '';
+//}
+
+// keys            list of keys
+proto.hash_functions.keys = function(hash) {
+    var list = new Array();
+    for ( var key in hash )
+        list.push(key);
+    return list;
+}
+
+// list            returns alternating key, value
+proto.hash_functions.list = function(hash, args) {
+    var what = '';
+    if ( args )
+        var what = args[0];
+
+    var list = new Array();
+    if (what == 'keys')
+        for ( var key in hash )
+            list.push(key);
+    else if (what == 'values')
+        for ( var key in hash )
+            list.push(hash[key]);
+    else if (what == 'each')
+        for ( var key in hash )
+            list.push(key, hash[key]);
+    else
+        for ( var key in hash )
+            list.push({ 'key': key, 'value': hash[key] });
+
+    return list;
+}
+
+// nsort           keys sorted numerically
+proto.hash_functions.nsort = function(hash) {
+    var list = new Array();
+    for (var key in hash)
+        list.push(key);
+    return list.sort(function(a, b) { return (a-b) });
+}
+
+// size            number of pairs
+proto.hash_functions.size = function(hash) {
+    var size = 0;
+    for (var key in hash)
+        size++;
+    return size;
+}
+
+
+// sort            keys sorted alphabetically
+proto.hash_functions.sort = function(hash) {
+    var list = new Array();
+    for (var key in hash)
+        list.push(key);
+    return list.sort();
+}
+
+// values          list of values
+proto.hash_functions.values = function(hash) {
+    var list = new Array();
+    for ( var key in hash )
+        list.push(hash[key]);
+    return list;
+}
+
+
+
+//------------------------------------------------------------------------------
+// Jemplate.Iterator class
+//------------------------------------------------------------------------------
+if (typeof Jemplate.Iterator == 'undefined') {
+    Jemplate.Iterator = function(object) {
+        if( object instanceof Array ) {
+            this.object = object;
+            this.size = object.length;
+            this.max  = this.size -1;
+        }
+        else if ( object instanceof Object ) {
+            this.object = object;
+            var object_keys = new Array;
+            for( var key in object ) {
+                object_keys[object_keys.length] = key;
+            }
+            this.object_keys = object_keys.sort();
+            this.size = object_keys.length;
+            this.max  = this.size -1;
+        }
+    }
+}
+
+proto = Jemplate.Iterator.prototype;
+
+proto.get_first = function() {
+    this.index = 0;
+    this.first = 1;
+    this.last  = 0;
+    this.count = 1;
+    return this.get_next(1);
+}
+
+proto.get_next = function(should_init) {
+    var object = this.object;
+    var index;
+    if( typeof(should_init) != 'undefined' && should_init ) {
+        index = this.index;
+    } else {
+        index = ++this.index;
+        this.first = 0;
+        this.count = this.index + 1;
+        if( this.index == this.size -1 ) {
+            this.last = 1;
+        }
+    }
+    if (typeof object == 'undefined')
+        throw('No object to iterate');
+    if( this.object_keys ) {
+        if (index < this.object_keys.length) {
+            this.prev = index > 0 ? this.object_keys[index - 1] : "";
+            this.next = index < this.max ? this.object_keys[index + 1] : "";
+            return [this.object_keys[index], false];
+        }
+    } else {
+        if (index < object.length) {
+            this.prev = index > 0 ? object[index - 1] : "";
+            this.next = index < this.max ? object[index +1] : "";
+            return [object[index], false];
+        }
+    }
+    return [null, true];
+}
+
+//------------------------------------------------------------------------------
+// Debugging Support
+//------------------------------------------------------------------------------
+
+function XXX(msg) {
+    if (! confirm(msg))
+        throw("terminated...");
+    return msg;
+}
+
+function JJJ(obj) {
+    return XXX(JSON.stringify(obj));
+}
+
+//------------------------------------------------------------------------------
+// Ajax support
+//------------------------------------------------------------------------------
+if (! this.Ajax) Ajax = {};
+
+Ajax.get = function(url, callback) {
+    var req = new XMLHttpRequest();
+    req.open('GET', url, Boolean(callback));
+    return Ajax._send(req, null, callback);
+}
+
+Ajax.post = function(url, data, callback) {
+    var req = new XMLHttpRequest();
+    req.open('POST', url, Boolean(callback));
+    req.setRequestHeader(
+        'Content-Type',
+        'application/x-www-form-urlencoded'
+    );
+    return Ajax._send(req, data, callback);
+}
+
+Ajax._send = function(req, data, callback) {
+    if (callback) {
+        req.onreadystatechange = function() {
+            if (req.readyState == 4) {
+                if(req.status == 200)
+                    callback(req.responseText);
+            }
+        };
+    }
+    req.send(data);
+    if (!callback) {
+        if (req.status != 200)
+            throw('Request for "' + url +
+                  '" failed with status: ' + req.status);
+        return req.responseText;
+    }
+}
+
+//------------------------------------------------------------------------------
+// Cross-Browser XMLHttpRequest v1.1
+//------------------------------------------------------------------------------
+/*
+Emulate Gecko 'XMLHttpRequest()' functionality in IE and Opera. Opera requires
+the Sun Java Runtime Environment <http://www.java.com/>.
+
+by Andrew Gregory
+http://www.scss.com.au/family/andrew/webdesign/xmlhttprequest/
+
+This work is licensed under the Creative Commons Attribution License. To view a
+copy of this license, visit http://creativecommons.org/licenses/by/1.0/ or send
+a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305,
+USA.
+*/
+
+// IE support
+if (window.ActiveXObject && !window.XMLHttpRequest) {
+  window.XMLHttpRequest = function() {
+    return new ActiveXObject((navigator.userAgent.toLowerCase().indexOf('msie 5') != -1) ? 'Microsoft.XMLHTTP' : 'Msxml2.XMLHTTP');
+  };
+}
+
+// Opera support
+if (window.opera && !window.XMLHttpRequest) {
+  window.XMLHttpRequest = function() {
+    this.readyState = 0; // 0=uninitialized,1=loading,2=loaded,3=interactive,4=complete
+    this.status = 0; // HTTP status codes
+    this.statusText = '';
+    this._headers = [];
+    this._aborted = false;
+    this._async = true;
+    this.abort = function() {
+      this._aborted = true;
+    };
+    this.getAllResponseHeaders = function() {
+      return this.getAllResponseHeader('*');
+    };
+    this.getAllResponseHeader = function(header) {
+      var ret = '';
+      for (var i = 0; i < this._headers.length; i++) {
+        if (header == '*' || this._headers[i].h == header) {
+          ret += this._headers[i].h + ': ' + this._headers[i].v + '\n';
+        }
+      }
+      return ret;
+    };
+    this.setRequestHeader = function(header, value) {
+      this._headers[this._headers.length] = {h:header, v:value};
+    };
+    this.open = function(method, url, async, user, password) {
+      this.method = method;
+      this.url = url;
+      this._async = true;
+      this._aborted = false;
+      if (arguments.length >= 3) {
+        this._async = async;
+      }
+      if (arguments.length > 3) {
+        // user/password support requires a custom Authenticator class
+        opera.postError('XMLHttpRequest.open() - user/password not supported');
+      }
+      this._headers = [];
+      this.readyState = 1;
+      if (this.onreadystatechange) {
+        this.onreadystatechange();
+      }
+    };
+    this.send = function(data) {
+      if (!navigator.javaEnabled()) {
+        alert("XMLHttpRequest.send() - Java must be installed and enabled.");
+        return;
+      }
+      if (this._async) {
+        setTimeout(this._sendasync, 0, this, data);
+        // this is not really asynchronous and won't execute until the current
+        // execution context ends
+      } else {
+        this._sendsync(data);
+      }
+    }
+    this._sendasync = function(req, data) {
+      if (!req._aborted) {
+        req._sendsync(data);
+      }
+    };
+    this._sendsync = function(data) {
+      this.readyState = 2;
+      if (this.onreadystatechange) {
+        this.onreadystatechange();
+      }
+      // open connection
+      var url = new java.net.URL(new java.net.URL(window.location.href), this.url);
+      var conn = url.openConnection();
+      for (var i = 0; i < this._headers.length; i++) {
+        conn.setRequestProperty(this._headers[i].h, this._headers[i].v);
+      }
+      this._headers = [];
+      if (this.method == 'POST') {
+        // POST data
+        conn.setDoOutput(true);
+        var wr = new java.io.OutputStreamWriter(conn.getOutputStream());
+        wr.write(data);
+        wr.flush();
+        wr.close();
+      }
+      // read response headers
+      // NOTE: the getHeaderField() methods always return nulls for me :(
+      var gotContentEncoding = false;
+      var gotContentLength = false;
+      var gotContentType = false;
+      var gotDate = false;
+      var gotExpiration = false;
+      var gotLastModified = false;
+      for (var i = 0; ; i++) {
+        var hdrName = conn.getHeaderFieldKey(i);
+        var hdrValue = conn.getHeaderField(i);
+        if (hdrName == null && hdrValue == null) {
+          break;
+        }
+        if (hdrName != null) {
+          this._headers[this._headers.length] = {h:hdrName, v:hdrValue};
+          switch (hdrName.toLowerCase()) {
+            case 'content-encoding': gotContentEncoding = true; break;
+            case 'content-length'  : gotContentLength   = true; break;
+            case 'content-type'    : gotContentType     = true; break;
+            case 'date'            : gotDate            = true; break;
+            case 'expires'         : gotExpiration      = true; break;
+            case 'last-modified'   : gotLastModified    = true; break;
+          }
+        }
+      }
+      // try to fill in any missing header information
+      var val;
+      val = conn.getContentEncoding();
+      if (val != null && !gotContentEncoding) this._headers[this._headers.length] = {h:'Content-encoding', v:val};
+      val = conn.getContentLength();
+      if (val != -1 && !gotContentLength) this._headers[this._headers.length] = {h:'Content-length', v:val};
+      val = conn.getContentType();
+      if (val != null && !gotContentType) this._headers[this._headers.length] = {h:'Content-type', v:val};
+      val = conn.getDate();
+      if (val != 0 && !gotDate) this._headers[this._headers.length] = {h:'Date', v:(new Date(val)).toUTCString()};
+      val = conn.getExpiration();
+      if (val != 0 && !gotExpiration) this._headers[this._headers.length] = {h:'Expires', v:(new Date(val)).toUTCString()};
+      val = conn.getLastModified();
+      if (val != 0 && !gotLastModified) this._headers[this._headers.length] = {h:'Last-modified', v:(new Date(val)).toUTCString()};
+      // read response data
+      var reqdata = '';
+      var stream = conn.getInputStream();
+      if (stream) {
+        var reader = new java.io.BufferedReader(new java.io.InputStreamReader(stream));
+        var line;
+        while ((line = reader.readLine()) != null) {
+          if (this.readyState == 2) {
+            this.readyState = 3;
+            if (this.onreadystatechange) {
+              this.onreadystatechange();
+            }
+          }
+          reqdata += line + '\n';
+        }
+        reader.close();
+        this.status = 200;
+        this.statusText = 'OK';
+        this.responseText = reqdata;
+        this.readyState = 4;
+        if (this.onreadystatechange) {
+          this.onreadystatechange();
+        }
+        if (this.onload) {
+          this.onload();
+        }
+      } else {
+        // error
+        this.status = 404;
+        this.statusText = 'Not Found';
+        this.responseText = '';
+        this.readyState = 4;
+        if (this.onreadystatechange) {
+          this.onreadystatechange();
+        }
+        if (this.onerror) {
+          this.onerror();
+        }
+      }
+    };
+  };
+}
+// ActiveXObject emulation
+if (!window.ActiveXObject && window.XMLHttpRequest) {
+  window.ActiveXObject = function(type) {
+    switch (type.toLowerCase()) {
+      case 'microsoft.xmlhttp':
+      case 'msxml2.xmlhttp':
+        return new XMLHttpRequest();
+    }
+    return null;
+  };
+}
+
+
+//------------------------------------------------------------------------------
+// JSON Support
+//------------------------------------------------------------------------------
+
+/*
+Copyright (c) 2005 JSON.org
+*/
+var JSON = function () {
+    var m = {
+            '\b': '\\b',
+            '\t': '\\t',
+            '\n': '\\n',
+            '\f': '\\f',
+            '\r': '\\r',
+            '"' : '\\"',
+            '\\': '\\\\'
+        },
+        s = {
+            'boolean': function (x) {
+                return String(x);
+            },
+            number: function (x) {
+                return isFinite(x) ? String(x) : 'null';
+            },
+            string: function (x) {
+                if (/["\\\x00-\x1f]/.test(x)) {
+                    x = x.replace(/([\x00-\x1f\\"])/g, function(a, b) {
+                        var c = m[b];
+                        if (c) {
+                            return c;
+                        }
+                        c = b.charCodeAt();
+                        return '\\u00' +
+                            Math.floor(c / 16).toString(16) +
+                            (c % 16).toString(16);
+                    });
+                }
+                return '"' + x + '"';
+            },
+            object: function (x) {
+                if (x) {
+                    var a = [], b, f, i, l, v;
+                    if (x instanceof Array) {
+                        a[0] = '[';
+                        l = x.length;
+                        for (i = 0; i < l; i += 1) {
+                            v = x[i];
+                            f = s[typeof v];
+                            if (f) {
+                                v = f(v);
+                                if (typeof v == 'string') {
+                                    if (b) {
+                                        a[a.length] = ',';
+                                    }
+                                    a[a.length] = v;
+                                    b = true;
+                                }
+                            }
+                        }
+                        a[a.length] = ']';
+                    } else if (x instanceof Object) {
+                        a[0] = '{';
+                        for (i in x) {
+                            v = x[i];
+                            f = s[typeof v];
+                            if (f) {
+                                v = f(v);
+                                if (typeof v == 'string') {
+                                    if (b) {
+                                        a[a.length] = ',';
+                                    }
+                                    a.push(s.string(i), ':', v);
+                                    b = true;
+                                }
+                            }
+                        }
+                        a[a.length] = '}';
+                    } else {
+                        return;
+                    }
+                    return a.join('');
+                }
+                return 'null';
+            }
+        };
+    return {
+        copyright: '(c)2005 JSON.org',
+        license: 'http://www.crockford.com/JSON/license.html',
+        stringify: function (v) {
+            var f = s[typeof v];
+            if (f) {
+                v = f(v);
+                if (typeof v == 'string') {
+                    return v;
+                }
+            }
+            return null;
+        },
+        parse: function (text) {
+            try {
+                return !(/[^,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]/.test(
+                        text.replace(/"(\\.|[^"\\])*"/g, ''))) &&
+                    eval('(' + text + ')');
+            } catch (e) {
+                return false;
+            }
+        }
+    };
+}();
+// BEGIN JSON.js
+//------------------------------------------------------------------------------
+// JSON Support
+//------------------------------------------------------------------------------
+
+/*
+Copyright (c) 2005 JSON.org
+*/
+var JSON = function () {
+    var m = {
+            '\b': '\\b',
+            '\t': '\\t',
+            '\n': '\\n',
+            '\f': '\\f',
+            '\r': '\\r',
+            '"' : '\\"',
+            '\\': '\\\\'
+        },
+        s = {
+            'boolean': function (x) {
+                return String(x);
+            },
+            number: function (x) {
+                return isFinite(x) ? String(x) : 'null';
+            },
+            string: function (x) {
+                if (/["\\\x00-\x1f]/.test(x)) {
+                    x = x.replace(/([\x00-\x1f\\"])/g, function(a, b) {
+                        var c = m[b];
+                        if (c) {
+                            return c;
+                        }
+                        c = b.charCodeAt();
+                        return '\\u00' +
+                            Math.floor(c / 16).toString(16) +
+                            (c % 16).toString(16);
+                    });
+                }
+                return '"' + x + '"';
+            },
+            object: function (x) {
+                if (x) {
+                    var a = [], b, f, i, l, v;
+                    if (x instanceof Array) {
+                        a[0] = '[';
+                        l = x.length;
+                        for (i = 0; i < l; i += 1) {
+                            v = x[i];
+                            f = s[typeof v];
+                            if (f) {
+                                v = f(v);
+                                if (typeof v == 'string') {
+                                    if (b) {
+                                        a[a.length] = ',';
+                                    }
+                                    a[a.length] = v;
+                                    b = true;
+                                }
+                            }
+                        }
+                        a[a.length] = ']';
+                    } else if (x instanceof Object) {
+                        a[0] = '{';
+                        for (i in x) {
+                            v = x[i];
+                            f = s[typeof v];
+                            if (f) {
+                                v = f(v);
+                                if (typeof v == 'string') {
+                                    if (b) {
+                                        a[a.length] = ',';
+                                    }
+                                    a.push(s.string(i), ':', v);
+                                    b = true;
+                                }
+                            }
+                        }
+                        a[a.length] = '}';
+                    } else {
+                        return;
+                    }
+                    return a.join('');
+                }
+                return 'null';
+            }
+        };
+    return {
+        copyright: '(c)2005 JSON.org',
+        license: 'http://www.crockford.com/JSON/license.html',
+        stringify: function (v) {
+            var f = s[typeof v];
+            if (f) {
+                v = f(v);
+                if (typeof v == 'string') {
+                    return v;
+                }
+            }
+            return null;
+        },
+        parse: function (text) {
+            try {
+                if (text.length > 5 * 1024) {
+                    return eval('(' + text + ')');
+                }
+                return !(/[^,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]/.test(
+                        text.replace(/"(\\.|[^"\\])*"/g, ''))) &&
+                    eval('(' + text + ')');
+            } catch (e) {
+                return false;
+            }
+        }
+    };
+}();
+// BEGIN Wikiwyg/Jemplate.js
+/*
+   This JavaScript code was generated by Jemplate, the JavaScript
+   Template Toolkit. Any changes made to this file will be lost the next
+   time the templates are compiled.
+
+   Copyright 2006 - Ingy döt Net - All rights reserved.
+*/
+
+if (typeof(Jemplate) == 'undefined')
+    throw('Jemplate.js must be loaded before any Jemplate template files');
+
+Jemplate.templateMap['save-cancel.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<div class="st-widget-buttons">\n    <span class="st-widget-savebutton"><input type="submit" value="Save" /></span>\n    <span class="st-widget-cancelbutton"><input type="reset" value="Cancel" /></span>\n</div>\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_link1_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Inter-workspace link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Other workspace:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 10 "widget_link1_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Page title:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 16 "widget_link1_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('page_title');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="link1_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include the text to display for the link, and a target section within the linked page.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 32 "widget_link1_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('label');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Section name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-section_name" name="section_name" value="';
+//line 38 "widget_link1_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('section_name');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="link1_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 52 "widget_link1_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_link2_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Link to a Section</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Use this form to edit the properties of the link to a page section.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Section name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-section_name" name="section_name" value="';
+//line 10 "widget_link2_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('section_name');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="link2_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include the text to display for the link, and the title of a different page.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 26 "widget_link2_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('label');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Workspace:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 38 "widget_link2_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Page title:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 51 "widget_link2_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('page_title');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="link2_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 66 "widget_link2_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_image_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Attached Image</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display an image on this page. The image must be already uploaded as an attachment to this page or another page. Use this form to edit the properties of the displayed image.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Attachment filename:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-image_name" name="image_name" value="';
+//line 10 "widget_image_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('image_name');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="image_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include the title of another page to which the image is attached, and link text. If link text is specified then a link to the image is displayed instead of the image.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 32 "widget_image_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Attached to:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 45 "widget_image_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('page_title');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 52 "widget_image_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('label');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="image_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 66 "widget_image_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_file_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Attachment Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a file attached to a page. Use this form to edit the properities of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Attachment filename:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-file_name" name="file_name" value="';
+//line 10 "widget_file_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('file_name');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="file_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include specifying a different page for the attachment, and link text.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 32 "widget_file_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">File attached to:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 45 "widget_file_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('page_title');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 52 "widget_file_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('label');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="file_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 66 "widget_file_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_toc_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Table of Contents</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a table of contents for a page. Each header or section on the page is listed as a link in the table of contents. Click "Save" now, or click "More options" to edit the properties for the table of contents.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n</table>\n</div>\n<div id="toc_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optionally, specify which page\'s headers and sections to use for the table of contents.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 26 "widget_toc_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Headers and<br/>sections in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 39 "widget_toc_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('page_title');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="toc_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 54 "widget_toc_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_include_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Page Include</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the contents of another page within the current page. Use this form to edit the properties for the page include.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Other page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 16 "widget_include_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Page title:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 23 "widget_include_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('page_title');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="include_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for page include.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="include_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 47 "widget_include_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_section_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Section Marker</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Add a section marker at the current cursor location. You can link to a section marker using a "Section Link". Use this form to edit the properties for the section marker.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Section name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-section_name" name="section_name" value="';
+//line 10 "widget_section_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('section_name');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="section_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a section marker.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="section_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_section_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_recent_changes_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">What\'s New</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a list of pages recently changed in a workspace. By default only the page titles are displayed. Use this form to edit the list properties.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Workspace:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 16 "widget_recent_changes_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n</table>\n</div>\n<div id="recent_changes_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optionally, specify that the page contents should be displayed.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nFull results:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
+//line 39 "widget_recent_changes_edit.html"
+if (stash.get('full')) {
+output += ' checked="checked"';
+}
+
+output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="recent_changes_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 50 "widget_recent_changes_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_tag_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Tag Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a list of pages with a specific tag. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Tag name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-tag_name" name="tag_name" value="';
+//line 10 "widget_tag_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('tag_name');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="tag_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include link text, and the name of a different workspace for the tags.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 26 "widget_tag_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('label');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Search:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 38 "widget_tag_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="tag_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 53 "widget_tag_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_tag_list_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Tag List</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a list of the most recently changed pages in a workspace that have a specific tag. By default only the page title is displayed. Use this form to edit the list properties.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Tag name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-tag_name" name="tag_name" value="';
+//line 10 "widget_tag_list_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('tag_name');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="tag_list_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include specifying which workspace to use and whether to display page titles or whole pages.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Pages in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 32 "widget_tag_list_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nFull results:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
+//line 45 "widget_tag_list_edit.html"
+if (stash.get('full')) {
+output += ' checked="checked"';
+}
+
+output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="tag_list_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 56 "widget_tag_list_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_weblog_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Weblog Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a weblog. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Weblog name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-weblog_name" name="weblog_name" value="';
+//line 10 "widget_weblog_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('weblog_name');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="weblog_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include link text, and the name of a different workspace for the weblog.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 26 "widget_weblog_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('label');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Weblog on:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 38 "widget_weblog_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="weblog_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 53 "widget_weblog_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_weblog_list_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Weblog List</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a list of the most recent entries from a weblog in a workspace. By default only the weblog entry names are displayed. Use this form to edit the list properties.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Weblog name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-weblog_name" name="weblog_name" value="';
+//line 10 "widget_weblog_list_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('weblog_name');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="weblog_list_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional parameters include specifying which workspace to use and whether to display page titles or whole pages.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 32 "widget_weblog_list_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nFull results:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
+//line 45 "widget_weblog_list_edit.html"
+if (stash.get('full')) {
+output += ' checked="checked"';
+}
+
+output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="weblog_list_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 56 "widget_weblog_list_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_fetchrss_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Inline RSS</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the content of an RSS feed. Use this form to edit the properties of the inline RSS feed.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">RSS feed URL:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-rss_url" name="rss_url" value="';
+//line 10 "widget_fetchrss_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('rss_url');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="fetchrss_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an RSS feed.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="fetchrss_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_fetchrss_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_fetchatom_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Inline Atom</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the content of an Atom feed. Use this form to edit the properties of the inline Atom feed.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Atom feed URL:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-atom_url" name="atom_url" value="';
+//line 10 "widget_fetchatom_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('atom_url');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="fetchatom_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an Atom feed.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="fetchatom_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_fetchatom_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_search_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Search Results</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the search results for the given phrase within a workspace. Use this form to edit the properties for the search.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Search term:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
+//line 10 "widget_search_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('search_term');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="search_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include the name of the workspace to search, whether to search in the page title, text or tags, and whether to display full results or just page titles.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">In:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 32 "widget_search_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nSearch type:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="radio" name="search_type" value="text"\n';
+//line 44 "widget_search_edit.html"
+if (stash.get('search_type') == 'text' || stash.get('search_type') == '') {
+output += 'checked="checked"';
+}
+
+output += '\n/> Text\n<input type="radio" name="search_type" value="category"\n';
+//line 47 "widget_search_edit.html"
+if (stash.get('search_type') == 'category') {
+output += 'checked="checked"';
+}
+
+output += '\n/> Tag\n<input type="radio" name="search_type" value="title"\n';
+//line 50 "widget_search_edit.html"
+if (stash.get('search_type') == 'title') {
+output += 'checked="checked"';
+}
+
+output += '\n/> Title\n</td>\n</tr>\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nFull results:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
+//line 62 "widget_search_edit.html"
+if (stash.get('full')) {
+output += ' checked="checked"';
+}
+
+output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="search_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 73 "widget_search_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_googlesoap_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Google Search</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the results from a Google search. Use this form to edit the properties for the search.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Search for:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
+//line 10 "widget_googlesoap_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('search_term');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="googlesoap_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an Google search.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="googlesoap_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_googlesoap_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_technorati_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Technorati Search</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the results for a Technorati search. Use this form to edit the properties for the search.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Search for:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
+//line 10 "widget_technorati_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('search_term');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="technorati_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Technorati search.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="technorati_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_technorati_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_aim_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">AIM Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to an AIM screen name. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">AIM screen name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-aim_id" name="aim_id" value="';
+//line 10 "widget_aim_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('aim_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="aim_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an AIM link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="aim_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_aim_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_yahoo_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Yahoo! IM Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a Yahoo! instant message ID. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Yahoo! ID:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-yahoo_id" name="yahoo_id" value="';
+//line 10 "widget_yahoo_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('yahoo_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="yahoo_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Yahoo! link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="yahoo_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_yahoo_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_skype_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Skype Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a Skype name. Clicking the link will start a Skype call with the person if your Skype client is properly configured. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Skype name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-skype_id" name="skype_id" value="';
+//line 10 "widget_skype_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('skype_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="skype_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Skype link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="skype_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_skype_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_user_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">User Name</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the full name for the given email address or user name. Use this form to edit the properties of the user name.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">User\'s email:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-user_email" name="user_email" value="';
+//line 10 "widget_user_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('user_email');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="user_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a user name.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="user_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_user_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_date_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Date in Local Time</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the given date and time in the individually-set time zone for each reader. Use this form to edit the date and time to be displayed</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">YYYY-MM-DD&nbsp;HH:MM:SS:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-date_string" name="date_string" value="';
+//line 10 "widget_date_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('date_string');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="date_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a date display.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="date_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_date_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_asis_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Unformatted</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Include unformatted text in the page. This text will not be treated as wiki text. Use this form to edit the text.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Unformatted content:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-asis_content" name="asis_content" value="';
+//line 10 "widget_asis_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('asis_content');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="asis_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for unformatted text.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="asis_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_asis_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_asap_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Convoq Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a Convoq name. Clicking the link will start a Convoq call with the person if your Convoq client is properly configured. Use this form to edit the properties of the Convoq link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Convoq name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-asap_id" name="asap_id" value="';
+//line 10 "widget_asap_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('asap_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="asap_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Convoq Link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="asap_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_asap_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_new_form_page_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">New Form Page</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Select a form and generates a new form page.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Form name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-form_name" name="form_name" value="';
+//line 10 "widget_new_form_page_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('form_name');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-form_text" name="form_text" value="';
+//line 16 "widget_new_form_page_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('form_text');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="new_form_page_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a new form page.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="new_form_page_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 40 "widget_new_form_page_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 // BEGIN pageview.js
 if (typeof ST == 'undefined') {
     ST = {};
@@ -3815,6 +6841,8 @@ ST.Page = function (args) {
 ST.Page.prototype = {
     page_id: null,
     wiki_id: null,
+    wiki_title: null,
+    page_title: null,
     revision_id: null,
     comment_form_window_height: null,
     element: {
@@ -3941,7 +6969,7 @@ ST.Page.prototype = {
         return page_info.is_active;
     },
 
-    refresh_page_content: function () {
+    refresh_page_content: function (force_update) {
         var uri = Page.restApiUri();
         uri = uri + '?verbose=1;link_dictionary=s2';
         var date = new Date();
@@ -3966,7 +6994,7 @@ ST.Page.prototype = {
         if (request.transport.status == 200) {
             var page_info = JSON.parse(request.transport.responseText);
             if (page_info) {
-                if (Page.revision_id < page_info.revision_id) {
+                if ((Page.revision_id < page_info.revision_id) || force_update) {
                     $('st-page-content').innerHTML = page_info.html;
                     $('st-page-editing-revisionid').value = page_info.revision_id;
                     Page.revision_id = page_info.revision_id;
@@ -4147,7 +7175,7 @@ ST.Attachments.prototype = {
         Element.update(this.element.attachMessage, 'Click "Browse" to find the file you want to upload. When you click "Upload another file" your file will be uploaded and added to the list of attachments for this page.');
         $(this.element.attachSubmit).value = 'Upload another file';
         this._refresh_uploaded_list();
-        Page.refresh_page_content();
+        Page.refresh_page_content(true);
         var response = text.match(/({"attachments"\:.*}]})/, 'i');
         if (response) {
             this._attachments = JSON.parse(response[1]);
@@ -4326,8 +7354,16 @@ ST.Attachments.prototype = {
     },
 
     _center_lightbox: function (overlayElement, element, parentElement) {
-        window.scroll(0, 0);
-        return (new ST.Lightbox).center(overlayElement, element, parentElement);
+        parentElement = $(parentElement);
+        var divs = {
+            wrapper: parentElement,
+            background: overlayElement,
+            content: element,
+            contentWrapper: element.parentNode
+        }
+        Widget.Lightbox.show({'divs':divs, 'effects':['RoundedCorners']});
+        divs.contentWrapper.style.width="520px";
+        divs.content.style.padding="10px";
     },
 
     _display_manage_interface: function () {
@@ -5093,7 +8129,14 @@ ST.AttachmentQueue.prototype = {
     _center_lightbox: function (parentElement) {
         var overlayElement = $('st-attachmentsqueue-overlay');
         var element = $('st-attachmentsqueue-dialog');
-        return (new ST.Lightbox).center(overlayElement, element, parentElement);
+        parentElement = $(parentElement);
+        var divs = {
+            wrapper: parentElement,
+            background: overlayElement,
+            content: element,
+            contentWrapper: element.parentNode
+        }
+        Widget.Lightbox.show({'divs':divs, 'effects':['RoundedCorners']});
     },
 
     count: function () {
@@ -5409,7 +8452,15 @@ ST.TagQueue.prototype = {
     _center_lightbox: function (parentElement) {
         var overlayElement = $('st-tagqueue-overlay');
         var element = $('st-tagqueue-dialog');
-        return (new ST.Lightbox).center(overlayElement, element, parentElement);
+        Widget.Lightbox.show({
+            divs: {
+                wrapper: $(parentElement),
+                background: overlayElement,
+                contentWrapper: element.parentNode,
+                content: element
+            },
+            effects: ['RoundedCorners']
+        });
     },
 
     count: function () {
@@ -5901,7 +8952,1208 @@ ST.ListView.prototype = {
 };
 
 window.ListView = new ST.ListView ();
-// BEGIN ../../../js-modules/src/Wikiwyg-09-26-06/lib/Wikiwyg.js
+// BEGIN LookaheadWidget.js
+/*
+ * Abstract class for a lookahead widget. A lookahead widget watches an &lt;input&gt; field
+ * and presents the user with a list of suggested possible matches. Suggestion list is retrieved
+ * using AJAX and the REST API.
+ *
+ * AJAX calls are asyncronous so as to not lock the browser and prevent the user from typing.
+ * I could not determine a way to cancel an existing AJAX call so the class tracks which
+ * AJAX call is the <i>active</i>. The class makes sure the suggestion list only contains
+ * suggestions from the active AJAX call.
+ */
+
+
+/**
+ * Constructor
+ *
+ * @param dialog_window lightbox dialog window
+ * @param api API call to populate lookup window
+ * @param edit_field_id CSS id for the workspace edit field
+ * @param window_class CSS class for the drop down windod which contains the
+ * suggestion list
+ * @param suggestion_block_class CSS class for the suggestion block
+ * @param suggestion_class CSS class for each suggestion
+ * @param variable_name JS variable associated with the object
+ */
+LookaheadWidget = function(dialog_window, api, edit_field_id, window_class, suggestion_block_class, suggestion_class, variable_name) {
+    this.apiCall = api;
+    this.editFieldId = edit_field_id;
+    this.editField = $(edit_field_id);
+
+    this.variableName = variable_name;
+    this.activeTransport = null;
+    this.suggestions = [];
+    this.hasFocus = false;
+    this.mouseInSuggestion = false;
+    this.suggestionYOffset = 2;
+
+    this.suggestionWindowClass = window_class;
+    this.suggestionClass = suggestion_class;
+    this.suggestionBlockClass = suggestion_block_class;
+
+    this.suggestionWindow = null;
+    this.suggestionBlock = null;
+    this.dialogWindow = dialog_window;
+    this.previousText = '';
+
+    // We have our own auto-complete, disable the browser's version
+    this.editField.setAttribute('autocomplete', 'off');
+
+    this._hookInterface();
+}
+
+/**
+ * Update the edit field with the suggestion selected by the user
+ */
+LookaheadWidget.prototype.acceptSuggestion = function(suggestion) {
+    this.activeTransport = null;
+    this._hideSuggestionBlock();
+    this.editField.value = suggestion;
+    this.previousText = suggestion;
+    return false;
+}
+
+/**
+ * Build the URI for the API call to retrieve the suggestion list
+ * @return URI string
+ */
+LookaheadWidget.prototype._apiURI = function () {
+    var uri = this.apiCall;
+    var connector = '?';
+    var parameters = [this._getOrder(), this._getFilter()];
+    for (i=0; i < parameters.length; i++) {
+        if (parameters[i] != '') {
+            uri += connector + parameters[i];
+            connector = ';';
+        }
+    }
+
+    return uri;
+}
+
+/**
+ * Create the suggestion window and populate it with the suggestions from the API call
+ */
+LookaheadWidget.prototype._createSuggestionBlock = function () {
+    if (this.suggestionWindow)
+        return;
+
+    this.suggestionWindow = document.createElement('div');
+    this.suggestionWindow.id = 'st-widget-lookahead-window';
+
+    this.suggestionWindow.className = this.suggestionWindowClass;
+    this.suggestionWindow.style.height = "0px";
+    this.suggestionWindow.style.overflow = "hidden";
+    this.suggestionWindow.style.display = 'none';
+
+    this.suggestionBlock = document.createElement('div');
+    this.suggestionBlock.id = 'st-widget-lookahead-suggestionblock';
+    this.suggestionBlock.className = this.suggestionBlockClass;
+    this.suggestionWindow.appendChild(this.suggestionBlock);
+
+    this.dialogWindow.appendChild(this.suggestionWindow);
+
+    Event.observe(this.suggestionWindow, 'mouseover', this._mouseInSuggestion.bind(this), false);
+    Event.observe(this.suggestionWindow, 'mouseout', this._mouseLeavingSuggestion.bind(this), false);
+}
+
+/**
+ * Delete the suggestion window
+ */
+LookaheadWidget.prototype._deleteSuggestionWindow = function () {
+    if (!this.suggestionWindow)
+        return;
+
+    this.suggestionWindow.removeChild(this.suggestionBlock);
+    this.suggestionWindow.parentNode.removeChild(this.suggestionWindow);
+    this.suggestionBlock = null;
+    this.suggestionWindow = null;
+}
+
+/**
+ * Escape the suggestion text so it works with HTML
+ * @return Escaped suggestion text
+ */
+LookaheadWidget.prototype._escapedSuggestion = function (suggestion) {
+    var escapes = [
+        { regex: /'/g, sub: "\\'" },
+        { regex: /\n/g, sub: "\\n" },
+        { regex: /\r/g, sub: "\\r" },
+        { regex: /\t/g, sub: "\\t" }
+    ];
+    for (var i=0; i < escapes.length; i++)
+        suggestion = suggestion.replace(escapes[i].regex, escapes[i].sub);
+    return suggestion.replace(/"/g, '&quot;');
+}
+
+LookaheadWidget.prototype._editIsEmpty = function () {
+    this.activeTransport = null;
+    this.suggestions = [];
+    this._hideSuggestionBlock();
+}
+
+/**
+ * Call the API and fetch the suggestion list
+ */
+LookaheadWidget.prototype._findSuggestions = function () {
+    if (this.editField.value.length == 0) {
+        this._editIsEmpty();
+    }
+    else {
+        if (this.previousText != this.editField.value) {
+            this.previousText = this.editField.value;
+            try {
+                var uri = this._apiURI();
+                var id = this.activeId;
+                var aj = new Ajax.Request();
+                var request = new Ajax.Request (
+                    uri,
+                    {
+                        method: 'GET',
+                        requestHeaders: ['Accept','text/plain'],
+                        onComplete: (function (req) {
+                            this.populateSuggestion(req);
+                        }).bind(this),
+                        onFailure: (function(req, jsonHeader) {
+                        }).bind(this)
+                    }
+                );
+                this.activeTransport = request.transport;
+            }
+            catch(e) {
+                // XXX Ignore any error?
+            }
+        }
+    }
+}
+
+/**
+ * Called when the edit control gains focus.
+ */
+LookaheadWidget.prototype._gainFocus = function () {
+    if (!this.hasFocus) {
+        this.hasFocus = true;
+        this.activeTransport = null;
+        this._createSuggestionBlock();
+        this._findSuggestions();
+    }
+},
+
+/**
+ * Build the filter criteria for the API call
+ * @return Filter criteria string for the API URI
+ */
+LookaheadWidget.prototype._getFilter = function () {
+    var filter = this.editField.value;
+    filter = filter.replace(/^\s+/,'');
+    filter = filter.replace(/ /g, '.*');
+    return 'filter=\\b'+this.editField.value;
+}
+
+/**
+ * Get the order clause for the API call. Default order is alpha
+ * @return Order criteria string for the API URI
+ */
+LookaheadWidget.prototype._getOrder = function () {
+    return 'order=alpha';
+}
+
+/**
+ * Hide the suggestion window
+ */
+LookaheadWidget.prototype._hideSuggestionBlock = function () {
+    this.suggestionBlock.innerHTML = '';
+    this.suggestionWindow.style.overflow = 'hidden';
+    this.suggestionWindow.style.display = 'none';
+    this.editField.focus();
+}
+
+/**
+ * Add the JS event observers for the &lt;input&gt; field
+ */
+LookaheadWidget.prototype._hookInterface = function () {
+    if ($(this.editFieldId)) {
+        Event.observe(this.editFieldId, 'keyup', this._findSuggestions.bind(this));
+        Event.observe(this.editFieldId, 'keydown', this._keyHandler.bind(this));
+        Event.observe(this.editFieldId, 'blur', this._loseFocus.bind(this));
+        Event.observe(this.editFieldId, 'focus', this._gainFocus.bind(this));
+    }
+}
+
+/**
+ * Called when a key is pressed when the edit field has the focus
+ * @param event JS event object
+ */
+LookaheadWidget.prototype._keyHandler = function (event) {
+    var e = event || window.event;
+    var key = e.charCode || e.keyCode;
+
+    if (key == Event.KEY_TAB && this._suggestionsDisplayed()) {
+        this._hideSuggestionBlock();
+        var ret = this._setFirstMatchingSuggestion();
+    }
+}
+
+/**
+ * Called when the input field loses focus. Default action is to hide the suggestion window
+ */
+LookaheadWidget.prototype._loseFocus = function() {
+    if (this.hasFocus && !this.mouseInSuggestion) {
+        this.hasFocus = false;
+        this._deleteSuggestionWindow();
+        this.activeTransport = null;
+    }
+}
+
+/**
+ * Called when the mouse enters the suggestion window.
+ *
+ * We need to track if the mouse is in the suggestion window to handle focus change. If
+ * the mouse is in the suggestion window we don't want to hide the window from the user.
+ */
+LookaheadWidget.prototype._mouseInSuggestion = function() {
+    this.mouseInSuggestion = true;
+}
+
+/**
+ * Called when the mouse leaves the suggestion window.
+ *
+ * We need to track if the mouse is in the suggestion window to handle focus change. If
+ * the mouse is in the suggestion window we don't want to hide the window from the user.
+ */
+LookaheadWidget.prototype._mouseLeavingSuggestion = function() {
+    this.mouseInSuggestion = false;
+}
+
+/**
+ * Parse the API return and build the suggestion list
+ *
+ * The suggestion list is cleared if it only contains one suggestion which matches
+ * the contents of the edit field. No use showing the user what they have already typed.
+ */
+LookaheadWidget.prototype._parseSuggestionList = function(suggestions_text) {
+    var text = trim(suggestions_text);
+    if (text.length == 0)
+        this.suggestions = [];
+    else {
+        this.suggestions = text.split("\n");
+        while (this.suggestions[this.suggestions.length -1] == '')
+            this.suggestions.pop();
+    }
+    if (this.suggestions.length == 1 && this.suggestions[0] == this.editField.value)
+        this.suggestions.pop();
+}
+
+LookaheadWidget.prototype.isValidTransport = function(request) {
+    if ((this.activeTransport != null && request != this.activeTransport) || !this.hasFocus)
+        return false;
+    else
+        return true;
+}
+
+/**
+ * Build the suggestion window and populate it with the suggestions from the API call
+ */
+LookaheadWidget.prototype.populateSuggestion = function(request) {
+
+    if (!this.isValidTransport(request))
+        return;
+
+    if (request.status != 200) {
+        if (request.status == 404) {
+            this.suggestionBlock.innerHTML = this._error404Message();
+        }
+        else {
+            this.suggestionBlock.innerHTML = this._apiErrorMessage();
+        }
+        this._showSuggestionBlock();
+        return;
+    }
+
+    this._parseSuggestionList(request.responseText);
+
+    if (this.suggestions.length == 0) {
+        this.suggestionBlock.innerHTML = '';
+        this._hideSuggestionBlock();
+        return;
+    }
+
+    var suggestions_text = '';
+    for (var i=0; i < this.suggestions.length; i++) {
+        suggestions_text +=
+            '<span class="' +
+            this.suggestionClass +
+            '"><a href="#" onclick="return ' + this.variableName + '.acceptSuggestion(\'' +
+            this._escapedSuggestion(this.suggestions[i]) +
+            '\')">' +
+            this.suggestions[i] +
+            '</a>';
+        if (i != this.suggestions.length - 1)
+            suggestions_text += ',';
+        suggestions_text += '</span> ';
+    }
+    this.suggestionBlock.innerHTML = suggestions_text;
+    this._showSuggestionBlock();
+}
+
+/**
+ * Select the first suggestion and update the edit field. This method is called if the user
+ * presses tab while the suggestion window is displayed
+ */
+LookaheadWidget.prototype._setFirstMatchingSuggestion = function () {
+    if (this.editField.value.length > 0 && this.suggestions.length > 0) {
+        this.editField.value = this.suggestions[0];
+        this._hideSuggestionBlock();
+    }
+    return true;
+}
+
+/**
+ * Size, position, and display the suggestion window
+ */
+LookaheadWidget.prototype._showSuggestionBlock = function () {
+    this.suggestionWindow.style.display = 'block';
+    this.suggestionWindow.height = '1px';
+    this.suggestionWindow.style.overflow = 'hidden';
+    this.suggestionWindow.style.position = 'absolute';
+
+    this.suggestionWindow.style.left = ST.getDocumentX(this.editField,true) + "px";
+    this.suggestionWindow.style.top =
+        ST.getDocumentY(this.editField,true) +
+        this.editField.offsetHeight +
+        this.suggestionYOffset + "px";
+    this.suggestionWindow.style.width = this.editField.offsetWidth + "px";
+    if (this.suggestionBlock.offsetHeight > 200) {
+        this.suggestionWindow.style.height = "200px";
+    }
+    else {
+        this.suggestionWindow.style.height = this.suggestionBlock.offsetHeight + 2 + "px";
+    }
+    this.suggestionWindow.style.overflow = "auto";
+}
+
+/**
+ * Determine if the suggestion window is being displayed
+ *
+ * @return bool
+ */
+LookaheadWidget.prototype._suggestionsDisplayed = function (message) {
+    return this.suggestionWindow.offsetHeight != 0;
+}
+
+/**
+ * Replace tokens in the API URI with the appropriate values
+ *
+ * @return modified API URI
+ */
+LookaheadWidget.prototype._tokenReplace = function(command, token, value) {
+    if (!this.workspace)
+        throw URIError('No workspace to query');
+
+    var re = new RegExp(token);
+    if (command.match(re))
+        command = command.replace(re, value);
+
+    return command;
+}
+// BEGIN WorkspaceSupportLookahead.js
+/**
+ * Abstract class for lookahead widgets whose suggestions are workspace specific (such as page name).
+ *
+ * @see LookaheadWidget
+ * @see ST.extend
+ */
+
+
+/**
+ * Constructor
+ *
+ * @param dialog_window lightbox dialog window
+ * @param api API call to retrieve suggestion list
+ * @param edit_field_id CSS id for the workspace edit field
+ * @param window_class CSS class for the drop down windod which contains the suggestion list
+ * @param suggestion_block_class CSS class for the suggestion block
+ * @param suggestion_class CSS class for each suggestion
+ * @param variable_name JS variable associated with the object
+ * @param widget Wikiwyg widget
+ */
+WorkspaceSupportLookahead = function(dialog_window, api, edit_field_id, window_class, suggestion_block_class, suggestion_class, variable_name, widget) {
+	WorkspaceSupportLookahead.baseConstructor.call(
+        this,
+        dialog_window,
+        api,
+        edit_field_id,
+		window_class,
+		suggestion_block_class,
+		suggestion_class,
+        variable_name
+    );
+    this.workspace = '';
+    this.workspaceWidget = widget;
+    this.defaultWorkspace = '';
+};
+
+ST.extend(WorkspaceSupportLookahead, LookaheadWidget);
+
+WorkspaceSupportLookahead.prototype.currentWorkspaceSelected = function () {
+    var nodes = document.getElementsByName('st-rb-workspace_id');
+    for (var i = 0; i < nodes.length; i++)
+        if (nodes[i].checked)
+            return nodes[i].value == 'current';
+    return false;
+}
+
+/**
+ * Get latest workspace data when control gains focus
+ */
+WorkspaceSupportLookahead.prototype._gainFocus = function() {
+    this.workspace = this.defaultWorkspace;
+    if (!this.currentWorkspaceSelected())
+        if (this.workspaceWidget && this.workspaceWidget.title_and_id.workspace_id.id)
+            this.workspace = this.workspaceWidget.title_and_id.workspace_id.id;
+
+    WorkspaceSupportLookahead.superClass._gainFocus.call(this)
+},
+
+/**
+ * Message to return when a 404 status code is returned by the API
+ * @return Error message in HTML format
+ */
+WorkspaceSupportLookahead.prototype._error404Message = function() {
+    return '<span class="st-suggestion-warning">Workspace "' + this.workspace + '" does not exist on wiki</span>';
+}
+
+/**
+ * Build the URI for the API call
+ * @return URI for API call
+ */
+WorkspaceSupportLookahead.prototype._apiURI = function() {
+    var uri = WorkspaceSupportLookahead.superClass._apiURI.call(this)
+    return this._tokenReplace(uri, ':ws', this.workspace);
+}
+// BEGIN WorkspaceLookahead.js
+/**
+ * This class implements a workspace lookahead widget.
+ *
+ * @see LookaheadWidget
+ * @see ST.Extend
+ */
+
+/**
+ * Constructor
+ *
+ * @param dialog_window lightbox dialog window
+ * @param edit_field_id CSS id for the workspace edit field
+ * @param window_class CSS class for the drop down windod which contains the
+ * suggestion list
+ * @param suggestion_block_class CSS class for the suggestion block
+ * @param suggestion_class CSS class for each suggestion
+ * @param variable_name JS variable associated with the object
+ * @param widget Wikiwyg widget
+ */
+WorkspaceLookahead = function(dialog_window, edit_field_id, window_class, suggestion_block_class, suggestion_class, variable_name, widget) {
+    WorkspaceLookahead.baseConstructor.call(
+        this,
+        dialog_window,
+        '/data/workspaces',
+        edit_field_id,
+        window_class,
+        suggestion_block_class,
+        suggestion_class,
+        variable_name
+    );
+    this.widget = widget;
+    this.setTitleFromId();
+    this.perfectMatch = false;
+};
+
+ST.extend(WorkspaceLookahead, LookaheadWidget);
+
+/**
+ * Update the wikiwyg widget and the workspace edit field with the user selection
+ */
+WorkspaceLookahead.prototype.acceptSuggestion = function(suggestion) {
+    this.activeTransport = null;
+    this._hideSuggestionBlock();
+    this.widget.title_and_id.workspace_id.id = suggestion;
+    this.widget.title_and_id.workspace_id.title = this.getTitleFromName(suggestion);
+    this.editField.value = this.widget.title_and_id.workspace_id.title;
+    this.previousText = this.widget.title_and_id.workspace_id.title;
+    return false;
+}
+
+/**
+ * Retrieves the title for a workspace name from the suggestion list returned
+ * by the API.
+ *
+ * @param name workspace name
+ * @return workspace title
+ */
+WorkspaceLookahead.prototype.getTitleFromName = function(name) {
+    var title = '';
+    for (var i=0; i < this.suggestions.length; i++) {
+        if (this.suggestions[i].name == name) {
+            title = this.suggestions[i].title;
+            break;
+        }
+    }
+
+    return title;
+}
+
+/**
+ * Message to display when an API error occurs
+ * @return Error message in HTML format
+ */
+WorkspaceLookahead.prototype._apiErrorMessage = function() {
+    return '<span class="st-suggestion-warning">Could not retrieve workspace list from wiki</span>';
+}
+
+/**
+ * Message to return when a 404 status code is returned by the API
+ * @return Error message in HTML format
+ */
+WorkspaceLookahead.prototype._error404Message = function() {
+    return this._apiErrorMessage();
+}
+
+/**
+ * If the user cleared the workspace edit field reset the value to default
+ * @return Nothing
+ */
+WorkspaceLookahead.prototype._editIsEmpty = function () {
+    this.widget.title_and_id.workspace_id.id = '';
+    this.widget.title_and_id.workspace_id.title = '';
+    WorkspaceLookahead.superClass._editIsEmpty.call(this);
+}
+
+/**
+ * Fetch the list of workspaces that match the user's string
+ */
+WorkspaceLookahead.prototype._findSuggestions = function () {
+    if (this.editField.value.length == 0) {
+        this._editIsEmpty();
+    }
+    else {
+        if (this.previousText != this.editField.value) {
+            this.previousText = this.editField.value;
+            var uri = this._apiURI();
+            var id = this.activeId;
+            var aj = new Ajax.Request();
+            var request = new Ajax.Request (
+                uri,
+                {
+                    method: 'GET',
+                    requestHeaders: ['Accept','application/json'],
+                    onComplete: (function (req) {
+                        this.populateSuggestion(req);
+                    }).bind(this),
+                    onFailure: (function(req, jsonHeader) {
+                        // XXX Need an error messaage
+                    }).bind(this)
+                }
+            );
+            this.activeTransport = request.transport;
+        }
+    }
+}
+
+/**
+ * Since only the id for the workspace is saved with the widget
+ * we need to pull the name of the workspace to display to the
+ * end user
+ * @return Nothing
+ */
+WorkspaceLookahead.prototype.setTitleFromId = function () {
+    var radioName = this.editFieldId + '-rb';
+    if (!this.widget.title_and_id.workspace_id.id) {
+        ST.setRadioValue(radioName, 'current');
+    }
+    else {
+        ST.setRadioValue(radioName, 'other');
+        this.editField.value = this.widget.title_and_id.workspace_id.title;
+    }
+}
+
+/**
+ * Build the title filter for the workspace API call
+ * @return Filter clause of the API call
+ */
+WorkspaceLookahead.prototype._getFilter = function () {
+    var filter = this.editField.value;
+    filter = filter.replace(/^\s+/,'');
+    filter = filter.replace(/ /g, '.*');
+    return 'title_filter=\\b'+this.editField.value;
+}
+
+/**
+ * Parse the API return and build out the suggestion list. The suggestion
+ * list is cleared if only one suggestion is returned and it matches what the
+ * user has entered. This prevents the lookahead component from displaying the
+ * single suggestion in the dropdown list.
+ */
+WorkspaceLookahead.prototype._parseSuggestionList = function(suggestions_text) {
+    this.suggestions = [];
+    var text = trim(suggestions_text);
+    if (text.length != 0)
+        this.suggestions = JSON.parse(text);
+
+    var re = new RegExp('^'+this.editField.value+'$', 'i');
+    if (this.suggestions.length == 1 && this.suggestions[0].title.match(re)) {
+        this.widget.title_and_id.workspace_id.id = this.suggestions[0].name;
+        this.suggestions.pop();
+        this.perfectMatch = true;
+    }
+    else
+        this.perfectMatch = false;
+}
+
+/**
+ * Called by the AJAX request. Parse the return from the AJAX call and display
+ * the suggestion window if required.
+ */
+WorkspaceLookahead.prototype.populateSuggestion = function(request) {
+    if (!this.isValidTransport(request))
+        return;
+
+    if (request.status != 200) {
+        if (request.status == 404) {
+            this.suggestionBlock.innerHTML = this._error404Message();
+        }
+        else {
+            this.suggestionBlock.innerHTML = this._apiErrorMessage();
+        }
+        this._showSuggestionBlock();
+        return;
+    }
+
+    this._parseSuggestionList(request.responseText);
+    if (!this.hasFocus) {
+        this.activeTransport = null;
+        return;
+    }
+
+    if (this.suggestions.length == 0) {
+        if (!this.perfectMatch) {
+            this.widget.title_and_id.workspace_id.id = this.editField.value;
+            this.widget.title_and_id.workspace_id.title = this.editField.value;
+        }
+        this.suggestionBlock.innerHTML = '';
+        this._hideSuggestionBlock();
+        return;
+    }
+
+    var suggestions_text = '';
+    for (var i=0; i < this.suggestions.length; i++) {
+        suggestions_text +=
+            '<span class="' +
+            this.suggestionClass +
+            '"><a href="#" onclick="return ' + this.variableName + '.acceptSuggestion(\'' +
+            this._escapedSuggestion(this.suggestions[i].name) +
+            '\')">' +
+            this.suggestions[i].title + ' (' + this.suggestions[i].name + ')' +
+            '</a>';
+        if (i != this.suggestions.length - 1)
+            suggestions_text += ',';
+        suggestions_text += '</span> ';
+    }
+
+    if (this.suggestionBlock == null)
+        this._createSuggestionBlock();
+
+    this.suggestionBlock.innerHTML = suggestions_text;
+
+    this._showSuggestionBlock();
+}
+
+/**
+ * If the user types in the workspace field then we automatically select the 'custom' radio button
+ */
+WorkspaceLookahead.prototype._keyHandler = function (event) {
+    var radioName = this.editFieldId + '-rb';
+    ST.setRadioValue(radioName, 'other');
+    WorkspaceLookahead.superClass._keyHandler.call(this, event);
+}
+
+/**
+ * Selects the first available suggestion. Called when the user presses tab and
+ * the suggestion window is visible.
+ * @return true
+ */
+WorkspaceLookahead.prototype._setFirstMatchingSuggestion = function () {
+    if (this.editField.value.length > 0 && this.suggestions.length > 0) {
+        this.acceptSuggestion(this.suggestions[0].name);
+    }
+    return true;
+}
+
+WorkspaceLookahead.prototype.isValidTransport = function(request) {
+    if ((this.activeTransport != null && request != this.activeTransport))
+        return false;
+    else
+        return true;
+}
+
+/**
+ * We need to override the default handling to capture the last call so we can update
+ * the ID if appropriate
+ */
+WorkspaceLookahead.prototype._loseFocus = function() {
+    if (this.hasFocus && !this.mouseInSuggestion) {
+        this.hasFocus = false;
+        this._deleteSuggestionWindow();
+//        this.activeTransport = null;
+    }
+}
+// BEGIN PageNameLookahead.js
+/**
+ * This class handles look ahead for page names. The class supports specifying a workspace
+ * will pull page names from that workspace.
+ */
+
+// namespace placeholder
+if (typeof ST == 'undefined') {
+    ST = {};
+}
+
+ST.lookaheadCache = { workspacePageCount: {} };
+
+/**
+ * Constructor
+ *
+ * @param dialog_window lightbox dialog window
+ * @param edit_field_id CSS id for the input tag
+ * @param window_class CSS class to apply to the div for the suggestion window
+ * @param suggestion_block_class CSS class for the div that holds the suggestion list
+ * @param suggestion_class CSS class for a suggestion
+ * @param variable_name name of JS variable that holds the object
+ * @param workspace_id CSS id for the workspace input tag
+ */
+PageNameLookahead = function(dialog_window, edit_field_id, window_class, suggestion_block_class, suggestion_class, variable_name, workspace_id) {
+    PageNameLookahead.baseConstructor.call(
+        this,
+        dialog_window,
+        '/data/workspaces/:ws/pages',
+        edit_field_id,
+        window_class,
+        suggestion_block_class,
+        suggestion_class,
+        variable_name,
+        workspace_id
+    );
+
+    this.lastEditLength = 0;
+    this.minEditLengthForLookup = 1;
+    var radioName = this.editFieldId + '-rb';
+    this.setMinEditLengthForLookup();
+
+    if (this.editField.value.length == 0)
+        ST.setRadioValue(radioName, 'current');
+    else
+        ST.setRadioValue(radioName, 'other');
+};
+
+ST.extend(PageNameLookahead, WorkspaceSupportLookahead);
+
+/**
+ * Override the _get_order method to return an empty string; the sections API call returns
+ * items in page order by default.
+ *
+ * @return blank string
+ */
+PageNameLookahead.prototype._apiErrorMessage = function() {
+    return '<span class="st-suggestion-warning">Could not retrieve page list from wiki</span>';
+}
+
+PageNameLookahead.prototype.getPageCountForWorkspace = function() {
+    if (this.workspace == '')
+        return 1;
+    if (this.workspace in ST.lookaheadCache.workspacePageCount)
+        return ST.lookaheadCache.workspacePageCount[this.workspace];
+
+    var uri = '/data/workspaces/'+this.workspace+'/tags/recent changes';
+
+    var request = new Ajax.Request (
+        uri,
+        {
+            method: 'GET',
+            asynchronous: false,
+            requestHeaders: ['Accept','application/json']
+        }
+    );
+
+    if (request.transport.status == 200) {
+        var details = JSON.parse(request.transport.responseText);
+        ST.lookaheadCache.workspacePageCount[this.workspace] = details.page_count;
+        return details.page_count;
+    }
+
+    return 0;
+}
+
+PageNameLookahead.prototype.setMinEditLengthForLookup = function() {
+    var pageCount = this.getPageCountForWorkspace();
+    if (pageCount < 5000)
+        this.minEditLengthForLookup = 1;
+    else if (pageCount < 10000)
+        this.minEditLengthForLookup = 2;
+    else
+        this.minEditLengthForLookup = 3;
+}
+
+/**
+ * We auto-select the current page radio button when the user clears the page title field
+ */
+PageNameLookahead.prototype._editIsEmpty = function () {
+    PageNameLookahead.superClass._editIsEmpty.call(this);
+}
+
+/**
+ * If the user types in the page title field then we automatically select the 'custom' radio button
+ */
+PageNameLookahead.prototype._keyHandler = function (event) {
+    var radioName = this.editFieldId + '-rb';
+    ST.setRadioValue(radioName, 'other');
+    PageNameLookahead.superClass._keyHandler.call(this, event);
+}
+
+/**
+ * We only want to handle a lookahead if the user has typed a minimum number of characters
+ */
+PageNameLookahead.prototype._findSuggestions = function () {
+    if (this.editField.value.length == 0 || this.editField.value.length >= this.minEditLengthForLookup) {
+        if (this.lastEditLength > 0 && this.lastEditLength < this.minEditLengthForLookup)
+            this.suggestionBlock.innerHTML = '<span class="st-lookahead-info">Searching for matching pages...</span>';
+        PageNameLookahead.superClass._findSuggestions.call(this);
+    }
+    else {
+        this.suggestionBlock.innerHTML = '<span class="st-lookahead-info">Page title lookahead requires at least ' + this.minEditLengthForLookup + ' characters</span>';
+        this._showSuggestionBlock();
+    }
+    this.lastEditLength = this.editField.value.length;
+}
+
+/**
+ * Get latest workspace data when control gains focus
+ */
+PageNameLookahead.prototype._gainFocus = function() {
+    PageNameLookahead.superClass._gainFocus.call(this)
+    this.setMinEditLengthForLookup();
+}
+// BEGIN TagLookahead.js
+/**
+ * Class to implement a tag name lookahead widget
+ *
+ * @see WorkspaceSupportLookahead
+ * @see ST.extend
+ */
+
+
+/**
+ * Constructor
+ *
+ * @param dialog_window lightbox dialog window
+ * @param edit_field_id CSS id for the input tag
+ * @param window_class CSS class to apply to the div for the suggestion window
+ * @param suggestion_block_class CSS class for the div that holds the suggestion list
+ * @param suggestion_class CSS class for a suggestion
+ * @param variable_name name of JS variable that holds the object
+ * @param workspace_id CSS id for the workspace edit field
+ *
+ */
+TagLookahead = function(dialog_window, edit_field_id, window_class, suggestion_block_class, suggestion_class, variable_name, workspace_id) {
+	TagLookahead.baseConstructor.call(
+        this,
+        dialog_window,
+        '/data/workspaces/:ws/tags',
+        edit_field_id,
+		window_class,
+		suggestion_block_class,
+		suggestion_class,
+		variable_name,
+        workspace_id
+    );
+};
+
+ST.extend(TagLookahead, WorkspaceSupportLookahead);
+
+/**
+ * Message to display when an API error occurs
+ * @return Error message in HTML format
+ */
+TagLookahead.prototype._apiErrorMessage = function() {
+    return '<span class="st-suggestion-warning">Could not retrieve tag list from wiki</span>';
+}
+
+/**
+ * Get the sort order for the suggestions
+ * @return sort order parameter string for the API call
+ */
+TagLookahead.prototype._getOrder = function () {
+    return 'order=weighted';
+}
+// BEGIN WeblogLookahead.js
+/**
+ * This class handles look ahead for Weblog name fields. This is a tag look ahead with a
+ * different filter (tags must end with blog
+ *
+ * @see TagLookahead
+ * @see ST.extend
+ */
+
+/**
+ * Constructor
+ *
+ * @param dialog_window lightbox dialog window
+ * @param edit_field_id CSS id for the input tag
+ * @param window_class CSS class to apply to the div for the suggestion window
+ * @param suggestion_block_class CSS class for the div that holds the suggestion list
+ * @param suggestion_class CSS class for a suggestion
+ * @param variable_name name of JS variable that holds the object
+ * @param workspace_id CSS id for the workspace edit field
+ *
+ */
+WeblogLookahead = function(dialog_window, edit_field_id, window_class, suggestion_block_class, suggestion_class, variable_name, workspace_id) {
+	WeblogLookahead.baseConstructor.call(
+        this,
+        dialog_window,
+        edit_field_id,
+		window_class,
+		suggestion_block_class,
+		suggestion_class,
+		variable_name,
+        workspace_id
+    );
+};
+
+ST.extend(WeblogLookahead, TagLookahead);
+
+/**
+ * Constructs the regex used to filter the tag list
+ *
+ * @return filter criteria string
+ */
+WeblogLookahead.prototype._getFilter = function () {
+    return 'filter=\\b'+this.editField.value+'.*(We)?blog$';
+}
+
+/**
+ * Messge to display in case of an API error
+ *
+ * @return html string
+ */
+WeblogLookahead.prototype._apiErrorMessage = function() {
+    return '<span class="st-suggestion-warning">Could not retrieve weblog list from wiki</span>';
+}
+// BEGIN PageNameSupportLookahead.js
+/**
+ * This class is a base class for all look ahead widgets that pull suggestions from a specific
+ * wiki page. The class supports specifying workspace and page name input fields and will use
+ * that information when pulling suggestions.
+ *
+ * You can set the default workspace id using the workspace data member
+ *
+ * You can set the default page name using the pagename data member
+ *
+ * @see LookaheadWidget
+ * @see ST.extend
+ */
+
+/**
+ * Constructor
+ *
+ * @param dialog_window lightbox dialog window
+ * @param edit_field_id CSS id for the input tag
+ * @param window_class CSS class to apply to the div for the suggestion window
+ * @param suggestion_block_class CSS class for the div that holds the suggestion list
+ * @param suggestion_class CSS class for a suggestion
+ * @param variable_name name of JS variable that holds the object
+ * @param workspace_widget Wikiwyg Workspace widget object
+ * @param pagename_id CSS id for the page name input tag
+ */
+PageNameSupportLookahead = function(dialog_window, api, edit_field_id, window_class, suggestion_block_class, suggestion_class, variable_name, workspace_widget, pagename_id) {
+	PageNameSupportLookahead.baseConstructor.call(
+        this,
+        dialog_window,
+        api,
+        edit_field_id,
+        window_class,
+        suggestion_block_class,
+        suggestion_class,
+        variable_name
+    );
+    this.workspace = '';
+    this.workspaceWidget = workspace_widget;
+    this.defaultWorkspace = '';
+
+    this.pagename = '';
+    this.pagenameId = pagename_id;
+    this.defaultPagename = '';
+};
+
+ST.extend(PageNameSupportLookahead, LookaheadWidget);
+
+PageNameSupportLookahead.prototype.currentWorkspaceSelected = function () {
+    var nodes = document.getElementsByName('st-rb-workspace_id');
+    for (var i = 0; i < nodes.length; i++)
+        if (nodes[i].checked)
+            return nodes[i].value == 'current';
+    return false;
+}
+
+PageNameSupportLookahead.prototype.currentPageSelected = function () {
+    var nodes = document.getElementsByName('st-rb-page_title');
+    for (var i = 0; i < nodes.length; i++)
+        if (nodes[i].checked)
+            return nodes[i].value == 'current';
+    return false;
+}
+
+/**
+ * When the edit field gains focus update the workspace and page name fields
+ * from the values in the form
+ */
+PageNameSupportLookahead.prototype._gainFocus = function() {
+	try {
+		this.workspace = this.defaultWorkspace;
+	    if (!this.currentWorkspaceSelected())
+	        if (this.workspaceWidget && this.workspaceWidget.title_and_id.workspace_id.id)
+	            this.workspace = this.workspaceWidget.title_and_id.workspace_id.id;
+
+		this.pagename = this.defaultPagename;
+	    if (!this.currentPageSelected())
+			if (this.pagenameId && trim($(this.pagenameId).value))
+				this.pagename = trim($(this.pagenameId).value);
+	}
+	catch(e) {
+		this.pagename = '';
+		this.workspace = '';
+	}
+    PageNameSupportLookahead.superClass._gainFocus.call(this)
+},
+
+/**
+ * Get the error message to display when the API returns a 404 error
+ * @return error message in HTML format
+ */
+PageNameSupportLookahead.prototype._error404Message = function() {
+    return '<span class="st-suggestion-warning">Workspace "' + this.workspace + '" or page"' + this.pagename + '" does not exist on wiki</span>';
+}
+
+/**
+ * Build the URI for the API call
+ * @return URI
+ */
+PageNameSupportLookahead.prototype._apiURI = function() {
+    var uri = PageNameSupportLookahead.superClass._apiURI.call(this)
+    uri = this._tokenReplace(uri, ':ws', this.workspace);
+    return this._tokenReplace(uri, ':pname', this.pagename);
+}
+// BEGIN PageSectionLookahead.js
+/**
+ * This class handles look ahead for page sections. The class supports specifying workspace
+ * and page edit fields and will use those values when pulling page sections.
+ *
+ * @see PageNameSupportLookahead
+ * @see ST.extend
+ */
+
+/**
+ * Constructor
+ *
+ * @param dialog_window lightbox dialog window
+ * @param edit_field_id CSS id for the input tag
+ * @param window_class CSS class to apply to the div for the suggestion window
+ * @param suggestion_block_class CSS class for the div that holds the suggestion list
+ * @param suggestion_class CSS class for a suggestion
+ * @param variable_name name of JS variable that holds the object
+ * @param workspace_id CSS id for the workspace input tag
+ * @param pagename_id CSS id for the page name input tag
+ */
+PageSectionLookahead = function(dialog_window, edit_field_id, window_class, suggestion_block_class, suggestion_class, variable_name, workspace_id, pagename_id) {
+	PageSectionLookahead.baseConstructor.call(
+        this,
+        dialog_window,
+        '/data/workspaces/:ws/pages/:pname/sections',
+        edit_field_id,
+		window_class,
+		suggestion_block_class,
+		suggestion_class,
+        variable_name,
+        workspace_id,
+        pagename_id
+    );
+};
+
+ST.extend(PageSectionLookahead, PageNameSupportLookahead);
+
+/**
+ * Messge to display in case of an API error
+ *
+ * @return html string
+ */
+PageSectionLookahead.prototype._apiErrorMessage = function() {
+    return '<span class="st-suggestion-warning">Could not retrieve section list from wiki</span>';
+}
+
+/**
+ * Override the _getOrder method to return an empty string; the sections API call returns
+ * items in page order by default.
+ *
+ * @return blank string
+ */
+PageSectionLookahead.prototype._getOrder = function () {
+    return '';
+}
+// BEGIN PageAttachmentLookahead.js
+/**
+ * This class handles look ahead for page attachments. The class supports specifying workspace
+ * and page edit fields and will use those values when pulling attachments.
+ *
+ * @see PageNameSupportLookahead
+ * @see ST.extend
+ */
+
+/**
+ * Constructor
+ *
+ * @param dialog_window lightbox dialog window
+ * @param edit_field_id CSS id for the input tag
+ * @param window_class CSS class to apply to the div for the suggestion window
+ * @param suggestion_block_class CSS class for the div that holds the suggestion list
+ * @param suggestion_class CSS class for a suggestion
+ * @param variable_name name of JS variable that holds the object
+ * @param workspace_id CSS id for the workspace input tag
+ * @param pagename_id CSS id for the page name input tag
+ */
+PageAttachmentLookahead = function(dialog_window, edit_field_id, window_class, suggestion_block_class, suggestion_class, variable_name, workspace_id, pagename_id) {
+	PageAttachmentLookahead.baseConstructor.call(
+        this,
+        dialog_window,
+        '/data/workspaces/:ws/pages/:pname/attachments',
+        edit_field_id,
+		window_class,
+		suggestion_block_class,
+		suggestion_class,
+        variable_name,
+        workspace_id,
+        pagename_id
+    );
+};
+
+ST.extend(PageAttachmentLookahead, PageNameSupportLookahead);
+
+/**
+ * Messge to display in case of an API error
+ *
+ * @return html string
+ */
+PageAttachmentLookahead.prototype._apiErrorMessage = function() {
+    return '<span class="st-suggestion-warning">Could not retrieve attachment list from wiki</span>';
+}
+// BEGIN ../../../js-modules/Wikiwyg-copy/lib/Wikiwyg.js
 /*==============================================================================
 Wikiwyg - Turn any HTML div into a wikitext /and/ wysiwyg edit area.
 
@@ -6239,7 +10491,6 @@ Wikiwyg.createElementWithAttrs = function(element, attrs, doc) {
     return Wikiwyg.create_element_with_attrs(element, attrs, doc);
 }
 
-// See IE, below
 Wikiwyg.create_element_with_attrs = function(element, attrs, doc) {
     var elem = doc.createElement(element);
     for (name in attrs)
@@ -6265,6 +10516,9 @@ Base class for Wikiwyg classes
 proto = new Subclass('Wikiwyg.Base');
 
 proto.set_config = function(user_config) {
+    if (Wikiwyg.Widgets && this.setup_widgets)
+        this.setup_widgets();
+
     for (var key in this.config) {
         if (user_config != null && user_config[key] != null)
             this.merge_config(key, user_config[key]);
@@ -6411,9 +10665,13 @@ proto.sanitize_dom = function(dom) { // See IE, below
 proto.element_transforms = function(dom, el_transforms) {
     for (var orig in el_transforms) {
         var elems = dom.getElementsByTagName(orig);
-        if (elems.length == 0) continue;
-        for (var i = 0; i < elems.length; i++) {
-            var elem = elems[i];
+        var elems_arr = [];
+        for (var ii = 0; ii < elems.length; ii++) {
+            elems_arr.push(elems[ii])
+        }
+
+        while ( elems_arr.length > 0 ) {
+            var elem = elems_arr.shift();
             var replace = el_transforms[orig];
             var new_el =
               Wikiwyg.createElementWithAttrs(replace.name, replace.attr);
@@ -6427,14 +10685,6 @@ proto.element_transforms = function(dom, el_transforms) {
 Support for Internet Explorer in Wikiwyg
  =============================================================================*/
 if (Wikiwyg.is_ie) {
-
-Wikiwyg.create_element_with_attrs = function(element, attrs, doc) {
-     var str = '';
-     // Note the double-quotes (make sure your data doesn't use them):
-     for (name in attrs)
-         str += ' ' + name + '="' + attrs[name] + '"';
-     return doc.createElement('<' + element + str + '>');
-}
 
 die = function(e) {
     alert(e);
@@ -6455,7 +10705,7 @@ proto.sanitize_dom = function(dom) {
 }
 
 } // end of global if statement for IE overrides
-// BEGIN ../../../js-modules/src/Wikiwyg-09-26-06/lib/Wikiwyg/Toolbar.js
+// BEGIN ../../../js-modules/Wikiwyg-copy/lib/Wikiwyg/Toolbar.js
 /*==============================================================================
 This Wikiwyg class provides toolbar support
 
@@ -6574,6 +10824,26 @@ proto.enableThis = function() {
 
 proto.disableThis = function() {
     this.div.style.display = 'none';
+}
+
+proto.setup_widgets_pulldown = function(title) {
+    var widgets_list = Wikiwyg.Widgets.widgets;
+    var widget_data = Wikiwyg.Widgets.widget;
+
+    var tb = eval(this.classname).prototype;
+
+    tb.styleSelector = [ 'label' ];
+    for (var i = 0; i < widgets_list.length; i++) {
+        var widget = widgets_list[i];
+        tb.styleSelector.push('widget_' + widget);
+    }
+    tb.controlLayout.push('selector');
+
+    tb.controlLabels.label = title;
+    for (var i = 0; i < widgets_list.length; i++) {
+        var widget = widgets_list[i];
+        tb.controlLabels['widget_' + widget] = widget_data[widget].label;
+    }
 }
 
 proto.make_button = function(type, label) {
@@ -6731,7 +11001,7 @@ proto.set_style = function(style_name) {
         this.wikiwyg.current_mode.process_command(style_name);
     this.styleSelect.selectedIndex = 0;
 }
-// BEGIN ../../../js-modules/src/Wikiwyg-09-26-06/lib/Wikiwyg/Preview.js
+// BEGIN ../../../js-modules/Wikiwyg-copy/lib/Wikiwyg/Preview.js
 /*==============================================================================
 This Wikiwyg mode supports a preview of current changes
 
@@ -6787,18 +11057,18 @@ proto.toHtml = function(func) {
 proto.disableStarted = function() {
     this.wikiwyg.divHeight = this.div.offsetHeight;
 }
-// BEGIN ../../../js-modules/src/Wikiwyg-09-26-06/lib/Wikiwyg/Wikitext.js
+// BEGIN ../../../js-modules/Wikiwyg-copy/lib/Wikiwyg/Wikitext.js
 /*==============================================================================
 This Wikiwyg mode supports a textarea editor with toolbar buttons.
 
 COPYRIGHT:
 
-    Copyright (c) 2005 Socialtext Corporation 
+    Copyright (c) 2005 Socialtext Corporation
     655 High Street
     Palo Alto, CA 94301 U.S.A.
     All rights reserved.
 
-Wikiwyg is free software. 
+Wikiwyg is free software.
 
 This library is free software; you can redistribute it and/or modify it
 under the terms of the GNU Lesser General Public License as published by
@@ -6922,7 +11192,7 @@ proto.fromHtml = function(html) {
     this.setTextArea('Loading...');
     var self = this;
     this.convertHtmlToWikitext(
-        html, 
+        html,
         function(value) { self.setTextArea(value) }
     );
 }
@@ -6951,20 +11221,20 @@ proto.get_keybinding_area = function() {
 /*==============================================================================
 Code to markup wikitext
  =============================================================================*/
-Wikiwyg.Wikitext.phrase_end_re = /[\s\.\:\;\,\!\?\(\)]/;
+Wikiwyg.Wikitext.phrase_end_re = /[\s\.\:\;\,\!\?\(\)\"]/;
 
 proto.find_left = function(t, selection_start, matcher) {
     var substring = t.substr(selection_start - 1, 1);
     var nextstring = t.substr(selection_start - 2, 1);
-    if (selection_start == 0) 
+    if (selection_start == 0)
         return selection_start;
     if (substring.match(matcher)) {
         // special case for word.word
-        if ((substring != '.') || (nextstring.match(/\s/))) 
+        if ((substring != '.') || (nextstring.match(/\s/)))
             return selection_start;
     }
     return this.find_left(t, selection_start - 1, matcher);
-}  
+}
 
 proto.find_right = function(t, selection_end, matcher) {
     var substring = t.substr(selection_end, 1);
@@ -7029,7 +11299,7 @@ proto.alarm_on = function() {
 proto.get_words = function() {
     function is_insane(selection) {
         return selection.match(/\r?\n(\r?\n|\*+ |\#+ |\=+ )/);
-    }   
+    }
 
     t = this.area; // XXX needs "var"?
     var selection_start = t.selectionStart;
@@ -7308,8 +11578,8 @@ proto.do_www = function() {
     var  url =  prompt("Please enter a link", "Type in your link here");
 	var old = this.config.markupRules.www[1];
 	this.config.markupRules.www[1] += url + " ";
-  
-	// do the transformation 
+
+	// do the transformation
 	var markup = this.config.markupRules['www'];
     var handler = markup[0];
      if (! this['markup_' + handler])
@@ -7317,7 +11587,7 @@ proto.do_www = function() {
     this['markup_' + handler](markup);
 
 	// reset
-	this.config.markupRules.www[1] = old;	
+	this.config.markupRules.www[1] = old;
 }
 
 proto.selection_mangle = function(method) {
@@ -7385,7 +11655,7 @@ proto.markup_line_alone = function(markup_array) {
     if (selection_start == null) {
         selection_start = selection_end;
     }
-    
+
     var text = t.value;
     this.selection_start = this.find_right(text, selection_start, /\r?\n/);
     this.selection_end = this.selection_start;
@@ -7409,7 +11679,7 @@ Code to convert from html to wikitext.
 proto.convert_html_to_wikitext = function(html) {
     this.copyhtml = html;
     var dom = document.createElement('div');
-    dom.innerHTML = this.strip_msword_gunk(html);
+    dom.innerHTML = html;
     this.output = [];
     this.list_type = [];
     this.indent_level = 0;
@@ -7424,18 +11694,6 @@ proto.convert_html_to_wikitext = function(html) {
     this.assert_new_line();
 
     return this.join_output(this.output);
-}
-
-// Adapted from http://tim.mackey.ie/CleanWordHTMLUsingRegularExpressions.aspx
-proto.strip_msword_gunk = function(html) {
-    return html.
-        replace(
-            /<(span|\w:\w+)[^>]*>(\s*&nbsp;\s*)+<\/\1>/gi,
-            function(m) {
-                return m.match(/ugly-ie-css-hack/) ? m : '';
-            }
-        ).
-        replace(/<\/?(font|xml|st\d+:\w+|[ovwxp]:\w+)[^>]*>/gi, '');
 }
 
 proto.normalizeDomStructure = function(dom) {
@@ -7504,7 +11762,7 @@ proto.normalize_styled_lists = function(dom, tag) {
 
         var items = element.getElementsByTagName('li');
         for (var j = 0; j < items.length; j++) {
-            items[j].innerHTML = 
+            items[j].innerHTML =
                 '<span style="' + style + '">' + items[j].innerHTML + '</span>';
         }
     }
@@ -7567,13 +11825,13 @@ proto.normalizePhraseWhitespace = function(element) {
 
     if (first_node && first_node.nodeValue.match(/^ /)) {
         first_node.nodeValue = first_node.nodeValue.replace(/^ +/, '');
-        if (prev_node && ! prev_node.nodeValue.match(/ $/)) 
+        if (prev_node && ! prev_node.nodeValue.match(/ $/))
             prev_node.nodeValue = prev_node.nodeValue + ' ';
     }
 
     if (last_node && last_node.nodeValue.match(/ $/)) {
         last_node.nodeValue = last_node.nodeValue.replace(/ $/, '');
-        if (next_node && ! next_node.nodeValue.match(/^ /)) 
+        if (next_node && ! next_node.nodeValue.match(/^ /))
             next_node.nodeValue = ' ' + next_node.nodeValue;
     }
 }
@@ -7610,14 +11868,20 @@ proto.end_is_no_good = function(element) {
     if (! last_node) return true;
     if (last_node.nodeValue.match(/ $/)) return false;
     if (! next_node || next_node.nodeValue == '\n') return false;
-    return ! next_node.nodeValue.match(/^[ ."\n]/);
+    return ! next_node.nodeValue.match(Wikiwyg.Wikitext.phrase_end_re);
 }
 
 proto.destroyElement = function(element) {
-    var value = element.innerHTML;
-    var span = document.createTextNode(value);
-    element.parentNode.replaceChild(span, element);
-    return true;
+    try {
+        var range = element.ownerDocument.createRange();
+        range.selectNode(element);
+        var docfrag = range.createContextualFragment( element.innerHTML );
+        element.parentNode.replaceChild(docfrag, element);
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
 }
 
 proto.getFirstTextNode = function(element) {
@@ -7685,7 +11949,7 @@ proto.walk = function(element) {
             if (nodeValue.match(/[^\n]/) &&
                 ! nodeValue.match(/^\n[\n\ \t]*$/)
                ) {
-                if (this.no_collapse_text) { 
+                if (this.no_collapse_text) {
                     this.appendOutput(nodeValue);
                 }
                 else {
@@ -7863,8 +12127,9 @@ proto.format_span = function(element) {
         return;
     }
 
-    var style = element.getAttribute('style');
-    if (!style) {
+    var style = element.getAttribute('style') || element.style;
+    var style_text = this.squish_style_object_into_string(style);
+    if (!style_text) {
         this.pass(element);
         return;
     }
@@ -7917,7 +12182,8 @@ proto.squish_style_object_into_string = function(style) {
         var pair = interesting_attributes[i];
         var css = pair[0] + '-' + pair[1];
         var js = pair[0] + pair[1].ucFirst();
-        string += css + ': ' + style[js] + '; ';
+        if (style[js])
+            string += css + ': ' + style[js] + '; ';
     }
     return string;
 }
@@ -7936,7 +12202,7 @@ klass.make_empty_formatter = function(style) {
 
 klass.make_formatter = function(style) {
     return function(element) {
-        if (this.element_has_text_content(element))
+        if (this.element_has_text_content(element) || this.element_has_only_image_content(element) )
             this.basic_formatter(element, style);
     }
 }
@@ -8038,7 +12304,7 @@ proto.previous_line = function() {
     );
 }
 
-proto.make_list = function(element, list_type) { 
+proto.make_list = function(element, list_type) {
     if (! this.previous_was_newline_or_start())
         this.insert_new_line();
 
@@ -8265,7 +12531,7 @@ proto.handle_opaque_phrase = function(element) {
         var text = comment.data;
         text = text.replace(/^ wiki:\s+/, '')
                    .replace(/-=/g, '-')
-                   .replace(/==/g, '=') 
+                   .replace(/==/g, '=')
                    .replace(/\s$/, '')
                    .replace(/\{(\w+):\s*\}/, '{$1}');
         this.appendOutput(Wikiwyg.htmlUnescape(text))
@@ -8282,7 +12548,9 @@ proto.smart_trailing_space = function(element) {
         }
     }
     else if (next.nodeType == 3) {
-        if (! next.nodeValue.match(/^\s/))
+        if (next.nodeValue.match(/^\w/))
+            this.appendOutput(' ');
+        else if (! next.nodeValue.match(/^\s/))
             this.no_following_whitespace();
     }
 }
@@ -8305,7 +12573,7 @@ proto.make_wikitext_link = function(label, href, element) {
 		before = this.config.markupRules.www[1];
 		after = this.config.markupRules.www[2];
 	}
-	
+
     this.assert_space_or_newline();
     if (! href) {
         this.appendOutput(label);
@@ -8366,8 +12634,7 @@ proto.initializeObject = function() {
 }
 
 } // end of global if
-
-// BEGIN ../../../js-modules/src/Wikiwyg-09-26-06/lib/Wikiwyg/Wysiwyg.js
+// BEGIN ../../../js-modules/Wikiwyg-copy/lib/Wikiwyg/Wysiwyg.js
 /*==============================================================================
 This Wikiwyg mode supports a DesignMode wysiwyg editor with toolbar buttons
 
@@ -8413,11 +12680,6 @@ proto.config = {
 proto.initializeObject = function() {
     this.edit_iframe = this.get_edit_iframe();
     this.div = this.edit_iframe;
-    this.set_design_mode_early();
-}
-
-proto.set_design_mode_early = function() { // See IE, below
-    // Unneeded for Gecko
 }
 
 proto.fromHtml = function(html) {
@@ -8583,8 +12845,6 @@ proto.apply_linked_stylesheet = function(style, head) {
 proto.process_command = function(command) {
     if (this['do_' + command])
         this['do_' + command](command);
-    if (! Wikiwyg.is_ie)
-        this.get_edit_window().focus();
 }
 
 proto.exec_command = function(command, option) {
@@ -8682,75 +12942,98 @@ Support for Internet Explorer in Wikiwyg.Wysiwyg
  =============================================================================*/
 if (Wikiwyg.is_ie) {
 
-proto.set_design_mode_early = function(wikiwyg) {
-    // XXX - need to know if iframe is ready yet...
-    this.get_edit_document().designMode = 'on';
+proto.initializeObject = function() {
+    this.div = document.createElement('div');
+    this.div.contentEditable = true;
+    this.div.style.overflow = 'auto';
+    this.div.id = 'wysiwyg-editable-div';
+    this.edit_iframe = this.div;
+    this.div.onbeforedeactivate = this.onbeforedeactivate.bind(this);
+    this.div.onactivate = this.onactivate.bind(this);
+    return this.div;
 }
 
-proto.get_edit_window = function() {
-    return this.edit_iframe;
+proto.fromHtml = function(html) {
+    var dom = document.createElement('div');
+    dom.innerHTML = html;
+    this.sanitize_dom(dom);
+    this.set_inner_html(dom.innerHTML);
 }
 
-proto.get_edit_document = function() {
-    return this.edit_iframe.contentWindow.document;
+proto.enableThis = function() {
+    Wikiwyg.Mode.prototype.enableThis.call(this);
+    this.div.style.border = '1px black solid';
+    this.div.width = '100%';
+    this.setHeightOf(this.div);
+    this.fix_up_relative_imgs();
+    this.apply_stylesheets();
+    this.enable_keybindings();
+    this.clear_inner_html();
+}
+
+proto.get_div = function() {
+    return this.div;
+}
+
+proto.get_keybinding_area = function() {
+    return this.get_div();
+}
+
+proto.get_edit_window = function() { return window }
+proto.get_edit_document = function() { return document }
+
+proto.get_inner_html = function() {
+    return this.get_div().innerHTML;
+}
+
+proto.set_inner_html = function(html) {
+    this.get_div().innerHTML = html;
+}
+
+// We don't need to apply stylesheets that have already been applied
+proto.apply_stylesheets = function() {}
+
+proto.enable_keybindings = function () {}
+
+proto.onbeforedeactivate = function() {
+    this.__range = this.get_edit_document().selection.createRange();
+}
+
+proto.onactivate = function() {
+    this.__range = undefined;
 }
 
 proto.get_selection_text = function() {
+    if (this.__range) {
+        return this.__range.htmlText;
+    }
+
     var selection = this.get_edit_document().selection;
-    if (selection != null)
-        return selection.createRange().htmlText;
+    if (selection != null) {
+        this.__range = selection.createRange();
+        return this.__range.htmlText;
+    }
     return '';
 }
 
 proto.insert_html = function(html) {
     var doc = this.get_edit_document();
-    var range = this.get_edit_document().selection.createRange();
+    var range = this.__range;
+    if (!range) {
+        range = this.get_edit_document().selection.createRange();
+    }
     if (range.boundingTop == 2 && range.boundingLeft == 2)
         return;
     range.pasteHTML(html);
     range.collapse(false);
     range.select();
-}
-
-proto.get_inner_html = function( cb ) {
-    if ( cb ) {
-        this.get_inner_html_async( cb );
-        return;
-    }
-    return this.get_edit_document().body.innerHTML;
-}
-
-proto.get_inner_html_async = function( cb ) {
-    var self = this;
-    var doc = this.get_edit_document();
-    if ( doc.readyState == 'loading' ) {
-        setTimeout( function() {
-            self.get_inner_html(cb);
-        }, 50);
-    } else {
-        var html = this.get_edit_document().body.innerHTML;
-        cb(html);
-        return html;
+    if (this.__range) {
+        this.__range = null;
     }
 }
-
-proto.set_inner_html = function(html) {
-    var self = this;
-    var doc = this.get_edit_document();
-    if ( doc.readyState == 'loading' ) {
-        setTimeout( function() {
-            self.set_inner_html(html);
-        }, 50);
-    } else {
-        this.get_edit_document().body.innerHTML = html;
-    }
-}
-
-// Use IE's design mode default key bindings for now.
-proto.enable_keybindings = function() {}
 
 } // end of global if
-// BEGIN ../../../js-modules/src/Wikiwyg-09-26-06/lib/Wikiwyg/HTML.js
+// BEGIN ../../../js-modules/Wikiwyg-copy/lib/Wikiwyg/HTML.js
 
 /*==============================================================================
 This Wikiwyg mode supports a simple HTML editor
@@ -8997,17 +13280,9 @@ function setup_wikiwyg() {
             }
             nlw_edit_controls_visible = true;
             ww.enableLinkConfirmations();
-            delayedWindowResize = function () {
+            window.onresize = function () {
                 ww.resizeEditor();
-                if (Wikiwyg.is_ie) {
-                    // Prevent {rt: 25296} from happening
-                    window.onresize = null;
-                    setTimeout(function() {
-                        window.onresize = delayedWindowResize
-                    }, 5);
-                }
             }
-            window.onresize = delayedWindowResize;
         } catch(e) {
             alert(e);    // XXX - Useful for debugging
         }
@@ -9052,6 +13327,8 @@ function setup_wikiwyg() {
             Element.setStyle('st-editing-tools-display', {display: 'block'});
             Element.setStyle('st-editing-tools-edit', {display: 'none'});
             Element.setStyle('st-page-maincontent', {marginRight: '0px'});
+
+            $(Page.element.content).style.height = "100%";
 
             // XXX WTF? ENOFUNCTION
             //do_post_cancel_tidying();
@@ -9112,7 +13389,7 @@ function try_wikiwyg() {
     try {
         setup_wikiwyg();
     } catch(e) {
-        //alert('Error: ' + e);
+        alert('Error: ' + e);
     }
 }
 
@@ -9197,6 +13474,9 @@ proto.default_config = {
     toolbarClass: 'Wikiwyg.Toolbar.Socialtext',
     modeClasses: [ WW_SIMPLE_MODE, WW_ADVANCED_MODE, WW_PREVIEW_MODE ]
 }
+
+if (window.wikiwyg_nlw_debug)
+    proto.default_config.modeClasses.push(WW_HTML_MODE);
 
 proto.placeToolbar = function(toolbar_div) {
     var wikiwyg_edit_page_bar =
@@ -9352,12 +13632,14 @@ proto.newpage_display_duplicate_dialog = function(page_name) {
     $('st-newpage-duplicate').style.display = 'block';
     $('st-newpage-duplicate-pagename').focus();
 
-    var s = new ST.Lightbox;
-    s.center(
-         'st-newpage-duplicate-overlay',
-         'st-newpage-duplicate-interface',
-         'st-newpage-duplicate'
-    );
+    var divs = {
+        wrapper: $('st-newpage-duplicate'),
+        background: $('st-newpage-duplicate-overlay'),
+        content: $('st-newpage-duplicate-interface'),
+        contentWrapper: $('st-newpage-duplicate-interface').parentNode
+    }
+    Widget.Lightbox.show({ divs:divs, effects:['RoundedCorners'] });
+    divs.contentWrapper.style.width="520px";
 
     return false;
 }
@@ -9476,15 +13758,17 @@ proto.displayNewPageDialog = function() {
         'st-newpage-duplicate-emphasis',
         'st-newpage-duplicate-emphasis'
     );
-    $('st-newpage-save').style.display = 'block';
+    // $('st-newpage-save').style.display = 'block';
     $('st-newpage-save-pagename').focus();
 
-    var s = new ST.Lightbox;
-    s.center(
-         'st-newpage-save-overlay',
-         'st-newpage-save-interface',
-         'st-newpage-save'
-    );
+    var divs = {
+        wrapper: $('st-newpage-save'),
+        background: $('st-newpage-save-overlay'),
+        content: $('st-newpage-save-interface'),
+        contentWrapper: $('st-newpage-save-interface').parentNode
+    }
+    Widget.Lightbox.show({ 'divs': divs, 'effects': ['RoundedCorners'] });
+
     return false;
 }
 
@@ -9732,35 +14016,28 @@ proto = Wikiwyg.Mode.prototype;
 
 proto.footer_offset = 20; // magic constant to make sure edit window does not scroll off page
 
+// XXX - Hardcoded until we can get height of Save/Preview/Cancel buttons
 proto.get_edit_height = function() {
     var available_height;
     if (self.innerHeight) {
         available_height = self.innerHeight;
-    }
-    else if (document.documentElement && document.documentElement.clientHeight) {
+    } else if (document.documentElement && document.documentElement.clientHeight) {
         available_height = document.documentElement.clientHeight;
-    }
-    else if (document.body) {
+    } else if (document.body) {
         available_height = document.body.clientHeight;
     }
 
     var x = 0;
-    if (Wikiwyg.is_ie && this.classname == WW_ADVANCED_MODE) {
-        x += this.div.offsetTop;
-    }
-    else {
-        var e = this.div;
-        while (e) {
-            x += e.offsetTop;
-            e = e.offsetParent;
-        }
+    var e = this.div;
+    while (e) {
+        x += e.offsetTop;
+        e = e.offsetParent;
     }
 
     var edit_height = available_height -
                       x -
                       this.wikiwyg.toolbarObject.div.offsetHeight -
                       this.footer_offset;
-
     return edit_height;
 }
 
@@ -9914,13 +14191,14 @@ proto.advanced_link_html = function() {
 
 proto.make_table_html = function(rows, columns) {
     var innards = '';
+    var cell = '<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>';
     for (var i = 0; i < rows; i++) {
         var row = '';
         for (var j = 0; j < columns; j++)
-            row += '<td style="width: 20px"></td>';
+            row += cell;
         innards += '<tr>' + row + '</tr>';
     }
-    return '<table><tbody>' + innards + '</tbody></table>';
+    return '<table style="border-collapse: collapse;" class="formatter_table">' + innards + '</table>';
 }
 
 proto.do_table = function() {
@@ -9941,6 +14219,10 @@ proto.setHeightOf = function (iframe) {
     iframe.style.height = this.get_edit_height() + 'px';
 };
 
+proto.socialtext_wikiwyg_image = function(image_name) {
+    return this.wikiwyg.config.toolbar.imagesLocation + image_name;
+}
+
 /*==============================================================================
 Socialtext Wikitext subclass.
  =============================================================================*/
@@ -9958,6 +14240,10 @@ proto.markupRules = {
     www: ['bound_phrase', '"', '"<http://...>'],
     attach: ['bound_phrase', '{file: ', '}'],
     image: ['bound_phrase', '{image: ', '}']
+}
+
+for (var ii in proto.markupRules) {
+    proto.config.markupRules[ii] = proto.markupRules[ii]
 }
 
 proto.canonicalText = function() {
@@ -10035,6 +14321,7 @@ proto.convertWikitextToHtml = function(wikitext, func) {
     var uri = location.pathname;
     var postdata = 'action=wikiwyg_wikitext_to_html;content=' +
         encodeURIComponent(wikitext);
+
     var post = new Ajax.Request (
         uri,
         {
@@ -10046,6 +14333,7 @@ proto.convertWikitextToHtml = function(wikitext, func) {
             asynchronous: false
         }
     );
+
     func(post.transport.responseText);
 }
 
@@ -10270,21 +14558,6 @@ proto.start_is_no_good = function(element) {
     return ! prev_node.nodeValue.match(/[\( "]$/);
 }
 
-proto.end_is_no_good = function(element) {
-    var last_node = this.getLastTextNode(element);
-    var next_node = this.getNextTextNode(element);
-
-    for (var n = element; n && n.nodeType != 3; n = n.lastChild) {
-        if (n.nodeType == 8) return false;
-    }
-
-    if (! last_node) return true;
-    if (last_node.nodeValue.match(/ $/)) return false;
-    if (! next_node || next_node.nodeValue == '\n') return false;
-    return ! next_node.nodeValue.match(/^[\) ."\n]/);
-}
-
-
 /*==============================================================================
 Socialtext Preview subclass.
  =============================================================================*/
@@ -10366,6 +14639,7 @@ wikiwyg_run_all_formatting_tests = function() {
 }
 
 klass.run_all_formatting_tests = wikiwyg_run_all_formatting_tests;
+
 // BEGIN Wikiwyg/MessageCenter.js
 /*==============================================================================
 Wikiwyg - Turn any HTML div into a wikitext /and/ wysiwyg edit area.
@@ -10508,6 +14782,1236 @@ proto.installControls = function () {
 }
 
 
+// BEGIN Widgets.js
+Wikiwyg.Widgets =
+{"widgets":["link1","link2","image","file","toc","include","section","recent_changes","tag","tag_list","weblog","weblog_list","fetchrss","fetchatom","search","googlesoap","technorati","aim","yahoo","skype","user","date","asis","asap","new_form_page"],"fields":{"search_term":"Search term","image_name":"Image name","tag_name":"Tag name","form_name":"Form name","weblog_name":"Weblog name","date_string":"YYYY-MM-DD&nbsp;HH:MM:SS","section_name":"Section name","file_name":"File name","user_email":"User's email","form_text":"Link text","page_title":"Page title","workspace_id":"Workspace","skype_id":"Skype name","relative_url":"Relative URL","atom_url":"Atom feed URL","rss_url":"RSS feed URL","asis_content":"Unformatted content","yahoo_id":"Yahoo! ID","aim_id":"AIM screen name","label":"Link text","asap_id":"Convoq name"},"api_for_title":{"workspace_id":"/data/workspaces/:workspace_id"},"synonyms":{"callme":"skype","category":"tag","ymsgr":"yahoo","callto":"skype","category_list":"tag_list"},"match":{"date_string":"^(\\d{4}-\\d{2}-\\d{2}\\s+\\d{2}:\\d{2}:\\d{2}.*)$","user_email":"^([a-zA-Z0-9_\\+\\.\\-\\&\\!\\%\\+\\$\\*\\^\\']+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9:]{2,4})+)$","workspace_id":"^[a-z0-9_\\-]+$","skype_id":"^(\\S+)$","aim_id":"^(\\S+)$","yahoo_id":"^(\\S+)$","asap_id":"^(\\S+)$"},"regexps":{"workspace-value":"^(?:(\\S+);)?\\s*(.*?)?\\s*$","three-part-link":"^(\\S*)?\\s*\\[([^\\]]*)\\]\\s*(.*?)?\\s*$"},"widget":{"asap":{"more_desc":"There are no optional properties for a Convoq Link.","uneditable":true,"on_menu":false,"color":"cyan4","pattern":"asap:%asap_id","required":["asap_id"],"desc":"Display a link to a Convoq name. Clicking the link will start a Convoq call with the person if your Convoq client is properly configured. Use this form to edit the properties of the Convoq link.","markup":["bound_phrase","asap:",""],"label":"Convoq Link","title":"Call '$asap_id' using Convoq. Click to edit.","image_text":[{"text":"Convoq: %asap_id","field":"default"}],"field":"asap_id"},"search":{"more_desc":"Optional properties include the name of the workspace to search, whether to search in the page title, text or tags, and whether to display full results or just page titles.","input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","search_term"],"regexp":"^(?:<(\\S+)>)?\\s*(.*?)?\\s*$"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"full":"off","pdfields":["workspace_id"],"pattern":"{search: <%workspace_id> %search_term}","color":"gold4","required":["search_term"],"fields":["search_term","workspace_id"],"desc":"Display the search results for the given phrase within a workspace. Use this form to edit the properties for the search.","title":{"default":"Search for '$search_term'. Click to edit.","full":"Display result for searching '$search_term'. Click to edit."},"label":"Search Results","labels":{"seach_term":"Search for","workspace_id":"In"},"image_text":[{"text":"search: %search_term","field":"default"}]},"recent_changes":{"more_desc":"Optionally, specify that the page contents should be displayed.","input":{"workspace_id":"radio"},"parse":{"regexp":"^\\s*(.*?)?\\s*$"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"full":"off","pattern":"{recent_changes: %workspace_id}","color":"gold","fields":["workspace_id"],"desc":"Display a list of pages recently changed in a workspace. By default only the page titles are displayed. Use this form to edit the list properties.","title":{"default":"What's new in the '$workspace_id' workspace. Click to edit.","full":"Display what's new in the '$workspace_id' workspace. Click to edit."},"label":"What's New","labels":{"workspace_id":"Workspace"},"image_text":[{"text":"recent changes: %workspace_id","field":"workspace_id"},{"text":"recent changes","field":"default"}]},"https":{"uneditable":true,"color":"darkorange","title":"HTTP relative link. Edit in Advanced mode."},"tag_list":{"more_desc":"Optional properties include specifying which workspace to use and whether to display page titles or whole pages.","input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","tag_name"],"regexp":"^(?:<(\\S+)>)?\\s*(.*?)?\\s*$"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"full":"off","pdfields":["workspace_id"],"pattern":"{tag_list: <%workspace_id> %tag_name}","color":"darkviolet","fields":["tag_name","workspace_id"],"required":["tag_name"],"desc":"Display a list of the most recently changed pages in a workspace that have a specific tag. By default only the page title is displayed. Use this form to edit the list properties.","title":{"default":"Pages with the '$tag_name' tag. Click to edit.","full":"Display pages with the '$tag_name' tag. Click to edit."},"label":"Tag List","labels":{"workspace_id":"Pages in"},"image_text":[{"text":"tag list: %tag_name","field":"default"}]},"date":{"more_desc":"There are no optional properties for a date display.","color":"royalblue","pattern":"{date: %date_string}","desc":"Display the given date and time in the individually-set time zone for each reader. Use this form to edit the date and time to be displayed","label":"Date in Local Time","title":"Display '$date_string' in reader's time zone. Click to edit.","image_text":[{"text":"date: %date_string","field":"default"}],"field":"date_string"},"file":{"more_desc":"Optional properties include specifying a different page for the attachment, and link text.","checks":["require_page_if_workspace"],"input":{"workspace_id":"radio","page_title":"radio"},"parse":{"fields":["workspace_id","page_title","file_name"],"regexp":"?three-part-link","no_match":"file_name"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"pdfields":["workspace_id","page_title","label"],"pattern":"\"%label\"{file: %workspace_id [%page_title] %file_name}","color":"brown","fields":["file_name","workspace_id","page_title","label"],"required":["file_name"],"desc":"Display a link to a file attached to a page. Use this form to edit the properities of the link.","title":"Link to file '$file_name'. Click to edit.","label":"Attachment Link","labels":{"workspace_id":"Page in","file_name":"Attachment filename","page_title":"File attached to"},"image_text":[{"text":"file: %label","field":"label"},{"text":"file: %file_name","field":"default"}]},"include":{"more_desc":"There are no optional properties for page include.","checks":["require_page_if_workspace"],"input":{"workspace_id":"radio"},"parse":{"regexp":"^(\\S*)?\\s*\\[([^\\]]*)\\]\\s*$"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"pdfields":[],"pattern":"{include: %workspace_id [%page_title]}","color":"darkblue","fields":["workspace_id","page_title"],"required":["page_title"],"desc":"Display the contents of another page within the current page. Use this form to edit the properties for the page include.","title":"Include the page '$page_title'. Click to edit.","label":"Page Include","labels":{"workspace_id":"Other page in"},"image_text":[{"text":"include: %page_title","field":"default"}]},"section":{"more_desc":"There are no optional properties for a section marker.","color":"darkred","pattern":"{section: %section_name}","desc":"Add a section marker at the current cursor location. You can link to a section marker using a \"Section Link\". Use this form to edit the properties for the section marker.","label":"Section Marker","title":"Section marker '$section_name'. Click to edit.","image_text":[{"text":"section: %section_name","field":"default"}],"field":"section_name"},"weblog_list":{"more_desc":"Optional parameters include specifying which workspace to use and whether to display page titles or whole pages.","input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","weblog_name"],"regexp":"^(?:<(\\S+)>)?\\s*(.*?)?\\s*$"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"full":"off","pdfields":["workspace_id"],"pattern":"{weblog_list: <%workspace_id> %weblog_name}","color":"forestgreen","fields":["workspace_id","weblog_name"],"required":["weblog_name"],"desc":"Display a list of the most recent entries from a weblog in a workspace. By default only the weblog entry names are displayed. Use this form to edit the list properties.","title":{"default":"Include the weblog '$weblog_name'. Click to edit.","full":"Display the weblog '$weblog_name'. Click to edit."},"label":"Weblog List","labels":{"workspace_id":"in"},"image_text":[{"text":"weblog list: %weblog_name","field":"default"}]},"ftp":{"uneditable":true,"color":"darkorange","title":"FTP link. Edit in Advanced mode."},"http":{"uneditable":true,"color":"darkorange","title":"Relative HTTP link. Edit in Advanced mode."},"html":{"uneditable":true,"color":"indianred","title":"Raw HTML section. Edit in advanced mode."},"irc":{"uneditable":true,"color":"darkorange","title":"IRC link. Edit in Advanced mode."},"technorati":{"more_desc":"There are no optional properties for a Technorati search.","pattern":"{technorati: %search_term}","color":"darkmagenta","desc":"Display the results for a Technorati search. Use this form to edit the properties for the search.","title":"Search Technorati for '$search_term'. Click to edit.","label":"Technorati Search","image_text":[{"text":"Technorati: %search_term","field":"default"}],"labels":{"search_term":"Search for"},"field":"search_term"},"unknown":{"uneditable":true,"color":"darkslategrey","title":"Unknown widget '$unknown_id'. Edit in advanced mode."},"toc":{"more_desc":"Optionally, specify which page's headers and sections to use for the table of contents.","checks":["require_page_if_workspace"],"input":{"workspace_id":"radio","page_title":"radio"},"parse":{"regexp":"^(\\S*)?\\s*\\[([^\\]]*)\\]\\s*$","no_match":"workspace_id"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"pdfields":["workspace_id","page_title"],"pattern":"{toc: %workspace_id [%page_title]}","color":"darkseagreen","fields":["workspace_id","page_title"],"desc":"Display a table of contents for a page. Each header or section on the page is listed as a link in the table of contents. Click \"Save\" now, or click \"More options\" to edit the properties for the table of contents.","title":"Table of contents for '$page_title'. Click to edit.","label":"Table of Contents","labels":{"workspace_id":"Page in","page_title":"Headers and<br/>sections in"},"image_text":[{"text":"toc: %page_title","field":"page_title"},{"text":"toc","field":"default"}]},"user":{"more_desc":"There are no optional properties for a user name.","color":"darkgoldenrod","pattern":"{user: %user_email}","required":["user_email"],"desc":"Display the full name for the given email address or user name. Use this form to edit the properties of the user name.","label":"User Name","title":"Show full name for '$user_email'. Click to edit.","image_text":[{"text":"user: %user_email","field":"default"}],"field":"user_email"},"tag":{"more_desc":"Optional properties include link text, and the name of a different workspace for the tags.","input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","tag_name"],"regexp":"?workspace-value","no_match":"tag_name"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"pdfields":["label","workspace_id"],"pattern":"\"%label\"{tag: %workspace_id; %tag_name}","color":"green","fields":["tag_name","label","workspace_id"],"required":["tag_name"],"desc":"Display a link to a list of pages with a specific tag. Use this form to edit the properties of the link.","title":"Link to tag '$tag_name'. Click to edit.","label":"Tag Link","labels":{"workspace_id":"Search"},"image_text":[{"text":"tag: %label","field":"label"},{"text":"tag: %tag_name","field":"tag_name"}]},"yahoo":{"more_desc":"There are no optional properties for a Yahoo! link.","pattern":"yahoo:%yahoo_id","required":["yahoo_id"],"desc":"Display a link to a Yahoo! instant message ID. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.","markup":["bound_phrase","yahoo:",""],"label":"Yahoo! IM Link","title":"Instant message to '$yahoo_id' using Yahoo! Click to edit.","image_text":[{"text":"Yahoo! IM: %yahoo_id","field":"default"}],"field":"yahoo_id"},"link2":{"checks":["require_page_if_workspace"],"input":{"workspace_id":"radio","page_title":"radio"},"parse":{"fields":["workspace_id","page_title","section_name"],"regexp":"?three-part-link","no_match":"section_name"},"primary_field":"section_name","pdfields":["label","workspace_id","page_title"],"color":"blue","required":["section_name"],"select_if":{"blank":["workspace_id"]},"desc":"Use this form to edit the properties of the link to a page section.","labels":{"workspace_id":"Workspace"},"image_text":[{"text":"link: %label","field":"label"},{"text":"link: %page_title (%section_name )","field":"page_title"},{"text":"link: %section_name","field":"default"}],"more_desc":"Optional properties include the text to display for the link, and the title of a different page.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{link: %workspace_id [%page_title] %section_name}","fields":["section_name","label","workspace_id","page_title"],"label":"Link to a Section","title":"Link to '$section_name' in '$page_title'. Click to edit."},"googlesoap":{"color":"saddlebrown","desc":"Display the results from a Google search. Use this form to edit the properties for the search.","image_text":[{"text":"Google: %search_term","field":"default"}],"labels":{"search_term":"Search for"},"field":"search_term","more_desc":"There are no optional properties for an Google search.","pattern":"{googlesoap: %search_term}","title":"Search Google for '$search_term'. Click to edit.","label":"Google Search"},"link1":{"checks":["require_page_if_workspace"],"parse":{"fields":["workspace_id","page_title","section_name"],"regexp":"?three-part-link","no_match":"section_name"},"primary_field":"workspace_id","pdfields":["label","section_name"],"color":"blue","required":["page_title","workspace_id"],"select_if":{"defined":["workspace_id"]},"desc":"Use this form to edit the properties of the link.","labels":{"workspace_id":"Other workspace"},"image_text":[{"text":"link: %label","field":"label"},{"text":"link: %page_title","field":"default"}],"more_desc":"Optional properties include the text to display for the link, and a target section within the linked page.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{link: %workspace_id [%page_title] %section_name}","fields":["workspace_id","page_title","label","section_name"],"label":"Inter-workspace link","title":"Link to '$page_title'. Click to edit."},"new_form_page":{"parse":{"regexp":"^\\s*(\\S+)\\s+(.+)\\s*$"},"on_menu":false,"color":"maroon","required":["form_name","form_text"],"desc":"Select a form and generates a new form page.","image_text":[{"text":"form: %form_name","field":"default"}],"more_desc":"There are no optional properties for a new form page.","pattern":"{new_form_page: %form_name %form_text}","fields":["form_name","form_text"],"title":"Use $form_name to generate a form. Click to edit.","label":"New Form Page"},"weblog":{"input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","weblog_name"],"regexp":"?workspace-value","no_match":"weblog_name"},"pdfields":["label","workspace_id"],"color":"purple","required":["weblog_name"],"desc":"Display a link to a weblog. Use this form to edit the properties of the link.","labels":{"workspace_id":"Weblog on"},"image_text":[{"text":"weblog: %label","field":"label"},{"text":"weblog: %weblog_name","field":"default"}],"more_desc":"Optional properties include link text, and the name of a different workspace for the weblog.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{weblog: %workspace_id; %weblog_name}","fields":["label","weblog_name","workspace_id"],"title":"Link to weblog '$weblog_name'. Click to edit.","label":"Weblog Link"},"fetchatom":{"color":"darkgreen","desc":"Display the content of an Atom feed. Use this form to edit the properties of the inline Atom feed.","image_text":[{"text":"feed: %atom_url","field":"default"}],"field":"atom_url","more_desc":"There are no optional properties for an Atom feed.","pattern":"{fetchatom: %atom_url}","label":"Inline Atom","title":"Include the '$atom_url' Atom feed. Click to edit."},"fetchrss":{"color":"orange","desc":"Display the content of an RSS feed. Use this form to edit the properties of the inline RSS feed.","image_text":[{"text":"feed: %rss_url","field":"default"}],"field":"rss_url","more_desc":"There are no optional properties for an RSS feed.","pattern":"{fetchrss: %rss_url}","label":"Inline RSS","title":"Include the '$rss_url' RSS feed. Click to edit."},"aim":{"required":["aim_id"],"desc":"Display a link to an AIM screen name. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.","markup":["bound_phrase","aim:",""],"image_text":[{"text":"AIM: %aim_id","field":"default"}],"field":"aim_id","more_desc":"There are no optional properties for an AIM link.","pattern":"aim:%aim_id","label":"AIM Link","title":"Instant message to '$aim_id' using AIM. Click to edit."},"image":{"checks":["require_page_if_workspace"],"input":{"workspace_id":"radio","page_title":"radio"},"parse":{"fields":["workspace_id","page_title","image_name"],"regexp":"?three-part-link","no_match":"image_name"},"pdfields":["workspace_id","page_title","label"],"color":"red","required":["image_name"],"desc":"Display an image on this page. The image must be already uploaded as an attachment to this page or another page. Use this form to edit the properties of the displayed image.","labels":{"workspace_id":"Page in","image_name":"Attachment filename","page_title":"Attached to"},"image_text":[{"text":"image: %label","field":"label"},{"text":"image: %image_name","field":"default"}],"more_desc":"Optional properties include the title of another page to which the image is attached, and link text. If link text is specified then a link to the image is displayed instead of the image.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{image: %workspace_id [%page_title] %image_name}","fields":["image_name","workspace_id","page_title","label"],"title":"Display image '$image_name'. Click to edit.","label":"Attached Image"},"skype":{"required":["skype_id"],"desc":"Display a link to a Skype name. Clicking the link will start a Skype call with the person if your Skype client is properly configured. Use this form to edit the properties of the link.","markup":["bound_phrase","skype:",""],"image_text":[{"text":"Skype: %skype_id","field":"default"}],"field":"skype_id","more_desc":"There are no optional properties for a Skype link.","pattern":"skype:%skype_id","label":"Skype Link","title":"Call '$skype_id' using Skype. Click to edit."},"sharepoint":{"color":"red","uneditable":true,"title":"Sharepoint link. Edit in advanced mode."},"asis":{"color":"darkslateblue","required":["asis_content"],"desc":"Include unformatted text in the page. This text will not be treated as wiki text. Use this form to edit the text.","markup":["bound_phrase","{{","}}"],"image_text":[{"text":"unformatted: %asis_content","field":"default"}],"field":"asis_content","more_desc":"There are no optional properties for unformatted text.","pattern":"{{%asis_content}}","label":"Unformatted","title":"Unformatted Content"}}};
+// BEGIN Wikiwyg/Widgets.js
+/*
+To Do:
+- Clicking on widget produces unwanted stretchy-handles.
+
+Refactor:
+
+*/
+
+Wikiwyg.is_ie7 = (
+    Wikiwyg.is_ie &&
+    Wikiwyg.ua.indexOf("7.0") != -1
+);
+Wikiwyg.Widgets.resolve_synonyms = function(widget) {
+    for (var ii in Wikiwyg.Widgets.synonyms) {
+        widget = widget.replace( new RegExp("^" + ii), Wikiwyg.Widgets.synonyms[ii]);
+    }
+    return widget;
+}
+
+Wikiwyg.Widgets.isMultiple = function(widget_id) {
+    var nameMatch = new RegExp(widget_id + '\\d+$');
+    for (var i = 0; i < Wikiwyg.Widgets.widgets.length; i++)
+        if (Wikiwyg.Widgets.widgets[i].match(nameMatch))
+            return true;
+    return false;
+}
+
+Wikiwyg.Widgets.getFirstMultiple = function(widget_id) {
+    var nameMatch = new RegExp(widget_id + '\\d+$');
+    for (var i = 0; i < Wikiwyg.Widgets.widgets.length; i++)
+        if (Wikiwyg.Widgets.widgets[i].match(nameMatch))
+            return Wikiwyg.Widgets.widgets[i];
+    return widget_id;
+}
+
+Wikiwyg.Widgets.mapMultipleSameWidgets = function(widget_parse) {
+    var id = widget_parse.id;
+    var strippedId = id.replace(/\d+$/, '');
+    var nameMatch = new RegExp(strippedId + '\\d+$');
+    var widgets_list = Wikiwyg.Widgets.widgets;
+    for (var i = 0; i < widgets_list.length; i++) {
+        var widget_name = widgets_list[i];
+        if (widget_name.match(nameMatch)) {
+            if (widget_data[widget_name].select_if) {
+                var match = true;
+                if (widget_data[widget_name].select_if.defined) {
+                    for (var k = 0; k < widget_data[widget_name].select_if.defined.length; k++) {
+                        if (!widget_parse[widget_data[widget_name].select_if.defined[k]])
+                            match = false;
+                    }
+                }
+                if (widget_data[widget_name].select_if.blank) {
+                    for (var k = 0; k < widget_data[widget_name].select_if.blank.length; k++) {
+                        if (widget_parse[widget_data[widget_name].select_if.blank[k]])
+                            match = false;
+                    }
+                }
+                if (match) {
+                    id = widget_name;
+                    break;
+                }
+            }
+        }
+    }
+
+    return id;
+}
+
+// Shortcut globals.
+Wikiwyg.Toolbar.Socialtext.prototype.setup_widgets = function() {
+    this.setup_widgets_pulldown('Insert...');
+}
+
+var widgets_list = Wikiwyg.Widgets.widgets;
+var widget_data = Wikiwyg.Widgets.widget;
+
+proto = eval(WW_SIMPLE_MODE).prototype;
+
+proto.enableThis = function() {
+    Wikiwyg.Mode.prototype.enableThis.call(this);
+    this.edit_iframe.style.border = '1px black solid';
+    this.edit_iframe.width = '100%';
+    this.setHeightOf(this.edit_iframe);
+    this.fix_up_relative_imgs();
+    this.get_edit_document().designMode = 'on';
+    this.apply_stylesheets();
+    this.enable_keybindings();
+    this.clear_inner_html();
+}
+
+proto.fromHtml = function(html) {
+    Wikiwyg.Wysiwyg.prototype.fromHtml.call(this, html);
+    try {
+        setTimeout(this.setWidgetHandlers.bind(this), 200);
+    } catch(e) { alert('bleh: ' + e) }
+}
+
+proto.toHtml = function(func) {
+    Wikiwyg.Wysiwyg.prototype.toHtml.call(this, func);
+    clearInterval( this._fixer_interval_id );
+    delete this._fixer_interval_id;
+
+    /*
+    if (Wikiwyg.is_ie7) {
+        clearInterval( this._white_page_fixer_interval_id );
+        delete this._white_page_fixer_interval_id;
+    }
+    */
+}
+
+proto.setWidgetHandlers = function() {
+    var imgs = this.get_edit_document().getElementsByTagName('img');
+    for (var ii = 0; ii < imgs.length; ii++) {
+        this.setWidgetHandler(imgs[ii]);
+    }
+    this.revert_widget_images();
+}
+
+proto.setWidgetHandler = function(img) {
+    var widget = img.getAttribute('widget');
+    if (! widget) return;
+    this.currentWidget = this.parseWidgetElement(img);
+    this.currentWidget = this.setTitleAndId(this.currentWidget);
+    this.attachTooltip(img);
+}
+
+proto.need_to_revert_widet = function(img) {
+    var style = img.getAttribute("style");
+    var has_style_attr = (typeof style == 'string')
+
+    if (   has_style_attr
+        || (img.getAttribute("mousedown") == 1)
+        || (img.getAttribute("mouseup") == 0)
+        || (img.getAttribute("mouseout") == 1)
+        || (img.getAttribute("mouseover") == 0)
+        || (img.getAttribute("src").match(/^\.\./))
+        ) {
+        return true;
+    }
+    return false;
+}
+
+proto.revert_widget_images = function() {
+    if ( this._fixer_interval_id ) {
+        return;
+    }
+    var self = this;
+    var fixer = function() {
+        var imgs = self.get_edit_document().getElementsByTagName('img');
+        for (var i=0; i < imgs.length; i++) {
+            var img = imgs[i];
+            if (!img.getAttribute("widget")) { continue; }
+            if (self.need_to_revert_widet(img)) {
+                /*
+                  This two height and width conditions is majorly for IE to revert
+                  the image size correctly.
+                */
+                if ( img.getAttribute("height") ) { img.style.height = img.getAttribute("height") }
+                if ( img.getAttribute("width") ) { img.removeAttribute("width"); }
+
+                img.removeAttribute("style");
+                img.removeAttribute("mouseup");
+                img.removeAttribute("mousedown");
+                img.removeAttribute("mouseover");
+                img.removeAttribute("mouseout");
+
+                self.attachWidgetHandlers(img);
+            }
+        }
+        self.reclaim_element_registry_space();
+    };
+    this._fixer_interval_id = setInterval(fixer, 500);
+
+    /*
+    if (Wikiwyg.is_ie7) {
+        this._white_page_fixer_interval_id = setInterval( function() {
+            self.get_edit_document().body.style.display="";
+            self.get_edit_document().body.style.display="block";
+        }, 10);
+    }
+    */
+}
+
+proto.sanitize_dom = function(dom) {
+    Wikiwyg.Wysiwyg.prototype.sanitize_dom.call(this, dom);
+    this.widget_walk(dom);
+}
+
+proto.attachTooltip = function(elem) {
+    if (elem.getAttribute("title"))
+        return;
+
+    var title = (typeof widget_data[this.currentWidget.id].title == "object")
+      ? this.currentWidget.full
+        ? widget_data[this.currentWidget.id].title.full
+        : widget_data[this.currentWidget.id].title['default']
+      : widget_data[this.currentWidget.id].title;
+
+    var self = this;
+    title = title.replace(/\$(\w+)/g, function() {
+        var text = self.currentWidget[arguments[1]];
+        if (text == '') {
+            if (arguments[1] == 'page_title')
+                text = Page.page_title;
+            else if (arguments[1] == 'workspace_id')
+                text = Page.wiki_title;
+        }
+        return text;
+    });
+    elem.setAttribute("title", title);
+
+    this.attachWidgetHandlers(elem);
+}
+
+proto.attachWidgetHandlers = function(elem) {
+    if ( !this.element_registry_push(elem) ) {
+        return;
+    }
+
+    var self = this;
+    DOM.Events.addListener(elem, 'mouseover', function(e) {
+        e.target.setAttribute("mouseover", 1);
+        e.target.setAttribute("mouseout", 0);
+    });
+    DOM.Events.addListener(elem, 'mouseout', function(e) {
+        e.target.setAttribute("mouseover", 0);
+        e.target.setAttribute("mouseout", 1);
+    });
+
+    DOM.Events.addListener(elem, 'mousedown', function(e) {
+        e.target.setAttribute("mousedown", 1);
+        e.target.setAttribute("mouseup", 0);
+    });
+
+    var id = this.currentWidget.id;
+    if (widget_data[id] && widget_data[id].uneditable) {
+        DOM.Events.addListener(elem, 'mouseup', function(e) {
+            e.target.setAttribute("mousedown", 0);
+            if ( e.target.getAttribute("mouseup") == 0 ) {
+                if ( Wikiwyg.Widgets.widget_editing > 0 )
+                    return;
+                alert("This is not an editable widget. Please edit it in advanced mode.")
+            }
+            e.target.setAttribute("mouseup", 1);
+        });
+    }
+    else {
+        DOM.Events.addListener(elem, 'mouseup', function(e) {
+            e.target.setAttribute("mousedown", 0);
+            if ( e.target.getAttribute("mouseup") == 0 ) {
+                if ( Wikiwyg.Widgets.widget_editing > 0 )
+                    return;
+                self.getWidgetInput(e.target, false, false);
+            }
+            e.target.setAttribute("mouseup", 1);
+        });
+    }
+}
+
+var wikiwyg_widgets_element_registry = new Array();
+proto.reclaim_element_registry_space = function() {
+    var imgs = this.get_edit_document().getElementsByTagName('img');
+    for(var i = 0; i < wikiwyg_widgets_element_registry.length; i++ ) {
+        var found = false;
+        for (var j = 0; j < imgs.length; j++) {
+            var img = imgs[j];
+            if (!img.getAttribute("widget")) { continue; }
+            if (wikiwyg_widgets_element_registry[i] == img) {
+                found = true;
+                break;
+            }
+        }
+        if ( !found ) {
+            delete wikiwyg_widgets_element_registry[i]
+        }
+    }
+    wikiwyg_widgets_element_registry = wikiwyg_widgets_element_registry.compact();
+}
+
+proto.element_registry_push = function(elem) {
+    var flag = 0;
+    wikiwyg_widgets_element_registry.each(function(i) {
+        if (i == elem) {
+            flag++;
+        }
+    });
+    if ( flag > 0 ) { return false; }
+    wikiwyg_widgets_element_registry.push(elem)
+    return true;
+}
+
+var wikiwyg_widgets_title_lookup = {
+};
+
+proto.titleInLoopup = function (field, id) {
+    if (field in wikiwyg_widgets_title_lookup)
+        if (id in wikiwyg_widgets_title_lookup[field])
+            return wikiwyg_widgets_title_lookup[field][id];
+    return '';
+}
+
+proto.pullTitleFromServer = function (field, id, data) {
+    var uri = Wikiwyg.Widgets.api_for_title[field];
+    uri = uri.replace(new RegExp(":" + field), id);
+
+    var request = new Ajax.Request (
+        uri,
+        {
+            method: 'GET',
+            asynchronous: false,
+            requestHeaders: ['Accept','application/json']
+        }
+    );
+    if (request.transport.status == 404)
+        return id;
+    else {
+        var details = JSON.parse(request.transport.responseText);
+        if (!(field in wikiwyg_widgets_title_lookup))
+            wikiwyg_widgets_title_lookup[field] = {};
+        wikiwyg_widgets_title_lookup[field][id] = details.title;
+
+        return details.title;
+    }
+}
+
+proto.setTitleAndId = function (widget) {
+    var widgetDefinition = widget_data[widget.id];
+    var fields = widgetDefinition.fields || [widgetDefinition.field];
+
+    for (var i=0; i < fields.length; i++) {
+        var field = fields[i];
+        if (Wikiwyg.Widgets.api_for_title[field]) {
+            if (!widget.title_and_id) {
+                widget.title_and_id = {};
+            }
+            if (!widget.title_and_id[field]) {
+                widget.title_and_id[field] = {id: '', title: ''};
+            }
+            if (widget[field]) {
+                var title = this.titleInLoopup(field, widget[field]);
+                if (!title)
+                    title = this.pullTitleFromServer(field, widget[field]);
+                widget.title_and_id[field].id = widget[field];
+                widget.title_and_id[field].title = title;
+            }
+        }
+    }
+
+    return widget;
+}
+
+proto.parseWidgetElement = function(element) {
+    return this.parseWidget(element.getAttribute('widget'));
+}
+
+proto.parseWidget = function(widget) {
+    var matches;
+
+    if ((matches = widget.match(/^(aim|yahoo|ymsgr|skype|callme|callto|http|asap|irc|file|ftp|https):([\s\S]*?)\s*$/)) ||
+        (matches = widget.match(/^\{(\{(.+)\})\}$/)) || // AS-IS
+        (matches = widget.match(/^"(.+?)"<(.+?)>$/)) || // Named Links
+        (matches = widget.match(/^(?:"(.*)")?\{(\w+):?\s*([\s\S]*?)\s*\}$/)) ||
+        (matches = widget.match(/^\.(\w+)\s*?\n([\s\S]*?)\1\s*?$/))
+    ) {
+        var widget_id = matches[1];
+        var full = false;
+        var args = matches[2];
+
+        var widget_label;
+        if ( matches.length == 4 ) {
+            widget_label = matches[1];
+            widget_id = matches[2];
+            args = matches[3];
+        }
+
+        if ( widget_id.match(/^\{/) ) {
+            widget_id = "asis";
+        }
+
+        widget_id = Wikiwyg.Widgets.resolve_synonyms(widget_id);
+
+        if (widget_id.match(/^(.*)_full$/)) {
+            var widget_id = RegExp.$1;
+            var full = true;
+        }
+
+        // Since multiple versions of the same widget have the same wafl
+        // structure we can use the parser for any version. Might as well be the first.
+        var isAMultipleWidget = Wikiwyg.Widgets.isMultiple(widget_id);
+        if (isAMultipleWidget) {
+            widget_id = Wikiwyg.Widgets.getFirstMultiple(widget_id);
+        }
+
+        var widget_parse;
+        if (this['parse_widget_' + widget_id]) {
+            widget_parse = this['parse_widget_' + widget_id](args);
+            widget_parse.id = widget_id;
+        }
+        else if (widget_data[widget_id]) {
+            widget_parse = {};
+            widget_parse.id = widget_id;
+        }
+        else {
+            widget_parse = {};
+            widget_parse.id = 'unknown';
+            widget_parse.unknown_id = widget_id;
+        }
+
+        widget_parse.full = full;
+        widget_parse.widget = widget;
+        if (widget_label)
+            widget_parse.label = widget_label;
+
+        if (isAMultipleWidget) {
+            var previousId = widget_parse.id;
+            widget_parse.id = Wikiwyg.Widgets.mapMultipleSameWidgets(widget_parse);
+            if (widget_parse.id != previousId && this['parse_widget_' + widget_parse.widget_id]) {
+                widget_parse = this['parse_widget_' + widget_parse.id](args);
+                widget_parse.id = widget_id;
+            }
+        }
+
+        return widget_parse;
+    }
+    else
+        throw('Unexpected Widget >>' + widget + '<< in parseWidget');
+}
+
+for (var i = 0; i < widgets_list.length; i++) {
+    var gen_widget_parser = function(data) {
+        return function(widget_args) {
+            var widget_parse = {};
+            if (data.fields) {
+                for (var i = 0; i < data.fields.length; i++) {
+                    widget_parse[ data.fields[i] ] = '';
+                }
+            }
+            else if (data.field) {
+                widget_parse[ data.field ] = '';
+            }
+            if (! widget_args.match(/\S/)) {
+                return widget_parse;
+            }
+
+            if (! (data.field || data.parse)) {
+                data.field = data.fields[0];
+            }
+
+            if (data.field) {
+                widget_parse[ data.field ] = widget_args;
+                return widget_parse;
+            }
+
+            var widgetFields = data.parse.fields || data.fields;
+            var regexp = data.parse.regexp;
+            var regexp2 = regexp.replace(/^\?/, '');
+            if (regexp != regexp2)
+                regexp = Wikiwyg.Widgets.regexps[regexp2];
+            var tokens = widget_args.match(regexp);
+            if (tokens) {
+                for (var i = 0; i < widgetFields.length; i++)
+                    widget_parse[ widgetFields[i] ] = tokens[i+1];
+            }
+            else {
+                if (data.parse.no_match)
+                    widget_parse[ data.parse.no_match ] = widget_args;
+            }
+            if (widget_parse.search_term) {
+                var term = widget_parse.search_term;
+                var term2 = term.replace(/^(category|title):/, '');
+                if (term == term2) {
+                    widget_parse.search_type = 'text';
+                }
+                else {
+                    widget_parse.search_type = RegExp.$1;
+                    widget_parse.search_term = term2;
+                }
+            }
+            return widget_parse;
+        }
+    }
+
+    var gen_do_widget = function(w) {
+        return function() {
+            try {
+                this.currentWidget = this.parseWidget('{' + w + ': }');
+                this.currentWidget = this.setTitleAndId(this.currentWidget);
+                var selection = this.get_selection_text();
+                selection = selection.replace(/\\s+$/,'');
+                this.getWidgetInput(this.currentWidget, selection, true);
+            } catch (E) {
+                // ignore error from parseWidget
+            }
+        }
+    };
+
+    var widget = widgets_list[i];
+    proto['parse_widget_' + widget] = gen_widget_parser(widget_data[widget]);
+    proto['do_widget_' + widget] = gen_do_widget(widget);
+}
+
+proto.widget_walk = function(elem) {
+    for (var part = elem.firstChild; part; part = part.nextSibling) {
+        if (part.nodeType != 1) continue;
+        if (part.nodeName == 'SPAN' || part.nodeName == 'DIV') {
+            var name = part.className;
+            if (name && name.match(/(nlw_phrase|wafl_block)/)) {
+                part = this.replace_widget(part);
+            }
+        }
+        this.widget_walk(part);
+    }
+}
+
+proto.replace_widget = function(elem) {
+    var comment = elem.lastChild;
+    if (comment.nodeType != 8) return;
+    if (! comment.nodeValue.match(/^\s*wiki:/)) return;
+    var widget = comment.nodeValue.replace(/^\s*wiki:\s*([\s\S]*?)\s*$/, '$1');
+    widget = widget.replace(/-=/g, '-');
+
+    var widget_image = Wikiwyg.createElementWithAttrs('img',
+        {
+            'src': this.getWidgetImageUrl(widget),
+            'widget': widget
+        }
+    );
+    elem.parentNode.replaceChild(widget_image, elem);
+    return widget_image;
+}
+
+proto.insert_widget = function(widget, widget_element) {
+    var html = '<img src="' + this.getWidgetImageUrl(widget) +
+        '" widget="' + widget.replace(/"/g,"&quot;") + '" />';
+
+    var self = this;
+    var docbody = this.get_edit_document().body;
+
+    var changer = function() {
+        try {
+            if ( widget_element ) {
+                if ( widget_element.parentNode ) {
+                    var div = self.get_edit_document().createElement("div");
+                    div.innerHTML = html;
+                    widget_element.parentNode.replaceChild(div.firstChild, widget_element);
+                }
+                else {
+                    self.insert_html(html);
+                }
+            }
+            else {
+                self.insert_html(html);
+            }
+            self.setWidgetHandlers();
+        }
+        catch(e) {
+            setTimeout(changer, 100);
+        }
+    }
+
+    this.get_edit_window().focus();
+    docbody.focus();
+    changer();
+}
+
+proto.getWidgetImageText = function(widget_text) {
+    var text = widget_text;
+    try {
+        var widget = this.parseWidget(widget_text);
+
+        // XXX Hack for html block. Should key off of 'uneditable' flag.
+        if (widget_text.match(/^\.html/))
+            text = widget_data.html.title;
+        else if (widget.id && widget_data[widget.id].image_text) {
+            for (var i=0; i < widget_data[widget.id].image_text.length; i++) {
+                if (widget_data[widget.id].image_text[i].field == 'default') {
+                    text = widget_data[widget.id].image_text[i].text;
+                    break;
+                }
+                else if (widget[widget_data[widget.id].image_text[i].field]) {
+                    text = widget_data[widget.id].image_text[i].text;
+                    break;
+                }
+            }
+        }
+
+        var fields = text.match(new RegExp('%\\S+', 'g'));
+        if (fields)
+            for (var i=0; i < fields.length; i++) {
+                var field = fields[i].slice(1);
+                if (widget[field])
+                    text = text.replace(new RegExp('%' + field), widget[field]);
+                else
+                    text = text.replace(new RegExp('%' + field), '');
+            }
+    }
+    catch (E) {
+        // parseWidget can throw an error
+        // Just ignore and set the text to be the widget text
+    }
+
+    return text;
+}
+
+proto.getWidgetImageUrl = function(widget_text) {
+    var md5 = MD5(this.getWidgetImageText(widget_text));
+    var url = nlw_make_static_path('/images/widgets/' + md5 + '.png');
+    return url;
+}
+
+proto.create_wafl_string = function(widget, form) {
+    var data = widget_data[widget];
+    var result = data.pattern || '{' + widget + ': %s}';
+
+    var fields =
+        data.field ? [ data.field ] :
+        data.fields ? data.fields :
+        [];
+    var values = this.form_values(widget, form);
+    for (var j = 0; j < fields.length; j++) {
+        var token = new RegExp('%' + fields[j]);
+        result = result.replace(token, values[fields[j]]);
+    }
+
+    result = result.
+        replace(/^\"\s*\"/, '').
+        replace(/\[\s*\]/, '').
+        replace(/\<\s*\>/, '').
+        replace(/\s;\s/, ' ').
+        replace(/\s\s+/g, ' ').
+        replace(/^\{(\w+)\: \}$/,'{$1}');
+    if (values.full)
+        result = result.replace(/^(\{\w+)/, '$1_full');
+    return result;
+}
+
+for (var i = 0; i < widgets_list.length; i++) {
+    var widget = widgets_list[i];
+    var gen_handle = function(widget) {
+        return function(form) {
+            var values = this.form_values(widget, form);
+            this.validate_fields(widget, values);
+            return this.create_wafl_string(widget, form);
+        };
+    };
+    proto['handle_widget_' + widget] = gen_handle(widget);
+}
+
+proto.form_values = function(widget, form) {
+    var data = widget_data[widget];
+    var fields =
+        data.field ? [ data.field ] :
+        data.fields ? data.fields :
+        [];
+    var values = {};
+
+    for (var i = 0; i < fields.length; i++) {
+        var value = '';
+
+        if (this.currentWidget.title_and_id && this.currentWidget.title_and_id[fields[i]] && this.currentWidget.title_and_id[fields[i]].id)
+            value = this.currentWidget.title_and_id[fields[i]].id;
+        else
+            value = form[fields[i]].value.
+                replace(/^\s*/, '').
+                replace(/\s*$/, '');
+        if (form['st-widget-' + fields[i] + '-rb']) {
+            var whichValue = ST.getRadioValue('st-widget-' + fields[i] + '-rb');
+            if (whichValue == 'current') {
+                value = '';
+            }
+        }
+        values[fields[i]] = value;
+    }
+    if (values.label) {
+        values.label = values.label.replace(/^"*/, '').replace(/"*$/, '');
+    }
+    if (values.search_term) {
+        var type = this.get_radio(form.search_type);
+        if (type && type.value != 'text')
+            values.search_term = type.value + ':' + values.search_term;
+    }
+    values.full = (form.full && form.full.checked);
+
+    return values;
+}
+
+proto.get_radio = function(elem) {
+    if (!(elem && elem.length)) return;
+    for (var i = 0; i <= elem.length; i++) {
+        if (elem[i].checked)
+            return elem[i];
+    }
+}
+
+proto.validate_fields = function(widget, values) {
+    var data = widget_data[widget];
+    var required = data.required || (data.field ? [data.field] : null);
+    if (required) {
+        for (var i = 0; i < required.length; i++) {
+            var field = required[i];
+            if (! values[field].length) {
+                var label = Wikiwyg.Widgets.fields[field];
+                throw("'" + label + "' is a required field");
+            }
+        }
+    }
+
+    var require = data.require_one;
+    if (require) {
+        var found = 0;
+        labels = [];
+        for (var i = 0; i < require.length; i++) {
+            var field = require[i];
+            labels.push(Wikiwyg.Widgets.fields[field]);
+            if (values[field].length)
+                found++;
+        }
+        if (! found)
+            throw("Requires one of: " + labels.join(', '));
+    }
+
+    for (var field in values) {
+        var regexp = Wikiwyg.Widgets.match[field];
+        if (! regexp) continue;
+        if (! values[field].length) continue;
+        var fieldOk = true;
+        if (this.currentWidget.title_and_id && this.currentWidget.title_and_id[field])
+            fieldOk = this.currentWidget.title_and_id[field].id.match(regexp);
+        else
+            fieldOk = values[field].match(regexp);
+
+        if (!fieldOk) {
+            var label = Wikiwyg.Widgets.fields[field];
+            throw("'" + label + "' has an invalid value");
+        }
+    }
+
+    var checks = data.checks;
+    if (checks) {
+        for (var i = 0; i < checks.length; i++) {
+            var check = checks[i];
+            this[check].call(this, values);
+        }
+    }
+}
+
+proto.require_page_if_workspace = function(values) {
+    if (values.workspace_id.length && ! values.page_title.length)
+        throw("Page Title required if Workspace Id specified");
+}
+
+proto.hookLookaheads = function(dialog) {
+    var cssSugestionWindow = 'st-widget-lookaheadsuggestionwindow';
+    var cssSuggestionBlock = 'st-widget-lookaheadsuggestionblock';
+    var cssSuggestionText = 'st-widget-lookaheadsuggestion';
+
+    if ($('st-widget-workspace_id')) {
+        window.workspaceLookahead = new WorkspaceLookahead(
+            dialog,
+            'st-widget-workspace_id',
+            cssSugestionWindow,
+            cssSuggestionBlock,
+            cssSuggestionText,
+            'workspaceLookahead',
+            this.currentWidget
+        );
+    }
+
+    if ($('st-widget-page_title')) {
+        window.pageLookahead = new PageNameLookahead(
+            dialog,
+            'st-widget-page_title',
+            cssSugestionWindow,
+            cssSuggestionBlock,
+            cssSuggestionText,
+            'pageLookahead',
+            this.currentWidget
+        );
+        window.pageLookahead.defaultWorkspace = Socialtext.wiki_id;
+    }
+
+    if ($('st-widget-tag_name')) {
+        window.tagLookahead = new TagLookahead(
+            dialog,
+            'st-widget-tag_name',
+            cssSugestionWindow,
+            cssSuggestionBlock,
+            cssSuggestionText,
+            'tagLookahead',
+            this.currentWidget
+        );
+        window.tagLookahead.defaultWorkspace = Socialtext.wiki_id;
+    }
+
+    if ($('st-widget-weblog_name')) {
+        window.weblogLookahead = new WeblogLookahead(
+            dialog,
+            'st-widget-weblog_name',
+            cssSugestionWindow,
+            cssSuggestionBlock,
+            cssSuggestionText,
+            'weblogLookahead',
+            this.currentWidget
+        );
+        window.weblogLookahead.defaultWorkspace = Socialtext.wiki_id;
+    }
+
+    if ($('st-widget-section_name')) {
+        window.sectionNameLookahead = new PageSectionLookahead(
+            dialog,
+            'st-widget-section_name',
+            cssSugestionWindow,
+            cssSuggestionBlock,
+            cssSuggestionText,
+            'sectionNameLookahead',
+            this.currentWidget,
+            'st-widget-page_title'
+        );
+        window.sectionNameLookahead.defaultWorkspace = Socialtext.wiki_id;
+        window.sectionNameLookahead.defaultPagename = $('st-page-editing-pagename').value;
+    }
+
+    if ($('st-widget-image_name')) {
+        window.imageNameLookahead = new PageAttachmentLookahead(
+            dialog,
+            'st-widget-image_name',
+            cssSugestionWindow,
+            cssSuggestionBlock,
+            cssSuggestionText,
+            'imageNameLookahead',
+            widget,
+            'st-widget-page_title'
+        );
+        window.imageNameLookahead.defaultWorkspace = Socialtext.wiki_id;
+        window.imageNameLookahead.defaultPagename = $('st-page-editing-pagename').value;
+    }
+
+    if ($('st-widget-file_name')) {
+        window.fileNameLookahead = new PageAttachmentLookahead(
+            dialog,
+            'st-widget-file_name',
+            cssSugestionWindow,
+            cssSuggestionBlock,
+            cssSuggestionText,
+            'fileNameLookahead',
+            widget,
+            'st-widget-page_title'
+        );
+        window.fileNameLookahead.defaultWorkspace = Socialtext.wiki_id;
+        window.fileNameLookahead.defaultPagename = $('st-page-editing-pagename').value;
+    }
+}
+
+Wikiwyg.Widgets.widget_editing = 0;
+
+proto.getWidgetInput = function(widget_element, selection, new_widget) {
+    if ( Wikiwyg.Widgets.widget_editing > 0 )
+        return;
+    Wikiwyg.Widgets.widget_editing++;
+
+    if ( widget_element.nodeName ) {
+        this.currentWidget = this.parseWidgetElement(widget_element);
+        this.currentWidget = this.setTitleAndId(this.currentWidget);
+        this.currentWidget.element = widget_element;
+    }
+    else {
+        this.currentWidget = widget_element;
+    }
+
+    var widget = this.currentWidget.id;
+
+    var template = 'widget_' + widget + '_edit.html';
+    var html = Jemplate.process(template, this.currentWidget);
+
+    var box = new Widget.Lightbox({contentClassName: 'jsan-widget-lightbox-content-wrapper', wrapperClassName: 'st-lightbox-dialog'});
+    box.content( html );
+    box.effects('RoundedCorners');
+    box.create();
+
+    this.hookLookaheads(box.divs.contentWrapper);
+
+    var self = this;
+    // XXX - Had to resort to this because we couldn't figure out how to
+    // inspect which button got clicked. Possibly refactor.
+    var callback = function(element) {
+        if (Wikiwyg.is_ie) {
+            wikiwyg.toolbarObject.styleSelect.style.display="none"
+        }
+
+        var form = element.getElementsByTagName('form')[0];
+
+        var onreset = function() {
+            clearInterval(intervalId);
+            box.releaseFocus();
+            box.release();
+            Wikiwyg.Widgets.widget_editing--;
+            return false;
+        }
+        var onsubmit = function() {
+            var error = null;
+            try {
+                var widget_string = self['handle_widget_' + widget](form);
+                var widget_text = self.getWidgetImageText(widget_string);
+                clearInterval(intervalId);
+                Ajax.post(
+                    location.pathname,
+                    'action=wikiwyg_generate_widget_image;' +
+                    'widget=' + encodeURIComponent(widget_text) +
+                    ';widget_string=' + encodeURIComponent(widget_string),
+                    function() {
+                        self.insert_widget(widget_string, widget_element);
+                        box.release();
+                        if (Wikiwyg.is_ie)
+                            wikiwyg.toolbarObject.styleSelect.style.display = "";
+                    }
+                );
+            }
+            catch(e) {
+                error = String(e);
+                var div = document.getElementById(
+                    widget + '_widget_edit_error_msg'
+                );
+                if (div) {
+                    div.style.display = 'block';
+                    div.innerHTML = '<span>' + error + '</span>';
+                }
+                else {
+                    alert(error);
+                }
+                if (Wikiwyg.is_ie)
+                    wikiwyg.toolbarObject.styleSelect.style.display = "";
+                Wikiwyg.Widgets.widget_editing--;
+                return false;
+            }
+            Wikiwyg.Widgets.widget_editing--;
+            return false;
+        }
+        var i = 0;
+        var set_wafl_text = function() {
+            var td = document.getElementById(widget + '_wafl_text');
+            if (td) {
+                var t =
+                    ' <span>' +
+                    self.create_wafl_string(widget, form).
+                        replace(/</g, '&lt;') +
+                    '</span> ';
+                td.innerHTML = t;
+            }
+        }
+
+        form.onreset = onreset;
+        form.onsubmit = onsubmit;
+
+        box.restrictFocus(form);
+
+        var data = widget_data[widget];
+        var primary_field =
+            data.primary_field ||
+            data.field ||
+            (data.required && data.required[0]) ||
+            data.fields[data.fields.length - 1];
+        if (new_widget && selection) {
+            selection = selection.replace(
+                /^<DIV class=wiki>([^\n]*?)(?:&nbsp;)*<\/DIV>$/mg, '$1'
+            ).replace(
+                /<DIV class=wiki>\r?\n<P><\/P><BR>([\s\S]*?)<\/DIV>/g, '$1'
+            ).replace(/<BR>/g,'');
+
+            form[primary_field].value = selection;
+        }
+
+        setTimeout(function() {try {form[primary_field].focus()} catch(e) {}}, 100);
+        var intervalId = setInterval(set_wafl_text.bind(this), 500);
+    }
+
+    box.show(callback);
+}
+
+Widget.Lightbox.prototype.restrictFocus = function(form) {
+    this._focusd_form = form;
+
+    // Need to get a list of any tag that can get focus: e.g. input and anchors
+    var inputs = new Array(form.getElementsByTagName("input"));
+    inputs.concat(form.getElementsByTagName("a"));
+
+    var focused = false ;
+    var total_fields = inputs.length;
+
+    for( var ii=0; ii < inputs.length; ii++ ) {
+        inputs[ii].onfocus = function() {
+            focused = true;
+        };
+        inputs[ii].onblur = function(idx) {
+            return function(e) {
+                focused = false;
+                setTimeout( function() {
+                    // XXX Need to check for visible fields
+                    if ( !focused ) {
+                        inputs[idx].focus();
+                    }
+                }, 30);
+            }
+        }(ii);
+    }
+}
+
+Widget.Lightbox.prototype.releaseFocus = function(form){
+    if ( !form ) form = this._focusd_form;
+    if ( !form ) return;
+    var inputs = form.getElementsByTagName("input");
+    for( var ii=0; ii < inputs.length; ii++ ) {
+        var _ = inputs[ii];
+        _.onfocus = function() {};
+        _.onblur  = function() {};
+    }
+}
+
+Widget.Lightbox.prototype.applyHandlers = function(){
+    if(!this.div)
+        return;
+
+    var self = this;
+    if (Widget.Lightbox.is_ie) {
+        DOM.Events.addListener(window, "resize", function () {
+            self.applyStyle();
+        });
+    }
+
+    if ($('st-widgets-moreoptions')) {
+        DOM.Events.addListener(document.getElementById('st-widgets-moreoptions'), 'click', function () {
+            self.toggleOptions();
+        });
+    }
+}
+
+Widget.Lightbox.prototype.toggleOptions = function() {
+    var link = document.getElementById('st-widgets-moreoptions');
+    var panel = document.getElementById('st-widgets-moreoptionspanel');
+    var icon = document.getElementById('st-widgets-optionsicon');
+    if (panel) {
+        if (link.innerHTML == 'More options') {
+            panel.style.display = "block";
+            link.innerHTML = 'Fewer options';
+            icon.src = nlw_make_static_path('/images/st/hide_more.gif');
+        }
+        else {
+            panel.style.display = "none";
+            link.innerHTML = 'More options';
+            icon.src = nlw_make_static_path('/images/st/show_more.gif');
+        }
+    }
+}
+
+Widget.Lightbox.prototype.release = function() {
+    /**
+     * What we would prefer to do is remove the entire lighbox from the DOM
+     * but IE does not handle the delete well. So, instead, we delete everything
+     * inside the wrapper. That way we get rid of the controls that- have unique
+     * IDs so the rest of the code will work properly.
+     */
+    this.div.removeChild(this.divs.contentWrapper);
+    this.div.removeChild(this.divs.background);
+    this.hide();
+}
+
+Widget.Lightbox.prototype.hide = function() {
+    if (!this.div.parentNode) return;
+    this.div.style.display="none";
+    if (Widget.Lightbox.is_ie) {
+        document.body.scroll="yes"
+    }
+    this.releaseFocus();
+
+    if (Wikiwyg.is_ie) {
+        wikiwyg.toolbarObject.styleSelect.style.display=""
+    }
+}
+
+eval(WW_ADVANCED_MODE).prototype.setup_widgets = function() {
+    var widgets_list = Wikiwyg.Widgets.widgets;
+    var widget_data = Wikiwyg.Widgets.widget;
+    var p = eval(this.classname).prototype;
+    for (var i = 0; i < widgets_list.length; i++) {
+        var widget = widgets_list[i];
+        p.markupRules['widget_' + widget] =
+            widget_data[widget].markup ||
+            ['bound_phrase', '{' + widget + ': ', '}'];
+        p['do_widget_' + widget] = Wikiwyg.Wikitext.make_do('widget_' + widget);
+    }
+}
+
+proto = eval(WW_ADVANCED_MODE).prototype;
+
+proto.format_img = function(element) {
+    var widget = element.getAttribute('widget');
+    if (! widget) {
+        return Wikiwyg.Wikitext.prototype.format_img.call(this, element);
+    }
+
+    if ( widget.match(/^\{include/) ) {
+        this.treat_include_wafl(element);
+    } else if ( widget.match(/^\.\w+\n/) ) {
+        this.assert_blank_line();
+    } else {
+        this.assert_space_or_newline();
+    }
+
+    widget = widget.replace(/-=/g, '-').replace(/==/g,'=').replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+    this.appendOutput(widget);
+    this.smart_trailing_space(element);
+}
+
+proto.format_a = function(element) {
+    if (this.is_opaque(element))
+        return this.handle_wafl_block(element);
+
+    Wikiwyg.Wikitext.prototype.format_a.call(this, element);
+}
+
+proto.format_div = function(element) {
+    if (this.is_opaque(element))
+        return this.handle_wafl_block(element);
+
+    Wikiwyg.Wikitext.prototype.format_div.call(this, element);
+}
+
+proto.destroyPhraseMarkup = function(element) {
+    if (this.contain_widget_image(element))
+        return false;
+    if (this.start_is_no_good(element) || this.end_is_no_good(element)) {
+        return this.destroyElement(element);
+    }
+    return false;
+}
+
+proto.contain_widget_image = function(element) {
+    for(var ii = 0; ii < element.childNodes.length; ii++ ) {
+        var e = element.childNodes[ii]
+        if ( e.nodeType == 1 ) {
+            if ( e.nodeName == 'IMG' ) {
+                if ( e.getAttribute("widget") )
+                    return true;
+            }
+        }
+    }
+}
+
+proto.treat_include_wafl = function(element) {
+    // Note: element should be a <span> or an <img>
+
+    if ( element.nodeType != 1 )
+        return;
+
+    if ( element.nodeName == 'SPAN' ) {
+        var inner = element.innerHTML;
+        if(!inner.match(/<!-- wiki: \{include: \[.+\]\} -->/)) {
+            return;
+        }
+    }
+    else if ( element.nodeName == 'IMG' ) {
+        var widget = element.getAttribute("widget");
+        if (!widget.match(/^\{include/))
+            return;
+    }
+
+    // If this is a {include} widget, we squeeze
+    // whitepsaces before and after it. Becuase
+    // {include} is supposed to be in a <p> of it's own.
+    // If user type "{include: Page} Bar", that leaves
+    // an extra space in <p>.
+
+    var next = element.nextSibling;
+    if (next && next.tagName &&
+            next.tagName.toLowerCase() == 'p') {
+        next.innerHTML = next.innerHTML.replace(/^ +/,"");
+    }
+
+    var prev = element.previousSibling;
+    if (prev
+        && prev.tagName
+        && prev.tagName.toLowerCase() == 'p') {
+        if (prev.innerHTML.match(/^[ \n\t]+$/)) {
+            // format_p is already called, so it's too late
+            // to do this:
+            //     prev.parentNode.removeChild( prev );
+
+            // Remove two blank lines for it's the output
+            // of an empty <p>
+            var line1 = this.output.pop();
+            var line2 = this.output.pop();
+            // But if they are not newline, put them back
+            // beause we don't want to mass around there.
+            if ( line1 != "\n" || line2 != "\n" ) {
+                this.output.push(line2);
+                this.output.push(line1);
+            }
+        }
+    }
+}
+
+proto.handle_bound_phrase = function(element, markup) {
+    if (! this.element_has_only_image_content(element) )
+        if (! this.element_has_text_content(element))
+            return;
+
+    if (element.innerHTML.match(/^\s*<br\s*\/?\s*>/)) {
+        this.appendOutput("\n");
+        element.innerHTML = element.innerHTML.replace(/^\s*<br\s*\/?\s*>/, '');
+    }
+    this.appendOutput(markup[1]);
+    this.no_following_whitespace();
+    this.walk(element);
+    this.appendOutput(markup[2]);
+}
+
+proto.markup_bound_phrase = function(markup_array) {
+    var markup_start = markup_array[1];
+    markup_start = markup_start.replace(/\d+: $/, ': ');
+    var markup_finish = markup_array[2];
+    var scroll_top = this.area.scrollTop;
+    if (markup_finish == 'undefined')
+        markup_finish = markup_start;
+    if (this.get_words())
+        this.add_markup_words(markup_start, markup_finish, null);
+    this.area.scrollTop = scroll_top;
+}
 // BEGIN Wikiwyg/DataValidator.js
 proto = new Subclass('Wikiwyg.DataValidator');
 

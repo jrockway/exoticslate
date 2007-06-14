@@ -2,6 +2,7 @@
 <div id="[% ns %]">
     <form onsubmit="return false;">
     <div id="[% ns %]-overlay" class="popup-overlay"></div>
+    <div>
     <div id="[% ns %]-interface">
         <div id="[% ns %]-title">Page Already Exists</div>
         <p class="[% ns %]-prompt">There is <span id="st-newpage-duplicate-emphasis">already a page</span> named <a id="[% ns %]-link" href="#" target="">XXX</a>. Would you like to:</p>
@@ -16,6 +17,7 @@
             </tr>
             </table>
         </div>
+    </div>
     </div>
     </form>
 </div>

@@ -1,3 +1,78 @@
+// namespace placeholder
+if (typeof ST == 'undefined') {
+    ST = {};
+}
+
+ST.isRelative = function(node) {
+    return node.style.position == 'relative' || node.style.position == 'absolute' || node.style.position == 'fixed';
+}
+
+ST.getRadioValue = function(name) {
+    var nodes = document.getElementsByName(name);
+    for (var i=0; i < nodes.length; i++)
+        if (nodes[i].checked)
+            return nodes[i].value;
+    return '';
+}
+
+ST.setRadioValue = function(name, value) {
+    var nodes = document.getElementsByName(name);
+    for (var i=0; i < nodes.length; i++) {
+        if (nodes[i].value == value) {
+            nodes[i].checked = true;
+            return;
+        }
+    }
+}
+
+// Function from Javascript: The Definitive Guide
+ST.getDocumentX = function(e, is_relative) {
+    var x = 0;
+    while (e) {
+        x+= e.offsetLeft;
+        e = e.offsetParent;
+        if (e && is_relative && ST.isRelative(e))
+            e = null;
+    }
+    return x;
+}
+
+ST.getDocumentY = function(e, is_relative) {
+    var y = 0;
+    while (e) {
+        y += e.offsetTop;
+        e = e.offsetParent;
+        if (e && is_relative && ST.isRelative(e))
+            e = null;
+    }
+    return y;
+}
+
+/**
+ * A function used to extend one class with another
+ *
+ * @author Kevin Lindsey
+ * @version 1.0
+ *
+ * copyright 2006, Kevin Lindsey
+ *
+ *
+ * @param {Object} subClass
+ * 		The inheriting class, or subclass
+ * @param {Object} baseClass
+ * 		The class from which to inherit
+ */
+ST.extend = function(subClass, baseClass) {
+   function inheritance() {}
+   inheritance.prototype = baseClass.prototype;
+
+   subClass.prototype = new inheritance();
+   subClass.prototype.constructor = subClass;
+   subClass.baseConstructor = baseClass;
+   subClass.superClass = baseClass.prototype;
+}
+
+
 // Pop up a new HTML window
 function query_popup(url, width, height, left, top) {
     if (!width) width = 400;

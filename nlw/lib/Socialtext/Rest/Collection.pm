@@ -93,10 +93,35 @@ sub _make_getter {
     };
 }
 
+sub new {
+    my $proto = shift;
+
+    my $class = ref($proto) || $proto;
+    my $new_object = $class->SUPER::new(@_);
+
+    return $new_object;
+}
+
+
 =head1 SUBCLASSING
 
 The below methods may be overridden to specialize behaviour of a particular
 implementation.
+
+=cut
+
+sub _initialize {
+    my ( $self, $rest, $params ) = @_;
+
+    $self->SUPER::_initialize($rest, $params);
+
+    $self->{FilterParameters} = {
+        'filter' => 'name',
+        'name_filter' => 'name',
+    };
+}
+
+
 
 =head3 $obj->get_resource($rest)
 
@@ -193,14 +218,50 @@ sub _resource_to_text { join '', map { "$_->{name}\n" } @{$_[1]} }
 
 sub allowed_methods { 'GET, HEAD, POST' }
 
+sub filter_spec { return $_[0]->{FilterParameters}; }
+
+sub create_filter {
+    my $self = shift;
+
+    my $filter_sub = sub { @_ };
+    my %filter_field = %{ $self->filter_spec };
+    while (my( $param, $field ) = each %filter_field) {
+        my $param_value = $self->rest->query->param($param);
+        if ($param_value) {
+            my $old_filter_sub = $filter_sub;
+            $filter_sub = sub {
+                grep {$_->{$field} =~ /$param_value/i}
+                &$old_filter_sub
+            };
+        }
+    }
+
+    return $filter_sub;
+}
+
 # Limit the results based on the count query parameter
 sub _limit_collectable {
     my $self = shift;
     my $count = $self->rest->query->param('count');
-    my $filter = $self->rest->query->param('filter');
-    my $filter_sub = $filter
-        ? sub {grep {$_->{name} =~ /$filter/i} @_}
-        : sub { @_ };
+    #my $filter = $self->rest->query->param('filter');
+    #my $filter_sub = $filter
+    #    ? sub {grep {$_->{name} =~ /$filter/i} @_}
+    #    : sub { @_ };
+
+    my $filter_sub = sub { @_ };
+    my %filter_field = %{ $self->filter_spec };
+    while (my( $param, $field ) = each %filter_field) {
+        my $param_value = $self->rest->query->param($param);
+        if ($param_value) {
+            my $old_filter_sub = $filter_sub;
+            $filter_sub = sub {
+                grep {$_->{$field} =~ /$param_value/i}
+                &$old_filter_sub
+            };
+        }
+    }
+
+
     my $count_sub = $count
         ? sub {
         my $limit = $count - 1;

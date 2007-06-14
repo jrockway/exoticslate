@@ -108,7 +108,15 @@ ST.TagQueue.prototype = {
     _center_lightbox: function (parentElement) {
         var overlayElement = $('st-tagqueue-overlay');
         var element = $('st-tagqueue-dialog');
-        return (new ST.Lightbox).center(overlayElement, element, parentElement);
+        Widget.Lightbox.show({
+            divs: {
+                wrapper: $(parentElement),
+                background: overlayElement,
+                contentWrapper: element.parentNode,
+                content: element
+            },
+            effects: ['RoundedCorners']
+        });
     },
 
     count: function () {

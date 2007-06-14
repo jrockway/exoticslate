@@ -3,14 +3,19 @@
 COMBINED_FILE=combined-source.js
 EXTERNAL_JAVASCRIPT=../../../js-modules
 
-WIKIWYG_REPOSITORY=http://svn.wikiwyg.net/code/trunk/wikiwyg
-WIKIWYG_CHECKOUT_VERSION=Wikiwyg-trunk
-WIKIWYG_CHECKOUT_PATH=$(EXTERNAL_JAVASCRIPT)/src/$(WIKIWYG_CHECKOUT_VERSION)
-WIKIWYG_CHECKOUT_COMMAND=svn co $(WIKIWYG_REPOSITORY) $(WIKIWYG_CHECKOUT_PATH)
+# WIKIWYG_REPOSITORY=http://svn.wikiwyg.net/code/trunk/wikiwyg
+# WIKIWYG_CHECKOUT_VERSION=Wikiwyg-trunk
+# WIKIWYG_CHECKOUT_PATH=$(EXTERNAL_JAVASCRIPT)/src/$(WIKIWYG_CHECKOUT_VERSION)
+# WIKIWYG_CHECKOUT_COMMAND=svn checkout $(WIKIWYG_REPOSITORY) $(WIKIWYG_CHECKOUT_PATH)
 
 # Use Wikiwyg-dev when developing Wikiwyg
-WIKIWYG_PATH=$(EXTERNAL_JAVASCRIPT)/src/Wikiwyg-09-26-06
-# WIKIWYG_PATH=$(EXTERNAL_JAVASCRIPT)/Wikiwyg-dev
+WIKIWYG_PATH=$(EXTERNAL_JAVASCRIPT)/Wikiwyg-copy
+
+JEMPLATE_GENERATOR=bin/generate-widget-jemplate.pl
+JEMPLATE_MODULE=Wikiwyg/Jemplate.js
+WIDGETS_YAML=Widgets.yaml
+
+ALL_EDIT_JEMPLATES:=$(shell perl -MYAML -e 'my $$y = YAML::LoadFile("$(WIDGETS_YAML)"); my $$w = $$y->{widgets}; print join " ", map "jemplate/widget_$${_}_edit.html", @$$w')
 
 ALL_JS_SOURCE_FILES= \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Debug.js \
@@ -21,11 +26,16 @@ ALL_JS_SOURCE_FILES= \
 		$(EXTERNAL_JAVASCRIPT)/DOM-Ready/lib/DOM/Ready.js \
 		$(EXTERNAL_JAVASCRIPT)/DOM-Events/lib/DOM/Events.js \
 		$(EXTERNAL_JAVASCRIPT)/Widget-SortableTable/lib/Widget/SortableTable.js \
-		JSON.js \
+		$(EXTERNAL_JAVASCRIPT)/Widget-Lightbox/lib/Widget/Lightbox.js \
+		$(EXTERNAL_JAVASCRIPT)/Widget-Lightbox/tests/lib/Effect/RoundedCorners.js \
+		md5.js \
 		Cookie.js \
 		ArrayUtils.js \
 		stlibrary.js \
 		Lightbox.js \
+		Jemplate.js \
+		JSON.js \
+		$(JEMPLATE_MODULE) \
 		pageview.js \
 		attachqueue.js \
 		StTemplateField.js \
@@ -34,6 +44,15 @@ ALL_JS_SOURCE_FILES= \
 		comment.js \
 		revisions.js \
 		listview.js \
+		LookaheadWidget.js \
+		WorkspaceSupportLookahead.js \
+		WorkspaceLookahead.js \
+		PageNameLookahead.js \
+		TagLookahead.js \
+		WeblogLookahead.js \
+		PageNameSupportLookahead.js \
+		PageSectionLookahead.js \
+		PageAttachmentLookahead.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Toolbar.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Preview.js \
@@ -42,10 +61,15 @@ ALL_JS_SOURCE_FILES= \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/HTML.js \
 		Wikiwyg/Socialtext.js \
 		Wikiwyg/MessageCenter.js \
+		Widgets.js \
+		Wikiwyg/Widgets.js \
 		Wikiwyg/DataValidator.js \
 		l10ns.js \
 
-all: $(COMBINED_FILE) Selection.htc
+all: $(COMBINED_FILE) Selection.htc Cyberbit.ttf
+
+Cyberbit.ttf:
+	cp /var/$@ $@
 
 clean:
 	rm -f $(COMBINED_FILE)
@@ -56,17 +80,21 @@ $(COMBINED_FILE): $(WIKIWYG_PATH) $(ALL_JS_SOURCE_FILES) Makefile
 	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
 	done
 
-# $(WIKIWYG_PATH): $(WIKIWYG_CHECKOUT_PATH)
-#	ln -s src/$(WIKIWYG_CHECKOUT_VERSION) $@
+Jemplate.js:
+	jemplate --runtime > $@
 
-$(WIKIWYG_CHECKOUT_PATH):
-	$(WIKIWYG_CHECKOUT_COMMAND)
+$(JEMPLATE_MODULE): jemplate $(ALL_EDIT_JEMPLATES)
+	jemplate --compile $< > $@
 
-$(JEMPLATE_MODULE): $(ALL_JEMPLATES)
-	@make -C jemplate
+$(ALL_EDIT_JEMPLATES): $(WIDGETS_YAML) $(JEMPLATE_GENERATOR) template/widget_edit.tt2 jemplate/save-cancel.html
+	$(JEMPLATE_GENERATOR) --yaml=$< --output=$@
 
 Selection.htc:
-	ln -s $(WIKIWYG_PATH)/lib/Selection.htc $@
+	ln -fs $(WIKIWYG_PATH)/lib/Selection.htc $@
+
+Widgets.js: $(WIDGETS_YAML)
+	perl -MYAML -MJSON -e 'print "Wikiwyg.Widgets =\n"; print objToJson(YAML::LoadFile(shift(@ARGV))); print ";\n"' \
+		$< > $@
 
 split-js:
 	perl \
@@ -80,4 +108,4 @@ split-js:
 	-e '}'
 
 WW:
-	ln -s $(WIKIWYG_PATH)/lib $@
+	ln -fs $(WIKIWYG_PATH)/lib $@

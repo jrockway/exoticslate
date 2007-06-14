@@ -19,6 +19,7 @@ sub html_end {
     my $method  = $self->method;
     my $escaped = $self->escape_wafl_dashes( $self->matched );
     chomp $escaped;
+    $self->hub->wikiwyg->generate_block_widget_image($self);
     return <<EOHTML;
 <!-- wiki:
 .$method

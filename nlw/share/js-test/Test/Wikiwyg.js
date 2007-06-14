@@ -35,7 +35,7 @@ proto.run_roundtrip_async = function(section_name, section_name2) {
         total_blocks++;
     }
 
-    var asyncId = this.builder.beginAsync(3600);
+    var asyncId = this.builder.beginAsync(60000);
     var finished_tests = 0;
     this.run_roundtrip_async2(section_name, section_name2,
         function() {

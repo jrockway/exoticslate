@@ -179,17 +179,9 @@ function setup_wikiwyg() {
             }
             nlw_edit_controls_visible = true;
             ww.enableLinkConfirmations();
-            delayedWindowResize = function () {
+            window.onresize = function () {
                 ww.resizeEditor();
-                if (Wikiwyg.is_ie) {
-                    // Prevent {rt: 25296} from happening
-                    window.onresize = null;
-                    setTimeout(function() {
-                        window.onresize = delayedWindowResize
-                    }, 5);
-                }
             }
-            window.onresize = delayedWindowResize;
         } catch(e) {
             alert(e);    // XXX - Useful for debugging
         }
@@ -234,6 +226,8 @@ function setup_wikiwyg() {
             Element.setStyle('st-editing-tools-display', {display: 'block'});
             Element.setStyle('st-editing-tools-edit', {display: 'none'});
             Element.setStyle('st-page-maincontent', {marginRight: '0px'});
+
+            $(Page.element.content).style.height = "100%";
 
             // XXX WTF? ENOFUNCTION
             //do_post_cancel_tidying();
@@ -294,7 +288,7 @@ function try_wikiwyg() {
     try {
         setup_wikiwyg();
     } catch(e) {
-        //alert('Error: ' + e);
+        alert('Error: ' + e);
     }
 }
 
@@ -379,6 +373,9 @@ proto.default_config = {
     toolbarClass: 'Wikiwyg.Toolbar.Socialtext',
     modeClasses: [ WW_SIMPLE_MODE, WW_ADVANCED_MODE, WW_PREVIEW_MODE ]
 }
+
+if (window.wikiwyg_nlw_debug)
+    proto.default_config.modeClasses.push(WW_HTML_MODE);
 
 proto.placeToolbar = function(toolbar_div) {
     var wikiwyg_edit_page_bar =
@@ -534,12 +531,14 @@ proto.newpage_display_duplicate_dialog = function(page_name) {
     $('st-newpage-duplicate').style.display = 'block';
     $('st-newpage-duplicate-pagename').focus();
 
-    var s = new ST.Lightbox;
-    s.center(
-         'st-newpage-duplicate-overlay',
-         'st-newpage-duplicate-interface',
-         'st-newpage-duplicate'
-    );
+    var divs = {
+        wrapper: $('st-newpage-duplicate'),
+        background: $('st-newpage-duplicate-overlay'),
+        content: $('st-newpage-duplicate-interface'),
+        contentWrapper: $('st-newpage-duplicate-interface').parentNode
+    }
+    Widget.Lightbox.show({ divs:divs, effects:['RoundedCorners'] });
+    divs.contentWrapper.style.width="520px";
 
     return false;
 }
@@ -658,15 +657,17 @@ proto.displayNewPageDialog = function() {
         'st-newpage-duplicate-emphasis',
         'st-newpage-duplicate-emphasis'
     );
-    $('st-newpage-save').style.display = 'block';
+    // $('st-newpage-save').style.display = 'block';
     $('st-newpage-save-pagename').focus();
 
-    var s = new ST.Lightbox;
-    s.center(
-         'st-newpage-save-overlay',
-         'st-newpage-save-interface',
-         'st-newpage-save'
-    );
+    var divs = {
+        wrapper: $('st-newpage-save'),
+        background: $('st-newpage-save-overlay'),
+        content: $('st-newpage-save-interface'),
+        contentWrapper: $('st-newpage-save-interface').parentNode
+    }
+    Widget.Lightbox.show({ 'divs': divs, 'effects': ['RoundedCorners'] });
+
     return false;
 }
 
@@ -914,35 +915,28 @@ proto = Wikiwyg.Mode.prototype;
 
 proto.footer_offset = 20; // magic constant to make sure edit window does not scroll off page
 
+// XXX - Hardcoded until we can get height of Save/Preview/Cancel buttons
 proto.get_edit_height = function() {
     var available_height;
     if (self.innerHeight) {
         available_height = self.innerHeight;
-    }
-    else if (document.documentElement && document.documentElement.clientHeight) {
+    } else if (document.documentElement && document.documentElement.clientHeight) {
         available_height = document.documentElement.clientHeight;
-    }
-    else if (document.body) {
+    } else if (document.body) {
         available_height = document.body.clientHeight;
     }
 
     var x = 0;
-    if (Wikiwyg.is_ie && this.classname == WW_ADVANCED_MODE) {
-        x += this.div.offsetTop;
-    }
-    else {
-        var e = this.div;
-        while (e) {
-            x += e.offsetTop;
-            e = e.offsetParent;
-        }
+    var e = this.div;
+    while (e) {
+        x += e.offsetTop;
+        e = e.offsetParent;
     }
 
     var edit_height = available_height -
                       x -
                       this.wikiwyg.toolbarObject.div.offsetHeight -
                       this.footer_offset;
-
     return edit_height;
 }
 
@@ -1096,13 +1090,14 @@ proto.advanced_link_html = function() {
 
 proto.make_table_html = function(rows, columns) {
     var innards = '';
+    var cell = '<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>';
     for (var i = 0; i < rows; i++) {
         var row = '';
         for (var j = 0; j < columns; j++)
-            row += '<td style="width: 20px"></td>';
+            row += cell;
         innards += '<tr>' + row + '</tr>';
     }
-    return '<table><tbody>' + innards + '</tbody></table>';
+    return '<table style="border-collapse: collapse;" class="formatter_table">' + innards + '</table>';
 }
 
 proto.do_table = function() {
@@ -1123,6 +1118,10 @@ proto.setHeightOf = function (iframe) {
     iframe.style.height = this.get_edit_height() + 'px';
 };
 
+proto.socialtext_wikiwyg_image = function(image_name) {
+    return this.wikiwyg.config.toolbar.imagesLocation + image_name;
+}
+
 /*==============================================================================
 Socialtext Wikitext subclass.
  =============================================================================*/
@@ -1140,6 +1139,10 @@ proto.markupRules = {
     www: ['bound_phrase', '"', '"<http://...>'],
     attach: ['bound_phrase', '{file: ', '}'],
     image: ['bound_phrase', '{image: ', '}']
+}
+
+for (var ii in proto.markupRules) {
+    proto.config.markupRules[ii] = proto.markupRules[ii]
 }
 
 proto.canonicalText = function() {
@@ -1217,6 +1220,7 @@ proto.convertWikitextToHtml = function(wikitext, func) {
     var uri = location.pathname;
     var postdata = 'action=wikiwyg_wikitext_to_html;content=' +
         encodeURIComponent(wikitext);
+
     var post = new Ajax.Request (
         uri,
         {
@@ -1228,6 +1232,7 @@ proto.convertWikitextToHtml = function(wikitext, func) {
             asynchronous: false
         }
     );
+
     func(post.transport.responseText);
 }
 
@@ -1452,21 +1457,6 @@ proto.start_is_no_good = function(element) {
     return ! prev_node.nodeValue.match(/[\( "]$/);
 }
 
-proto.end_is_no_good = function(element) {
-    var last_node = this.getLastTextNode(element);
-    var next_node = this.getNextTextNode(element);
-
-    for (var n = element; n && n.nodeType != 3; n = n.lastChild) {
-        if (n.nodeType == 8) return false;
-    }
-
-    if (! last_node) return true;
-    if (last_node.nodeValue.match(/ $/)) return false;
-    if (! next_node || next_node.nodeValue == '\n') return false;
-    return ! next_node.nodeValue.match(/^[\) ."\n]/);
-}
-
-
 /*==============================================================================
 Socialtext Preview subclass.
  =============================================================================*/
@@ -1548,3 +1538,4 @@ wikiwyg_run_all_formatting_tests = function() {
 }
 
 klass.run_all_formatting_tests = wikiwyg_run_all_formatting_tests;
+

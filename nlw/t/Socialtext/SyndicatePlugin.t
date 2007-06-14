@@ -27,16 +27,17 @@ my $date = DateTime->now->add( seconds => 600 );
 # We have to call syndicate off the hub to initialize Socialtext::CGI :(
 my $syndicator = $hub->syndicate;
 
+
 Socialtext::Page->new(hub => $hub)->create(
     title => 'this is the title',
-    content => ("\n^^^This is the content\n\n* [Wiki 101]\\n\nHello.\n" x 100),
+     content => ("\n^^^ This is the content\n\n* [Wiki 101]\\n\nHello.\n" x 100),
     creator => $hub->current_user,
     date => $date,
 );
 
 Socialtext::Page->new(hub => $hub)->create(
     title => 'this is the ugly one in base 64',
-    content => "\n^^^This is the\bugly\n\n* [Wiki 101]\\n\nHello.\n",
+    content => "\n^^^ This is the\bugly\n\n* [Wiki 101]\\n\nHello.\n",
     creator => $hub->current_user,
     date => $date,
 );
@@ -95,7 +96,7 @@ this is bad xhtml</title>
 --- method: _syndicate_category
 --- type: RSS20
 --- argument: Recent Changes
---- match 
+--- match
 rss version="2.0"
 <title><![CDATA[Auth-to-edit Wiki: Recent Changes]]></title>
 -0000</pubDate>

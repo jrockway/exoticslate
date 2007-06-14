@@ -380,6 +380,152 @@ sub hash_representation {
         revision_count => scalar $self->all_revision_ids, };
 }
 
+=head2 $page->get_headers()
+
+Gets a list of hashes describing the headers present on this 
+page. The content of the page is passed through the wikitext
+formatter to locate the headers, get their level and text.
+
+The returned hashes contained in the list have two elements:
+
+=over 4
+
+=item text
+
+The text of the header
+
+=item level
+
+The size or value of the header (1-6) representing it's nesting
+in a hierarchy of headers
+
+=back
+
+=cut
+sub get_headers {
+    my $self = shift;
+    return $self->get_units(
+        'hx' => sub {
+            return +{text => $_[0]->get_text, level => $_[0]->level}
+        },
+    );
+}
+
+
+=head2 $page->get_sections()
+
+Gets a list of hashes describing the headers and sections
+present on this page. The content of the page is passed
+through the wikitext formatter to locate the headers and
+the sections.
+
+The returned hashes contained in the list have one element:
+
+=over 4
+
+=item text
+
+The text of the section. For headers this is the header
+text. For sections it is the argument of the section wafl
+phrase.
+
+=back
+
+=cut
+sub get_sections {
+    my $self = shift;
+    return $self->get_units(
+        'hx' => sub {
+            return +{text => $_[0]->get_text};
+        },
+        'wafl_phrase' => sub {
+            return unless $_[0]->method eq 'section';
+            return +{text => $_[0]->arguments};
+        },
+    )
+}
+
+=head2 $page->get_units(%matches)
+
+Parse the wikitext of a page to find the units named in matches
+and push information about each matched unit onto a list that
+is returned as a reference.
+
+%matches is made up of key value pairs. The key is the name of a 
+valid L<Socialtext::Formatter::Unit>. The value is a 
+subroutine that returns a reference to a hash that may
+contain anything. The assumption is that it will contain
+information about the unit. See get_headers and get_sections
+for examples.
+
+=cut 
+sub get_units {
+    my $self    = shift;
+    my %matches = @_;
+
+    my $parser = Socialtext::Formatter::Parser->new(
+        table      => $self->hub->formatter->table,
+        wafl_table => $self->hub->formatter->wafl_table
+    );
+    my $parsed_unit = $parser->text_to_parsed( $self->content );
+
+    my @units;
+
+    {
+        no warnings 'once';
+        # When we use get_text to unwind the parse tree and give
+        # us the content of a unit that contains units, we need to
+        # make sure that we get the right stuff as get_text is
+        # called recursively. This insures we do.
+        local *Socialtext::Formatter::WaflPhrase::get_text = sub {
+            my $self = shift;
+            return $self->arguments;
+        };
+        my $sub = sub {
+            my $unit         = shift;
+            my $formatter_id = $unit->formatter_id;
+            if ( $matches{$formatter_id} ) {
+                push @units, $matches{$formatter_id}->($unit);
+            }
+        };
+        $self->traverse_page_units($parsed_unit->units, $sub);
+    }
+
+
+    return \@units;
+}
+
+=head2 $page->traverse_page_units($units, $sub)
+
+Traverse the parse tree of a page to perform the 
+actions described in $sub on each unit. $sub is
+passed the current unit.
+
+$units is usually the result of
+C<Socialtext::Formatter::text_to_parsed($content)->units>
+
+The upshot of that is that this method expects a 
+list of units, not a single unit. This makes it
+easy for it to be recursive.
+
+=cut
+# REVIEW: This should probably be somewhere other than Socialtext::Page
+# but where? Socialtext::Formatter? Socialtext::Formatter::Unit?
+sub traverse_page_units {
+    my $self  = shift;
+    my $units = shift;
+    my $sub   = shift;
+
+    foreach my $unit (@$units) {
+        if (ref $unit) {
+            $sub->($unit);
+            if ($unit->units) {
+                $self->traverse_page_units($unit->units, $sub);
+            }
+        }
+    }
+}
+
 =head2 $page->title( [$str] )
 
 Gets or sets the page title.  If the page title, or I<$str>, is not

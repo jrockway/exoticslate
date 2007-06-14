@@ -281,11 +281,11 @@ the parse tree. The parsing process will link the units together
 so they may be self-traversed (traversal described in
 L<Socialtext::Formatter::Unit>).
 
-=item unit_matched
+=item unit_match
 
 A noop method available for overrides and hooking. When the parser
 has made a sure match to a particular L<Socialtext::Formatter::Unit> class,
-unit_matched is called. This can be used to do things like calculate
+unit_match is called. This can be used to do things like calculate
 the number of links on a page, build table of contents, and other
 side-effecty sorts of things.
 

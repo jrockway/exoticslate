@@ -20,7 +20,7 @@ field 'level';
 sub match {
     my $self = shift;
     my $text = shift;
-    return unless $text =~ /^(\^{1,6})\s*(.*?)(\s+=+)?\s*\n+/m;
+    return unless $text =~ /^(\^{1,6}) +(.*?)(\s+=+)?\s*?\n+/m;
     $self->level( length($1) );
     $self->set_match($2);
 }

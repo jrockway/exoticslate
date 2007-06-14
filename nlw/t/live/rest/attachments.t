@@ -94,10 +94,10 @@ test_http "GET json from Workspace sorted alpha" {
 
     like $response->[0]->{id}, qr{\d+-\d+-\d+},
         'id element is present and in the form of an attachment id';
-    is $response->[0]->{name}, 'Robot.txt',
-        'first element in sorted attachments is Robot.txt';
-    is $response->[3]->{name}, 'thing.png',
-        'fourth element in sorted attachments is thing.png';
+    is $response->[0]->{name}, 'O Star.txt',
+        'first element in sorted attachments is \'O Star.txt\'';
+    is $response->[3]->{name}, 'test_image.jpg',
+        'fourth element in sorted attachments is test_image.jpg';
 
 }
 
@@ -110,7 +110,7 @@ test_http "GET json from Workspace sorted size" {
     my $response = jsonToObj( $test->response->content );
 
     is $response->[0]->{name}, 'thing.png', 'first element in sorted attachments is thing.png';
-    is $response->[3]->{name}, 'Rule #1', 'fourth element in sorted attachments is Rule #1';
+    is $response->[3]->{name}, 'O Star.txt', 'fourth element in sorted attachments is O Star.txt';
 
 }
 

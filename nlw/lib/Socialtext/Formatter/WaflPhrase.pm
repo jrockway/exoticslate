@@ -11,29 +11,48 @@ use Socialtext::Permission 'ST_READ_PERM';
 
 const formatter_id  => 'wafl_phrase';
 const pattern_start =>
-    qr/(^|(?<=[\s\-]))\{[\w-]+(?=[\:\ \}])(\s*:)?\s*.*?\}(?=[^A-Za-z0-9]|\z)/;
+    qr/(^|(?<=[\s\-]))(".+?")?\{[\w-]+(?=[\:\ \}])(\s*:)?\s*.*?\}(?=[^A-Za-z0-9]|\z)/;
 field 'method';
 field 'arguments';
+field 'label';
 field error => '';
 
 sub html_start { '<span class="nlw_phrase">'}
 
 sub html_end {
-    my $self = shift;
-    '<!-- wiki: {'
-        . $self->method . ': '
-        . $self->escape_wafl_dashes( $self->arguments )
-        . '} --></span>';
+    my $self   = shift;
+    my $widget = ''
+        . ( $self->label ? '"' . $self->label . '"' : '' ) . '{'
+        . $self->method
+        . (
+        $self->arguments
+        ? ': ' . $self->escape_wafl_dashes( $self->arguments )
+        : ''
+        )
+        . '}';
+    $self->hub->wikiwyg->generate_phrase_widget_image($widget);
+    return "<!-- wiki: $widget --></span>";
 }
 
 sub match {
     my $self = shift;
     return unless $self->SUPER::match(@_);
-    return unless $self->matched =~ /^\{([\w\-]+)(?:\s*\:)?\s*(.*)\}$/;
-    $self->arguments($2);
-    my $method = lc $1;
-    $method =~ s/-/_/g;
-    $self->method($method);
+
+    my $label_re = qr/"(.+?)"/;
+    my $wafl_re  = qr/\{([\w\-]+)(?:\s*\:)?\s*(.*)\}/;
+    if ( $self->matched =~ /^${label_re}${wafl_re}$/ ) {
+        $self->label($1);
+        $self->arguments($3);
+        my $method = lc $2;
+        $method =~ s/-/_/g;
+        $self->method($method);
+    }
+    elsif ( $self->matched =~ /^${wafl_re}$/ ) {
+        $self->arguments($2);
+        my $method = lc $1;
+        $method =~ s/-/_/g;
+        $self->method($method);
+    }
 }
 
 sub set_error {
@@ -44,19 +63,19 @@ sub set_error {
 
 sub syntax_error {
     my $self = shift;
-    my $text = shift || $self->arguments;
+    my $text = shift || $self->label || $self->arguments;
     return qq[<span class="wafl_syntax_error">$text</span>];
 }
 
 sub permission_error {
     my $self = shift;
-    my $text = shift || $self->arguments;
+    my $text = shift || $self->label || $self->arguments;
     return qq[<span class="wafl_permission_error">$text</span>];
 }
 
 sub existence_error {
     my $self = shift;
-    my $text = shift || $self->arguments;
+    my $text = shift || $self->label || $self->arguments;
     return qq[<span class="wafl_existence_error">$text</span>];
 }
 
@@ -144,10 +163,10 @@ sub html_start {
 
 sub html_end {
     my $self = shift;
-    '<!-- wiki: {'
-        . $self->method . ': '
-        . $self->escape_wafl_dashes( $self->arguments )
-        . '} --></div>';
+    my $widget = '{' . $self->method . ': ' .
+        $self->escape_wafl_dashes( $self->arguments ) . '}';
+    $self->hub->wikiwyg->generate_phrase_widget_image($widget);
+    return "<!-- wiki: $widget --></div>";
 }
 
 ################################################################################
@@ -160,12 +179,13 @@ sub html_start {
 }
 
 sub html_end {
-   my $self = shift;
-   my $page = $Socialtext::Formatter::Viewer::in_paragraph ? '<p>' : '';
-   '<!-- wiki: {'
-       . $self->method . ': '
-       . $self->escape_wafl_dashes( $self->arguments )
-       . "} --></span>$page";
+    my $self = shift;
+    my $widget = '{' . $self->method . ': ' .
+        $self->escape_wafl_dashes( $self->arguments ) . '}';
+    $self->hub->wikiwyg->generate_phrase_widget_image($widget);
+    my $page = $Socialtext::Formatter::Viewer::in_paragraph ? '<p>' : '';
+    my $space = Socialtext::BrowserDetect::ie() ?  "&nbsp;" : "";
+    return "<!-- wiki: $widget --></span>$space$page";
 }
 
 ################################################################################
@@ -208,6 +228,9 @@ sub html {
     );
     $self->hub->current_workspace($old_current_workspace);
 
+    return qq{<a href="$link">} . $self->label ."</a>"
+        if $self->label;
+
     return 
         qq{<img alt="$image_name" src="$link" />};
 }
@@ -225,14 +248,22 @@ sub html {
     my ( $workspace_name, $page_title, $file_name, $page_id, $page_uri )
         = $self->parse_wafl_reference;
     return $self->syntax_error unless $file_name;
-    my $label = $file_name;
-    $label = "[$page_title] $label"
-        if $page_title
-        and ( $self->current_page_id ne
-        Socialtext::Page->name_to_id($page_title) );
-    $label = "$workspace_name:$label"
-        if $workspace_name
-        and ( $self->current_workspace_name ne $workspace_name );
+
+    my $label;
+    if ( $self->label ) {
+        $label = $self->label if $self->label;
+    }
+    else {
+        $label = $file_name;
+        $label = "[$page_title] $label"
+            if $page_title
+            and ( $self->current_page_id ne
+            Socialtext::Page->name_to_id($page_title) );
+        $label = "$workspace_name:$label"
+            if $workspace_name
+            and ( $self->current_workspace_name ne $workspace_name );
+    }
+
     my $file_id = $self->get_file_id( $workspace_name, $page_id, $file_name )
         or return $self->error;
 
@@ -398,11 +429,11 @@ sub html {
 
     return $self->syntax_error unless $page_title || $section_id;
 
-    my $label        = '';
+    my $label        = $self->label || '';
     my $link_title   = '';
     my $section_text = '';
     if ($section_id) {
-        $label = $page_title
+        $label ||= $page_title
             ? "$page_title ($section_id)"
             : $section_id;
         $section_id   = Socialtext::Page->name_to_id($section_id);
@@ -410,7 +441,7 @@ sub html {
         $link_title   = "section link";
     }
     else {
-        $label      = $page_title;
+        $label      ||= $page_title;
         $link_title = "inter-workspace link: $workspace_name";
     }
 
@@ -504,9 +535,17 @@ sub _link_to_action_display {
         url_prefix => $p{url_prefix},
     );
 
-    return qq(<a title="$p{action} link" href="$link">)
-        . qq($p{category}</a>);
+    my $label = $self->label || $p{category};
+    return qq(<a title="$p{action} link" href="$link">$label</a>);
 }
+
+################################################################################
+package Socialtext::Formatter::TagLink;
+
+use base 'Socialtext::Formatter::CategoryLink';
+use Class::Field qw( const );
+
+const wafl_id => 'tag';
 
 ################################################################################
 package Socialtext::Formatter::WeblogLink;
@@ -576,66 +615,49 @@ sub html {
 }
 
 sub _parse_page_for_headers {
-    my $self = shift;
-    my $workspace_name = shift;
-    my $page_id      = shift;
-    my $page_title   = shift;
+    my $self              = shift;
+    my $workspace_name    = shift;
+    my $page_id           = shift;
+    my $remote_page_title = shift;
+
     my $hub = $self->hub_for_workspace_name($workspace_name);
-
+    my $wikitext = '';
     my $page = $hub->pages->new_page($page_id);
-
-    my $parser = Socialtext::Formatter::Parser->new(
-        table=>$self->hub->formatter->table,
-        wafl_table=>$self->hub->formatter->wafl_table
-    );
-
-    my $parse_tree = $parser->text_to_parsed( $page->content );
+    my $page_title = $page->title;
 
     my $wikitext_page_id =
         $self->current_page_id eq $page_id
         ? ''
-        : '[' . $page_title . ']';
+        : '[' . $remote_page_title . ']';
     my $wikitext_workspace_name =
         $self->current_workspace_name eq $workspace_name
         ? ''
         : $workspace_name;
 
-    my $wikitext = '';
-
     my $title = qq(<div class="toc"><p>Table of Contents: )
-        . $page->title
+        . $page_title
         . "</p>\n";
 
-    
-    {
-        no warnings 'once';
-        local *Socialtext::Formatter::WaflPhrase::get_text = sub {
-            my $self = shift;
-            return $self->arguments;
-        };
+    my $headers = $page->get_headers();
 
-        # Headers are going to be blocks one step underneath the top_class
-        # get them, their text, and their level to create a wiki list of
-        # InterWikilinkS
-        my $units = $parse_tree->units;
-        foreach my $unit (@$units) {
-            next unless ref $unit;
-            next unless $unit->formatter_id eq 'hx';
-            $wikitext .= '*' x $unit->level . ' '
-                . qq({link $wikitext_workspace_name )
-                . qq($wikitext_page_id )
-                . $unit->get_text . "}\n";
-        }
-        $wikitext = "> {link $wikitext_workspace_name ["
-            . $page->title
-            . ']} does not have any headers.'
-            unless $wikitext;
+    # create a list describing the headers
+    foreach my $header (@$headers) {
+        $wikitext .= '*' x $header->{level} . ' '
+            . qq({link $wikitext_workspace_name )
+            . qq($wikitext_page_id )
+            . $header->{text} . "}\n";
     }
+
+    $wikitext = "> {link $wikitext_workspace_name ["
+        . $page_title
+        . ']} does not have any headers.'
+        unless $wikitext;
 
     my $html = $self->hub->viewer->text_to_html( "\n" . $wikitext . "\n\n" );
     
     return $title . $html . '</div>';
 }
+
 
 1;
 

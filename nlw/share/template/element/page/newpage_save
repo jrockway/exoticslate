@@ -2,6 +2,7 @@
 <div id="[% ns %]">
     <form onsubmit="return false;">
     <div id="[% ns %]-overlay" class="popup-overlay"></div>
+    <div>
     <div id="[% ns %]-interface">
 
         <div id="[% ns %]-title">Save Page As</div>
@@ -19,6 +20,7 @@
             </tr>
             </table>
         </div>
+    </div>
     </div>
     </form>
 </div>

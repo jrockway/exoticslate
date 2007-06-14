@@ -8,7 +8,7 @@ use Test::Live fixtures => ['admin_with_extra_pages'];
 my $LiveTest = Test::Live->new();
 $LiveTest->standard_query_validation;
 
-# Delete an existing attachment
+#  Delete an existing attachment
 {
     # get the attachments for formattingtest (as json)
     my $content = _get_page_content(
@@ -137,3 +137,4 @@ devnull1
 text: thing.png
 n: 1
 --- match_file: t/extra-attachments/live/attachments.t/thing.png
+

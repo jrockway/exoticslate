@@ -65,7 +65,9 @@
 <script type="text/javascript">
     var Page = new ST.Page ({
         page_id: '[% page.id %]',
+        page_title: '[% page.title.replace('\'', '\\\'') %]',
         wiki_id: '[% wiki.name %]',
+        wiki_title: '[% wiki.title.replace('\'', '\\\'') %]',
         revision_id: '[% page.revision_id %]',
         comment_form_window_height: '[% wiki.comment_form_window_height %]'
     });

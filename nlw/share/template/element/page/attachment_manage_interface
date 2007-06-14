@@ -2,6 +2,7 @@
 <div id="st-attachments-manageinterface">
     <form onsubmit="return false;">
     <div id="[% ns %]-manageinterface-overlay" class="popup-overlay"></div>
+    <div>
     <div id="[% ns %]-interface">
         <div id="[% ns %]-filetable">
             <table id="[% ns %]-filelisting">
@@ -26,6 +27,7 @@
             <span id="[% ns %]-deletemessage"></span>
         </div>
         <br />
+    </div>
     </div>
     </form>
 </div>

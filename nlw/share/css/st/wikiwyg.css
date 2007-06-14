@@ -15,6 +15,13 @@ td {
     font-size: 70%;
 }
 
+div.wiki {
+    padding: 5px;
+}
+
+p {
+    margin:0 0 1em 0;
+}
 
 a {
     color: blue;

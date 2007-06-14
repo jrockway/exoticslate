@@ -194,8 +194,8 @@ my $act_as_token;
 {
     # make the count higher than there are pages
     my $response = _get_changes('recent changes', 1000);
-    # expect only 31 pages because that's what's in the workspace total
-    is( scalar @$response, 31, 'there are 31 changes' );
+    # expect only 34 pages because that's what's in the workspace total
+    is( scalar @$response, 34, 'there are 34 changes' );
     ok( grep( 'Admin Wiki', map { $_->{subject} } @$response ),
         'changes contain admin wiki page' );
 }
@@ -203,9 +203,9 @@ my $act_as_token;
 # recent changes with other case and no count
 {
     my $response = _get_changes('Recent Changes', 1000);
-    # expect only 31 pages because that's what's in the workspace total
-    is( scalar @$response, 31,
-        'there are 31 changes with bad case category' );
+    # expect only 34 pages because that's what's in the workspace total
+    is( scalar @$response, 34,
+        'there are 34 changes with bad case category' );
     ok( grep( 'Admin Wiki', map { $_->{subject} } @$response ),
         'changes contain admin wiki page when bad case category' );
 }

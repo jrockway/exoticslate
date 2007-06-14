@@ -6,10 +6,11 @@ var filters = {
 
 t.plan(5);
 t.pass('#15858: wikiwyg: multiple blank lines collapse to single blank line');
+t.run_roundtrip('wikitext');
+
 t.filters(filters);
 t.run_is('html', 'wikitext');
 
-t.run_roundtrip('wikitext');
 
 /* Test
 === Single blank line preserved

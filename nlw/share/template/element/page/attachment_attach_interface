@@ -1,6 +1,7 @@
 [% ns = 'st-attachments-attach' %]
 <div id="st-attachments-attachinterface">
-    <div id="[% ns %]-attachinterface-overlay" class="popup-overlay"></div>
+    <div id="[% ns %]-attachinterface-overlay"></div>
+    <div id="[% ns %]-interface-wrapper">
     <div id="[% ns %]-interface">
         <form id="[% ns %]-form" name="attachForm" method="post" action="/page/[% wiki.name %]/[% page.id %]/attachments" accept="text/javascript" enctype="multipart/form-data" target="[% ns %]-formtarget">
             <iframe id="[% ns %]-formtarget" name="[% ns %]-formtarget" src="[% wiki.static_path %]/html/blank.html"></iframe>
@@ -31,6 +32,8 @@
                 <div id="[% ns %]-close">[% INCLUDE element/button id="${ns}-closebutton", label="Done" %]</div>
                 <div id="[% ns %]-uploadbutton"><input id="[% ns %]-submit" name="submit" type="submit" value="Upload file" /></div>
             </div>
+            <div style="clear:both;">&nbsp;</div>
         </form>
+    </div>
     </div>
 </div>

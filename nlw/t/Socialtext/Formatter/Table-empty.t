@@ -30,19 +30,19 @@ __DATA__
 <div class="wiki">
 <table style="border-collapse: collapse;" class="formatter_table">
 <tr>
-<td style="border: 1px solid black;padding: .2em;"></td>
-<td style="border: 1px solid black;padding: .2em;"></td>
-<td style="border: 1px solid black;padding: .2em;"></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
 </tr>
 <tr>
-<td style="border: 1px solid black;padding: .2em;"></td>
-<td style="border: 1px solid black;padding: .2em;"></td>
-<td style="border: 1px solid black;padding: .2em;"></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
 </tr>
 <tr>
-<td style="border: 1px solid black;padding: .2em;"></td>
-<td style="border: 1px solid black;padding: .2em;"></td>
-<td style="border: 1px solid black;padding: .2em;"></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
 </tr>
 </table>
 </div>
@@ -56,19 +56,19 @@ __DATA__
 <div class="wiki">
 <table style="border-collapse: collapse;" class="formatter_table">
 <tr>
-<td style="border: 1px solid black;padding: .2em;"></td>
-<td style="border: 1px solid black;padding: .2em;"></td>
-<td style="border: 1px solid black;padding: .2em;"></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
 </tr>
 <tr>
-<td style="border: 1px solid black;padding: .2em;"></td>
-<td style="border: 1px solid black;padding: .2em;"></td>
-<td style="border: 1px solid black;padding: .2em;"></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
 </tr>
 <tr>
-<td style="border: 1px solid black;padding: .2em;"></td>
-<td style="border: 1px solid black;padding: .2em;"></td>
-<td style="border: 1px solid black;padding: .2em;"></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
+<td style="border: 1px solid black;padding: .2em;"><span style="padding:.5em">&nbsp;</span></td>
 </tr>
 </table>
 </div>

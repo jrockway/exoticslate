@@ -1,0 +1,99 @@
+<span class="st-widget-dialog-title"><! widget.label !></span>
+<form>
+<div class="st-widget-dialog">
+<p class="st-widget-description"><! widget.desc !></p>
+<div id="st-widgets-standardoptionspanel">
+<table class="st-widgets-optionstable">
+<! FOR field = fields -!>
+<! pd = 0 -!>
+<! FOREACH pdfield = pdfields -!>
+<! IF pdfield == field -!><! pd = 1 -!><! END -!>
+<! END -!>
+<! IF pd == 0 -!>
+<! PROCESS CONTROL_ROW -!>
+<! END -!>
+<! END -!>
+</table>
+</div>
+<div id="<! type !>_widget_edit_error_msg" class="widget_edit_error_msg"></div>
+<div class="st-widgets-options">
+    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">
+    <a id="st-widgets-moreoptions" href="#">More options</a>
+</div>
+<div id="st-widgets-moreoptionspanel">
+<p class="st-widget-description"><! widget.more_desc !></p>
+<table class="st-widgets-moreoptionstable">
+<! FOR field = pdfields -!>
+<! PROCESS CONTROL_ROW -!>
+<! END -!>
+
+<! IF type == 'search' !>
+<tr>
+<td class="st-widget-dialog-editlabel">
+Search type:
+</td>
+<td class="st-widget-dialog-editfield">
+<input type="radio" name="search_type" value="text"
+[% IF search_type == 'text' || search_type == '' %]checked="checked"[% END %]
+/> Text
+<input type="radio" name="search_type" value="category"
+[% IF search_type == 'category' %]checked="checked"[% END %]
+/> Tag
+<input type="radio" name="search_type" value="title"
+[% IF search_type == 'title' %]checked="checked"[% END %]
+/> Title
+</td>
+</tr>
+<! END !>
+
+<! IF widget.full !>
+<tr>
+<td class="st-widget-dialog-editlabel">
+Full results:
+</td>
+<td class="st-widget-dialog-editfield">
+<input type="checkbox" name="full"[% IF full %] checked="checked"[% END %] />
+</td>
+</tr>
+<! END !>
+</table>
+<div class="st-widgetdialog-wikitext">
+    <span class="label">wiki text: </span>
+    <span class="wikitext" id="<! type !>_wafl_text">&nbsp;</span>
+</div>
+</div>
+</div>
+[% PROCESS 'save-cancel.html' %]
+</form>
+
+<! BLOCK CONTROL_ROW -!>
+<! IF widget.input.$field == 'radio' -!>
+<! PROCESS RADIO -!>
+<! ELSE -!>
+<tr>
+  <td class="st-widget-dialog-editlabel"><! widget.labels.$field || data.fields.$field !>:</td>
+  <td class="st-widget-dialog-editfield">
+    <input size="40" type="text" id="st-widget-<! field !>" name="<! field !>" value="[% <! field !> | html %]"/>
+  </td>
+</tr>
+<! END -!>
+<! END -!>
+
+<! BLOCK RADIO -!>
+<tr>
+  <td class="st-widget-dialog-editlabel"><! widget.labels.$field || data.fields.$field !>:</td>
+  <td class="st-widget-dialog-editfield">
+    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-<! field !>-rb" value="current" checked>the current
+<! IF field == 'workspace_id' -!>
+workspace
+<! ELSE -!>
+page
+<! END -!><i>&nbsp;&nbsp;or</i></p>
+<p class="st-widget-dialog-choiceradio">
+  <input type="radio" name="st-widget-<! field !>-rb" value="other">the
+  <! IF field == 'workspace_id' -!>workspace named<! ELSE -!>page titled<! END -!>&nbsp;
+<input size="25" type="text" id="st-widget-<! field !>" name="<! field !>" value="[% <! field !> | html %]"/>
+</p>
+</td>
+</tr>
+<! END -!>

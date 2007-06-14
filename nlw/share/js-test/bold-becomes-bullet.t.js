@@ -26,7 +26,7 @@ t.run_is('html', 'wiitext');
 Bold me</span>: xxx</p>
 <br></div>
 --- wikitext
-Bold me: xxx
+*Bold me*: xxx
 
 === A italic
 --- html
@@ -35,7 +35,7 @@ Bold me: xxx
 Italic Me</span>: xxx</p>
 <br></div>
 --- wikitext
-Italic Me: xxx
+_Italic Me_: xxx
 
 === A line-through
 --- html
@@ -44,7 +44,7 @@ Italic Me: xxx
 Thru Me</span>: xxx</p>
 <br></div>
 --- wikitext
-Thru Me: xxx
+-Thru Me-: xxx
 
 */
 

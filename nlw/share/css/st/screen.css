@@ -3,6 +3,7 @@ body {
     color: #000;
     background: #eee;
     margin: 0;
+    position: relative;
 }
 
 /* Wiki Navigation */
@@ -673,6 +674,13 @@ body {
     margin-bottom: 10px;
 }
 
+#wysiwyg-editable-div {
+  background: #ffd;
+  border-style: solid;
+  border-color: #888 #ccc #ccc #888;
+  border-width: 2px;
+}
+
 #st-page-editing-wysiwyg {
   background: #ffd;
   border-style: solid;
@@ -1193,13 +1201,6 @@ body {
     font-family: Helvetica, sans-serif;
     font-size: 90%;
     display: none;
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    z-index: 2000;
-    background-image: url("../../images/st/popup/bg.png");
 }
 #st-attachments-manageinterface {
     font-family: Helvetica, sans-serif;
@@ -1211,44 +1212,20 @@ body {
     width: 100%;
     height: 100%;
     z-index: 2000;
-    background-image: url("../../images/st/popup/bg.png");
+    background:transparent;
 }
 
-* html #st-attachments-attachinterface {
-    background-image: none;
-}
-* html #st-attachments-manageinterface {
-    background-image: none;
-}
-* html .popup-overlay {
-    background-image: url("../../images/st/popup/bg.png");
-    background-color: #000;
-    opacity: .70;
+.popup-overlay {
     position: absolute;
     left: 0px;
     top: 0px;
     width: 100%;
     height: 100%;
     z-index: 2001;
+    background-image: url("../../images/st/popup/bg.png");
+    background-color: #000;
+    opacity: .70;
 }
-
-#st-attachments-attach-interface {
-    z-index: 2002;
-    background-color: #fff;
-    color: #000;
-    border: 4px solid #ccc;
-    padding: 1em;
-    width: 520px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10%;
-    position: absolute;
-    top: 0px;
-}
-
-* html #st-attachments-attach-interface {
-}
-
 #st-attachments-attach-formtarget {
     width: 0px;
     height: 0px;
@@ -1329,34 +1306,6 @@ body {
     font-family: Helvetica, sans-serif;
     font-size: 90%;
     display: none;
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    background-image: url("../../images/st/popup/bg.png"); /* Don't forget IE hack for ship! */
-    z-index: 2000;
-}
-
-* html #st-attachmentsqueue-interface {
-    background-image: none;
-}
-
-#st-attachmentsqueue-dialog {
-    z-index: 2002;
-    background-color: #fff;
-    color: #000;
-    border: 4px solid #ccc;
-    padding: 1em;
-    width: 530px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10%;
-    position: absolute;
-    top: 0px;
-}
-
-* html #st-attachmentsqueue-dialog {
 }
 
 #st-attachmentsqueue-fileprompt {
@@ -1429,34 +1378,10 @@ body {
 /* Queue Tag Dialog */
 
 #st-tagqueue-interface {
-    font-family: Helvetica, sans-serif;
-    font-size: 90%;
     display: none;
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    background-image: url("../../images/st/popup/bg.png"); /* Don't forget IE hack for ship! */
-    z-index: 2000;
-}
-
-* html #st-tagqueue-interface {
-    background-image: none;
 }
 
 #st-tagqueue-dialog {
-    z-index: 2002;
-    background-color: #fff;
-    color: #000;
-    border: 4px solid #ccc;
-    padding: 1em;
-    width: 350px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10%;
-    position: absolute;
-    top: 0px;
 }
 
 * html #st-tagqueue-dialog {
@@ -1660,17 +1585,6 @@ table.page-stats-content tfoot {
 /* Manage File Interface */
 
 #st-attachments-manage-interface {
-    z-index: 2002;
-    background-color: #fff;
-    color: #000;
-    border: 4px solid #ccc;
-    padding: 1em;
-    width: 520px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10%;
-    position: absolute;
-    top: 0px;
 }
 
 #st-attachments-manage-filetable {
@@ -2467,45 +2381,10 @@ span.st-weblog-previousentries, span.st-weblog-nextentries {
 
 /* New Page */
 #st-newpage-save, #st-newpage-duplicate {
-    display: none;
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    background: url("../../images/st/popup/bg.png"); /* Don't forget IE hack for ship! */
-    z-index: 2000;
+    display:none;
 }
 
-#st-newpage-save-interface {
-    background-color: #fff;
-    color: #000;
-    border: 4px solid #ccc;
-    padding: 0.5em;
-    width: 450px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10%;
-    position:absolute;
-    top:0px;
-    z-index:2003;
-}
-
-#st-newpage-duplicate-interface {
-    background-color: #fff;
-    color: #000;
-    border: 4px solid #ccc;
-    padding: 0.5em;
-    width: 530px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10%;
-    position:absolute;
-    top:0px;
-    z-index:2003;
-}
-
-#st-newpage-save-title, #st-newpage-duplicate-title {
+#st-newpage-duplicate-title {
     margin: 0;
     padding: 0;
     font-weight: bold;
@@ -2644,6 +2523,7 @@ span.st-weblog-previousentries, span.st-weblog-nextentries {
     border-bottom: 0.2em dashed rgb(200,0,0);
 }
 
+
 #st-edit-mode-container {
 }
 
@@ -2768,7 +2648,6 @@ menu on the page bar.
     display: block;
 }
 
-
 .email-page-select {
    width: 175px;
    font-size: x-small;
@@ -2788,6 +2667,28 @@ menu on the page bar.
 
 .email-page-input-new {
     width: 175px;
+}
+
+/* Lightbox */
+.st-lightbox {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background: url("../../images/st/popup/bg.png");
+    z-index: 32767;
+}
+
+.st-lightbox-content {
+    background-color: #fff;
+    color: #000;
+    border: 4px solid #ccc;
+    padding: 0.5em;
+    width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
 }
 
 /* System Status, Red with icon */
@@ -2863,12 +2764,221 @@ menu on the page bar.
 
 .wiki-include-title a:hover {
     text-decoration: underline;
-    color: default;
 }
 
 
 div.wiki-include-content {
     margin-left: 16px;
+}
+
+/* WAFL Widget styles */
+
+div.st-widget-dialog {
+    margin: 4px;
+    border: thin solid #000055;
+    padding: 4px;
+    background-color: #FFFFFF;
+}
+
+div.st-lightbox-dialog {
+    background-color: #CCD8FF;
+    z-index: 2001;
+    padding: 0;
+    width: 520px;
+    margin: 100px auto;
+    border: 1px outset #555;
+}
+
+div.jsan-widget-lightbox-content-wrapper {
+    background-color: #CCD8FF;
+    padding: 5px;
+    margin: 0px;
+}
+
+.st-widget-buttons {
+    padding: 0.2em 0.2em 0.1em 0.2em;
+    text-align: right;
+}
+
+span.st-widget-cancelbutton {
+    padding: 0 0 0 7px;
+}
+
+#st-widgets-standardoptionspanel {
+    padding: 4px;
+    margin: 0;
+}
+
+#st-widgets-standardoptionspanel input {
+    font-size: 90%;
+}
+
+#st-widgets-moreoptionspanel {
+    display: none;
+    background-color: #F0F0F0;
+    padding: 2px 4px 4px 4px;
+    margin: 6px 0 4px 0;
+    border: 1px solid #B0CCFF;
+}
+
+#st-widgets-moreoptionspanel input {
+    font-size: 90%;
+}
+
+td.st-widget-dialog-widgetlabel {
+    padding-top: 10px;
+    font-size: 0.8em;
+    font-family: Helvetica, Arial, sans-serif;
+    white-space: nowrap;
+    vertical-align: top;
+}
+
+div.st-widgetdialog-wikitext {
+    padding-top: 10px;
+    font-size: 0.8em;
+    font-family: Helvetica, Arial, sans-serif;
+    vertical-align: top;
+    text-align: center;
+}
+
+div.st-widgetdialog-wikitext span.label {
+    padding-right: 3px;
+    font-style: italic;
+}
+
+div.st-widgetdialog-wikitext span.wikitext {
+}
+
+p.st-widget-dialog-defaultradio {
+    margin: 0;
+    padding: 0 0 5px 0;
+}
+
+p.st-widget-dialog-choiceradio {
+    margin: 0;
+    padding: 0;
+}
+
+.st-widgets-options {
+    margin: 0;
+    padding: 0;
+}
+
+#st-widgets-moreoptions {
+    padding-left: 8px;
+    font-size: 0.8em;
+}
+
+
+span.st-widget-dialog-title {
+    padding-left: 0;
+    font-weight: bold;
+    font-size: 1.1em;
+    font-family: Verdana, Arial, sans-serif;
+    display: block;
+}
+
+p.st-widget-description {
+    padding: 0;
+    margin: 0.2em 0 0.8em 0;
+    font-size: 0.9em;
+    font-family: Verdana, Arial, sans-serif;
+}
+
+.widget_edit_advanced {
+    font-size: 0.9em;
+    font-family: monospace;
+}
+
+table.st-widgets-optionstable {
+    border-collapse: separate;
+    border-spacing: 0px 6px;
+}
+
+table.st-widgets-moreoptionstable {
+    border-collapse: separate;
+    border-spacing: 0px 6px;
+}
+
+td.st-widget-dialog-editlabel {
+    padding-right: 0.5em;
+    font-size: 0.8em;
+    font-family: Helvetica, Arial, sans-serif;
+    white-space: nowrap;
+    vertical-align: top;
+    font-weight: 600;
+}
+
+td.st-widget-dialog-editfield {
+    padding: 0;
+    font-size: 0.8em;
+    font-family: Verdana, Arial, sans-serif;
+}
+
+.widget_edit_error_msg {
+    border-top: 1px solid #BA4949;
+    border-bottom: 1px solid #BA4949;
+    background-color: #F5F5F5;
+    color: #800000;
+    font-size: 90%;
+    padding: 4px;
+    display: none;
+}
+
+/* Lookahead styles */
+div.st-widget-lookaheadsuggestionwindow {
+    background-color: #F2FFFF;
+    border: thin solid #000055;
+    overflow: hidden;
+    position: absolute;
+    height: 0px;
+}
+
+div.st-widget-lookaheadsuggestionblock {
+    padding: 5px 0.8em 5px 0.8em;
+    display: block;
+}
+
+span.st-widget-lookaheadsuggestion {
+    font-family: Verdana, Arial, Helvetica, Sans-Serif;
+    font-size: 0.9em;
+    padding-right: 0.1em;
+}
+
+span.st-widget-lookaheadsuggestion a:hover {
+    background-color: #DDDDFF;
+}
+
+span.st-widget-lookaheadsuggestion a:link {
+    color: #000077;
+}
+
+span.st-widget-lookaheadsuggestion a:visited {
+    color: #000077;
+}
+
+span.st-lookahead-info {
+    font-size: 0.7em;
+}
+
+span.st-lookahead-suggestion {
+    font-size: 0.8em;
+}
+
+div.st-widget-lookaheadsuggestions {
+    display: none;
+    background-color: #EFFEFF;
+    height: 200px;
+    overflow: auto;
+}
+
+div.st-widget-buttons {
+    padding: 0.2em 0.2em 0.1em 0.2em;
+    text-align: right;
+}
+
+span.st-widget-cancelbutton {
+    padding: 0 0 0 7px;
 }
 
 /* Multi-page export */
@@ -3029,4 +3139,3 @@ div#st-listtools ul.level2 {
     color: #888;
     vertical-align: bottom;
 }
-

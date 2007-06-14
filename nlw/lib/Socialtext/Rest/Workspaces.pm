@@ -18,6 +18,15 @@ $JSON::UTF8 = 1;
 # has 'selected'.
 sub permission { +{} }
 
+sub _initialize {
+    my ( $self, $rest, $params ) = @_;
+
+    $self->SUPER::_initialize($rest, $params);
+
+    $self->{FilterParameters}->{'title_filter'} = 'title';
+}
+
+
 sub collection_name {
     'Workspaces';
 }
@@ -153,4 +162,3 @@ sub _create_workspace {
 }
 
 1;
-

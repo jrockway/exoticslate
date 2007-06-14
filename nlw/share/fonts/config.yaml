@@ -1,0 +1,16 @@
+---
+font: DejaVuSans.ttf
+lower: 32
+upper: 3583
+size: 12
+default: ascii
+---
+font: ipag-mona.ttf
+lower: 12352 
+upper: 12543
+size: 16
+---
+font: odokai.ttf
+lower: 12544
+upper: 40959
+size: 16

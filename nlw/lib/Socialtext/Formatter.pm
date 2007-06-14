@@ -41,7 +41,7 @@ sub wafl_classes {
     qw(
         Preformatted Html Selenium PageInclusion
         Image File HtmlPage CSS InterWikiLink TradeMark
-        WeblogLink CategoryLink TeleType Toc
+        WeblogLink CategoryLink TagLink TeleType Toc
     );
 }
 

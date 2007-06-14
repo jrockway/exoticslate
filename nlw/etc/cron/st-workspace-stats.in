@@ -1,2 +1,0 @@
-# generate and mail workspace usage reports to each workspace and corp
-0 7 * * 0 root /usr/bin/nice @BINDIR@/st-workspace-view-edit-stats < @HTTPD_LOGDIR@/access.log.1

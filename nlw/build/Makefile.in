@@ -55,6 +55,7 @@ INSTALL_BASE = install-css        \
                install-dev        \
                install-html       \
                install-images     \
+               install-fonts      \
                install-javascript \
                install-js-test    \
                install-test       \

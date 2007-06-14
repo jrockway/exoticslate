@@ -94,7 +94,7 @@ Awesome {tm}
 --- match
 <div class="wiki">
 <p>
-Awesome <span class="nlw_phrase">&trade;<!-- wiki: {tm: } --></span></p>
+Awesome <span class="nlw_phrase">&trade;<!-- wiki: {tm} --></span></p>
 </div>
 
 === asis phrase

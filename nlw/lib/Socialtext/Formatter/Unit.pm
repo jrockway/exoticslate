@@ -335,6 +335,13 @@ sub match {
     return 1;
 }
 
+sub text_filter {
+    return $_[1] =~ /\S/
+        ? $_[1]
+        : '<span style="padding:.5em">&nbsp;</span>';
+}
+
+
 1;
 
 __END__

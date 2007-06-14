@@ -85,6 +85,7 @@ HTML::WikiConverter::Socialtext: 0.03
 Imager: 0
 IO::File: 0
 IPC::Run: 0.79
+Jemplate: 0.20
 JSON: 1.07
 KinoSearch: 0.15
 LWP::UserAgent: 2.033

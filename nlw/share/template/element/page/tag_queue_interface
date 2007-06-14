@@ -1,7 +1,8 @@
 [% ns = 'st-tagqueue' %]
 <div id="[% ns %]-interface">
     <form onsubmit="return false;">
-    <div id="[% ns %]-overlay" class="popup-overlay"></div>
+    <div id="[% ns %]-overlay"></div>
+    <div>
     <div id="[% ns %]-dialog">
         <div id="[% ns %]-title">Add Tags</div>
         <p id="[% ns %]-message">Enter a tag and click "Add tag". The tag will be saved when you save the page.</p>
@@ -13,6 +14,8 @@
             <div id="[% ns %]-close">[% INCLUDE element/button id="${ns}-closebutton", label="Done" %]</div>
             <div id="[% ns %]-addbutton">[% INCLUDE element/button id="${ns}-submitbutton", tooltip="Click this button to add your tag", label = "Add&nbsp;tag" %]</div>
         </div>
+        <div style="clear:both;">&nbsp;</div>
+    </div>
     </div>
     <div id="[% ns %]-holder" style="display: none"></div>
     <div id="[% ns %]-listtemplate" style="display: none">[% INCLUDE element/jst/tag/queue %]</div>

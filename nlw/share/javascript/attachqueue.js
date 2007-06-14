@@ -110,7 +110,14 @@ ST.AttachmentQueue.prototype = {
     _center_lightbox: function (parentElement) {
         var overlayElement = $('st-attachmentsqueue-overlay');
         var element = $('st-attachmentsqueue-dialog');
-        return (new ST.Lightbox).center(overlayElement, element, parentElement);
+        parentElement = $(parentElement);
+        var divs = {
+            wrapper: parentElement,
+            background: overlayElement,
+            content: element,
+            contentWrapper: element.parentNode
+        }
+        Widget.Lightbox.show({'divs':divs, 'effects':['RoundedCorners']});
     },
 
     count: function () {

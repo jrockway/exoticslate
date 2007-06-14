@@ -11,7 +11,8 @@ const contains_phrases => [];
 
 # Because -- cannot appear inside HTML comments, we escape '-' characters
 # here into '-='.  Because '=' is our trailing escape character, we first
-# escape '=' to '=='.  This transform will be reversed inside NLW.js.
+# escape '=' to '=='.  This transform will be reversed inside
+# Wikiwyg/Socialtext.js and Wikiwyg/Widgets.js.
 sub escape_wafl_dashes {
     shift;
     my $html = shift || '';

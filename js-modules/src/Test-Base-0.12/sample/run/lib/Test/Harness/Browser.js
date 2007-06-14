@@ -353,7 +353,8 @@ if (window.parent != window &&
         for (var i = 0; i < this.failures.length; i++) {
             var track = this.failures[i];
             var style = i % 2 ? 'even' : 'odd';
-            table += '<tr class="' + style + '"><td>' + track.fn + '</td>'
+            table += '<tr class="' + style + '"><td><a href="'
+              + track.fn + '">'+track.fn+ '</a></td>'
               + '<td>' + track.total + '</td>'
               + '<td>' + (track.total - track.ok) + '</td>'
               + '<td>' + this._failList(track.failList) + '</td></tr>';

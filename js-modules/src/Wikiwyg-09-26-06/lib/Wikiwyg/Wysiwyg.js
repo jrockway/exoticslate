@@ -81,6 +81,26 @@ proto.enableThis = function() {
     this.apply_stylesheets();
     this.enable_keybindings();
     this.clear_inner_html();
+    if ( Wikiwyg.is_ie ) {
+        var self = this;
+        var win = this.get_edit_window();
+        var doc = this.get_edit_document();
+        self.ieSelectionBookmark = null;
+        var bookmark = function() {
+            var range = doc.selection.createRange();
+            self.ieSelectionBookmark = range.getBookmark();
+        }
+        doc.attachEvent("onbeforedeactivate", bookmark);
+        var restoreBookmark = function() {
+             if (self.ieSelectionBookmark) {
+                 var range = doc.body.createTextRange();
+                 range.moveToBookmark(self.ieSelectionBookmark);
+                 range.collapse();
+                 range.select();
+             }
+        }
+        doc.attachEvent("onactivate", restoreBookmark);
+    }
 }
 
 proto.clear_inner_html = function() {

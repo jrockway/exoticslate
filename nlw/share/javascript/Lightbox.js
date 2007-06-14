@@ -7,6 +7,47 @@ if (typeof ST == 'undefined') {
 ST.Lightbox = function() {};
 
 ST.Lightbox.prototype = {
+    create: function(contentElement) {
+        var wrapper = document.createElement("div");
+        var overlay = document.createElement("div");
+        var content = document.createElement("div");
+
+        wrapper.appendChild(overlay);
+        wrapper.appendChild(content);
+
+        overlay.className = "popup-overlay";
+
+        content.className = "st-lightbox-content";
+        content.appendChild(contentElement);
+
+        this.wrapper = wrapper;
+        this.overlay = overlay;
+        this.content = content;
+
+        return this;
+    },
+    show: function() {
+        document.body.appendChild(this.wrapper);
+        this.center(this.overlay, this.content, this.wrapper);
+        with(this.wrapper.style) {
+            position = Wikiwyg.is_ie ? "absolute" :"fixed";
+            top = 0;
+            left = 0;
+            width = "100%";
+            height = "100%";
+        }
+        with(this.overlay.style) {
+            zIndex = 90;
+            position = Wikiwyg.is_ie ? "absolute" :"fixed";
+        }
+        with(this.content.style) {
+            zIndex = 2000;
+            position = Wikiwyg.is_ie ? "absolute" :"fixed";
+        }
+    },
+    close: function() {
+        document.body.removeChild(this.wrapper);
+    },
     center: function (overlayElement, element, parentElement) {
         try{
             element = $(element);

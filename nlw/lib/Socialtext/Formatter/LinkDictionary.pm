@@ -75,6 +75,15 @@ Links to the category display page.
 field category             =>
     '/%{workspace}/index.cgi?action=category_display;category=%{category}';
 
+=head2 tag
+
+Alias of 'category'
+
+=cut
+field tag             =>
+    '/%{workspace}/index.cgi?action=category_display;category=%{category}';
+
+
 =head2 weblog
 
 Links to weblog display.

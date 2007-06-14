@@ -42,6 +42,14 @@
             'text/plain':   *default
         '*': [Socialtext::Rest::PageTags, bad_method]
 -
+    '/data/workspaces/:ws/pages/:pname/sections':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::Sections, GET_html]
+            'text/html':        *default
+            'text/plain':       [Socialtext::Rest::Sections, GET_text]
+            'application/json': [Socialtext::Rest::Sections, GET_json]
+        '*': [Socialtext::Rest::PageTags, bad_method]
+-
     '/data/workspaces/:ws/pages/:pname/revisions/:revision_id':
         'GET':
             '*/*':           &default [Socialtext::Rest::PageRevision, GET_html]

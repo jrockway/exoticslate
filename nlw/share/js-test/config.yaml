@@ -4,7 +4,13 @@ import_libs:
   - ../../js-modules/Ajax/lib/Ajax.js
   - ../Test/Wikiwyg.js
   - ../../javascript/main.js
-  - ../../js-modules/Wikiwyg/lib/Wikiwyg.js
-  - ../../js-modules/Wikiwyg/lib/Wikiwyg/Wikitext.js
-  - ../../js-modules/Wikiwyg/lib/Wikiwyg/Wysiwyg.js
+  - ../../javascript/md5.js
+  - ../../javascript/pageview.js
+  - ../../js-modules/DOM-Events/lib/DOM/Events.js
+  - ../../js-modules/Widget-Lightbox/lib/Widget/Lightbox.js
+  - ../../js-modules/Wikiwyg-copy/lib/Wikiwyg.js
+  - ../../js-modules/Wikiwyg-copy/lib/Wikiwyg/Wikitext.js
+  - ../../js-modules/Wikiwyg-copy/lib/Wikiwyg/Wysiwyg.js
   - ../../javascript/Wikiwyg/Socialtext.js
+  - ../../javascript/Widgets.js 
+  - ../../javascript/Wikiwyg/Widgets.js

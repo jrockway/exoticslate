@@ -11,6 +11,8 @@ ST.Page = function (args) {
 ST.Page.prototype = {
     page_id: null,
     wiki_id: null,
+    wiki_title: null,
+    page_title: null,
     revision_id: null,
     comment_form_window_height: null,
     element: {
@@ -137,7 +139,7 @@ ST.Page.prototype = {
         return page_info.is_active;
     },
 
-    refresh_page_content: function () {
+    refresh_page_content: function (force_update) {
         var uri = Page.restApiUri();
         uri = uri + '?verbose=1;link_dictionary=s2';
         var date = new Date();
@@ -162,7 +164,7 @@ ST.Page.prototype = {
         if (request.transport.status == 200) {
             var page_info = JSON.parse(request.transport.responseText);
             if (page_info) {
-                if (Page.revision_id < page_info.revision_id) {
+                if ((Page.revision_id < page_info.revision_id) || force_update) {
                     $('st-page-content').innerHTML = page_info.html;
                     $('st-page-editing-revisionid').value = page_info.revision_id;
                     Page.revision_id = page_info.revision_id;
@@ -343,7 +345,7 @@ ST.Attachments.prototype = {
         Element.update(this.element.attachMessage, 'Click "Browse" to find the file you want to upload. When you click "Upload another file" your file will be uploaded and added to the list of attachments for this page.');
         $(this.element.attachSubmit).value = 'Upload another file';
         this._refresh_uploaded_list();
-        Page.refresh_page_content();
+        Page.refresh_page_content(true);
         var response = text.match(/({"attachments"\:.*}]})/, 'i');
         if (response) {
             this._attachments = JSON.parse(response[1]);
@@ -522,8 +524,16 @@ ST.Attachments.prototype = {
     },
 
     _center_lightbox: function (overlayElement, element, parentElement) {
-        window.scroll(0, 0);
-        return (new ST.Lightbox).center(overlayElement, element, parentElement);
+        parentElement = $(parentElement);
+        var divs = {
+            wrapper: parentElement,
+            background: overlayElement,
+            content: element,
+            contentWrapper: element.parentNode
+        }
+        Widget.Lightbox.show({'divs':divs, 'effects':['RoundedCorners']});
+        divs.contentWrapper.style.width="520px";
+        divs.content.style.padding="10px";
     },
 
     _display_manage_interface: function () {

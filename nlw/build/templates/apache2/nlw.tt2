@@ -107,7 +107,7 @@ Listen [% config.custom_http_port %]
 [% END %]
 
 [% IF config.ssl_only or config.use_ssl %]
-    [% hi_port = config.apache_perl_port + 1000 %]
+    [% hi_port = config.apache_perl_port + config.ssl_port_difference %]
     [% server_common( hi_port, 1 ) %]
     SSLEngine on
     SSLCertificateFile    [% config.ssl_base_dir %]/certs/[% config.nlw_server_hostname %].crt

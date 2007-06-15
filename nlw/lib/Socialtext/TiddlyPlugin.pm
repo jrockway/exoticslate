@@ -14,7 +14,7 @@ use Class::Field qw( const field );
 use Encode;
 use File::Temp;
 use Readonly;
-use Socialtext::WebHelpers::Apache;
+use Socialtext::URI;
 use Socialtext::AppConfig;
 use Socialtext::String;
 
@@ -97,11 +97,7 @@ sub _create_html {
         pages     => $tiddlers,
         default   => {
             workspace => $self->hub->current_workspace->name,
-            # Socialtext::URI::uri() always returns http
-            # TiddlyWiki does not effectively handle redirects
-            # so we need to use the protocol that this workspace
-            # uses.
-            server    => Socialtext::WebHelpers::Apache->base_uri(),
+            server    => Socialtext::URI::uri(),
         },
     );
 }
@@ -191,11 +187,7 @@ sub _tiddler_representation {
         wikitext => $self->_escape_wikitext( $page->content ),
         workspace   => $self->hub->current_workspace->name(),
         page        => $page->uri,
-        # Socialtext::URI::uri() always returns http
-        # TiddlyWiki does not effectively handle redirects
-        # so we need to use the protocol that this workspace
-        # uses.
-        server      => Socialtext::WebHelpers::Apache->base_uri(),
+        server      => Socialtext::URI::uri(),
         pageName    => $page->name,
         version     => $page->revision_id(),
     };

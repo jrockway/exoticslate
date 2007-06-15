@@ -9,8 +9,13 @@ our @LOG_MSGS;
 
 sub new {
     my $class = shift;
-    my %opts = @_;
-    my $self = { %opts };
+    my $self;
+    if (ref($_[0])) {
+        $self = $_[0];
+    } else {
+        my %opts = @_;
+        $self = { %opts };
+    }
     bless $self, $class;
 }
 

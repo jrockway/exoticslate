@@ -5,13 +5,14 @@ use warnings;
 use Test::Live fixtures => [qw(admin)];
 use Test::More tests => 4;
 use Socialtext::Hostname;
+use Socialtext::HTTPPorts qw(SSL_PORT_DIFFERENCE);
 
 my $live     = Test::Live->new();
 my $base_uri = $live->base_url;
 my $wsdl     = $base_uri . '/static/wsdl/0.9.wsdl';
 my $host     = Socialtext::Hostname::fqdn();
 my $port     = $< + 30000;
-my $ssl_port = $port + 1000;
+my $ssl_port = $port + SSL_PORT_DIFFERENCE;
 
 =for future fixes XXX
 

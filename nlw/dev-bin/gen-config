@@ -39,9 +39,11 @@ use File::Spec;
 use File::Slurp ();
 use Getopt::Long;
 use Socialtext::AppConfig;
+use Socialtext::HTTPPorts qw(SSL_PORT_DIFFERENCE);
 use Socialtext::Build qw(get_prefixed_dir get_build_setting);
 use Sys::Hostname;
 use Socialtext::Hostname;
+use Socialtext::HTTPPorts;
 use Template ();
 use User::pwent;
 
@@ -441,7 +443,7 @@ sub apache2_params {
 sub _frontend_ports {
     if ( $opts{ports_start_at} ) {
         my $port = $user->uid + $opts{ports_start_at};
-        return { http => $port, https => $port + 1000 };
+        return { http => $port, https => $port + SSL_PORT_DIFFERENCE};
     }
     else {
         return { http => 80, https => 443 };
@@ -563,15 +565,16 @@ sub standard_params {
     my %dirs = %{+shift};
 
     my %config = (
-        is_dev          => _bool( $is_dev_install ),
-        is_production   => _bool( $is_production ),
-        is_appliance    => _bool( $is_appliance ),
-        is_mac          => _bool( $^O eq 'darwin' ),
+        is_dev        => _bool($is_dev_install),
+        is_production => _bool($is_production),
+        is_appliance  => _bool($is_appliance),
+        is_mac        => _bool( $^O eq 'darwin' ),
 
-        socialtext_open => _bool( $socialtext_open ),
-        apache_proxy    => _bool( $opts{'apache-proxy'} ),
-        apache_status   => $opts{'apache-status'},
-        server_admin    => get_build_setting( 'server-admin' ),
+        socialtext_open     => _bool($socialtext_open),
+        apache_proxy        => _bool( $opts{'apache-proxy'} ),
+        apache_status       => $opts{'apache-status'},
+        server_admin        => get_build_setting('server-admin'),
+        ssl_port_difference => SSL_PORT_DIFFERENCE,
     );
 
     $config{nlw_server_hostname} = $opts{hostname} 

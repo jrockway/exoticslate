@@ -5,7 +5,9 @@ use strict;
 use warnings;
 
 use Socialtext::String;
+use Socialtext::URI;
 use URI::Escape ();
+use Apache::Constants qw(FORBIDDEN REDIRECT);
 
 my $SupportClass;
 my %Roles;
@@ -98,6 +100,28 @@ sub html_unescape {
     return Socialtext::String::html_unescape(@_);
 }
 
+sub redirect {
+    my $class = shift;
+    my $uri = (@_ == 1 ? shift : Socialtext::URI::uri(@_));
 
+    my $r = Apache::Request->instance( Apache->request );
+    $r->method('GET');
+    $r->headers_in->unset('Content-length');
+
+    $r->err_headers_out->add( Location => $uri );
+    $r->status ( REDIRECT );
+
+    $r->send_http_header;
+}
+
+sub abort_forbidden {
+    my $self       = shift;
+    my $r = Apache::Request->instance( Apache->request );
+
+    $r->method('GET');
+    $r->headers_in->unset('Content-length');
+    $r->status(FORBIDDEN);
+
+    Socialtext::WebApp::Exception::Forbidden->throw();
+}
 1;
-

@@ -53,7 +53,7 @@ sub challenge {
 
     # stick some information in the session
     # and then establishes a redirect header
-    # and throws: MasonX::WebApp::Exception::Aborted
+    # and throws up
     $app->_handle_error(
         error => {
             type => $type,

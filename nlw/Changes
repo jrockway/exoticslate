@@ -194,9 +194,7 @@ Synced with ST-based trunk -r14912
 
 
     [INTERNALS]
-    All config files are now generated with Template Toolkit, not
-    HTML::Mason.  This brings us a step closer to removing Mason from
-    Socialtext Open.
+    All config files are now generated with Template Toolkit.
 
     Removed unused /st-archive handler from Socialtext Open.
 

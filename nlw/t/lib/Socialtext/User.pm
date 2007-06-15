@@ -14,4 +14,6 @@ sub confirm_email_address {}
 
 sub confirmation_uri { 'blah/nlw/submit/confirm/foo' }
 
+sub FormattedEmail { 'One Loser <one@foo.bar>' }
+
 1;

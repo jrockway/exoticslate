@@ -60,7 +60,6 @@
 # Not stored in SF repo
 =lib/Socialtext/WebApp/Control.pm
 =lib/Socialtext/AccessHandler/IsBusinessAdmin.pm
-^share/mason/nlw/control/
 
 # Test data
 # Not stored in SF repo

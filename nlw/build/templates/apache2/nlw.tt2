@@ -78,6 +78,7 @@
 
 [%# Real code starts %]
 ErrorDocument 502 /static/html/502.html
+ErrorDocument 500 /static/html/500.html
 
 [% IF config.custom_http_port -%]
 Listen [% config.custom_http_port %]

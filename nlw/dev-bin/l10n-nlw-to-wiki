@@ -6,27 +6,73 @@ use FindBin qw/$Bin/;
 use lib "$Bin/../lib";
 use Socialtext::Wikil10n qw/load_existing_l10ns make_rester/;
 use Socialtext::System qw/shell_run/;
+use Socialtext::File qw/set_contents/;
 use Locale::PO;
+use File::Find::Rule;
 
-my @files = (
-    'share/template/view/homepage',
-    'share/javascript/revisions.js',
-    'lib/Socialtext/CLI.pm',
+my $LIVE = shift;
+
+my @exclude_rx = (
+    qr/tiddlytext/,
+    qr/combined-source\.js/,
+    qr/Socialtext\/l10n.pm/,
 );
+my @include_rx = (
+    qr/\.(?:pm|js)$/, 
+    qr/share\/template/,
+);
+my @files = get_files( "lib/", "share/template", "share/javascript" );
 
 my $en_file = "nlw-en.po";
-shell_run("xgettext.pl -o $en_file @files");
-die unless -e $en_file;
+call_xgettext( $en_file => @files );
 po_to_wiki($en_file);
 exit;
+
+sub call_xgettext {
+    my ( $lang, @files ) = @_;
+
+    my $tmpfile = "/tmp/gettext.$$";
+    set_contents( $tmpfile, join( "\n", @files ) );
+    unlink $lang;
+    shell_run("cat $tmpfile | xargs xgettext.pl -o $lang");
+    unlink $tmpfile;
+    die "Expected xgettext.pl to create $lang\n" unless -e $lang;
+}
+
+sub get_files {
+    my @dirs  = @_;
+    my @files = File::Find::Rule->file()->in(@dirs);
+    my @new_files;
+
+    FILE: for my $file (@files) {
+        for my $rx (@exclude_rx) {
+           next FILE if $file =~ $rx;
+        }
+        for my $rx (@include_rx) {
+            next unless $file =~ $rx;
+            push @new_files, $file;
+            last;
+        }
+    }
+
+    return @new_files;
+}
 
 
 sub po_to_wiki {
     my $pos = Locale::PO->load_file_asarray(shift);
-    my $r = make_rester();
+    my $r = make_rester($LIVE);
 
     print "Fetching pages tagged l10n...\n";
     my @locale_pages = $r->get_taggedpages('l10n');
+    if (@locale_pages == 0) {
+        my $page = 'Socialtext - english';
+        $r->put_page($page, 'no strings yet...');
+        $r->put_pagetag($page, 'l10n');
+        $r->put_pagetag($page, 'locale=en');
+        push @locale_pages, $page;
+    }
+
     for my $title (@locale_pages) {
         print "Updating localizations for - $title\n";
         my $existing_pos = load_existing_l10ns($r, $title);

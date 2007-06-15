@@ -1,7 +1,0 @@
-<!-- @COPYRIGHT@ -->
-<span class="error">
-You must be logged in to edit the <% $workspace_name %> workspace.
-</span>
-<%args>
-$workspace_name
-</%args>

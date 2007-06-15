@@ -76,8 +76,6 @@ Getopt::Long: 0
 HTML::Entities: 1.32
 HTML::FillInForm: 1.05
 HTML::FormatRTF: 2.04
-HTML::Mason: 1.28
-HTML::Mason::Interp: 0
 HTML::PrettyPrinter: 0.03
 HTML::TreeBuilder: 3.13
 HTML::WikiConverter: 0.61
@@ -98,7 +96,6 @@ Log::Dispatch::Screen: 1.17
 Log::Dispatch::Syslog: 1.18
 LWP::UserAgent: 2.033
 Mail::Address: 1.67
-MasonX::WebApp: 0
 MIME::Parser: 5.417
 MIME::Types: 1.15
 MLDBM: 2.01

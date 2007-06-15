@@ -13,7 +13,7 @@ isa_ok( $hub, 'Socialtext::Hub' );
 my $ws = $hub->current_workspace();
 
 RECEIVE_STRING_SIMPLE: {
-    my $file = 't/test-data/email/mason';
+    my $file = 't/test-data/email/EmailReceiver';
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
     my $email = do { local $/ = undef; <$fh> };
@@ -25,13 +25,13 @@ RECEIVE_STRING_SIMPLE: {
         workspace => $ws,
     );
 
-    tests_for_mason_email();
+    tests_for_email();
 
     my $user = Socialtext::User->new( email_address => 'williams@tni.com' );
     isa_ok( $user, 'Socialtext::User',
         'A new user was created because of an accepted email' );
 
-    my $page = $hub->pages->new_from_name('[Mason] CVS Mason and Apache2');
+    my $page = $hub->pages->new_from_name('[monkey] CVS monkey and ape2');
     isa_ok( $page, 'Socialtext::Page' );
     $page->purge();
 
@@ -39,7 +39,7 @@ RECEIVE_STRING_SIMPLE: {
 }
 
 RECEIVE_HANDLE_SIMPLE: {
-    my $file = 't/test-data/email/mason';
+    my $file = 't/test-data/email/EmailReceiver';
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
@@ -50,17 +50,17 @@ RECEIVE_HANDLE_SIMPLE: {
         workspace => $ws,
     );
 
-    tests_for_mason_email();
+    tests_for_email();
 
     remove_guest_email_in($ws);
 }
 
-sub tests_for_mason_email {
-    my $page = $hub->pages()->new_from_name('[Mason] CVS Mason and Apache2');
+sub tests_for_email {
+    my $page = $hub->pages()->new_from_name('[monkey] CVS monkey and ape2');
     isa_ok( $page, 'Socialtext::Page' );
 
-    ok( $page->active(), "Found a page with the name '[Mason] CVS Mason and Apache2'" );
-    is( $page->title(), '[Mason] CVS Mason and Apache2',
+    ok( $page->active(), "Found a page with the name '[monkey] CVS monkey and ape2'" );
+    is( $page->title(), '[monkey] CVS monkey and ape2',
         'check that page title matches subject' );
     like( $page->content(), qr{From:\s+"John Williams"\s+<mailto:williams\@tni.com>},
           'content includes email sender name & address' );
@@ -78,8 +78,8 @@ sub tests_for_mason_email {
     my $categories = $page->metadata()->Category();
     ok( scalar @$categories, 'page has category metadata' );
     is_deeply( [ sort @$categories ],
-               [ 'Apache', 'Email', 'Mason' ],
-               'categories are Apache, Email, & Mason' );
+               [ 'Email', 'ape', 'monkey' ],
+               'categories are ape, Email, & monkey' );
 
     my $attachments = $page->hub()->attachments()->all( page_id => $page->id );
     is( @$attachments, 0,

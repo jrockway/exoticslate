@@ -9,6 +9,7 @@ use Class::Field qw( const field );
 use Socialtext::AppConfig;
 use Socialtext::Helpers;
 use Socialtext::Exceptions;
+use Socialtext::WebApp;
 
 sub class_id { 'attachments_ui' }
 const class_title => 'Attachments';
@@ -96,10 +97,6 @@ sub attachments_download {
         print while <$fh>;
     }
 
-    # If we always load this it breaks when we try to just compile the
-    # module outside of mod_perl - this will be fixed in HTML::Mason
-    # 1.33 (not released yet)
-    require Socialtext::WebApp;
     Socialtext::WebApp::Exception::ContentSent->throw();
 }
 

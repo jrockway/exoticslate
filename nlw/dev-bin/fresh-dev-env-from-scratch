@@ -27,7 +27,6 @@ if [ -e t/tmp ]; then
     dev-bin/nlwctl --test stop
     rm -r t/tmp* &
 fi
-rm_dir "mason_data_dir";
 rm_dir "template_compile_dir";
 rm_dir "formatter_cache_dir";
 

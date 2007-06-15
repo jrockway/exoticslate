@@ -5746,6 +5746,400 @@ output += '<div class="st-widget-buttons">\n    <span class="st-widget-savebutto
     return output;
 }
 
+Jemplate.templateMap['widget_aim_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">AIM Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to an AIM screen name. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">AIM screen name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-aim_id" name="aim_id" value="';
+//line 10 "widget_aim_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('aim_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="aim_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an AIM link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="aim_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_aim_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_asap_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Convoq Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a Convoq name. Clicking the link will start a Convoq call with the person if your Convoq client is properly configured. Use this form to edit the properties of the Convoq link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Convoq name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-asap_id" name="asap_id" value="';
+//line 10 "widget_asap_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('asap_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="asap_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Convoq Link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="asap_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_asap_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_asis_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Unformatted</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Include unformatted text in the page. This text will not be treated as wiki text. Use this form to edit the text.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Unformatted content:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-asis_content" name="asis_content" value="';
+//line 10 "widget_asis_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('asis_content');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="asis_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for unformatted text.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="asis_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_asis_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_date_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Date in Local Time</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the given date and time in the individually-set time zone for each reader. Use this form to edit the date and time to be displayed</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">YYYY-MM-DD&nbsp;HH:MM:SS:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-date_string" name="date_string" value="';
+//line 10 "widget_date_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('date_string');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="date_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a date display.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="date_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_date_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_fetchatom_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Inline Atom</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the content of an Atom feed. Use this form to edit the properties of the inline Atom feed.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Atom feed URL:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-atom_url" name="atom_url" value="';
+//line 10 "widget_fetchatom_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('atom_url');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="fetchatom_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an Atom feed.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="fetchatom_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_fetchatom_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_fetchrss_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Inline RSS</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the content of an RSS feed. Use this form to edit the properties of the inline RSS feed.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">RSS feed URL:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-rss_url" name="rss_url" value="';
+//line 10 "widget_fetchrss_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('rss_url');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="fetchrss_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an RSS feed.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="fetchrss_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_fetchrss_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_file_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Attachment Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a file attached to a page. Use this form to edit the properities of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Attachment filename:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-file_name" name="file_name" value="';
+//line 10 "widget_file_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('file_name');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="file_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include specifying a different page for the attachment, and link text.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 32 "widget_file_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">File attached to:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 45 "widget_file_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('page_title');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 52 "widget_file_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('label');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="file_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 66 "widget_file_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_googlesoap_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Google Search</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the results from a Google search. Use this form to edit the properties for the search.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Search for:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
+//line 10 "widget_googlesoap_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('search_term');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="googlesoap_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an Google search.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="googlesoap_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_googlesoap_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_image_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Attached Image</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display an image on this page. The image must be already uploaded as an attachment to this page or another page. Use this form to edit the properties of the displayed image.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Attachment filename:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-image_name" name="image_name" value="';
+//line 10 "widget_image_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('image_name');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="image_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include the title of another page to which the image is attached, and link text. If link text is specified then a link to the image is displayed instead of the image.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 32 "widget_image_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Attached to:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 45 "widget_image_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('page_title');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 52 "widget_image_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('label');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="image_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 66 "widget_image_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_include_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Page Include</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the contents of another page within the current page. Use this form to edit the properties for the page include.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Other page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 16 "widget_include_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Page title:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 23 "widget_include_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('page_title');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="include_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for page include.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="include_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 47 "widget_include_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['widget_link1_edit.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
@@ -5880,62 +6274,38 @@ output += '\n</form>\n\n\n';
     return output;
 }
 
-Jemplate.templateMap['widget_image_edit.html'] = function(context) {
+Jemplate.templateMap['widget_new_form_page_edit.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Attached Image</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display an image on this page. The image must be already uploaded as an attachment to this page or another page. Use this form to edit the properties of the displayed image.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Attachment filename:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-image_name" name="image_name" value="';
-//line 10 "widget_image_edit.html"
+output += '<span class="st-widget-dialog-title">New Form Page</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Select a form and generates a new form page.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Form name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-form_name" name="form_name" value="';
+//line 10 "widget_new_form_page_edit.html"
 
 // FILTER
 output += (function() {
     var output = '';
 
-output += stash.get('image_name');
+output += stash.get('form_name');
 
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="image_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include the title of another page to which the image is attached, and link text. If link text is specified then a link to the image is displayed instead of the image.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
-//line 32 "widget_image_edit.html"
+output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-form_text" name="form_text" value="';
+//line 16 "widget_new_form_page_edit.html"
 
 // FILTER
 output += (function() {
     var output = '';
 
-output += stash.get('workspace_id');
+output += stash.get('form_text');
 
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Attached to:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
-//line 45 "widget_image_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('page_title');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
-//line 52 "widget_image_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('label');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="image_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 66 "widget_image_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="new_form_page_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a new form page.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="new_form_page_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 40 "widget_new_form_page_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -5947,26 +6317,14 @@ output += '\n</form>\n\n\n';
     return output;
 }
 
-Jemplate.templateMap['widget_file_edit.html'] = function(context) {
+Jemplate.templateMap['widget_recent_changes_edit.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Attachment Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a file attached to a page. Use this form to edit the properities of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Attachment filename:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-file_name" name="file_name" value="';
-//line 10 "widget_file_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('file_name');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="file_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include specifying a different page for the attachment, and link text.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
-//line 32 "widget_file_edit.html"
+output += '<span class="st-widget-dialog-title">What\'s New</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a list of pages recently changed in a workspace. By default only the page titles are displayed. Use this form to edit the list properties.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Workspace:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 16 "widget_recent_changes_edit.html"
 
 // FILTER
 output += (function() {
@@ -5977,32 +6335,14 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">File attached to:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
-//line 45 "widget_file_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n</table>\n</div>\n<div id="recent_changes_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optionally, specify that the page contents should be displayed.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nFull results:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
+//line 39 "widget_recent_changes_edit.html"
+if (stash.get('full')) {
+output += ' checked="checked"';
+}
 
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('page_title');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
-//line 52 "widget_file_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('label');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="file_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 66 "widget_file_edit.html"
+output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="recent_changes_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 50 "widget_recent_changes_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6014,14 +6354,26 @@ output += '\n</form>\n\n\n';
     return output;
 }
 
-Jemplate.templateMap['widget_toc_edit.html'] = function(context) {
+Jemplate.templateMap['widget_search_edit.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Table of Contents</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a table of contents for a page. Each header or section on the page is listed as a link in the table of contents. Click "Save" now, or click "More options" to edit the properties for the table of contents.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n</table>\n</div>\n<div id="toc_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optionally, specify which page\'s headers and sections to use for the table of contents.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
-//line 26 "widget_toc_edit.html"
+output += '<span class="st-widget-dialog-title">Search Results</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the search results for the given phrase within a workspace. Use this form to edit the properties for the search.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Search term:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
+//line 10 "widget_search_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('search_term');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="search_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include the name of the workspace to search, whether to search in the page title, text or tags, and whether to display full results or just page titles.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">In:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 32 "widget_search_edit.html"
 
 // FILTER
 output += (function() {
@@ -6032,63 +6384,32 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Headers and<br/>sections in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
-//line 39 "widget_toc_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('page_title');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="toc_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 54 "widget_toc_edit.html"
-output += context.process('save-cancel.html');
-output += '\n</form>\n\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nSearch type:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="radio" name="search_type" value="text"\n';
+//line 44 "widget_search_edit.html"
+if (stash.get('search_type') == 'text' || stash.get('search_type') == '') {
+output += 'checked="checked"';
 }
 
-Jemplate.templateMap['widget_include_edit.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
+output += '\n/> Text\n<input type="radio" name="search_type" value="category"\n';
+//line 47 "widget_search_edit.html"
+if (stash.get('search_type') == 'category') {
+output += 'checked="checked"';
+}
 
-    try {
-output += '<span class="st-widget-dialog-title">Page Include</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the contents of another page within the current page. Use this form to edit the properties for the page include.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Other page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
-//line 16 "widget_include_edit.html"
+output += '\n/> Tag\n<input type="radio" name="search_type" value="title"\n';
+//line 50 "widget_search_edit.html"
+if (stash.get('search_type') == 'title') {
+output += 'checked="checked"';
+}
 
-// FILTER
-output += (function() {
-    var output = '';
+output += '\n/> Title\n</td>\n</tr>\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nFull results:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
+//line 62 "widget_search_edit.html"
+if (stash.get('full')) {
+output += ' checked="checked"';
+}
 
-output += stash.get('workspace_id');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Page title:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-page_title" name="page_title" value="';
-//line 23 "widget_include_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('page_title');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="include_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for page include.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="include_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 47 "widget_include_edit.html"
+output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="search_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 73 "widget_search_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6131,32 +6452,26 @@ output += '\n</form>\n\n\n';
     return output;
 }
 
-Jemplate.templateMap['widget_recent_changes_edit.html'] = function(context) {
+Jemplate.templateMap['widget_skype_edit.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">What\'s New</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a list of pages recently changed in a workspace. By default only the page titles are displayed. Use this form to edit the list properties.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Workspace:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
-//line 16 "widget_recent_changes_edit.html"
+output += '<span class="st-widget-dialog-title">Skype Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a Skype name. Clicking the link will start a Skype call with the person if your Skype client is properly configured. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Skype name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-skype_id" name="skype_id" value="';
+//line 10 "widget_skype_edit.html"
 
 // FILTER
 output += (function() {
     var output = '';
 
-output += stash.get('workspace_id');
+output += stash.get('skype_id');
 
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n</table>\n</div>\n<div id="recent_changes_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optionally, specify that the page contents should be displayed.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nFull results:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
-//line 39 "widget_recent_changes_edit.html"
-if (stash.get('full')) {
-output += ' checked="checked"';
-}
-
-output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="recent_changes_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 50 "widget_recent_changes_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="skype_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Skype link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="skype_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_skype_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6272,6 +6587,111 @@ output += '\n</form>\n\n\n';
     return output;
 }
 
+Jemplate.templateMap['widget_technorati_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Technorati Search</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the results for a Technorati search. Use this form to edit the properties for the search.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Search for:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
+//line 10 "widget_technorati_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('search_term');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="technorati_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Technorati search.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="technorati_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_technorati_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_toc_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">Table of Contents</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a table of contents for a page. Each header or section on the page is listed as a link in the table of contents. Click "Save" now, or click "More options" to edit the properties for the table of contents.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n</table>\n</div>\n<div id="toc_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optionally, specify which page\'s headers and sections to use for the table of contents.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 26 "widget_toc_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('workspace_id');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Headers and<br/>sections in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 39 "widget_toc_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('page_title');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="toc_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 54 "widget_toc_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['widget_user_edit.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<span class="st-widget-dialog-title">User Name</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the full name for the given email address or user name. Use this form to edit the properties of the user name.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">User\'s email:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-user_email" name="user_email" value="';
+//line 10 "widget_user_edit.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('user_email');
+
+    return context.filter(output, 'html', []);
+})();
+
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="user_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a user name.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="user_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 34 "widget_user_edit.html"
+output += context.process('save-cancel.html');
+output += '\n</form>\n\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['widget_weblog_edit.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
@@ -6376,228 +6796,6 @@ output += '\n</form>\n\n\n';
     return output;
 }
 
-Jemplate.templateMap['widget_fetchrss_edit.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-output += '<span class="st-widget-dialog-title">Inline RSS</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the content of an RSS feed. Use this form to edit the properties of the inline RSS feed.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">RSS feed URL:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-rss_url" name="rss_url" value="';
-//line 10 "widget_fetchrss_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('rss_url');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="fetchrss_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an RSS feed.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="fetchrss_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_fetchrss_edit.html"
-output += context.process('save-cancel.html');
-output += '\n</form>\n\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
-Jemplate.templateMap['widget_fetchatom_edit.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-output += '<span class="st-widget-dialog-title">Inline Atom</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the content of an Atom feed. Use this form to edit the properties of the inline Atom feed.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Atom feed URL:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-atom_url" name="atom_url" value="';
-//line 10 "widget_fetchatom_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('atom_url');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="fetchatom_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an Atom feed.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="fetchatom_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_fetchatom_edit.html"
-output += context.process('save-cancel.html');
-output += '\n</form>\n\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
-Jemplate.templateMap['widget_search_edit.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-output += '<span class="st-widget-dialog-title">Search Results</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the search results for the given phrase within a workspace. Use this form to edit the properties for the search.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Search term:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
-//line 10 "widget_search_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('search_term');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="search_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include the name of the workspace to search, whether to search in the page title, text or tags, and whether to display full results or just page titles.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">In:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
-//line 32 "widget_search_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('workspace_id');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n</p>\n</td>\n</tr>\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nSearch type:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="radio" name="search_type" value="text"\n';
-//line 44 "widget_search_edit.html"
-if (stash.get('search_type') == 'text' || stash.get('search_type') == '') {
-output += 'checked="checked"';
-}
-
-output += '\n/> Text\n<input type="radio" name="search_type" value="category"\n';
-//line 47 "widget_search_edit.html"
-if (stash.get('search_type') == 'category') {
-output += 'checked="checked"';
-}
-
-output += '\n/> Tag\n<input type="radio" name="search_type" value="title"\n';
-//line 50 "widget_search_edit.html"
-if (stash.get('search_type') == 'title') {
-output += 'checked="checked"';
-}
-
-output += '\n/> Title\n</td>\n</tr>\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nFull results:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
-//line 62 "widget_search_edit.html"
-if (stash.get('full')) {
-output += ' checked="checked"';
-}
-
-output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="search_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 73 "widget_search_edit.html"
-output += context.process('save-cancel.html');
-output += '\n</form>\n\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
-Jemplate.templateMap['widget_googlesoap_edit.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-output += '<span class="st-widget-dialog-title">Google Search</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the results from a Google search. Use this form to edit the properties for the search.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Search for:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
-//line 10 "widget_googlesoap_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('search_term');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="googlesoap_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an Google search.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="googlesoap_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_googlesoap_edit.html"
-output += context.process('save-cancel.html');
-output += '\n</form>\n\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
-Jemplate.templateMap['widget_technorati_edit.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-output += '<span class="st-widget-dialog-title">Technorati Search</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the results for a Technorati search. Use this form to edit the properties for the search.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Search for:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
-//line 10 "widget_technorati_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('search_term');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="technorati_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Technorati search.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="technorati_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_technorati_edit.html"
-output += context.process('save-cancel.html');
-output += '\n</form>\n\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
-Jemplate.templateMap['widget_aim_edit.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-output += '<span class="st-widget-dialog-title">AIM Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to an AIM screen name. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">AIM screen name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-aim_id" name="aim_id" value="';
-//line 10 "widget_aim_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('aim_id');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="aim_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an AIM link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="aim_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_aim_edit.html"
-output += context.process('save-cancel.html');
-output += '\n</form>\n\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
 Jemplate.templateMap['widget_yahoo_edit.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
@@ -6618,204 +6816,6 @@ output += stash.get('yahoo_id');
 
 output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="yahoo_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Yahoo! link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="yahoo_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
 //line 34 "widget_yahoo_edit.html"
-output += context.process('save-cancel.html');
-output += '\n</form>\n\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
-Jemplate.templateMap['widget_skype_edit.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-output += '<span class="st-widget-dialog-title">Skype Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a Skype name. Clicking the link will start a Skype call with the person if your Skype client is properly configured. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Skype name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-skype_id" name="skype_id" value="';
-//line 10 "widget_skype_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('skype_id');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="skype_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Skype link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="skype_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_skype_edit.html"
-output += context.process('save-cancel.html');
-output += '\n</form>\n\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
-Jemplate.templateMap['widget_user_edit.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-output += '<span class="st-widget-dialog-title">User Name</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the full name for the given email address or user name. Use this form to edit the properties of the user name.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">User\'s email:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-user_email" name="user_email" value="';
-//line 10 "widget_user_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('user_email');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="user_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a user name.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="user_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_user_edit.html"
-output += context.process('save-cancel.html');
-output += '\n</form>\n\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
-Jemplate.templateMap['widget_date_edit.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-output += '<span class="st-widget-dialog-title">Date in Local Time</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the given date and time in the individually-set time zone for each reader. Use this form to edit the date and time to be displayed</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">YYYY-MM-DD&nbsp;HH:MM:SS:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-date_string" name="date_string" value="';
-//line 10 "widget_date_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('date_string');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="date_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a date display.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="date_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_date_edit.html"
-output += context.process('save-cancel.html');
-output += '\n</form>\n\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
-Jemplate.templateMap['widget_asis_edit.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-output += '<span class="st-widget-dialog-title">Unformatted</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Include unformatted text in the page. This text will not be treated as wiki text. Use this form to edit the text.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Unformatted content:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-asis_content" name="asis_content" value="';
-//line 10 "widget_asis_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('asis_content');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="asis_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for unformatted text.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="asis_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_asis_edit.html"
-output += context.process('save-cancel.html');
-output += '\n</form>\n\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
-Jemplate.templateMap['widget_asap_edit.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-output += '<span class="st-widget-dialog-title">Convoq Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a Convoq name. Clicking the link will start a Convoq call with the person if your Convoq client is properly configured. Use this form to edit the properties of the Convoq link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Convoq name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-asap_id" name="asap_id" value="';
-//line 10 "widget_asap_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('asap_id');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="asap_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Convoq Link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="asap_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_asap_edit.html"
-output += context.process('save-cancel.html');
-output += '\n</form>\n\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
-Jemplate.templateMap['widget_new_form_page_edit.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-output += '<span class="st-widget-dialog-title">New Form Page</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Select a form and generates a new form page.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Form name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-form_name" name="form_name" value="';
-//line 10 "widget_new_form_page_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('form_name');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-form_text" name="form_text" value="';
-//line 16 "widget_new_form_page_edit.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('form_text');
-
-    return context.filter(output, 'html', []);
-})();
-
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="new_form_page_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a new form page.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="new_form_page_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 40 "widget_new_form_page_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -16133,11 +16133,33 @@ proto.sendBackWikitext = function(html) {
     Ajax.post(uri, postdata, func);
 }
 // BEGIN l10ns.js
-var LocalizedStrings = {"jp":{"You cannot compare a revision to itself.":"それ自身と修正を比較することができない。"},"es":{"You must select two revisions to compare.":"Elija dos revisiones para compararlos.","You cannot compare a revision to itself.":"No puede comparar una revisión a su misma."}};
+var LocalizedStrings = {"zj":{"You must select two revisions to compare.":"y\u304a\u3046 m\u3046s7 S\u3048L\u3048C7 7W\u304a r\u3048v\u3044s\u3044\u304aNs 7\u304a C\u304aMp\u3042r\u3048.","You cannot compare a revision to itself.":"y\u304a\u3046 c\u3042nN\u304a7 C\u304aMp\u3042r\u3048 \u3042 R\u3048V\u3044S\u3044\u304an 7\u304a \u30447S\u3048Lf."},"zz":{"You must select two revisions to compare.":"y0u mUs7 S3L3C7 7W0 r3vIsI0Ns 70 C0Mp4r3.","You cannot compare a revision to itself.":"y0u c4nN07 C0Mp4r3 4 R3ViSi0n 70 I7S3Lf."}};
 
-function loc(str) {
+function loc() {
     var locale = Socialtext.loc_lang;
     var dict = LocalizedStrings[locale] || new Array;
-    return dict[str] || str;
+    var str = arguments[0] || "";
+    var l10n = dict[str];
+
+    if (!l10n) {
+        var nstr = str.replace(/\"/g, "\\\"");
+        l10n = dict[nstr] || str;
+    }
+
+    /* If the hash-lookup failed, convert [_1] into %1 and try again. */
+    if (!l10n) {
+        var nstr = str.replace(/\[_(\d+)\]/g, "%$1");
+        l10n = dict[nstr] || str;
+    }
+
+    /* Convert both %1 and [_1] style vars into the given arguments */
+    for (var i = 1; i < arguments.length; i++) {
+        var rx = new RegExp("\\[_" + i + "\\]", "g");
+        var rx2 = new RegExp("%" + i + "", "g");
+        l10n = l10n.replace(rx, arguments[i]);
+        l10n = l10n.replace(rx2, arguments[i]);
+    }
+
+    return l10n;
 }
 

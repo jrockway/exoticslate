@@ -4,6 +4,7 @@
 use strict;
 use warnings;
 
+use mocked 'Apache';
 use Test::Socialtext tests => 23;
 fixtures( 'admin' );
 

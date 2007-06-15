@@ -72,15 +72,17 @@ sub prepare_apache_and_possibly_stop {
         push @pairs, [qw( apache2 apache2 )];
 #    }
     my %apaches;
+    my $some_conf_dir_exists = 0;
     for my $pair ( @pairs ) {
         my ( $apache, $conf ) = @$pair;
         my $conf_file = Cwd::getcwd() . "/t/tmp/etc/$apache/nlw-$conf.conf";
+        $some_conf_dir_exists ||= -e $conf_file;
         $apaches{$apache}
             = Socialtext::ApacheDaemon->new( conf_file => $conf_file );
     }
 
     $self->apaches( \%apaches );
-    $self->stop_all if -e 't/tmp' and not $ENV{NLW_LIVE_DANGEROUSLY};
+    $self->stop_all if $some_conf_dir_exists and not $ENV{NLW_LIVE_DANGEROUSLY};
 }
 
 sub get_apaches {

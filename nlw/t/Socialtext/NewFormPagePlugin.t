@@ -4,6 +4,7 @@
 use strict;
 use warnings;
 
+use mocked 'Apache';
 use Test::Socialtext;
 fixtures( 'admin_no_pages' );
 
@@ -57,7 +58,7 @@ my $viewer = $hub->viewer;
 
     my $process = $hub->new_form_page->new_form_page_process;
     is( '', $process, 'returns empty string' );
-    like( $hub->headers->redirect, qr{\Q?basil_hogwart},
+    like( $Apache::Request::HEADERS{Location}, qr{\Q?basil_hogwart},
         'redirects to basil_hogwart' );
 }
 

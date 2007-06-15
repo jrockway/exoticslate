@@ -54,7 +54,6 @@ perl-Feed-Find
 perl-File-CounterFile
 perl-File-Slurp
 perl-HTML-FillInForm
-perl-HTML-Mason
 perl-HTML-Parser
 perl-HTML-Tagset
 perl-HTML-Tree

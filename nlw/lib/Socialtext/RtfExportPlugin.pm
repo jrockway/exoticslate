@@ -4,6 +4,7 @@ use warnings;
 use strict;
 
 use base 'Socialtext::Plugin';
+use Socialtext::WebApp;
 use Class::Field 'const';
 use Imager;
 
@@ -69,10 +70,6 @@ sub rtf_export {
 
     print $content;
 
-    # If we always load this it breaks when we try to just compile the
-    # module outside of mod_perl - this will be fixed in HTML::Mason
-    # 1.33 (not released yet)
-    require Socialtext::WebApp;
     Socialtext::WebApp::Exception::ContentSent->throw();
 }
 

@@ -42,7 +42,6 @@ sub settings {
 sub users_settings {
     my $self = shift;
     if ( $self->hub()->current_user()->is_guest() ) {
-        my $app = Socialtext::WebApp->NewForNLW;
         Socialtext::Challenger->Challenge(
             type => 'settings_requires_account' );
     }

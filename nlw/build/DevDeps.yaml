@@ -40,4 +40,4 @@ Test::WWW::Mechanize: 0
 Socialtext::WikiTest: 0.05
 
 # For mocking libraries
-mocked: 0
+mocked: 0.06

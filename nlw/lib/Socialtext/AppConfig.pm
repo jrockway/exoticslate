@@ -152,10 +152,6 @@ sub _default_template_compile_dir {
     return File::Spec->catdir( _cache_root_dir(), 'tt2' );
 }
 
-sub _default_mason_data_dir {
-    return File::Spec->catdir( _cache_root_dir(), 'mason' );
-}
-
 sub _default_formatter_cache_dir {
     return File::Spec->catdir( _cache_root_dir(), 'formatter' );
 }
@@ -690,21 +686,6 @@ F<t/tmp/cache/tt2>, otherwise F<~/.nlw/cache/tt2>.
 Optional.
 
 =for code default => _default_template_compile_dir()
-
-=for code type => SCALAR_TYPE
-
-=head2 mason_data_dir
-
-The directory to use for caching compiled Mason templates and other
-cached Mason data.
-
-If the startup user was root, this defaults to
-F</var/cache/socialtext/mason>. Under the test harness it defaults to
-F<t/tmp/cache/mason>, otherwise F<~/.nlw/cache/mason>.
-
-Optional.
-
-=for code default => _default_mason_data_dir()
 
 =for code type => SCALAR_TYPE
 

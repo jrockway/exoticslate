@@ -6,6 +6,7 @@ use warnings;
 
 use MIME::Base64;
 use Test::Socialtext;
+use Socialtext::User;
 use mocked 'Apache::Request';
 use mocked 'Apache::Cookie';
 

@@ -3,12 +3,10 @@ package Socialtext::WebApp;
 use strict;
 use warnings;
 
-use base 'MasonX::WebApp';
-
 use Apache::Constants qw(FORBIDDEN);
 use Apache::URI;
 
-# XXX - MasonX::WebApp::Exception::Abort should have a status field
+# XXX - The exception should have a status field
 # instead of having the status in the webapp object, because the
 # exception is always accessible, even if the webapp object is not.
 use Exception::Class (
@@ -21,14 +19,13 @@ use Exception::Class (
 );
 
 use Socialtext::Helpers;
-
 use Socialtext::Session;
 use Socialtext::UniqueArray;
 use Socialtext::Validate
   qw( validate validate_with SCALAR ARRAYREF HASHREF OBJECT );
 
 # XXX - this attributes stuff should probably be moved to
-# MasonX::WebApp if it's the right way to go.
+# the WebApp if it's the right way to go.
 use attributes;
 
 my %ValidActions;
@@ -45,10 +42,6 @@ sub MODIFY_CODE_ATTRIBUTES {
     return keys %attr;
 }
 
-BEGIN { __PACKAGE__->_LoadActions }
-
-__PACKAGE__->UseSession(0);
-
 sub session {
     my $self = shift;
 
@@ -61,23 +54,15 @@ sub session {
 sub NewForNLW {
     my $class = shift;
 
-    return $class->new(
+    my $self = {
         apache_req => Apache::Request->instance( Apache->request ),
-
-        # XXX - try to set these?
-        args      => {},
-        comp_root => '',
-    );
+    };
+    bless $self, $class or die "Can't bless $self to $class: $!";
+    return $self;
 }
 
-sub _init {
-    my $self = shift;
-    my %p    = validate( @_, { comp_root => { type => SCALAR }, }, );
-
-    $self->{comp_root} = $p{comp_root};
-
-    $self->_decode_args;
-}
+sub _init { shift->decode_args }
+sub apache_req { shift->{apache_req} }
 
 sub _decode_args {
     my $self = shift;
@@ -106,7 +91,7 @@ sub _require_args {
     my $args = $self->args;
 
     foreach my $p (@_) {
-        $self->redirect( uri => '/' )
+        $self->redirect( '/' )
           unless exists $args->{$p} && length $args->{$p};
     }
 }
@@ -124,26 +109,19 @@ sub _arg_as_array {
 
 sub _handle_action {
     my $self = shift;
-
     my ($action) = $self->apache_req->uri =~ m{^/nlw/submit/([\w\.]+)};
 
     return unless defined $action && length $action;
-
     return if $action =~ /^_/;
-
     $action =~ s/\./_/g;
-
-    MasonX::WebApp::Exception::Params->throw(
-        error => "Invalid action: $action" )
-      unless $self->_is_valid_action($action);
+    die "Invalid action: $action\n" unless $self->_is_valid_action($action);
 
     $self->$action();
 
     # This code is unlikely to be executed, as issuing a redirect
     # causes an exception
-    MasonX::WebApp::Exception->throw(
-        error => "No redirect was issued after the $action action." )
-      unless $self->redirected;
+    die "No redirect was issued after the $action action."
+        unless $self->redirected;
 }
 
 sub _is_valid_action {
@@ -161,8 +139,6 @@ sub _is_valid_action {
     return $ValidActions{$coderef};
 }
 
-# XXX - copied from MasonX::WebApp to allow accepting a hashref param
-# - should probably look into changing this API in MasonX::WebApp.
 sub _handle_error {
     my $self = shift;
 
@@ -199,8 +175,7 @@ sub redirect {
     my $self = shift;
 
     $self->session->write();
-
-    $self->SUPER::redirect(@_);
+    Socialtext::WebHelpers->redirect(@_);
 }
 
 sub abort_forbidden {

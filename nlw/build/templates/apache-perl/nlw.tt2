@@ -22,11 +22,10 @@
     PerlSetEnv APACHE_LOG_DIR [% config.log_dir %]
 
 [% IF config.is_dev %]
-    # XXX - I suspect this is wrong
     ErrorDocument 500 /nlw/errors/500.html
 
     PerlSetVar ReloadAll Off
-    PerlSetVar ReloadModules "Socialtext::WebApp Socialtext::WebApp::* Socialtext::* Socialtext::MasonHandler Socialtext::Handler Socialtext::Handler::* Socialtext::RequestContext"
+    PerlSetVar ReloadModules "Socialtext::WebApp Socialtext::WebApp::* Socialtext::* Socialtext::Handler Socialtext::Handler::* Socialtext::RequestContext"
     PerlInitHandler  +Apache::Reload
 [% END %]
 
@@ -63,9 +62,7 @@
     </Location>
 
     [% simple_handler( '/data', 'Socialtext::Handler::REST' ) %]
-
-    Alias /nlw [% config.comp_root %]
-    [% simple_handler( '/nlw', 'Socialtext::MasonHandler' ) %]
+    [% simple_handler( '/nlw', 'Socialtext::Handler::Authen' ) %]
 
     <Location /challenge>
         SetHandler perl-script
@@ -86,17 +83,13 @@
         PerlAuthzHandler +Socialtext::AuthzHandler
         Require valid-workspace-membership
     </Location>
+
     <Location /nlw/control>
-        [%# Control panel %]
+        SetHandler  perl-script
+        PerlHandler +Socialtext::Handler::ControlPanel
         PerlAccessHandler  +Socialtext::AccessHandler::IsBusinessAdmin
     </Location>
 [% END %]
-
-    # These are considered internal components (traditional Mason naming
-    # convention), where .html, etc, are publically viewable.
-    <LocationMatch "^/nlw/.*(handler|\.mas)$">
-        Deny from all
-    </LocationMatch>
 
 [% simple_handler( '/lite/page',      'Socialtext::Handler::Page::Lite' ) %]
 [% simple_handler( '/lite/changes',   'Socialtext::Handler::Changes::Lite' ) %]
@@ -176,7 +169,6 @@ PerlSetVar st_max_unshared_size 225000
 [%- END -%]
 
 PerlSetEnv  NLW_CONFIG      [% config.nlw_config_file %]
-PerlSetEnv  MASON_COMP_ROOT [% config.comp_root %]
 PerlSetEnv  APACHE_LOG_DIR  [% config.log_dir %]
 [% IF ENV.HARNESS_ACTIVE %]
 PerlSetEnv  HARNESS_ACTIVE  [% ENV.HARNESS_ACTIVE %]

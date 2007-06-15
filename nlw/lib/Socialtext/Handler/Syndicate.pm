@@ -29,7 +29,6 @@ sub real_handler {
     # create nlw main object
     my $nlw = eval { $class->get_nlw($r, $user) };
     if ( my $e = $@ ) {
-        return if Exception::Class->caught('MasonX::WebApp::Exception::Abort');
         return $class->handle_error( $r, $@ );
     }
 
@@ -52,9 +51,7 @@ sub real_handler {
     return NOT_FOUND
         if Exception::Class->caught('Socialtext::Exception::NoSuchPage');
 
-    return $class->handle_error( $r, $@, $nlw )
-      if $@
-      and not Exception::Class->caught('MasonX::WebApp::Exception::Abort');
+    return $class->handle_error( $r, $@, $nlw ) if $@;
 
     my $output = $feed->as_xml;
     if ( defined $output ) {

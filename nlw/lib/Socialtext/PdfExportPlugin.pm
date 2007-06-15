@@ -2,14 +2,14 @@
 package Socialtext::PdfExportPlugin;
 use warnings;
 use strict;
-
 use base 'Socialtext::Plugin';
-use Class::Field 'const';
 
+use Socialtext::PdfExport::LinkDictionary;
+use Socialtext::WebApp;
+use File::chdir;
 use IPC::Run 'run';
 use Readonly;
-use Socialtext::PdfExport::LinkDictionary;
-use File::chdir;
+use Class::Field 'const';
 
 =head1 NAME
 
@@ -74,10 +74,6 @@ sub pdf_export {
         $self->hub->headers->print;
         print $pdf_content;
 
-        # If we always load this it breaks when we try to just compile the
-        # module outside of mod_perl - this will be fixed in HTML::Mason
-        # 1.33 (not released yet)
-        require Socialtext::WebApp;
         Socialtext::WebApp::Exception::ContentSent->throw();
     }
     return "Error:<pre>$pdf_content</pre>\n";

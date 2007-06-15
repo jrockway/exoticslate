@@ -184,7 +184,6 @@ sub LoadDeps {
         } grep /^\s*[^#].*: /, <$fh>
     ) . "\x7D";
     die "Could not parse $file: $@\n" if $@;
-    delete $ref->{'MasonX::WebApp'}; # MasonX::WebApp causes dependency problems
 
     return %$ref;
 }

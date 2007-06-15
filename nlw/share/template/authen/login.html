@@ -1,0 +1,41 @@
+[%# @COPYRIGHT@ -%]
+[% WRAPPER authen/wrapper title = loc("Login") %]
+    <h3>Log in to Socialtext</h3>
+
+    <script type="text/javascript">
+    push_onload_function(function() {
+        var username = document.forms["login"].username;
+        if ( username.value.length ) {
+           document.forms["login"].password.focus();
+        }
+        else {
+            document.forms["login"].username.focus();
+        }
+    })
+    </script>
+
+    <form name="login" method="post" action="/nlw/submit/login">
+     <input type="hidden" name="redirect_to" value="[% redirect_to | html %]" />
+     <div class="label-value">
+      <label for="username">[% username_label %]</label>
+      <input id="username" name="username" type="text" size="30" value="[% username %]" />
+     </div>
+
+     <div class="label-value">
+      <label for="password">Password:</label>
+      <input id="password" name="password" type="password" size="30" value="" />
+     </div>
+
+     <div class="form-element">
+      <input class="checkbox" name="remember" type="checkbox" id="remember" value="1" />
+      <span class="description">
+       <label for="remember">Remember me on this computer.</label>
+      </span>
+     </div>
+     <div class="form-element">
+      <input class="button" type="submit" value="Log in" />
+     </div>
+    </form>
+<p><a href="/nlw/forgot_password.html">I don't know my password.</a></p>
+
+[% END %]

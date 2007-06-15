@@ -6,18 +6,21 @@ use base 'Exporter';
 our @EXPORT_OK = qw/get_log_reasons/;
 
 our @LOG_MSGS;
+our %HEADERS;
 
 sub new {
     my $class = shift;
-    my $self;
-    if (ref($_[0])) {
-        $self = $_[0];
-    } else {
-        my %opts = @_;
-        $self = { %opts };
-    }
+    my $self = (@_ == 1 ? shift : { @_ });
     bless $self, $class;
 }
+
+sub method           { }
+sub headers_in       {shift}
+sub err_headers_out  {shift}
+sub unset            { }
+sub add              { $HEADERS{$_[1]} = $_[2] }
+sub status           { }
+sub send_http_header { }
 
 sub instance {
     new(@_);
@@ -81,7 +84,13 @@ package Apache::URI;
 
 sub new {
     my ($class, %opts) = @_;
-    my $self = { %opts };
+    my $self = {
+        scheme   => 'http',
+        hostname => 'localhost',
+        path     => '/',
+        query    => '',
+        %opts
+    };
     bless $self, $class;
 }
 

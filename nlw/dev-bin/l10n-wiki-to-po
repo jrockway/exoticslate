@@ -8,80 +8,183 @@ use Socialtext::Wikil10n qw/load_existing_l10ns make_rester/;
 use Socialtext::System qw/shell_run/;
 use Socialtext::File qw/set_contents/;
 use JSON;
+use utf8;
 
-my $r = make_rester();
+my $live = shift;
+my $r    = make_rester($live);
 my $l10n = load_localizations();
 
 my $js_output = 'share/javascript/l10ns.js';
-my $is_js = qr#share/javascript#;
-create_perl_l10ns('share/l10n', $l10n);
-create_js_l10ns('share/javascript/l10ns.js', $l10n);
+my $is_js     = qr#share/javascript|share/template/element/jst#;
+my $is_po     = qr#lib/\S+\.pm|share/template#;
+create_perl_l10ns( 'share/l10n', $l10n );
+create_js_l10ns( 'share/javascript/l10ns.js', $l10n );
 exit;
 
 sub create_perl_l10ns {
-    my $dir      = shift;
-    my $l10n     = shift;
+    my $dir  = shift;
+    my $l10n = shift;
 
-    for my $locale (keys %$l10n) {
-        my $output = '';
-        my $dict = $l10n->{$locale};
-        for my $id (keys %$dict) {
-            my $l = $dict->{$id};
-            next if $l->{reference} =~ $is_js;
-            $output .= "#: $l->{reference}\n";
-            $output .= "#. $l->{other}\n" if $l->{other};
-            $output .= qq(msgid "$id"\nmsgstr "$l->{msgstr}"\n\n);
-        }
-
-        my $filename = "$dir/$locale.po";
-        set_contents($filename, $output);
-        print "Wrote $filename\n";
+    for my $locale ( keys %$l10n ) {
+        _create_po_file( $dir, $locale, $l10n->{$locale} );
     }
+    _create_po_file( $dir, 'zz', $l10n->{en} );
+    _create_po_file( $dir, 'zj', $l10n->{en} );
 }
 
+sub _create_po_file {
+    my $dir    = shift;
+    my $locale = shift;
+    my $dict   = shift;
+
+    my $output = <<'EOT';
+msgid ""
+msgstr ""
+"Project-Id-Version: Socialtext i18n\n"
+"PO-Revision-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: Socialtext i18n team\n"
+"Last-Translator: Socialtext i18n team\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+EOT
+    for my $id ( sort keys %$dict ) {
+        my $l = $dict->{$id};
+        next unless $l->{reference} =~ $is_po;
+        $output .= "#: $l->{reference}\n";
+        $output .= "#. $l->{other}\n" if $l->{other};
+        my $str;
+        if ( $locale eq 'zz' ) {
+            $str = _haxorify($id);
+        }
+        elsif ( $locale eq 'zj' ) {
+            $str = _haxorify_jp($id);
+        }
+        else {
+            $str = $l->{msgstr};
+        }
+
+        $output .= qq(msgid "$id"\nmsgstr "$str"\n\n);
+    }
+
+    my $filename = "$dir/$locale.po";
+    set_contents( $filename, $output, 1 );
+    print "Wrote $filename\n";
+}
+
+sub _haxorify {
+    my %leet   = ( a => 4, e => 3, o => 0, t => 7, b => 8 );
+    my $c      = 0;
+    my $result = join "", map { ( $c++ % 2 ) ? uc($_) : $_ }
+        map { defined( $leet{$_} ) ? $leet{$_} : $_ }
+        map lc, split //, shift;
+    $result =~ s/qu4n7/quant/gi;
+    $result =~ s/<4 hr3f/<a href/gi;
+    return $result;
+}
+
+# XXX to be refactored
+sub _haxorify_jp {
+    my %leet = (
+        a => 'あ', i => 'い', u => 'う', e => 'え', o => 'お',
+        t => 7,     b => 8
+    );
+    my $c = 0;
+    my $result = join "", map { ( $c++ % 2 ) ? uc($_) : $_ }
+        map { defined( $leet{$_} ) ? $leet{$_} : $_ }
+        map lc, split //, shift;
+    $result =~ s/qうあn7/quant/gi;
+    # kitano to fix a href later
+    return $result;
+}
 
 sub create_js_l10ns {
     my $filename = shift;
     my $l10n     = shift;
 
     my $js_hash = {};
-    for my $locale (keys %$l10n) {
-        my $dict = $l10n->{$locale};
-        for my $id (keys %$dict) {
-            my $l = $dict->{$id};
-            next unless $l->{reference} =~ $is_js;
-            # keep the js small by skipping empties
-            next unless $l->{msgstr}; 
-            $js_hash->{$locale}{$id} = $l->{msgstr};
-        }
+    for my $locale ( keys %$l10n ) {
+        $js_hash->{$locale} = _create_js_hash( $locale, $l10n->{$locale} );
     }
-    my $js_out = "var LocalizedStrings = " . objToJson($js_hash) . ";\n";
-    $js_out .= <<EOT;
+    $js_hash->{zz} = _create_js_hash( 'zz', $l10n->{en} );
+    $js_hash->{zj} = _create_js_hash( 'zj', $l10n->{en} );
 
-function loc(str) {
+    for my $locale ( keys %$js_hash ) {
+        delete $js_hash->{$locale} unless %{ $js_hash->{$locale} };
+    }
+
+    my $js_out = "var LocalizedStrings = " . objToJson($js_hash) . ";\n";
+    $js_out .= <<'EOT';
+
+function loc() {
     var locale = Socialtext.loc_lang;
     var dict = LocalizedStrings[locale] || new Array;
-    return dict[str] || str;
+    var str = arguments[0] || "";
+    var l10n = dict[str];
+
+    if (!l10n) {
+        var nstr = str.replace(/\"/g, "\\\"");
+        l10n = dict[nstr] || str;
+    }
+
+    /* If the hash-lookup failed, convert [_1] into %1 and try again. */
+    if (!l10n) {
+        var nstr = str.replace(/\[_(\d+)\]/g, "%$1");
+        l10n = dict[nstr] || str;
+    }
+
+    /* Convert both %1 and [_1] style vars into the given arguments */
+    for (var i = 1; i < arguments.length; i++) {
+        var rx = new RegExp("\\[_" + i + "\\]", "g");
+        var rx2 = new RegExp("%" + i + "", "g");
+        l10n = l10n.replace(rx, arguments[i]);
+        l10n = l10n.replace(rx2, arguments[i]);
+    }
+
+    return l10n;
 }
 
 EOT
 
     print "Wrote $filename\n";
-    set_contents($filename, $js_out);
+    set_contents( $filename, $js_out, 1 );
     shell_run("cd share/javascript && make");
 }
 
+sub _create_js_hash {
+    my $locale = shift;
+    my $dict   = shift;
+
+    my %strings;
+    for my $id ( keys %$dict ) {
+        my $l = $dict->{$id};
+        next unless $l->{reference} =~ $is_js;
+
+        # Create fake zz locale strings
+        my $str = $l->{msgstr};
+        $str = _haxorify($id)    if $locale eq 'zz';
+        $str = _haxorify_jp($id) if $locale eq 'zj';
+
+        # keep the js small by skipping empties
+        next unless $str;
+
+        $strings{$id} = $str;
+    }
+    return \%strings;
+}
 
 sub load_localizations {
     my %items;
-    for my $page ($r->get_taggedpages('l10n')) {
+    for my $page ( $r->get_taggedpages('l10n') ) {
         my @tags = $r->get_pagetags($page);
         my $locale;
         for (@tags) {
             $locale = $1 if m/^locale=(\w+)$/;
         }
         die "Could not find locale for page ($page)" unless $locale;
-        $items{$locale} = load_existing_l10ns($r, $page);
+        $items{$locale} = load_existing_l10ns( $r, $page );
     }
     return \%items;
 }

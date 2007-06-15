@@ -204,8 +204,7 @@ sub _add_attachment_doc {
 # is about 20 MB.  Unicode might screw us here with its multibyte characters,
 # but I'm not too worried about it.
 # 
-# The 20 MB figure was arrived at by using the maximum post size in
-# Socialtext::MasonHandler.
+# The 20 MB figure was arrived at by history which is no longer relevant.
 #
 # See {link dev-tasks [KinoSearch - Maximum File Size Cap]} for more
 # information.

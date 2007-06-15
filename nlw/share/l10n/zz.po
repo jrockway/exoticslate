@@ -1,0 +1,251 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Socialtext i18n\n"
+"PO-Revision-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: Socialtext i18n team\n"
+"Last-Translator: Socialtext i18n team\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: lib/Socialtext/Handler/Authen.pm:160 lib/Socialtext/Handler/Authen.pm:185 lib/Socialtext/Handler/Authen.pm:255 lib/Socialtext/Handler/Authen.pm:297 lib/Socialtext/Handler/Authen.pm:331
+#.  
+msgid "$r->args, $r->content"
+msgstr "$R->4RgS, $R->c0n73N7"
+
+#: lib/Socialtext/Formatter/Phrase.pm:127
+#.  
+msgid "$text"
+msgstr "$73X7"
+
+#: lib/Socialtext/Handler/Authen.pm:165 lib/Socialtext/Handler/Authen.pm:341
+#. (
+msgid "%1 is not registered as a user.  Try a different email address?"
+msgstr "%1 Is n07 r3gIs73R3D 4s 4 uS3R.  7rY 4 DiFf3r3n7 3m4iL 4dDr3sS?"
+
+#: lib/Socialtext/CLI.pm:413
+#. (
+msgid "'%1' is not a valid locale"
+msgstr "'%1' Is n07 4 v4lId l0c4l3"
+
+#: lib/Socialtext/PreferencesPlugin.pm:161
+#.  
+msgid "@$choices"
+msgstr "@$cH0Ic3s"
+
+#: lib/Socialtext/Handler/Authen.pm:200
+#. (
+msgid "A user with this email address (%1) already exists."
+msgstr "4 uS3R Wi7h 7HiS 3m4iL 4dDr3sS (%1) 4Lr34Dy 3XiS7S."
+
+#: lib/Socialtext/Handler/Authen.pm:248
+#. (
+msgid "An email confirming your registration has been sent to %1."
+msgstr "4N 3m4iL C0NfIrMiNg y0uR R3GiS7R47i0n h4s 833N S3N7 70 %1."
+
+#: lib/Socialtext/Handler/Authen.pm:173
+#. (
+msgid "An email with instructions on changing your password has been sent to %1."
+msgstr "4N 3m4iL Wi7h iNs7rUc7i0nS 0n cH4NgInG Y0Ur p4sSw0rD H4S 833n s3n7 70 %1."
+
+#: share/template/authen/forgot_password.html:36
+#.  
+msgid "Back to <a href=\"/nlw/login.html\">Log in to Socialtext</a>."
+msgstr "84cK 70 <a href=\"/NlW/L0GiN.H7Ml\">l0g iN 70 s0cI4L73x7</4>."
+
+#: share/template/authen/choose_password.html:2
+#.  
+msgid "Choose Password"
+msgstr "cH00s3 P4SsW0Rd"
+
+#: share/template/authen/choose_password.html:27
+#.  
+msgid "Choose Password:"
+msgstr "cH00s3 P4SsW0Rd:"
+
+#: lib/Socialtext/Handler/Authen.pm:83 share/template/authen/forgot_password.html:5
+#.  
+msgid "Email Address:"
+msgstr "3M4Il 4DdR3Ss:"
+
+#: share/template/authen/forgot_password.html:11
+#.  
+msgid "Enter your email address below. Enter the email address you normally use for your Socialtext account. If you got here by clicking a link you received in an email message, look at that message, and use the email address it was sent to."
+msgstr "3N73r y0uR 3m4iL 4dDr3sS 83L0W. 3N73r 7H3 3M4Il 4DdR3Ss y0u n0rM4LlY Us3 F0R Y0Ur s0cI4L73x7 4cC0Un7. iF Y0U G07 H3R3 8Y ClIcKiNg 4 lInK Y0U R3C3Iv3d iN 4n 3M4Il m3sS4G3, L00k 47 7h47 m3sS4G3, 4nD Us3 7h3 3m4iL 4dDr3sS I7 w4s s3n7 70."
+
+#: share/template/authen/errors/settings_requires_account:5 share/template/authen/errors/watchlist_requires_account:5
+#. (
+msgid "If you do not already have an account, you can <a href=\"/nlw/register.html?redirect_to=%1\">register here</a>."
+msgstr "iF Y0U D0 n07 4Lr34Dy h4v3 4n 4Cc0uN7, Y0U C4N <a href=\"/nLw/r3gIs73R.H7Ml?r3dIr3c7_70=%1\">R3GiS73r h3r3</4>."
+
+#: lib/Socialtext/CLI.pm:420
+#. (
+msgid "Locale for %1 is now %2"
+msgstr "l0c4l3 F0R %1 iS N0W %2"
+
+#: share/template/authen/choose_password.html:3
+#.  
+msgid "Log in to Socialtext"
+msgstr "l0g iN 70 s0cI4L73x7"
+
+#: share/template/authen/choose_password.html:12
+#.  
+msgid "Log in with an existing account"
+msgstr "l0g iN Wi7h 4N 3xIs7iNg 4Cc0uN7"
+
+#: share/template/authen/login.html:2
+#.  
+msgid "Login"
+msgstr "l0gIn"
+
+#: share/template/authen/forgot_password.html:7
+#.  
+msgid "No problem, we can send you an email that will help. You will be able to change your password back to something you know."
+msgstr "n0 Pr08L3M, w3 C4N S3Nd y0u 4N 3m4iL 7h47 wIlL H3Lp. Y0U WiLl 83 48L3 70 Ch4nG3 y0uR P4SsW0Rd 84cK 70 s0m37HiNg y0u kN0W."
+
+#: lib/Socialtext/Handler/Authen.pm:190
+#.  
+msgid "Please enter an email address."
+msgstr "pL34s3 3n73R 4n 3M4Il 4DdR3Ss."
+
+#: share/template/authen/choose_password.html:32
+#.  
+msgid "Re-type Password:"
+msgstr "r3-7yP3 p4sSw0rD:"
+
+#: share/template/authen/forgot_password.html:32
+#.  
+msgid "Since your password is stored in the directory for your organization, there is no way to reset your password within the Socialtext system.  Please contact your directory administrator for assistance."
+msgstr "sInC3 y0uR P4SsW0Rd iS S70r3d iN 7h3 DiR3C70rY F0R Y0Ur 0Rg4nIz47I0N, 7H3R3 iS N0 w4y 70 R3S37 Y0Ur p4sSw0rD Wi7hIn 7H3 s0cI4L73x7 SyS73m.  pL34s3 C0N74c7 Y0Ur dIr3c70Ry 4DmInIs7r470r f0r 4SsIs74Nc3."
+
+#: share/template/authen/choose_password.html:37
+#.  
+msgid "Submit"
+msgstr "sU8Mi7"
+
+#: lib/Socialtext/Handler/Authen.pm:277
+#.  
+msgid "The confirmation URL you used has expired. A new one will be sent."
+msgstr "7H3 c0nFiRm47I0N UrL Y0U Us3d h4s 3XpIr3d. 4 N3W 0n3 WiLl 83 S3N7."
+
+#: lib/Socialtext/Handler/Authen.pm:353
+#.  
+msgid "The confirmation email has been resent. Please follow the link in this email to activate your account."
+msgstr "7H3 c0nFiRm47I0N 3m4iL H4S 833n r3s3n7. pL34s3 F0Ll0w 7H3 lInK In 7HiS 3m4iL 70 4C7Iv473 Y0Ur 4Cc0uN7."
+
+#: lib/Socialtext/Handler/Authen.pm:346
+#. (
+msgid "The email address for %1 has already been confirmed."
+msgstr "7H3 3M4Il 4DdR3Ss f0r %1 H4S 4lR34dY 833n c0nFiRm3d."
+
+#: share/template/authen/forgot_password.html:28
+#. (
+msgid "The email we will send you will come from <strong>%1</strong>. To ensure you receive it, please add <strong>%1</strong> to your address book or safe list."
+msgstr "7H3 3M4Il w3 WiLl s3nD Y0U WiLl c0m3 Fr0m <S7R0Ng>%1</s7r0nG>. 70 3NsUr3 Y0U R3C3Iv3 I7, Pl34S3 4Dd <S7R0Ng>%1</s7r0nG> 70 Y0Ur 4DdR3Ss 800K 0r s4f3 LiS7."
+
+#: lib/Socialtext/Handler/Authen.pm:263 lib/Socialtext/Handler/Authen.pm:304 lib/Socialtext/Handler/Authen.pm:63
+#.  
+msgid "The given confirmation URL does not match any pending confirmations."
+msgstr "7H3 gIv3n c0nFiRm47I0N UrL D03s n07 m47Ch 4Ny p3nDiNg c0nFiRm47I0Ns."
+
+#: lib/Socialtext/Handler/Authen.pm:209 lib/Socialtext/Handler/Authen.pm:310
+#.  
+msgid "The passwords you provided did not match."
+msgstr "7H3 p4sSw0rDs y0u pR0ViD3D DiD N07 M47cH."
+
+#: lib/Socialtext/Handler/Authen.pm:114
+#.  
+msgid "This username has no associated email address."
+msgstr "7HiS Us3rN4M3 h4s n0 4sS0Ci473d 3M4Il 4DdR3Ss."
+
+#: share/template/authen/choose_password.html:15
+#.  
+msgid "To proceed, please choose a password."
+msgstr "70 Pr0c33D, pL34s3 Ch00S3 4 p4sSw0rD."
+
+#: share/template/authen/errors/settings_requires_account:3
+#.  
+msgid "To set your preferences for a workspace, you must be logged in."
+msgstr "70 S37 Y0Ur pR3F3R3Nc3s f0r 4 w0rKsP4C3, Y0U MuS7 83 L0Gg3d iN."
+
+#: share/template/authen/errors/watchlist_requires_account:3
+#.  
+msgid "To use the watchlist feature in a workspace, you must be logged in."
+msgstr "70 Us3 7h3 W47cHlIs7 F347Ur3 In 4 w0rKsP4C3, Y0U MuS7 83 L0Gg3d iN."
+
+#: lib/Socialtext/Handler/Authen.pm:83 share/template/authen/choose_password.html:22
+#.  
+msgid "Username:"
+msgstr "uS3Rn4m3:"
+
+#: share/template/view/homepage:9
+#. (
+msgid "Welcome, %1."
+msgstr "w3lC0M3, %1."
+
+#: lib/Socialtext/Handler/Authen.pm:123 lib/Socialtext/Handler/Authen.pm:133
+#.  
+msgid "Wrong email address or password - please try again."
+msgstr "wR0Ng 3M4Il 4DdR3Ss 0R P4SsW0Rd - pL34s3 7rY 4g4iN."
+
+#: share/template/authen/errors/unauthorized_workspace:3
+#.  
+msgid "You are not authorized to view this workspace."
+msgstr "y0u 4R3 n07 4U7H0RiZ3D 70 vI3W 7hIs w0rKsP4C3."
+
+#: share/template/authen/errors/login_to_edit:3
+#. (
+msgid "You must be logged in to edit the %1 workspace."
+msgstr "y0u mUs7 83 l0gG3D In 70 3dI7 7H3 %1 W0RkSp4c3."
+
+#: share/template/authen/errors/authenticate_to_read:3
+#. (
+msgid "You must be logged in to view the %1 workspace.  If you already have an account, please login now.<br /> Otherwise, you can <a href=\"/nlw/register.html?redirect_to=%2\">create a new account</a>"
+msgstr "y0u mUs7 83 l0gG3D In 70 Vi3w 7H3 %1 W0RkSp4c3.  If y0u 4Lr34Dy h4v3 4n 4Cc0uN7, Pl34S3 l0gIn n0w.<8r /> 07H3RwIs3, y0u c4n <a href=\"/NlW/R3GiS73r.h7mL?R3DiR3C7_70=%2\">cR3473 4 N3W 4cC0Un7</4>"
+
+#: share/template/authen/errors/not_logged_in:2
+#.  
+msgid "You must login to view this page."
+msgstr "y0u mUs7 L0GiN 70 vI3W 7hIs p4g3."
+
+#: lib/Socialtext/Handler/Authen.pm:97
+#.  
+msgid "You must provide a valid email address."
+msgstr "y0u mUs7 Pr0vId3 4 V4LiD 3m4iL 4dDr3sS."
+
+#: share/template/authen/errors/requires_confirmation:2
+#.  
+msgid "You need to confirm your email address to activate this account."
+msgstr "y0u n33D 70 c0nFiRm y0uR 3m4iL 4dDr3sS 70 4C7Iv473 7hIs 4Cc0uN7."
+
+#: share/template/authen/errors/requires_confirmation:4
+#.  
+msgid "You should have received an email with a confirmation link."
+msgstr "y0u sH0UlD H4V3 r3c3iV3D 4n 3M4Il wI7H 4 C0NfIrM47i0n lInK."
+
+#: lib/Socialtext/Handler/Authen.pm:289
+#. (
+msgid "Your email address, %1, has been confirmed. Please login."
+msgstr "y0uR 3m4iL 4dDr3sS, %1, h4s 833N C0NfIrM3D. pL34s3 L0GiN."
+
+#: lib/Socialtext/Handler/Authen.pm:324
+#.  
+msgid "Your password has been set and you can now login."
+msgstr "y0uR P4SsW0Rd h4s 833N S37 4nD Y0U C4N N0W L0GiN."
+
+#: lib/Socialtext/DisplayPlugin.pm:360
+#.  
+msgid "\n            filename       => $_->filename,\n            id             => $_->id,\n            upload_date    => $self->_date_only($_->Date),\n            upload_time    => $self->_time_only($_->Date),\n            date           => $self->_date_epoch_from($_->Date),\n            from           => $_->From,\n            filesize       => $_->Content_Length,\n            mime_type      => $_->mime_type,\n"
+msgstr "\N            fIl3n4m3       => $_->fIl3n4m3,\n            Id             => $_->Id,\N            uPl04D_D473    => $S3Lf->_d473_0nLy($_->d473),\N            uPl04D_7iM3    => $S3Lf->_7Im3_0nLy($_->d473),\N            d473           => $S3Lf->_d473_3p0cH_Fr0m($_->d473),\N            fR0M           => $_->fR0M,\n            FiL3SiZ3       => $_->C0N73n7_L3Ng7h,\N            mIm3_7yP3      => $_->mIm3_7yP3,\N"
+
+#: lib/Socialtext/Handler/Attachment.pm:222
+#.  
+msgid "\n            filename    => $_->filename,\n            id          => $_->id,\n            upload_date => $class->_date_only($_->Date),\n            upload_time => $class->_time_only($_->Date),\n            date        => $class->_date_epoch_from($_->Date),\n            from        => $_->From,\n            filesize    => $_->Content_Length,\n            mime_type   => $_->mime_type,\n"
+msgstr "\N            fIl3n4m3    => $_->FiL3N4M3,\N            iD          => $_->Id,\N            uPl04D_D473 => $cL4Ss->_d473_0nLy($_->d473),\N            uPl04D_7iM3 => $cL4Ss->_7Im3_0nLy($_->d473),\N            d473        => $cL4Ss->_d473_3p0cH_Fr0m($_->d473),\N            fR0M        => $_->Fr0m,\N            fIl3sIz3    => $_->C0N73n7_L3Ng7h,\N            mIm3_7yP3   => $_->MiM3_7Yp3,\n"
+
+#: lib/Socialtext/HomepagePlugin.pm:182
+#.  
+msgid "\n            title   => $self->hub->helpers->html_escape($_->title),\n            name    => $self->hub->helpers->uri_escape($_->name),\n            changes => $self->_get_changes_count_for_wiki($_),\n"
+msgstr "\N            7I7L3   => $s3lF->hU8->H3Lp3rS->h7mL_3sC4P3($_->7I7L3),\n            N4M3    => $S3Lf->Hu8->h3lP3Rs->UrI_3sC4P3($_->n4m3),\N            cH4Ng3s => $s3lF->_G37_Ch4nG3S_C0Un7_F0R_WiKi($_),\N"
+

@@ -17,18 +17,6 @@ BEGIN {
     $@ && die "$@\ngen-config cannot run until Socialtext has been configured.\n";
 }
 
-=for Historical purposes:
-
-These config files were originally generated from HTML::Mason files,
-not Template Toolkit files.  If you need to go back and find the original
-files in Subversion, they are the following in build/templates/:
-
-* apache-perl/handlers.mas, nlw.mas, base.mas & modules.mas
-* apache2/modules.mas, nlw.mas & base.mas
-* shared/apache-any-nlw.mas, apache-any.mas, common.mas & rewrite.mas
-
-=cut
-
 use lib "$FindBin::Bin/../lib";
 
 use Cwd;
@@ -485,7 +473,6 @@ sub apache_perl_params {
         eu_httpd_exists => -f "$confd/eu-httpd.conf",
         eu_httpsd_exists => -f "$confd/eu-httpsd.conf",
 
-        # XXX See how this was used in the original Mason
         $opts{'apache-proxy'} ? () : (
             apache2_etc_dir => $dirs{apache_perl_etc},
             use_ssl => _use_ssl($config{nlw_server_hostname}),
@@ -512,10 +499,6 @@ sub apache_perl_params {
     $config{inc} = _get_inc();
 
     if ($is_dev_install) {
-        $config{comp_root} =
-            Cwd::abs_path(
-                File::Spec->catdir( File::Basename::dirname($0), File::Spec->updir, 'share', 'mason', 'nlw' ) );
-
         $config{user}  = $user->name;
         $config{group} = scalar getgrgid( $user->gid );
         $config{servers} = {
@@ -530,7 +513,6 @@ sub apache_perl_params {
     else {
         $config{user} = get_build_setting( 'st-user' );
         $config{group} = get_build_setting( 'st-group' );
-        $config{comp_root}  = '/usr/share/nlw/mason/nlw';
     }
 
     return \%config;

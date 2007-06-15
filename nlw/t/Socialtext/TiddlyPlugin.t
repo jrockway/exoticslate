@@ -3,8 +3,7 @@
 use strict;
 use warnings;
 
-use lib 't/lib';
-
+use mocked 'Apache';
 use Test::Socialtext tests => 19;
 fixtures('admin_no_pages');
 

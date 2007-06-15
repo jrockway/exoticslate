@@ -339,30 +339,6 @@ HTML::FillInForm
     HTML::Parser
         HTML::Tagset
 
-HTML::Mason
-    Cache::Cache
-        Digest::SHA1
-        Error
-    Class::Container
-        Params::Validate
-    Exception::Class
-        Class::Data::Inheritable
-        Devel::StackTrace
-    Module::Build
-    Params::Validate
-
-HTML::Mason::Interp
-    Cache::Cache
-        Digest::SHA1
-        Error
-    Class::Container
-        Params::Validate
-    Exception::Class
-        Class::Data::Inheritable
-        Devel::StackTrace
-    Module::Build
-    Params::Validate
-
 HTML::PrettyPrinter
     HTML::Element
         HTML::Parser
@@ -508,43 +484,6 @@ MIME::Types
 
 MLDBM
 
-MasonX::WebApp
-    Apache::Session::Wrapper
-        Apache::Session
-            Test::Deep
-                Test::NoWarnings
-                    Test::Tester
-                Test::Tester
-            Test::Exception
-                Sub::Uplevel
-                Test::Builder::Tester
-        Class::Container
-            Params::Validate
-        Exception::Class
-            Class::Data::Inheritable
-            Devel::StackTrace
-        Module::Build
-        Params::Validate
-    Class::Data::Inheritable
-    Class::Factory::Util
-    Exception::Class
-        Class::Data::Inheritable
-        Devel::StackTrace
-    HTML::Mason
-        Cache::Cache
-            Digest::SHA1
-            Error
-        Class::Container
-            Params::Validate
-        Exception::Class
-            Class::Data::Inheritable
-            Devel::StackTrace
-        Module::Build
-        Params::Validate
-    Test::Exception
-        Sub::Uplevel
-        Test::Builder::Tester
-    URI
 
 Params::Validate
 
@@ -916,7 +855,6 @@ Number of times each module is used
   2 Email::MessageID
   2 File::Slurp
   2 HTML::FillInForm
-  2 HTML::Mason
   2 HTML::Tree
   2 HTML::WikiConverter
   2 IO::Stringy
@@ -971,7 +909,6 @@ Number of times each module is used
   1 File::Which
   1 File::chdir
   1 Filesys::DfPortable
-  1 HTML::Mason::Interp
   1 HTML::PrettyPrinter
   1 HTML::TokeParser
   1 HTML::TreeBuilder
@@ -1001,7 +938,6 @@ Number of times each module is used
   1 Log::Dispatch::Syslog
   1 MIME::Lite
   1 MLDBM
-  1 MasonX::WebApp
   1 REST::Application
   1 Readonly::XS
   1 SOAP::Lite

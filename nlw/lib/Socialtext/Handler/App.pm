@@ -27,8 +27,7 @@ sub real_handler {
             if Exception::Class->caught('Socialtext::WebApp::Exception::Forbidden');
         return NOT_FOUND
             if Exception::Class->caught('Socialtext::WebApp::Exception::NotFound');
-        return $class->handle_error( $r, $e )
-            unless Exception::Class->caught('MasonX::WebApp::Exception::Abort');
+        return $class->handle_error( $r, $e );
     }
 
     $class->send_output( $r, $nlw, $html );

@@ -66,7 +66,6 @@ INSTALL_BASE = install-css        \
 
 INSTALL_FILE_TARGETS = $(INSTALL_BASE)   \
                        install-doc-pages \
-                       install-mason     \
                        install-template 
 
 INSTALL_PKGS_TARGETS = install-pkgs-dapper \
@@ -291,13 +290,10 @@ start-services:
 
 clean-temps: install-ok clean-cache
 
-clean-cache: clean-formatter-cache clean-mason-cache clean-tt2-cache
+clean-cache: clean-formatter-cache clean-tt2-cache
 
 clean-formatter-cache:
 	$(RM_DIR) $(CACHE_DIR)/formatter
-
-clean-mason-cache:
-	$(RM_DIR) $(CACHE_DIR)/mason
 
 clean-tt2-cache:
 	$(RM_DIR) $(CACHE_DIR)/tt2

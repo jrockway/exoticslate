@@ -77,14 +77,14 @@ sub challenge {
             return_to  => "$FULL_URI",
             trust_root => "$BASE_URI"
         );
-        $app->redirect( uri => $check_url );
+        $app->redirect( $check_url );
     }
     else {
         if ( my $setup_url = $csr->user_setup_url ) {
-            $app->redirect( uri => $setup_url);
+            $app->redirect( $setup_url);
         }
         elsif ( $csr->user_cancel ) {
-            $app->redirect( uri => $ENV{HTTP_REFERER} );
+            $app->redirect( $ENV{HTTP_REFERER} );
         }
         elsif ( my $vident = $csr->verified_identity ) {
             my $verified_url = $vident->url;
@@ -92,7 +92,7 @@ sub challenge {
                 return undef;
             }
         }
-        $app->redirect ( uri => "/" );
+        $app->redirect ( "/" );
     }
 }
 

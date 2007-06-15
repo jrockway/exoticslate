@@ -76,6 +76,7 @@ sub st_login {
 
     my $url = '/nlw/login.html';
     $url .= "?redirect_to=\%2F$workspace\%2Findex.cgi" if $workspace;
+    diag "st-login: $username, $password, $workspace - $url";
     $sel->open_ok($url);
     $sel->type_ok('username', $username);
     $sel->type_ok('password', $password);

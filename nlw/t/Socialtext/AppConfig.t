@@ -30,7 +30,7 @@ BEGIN {
     delete $ENV{NLW_APPCONFIG};
 }
 
-plan tests => 66;
+plan tests => 65;
 
 my $user = getpwuid($>);
 
@@ -214,7 +214,6 @@ CHECK_ALL_METHODS: {
         formatter_cache_dir
         login_message_file
         MAC_secret
-        mason_data_dir
         pid_file_dir
         script_name
         search_factory_class

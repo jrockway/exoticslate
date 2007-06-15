@@ -87,13 +87,8 @@ sub real_handler  {
         $class->get_cool_nlw($r, $user);
     };
 
-    return NOT_FOUND unless $nlw;
-
-    # REVIEW: handle_error here, not handle_cool_error. Not sure if
-    # this is right or not. Don't really even know if we'll ever have
-    # an error here.
     return $class->handle_error( $r, $@ ) if $@;
-
+    return NOT_FOUND unless $nlw;
     return HTTP_UNAUTHORIZED
         unless $class->_user_has_permission( 'read', $nlw->hub );
 
@@ -108,10 +103,7 @@ sub real_handler  {
         eval {
             ( $output, $type ) = $class->$method( $r, $nlw );
         };
-        # REVIEW: When does the mason error happen?
-        return $class->handle_cool_error( $r, $@ ) if $@
-            and
-            not Exception::Class->caught('MasonX::WebApp::Exception::Abort');
+        return $class->handle_error( $r, $@, $nlw ) if $@;
 
         # If type was not set, we got back an HTTP error or
         # redirect and we want to send it right up the chain,
@@ -167,7 +159,6 @@ sub get_cool_nlw {
     # create nlw main object
     my $nlw = eval { $class->get_nlw($r, $user) };
     if ( my $e = $@ ) {
-        return if Exception::Class->caught('MasonX::WebApp::Exception::Abort');
         return if Exception::Class->caught('Socialtext::WebApp::Exception::NotFound');
         die $@;
     }
@@ -202,20 +193,6 @@ sub send_output {
     $nlw->hub->headers->content_type($type . '; charset=utf-8');
     $nlw->hub->headers->print;
     $r->print($content);
-}
-
-sub handle_cool_error {
-    my $class = shift;
-    my $r     = shift;
-    my $error = shift;
-
-    $r->log_error($error);
-    $error = "pid: $$ -> " . $error;
-
-    # REVIEW: Mason is going to hop in and make pretty error
-    # messages for us now, whether we really want that or not.
-    $r->pnotes( error => $error );
-    return SERVER_ERROR;
 }
 
 # REVIEW: This is good enough for our purposes, but for true

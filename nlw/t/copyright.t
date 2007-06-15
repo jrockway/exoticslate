@@ -17,7 +17,7 @@ BEGIN {
     plan skip_all => 'This test requires App::Ack' if $@;
 }
 
-# REVIEW: Should include html, mason and tt, too, but I don't want to mess up any templates at this point.
+# REVIEW: Should include html and tt too, but I don't want to mess up any templates at this point.
 my @keeper_types = qw( perl javascript );
 my %keeper_types = map { ($_,1) } @keeper_types;
 

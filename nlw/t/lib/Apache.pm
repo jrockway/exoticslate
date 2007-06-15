@@ -3,8 +3,8 @@ package Apache;
 use strict;
 use warnings;
 
-use lib 't/lib';
-use Apache::Request;
+use mocked 'Apache::Request';
+use mocked 'Apache::Constants';
 
 sub new {
     my ($class, %opts) = @_;
@@ -16,6 +16,5 @@ sub request {
     my $class = shift;
     return Apache::Request->new(@_);
 }
-
 
 1;

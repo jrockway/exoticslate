@@ -1,9 +1,0 @@
-<!-- @COPYRIGHT@ -->
-% if ( defined $username and length $username ) {
-<span class="error">"<% $username | h %>" is not a valid <% lc $App->username_label %>.  Please use your <% lc $App->username_label %> to log in.</span>
-% } else {
-<span class="error">You must provide a valid <% lc $App->username_label %>.</span>
-% }
-<%args>
-$username
-</%args>

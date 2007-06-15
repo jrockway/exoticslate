@@ -77,12 +77,20 @@ sub user_plugin_directory {
     return $dir;
 }
 
-# XXX this is different from the redirect in Socialtext::WebHelpers::Apache
-# not sure why
 sub redirect {
     my $self = shift;
+    # This uses Socialtext::WebHelpers::redirect
     $self->hub->headers->redirect( $self->_redirect_url(@_) );
     return '';
+}
+
+sub _redirect_url {
+    my $self = shift;
+    my $target = shift;
+    return $target
+        if $target =~ /^(https?:|\/)/i
+        or $target =~ /\?/;
+    $self->hub->cgi->full_uri . '?' . $target;
 }
 
 sub box_on {
@@ -251,15 +259,6 @@ sub _render_box {
     my $self = shift;
     my $title = $self->box_title;
     $self->template_process('side_box.html');
-}
-
-sub _redirect_url {
-    my $self = shift;
-    my $target = shift;
-    return $target
-        if $target =~ /^(https?:|\/)/i
-        or $target =~ /\?/;
-    $self->hub->cgi->full_uri . '?' . $target;
 }
 
 sub _get_pref_list {

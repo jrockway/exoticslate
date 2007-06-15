@@ -50,7 +50,8 @@ NORMAL_MAIL: {
         permission => Socialtext::Permission->new( name => 'email_in' ),
     );
 
-    my $in = get_email('mason');
+    my $in = get_email('EmailReceiver');
+    warn $in;
     my ($out, $err);
     my @command = ('bin/st-admin', 'deliver-email', '--workspace', 'admin');
 
@@ -61,7 +62,7 @@ NORMAL_MAIL: {
     is($err, '', 'no stderr output');
     is($out, '', 'no stdout output');
 
-    check_mason_email( new_hub('admin') );
+    check_monkey_email( new_hub('admin') );
 
     $hub->current_workspace->remove_permission(
         role       => Socialtext::Role->Guest(),
@@ -76,7 +77,7 @@ CASE_OF_WORKSPACE_IN_TO_ADDRESS: {
         permission => Socialtext::Permission->new( name => 'email_in' ),
     );
 
-    my $in = get_email('mason');
+    my $in = get_email('EmailReceiver');
     my ($out, $err);
     my @command = ('bin/st-admin', 'deliver-email', '--workspace', 'FooBar');
 
@@ -87,7 +88,7 @@ CASE_OF_WORKSPACE_IN_TO_ADDRESS: {
     is($err, '', 'no stderr output');
     is($out, '', 'no stdout output');
 
-    check_mason_email( new_hub('foobar') );
+    check_monkey_email( new_hub('foobar') );
 
     $hub->current_workspace->remove_permission(
         role       => Socialtext::Role->Guest(),
@@ -96,14 +97,14 @@ CASE_OF_WORKSPACE_IN_TO_ADDRESS: {
 }
 
 
-sub check_mason_email
+sub check_monkey_email
 {
     my $hub = shift;
 
-    my $page = $hub->pages->new_from_name('[Mason] CVS Mason and Apache2');
-
-    ok( $page, "Found a page with the name '[Mason] CVS Mason and Apache2'" );
-    is( $page->title, '[Mason] CVS Mason and Apache2',
+    my $page_name = '[monkey] CVS monkey and ape2';
+    my $page = $hub->pages->new_from_name($page_name);
+    ok( $page, "Found a page with the name '$page_name'" );
+    is( $page->title, $page_name,
         'check that page title matches subject' );
     like( $page->content, qr{From:\s+"John Williams"\s+<mailto:williams\@tni.com>},
           'content includes email sender name & address' );
@@ -118,8 +119,8 @@ sub check_mason_email
 
     my $categories = $page->metadata->Category;
     ok( scalar @$categories, 'page has category metadata' );
-    is_deeply( [ sort @$categories ], [ 'Apache', 'Email', 'Mason' ],
-               'Categories are Apache & Mason' );
+    is_deeply( [ sort @$categories ], [ 'Email', 'ape', 'monkey' ],
+               'Categories are ape & monkey' );
 
     my $attachments = $page->hub->attachments->all( page_id => $page->id );
     is( @$attachments, 0,
@@ -130,7 +131,7 @@ sub get_email {
     my $name = shift;
 
     my $file = "t/test-data/email/$name";
-    die "No such email $name" unless -f $file;
+    die "No such email at $file" unless -f $file;
 
     return Socialtext::File::get_contents($file);
 }

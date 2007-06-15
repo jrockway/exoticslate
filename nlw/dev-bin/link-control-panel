@@ -1,0 +1,39 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use File::Path qw/mkpath/;
+
+my $branch = shift;
+
+$branch = "branches/$branch" if $branch;
+$branch ||= "trunk";
+
+print "Linking in control panel from $branch...\n\n";
+
+my $control_base = "$ENV{HOME}/src/st/control";
+die "Control is not checked out to $control_base" unless -d $control_base;
+
+my $control_dir = "$control_base/$branch";
+die "Couldn't find control branch '$control_dir'" unless -d $control_dir;
+
+my @libs = qw(
+    lib/Socialtext/AccessHandler/IsBusinessAdmin.pm
+    lib/Socialtext/Handler/ControlPanel.pm
+);
+
+for my $f (@libs) {
+    print "Linking in $f...\n";
+    (my $dir = $f) =~ s#^(.+)/.+#$1#;
+    unless (-d $dir) {
+        mkpath $dir or die "Can't mkpath $dir: $!";
+    }
+    unlink $f;
+    symlink "$control_dir/$f", $f or die "Can't symlink $control_dir/$f, $f: $!";
+}
+
+print "Linking in control templates...\n";
+my $tmpl_dir = "share/template/control";
+unlink $tmpl_dir;
+symlink "$control_dir/$tmpl_dir", $tmpl_dir
+    or die "Can't symlink $control_dir/$tmpl_dir => $tmpl_dir: $!";

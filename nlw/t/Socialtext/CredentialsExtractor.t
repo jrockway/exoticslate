@@ -4,9 +4,9 @@
 use strict;
 use warnings;
 
-use lib 't/lib';
-use Apache::Request qw/get_log_reasons/; # mocked
-use Apache::Cookie;  # mocked
+use Apache::Constants;
+use mocked 'Apache::Request', qw/get_log_reasons/;
+use mocked 'Apache::Cookie';
 
 use Digest::SHA1;
 use MIME::Base64;

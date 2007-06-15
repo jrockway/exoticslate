@@ -243,8 +243,7 @@ sub assert_current_user_is_admin {
     # error to the session, it will just sit there until the next time
     # the browser hits the login screen, which is obviously wrong.
 
-    my $app = Socialtext::WebApp->NewForNLW;
-    $app->redirect( uri => '?' );
+    Socialtext::WebHelpers->redirect('?');
 }
 
 {
@@ -269,10 +268,7 @@ sub assert_current_user_is_admin {
         my $self = shift;
         my %p = validate( @_, $spec );
 
-        # XXX - unclean!
-        my $app = Socialtext::WebApp->NewForNLW;
-
-        $app->abort_forbidden()
+        Socialtext::WebHelpers->abort_forbidden()
             if Socialtext::AppConfig->unauthorized_returns_forbidden();
 
         Socialtext::Challenger->Challenge( type    => $p{error_type},

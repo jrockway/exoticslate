@@ -67,7 +67,7 @@ DOC
 
         entry( sharedir => '/usr/share/nlw', <<'DOC' ),
 The location of the shared files used by Socialtext.  This includes things
-like images, Mason templates, and other shared but static files.
+like images, templates, and other shared but static files.
 DOC
 
         entry( 'root-user' => 'root', <<'DOC' ),

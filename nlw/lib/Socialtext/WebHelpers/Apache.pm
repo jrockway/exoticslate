@@ -3,8 +3,6 @@ package Socialtext::WebHelpers::Apache;
 use strict;
 use warnings;
 
-use Class::Field qw(field);
-
 use Apache;
 use Apache::Request;
 use Carp ();

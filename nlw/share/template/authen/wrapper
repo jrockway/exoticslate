@@ -1,0 +1,34 @@
+<!-- @COPYRIGHT@ -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="[% static_path %]/css/xhtml/base.css" />
+    <link rel="stylesheet" type="text/css" href="[% static_path %]/css/xhtml/form.css" />
+     <script type="text/javascript" src="[% static_path %]/javascript/combined-source.js"></script>
+  </head>
+
+  <body onload="call_onload_functions()">
+    <a name="page_top"></a>
+
+    <div class="pane">
+    <img id="logo" src="/static/2.11.6.1/images/logo-bar-18.gif" alt="logo"/>
+    <div id="support_link"><a href="mailto:root@talc.socialtext.net">root@talc.socialtext.net</a></div>
+ 
+    [% INCLUDE errors_and_messages %]
+    [% content %]
+</div>
+
+<!-- @COPYRIGHT@ -->
+<div id="product">
+ <span id="product_id"><a target="_blank"
+            href="http://www.socialtext.com/">Socialtext
+            Workspace<sup>&trade;</sup> v2.11.6.1</a>
+ </span>
+
+</div>
+
+</body>
+</html>

@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use base 'Socialtext::Query::Plugin';
-
 use Class::Field qw( const field );
 use Socialtext::AppConfig;
 use Socialtext::EmailNotifier;

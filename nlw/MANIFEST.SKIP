@@ -10,7 +10,6 @@ bench/
 t/tmp\.*
 blib/
 ^lib/Socialtext/WebApp/Control\.pm$
-^share/mason/nlw/control
 ^Makefile$
 ^share/wsdl/nlw.wsdl$
 ^lib/Socialtext/Build/ConfigureValues\.pm$

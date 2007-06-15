@@ -141,15 +141,57 @@ sub handle_error {
     my $error = shift;
     my $nlw   = shift;
 
-    $error = "pid: $$ -> " . $error;
+    if (ref($error) ne 'ARRAY') {
+        $error = "pid: $$ -> " . $error;
+        $r->log_error($error);
+        $error = $nlw->html_escape($error) if $nlw;
+        $error = [ $error ];
+    }
 
-    $r->log_error($error);
+    my %vars = (
+        debug => Socialtext::AppConfig->debug,
+        errors => $error,
+    );
 
-    $error = $nlw->html_escape($error) if $nlw;
-    $r->content_type('text/html; charset=UTF-8');
-    $r->send_http_header;
-    $r->print("<h1>Software Error:</h1><pre>\n$error</pre>\n");
+    return $class->render_template($r, 'errors/500.html', \%vars);
+}
+
+sub render_template {
+    my $class    = shift;
+    my $r        = shift;
+    my $template = shift;
+    my $vars     = shift || {};
+
+    my $renderer = Socialtext::TT2::Renderer->instance;
+    eval {
+        $r->print(
+            $renderer->render(
+                template => $template,
+                vars     => $vars,
+            )
+        );
+    };
+    if ($@) {
+        if ($@ =~ /\.html: not found/) {
+            return NOT_FOUND;
+        }
+        warn $@ if $@;
+    }
     return OK;
+}
+
+sub r { shift->{r} }
+
+sub session {
+    my $self = shift;
+    $self->{session} ||=  Socialtext::Session->new( $self->r );
+    return $self->{session};
+}
+
+sub redirect {
+    my $self = shift;
+    $self->r->header_out(Location => shift);
+    return REDIRECT;
 }
 
 

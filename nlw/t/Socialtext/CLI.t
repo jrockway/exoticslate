@@ -231,8 +231,8 @@ CREATE_USER: {
 }
 
 CONFIRM_USER: {
-    my $user = Socialtext::User->create(username => 'invitee@example.com', 
-                                        email_address => 'invitee@example.com' );
+    my $user = Socialtext::User->create(username => 'devnull5@socialtext.com', 
+                                        email_address => 'devnull5@socialtext.com' );
     ok( $user, 'User created via User->create' );
     ok(
         ! $user->has_valid_password(),
@@ -243,20 +243,20 @@ CONFIRM_USER: {
     expect_success(
         sub {
             Socialtext::CLI->new(
-                argv => [qw( --email invitee@example.com --password foobar )] )
+                argv => [qw( --email devnull5@socialtext.com --password foobar )] )
                 ->confirm_user();
             },
-            qr/\Qinvitee\E\@\Qexample.com has been confirmed with password foobar\E/,
+            qr/\Qdevnull5\E\@\Qsocialtext.com has been confirmed with password foobar\E/,
             'confirm-user success message'
     );
 
     expect_failure(
         sub {
             Socialtext::CLI->new(
-                argv => [qw( --email invitee@example.com --password foobar )] )
+                argv => [qw( --email devnull5@socialtext.com --password foobar )] )
                 ->confirm_user();
         },
-        qr/\Qinvitee\E\@\Qexample.com has already been confirmed\E/,
+        qr/\Qdevnull5\E\@\Qsocialtext.com has already been confirmed\E/,
         'confirm-user failed with already confirmed user'
     );
 }

@@ -16,6 +16,13 @@ We trust you'll find it worth the effort.
 Here's a high-level overview to installing Socialtext Open, with
 pointers to more detailed information.
 
+* Install development tools
+
+    Due to the number of dependencies, you will likely need to install
+    the basic set of development tools and libraries appropriate for
+    your version/flavor of Unix/Linux.  At a minimum, you will need
+    make and a c compiler.
+
 * Install apache-perl
 
     apache-perl is the name of the Debian package that contains
@@ -29,6 +36,11 @@ pointers to more detailed information.
     In Debian, the package to install is apache2-mpm-prefork.  Other
     distributions may have others.  It's important that it include
     the internal Apache proxy server modules built for it.
+
+* Install the Freetype libraries, libfreetype6-dev
+
+    Socialtext generates images on the fly for the Wikiwyg editor.  It
+    uses some provided fonts and the Freetype system to do so.
 
 * Install, configure and start PostgreSQL
 

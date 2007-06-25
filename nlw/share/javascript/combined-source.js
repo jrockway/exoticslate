@@ -15255,12 +15255,14 @@ for (var i = 0; i < widgets_list.length; i++) {
             }
             if (widget_parse.search_term) {
                 var term = widget_parse.search_term;
-                var term2 = term.replace(/^(category|title):/, '');
+                var term2 = term.replace(/^(tag|category|title):/, '');
                 if (term == term2) {
                     widget_parse.search_type = 'text';
                 }
                 else {
                     widget_parse.search_type = RegExp.$1;
+                    if (widget_parse.search_type == 'tag')
+                        widget_parse.search_type = 'category';
                     widget_parse.search_term = term2;
                 }
             }

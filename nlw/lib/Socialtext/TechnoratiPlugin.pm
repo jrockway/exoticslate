@@ -56,7 +56,7 @@ sub _techno_url {
     my $technorati_key = $self->hub->technorati->key;
     return $self->technorati_base_url .
         "?key=$technorati_key&url=$url&" .
-        'type=link&format=rss&limit=10&current=no';
+        'type=link&format=rss&limit=10';
 }
 
 ##########################################################################

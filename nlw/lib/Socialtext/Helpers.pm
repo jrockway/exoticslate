@@ -118,8 +118,10 @@ sub _get_css_info {
     my ($self) = @_;
     return {
         screen  => $self->hub->css->uri_for_css('screen.css'),
-        print  => $self->hub->css->uri_for_css('print.css'),
+        print   => $self->hub->css->uri_for_css('print.css'),
         wikiwyg => $self->hub->css->uri_for_css('wikiwyg.css'),
+        ie      => $self->hub->css->uri_for_css('ie.css'),
+        ieprint => $self->hub->css->uri_for_css('ieprint.css'),
     };
 }
 

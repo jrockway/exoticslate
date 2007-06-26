@@ -8327,9 +8327,6 @@ ST.TagQueue.prototype = {
     },
 
     socialtextModifiers: {
-        uri_escape: function (str) {
-            return escape(Page.utf8_encode(str));
-        },
         escapespecial : function(str) {
             var escapes = [
                 { regex: /'/g, sub: "\\'" },

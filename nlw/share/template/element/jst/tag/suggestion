@@ -3,5 +3,5 @@
  <a href="#" onclick="Tags.addTag('${t.tag|escapespecial|quoter}'); return false"
    title="Add ${t.tag} to page"
    class="st-tags-suggestion"
->${t.tag}</a>{if t_index != lastIndex}, {/if}
+>${t.tag|escapespecial|quoter}</a>{if t_index != lastIndex}, {/if}
 {/for}

@@ -6870,7 +6870,7 @@ ST.Page.prototype = {
     },
 
     APIUriPageTag: function (tag) {
-        return this.APIUri() + '/tags/' + escape(this.utf8_encode(tag));
+        return this.APIUri() + '/tags/' + encodeURIComponent(tag);
     },
 
     APIUriPageTags: function () {
@@ -6878,7 +6878,7 @@ ST.Page.prototype = {
     },
 
     UriPageTagDelete: function (id) {
-        return '?action=category_delete_from_page;page_id=' + this.page_id + ';category=' + escape(this.utf8_encode(id));
+        return '?action=category_delete_from_page;page_id=' + encodeURIComponent(this.page_id) + ';category=' + encodeURIComponent(id);
     },
 
     UriPageAttachmentDelete: function (id) {
@@ -6893,67 +6893,10 @@ ST.Page.prototype = {
         return '/' + this.wiki_id + '/index.cgi';
     },
 
-    utf8_encode : function (string) {
-        string = string.replace(/\r\n/g,"\n");
-        var utftext = "";
-
-        for (var n = 0; n < string.length; n++) {
-
-            var c = string.charCodeAt(n);
-
-            if (c < 128) {
-                utftext += String.fromCharCode(c);
-            }
-            else if((c > 127) && (c < 2048)) {
-                utftext += String.fromCharCode((c >> 6) | 192);
-                utftext += String.fromCharCode((c & 63) | 128);
-            }
-            else {
-                utftext += String.fromCharCode((c >> 12) | 224);
-                utftext += String.fromCharCode(((c >> 6) & 63) | 128);
-                utftext += String.fromCharCode((c & 63) | 128);
-            }
-
-        }
-
-        return utftext;
-    },
-
-    utf8_decode : function (utftext) {
-        var string = "";
-        var i = 0;
-        var c = c1 = c2 = 0;
-
-        while ( i < utftext.length ) {
-
-            c = utftext.charCodeAt(i);
-
-            if (c < 128) {
-                string += String.fromCharCode(c);
-                i++;
-            }
-            else if((c > 191) && (c < 224)) {
-                c2 = utftext.charCodeAt(i+1);
-                string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
-                i += 2;
-            }
-            else {
-                c2 = utftext.charCodeAt(i+1);
-                c3 = utftext.charCodeAt(i+2);
-                string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-                i += 3;
-            }
-
-        }
-
-        return string;
-    },
-
-
     active_page_exists: function (page_name) {
         page_name = trim(page_name);
         var uri = this.ContentUri();
-        uri = uri + '?action=page_info;page_name=' + escape(this.utf8_encode(page_name));
+        uri = uri + '?action=page_info;page_name=' + encodeURIComponent(page_name);
         var ar = new Ajax.Request (
             uri,
             {
@@ -7614,15 +7557,13 @@ ST.Tags.prototype = {
     suggestionRE: '',
     _deleted_tags: [],
     socialtextModifiers: {
-        uri_escape: function (str) {
-            return escape(Page.utf8_encode(str));
-        },
         escapespecial : function(str) {
             var escapes = [
                 { regex: /'/g, sub: "\\'" },
                 { regex: /\n/g, sub: "\\n" },
                 { regex: /\r/g, sub: "\\r" },
-                { regex: /\t/g, sub: "\\t" }
+                { regex: /\t/g, sub: "\\t" },
+                { regex: /</, sub: '&lt;' }
             ];
             for (var i=0; i < escapes.length; i++)
                 str = str.replace(escapes[i].regex, escapes[i].sub);
@@ -7713,8 +7654,9 @@ ST.Tags.prototype = {
 
     decodeTagNames: function () {
         var tagList = this.initialTags;
-        for (i=0; i < tagList.tags.length; i++)
-            tagList.tags[i].tag = Page.utf8_decode(unescape(tagList.tags[i].tag));
+        for (i=0; i < tagList.tags.length; i++) {
+            tagList.tags[i].tag = decodeURIComponent(tagList.tags[i].tag);
+        }
     },
 
     computeTagLevels: function () {
@@ -7751,9 +7693,9 @@ ST.Tags.prototype = {
         if (tagToAdd.length == 0) {
             return;
         }
-        tagToAdd = html_escape(tagToAdd);
+        //XXX tagToAdd = html_escape(tagToAdd);
         this.showTagMessage('Adding tag ' + html_escape(tagToAdd));
-        var uri = Page.APIUriPageTag(tagToAdd);
+        var uri = Page.APIUriPageTag(encodeURIComponent(tagToAdd));
         new Ajax.Request (
             uri,
             {
@@ -7815,10 +7757,8 @@ ST.Tags.prototype = {
             Element.hide(this.element.suggestions);
         } else {
             if (this.workspaceTags.tags) {
-                var expression = field.value;
-                if (field.value.search(/ /) == -1) {
-                    expression = '\\b'+expression;
-                }
+                var expression = field.value.replace(/([.*+?|(){}[\]\\])/g,'\\$1');
+                expression = '(^| )'+expression;
                 this.suggestionRE = new RegExp(expression,'i');
                 var suggestions = {
                     matches : this.workspaceTags.tags.grep(this.matchTag.bind(this))
@@ -7898,11 +7838,16 @@ ST.Tags.prototype = {
         );
     },
 
+    viewTag: function (tag) {
+        tag = encodeURIComponent(tag);
+        var uri = "?action=category_display;category=" + tag + ";tag=/" + tag;
+        document.location = uri;
+    },
+
     deleteTag: function (tagToDelete) {
-        this.showTagMessage('Removing tag ' + tagToDelete);
+        this.showTagMessage('Removing tag ' + html_escape(tagToDelete));
         this._deleted_tags.push(tagToDelete);
 
-        //var uri = Page.APIUriPageTag(tagToDelete);
         var uri = Page.UriPageTagDelete(tagToDelete);
         var ar = new Ajax.Request (
             uri,
@@ -7925,7 +7870,7 @@ ST.Tags.prototype = {
 
     _update_delete_list: function () {
         if (this._deleted_tags.length > 0) {
-            Element.update(this.element.deleteTagsMessage, 'These tags have been removed: ' + this._deleted_tags.join(', '));
+            Element.update(this.element.deleteTagsMessage, html_escape('These tags have been removed: ' + this._deleted_tags.join(', ')));
             $(this.element.deleteTagsMessage).style.display = 'block';
         }
         else {

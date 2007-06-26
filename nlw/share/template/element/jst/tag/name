@@ -1,8 +1,7 @@
 {for t in tags}
 <li class="st-tags-tagline st-page-box-listing-entry">
     <span class="${t.level}">
-        <a href="?action=category_display;category=${t.tag|uri_escape};tag=/${t.tag|uri_escape}"
-            class="st-tags-tagline-link">${t.tag}</a>
+        <a href='#' onClick="Tags.viewTag('${t.tag}')">${t.tag}</a>
     </span>
     {if Socialtext.perms.edit}
     <span class="st-tags-tagdelete">

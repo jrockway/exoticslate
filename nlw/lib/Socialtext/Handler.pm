@@ -33,13 +33,15 @@ sub challenge {
 
 sub handler ($$) {
     my $class = shift;
-    my $r     = shift;
 
-    my $user = $class->authenticate($r) || $class->guest($r);
+    # set max upload size
+    my $apr = Apache::Request->instance( shift, POST_MAX => ( 1024 ** 2 ) * 50 );
 
-    return $class->challenge(request => $r) unless $user;
+    my $user = $class->authenticate($apr) || $class->guest($apr);
 
-    return $class->real_handler($r, $user);
+    return $class->challenge(request => $apr) unless $user;
+
+    return $class->real_handler($apr, $user);
 }
 
 sub authenticate {

@@ -2,5 +2,5 @@
 <span class="error">
   [% loc('To set your preferences for a workspace, you must be logged in.') %]
   <br/>
-  [% loc('If you do not already have an account, you can <a href="/nlw/register.html?redirect_to=[_1]">register here</a>.', redirect_to) | html %]
+  [% loc('If you do not already have an account, you can <a href="/nlw/register.html?redirect_to=[_1]">register here</a>.', redirect_to) %]
 </span>

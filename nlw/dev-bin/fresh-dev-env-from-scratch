@@ -34,6 +34,9 @@ set -x
 NLWCTL_QUIET=1 dev-bin/nlwctl stop
 dev-bin/_fresh-dev-env
 
+# Setup robots.txt file to prevent dev-env heat death
+perl -le 'print "User-agent: *\nDisallow: /"' > ~/.nlw/root/docroot/robots.txt
+
 if [ $FDEFS_PROXY = 0 ]; then
     echo "Starting in single-Apache mode";
     dev-bin/gen-config --root=$HOME/.nlw --ports-start-at=20000 --apache-proxy=$FDEFS_PROXY --socialtext-open=0;

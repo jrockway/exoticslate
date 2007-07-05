@@ -261,6 +261,13 @@ sub generate_app_config {
         $appconfig->set( web_hostname => $opts{hostname} );
     }
 
+    # Throttle ceqlotron in dev-envs.  The default values tend to spike load
+    # on shared machines.
+    if ( $config{is_dev} ) {
+        $appconfig->set( ceqlotron_max_concurrency => 1 );
+        $appconfig->set( ceqlotron_synchronous     => 1 );
+    }
+
     File::Path::mkpath(
        File::Basename::dirname($output_file), $opts{verbose}, 0755 );
 

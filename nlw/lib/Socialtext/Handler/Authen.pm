@@ -6,6 +6,7 @@ use warnings;
 use base 'Socialtext::Handler';
 
 use Apache::Constants qw( NOT_FOUND );
+use Socialtext;
 
 use Email::Valid;
 use Exception::Class;
@@ -47,6 +48,7 @@ sub handler ($$) {
             username_label => $self->username_label,
             redirect_to    => $self->{args}{redirect_to},
             static_path    => Socialtext::Helpers::static_path(),
+            st_version     => $Socialtext::VERSION,
             %$saved_args,
         };
 

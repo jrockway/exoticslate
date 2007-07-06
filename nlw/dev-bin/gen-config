@@ -265,7 +265,7 @@ sub generate_app_config {
     # on shared machines.
     if ( $config{is_dev} ) {
         $appconfig->set( ceqlotron_max_concurrency => 1 );
-        $appconfig->set( ceqlotron_synchronous     => 1 );
+        $appconfig->set( ceqlotron_synchronous     => 0 );
     }
 
     File::Path::mkpath(

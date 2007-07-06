@@ -106,12 +106,7 @@ sub gather_data {
 
         next if ( $SKIP_USERS{ $log_ref->{user} } );
 
-        # Some redirects should not be read as views/edits, such as
-        # when a user is unauthorized to view the workspace.
-        next if ($log_ref->{status} eq 302 &&
-		 $log_ref->{referer} =~ /\/login\.html\?/);
-
-        next unless $log_ref->{status} =~ /^[23]/;   # okay or redirect status
+        next unless $log_ref->{status} =~ /^[2]/;   # okay status only
 
         my $workspace = lc Socialtext::UsageStats::get_workspace_from_url(
             $log_ref->{url}

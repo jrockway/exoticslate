@@ -56,7 +56,7 @@ most cases the default settings will work fine)
 ** o conf urllist push http://mirrors.kernel.org/cpan/
 ** o conf commit
  ** quit
- *  sudo cpan -i B/BY/BYRNE/SOAP/SOAP-Lite-0.67.tar.gz MasonX::WebApp 
+ *  sudo cpan -i B/BY/BYRNE/SOAP/SOAP-Lite-0.67.tar.gz 
  
  
 4) Configuring and installing   This step takes around 30 minutes.

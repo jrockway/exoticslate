@@ -12904,11 +12904,8 @@ proto.onactivate = function() {
 }
 
 proto.get_selection_text = function() {
-    if (this.__range) {
-        return this.__range.htmlText;
-    }
-
     var selection = this.get_edit_document().selection;
+
     if (selection != null) {
         this.__range = selection.createRange();
         return this.__range.htmlText;

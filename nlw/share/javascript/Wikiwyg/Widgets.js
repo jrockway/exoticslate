@@ -76,18 +76,6 @@ var widget_data = Wikiwyg.Widgets.widget;
 
 proto = eval(WW_SIMPLE_MODE).prototype;
 
-proto.enableThis = function() {
-    Wikiwyg.Mode.prototype.enableThis.call(this);
-    this.edit_iframe.style.border = '1px black solid';
-    this.edit_iframe.width = '100%';
-    this.setHeightOf(this.edit_iframe);
-    this.fix_up_relative_imgs();
-    this.get_edit_document().designMode = 'on';
-    this.apply_stylesheets();
-    this.enable_keybindings();
-    this.clear_inner_html();
-}
-
 proto.fromHtml = function(html) {
     Wikiwyg.Wysiwyg.prototype.fromHtml.call(this, html);
     try {
@@ -874,7 +862,7 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
     var template = 'widget_' + widget + '_edit.html';
     var html = Jemplate.process(template, this.currentWidget);
 
-    var box = new Widget.Lightbox({contentClassName: 'jsan-widget-lightbox-content-wrapper', wrapperClassName: 'st-lightbox-dialog'});
+    var box = new Widget.Lightbox.Socialtext({contentClassName: 'jsan-widget-lightbox-content-wrapper', wrapperClassName: 'st-lightbox-dialog'});
     box.content( html );
     box.effects('RoundedCorners');
     box.create();
@@ -978,7 +966,13 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
     box.show(callback);
 }
 
-Widget.Lightbox.prototype.restrictFocus = function(form) {
+Widget.Lightbox.Socialtext = function (param) {
+    Widget.Lightbox.call(this,param);
+}
+
+Widget.Lightbox.Socialtext.prototype = new Widget.Lightbox;
+
+Widget.Lightbox.Socialtext.prototype.restrictFocus = function(form) {
     this._focusd_form = form;
 
     // Need to get a list of any tag that can get focus: e.g. input and anchors
@@ -1006,7 +1000,7 @@ Widget.Lightbox.prototype.restrictFocus = function(form) {
     }
 }
 
-Widget.Lightbox.prototype.releaseFocus = function(form){
+Widget.Lightbox.Socialtext.prototype.releaseFocus = function(form){
     if ( !form ) form = this._focusd_form;
     if ( !form ) return;
     var inputs = form.getElementsByTagName("input");
@@ -1017,7 +1011,7 @@ Widget.Lightbox.prototype.releaseFocus = function(form){
     }
 }
 
-Widget.Lightbox.prototype.applyHandlers = function(){
+Widget.Lightbox.Socialtext.prototype.applyHandlers = function(){
     if(!this.div)
         return;
 
@@ -1035,7 +1029,7 @@ Widget.Lightbox.prototype.applyHandlers = function(){
     }
 }
 
-Widget.Lightbox.prototype.toggleOptions = function() {
+Widget.Lightbox.Socialtext.prototype.toggleOptions = function() {
     var link = document.getElementById('st-widgets-moreoptions');
     var panel = document.getElementById('st-widgets-moreoptionspanel');
     var icon = document.getElementById('st-widgets-optionsicon');
@@ -1053,7 +1047,7 @@ Widget.Lightbox.prototype.toggleOptions = function() {
     }
 }
 
-Widget.Lightbox.prototype.release = function() {
+Widget.Lightbox.Socialtext.prototype.release = function() {
     /**
      * What we would prefer to do is remove the entire lighbox from the DOM
      * but IE does not handle the delete well. So, instead, we delete everything
@@ -1065,16 +1059,13 @@ Widget.Lightbox.prototype.release = function() {
     this.hide();
 }
 
-Widget.Lightbox.prototype.hide = function() {
-    if (!this.div.parentNode) return;
-    this.div.style.display="none";
-    if (Widget.Lightbox.is_ie) {
-        document.body.scroll="yes"
-    }
-    this.releaseFocus();
-
-    if (Wikiwyg.is_ie) {
-        wikiwyg.toolbarObject.styleSelect.style.display=""
+Widget.Lightbox.Socialtext.prototype.hide = function() {
+    Widget.Lightbox.prototype.hide.call(this);
+    if (this.div.parentNode) {
+        this.releaseFocus();
+        if (Wikiwyg.is_ie) {
+            wikiwyg.toolbarObject.styleSelect.style.display=""
+        }
     }
 }
 

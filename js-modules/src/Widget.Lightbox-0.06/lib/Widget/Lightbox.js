@@ -70,6 +70,7 @@ Widget.Lightbox.show = function(param) {
 }
 
 Widget.Lightbox.prototype.show = function(callback) {
+    this.scrollable = "no";
     var div = this.create();
     if ( this.div.style.display== "none" )
         this.div.style.display="block";
@@ -86,7 +87,7 @@ Widget.Lightbox.prototype.hide = function() {
     if (this.div.parentNode) {
         this.div.style.display="none";
         if (Widget.Lightbox.is_ie) {
-            document.body.scroll="yes"
+            document.body.scroll = this.scrollable = "yes";
         }
     }
 }
@@ -206,7 +207,7 @@ Widget.Lightbox.prototype.applyStyle = function() {
     divs.contentWrapper.style.left = my_left;
 
     if ( Widget.Lightbox.is_ie ) {
-        document.body.scroll="no";
+        document.body.scroll = this.scrollable;
         divs.background.style.height = win_height;
     }
 }

@@ -12,6 +12,7 @@ use Socialtext::Permission 'ST_READ_PERM';
 const formatter_id  => 'wafl_phrase';
 const pattern_start =>
     qr/(^|(?<=[\s\-]))(".+?")?\{[\w-]+(?=[\:\ \}])(\s*:)?\s*.*?\}(?=[^A-Za-z0-9]|\z)/;
+const wafl_reference_parse => qr/^\s*(?:([\w\-]+)?\s*\[(.*?)\])?\s*(\S.*?)?\s*$/;
 field 'method';
 field 'arguments';
 field 'label';
@@ -81,8 +82,7 @@ sub existence_error {
 
 sub parse_wafl_reference {
     my $self = shift;
-    $self->arguments =~ /^\s*(?:([\w\-]+)?\s*\[(.*?)\])?\s*(\S.*?)?\s*$/
-        or return;
+    $self->arguments =~ $self->wafl_reference_parse or return;
     my ( $workspace_name, $page_title, $qualifier ) = ( $1, $2, $3 );
     $workspace_name ||= $self->current_workspace_name;
     # XXX this just feels wrong. It's necessary for the many ways

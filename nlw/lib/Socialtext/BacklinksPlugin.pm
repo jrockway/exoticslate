@@ -6,16 +6,12 @@ use warnings;
 use base 'Socialtext::Query::Plugin';
 
 use Class::Field qw( const );
-use Socialtext::Formatter::Parser;
 use Socialtext::Pages;
 
 sub class_id { 'backlinks' }
 const class_title          => 'Backlinks';
 const SEPARATOR            => '____';
 const MAX_FILE_LENGTH      => 255;
-const free_link_match_class => 'Socialtext::Formatter::FreeLink';
-const include_match_class   => 'Socialtext::Formatter::WaflPhrase';
-const match_method         => 'Socialtext::Formatter::Parser::unit_match';
 const preference_query     =>
       'How many backlinks to show in side pane box';
 const cgi_class => 'Socialtext::Backlinks::CGI';
@@ -119,45 +115,44 @@ sub update {
     my $page = shift;
 
     # XXX The formmatter uses current
+    # REVIEW this can probably come out in new style?
     my $current = $self->hub->pages->current;
 
-    my $backlinks = $self;
-    my $sub = sub {
-        my $self = shift;
-        my $unit = shift;
-        my $page_name;
-        # wafl phrases are not fully vivified at this stage
-        # REVIEW: this is just an icky non-smart way of doing things
-        if ($unit->isa( $backlinks->include_match_class )) {
-            my $text = $unit->matched;
-            if ( $text =~ /{include\s+\[([^]]+)\]}/ ) {
-                $page_name = $1;
-            }
-        }
-        elsif ($unit->isa( $backlinks->free_link_match_class )) {
-            $page_name = $unit->title;
-        }
-        if ($page_name) {
-            my $link = Socialtext::Page->name_to_id($page_name);
-            $backlinks->_write_link($page, $link);
-        }
-    };
-
-    no strict 'refs';
-    no warnings 'redefine';
-    local *{$self->match_method} = $sub;
-
-    $self->hub->pages->current($page);
     $self->_clean_source_links($page);
 
-    my $parser = Socialtext::Formatter::Parser->new(
-        table      => $self->hub->formatter->table,
-        wafl_table => $self->hub->formatter->wafl_table,
-    );
+    my $links = $self->_get_links($page);
+    foreach my $found (@$links) {
+        my $link = Socialtext::Page->name_to_id($found->{link});
+        $self->_write_link($page, $link);
+    }
 
-    $parser->text_to_parsed($page->content);
     $self->hub->pages->current($current);
 }
+
+sub _get_links {
+    my $self = shift;
+    my $page = shift;
+
+    my $hub = $self->hub;
+
+    # XXX this borrows a lot of code from Socialtext::Formatter::WaflPhrase to
+    # avoid hub confusion
+    return $page->get_units(
+        'wiki' => sub {
+            return +{link => $_[0]->title};
+        },
+        'wafl_phrase' => sub {
+            my $unit = shift;
+            return unless $unit->method eq 'include';
+            $unit->arguments =~ $unit->wafl_reference_parse;
+            my ( $workspace_name, $page_title, $qualifier ) = ( $1, $2, $3 );
+            # don't write interwiki includes (yet)
+            return if (defined $workspace_name and $workspace_name ne $hub->current_workspace->name);
+            return +{ link => $page_title };
+        }
+    );
+} 
+
 
 sub all_backlinks {
     my $self = shift;

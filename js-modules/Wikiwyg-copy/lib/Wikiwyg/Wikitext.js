@@ -190,7 +190,7 @@ proto.find_right = function(t, selection_end, matcher) {
 }
 
 proto.get_lines = function() {
-    t = this.area; // XXX needs "var"?
+    var t = this.area;
     var selection_start = t.selectionStart;
     var selection_end = t.selectionEnd;
 

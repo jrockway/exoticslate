@@ -3,12 +3,12 @@ This Wikiwyg mode supports a DesignMode wysiwyg editor with toolbar buttons
 
 COPYRIGHT:
 
-    Copyright (c) 2005 Socialtext Corporation 
+    Copyright (c) 2005 Socialtext Corporation
     655 High Street
     Palo Alto, CA 94301 U.S.A.
     All rights reserved.
 
-Wikiwyg is free software. 
+Wikiwyg is free software.
 
 This library is free software; you can redistribute it and/or modify it
 under the terms of the GNU Lesser General Public License as published by
@@ -39,7 +39,7 @@ proto.config = {
     editHeightAdjustment: 1.3,
     clearRegex: null
 };
-    
+
 proto.initializeObject = function() {
     this.edit_iframe = this.get_edit_iframe();
     this.div = this.edit_iframe;
@@ -145,13 +145,13 @@ proto.apply_inline_stylesheet = function(style, head) {
 
             /* It's pretty strange that this doesnt work.
                That's why Ajax.get() is used to retrive the css text.
-               
+
             this.apply_linked_stylesheet({
                 href: style.cssRules[i].href,
                 type: 'text/css'
             }, head);
             */
-            
+
             style_string += Ajax.get(style.cssRules[i].href);
         } else {
             style_string += style.cssRules[i].cssText + "\n";
@@ -208,6 +208,8 @@ proto.apply_linked_stylesheet = function(style, head) {
 proto.process_command = function(command) {
     if (this['do_' + command])
         this['do_' + command](command);
+    if (! Wikiwyg.is_ie)
+        this.get_edit_window().focus();
 }
 
 proto.exec_command = function(command, option) {
@@ -274,7 +276,7 @@ proto.do_link = function() {
         url = match[2];
     }
     else {
-        url = '?' + escape(selection); 
+        url = '?' + escape(selection);
     }
     this.exec_command('createlink', url);
 }
@@ -305,58 +307,13 @@ Support for Internet Explorer in Wikiwyg.Wysiwyg
  =============================================================================*/
 if (Wikiwyg.is_ie) {
 
-proto.initializeObject = function() {
-    this.div = document.createElement('div');
-    this.div.contentEditable = true;
-    this.div.style.overflow = 'auto';
-    this.div.id = 'wysiwyg-editable-div';
-    this.edit_iframe = this.div;
-    this.div.onbeforedeactivate = this.onbeforedeactivate.bind(this);
-    this.div.onactivate = this.onactivate.bind(this);
-    return this.div;
+proto.get_edit_window = function() {
+    return this.edit_iframe;
 }
 
-proto.fromHtml = function(html) {
-    var dom = document.createElement('div');
-    dom.innerHTML = html;
-    this.sanitize_dom(dom);
-    this.set_inner_html(dom.innerHTML);
+proto.get_edit_document = function() {
+    return this.edit_iframe.contentWindow.document;
 }
-
-proto.enableThis = function() {
-    Wikiwyg.Mode.prototype.enableThis.call(this);
-    this.div.style.border = '1px black solid';
-    this.div.width = '100%';
-    this.setHeightOf(this.div);
-    this.fix_up_relative_imgs();
-    this.apply_stylesheets();
-    this.enable_keybindings();
-    this.clear_inner_html();
-}
-
-proto.get_div = function() {
-    return this.div;
-}
-
-proto.get_keybinding_area = function() {
-    return this.get_div();
-}
-
-proto.get_edit_window = function() { return window }
-proto.get_edit_document = function() { return document }
-
-proto.get_inner_html = function() {
-    return this.get_div().innerHTML;
-}
-
-proto.set_inner_html = function(html) {
-    this.get_div().innerHTML = html;
-}
-
-// We don't need to apply stylesheets that have already been applied
-proto.apply_stylesheets = function() {}
-
-proto.enable_keybindings = function () {}
 
 proto.onbeforedeactivate = function() {
     this.__range = this.get_edit_document().selection.createRange();
@@ -367,11 +324,8 @@ proto.onactivate = function() {
 }
 
 proto.get_selection_text = function() {
-    if (this.__range) {
-        return this.__range.htmlText;
-    }
-
     var selection = this.get_edit_document().selection;
+
     if (selection != null) {
         this.__range = selection.createRange();
         return this.__range.htmlText;
@@ -394,5 +348,56 @@ proto.insert_html = function(html) {
         this.__range = null;
     }
 }
+
+proto.get_inner_html = function( cb ) {
+    if ( cb ) {
+        this.get_inner_html_async( cb );
+        return;
+    }
+    return this.get_editable_div().innerHTML;
+}
+
+proto.get_editable_div = function () {
+    if (!this._editable_div) {
+        this._editable_div = this.get_edit_document().createElement('div');
+        this._editable_div.contentEditable = true;
+        this._editable_div.style.overflow = 'auto';
+        this._editable_div.style.border = 'none'
+        this._editable_div.id = 'wysiwyg-editable-div';
+        this._editable_div.onbeforedeactivate = this.onbeforedeactivate.bind(this);
+        this._editable_div.onactivate = this.onactivate.bind(this);
+        this.get_edit_document().body.appendChild(this._editable_div);
+    }
+    return this._editable_div;
+}
+
+proto.get_inner_html_async = function( cb ) {
+    var self = this;
+    var doc = this.get_edit_document();
+    if ( doc.readyState == 'loading' ) {
+        setTimeout( function() {
+            self.get_inner_html(cb);
+        }, 50);
+    } else {
+        var html = this.get_editable_div().innerHTML;
+        cb(html);
+        return html;
+    }
+}
+
+proto.set_inner_html = function(html) {
+    var self = this;
+    var doc = this.get_edit_document();
+    if ( doc.readyState == 'loading' ) {
+        setTimeout( function() {
+            self.set_inner_html(html);
+        }, 50);
+    } else {
+        this.get_editable_div().innerHTML = html;
+    }
+}
+
+// Use IE's design mode default key bindings for now.
+proto.enable_keybindings = function() {}
 
 } // end of global if

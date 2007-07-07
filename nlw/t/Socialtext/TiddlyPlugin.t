@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use mocked 'Apache';
-use Test::Socialtext tests => 19;
+use Test::Socialtext tests => 18;
 fixtures('admin_no_pages');
 
 BEGIN {
@@ -50,24 +50,27 @@ ok $page->isa('Socialtext::Page'), "we did create a page";
 my $html = $hub->tiddly->produce_tiddly(pages => [$page], count => 1);
 
 # turn it into tiddlers
-my @chunks = split('<!--STORE-AREA-END-->', $html);
+my @chunks = split('<!--POST-STOREAREA-->', $html);
 my @tiddlers = split('</div>', $chunks[0]);
 
 # get the one we care about
 my $tiddler = $tiddlers[-3];
 
-my ($attributes, $body) = split('>', $tiddler);
+my ($attributes, $body) = split('>', $tiddler, 2);
 
-is $body, "Righteous\\nBro!\\n", "tiddler content is correct";
+is $body, "\n<pre>Righteous\nBro!\n</pre>\n", "tiddler content is correct";
 
 my %attribute;
 while ($attributes =~ /([\w\.]+)="([^"]+)"/g) {
     $attribute{$1} = $2;
 }
 
-is $attribute{'tiddler'}, $page->metadata->Subject,
+# make sure we get the right name and such
+$page = $hub->pages->new_from_name($Title);
+
+is $attribute{'title'}, $page->metadata->Subject,
     'tiddler and subject are the same';
-is $attribute{'tiddler'}, $Title, 'tiddler and given title are the same';
+is $attribute{'title'}, $Title, 'tiddler and given title are the same';
 is $attribute{'modifier'}, 'devnull1@socialtext.com',
     'tiddler has the devnull1 modifier';
 like $attribute{'modified'}, qr{\d{12}},
@@ -75,12 +78,11 @@ like $attribute{'modified'}, qr{\d{12}},
 like $attribute{'created'}, qr{\d{12}},
     'tiddler has a date stamp for created';
 is $attribute{'tags'},        'love [[hope charity]]',  'tiddler lists correct tags';
-is $attribute{'server.type'}, 'socialtext', 'server type is socialtext';
 is $attribute{'wikiformat'},  'socialtext', 'Wiki format socialtext';
 like $attribute{'server.host'}, qr{^https?://},   'server.host looks like a uri';
 is $attribute{'server.workspace'}, 'admin', 'tiddler has the right workspace';
 is $attribute{'server.page.id'},   $page->uri,  'page.id is set to uri';
-is $attribute{'server.page.name'}, $page->name, 'page.name is to name';
-is $attribute{'server.page.version'}, $page->revision_id,
+is $attribute{'server.page.name'}, $Title, 'page.name is set to title';
+is $attribute{'server.page.revision'}, $page->revision_id,
     'version and revision id are the same';
 

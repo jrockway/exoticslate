@@ -9,7 +9,6 @@ use warnings;
 
 use base 'Socialtext::Plugin';
 
-use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use Class::Field qw( const field );
 use Encode;
 use File::Temp;
@@ -97,6 +96,8 @@ sub _create_html {
         pages     => $tiddlers,
         default   => {
             workspace => $self->hub->current_workspace->name,
+            workspacelist => join (' ',
+                map { $_->name } $self->hub->current_user->workspaces()->all()),
             server    => Socialtext::URI::uri(),
         },
     );
@@ -151,7 +152,7 @@ sub _send_html {
     my $filename = join ('-', $self->hub->current_workspace->name, 'unplugged.html');
     $self->hub->headers->add_attachment(
         type => 'text/html',
-        len => length($html),
+        len => undef,
         filename => $filename
     );
     $self->hub->headers->print;
@@ -189,7 +190,7 @@ sub _tiddler_representation {
         page        => $page->uri,
         server      => Socialtext::URI::uri(),
         pageName    => $page->name,
-        version     => $page->revision_id(),
+        revision    => $page->revision_id(),
     };
 }
 
@@ -198,8 +199,6 @@ sub _escape_wikitext {
     my $content = shift;
 
     $content = Socialtext::String::html_escape($content);
-    $content =~ s{\\}{\\s}g;
-    $content =~ s{\n}{\\n}g;
     $content =~ s{\r}{};
 
     return $content;

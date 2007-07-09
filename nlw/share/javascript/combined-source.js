@@ -12652,7 +12652,8 @@ proto.enableThis = function() {
     this.edit_iframe.width = '100%';
     this.setHeightOf(this.edit_iframe);
     this.fix_up_relative_imgs();
-    this.get_edit_document().designMode = 'on';
+    if (!Wikiwyg.is_ie)
+        this.get_edit_document().designMode = 'on';
     this.apply_stylesheets();
     this.enable_keybindings();
     this.clear_inner_html();

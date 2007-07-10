@@ -3,9 +3,6 @@ package Socialtext::WebApp;
 use strict;
 use warnings;
 
-use Apache::Constants qw(FORBIDDEN);
-use Apache::URI;
-
 # XXX - The exception should have a status field
 # instead of having the status in the webapp object, because the
 # exception is always accessible, even if the webapp object is not.
@@ -16,11 +13,14 @@ use Exception::Class (
       { description => 'return a FORBIDDEN status' },
     'Socialtext::WebApp::Exception::NotFound' =>
       { description => 'return a NOT_FOUND status' },
+    'Socialtext::WebApp::Exception::Redirect' =>
+      { description => 'system needs to send a redirect' },
 );
 
 use Socialtext::Helpers;
 use Socialtext::Session;
 use Socialtext::UniqueArray;
+use Socialtext::URI;
 use Socialtext::Validate
   qw( validate validate_with SCALAR ARRAYREF HASHREF OBJECT );
 
@@ -173,19 +173,14 @@ sub _handle_error {
 
 sub redirect {
     my $self = shift;
+    my $uri = (@_ == 1 ? shift : Socialtext::URI::uri(@_));
 
     $self->session->write();
-    Socialtext::WebHelpers->redirect(@_);
+    Socialtext::WebApp::Exception::Redirect->throw($uri);
 }
 
 sub abort_forbidden {
     my $self = shift;
-
-    my $r = $self->apache_req;
-
-    $r->method('GET');
-    $r->headers_in->unset('Content-length');
-    $r->status(FORBIDDEN);
 
     Socialtext::WebApp::Exception::Forbidden->throw();
 }

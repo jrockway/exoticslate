@@ -21,6 +21,8 @@ Socialtext::EmailSender->TestModeOn();
 my $hub    = new_hub('admin');
 my $bugs   = $hub->bugs;
 
+# XXX the hub needs a rest object, so we need a mock rest object
+
 {
     Email::Send::Test->clear;
 

@@ -151,11 +151,13 @@
 <script type="text/javascript">
     new Ajax.Updater(
             'st-weblog-archives-list',
-            '?action=weblog_archive_html;category=[% category.replace('\'','%27') %]'
+            '?action=weblog_archive_html;category=[% category.replace('\'','%27') %]',
+            {'method':'get'}
             );
 
     new Ajax.Updater(
             'st-weblog-navigation-content',
-            '?action=weblog_html'
+            '?action=weblog_html',
+            {'method':'get'}
             );
 </script>

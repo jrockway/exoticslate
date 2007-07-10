@@ -101,11 +101,8 @@ sub check_user_authorization {
 
     my $error_type = 'unauthorized_workspace';
     if ( $self->hub->current_user->is_guest
-         and $self->hub->current_workspace->role_has_permission(
-             permission => ST_READ_PERM,
-             role       => Socialtext::Role->AuthenticatedUser,
-         ) ) {
-        $error_type = 'authenticate_to_read';
+        and !$self->hub->checker->check_permission('read') ) {
+        $error_type = 'not_logged_in';
     }
 
     $self->hub->authz_error( error_type => $error_type );

@@ -6,6 +6,7 @@ use warnings;
 use base 'Socialtext::Plugin';
 
 use Class::Field qw( const );
+use DateTime::Format::Strptime;
 use Socialtext::User;
 use Socialtext::String;
 use Socialtext::TT2::Renderer;
@@ -37,15 +38,15 @@ sub page_info {
     my $self = shift;
 
     my $page = $self->hub->pages->current;
-   
+
     # UTF8 issues with *nix filename lengths
-    # currently an issue may be resolved in 
+    # currently an issue may be resolved in
     # the future
     unless (defined $page) {
         Socialtext::Exception::DataValidation->throw(
             errors => ['Page name is too long'] );
     }
-    
+
     $page->load;
 
     my $info = $self->_get_page_info($page);
@@ -138,7 +139,7 @@ sub display {
 
     my $page = $self->hub->pages->current;
 
-    # Put in to deal with bots trying 
+    # Put in to deal with bots trying
     # very long and useless page names
     unless (defined $page) {
         Socialtext::Exception::DataValidation->throw(
@@ -197,7 +198,6 @@ sub display {
             page                    => $self->_get_page_info($page),
             tag_count               => scalar @{ $page->metadata->Category }, # counts recent changes!
             initialtags             => $self->_getCurrentTags($page),
-            initialattachments      => $self->_getCurrentAttachments($page),
             workspacetags           => $self->_get_workspace_tags,
             is_homepage             =>
                 ( not $self->hub->current_workspace->homepage_is_dashboard
@@ -260,7 +260,6 @@ sub content_only {
             title        => $page->title,
             page         => $self->_get_page_info($page),
             initialtags  => $self->_getCurrentTags($page),
-            initialattachments  => $self->_getCurrentAttachments($page),
             workspacetags  => $self->_get_workspace_tags,
         },
     );
@@ -343,27 +342,6 @@ sub _time_only {
     return $strptime->parse_datetime($date)->hms;
 }
 
-sub _getCurrentAttachments {
-    my $self = shift;
-    my $PAGE = shift;
-
-    my $c = 0;
-    my @attachments =    map {{
-            filename       => $_->filename,
-            id             => $_->id,
-            upload_date    => $self->_date_only($_->Date),
-            upload_time    => $self->_time_only($_->Date),
-            date           => $self->_date_epoch_from($_->Date),
-            from           => $_->From,
-            filesize       => $_->Content_Length,
-            mime_type      => $_->mime_type,
-        }}
-    sort { lc($a->filename) cmp lc($b->filename) }
-    @{$self->hub->attachments->all( page_id => $PAGE->id ) };
-
-    return JSON::objToJson({attachments => \@attachments});
-}
-
 sub _get_workspace_tags {
     my $self = shift;
 
@@ -396,7 +374,7 @@ sub _getCurrentTags {
         @{ $page->metadata->Category } );
 
     foreach my $tag (@{$tags{tags}}) {
-        $tag->{count} = JSON::Number($tag->{count});
+        $tag->{page_count} = JSON::Number($tag->{page_count});
     }
     $tags{maxCount} = JSON::Number($tags{maxCount});
 

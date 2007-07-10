@@ -28,14 +28,16 @@ ALL_JS_SOURCE_FILES= \
 		$(EXTERNAL_JAVASCRIPT)/Widget-SortableTable/lib/Widget/SortableTable.js \
 		$(EXTERNAL_JAVASCRIPT)/Widget-Lightbox/lib/Widget/Lightbox.js \
 		$(EXTERNAL_JAVASCRIPT)/Widget-Lightbox/tests/lib/Effect/RoundedCorners.js \
+		hacks.js \
 		md5.js \
 		Cookie.js \
 		ArrayUtils.js \
 		stlibrary.js \
-		Lightbox.js \
 		Jemplate.js \
 		JSON.js \
 		$(JEMPLATE_MODULE) \
+		pagetags.js \
+		pageattachments.js \
 		pageview.js \
 		attachqueue.js \
 		StTemplateField.js \
@@ -53,6 +55,7 @@ ALL_JS_SOURCE_FILES= \
 		PageNameSupportLookahead.js \
 		PageSectionLookahead.js \
 		PageAttachmentLookahead.js \
+		startup.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Toolbar.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Preview.js \

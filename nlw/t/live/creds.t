@@ -32,8 +32,10 @@ my %DESCRIPTION = (
     $BOGUS      => 'bogus creds',
 );
 
+# noauth now redirects to just feed so we go there directly
+# to see what happens authwise
 Noauth_feeds: {
-    my $t = make_tester( 'noauth feeds', '/noauth/feed/workspace/public' );
+    my $t = make_tester( 'noauth feeds', '/feed/workspace/public' );
     $t->( $_, 200 )
         for ( $NO_CREDS, $HTTP_BASIC, $COOKIE, $HTTP_BASIC | $BOGUS );
     TODO: {
@@ -42,8 +44,10 @@ Noauth_feeds: {
     }
 }
 
+# only test admin here. public will never present creds so 
+# we don't test it here.
 Auth_feeds: {
-    for my $ws qw(admin public) {
+    for my $ws qw(admin) {
         my $t = make_tester( "$ws auth feed", "/feed/workspace/$ws" );
         $t->( $_, 200 ) for ( $HTTP_BASIC, $COOKIE );
         $t->( $_, 401 ) for ( $NO_CREDS, $HTTP_BASIC | $BOGUS );
@@ -57,7 +61,7 @@ Auth_feeds: {
 Public_rest: {
     my $t = make_tester( 'public REST', '/data/workspaces/public/pages' );
     $t->( $_, 200 ) for ( $HTTP_BASIC, $COOKIE );
-    $t->( $_, 401 ) for ( $NO_CREDS, $HTTP_BASIC | $BOGUS );
+    $t->( $_, 200 ) for ( $NO_CREDS, $HTTP_BASIC | $BOGUS );
     TODO: {
         local $TODO = "Need to fix a bug in User.pm";
         $t->($COOKIE | $BOGUS, 401);
@@ -85,12 +89,12 @@ Public_workspace: {
 }
 
 Private_workspace: {
-    my $t = make_tester( 'private workspace', '/admin/index.cgi?admin_wiki' );
-    $t->( $_, 200 ) for ( $HTTP_BASIC, $COOKIE );
+    my $t = make_tester( 'private workspace', '/admin/index.cgi?admin_wiki');
+    $t->( $_, 200 ) for ( $HTTP_BASIC, $COOKIE);
     $t->( $_, 302 ) for ( $NO_CREDS, $HTTP_BASIC | $BOGUS );
     TODO: {
         local $TODO = "Need to fix a bug in User.pm";
-        $t->($COOKIE | $BOGUS, 302);
+        $t->( $COOKIE | $BOGUS, 302 );
     }
 }
 
@@ -105,7 +109,7 @@ Public_miki: {
 }
 
 Private_miki: {
-    my $t = make_tester( 'private miki', '/lite/page/admin/public_wiki' );
+    my $t = make_tester( 'private miki', '/lite/page/admin/admin_wiki' );
     $t->( $_, 200 ) for ( $HTTP_BASIC, $COOKIE );
     $t->( $_, 302 ) for ( $NO_CREDS, $HTTP_BASIC | $BOGUS );
     TODO: {
@@ -197,4 +201,3 @@ sub _make_http_cookie {
         }
     );
 }
-

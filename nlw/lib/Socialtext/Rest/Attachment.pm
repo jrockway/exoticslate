@@ -5,6 +5,7 @@ use warnings;
 use strict;
 
 use base 'Socialtext::Rest';
+use IO::File;
 use Socialtext::HTTP ':codes';
 
 sub allowed_methods { 'GET, HEAD, DELETE' }
@@ -21,16 +22,28 @@ sub GET {
     return $self->no_workspace() unless $self->workspace;
     return $self->not_authorized() unless $self->user_can('read');
 
-    my $contents = eval {
+    my $fh;
+    eval {
         my $attachment = $self->_get_attachment();
-        $rest->header( -type => $attachment->mime_type );
-        return $attachment->content;
+        my $file = $attachment->full_path;
+
+        unless ( -e $file ) {
+            $self->_invalid_attachment( $rest, 'not found' );
+        }
+
+        $fh = new IO::File $file, 'r';
+        die "Cannot read $file: $!" unless $fh;
+
+        $rest->header(
+            '-content-length' => -s $file,
+            -type             => $attachment->mime_type,
+        );
     };
     # REVIEW: would be nice to be able to toss some kind of exception
     # all the way out to the browser
     # Probably an invalid attachment id.
     return $self->_invalid_attachment( $rest, $@ ) if $@;
-    return $contents;
+    return $fh;
 }
 
 sub DELETE {

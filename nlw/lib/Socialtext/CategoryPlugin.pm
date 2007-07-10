@@ -86,7 +86,7 @@ sub category_list {
 
 sub category_delete_from_page {
     my $self = shift;
- 
+
     return unless $self->hub->checker->check_permission('edit');
 
     my $page_id = shift || $self->cgi->page_id;
@@ -494,17 +494,17 @@ sub weight_categories {
         next if ( lc($tag) eq 'recent changes' );
         push @{ $data{tags} },
             {
-            'tag'   => $tag,
-            'count' => $self->page_count( lc($tag) )
+            'name'   => $tag,
+            'page_count' => $self->page_count( lc($tag) )
             };
     }
 
     @{ $data{tags} } = sort {
-        if ( $b->{count} == $a->{count} ) {
+        if ( $b->{page_count} == $a->{page_count} ) {
             return lc( $a->{tag} ) cmp lc( $b->{tag} );
         }
         else {
-            return $b->{count} <=> $a->{count};
+            return $b->{page_count} <=> $a->{page_count};
         }
     } @{ $data{tags} };
 

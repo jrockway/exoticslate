@@ -13,7 +13,6 @@ use Class::Field qw( const field );
 use Encode;
 use File::Temp;
 use Readonly;
-use Socialtext::URI;
 use Socialtext::AppConfig;
 use Socialtext::String;
 
@@ -98,7 +97,7 @@ sub _create_html {
             workspace => $self->hub->current_workspace->name,
             workspacelist => join (' ',
                 map { $_->name } $self->hub->current_user->workspaces()->all()),
-            server    => Socialtext::URI::uri(),
+            server    => $self->hub->cgi->base_uri(),
         },
     );
 }
@@ -188,7 +187,7 @@ sub _tiddler_representation {
         wikitext => $self->_escape_wikitext( $page->content ),
         workspace   => $self->hub->current_workspace->name(),
         page        => $page->uri,
-        server      => Socialtext::URI::uri(),
+        server      => $self->hub->cgi->base_uri(),
         pageName    => $page->name,
         revision    => $page->revision_id(),
     };

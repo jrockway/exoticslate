@@ -294,7 +294,7 @@ proto.pullTitleFromServer = function (field, id, data) {
     var request = new Ajax.Request (
         uri,
         {
-            method: 'GET',
+            method: 'get',
             asynchronous: false,
             requestHeaders: ['Accept','application/json']
         }

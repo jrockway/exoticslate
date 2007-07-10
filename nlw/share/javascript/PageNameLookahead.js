@@ -68,7 +68,7 @@ PageNameLookahead.prototype.getPageCountForWorkspace = function() {
     var request = new Ajax.Request (
         uri,
         {
-            method: 'GET',
+            method: 'get',
             asynchronous: false,
             requestHeaders: ['Accept','application/json']
         }

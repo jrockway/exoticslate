@@ -365,6 +365,7 @@ proto.get_editable_div = function () {
         this._editable_div.style.overflow = 'auto';
         this._editable_div.style.border = 'none'
         this._editable_div.id = 'wysiwyg-editable-div';
+        this._editable_div.onmousedown = function () { this.focus() };
         this._editable_div.onbeforedeactivate = this.onbeforedeactivate.bind(this);
         this._editable_div.onactivate = this.onactivate.bind(this);
         this.get_edit_document().body.appendChild(this._editable_div);

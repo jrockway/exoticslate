@@ -65,31 +65,6 @@
     [% simple_handler( '/',      'Socialtext::Handler::REST' ) %]
     [% simple_handler( '/nlw', 'Socialtext::Handler::Authen' ) %]
 
-[% IF not config.socialtext_open %]
-    <Location /st-archive>
-        [%# A way for host customers to download stuff (workspace backups,
-        etc) in a way that requires authentication.  Only used on production. %]
-        Options FollowSymlinks
-        AuthName "Socialtext Authentication"
-        AuthType Basic
-        PerlAddVar SocialtextAuthenActions check_cookie
-        PerlAddVar SocialtextAuthenActions check_basic
-        PerlAddVar SocialtextAuthenActions http_401
-        PerlAuthenHandler +Socialtext::Apache::AuthenHandler
-        PerlSetEnv ST_AUTHZ_URL_BASE /st-archive/
-        PerlAuthzHandler +Socialtext::AuthzHandler
-        Require valid-workspace-membership
-    </Location>
-
-    <Location /nlw/control>
-        SetHandler  perl-script
-        PerlHandler +Socialtext::Handler::ControlPanel
-        PerlAccessHandler  +Socialtext::AccessHandler::IsBusinessAdmin
-    </Location>
-[% END %]
-
-
-
     <LocationMatch "^/[^/]+/index\.cgi">
         ErrorDocument 404 /index.cgi
     </LocationMatch>

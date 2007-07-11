@@ -65,6 +65,14 @@
     [% simple_handler( '/',      'Socialtext::Handler::REST' ) %]
     [% simple_handler( '/nlw', 'Socialtext::Handler::Authen' ) %]
 
+[% IF not config.socialtext_open %]
+    <Location /nlw/control>
+        SetHandler  perl-script
+        PerlHandler +Socialtext::Handler::ControlPanel
+        PerlAccessHandler  +Socialtext::AccessHandler::IsBusinessAdmin
+    </Location>
+[% END %]
+
     <LocationMatch "^/[^/]+/index\.cgi">
         ErrorDocument 404 /index.cgi
     </LocationMatch>

@@ -7474,7 +7474,7 @@ ST.Attachments.prototype = {
 
     _hide_manage_file_interface: function () {
         this._pullAttachmentList();
-        Page.refresh_page_content();
+        Page.refresh_page_content(true);
 
         $(this.element.manageInterface).style.display = 'none';
         this._enable_scrollbar();
@@ -7714,7 +7714,12 @@ ST.Page.prototype = {
     },
 
     AttachmentListUri: function () {
-        return this.restApiUri() + '/attachments';
+        return this.restApiUri() + '/attachments' + '?' + this.ieCacheFix();
+    },
+
+    ieCacheFix: function () {
+        var date = new Date();
+        return 'iecacheworkaround=' + date.toLocaleTimeString();
     },
 
     ContentUri: function () {
@@ -7743,8 +7748,7 @@ ST.Page.prototype = {
     refresh_page_content: function (force_update) {
         var uri = Page.restApiUri();
         uri = uri + '?verbose=1;link_dictionary=s2';
-        var date = new Date();
-        uri += ';iecacheworkaround=' + date.toLocaleTimeString();
+        uri = uri + '' + this.ieCacheFix()
         var request = new Ajax.Request (
             uri,
             {
@@ -7885,7 +7889,6 @@ ST.NavBar.prototype = {
         Event.observe(this.element.searchField, 'focus', this.clear_search.bind(this));
     }
 };
-
 // BEGIN attachqueue.js
 if (typeof ST == 'undefined') {
     ST = {};

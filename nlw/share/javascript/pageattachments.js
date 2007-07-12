@@ -353,7 +353,7 @@ ST.Attachments.prototype = {
 
     _hide_manage_file_interface: function () {
         this._pullAttachmentList();
-        Page.refresh_page_content();
+        Page.refresh_page_content(true);
 
         $(this.element.manageInterface).style.display = 'none';
         this._enable_scrollbar();

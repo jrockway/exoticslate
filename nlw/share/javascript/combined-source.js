@@ -7748,7 +7748,7 @@ ST.Page.prototype = {
     refresh_page_content: function (force_update) {
         var uri = Page.restApiUri();
         uri = uri + '?verbose=1;link_dictionary=s2';
-        uri = uri + '' + this.ieCacheFix()
+        uri = uri + ';' + this.ieCacheFix()
         var request = new Ajax.Request (
             uri,
             {
@@ -15747,12 +15747,15 @@ Widget.Lightbox.Socialtext.prototype.release = function() {
 }
 
 Widget.Lightbox.Socialtext.prototype.hide = function() {
-    Widget.Lightbox.prototype.hide.call(this);
-    if (this.div.parentNode) {
-        this.releaseFocus();
-        if (Wikiwyg.is_ie) {
-            wikiwyg.toolbarObject.styleSelect.style.display=""
-        }
+    if (!this.div.parentNode) return;
+    this.div.style.display="none";
+    if (Widget.Lightbox.is_ie) {
+        document.body.scroll="yes"
+    }
+    this.releaseFocus();
+
+    if (Wikiwyg.is_ie) {
+        wikiwyg.toolbarObject.styleSelect.style.display=""
     }
 }
 

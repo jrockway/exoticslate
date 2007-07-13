@@ -1060,12 +1060,15 @@ Widget.Lightbox.Socialtext.prototype.release = function() {
 }
 
 Widget.Lightbox.Socialtext.prototype.hide = function() {
-    Widget.Lightbox.prototype.hide.call(this);
-    if (this.div.parentNode) {
-        this.releaseFocus();
-        if (Wikiwyg.is_ie) {
-            wikiwyg.toolbarObject.styleSelect.style.display=""
-        }
+    if (!this.div.parentNode) return;
+    this.div.style.display="none";
+    if (Widget.Lightbox.is_ie) {
+        document.body.scroll="yes"
+    }
+    this.releaseFocus();
+
+    if (Wikiwyg.is_ie) {
+        wikiwyg.toolbarObject.styleSelect.style.display=""
     }
 }
 

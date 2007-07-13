@@ -94,7 +94,7 @@ ST.Page.prototype = {
     refresh_page_content: function (force_update) {
         var uri = Page.restApiUri();
         uri = uri + '?verbose=1;link_dictionary=s2';
-        uri = uri + ';' + this.ieCacheFix()
+        uri = uri + ';' + this.ieCacheFix();
         var request = new Ajax.Request (
             uri,
             {

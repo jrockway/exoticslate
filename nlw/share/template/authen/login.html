@@ -38,4 +38,8 @@
     </form>
 <p><a href="/nlw/forgot_password.html">I don't know my password.</a></p>
 
+[% IF login_message %]
+<div id="login-message">[% login_message %]</div>
+[% END %]
+
 [% END %]

@@ -59,11 +59,7 @@ sub unplug {
         count => $count,
     );
 
-    $self->_send_html($html);
-
-    # bail out here in a way that will be okay for apache
-    require Socialtext::WebApp;
-    Socialtext::WebApp::Exception::ContentSent->throw();
+    return $self->_send_html($html);
 }
 
 =head2 produce_tiddly(%args)
@@ -154,9 +150,8 @@ sub _send_html {
         len => undef,
         filename => $filename
     );
-    $self->hub->headers->print;
 
-    print $html;
+    return $html;
 }
 
 sub _make_tiddlers {

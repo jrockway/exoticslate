@@ -99,6 +99,8 @@ ST.Attachments.prototype = {
         $(this.element.attachEmbedCheckbox).disabled = false;
         $(this.element.attachCloseButton).style.display = 'block';
 
+        this._update_uploaded_list($(this.element.attachFilename).value);
+
         Element.update(this.element.attachMessage, 'Click "Browse" to find the file you want to upload. When you click "Upload another file" your file will be uploaded and added to the list of attachments for this page.');
         $(this.element.attachSubmit).value = 'Upload another file';
         if (text.match(/Request Entity Too Large/)) {
@@ -106,7 +108,7 @@ ST.Attachments.prototype = {
         }
         else {
             this._pullAttachmentList();
-            Page.refresh_page_content();
+            Page.refresh_page_content(true);
         }
 
         Try.these(
@@ -159,7 +161,6 @@ ST.Attachments.prototype = {
 
         $(this.element.attachUploadMessage).style.display = 'block';
 
-//        this._update_uploaded_list(filename);
         this._hide_attach_error();
     },
 
@@ -495,6 +496,7 @@ ST.Attachments.prototype = {
     _update_uploaded_list: function (filename) {
         filename = filename.match(/^.+[\\\/]([^\\\/]+)$/)[1];
         this._uploaded_list.push(filename);
+        this._refresh_uploaded_list();
     },
 
     _loadInterface: function () {

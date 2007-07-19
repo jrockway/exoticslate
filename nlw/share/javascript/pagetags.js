@@ -262,8 +262,8 @@ ST.Tags.prototype = {
 
         if (field.value.length > 0) {
             var suggestions = this.workspaceTags.tags.grep(this.matchTag.bind(this));
-            if ((suggestions.length >= 1) && (field.value != suggestions[0].tag)) {
-                field.value = suggestions[0].tag;
+            if ((suggestions.length >= 1) && (field.value != suggestions[0].name)) {
+                field.value = suggestions[0].name;
                 return false;
             }
         }

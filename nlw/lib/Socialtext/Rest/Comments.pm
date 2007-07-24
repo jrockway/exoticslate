@@ -25,7 +25,6 @@ sub POST {
             else {
                 $self->page->add_comment( $rest->getContent );
                 $rest->header( -status => HTTP_204_No_Content );
-                return '';
             }
         }
     );

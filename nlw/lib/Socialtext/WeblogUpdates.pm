@@ -62,7 +62,7 @@ sub send_ping {
     my $full_url = $self->hub->current_workspace->uri
         . Socialtext::AppConfig->script_name . '?'
         . $page->uri;
-    my $title = $self->hub->current_workspace->title . ' - ' . $page->title;
+    my $title = $self->hub->current_workspaces->title . ' - ' . $page->title;
     my $ping_text =<<"EOF";
 <?xml version="1.0"?>
 <methodCall>

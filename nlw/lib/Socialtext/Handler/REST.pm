@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use base 'REST::Application::Routes';
-use base 'Socialtext::Handler';
+use base 'Socialtext::Handler::BasicChallenger';
 use Socialtext::HTTP ':codes';
 
 use Apache;
@@ -14,62 +14,12 @@ use Encode qw(decode_utf8);
 use File::Basename;
 use File::Spec;
 use Readonly;
-use Scalar::Util qw(blessed);
 use YAML;
 
 Readonly my $URI_MAP => 'uri_map.yaml';
-Readonly my $AUTH_MAP => 'auth_map.yaml';
-Readonly my $AUTH_INFO_DEFAULTS => {
-    guest => 1,
-    auth  => 'default', # meaningless right now
-};
 
-my @AuthInfo;
 my @ResourceHooks;
 __PACKAGE__->_load_resource_hooks();
-
-sub handler ($$) {
-    my $class = shift;
-    my $r     = shift;
-
-    my $auth_info = $class->getAuthForURI($r->uri);
-
-    my $user = $class->authenticate($r) || $class->guest($r, $auth_info);
-
-    return $class->challenge(request => $r, auth_info => $auth_info) unless $user;
-
-    return $class->real_handler($r, $user);
-}
-
-sub guest {
-    my $class     = shift;
-    my $request   = shift;
-    my $auth_info = shift;
-
-    if ($auth_info->{guest}) {
-        return Socialtext::User->Guest;
-    }
-
-    return undef;
-}
-
-sub challenge {
-    my $class = shift;
-    my %p = @_;
-    my $request = $p{request};
-    my $auth_info = $p{auth_info};
-
-    if ($auth_info->{auth} eq 'basic') {
-        $request->status_line(HTTP_401_Unauthorized);
-        $request->header_out('WWW-Authenticate' => 'Basic realm="Socialtext"');
-        $request->send_http_header;
-        return AUTH_REQUIRED
-    }
-
-    # later there could be other options here
-    return Socialtext::Challenger->Challenge(@_);
-}
-
 
 # FIXME: We do not want to return OK here in all cases.
 sub real_handler {
@@ -81,32 +31,7 @@ sub real_handler {
     return OK;
 }
 
-# overrride from REST::Application so we can return file handles effectively
-sub run {
-    my $self = shift;
-
-    # Get resource.
-    $self->preRun(); # A no-op by default.
-    my $repr = $self->loadResource(@_);
-    $self->postRun($repr); # A no-op by default.
-
-    # if our resource returned a filehandle then print the headers and print it
-    if (ref($repr) and blessed($repr) and $repr->isa('IO::Handle')) {
-        my $headers = $self->getHeaders();
-        print $headers;
-        print while <$repr>;
-        return;
-    }
-
-    # Get the headers and then add the representation to to the output stream.
-    my $output = $self->getHeaders();
-    $self->addRepresentation($repr, \$output);
-
-    # Send the output unless we're told not to by the environment.
-    print $output if not $ENV{REST_APP_RETURN_ONLY};
-
-    return $output;
-}
+sub allows_guest {0}
 
 sub setup {
     my ( $self, %args ) = @_;
@@ -140,9 +65,8 @@ sub callHandler {
         $self->request->log_error($result);
     }
 
-    # Convert the result to a ref if it isn't already
-    return ref($result) ? $result : \$result;
-
+    # Convert the result to a scalar result if it isn't already.
+    return (ref($result) eq 'scalar') ? $result : \$result;
 }
 
 # FIXME: add on cache handling hack
@@ -182,11 +106,12 @@ sub defaultResourceHandler {
     local $YAML::UseCode = 1;
     local $YAML::UseFold = 1;
 
-    $_[0]->header( -status => HTTP_404_Not_Found,
-                   -type   => 'text/html' );
+    $_[0]->header( -status => HTTP_500_Internal_Server_Error,
+                   -type   => 'text/plain' );
     # Delete Socialtext objects.  Usually noise anyway.
     delete $_[0]->{$_} for qw(_user);
-    return "No File or Method found for your request.  <!-- State is dumped below.\n\n" . Dump(@_) . '-->';
+    return "No method found for your request.  State is dumped below.\n\n"
+        . Dump(@_);
 }
 
 # XXX: The framework should use another layer of indirection over
@@ -223,24 +148,6 @@ sub getContent {
     return $self->{__content};
 }
 
-sub getAuthForURI {
-    my ($self, $path) =@_;
-    my $template;
-    my $info = $AUTH_INFO_DEFAULTS;
-    my @auth = @AuthInfo; # copy the list
-    # XXX somebody who knows perl should fix this
-    while (@auth) {
-        my $template = shift(@auth);
-        my $value = shift(@auth);
-        my $regex = qr{^$template};
-        if ($path =~ $regex) {
-           $info = $value;;
-           last;
-        }
-    }
-    return $info;
-}
-
 # use CGI for POST, and read the buffer for PUT
 sub _getContent {
     my $self = shift;
@@ -271,16 +178,12 @@ sub do_test {
 # an ordered list.
 sub _load_resource_hooks {
     my $class  = shift;
-    my $config_dir = File::Basename::dirname(
-            Socialtext::AppConfig->file() );
-
-    my $authinfo = YAML::LoadFile( File::Spec->catfile( $config_dir, $AUTH_MAP ) );
-    my $hooks = YAML::LoadFile( File::Spec->catfile( $config_dir, $URI_MAP ) );
+    my $dir   = File::Basename::dirname(__FILE__);
+    my $hooks = YAML::LoadFile( File::Spec->catfile( $dir, $URI_MAP ) );
 
     $class->_load_resource_hook_classes($hooks);
     $class->_duplicate_gets_to_heads($hooks);
     @ResourceHooks = (map {%$_} @$hooks );
-    @AuthInfo = (map {%$_} @$authinfo );
 }
 
 # Duplicate all the GET handlers into HEAD handlers as well.
@@ -318,10 +221,7 @@ sub _load_classes {
         my $class = $hook->[0] || return;
         return if $class->can('new');
         eval "require $class; 0;";
-        if ($@) {
-            warn "unable to load $class: $@\n";
-            die "$@\n";
-        }
+        die "$@\n" if $@;
     }
     elsif ( ref($hook) eq 'HASH' ) {
         for my $key ( keys %$hook ) {

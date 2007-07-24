@@ -156,7 +156,7 @@ LookaheadWidget.prototype._findSuggestions = function () {
                 var request = new Ajax.Request (
                     uri,
                     {
-                        method: 'get',
+                        method: 'GET',
                         requestHeaders: ['Accept','text/plain'],
                         onComplete: (function (req) {
                             this.populateSuggestion(req);

@@ -84,6 +84,15 @@ sub redirect {
     return '';
 }
 
+sub _redirect_url {
+    my $self = shift;
+    my $target = shift;
+    return $target
+        if $target =~ /^(https?:|\/)/i
+        or $target =~ /\?/;
+    $self->hub->cgi->full_uri . '?' . $target;
+}
+
 sub box_on {
     my $self = shift;1}
 
@@ -250,15 +259,6 @@ sub _render_box {
     my $self = shift;
     my $title = $self->box_title;
     $self->template_process('side_box.html');
-}
-
-sub _redirect_url {
-    my $self = shift;
-    my $target = shift;
-    return $target
-        if $target =~ /^(https?:|\/)/i
-        or $target =~ /\?/;
-    return $self->hub->cgi->full_uri . '?' . $target;
 }
 
 sub _get_pref_list {

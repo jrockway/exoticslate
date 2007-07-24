@@ -4,10 +4,11 @@
     <form onsubmit="return false;">
     [% INCLUDE element/jst/template id='st-attachments-listtemplate', jst='attachment/name' %]
     [% INCLUDE element/jst/template id='st-attachments-managetable', jst='attachment/managetable' %]
+    [% INCLUDE element/json id='st-attachments-files', json=initialattachments %]
     </form>
     <ul id="[% ns %]-listing" class="st-page-box-listing">
     </ul>
-    [% IF checker.check_permission('attachments') %]
+    [% IF checker.check_permission('attachments') %] 
     <table id="[% ns %]-buttons">
         <tr>
             <td id="[% ns %]-buttons-uploadbutton">

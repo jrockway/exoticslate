@@ -12,13 +12,9 @@ Socialtext.perms = {
     edit: [% IF checker.check_permission('edit') %] true [% ELSE %] false [% END %]
 };
 
-[% IF box_javascript == 1 %]
-Socialtext.box_javascript = true;
-[% INCLUDE js_page_object %]
-[% END %]
-
-[% IF box_javascript == 0 %]
 Socialtext.box_javascript = false;
+[% IF box_javascript %]
+Socialtext.box_javascript = true;
 [% END %]
 
 Socialtext.double_click_to_edit = false;
@@ -31,17 +27,3 @@ function nlw_make_static_path(rest) {
 }
 </script>
 
-[% BLOCK js_page_object %]
-var Page;
-
-function createPageObject() {
-    Page = new ST.Page ({
-        page_id: '[% page.id %]',
-        page_title: '[% page.title.replace('\'', '\\\'') %]',
-        wiki_id: '[% wiki.name %]',
-        wiki_title: '[% wiki.title.replace('\'', '\\\'') %]',
-        revision_id: '[% page.revision_id %]',
-        comment_form_window_height: '[% wiki.comment_form_window_height %]'
-    });
-}
-[% END %]

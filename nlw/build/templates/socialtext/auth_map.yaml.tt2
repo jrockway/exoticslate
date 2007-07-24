@@ -1,9 +1,0 @@
---- !!omap
-- 
-    '/data':
-        guest: 1
-        auth:  basic
--
-    '/feed':
-        auth:  basic
-        guest: 1

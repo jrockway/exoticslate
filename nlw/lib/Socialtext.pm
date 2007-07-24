@@ -15,7 +15,7 @@ use Socialtext::Authz;
 use Socialtext::Permission 'ST_READ_PERM';
 use Socialtext::Validate qw( validate SCALAR_TYPE USER_TYPE WORKSPACE_TYPE );
 
-our $VERSION = '2.14.0.5';
+our $VERSION = '2.12.4.1';
 
 const product_version => $VERSION;
 field using_debug => 0;
@@ -101,8 +101,11 @@ sub check_user_authorization {
 
     my $error_type = 'unauthorized_workspace';
     if ( $self->hub->current_user->is_guest
-        and !$self->hub->checker->check_permission('read') ) {
-        $error_type = 'not_logged_in';
+         and $self->hub->current_workspace->role_has_permission(
+             permission => ST_READ_PERM,
+             role       => Socialtext::Role->AuthenticatedUser,
+         ) ) {
+        $error_type = 'authenticate_to_read';
     }
 
     $self->hub->authz_error( error_type => $error_type );

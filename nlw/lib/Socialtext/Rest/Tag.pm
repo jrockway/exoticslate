@@ -61,7 +61,6 @@ sub PUT {
         $self->_add_tag($self->tag);
         $rest->header( -status => HTTP_201_Created );
     }
-    return '';
 }
 
 =head2 DELETE tag
@@ -84,7 +83,6 @@ sub DELETE {
     else {
         $rest->header( -status => HTTP_404_Not_Found );
     }
-    return '';
 }
 
 

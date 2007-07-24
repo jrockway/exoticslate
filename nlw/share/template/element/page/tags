@@ -10,7 +10,7 @@
     <ul id="st-tags-listing" class="st-page-box-listing">
     </ul>
     <div id="st-tags-deletemessage"></div>
-    [% IF checker.check_permission('edit') %]
+    [% IF checker.check_permission('edit') %]    
     <div id="st-tags-addblock">[% INCLUDE element/button id="st-tags-addlink", tooltip="Click this button to add a tag to the page", label = "Add tag" %]</div>
     <div id="st-tags-addinput">
         <form onsubmit="return false;">

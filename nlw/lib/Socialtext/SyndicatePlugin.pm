@@ -335,7 +335,7 @@ sub _watchlist_html_link {
 
     return $self->hub->current_workspace->uri
         . Socialtext::AppConfig->script_name
-        . "?$page";
+        . '?$page';
 }
 
 sub _search_html_link {

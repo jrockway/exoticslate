@@ -40,35 +40,40 @@ This page is about to have attachments stuck to it...
 --- form: attachForm
 --- post
 file: t/extra-attachments/FormattingTest/Rule #1
-
-=== Make sure page has attachment
---- request_path: /data/workspaces/admin/pages/velcro/attachments
---- match: Rule #1
+--- match
+filename":"Rule #1"
 
 === Go back to our page
 --- request_path: /admin/index.cgi?Velcro
+--- match
+href="/admin/index.cgi/Rule%20%231\?action=attachments_download
 
 === attach foo.txt (will be overridden)
 --- form: attachForm
 --- post
 file: t/attachments/same-name-different-content/foo.txt
-
-=== Make sure page has attachment
---- request_path: /data/workspaces/admin/pages/velcro/attachments
---- match: foo\.txt
+--- match
+filename":"foo.txt"
 
 === Go back to our page
 --- request_path: /admin/index.cgi?Velcro
+--- match
+<a href="/admin/index.cgi/foo.txt\?action=attachments_download;page_name=velcro;id=.*">foo.txt</a>
 
 === attach new foo.txt (snippet of johnt & autarch talking)
 --- form: attachForm
 --- post
 file: t/attachments/foo.txt
+--- match
+filename":"foo.txt"
 
-=== Make sure page has 2 copies of foo.txt
---- request_path: /data/workspaces/admin/pages/velcro/attachments
---- match: foo\.txt
---- match: foo\.txt
+=== Go back to our page
+--- query
+action: display
+page_name: Velcro
+--- match
+<a href="/admin/index.cgi/foo.txt\?action=attachments_download;page_name=velcro;id=.*">foo.txt</a>
+<a href="/admin/index.cgi/foo.txt\?action=attachments_download;page_name=velcro;id=.*">foo.txt</a>
 
 === Go back to our page again
 --- request_path: /admin/index.cgi?Velcro
@@ -77,7 +82,7 @@ Velcro
 
 === search attachments
 --- do: runCeqlotron
---- form: displaySearchForm
+--- form: searchForm
 --- post
 search_term: autarch
 --- match
@@ -94,16 +99,14 @@ Velcro
 --- post
 file: t/attachments/revolts.doc
 
-=== Make sure page has attachment
---- request_path: /data/workspaces/admin/pages/velcro/attachments
---- match: revolts\.doc
-
 === Go back to our page again
 --- request_path: /admin/index.cgi?Velcro
+--- match
+<a href="/admin/index.cgi/revolts.doc\?action=attachments_download;page_name=velcro;id=.*">revolts.doc</a>
 
 === search word attachment
 --- do: runCeqlotron
---- form: displaySearchForm
+--- form: searchForm
 --- post
 search_term: tocqueville
 --- match

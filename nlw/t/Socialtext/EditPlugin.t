@@ -32,16 +32,16 @@ $page = Socialtext::Page->new( hub => $hub )->create(
 $save_revision_id = $page->revision_id;
 
 EDIT_CONTENT: {
-    my $hub = new_hub('admin');
-    my $cgi = $hub->rest->query;
-    $cgi->param('page_name', 'revision_page');
-    $cgi->param('revision_id', $revision_ids[0]);
-    $cgi->param('page_body', 'Hello');
-    $cgi->param('action', 'edit_content');
-    $cgi->param('caller_action', '');
-    $cgi->param('append_mode', '');
-    $cgi->param('page_body_decoy', 'Hello');
+    sleep(2);
+    CGI::param('page_name', 'revision_page');
+    CGI::param('revision_id', $revision_ids[0]);
+    CGI::param('page_body', 'Hello');
+    CGI::param('action', 'edit_content');
+    CGI::param('caller_action', '');
+    CGI::param('append_mode', '');
+    CGI::param('page_body_decoy', 'Hello');
 
+    my $hub = new_hub('admin');
 
     my $return = $hub->edit->edit_content;
     is($return, '', 'Nothing returned because OK edit_content redirects');
@@ -54,76 +54,81 @@ EDIT_CONTENT: {
 }
 
 EDIT: {
+    sleep(2);
+    CGI::param('page_name', 'revision_page');
+    CGI::param('revision_id', $revision_ids[-1]);
+    CGI::param('page_body', 'Hello');
+    CGI::param('action', 'edit');
+    CGI::param('caller_action', '');
+    CGI::param('append_mode', '');
+    CGI::param('page_body_decoy', 'Hello');
+
     my $hub = new_hub('admin');
-    my $cgi = $hub->rest->query;
-    $cgi->param('page_name', 'revision_page');
-    $cgi->param('revision_id', $revision_ids[-1]);
-    $cgi->param('page_body', 'Hello');
-    $cgi->param('action', 'edit');
-    $cgi->param('caller_action', '');
-    $cgi->param('append_mode', '');
-    $cgi->param('page_body_decoy', 'Hello');
 
     my $return = $hub->edit->edit;
     ok($return =~ /Socialtext.start_in_edit_mode\s*=\s*true;/, 'Page returned with edit mode triggered');
 }
 
 EDIT_CONTENT_contention: {
+    sleep(2);
+    CGI::param('page_name', 'revision_page');
+    CGI::param('revision_id', $revision_ids[0]);
+    CGI::param('page_body', 'Should Be A Contention');
+    CGI::param('action', 'edit_content');
+    CGI::param('caller_action', '');
+    CGI::param('append_mode', '');
+    CGI::param('page_body_decoy', 'Hello');
+
     my $hub = new_hub('admin');
-    my $cgi = $hub->rest->query;
-    $cgi->param('page_name', 'revision_page');
-    $cgi->param('revision_id', $revision_ids[0]);
-    $cgi->param('page_body', 'Should Be A Contention');
-    $cgi->param('action', 'edit_content');
-    $cgi->param('caller_action', '');
-    $cgi->param('append_mode', '');
-    $cgi->param('page_body_decoy', 'Hello');
 
     my $return = $hub->edit->edit_content;
     ok($return =~ /st-editcontention/, 'Edit contention dialog displayed');
 
     my $page = Socialtext::Page->new(hub => $hub, id => 'revision_page')->load();
     my @ids = $page->all_revision_ids();
-    is(scalar(@ids), 2, "2 Revisions @ids");
+    is(scalar(@ids), 3, '3 Revisions');
     is($page->content, "Hello\n", 'New content not saved');
 }
 
 EDIT_CONTENT_contention_other_than_content: {
+    sleep(2);
+
+    CGI::param('page_name', 'revision_page');
+    CGI::param('revision_id', $revision_ids[0]);
+    CGI::param('page_body', 'Should Be No Contention');
+    CGI::param('action', 'edit_content');
+    CGI::param('caller_action', '');
+    CGI::param('append_mode', '');
+    CGI::param('page_body_decoy', 'Hello');
+
     my $hub = new_hub('admin');
-    my $cgi = $hub->rest->query;
-    $cgi->param('page_name', 'revision_page');
-    $cgi->param('revision_id', $revision_ids[0]);
-    $cgi->param('page_body', 'Should Be No Contention');
-    $cgi->param('action', 'edit_content');
-    $cgi->param('caller_action', '');
-    $cgi->param('append_mode', '');
-    $cgi->param('page_body_decoy', 'Hello');
 
     my $page = Socialtext::Page->new(hub => $hub, id => 'revision_page')->load_revision($revision_ids[0]);
     my $content = $page->content;
     $page = Socialtext::Page->new(hub => $hub, id => 'revision_page')->load;
     $page->content($content);
     $page->store(user => $hub->current_user);
+    sleep(2);
 
     my $return = $hub->edit->edit_content;
     is($return, '', 'Nothing returned because OK save redirects');
 
     $page = Socialtext::Page->new(hub => $hub, id => 'revision_page')->load();
     my @ids = $page->all_revision_ids();
-    is(scalar(@ids), 4, '4 Revisions');
+    is(scalar(@ids), 5, '5 Revisions');
     is($page->content, "Should Be No Contention\n", 'New content saved');
 }
 
 _EDIT_CONTENTION_SCREEN: {
+    CGI::param('page_name', 'revision_page');
+    CGI::param('revision_id', $revision_ids[0]);
+    CGI::param('page_body', 'This is an edit contention');
+    CGI::param('action', 'edit_content');
+    CGI::param('caller_action', '');
+    CGI::param('append_mode', '');
+    CGI::param('page_body_decoy', 'Hello');
+
     my $hub = new_hub('admin');
-    my $cgi = $hub->rest->query;
-    $cgi->param('page_name', 'revision_page');
-    $cgi->param('revision_id', $revision_ids[0]);
-    $cgi->param('page_body', 'This is an edit contention');
-    $cgi->param('action', 'edit_content');
-    $cgi->param('caller_action', '');
-    $cgi->param('append_mode', '');
-    $cgi->param('page_body_decoy', 'Hello');
     my $page = Socialtext::Page->new(hub => $hub, id => 'revision_page')->load;
 
     my $return = $hub->edit->_edit_contention_screen($page);
@@ -153,6 +158,7 @@ _THERE_IS_AN_EDIT_CONTENTION_different_revision_ids_same_content: {
     $page->content('Same Content');
     $page->store(user => $hub->current_user);
     my $previous_revision = $page->revision_id;
+    sleep(2);
     $page->store(user => $hub->current_user);
 
     my $return = $hub->edit->_there_is_an_edit_contention($page, $previous_revision);
@@ -160,18 +166,19 @@ _THERE_IS_AN_EDIT_CONTENTION_different_revision_ids_same_content: {
 }
 
 SAVE: {
+    sleep(2);
+    CGI::param('page_name', 'save_page');
+    CGI::param('revision_id', $save_revision_id);
+    CGI::param('page_body', 'Hello');
+    CGI::param('action', 'edit_save');
+    CGI::param('caller_action', '');
+    CGI::param('append_mode', '');
+    CGI::param('page_body_decoy', 'Hello');
+    CGI::param('original_page_id', 'save_page');
+    CGI::param('subject', 'save_page');
+    CGI::param('add_tag', "one\n");
+
     my $hub = new_hub('admin');
-    my $cgi = $hub->rest->query;
-    $cgi->param('page_name', 'save_page');
-    $cgi->param('revision_id', $save_revision_id);
-    $cgi->param('page_body', 'Hello');
-    $cgi->param('action', 'edit_save');
-    $cgi->param('caller_action', '');
-    $cgi->param('append_mode', '');
-    $cgi->param('page_body_decoy', 'Hello');
-    $cgi->param('original_page_id', 'save_page');
-    $cgi->param('subject', 'save_page');
-    $cgi->param('add_tag', "one\n");
 
     my $return = $hub->edit->save;
     is($return, '', 'Nothing returned because OK save redirects');
@@ -184,17 +191,18 @@ SAVE: {
 }
 
 SAVE_contention: {
+    sleep(2);
+    CGI::param('page_name', 'save_page');
+    CGI::param('revision_id', $save_revision_id);
+    CGI::param('page_body', 'Should Be A Contention');
+    CGI::param('action', 'edit_save');
+    CGI::param('caller_action', '');
+    CGI::param('append_mode', '');
+    CGI::param('page_body_decoy', 'Hello');
+    CGI::param('original_page_id', 'save_page');
+    CGI::param('subject', 'save_page');
+
     my $hub = new_hub('admin');
-    my $cgi = $hub->rest->query;
-    $cgi->param('page_name', 'save_page');
-    $cgi->param('revision_id', $save_revision_id);
-    $cgi->param('page_body', 'Should Be A Contention');
-    $cgi->param('action', 'edit_save');
-    $cgi->param('caller_action', '');
-    $cgi->param('append_mode', '');
-    $cgi->param('page_body_decoy', 'Hello');
-    $cgi->param('original_page_id', 'save_page');
-    $cgi->param('subject', 'save_page');
 
     my $return = $hub->edit->edit_content;
     ok($return =~ /st-editcontention/, 'Edit contention dialog displayed');

@@ -27,7 +27,7 @@
     [% END %]
     </div>
     <div id="st-wiki-title-central-page-link">
-      Central page: <b><a href="index.cgi?[% wiki.central_page %]">[% wiki.title %]</a></b>
+      Central page: <b><a href="index.cgi?[% wiki.central_page %]" id="st-central-page-link">[% wiki.title %]</a></b>
     </div>
 
 

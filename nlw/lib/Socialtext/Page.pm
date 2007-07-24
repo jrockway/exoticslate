@@ -596,7 +596,6 @@ sub add_tags {
         foreach (@tags) {
             $meta->add_category($_);
         }
-        $self->metadata->update( user => $self->hub->current_user );
         $self->store( user => $self->hub->current_user );
     }
 }

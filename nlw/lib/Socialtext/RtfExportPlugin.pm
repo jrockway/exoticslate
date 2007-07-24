@@ -4,6 +4,7 @@ use warnings;
 use strict;
 
 use base 'Socialtext::Plugin';
+use Socialtext::WebApp;
 use Class::Field 'const';
 use Imager;
 
@@ -65,7 +66,11 @@ sub rtf_export {
         len => length($content),
         type => 'text/rtf',
     );
-    return $content;
+    $self->hub->headers->print;
+
+    print $content;
+
+    Socialtext::WebApp::Exception::ContentSent->throw();
 }
 
 =head2 export($page_name, \$content)
@@ -348,8 +353,6 @@ sub _proxy_cookies {
     my $self_uri = Socialtext::URI::uri();
     if ( $uri =~ /^\Q$self_uri\E/ && Apache::Cookie->can('fetch') ) {
 
-        # FIXME: Don't call Apache::Cookie here, use CGI::Cookie or get
-        # the cookie out of the hub->rest object somehow.
         # FIXME: The cookie getting code belongs abstracted into WebHelpers or
         # (more probably), into Rug.  Since the latter is not done but
         # presumably on the way, I'll leave this in here for the time being.

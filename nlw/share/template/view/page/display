@@ -17,7 +17,7 @@
 
 <div id="st-page-content">[% page.content %]</div>
 </div>
-
+[% INCLUDE js_page_object %]
 <div style="clear:both; height:1px;">&nbsp;</div>
 </td></tr></table>
 [% END %]
@@ -59,6 +59,19 @@
         [% END %]
 
     </div>
+[% END %]
+
+[% BLOCK js_page_object %]
+<script type="text/javascript">
+    var Page = new ST.Page ({
+        page_id: '[% page.id %]',
+        page_title: '[% page.title.replace('\'', '\\\'') %]',
+        wiki_id: '[% wiki.name %]',
+        wiki_title: '[% wiki.title.replace('\'', '\\\'') %]',
+        revision_id: '[% page.revision_id %]',
+        comment_form_window_height: '[% wiki.comment_form_window_height %]'
+    });
+</script>
 [% END %]
 
 [% BLOCK side_box_pagetools %]

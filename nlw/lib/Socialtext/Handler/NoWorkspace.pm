@@ -1,25 +1,21 @@
-package Socialtext::Rest::NoWorkspace;
 # @COPYRIGHT@
+package Socialtext::Handler::NoWorkspace;
 
 use strict;
 use warnings;
 
-use base 'Socialtext::Rest';
-
+use Apache::Constants qw(REDIRECT);
+use Socialtext::Apache::User;
 use Socialtext::AppConfig;
-use Socialtext::HTTP ':codes';
 use Socialtext::Log 'st_log';
 use Socialtext::Permission 'ST_READ_PERM';
 use Socialtext::User;
 use Socialtext::Workspace;
 
-# XXX There may be some issues with session handling
-# here. Not sure if they are new or not new.
-
 sub handler {
-    my ($self, $rest) = @_;
+    my $r = shift;
 
-    my $user = $rest->user;
+    my $user = Socialtext::Apache::User::current_user($r);
 
     Socialtext::Challenger->Challenge() unless $user;
 
@@ -49,7 +45,7 @@ sub handler {
         name => 'help' );
 
     if ($destination_ws) {
-        return _redirect( $rest, $destination_ws->uri() . 'index.cgi', $user );
+        return _redirect( $r, $destination_ws->uri(), $user );
     }
 
     # If we get here something has gone rather wrong, since the call
@@ -66,23 +62,22 @@ you were trying to log in to, so we can fix the problem.
 ERROR_MSG
     );
 
-    return _redirect( $rest, '/nlw/login.html', $user );
+    return _redirect( $r, '/nlw/login.html', $user );
 }
 
 sub _redirect {
-    my $rest = shift;
+    my $r = shift;
     my $uri = shift;
     my $user = shift;
 
-    $rest->header(
-        -status => HTTP_302_Found,
-        -Location => $uri,
-    );
+    $r->status(REDIRECT);
+    $r->err_header_out( Location => $uri );
+    $r->send_http_header;
 
     my $email = $user ? $user->email_address : "unknown user";
     st_log->info("NoWorkspace: Redirecting $email to $uri");
 
-    return '';
+    return REDIRECT;
 }
 
 1;

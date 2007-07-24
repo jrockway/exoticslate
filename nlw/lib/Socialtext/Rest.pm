@@ -65,15 +65,6 @@ sub bad_type {
     return '';
 }
 
-sub redirect_workspaces {
-    my ( $self, $rest ) = @_;
-    $rest->header(
-        -status => HTTP_302_Found,
-       -Location => $self->rest->query->url(-base => 1) . '/data/workspaces',
-    );
-    return '';
-}
-
 sub _initialize {
     my ( $self, $rest, $params ) = @_;
 
@@ -178,19 +169,10 @@ requested method on the resource.
 =cut
 sub not_authorized {
     my $self = shift;
-
-    if ($self->rest->user->is_guest) {
-        $self->rest->header(
-            -status => HTTP_401_Unauthorized,
-            -WWW_Authenticate => 'Basic realm="Socialtext"',
-        )
-    }
-    else {
-        $self->rest->header(
-            -status => HTTP_403_Forbidden,
-            -type   => 'text/plain',
-        );
-    }
+    $self->rest->header(
+        -status => HTTP_403_Forbidden,
+        -type   => 'text/plain',
+    );
     return 'User not authorized';
 }
 

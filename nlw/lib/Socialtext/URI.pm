@@ -23,7 +23,7 @@ sub _scheme {
     if ($apr) {
         # FIXME: we should look in the ENV here not the apache
         # dir config
-        $scheme = $ENV{NLWHTTPSRedirect} ? 'https' : 'http';
+        $scheme = $apr->dir_config('NLWHTTPSRedirect') ? 'https' : 'http';
     }
     return ( scheme => $scheme );
 }

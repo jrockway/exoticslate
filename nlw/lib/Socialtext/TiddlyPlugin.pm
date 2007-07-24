@@ -13,6 +13,7 @@ use Class::Field qw( const field );
 use Encode;
 use File::Temp;
 use Readonly;
+use Socialtext::URI;
 use Socialtext::AppConfig;
 use Socialtext::String;
 
@@ -59,7 +60,11 @@ sub unplug {
         count => $count,
     );
 
-    return $self->_send_html($html);
+    $self->_send_html($html);
+
+    # bail out here in a way that will be okay for apache
+    require Socialtext::WebApp;
+    Socialtext::WebApp::Exception::ContentSent->throw();
 }
 
 =head2 produce_tiddly(%args)
@@ -93,7 +98,7 @@ sub _create_html {
             workspace => $self->hub->current_workspace->name,
             workspacelist => join (' ',
                 map { $_->name } $self->hub->current_user->workspaces()->all()),
-            server    => $self->hub->cgi->base_uri(),
+            server    => Socialtext::URI::uri(),
         },
     );
 }
@@ -150,8 +155,9 @@ sub _send_html {
         len => undef,
         filename => $filename
     );
+    $self->hub->headers->print;
 
-    return $html;
+    print $html;
 }
 
 sub _make_tiddlers {
@@ -182,7 +188,7 @@ sub _tiddler_representation {
         wikitext => $self->_escape_wikitext( $page->content ),
         workspace   => $self->hub->current_workspace->name(),
         page        => $page->uri,
-        server      => $self->hub->cgi->base_uri(),
+        server      => Socialtext::URI::uri(),
         pageName    => $page->name,
         revision    => $page->revision_id(),
     };

@@ -93,16 +93,15 @@ sub edit_content {
     my @files = $self->cgi->file;
     my @embeds = $self->cgi->embed;
     my @unpacks = $self->cgi->unpack;
-
-    if (scalar @files) {
-        if ($self->hub->checker->check_permission('attachments')) {
-            my $args = $self->hub->attachments_ui->process_attachments_upload(
-                files  => \@files,
-                embed  => \@embeds,
-                unpack => \@unpacks,
+    my $count = scalar(@files);
+    if ($count && $self->hub->checker->check_permission('attachments')) {
+        for (my $i=0; $i < $count; $i++) {
+            my $error_code = $self->hub->attachments_ui->save_attachment(
+                $files[$i],
+                $embeds[$i],
+                $unpacks[$i],
             );
-            # args contains an error message
-            # but it wasn't used in this section of the code
+
         }
     }
 

@@ -6,10 +6,10 @@ use warnings;
 use base 'Socialtext::Plugin';
 
 use Class::Field qw( const field );
-use IO::File;
 use Socialtext::AppConfig;
 use Socialtext::Helpers;
 use Socialtext::Exceptions;
+use Socialtext::WebApp;
 
 sub class_id { 'attachments_ui' }
 const class_title => 'Attachments';
@@ -71,8 +71,8 @@ sub attachments_download {
         # TODO: make 404 a real HTTP 404
         die "404: File Not Found: '$file'";
     }
-    my $fh = new IO::File $file, 'r';
-    die "Cannot read $file: $!" unless $fh;
+    open my $fh, '<', $file
+      or die "Cannot read $file: $!";
 
     # Add the headers for an attachment
     my $filename = $attachment->filename;
@@ -88,57 +88,38 @@ sub attachments_download {
         $self->hub->headers->content_disposition(undef);
     }
 
-    # return the glob so the framework can write it down
-    return $fh;
+    # Send the data across the wire
+    $self->hub->headers->print;
+    if ( $ENV{MOD_PERL} ) {
+        Apache->request->send_fd($fh);
+    }
+    else {
+        print while <$fh>;
+    }
+
+    Socialtext::WebApp::Exception::ContentSent->throw();
 }
 
 sub attachments_upload {
     my $self = shift;
-
-    my @files = $self->cgi->file;
-    my @embeds = $self->cgi->embed;
-    my @unpacks = $self->cgi->unpack;
-
-    my $args = $self->process_attachments_upload(
-        files  => \@files,
-        embed  => \@embeds,
-        unpack => \@unpacks,
-    );
-
-    return $self->_finish(%$args);
-}
-
-sub process_attachments_upload {
-    my $self = shift;
-    my %p    = @_;
-
-    my @files = @{$p{files}};
-    my @embeds = @{$p{embed}};
-    my @unpacks = @{$p{unpack}};
-
-    my $count = scalar(@files);
-
     Socialtext::Exception::DataValidation->throw("No file given for upload\n")
-        unless $count;
-    return +{}
+        unless defined $self->cgi->file;
+    return $self->_finish
         unless $self->hub->checker->check_permission('attachments');
 
-    my %args;
-    if ($count) {
-        for (my $i=0; $i < $count; $i++) {
-            my $error_code = $self->save_attachment(
-                $files[$i],
-                $embeds[$i],
-                $unpacks[$i],
-            );
-            if ($error_code) {
-                $error_code =~ s/\. at.*//s;    # grr... stinkin auto-added backtrace.
-                $args{attachment_error} .= $error_code;
-            }
+    my $error_code = $self->save_attachment(
+        $self->cgi->file,
+        $self->cgi->embed,
+        $self->cgi->unpack,
+    );
 
-        }
+    my %args;
+    if ($error_code) {
+        $error_code =~ s/\. at.*//s;    # grr... stinkin auto-added backtrace.
+        $args{attachment_error} = $error_code;
     }
-    return \%args;
+
+    return $self->_finish(%args);
 }
 
 sub save_attachment {
@@ -274,6 +255,7 @@ cgi 'caller_action';
 cgi 'button';
 cgi 'checkbox';
 cgi 'selected';
+cgi 'id' => '-clean_path';
 cgi 'filename';
 cgi 'caller_action';
 cgi 'page_name';
@@ -282,3 +264,4 @@ cgi 'as_page';
 cgi 'unpack';
 
 1;
+

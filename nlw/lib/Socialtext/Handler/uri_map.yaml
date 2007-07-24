@@ -14,7 +14,7 @@
             'text/x.cowsay':    [Socialtext::Rest::Echo, POST_cowsay]
         '*': [Socialtext::Rest::Echo, bad_method]
 -
-    '/data/version':
+    /data/version:
         GET:
             '*/*':     &default [Socialtext::Rest::Version, GET_text]
             text/plain:         *default
@@ -48,7 +48,7 @@
             'text/html':        *default
             'text/plain':       [Socialtext::Rest::Sections, GET_text]
             'application/json': [Socialtext::Rest::Sections, GET_json]
-        '*': [Socialtext::Rest::Sections, bad_method]
+        '*': [Socialtext::Rest::PageTags, bad_method]
 -
     '/data/workspaces/:ws/pages/:pname/revisions/:revision_id':
         'GET':
@@ -225,61 +225,6 @@
             '*/*':              [Socialtext::Rest::Accounts, bad_type]
             'application/json': [Socialtext::Rest::Accounts, POST]
         '*':                    [Socialtext::Rest::Accounts, bad_method]
--
-    '/data':
-        '*':                    [Socialtext::Rest, redirect_workspaces]
--
-    '/lite/changes/:ws/:tag':
-        'GET':                  [Socialtext::Rest::Lite, changes]
-        '*':                    [Socialtext::Rest::Lite, bad_method]
--
-    '/lite/changes/:ws':
-        'GET':                  [Socialtext::Rest::Lite, changes]
-        '*':                    [Socialtext::Rest::Lite, bad_method]
--
-    '/lite/category/:ws/:tag':
-        'GET':                  [Socialtext::Rest::Lite, category]
-        '*':                    [Socialtext::Rest::Lite, bad_method]
--
-    '/lite/category/:ws':
-        'GET':                  [Socialtext::Rest::Lite, category]
-        '*':                    [Socialtext::Rest::Lite, bad_method]
--
-    '/lite/search/:ws':
-        'GET':                  [Socialtext::Rest::Lite, search]
-        '*':                    [Socialtext::Rest::Lite, bad_method]
--
-    '/lite/page/:ws/:pname':
-        'GET':                  [Socialtext::Rest::Lite, get_page]
-        'POST':
-            'application/x-www-form-urlencoded': [Socialtext::Rest::Lite, edit_page]
-            '*/*':              [Socialtext::Rest::Lite, bad_type]
-        '*':                    [Socialtext::Rest::Lite, bad_method]
--
-    '/lite/page/:ws':
-        'GET':                  [Socialtext::Rest::Lite, get_page]
-        '*':                    [Socialtext::Rest::Lite, bad_method]
--
-    '/wsdl/:wsdl':
-        'GET':                  [Socialtext::Rest::WSDL, GET]
-        '*':                    [Socialtext::Rest::WSDL, bad_method]
--
-    '/feed/workspace/:ws':
-        'GET':                  [Socialtext::Rest::Feed, GET]
-        '*':                    [Socialtext::Rest::Feed, bad_method]
--
-    '/soap/:version':
-        'POST':                 [Socialtext::SOAPServer, POST]
--
-    '/challenge':
-        '*':                    [Socialtext::Rest::Challenge, handler]
--
-    '/:ws/index.cgi':
-        '*':                    [Socialtext::Rest::App, handler]
--
-    '/index.cgi':
-        '*':                    [Socialtext::Rest::NoWorkspace, handler]
-# -
-#     '/hydra':
-#         'GET':                  [Socialtext::Rest::Hydra, GET]
-#         '*':                    [Socialtext::Rest::Hydra, bad_method]
+# REVIEW: what goes here?
+#    '/data':
+

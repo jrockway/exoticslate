@@ -109,7 +109,7 @@ WorkspaceLookahead.prototype._findSuggestions = function () {
             var request = new Ajax.Request (
                 uri,
                 {
-                    method: 'get',
+                    method: 'GET',
                     requestHeaders: ['Accept','application/json'],
                     onComplete: (function (req) {
                         this.populateSuggestion(req);

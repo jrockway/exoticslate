@@ -474,7 +474,7 @@ proto.disable_button = function(mode_name) {
 }
 
 proto.button_disabled_func = function(mode_name) {
-    return function() { return false }
+    return function() { false }
 }
 
 proto.newpage_keyupHandler = function(event) {

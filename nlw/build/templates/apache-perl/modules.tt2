@@ -22,7 +22,6 @@
 [% load_module( 'auth' ) %]
 [% load_module( 'expires' ) %]
 [% load_module( 'headers' ) %]
-[% load_module( 'env' ) %]
 [% load_module( 'setenvif' ) %]
 [% IF config.ssl %]
     [% load_module( 'ssl' ) %]

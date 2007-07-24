@@ -57,15 +57,33 @@
 
     PerlCleanupHandler  +Socialtext::Handler::Cleanup
 
-# Order is important in these next three sections
     <Location />
         PerlInitHandler  +Socialtext::InitHandler
     </Location>
 
-    [% simple_handler( '/',      'Socialtext::Handler::REST' ) %]
+    [% simple_handler( '/data', 'Socialtext::Handler::REST' ) %]
     [% simple_handler( '/nlw', 'Socialtext::Handler::Authen' ) %]
 
+    <Location /challenge>
+        SetHandler perl-script
+        PerlHandler +Socialtext::Handler::Challenge
+    </Location>
 [% IF not config.socialtext_open %]
+    <Location /st-archive>
+        [%# A way for host customers to download stuff (workspace backups,
+        etc) in a way that requires authentication.  Only used on production. %]
+        Options FollowSymlinks
+        AuthName "Socialtext Authentication"
+        AuthType Basic
+        PerlAddVar SocialtextAuthenActions check_cookie
+        PerlAddVar SocialtextAuthenActions check_basic
+        PerlAddVar SocialtextAuthenActions http_401
+        PerlAuthenHandler +Socialtext::Apache::AuthenHandler
+        PerlSetEnv ST_AUTHZ_URL_BASE /st-archive/
+        PerlAuthzHandler +Socialtext::AuthzHandler
+        Require valid-workspace-membership
+    </Location>
+
     <Location /nlw/control>
         SetHandler  perl-script
         PerlHandler +Socialtext::Handler::ControlPanel
@@ -73,9 +91,44 @@
     </Location>
 [% END %]
 
+[% simple_handler( '/lite/page',      'Socialtext::Handler::Page::Lite' ) %]
+[% simple_handler( '/lite/changes',   'Socialtext::Handler::Changes::Lite' ) %]
+[% simple_handler( '/lite/search',    'Socialtext::Handler::Search::Lite' ) %]
+[% simple_handler( '/lite/category',  'Socialtext::Handler::Category::Lite' ) %]
+
+[% simple_handler( '/page',           'Socialtext::Handler::Page::Full' ) %]
+[% simple_handler( '/changes',        'Socialtext::Handler::Changes::Full' ) %]
+[% simple_handler( '/search',         'Socialtext::Handler::Search::Full' ) %]
+[% simple_handler( '/category',       'Socialtext::Handler::Category::Full' ) %]
+
+[% match_handler(  '^/page/[^/]+/[^/]+/attachments', 'Socialtext::Handler::Attachment' ) %]
+[% match_handler(  '^/page/[^/]+/[^/]+/tags',        'Socialtext::Handler::Tag' ) %]
+[% match_handler(  '^/index\.cgi',                   'Socialtext::Handler::App' ) %]
+
     <LocationMatch "^/[^/]+/index\.cgi">
         ErrorDocument 404 /index.cgi
+
+        SetHandler   perl-script
+        PerlHandler  +Socialtext::Handler::App
     </LocationMatch>
+
+    <LocationMatch "^/[^/]+/member/index\.cgi">
+        ErrorDocument 404 /index.cgi
+
+        SetHandler   perl-script
+        PerlHandler  +Socialtext::Handler::App
+    </LocationMatch>
+
+    <Location /index.cgi>
+        SetHandler   perl-script
+        PerlInitHandler  +Socialtext::InitHandler
+        PerlHandler  +Socialtext::Handler::NoWorkspace
+    </Location>
+
+[% simple_handler( '/feed',           'Socialtext::Handler::Syndicate' ) %]
+[% simple_handler( '/noauth/feed',    'Socialtext::Handler::Syndicate' ) %]
+[% simple_handler( '/soap/0.9',       'Socialtext::SOAPServer' ) %]
+[% simple_handler( '/wsdl',           'Socialtext::Handler::WSDL' ) %]
 
 [% END %][%# MACRO vhost_common %]
 
@@ -140,7 +193,7 @@ PerlModule  Socialtext::ModPerl
 
 [% IF config.apache_proxy %]
 <VirtualHost *:[% config.backend_port + config.ssl_port_difference %]>
-    SetEnv  NLWHTTPSRedirect  1
+    PerlSetVar  NLWHTTPSRedirect  1
 [% vhost_common( 1 ) %]
 </VirtualHost>
 [% END %][%# config.apache_proxy %]
@@ -153,7 +206,7 @@ PerlModule  Socialtext::ModPerl
 
 <VirtualHost 10.8.0.1:[% config.backend_port + config.ssl_port_difference %]>
     ServerName www.eu.socialtext.net
-    SetEnv  NLWHTTPSRedirect  1
+    PerlSetVar  NLWHTTPSRedirect  1
 [% vhost_common( 1 ) %]
 </VirtualHost>
 [% END %][%# config.eu_httpd_exists %]

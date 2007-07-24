@@ -10,6 +10,7 @@ use Apache;
 use Apache::Request;
 use Apache::Cookie;
 use Socialtext::User;
+use Socialtext::WebHelpers::Apache;
 use LWP::UserAgent;
 use Socialtext::WebApp;
 use URI::Escape qw (uri_unescape);
@@ -37,9 +38,7 @@ sub challenge {
     my $request  = $p{request};
     my $redirect = $p{redirect};
     my $type;
-
-    # REVIEW: be nice to change how this is done in the future
-    my $app = Socialtext::WebApp->NewForNLW;
+ my $app = Socialtext::WebApp->NewForNLW;
     $request = Apache::Request->instance( Apache->request );
 
     my $claimed_identity =
@@ -64,29 +63,19 @@ sub challenge {
         consumer_secret => 'THIS IS MY SECRET!',
     );
 
-    # if we've NOT returned from the openid server with some info
-    # do a redirect to the open id server
     if ( !$request->param('openid.mode') ) {
-        my $uri = _get_uri($request);
-        my ($full_uri, $base_uri);
-
-        $full_uri = $uri->unparse;
-
-        # get rid of the extra bits on the url to have
-        # just base
-        $uri->query(undef);
-        $uri->path(undef);
-        $base_uri = $uri->unparse;
+        my $FULL_URI = Socialtext::WebHelpers::Apache->full_uri_with_query;
+        my $BASE_URI = Socialtext::WebHelpers::Apache->base_uri;
 
         $claimed_identity = $csr->claimed_identity($claimed_identity);
 
         if ( !$claimed_identity && !$request->param('openid.identity') ) {
-            warn "Socialtext::Challenger::OpenId RETURNING UNDEF\n";
+            warn "RETURNING UNDEF HERE\n";
             return undef;
         }
         my $check_url = $claimed_identity->check_url(
-            return_to  => "$full_uri",
-            trust_root => "$base_uri"
+            return_to  => "$FULL_URI",
+            trust_root => "$BASE_URI"
         );
         $app->redirect( $check_url );
     }
@@ -105,25 +94,6 @@ sub challenge {
         }
         $app->redirect ( "/" );
     }
-}
-
-sub _get_uri {
-    my $request = shift;
-    my $uri     = $request->parsed_uri;
-    $uri->hostname( $request->hostname );
-
-    my $xfh = $request->header_in('X-Forwarded-Host');
-    if ( $xfh && ( $xfh =~ /:(\d+)$/ ) ) {
-        my $front_end_port = $1;
-        if (   $front_end_port
-            && ( $front_end_port != 80 )
-            && ( $front_end_port != 443 ) ) {
-            $uri->port($front_end_port);
-        }
-    }
-    $uri->scheme( $ENV{'NLWHTTPSRedirect'} ? 'https' : 'http' );
-
-    return $uri;
 }
 
 sub _set_cookie {
@@ -147,9 +117,8 @@ sub _set_cookie {
 }
 
 sub _MAC_for_user_id {
-    return Digest::SHA1::sha1_base64( $_[0],
-        Socialtext::AppConfig->MAC_secret );
-}
+            return Digest::SHA1::sha1_base64( $_[0], Socialtext::AppConfig->MAC_secret );
+                }
 
 1;
 =head1 AUTHOR

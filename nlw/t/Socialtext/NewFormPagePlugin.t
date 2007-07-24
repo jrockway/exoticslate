@@ -52,16 +52,13 @@ my $viewer = $hub->viewer;
 # check form input handling
 {
     CGI->initialize_globals;
-    $hub->rest(undef);
     $ENV{GATEWAY_INTERFACE} = 1;
     $ENV{REQUEST_METHOD} = 'GET';
     $ENV{QUERY_STRING} = 'action=new_form_page_process;form_id=generic;first_name=Basil;last_name=Hogwart;email_address=devnull7@socialtext.com';
 
     my $process = $hub->new_form_page->new_form_page_process;
     is( '', $process, 'returns empty string' );
-    $hub->headers->print;
-    my %headers = $hub->rest->header;
-    like( $headers{-Location}, qr{\Q?basil_hogwart},
+    like( $Apache::Request::HEADERS{Location}, qr{\Q?basil_hogwart},
         'redirects to basil_hogwart' );
 }
 

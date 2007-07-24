@@ -89,54 +89,6 @@ sub _preload_templates {
     );
 }
 
-sub get_nlw {
-    my $class = shift;
-    my $r     = shift;
-    my $user  = shift;
-
-    my ( $hub, $type, $app, $workspace_title, $workspace_id );
-
-    my $context = Socialtext::RequestContext->new(
-        uri                 => $r->uri,
-        user                => $user,
-        workspace_uri_regex => $class->workspace_uri_regex,
-        notes_callback      => sub { $r->pnotes(@_) },
-    );
-
-    $hub = $context->hub;
-
-    Socialtext::WebApp::Exception::NotFound->throw()
-        unless $hub;
-
-    if ( !$hub->checker->check_permission('read') ) {
-        $class->challenge(hub => $hub, request => $r);
-    }
-
-    return $hub->main;
-}
-
-sub send_output {
-    my $class = shift;
-    my $r     = shift;
-    my $nlw   = shift;
-    my $html  = shift;
-
-    # REVIEW: When "Invalid MAC in cookie presented for $user_data{user_id}"
-    # happens in Socialtext::Apache::User::user_id(), we eventually fall
-    # through to here with $nlw _not_ defined, causing upset in the error
-    # logs. This 'if $nlw' adjustment below _stinks_, but cdent needs a
-    # pair or other assistance (and less sickness) to get the dots connected.
-    $nlw->hub->headers->print if $nlw;
-    if ( defined $html ) {
-        $nlw->utf8_encode($html) if $nlw;
-        $r->print($html);
-    }
-
-    # REVIEW - also doesn't really belong here, but is the only
-    # centralized point at the end of a handler's run.
-    Socialtext::WebApp->NewForNLW()->session()->write();
-}
-
 sub handle_error {
     my $class = shift;
     my $r     = shift;

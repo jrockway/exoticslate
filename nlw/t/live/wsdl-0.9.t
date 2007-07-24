@@ -42,6 +42,10 @@ work both behind the proxy and not.
 
 $live->mech( WWW::Mechanize->new() );
 
+# FIXME: wsdl file is not supposed to require log in
+# this test will pass if the below is unchecked.
+#$live->log_in();
+
 {
     $live->mech->get($wsdl);
     is($live->mech->status, 200, "GET $wsdl gives 200");

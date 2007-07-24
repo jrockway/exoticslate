@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 12;
+use Test::More tests => 16;
 use File::Temp qw/tempdir/;
 
 my $gen_config = "dev-bin/gen-config";
@@ -24,6 +24,8 @@ Dev_env: {
         apache-perl/nlw-httpd.conf
         apache-perl/auto-generated.d/nlw.conf
         socialtext/shortcuts.yaml
+        socialtext/uri_map.yaml
+        socialtext/auth_map.yaml
     );
     for my $f (@files) {
         my $full_path = "$test_root/etc/$f";

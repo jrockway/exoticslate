@@ -50,7 +50,6 @@
     #     or /webplugin/PLUGIN-NAME/foo.html for static files and resources
     ScriptAliasMatch ^/webplugin/cgi/([^/]+)(.*) [% config.data_root_dir %]/webplugin/$1/cgi$2
     <LocationMatch "^/webplugin/cgi/[^/+].*">   
-        AllowOverride None
         Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
         Order allow,deny
         Allow from all
@@ -58,7 +57,6 @@
 
     AliasMatch ^/webplugin/([^/]+)(.*) [% config.data_root_dir %]/webplugin/$1/static$2
     <LocationMatch "^/webplugin/[^/+].*.*"> 
-        AllowOverride None
         Options -MultiViews +SymLinksIfOwnerMatch
         Order allow,deny
         Allow from all

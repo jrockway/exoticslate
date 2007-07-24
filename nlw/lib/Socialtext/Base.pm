@@ -4,15 +4,15 @@ use strict;
 use warnings;
 
 use Class::Field qw( const field );
-use Socialtext::WebHelpers ':base';
 
 use Data::Dumper;
 use Encode;
 use Socialtext::Paths;
 use Socialtext::File;
+use Socialtext::String;
+use URI::Escape ();
 
 field hub => -weak;
-
 
 # This at one point was changed to simply do this:
 #
@@ -106,6 +106,27 @@ sub utf8_encode {
     return $_[0];
 }
 
+sub uri_escape {
+    my $self = shift;
+    return URI::Escape::uri_escape_utf8(shift);
+}
+
+sub uri_unescape {
+    my $self = shift;
+    my $data = shift;
+    $data = URI::Escape::uri_unescape($data);
+    return $self->utf8_decode($data);
+}
+
+sub html_escape {
+    my $self = shift;
+    return Socialtext::String::html_escape(@_);
+}
+
+sub html_unescape {
+    my $self = shift;
+    return Socialtext::String::html_unescape(@_);
+}
 
 1;
 

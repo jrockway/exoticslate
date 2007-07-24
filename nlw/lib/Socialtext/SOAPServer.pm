@@ -7,6 +7,8 @@ use SOAP::Transport::HTTP;
 use Socialtext::Log 'st_log';
 use Digest::SHA1 ();
 
+use base 'Socialtext::Rest';
+
 our $VERSION = '0.09';
 
 # XXX: Fix a bug in SOAP::Lite which breaks .NET clients.
@@ -41,16 +43,7 @@ if (SOAP::Lite->VERSION > 0.67) {
 
 Socialtext::SOAPServer - A framework for presenting Socialtext methods over SOAP
 
-=head1 SYNOPSIS
-
-    <Location /soap/0.9>
-      SetHandler   perl-script
-      PerlHandler  Socialtext::SOAPServer
-    </Location>
-
-=head1 DESCRIPTION
-
-C<Socialtext::SOAPServer> adds a C<handler()> under Apache mod_perl that
+C<Socialtext::SOAPServer> adds a CGI-like-hybrid that
 provides SOAP-based access to a small number of methods contained
 in an inner class L<NLWSOAP>. An inner class is used to operate with
 the way L<SOAP::Lite> handles dispatch and namespacing.
@@ -73,12 +66,23 @@ Expect a C<getAuth()> method in the future.
 # don't want to die on 'Broken pipe' or Ctrl-C
 $SIG{PIPE} = 'IGNORE';
 
-my $server = SOAP::Transport::HTTP::Apache->new();
-$server->dispatch_to( 'NLWSOAP');
-$server->serializer->ns('');
 
-sub handler {
-    $server->handler(@_);
+sub POST {
+    my $self = shift;
+    my $rest = shift;
+
+    my $server = SOAP::Transport::HTTP::Posted->new;
+    $server->dispatch_to( 'NLWSOAP');
+    $server->serializer->ns('');
+
+    $server->request($rest->query);
+
+    my $soap_response = $server->handle(@_);
+
+    $rest->header(
+        -status => $soap_response->code,
+    );
+    return $soap_response->content;
 }
 
 package NLWSOAP;
@@ -650,3 +654,45 @@ under the same terms as Perl itself.
 
 =cut
 
+package SOAP::Transport::HTTP::Posted;
+use SOAP::Transport::HTTP;
+
+# most use ISA because SOAP::Lite diddles with things weirdly.
+use vars qw(@ISA);
+@ISA = qw(SOAP::Transport::HTTP::Server);
+
+sub handle {
+    my $self = shift->new;
+
+    my $length = $ENV{'CONTENT_LENGTH'} || 0;
+
+    if ( !$length ) {
+        $self->response( HTTP::Response->new(411) )    # LENGTH REQUIRED
+    }
+    elsif ( defined $SOAP::Constants::MAX_CONTENT_SIZE
+        && $length > $SOAP::Constants::MAX_CONTENT_SIZE ) {
+        $self->response( HTTP::Response->new(413) ) # REQUEST ENTITY TOO LARGE
+    }
+    else {
+        my $content = $self->request->param('POSTDATA');
+        $self->request(
+            HTTP::Request->new(
+                $ENV{'REQUEST_METHOD'} || '', # method
+                $ENV{'SCRIPT_NAME'},          # uri
+                HTTP::Headers->new(           # headers
+                    map {
+                        (     /^HTTP_(.+)/i
+                            ? ( $1 =~ m/SOAPACTION/ )
+                            ? ('SOAPAction')
+                            : ($1)
+                            : $_ ) => $ENV{$_}
+                        } keys %ENV
+                ),
+                $content,                     # content
+            )
+        );
+        $self->SUPER::handle;
+    }
+
+    return $self->response;
+}

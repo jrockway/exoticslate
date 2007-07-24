@@ -66,6 +66,20 @@ sub handler ($$) {
             $vars->{hash} = $hash;
         }
 
+        # Include login_message_file content in vars sent to template
+        # if login_message_file is set in AppConfig.
+        if ( $uri eq 'login.html' ) {
+            my $file = Socialtext::AppConfig->login_message_file();
+            if ( $file and -r $file ) {
+                # trap any errors and ignore them to the error log
+                eval {
+                    $vars->{login_message}
+                        = Socialtext::File::get_contents_utf8($file);
+                };
+                warn $@ if $@;
+            }
+        }
+
         my @errors;
         if ($r->prev) {
             @errors = split /\n/, $r->prev->pnotes('error') || '';

@@ -10,7 +10,7 @@ __DATA__
 === 'Start here' page
 --- request_path: /admin/index.cgi?Start_here
 --- match
-st-tags-initial.*"tag"\:"Welcome"
+st-tags-initial.*"tags".*"name":"Welcome"
 
 === List all categories
 --- query

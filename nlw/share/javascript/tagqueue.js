@@ -59,7 +59,7 @@ ST.TagQueue.prototype = {
                 { regex: /\r/g, sub: "\\r" },
                 { regex: /\t/g, sub: "\\t" }
             ];
-            s = t.tag;
+            s = t.name;
             for (var i=0; i < escapes.length; i++)
                 s = s.replace(escapes[i].regex, escapes[i].sub);
             return s;
@@ -210,11 +210,11 @@ ST.TagQueue.prototype = {
     },
 
     matchTag: function (tag) {
-        if (typeof tag.tag == 'number') {
-            var s = tag.tag.toString();
+        if (typeof tag.name == 'number') {
+            var s = tag.name.toString();
             return s.search(this.suggestionRE) != -1;
         } else {
-            return tag.tag.search(this.suggestionRE) != -1;
+            return tag.name.search(this.suggestionRE) != -1;
         }
     },
 
@@ -223,8 +223,8 @@ ST.TagQueue.prototype = {
 
         if (field.value.length > 0) {
             var suggestions = this.workspaceTags.tags.grep(this.matchTag.bind(this));
-            if ((suggestions.length >= 1) && (field.value != suggestions[0].tag)) {
-                field.value = suggestions[0].tag;
+            if ((suggestions.length >= 1) && (field.value != suggestions[0].name)) {
+                field.value = suggestions[0].name;
                 return false;
             }
         }
@@ -285,8 +285,3 @@ ST.TagQueue.prototype = {
    }
 
 };
-
-// main
-if (Socialtext.box_javascript) {
-    window.TagQueue = new ST.TagQueue ();
-}

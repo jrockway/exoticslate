@@ -453,11 +453,6 @@ sub logo_filename {
 }
 
 {
-    Readonly my $spec => {
-        filehandle => HANDLE_TYPE,
-        filename   => SCALAR_TYPE,
-    };
-
     Readonly my %ValidTypes => (
         'image/jpeg' => 'jpg',
         'image/gif'  => 'gif',
@@ -467,7 +462,7 @@ sub logo_filename {
 
     sub set_logo_from_filehandle {
         my $self = shift;
-        my %p = validate( @_, $spec );
+        my %p = @_;
 
         my $mime_type = MIME::Types->new()->mimeTypeOf( $p{filename} );
         unless ( $mime_type and $ValidTypes{$mime_type} ) {

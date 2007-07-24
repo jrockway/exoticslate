@@ -512,11 +512,15 @@ sub new_font {
     my $self = shift;
     my $type = shift;
 
-    return Imager::Font->new(
+    my $font = Imager::Font->new(
         file => $font_path . '/' . $font_table[$type]{font},
         size => $font_table[$type]{size},
         utf8 => 1,
-    ) or die "Cannot load $font_path ", Imager->errstr;
+    );
+    unless ($font) {
+        die "Cannot load $font_path ", Imager->errstr, "#";
+    }
+    return $font;
 }
 
 sub wikiwyg_get_page_html2 {

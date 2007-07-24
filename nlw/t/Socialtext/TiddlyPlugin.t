@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use mocked 'Apache';
-use Test::Socialtext tests => 18;
+use Test::Socialtext tests => 17;
 fixtures('admin_no_pages');
 
 BEGIN {
@@ -19,21 +19,6 @@ my $hub = new_hub('admin');
 
 # class_id
 is (Socialtext::TiddlyPlugin->class_id(), 'tiddly', 'class_id is tiddly');
-
-# unplug
-eval {
-    open STDOUT, ">/dev/null";    # dump output
-    binmode STDOUT, 'utf8';
-    $hub->tiddly->unplug();
-    open STDOUT;
-};
-if ( my $exception = $@ ) {
-    ok(
-        Exception::Class->caught(
-            'Socialtext::WebApp::Exception::ContentSent'),
-        'calling unplug() throws ContentSent exception'
-    );
-}
 
 # produce_tiddly
 # make one page

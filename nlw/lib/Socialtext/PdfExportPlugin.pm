@@ -5,7 +5,6 @@ use strict;
 use base 'Socialtext::Plugin';
 
 use Socialtext::PdfExport::LinkDictionary;
-use Socialtext::WebApp;
 use File::chdir;
 use IPC::Run 'run';
 use Readonly;
@@ -71,10 +70,7 @@ sub pdf_export {
             len      => length($pdf_content),
             type     => 'application/pdf',
         );
-        $self->hub->headers->print;
-        print $pdf_content;
-
-        Socialtext::WebApp::Exception::ContentSent->throw();
+        return $pdf_content;
     }
     return "Error:<pre>$pdf_content</pre>\n";
 }

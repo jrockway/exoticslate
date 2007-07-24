@@ -13,6 +13,7 @@ use Socialtext::Authz::SimpleChecker;
 use Socialtext::Validate qw( validate SCALAR_TYPE );
 use Socialtext::BrowserDetect ();
 use Socialtext::Challenger;
+use Socialtext::WebApp;
 
 sub class_id { 'hub' }
 
@@ -31,6 +32,9 @@ field 'checker' =>
 
 field 'current_workspace';
 field 'current_user';
+
+use REST::Application;
+field 'rest' => -init => 'REST::Application->new()';
 
 field config_files => [];
 
@@ -243,7 +247,7 @@ sub assert_current_user_is_admin {
     # error to the session, it will just sit there until the next time
     # the browser hits the login screen, which is obviously wrong.
 
-    Socialtext::WebHelpers->redirect('?');
+    Socialtext::WebApp::Exception::Redirect->throw('?');
 }
 
 {
@@ -268,7 +272,7 @@ sub assert_current_user_is_admin {
         my $self = shift;
         my %p = validate( @_, $spec );
 
-        Socialtext::WebHelpers->abort_forbidden()
+        Socialtext::WebApp::Exception::Forbidden->throw()
             if Socialtext::AppConfig->unauthorized_returns_forbidden();
 
         Socialtext::Challenger->Challenge( type    => $p{error_type},

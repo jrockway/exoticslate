@@ -149,6 +149,7 @@ sub DELETE {
         DELETE => sub {
             $self->page->delete( user => $rest->user );
             $rest->header( -status => HTTP_204_No_Content );
+            return '';
         }
     );
 }
@@ -176,8 +177,10 @@ sub PUT_wikitext {
     );
 
     $rest->header(
-        -status => $existed_p ? HTTP_204_No_Content : HTTP_201_Created,
-        -Location => $self->full_url );
+        -status => $existed_p ? HTTP_204_No_Content: HTTP_201_Created,
+        -Location => $self->full_url
+    );
+    return '';
 }
 
 sub PUT_html {
@@ -198,8 +201,10 @@ sub PUT_html {
     );
 
     $rest->header(
-        -status => $existed_p ? HTTP_204_No_Content : HTTP_201_Created,
-        -Location => $self->full_url );
+        -status => $existed_p ? HTTP_204_No_Content: HTTP_201_Created,
+        -Location => $self->full_url
+    );
+    return '';
 }
 
 sub PUT_json {
@@ -224,6 +229,7 @@ sub PUT_json {
         -status => $existed_p ? HTTP_204_No_Content: HTTP_201_Created,
         -Location => $self->full_url
     );
+    return '';
 }
 
 

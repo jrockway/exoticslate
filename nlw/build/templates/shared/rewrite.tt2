@@ -52,6 +52,12 @@
     # files.  This rewrites the URL so it'll get sent to the backend.
     RewriteRule ^/static/wsdl/(.+)   /wsdl/$1 [R,L]
 
+    # Rewrite / to /index.cgi
+    RewriteRule    ^/$ /index.cgi  [R,L]
+
+    # Rewrite /noauth feeds to /feed, don't escape args!
+    RewriteRule ^/noauth/feed/(.+)   /feed/$1 [R,L,NE]
+
     # this first one is only here for sake of doc-pages, everything
     # else should use /static
     RewriteRule    /.*/base/(.+)            /static/$1  [R,L]
@@ -67,17 +73,16 @@
     RewriteRule    ^(/\w+)/member/(.*)  $1/$2          [R,L]
 
     RewriteRule    ^/lite/page/([^/]+)$ /lite/page/$1/ [R,L,NE]
-    RewriteRule    ^/$ /index.cgi  [R,L]
 
 [% IF config.is_dev %]
     RewriteRule    !^/alzabo  -  [C]
 [% END %]
+    RewriteRule    !^/data   -  [C]
     RewriteRule    !^/nlw    -  [C]
     RewriteRule    !^/challenge - [C]
     RewriteRule    !^/logos  -  [C]
     RewriteRule    !^/favicon\.ico  -  [C]
     RewriteRule    ^/([^/\.]+)/?$  /$1/index.cgi  [R,L,NE]
-    RewriteRule    ^/([^/\.]+)/member/?$  /$1/member/index.cgi  [R,L,NE]
     RewriteRule    ^/([^/\.]+)/emailprefs$ /$1/index.cgi?action=preferences_settings&preferences_class_id=email_notify [R,L,NE,QSA]
     RewriteRule    ^/([^/\.]+)/watchlistprefs$ /$1/index.cgi?action=preferences_settings&preferences_class_id=watchlist [R,L,NE,QSA]
 

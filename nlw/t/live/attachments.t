@@ -17,8 +17,9 @@ __DATA__
 file: t/extra-attachments/live/attachments.t/test.txt
 --- match: test\.txt
 
-=== Reload page
---- request_path: /admin/index.cgi?admin_wiki
+=== Make sure page has attachment
+--- request_path: /data/workspaces/admin/pages/admin_wiki/attachments
+--- match: test\.txt
 
 === Make sure attachment has correct data
 --- follow_link
@@ -34,12 +35,9 @@ n: 1
 --- form: attachForm
 --- post
 file: t/extra-attachments/live/attachments.t/thing.png
---- match
-test\.txt
-thing\.png
 
-=== Back to the home page
---- request_path: /admin/index.cgi?admin_wiki
+=== Make sure page has 2 attachment
+--- request_path: /data/workspaces/admin/pages/admin_wiki/attachments
 --- match
 test\.txt
 thing\.png

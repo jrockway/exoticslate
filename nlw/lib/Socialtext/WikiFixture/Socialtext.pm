@@ -80,7 +80,7 @@ sub st_login {
     $sel->open_ok($url);
     $sel->type_ok('username', $username);
     $sel->type_ok('password', $password);
-    $self->click_and_wait(q{//input[@value='Log in']}, 'log in');
+    $self->click_and_wait(q{id=login_btn}, 'log in');
 }
 
 =head2 st_logout()
@@ -91,7 +91,8 @@ Log out of the Socialtext wiki.
 
 sub st_logout {
     my $self = shift;
-    $self->click_and_wait('link=Log out', 'log out');
+    diag "st-logout";
+    $self->click_and_wait('id=logout_btn', 'log out');
 }
 
 =head2 st_logoutin()
@@ -290,6 +291,7 @@ sub st_admin {
         }
     }
 
+    diag "st-admin $options";
     _run_command("st-admin $options", $verify);
 }
 

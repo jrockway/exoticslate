@@ -20,7 +20,7 @@ local $ENV{NLW_APPCONFIG} = "ceqlotron_synchronous=1,$old_config";
 
 # this test insn't stable with regards to changes in fixtures or
 # extra pages
-plan tests => 52;
+plan tests => 53;
 
 # light em up, we want some web servage
 # but that's it
@@ -51,6 +51,8 @@ my $act_as_token;
     # Tue May 30 13:34:36 2006
     like( $response, qr/\A\w{3}\s+\w{3}\s+\d+\s+\d+:\d+:\d+\s+\d{4}\z/,
         "heartBeat time, $response looks like a time string" );
+    my $http_response = $soap->transport->http_response();
+    is $http_response->header('Content-type'), 'text/xml; charset=utf-8', 'content type of response is text/xml';
 }
 
 # good auth

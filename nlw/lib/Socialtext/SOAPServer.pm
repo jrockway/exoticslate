@@ -81,6 +81,7 @@ sub POST {
 
     $rest->header(
         -status => $soap_response->code,
+        -type   => 'text/xml; charset=utf-8',
     );
     return $soap_response->content;
 }

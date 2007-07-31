@@ -153,15 +153,30 @@ sub callHandler {
 sub postHandler {
     my ($self, $resultref, $args) = @_;
     my %headers = $self->header;
-    unless ($headers{'-cache_control'} ||
-            $headers{'-pragma'} ||
-            $headers{'-Etag'} ) {
-        $self->header(
-            $self->header,
+
+    # We check on existence rather than definedness, because someone might
+    # have set a header to undef on purpose, so at to indicate not printing it
+    # at all.
+    unless (exists $headers{'-cache_control'} ||
+            exists $headers{'-Cache-control'} ||
+            exists $headers{'-pragma'} ||
+            exists $headers{'-Pragma'} ||
+            exists $headers{'-Etag'} ) {
+        %headers = (
+            %headers,
             -cache_control => 'no-cache',
             -pragma => 'no-cache',
         );
     }
+
+    # CGI->header gets freaked out by undef values in its arguments.  So we
+    # delete any undefs.
+    while (my($k,$v) = each %headers) {
+        delete $headers{$k} unless defined $v;
+    }
+
+    # Reset headers to our cleaned set.
+    $self->header(%headers);
 
     # If the request is a head, send back just the headers
     if ($self->getRequestMethod() eq 'HEAD') {

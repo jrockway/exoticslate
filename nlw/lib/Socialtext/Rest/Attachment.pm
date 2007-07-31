@@ -34,9 +34,13 @@ sub GET {
         $fh = new IO::File $file, 'r';
         die "Cannot read $file: $!" unless $fh;
 
+        # See Socialtext::Headers::add_attachments for the IE6/7 motivation
+        # behind Pragma and Cache-control below.
         $rest->header(
             '-content-length' => -s $file,
             -type             => $attachment->mime_type,
+            -pragma           => undef,
+            '-cache-control'  => undef,
         );
     };
     # REVIEW: would be nice to be able to toss some kind of exception

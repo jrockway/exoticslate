@@ -10,7 +10,7 @@ BEGIN {
     plan skip_all => 'This test requires Test::MockObject' if $@;
 }
 
-use Socialtext::EmailReceiver;
+use Socialtext::EmailReceiver::en;
 
 my %tests = (
     q|"admin+My Test"@socialtext.net| =>
@@ -25,7 +25,7 @@ plan tests => scalar keys %tests;
 
 for my $address ( sort keys %tests ) {
     my $receiver
-        = Socialtext::EmailReceiver->_new( mock_email($address), mock_ws() );
+        = Socialtext::EmailReceiver::en->_new( mock_email($address), mock_ws() );
 
     my $found = $receiver->_get_to_address_local_part();
     ( my $expect = $address ) =~ s/\@socialtext\.net$//;

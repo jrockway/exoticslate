@@ -11,15 +11,16 @@ use Socialtext::User;
 use Socialtext::String;
 use Socialtext::TT2::Renderer;
 use Socialtext::BrowserDetect ();
+use Socialtext::l10n qw/loc system_locale available_locales/;
 use JSON;
 
 $JSON::UTF8 = 1;
 
 sub class_id { 'display' }
-const class_title => 'Screen Layout';
+const class_title => loc('Screen Layout');
 const maximum_header_attachments => 5;
 const cgi_class => 'Socialtext::Display::CGI';
-
+                
 sub register {
     my $self = shift;
     my $registry = shift;
@@ -44,7 +45,7 @@ sub page_info {
     # the future
     unless (defined $page) {
         Socialtext::Exception::DataValidation->throw(
-            errors => ['Page name is too long'] );
+            errors => [loc('Page name is too long')] );
     }
 
     $page->load;
@@ -57,7 +58,7 @@ sub page_info {
 sub new_page {
     my $self = shift;
 
-    my $title = $self->cgi->new_blog_entry ? $self->hub->pages->new_page_title : 'Untitled Page';
+    my $title = $self->cgi->new_blog_entry ? $self->hub->pages->new_page_title : loc('Untitled Page');
     my $page = $self->hub->pages->new_from_name($title);
     my $uri = 'action=display';
 
@@ -88,7 +89,7 @@ sub preview {
 sub mouseover_length {
     my $self = shift;
     my $p = $self->new_preference('mouseover_length');
-    $p->query('Should hovering your mouse over a link display the first part of the page?');
+    $p->query(loc('Should hovering your mouse over a link display the first part of the page?'));
     $p->default(1);
     return $p;
 }
@@ -96,7 +97,7 @@ sub mouseover_length {
 sub include_breadcrumbs {
     my $self = shift;
     my $p = $self->new_preference('include_breadcrumbs');
-    $p->query('Include Recently Viewed items as a side box when viewing pages?');
+    $p->query(loc('Include Recently Viewed items as a side box when viewing pages?'));
     $p->type('boolean');
     $p->default(0);
     return $p;
@@ -105,9 +106,14 @@ sub include_breadcrumbs {
 sub locale {
     my $self = shift;
     my $p = $self->new_preference('locale');
-    $p->query('');
-    $p->type('hidden');
-    $p->default('en');
+    $p->query(loc('Which language do you use?'));
+    $p->type('pulldown');
+    my $languages = available_locales();
+    my $choices = [ map {$_ => $languages->{$_}} sort keys %$languages ];
+    $p->choices($choices);
+    
+    # XXX default value should be server locale
+    $p->default(system_locale());
     return $p;
 }
 
@@ -143,7 +149,7 @@ sub display {
     # very long and useless page names
     unless (defined $page) {
         Socialtext::Exception::DataValidation->throw(
-            errors => ['Not a valid page name'] );
+            errors => [loc('Not a valid page name')] );
     }
 
     $self->log_action("DISPLAY_PAGE");

@@ -22,6 +22,15 @@ sub class_id { 'attachments' }
 field 'attachment_set';
 field 'attachment_set_page_id';
 
+my $encoding_charset_map = {
+    'euc-jp' => 'EUC-JP',
+    'shiftjis' => 'Shift_JIS',
+    'iso-2022-jp' => 'ISO-2022-JP',
+    'utf8' => 'UTF-8',
+    'cp932' => 'CP932',
+    'iso-8859-1' => 'ISO-8859-1',
+};
+
 sub all {
     my $self = shift;
     my %p = @_;
@@ -564,6 +573,19 @@ sub mime_type {
     }
     my $type_object = MIME::Types->new->mimeTypeOf( $self->filename );
     return $type_object ? $type_object->type : 'application/binary';
+}
+
+sub charset {
+    my $self = shift;
+    my $locale = shift;
+
+    my $encoding = Socialtext::File->get_guess_encoding( $locale, $self->full_path );
+    my $charset = $encoding_charset_map->{$encoding};
+    if (! defined $charset ) {
+        $charset = 'UTF-8';
+    }
+
+    return $charset;
 }
 
 sub should_popup {

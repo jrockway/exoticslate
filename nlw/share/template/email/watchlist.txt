@@ -1,19 +1,18 @@
 [% user.guess_real_name %],
 
-To stop receiving or change how often you receive emails about changes
-to your watchlist in [% workspace.title %], go to:
+[% loc('To stop receiving or change how often you receive emails about changes to your watchlist in [_1], go to:', workspace.title) %]
 
  [% watchlist_preference_uri %]
  
  --
 
-The following pages you are watching in [% workspace.title %] have recently changed:
+[% loc('The following pages you are watching in [_1] have recently changed:', workspace.title) %]
 
 [%- FOR page = pages %]
 [% page.metadata.Subject %]
   [%+ workspace.uri %]?[% page.uri %]
  [%- IF include_editor %]
-  (by [% page.last_edited_by.best_full_name( workspace => workspace ) %] on [% page.metadata.Date %])
+  [% loc("(by [_1] on [_2])", page.last_edited_by.best_full_name( workspace => workspace ), page.metadata.Date) %]
  [%- END %]
 
 [%- END %]

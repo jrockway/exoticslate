@@ -8,6 +8,7 @@ use Socialtext::Wikil10n qw/load_existing_l10ns make_rester/;
 use Socialtext::System qw/shell_run/;
 use Socialtext::File qw/set_contents/;
 use JSON;
+use Encode;
 use utf8;
 
 my $live = shift;
@@ -16,7 +17,7 @@ my $l10n = load_localizations();
 
 my $js_output = 'share/javascript/l10ns.js';
 my $is_js     = qr#share/javascript|share/template/element/jst#;
-my $is_po     = qr#lib/\S+\.pm|share/template#;
+my $is_po     = qr#lib/\S+\.pm|share/template|share/console-template/template#;
 create_perl_l10ns( 'share/l10n', $l10n );
 create_js_l10ns( 'share/javascript/l10ns.js', $l10n );
 exit;
@@ -66,11 +67,12 @@ EOT
             $str = $l->{msgstr};
         }
 
+        Encode::_utf8_on($str) unless Encode::is_utf8($str);
         $output .= qq(msgid "$id"\nmsgstr "$str"\n\n);
     }
 
     my $filename = "$dir/$locale.po";
-    set_contents( $filename, $output, 1 );
+    set_contents( $filename, $output, 1);
     print "Wrote $filename\n";
 }
 
@@ -123,17 +125,20 @@ function loc() {
     var dict = LocalizedStrings[locale] || new Array;
     var str = arguments[0] || "";
     var l10n = dict[str];
+    var nstr = "";
 
     if (!l10n) {
-        var nstr = str.replace(/\"/g, "\\\"");
-        l10n = dict[nstr] || str;
+        /* If the hash-lookup failed, convert " into \\\" and try again. */
+        nstr = str.replace(/\"/g, "\\\"");
+        l10n = dict[nstr];
+        if (!l10n) {
+            /* If the hash-lookup failed, convert [_1] into %1 and try again. */
+            nstr = nstr.replace(/\[_(\d+)\]/g, "%$1");
+            l10n = dict[nstr] || str;
+        }
     }
 
-    /* If the hash-lookup failed, convert [_1] into %1 and try again. */
-    if (!l10n) {
-        var nstr = str.replace(/\[_(\d+)\]/g, "%$1");
-        l10n = dict[nstr] || str;
-    }
+    l10n = l10n.replace(/\\\"/g, "\"");
 
     /* Convert both %1 and [_1] style vars into the given arguments */
     for (var i = 1; i < arguments.length; i++) {
@@ -149,7 +154,7 @@ function loc() {
 EOT
 
     print "Wrote $filename\n";
-    set_contents( $filename, $js_out, 1 );
+    set_contents( $filename, $js_out);
     shell_run("cd share/javascript && make");
 }
 
@@ -170,6 +175,7 @@ sub _create_js_hash {
         # keep the js small by skipping empties
         next unless $str;
 
+        Encode::_utf8_on($str) unless Encode::is_utf8($str);
         $strings{$id} = $str;
     }
     return \%strings;

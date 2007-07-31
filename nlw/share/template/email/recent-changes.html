@@ -1,7 +1,9 @@
 [%# @COPYRIGHT@ -%]
+[% SET escaped_str1 = workspace.title | html %]
+[% SET escaped_str2 = preference_uri | html %]
 <html>
 <head>
- <title>Recent changes in [% workspace.title | html %]</title>
+ <title>[% loc('Recent changes in [_1]', escaped_str1) %]</title>
 </head>
 
 <body>
@@ -11,15 +13,13 @@
 </p>
 
 <p>
-To stop receiving or change how often you receive emails about changes
-to [% workspace.title | html %], you can
-<a href="[% preference_uri | html %]">change your preferences</a>.
+[% loc('To stop receiving or change how often you receive emails about changes to [_1], you can <a href="[_2]">change your preferences</a>.', escaped_str1, escaped_str2) %]
 </p>
 
 <hr />
 
 <p>
-The following pages in [% workspace.title | html %] have recently changed:
+[% loc('The following pages in [_1] have recently changed:', escaped_str1) %]
 </p>
 
 <ul>
@@ -27,7 +27,9 @@ The following pages in [% workspace.title | html %] have recently changed:
  <li><a href="[% workspace.uri %]?[% page.uri %]">[% page.metadata.Subject %]</a>
   [%- IF include_editor %]
      <br />
-     (by [% page.last_edited_by.best_full_name( workspace => workspace ) | html %] on [% page.metadata.Date | html %])
+     [% SET escaped_str3 = page.last_edited_by.best_full_name( workspace => workspace ) | html %]
+     [% SET escaped_str4 = page.metadata.Date | html %]
+     [% loc('(by [_1] on [_2])', escaped_str3, escaped_str4) %]
   [%- END %]
  </li>
 [%- END %]

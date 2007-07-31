@@ -9,6 +9,7 @@ use CGI;
 use Class::Field qw( const );
 use Socialtext::Pages;
 use Socialtext::Exceptions qw( data_validation_error );
+use Socialtext::l10n qw(loc);
 
 sub class_id { 'edit' }
 const class_title => 'Editing Page';
@@ -34,11 +35,11 @@ sub _validate_pagename_length {
     if ( Socialtext::Page->_MAX_PAGE_ID_LENGTH
          < length Socialtext::Page->name_to_id($page_name) ) {
 
-        my $message = "Page title is too long after URL encoding";
+        my $message = loc("Page title is too long after URL encoding");
         data_validation_error errors => [$message];
     }
     if ( length Socialtext::Page->name_to_id($page_name) == 0 ) {
-        my $message = "Page title missing";
+        my $message = loc("Page title missing");
         data_validation_error errors => [$message];
     }
 }
@@ -139,13 +140,13 @@ sub save {
     # the title as stored in a hidden form variable.
     unless ( defined $subject && length $subject ) {
         Socialtext::Exception::DataValidation->throw(
-            errors => ['A page must have a title to be saved.'] );
+            errors => [loc('A page must have a title to be saved.')] );
     }
 
     my $body = $self->cgi->page_body;
     unless ( defined $body && length $body ) {
         Socialtext::Exception::DataValidation->throw(
-            errors => ['A page must have a body to be saved.'] );
+            errors => [loc('A page must have a body to be saved.')] );
     }
 
     my @categories =

@@ -22,7 +22,7 @@ Copy the page <[^>]+>"Admin Wiki"</[^>]+> to another workspace\?
 
 === Do it
 --- post
-target_workspace_id: foobar
+target_workspace_id: Foobar Wiki (foobar)
 --- match
 body onload="window.close
 
@@ -40,7 +40,7 @@ Copy the page <[^>]+>"Admin Wiki"</[^>]+> to another workspace\?
 
 === Do it with empty name
 --- post
-target_workspace_id: foobar
+target_workspace_id: Foobar Wiki (foobar)
 new_title:
 --- match
 Please enter or change the page name.
@@ -54,7 +54,7 @@ Copy the page <[^>]+>"Admin Wiki"</[^>]+> to another workspace\?
 
 === Copy page with duplicate name
 --- post
-target_workspace_id: foobar
+target_workspace_id: Foobar Wiki (foobar)
 new_title: foobar wiki
 --- match
 already in use in workspace

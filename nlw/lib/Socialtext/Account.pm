@@ -8,6 +8,7 @@ our $VERSION = '0.01';
 
 use Socialtext::Exceptions qw( data_validation_error );
 use Socialtext::Validate qw( validate SCALAR_TYPE );
+use Socialtext::l10n qw(loc);
 
 use Socialtext::Schema;
 use base 'Socialtext::AlzaboWrapper';
@@ -54,19 +55,19 @@ sub _validate_and_clean_data {
     if ( ( exists $p->{name} or $is_create )
          and not
          ( defined $p->{name} and length $p->{name} ) ) {
-        push @errors, "Account name is a required field.";
+        push @errors, loc('Account name is a required field.');
     }
 
     if ( defined $p->{name} && Socialtext::Account->new( name => $p->{name} ) ) {
-        push @errors, "The account name you chose, $p->{name}, is already in use.";
+        push @errors, loc('The account name you chose, [_1], is already in use.',$p->{name} );
     }
 
     if ( not $is_create and $self->is_system_created and $p->{name} ) {
-        push @errors, "You cannot change the name of a system-created account.";
+        push @errors, loc('You cannot change the name of a system-created account.');
     }
 
     if ( not $is_create and $p->{is_system_created} ) {
-        push @errors, "You cannot change is_system_created for an account after it has been created.";
+        push @errors, loc('You cannot change is_system_created for an account after it has been created.');
     }
 
     data_validation_error errors => \@errors if @errors;

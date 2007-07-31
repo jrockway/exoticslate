@@ -3,12 +3,12 @@
 <div id="st-page-title">[% display_title %]</div>
 <div id="st-deleted-epilogue">
   <p>
-    Did you delete this page in error? If so, you can restore the page.
+    [% loc('Did you delete this page in error? If so, you can restore the page.') %]
     <form method="post" action="[% script_name %]">
         <input type="hidden" name="action" value="undelete_page" />
         <input type="hidden" name="page_id" value="[% page_id %]" />
 
-        [% INCLUDE element/formbutton name="Restore Page", value="Restore Page"  %]
+        [% INCLUDE element/formbutton name="Restore Page", value=loc("Restore Page")  %]
     </form>
   </p>
   [% backlinks_description %]

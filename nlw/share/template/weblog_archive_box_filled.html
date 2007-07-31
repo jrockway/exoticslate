@@ -6,13 +6,13 @@
       PROCESS archive_link category = category,
                            start    = archive.$year.$month.start,
                            limit    = archive.$year.$month.limit,
-                           month    = archive.$year.$month.name,
+                           month    = month,
                            year     = year;
     END;
   END;
 %]
 
 [% BLOCK archive_link %]
-<li><a href="[% script_name %]?action=weblog_display;category=[% category %];start=[% start %];limit=[% limit %]">[% month %] [% year %]</a></li>
+<li><a href="[% script_name %]?action=weblog_display;category=[% category %];start=[% start %];limit=[% limit %]">[% hub.helpers.format_date(year, month) %]</a></li>
 [% END %]
 

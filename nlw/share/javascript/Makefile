@@ -18,6 +18,7 @@ WIDGETS_YAML=Widgets.yaml
 ALL_EDIT_JEMPLATES:=$(shell perl -MYAML -e 'my $$y = YAML::LoadFile("$(WIDGETS_YAML)"); my $$w = $$y->{widgets}; print join " ", map "jemplate/widget_$${_}_edit.html", @$$w')
 
 ALL_JS_SOURCE_FILES= \
+		l10ns.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Debug.js \
 		main.js \
 		$(EXTERNAL_JAVASCRIPT)/prototype/dist/prototype.js \
@@ -67,7 +68,6 @@ ALL_JS_SOURCE_FILES= \
 		Widgets.js \
 		Wikiwyg/Widgets.js \
 		Wikiwyg/DataValidator.js \
-		l10ns.js \
 
 all: $(COMBINED_FILE) Selection.htc Cyberbit.ttf
 

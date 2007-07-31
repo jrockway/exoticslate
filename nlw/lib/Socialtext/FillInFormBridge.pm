@@ -8,7 +8,7 @@ use Scalar::Util ();
 use Params::Validate
     qw( validate_pos HASHREF OBJECT );
 
-use HTML::FillInForm;
+use HTML::FillInForm::ForceUTF8;
 
 
 sub New {

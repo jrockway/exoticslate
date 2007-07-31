@@ -20,6 +20,7 @@ use base 'Socialtext::Formatter::WaflPhrase';
 sub html {
     my $self = shift;
     my $anchor = Socialtext::Page->name_to_id($self->arguments);
+    $anchor = Socialtext::Formatter::legalize_sgml_id($anchor);
     return qq{<a name="$anchor"><span class="ugly-ie-css-hack" style="display:none;">&nbsp;</span></a>};
 }
 

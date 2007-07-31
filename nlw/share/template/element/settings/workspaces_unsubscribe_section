@@ -5,11 +5,8 @@
  <table id="[% settings_table_id %]">
   <tr>
    <td width="500px" class="padding-bottom-small heavy">
-    Only Click the button below if you wish to be unsubscribed from this
-     workspace. After clicking you will no longer have access to this
-     workspace unless you are resubscribed by a Workspace administrator at a
-     later time.
-   [% INCLUDE element/formbutton value = "Unsubscribe from the ${workspace.name} workspace" %]
+    [% loc('Only Click the button below if you wish to be unsubscribed from this workspace. After clicking you will no longer have access to this workspace unless you are resubscribed by a Workspace administrator at a later time.') %]
+   [% INCLUDE element/formbutton value = loc("Unsubscribe from the [_1] workspace", workspace.name) %]
    </td>
   </tr>
  </table>

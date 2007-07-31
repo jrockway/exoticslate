@@ -14,7 +14,7 @@
      [% IF row.subtotal %]
      <td></td>
      <td></td>
-     <td><strong>Subtotal for this attachment</strong></td>
+     <td><strong>[% loc('Subtotal for this attachment') %]</strong></td>
      <td>[% row.subtotal %]</td>
      [% ELSE %]
      <td>[% row.attachment | html %]</td>

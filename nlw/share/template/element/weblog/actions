@@ -8,7 +8,7 @@
 </div>
 
 [% BLOCK choose_weblog %]
-  <span class="st-weblog-chooseprompt">Go to: </span>
+  <span class="st-weblog-chooseprompt">[% loc('Go to:') %] </span>
   <input type="hidden" name="action" value="weblog_display" />
   <select name="category" onchange="this.form.submit()" id="page-control-category-selector">
     [% FOREACH blog = blogs %]

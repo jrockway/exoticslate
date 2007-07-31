@@ -7,9 +7,9 @@
             <input type="hidden" name="page_name" value="[% page.id %]"/>
             <input type="hidden" name="action" value="attachments_upload"/>
             <iframe id="[% ns %]-formtarget" name="[% ns %]-formtarget" src="[% wiki.static_path %]/html/blank.html"></iframe>
-            <div id="[% ns %]-title">Upload Files</div>
+            <div id="[% ns %]-title">[% loc('Upload Files') %]</div>
 
-            <p id="[% ns %]-message">Click "Browse" to find the file you want to upload. When you click "Upload file" your file will be uploaded and added to the list of attachments for this page.</p>
+            <p id="[% ns %]-message">[% loc('Click "Browse" to find the file you want to upload. When you click "Upload file" your file will be uploaded and added to the list of attachments for this page.') %]</p>
             <p id="[% ns %]-fileprompt">
                 <input id="[% ns %]-filename" size="60" type="file" name="file"/>
             </p>
@@ -19,20 +19,20 @@
                 <label for="[% ns %]-embedcheckbox" id="[% ns %]-embedlabel">
                     <input class="checkbox" type="checkbox" id="[% ns %]-embedcheckbox" name="embedcb" value="1" checked="checked"/>
                     <input type="hidden" id="[% ns %]-embedfield" name="embed" value="1"/>
-                    Add a link to the attachment at the top of the page? Images will appear in the page.
+                    [% loc('Add a link to the attachment at the top of the page? Images will appear in the page.') %]
                 </label>
             </div>
             <div id="[% ns %]-unpack">
                 <label for="[% ns %]-unpackcheckbox" id="[% ns %]-unpacklabel">
                     <input class="checkbox" type="checkbox" id="[% ns %]-unpackcheckbox" name="unpackcb" value="1" />
                     <input type="hidden" id="[% ns %]-unpackfield" name="unpack" value="0"/>
-                    Expand zip archive and attach individual files to the page
+                    [% loc('Expand zip archive and attach individual files to the page') %]
                 </label>
             </div>
             <div id="[% ns %]-list"></div>
             <div id="[% ns %]-buttons">
-                <div id="[% ns %]-close">[% INCLUDE element/button id="${ns}-closebutton", label="Done" %]</div>
-                <div id="[% ns %]-uploadbutton"><input id="[% ns %]-submit" name="submit" type="submit" value="Upload file" /></div>
+                <div id="[% ns %]-close">[% INCLUDE element/button id="${ns}-closebutton", label=loc('Done') %]</div>
+                <div id="[% ns %]-uploadbutton"><input id="[% ns %]-submit" name="submit" type="submit" value=[% loc('Upload file') %] /></div>
             </div>
             <div style="clear:both;">&nbsp;</div>
         </form>

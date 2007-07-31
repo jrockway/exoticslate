@@ -22,7 +22,6 @@ use Email::Valid;
 use Socialtext::String;
 use Readonly;
 use Socialtext::Data;
-use Socialtext::EmailSender;
 use Socialtext::Role;
 use Socialtext::TT2::Renderer;
 use Socialtext::URI;

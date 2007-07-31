@@ -21,7 +21,7 @@ export PATH="$DIRNAME:$DIRNAME/../bin:$PATH"
 abs_path() { perl -MCwd -le "print Cwd::abs_path(shift)" $1; }
 
 # Get the tarball and puzzle out the workspace name from it.
-TARBALL=${1:-"$DIRNAME/../share/doc-pages/help/help.tar.gz"}
+TARBALL=${1:-"$DIRNAME/../share/l10n/help/help-en.tar.gz"}
 TARBALL=$(abs_path $TARBALL)
 WS_NAME=$(echo `basename $TARBALL` | cut -f 1 -d .)
 

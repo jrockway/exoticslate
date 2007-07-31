@@ -109,7 +109,7 @@ test_http "GET pages list" {
             last_editor revision_count);
         isa_ok( $page->{tags}, 'ARRAY', "Page tags" );
 
-        is_deeply( $page->{tags}, ['Welcome'], "Quick Start has proper tags" )
+        is_deeply( $page->{tags}, ['Welcome', 'Recent Changes'], "Quick Start has proper tags" )
             if $page->{name} eq 'Quick Start';
     }
 }

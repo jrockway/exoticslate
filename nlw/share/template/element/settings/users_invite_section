@@ -1,30 +1,24 @@
 [%# @COPYRIGHT@ -%]
-[% save_button_value = 'Invite' %]
+[% save_button_value = loc('Invite') %]
 [% PROCESS element/settings/start %]
 <tr>
  <td>
-  <div class="workspace-entry-header">Invite Other Users</div>
+  <div class="workspace-entry-header">[% loc('Invite Other Users') %]</div>
   <div class="workspace-entry">
    <div class="workspace-entry-p">
-    Enter a list of email addresses (one address per line) of people you
-    would like to invite to this Workspace.
+    [% loc('Enter a list of email addresses (one address per line) of people you would like to invite to this Workspace.') %]
    </div>
 
    [% IF invitation_filter %]
    <div class="workspace-entry-p">
-     A filter has been set on this workspace. All candidate email
-     addresses must match this pattern:
-     <span style="color: red">
-       [% invitation_filter %]
-     </span>
-   </div>
+     [% loc('A filter has been set on this workspace. All candidate email addresses must match this pattern: <span style="color: red"> [_1] </span>', invitation_filter) %]  </div>
    [% END %]
 
    <textarea name="users_new_ids" rows="4" cols="50">[% users_new_ids %]</textarea>
    <div class="settings-comment">
-    Example:
-    <pre>your.friend@example.com
-another.friend@example.com
+    [% loc('Example:') %]
+    <pre>[% loc('your.friend@example.com') %]
+[% loc('another.friend@example.com') %]
     </pre>
    </div>
   </div>
@@ -33,20 +27,19 @@ another.friend@example.com
 [% IF hub.checker.check_permission('admin_workspace') %]
 <tr>
  <td>
-  <div class="workspace-subentry">Personal Message</div>
+  <div class="workspace-subentry">[% loc('Personal Message') %]</div>
   <div class="workspace-entry">
-   <div class="workspace-entry-p">If you wish, you can include a personal message in the invitation email. You can edit the message to say anything you want.</div>
+   <div class="workspace-entry-p">[% loc('If you wish, you can include a personal message in the invitation email. You can edit the message to say anything you want.') %]</div>
 
    <div class="workspace-entry-p">
-   <input name="append_invitation" type="checkbox" value="1" /> Append the personal message below?<br />
-   <textarea name="invitation_text" rows="8" cols="50" class="clear-line"
->The Workspace is easy to use. Click links to browse through the pages.
+   <input name="append_invitation" type="checkbox" value="1" /> [% loc('Append the personal message below?') %]<br />
+   <textarea name="invitation_text" rows="8" cols="50" class="clear-line">[% loc('The Workspace is easy to use. Click links to browse through the pages.') %]
 
-If you see something you'd like to add to or change, click the "Edit" link at the top of each page.  Make your contributions in the text box, then click "Save".
+[% loc("If you see something you'd like to add to or change, click the \"Edit\" link at the top of each page.") %] [% loc('Make your contributions in the text box, then click "Save".') %]
 
-When you're entering text, just type in paragraphs. And don't worry about breaking anything - previous versions of the page are saved, so there's always a backup copy of the page you're working on.
+[% loc("When you're entering text, just type in paragraphs.") %] [% loc("And don't worry about breaking anything - previous versions of the page are saved, so there's always a backup copy of the page you're working on.") %]
 
-To make a link to another page (even if it doesn't exist yet), put [square brackets around a word or phrase].
+[% loc("To make a link to another page (even if it doesn't exist yet), put square brackets around a word or phrase.") %]
    </textarea>
    </div>
   </div>
@@ -54,9 +47,9 @@ To make a link to another page (even if it doesn't exist yet), put [square brack
 </tr>
 <tr>
  <td>
-  <div class="workspace-subentry">Standard Welcome Message</div>
+  <div class="workspace-subentry">[% loc('Standard Welcome Message') %]</div>
   <div class="workspace-entry">
-   <div class="workspace-entry-p">New users will be sent the following invitation email:</div>
+   <div class="workspace-entry-p">[% loc('New users will be sent the following invitation email:') %]</div>
 
    <div class="users-invite-message">
 
@@ -66,7 +59,7 @@ To make a link to another page (even if it doesn't exist yet), put [square brack
       requires_confirmation => 1,
       inviting_user         => hub.current_user.best_full_name,
       confirmation_uri      => ''
-      extra_text            => '<Your personal message goes here.>',
+      extra_text            => loc('<Your personal message goes here.>'),
     %]
 
    </div>
@@ -75,11 +68,11 @@ To make a link to another page (even if it doesn't exist yet), put [square brack
  [% ELSE %]
  <tr>
   <td>
-   <div class="workspace-subentry">Administrator Notification</div>
+   <div class="workspace-subentry">[% loc('Administrator Notification') %]</div>
     <div class="workspace-entry">
-        <div class="workspace-entry-p">The workspace administrators for this space will receive a notification of your request so that the users can be invited.<br />
-       <input name="append_invitation" type="checkbox" value="1" /> Append the extra text below?<br />
-       <textarea name="invitation_text" rows="8" cols="50" class="clear-line" >Please invite these people into the [% hub.current_workspace.title %] workspace.
+        <div class="workspace-entry-p">[% loc('The workspace administrators for this space will receive a notification of your request so that the users can be invited.') %]<br />
+       <input name="append_invitation" type="checkbox" value="1" /> [% loc('Append the extra text below?') %]<br />
+       <textarea name="invitation_text" rows="8" cols="50" class="clear-line" >[% loc('Please invite these people into the [_1] workspace.', hub.current_workspace.title) %]
 
        </textarea>
 

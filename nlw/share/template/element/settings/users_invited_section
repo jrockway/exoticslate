@@ -3,21 +3,21 @@
   <tr>
    <td>
      [% PROCESS users_listing
-         label = 'The following users were already members of this Workspace',
+         label = loc('The following users were already members of this Workspace'),
          users = users_already_present
          IF users_already_present.size;
         PROCESS users_listing
-         label = 'The following email addresses were invalid',
+         label = loc('The following email addresses were invalid'),
          users = invalid_addresses
          IF invalid_addresses.size;
         PROCESS users_listing
-         label = 'The following users were invited into this Workspace',
+         label = loc('The following users were invited into this Workspace'),
          users = users_invited
          IF checker.check_permission('admin_workspace') ;
         PROCESS users_listing
-         label = 'Your request to invite the following users has been sent',
+         label = loc('Your request to invite the following users has been sent'),
          users = users_invited
-         IF !checker.check_permission('admin_workspace') ;
+         IF !checker.check_permission('admin_workspace') AND users_invited.size;
      %]
    </td>
   </tr>

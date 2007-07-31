@@ -9,8 +9,12 @@ use Socialtext::System qw/shell_run/;
 use Socialtext::File qw/set_contents/;
 use Locale::PO;
 use File::Find::Rule;
+use Cwd;
 
 my $LIVE = shift;
+
+link_enterprise_features();
+update_enterprise_features();
 
 my @exclude_rx = (
     qr/tiddlytext/,
@@ -20,13 +24,49 @@ my @exclude_rx = (
 my @include_rx = (
     qr/\.(?:pm|js)$/, 
     qr/share\/template/,
+    qr/share\/console-template\/template/,
 );
-my @files = get_files( "lib/", "share/template", "share/javascript" );
+my @files = get_files( "lib/", "share/template", "share/javascript", "share/console-template" );
 
 my $en_file = "nlw-en.po";
+shell_run("dev-bin/l10n-widget-to-js");
 call_xgettext( $en_file => @files );
 po_to_wiki($en_file);
 exit;
+
+sub update_enterprise_features {
+    shell_run("svk pull $ENV{HOME}/src/st/appliance/");
+}
+
+sub link_enterprise_features {
+#   _call_link_control_panel();
+   _call_link_console();
+}
+
+sub _call_link_control_panel {
+    my $branch_name = _get_branch_name(); 
+    shell_run("dev-bin/link-control-panel $branch_name");
+}
+
+sub _call_link_console {
+    my $branch_name = _get_branch_name(); 
+    shell_run("dev-bin/link-console $branch_name");
+}
+
+sub _get_branch_name {
+    my $branch_name = "";
+    
+    my $curdir = cwd;
+    my $branch_regexp = qr/$ENV{HOME}\/src\/st\/(.*?)\/nlw/;
+
+    if($curdir =~ m/$branch_regexp/) {
+       $branch_name = $1;
+    }
+    if($branch_name eq "") {
+        $branch_name = "trunk";
+    }
+    return $branch_name; 
+}
 
 sub call_xgettext {
     my ( $lang, @files ) = @_;

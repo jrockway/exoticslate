@@ -100,7 +100,7 @@ my $act_as_token;
 {
     eval {
         my $response
-            = $soap->getAuth( $user, $password, 'help', $good_user );
+            = $soap->getAuth( $user, $password, 'help-en', $good_user );
     };
     like $@, qr/Impersonate denied/, 'bad credentials cause a fault';
 }
@@ -172,7 +172,7 @@ my $act_as_token;
     like( $content,
         qr{<div class="wiki">\n<h2 id="welcome_to_the_workspace">Welcome to the Workspace</h2>},
         'first line of html output is welcome message' );
-    like( $content, qr{"\Q$base_uri/help/index.cgi?socialtext_documentation"},
+    like( $content, qr{"\Q$base_uri/help-en/index.cgi?socialtext_documentation"},
         'href to documentation is fully qualified for the right workspace' );
 }
 
@@ -182,7 +182,7 @@ my $act_as_token;
     like( $content,
         qr{<div class="wiki">\n<h2 id="welcome_to_the_workspace">Welcome to the Workspace</h2>},
         'first line of html output is welcome message' );
-    like( $content, qr{"\Q/lite/page/help/socialtext_documentation"},
+    like( $content, qr{"\Q/lite/page/help-en/socialtext_documentation"},
         'href to documentation is formatted for lite' );
 }
 

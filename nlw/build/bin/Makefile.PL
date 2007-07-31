@@ -85,6 +85,11 @@ sub install_deps {
             s/\s.*// for @missing; # Chomp the trailing version number
             system( 'sudo', $^X, '-MCPAN', '-e', 'CPAN::Shell->install(@ARGV)',
                 @missing );
+            my $rc = $? >> 8;
+            if ($rc == 1) {
+                print "\nSudo returned 1.  No permission to install dependencies.\n\n";
+                return;
+            }
             # Rerun this script to recheck prereqs.  Can't just call WriteMakefile
             # again b/c MakeMaker breaks.
             exec($^X, $0, @original_argv);

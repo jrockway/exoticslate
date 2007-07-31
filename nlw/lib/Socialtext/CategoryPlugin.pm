@@ -14,7 +14,7 @@ use Socialtext::Permission qw( ST_ADMIN_WORKSPACE_PERM );
 use Socialtext::Validate qw( validate SCALAR_TYPE USER_TYPE );
 use Socialtext::Indexes ();
 use URI::Escape ();
-
+use Socialtext::l10n qw(loc);
 
 sub class_id {'category'}
 const class_title => 'Category Managment';
@@ -78,7 +78,7 @@ sub category_list {
 
     $self->screen_template('view/taglistview');
     return $self->render_screen(
-        display_title => "All Tags in Workspace",
+        display_title => loc("All Tags in Workspace"),
         rows          => \@rows,
         allow_delete  => 0,
     );
@@ -89,9 +89,10 @@ sub category_delete_from_page {
 
     return unless $self->hub->checker->check_permission('edit');
 
-    my $page_id = shift || $self->cgi->page_id;
+    my $page_id = shift || $self->uri_escape($self->cgi->page_id);
     my $category = shift || $self->cgi->category;
     my $page = $self->hub->pages->new_page($page_id);
+
     $page->delete_tag($category);
     $page->metadata->update(user => $self->hub->current_user);
     $page->store( user => $self->hub->current_user );
@@ -137,7 +138,7 @@ sub category_display {
 
     $self->screen_template('view/category_display');
     return $self->render_screen(
-        display_title          => "Tag: " . $category,
+        display_title          => loc("Tag: [_1]", $category),
         predicate              => 'action=category_display;category=' . $uri_escaped_category,
         rows                   => $rows,
         html_escaped_category  => $html_escaped_category,
@@ -145,8 +146,7 @@ sub category_display {
         email_category_address => $self->email_address($category),
         sortdir                => \%sort_map,
         unplug_uri    => "?action=unplug;tag=$uri_escaped_category",
-        unplug_phrase => 'Click this button to save the pages with the tag '
-            . "$html_escaped_category to your computer for offline use.",
+        unplug_phrase => loc('Click this button to save the pages with the tag [_1] to your computer for offline use.', $html_escaped_category),
     );
 }
 
@@ -597,6 +597,7 @@ cgi 'direction';
 package Socialtext::Category::Wafl;
 
 use base 'Socialtext::Query::Wafl';
+use Socialtext::l10n qw(loc);
 
 sub _set_titles {
     my $self = shift;
@@ -604,13 +605,19 @@ sub _set_titles {
 
     my $title_info;
     if ( $arguments =~ /blog/i ) {
-        $title_info = "Recent Posts from $arguments";
+  
+        if ( $self->target_workspace ne $self->current_workspace_name ) {
+            $title_info = loc("Recent Posts from [_1] in workspace [_2]", $arguments, $self->target_workspace);
+        } else {
+            $title_info = loc("Recent Posts from [_1]", $arguments);
+        }
     }
     else {
-        $title_info = "Recent Changes in Tag $arguments";
-    }
-    if ( $self->target_workspace ne $self->current_workspace_name ) {
-        $title_info .= ' in workspace ' . $self->target_workspace;
+        if ( $self->target_workspace ne $self->current_workspace_name ) {
+            $title_info = loc("Recent Changes in Tag [_1] in workspace [_2]", $arguments, $self->target_workspace);
+        } else {
+            $title_info = loc("Recent Changes in Tag [_1]", $arguments);
+        }
     }
     $self->wafl_query_title($title_info);
     $self->wafl_query_link( $self->_set_query_link($arguments) );

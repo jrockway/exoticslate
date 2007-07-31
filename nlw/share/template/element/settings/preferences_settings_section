@@ -3,7 +3,7 @@
   [% FOREACH preference = preference_list %]
     <tr valign="top">
       <td width="47%" class="preferences-td" align="right">
-       <div class="preferences-query">[% preference.query %]</div>
+       <div class="preferences-query">[% IF preference.query %][% loc(preference.query) %][% END %]</div>
       </td>
     [% IF preference.layout_over_under %]
       </tr>

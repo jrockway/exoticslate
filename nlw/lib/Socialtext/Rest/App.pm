@@ -8,6 +8,7 @@ use base 'Socialtext::Rest';
 
 use Socialtext::Challenger;
 use Socialtext::HTTP ':codes';
+use Socialtext::l10n 'loc_lang';
 
 # XXX right?
 sub not_authorized {
@@ -31,6 +32,9 @@ sub handler {
         # put a rest object on the hub so we can use it
         # elsewhere when doing Socialtext::CGI operations
         $self->hub->rest($rest);
+
+        # Set the locale for this request
+        loc_lang( $self->hub->best_locale );
 
         # html is either a string or IO::Handle
         $html = $nlw->process;

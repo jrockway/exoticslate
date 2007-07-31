@@ -6,6 +6,8 @@ use strict;
 use base 'Socialtext::Plugin';
 use Class::Field 'const';
 use Imager;
+use Socialtext::l10n qw(loc);
+use Socialtext::BrowserDetect;
 
 =head1 NAME
 
@@ -48,18 +50,26 @@ An action callable by the web interface to return an RTF
 version of multiple pages named in the CGI page variable C<page_selected>.
 
 =cut
+
+
 sub rtf_export {
     my $self = shift;
 
     my @page_names = $self->cgi->page_selected;
     if ( 0 == @page_names ) {
-        return "Error:<pre>No pages selected for export</pre>\n";
+        return loc("Error:<pre>No pages selected for export</pre>\n");
     }
 
     my $content;
     $self->export( \@page_names, \$content );
 
     my $filename = $self->cgi->filename || "$page_names[0].rtf";
+
+    # XXX: should test with safari
+    if( Socialtext::BrowserDetect::ie() ) {
+        $filename = $self->uri_escape($filename);
+    }
+
     $self->hub->headers->add_attachment(
         filename => $filename,
         len => length($content),

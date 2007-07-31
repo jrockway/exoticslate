@@ -19,6 +19,7 @@ use Socialtext::WebApp;
 use Socialtext::TT2::Renderer;
 use Socialtext::User;
 use Socialtext::Challenger;
+use Socialtext::l10n qw/loc_lang/;
 
 # provides a way to skip this when running tests
 _preload_templates()

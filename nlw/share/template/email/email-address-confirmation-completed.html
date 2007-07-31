@@ -1,30 +1,30 @@
 <html>
 <head>
- <title>Your email address has been confirmed</title>
+ <title>[% loc('Your email address has been confirmed') %]</title>
 </head>
 
 <body>
 
 <p>
-Hello,
+[% loc('Hello,') %]
 </p>
 
 <p>
-You have confirmed your email address and can now log on to the
-[% title | html %] workspace.
+[% SET escaped_str = title | html %]
+[% loc('You have confirmed your email address and can now log on to the [_1] workspace.', escaped_str ) %]
 </p>
 
 <p>
-To do so, go to this web address: <a href="[% uri | html %]">[% uri | html %]</a>
+[% loc('To do so, go to this web address:') %] <a href="[% uri | html %]">[% uri | html %]</a>
 </p>
 
 <p>
-Log in with your email address: [% user.email_address %]
+[% loc('Log in with your email address:') %] [% user.email_address %]
 </p>
 
 <p>
-You may want to keep this email for future reference. If you have
-questions, please contact your wiki support at
+[% loc('You may want to keep this email for future reference.') %]
+[% loc('If you have questions, please contact your wiki support at') %]
 <a href="mailto:[% appconfig.support_address | html %]">[% appconfig.support_address | html %]</a>.
 </p>
 

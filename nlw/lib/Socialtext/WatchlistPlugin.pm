@@ -12,9 +12,10 @@ use Socialtext::Helpers;
 use Socialtext::Watchlist;
 use Socialtext::User;
 use Socialtext::TT2::Renderer;
+use Socialtext::l10n qw( loc );
 
 const class_id    => 'watchlist';
-const class_title => 'Watchlist';
+const class_title => loc('Watchlist');
 const cgi_class   => 'Socialtext::Watchlist::CGI';
 const listview_extra_columns => { watchlist => 1 };
 field 'lock_handle';
@@ -42,7 +43,7 @@ sub init {
 sub watchlist_notify_frequency {
     my $self = shift;
     my $p    = $self->new_preference('watchlist_notify_frequency');
-    $p->query('How frequently would you like to receive watchlist emails?');
+    $p->query(loc('How frequently would you like to receive watchlist emails?'));
     $p->type('pulldown');
     my $choices = [
         0     => 'Never',
@@ -64,11 +65,11 @@ sub watchlist_links_only {
     my $self = shift;
     my $p    = $self->new_preference('watchlist_links_only');
     $p->query(
-        'What information about changed pages do you want in email digests?');
+        loc('What information about changed pages do you want in email digests?'));
     $p->type('radio');
     my $choices = [
-        condensed => 'Page name and link only',
-        expanded  => 'Page name and link, plus author and date',
+        condensed => loc('Page name and link only'),
+        expanded  => loc('Page name and link, plus author and date'),
     ];
     $p->choices($choices);
     $p->default('expanded');
@@ -78,7 +79,7 @@ sub watchlist_links_only {
 sub watchlist_dashboard_length {
     my $self = shift;
     my $p = $self->new_preference('watchlist_dashboard_length');
-    $p->query('How many items from your watchlist should be shown on the dashboard?');
+    $p->query(loc('How many items from your watchlist should be shown on the dashboard?'));
     $p->type('pulldown');
     my $choices = [
         5 => 5, 10 => 10, 15 => 15, 20 => 20
@@ -128,7 +129,8 @@ sub add_to_watchlist {
         user      => $self->hub->current_user,
         workspace => $self->hub->current_workspace
     );
-    my $page = $self->hub->pages->new_page( $self->cgi->page );
+
+    my $page = $self->hub->pages->new_from_name( $self->cgi->page );
     if ( !$watchlist->has_page( page => $page ) ) {
         $watchlist->add_page( page => $page );
     }
@@ -144,7 +146,7 @@ sub remove_from_watchlist {
     );
 
     if ( $self->cgi->page ) {
-        my $page = $self->hub->pages->new_page( $self->cgi->page );
+        my $page = $self->hub->pages->new_from_name( $self->cgi->page );
         $watchlist->remove_page( page => $page );
         return '0';
     }
@@ -186,24 +188,23 @@ sub display_watchlist {
 
     my @pages = $watchlist->pages;
     if ( $#pages < 0 ) {
-        my $empty_message = "No watchlist for "
-            . $self->hub->current_user->username . " in "
-            . $self->hub->current_workspace->title;
+        my $empty_message = loc("No watchlist for [_1] in [_2]",
+            $self->hub->current_user->username, 
+            $self->hub->current_workspace->title);
         my $renderer = Socialtext::TT2::Renderer->instance;
         return $renderer->render(
             template => 'view/empty_watchlist',
             vars     => {
                 $self->hub->helpers->global_template_vars,
                 action        => 'display_watchlist',
-                title         => "Watchlist",
+                title         => loc("Watchlist"),
                 empty_message => $empty_message,
                 feeds => $self->_feeds( $self->hub->current_workspace ),
                 enable_unplugged =>
                     $self->hub->current_workspace->enable_unplugged,
                 unplug_uri    => "?action=unplug;watchlist=default",
                 unplug_phrase =>
-                    "Click this button to save the pages you're "
-                    . 'watching for offline use.',
+                    loc("Click this button to save the pages you're watching for offline use."),
             },
         );
     }
@@ -242,7 +243,7 @@ sub watchlist_changes {
 
         my $watchlist;
         foreach my $page (@$pages) {
-            my $page_object = $self->hub->pages->new_from_name($page);
+            my $page_object = $self->hub->pages->new_page($page);
 
             # If the page has been purged take it out of the watchlist
             if ( !$page_object->active ) {
@@ -257,7 +258,7 @@ sub watchlist_changes {
             $self->push_result($page_object);
         }
     }
-    $self->result_set->{display_title} = "Pages You're Watching";
+    $self->result_set->{display_title} = loc("Pages You're Watching");
 
     $self->write_result_set;
 

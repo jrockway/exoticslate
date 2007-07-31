@@ -1,11 +1,13 @@
 #!perl
 # @COPYRIGHT@
-use Test::Socialtext tests => 86;
+use Test::Socialtext tests => 90;
 
 use strict;
 use warnings;
 
-fixtures( 'rdbms_clean' );
+fixtures( 'rdbms_clean', 'help' );
+
+use mocked qw(Socialtext::l10n system_locale);
 
 use Socialtext::EmailAlias;
 use Socialtext::File;
@@ -16,7 +18,7 @@ use Socialtext::Workspace;
 my $has_image_magick = eval { require Image::Magick; 1 };
 
 {
-    is( Socialtext::Workspace->Count(), 0, 'no workspaces in DBMS yet' );
+    is( Socialtext::Workspace->Count(), 1, 'Only help workspace in DBMS yet' );
 }
 
 {
@@ -41,7 +43,7 @@ my $has_image_magick = eval { require Image::Magick; 1 };
         'system user is not in any workspaces' );
     ok( Socialtext::EmailAlias::find_alias( $ws->name ), 'found alias for new workspace' );
 
-    is( Socialtext::Workspace->Count(), 1, 'workspace count is 1' );
+    is( Socialtext::Workspace->Count(), 2, 'workspace count is 2' );
 
     my $hostname = Socialtext::AppConfig->web_hostname;
     like( $ws->uri, qr{\Qhttp://$hostname/short-name/\E}i,
@@ -182,8 +184,8 @@ sub check_errors {
         qr/one of top, bottom, or replace/,
         qr/title is a required field/,
         ) {
-        ok( ( grep { /$regex/ } $e->messages ),
-            "got error message matching $regex" );
+            my $errors = join ', ', $e->messages;           
+            like $errors, $regex, "got error message matching $regex";
     }
 
  TODO:
@@ -301,8 +303,8 @@ sub check_errors {
 
 {
     my $user = Socialtext::User->create(
-        username      => 'devnull1@socialtext.com',
-        email_address => 'devnull1@socialtext.com',
+        username      => 'devnull11@socialtext.com',
+        email_address => 'devnull11@socialtext.com',
         password      => 'd3vnu11l',
     );
     my $ws = Socialtext::Workspace->new( name => 'short-name-2' );
@@ -321,7 +323,7 @@ sub check_errors {
 }
 
 {
-    my $user = Socialtext::User->new( username => 'devnull1@socialtext.com' );
+    my $user = Socialtext::User->new( username => 'devnull11@socialtext.com' );
     my $ws = Socialtext::Workspace->create(
         name               => 'short-name-3',
         title              => 'Longer Title 3',
@@ -559,3 +561,27 @@ NAME_IS_VALID: {
     }
 }
 
+HELP_WORKSPACE_WITH_WS_MISSING: {
+    system_locale('xx');  # Set locale to xx, but help-xx doesn't exist yet.
+
+    my $ws1 = Socialtext::Workspace->help_workspace();
+    is( $ws1->name, "help-en", "help_workspace() is help-en" );
+
+    my $ws2 = Socialtext::Workspace->new( name => "help" );
+    is( $ws2->name, "help-en", "new(name => help) DTRT" );
+}
+
+HELP_WORKSPACE_WITH_WS_NOT_MISSING: {
+    system_locale('xx');
+    Socialtext::Workspace->create(
+        name       => 'help-xx',
+        title      => 'Help XX',
+        account_id => Socialtext::Account->Socialtext()->account_id,
+    );
+
+    my $ws1 = Socialtext::Workspace->help_workspace();
+    is( $ws1->name, "help-xx", "help_workspace() is help-xx" );
+
+    my $ws2 = Socialtext::Workspace->new( name => "help" );
+    is( $ws2->name, "help-xx", "new(name => help) DTRT" );
+}

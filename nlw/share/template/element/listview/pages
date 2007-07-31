@@ -23,7 +23,12 @@
         </td>
     [% IF listview_extra_columns.watchlist %]
         <td class="[% style %]-row-watchlist query-results-row-watchlist">
-           <img src="[% wiki.static_path %]/images/st/pagetools/watch-on-list.gif" alt="[% row.page_uri %]" class="watchlist-list-toggle" />
+           [% IF loc_lang == 'en' %]
+               <img src="[% wiki.static_path %]/images/st/pagetools/watch-on-list.gif" alt="[% row.page_uri %]" class="watchlist-list-toggle" />
+           [% ELSE %]
+               <img src="[% wiki.static_path %]/images/st/pagetools/watch-star-on.gif" alt="[% row.page_uri %]" class="watchlist-list-toggle" />
+           [% END %]
+
         </td>
     [% END %]
         <td class="[% style %]-row-title query-results-row-title">
@@ -68,16 +73,16 @@
   </th>
   [% END %]
   <th id="[% style %]-header-title" class="query-results-header-title">
-    [% PROCESS listing_header_link name = 'Title' field = 'Subject' %]
+    [% PROCESS listing_header_link name = loc('Title') field = 'Subject' %]
   </th>
   <th id="[% style %]-header-last-edited-by" class="query-results-header-last-edited-by">
-    [% PROCESS listing_header_link name = 'Last Edited By' field = 'From' %]
+    [% PROCESS listing_header_link name = loc('Last Edited By') field = 'From' %]
   </th>
   <th id="[% style %]-header-date" class="query-results-header-date">
-    [% PROCESS listing_header_link name = 'Date' field = 'Date' %]
+    [% PROCESS listing_header_link name = loc('Date') field = 'Date' %]
   </th>
   <th id="[% style %]-header-revisions" class="query-results-header-revisions">
-    [% PROCESS listing_header_link name = 'Revisions' field = 'revision_count' %]
+    [% PROCESS listing_header_link name = loc('Revisions') field = 'revision_count' %]
   </th>
 [% END %]
 

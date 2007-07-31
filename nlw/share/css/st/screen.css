@@ -427,9 +427,6 @@ body {
 #st-whats-new-title-link {
     background: url("../../images/st/homepage/icon-28-pages.gif") no-repeat left top;
 }
-#st-watchlist-title-link {
-    background: url("../../images/st/homepage/icon-28-star.gif") no-repeat left top;
-}
 #st-wikis-title-link {
     background: url("../../images/st/homepage/icon-28-group.gif") no-repeat left top;
 }
@@ -694,6 +691,7 @@ body {
     overflow: hidden;
     float: left;
     height: 25px;
+    padding-bottom: 3px;
 }
 
 #wikiwyg_wikitext_textarea {
@@ -1709,11 +1707,13 @@ table.page-stats-content tfoot {
 .settings-header {
     margin-top: 1em;
     font-weight: bold;
+    width: 15em;
 }
 
 .settings-selections {
     padding: 0px 0px 0px 20px;
     line-height: 1.5em;
+    width: 15em;
 }
 
 .settings-selections a:visited, .settings-selections a:active {
@@ -1825,7 +1825,7 @@ table.page-stats-content tfoot {
 #st-listview-tabs ul {
   display: block;
   list-style: none outside;
-  margin: 0 0 0 4em;
+  margin: 0 0 0 3em;
   padding: 0;
   font-family: Helvetica, Arial, Sans-serif;
   font-size: 80%;
@@ -1916,13 +1916,52 @@ div#st-pagetools {
     vertical-align: top;
 }
 
-#st-pagetools span.st-watchlist-link {
+#st-pagetools div.st-watchlist-link {
     color: inherit;
     vertical-align: top;
 }
 
+#st-revision-count {
+    text-align: right;
+    line-height: 1.15em; 
+    font-size: .90em;
+    text-transform: uppercase; letter-spacing: .15em; font-family: Arial, Helvetica, sans-serif;
+    float: left;
+    vertical-align: middle;
+}
+
 .st-watchlist-link {
     cursor: pointer;
+}
+div.st-watchlist-link img {
+    margin: 3px; margin-left: 1px; margin-right:0px;
+    float: right;
+}
+
+div.st-watchlist-link div {
+    text-align: right;
+    padding: 0px;
+    margin: 0px;
+    width: 80px;
+    float: right;
+    line-height: 1.15em; 
+    font-size: .60em;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+#st-watchlist-title-link {
+    background: url("../../images/st/homepage/icon-28-star.gif") no-repeat left top;
+}
+
+#st-watchlist-text.off {
+    color: #A0A0A0;
+}
+
+#st-watchlist-text.on {
+    color: #000000;
 }
 
 div#st-pagetools ul.level2 {

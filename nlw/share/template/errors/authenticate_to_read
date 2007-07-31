@@ -1,4 +1,4 @@
 <!-- @COPYRIGHT@ -->
 <span class="error">
-[% loc('You must be logged in to view the [_1] workspace.  If you already have an account, please login now.<br /> Otherwise, you can <a href="/nlw/register.html?redirect_to=[_2]">create a new account</a>', workspace_name, redirect_to) %]
+[% loc('You must be logged in to view the [_1] workspace. If you already have an account, please login now.<br /> Otherwise, you can <a href="/nlw/register.html?redirect_to=[_2]">create a new account</a>', workspace_name, redirect_to) %]
 </span> 

@@ -215,11 +215,12 @@ was created from the provided URI.
 =cut
 sub no_workspace {
     my $self = shift;
+    my $ws = shift || $self->ws;
     $self->rest->header(
         -status => HTTP_404_Not_Found,
         -type   => 'text/plain',
     );
-    return $self->ws . ' not found';
+    return $ws . ' not found';
 }
 
 # REVIEW: making use of CGI.pm here

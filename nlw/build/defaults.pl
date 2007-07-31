@@ -9,6 +9,12 @@ use File::Basename qw(basename);
 
 print Dumper(
     {
+        entry ('default-locale' => 'en', << 'DOC' ),
+The country code for the localization you wish to use.  If your localization
+isn't present, or isn't finished, then English is used for the unlocalized
+parts.
+DOC
+
         entry ('js-modules' => (-e '../js-modules' ? 1 : 0), << 'DOC' ),
 We only make wikiwyg if we have the js-modules, check for that here.
 DOC

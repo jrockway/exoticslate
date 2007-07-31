@@ -9,7 +9,7 @@ workspaces:
       impersonator: [devnull2@socialtext.com]
   public: { }
   auth-to-edit: { }
-  help: { }
+  "help-en": { }
 
 cache:
   - WORKSPACES

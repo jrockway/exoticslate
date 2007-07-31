@@ -12,7 +12,7 @@ BEGIN {
 }
 
 SAVE_BREADCRUMB: {
-    save_breadcrumb_ok('help');
+    save_breadcrumb_ok('help-en');
 }
 
 UPDATE_BREADCRUMB: {
@@ -38,7 +38,7 @@ SAVE_MULTIPLE_BREADCRUMBS: {
 LIST_BREADCRUMBS: {
     get_breadcrumbs_ok(
         10,
-        qw(public exchange sale foobar admin help),
+        qw(public exchange sale foobar admin help-en),
     );
 }
 

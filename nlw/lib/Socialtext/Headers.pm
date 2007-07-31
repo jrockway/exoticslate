@@ -36,6 +36,9 @@ sub add_attachment {
     $self->content_disposition("attachment; filename=\"$args{filename}\"");
     $self->content_type( $args{type} || 'text/html' );
     $self->content_length( $args{len} );
+    if (defined $args{charset} ) {
+        $self->charset( $args{charset} );
+    }
     $self->erase_cache_headers();
 }
 

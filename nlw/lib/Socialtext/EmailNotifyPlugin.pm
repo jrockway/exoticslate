@@ -10,12 +10,12 @@ use Fcntl ':flock';
 use Socialtext::AppConfig;
 use Socialtext::File;
 use Socialtext::Paths;
-use Socialtext::EmailSender;
 use Socialtext::TT2::Renderer;
 use Socialtext::EmailNotifier;
+use Socialtext::l10n qw( loc );
 
 sub class_id { 'email_notify' }
-const class_title => 'Email Notification';
+const class_title => loc('Email Notification');
 field abstracts => [];
 field 'lock_handle';
 field notify_requested => 0;
@@ -31,18 +31,18 @@ sub register {
 sub notify_frequency {
     my $self = shift;
     my $p = $self->new_preference('notify_frequency');
-    $p->query('How often would you like to receive email updates?');
+    $p->query(loc('How often would you like to receive email updates?'));
     $p->type('pulldown');
     my $choices = [
-        0 => 'Never',
-        1 => 'Every Minute',
-        5 => 'Every 5 Minutes',
-        15 => 'Every 15 Minutes',
-        60 => 'Every Hour',
-        360 => 'Every 6 Hours',
-        1440 => 'Every Day',
-        4320 => 'Every 3 Days',
-        10080 => 'Every Week',
+        0 => loc('Never'),
+        1 => loc('Every Minute'),
+        5 => loc('Every 5 Minutes'),
+        15 => loc('Every 15 Minutes'),
+        60 => loc('Every Hour'),
+        360 => loc('Every 6 Hours'),
+        1440 => loc('Every Day'),
+        4320 => loc('Every 3 Days'),
+        10080 => loc('Every Week'),
     ];
     $p->choices($choices);
     $p->default(1440);
@@ -52,12 +52,12 @@ sub notify_frequency {
 sub sort_order {
     my $self = shift;
     my $p = $self->new_preference('sort_order');
-    $p->query('What order would you like the updates to be sorted?');
+    $p->query(loc('What order would you like the updates to be sorted?'));
     $p->type('radio');
     my $choices = [
-        chrono => 'Chronologically (Oldest First)',
-        reverse => 'Reverse Chronologically',
-        name => 'Page Name',
+        chrono => loc('Chronologically (Oldest First)'),
+        reverse => loc('Reverse Chronologically'),
+        name => loc('Page Name'),
     ];
     $p->choices($choices);
     $p->default('chrono');
@@ -67,11 +67,11 @@ sub sort_order {
 sub links_only {
     my $self = shift;
     my $p = $self->new_preference('links_only');
-    $p->query('What information about changed pages do you want in email digests?');
+    $p->query(loc('What information about changed pages do you want in email digests?'));
     $p->type('radio');
     my $choices = [
-        condensed => 'Page name and link only',
-        expanded => 'Page name and link, plus author and date',
+        condensed => loc('Page name and link only'),
+        expanded => loc('Page name and link, plus author and date'),
     ];
     $p->choices($choices);
     $p->default('expanded');
@@ -143,7 +143,7 @@ sub get_notification_vars {
       $self->hub->current_workspace->formatted_email_notification_from_address;
 
     my $subject =
-        'Recent Changes In ' . $self->hub->current_workspace->title . ' Workspace';
+        loc('Recent Changes In [_1] Workspace', $self->hub->current_workspace->title);
 
     my $text_template = 'email/recent-changes.txt';
     my $html_template = 'email/recent-changes.html';

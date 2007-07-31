@@ -1,4 +1,4 @@
 <input type="submit" name="Button" value="[% submit_value %]" [%
   IF submit_onclick; submit_onclick; END %] class="standard-button-submit" />
-<input type="reset" name="Button" value="Cancel" [%
+<input type="reset" name="Button" value="[% loc('Cancel') %]" [%
   IF cancel_onclick; cancel_onclick; END %] class="standard-button-cancel" />

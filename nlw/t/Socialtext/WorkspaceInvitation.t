@@ -24,7 +24,7 @@ BEGIN {
 # fixtures( 'rdbms_clean' );
 fixtures( 'admin_no_pages' );
 
-Socialtext::EmailSender->TestModeOn();
+$Socialtext::EmailSender::Base::SendClass = 'Test';
 
 my $admin_workspace = Socialtext::Workspace->new( name => 'admin' );
 my $current_user    = Socialtext::User->new( username => 'devnull1@socialtext.com' );

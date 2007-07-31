@@ -454,7 +454,7 @@ ADD_REMOVE_WS_ADMIN: {
 LIST_WORKSPACES: {
     expect_success(
         sub { Socialtext::CLI->new()->list_workspaces(); },
-        "admin\nauth-to-edit\nexchange\nfoobar\nhelp\npublic\nsale\n",
+        "admin\nauth-to-edit\nexchange\nfoobar\nhelp-en\npublic\nsale\n",
         'list-workspaces by name'
     );
 
@@ -812,7 +812,7 @@ ADD_REMOVE_PERMISSION: {
 SHOW_ACLS: {
     expect_success(
         sub {
-            Socialtext::CLI->new( argv => [qw( --workspace help )] )
+            Socialtext::CLI->new( argv => [qw( --workspace help-en )] )
                 ->show_acls();
         },
         qr/\Qpermission set name: public-read-only\E

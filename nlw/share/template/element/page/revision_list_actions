@@ -4,7 +4,7 @@
             [% INCLUDE element/ws_link
                 href = "${script_name}?${page_uri}",
                 id   = "st-back-to-current-revision-link",
-                name = "Back To Current Revision"
+                name = loc("Back To Current Revision")
             %]
         </li>
     </ul>

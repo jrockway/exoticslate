@@ -18,7 +18,7 @@ plan tests => 1;
 
 use Socialtext::EmailNotifier;
 
-Socialtext::EmailSender->TestModeOn();
+$Socialtext::EmailSender::Base::SendClass = 'Test';
 
 my $hub = new_hub('admin');
 $hub->current_workspace->update( email_notify_is_enabled => 0 );

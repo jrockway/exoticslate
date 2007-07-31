@@ -2,13 +2,13 @@
 [% PROCESS element/settings/start %]
 <tr class="user-settings-listall-headings">
   [% IF hub.checker.check_permission('admin_workspace') %]
-    <td>Remove</td>
+    <td>[% loc('Remove') %]</td>
   [% END %]
-    <td>Email Address</td>
-    <td>Admin</td>
+    <td>[% loc('Email Address') %]</td>
+    <td>[% loc('Admin') %]</td>
   [% IF hub.checker.check_permission('admin_workspace') && 
         appconfig.is_default('user_factories') %]
-    <td>Reset Password</td>
+    <td>[% loc('Reset Password') %]</td>
   [% END %]
 </tr>
 

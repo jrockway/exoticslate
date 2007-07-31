@@ -36,7 +36,7 @@
         [% INCLUDE element/page/tags %]
 
         <div id="st-incoming-links" class="st-page-box">
-          <div id="st-incoming-links-title" class="st-page-box-title">Incoming Links</div>
+          <div id="st-incoming-links-title" class="st-page-box-title">[% loc('Incoming Links') %]</div>
           [% IF page.incoming.size > 0 %]
               <ul id="st-incoming-links-listing" class="st-page-box-listing">
               [% FOREACH in IN page.incoming %]
@@ -44,7 +44,7 @@
               [% END %]
               </ul>
         [% ELSE %]
-            <p class="st-page-boxes-nobacklinks">There are no pages that link to this page yet.</p>
+            <p class="st-page-boxes-nobacklinks">[% loc('There are no pages that link to this page yet.') %]</p>
         [% END %]
         </div>
 
@@ -64,22 +64,46 @@
 [% BLOCK side_box_pagetools %]
     <table id="st-side-box-pagetools" width="100%"><tr>
         <td valign="center" style="padding-left: 0.7em">
-            [% IF page.revisions > 0 %]
-                <a href="?action=revision_list;page_name=[% page.id %]" title="Click to view previous versions of this page."><span id="st-rewind-revision-count">[% page.revisions %]</span>&nbsp;&nbsp;<img border="0" src="[% wiki.static_path %]/images/st/pagetools/revision[% 's' IF page.revisions > 1 %].gif" /></a>
+            [% IF loc_lang == 'en' %]
+                [% IF page.revisions > 0 %]
+                    <a href="?action=revision_list;page_name=[% page.id %]" title="[% loc('Click to view previous versions of this page.') %]"><span id="st-rewind-revision-count">[% page.revisions %]</span>&nbsp;&nbsp;<img border="0" src="[% wiki.static_path %]/images/st/pagetools/revision[% 's' IF page.revisions > 1 %].gif" /></a>
+                [% ELSE %]
+                    <img border="0" src="[% wiki.static_path %]/images/st/pagetools/revisions.gif" /><span id="st-rewind-norevisions">&nbsp;&nbsp;0</span>
+                [% END %]
             [% ELSE %]
-                <img border="0" src="[% wiki.static_path %]/images/st/pagetools/revisions.gif" /><span id="st-rewind-norevisions">&nbsp;&nbsp;0</span>
+                [% IF page.revisions > 0 %]
+                    <a href="?action=revision_list;page_name=[% page.id %]" title="[% loc('Click to view previous versions of this page.') %]"><span id="st-revision-count">[% loc('[quant,_1,revision]', page.revisions) %]</span></a>
+                [% ELSE %]
+                    <span id="st-rewind-revision-count">[% loc('No revisions') %]</span>
+                [% END %]
             [% END %]
         </td>
         <td align="right" style="padding-right: 0.7em">
   [% UNLESS user.is_guest %]
-            <span class="st-watchlist-link">
-        		<img height="13" id="st-watchlist-indicator" name="WatchlistButton"
-                [% IF watching %]
-                    src="[% wiki.static_path %]/images/st/pagetools/watch-on.gif">
+            <div class="st-watchlist-link">
+                [% IF loc_lang == 'en' %]
+                    <img height="13" id="st-watchlist-indicator" name="WatchlistButton"
+                    [% IF watching %]
+                        src="[% wiki.static_path %]/images/st/pagetools/watch-on.gif">
+                    [% ELSE %]
+                        src="[% wiki.static_path %]/images/st/pagetools/watch-off.gif">
+                    [% END %]
                 [% ELSE %]
-                    src="[% wiki.static_path %]/images/st/pagetools/watch-off.gif">
+                    <img height="13" id="st-watchlist-indicator" name="WatchlistButton"
+                    [% IF watching %]
+                        src="[% wiki.static_path %]/images/st/pagetools/watch-star-on.gif">
+                    [% ELSE %]
+                        src="[% wiki.static_path %]/images/st/pagetools/watch-star-off.gif">
+                    [% END %]
+                    <div id="st-watchlist-text">
+                    [% IF watching %]
+                       [% loc('Watching this page') %]
+                    [% ELSE %]
+                       [% loc('Watch this page') %]
+                    [% END %]
+                    </div>
                 [% END %]
-            </span>
+            </div>
   [% END %]
         </td>
     </tr></table>

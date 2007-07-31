@@ -141,12 +141,12 @@ function check_revisions(form) {
     }
 
     if ((! r1) || (! r2)) {
-        alert('You must select two revisions to compare.');
+        alert(loc('You must select two revisions to compare.'));
         return false;
     }
 
     if (r1 == r2) {
-        alert('You cannot compare a revision to itself.');
+        alert(loc('You cannot compare a revision to itself.'));
         return false;
     }
 
@@ -162,6 +162,6 @@ if (typeof(Socialtext) == 'undefined') {
 }
 
 Socialtext.clear_untitled = function(input) {
-    if (input.value == 'Untitled Page')
+    if (input.value == loc('Untitled Page'))
         input.value = '';
 }

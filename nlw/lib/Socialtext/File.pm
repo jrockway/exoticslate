@@ -17,6 +17,7 @@ use File::Path;
 use File::Spec;
 use File::Temp;
 use File::Find;
+use Encode::Guess;
 
 # NOTE: Please don't add any Socialtext::* dependencies.  This module
 # should be able to be used by any other socialtext code without
@@ -99,6 +100,70 @@ sub get_contents_or_empty {
 
 sub get_contents_utf8 {
     return get_contents(shift, 1);
+}
+
+my $locale_encoding_names = {
+    'ja' => 'euc-jp shiftjis cp932 iso-2022-jp utf8',
+    'en' => 'utf8',
+};
+
+sub get_guess_encoding {
+    my $self = shift;
+    my $locale = shift;
+    my $file_full_path = shift;
+
+    my $data;
+
+    unless ( -e $file_full_path ) {
+        return 'utf8';
+    }
+
+    open (FH, $file_full_path);
+    my $len = -s $file_full_path;
+    if ($len > 1000) {
+        $len = 1000;
+    }
+    read FH, $data, $len;
+    close FH;
+
+    my $encoding_names = $locale_encoding_names->{$locale};
+    if ( ! defined $encoding_names) {
+        return 'utf8';
+    }
+    my @match_list = split(/\s/, $encoding_names);
+    my $enc = Encode::Guess::guess_encoding($data, @match_list);
+    if ( ref($enc) ) {
+        return $enc->name;
+    } else {
+        foreach (@match_list) {
+            if ( $enc =~ /$_/ ) {
+                return $_;
+            }
+        }
+        return 'utf8';
+    }
+}
+
+sub _guess_string_encoding {
+    my $class = shift;
+    my $locale = shift;
+    my $data = shift;
+    my $encoding_names = $locale_encoding_names->{$locale};
+    if ( ! defined $encoding_names) {
+        return 'utf8';
+    }
+    my @match_list = split(/\s/, $encoding_names);
+    my $enc = Encode::Guess::guess_encoding($data, @match_list);
+    if ( ref($enc) ) {
+        return $enc->name;
+    } else {
+        foreach (@match_list) {
+            if ( $enc =~ /$_/ ) {
+                return $_;
+            }
+        }
+        return 'utf8';
+    }
 }
 
 sub ensure_directory {

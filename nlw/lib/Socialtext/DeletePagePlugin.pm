@@ -8,6 +8,7 @@ use URI::Escape;
 use Encode;
 
 use Class::Field qw( const );
+use Socialtext::l10n qw( loc );
 
 
 sub class_id { 'delete_page' }
@@ -41,8 +42,7 @@ sub undelete_page {
 
     my @rev_ids = $page->all_revision_ids;
     if ( @rev_ids < 2 ) {
-        my $msg = 'Cannot undelete a page with only one revision. '
-            . 'Returning to front page.';
+        my $msg = loc('Cannot undelete a page with only one revision. Returning to front page.');
         return $self->hub->fail_home_with_warning( $msg );
     }
     $page->restore_revision(
@@ -65,7 +65,7 @@ sub delete_epilogue {
 
     $self->screen_template('view/page/delete_epilogue');
     $self->render_screen(
-        display_title => 'Deleted "' . $page->metadata->Subject . '"',
+        display_title => loc("Deleted \"[_1]\"", $page->metadata->Subject),
         page_id => $page->uri,
         backlinks_description =>
             $self->hub->backlinks->past_tense_description_for_page($page),

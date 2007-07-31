@@ -26,7 +26,7 @@ $live->log_in();
     my $content = $live->mech->content;
 
     like $content,
-        qr{img alt="http://[^/]+/admin/base/images/docs/View-Page-Revisions.png" src="http://[^/]+/admin/base/images/docs/View-Page-Revisions.png"},
+        qr{img alt="View-Page-Revisions.png" src="http://.*?View-Page-Revisions.png},
         'url for image is http';
 }
 
@@ -37,6 +37,6 @@ $live->log_in();
     is( $live->mech->status, 200, "GET $feed gives 200" );
     my $content = $live->mech->content;
     like $content,
-        qr{img alt="https://[^/]+/admin/base/images/docs/View-Page-Revisions.png" src="https://[^/]+/admin/base/images/docs/View-Page-Revisions.png"},
+        qr{img alt="View-Page-Revisions.png" src="https://.*?View-Page-Revisions.png},
         'url for image is https';
 }

@@ -6,6 +6,7 @@ use warnings;
 my $ALPHANUM = '\p{Letter}\p{Number}\pM';
 
 use base 'Socialtext::Formatter::Unit';
+use Socialtext::l10n qw( loc );
 
 sub match {
     my $self = shift;
@@ -124,8 +125,10 @@ sub html {
     my $self = shift;
     my $text = $self->escape_html( $self->asis_text );
     my $space = $self->extra_space;
-    $self->hub->wikiwyg->generate_widget_image("{{$text}}");
-    return qq(<span class="nlw_phrase">$text<!-- wiki: {{$text}} --></span>$space);
+    # Avoid two { or } chars in a row, it screws up xgettext.pl
+    $self->hub->wikiwyg->generate_widget_image("{"."{$text}"."}");
+    return qq(<span class="nlw_phrase">$text<!-- wiki: {) . qq({$text}) . 
+           qq(} --></span>$space);
 }
 
 ################################################################################
@@ -218,6 +221,7 @@ package Socialtext::Formatter::HyperLink;
 
 use base 'Socialtext::Formatter::Phrase';
 use Class::Field qw( const );
+use Socialtext::l10n qw( loc );
 
 # These are all stolen from URI.pm
 my $reserved   = q{;/?:@&=+$,[]#};
@@ -257,8 +261,9 @@ sub html {
         $match =~ /\.(gif|jpg|jpeg|jpe|png|pbm)(?:\?\S+)?$/i
         ? qq{<img alt="$href" src="$href" border="0" />}
         : $match =~ /^irc:/
-        ? qq{<a title="(start irc session)" href="$href">$href</a>}
-        : qq{<a $target title="(external link)" href="$href">$href</a>};
+        ? "<a title=\"(" . loc('start irc session') . ")\" href=\"$href\">$href</a>"
+        : "<a $target title=\"(" . loc('external link') . ")\" href=\"$href\">$href</a>";
+
 
     return $wrap_start . $output . $wrap_finish;
 }
@@ -281,6 +286,7 @@ package Socialtext::Formatter::BracketHyperLink;
 
 use base 'Socialtext::Formatter::HyperLink';
 use Class::Field qw( const );
+use Socialtext::l10n qw( loc );
 
 const formatter_id  => 'b_hyper';
 const pattern_start => qr{("[^"]*"\s*)?<(?:http|https|ftp|irc|file):.+?>};
@@ -321,8 +327,8 @@ sub html {
         $match =~ /\.(gif|jpg|jpeg|jpe|png|pbm)$/i
         ?  ( $text ? qq{<a href="$href">$text</a>} : qq{<img alt="$escaped_text" src="$href" border="0" />} )
         : $match =~ /^irc:/
-        ? qq{<a title="(start irc session)" href="$href">$escaped_text</a>}
-        : qq{<a $target title="(external link)" }
+        ? "<a title=\"(" . loc('start irc session') . "\" href=\"$href\">$escaped_text</a>"
+        : "<a $target title=\"(" . loc('external link') .')" '
         . qq{href="$href">$escaped_text$hint</a>};
     return $wrap_start . $output . $wrap_finish;
 }

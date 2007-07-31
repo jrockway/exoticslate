@@ -6,17 +6,17 @@
   <div class="workspace-entry-header">Invite Another User</div>
   <div class="workspace-entry">
    <div class="workspace-entry-p">
-    Enter the information for the user you would like to invite to this workspace.
+    [% loc('Enter the information for the user you would like to invite to this workspace.') %]
    </div>
 
-   OpenID for this user: <input type=text name="users_openid"><br>
-   Email Address for this user: <input type=text name="users_email">
+   [% loc('OpenID for this user:') %] <input type=text name="users_openid"><br>
+   [% loc('Email Address for this user:') %] <input type=text name="users_email">
 
    <div class="settings-comment">
    <p>
-    Example:
-    <pre>OpenID: myname.myopenid.com
-Email: another.friend@example.com
+    [% loc('Example:') %]
+    <pre>[% loc('OpenID:')%] myname.myopenid.com
+[% loc('Email:') %] another.friend@example.com
     </pre>
    </div>
   </div>

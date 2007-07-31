@@ -42,7 +42,7 @@ ST.ListView.prototype = {
     
     _getPdf: function () {
         if (!this._atLeastOnePageSelected()) {
-            alert("You must check at least one page in order to create a PDF.");
+            alert(loc("You must check at least one page in order to create a PDF."));
         }
         else {
             $(this.element.submitAction).value = 'pdf_export';
@@ -53,7 +53,7 @@ ST.ListView.prototype = {
 
     _getRtf: function () {
         if (!this._atLeastOnePageSelected()) {
-            alert("You must check at least one page in order to create a Word document.");
+            alert(loc("You must check at least one page in order to create a Word document."));
         }
         else {
             $(this.element.submitAction).value = 'rtf_export';

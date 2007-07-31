@@ -14,6 +14,7 @@ use Socialtext::Helpers;
 use File::Path ();
 use List::Util;
 use Socialtext::File;
+use Socialtext::l10n qw( loc );
 use Imager;
 use Digest::MD5;
 use Encode;
@@ -21,7 +22,11 @@ use YAML;
 
 sub class_id { 'wikiwyg' }
 const cgi_class => 'Socialtext::Wikiwyg::CGI';
-const class_title => 'Page Editing';
+const class_title => loc('Page Editing');
+field widgets_definition => {} => -init => q{
+        my $yaml_path = Socialtext::AppConfig->code_base . '/javascript/Widgets.yaml';
+        YAML::LoadFile($yaml_path);
+};
 field widgets_definition => {} => -init => q{
         my $yaml_path = Socialtext::AppConfig->code_base . '/javascript/Widgets.yaml';
         YAML::LoadFile($yaml_path);
@@ -306,18 +311,43 @@ sub widget_image_text {
             }
         }
 
-        my @tokens = $text =~ /%(\S+)/g;
-        foreach my $token (@tokens) {
-            if (exists($widget->{$token})) {
-                my $match = '%' . $token;
-                $text =~ s/$match/$widget->{$token}/;
-            }
-        }
+        $text = $self->localize_widget_image_text($text, $widget);
     }
 
     return $text;
 }
 
+sub localize_widget_image_text {
+    my $self = shift;
+    my $text = shift;
+    my $widget = shift;
+
+    my $newtext = $text;
+    my $newtext_args = "";
+    my @params = $text =~ /%(\w+)/g;
+    my $count = 1;
+    foreach my $param (@params) {
+        if (exists($widget->{$param})) {
+            $newtext =~ s/%$param/[_$count]/;
+            $newtext_args .= ", \"$widget->{$param}\"";
+            $count++;
+        }
+    }
+
+    if ($newtext_args ne "") {
+        $newtext = eval("loc(\"" . $newtext . "\"" . $newtext_args . ")");
+        if ($@) {
+            $newtext = $text;
+        }
+    }else{
+        $newtext = eval("loc(\"" . $newtext . "\")");
+        if ($@) {
+            $newtext = $text;
+        }
+    }
+
+    return $newtext;
+}
 
 sub generate_phrase_widget_image {
     my $self = shift;
@@ -531,7 +561,7 @@ sub wikiwyg_get_page_html2 {
     # If the page id is null or empty throw a DataValidation Error
     unless ( defined $page_id && length $page_id ) {
         Socialtext::Exception::DataValidation->throw(
-            errors => ['No page ID given'] );
+            errors => [loc('No page ID given')] );
     }
 
     # Get all the page ids for comparison against the inputted page id
@@ -540,12 +570,12 @@ sub wikiwyg_get_page_html2 {
     # If the page id does not exist throw a DataValidation Error
     unless ( grep (/^$page_id$/,@page_ids)) {
         Socialtext::Exception::DataValidation->throw(
-            errors => ["An invalid page ID was given: $page_id"] );
+            errors => [loc("An invalid page ID was given: [_1]", $page_id)] );
     }
 
     if (! -d "/tmp/wikiwyg_data_validation/$session_id") {
         Socialtext::Exception::DataValidation->throw(
-          errors => ['Validation subroutine called outside of validator'] );
+          errors => [loc('Validation subroutine called outside of validator')] );
     }
 
     my $wikitext = $self->hub->pages->new_from_name($page_id)->content;
@@ -597,7 +627,7 @@ sub power_user {
 sub wikiwyg_double {
     my $self = shift;
     my $p = $self->new_preference('wikiwyg_double');
-    $p->query('Double-click to edit a page?');
+    $p->query(loc('Double-click to edit a page?'));
     $p->default(1);
     return $p;
 }
@@ -681,7 +711,7 @@ sub wikiwyg_get_page_html {
     # If the page id is null or empty throw a DataValidation Error
     unless ( defined $page_id && length $page_id ) {
         Socialtext::Exception::DataValidation->throw(
-            errors => ['No page ID given'] );
+            errors => [loc('No page ID given')] );
     }
 
     # Get all the page ids for comparison against the inputted page id
@@ -690,7 +720,7 @@ sub wikiwyg_get_page_html {
     # If the page id does not exist throw a DataValidation Error
     unless ( grep (/^$page_id$/,@page_ids)) {
         Socialtext::Exception::DataValidation->throw(
-            errors => ["An invalid page ID was given: $page_id"] );
+            errors => [loc("An invalid page ID was given: [_1]", $page_id)] );
     }
 
     my $wikitext = $self->hub->pages->new_from_name($page_id)->content;

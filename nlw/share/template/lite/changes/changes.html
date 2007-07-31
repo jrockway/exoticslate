@@ -8,11 +8,12 @@
 <div>
     [% IF category == 'recent changes' %]
     <a href="/lite/category/[% workspace_name %]/">
-        Filter by category
+        [% loc('Filter by category') %]
     </a>
     [% ELSE %]
     <a href="/lite/category/[% workspace_name %]/[% category | uri |html %]">
-        All Pages in [% category | html %]
+        [% SET escaped_str = category | html %]
+        [% loc('All Pages in [_1]', escaped_str) %]
     </a>
     [% END %]
 </div>

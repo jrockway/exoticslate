@@ -28,6 +28,7 @@ widgets:
 widget:
 
   toc:
+    id: toc
     label: Table of Contents
     color: darkseagreen
     pattern: '{toc: %workspace_id [%page_title]}'
@@ -41,7 +42,7 @@ widget:
       workspace_id: Page in
     title: Table of contents for '$page_title'. Click to edit.
     desc: Display a table of contents for a page. Each header or section on the page is listed as a link in the table of contents. Click "Save" now, or click "More options" to edit the properties for the table of contents.
-    more_desc: Optionally, specify which page's headers and sections to use for the table of contents.
+    more_desc: Optionally, specify which page\'s headers and sections to use for the table of contents.
     parse:
       regexp: '^(\S*)?\s*\[([^\]]*)\]\s*$'
       no_match: workspace_id
@@ -55,6 +56,7 @@ widget:
         - { field: default, text: "toc" }
 
   link1:
+    id: link1
     label: Inter-workspace link
     color: blue
     pattern: '"%label"{link: %workspace_id [%page_title] %section_name}'
@@ -83,6 +85,7 @@ widget:
         - { field: default, text: "link: %page_title" }
 
   link2:
+    id: link2
     label: Link to a Section
     color: blue
     pattern: '"%label"{link: %workspace_id [%page_title] %section_name}'
@@ -115,6 +118,7 @@ widget:
         - { field: default, text: "link: %section_name" }
 
   section:
+    id: section
     label: Section Marker
     color: darkred
     pattern: '{section: %section_name}'
@@ -126,6 +130,7 @@ widget:
         - { field: default, text: "section: %section_name" }
 
   image:
+    id: image
     label: Attached Image
     color: red
     pattern: '"%label"{image: %workspace_id [%page_title] %image_name}'
@@ -156,6 +161,7 @@ widget:
         - { field: default, text: "image: %image_name" }
 
   file:
+    id: file
     label: Attachment Link
     color: brown
     pattern: '"%label"{file: %workspace_id [%page_title] %file_name}'
@@ -186,6 +192,7 @@ widget:
         - { field: default, text: "file: %file_name" }
 
   weblog:
+    id: weblog
     label: Weblog Link
     color: purple
     pattern: '"%label"{weblog: %workspace_id; %weblog_name}'
@@ -212,6 +219,7 @@ widget:
         - { field: default, text: "weblog: %weblog_name" }
 
   tag:
+    id: tag
     label: Tag Link
     color: green
     pattern: '"%label"{tag: %workspace_id; %tag_name}'
@@ -238,6 +246,7 @@ widget:
         - { field: tag_name, text: "tag: %tag_name" }
 
   search:
+    id: search
     label: Search Results
     color: gold4
     pattern: '{search: <%workspace_id> %search_term}'
@@ -266,6 +275,7 @@ widget:
         - { field: default, text: "search: %search_term" }
 
   include:
+    id: include
     label: Page Include
     color: darkblue
     pattern: '{include: %workspace_id [%page_title]}'
@@ -290,6 +300,7 @@ widget:
         - { field: default, text: "include: %page_title" }
 
   new_form_page:
+    id: new_form_page
     label: New Form Page
     color: maroon
     pattern: '{new_form_page: %form_name %form_text}'
@@ -305,6 +316,7 @@ widget:
     on_menu: false
 
   fetchrss:
+    id: fetchrss
     label: Inline RSS
     color: orange
     pattern: '{fetchrss: %rss_url}'
@@ -316,6 +328,7 @@ widget:
         - { field: default, text: "feed: %rss_url" }
 
   fetchatom:
+    id: fetchatom
     label: Inline Atom
     color: darkgreen
     pattern: '{fetchatom: %atom_url}'
@@ -327,6 +340,7 @@ widget:
         - { field: default, text: "feed: %atom_url" }
 
   googlesoap:
+    id: googlesoap
     label: Google Search
     color: saddlebrown
     pattern: '{googlesoap: %search_term}'
@@ -340,6 +354,7 @@ widget:
         - { field: default, text: "Google: %search_term" }
 
   technorati:
+    id: technorati
     label: Technorati Search
     color: darkmagenta
     pattern: '{technorati: %search_term}'
@@ -353,7 +368,8 @@ widget:
         - { field: default, text: "Technorati: %search_term" }
 
   recent_changes:
-    label: What's New
+    id: recent_changes
+    label: What\'s New
     color: gold
     pattern: '{recent_changes: %workspace_id}'
     fields: [workspace_id]
@@ -378,6 +394,7 @@ widget:
         - { field: default, text: "recent changes" }
 
   tag_list:
+    id: tag_list
     label: Tag List
     color: darkviolet
     pattern: '{tag_list: <%workspace_id> %tag_name}'
@@ -405,6 +422,7 @@ widget:
         - { field: default, text: "tag list: %tag_name" }
 
   weblog_list:
+    id: weblog_list
     label: Weblog List
     color: forestgreen
     pattern: '{weblog_list: <%workspace_id> %weblog_name}'
@@ -432,6 +450,7 @@ widget:
         - { field: default, text: "weblog list: %weblog_name" }
 
   aim:
+    id: aim
     label: AIM Link
     pattern: 'aim:%aim_id'
     markup: ['bound_phrase', 'aim:', '']
@@ -444,6 +463,7 @@ widget:
         - { field: default, text: "AIM: %aim_id" }
 
   yahoo:
+    id: yahoo
     label: Yahoo! IM Link
     pattern: 'yahoo:%yahoo_id'
     markup: ['bound_phrase', 'yahoo:', '']
@@ -456,6 +476,7 @@ widget:
         - { field: default, text: "Yahoo! IM: %yahoo_id" }
 
   skype:
+    id: skype
     label: Skype Link
     pattern: 'skype:%skype_id'
     markup: ['bound_phrase', 'skype:', '']
@@ -468,6 +489,7 @@ widget:
         - { field: default, text: "Skype: %skype_id" }
 
   user:
+    id: user
     label: User Name
     color: darkgoldenrod
     pattern: '{user: %user_email}'
@@ -480,6 +502,7 @@ widget:
         - { field: default, text: "user: %user_email" }
 
   date:
+    id: date
     label: Date in Local Time
     color: royalblue
     pattern: '{date: %date_string}'
@@ -491,11 +514,13 @@ widget:
         - { field: default, text: "date: %date_string" }
 
   http:
+    id: http
     color: darkorange
     title: Relative HTTP link. Edit in Advanced mode.
     uneditable: true
 
   asis:
+    id: asis
     label: Unformatted
     color: darkslateblue
     pattern: '{{%asis_content}}'
@@ -509,6 +534,7 @@ widget:
         - { field: default, text: "unformatted: %asis_content" }
 
   asap:
+    id: asap
     label: Convoq Link
     color: cyan4
     pattern: 'asap:%asap_id'
@@ -524,31 +550,37 @@ widget:
     on_menu: false
 
   html:
+    id: html
     color: indianred
     title: Raw HTML section. Edit in advanced mode.
     uneditable: true
 
   sharepoint:
+    id: sharepoint
     color: red
     title: Sharepoint link. Edit in advanced mode.
     uneditable: true
 
   unknown:
+    id: unknown
     color: darkslategrey
     title: Unknown widget '$unknown_id'. Edit in advanced mode.
     uneditable: true
 
   irc:
+    id: irc
     color: darkorange
     title: IRC link. Edit in Advanced mode.
     uneditable: true
 
   https:
+    id: https
     color: darkorange
     title: HTTP relative link. Edit in Advanced mode.
     uneditable: true
 
   ftp:
+    id: ftp
     color: darkorange
     title: FTP link. Edit in Advanced mode.
     uneditable: true
@@ -569,7 +601,7 @@ fields:
   asap_id: Convoq name
   relative_url: Relative URL
   search_term: Search term
-  user_email: User's email
+  user_email: User\'s email
   date_string: YYYY-MM-DD&nbsp;HH:MM:SS
   asis_content: Unformatted content
   label: Link text

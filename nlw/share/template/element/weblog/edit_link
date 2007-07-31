@@ -4,7 +4,7 @@
 %]
 <div class="sidebar-box-content-edit-link">
   [% IF hub.checker.check_permission('edit_controls') AND NOT hub.checker.check_permission('edit') %]
-  <span class="edit-requires-login-label">Login +</span>
+  <span class="edit-requires-login-label">[% loc('Login +') %]</span>
   [% END %]
-  <a href="[% hub.weblog.page_edit_path %]#edit">edit</a>
+  <a href="[% hub.weblog.page_edit_path %]#edit">[% loc('edit') %]</a>
 </div>

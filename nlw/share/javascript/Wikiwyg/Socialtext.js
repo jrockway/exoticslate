@@ -82,6 +82,9 @@ function setup_wikiwyg() {
 
     if ( Wikiwyg.is_safari ) firstMode = WW_ADVANCED_MODE;
 
+    var clearRx = 
+        new RegExp("^" + loc("Replace this text with your own.") + "\\s*$");
+
     // Wikiwyg configuration
     var myConfig = {
         doubleClickToEdit: false,
@@ -96,7 +99,7 @@ function setup_wikiwyg() {
             editHeightAdjustment: 1.3
         },
         wikitext: {
-            clearRegex: /^Replace this text with your own.\s*$/,
+            clearRegex: clearRx,
             textareaId: 'st-page-editing-pagebody-decoy'
         },
         preview: {
@@ -142,7 +145,7 @@ function setup_wikiwyg() {
     // XXX Surely we could use plain HTML here
     Wikiwyg.Socialtext.loading_bar = document.createElement("div");
     Wikiwyg.Socialtext.loading_bar.innerHTML =
-        '<span style="color: red" id="loading-message">Loading...</span>';
+        '<span style="color: red" id="loading-message">' + loc('Loading...') + '</span>';
     Wikiwyg.Socialtext.loading_bar.style.display = 'none';
     Wikiwyg.Socialtext.edit_bar.parentNode.appendChild(Wikiwyg.Socialtext.loading_bar);
 
@@ -210,7 +213,7 @@ function setup_wikiwyg() {
         try {
             if (ww.contentIsModified()) {
                 // If it's not confirmed somewhere else, do it right here.
-                if (ww.confirmed != true && !confirm("If you click 'OK', all edit changes will be lost!"))
+                if (ww.confirmed != true && !confirm(loc("If you click 'OK', all edit changes will be lost!")))
                     return false;
             }
             if (Socialtext.new_page) {
@@ -262,7 +265,7 @@ function setup_wikiwyg() {
         wysiwyg_link.style.textDecoration = 'line-through';
         // XXX stopObserving
         wysiwyg_link.onclick = function() {
-            alert("Safari does not support simple mode editing");
+            alert(loc("Safari does not support simple mode editing"));
             return false;
         }
     }
@@ -288,7 +291,7 @@ function try_wikiwyg() {
     try {
         setup_wikiwyg();
     } catch(e) {
-        alert('Error: ' + e);
+        alert(loc('Error') + ': ' + e);
     }
 }
 
@@ -391,8 +394,8 @@ proto.resizeEditor = function () {
     this.modeByName(WW_ADVANCED_MODE).setHeightOfEditor();
 }
 
-proto.preview_link_text = 'Preview';
-proto.preview_link_more = 'Edit More';
+proto.preview_link_text = loc('Preview');
+proto.preview_link_more = loc('Edit More');
 
 proto.preview_link_action = function() {
     var preview = this.modeButtonMap[WW_PREVIEW_MODE];
@@ -546,14 +549,15 @@ proto.newpage_display_duplicate_dialog = function(page_name) {
 proto.newpage_save = function(page_name, pagename_editfield) {
     var saved = false;
     page_name = trim(page_name);
+
     if (page_name.length == 0) {
-        alert('You must specify a page name');
+        alert(loc('You must specify a page name'));
         if (pagename_editfield) {
             pagename_editfield.focus();
         }
     }
     else if (is_reserved_pagename(page_name)) {
-        alert('"' + page_name + '" is a reserved page name. Please use a different name');
+        alert(loc('"[_1]" is a reserved page name. Please use a different name', page_name));
         if (pagename_editfield) {
             pagename_editfield.focus();
         }
@@ -575,7 +579,7 @@ proto.newpage_save = function(page_name, pagename_editfield) {
 proto.saveContent = function() {
     Wikiwyg.Socialtext.edit_bar.style.display = 'none';
     Wikiwyg.Socialtext.loading_bar.innerHTML =
-        '<span style="color: red" id="saving-message">Saving...</span>';
+        '<span style="color: red" id="saving-message">' + loc('Saving...') + '</span>';
     Wikiwyg.Socialtext.loading_bar.style.display = 'block';
     this.saveChanges();
 }
@@ -608,7 +612,7 @@ proto.newpage_duplicate_ok = function() {
         }
     }
     if (!option) {
-        alert('You must select one of the options or click cancel');
+        alert(loc('You must select one of the options or click cancel'));
         return;
     }
     switch(option) {
@@ -693,6 +697,14 @@ proto.saveNewPage = function() {
             return this.newpage_saveClicked();
         }
         else  {
+
+            if (encodeURI(new_page_name.value).length > 255) {
+                alert(loc('Page title is too long after URL encoding'));
+                if (pagename_editfield) {
+                    pagename_editfield.focus();
+                }
+            }
+
             edit_page_name.value = new_page_name.value;
             this.saveContent();
         }
@@ -808,7 +820,7 @@ proto.saveChanges = function() {
 
 proto.confirmLinkFromEdit = function() {
     if (wikiwyg.contentIsModified()) {
-        var response = confirm("You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to stay on the current page.");
+        var response = confirm(loc("You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to stay on the current page."));
 
         // wikiwyg.confirmed is for the situations when multiple confirmations
         // are considered. It store the value of this confirmation for
@@ -831,8 +843,8 @@ proto.enableLinkConfirmations = function() {
     window.onunload = function() {
         if (wikiwyg.contentIsModified()) {
             var the_question = [
-                "You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes and stay on the current page.",
-                "You have unsaved changes. Do you want to save those changes? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes before navigating away from this page."
+                loc("You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes and stay on the current page."),
+                loc("You have unsaved changes. Do you want to save those changes? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes before navigating away from this page.")
             ];
             if (!confirm(the_question[Wikiwyg.is_safari ? 1 : 0])) {
                 wikiwyg.lastChance = true;
@@ -953,11 +965,11 @@ proto.enableFinished = function() {
 }
 
 var WW_ERROR_TABLE_SPEC_BAD =
-    "That doesn't appear to be a valid number.";
+    loc("That doesn't appear to be a valid number.");
 var WW_ERROR_TABLE_SPEC_TOO_BIG =
-    "That seems like a bit too large for a table.";
+    loc("That seems like a bit too large for a table.");
 var WW_ERROR_TABLE_SPEC_HAS_ZERO =
-    "Can't have a 0 for a size.";
+    loc("Can't have a 0 for a size.");
 proto.parse_input_as_table_spec = function(input) {
     var match = input.match(/^\s*(\d+)(?:\s*x\s*(\d+))?\s*$/i);
     if (match == null)
@@ -976,9 +988,18 @@ proto.parse_input_as_table_spec = function(input) {
 proto.prompt_for_table_dimensions = function() {
     var rows, columns;
     var errorText = '';
+    var promptTextMessageForRows = loc('Please enter the number of table rows:');
+    var promptTextMessageForColumns = loc('Please enter the number of table columns:');
+    
     while (!(rows && columns)) {
-        var promptText = 'Please enter the number of table ' +
-            (rows ? 'columns' : 'rows') + ':';
+        var promptText;
+
+        if(rows) {
+           promptText = promptTextMessageForColumns;
+        } else {
+           promptText = promptTextMessageForRows;
+        }
+
         if (errorText)
             promptText = errorText + "\n" + promptText;
         var answer = prompt(promptText, '3');
@@ -1013,15 +1034,66 @@ proto.controlLayout = [
 ];
 
 proto.controlLabels = {
-    www: 'External Link',
-    attach: 'Link to Attachment',
-    image: 'Include an Image',
-    unlink: 'Unlink'
+    attach: loc('Link to Attachment'),
+    bold: loc('Bold') + ' (Ctrl+b)',
+    cancel: loc('Cancel'),
+    h1: loc('Heading 1'),
+    h2: loc('Heading 2'),
+    h3: loc('Heading 3'),
+    h4: loc('Heading 4'),
+    h5: loc('Heading 5'),
+    h6: loc('Heading 6'),
+    help: loc('About Wikiwyg'),
+    hr: loc('Horizontal Rule'),
+    image: loc('Include an Image'),
+    indent: loc('More Indented'),
+    italic: loc('Italic') + '(Ctrl+i)',
+    label: loc('[Style]'),
+    link: loc('Create Link'),
+    ordered: loc('Numbered List'),
+    outdent: loc('Less Indented'),
+    p: loc('Normal Text'),
+    pre: loc('Preformatted'),
+    save: loc('Save'),
+    strike: loc('Strike Through') + '(Ctrl+d)',
+    table: loc('Create Table'),
+    underline: loc('Underline') + '(Ctrl+u)',
+    unlink: loc('Unlink'),
+    unordered: loc('Bulleted List'),
+    www: loc('External Link')
 };
 
 proto.resetModeSelector = function() {
     this.wikiwyg.disable_button(this.wikiwyg.first_mode.classname);
 }
+
+proto.add_styles = function() {
+    var options = this.config.styleSelector;
+    var labels = this.config.controlLabels;
+
+    this.styleSelect = document.createElement('select');
+    this.styleSelect.className = 'wikiwyg_selector';
+    if (this.config.selectorWidth)
+        this.styleSelect.style.width = this.config.selectorWidth;
+
+    for (var i = 0; i < options.length; i++) {
+        value = options[i];
+        var option = Wikiwyg.createElementWithAttrs(
+            'option', { 'value': value }
+        );
+        var labelValue = labels[value] || value;
+        var labelValue = labelValue.replace(/\\'/g, "'"); 
+        var text = loc(labelValue);
+        option.appendChild(document.createTextNode(text));
+        this.styleSelect.appendChild(option);
+    }
+    var self = this;
+    this.styleSelect.onchange = function() { 
+        self.set_style(this.value) 
+    };
+    this.div.appendChild(this.styleSelect);
+}
+
 
 /*==============================================================================
 Socialtext Wysiwyg subclass.
@@ -1036,18 +1108,14 @@ proto.fromHtml = function(html) {
 proto.show_messages = function(html) {
     var advanced_link = this.advanced_link_html();
     var message_titles = {
-        wiki:  'Advanced Content in Grey Border',
-        table: 'Table Edit Tip',
-        both:  'Table & Advanced Editing'
+        wiki:  loc('Advanced Content in Grey Border'),
+        table: loc('Table Edit Tip'),
+        both:  loc('Table & Advanced Editing')
     };
     var message_bodies = {
         wiki:
-            'Advanced content is shown inside a grey border. Switch to ' +
-            advanced_link +
-            ' to edit areas inside a grey border.',
-        table: 'Use ' +
-            advanced_link +
-            ' to change the number of rows and columns in a table.',
+            loc('Advanced content is shown inside a grey border. Switch to [_1] to edit areas inside a grey border.',advanced_link),
+        table: loc('Use [_1] to change the number of rows and columns in a table.', advanced_link),
         both: ''
     };
     message_bodies.both = message_bodies.table + ' ' + message_bodies.wiki;
@@ -1069,23 +1137,22 @@ proto.show_messages = function(html) {
 }
 
 proto.do_attach = function() {
-    this.wikiwyg.message.display(this.use_advanced_mode_message('Attachments'));
+    this.wikiwyg.message.display(this.use_advanced_mode_message(loc('Attachments')));
 }
 
 proto.do_image = function() {
-    this.wikiwyg.message.display(this.use_advanced_mode_message('Images'));
+    this.wikiwyg.message.display(this.use_advanced_mode_message(loc('Images')));
 }
 
 proto.use_advanced_mode_message = function(subject) {
     return {
-        title: 'Use Advanced Mode for ' + subject,
-        body: 'Switch to ' + this.advanced_link_html() +
-              ' to use this feature.'
+        title: loc('Use Advanced Mode for [_1]', subject),
+        body: loc('Switch to [_1] to use this feature.',  this.advanced_link_html()) 
     }
 }
 
 proto.advanced_link_html = function() {
-    return '<a onclick="wikiwyg.wikitext_link.onclick(); return false" href="#">Advanced Mode</a>';
+    return '<a onclick="wikiwyg.wikitext_link.onclick(); return false" href="#">' + loc('Advanced Mode') + '</a>';
 }
 
 proto.make_table_html = function(rows, columns) {
@@ -1109,7 +1176,7 @@ proto.do_table = function() {
 proto.do_www = function() {
     var selection = this.get_link_selection_text();
     if (! selection) return;
-    var url = prompt('Enter your destination url here:', 'http://');
+    var url = prompt(loc('Enter your destination url here:'), 'http://');
     if (url == null) return;
     this.exec_command('createlink', url);
 }
@@ -1120,6 +1187,16 @@ proto.setHeightOf = function (iframe) {
 
 proto.socialtext_wikiwyg_image = function(image_name) {
     return this.wikiwyg.config.toolbar.imagesLocation + image_name;
+}
+
+
+proto.get_link_selection_text = function() {
+    var selection = this.get_selection_text();
+    if (! selection) {
+        alert(loc("Please select the text you would like to turn into a link."));
+        return;
+    }
+    return selection;
 }
 
 /*==============================================================================

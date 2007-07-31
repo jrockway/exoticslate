@@ -1,6 +1,6 @@
 [%# @COPYRIGHT@ -%]
 [% WRAPPER authen/wrapper title = loc("Login") %]
-    <h3>Log in to Socialtext</h3>
+    <h3>[% loc('Log in to Socialtext') %]</h3>
 
     <script type="text/javascript">
     push_onload_function(function() {
@@ -22,21 +22,21 @@
      </div>
 
      <div class="label-value">
-      <label for="password">Password:</label>
+      <label for="password">[% loc('Password:') %]</label>
       <input id="password" name="password" type="password" size="30" value="" />
      </div>
 
      <div class="form-element">
       <input class="checkbox" name="remember" type="checkbox" id="remember" value="1" />
       <span class="description">
-       <label for="remember">Remember me on this computer.</label>
+       <label for="remember">[% loc('Remember me on this computer.') %]</label>
       </span>
      </div>
      <div class="form-element">
-      <input class="button" type="submit" id="login_btn" value="Log in" />
+      <input class="button" type="submit" value="[% loc('Log in') %]" />
      </div>
     </form>
-<p><a href="/nlw/forgot_password.html">I don't know my password.</a></p>
+<p><a href="/nlw/forgot_password.html">[% loc("I don't know my password.") %]</a></p>
 
 [% IF login_message %]
 <div id="login-message">[% login_message %]</div>

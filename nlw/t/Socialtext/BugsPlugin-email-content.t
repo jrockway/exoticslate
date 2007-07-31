@@ -14,9 +14,7 @@ BEGIN {
 }
 
 plan tests => 7;
-
-
-Socialtext::EmailSender->TestModeOn();
+$Socialtext::EmailSender::Base::SendClass = 'Test';
 
 my $hub    = new_hub('admin');
 my $bugs   = $hub->bugs;

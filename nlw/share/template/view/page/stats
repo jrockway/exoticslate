@@ -6,28 +6,28 @@
 <div id="st-usagereport-navbar">[ <a href="index.cgi?[% page_id %]">Return to page</a> ] [ <a href="index.cgi?action=page_stats_index;page_id=[% page_id %]">Report Index</a> ]</div>
 <div id="st-usagereport-date"><h2>Report for [% display_date %]</h2></div>
   <table class="standard-table page-stats-content">
-   <caption>Summary</caption>
+   <caption>[% loc("Summary") %]</caption>
    <thead>
     <tr>
-     <th>Type</th>
-     <th>Total</th>
+     <th>[% loc("Type") %]</th>
+     <th>[% loc("Total") %]</th>
     </tr>
    </thead>
    <tbody>
     <tr class="odd">
-     <td>Views</td>
+     <td>[% loc("Views") %]</td>
      <td>[% summary_stats.DISPLAY_PAGE %]</td>
     </tr>
     <tr class="even">
-     <td>Edits</td>
+     <td>[% loc("Edits") %]</td>
      <td>[% summary_stats.EDIT_PAGE %]</td>
     </tr>
     <tr class="odd">
-     <td>Uploads</td>
+     <td>[% loc("Uploads") %]</td>
      <td>[% summary_stats.UPLOAD_ATTACHMENT %]</td>
     </tr>
     <tr class="even">
-     <td>Downloads</td>
+     <td>[% loc("Downloads") %]</td>
      <td>[% summary_stats.DOWNLOAD_ATTACHMENT %]</td>
     </tr>
    </tbody>
@@ -52,7 +52,7 @@
        total  = summary_stats.UPLOAD_ATTACHMENT
      %]
   [% ELSE %]
-    <p>No uploads.</p>
+    <p>[% loc("No uploads.") %]</p>
   [% END %]
 
   [% IF attachment_downloads.size %]
@@ -62,7 +62,7 @@
        total  = summary_stats.DOWNLOAD_ATTACHMENT
      %]
   [% ELSE %]
-    <p>No downloads.</p>
+    <p>[% loc("No downloads.") %]</p>
   [% END %]
 
 [% ELSE %]

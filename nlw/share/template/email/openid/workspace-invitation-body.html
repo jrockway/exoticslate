@@ -4,30 +4,32 @@
 [% extra_text -%]
 [% END %]
 
+[% SET escaped_str_1 =  workspace_title | html %]
+[% SET escaped_str_2 =  workspace_uri | html %]
+[% SET escaped_str_3 =  username | html %]
 <p>
-Hi,
+[% loc('Hi,') %]
 </p>
 
 <p>
-I'm inviting you to join [% workspace_title | html %], one of our
-shared workspaces.
+[% loc("I'm inviting you to join [_1], one of our shared workspaces.",  escaped_str_1) %]
 
 [% UNLESS requires_confirmation %]
-Sign in using the information below:
+[% loc('Sign in using the information below:') %]
 <p>
-web address: <a href="[% workspace_uri | html %]">[% workspace_uri | html %]</a><br />
-username: [% username | html %]
+[% loc('web address:') %] <a href="[% escaped_str_2 %]">[% escaped_str_2 %]</a><br />
+[% loc('username:') %] [% escaped_str_3 %]
 </p>
 
-You can sign into our system using OpenID.  On the Socialtext login screen, please input your OpenID into the indicated field and you will be redirected to the OpenID site to verify your identity.  Once you have verified your identity, you will be sent back to the Socialtext site and be able to access the workspace.
+[% loc('You can sign into our system using OpenID. On the Socialtext login screen, please input your OpenID into the indicated field and you will be redirected to the OpenID site to verify your identity. Once you have verified your identity, you will be sent back to the Socialtext site and be able to access the workspace.') %]
 
 <p>
-You may want to keep this email for future reference.
+[% loc('You may want to keep this email for future reference.') %]
 </p>
 [% END %]
 
 <p>
-Thanks,
+[% loc('Thanks,') %]
 </p>
 
 <p>

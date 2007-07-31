@@ -1,5 +1,5 @@
 #!/bin/sh
 set -e
 
-TARBALL=$(st-build-setting sharedir)/doc-pages/help/help.tar.gz
-st-run-as-web-user st-create-help-workspace $TARBALL
+SHAREDIR=`dirname $0`/../l10n/help/
+st-run-as-web-user st-create-help-workspaces $SHAREDIR

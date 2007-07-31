@@ -2,7 +2,7 @@ fixtures:
   - alzabo
 
 workspaces:
-    help: { }
+    "help-en": { }
 
 cache:
   - WORKSPACES

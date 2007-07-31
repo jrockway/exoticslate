@@ -1,15 +1,4991 @@
-#: share/template/view/homepage:9
-#. (user.username.replace('\s+$', '')
-msgid "Welcome, %1."
-msgstr "Tere Tulemast, %1."
+msgid ""
+msgstr ""
+"Project-Id-Version: Socialtext i18n\n"
+"PO-Revision-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: Socialtext i18n team\n"
+"Last-Translator: Socialtext i18n team\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 
-#: lib/Socialtext/CLI.pm:420
-#. ($user->username, $new_locale)
+#: lib/Socialtext/SearchPlugin.pm:94
+#. (
+msgid "%1 - Atom Search for %2"
+msgstr ""
+
+#: lib/Socialtext/SearchPlugin.pm:87
+#. (
+msgid "%1 - RSS Search for %2"
+msgstr ""
+
+#: lib/Socialtext/WeblogPlugin.pm:112
+#. (
+msgid "%1 Weblog"
+msgstr ""
+
+#: share/template/view/category_display:32
+#. (
+msgid "%1 as a weblog"
+msgstr ""
+
+#: lib/Socialtext/User/Default.pm:171
+#. (
+msgid "%1 is a required field."
+msgstr ""
+
+#: lib/Socialtext/User/Default.pm:178
+#. (
+msgid "%1 is not a valid email address."
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:167 lib/Socialtext/Handler/Authen.pm:339
+#. (
+msgid "%1 is not registered as a user. Try a different email address?"
+msgstr ""
+
+#: share/template/email/openid/invite-request-email.html:10 share/template/email/openid/invite-request-email.txt:3 share/template/email/st/invite-request-email.html:10 share/template/email/st/invite-request-email.txt:3
+#. (
+msgid "%1 would like to ask you to invite new users into the %2 workspace:"
+msgstr ""
+
+#: lib/Socialtext/FavoritesPlugin.pm:31
+#. (
+msgid "%1's Notepad"
+msgstr ""
+
+#: lib/Socialtext/SyndicatePlugin.pm:305
+#. (
+msgid "%1: search for %2"
+msgstr ""
+
+#: lib/Socialtext/SyndicatePlugin.pm:312
+#. (
+msgid "%1: watchlist for %2"
+msgstr ""
+
+#: share/template/element/page/details:38 share/template/view/page/display:75
+#. (
+msgid "%quant(%1,revision)"
+msgstr ""
+
+#: share/template/element/page/details:33 share/template/element/page/details:35
+#. (
+msgid "%quant(%1,view)"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:432
+#. (
+msgid "'%1' is a reserved workspace name and cannot be used."
+msgstr ""
+
+#: lib/Socialtext/CLI.pm:438
+#. (
+msgid "'%1' is not a valid locale"
+msgstr ""
+
+#: share/template/authen/register.html:26 share/template/authen/register.html:31
+#.  
+msgid "(Optional)"
+msgstr ""
+
+#: share/template/email/recent-changes.html:32 share/template/email/recent-changes.txt:15 share/template/email/watchlist.html:32 share/template/email/watchlist.txt:15
+#. (
+msgid "(by %1 on %2)"
+msgstr ""
+
+#: share/console-template/template/help.html:8
+#.  
+msgid "(contact <a href=\"mailto:support@socialtext.com\">Socialtext Support</a> if you need access)"
+msgstr ""
+
+#: share/console-template/template/setup.html:33
+#.  
+msgid "(leave blank to use appliance's built-in SMTP server)"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:33
+#.  
+msgid "+0000 UTC/GMT, Western European"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:34
+#.  
+msgid "+0100 Central European"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:35
+#.  
+msgid "+0200 Eastern European"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:36
+#.  
+msgid "+0300 Baghdad"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:37
+#.  
+msgid "+0330 Iran"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:38
+#.  
+msgid "+0400 Delta/USSR Zone 3"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:39
+#.  
+msgid "+0500 Echo/USSR Zone 4"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:40
+#.  
+msgid "+0530 Indian"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:41
+#.  
+msgid "+0600 Foxtrot/USSR Zone 5"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:42
+#.  
+msgid "+0700 Golf/USSR Zone 6"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:43
+#.  
+msgid "+0800 Western Australian, China Coast"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:44
+#.  
+msgid "+0900 Japan, Korean"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:45
+#.  
+msgid "+0930 Central Australian"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:46
+#.  
+msgid "+1000 Eastern Australian, Guam"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:47
+#.  
+msgid "+1100 Lima"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:48
+#.  
+msgid "+1200 International Date Line East"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:49
+#.  
+msgid "+1200 New Zealand"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:32
+#.  
+msgid "-0100 West Africa"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:31
+#.  
+msgid "-0200 Oscar"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:30
+#.  
+msgid "-0300 Greenland"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:29
+#.  
+msgid "-0330 Newfoundland"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:28
+#.  
+msgid "-0400 Atlantic"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:27
+#.  
+msgid "-0500 Eastern (Americas)"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:26
+#.  
+msgid "-0600 Central (Americas)"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:25
+#.  
+msgid "-0700 Mountain"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:24
+#.  
+msgid "-0800 Pacific"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:23
+#.  
+msgid "-0900 Yukon"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:22
+#.  
+msgid "-1000 Hawaii, Central Alaska"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:21
+#.  
+msgid "-1100 Nome"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:20
+#.  
+msgid "-1200 International Date Line West"
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:108 share/template/element/settings/users_invite_section:62
+#.  
+msgid "<Your personal message goes here.>"
+msgstr ""
+
+#: share/template/view/refcard:207
+#.  
+msgid "<a href=\"./proposal.pdf\">proposal.pdf</a> on <u>page name</u>"
+msgstr ""
+
+#: share/template/view/refcard:202
+#.  
+msgid "<a href=\"./proposal.pdf\">proposal.pdf</a> on this page"
+msgstr ""
+
+#: share/template/workspaces_created_section.html:14
+#. (
+msgid "<a href=\"/%1/?action=users_invitation\">Invite</a> other people to %2."
+msgstr ""
+
+#: share/template/workspaces_created_section.html:13
+#. (
+msgid "<a href=\"/%1/\">Go to</a> the %2 home page."
+msgstr ""
+
+#: share/template/view/homepage:12
+#.  
+msgid "<a href=\"?action=users_invitation\">Invite your colleagues<b></b></a> to this workspace."
+msgstr ""
+
+#: lib/Socialtext/FavoritesPlugin.pm:25
+#.  
+msgid "<p>This is where you set the title of the page you would like to see in the \"Your Notepad\" panel.</p><p>Some choose to use an existing page, and others make a new page, such as \"Rupert Jee's Notepad\".</p>"
+msgstr ""
+
+#: share/template/view/refcard:107
+#.  
+msgid "<u>Link to section</u> in the same page"
+msgstr ""
+
+#: share/template/view/refcard:112
+#.  
+msgid "<u>Link to section</u> of a different page"
+msgstr ""
+
+#: share/template/view/refcard:117
+#.  
+msgid "<u>Link to section</u> of a page in another workspace"
+msgstr ""
+
+#: share/template/view/refcard:97
+#.  
+msgid "<u>Page Link</u> to different-workspace"
+msgstr ""
+
+#: share/template/element/settings/users_settings_section:30
+#.  
+msgid "A dialog box will pop up after your password is changed."
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:14
+#.  
+msgid "A filter has been set on this workspace. All candidate email addresses must match this pattern:"
+msgstr ""
+
+#: share/template/element/settings/users_invite_section:14
+#. (
+msgid "A filter has been set on this workspace. All candidate email addresses must match this pattern: <span style=\"color: red\"> %1 </span>"
+msgstr ""
+
+#: lib/Socialtext/EditPlugin.pm:149
+#.  
+msgid "A page must have a body to be saved."
+msgstr ""
+
+#: lib/Socialtext/EditPlugin.pm:143
+#.  
+msgid "A page must have a title to be saved."
+msgstr ""
+
+#: lib/Socialtext/User/Default.pm:187
+#.  
+msgid "A password is required to create a new user."
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:199
+#. (
+msgid "A user with this email address (%1) already exists."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:57 share/javascript/widget_resource.js:57
+#. (
+msgid "AIM: %1"
+msgstr ""
+
+#: share/template/view/refcard:228
+#.  
+msgid "AOL user aim:aimuser presence"
+msgstr ""
+
+#: share/template/view/refcard:227
+#.  
+msgid "AOL user aimuser presence"
+msgstr ""
+
+#: share/template/view/homepage:93
+#.  
+msgid "Access a Community of Peers"
+msgstr ""
+
+#: lib/Socialtext/Account.pm:58
+#.  
+msgid "Account name is a required field."
+msgstr ""
+
+#: lib/Socialtext/Appliance/UsageStats.pm:136 lib/Socialtext/Appliance/UsageStats.pm:155 lib/Socialtext/Appliance/UserReport.pm:124 lib/Socialtext/Appliance/UserReport.pm:143
+#. (
+msgid "Active user count for %1: %2"
+msgstr ""
+
+#: lib/Socialtext/Appliance/UsageStats.pm:137 lib/Socialtext/Appliance/UserReport.pm:125
+#.  
+msgid "Active?"
+msgstr ""
+
+#: share/template/popup/email_page:129 share/template/popup/email_page:137
+#.  
+msgid "Add"
+msgstr ""
+
+#: share/console-template/template/setup.html:53
+#.  
+msgid "Add Administrator"
+msgstr ""
+
+#: share/template/popup/email_page:133
+#.  
+msgid "Add All"
+msgstr ""
+
+#: share/console-template/template/setup.html:49
+#.  
+msgid "Add Appliance Administrators"
+msgstr ""
+
+#: share/template/comment_popup.html:51
+#. (
+msgid "Add Comment to %1"
+msgstr ""
+
+#: share/template/element/page/tag_queue_interface:7
+#.  
+msgid "Add Tags"
+msgstr ""
+
+#: share/template/element/page/attachment_queue_interface:20
+#.  
+msgid "Add a link to the attachment at the top of the page? Images will appear in the page when the page is saved."
+msgstr ""
+
+#: share/template/element/page/attachment_attach_interface:22
+#.  
+msgid "Add a link to the attachment at the top of the page? Images will appear in the page."
+msgstr ""
+
+#: share/javascript/attachqueue.js:214 share/template/element/page/attachment_queue_interface:32
+#.  
+msgid "Add file"
+msgstr ""
+
+#: share/javascript/tagqueue.js:196 share/template/element/page/tags:14
+#.  
+msgid "Add tag"
+msgstr ""
+
+#: share/template/popup/email_page:73
+#.  
+msgid "Add this note at the front of the email? (You can customize the note below.)"
+msgstr ""
+
+#: share/template/element/page/tag_queue_interface:15
+#.  
+msgid "Add&nbsp;tag"
+msgstr ""
+
+#: share/template/layout/html:111
+#.  
+msgid "Add&nbsp;tags"
+msgstr ""
+
+#: share/template/popup/email_page:116
+#.  
+msgid "Additional Recipient"
+msgstr ""
+
+#: share/template/element/settings/users_listall_section:8
+#.  
+msgid "Admin"
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:117 share/template/element/settings/users_invite_section:71
+#.  
+msgid "Administrator Notification"
+msgstr ""
+
+#: share/template/element/page/edit:10
+#.  
+msgid "Advanced"
+msgstr ""
+
+#: share/template/element/listview/actionbar:12
+#.  
+msgid "All Files"
+msgstr ""
+
+#: share/template/view/attachmentslist:7
+#. (
+msgid "All Files in %1"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:171 share/template/element/listview/actionbar:10
+#.  
+msgid "All Pages"
+msgstr ""
+
+#: share/template/lite/changes/changes.html:16
+#. (
+msgid "All Pages in %1"
+msgstr ""
+
+#: share/template/element/page/revision_compare_actions:15 share/template/view/page_revision_list:3
+#.  
+msgid "All Revisions"
+msgstr ""
+
+#: share/template/element/listview/actionbar:11
+#.  
+msgid "All Tags"
+msgstr ""
+
+#: share/template/view/taglistview:6
+#. (
+msgid "All Tags in %1"
+msgstr ""
+
+#: lib/Socialtext/CategoryPlugin.pm:81
+#.  
+msgid "All Tags in Workspace"
+msgstr ""
+
+#: lib/Socialtext/BacklinksPlugin.pm:73
+#. (
+msgid "All backlinks for \"%1\""
+msgstr ""
+
+#: share/template/element/wiki/subnav-dashboard:14
+#.  
+msgid "All files"
+msgstr ""
+
+#: share/template/element/wiki/subnav-dashboard:10
+#.  
+msgid "All pages"
+msgstr ""
+
+#: share/template/element/wiki/subnav-dashboard:12
+#.  
+msgid "All tags"
+msgstr ""
+
+#: share/template/element/page/revision_view_actions:16
+#.  
+msgid "All&nbsp;Revisions"
+msgstr ""
+
+#: share/template/email/workspace-invitation.html:5
+#. (
+msgid "An Invitation to join %1"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:393
+#.  
+msgid "An account must be specified for all new workspaces."
+msgstr ""
+
+#: share/template/bugs_content.html:17
+#.  
+msgid "An application error has occurred in the Socialtext Workspace system."
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:250
+#. (
+msgid "An email confirming your registration has been sent to %1."
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:175
+#. (
+msgid "An email with instructions on changing your password has been sent to %1."
+msgstr ""
+
+#: lib/Socialtext/WikiwygPlugin.pm:573 lib/Socialtext/WikiwygPlugin.pm:723
+#. (
+msgid "An invalid page ID was given: %1"
+msgstr ""
+
+#: share/template/element/settings/users_invite_section:40
+#.  
+msgid "And don't worry about breaking anything - previous versions of the page are saved, so there's always a backup copy of the page you're working on."
+msgstr ""
+
+#: lib/Socialtext/HomepagePlugin.pm:65 share/template/view/homepage:58
+#.  
+msgid "Announcements and Links"
+msgstr ""
+
+#: lib/Socialtext/WorkspacesUIPlugin.pm:337
+#. (
+msgid "Anyone can send email to %1."
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:108
+#.  
+msgid "Anyone can send email to this workspace."
+msgstr ""
+
+#: share/console-template/template/setup.html:21
+#.  
+msgid "Apache Logs"
+msgstr ""
+
+#: share/console-template/template/setup.html:23
+#.  
+msgid "Apache error log"
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:120 share/template/element/settings/users_invite_section:74
+#.  
+msgid "Append the extra text below?"
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:79 share/template/element/settings/users_invite_section:35
+#.  
+msgid "Append the personal message below?"
+msgstr ""
+
+#: share/template/element/page/newpage_duplicate:11
+#.  
+msgid "Append your text to the bottom of the existing page named:"
+msgstr ""
+
+#: share/console-template/template/console_wrapper.tmpl:60
+#.  
+msgid "Appliance Console"
+msgstr ""
+
+#: share/console-template/template/help.html:6
+#.  
+msgid "Appliance Documentation"
+msgstr ""
+
+#: share/console-template/template/help.html:7
+#.  
+msgid "Appliance Manual Workspace"
+msgstr ""
+
+#: share/console-template/template/form.tmpl:6
+#.  
+msgid "Appliance clock when this screen was generated:"
+msgstr ""
+
+#: share/template/bugs_content.html:5
+#.  
+msgid "Application Error"
+msgstr ""
+
+#: share/template/bugs_dump.html:5
+#.  
+msgid "Application Error Bug Dump"
+msgstr ""
+
+#: lib/Socialtext/BugsPlugin.pm:121
+#. (
+msgid "Application error for %1 on %2: %3"
+msgstr ""
+
+#: lib/Socialtext/BugsPlugin.pm:115
+#. (
+msgid "Application error in %1 for %2 on %3: %4"
+msgstr ""
+
+#: lib/Socialtext/BugsPlugin.pm:118
+#. (
+msgid "Application error in %1 on %2: %3"
+msgstr ""
+
+#: lib/Socialtext/BugsPlugin.pm:123
+#. (
+msgid "Application error on %1: %2"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:240
+#.  
+msgid "Archive Directory"
+msgstr ""
+
+#: share/template/view/homepage:97
+#. (
+msgid "As a Socialtext customer, you have access to the %1."
+msgstr ""
+
+#: share/template/search_help_field.html:29
+#.  
+msgid "As we continue to develop the search system, the options you will have and the interface you have to make use of them will improve."
+msgstr ""
+
+#: lib/Socialtext/AttachmentsUIPlugin.pm:62
+#.  
+msgid "Attachment not found. The page name, file name or identifer number in the link may be incorrect, or the attachment may have been deleted or is not present in this workspace."
+msgstr ""
+
+#: share/javascript/Wikiwyg/Socialtext.js:1139 share/template/element/page/attachments:3
+#.  
+msgid "Attachments"
+msgstr ""
+
+#: share/template/lite/page/display.html:10
+#.  
+msgid "Attachments for this page:"
+msgstr ""
+
+#: share/template/element/page/attachment_manage_interface:13
+#.  
+msgid "Author"
+msgstr ""
+
+#: share/console-template/template/backup.html:39
+#.  
+msgid "Automatic Backup Schedule"
+msgstr ""
+
+#: share/template/view/page/stats_index:7
+#.  
+msgid "Available Reports"
+msgstr ""
+
+#: share/template/element/page/revision_compare_actions:8 share/template/element/page/revision_list_actions:7
+#.  
+msgid "Back To Current Revision"
+msgstr ""
+
+#: share/template/authen/forgot_password.html:36
+#. (
+msgid "Back to <a href=\"%1\">Log in to Socialtext</a>."
+msgstr ""
+
+#: share/console-template/template/console_wrapper.tmpl:39
+#.  
+msgid "Backup"
+msgstr ""
+
+#: share/console-template/template/backup.html:94
+#.  
+msgid "Backup Destination"
+msgstr ""
+
+#: share/console-template/template/backup.html:11
+#.  
+msgid "Backup Now"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:233
+#.  
+msgid "Backup Server name"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:84
+#.  
+msgid "Backup already running"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:219
+#.  
+msgid "Backup destination updated"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:46
+#. (
+msgid "Backup is in progress - started at %1"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:44
+#.  
+msgid "Backup is in progress - started at never"
+msgstr ""
+
+#: share/template/email/st/workspace-invitation-body.html:37 share/template/email/st/workspace-invitation.txt:17
+#. (
+msgid "Because you already have %1 %2 account, the password is the same as the password you use for your other %3 workspaces."
+msgstr ""
+
+#: share/template/view/refcard:232
+#.  
+msgid "Block of HTML"
+msgstr ""
+
+#: share/template/view/refcard:237
+#.  
+msgid "Block of text with no *special* punctuation"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:22
+#.  
+msgid "Bottom of page"
+msgstr ""
+
+#: share/template/email/standard-footer.html:12 share/template/email/standard-footer.txt:5
+#.  
+msgid "Brought to you by Socialtext."
+msgstr ""
+
+#: lib/Socialtext/BugsPlugin.pm:44
+#.  
+msgid "Bug Dump"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:29 share/javascript/widget_resource.js:29
+#. (
+msgid "Call '%1' using Convoq. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:25 share/javascript/widget_resource.js:25
+#. (
+msgid "Call '%1' using Skype. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/UserSettingsPlugin.pm:229
+#.  
+msgid "Can't remove privileges of the last admin"
+msgstr ""
+
+#: share/console-template/template/popup.html:48 share/javascript/Wikiwyg/Jemplate.js:22 share/javascript/Wikiwyg/Socialtext.js:1038 share/template/comment_popup.html:39 share/template/element/page/edit:8 share/template/element/page/newpage_duplicate:15 share/template/element/page/newpage_save:18 share/template/popup/email_page:90 share/template/standard_buttons:3
+#.  
+msgid "Cancel"
+msgstr ""
+
+#: share/template/lite/header.html:14
+#.  
+msgid "Cancel Edit"
+msgstr ""
+
+#: lib/Socialtext/DeletePagePlugin.pm:45
+#.  
+msgid "Cannot undelete a page with only one revision. Returning to front page."
+msgstr ""
+
+#: lib/Socialtext/Appliance/UsageStats.pm:134
+#.  
+msgid "Category: usage report blog - detailed"
+msgstr ""
+
+#: lib/Socialtext/Appliance/UsageStats.pm:153
+#.  
+msgid "Category: usage report blog - summary"
+msgstr ""
+
+#: lib/Socialtext/Appliance/UserReport.pm:139
+#.  
+msgid "Category: usage report blog - summary\n\n"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_appearance_section:66 share/template/view/homepage:30
+#.  
+msgid "Central page"
+msgstr ""
+
+#: share/template/element/settings/users_settings_section:24
+#.  
+msgid "Change Password"
+msgstr ""
+
+#: lib/Socialtext/UserSettingsPlugin.pm:103 lib/Socialtext/UserSettingsPlugin.pm:232 lib/Socialtext/WorkspacesUIPlugin.pm:67
+#.  
+msgid "Changes Saved"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:177
+#. (
+msgid "Changes in %1"
+msgstr ""
+
+#: lib/Socialtext/WorkspacesUIPlugin.pm:142
+#.  
+msgid "Changes saved"
+msgstr ""
+
+#: share/template/element/settings/users_settings_section:42
+#. (
+msgid "Check with your %1 administrator."
+msgstr ""
+
+#: share/template/authen/choose_password.html:2
+#.  
+msgid "Choose Password"
+msgstr ""
+
+#: share/template/authen/choose_password.html:27
+#.  
+msgid "Choose Password:"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:58
+#.  
+msgid "Chronologically (Oldest First)"
+msgstr ""
+
+#: share/template/new_form_page/new_form_page_buttons.html:8
+#.  
+msgid "Clear"
+msgstr ""
+
+#: share/template/lite/page/contention.html:6
+#. (
+msgid "Click <a href=\"%1\">here</a> to go to the latest version of the page."
+msgstr ""
+
+#: share/template/element/page/attachment_queue_interface:9
+#.  
+msgid "Click \"Browse\" to find the file you want to upload. When you click \"Add file\" this file will be added to the list of attachments for this page, and uploaded when you save the page."
+msgstr ""
+
+#: share/template/element/page/attachment_attach_interface:12
+#.  
+msgid "Click \"Browse\" to find the file you want to upload. When you click \"Upload file\" your file will be uploaded and added to the list of attachments for this page."
+msgstr ""
+
+#: share/template/view/edit_contention:4
+#.  
+msgid "Click here to go to the latest version of the page."
+msgstr ""
+
+#: share/template/element/page/actions:16
+#.  
+msgid "Click this button to add a comment to the page"
+msgstr ""
+
+#: share/template/element/page/attachments:14
+#.  
+msgid "Click this button to add a file to the page"
+msgstr ""
+
+#: share/template/element/page/tags:14 share/template/layout/html:111
+#.  
+msgid "Click this button to add a tag to the page"
+msgstr ""
+
+#: share/template/element/page/tag_queue_interface:15
+#.  
+msgid "Click this button to add your tag"
+msgstr ""
+
+#: share/template/element/page/edit:8
+#.  
+msgid "Click this button to cancel editing and discard your changes"
+msgstr ""
+
+#: share/template/view/weblog:142
+#.  
+msgid "Click this button to create a new blog post"
+msgstr ""
+
+#: share/template/view/homepage:115
+#.  
+msgid "Click this button to create a new page"
+msgstr ""
+
+#: share/template/view/homepage:138
+#.  
+msgid "Click this button to create a new workspace"
+msgstr ""
+
+#: share/template/element/page/actions:5 share/template/element/page/actions:7
+#.  
+msgid "Click this button to edit the page"
+msgstr ""
+
+#: share/template/element/page/attachments:17
+#.  
+msgid "Click this button to manage files attached to the page"
+msgstr ""
+
+#: share/template/element/wiki/nav:18
+#.  
+msgid "Click this button to perform your search"
+msgstr ""
+
+#: share/template/element/page/edit:7
+#.  
+msgid "Click this button to preview your page before saving it"
+msgstr ""
+
+#: lib/Socialtext/BreadCrumbsPlugin.pm:79
+#.  
+msgid "Click this button to save recently viewed pages to your computer for offline use."
+msgstr ""
+
+#: lib/Socialtext/HomepagePlugin.pm:57 lib/Socialtext/RecentChangesPlugin.pm:111
+#. (
+msgid "Click this button to save the %1 most recent pages to your computer for offline use."
+msgstr ""
+
+#: lib/Socialtext/SearchPlugin.pm:69
+#.  
+msgid "Click this button to save the pages from this search to your computer for offline use"
+msgstr ""
+
+#: lib/Socialtext/CategoryPlugin.pm:149
+#. (
+msgid "Click this button to save the pages with the tag %1 to your computer for offline use."
+msgstr ""
+
+#: lib/Socialtext/WatchlistPlugin.pm:207
+#.  
+msgid "Click this button to save the pages you're watching for offline use."
+msgstr ""
+
+#: share/template/view/weblog:18
+#.  
+msgid "Click this button to save the posts in this weblog to your computer for offline use."
+msgstr ""
+
+#: share/template/element/page/details:49
+#.  
+msgid "Click this button to save this page to your computer for offline use."
+msgstr ""
+
+#: share/template/element/page/edit:6
+#.  
+msgid "Click this button to save your page"
+msgstr ""
+
+#: share/template/element/page/tags:18
+#.  
+msgid "Click this button to save your tag"
+msgstr ""
+
+#: share/template/layout/html:108
+#.  
+msgid "Click this button to upload a file to the page"
+msgstr ""
+
+#: share/template/view/page/display:69 share/template/view/page/display:75
+#.  
+msgid "Click to view previous versions of this page."
+msgstr ""
+
+#: share/console-template/template/popup.html:32 share/template/element/page/attachment_manage_interface:23
+#.  
+msgid "Close"
+msgstr ""
+
+#: share/template/element/page/revision_compare_actions:29
+#.  
+msgid "Color View (Unformatted)"
+msgstr ""
+
+#: share/template/element/page/actions:16
+#.  
+msgid "Comment"
+msgstr ""
+
+#: share/template/view/page_revision_list:34
+#.  
+msgid "Compare Revisions"
+msgstr ""
+
+#: lib/Socialtext/RevisionPlugin.pm:110
+#. (
+msgid "Compare Revisions %1 and %2"
+msgstr ""
+
+#: share/template/workspaces_created_section.html:7
+#. (
+msgid "Congratulations! You have just created \"%1\", a brand new Socialtext Workspace. You are the administrator. The web address of the new workspace is %2."
+msgstr ""
+
+#: share/console-template/template/help.html:10
+#.  
+msgid "Contact Socialtext Support"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:63 share/javascript/widget_resource.js:63
+#. (
+msgid "Convoq: %1"
+msgstr ""
+
+#: share/template/popup/copy_to_workspace:36
+#.  
+msgid "Copy"
+msgstr ""
+
+#: share/template/popup/copy_to_workspace:8
+#. (
+msgid "Copy '%1' to another workspace"
+msgstr ""
+
+#: share/template/element/page/actions:41
+#.  
+msgid "Copy Page to Workspace"
+msgstr ""
+
+#: share/template/popup/copy_to_workspace:15
+#. (
+msgid "Copy the page %1 to another workspace?"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:269
+#.  
+msgid "Could not read/write to share"
+msgstr ""
+
+#: share/template/element/settings/weblog_create:2 share/template/element/settings/workspaces_create_section:2
+#.  
+msgid "Create"
+msgstr ""
+
+#: share/template/element/settings/weblog_create:6
+#.  
+msgid "Create A Weblog"
+msgstr ""
+
+#: share/console-template/template/setup.html:57 share/console-template/template/setup.html:60
+#.  
+msgid "Create Initial Workspace"
+msgstr ""
+
+#: lib/Socialtext/WeblogPlugin.pm:71 share/template/element/settings/select:43
+#.  
+msgid "Create New Weblog"
+msgstr ""
+
+#: share/template/element/settings/select:25
+#.  
+msgid "Create New Workspace"
+msgstr ""
+
+#: share/template/element/listview/actions:6
+#.  
+msgid "Create PDF document from checked pages"
+msgstr ""
+
+#: share/template/element/listview/actions:8
+#.  
+msgid "Create Word document from checked pages"
+msgstr ""
+
+#: lib/Socialtext/NewFormPagePlugin.pm:33
+#.  
+msgid "Create Your Profile"
+msgstr ""
+
+#: share/template/element/page/details:6
+#. (
+msgid "Created by %1 on %2."
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:325
+#. (
+msgid "Creating backup tarball (%1) ..."
+msgstr ""
+
+#: share/template/view/page/stats_index:6
+#.  
+msgid "Current Report"
+msgstr ""
+
+#: share/template/element/settings/users_settings_section:34
+#.  
+msgid "Current password"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:88
+#.  
+msgid "Custom privacy setting"
+msgstr ""
+
+#: lib/Socialtext/HomepagePlugin.pm:48 share/template/element/settings/workspaces_settings_appearance_section:59 share/template/element/wiki/subnav-default:5 share/template/element/wiki/subnav-listview:5 share/template/element/wiki/subnav-weblog:5
+#.  
+msgid "Dashboard"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_appearance_section:52
+#.  
+msgid "Dashboard is best if most users have a number of other workspaces. Central page is best for a close-knit community in which most users only have one workspace."
+msgstr ""
+
+#: share/template/view/homepage:19
+#. (
+msgid "Dashboard: %1"
+msgstr ""
+
+#: share/template/element/listview/pages:82 share/template/view/page_revision_list:47
+#.  
+msgid "Date"
+msgstr ""
+
+#: share/template/element/page/attachment_manage_interface:14 share/template/view/attachmentslist:20
+#.  
+msgid "Date Uploaded"
+msgstr ""
+
+#: lib/Socialtext/EmailReceiver/Base.pm:710
+#.  
+msgid "Date:"
+msgstr ""
+
+#: share/template/element/page/actions:38
+#.  
+msgid "Delete Page"
+msgstr ""
+
+#: share/template/view/attachmentslist:43
+#.  
+msgid "Delete Selected Attachments"
+msgstr ""
+
+#: share/template/element/page/attachment_manage_interface:26
+#.  
+msgid "Delete Selected Files"
+msgstr ""
+
+#: lib/Socialtext/DeletePagePlugin.pm:68
+#. (
+msgid "Deleted \"%1\""
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:285
+#. (
+msgid "Did not get %1"
+msgstr ""
+
+#: share/template/view/page/delete_epilogue:6
+#.  
+msgid "Did you delete this page in error? If so, you can restore the page."
+msgstr ""
+
+#: share/template/view/homepage:89
+#.  
+msgid "Did you know?"
+msgstr ""
+
+#: share/console-template/template/overview.html:12
+#.  
+msgid "Disk Usage"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:27 share/javascript/widget_resource.js:27
+#. (
+msgid "Display '%1' in reader's time zone. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/BreadCrumbsPlugin.pm:33
+#. (
+msgid "Display \\\"%1\\\" side pane box?"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:72
+#.  
+msgid "Display as a side box in page view?"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:4 share/javascript/widget_resource.js:4
+#. (
+msgid "Display image '%1'. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:13 share/javascript/widget_resource.js:13
+#. (
+msgid "Display pages with the '%1' tag. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:20 share/javascript/widget_resource.js:20
+#. (
+msgid "Display result for searching '%1'. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:16 share/javascript/widget_resource.js:16
+#. (
+msgid "Display the weblog '%1'. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:10 share/javascript/widget_resource.js:10
+#. (
+msgid "Display what's new in the '%1' workspace. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Appliance/ConsoleController.pm:105
+#.  
+msgid "Do you really want to delete all workspaces and create a new initial workspace? (This action cannot be undone.)"
+msgstr ""
+
+#: lib/Socialtext/Appliance/ConsoleController.pm:77
+#.  
+msgid "Do you really want to reboot the appliance?"
+msgstr ""
+
+#: lib/Socialtext/Appliance/ConsoleController.pm:91
+#.  
+msgid "Do you really want to shutdown the appliance?"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:17
+#.  
+msgid "Do you want to set up this workspace as:"
+msgstr ""
+
+#: share/template/element/page/attachment_attach_interface:34 share/template/element/page/attachment_queue_interface:31 share/template/element/page/tag_queue_interface:14
+#.  
+msgid "Done"
+msgstr ""
+
+#: lib/Socialtext/WikiwygPlugin.pm:630
+#.  
+msgid "Double-click to edit a page?"
+msgstr ""
+
+#: share/template/view/page/stats:30
+#.  
+msgid "Downloads"
+msgstr ""
+
+#: share/template/popup/duplicate:28
+#.  
+msgid "Duplicate"
+msgstr ""
+
+#: share/template/popup/duplicate:7
+#. (
+msgid "Duplicate '%1'"
+msgstr ""
+
+#: share/template/popup/duplicate:19
+#. (
+msgid "Duplicate <span id=\"duplicate-page-page-title\">\"%1\"</span>"
+msgstr ""
+
+#: share/template/element/page/actions:34
+#.  
+msgid "Duplicate Page"
+msgstr ""
+
+#: share/template/popup/duplicate:57
+#. (
+msgid "Duplicate of %1"
+msgstr ""
+
+#: share/template/view/weblog:79
+#.  
+msgid "Earlier entries"
+msgstr ""
+
+#: share/template/element/page/actions:5
+#.  
+msgid "Edit"
+msgstr ""
+
+#: share/template/lite/page/edit.html:2
+#. (
+msgid "Edit %1"
+msgstr ""
+
+#: share/template/element/page/edit:11
+#.  
+msgid "Edit Tips"
+msgstr ""
+
+#: share/template/view/page_revision_list:46
+#.  
+msgid "Edited By"
+msgstr ""
+
+#: share/template/layout/html:98
+#.  
+msgid "Editing"
+msgstr ""
+
+#: share/template/view/page/stats:22
+#.  
+msgid "Edits"
+msgstr ""
+
+#: share/template/element/page/actions:28 share/template/element/settings/users_settings_section:9
+#.  
+msgid "Email"
+msgstr ""
+
+#: lib/Socialtext/WebApp.pm:209 share/template/element/settings/users_listall_section:7
+#.  
+msgid "Email Address"
+msgstr ""
+
+#: share/template/element/settings/users_invite_openid_invite:13
+#.  
+msgid "Email Address for this user:"
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:87 share/template/authen/forgot_password.html:5 share/template/authen/register.html:10
+#.  
+msgid "Email Address:"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:18
+#.  
+msgid "Email Notification"
+msgstr ""
+
+#: share/template/element/page/actions:45
+#.  
+msgid "Email To This Page"
+msgstr ""
+
+#: share/template/element/page/actions:44
+#.  
+msgid "Email To This Workspace"
+msgstr ""
+
+#: share/console-template/template/setup.html:42
+#.  
+msgid "Email address for testing:"
+msgstr ""
+
+#: share/template/element/page/actions:28
+#.  
+msgid "Email this page"
+msgstr ""
+
+#: share/template/element/settings/users_invite_openid_invite:19 share/template/new_form_page/generic/new_form_page_query.html:25 share/template/new_form_page/new_form_page_query.html:29
+#.  
+msgid "Email:"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:41
+#.  
+msgid "Enable email notifications for this workspace?"
+msgstr ""
+
+#: share/template/email/password-change.html:24 share/template/email/password-change.txt:11
+#.  
+msgid "Enjoy!"
+msgstr ""
+
+#: share/template/element/settings/users_invite_section:9
+#.  
+msgid "Enter a list of email addresses (one address per line) of people you would like to invite to this Workspace."
+msgstr ""
+
+#: share/template/element/page/newpage_save:10
+#.  
+msgid "Enter a meaningful and distinctive title for your page."
+msgstr ""
+
+#: share/javascript/tagqueue.js:197 share/template/element/page/tag_queue_interface:8
+#.  
+msgid "Enter a tag and click \"Add tag\". The tag will be saved when you save the page."
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:9
+#.  
+msgid "Enter part of a user's first or last name, or email address."
+msgstr ""
+
+#: share/template/element/settings/users_invite_openid_invite:9
+#.  
+msgid "Enter the information for the user you would like to invite to this workspace."
+msgstr ""
+
+#: share/template/authen/forgot_password.html:11
+#.  
+msgid "Enter your email address below. Enter the email address you normally use for your Socialtext account. If you got here by clicking a link you received in an email message, look at that message, and use the email address it was sent to."
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm:70
+#. (
+msgid "Error updating from timeserver %1"
+msgstr ""
+
+#: share/template/lite/search/search.html:14
+#.  
+msgid "Error:"
+msgstr ""
+
+#: lib/Socialtext/PdfExportPlugin.pm:61 lib/Socialtext/RtfExportPlugin.pm:59
+#.  
+msgid "Error:<pre>No pages selected for export</pre>\n"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:40
+#.  
+msgid "Every 15 Minutes"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:44
+#.  
+msgid "Every 3 Days"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:39
+#.  
+msgid "Every 5 Minutes"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:42
+#.  
+msgid "Every 6 Hours"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:43
+#.  
+msgid "Every Day"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:41
+#.  
+msgid "Every Hour"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:38
+#.  
+msgid "Every Minute"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:45
+#.  
+msgid "Every Week"
+msgstr ""
+
+#: share/template/element/settings/users_invite_openid_invite:17 share/template/element/settings/users_invite_search_section:23 share/template/element/settings/users_invite_section:19
+#.  
+msgid "Example:"
+msgstr ""
+
+#: share/template/element/settings/workspaces_create_section:13 share/template/element/settings/workspaces_settings_appearance_section:12
+#.  
+msgid "Example: Acme Widgets Product Development"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_appearance_section:40
+#.  
+msgid "Example: C:\\My Pictures\\socialtext-logo-30.gif"
+msgstr ""
+
+#: share/template/element/settings/weblog_create:13
+#.  
+msgid "Example: Sales Team Weblog"
+msgstr ""
+
+#: share/template/element/settings/workspaces_create_section:30
+#.  
+msgid "Example: acme-product-dev creates this workspace address:"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_appearance_section:31
+#.  
+msgid "Example: http://www.socialtext.com/images/socialtext-logo-30.gif"
+msgstr ""
+
+#: share/template/new_form_page/generic/new_form_page_instructions.html:5 share/template/new_form_page/new_form_page_instructions.html:5
+#.  
+msgid "Except for your name, all fields are optional."
+msgstr ""
+
+#: share/template/element/page/attachment_attach_interface:29 share/template/element/page/attachment_queue_interface:27
+#.  
+msgid "Expand zip archive and attach individual files to the page"
+msgstr ""
+
+#: share/template/element/listview/actions:3
+#.  
+msgid "Export"
+msgstr ""
+
+#: share/template/element/page/actions:47
+#.  
+msgid "Export as HTML"
+msgstr ""
+
+#: share/template/element/listview/actions:6 share/template/element/page/actions:50
+#.  
+msgid "Export to PDF"
+msgstr ""
+
+#: share/template/element/listview/actions:8 share/template/element/page/actions:52
+#.  
+msgid "Export to Word"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:315
+#. (
+msgid "Exporting %1"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:311
+#.  
+msgid "Exporting workspaces ..."
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:357
+#.  
+msgid "Fetching backup file from SMB share ..."
+msgstr ""
+
+#: share/template/element/page/attachment_manage_interface:12
+#.  
+msgid "File Name"
+msgstr ""
+
+#: share/template/view/attachmentslist:17
+#.  
+msgid "Filename"
+msgstr ""
+
+#: share/template/element/jst/attachment/queue:1
+#.  
+msgid "Files To upload:"
+msgstr ""
+
+#: share/template/lite/changes/changes.html:11
+#.  
+msgid "Filter by category"
+msgstr ""
+
+#: share/template/element/settings/users_settings_section:12 share/template/element/settings/users_settings_section:14
+#.  
+msgid "First Name"
+msgstr ""
+
+#: share/template/authen/register.html:25
+#.  
+msgid "First Name:"
+msgstr ""
+
+#: lib/Socialtext/WeblogPlugin.pm:126
+#. (
+msgid "First Post in %1"
+msgstr ""
+
+#: share/template/new_form_page/generic/new_form_page_query.html:15 share/template/new_form_page/new_form_page_query.html:13
+#.  
+msgid "First name:"
+msgstr ""
+
+#: share/template/authen/forgot_password.html:2
+#.  
+msgid "Forgot Password"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:191
+#.  
+msgid "Fri"
+msgstr ""
+
+#: share/template/popup/email_page:23
+#.  
+msgid "From"
+msgstr ""
+
+#: lib/Socialtext/EmailReceiver/Base.pm:693
+#.  
+msgid "From:"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:64
+#.  
+msgid "Fully public"
+msgstr ""
+
+#: share/template/element/weblog/actions:11
+#.  
+msgid "Go to:"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:55 share/javascript/widget_resource.js:55
+#. (
+msgid "Google: %1"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:288
+#. (
+msgid "Got file %1"
+msgstr ""
+
+#: share/template/email/password-change.html:12 share/template/email/password-change.txt:1
+#.  
+msgid "Greetings from Socialtext,"
+msgstr ""
+
+#: share/template/email/email-address-confirmation-completed.html:9 share/template/email/email-address-confirmation-completed.txt:1 share/template/email/openid/invite-request-email.html:8 share/template/email/openid/invite-request-email.txt:1 share/template/email/st/invite-request-email.html:8 share/template/email/st/invite-request-email.txt:1
+#.  
+msgid "Hello,"
+msgstr ""
+
+#: share/template/popup/email_page:75
+#. (
+msgid "Hello, this is a page from the workspace that I wanted you to see. This page is also available for viewing or editing on the web at:\n\n%1"
+msgstr ""
+
+#: share/console-template/template/console_wrapper.tmpl:39 share/template/element/wiki/nav:10
+#.  
+msgid "Help"
+msgstr ""
+
+#: share/template/email/openid/workspace-invitation-body.html:11 share/template/email/openid/workspace-invitation.txt:3 share/template/email/st/workspace-invitation-body.html:8 share/template/email/st/workspace-invitation.txt:3
+#.  
+msgid "Hi,"
+msgstr ""
+
+#: share/template/element/wiki/nav:13
+#.  
+msgid "Home"
+msgstr ""
+
+#: lib/Socialtext/WatchlistPlugin.pm:46
+#.  
+msgid "How frequently would you like to receive watchlist emails?"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:59
+#.  
+msgid "How many items from that time period should be displayed as a side box on pages?"
+msgstr ""
+
+#: lib/Socialtext/WatchlistPlugin.pm:82
+#.  
+msgid "How many items from your watchlist should be shown on the dashboard?"
+msgstr ""
+
+#: lib/Socialtext/BreadCrumbsPlugin.pm:41
+#.  
+msgid "How many pages to show in side pane box?"
+msgstr ""
+
+#: lib/Socialtext/SyndicatePlugin.pm:142
+#.  
+msgid "How many posts should be displayed in outgoing feeds?"
+msgstr ""
+
+#: lib/Socialtext/WeblogPlugin.pm:38
+#.  
+msgid "How many posts should be displayed in weblog view?"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:34
+#.  
+msgid "How often would you like to receive email updates?"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:90
+#.  
+msgid "How should Daylight Savings/Summer Time be handled?"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:125
+#.  
+msgid "How should displayed dates be formatted?"
+msgstr ""
+
+#: share/template/authen/login.html:39
+#.  
+msgid "I don't know my password."
+msgstr ""
+
+#: share/template/email/openid/workspace-invitation-body.html:15 share/template/email/st/workspace-invitation-body.html:13 share/template/email/st/workspace-invitation.txt:5
+#. (
+msgid "I'm inviting you to join %1, one of our shared workspaces."
+msgstr ""
+
+#: share/template/email/openid/workspace-invitation.txt:5
+#. (
+msgid "I'm inviting you to join %1, one of our shared workspaces. Sign in using the information below:"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:9
+#.  
+msgid "If there is already an existing page with that title, where should the body of the email be added?"
+msgstr ""
+
+#: share/template/popup/copy_to_workspace:53
+#. (
+msgid "If you are sure you wish to overwrite the \"%1\" page on \"%2\", please press \"Copy\" again."
+msgstr ""
+
+#: share/template/popup/rename:54
+#. (
+msgid "If you are sure you wish to overwrite the existing \"%1\" page, please press \"Rename\" again."
+msgstr ""
+
+#: share/template/errors/settings_requires_account:6 share/template/errors/watchlist_requires_account:6
+#. (
+msgid "If you do not already have an account, you can <a href=\"/nlw/register.html?redirect_to=%1\">register here</a>."
+msgstr ""
+
+#: share/template/email/st/workspace-invitation.txt:18
+#.  
+msgid "If you don't remember it, follow this link to select a new password:"
+msgstr ""
+
+#: share/template/email/st/workspace-invitation-body.html:38
+#. (
+msgid "If you don't remember it, just <a href=\"%4\">click here to select a new password</a>."
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_appearance_section:24
+#.  
+msgid "If you don't select an image, a Socialtext logo will be used instead."
+msgstr ""
+
+#: share/template/email/password-change.txt:9
+#. (
+msgid "If you have any questions, please feel free to send email to %1."
+msgstr ""
+
+#: share/template/email/password-change.html:20
+#. (
+msgid "If you have any questions, please feel free to send email to <a href=\"mailto:%1\">%2</a>."
+msgstr ""
+
+#: share/template/email/standard-footer.html:7
+#. (
+msgid "If you have questions about this email, contact your wiki support at %1"
+msgstr ""
+
+#: share/template/email/standard-footer.txt:3
+#. (
+msgid "If you have questions about this email, contact your wiki support at %1."
+msgstr ""
+
+#: share/template/email/email-address-confirmation-completed.html:27
+#.  
+msgid "If you have questions, please contact your wiki support at"
+msgstr ""
+
+#: share/template/email/email-address-confirmation-completed.txt:11
+#. (
+msgid "If you have questions, please contact your wiki support at %1."
+msgstr ""
+
+#: share/template/element/settings/users_invite_section:38
+#.  
+msgid "If you see something you'd like to add to or change, click the \"Edit\" link at the top of each page."
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:84
+#.  
+msgid "If you see something you'd like to add to or change, click the \"Edit\" link at the top of each page. Make your contributions in the text box, then click \"Save\"."
+msgstr ""
+
+#: share/template/search_help_field.html:21
+#.  
+msgid "If you try to search on a field that does not exist (<tt>link:hello</tt>) or without a query (<tt>link:</tt>) you will see this message."
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:76 share/template/element/settings/users_invite_section:32
+#.  
+msgid "If you wish, you can include a personal message in the invitation email. You can edit the message to say anything you want."
+msgstr ""
+
+#: lib/Socialtext/BugsPlugin.pm:32 share/template/bugs_content.html:25
+#.  
+msgid "Ignore Bug"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_appearance_section:26
+#.  
+msgid "Image Already On The Web"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:371
+#.  
+msgid "Importing workspaces from tarballs ..."
+msgstr ""
+
+#: lib/Socialtext/DisplayPlugin.pm:100
+#.  
+msgid "Include Recently Viewed items as a side box when viewing pages?"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:18 share/javascript/widget_resource.js:18
+#. (
+msgid "Include the '%1' Atom feed. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:17 share/javascript/widget_resource.js:17
+#. (
+msgid "Include the '%1' RSS feed. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:7 share/javascript/widget_resource.js:7
+#. (
+msgid "Include the page '%1'. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:15 share/javascript/widget_resource.js:15
+#. (
+msgid "Include the weblog '%1'. Click to edit."
+msgstr ""
+
+#: share/template/view/page/display:39
+#.  
+msgid "Incoming Links"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:383
+#.  
+msgid "Incoming email placement must be one of top, bottom, or replace."
+msgstr ""
+
+#: share/console-template/template/popup.html:41
+#.  
+msgid "Initial Appliance Administrator Email"
+msgstr ""
+
+#: lib/Socialtext/Appliance/ConsoleController.pm:106
+#.  
+msgid "Initialize Workspaces"
+msgstr ""
+
+#: lib/Socialtext/Appliance/ConsoleController.pm:104
+#.  
+msgid "Initialize Workspaces?"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:366
+#.  
+msgid "Initializing workspaces ..."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:23 share/javascript/widget_resource.js:23
+#. (
+msgid "Instant message to '%1' using AIM. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:24 share/javascript/widget_resource.js:24
+#. (
+msgid "Instant message to '%1' using Yahoo! Click to edit."
+msgstr ""
+
+#: share/console-template/template/setup.html:7
+#.  
+msgid "Internet Time Server"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:77
+#.  
+msgid "Intranet"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:83
+#.  
+msgid "Invalid character '/' in changes parameter"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm:46
+#. (
+msgid "Invalid host: %1"
+msgstr ""
+
+#: share/template/email/openid/invite-request-email.html:4 share/template/email/st/invite-request-email.html:4
+#.  
+msgid "Invitation Request"
+msgstr ""
+
+#: lib/Socialtext/OpenIdPlugin.pm:122
+#. (
+msgid "Invitation to join %1"
+msgstr ""
+
+#: share/template/element/settings/users_invite_section:2
+#.  
+msgid "Invite"
+msgstr ""
+
+#: share/template/element/settings/select:14
+#.  
+msgid "Invite New Users"
+msgstr ""
+
+#: share/template/element/settings/users_invite_section:6
+#.  
+msgid "Invite Other Users"
+msgstr ""
+
+#: share/template/search_help_field.html:3
+#.  
+msgid "It looks like you are trying to search on a field in the search index. At this time the fields available are:"
+msgstr ""
+
+#: share/template/element/settings/workspaces_create_section:24
+#.  
+msgid "It must consist of 3-30 lowercase letters or dashes."
+msgstr ""
+
+#: share/template/view/homepage:97
+#.  
+msgid "It's where you can share tips and best practices with other Socialtext customers."
+msgstr ""
+
+#: share/template/popup/copy_to_workspace:35 share/template/popup/duplicate:71 share/template/popup/rename:78
+#.  
+msgid "Keep attachments"
+msgstr ""
+
+#: share/template/popup/email_page:83
+#.  
+msgid "Keep attachments?"
+msgstr ""
+
+#: share/template/popup/copy_to_workspace:34 share/template/popup/duplicate:66 share/template/popup/rename:74
+#.  
+msgid "Keep categories"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:45
+#.  
+msgid "Last 2 Days"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:48
+#.  
+msgid "Last 2 Weeks"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:44
+#.  
+msgid "Last 24 hours"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:46
+#.  
+msgid "Last 3 Days"
+msgstr ""
+
+#: share/template/element/listview/pages:79
+#.  
+msgid "Last Edited By"
+msgstr ""
+
+#: lib/Socialtext/Appliance/UsageStats.pm:137 lib/Socialtext/Appliance/UserReport.pm:125
+#.  
+msgid "Last Login"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:49
+#.  
+msgid "Last Month"
+msgstr ""
+
+#: share/template/element/settings/users_settings_section:11 share/template/element/settings/users_settings_section:15
+#.  
+msgid "Last Name"
+msgstr ""
+
+#: share/template/authen/register.html:30
+#.  
+msgid "Last Name:"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:47
+#.  
+msgid "Last Week"
+msgstr ""
+
+#: share/template/view/homepage:112
+#. (
+msgid "Last edited by %1"
+msgstr ""
+
+#: share/template/view/homepage:109 share/template/view/homepage:127
+#. (
+msgid "Last edited by <span class=\"st-homepage-whatsnew-author\">%1</span> on <span class=\"st-homepage-whatsnew-date\">%2</span>"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:54
+#. (
+msgid "Last manual backup was %1"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:52
+#.  
+msgid "Last manual backup was never"
+msgstr ""
+
+#: share/template/new_form_page/generic/new_form_page_query.html:20 share/template/new_form_page/new_form_page_query.html:21
+#.  
+msgid "Last name:"
+msgstr ""
+
+#: share/template/view/refcard:24
+#.  
+msgid "Link text"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:3 share/javascript/widget_resource.js:3
+#. (
+msgid "Link to '%1' in '%2'. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:2 share/javascript/widget_resource.js:2
+#. (
+msgid "Link to '%1'. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:5 share/javascript/widget_resource.js:5
+#. (
+msgid "Link to file '%1'. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:11 share/javascript/widget_resource.js:11
+#. (
+msgid "Link to tag '%1'. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:14 share/javascript/widget_resource.js:14
+#. (
+msgid "Link to weblog '%1'. Click to edit."
+msgstr ""
+
+#: share/template/element/settings/select:10
+#.  
+msgid "List All Users"
+msgstr ""
+
+#: share/javascript/Wikiwyg/Socialtext.js:148 share/template/view/weblog:137
+#.  
+msgid "Loading..."
+msgstr ""
+
+#: lib/Socialtext/CLI.pm:445
+#. (
 msgid "Locale for %1 is now %2"
 msgstr ""
 
-#: lib/Socialtext/CLI.pm:413
-#. ($new_locale)
-msgid "'%1' is not a valid locale"
+#: share/template/authen/login.html:36
+#.  
+msgid "Log in"
+msgstr ""
+
+#: share/template/authen/choose_password.html:3 share/template/authen/login.html:3
+#.  
+msgid "Log in to Socialtext"
+msgstr ""
+
+#: share/template/authen/choose_password.html:12 share/template/authen/register.html:4
+#.  
+msgid "Log in with an existing account"
+msgstr ""
+
+#: share/template/email/email-address-confirmation-completed.html:22 share/template/email/email-address-confirmation-completed.txt:8
+#.  
+msgid "Log in with your email address:"
+msgstr ""
+
+#: share/template/element/wiki/nav:8
+#.  
+msgid "Log out"
+msgstr ""
+
+#: share/template/authen/login.html:2 share/template/element/wiki/nav:5
+#.  
+msgid "Login"
+msgstr ""
+
+#: share/template/element/weblog/edit_link:7
+#.  
+msgid "Login +"
+msgstr ""
+
+#: share/template/element/page/actions:7
+#.  
+msgid "Login + Edit"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:541
+#.  
+msgid "Logo file must be a gif, jpeg, or png file."
+msgstr ""
+
+#: share/template/view/empty_watchlist:14
+#. (
+msgid "Look for <img border=\"0\" src=\"%1/images/st/pagetools/watch-hover.gif\"/> on a page you want to watch and then click on it to add the page to your Watchlist.."
+msgstr ""
+
+#: share/template/element/settings/users_invite_section:38
+#.  
+msgid "Make your contributions in the text box, then click \"Save\"."
+msgstr ""
+
+#: lib/Socialtext/Hub.pm:143
+#.  
+msgid "Malformed query."
+msgstr ""
+
+#: share/template/element/settings/select:8
+#.  
+msgid "Manage All Users"
+msgstr ""
+
+#: share/template/element/page/attachments:17
+#.  
+msgid "Manage files"
+msgstr ""
+
+#: share/template/view/refcard:52
+#.  
+msgid "Meeting Notes"
+msgstr ""
+
+#: share/template/view/refcard:217
+#.  
+msgid "Meeting notes category"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:191
+#.  
+msgid "Mon"
+msgstr ""
+
+#: share/template/element/settings/select:6
+#.  
+msgid "My Settings"
+msgstr ""
+
+#: share/template/view/refcard:51
+#.  
+msgid "My Weblog"
+msgstr ""
+
+#: share/template/view/refcard:212
+#.  
+msgid "My Weblog weblog"
+msgstr ""
+
+#: share/template/element/settings/select:23
+#.  
+msgid "My Workspaces"
+msgstr ""
+
+#: share/template/element/settings/users_settings_section:6 share/template/view/refcard:27
+#.  
+msgid "Name"
+msgstr ""
+
+#: lib/Socialtext/WeblogPlugin.pm:416
+#. (
+msgid "Navigation for: %1"
+msgstr ""
+
+#: share/console-template/template/console_wrapper.tmpl:36
+#.  
+msgid "Navigation tabs to select different sections of the control panel."
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:37
+#.  
+msgid "Never"
+msgstr ""
+
+#: share/template/view/homepage:115
+#.  
+msgid "New Page"
+msgstr ""
+
+#: share/template/view/homepage:138
+#.  
+msgid "New Workspace"
+msgstr ""
+
+#: share/console-template/template/setup.html:51
+#.  
+msgid "New administrator email address:"
+msgstr ""
+
+#: share/template/popup/copy_to_workspace:33 share/template/popup/duplicate:61 share/template/popup/rename:69
+#.  
+msgid "New page name"
+msgstr ""
+
+#: share/template/element/settings/users_settings_section:35
+#.  
+msgid "New password"
+msgstr ""
+
+#: lib/Socialtext/UserSettingsPlugin.pm:79
+#.  
+msgid "New passwords do not match"
+msgstr ""
+
+#: share/template/element/settings/users_settings_section:29
+#.  
+msgid "New passwords must be at least 6 characters long."
+msgstr ""
+
+#: share/javascript/pageview.js:214 share/template/element/wiki/nav:16
+#.  
+msgid "New search"
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:98 share/template/element/settings/users_invite_section:52
+#.  
+msgid "New users will be sent the following invitation email:"
+msgstr ""
+
+#: share/template/popup/copy_to_workspace:20
+#.  
+msgid "New workspace"
+msgstr ""
+
+#: share/template/view/weblog:142
+#.  
+msgid "New&nbsp;Post"
+msgstr ""
+
+#: share/template/view/weblog:76
+#.  
+msgid "Newer entries"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:56
+#.  
+msgid "No"
+msgstr ""
+
+#: share/template/view/page/stats:65
+#.  
+msgid "No downloads."
+msgstr ""
+
+#: lib/Socialtext/UserSettingsPlugin.pm:301 lib/Socialtext/UserSettingsPlugin.pm:318
+#.  
+msgid "No email addresses specified"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:277
+#.  
+msgid "No file provided to verify"
+msgstr ""
+
+#: share/console-template/template/backup.html:35
+#.  
+msgid "No files available to restore."
+msgstr ""
+
+#: lib/Socialtext/WikiwygPlugin.pm:564 lib/Socialtext/WikiwygPlugin.pm:714
+#.  
+msgid "No page ID given"
+msgstr ""
+
+#: share/template/authen/forgot_password.html:7
+#.  
+msgid "No problem, we can send you an email that will help. You will be able to change your password back to something you know."
+msgstr ""
+
+#: share/template/view/page/display:77
+#.  
+msgid "No revisions"
+msgstr ""
+
+#: lib/Socialtext/HitCounterPlugin.pm:192
+#. (
+msgid "No statistics yet available for %1"
+msgstr ""
+
+#: lib/Socialtext/HitCounterPlugin.pm:109
+#.  
+msgid "No stats dir for this page"
+msgstr ""
+
+#: lib/Socialtext/HitCounterPlugin.pm:125
+#.  
+msgid "No stats for this page"
+msgstr ""
+
+#: lib/Socialtext/HitCounterPlugin.pm:74
+#.  
+msgid "No stats for this page yet"
+msgstr ""
+
+#: share/template/view/page/stats:55
+#.  
+msgid "No uploads."
+msgstr ""
+
+#: lib/Socialtext/OpenIdPlugin.pm:36
+#.  
+msgid "No users entered"
+msgstr ""
+
+#: lib/Socialtext/WatchlistPlugin.pm:193
+#. (
+msgid "No watchlist for %1 in %2"
+msgstr ""
+
+#: share/template/element/page/revision_view_actions:33
+#.  
+msgid "Normal View"
+msgstr ""
+
+#: lib/Socialtext/DisplayPlugin.pm:152
+#.  
+msgid "Not a valid page name"
+msgstr ""
+
+#: share/template/element/page/newpage_duplicate:16
+#.  
+msgid "Ok"
+msgstr ""
+
+#: lib/Socialtext/UserSettingsPlugin.pm:77
+#.  
+msgid "Old password is incorrect"
+msgstr ""
+
+#: share/template/email/st/workspace-invitation-body.html:26 share/template/email/st/workspace-invitation.txt:10
+#.  
+msgid "Once you have confirmed your account, you will receive a second email with login details."
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:117
+#. (
+msgid "Only %1 can send email to this workspace."
+msgstr ""
+
+#: share/template/element/settings/workspaces_unsubscribe_section:8
+#.  
+msgid "Only Click the button below if you wish to be unsubscribed from this workspace. After clicking you will no longer have access to this workspace unless you are resubscribed by a Workspace administrator at a later time."
+msgstr ""
+
+#: lib/Socialtext/WorkspacesUIPlugin.pm:344
+#. (
+msgid "Only registered users can send email to %1."
+msgstr ""
+
+#: lib/Socialtext/WorkspacesUIPlugin.pm:341
+#. (
+msgid "Only workspace members can send email to %1."
+msgstr ""
+
+#: share/template/element/settings/users_invite_openid_invite:12
+#.  
+msgid "OpenID for this user:"
+msgstr ""
+
+#: share/template/element/settings/users_invite_openid_invite:18
+#.  
+msgid "OpenID:"
+msgstr ""
+
+#: share/template/workspaces_created_section.html:23
+#. (
+msgid "Or you may continue to work in this workspace, and visit \"%1\" later."
+msgstr ""
+
+#: lib/Socialtext/BacklinksPlugin.pm:109 lib/Socialtext/BacklinksPlugin.pm:90 share/template/element/listview/actionbar:9
+#.  
+msgid "Orphaned Pages"
+msgstr ""
+
+#: share/template/view/homepage:81
+#.  
+msgid "Other participants can see it, too, and can edit it to leave notes for you."
+msgstr ""
+
+#: share/console-template/template/setup.html:31
+#.  
+msgid "Outgoing mail server"
+msgstr ""
+
+#: share/console-template/template/console_wrapper.tmpl:39
+#.  
+msgid "Overview"
+msgstr ""
+
+#: share/template/element/page/newpage_duplicate:7
+#.  
+msgid "Page Already Exists"
+msgstr ""
+
+#: lib/Socialtext/WikiwygPlugin.pm:25
+#.  
+msgid "Page Editing"
+msgstr ""
+
+#: share/template/lite/page/display.html:6
+#.  
+msgid "Page Last Updated:"
+msgstr ""
+
+#: share/template/view/refcard:23
+#.  
+msgid "Page Link"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:60
+#.  
+msgid "Page Name"
+msgstr ""
+
+#: share/template/view/attachmentslist:18 share/template/view/refcard:26
+#.  
+msgid "Page Title"
+msgstr ""
+
+#: share/template/element/page/newpage_save:12
+#.  
+msgid "Page Title:"
+msgstr ""
+
+#: share/template/view/refcard:22
+#.  
+msgid "Page link"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:73 lib/Socialtext/WatchlistPlugin.pm:71
+#.  
+msgid "Page name and link only"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:74 lib/Socialtext/WatchlistPlugin.pm:72
+#.  
+msgid "Page name and link, plus author and date"
+msgstr ""
+
+#: lib/Socialtext/DisplayPlugin.pm:48
+#.  
+msgid "Page name is too long"
+msgstr ""
+
+#: lib/Socialtext/Page.pm:1201
+#. (
+msgid "Page renamed to %1"
+msgstr ""
+
+#: share/template/view/refcard:102
+#.  
+msgid "Page section name"
+msgstr ""
+
+#: lib/Socialtext/EditPlugin.pm:38 lib/Socialtext/Page.pm:683 share/javascript/Wikiwyg/Socialtext.js:701
+#.  
+msgid "Page title is too long after URL encoding"
+msgstr ""
+
+#: lib/Socialtext/EditPlugin.pm:42
+#.  
+msgid "Page title missing"
+msgstr ""
+
+#: share/template/view/taglistview:21
+#.  
+msgid "Pages"
+msgstr ""
+
+#: lib/Socialtext/WatchlistPlugin.pm:261 share/template/view/empty_watchlist:7
+#.  
+msgid "Pages You're Watching"
+msgstr ""
+
+#: lib/Socialtext/SearchPlugin.pm:121
+#. (
+msgid "Pages containing '%1' (%2)"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:12 share/javascript/widget_resource.js:12
+#. (
+msgid "Pages with the '%1' tag. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:236
+#.  
+msgid "Password"
+msgstr ""
+
+#: share/template/authen/login.html:25 share/template/authen/register.html:15
+#.  
+msgid "Password:"
+msgstr ""
+
+#: lib/Socialtext/User/Default.pm:227
+#.  
+msgid "Passwords must be at least 6 characters long."
+msgstr ""
+
+#: share/console-template/template/backup.html:6
+#.  
+msgid "Perform Backup Now"
+msgstr ""
+
+#: share/console-template/template/backup.html:16
+#.  
+msgid "Perform Restore"
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:74 share/template/element/settings/users_invite_section:30
+#.  
+msgid "Personal Message"
+msgstr ""
+
+#: share/template/email/email-address-confirmation.html:16
+#. (
+msgid "Please <a href=\"%1\">click on this link to confirm your email address and choose a password.</a>"
+msgstr ""
+
+#: share/template/email/st/workspace-invitation-body.html:22
+#. (
+msgid "Please <a href=\"%1\">click on this link</a> to confirm your email address."
+msgstr ""
+
+#: share/template/popup/copy_to_workspace:52
+#.  
+msgid "Please choose a different name."
+msgstr ""
+
+#: share/template/popup/duplicate:51
+#. (
+msgid "Please choose a different name. If you are sure you wish to overwrite the existing \"%1\" page, please press \"Duplicate\" again."
+msgstr ""
+
+#: share/template/email/password-change.html:6
+#.  
+msgid "Please choose a new Socialtext password"
+msgstr ""
+
+#: share/template/email/st/workspace-invitation.txt:8
+#.  
+msgid "Please click on this link to confirm your email address:"
+msgstr ""
+
+#: share/template/email/email-address-confirmation.html:5
+#.  
+msgid "Please confirm your email address"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm:140 lib/Socialtext/Appliance/Model/Setup.pm:160
+#.  
+msgid "Please enter a valid email address"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm:149
+#.  
+msgid "Please enter an email address"
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:189
+#.  
+msgid "Please enter an email address."
+msgstr ""
+
+#: share/template/email/email-address-confirmation.txt:5
+#.  
+msgid "Please follow this link to confirm your address:"
+msgstr ""
+
+#: share/template/element/settings/weblog_create:9
+#.  
+msgid "Please give your weblog a name. If the name you provide does not end with \"Blog\" or \"Weblog\", the system will add \"Blog\" to the name you provide. After you click \"Save\", you'll be taken right to the new weblog."
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:121 share/template/element/settings/users_invite_section:75
+#. (
+msgid "Please invite these people into the %1 workspace."
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:94
+#.  
+msgid "Please select a file to restore"
+msgstr ""
+
+#: lib/Socialtext/Hub.pm:147
+#. (
+msgid "Please send email to <a href=\"mailto:%1\">%1</a> if you think it should have worked."
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:101
+#.  
+msgid "Please wait until the backup finishes, then retry."
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:77
+#.  
+msgid "Please wait until the restore finishes, then retry."
+msgstr ""
+
+#: share/template/view/category_display:39
+#.  
+msgid "Post to this tag by email:"
+msgstr ""
+
+#: share/template/view/weblog:92 share/template/view/weblog:96
+#. (
+msgid "Posted by %1 on %2"
+msgstr ""
+
+#: share/template/element/settings/select:47
+#.  
+msgid "Preferences"
+msgstr ""
+
+#: lib/Socialtext/UserPreferencesPlugin.pm:34
+#.  
+msgid "Preferences Class ID is missing"
+msgstr ""
+
+#: lib/Socialtext/UserPreferencesPlugin.pm:46
+#.  
+msgid "Preferences saved"
+msgstr ""
+
+#: lib/Socialtext/UserPreferencesPlugin.pm:64
+#. (
+msgid "Preferences: %1"
+msgstr ""
+
+#: share/javascript/Wikiwyg/Socialtext.js:397 share/template/element/page/edit:7
+#.  
+msgid "Preview"
+msgstr ""
+
+#: share/template/element/page/actions:24
+#.  
+msgid "Print"
+msgstr ""
+
+#: share/template/view/refcard:10
+#.  
+msgid "Print This"
+msgstr ""
+
+#: share/template/element/page/actions:24
+#.  
+msgid "Print this page"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:28
+#.  
+msgid "Private"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:37
+#.  
+msgid "Public login-to-edit"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:55
+#.  
+msgid "Public read-and-comment-only"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:46
+#.  
+msgid "Public read-only"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:267
+#.  
+msgid "Put and retrieved test file"
+msgstr ""
+
+#: share/template/element/wiki/subnav-dashboard:3 share/template/element/wiki/subnav-default:3 share/template/element/wiki/subnav-listview:3 share/template/element/wiki/subnav-weblog:3
+#.  
+msgid "Quick jump"
+msgstr ""
+
+#: share/console-template/template/setup.html:10
+#.  
+msgid "RFC 868 Time Server"
+msgstr ""
+
+#: share/template/authen/choose_password.html:32 share/template/authen/register.html:20
+#.  
+msgid "Re-type Password:"
+msgstr ""
+
+#: lib/Socialtext/Appliance/ConsoleController.pm:78
+#.  
+msgid "Reboot"
+msgstr ""
+
+#: share/console-template/template/shutdown.html:12
+#.  
+msgid "Reboot Appliance"
+msgstr ""
+
+#: lib/Socialtext/Appliance/ConsoleController.pm:76
+#.  
+msgid "Reboot Appliance?"
+msgstr ""
+
+#: share/console-template/template/shutdown.html:15
+#.  
+msgid "Reboot Now"
+msgstr ""
+
+#: lib/Socialtext/WeblogPlugin.pm:219
+#.  
+msgid "Recent Changes"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:146
+#. (
+msgid "Recent Changes In %1 Workspace"
+msgstr ""
+
+#: lib/Socialtext/CategoryPlugin.pm:619
+#. (
+msgid "Recent Changes in Tag %1"
+msgstr ""
+
+#: lib/Socialtext/CategoryPlugin.pm:617
+#. (
+msgid "Recent Changes in Tag %1 in workspace %2"
+msgstr ""
+
+#: lib/Socialtext/CategoryPlugin.pm:612
+#. (
+msgid "Recent Posts from %1"
+msgstr ""
+
+#: lib/Socialtext/CategoryPlugin.pm:610
+#. (
+msgid "Recent Posts from %1 in workspace %2"
+msgstr ""
+
+#: share/template/email/recent-changes.html:6
+#. (
+msgid "Recent changes in %1"
+msgstr ""
+
+#: share/template/lite/category/category.html:26
+#. (
+msgid "Recent changes in %1 category"
+msgstr ""
+
+#: share/template/element/listview/actionbar:8 share/template/element/page/breadcrumbs:2
+#.  
+msgid "Recently Viewed"
+msgstr ""
+
+#: lib/Socialtext/BreadCrumbsPlugin.pm:77
+#.  
+msgid "Recently Viewed Pages"
+msgstr ""
+
+#: share/template/popup/email_page:144
+#.  
+msgid "Recipient(s)"
+msgstr ""
+
+#: lib/Socialtext/Appliance/ConsoleController.pm:117
+#. (
+msgid "Redirecting to %1"
+msgstr ""
+
+#: share/console-template/template/backup.html:20
+#.  
+msgid "Refresh file list"
+msgstr ""
+
+#: share/template/authen/register.html:35 share/template/element/wiki/nav:6
+#.  
+msgid "Register"
+msgstr ""
+
+#: share/template/authen/login.html:32
+#.  
+msgid "Remember me on this computer."
+msgstr ""
+
+#: share/template/element/settings/users_listall_section:5 share/template/popup/email_page:130
+#.  
+msgid "Remove"
+msgstr ""
+
+#: share/template/element/jst/attachment/queue:5
+#. (
+msgid "Remove %1 from the queue"
+msgstr ""
+
+#: share/template/popup/email_page:134
+#.  
+msgid "Remove All"
+msgstr ""
+
+#: share/template/popup/rename:31
+#.  
+msgid "Rename"
+msgstr ""
+
+#: share/template/popup/rename:7
+#. (
+msgid "Rename '%1'"
+msgstr ""
+
+#: share/template/popup/rename:21
+#. (
+msgid "Rename <span id=\"%1-pagetitle\">\"%2\"</span>"
+msgstr ""
+
+#: share/template/element/page/actions:35
+#.  
+msgid "Rename Page"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:28
+#.  
+msgid "Replace existing page"
+msgstr ""
+
+#: lib/Socialtext/Page.pm:733 share/javascript/Wikiwyg/Socialtext.js:86
+#.  
+msgid "Replace this text with your own."
+msgstr ""
+
+#: lib/Socialtext/BugsPlugin.pm:31 share/template/bugs_content.html:24
+#.  
+msgid "Report Bug"
+msgstr ""
+
+#: lib/Socialtext/UserSettingsPlugin.pm:481
+#. (
+msgid "Request to invite new users to the %1 workspace"
+msgstr ""
+
+#: share/template/errors/requires_confirmation:10
+#.  
+msgid "Resend confirmation"
+msgstr ""
+
+#: share/template/element/settings/users_listall_section:11
+#.  
+msgid "Reset Password"
+msgstr ""
+
+#: share/console-template/template/backup.html:31
+#.  
+msgid "Restore Now"
+msgstr ""
+
+#: share/template/view/page/delete_epilogue:11
+#.  
+msgid "Restore Page"
+msgstr ""
+
+#: share/template/element/page/revision_view_actions:53
+#. (
+msgid "Restore Revision %1"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:65
+#. (
+msgid "Restore in progress - started at %1"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:63
+#.  
+msgid "Restore in progress - started at never"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:108
+#.  
+msgid "Restore is already running"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:348
+#. (
+msgid "Restoring backup from (%1) ..."
+msgstr ""
+
+#: share/template/view/page/stats_index:6
+#.  
+msgid "Return to page"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:59
+#.  
+msgid "Reverse Chronologically"
+msgstr ""
+
+#: share/template/workspaces_created_section.html:15
+#. (
+msgid "Review or change the settings for %1:"
+msgstr ""
+
+#: lib/Socialtext/RevisionPlugin.pm:152 lib/Socialtext/RevisionPlugin.pm:76
+#. (
+msgid "Revision %1"
+msgstr ""
+
+#: share/template/element/listview/pages:85
+#.  
+msgid "Revisions"
+msgstr ""
+
+#: share/template/view/page_revision_list:10
+#.  
+msgid "Revisions to the current document"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:12
+#.  
+msgid "Roles and Permission Sets (standard workspace types)"
+msgstr ""
+
+#: share/template/element/settings/weblog_create:12
+#.  
+msgid "Sample Weblog"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:191
+#.  
+msgid "Sat"
+msgstr ""
+
+#: share/javascript/Wikiwyg/Jemplate.js:20 share/javascript/Wikiwyg/Socialtext.js:1056 share/template/comment_popup.html:38 share/template/element/page/edit:6 share/template/element/page/newpage_save:19 share/template/element/settings/save:3 share/template/lite/page/edit.html:10 share/template/lite/page/edit.html:15
+#.  
+msgid "Save"
+msgstr ""
+
+#: share/console-template/template/backup.html:90
+#.  
+msgid "Save Backup Schedule"
+msgstr ""
+
+#: share/template/element/page/newpage_save:8
+#.  
+msgid "Save Page As"
+msgstr ""
+
+#: share/template/element/page/tags:18
+#.  
+msgid "Save tag"
+msgstr ""
+
+#: share/template/element/page/newpage_duplicate:10
+#. (
+msgid "Save the page with the name \"<span id=\"%1-suggest\">XXX</span>\""
+msgstr ""
+
+#: share/template/element/page/newpage_duplicate:9
+#.  
+msgid "Save with a different name:"
+msgstr ""
+
+#: lib/Socialtext/DisplayPlugin.pm:20
+#.  
+msgid "Screen Layout"
+msgstr ""
+
+#: share/template/element/wiki/nav:18
+#.  
+msgid "Search"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:21 share/javascript/widget_resource.js:21
+#. (
+msgid "Search Google for '%1'. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/SearchPlugin.pm:65 share/javascript/Wikiwyg/Jemplate.js:1298
+#.  
+msgid "Search Results"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:22 share/javascript/widget_resource.js:22
+#. (
+msgid "Search Technorati for '%1'. Click to edit."
+msgstr ""
+
+#: lib/Socialtext/SearchPlugin.pm:265
+#. (
+msgid "Search for %1"
+msgstr ""
+
+#: lib/Socialtext/SearchPlugin.pm:263
+#. (
+msgid "Search for %1 in workspace %2"
+msgstr ""
+
+#: share/template/google_soap.html:18
+#. (
+msgid "Search for &quot;%1&quot;"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:19 share/javascript/widget_resource.js:19
+#. (
+msgid "Search for '%1'. Click to edit."
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:6
+#.  
+msgid "Search for Users to Invite"
+msgstr ""
+
+#: share/template/lite/search/search.html:8
+#.  
+msgid "Search for the following terms:"
+msgstr ""
+
+#: share/template/view/refcard:28
+#.  
+msgid "Section"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:8 share/javascript/widget_resource.js:8
+#. (
+msgid "Section marker '%1'. Click to edit."
+msgstr ""
+
+#: share/template/element/wiki/subnav-dashboard:9
+#.  
+msgid "See more"
+msgstr ""
+
+#: share/template/view/page_revision_list:43
+#.  
+msgid "Select"
+msgstr ""
+
+#: share/template/popup/email_page:37
+#.  
+msgid "Select Recipients"
+msgstr ""
+
+#: share/template/popup/email_page:88
+#.  
+msgid "Send"
+msgstr ""
+
+#: share/console-template/template/setup.html:40 share/console-template/template/setup.html:44
+#.  
+msgid "Send Test Email"
+msgstr ""
+
+#: share/template/popup/email_page:7
+#. (
+msgid "Sending '%1' page by email"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm:117
+#. (
+msgid "Sent test email to %1"
+msgstr ""
+
+#: share/console-template/template/backup.html:109
+#.  
+msgid "Set Backup Destination"
+msgstr ""
+
+#: share/console-template/template/setup.html:29 share/console-template/template/setup.html:34
+#.  
+msgid "Set Email Configuration"
+msgstr ""
+
+#: share/console-template/template/setup.html:12
+#.  
+msgid "Set Time Server"
+msgstr ""
+
+#: share/template/element/settings/select:2 share/template/element/wiki/nav:3
+#.  
+msgid "Settings"
+msgstr ""
+
+#: share/console-template/template/console_wrapper.tmpl:39
+#.  
+msgid "Setup"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:234
+#.  
+msgid "Shared Directory Name"
+msgstr ""
+
+#: lib/Socialtext/DisplayPlugin.pm:92
+#.  
+msgid "Should hovering your mouse over a link display the first part of the page?"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:177
+#.  
+msgid "Should seconds be included on displayed times?"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:152
+#.  
+msgid "Should times be displayed in 12-hour or 24-hour format?"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:38
+#.  
+msgid "Should users of this workspace receive email notifications of changes to this workspace?"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:26 share/javascript/widget_resource.js:26
+#. (
+msgid "Show full name for '%1'. Click to edit."
+msgstr ""
+
+#: share/console-template/template/shutdown.html:6
+#.  
+msgid "Shut Down Appliance"
+msgstr ""
+
+#: share/console-template/template/shutdown.html:9
+#.  
+msgid "Shut Down Now"
+msgstr ""
+
+#: lib/Socialtext/Appliance/ConsoleController.pm:92 share/console-template/template/console_wrapper.tmpl:39
+#.  
+msgid "Shutdown"
+msgstr ""
+
+#: lib/Socialtext/Appliance/ConsoleController.pm:90
+#.  
+msgid "Shutdown Appliance?"
+msgstr ""
+
+#: share/template/email/openid/workspace-invitation-body.html:18 share/template/email/st/workspace-invitation-body.html:15 share/template/email/st/workspace-invitation.txt:5
+#.  
+msgid "Sign in using the information below:"
+msgstr ""
+
+#: share/template/element/page/edit:9
+#.  
+msgid "Simple"
+msgstr ""
+
+#: share/template/authen/forgot_password.html:32
+#.  
+msgid "Since your password is stored in the directory for your organization, there is no way to reset your password within the Socialtext system. Please contact your directory administrator for assistance."
+msgstr ""
+
+#: share/template/element/page/attachment_manage_interface:15 share/template/view/attachmentslist:21
+#.  
+msgid "Size"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:59 share/javascript/widget_resource.js:59
+#. (
+msgid "Skype: %1"
+msgstr ""
+
+#: share/console-template/template/console_wrapper.tmpl:24 share/console-template/template/console_wrapper.tmpl:7
+#.  
+msgid "Socialtext Appliance"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm:123
+#.  
+msgid "Socialtext Appliance Test Email"
+msgstr ""
+
+#: share/template/view/refcard:34
+#.  
+msgid "Socialtext Email"
+msgstr ""
+
+#: share/template/view/refcard:33
+#.  
+msgid "Socialtext Home Page"
+msgstr ""
+
+#: share/template/view/refcard:5
+#.  
+msgid "Socialtext Workspace Punctuation Help"
+msgstr ""
+
+#: lib/Socialtext/Appliance/UsageStats.pm:144 lib/Socialtext/Appliance/UserReport.pm:132
+#.  
+msgid "Socialtext detailed use report:"
+msgstr ""
+
+#: share/template/authen/forgot_password.html:3
+#.  
+msgid "Socialtext password help"
+msgstr ""
+
+#: lib/Socialtext/Appliance/UsageStats.pm:161 lib/Socialtext/Appliance/UserReport.pm:149
+#.  
+msgid "Socialtext summary use report:"
+msgstr ""
+
+#: share/template/lite/page/contention.html:5 share/template/view/edit_contention:3
+#.  
+msgid "Somebody else made changes to the page while you were editing it."
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:80
+#.  
+msgid "Sort entries by first posted time"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:74
+#.  
+msgid "Sort entries by last updated time"
+msgstr ""
+
+#: share/template/element/page/revision_view_actions:35
+#.  
+msgid "Source View"
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:96 share/template/element/settings/users_invite_section:50
+#.  
+msgid "Standard Welcome Message"
+msgstr ""
+
+#: share/template/view/page/stats_index:4
+#.  
+msgid "Statistics Reports"
+msgstr ""
+
+#: share/template/popup/email_page:30
+#.  
+msgid "Subject"
+msgstr ""
+
+#: share/template/authen/choose_password.html:37 share/template/authen/forgot_password.html:22 share/template/new_form_page/new_form_page_buttons.html:4
+#.  
+msgid "Submit"
+msgstr ""
+
+#: share/template/element/pagestats/attachments_table:17
+#.  
+msgid "Subtotal for this attachment"
+msgstr ""
+
+#: share/template/element/page/tag_queue_interface:12 share/template/element/page/tags:22
+#.  
+msgid "Suggestions:"
+msgstr ""
+
+#: share/template/view/page/stats:9
+#.  
+msgid "Summary"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:191
+#.  
+msgid "Sun"
+msgstr ""
+
+#: share/console-template/template/setup.html:17
+#.  
+msgid "Synchronize With Time Server Now"
+msgstr ""
+
+#: lib/Socialtext/SyndicatePlugin.pm:42
+#.  
+msgid "Syndicate"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/System.pm:56
+#.  
+msgid "System rebooting ..."
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/System.pm:62
+#.  
+msgid "System shutting down ..."
+msgstr ""
+
+#: lib/Socialtext/Formatter/WaflPhrase.pm:645 share/javascript/Wikiwyg/Jemplate.js:1847
+#.  
+msgid "Table of Contents"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:6 share/javascript/widget_resource.js:6
+#. (
+msgid "Table of contents for '%1'. Click to edit."
+msgstr ""
+
+#: share/javascript/Wikiwyg/Jemplate.js:1391 share/template/view/taglistview:20
+#.  
+msgid "Tag"
+msgstr ""
+
+#: share/template/element/page/tag_queue_interface:10
+#.  
+msgid "Tag:"
+msgstr ""
+
+#: lib/Socialtext/CategoryPlugin.pm:141
+#. (
+msgid "Tag: %1"
+msgstr ""
+
+#: share/template/element/page/tags:2
+#.  
+msgid "Tags"
+msgstr ""
+
+#: lib/Socialtext/RevisionPlugin.pm:160
+#.  
+msgid "Tags:"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:56 share/javascript/widget_resource.js:56
+#. (
+msgid "Technorati: %1"
+msgstr ""
+
+#: share/template/email/openid/workspace-invitation-body.html:32 share/template/email/openid/workspace-invitation.txt:14 share/template/email/st/workspace-invitation-body.html:47
+#.  
+msgid "Thanks,"
+msgstr ""
+
+#: lib/Socialtext/User/Default.pm:164
+#. (
+msgid "The %1 you provided (%2) is already in use."
+msgstr ""
+
+#: share/template/email/openid/invite-request-email.txt:12 share/template/email/st/invite-request-email.txt:12
+#.  
+msgid "The User Invite page can be found at:"
+msgstr ""
+
+#: share/template/element/settings/users_invite_section:36
+#.  
+msgid "The Workspace is easy to use. Click links to browse through the pages."
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:81
+#.  
+msgid "The Workspace is easy to use. Click links to browse through the\n>pages."
+msgstr ""
+
+#: lib/Socialtext/Account.pm:62
+#. (
+msgid "The account name you chose, %1, is already in use."
+msgstr ""
+
+#: share/console-template/template/backup.html:98
+#.  
+msgid "The appliance can store backup files on a Windows- or SMB-compatible shared directory/folder on another computer. Set the backup server, directory and username here."
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:277
+#.  
+msgid "The confirmation URL you used has expired. A new one will be sent."
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:351
+#.  
+msgid "The confirmation email has been resent. Please follow the link in this email to activate your account."
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:344
+#. (
+msgid "The email address for %1 has already been confirmed."
+msgstr ""
+
+#: share/template/authen/forgot_password.html:28
+#. (
+msgid "The email we will send you will come from <strong>%1</strong>. To ensure you receive it, please add <strong>%1</strong> to your address book or safe list."
+msgstr ""
+
+#: share/template/element/settings/users_invited_section:10
+#.  
+msgid "The following email addresses were invalid"
+msgstr ""
+
+#: share/template/email/recent-changes.html:22 share/template/email/recent-changes.txt:9
+#. (
+msgid "The following pages in %1 have recently changed:"
+msgstr ""
+
+#: share/template/email/watchlist.html:22 share/template/email/watchlist.txt:9
+#. (
+msgid "The following pages you are watching in %1 have recently changed:"
+msgstr ""
+
+#: share/template/element/settings/users_invited_section:6
+#.  
+msgid "The following users were already members of this Workspace"
+msgstr ""
+
+#: share/template/element/settings/users_invited_section:14
+#.  
+msgid "The following users were invited into this Workspace"
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:263 lib/Socialtext/Handler/Authen.pm:303 lib/Socialtext/Handler/Authen.pm:64
+#.  
+msgid "The given confirmation URL does not match any pending confirmations."
+msgstr ""
+
+#: share/template/popup/rename:35
+#.  
+msgid "The main window will navigate to the new page after you click \"Rename\"."
+msgstr ""
+
+#: share/template/popup/duplicate:32
+#.  
+msgid "The main window will navigate to the new page name after you click \"Duplicate\"."
+msgstr ""
+
+#: share/template/popup/copy_to_workspace:51
+#. (
+msgid "The new page name you selected, \"%1\", is already in use in workspace \"%2\""
+msgstr ""
+
+#: share/template/popup/duplicate:50
+#. (
+msgid "The new page name you selected, \"%1\", is already in use."
+msgstr ""
+
+#: share/template/popup/rename:53
+#. (
+msgid "The new page name you selected, \"%1\", is already in use. Please choose a different name."
+msgstr ""
+
+#: lib/Socialtext/BacklinksPlugin.pm:236
+#.  
+msgid "The page had no Backlinks."
+msgstr ""
+
+#: lib/Socialtext/BacklinksPlugin.pm:221
+#.  
+msgid "The page had these Backlinks:"
+msgstr ""
+
+#: lib/Socialtext/HitCounterPlugin.pm:56
+#. (
+msgid "The page id you specified (%1) was invalid."
+msgstr ""
+
+#: share/template/popup/rename:61
+#. (
+msgid "The page name you selected, %1, is the same as the page's current title. Please enter a new page name."
+msgstr ""
+
+#: share/template/popup/copy_to_workspace:47 share/template/popup/duplicate:44 share/template/popup/rename:47
+#. (
+msgid "The page name you selected, \"%1\", is not allowed. Please enter or change the page name."
+msgstr ""
+
+#: share/template/popup/duplicate:38 share/template/popup/rename:41
+#. (
+msgid "The page name you selected, \"%1\", is too long after URL encoding."
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:211 lib/Socialtext/Handler/Authen.pm:310
+#.  
+msgid "The passwords you provided did not match."
+msgstr ""
+
+#: lib/Socialtext/WorkspacesUIPlugin.pm:335
+#. (
+msgid "The permissions for %1 have been set to %2."
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:389
+#. (
+msgid "The skin you specified,%1, does not exist."
+msgstr ""
+
+#: share/template/element/settings/workspaces_listall_section:5
+#.  
+msgid "The ten most recently visited of these workspaces are displayed in the Dashboard."
+msgstr ""
+
+#: share/template/lite/page/contention.html:7 share/template/view/edit_contention:5
+#.  
+msgid "The text you just edited is shown below. You can copy and paste your changes from there:"
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:119 share/template/element/settings/users_invite_section:73
+#.  
+msgid "The workspace administrators for this space will receive a notification of your request so that the users can be invited."
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:361
+#. (
+msgid "The workspace name you chose, %1, is already in use as an email alias."
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:365
+#. (
+msgid "The workspace name you chose, %1, is already in use by another workspace."
+msgstr ""
+
+#: share/template/view/page/display:47
+#.  
+msgid "There are no pages that link to this page yet."
+msgstr ""
+
+#: share/template/element/page/tags:9
+#.  
+msgid "There are no tags for this page."
+msgstr ""
+
+#: share/template/element/page/newpage_duplicate:8
+#. (
+msgid "There is <span id=\"st-newpage-duplicate-emphasis\">already a page</span> named <a id=\"%1-link\" href=\"#\" target=\"\">XXX</a>. Would you like to:"
+msgstr ""
+
+#: lib/Socialtext/WeblogPlugin.pm:120
+#. (
+msgid "There is already a '%1' weblog. Please choose a different name."
+msgstr ""
+
+#: lib/Socialtext/Hub.pm:139
+#.  
+msgid "There was an error with your request"
+msgstr ""
+
+#: share/template/fetchrss.html:34
+#.  
+msgid "There was an error:"
+msgstr ""
+
+#: share/template/element/settings/select:32
+#.  
+msgid "This Workspace"
+msgstr ""
+
+#: lib/Socialtext/HitCounterPlugin.pm:59
+#.  
+msgid "This action requires a page to be specified."
+msgstr ""
+
+#: share/console-template/template/setup.html:58
+#.  
+msgid "This action will delete all existing workspaces and users on this appliance, and create the Admin workspace."
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm:124
+#.  
+msgid "This email was sent from the Socialtext Appliance."
+msgstr ""
+
+#: share/template/new_form_page/new_form_page_instructions.html:3
+#.  
+msgid "This form will create your profile page for Inbox."
+msgstr ""
+
+#: share/template/new_form_page/generic/new_form_page_instructions.html:3
+#.  
+msgid "This form will create your profile page."
+msgstr ""
+
+#: share/template/element/settings/workspaces_create_section:23
+#.  
+msgid "This is a short unique identifier used as part of your workspace's web address and email address."
+msgstr ""
+
+#: lib/Socialtext/WeblogPlugin.pm:141
+#. (
+msgid "This is the first post in %1. Click *New Post* to add another post."
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_appearance_section:8
+#.  
+msgid "This is the title of your workspace. It may be changed at any time."
+msgstr ""
+
+#: share/template/element/settings/workspaces_create_section:9
+#.  
+msgid "This is the title of your workspace. It may be changed later if you want."
+msgstr ""
+
+#: share/template/view/homepage:80
+#.  
+msgid "This is your personal notepad page. Edit it to your liking."
+msgstr ""
+
+#: lib/Socialtext/BacklinksPlugin.pm:227
+#.  
+msgid "This page is linked to from:"
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:117
+#.  
+msgid "This username has no associated email address."
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:191
+#.  
+msgid "Thu"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:17
+#.  
+msgid "Time"
+msgstr ""
+
+#: share/console-template/template/backup.html:64
+#.  
+msgid "Time each day:"
+msgstr ""
+
+#: share/template/element/page/newpage_save:14
+#.  
+msgid "Tip: You'll be able to find this page later by using the title you choose."
+msgstr ""
+
+#: share/javascript/Wikiwyg/Jemplate.js:1402 share/template/element/listview/pages:76
+#.  
+msgid "Title"
+msgstr ""
+
+#: lib/Socialtext/SearchPlugin.pm:119
+#. (
+msgid "Titles containing '%1' (%2)"
+msgstr ""
+
+#: share/template/view/refcard:253
+#.  
+msgid "To Get This..."
+msgstr ""
+
+#: share/template/email/password-change.txt:3
+#.  
+msgid "To change your password, please follow this link:"
+msgstr ""
+
+#: share/template/email/email-address-confirmation-completed.html:18 share/template/email/email-address-confirmation-completed.txt:6
+#.  
+msgid "To do so, go to this web address:"
+msgstr ""
+
+#: share/template/email/openid/invite-request-email.html:25
+#.  
+msgid "To invite these users into the workspace, visit the user invite page for the <br /> workspace and copy and paste the list above into the invite box. The User <br />Invite page can be found at:"
+msgstr ""
+
+#: share/template/email/st/invite-request-email.html:25
+#.  
+msgid "To invite these users into the workspace, visit the user invite page for the <br />workspace and copy and paste the list above into the invite box. The User <br />Invite page can be found at:"
+msgstr ""
+
+#: share/template/email/openid/invite-request-email.txt:11 share/template/email/st/invite-request-email.txt:11
+#.  
+msgid "To invite these users into the workspace, visit the user invite page for the workspace and copy and paste the list above into the invite box."
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:88
+#.  
+msgid "To make a link to another page (even if it doesn't exist yet), put [square brackets around a word or phrase]."
+msgstr ""
+
+#: share/template/element/settings/users_invite_section:42
+#.  
+msgid "To make a link to another page (even if it doesn't exist yet), put square brackets around a word or phrase."
+msgstr ""
+
+#: share/template/authen/choose_password.html:15
+#.  
+msgid "To proceed, please choose a password."
+msgstr ""
+
+#: share/console-template/template/overview.html:8
+#.  
+msgid "To see a list of all the workspaces and users on the system, go to the <a href=\"/nlw/control/\">Socialtext Accounts Admin</a> tool."
+msgstr ""
+
+#: share/template/errors/settings_requires_account:4
+#.  
+msgid "To set your preferences for a workspace, you must be logged in."
+msgstr ""
+
+#: share/template/email/recent-changes.txt:3
+#. (
+msgid "To stop receiving or change how often you receive emails about changes to %1, go to"
+msgstr ""
+
+#: share/template/email/recent-changes.html:16
+#. (
+msgid "To stop receiving or change how often you receive emails about changes to %1, you can <a href=\"%2\">change your preferences</a>."
+msgstr ""
+
+#: share/template/email/watchlist.txt:3
+#. (
+msgid "To stop receiving or change how often you receive emails about changes to your watchlist in %1, go to:"
+msgstr ""
+
+#: share/template/email/watchlist.html:16
+#. (
+msgid "To stop receiving or change how often you receive emails about changes to your watchlist in %1, you can <a href=\"%2\">change your preferences</a>."
+msgstr ""
+
+#: share/template/errors/watchlist_requires_account:4
+#.  
+msgid "To use the watchlist feature in a workspace, you must be logged in."
+msgstr ""
+
+#: share/template/popup/email_page:118
+#. (
+msgid "Too many users (%1) to display for selection. Please add recipients manually."
+msgstr ""
+
+#: share/template/element/page/actions:31
+#.  
+msgid "Tools"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:16
+#.  
+msgid "Top of page"
+msgstr ""
+
+#: share/template/view/page/stats:13
+#.  
+msgid "Total"
+msgstr ""
+
+#: lib/Socialtext/Appliance/UsageStats.pm:135 lib/Socialtext/Appliance/UsageStats.pm:154 lib/Socialtext/Appliance/UserReport.pm:123 lib/Socialtext/Appliance/UserReport.pm:142
+#. (
+msgid "Total user count for %1: %2"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:191
+#.  
+msgid "Tue"
+msgstr ""
+
+#: share/template/view/page/stats:12
+#.  
+msgid "Type"
+msgstr ""
+
+#: share/template/view/refcard:253
+#.  
+msgid "Type This"
+msgstr ""
+
+#: share/template/element/settings/users_settings_section:36
+#.  
+msgid "Type new password again"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:561
+#.  
+msgid "Unable to process logo file. Is it an image?"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:28 share/javascript/widget_resource.js:28
+#.  
+msgid "Unformatted Content"
+msgstr ""
+
+#: share/template/element/settings/select:27
+#.  
+msgid "Unsubscribe"
+msgstr ""
+
+#: share/template/element/settings/workspaces_unsubscribe_section:9
+#. (
+msgid "Unsubscribe from the %1 workspace"
+msgstr ""
+
+#: lib/Socialtext/DisplayPlugin.pm:61 share/javascript/main.js:165 share/javascript/stlibrary.js:102
+#.  
+msgid "Untitled Page"
+msgstr ""
+
+#: share/template/view/weblog:90
+#. (
+msgid "Updated by %1 on %2"
+msgstr ""
+
+#: share/template/element/page/details:10
+#. (
+msgid "Updated by %1 on %2."
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm:98
+#. (
+msgid "Updated mail server to %1"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm:102
+#.  
+msgid "Updated mail server to use built-in server"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm:68
+#. (
+msgid "Updated time from %1"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_appearance_section:35
+#.  
+msgid "Upload An Image"
+msgstr ""
+
+#: share/template/element/page/attachment_attach_interface:10 share/template/element/page/attachment_queue_interface:7
+#.  
+msgid "Upload Files"
+msgstr ""
+
+#: share/template/element/page/attachment_attach_interface:35
+#.  
+msgid "Upload file"
+msgstr ""
+
+#: share/template/element/page/attachments:14
+#.  
+msgid "Upload files"
+msgstr ""
+
+#: share/template/layout/html:108
+#.  
+msgid "Upload&nbsp;files"
+msgstr ""
+
+#: share/template/view/attachmentslist:19
+#.  
+msgid "Uploaded By"
+msgstr ""
+
+#: share/template/view/page/stats:26
+#.  
+msgid "Uploads"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:30 share/javascript/widget_resource.js:30
+#. (
+msgid "Use %1 to generate a form. Click to edit."
+msgstr ""
+
+#: share/console-template/template/popup.html:54
+#.  
+msgid "Use the email address you entered above as the username, and <strong>password</strong> as the password. You can change your password later."
+msgstr ""
+
+#: share/template/element/settings/users_settings_section:31
+#.  
+msgid "Use your email address and new password to log in again."
+msgstr ""
+
+#: lib/Socialtext/Appliance/UsageStats.pm:137 lib/Socialtext/Appliance/UserReport.pm:125 share/javascript/Wikiwyg/Jemplate.js:1957
+#.  
+msgid "User Name"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:235 lib/Socialtext/WebApp.pm:210
+#.  
+msgid "Username"
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:87 share/template/authen/choose_password.html:22
+#.  
+msgid "Username:"
+msgstr ""
+
+#: share/template/element/settings/select:3
+#.  
+msgid "Users"
+msgstr ""
+
+#: lib/Socialtext/OpenIdPlugin.pm:91 lib/Socialtext/UserSettingsPlugin.pm:283 lib/Socialtext/UserSettingsPlugin.pm:369 lib/Socialtext/UserSettingsPlugin.pm:430
+#.  
+msgid "Users: Invite New Users"
+msgstr ""
+
+#: lib/Socialtext/UserSettingsPlugin.pm:141
+#.  
+msgid "Users: List All Users"
+msgstr ""
+
+#: lib/Socialtext/UserSettingsPlugin.pm:140
+#.  
+msgid "Users: Manage All Users"
+msgstr ""
+
+#: lib/Socialtext/UserSettingsPlugin.pm:64
+#.  
+msgid "Users: My Settings"
+msgstr ""
+
+#: lib/Socialtext/WikiwygPlugin.pm:578
+#.  
+msgid "Validation subroutine called outside of validator"
+msgstr ""
+
+#: share/template/view/category_display:31
+#.  
+msgid "View"
+msgstr ""
+
+#: share/template/element/page/revision_compare_actions:23
+#.  
+msgid "View Formatted"
+msgstr ""
+
+#: share/template/view/page_revision_list:45
+#.  
+msgid "View Revision"
+msgstr ""
+
+#: share/template/element/page/revision_view_actions:9
+#.  
+msgid "View&nbsp;Current&nbsp;Revision"
+msgstr ""
+
+#: share/template/view/page/stats:18
+#.  
+msgid "Views"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:66
+#.  
+msgid "Warning"
+msgstr ""
+
+#: share/javascript/Watchlist.js:34 share/template/view/page/display:102
+#.  
+msgid "Watch this page"
+msgstr ""
+
+#: share/javascript/Watchlist.js:27 share/template/view/page/display:100
+#.  
+msgid "Watching this page"
+msgstr ""
+
+#: lib/Socialtext/WatchlistPlugin.pm:18 lib/Socialtext/WatchlistPlugin.pm:200
+#.  
+msgid "Watchlist"
+msgstr ""
+
+#: share/template/email/watchlist.html:5
+#. (
+msgid "Watchlist Update for %1"
+msgstr ""
+
+#: share/template/email/email-address-confirmation.html:20 share/template/email/email-address-confirmation.txt:9
+#.  
+msgid "We hope you enjoy using the Socialtext wiki."
+msgstr ""
+
+#: share/template/view/weblog:15
+#.  
+msgid "Weblog"
+msgstr ""
+
+#: share/template/view/weblog:127
+#.  
+msgid "Weblog Archives"
+msgstr ""
+
+#: lib/Socialtext/WeblogPlugin.pm:399 share/template/view/weblog:136
+#.  
+msgid "Weblog Navigation"
+msgstr ""
+
+#: lib/Socialtext/WeblogPlugin.pm:103
+#.  
+msgid "Weblog name must be between 2 and 28 characters long."
+msgstr ""
+
+#: lib/Socialtext/WeblogPlugin.pm:161
+#. (
+msgid "Weblog: %1 Atom"
+msgstr ""
+
+#: lib/Socialtext/WeblogPlugin.pm:156
+#. (
+msgid "Weblog: %1 RSS"
+msgstr ""
+
+#: share/template/element/settings/select:41 share/template/element/wiki/subnav-dashboard:6 share/template/element/wiki/subnav-default:13 share/template/element/wiki/subnav-default:9 share/template/element/wiki/subnav-listview:10 share/template/element/wiki/subnav-listview:7
+#.  
+msgid "Weblogs"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm:191
+#.  
+msgid "Wed"
+msgstr ""
+
+#: share/template/view/homepage:9
+#. (
+msgid "Welcome, %1."
+msgstr "Tere Tulemast, %1."
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:70 lib/Socialtext/WatchlistPlugin.pm:68
+#.  
+msgid "What information about changed pages do you want in email digests?"
+msgstr ""
+
+#: lib/Socialtext/EmailNotifyPlugin.pm:55
+#.  
+msgid "What order would you like the updates to be sorted?"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:41
+#.  
+msgid "What time interval should \"What's New\" display?"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:66
+#.  
+msgid "What time zone should times be displayed in?"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:14 lib/Socialtext/RecentChangesPlugin.pm:235 share/javascript/Wikiwyg/Jemplate.js:1210 share/template/element/listview/actionbar:4 share/template/element/page/recent_changes:2
+#.  
+msgid "What's New"
+msgstr ""
+
+#: lib/Socialtext/RecentChangesPlugin.pm:233
+#. (
+msgid "What's in workspace %1"
+msgstr ""
+
+#: share/template/element/wiki/subnav-dashboard:4 share/template/element/wiki/subnav-default:11 share/template/element/wiki/subnav-default:7 share/template/element/wiki/subnav-weblog:10 share/template/element/wiki/subnav-weblog:7
+#.  
+msgid "What's new"
+msgstr ""
+
+#: share/template/view/homepage:117
+#. (
+msgid "What's new in %1"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:9 share/javascript/widget_resource.js:9
+#. (
+msgid "What's new in the '%1' workspace. Click to edit."
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:8
+#.  
+msgid "When the workspace receives an email, the subject of the email becomes the title of a page, and the body of the email becomes the body of the page."
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_appearance_section:51
+#. (
+msgid "When users click \"Home\" in this workspace, should they see a personal dashboard, or the central page of the workspace? The central page of the workspace has the same title as the workspace (\"%1\")."
+msgstr ""
+
+#: share/template/email/password-change.html:16
+#. (
+msgid "When you <a href=\"%1\">click on this link</a>, you will be taken to a page which allows you to choose a new password."
+msgstr ""
+
+#: share/template/email/password-change.txt:7
+#.  
+msgid "When you click on this link, you will be taken to a page which allows you to choose a new password."
+msgstr ""
+
+#: share/template/element/settings/users_invite_section:40
+#.  
+msgid "When you're entering text, just type in paragraphs."
+msgstr ""
+
+#: share/template/element/settings/users_invite_search_section:86
+#.  
+msgid "When you're entering text, just type in paragraphs. And don't worry about breaking anything - previous versions of the page are saved, so there's always a backup copy of the page you're working on."
+msgstr ""
+
+#: lib/Socialtext/DisplayPlugin.pm:109
+#.  
+msgid "Which language do you use?"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:97
+#.  
+msgid "Who can send email to this workspace?"
+msgstr ""
+
+#: lib/Socialtext/Appliance/UsageStats.pm:137 lib/Socialtext/Appliance/UserReport.pm:125
+#.  
+msgid "Workspace"
+msgstr ""
+
+#: share/template/popup/email_page:110
+#.  
+msgid "Workspace Address Book"
+msgstr ""
+
+#: share/template/element/settings/select:34 share/template/workspaces_created_section.html:17
+#.  
+msgid "Workspace Appearance"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:35
+#.  
+msgid "Workspace Email Notify Setting"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:5
+#.  
+msgid "Workspace Email Receive Setting"
+msgstr ""
+
+#: share/template/element/settings/select:35 share/template/workspaces_created_section.html:18
+#.  
+msgid "Workspace Features"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_appearance_section:48
+#.  
+msgid "Workspace Home Link"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_appearance_section:19
+#.  
+msgid "Workspace Logo Image"
+msgstr ""
+
+#: share/template/element/settings/workspaces_create_section:20 share/template/element/settings/workspaces_listall_section:10
+#.  
+msgid "Workspace Name"
+msgstr ""
+
+#: share/template/element/settings/select:36 share/template/workspaces_created_section.html:19
+#.  
+msgid "Workspace Privacy"
+msgstr ""
+
+#: share/template/element/settings/workspaces_create_section:6 share/template/element/settings/workspaces_listall_section:9 share/template/element/settings/workspaces_settings_appearance_section:5
+#.  
+msgid "Workspace Title"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:64
+#.  
+msgid "Workspace Weblog Sort Order"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:339
+#.  
+msgid "Workspace name is a required field."
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:427
+#.  
+msgid "Workspace name must be between 3 and 30 characters long, and must contain only upper- or lower-case letters, numbers, underscores, and dashes."
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:350
+#.  
+msgid "Workspace title is a required field."
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:378
+#.  
+msgid "Workspace title is too long after URL encoding"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:372
+#.  
+msgid "Workspace title must be between 2 and 64 characters long."
+msgstr ""
+
+#: share/console-template/template/overview.html:6 share/template/element/settings/select:18
+#.  
+msgid "Workspaces"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm:157
+#. (
+msgid "Workspaces initialized.<br>Log: %1"
+msgstr ""
+
+#: lib/Socialtext/WorkspacesUIPlugin.pm:176
+#.  
+msgid "Workspaces: Create New Workspace"
+msgstr ""
+
+#: lib/Socialtext/WorkspacesUIPlugin.pm:238
+#.  
+msgid "Workspaces: Created New Workspace"
+msgstr ""
+
+#: lib/Socialtext/WorkspacesUIPlugin.pm:55
+#.  
+msgid "Workspaces: My Workspaces"
+msgstr ""
+
+#: lib/Socialtext/WorkspacesUIPlugin.pm:304
+#.  
+msgid "Workspaces: Permissions"
+msgstr ""
+
+#: lib/Socialtext/WorkspacesUIPlugin.pm:103
+#.  
+msgid "Workspaces: This Workspace"
+msgstr ""
+
+#: lib/Socialtext/WorkspacesUIPlugin.pm:267
+#.  
+msgid "Workspaces: Unsubscribe"
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:126 lib/Socialtext/Handler/Authen.pm:136
+#.  
+msgid "Wrong email address or password - please try again."
+msgstr ""
+
+#: share/template/view/refcard:222
+#.  
+msgid "Yahoo user yahoouser presence"
+msgstr ""
+
+#: share/template/view/refcard:223
+#.  
+msgid "Yahoo user ymsgr:yahoouser presence"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:58 share/javascript/widget_resource.js:58
+#. (
+msgid "Yahoo! IM: %1"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:49
+#.  
+msgid "Yes"
+msgstr ""
+
+#: share/template/errors/unauthorized_workspace:3
+#.  
+msgid "You are not authorized to view this workspace."
+msgstr ""
+
+#: share/template/view/homepage:82
+#.  
+msgid "You can also put links here to pages you want to remember."
+msgstr ""
+
+#: share/template/bugs_content.html:20
+#. (
+msgid "You can assist the Socialtext team to fix this bug by entering a comment about what actions you were performing when this bug occurred<a href=\"%1?action=bugs_dump;bug_id=%2\" style=\"text-color: black; text-decoration: none;\">.</a> Please enter your comments in the box below."
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_appearance_section:22
+#.  
+msgid "You can choose an image to use as the workspace logo. You may enter the web address of an image already on the web, or you may upload an image from your computer."
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:11
+#.  
+msgid "You can choose the level of privacy for your workspace. For more information on choosing the level of privacy for your workspace, see"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_features_section:67
+#.  
+msgid "You can choose to sort weblog entries by the date an entry is updated, or by the date an entry was first posted."
+msgstr ""
+
+#: share/template/new_form_page/generic/new_form_page_instructions.html:4 share/template/new_form_page/new_form_page_instructions.html:4
+#.  
+msgid "You can edit your profile in the workspace afterwards if you'd like, but you don't have to."
+msgstr ""
+
+#: share/template/email/openid/workspace-invitation.txt:10
+#.  
+msgid "You can now sign into our system using OpenID. On the Socialtext login screen, please input your OpenID into the indicated field and you will be redirected to the OpenID site to verify your identity. Once you have verified your identity, you will be sent back to the Socialtext site and be able to access the workspace."
+msgstr ""
+
+#: share/template/email/openid/workspace-invitation-body.html:24
+#.  
+msgid "You can sign into our system using OpenID. On the Socialtext login screen, please input your OpenID into the indicated field and you will be redirected to the OpenID site to verify your identity. Once you have verified your identity, you will be sent back to the Socialtext site and be able to access the workspace."
+msgstr ""
+
+#: share/console-template/template/form.tmpl:9
+#.  
+msgid "You can synchronize the appliance clock with another computer using the Internet Time protocol. The appliance must be able to contact that server via port 37."
+msgstr ""
+
+#: lib/Socialtext/Account.pm:70
+#.  
+msgid "You cannot change is_system_created for an account after it has been created."
+msgstr ""
+
+#: lib/Socialtext/User/Default.pm:197
+#.  
+msgid "You cannot change the email address of a system-created user."
+msgstr ""
+
+#: lib/Socialtext/Account.pm:66
+#.  
+msgid "You cannot change the name of a system-created account."
+msgstr ""
+
+#: lib/Socialtext/User/Default.pm:193
+#.  
+msgid "You cannot change the name of a system-created user."
+msgstr ""
+
+#: share/template/email/email-address-confirmation-completed.html:14 share/template/email/email-address-confirmation-completed.txt:4
+#. (
+msgid "You have confirmed your email address and can now log on to the %1 workspace."
+msgstr ""
+
+#: share/template/search_help_field.html:12
+#.  
+msgid "You may search on a field by separating the field name from the query with a colon, like this:"
+msgstr ""
+
+#: share/template/email/email-address-confirmation-completed.html:26 share/template/email/email-address-confirmation-completed.txt:10 share/template/email/openid/workspace-invitation-body.html:27 share/template/email/openid/workspace-invitation.txt:12 share/template/email/st/workspace-invitation-body.html:42 share/template/email/st/workspace-invitation.txt:22
+#.  
+msgid "You may want to keep this email for future reference."
+msgstr ""
+
+#: share/template/errors/login_to_edit:3
+#. (
+msgid "You must be logged in to edit the %1 workspace."
+msgstr ""
+
+#: share/template/errors/authenticate_to_read:3
+#. (
+msgid "You must be logged in to view the %1 workspace. If you already have an account, please login now.<br /> Otherwise, you can <a href=\"/nlw/register.html?redirect_to=%2\">create a new account</a>"
+msgstr ""
+
+#: share/template/errors/require_business_admin:2
+#.  
+msgid "You must have admin privileges to access this URI."
+msgstr ""
+
+#: lib/Socialtext/OpenIdPlugin.pm:42
+#.  
+msgid "You must input both an OpenID and an email."
+msgstr ""
+
+#: share/template/errors/not_logged_in:2
+#.  
+msgid "You must login to view this page."
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:100
+#.  
+msgid "You must provide a valid email address."
+msgstr ""
+
+#: share/template/errors/requires_confirmation:2
+#.  
+msgid "You need to confirm your email address to activate this account."
+msgstr ""
+
+#: share/template/errors/requires_confirmation:4
+#.  
+msgid "You should have received an email with a confirmation link."
+msgstr ""
+
+#: share/template/email/email-address-confirmation.html:15 share/template/email/email-address-confirmation.txt:4
+#.  
+msgid "You signed up for a new account with our system and we need to confirm your email address."
+msgstr ""
+
+#: share/console-template/template/popup.html:53
+#.  
+msgid "You will be asked to log into the Console after you click \"Initialize Workspaces\"."
+msgstr ""
+
+#: share/template/workspaces_created_section.html:10
+#.  
+msgid "You're ready to jump to your new workspace, if you want to. Choose your next step:"
+msgstr ""
+
+#: lib/Socialtext/FavoritesPlugin.pm:12 share/template/view/homepage:74
+#.  
+msgid "Your Notepad"
+msgstr ""
+
+#: share/template/element/listview/actionbar:6
+#.  
+msgid "Your Watchlist"
+msgstr ""
+
+#: share/template/email/email-address-confirmation-completed.html:3
+#.  
+msgid "Your email address has been confirmed"
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:289
+#. (
+msgid "Your email address, %1, has been confirmed. Please login."
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:324
+#.  
+msgid "Your password has been set and you can now login."
+msgstr ""
+
+#: share/template/search_help_field.html:25
+#. (
+msgid "Your query was \"%1\""
+msgstr ""
+
+#: share/template/element/settings/users_invited_section:18
+#.  
+msgid "Your request to invite the following users has been sent"
+msgstr ""
+
+#: share/template/element/settings/users_settings_section:41
+#.  
+msgid "Your settings cannot be changed via the Socialtext settings UI."
+msgstr ""
+
+#: share/template/view/homepage:130
+#.  
+msgid "Your watchlist"
+msgstr ""
+
+#: share/template/view/homepage:139
+#.  
+msgid "Your workspaces"
+msgstr ""
+
+#: lib/Socialtext/Handler/Authen.pm:110
+#. (
+msgid "\"%1\" is not a valid email address. Please use your email address to log in."
+msgstr ""
+
+#: share/template/element/settings/workspaces_create_section:34
+#.  
+msgid "and this email address:"
+msgstr ""
+
+#: share/template/view/refcard:30
+#.  
+msgid "another workspace"
+msgstr ""
+
+#: share/template/element/settings/users_invite_section:21
+#.  
+msgid "another.friend@example.com"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:64
+#.  
+msgid "anybody can see and edit pages"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:77
+#.  
+msgid "anybody can see and edit pages, upload files and send email"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:55
+#.  
+msgid "anybody can see the workspace and make comments, only privately invited members can edit"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:46
+#.  
+msgid "anybody can see the workspace, only privately invited members can edit"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:37
+#.  
+msgid "anybody can see the workspace, users can register to be able to edit"
+msgstr ""
+
+#: share/template/view/weblog:120
+#.  
+msgid "attachments"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:835
+#.  
+msgid "authenticated-user-only"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:95
+#.  
+msgid "automatic, United States"
+msgstr ""
+
+#: share/template/view/refcard:13
+#.  
+msgid "bold words"
+msgstr ""
+
+#: share/template/search_help_field.html:8
+#.  
+msgid "category"
+msgstr ""
+
+#: share/template/search_help_field.html:17
+#.  
+msgid "category:help"
+msgstr ""
+
+#: share/template/view/homepage:136
+#.  
+msgid "change"
+msgstr ""
+
+#: share/template/view/homepage:136
+#.  
+msgid "changes"
+msgstr ""
+
+#: lib/Socialtext/Pages.pm:144
+#.  
+msgid "click to create page"
+msgstr ""
+
+#: share/template/element/page/details:25 share/template/view/weblog:105
+#.  
+msgid "comment"
+msgstr ""
+
+#: lib/Socialtext/Page.pm:664
+#. (
+msgid "contributed by {user: %1} on {date: %2}"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:93
+#.  
+msgid "currently in DST"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:94
+#.  
+msgid "currently not in DST"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:61 share/javascript/widget_resource.js:61
+#. (
+msgid "date: %1"
+msgstr ""
+
+#: share/template/view/refcard:25
+#.  
+msgid "different-workspace"
+msgstr ""
+
+#: share/template/view/refcard:19
+#.  
+msgid "dinette"
+msgstr ""
+
+#: share/template/element/page/details:14 share/template/element/weblog/edit_link:9 share/template/view/homepage:52 share/template/view/homepage:54 share/template/view/homepage:68 share/template/view/homepage:70
+#.  
+msgid "edit"
+msgstr ""
+
+#: share/template/view/weblog:112
+#.  
+msgid "edit this post"
+msgstr ""
+
+#: share/template/view/refcard:32
+#.  
+msgid "email link"
+msgstr ""
+
+#: share/template/element/settings/save:10
+#.  
+msgid "error:"
+msgstr ""
+
+#: share/template/view/refcard:35
+#.  
+msgid "external image"
+msgstr ""
+
+#: lib/Socialtext/Formatter/Phrase.pm:265 lib/Socialtext/Formatter/Phrase.pm:331 share/template/view/refcard:31
+#.  
+msgid "external link"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:52 lib/Socialtext/Widget_resource.pm:53 share/javascript/widget_resource.js:52 share/javascript/widget_resource.js:53
+#. (
+msgid "feed: %1"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:38 lib/Socialtext/Widget_resource.pm:39 share/javascript/widget_resource.js:38 share/javascript/widget_resource.js:39
+#. (
+msgid "file: %1"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:64 share/javascript/widget_resource.js:64
+#. (
+msgid "form: %1"
+msgstr ""
+
+#: share/console-template/template/overview.html:14
+#.  
+msgid "free"
+msgstr ""
+
+#: share/template/view/refcard:39
+#.  
+msgid "heading 1"
+msgstr ""
+
+#: share/template/view/refcard:40
+#.  
+msgid "heading 2"
+msgstr ""
+
+#: share/template/view/refcard:41
+#.  
+msgid "heading 3"
+msgstr ""
+
+#: share/template/view/refcard:42
+#.  
+msgid "heading 4"
+msgstr ""
+
+#: share/template/view/refcard:43
+#.  
+msgid "heading 5"
+msgstr ""
+
+#: share/template/view/refcard:44
+#.  
+msgid "heading 6"
+msgstr ""
+
+#: share/template/view/refcard:29
+#.  
+msgid "headings are sections too"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:66
+#.  
+msgid "if you use this setting, the workspace is likely to be spammed"
+msgstr ""
+
+#: share/template/view/refcard:49
+#.  
+msgid "image attached to a page in another workspace"
+msgstr ""
+
+#: share/template/view/refcard:46
+#.  
+msgid "image attached to page"
+msgstr ""
+
+#: share/template/view/refcard:45 share/template/view/refcard:47
+#.  
+msgid "image attachment"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:36 lib/Socialtext/Widget_resource.pm:37 share/javascript/widget_resource.js:36 share/javascript/widget_resource.js:37
+#. (
+msgid "image: %1"
+msgstr ""
+
+#: share/template/view/weblog:20
+#. (
+msgid "in %1"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:42 share/javascript/widget_resource.js:42
+#. (
+msgid "include: %1"
+msgstr ""
+
+#: share/template/view/refcard:20
+#.  
+msgid "indented"
+msgstr ""
+
+#: lib/Socialtext/Formatter/WaflPhrase.pm:446
+#. (
+msgid "inter-workspace link: %1"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:835
+#.  
+msgid "intranet"
+msgstr ""
+
+#: share/template/view/refcard:14
+#.  
+msgid "italic words"
+msgstr ""
+
+#: share/template/view/refcard:36
+#.  
+msgid "item 1"
+msgstr ""
+
+#: share/template/view/refcard:37
+#.  
+msgid "item 2"
+msgstr ""
+
+#: share/template/view/refcard:21
+#.  
+msgid "lines"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:31 lib/Socialtext/Widget_resource.pm:32 lib/Socialtext/Widget_resource.pm:33 lib/Socialtext/Widget_resource.pm:35 share/javascript/widget_resource.js:31 share/javascript/widget_resource.js:32 share/javascript/widget_resource.js:33 share/javascript/widget_resource.js:35
+#. (
+msgid "link: %1"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:34 share/javascript/widget_resource.js:34
+#. (
+msgid "link: %1 (%2 )"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:835
+#.  
+msgid "member-only"
+msgstr ""
+
+#: share/template/view/refcard:16
+#.  
+msgid "monospace"
+msgstr ""
+
+#: lib/Socialtext/TimeZonePlugin.pm:96
+#.  
+msgid "never in DST"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:28
+#.  
+msgid "only invited users can access the workspace"
+msgstr ""
+
+#: share/template/element/settings/workspaces_settings_appearance_section:27 share/template/element/settings/workspaces_settings_appearance_section:36
+#.  
+msgid "optional"
+msgstr ""
+
+#: share/template/view/weblog:146
+#.  
+msgid "or post by email:"
+msgstr ""
+
+#: share/template/view/refcard:50
+#.  
+msgid "page name"
+msgstr ""
+
+#: share/console-template/template/overview.html:14
+#.  
+msgid "percent free"
+msgstr ""
+
+#: share/template/view/weblog:116
+#.  
+msgid "permalink"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:835
+#.  
+msgid "public"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:835
+#.  
+msgid "public-authenticate-to-edit"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:835
+#.  
+msgid "public-comment-only"
+msgstr ""
+
+#: lib/Socialtext/Workspace.pm:835
+#.  
+msgid "public-read-only"
+msgstr ""
+
+#: lib/Socialtext/WeblogPlugin.pm:180 lib/Socialtext/Widget_resource.pm:45 share/javascript/widget_resource.js:45
+#.  
+msgid "recent changes"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:44 share/javascript/widget_resource.js:44
+#. (
+msgid "recent changes: %1"
+msgstr ""
+
+#: share/console-template/template/form.tmpl:7
+#.  
+msgid "refresh"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:116
+#.  
+msgid "registered users"
+msgstr ""
+
+#: share/template/element/settings/weblog_create:11 share/template/element/settings/workspaces_create_section:11 share/template/element/settings/workspaces_create_section:26 share/template/element/settings/workspaces_settings_appearance_section:10
+#.  
+msgid "required"
+msgstr ""
+
+#: share/template/view/page_revision_list:60
+#.  
+msgid "revision"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:54 share/javascript/widget_resource.js:54
+#. (
+msgid "search: %1"
+msgstr ""
+
+#: lib/Socialtext/Formatter/WaflPhrase.pm:442
+#.  
+msgid "section link"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:43 share/javascript/widget_resource.js:43
+#. (
+msgid "section: %1"
+msgstr ""
+
+#: lib/Socialtext/Formatter/Phrase.pm:264 lib/Socialtext/Formatter/Phrase.pm:330
+#.  
+msgid "start irc session"
+msgstr ""
+
+#: share/template/view/refcard:15
+#.  
+msgid "strikeout"
+msgstr ""
+
+#: share/template/view/refcard:38
+#.  
+msgid "subitem 1"
+msgstr ""
+
+#: share/template/view/refcard:17
+#.  
+msgid "table"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:48 share/javascript/widget_resource.js:48
+#. (
+msgid "tag list: %1"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:46 lib/Socialtext/Widget_resource.pm:47 share/javascript/widget_resource.js:46 share/javascript/widget_resource.js:47
+#. (
+msgid "tag: %1"
+msgstr ""
+
+#: share/template/view/refcard:53
+#.  
+msgid "this text is not bold"
+msgstr ""
+
+#: share/template/search_help_field.html:7
+#.  
+msgid "title"
+msgstr ""
+
+#: share/template/search_help_field.html:16
+#.  
+msgid "title:hello"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:41 share/javascript/widget_resource.js:41
+#.  
+msgid "toc"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:40 share/javascript/widget_resource.js:40
+#. (
+msgid "toc: %1"
+msgstr ""
+
+#: share/console-template/template/overview.html:14
+#.  
+msgid "total"
+msgstr ""
+
+#: share/template/popup/email_page:122
+#.  
+msgid "type email address here"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:62 share/javascript/widget_resource.js:62
+#. (
+msgid "unformatted: %1"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:60 share/javascript/widget_resource.js:60
+#. (
+msgid "user: %1"
+msgstr ""
+
+#: share/template/email/openid/workspace-invitation-body.html:21 share/template/email/openid/workspace-invitation.txt:8 share/template/email/st/workspace-invitation-body.html:31 share/template/email/st/workspace-invitation.txt:13
+#.  
+msgid "username:"
+msgstr ""
+
+#: share/template/view/refcard:18
+#.  
+msgid "value"
+msgstr ""
+
+#: share/template/element/settings/save:7
+#.  
+msgid "warning:"
+msgstr ""
+
+#: share/template/email/openid/workspace-invitation-body.html:20 share/template/email/openid/workspace-invitation.txt:7 share/template/email/st/workspace-invitation-body.html:30 share/template/email/st/workspace-invitation.txt:12
+#.  
+msgid "web address:"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:51 share/javascript/widget_resource.js:51
+#. (
+msgid "weblog list: %1"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm:49 lib/Socialtext/Widget_resource.pm:50 share/javascript/widget_resource.js:49 share/javascript/widget_resource.js:50
+#. (
+msgid "weblog: %1"
+msgstr ""
+
+#: share/template/view/refcard:48
+#.  
+msgid "workspace"
+msgstr ""
+
+#: share/template/element/settings/workspaces_permissions_section:116
+#.  
+msgid "workspace members"
+msgstr ""
+
+#: share/template/element/settings/users_invite_section:20
+#.  
+msgid "your.friend@example.com"
+msgstr ""
+
+#: share/template/view/refcard:203
+#.  
+msgid "{file: proposal.pdf} on this page"
 msgstr ""
 

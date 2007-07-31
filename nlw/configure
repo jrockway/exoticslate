@@ -9,6 +9,9 @@ use Getopt::Long;
 use Cwd qw(abs_path);
 use File::Basename qw(dirname basename);
 use File::Spec::Functions qw(catfile updir);
+use FindBin;
+use lib "$FindBin::Bin/lib";
+use Socialtext::l10n qw/valid_code/;
 $| = 1;
 
 our %options;
@@ -214,6 +217,16 @@ must be a readable directory.  Try as:
 EOF
             $ok = 0;
         }
+    }
+
+    # Valid Locale code
+    my $locale = $settings{'default-locale'}->{value};
+    if (! valid_code($locale)) {
+        print <<"EOF";
+'$locale' is not a supported locale.
+
+EOF
+        $ok = 0;
     }
 
     return $ok;

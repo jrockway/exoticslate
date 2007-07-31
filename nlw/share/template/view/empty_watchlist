@@ -4,14 +4,14 @@
 
 <div>
 <div id="st-list-title">
-    Pages You're Watching
+    [% loc("Pages You're Watching") %]
     [% INCLUDE rss_link %]
 </div>
 <div id="st-actions-bar-spacer-clear">&nbsp;</div>
 </div>
 
 <p />[% empty_message %]<p />
-<p />Look for <img border="0" src="[% wiki.static_path %]/images/st/pagetools/watch-hover.gif"/> on a page you want to watch and then click on it to add the page to your Watchlist..<p />
+<p />[% loc('Look for <img border="0" src="[_1]/images/st/pagetools/watch-hover.gif"/> on a page you want to watch and then click on it to add the page to your Watchlist..', wiki.static_path) %]<p />
 [% END %]
 
 [% BLOCK rss_link %]

@@ -58,6 +58,7 @@ Email::Send::Sendmail: 0
 Email::Simple: 1.92
 Email::Valid: 0.15
 Encode: 2.10
+Encode::Unicode::Japanese: 0.02
 Exception::Class: 1.21
 Exporter: 0
 Fcntl: 1.05
@@ -75,14 +76,17 @@ FindBin: 1.44
 Getopt::Long: 0
 HTML::Entities: 1.32
 HTML::FillInForm: 1.05
+HTML::FillInForm::ForceUTF8: 0.02
 HTML::FormatRTF: 2.04
 HTML::PrettyPrinter: 0.03
 HTML::TreeBuilder: 3.13
 HTML::WikiConverter: 0.61
 HTML::WikiConverter::Socialtext: 0.03
+Lingua::JA::Fold: 0.07 
 Imager: 0
 IO::File: 0
 IPC::Run: 0.79
+Jcode: 2.06
 Jemplate: 0.20
 JSON: 1.07
 KinoSearch: 0.15

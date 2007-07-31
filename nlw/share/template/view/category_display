@@ -28,15 +28,15 @@
 
 [% BLOCK view_as_welog %]
   <div id="category-display-weblog-view">
-    View
-    <a href="[% script_name %]?action=weblog_display;category=[% uri_escaped_category %]">[% html_escaped_category %] as a weblog</a>
+    [% loc("View") %]
+    <a href="[% script_name %]?action=weblog_display;category=[% uri_escaped_category %]">[% loc("[_1] as a weblog", html_escaped_category) %]</a>
   </div>
 [% END %]
 
 [% BLOCK post_by_email %]
   <div id="category-display-post-email">
     [% IF checker.check_permission('email_in') AND email_category_address %]
-    Post to this tag by email:
+    [% loc("Post to this tag by email:") %]
     <a href="mailto:[% email_category_address %]">[% html_escaped_category %]</a>
     [% END %]
   </div>

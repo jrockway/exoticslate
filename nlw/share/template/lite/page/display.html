@@ -3,11 +3,11 @@
 
         [% page_html %]
         [% IF page_update_info %]
-        <div><p><em>Page Last Updated: [% page_update_info %]</em></p></div>
+        <div><p><em>[% loc('Page Last Updated:') %] [% page_update_info %]</em></p></div>
         [% END %]
         [% IF attachments.size %]
         <hr>
-        <p>Attachments for this page:</p>
+        <p>[% loc('Attachments for this page:') %]</p>
         <ul>
             [%
             FOREACH row = attachments;

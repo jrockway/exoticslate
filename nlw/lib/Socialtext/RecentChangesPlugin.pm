@@ -1,16 +1,17 @@
 # @COPYRIGHT@
 package Socialtext::RecentChangesPlugin;
 use Socialtext::CategoryPlugin;
+use Socialtext::l10n qw/loc/;
 use strict;
 use warnings;
 
 use base 'Socialtext::Query::Plugin';
 
 use Class::Field qw( const );
-
+use Socialtext::l10n qw ( loc );
 
 sub class_id { 'recent_changes' }
-const class_title      => "What's New";
+const class_title      => loc("What's New");
 const cgi_class        => 'Socialtext::RecentChanges::CGI';
 const default_category => 'recent changes';
 
@@ -37,15 +38,15 @@ sub get_result_set_path {
 sub changes_depth {
     my $self = shift;
     my $p = $self->new_preference('changes_depth');
-    $p->query('What time interval should "What\'s New" display?');
+    $p->query(loc('What time interval should "What\'s New" display?'));
     $p->type('pulldown');
     my $choices = [
-        1 => 'Last 24 hours',
-        2 => 'Last 2 Days',
-        3 => 'Last 3 Days',
-        7 => 'Last Week',
-        14 => 'Last 2 Weeks',
-        31 => 'Last Month',
+        1 => loc('Last 24 hours'),
+        2 => loc('Last 2 Days'),
+        3 => loc('Last 3 Days'),
+        7 => loc('Last Week'),
+        14 => loc('Last 2 Weeks'),
+        31 => loc('Last Month'),
     ];
     $p->choices($choices);
     $p->default(7);
@@ -55,7 +56,7 @@ sub changes_depth {
 sub sidebox_changes_depth {
     my $self = shift;
     my $p = $self->new_preference('sidebox_changes_depth');
-    $p->query('How many items from that time period should be displayed as a side box on pages?');
+    $p->query(loc('How many items from that time period should be displayed as a side box on pages?'));
     $p->type('pulldown');
     my $choices = [
         2 => 2, 4 => 4, 6 => 6, 8 => 8, 10 => 10, 15 => 15, 20 => 20
@@ -68,7 +69,7 @@ sub sidebox_changes_depth {
 sub include_in_pages {
     my $self = shift;
     my $p = $self->new_preference('include_in_pages');
-    $p->query('Display as a side box in page view?');
+    $p->query(loc('Display as a side box in page view?'));
     $p->type('boolean');
     $p->default(0);
     return $p;
@@ -79,7 +80,7 @@ sub recent_changes {
 
     if ( $self->cgi->changes =~ /\// ) {
         Socialtext::Exception::DataValidation->throw(
-            errors => ["Invalid character '/' in changes parameter"] );
+            errors => [loc("Invalid character '/' in changes parameter")] );
     }
 
     my $type = $self->cgi->changes;
@@ -107,9 +108,7 @@ sub recent_changes {
         \%sortdir,
         feeds         => $self->_feeds( $self->hub->current_workspace ),
         unplug_uri    => "?action=unplug",
-        unplug_phrase => 'Click this button to save the '
-            . $self->hub->tiddly->default_count
-            . ' most recent pages to your computer for offline use.',
+        unplug_phrase => loc('Click this button to save the [_1] most recent pages to your computer for offline use.', $self->hub->tiddly->default_count),
     );
 }
 
@@ -169,12 +168,13 @@ sub new_changes {
     my $display_title;
     my $pages_ref;
     if (defined $type && $type eq 'all') {
-        $display_title = "All Pages";
+        $display_title = loc("All Pages");
         $pages_ref = [$self->hub->pages->all_active];
     }
     else {
         my $depth = $self->preferences->changes_depth;
-        $display_title = 'Changes in ' . $depth->value_label;
+        my $last_changes_time = loc($depth->value_label);
+        $display_title = loc('Changes in [_1]', $last_changes_time);
         my $days = $depth->value;
         my $minutes = $days * 1440;
         $pages_ref =
@@ -224,12 +224,15 @@ package Socialtext::RecentChanges::Wafl;
 
 use Socialtext::CategoryPlugin;
 use base 'Socialtext::Category::Wafl';
+use Socialtext::l10n qw/loc/;
 
 sub _set_titles {
     my $self = shift;
-    my $title_info = "What's New";
+    my $title_info;;
     if ($self->target_workspace ne $self->current_workspace_name) {
-        $title_info .= ' in workspace ' . $self->target_workspace;
+        $title_info = loc("What\'s in workspace [_1]", $self->target_workspace);
+    } else {
+        $title_info = loc("What's New");
     }
     $self->wafl_query_title($title_info);
     $self->wafl_query_link($self->_set_query_link);

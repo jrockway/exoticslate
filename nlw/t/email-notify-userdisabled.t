@@ -9,7 +9,7 @@ fixtures( 'admin_no_pages' );
 use Email::Send::Test;
 use Socialtext::EmailNotifier;
 
-Socialtext::EmailSender->TestModeOn();
+$Socialtext::EmailSender::Base::SendClass = 'Test';
 my $ten_days_ago = time - (86400 * 10);
 my $hub = new_hub('admin');
 

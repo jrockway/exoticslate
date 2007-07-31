@@ -8,6 +8,10 @@
     PROCESS css_link css = hub.css.uri_for_css('print_preview.css'), media = 'screen';
   END;
   PROCESS css_link css = hub.css.uri_for_css('wikiwyg_editor.css'), media = 'wikiwyg';
+  
+  IF loc_lang == 'ja';
+    PROCESS css_link css  = hub.css.uri_for_css('ja.css'), media = 'screen';
+  END;
 %]
 
 [% BLOCK css_link %]

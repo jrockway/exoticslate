@@ -7,6 +7,8 @@ use warnings;
 use Socialtext;
 use base 'Socialtext::Base';
 use Socialtext::l10n qw/loc/;
+use Data::Dumper;
+use Encode ();
 
 sub class_id { 'helpers' }
 
@@ -37,6 +39,45 @@ sub script_link {
     my %query = @_;
     my $url = $self->script_path . '?' . $self->query_string_from_hash(%query);
     return qq(<a href="$url">$label</a>);
+}
+
+my $supported_format = {
+    'en' => '%B %Y',
+    'ja' => '%Y年 %m月',
+};
+
+sub _get_date_format {
+    my $self = shift;
+    my $locale = $self->hub->best_locale;
+    my $locale_format = $supported_format->{$locale};
+    if(!defined $locale_format)
+    {
+        $locale = 'en';
+        $locale_format = $supported_format->{'en'};
+    }
+        
+    return DateTime::Format::Strptime->new(
+            pattern=> $locale_format,
+            locale => $locale,
+        );
+}
+
+sub format_date {
+    my $self = shift;
+    my $year = shift;
+    my $month = shift;
+
+    # Create DateTime object
+    my $datetime = DateTime->new(
+            time_zone => 'local',
+            year => $year, month => $month,   day => 1,
+            hour => 0,   minute => 0, second => 0
+        );
+
+    my $format = $self->_get_date_format;
+    my $date_str = $format->format_datetime($datetime);
+    Encode::_utf8_on($date_str);
+    return $date_str;
 }
 
 sub page_display_link {
@@ -101,7 +142,7 @@ sub global_template_vars {
 
     return (
         loc               => \&loc,
-        loc_lang          => $self->hub->display->preferences->locale->value,
+        loc_lang          => $self->hub->best_locale,
         css               => $self->_get_css_info,
         images            => $self->_get_images_info,
         user              => $self->_get_user_info,
@@ -116,13 +157,25 @@ sub global_template_vars {
 
 sub _get_css_info {
     my ($self) = @_;
-    return {
-        screen  => $self->hub->css->uri_for_css('screen.css'),
-        print   => $self->hub->css->uri_for_css('print.css'),
-        wikiwyg => $self->hub->css->uri_for_css('wikiwyg.css'),
-        ie      => $self->hub->css->uri_for_css('ie.css'),
-        ieprint => $self->hub->css->uri_for_css('ieprint.css'),
-    };
+
+    if($self->hub->best_locale eq 'ja') {
+        return {
+            per_locale => $self->hub->css->uri_for_css('ja.css'),
+            screen  => $self->hub->css->uri_for_css('screen.css'),
+            print   => $self->hub->css->uri_for_css('print.css'),
+            wikiwyg => $self->hub->css->uri_for_css('wikiwyg.css'),
+            ie      => $self->hub->css->uri_for_css('ie.css'),
+            ieprint => $self->hub->css->uri_for_css('ieprint.css'),
+        };
+    } else {
+        return {
+            screen  => $self->hub->css->uri_for_css('screen.css'),
+            print  => $self->hub->css->uri_for_css('print.css'),
+            wikiwyg => $self->hub->css->uri_for_css('wikiwyg.css'),
+            ie      => $self->hub->css->uri_for_css('ie.css'),
+            ieprint => $self->hub->css->uri_for_css('ieprint.css'),
+        };
+    }
 }
 
 sub _get_images_info {

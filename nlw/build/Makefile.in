@@ -65,7 +65,6 @@ INSTALL_BASE = install-css        \
                install-wsdl
 
 INSTALL_FILE_TARGETS = $(INSTALL_BASE)   \
-                       install-doc-pages \
                        install-template 
 
 INSTALL_PKGS_TARGETS = install-pkgs-dapper \
@@ -349,7 +348,7 @@ test:
 
 
 testlive:
-	$(PERL) $(PROVE) -l t/live
+	$(PERL) $(PROVE) -l -r t/live
 
 
 

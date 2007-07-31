@@ -144,7 +144,7 @@ ST.TagQueue.prototype = {
                     suggestions._MODIFIERS = this.socialtextModifiers;
                     this.jst.suggestion.update(suggestions);
                 } else {
-                    var help = '<span class="st-tagqueue-nomatch">No matches</span>';
+                    var help = '<span class="st-tagqueue-nomatch">' + loc("No matches") + '</span>';
                     this.jst.suggestion.set_text(help);
                 }
             }
@@ -167,7 +167,7 @@ ST.TagQueue.prototype = {
 
     queue_tag: function (tag) {
         if (! tag) {
-            this._show_error('No tag entered');
+            this._show_error(loc('No tag entered'));
             return false;
         }
         this._queued_tags.push(tag);
@@ -187,14 +187,14 @@ ST.TagQueue.prototype = {
                 data.queue.push(this._queued_tags[i]);
             this.jst.list.update(data);
             this.jst.list.show();
-            Element.update(this.element.submitButton, 'Add another tag');
-            Element.update(this.element.message, 'Enter a tag and click "Add another tag". The tag will be saved when you save the page.');
+            Element.update(this.element.submitButton, loc('Add another tag'));
+            Element.update(this.element.message, loc('Enter a tag and click "Add another tag". The tag will be saved when you save the page.'));
         }
         else {
             this.jst.list.clear();
             this.jst.list.hide();
-            Element.update(this.element.submitButton, 'Add tag');
-            Element.update(this.element.message, 'Enter a tag and click "Add tag". The tag will be saved when you save the page.');
+            Element.update(this.element.submitButton, loc('Add tag'));
+            Element.update(this.element.message, loc('Enter a tag and click "Add tag". The tag will be saved when you save the page.'));
         }
         this._hide_error();
         return false;

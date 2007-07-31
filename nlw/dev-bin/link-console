@@ -1,0 +1,64 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use File::Path qw/mkpath/;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use Socialtext::File qw/set_contents/;
+
+my $branch = shift;
+
+$branch = "branches/$branch" if $branch;
+$branch ||= "trunk";
+
+print "Linking in console from $branch...\n\n";
+
+my $appliance_base = "$ENV{HOME}/src/st/appliance";
+die "Appliance repo is not checked out to $appliance_base" unless -d $appliance_base;
+
+my $console_dir = "$appliance_base/$branch/libsocialtext-appliance-perl";
+die "Couldn't find console branch '$console_dir'" unless -d $console_dir;
+
+my @libs = qx(find $console_dir/lib -name '*.pm');
+for my $f (@libs) {
+    chomp $f;
+    $f =~ s#^\Q$console_dir\E/##;
+    print "Linking in $f...\n";
+    (my $dir = $f) =~ s#^(.+)/.+#$1#;
+    unless (-d $dir) {
+        mkpath $dir or die "Can't mkpath $dir: $!";
+    }
+    unlink $f;
+    symlink "$console_dir/$f", $f or die "Can't symlink $console_dir/$f, $f: $!";
+}
+
+my @tmpls = qx(find $console_dir/template -name '*.tmpl' -or -name '*.html');
+for my $f (@tmpls ) {
+    chomp $f;
+    $f =~ s#^\Q$console_dir\E/##;
+    print "Linking in $f...\n";
+    (my $dir = $f) =~ s#^(.+)/.+#$1#;
+    
+    unless (-d "share/console-template/$dir") {
+        mkpath "share/console-template/$dir" or die "Can't mkpath $dir: $!";
+    }
+    unlink "share/console-template/$f";
+    symlink "$console_dir/$f", "share/console-template/$f" or die "Can't symlink $console_dir/$f, $f: $!";
+}
+
+
+
+my $console_root = "$ENV{HOME}/.nlw/root/console";
+if (! -d $console_root) {
+    mkpath $console_root or die "Can't mkpath $console_root: $!";
+}
+my $console_cgi = "$console_root/index.cgi";
+print "Linking in console cgi ($console_cgi) ...\n";
+unlink $console_cgi;
+set_contents($console_cgi, <<EOT);
+#!/bin/bash
+export ST_APP_CONFIG=$ENV{HOME}/.nlw/etc/appliance.conf
+perl -I$ENV{HOME}/src/st/current/nlw/lib $console_dir/cgi/appliance.cgi
+EOT
+chmod 0755, $console_cgi or die "Can't chmod 0755, $console_cgi: $!";

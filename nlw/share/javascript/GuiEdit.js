@@ -18,21 +18,21 @@ COPYRIGHT NOTICE:
 // XXX refactor this to include spacers so we can generate
 // the toolbar from this info
 var button_names = {
-    "bold" : "Bold",
-    "italic" : "Italic",
-    "strike" : "Strikethrough",
-    "h1" : "Heading 1",
-    "h2" : "Heading 2",
-    "h3" : "Heading 3",
-    "ul" : "Bullets",
-    "ol" : "Numbering",
-    "indent" :  "Increase Indent",
-    "outdent" : "Decrease Indent",
-    "filew" : "Insert attachment",
-    "image" : "Insert image",
-    "wikilink" :  "Insert Socialtext link",
-    "createlink" :  "Insert web link",
-    "createtable" : "Insert table"
+    "bold" : loc("Bold"),
+    "italic" : loc("Italic"),
+    "strike" : loc("Strikethrough"),
+    "h1" : loc("Heading 1"),
+    "h2" : loc("Heading 2"),
+    "h3" : loc("Heading 3"),
+    "ul" : loc("Bullets"),
+    "ol" : loc("Numbering"),
+    "indent" :  loc("Increase Indent"),
+    "outdent" : loc("Decrease Indent"),
+    "filew" : loc("Insert attachment"),
+    "image" : loc("Insert image"),
+    "wikilink" :  loc("Insert Socialtext link"),
+    "createlink" :  loc("Insert web link"),
+    "createtable" : loc("Insert table")
 };
 
 var table_markup = '* | *col b* | *col c* |\n| cell a1 | cell b1 | cell c1 |\n|         |         |         |\n'
@@ -83,7 +83,7 @@ GuiEdit.prototype.init = function(id, name, nameClass, imgPath) {
     this.makeButton("createlink")
     this.makeSpacer()
     this.makeButton("createtable")
-    
+   
     try {
         var toolbar = document.createElement("div")
         toolbar.id = "tb_" + this.id
@@ -282,7 +282,7 @@ GuiEdit.prototype.getWords = function() {
 }
 
 GuiEdit.prototype.report_info = function() {
-    alert("selection_start: " + this.selection_start + "\nselection_end: " +
+    alert(loc("selection_start: [_1]", this.selection_start) + "\nselection_end: " +
       this.selection_end + "\nselection: " + this.sel)
 }
 
@@ -424,7 +424,7 @@ GuiEdit.prototype.do_image = function() {
 }
 
 GuiEdit.prototype.do_wikilink = function() {
-    this.boundword('[', ']', 'type link text here')
+    this.boundword('[', ']', loc('type link text here'))
 }
 
 GuiEdit.prototype.do_createlink = function() {

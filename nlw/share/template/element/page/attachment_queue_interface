@@ -4,9 +4,9 @@
     <div id="[% ns %]-overlay" class="popup-overlay"></div>
     <div>
     <div id="[% ns %]-dialog">
-        <div id="[% ns %]-title">Upload Files</div>
+        <div id="[% ns %]-title">[% loc('Upload Files') %]</div>
 
-        <p id="[% ns %]-message">Click "Browse" to find the file you want to upload. When you click "Add file" this file will be added to the list of attachments for this page, and uploaded when you save the page.</p>
+        <p id="[% ns %]-message">[% loc('Click "Browse" to find the file you want to upload. When you click "Add file" this file will be added to the list of attachments for this page, and uploaded when you save the page.') %]</p>
         <p id="[% ns %]-fileprompt">
             <input id="[% ns %]-filename" size="60" type="file" name="file"/>
         </p>
@@ -17,19 +17,19 @@
             <label for="[% ns %]-embedcheckbox" id="[% ns %]-embedlabel">
                 <input class="checkbox" type="checkbox" id="[% ns %]-embedcheckbox" name="embedcb" value="1" checked="checked"/>
                 <input type="hidden" id="[% ns %]-embedfield" name="embed" value="1"/>
-                <span id="[% ns %]-embedmessage">Add a link to the attachment at the top of the page? Images will appear in the page when the page is saved.</span>
+                <span id="[% ns %]-embedmessage">[% loc('Add a link to the attachment at the top of the page? Images will appear in the page when the page is saved.') %]</span>
             </label>
         </div>
         <div id="[% ns %]-unpack">
             <label for="[% ns %]-unpackcheckbox" id="[% ns %]-unpacklabel">
                 <input class="checkbox" type="checkbox" id="[% ns %]-unpackcheckbox" name="unpackcb" value="1" />
                 <input type="hidden" id="[% ns %]-unpackfield" name="unpack" value="0"/>
-                <span id="[% ns %]-unpackmessage">Expand zip archive and attach individual files to the page</span>
+                <span id="[% ns %]-unpackmessage">[% loc('Expand zip archive and attach individual files to the page') %]</span>
             </label>
         </div>
         <div id="[% ns %]-buttons">
-            <div id="[% ns %]-close">[% INCLUDE element/button id="${ns}-closebutton", label="Done" %]</div>
-            <div id="[% ns %]-uploadbutton">[% INCLUDE element/button id="${ns}-submitbutton", label="Add file" %]</div>
+            <div id="[% ns %]-close">[% INCLUDE element/button id="${ns}-closebutton", label=loc("Done") %]</div>
+            <div id="[% ns %]-uploadbutton">[% INCLUDE element/button id="${ns}-submitbutton", label=loc("Add file") %]</div>
         </div>
         <div style="clear:both;">&nbsp;</div>
     </div>

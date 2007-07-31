@@ -142,7 +142,7 @@ test_http "GET existing page as html" {
     like $body, qr{<a href="start_here"\s*>start here</a>},
         'body has a properly formatted start here link';
     like $body,
-        qr{href="/data/workspaces/help/pages/socialtext_documentation"\s*>Socialtext Documentation</a>},
+        qr{href="/data/workspaces/help-en/pages/socialtext_documentation"\s*>Socialtext Documentation</a>},
         'body has a properly formatted doc link';
 }
 

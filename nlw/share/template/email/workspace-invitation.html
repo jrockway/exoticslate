@@ -1,7 +1,8 @@
 [%# @COPYRIGHT@ -%]
+[% SET escaped_str = workspace.title | html %]
 <html>
 <head>
- <title>An Invitation to join [% workspace.title | html %]</title>
+ <title>[% loc('An Invitation to join [_1]', escaped_str) %]</title>
 </head>
 
 <body>

@@ -15,7 +15,7 @@ workspaces:
     extra_pages: 1
   auth-to-edit:
     extra_pages: 1
-  help: { }
+  "help-en": { }
 
 cache:
   - WORKSPACES

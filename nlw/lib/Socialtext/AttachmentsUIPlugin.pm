@@ -10,6 +10,8 @@ use IO::File;
 use Socialtext::AppConfig;
 use Socialtext::Helpers;
 use Socialtext::Exceptions;
+use Socialtext::l10n qw(loc system_locale);
+use Socialtext::BrowserDetect;
 
 sub class_id { 'attachments_ui' }
 const class_title => 'Attachments';
@@ -57,9 +59,7 @@ sub attachments_download {
 
     eval { $attachment->load };
     return $self->failure_message(
-        "Attachment not found. The page name, file name or identifer number "
-            . "in the link may be incorrect, or the attachment may have been "
-            . "deleted or is not present in this workspace.",
+        loc("Attachment not found. The page name, file name or identifer number in the link may be incorrect, or the attachment may have been deleted or is not present in this workspace."),
         $@, $self->hub->pages->current
 
     ) if $@;
@@ -74,20 +74,33 @@ sub attachments_download {
     my $fh = new IO::File $file, 'r';
     die "Cannot read $file: $!" unless $fh;
 
+    my $mime_type = $attachment->mime_type;
+    my $charset = 'UTF-8';
+
+    if ( $mime_type =~ /^text/ ) {
+        $charset = $attachment->charset(system_locale());
+    }
+
     # Add the headers for an attachment
     my $filename = $attachment->filename;
     $self->log_action("DOWNLOAD_ATTACHMENT", $filename);
+    
+    # XXX: should test with safari
+    if( Socialtext::BrowserDetect::ie() ) {
+        $filename = $self->uri_escape($filename);
+    }
+
     $self->hub->headers->add_attachment(
         filename => $filename,
         len      => -s $file,
-        type     => $attachment->mime_type
+        type     => $mime_type,
+        charset  => $charset,
     );
 
     # Erase Content-Disposition if we want the attachment inline.
     if ( not $attachment->should_popup or $self->cgi->as_page ) {
         $self->hub->headers->content_disposition(undef);
     }
-
     # return the glob so the framework can write it down
     return $fh;
 }

@@ -4,7 +4,7 @@
     <div id="st-page-wiki-title">[% wiki.title %]</div>
     <div id="st-attachments-list-body">
         <div>
-            <div id="st-list-title">All Files in [% wiki.title %]</div>
+            <div id="st-list-title">[% loc('All Files in [_1]', wiki.title) %]</div>
             <div id="st-actions-bar-spacer-clear">&nbsp;</div>
         </div>
         [% IF checker.check_permission('delete') %]
@@ -14,11 +14,11 @@
              <thead>
               <tr>
                <th></th>
-               <th>Filename</th>
-               <th>Page Title</th>
-               <th>Uploaded By</th>
-               <th>Date Uploaded</th>
-               <th>Size</th>
+               <th>[% loc('Filename') %]</th>
+               <th>[% loc('Page Title') %]</th>
+               <th>[% loc('Uploaded By') %]</th>
+               <th>[% loc('Date Uploaded') %]</th>
+               <th>[% loc('Size') %]</th>
               </tr>
              </thead>
              <tbody>
@@ -40,7 +40,7 @@
             </table>
         [% IF checker.check_permission('delete') %]
             [% IF rows.size %]
-                [% PROCESS element/formbutton name = "button" value = "Delete Selected Attachments" %]
+                [% PROCESS element/formbutton name = "button" value = loc('Delete Selected Attachments') %]
                 <input type="hidden" name="action" value="attachments_delete" />
                 <input type="hidden" name="caller_action" value="[% hub.action %]" />
             [% END %]

@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 DIR=`dirname $0`
+$DIR/l10n-widget-to-js
 $DIR/l10n-nlw-to-wiki
 $DIR/l10n-wiki-to-po
 $DIR/nlwctl -1 restart

@@ -4,7 +4,8 @@ use strict;
 use warnings;
 use base 'Exporter';
 use Socialtext::AppConfig;
-our @EXPORT_OK = qw(loc loc_lang valid_code);
+our @EXPORT_OK = qw(loc loc_lang valid_code system_locale best_locale
+                    available_locales);
 
 =head1 NAME
 
@@ -32,9 +33,25 @@ See Locale::Maketext::Simple for information on string formats.
 
 Set the locale.
 
+=head2 best_locale( [$hub] )
+
+This function tries to find the "best" locale in the current context.  If a
+hub is passed in then we try to find the current user's locale in the current
+workspace.  We can't find that (or a hub isn't passed in) then we instead
+return the system locale.
+
+=head2 system_locale( )
+
+Returns the current system wide locale code.
+
 =head2 valid_code( $code )
 
 Returns true if the locale code is supported.
+
+=head2 available_locales 
+
+Returns a hash ref of available locales.  The key to the hash is the 
+locale code, the value is the locale name.
 
 =head1 Localization Files
 
@@ -54,7 +71,33 @@ Locale::Maketext::Simple->import (
 );
 
 sub valid_code { 
-    return 1; # everything goes
+    my $code = shift;
+    my $available = available_locales();
+
+    # Add sekret locales
+    $available->{zz} = 'Hax0r';
+    $available->{zj} = 'Japanese Hax0r';
+
+    return $available->{$code};
+}
+
+sub available_locales {
+    # hardcoded for now, can be dynamic in the future
+
+    return {
+        'en' => loc('English'),
+        'ja' => loc('Japanese'),
+    };
+}
+
+sub best_locale {
+    my $hub = shift;
+    my $loc = eval { no warnings; $hub->preferences_object->locale->value };
+    return $loc || system_locale();
+}
+
+sub system_locale {
+    return Socialtext::AppConfig->new->locale();
 }
 
 =head1 AUTHOR

@@ -25,7 +25,6 @@ use Email::Valid;
 use Socialtext::String;
 use Readonly;
 use Socialtext::Data;
-use Socialtext::EmailSender;
 use Socialtext::Role;
 use Socialtext::TT2::Renderer;
 use Socialtext::URI;
@@ -34,6 +33,7 @@ use Socialtext::UserId;
 use Socialtext::UserMetadata;
 use Socialtext::UserWorkspaceRole;
 use Socialtext::Workspace;
+use Socialtext::l10n qw(loc);
 
 my $SystemUsername = 'system-user';
 my $GuestUsername  = 'guest';
@@ -161,24 +161,21 @@ sub _validate_and_clean_data {
              and ( $is_create
                    or $p->{$k} ne $self->$k() )
              and Socialtext::User->new( $k => $p->{$k} ) ) {
-            push @errors,
-                'The ' . Socialtext::Data::humanize_column_name($k)
-                . " you provided ($p->{$k}) is already in use.";
+            push @errors, loc("The [_1] you provided ([_2]) is already in use.", Socialtext::Data::humanize_column_name($k), $p->{$k});
         }
 
         if ( ( exists $p->{$k} or $is_create )
              and not
              ( defined $p->{$k} and length $p->{$k} ) ) {
-            push @errors,
-                ucfirst Socialtext::Data::humanize_column_name($k)
-                . ' is a required field.';
+            push @errors, 
+                    loc('[_1] is a required field.', ucfirst Socialtext::Data::humanize_column_name($k));
 
         }
     }
 
     if ( defined $p->{email_address} && length $p->{email_address}
          && ! Email::Valid->address( $p->{email_address} ) ) {
-        push @errors, "$p->{email_address} is not a valid email address.";
+        push @errors, loc("[_1] is not a valid email address.",$p->{email_address});
     }
 
     if ( defined $p->{password} && length $p->{password} < 6 ) {
@@ -187,17 +184,17 @@ sub _validate_and_clean_data {
 
     if ( delete $p->{require_password}
          and $is_create and not defined $p->{password} ) {
-        push @errors, 'A password is required to create a new user.';
+        push @errors, loc('A password is required to create a new user.');
     }
 
     if ( not $is_create and $metadata ) {
         if ( $metadata->is_system_created ) {
             push @errors,
-                "You cannot change the name of a system-created user."
+                loc("You cannot change the name of a system-created user.")
                 if $p->{username};
 
             push @errors,
-                "You cannot change the email address of a system-created user."
+                loc("You cannot change the email address of a system-created user.")
                 if $p->{email_address};
         }
     }
@@ -227,7 +224,7 @@ sub _validate_and_clean_data {
         shift;
         my %p = validate( @_, $spec );
 
-        return ( "Passwords must be at least 6 characters long." )
+        return ( loc("Passwords must be at least 6 characters long.") )
             unless length $p{password} >= 6;
 
         return;

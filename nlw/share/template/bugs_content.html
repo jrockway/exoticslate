@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <title>Application Error</title>
+    <title>[% loc('Application Error') %]</title>
     <style>
       #app-bug-title {
           color: red;
@@ -14,20 +14,15 @@
   </head>
   <body>
     <p id="app-bug-title">
-      An application error has occurred in the Socialtext Workspace system.
+      [% loc('An application error has occurred in the Socialtext Workspace system.') %]
     </p>
     <p>
-      You can assist the Socialtext team to fix this bug by entering a
-      comment about what actions you were performing when this bug
-      occurred<a
-      href="[%script_name%]?action=bugs_dump;bug_id=[%bug_id%]" style="text-
-      color: black; text-decoration: none;">.</a> Please enter your
-      comments in the box below.
+      [% loc('You can assist the Socialtext team to fix this bug by entering a comment about what actions you were performing when this bug occurred<a href="[_1]?action=bugs_dump;bug_id=[_2]" style="text-color: black; text-decoration: none;">.</a> Please enter your comments in the box below.', script_name, bug_id) %]
     </p>
     <form>
       <textarea name="user_comment" rows="10" cols="60"></textarea>
-      <input type="submit" name="Button" value="Report Bug" />
-      <input type="submit" name="Button" value="Ignore Bug" />
+      <input type="submit" name="Button" value="[% loc('Report Bug') %]" />
+      <input type="submit" name="Button" value="[% loc('Ignore Bug') %]" />
       <input type="hidden" name="action" value="bugs_report" />
       <input type="hidden" name="bug_id" value="[% bug_id %]" />
     </form>

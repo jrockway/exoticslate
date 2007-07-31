@@ -15,6 +15,7 @@ use Readonly;
 use Socialtext::User;
 use Socialtext::Validate qw( validate DIR_TYPE );
 use Socialtext::Workspace;
+use Socialtext::l10n qw( loc );
 
 sub class_id { 'pages' }
 const class_title => 'NLW Pages';
@@ -140,7 +141,7 @@ sub title_to_disposition {
 
     return unless $page;
 
-    return ('title="[click to create page]" class="incipient"', 
+    return ('title="[' . loc("click to create page") . ']" class="incipient"', 
             $self->uri_escape($page_name),
            ) unless $page->active;
 
@@ -322,56 +323,6 @@ sub html_for_page_in_workspace {
     delete $semaphore->{$semaphore_string};
 
     return $html;
-}
-
-{
-    Readonly my $spec => {
-        directory => DIR_TYPE,
-        hub       => { isa => 'Socialtext::Hub' },
-    };
-
-    sub AddPagesFromDirectory {
-        my $class = shift;
-        my %p = validate( @_, $spec );
-
-        my $hub = $p{hub};
-
-        opendir PAGE_FILES, $p{directory}
-            or die "Couldn't open directory $p{directory}:\n$!";
-
-        while ( my $page_file = readdir PAGE_FILES ) {
-            my $page_path = Socialtext::File::catfile( $p{directory}, $page_file );
-
-            next unless -f $page_path;
-
-            my $source_page = $hub->pages->new_page_from_file($page_path);
-            my $subject     = $source_page->metadata->Subject;
-            $subject = $hub->current_workspace->title
-                if $subject eq 'Top page';
-            my $category          = $source_page->metadata->Category;
-            my $content           = $source_page->content;
-            my $content_formatted = $hub->template->process(
-                \$content,
-                workspace_title => $hub->current_workspace->title,
-            );
-
-            my $page = $hub->pages->new_from_name($subject);
-            $page->content($content_formatted);
-            my $metadata = $page->new_metadata($subject);
-            $metadata->Subject($subject);
-            $metadata->Category($category);
-            $metadata->Revision(0);
-            $page->metadata($metadata);
-            $page->metadata->update( user => $hub->current_user );
-            $page->store( user => $hub->current_user );
-
-            $hub->category->save(@$category);
-            $hub->category->index->update(    #XXX refactor
-                $page->id, $metadata->Date,
-                [],        $category,
-            );
-        }
-    }
 }
 
 ################################################################################

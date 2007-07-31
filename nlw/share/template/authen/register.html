@@ -1,38 +1,38 @@
 [%# @COPYRIGHT@ -%]
 [% WRAPPER authen/wrapper title = "Register" %]
 <p>
-<a href="/nlw/login.html?redirect_to=[% redirect_to | html %]">Log in with an existing account</a>.
+<a href="/nlw/login.html?redirect_to=[% redirect_to | html %]">[% loc('Log in with an existing account') %]</a>.
 </p>
 
 <form method="post" action="/nlw/submit/register">
  <input type="hidden" name="redirect_to" value="[% redirect_to | html %]" />
  <div class="label-value">
-  <label for="email_address">Email Address:</label>
+  <label for="email_address">[% loc('Email Address:') %]</label>
   <input id="email_address" name="email_address" type="text" size="30" value="" />
  </div>
 
  <div class="label-value">
-  <label for="password">Password:</label>
+  <label for="password">[% loc('Password:') %]</label>
   <input id="password" name="password" type="password" size="30" value="" />
  </div>
 
  <div class="label-value">
-  <label for="password2">Re-type Password:</label>
+  <label for="password2">[% loc('Re-type Password:') %]</label>
   <input id="password2" name="password2" type="password" size="30" value="" />
  </div>
 
  <div class="label-value">
-  <label for="first_name">First Name:</label>
-  <input id="first_name" name="first_name" type="text" size="30" value="" /> (Optional)
+  <label for="first_name">[% loc('First Name:') %]</label>
+  <input id="first_name" name="first_name" type="text" size="30" value="" /> [% loc('(Optional)') %]
  </div>
 
  <div class="label-value">
-  <label for="last_name">Last Name:</label>
-  <input id="last_name" name="last_name" type="text" size="30" value="" /> (Optional)
+  <label for="last_name">[% loc('Last Name:') %]</label>
+  <input id="last_name" name="last_name" type="text" size="30" value="" /> [% loc('(Optional)') %]
  </div>
 
  <div class="form-element">
-  <input class="button" type="submit" value="Register" />
+  <input class="button" type="submit" value="[% loc('Register') %]" />
  </div>
 </form>
 

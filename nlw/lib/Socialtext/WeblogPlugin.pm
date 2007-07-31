@@ -10,7 +10,7 @@ use Socialtext::Pages;
 use Socialtext::MLDBMAccess;
 use URI;
 use URI::QueryParam;
-
+use Socialtext::l10n qw( loc );
 
 sub class_id { 'weblog' }
 const class_title => 'Weblogs';
@@ -34,7 +34,7 @@ sub register {
 sub weblog_depth {
     my $self = shift;
     my $p = $self->new_preference('weblog_depth');
-    $p->query('How many posts should be displayed in weblog view?');
+    $p->query(loc('How many posts should be displayed in weblog view?'));
     $p->type('pulldown');
     my $choices = [
         5 => '5',
@@ -67,18 +67,40 @@ sub weblogs_create {
         settings_table_id => 'settings-table',
         settings_section  => $settings_section,
         hub               => $self->hub,
-        display_title     => 'Create New Weblog',
+        display_title     => loc('Create New Weblog'),
         pref_list         => $self->_get_pref_list,
     );
+}
+
+sub _get_weblog_category_suffix {
+    my $self = shift;
+    my $locale = $self->hub->best_locale;
+    my $weblog_category_suffix;
+    if ($locale eq 'ja') {
+        $weblog_category_suffix = qr/ブログ/;
+    } else {
+        $weblog_category_suffix = qr/blog/;
+    }
+
+    $weblog_category_suffix;
 }
 
 sub _create_weblog {
     my $self = shift;
     my $weblog_category = $self->cgi->weblog_title;
+    my $weblog_name = $weblog_category;
     $weblog_category =~ s/^\s+|\s+$//g;
 
-    unless ( $weblog_category =~ /blog$/i ) {
-        $weblog_category .= " Weblog";
+    if (length($weblog_name) < 2 or length($weblog_name) > 28) {
+        my $message = loc("Weblog name must be between 2 and 28 characters long.");
+        $self->add_error($message);
+        return;
+    }
+
+    my $weblog_category_suffix = $self->_get_weblog_category_suffix(); 
+
+    unless ( $weblog_category =~ /$weblog_category_suffix$/i ) {
+        $weblog_category = loc("[_1] Weblog", $weblog_category);
     }
 
     $self->hub->category->load;
@@ -86,13 +108,13 @@ sub _create_weblog {
 
     for (keys %$all_categories) {
         if (/^\Q$weblog_category\E/i) {
-            my $message = "There is already a '$weblog_category' weblog. Please choose a different name.";
+            my $message = loc("There is already a \'[_1]\' weblog. Please choose a different name.", $weblog_category);
             $self->add_error($message);
             return;
         }
     }
 
-    my $first_post_title = "First Post in $weblog_category";
+    my $first_post_title = loc("First Post in [_1]", $weblog_category);
     my $first_post_id = Socialtext::Page->name_to_id($first_post_title);
     my $first_post = $self->hub->pages->new_page($first_post_id);
 
@@ -104,7 +126,7 @@ sub _create_weblog {
 
     push @$categories, $weblog_category;
 
-    my $content = "This is the first post in $weblog_category. Click *New Post* to add another post.";
+    my $content = loc("This is the first post in [_1]. Click *New Post* to add another post.", $weblog_category);
     $first_post->content($content);
     $metadata->update( user => $self->hub->current_user );
     $first_post->store( user => $self->hub->current_user );
@@ -119,12 +141,12 @@ sub _feeds {
     my $feeds = $self->SUPER::_feeds($workspace);
     my $uri_root = $self->hub->syndicate->feed_uri_root($self->hub->current_workspace);
     $feeds->{rss}->{page} = {
-        title => 'Weblog: ' . $self->current_blog . ' RSS',
+        title => loc('Weblog: [_1] RSS', $self->current_blog_str),
         url => $uri_root . '?category=' . $self->current_blog,
     };
 
     $feeds->{atom}->{page} = {
-        title => 'Weblog: ' . $self->current_blog . ' Atom',
+        title => loc('Weblog: [_1] Atom', $self->current_blog_str),
         url => $uri_root . '?category=' . $self->current_blog .';type=Atom',
     };
 
@@ -137,6 +159,13 @@ sub first_blog {
     my ($first_blog) = grep /blog/i, sort values %{$self->hub->category->all};
     $first_blog ||= 'recent changes';
     return $first_blog;
+}
+
+sub current_blog_str {
+    my $self = shift;
+    $self->current_weblog($self->cgi->category) && $self->update_current_weblog
+      if $self->cgi->category;
+    $self->cgi->category || $self->cache->{current_weblog} || loc('recent changes');
 }
 
 sub current_blog {
@@ -175,7 +204,7 @@ sub weblog_display {
 
     $self->hub->category->load;
     my $categories = $self->hub->category->all;
-    $categories->{'recent changes'} = 'Recent Changes';
+    $categories->{'recent changes'} = loc('Recent Changes');
     my @blogs = map {
 	{
 	    display => $categories->{$_},
@@ -222,7 +251,7 @@ sub weblog_display {
     $self->update_current_weblog;
     $self->screen_template('view/weblog');
     return $self->render_screen(
-        display_title => $weblog_id,
+        display_title => loc($weblog_id),
         sections => \@sections,
         feeds => $self->_feeds($self->hub->current_workspace),
         category => $weblog_id,
@@ -355,7 +384,7 @@ sub box_on {
 
 sub box_title {
     my $self = shift;
-    return 'Weblog Navigation';
+    return loc('Weblog Navigation');
 }
 
 sub box_content_filled {
@@ -372,7 +401,7 @@ sub box_content_filled {
 
 sub page_title {
     my $self = shift;
-    'Navigation for: ' . $self->current_blog;
+    return loc('Navigation for: [_1]', $self->current_blog);
 }
 
 sub page_edit_path {

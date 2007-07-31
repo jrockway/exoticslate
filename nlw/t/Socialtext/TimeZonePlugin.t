@@ -81,6 +81,7 @@ foreach my $z ( keys %$zones )
                         $prefs->dst->value($dst);
                         $prefs->time_display_12_24->value($h);
                         $prefs->time_display_seconds->value($s);
+                        $prefs->locale->value('en');
                         run_tests($prefs);
                     }
                 }

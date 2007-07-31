@@ -8,10 +8,11 @@ use base 'Socialtext::Plugin';
 use Class::Field qw( const );
 use File::Path ();
 use Socialtext::AppConfig;
-use Socialtext::EmailSender;
 use Storable ();
 use Sys::Hostname ();
 use YAML ();
+use Socialtext::EmailSender::Factory;
+use Socialtext::l10n qw(loc system_locale);
 
 $Storable::forgive_me = 42;
 
@@ -27,8 +28,8 @@ sub register {
 
 sub bugs_report {
     my $self = shift;
-    return $self->save_comment if $self->cgi->Button eq 'Report Bug';
-    return $self->ignore_bug if $self->cgi->Button eq 'Ignore Bug';
+    return $self->save_comment if $self->cgi->Button eq loc('Report Bug');
+    return $self->ignore_bug if $self->cgi->Button eq loc('Ignore Bug');
     my $bug_id = $self->save_report(@_);
     return $self->hub->template->process('bugs_content.html',
         bug_id => $bug_id,
@@ -40,7 +41,7 @@ sub bugs_dump {
     my $dump = eval { YAML::Dump($self->retrieve($self->cgi->bug_id)) } || $@;
     return $self->hub->template->process('bugs_dump.html',
        content_pane => 'bugs_dump.html',
-       display_title => 'Bug Dump',
+       display_title => loc('Bug Dump'),
        dump => $dump,
     );
 }
@@ -108,14 +109,25 @@ sub send_email {
     my $hostname = Sys::Hostname::hostname();
     my ($error) = $report->{_10_msg} =~ /([^\n]+)(?:\n|$)/;
 
-    my $subject = "Application error";
-    $subject .= " in $workspace" if defined $workspace;
-    $subject .= " for " . $user->email_address if defined $user;
-    $subject .= " on $hostname: $error";
+    my $subject;
+
+    if( defined $workspace and defined $user) {
+        $subject = loc("Application error in [_1] for [_2] on [_3]: [_4]", $workspace,$user->email_address, $hostname, $error);
+    } elsif (defined $workspace and not defined $user) {
+
+        $subject = loc("Application error in [_1] on [_2]: [_3]", $workspace,$hostname, $error);
+    } elsif (not defined $workspace and defined $user) {
+
+        $subject = loc("Application error for [_1] on [_2]: [_3]", $user->email_address, $hostname, $error);
+    } else {
+        $subject = loc("Application error on [_1]: [_2]", $hostname, $error);
+    }
 
     my $dump = eval { YAML::Dump($report) } || $@;
 
-    Socialtext::EmailSender->send(
+    my $locale = system_locale();
+    my $email_sender = Socialtext::EmailSender::Factory->create($locale);
+    $email_sender->send(
         from      => 'noreply@socialtext.com',
         to        => Socialtext::AppConfig->email_errors_to,
         subject   => $subject,

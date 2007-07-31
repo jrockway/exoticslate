@@ -9,6 +9,7 @@ use Socialtext::BrowserDetect ();
 use Socialtext::AppConfig;
 use Socialtext::Helpers;
 use Socialtext::TT2::Renderer;
+use Socialtext::l10n qw(loc);
 
 sub class_id { 'template' }
 
@@ -17,12 +18,14 @@ sub process {
     my $template = shift;
 
     my @vars = (
-        detected_ie => Socialtext::BrowserDetect::ie(),
+        loc             => \&loc,
+        loc_lang        => $self->hub->best_locale(),
+        detected_ie     => Socialtext::BrowserDetect::ie(),
         detected_safari => Socialtext::BrowserDetect::safari(),
-        hub         => $self->hub,
-        static_path => Socialtext::Helpers->static_path,
-        appconfig   => Socialtext::AppConfig->instance(),
-        script_name => Socialtext::AppConfig->script_name,
+        hub             => $self->hub,
+        static_path     => Socialtext::Helpers->static_path,
+        appconfig       => Socialtext::AppConfig->instance(),
+        script_name     => Socialtext::AppConfig->script_name,
         @_,
     );
     $self->hub->preferences->init;

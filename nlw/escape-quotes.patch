@@ -1,0 +1,47 @@
+diff -ruN Locale-Maketext-Lexicon-0.62.ORIGINAL/lib/Locale/Maketext/Extract.pm Locale-Maketext-Lexicon-0.62/lib/Locale/Maketext/Extract.pm
+--- Locale-Maketext-Lexicon-0.62.ORIGINAL/lib/Locale/Maketext/Extract.pm	2006-06-15 08:05:43.000000000 -0700
++++ Locale-Maketext-Lexicon-0.62/lib/Locale/Maketext/Extract.pm	2007-05-23 16:51:40.000000000 -0700
+@@ -281,11 +281,11 @@
+ 
+         # begin or end of string
+         $state == PAR  && m/^(\')/gc      && do { $state = $quo = QUO1;   redo };
+-        $state == QUO1 && m/^([^\']+)/gc  && do { $str  .= $1;            redo };
++        $state == QUO1 && m/^((?:[^\'\\]+)(?:\\\'|\\(?!\'))*)/gc && do { $str  .= $1; redo };
+         $state == QUO1 && m/^\'/gc        && do { $state = PAR;           redo };
+ 
+         $state == PAR  && m/^\"/gc        && do { $state = $quo = QUO2;   redo };
+-        $state == QUO2 && m/^([^\"]+)/gc  && do { $str  .= $1;            redo };
++        $state == QUO2 && m/^((?:[^\"\\]+)(?:\\\"|\\(?!\"))*)/gc && do { $str  .= $1; redo };
+         $state == QUO2 && m/^\"/gc        && do { $state = PAR;           redo };
+ 
+         $state == PAR  && m/^\`/gc        && do { $state = $quo = QUO3;   redo };
+diff -ruN Locale-Maketext-Lexicon-0.62.ORIGINAL/t/5-extract.t Locale-Maketext-Lexicon-0.62/t/5-extract.t
+--- Locale-Maketext-Lexicon-0.62.ORIGINAL/t/5-extract.t	2006-06-15 08:05:43.000000000 -0700
++++ Locale-Maketext-Lexicon-0.62/t/5-extract.t	2007-05-23 16:57:23.000000000 -0700
+@@ -1,7 +1,7 @@
+ #! /usr/bin/perl -w
+ use lib '../lib';
+ use strict;
+-use Test::More tests => 22;
++use Test::More tests => 24;
+ 
+ use_ok('Locale::Maketext::Extract');
+ my $Ext = Locale::Maketext::Extract->new;
+@@ -39,6 +39,17 @@
+ 
+ extract_ok(q([% loc( 'foo "bar" baz' ) %]) => 'foo "bar" baz', 'Escaped double quote in text');
+ 
++extract_ok(
++    q(my $x = loc('I "think" you\'re a cow.') . "\n";) => 'I "think" you\'re a cow.', 
++    "Handle escaped single quotes"
++);
++
++extract_ok(
++    q(my $x = loc("I'll poke you like a \"cow\" man.") . "\n";)
++        => 'I\'ll poke you like a "cow" man.',
++    "Handle escaped double quotes"
++);
++
+ sub extract_ok {
+     my ($text, $result, $info, $verbatim) = @_;
+     $Ext->extract('' => $text);

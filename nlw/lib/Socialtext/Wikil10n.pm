@@ -2,6 +2,7 @@ package Socialtext::Wikil10n;
 # @COPYRIGHT@
 use strict;
 use warnings;
+use Encode qw(decode_utf8);
 use Socialtext::Resting;
 use Socialtext::System qw/shell_run/;
 use base 'Exporter';
@@ -11,7 +12,7 @@ sub load_existing_l10ns {
     my $r     = shift;
     my $title = shift;
 
-    my $content = $r->get_page($title);
+    my $content = decode_utf8( $r->get_page($title) );
     return {} if $r->response->code ne 200;
 
     #use Data::Dumper;

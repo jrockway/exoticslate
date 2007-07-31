@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext;
+use Socialtext::EmailReceiver::Factory;
 fixtures( 'admin_no_pages' );
 
 BEGIN {
@@ -15,11 +16,9 @@ BEGIN {
 
 plan tests => 4;
 
-
+$Socialtext::EmailSender::Base::SendClass = 'Test';
 use Socialtext::EmailNotifier;
-use Socialtext::EmailReceiver;
-
-Socialtext::EmailSender->TestModeOn();
+use Socialtext::EmailReceiver::Factory;
 
 my $hub = new_hub('admin');
 
@@ -70,10 +69,13 @@ sub deliver_email {
 
     open my $fh, '<', $file or die $!;
 
-    Socialtext::EmailReceiver->receive_handle(
-        handle    => $fh,
-        workspace => $hub->current_workspace(),
-    );
+    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
+                {
+                    locale => 'en',
+                    handle => $fh,
+                    workspace => $hub->current_workspace
+                });
+    $email_receiver->receive();
 
     # XXX due to decoupling of postprocess email notify need to call
     # this by hand

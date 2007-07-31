@@ -1,27 +1,25 @@
 [% extra_text -%]
 
-Hi,
+[% loc('Hi,') %]
 
-I'm inviting you to join [% workspace_title %], one of our shared workspaces. [% UNLESS requires_confirmation %]Sign in using the information below:[% END %]
+[% loc("I'm inviting you to join [_1], one of our shared workspaces.", workspace_title) %] [% UNLESS requires_confirmation %][% loc('Sign in using the information below:') %][% END %]
 
 [% IF requires_confirmation -%]
-Please click on this link to confirm your email address: [% confirmation_uri | html %]
+[% loc("Please click on this link to confirm your email address:") %] [% confirmation_uri | html %]
 
-Once you have confirmed your account, you will receive a second email
-with login details.
+[% loc("Once you have confirmed your account, you will receive a second email with login details.") %]
 [% ELSE -%]
-web address: [% workspace_uri | html %]
-username: [% username | html %]
+[% loc('web address:') %] [% workspace_uri | html %]
+[% loc('username:') %] [% username | html %]
 
 [% IF appconfig.is_default('user_factories') %] 
 [% IF app_name; a = 'a'; ELSE; a = 'an'; END %]
-Because you already have [% a %] [% app_name %] account, the password is the
-same as the password you use for your other [% app_name %] workspaces. If
-you don't remember it, follow this link to select a new password:
+[% loc("Because you already have [_1] [_2] account, the password is the same as the password you use for your other [_3] workspaces.", a, app_name, app_name) %]
+[% loc("If you don't remember it, follow this link to select a new password:") %]
 [% forgot_password_uri %]
 
 [% END %]
-You may want to keep this email for future reference.
+[% loc("You may want to keep this email for future reference.") %]
 [% END -%]
 
 Thanks,

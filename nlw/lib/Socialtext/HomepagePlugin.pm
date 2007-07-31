@@ -8,8 +8,8 @@ use base 'Socialtext::Plugin';
 
 use Socialtext::TT2::Renderer;
 use Socialtext::Watchlist;
-use Socialtext::l10n qw/loc_lang/;
-
+use Socialtext::l10n qw( loc );
+use URI::Escape;
 # XXX This code has no documentation
 
 sub class_id    () { 'homepage' }
@@ -39,16 +39,13 @@ sub homepage {
 sub dashboard {
     my $self = shift;
 
-    my $locale = $self->preferences->locale->value;
-    loc_lang($locale);
-
     my $renderer = Socialtext::TT2::Renderer->instance;
 
     return $renderer->render(
         template => 'view/homepage',
         vars     => {
             $self->hub->helpers->global_template_vars,
-            title          => 'Dashboard',
+            title          => loc('Dashboard'),
             group_notes    => $self->_get_group_notes_info,
             personal_notes => $self->_get_personal_notes_info,
             whats_new      => $self->_get_whats_new_info,
@@ -57,16 +54,15 @@ sub dashboard {
             hub            => $self->hub,
             feeds          => $self->_feeds( $self->hub->current_workspace ),
             unplug_uri     => "?action=unplug",
-            unplug_phrase  => 'Click this button to save the '
-                . $self->hub->tiddly->default_count
-                . ' most recent pages to your computer for offline use.',
+            unplug_phrase  => loc('Click this button to save the [_1] most recent pages to your computer for offline use.', $self->hub->tiddly->default_count),
         },
     );
 }
 
+
 sub _get_group_notes_info {
     my ($self) = @_;
-    my $page_title = 'Announcements and Links';
+    my $page_title = loc('Announcements and Links');
     return {
         html      => $self->hub->pages->new_from_name($page_title)->to_html_or_default,
         edit_path => $self->hub->helpers->page_edit_path($page_title),
@@ -77,11 +73,12 @@ sub _get_group_notes_info {
 sub _get_personal_notes_info {
     my ($self) = @_;
     my $page_title = $self->hub->favorites->preferences->which_page->value;
+
     if ($page_title) {
         return {
             html      => $self->hub->pages->new_from_name($page_title)->to_html_or_default,
             edit_path => $self->hub->favorites->favorites_edit_path . ';caller_action=homepage',
-            view_path => $self->hub->helpers->page_display_path($page_title),
+            view_path => $self->hub->helpers->page_display_path(URI::Escape::uri_escape_utf8($page_title)),
         };
     }
     return {
@@ -144,7 +141,7 @@ sub _get_watchlist_info {
     # Leave the rest of purging to display_watchlist action.
     # (Or further invocations to this function.)
     foreach ( $watchlist->pages() ) {
-        my $page = $self->hub->pages->new_from_name($_);
+        my $page = $self->hub->pages->new_page($_);
         if ( !$page->active ) {
             $watchlist ||= Socialtext::Watchlist->new(
                 user      => $self->hub->current_user,
@@ -175,11 +172,11 @@ sub _get_watchlist_info {
 sub _get_wikis_info {
     my $self = shift;
     return [
-        map {{
+        map { {
             title   => $self->hub->helpers->html_escape($_->title),
             name    => $self->hub->helpers->uri_escape($_->name),
             changes => $self->_get_changes_count_for_wiki($_),
-        }} 
+        } } 
         $self->hub->current_workspace->read_breadcrumbs(
             $self->hub->current_user 
         )

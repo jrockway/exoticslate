@@ -1,3 +1,37 @@
+// BEGIN l10ns.js
+var LocalizedStrings = {"ja":{"Could not retrieve the latest revision of the page":"ページの最新のリビジョンを取得することができませんでした。","Link to tag '%1'. Click to edit.":"'%1' タグへのリンク: クリックして編集してください。","Display the search results for the given phrase within a workspace. Use this form to edit the properties for the search.":"ワークスペース内で使われているフレーズについて検索結果を表示します。このフォームを使用して検索のプロパティを編集してください。","Attachment filename:":"添付ファイル名:","Search Technorati for '%1'. Click to edit.":"Technorati で '%1' を検索します。 クリックして編集してください。","Switch to %1 to use this feature.":"この機能を使うには %1 に切り替えてください。","Page title is too long after URL encoding":"URL のエンコード処理を行うと、ページタイトル が長くなりすぎます。全角文字は28字まで使用できます。","Search for '%1'. Click to edit.":"'%1' を検索する。 クリックして編集してください。","User Name":"ユーザ名","Create Table":"表の作成","Link to Attachment":"添付ファイルへのリンク","Can't have a 0 for a size.":"0 は入力できません。","Loading...":"読み込み中...","Display a link to a file attached to a page. Use this form to edit the properities of the link.":"ページに添付されているファイルへのリンクを表示します。このフォームを使用してリンクのプロパティを編集してください。","There are no optional properties for a Convoq Link.":"Convoq リンクに関するオプショナルプロパティはありません。","You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to stay on the current page.":"変更が保存されていません。 このページから離れますか？ 'OK' をクリックすると、すべての変更内容が失われます。変更を保存し、このページに残りたい場合は、'キャンセル' をクリックしてください。","Edit More":"さらに編集","'%1' has an invalid value":"'%1' に無効な値が含まれます","recent changes":"最近の更新","You cannot compare a revision to itself.":"同じリビジョンと比較することはできません。","In:":"場所:","Inline RSS":"RSS のインライン","Table of Contents":"目次","Display a table of contents for a page. Each header or section on the page is listed as a link in the table of contents. Click \\\"Save\\\" now, or click \\\"More options\\\" to edit the properties for the table of contents.":"ページの目次を表示します。ページの各ヘッダやセクションが目次の中にリンクとして一覧表示されます。 \\\"保存\\\" をクリックするか、あるいは、 \\\"オプションを表示\\\" をクリックし、目次のプロパティを編集してください。","Enter a tag and click \\\"Add tag\\\". The tag will be saved when you save the page.":"タグを入力し ”タグを追加” をクリックしてください。タグはページ保存時に追加されます。","Optional properties include specifying which workspace to use and whether to display page titles or whole pages.":"使用するワークスペース、また、ページのタイトルを表示させるか、ページ全体を表示させるか、オプショナルプロパティで指定できます。","RSS feed URL:":"RSS フィード URL:","error -> To send email, you must specify a recipient":"エラー -> Email を送るには宛先を指定してください。","No tag entered":"タグが入力されていません。","Advanced content is shown inside a grey border. Switch to %1 to edit areas inside a grey border.":"灰色の点線ボックス内の内容は高度編集モードでのみ編集可能です。ボックス内を編集するには %1 に切り替えてください。","Could not remove page from watchlist":"ウォッチリストからページを削除することができませんでした。","Display the contents of another page within the current page. Use this form to edit the properties for the page include.":"現在のページの中に、別のページの内容を表示します。このフォームを使用して挿入するページのプロパティを編集してください。","Unlink":"リンクをはずす","Search term:":"検索するワード:","Heading 1":"見出し1","Atom feed URL:":"Atom フィード URL:","Link to '%1' in '%2'. Click to edit.":"'%2' の '%1' へのリンクです。 クリックして編集してください。","There are no optional properties for page include.":"ページ挿入に関するオプショナルプロパティはありません。","Insert table":"表を挿入","page does not exist":"ページが存在しません。","Link to file '%1'. Click to edit.":"'%1' ファイルへのリンクです。 クリックして編集してください。","There are no optional properties for an Google search.":"Google 検索に関するオプショナルプロパティはありません。","Display a link to an AIM screen name. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.":"AIM スクリーンネームへのリンクを表示します。相手がオンラインかどうかアイコンで表示されます。 IM クライアントがきちんと設定されていれば、リンクをクリックすると IM で会話を開始することができます。このフォームを使用してリンクのプロパティを編集してください。","Underline":"下線","Bulleted List":"箇条書き","Technorati: %1":"Technorati: %1","Weblog Link":"ウェブログリンク","Date in Local Time":"ローカルタイム","Tag":"タグ","Display an image on this page. The image must be already uploaded as an attachment to this page or another page. Use this form to edit the properties of the displayed image.":"このページに画像を表示します。画像は添付として、このページ、あるいは、別のページにすでにアップロードされているはずです。このフォームを使用して表示された画像のプロパティを編集してください。","You must select two revisions to compare.":"比較したいリビジョンを2つ選択してください。","External Link":"外部リンクの作成","Weblog on:":"ウェブログ","Enter your destination url here:":"ここにリンクしたいサイトの URL を入力してください。","User's email:":"ユーザの Email:","Use %1 to change the number of rows and columns in a table.":"%1 を使用して、表の行数と列数を変更してください。","in:":"場所","Display a link to a Skype name. Clicking the link will start a Skype call with the person if your Skype client is properly configured. Use this form to edit the properties of the link.":"Skype 名へのリンクを表示します。 Skype クライアントがきちんと設定されていれば、リンクをクリックすると Skype 通話が開始されます。このフォームを使用してリンクのプロパティを編集してください。","Title":"タイトル","Tag List":"タグ一覧","Other workspace:":"別のワークスペース","That seems like a bit too large for a table.":"表にしては少し大きすぎるようです。","Tag Link":"タグリンク","the current page":"現在のページ","Increase Indent":"インデントを増やす","%asis_content":"(オプショナル)","Advanced Content in Grey Border":"高度編集モードの編集内容を灰色の点線ボックス内に表示","[Style]":"スタイル","Display pages with the '%1' tag. Click to edit.":"'%1' タグが付いたページを表示します。クリックして編集してください。","Heading 3":"見出し3","Please enter the number of table rows:":"表の行の数字を入力してください:","Strikethrough":"取り消し線","Unexpected Widget >>%1<< in parseWidget":"parseWidget で予期しない Widget >>%1<<","You have unsaved changes. Do you want to save those changes? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes before navigating away from this page.":"変更が保存されていません。 変更を破棄しますか？ 'OK' をクリックすると、すべての変更内容が失われます。このページから離れる前に変更を保存する場合は、'キャンセル' をクリックしてください。","Numbering":"番号付き箇条書き","Show full name for '%1'. Click to edit.":"'%1' に対するフルネームを表示します。クリックして編集してください。","Display a list of the most recently changed pages in a workspace that have a specific tag. By default only the page title is displayed. Use this form to edit the list properties.":"特定のタグが付いているワークスペースで、最も最近変更のあったページ一覧を表示します。初期設定では、ページのタイトルのみが表示されます。このフォームを使用してリストのプロパティを編集してください。","Click \\\"Browse\\\" to find the file you want to upload. When you click \\\"Add another file,\\\" these files will be added to the list of attachments for this page, and uploaded when you save the page.":"\\\"参照\\\" をクリックし、アップロードしたいファイルを選択してください。 \\\"別のファイルを追加\\\" をクリックすると、これらのファイルがこのページの添付リストに追加され、ページを保存した時にアップロードされます。","Heading 2":"見出し2","Weblog name:":"ウェブログ名:","There are no optional properties for a Yahoo! link.":"Yahoo! リンクに関するオプショナルプロパティはありません。","Search type:":"検索対象:","Plese click \\\"Browse\\\" and select a file to upload.":"\\\"参照\\\" をクリックして、アップロードするファイルを選択してください。","You must check at least one page in order to create a PDF.":"PDFを生成するためには少なくとも一つのページをチェックしなければいけません。","Skype name:":"Skype 名:","Select a form and generates a new form page.":"フォームを選択してください。新しいフォームページを作成します。","Create Link":"リンクの作成","Include an Image":"画像の挿入","Numbered List":"番号付き箇条書き","Insert Socialtext link":"リンクの作成","Optional parameters include specifying which workspace to use and whether to display page titles or whole pages.":"使用するワークスペース、また、ページのタイトルを表示させるか、ページ全体を表示させるか、オプショナルパラメーターで指定できます。","Instant message to '%1' using Yahoo! Click to edit.":"'%1' への Yahoo! インスタントメッセージです。クリックして編集してください。","Google Search":"Google 検索","unformatted: %1":"レイアウトなし: %1","Attached to:":"添付:","toc: %1":"目次: %1","Convoq name:":"Convoq 名:","Display a link to a Convoq name. Clicking the link will start a Convoq call with the person if your Convoq client is properly configured. Use this form to edit the properties of the Convoq link.":"Convoq 名へのリンクを表示します。Convoq クライアントがきちんと設定されていれば、リンクをクリックすると Convoq コールが開始されます。このフォームを使用してConvoq リンクのプロパティを編集してください。","Page title:":"ページのタイトル:","recent changes: %1":"最近の更新: %1","Display a link to a weblog. Use this form to edit the properties of the link.":"ウェブログへのリンクを表示します。このフォームを使用してリンクのプロパティを編集してください。","Error":"エラー","There are no optional properties for a user name.":"ユーザ名に関するオプショナルプロパティはありません。","user: %1":"ユーザ: %1","File attached to:":"ファイルの添付先:","Remove %1 from the queue":"キューから%1を削除","Please enter the number of table columns:":"表の列の数字を入力してください:","Display a link to a Yahoo! instant message ID. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.":"Yahoo! インスタントメッセージ ID へのリンクを表示します。相手がオンラインかどうかアイコンで表示されます。IM クライアントがきちんと設定されていれば、リンクをクリックすると IM で会話を開始することができます。このフォームを使用してリンクのプロパティを編集してください。","include: %1":"挿入: %1","Include unformatted text in the page. This text will not be treated as wiki text. Use this form to edit the text.":"ページにレイアウトなしのテキストを挿入します。このテキストには wiki 記法が適用されません。このフォームを使用してテキストを編集してください。","feed: %1":"フィード: %1","Attachment Link":"添付ファイルへのリンク","Convoq: %1":"Convoq: %1","Use this form to edit the properties of the link to a page section.":"このフォームを使用してページセクションへのリンクのプロパティを編集してください。","Bullets":"箇条書き","Display '%1' in reader's time zone. Click to edit.":"ユーザのタイムゾーンで '%1' を表示します。クリックして編集してください。","Attachments":"添付","Display a list of the most recent entries from a weblog in a workspace. By default only the weblog entry names are displayed. Use this form to edit the list properties.":"ワークスペースのウェブログから、最も最近のエントリ一覧を表示します。初期設定では、ウェブログのエントリ名のみが表示されます。このフォームを使用してリストのプロパティを編集してください。","Link to weblog '%1'. Click to edit.":"'%1' ウェブログへのリンク: クリックして編集してください。","You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes and stay on the current page.":"変更が保存されていません。 このページから離れますか？ 'OK' をクリックすると、すべての変更内容が失われます。変更を保存し、このページに残りたい場合は、'キャンセル' をクリックしてください。","Table & Advanced Editing":"表 & 高度編集","Google: %1":"Google: %1","Page Include":"ページの挿入","Link to a Section":"セクションへのリンク","Search for:":"検索するワード:","Search:":"検索:","Inter-workspace link":"ワークスペース間のリンク","Link text:":"リンクの文字:","Workspace:":"ワークスペース:","Page in:":"ページ:","Are you sure you want to delete this page?":"このページを本当に削除しますか？","Heading 6":"見出し6","Optional properties include link text, and the name of a different workspace for the tags.":"オプショナルプロパティで、リンクの文字、そのタグに対する別のワークスペース名を指定できます。","weblog: %1":"ウェブログ: %1","Attached Image":"添付画像","Watch this page":"このページをウォッチする","Display the weblog '%1'. Click to edit.":"ウェブログ '%1' を表示します。 クリックして編集してください。","section: %1":"セクション: %1","Page Title required if Workspace Id specified":"ワークスペース ID が指定されている場合は、ページのタイトルが 必要です。","Display the content of an RSS feed. Use this form to edit the properties of the inline RSS feed.":"RSS フィードの内容を表示します。このフォームを使用して インライン RSS フィードのプロパティを編集してください。","What's new in the '%1' workspace. Click to edit.":"'%1' ワークスペースの更新情報です。クリックして編集してください。","Add links to these attachments at the top of the page? Images will appear in the page.":"このページのトップにある添付にリンクを追加しますか？ ページに画像が表示されます。","There are no optional properties for an Atom feed.":"ATOM フィードに関するオプショナルプロパティはありません。","date: %1":"日: %1","New Form Page":"新しいフォームページ","AIM Link":"AIM リンク","Use Advanced Mode for %1":"%1 については高度編集モードを使用してください。","Enter a tag and click \\\"Add another tag\\\". The tag will be saved when you save the page.":"タグを入力し ”別のタグを追加” をクリックしてください。","Convoq Link":"Convoq リンク","Display result for searching '%1'. Click to edit.":"'%1' の検索結果を表示します。クリックして編集してください。","Pages tagged with":"でタグの付いたページ","Cancel":"キャンセル","Display the content of an Atom feed. Use this form to edit the properties of the inline Atom feed.":"Atom フィードの内容を表示します。このフォームを使用してインラインAtom フィードのプロパティを編集してください。","Requires one of: %1":"次から少なくとも 1つは必要です: %1","Optionally, specify that the page contents should be displayed.":"オプションとして、ページの内容を表示するように指定できます。","wiki text":"wiki テキスト","Display a link to a list of pages with a specific tag. Use this form to edit the properties of the link.":"特定のタグがついたページ一覧へのリンクを表示します。このフォームを使用してリンクのプロパティを編集してください。","Table Edit Tip":"表の編集のコツ","file: %1":"ファイル: %1","Pages in:":"ページ:","Unformatted Content":"レイアウトなしテキスト","You must specify a page name":"ページ名を指定してください。","Optional properties include the name of the workspace to search, whether to search in the page title, text or tags, and whether to display full results or just page titles.":"オプショナルプロパティで、検索するワークスペース名、また、ページタイトル、テキスト、タグのうち、どれで検索するのか指定できます。完全検索結果を表示させるか、ページタイトルのみを表示させるかも指定することができます。","Preview":"プレビュー","Include the weblog '%1'. Click to edit.":"'%1' ウェブログを挿入します。クリックして編集してください。","Add file":"ファイルを追加","Expand zip archives and attach individual files to the page?":"zip アーカイブを解凍し、個々のファイルをページに添付しますか？","Include the page '%1'. Click to edit.":"'%1' ページを挿入します。クリックして編集してください。","Heading 5":"見出し5","Optional properties include specifying a different page for the attachment, and link text.":"オプショナルプロパティで、添付するページ、リンクの文字を指定できます。","Display the results from a Google search. Use this form to edit the properties for the search.":"Google による検索結果を表示します。このフォームを使用して検索のプロパティを編集してください。","Skype Link":"Skype リンク","There are no optional properties for unformatted text.":"レイアウトなしのテキストに関するオプショナルプロパティはありません。","Optional properties include the title of another page to which the image is attached, and link text. If link text is specified then a link to the image is displayed instead of the image.":"オプショナルプロパティで、画像が添付されている別のページの名前、リンクの文字を指定できます。リンクの文字が指定されている場合は、画像ではなく、画像へのリンクが表示されます。","Unformatted":"レイアウトなしテキスト","Could not add page to watchlist":"ウォッチリストにページを追加することができませんでした。","Optional properties include the text to display for the link, and a target section within the linked page.":"オプショナルプロパティで、リンクの文字、リンク先のセクションを指定できます。","Link to '%1'. Click to edit.":"'%1' へのリンクです。 クリックして編集してください。","Add another tag":"別のタグを追加","Add another file":"別のファイルを追加","selection_start: %1":"selection_start: %1","Text":"テキスト","Headers and<br/>sections in:":"見出しと<br/>セクション:","Section name:":"セクション名:","Unformatted content:":"レイアウトなしテキスト:","Italic":"イタリック","AIM: %1":"AIM: %1","Save":"保存","the workspace named":"別のワークスペース","Yahoo! IM: %1":"Yahoo! IM: %1","'%1' is a required field":"'%1' は必要な項目です","You must check at least one page in order to create a Word document.":"Word文書を生成するためには少なくとも一つのページをチェックしなければいけません。","Insert...":"挿入 ...","Instant message to '%1' using AIM. Click to edit.":"'%1' への AIM インスタントメッセージです。クリックして編集してください。","Display what's new in the '%1' workspace. Click to edit.":"'%1' ワークスペースの更新情報を表示します。 クリックして編集してください。","toc":"目次","error -> \\\"%1\\\" is not a valid email address":"エラー -> \\\"%1\\\" は有効な Email アドレスではありません。","weblog list: %1":"ウェブログ一覧: %1","Yahoo! IM Link":"Yahoo! IM リンク","This is not an editable widget. Please edit it in advanced mode.":"この widget は編集できません。高度編集モードで編集してください。","Insert attachment":"添付の挿入","Skype: %1":"Skype: %1","There are no optional properties for an AIM link.":"AIM リンクに関するオプショナルプロパティはありません。","Untitled Page":"タイトルなし","Display a list of pages recently changed in a workspace. By default only the page titles are displayed. Use this form to edit the list properties.":"ワークスペースで最近変更があったページの一覧を表示します。初期設定では、ページのタイトルのみが表示されます。このフォームを使用してリストのプロパティを編集してください。","Horizontal Rule":"水平線","Click \\\"Browse\\\" to find the file you want to upload. When you click \\\"Add file,\\\" this file will be added to the list of attachments for this page, and uploaded when you save the page.":"\\\"参照\\\"をクリックし、アップロードしたいファイルを選択してください。\\\"ファイルを追加\\\" をクリックすると、このファイルがこのページの添付リストに追加され、ページを保存した時にアップロードされます。","Fewer options":"オプション >>","type link text here":"ここにリンクの文字をタイプしてください。","Use %1 to generate a form. Click to edit.":"%1 を使用してフォームを作成してください。クリックして編集してください。","tag: %1":"タグ: %1","Bold":"太字","\\\",\\\"":"\\\",\\\"","Files To upload:":"アップロードするファイル:","tag list: %1":"タグ一覧: %1","Add a link to this attachment at the top of the page? Images will appear in the page.":"このページのトップにある添付にリンクを追加しますか？ 添付ファイルが画像の場合は、、画像がページ内に表示されます。","Please select the text you would like to turn into a link.":"リンクに変換したいテキストを選択してください。","Display the full name for the given email address or user name. Use this form to edit the properties of the user name.":"与えられた Email アドレス、あるいは、ユーザ名に対してフルネームを表示します。このフォームを使用してユーザ名のプロパティを編集してください。","the page titled":"別のページ","More Indented":"インデントを増やす","More options":"他のオプション","Display the results for a Technorati search. Use this form to edit the properties for the search.":"Technorati による検索結果を表示します。このフォームを使用して検索のプロパティを編集してください。","Preformatted":"レイアウト表示","Full results:":"内容を表示:","Call '%1' using Convoq. Click to edit.":"'%1' と Convoq 通話を開始します。クリックして編集してください。","Images":"画像","Heading 4":"見出し4","Optionally, specify which page's headers and sections to use for the table of contents.":"オプションとして、どのページの見出しとセクションを目次に使用するか指定できます。","You must select one of the options or click cancel":"オプションの中から1つ選択するか、キャンセルをクリックしてください。","form: %1":"フォーム: %1","Table of contents for '%1'. Click to edit.":"'%1' の目次。クリックして編集してください。","About Wikiwyg":"Wikiwygにつぃて","Section marker '%1'. Click to edit.":"'%1' セクションマーカー。 クリックして編集してください。","Section Marker":"セクションマーカー","Yahoo! ID:":"Yahoo! ID:","There are no optional properties for a section marker.":"セクションマーカーに関するオプショナルプロパティはありません。","That doesn't appear to be a valid number.":"有効な数字のようではありません。","There are no optional properties for a new form page.":"新しいフォームページに関するオプショナルプロパティはありません。","Include the '%1' Atom feed. Click to edit.":"'%1' Atom フィードを挿入します。クリックして編集してください。","image: %1":"画像: %1","Display the given date and time in the individually-set time zone for each reader. Use this form to edit the date and time to be displayed":"各ユーザが個々に設定したタイムゾーンで日時を表示します。このフォームを使用して表示される日時を編集してください。","Replace this text with your own.":"このテキストを書き換えてください。","There are no optional properties for a date display.":"日時の表示に関するオプショナルプロパティはありません。","the current workspace":"現在のワークスペース","Tag name:":"タグ名:","Decrease Indent":"インデントを減らす","New search":"ワードを入力","\\\"%1\\\" is a reserved page name. Please use a different name":"\\\"%1\\\" は予約されたページ名です。別の名前を使用してください。","Use this form to edit the properties of the link.":"このフォームを使用してリンクのプロパティを編集してください。","Call '%1' using Skype. Click to edit.":"'%1' と Skype 通話を開始します。クリックして編集してください。","Optional properties include the text to display for the link, and the title of a different page.":"オプショナルプロパティで、リンクの文字、リンク先のページのタイトルを指定できます。","Advanced Mode":"高度編集モード","If you click 'OK', all edit changes will be lost!":"'OK'をクリックすると、すべての編集内容が失われます！","or":"あるいは","Strike Through":"取り消し線","Search Results":"検索結果","Insert web link":"外部リンクの作成","Add a section marker at the current cursor location. You can link to a section marker using a \\\"Section Link\\\". Use this form to edit the properties for the section marker.":"カーソルが今ある位置にセクションマーカーを追加します。 \\\"セクションリンク\\\" でセクションマーカーへリンクすることができます。このフォームを使用してセクションマーカーのプロパティを編集してください。","link: %1 (%2 )":"リンク: %1 (%2 )","link: %1":"リンク: %1","Less Indented":"インデントを減らす","There are no optional properties for an RSS feed.":"RSS フィードに関するオプショナルプロパティはありません。","search: %1":"検索: %1","Display image '%1'. Click to edit.":"画像 '%1' を表示します。クリックして編集してください。","Pages with the '%1' tag. Click to edit.":"'%1' タグの付いたページです。クリックして編集してください。","Other page in:":"別のページ:","Insert image":"画像の挿入","YYYY-MM-DD&nbsp;HH:MM:SS:":"YYYY-MM-DD&nbsp;HH:MM:SS:","No matches":"一致するページがありません。","Safari does not support simple mode editing":"Safari は簡易編集モードに対応していません。","Search Google for '%1'. Click to edit.":"Google で '%1' を検索する。 クリックして編集してください。","Expand zip archive and attach individual files to the page?":"zip アーカイブを解凍し、個々のファイルをページに添付しますか？","Add tag":"タグを追加","There are no optional properties for a Technorati search.":"Technorati リンクに関するオプショナルプロパティはありません。","AIM screen name:":"AIM スクリーンネーム:","Technorati Search":"Technorati 検索","What's New":"更新情報","There are no optional properties for a Skype link.":"Skype リンクに関するオプショナルプロパティはありません。","Inline Atom":"Atom のインライン","Optional properties include link text, and the name of a different workspace for the weblog.":"オプショナルプロパティには、リンクの文字、ワークスペース名があります。","Watching this page":"このページをウォッチ中","Normal Text":"ノーマルテキスト","Saving...":"保存中...","Weblog List":"ウェブログ一覧","Include the '%1' RSS feed. Click to edit.":"'%1' RSS フィードを挿入します。クリックして編集してください。","Form name:":"フォーム名:"},"zj":{"Could not retrieve the latest revision of the page":"cおうLd nお7 rえ7Rいえvえ 7hえ Lあ7えS7 rえvいsいおN おf 7Hえ pあgえ","Link to tag '%1'. Click to edit.":"lいnK 7お 7あg '%1'. cLいCk 7お えdい7.","Display the search results for the given phrase within a workspace. Use this form to edit the properties for the search.":"dいsPlあy 7Hえ sえあRcH RえSうL7S FおR 7hえ GいVえN PhRあSえ wい7HいN あ WおRkSpあcえ. うSえ 7HいS FおRm 7お えdい7 7Hえ pRおPえR7いえS FおR 7hえ SえあrCh.","Attachment filename:":"あ77あcHmえn7 FいLえNあMえ:","Search Technorati for '%1'. Click to edit.":"sえあRcH 7えChNおRあ7い fおr '%1'. cLいCk 7お えdい7.","Switch to %1 to use this feature.":"sWい7cH 7お %1 7お うSえ 7HいS Fえあ7うrえ.","Page title is too long after URL encoding":"pあgえ 7い7lえ いs 7おお lおnG あf7えR うrL えnCおDいNg","Search for '%1'. Click to edit.":"sえあRcH FおR '%1'. ClいcK 7お えDい7.","User Name":"うSえR NあMえ","Create Table":"cRえあ7え 7あ8lえ","Link to Attachment":"lいnK 7お あ77あcHmえn7","Can't have a 0 for a size.":"cあn'7 hあvえ あ 0 FおR あ SいZえ.","You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to stay on the current page.":"yおう hあvえ うnSあVえD ChあnGえS. あRえ yおう sうrえ Yおう WあN7 7お NあVいGあ7え あWあY Frおm 7HいS PあGえ? いf yおう cLいCk 'おk', あLl えDい7 ChあnGえS WいLl 8え LおS7. ClいcK 'cあnCえL' いF Yおう WあN7 7お S7あy おN 7hえ CうRrえn7 PあGえ.","There are no optional properties for a Convoq Link.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR あ CおNvおq lいnK.","Display a link to a file attached to a page. Use this form to edit the properities of the link.":"dいsPlあy あ lいnK 7お あ fいlえ あ77あChえd 7お あ PあGえ. うsえ 7hいs fおrM 7お えDい7 7hえ Prおpえrい7いえS おf 7Hえ lいnK.","Loading...":"lおあDいNg...","Edit More":"えDい7 MおRえ","'%1' has an invalid value":"'%1' HあS あn いNvあlいd vあlうえ","recent changes":"rえcえn7 ChあnGえS","You cannot compare a revision to itself.":"yおう cあnNお7 CおMpあrえ あ RえVいSいおn 7お い7SえLf.","Inline RSS":"いNlいnえ RsS","In:":"いN:","Display a table of contents for a page. Each header or section on the page is listed as a link in the table of contents. Click \\\"Save\\\" now, or click \\\"More options\\\" to edit the properties for the table of contents.":"dいsPlあy あ 7あ8Lえ おF CおN7えn7s fおr あ pあgえ. えあcH Hえあdえr おR SえC7いおN おn 7Hえ pあgえ いs lいs7えD あs あ lいnK いn 7Hえ 7あ8Lえ おF CおN7えn7s. ClいcK \\\"SあVえ\\\" nおw, おr cLいCk \\\"mおrえ おp7いおnS\\\" 7お えDい7 7hえ Prおpえr7いえs fおr 7Hえ 7あ8Lえ おF CおN7えn7s.","Table of Contents":"7あ8Lえ おF CおN7えn7s","Enter a tag and click \\\"Add tag\\\". The tag will be saved when you save the page.":"えN7えr あ 7あg あNd cLいCk \\\"あDd 7あg\\\". 7hえ 7あG WいLl 8え SあVえD Whえn yおう sあvえ 7hえ PあGえ.","Optional properties include specifying which workspace to use and whether to display page titles or whole pages.":"おP7いおNあL Prおpえr7いえs いNcLうDえ sPえCいFyいnG WhいcH WおRkSpあcえ 7お うSえ あNd wHえ7hえr 7お DいSpLあY PあGえ 7い7LえS おr wHおLえ pあgえs.","RSS feed URL:":"rSs fええD うrL:","No tag entered":"nお 7あG えn7えRえD","error -> To send email, you must specify a recipient":"えRrおr -> 7お sえnD えmあいL, yおう mうs7 SpえcいfY あ RえCいPいえn7","Advanced content is shown inside a grey border. Switch to %1 to edit areas inside a grey border.":"あDvあnCえD CおN7えn7 いs sHおWn いNsいdえ あ Grえy 8おrDえR. sWい7cH 7お %1 7お えDい7 あrえあS いnSいDえ あ gRえY 8おRdえr.","Could not remove page from watchlist":"cおうLd nお7 rえmおvえ PあGえ fRおM Wあ7cHlいs7","Display the contents of another page within the current page. Use this form to edit the properties for the page include.":"dいsPlあy 7Hえ cおn7えN7S おf あNお7hえr pあgえ Wい7hいn 7Hえ cうrRえN7 pあgえ. うSえ 7HいS FおRm 7お えdい7 7Hえ pRおPえR7いえS FおR 7hえ PあGえ いNcLうDえ.","Unlink":"うNlいnK","Heading 1":"hえあDいNg 1","Search term:":"sえあRcH 7えRm:","Atom feed URL:":"あ7おM Fええd うRl:","Link to '%1' in '%2'. Click to edit.":"lいnK 7お '%1' いn '%2'. cLいCk 7お えdい7.","There are no optional properties for page include.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR PあGえ いNcLうDえ.","Insert table":"いNsえr7 7あ8lえ","Link to file '%1'. Click to edit.":"lいnK 7お fいlえ '%1'. ClいcK 7お えDい7.","page does not exist":"pあgえ Dおえs nお7 えXいS7","Display a link to an AIM screen name. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.":"dいsPlあy あ lいnK 7お あN あいM ScRええn nあmえ. 7Hえ いCおN WいLl sHおW Whえ7HえR 7hえ PえRsおn いS おnLいNえ. ClいcKいNg 7Hえ lいnK WいLl s7あR7 あN いm cおnVえRsあ7いおN Wい7h 7Hえ pえrSおN いf yおうR いm cLいえn7 いs pRおPえRlY CおNfいgうrえd. うsえ 7hいs fおrM 7お えDい7 7hえ Prおpえr7いえs おF 7hえ LいNk.","There are no optional properties for an Google search.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR あn gおおGlえ SえあrCh.","Underline":"うNdえrLいNえ","Technorati: %1":"7えcHnおrあ7い: %1","Bulleted List":"8うlLえ7えD LいS7","Weblog Link":"wえ8LおG LいNk","Date in Local Time":"dあ7え いn lおcあl 7いmえ","Tag":"7あg","Display an image on this page. The image must be already uploaded as an attachment to this page or another page. Use this form to edit the properties of the displayed image.":"dいsPlあy あN いmあgえ おn 7HいS PあGえ. 7hえ いmあgえ MうS7 8え あlRえあdY うpLおあdえd あS あn あ77あcHmえn7 7お 7HいS PあGえ おR あnお7HえR PあGえ. うsえ 7hいs fおrM 7お えDい7 7hえ Prおpえr7いえs おF 7hえ DいSpLあYえD いmあgえ.","You must select two revisions to compare.":"yおう mうs7 SえLえC7 7Wお rえvいsいおNs 7お CおMpあrえ.","User's email:":"うSえR'S えmあいL:","Enter your destination url here:":"えN7えr yおうR DえS7いnあ7いおN うrL HえRえ:","Weblog on:":"wえ8LおG おn:","External Link":"えX7えrNあL LいNk","Use %1 to change the number of rows and columns in a table.":"うSえ %1 7お cHあNgえ 7hえ NうM8えr おF RおWs あNd cおlうmNs いN あ 7あ8lえ.","in:":"いN:","Display a link to a Skype name. Clicking the link will start a Skype call with the person if your Skype client is properly configured. Use this form to edit the properties of the link.":"dいsPlあy あ lいnK 7お あ sKyPえ nあmえ. cLいCkいnG 7hえ LいNk wいlL S7あr7 あ SkYpえ CあLl wい7H 7hえ PえRsおn いF Yおうr sKyPえ cLいえn7 いs pRおPえRlY CおNfいgうrえd. うsえ 7hいs fおrM 7お えDい7 7hえ Prおpえr7いえs おF 7hえ LいNk.","Title":"7い7Lえ","Tag List":"7あg lいs7","Other workspace:":"お7hえr wおrKsPあCえ:","That seems like a bit too large for a table.":"7Hあ7 SええmS LいKえ あ 8い7 7おお lあrGえ fおr あ 7あ8Lえ.","the current page":"7Hえ cうrRえN7 pあgえ","Tag Link":"7あg lいnK","Increase Indent":"いNcRえあsえ いnDえN7","%asis_content":"%あsいs_cおn7えN7","Advanced Content in Grey Border":"あDvあnCえD CおN7えn7 いn gRえY 8おRdえr","[Style]":"[S7Ylえ]","Display pages with the '%1' tag. Click to edit.":"dいsPlあy pあgえs wい7H 7hえ '%1' 7あg. ClいcK 7お えDい7.","Heading 3":"hえあDいNg 3","Please enter the number of table rows:":"pLえあsえ えn7えR 7hえ NうM8えr おF 7あ8lえ RおWs:","Strikethrough":"s7rいkえ7HrおうGh","Unexpected Widget >>%1<< in parseWidget":"うNえXpえc7えD WいDgえ7 >>%1<< いn pあrSえWいDgえ7","You have unsaved changes. Do you want to save those changes? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes before navigating away from this page.":"yおう hあvえ うnSあVえD ChあnGえS. dお Yおう WあN7 7お SあVえ 7HおSえ cHあNgえs? いf yおう cLいCk 'おk', あLl えDい7 ChあnGえS WいLl 8え LおS7. ClいcK 'cあnCえL' いF Yおう WあN7 7お SあVえ cHあNgえs 8えfおrえ NあVいGあ7いNg あWあY Frおm 7HいS PあGえ.","Show full name for '%1'. Click to edit.":"sHおW FうLl nあmえ FおR '%1'. ClいcK 7お えDい7.","Numbering":"nうm8えRいNg","Display a list of the most recently changed pages in a workspace that have a specific tag. By default only the page title is displayed. Use this form to edit the list properties.":"dいsPlあy あ lいs7 おf 7Hえ mおs7 RえCえN7Ly cHあNgえd pあgえs いN あ WおRkSpあcえ 7hあ7 hあvえ あ Spえcいfいc 7あg. 8y dえfあうL7 おNlY 7hえ PあGえ 7い7Lえ いS DいSpLあYえD. うSえ 7HいS FおRm 7お えdい7 7Hえ lいs7 Prおpえr7いえs.","Click \\\"Browse\\\" to find the file you want to upload. When you click \\\"Add another file,\\\" these files will be added to the list of attachments for this page, and uploaded when you save the page.":"cLいCk \\\"8RおWsえ\\\" 7お fいnD 7hえ FいLえ yおう wあn7 7お うPlおあD. wHえN Yおう ClいcK \\\"あdD あnお7HえR FいLえ,\\\" 7hえsえ FいLえS WいLl 8え あdDえD 7お 7Hえ lいs7 おf あ77あcHmえn7s fおr 7HいS PあGえ, あnD うpLおあdえd wHえN Yおう SあVえ 7Hえ pあgえ.","Heading 2":"hえあDいNg 2","Weblog name:":"wえ8LおG NあMえ:","There are no optional properties for a Yahoo! link.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR あ YあHおお! lいnK.","Search type:":"sえあRcH 7yPえ:","Plese click \\\"Browse\\\" and select a file to upload.":"pLえSえ cLいCk \\\"8RおWsえ\\\" あnD SえLえC7 あ fいlえ 7お うPlおあD.","You must check at least one page in order to create a PDF.":"yおう mうs7 ChえcK あ7 lえあS7 おNえ pあgえ いn おRdえr 7お Crえあ7え あ pDf.","Skype name:":"sKyPえ nあmえ:","Select a form and generates a new form page.":"sえlえc7 あ FおRm あNd gえnえrあ7えs あ nえw fおrM PあGえ.","Include an Image":"いNcLうDえ あN いmあgえ","Create Link":"cRえあ7え LいNk","Optional parameters include specifying which workspace to use and whether to display page titles or whole pages.":"おP7いおNあL PあRあMえ7えRs いNcLうDえ sPえCいFyいnG WhいcH WおRkSpあcえ 7お うSえ あNd wHえ7hえr 7お DいSpLあY PあGえ 7い7LえS おr wHおLえ pあgえs.","Insert Socialtext link":"いNsえr7 SおCいあl7えX7 lいnK","Numbered List":"nうm8えRえD LいS7","Instant message to '%1' using Yahoo! Click to edit.":"いNs7あN7 mえsSあGえ 7お '%1' うSいNg yあhおお! ClいcK 7お えDい7.","Google Search":"gおおGlえ SえあrCh","Attached to:":"あ77あcHえD 7お:","unformatted: %1":"うNfおrMあ77えd: %1","toc: %1":"7おc: %1","Display a link to a Convoq name. Clicking the link will start a Convoq call with the person if your Convoq client is properly configured. Use this form to edit the properties of the Convoq link.":"dいsPlあy あ lいnK 7お あ cおnVおQ NあMえ. ClいcKいNg 7Hえ lいnK WいLl s7あR7 あ cおnVおQ CあLl wい7H 7hえ PえRsおn いF Yおうr cおnVおQ ClいえN7 いS PrおpえrLy cおnFいGうRえD. うSえ 7HいS FおRm 7お えdい7 7Hえ pRおPえR7いえS おf 7Hえ cおnVおQ LいNk.","Convoq name:":"cおnVおQ NあMえ:","recent changes: %1":"rえcえn7 ChあnGえS: %1","Page title:":"pあgえ 7い7lえ:","Display a link to a weblog. Use this form to edit the properties of the link.":"dいsPlあy あ lいnK 7お あ wえ8LおG. うSえ 7HいS FおRm 7お えdい7 7Hえ pRおPえR7いえS おf 7Hえ lいnK.","Error":"えRrおr","There are no optional properties for a user name.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR あ うsえr nあmえ.","user: %1":"うSえR: %1","File attached to:":"fいlえ あ77あChえd 7お:","Remove %1 from the queue":"rえmおvえ %1 fRおM 7hえ Qうえうえ","Please enter the number of table columns:":"pLえあsえ えn7えR 7hえ NうM8えr おF 7あ8lえ CおLうMnS:","Display a link to a Yahoo! instant message ID. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.":"dいsPlあy あ lいnK 7お あ yあhおお! いnS7あn7 MえSsあgえ いd. 7hえ いcおn wいlL Shおw wHえ7hえr 7Hえ pえrSおN いs おNlいnえ. cLいCkいnG 7hえ LいNk wいlL S7あr7 あn いM CおNvえrSあ7いおn wい7H 7hえ PえRsおn いF Yおうr いM ClいえN7 いS PrおpえrLy cおnFいGうRえD. うSえ 7HいS FおRm 7お えdい7 7Hえ pRおPえR7いえS おf 7Hえ lいnK.","include: %1":"いNcLうDえ: %1","Include unformatted text in the page. This text will not be treated as wiki text. Use this form to edit the text.":"いNcLうDえ うNfおrMあ77えd 7えx7 いn 7Hえ pあgえ. 7HいS 7えX7 wいlL Nお7 8え 7Rえあ7えd あS WいKい 7えx7. うSえ 7HいS FおRm 7お えdい7 7Hえ 7えx7.","feed: %1":"fええD: %1","Attachment Link":"あ77あcHmえn7 LいNk","Use this form to edit the properties of the link to a page section.":"うSえ 7HいS FおRm 7お えdい7 7Hえ pRおPえR7いえS おf 7Hえ lいnK 7お あ pあgえ SえC7いおN.","Convoq: %1":"cおnVおQ: %1","Bullets":"8うlLえ7s","Display '%1' in reader's time zone. Click to edit.":"dいsPlあy '%1' いn rえあDえR'S 7いMえ zおnえ. cLいCk 7お えdい7.","Attachments":"あ77あcHmえn7s","Display a list of the most recent entries from a weblog in a workspace. By default only the weblog entry names are displayed. Use this form to edit the list properties.":"dいsPlあy あ lいs7 おf 7Hえ mおs7 RえCえN7 えN7Rいえs fRおM あ Wえ8lおg いN あ WおRkSpあcえ. 8Y DえFあうl7 おnLy 7Hえ wえ8LおG えn7rY NあMえS あrえ DいSpLあYえD. うSえ 7HいS FおRm 7お えdい7 7Hえ lいs7 Prおpえr7いえs.","You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes and stay on the current page.":"yおう hあvえ うnSあVえD ChあnGえS. あRえ yおう sうrえ Yおう WあN7 7お NあVいGあ7え あWあY Frおm 7HいS PあGえ? いf yおう cLいCk 'おk', あLl えDい7 ChあnGえS WいLl 8え LおS7. ClいcK 'cあnCえL' いF Yおう WあN7 7お SあVえ cHあNgえs あNd s7あY おn 7Hえ cうrRえN7 pあgえ.","Link to weblog '%1'. Click to edit.":"lいnK 7お wえ8LおG '%1'. ClいcK 7お えDい7.","Google: %1":"gおおGlえ: %1","Table & Advanced Editing":"7あ8Lえ & あDvあnCえD えdい7いnG","Link to a Section":"lいnK 7お あ sえc7いおn","Page Include":"pあgえ いnClうdえ","Search for:":"sえあRcH FおR:","Search:":"sえあRcH:","Inter-workspace link":"いN7えr-wおrKsPあCえ lいnK","Link text:":"lいnK 7えX7:","Workspace:":"wおrKsPあCえ:","Page in:":"pあgえ いn:","Are you sure you want to delete this page?":"あRえ yおう sうrえ Yおう WあN7 7お DえLえ7え 7HいS PあGえ?","Heading 6":"hえあDいNg 6","Optional properties include link text, and the name of a different workspace for the tags.":"おP7いおNあL Prおpえr7いえs いNcLうDえ lいnK 7えX7, あnD 7hえ NあMえ おF あ DいFfえrえn7 WおRkSpあcえ FおR 7hえ 7あGs.","weblog: %1":"wえ8LおG: %1","Attached Image":"あ77あcHえD いmあgえ","Watch this page":"wあ7Ch 7HいS PあGえ","Display the weblog '%1'. Click to edit.":"dいsPlあy 7Hえ wえ8LおG '%1'. ClいcK 7お えDい7.","section: %1":"sえc7いおn: %1","Page Title required if Workspace Id specified":"pあgえ 7い7lえ RえQういrえd いF WおRkSpあcえ いd sPえCいFいえd","Display the content of an RSS feed. Use this form to edit the properties of the inline RSS feed.":"dいsPlあy 7Hえ cおn7えN7 おF あn rSs fええD. うSえ 7HいS FおRm 7お えdい7 7Hえ pRおPえR7いえS おf 7Hえ いNlいnえ RsS Fええd.","What's new in the '%1' workspace. Click to edit.":"wHあ7'S NえW いn 7Hえ '%1' WおRkSpあcえ. cLいCk 7お えdい7.","Add links to these attachments at the top of the page? Images will appear in the page.":"あDd lいnKs 7お 7hえsえ あ77あChMえN7S あ7 7Hえ 7おp おF 7hえ PあGえ? いmあgえs wいlL あpPえあr いN 7hえ PあGえ.","There are no optional properties for an Atom feed.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR あn あ7おM Fええd.","date: %1":"dあ7え: %1","New Form Page":"nえw fおrM PあGえ","AIM Link":"あいm lいnK","Use Advanced Mode for %1":"うSえ あDvあnCえD MおDえ fおr %1","Enter a tag and click \\\"Add another tag\\\". The tag will be saved when you save the page.":"えN7えr あ 7あg あNd cLいCk \\\"あDd あNお7hえr 7あg\\\". 7hえ 7あG WいLl 8え SあVえD Whえn yおう sあvえ 7hえ PあGえ.","Convoq Link":"cおnVおQ LいNk","Display result for searching '%1'. Click to edit.":"dいsPlあy rえsうl7 FおR SえあrChいnG '%1'. ClいcK 7お えDい7.","Pages tagged with":"pあgえs 7あgGえD Wい7h","Cancel":"cあnCえL","Display the content of an Atom feed. Use this form to edit the properties of the inline Atom feed.":"dいsPlあy 7Hえ cおn7えN7 おF あn あ7おM Fええd. うsえ 7hいs fおrM 7お えDい7 7hえ Prおpえr7いえs おF 7hえ いnLいNえ あ7おM Fええd.","Requires one of: %1":"rえqういRえS おnえ おf: %1","Optionally, specify that the page contents should be displayed.":"おP7いおNあLlY, sPえCいFy 7Hあ7 7hえ PあGえ cおn7えN7S ShおうLd 8え DいSpLあYえD.","Display a link to a list of pages with a specific tag. Use this form to edit the properties of the link.":"dいsPlあy あ lいnK 7お あ lいs7 おf pあgえs wい7H あ Spえcいfいc 7あg. うsえ 7hいs fおrM 7お えDい7 7hえ Prおpえr7いえs おF 7hえ LいNk.","wiki text":"wいkい 7えX7","Table Edit Tip":"7あ8Lえ えDい7 7いP","Pages in:":"pあgえs いN:","file: %1":"fいlえ: %1","Unformatted Content":"うNfおrMあ77えd cおn7えN7","You must specify a page name":"yおう mうs7 SpえcいfY あ PあGえ nあmえ","Optional properties include the name of the workspace to search, whether to search in the page title, text or tags, and whether to display full results or just page titles.":"おP7いおNあL Prおpえr7いえs いNcLうDえ 7Hえ nあmえ おf 7Hえ wおrKsPあCえ 7お SえあrCh, Whえ7HえR 7お sえあRcH いn 7Hえ pあgえ 7い7lえ, 7えx7 おr 7あgS, あNd wHえ7hえr 7お DいSpLあY FうLl rえsうl7s おR JうS7 pあgえ 7い7lえs.","Add file":"あDd fいlえ","Include the weblog '%1'. Click to edit.":"いNcLうDえ 7Hえ wえ8LおG '%1'. ClいcK 7お えDい7.","Preview":"pRえVいえw","Expand zip archives and attach individual files to the page?":"えXpあnD ZいP あrChいvえs あNd あ77あcH いnDいVいDうあl fいlえs 7お 7hえ PあGえ?","Include the page '%1'. Click to edit.":"いNcLうDえ 7Hえ pあgえ '%1'. ClいcK 7お えDい7.","Heading 5":"hえあDいNg 5","Optional properties include specifying a different page for the attachment, and link text.":"おP7いおNあL Prおpえr7いえs いNcLうDえ sPえCいFyいnG あ DいFfえrえn7 PあGえ fおr 7Hえ あ77あcHmえn7, あNd lいnK 7えX7.","Display the results from a Google search. Use this form to edit the properties for the search.":"dいsPlあy 7Hえ rえsうl7s fRおM あ GおおgLえ sえあRcH. うSえ 7HいS FおRm 7お えdい7 7Hえ pRおPえR7いえS FおR 7hえ SえあrCh.","Skype Link":"sKyPえ lいnK","There are no optional properties for unformatted text.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR うnFおRmあ77えD 7えX7.","Optional properties include the title of another page to which the image is attached, and link text. If link text is specified then a link to the image is displayed instead of the image.":"おP7いおNあL Prおpえr7いえs いNcLうDえ 7Hえ 7い7Lえ おF あnお7HえR PあGえ 7お WhいcH 7hえ いmあgえ いs あ77あcHえD, あNd lいnK 7えX7. いf lいnK 7えX7 いS SpえcいfいえD 7hえn あ lいnK 7お 7Hえ いMあGえ いS DいSpLあYえD いnS7えあD おf 7Hえ いMあGえ.","Unformatted":"うNfおrMあ77えd","Could not add page to watchlist":"cおうLd nお7 あDd pあgえ 7お wあ7ChLいS7","Optional properties include the text to display for the link, and a target section within the linked page.":"おP7いおNあL Prおpえr7いえs いNcLうDえ 7Hえ 7えx7 7お dいsPlあy fおr 7Hえ lいnK, あNd あ 7あrGえ7 SえC7いおN Wい7hいn 7Hえ lいnKえD PあGえ.","Add another tag":"あDd あNお7hえr 7あg","Link to '%1'. Click to edit.":"lいnK 7お '%1'. cLいCk 7お えdい7.","Add another file":"あDd あNお7hえr fいlえ","selection_start: %1":"sえlえc7いおn_s7あR7: %1","Text":"7えx7","Section name:":"sえc7いおn nあmえ:","Headers and<br/>sections in:":"hえあDえRs あNd<8R/>sえc7いおnS いn:","Unformatted content:":"うNfおrMあ77えd cおn7えN7:","Italic":"い7あLいC","Save":"sあvえ","AIM: %1":"あいm: %1","Yahoo! IM: %1":"yあhおお! いm: %1","the workspace named":"7Hえ wおrKsPあCえ nあmえd","You must check at least one page in order to create a Word document.":"yおう mうs7 ChえcK あ7 lえあS7 おNえ pあgえ いn おRdえr 7お Crえあ7え あ wおrD DおCうMえN7.","'%1' is a required field":"'%1' いs あ rえqういRえD FいえlD","Instant message to '%1' using AIM. Click to edit.":"いNs7あN7 mえsSあGえ 7お '%1' うSいNg あいm. ClいcK 7お えDい7.","Insert...":"いNsえr7...","toc":"7おc","Display what's new in the '%1' workspace. Click to edit.":"dいsPlあy wHあ7'S NえW いn 7Hえ '%1' WおRkSpあcえ. cLいCk 7お えdい7.","error -> \\\"%1\\\" is not a valid email address":"えRrおr -> \\\"%1\\\" いS Nお7 あ VあLいD えmあいL あdDrえsS","Yahoo! IM Link":"yあhおお! いm lいnK","weblog list: %1":"wえ8LおG LいS7: %1","Insert attachment":"いNsえr7 あ77あChMえN7","This is not an editable widget. Please edit it in advanced mode.":"7HいS いs nお7 あN えdい7あ8Lえ wいdGえ7. pLえあsえ えdい7 い7 いn あDvあnCえD MおDえ.","Skype: %1":"sKyPえ: %1","There are no optional properties for an AIM link.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR あn あいm lいnK.","Untitled Page":"うN7い7LえD PあGえ","Display a list of pages recently changed in a workspace. By default only the page titles are displayed. Use this form to edit the list properties.":"dいsPlあy あ lいs7 おf pあgえs rえcえn7lY ChあnGえD いn あ wおrKsPあCえ. 8y dえfあうL7 おNlY 7hえ PあGえ 7い7LえS あrえ DいSpLあYえD. うSえ 7HいS FおRm 7お えdい7 7Hえ lいs7 Prおpえr7いえs.","Horizontal Rule":"hおrいzおn7あL RうLえ","Click \\\"Browse\\\" to find the file you want to upload. When you click \\\"Add file,\\\" this file will be added to the list of attachments for this page, and uploaded when you save the page.":"cLいCk \\\"8RおWsえ\\\" 7お fいnD 7hえ FいLえ yおう wあn7 7お うPlおあD. wHえN Yおう ClいcK \\\"あdD FいLえ,\\\" 7hいs fいlえ WいLl 8え あdDえD 7お 7Hえ lいs7 おf あ77あcHmえn7s fおr 7HいS PあGえ, あnD うpLおあdえd wHえN Yおう SあVえ 7Hえ pあgえ.","Fewer options":"fえwえr おP7いおNs","type link text here":"7Ypえ LいNk 7えx7 HえRえ","Use %1 to generate a form. Click to edit.":"うSえ %1 7お gえnえrあ7え あ FおRm. ClいcK 7お えDい7.","tag: %1":"7あg: %1","Bold":"8おlD","Files To upload:":"fいlえs 7お うpLおあd:","\\\",\\\"":"\\\",\\\"","tag list: %1":"7あg lいs7: %1","Add a link to this attachment at the top of the page? Images will appear in the page.":"あDd あ lいnK 7お 7HいS あ77あChMえN7 あ7 7hえ 7おP おf 7Hえ pあgえ? いMあGえS WいLl あPpえあR いn 7Hえ pあgえ.","Please select the text you would like to turn into a link.":"pLえあsえ SえLえC7 7Hえ 7えx7 Yおう WおうlD LいKえ 7お 7うRn いN7お あ LいNk.","Display the full name for the given email address or user name. Use this form to edit the properties of the user name.":"dいsPlあy 7Hえ fうlL NあMえ fおr 7Hえ gいvえn えMあいl あDdRえSs おR うsえr nあmえ. うSえ 7HいS FおRm 7お えdい7 7Hえ pRおPえR7いえS おf 7Hえ うSえR NあMえ.","the page titled":"7Hえ pあgえ 7い7lえd","More options":"mおrえ おp7いおnS","More Indented":"mおrえ いnDえN7えd","Display the results for a Technorati search. Use this form to edit the properties for the search.":"dいsPlあy 7Hえ rえsうl7s fおr あ 7えcHnおrあ7い SえあrCh. うsえ 7hいs fおrM 7お えDい7 7hえ Prおpえr7いえs fおr 7Hえ sえあRcH.","Preformatted":"pRえFおRmあ77えD","Full results:":"fうlL RえSうL7S:","Call '%1' using Convoq. Click to edit.":"cあlL '%1' うSいNg cおnVおQ. cLいCk 7お えdい7.","Heading 4":"hえあDいNg 4","Images":"いMあGえS","Optionally, specify which page's headers and sections to use for the table of contents.":"おP7いおNあLlY, sPえCいFy wHいCh pあgえ'S HえあdえrS あnD SえC7いおNs 7お うsえ FおR 7hえ 7あ8lえ おf cおn7えN7S.","You must select one of the options or click cancel":"yおう mうs7 SえLえC7 おNえ おF 7hえ おp7いおnS おr cLいCk cあnCえL","form: %1":"fおrM: %1","About Wikiwyg":"あ8おう7 wいkいwYg","Table of contents for '%1'. Click to edit.":"7あ8Lえ おF CおN7えn7s fおr '%1'. cLいCk 7お えdい7.","Section marker '%1'. Click to edit.":"sえc7いおn mあrKえR '%1'. ClいcK 7お えDい7.","Yahoo! ID:":"yあhおお! いd:","Section Marker":"sえc7いおn mあrKえR","That doesn't appear to be a valid number.":"7Hあ7 DおえsN'7 あpPえあr 7お 8え あ vあlいd nうm8えR.","There are no optional properties for a section marker.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR あ SえC7いおN MあRkえr.","There are no optional properties for a new form page.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR あ NえW FおRm pあgえ.","image: %1":"いMあGえ: %1","Include the '%1' Atom feed. Click to edit.":"いNcLうDえ 7Hえ '%1' あ7おm fええD. cLいCk 7お えdい7.","Display the given date and time in the individually-set time zone for each reader. Use this form to edit the date and time to be displayed":"dいsPlあy 7Hえ gいvえn dあ7え あnD 7いMえ いN 7hえ いnDいVいDうあlLy-sえ7 7いmえ ZおNえ fおr えあcH Rえあdえr. うsえ 7hいs fおrM 7お えDい7 7hえ Dあ7え あNd 7いmえ 7お 8え DいSpLあYえD","Replace this text with your own.":"rえpLあCえ 7HいS 7えX7 wい7H Yおうr おWn.","There are no optional properties for a date display.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR あ Dあ7え dいsPlあy.","the current workspace":"7Hえ cうrRえN7 wおrKsPあCえ","Decrease Indent":"dえcRえあsえ いnDえN7","Tag name:":"7あg nあmえ:","New search":"nえw sえあRcH","Use this form to edit the properties of the link.":"うSえ 7HいS FおRm 7お えdい7 7Hえ pRおPえR7いえS おf 7Hえ lいnK.","\\\"%1\\\" is a reserved page name. Please use a different name":"\\\"%1\\\" いs あ rえsえrVえD PあGえ nあmえ. pLえあsえ うsえ あ DいFfえrえn7 NあMえ","Call '%1' using Skype. Click to edit.":"cあlL '%1' うSいNg sKyPえ. ClいcK 7お えDい7.","Advanced Mode":"あDvあnCえD MおDえ","Optional properties include the text to display for the link, and the title of a different page.":"おP7いおNあL Prおpえr7いえs いNcLうDえ 7Hえ 7えx7 7お dいsPlあy fおr 7Hえ lいnK, あNd 7Hえ 7い7Lえ おF あ DいFfえrえn7 PあGえ.","Strike Through":"s7rいkえ 7hRおうgH","or":"おR","If you click 'OK', all edit changes will be lost!":"いF Yおう ClいcK 'おK', あlL えdい7 cHあNgえs wいlL 8え lおs7!","Search Results":"sえあRcH RえSうL7S","Insert web link":"いNsえr7 Wえ8 LいNk","Add a section marker at the current cursor location. You can link to a section marker using a \\\"Section Link\\\". Use this form to edit the properties for the section marker.":"あDd あ sえc7いおn mあrKえR あ7 7Hえ cうrRえN7 cうrSおR LおCあ7いおn. Yおう CあN LいNk 7お あ SえC7いおN MあRkえr うSいNg あ \\\"sえc7いおn lいnK\\\". うSえ 7HいS FおRm 7お えdい7 7Hえ pRおPえR7いえS FおR 7hえ SえC7いおN MあRkえr.","link: %1 (%2 )":"lいnK: %1 (%2 )","link: %1":"lいnK: %1","Less Indented":"lえsS いnDえN7えd","There are no optional properties for an RSS feed.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR あn rSs fええD.","search: %1":"sえあRcH: %1","Display image '%1'. Click to edit.":"dいsPlあy いMあGえ '%1'. cLいCk 7お えdい7.","Pages with the '%1' tag. Click to edit.":"pあgえs wい7H 7hえ '%1' 7あg. ClいcK 7お えDい7.","Other page in:":"お7hえr pあgえ いn:","Insert image":"いNsえr7 いmあgえ","YYYY-MM-DD&nbsp;HH:MM:SS:":"yYyY-Mm-dD&N8Sp;hH:Mm:sS:","No matches":"nお Mあ7cHえS","Safari does not support simple mode editing":"sあfあrい Dおえs nお7 sうpPおR7 sいmPlえ MおDえ えDい7いNg","Search Google for '%1'. Click to edit.":"sえあRcH GおおgLえ fおr '%1'. cLいCk 7お えdい7.","Expand zip archive and attach individual files to the page?":"えXpあnD ZいP あrChいvえ あnD あ77あCh いNdいvいdうあL FいLえS 7お 7Hえ pあgえ?","Add tag":"あDd 7あg","There are no optional properties for a Technorati search.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR あ 7えChNおRあ7い sえあRcH.","AIM screen name:":"あいm sCrええN NあMえ:","Technorati Search":"7えcHnおrあ7い SえあrCh","What's New":"wHあ7'S NえW","There are no optional properties for a Skype link.":"7HえRえ あRえ nお おp7いおnあl pRおPえR7いえS FおR あ SkYpえ LいNk.","Inline Atom":"いNlいnえ あ7おm","Optional properties include link text, and the name of a different workspace for the weblog.":"おP7いおNあL Prおpえr7いえs いNcLうDえ lいnK 7えX7, あnD 7hえ NあMえ おF あ DいFfえrえn7 WおRkSpあcえ FおR 7hえ Wえ8lおg.","Watching this page":"wあ7ChいnG 7hいs pあgえ","Normal Text":"nおrMあL 7えX7","Saving...":"sあvいnG...","Weblog List":"wえ8LおG LいS7","Include the '%1' RSS feed. Click to edit.":"いNcLうDえ 7Hえ '%1' RsS Fええd. ClいcK 7お えDい7.","Form name:":"fおrM NあMえ:"},"zz":{"Could not retrieve the latest revision of the page":"c0uLd n07 r37Ri3v3 7h3 L473S7 r3vIsI0N 0f 7H3 p4g3","Link to tag '%1'. Click to edit.":"lInK 70 74g '%1'. cLiCk 70 3dI7.","Display the search results for the given phrase within a workspace. Use this form to edit the properties for the search.":"dIsPl4y 7H3 s34RcH R3SuL7S F0R 7h3 GiV3N PhR4S3 wI7HiN 4 W0RkSp4c3. uS3 7HiS F0Rm 70 3dI7 7H3 pR0P3R7I3S F0R 7h3 S34rCh.","Attachment filename:":"4774cHm3n7 FiL3N4M3:","Search Technorati for '%1'. Click to edit.":"s34RcH 73ChN0R47i f0r '%1'. cLiCk 70 3dI7.","Switch to %1 to use this feature.":"sWi7cH 70 %1 70 uS3 7HiS F347Ur3.","Page title is too long after URL encoding":"p4g3 7i7l3 Is 700 l0nG 4f73R UrL 3nC0DiNg","Search for '%1'. Click to edit.":"s34RcH F0R '%1'. ClIcK 70 3Di7.","User Name":"uS3R N4M3","Create Table":"cR3473 748l3","Link to Attachment":"lInK 70 4774cHm3n7","Can't have a 0 for a size.":"c4n'7 h4v3 4 0 F0R 4 SiZ3.","You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to stay on the current page.":"y0u h4v3 UnS4V3D Ch4nG3S. 4R3 y0u sUr3 Y0U W4N7 70 N4ViG473 4W4Y Fr0m 7HiS P4G3? If y0u cLiCk '0k', 4Ll 3Di7 Ch4nG3S WiLl 83 L0S7. ClIcK 'c4nC3L' iF Y0U W4N7 70 S74y 0N 7h3 CuRr3n7 P4G3.","There are no optional properties for a Convoq Link.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R 4 C0Nv0q lInK.","Display a link to a file attached to a page. Use this form to edit the properities of the link.":"dIsPl4y 4 lInK 70 4 fIl3 4774Ch3d 70 4 P4G3. Us3 7hIs f0rM 70 3Di7 7h3 Pr0p3rI7I3S 0f 7H3 lInK.","Loading...":"l04DiNg...","Edit More":"3Di7 M0R3","'%1' has an invalid value":"'%1' H4S 4n iNv4lId v4lU3","recent changes":"r3c3n7 Ch4nG3S","You cannot compare a revision to itself.":"y0u c4nN07 C0Mp4r3 4 R3ViSi0n 70 I7S3Lf.","Inline RSS":"iNlIn3 RsS","In:":"iN:","Display a table of contents for a page. Each header or section on the page is listed as a link in the table of contents. Click \\\"Save\\\" now, or click \\\"More options\\\" to edit the properties for the table of contents.":"dIsPl4y 4 748L3 0F C0N73n7s f0r 4 p4g3. 34cH H34d3r 0R S3C7I0N 0n 7H3 p4g3 Is lIs73D 4s 4 lInK In 7H3 748L3 0F C0N73n7s. ClIcK \\\"S4V3\\\" n0w, 0r cLiCk \\\"m0r3 0p7i0nS\\\" 70 3Di7 7h3 Pr0p3r7i3s f0r 7H3 748L3 0F C0N73n7s.","Table of Contents":"748L3 0F C0N73n7s","Enter a tag and click \\\"Add tag\\\". The tag will be saved when you save the page.":"3N73r 4 74g 4Nd cLiCk \\\"4Dd 74g\\\". 7h3 74G WiLl 83 S4V3D Wh3n y0u s4v3 7h3 P4G3.","Optional properties include specifying which workspace to use and whether to display page titles or whole pages.":"0P7I0N4L Pr0p3r7i3s iNcLuD3 sP3CiFyInG WhIcH W0RkSp4c3 70 uS3 4Nd wH37h3r 70 DiSpL4Y P4G3 7I7L3S 0r wH0L3 p4g3s.","RSS feed URL:":"rSs f33D UrL:","No tag entered":"n0 74G 3n73R3D","error -> To send email, you must specify a recipient":"3Rr0r -> 70 s3nD 3m4iL, y0u mUs7 Sp3cIfY 4 R3CiPi3n7","Advanced content is shown inside a grey border. Switch to %1 to edit areas inside a grey border.":"4Dv4nC3D C0N73n7 Is sH0Wn iNsId3 4 Gr3y 80rD3R. sWi7cH 70 %1 70 3Di7 4r34S InSiD3 4 gR3Y 80Rd3r.","Could not remove page from watchlist":"c0uLd n07 r3m0v3 P4G3 fR0M W47cHlIs7","Display the contents of another page within the current page. Use this form to edit the properties for the page include.":"dIsPl4y 7H3 c0n73N7S 0f 4N07h3r p4g3 Wi7hIn 7H3 cUrR3N7 p4g3. uS3 7HiS F0Rm 70 3dI7 7H3 pR0P3R7I3S F0R 7h3 P4G3 iNcLuD3.","Unlink":"uNlInK","Heading 1":"h34DiNg 1","Search term:":"s34RcH 73Rm:","Atom feed URL:":"470M F33d uRl:","Link to '%1' in '%2'. Click to edit.":"lInK 70 '%1' In '%2'. cLiCk 70 3dI7.","There are no optional properties for page include.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R P4G3 iNcLuD3.","Insert table":"iNs3r7 748l3","Link to file '%1'. Click to edit.":"lInK 70 fIl3 '%1'. ClIcK 70 3Di7.","page does not exist":"p4g3 D03s n07 3XiS7","Display a link to an AIM screen name. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.":"dIsPl4y 4 lInK 70 4N 4iM ScR33n n4m3. 7H3 iC0N WiLl sH0W Wh37H3R 7h3 P3Rs0n iS 0nLiN3. ClIcKiNg 7H3 lInK WiLl s74R7 4N Im c0nV3Rs47I0N Wi7h 7H3 p3rS0N If y0uR Im cLi3n7 Is pR0P3RlY C0NfIgUr3d. Us3 7hIs f0rM 70 3Di7 7h3 Pr0p3r7i3s 0F 7h3 LiNk.","There are no optional properties for an Google search.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R 4n g00Gl3 S34rCh.","Underline":"uNd3rLiN3","Technorati: %1":"73cHn0r47I: %1","Bulleted List":"8UlL373D LiS7","Weblog Link":"w38L0G LiNk","Date in Local Time":"d473 In l0c4l 7Im3","Tag":"74g","Display an image on this page. The image must be already uploaded as an attachment to this page or another page. Use this form to edit the properties of the displayed image.":"dIsPl4y 4N Im4g3 0n 7HiS P4G3. 7h3 Im4g3 MuS7 83 4lR34dY UpL04d3d 4S 4n 4774cHm3n7 70 7HiS P4G3 0R 4n07H3R P4G3. Us3 7hIs f0rM 70 3Di7 7h3 Pr0p3r7i3s 0F 7h3 DiSpL4Y3D Im4g3.","You must select two revisions to compare.":"y0u mUs7 S3L3C7 7W0 r3vIsI0Ns 70 C0Mp4r3.","User's email:":"uS3R'S 3m4iL:","Enter your destination url here:":"3N73r y0uR D3S7In47I0N UrL H3R3:","Weblog on:":"w38L0G 0n:","External Link":"3X73rN4L LiNk","Use %1 to change the number of rows and columns in a table.":"uS3 %1 70 cH4Ng3 7h3 NuM83r 0F R0Ws 4Nd c0lUmNs iN 4 748l3.","in:":"iN:","Display a link to a Skype name. Clicking the link will start a Skype call with the person if your Skype client is properly configured. Use this form to edit the properties of the link.":"dIsPl4y 4 lInK 70 4 sKyP3 n4m3. cLiCkInG 7h3 LiNk wIlL S74r7 4 SkYp3 C4Ll wI7H 7h3 P3Rs0n iF Y0Ur sKyP3 cLi3n7 Is pR0P3RlY C0NfIgUr3d. Us3 7hIs f0rM 70 3Di7 7h3 Pr0p3r7i3s 0F 7h3 LiNk.","Title":"7I7L3","Tag List":"74g lIs7","Other workspace:":"07h3r w0rKsP4C3:","That seems like a bit too large for a table.":"7H47 S33mS LiK3 4 8I7 700 l4rG3 f0r 4 748L3.","the current page":"7H3 cUrR3N7 p4g3","Tag Link":"74g lInK","Increase Indent":"iNcR34s3 InD3N7","%asis_content":"%4sIs_c0n73N7","Advanced Content in Grey Border":"4Dv4nC3D C0N73n7 In gR3Y 80Rd3r","[Style]":"[S7Yl3]","Display pages with the '%1' tag. Click to edit.":"dIsPl4y p4g3s wI7H 7h3 '%1' 74g. ClIcK 70 3Di7.","Heading 3":"h34DiNg 3","Please enter the number of table rows:":"pL34s3 3n73R 7h3 NuM83r 0F 748l3 R0Ws:","Strikethrough":"s7rIk37Hr0uGh","Unexpected Widget >>%1<< in parseWidget":"uN3Xp3c73D WiDg37 >>%1<< In p4rS3WiDg37","You have unsaved changes. Do you want to save those changes? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes before navigating away from this page.":"y0u h4v3 UnS4V3D Ch4nG3S. d0 Y0U W4N7 70 S4V3 7H0S3 cH4Ng3s? If y0u cLiCk '0k', 4Ll 3Di7 Ch4nG3S WiLl 83 L0S7. ClIcK 'c4nC3L' iF Y0U W4N7 70 S4V3 cH4Ng3s 83f0r3 N4ViG47iNg 4W4Y Fr0m 7HiS P4G3.","Show full name for '%1'. Click to edit.":"sH0W FuLl n4m3 F0R '%1'. ClIcK 70 3Di7.","Numbering":"nUm83RiNg","Display a list of the most recently changed pages in a workspace that have a specific tag. By default only the page title is displayed. Use this form to edit the list properties.":"dIsPl4y 4 lIs7 0f 7H3 m0s7 R3C3N7Ly cH4Ng3d p4g3s iN 4 W0RkSp4c3 7h47 h4v3 4 Sp3cIfIc 74g. 8y d3f4uL7 0NlY 7h3 P4G3 7I7L3 iS DiSpL4Y3D. uS3 7HiS F0Rm 70 3dI7 7H3 lIs7 Pr0p3r7i3s.","Click \\\"Browse\\\" to find the file you want to upload. When you click \\\"Add another file,\\\" these files will be added to the list of attachments for this page, and uploaded when you save the page.":"cLiCk \\\"8R0Ws3\\\" 70 fInD 7h3 FiL3 y0u w4n7 70 uPl04D. wH3N Y0U ClIcK \\\"4dD 4n07H3R FiL3,\\\" 7h3s3 FiL3S WiLl 83 4dD3D 70 7H3 lIs7 0f 4774cHm3n7s f0r 7HiS P4G3, 4nD UpL04d3d wH3N Y0U S4V3 7H3 p4g3.","Heading 2":"h34DiNg 2","Weblog name:":"w38L0G N4M3:","There are no optional properties for a Yahoo! link.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R 4 Y4H00! lInK.","Search type:":"s34RcH 7yP3:","Plese click \\\"Browse\\\" and select a file to upload.":"pL3S3 cLiCk \\\"8R0Ws3\\\" 4nD S3L3C7 4 fIl3 70 uPl04D.","You must check at least one page in order to create a PDF.":"y0u mUs7 Ch3cK 47 l34S7 0N3 p4g3 In 0Rd3r 70 Cr3473 4 pDf.","Skype name:":"sKyP3 n4m3:","Select a form and generates a new form page.":"s3l3c7 4 F0Rm 4Nd g3n3r473s 4 n3w f0rM P4G3.","Include an Image":"iNcLuD3 4N Im4g3","Create Link":"cR3473 LiNk","Optional parameters include specifying which workspace to use and whether to display page titles or whole pages.":"0P7I0N4L P4R4M373Rs iNcLuD3 sP3CiFyInG WhIcH W0RkSp4c3 70 uS3 4Nd wH37h3r 70 DiSpL4Y P4G3 7I7L3S 0r wH0L3 p4g3s.","Insert Socialtext link":"iNs3r7 S0Ci4l73X7 lInK","Numbered List":"nUm83R3D LiS7","Instant message to '%1' using Yahoo! Click to edit.":"iNs74N7 m3sS4G3 70 '%1' uSiNg y4h00! ClIcK 70 3Di7.","Google Search":"g00Gl3 S34rCh","Attached to:":"4774cH3D 70:","unformatted: %1":"uNf0rM4773d: %1","toc: %1":"70c: %1","Display a link to a Convoq name. Clicking the link will start a Convoq call with the person if your Convoq client is properly configured. Use this form to edit the properties of the Convoq link.":"dIsPl4y 4 lInK 70 4 c0nV0Q N4M3. ClIcKiNg 7H3 lInK WiLl s74R7 4 c0nV0Q C4Ll wI7H 7h3 P3Rs0n iF Y0Ur c0nV0Q ClI3N7 iS Pr0p3rLy c0nFiGuR3D. uS3 7HiS F0Rm 70 3dI7 7H3 pR0P3R7I3S 0f 7H3 c0nV0Q LiNk.","Convoq name:":"c0nV0Q N4M3:","recent changes: %1":"r3c3n7 Ch4nG3S: %1","Page title:":"p4g3 7i7l3:","Display a link to a weblog. Use this form to edit the properties of the link.":"dIsPl4y 4 lInK 70 4 w38L0G. uS3 7HiS F0Rm 70 3dI7 7H3 pR0P3R7I3S 0f 7H3 lInK.","Error":"3Rr0r","There are no optional properties for a user name.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R 4 Us3r n4m3.","user: %1":"uS3R: %1","File attached to:":"fIl3 4774Ch3d 70:","Remove %1 from the queue":"r3m0v3 %1 fR0M 7h3 Qu3u3","Please enter the number of table columns:":"pL34s3 3n73R 7h3 NuM83r 0F 748l3 C0LuMnS:","Display a link to a Yahoo! instant message ID. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.":"dIsPl4y 4 lInK 70 4 y4h00! InS74n7 M3Ss4g3 Id. 7h3 Ic0n wIlL Sh0w wH37h3r 7H3 p3rS0N Is 0NlIn3. cLiCkInG 7h3 LiNk wIlL S74r7 4n iM C0Nv3rS47i0n wI7H 7h3 P3Rs0n iF Y0Ur iM ClI3N7 iS Pr0p3rLy c0nFiGuR3D. uS3 7HiS F0Rm 70 3dI7 7H3 pR0P3R7I3S 0f 7H3 lInK.","include: %1":"iNcLuD3: %1","Include unformatted text in the page. This text will not be treated as wiki text. Use this form to edit the text.":"iNcLuD3 uNf0rM4773d 73x7 In 7H3 p4g3. 7HiS 73X7 wIlL N07 83 7R3473d 4S WiKi 73x7. uS3 7HiS F0Rm 70 3dI7 7H3 73x7.","feed: %1":"f33D: %1","Attachment Link":"4774cHm3n7 LiNk","Use this form to edit the properties of the link to a page section.":"uS3 7HiS F0Rm 70 3dI7 7H3 pR0P3R7I3S 0f 7H3 lInK 70 4 p4g3 S3C7I0N.","Convoq: %1":"c0nV0Q: %1","Bullets":"8UlL37s","Display '%1' in reader's time zone. Click to edit.":"dIsPl4y '%1' In r34D3R'S 7iM3 z0n3. cLiCk 70 3dI7.","Attachments":"4774cHm3n7s","Display a list of the most recent entries from a weblog in a workspace. By default only the weblog entry names are displayed. Use this form to edit the list properties.":"dIsPl4y 4 lIs7 0f 7H3 m0s7 R3C3N7 3N7Ri3s fR0M 4 W38l0g iN 4 W0RkSp4c3. 8Y D3F4Ul7 0nLy 7H3 w38L0G 3n7rY N4M3S 4r3 DiSpL4Y3D. uS3 7HiS F0Rm 70 3dI7 7H3 lIs7 Pr0p3r7i3s.","You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes and stay on the current page.":"y0u h4v3 UnS4V3D Ch4nG3S. 4R3 y0u sUr3 Y0U W4N7 70 N4ViG473 4W4Y Fr0m 7HiS P4G3? If y0u cLiCk '0k', 4Ll 3Di7 Ch4nG3S WiLl 83 L0S7. ClIcK 'c4nC3L' iF Y0U W4N7 70 S4V3 cH4Ng3s 4Nd s74Y 0n 7H3 cUrR3N7 p4g3.","Link to weblog '%1'. Click to edit.":"lInK 70 w38L0G '%1'. ClIcK 70 3Di7.","Google: %1":"g00Gl3: %1","Table & Advanced Editing":"748L3 & 4Dv4nC3D 3dI7InG","Link to a Section":"lInK 70 4 s3c7i0n","Page Include":"p4g3 InClUd3","Search for:":"s34RcH F0R:","Search:":"s34RcH:","Inter-workspace link":"iN73r-w0rKsP4C3 lInK","Link text:":"lInK 73X7:","Workspace:":"w0rKsP4C3:","Page in:":"p4g3 In:","Are you sure you want to delete this page?":"4R3 y0u sUr3 Y0U W4N7 70 D3L373 7HiS P4G3?","Heading 6":"h34DiNg 6","Optional properties include link text, and the name of a different workspace for the tags.":"0P7I0N4L Pr0p3r7i3s iNcLuD3 lInK 73X7, 4nD 7h3 N4M3 0F 4 DiFf3r3n7 W0RkSp4c3 F0R 7h3 74Gs.","weblog: %1":"w38L0G: %1","Attached Image":"4774cH3D Im4g3","Watch this page":"w47Ch 7HiS P4G3","Display the weblog '%1'. Click to edit.":"dIsPl4y 7H3 w38L0G '%1'. ClIcK 70 3Di7.","section: %1":"s3c7i0n: %1","Page Title required if Workspace Id specified":"p4g3 7i7l3 R3QuIr3d iF W0RkSp4c3 Id sP3CiFi3d","Display the content of an RSS feed. Use this form to edit the properties of the inline RSS feed.":"dIsPl4y 7H3 c0n73N7 0F 4n rSs f33D. uS3 7HiS F0Rm 70 3dI7 7H3 pR0P3R7I3S 0f 7H3 iNlIn3 RsS F33d.","What's new in the '%1' workspace. Click to edit.":"wH47'S N3W In 7H3 '%1' W0RkSp4c3. cLiCk 70 3dI7.","Add links to these attachments at the top of the page? Images will appear in the page.":"4Dd lInKs 70 7h3s3 4774ChM3N7S 47 7H3 70p 0F 7h3 P4G3? Im4g3s wIlL 4pP34r iN 7h3 P4G3.","There are no optional properties for an Atom feed.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R 4n 470M F33d.","date: %1":"d473: %1","New Form Page":"n3w f0rM P4G3","AIM Link":"4Im lInK","Use Advanced Mode for %1":"uS3 4Dv4nC3D M0D3 f0r %1","Enter a tag and click \\\"Add another tag\\\". The tag will be saved when you save the page.":"3N73r 4 74g 4Nd cLiCk \\\"4Dd 4N07h3r 74g\\\". 7h3 74G WiLl 83 S4V3D Wh3n y0u s4v3 7h3 P4G3.","Convoq Link":"c0nV0Q LiNk","Display result for searching '%1'. Click to edit.":"dIsPl4y r3sUl7 F0R S34rChInG '%1'. ClIcK 70 3Di7.","Pages tagged with":"p4g3s 74gG3D Wi7h","Cancel":"c4nC3L","Display the content of an Atom feed. Use this form to edit the properties of the inline Atom feed.":"dIsPl4y 7H3 c0n73N7 0F 4n 470M F33d. Us3 7hIs f0rM 70 3Di7 7h3 Pr0p3r7i3s 0F 7h3 InLiN3 470M F33d.","Requires one of: %1":"r3qUiR3S 0n3 0f: %1","Optionally, specify that the page contents should be displayed.":"0P7I0N4LlY, sP3CiFy 7H47 7h3 P4G3 c0n73N7S Sh0uLd 83 DiSpL4Y3D.","Display a link to a list of pages with a specific tag. Use this form to edit the properties of the link.":"dIsPl4y 4 lInK 70 4 lIs7 0f p4g3s wI7H 4 Sp3cIfIc 74g. Us3 7hIs f0rM 70 3Di7 7h3 Pr0p3r7i3s 0F 7h3 LiNk.","wiki text":"wIkI 73X7","Table Edit Tip":"748L3 3Di7 7iP","Pages in:":"p4g3s iN:","file: %1":"fIl3: %1","Unformatted Content":"uNf0rM4773d c0n73N7","You must specify a page name":"y0u mUs7 Sp3cIfY 4 P4G3 n4m3","Optional properties include the name of the workspace to search, whether to search in the page title, text or tags, and whether to display full results or just page titles.":"0P7I0N4L Pr0p3r7i3s iNcLuD3 7H3 n4m3 0f 7H3 w0rKsP4C3 70 S34rCh, Wh37H3R 70 s34RcH In 7H3 p4g3 7i7l3, 73x7 0r 74gS, 4Nd wH37h3r 70 DiSpL4Y FuLl r3sUl7s 0R JuS7 p4g3 7i7l3s.","Add file":"4Dd fIl3","Include the weblog '%1'. Click to edit.":"iNcLuD3 7H3 w38L0G '%1'. ClIcK 70 3Di7.","Preview":"pR3Vi3w","Expand zip archives and attach individual files to the page?":"3Xp4nD ZiP 4rChIv3s 4Nd 4774cH InDiViDu4l fIl3s 70 7h3 P4G3?","Include the page '%1'. Click to edit.":"iNcLuD3 7H3 p4g3 '%1'. ClIcK 70 3Di7.","Heading 5":"h34DiNg 5","Optional properties include specifying a different page for the attachment, and link text.":"0P7I0N4L Pr0p3r7i3s iNcLuD3 sP3CiFyInG 4 DiFf3r3n7 P4G3 f0r 7H3 4774cHm3n7, 4Nd lInK 73X7.","Display the results from a Google search. Use this form to edit the properties for the search.":"dIsPl4y 7H3 r3sUl7s fR0M 4 G00gL3 s34RcH. uS3 7HiS F0Rm 70 3dI7 7H3 pR0P3R7I3S F0R 7h3 S34rCh.","Skype Link":"sKyP3 lInK","There are no optional properties for unformatted text.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R UnF0Rm4773D 73X7.","Optional properties include the title of another page to which the image is attached, and link text. If link text is specified then a link to the image is displayed instead of the image.":"0P7I0N4L Pr0p3r7i3s iNcLuD3 7H3 7I7L3 0F 4n07H3R P4G3 70 WhIcH 7h3 Im4g3 Is 4774cH3D, 4Nd lInK 73X7. If lInK 73X7 iS Sp3cIfI3D 7h3n 4 lInK 70 7H3 iM4G3 iS DiSpL4Y3D InS734D 0f 7H3 iM4G3.","Unformatted":"uNf0rM4773d","Could not add page to watchlist":"c0uLd n07 4Dd p4g3 70 w47ChLiS7","Optional properties include the text to display for the link, and a target section within the linked page.":"0P7I0N4L Pr0p3r7i3s iNcLuD3 7H3 73x7 70 dIsPl4y f0r 7H3 lInK, 4Nd 4 74rG37 S3C7I0N Wi7hIn 7H3 lInK3D P4G3.","Add another tag":"4Dd 4N07h3r 74g","Link to '%1'. Click to edit.":"lInK 70 '%1'. cLiCk 70 3dI7.","Add another file":"4Dd 4N07h3r fIl3","selection_start: %1":"s3l3c7i0n_s74R7: %1","Text":"73x7","Section name:":"s3c7i0n n4m3:","Headers and<br/>sections in:":"h34D3Rs 4Nd<8R/>s3c7i0nS In:","Unformatted content:":"uNf0rM4773d c0n73N7:","Italic":"i74LiC","Save":"s4v3","AIM: %1":"4Im: %1","Yahoo! IM: %1":"y4h00! Im: %1","the workspace named":"7H3 w0rKsP4C3 n4m3d","You must check at least one page in order to create a Word document.":"y0u mUs7 Ch3cK 47 l34S7 0N3 p4g3 In 0Rd3r 70 Cr3473 4 w0rD D0CuM3N7.","'%1' is a required field":"'%1' Is 4 r3qUiR3D Fi3lD","Instant message to '%1' using AIM. Click to edit.":"iNs74N7 m3sS4G3 70 '%1' uSiNg 4Im. ClIcK 70 3Di7.","Insert...":"iNs3r7...","toc":"70c","Display what's new in the '%1' workspace. Click to edit.":"dIsPl4y wH47'S N3W In 7H3 '%1' W0RkSp4c3. cLiCk 70 3dI7.","error -> \\\"%1\\\" is not a valid email address":"3Rr0r -> \\\"%1\\\" iS N07 4 V4LiD 3m4iL 4dDr3sS","Yahoo! IM Link":"y4h00! Im lInK","weblog list: %1":"w38L0G LiS7: %1","Insert attachment":"iNs3r7 4774ChM3N7","This is not an editable widget. Please edit it in advanced mode.":"7HiS Is n07 4N 3dI748L3 wIdG37. pL34s3 3dI7 i7 In 4Dv4nC3D M0D3.","Skype: %1":"sKyP3: %1","There are no optional properties for an AIM link.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R 4n 4Im lInK.","Untitled Page":"uN7I7L3D P4G3","Display a list of pages recently changed in a workspace. By default only the page titles are displayed. Use this form to edit the list properties.":"dIsPl4y 4 lIs7 0f p4g3s r3c3n7lY Ch4nG3D In 4 w0rKsP4C3. 8y d3f4uL7 0NlY 7h3 P4G3 7I7L3S 4r3 DiSpL4Y3D. uS3 7HiS F0Rm 70 3dI7 7H3 lIs7 Pr0p3r7i3s.","Horizontal Rule":"h0rIz0n74L RuL3","Click \\\"Browse\\\" to find the file you want to upload. When you click \\\"Add file,\\\" this file will be added to the list of attachments for this page, and uploaded when you save the page.":"cLiCk \\\"8R0Ws3\\\" 70 fInD 7h3 FiL3 y0u w4n7 70 uPl04D. wH3N Y0U ClIcK \\\"4dD FiL3,\\\" 7hIs fIl3 WiLl 83 4dD3D 70 7H3 lIs7 0f 4774cHm3n7s f0r 7HiS P4G3, 4nD UpL04d3d wH3N Y0U S4V3 7H3 p4g3.","Fewer options":"f3w3r 0P7I0Ns","type link text here":"7Yp3 LiNk 73x7 H3R3","Use %1 to generate a form. Click to edit.":"uS3 %1 70 g3n3r473 4 F0Rm. ClIcK 70 3Di7.","tag: %1":"74g: %1","Bold":"80lD","Files To upload:":"fIl3s 70 UpL04d:","\\\",\\\"":"\\\",\\\"","tag list: %1":"74g lIs7: %1","Add a link to this attachment at the top of the page? Images will appear in the page.":"4Dd 4 lInK 70 7HiS 4774ChM3N7 47 7h3 70P 0f 7H3 p4g3? iM4G3S WiLl 4Pp34R In 7H3 p4g3.","Please select the text you would like to turn into a link.":"pL34s3 S3L3C7 7H3 73x7 Y0U W0UlD LiK3 70 7uRn iN70 4 LiNk.","Display the full name for the given email address or user name. Use this form to edit the properties of the user name.":"dIsPl4y 7H3 fUlL N4M3 f0r 7H3 gIv3n 3M4Il 4DdR3Ss 0R Us3r n4m3. uS3 7HiS F0Rm 70 3dI7 7H3 pR0P3R7I3S 0f 7H3 uS3R N4M3.","the page titled":"7H3 p4g3 7i7l3d","More options":"m0r3 0p7i0nS","More Indented":"m0r3 InD3N73d","Display the results for a Technorati search. Use this form to edit the properties for the search.":"dIsPl4y 7H3 r3sUl7s f0r 4 73cHn0r47I S34rCh. Us3 7hIs f0rM 70 3Di7 7h3 Pr0p3r7i3s f0r 7H3 s34RcH.","Preformatted":"pR3F0Rm4773D","Full results:":"fUlL R3SuL7S:","Call '%1' using Convoq. Click to edit.":"c4lL '%1' uSiNg c0nV0Q. cLiCk 70 3dI7.","Heading 4":"h34DiNg 4","Images":"iM4G3S","Optionally, specify which page's headers and sections to use for the table of contents.":"0P7I0N4LlY, sP3CiFy wHiCh p4g3'S H34d3rS 4nD S3C7I0Ns 70 Us3 F0R 7h3 748l3 0f c0n73N7S.","You must select one of the options or click cancel":"y0u mUs7 S3L3C7 0N3 0F 7h3 0p7i0nS 0r cLiCk c4nC3L","form: %1":"f0rM: %1","About Wikiwyg":"480U7 wIkIwYg","Table of contents for '%1'. Click to edit.":"748L3 0F C0N73n7s f0r '%1'. cLiCk 70 3dI7.","Section marker '%1'. Click to edit.":"s3c7i0n m4rK3R '%1'. ClIcK 70 3Di7.","Yahoo! ID:":"y4h00! Id:","Section Marker":"s3c7i0n m4rK3R","That doesn't appear to be a valid number.":"7H47 D03sN'7 4pP34r 70 83 4 v4lId nUm83R.","There are no optional properties for a section marker.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R 4 S3C7I0N M4Rk3r.","There are no optional properties for a new form page.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R 4 N3W F0Rm p4g3.","image: %1":"iM4G3: %1","Include the '%1' Atom feed. Click to edit.":"iNcLuD3 7H3 '%1' 470m f33D. cLiCk 70 3dI7.","Display the given date and time in the individually-set time zone for each reader. Use this form to edit the date and time to be displayed":"dIsPl4y 7H3 gIv3n d473 4nD 7iM3 iN 7h3 InDiViDu4lLy-s37 7Im3 Z0N3 f0r 34cH R34d3r. Us3 7hIs f0rM 70 3Di7 7h3 D473 4Nd 7Im3 70 83 DiSpL4Y3D","Replace this text with your own.":"r3pL4C3 7HiS 73X7 wI7H Y0Ur 0Wn.","There are no optional properties for a date display.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R 4 D473 dIsPl4y.","the current workspace":"7H3 cUrR3N7 w0rKsP4C3","Decrease Indent":"d3cR34s3 InD3N7","Tag name:":"74g n4m3:","New search":"n3w s34RcH","Use this form to edit the properties of the link.":"uS3 7HiS F0Rm 70 3dI7 7H3 pR0P3R7I3S 0f 7H3 lInK.","\\\"%1\\\" is a reserved page name. Please use a different name":"\\\"%1\\\" Is 4 r3s3rV3D P4G3 n4m3. pL34s3 Us3 4 DiFf3r3n7 N4M3","Call '%1' using Skype. Click to edit.":"c4lL '%1' uSiNg sKyP3. ClIcK 70 3Di7.","Advanced Mode":"4Dv4nC3D M0D3","Optional properties include the text to display for the link, and the title of a different page.":"0P7I0N4L Pr0p3r7i3s iNcLuD3 7H3 73x7 70 dIsPl4y f0r 7H3 lInK, 4Nd 7H3 7I7L3 0F 4 DiFf3r3n7 P4G3.","Strike Through":"s7rIk3 7hR0UgH","or":"0R","If you click 'OK', all edit changes will be lost!":"iF Y0U ClIcK '0K', 4lL 3dI7 cH4Ng3s wIlL 83 l0s7!","Search Results":"s34RcH R3SuL7S","Insert web link":"iNs3r7 W38 LiNk","Add a section marker at the current cursor location. You can link to a section marker using a \\\"Section Link\\\". Use this form to edit the properties for the section marker.":"4Dd 4 s3c7i0n m4rK3R 47 7H3 cUrR3N7 cUrS0R L0C47i0n. Y0U C4N LiNk 70 4 S3C7I0N M4Rk3r uSiNg 4 \\\"s3c7i0n lInK\\\". uS3 7HiS F0Rm 70 3dI7 7H3 pR0P3R7I3S F0R 7h3 S3C7I0N M4Rk3r.","link: %1 (%2 )":"lInK: %1 (%2 )","link: %1":"lInK: %1","Less Indented":"l3sS InD3N73d","There are no optional properties for an RSS feed.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R 4n rSs f33D.","search: %1":"s34RcH: %1","Display image '%1'. Click to edit.":"dIsPl4y iM4G3 '%1'. cLiCk 70 3dI7.","Pages with the '%1' tag. Click to edit.":"p4g3s wI7H 7h3 '%1' 74g. ClIcK 70 3Di7.","Other page in:":"07h3r p4g3 In:","Insert image":"iNs3r7 Im4g3","YYYY-MM-DD&nbsp;HH:MM:SS:":"yYyY-Mm-dD&N8Sp;hH:Mm:sS:","No matches":"n0 M47cH3S","Safari does not support simple mode editing":"s4f4rI D03s n07 sUpP0R7 sImPl3 M0D3 3Di7iNg","Search Google for '%1'. Click to edit.":"s34RcH G00gL3 f0r '%1'. cLiCk 70 3dI7.","Expand zip archive and attach individual files to the page?":"3Xp4nD ZiP 4rChIv3 4nD 4774Ch iNdIvIdU4L FiL3S 70 7H3 p4g3?","Add tag":"4Dd 74g","There are no optional properties for a Technorati search.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R 4 73ChN0R47i s34RcH.","AIM screen name:":"4Im sCr33N N4M3:","Technorati Search":"73cHn0r47I S34rCh","What's New":"wH47'S N3W","There are no optional properties for a Skype link.":"7H3R3 4R3 n0 0p7i0n4l pR0P3R7I3S F0R 4 SkYp3 LiNk.","Inline Atom":"iNlIn3 470m","Optional properties include link text, and the name of a different workspace for the weblog.":"0P7I0N4L Pr0p3r7i3s iNcLuD3 lInK 73X7, 4nD 7h3 N4M3 0F 4 DiFf3r3n7 W0RkSp4c3 F0R 7h3 W38l0g.","Watching this page":"w47ChInG 7hIs p4g3","Normal Text":"n0rM4L 73X7","Saving...":"s4vInG...","Weblog List":"w38L0G LiS7","Include the '%1' RSS feed. Click to edit.":"iNcLuD3 7H3 '%1' RsS F33d. ClIcK 70 3Di7.","Form name:":"f0rM N4M3:"}};
+
+function loc() {
+    var locale = Socialtext.loc_lang;
+    var dict = LocalizedStrings[locale] || new Array;
+    var str = arguments[0] || "";
+    var l10n = dict[str];
+    var nstr = "";
+
+    if (!l10n) {
+        /* If the hash-lookup failed, convert " into \\\" and try again. */
+        nstr = str.replace(/\"/g, "\\\"");
+        l10n = dict[nstr];
+        if (!l10n) {
+            /* If the hash-lookup failed, convert [_1] into %1 and try again. */
+            nstr = nstr.replace(/\[_(\d+)\]/g, "%$1");
+            l10n = dict[nstr] || str;
+        }
+    }
+
+    l10n = l10n.replace(/\\\"/g, "\"");
+
+    /* Convert both %1 and [_1] style vars into the given arguments */
+    for (var i = 1; i < arguments.length; i++) {
+        var rx = new RegExp("\\[_" + i + "\\]", "g");
+        var rx2 = new RegExp("%" + i + "", "g");
+        l10n = l10n.replace(rx, arguments[i]);
+        l10n = l10n.replace(rx2, arguments[i]);
+    }
+
+    return l10n;
+}
+
 // BEGIN ../../../js-modules/Wikiwyg-copy/lib/Wikiwyg/Debug.js
 /*==============================================================================
 This Wikiwyg mode supports a textarea editor with toolbar buttons.
@@ -218,12 +252,12 @@ function check_revisions(form) {
     }
 
     if ((! r1) || (! r2)) {
-        alert('You must select two revisions to compare.');
+        alert(loc('You must select two revisions to compare.'));
         return false;
     }
 
     if (r1 == r2) {
-        alert('You cannot compare a revision to itself.');
+        alert(loc('You cannot compare a revision to itself.'));
         return false;
     }
 
@@ -239,7 +273,7 @@ if (typeof(Socialtext) == 'undefined') {
 }
 
 Socialtext.clear_untitled = function(input) {
-    if (input.value == 'Untitled Page')
+    if (input.value == loc('Untitled Page'))
         input.value = '';
 }
 // BEGIN ../../../js-modules/prototype/dist/prototype.js
@@ -4377,7 +4411,7 @@ ST.extend = function(subClass, baseClass) {
 // Pop up a new HTML window
 function query_popup(url, width, height, left, top) {
     if (!width) width = 400;
-    if (!height) height = 275;
+    if (!height) height = 287;
     if (!left) left = 400-width/2;
     if (!top) top = 280-height/2;
     window.open(url, '_blank', 'toolbar=no, location=no, directories=no, status=no, menubar=no, titlebar=no, scrollbars=yes, resizable=yes, width=' + width + ', height=' + height + ', left=' + left + ', top=' + top);
@@ -4400,7 +4434,8 @@ function trim(value) {
 function is_reserved_pagename(pagename) {
     if (pagename && pagename.length > 0) {
         var name = trim(pagename.toLowerCase());
-        return name == 'untitled page';
+        var untitled = loc('Untitled Page').toLowerCase();
+        return name == untitled;
     }
     else {
         return false;
@@ -4408,7 +4443,7 @@ function is_reserved_pagename(pagename) {
 }
 
 function confirm_delete(pageid) {
-    if (confirm('Are you sure you want to delete this page?')) {
+    if (confirm(loc('Are you sure you want to delete this page?'))) {
         location = 'index.cgi?action=delete_page;page_name=' + pageid;
     }
 }
@@ -5656,7 +5691,18 @@ Jemplate.templateMap['save-cancel.html'] = function(context) {
     var output = '';
 
     try {
-output += '<div class="st-widget-buttons">\n    <span class="st-widget-savebutton"><input type="submit" value="Save" /></span>\n    <span class="st-widget-cancelbutton"><input type="reset" value="Cancel" /></span>\n</div>\n';
+output += '<div class="st-widget-buttons">';
+//line 3 "save-cancel.html"
+stash.set("save_cancel_button_st_widget_save_button",loc('Save'));
+//line 4 "save-cancel.html"
+stash.set("save_cancel_button_st_widget_cancel_button",loc('Cancel'));
+output += '    <span class="st-widget-savebutton"><input type="submit" value=';
+//line 5 "save-cancel.html"
+output += stash.get('save_cancel_button_st_widget_save_button');
+output += ' /></span>\n    <span class="st-widget-cancelbutton"><input type="reset" value=';
+//line 6 "save-cancel.html"
+output += stash.get('save_cancel_button_st_widget_cancel_button');
+output += ' /></span>\n</div>\n';
     }
     catch(e) {
         var error = context.set_error(e, output);
@@ -5672,8 +5718,24 @@ Jemplate.templateMap['widget_aim_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">AIM Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to an AIM screen name. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">AIM screen name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-aim_id" name="aim_id" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_aim_edit.html"
+stash.set("aim_st_widget_dialog_title", loc('AIM Link'));
+//line 1 "widget_aim_edit.html"
+output += stash.get('aim_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_aim_edit.html"
+ stash.set("aim_st_widget_description", loc('Display a link to an AIM screen name. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.')); 
+//line 4 "widget_aim_edit.html"
+output += stash.get('aim_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_aim_edit.html"
+stash.set("aim_st_widget_dialog_editlabel_field",loc('AIM screen name:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_aim_edit.html"
+output += stash.get('aim_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-aim_id" name="aim_id" value="';
+//line 12 "widget_aim_edit.html"
 
 // FILTER
 output += (function() {
@@ -5684,8 +5746,23 @@ output += stash.get('aim_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="aim_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an AIM link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="aim_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_aim_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="aim_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_aim_edit.html"
+ stash.set('aim_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_aim_edit.html"
+output += stash.get('aim_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_aim_edit.html"
+stash.set("aim_st_widgets_moreoptionspanel",loc('There are no optional properties for an AIM link.'));
+//line 23 "widget_aim_edit.html"
+output += stash.get('aim_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 31 "widget_aim_edit.html"
+stash.set("aim_st_widgetdialog_wikitext",loc('wiki text'));
+//line 31 "widget_aim_edit.html"
+output += stash.get('aim_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="aim_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 37 "widget_aim_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -5703,8 +5780,24 @@ Jemplate.templateMap['widget_asap_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Convoq Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a Convoq name. Clicking the link will start a Convoq call with the person if your Convoq client is properly configured. Use this form to edit the properties of the Convoq link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Convoq name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-asap_id" name="asap_id" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_asap_edit.html"
+stash.set("asap_st_widget_dialog_title", loc('Convoq Link'));
+//line 1 "widget_asap_edit.html"
+output += stash.get('asap_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_asap_edit.html"
+ stash.set("asap_st_widget_description", loc('Display a link to a Convoq name. Clicking the link will start a Convoq call with the person if your Convoq client is properly configured. Use this form to edit the properties of the Convoq link.')); 
+//line 4 "widget_asap_edit.html"
+output += stash.get('asap_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_asap_edit.html"
+stash.set("asap_st_widget_dialog_editlabel_field",loc('Convoq name:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_asap_edit.html"
+output += stash.get('asap_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-asap_id" name="asap_id" value="';
+//line 12 "widget_asap_edit.html"
 
 // FILTER
 output += (function() {
@@ -5715,8 +5808,23 @@ output += stash.get('asap_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="asap_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Convoq Link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="asap_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_asap_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="asap_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_asap_edit.html"
+ stash.set('asap_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_asap_edit.html"
+output += stash.get('asap_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_asap_edit.html"
+stash.set("asap_st_widgets_moreoptionspanel",loc('There are no optional properties for a Convoq Link.'));
+//line 23 "widget_asap_edit.html"
+output += stash.get('asap_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 31 "widget_asap_edit.html"
+stash.set("asap_st_widgetdialog_wikitext",loc('wiki text'));
+//line 31 "widget_asap_edit.html"
+output += stash.get('asap_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="asap_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 37 "widget_asap_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -5734,8 +5842,24 @@ Jemplate.templateMap['widget_asis_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Unformatted</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Include unformatted text in the page. This text will not be treated as wiki text. Use this form to edit the text.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Unformatted content:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-asis_content" name="asis_content" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_asis_edit.html"
+stash.set("asis_st_widget_dialog_title", loc('Unformatted'));
+//line 1 "widget_asis_edit.html"
+output += stash.get('asis_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_asis_edit.html"
+ stash.set("asis_st_widget_description", loc('Include unformatted text in the page. This text will not be treated as wiki text. Use this form to edit the text.')); 
+//line 4 "widget_asis_edit.html"
+output += stash.get('asis_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_asis_edit.html"
+stash.set("asis_st_widget_dialog_editlabel_field",loc('Unformatted content:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_asis_edit.html"
+output += stash.get('asis_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-asis_content" name="asis_content" value="';
+//line 12 "widget_asis_edit.html"
 
 // FILTER
 output += (function() {
@@ -5746,8 +5870,23 @@ output += stash.get('asis_content');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="asis_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for unformatted text.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="asis_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_asis_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="asis_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_asis_edit.html"
+ stash.set('asis_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_asis_edit.html"
+output += stash.get('asis_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_asis_edit.html"
+stash.set("asis_st_widgets_moreoptionspanel",loc('There are no optional properties for unformatted text.'));
+//line 23 "widget_asis_edit.html"
+output += stash.get('asis_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 31 "widget_asis_edit.html"
+stash.set("asis_st_widgetdialog_wikitext",loc('wiki text'));
+//line 31 "widget_asis_edit.html"
+output += stash.get('asis_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="asis_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 37 "widget_asis_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -5765,8 +5904,24 @@ Jemplate.templateMap['widget_date_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Date in Local Time</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the given date and time in the individually-set time zone for each reader. Use this form to edit the date and time to be displayed</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">YYYY-MM-DD&nbsp;HH:MM:SS:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-date_string" name="date_string" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_date_edit.html"
+stash.set("date_st_widget_dialog_title", loc('Date in Local Time'));
+//line 1 "widget_date_edit.html"
+output += stash.get('date_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_date_edit.html"
+ stash.set("date_st_widget_description", loc('Display the given date and time in the individually-set time zone for each reader. Use this form to edit the date and time to be displayed')); 
+//line 4 "widget_date_edit.html"
+output += stash.get('date_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_date_edit.html"
+stash.set("date_st_widget_dialog_editlabel_field",loc('YYYY-MM-DD&nbsp;HH:MM:SS:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_date_edit.html"
+output += stash.get('date_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-date_string" name="date_string" value="';
+//line 12 "widget_date_edit.html"
 
 // FILTER
 output += (function() {
@@ -5777,8 +5932,23 @@ output += stash.get('date_string');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="date_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a date display.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="date_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_date_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="date_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_date_edit.html"
+ stash.set('date_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_date_edit.html"
+output += stash.get('date_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_date_edit.html"
+stash.set("date_st_widgets_moreoptionspanel",loc('There are no optional properties for a date display.'));
+//line 23 "widget_date_edit.html"
+output += stash.get('date_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 31 "widget_date_edit.html"
+stash.set("date_st_widgetdialog_wikitext",loc('wiki text'));
+//line 31 "widget_date_edit.html"
+output += stash.get('date_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="date_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 37 "widget_date_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -5796,8 +5966,24 @@ Jemplate.templateMap['widget_fetchatom_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Inline Atom</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the content of an Atom feed. Use this form to edit the properties of the inline Atom feed.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Atom feed URL:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-atom_url" name="atom_url" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_fetchatom_edit.html"
+stash.set("fetchatom_st_widget_dialog_title", loc('Inline Atom'));
+//line 1 "widget_fetchatom_edit.html"
+output += stash.get('fetchatom_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_fetchatom_edit.html"
+ stash.set("fetchatom_st_widget_description", loc('Display the content of an Atom feed. Use this form to edit the properties of the inline Atom feed.')); 
+//line 4 "widget_fetchatom_edit.html"
+output += stash.get('fetchatom_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_fetchatom_edit.html"
+stash.set("fetchatom_st_widget_dialog_editlabel_field",loc('Atom feed URL:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_fetchatom_edit.html"
+output += stash.get('fetchatom_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-atom_url" name="atom_url" value="';
+//line 12 "widget_fetchatom_edit.html"
 
 // FILTER
 output += (function() {
@@ -5808,8 +5994,23 @@ output += stash.get('atom_url');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="fetchatom_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an Atom feed.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="fetchatom_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_fetchatom_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="fetchatom_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_fetchatom_edit.html"
+ stash.set('fetchatom_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_fetchatom_edit.html"
+output += stash.get('fetchatom_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_fetchatom_edit.html"
+stash.set("fetchatom_st_widgets_moreoptionspanel",loc('There are no optional properties for an Atom feed.'));
+//line 23 "widget_fetchatom_edit.html"
+output += stash.get('fetchatom_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 31 "widget_fetchatom_edit.html"
+stash.set("fetchatom_st_widgetdialog_wikitext",loc('wiki text'));
+//line 31 "widget_fetchatom_edit.html"
+output += stash.get('fetchatom_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="fetchatom_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 37 "widget_fetchatom_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -5827,8 +6028,24 @@ Jemplate.templateMap['widget_fetchrss_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Inline RSS</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the content of an RSS feed. Use this form to edit the properties of the inline RSS feed.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">RSS feed URL:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-rss_url" name="rss_url" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_fetchrss_edit.html"
+stash.set("fetchrss_st_widget_dialog_title", loc('Inline RSS'));
+//line 1 "widget_fetchrss_edit.html"
+output += stash.get('fetchrss_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_fetchrss_edit.html"
+ stash.set("fetchrss_st_widget_description", loc('Display the content of an RSS feed. Use this form to edit the properties of the inline RSS feed.')); 
+//line 4 "widget_fetchrss_edit.html"
+output += stash.get('fetchrss_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_fetchrss_edit.html"
+stash.set("fetchrss_st_widget_dialog_editlabel_field",loc('RSS feed URL:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_fetchrss_edit.html"
+output += stash.get('fetchrss_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-rss_url" name="rss_url" value="';
+//line 12 "widget_fetchrss_edit.html"
 
 // FILTER
 output += (function() {
@@ -5839,8 +6056,23 @@ output += stash.get('rss_url');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="fetchrss_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an RSS feed.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="fetchrss_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_fetchrss_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="fetchrss_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_fetchrss_edit.html"
+ stash.set('fetchrss_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_fetchrss_edit.html"
+output += stash.get('fetchrss_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_fetchrss_edit.html"
+stash.set("fetchrss_st_widgets_moreoptionspanel",loc('There are no optional properties for an RSS feed.'));
+//line 23 "widget_fetchrss_edit.html"
+output += stash.get('fetchrss_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 31 "widget_fetchrss_edit.html"
+stash.set("fetchrss_st_widgetdialog_wikitext",loc('wiki text'));
+//line 31 "widget_fetchrss_edit.html"
+output += stash.get('fetchrss_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="fetchrss_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 37 "widget_fetchrss_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -5858,8 +6090,24 @@ Jemplate.templateMap['widget_file_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Attachment Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a file attached to a page. Use this form to edit the properities of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Attachment filename:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-file_name" name="file_name" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_file_edit.html"
+stash.set("file_st_widget_dialog_title", loc('Attachment Link'));
+//line 1 "widget_file_edit.html"
+output += stash.get('file_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_file_edit.html"
+ stash.set("file_st_widget_description", loc('Display a link to a file attached to a page. Use this form to edit the properities of the link.')); 
+//line 4 "widget_file_edit.html"
+output += stash.get('file_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_file_edit.html"
+stash.set("file_st_widget_dialog_editlabel_field",loc('Attachment filename:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_file_edit.html"
+output += stash.get('file_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-file_name" name="file_name" value="';
+//line 12 "widget_file_edit.html"
 
 // FILTER
 output += (function() {
@@ -5870,8 +6118,39 @@ output += stash.get('file_name');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="file_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include specifying a different page for the attachment, and link text.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="file_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_file_edit.html"
+ stash.set('file_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_file_edit.html"
+output += stash.get('file_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_file_edit.html"
+stash.set("file_st_widgets_moreoptionspanel",loc('Optional properties include specifying a different page for the attachment, and link text.'));
+//line 23 "widget_file_edit.html"
+output += stash.get('file_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n<tr>';
+//line 27 "widget_file_edit.html"
+stash.set("file_st_widget_dialog_editlabel_field_radio",loc('Page in:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 28 "widget_file_edit.html"
+output += stash.get('file_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>';
 //line 32 "widget_file_edit.html"
+stash.set("file_st_widget_dialog_defaultradio_current",loc('the current workspace'));
+//line 33 "widget_file_edit.html"
+output += stash.get('file_st_widget_dialog_defaultradio_current');
+//line 33 "widget_file_edit.html"
+stash.set("file_st_widget_workspace_id_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
+//line 34 "widget_file_edit.html"
+output += stash.get('file_st_widget_workspace_id_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">';
+//line 38 "widget_file_edit.html"
+stash.set("file_st_widget_workspace_id_rb",loc('the workspace named'));
+//line 39 "widget_file_edit.html"
+output += stash.get('file_st_widget_workspace_id_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 41 "widget_file_edit.html"
 
 // FILTER
 output += (function() {
@@ -5882,8 +6161,29 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">File attached to:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
-//line 45 "widget_file_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>';
+//line 47 "widget_file_edit.html"
+stash.set("file_st_widget_dialog_editlabel_field_radio",loc('File attached to:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 48 "widget_file_edit.html"
+output += stash.get('file_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>';
+//line 52 "widget_file_edit.html"
+stash.set("file_st_widget_dialog_defaultradio_current",loc('the current page'));
+//line 53 "widget_file_edit.html"
+output += stash.get('file_st_widget_dialog_defaultradio_current');
+//line 53 "widget_file_edit.html"
+stash.set("file_st_widget_page_title_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
+//line 54 "widget_file_edit.html"
+output += stash.get('file_st_widget_page_title_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">';
+//line 58 "widget_file_edit.html"
+stash.set("file_st_widget_page_title_rb",loc('the page titled'));
+//line 59 "widget_file_edit.html"
+output += stash.get('file_st_widget_page_title_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 61 "widget_file_edit.html"
 
 // FILTER
 output += (function() {
@@ -5894,8 +6194,14 @@ output += stash.get('page_title');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
-//line 52 "widget_file_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>';
+//line 67 "widget_file_edit.html"
+stash.set("file_st_widget_dialog_editlabel_field",loc('Link text:'));
+output += '<td class="st-widget-dialog-editlabel">';
+//line 68 "widget_file_edit.html"
+output += stash.get('file_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 70 "widget_file_edit.html"
 
 // FILTER
 output += (function() {
@@ -5906,8 +6212,13 @@ output += stash.get('label');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="file_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 66 "widget_file_edit.html"
+output += '"/>\n  </td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 79 "widget_file_edit.html"
+stash.set("file_st_widgetdialog_wikitext",loc('wiki text'));
+//line 79 "widget_file_edit.html"
+output += stash.get('file_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="file_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 85 "widget_file_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -5925,8 +6236,24 @@ Jemplate.templateMap['widget_googlesoap_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Google Search</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the results from a Google search. Use this form to edit the properties for the search.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Search for:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_googlesoap_edit.html"
+stash.set("googlesoap_st_widget_dialog_title", loc('Google Search'));
+//line 1 "widget_googlesoap_edit.html"
+output += stash.get('googlesoap_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_googlesoap_edit.html"
+ stash.set("googlesoap_st_widget_description", loc('Display the results from a Google search. Use this form to edit the properties for the search.')); 
+//line 4 "widget_googlesoap_edit.html"
+output += stash.get('googlesoap_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_googlesoap_edit.html"
+stash.set("googlesoap_st_widget_dialog_editlabel_field",loc('Search for:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_googlesoap_edit.html"
+output += stash.get('googlesoap_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
+//line 12 "widget_googlesoap_edit.html"
 
 // FILTER
 output += (function() {
@@ -5937,8 +6264,23 @@ output += stash.get('search_term');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="googlesoap_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for an Google search.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="googlesoap_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_googlesoap_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="googlesoap_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_googlesoap_edit.html"
+ stash.set('googlesoap_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_googlesoap_edit.html"
+output += stash.get('googlesoap_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_googlesoap_edit.html"
+stash.set("googlesoap_st_widgets_moreoptionspanel",loc('There are no optional properties for an Google search.'));
+//line 23 "widget_googlesoap_edit.html"
+output += stash.get('googlesoap_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 31 "widget_googlesoap_edit.html"
+stash.set("googlesoap_st_widgetdialog_wikitext",loc('wiki text'));
+//line 31 "widget_googlesoap_edit.html"
+output += stash.get('googlesoap_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="googlesoap_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 37 "widget_googlesoap_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -5956,8 +6298,24 @@ Jemplate.templateMap['widget_image_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Attached Image</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display an image on this page. The image must be already uploaded as an attachment to this page or another page. Use this form to edit the properties of the displayed image.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Attachment filename:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-image_name" name="image_name" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_image_edit.html"
+stash.set("image_st_widget_dialog_title", loc('Attached Image'));
+//line 1 "widget_image_edit.html"
+output += stash.get('image_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_image_edit.html"
+ stash.set("image_st_widget_description", loc('Display an image on this page. The image must be already uploaded as an attachment to this page or another page. Use this form to edit the properties of the displayed image.')); 
+//line 4 "widget_image_edit.html"
+output += stash.get('image_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_image_edit.html"
+stash.set("image_st_widget_dialog_editlabel_field",loc('Attachment filename:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_image_edit.html"
+output += stash.get('image_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-image_name" name="image_name" value="';
+//line 12 "widget_image_edit.html"
 
 // FILTER
 output += (function() {
@@ -5968,8 +6326,39 @@ output += stash.get('image_name');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="image_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include the title of another page to which the image is attached, and link text. If link text is specified then a link to the image is displayed instead of the image.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="image_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_image_edit.html"
+ stash.set('image_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_image_edit.html"
+output += stash.get('image_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_image_edit.html"
+stash.set("image_st_widgets_moreoptionspanel",loc('Optional properties include the title of another page to which the image is attached, and link text. If link text is specified then a link to the image is displayed instead of the image.'));
+//line 23 "widget_image_edit.html"
+output += stash.get('image_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n<tr>';
+//line 27 "widget_image_edit.html"
+stash.set("image_st_widget_dialog_editlabel_field_radio",loc('Page in:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 28 "widget_image_edit.html"
+output += stash.get('image_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>';
 //line 32 "widget_image_edit.html"
+stash.set("image_st_widget_dialog_defaultradio_current",loc('the current workspace'));
+//line 33 "widget_image_edit.html"
+output += stash.get('image_st_widget_dialog_defaultradio_current');
+//line 33 "widget_image_edit.html"
+stash.set("image_st_widget_workspace_id_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
+//line 34 "widget_image_edit.html"
+output += stash.get('image_st_widget_workspace_id_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">';
+//line 38 "widget_image_edit.html"
+stash.set("image_st_widget_workspace_id_rb",loc('the workspace named'));
+//line 39 "widget_image_edit.html"
+output += stash.get('image_st_widget_workspace_id_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 41 "widget_image_edit.html"
 
 // FILTER
 output += (function() {
@@ -5980,8 +6369,29 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Attached to:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
-//line 45 "widget_image_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>';
+//line 47 "widget_image_edit.html"
+stash.set("image_st_widget_dialog_editlabel_field_radio",loc('Attached to:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 48 "widget_image_edit.html"
+output += stash.get('image_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>';
+//line 52 "widget_image_edit.html"
+stash.set("image_st_widget_dialog_defaultradio_current",loc('the current page'));
+//line 53 "widget_image_edit.html"
+output += stash.get('image_st_widget_dialog_defaultradio_current');
+//line 53 "widget_image_edit.html"
+stash.set("image_st_widget_page_title_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
+//line 54 "widget_image_edit.html"
+output += stash.get('image_st_widget_page_title_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">';
+//line 58 "widget_image_edit.html"
+stash.set("image_st_widget_page_title_rb",loc('the page titled'));
+//line 59 "widget_image_edit.html"
+output += stash.get('image_st_widget_page_title_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 61 "widget_image_edit.html"
 
 // FILTER
 output += (function() {
@@ -5992,8 +6402,14 @@ output += stash.get('page_title');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
-//line 52 "widget_image_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>';
+//line 67 "widget_image_edit.html"
+stash.set("image_st_widget_dialog_editlabel_field",loc('Link text:'));
+output += '<td class="st-widget-dialog-editlabel">';
+//line 68 "widget_image_edit.html"
+output += stash.get('image_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 70 "widget_image_edit.html"
 
 // FILTER
 output += (function() {
@@ -6004,8 +6420,13 @@ output += stash.get('label');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="image_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 66 "widget_image_edit.html"
+output += '"/>\n  </td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 79 "widget_image_edit.html"
+stash.set("image_st_widgetdialog_wikitext",loc('wiki text'));
+//line 79 "widget_image_edit.html"
+output += stash.get('image_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="image_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 85 "widget_image_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6023,8 +6444,39 @@ Jemplate.templateMap['widget_include_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Page Include</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the contents of another page within the current page. Use this form to edit the properties for the page include.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Other page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_include_edit.html"
+stash.set("include_st_widget_dialog_title", loc('Page Include'));
+//line 1 "widget_include_edit.html"
+output += stash.get('include_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_include_edit.html"
+ stash.set("include_st_widget_description", loc('Display the contents of another page within the current page. Use this form to edit the properties for the page include.')); 
+//line 4 "widget_include_edit.html"
+output += stash.get('include_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_include_edit.html"
+stash.set("include_st_widget_dialog_editlabel_field_radio",loc('Other page in:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 10 "widget_include_edit.html"
+output += stash.get('include_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>';
+//line 14 "widget_include_edit.html"
+stash.set("include_st_widget_dialog_defaultradio_current",loc('the current workspace'));
+//line 15 "widget_include_edit.html"
+output += stash.get('include_st_widget_dialog_defaultradio_current');
+//line 15 "widget_include_edit.html"
+stash.set("include_st_widget_workspace_id_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
 //line 16 "widget_include_edit.html"
+output += stash.get('include_st_widget_workspace_id_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">';
+//line 20 "widget_include_edit.html"
+stash.set("include_st_widget_workspace_id_rb",loc('the workspace named'));
+//line 21 "widget_include_edit.html"
+output += stash.get('include_st_widget_workspace_id_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 23 "widget_include_edit.html"
 
 // FILTER
 output += (function() {
@@ -6035,8 +6487,14 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Page title:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-page_title" name="page_title" value="';
-//line 23 "widget_include_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>';
+//line 29 "widget_include_edit.html"
+stash.set("include_st_widget_dialog_editlabel_field",loc('Page title:'));
+output += '<td class="st-widget-dialog-editlabel">';
+//line 30 "widget_include_edit.html"
+output += stash.get('include_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 32 "widget_include_edit.html"
 
 // FILTER
 output += (function() {
@@ -6047,8 +6505,23 @@ output += stash.get('page_title');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="include_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for page include.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="include_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 47 "widget_include_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="include_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 40 "widget_include_edit.html"
+ stash.set('include_st_widgets_moreoptions', loc('More options')); 
+//line 40 "widget_include_edit.html"
+output += stash.get('include_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 43 "widget_include_edit.html"
+stash.set("include_st_widgets_moreoptionspanel",loc('There are no optional properties for page include.'));
+//line 43 "widget_include_edit.html"
+output += stash.get('include_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 51 "widget_include_edit.html"
+stash.set("include_st_widgetdialog_wikitext",loc('wiki text'));
+//line 51 "widget_include_edit.html"
+output += stash.get('include_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="include_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 57 "widget_include_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6066,8 +6539,24 @@ Jemplate.templateMap['widget_link1_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Inter-workspace link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Other workspace:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_link1_edit.html"
+stash.set("link1_st_widget_dialog_title", loc('Inter-workspace link'));
+//line 1 "widget_link1_edit.html"
+output += stash.get('link1_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_link1_edit.html"
+ stash.set("link1_st_widget_description", loc('Use this form to edit the properties of the link.')); 
+//line 4 "widget_link1_edit.html"
+output += stash.get('link1_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_link1_edit.html"
+stash.set("link1_st_widget_dialog_editlabel_field",loc('Other workspace:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_link1_edit.html"
+output += stash.get('link1_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 12 "widget_link1_edit.html"
 
 // FILTER
 output += (function() {
@@ -6078,8 +6567,14 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Page title:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-page_title" name="page_title" value="';
-//line 16 "widget_link1_edit.html"
+output += '"/>\n  </td>\n</tr>\n<tr>';
+//line 17 "widget_link1_edit.html"
+stash.set("link1_st_widget_dialog_editlabel_field",loc('Page title:'));
+output += '<td class="st-widget-dialog-editlabel">';
+//line 18 "widget_link1_edit.html"
+output += stash.get('link1_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 20 "widget_link1_edit.html"
 
 // FILTER
 output += (function() {
@@ -6090,8 +6585,24 @@ output += stash.get('page_title');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="link1_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include the text to display for the link, and a target section within the linked page.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
-//line 32 "widget_link1_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="link1_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 28 "widget_link1_edit.html"
+ stash.set('link1_st_widgets_moreoptions', loc('More options')); 
+//line 28 "widget_link1_edit.html"
+output += stash.get('link1_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 31 "widget_link1_edit.html"
+stash.set("link1_st_widgets_moreoptionspanel",loc('Optional properties include the text to display for the link, and a target section within the linked page.'));
+//line 31 "widget_link1_edit.html"
+output += stash.get('link1_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n<tr>';
+//line 35 "widget_link1_edit.html"
+stash.set("link1_st_widget_dialog_editlabel_field",loc('Link text:'));
+output += '<td class="st-widget-dialog-editlabel">';
+//line 36 "widget_link1_edit.html"
+output += stash.get('link1_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 38 "widget_link1_edit.html"
 
 // FILTER
 output += (function() {
@@ -6102,8 +6613,14 @@ output += stash.get('label');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Section name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-section_name" name="section_name" value="';
-//line 38 "widget_link1_edit.html"
+output += '"/>\n  </td>\n</tr>\n<tr>';
+//line 43 "widget_link1_edit.html"
+stash.set("link1_st_widget_dialog_editlabel_field",loc('Section name:'));
+output += '<td class="st-widget-dialog-editlabel">';
+//line 44 "widget_link1_edit.html"
+output += stash.get('link1_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-section_name" name="section_name" value="';
+//line 46 "widget_link1_edit.html"
 
 // FILTER
 output += (function() {
@@ -6114,8 +6631,13 @@ output += stash.get('section_name');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="link1_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 52 "widget_link1_edit.html"
+output += '"/>\n  </td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 55 "widget_link1_edit.html"
+stash.set("link1_st_widgetdialog_wikitext",loc('wiki text'));
+//line 55 "widget_link1_edit.html"
+output += stash.get('link1_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="link1_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 61 "widget_link1_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6133,8 +6655,24 @@ Jemplate.templateMap['widget_link2_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Link to a Section</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Use this form to edit the properties of the link to a page section.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Section name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-section_name" name="section_name" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_link2_edit.html"
+stash.set("link2_st_widget_dialog_title", loc('Link to a Section'));
+//line 1 "widget_link2_edit.html"
+output += stash.get('link2_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_link2_edit.html"
+ stash.set("link2_st_widget_description", loc('Use this form to edit the properties of the link to a page section.')); 
+//line 4 "widget_link2_edit.html"
+output += stash.get('link2_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_link2_edit.html"
+stash.set("link2_st_widget_dialog_editlabel_field",loc('Section name:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_link2_edit.html"
+output += stash.get('link2_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-section_name" name="section_name" value="';
+//line 12 "widget_link2_edit.html"
 
 // FILTER
 output += (function() {
@@ -6145,8 +6683,24 @@ output += stash.get('section_name');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="link2_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include the text to display for the link, and the title of a different page.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
-//line 26 "widget_link2_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="link2_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_link2_edit.html"
+ stash.set('link2_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_link2_edit.html"
+output += stash.get('link2_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_link2_edit.html"
+stash.set("link2_st_widgets_moreoptionspanel",loc('Optional properties include the text to display for the link, and the title of a different page.'));
+//line 23 "widget_link2_edit.html"
+output += stash.get('link2_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n<tr>';
+//line 27 "widget_link2_edit.html"
+stash.set("link2_st_widget_dialog_editlabel_field",loc('Link text:'));
+output += '<td class="st-widget-dialog-editlabel">';
+//line 28 "widget_link2_edit.html"
+output += stash.get('link2_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 30 "widget_link2_edit.html"
 
 // FILTER
 output += (function() {
@@ -6157,8 +6711,29 @@ output += stash.get('label');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Workspace:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
-//line 38 "widget_link2_edit.html"
+output += '"/>\n  </td>\n</tr>\n<tr>';
+//line 35 "widget_link2_edit.html"
+stash.set("link2_st_widget_dialog_editlabel_field_radio",loc('Workspace:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 36 "widget_link2_edit.html"
+output += stash.get('link2_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>';
+//line 40 "widget_link2_edit.html"
+stash.set("link2_st_widget_dialog_defaultradio_current",loc('the current workspace'));
+//line 41 "widget_link2_edit.html"
+output += stash.get('link2_st_widget_dialog_defaultradio_current');
+//line 41 "widget_link2_edit.html"
+stash.set("link2_st_widget_workspace_id_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
+//line 42 "widget_link2_edit.html"
+output += stash.get('link2_st_widget_workspace_id_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">';
+//line 46 "widget_link2_edit.html"
+stash.set("link2_st_widget_workspace_id_rb",loc('the workspace named'));
+//line 47 "widget_link2_edit.html"
+output += stash.get('link2_st_widget_workspace_id_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 49 "widget_link2_edit.html"
 
 // FILTER
 output += (function() {
@@ -6169,8 +6744,29 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Page title:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
-//line 51 "widget_link2_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>';
+//line 55 "widget_link2_edit.html"
+stash.set("link2_st_widget_dialog_editlabel_field_radio",loc('Page title:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 56 "widget_link2_edit.html"
+output += stash.get('link2_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>';
+//line 60 "widget_link2_edit.html"
+stash.set("link2_st_widget_dialog_defaultradio_current",loc('the current page'));
+//line 61 "widget_link2_edit.html"
+output += stash.get('link2_st_widget_dialog_defaultradio_current');
+//line 61 "widget_link2_edit.html"
+stash.set("link2_st_widget_page_title_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
+//line 62 "widget_link2_edit.html"
+output += stash.get('link2_st_widget_page_title_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">';
+//line 66 "widget_link2_edit.html"
+stash.set("link2_st_widget_page_title_rb",loc('the page titled'));
+//line 67 "widget_link2_edit.html"
+output += stash.get('link2_st_widget_page_title_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 69 "widget_link2_edit.html"
 
 // FILTER
 output += (function() {
@@ -6181,8 +6777,13 @@ output += stash.get('page_title');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="link2_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 66 "widget_link2_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 79 "widget_link2_edit.html"
+stash.set("link2_st_widgetdialog_wikitext",loc('wiki text'));
+//line 79 "widget_link2_edit.html"
+output += stash.get('link2_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="link2_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 85 "widget_link2_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6200,8 +6801,24 @@ Jemplate.templateMap['widget_new_form_page_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">New Form Page</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Select a form and generates a new form page.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Form name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-form_name" name="form_name" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_new_form_page_edit.html"
+stash.set("new_form_page_st_widget_dialog_title", loc('New Form Page'));
+//line 1 "widget_new_form_page_edit.html"
+output += stash.get('new_form_page_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_new_form_page_edit.html"
+ stash.set("new_form_page_st_widget_description", loc('Select a form and generates a new form page.')); 
+//line 4 "widget_new_form_page_edit.html"
+output += stash.get('new_form_page_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_new_form_page_edit.html"
+stash.set("new_form_page_st_widget_dialog_editlabel_field",loc('Form name:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_new_form_page_edit.html"
+output += stash.get('new_form_page_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-form_name" name="form_name" value="';
+//line 12 "widget_new_form_page_edit.html"
 
 // FILTER
 output += (function() {
@@ -6212,8 +6829,14 @@ output += stash.get('form_name');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-form_text" name="form_text" value="';
-//line 16 "widget_new_form_page_edit.html"
+output += '"/>\n  </td>\n</tr>\n<tr>';
+//line 17 "widget_new_form_page_edit.html"
+stash.set("new_form_page_st_widget_dialog_editlabel_field",loc('Link text:'));
+output += '<td class="st-widget-dialog-editlabel">';
+//line 18 "widget_new_form_page_edit.html"
+output += stash.get('new_form_page_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-form_text" name="form_text" value="';
+//line 20 "widget_new_form_page_edit.html"
 
 // FILTER
 output += (function() {
@@ -6224,8 +6847,23 @@ output += stash.get('form_text');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="new_form_page_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a new form page.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="new_form_page_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 40 "widget_new_form_page_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="new_form_page_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 28 "widget_new_form_page_edit.html"
+ stash.set('new_form_page_st_widgets_moreoptions', loc('More options')); 
+//line 28 "widget_new_form_page_edit.html"
+output += stash.get('new_form_page_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 31 "widget_new_form_page_edit.html"
+stash.set("new_form_page_st_widgets_moreoptionspanel",loc('There are no optional properties for a new form page.'));
+//line 31 "widget_new_form_page_edit.html"
+output += stash.get('new_form_page_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 39 "widget_new_form_page_edit.html"
+stash.set("new_form_page_st_widgetdialog_wikitext",loc('wiki text'));
+//line 39 "widget_new_form_page_edit.html"
+output += stash.get('new_form_page_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="new_form_page_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 45 "widget_new_form_page_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6243,8 +6881,39 @@ Jemplate.templateMap['widget_recent_changes_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">What\'s New</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a list of pages recently changed in a workspace. By default only the page titles are displayed. Use this form to edit the list properties.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Workspace:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_recent_changes_edit.html"
+stash.set("recent_changes_st_widget_dialog_title", loc('What\'s New'));
+//line 1 "widget_recent_changes_edit.html"
+output += stash.get('recent_changes_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_recent_changes_edit.html"
+ stash.set("recent_changes_st_widget_description", loc('Display a list of pages recently changed in a workspace. By default only the page titles are displayed. Use this form to edit the list properties.')); 
+//line 4 "widget_recent_changes_edit.html"
+output += stash.get('recent_changes_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_recent_changes_edit.html"
+stash.set("recent_changes_st_widget_dialog_editlabel_field_radio",loc('Workspace:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 10 "widget_recent_changes_edit.html"
+output += stash.get('recent_changes_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>';
+//line 14 "widget_recent_changes_edit.html"
+stash.set("recent_changes_st_widget_dialog_defaultradio_current",loc('the current workspace'));
+//line 15 "widget_recent_changes_edit.html"
+output += stash.get('recent_changes_st_widget_dialog_defaultradio_current');
+//line 15 "widget_recent_changes_edit.html"
+stash.set("recent_changes_st_widget_workspace_id_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
 //line 16 "widget_recent_changes_edit.html"
+output += stash.get('recent_changes_st_widget_workspace_id_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">';
+//line 20 "widget_recent_changes_edit.html"
+stash.set("recent_changes_st_widget_workspace_id_rb",loc('the workspace named'));
+//line 21 "widget_recent_changes_edit.html"
+output += stash.get('recent_changes_st_widget_workspace_id_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 23 "widget_recent_changes_edit.html"
 
 // FILTER
 output += (function() {
@@ -6255,14 +6924,34 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n</table>\n</div>\n<div id="recent_changes_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optionally, specify that the page contents should be displayed.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nFull results:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
-//line 39 "widget_recent_changes_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n</table>\n</div>\n<div id="recent_changes_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 32 "widget_recent_changes_edit.html"
+ stash.set('recent_changes_st_widgets_moreoptions', loc('More options')); 
+//line 32 "widget_recent_changes_edit.html"
+output += stash.get('recent_changes_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 35 "widget_recent_changes_edit.html"
+stash.set("recent_changes_st_widgets_moreoptionspanel",loc('Optionally, specify that the page contents should be displayed.'));
+//line 35 "widget_recent_changes_edit.html"
+output += stash.get('recent_changes_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">';
+//line 44 "widget_recent_changes_edit.html"
+stash.set("recent_changes_st_widget_dialog_editlable_results",loc('Full results:'));
+//line 44 "widget_recent_changes_edit.html"
+output += stash.get('recent_changes_st_widget_dialog_editlable_results');
+output += '\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
+//line 47 "widget_recent_changes_edit.html"
 if (stash.get('full')) {
 output += ' checked="checked"';
 }
 
-output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="recent_changes_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 50 "widget_recent_changes_edit.html"
+output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 53 "widget_recent_changes_edit.html"
+stash.set("recent_changes_st_widgetdialog_wikitext",loc('wiki text'));
+//line 53 "widget_recent_changes_edit.html"
+output += stash.get('recent_changes_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="recent_changes_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 59 "widget_recent_changes_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6280,8 +6969,24 @@ Jemplate.templateMap['widget_search_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Search Results</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the search results for the given phrase within a workspace. Use this form to edit the properties for the search.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Search term:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_search_edit.html"
+stash.set("search_st_widget_dialog_title", loc('Search Results'));
+//line 1 "widget_search_edit.html"
+output += stash.get('search_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_search_edit.html"
+ stash.set("search_st_widget_description", loc('Display the search results for the given phrase within a workspace. Use this form to edit the properties for the search.')); 
+//line 4 "widget_search_edit.html"
+output += stash.get('search_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_search_edit.html"
+stash.set("search_st_widget_dialog_editlabel_field",loc('Search term:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_search_edit.html"
+output += stash.get('search_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
+//line 12 "widget_search_edit.html"
 
 // FILTER
 output += (function() {
@@ -6292,8 +6997,39 @@ output += stash.get('search_term');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="search_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include the name of the workspace to search, whether to search in the page title, text or tags, and whether to display full results or just page titles.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">In:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="search_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_search_edit.html"
+ stash.set('search_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_search_edit.html"
+output += stash.get('search_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_search_edit.html"
+stash.set("search_st_widgets_moreoptionspanel",loc('Optional properties include the name of the workspace to search, whether to search in the page title, text or tags, and whether to display full results or just page titles.'));
+//line 23 "widget_search_edit.html"
+output += stash.get('search_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n<tr>';
+//line 27 "widget_search_edit.html"
+stash.set("search_st_widget_dialog_editlabel_field_radio",loc('In:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 28 "widget_search_edit.html"
+output += stash.get('search_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>';
 //line 32 "widget_search_edit.html"
+stash.set("search_st_widget_dialog_defaultradio_current",loc('the current workspace'));
+//line 33 "widget_search_edit.html"
+output += stash.get('search_st_widget_dialog_defaultradio_current');
+//line 33 "widget_search_edit.html"
+stash.set("search_st_widget_workspace_id_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
+//line 34 "widget_search_edit.html"
+output += stash.get('search_st_widget_workspace_id_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">';
+//line 38 "widget_search_edit.html"
+stash.set("search_st_widget_workspace_id_rb",loc('the workspace named'));
+//line 39 "widget_search_edit.html"
+output += stash.get('search_st_widget_workspace_id_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 41 "widget_search_edit.html"
 
 // FILTER
 output += (function() {
@@ -6304,32 +7040,62 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nSearch type:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="radio" name="search_type" value="text"\n';
-//line 44 "widget_search_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">';
+//line 50 "widget_search_edit.html"
+stash.set("search_st_widget_dialog_editlabel_search_type",loc('Search type:'));
+//line 50 "widget_search_edit.html"
+output += stash.get('search_st_widget_dialog_editlabel_search_type');
+output += '\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="radio" name="search_type" value="text"\n';
+//line 54 "widget_search_edit.html"
 if (stash.get('search_type') == 'text' || stash.get('search_type') == '') {
 output += 'checked="checked"';
 }
 
-output += '\n/> Text\n<input type="radio" name="search_type" value="category"\n';
-//line 47 "widget_search_edit.html"
+output += '\n/> ';
+//line 55 "widget_search_edit.html"
+stash.set("search_st_widget_dialog_editfieled_search_type",loc('Text'));
+//line 55 "widget_search_edit.html"
+output += stash.get('search_st_widget_dialog_editfieled_search_type');
+output += '\n<input type="radio" name="search_type" value="category"\n';
+//line 57 "widget_search_edit.html"
 if (stash.get('search_type') == 'category') {
 output += 'checked="checked"';
 }
 
-output += '\n/> Tag\n<input type="radio" name="search_type" value="title"\n';
-//line 50 "widget_search_edit.html"
+output += '\n/>';
+//line 58 "widget_search_edit.html"
+stash.set("search_st_widget_dialog_editfieled_search_type",loc('Tag'));
+//line 58 "widget_search_edit.html"
+output += stash.get('search_st_widget_dialog_editfieled_search_type');
+output += '\n<input type="radio" name="search_type" value="title"\n';
+//line 60 "widget_search_edit.html"
 if (stash.get('search_type') == 'title') {
 output += 'checked="checked"';
 }
 
-output += '\n/> Title\n</td>\n</tr>\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nFull results:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
-//line 62 "widget_search_edit.html"
+output += '\n/>';
+//line 61 "widget_search_edit.html"
+stash.set("search_st_widget_dialog_editfieled_search_type",loc('Title'));
+//line 61 "widget_search_edit.html"
+output += stash.get('search_st_widget_dialog_editfieled_search_type');
+output += '\n</td>\n</tr>\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">';
+//line 70 "widget_search_edit.html"
+stash.set("search_st_widget_dialog_editlable_results",loc('Full results:'));
+//line 70 "widget_search_edit.html"
+output += stash.get('search_st_widget_dialog_editlable_results');
+output += '\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
+//line 73 "widget_search_edit.html"
 if (stash.get('full')) {
 output += ' checked="checked"';
 }
 
-output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="search_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 73 "widget_search_edit.html"
+output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 79 "widget_search_edit.html"
+stash.set("search_st_widgetdialog_wikitext",loc('wiki text'));
+//line 79 "widget_search_edit.html"
+output += stash.get('search_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="search_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 85 "widget_search_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6347,8 +7113,24 @@ Jemplate.templateMap['widget_section_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Section Marker</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Add a section marker at the current cursor location. You can link to a section marker using a "Section Link". Use this form to edit the properties for the section marker.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Section name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-section_name" name="section_name" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_section_edit.html"
+stash.set("section_st_widget_dialog_title", loc('Section Marker'));
+//line 1 "widget_section_edit.html"
+output += stash.get('section_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_section_edit.html"
+ stash.set("section_st_widget_description", loc('Add a section marker at the current cursor location. You can link to a section marker using a "Section Link". Use this form to edit the properties for the section marker.')); 
+//line 4 "widget_section_edit.html"
+output += stash.get('section_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_section_edit.html"
+stash.set("section_st_widget_dialog_editlabel_field",loc('Section name:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_section_edit.html"
+output += stash.get('section_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-section_name" name="section_name" value="';
+//line 12 "widget_section_edit.html"
 
 // FILTER
 output += (function() {
@@ -6359,8 +7141,23 @@ output += stash.get('section_name');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="section_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a section marker.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="section_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_section_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="section_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_section_edit.html"
+ stash.set('section_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_section_edit.html"
+output += stash.get('section_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_section_edit.html"
+stash.set("section_st_widgets_moreoptionspanel",loc('There are no optional properties for a section marker.'));
+//line 23 "widget_section_edit.html"
+output += stash.get('section_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 31 "widget_section_edit.html"
+stash.set("section_st_widgetdialog_wikitext",loc('wiki text'));
+//line 31 "widget_section_edit.html"
+output += stash.get('section_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="section_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 37 "widget_section_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6378,8 +7175,24 @@ Jemplate.templateMap['widget_skype_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Skype Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a Skype name. Clicking the link will start a Skype call with the person if your Skype client is properly configured. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Skype name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-skype_id" name="skype_id" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_skype_edit.html"
+stash.set("skype_st_widget_dialog_title", loc('Skype Link'));
+//line 1 "widget_skype_edit.html"
+output += stash.get('skype_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_skype_edit.html"
+ stash.set("skype_st_widget_description", loc('Display a link to a Skype name. Clicking the link will start a Skype call with the person if your Skype client is properly configured. Use this form to edit the properties of the link.')); 
+//line 4 "widget_skype_edit.html"
+output += stash.get('skype_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_skype_edit.html"
+stash.set("skype_st_widget_dialog_editlabel_field",loc('Skype name:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_skype_edit.html"
+output += stash.get('skype_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-skype_id" name="skype_id" value="';
+//line 12 "widget_skype_edit.html"
 
 // FILTER
 output += (function() {
@@ -6390,8 +7203,23 @@ output += stash.get('skype_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="skype_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Skype link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="skype_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_skype_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="skype_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_skype_edit.html"
+ stash.set('skype_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_skype_edit.html"
+output += stash.get('skype_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_skype_edit.html"
+stash.set("skype_st_widgets_moreoptionspanel",loc('There are no optional properties for a Skype link.'));
+//line 23 "widget_skype_edit.html"
+output += stash.get('skype_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 31 "widget_skype_edit.html"
+stash.set("skype_st_widgetdialog_wikitext",loc('wiki text'));
+//line 31 "widget_skype_edit.html"
+output += stash.get('skype_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="skype_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 37 "widget_skype_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6409,8 +7237,24 @@ Jemplate.templateMap['widget_tag_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Tag Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a list of pages with a specific tag. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Tag name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-tag_name" name="tag_name" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_tag_edit.html"
+stash.set("tag_st_widget_dialog_title", loc('Tag Link'));
+//line 1 "widget_tag_edit.html"
+output += stash.get('tag_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_tag_edit.html"
+ stash.set("tag_st_widget_description", loc('Display a link to a list of pages with a specific tag. Use this form to edit the properties of the link.')); 
+//line 4 "widget_tag_edit.html"
+output += stash.get('tag_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_tag_edit.html"
+stash.set("tag_st_widget_dialog_editlabel_field",loc('Tag name:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_tag_edit.html"
+output += stash.get('tag_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-tag_name" name="tag_name" value="';
+//line 12 "widget_tag_edit.html"
 
 // FILTER
 output += (function() {
@@ -6421,8 +7265,24 @@ output += stash.get('tag_name');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="tag_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include link text, and the name of a different workspace for the tags.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
-//line 26 "widget_tag_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="tag_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_tag_edit.html"
+ stash.set('tag_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_tag_edit.html"
+output += stash.get('tag_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_tag_edit.html"
+stash.set("tag_st_widgets_moreoptionspanel",loc('Optional properties include link text, and the name of a different workspace for the tags.'));
+//line 23 "widget_tag_edit.html"
+output += stash.get('tag_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n<tr>';
+//line 27 "widget_tag_edit.html"
+stash.set("tag_st_widget_dialog_editlabel_field",loc('Link text:'));
+output += '<td class="st-widget-dialog-editlabel">';
+//line 28 "widget_tag_edit.html"
+output += stash.get('tag_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 30 "widget_tag_edit.html"
 
 // FILTER
 output += (function() {
@@ -6433,8 +7293,29 @@ output += stash.get('label');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Search:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
-//line 38 "widget_tag_edit.html"
+output += '"/>\n  </td>\n</tr>\n<tr>';
+//line 35 "widget_tag_edit.html"
+stash.set("tag_st_widget_dialog_editlabel_field_radio",loc('Search:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 36 "widget_tag_edit.html"
+output += stash.get('tag_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>';
+//line 40 "widget_tag_edit.html"
+stash.set("tag_st_widget_dialog_defaultradio_current",loc('the current workspace'));
+//line 41 "widget_tag_edit.html"
+output += stash.get('tag_st_widget_dialog_defaultradio_current');
+//line 41 "widget_tag_edit.html"
+stash.set("tag_st_widget_workspace_id_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
+//line 42 "widget_tag_edit.html"
+output += stash.get('tag_st_widget_workspace_id_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">';
+//line 46 "widget_tag_edit.html"
+stash.set("tag_st_widget_workspace_id_rb",loc('the workspace named'));
+//line 47 "widget_tag_edit.html"
+output += stash.get('tag_st_widget_workspace_id_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 49 "widget_tag_edit.html"
 
 // FILTER
 output += (function() {
@@ -6445,8 +7326,13 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="tag_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 53 "widget_tag_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 59 "widget_tag_edit.html"
+stash.set("tag_st_widgetdialog_wikitext",loc('wiki text'));
+//line 59 "widget_tag_edit.html"
+output += stash.get('tag_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="tag_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 65 "widget_tag_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6464,8 +7350,24 @@ Jemplate.templateMap['widget_tag_list_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Tag List</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a list of the most recently changed pages in a workspace that have a specific tag. By default only the page title is displayed. Use this form to edit the list properties.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Tag name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-tag_name" name="tag_name" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_tag_list_edit.html"
+stash.set("tag_list_st_widget_dialog_title", loc('Tag List'));
+//line 1 "widget_tag_list_edit.html"
+output += stash.get('tag_list_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_tag_list_edit.html"
+ stash.set("tag_list_st_widget_description", loc('Display a list of the most recently changed pages in a workspace that have a specific tag. By default only the page title is displayed. Use this form to edit the list properties.')); 
+//line 4 "widget_tag_list_edit.html"
+output += stash.get('tag_list_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_tag_list_edit.html"
+stash.set("tag_list_st_widget_dialog_editlabel_field",loc('Tag name:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_tag_list_edit.html"
+output += stash.get('tag_list_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-tag_name" name="tag_name" value="';
+//line 12 "widget_tag_list_edit.html"
 
 // FILTER
 output += (function() {
@@ -6476,8 +7378,39 @@ output += stash.get('tag_name');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="tag_list_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include specifying which workspace to use and whether to display page titles or whole pages.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Pages in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="tag_list_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_tag_list_edit.html"
+ stash.set('tag_list_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_tag_list_edit.html"
+output += stash.get('tag_list_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_tag_list_edit.html"
+stash.set("tag_list_st_widgets_moreoptionspanel",loc('Optional properties include specifying which workspace to use and whether to display page titles or whole pages.'));
+//line 23 "widget_tag_list_edit.html"
+output += stash.get('tag_list_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n<tr>';
+//line 27 "widget_tag_list_edit.html"
+stash.set("tag_list_st_widget_dialog_editlabel_field_radio",loc('Pages in:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 28 "widget_tag_list_edit.html"
+output += stash.get('tag_list_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>';
 //line 32 "widget_tag_list_edit.html"
+stash.set("tag_list_st_widget_dialog_defaultradio_current",loc('the current workspace'));
+//line 33 "widget_tag_list_edit.html"
+output += stash.get('tag_list_st_widget_dialog_defaultradio_current');
+//line 33 "widget_tag_list_edit.html"
+stash.set("tag_list_st_widget_workspace_id_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
+//line 34 "widget_tag_list_edit.html"
+output += stash.get('tag_list_st_widget_workspace_id_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">';
+//line 38 "widget_tag_list_edit.html"
+stash.set("tag_list_st_widget_workspace_id_rb",loc('the workspace named'));
+//line 39 "widget_tag_list_edit.html"
+output += stash.get('tag_list_st_widget_workspace_id_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 41 "widget_tag_list_edit.html"
 
 // FILTER
 output += (function() {
@@ -6488,14 +7421,24 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nFull results:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
-//line 45 "widget_tag_list_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">';
+//line 52 "widget_tag_list_edit.html"
+stash.set("tag_list_st_widget_dialog_editlable_results",loc('Full results:'));
+//line 52 "widget_tag_list_edit.html"
+output += stash.get('tag_list_st_widget_dialog_editlable_results');
+output += '\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
+//line 55 "widget_tag_list_edit.html"
 if (stash.get('full')) {
 output += ' checked="checked"';
 }
 
-output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="tag_list_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 56 "widget_tag_list_edit.html"
+output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 61 "widget_tag_list_edit.html"
+stash.set("tag_list_st_widgetdialog_wikitext",loc('wiki text'));
+//line 61 "widget_tag_list_edit.html"
+output += stash.get('tag_list_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="tag_list_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 67 "widget_tag_list_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6513,8 +7456,24 @@ Jemplate.templateMap['widget_technorati_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Technorati Search</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the results for a Technorati search. Use this form to edit the properties for the search.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Search for:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_technorati_edit.html"
+stash.set("technorati_st_widget_dialog_title", loc('Technorati Search'));
+//line 1 "widget_technorati_edit.html"
+output += stash.get('technorati_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_technorati_edit.html"
+ stash.set("technorati_st_widget_description", loc('Display the results for a Technorati search. Use this form to edit the properties for the search.')); 
+//line 4 "widget_technorati_edit.html"
+output += stash.get('technorati_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_technorati_edit.html"
+stash.set("technorati_st_widget_dialog_editlabel_field",loc('Search for:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_technorati_edit.html"
+output += stash.get('technorati_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-search_term" name="search_term" value="';
+//line 12 "widget_technorati_edit.html"
 
 // FILTER
 output += (function() {
@@ -6525,8 +7484,23 @@ output += stash.get('search_term');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="technorati_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Technorati search.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="technorati_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_technorati_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="technorati_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_technorati_edit.html"
+ stash.set('technorati_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_technorati_edit.html"
+output += stash.get('technorati_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_technorati_edit.html"
+stash.set("technorati_st_widgets_moreoptionspanel",loc('There are no optional properties for a Technorati search.'));
+//line 23 "widget_technorati_edit.html"
+output += stash.get('technorati_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 31 "widget_technorati_edit.html"
+stash.set("technorati_st_widgetdialog_wikitext",loc('wiki text'));
+//line 31 "widget_technorati_edit.html"
+output += stash.get('technorati_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="technorati_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 37 "widget_technorati_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6544,8 +7518,49 @@ Jemplate.templateMap['widget_toc_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Table of Contents</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a table of contents for a page. Each header or section on the page is listed as a link in the table of contents. Click "Save" now, or click "More options" to edit the properties for the table of contents.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n</table>\n</div>\n<div id="toc_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optionally, specify which page\'s headers and sections to use for the table of contents.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Page in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_toc_edit.html"
+stash.set("toc_st_widget_dialog_title", loc('Table of Contents'));
+//line 1 "widget_toc_edit.html"
+output += stash.get('toc_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_toc_edit.html"
+ stash.set("toc_st_widget_description", loc('Display a table of contents for a page. Each header or section on the page is listed as a link in the table of contents. Click "Save" now, or click "More options" to edit the properties for the table of contents.')); 
+//line 4 "widget_toc_edit.html"
+output += stash.get('toc_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n</table>\n</div>\n<div id="toc_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 12 "widget_toc_edit.html"
+ stash.set('toc_st_widgets_moreoptions', loc('More options')); 
+//line 12 "widget_toc_edit.html"
+output += stash.get('toc_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 15 "widget_toc_edit.html"
+stash.set("toc_st_widgets_moreoptionspanel",loc('Optionally, specify which page\'s headers and sections to use for the table of contents.'));
+//line 15 "widget_toc_edit.html"
+output += stash.get('toc_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n<tr>';
+//line 19 "widget_toc_edit.html"
+stash.set("toc_st_widget_dialog_editlabel_field_radio",loc('Page in:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 20 "widget_toc_edit.html"
+output += stash.get('toc_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>';
+//line 24 "widget_toc_edit.html"
+stash.set("toc_st_widget_dialog_defaultradio_current",loc('the current workspace'));
+//line 25 "widget_toc_edit.html"
+output += stash.get('toc_st_widget_dialog_defaultradio_current');
+//line 25 "widget_toc_edit.html"
+stash.set("toc_st_widget_workspace_id_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
 //line 26 "widget_toc_edit.html"
+output += stash.get('toc_st_widget_workspace_id_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">';
+//line 30 "widget_toc_edit.html"
+stash.set("toc_st_widget_workspace_id_rb",loc('the workspace named'));
+//line 31 "widget_toc_edit.html"
+output += stash.get('toc_st_widget_workspace_id_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 33 "widget_toc_edit.html"
 
 // FILTER
 output += (function() {
@@ -6556,8 +7571,29 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Headers and<br/>sections in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>the current\npage\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">the\n  page titled&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
+output += '"/>\n</p>\n</td>\n</tr>\n<tr>';
 //line 39 "widget_toc_edit.html"
+stash.set("toc_st_widget_dialog_editlabel_field_radio",loc('Headers and<br/>sections in:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 40 "widget_toc_edit.html"
+output += stash.get('toc_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-page_title-rb" value="current" checked>';
+//line 44 "widget_toc_edit.html"
+stash.set("toc_st_widget_dialog_defaultradio_current",loc('the current page'));
+//line 45 "widget_toc_edit.html"
+output += stash.get('toc_st_widget_dialog_defaultradio_current');
+//line 45 "widget_toc_edit.html"
+stash.set("toc_st_widget_page_title_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
+//line 46 "widget_toc_edit.html"
+output += stash.get('toc_st_widget_page_title_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-page_title-rb" value="other">';
+//line 50 "widget_toc_edit.html"
+stash.set("toc_st_widget_page_title_rb",loc('the page titled'));
+//line 51 "widget_toc_edit.html"
+output += stash.get('toc_st_widget_page_title_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-page_title" name="page_title" value="';
+//line 53 "widget_toc_edit.html"
 
 // FILTER
 output += (function() {
@@ -6568,8 +7604,13 @@ output += stash.get('page_title');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="toc_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 54 "widget_toc_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 63 "widget_toc_edit.html"
+stash.set("toc_st_widgetdialog_wikitext",loc('wiki text'));
+//line 63 "widget_toc_edit.html"
+output += stash.get('toc_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="toc_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 69 "widget_toc_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6587,8 +7628,24 @@ Jemplate.templateMap['widget_user_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">User Name</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display the full name for the given email address or user name. Use this form to edit the properties of the user name.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">User\'s email:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-user_email" name="user_email" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_user_edit.html"
+stash.set("user_st_widget_dialog_title", loc('User Name'));
+//line 1 "widget_user_edit.html"
+output += stash.get('user_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_user_edit.html"
+ stash.set("user_st_widget_description", loc('Display the full name for the given email address or user name. Use this form to edit the properties of the user name.')); 
+//line 4 "widget_user_edit.html"
+output += stash.get('user_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_user_edit.html"
+stash.set("user_st_widget_dialog_editlabel_field",loc('User\'s email:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_user_edit.html"
+output += stash.get('user_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-user_email" name="user_email" value="';
+//line 12 "widget_user_edit.html"
 
 // FILTER
 output += (function() {
@@ -6599,8 +7656,23 @@ output += stash.get('user_email');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="user_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a user name.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="user_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_user_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="user_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_user_edit.html"
+ stash.set('user_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_user_edit.html"
+output += stash.get('user_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_user_edit.html"
+stash.set("user_st_widgets_moreoptionspanel",loc('There are no optional properties for a user name.'));
+//line 23 "widget_user_edit.html"
+output += stash.get('user_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 31 "widget_user_edit.html"
+stash.set("user_st_widgetdialog_wikitext",loc('wiki text'));
+//line 31 "widget_user_edit.html"
+output += stash.get('user_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="user_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 37 "widget_user_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6618,8 +7690,24 @@ Jemplate.templateMap['widget_weblog_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Weblog Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a weblog. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Weblog name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-weblog_name" name="weblog_name" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_weblog_edit.html"
+stash.set("weblog_st_widget_dialog_title", loc('Weblog Link'));
+//line 1 "widget_weblog_edit.html"
+output += stash.get('weblog_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_weblog_edit.html"
+ stash.set("weblog_st_widget_description", loc('Display a link to a weblog. Use this form to edit the properties of the link.')); 
+//line 4 "widget_weblog_edit.html"
+output += stash.get('weblog_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_weblog_edit.html"
+stash.set("weblog_st_widget_dialog_editlabel_field",loc('Weblog name:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_weblog_edit.html"
+output += stash.get('weblog_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-weblog_name" name="weblog_name" value="';
+//line 12 "widget_weblog_edit.html"
 
 // FILTER
 output += (function() {
@@ -6630,8 +7718,24 @@ output += stash.get('weblog_name');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="weblog_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional properties include link text, and the name of a different workspace for the weblog.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Link text:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
-//line 26 "widget_weblog_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="weblog_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_weblog_edit.html"
+ stash.set('weblog_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_weblog_edit.html"
+output += stash.get('weblog_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_weblog_edit.html"
+stash.set("weblog_st_widgets_moreoptionspanel",loc('Optional properties include link text, and the name of a different workspace for the weblog.'));
+//line 23 "widget_weblog_edit.html"
+output += stash.get('weblog_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n<tr>';
+//line 27 "widget_weblog_edit.html"
+stash.set("weblog_st_widget_dialog_editlabel_field",loc('Link text:'));
+output += '<td class="st-widget-dialog-editlabel">';
+//line 28 "widget_weblog_edit.html"
+output += stash.get('weblog_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-label" name="label" value="';
+//line 30 "widget_weblog_edit.html"
 
 // FILTER
 output += (function() {
@@ -6642,8 +7746,29 @@ output += stash.get('label');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n<tr>\n  <td class="st-widget-dialog-editlabel">Weblog on:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
-//line 38 "widget_weblog_edit.html"
+output += '"/>\n  </td>\n</tr>\n<tr>';
+//line 35 "widget_weblog_edit.html"
+stash.set("weblog_st_widget_dialog_editlabel_field_radio",loc('Weblog on:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 36 "widget_weblog_edit.html"
+output += stash.get('weblog_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>';
+//line 40 "widget_weblog_edit.html"
+stash.set("weblog_st_widget_dialog_defaultradio_current",loc('the current workspace'));
+//line 41 "widget_weblog_edit.html"
+output += stash.get('weblog_st_widget_dialog_defaultradio_current');
+//line 41 "widget_weblog_edit.html"
+stash.set("weblog_st_widget_workspace_id_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
+//line 42 "widget_weblog_edit.html"
+output += stash.get('weblog_st_widget_workspace_id_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">';
+//line 46 "widget_weblog_edit.html"
+stash.set("weblog_st_widget_workspace_id_rb",loc('the workspace named'));
+//line 47 "widget_weblog_edit.html"
+output += stash.get('weblog_st_widget_workspace_id_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 49 "widget_weblog_edit.html"
 
 // FILTER
 output += (function() {
@@ -6654,8 +7779,13 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="weblog_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 53 "widget_weblog_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 59 "widget_weblog_edit.html"
+stash.set("weblog_st_widgetdialog_wikitext",loc('wiki text'));
+//line 59 "widget_weblog_edit.html"
+output += stash.get('weblog_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="weblog_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 65 "widget_weblog_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6673,8 +7803,24 @@ Jemplate.templateMap['widget_weblog_list_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Weblog List</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a list of the most recent entries from a weblog in a workspace. By default only the weblog entry names are displayed. Use this form to edit the list properties.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Weblog name:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-weblog_name" name="weblog_name" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_weblog_list_edit.html"
+stash.set("weblog_list_st_widget_dialog_title", loc('Weblog List'));
+//line 1 "widget_weblog_list_edit.html"
+output += stash.get('weblog_list_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_weblog_list_edit.html"
+ stash.set("weblog_list_st_widget_description", loc('Display a list of the most recent entries from a weblog in a workspace. By default only the weblog entry names are displayed. Use this form to edit the list properties.')); 
+//line 4 "widget_weblog_list_edit.html"
+output += stash.get('weblog_list_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_weblog_list_edit.html"
+stash.set("weblog_list_st_widget_dialog_editlabel_field",loc('Weblog name:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_weblog_list_edit.html"
+output += stash.get('weblog_list_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-weblog_name" name="weblog_name" value="';
+//line 12 "widget_weblog_list_edit.html"
 
 // FILTER
 output += (function() {
@@ -6685,8 +7831,39 @@ output += stash.get('weblog_name');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="weblog_list_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">Optional parameters include specifying which workspace to use and whether to display page titles or whole pages.</p>\n<table class="st-widgets-moreoptionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">in:</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>the current\nworkspace\n<i>&nbsp;&nbsp;or</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">the\n  workspace named&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="weblog_list_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_weblog_list_edit.html"
+ stash.set('weblog_list_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_weblog_list_edit.html"
+output += stash.get('weblog_list_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_weblog_list_edit.html"
+stash.set("weblog_list_st_widgets_moreoptionspanel",loc('Optional parameters include specifying which workspace to use and whether to display page titles or whole pages.'));
+//line 23 "widget_weblog_list_edit.html"
+output += stash.get('weblog_list_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n<tr>';
+//line 27 "widget_weblog_list_edit.html"
+stash.set("weblog_list_st_widget_dialog_editlabel_field_radio",loc('in:'));
+output += '  <td class="st-widget-dialog-editlabel">';
+//line 28 "widget_weblog_list_edit.html"
+output += stash.get('weblog_list_st_widget_dialog_editlabel_field_radio');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-workspace_id-rb" value="current" checked>';
 //line 32 "widget_weblog_list_edit.html"
+stash.set("weblog_list_st_widget_dialog_defaultradio_current",loc('the current workspace'));
+//line 33 "widget_weblog_list_edit.html"
+output += stash.get('weblog_list_st_widget_dialog_defaultradio_current');
+//line 33 "widget_weblog_list_edit.html"
+stash.set("weblog_list_st_widget_workspace_id_rb_or",loc('or'));
+output += '<i>&nbsp;&nbsp;';
+//line 34 "widget_weblog_list_edit.html"
+output += stash.get('weblog_list_st_widget_workspace_id_rb_or');
+output += '</i></p>\n<p class="st-widget-dialog-choiceradio">\n  <input type="radio" name="st-widget-workspace_id-rb" value="other">';
+//line 38 "widget_weblog_list_edit.html"
+stash.set("weblog_list_st_widget_workspace_id_rb",loc('the workspace named'));
+//line 39 "widget_weblog_list_edit.html"
+output += stash.get('weblog_list_st_widget_workspace_id_rb');
+output += '&nbsp;\n<input size="25" type="text" id="st-widget-workspace_id" name="workspace_id" value="';
+//line 41 "widget_weblog_list_edit.html"
 
 // FILTER
 output += (function() {
@@ -6697,14 +7874,24 @@ output += stash.get('workspace_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">\nFull results:\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
-//line 45 "widget_weblog_list_edit.html"
+output += '"/>\n</p>\n</td>\n</tr>\n\n\n\n\n<tr>\n<td class="st-widget-dialog-editlabel">';
+//line 52 "widget_weblog_list_edit.html"
+stash.set("weblog_list_st_widget_dialog_editlable_results",loc('Full results:'));
+//line 52 "widget_weblog_list_edit.html"
+output += stash.get('weblog_list_st_widget_dialog_editlable_results');
+output += '\n</td>\n<td class="st-widget-dialog-editfield">\n<input type="checkbox" name="full"';
+//line 55 "widget_weblog_list_edit.html"
 if (stash.get('full')) {
 output += ' checked="checked"';
 }
 
-output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="weblog_list_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 56 "widget_weblog_list_edit.html"
+output += ' />\n</td>\n</tr>\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 61 "widget_weblog_list_edit.html"
+stash.set("weblog_list_st_widgetdialog_wikitext",loc('wiki text'));
+//line 61 "widget_weblog_list_edit.html"
+output += stash.get('weblog_list_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="weblog_list_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 67 "widget_weblog_list_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -6722,8 +7909,24 @@ Jemplate.templateMap['widget_yahoo_edit.html'] = function(context) {
     var output = '';
 
     try {
-output += '<span class="st-widget-dialog-title">Yahoo! IM Link</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">Display a link to a Yahoo! instant message ID. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>\n  <td class="st-widget-dialog-editlabel">Yahoo! ID:</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-yahoo_id" name="yahoo_id" value="';
+output += '<span class="st-widget-dialog-title">';
+//line 1 "widget_yahoo_edit.html"
+stash.set("yahoo_st_widget_dialog_title", loc('Yahoo! IM Link'));
+//line 1 "widget_yahoo_edit.html"
+output += stash.get('yahoo_st_widget_dialog_title');
+output += '</span>\n<form>\n<div class="st-widget-dialog">\n<p class="st-widget-description">';
+//line 4 "widget_yahoo_edit.html"
+ stash.set("yahoo_st_widget_description", loc('Display a link to a Yahoo! instant message ID. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.')); 
+//line 4 "widget_yahoo_edit.html"
+output += stash.get('yahoo_st_widget_description');
+output += '</p>\n<div id="st-widgets-standardoptionspanel">\n<table class="st-widgets-optionstable">\n<tr>';
+//line 9 "widget_yahoo_edit.html"
+stash.set("yahoo_st_widget_dialog_editlabel_field",loc('Yahoo! ID:'));
+output += '<td class="st-widget-dialog-editlabel">';
 //line 10 "widget_yahoo_edit.html"
+output += stash.get('yahoo_st_widget_dialog_editlabel_field');
+output += '</td>\n  <td class="st-widget-dialog-editfield">\n    <input size="40" type="text" id="st-widget-yahoo_id" name="yahoo_id" value="';
+//line 12 "widget_yahoo_edit.html"
 
 // FILTER
 output += (function() {
@@ -6734,8 +7937,23 @@ output += stash.get('yahoo_id');
     return context.filter(output, 'html', []);
 })();
 
-output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="yahoo_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">More options</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">There are no optional properties for a Yahoo! link.</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">wiki text: </span>\n    <span class="wikitext" id="yahoo_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
-//line 34 "widget_yahoo_edit.html"
+output += '"/>\n  </td>\n</tr>\n</table>\n</div>\n<div id="yahoo_widget_edit_error_msg" class="widget_edit_error_msg"></div>\n<div class="st-widgets-options">\n    <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">\n    <a id="st-widgets-moreoptions" href="#">';
+//line 20 "widget_yahoo_edit.html"
+ stash.set('yahoo_st_widgets_moreoptions', loc('More options')); 
+//line 20 "widget_yahoo_edit.html"
+output += stash.get('yahoo_st_widgets_moreoptions');
+output += '</a>\n</div>\n<div id="st-widgets-moreoptionspanel">\n<p class="st-widget-description">';
+//line 23 "widget_yahoo_edit.html"
+stash.set("yahoo_st_widgets_moreoptionspanel",loc('There are no optional properties for a Yahoo! link.'));
+//line 23 "widget_yahoo_edit.html"
+output += stash.get('yahoo_st_widgets_moreoptionspanel');
+output += '</p>\n<table class="st-widgets-moreoptionstable">\n\n\n\n\n</table>\n<div class="st-widgetdialog-wikitext">\n    <span class="label">';
+//line 31 "widget_yahoo_edit.html"
+stash.set("yahoo_st_widgetdialog_wikitext",loc('wiki text'));
+//line 31 "widget_yahoo_edit.html"
+output += stash.get('yahoo_st_widgetdialog_wikitext');
+output += '\n</span>\n    <span class="wikitext" id="yahoo_wafl_text">&nbsp;</span>\n</div>\n</div>\n</div>\n';
+//line 37 "widget_yahoo_edit.html"
 output += context.process('save-cancel.html');
 output += '\n</form>\n\n\n';
     }
@@ -7739,7 +8957,7 @@ ST.Page.prototype = {
                 asynchronous: false,
                 requestHeaders: ['Accept','text/javascript'],
                 onFailure: (function(req, jsonHeader) {
-                    alert('Could not retrieve the latest revision of the page');
+                    alert(loc('Could not retrieve the latest revision of the page'));
                 }).bind(this)
             }
         );
@@ -7758,7 +8976,7 @@ ST.Page.prototype = {
                 asynchronous: false,
                 requestHeaders: ['Accept','application/json'],
                 onFailure: (function(req, jsonHeader) {
-                    alert('Could not retrieve the latest revision of the page');
+                    alert(loc('Could not retrieve the latest revision of the page'));
                 }).bind(this)
             }
         );
@@ -7871,7 +9089,9 @@ ST.NavBar.prototype = {
     },
 
     clear_search: function(arg) {
-        if( $(this.element.searchField).value.match(/New\s*search/i) ) {
+        var new_search = loc("New search").replace("\s", '\s*');
+        var reg = new RegExp(new_search, 'i');
+        if( $(this.element.searchField).value.match(reg) ) {
             $(this.element.searchField).value = "";
         }
     },
@@ -8065,7 +9285,7 @@ ST.AttachmentQueue.prototype = {
     _queue_file: function () {
         var filenameField = $(this.element.filename);
         if (! filenameField.value) {
-            this._show_error('Plese click "Browse" and select a file to upload.');
+            this._show_error(loc('Plese click "Browse" and select a file to upload.'));
             return false;
         }
 
@@ -8097,18 +9317,18 @@ ST.AttachmentQueue.prototype = {
                 data.queue.push(this._queued_files[i].filename);
             this.jst.list.update(data);
             this.jst.list.show();
-            Element.update(this.element.submitButton, 'Add another file');
-            Element.update(this.element.embedMessage, 'Add links to these attachments at the top of the page? Images will appear in the page.');
-            Element.update(this.element.unpackMessage, 'Expand zip archives and attach individual files to the page?');
-            Element.update(this.element.message, 'Click "Browse" to find the file you want to upload. When you click "Add another file," these files will be added to the list of attachments for this page, and uploaded when you save the page.');
+            Element.update(this.element.submitButton, loc('Add another file'));
+            Element.update(this.element.embedMessage, loc('Add links to these attachments at the top of the page? Images will appear in the page.'));
+            Element.update(this.element.unpackMessage, loc('Expand zip archives and attach individual files to the page?'));
+            Element.update(this.element.message, loc('Click "Browse" to find the file you want to upload. When you click "Add another file," these files will be added to the list of attachments for this page, and uploaded when you save the page.'));
         }
         else {
             this.jst.list.clear();
             this.jst.list.hide();
-            Element.update(this.element.submitButton, 'Add file');
-            Element.update(this.element.embedMessage, 'Add a link to this attachment at the top of the page? Images will appear in the page.');
-            Element.update(this.element.unpackMessage, 'Expand zip archive and attach individual files to the page?');
-            Element.update(this.element.message, 'Click "Browse" to find the file you want to upload. When you click "Add file," this file will be added to the list of attachments for this page, and uploaded when you save the page.');
+            Element.update(this.element.submitButton, loc('Add file'));
+            Element.update(this.element.embedMessage, loc('Add a link to this attachment at the top of the page? Images will appear in the page.'));
+            Element.update(this.element.unpackMessage, loc('Expand zip archive and attach individual files to the page?'));
+            Element.update(this.element.message, loc('Click "Browse" to find the file you want to upload. When you click "Add file," this file will be added to the list of attachments for this page, and uploaded when you save the page.'));
         }
         this._check_for_zip_file();
         return false;
@@ -8363,7 +9583,7 @@ ST.TagQueue.prototype = {
                     suggestions._MODIFIERS = this.socialtextModifiers;
                     this.jst.suggestion.update(suggestions);
                 } else {
-                    var help = '<span class="st-tagqueue-nomatch">No matches</span>';
+                    var help = '<span class="st-tagqueue-nomatch">' + loc("No matches") + '</span>';
                     this.jst.suggestion.set_text(help);
                 }
             }
@@ -8386,7 +9606,7 @@ ST.TagQueue.prototype = {
 
     queue_tag: function (tag) {
         if (! tag) {
-            this._show_error('No tag entered');
+            this._show_error(loc('No tag entered'));
             return false;
         }
         this._queued_tags.push(tag);
@@ -8406,14 +9626,14 @@ ST.TagQueue.prototype = {
                 data.queue.push(this._queued_tags[i]);
             this.jst.list.update(data);
             this.jst.list.show();
-            Element.update(this.element.submitButton, 'Add another tag');
-            Element.update(this.element.message, 'Enter a tag and click "Add another tag". The tag will be saved when you save the page.');
+            Element.update(this.element.submitButton, loc('Add another tag'));
+            Element.update(this.element.message, loc('Enter a tag and click "Add another tag". The tag will be saved when you save the page.'));
         }
         else {
             this.jst.list.clear();
             this.jst.list.hide();
-            Element.update(this.element.submitButton, 'Add tag');
-            Element.update(this.element.message, 'Enter a tag and click "Add tag". The tag will be saved when you save the page.');
+            Element.update(this.element.submitButton, loc('Add tag'));
+            Element.update(this.element.message, loc('Enter a tag and click "Add tag". The tag will be saved when you save the page.'));
         }
         this._hide_error();
         return false;
@@ -8518,24 +9738,41 @@ ST.Watchlist.prototype = {
 
     button_activate: function () {
         if (!this.isBeingWatched) {
+            var text = document.getElementById('st-watchlist-text');
+            if (text) {
+                text.className = 'on';
+            }
             this.image.src = this._image_src('hover');
         }
         return false;
     },
 
     button_default: function () {
+        var text = document.getElementById('st-watchlist-text');
         if (this.isBeingWatched) {
+            if (text) {
+                text.innerHTML = loc("Watching this page");
+                text.className = 'on';
+            }
             this.image.src = this._image_src('on');
         }
         else {
+            if (text) {
+                text.innerHTML = loc("Watch this page");
+                text.className = 'off';
+            }
             this.image.src = this._image_src('off');
         }
         return false;
     },
 
     _image_src: function(type) {
+        var star = '';
+        if (Socialtext.loc_lang != 'en') {
+            star = 'star-';
+        }
         return nlw_make_static_path(
-            '/images/st/pagetools/watch-' + type + '.gif'
+            '/images/st/pagetools/watch-' + star + type + '.gif'
         );
     },
 
@@ -8567,10 +9804,10 @@ ST.Watchlist.prototype = {
 
     _display_toggle_error: function () {
         if (this.isBeingWatched) {
-            alert('Could not remove page from watchlist');
+            alert(loc('Could not remove page from watchlist'));
         }
         else {
-            alert('Could not add page to watchlist');
+            alert(loc('Could not add page to watchlist'));
         }
     },
 
@@ -8583,16 +9820,28 @@ ST.Watchlist.prototype = {
     _loadInterface: function (indicator) {
         this.image = $(indicator);
         if (this.image) {
-            if (this.image.src.match(/watch-on/)) {
-                this.isBeingWatched = true;
+            if (Socialtext.loc_lang != 'en') {
+                if (this.image.src.match(/watch-star-on/)) {
+                    this.isBeingWatched = true;
+                }
+                else {
+                    this.isBeingWatched = false;
+                }
             }
             else {
-                this.isBeingWatched = false;
+                if (this.image.src.match(/watch-on/)) {
+                    this.isBeingWatched = true;
+                }
+                else {
+                    this.isBeingWatched = false;
+                }
             }
 
-            Event.observe(indicator,  'click', this._toggle_watch_state.bind(this));
-            Event.observe(indicator,  'mouseover', this.button_activate.bind(this));
-            Event.observe(indicator,  'mouseout', this.button_default.bind(this));
+            Event.observe(this.image.parentNode,  'click', this._toggle_watch_state.bind(this));
+            Event.observe(this.image.parentNode,  'mouseover', this.button_activate.bind(this));
+            Event.observe(this.image.parentNode,  'mouseout', this.button_default.bind(this));
+
+            this.button_default();
         }
     }
 };
@@ -8739,7 +9988,7 @@ ST.ListView.prototype = {
     
     _getPdf: function () {
         if (!this._atLeastOnePageSelected()) {
-            alert("You must check at least one page in order to create a PDF.");
+            alert(loc("You must check at least one page in order to create a PDF."));
         }
         else {
             $(this.element.submitAction).value = 'pdf_export';
@@ -8750,7 +9999,7 @@ ST.ListView.prototype = {
 
     _getRtf: function () {
         if (!this._atLeastOnePageSelected()) {
-            alert("You must check at least one page in order to create a Word document.");
+            alert(loc("You must check at least one page in order to create a Word document."));
         }
         else {
             $(this.element.submitAction).value = 'rtf_export';
@@ -13087,6 +14336,9 @@ function setup_wikiwyg() {
 
     if ( Wikiwyg.is_safari ) firstMode = WW_ADVANCED_MODE;
 
+    var clearRx = 
+        new RegExp("^" + loc("Replace this text with your own.") + "\\s*$");
+
     // Wikiwyg configuration
     var myConfig = {
         doubleClickToEdit: false,
@@ -13101,7 +14353,7 @@ function setup_wikiwyg() {
             editHeightAdjustment: 1.3
         },
         wikitext: {
-            clearRegex: /^Replace this text with your own.\s*$/,
+            clearRegex: clearRx,
             textareaId: 'st-page-editing-pagebody-decoy'
         },
         preview: {
@@ -13147,7 +14399,7 @@ function setup_wikiwyg() {
     // XXX Surely we could use plain HTML here
     Wikiwyg.Socialtext.loading_bar = document.createElement("div");
     Wikiwyg.Socialtext.loading_bar.innerHTML =
-        '<span style="color: red" id="loading-message">Loading...</span>';
+        '<span style="color: red" id="loading-message">' + loc('Loading...') + '</span>';
     Wikiwyg.Socialtext.loading_bar.style.display = 'none';
     Wikiwyg.Socialtext.edit_bar.parentNode.appendChild(Wikiwyg.Socialtext.loading_bar);
 
@@ -13215,7 +14467,7 @@ function setup_wikiwyg() {
         try {
             if (ww.contentIsModified()) {
                 // If it's not confirmed somewhere else, do it right here.
-                if (ww.confirmed != true && !confirm("If you click 'OK', all edit changes will be lost!"))
+                if (ww.confirmed != true && !confirm(loc("If you click 'OK', all edit changes will be lost!")))
                     return false;
             }
             if (Socialtext.new_page) {
@@ -13267,7 +14519,7 @@ function setup_wikiwyg() {
         wysiwyg_link.style.textDecoration = 'line-through';
         // XXX stopObserving
         wysiwyg_link.onclick = function() {
-            alert("Safari does not support simple mode editing");
+            alert(loc("Safari does not support simple mode editing"));
             return false;
         }
     }
@@ -13293,7 +14545,7 @@ function try_wikiwyg() {
     try {
         setup_wikiwyg();
     } catch(e) {
-        alert('Error: ' + e);
+        alert(loc('Error') + ': ' + e);
     }
 }
 
@@ -13396,8 +14648,8 @@ proto.resizeEditor = function () {
     this.modeByName(WW_ADVANCED_MODE).setHeightOfEditor();
 }
 
-proto.preview_link_text = 'Preview';
-proto.preview_link_more = 'Edit More';
+proto.preview_link_text = loc('Preview');
+proto.preview_link_more = loc('Edit More');
 
 proto.preview_link_action = function() {
     var preview = this.modeButtonMap[WW_PREVIEW_MODE];
@@ -13551,14 +14803,15 @@ proto.newpage_display_duplicate_dialog = function(page_name) {
 proto.newpage_save = function(page_name, pagename_editfield) {
     var saved = false;
     page_name = trim(page_name);
+
     if (page_name.length == 0) {
-        alert('You must specify a page name');
+        alert(loc('You must specify a page name'));
         if (pagename_editfield) {
             pagename_editfield.focus();
         }
     }
     else if (is_reserved_pagename(page_name)) {
-        alert('"' + page_name + '" is a reserved page name. Please use a different name');
+        alert(loc('"[_1]" is a reserved page name. Please use a different name', page_name));
         if (pagename_editfield) {
             pagename_editfield.focus();
         }
@@ -13580,7 +14833,7 @@ proto.newpage_save = function(page_name, pagename_editfield) {
 proto.saveContent = function() {
     Wikiwyg.Socialtext.edit_bar.style.display = 'none';
     Wikiwyg.Socialtext.loading_bar.innerHTML =
-        '<span style="color: red" id="saving-message">Saving...</span>';
+        '<span style="color: red" id="saving-message">' + loc('Saving...') + '</span>';
     Wikiwyg.Socialtext.loading_bar.style.display = 'block';
     this.saveChanges();
 }
@@ -13613,7 +14866,7 @@ proto.newpage_duplicate_ok = function() {
         }
     }
     if (!option) {
-        alert('You must select one of the options or click cancel');
+        alert(loc('You must select one of the options or click cancel'));
         return;
     }
     switch(option) {
@@ -13698,6 +14951,14 @@ proto.saveNewPage = function() {
             return this.newpage_saveClicked();
         }
         else  {
+
+            if (encodeURI(new_page_name.value).length > 255) {
+                alert(loc('Page title is too long after URL encoding'));
+                if (pagename_editfield) {
+                    pagename_editfield.focus();
+                }
+            }
+
             edit_page_name.value = new_page_name.value;
             this.saveContent();
         }
@@ -13813,7 +15074,7 @@ proto.saveChanges = function() {
 
 proto.confirmLinkFromEdit = function() {
     if (wikiwyg.contentIsModified()) {
-        var response = confirm("You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to stay on the current page.");
+        var response = confirm(loc("You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to stay on the current page."));
 
         // wikiwyg.confirmed is for the situations when multiple confirmations
         // are considered. It store the value of this confirmation for
@@ -13836,8 +15097,8 @@ proto.enableLinkConfirmations = function() {
     window.onunload = function() {
         if (wikiwyg.contentIsModified()) {
             var the_question = [
-                "You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes and stay on the current page.",
-                "You have unsaved changes. Do you want to save those changes? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes before navigating away from this page."
+                loc("You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes and stay on the current page."),
+                loc("You have unsaved changes. Do you want to save those changes? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes before navigating away from this page.")
             ];
             if (!confirm(the_question[Wikiwyg.is_safari ? 1 : 0])) {
                 wikiwyg.lastChance = true;
@@ -13958,11 +15219,11 @@ proto.enableFinished = function() {
 }
 
 var WW_ERROR_TABLE_SPEC_BAD =
-    "That doesn't appear to be a valid number.";
+    loc("That doesn't appear to be a valid number.");
 var WW_ERROR_TABLE_SPEC_TOO_BIG =
-    "That seems like a bit too large for a table.";
+    loc("That seems like a bit too large for a table.");
 var WW_ERROR_TABLE_SPEC_HAS_ZERO =
-    "Can't have a 0 for a size.";
+    loc("Can't have a 0 for a size.");
 proto.parse_input_as_table_spec = function(input) {
     var match = input.match(/^\s*(\d+)(?:\s*x\s*(\d+))?\s*$/i);
     if (match == null)
@@ -13981,9 +15242,18 @@ proto.parse_input_as_table_spec = function(input) {
 proto.prompt_for_table_dimensions = function() {
     var rows, columns;
     var errorText = '';
+    var promptTextMessageForRows = loc('Please enter the number of table rows:');
+    var promptTextMessageForColumns = loc('Please enter the number of table columns:');
+    
     while (!(rows && columns)) {
-        var promptText = 'Please enter the number of table ' +
-            (rows ? 'columns' : 'rows') + ':';
+        var promptText;
+
+        if(rows) {
+           promptText = promptTextMessageForColumns;
+        } else {
+           promptText = promptTextMessageForRows;
+        }
+
         if (errorText)
             promptText = errorText + "\n" + promptText;
         var answer = prompt(promptText, '3');
@@ -14018,15 +15288,66 @@ proto.controlLayout = [
 ];
 
 proto.controlLabels = {
-    www: 'External Link',
-    attach: 'Link to Attachment',
-    image: 'Include an Image',
-    unlink: 'Unlink'
+    attach: loc('Link to Attachment'),
+    bold: loc('Bold') + ' (Ctrl+b)',
+    cancel: loc('Cancel'),
+    h1: loc('Heading 1'),
+    h2: loc('Heading 2'),
+    h3: loc('Heading 3'),
+    h4: loc('Heading 4'),
+    h5: loc('Heading 5'),
+    h6: loc('Heading 6'),
+    help: loc('About Wikiwyg'),
+    hr: loc('Horizontal Rule'),
+    image: loc('Include an Image'),
+    indent: loc('More Indented'),
+    italic: loc('Italic') + '(Ctrl+i)',
+    label: loc('[Style]'),
+    link: loc('Create Link'),
+    ordered: loc('Numbered List'),
+    outdent: loc('Less Indented'),
+    p: loc('Normal Text'),
+    pre: loc('Preformatted'),
+    save: loc('Save'),
+    strike: loc('Strike Through') + '(Ctrl+d)',
+    table: loc('Create Table'),
+    underline: loc('Underline') + '(Ctrl+u)',
+    unlink: loc('Unlink'),
+    unordered: loc('Bulleted List'),
+    www: loc('External Link')
 };
 
 proto.resetModeSelector = function() {
     this.wikiwyg.disable_button(this.wikiwyg.first_mode.classname);
 }
+
+proto.add_styles = function() {
+    var options = this.config.styleSelector;
+    var labels = this.config.controlLabels;
+
+    this.styleSelect = document.createElement('select');
+    this.styleSelect.className = 'wikiwyg_selector';
+    if (this.config.selectorWidth)
+        this.styleSelect.style.width = this.config.selectorWidth;
+
+    for (var i = 0; i < options.length; i++) {
+        value = options[i];
+        var option = Wikiwyg.createElementWithAttrs(
+            'option', { 'value': value }
+        );
+        var labelValue = labels[value] || value;
+        var labelValue = labelValue.replace(/\\'/g, "'"); 
+        var text = loc(labelValue);
+        option.appendChild(document.createTextNode(text));
+        this.styleSelect.appendChild(option);
+    }
+    var self = this;
+    this.styleSelect.onchange = function() { 
+        self.set_style(this.value) 
+    };
+    this.div.appendChild(this.styleSelect);
+}
+
 
 /*==============================================================================
 Socialtext Wysiwyg subclass.
@@ -14041,18 +15362,14 @@ proto.fromHtml = function(html) {
 proto.show_messages = function(html) {
     var advanced_link = this.advanced_link_html();
     var message_titles = {
-        wiki:  'Advanced Content in Grey Border',
-        table: 'Table Edit Tip',
-        both:  'Table & Advanced Editing'
+        wiki:  loc('Advanced Content in Grey Border'),
+        table: loc('Table Edit Tip'),
+        both:  loc('Table & Advanced Editing')
     };
     var message_bodies = {
         wiki:
-            'Advanced content is shown inside a grey border. Switch to ' +
-            advanced_link +
-            ' to edit areas inside a grey border.',
-        table: 'Use ' +
-            advanced_link +
-            ' to change the number of rows and columns in a table.',
+            loc('Advanced content is shown inside a grey border. Switch to [_1] to edit areas inside a grey border.',advanced_link),
+        table: loc('Use [_1] to change the number of rows and columns in a table.', advanced_link),
         both: ''
     };
     message_bodies.both = message_bodies.table + ' ' + message_bodies.wiki;
@@ -14074,23 +15391,22 @@ proto.show_messages = function(html) {
 }
 
 proto.do_attach = function() {
-    this.wikiwyg.message.display(this.use_advanced_mode_message('Attachments'));
+    this.wikiwyg.message.display(this.use_advanced_mode_message(loc('Attachments')));
 }
 
 proto.do_image = function() {
-    this.wikiwyg.message.display(this.use_advanced_mode_message('Images'));
+    this.wikiwyg.message.display(this.use_advanced_mode_message(loc('Images')));
 }
 
 proto.use_advanced_mode_message = function(subject) {
     return {
-        title: 'Use Advanced Mode for ' + subject,
-        body: 'Switch to ' + this.advanced_link_html() +
-              ' to use this feature.'
+        title: loc('Use Advanced Mode for [_1]', subject),
+        body: loc('Switch to [_1] to use this feature.',  this.advanced_link_html()) 
     }
 }
 
 proto.advanced_link_html = function() {
-    return '<a onclick="wikiwyg.wikitext_link.onclick(); return false" href="#">Advanced Mode</a>';
+    return '<a onclick="wikiwyg.wikitext_link.onclick(); return false" href="#">' + loc('Advanced Mode') + '</a>';
 }
 
 proto.make_table_html = function(rows, columns) {
@@ -14114,7 +15430,7 @@ proto.do_table = function() {
 proto.do_www = function() {
     var selection = this.get_link_selection_text();
     if (! selection) return;
-    var url = prompt('Enter your destination url here:', 'http://');
+    var url = prompt(loc('Enter your destination url here:'), 'http://');
     if (url == null) return;
     this.exec_command('createlink', url);
 }
@@ -14125,6 +15441,16 @@ proto.setHeightOf = function (iframe) {
 
 proto.socialtext_wikiwyg_image = function(image_name) {
     return this.wikiwyg.config.toolbar.imagesLocation + image_name;
+}
+
+
+proto.get_link_selection_text = function() {
+    var selection = this.get_selection_text();
+    if (! selection) {
+        alert(loc("Please select the text you would like to turn into a link."));
+        return;
+    }
+    return selection;
 }
 
 /*==============================================================================
@@ -14688,7 +16014,7 @@ proto.installControls = function () {
 
 // BEGIN Widgets.js
 Wikiwyg.Widgets =
-{"widgets":["link1","link2","image","file","toc","include","section","recent_changes","tag","tag_list","weblog","weblog_list","fetchrss","fetchatom","search","googlesoap","technorati","aim","yahoo","skype","user","date","asis","asap","new_form_page"],"fields":{"search_term":"Search term","image_name":"Image name","tag_name":"Tag name","form_name":"Form name","weblog_name":"Weblog name","date_string":"YYYY-MM-DD&nbsp;HH:MM:SS","section_name":"Section name","file_name":"File name","user_email":"User's email","form_text":"Link text","page_title":"Page title","workspace_id":"Workspace","skype_id":"Skype name","relative_url":"Relative URL","atom_url":"Atom feed URL","rss_url":"RSS feed URL","asis_content":"Unformatted content","yahoo_id":"Yahoo! ID","aim_id":"AIM screen name","label":"Link text","asap_id":"Convoq name"},"api_for_title":{"workspace_id":"/data/workspaces/:workspace_id"},"synonyms":{"callme":"skype","category":"tag","ymsgr":"yahoo","callto":"skype","category_list":"tag_list"},"match":{"date_string":"^(\\d{4}-\\d{2}-\\d{2}\\s+\\d{2}:\\d{2}:\\d{2}.*)$","user_email":"^([a-zA-Z0-9_\\+\\.\\-\\&\\!\\%\\+\\$\\*\\^\\']+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9:]{2,4})+)$","workspace_id":"^[a-z0-9_\\-]+$","skype_id":"^(\\S+)$","aim_id":"^(\\S+)$","yahoo_id":"^(\\S+)$","asap_id":"^(\\S+)$"},"regexps":{"workspace-value":"^(?:(\\S+);)?\\s*(.*?)?\\s*$","three-part-link":"^(\\S*)?\\s*\\[([^\\]]*)\\]\\s*(.*?)?\\s*$"},"widget":{"asap":{"more_desc":"There are no optional properties for a Convoq Link.","uneditable":true,"on_menu":false,"color":"cyan4","pattern":"asap:%asap_id","required":["asap_id"],"desc":"Display a link to a Convoq name. Clicking the link will start a Convoq call with the person if your Convoq client is properly configured. Use this form to edit the properties of the Convoq link.","markup":["bound_phrase","asap:",""],"label":"Convoq Link","title":"Call '$asap_id' using Convoq. Click to edit.","image_text":[{"text":"Convoq: %asap_id","field":"default"}],"field":"asap_id"},"search":{"more_desc":"Optional properties include the name of the workspace to search, whether to search in the page title, text or tags, and whether to display full results or just page titles.","input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","search_term"],"regexp":"^(?:<(\\S+)>)?\\s*(.*?)?\\s*$"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"full":"off","pdfields":["workspace_id"],"pattern":"{search: <%workspace_id> %search_term}","color":"gold4","required":["search_term"],"fields":["search_term","workspace_id"],"desc":"Display the search results for the given phrase within a workspace. Use this form to edit the properties for the search.","title":{"default":"Search for '$search_term'. Click to edit.","full":"Display result for searching '$search_term'. Click to edit."},"label":"Search Results","labels":{"seach_term":"Search for","workspace_id":"In"},"image_text":[{"text":"search: %search_term","field":"default"}]},"recent_changes":{"more_desc":"Optionally, specify that the page contents should be displayed.","input":{"workspace_id":"radio"},"parse":{"regexp":"^\\s*(.*?)?\\s*$"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"full":"off","pattern":"{recent_changes: %workspace_id}","color":"gold","fields":["workspace_id"],"desc":"Display a list of pages recently changed in a workspace. By default only the page titles are displayed. Use this form to edit the list properties.","title":{"default":"What's new in the '$workspace_id' workspace. Click to edit.","full":"Display what's new in the '$workspace_id' workspace. Click to edit."},"label":"What's New","labels":{"workspace_id":"Workspace"},"image_text":[{"text":"recent changes: %workspace_id","field":"workspace_id"},{"text":"recent changes","field":"default"}]},"https":{"uneditable":true,"color":"darkorange","title":"HTTP relative link. Edit in Advanced mode."},"tag_list":{"more_desc":"Optional properties include specifying which workspace to use and whether to display page titles or whole pages.","input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","tag_name"],"regexp":"^(?:<(\\S+)>)?\\s*(.*?)?\\s*$"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"full":"off","pdfields":["workspace_id"],"pattern":"{tag_list: <%workspace_id> %tag_name}","color":"darkviolet","fields":["tag_name","workspace_id"],"required":["tag_name"],"desc":"Display a list of the most recently changed pages in a workspace that have a specific tag. By default only the page title is displayed. Use this form to edit the list properties.","title":{"default":"Pages with the '$tag_name' tag. Click to edit.","full":"Display pages with the '$tag_name' tag. Click to edit."},"label":"Tag List","labels":{"workspace_id":"Pages in"},"image_text":[{"text":"tag list: %tag_name","field":"default"}]},"date":{"more_desc":"There are no optional properties for a date display.","color":"royalblue","pattern":"{date: %date_string}","desc":"Display the given date and time in the individually-set time zone for each reader. Use this form to edit the date and time to be displayed","label":"Date in Local Time","title":"Display '$date_string' in reader's time zone. Click to edit.","image_text":[{"text":"date: %date_string","field":"default"}],"field":"date_string"},"file":{"more_desc":"Optional properties include specifying a different page for the attachment, and link text.","checks":["require_page_if_workspace"],"input":{"workspace_id":"radio","page_title":"radio"},"parse":{"fields":["workspace_id","page_title","file_name"],"regexp":"?three-part-link","no_match":"file_name"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"pdfields":["workspace_id","page_title","label"],"pattern":"\"%label\"{file: %workspace_id [%page_title] %file_name}","color":"brown","fields":["file_name","workspace_id","page_title","label"],"required":["file_name"],"desc":"Display a link to a file attached to a page. Use this form to edit the properities of the link.","title":"Link to file '$file_name'. Click to edit.","label":"Attachment Link","labels":{"workspace_id":"Page in","file_name":"Attachment filename","page_title":"File attached to"},"image_text":[{"text":"file: %label","field":"label"},{"text":"file: %file_name","field":"default"}]},"include":{"more_desc":"There are no optional properties for page include.","checks":["require_page_if_workspace"],"input":{"workspace_id":"radio"},"parse":{"regexp":"^(\\S*)?\\s*\\[([^\\]]*)\\]\\s*$"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"pdfields":[],"pattern":"{include: %workspace_id [%page_title]}","color":"darkblue","fields":["workspace_id","page_title"],"required":["page_title"],"desc":"Display the contents of another page within the current page. Use this form to edit the properties for the page include.","title":"Include the page '$page_title'. Click to edit.","label":"Page Include","labels":{"workspace_id":"Other page in"},"image_text":[{"text":"include: %page_title","field":"default"}]},"section":{"more_desc":"There are no optional properties for a section marker.","color":"darkred","pattern":"{section: %section_name}","desc":"Add a section marker at the current cursor location. You can link to a section marker using a \"Section Link\". Use this form to edit the properties for the section marker.","label":"Section Marker","title":"Section marker '$section_name'. Click to edit.","image_text":[{"text":"section: %section_name","field":"default"}],"field":"section_name"},"weblog_list":{"more_desc":"Optional parameters include specifying which workspace to use and whether to display page titles or whole pages.","input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","weblog_name"],"regexp":"^(?:<(\\S+)>)?\\s*(.*?)?\\s*$"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"full":"off","pdfields":["workspace_id"],"pattern":"{weblog_list: <%workspace_id> %weblog_name}","color":"forestgreen","fields":["workspace_id","weblog_name"],"required":["weblog_name"],"desc":"Display a list of the most recent entries from a weblog in a workspace. By default only the weblog entry names are displayed. Use this form to edit the list properties.","title":{"default":"Include the weblog '$weblog_name'. Click to edit.","full":"Display the weblog '$weblog_name'. Click to edit."},"label":"Weblog List","labels":{"workspace_id":"in"},"image_text":[{"text":"weblog list: %weblog_name","field":"default"}]},"ftp":{"uneditable":true,"color":"darkorange","title":"FTP link. Edit in Advanced mode."},"http":{"uneditable":true,"color":"darkorange","title":"Relative HTTP link. Edit in Advanced mode."},"html":{"uneditable":true,"color":"indianred","title":"Raw HTML section. Edit in advanced mode."},"irc":{"uneditable":true,"color":"darkorange","title":"IRC link. Edit in Advanced mode."},"technorati":{"more_desc":"There are no optional properties for a Technorati search.","pattern":"{technorati: %search_term}","color":"darkmagenta","desc":"Display the results for a Technorati search. Use this form to edit the properties for the search.","title":"Search Technorati for '$search_term'. Click to edit.","label":"Technorati Search","image_text":[{"text":"Technorati: %search_term","field":"default"}],"labels":{"search_term":"Search for"},"field":"search_term"},"unknown":{"uneditable":true,"color":"darkslategrey","title":"Unknown widget '$unknown_id'. Edit in advanced mode."},"toc":{"more_desc":"Optionally, specify which page's headers and sections to use for the table of contents.","checks":["require_page_if_workspace"],"input":{"workspace_id":"radio","page_title":"radio"},"parse":{"regexp":"^(\\S*)?\\s*\\[([^\\]]*)\\]\\s*$","no_match":"workspace_id"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"pdfields":["workspace_id","page_title"],"pattern":"{toc: %workspace_id [%page_title]}","color":"darkseagreen","fields":["workspace_id","page_title"],"desc":"Display a table of contents for a page. Each header or section on the page is listed as a link in the table of contents. Click \"Save\" now, or click \"More options\" to edit the properties for the table of contents.","title":"Table of contents for '$page_title'. Click to edit.","label":"Table of Contents","labels":{"workspace_id":"Page in","page_title":"Headers and<br/>sections in"},"image_text":[{"text":"toc: %page_title","field":"page_title"},{"text":"toc","field":"default"}]},"user":{"more_desc":"There are no optional properties for a user name.","color":"darkgoldenrod","pattern":"{user: %user_email}","required":["user_email"],"desc":"Display the full name for the given email address or user name. Use this form to edit the properties of the user name.","label":"User Name","title":"Show full name for '$user_email'. Click to edit.","image_text":[{"text":"user: %user_email","field":"default"}],"field":"user_email"},"tag":{"more_desc":"Optional properties include link text, and the name of a different workspace for the tags.","input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","tag_name"],"regexp":"?workspace-value","no_match":"tag_name"},"title_and_id":{"workspace_id":{"id":null,"title":null}},"pdfields":["label","workspace_id"],"pattern":"\"%label\"{tag: %workspace_id; %tag_name}","color":"green","fields":["tag_name","label","workspace_id"],"required":["tag_name"],"desc":"Display a link to a list of pages with a specific tag. Use this form to edit the properties of the link.","title":"Link to tag '$tag_name'. Click to edit.","label":"Tag Link","labels":{"workspace_id":"Search"},"image_text":[{"text":"tag: %label","field":"label"},{"text":"tag: %tag_name","field":"tag_name"}]},"yahoo":{"more_desc":"There are no optional properties for a Yahoo! link.","pattern":"yahoo:%yahoo_id","required":["yahoo_id"],"desc":"Display a link to a Yahoo! instant message ID. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.","markup":["bound_phrase","yahoo:",""],"label":"Yahoo! IM Link","title":"Instant message to '$yahoo_id' using Yahoo! Click to edit.","image_text":[{"text":"Yahoo! IM: %yahoo_id","field":"default"}],"field":"yahoo_id"},"link2":{"checks":["require_page_if_workspace"],"input":{"workspace_id":"radio","page_title":"radio"},"parse":{"fields":["workspace_id","page_title","section_name"],"regexp":"?three-part-link","no_match":"section_name"},"primary_field":"section_name","pdfields":["label","workspace_id","page_title"],"color":"blue","required":["section_name"],"select_if":{"blank":["workspace_id"]},"desc":"Use this form to edit the properties of the link to a page section.","labels":{"workspace_id":"Workspace"},"image_text":[{"text":"link: %label","field":"label"},{"text":"link: %page_title (%section_name )","field":"page_title"},{"text":"link: %section_name","field":"default"}],"more_desc":"Optional properties include the text to display for the link, and the title of a different page.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{link: %workspace_id [%page_title] %section_name}","fields":["section_name","label","workspace_id","page_title"],"label":"Link to a Section","title":"Link to '$section_name' in '$page_title'. Click to edit."},"googlesoap":{"color":"saddlebrown","desc":"Display the results from a Google search. Use this form to edit the properties for the search.","image_text":[{"text":"Google: %search_term","field":"default"}],"labels":{"search_term":"Search for"},"field":"search_term","more_desc":"There are no optional properties for an Google search.","pattern":"{googlesoap: %search_term}","title":"Search Google for '$search_term'. Click to edit.","label":"Google Search"},"link1":{"checks":["require_page_if_workspace"],"parse":{"fields":["workspace_id","page_title","section_name"],"regexp":"?three-part-link","no_match":"section_name"},"primary_field":"workspace_id","pdfields":["label","section_name"],"color":"blue","required":["page_title","workspace_id"],"select_if":{"defined":["workspace_id"]},"desc":"Use this form to edit the properties of the link.","labels":{"workspace_id":"Other workspace"},"image_text":[{"text":"link: %label","field":"label"},{"text":"link: %page_title","field":"default"}],"more_desc":"Optional properties include the text to display for the link, and a target section within the linked page.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{link: %workspace_id [%page_title] %section_name}","fields":["workspace_id","page_title","label","section_name"],"label":"Inter-workspace link","title":"Link to '$page_title'. Click to edit."},"new_form_page":{"parse":{"regexp":"^\\s*(\\S+)\\s+(.+)\\s*$"},"on_menu":false,"color":"maroon","required":["form_name","form_text"],"desc":"Select a form and generates a new form page.","image_text":[{"text":"form: %form_name","field":"default"}],"more_desc":"There are no optional properties for a new form page.","pattern":"{new_form_page: %form_name %form_text}","fields":["form_name","form_text"],"title":"Use $form_name to generate a form. Click to edit.","label":"New Form Page"},"weblog":{"input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","weblog_name"],"regexp":"?workspace-value","no_match":"weblog_name"},"pdfields":["label","workspace_id"],"color":"purple","required":["weblog_name"],"desc":"Display a link to a weblog. Use this form to edit the properties of the link.","labels":{"workspace_id":"Weblog on"},"image_text":[{"text":"weblog: %label","field":"label"},{"text":"weblog: %weblog_name","field":"default"}],"more_desc":"Optional properties include link text, and the name of a different workspace for the weblog.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{weblog: %workspace_id; %weblog_name}","fields":["label","weblog_name","workspace_id"],"title":"Link to weblog '$weblog_name'. Click to edit.","label":"Weblog Link"},"fetchatom":{"color":"darkgreen","desc":"Display the content of an Atom feed. Use this form to edit the properties of the inline Atom feed.","image_text":[{"text":"feed: %atom_url","field":"default"}],"field":"atom_url","more_desc":"There are no optional properties for an Atom feed.","pattern":"{fetchatom: %atom_url}","label":"Inline Atom","title":"Include the '$atom_url' Atom feed. Click to edit."},"fetchrss":{"color":"orange","desc":"Display the content of an RSS feed. Use this form to edit the properties of the inline RSS feed.","image_text":[{"text":"feed: %rss_url","field":"default"}],"field":"rss_url","more_desc":"There are no optional properties for an RSS feed.","pattern":"{fetchrss: %rss_url}","label":"Inline RSS","title":"Include the '$rss_url' RSS feed. Click to edit."},"aim":{"required":["aim_id"],"desc":"Display a link to an AIM screen name. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.","markup":["bound_phrase","aim:",""],"image_text":[{"text":"AIM: %aim_id","field":"default"}],"field":"aim_id","more_desc":"There are no optional properties for an AIM link.","pattern":"aim:%aim_id","label":"AIM Link","title":"Instant message to '$aim_id' using AIM. Click to edit."},"image":{"checks":["require_page_if_workspace"],"input":{"workspace_id":"radio","page_title":"radio"},"parse":{"fields":["workspace_id","page_title","image_name"],"regexp":"?three-part-link","no_match":"image_name"},"pdfields":["workspace_id","page_title","label"],"color":"red","required":["image_name"],"desc":"Display an image on this page. The image must be already uploaded as an attachment to this page or another page. Use this form to edit the properties of the displayed image.","labels":{"workspace_id":"Page in","image_name":"Attachment filename","page_title":"Attached to"},"image_text":[{"text":"image: %label","field":"label"},{"text":"image: %image_name","field":"default"}],"more_desc":"Optional properties include the title of another page to which the image is attached, and link text. If link text is specified then a link to the image is displayed instead of the image.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{image: %workspace_id [%page_title] %image_name}","fields":["image_name","workspace_id","page_title","label"],"title":"Display image '$image_name'. Click to edit.","label":"Attached Image"},"skype":{"required":["skype_id"],"desc":"Display a link to a Skype name. Clicking the link will start a Skype call with the person if your Skype client is properly configured. Use this form to edit the properties of the link.","markup":["bound_phrase","skype:",""],"image_text":[{"text":"Skype: %skype_id","field":"default"}],"field":"skype_id","more_desc":"There are no optional properties for a Skype link.","pattern":"skype:%skype_id","label":"Skype Link","title":"Call '$skype_id' using Skype. Click to edit."},"sharepoint":{"color":"red","uneditable":true,"title":"Sharepoint link. Edit in advanced mode."},"asis":{"color":"darkslateblue","required":["asis_content"],"desc":"Include unformatted text in the page. This text will not be treated as wiki text. Use this form to edit the text.","markup":["bound_phrase","{{","}}"],"image_text":[{"text":"unformatted: %asis_content","field":"default"}],"field":"asis_content","more_desc":"There are no optional properties for unformatted text.","pattern":"{{%asis_content}}","label":"Unformatted","title":"Unformatted Content"}}};
+{"widgets":["link1","link2","image","file","toc","include","section","recent_changes","tag","tag_list","weblog","weblog_list","fetchrss","fetchatom","search","googlesoap","technorati","aim","yahoo","skype","user","date","asis","asap","new_form_page"],"fields":{"search_term":"Search term","image_name":"Image name","tag_name":"Tag name","form_name":"Form name","weblog_name":"Weblog name","date_string":"YYYY-MM-DD&nbsp;HH:MM:SS","section_name":"Section name","file_name":"File name","user_email":"User\\'s email","form_text":"Link text","page_title":"Page title","workspace_id":"Workspace","skype_id":"Skype name","relative_url":"Relative URL","atom_url":"Atom feed URL","rss_url":"RSS feed URL","asis_content":"Unformatted content","yahoo_id":"Yahoo! ID","aim_id":"AIM screen name","label":"Link text","asap_id":"Convoq name"},"api_for_title":{"workspace_id":"/data/workspaces/:workspace_id"},"synonyms":{"callme":"skype","category":"tag","ymsgr":"yahoo","callto":"skype","category_list":"tag_list"},"match":{"date_string":"^(\\d{4}-\\d{2}-\\d{2}\\s+\\d{2}:\\d{2}:\\d{2}.*)$","user_email":"^([a-zA-Z0-9_\\+\\.\\-\\&\\!\\%\\+\\$\\*\\^\\']+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9:]{2,4})+)$","workspace_id":"^[a-z0-9_\\-]+$","skype_id":"^(\\S+)$","aim_id":"^(\\S+)$","yahoo_id":"^(\\S+)$","asap_id":"^(\\S+)$"},"regexps":{"workspace-value":"^(?:(\\S+);)?\\s*(.*?)?\\s*$","three-part-link":"^(\\S*)?\\s*\\[([^\\]]*)\\]\\s*(.*?)?\\s*$"},"widget":{"asap":{"more_desc":"There are no optional properties for a Convoq Link.","uneditable":true,"on_menu":false,"color":"cyan4","pattern":"asap:%asap_id","required":["asap_id"],"desc":"Display a link to a Convoq name. Clicking the link will start a Convoq call with the person if your Convoq client is properly configured. Use this form to edit the properties of the Convoq link.","markup":["bound_phrase","asap:",""],"title":"Call '$asap_id' using Convoq. Click to edit.","id":"asap","label":"Convoq Link","image_text":[{"text":"Convoq: %asap_id","field":"default"}],"field":"asap_id"},"search":{"input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","search_term"],"regexp":"^(?:<(\\S+)>)?\\s*(.*?)?\\s*$"},"pdfields":["workspace_id"],"color":"gold4","required":["search_term"],"desc":"Display the search results for the given phrase within a workspace. Use this form to edit the properties for the search.","id":"search","labels":{"seach_term":"Search for","workspace_id":"In"},"image_text":[{"text":"search: %search_term","field":"default"}],"more_desc":"Optional properties include the name of the workspace to search, whether to search in the page title, text or tags, and whether to display full results or just page titles.","title_and_id":{"workspace_id":{"id":null,"title":null}},"full":"off","pattern":"{search: <%workspace_id> %search_term}","fields":["search_term","workspace_id"],"title":{"default":"Search for '$search_term'. Click to edit.","full":"Display result for searching '$search_term'. Click to edit."},"label":"Search Results"},"recent_changes":{"input":{"workspace_id":"radio"},"parse":{"regexp":"^\\s*(.*?)?\\s*$"},"color":"gold","desc":"Display a list of pages recently changed in a workspace. By default only the page titles are displayed. Use this form to edit the list properties.","id":"recent_changes","labels":{"workspace_id":"Workspace"},"image_text":[{"text":"recent changes: %workspace_id","field":"workspace_id"},{"text":"recent changes","field":"default"}],"more_desc":"Optionally, specify that the page contents should be displayed.","title_and_id":{"workspace_id":{"id":null,"title":null}},"full":"off","pattern":"{recent_changes: %workspace_id}","fields":["workspace_id"],"title":{"default":"What's new in the '$workspace_id' workspace. Click to edit.","full":"Display what's new in the '$workspace_id' workspace. Click to edit."},"label":"What\\'s New"},"https":{"color":"darkorange","id":"https","uneditable":true,"title":"HTTP relative link. Edit in Advanced mode."},"tag_list":{"input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","tag_name"],"regexp":"^(?:<(\\S+)>)?\\s*(.*?)?\\s*$"},"pdfields":["workspace_id"],"color":"darkviolet","required":["tag_name"],"desc":"Display a list of the most recently changed pages in a workspace that have a specific tag. By default only the page title is displayed. Use this form to edit the list properties.","id":"tag_list","labels":{"workspace_id":"Pages in"},"image_text":[{"text":"tag list: %tag_name","field":"default"}],"more_desc":"Optional properties include specifying which workspace to use and whether to display page titles or whole pages.","title_and_id":{"workspace_id":{"id":null,"title":null}},"full":"off","pattern":"{tag_list: <%workspace_id> %tag_name}","fields":["tag_name","workspace_id"],"label":"Tag List","title":{"default":"Pages with the '$tag_name' tag. Click to edit.","full":"Display pages with the '$tag_name' tag. Click to edit."}},"date":{"color":"royalblue","desc":"Display the given date and time in the individually-set time zone for each reader. Use this form to edit the date and time to be displayed","id":"date","image_text":[{"text":"date: %date_string","field":"default"}],"field":"date_string","more_desc":"There are no optional properties for a date display.","pattern":"{date: %date_string}","label":"Date in Local Time","title":"Display '$date_string' in reader's time zone. Click to edit."},"file":{"checks":["require_page_if_workspace"],"input":{"workspace_id":"radio","page_title":"radio"},"parse":{"fields":["workspace_id","page_title","file_name"],"regexp":"?three-part-link","no_match":"file_name"},"pdfields":["workspace_id","page_title","label"],"color":"brown","required":["file_name"],"desc":"Display a link to a file attached to a page. Use this form to edit the properities of the link.","id":"file","labels":{"workspace_id":"Page in","file_name":"Attachment filename","page_title":"File attached to"},"image_text":[{"text":"file: %label","field":"label"},{"text":"file: %file_name","field":"default"}],"more_desc":"Optional properties include specifying a different page for the attachment, and link text.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{file: %workspace_id [%page_title] %file_name}","fields":["file_name","workspace_id","page_title","label"],"label":"Attachment Link","title":"Link to file '$file_name'. Click to edit."},"include":{"checks":["require_page_if_workspace"],"input":{"workspace_id":"radio"},"parse":{"regexp":"^(\\S*)?\\s*\\[([^\\]]*)\\]\\s*$"},"pdfields":[],"color":"darkblue","required":["page_title"],"desc":"Display the contents of another page within the current page. Use this form to edit the properties for the page include.","id":"include","labels":{"workspace_id":"Other page in"},"image_text":[{"text":"include: %page_title","field":"default"}],"more_desc":"There are no optional properties for page include.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"{include: %workspace_id [%page_title]}","fields":["workspace_id","page_title"],"label":"Page Include","title":"Include the page '$page_title'. Click to edit."},"section":{"color":"darkred","desc":"Add a section marker at the current cursor location. You can link to a section marker using a \"Section Link\". Use this form to edit the properties for the section marker.","id":"section","image_text":[{"text":"section: %section_name","field":"default"}],"field":"section_name","more_desc":"There are no optional properties for a section marker.","pattern":"{section: %section_name}","label":"Section Marker","title":"Section marker '$section_name'. Click to edit."},"weblog_list":{"input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","weblog_name"],"regexp":"^(?:<(\\S+)>)?\\s*(.*?)?\\s*$"},"pdfields":["workspace_id"],"color":"forestgreen","required":["weblog_name"],"desc":"Display a list of the most recent entries from a weblog in a workspace. By default only the weblog entry names are displayed. Use this form to edit the list properties.","id":"weblog_list","labels":{"workspace_id":"in"},"image_text":[{"text":"weblog list: %weblog_name","field":"default"}],"more_desc":"Optional parameters include specifying which workspace to use and whether to display page titles or whole pages.","title_and_id":{"workspace_id":{"id":null,"title":null}},"full":"off","pattern":"{weblog_list: <%workspace_id> %weblog_name}","fields":["workspace_id","weblog_name"],"label":"Weblog List","title":{"default":"Include the weblog '$weblog_name'. Click to edit.","full":"Display the weblog '$weblog_name'. Click to edit."}},"ftp":{"color":"darkorange","id":"ftp","uneditable":true,"title":"FTP link. Edit in Advanced mode."},"http":{"color":"darkorange","id":"http","uneditable":true,"title":"Relative HTTP link. Edit in Advanced mode."},"html":{"color":"indianred","id":"html","uneditable":true,"title":"Raw HTML section. Edit in advanced mode."},"irc":{"color":"darkorange","id":"irc","uneditable":true,"title":"IRC link. Edit in Advanced mode."},"technorati":{"color":"darkmagenta","desc":"Display the results for a Technorati search. Use this form to edit the properties for the search.","id":"technorati","image_text":[{"text":"Technorati: %search_term","field":"default"}],"labels":{"search_term":"Search for"},"field":"search_term","more_desc":"There are no optional properties for a Technorati search.","pattern":"{technorati: %search_term}","title":"Search Technorati for '$search_term'. Click to edit.","label":"Technorati Search"},"unknown":{"color":"darkslategrey","id":"unknown","uneditable":true,"title":"Unknown widget '$unknown_id'. Edit in advanced mode."},"toc":{"checks":["require_page_if_workspace"],"input":{"workspace_id":"radio","page_title":"radio"},"parse":{"regexp":"^(\\S*)?\\s*\\[([^\\]]*)\\]\\s*$","no_match":"workspace_id"},"pdfields":["workspace_id","page_title"],"color":"darkseagreen","desc":"Display a table of contents for a page. Each header or section on the page is listed as a link in the table of contents. Click \"Save\" now, or click \"More options\" to edit the properties for the table of contents.","id":"toc","labels":{"workspace_id":"Page in","page_title":"Headers and<br/>sections in"},"image_text":[{"text":"toc: %page_title","field":"page_title"},{"text":"toc","field":"default"}],"more_desc":"Optionally, specify which page\\'s headers and sections to use for the table of contents.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"{toc: %workspace_id [%page_title]}","fields":["workspace_id","page_title"],"title":"Table of contents for '$page_title'. Click to edit.","label":"Table of Contents"},"user":{"color":"darkgoldenrod","required":["user_email"],"desc":"Display the full name for the given email address or user name. Use this form to edit the properties of the user name.","id":"user","image_text":[{"text":"user: %user_email","field":"default"}],"field":"user_email","more_desc":"There are no optional properties for a user name.","pattern":"{user: %user_email}","label":"User Name","title":"Show full name for '$user_email'. Click to edit."},"tag":{"input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","tag_name"],"regexp":"?workspace-value","no_match":"tag_name"},"pdfields":["label","workspace_id"],"color":"green","required":["tag_name"],"desc":"Display a link to a list of pages with a specific tag. Use this form to edit the properties of the link.","id":"tag","labels":{"workspace_id":"Search"},"image_text":[{"text":"tag: %label","field":"label"},{"text":"tag: %tag_name","field":"tag_name"}],"more_desc":"Optional properties include link text, and the name of a different workspace for the tags.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{tag: %workspace_id; %tag_name}","fields":["tag_name","label","workspace_id"],"title":"Link to tag '$tag_name'. Click to edit.","label":"Tag Link"},"yahoo":{"required":["yahoo_id"],"desc":"Display a link to a Yahoo! instant message ID. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.","markup":["bound_phrase","yahoo:",""],"id":"yahoo","image_text":[{"text":"Yahoo! IM: %yahoo_id","field":"default"}],"field":"yahoo_id","more_desc":"There are no optional properties for a Yahoo! link.","pattern":"yahoo:%yahoo_id","label":"Yahoo! IM Link","title":"Instant message to '$yahoo_id' using Yahoo! Click to edit."},"link2":{"checks":["require_page_if_workspace"],"input":{"workspace_id":"radio","page_title":"radio"},"parse":{"fields":["workspace_id","page_title","section_name"],"regexp":"?three-part-link","no_match":"section_name"},"primary_field":"section_name","pdfields":["label","workspace_id","page_title"],"color":"blue","required":["section_name"],"select_if":{"blank":["workspace_id"]},"desc":"Use this form to edit the properties of the link to a page section.","id":"link2","labels":{"workspace_id":"Workspace"},"image_text":[{"text":"link: %label","field":"label"},{"text":"link: %page_title (%section_name )","field":"page_title"},{"text":"link: %section_name","field":"default"}],"more_desc":"Optional properties include the text to display for the link, and the title of a different page.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{link: %workspace_id [%page_title] %section_name}","fields":["section_name","label","workspace_id","page_title"],"title":"Link to '$section_name' in '$page_title'. Click to edit.","label":"Link to a Section"},"googlesoap":{"color":"saddlebrown","desc":"Display the results from a Google search. Use this form to edit the properties for the search.","id":"googlesoap","image_text":[{"text":"Google: %search_term","field":"default"}],"labels":{"search_term":"Search for"},"field":"search_term","more_desc":"There are no optional properties for an Google search.","pattern":"{googlesoap: %search_term}","title":"Search Google for '$search_term'. Click to edit.","label":"Google Search"},"link1":{"checks":["require_page_if_workspace"],"parse":{"fields":["workspace_id","page_title","section_name"],"regexp":"?three-part-link","no_match":"section_name"},"primary_field":"workspace_id","pdfields":["label","section_name"],"color":"blue","required":["page_title","workspace_id"],"select_if":{"defined":["workspace_id"]},"desc":"Use this form to edit the properties of the link.","id":"link1","labels":{"workspace_id":"Other workspace"},"image_text":[{"text":"link: %label","field":"label"},{"text":"link: %page_title","field":"default"}],"more_desc":"Optional properties include the text to display for the link, and a target section within the linked page.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{link: %workspace_id [%page_title] %section_name}","fields":["workspace_id","page_title","label","section_name"],"label":"Inter-workspace link","title":"Link to '$page_title'. Click to edit."},"new_form_page":{"parse":{"regexp":"^\\s*(\\S+)\\s+(.+)\\s*$"},"on_menu":false,"color":"maroon","required":["form_name","form_text"],"desc":"Select a form and generates a new form page.","id":"new_form_page","image_text":[{"text":"form: %form_name","field":"default"}],"more_desc":"There are no optional properties for a new form page.","pattern":"{new_form_page: %form_name %form_text}","fields":["form_name","form_text"],"title":"Use $form_name to generate a form. Click to edit.","label":"New Form Page"},"weblog":{"input":{"workspace_id":"radio"},"parse":{"fields":["workspace_id","weblog_name"],"regexp":"?workspace-value","no_match":"weblog_name"},"pdfields":["label","workspace_id"],"color":"purple","required":["weblog_name"],"desc":"Display a link to a weblog. Use this form to edit the properties of the link.","id":"weblog","labels":{"workspace_id":"Weblog on"},"image_text":[{"text":"weblog: %label","field":"label"},{"text":"weblog: %weblog_name","field":"default"}],"more_desc":"Optional properties include link text, and the name of a different workspace for the weblog.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{weblog: %workspace_id; %weblog_name}","fields":["label","weblog_name","workspace_id"],"title":"Link to weblog '$weblog_name'. Click to edit.","label":"Weblog Link"},"fetchatom":{"color":"darkgreen","desc":"Display the content of an Atom feed. Use this form to edit the properties of the inline Atom feed.","id":"fetchatom","image_text":[{"text":"feed: %atom_url","field":"default"}],"field":"atom_url","more_desc":"There are no optional properties for an Atom feed.","pattern":"{fetchatom: %atom_url}","label":"Inline Atom","title":"Include the '$atom_url' Atom feed. Click to edit."},"fetchrss":{"color":"orange","desc":"Display the content of an RSS feed. Use this form to edit the properties of the inline RSS feed.","id":"fetchrss","image_text":[{"text":"feed: %rss_url","field":"default"}],"field":"rss_url","more_desc":"There are no optional properties for an RSS feed.","pattern":"{fetchrss: %rss_url}","label":"Inline RSS","title":"Include the '$rss_url' RSS feed. Click to edit."},"aim":{"required":["aim_id"],"desc":"Display a link to an AIM screen name. The icon will show whether the person is online. Clicking the link will start an IM conversation with the person if your IM client is properly configured. Use this form to edit the properties of the link.","markup":["bound_phrase","aim:",""],"id":"aim","image_text":[{"text":"AIM: %aim_id","field":"default"}],"field":"aim_id","more_desc":"There are no optional properties for an AIM link.","pattern":"aim:%aim_id","label":"AIM Link","title":"Instant message to '$aim_id' using AIM. Click to edit."},"image":{"checks":["require_page_if_workspace"],"input":{"workspace_id":"radio","page_title":"radio"},"parse":{"fields":["workspace_id","page_title","image_name"],"regexp":"?three-part-link","no_match":"image_name"},"pdfields":["workspace_id","page_title","label"],"color":"red","required":["image_name"],"desc":"Display an image on this page. The image must be already uploaded as an attachment to this page or another page. Use this form to edit the properties of the displayed image.","id":"image","labels":{"workspace_id":"Page in","image_name":"Attachment filename","page_title":"Attached to"},"image_text":[{"text":"image: %label","field":"label"},{"text":"image: %image_name","field":"default"}],"more_desc":"Optional properties include the title of another page to which the image is attached, and link text. If link text is specified then a link to the image is displayed instead of the image.","title_and_id":{"workspace_id":{"id":null,"title":null}},"pattern":"\"%label\"{image: %workspace_id [%page_title] %image_name}","fields":["image_name","workspace_id","page_title","label"],"label":"Attached Image","title":"Display image '$image_name'. Click to edit."},"skype":{"required":["skype_id"],"desc":"Display a link to a Skype name. Clicking the link will start a Skype call with the person if your Skype client is properly configured. Use this form to edit the properties of the link.","markup":["bound_phrase","skype:",""],"id":"skype","image_text":[{"text":"Skype: %skype_id","field":"default"}],"field":"skype_id","more_desc":"There are no optional properties for a Skype link.","pattern":"skype:%skype_id","label":"Skype Link","title":"Call '$skype_id' using Skype. Click to edit."},"sharepoint":{"color":"red","id":"sharepoint","uneditable":true,"title":"Sharepoint link. Edit in advanced mode."},"asis":{"color":"darkslateblue","required":["asis_content"],"desc":"Include unformatted text in the page. This text will not be treated as wiki text. Use this form to edit the text.","markup":["bound_phrase","{{","}}"],"id":"asis","image_text":[{"text":"unformatted: %asis_content","field":"default"}],"field":"asis_content","more_desc":"There are no optional properties for unformatted text.","pattern":"{{%asis_content}}","label":"Unformatted","title":"Unformatted Content"}}};
 // BEGIN Wikiwyg/Widgets.js
 /*
 To Do:
@@ -14760,7 +16086,7 @@ Wikiwyg.Widgets.mapMultipleSameWidgets = function(widget_parse) {
 
 // Shortcut globals.
 Wikiwyg.Toolbar.Socialtext.prototype.setup_widgets = function() {
-    this.setup_widgets_pulldown('Insert...');
+    this.setup_widgets_pulldown(loc('Insert...'));
 }
 
 var widgets_list = Wikiwyg.Widgets.widgets;
@@ -14876,18 +16202,37 @@ proto.attachTooltip = function(elem) {
         : widget_data[this.currentWidget.id].title['default']
       : widget_data[this.currentWidget.id].title;
 
-    var self = this;
-    title = title.replace(/\$(\w+)/g, function() {
-        var text = self.currentWidget[arguments[1]];
-        if (text == '') {
-            if (arguments[1] == 'page_title')
-                text = Page.page_title;
-            else if (arguments[1] == 'workspace_id')
-                text = Page.wiki_title;
+    var params = title.match(/\$(\w+)/g);
+    var newtitle = title; 
+    var newtitle_args = "";
+    if ( params != null ){
+        for ( i = 0; i < params.length; i++) {
+            params[i] = params[i].replace(/^\$/, "");
+            var text = this.currentWidget[params[i]];
+            if (text == '') {
+                if (params[i] == 'page_title')
+                    text = Page.page_title;
+                else if (params[i] == 'workspace_id')
+                    text = Page.wiki_title;
+            }
+            if (text != '') {
+                newtitle = newtitle.replace("\$" + params[i], "[_" + ( i + 1 ) + "]");
+                newtitle_args += ", \"" + text + "\"";
+            }
         }
-        return text;
-    });
-    elem.setAttribute("title", title);
+    }
+    if (newtitle_args != "") {
+        newtitle = eval("loc(\"" + newtitle + "\"" + newtitle_args + ")");
+        if ( newtitle == 'undefined' ){
+            newtitle = title;
+        }
+    }else{
+        newtitle = eval("loc(\"" + newtitle + "\")");
+        if ( newtitle == 'undefined' ){
+            newtitle = title;
+        }
+    }
+    elem.setAttribute("title", newtitle);
 
     this.attachWidgetHandlers(elem);
 }
@@ -14919,7 +16264,7 @@ proto.attachWidgetHandlers = function(elem) {
             if ( e.target.getAttribute("mouseup") == 0 ) {
                 if ( Wikiwyg.Widgets.widget_editing > 0 )
                     return;
-                alert("This is not an editable widget. Please edit it in advanced mode.")
+                alert(loc("This is not an editable widget. Please edit it in advanced mode."))
             }
             e.target.setAttribute("mouseup", 1);
         });
@@ -15103,7 +16448,7 @@ proto.parseWidget = function(widget) {
         return widget_parse;
     }
     else
-        throw('Unexpected Widget >>' + widget + '<< in parseWidget');
+        throw(loc('Unexpected Widget >>[_1]<< in parseWidget', widget));
 }
 
 for (var i = 0; i < widgets_list.length; i++) {
@@ -15265,16 +16610,7 @@ proto.getWidgetImageText = function(widget_text) {
                 }
             }
         }
-
-        var fields = text.match(new RegExp('%\\S+', 'g'));
-        if (fields)
-            for (var i=0; i < fields.length; i++) {
-                var field = fields[i].slice(1);
-                if (widget[field])
-                    text = text.replace(new RegExp('%' + field), widget[field]);
-                else
-                    text = text.replace(new RegExp('%' + field), '');
-            }
+        text = this.getWidgetImageLocalizeText(widget, text);
     }
     catch (E) {
         // parseWidget can throw an error
@@ -15282,6 +16618,34 @@ proto.getWidgetImageText = function(widget_text) {
     }
 
     return text;
+}
+
+proto.getWidgetImageLocalizeText = function(widget, text) {
+    var params = text.match(/%(\w+)/g);
+    var newtext = text; 
+    var newtext_args = "";
+    if ( params != null ){
+        for ( i = 0; i < params.length; i++) {
+            params[i] = params[i].replace(/^%/, "");
+            var mytext = widget[params[i]];
+            if (mytext != '') {
+                newtext = newtext.replace("%" + params[i], "[_" + ( i + 1 ) + "]");
+                newtext_args += ", \"" + mytext + "\"";
+            }
+        }
+    }
+    if (newtext_args != "") {
+        newtext = eval("loc(\"" + newtext + "\"" + newtext_args + ")");
+        if ( newtext == 'undefined' ){
+            newtext = text;
+        }
+    }else{
+        newtext = eval("loc(\"" + newtext + "\")");
+        if ( newtext == 'undefined' ){
+            newtext = text;
+        }
+    }
+    return newtext;
 }
 
 proto.getWidgetImageUrl = function(widget_text) {
@@ -15382,7 +16746,7 @@ proto.validate_fields = function(widget, values) {
             var field = required[i];
             if (! values[field].length) {
                 var label = Wikiwyg.Widgets.fields[field];
-                throw("'" + label + "' is a required field");
+                throw(loc("'[_1]' is a required field", label));
             }
         }
     }
@@ -15398,7 +16762,7 @@ proto.validate_fields = function(widget, values) {
                 found++;
         }
         if (! found)
-            throw("Requires one of: " + labels.join(', '));
+            throw(loc("Requires one of: [_1]", labels.join(', ')));
     }
 
     for (var field in values) {
@@ -15413,7 +16777,7 @@ proto.validate_fields = function(widget, values) {
 
         if (!fieldOk) {
             var label = Wikiwyg.Widgets.fields[field];
-            throw("'" + label + "' has an invalid value");
+            throw(loc("'[_1]' has an invalid value", label));
         }
     }
 
@@ -15428,7 +16792,7 @@ proto.validate_fields = function(widget, values) {
 
 proto.require_page_if_workspace = function(values) {
     if (values.workspace_id.length && ! values.page_title.length)
-        throw("Page Title required if Workspace Id specified");
+        throw(loc("Page Title required if Workspace Id specified"));
 }
 
 proto.hookLookaheads = function(dialog) {
@@ -15726,14 +17090,14 @@ Widget.Lightbox.Socialtext.prototype.toggleOptions = function() {
     var panel = document.getElementById('st-widgets-moreoptionspanel');
     var icon = document.getElementById('st-widgets-optionsicon');
     if (panel) {
-        if (link.innerHTML == 'More options') {
+        if (link.innerHTML == loc('More options')) {
             panel.style.display = "block";
-            link.innerHTML = 'Fewer options';
+            link.innerHTML = loc('Fewer options');
             icon.src = nlw_make_static_path('/images/st/hide_more.gif');
         }
         else {
             panel.style.display = "none";
-            link.innerHTML = 'More options';
+            link.innerHTML = loc('More options');
             icon.src = nlw_make_static_path('/images/st/show_more.gif');
         }
     }
@@ -16032,34 +17396,3 @@ proto.sendBackWikitext = function(html) {
     setTimeout(func, 5000);
     Ajax.post(uri, postdata, func);
 }
-// BEGIN l10ns.js
-var LocalizedStrings = {"zj":{"You must select two revisions to compare.":"y\u304a\u3046 m\u3046s7 S\u3048L\u3048C7 7W\u304a r\u3048v\u3044s\u3044\u304aNs 7\u304a C\u304aMp\u3042r\u3048.","You cannot compare a revision to itself.":"y\u304a\u3046 c\u3042nN\u304a7 C\u304aMp\u3042r\u3048 \u3042 R\u3048V\u3044S\u3044\u304an 7\u304a \u30447S\u3048Lf."},"zz":{"You must select two revisions to compare.":"y0u mUs7 S3L3C7 7W0 r3vIsI0Ns 70 C0Mp4r3.","You cannot compare a revision to itself.":"y0u c4nN07 C0Mp4r3 4 R3ViSi0n 70 I7S3Lf."}};
-
-function loc() {
-    var locale = Socialtext.loc_lang;
-    var dict = LocalizedStrings[locale] || new Array;
-    var str = arguments[0] || "";
-    var l10n = dict[str];
-
-    if (!l10n) {
-        var nstr = str.replace(/\"/g, "\\\"");
-        l10n = dict[nstr] || str;
-    }
-
-    /* If the hash-lookup failed, convert [_1] into %1 and try again. */
-    if (!l10n) {
-        var nstr = str.replace(/\[_(\d+)\]/g, "%$1");
-        l10n = dict[nstr] || str;
-    }
-
-    /* Convert both %1 and [_1] style vars into the given arguments */
-    for (var i = 1; i < arguments.length; i++) {
-        var rx = new RegExp("\\[_" + i + "\\]", "g");
-        var rx2 = new RegExp("%" + i + "", "g");
-        l10n = l10n.replace(rx, arguments[i]);
-        l10n = l10n.replace(rx2, arguments[i]);
-    }
-
-    return l10n;
-}
-

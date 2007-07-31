@@ -5,7 +5,7 @@ use warnings;
 
 use Test::More;
 
-use Socialtext::EmailReceiver;
+use Socialtext::EmailReceiver::en;
 use Test::MockObject;
 
 my %tests = (
@@ -22,7 +22,7 @@ plan tests => scalar keys %tests;
 
 for my $subject ( sort keys %tests ) {
     my $receiver
-        = Socialtext::EmailReceiver->_new( mock_email($subject), mock_ws() );
+        = Socialtext::EmailReceiver::en->_new( mock_email($subject), mock_ws() );
 
     is( $receiver->_clean_subject(), $tests{$subject},
         "Clean subject for $subject is $tests{$subject}" );

@@ -15,7 +15,7 @@ use Socialtext::AppConfig;
 use Pod::Usage;
 use Readonly;
 use Socialtext::Validate qw( validate SCALAR_TYPE ARRAYREF_TYPE );
-use Socialtext::l10n qw( loc loc_lang valid_code );
+use Socialtext::l10n qw( loc loc_lang valid_code system_locale );
 
 
 my %CommandAliases = (
@@ -1168,13 +1168,17 @@ sub deliver_email {
 
     my $ws = $self->_require_workspace();
 
-    require Socialtext::EmailReceiver;
+    require Socialtext::EmailReceiver::Factory;
 
     eval {
-        Socialtext::EmailReceiver->receive_handle(
-            handle    => \*STDIN,
-            workspace => $ws,
-        );
+        my $locale = system_locale();
+        my $email_receiver = Socialtext::EmailReceiver::Factory->create({
+            locale => $locale,
+            handle => \*STDIN,
+            workspace => $ws
+        });
+
+        $email_receiver->receive();
     };
 
     if ( my $e = Exception::Class->caught('Socialtext::Exception::Auth') ) {
@@ -1184,7 +1188,6 @@ sub deliver_email {
         die $e;
     }
 }
-
 
 sub customjs {
     my $self = shift;
@@ -1584,6 +1587,7 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   add-impersonator [--username or --email] --workspace
   remove-impersonator [--username or --email] --workspace
   disable-email-notify [--username or --email] --workspace
+  set-locale [--username or --email] --workspace --locale
 
   WORKSPACES
 
@@ -1701,6 +1705,11 @@ member.
 
 Turns off email notifications from the specified workspace for the
 given user.
+
+=head2 set-locale --username --workspace --locale
+
+Sets the language locale for user on a workspace.  Locale codes are 2 letter
+codes.  Eg: en, fr, ja, de
 
 =head2 set-permissions --workspace --permissions
 

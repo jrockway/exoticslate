@@ -6,10 +6,10 @@ use warnings;
 use base 'Socialtext::Plugin';
 
 use Class::Field qw( const );
-
+use Socialtext::l10n qw( loc );
 
 sub class_id { 'favorites' }
-const class_title => 'Your Notepad';
+const class_title => loc('Your Notepad');
 
 sub register {
     my $self = shift;
@@ -22,17 +22,13 @@ sub which_page_pref {
     my $self = shift;
     my $p = $self->new_preference('which_page');
     my $title = $self->class_title;
-    $p->query(<<"EOT");
-<p>This is where you set the title of the page you would like to see in
-the "Your Notepad" panel.</p>
-<p>Some choose to use an existing page, and others make a new page, such as
-"Rupert Jee's Notepad".</p>
-EOT
-    $p->type('input');
+    my $message = loc('<p>This is where you set the title of the page you would like to see in the "Your Notepad" panel.</p><p>Some choose to use an existing page, and others make a new page, such as "Rupert Jee\'s Notepad".</p>');
+    $p->query($message);
     $p->size(30);
+    $p->type('input');
     $p->default_for_input(sub {
         my $self = shift;
-        return $self->hub->current_user->best_full_name . "'s Notepad";
+        return loc("[_1]'s Notepad", $self->hub->current_user->best_full_name);
     });
     $p->layout_over_under(1);
     return $p;

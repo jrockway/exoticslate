@@ -1,3 +1,5 @@
+[%# This macro defines the main chunk of the apache config.  We load this chunk into
+  # Virtual host blocks below... %]
 [% MACRO server_common( apache_perl_port, for_ssl_vhost ) BLOCK %]
 [% IF config.is_appliance AND config.hostname_conf_exists %]
     Include /etc/apache2/conf.d/hostname.conf
@@ -12,10 +14,14 @@
     DocumentRoot [% config.data_root_dir %]
     ProxyRequests Off
 
-[% IF config.is_appliance %]
-    Alias /console/ /var/www/console/
+[% IF config.is_appliance || config.is_dev %]
+    [% SET console_base = '/var/www/console' %]
+    [% IF config.is_dev %]
+        [% console_base = config.data_root_dir _ '/console' %]
+    [% END %]
+    Alias /console/ [% console_base %]/
 
-    <Directory /var/www/console>
+    <Directory [% console_base %]>
         Options FollowSymlinks
     </Directory>
 
@@ -74,7 +80,10 @@
 [% END %]
 [% END %][%# server_common %]
 
-[%# Real code starts %]
+
+[%# ######################################
+  # Real code starts 
+  # ###################################### %]
 ErrorDocument 502 /static/html/502.html
 ErrorDocument 500 /static/html/500.html
 

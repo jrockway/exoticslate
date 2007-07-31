@@ -21,6 +21,7 @@ use Template;
 use Template::Constants ':debug';
 use Template::Provider;
 use Socialtext::Build qw( get_build_setting );
+use Socialtext::l10n qw( loc system_locale );
 
 use Template::Plugin::FillInForm;
 
@@ -72,6 +73,9 @@ sub _maybe_fetch {
         my $self = shift;
         my %p = validate( @_, $spec );
 
+        if (! defined $p{vars}{loc} ) {$p{vars}{loc} = \&loc;}
+        if (! defined $p{vars}{loc_lang} ) {$p{vars}{loc_lang} = system_locale();}
+        
         # Setting the global like this lets us change the paths for
         # each template we process, but we don't have to _reset_ them
         # afterwards, and we don't need to create a new Template.pm

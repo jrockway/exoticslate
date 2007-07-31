@@ -419,6 +419,7 @@ package Socialtext::Formatter::InterWikiLink;
 use base 'Socialtext::Formatter::WaflPhrase';
 use Class::Field qw( const );
 use Socialtext::Permission 'ST_READ_PERM';
+use Socialtext::l10n qw( loc );
 
 const wafl_id => 'link';
 
@@ -438,11 +439,11 @@ sub html {
             : $section_id;
         $section_id   = Socialtext::Page->name_to_id($section_id);
         $section_text = '#' . Socialtext::Formatter::legalize_sgml_id($section_id);
-        $link_title   = "section link";
+        $link_title   = loc("section link");
     }
     else {
         $label      ||= $page_title;
-        $link_title = "inter-workspace link: $workspace_name";
+        $link_title = loc("inter-workspace link: [_1]", $workspace_name);
     }
 
     my $ws = Socialtext::Workspace->new( name => $workspace_name );
@@ -457,7 +458,7 @@ sub html {
         $page_title
         and not Socialtext::Pages->page_exists_in_workspace(
             $page_title,
-            $workspace_name,
+            $ws->name,
         )
         ) {
         $page_uri = Socialtext::Pages->title_to_uri($page_title);
@@ -465,7 +466,7 @@ sub html {
 
     my $url = $page_title
         ? $self->_interwiki_url(
-            $workspace_name, $page_uri, $section_text,
+            $ws->name, $page_uri, $section_text,
         )
         : $section_text;
 
@@ -586,6 +587,7 @@ package Socialtext::Formatter::Toc;
 use base 'Socialtext::Formatter::WaflPhraseDiv';
 use Class::Field qw( const );
 use Socialtext::Permission 'ST_READ_PERM';
+use Socialtext::l10n qw(loc);
 
 const wafl_id => 'toc';
 
@@ -602,9 +604,15 @@ sub html {
             workspace  => $ws,
         );
 
+    my $hub = $self->hub_for_workspace_name($workspace_name);
+    my $cur_page = $hub->pages->new_page($page_id);
+    my $cur_page_title = $cur_page->title;
+
+    return $self->syntax_error if not $cur_page_title;
+
     return $self->syntax_error
         if not Socialtext::Pages->page_exists_in_workspace(
-        $page_id,
+        $cur_page_title,
         $workspace_name,
         );
 
@@ -634,7 +642,7 @@ sub _parse_page_for_headers {
         ? ''
         : $workspace_name;
 
-    my $title = qq(<div class="toc"><p>Table of Contents: )
+    my $title = qq(<div class="toc"><p>) . loc('Table of Contents') . ': '
         . $page_title
         . "</p>\n";
 

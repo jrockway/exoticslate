@@ -171,7 +171,7 @@ ST.AttachmentQueue.prototype = {
     _queue_file: function () {
         var filenameField = $(this.element.filename);
         if (! filenameField.value) {
-            this._show_error('Plese click "Browse" and select a file to upload.');
+            this._show_error(loc('Plese click "Browse" and select a file to upload.'));
             return false;
         }
 
@@ -203,18 +203,18 @@ ST.AttachmentQueue.prototype = {
                 data.queue.push(this._queued_files[i].filename);
             this.jst.list.update(data);
             this.jst.list.show();
-            Element.update(this.element.submitButton, 'Add another file');
-            Element.update(this.element.embedMessage, 'Add links to these attachments at the top of the page? Images will appear in the page.');
-            Element.update(this.element.unpackMessage, 'Expand zip archives and attach individual files to the page?');
-            Element.update(this.element.message, 'Click "Browse" to find the file you want to upload. When you click "Add another file," these files will be added to the list of attachments for this page, and uploaded when you save the page.');
+            Element.update(this.element.submitButton, loc('Add another file'));
+            Element.update(this.element.embedMessage, loc('Add links to these attachments at the top of the page? Images will appear in the page.'));
+            Element.update(this.element.unpackMessage, loc('Expand zip archives and attach individual files to the page?'));
+            Element.update(this.element.message, loc('Click "Browse" to find the file you want to upload. When you click "Add another file," these files will be added to the list of attachments for this page, and uploaded when you save the page.'));
         }
         else {
             this.jst.list.clear();
             this.jst.list.hide();
-            Element.update(this.element.submitButton, 'Add file');
-            Element.update(this.element.embedMessage, 'Add a link to this attachment at the top of the page? Images will appear in the page.');
-            Element.update(this.element.unpackMessage, 'Expand zip archive and attach individual files to the page?');
-            Element.update(this.element.message, 'Click "Browse" to find the file you want to upload. When you click "Add file," this file will be added to the list of attachments for this page, and uploaded when you save the page.');
+            Element.update(this.element.submitButton, loc('Add file'));
+            Element.update(this.element.embedMessage, loc('Add a link to this attachment at the top of the page? Images will appear in the page.'));
+            Element.update(this.element.unpackMessage, loc('Expand zip archive and attach individual files to the page?'));
+            Element.update(this.element.message, loc('Click "Browse" to find the file you want to upload. When you click "Add file," this file will be added to the list of attachments for this page, and uploaded when you save the page.'));
         }
         this._check_for_zip_file();
         return false;

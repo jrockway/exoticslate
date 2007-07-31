@@ -9,9 +9,10 @@ our $VERSION = '0.01';
 use Fcntl ':flock';
 use Readonly;
 use Socialtext::AppConfig;
-use Socialtext::EmailSender;
 use Socialtext::String;
 use Socialtext::Validate qw( validate PLUGIN_TYPE ARRAYREF_TYPE SCALAR_TYPE HASHREF_TYPE);
+use Socialtext::l10n qw(system_locale);
+use Socialtext::EmailSender::Factory;
 
 =head1 SYNOPSIS
 
@@ -71,7 +72,9 @@ An object used for shared email notification methods.
             vars     => $p{vars},
         );
 
-        Socialtext::EmailSender->send(
+        my $locale = system_locale();
+        my $email_sender = Socialtext::EmailSender::Factory->create($locale);
+        $email_sender->send(
             from      => $p{from},
             to        => $p{user}->name_and_email,
             subject   => $p{subject},

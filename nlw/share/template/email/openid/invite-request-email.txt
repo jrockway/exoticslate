@@ -1,7 +1,6 @@
-Hello,
+[% loc('Hello,') %]
 
-[% inviting_user %] would like to ask you to invite new users into the
-[% workspace_title %] workspace:
+[% loc('[_1] would like to ask you to invite new users into the [_2] workspace:', inviting_user, workspace_title) %]
 
 [% FOREACH user = invited_users %]
     [% user %] [% END %]
@@ -9,9 +8,8 @@ Hello,
 [% IF extra_text %]
     [% extra_text %]
 [% END %]
-To invite these users into the workspace, visit the user invite page
-for the workspace and copy and paste the list above into the invite box.
-The User Invite page can be found at:
+[% loc('To invite these users into the workspace, visit the user invite page for the workspace and copy and paste the list above into the invite box.') %]
+[% loc('The User Invite page can be found at:') %]
 
 [% url %]
 

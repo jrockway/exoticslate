@@ -17,7 +17,7 @@ use Socialtext::Page;
 
 plan tests => 36;
 
-Socialtext::EmailSender->TestModeOn();
+$Socialtext::EmailSender::Base::SendClass = 'Test';
 
 my $hub   = new_hub('admin');
 my $pages = $hub->pages;
@@ -197,8 +197,8 @@ EOF
 
     # XXX - Email::MIME::Creator for some reason appends the charset,
     # but this doesn't seem to be harmful
-    is( $html_parts[1]->header('Content-Type'), 'image/gif; charset="us-ascii"',
-        q{third part content type is 'image/gif; charset="us-ascii"'} );
+    is( $html_parts[1]->header('Content-Type'), 'image/gif',
+        q{third part content type is 'image/gif'} );
     is( $html_parts[1]->header('Content-Transfer-Encoding'), 'base64',
         'third part content transfer encoding is base64' );
     is( $html_parts[1]->header('Content-Disposition'),

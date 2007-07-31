@@ -31,6 +31,7 @@ mkdir $new_root
     or die "Cannot mkdir $new_root: $!";
 
 Socialtext::AppConfig->set( data_root_dir => $new_root );
+Socialtext::AppConfig->write;
 
 Socialtext::Workspace->ImportFromTarball( tarball => $tarball );
 

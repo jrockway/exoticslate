@@ -13,7 +13,7 @@ workspaces:
     ordered_pages: 1
   auth-to-edit:
     ordered_pages: 1
-  help: { }
+  "help-en": { }
 
 cache:
   - WORKSPACES

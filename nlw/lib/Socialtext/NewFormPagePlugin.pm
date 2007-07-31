@@ -9,6 +9,7 @@ use Class::Field qw( const );
 use Socialtext::AppConfig;
 use Socialtext::TT2::Renderer;
 use Socialtext::BrowserDetect ();
+use Socialtext::l10n qw(loc);
 
 sub class_id { 'new_form_page' }
 const class_title => 'New Form Page';
@@ -29,7 +30,7 @@ sub new_form_page {
     $self->_render(
         template_base_path() . '/new_form_page_input.html',
 #        $self->screen_template,
-        display_title => 'Create Your Profile',
+        display_title => loc('Create Your Profile'),
         self => $self,
         $self->cgi->all,
     );

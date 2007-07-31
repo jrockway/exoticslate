@@ -10,6 +10,8 @@ use Socialtext::AppConfig;
 use Socialtext::TT2::Renderer;
 use Socialtext::URI;
 use Socialtext::User;
+use Socialtext::l10n qw(system_locale);
+use Socialtext::EmailSender::Factory;
 
 =pod
 
@@ -124,7 +126,9 @@ sub _invite_notify {
         }
     );
 
-    Socialtext::EmailSender->send(
+    my $locale = system_locale();
+    my $email_sender = Socialtext::EmailSender::Factory->create($locale);
+    $email_sender->send(
         from      => $self->{from_user}->name_and_email,
         to        => $user->email_address,
         subject   => $subject,

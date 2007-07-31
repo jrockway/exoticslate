@@ -76,7 +76,6 @@
     <LocationMatch "^/[^/]+/index\.cgi">
         ErrorDocument 404 /index.cgi
     </LocationMatch>
-
 [% END %][%# MACRO vhost_common %]
 
 [%# Real code starts here %]

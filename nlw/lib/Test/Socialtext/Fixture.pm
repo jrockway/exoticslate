@@ -256,14 +256,15 @@ sub _generate_workspaces {
     );
     my $account_id = Socialtext::Account->Socialtext()->account_id();
 
+    $self->_generate_help_workspace( $creator, "help-en" );
     print STDERR "# workspaces: " if $self->env->verbose;
     while ( my ( $name, $spec ) = each %{ $self->config->{workspaces} } ) {
         print STDERR "$name... " if $self->env->verbose;
-
-        if ( $name eq 'help' ) {
-            $self->_generate_help_workspace($creator);
+        if ( $name =~ /help/ ) {
+            $self->_generate_help_workspace( $creator, $name );
             next;
         }
+
 	my $title = ucfirst($name) . ' Wiki';
 
 	if( defined $spec->{title} ) {
@@ -324,11 +325,17 @@ sub _activate_impersonate_permission {
 sub _generate_help_workspace {
     my $self = shift;
     my $user = shift;
+    my $ws_name = shift || 'help-en';
+    my $tarball = "share/l10n/help/$ws_name.tar.gz";
 
+    # Workspace already exists.
+    return if Socialtext::Workspace->new( name => $ws_name );
 
-    _system_or_die( 'bin/st-create-help-workspace' );
-    my $ws = Socialtext::Workspace->new( name => 'help' );
-    $ws->add_user(
+    # Load up the workspace from a previous export.
+    _system_or_die(
+        "bin/st-admin import-workspace --tarball $tarball --overwrite");
+    my $ws = Socialtext::Workspace->new( name => $ws_name );
+    $ws ->add_user(
         user => $user,
         role => Socialtext::Role->WorkspaceAdmin(),
     );

@@ -1,50 +1,50 @@
 [%# @COPYRIGHT@ -%]
-<div class="settings-top-header">[% hub.current_workspace.title %] Settings</div>
-<div class="settings-header">Users</div>
+<div class="settings-top-header">[% hub.current_workspace.title %] [% loc('Settings') %]</div>
+<div class="settings-header">[% loc('Users') %]</div>
 <div class="settings-selections">
   [%
-    PROCESS settings_link action = 'users_settings', name = 'My Settings';
+    PROCESS settings_link action = 'users_settings', name = loc('My Settings');
     IF checker.check_permission('admin_workspace');
-      PROCESS settings_link action = 'users_listall', name = 'Manage All Users';
+      PROCESS settings_link action = 'users_listall', name = loc('Manage All Users');
     ELSE;
-      PROCESS settings_link action = 'users_listall', name = 'List All Users';
+      PROCESS settings_link action = 'users_listall', name = loc('List All Users');
     END;
     IF (checker.check_permission('admin_workspace')  ||
          checker.check_permission('request_invite') );
-      PROCESS settings_link action = 'users_invitation', name = 'Invite New Users';
+      PROCESS settings_link action = 'users_invitation', name = loc('Invite New Users');
     END;
   %]
 </div>
-<div class="settings-header">Workspaces</div>
+<div class="settings-header">[% loc('Workspaces') %]</div>
 <div class="settings-selections">
   [%
     IF checker.check_permission('admin_workspace');
     END;
-      PROCESS settings_link action = 'workspaces_listall', name = 'My Workspaces';
+      PROCESS settings_link action = 'workspaces_listall', name = loc('My Workspaces');
     IF checker.check_permission('admin_workspace');
-      PROCESS settings_link action = 'workspaces_create', name = 'Create New Workspace';
+      PROCESS settings_link action = 'workspaces_create', name = loc('Create New Workspace');
     END;
-    PROCESS settings_link action = 'workspaces_unsubscribe', name = 'Unsubscribe';
+    PROCESS settings_link action = 'workspaces_unsubscribe', name = loc('Unsubscribe');
   %]
 </div>
 
 [% IF checker.check_permission('admin_workspace') %]
-<div class="settings-header">This Workspace</div>
+<div class="settings-header">[% loc('This Workspace') %]</div>
 <div class="settings-selections">
-   [% PROCESS settings_link action = 'workspaces_settings_appearance', name = 'Workspace Appearance' %]
-   [% PROCESS settings_link action = 'workspaces_settings_features', name = 'Workspace Features' %]
-   [% PROCESS settings_link action = 'workspaces_permissions', name = 'Workspace Privacy' %]
+   [% PROCESS settings_link action = 'workspaces_settings_appearance', name = loc('Workspace Appearance') %]
+   [% PROCESS settings_link action = 'workspaces_settings_features', name = loc('Workspace Features') %]
+   [% PROCESS settings_link action = 'workspaces_permissions', name = loc('Workspace Privacy') %]
 </div>
 [% END %]
 
 [% IF checker.check_permission('edit') %]
-<div class="settings-header">Weblogs</div>
+<div class="settings-header">[% loc('Weblogs') %]</div>
 <div class="settings-selections">
-  [% PROCESS settings_link action = 'weblogs_create', name = 'Create New Weblog' %]
+  [% PROCESS settings_link action = 'weblogs_create', name = loc('Create New Weblog') %]
 </div>
 [% END %]
 
-<div class="settings-header">Preferences</div>
+<div class="settings-header">[% loc('Preferences') %]</div>
 <div class="settings-selections">
   [%
     FOREACH pref = pref_list;
@@ -67,5 +67,6 @@
       id_param = ";preferences_class_id=${pref_id}";
     END;
   %]
-  <a class="settings-link" href="[% script_name %]?action=[% action %][% id_param %]">[% name.replace(' ', '&nbsp;') %]</a>
+  [% SET setting_name = loc(name.replace('&nbsp;', ' ')) %]
+  <a class="settings-link" href="[% script_name %]?action=[% action %][% id_param %]">[% setting_name.replace(' ', '&nbsp;') %]</a>
 [% END %]

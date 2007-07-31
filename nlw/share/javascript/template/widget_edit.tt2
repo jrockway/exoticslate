@@ -1,7 +1,7 @@
-<span class="st-widget-dialog-title"><! widget.label !></span>
+<span class="st-widget-dialog-title">[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widget_dialog_title", loc('<! widget.label !>'));[%- END -%][%- <! widget.id !>_st_widget_dialog_title -%]</span>
 <form>
 <div class="st-widget-dialog">
-<p class="st-widget-description"><! widget.desc !></p>
+<p class="st-widget-description">[%- JAVASCRIPT -%] stash.set("<! widget.id !>_st_widget_description", loc('<! widget.desc !>')); [%- END -%][%- <! widget.id !>_st_widget_description -%]</p>
 <div id="st-widgets-standardoptionspanel">
 <table class="st-widgets-optionstable">
 <! FOR field = fields -!>
@@ -18,10 +18,10 @@
 <div id="<! type !>_widget_edit_error_msg" class="widget_edit_error_msg"></div>
 <div class="st-widgets-options">
     <img id="st-widgets-optionsicon" src="/static/2.9.3.0/images/st/show_more.gif">
-    <a id="st-widgets-moreoptions" href="#">More options</a>
+    <a id="st-widgets-moreoptions" href="#">[%- JAVASCRIPT -%] stash.set('<! widget.id !>_st_widgets_moreoptions', loc('More options')); [%- END -%][%- <! widget.id !>_st_widgets_moreoptions -%]</a>
 </div>
 <div id="st-widgets-moreoptionspanel">
-<p class="st-widget-description"><! widget.more_desc !></p>
+<p class="st-widget-description">[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widgets_moreoptionspanel",loc('<! widget.more_desc !>'));[%- END -%][% <! widget.id !>_st_widgets_moreoptionspanel %]</p>
 <table class="st-widgets-moreoptionstable">
 <! FOR field = pdfields -!>
 <! PROCESS CONTROL_ROW -!>
@@ -30,18 +30,18 @@
 <! IF type == 'search' !>
 <tr>
 <td class="st-widget-dialog-editlabel">
-Search type:
+[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widget_dialog_editlabel_search_type",loc('Search type:'));[%- END -%][% <! widget.id !>_st_widget_dialog_editlabel_search_type %]
 </td>
 <td class="st-widget-dialog-editfield">
 <input type="radio" name="search_type" value="text"
 [% IF search_type == 'text' || search_type == '' %]checked="checked"[% END %]
-/> Text
+/> [%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widget_dialog_editfieled_search_type",loc('Text'));[%- END -%][% <! widget.id !>_st_widget_dialog_editfieled_search_type %]
 <input type="radio" name="search_type" value="category"
 [% IF search_type == 'category' %]checked="checked"[% END %]
-/> Tag
+/>[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widget_dialog_editfieled_search_type",loc('Tag'));[%- END -%][% <! widget.id !>_st_widget_dialog_editfieled_search_type %]
 <input type="radio" name="search_type" value="title"
 [% IF search_type == 'title' %]checked="checked"[% END %]
-/> Title
+/>[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widget_dialog_editfieled_search_type",loc('Title'));[%- END -%][% <! widget.id !>_st_widget_dialog_editfieled_search_type %]
 </td>
 </tr>
 <! END !>
@@ -49,7 +49,7 @@ Search type:
 <! IF widget.full !>
 <tr>
 <td class="st-widget-dialog-editlabel">
-Full results:
+[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widget_dialog_editlable_results",loc('Full results:'));[%- END -%][% <! widget.id !>_st_widget_dialog_editlable_results %]
 </td>
 <td class="st-widget-dialog-editfield">
 <input type="checkbox" name="full"[% IF full %] checked="checked"[% END %] />
@@ -58,7 +58,8 @@ Full results:
 <! END !>
 </table>
 <div class="st-widgetdialog-wikitext">
-    <span class="label">wiki text: </span>
+    <span class="label">[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widgetdialog_wikitext",loc('wiki text'));[%- END -%][% <! widget.id !>_st_widgetdialog_wikitext %]
+</span>
     <span class="wikitext" id="<! type !>_wafl_text">&nbsp;</span>
 </div>
 </div>
@@ -71,7 +72,8 @@ Full results:
 <! PROCESS RADIO -!>
 <! ELSE -!>
 <tr>
-  <td class="st-widget-dialog-editlabel"><! widget.labels.$field || data.fields.$field !>:</td>
+[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widget_dialog_editlabel_field",loc('<! widget.labels.$field || data.fields.$field !>:'));[%- END -%]
+<td class="st-widget-dialog-editlabel">[% <! widget.id !>_st_widget_dialog_editlabel_field %]</td>
   <td class="st-widget-dialog-editfield">
     <input size="40" type="text" id="st-widget-<! field !>" name="<! field !>" value="[% <! field !> | html %]"/>
   </td>
@@ -81,17 +83,28 @@ Full results:
 
 <! BLOCK RADIO -!>
 <tr>
-  <td class="st-widget-dialog-editlabel"><! widget.labels.$field || data.fields.$field !>:</td>
+[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widget_dialog_editlabel_field_radio",loc('<! widget.labels.$field || data.fields.$field !>:'));[%- END -%]
+  <td class="st-widget-dialog-editlabel">[% <! widget.id !>_st_widget_dialog_editlabel_field_radio %]</td>
   <td class="st-widget-dialog-editfield">
-    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-<! field !>-rb" value="current" checked>the current
+    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-<! field !>-rb" value="current" checked>
 <! IF field == 'workspace_id' -!>
-workspace
+[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widget_dialog_defaultradio_current",loc('the current workspace'));[%- END -%]
+[% <! widget.id !>_st_widget_dialog_defaultradio_current %]
 <! ELSE -!>
-page
-<! END -!><i>&nbsp;&nbsp;or</i></p>
+[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widget_dialog_defaultradio_current",loc('the current page'));[%- END -%]
+[% <! widget.id !>_st_widget_dialog_defaultradio_current %]
+<! END -!>
+[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widget_<! field !>_rb_or",loc('or'));[%- END -%]
+<i>&nbsp;&nbsp;[%- <! widget.id !>_st_widget_<! field !>_rb_or -%]</i></p>
 <p class="st-widget-dialog-choiceradio">
-  <input type="radio" name="st-widget-<! field !>-rb" value="other">the
-  <! IF field == 'workspace_id' -!>workspace named<! ELSE -!>page titled<! END -!>&nbsp;
+  <input type="radio" name="st-widget-<! field !>-rb" value="other">
+  <! IF field == 'workspace_id' -!>
+[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widget_<! field !>_rb",loc('the workspace named'));[%- END -%]
+[%- <! widget.id !>_st_widget_<! field !>_rb -%] 
+<! ELSE -!>
+[%- JAVASCRIPT -%]stash.set("<! widget.id !>_st_widget_<! field !>_rb",loc('the page titled'));[%- END -%]
+[%- <! widget.id !>_st_widget_<! field !>_rb -%] 
+<! END -!>&nbsp;
 <input size="25" type="text" id="st-widget-<! field !>" name="<! field !>" value="[% <! field !> | html %]"/>
 </p>
 </td>

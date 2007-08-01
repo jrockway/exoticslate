@@ -30,6 +30,7 @@ LoadModule mime_module          [% config.module_dir %]/mod_mime.so
 LoadModule log_config_module    [% config.module_dir %]/mod_log_config.so
 LoadModule alias_module         [% config.module_dir %]/mod_alias.so
 LoadModule setenvif_module      [% config.module_dir %]/mod_setenvif.so
+LoadModule dir_module           [% config.module_dir %]/mod_dir.so
 [% END %]
 
 <IfModule mod_ssl.c>

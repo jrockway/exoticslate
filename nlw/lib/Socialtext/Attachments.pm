@@ -319,9 +319,15 @@ sub load {
         $self->$key($value);
     }
 
-    $self->filename( $self->Subject );
-    $self->db_filename( $self->DB_Filename
-            || $self->uri_escape( $self->Subject ) );
+    {
+        # This might be undef here, and lots of tests use -w which will cause
+        # confusing warnings from inside URI::Escape.  Harmless to remove this
+        # localized var, but it reduces some noise.
+        local $^W = 0; 
+        $self->filename( $self->Subject );
+        $self->db_filename( $self->DB_Filename
+                || $self->uri_escape( $self->Subject ) );
+    }
 
     $self->loaded(1);
     return $self;

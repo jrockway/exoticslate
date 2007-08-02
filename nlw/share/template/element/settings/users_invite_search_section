@@ -85,7 +85,7 @@ function toggle_all() {
 
 [% loc("When you're entering text, just type in paragraphs. And don't worry about breaking anything - previous versions of the page are saved, so there's always a backup copy of the page you're working on.") %]
 
-[% loc("To make a link to another page (even if it doesn't exist yet), put [square brackets around a word or phrase].") %]
+[% loc("To make a link to another page (even if it doesn't exist yet), put ~[square brackets around a word or phrase~].") %]
    </textarea>
    </div>
   </div>

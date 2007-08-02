@@ -94,6 +94,7 @@ function setup_wikiwyg() {
             imagesLocation: nlw_make_static_path('/images/wikiwyg_icons/')
         },
         wysiwyg: {
+            clearRegex: /^<div class="?wiki"?>\s*Replace this text with your own.\s*<br><\/div>\s*$/i,
             iframeId: 'st-page-editing-wysiwyg',
             editHeightMinimum: 200,
             editHeightAdjustment: 1.3
@@ -1304,6 +1305,7 @@ proto.convertWikitextToHtml = function(wikitext, func) {
             method: 'post',
             parameters: $H({
                 action: 'wikiwyg_wikitext_to_html',
+                page_name: $('st-page-editing-pagename').value,
                 content: wikitext
             }).toQueryString(),
             asynchronous: false

@@ -9,6 +9,7 @@ use Class::Field qw'field';
 
 field free         => '%{page_uri}';
 field interwiki    => '/lite/page/%{workspace}/%{page_uri}%{section}';
+field interwiki_edit    => '/lite/page/%{workspace}/%{page_uri}%{section}?action=edit';
 field search_query =>
     '/lite/search/%{workspace}?search_term=%{search_term}';
 field category_query =>

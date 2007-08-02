@@ -257,6 +257,9 @@ sub watchlist_changes {
 
             $self->push_result($page_object);
         }
+
+        $sortdir{Date} = 1;
+        $self->result_set( $self->sorted_result_set( \%sortdir ) );
     }
     $self->result_set->{display_title} = loc("Pages You're Watching");
 

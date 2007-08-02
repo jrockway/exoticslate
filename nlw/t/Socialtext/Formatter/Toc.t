@@ -92,22 +92,22 @@ EOF
 $admin->pages->current($page_two);
 my $html_two = $page_two->to_html_or_default();
 like $html_two,
-    qr{<p>Table of Contents: source two</p>},
+    qr{<h3 id="contents">Contents</h3>},
     'page two has a title for the first table of contents';
 like $html_two,
-    qr{<p>Table of Contents: target one</p>},
+    qr{<h3 id="contents">Contents</h3>},
     'page two has a title for the remote table of contents';
 like $html_two,
     qr{<li><span.*<a.* href="#witness_the_fitness">Witness the Fitness</a>.*</li>},
     'page two has a section link to witness the fitness';
 like $html_two,
-    qr{<li><span.*<a.* href="/admin/index.cgi\?target_one#structured_wikitext">target one \(Structured Wikitext\)</a>.*</li>},
+    qr{<li><span.*<a.* href="/admin/index\.cgi\?target_one#structured_wikitext">Structured Wikitext</a>.*</li>},
     'page two has a section link to structured wikitext on target one';
 like $html_two,
-    qr{<li><span.*<a.* href="/admin/index.cgi\?target_one#header_with_in_summary">target one \(Header with in summary\)</a>.*</li>},
+    qr{<li><span.*<a.* href="/admin/index\.cgi\?target_one#header_with_in_summary">Header with in summary</a>.*</li>},
     'page two has a section link to complex header on target one';
 like $html_two,
-    qr{<li><span.*<a.* href="/admin/index.cgi\?target_one#header_with_free_link">target one \(Header with Free Link\)</a>.*</li>},
+    qr{<li><span.*<a.* href="/admin/index\.cgi\?target_one#header_with_free_link">Header with Free Link</a>.*</li>},
     'page two has a section link to complex header on target one';
 like $html_two,
     qr{class="wafl_syntax_error">\[target infinity\]},
@@ -130,7 +130,7 @@ like $html_two,
     qr{<li><span.*<a.* href="#witness_the_fitness">Witness the Fitness</a>.*</li>},
     'page two has a section link to witness the fitness';
 like $html_two,
-    qr{<li><span.*<a.* href="http://.*/admin/index.cgi\?target_one#structured_wikitext">target one \(Structured Wikitext\)</a>.*</li>},
+    qr{<li><span.*<a.* href="http://.*/admin/index.cgi\?target_one#structured_wikitext">Structured Wikitext</a>.*</li>},
     'page two has a section link to structured wikitext on target one';
 like $html_two,
     qr{class="wafl_syntax_error">\[target infinity\]},
@@ -158,10 +158,10 @@ EOF
 $foobar->pages->current($page_foobar);
 my $html_foobar = $page_foobar->to_html_or_default();
 like $html_foobar,
-    qr{<li><span.*<a.*href="/admin/index.cgi\?target_one#structured_wikitext">target one \(Structured Wikitext\)</a>.*</span></li>},
+    qr{<li><span.*<a.*href="/admin/index.cgi\?target_one#structured_wikitext">Structured Wikitext</a>.*</span></li>},
     'page foobar links to structured wikitext on target one';
 like $html_foobar,
-    qr{<li><span.*<a.*href="/admin/index.cgi\?source_two#witness_the_fitness">source two \(Witness the Fitness\)</a>.*</span></li>},
+    qr{<li><span.*<a.*href="/admin/index.cgi\?source_two#witness_the_fitness">Witness the Fitness</a>.*</span></li>},
     'page foobar links to witness the fitness on source two';
 like $html_foobar,
     qr{syntax_error.*admin \[target infinity\]},

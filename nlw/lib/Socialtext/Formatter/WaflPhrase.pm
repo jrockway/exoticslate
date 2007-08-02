@@ -231,7 +231,7 @@ sub html {
     return qq{<a href="$link">} . $self->label ."</a>"
         if $self->label;
 
-    return 
+    return
         qq{<img alt="$image_name" src="$link" />};
 }
 
@@ -316,7 +316,7 @@ sub html {
         id         => $file_id,
     );
 
-    return 
+    return
         qq{<a href="$link;as_page=1" target="_blank">$label</a>};
 }
 
@@ -395,12 +395,30 @@ sub html {
     $self->hub->viewer->page_id($viewer_page_id);
     return $self->html_escape($self->matched) unless $html;
 
-    # Use the formatter to generate link text
-    my $link_text = "{link $workspace_name [$page_title]}";
-    my $page_link = $self->_strip_outer_div(
-        $self->hub->viewer->text_to_html("$link_text\n") );
-    return qq(<div class="wiki-include-page">\n)
-        . qq(<div class="wiki-include-title">$page_link</div>\n)
+    my $view_url = $self->hub->viewer->link_dictionary->format_link(
+        link       => 'interwiki',
+        workspace  => $workspace_name,
+        page_uri   => $page_uri,
+        url_prefix => $self->url_prefix,
+    );
+    
+    my $edit_url;
+    eval {
+        $edit_url = $self->hub->viewer->link_dictionary->format_link(
+            link       => 'interwiki_edit',
+            workspace  => $workspace_name,
+            page_uri   => $page_uri,
+            url_prefix => $self->url_prefix,
+        );
+    };
+
+    my $img = $self->hub->helpers->images_path . 'st/homepage/edit-icon.gif';
+    my $link = "<a href='$view_url'>$page_title</a>";
+    my $edit = $edit_url ? "<a href='$edit_url'><img src='$img' border='0'/></a>" : "";
+    my $style = 'border-left: 1px solid #80a9f3; padding: 0px 10px 0px 5px ; margin-left: 12px';
+
+    return qq(<div style="$style" class="wiki-include-page">\n)
+        . qq(<div class="wiki-include-title">$link $edit</div>\n)
         . qq(<div class="wiki-include-content">$html</div></div>);
 }
 
@@ -587,7 +605,7 @@ package Socialtext::Formatter::Toc;
 use base 'Socialtext::Formatter::WaflPhraseDiv';
 use Class::Field qw( const );
 use Socialtext::Permission 'ST_READ_PERM';
-use Socialtext::l10n qw(loc);
+use Socialtext::l10n qw( loc );
 
 const wafl_id => 'toc';
 
@@ -629,43 +647,55 @@ sub _parse_page_for_headers {
     my $remote_page_title = shift;
 
     my $hub = $self->hub_for_workspace_name($workspace_name);
-    my $wikitext = '';
     my $page = $hub->pages->new_page($page_id);
     my $page_title = $page->title;
 
-    my $wikitext_page_id =
-        $self->current_page_id eq $page_id
-        ? ''
-        : '[' . $remote_page_title . ']';
-    my $wikitext_workspace_name =
-        $self->current_workspace_name eq $workspace_name
-        ? ''
-        : $workspace_name;
 
-    my $title = qq(<div class="toc"><p>) . loc('Table of Contents') . ': '
-        . $page_title
-        . "</p>\n";
+    if ($self->current_page_id eq $page_id) {
+        my $content = $self->hub->wikiwyg->cgi->content;
+        $page->content($content) if $content;
+    }
+
+    my $contents = loc('Contents');
+
+    my ($title,$linkref) = ('','');
+    if ($self->current_workspace_name ne $workspace_name) {
+        $title = ": $workspace_name: {link: $workspace_name [$remote_page_title]}";
+        $linkref = "$workspace_name [$remote_page_title]";
+    }
+    elsif ($self->current_page_id ne $page_id) {
+        $title = ": [$remote_page_title]";
+        $linkref = "[$remote_page_title]";
+    }
+
+    my $wikitext = "^^^ $contents$title\n";
 
     my $headers = $page->get_headers();
 
-    # create a list describing the headers
-    foreach my $header (@$headers) {
-        $wikitext .= '*' x $header->{level} . ' '
-            . qq({link $wikitext_workspace_name )
-            . qq($wikitext_page_id )
-            . $header->{text} . "}\n";
+    if (@$headers) {
+        my $min;
+        for my $header (@$headers) {
+            $min = $header->{level} if not defined $min or $header->{level} < $min;
+        }
+
+        # create a list describing the headers
+        foreach my $header (@$headers) {
+            my $stars = '*' x ($header->{level} - ($min-1));
+            $wikitext .= "$stars {link: $linkref $header->{text}}\n";
+        }
+    }
+    else {
+        $wikitext = "> {link: $workspace_name [$page_title]} does not have any headers.\n";
     }
 
-    $wikitext = "> {link $wikitext_workspace_name ["
-        . $page_title
-        . ']} does not have any headers.'
-        unless $wikitext;
+    my $html = $self->hub->viewer->text_to_html($wikitext);
 
-    my $html = $self->hub->viewer->text_to_html( "\n" . $wikitext . "\n\n" );
-    
-    return $title . $html . '</div>';
+    # Since we say which page this toc was generated for in the title, remove
+    # all the page_name(...) parts of links
+    $html =~ s/$page_title \((.*)\)/$1/g;
+
+    return "<table class='toc'><tr><td>$html</td></tr></table>";
 }
 
 
 1;
-

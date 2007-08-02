@@ -13839,15 +13839,26 @@ proto.enableThis = function() {
     this.get_edit_document().designMode = 'on';
     this.apply_stylesheets();
     this.enable_keybindings();
-    this.clear_inner_html();
+    this.set_clear_handler();
 }
 
 proto.clear_inner_html = function() {
     var inner_html = this.get_inner_html();
     var clear = this.config.clearRegex;
+    var res = inner_html.match(clear) ? 'true' : 'false';
     if (clear && inner_html.match(clear))
         this.set_inner_html('');
 }
+
+proto.set_clear_handler = function () {
+    var self = this;
+    this.get_edit_iframe().contentWindow.addEventListener(
+        'click',
+        function () { self.clear_inner_html() },
+        false
+    );
+}
+
 
 proto.get_keybinding_area = function() {
     return this.get_edit_document();
@@ -14348,6 +14359,7 @@ function setup_wikiwyg() {
             imagesLocation: nlw_make_static_path('/images/wikiwyg_icons/')
         },
         wysiwyg: {
+            clearRegex: /^<div class="?wiki"?>\s*Replace this text with your own.\s*<br><\/div>\s*$/i,
             iframeId: 'st-page-editing-wysiwyg',
             editHeightMinimum: 200,
             editHeightAdjustment: 1.3
@@ -15558,6 +15570,7 @@ proto.convertWikitextToHtml = function(wikitext, func) {
             method: 'post',
             parameters: $H({
                 action: 'wikiwyg_wikitext_to_html',
+                page_name: $('st-page-editing-pagename').value,
                 content: wikitext
             }).toQueryString(),
             asynchronous: false

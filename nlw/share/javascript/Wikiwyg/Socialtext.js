@@ -926,7 +926,17 @@ Mode class generic overrides.
  =============================================================================*/
 proto = Wikiwyg.Mode.prototype;
 
-proto.footer_offset = 20; // magic constant to make sure edit window does not scroll off page
+// magic constant to make sure edit window does not scroll off page
+proto.footer_offset = Wikiwyg.is_ie? 30 : 48;
+
+proto.get_offset_top = function (e) {
+    var x = 0;
+    while (e) {
+        x += e.offsetTop;
+        e = e.offsetParent;
+    }
+    return x;
+}
 
 // XXX - Hardcoded until we can get height of Save/Preview/Cancel buttons
 proto.get_edit_height = function() {
@@ -939,15 +949,8 @@ proto.get_edit_height = function() {
         available_height = document.body.clientHeight;
     }
 
-    var x = 0;
-    var e = this.div;
-    while (e) {
-        x += e.offsetTop;
-        e = e.offsetParent;
-    }
-
     var edit_height = available_height -
-                      x -
+                      this.get_offset_top(this.div) -
                       this.wikiwyg.toolbarObject.div.offsetHeight -
                       this.footer_offset;
     return edit_height;

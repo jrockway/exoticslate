@@ -67,6 +67,7 @@ proto.initializeObject = function() { // See IE
 
 proto.initialize_object = function() {
     this.div = document.createElement('div');
+    this.div.style.position = 'relative';
     if (this.config.textareaId)
         this.textarea = document.getElementById(this.config.textareaId);
     else
@@ -90,7 +91,7 @@ proto.clear_inner_text = function() {
 
 proto.enableThis = function() {
     Wikiwyg.Mode.prototype.enableThis.call(this);
-    this.textarea.style.width = '100%';
+    this.textarea.style.width = '99%';
     this.setHeightOfEditor();
     this.enable_keybindings();
 }

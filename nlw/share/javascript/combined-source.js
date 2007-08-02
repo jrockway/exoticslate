@@ -12254,6 +12254,7 @@ proto.initializeObject = function() { // See IE
 
 proto.initialize_object = function() {
     this.div = document.createElement('div');
+    this.div.style.position = 'relative';
     if (this.config.textareaId)
         this.textarea = document.getElementById(this.config.textareaId);
     else
@@ -12277,7 +12278,7 @@ proto.clear_inner_text = function() {
 
 proto.enableThis = function() {
     Wikiwyg.Mode.prototype.enableThis.call(this);
-    this.textarea.style.width = '100%';
+    this.textarea.style.width = '99%';
     this.setHeightOfEditor();
     this.enable_keybindings();
 }
@@ -13807,6 +13808,7 @@ proto.config = {
 proto.initializeObject = function() {
     this.edit_iframe = this.get_edit_iframe();
     this.div = this.edit_iframe;
+    this.div.style.width = '99%';
 }
 
 proto.fromHtml = function(html) {
@@ -13833,7 +13835,7 @@ proto.fix_up_relative_imgs = function() {
 proto.enableThis = function() {
     Wikiwyg.Mode.prototype.enableThis.call(this);
     this.edit_iframe.style.border = '1px black solid';
-    this.edit_iframe.width = '100%';
+    this.edit_iframe.width = '99%';
     this.setHeightOf(this.edit_iframe);
     this.fix_up_relative_imgs();
     this.get_edit_document().designMode = 'on';
@@ -15191,7 +15193,17 @@ Mode class generic overrides.
  =============================================================================*/
 proto = Wikiwyg.Mode.prototype;
 
-proto.footer_offset = 20; // magic constant to make sure edit window does not scroll off page
+// magic constant to make sure edit window does not scroll off page
+proto.footer_offset = Wikiwyg.is_ie? 30 : 48;
+
+proto.get_offset_top = function (e) {
+    var x = 0;
+    while (e) {
+        x += e.offsetTop;
+        e = e.offsetParent;
+    }
+    return x;
+}
 
 // XXX - Hardcoded until we can get height of Save/Preview/Cancel buttons
 proto.get_edit_height = function() {
@@ -15204,15 +15216,8 @@ proto.get_edit_height = function() {
         available_height = document.body.clientHeight;
     }
 
-    var x = 0;
-    var e = this.div;
-    while (e) {
-        x += e.offsetTop;
-        e = e.offsetParent;
-    }
-
     var edit_height = available_height -
-                      x -
+                      this.get_offset_top(this.div) -
                       this.wikiwyg.toolbarObject.div.offsetHeight -
                       this.footer_offset;
     return edit_height;

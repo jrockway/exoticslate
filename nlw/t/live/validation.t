@@ -19,7 +19,7 @@ Malformed query.+Please send email to.*if you think it should have worked\.
 action: attachments_upload
 --- MATCH_WHOLE_PAGE
 --- match
-Malformed query.+Please send email to.*if you think it should have worked\.
+The file you are trying to upload does not exist
 
 === Unknown action
 --- query

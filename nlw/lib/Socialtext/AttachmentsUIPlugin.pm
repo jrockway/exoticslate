@@ -10,6 +10,7 @@ use IO::File;
 use Socialtext::AppConfig;
 use Socialtext::Helpers;
 use Socialtext::Exceptions;
+use Socialtext::TT2::Renderer;
 use Socialtext::l10n qw(loc system_locale);
 use Socialtext::BrowserDetect;
 
@@ -112,13 +113,13 @@ sub attachments_upload {
     my @embeds = $self->cgi->embed;
     my @unpacks = $self->cgi->unpack;
 
-    my $args = $self->process_attachments_upload(
+    my $error = $self->process_attachments_upload(
         files  => \@files,
         embed  => \@embeds,
         unpack => \@unpacks,
     );
 
-    return $self->_finish(%$args);
+    return $self->_finish(error => $error, files => \@files);
 }
 
 sub process_attachments_upload {
@@ -129,29 +130,37 @@ sub process_attachments_upload {
     my @embeds = @{$p{embed}};
     my @unpacks = @{$p{unpack}};
 
-    my $count = scalar(@files);
+    my $count = grep { -s $_->{handle} } @files;
 
-    Socialtext::Exception::DataValidation->throw("No file given for upload\n")
+    return loc('The file you are trying to upload does not exist')
         unless $count;
-    return +{}
+
+    return loc('You dont have permission to upload attachments')
         unless $self->hub->checker->check_permission('attachments');
 
-    my %args;
-    if ($count) {
-        for (my $i=0; $i < $count; $i++) {
-            my $error_code = $self->save_attachment(
-                $files[$i],
-                $embeds[$i],
-                $unpacks[$i],
-            );
-            if ($error_code) {
-                $error_code =~ s/\. at.*//s;    # grr... stinkin auto-added backtrace.
-                $args{attachment_error} .= $error_code;
-            }
-
+    my $error = '';
+    for (my $i=0; $i < $count; $i++) {
+        my $error_code = $self->save_attachment(
+            $files[$i],
+            $embeds[$i],
+            $unpacks[$i],
+        );
+        if ($error_code) {
+            $error_code =~ s/\. at.*//s;    # grr... stinkin auto-added backtrace.
+            $error .= $error_code;
         }
+
     }
-    return \%args;
+    return $error;
+}
+
+sub _finish {
+    my ($self, %args) = @_;
+    my $renderer = Socialtext::TT2::Renderer->instance;
+    return $renderer->render(
+        template => 'view/attachmentresult',
+        vars     => \%args,
+    );
 }
 
 sub save_attachment {
@@ -232,8 +241,7 @@ sub _attachment_download_link {
 
 sub attachments_delete {
     my $self = shift;
-    return $self->_finish
-        unless $self->hub->checker->check_permission('delete');
+    return unless $self->hub->checker->check_permission('delete');
 
     for my $attachment_junk ( $self->cgi->selected ) {
         my ( $page_id, $id, undef ) = map { split ',' } $attachment_junk;
@@ -250,26 +258,6 @@ sub attachments_delete {
 
     # If called via AJAX we have nothing to return
     return;
-}
-
-sub _finish {
-    my $self = shift;
-    my %args = @_;
-
-    my $query_string;
-
-    if ( $self->cgi->caller_action eq 'attachments_listall' ) {
-        $query_string = 'action=attachments_listall';
-    }
-    else {
-        $query_string = 'action=display;js=toggle_attachments_div;page_name='
-            . $self->cgi->page_name;
-        $query_string .= ';caller_action=' . $self->cgi->caller_action;
-    }
-
-    $query_string .= ";$_=$args{$_}" for keys %args;
-
-    $self->redirect($query_string);
 }
 
 #------------------------------------------------------------------------------#

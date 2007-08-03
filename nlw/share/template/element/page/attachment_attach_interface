@@ -3,13 +3,14 @@
     <div id="[% ns %]-attachinterface-overlay"></div>
     <div id="[% ns %]-interface-wrapper">
     <div id="[% ns %]-interface">
+        <iframe id="[% ns %]-formtarget" name="[% ns %]-formtarget" src="about:blank"></iframe>
         <form id="[% ns %]-form" name="attachForm" method="post" action="index.cgi" enctype="multipart/form-data" target="[% ns %]-formtarget">
             <input type="hidden" name="page_name" value="[% page.id %]"/>
             <input type="hidden" name="action" value="attachments_upload"/>
-            <iframe id="[% ns %]-formtarget" name="[% ns %]-formtarget" src="[% wiki.static_path %]/html/blank.html"></iframe>
             <div id="[% ns %]-title">[% loc('Upload Files') %]</div>
 
             <p id="[% ns %]-message">[% loc('Click "Browse" to find the file you want to upload. When you click "Upload file" your file will be uploaded and added to the list of attachments for this page.') %]</p>
+            <p id="[% ns %]-limit">[% loc('Maximum file size: 50MB') %]</p>
             <p id="[% ns %]-fileprompt">
                 <input id="[% ns %]-filename" size="60" type="file" name="file"/>
             </p>

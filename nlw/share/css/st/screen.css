@@ -1225,8 +1225,8 @@ body {
     opacity: .70;
 }
 #st-attachments-attach-formtarget {
-    width: 0px;
-    height: 0px;
+    width: 0;
+    height: 0;
     border: 0;
     padding: 0;
     margin: 0;
@@ -1291,6 +1291,10 @@ body {
     border-bottom: 1px solid #4949BA;
     background-color: #F5F5F5;
     padding: 3px;
+}
+
+#st-attachments-attach-limit {
+    font-style: italic;
 }
 
 .st-attachments-attach-listlabel {

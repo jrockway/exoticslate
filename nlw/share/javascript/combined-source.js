@@ -8423,13 +8423,13 @@ ST.Attachments.prototype = {
     },
 
     _attach_status_check: function () {
-        var text = null;
+        var doc = null;
         Try.these(
-            function () { text = $('st-attachments-attach-formtarget').contentWindow.document.body.innerHTML; },
-            function () { text = $('st-attachments-attach-formtarget').contentDocument.body.innerHTML; }
+            function () { doc = $('st-attachments-attach-formtarget').contentWindow.document; },
+            function () { doc = $('st-attachments-attach-formtarget').contentDocument; }
         );
-        if (text == null)
-            return;
+        if (!doc) return;
+        if (!doc.getElementById('attachment_upload')) return;
         clearInterval(this._attach_waiter);
         $(this.element.attachUploadMessage).style.display = 'none';
         Element.update(this.element.attachUploadMessage, '');
@@ -8438,17 +8438,20 @@ ST.Attachments.prototype = {
         $(this.element.attachEmbedCheckbox).disabled = false;
         $(this.element.attachCloseButton).style.display = 'block';
 
-        this._update_uploaded_list($(this.element.attachFilename).value);
-
         Element.update(this.element.attachMessage, 'Click "Browse" to find the file you want to upload. When you click "Upload another file" your file will be uploaded and added to the list of attachments for this page.');
         $(this.element.attachSubmit).value = 'Upload another file';
-        if (text.match(/Request Entity Too Large/)) {
-            text = 'File size exceeds maximum limit. File was not uploaded.';
+        var err = doc.getElementById('error');
+        if (err) {
+            var msg = err.innerHTML;
+            this._show_attach_error(msg);
         }
         else {
+            this._update_uploaded_list($(this.element.attachFilename).value);
             this._pullAttachmentList();
             Page.refresh_page_content(true);
         }
+
+        doc.location = 'about:blank';
 
         Try.these(
             (function() {
@@ -8833,8 +8836,8 @@ ST.Attachments.prototype = {
     },
 
     _update_uploaded_list: function (filename) {
-        filename = filename.match(/^.+[\\\/]([^\\\/]+)$/)[1];
-        this._uploaded_list.push(filename);
+        var match = filename.match(/^.+[\\\/]([^\\\/]+)$/);
+        this._uploaded_list.push(match == null ? filename : match[1]);
         this._refresh_uploaded_list();
     },
 

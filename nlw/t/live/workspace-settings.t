@@ -32,6 +32,7 @@ logo_uri: 'http://www.example.com/eg.gif'
 action: workspaces_settings_features
 --- match
 <input type="radio" name="incoming_email_placement"
+<input type="radio" name="enable_unplugged"
 
 === save changes
 --- form: 2
@@ -39,6 +40,7 @@ action: workspaces_settings_features
 Button: Button
 incoming_email_placement: bottom
 email_notify_is_enabled: 0
+enable_unplugged: 0
 --- match
 <div class="workspace-entry-header">Workspace Email Receive Setting</div>
    <input type="radio" name="incoming_email_placement"

@@ -33,7 +33,7 @@ sub register {
 sub workspaces_listall {
     my $self = shift;
     if ( $self->hub()->current_user()->is_guest() ) {
-        Socialtext::Challenger->Challenge( type    => 
+        Socialtext::Challenger->Challenge( type    =>
                                                 'settings_requires_account' );
     }
 
@@ -91,6 +91,7 @@ sub _workspace_settings {
     my $section_template = "element/settings/workspaces_settings_${type}_section";
     my $settings_section = $self->template_process(
         $section_template,
+        $self->hub->helpers->global_template_vars,
         workspace => $self->hub->current_workspace,
         $self->status_messages_for_template,
     );
@@ -109,7 +110,7 @@ sub _update_workspace_settings {
     my $self = shift;
 
     my %update;
-    for my $f ( qw( title incoming_email_placement 
+    for my $f ( qw( title incoming_email_placement enable_unplugged
                     email_notify_is_enabled sort_weblogs_by_create
                     homepage_is_dashboard ) ) {
 
@@ -203,6 +204,7 @@ sub _create_workspace {
             header_logo_link_uri => $current_ws->header_logo_link_uri,
             # end customization inheritances
             account_id => $account_id,
+            enable_unplugged => 1,
         );
 
         $ws->set_logo_from_uri( uri => $self->cgi->logo_uri )
@@ -243,7 +245,7 @@ sub workspaces_created {
 sub workspaces_unsubscribe {
     my $self = shift;
     if ( $self->hub()->current_user()->is_guest() ) {
-        Socialtext::Challenger->Challenge( type    => 
+        Socialtext::Challenger->Challenge( type    =>
                                                 'settings_requires_account' );
 
     }
@@ -383,5 +385,6 @@ cgi 'account_id';
 cgi 'account_name';
 cgi 'permission_set_name';
 cgi 'guest_has_email_in';
+cgi 'enable_unplugged';
 
 1;

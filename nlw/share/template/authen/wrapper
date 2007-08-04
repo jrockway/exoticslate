@@ -7,7 +7,6 @@
     <title>[% title %]</title>
     <link rel="stylesheet" type="text/css" href="[% static_path %]/css/xhtml/base.css" />
     <link rel="stylesheet" type="text/css" href="[% static_path %]/css/xhtml/form.css" />
-     <script type="text/javascript" src="[% static_path %]/javascript/combined-source.js"></script>
   </head>
 
   <body onload="call_onload_functions()">

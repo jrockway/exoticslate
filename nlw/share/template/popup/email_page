@@ -74,7 +74,7 @@
 [% END %]
 
 [% BLOCK email_page_note %]
-  [% SET note = loc("Hello, this is a page from the workspace that I wanted you to see. This page is also available for viewing or editing on the web at:\n\n[_1]", ${page.full_uri}) UNLESS note %]
+  [% SET note = loc("Hello, this is a page from the workspace that I wanted you to see. This page is also available for viewing or editing on the web at:\n\n[_1]", page.full_uri) UNLESS note %]
   <textarea name="email_page_add_note" rows="7" cols="60">[% note %]</textarea>
 [% END %]
 

@@ -9,7 +9,29 @@
     <link rel="stylesheet" type="text/css" href="[% static_path %]/css/xhtml/form.css" />
   </head>
 
-  <body onload="call_onload_functions()">
+    <script type="text/javascript">
+// This script will focus the login and choose_password pages
+    function authen_focus () {
+        var form = document.forms["login"];
+        if (form) {
+            var username = form.username;
+            var password = form.password;
+            if (username && password) {
+                if ( username.value.length ) {
+                    password.focus();
+                }
+                else {
+                    username.focus();
+                }
+            }
+            else if (password) {
+                password.focus();
+            }
+        }
+    }
+    </script>
+
+  <body onload="authen_focus()">
     <a name="page_top"></a>
 
     <div class="pane">

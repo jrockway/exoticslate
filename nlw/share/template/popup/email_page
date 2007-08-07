@@ -127,7 +127,7 @@
   <div id="[% ns %]-userselect-columncenter" class="email-page-user-select-column">
     <div class="email-page-user-select-button-group">
       <input class="email-page-input" type="button" name="email_page_select_add" value="[% loc('Add') %] &gt;&gt;" onclick="email_page_move();" />
-      <input class="email-page-input" type="button" name="email_page_select_add" value="&lt;&lt; [% loc('Remove') %]" onclick="email_page_remove();" />
+      <input class="email-page-input" type="button" name="email_page_select_remove" value="&lt;&lt; [% loc('Remove') %]" onclick="email_page_remove();" />
     </div> 
     <div class="email-page-user-select-button-group">
       <input class="email-page-input" type="button" name="email_page_select_all" value="[% loc('Add All') %] &gt;&gt;" onclick="email_page_all();" />

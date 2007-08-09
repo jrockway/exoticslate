@@ -99,7 +99,6 @@ sub store {
 
 sub send_email {
     my $self = shift;
-    return if Socialtext::AppConfig->is_appliance;
     return unless Socialtext::AppConfig->email_errors_to;
 
     my $report = shift;

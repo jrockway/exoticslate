@@ -1,0 +1,2 @@
+127.0.0.1 - - [01/Aug/2007:11:19:02 -0700] "GET /admin/index.cgi HTTP/1.1" 302 5 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.5) Gecko/20070713 Firefox/2.0.0.5" 6081 8
+127.0.0.1 - - [01/Aug/2007:11:19:03 -0700] "GET /nlw/login.html?redirect_to=%2Fadmin%2Findex.cgi HTTP/1.1" 200 - "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.5) Gecko/20070713 Firefox/2.0.0.5" 6081 1

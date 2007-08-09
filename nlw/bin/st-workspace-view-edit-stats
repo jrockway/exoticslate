@@ -26,6 +26,7 @@ GetOptions(
     'no_mail'     => \$opts{no_mail},
     'help'        => \$opts{help},
     'skip_file=s' => \$opts{skip_file},
+    'verbose'     => \$opts{verbose},
 ) or exit 1;
 
 show_help() if $opts{help};
@@ -33,6 +34,7 @@ show_help() if $opts{help};
 # XXX don't change this without also changing
 # Socialtext::Page::_is_system_page 
 my $FROM_ADDRESS = 'noreply@socialtext.com';
+my $summary_email = Socialtext::AppConfig->reports_summary_email();
 
 # actions to be counted as view
 my @VIEW_ACTIONS = qw(
@@ -81,12 +83,16 @@ my %actions;
 
 my %selected_workspaces = map { $_ => 1 } @ARGV;
 my %action_summary;
-my ( $day, $month, $year );    # the date to use in email subject
+
+# the date to use in email subject (will be set to last log line)
+my ( $day, $month, $year ) = (localtime)[3,4,5];
+$month++; $year += 1900;
 
 # Where are we running?
 my $hostname = hostname();
 my $is_appliance = -e '/etc/socialtext/appliance.conf' ? 1 : 0;
 
+$opts{skip_file} ||= Socialtext::AppConfig->reports_skip_file();
 update_skip_list( $opts{skip_file} );
 fill_action_summary( \%action_summary );
 gather_data();
@@ -97,26 +103,45 @@ process_data();
 sub gather_data {
     # REVIEW: Why are we using STDIN instead of the magic filehandle?
     while ( my $log_line = <STDIN> ) {
+        next if $log_line =~ m/^\s*$/;
+
         my $log_ref
             = Socialtext::UsageStats::parse_apache_log_line($log_line);
 
         # count only lines with authenticated socialtext users
         # skipping eventspace public side in the process
-        next if ( $log_ref->{user} !~ /\@/ );
+        if ( $log_ref->{user} !~ /\@/ ) {
+            verbose("$log_ref->{user} is not authenticated");
+            next;
+        }
 
-        next if ( $SKIP_USERS{ $log_ref->{user} } );
+        if ( $SKIP_USERS{ $log_ref->{user} } ) {
+            verbose("$log_ref->{user} is in the skip list");
+            next;
+        }
 
-        next unless $log_ref->{status} =~ /^[2]/;   # okay status only
+        if ($log_ref->{url} =~ m#^/data/workspaces#) {
+            verbose("Skipping REST call - $log_ref->{url}");
+            next;
+        }
 
         my $workspace = lc Socialtext::UsageStats::get_workspace_from_url(
             $log_ref->{url}
         );
+        unless (defined $workspace) {
+            verbose("Couldn't find workspace from url: $log_ref->{url}");
+            next;
+        }
 
-        next unless defined $workspace;
+        if (%selected_workspaces and not $selected_workspaces{$workspace}) {
+            verbose("$workspace is not a selected workspace");
+            next;
+        }
 
-        next if %selected_workspaces and not $selected_workspaces{$workspace};
-
-        next unless Socialtext::Workspace->new( name => $workspace );
+        unless (Socialtext::Workspace->new( name => $workspace )) {
+            verbose("Couldn't load workspace '$workspace' - url='$log_ref->{url}'");
+            next;
+        }
 
         # we get the date from every line so that by the time we are to the
         # end of the log, we have the end date of the period
@@ -128,6 +153,11 @@ sub gather_data {
         # inside a workspace
         my $action = '';
         if ( $log_ref->{method} eq 'GET' ) {
+            unless ($log_ref->{status} =~ /^[2]/) {
+                verbose("Skipping GET based on status: $log_ref->{status}");
+                next;
+            }
+
             if ( $log_ref->{url} =~ m{index\.cgi\?action=(\w+)} ) {
                 $action = $1;
             }
@@ -136,6 +166,11 @@ sub gather_data {
             }
         }
         elsif ( $log_ref->{method} eq 'POST' ) {
+            unless ($log_ref->{status} =~ /^[23]/) {
+                verbose("Skipping POST based on status: $log_ref->{status}");
+                next;
+            }
+
             if (
                 Socialtext::UsageStats::is_edit_action(
                     $log_ref->{method},
@@ -152,8 +187,15 @@ sub gather_data {
                 $action = '';
             }
         }
+        else {
+            verbose("Unknown method: '$log_ref->{method}'");
+        }
 
-        next unless exists $action_summary{$action};
+        unless (exists $action_summary{$action}) {
+            verbose("Couldn't lookup action '$action' - $log_ref->{url}");
+            next;
+        }
+
         $actions{ $action_summary{$action} }++;
 
         # XXX inscrutable
@@ -237,10 +279,13 @@ sub process_data {
     }
     else {
         produce_output(
-            'corp@socialtext.net',
+            $summary_email,
             $details,
             "$hostname Detailed Usage for week $year $month $day"
         );
+    }
+    unless ($summary_email or $opts{no_mail}) {
+        print "No email address configured: reports_summary_email - no email sent.\n";
     }
 }
 
@@ -295,15 +340,12 @@ sub update_skip_list {
     my $file = shift;
     return unless $file;
 
-    my ($fh, $line);
-    open ($fh, "$file") or die "unable to open skip file $file\n";
-
-    while ($line = <$fh>) {
-        chomp($line);
-        $SKIP_WORKSPACES{lc($line)} = 1;
+    open my $fh, $file or die "unable to open skip file $file: $!\n";
+    while (my $line = <$fh>) {
+        chomp $line;
+        $SKIP_WORKSPACES{lc $line} = 1;
     }
-    
-    close($fh);
+    close $fh;
 }
 
 sub show_help {
@@ -313,8 +355,8 @@ sub show_help {
 
  By default, without args, STDIN is parsed as an apache access log
  for workspace view and edit statistics. The results are mailed to
- each workspace counted, with a summary page mailed to the corp
- workspace.
+ each workspace counted, with a summary page mailed to an address
+ specified with --email.
 
  If one or more workspace names is given as an argument, only those 
  workspaces are counted and reported.
@@ -326,6 +368,8 @@ sub show_help {
 
  The script knows the following options:
 
+ --email     An email address to mail the summary to
+
  --no_mail   Do not send mail. Instead send the output to STDOUT.
 
  --skip_file A list of workspaces, one per line, to be skipped.
@@ -334,4 +378,9 @@ sub show_help {
 
 EOF
     exit(0);
+}
+
+sub verbose {
+    my $msg = shift;
+    warn "$msg\n" if $opts{verbose};
 }

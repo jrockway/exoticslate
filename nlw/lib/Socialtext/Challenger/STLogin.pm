@@ -44,12 +44,18 @@ sub challenge {
 
     if ($hub) {
         $ws = $hub->current_workspace;
-        $type = 'unauthorized_workspace' unless $hub->current_user->is_guest;
+        if ( !$hub->current_user->is_guest ) {
+            $type = 'unauthorized_workspace';
+            $request->log_error('User ' . $hub->current_user->email_address .
+                                ' is not authorized to view workspace ' .
+                                $hub->current_workspace->title);
+        }
     }
     $type = $p{type} ? $p{type} : $type;
 
     my $workspace_title = $ws ? $ws->title        : '';
     my $workspace_id    = $ws ? $ws->workspace_id : '';
+
 
     # stick some information in the session
     # and then establishes a redirect header

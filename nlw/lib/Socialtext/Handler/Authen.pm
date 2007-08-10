@@ -122,6 +122,7 @@ sub login {
 
     unless ( $user_check ) {
         $self->session->add_error( loc('"[_1]" is not a valid email address. Please use your email address to log in.', $username) );
+        $r->log_error ($username . ' is not a valid email address');
         return $self->_redirect('/nlw/login.html');
     }
     my $auth = Socialtext::Authen->new;
@@ -129,15 +130,18 @@ sub login {
 
     if ($user && !$user->email_address) {
         $self->session->add_error(loc("This username has no associated email address." ));
+        $r->log_error ($username . ' has no associated email address');
         return $self->_redirect('/nlw/login.html');
     }
 
     if ($user and $user->requires_confirmation) {
+        $r->log_error($username . ' requires confirmation');
         return $self->require_confirmation_redirect($user->email_address);
     }
 
     unless ($self->{args}{password}) {
         $self->session->add_error(loc("Wrong email address or password - please try again."));
+        $r->log_error('Wrong email address or password for ' . $username);
         return $self->_redirect('/nlw/login.html');
     }
 
@@ -148,6 +152,7 @@ sub login {
 
     unless ($check_password) {
         $self->session->add_error(loc("Wrong email address or password - please try again."));
+        $r->log_error('Wrong email address or password for ' . $username);
         return $self->_redirect('/nlw/login.html');
     }
 

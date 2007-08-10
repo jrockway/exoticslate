@@ -318,35 +318,26 @@ sub widget_image_text {
 }
 
 sub localize_widget_image_text {
-    my $self = shift;
-    my $text = shift;
-    my $widget = shift;
+    my ( $self, $text, $widget ) = @_;
+    my @vars = ( $text =~ /%(\w+)/g );
+    my @values;
 
-    my $newtext = $text;
-    my $newtext_args = "";
-    my @params = $text =~ /%(\w+)/g;
+    # Escape brackets, they are meaningful to loc().
+    $text =~ s/\]/~]/g;
+    $text =~ s/\[/~[/g;
+
+    # Convert the variables into [_1]-style vars, and save the values so we
+    # can pass them into loc().
     my $count = 1;
-    foreach my $param (@params) {
-        if (exists($widget->{$param})) {
-            $newtext =~ s/%$param/[_$count]/;
-            $newtext_args .= ", \"$widget->{$param}\"";
+    for my $var (@vars) {
+        if ( exists $widget->{$var} ) {
+            $text =~ s/%$var/[_$count]/;
+            push @values, $widget->{$var};
             $count++;
         }
     }
 
-    if ($newtext_args ne "") {
-        $newtext = eval("loc(\"" . $newtext . "\"" . $newtext_args . ")");
-        if ($@) {
-            $newtext = $text;
-        }
-    }else{
-        $newtext = eval("loc(\"" . $newtext . "\")");
-        if ($@) {
-            $newtext = $text;
-        }
-    }
-
-    return $newtext;
+    return loc( $text, @values );
 }
 
 sub generate_phrase_widget_image {

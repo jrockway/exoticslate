@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 19;
+use Test::Socialtext tests => 20;
 fixtures( 'ALL' );
 
 # Confirm that we can create tables of contents of 
@@ -67,6 +67,22 @@ $admin->pages->current($page_one);
 my $html_one = $page_one->to_html_or_default();
 like $html_one, qr{<h1 id="structured_wikitext">Structured Wikitext</h1>},
     'page one should start with an h1';
+
+my $page_plusplus = Socialtext::Page->new( hub => $admin )->create(
+    title  => 'C++',
+    content => <<'EOF',
+
+{toc}
+
+EOF
+    creator => $admin->current_user,
+);
+
+$admin->pages->current($page_plusplus);
+my $html_plusplus = $page_plusplus->to_html_or_default();
+like $html_plusplus,
+    qr{does not have any headers.},
+    'Plusplus page has a valid (empty) toc';
 
 my $page_two = Socialtext::Page->new( hub => $admin )->create(
     title   => 'source two',

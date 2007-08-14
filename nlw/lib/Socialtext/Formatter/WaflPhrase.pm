@@ -692,7 +692,7 @@ sub _parse_page_for_headers {
 
     # Since we say which page this toc was generated for in the title, remove
     # all the page_name(...) parts of links
-    $html =~ s/$page_title \((.*)\)/$1/g;
+    $html =~ s/\Q$page_title\E \((.*)\)/$1/g;
 
     return "<table class='toc'><tr><td>$html</td></tr></table>";
 }

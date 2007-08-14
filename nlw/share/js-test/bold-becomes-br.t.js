@@ -11,12 +11,12 @@ if ( Wikiwyg.is_safari ) {
 }
 else {
     t.filters(filters);
-    if ( Wikiwyg.is_ie ) {
+    if (Wikiwyg.is_ie ) {
         t.skip("IE doesn't have this problem.");
     } else {
         t.run_is('html', 'wikitext');
     }
-    t.run_roundtrip_async('wikitext');
+    t.run_roundtrip('wikitext');
 }
 
 /* Test

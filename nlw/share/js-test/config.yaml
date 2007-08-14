@@ -6,6 +6,7 @@ import_libs:
   - ../Test/Wikiwyg.js
   - ../../javascript/main.js
   - ../../javascript/md5.js
+  - ../../javascript/Cookie.js
   - ../../javascript/pageview.js
   - ../../js-modules/DOM-Events/lib/DOM/Events.js
   - ../../js-modules/Widget-Lightbox/lib/Widget/Lightbox.js

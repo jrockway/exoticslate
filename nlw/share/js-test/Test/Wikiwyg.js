@@ -6,87 +6,15 @@ proto.init = function() {
 }
 
 proto.run_roundtrip = function(section_name, section_name2) {
-    if ( Wikiwyg.is_ie ) {
-        this.run_roundtrip_async(section_name, section_name2);
-    }
-    else {
-        this.run_roundtrip_sync(section_name, section_name2);
-    }
-}
-
-proto.run_roundtrip_async = function(section_name, section_name2) {
-    this.pause = function() { };
-
     if ( Wikiwyg.is_safari ) {
         this.skip("Skip roundtrip tests on Safari");
         return;
     }
 
-    if ( typeof(section_name2) == 'undefined' ) {
-        section_name2 = section_name;
-    }
-
-    this.compile();
-    var total_blocks = 0;
-    var blocks = this.state.blocks;
-    for (var i = 0; i < blocks.length; i++) {
-        var block = blocks[i];
-        if (! this.verify_block(block, section_name)) continue;
-        total_blocks++;
-    }
-
-    var asyncId = this.builder.beginAsync(60000);
-    var finished_tests = 0;
-    this.run_roundtrip_async2(section_name, section_name2,
-        function() {
-            finished_tests++;
-            if ( finished_tests == total_blocks ) {
-                t.builder.endAsync(asyncId);
-                this.pause = Test.Wikiwyg.prototype.pause;
-            }
-        }
-    );
-
-}
-
-proto.run_roundtrip_async2 = function(section_name, section_name2, func) {
-    try {
-        var blocks =  this.state.blocks;
-        for (var i = 0; i < blocks.length; i++) {
-            var block = blocks[i];
-            if (! this.verify_block(block, section_name)) continue;
-            var wikitext = block.data[section_name];
-            var self = this;
-            var cb = (function( block, section_name2 ) {
-                return function( wikitext2 ) {
-                    if (section_name2)
-                        wikitext = block.data[section_name2];
-
-                    self.is(
-                        wikitext2.replace(/\r/g, ''),
-                        wikitext.replace(/\r/g, ''),
-                        block.name
-                    );
-                    if (func) {
-                        func();
-                    }
-                }
-            })(block, section_name2);
-
-            this.do_roundtrip(wikitext, cb);
-        }
-    }
-    catch(e) {
-        // alert(e);
-        throw(e);
-    }
+    this.run_roundtrip_sync(section_name, section_name2);
 }
 
 proto.run_roundtrip_sync = function(section_name, section_name2) {
-    if ( Wikiwyg.is_safari ) {
-        this.skip("Skip roundtrip tests on Safari");
-        return;
-    }
     try {
         this.compile();
         var blocks =  this.state.blocks;
@@ -146,16 +74,9 @@ proto.create_wysiwyg_object = function(html) {
     wysiwyg.config.iframeId = "wikiwyg_iframe";
     wysiwyg.wikiwyg = wikiwyg;
     wysiwyg.initializeObject();
-    this.pause();
     return wysiwyg;
 }
 
-proto.pause = function() {
-    if (/MSIE/.test(navigator.userAgent)) {
-        alert("Pause...");
-    }
-}
-    
 proto = Subclass('Test.Wikiwyg.Block', 'Test.Base.Block');
 
 proto.init = function() {

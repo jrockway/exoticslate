@@ -16116,10 +16116,21 @@ var widget_data = Wikiwyg.Widgets.widget;
 proto = eval(WW_SIMPLE_MODE).prototype;
 
 proto.fromHtml = function(html) {
+
+    // TODO Move this to Wikiwyg.Wysiwyg
+    if (Wikiwyg.is_ie) {
+        html = html.replace(/<DIV class=wiki>(.*)<\/DIV>/g, "$1");
+        html = html.replace(/^<div class.*>/,"").replace(/<\/div>$/,"");
+    }
+
+    var br = "<br class=\"p\"/>";
+    html = html.replace(/\n*<p>\n?/g, "").replace(/<\/p>/g, br + br);
+
     Wikiwyg.Wysiwyg.prototype.fromHtml.call(this, html);
     try {
         setTimeout(this.setWidgetHandlers.bind(this), 200);
     } catch(e) { alert('bleh: ' + e) }
+
 }
 
 proto.toHtml = function(func) {

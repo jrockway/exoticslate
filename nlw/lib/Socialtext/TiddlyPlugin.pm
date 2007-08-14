@@ -229,7 +229,6 @@ sub _make_tiddly_tags {
     return join ' ', @formatted_tags;
 }
         
-1;
 package Socialtext::Tiddly::CGI;
 
 use base 'Socialtext::Query::CGI';
@@ -241,3 +240,5 @@ cgi 'watchlist';
 cgi 'search_term';
 cgi 'page_name';
 cgi 'breadcrumbs';
+
+1;

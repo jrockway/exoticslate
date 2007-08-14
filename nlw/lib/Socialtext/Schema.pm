@@ -291,6 +291,11 @@ sub SchemaObject {
               default        => '',
             );
         $table->make_column
+            ( name           => 'homepage_weblog',
+              type           => 'TEXT',
+              default        => '',
+            );
+        $table->make_column
             ( name           => 'email_addresses_are_hidden',
               type           => 'BOOLEAN',
               default        => 'f',

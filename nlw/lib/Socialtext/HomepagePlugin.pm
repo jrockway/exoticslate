@@ -29,6 +29,12 @@ sub homepage {
         return $self->dashboard;
     }
 
+    if ( my $weblog = $self->hub->current_workspace->homepage_weblog ) {
+        return $self->redirect( '?'
+                . 'action=weblog_display;category='
+                . URI::Escape::uri_escape_utf8($weblog) );
+    }
+
     my $title = $self->hub->current_workspace->title;
     my $uri = $self->hub->pages->new_from_name($title)->uri;
 

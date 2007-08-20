@@ -18,3 +18,16 @@ body.st-popup {
 #st-refcard {
     behavior: url(/static/javascript/csshover.htc);
 }
+
+
+.email-page-user-select-column {
+    float: left;
+    padding-right: 1.0em;
+    width: 11em;
+}
+
+#st-popup-emailpage-userselect-columncenter {
+    width: 8em;
+}
+
+

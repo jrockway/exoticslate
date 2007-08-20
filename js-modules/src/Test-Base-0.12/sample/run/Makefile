@@ -6,7 +6,7 @@ ALL_TARGETS:=$(ALL_T_HTML) index.html
 
 all: $(ALL_TARGETS)
 
-%.t.html:
+$(ALL_T_HTML): ../config.yaml ../template/test.html
 	perl bin/render-template test.html $@
 
 index.html: ../*.t.js

@@ -64,6 +64,16 @@ Wikiwyg.is_old_firefox = (
     Wikiwyg.ua.indexOf('konqueror') == -1
 );
 
+Wikiwyg.is_safari2 = (
+    Wikiwyg.is_safari &&
+    Wikiwyg.ua.indexOf("version/2") != -1
+);
+
+Wikiwyg.is_safari3 = (
+    Wikiwyg.is_safari &&
+    Wikiwyg.ua.indexOf("version/3") != -1
+);
+
 function setup_wikiwyg() {
     if (! Wikiwyg.browserIsSupported) return;
 

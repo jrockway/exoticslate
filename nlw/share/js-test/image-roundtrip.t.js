@@ -5,13 +5,15 @@ var filters = {
     html: ['html_to_wikitext']
 };
 
-t.plan(3);
-
-t.filters(filters);
-
-t.run_roundtrip('wikitext');
-
-t.run_is('html', 'text');
+if (Wikiwyg.is_safari) {
+    t.skipAll("On Safari")
+}
+else {
+    t.plan(3);
+    t.filters(filters);
+    t.run_roundtrip('wikitext');
+    t.run_is('html', 'text');
+}
 
 /* Test
 === uj-232 - Image urls not roundtripping in IE

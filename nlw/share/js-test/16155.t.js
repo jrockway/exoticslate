@@ -7,7 +7,7 @@ var filters = {
 
 if (Wikiwyg.is_ie)
     filters.fixed.push( function() { return this.data.fixed_ie });
-if (Wikiwyg.is_safari)
+if (Wikiwyg.is_safari && !Wikiwyg.is_safari3 ) 
     filters.fixed.push( function() { return this.data.fixed_safari });
 
 t.plan(2);

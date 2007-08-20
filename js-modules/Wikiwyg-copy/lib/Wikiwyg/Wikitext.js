@@ -620,7 +620,7 @@ Code to convert from html to wikitext.
 proto.convert_html_to_wikitext = function(html) {
     this.copyhtml = html;
     var dom = document.createElement('div');
-    dom.innerHTML = html;
+    dom.innerHTML = this.strip_msword_gunk(html);
     this.output = [];
     this.list_type = [];
     this.indent_level = 0;
@@ -635,6 +635,18 @@ proto.convert_html_to_wikitext = function(html) {
     this.assert_new_line();
 
     return this.join_output(this.output);
+}
+
+// Adapted from http://tim.mackey.ie/CleanWordHTMLUsingRegularExpressions.aspx
+proto.strip_msword_gunk = function(html) {
+    return html.
+        replace(
+            /<(span|\w:\w+)[^>]*>(\s*&nbsp;\s*)+<\/\1>/gi,
+            function(m) {
+                return m.match(/ugly-ie-css-hack/) ? m : '';
+            }
+        ).
+        replace(/<\/?(font|xml|st\d+:\w+|[ovwxp]:\w+)[^>]*>/gi, '');
 }
 
 proto.normalizeDomStructure = function(dom) {

@@ -9064,6 +9064,7 @@ ST.Page.prototype = {
     },
 
     _loadInterface: function () {
+        if (typeof Test != 'undefined') return;
         var m = Cookie.get('st-page-accessories');
         if (m == null || m == 'show') {
             this.showAccessories();
@@ -12810,7 +12811,7 @@ Code to convert from html to wikitext.
 proto.convert_html_to_wikitext = function(html) {
     this.copyhtml = html;
     var dom = document.createElement('div');
-    dom.innerHTML = html;
+    dom.innerHTML = this.strip_msword_gunk(html);
     this.output = [];
     this.list_type = [];
     this.indent_level = 0;
@@ -12825,6 +12826,18 @@ proto.convert_html_to_wikitext = function(html) {
     this.assert_new_line();
 
     return this.join_output(this.output);
+}
+
+// Adapted from http://tim.mackey.ie/CleanWordHTMLUsingRegularExpressions.aspx
+proto.strip_msword_gunk = function(html) {
+    return html.
+        replace(
+            /<(span|\w:\w+)[^>]*>(\s*&nbsp;\s*)+<\/\1>/gi,
+            function(m) {
+                return m.match(/ugly-ie-css-hack/) ? m : '';
+            }
+        ).
+        replace(/<\/?(font|xml|st\d+:\w+|[ovwxp]:\w+)[^>]*>/gi, '');
 }
 
 proto.normalizeDomStructure = function(dom) {
@@ -14332,6 +14345,16 @@ Wikiwyg.is_old_firefox = (
     Wikiwyg.ua.indexOf('firefox/1.0.7') != -1 &&
     Wikiwyg.ua.indexOf('safari') == -1 &&
     Wikiwyg.ua.indexOf('konqueror') == -1
+);
+
+Wikiwyg.is_safari2 = (
+    Wikiwyg.is_safari &&
+    Wikiwyg.ua.indexOf("version/2") != -1
+);
+
+Wikiwyg.is_safari3 = (
+    Wikiwyg.is_safari &&
+    Wikiwyg.ua.indexOf("version/3") != -1
 );
 
 function setup_wikiwyg() {
@@ -16123,14 +16146,61 @@ proto.fromHtml = function(html) {
         html = html.replace(/^<div class.*>/,"").replace(/<\/div>$/,"");
     }
 
-    var br = "<br class=\"p\"/>";
-    html = html.replace(/\n*<p>\n?/g, "").replace(/<\/p>/g, br + br);
+    html = this.replace_p_with_br(html);
 
     Wikiwyg.Wysiwyg.prototype.fromHtml.call(this, html);
     try {
         setTimeout(this.setWidgetHandlers.bind(this), 200);
     } catch(e) { alert('bleh: ' + e) }
 
+}
+
+proto.replace_p_with_br = function(html) {
+    var br = "<br class=\"p\"/>";
+    var doc = document.createElement("div");
+    doc.innerHTML = html;
+    var p_tags = doc.getElementsByTagName("p");
+    for(var i=0;i<p_tags.length;i++) {
+        var html = p_tags[i].innerHTML;
+        var prev = p_tags[i].previousSibling;
+        if (prev && prev.tagName) {
+            var prev_tag = prev.tagName.toLowerCase();
+        }
+
+        html = html.replace(/(<br>)?\s*$/, br + br);
+        if (prev && prev_tag && prev_tag != 'br' && prev_tag != 'p') {
+            html = html.replace(/^\n?/,br)
+        }
+        else if (prev && prev_tag && prev_tag == 'br') {
+            html = html.replace(/^\n?/,'')
+
+            var remove_br = function() {
+                var ps = prev.previousSibling;
+                while(ps.nodeType == 3) {
+                    ps = ps.previousSibling;
+                }
+                if (ps.tagName && ps.tagName.toLowerCase() == 'blockquote') {
+                    return true;
+                }
+                return false;
+            }();
+
+            if (remove_br) {
+                prev.parentNode.removeChild(prev);
+            }
+        }
+        else {
+            html = html.replace(/^\n?/,'')
+        }
+
+        if (prev && prev.nodeType == 3) {
+            prev.nodeValue = prev.nodeValue.replace(/\n*$/,'')
+        }
+
+        new Insertion.Before(p_tags[i],html);
+        p_tags[i].parentNode.removeChild(p_tags[i]);
+    }
+    return doc.innerHTML;
 }
 
 proto.toHtml = function(func) {

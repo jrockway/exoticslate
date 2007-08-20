@@ -10,6 +10,9 @@ if (Wikiwyg.is_ie) {
     t.plan(1);
     t.pass("Skipping these tests on IE");
 }
+else if (Wikiwyg.is_safari) {
+    t.skipAll("These tests are not meant to be ran on Safari")
+}
 else {
     t.plan(3);
     t.filters(filters);

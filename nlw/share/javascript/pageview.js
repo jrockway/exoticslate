@@ -187,6 +187,7 @@ ST.Page.prototype = {
     },
 
     _loadInterface: function () {
+        if (typeof Test != 'undefined') return;
         var m = Cookie.get('st-page-accessories');
         if (m == null || m == 'show') {
             this.showAccessories();

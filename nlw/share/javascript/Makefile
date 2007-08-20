@@ -1,12 +1,8 @@
 .PHONY: all clean split-js
+    dom.innerHTML = html;
 
 COMBINED_FILE=combined-source.js
 EXTERNAL_JAVASCRIPT=../../../js-modules
-
-# WIKIWYG_REPOSITORY=http://svn.wikiwyg.net/code/trunk/wikiwyg
-# WIKIWYG_CHECKOUT_VERSION=Wikiwyg-trunk
-# WIKIWYG_CHECKOUT_PATH=$(EXTERNAL_JAVASCRIPT)/src/$(WIKIWYG_CHECKOUT_VERSION)
-# WIKIWYG_CHECKOUT_COMMAND=svn checkout $(WIKIWYG_REPOSITORY) $(WIKIWYG_CHECKOUT_PATH)
 
 # Use Wikiwyg-dev when developing Wikiwyg
 WIKIWYG_PATH=$(EXTERNAL_JAVASCRIPT)/Wikiwyg-copy

@@ -6,7 +6,7 @@ var filters = {
     wikitext: ['template_vars']
 };
 
-t.plan(6);
+t.plan(7);
 
 t.filters(filters);
 
@@ -127,6 +127,17 @@ This is {not-wafl: really no} yo I say {nonono} {no go} eval {this_func()}
 
 .not-a-wafl-block
 
+=== indented block does not roundtrip with an extra paragraph in the beginning
+--- wikitext
+Lorem Ipsum, Extra paragraph in the beginning..
+
+Normal.
+
+> This text
+> should get
+> indented.
+
+Back to normal.
 
 */
 

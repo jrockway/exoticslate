@@ -1,6 +1,6 @@
 var t = new Test.Wikiwyg();
 
-t.plan(5);
+t.plan(4);
 
 t.run_roundtrip('wikitext');
 
@@ -23,16 +23,19 @@ next line
 
 next line
 
-=== asis phrase with no space after text
---- wikitext
-{{ {one} }}two
-
-next line
-
 === two asis
 --- wikitext
 {{ {one} }}
 
 {{ {two} }}
 
+*/
+
+/* Old Test. No longer supported
+=== asis phrase with no space after text
+--- SKIP
+--- wikitext
+{{ {one} }}two
+
+next line
 */

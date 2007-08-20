@@ -1,6 +1,7 @@
 index_title: Socialtext Javascript Testing
 import_libs:
   - ../../javascript/l10ns.js 
+  - ../../javascript/Cookie.js
   - ../../js-modules/prototype/dist/prototype.js
   - ../../js-modules/Ajax/lib/Ajax.js
   - ../Test/Wikiwyg.js

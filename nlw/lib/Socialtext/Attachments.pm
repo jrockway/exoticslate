@@ -609,7 +609,7 @@ sub should_popup {
 sub image_or_file_wafl {
     my $self = shift;
     my $filename = $self->utf8_decode($self->filename);
-    $filename =~ /\.(gif|jpg|jpeg|png)$/i
+    $filename =~ /\.(bmp|gif|jpg|jpeg|png)$/i
       ? "{image: $filename}" . "\n\n"
       : "{file: $filename}" . "\n\n";
 }

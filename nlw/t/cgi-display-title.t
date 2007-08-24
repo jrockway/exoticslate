@@ -7,6 +7,7 @@ use warnings;
 use Test::Socialtext tests => 10;
 fixtures( 'admin' );
 use Test::Socialtext::CGIOutput;
+use mocked 'Apache::Cookie';
 
 # existing uri to title
 perform_query('quick_start', 'Quick Start');

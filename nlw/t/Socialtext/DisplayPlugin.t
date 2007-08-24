@@ -4,6 +4,7 @@
 use strict;
 use warnings;
 use Test::Socialtext tests => 7;
+use mocked 'Apache::Cookie';
 fixtures( 'admin' );
 
 BEGIN {

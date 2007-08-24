@@ -13,6 +13,7 @@ use Socialtext::TT2::Renderer;
 use Socialtext::BrowserDetect ();
 use Socialtext::l10n qw/loc system_locale available_locales/;
 use JSON;
+use Apache::Cookie;
 
 $JSON::UTF8 = 1;
 
@@ -196,6 +197,12 @@ sub display {
     $self->hub->breadcrumbs->drop_crumb($page);
     $self->hub->hit_counter->hit_counter_increment;
 
+    my $cookies = Apache::Cookie->fetch();
+    my $st_page_accessories = (
+        $cookies && $cookies->{'st-page-accessories'} &&
+        $cookies->{'st-page-accessories'}->value
+    ) || 'show';
+
     return $renderer->render(
         template => 'view/page/display',
         vars     => {
@@ -233,6 +240,7 @@ sub display {
             breadcrumbs             => \@breadcrumbs,
             enable_unplugged        =>
                 $self->hub->current_workspace->enable_unplugged,
+            st_page_accessories     => $st_page_accessories,
         },
     );
 }

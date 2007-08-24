@@ -24,13 +24,13 @@
 
 [% BLOCK side_boxes_toggle %]
     <div id="st-page-boxes-toggle">
-        <a href="#" id="st-page-boxes-toggle-link">V</a>
+        <a href="#" id="st-page-boxes-toggle-link">[% IF st_page_accessories == 'show' %]V[% ELSE %]&gt;[% END %]</a>
     </div>
 [% END %]
 
 [% BLOCK side_boxes %]
     <div id="st-page-boxes-underlay"></div>
-    <div id="st-page-boxes">
+    <div id="st-page-boxes" style="display: [% IF st_page_accessories == 'show' %]block[% ELSE %]none[% END %]">
         [% INCLUDE side_box_pagetools %]
 
         [% INCLUDE element/page/tags %]

@@ -7,6 +7,7 @@ use warnings;
 use Test::Socialtext tests => 2;
 fixtures( 'admin_no_pages' );
 use Test::Socialtext::CGIOutput;
+use mocked 'Apache::Cookie';
 
 {
     set_query('Edit%20in%20Place%20Phase%200');

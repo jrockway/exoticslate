@@ -11,6 +11,7 @@ use Readonly;
 use Test::Live fixtures => ['admin_no_pages'];
 use Test::More;
 use Test::Socialtext::Environment;
+use mocked 'Apache::Cookie';
 
 Readonly my $CRUMBS =>
     Test::HTTP::Socialtext->url('/data/workspaces/admin/breadcrumbs');

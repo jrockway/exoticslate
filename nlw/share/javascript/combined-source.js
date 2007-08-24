@@ -8241,7 +8241,7 @@ ST.Tags.prototype = {
     fetchTags: function () {
         var uri = Page.APIUriPageTags();
         var date = new Date();
-        uri += ';iecacheworkaround=' + date.toLocaleTimeString();
+        uri += '?iecacheworkaround=' + date.toLocaleTimeString();
         var ar = new Ajax.Request (
             uri,
             {

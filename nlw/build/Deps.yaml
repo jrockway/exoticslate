@@ -108,14 +108,7 @@ Pod::Usage: 0
 POSIX: 1.08
 Readonly: 1.03
 Readonly::XS: 1.03
-# REST::Application >= 0.991 contains refactored tunneling code.  This removes the need
-# for the tunneling code in Socialtext, and makes Socialtext compatible with
-# the latests version of REST::Application.
-#
-# REST::Application >= 0.97 required to deal with error that used to
-# present when using a collection uri with a trailing / for example:
-# /data/workspaces/:ws/pages/
-REST::Application: 0.991
+REST::Application: 0.992
 RTF::Writer: 0
 Scalar::Util: 1.18
 SOAP::Lite: 0.67

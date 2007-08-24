@@ -74,7 +74,7 @@
 [% IF config.is_dev %]
     RewriteRule    !^/alzabo  -  [C]
 [% END %]
-    RewriteRule    !^/data   -  [C]
+    RewriteRule    !^/data(/.*)?$   -  [C]
     RewriteRule    !^/nlw    -  [C]
     RewriteRule    !^/challenge - [C]
     RewriteRule    !^/logos  -  [C]

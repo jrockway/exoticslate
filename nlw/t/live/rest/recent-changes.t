@@ -50,7 +50,7 @@ test_http "recent changes JSON" {
 }
 
 test_http "recent changes HTML" {
-    >> GET $PAGES_URL$QUERY
+    >> GET $PAGES_URL?$QUERY
     >> Accept: $HTML_TYPE
 
     << 200

@@ -171,6 +171,12 @@
         'DELETE':  [Socialtext::Rest::Attachment, DELETE]
         '*': [Socialtext::Rest::Attachment, bad_method]
 -
+    '/data/workspaces/:ws/attachments/:attachment_id/files/:filename':
+        'GET':
+            '*/*': [Socialtext::Rest::Attachment, GET]
+        'DELETE':  [Socialtext::Rest::Attachment, DELETE]
+        '*': [Socialtext::Rest::Attachment, bad_method]
+-
     '/data/workspaces/:ws/attachments':
         'GET':
             '*/*':     &default [Socialtext::Rest::WorkspaceAttachments, GET_html]
@@ -276,6 +282,9 @@
 -
     '/help/index.cgi':
         '*':                    [Socialtext::Rest::Help, handler]
+-
+    '/:ws/index.cgi/:filename':
+        '*':                    [Socialtext::Rest::App, handler]
 -
     '/:ws/index.cgi':
         '*':                    [Socialtext::Rest::App, handler]

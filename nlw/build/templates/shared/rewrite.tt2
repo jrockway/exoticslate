@@ -105,6 +105,4 @@
 [% END %]
 
     Alias /static  [% config.static_dir %]
-    <Location /static>
-        AddCharset UTF-8 .js
-    </Location>
+

@@ -76,6 +76,16 @@
     <LocationMatch "^/[^/]+/index\.cgi">
         ErrorDocument 404 /index.cgi
     </LocationMatch>
+[%- IF config.single %]
+    <Location /static>
+        # When running as a single server the rule for 
+        # passing to the REST handler can be too consuming.
+        # Use this rule for content that should be handled
+        # as files.
+        SetHandler default-handler
+    </Location>
+[% END -%]
+
 [% END %][%# MACRO vhost_common %]
 
 [%# Real code starts here %]

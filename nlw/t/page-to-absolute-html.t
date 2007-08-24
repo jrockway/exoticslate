@@ -38,7 +38,7 @@ EOF
     add_attachment($page->id, 'html-page-wafl.html');
     add_attachment($page->id, 'socialtext-logo-30.gif');
 
-    my $server_root = qr{https?://[-\w\.]+\w+};
+    my $server_root = qr{https?://[-\w\.:]+\w+};
 
     my @tests = (
         [ "{file html-page-wafl.html}" =>

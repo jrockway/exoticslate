@@ -59,9 +59,8 @@ sub handler ($$) {
             my $hash = $saved_args->{hash};
             return $self->_redirect('/nlw/login.html') unless $hash;
 
-            my $user = Socialtext::User->new( email_confirmation_hash => $hash );
+            my $user = $self->_find_user_for_email_confirmation_hash( $r, $hash );
             unless ($user) {
-                $self->session->add_error(loc("The given confirmation URL does not match any pending confirmations."));
                 return $self->_redirect('/nlw/login.html');
             }
             $vars->{email_address} = $user->email_address;
@@ -277,9 +276,8 @@ sub confirm_email {
     my $hash = $self->{args}{hash};
     return $self->_redirect('/nlw/login.html') unless $hash;
 
-    my $user = Socialtext::User->new( email_confirmation_hash => $hash );
+    my $user = $self->_find_user_for_email_confirmation_hash( $r, $hash );
     unless ($user) {
-        $self->session->add_error(loc("The given confirmation URL does not match any pending confirmations."));
         return $self->_redirect('/nlw/login.html');
     }
 
@@ -317,9 +315,8 @@ sub choose_password {
     my $hash = $self->{args}{hash};
     return $self->_redirect('/nlw/login.html') unless $hash;
 
-    my $user = Socialtext::User->new( email_confirmation_hash => $hash );
+        my $user = $self->_find_user_for_email_confirmation_hash( $r, $hash );
     unless ($user) {
-        $self->session->add_error(loc("The given confirmation URL does not match any pending confirmations."));
         return $self->_redirect('/nlw/login.html');
     }
 
@@ -397,6 +394,25 @@ sub _redirect {
               . "redirect_to=" . uri_escape_utf8($redirect_to);
     }
     $self->redirect($uri);
+}
+
+sub _find_user_for_email_confirmation_hash {
+    my $self = shift;
+    my $r = shift;
+    my $hash = shift;
+
+    # now in order to deal with email clients that might have decoded %2B to '+' for us
+    # we need to change spaces in the hash back to '+' signs.
+    # see: https://rt.socialtext.net:444/Ticket/Display.html?id=26571
+    $hash =~ s/ /+/g;
+
+    my $user = Socialtext::User->new( email_confirmation_hash => $hash );
+    unless ($user) {
+        $self->session->add_error(loc("The given confirmation URL does not match any pending confirmations."));
+        $self->session->add_error( "<br/>(" . $r->uri . "?" . $r->args . ")" );
+        $r->log_error ("no confirmation hash for: [" . $r->uri . "?" . $r->args . "]" );
+    }
+    return $user;
 }
 
 1;

@@ -46,6 +46,10 @@ my $has_image_magick = eval { require Image::Magick; 1 };
     is( Socialtext::Workspace->Count(), 2, 'workspace count is 2' );
 
     my $hostname = Socialtext::AppConfig->web_hostname;
+
+    if ( my $custom_port = Socialtext::AppConfig->custom_http_port ) {
+        $hostname .= ":$custom_port";
+    }
     like( $ws->uri, qr{\Qhttp://$hostname/short-name/\E}i,
           'check workspace uri' );
 

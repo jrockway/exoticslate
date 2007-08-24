@@ -89,7 +89,7 @@ EOF
     like( $parts[1]->body, qr{\Q<strong>NOTE</strong>\E},
         'check html body - 2' );
 
-    my $server_root = qr{https?://[-\w\.]+\w+};
+    my $server_root = qr{https?://[-\w\.:]+\w+};
     like( $parts[1]->body, qr{href="$server_root/\Qadmin/index.cgi?WikiLink"},
         'check wiki link in html body' );
     like( $parts[1]->body, qr{href="$server_root/\Qfoobar/index.cgi?InterWikiLink"},

@@ -280,6 +280,8 @@ sub generate_app_config {
     my %config = %{apache2_params( \%dirs )};
 
     if ( $config{is_dev} ) {
+        my $frontend_ports = _frontend_ports();
+        $config{custom_http_port} = $frontend_ports->{http};
         $config{email_errors_to} =
             $ENV{NLW_EMAIL_CRASHES_TO_ME}
           ? $user->name . '@socialtext.com'

@@ -87,12 +87,12 @@
 ErrorDocument 502 /static/html/502.html
 ErrorDocument 500 /static/html/500.html
 
-[% IF config.custom_http_port -%]
+[% IF config.custom_http_port and !config.is_dev -%]
 Listen [% config.custom_http_port %]
 [% END %]
 
 <VirtualHost *:[% config.ports.http %]>
-[% IF config.custom_http_port %]
+[% IF config.custom_http_port AND !config.is_dev %]
     RewriteEngine On
     RewriteRule ^(.*) http://%{SERVER_NAME}:[% config.custom_http_port %]$1 [R,L,NE]
 </VirtualHost>

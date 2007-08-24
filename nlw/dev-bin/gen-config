@@ -143,6 +143,35 @@ sub main {
             ];
     }
 
+    if ( is_target_for('html') ) {
+        my %config = ('server_admin',  get_build_setting('server-admin') );
+        my $static_dir = _static_dir();
+
+        push @files,
+        [
+        'html/500.tt2' => "$static_dir/html/500.html",
+        \%config,
+        'overwrite',
+        ];
+
+        foreach my $lang ( _get_langs() ) {
+            push @files,
+                [
+                "html/502.$lang.tt2" => "$static_dir/html/502.html.$lang",
+                \%config,
+                'overwrite',
+                ];
+        }
+
+        push @files,
+                [
+                'html/502.en.tt2' => "$static_dir/html/502.html.html",
+                \%config,
+                'overwrite',
+                 ];
+
+    }
+
     if ( is_target_for( 'apache', 'apache-perl' ) ) {
         my $params = apache_perl_params( \%dirs );
         push @files,
@@ -331,9 +360,7 @@ sub generate_config {
 
     while ( my $spec = shift @files ) {
         my ( $source, $target, $config, $overwrite ) = @$spec;
-
         next if -f $target && !$overwrite && !$opts{stdout};
-
         _print_file_gen( "$inc/templates$source", $target );
 
         my $buffer;
@@ -352,7 +379,6 @@ sub generate_config {
         else {
             my $time = scalar localtime;
             File::Path::mkpath( File::Basename::dirname($target), $opts{verbose}, 0755 );
-
             open my $fh, ">", $target or die "Cannot write to $target: $!";
             print {$fh} <<"EOF";
 #
@@ -559,6 +585,14 @@ sub _get_inc {
 }
 
 sub _bool { $_[0] ? 1 : 0 }
+
+sub _get_langs {
+    opendir my $dh, 'build/templates/html';
+
+    my @langs =
+       grep { $_ =~ s/502.(.*).tt2/$1/g; } readdir $dh;
+    return @langs;
+}
 
 sub standard_params {
     my %dirs = %{+shift};

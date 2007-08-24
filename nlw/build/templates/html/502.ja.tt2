@@ -22,7 +22,7 @@
 <p>ご迷惑をおかけしますが、2、3分後に再度アクセスしてみてください。</p>
 
 <p>引き続き問題が起こるようでしたら、問題の内容を
-<a href="mailto:root@talc.socialtext.net">root@talc.socialtext.net</a>
+<a href="mailto:[% config.server_admin %]">[% config.server_admin %]</a>
 まで報告してください。質問も受け付けております。</p>
 
 <p id="http-error-detail"><br />

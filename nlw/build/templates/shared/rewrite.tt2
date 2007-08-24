@@ -11,7 +11,6 @@
     [% IF config.eu_httpsd_exists %]
         # include file for redirecting for the remote proxies (https)
         Include conf.d/eu-httpsd.conf
-        Include conf.d/asia-httpsd.conf
     [% END %]
 [% ELSE %]
     [% IF config.use_ssl && config.redirect_to_ssl %]
@@ -21,7 +20,6 @@
     [% IF config.eu_httpd_exists %]
         # include file to redirect for the remote proxies
         Include conf.d/eu-httpd.conf
-        Include conf.d/asia-httpd.conf
     [% END %]
 [% END %]
 
@@ -31,7 +29,6 @@
 [% END %]
 [% IF not (config.is_appliance || config.is_dev || !config.apache_proxy) %]
     RewriteCond    %{HTTP_HOST}  !^www.eu.socialtext.net$
-    RewriteCond    %{HTTP_HOST}  !^www.asia.socialtext.net$
     RewriteCond    %{HTTP_HOST}  !^miki.socialtext.net$
     Rewritecond    %{HTTP_HOST}  !^chalk.socialtext.net$
     RewriteCond    %{HTTP_HOST}  !^[% config.nlw_server_hostname %]:?\d*$

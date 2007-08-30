@@ -3,7 +3,7 @@
     <div id="[% ns %]-attachinterface-overlay"></div>
     <div id="[% ns %]-interface-wrapper">
     <div id="[% ns %]-interface">
-        <iframe id="[% ns %]-formtarget" name="[% ns %]-formtarget" src="about:blank"></iframe>
+        <iframe id="[% ns %]-formtarget" name="[% ns %]-formtarget" src="[% wiki.static_path %]/html/blank.html"></iframe>
         <form id="[% ns %]-form" name="attachForm" method="post" action="index.cgi" enctype="multipart/form-data" target="[% ns %]-formtarget">
             <input type="hidden" name="page_name" value="[% page.id %]"/>
             <input type="hidden" name="action" value="attachments_upload"/>

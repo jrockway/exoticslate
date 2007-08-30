@@ -8451,7 +8451,7 @@ ST.Attachments.prototype = {
             Page.refresh_page_content(true);
         }
 
-        doc.location = 'about:blank';
+        doc.location = '/static/html/blank.html';
 
         Try.these(
             (function() {

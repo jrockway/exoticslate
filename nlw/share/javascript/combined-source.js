@@ -16319,7 +16319,7 @@ proto.attachTooltip = function(elem) {
             }
             if (text != '') {
                 newtitle = newtitle.replace("\$" + params[i], "[_" + ( i + 1 ) + "]");
-                newtitle_args += ", \"" + text + "\"";
+                newtitle_args += ", \"" + text.replace(/"/g, '\\"') + "\"";
             }
         }
     }
@@ -16726,24 +16726,23 @@ proto.getWidgetImageLocalizeText = function(widget, text) {
     var params = text.match(/%(\w+)/g);
     var newtext = text; 
     var newtext_args = "";
-    if ( params != null ){
-        for ( i = 0; i < params.length; i++) {
+    if (params != null) {
+        for (i = 0; i < params.length; i++) {
             params[i] = params[i].replace(/^%/, "");
-            var mytext = widget[params[i]];
-            if (mytext != '') {
-                newtext = newtext.replace("%" + params[i], "[_" + ( i + 1 ) + "]");
-                newtext_args += ", \"" + mytext + "\"";
-            }
+            var mytext = widget[params[i]] || "";
+            newtext = newtext.replace("%" + params[i], "[_" + ( i + 1 ) + "]");
+            newtext_args += ", \"" + mytext.replace(/"/g, '\\"') + "\"";
         }
     }
     if (newtext_args != "") {
         newtext = eval("loc(\"" + newtext + "\"" + newtext_args + ")");
-        if ( newtext == 'undefined' ){
+        if (newtext == 'undefined'){
             newtext = text;
         }
-    }else{
+    }
+    else {
         newtext = eval("loc(\"" + newtext + "\")");
-        if ( newtext == 'undefined' ){
+        if (newtext == 'undefined') {
             newtext = text;
         }
     }

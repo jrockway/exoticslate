@@ -16176,10 +16176,11 @@ proto.replace_p_with_br = function(html) {
 
             var remove_br = function() {
                 var ps = prev.previousSibling;
-                while(ps.nodeType == 3) {
+                while (ps && ps.nodeType == 3) {
                     ps = ps.previousSibling;
                 }
-                if (ps.tagName && ps.tagName.toLowerCase() == 'blockquote') {
+                if (ps && ps.tagName &&
+                    ps.tagName.toLowerCase() == 'blockquote') {
                     return true;
                 }
                 return false;

@@ -247,6 +247,9 @@ js: javascript
 javascript:
 	if [ "@JS_MODULES@" = "1" ]; then $(MAKE) -C share/javascript all; fi
 
+js-test:
+	if [ "@JS_MODULES@" = "1" ]; then $(MAKE) -C share/js-test; fi
+
 favicon: install-ok $(DATA_ROOT_DIR)
 	$(INSTALL_ST) share/images/favicon.ico $(DATA_ROOT_DIR)/favicon.ico
 

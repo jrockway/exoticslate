@@ -250,16 +250,22 @@ proto.attachTooltip = function(elem) {
         for ( i = 0; i < params.length; i++) {
             params[i] = params[i].replace(/^\$/, "");
             var text = this.currentWidget[params[i]];
-            if (text == '') {
-                if (params[i] == 'page_title')
-                    text = Page.page_title;
-                else if (params[i] == 'workspace_id')
-                    text = Page.wiki_title;
+            if (typeof(text) != 'undefined') {
+                if (text == '') {
+                    if (params[i] == 'page_title')
+                        text = Page.page_title;
+                    else if (params[i] == 'workspace_id')
+                        text = Page.wiki_title;
+                }
+                else {
+                    newtitle = newtitle.replace("$" + params[i], "[_" + ( i + 1 ) + "]");
+                    newtitle_args += ", \"" + text.replace(/"/g, '\\"') + "\"";
+                }
             }
-            if (text != '') {
-                newtitle = newtitle.replace("\$" + params[i], "[_" + ( i + 1 ) + "]");
-                newtitle_args += ", \"" + text.replace(/"/g, '\\"') + "\"";
+            else {
+                newtitle_args += ", \"\"";
             }
+            newtitle = newtitle.replace("$" + params[i], "");
         }
     }
     if (newtitle_args != "") {

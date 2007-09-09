@@ -64,47 +64,11 @@ my $l10n_dir = "$share_dir/l10n";
 
 require Locale::Maketext::Simple;
 Locale::Maketext::Simple->import (
+    # This path allows the unit tests to work, but should be removed
+    # once the build system puts .po files into the right spot
     Path => $l10n_dir,
     Decode => 1,
-    Export => "_loc",  # We have our own loc()
 );
-
-sub loc {
-    my $msg = shift;
-    my $var_rx = qr/~*\[_\d+\]/;
-
-    # RT 26769: Automagically quote square braces.  We do this by splitting
-    # the string on the var_rx above, which matches legal loc() variables.
-    # The capturing parens in the split include the split-item in the list, so
-    # we end up with a list of alternating like this: non-variable, variable,
-    # non-variable, ...  Everything that doesn't match the var_rx needs to
-    # have its square braces quoted.  Care is taken to not requote already
-    # quoted braces.
-    my $new_msg = "";
-    my @parts = split /($var_rx)/, $msg; 
-    for my $part (@parts) {
-        if ( $part =~ /$var_rx/ ) {
-            $new_msg .= $part;
-        }
-        else {
-            # Quote square braces, but only if they are already not quoted
-            # away.  The complication here w/ the tildes is to make sure we
-            # have an odd number of tildes, otherwise we have to add an extra
-            # one to ensure we're quoting.
-            $part =~ s/(~*)(\[|\])/ 
-                my $tildes = $1 || "";
-                $tildes .= '~' unless length($tildes) % 2;
-                $tildes . $2;
-            /xeg;
-            $new_msg .= $part;
-        }
-    }
-
-    return _loc( $new_msg, @_ );
-}
-
-# Have to wrap this b/c we renamed the real loc() function to _loc()
-sub loc_lang { return _loc_lang(@_) }
 
 sub valid_code { 
     my $code = shift;

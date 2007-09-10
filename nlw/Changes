@@ -1,5 +1,12 @@
 Change log for Socialtext Open
 
+2.14.X
+    [BUGS]
+    rt-26744 - An infinite loop could be created with the caching of breadcrumb trails.  Similar
+    yet different from rt-25330.
+
+    [FEATURES]
+
 Released from osr-fix-install, synced with trunk at r2510
 
 2.11.6.1

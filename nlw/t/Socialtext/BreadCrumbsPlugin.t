@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 32;
+use Test::Socialtext tests => 35;
 use mocked 'Apache::Cookie';
 fixtures( 'admin_no_pages', 'foobar_no_pages' );
 
@@ -57,6 +57,31 @@ is_deeply(
     'When no .trail file is around, the default result set is the same as the new result set.'
 );
 
+# recreate the .trail file
+display_and_check_crumbs( $admin,  'Page 1', ['page_1'] );
+
+# calculate the result set
+my $plain_result_set = $admin->breadcrumbs->result_set;
+
+# make sure we can sort it
+# my %sortdir_hash = (sortby => 'revision_count', direction => 1);
+# my $sorted_result_set = $admin->breadcrumbs->sorted_result_set(\%sortdir_hash);
+
+# wipe out the on-disk cache
+wipe_out_cache($admin->breadcrumbs);
+
+# check that it gets recreated properly in standard and sorted varieties
+is_deeply(
+    $admin->breadcrumbs->result_set,
+    $plain_result_set,
+    'Recreated result set is the same as that prior to cache file getting clobbered.'
+);
+# is_deeply(
+# $admin->breadcrumbs->sorted_result_set(\%sortdir_hash),
+# $sorted_result_set,
+# 'Recreated sorted result set is the same as that prior to cache file getting clobbered.'
+# );
+
 sub display_and_check_crumbs {
     my $hub    = shift;
     my $title  = shift;
@@ -77,4 +102,9 @@ sub display_and_check_crumbs {
 sub wipe_out_trail_file {
     my $breadcrumbs = shift;
     unlink $breadcrumbs->_trail_filename;
+}
+
+sub wipe_out_cache {
+    my $breadcrumbs = shift;
+    unlink $breadcrumbs->get_result_set_path;
 }

@@ -68,7 +68,7 @@ sub breadcrumbs_list {
     else {
         $self->result_set( $self->new_result_set );
 
-        $self->new_crumbs;
+        $self->_incorporate_trail_pages;
         $self->write_result_set;
     }
 
@@ -84,10 +84,14 @@ sub default_result_set {
     # we want to follow our super's behavior of returning a new_result_set as
     # a true default - this caused infinite loops before {rt 25330}
     my $self = shift;
-    return $self->new_crumbs ? $self->result_set : $self->new_result_set;
+    unless ( -f $self->get_result_set_path ) {
+        $self->result_set($self->new_result_set);
+        $self->_incorporate_trail_pages;
+    }
+    return $self->result_set;
 }
 
-sub new_crumbs {
+sub _incorporate_trail_pages {
     my $self = shift;
     my @pages = $self->breadcrumb_pages;
     foreach my $page ( @pages ) {

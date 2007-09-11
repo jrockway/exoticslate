@@ -150,6 +150,7 @@ sub global_template_vars {
         checker           => $self->hub->checker,
         home_is_dashboard => $self->hub->current_workspace->homepage_is_dashboard,
         customjs_uri      => $self->hub->current_workspace->customjs_uri,
+        customjs_name     => $self->hub->current_workspace->customjs_name,
         app_version       => Socialtext->product_version,
         skin_name         => $self->hub->current_workspace->skin_name,
     );

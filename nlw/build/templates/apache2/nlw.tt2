@@ -68,12 +68,13 @@
         Allow from all
     </LocationMatch>
 
-    # This fixes a bug where images flash on mouseover in IE
-    ExpiresActive On
     # Do not set ExpiresDefault!  That will cause firefox to cache redirects
-    ExpiresByType image/gif A86400
-    ExpiresByType image/jpeg A86400
-    ExpiresByType image/png A86400
+
+    ExpiresActive On
+    <Location /static>
+        ExpiresDefault "access plus 1 years"
+    </Location>
+
 
 [% IF config.is_dev %]
     Redirect 301 /favicon.ico http://www.socialtext.net/favicon.ico

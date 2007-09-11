@@ -1,6 +1,6 @@
 #!perl
 # @COPYRIGHT@
-use Test::Socialtext tests => 90;
+use Test::Socialtext tests => 92;
 
 use strict;
 use warnings;
@@ -416,9 +416,15 @@ customjs_uri: {
         account_id => Socialtext::Account->Socialtext()->account_id,
     );
     is( $ws->customjs_uri, '', 'Default custom javascript URI is blank'),
+    is( $ws->customjs_name, '', 'Default custom javascript name is blank'),
 
+    $ws->update(customjs_name => '');
     $ws->update(customjs_uri => 'custom.js');
     is( $ws->customjs_uri, 'custom.js', 'Custom javascript set correctly'),
+
+    $ws->update(customjs_uri => '');
+    $ws->update(customjs_name => 'my_company');
+    is( $ws->customjs_name, 'my_company', 'Custom javascript set correctly'),
 }
 
 CHANGE_WORKSPACE_TITLE: {

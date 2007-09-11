@@ -38,7 +38,9 @@
         <script type="text/javascript" charset="utf-8"
             src="[% wiki.static_path %]/javascript/combined-source.js">
         </script>
-        [% IF customjs_uri %]
+        [% IF customjs_name %]
+        <script type="text/javascript" charset="utf-8" src="[% wiki.static_path %]/javascript/[% customjs_name %]/custom.js"></script>
+        [% ELSIF customjs_uri %]
         <script type="text/javascript" charset="utf-8" src="[% customjs_uri %]"></script>
         [% END %]
 

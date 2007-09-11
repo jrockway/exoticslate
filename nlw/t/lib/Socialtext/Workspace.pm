@@ -28,6 +28,8 @@ sub comment_by_email { 'mock_workspace_comment_by_email' }
 
 sub customjs_uri { '' }
 
+sub customjs_name { '' }
+
 sub read_breadcrumbs { }
 
 1;

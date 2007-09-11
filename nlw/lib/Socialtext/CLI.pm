@@ -1194,7 +1194,16 @@ sub customjs {
 
     my ( $hub, $main ) = $self->_require_hub();
 
-    if ($hub->current_workspace()->customjs_uri()) {
+    if ($hub->current_workspace()->customjs_name()) {
+        $self->_success(
+            'Custom JS URI for ' .
+            $hub->current_workspace()->name .
+            ' workspace is ' .
+            $hub->current_workspace()->customjs_name() .
+            '.'
+        );
+    }
+    elsif ($hub->current_workspace()->customjs_uri()) {
         $self->_success(
             'Custom JS URI for ' .
             $hub->current_workspace()->name .
@@ -1217,6 +1226,7 @@ sub clear_customjs {
     my ( $hub, $main ) = $self->_require_hub();
 
     $hub->current_workspace()->update('customjs_uri', '');
+    $hub->current_workspace()->update('customjs_name', '');
     $self->_success(
         'Custom JS URI cleared for ' .
         $hub->current_workspace()->name .
@@ -1229,15 +1239,31 @@ sub set_customjs {
 
     my ( $hub, $main ) = $self->_require_hub();
 
-    my %opts = $self->_get_options( 'uri:s' );
-    $hub->current_workspace()->update('customjs_uri', $opts{uri});
-    $self->_success(
-        'Custom JS URI for ' .
-        $hub->current_workspace()->name .
-        ' workspace set to ' .
-        $opts{uri} .
-        '.'
-    );
+    my %opts = $self->_get_options( 'uri:s', 'name:s' );
+
+    $hub->current_workspace()->update('customjs_uri', '');
+    $hub->current_workspace()->update('customjs_name', '');
+
+    if ($opts{uri}) {
+        $hub->current_workspace()->update('customjs_uri', $opts{uri});
+        $self->_success(
+            'Custom JS URI for ' .
+            $hub->current_workspace()->name .
+            ' workspace set to ' .
+            $opts{uri} .
+            '.'
+        );
+    }
+    elsif ($opts{name}) {
+        $hub->current_workspace()->update('customjs_name', $opts{name});
+        $self->_success(
+            'Custom JS name for ' .
+            $hub->current_workspace()->name .
+            ' workspace set to ' .
+            $opts{name} .
+            '.'
+        );
+    }
 }
 
 
@@ -1615,7 +1641,7 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   delete-category --workspace [--category or --search]
   add-users-from --workspace --target
   customjs --workspace
-  set-customjs --workspace --uri
+  set-customjs --workspace [--uri or --name]
   clear-customjs --workspace
 
   INDEXING
@@ -1831,13 +1857,13 @@ system. If you pass "--ids", it lists workspace ids instead.
 
 Remove the custom Javascript for a workspace.
 
-=head2 set-customjs --workspace --uri
+=head2 set-customjs --workspace [--uri or --name]
 
-Set the URI for the custom Javascript for a workspace.
+Set the URI or name for the custom Javascript for a workspace.
 
 =head2 customjs --workspace
 
-Show the URI for the custom Javascript assigned to a workspace.
+Show the URI or name for the custom Javascript assigned to a workspace.
 
 =head2 html-archive --workspace --file
 

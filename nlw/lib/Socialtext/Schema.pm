@@ -455,6 +455,11 @@ sub SchemaObject {
               type           => 'TEXT',
               default         => '',
             );
+        $table->make_column
+            ( name           => 'customjs_name',
+              type           => 'TEXT',
+              default         => '',
+            );
         $table->make_index
             ( columns  => [ $schema->table( 'Workspace' )->columns( 'name' ) ],
               unique   => 1,

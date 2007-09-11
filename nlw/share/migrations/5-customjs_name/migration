@@ -1,0 +1,6 @@
+#!/bin/sh
+
+DB=`st-config echo db_schema_name`
+DB_USER=`st-config echo db_user`
+
+psql -U $DB_USER -d $DB -t -c 'ALTER TABLE "Workspace" ADD COLUMN "customjs_name" text'

@@ -1,11 +1,16 @@
 Change log for Socialtext Open
 
-2.14.X
+2.15.X
     [BUGS]
     rt-26744 - An infinite loop could be created with the caching of breadcrumb trails.  Similar
     yet different from rt-25330.
 
     [FEATURES]
+    All static resources like css files, javascript files and UI images like rounded corners now
+    get expires headers setting the expiration to 10 years out.  This is to increase use of browser and
+    proxy caches of the rather largish combined-source.js file.  Note that all of these resources all use
+    versioned URIs like /static/X.X.X.X/resource-name.ext so when Socialtext gets upgraded, new resources
+    will come along.
 
 Released from osr-fix-install, synced with trunk at r2510
 

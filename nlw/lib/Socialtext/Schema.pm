@@ -181,6 +181,16 @@ sub SchemaObject {
               length         => 250,
               nullable       => 1,
             );
+        $table->make_index
+            (
+                columns => [
+                    $schema->table('UserId')
+                        ->columns( 'driver_key', 'driver_unique_id' )
+                ],
+                unique => 1,
+                function => 'driver_key, driver_unique_id',
+
+            );
     }
 
     {

@@ -3,9 +3,10 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
+use IPC::Run qw(run timeout);
 
 use utf8;
-use Test::Socialtext tests => 191;
+use Test::Socialtext tests => 192;
 fixtures( 'admin_no_pages' );
 
 BEGIN { use_ok("Socialtext::Search::KinoSearch::Factory") }
@@ -152,10 +153,43 @@ LOTS_OF_HITS: {
     search_ok( "Page Test", 105, "Big result sets returned ok" );
 }
 
+#####################################
+#
+# In this test block we are testing to see if $& (or friends) has been used.
+# The mention (whether it's in unused code or not) of $&, $' or $` will cause
+# Perl regexes to slow down globally, in an exponential fashion (by the length
+# of the string being tested).  This is a fundamental limitation and bug in
+# Perl.  Search below for "MACHINERY_FOR_DOLLAR_AMP_TIMING_TEST" for more
+# information.
+TEST_FOR_DOLLAR_AMP_AND_FRIENDS: {
+    my $MAX_RATIO = 10;
+    my $baseline  = run_time_test_externally();
+    my $test_time = run_time_test_internally();
+    my $ratio_ok  = ( ( $test_time / $baseline ) < $MAX_RATIO );
+    ok( $ratio_ok, 'Timing test for $& and friends.' );
+    unless ($ratio_ok) {
+        my $opt = $ENV{PERL5OPT} || "";
+        diag(<<MSG);
+A run without \$& (or friends) present took $baseline seconds.  A run in the
+current test environment took $test_time seconds.  This is more than
+${MAX_RATIO}x as long, which is a sign of the exponential time-increase that
+\$& and family introduce.  \$& may be present in your testing environment, or
+some module loading during the tests (i.e. dependency modules, production
+code, etc).  Please verify if this is the case and remove it if so, since
+indexing will be strongly affected.
+
+A common problem in dev-envs is using prv, which will automatically include
+diagnostics.pm which uses \$&, and causes this test to fail.  If
+diagnostics.pm is included by the environment variable PERL5OPT which has the
+current value: PERL5OPT=$opt.
+MSG
+    }
+}
+
 INDEX_AND_SEARCH_A_BIG_DOCUMENT: {
     my $text = "Mary had a little lamb and it liked to drink. " x 100000;
     erase_index_ok();
-    ok( 1, '(Indexing big document (4.4 MB), to suss out $& bugs)' );
+    ok( 1, '(Indexing big document - 4.4 MB)' );
     make_page_ok( "Really Big Page", $text );
     search_ok( "lamb", 1, "Searching for the big page" );
 }
@@ -219,7 +253,7 @@ sub search_ok {
 
 sub index_ok {
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    my $INDEX_MAX = 60;    # 60 seconds to index a page.
+    my $INDEX_MAX = 60*5;    # Maximum of 5 minutes to index page.
 
     my $page = shift;
     my $id   = ref($page) ? $page->id : $page;
@@ -257,4 +291,70 @@ sub searcher {
 
 sub indexer {
     Socialtext::Search::KinoSearch::Factory->create_indexer($workspace);
+}
+
+########################################################
+#
+# Machinery for testing for the prescense of $& and family.  
+#
+# We test for this by taking some code and running it in an external Perl
+# program, one known to be free of any use of $& or its friends.  We record
+# how long a certain regular expression takes to finish.  We then run the same
+# test but via eval() in the current process and record how long this takes.
+#
+# The external run gives a baseline for the environment the test is running
+# on, so we don't have to hard code in a certain number of seconds (which
+# might be wrong for some computers).
+#
+# (Use BEGIN so the variables in the closure are evaluated right away).
+BEGIN { # MACHINERY_FOR_DOLLAR_AMP_TIMING_TEST. 
+    my $TIMELIMIT = 60*5;  # Five minutes should be an plenty of time.
+    my $CODE = <<'PROG';
+    use strict;
+    use warnings;
+    use Time::HiRes qw(gettimeofday tv_interval);
+    $| = 1;
+
+    my $str = "xy"x100_000;
+    my $start = [gettimeofday];
+    1 while $str =~ m/x/g;
+    my $time = sprintf "%.04f", tv_interval($start);
+    if (@ARGV) {  # For communicating back via an external program
+        print $time;
+        exit 0;
+    } else {      # for communicating back via eval()
+        $time;
+    }
+PROG
+
+    sub run_time_test_internally {
+        my $out;
+        eval {
+            local $SIG{ALRM} = sub { die "TIMELIMIT EXCEEDED" };
+            alarm($TIMELIMIT);
+            $out = eval $CODE;
+            alarm(0);
+            die "$@\n" if $@;
+        };
+        die "Failure evaling Perl program: $@\n" if $@;
+        unless ( defined($out) and $out =~ /\d+\.\d+/ ) {
+            die "Perl code did not return a value.\n";
+        }
+        return $out;
+    }
+
+    sub run_time_test_externally {
+        my ( $out, $err );
+        my $rv = run(
+            [ "/usr/bin/env", "-i", "perl", "-e", $CODE, "1" ],
+            \undef, \$out, \$err,
+            timeout($TIMELIMIT)
+        );
+        unless ( defined($out) and $out =~ /\d+\.\d+/ ) {
+            $err = "(no stderr)" unless defined $err;
+            $out = "(no stdout)" unless defined $out;
+            die "Failure running Perl program (exit=$rv).\n$out\n\n$err\n";
+        }
+        return $out;
+    }
 }

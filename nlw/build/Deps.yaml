@@ -8,9 +8,7 @@
 # will make people upgrade modules that they don't need to.
 ---
 Algorithm::Diff: 1.1901
-# The change in 0.8902 to not use UNIVERSAL::isa exposed a bug in the
-# handling of an attempt to load a row which doesn't exist in the DBMS.
-Alzabo: 0.8903
+Alzabo: 0.91
 Apache::Constants: 1.09
 Apache::Request: 1.33
 Apache::Session: 1.81

@@ -56,9 +56,9 @@ most cases the default settings will work fine)
 ** o conf urllist push http://mirrors.kernel.org/cpan/
 ** o conf commit
  ** quit
- *  sudo cpan -i B/BY/BYRNE/SOAP/SOAP-Lite-0.67.tar.gz 
- 
- 
+ *  sudo cpan -i B/BY/BYRNE/SOAP/SOAP-Lite-0.67.tar.gz YAML::Dumper 
+ *  sudo cpan -i force install Feed::Find Encode::Unicode::Japanese Test::Pod
+  
 4) Configuring and installing   This step takes around 30 minutes.
 
 sudo ./configure --socialtext-open=1 --apache-proxy=0 --hostname=yourhost.com --url=http://yourhost.com   --server-admin=defaultuser@yourhost.com   --support-address=defaultuser@yourhost.com

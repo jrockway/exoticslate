@@ -330,7 +330,7 @@ cpan:
 
 check-deps: check-dependencies
 check-dependencies:
-	$(PERL) dev-bin/list-module-deps -u
+	$(PERL) dev-bin/list-module-deps -u --socialtext-open=@SOCIALTEXT_OPEN@
 
 diff:
 	svndiff
@@ -340,7 +340,10 @@ manifest: MANIFEST
 MANIFEST:
 	$(PERL_MAKE) manifest
 	# XXX: Hack a filename because ExtUtils::Manifest can't handle spaces.
-	perl -i -p -e 's/^(.*Rule #1)$$/#-#$$1/' $@
+	# XXX: Every file with a space in it's name needs to get handled by
+	# XXX: this hack explicitely.
+	perl -i -p -e 's/^(.*Rule #1)$$/#-#$$1/;s/^(.*O Star\.txt)$$/#-#$$1/' $@
+
 
 tardist: MANIFEST $(PERL_MAKEFILE)
 	$(PERL_MAKE) tardist

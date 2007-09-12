@@ -51,6 +51,7 @@ liblingua-stem-it-perl
 liblingua-stem-ru-perl
 liblingua-stem-snowball-da-perl
 liblist-moreutils-perl
+liblocale-maketext-simple-perl
 liblog-dispatch-perl
 liblwp-authen-wsse-perl
 libmime-base64-perl
@@ -58,6 +59,7 @@ libmime-types-perl
 libmldbm-perl
 libmodule-build-perl
 libmodule-pluggable-perl
+libparams-validate-perl
 libplucene-perl
 libreturn-value-perl
 libspiffy-perl

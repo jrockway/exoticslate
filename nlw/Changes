@@ -14,6 +14,44 @@ Change log for Socialtext Open
 
 Released from osr-fix-install, synced with trunk at r2510
 
+
+Release notes, 2.15.0.0  Sept 2007
+
+[FEATURES]
+  
+  This release applies the CPAL license to the open source release. 
+
+  Previous releases since 2.11.6.1 added:
+ 
+  * WikiWidgets
+  * Japanese localization
+  * interwiki search 
+  * Miki login support 
+
+
+  Other features and bug fixes in 2.14:
+
+  * Uploading bmp images now works like any other image 
+  * Allow homepage to redirect to a weblog
+  * bug fix for IE "white screen" errors
+  * bug fix for tab completion of tags
+   
+   Other features and bug fixes in 2.12:
+
+   * Socialtext Unplugged was upgraded with a number of bug fixes,
+      particularly to sync when reconnected
+   * Included pages better integrated into the look of including pages
+   * Backlinks now detect and link to page includes
+   * Page rename will now honor case changes in page titles
+   * IE 6 no longer freezes when Edit immediately follows Upload files
+   * GMail no longer ignores Subject during Email To This Page
+   * Neither page headers nor footers are added during PDF/Word export
+   * A bug that prevented PDF/Word export under SSL on Internet Explorer was
+      repaired
+   * Email sent from Socialtext wikis are more robustly formatted to get
+    * through spam filters
+   * The code no longer uses Mason
+
 2.11.6.1
 
     [FEATURES]

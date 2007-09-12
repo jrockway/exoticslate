@@ -68,9 +68,9 @@ sub prepare_apache_and_possibly_stop {
         unless -d Cwd::getcwd() . '/t/tmp/etc';
 
     my @pairs = ( [qw(apache-perl httpd)] );
-#    if ( get_build_setting( 'apache-proxy' ) ) {
+    if ( get_build_setting( 'apache-proxy' ) ) {
         push @pairs, [qw( apache2 apache2 )];
-#    }
+    }
     my %apaches;
     my $some_conf_dir_exists = 0;
     for my $pair ( @pairs ) {

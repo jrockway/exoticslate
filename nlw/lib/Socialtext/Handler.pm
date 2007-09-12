@@ -119,12 +119,14 @@ sub render_template {
 
     my $renderer = Socialtext::TT2::Renderer->instance;
     eval {
+        $r->content_type("text/html");
+        $r->send_http_header;
         $r->print(
-            $renderer->render(
-                template => $template,
-                vars     => $vars,
-            )
-        );
+                  $renderer->render(
+                                    template => $template,
+                                    vars     => $vars,
+                                   )
+                 );
     };
     if ($@) {
         if ($@ =~ /\.html: not found/) {

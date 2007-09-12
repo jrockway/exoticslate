@@ -73,18 +73,13 @@ sub _generate_base_config {
 
     my $env               = $self->env;
 
-    _system_or_die(
-        $env->nlw_dir . '/configure',
-        '--quiet',
-    );
-
     my $testing = $ENV{HARNESS_ACTIVE} ? '--testing' : '';
 
     my $gen_config = $env->nlw_dir . '/dev-bin/gen-config';
     my $st_db      = $env->nlw_dir . '/bin/st-db';
 
-    my $apache_proxy    = get_build_setting('apache-proxy')    || 1;
-    my $socialtext_open = get_build_setting('socialtext-open') || 0;
+    my $apache_proxy    = get_build_setting('apache-proxy');
+    my $socialtext_open = get_build_setting('socialtext-open');
 
     _system_or_die(
         $gen_config,

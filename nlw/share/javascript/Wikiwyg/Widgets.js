@@ -80,7 +80,13 @@ proto.fromHtml = function(html) {
     // TODO Move this to Wikiwyg.Wysiwyg
     if (Wikiwyg.is_ie) {
         html = html.replace(/<DIV class=wiki>(.*)<\/DIV>/g, "$1");
-        html = html.replace(/^<div class.*>/,"").replace(/<\/div>$/,"");
+        html = html.replace(/^<div class.*>/,"").replace(/<\/div>\s*$/i,"");
+
+        var br_at_the_end = new RegExp("(\n?<br ?/>)+$");
+        if(html.match(br_at_the_end)) {
+            html = html.replace(br_at_the_end, "")
+            html += "<p> </p>"
+        }
         html = this.assert_padding_between_block_elements(html);
     }
     else {

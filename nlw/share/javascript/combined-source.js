@@ -16190,7 +16190,7 @@ proto.fromHtml = function(html) {
     // TODO Move this to Wikiwyg.Wysiwyg
     if (Wikiwyg.is_ie) {
         html = html.replace(/<DIV class=wiki>(.*)<\/DIV>/g, "$1");
-        html = html.replace(/^<div class.*>/,"").replace(/<\/div>\s*$/i,"");
+        html = html.replace(/<div class="wiki">\s?(.*)<\/div>\s*/g,"$1")
 
         var br_at_the_end = new RegExp("(\n?<br ?/>)+$");
         if(html.match(br_at_the_end)) {

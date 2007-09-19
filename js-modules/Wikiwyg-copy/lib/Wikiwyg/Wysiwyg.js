@@ -329,6 +329,41 @@ proto.enableThis = function() {
     this.clear_inner_html();
 }
 
+proto.toHtml = function(func) {
+    var html = this.get_inner_html();
+    var br = "<br class=\"p\"/>";
+
+    html = this.remove_padding_material(html);
+    html = html
+        .replace(/\n*<p>\n?/ig, "")
+        .replace(/<\/p>/ig, br)
+
+    func(html);
+}
+
+proto.remove_padding_material = function(html) {
+    var dom = document.createElement("div");
+    dom.innerHTML = html;
+
+    // <BR>&nbsp; at t last. This is likely
+    // something left by deleting from a padding <p>.
+    var pTags = dom.getElementsByTagName("p");
+
+    for(var i = 0; i < pTags.length; i++) {
+      var p = pTags[i]
+      if (p.nodeType == 1) {
+          if (p.outerHTML.match(/<P class=padding>&nbsp;<\/P>/)) {
+              p.outerHTML = "<BR>"
+          } else if (p.innerHTML.match(/&nbsp;$/)) {
+              var h = p.innerHTML
+              p.innerHTML = h.replace(/&nbsp;$/,"");
+          }
+      }
+    }
+
+    return dom.innerHTML;
+}
+
 proto.process_command = function(command) {
     if (this['do_' + command])
         this['do_' + command](command);

@@ -53,4 +53,5 @@ foobar page one
 {search-full title:admin}
 --- htmlre
 <!-- wiki: {include: \[admin page one\]} --></span>
-<!-- wiki: {search_full: title:admin} --></div><br /></div>
+<!-- wiki: {search_full: title:admin}
+--></div><br /></div>

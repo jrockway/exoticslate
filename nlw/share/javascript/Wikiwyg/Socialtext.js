@@ -302,7 +302,7 @@ function try_wikiwyg() {
     try {
         setup_wikiwyg();
     } catch(e) {
-        alert(loc('Error') + ': ' + e);
+        alert(loc('setup_wikiwyg error') + ': ' + (e.description || e));
     }
 }
 
@@ -1091,7 +1091,7 @@ proto.add_styles = function() {
         this.styleSelect.style.width = this.config.selectorWidth;
 
     for (var i = 0; i < options.length; i++) {
-        value = options[i];
+        var value = options[i];
         var option = Wikiwyg.createElementWithAttrs(
             'option', { 'value': value }
         );

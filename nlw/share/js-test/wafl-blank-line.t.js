@@ -25,6 +25,7 @@ baz
 === Wafl phrase, then wafl phrase
 --- wikitext
 foo {file: bar}
+
 {file: baz}
 
 */

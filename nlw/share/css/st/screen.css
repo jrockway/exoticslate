@@ -678,6 +678,17 @@ body {
   border-width: 2px;
 }
 
+#wysiwyg-editable-div div.wiki {
+    margin:0; padding:0;
+}
+
+#wysiwyg-editable-div ol,
+#wysiwyg-editable-div ul,
+#wysiwyg-editable-div p {
+  margin-top:0;
+  margin-bottom:0;
+}
+
 #st-page-editing-wysiwyg {
   background: #ffd;
   border-style: solid;

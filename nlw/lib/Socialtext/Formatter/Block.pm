@@ -47,7 +47,20 @@ const formatter_id  => 'p';
 const html_start    => "<p>\n";
 const html_end      => "</p>\n";
 const pattern_block =>
-    qr/((?:^(?!(?:[\#\-\*]+ |[\^\|\>]|\.\w+\s*\n)).*\S.*\n)+(^\s*\n)*)/m;
+    qr/(            # Capture whole thing
+        (?:
+        ^(?!        # All consecutive lines *not* starting with
+        (?:
+            [\#\-\*]+[\ ] |
+            [\^\|\>] |
+            \.\w+\s*\n |
+            \{[^\}]+\}\s*\n
+        )
+        )
+        .*\S.*\n
+        )+
+        (^\s*\n)*   # and all blank lines after
+        )/mx;
 
 sub text_filter {
     my $self = shift;
@@ -80,7 +93,7 @@ use base 'Socialtext::Formatter::Paragraph';
 use Class::Field qw( const );
 
 const formatter_id  => 'wafl_p';
-const pattern_block => qr/^(\{.*\})\n/m;
+const pattern_block => qr/^(\{.*\})[\ \t]*\n/m;
 const html_start    => "";
 const html_end      => "<br />";
 

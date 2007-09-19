@@ -58,13 +58,15 @@ foobar page one
 {recent-changes-full foobar}
 --- htmlre
 <!-- wiki: {include: foobar \[foobar page six\]
-<!-- wiki: {recent_changes_full: foobar} --></div><br /></div>
+<!-- wiki: {recent_changes_full: foobar}
+--></div><br /></div>
 
 === {recent-changes-full <foobar>}
 --- kwiki
 {recent-changes-full <foobar>}
 --- htmlre
 <!-- wiki: {include: foobar \[foobar page six\]}
-<!-- wiki: {recent_changes_full: <foobar>} --></div><br /></div>
+<!-- wiki: {recent_changes_full: <foobar>}
+--></div><br /></div>
 
 

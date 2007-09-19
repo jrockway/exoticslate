@@ -77,20 +77,48 @@ var widget_data = Wikiwyg.Widgets.widget;
 proto = eval(WW_SIMPLE_MODE).prototype;
 
 proto.fromHtml = function(html) {
-
     // TODO Move this to Wikiwyg.Wysiwyg
     if (Wikiwyg.is_ie) {
         html = html.replace(/<DIV class=wiki>(.*)<\/DIV>/g, "$1");
         html = html.replace(/^<div class.*>/,"").replace(/<\/div>$/,"");
+        html = this.assert_padding_between_block_elements(html);
     }
-
-    html = this.replace_p_with_br(html);
+    else {
+        html = this.replace_p_with_br(html);
+    }
 
     Wikiwyg.Wysiwyg.prototype.fromHtml.call(this, html);
     try {
         setTimeout(this.setWidgetHandlers.bind(this), 200);
     } catch(e) { alert('bleh: ' + e) }
 
+}
+
+proto.assert_padding_between_block_elements = function(html) {
+    var doc = document.createElement("div");
+    doc.innerHTML = html;
+    if (doc.childNodes.length == 1) {
+        var h = doc.childNodes[0].innerHTML
+        doc.innerHTML = h
+    }
+
+    var node_is_a_block = function(node) {
+        return (node.nodeType == 1 && node.tagName.toLowerCase().match(/^(ul|ol|table|blockquote|p)$/));
+    };
+
+    for(var i = 1; i < doc.childNodes.length; i++) {
+        if ( node_is_a_block(doc.childNodes[i]) ) {
+            if ( node_is_a_block(doc.childNodes[i-1]) ) {
+                var padding = document.createElement("p");
+                padding.setAttribute("class", "padding");
+                padding.innerHTML='&nbsp;';
+                doc.insertBefore(padding, doc.childNodes[i]);
+                i++;
+            }
+        }
+    }
+
+    return doc.innerHTML;
 }
 
 proto.replace_p_with_br = function(html) {
@@ -578,6 +606,11 @@ proto.widget_walk = function(elem) {
         if (part.nodeType != 1) continue;
         if (part.nodeName == 'SPAN' || part.nodeName == 'DIV') {
             var name = part.className;
+
+            // HALGHALGHAHG - Horrible fix for horrendous IE bug.
+            if (part.nextSibling && part.nextSibling.nodeType == 8)
+                part.appendChild(part.nextSibling);
+
             if (name && name.match(/(nlw_phrase|wafl_block)/)) {
                 part = this.replace_widget(part);
             }

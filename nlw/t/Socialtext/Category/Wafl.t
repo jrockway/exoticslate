@@ -61,21 +61,24 @@ foobar page two
 {category-list-full category 0}
 --- htmlre
 <!-- wiki: {include: \[admin page two\]} --></span>
-<!-- wiki: {category_list_full: category 0} --></div><br /></div>
+<!-- wiki: {category_list_full: category 0}
+--></div><br /></div>
 
 === {tag-list-full category 0}
 --- kwiki
 {tag-list-full category 0}
 --- htmlre
 <!-- wiki: {include: \[admin page two\]} --></span>
-<!-- wiki: {tag_list_full: category 0} --></div><br /></div>
+<!-- wiki: {tag_list_full: category 0}
+--></div><br /></div>
 
 === {category-list-full <foobar> category 0}
 --- kwiki
 {category-list-full <foobar> category 0}
 --- htmlre
 <!-- wiki: {include: foobar \[foobar page two\]} --></span>
-<!-- wiki: {category_list_full: <foobar> category 0} --></div><br /></div>
+<!-- wiki: {category_list_full: <foobar> category 0}
+--></div><br /></div>
 
 === {weblog-list category 1}
 --- kwiki

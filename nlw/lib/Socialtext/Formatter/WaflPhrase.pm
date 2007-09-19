@@ -166,7 +166,7 @@ sub html_end {
     my $widget = '{' . $self->method . ': ' .
         $self->escape_wafl_dashes( $self->arguments ) . '}';
     $self->hub->wikiwyg->generate_phrase_widget_image($widget);
-    return "<!-- wiki: $widget --></div>";
+    return "<!-- wiki: $widget\n--></div>";
 }
 
 ################################################################################

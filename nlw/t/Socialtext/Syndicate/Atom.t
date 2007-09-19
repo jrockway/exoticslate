@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 69;
+use Test::Socialtext tests => 70;
 fixtures( 'admin_with_extra_pages' );
 
 BEGIN {

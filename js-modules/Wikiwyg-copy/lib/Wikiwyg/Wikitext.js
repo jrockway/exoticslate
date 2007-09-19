@@ -655,6 +655,19 @@ proto.normalizeDomStructure = function(dom) {
     this.normalize_styled_lists(dom, 'ul');
     this.normalize_styled_blocks(dom, 'li');
     this.normalize_span_whitespace(dom, 'span');
+    this.normalize_empty_link_tags(dom);
+}
+
+proto.normalize_empty_link_tags = function(dom) {
+    // Remove <a ...><!-- wiki-rename-link ... --></a>
+    var links = dom.getElementsByTagName("a");
+    $A(links).each(function(l) {
+        if( l.childNodes.length == 1 &&
+            l.childNodes[0].nodeType == 8 // comment node
+            ) {
+            l.parentNode.removeChild(l)
+        }
+    })
 }
 
 proto.normalize_span_whitespace = function(dom,tag ) {

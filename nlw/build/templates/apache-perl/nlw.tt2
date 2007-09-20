@@ -109,7 +109,7 @@
 # determine the shared memory size for your platform.
 
 # This sets the maximum amount of unshared memory the process can use.
-PerlSetVar st_max_unshared_size 225000
+PerlSetVar st_max_unshared_size 240000
 
 # This sets the minimum amount of shared memory the process must have.
 # PerlSetVar st_min_shared_size   70000

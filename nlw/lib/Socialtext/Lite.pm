@@ -7,6 +7,7 @@ use Readonly;
 use Socialtext::Formatter::LiteLinkDictionary;
 use Socialtext::String;
 use Socialtext::Permission 'ST_EDIT_PERM';
+use Socialtext::Helpers;
 
 =head1 NAME
 
@@ -328,6 +329,7 @@ sub _process_template {
         search_link     => $self->_search_link,
         brand_stamp     => $self->hub->main->version_tag,
         workspace_title => $self->hub->current_workspace->title,
+        static_path     => Socialtext::Helpers->static_path,
         %vars,
     );
 }

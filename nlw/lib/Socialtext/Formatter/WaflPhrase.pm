@@ -360,7 +360,8 @@ package Socialtext::Formatter::PageInclusion;
 
 use base 'Socialtext::Formatter::WaflPhraseDivP';
 use Class::Field qw( const );
-use Socialtext::Permission 'ST_READ_PERM';
+use Socialtext::Permission qw(ST_READ_PERM ST_EDIT_PERM);
+use Socialtext::l10n qw( loc );
 
 const wafl_id => 'include';
 
@@ -378,6 +379,12 @@ sub html {
             permission => ST_READ_PERM,
             workspace  => $ws,
         );
+
+    my $edit_perm = $self->authz->user_has_permission_for_workspace(
+        user       => $self->current_user,
+        permission => ST_EDIT_PERM,
+        workspace  => $ws,
+    );
 
     # When we format an included page, viewer->page_id gets clobbered
     # because we don't make a new viewer object, just reuse the
@@ -401,24 +408,37 @@ sub html {
         page_uri   => $page_uri,
         url_prefix => $self->url_prefix,
     );
-    
+
     my $edit_url;
-    eval {
-        $edit_url = $self->hub->viewer->link_dictionary->format_link(
-            link       => 'interwiki_edit',
-            workspace  => $workspace_name,
-            page_uri   => $page_uri,
-            url_prefix => $self->url_prefix,
-        );
-    };
+    if ($edit_perm) {
+        eval {
+            $edit_url = $self->hub->viewer->link_dictionary->format_link(
+                link       => 'interwiki_edit',
+                workspace  => $workspace_name,
+                page_uri   => $page_uri,
+                url_prefix => $self->url_prefix,
+            );
+        };
+    }
 
-    my $img = $self->hub->helpers->images_path . 'st/homepage/edit-icon.gif';
     my $link = "<a href='$view_url'>$page_title</a>";
-    my $edit = $edit_url ? "<a href='$edit_url'><img src='$img' border='0'/></a>" : "";
-    my $style = 'border-left: 1px solid #80a9f3; padding: 0px 10px 0px 5px ; margin-left: 12px';
 
-    return qq(<div style="$style" class="wiki-include-page">\n)
-        . qq(<div class="wiki-include-title">$link $edit</div>\n)
+    my $edit_icon = '';
+    if ($edit_url) {
+        my $edit = loc('edit');
+        if ($edit eq 'edit') {
+            my $img_path = $self->hub->helpers->images_path;
+            my $icon_url = "$img_path/st/homepage/edit-icon.gif";
+            $edit = "<img src='$icon_url' border='0'/>";
+        }
+        else {
+            $edit = "$edit";
+        }
+        $edit_icon = "<a class='wiki-include-edit-link' href='$edit_url'>$edit</a>";
+    }
+
+    return qq(<div class="wiki-include-page">\n)
+        . qq(<div class="wiki-include-title">$link $edit_icon</div>\n)
         . qq(<div class="wiki-include-content">$html</div></div>);
 }
 

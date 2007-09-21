@@ -2828,6 +2828,11 @@ menu on the page bar.
 
 /* Include page styles */
 
+.wiki-include-edit-link {
+    font-size: 10px;
+    font-weight: normal;
+}
+
 .wiki-include-page {
     border-left: 1px solid #80a9f3;
     padding-left: 5px;

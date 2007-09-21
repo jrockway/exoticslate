@@ -11,6 +11,7 @@ use Class::Field qw'field';
 field free      => '%{page_uri}';
 field interwiki =>
     '/data/workspaces/%{workspace}/pages/%{page_uri}%{section}';
+field interwiki_edit => '';
 field search_query => '/data/workspaces/%{workspace}/pages?q=%{search_term}';
 field category_query => '/data/workspaces/%{workspace}/tags/%{category}/pages';
 

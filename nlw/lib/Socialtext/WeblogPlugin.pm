@@ -251,7 +251,7 @@ sub weblog_display {
     $self->update_current_weblog;
     $self->screen_template('view/weblog');
     return $self->render_screen(
-        display_title => loc($weblog_id),
+        display_title => loc('[_1]', $weblog_id),
         sections => \@sections,
         feeds => $self->_feeds($self->hub->current_workspace),
         category => $weblog_id,

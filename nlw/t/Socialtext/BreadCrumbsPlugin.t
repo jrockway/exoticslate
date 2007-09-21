@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Test::Socialtext tests => 35;
 use mocked 'Apache::Cookie';
-use mocked 'Apache::Cookie';
+
 fixtures( 'admin_no_pages', 'foobar_no_pages' );
 
 BEGIN {

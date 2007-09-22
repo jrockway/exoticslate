@@ -27,21 +27,32 @@ sub set_return_value {
 
 sub method_args_ok {
     my ($self, $name, $expected) = @_;
+    unless (ref($self->{$name}) eq 'ARRAY') {
+        die "$name is a $self->{$name}";
+    }
     my $actual = shift @{$self->{$name}};
-    is_deeply $actual, $expected;
+    if ($expected and $expected ne '*') {
+        is_deeply $actual, $expected;
+    }
 }
 
 sub empty_ok {
     my $self = shift;
     my $ignore_extra = shift;
+
+    my %skip = map { $_ => 1 } qw/return args browser_start_command/;
     for my $k (keys %$self) {
-        next if $k eq 'return' or $k eq 'args';
+        next if $skip{$k};
         next if ref($self->{$k}) eq 'ARRAY' and @{$self->{$k}} == 0;
         if ($ignore_extra) {
             delete $self->{$k};
         }
         else {
-            ok 0, "extra call to $k - " . ref($self->{$k});
+            my $args = delete $self->{$k};
+            if (ref($args) eq 'ARRAY') {
+                $args = join(', ', @$args);
+            }
+            ok 0, "extra call to $k - ($args)";
         }
     }
     $self->{return} = {};
@@ -66,5 +77,6 @@ sub AUTOLOAD {
     }
     return;
 }
+
 
 1;

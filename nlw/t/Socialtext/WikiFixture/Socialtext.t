@@ -6,15 +6,17 @@ use Test::More;
 use Test::Exception;
 
 BEGIN {
-    unless ( eval "use Socialtext::WikiFixture::TestUtils;
-                   use mocked 'Socialtext::User'" ) {
-        plan skip_all
-            => 'These tests require Socialtext::WikiFixture::TestUtils';
+    unless ( $ENV{ST_RUN_WIKIFIXTURE_TESTS} ) {
+        plan skip_all => 'Skip wikifixture tests';
+        # These tests are somewhat fragile, and can be broken by
+        # enhancements to the Selenium fixture.  So lets keep them
+        # from bothering Socialtext developers, but keep them around
+        # for when we need to hack the fixture.
     }
     use_ok 'Socialtext::WikiObject::TestPlan';
 }
 
-plan tests => 372;
+plan tests => 401;
 
 # avoid calling ok(0) for an intentionally failing test
 local $ENV{ST_WF_TEST} = 1;
@@ -22,6 +24,7 @@ local $ENV{ST_WF_TEST} = 1;
 # Add to t/bin to the path for our fake st-* commands                           
 $ENV{PATH} = "t/bin:$ENV{PATH}"; 
 ok -x 't/bin/st-admin';
+ok -x 't/bin/st-config';
 
 st_fixture_ok(
     plan => <<EOT,
@@ -38,12 +41,12 @@ st_fixture_ok(
 | st-logoutin |
 EOT
     tests => [
-        [ 'click_ok' => ['link=Log out', 'log out']],
+        [ 'click_ok' => ['id=logout_btn', 'log out']],
         [ 'wait_for_page_to_load_ok' => [10000 , 'log out']],
         [ 'open_ok', '/nlw/login.html?redirect_to=%2Ffoo%2Findex.cgi' ],
         [ 'type_ok', ['username' => 'testuser']],
         [ 'type_ok', ['password' => 'password']],
-        [ 'click_ok', [q{//input[@value='Log in']}, 'log in']],
+        [ 'click_ok', [q{id=login_btn}, 'log in']],
         [ 'wait_for_page_to_load_ok' => [10000, 'log in']],
     ],
 );
@@ -296,7 +299,7 @@ EOT
         [ open_ok => '/nlw/login.html?redirect_to=%2Ffoo%2Findex.cgi' ],
         [ type_ok => ['username', 'foo']],
         [ type_ok => ['password', 'bar']],
-        [ click_ok => [q{//input[@value='Log in']}, 'log in']],
+        [ click_ok => [q{id=login_btn}, 'log in']],
         [ wait_for_page_to_load_ok => [10000, 'log in']],
     ],
 );
@@ -366,7 +369,7 @@ ST_admin: {
     local *Socialtext::WikiFixture::Socialtext::like = sub { @like_args = @_ };
     my $diag_text = '';
     local *Socialtext::WikiFixture::Socialtext::diag = sub { 
-        $diag_text = shift;
+        $diag_text .= shift;
     };
 
     Regular: {
@@ -381,6 +384,7 @@ EOT
     }
 
     Regular_without_match: {
+        $diag_text = '';
         @like_args = ();
         st_fixture_ok(
             name => 'regular st-admin without match',
@@ -394,6 +398,7 @@ EOT
     my $workspace = 'invalid';
     my $tarball = "/tmp/$workspace.1.tar.gz";
     Export_workspace_no_existing_old_tarball: {
+        $diag_text = '';
         unlink $tarball;
         st_fixture_ok(
             name => 'export non-existing st-admin',
@@ -401,10 +406,11 @@ EOT
 | st-admin | --export-workspace --workspace $workspace | export-workspace |
 EOT
         );
-        is $diag_text, '';
+        like $diag_text, qr/st-login:/;
     }
 
     Export_workspace_existing_old_tarball: {
+        $diag_text = '';
         system("date > $tarball");
         st_fixture_ok(
             name => 'export existing st-admin',
@@ -412,7 +418,39 @@ EOT
 | st-admin | --export-workspace --workspace $workspace | export-workspace |
 EOT
         );
-        is $diag_text, "Deleting $tarball\n";
+        like $diag_text, qr/Deleting \Q$tarball\E/;
+    }
+}
+
+ST_config: {
+    no warnings qw/redefine once/;
+    my @like_args;
+    local *Socialtext::WikiFixture::Socialtext::like = sub { @like_args = @_ };
+    my $diag_text = '';
+    local *Socialtext::WikiFixture::Socialtext::diag = sub { 
+        $diag_text = shift;
+    };
+
+    Regular: {
+        st_fixture_ok(
+            name => 'regular st-config',
+            plan => <<EOT,
+| st-config | foo | qr/foo/ |
+EOT
+        );
+        like $like_args[0], qr/foo/;
+        is $like_args[1], qr/foo/s;
+    }
+
+    Regular_without_match: {
+        @like_args = ();
+        st_fixture_ok(
+            name => 'regular st-config without match',
+            plan => <<EOT,
+| st-config | foo |  |
+EOT
+        );
+        is scalar(@like_args), 0, 'no test done';
     }
 }
 
@@ -597,12 +635,15 @@ sub st_fixture_ok {
     my $timeout = $args{fixture_args}{selenium_timeout} || 10000;
 
     my $tests = $args{tests};
-    unshift @$tests, [ open_ok => '/nlw/login.html?redirect_to=%2Ffoo%2Findex.cgi' ],
-                     [ type_ok => ['username', 'testuser']],
-                     [ type_ok => ['password', 'password']],
-                     [ click_ok => [q{//input[@value='Log in']}, 'log in']],
-                     [ wait_for_page_to_load_ok => [$timeout, 'log in']],
-                     [ open_ok => '/foo' ];
+    unshift @$tests, 
+      [ open => 'http://server' ],
+      [ get_eval => '*' ],
+      [ open_ok => '/nlw/login.html?redirect_to=%2Ffoo%2Findex.cgi' ],
+      [ type_ok => ['username', 'testuser']],
+      [ type_ok => ['password', 'password']],
+      [ click_ok => [q{id=login_btn}, 'log in']],
+      [ wait_for_page_to_load_ok => [$timeout, 'log in']],
+      [ open_ok => '/foo' ];
 
     Socialtext::WikiFixture::TestUtils::fixture_ok(
         name => $name,

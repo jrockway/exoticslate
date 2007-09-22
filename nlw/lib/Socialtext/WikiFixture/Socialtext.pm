@@ -56,8 +56,13 @@ sub init {
 
     $self->SUPER::init;
 
+    { # Talc/Topaz are configured to allow emailing into specific dev-envs
+        (my $host = $self->{browser_url}) =~ s#^http.?://(.+):\d+#$1#;
+        $self->{wikiemail} = $ENV{WIKIEMAIL} || "$ENV{USER}.$host";
+        diag  "wikiemail:  $self->{wikiemail}";
+    }
+
     $self->st_login;
-    $self->{selenium}->open_ok('/' . $self->{workspace});
 }
 
 =head2 st_login()
@@ -295,6 +300,22 @@ sub st_admin {
     _run_command("st-admin $options", $verify);
 }
 
+=head2 st_config( $command_options )
+
+Runs st_config command line script with the supplied options.
+
+=cut
+
+sub st_config {
+    my $self = shift;
+    my $options = shift || '';
+    my $verify = shift;
+    $verify = $self->quote_as_regex($verify) if $verify;
+
+    diag "st-config $options";
+    _run_command("st-config $options", $verify);
+}
+
 =head2 st_admin_export_workspace_ok( $workspace )
 
 Verifies that a workspace tarball was created.
@@ -420,7 +441,6 @@ sub _run_command {
         warn $output;
     }
 }
-
 
 =head1 AUTHOR
 

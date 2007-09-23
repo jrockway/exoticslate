@@ -6,7 +6,7 @@ use warnings;
 use IPC::Run qw(run timeout);
 
 use utf8;
-use Test::Socialtext tests => 192;
+use Test::Socialtext tests => 196;
 fixtures( 'admin_no_pages' );
 
 BEGIN { use_ok("Socialtext::Search::KinoSearch::Factory") }
@@ -107,6 +107,16 @@ QUOTE
 
     search_ok( "(sages OR bridges) AND (tea OR emperor)", 1,
         "More complex search" );
+}
+
+# If a page has two tags: "cows love" and "super matthew" then make sure a tag
+# search for neither of these matches: "love super" or "matthew cows" 
+RT22654_CROSSTAG_SEARCH_BUG: {
+    erase_index_ok();
+    make_page_ok( "Story of the Mammal", "Mammal Power",
+        [ "cows love", "super matthew" ] );
+    search_ok( 'tag:"love super"',   0, "" );
+    search_ok( 'tag:"matthew cows"', 0, "" );
 }
 
 RT22174_TITLE_SEARCH_BUG: {

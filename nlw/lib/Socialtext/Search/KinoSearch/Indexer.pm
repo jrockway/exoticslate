@@ -148,7 +148,10 @@ sub _get_page_tags {
     my ( $self, $page ) = @_;
     my @tags = grep { !/\brecent changes\b/i } @{ $page->metadata->Category };
     _debug( "Retrieved page tags: " . scalar(@tags) . " tags" );
-    return join( " :: ", @tags );
+
+    # Use ta_g_se_p to split tags since it will not be tokenized away, and so
+    # tags don't bleed into each other when stored. 
+    return join( " ta_g_se_p ", @tags );  
 }
 
 ########################

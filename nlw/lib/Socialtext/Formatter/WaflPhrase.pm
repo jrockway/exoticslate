@@ -666,12 +666,13 @@ sub _parse_page_for_headers {
     my $page_id           = shift;
     my $remote_page_title = shift;
 
+    my $cur_page_id = $self->hub->viewer->page_id;
+
     my $hub = $self->hub_for_workspace_name($workspace_name);
     my $page = $hub->pages->new_page($page_id);
     my $page_title = $page->title;
 
-
-    if ($self->current_page_id eq $page_id) {
+    if ($cur_page_id eq $page_id) {
         my $content = $self->hub->wikiwyg->cgi->content;
         $page->content($content) if $content;
     }
@@ -683,7 +684,7 @@ sub _parse_page_for_headers {
         $title = ": $workspace_name: {link: $workspace_name [$remote_page_title]}";
         $linkref = "$workspace_name [$remote_page_title]";
     }
-    elsif ($self->current_page_id ne $page_id) {
+    elsif ($cur_page_id ne $page_id) {
         $title = ": [$remote_page_title]";
         $linkref = "[$remote_page_title]";
     }

@@ -2,6 +2,27 @@ Change log for Socialtext Open
 
 2.15.X
 
+Release notes, 2.15.1.0  Sept 2007
+  [BUGS]
+  
+  Fixed some verticial whitespace issues in Simple/Advanced mode Wikiwyg editing. {rt: 26980, 26979, 24032}
+
+  Fixed an issue where a link could be split two links if a user caused a BR to be entered by pressing enter at the end of the link while in Wikiwyg editing. {rt: 24622}
+
+  Wikiwyg fixes for dynamic WAFL formatting, using the word "value" in a header, addition of whitespace around WAFL objects when switching from Preview to Simple, and adding a colon to a search term in a search_full WAFL phrase.  {rt: 1458, 24032, 26959, 26989, 26994}
+
+  Fixed an issue with the REST method /data/workspaces/:ws/pages/:page where the page has an included page (include WAFL phrase).  When requesting the text/html representation of the page, an 'edit this page' widget would be included in the include page's html "frame".  This is undesirable and has been removed.  NO TICKET
+
+  Fixed an issue with using square brackets "[]" in a weblog title that caused an application error.  {rt: 26696}
+
+  Fixed an issue with setting "permisissions" for Workspaces via the Settings/Workspace/Privacy tab.  {rt: 24500, 23042}
+
+  Fixed an issue with the login workflow when using "miki" like URLs "/lite...". {rt: 22089}
+
+  Improved tag searching, allowing for searches like `tag:"sheep cow"`.  Note that indexing of a page must happen in order for this behavior to be noticed.  New pages, edited pages and new workspaces will all be handled automatically.  {rt: 22654}
+
+  Made the representation of toc WAFL blocks look better in "miki".  {rt: 26827}
+
 Release notes, 2.15.0.0  Sept 2007
 
   [FEATURES]

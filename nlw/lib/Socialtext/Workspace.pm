@@ -886,23 +886,12 @@ sub comment_form_custom_fields {
 
             # XXX - maybe this belongs in a higher-level API that in
             # turn calls set_permissions
-            if ( $p{set_name} =~ /^public/ &&
-                 $p{set_name} !~ /read-only/ ) {
+            if ( $p{set_name} =~ /^public/ ) {
                 $self->update(
                     allows_html_wafl           => 0,
                     email_notify_is_enabled    => 0,
                     email_addresses_are_hidden => 1,
                     homepage_is_dashboard      => 0,
-                );
-            # If we're switching *from* public back to private,
-            # we should undo all of the eventspace settings.  Otherwise
-            # people get sad
-            } else {
-                $self->update(
-                    allows_html_wafl           => 1,
-                    email_notify_is_enabled    => 1,
-                    email_addresses_are_hidden => 0,
-                    homepage_is_dashboard      => 1,
                 );
             }
 

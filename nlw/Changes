@@ -2,7 +2,7 @@ Change log for Socialtext Open
 
 2.15.X
 
-Release notes, 2.15.1.0  Sept 2007
+Release notes, 2.15.1.1  Sept 2007
   [BUGS]
   
   Fixed some verticial whitespace issues in Simple/Advanced mode Wikiwyg editing. {rt: 26980, 26979, 24032}
@@ -14,8 +14,6 @@ Release notes, 2.15.1.0  Sept 2007
   Fixed an issue with the REST method /data/workspaces/:ws/pages/:page where the page has an included page (include WAFL phrase).  When requesting the text/html representation of the page, an 'edit this page' widget would be included in the include page's html "frame".  This is undesirable and has been removed.  NO TICKET
 
   Fixed an issue with using square brackets "[]" in a weblog title that caused an application error.  {rt: 26696}
-
-  Fixed an issue with setting "permisissions" for Workspaces via the Settings/Workspace/Privacy tab.  {rt: 24500, 23042}
 
   Fixed an issue with the login workflow when using "miki" like URLs "/lite...". {rt: 22089}
 

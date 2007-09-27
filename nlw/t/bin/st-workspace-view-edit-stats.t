@@ -9,6 +9,12 @@ my $script = "bin/st-workspace-view-edit-stats";
 ok -x $script;
 $script = "$^X -Ilib $script --no_mail --verbose";
 
+# This doesn't test all known forms of input.  We have 
+# test data for regular users, but not LDAP users.
+# Brandon, under penalty of DEATH, has promised to give
+# us real data.  Once we have real data, we can write a
+# real test.
+
 Single_view: {
     stats_ok(
         file => "t/test-data/view-edit-stats/single_view",

@@ -108,9 +108,10 @@ sub gather_data {
         my $log_ref
             = Socialtext::UsageStats::parse_apache_log_line($log_line);
 
-        # count only lines with authenticated socialtext users
+        # count only lines with authenticated socialtext users,
+        # where the username is an email address or LDAP identifier,
         # skipping eventspace public side in the process
-        if ( $log_ref->{user} !~ /\@/ ) {
+        if ( $log_ref->{user} eq '-' ) {
             verbose("$log_ref->{user} is not authenticated");
             next;
         }

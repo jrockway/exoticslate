@@ -11,7 +11,20 @@ proto.run_roundtrip = function(section_name, section_name2) {
         return;
     }
 
-    this.run_roundtrip_sync(section_name, section_name2);
+    if (Wikiwyg.is_ie) {
+        var self = this;
+
+        var t = 10000
+        var id = this.builder.beginAsync(t + 1000);
+        setTimeout(function() {
+            self.run_roundtrip_sync(section_name, section_name2);
+
+            self.builder.endAsync(id)
+        }, 300)
+    }
+    else {
+        this.run_roundtrip_sync(section_name, section_name2);
+    }
 }
 
 proto.run_roundtrip_sync = function(section_name, section_name2) {

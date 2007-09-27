@@ -6,12 +6,12 @@ onto chunks let's do that separately.
 
 var t = new Test.Wikiwyg();
 
-t.plan(2);
+t.plan(16);
 
 t.run_roundtrip('wikitext');
 
 /* Test
-=== The old big Formatting Test page roundtrips
+=== The old big Formatting Test page roundtrips, part 1
 --- wikitext
 {section: top of page anchor test which broke in IE}
 
@@ -62,6 +62,8 @@ See also: FormattingTest | [FormattingToDo] | [WikiwygFormattingTest] | [Wikiwyg
 * This is a "named file link"<file://thisisaserver/filename.txt>
 * "Save the dash in this renamed link"[Workspace Tour - Table of Contents]
 
+=== The old big Formatting Test page roundtrips, part 2
+--- wikitext
 ^^ Presence links
 
 * Aim
@@ -87,6 +89,8 @@ See also: FormattingTest | [FormattingToDo] | [WikiwygFormattingTest] | [Wikiwyg
 
 ^^^^^^ Header 6
 
+=== The old big Formatting Test page roundtrips, part 3
+--- wikitext
 ^^ Lists
 
 * One Simple
@@ -109,6 +113,8 @@ This paragraph is significant.
 ## ...
 ## Omega
 
+=== The old big Formatting Test page roundtrips, part 4
+--- wikitext
 ^^^ {rt: 14950}
 
 * One Simple
@@ -151,6 +157,8 @@ This is *bold* _italic_ -strike- `monospace` yo
 
 Leave `*stars*` and `_unders_` alone inside my backticks please.
 
+=== The old big Formatting Test page roundtrips, part 5
+--- wikitext
 ^^ Tables
 
 A Simple table
@@ -173,6 +181,8 @@ _fish_ |
 content
 .pre |
 
+=== The old big Formatting Test page roundtrips, part 6
+--- wikitext
 ^^ Blockquote Test
 
 Normal.
@@ -194,6 +204,8 @@ Normal.
 
 Back to normal.
 
+=== The old big Formatting Test page roundtrips, part 7
+--- wikitext
 ^^ Wafl phrases
 
 * image wafl (exists): {image: test_image.jpg}
@@ -208,12 +220,16 @@ Back to normal.
 * *{link: enboldenated wafl yo}* yo yo yo
 * yo yo yo {link: wafl yo} yo yo yo
 
+=== The old big Formatting Test page roundtrips part 8
+--- wikitext
 ^^ Non WAFL
 
 This is {not-wafl: really no} yo I say {nonono} {no go} eval {this_func()}
 
 .not-a-wafl-block
 
+=== The old big Formatting Test page roundtrips, part 9
+--- wikitext
 ^^ {rt: 14913}
 
 Preserve pairs of angle brackets:
@@ -224,6 +240,8 @@ Preserve pairs of angle brackets:
 < >
 <<<>
 
+=== The old big Formatting Test page roundtrips part 10
+--- wikitext
 ^^ {rt: 14914}
 
 Make wafl phrase markup stricter:
@@ -232,6 +250,8 @@ This {link[not]} {link,nope} {not.wafl.either}
 
 Real wafl {{ {link:foo} or {link: foo} or {link foo} or {tm};}} only
 
+=== The old big Formatting Test page roundtrips part 11
+--- wikitext
 ^^ {rt: 14915}
 
 Preserve lines of phrase markers (10 each below):
@@ -242,6 +262,8 @@ xxx __________
 xxx__________
 __________
 
+=== The old big Formatting Test page roundtrips part 12
+--- wikitext
 ^^ {rt: 14365}
 
 {link: Foo}
@@ -288,6 +310,8 @@ XXX - this isn't doing quite what it thinks it is:
 
 {{
 
+=== The old big Formatting Test page roundtrips, part 13
+--- wikitext
 ^^ multiline
 
 *asis* _without_ -any- [escaped html entities]
@@ -298,6 +322,8 @@ XXX - this isn't doing quite what it thinks it is:
 
 }}
 
+=== The old big Formatting Test page roundtrips part 14
+--- wikitext
 ^^ Wafl blocks.
 
 ^^^ Pre formatted
@@ -328,6 +354,8 @@ once
 
 &lt;some text between carets&gt;
 
+=== The old big Formatting Test page roundtrips part 15
+--- wikitext
 ^^^ Raw HTML
 
 .html

@@ -1,5 +1,22 @@
 Change log for Socialtext Open
 
+2.16.X
+
+Release notes, 2.16.0.0  Sept 2007
+
+  [FEATURES]
+  
+  Inter-Wiki Search is now avaiable.  Queries can be sent to searches
+  with the form "search terms workspaces:workspace-1,workspace-2,workspace-4".  
+  Note in the comma seperated list of workspaces, there can be no spaces.
+
+  [BUGS]
+
+  Usage report stats (st-workspace-view-edit-stats) now behaves better in LDAP authenticated
+  environments. {rt: 27198}
+
+  To support better Javascript testing in IE, some changes to the JS-Test framework were made.
+
 2.15.X
 
 Release notes, 2.15.1.1  Sept 2007

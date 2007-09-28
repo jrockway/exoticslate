@@ -21,7 +21,8 @@ usage() if @ARGV < 2;
 my $workspace = shift;
 my $query = "@ARGV";
 
-my @hits = Socialtext::Search::AbstractFactory->GetFactory->create_searcher($workspace)
+my @hits = Socialtext::Search::AbstractFactory->GetFactory
+    ->create_searcher($workspace)
     ->search($query);
 
 foreach my $hit (@hits) {

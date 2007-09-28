@@ -24,7 +24,7 @@ use Socialtext::CLI;
 
 use Cwd;
 
-plan tests => 229;
+plan tests => 237;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -1130,6 +1130,66 @@ SET_COMMENT_FORM_CUSTOM_FIELDS: {
     $ws = Socialtext::Workspace->new( name => 'admin' );
     @fields = sort $ws->comment_form_custom_fields();
     is( scalar @fields, 0, 'workspace has no fields' );
+}
+
+# search set tests
+CREATE_SEARCH_SET: {
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                '--name', 'bozo', '--username',
+                'devnull1@socialtext.com'
+                ]
+            )->create_search_set();
+        },
+        qr/A search set named 'bozo' was created for user devnull1\@socialtext\.com\./,
+        'create-search-set success'
+    );
+}
+
+ADD_REMOVE_WORKSPACE_TO_SEARCH_SET: {
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                '--name', 'bozo', '--username',
+                'devnull1@socialtext.com', '--workspace',
+                'admin'
+                ]
+            )->add_workspace_to_search_set();
+        },
+        qr/'admin' was added to search set 'bozo' for user devnull1\@socialtext\.com\./,
+        'add-workspace-to-search-set success'
+    );
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                '--name', 'bozo', '--username',
+                'devnull1@socialtext.com', '--workspace',
+                'admin'
+                ]
+            )->remove_workspace_from_search_set();
+        },
+        qr/'admin' was removed from search set 'bozo' for user devnull1\@socialtext\.com\./,
+        'remove-workspace-from-search-set success'
+    );
+}
+
+DELETE_SEARCH_SET: {
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                '--name', 'bozo', '--username',
+                'devnull1@socialtext.com'
+                ]
+            )->delete_search_set();
+        },
+        qr/The search set named 'bozo' was deleted for user devnull1\@socialtext\.com\./,
+        'delete-search-set success'
+    );
 }
 
 SET_LOGO_FROM_FILE: {

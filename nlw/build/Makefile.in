@@ -34,7 +34,7 @@ INSTALLSCRIPT   = $(PREFIX)@BINDIR@
 
 # Perl location
 PERL = @PERL@
-PROVE = `which prove`
+PROVE = $(PERL) $(shell which prove)
 
 # Program locations
 STCTL          = $(PERL) dev-bin/nlwctl
@@ -350,13 +350,10 @@ tardist: MANIFEST $(PERL_MAKEFILE)
 
 test:
 	$<
-	$(PERL) $(PROVE) -l $(shell find t -name '*.t' -not -regex '^t/live.*' | sort)
-
+	$(PROVE) -l $(shell find t -name '*.t' -not -regex '^t/live.*' | sort)
 
 testlive:
 	$(PERL) $(PROVE) -l -r t/live
-
-
 
 testall: test testlive
 

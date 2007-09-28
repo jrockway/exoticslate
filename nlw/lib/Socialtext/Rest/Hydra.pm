@@ -47,4 +47,5 @@ sub GET {
     return $stuff;
 }
 
+END:
 1;

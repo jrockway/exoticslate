@@ -18,7 +18,7 @@ Socialtext::Search::AbstractFactory->GetFactory->create_indexer('admin')
 ceqlotron_run_synchronously();
 
 {
-    $hub->search->search_for_term('the');
+    $hub->search->search_for_term(search_term => 'the');
 
     my $set = $hub->search->result_set;
     ok( $set, 'we have results' );

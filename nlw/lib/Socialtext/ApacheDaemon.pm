@@ -85,7 +85,6 @@ sub hup {
         },
     );
     $self->start unless $exists;
-    sleep 5 if $exists;
 }
 
 sub stop {
@@ -169,8 +168,8 @@ sub wait_for_servers_to_quit {
     my $self = shift;
 
     my $x = 0;
-    until ($x++ == 20) {
-        sleep 1;
+    until ($x++ >= (20 / $SLEEP_SECONDS)) {
+        sleep $SLEEP_SECONDS;
         return 1 unless $self->servers_running_on_this_port;
     }
     return;
@@ -205,7 +204,7 @@ sub wait_for_startup {
 
     my $x = 0;
     until ( -f $self->pid_file ) {
-        sleep 1;
+        sleep $SLEEP_SECONDS;
         $self->maybe_test_verbose('.');
         if ( $x++ == 30 ) {
             $ENV{NLW_TESTS_DIRTY} = 1;
@@ -213,7 +212,6 @@ sub wait_for_startup {
                 . "(Left t/tmp/* intact so you can inspect the aftermath)\n";
         }
     }
-    sleep 3; # wait for the server to finish starting up
     $self->maybe_test_verbose("\n", $self->short_binary, "started\n");
 }
 

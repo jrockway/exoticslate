@@ -34,6 +34,12 @@ body {
     background: url("../../images/st/wiki-nav/left-round.gif") no-repeat bottom left;
 }
 
+#st-search-scope .scope-label{
+    font-size: 0.85em;
+    vertical-align: middle;
+    padding-bottom: 4px;
+}
+
 #st-home {
     float: left;
     margin-right: 60px;
@@ -154,6 +160,15 @@ body {
 
 #st-search-form #st-search-term {
     float: left;
+    font-size: 60%;
+}
+
+#st-search-scope {
+    margin-left: 5px;
+    float: left;
+}
+
+#st-search-scope-select {
     font-size: 60%;
 }
 

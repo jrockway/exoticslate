@@ -1055,6 +1055,16 @@ Default: Socialtext::Search::KinoSearch::Factory
 
 =for code type => SCALAR_TYPE
 
+=head2 interwiki_search_set
+
+This allows an administrator to establish a set of workspaces to be searched
+as a default collection. Specified as a colon-separated list of workspace
+names.
+
+=for code default => '' 
+
+=for code type => SCALAR_TYPE
+
 =head2 reports_summary_email
 
 Setting this causes the reports summary to be sent to the specified address.

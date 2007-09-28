@@ -251,7 +251,7 @@ sub getSearch {
 
     _log('search', $hub, $query);
 
-    my $results = $hub->search->get_result_set($query);
+    my $results = $hub->search->get_result_set(search_term => $query);
 
     return 
         SOAP::Data->name('searchList')

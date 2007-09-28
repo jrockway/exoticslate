@@ -37,7 +37,9 @@ Test::Output: 0.09
 Test::Pod: 0
 Test::Pod::Coverage: 0
 Test::Program: 0
+Test::WWW::Selenium: 0
 Test::WWW::Mechanize: 0
+Socialtext::WikiFixture::Socialtext: 0
 Socialtext::WikiTest: 0.05
 
 # For mocking libraries

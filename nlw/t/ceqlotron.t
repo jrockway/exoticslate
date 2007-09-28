@@ -4,7 +4,8 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 19;
+use Test::Socialtext tests => 33;
+use Test::Socialtext::Search;
 fixtures( 'admin' );
 
 use Fcntl ':flock';
@@ -33,9 +34,12 @@ test_lock_doesnt_block();
 test_page_symlink();
 test_attachment_symlink();
 test_workspace_symlink();
+test_rampup_produces_no_macguffin();
+test_rampup_produces_macguffin();
 
 sub test_create {
     remove_dir();
+    turn_off_rampup(); # to make sure our environment is clean 
     system($^X, $CEQLOTRON, '--once', '--foreground');
     ok( -e $CEQ_DIR, "$CEQLOTRON creates $CEQ_DIR" );
     ok( -f $LOCK_FILE, "$CEQLOTRON creates $LOCK_FILE" );
@@ -70,7 +74,7 @@ sub test_page_symlink {
     unlink $MACGUFFIN_FILE or die "unlink '$MACGUFFIN_FILE': $!";
 
     st_admin_args_ok($macguffin_output);
-    st_admin_command_count_is( $macguffin_output, 4 );
+    st_admin_command_count_is( $macguffin_output, 5 );
     for my $cmd (qw(index-page send-weblog-pings send-email-notifications 
                     send-watchlist-emails)) {
         st_admin_command_present(
@@ -79,9 +83,6 @@ sub test_page_symlink {
                 '--ceqlotron' )
         );
     }
-    my @commands = split /\n/, $macguffin_output->{STDIN};
-    like( $commands[-1], qr/index-page/m,
-          'index-page is the last command sent to from_input' );
 }
 
 # This test uses dev-bin/macguffin to figure out how st-admin would be called and
@@ -103,7 +104,7 @@ sub test_attachment_symlink {
     unlink $MACGUFFIN_FILE or die "unlink '$MACGUFFIN_FILE': $!";
 
     st_admin_args_ok($macguffin_output);
-    st_admin_command_count_is( $macguffin_output, 1 );
+    st_admin_command_count_is( $macguffin_output, 2 );
     st_admin_command_present(
         $macguffin_output,
         join( "\0", 'index-attachment', '--attachment', $ATTACHMENT_ID,
@@ -136,17 +137,65 @@ sub test_workspace_symlink {
     );
 }
 
+# this test should not create a macguffin file, since we've blown away the
+# rampup.yaml search config
+sub test_rampup_produces_no_macguffin {
+    use_ok( "Socialtext::ChangeEvent::RampupIndexPage" );
+    my $page = $hub->pages->new_from_name($PAGE_NAME);
+    Socialtext::ChangeEvent::RampupIndexPage->Record($page);
+    ok ( ! -e 't/tmp/etc/socialtext/search/rampup.yaml', "rampup.yaml file doesn't exist");
+    run_ceqlotron_with_macguffin();
+    ok(
+        -e $MACGUFFIN_FILE,
+        "$CEQLOTRON (rampup page symlink) created the macguffin file, but it's empty."
+    );
+
+    my $macguffin_output = LoadFile($MACGUFFIN_FILE);
+    unlink $MACGUFFIN_FILE or die "unlink '$MACGUFFIN_FILE': $!";
+
+    st_admin_args_ok($macguffin_output);
+    st_admin_command_count_is( $macguffin_output, 1 );
+    st_admin_command_present(
+        $macguffin_output,
+        ""
+    );
+}
+
+# this test should create a macguffin file for a given event being generated,
+# since the rampup.yaml search config will be in effect
+sub test_rampup_produces_macguffin {
+    turn_on_rampup();
+    my $page = $hub->pages->new_from_name($PAGE_NAME);
+    Socialtext::ChangeEvent::RampupIndexPage->Record($page);
+
+    run_ceqlotron_with_macguffin();
+    ok(
+        -e $MACGUFFIN_FILE,
+        "$CEQLOTRON (rampup page symlink) called the MacGuffin"
+    );
+
+    my $macguffin_output = LoadFile($MACGUFFIN_FILE);
+    unlink $MACGUFFIN_FILE or die "unlink '$MACGUFFIN_FILE': $!";
+
+    st_admin_args_ok($macguffin_output);
+    st_admin_command_count_is( $macguffin_output, 1 );
+    st_admin_command_present(
+        $macguffin_output,
+        "index-page\0--workspace\0admin\0--page\0$PAGE_NAME\0--search-config\0rampup\0--ceqlotron"
+    );
+    turn_off_rampup();
+}
+
 sub st_admin_args_ok {
     my ( $macguffin_output ) = @_;
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-    use Data::Dumper;
     is_deeply(
-        $macguffin_output->{ARGV},
+        $_->{ARGV},
         [ 'from_input' ],
         'st-admin command-line arguments are correct'
-    ) or diag(Dumper($macguffin_output->{ARGV}));
+    ) for @$macguffin_output;
 }
 
 sub st_admin_command_count_is {
@@ -154,8 +203,7 @@ sub st_admin_command_count_is {
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-    my @lines = split /\n/, $macguffin_output->{STDIN};
-    is( scalar @lines, $expected, "$expected commands sent to st-admin" );
+    is( scalar @$macguffin_output, $expected, "$expected commands sent to st-admin" );
 }
 
 sub st_admin_command_present {
@@ -167,7 +215,7 @@ sub st_admin_command_present {
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
     like(
-        $macguffin_output->{STDIN},
+        (join "\n", map { $_->{STDIN} } @$macguffin_output),
         qr/^\Q$command\E\s*$/m,
         "'$pretty_command' sent to st-admin"
     );
@@ -187,3 +235,4 @@ sub remove_dir {
     }
     die "Unable to clear out $CEQ_DIR" if -e $CEQ_DIR;
 }
+

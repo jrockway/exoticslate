@@ -1,0 +1,30 @@
+# [% TAGS [- -] %]
+---
+version: 1
+index_type: per_workspace
+search_engine: kinosearch
+directory_pattern: %plugin_directory%/%search_engine%
+query_parser_method: _parse_query
+hits_processor_method: _process_hits
+key_generator: naked_key
+field_spec:
+    key:
+        analyzed: 0
+
+    title:
+        stored: 0
+        boost: 4
+
+    tag:
+        stored: 0
+        boost: 2
+
+    text:
+        stored: 0
+search_box_snippet: |
+    <form id="st-search-form" name="[% mode %]SearchForm" method="get" action="index.cgi">
+        <input id="st-search-term" type="text" name="search_term" value="[% loc('New search') %]" />
+        <input type="hidden" name="action" value="search" />
+        <input type="hidden" name="scope" value="_"/>
+        [% INCLUDE element/button href='#', id='st-search-submit', tooltip=loc('Click this button to perform your search'), label=loc('Search') %]
+    </form>

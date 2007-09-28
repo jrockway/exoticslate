@@ -9,6 +9,7 @@ Socialtext::Search::PageHit - Representation of a search hit found in a page.
 =head1 SYNOPSIS
 
     $uri = $page_hit->page_uri();
+    $key     = $page_hit->key();
 
     print "Your search term was found in the page with URI $uri.\n";
 
@@ -43,6 +44,40 @@ sub page_uri {
         croak(__PACKAGE__, "::page_uri called in a weird way");
     }
 }
+
+=head2 $page_hit->workspace_name()
+
+Returns the name of the workspace where the hit was found.
+
+=cut
+sub workspace_name {
+    my ( $self ) = @_;
+
+    if (ref $self) {
+        croak(ref $self, ": internal bug: workspace_name not implemented");
+    }
+    else {
+        croak(__PACKAGE__, "::workspace_name called in a weird way");
+    }
+}
+
+=head2 $page_hit->key()
+
+Returns the document key of the hit in the index.
+
+=cut
+sub key {
+    my ( $self ) = @_;
+
+    if (ref $self) {
+        croak(ref $self, ": internal bug: key not implemented");
+    }
+    else {
+        croak(__PACKAGE__, "::key called in a weird way");
+    }
+}
+
+1;
 
 =head1 SEE ALSO
 

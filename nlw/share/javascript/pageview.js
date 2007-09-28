@@ -202,13 +202,15 @@ ST.Page.prototype = {
 ST.NavBar = function (args) {
     $H(args).each(this._applyArgument.bind(this));
     Event.observe(window, 'load', this._loadInterface.bind(this));
+    Event.observe(window, 'load', this._prepopulateFields.bind(this));
 };
 
 ST.NavBar.prototype = {
     element: {
         searchForm: 'st-search-form',
         searchButton: 'st-search-submit',
-        searchField: 'st-search-term'
+        searchField: 'st-search-term',
+        searchSelect: 'st-search-scope-select'
     },
 
     submit_search: function (arg) {
@@ -227,6 +229,33 @@ ST.NavBar.prototype = {
         if (typeof this[arg.key] != 'undefined') {
             this[arg.key] = arg.value;
         }
+    },
+
+    _prepopulateFields: function() {
+        // snarf the window.location.href, look for 'search_term' and
+        // 'scope' - prepopulate the st-search-term with search_term, and
+        // pre-check the appropriate scope radio button.
+        var href = window.location.href;
+        var search_match = href.match(/search_term=([^&;]+)/); 
+        // ^^ will match both 'search_term' and 'orig_search_term'
+        if (search_match) {
+            $(this.element.searchField).value = unescape(search_match[1]).replace(/\+/g, ' ');
+        }
+        
+        var scope_match = href.match(/(scope=)/);
+        /*
+        if (scope_match) {
+            if (href.match(/scope=all/)) {
+                $(this.element.searchScopeGlobal).checked = true;
+            }
+            else {
+                $(this.element.searchScopeLocal).checked = true;
+            }
+        }
+        else {
+            $(this.element.searchScopeLocal).checked = true;
+        }
+        */
     },
 
     _loadInterface: function () {

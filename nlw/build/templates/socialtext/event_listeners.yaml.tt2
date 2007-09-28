@@ -1,0 +1,24 @@
+# The keys are event types, the value for each is a list of classes which
+# listen for such events.
+---
+Attachment:
+    - Socialtext::EventListener::IndexAttachment::IndexAttachment
+    - Socialtext::EventListener::IndexAttachment::RampupIndexAttachment
+IndexAttachment:
+    - Socialtext::EventListener::IndexAttachment::IndexAttachment
+    - Socialtext::EventListener::IndexAttachment::RampupIndexAttachment
+RampupIndexAttachment:
+    - Socialtext::EventListener::IndexAttachment::RampupIndexAttachment
+Page:
+    - Socialtext::EventListener::IndexPage::IndexPage
+    - Socialtext::EventListener::IndexPage::RampupIndexPage
+    - Socialtext::EventListener::Page::SendEmailNotifications
+    - Socialtext::EventListener::Page::SendWatchlistEmails
+    - Socialtext::EventListener::Page::SendWeblogPings
+IndexPage:
+    - Socialtext::EventListener::IndexPage::IndexPage
+    - Socialtext::EventListener::IndexPage::RampupIndexPage
+RampupIndexPage:
+    - Socialtext::EventListener::IndexPage::RampupIndexPage
+Workspace:
+    - Socialtext::EventListener::Workspace::IndexWorkspace

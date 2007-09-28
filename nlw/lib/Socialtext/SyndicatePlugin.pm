@@ -8,7 +8,7 @@ use base 'Socialtext::Plugin';
 use Class::Field qw( const );
 use Socialtext::AppConfig;
 use Socialtext::Exceptions qw( no_such_page_error );
-use Socialtext::Search::AbstractFactory;
+use Socialtext::Search 'search_on_behalf';
 use Socialtext::Syndicate::Feed;
 use Socialtext::Watchlist;
 use Socialtext::User;
@@ -30,11 +30,11 @@ RSS20 and Atom format feeds of one or more L<Socialtext::Page> objects.
 Feeds may be created based on a variety of CGI parameter inputs. See
 L</METHODS>.
 
-Socialtext::SyndicatePlugin is primarly used by L<Socialtext::Handler::Syndicate>
-and uses L<Socialtext::Syndicate::Feed> for most of the hard work.
-Socialtext::SyndicatePlugin acts as a bridge between the two: inspecting
-CGI parameters and choosing the proper set of pages based on those
-parameters.
+Socialtext::SyndicatePlugin is primarly used by
+L<Socialtext::Handler::Syndicate> and uses L<Socialtext::Syndicate::Feed> for
+most of the hard work.  Socialtext::SyndicatePlugin acts as a bridge between
+the two: inspecting CGI parameters and choosing the proper set of pages based
+on those parameters.
 
 =cut
 
@@ -280,13 +280,16 @@ sub _watchlist_get_items {
 sub _search_get_items {
     my $self = shift;
     my $query = shift;
-    my $searcher = Socialtext::Search::AbstractFactory->GetFactory->create_searcher(
-        $self->hub->current_workspace->name
-    );
 
     my @pages = map { $self->hub->pages->new_from_name( $_->page_uri ) }
         grep { $_->isa('Socialtext::Search::PageHit') }
-        $searcher->search($query);
+        search_on_behalf(
+            $self->hub->current_workspace->name,
+            $query,
+            undef, # undefined scope
+            $self->hub->current_user,
+            sub { },   # FIXME: swallowing this error for now
+            sub { } ); # FIXME: swallowing this error for now
 
     return \@pages;
 }

@@ -145,9 +145,9 @@ sub fork_some_children {
 }
 
 sub run_event {
-    if ( Socialtext::Ceqlotron::_dispatch_symlink(@_) ) {
+    if ( my $new_children = Socialtext::Ceqlotron::_dispatch_symlink(@_) ) {
         with_sigchld_blocked {    # To avoid a race on $RunningChildren.
-            ++$RunningChildren;
+            $RunningChildren += $new_children;
             st_log->debug("ceqlotron fork - concurrency $RunningChildren");
         }
     }

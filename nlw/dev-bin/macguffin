@@ -8,13 +8,25 @@ use strict;
 
 # For etymology, see http://en.wikipedia.org/wiki/MacGuffin
 
-use YAML;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
+use YAML qw(Load Dump);
+use Fcntl qw(:flock :seek);
+use Socialtext::File;
 use Readonly;
 
 Readonly my $FILE => "/tmp/macguffin-$<.yaml";
 
-open F, '>', $FILE or die "$FILE: $!";
+Socialtext::File::ensure_empty_file($FILE);
+open F, '+<', $FILE or die "open $FILE: $!";
+flock F, LOCK_EX or die "flock $FILE: $!";
+seek F, 0, SEEK_SET;
+
+my $list = Load(join '', <F>);
+$list ||= [];
 
 my $stdin = join '', <STDIN>;
-print F Dump({ARGV => \@ARGV, STDIN => $stdin}) or die "print '$FILE': $!";
-close F or die "close '$FILE': $!";
+
+seek F, 0, SEEK_SET;
+print F Dump( [ @$list, { ARGV => \@ARGV, STDIN => $stdin } ] );

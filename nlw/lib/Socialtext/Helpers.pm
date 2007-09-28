@@ -6,6 +6,9 @@ use warnings;
 # vaguely akin to RubyOnRails' "helpers"
 use Socialtext;
 use base 'Socialtext::Base';
+use Socialtext::Search::Config;
+use Socialtext::Search::Set;
+use Socialtext::TT2::Renderer;
 use Socialtext::l10n qw/loc/;
 use Data::Dumper;
 use Encode ();
@@ -140,6 +143,26 @@ sub preference_path {
 sub global_template_vars {
     my $self = shift;
 
+    my $show_search_set = (
+        ( $self->hub->current_user->is_authenticated )
+            || ( $self->hub->current_user->is_guest
+            && Socialtext::AppConfig->interwiki_search_set )
+    );
+    my $snippet = Socialtext::Search::Config->new()->search_box_snippet;
+
+    my $renderer = Socialtext::TT2::Renderer->instance();
+
+    my $search_box = $renderer->render(
+        template => \$snippet,
+        vars => {
+            current_workspace => $self->hub->current_workspace,
+            show_search_set   => $show_search_set,
+            search_sets       => [Socialtext::Search::Set->AllForUser(
+                $self->hub->current_user
+            )->all],
+        }
+    );
+
     return (
         loc               => \&loc,
         loc_lang          => $self->hub->best_locale,
@@ -148,11 +171,13 @@ sub global_template_vars {
         user              => $self->_get_user_info,
         wiki              => $self->_get_wiki_info,
         checker           => $self->hub->checker,
+        current_workspace => $self->hub->current_workspace,
         home_is_dashboard => $self->hub->current_workspace->homepage_is_dashboard,
-        customjs_uri      => $self->hub->current_workspace->customjs_uri,
+        customjs_uri       => $self->hub->current_workspace->customjs_uri,
         customjs_name     => $self->hub->current_workspace->customjs_name,
-        app_version       => Socialtext->product_version,
-        skin_name         => $self->hub->current_workspace->skin_name,
+        app_version        => Socialtext->product_version,
+        skin_name          => $self->hub->current_workspace->skin_name,
+        search_box_snippet => $search_box,
     );
 }
 

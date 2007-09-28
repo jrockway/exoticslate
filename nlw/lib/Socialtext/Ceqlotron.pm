@@ -12,10 +12,12 @@ use POSIX qw( :sys_wait_h :signal_h );
 use IPC::Run qw( run );
 use Readonly;
 
+use Socialtext;
 use Socialtext::ChangeEvent;
 use Socialtext::File;
 use Socialtext::Log 'st_log';
 use Socialtext::Paths;
+use Socialtext::EventListener::Registry;
 
 our @EXPORT_OK = qw( foreach_event );
 
@@ -302,161 +304,36 @@ sub _by_ctime_and_workspace {
     return @sorted_links;
 }
 
-# Given an event, runs st-admin with the correct args and then unlinks
-# the event.
+# React to events and then unlink afterwards.
 sub _dispatch_symlink {
     my ( $event ) = @_;
 
-    my $ran_it = _run_admin(
-        $event->workspace_name,
-          $event->isa('Socialtext::ChangeEvent::Workspace') ? _workspace_args($event)
-        : $event->isa('Socialtext::ChangeEvent::Page')      ? _page_args($event)
-        : _attachment_args($event)
-    );
+    my @event_type_parts = split /::/, ref $event;
+    my $event_type = $event_type_parts[-1];
 
-    if ($ran_it) {
+    my $forked_children = 0;
+
+    Socialtext::EventListener::Registry->load();
+    my $listeners = $Socialtext::EventListener::Registry::Listeners{$event_type};
+    foreach my $listener (@$listeners) {
+        eval { 
+            eval "require $listener";
+            $listener->react($event);
+        };
+        if ($@) {
+            st_log->error( "$listener failed with: $@" ); 
+        } else {
+            $forked_children++;
+        }
+    }
+
+    if ($forked_children) {
         my $path = $event->link_path;
         unlink $path
             or st_log->error( "ST::Ceqlotron unlinking $path failed: $!" );
     }
-}
 
-sub _workspace_args {
-    my ( $event ) = @_;
-
-    st_log->info( 'ST::Ceqlotron workspace event for ' . $event->workspace_name );
-
-    return ( [ 'index-workspace', '--workspace', $event->workspace_name ] );
-}
-
-sub _page_args {
-    my ( $event ) = @_;
-
-    st_log->info(
-        'ST::Ceqlotron page event for ' . $event->workspace_name . ' ' . $event->page_uri );
-
-    return
-        map { [ $_, '--workspace', $event->workspace_name, '--page', $event->page_uri ] }
-            qw(send-weblog-pings send-email-notifications send-watchlist-emails index-page);
-}
-
-sub _attachment_args {
-    my ( $event ) = @_;
-
-    st_log->info( 'ST::Ceqlotron attachment event for '
-            . $event->workspace_name . ' '
-            . $event->page_uri . ' '
-            . $event->attachment_id );
-
-    return ( [ 'index-attachment',
-               '--attachment', $event->attachment_id,
-               '--page', $event->page_uri,
-               '--workspace', $event->workspace_name,
-             ] );
-}
-
-# This either runs st-admin in the foreground (_exec_admin) or background
-# (_fork_admin) depending on the value in
-# AppConfig->ceqlotron_synchronous.
-sub _run_admin {
-    Socialtext::AppConfig->ceqlotron_synchronous
-        ? _exec_admin( @_ )
-        : _fork_admin( @_ );
-}
-
-# This runs st-admin asynchronously and sends the approciate commands
-# on stdin.  @lists is a list of command+argument lists.
-sub _fork_admin {
-    my ( $workspace, @lists ) = @_;
-
-    # Note: we need to fork first, then call IPC::Run::run.  Recall that run()
-    # works like the system() builtin.  It waits for the child process to
-    # exit.  In order to do more than one thing at a time, we have to fork
-    # first.
-
-    # Block all incoming signals before fork.
-    my $old_sigset = POSIX::SigSet->new;
-    my $all_signals = POSIX::SigSet->new;
-    $all_signals->fillset;
-    unless (defined sigprocmask(SIG_BLOCK, $all_signals, $old_sigset)) {
-        st_log->notice( "ST::Ceqlotron SIG_BLOCK: $!" );
-        return;
-    }
-    my $child_pid = fork;
-
-    if (! defined $child_pid) {
-        st_log->notice( "ST::Ceqlotron fork failed: $!" );
-        goto UNBLOCK_AND_RETURN;
-    }
-    elsif ($child_pid == 0) { # in child process
-        foreach my $signal (keys %SIG) {
-            $SIG{$signal} = 'DEFAULT';
-        }
-        # Now safe to unblock signals.
-        sigprocmask(SIG_SETMASK, $old_sigset);
-        # flock() locks are inherited by child processes.  We must release the
-        # lock here or else we'll hold the lock from the parent until _we_
-        # exit.
-        release_lock();
-        st_log->debug("ST::Ceqlotron fork pid $$");
-
-        _exec_admin( $workspace, @lists );
-        # REVIEW: in the future we will want to exit with the
-        # status of the fork.
-        exit;
-    }
-
-UNBLOCK_AND_RETURN:
-    # Unblock signals before returning.
-    sigprocmask(SIG_SETMASK, $old_sigset);
-}
-
-# This runs st-admin and sends the appropriate commands on stdin.
-sub _exec_admin {
-    my ( $workspace, @lines ) = @_;
-    my $in = join '', map { "$_\n" } map { join "\0", @$_, '--ceqlotron' } @lines;
-    my $out;
-    my $err;
-
-    my $script = Socialtext::AppConfig->admin_script;
-    my @cmd = ( $script, 'from_input' );
-
-    my $run_results = run \@cmd, \$in, \$out, \$err;
-    st_log->error("ST::Ceqlotron unable to exec @cmd: $!") unless $run_results;
-
-    _log_output(\@cmd, $out, $err) if $out or $err;
-
-    return $run_results;
-}
-
-# borrowed from Socialtext::Postprocess::Runner may it rip
-sub _log_output {
-    my $command = shift;
-    my @output  = @_;
-
-    my $dir = "/tmp/nlw-postprocess-$<";
-    -e $dir or mkdir $dir; # we can't output at this point, so silently fail =(
-
-    # the messages produced by this sub are far too noisy to be of
-    # value in the syslog, so produce a pointer in the syslog to the
-    # more verbose log
-    st_log->warning("ST::Ceqlotron @$command produced output in $dir");
-
-    my $name = join('_', @$command);
-
-    # no / or : in file names, otherwise things aren't going to work well
-    $name =~ s{/|:}{-}g;
-
-    # In some testing situations this fail to open, but we
-    # don't want to die when that happens.
-    my $error_log = "$dir/$$-$name";
-    if ( open my $fh, '>', $error_log ) {
-        print $fh join "---\n", @output;
-        close $fh;
-    }
-    else {
-        st_log->warning("ST::Ceqlotron unable to open $error_log for writing: $!");
-    }
+    return $forked_children;
 }
 
 =head1 APPCONFIG VARIABLES

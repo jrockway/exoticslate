@@ -12,6 +12,8 @@ sub FormattedEmail { 'One Loser <one@foo.bar>' }
 
 sub guess_real_name { 'One Loser' }
 
+sub is_authenticated { ! $_[0]->is_guest() }
+
 sub is_guest { $_[0]->{is_guest} }
 
 sub user_id { 1 }

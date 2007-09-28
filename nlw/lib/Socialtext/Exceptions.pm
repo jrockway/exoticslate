@@ -54,6 +54,13 @@ BEGIN {
             description => 'An attempt to access a non-existent page'
         },
 
+        'Socialtext::Exception::NoSuchWorkspace' => {
+            isa         => 'Socialtext::Exception',
+            alias       => 'no_such_workspace_error',
+            fields      => [qw( name )],
+            description => 'An attempt to access a non-existent workspace'
+        },
+
         'Socialtext::Exception::VirtualMethod' => {
             isa         => 'Socialtext::Exception',
             description =>
@@ -144,3 +151,4 @@ This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
 =cut
+

@@ -3,15 +3,17 @@
     <tr id="[% style %]-header-row" class="query-results-header-row">[% PROCESS listing_headers %]</tr>
 [%
     FOREACH row = rows;
-      PROCESS listing_row page_uri    = row.page_uri,
-                          page_id     = row.page_id,
-                          odd         = loop.count % 2,
-                          summary     = row.Summary,
-                          subject     = row.Subject,
-                          from        = row.From,
-                          page_date   = row.DateLocal,
-                          disposition = row.disposition,
-                          revisions   = row.revision_count;
+      PROCESS listing_row page_uri        = row.page_uri,
+                          page_id         = row.page_id,
+                          workspace_name  = row.workspace_name || current_workspace.name,
+                          workspace_title = row.workspace_title,
+                          odd             = loop.count % 2,
+                          summary         = row.Summary,
+                          subject         = row.Subject,
+                          from            = row.From,
+                          page_date       = row.DateLocal,
+                          disposition     = row.disposition,
+                          revisions       = row.revision_count;
     END;
 %]
 </table>
@@ -32,7 +34,7 @@
         </td>
     [% END %]
         <td class="[% style %]-row-title query-results-row-title">
-            <a class="[% style %]-row-title-link query-results-row-title-link" href="[% script_name %]?[% page_uri %]" title="[% summary %]">[% subject | html %]</a>
+            <a class="[% style %]-row-title-link query-results-row-title-link" href="/[% workspace_name %]/index.cgi?[% page_uri %]" title="[% summary %]">[% subject | html %]</a>
 
       [% IF row.attachments;
              FOREACH attachment = row.attachments;
@@ -45,6 +47,11 @@
       %]
 
         </td>
+        [% IF show_workspace_column %]
+        <td class="[% style %]-row-workspace query-results-row-workspace">
+            <a href="/[% workspace_name %]/">[% workspace_title %]</a>
+        </td>
+        [% END %]
         <td class="[% style %]-row-last-edited-by query-results-row-last-edited-by">[% from %]</td>
         <td class="[% style %]-row-date query-results-row-date">
         [%
@@ -75,6 +82,11 @@
   <th id="[% style %]-header-title" class="query-results-header-title">
     [% PROCESS listing_header_link name = loc('Title') field = 'Subject' %]
   </th>
+  [% IF show_workspace_column %]
+  <th id="[% style %]-header-workspace" class="query-results-header-workspace">
+    [% PROCESS listing_header_link name = 'Workspace' field = 'Workspace' %]
+  </th>
+  [% END %]
   <th id="[% style %]-header-last-edited-by" class="query-results-header-last-edited-by">
     [% PROCESS listing_header_link name = loc('Last Edited By') field = 'From' %]
   </th>
@@ -87,7 +99,7 @@
 [% END %]
 
 [% BLOCK listing_header_link %]
-  <a href="?[% predicate %];sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</a>
+  <a href="?[% predicate %];sortby=[% field %];direction=[% sortdir.$field %];scope=[% scope %];orig_search_term=[% search_term %]">[% name %]</a>
 [% END %]
 
 [% BLOCK attachment_link %]

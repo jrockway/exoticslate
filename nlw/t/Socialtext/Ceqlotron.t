@@ -4,12 +4,14 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 9;
+use YAML qw( Dump );
+use Test::Socialtext tests => 17;
 fixtures( 'admin' );
 
 # Use this file for testing Socialtext::Ceqlotron subs.  Use ceqlotron.t for testing
 # bin/ceqlotron from the outside.
 
+use Socialtext::EventListener::Registry;
 use Socialtext::Ceqlotron 'foreach_event';
 
 use Readonly;
@@ -27,11 +29,36 @@ use_ok( 'Socialtext::Ceqlotron' );
 Socialtext::Ceqlotron::clean_queue_directory();
 Socialtext::Ceqlotron::ensure_lock_file();
 
+test_registrations();
 test_lock_is_idempotent();
 test_lock_is_exclusive();
 test_foreach_ctime();
 test_last_event();
 test_event_removal();
+
+# At runtime there should be eight listeners registered, five for Page
+# events, two for Attachment events, and one for Workspace events
+sub test_registrations {
+    Socialtext::EventListener::Registry->load();
+    my %listeners = %Socialtext::EventListener::Registry::Listeners;
+
+    is( scalar keys %listeners, 7,
+        "There are seven event types" );
+    is( scalar @{ $listeners{Page} }, 5,
+        "There are five page listeners" );
+    is( scalar @{ $listeners{Attachment} }, 2,
+        "There are two attachment listeners" );
+    is( scalar @{ $listeners{Workspace} }, 1,
+        "There is one workspace listener" );
+    is( scalar @{ $listeners{IndexPage} }, 2,
+        "There are two indexpage listeners" );
+    is( scalar @{ $listeners{IndexAttachment} }, 2,
+        "There are two indexattachment listeners" );
+    is( scalar @{ $listeners{RampupIndexPage} }, 1,
+        "There is one rampupindexpage listener" );
+    is( scalar @{ $listeners{RampupIndexAttachment} }, 1,
+        "There is one rampupindexattachment listener" );
+}
 
 # This test verifies that the ceqlotron removes events from the queue
 # when run synchrously, using the events created elsewhere in this file.
@@ -39,8 +66,10 @@ sub test_event_removal {
     my $count;
 
     _event_count_test(5, "With a fresh queue, ");
+    system 'date';
     Test::Socialtext::ceqlotron_run_synchronously();
     _event_count_test(0, "After running the queue, ");
+    system 'date';
 }
 
 # This test verifies that foreach_event goes through in CTIME order.
@@ -69,7 +98,7 @@ sub create_events {
     my $seconds = $SLEEP_SECONDS * @PAGE_IDS;
     Test::More::diag("This will take at least $seconds seconds.");
     foreach my $page_id (@PAGE_IDS) {
-        Socialtext::ChangeEvent->Record(
+        Socialtext::ChangeEvent::Page->Record(
             $hub->pages->new_from_name($page_id)
         );
         sleep $SLEEP_SECONDS;

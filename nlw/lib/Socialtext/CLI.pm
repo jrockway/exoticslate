@@ -14,9 +14,9 @@ use Getopt::Long qw( :config pass_through );
 use Socialtext::AppConfig;
 use Pod::Usage;
 use Readonly;
+use Socialtext::Search::AbstractFactory;
 use Socialtext::Validate qw( validate SCALAR_TYPE ARRAYREF_TYPE );
 use Socialtext::l10n qw( loc loc_lang valid_code system_locale );
-
 
 my %CommandAliases = (
     '--help' => 'help',
@@ -26,24 +26,26 @@ my %CommandAliases = (
 
 {
     Readonly my $spec => { argv => ARRAYREF_TYPE( default => [] ) };
+
     sub new {
         my $class = shift;
-        my %p = validate( @_, $spec );
+        my %p     = validate( @_, $spec );
 
         local @ARGV = @{ $p{argv} };
 
         my %opts;
         GetOptions(
             'ceqlotron' => \$opts{ceqlotron},
-        ) or exit 1;
+            )
+            or exit 1;
 
         my $self = {
-            argv      => [ @ARGV ],
+            argv      => [@ARGV],
             command   => '',
             ceqlotron => $opts{ceqlotron},
         };
 
-        return bless $self, $class
+        return bless $self, $class;
     }
 }
 
@@ -56,8 +58,9 @@ sub run {
 
     $self->_help_as_error(
         "You must provide a command as the first argument to this script.\n"
-        . "Please run '$script_name help' for more details.")
-        unless defined $command and length $command;
+            . "Please run '$script_name help' for more details." )
+        unless defined $command
+        and length $command;
 
     $command = $CommandAliases{$command}
         if $CommandAliases{$command};
@@ -65,8 +68,8 @@ sub run {
 
     unless ( $self->can($command) ) {
         $self->_help_as_error(
-            "The command you specified, $command, was not valid.\n"
-            . "Please run '$script_name help' for more details.");
+                  "The command you specified, $command, was not valid.\n"
+                . "Please run '$script_name help' for more details." );
     }
 
     if ( $command ne 'help' ) {
@@ -88,7 +91,7 @@ sub _check_privs {
     my $data_root = Socialtext::AppConfig->data_root_dir();
     return if -w $data_root;
 
-    my $uid = (stat $data_root)[4];
+    my $uid      = ( stat $data_root )[4];
     my $username = getpwuid $uid;
 
     warn <<"EOF";
@@ -106,7 +109,8 @@ EOF
 }
 
 sub _drop_privs {
-    my ( $uid, $gid ) = (stat Socialtext::AppConfig->data_root_dir())[4, 5];
+    my ( $uid, $gid )
+        = ( stat Socialtext::AppConfig->data_root_dir() )[ 4, 5 ];
 
     require POSIX;
     POSIX::setgid($gid);
@@ -127,21 +131,24 @@ sub _help_as_error {
         exitval => SCALAR_TYPE( default => 0 ),
         verbose => SCALAR_TYPE( default => 0 ),
     };
+
     sub _print_help {
         my $self = shift;
-        my %p = validate( @_, $spec );
+        my %p    = validate( @_, $spec );
 
         if ( $p{message} ) {
             $p{message} = _clean_msg( $p{message} );
         }
 
-        pod2usage({
-            -message => $p{message},
-            -input   => $INC{'Socialtext/CLI.pm'},
-            -section => 'NAME|SYNOPSIS|COMMANDS',
-            -verbose => ( $p{verbose} ? 2 : 0 ),
-            -exitval => $p{exitval},
-        });
+        pod2usage(
+            {
+                -message => $p{message},
+                -input   => $INC{'Socialtext/CLI.pm'},
+                -section => 'NAME|SYNOPSIS|COMMANDS',
+                -verbose => ( $p{verbose} ? 2 : 0 ),
+                -exitval => $p{exitval},
+            }
+        );
     }
 }
 
@@ -152,7 +159,7 @@ sub give_system_admin {
     $user->update_metadata( is_technical_admin => 1 );
 
     my $username = $user->username();
-    $self->_success( "$username now has system admin access." );
+    $self->_success("$username now has system admin access.");
 }
 
 sub give_accounts_admin {
@@ -162,7 +169,7 @@ sub give_accounts_admin {
     $user->update_metadata( is_business_admin => 1 );
 
     my $username = $user->username();
-    $self->_success( "$username now has accounts admin access." );
+    $self->_success("$username now has accounts admin access.");
 }
 
 sub remove_system_admin {
@@ -172,7 +179,7 @@ sub remove_system_admin {
     $user->update_metadata( is_technical_admin => 0 );
 
     my $username = $user->username();
-    $self->_success( "$username no longer has system admin access." );
+    $self->_success("$username no longer has system admin access.");
 }
 
 sub remove_accounts_admin {
@@ -182,7 +189,7 @@ sub remove_accounts_admin {
     $user->update_metadata( is_business_admin => 0 );
 
     my $username = $user->username();
-    $self->_success( "$username no longer has accounts admin access." );
+    $self->_success("$username no longer has accounts admin access.");
 }
 
 sub list_workspaces {
@@ -204,7 +211,7 @@ sub list_workspaces {
 sub _determine_workspace_output {
     my $self = shift;
 
-    my %opts = $self->_get_options( 'ids' );
+    my %opts = $self->_get_options('ids');
 
     return $opts{ids}
         ? 'workspace_id'
@@ -217,22 +224,29 @@ sub create_user {
 
     require Socialtext::User;
 
-    if ( $user{username} and Socialtext::User->new( username => $user{username} ) ) {
+    if ( $user{username}
+        and Socialtext::User->new( username => $user{username} ) ) {
         $self->_error(
-            qq|The username you provided, "$user{username}", is already in use.|);
+            qq|The username you provided, "$user{username}", is already in use.|
+        );
     }
 
     if ( $user{email_address}
-         and Socialtext::User->new( email_address => $user{email_address} ) ) {
+        and Socialtext::User->new( email_address => $user{email_address} ) ) {
         $self->_error(
-            qq|The email address you provided, "$user{email_address}", is already in use.|);
+            qq|The email address you provided, "$user{email_address}", is already in use.|
+        );
     }
 
     $user{username} ||= $user{email_address};
 
-    my $user = eval { Socialtext::User->create( %user, require_password => 1 ) };
-    if ( my $e = Exception::Class->caught('Socialtext::Exception::DataValidation') ) {
-        my $msg = "The following errors occurred when creating the new user:\n\n";
+    my $user
+        = eval { Socialtext::User->create( %user, require_password => 1 ) };
+    if ( my $e
+        = Exception::Class->caught('Socialtext::Exception::DataValidation') )
+    {
+        my $msg
+            = "The following errors occurred when creating the new user:\n\n";
         for my $m ( $e->messages ) {
             $msg .= "  * $m\n";
         }
@@ -243,8 +257,9 @@ sub create_user {
         die $e;
     }
 
-    $self->_success( 'A new user with the username "' . $user->username()
-                      . '" was created.' );
+    $self->_success( 'A new user with the username "'
+            . $user->username()
+            . '" was created.' );
 }
 
 sub _require_create_user_params {
@@ -262,7 +277,9 @@ sub _require_create_user_params {
         my $val = $opts{$key};
 
         unless ( Encode::is_utf8($val) or $val =~ /^[\0x00-\xff]*$/ ) {
-            $self->_error( "The value you provided for the $key option is not a valid UTF8 string." );
+            $self->_error(
+                "The value you provided for the $key option is not a valid UTF8 string."
+            );
         }
     }
 
@@ -296,14 +313,18 @@ sub add_member {
     my $ws   = $self->_require_workspace();
 
     if ( $ws->has_user( user => $user ) ) {
-        $self->_error( $user->username . ' is already a member of the '
-                        . $ws->name . ' workspace.' );
+        $self->_error( $user->username
+                . ' is already a member of the '
+                . $ws->name
+                . ' workspace.' );
     }
 
     $ws->add_user( user => $user );
 
-    $self->_success( $user->username . ' is now a member of the '
-                      . $ws->name . ' workspace.' );
+    $self->_success( $user->username
+            . ' is now a member of the '
+            . $ws->name
+            . ' workspace.' );
 }
 
 sub remove_member {
@@ -313,23 +334,27 @@ sub remove_member {
     my $ws   = $self->_require_workspace();
 
     unless ( $ws->has_user( user => $user ) ) {
-        $self->_error( $user->username . ' is not a member of the '
-                        . $ws->name . ' workspace.' );
+        $self->_error( $user->username
+                . ' is not a member of the '
+                . $ws->name
+                . ' workspace.' );
     }
 
     $ws->remove_user( user => $user );
 
-    $self->_success( $user->username . ' is no longer a member of the '
-                      . $ws->name . ' workspace.' );
+    $self->_success( $user->username
+            . ' is no longer a member of the '
+            . $ws->name
+            . ' workspace.' );
 
 }
 
 sub _make_role_toggler {
-    my $rolename = shift;
-    my $add_p = shift;
+    my $rolename    = shift;
+    my $add_p       = shift;
     my $pre_failure = $add_p ? 'already' : 'not';
-    my $success = $add_p ? 'now' : 'no longer';
-    my $article = $rolename =~ /^[aeiou]/ ? 'an' : 'a';
+    my $success     = $add_p ? 'now' : 'no longer';
+    my $article     = $rolename =~ /^[aeiou]/ ? 'an' : 'a';
 
     return sub {
         my $self = shift;
@@ -338,7 +363,7 @@ sub _make_role_toggler {
         my $ws   = $self->_require_workspace();
 
         require Socialtext::Role;
-        my $role = Socialtext::Role->new( name => $rolename );
+        my $role         = Socialtext::Role->new( name => $rolename );
         my $display_name = $role->display_name();
 
         if ( $add_p == $ws->user_has_role( user => $user, role => $role ) ) {
@@ -355,9 +380,11 @@ sub _make_role_toggler {
             is_selected => $is_selected,
         );
 
-        $self->_success( $user->username . " is $success $article $display_name for the "
-                          . $ws->name . ' workspace.' );
-    }
+        $self->_success( $user->username
+                . " is $success $article $display_name for the "
+                . $ws->name
+                . ' workspace.' );
+        }
 }
 
 {
@@ -375,7 +402,7 @@ sub change_password {
     my $pw   = $self->_require_string('password');
 
     $self->_eval_password_change($user,$pw);
-    
+
     $self->_success( 'The password for ' . $user->username
                       . ' has been changed.' );
 }
@@ -387,8 +414,11 @@ sub _eval_password_change {
 
     eval { $user->update_store( password => $pw ) };
 
-    if ( my $e = Exception::Class->caught('Socialtext::Exception::DataValidation') ) {
-        my $msg = "The following errors occurred when changing the password:\n\n";
+    if ( my $e
+        = Exception::Class->caught('Socialtext::Exception::DataValidation') )
+    {
+        my $msg
+            = "The following errors occurred when changing the password:\n\n";
         for my $m ( $e->messages ) {
             $msg .= "  * $m\n";
         }
@@ -398,51 +428,62 @@ sub _eval_password_change {
     elsif ( $e = $@ ) {
         die $e;
     }
-}    
+}
 
 sub disable_email_notify {
     my $self = shift;
 
     my $user = $self->_require_user();
-    my ( $hub, $main )  = $self->_require_hub($user);
+    my ( $hub, $main ) = $self->_require_hub($user);
 
     my $ws = $hub->current_workspace();
 
     unless ( $ws->has_user( user => $user ) ) {
-        $self->_error( $user->username . ' is not a member of the '
-                        . $ws->name . ' workspace.' );
+        $self->_error( $user->username
+                . ' is not a member of the '
+                . $ws->name
+                . ' workspace.' );
     }
 
     # XXX - this wipes out other email-related prefs, but that's
     # probably ok for now
-    $hub->preferences()->store( $user->email_address(),
-                                email_notify => { notify_frequency => 0 } );
+    $hub->preferences()->store(
+        $user->email_address(),
+        email_notify => { notify_frequency => 0 }
+    );
 
-    $self->_success( 'Email notify has been disabled for ' . $user->username()
-                      . ' in the ' . $ws->name() . " workspace.\n" );
+    $self->_success( 'Email notify has been disabled for '
+            . $user->username()
+            . ' in the '
+            . $ws->name()
+            . " workspace.\n" );
 }
 
 sub set_locale {
     my $self = shift;
 
     my $user = $self->_require_user();
-    my ( $hub, $main )  = $self->_require_hub($user);
+    my ( $hub, $main ) = $self->_require_hub($user);
 
-    my $email = $user->email_address;
-    my $prefs = $hub->preferences->_load_all($email);
+    my $email         = $user->email_address;
+    my $prefs         = $hub->preferences->_load_all($email);
     my $display_prefs = $prefs->{display};
     loc_lang( $display_prefs->{locale} || 'en' );
 
     my $new_locale = $self->_require_string('locale');
-    if (not valid_code($new_locale)) {
-        $self->_error(loc("'[_1]' is not a valid locale", $new_locale));
+    if ( not valid_code($new_locale) ) {
+        $self->_error( loc( "'[_1]' is not a valid locale", $new_locale ) );
     }
 
     $display_prefs->{locale} = $new_locale;
     $hub->preferences->store( $email, display => $display_prefs );
     loc_lang($new_locale);
-    $self->_success(loc('Locale for [_1] is now [_2]', 
-                        $user->username, $new_locale));
+    $self->_success(
+        loc(
+            'Locale for [_1] is now [_2]',
+            $user->username, $new_locale
+        )
+    );
 }
 
 sub delete_category {
@@ -485,7 +526,7 @@ sub search_categories {
 
 sub create_workspace {
     my $self = shift;
-    my %ws = $self->_require_create_workspace_params(shift);
+    my %ws   = $self->_require_create_workspace_params(shift);
 
     require Socialtext::Hostname;
     require Socialtext::User;
@@ -493,17 +534,18 @@ sub create_workspace {
 
     if ( $ws{name} and Socialtext::Workspace->new( name => $ws{name} ) ) {
         $self->_error(
-            qq|The workspace name you provided, "$ws{name}", is already in use.|);
+            qq|The workspace name you provided, "$ws{name}", is already in use.|
+        );
     }
 
     my $account_name = delete $ws{account} || Socialtext::Hostname::domain();
+
     # Special case hack for ST production systems
     $account_name = 'Socialtext' if $account_name =~ /socialtext/;
 
     my $account = Socialtext::Account->new( name => $account_name );
     unless ($account) {
-        $self->_error(
-            qq|There is no account named "$account_name".|);
+        $self->_error(qq|There is no account named "$account_name".|);
     }
 
     $ws{account_id} = $account->account_id();
@@ -513,8 +555,11 @@ sub create_workspace {
         Socialtext::Workspace->create( %ws, @skip );
     };
 
-    if ( my $e = Exception::Class->caught('Socialtext::Exception::DataValidation') ) {
-        my $msg = "The following errors occurred when creating the new workspace:\n\n";
+    if ( my $e
+        = Exception::Class->caught('Socialtext::Exception::DataValidation') )
+    {
+        my $msg
+            = "The following errors occurred when creating the new workspace:\n\n";
         for my $m ( $e->messages ) {
             $msg .= "  * $m\n";
         }
@@ -525,8 +570,8 @@ sub create_workspace {
         die $e;
     }
 
-    $self->_success( 'A new workspace named "' . $ws->name()
-                      . '" was created.' );
+    $self->_success(
+        'A new workspace named "' . $ws->name() . '" was created.' );
 }
 
 sub _require_create_workspace_params {
@@ -554,8 +599,11 @@ sub create_account {
 
     my $account = eval { Socialtext::Account->create( name => $name ) };
 
-    if ( my $e = Exception::Class->caught('Socialtext::Exception::DataValidation') ) {
-        my $msg = "The following errors occurred when creating the new account:\n\n";
+    if ( my $e
+        = Exception::Class->caught('Socialtext::Exception::DataValidation') )
+    {
+        my $msg
+            = "The following errors occurred when creating the new account:\n\n";
         for my $m ( $e->messages ) {
             $msg .= "  * $m\n";
         }
@@ -566,8 +614,8 @@ sub create_account {
         die $e;
     }
 
-    $self->_success( 'A new account named "' . $account->name()
-                      . '" was created.' );
+    $self->_success(
+        'A new account named "' . $account->name() . '" was created.' );
 }
 
 sub set_permissions {
@@ -578,8 +626,9 @@ sub set_permissions {
 
     $ws->set_permissions( set_name => $set_name );
 
-    $self->_success( 'The permissions for the ' . $ws->name()
-                      . " workspace have been changed to $set_name.\n" );
+    $self->_success( 'The permissions for the '
+            . $ws->name()
+            . " workspace have been changed to $set_name.\n" );
 }
 
 sub add_permission {
@@ -594,8 +643,13 @@ sub add_permission {
         role       => $role,
     );
 
-    $self->_success( 'The ' . $perm->name() . ' permission has been granted to the '
-                      . $role->display_name() . ' role in the ' . $ws->name() . " workspace.\n" );
+    $self->_success( 'The '
+            . $perm->name()
+            . ' permission has been granted to the '
+            . $role->display_name()
+            . ' role in the '
+            . $ws->name()
+            . " workspace.\n" );
 }
 
 sub remove_permission {
@@ -610,8 +664,13 @@ sub remove_permission {
         role       => $role,
     );
 
-    $self->_success( 'The ' . $perm->name() . ' permission has been revoked from the '
-                      . $role->display_name() . ' role in the ' . $ws->name() . " workspace.\n" );
+    $self->_success( 'The '
+            . $perm->name()
+            . ' permission has been revoked from the '
+            . $role->display_name()
+            . ' role in the '
+            . $ws->name()
+            . " workspace.\n" );
 }
 
 sub show_workspace_config {
@@ -633,7 +692,8 @@ sub show_workspace_config {
 
     $msg .= sprintf( $fmt, 'ping URIs', join ' - ', $ws->ping_uris );
     $msg .= "\n";
-    $msg .= sprintf( $fmt, 'custom comment form fields', join ' - ', $ws->comment_form_custom_fields );
+    $msg .= sprintf( $fmt, 'custom comment form fields', join ' - ',
+        $ws->comment_form_custom_fields );
     $msg .= "\n";
 
     $self->_success($msg);
@@ -651,11 +711,11 @@ sub set_workspace_config {
         next if $key =~ /_id$/;
 
         if ( $unsettable{$key} ) {
-            $self->_error( "Cannot change $key after workspace creation." );
+            $self->_error("Cannot change $key after workspace creation.");
         }
 
         unless ( $ws->can($key) ) {
-            $self->_error( "$key is not a valid workspace config key." );
+            $self->_error("$key is not a valid workspace config key.");
         }
 
         $value = undef if $value eq '-null-';
@@ -665,8 +725,11 @@ sub set_workspace_config {
 
     eval { $ws->update(%update) };
 
-    if ( my $e = Exception::Class->caught('Socialtext::Exception::DataValidation') ) {
-        my $msg = "The following errors occurred when setting the workspace config:\n\n";
+    if ( my $e
+        = Exception::Class->caught('Socialtext::Exception::DataValidation') )
+    {
+        my $msg
+            = "The following errors occurred when setting the workspace config:\n\n";
         for my $m ( $e->messages ) {
             $msg .= "  * $m\n";
         }
@@ -677,18 +740,101 @@ sub set_workspace_config {
         die $e;
     }
 
-    $self->_success( 'The workspace config for '
-                     . $ws->name() . ' has been updated.' );
+    $self->_success(
+        'The workspace config for ' . $ws->name() . ' has been updated.' );
+}
+
+sub create_search_set {
+    require Socialtext::Search::Set;
+    my $self = shift;
+
+    my $user = $self->_require_user;
+    my %opts = $self->_get_options( 'name:s' );
+
+    Socialtext::Search::Set->create(
+        name => $opts{name},
+        user => $user ) || die "Cannot create search set.";
+
+    $self->_success( "A search set named '$opts{name}' was created for user "
+            . $user->username() . "." );
+}
+
+sub delete_search_set {
+    my $self = shift;
+
+    my $set = $self->_require_search_set;
+    my $name = $set->name;
+    $set->delete;
+
+    $self->_success( "The search set named '$name' was deleted for user "
+            . $self->_require_user->username() . "." );
+}
+
+sub list_search_sets {
+    require Socialtext::Search::Set;
+    my $self = shift;
+
+    my $user = $self->_require_user;
+
+    my $sets = Socialtext::Search::Set->AllForUser( $user );
+
+    while (my $set = $sets->next) {
+        print '  ', $set->name, "\n";
+    }
+}
+
+sub add_workspace_to_search_set {
+    my $self = shift;
+
+    my $search_set = $self->_require_search_set;
+    my $ws         = $self->_require_workspace;
+
+    $search_set->add_workspace_name( $ws->name );
+    $self->_success( "'"
+            . $ws->name
+            . "' was added to search set '"
+            . $search_set->name
+            . "' for user "
+            . $self->_require_user->username()
+            . "." );
+}
+
+sub remove_workspace_from_search_set {
+    my $self = shift;
+
+    my $search_set = $self->_require_search_set;
+    my $ws         = $self->_require_workspace;
+
+    $search_set->remove_workspace_name( $ws->name );
+    $self->_success( "'"
+            . $ws->name
+            . "' was removed from search set '"
+            . $search_set->name
+            . "' for user "
+            . $self->_require_user->username()
+            . "." );
+}
+
+sub list_workspaces_in_search_set {
+    my $self = shift;
+
+    my $search_set = $self->_require_search_set;
+
+    my $workspace_names = $search_set->workspace_names;
+
+    while ( my $workspace_name = $workspace_names->next ) {
+        print "  $workspace_name\n";
+    }
 }
 
 sub set_logo_from_file {
     my $self = shift;
 
-    my $ws = $self->_require_workspace();
+    my $ws       = $self->_require_workspace();
     my $filename = $self->_require_string('file');
 
     open my $fh, '<', $filename
-        or $self->_error( "Cannot read $filename: $!" );
+        or $self->_error("Cannot read $filename: $!");
 
     eval {
         $ws->set_logo_from_filehandle(
@@ -697,8 +843,11 @@ sub set_logo_from_file {
         );
     };
 
-    if ( my $e = Exception::Class->caught('Socialtext::Exception::DataValidation') ) {
-        my $msg = "The following errors occurred when trying to use this logo:\n\n";
+    if ( my $e
+        = Exception::Class->caught('Socialtext::Exception::DataValidation') )
+    {
+        my $msg
+            = "The following errors occurred when trying to use this logo:\n\n";
         for my $m ( $e->messages ) {
             $msg .= "  * $m\n";
         }
@@ -710,7 +859,8 @@ sub set_logo_from_file {
     }
 
     $self->_success( 'The logo file was imported as the new logo for the '
-                     . $ws->name() . ' workspace.' );
+            . $ws->name()
+            . ' workspace.' );
 }
 
 sub set_comment_form_custom_fields {
@@ -721,7 +871,8 @@ sub set_comment_form_custom_fields {
     $ws->set_comment_form_custom_fields( fields => $self->{argv} );
 
     $self->_success( 'The custom comment form fields for the '
-                     . $ws->name() . ' workspace have been updated.' );
+            . $ws->name()
+            . ' workspace have been updated.' );
 }
 
 sub set_ping_uris {
@@ -732,7 +883,8 @@ sub set_ping_uris {
     $ws->set_ping_uris( uris => $self->{argv} );
 
     $self->_success( 'The ping uris for the '
-                     . $ws->name() . ' workspace have been updated.' );
+            . $ws->name()
+            . ' workspace have been updated.' );
 }
 
 sub rename_workspace {
@@ -745,7 +897,7 @@ sub rename_workspace {
     my $old_name = $ws->name();
     $ws->rename( name => $name );
 
-    $self->_success( "The $old_name workspace has been renamed to $name." );
+    $self->_success("The $old_name workspace has been renamed to $name.");
 }
 
 sub show_acls {
@@ -762,7 +914,8 @@ sub show_acls {
     my @perms = Socialtext::Permission->All()->all();
 
     my $msg = "ACLs for " . $ws->name . " workspace\n\n";
-    $msg .= "  permission set name: " . $ws->current_permission_set_name() . "\n\n";
+    $msg .= "  permission set name: "
+        . $ws->current_permission_set_name() . "\n\n";
 
     my $first_col = '<' x List::Util::max( map { length $_->name } @perms );
 
@@ -793,14 +946,16 @@ sub show_acls {
         my @marks;
         for my $role (@roles) {
             push @marks,
-                $ws->role_has_permission( role => $role, permission => $perm ) ? 'X' : ' ';
+                $ws->role_has_permission( role => $role, permission => $perm )
+                ? 'X'
+                : ' ';
         }
 
-        formline $format, $perm->name(), map { $_ => '|'} @marks
+        formline $format, $perm->name(), map { $_ => '|' } @marks;
     }
 
     $msg .= $^A;
-    $self->_success($msg, "no indent");
+    $self->_success( $msg, "no indent" );
 }
 
 sub purge_page {
@@ -813,7 +968,8 @@ sub purge_page {
     $page->purge();
 
     $self->_success( "The $title page was purged from the "
-                      . $hub->current_workspace()->name() . " workspace.\n" );
+            . $hub->current_workspace()->name()
+            . " workspace.\n" );
 }
 
 sub purge_attachment {
@@ -842,8 +998,9 @@ sub html_archive {
     require Socialtext::HTMLArchive;
     $file = Socialtext::HTMLArchive->new( hub => $hub )->create_zip($file);
 
-    $self->_success( 'An HTML archive of the ' . $hub->current_workspace()->name()
-                      . " workspace has been created in $file.\n" );
+    $self->_success( 'An HTML archive of the '
+            . $hub->current_workspace()->name()
+            . " workspace has been created in $file.\n" );
 }
 
 sub export_workspace {
@@ -853,13 +1010,13 @@ sub export_workspace {
 
     my $file = $self->_export_workspace($ws);
 
-    $self->_success( 'The ' . $ws->name()
-                      . " workspace has been exported to $file." );
+    $self->_success(
+        'The ' . $ws->name() . " workspace has been exported to $file." );
 }
 
 sub _export_workspace {
     my $self = shift;
-    my $ws    = shift;
+    my $ws   = shift;
 
     my $dir = $self->_optional_string('dir');
     my $name = $self->_optional_string('name') || $ws->name;
@@ -918,6 +1075,8 @@ sub delete_workspace {
         unless $skip_export;
 
     my $name = $ws->name();
+    Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
+        $ws->name )->delete_workspace( $ws->name );
     $ws->delete();
 
     my $msg = "The $name workspace has been ";
@@ -933,35 +1092,51 @@ sub index_page {
     my ( $hub, $main ) = $self->_require_hub();
     my $page = $self->_require_page($hub);
 
+    my $search_config = $self->_optional_string('search-config') || 'live';
     my $ws_name = $hub->current_workspace()->name();
 
     require Socialtext::Search::AbstractFactory;
-    Socialtext::Search::AbstractFactory->GetFactory->create_indexer($ws_name)
-        ->index_page( $page->id() );
+    my $indexer
+        = Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
+        $ws_name,
+        config_type => $search_config
+    );
+    if ( !$indexer ) {
+        $self->_error("Couldn't create an indexer\n");
+    }
+    $indexer->index_page( $page->id() );
 
-    $self->_success( 'The ' . $page->metadata()->Subject()
-                      . " page in the $ws_name workspace has been indexed." );
+    $self->_success( 'The '
+            . $page->metadata()->Subject()
+            . " page in the $ws_name workspace has been indexed." );
 }
 
 sub index_attachment {
     my $self = shift;
 
     my ( $hub, $main ) = $self->_require_hub();
-    my $page = $self->_require_page($hub);
+    my $page       = $self->_require_page($hub);
     my $attachment = $self->_require_attachment($page);
 
-    my $ws_name = $hub->current_workspace()->name();
+    my $search_config = $self->_optional_string('search-config') || 'live';
+    my $ws_name       = $hub->current_workspace()->name();
 
     require Socialtext::Search::AbstractFactory;
-    Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
-        $hub->current_workspace->name
-    )->index_attachment( $page->id(), $attachment->id() );
+    my $indexer
+        = Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
+        $ws_name,
+        config_type => $search_config
+        );
+    if ( !$indexer ) {
+        $self->_error("Couldn't create an indexer\n");
+    }
+    $indexer->index_attachment( $page->id(), $attachment->id() );
 
-    Socialtext::Search::AbstractFactory->GetFactory->create_indexer($ws_name)
-        ->index_page( $page->id() );
+    $indexer->index_page( $page->id() );
 
-    $self->_success( 'The ' . $attachment->filename()
-                      . " attachment in the $ws_name workspace has been indexed." );
+    $self->_success( 'The '
+            . $attachment->filename()
+            . " attachment in the $ws_name workspace has been indexed." );
 }
 
 sub index_workspace {
@@ -969,10 +1144,17 @@ sub index_workspace {
 
     my ( $hub, $main ) = $self->_require_hub();
 
+    my $search_config = $self->_optional_string('search-config') || 'live';
     if ( $self->_get_options("sync") ) {
         my $ws_name = $hub->current_workspace()->name();
         my $factory = Socialtext::Search::AbstractFactory->GetFactory();
-        my $indexer = $factory->create_indexer($ws_name);
+        my $indexer = $factory->create_indexer(
+            $ws_name,
+            config_type => $search_config
+        );
+        if ( !$indexer ) {
+            $self->_error("Couldn't create an indexer\n");
+        }
         $indexer->index_workspace($ws_name);
         $self->_success("The $ws_name workspace has been indexed.");
     }
@@ -980,33 +1162,45 @@ sub index_workspace {
     # Rather than call index_workspace on the indexer object (which is
     # synchronous), we create ChangeEvents to trigger the appropriate
     # indexer activity.
-    require Socialtext::ChangeEvent;
+    require Socialtext::ChangeEvent::IndexPage;
+    require Socialtext::ChangeEvent::IndexAttachment;
 
     for my $page_id ( $hub->pages()->all_ids() ) {
         my $page = $hub->pages()->new_page($page_id);
 
         next if $page->deleted();
 
-        Socialtext::ChangeEvent->Record($page);
+        if ( $search_config eq 'rampup' ) {
+            Socialtext::ChangeEvent::RampupIndexPage->Record($page);
+        }
+        else {
+            Socialtext::ChangeEvent::IndexPage->Record($page);
+        }
 
-        $self->_index_attachments_for_page($page);
+        $self->_index_attachments_for_page($page, $search_config);
     }
 
-    $self->_success( 'The ' . $hub->current_workspace()->name()
-                      . ' workspace has been indexed.' );
+    $self->_success( 'The '
+            . $hub->current_workspace()->name()
+            . ' workspace has been indexed.' );
 }
 
 # Helper for index_workspace
 sub _index_attachments_for_page {
-    my $self = shift;
-    my $page  = shift;
+    my ( $self, $page, $search_config ) = @_;
 
-    my $attachments = $page->hub()->attachments()->all( page_id => $page->id() );
+    my $attachments
+        = $page->hub()->attachments()->all( page_id => $page->id() );
 
     foreach my $attachment (@$attachments) {
         next if $attachment->deleted();
 
-        Socialtext::ChangeEvent->Record($attachment);
+        if ( $search_config eq 'rampup' ) {
+            Socialtext::ChangeEvent::RampupIndexAttachment->Record($attachment);
+        }
+        else {
+            Socialtext::ChangeEvent::IndexAttachment->Record($attachment);
+        }
     }
 }
 
@@ -1018,10 +1212,11 @@ sub delete_search_index {
     require Socialtext::Search::AbstractFactory;
     Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
         $ws->name()
-    )->delete_workspace();
+    )->delete_workspace($ws->name());
 
     $self->_success( 'The search index for the '
-                      . $ws->name() . ' workspace has been deleted.' );
+            . $ws->name()
+            . ' workspace has been deleted.' );
 }
 
 sub send_email_notifications {
@@ -1030,16 +1225,18 @@ sub send_email_notifications {
     my ( $hub, $main ) = $self->_require_hub();
 
     unless ( $hub->current_workspace()->email_notify_is_enabled() ) {
-        $self->_error( 'Email notifications are disabled for the '.
-                        $hub->current_workspace()->name() . ' workspace.' );
+        $self->_error( 'Email notifications are disabled for the '
+                . $hub->current_workspace()->name()
+                . ' workspace.' );
     }
 
     my $page = $self->_require_page($hub);
 
     $hub->email_notify()->maybe_send_notifications( $page->id() );
 
-    $self->_success( 'Email notifications were sent for the '.
-                      $page->metadata()->Subject() . ' page.' );
+    $self->_success( 'Email notifications were sent for the '
+            . $page->metadata()->Subject()
+            . ' page.' );
 }
 
 sub send_watchlist_emails {
@@ -1050,8 +1247,9 @@ sub send_watchlist_emails {
 
     $hub->watchlist()->maybe_send_notifications( $page->id() );
 
-    $self->_success( 'Watchlist emails were sent for the '.
-                      $page->metadata()->Subject() . ' page.' );
+    $self->_success( 'Watchlist emails were sent for the '
+            . $page->metadata()->Subject()
+            . ' page.' );
 }
 
 sub send_weblog_pings {
@@ -1060,8 +1258,9 @@ sub send_weblog_pings {
     my ( $hub, $main ) = $self->_require_hub();
 
     unless ( $hub->current_workspace()->ping_uris() ) {
-        $self->_error( 'The ' . $hub->current_workspace()->name()
-                        . ' workspace has no ping uris.' );
+        $self->_error( 'The '
+                . $hub->current_workspace()->name()
+                . ' workspace has no ping uris.' );
     }
 
     my $page = $self->_require_page($hub);
@@ -1070,7 +1269,8 @@ sub send_weblog_pings {
     Socialtext::WeblogUpdates->new( hub => $hub )->send_ping($page);
 
     $self->_success( 'Pings were sent for the '
-                      . $page->metadata()->Subject() . ' page.' );
+            . $page->metadata()->Subject()
+            . ' page.' );
 }
 
 sub mass_copy_pages {
@@ -1078,14 +1278,17 @@ sub mass_copy_pages {
 
     my ( $hub, $main ) = $self->_require_hub();
     my $target_ws = $self->_require_target_workspace();
-    my $prefix = $self->_optional_string('prefix');
+    my $prefix    = $self->_optional_string('prefix');
     $prefix ||= '';
 
-    $hub->duplicate_page()->mass_copy_to( $target_ws->name(), $prefix, $hub->current_user() );
+    $hub->duplicate_page()
+        ->mass_copy_to( $target_ws->name(), $prefix, $hub->current_user() );
 
-    my $msg =
-        'All of the pages in the ' . $hub->current_workspace()->name()
-        . ' workspace have been copied to the ' . $target_ws->name() . ' workspace';
+    my $msg = 'All of the pages in the '
+        . $hub->current_workspace()->name()
+        . ' workspace have been copied to the '
+        . $target_ws->name()
+        . ' workspace';
     $msg .= qq|, prefixed with "$prefix"| if $prefix;
     $msg .= '.';
 
@@ -1143,7 +1346,8 @@ sub update_page {
 
     my $content = do { local $/; <STDIN> };
     unless ( defined $content and length $content ) {
-        $self->_error( 'update-page requires that you provide page content on stdin.' );
+        $self->_error(
+            'update-page requires that you provide page content on stdin.');
         return;
     }
 
@@ -1158,7 +1362,7 @@ sub update_page {
     );
 
     my $verb = $revision == 0 ? 'created' : 'updated';
-    $self->_success( qq|The "$title" page has been $verb.| );
+    $self->_success(qq|The "$title" page has been $verb.|);
 }
 
 # This command is quiet since it's really only designed to be run by
@@ -1215,7 +1419,7 @@ sub customjs {
         $self->_success(
             'The ' .
             $hub->current_workspace()->name .
-            ' workspace has not custom Javascript set.'
+            ' workspace has no custom Javascript set.'
         );
     }
 }
@@ -1266,15 +1470,14 @@ sub set_customjs {
     }
 }
 
-
 # Called by Socialtext::Ceqlotron
 sub from_input {
-    my $self = shift;
+    my $self  = shift;
     my $class = ref $self;
 
     {
         no warnings 'redefine';
-        *_exit = sub {};
+        *_exit          = sub { };
         *_help_as_error = sub { die $_[1] };
     }
 
@@ -1305,46 +1508,53 @@ sub _require_user {
 
     my $self = shift;
 
+    return $self->{user} if exists $self->{user};
+
     my %opts = $self->_get_options( 'username:s', 'email:s' );
 
     unless ( grep { defined and length } @opts{ 'username', 'email' } ) {
         $self->_help_as_error(
             "The command you called ($self->{command}) requires a user to be specified.\n"
-            . "A user can be identified by username (--username) or email address (--email).\n" );
+                . "A user can be identified by username (--username) or email address (--email).\n"
+        );
     }
 
     my $user;
     if ( $opts{username} ) {
         $user = Socialtext::User->new( username => $opts{username} )
-            or $self->_error(qq|No user with the username "$opts{username}" could be found.|);
+            or $self->_error(
+            qq|No user with the username "$opts{username}" could be found.|);
     }
     elsif ( $opts{email} ) {
         $user = Socialtext::User->new( email_address => $opts{email} )
-            or $self->_error(qq|No user with the email address "$opts{email}" could be found.|);
+            or $self->_error(
+            qq|No user with the email address "$opts{email}" could be found.|
+            );
     }
 
-    return $user;
+    return $self->{user} = $user;
 }
 
 sub _require_workspace {
     require Socialtext::Workspace;
 
     my $self = shift;
-    my $key = shift || 'workspace';
+    my $key  = shift || 'workspace';
 
-    my %opts = $self->_get_options( "$key:s" );
+    my %opts = $self->_get_options("$key:s");
 
     unless ( $opts{$key} ) {
         $self->_help_as_error(
             "The command you called ($self->{command}) requires a workspace to be specified.\n"
-            . "A workspace is identified by name with the --$key option.\n" );
+                . "A workspace is identified by name with the --$key option.\n"
+        );
         return;
     }
 
     my $ws = Socialtext::Workspace->new( name => $opts{$key} );
 
     unless ($ws) {
-        $self->_error(qq|No workspace named "$opts{$key}" could be found.| );
+        $self->_error(qq|No workspace named "$opts{$key}" could be found.|);
     }
 
     return $ws;
@@ -1384,24 +1594,27 @@ sub _require_categories {
     unless ( grep { defined and length } @opts{ 'category', 'search' } ) {
         $self->_help_as_error(
             "The command you called ($self->{command}) requires one or more categories to be specified.\n"
-            . "You can specify a category by name (--category) or by a search string (--search)." );
+                . "You can specify a category by name (--category) or by a search string (--search)."
+        );
     }
 
     if ( $opts{category} ) {
         unless ( $hub->category()->exists( $opts{category} ) ) {
             $self->_error( qq|There is no category "$opts{category}" in the |
-                            . $hub->current_workspace()->name() . ' workspace.' );
+                    . $hub->current_workspace()->name()
+                    . ' workspace.' );
         }
 
         return $opts{category};
     }
     else {
-        my @matches =
-            $hub->category->match_categories( $opts{search} );
+        my @matches = $hub->category->match_categories( $opts{search} );
 
         unless (@matches) {
-            $self->_error( qq|No categories matching "$opts{search}" were found in the |
-                            . $hub->current_workspace()->name() . ' workspace.' );
+            $self->_error(
+                qq|No categories matching "$opts{search}" were found in the |
+                    . $hub->current_workspace()->name()
+                    . ' workspace.' );
         }
 
         return @matches;
@@ -1417,13 +1630,14 @@ sub _require_page {
     unless ( $opts{page} ) {
         $self->_help_as_error(
             "The command you called ($self->{command}) requires a page to be specified.\n"
-            . "You can specify a page by id with the --page option." );
+                . "You can specify a page by id with the --page option." );
     }
 
     my $page = $hub->pages()->new_page( $opts{page} );
     unless ( $page and $page->exists() ) {
         $self->_error( qq|There is no page with the id "$opts{page}" in the |
-                        . $hub->current_workspace()->name() . " workspace.\n" );
+                . $hub->current_workspace()->name()
+                . " workspace.\n" );
     }
 
     return $page;
@@ -1438,7 +1652,8 @@ sub _require_attachment {
     unless ( $opts{attachment} ) {
         $self->_help_as_error(
             "The command you called ($self->{command}) requires an attachment to be specified.\n"
-            . "You can specify an attachment by id with the --attachment option." );
+                . "You can specify an attachment by id with the --attachment option."
+        );
     }
 
     my $attachment = $page->hub()->attachments()->new_attachment(
@@ -1447,13 +1662,15 @@ sub _require_attachment {
     );
 
     unless ( $attachment->exists() ) {
-        $self->_error( qq|There is no attachment with the id "$opts{attachment}" in the |
-                        . $page->hub()->current_workspace()->name() . " workspace.\n" );
+        $self->_error(
+            qq|There is no attachment with the id "$opts{attachment}" in the |
+                . $page->hub()->current_workspace()->name()
+                . " workspace.\n" );
     }
 
     $attachment->load();
 
-    return $attachment
+    return $attachment;
 }
 
 sub _require_permission {
@@ -1466,14 +1683,15 @@ sub _require_permission {
     unless ( $opts{permission} ) {
         $self->_help_as_error(
             "The command you called ($self->{command}) requires a permission to be specified.\n"
-            . "A permission is identified by name with the --permission option.\n" );
+                . "A permission is identified by name with the --permission option.\n"
+        );
         return;
     }
 
     my $perm = Socialtext::Permission->new( name => $opts{permission} );
 
     unless ($perm) {
-        $self->_error(qq|There is no permission named "$opts{permission}".| );
+        $self->_error(qq|There is no permission named "$opts{permission}".|);
     }
 
     return $perm;
@@ -1489,14 +1707,14 @@ sub _require_role {
     unless ( $opts{role} ) {
         $self->_help_as_error(
             "The command you called ($self->{command}) requires a role to be specified.\n"
-            . "A role is identified by name with the --role option.\n" );
+                . "A role is identified by name with the --role option.\n" );
         return;
     }
 
     my $role = Socialtext::Role->new( name => $opts{role} );
 
     unless ($role) {
-        $self->_error(qq|There is no role named "$opts{role}".| );
+        $self->_error(qq|There is no role named "$opts{role}".|);
     }
 
     return $role;
@@ -1506,21 +1724,34 @@ sub _require_string {
     my $self = shift;
     my $name = shift;
 
-    my %opts = $self->_get_options( "$name:s" );
+    my %opts = $self->_get_options("$name:s");
 
     unless ( defined $opts{$name} and length $opts{$name} ) {
         $self->_help_as_error(
-            "The command you called ($self->{command}) requires a $name to be specified with the --$name option.\n");
+            "The command you called ($self->{command}) requires a $name to be specified with the --$name option.\n"
+        );
     }
 
     return $opts{$name};
+}
+
+sub _require_search_set {
+    require Socialtext::Search::Set;
+    my $self = shift;
+
+    my $user = $self->_require_user;
+    my $name = $self->_require_string('name');
+
+    return Socialtext::Search::Set->new(
+        name => $name,
+        user => $user ) || die "Cannot find search set.";
 }
 
 sub _optional_string {
     my $self = shift;
     my $name = shift;
 
-    my %opts = $self->_get_options( "$name:s" );
+    my %opts = $self->_get_options("$name:s");
 
     return $opts{$name};
 }
@@ -1529,7 +1760,7 @@ sub _boolean_flag {
     my $self = shift;
     my $name = shift;
 
-    my %opts = $self->_get_options( "$name" );
+    my %opts = $self->_get_options("$name");
 
     return $opts{$name};
 }
@@ -1542,17 +1773,18 @@ sub _get_options {
     my %opts;
     GetOptions( \%opts, @_ ) or exit 1;
 
-    $self->{argv} = [ @ARGV ];
+    $self->{argv} = [@ARGV];
 
     return %opts;
 }
 
 sub _success {
     my $self = shift;
-    my $msg  = _clean_msg(shift, shift);
+    my $msg  = _clean_msg( shift, shift );
 
     print $msg
-        if defined $msg and not $self->{ceqlotron};
+        if defined $msg
+        and not $self->{ceqlotron};
 
     _exit(0);
 }
@@ -1562,7 +1794,8 @@ sub _error {
     my $msg  = _clean_msg(shift);
 
     print STDERR $msg
-        if defined $msg and not $self->{ceqlotron};
+        if defined $msg
+        and not $self->{ceqlotron};
 
     _exit( $self->{ceqlotron} ? 0 : 1 );
 }
@@ -1571,7 +1804,7 @@ sub _error {
 sub _exit { exit shift; }
 
 sub _clean_msg {
-    my $msg = shift;
+    my $msg       = shift;
     my $no_indent = shift || 0;
 
     return unless defined $msg;
@@ -1585,7 +1818,6 @@ sub _clean_msg {
 
     return $msg;
 }
-
 
 1;
 
@@ -1646,10 +1878,10 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
 
   INDEXING
 
-  index-workspace --workspace [--sync]
+  index-workspace --workspace [--sync] [--search-config]
   delete-search-index --workspace
   index-page --workspace --page
-  index-attachment --workspace --page --attachment
+  index-attachment --workspace --page --attachment [--search-config]
 
   ACCOUNTS
 
@@ -1661,9 +1893,18 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
 
   EMAIL
 
-  send_email_notifications --workspace --page
-  send_watchlist_emails --workspace --page
+  send-email-notifications --workspace --page
+  send-watchlist-emails --workspace --page
   deliver-email --workspace
+
+  SEARCH
+
+  create-search-set --name [--username or --email]
+  delete-search-set --name [--username or --email]
+  list-search-sets [--username or --email]
+  add-workspace-to-search-set --name --workspace [--username or --email]
+  remove-workspace-from-search-set --name --workspace [--username or --email]
+  list-workspaces-in-search-set --name [--username or --email]
 
   OTHER
 
@@ -1889,14 +2130,17 @@ specified by its I<page id>, which is the name used in URIs.
 
 =head2 purge-attachment --workspace --page --attachment
 
-Purges the specified attachment from the given page and workspace. The attachment must be
-specified by its I<attachment id>, which is the name used in URIs.
+Purges the specified attachment from the given page and workspace. The
+attachment must be specified by its I<attachment id>, which is the
+name used in URIs.
 
-=head2 index-workspace --workspace [--sync]
+=head2 index-workspace --workspace [--sync] [--search-config]
 
-(Re-)indexes all the pages and attachments in the specified workspace.  If
---sync is given the indexing is done syncronously, otherwise change events are
-created and indexing is done asyncronously.
+(Re-)indexes all the pages and attachments in the specified workspace.
+If --sync is given the indexing is done syncronously, otherwise change
+events are created and indexing is done asyncronously. If
+--search-config is given, use an alternate configuration (from
+live.yaml) to specify indexing parameters.
 
 =head2 delete-search-index --workspace
 
@@ -1906,10 +2150,34 @@ Deletes the search index for the specified workspace.
 
 (Re-)indexes the specified page in the given workspace.
 
-=head2 index-attachment --workspace --page --attachment
+=head2 index-attachment --workspace --page --attachment [--search-config]
 
 (Re-)indexes the specified attachment in the given workspace. The
 attachment must be specified by its id and its page's id.
+
+=head2 create-search-set --name [--username or --email]
+
+Creates a named search set for the given user.
+
+=head2 delete-search-set --name [--username or --email]
+
+Deletes the named search set for the given user.
+
+=head2 list-search-sets [--username or --email]
+
+Lists the search sets for the given user.
+
+=head2 add-workspace-to-search-set --name --workspace [--username or --email]
+
+Adds a workspace to the named search set for the given user.
+
+=head2 remove-workspace-from-search-set --name --workspace [--username or --email]
+
+Removes the named workspace from the named search set for the given user.
+
+=head2 list-workspaces-in-search-set --name [--username or --email]
+
+Lists all workspaces in the named search set for the given user.
 
 =head2 set-logo-from-file --workspace --file /path/to/file.jpg
 

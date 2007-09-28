@@ -8,10 +8,18 @@ Socialtext::Search::SimpleAttachmentHit - A basic implementation of Socialtext::
 
 =head1 SYNOPSIS
 
-    $hit = Socialtext::Search::SimpleAttachmentHit->new( $page_uri, $attachment_id );
+    $hit = Socialtext::Search::SimpleAttachmentHit->new(
+        $page_uri,
+        $attachment_id,
+        $workspace_name,
+        $key
 
-    $hit->page_uri(); # returns $page_uri
-    $hit->attachment_id(); # returns $attachment_id
+    );
+
+    $hit->page_uri();              # returns $page_uri
+    $hit->attachment_id();         # returns $attachment_id
+    $hit->workspace_name();        # returns $workspace_name
+    $hit->key();                   # returns $key 
 
 =head1 DESCRIPTION
 
@@ -25,7 +33,7 @@ use base 'Socialtext::Search::AttachmentHit';
 
 =head1 CONSTRUCTOR
 
-=head2 Socialtext::Search::SimpleAttachmentHit->new( $page_uri, $attachment_id )
+=head2 Socialtext::Search::SimpleAttachmentHit->new( $page_uri, $attachment_id, $workspace_name, $key )
 
 Creates an AttachmentHit pointing at the given attachment (attached to the
 page with URI $page_uri).
@@ -33,9 +41,14 @@ page with URI $page_uri).
 =cut
 
 sub new {
-    my ( $class, $page_uri, $attachment_id ) = @_;
+    my ( $class, $page_uri, $attachment_id, $workspace_name, $key ) = @_;
 
-    bless { page_uri => $page_uri, attachment_id => $attachment_id }, $class;
+    bless {
+        page_uri       => $page_uri,
+        attachment_id  => $attachment_id,
+        workspace_name => $workspace_name,
+        key            => $key,
+    }, $class;
 }
 
 =head1 OBJECT METHODS
@@ -49,7 +62,6 @@ Change the page that this hit points to.
 =cut
 
 sub set_page_uri { $_[0]->{page_uri} = $_[1] }
-
 sub page_uri { $_[0]->{page_uri} }
 
 =head2 $hit->set_attachment_id($attachment_id)
@@ -59,8 +71,41 @@ Change the attachment that this hit points to.
 =cut
 
 sub set_attachment_id { $_[0]->{attachment_id} = $_[1] }
-
 sub attachment_id { $_[0]->{attachment_id} }
+
+=head2 $hit->set_workspace_name($workspace_name)
+
+Change the workspace this hit points to.
+
+=cut
+
+sub set_workspace_name { $_[0]->{workspace_name} = $_[1] }
+sub workspace_name     { $_[0]->{workspace_name} }
+
+=head2 $hit->set_key($key)
+
+Change the document key this hit points to.
+
+=cut
+
+sub set_key { $_[0]->{key} = $_[1] }
+sub key     { $_[0]->{key} }
+
+=head2 $hit->composed_key()
+
+Return a composed key guaranteeing cross-workspace uniqueness
+
+=cut
+
+sub composed_key {
+    my $self = shift;
+    my $workspace_name = $self->workspace_name;
+    my $page_uri = $self->page_uri;
+    my $key = $self->key;
+    return "$workspace_name $page_uri $key";
+}
+
+1;
 
 =head1 SEE ALSO
 

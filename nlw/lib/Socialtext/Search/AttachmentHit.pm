@@ -10,6 +10,8 @@ Socialtext::Search::AttachmentHit - Representation of a search hit found in an a
 
     $page_uri = $attachment_hit->page_uri();
     $attachment_id = $attachment_hit->attachment_id();
+    $ws_name       = $attachment_hit->workspace_name();
+    $key           = $attachment_hit->key();
 
     print "Your search term was found in the attachment $attachment_id\n";
     print "attached to the page with URI $page_uri.\n";
@@ -61,6 +63,39 @@ sub attachment_id {
     }
 }
 
+=head2 $attachment_hit->workspace_name()
+
+Returns the name of the workspace where the hit was found.
+
+=cut
+sub workspace_name {
+    my ( $self ) = @_;
+
+    if (ref $self) {
+        croak(ref $self, ": internal bug: workspace_name not implemented");
+    }
+    else {
+        croak(__PACKAGE__, "::workspace_name called in a weird way");
+    }
+}
+
+=head2 $attachment_hit->key()
+
+Returns the document key of the hit in the index.
+
+=cut
+sub key {
+    my ( $self ) = @_;
+
+    if (ref $self) {
+        croak(ref $self, ": internal bug: key not implemented");
+    }
+    else {
+        croak(__PACKAGE__, "::key called in a weird way");
+    }
+}
+
+1;
 
 =head1 SEE ALSO
 

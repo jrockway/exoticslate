@@ -25,13 +25,22 @@ package Socialtext::Search::Searcher;
 
 =head1 OBJECT INTERFACE
 
-=head2 $searcher->search($query_string)
+=head2 $searcher->search($query_string, [$authorizer])
 
-Returns a list of L<Socialtext::Search::Hit>s each corresponding to some item in the
-workspace which matches the given query.
+Returns a list of L<Socialtext::Search::Hit>s each corresponding to some item
+in the workspace which matches the given query.
 
 If there is any sort of trouble searching, the searcher will indicate the
 error by C<die()>ing.
+
+If C<$authorizer> is provided, it may be called with a single workspce name as
+an argument.  It should return C<false> if there is a problem authorizing
+access to the given workspace.  Any context, e.g. as to who the current user
+is and how they are to be authorized, is to be carried by the C<$authorizer>
+callback.
+
+If there is an authorization problem, then L<Socialtext::Exception::Auth> is
+thrown.
 
 =cut
 
@@ -48,7 +57,9 @@ sub search {
 
 =head1 SEE ALSO
 
-L<Socialtext::Search::Indexer>, L<Socialtext::Search::Hit>
+L<Socialtext::Search::Indexer>,
+L<Socialtext::Search::Hit>,
+L<Socialtext::Exception::Auth>
 
 =head1 AUTHOR
 

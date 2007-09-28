@@ -12,33 +12,37 @@ use Socialtext::Search::KinoSearch::Factory;
 use Socialtext::Search::KinoSearch::QueryParser;
 use Socialtext::Search::SimpleAttachmentHit;
 use Socialtext::Search::SimplePageHit;
+use Socialtext::Search::Utils;
 
 field 'analyzer';
+field 'config';
 field 'index';
 field 'language';
 field 'searcher';
-field 'workspace';
+field 'ws_name';
 
 sub new {
-    my ( $class, $ws_name, $language, $index, $analyzer ) = @_;
+    my ( $class, $ws_name, $language, $index, $analyzer, $config ) = @_;
     my $self = bless {}, $class;
 
     # Create Searcher
     $self->analyzer($analyzer);
     $self->index($index);
     $self->language($language);
-    $self->workspace($ws_name);
+    $self->ws_name($ws_name);
+    $self->config($config);
 
     return $self;
 }
 
 # Perform a search and return the results.
 sub search {
-    my ( $self, $query_string ) = @_;
+    my ( $self, $query_string, $authorizer ) = @_;
     $self->_init_searcher();
     _debug("Searching with query: $query_string");
-    my $hits = $self->_search($query_string);
-    return $self->_process_hits($hits);
+    my $hits = $self->_search( $query_string, $authorizer );
+    my $hits_processor_method = $self->config->hits_processor_method;
+    return $self->$hits_processor_method($hits);
 }
 
 # Load up the Searcher.
@@ -49,7 +53,7 @@ sub _init_searcher {
 
     # Ensure the index exists, this creates it if it does not.
     my $factory = Socialtext::Search::AbstractFactory->GetFactory();
-    $factory->create_indexer( $self->workspace, $self->language );
+    $factory->create_indexer( $self->ws_name );
 
     $self->searcher(
         KinoSearch::Searcher->new(
@@ -62,10 +66,38 @@ sub _init_searcher {
 
 # Parses the query string and returns the raw KinoSearch hit results.
 sub _search {
-    my ( $self, $query_string ) = @_;
-    my $query = $self->_parse_query($query_string);
+    my ( $self, $query_string, $authorizer ) = @_;
+    my $query_parser_method = $self->config->query_parser_method;
+    my $query = $self->$query_parser_method($query_string);
+    $self->_authorize( $query, $authorizer );
     _debug("Performing actual search for query");
     return $self->searcher->search( query => $query );
+}
+
+# Either do nothing if the query's authorized, or throw NoSuchWorkspace or
+# Auth.
+sub _authorize {
+    my ( $self, $query, $authorizer ) = @_;
+
+    my $visit;
+    $visit = sub {
+        my ($query) = @_;
+
+        if ( $query->isa('KinoSearch::Search::TermQuery') ) {
+            if ( $query->{term}->get_field eq 'workspace' ) {
+                my $ws_name = Socialtext::Search::Utils::soften(
+                    $query->{term}->get_text );
+                Socialtext::Exception::Auth->throw
+                    unless $authorizer->( $ws_name );
+            }
+        } elsif ( $query->isa('KinoSearch::Search::BooleanQuery') ) {
+            for my $clause ( @{ $query->{clauses} } ) {
+                $visit->($clause->{query});
+            }
+        }
+    };
+
+    $visit->($query) if defined $authorizer;
 }
 
 # Munge the query to our liking, parse the query and return a query object.
@@ -73,12 +105,11 @@ sub _search {
 # the ones mentioned below in the "fields =>" parameter.
 sub _parse_query {
     my ( $self, $query_string ) = @_;
-    _debug("Parsing query");
+    _debug("Parsing query using _parse_query()" );
     my $parser_class = 'Socialtext::Search::KinoSearch::QueryParser';
     return $parser_class->new( searcher => $self )->parse($query_string);
 }
 
-# Convert raw KinoSearch hits into Socialtext result objects.
 sub _process_hits {
     my ( $self, $hits ) = @_;
     _debug("Processing search results");
@@ -90,22 +121,19 @@ sub _process_hits {
         next if exists $seen{ $hit->{key} };
         $seen{ $hit->{key} } = 1;
         _debug( "Contructing hit object for " . $hit->{key} );
-        push @results, $self->_make_result( $hit->{key} );
+        push @results, $self->_make_result( $hit->{key}, $self->ws_name );
     }
 
     return @results;
 }
 
-# Given a specific hit, convert it into a Socialtext result object.  Takes
-# care to note the differences between attachments and pages.  The structure
-# of the 'key' is defined in the Indexer at index time.
 sub _make_result {
-    my ( $self, $key ) = @_;
+    my ( $self, $key, $ws_name ) = @_;
     my ( $page, $attachment ) = split /:/, $key, 2;
     return
         defined $attachment
-        ? Socialtext::Search::SimpleAttachmentHit->new( $page, $attachment )
-        : Socialtext::Search::SimplePageHit->new($page);
+        ? Socialtext::Search::SimpleAttachmentHit->new( $page, $attachment, $ws_name, $key )
+        : Socialtext::Search::SimplePageHit->new( $page, $ws_name, $key );
 }
 
 # Send a debugging message to syslog.
@@ -116,13 +144,11 @@ sub _debug {
 }
 
 1;
-__END__
-
-=pod
 
 =head1 NAME
 
-Socialtext::Search::KinoSearch::Searcher - KinoSearch grep-through-the-files Socialtext::Search::Searcher implementation.
+Socialtext::Search::KinoSearch::Searcher
+- KinoSearch Socialtext::Search::Searcher implementation.
 
 =head1 SEE
 

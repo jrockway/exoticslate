@@ -7,6 +7,10 @@ use warnings;
 use Data::UUID;
 use Socialtext::ChangeEvent::Attachment;
 use Socialtext::ChangeEvent::Page;
+use Socialtext::ChangeEvent::IndexAttachment;
+use Socialtext::ChangeEvent::IndexPage;
+use Socialtext::ChangeEvent::RampupIndexPage;
+use Socialtext::ChangeEvent::RampupIndexAttachment;
 use Socialtext::ChangeEvent::Workspace;
 use Socialtext::File;
 use Socialtext::Log 'st_log';
@@ -42,8 +46,12 @@ built.
 
 Returns an instance of
 L<Socialtext::ChangeEvent::Workspace>,
-L<Socialtext::ChangeEvent::Page>, or
+L<Socialtext::ChangeEvent::Page>, 
 L<Socialtext::ChangeEvent::Attachment>,
+L<Socialtext::ChangeEvent::IndexPage>, or
+L<Socialtext::ChangeEvent::IndexAttachment>, or
+L<Socialtext::ChangeEvent::RampupIndexAttachment>, or
+L<Socialtext::ChangeEvent::RampupIndexPage>,
 depending on what the path is a symlink to.
 
 =cut
@@ -55,7 +63,11 @@ sub new {
 
     my $target = readlink $path or die "readlink '$path': $!";
 
-    return Socialtext::ChangeEvent::Page->new($target, $path)
+    return Socialtext::ChangeEvent::RampupIndexPage->new($target, $path)
+        || Socialtext::ChangeEvent::RampupIndexAttachment->new($target, $path)
+        || Socialtext::ChangeEvent::IndexPage->new($target, $path)
+        || Socialtext::ChangeEvent::Page->new($target, $path)
+        || Socialtext::ChangeEvent::IndexAttachment->new($target, $path)
         || Socialtext::ChangeEvent::Attachment->new($target, $path)
         || Socialtext::ChangeEvent::Workspace->new($target, $path)
         || die "cequnklink $path $target";
@@ -137,12 +149,14 @@ sub _record_object {
 
 # symlink the provided path
 sub _link_to {
-    my $self = shift;
-    my $path = shift;
+    my $self   = shift;
+    my $path   = shift;
+    my $prefix = shift;
     my $uuid = $self->_get_UUID();
-
+    my $file_name = ($prefix) ? $prefix . $uuid : $uuid;
+    
     my $directory = Socialtext::Paths::change_event_queue_dir();
-    my $link_name = Socialtext::File::catfile($directory, $uuid);
+    my $link_name = Socialtext::File::catfile($directory, $file_name);
 
     st_log->debug("writing change event for $path");
 

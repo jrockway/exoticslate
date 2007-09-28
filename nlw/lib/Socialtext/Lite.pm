@@ -197,7 +197,7 @@ sub search {
 
     if ( $search_term ) {
         eval {
-            $search_results = $self->hub->search->get_result_set($search_term);
+            $search_results = $self->hub->search->get_result_set(search_term => $search_term);
         };
         if ($@) {
             $error = $@;

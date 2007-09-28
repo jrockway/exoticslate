@@ -700,6 +700,46 @@ sub SchemaObject {
               type           => 'TIMESTAMPTZ',
             );
     }
+    {
+        my $table = $schema->make_table(
+            name        => 'search_sets', );
+        $table->make_column(
+            name        => 'search_set_id',
+            type        => 'INT8',
+            sequenced   => 1,
+            primary_key => 1, );
+        $table->make_column(
+            name        => 'name',
+            type        => 'VARCHAR',
+            length      => 40, );
+        $table->make_column(
+            name        => 'owner_user_id',
+            type        => 'INT8', );
+        $table->make_index (
+            columns => [
+                $schema->table('search_sets')
+                    ->columns( 'owner_user_id', 'name' )
+            ],
+            unique => 1,
+            function => 'owner_user_id, lower(name)',);
+    }
+    {
+        my $table = $schema->make_table(
+            name        => 'search_set_workspaces', );
+        $table->make_column(
+            name        => 'search_set_id',
+            type        => 'INT8', );
+        $table->make_column(
+            name        => 'workspace_id',
+            type        => 'INT8', );
+        $table->make_index (
+            columns => [
+                $schema->table('search_set_workspaces')
+                    ->columns( 'search_set_id', 'workspace_id' )
+            ],
+            unique => 1,
+            function => 'search_set_id, workspace_id', );
+    }
 
     $schema->add_relationship
             ( columns_from => [ $schema->table( 'UserId' )->columns( 'system_unique_id' ) ],

@@ -9,7 +9,8 @@ Socialtext::Search::Indexer - Interface for fulltext search indices.
 =head1 SYNOPSIS
 
     $factory = Socialtext::Search::AbstractFactory->GetFactory();
-    $indexer = $factory->create_indexer($workspace_id);
+    $indexer = $factory->create_indexer( $workspace_name, 
+                                         config_type => $config_type);
 
     # Update page's content in the index.
     $indexer->index_page($page_uri);
@@ -21,9 +22,9 @@ Socialtext::Search::Indexer - Interface for fulltext search indices.
 
 =head1 DESCRIPTION
 
-Socialtext::Search::Indexer is the interface for creating fulltext search indices on
-a workspace.  An Indexer is tied to a specific workspace when it is created by
-the factory, and it indexes documents within that workspace.
+Socialtext::Search::Indexer is the interface for creating fulltext search
+indices on a workspace.  An Indexer is tied to a specific workspace when it is
+created by the factory, and it indexes documents within that workspace.
 
 =cut
 

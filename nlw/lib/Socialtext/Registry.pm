@@ -26,6 +26,22 @@ sub add {
     return $self->_add( $key, $value->id, object => $value );
 }
 
+sub append {
+    my ( $self, $key, $value ) = @_;
+
+    my $class_id = $self->current_class_id;
+
+    Carp::confess( "key given to Socialtext::Registry->add was undef" )
+        unless defined $key;
+
+    Carp::confess( "cannot call Socialtext::Registry->add when Socialtext::Registry->current_class_id is not defined" )
+        unless defined $class_id;
+
+    push @{ $self->temp_lookup->{$key}{$value} }, $class_id;
+
+    push @{ $self->temp_lookup->{add_order}{$class_id}{$key} }, $value;
+}
+
 sub load {
     my $self = shift;
     my $lookup = $self->_update->lookup;
@@ -35,7 +51,7 @@ sub load {
 
 # Was Socialtext::Registry->add, left as a separate method for clarity
 sub _add {
-    my $self = shift;
+    my $self  = shift;
     my $key   = shift;
     my $value = shift;
 
@@ -141,15 +157,14 @@ package Socialtext::Lookup;
 use base 'Socialtext::Base';
 use Class::Field qw( field );
 
-field action     => {};
-field add_order  => {};
-field classes    => {};
-field plugins    => [];
-field preference => {};
-field preload    => {};
-field tool       => {};
-field wafl       => {};
-
+field action          => {};
+field add_order       => {};
+field classes         => {};
+field plugins         => [];
+field preference      => {};
+field preload         => {};
+field tool            => {};
+field wafl            => {};
 
 1;
 

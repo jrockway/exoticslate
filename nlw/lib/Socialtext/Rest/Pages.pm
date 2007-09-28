@@ -8,6 +8,7 @@ use base 'Socialtext::Rest::Collection';
 use Socialtext::HTTP ':codes';
 
 use Socialtext::Page;
+use Socialtext::Search 'search_on_behalf';
 use Socialtext::String;
 
 $JSON::UTF8 = 1;
@@ -96,8 +97,11 @@ sub _searched_pages {
     map { Socialtext::Page->new( hub => $self->hub, id => $_ ) }
         map  { $_->page_uri }
         grep { $_->isa('Socialtext::Search::PageHit') }
-        Socialtext::Search::AbstractFactory->GetFactory->create_searcher(
-        $self->hub->current_workspace->name )->search($search_query);
+        search_on_behalf(
+            $self->hub->current_workspace->name,
+            $search_query,
+            undef, # undefined scope
+            $self->hub->current_user );
 }
 
 1;

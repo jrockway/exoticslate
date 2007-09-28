@@ -6,7 +6,8 @@ use warnings;
 use IPC::Run qw(run timeout);
 
 use utf8;
-use Test::Socialtext tests => 196;
+use Test::Socialtext::Search;
+use Test::Socialtext tests => 199;
 fixtures( 'admin_no_pages' );
 
 BEGIN { use_ok("Socialtext::Search::KinoSearch::Factory") }
@@ -14,7 +15,24 @@ BEGIN { use_ok("Socialtext::Search::KinoSearch::Factory") }
 our $workspace = 'admin';
 our $hub = new_hub('admin');
 
-BASIC_SEARCH: {
+my $INDEXER;
+my $SEARCHER;
+
+make_indexer();
+make_searcher();
+basic_search();
+more_featured_search();
+flexing_multiple_pages();
+rt22654_crosstag_search_bug();
+rt22174_title_search_bug();
+basic_utf8();
+lots_of_hits();
+test_for_dollar_amp_and_friend();
+index_and_search_a_big_document(); # go away?
+basic_wildcard_search();
+rampup_indexing();
+
+sub basic_search {
     erase_index_ok();
     make_page_ok(
         "Cows Rock",
@@ -27,7 +45,7 @@ BASIC_SEARCH: {
     search_ok( "It is raining", 0, "Nonsense" );
 }
 
-MORE_FEATURED_SEARCH: {
+sub more_featured_search {
     erase_index_ok();
     make_page_ok( "Tom Stoppard", <<'QUOTE', [ "man likes dog", "man" ] );
 We cross our bridges when we come to them and burn them behind us, with
@@ -61,7 +79,7 @@ QUOTE
     search_ok( "tag:idonotexst", 0, "Tag search for a non-existant tag" );
 }
 
-FLEXING_MULTIPLE_PAGES: {
+sub flexing_multiple_pages {
     erase_index_ok();
     make_page_ok( "Tom Stoppard", <<'QUOTE', [ "quotes", "writers" ] );
 We cross our bridges when we come to them and burn them behind us, with
@@ -111,7 +129,7 @@ QUOTE
 
 # If a page has two tags: "cows love" and "super matthew" then make sure a tag
 # search for neither of these matches: "love super" or "matthew cows" 
-RT22654_CROSSTAG_SEARCH_BUG: {
+sub rt22654_crosstag_search_bug {
     erase_index_ok();
     make_page_ok( "Story of the Mammal", "Mammal Power",
         [ "cows love", "super matthew" ] );
@@ -119,7 +137,7 @@ RT22654_CROSSTAG_SEARCH_BUG: {
     search_ok( 'tag:"matthew cows"', 0, "" );
 }
 
-RT22174_TITLE_SEARCH_BUG: {
+sub rt22174_title_search_bug {
     erase_index_ok();
     make_page_ok( "Beamish Stout", 'has thou slain the jabberwock' );
     make_page_ok( "light", 'is beamish.  has thou slain the jabberwock' );
@@ -128,7 +146,7 @@ RT22174_TITLE_SEARCH_BUG: {
     search_ok( '=beamish AND "has thou slain the jabberwock"',      1, "" );
 }
 
-BASIC_UTF8: {
+sub basic_utf8 {
     erase_index_ok();
     my $utf8 = "big and Groß";
     make_page_ok( $utf8, "Cows are good but $utf8 en français",
@@ -155,7 +173,7 @@ BASIC_UTF8: {
     search_ok( "tag:espa nol", 0, "UTF-8 not used as token seperator" );
 }
 
-LOTS_OF_HITS: {
+sub lots_of_hits {
     erase_index_ok();
     for my $n ( 1 .. 105 ) {
         make_page_ok( "Page Test $n", "The contents are $n" );
@@ -171,7 +189,7 @@ LOTS_OF_HITS: {
 # of the string being tested).  This is a fundamental limitation and bug in
 # Perl.  Search below for "MACHINERY_FOR_DOLLAR_AMP_TIMING_TEST" for more
 # information.
-TEST_FOR_DOLLAR_AMP_AND_FRIENDS: {
+sub test_for_dollar_amp_and_friend {
     my $MAX_RATIO = 10;
     my $baseline  = run_time_test_externally();
     my $test_time = run_time_test_internally();
@@ -196,7 +214,7 @@ MSG
     }
 }
 
-INDEX_AND_SEARCH_A_BIG_DOCUMENT: {
+sub index_and_search_a_big_document {
     my $text = "Mary had a little lamb and it liked to drink. " x 100000;
     erase_index_ok();
     ok( 1, '(Indexing big document - 4.4 MB)' );
@@ -204,7 +222,7 @@ INDEX_AND_SEARCH_A_BIG_DOCUMENT: {
     search_ok( "lamb", 1, "Searching for the big page" );
 }
 
-BASIC_WILDCARD_SEARCH: {
+sub basic_wildcard_search {
     erase_index_ok();
     my @words = split /\s+/, "When the roofers are done roofing the roof.";
     my $n = 0;
@@ -224,6 +242,18 @@ BASIC_WILDCARD_SEARCH: {
     search_ok( "tag:cow_roof*", 3, "Searching for wildcard in tag" );
     search_ok( "tag:cow_roof*", 3, "Searching for wildcard in tag w/ caps." );
     search_ok( "(roof*)", 3, "Searching for wildcard in tag in parens." );
+}
+
+sub rampup_indexing {
+    erase_index_ok();
+    turn_on_rampup();
+    make_indexer( 'config_type' => 'rampup' );
+
+    make_page_ok( "RampupPage", "i am a rampup page" );
+
+    make_searcher( 'config_type' => 'rampup' );
+    search_ok( "rampup", 1, "Searching for rampup in rampup index" );
+    turn_off_rampup();
 }
 
 sub make_page_ok {
@@ -295,12 +325,20 @@ sub erase_index_ok {
     ok( not($@), "============ ERASED INDEX =============" );
 }
 
-sub searcher {
-    Socialtext::Search::KinoSearch::Factory->create_searcher($workspace);
+sub make_searcher {
+    $SEARCHER = Socialtext::Search::KinoSearch::Factory->create_searcher($workspace, @_);
+}
+
+sub make_indexer {
+    $INDEXER = Socialtext::Search::KinoSearch::Factory->create_indexer($workspace, @_);
 }
 
 sub indexer {
-    Socialtext::Search::KinoSearch::Factory->create_indexer($workspace);
+    return $INDEXER;
+}
+
+sub searcher {
+    return $SEARCHER;
 }
 
 ########################################################

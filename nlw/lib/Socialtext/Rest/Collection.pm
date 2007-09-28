@@ -74,22 +74,34 @@ sub _make_getter {
     return sub {
         my ( $self, $rest ) = @_;
 
-        $self->if_authorized(
-            'GET',
-            sub {
-                # REVIEW: should eval this for errors
-                my $resource = $self->get_resource($rest);
-                $resource = [] unless @$resource; # protect against weird data
-                $rest->header(
-                    -status        => HTTP_200_OK,
-                    -type          => $content_type . '; charset=UTF-8',
-                    -Last_Modified => $self->make_http_date(
-                        $self->last_modified($resource)
-                    )
-                );
-                return $self->$sub($resource);
+        my $rv;
+        eval {
+            $rv = $self->if_authorized(
+                'GET',
+                sub {
+                    # REVIEW: should eval this for errors
+                    my $resource = $self->get_resource($rest);
+                    $resource = [] unless @$resource; # protect against weird data
+                    $rest->header(
+                        -status        => HTTP_200_OK,
+                        -type          => $content_type . '; charset=UTF-8',
+                        -Last_Modified => $self->make_http_date(
+                            $self->last_modified($resource)
+                        )
+                    );
+                    $self->$sub($resource);
+                }
+            );
+        };
+        if (my $except = $@) {
+            if ($except->isa('Socialtext::Exception::Auth')) {
+                return $self->not_authorized;
+            } elsif ($except->isa('Socialtext::Exception::NoSuchWorkspace')) {
+                return $self->no_workspace;
             }
-        );
+        }
+
+        return $rv;
     };
 }
 

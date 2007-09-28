@@ -11,6 +11,7 @@ use KinoSearch::QueryParser::QueryParser;
 use KinoSearch::Search::BooleanQuery;
 use KinoSearch::Search::TermQuery;
 use KinoSearch::Store::RAMInvIndex;
+use Socialtext::Search::Utils;
 
 sub new {
     my ( $class, %args ) = @_;
@@ -28,6 +29,9 @@ sub parse {
     # Preprocess the query to clearly mark wildcards out of the way.
     $self->_replace_wildcards( \$query_string );
 
+    # Make workspace field searches hardened against stemming
+    $self->_harden_workspace( \$query_string );
+
     # Get the default query tree from the query string.
     my $query = KinoSearch::QueryParser::QueryParser->new(
         analyzer       => $self->{searcher}->analyzer,
@@ -37,6 +41,16 @@ sub parse {
 
     # Postprocess the query string to expand wildcards
     return $self->_expand_wildcards($query);
+}
+
+sub _harden_workspace {
+    my ( $self, $query_string_ref ) = @_;
+
+    # The only way I could find to do this was with a zero-width
+    # positive look-behind assertion.  Not sure how expensive it is...
+    $$query_string_ref =~ 
+        s{(?<=workspace\:)([\w\-]+)}
+         {&Socialtext::Search::Utils::harden($1)}eg;
 }
 
 sub _replace_wildcards {

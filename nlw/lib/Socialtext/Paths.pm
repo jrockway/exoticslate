@@ -38,11 +38,19 @@ workspace name.  If not given a name, they return the root for the
 specific type of directory.
 
 =cut
-
 sub page_data_directory      { _per_workspace_dir( 'data', @_ ) }
 sub plugin_directory         { _per_workspace_dir( 'plugin', @_ ) }
 sub change_event_queue_dir   { Socialtext::AppConfig->change_event_queue_dir }
 sub change_event_queue_lock  { change_event_queue_dir() . '/lock' }
+
+=head2 system_plugin_directory()
+
+Returns the path to the system plugin directory wherein plugins
+may store supra-workspace data.
+
+=cut
+# This one is formed just like the per-workspace ones, but no workspace name.
+sub system_plugin_directory { _per_workspace_dir('plugin.system', @_) }
 
 =head2 pid_file( $program_name )
 

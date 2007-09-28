@@ -14,10 +14,12 @@ Socialtext::Search::AbstractFactory - Instantiate search-related objects.
 =head1 SYNOPSIS
 
     $factory = Socialtext::Search::AbstractFactory->GetFactory();
-    $indexer = create_indexer($workspace_name);
+    $indexer = create_indexer($workspace_name,
+                              config_type => $config_type );
     # Index documents in this workspace using $indexer.
 
-    $searcher = create_searcher($workspace_name);
+    $searcher = create_searcher($workspace_name,
+                                config_type => $config_type );
     # Perform searches on this workspace using $searcher.
 
 =head1 DESCRIPTION
@@ -41,10 +43,10 @@ L<Socialtext::AppConfig/search_factory_class>.
 =head2 GetFactory()
 
 Returns an instance of the class configured in
-L<Socialtext::AppConfig/search_factory_class>, by C<require>ing and calling C<new()>
-on this class.  If there are troubles loading or instantiating, the method
-will C<die> with a string beginning
-C<< Socialtext::Search::AbstractFactory->GetFactory: >>.
+L<Socialtext::AppConfig/search_factory_class>, by C<require>ing and calling
+C<new()> on this class.  If there are troubles loading or instantiating, the
+method will C<die> with a string beginning C<<
+Socialtext::Search::AbstractFactory->GetFactory: >>.
 
 =cut
 
@@ -64,10 +66,11 @@ sub GetFactory {
 
 =head1 OBJECT INTERFACE
 
-=head2 $factory->create_searcher($workspace_name)
+=head2 $factory->create_searcher($workspace_name,
+                                 config_type => $config_type )
 
-Returns an implementation of the L<Socialtext::Search::Searcher> interface which will
-search the given workspace.
+Returns an implementation of the L<Socialtext::Search::Searcher> interface
+which will search the given workspace.
 
 =cut
 
@@ -82,10 +85,11 @@ sub create_searcher {
     }
 }
 
-=head2 $factory->create_indexer($workspace_name)
+=head2 $factory->create_indexer($workspace_name,
+                                config_type => $config_type )
 
-Returns an implementation of the L<Socialtext::Search::Indexer> interface which will
-search the given workspace.
+Returns an implementation of the L<Socialtext::Search::Indexer> interface
+which will search the given workspace.
 
 =cut
 
@@ -102,7 +106,8 @@ sub create_indexer {
 
 =head1 SEE ALSO
 
-L<Socialtext::AppConfig>, L<http://en.wikipedia.org/wiki/Abstract_factory_pattern>
+L<Socialtext::AppConfig>,
+L<http://en.wikipedia.org/wiki/Abstract_factory_pattern>
 
 =head1 AUTHOR
 

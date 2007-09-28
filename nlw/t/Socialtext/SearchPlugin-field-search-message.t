@@ -18,7 +18,7 @@ run {
     my $case = shift;
     my $query = $case->query;
 
-    $hub->search->search_for_term($query);
+    $hub->search->search_for_term(search_term => $query);
     my $set = $hub->search->result_set;
     my $message = $hub->search->error_message || '';
 

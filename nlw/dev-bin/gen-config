@@ -34,6 +34,7 @@ use Socialtext::Hostname;
 use Socialtext::HTTPPorts;
 use Template ();
 use User::pwent;
+use YAML qw( LoadFile );
 
 my $inc = "build/";
 
@@ -188,9 +189,54 @@ sub main {
     }
 
     if ( is_target_for( "app" ) ) {
+        my $src_file = 'socialtext/search/search_config.yaml.tt2'; 
+        my $live_dest_file = File::Spec->catdir($dirs{socialtext_etc},
+                                                'search/live.yaml');
+        my $rampup_dest_file = File::Spec->catdir($dirs{socialtext_etc},
+                                                  'search/rampup.yaml');
+        my $src_ver = _get_search_config_version(
+            File::Spec->catdir( _get_template_root(), $src_file ) );
+
+        my $dest_is_live = 0;
+        if (!-e $live_dest_file) {
+            $dest_is_live = 1;
+            if ($src_ver > 1) {
+                # "You know what that makes you? Larry?"
+                # "Lollygaggers, sir."
+                # "Lollygaggers!"
+                my $lollygagger_file
+                    = File::Spec->catdir( $dirs{socialtext_etc},
+                    'search/lollygagger' );
+                push @files,
+                    [ $src_file => $lollygagger_file, {}, 'overwrite' ],
+            }
+        }
+        else {
+            my $live_ver = _get_search_config_version( $live_dest_file );
+
+            if ( $src_ver > $live_ver ) {
+                $dest_is_live = 0;
+            }
+            else {
+                $dest_is_live = 1;
+            }
+        }
+
+        my $dest_file = ( $dest_is_live ) ? $live_dest_file : $rampup_dest_file;
+
         push @files,
             [
             'socialtext/shortcuts.yaml.tt2' => "$dirs{socialtext_etc}/shortcuts.yaml",
+            { },
+            $is_dev_install ? 'overwrite' : 0
+            ],
+            [
+            $src_file => $dest_file,
+            { },
+            'overwrite'
+            ],
+            [
+            'socialtext/event_listeners.yaml.tt2' => "$dirs{socialtext_etc}/event_listeners.yaml",
             { },
             $is_dev_install ? 'overwrite' : 0
             ],
@@ -210,6 +256,14 @@ sub main {
     generate_config( @files );
     copy_static_files( \%dirs )
         if is_target_for( "ssl", "apache", "apache2", "apache-perl" );
+}
+
+sub _get_search_config_version {
+    my $file = shift;
+
+    my $yaml = LoadFile( $file );
+    my $version = $yaml->{version} || 0;
+    return $version;
 }
 
 sub local_dirs {
@@ -345,9 +399,7 @@ sub _existing_or_new_secret {
     return join ' ', @secrets;
 }
 
-sub generate_config {
-    my @files = @_;
-
+sub _get_template_root {
     my $template_root =
         Cwd::abs_path(
             File::Spec->catdir(
@@ -355,6 +407,14 @@ sub generate_config {
                 File::Spec->updir, $inc, 'templates'
             )
         );
+
+    return $template_root;
+}
+
+sub generate_config {
+    my @files = @_;
+
+    my $template_root = _get_template_root();
 
     my $tt = Template->new({
         INCLUDE_PATH    => $template_root,

@@ -3,9 +3,13 @@ package Socialtext::Search::KinoSearch::Factory;
 use strict;
 use warnings;
 
+use File::Basename 'dirname';
+use Socialtext::File 'ensure_directory';
 use Socialtext::Search::KinoSearch::Analyzer;
 use Socialtext::Search::KinoSearch::Indexer;
 use Socialtext::Search::KinoSearch::Searcher;
+use Socialtext::Search::Config;
+use Socialtext::AppConfig;
 use base 'Socialtext::Search::AbstractFactory';
 
 # Rather than create an actual object (since there's no state), just return
@@ -13,26 +17,33 @@ use base 'Socialtext::Search::AbstractFactory';
 sub new { $_[0] }
 
 sub create_searcher {
-    my ( $self, $ws_name, $lang ) = @_;
-    return $self->_create( "Searcher", $ws_name, $lang );
+    my ( $self, $ws_name, %param ) = @_;
+    return $self->_create( "Searcher", $ws_name, %param );
 }
 
 sub create_indexer {
-    my ( $self, $ws_name, $lang ) = @_;
-    return $self->_create( "Indexer", $ws_name, $lang );
+    my ( $self, $ws_name, %param )  = @_;
+    return $self->_create( "Indexer", $ws_name, %param );
 }
 
 sub _create {
-    my ( $self, $kind, $ws_name, $lang ) = @_;
+    my $self = shift;
+    my ( $kind, $ws_name, %param ) = @_;
+    $param{config_type} ||= 'live';
+    $param{language}    ||= 'en';
+    
+    my $config = Socialtext::Search::Config->new(  
+        mode => $param{config_type},
+    );
+
+    $config or return;
+    
     my $class = 'Socialtext::Search::KinoSearch::' . $kind;
-    return $class->new( $ws_name, $lang, $self->_index($ws_name),
-        $self->_analyzer($lang) );
+    return $class->new( $ws_name, $param{language}, 
+        $config->index_directory(workspace => $ws_name),
+        $self->_analyzer($param{language}), $config );
 }
 
-sub _index {
-    my ( $self, $ws_name ) = @_;
-    return Socialtext::Paths::plugin_directory($ws_name) . '/kinosearch';
-}
 
 sub _analyzer {
     my ( $self, $lang ) = @_;

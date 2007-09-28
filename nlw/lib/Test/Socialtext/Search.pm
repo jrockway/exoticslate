@@ -3,22 +3,27 @@ package Test::Socialtext::Search;
 use strict;
 use warnings;
 
+use File::Path;
+use File::Spec;
 use Test::More;
 use Test::Socialtext ();
 use Test::Socialtext::Environment;
 use Socialtext::Ceqlotron;
+use Socialtext::Paths;
 
 require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(init delete_page search_for_term
                  search_for_term_in_attach confirm_term_in_result
-                 create_and_confirm_page);
+                 create_and_confirm_page turn_on_rampup
+                 turn_off_rampup);
 
 Socialtext::Ceqlotron::clean_queue_directory();
-my $hub;
+our $hub;
 
 sub hub {
-    $hub = Test::Socialtext::Environment->instance()->hub_for_workspace('admin');
+    $hub = Test::Socialtext::Environment->instance()
+        ->hub_for_workspace('admin');
     return $hub;
 }
 
@@ -37,14 +42,11 @@ sub search_for_term {
     Test::Socialtext::ceqlotron_run_synchronously();
 
     my $search = $hub->search;
-    $search->search_for_term($term);
+    $search->search_for_term(search_term => $term);
     my $set = $search->result_set;
 
     if ($negation) {
         ok( $set, 'we have results' );
-        use YAML;
-        die "($#{$set->{rows}}) ", Dump( $set->{rows} )
-            if $#{ $set->{rows} } >= 0;
         is_deeply(
             $set->{rows},
             [],
@@ -70,7 +72,7 @@ sub search_for_term_in_attach {
     Test::Socialtext::ceqlotron_run_synchronously();
 
     my $search = $hub->search;
-    $search->search_for_term($term);
+    $search->search_for_term(search_term => $term);
     my $set = $search->result_set;
     ok( $set->{hits} > 0, "have page hits via term $term");
     ok( grep(@{$_->{attachments}} > 0, @{$set->{rows}}), "have attachments");
@@ -141,6 +143,44 @@ sub create_and_confirm_page {
             }
         }
     }
+}
+
+sub turn_on_rampup {
+    my $dir = 't/tmp/etc/socialtext/search';
+    my $rampup_yaml = <<EOY;
+---
+version: 9999
+index_type: combined
+search_engine: kinosearch
+directory_pattern: %system_plugin_directory%/woot
+query_parser_method: _parse_query
+hits_processor_method: _process_hits
+key_generator: composite_key
+field_spec:
+    key:
+        analyzed: 0
+
+    title:
+        stored: 0
+        boost: 4
+
+    tag:
+        stored: 0
+        boost: 2
+
+    text:
+        stored: 0
+
+EOY
+
+    open RAMPUP, ">" . File::Spec->catdir( $dir, "rampup.yaml" ) || die "I just can't! $!\n";
+    print RAMPUP $rampup_yaml;
+    close RAMPUP;
+}
+
+sub turn_off_rampup {
+    unlink 't/tmp/etc/socialtext/search/rampup.yaml';
+    #rmtree( File::Spec->catdir( Socialtext::Paths::system_plugin_directory, 'woot' ) );
 }
 
 1;

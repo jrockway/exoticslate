@@ -56,6 +56,15 @@ sub page_uri       { $_[0]->{page_uri} }
 sub attachment_id  { $_[0]->{attachment_id} }
 sub link_path      { $_[0]->{link_path} }
 
+# XXX: not necessary yet, but a step toward getting rid of the 
+# "are you my mommy?" logic in S::ChangeEvent.
+sub _record_object {
+    my $self = shift;
+    my $object = shift;
+
+    $self->_link_to($object->full_path);
+}
+
 =head1 SEE ALSO
 
 L<Socialtext::ChangeEvent>, L<Socialtext::Attachment>

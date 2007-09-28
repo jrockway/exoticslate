@@ -6,8 +6,10 @@ use warnings;
 use base 'Socialtext::Query::Plugin';
 
 use Class::Field qw( const field );
+use Socialtext::Search qw( search_on_behalf );
 use Socialtext::Search::AbstractFactory;
 use Socialtext::Pages;
+use Socialtext::Workspace;
 use Socialtext::l10n qw(loc);
 
 sub class_id { 'search' }
@@ -18,6 +20,7 @@ const sortdir => {
     Summary        => 1,
     Subject        => 0,
     From           => 0,
+    Workspace      => 0,
     Date           => 1,
     revision_count => 1,
 };
@@ -45,22 +48,46 @@ sub register {
 
 sub search {
     my $self = shift;
+    # since we dispatch to the heavyweight search in the presence of
+    # 'search_term', and since we want to keep track of the original search
+    # term when we use the cached results set, we keep a parallel
+    # 'orig_search_term' around to populate those links.
+    #
+    # REVIEW: Icky, gross, patches welcome.
+    #
+    my $search_term;
+    my $workspace_in_search_term;
     my %sortdir = %{$self->sortdir};
     if ( $self->cgi->defined('search_term') ) {
+        $search_term = $self->cgi->search_term;
+        if ( $search_term =~ m/workspace\:/ ) {
+            $workspace_in_search_term = 1;
+        }
         $self->hub->log->debug( 'performing search for '
-                . $self->cgi->search_term
-                . ' in workspace '
-                . $self->hub->current_workspace->name );
-        $self->search_for_term($self->cgi->search_term);
+                . $search_term );
+        $self->search_for_term(
+            search_term => $search_term,
+            scope       => $self->cgi->scope
+        );
     }
     $self->result_set( $self->sorted_result_set( \%sortdir ) );
 
     my $uri_escaped_search_term
-        = $self->uri_escape( $self->cgi->search_term );
+        = $self->uri_escape( $search_term );
+
     $self->display_results(
         \%sortdir,
+        search_term => $self->cgi->search_term
+            || $self->cgi->orig_search_term,
+        scope => $self->cgi->scope || '',
+        show_workspace_column =>
+            (          ( $self->cgi->scope ne '_' )
+                    || ( $self->cgi->search_term      =~ /\bworkspaces:\S+/ )
+                    || ( $self->cgi->orig_search_term =~ /\bworkspaces:\S+/ )
+                    || 0 ),
         feeds => $self->_feeds(
-            $self->hub->current_workspace, $self->cgi->search_term
+            $self->hub->current_workspace, search_term => $search_term,
+            scope => $self->cgi->scope,
         ),
         title      => loc('Search Results'),
         unplug_uri => "?action=unplug;search_term="
@@ -73,9 +100,10 @@ sub search {
 sub _feeds {
     my $self      = shift;
     my $workspace = shift;
-    my $query     = shift;
+    my %query     = @_;
 
-    my $uri_escaped_query  = $self->uri_escape($query);
+    my $uri_escaped_query  = $self->uri_escape($query{search_term});
+    my $scope = $query{scope};
 
     my $root  = $self->hub->syndicate->feed_uri_root($workspace);
     # REVIEW: Even though these are not page feeds, they are called
@@ -84,15 +112,15 @@ sub _feeds {
     my %feeds = (
         rss => {
             page => {
-                title => loc('[_1] - RSS Search for [_2]', $workspace->title, $query)
+                title => loc('[_1] - RSS Search for [_2]', $workspace->title, $query{search_term})
 ,
-                url => $root . "?search_term=$uri_escaped_query",
+                url => $root . "?search_term=$uri_escaped_query;scope=$scope",
             },
         },
         atom => {
             page => {
-                title => loc('[_1] - Atom Search for [_2]', $workspace->title, $query),
-                url => $root . "?search_term=$uri_escaped_query;type=Atom",
+                title => loc('[_1] - Atom Search for [_2]', $workspace->title, $query{search_term}),
+                url => $root . "?search_term=$uri_escaped_query;scope=$scope;type=Atom",
             },
         },
     );
@@ -101,17 +129,18 @@ sub _feeds {
 }
 
 sub search_for_term {
-    my $self = shift;
-    my $search_term = shift;
+    my ( $self, %query )  = @_;
+    my $search_term = $query{search_term};
     $self->hub->log->debug("searchquery '" . $search_term . "'");
 
     $self->result_set( $self->new_result_set );
     eval {
-        @{ $self->result_set->{rows} } = $self->_new_search($search_term);
+        @{ $self->result_set->{rows} } = $self->_new_search(%query);
         $self->title_search( $search_term =~ s/^=// );
         $self->hub->log->debug("hitcount " . scalar @{ $self->result_set->{rows} });
         foreach my $row ( @{ $self->result_set->{rows} } ) {
-            $self->hub->log->debug("hitrow $row->{page_uri}");
+            $self->hub->log->debug("hitrow $row->{page_uri}")
+                if exists $row->{page_uri};
             $self->hub->log->debug("hitkeys @{ [keys %$row ] }");
         }
         $self->result_set->{hits}          = scalar @{ $self->result_set->{rows} };
@@ -129,37 +158,50 @@ sub search_for_term {
                     'search_help_field.html',
                 )
             );
-        }
-        else {
+        } elsif ($@->isa('Socialtext::Exception::NoSuchWorkspace')) {
+            $self->error_message(
+                  "You tried to search on the workspace named '"
+                . $@->name
+                . "', which does not exist." );
+        } elsif ($@->isa('Socialtext::Exception::Auth')) {
+            # FIXME: It would be better to show the name of the workspace
+            # they're not authorized to see. -mml 20070504
+            $self->error_message(
+                  "You are not authorized to perform the requested search." );
+        } else {
             $self->hub->log->warning("searchdie '$@'");
         }
     }
 }
 
 sub _new_search {
-    my $self = shift;
-    my $query_string = shift;
+    my ( $self, %query ) = @_;
 
-    my @hits = Socialtext::Search::AbstractFactory->GetFactory->create_searcher(
-        $self->hub->current_workspace->name
-    )->search($query_string);
+    my @hits = search_on_behalf(
+        $self->hub->current_workspace->name,
+        $query{search_term},
+        $query{scope},
+        $self->hub->current_user );
 
-    my ( %page_row, @attachment_rows );
+    my ( %page_row, @attachment_rows, $parent_key );
     foreach my $hit (@hits) {
-        $page_row{ $hit->page_uri } = $self->_make_page_row( $hit->page_uri )
+        $page_row{ $hit->composed_key } = $self->_make_page_row( $hit )
             if $hit->isa('Socialtext::Search::PageHit');
     }
     foreach my $hit (@hits) {
         if ($hit->isa('Socialtext::Search::AttachmentHit')) {
-            $page_row{ $hit->page_uri }
-                = $self->_make_page_row( $hit->page_uri )
-                unless exists $page_row{ $hit->page_uri };
+            # we want to act on the parent page's key,
+            # rather than the attachment hit's key
+            # XXX: This needs a generalized function in the package that
+            # defines the key munging.
+            $hit->key =~ m/(.*)?\:/;
+            $parent_key = $hit->workspace_name . " " . $1;
+            $page_row{ $parent_key }
+                = $self->_make_page_row( $hit )
+                unless exists $page_row{ $parent_key };
 
-            push @{ $page_row{ $hit->page_uri }->{attachments} },
-                $self->_make_attachment_row(
-                    $hit->page_uri,
-                    $hit->attachment_id
-                );
+            push @{ $page_row{ $parent_key }->{attachments} },
+                $self->_make_attachment_row( $hit );
         }
     }
 
@@ -169,7 +211,18 @@ sub _new_search {
 
 sub _make_page_row {
     my $self = shift;
-    my $page_uri = shift;
+    my $hit = shift;
+
+    my $workspace = my $orig_workspace = $self->hub->current_workspace();
+
+    my $page_uri = $hit->page_uri;
+
+    eval {
+        $workspace = Socialtext::Workspace->new( name => $hit->workspace_name );
+    };
+
+    $self->hub->current_workspace($workspace);
+
     my $page     = $self->hub->pages->new_page($page_uri);
 
     return {} if $page->deleted;
@@ -178,56 +231,78 @@ sub _make_page_row {
 
     my $author   = $page->last_edited_by;
 
+    $self->hub->current_workspace($orig_workspace);
+
     # $author will be undef if the page_uri in the index
     # does not correspond with any existing page. This can happen
     # when pages with page ids are created (happened in the
     # way past, but is cleared up now).
     unless ($author) {
         $self->hub->log->warning( 'search result skipped: '
-                . $self->hub->current_workspace->name . ': \''
+                . $workspace->name . ': \''
                 . $page_uri
                 . '\' has no author or is a bad page id' );
         return {};
     }
 
     my $author_name = $author->best_full_name(
-        workspace => $self->hub->current_workspace );
+        workspace => $workspace );
+
 
     return +{
-        ( map { ( $_ => $metadata->$_ ) }
-            (qw(From Date Subject Revision Summary)) ),
-        DateLocal      => $page->datetime_for_user,
-        revision_count => scalar $page->all_revision_ids,
-        page_uri       => $page->uri,
-        page_id        => $page->id,
-        From           => $author_name,
+        (
+            map { ( $_ => $metadata->$_ ) }
+                (qw(From Date Subject Revision Summary))
+        ),
+        DateLocal       => $page->datetime_for_user,
+        revision_count  => scalar $page->all_revision_ids,
+        page_uri        => $page->uri,
+        page_id         => $page->id,
+        From            => $author_name,
+        Workspace       => $workspace->title,
+        workspace_name  => $workspace->name,
+        workspace_title => $workspace->title,
     };
 }
 
 sub _make_attachment_row {
     my $self = shift;
-    my $page_uri = shift;
-    my $attachment_id = shift;
+    my $hit = shift;
+
+    my $workspace = my $orig_workspace = $self->hub->current_workspace();
+
+    my $page_uri = $hit->page_uri;
+
+    eval {
+        $workspace = Socialtext::Workspace->new( name => $hit->workspace_name );
+    };
+
+    $self->hub->current_workspace($workspace);
+
+    my $attachment_id = $hit->attachment_id;
 
     my $attachment = $self->hub->attachments->new_attachment(
         id      => $attachment_id,
         page_id => $page_uri,
     )->load;
 
+    $self->hub->current_workspace($orig_workspace);
+
     return $attachment->deleted
         ? {}
         : {
-        id        => $attachment->id,
-        filename  => $attachment->filename,
-        DateLocal => $self->hub->timezone->date_local( $attachment->{Date} ),
+        id              => $attachment->id,
+        filename        => $attachment->filename,
+        DateLocal       => $self->hub->timezone->date_local( $attachment->{Date} ),
+        workspace_name  => $workspace->name,
+        workspace_title => $workspace->title,
         };
 }
 
 sub get_result_set {
-    my $self = shift;
-    my $search_term = shift;
+    my ( $self, %query ) = @_;
     my %sortdir = %{$self->sortdir};
-    $self->search_for_term($search_term);
+    $self->search_for_term(%query);
     return $self->sorted_result_set(\%sortdir);
 }
 
@@ -248,6 +323,7 @@ use base 'Socialtext::Query::CGI';
 use Socialtext::CGI qw( cgi );
 
 cgi search_term => '-html_clean';
+cgi orig_search_term => '-html_clean';
 
 ######################################################################
 package Socialtext::Search::Wafl;
@@ -285,9 +361,9 @@ sub _get_wafl_data {
     my $workspace_name = shift;
     my $main;
 
-    $hub = $self->hub_for_workspace_name($workspace_name);
+    $hub = $self->hub_for_workspace_name( $workspace_name );
 
-    $hub->search->get_result_set($query);
+    $hub->search->get_result_set( search_term => $query );
 }
 
 1;

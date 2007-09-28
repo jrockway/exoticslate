@@ -7,34 +7,47 @@ use Class::Field qw(field);
 use File::Path;
 use KinoSearch::Index::Term;
 use KinoSearch::InvIndexer;
+use List::MoreUtils 'zip';
 use Readonly;
+use YAML;
 
 use Socialtext::Hub;
 use Socialtext::Workspace;
 use Socialtext::Page;
 use Socialtext::Attachments;
 use Socialtext::Log qw(st_log);
+use Socialtext::Search::ContentTypes;
+use Socialtext::Search::Utils;
+use Socialtext::File;
 use base 'Socialtext::Search::Indexer';
 
 # Constants for aquiring a lock.
-Readonly our $LOCK_WAIT    => 1;  # Wait this many seconds before retrying.
+Readonly my $LOCK_WAIT    => 1;  # Wait this many seconds before retrying.
+Readonly my $FIELD_SEPARATOR => ' __ ';
 
 field 'analyzer';
+field 'field_spec';
 field 'hub';
 field 'index';
 field 'indexer';
 field 'language';
 field 'speced' => 0;
-field 'workspace';
+field 'ws_name';
+field 'config';
 
 sub new {
-    my ( $class, $ws_name, $language, $index, $analyzer ) = @_;
+    my ( $class, $ws_name, $language, $index, $analyzer, $config ) = @_;
     my $self = bless {}, $class;
 
     $self->analyzer($analyzer);
     $self->index($index);
     $self->language($language);
-    $self->workspace($ws_name);
+    $self->ws_name($ws_name);
+
+    $self->config($config);
+    if ( !$config ) {
+        return undef;
+    }
 
     # Create hub
     my $ws = Socialtext::Workspace->new( name => $ws_name );
@@ -64,7 +77,8 @@ sub new {
 sub index_workspace {
     my ( $self, $ws_name ) = @_;
     $self->_assert_right_ws($ws_name);
-    $self->_init_indexer("recreate index");
+    $self->delete_workspace($ws_name);
+    $self->_init_indexer();
     _debug("Starting to retrieve page ids to index workspace.");
     for my $page_id ( $self->hub->pages->all_ids ) {
         my $page = $self->_load_page($page_id) || next;
@@ -78,6 +92,29 @@ sub index_workspace {
 sub delete_workspace {
     my ( $self, $ws_name ) = @_;
     $self->_assert_right_ws($ws_name);
+    
+    if ( $self->config->index_type eq 'combined' ) {
+        $self->_delete_workspace_terms( $ws_name );
+    } 
+    else {
+        $self->_delete_workspace_files( $ws_name );
+    }
+}
+
+sub _delete_workspace_terms {
+    my ( $self, $ws_name ) = @_;
+    _debug( "Removing index with _delete_workspace_terms()" );
+    $self->_init_indexer();
+    my $term = KinoSearch::Index::Term->new( workspace => 
+        Socialtext::Search::Utils::harden( $ws_name ) );
+    $self->indexer->delete_docs_by_term($term);
+    $self->_finish;
+    _debug( "Removed " . $ws_name . " pages and attachments from index." );
+}
+
+sub _delete_workspace_files {
+    my ( $self, $ws_name ) = @_;
+    _debug( "Removing physical index with _delete_workspace_files()" );
     File::Path::rmtree( $self->index );
     _debug( "Removed " . $self->index );
 }
@@ -123,7 +160,14 @@ sub index_page {
 sub delete_page {
     my ( $self, $page_uri ) = @_;
     $self->_init_indexer();
-    $self->_delete_doc_by_key($page_uri);
+    my $key;
+    if ($self->config->index_type eq 'combined') {
+        $key = $self->generate_key($page_uri);
+    }
+    else {
+        $key = $page_uri;
+    }
+    $self->_delete_doc_by_key($key);
     $self->_finish();
 }
 
@@ -135,10 +179,12 @@ sub _add_page_doc {
     my $doc = $self->_create_new_document();
     $self->_set_fields(
         $doc,
-        key   => $page->id,
-        text  => $page->content,
-        title => $page->title,
-        tag  => $self->_get_page_tags($page),
+        key       => $self->generate_key($page->uri),
+        text      => $page->content,
+        type      => Socialtext::Search::ContentTypes->lookup( ref $page ),
+        title     => $page->title,
+        tag       => $self->_get_page_tags($page),
+        workspace => Socialtext::Search::Utils::harden( $self->ws_name ),
     );
     $self->_add_document($doc);
 }
@@ -178,7 +224,14 @@ sub index_attachment {
 sub delete_attachment {
     my ( $self, $page_uri, $attachment_id ) = @_;
     $self->_init_indexer();
-    $self->_delete_doc_by_key( $page_uri . ':' . $attachment_id );
+    my $key;
+    if ( $self->config->index_type eq 'combined' ) {
+        $key = $self->generate_key($page_uri) . ':' . $attachment_id;
+    }
+    else {
+        $key = $page_uri . ':' . $attachment_id;
+    }
+    $self->_delete_doc_by_key( $key );
     $self->_finish();
 }
 
@@ -187,7 +240,11 @@ sub delete_attachment {
 # 'page_id:attachment_id'.
 sub _add_attachment_doc {
     my ( $self, $attachment ) = @_;
-    my $key     = $attachment->page_id . ':' . $attachment->id;
+    # REVIEW we are using page_id not page_uri here where we pass to
+    # compose_key, which may or may not be guaranteed to be okay...
+    # XXX FIXME HACK
+    my $key
+        = $self->generate_key( $attachment->page_id ) . ':' . $attachment->id;
     my $content = $attachment->to_string;
     _debug( "Retrieved attachment content.  Length is " . length $content );
     return unless length $content;
@@ -196,8 +253,13 @@ sub _add_attachment_doc {
     my $doc = $self->_create_new_document();
     $self->_set_fields(
         $doc,
-        key  => $key,
-        text => $content,
+        key       => $key,
+        parent    => $attachment->page_id,
+        title     => $attachment->id,
+        type      => Socialtext::Search::ContentTypes->lookup( 
+                         ref $attachment ),
+        workspace => Socialtext::Search::Utils::harden( $self->ws_name ),
+        text      => $content,
     );
 
     $self->_add_document($doc);
@@ -215,7 +277,7 @@ sub _truncate {
     my ( $self, $key, $text_ref ) = @_;
     my $max_size = 20 * ( 1024**2 );
     return if length($$text_ref) <= $max_size;
-    my $info = "ws = " . $self->workspace . " key = $key";
+    my $info = "ws = " . $self->ws_name . " key = $key";
     _debug("Truncating text to $max_size characters:  $info");
     $$text_ref = substr( $$text_ref, 0, $max_size );
 }
@@ -223,6 +285,25 @@ sub _truncate {
 #################
 # Miscellaneous 
 #################
+
+sub generate_key {
+    my ( $self, $page_uri ) = @_;
+    my $key_generator = $self->config->key_generator;
+
+    return $self->$key_generator($page_uri);
+}
+
+# construct a naked key
+sub naked_key {
+    my ( $self, $page_uri ) = @_;
+    return $page_uri;
+}
+
+# Construct a composite key
+sub composite_key {
+    my ( $self, $page_uri ) = @_;
+    return $self->ws_name . $FIELD_SEPARATOR . $page_uri;
+}
 
 # Create a new index object.  If a true value is passed in we create the
 # index, which means its erased and recreated if it exists and just created if
@@ -254,6 +335,8 @@ sub _make_indexer {
     my ( $self, $create ) = @_;
     _debug("Attempting to create index in " . $self->index . ".  (May fail if we don't get lock).");
 
+    Socialtext::File::ensure_directory( $self->index );
+
     my $indexer = eval {
         KinoSearch::InvIndexer->new(
             invindex => $self->index,
@@ -266,10 +349,11 @@ sub _make_indexer {
 }
 
 # Create a new Document.  The index stores "Document" objects, which contain
-# key/value pairs called "Fields".  This function specifies the the fields for
-# a document and then creates a new one.  The fields can only be specified
+# key/value pairs called "Fields". This function calls _spec_fields, which 
+# specifies the the fields for a document based on the specified yaml file,
+# and then creates a new one.  The fields can only be specified
 # once, so care is taken not to specify more than once.  We have the following
-# fields:
+# fields.
 #
 #   key - The unique id for the doc (see earlier comments for its structure).
 #   title - The title of a page, or empty for an attachment.
@@ -279,13 +363,11 @@ sub _make_indexer {
 # See below for the properities of the fields (e.g. not all fields are stored
 # or tokenized).  See L<KinoSearch::InvIndexer> for more info on what the
 # properites mean.
+
 sub _create_new_document {
     my $self = shift;
     unless ( $self->speced ) {
-        $self->indexer->spec_field( name => 'key', analyzed => 0 );
-        $self->indexer->spec_field( name => 'title', stored => 0, boost => 4 );
-        $self->indexer->spec_field( name => 'tag', stored => 0, boost => 2);
-        $self->indexer->spec_field( name => 'text', stored => 0 );
+        $self->_spec_fields;
         $self->speced(1);
         _debug("Specified Document fields.");
     }
@@ -293,11 +375,29 @@ sub _create_new_document {
     return $self->indexer->new_doc();
 }
 
+sub _spec_fields {
+    my $self    = shift;
+    $self->field_spec( $self->config->field_spec );
+    my $field_spec = $self->field_spec;
+
+    # The YAML key for each block is the name for the field to be passed into
+    # spec_field
+    foreach my $key ( keys %{$field_spec} ) {
+        my %arg;
+        $arg{name} = $key;
+        foreach my $sub_key ( keys %{$field_spec->{$key}} ) {
+            $arg{$sub_key} = $field_spec->{$key}->{$sub_key};
+        }
+        $self->indexer->spec_field( %arg );
+    }
+}
+
 # A set of key/value pairs (i.e. fields) are passed in and set on the given
 # document.  Logging is done along the way as well.
 sub _set_fields {
     my ( $self, $doc, %args ) = @_;
-    for my $name ( sort keys %args ) {
+    for my $name ( sort keys %{$self->field_spec} ) {
+        $args{$name} || next;
         $doc->set_value( $name => $args{$name} );
         _debug( "Field '$name': length=" . length( $args{$name} ) );
         _debug( "Field '$name': snippet=" . substr $args{$name}, 0, 100 );

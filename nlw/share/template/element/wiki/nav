@@ -12,10 +12,6 @@
     <div id="st-home">
         <a id="st-home-link" href="?">[% loc('Home') %]</a>
     </div>
-    <form id="st-search-form" name="[% mode %]SearchForm" method="get" action="index.cgi">
-        <input id="st-search-term" type="text" name="search_term" value="[% loc('New search') %]" />
-        <input type="hidden" name="action" value="search" />
-        [% INCLUDE element/button href='#', id='st-search-submit', tooltip=loc('Click this button to perform your search'), label=loc('Search') %]
-    </form>
+    [% search_box_snippet %]
     <br clear="both" />
 </div></div></div></div>

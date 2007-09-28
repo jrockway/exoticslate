@@ -90,6 +90,8 @@ sub make_attachment {
         fh       => $fh,
     );
     $attachment->save($fh);
+    # XXX: something in the following call to store() is generating
+    # a "Use of unitialized value... message when running tests.
     $attachment->store( user => $hub->current_user );
     return $attachment;
 }

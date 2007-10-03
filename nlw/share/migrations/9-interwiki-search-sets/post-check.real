@@ -12,3 +12,5 @@ if [ "$search_sets_sum" != "$expected_search_sets_sum" ] ; then
     exit 1
 fi
 
+# migration succeeded
+exit 0

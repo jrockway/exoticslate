@@ -5,13 +5,13 @@
 DB=`st-config echo db_schema_name`
 DB_USER=`st-config echo db_user`
 
-# check for the existence of "search_sets", if it's already present, punt.
+TABLE_EXISTS=`psql --no-align --tuples-only -U $DB_USER -d $DB -c "
+SELECT COUNT(*)
+FROM pg_class
+WHERE relname = 'search_sets'
+"`
 
-expected_search_sets_result='Did not find any relation named "search_sets".'
-
-search_sets_results=`psql -U $DB_USER -d $DB -t -c '\d search_sets' 2>&1`
-
-if [ "$search_sets_results" != "$expected_search_sets_results" ]; then
+if [ "$TABLE_EXISTS" == "1" ]; then
     echo "Search sets table already present.  Aborting."
     exit 1
 fi

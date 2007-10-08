@@ -378,8 +378,14 @@ sub _format_results {
 
     my $wikitext = $separator . join( $separator,
         map {
-            "{$wafl " . $_->{workspace_name} . "[" . $_->{Subject} . ']}'
-        } @$rows
+            "{$wafl "
+                . (
+                  $self->hub->current_workspace->name ne $_->{workspace_name}
+                ? $_->{workspace_name}
+                : '' )
+                . " ["
+                . $_->{Subject} . ']}'
+            } @$rows
     );
 
     return $self->hub->viewer->text_to_html($wikitext. "\n\n");

@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 5;
+use Test::Socialtext tests => 6;
 use Socialtext::Ceqlotron;
 
 fixtures( 'admin_with_ordered_pages', 'foobar_with_ordered_pages' );
@@ -73,3 +73,13 @@ foobar page two
 admin page two
 foobar page one
 admin page one
+
+=== {search-full title:admin workspaces:admin,foobar}
+--- kwiki
+{search-full title:page workspaces:admin,foobar}
+--- htmlre
+<!-- wiki: {include: foobar \[foobar page one\]} --></span>
+<!-- wiki: {include: \[admin page one\]} --></span>
+<!-- wiki: {search_full: title:page workspaces:admin,foobar}
+--></div><br /></div>
+

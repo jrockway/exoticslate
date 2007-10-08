@@ -39,21 +39,24 @@ sub search_on_behalf {
 
     my @workspaces = _enumerate_workspaces($scope, $user, $ws_name, \$query);
 
-    eval {
-        @hits = map { _search_for_query_in_workspace_for_user($query, $_, $user) } @workspaces;
-    };
-    if ( my $except = $@ ) {
-        my $handler =
+    for my $workspace (@workspaces) {
+        eval {
+            push @hits,
+                _search_for_query_in_workspace_for_user( $query, $workspace,
+                $user );
+        };
+        if ( my $except = $@ ) {
+            my $handler =
   $except->isa('Socialtext::Exception::NoSuchWorkspace') ? $no_such_ws_handler
 : $except->isa('Socialtext::Exception::Auth')            ? $authz_handler
                                                          : undef;
-
-        if (defined $handler) {
-            $handler->($except);
-        } elsif (ref $except) {
-            $except->rethrow;
-        } else {
-            die $except;
+            if (defined $handler) {
+                $handler->($except);
+            } elsif (ref $except) {
+                $except->rethrow;
+            } else {
+                die $except;
+            }
         }
     }
 

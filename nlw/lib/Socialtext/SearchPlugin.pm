@@ -181,8 +181,9 @@ sub _new_search {
         $self->hub->current_workspace->name,
         $query{search_term},
         $query{scope},
-        $self->hub->current_user );
-
+        $self->hub->current_user,
+        sub { }, # FIXME: We'd rather message the user than ignore these.
+        sub { }); # FIXME: We'd rather message the user than ignore these.
     my ( %page_row, @attachment_rows, $parent_key );
     foreach my $hit (@hits) {
         $page_row{ $hit->composed_key } = $self->_make_page_row( $hit )
@@ -363,7 +364,25 @@ sub _get_wafl_data {
 
     $hub = $self->hub_for_workspace_name( $workspace_name );
 
+    # This is important so that we only see results that the current user is
+    # authorized to see (and we see all such results).
+    $hub->current_user($self->hub->current_user);
+
     $hub->search->get_result_set( search_term => $query );
+}
+
+sub _format_results {
+    my ( $self, $results, $separator, $wafl ) = @_;
+
+    my $rows = $results->{rows};
+
+    my $wikitext = $separator . join( $separator,
+        map {
+            "{$wafl " . $_->{workspace_name} . "[" . $_->{Subject} . ']}'
+        } @$rows
+    );
+
+    return $self->hub->viewer->text_to_html($wikitext. "\n\n");
 }
 
 1;

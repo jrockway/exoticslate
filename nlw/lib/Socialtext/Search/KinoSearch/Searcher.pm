@@ -79,25 +79,10 @@ sub _search {
 sub _authorize {
     my ( $self, $query, $authorizer ) = @_;
 
-    my $visit;
-    $visit = sub {
-        my ($query) = @_;
+    return unless defined $authorizer;
 
-        if ( $query->isa('KinoSearch::Search::TermQuery') ) {
-            if ( $query->{term}->get_field eq 'workspace' ) {
-                my $ws_name = Socialtext::Search::Utils::soften(
-                    $query->{term}->get_text );
-                Socialtext::Exception::Auth->throw
-                    unless $authorizer->( $ws_name );
-            }
-        } elsif ( $query->isa('KinoSearch::Search::BooleanQuery') ) {
-            for my $clause ( @{ $query->{clauses} } ) {
-                $visit->($clause->{query});
-            }
-        }
-    };
-
-    $visit->($query) if defined $authorizer;
+    Socialtext::Exception::Auth->throw
+        unless $authorizer->( $self->ws_name );
 }
 
 # Munge the query to our liking, parse the query and return a query object.

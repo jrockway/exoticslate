@@ -219,20 +219,27 @@ sub _make_page_row {
     my $page_uri = $hit->page_uri;
 
     eval {
-        $workspace = Socialtext::Workspace->new( name => $hit->workspace_name );
+        $workspace
+            = Socialtext::Workspace->new( name => $hit->workspace_name );
     };
 
-    $self->hub->current_workspace($workspace);
+    my $page;
+    my $is_page_deleted;
+    my $metadata;
+    my $author;
+    $self->with_alternate_workspace(
+        $workspace,
+        sub {
+            $page            = $self->hub->pages->new_page($page_uri);
+            $is_page_deleted = $page->deleted;
+            if ( not $is_page_deleted ) {
+                $metadata = $page->metadata;
+                $author   = $page->last_edited_by;
+            }
+        }
+    );
 
-    my $page     = $self->hub->pages->new_page($page_uri);
-
-    return {} if $page->deleted;
-
-    my $metadata = $page->metadata;
-
-    my $author   = $page->last_edited_by;
-
-    $self->hub->current_workspace($orig_workspace);
+    return {} if $is_page_deleted;
 
     # $author will be undef if the page_uri in the index
     # does not correspond with any existing page. This can happen
@@ -266,6 +273,18 @@ sub _make_page_row {
     };
 }
 
+sub with_alternate_workspace {
+    my ( $self, $ws, $code ) = @_;
+    my $orig = $self->hub->current_workspace();
+    eval {
+        $self->hub->current_workspace($ws);
+        $code->();
+    };
+    my $err = $@;
+    $self->hub->current_workspace($orig);
+    die "$err\n" if $err;
+}
+
 sub _make_attachment_row {
     my $self = shift;
     my $hit = shift;
@@ -278,16 +297,17 @@ sub _make_attachment_row {
         $workspace = Socialtext::Workspace->new( name => $hit->workspace_name );
     };
 
-    $self->hub->current_workspace($workspace);
-
-    my $attachment_id = $hit->attachment_id;
-
-    my $attachment = $self->hub->attachments->new_attachment(
-        id      => $attachment_id,
-        page_id => $page_uri,
-    )->load;
-
-    $self->hub->current_workspace($orig_workspace);
+    my $attachment;
+    $self->with_alternate_workspace(
+        $workspace,
+        sub {
+            my $attachment_id = $hit->attachment_id;
+            $attachment = $self->hub->attachments->new_attachment(
+                id      => $attachment_id,
+                page_id => $page_uri,
+            )->load;
+        }
+    );
 
     return $attachment->deleted
         ? {}

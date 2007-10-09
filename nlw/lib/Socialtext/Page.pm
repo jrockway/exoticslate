@@ -1506,12 +1506,16 @@ sub write_file {
       or die "No id for content object";
     my $revision_file = $self->revision_file( $self->new_revision_id );
     my $page_path = join '/', Socialtext::Paths::page_data_directory( $self->hub->current_workspace->name ), $id;
-    my $index_path = join '/', $page_path, 'index.txt';
     File::Path::mkpath($page_path, 0, 0755);
     Socialtext::File::set_contents_utf8($revision_file, join "\n", $headers, $body);
-    unlink($index_path);
-    symlink $revision_file, $index_path
-      or die "Can't create symlink: $!";
+
+    # Update the index symlink using a rename
+    my $index_path = join '/', $page_path, 'index.txt';
+    my $temp_index = "$index_path.$$";
+    symlink $revision_file, $temp_index
+        or die "Can't create symlink: $!";
+    CORE::rename $temp_index => $index_path
+        or die "Can't rename $temp_index to $index_path: $!";
 }
 
 sub current_revision_file {

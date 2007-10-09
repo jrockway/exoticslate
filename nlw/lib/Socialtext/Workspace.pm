@@ -28,6 +28,7 @@ use File::Copy ();
 use File::Find ();
 use File::Path ();
 use File::Temp ();
+use IPC::Run qw/run/;
 use List::MoreUtils ();
 use MIME::Types;
 use Socialtext;
@@ -1328,24 +1329,23 @@ sub users_with_roles {
         $p{name} ||= $self->name;
 
         my $tarball_dir
-            = defined $p{dir} ? Cwd::abs_path( $p{dir} ) : File::Temp::tempdir( CLEANUP => 1 );
-
-        my $export_dir = $self->_data_for_export($p{name});
+            = defined $p{dir} ? Cwd::abs_path( $p{dir} ) : $ENV{ST_TMP} || '/tmp';
 
         my $tarball = Socialtext::File::catfile( $tarball_dir,
-            $p{name} . '.' . $EXPORT_VERSION . '.tar.gz' );
+            $p{name} . '.' . $EXPORT_VERSION . '.tar' );
 
-        # Can't use Archive::Tar, it loads everything into memory.
-        local $CWD = $export_dir;
-        system( 'tar', "czf", $tarball, '.' )
-            and die "tarball creation for workspace export failed: $!";
+        $self->_create_export_tarball($tarball, $p{name});
 
-        return $tarball;
+        # pack up the tarball
+        run "gzip --fast --force $tarball";
+
+        return "$tarball.gz";
     }
 }
 
-sub _data_for_export {
+sub _create_export_tarball {
     my $self = shift;
+    my $tarball = shift;
     my $name = shift || $self->name;
 
     my $tmpdir = File::Temp::tempdir( CLEANUP => 1 );
@@ -1353,14 +1353,16 @@ sub _data_for_export {
     $self->_dump_users_to_yaml_file($tmpdir, $name);
     $self->_dump_permissions_to_yaml_file($tmpdir, $name);
     $self->_export_logo_file($tmpdir);
+    local $CWD = $tmpdir;
+    run "tar cf $tarball *";
 
     # Copy all the data for export into a the tempdir.
     local $CWD = Socialtext::AppConfig->data_root_dir();
+    my @to_tar;
     for my $dir (qw(plugin user data)) {
-        my $src  = Socialtext::File::catdir( $dir,     $self->name );
-        my $dest = Socialtext::File::catdir( $tmpdir, $dir, $name );
-        dircopy( $src, $dest ) or die "Can't copy $src to $dest: $!\n";
+        push @to_tar, Socialtext::File::catdir( $dir,     $self->name );
     }
+    run "tar rf $tarball @to_tar";
 
     return $tmpdir;
 }

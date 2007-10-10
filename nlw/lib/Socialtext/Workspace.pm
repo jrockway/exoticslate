@@ -1358,13 +1358,21 @@ sub _create_export_tarball {
 
     # Copy all the data for export into a the tempdir.
     local $CWD = Socialtext::AppConfig->data_root_dir();
-    my @to_tar;
     for my $dir (qw(plugin user data)) {
-        push @to_tar, Socialtext::File::catdir( $dir,     $self->name );
+        if ($name eq $self->name) {
+            # We can append directly to the tarball to save a copy
+            run "tar rf $tarball "
+                . Socialtext::File::catdir( $dir, $self->name );
+        }
+        else {
+            # Copy the workspace data into the tmpdir, then add to the tarball
+            my $src  = Socialtext::File::catdir( $dir,     $self->name );
+            my $dest = Socialtext::File::catdir( $tmpdir, $dir, $name );
+            dircopy( $src, $dest ) or die "Can't copy $src to $dest: $!\n";
+            local $CWD = $tmpdir;
+            run "tar rf $tarball " . Socialtext::File::catdir( $dir, $name );
+        }
     }
-    run "tar rf $tarball @to_tar";
-
-    return $tmpdir;
 }
 
 sub _dump_to_yaml_file {

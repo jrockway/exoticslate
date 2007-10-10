@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 20;
+use Test::Socialtext tests => 28;
 fixtures( 'admin' );
 
 use File::Basename ();
@@ -14,7 +14,7 @@ use YAML ();
 my $hub = new_hub('admin');
 my $admin = $hub->current_workspace;
 
-{
+Data_paths_exist: {
     ok( scalar ( grep { m{data/admin} } $admin->_data_dir_paths() ),
         '_data_dir_paths() includes pages' );
     ok( scalar ( grep { m{plugin/admin} } $admin->_data_dir_paths() ),
@@ -23,7 +23,7 @@ my $admin = $hub->current_workspace;
         '_data_dir_paths() includes user' );
 }
 
-{
+Export_includes_logo_and_info: {
     my $image ='t/attachments/socialtext-logo-30.gif';
     open my $fh, '<', $image
         or die "Cannot read $image: $!";
@@ -45,7 +45,7 @@ my $admin = $hub->current_workspace;
         'check logo filename' );
 }
 
-{
+Export_users_dumped: {
     $admin->_dump_users_to_yaml_file( 't/tmp' );
 
     my $users_file = 't/tmp/admin-users.yaml';
@@ -58,7 +58,7 @@ my $admin = $hub->current_workspace;
         'check creator name for first user in user dump' );
 }
 
-{
+Export_permissions_dumped: {
     $admin->_dump_permissions_to_yaml_file( 't/tmp' );
 
     my $users_file = 't/tmp/admin-permissions.yaml';
@@ -71,7 +71,7 @@ my $admin = $hub->current_workspace;
         'valid permission name in first dumped perm' );
 }
 
-{
+Export_tarball_format: {
     my $tarball = $admin->export_to_tarball();
     ok( -f $tarball, 'tarball exists' );
 
@@ -80,10 +80,30 @@ my $admin = $hub->current_workspace;
         and die "Cannot untar $tarball: $!";
 
     for my $data_dir ( qw( data plugin user ) ) {
-        ok( -d "$dir/$data_dir", "$data_dir is in tarball" );
+        my $d = "$dir/$data_dir/admin";
+        ok( -d $d, "$d is in tarball" );
     }
 
     ok( -f "$dir/admin-info.yaml", 'workspace yaml dump file is in tarball' );
     ok( -f "$dir/admin-users.yaml", 'users yaml dump file is in tarball' );
     ok( -f "$dir/admin-permissions.yaml", 'permissions yaml dump file is in tarball' );
+}
+
+Export_to_different_name: {
+    my $tarball = $admin->export_to_tarball(name => 'monkey');
+    like $tarball, qr/monkey/, 'tarball named like a monkey';
+    ok( -f $tarball, 'tarball exists' );
+
+    my $dir = File::Temp::tempdir( CLEANUP => 1 );
+    system( 'tar', 'xzf', $tarball, '-C', $dir )
+        and die "Cannot untar $tarball: $!";
+
+    for my $data_dir ( qw( data plugin user ) ) {
+        my $d = "$dir/$data_dir/monkey";
+        ok( -d $d, "$d is in tarball" );
+    }
+
+    ok( -f "$dir/monkey-info.yaml", 'workspace yaml dump file is in tarball' );
+    ok( -f "$dir/monkey-users.yaml", 'users yaml dump file is in tarball' );
+    ok( -f "$dir/monkey-permissions.yaml", 'permissions yaml dump file is in tarball' );
 }

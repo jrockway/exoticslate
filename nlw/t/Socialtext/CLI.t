@@ -24,7 +24,7 @@ use Socialtext::CLI;
 
 use Cwd;
 
-plan tests => 237;
+plan tests => 239;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -616,6 +616,19 @@ EXPORT_WORKSPACE: {
     );
     my @files = glob "$dir/*.tar.gz";
     is( scalar @files, 1, "one .tar.gz file in $dir" );
+}
+
+CLONE_WORKSPACE: {
+    my $new_clone = "monkey-$NEW_WORKSPACE";
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => ['--workspace', $NEW_WORKSPACE, '--target', $new_clone],
+            )->clone_workspace();
+        },
+        qr{The $NEW_WORKSPACE workspace has been cloned to $new_clone},
+        'clone-workspace success message',
+    );
 }
 
 DELETE_SEARCH_INDEX: {

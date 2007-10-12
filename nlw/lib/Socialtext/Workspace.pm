@@ -354,10 +354,16 @@ sub _validate_and_clean_data {
         }
     }
 
-    if ( defined $p->{title}
-         and ( length $p->{title} < 2 or length $p->{title} > 64 )
-       ) {
-        push @errors, loc('Workspace title must be between 2 and 64 characters long.');
+    if (
+        defined $p->{title}
+        and (  length $p->{title} < 2
+            or length $p->{title} > 64
+            or $p->{title} =~ /^-/ )
+        ) {
+        push @errors,
+            loc(
+            'Workspace title must be between 2 and 64 characters long and may not begin with a -.'
+            );
     }
 
     if ( $p->{incoming_email_placement}
@@ -407,6 +413,11 @@ sub NameIsValid {
     if ( $name !~ /^[a-z0-9_\-]{3,30}$/ ) {
         push @{$errors},
             loc('Workspace name must be between 3 and 30 characters long, and must contain only upper- or lower-case letters, numbers, underscores, and dashes.');
+    }
+
+    if ( $name =~ /^-/ ) {
+        push @{$errors},
+            loc('Workspace name may not begin with -.');
     }
 
     if ( $ReservedNames{$name} || ($name =~ /^st_/i) ) {

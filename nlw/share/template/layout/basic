@@ -21,7 +21,7 @@
 
         [% INCLUDE "element/wiki/js-bootstrap" %]
         <script type="text/javascript"
-            src="[% wiki.static_path %]/javascript/combined-source.js">
+            src="[% wiki.static_path %]/javascript/combined-source.js.gz">
         </script>
     </head>
     <body id="socialtext-wiki">

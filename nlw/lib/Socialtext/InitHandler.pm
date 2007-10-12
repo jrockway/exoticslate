@@ -32,7 +32,7 @@ sub _regen_combined_js {
                                  'javascript' );
     local $CWD = $dir;
 
-    system( 'make', 'combined-source.js' )
+    system( 'make', 'all' )
         and die "Cannot call 'make combined-source.js' in $dir: $!";
 }
 

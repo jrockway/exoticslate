@@ -2,6 +2,7 @@
     dom.innerHTML = html;
 
 COMBINED_FILE=combined-source.js
+COMBINED_FILE_GZIP=combined-source.js.gz
 EXTERNAL_JAVASCRIPT=../../../js-modules
 
 # Use Wikiwyg-dev when developing Wikiwyg
@@ -65,13 +66,16 @@ ALL_JS_SOURCE_FILES= \
 		Wikiwyg/Widgets.js \
 		Wikiwyg/DataValidator.js \
 
-all: $(COMBINED_FILE) Selection.htc Cyberbit.ttf
+all: $(COMBINED_FILE_GZIP) Selection.htc Cyberbit.ttf
 
 Cyberbit.ttf:
 	cp /var/$@ $@
 
 clean:
-	rm -f $(COMBINED_FILE)
+	rm -f $(COMBINED_FILE) $(COMBINED_FILE_GZIP)
+
+$(COMBINED_FILE_GZIP): $(COMBINED_FILE)
+	gzip -c $(COMBINED_FILE) > $(COMBINED_FILE_GZIP)
 
 $(COMBINED_FILE): $(WIKIWYG_PATH) $(ALL_JS_SOURCE_FILES) Makefile
 	rm -f $@;

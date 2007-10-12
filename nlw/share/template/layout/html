@@ -36,7 +36,7 @@
 
         [% INCLUDE "element/wiki/js-bootstrap" %]
         <script type="text/javascript" charset="utf-8"
-            src="[% wiki.static_path %]/javascript/combined-source.js">
+            src="[% wiki.static_path %]/javascript/combined-source.js.gz">
         </script>
         [% IF customjs_name %]
         <script type="text/javascript" charset="utf-8" src="[% wiki.static_path %]/javascript/[% customjs_name %]/custom.js"></script>

@@ -56,10 +56,10 @@ Best_locale: {
 AutoBlockQuoting: {
     is(
         loc(
-            'Foo [_2] ~[cow love] [_1] [food][sofa]~~~~~[lick]~[love dude][_3]~[squared]man ~~~~~~[eek] [_1]',
-            "aaa", "bbb", "ccc"
+            'Foo [_2] ~[cow love] [quant,_1,foo] [_1] [*,_4,blah][food][sofa]~~~~~[lick]~[love dude][_3]~[squared]man ~~~~~~[eek] [_1]',
+            "aaa", "bbb", "ccc", 15
         ),
-        "Foo bbb [cow love] aaa [food][sofa]~~[lick][love dude]ccc[squared]man ~~~[eek] aaa",
+        "Foo bbb [cow love] 0 foos aaa 15 blahs[food][sofa]~~[lick][love dude]ccc[squared]man ~~~[eek] aaa",
         "Ensure that non-variable square brackets are quoted away."
     );
 }

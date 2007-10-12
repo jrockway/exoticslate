@@ -71,19 +71,39 @@ Locale::Maketext::Simple->import (
 
 sub loc {
     my $msg = shift;
-    my $var_rx = qr/~*\[_\d+\]/;
+
+    # Bracket Notation variables are either _digits or _*.
+    my $var_rx = qr/_(?:\d+|\*)/;
+
+    # A whitelist of legal Bracket Notation functions we accept.
+    # Locale::Maktext will turn [foo,bar] into $lh->foo("bar"), so technically
+    # just about anything is legal.  Rather than try to match all the
+    # possibilities we'll just have an opt-in whitelist.  Spaces are not
+    # allowed around commas in Bracket Notation.
+    my $legal_funcs = "(?:" . join("|", (
+        qr/quant,$var_rx,.*?/,
+        qr/\*,$var_rx,.*?/,    # alias for quant
+        qr/numf,$var_rx/,
+        qr/\#,$var_rx/,        # alias for numf
+        qr/sprintf,.*?/,
+        qr/tense,$var_rx,.*?/,
+    )) . ")";
+
+    # A legal bracket, or at least the subset we accept, is either a plain
+    # variable or a legal func as defined above.
+    my $bracket_rx = qr/~*\[(?:$var_rx|$legal_funcs)\]/;
 
     # RT 26769: Automagically quote square braces.  We do this by splitting
-    # the string on the var_rx above, which matches legal loc() variables.
+    # the string on the bracket_rx above, which matches legal loc() variables.
     # The capturing parens in the split include the split-item in the list, so
-    # we end up with a list of alternating like this: non-variable, variable,
-    # non-variable, ...  Everything that doesn't match the var_rx needs to
-    # have its square braces quoted.  Care is taken to not requote already
-    # quoted braces.
+    # we end up with a list of alternating items like this: non-bracket,
+    # bracket, non-bracket, ...  Everything that doesn't match the bracket_rx
+    # needs to have its square braces quoted.  Care is taken to not requote
+    # already quoted braces.
     my $new_msg = "";
-    my @parts = split /($var_rx)/, $msg; 
+    my @parts = split /($bracket_rx)/, $msg; 
     for my $part (@parts) {
-        if ( $part =~ /$var_rx/ ) {
+        if ( $part =~ /$bracket_rx/ ) {
             $new_msg .= $part;
         }
         else {

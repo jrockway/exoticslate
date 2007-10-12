@@ -353,7 +353,7 @@ test:
 	$(PROVE) -l $(shell find t -name '*.t' -not -regex '^t/live.*' | sort)
 
 testlive:
-	$(PERL) $(PROVE) -l -r t/live
+	$(PROVE) -l -r t/live
 
 testall: test testlive
 

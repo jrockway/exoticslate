@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::Socialtext tests => 12;
+use Test::Socialtext tests => 13;
 use Socialtext::AppConfig;
 
 fixtures('admin_no_pages');
@@ -51,6 +51,17 @@ Best_locale: {
 
     #is( best_locale($hub), 'en', "Checking best locale - from user" );
     is( best_locale(), 'xx', "Checking best locale - from system" );
+}
+
+AutoBlockQuoting: {
+    is(
+        loc(
+            'Foo [_2] ~[cow love] [_1] [food][sofa]~~~~~[lick]~[love dude][_3]~[squared]man ~~~~~~[eek] [_1]',
+            "aaa", "bbb", "ccc"
+        ),
+        "Foo bbb [cow love] aaa [food][sofa]~~[lick][love dude]ccc[squared]man ~~~[eek] aaa",
+        "Ensure that non-variable square brackets are quoted away."
+    );
 }
 
 sub set_system_locale {

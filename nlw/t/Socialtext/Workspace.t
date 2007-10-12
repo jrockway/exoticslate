@@ -1,6 +1,6 @@
 #!perl
 # @COPYRIGHT@
-use Test::Socialtext tests => 92;
+use Test::Socialtext tests => 93;
 
 use strict;
 use warnings;
@@ -508,6 +508,10 @@ NAME_IS_VALID: {
 
     ok( ! Socialtext::Workspace->NameIsValid( name => 'data' ),
         'Reserved word as workspace name fails'
+    );
+
+    ok( ! Socialtext::Workspace->NameIsValid( name => 'COWLOVE'),
+        'No capitals in workspace name'
     );
 
     # Check basic parameter validation

@@ -404,7 +404,7 @@ sub NameIsValid {
     my $name    = $p{name};
     my $errors  = $p{errors};
 
-    if ( $name !~ /^[A-Za-z0-9_\-]{3,30}$/ ) {
+    if ( $name !~ /^[a-z0-9_\-]{3,30}$/ ) {
         push @{$errors},
             loc('Workspace name must be between 3 and 30 characters long, and must contain only upper- or lower-case letters, numbers, underscores, and dashes.');
     }
@@ -1327,6 +1327,7 @@ sub users_with_roles {
         my $self = shift;
         my %p = validate( @_, $spec );
         $p{name} ||= $self->name;
+        $p{name} = lc $p{name};
 
         my $tarball_dir
             = defined $p{dir} ? Cwd::abs_path( $p{dir} ) : $ENV{ST_TMP} || '/tmp';

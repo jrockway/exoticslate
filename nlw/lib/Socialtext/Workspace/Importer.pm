@@ -35,7 +35,7 @@ Readonly my $MAX_VERSION => 1;
             "Cannot determine workspace name and version from tarball name: $p{tarball}";
         $version ||= 0;
 
-        my $new_name = $p{name} || $old_name;
+        my $new_name = lc( $p{name} || $old_name );
 
         if ( $version > $MAX_VERSION ) {
             die "Cannot import a tarball with a version greater than $MAX_VERSION\n";

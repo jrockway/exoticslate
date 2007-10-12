@@ -1019,7 +1019,7 @@ sub _export_workspace {
     my $ws   = shift;
 
     my $dir = $self->_optional_string('dir');
-    my $name = $self->_optional_string('name') || $ws->name;
+    my $name = lc( $self->_optional_string('name') || $ws->name );
     $dir ||= $ENV{ST_EXPORT_DIR};
     $dir ||= File::Spec->tmpdir();
 
@@ -1048,6 +1048,7 @@ sub clone_workspace {
     my %opts      = $self->_get_options( "target:s", "overwrite" );
 
     $self->_help_as_error("--target required.") unless defined $opts{target};
+    $opts{target} = lc $opts{target};
 
     my $dir = File::Temp::tempdir( CLEANUP => 1 );
     my $file = $ws->export_to_tarball( dir => $dir, name => $opts{target} );

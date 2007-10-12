@@ -7,7 +7,7 @@ use IPC::Run qw(run timeout);
 
 use utf8;
 use Test::Socialtext::Search;
-use Test::Socialtext tests => 199;
+use Test::Socialtext tests => 206;
 fixtures( 'admin_no_pages' );
 
 BEGIN { use_ok("Socialtext::Search::KinoSearch::Factory") }
@@ -77,6 +77,22 @@ QUOTE
     search_ok( "tag:dog", 1, "Tag search with word not also standalone" );
     search_ok( "tag:\"man likes dog\"", 1, "Tag search with phrase" );
     search_ok( "tag:idonotexst", 0, "Tag search for a non-existant tag" );
+}
+
+# As part of RT 26849 faux fields are removed from query strings by replacing
+# their ending ":" with a space.  Ensure this works okay.
+FIXUP_FAUX_FIELDS: {
+    erase_index_ok();
+    make_page_ok( "Love Nerd", "Baby Eater", [ "quotes", "writers" ] );
+    search_ok( "tag:quotes", 1 );
+    search_ok( "baby:eater", 1 );  # baby:eater becomes "baby eater"
+}
+
+# RT 25899: ensure phrase queries work
+PHRASE_QUERY_BUG: {
+    erase_index_ok();
+    make_page_ok( "Little Sheep", "zzz xxx yyy zzz" );
+    search_ok( '"yyy zzz"', 1 );  # Breaks with KS 0.15 and less
 }
 
 sub flexing_multiple_pages {

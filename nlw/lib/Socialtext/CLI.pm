@@ -218,6 +218,58 @@ sub _determine_workspace_output {
         : 'name';
 }
 
+sub set_user_names {
+    my $self = shift;
+    my %opts = $self->_require_set_user_names_params(shift);
+
+    require Socialtext::User;
+
+    my $user;
+    if ( $opts{username}) {
+        $user = Socialtext::User->new( username => $opts{username});
+        delete $opts{username};
+    } elsif ($opts{email_address}) {
+        $user = Socialtext::User->new( email_address => $opts{email_address} );
+        delete $opts{email_address};
+    }
+
+    if (!$user) {
+        $self->_error('The user you specified does not exist.');
+    }
+
+    my $result = $user->update_store(%opts);
+    if ($result == 0) {
+        $self->_error('First name and last name match the current names for the user; no change to "' . $user->username() . '".');
+    }
+
+    $self->_success( 'User "' . $user->username() . '" was updated.' );
+}
+
+sub _require_set_user_names_params {
+    my $self = shift;
+
+    my %opts = $self->_get_options(
+        'username:s',
+        'email:s',
+        'first-name:s',
+        'last-name:s'
+    );
+
+    for my $key ( grep { defined $opts{$_} } 'first-name', 'last-name' ) {
+        my $val = $opts{$key};
+
+        unless ( Encode::is_utf8($val) or $val =~ /^[\0x00-\xff]*$/ ) {
+            $self->_error( "The value you provided for the $key option is not a valid UTF8 string." );
+        }
+    }
+
+    $opts{email_address} = delete $opts{email};
+    $opts{first_name}    = delete $opts{'first-name'} if (defined($opts{'first-name'}));
+    $opts{last_name}     = delete $opts{'last-name'} if (defined($opts{'last-name'}));
+
+    return %opts;
+}
+
 sub create_user {
     my $self = shift;
     my %user = $self->_require_create_user_params(shift);
@@ -292,19 +344,19 @@ sub _require_create_user_params {
 
 sub confirm_user {
     my $self = shift;
-    
+
     my $user = $self->_require_user();
     my $password = $self->_require_string('password');
 
     unless ($user->requires_confirmation) {
         $self->_error( $user->username . ' has already been confirmed' );
-    }    
+    }
     $user->confirm_email_address;
     $self->_eval_password_change($user,$password);
 
     $self->_success( $user->username . ' has been confirmed with password '
                         . $password );
-}    
+}
 
 sub add_member {
     my $self = shift;
@@ -956,6 +1008,64 @@ sub show_acls {
 
     $msg .= $^A;
     $self->_success( $msg, "no indent" );
+}
+
+sub show_members {
+    my $self = shift;
+
+    my $ws = $self->_require_workspace();
+
+    my $msg = "Members of the " . $ws->name . " workspace\n\n";
+    $msg .= "| Email Address | First | Last | Role |\n";
+
+    my $user_cursor =  $ws->users_with_roles;
+    my $entry;
+    while ($entry = $user_cursor->next) {
+        my ($user, $role) = @$entry;
+        $msg .= '| ' . join(' | ', $user->email_address, $user->first_name, $user->last_name, $role->name) . " |\n";
+    }
+
+    $self->_success($msg, "no indent");
+}
+
+sub show_admins {
+    my $self = shift;
+
+    my $ws = $self->_require_workspace();
+
+    my $msg = "Admins of the " . $ws->name . " workspace\n\n";
+    $msg .= "| Email Address | First | Last |\n";
+
+    use Data::Dumper;
+    my $user_cursor =  $ws->users_with_roles;
+    my $entry;
+    while ($entry = $user_cursor->next) {
+        my ($user, $role) = @$entry;
+        next if ($role->name ne 'workspace_admin');
+        $msg .= '| ' . join(' | ', $user->email_address, $user->first_name, $user->last_name) . " |\n";
+    }
+
+    $self->_success($msg, "no indent");
+}
+
+sub show_impersonators {
+    my $self = shift;
+
+    my $ws = $self->_require_workspace();
+
+    my $msg = "Impersonators in the " . $ws->name . " workspace\n\n";
+    $msg .= "| Email Address | First | Last |\n";
+
+    use Data::Dumper;
+    my $user_cursor =  $ws->users_with_roles;
+    my $entry;
+    while ($entry = $user_cursor->next) {
+        my ($user, $role) = @$entry;
+        next if ($role->name ne 'impersonator');
+        $msg .= '| ' . join(' | ', $user->email_address, $user->first_name, $user->last_name) . " |\n";
+    }
+
+    $self->_success($msg, "no indent");
 }
 
 sub purge_page {
@@ -1847,6 +1957,7 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   remove-impersonator [--username or --email] --workspace
   disable-email-notify [--username or --email] --workspace
   set-locale [--username or --email] --workspace --locale
+  set-user-names [--username or --email] --first-name --last-name
 
   WORKSPACES
 
@@ -1857,6 +1968,9 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   add-permission --workspace --role --permission
   remove-permission --workspace --role --permission
   show-acls --workspace
+  show-members --workspace
+  show-admins --workspace
+  show-impersonators --workspace
   set-workspace-config --workspace <key> <value>
   show-workspace-config --workspace
   create-workspace --name --title --account [--empty]
@@ -1931,7 +2045,7 @@ username.
 =head2 confirm-user --email --password
 
 Confirms a new user and assigns the listed password to that user.  Requires
-an email address and a password. 
+an email address and a password.
 
 =head2 change-password [--username or --email] --password
 
@@ -1979,6 +2093,10 @@ given user.
 Sets the language locale for user on a workspace.  Locale codes are 2 letter
 codes.  Eg: en, fr, ja, de
 
+=head2 set-user-names [--email or --username] --first-name --last-name
+
+Set the first and last names for an existing user.
+
 =head2 set-permissions --workspace --permissions
 
 Sets the permission for the specified workspace to the given named
@@ -2019,6 +2137,18 @@ workspace.
 
 Prints a table of the workspace's role/permissions matrix to standard
 output.
+
+=head2 show-members --workspace
+
+Prints a table of the workspace's members to standard output.
+
+=head2 show-admins --workspace
+
+Prints a table of the workspace's admins to standard output.
+
+=head2 show-impersonators --workspace
+
+Prints a table of the workspace's impersonators to standard output.
 
 =head2 set-workspace-config --workspace <key> <value>
 

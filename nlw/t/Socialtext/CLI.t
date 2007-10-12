@@ -24,7 +24,7 @@ use Socialtext::CLI;
 
 use Cwd;
 
-plan tests => 239;
+plan tests => 253;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -231,7 +231,7 @@ CREATE_USER: {
 }
 
 CONFIRM_USER: {
-    my $user = Socialtext::User->create(username => 'devnull5@socialtext.com', 
+    my $user = Socialtext::User->create(username => 'devnull5@socialtext.com',
                                         email_address => 'devnull5@socialtext.com' );
     ok( $user, 'User created via User->create' );
     ok(
@@ -262,7 +262,6 @@ CONFIRM_USER: {
 }
 
 GIVE_REMOVE_ADMIN: {
-
     # We call ST::User->new each time to force the system to re-fetch
     # the data from the DBMS.
     ok(
@@ -847,7 +846,7 @@ PURGE_ATTACHMENT: {
     my $filename = $att->filename();
     my $att_id = $att->id();
 
-    ok( 
+    ok(
         $att->exists(),
         'Attachment exists'
     );
@@ -875,7 +874,7 @@ PURGE_ATTACHMENT: {
         qr/\QThere is no attachment with the id "$att_id" in the admin workspace./,
         'purge-attachment fails with bad attachment id'
     );
-    
+
     expect_failure(
         sub {
             Socialtext::CLI->new(
@@ -1370,6 +1369,216 @@ RENAME_WORKSPACE: {
     ok(
         Socialtext::Workspace->new( name => 'new-admin' ),
         'new-admin workspace exists'
+    );
+}
+
+SET_USER_NAMES: {
+    {
+        local *STDOUT;
+        open STDOUT, '>', '/dev/null';
+        eval {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --email setnames@example.com --password foobar
+                        --first-name John --last-name Doe )
+                ]
+            )->create_user();
+        };
+    }
+
+    {
+        local *STDOUT;
+        open STDOUT, '>', '/dev/null';
+        eval {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --email setnames@example.com --first-name Jane --last-name Smith )
+                ]
+            )->set_user_names();
+        };
+    }
+
+    my $user = Socialtext::User->new( username => 'setnames@example.com' );
+    is( $user->first_name(), 'Jane', 'First name updated' );
+    is( $user->last_name(),  'Smith',  'Last name updated' );
+}
+
+SET_USER_NAMES_no_user: {
+
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --email noususj@example.com --first-name Jane --last-name Smith )
+                ]
+            )->set_user_names();
+        },
+        qr/\QThe user you specified does not exist.\E/,
+        'Admin warned about missing user'
+    );
+}
+
+SET_USER_NAMES_firstnameonly: {
+    {
+        local *STDOUT;
+        open STDOUT, '>', '/dev/null';
+        eval {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --email firstnameonly@example.com --password foobar
+                        --first-name John --last-name Doe )
+                ]
+            )->create_user();
+        };
+    }
+
+    {
+        local *STDOUT;
+        open STDOUT, '>', '/dev/null';
+        eval {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --email firstnameonly@example.com --first-name Jane )
+                ]
+            )->set_user_names();
+        };
+    }
+
+    my $user = Socialtext::User->new( username => 'firstnameonly@example.com' );
+    is( $user->first_name(), 'Jane', 'First name updated' );
+    is( $user->last_name(),  'Doe',  'Last name still the same' );
+}
+
+SET_USER_NAMES_lastnameonly: {
+    {
+        local *STDOUT;
+        open STDOUT, '>', '/dev/null';
+        eval {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --email lastnameonly@example.com --password foobar
+                        --first-name John --last-name Doe )
+                ]
+            )->create_user();
+        };
+    }
+
+    {
+        local *STDOUT;
+        open STDOUT, '>', '/dev/null';
+        eval {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --email lastnameonly@example.com --last-name Smith )
+                ]
+            )->set_user_names();
+        };
+    }
+
+    my $user = Socialtext::User->new( username => 'lastnameonly@example.com' );
+    is( $user->first_name(), 'John', 'First name still the same' );
+    is( $user->last_name(),  'Smith',  'Last name changed' );
+}
+
+SHOW_MEMBERS: {
+    my $output = '';
+    {
+        local *STDOUT;
+        open STDOUT, '>', '/dev/null';
+        eval {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --email smtest1@socialtext.net --password foobar
+                        --first-name Test1 --last-name User )
+                ]
+            )->create_user();
+        };
+
+        eval {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --email smtest2@socialtext.net --password foobar
+                        --first-name Test2 --last-name User )
+                ]
+            )->create_user();
+        };
+        eval {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --email smtest2@socialtext.net --workspace foobar )
+                ]
+            )->add_member();
+        };
+
+        eval {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --email smtest3@socialtext.net --password foobar
+                        --first-name Test3 --last-name User )
+                ]
+            )->create_user();
+        };
+        eval {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --email smtest3@socialtext.net --workspace foobar )
+                ]
+            )->add_member();
+        };
+    }
+
+    expect_success(
+        sub {
+            $output = Socialtext::CLI->new(
+                argv => [
+                    qw( --workspace foobar )
+                ]
+            )->show_members();
+        },
+        qr/^(?!.*smtest1).*smtest2\@socialtext.net \| Test2 \| User \|.*smtest3\@socialtext.net \| Test3 \| User/s,
+        'Show members has correct list'
+    );
+}
+
+SHOW_ADMINS: {
+    my $output = '';
+    {
+        local *STDOUT;
+        open STDOUT, '>', '/dev/null';
+        eval {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --email smtest2@socialtext.net --workspace foobar )
+                ]
+            )->add_workspace_admin();
+        };
+    }
+
+    expect_success(
+        sub {
+            $output = Socialtext::CLI->new(
+                argv => [
+                    qw( --workspace foobar )
+                ]
+            )->show_admins();
+        },
+        qr/^(?!.*smtest[1|3]).*smtest2\@socialtext.net \| Test2 \|/s,
+        'Show admins has correct list'
+    );
+}
+
+SHOW_IMPERSONATORS: {
+    # At this point, devnull2@socialtext.com is an impersonator in the foobar workspace
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --workspace foobar )
+                ]
+            )->show_impersonators();
+        },
+        qr/Last \|\n\| devnull2\@socialtext.com/s,
+        'show-impersonators has correct list'
     );
 }
 

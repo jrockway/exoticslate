@@ -45,6 +45,13 @@
     RewriteRule    /test-selenium/(.*)           /static/selenium/$1 [PT,L]
 [% END %]
 
+    # make sure user agents that don't do gzipped javascript use
+    # the uncompressed version - Note SAFARI!!!
+    # ALSO notice that this RewriteRule is NOT the last one in the chain
+    RewriteCond %{HTTP_USER_AGENT} ".*Safari.*" [OR]
+    RewriteCond %{HTTP:Accept-Encoding} !gzip
+    RewriteRule (.*)\.js\.gz$ $1\.js
+
     # We support /static/wsdl for backward compat., but WSDLs are not static
     # files.  This rewrites the URL so it'll get sent to the backend.
     RewriteRule ^/static/wsdl/(.+)   /wsdl/$1 [R,L]

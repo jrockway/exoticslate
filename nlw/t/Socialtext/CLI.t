@@ -24,7 +24,7 @@ use Socialtext::CLI;
 
 use Cwd;
 
-plan tests => 257;
+plan tests => 263;
 
 our $LastExitVal;
 no warnings 'redefine';

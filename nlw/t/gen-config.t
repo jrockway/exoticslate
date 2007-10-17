@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 16;
+use Test::More tests => 18;
 use File::Temp qw/tempdir/;
 
 my $gen_config = "dev-bin/gen-config";
@@ -27,6 +27,7 @@ Dev_env: {
     my @files = qw(
         apache2/nlw-apache2.conf
         apache2/auto-generated.d/nlw.conf
+        apache2/conf.d/socialtext-empty.conf
         apache-perl/nlw-httpd.conf
         apache-perl/auto-generated.d/nlw.conf
         socialtext/shortcuts.yaml

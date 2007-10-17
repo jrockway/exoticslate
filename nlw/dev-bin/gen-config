@@ -141,6 +141,11 @@ sub main {
             'apache2/nlw.tt2' => "$dirs{apache2_etc}/auto-generated.d/nlw.conf",
             $params,
             'overwrite',
+            ],
+            [
+            'apache2/empty.conf' => "$dirs{apache2_etc}/conf.d/socialtext-empty.conf",
+            $params,
+            0,
             ];
     }
 

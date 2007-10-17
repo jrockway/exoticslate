@@ -27,9 +27,9 @@ sub openid_invite {
 
     $self->hub->assert_current_user_is_admin;
 
-    if ( $self->cgi->users_openid && 
+    if ( $self->cgi->users_openid &&
          $self->cgi->users_email ) {
-        my %user_hash = ( $self->cgi->users_email => 
+        my %user_hash = ( $self->cgi->users_email =>
                             $self->cgi->users_openid );
 
         unless ( keys %user_hash ) {
@@ -60,7 +60,7 @@ sub _invite_users {
                                            username => $username );
 
         if ( $user &&
-             $self->hub->current_workspace->has_user( user => $user ) )
+             $self->hub->current_workspace->has_user( $user ) )
         {
             push @present, $email;
             next;
@@ -96,7 +96,7 @@ sub _invite_users {
 sub invite_one_user {
     my $self = shift;
     my $user_data = shift;
-    
+
     my $user = Socialtext::User->new(
         email_address => $user_data->{email_address} );
     $user ||= Socialtext::User->create(
@@ -173,4 +173,3 @@ cgi 'users_openid';
 cgi 'users_email';
 
 1;
-

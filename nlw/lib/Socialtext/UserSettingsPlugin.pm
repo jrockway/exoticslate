@@ -389,7 +389,7 @@ sub _invite_users {
 
         my $user = Socialtext::User->new( email_address => $email );
         if (   $user
-            && $self->hub->current_workspace->has_user( user => $user ) )
+            && $self->hub->current_workspace->has_user( $user ) )
         {
             push @present, $email;
             next;
@@ -549,4 +549,3 @@ cgi 'append_invitation';
 cgi 'invitation_text';
 
 1;
-

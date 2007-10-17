@@ -40,7 +40,7 @@ EOF
         my $user = Socialtext::User->new( username => $username );
 
         ok( $user, "$username exists in database" );
-        ok( $ws->has_user( user => $user ),
+        ok( $ws->has_user( $user ),
             "$username is a member of the admin workspace" );
         is( $user->creator()->username(), 'devnull1@socialtext.com',
             "$username has devnull1\@socialtext.com as creator" );

@@ -185,7 +185,7 @@ sub _clean_subject {
     my $subject = $self->{email}->header('Subject');
 
     if ( defined $subject ) {
-        $subject =~ s/^\s*(?:(?:fwd|re):\s*)*//ig;
+        $subject =~ s/^\s*(?:(?:fwd|re|fw):\s*)*//ig;
         $subject =~ s/^\s+|\s+$//g;
     }
 

@@ -348,7 +348,7 @@ sub _validate_and_clean_data {
         if ( Socialtext::EmailAlias::find_alias( $p->{name} ) ) {
             push @errors, loc("The workspace name you chose, [_1], is already in use as an email alias.", $p->{name});
         }
-        
+
         if ( Socialtext::Workspace->new( name => $p->{name} ) ) {
             push @errors, loc("The workspace name you chose, [_1], is already in use by another workspace.", $p->{name});
         }
@@ -401,7 +401,7 @@ sub NameIsValid {
     # each call. If the spec is defined outside this scope, then the same
     # arrayref will be used for every call with a defaulted 'errors'
     # parameter, mistakenly preserving the error list between calls.
-    # 
+    #
     my %p = Params::Validate::validate( @_, {
         name    => SCALAR_TYPE,
         errors  => ARRAYREF_TYPE( default => [] ),
@@ -1204,25 +1204,25 @@ sub is_public {
     }
 }
 
+sub has_user {
+    my $self = shift;
+    my $user = shift; # [in] User
+
+    my $uwr_table = Socialtext::Schema->Load()->table('UserWorkspaceRole');
+    return 1 if
+        $uwr_table->row_count(
+            where => [
+                [ $uwr_table->column('workspace_id'), '=', $self->workspace_id ],
+                [ $uwr_table->column('user_id'), '=', $user->user_id ],
+                [ $uwr_table->column('role_id'), '!=', Socialtext::Role->Guest()->role_id() ],
+            ],
+        );
+}
+
 {
     Readonly my $spec => {
         user => USER_TYPE,
     };
-    sub has_user {
-        my $self = shift;
-        my %p = validate( @_, $spec );
-
-        my $uwr_table = Socialtext::Schema->Load()->table('UserWorkspaceRole');
-        return 1 if
-            $uwr_table->row_count(
-                where => [
-                    [ $uwr_table->column('workspace_id'), '=', $self->workspace_id ],
-                    [ $uwr_table->column('user_id'), '=', $p{user}->user_id ],
-                    [ $uwr_table->column('role_id'), '!=', Socialtext::Role->Guest()->role_id() ],
-                ],
-            );
-    }
-
     sub role_for_user {
         my $self = shift;
         my %p = validate( @_, $spec );
@@ -1324,7 +1324,7 @@ sub users_with_roles {
     my $self = shift;
 
     return
-        Socialtext::User->ByWorkspaceIdWithRoles( 
+        Socialtext::User->ByWorkspaceIdWithRoles(
             workspace_id => $self->workspace_id(), @_ );
 }
 
@@ -2367,7 +2367,7 @@ Assigns the specified role to the given user. The value of is_selected
 defaults to 0. If the user already has a role for this workspace, this
 method changes that role.
 
-=head2 $workspace->has_user( user => $user )
+=head2 $workspace->has_user( $user )
 
 Returns a boolean indicating whether or not the user has an explicitly
 assigned role for this workspace.

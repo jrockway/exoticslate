@@ -36,7 +36,7 @@ ADD_USER:
 
     $ws->add_user( user => $user );
 
-    ok( $ws->has_user( user => $user ), 'user is now a member of the workspace' );
+    ok( $ws->has_user( $user ), 'user is now a member of the workspace' );
 
     my $role = Socialtext::Role->Member();
 
@@ -85,7 +85,7 @@ REMOVE_USER:
 
     $ws->remove_user( user => $user );
 
-    ok( ! $ws->has_user( user => $user ), 'user is no longer a member of the workspace' );
+    ok( ! $ws->has_user( $user ), 'user is no longer a member of the workspace' );
 
     my $log_msg = join ' : ', 'REMOVE_USER', $ws->workspace_id(),
         $user->user_id();

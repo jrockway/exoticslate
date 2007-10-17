@@ -55,7 +55,8 @@ sub _invite_one_user {
     my $self = shift;
 
     my $user = Socialtext::User->new(
-        email_address => $self->{invitee} );
+        email_address => $self->{invitee}
+    );
     $user ||= Socialtext::User->create(
         username => $self->{invitee},
         email_address => $self->{invitee},
@@ -150,3 +151,5 @@ sub _log_action {
     }
     Socialtext::Log->new()->info("$log_msg");
 }
+
+1;

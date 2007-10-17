@@ -60,7 +60,7 @@ Socialtext::Workspace->ImportFromTarball( tarball => $tarball );
     ok( $admin->user_count, 'admin workspace has users' );
 
     my $user = Socialtext::User->new( username => 'devnull1@socialtext.com' );
-    ok( $admin->has_user( user => $user ), 'devnull1@socialtext.com is in admin workspace' );
+    ok( $admin->has_user( $user ), 'devnull1@socialtext.com is in admin workspace' );
 
     is( $user->first_name(), $singapore, 'user first name is Singapore (in Chinese)' );
     is( $user->last_name(), $dot_net, 'user last name is dot net (umlauts on o)' );

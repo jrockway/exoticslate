@@ -11,9 +11,14 @@ use Test::MockObject;
 my %tests = (
     'Normal Subject'            => 'Normal Subject',
     'Re: Lalala'                => 'Lalala',
+    'Fw: Lalala'                => 'Lalala',
     'Re: re: Re:  Re: Lalalala' => 'Lalalala',
+    'Re: Fw: Re:  Re: Lalalala' => 'Lalalala',
     'Fwd: Re:  Re: Hello'       => 'Hello',
     'Fwd:Re:Re:Goodbye'         => 'Goodbye',
+    'Fwd:Fw:Re:Goodbye'         => 'Goodbye',
+    'Fw:Fwd:Re:Re:Goodbye'      => 'Goodbye',
+    'Re: Fw:Fwd:Re:Goodbye'     => 'Goodbye',
     'Re: Fwd:  Re:  Cheap St0x' => 'Cheap St0x',
     '   Spacey    '             => 'Spacey',
 );

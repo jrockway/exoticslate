@@ -24,7 +24,7 @@ use Socialtext::CLI;
 
 use Cwd;
 
-plan tests => 253;
+plan tests => 257;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -350,7 +350,7 @@ ADD_REMOVE_MEMBER: {
 
     my $ws   = Socialtext::Workspace->new( name => 'foobar' );
     my $user = Socialtext::User->new( username  => 'test@example.com' );
-    ok( $ws->has_user( user => $user ), 'user was added to workspace' );
+    ok( $ws->has_user( $user ), 'user was added to workspace' );
 
     expect_failure(
         sub {
@@ -373,7 +373,7 @@ ADD_REMOVE_MEMBER: {
     );
 
     $user = Socialtext::User->new( username => 'test@example.com' );
-    ok( !$ws->has_user( user => $user ), 'user was removed from workspace' );
+    ok( !$ws->has_user( $user ), 'user was removed from workspace' );
 
     expect_failure(
         sub {
@@ -1285,7 +1285,7 @@ ADD_USERS_FROM: {
     my $devnull2
         = Socialtext::User->new( username => 'devnull2@socialtext.com' );
     ok(
-        $new_ws->has_user( user => $devnull2 ),
+        $new_ws->has_user( $devnull2 ),
         "devnull2\@socialtext.com is a member of $NEW_WORKSPACE"
     );
 
@@ -1352,6 +1352,66 @@ EOF
         },
         qr/\Qupdate-page requires that you provide page content on stdin./,
         'update-page fails with no content'
+    );
+}
+
+INVITE_USER_userexists: {
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [ '--workspace', 'foobar', '--from', 'test@socialtext.com', '--email', 'devnull1@socialtext.com' ]
+            )->invite_user();
+        },
+        qr/The email address you provided, "devnull1\@socialtext.com", is already a member of the "foobar" workspace\./,
+        'Checks to make sure the user does not already exist'
+    );
+}
+
+INVITE_USER_invalidworkspace: {
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [ '--workspace', 'DOESNOTEXIST', '--from', 'test@socialtext.com', '--email', 'test1@socialtext.com' ]
+            )->invite_user();
+        },
+        qr/No workspace named/,
+        'Checks to make sure the workspace exists'
+    );
+}
+
+INVITE_USER_noworkspace: {
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [ '--from', 'test@socialtext.com', '--email', 'test@socialtext.com' ]
+            )->invite_user();
+        },
+        qr/You must specify a workspace/,
+        'Checks to make sure a workspace is specified'
+    );
+}
+
+INVITE_USER_nofrom: {
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [ '--workspace', 'foobar', '--email', 'test@socialtext.com' ]
+            )->invite_user();
+        },
+        qr/You must specify an inviter email address/,
+        'Checks to make sure an inviter email address is specified'
+    );
+}
+
+INVITE_USER_noemail: {
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [ '--workspace', 'foobar', '--from', 'test@socialtext.com' ]
+            )->invite_user();
+        },
+        qr/You must specify an invitee email address/,
+        'Checks to make sure an invitee email addres is specified'
     );
 }
 
@@ -1607,6 +1667,7 @@ sub expect_failure {
     my $sub    = shift;
     my $expect = shift;
     my $desc   = shift;
+    my $error_code = shift || 1;
 
     my $test = ref $expect ? \&stderr_like : \&stderr_is;
 
@@ -1619,5 +1680,5 @@ sub expect_failure {
         $desc
     );
     warn $@ if $@ and $@ !~ /exited/;
-    is( $LastExitVal, 1, 'exited with exit code 1' );
+    is( $LastExitVal, $error_code, "exited with exit code $error_code" );
 }

@@ -17,6 +17,8 @@ use Readonly;
 use Socialtext::Search::AbstractFactory;
 use Socialtext::Validate qw( validate SCALAR_TYPE ARRAYREF_TYPE );
 use Socialtext::l10n qw( loc loc_lang valid_code system_locale );
+use Socialtext::Workspace;
+use Socialtext::User;
 
 my %CommandAliases = (
     '--help' => 'help',
@@ -364,7 +366,7 @@ sub add_member {
     my $user = $self->_require_user();
     my $ws   = $self->_require_workspace();
 
-    if ( $ws->has_user( user => $user ) ) {
+    if ( $ws->has_user( $user ) ) {
         $self->_error( $user->username
                 . ' is already a member of the '
                 . $ws->name
@@ -385,7 +387,7 @@ sub remove_member {
     my $user = $self->_require_user();
     my $ws   = $self->_require_workspace();
 
-    unless ( $ws->has_user( user => $user ) ) {
+    unless ( $ws->has_user( $user ) ) {
         $self->_error( $user->username
                 . ' is not a member of the '
                 . $ws->name
@@ -490,7 +492,7 @@ sub disable_email_notify {
 
     my $ws = $hub->current_workspace();
 
-    unless ( $ws->has_user( user => $user ) ) {
+    unless ( $ws->has_user( $user ) ) {
         $self->_error( $user->username
                 . ' is not a member of the '
                 . $ws->name
@@ -1416,7 +1418,7 @@ sub add_users_from {
 
     my @added;
     while ( my $user = $users->next() ) {
-        next if $target_ws->has_user( user => $user );
+        next if $target_ws->has_user( $user );
 
         $target_ws->add_user( user => $user );
         push @added, $user->username();
@@ -1579,6 +1581,62 @@ sub set_customjs {
             '.'
         );
     }
+}
+
+sub invite_user {
+    my $self = shift;
+
+    $self->{command} = 'invite_user';
+
+    my %opts = $self->_get_options( 'workspace:s', 'email:s', 'from:s', 'secure' );
+
+    if ($opts{secure}) {
+        $Socialtext::URI::default_scheme = 'https';
+    }
+
+    $self->_error('You must specify a workspace')
+        if (!$opts{workspace});
+    my $workspace = Socialtext::Workspace->new( name => $opts{workspace} );
+    unless ($workspace) {
+        $self->_error(qq|No workspace named "$opts{workspace}" could be found.| );
+    }
+
+    $self->_error('You must specify an invitee email address')
+        if (!$opts{email});
+
+    $self->_error('You must specify an inviter email address')
+        if (!$opts{from});
+
+    my $to_user = Socialtext::User->new( email_address => $opts{email});
+    if ( $to_user && $workspace->has_user($to_user)) {
+        $self->_error(
+            qq|The email address you provided, "$opts{email}", is already a member of the "|
+            . $opts{workspace} .'" workspace.'
+        );
+    }
+
+    my $from_user = Socialtext::User->new(email_address => $opts{from});
+    if (!$from_user || !$workspace->has_user($from_user)) {
+        $self->_error(
+            qq|The from email address you provided, "$opts{from}", is not a member of the workspace.|
+        );
+    }
+
+    require Socialtext::WorkspaceInvitation;
+
+    my $invitation = Socialtext::WorkspaceInvitation->new(
+        workspace => $workspace,
+        from_user => $from_user,
+        invitee   => $opts{email},
+        extra_text => '',
+        viewer => undef
+    );
+    $invitation->send();
+
+    $self->_success(
+        'An invite has been sent to "' . $opts{email}
+        . '" to join the "' . $workspace->title . '" workspace.'
+    );
 }
 
 # Called by Socialtext::Ceqlotron
@@ -1834,13 +1892,13 @@ sub _require_role {
 sub _require_string {
     my $self = shift;
     my $name = shift;
+    my $desc = shift || $name;
 
     my %opts = $self->_get_options("$name:s");
 
     unless ( defined $opts{$name} and length $opts{$name} ) {
         $self->_help_as_error(
-            "The command you called ($self->{command}) requires a $name to be specified with the --$name option.\n"
-        );
+            "The command you called ($self->{command}) requires a $desc to be specified with the --$name option.\n");
     }
 
     return $opts{$name};
@@ -1947,6 +2005,7 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   USERS
 
   create-user --email [--username] --password [--first-name --last-name]
+  invite-user --email --workspace --from [--secure]
   confirm-user --email --password
   change-password [--username or --email] --password
   add-member [--username or --email] --workspace
@@ -2041,6 +2100,13 @@ The following commands are provided:
 Creates a new user. An email address and password are required. If no
 username is specified, then the email address will also be used as the
 username.
+
+=head2 invite-user --email --workspace --from [--secure]
+
+Invite a user to join a workspace. Along with the user's email address, an email
+address for the person sending the invitation and the workspace to join are
+also required. If the --secure option is specified, the link in the email is a
+secure (https) link.
 
 =head2 confirm-user --email --password
 

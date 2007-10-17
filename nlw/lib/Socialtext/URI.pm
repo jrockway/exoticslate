@@ -8,6 +8,7 @@ use Socialtext::AppConfig;
 use Socialtext::HTTPPorts qw(SSL_PORT_DIFFERENCE);
 use URI::FromHash;
 
+our $default_scheme = 'http';
 
 sub uri {
     URI::FromHash::uri( _scheme(), _host(), _port(), @_ );
@@ -19,7 +20,8 @@ sub uri_object {
 
 sub _scheme {
     my $apr    = _apr();
-    my $scheme = 'http';
+    my $scheme = $default_scheme;
+
     if ($apr) {
         # FIXME: we should look in the ENV here not the apache
         # dir config
@@ -53,7 +55,7 @@ sub _https_port {
     # those circumstances
     return () if Socialtext::AppConfig->custom_http_port();
 
-    # NLW_FRONTEND_PORT only set in dev-env when there 
+    # NLW_FRONTEND_PORT only set in dev-env when there
     # is a front and backend
     if ($ENV{NLW_FRONTEND_PORT}) {
         return ( port => ( $ENV{NLW_FRONTEND_PORT} + SSL_PORT_DIFFERENCE ));

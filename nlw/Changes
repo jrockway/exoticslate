@@ -2,11 +2,28 @@ Change log for Socialtext Open
 
 2.16.X
 
+Release notes, 2.16.1.0  Oct 2007
+
+  [FEATURES]
+
+  combined-source.js is now served as a gzip compressed file to browsers.  Except for browsers like Safari that don't support this.  This speeds up initial page loads on browsers that don't have a cached version of the file.
+
+  {rt: 23228}: Admin: make these st-admin commands.  We've added a number of tools to the st-admin command line interface.  purge-attachment, confirm-user, show-members, show-admins, show-impersonators, set-user-names, invite-user.
+
+  [BUGS]
+
+  {rt: 26769}: Can we fix loc() to quote brackets.  Localized message ids can now contain brackets.
+
+  {rt: 26637}: st-admin clone-workspace capitalization problem.  When cloning a workspace, if you used a mixed case workspace-name for the target workspace, the name would not get normalized properly.
+
+  {rt: 22646}: Settings: Users should not be able to create a workspace that begins with '-'.
 Release notes, 2.16.0.0  Sept 2007
+
+  {rt: 25272}: Appliance: add an empty /etc/apache2/conf.d/*.conf file to silence log rotation warnings on appliances
 
   [FEATURES]
   
-  Inter-Wiki Search is now avaiable.  Queries can be sent to searches
+  Inter-Wiki Search is now available.  Queries can be sent to searches
   with the form "search terms workspaces:workspace-1,workspace-2,workspace-4".  
   Note in the comma seperated list of workspaces, there can be no spaces.
 

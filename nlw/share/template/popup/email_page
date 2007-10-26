@@ -4,15 +4,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <title>[% loc("Sending '[_1]' page by email", page_title) %]</title>
+    <title>Sending '[% page_title %]' page by email</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    
-    [% INCLUDE "element/wiki/js-bootstrap" %] 
-    [% PROCESS css_links.html + javascript_links.html %]
+    [% PROCESS element/popup_css_links + javascript_links.html %]
     <script type="text/javascript" src="[% static_path %]/javascript/combined-source.js"></script>
-    <!--[if IE]>
-        <link rel="stylesheet" type="text/css" href="[% hub.css.uri_for_css('ie.css') %]" media="screen" />
-    <![endif]-->
   </head>
 
   <body id="[% ns %]" class="st-popup">
@@ -20,21 +15,21 @@
   <form name="email_page_form" method="post" action="[% script_name %]" enctype="application/x-www-form-urlencoded">
 
     <div class="email-page-row">
-      <div class="email-page-row-label">[% loc('From') %]:</div>
+      <div class="email-page-row-label">From:</div>
       <div class="email-page-row-content">
         [%- sending_user.best_full_name | html_encode %] &lt;[%- sending_user.email_address %]&gt;
       </div>
     </div>
 
     <div class="email-page-row">
-      <div class="email-page-row-label">[% loc('Subject') %]:</div>
+      <div class="email-page-row-label">Subject:</div>
       <div class="email-page-row-content">
         <input name="email_page_subject" type="text" size="50" value="[% page_title | html_encode %]" />
       </div>
     </div>
 
     <div class="email-page-row">
-      <div class="email-page-row-label">[% loc('Select Recipients') %]</div>
+      <div class="email-page-row-label">Select Recipients</div>
       <div class="email-page-row-content">
         [% PROCESS email_page_user_select %]
       </div>
@@ -70,7 +65,7 @@
 
 [% BLOCK email_page_note_check %]
   <input name="email_page_add_note_check" type="checkbox"  value="1" checked="checked" />
-  [% loc("Add this note at the front of the email? (You can customize the note below.)") %]
+  Add this note at the front of the email? (You can customize the note below.)
 [% END %]
 
 [% BLOCK email_page_note %]
@@ -80,14 +75,14 @@
 
 [% BLOCK keep_attachments %]
   <input name="email_page_keep_attachments" type="checkbox" value="1" />
-  [% loc('Keep attachments?') %]
+  Keep attachments?
 [% END %]
 
 [% BLOCK email_page_buttons %]
   <div id="[% ns %]-buttons">
-    <input class="standard-button-submit" type="submit" name="Button" value="[% loc('Send') %]" onclick="email_page_validate(); return false;" />
+    <input class="standard-button-submit" type="submit" name="Button" value="Send" onclick="email_page_validate(); return false;" />
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <input class="standard-button-cancel" type="submit" name="Button" value="[% loc('Cancel') %]" onclick="window.close(); return false;" />
+    <input class="standard-button-cancel" type="submit" name="Button" value="Cancel" onclick="window.close(); return false;" />
   </div>
 [% END %]
 
@@ -104,22 +99,23 @@
             + email_page_user_select_right;
   END;
 %]
+
 [% BLOCK email_page_user_select_left %]
   <div id="[% ns %]-userselect-columnleft" class="email-page-user-select-column">
   [% IF users %]
-    <div class="email-page-user-select-label">[% loc('Workspace Address Book') %]</div>
+    <div class="email-page-user-select-label">Workspace Address Book</div>
     <select class="email-page-select" multiple name="email_page_user_source" size="9">
       [% FOREACH user = users %]
         <option>[% user.email_address %]</option>
       [% END %]
     </select>
-    <div id="[% ns %]-userselect-addlabel" class="email-page-user-select-label">[% loc('Additional Recipient') %]</div>
+    <div id="[% ns %]-userselect-addlabel" class="email-page-user-select-label">Additional Recipient</div>
   [% ELSE %]
-     <p>[% loc('Too many users ([_1]) to display for selection. Please add recipients manually.', user_count) %]</p>
+     <p>Too many users ([% user_count %]) to display for selection. Please add recipients manually.</p>
     <select class="email-page-select" multiple name="email_page_user_source" style="visibility: hidden"></select>
      <div id="[% ns %]-userselect-addlabel" class="email-page-user-select-label">Recipients</div>
   [% END %]
-    <input class="email-page-input-new" type="text" name="email_page_add_one" value="[% loc('type email address here') %]" onclick="email_page_clear_element(this, '[% loc('type email address here')%]');" onblur="email_page_validate_add();" />
+    <input class="email-page-input-new" type="text" name="email_page_add_one" value="type email address here" onclick="email_page_clear_element(this, 'type email address here');" onblur="email_page_validate_add();" />
   </div>
 [% END %]
 
@@ -130,18 +126,18 @@
       <input class="email-page-input" type="button" name="email_page_select_remove" value="&lt;&lt; [% loc('Remove') %]" onclick="email_page_remove();" />
     </div> 
     <div class="email-page-user-select-button-group">
-      <input class="email-page-input" type="button" name="email_page_select_all" value="[% loc('Add All') %] &gt;&gt;" onclick="email_page_all();" />
-      <input class="email-page-input" type="button" name="email_page_select_none" value="&lt;&lt; [% loc('Remove All') %]" onclick="email_page_none();" />
-    </div> 
+      <input class="email-page-input" type="button" name="email_page_select_all" value="Add All &gt;&gt;" onclick="email_page_all();" />
+      <input class="email-page-input" type="button" name="email_page_select_none" value="&lt;&lt; Remove All" onclick="email_page_none();" />
+    </div>
     <div class="email-page-user-select-button-group">
-      <input class="email-page-input" type="button" name="email_page_add_one_button" value="[% loc('Add') %] &gt;&gt;" onclick="email_page_validate_add();"/>
+      <input class="email-page-input" type="button" name="email_page_add_one_button" value="Add &gt;&gt;" onclick="email_page_validate_add();"/>
     </div>
   </div>
 [% END %]
 
 [% BLOCK email_page_user_select_right %]
   <div id="[% ns %]-userselect-columnright" class="email-page-user-select-column">
-    <div class="email-page-user-select-label">[% loc('Recipient(s)') %]</div>
+    <div class="email-page-user-select-label">Recipient(s)</div>
     <select class="email-page-select" multiple name="email_page_user_choices" size="14">
       [% FOREACH choice = choices %]
         <option>[% choice %]</option>

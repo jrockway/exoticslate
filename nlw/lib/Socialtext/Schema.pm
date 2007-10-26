@@ -470,6 +470,16 @@ sub SchemaObject {
               type           => 'TEXT',
               default         => '',
             );
+        $table->make_column
+            ( name           => 'cascade_css',
+              type           => 'BOOLEAN',
+              default         => 't',
+            );
+        $table->make_column
+            ( name           => 'workspace_template',
+              type           => 'TEXT',
+              default         => '',
+            );
         $table->make_index
             ( columns  => [ $schema->table( 'Workspace' )->columns( 'name' ) ],
               unique   => 1,

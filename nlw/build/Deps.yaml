@@ -80,7 +80,7 @@ HTML::PrettyPrinter: 0.03
 HTML::TreeBuilder: 3.13
 HTML::WikiConverter: 0.61
 HTML::WikiConverter::Socialtext: 0.03
-Lingua::JA::Fold: 0.07 
+Lingua::JA::Fold: 0.07
 Imager: 0
 IO::File: 0
 IPC::Run: 0.79

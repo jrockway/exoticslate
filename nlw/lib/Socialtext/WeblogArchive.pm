@@ -22,6 +22,7 @@ sub weblog_archive_html {
     my $blog_category = shift;
     $blog_category ||= $self->current_blog;
     my $archive = $self->assemble_archive($blog_category);
+
     $self->template_process(
         'weblog_archive_box_filled.html',
         archive  => $archive,
@@ -34,7 +35,7 @@ sub assemble_archive {
     my $blog_category = shift;
 
     my $entries = $self->_get_entries_faster($blog_category);
-    
+
     my %archive;
     my $by_create = $self->hub->current_workspace->sort_weblogs_by_create;
     foreach my $entry_number (0 .. $#{$entries}) {

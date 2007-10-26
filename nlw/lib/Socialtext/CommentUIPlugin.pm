@@ -23,7 +23,10 @@ sub register {
 
 sub enter_comment {
     my $self = shift;
-    $self->template_process('comment_popup.html');
+    $self->template_process(
+        'comment_popup.html',
+        $self->hub->helpers->global_template_vars,
+    );
 }
 
 # XXX this method has no test coverage

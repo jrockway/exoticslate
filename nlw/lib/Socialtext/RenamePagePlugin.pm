@@ -29,6 +29,7 @@ sub rename_popup {
     $self->template_process(
         'popup/rename',
         %p,
+        $self->hub->helpers->global_template_vars,
     );
 }
 
@@ -103,4 +104,3 @@ cgi 'new_title';
 cgi 'clobber';
 
 1;
-

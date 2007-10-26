@@ -98,8 +98,8 @@ function trim(value) {
 
 function is_reserved_pagename(pagename) {
     if (pagename && pagename.length > 0) {
-        var name = trim(pagename.toLowerCase());
-        var untitled = loc('Untitled Page').toLowerCase();
+        var name = nlw_name_to_id(trim(pagename));
+        var untitled = nlw_name_to_id(loc('Untitled Page'))
         return name == untitled;
     }
     else {

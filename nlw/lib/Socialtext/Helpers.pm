@@ -2,6 +2,7 @@
 package Socialtext::Helpers;
 use strict;
 use warnings;
+use Encode;
 
 # vaguely akin to RubyOnRails' "helpers"
 use Socialtext;
@@ -10,13 +11,55 @@ use Socialtext::Search::Config;
 use Socialtext::Search::Set;
 use Socialtext::TT2::Renderer;
 use Socialtext::l10n qw/loc/;
-use Data::Dumper;
-use Encode ();
 
 sub class_id { 'helpers' }
 
 sub static_path { '/static/' . Socialtext->product_version() }
 sub images_path { shift->static_path . '/images/' }
+
+
+my $supported_format = {
+    'en' => '%B %Y',
+    'ja' => '%Y年 %m月',
+};
+
+sub _get_date_format {
+    my $self = shift;
+    my $locale = $self->hub->best_locale;
+    my $locale_format = $supported_format->{$locale};
+    if (!defined $locale_format) {
+        $locale = 'en';
+        $locale_format = $supported_format->{'en'};
+    }
+
+    return DateTime::Format::Strptime->new(
+        pattern=> $locale_format,
+        locale => $locale,
+    );
+}
+
+sub format_date {
+    my $self = shift;
+    my $year = shift;
+    my $month = shift;
+
+    # Create DateTime object
+    my $datetime = DateTime->new(
+        time_zone => 'local',
+        year => $year,
+        month => $month,
+        day => 1,
+        hour => 0,
+        minute => 0,
+        second => 0
+    );
+
+    my $format = $self->_get_date_format;
+    my $date_str = $format->format_datetime($datetime);
+    Encode::_utf8_on($date_str);
+    return $date_str;
+}
+
 
 # XXX most of this should become Socialtext::Links or something
 
@@ -42,45 +85,6 @@ sub script_link {
     my %query = @_;
     my $url = $self->script_path . '?' . $self->query_string_from_hash(%query);
     return qq(<a href="$url">$label</a>);
-}
-
-my $supported_format = {
-    'en' => '%B %Y',
-    'ja' => '%Y年 %m月',
-};
-
-sub _get_date_format {
-    my $self = shift;
-    my $locale = $self->hub->best_locale;
-    my $locale_format = $supported_format->{$locale};
-    if(!defined $locale_format)
-    {
-        $locale = 'en';
-        $locale_format = $supported_format->{'en'};
-    }
-        
-    return DateTime::Format::Strptime->new(
-            pattern=> $locale_format,
-            locale => $locale,
-        );
-}
-
-sub format_date {
-    my $self = shift;
-    my $year = shift;
-    my $month = shift;
-
-    # Create DateTime object
-    my $datetime = DateTime->new(
-            time_zone => 'local',
-            year => $year, month => $month,   day => 1,
-            hour => 0,   minute => 0, second => 0
-        );
-
-    my $format = $self->_get_date_format;
-    my $date_str = $format->format_datetime($datetime);
-    Encode::_utf8_on($date_str);
-    return $date_str;
 }
 
 sub page_display_link {
@@ -165,8 +169,9 @@ sub global_template_vars {
 
     return (
         loc               => \&loc,
-        loc_lang          => $self->hub->best_locale,
+        loc_lang          => $self->hub->display->preferences->locale->value,
         css               => $self->_get_css_info,
+        additional_css    => $self->_get_additional_css_info,
         images            => $self->_get_images_info,
         user              => $self->_get_user_info,
         wiki              => $self->_get_wiki_info,
@@ -178,30 +183,46 @@ sub global_template_vars {
         app_version        => Socialtext->product_version,
         skin_name          => $self->hub->current_workspace->skin_name,
         search_box_snippet => $search_box,
+        miki_url          => $self->miki_path,
+    );
+}
+
+sub miki_path {
+    my ($self,$link) = @_;
+    require Socialtext::Formatter::LiteLinkDictionary;
+
+    my $page_name = $self->hub->pages->current->name;
+    my $workspace_name = $self->hub->current_workspace->name;
+
+    return Socialtext::Formatter::LiteLinkDictionary->new->format_link(
+        link       => $link || 'interwiki',
+        workspace  => $workspace_name,
+        page_uri   => $page_name,
     );
 }
 
 sub _get_css_info {
     my ($self) = @_;
+    return {
+        common    => $self->hub->css->uri_for_common_css,
+        screen    => $self->hub->css->uris_for_css('screen.css'),
+        screen_ie => $self->hub->css->uris_for_css('screen.ie.css'),
+        print     => $self->hub->css->uris_for_css('print.css'),
+        wikiwyg   => $self->hub->css->uris_for_css('wikiwyg.css'),
+        print_ie  => $self->hub->css->uris_for_css('print.ie.css'),
+        popup     => $self->hub->css->uris_for_css('popup.css'),
+        popup_ie  => $self->hub->css->uris_for_css('popup.ie.css'),
+    };
+}
 
-    if($self->hub->best_locale eq 'ja') {
-        return {
-            per_locale => $self->hub->css->uri_for_css('ja.css'),
-            screen  => $self->hub->css->uri_for_css('screen.css'),
-            print   => $self->hub->css->uri_for_css('print.css'),
-            wikiwyg => $self->hub->css->uri_for_css('wikiwyg.css'),
-            ie      => $self->hub->css->uri_for_css('ie.css'),
-            ieprint => $self->hub->css->uri_for_css('ieprint.css'),
-        };
-    } else {
-        return {
-            screen  => $self->hub->css->uri_for_css('screen.css'),
-            print  => $self->hub->css->uri_for_css('print.css'),
-            wikiwyg => $self->hub->css->uri_for_css('wikiwyg.css'),
-            ie      => $self->hub->css->uri_for_css('ie.css'),
-            ieprint => $self->hub->css->uri_for_css('ieprint.css'),
-        };
-    }
+sub _get_additional_css_info {
+    my ($self) = @_;
+    return {
+        plugin      => $self->hub->css->uris_for_plugin_css,
+        skin        => $self->hub->css->uris_for_additional_skin_css,
+        local       => $self->hub->css->uris_for_additional_local_css,
+        locale       => $self->hub->css->uris_for_additional_locale_css,
+    };
 }
 
 sub _get_images_info {
@@ -232,6 +253,7 @@ sub _get_wiki_info {
         has_dashboard => $wiki->homepage_is_dashboard,
         is_public     => $wiki->is_public,
         uri           => $wiki->uri,
+        skin          => $wiki->skin_name,
         email_address => $wiki->email_in_address,
         static_path   => $self->static_path,
         comment_form_window_height => $wiki->comment_form_window_height,

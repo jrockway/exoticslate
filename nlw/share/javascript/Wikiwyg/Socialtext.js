@@ -174,6 +174,7 @@ function setup_wikiwyg() {
             if (Wikiwyg.is_safari || Wikiwyg.is_old_firefox) {
                 $('st-page-editing-uploadbutton').style.display = 'none';
             }
+            $('st-all-footers').style.display = 'none';
             $('st-display-mode-container').style.display = 'none';
             $('st-edit-mode-container').style.display = 'block';
             Page.refresh_page_content();
@@ -232,6 +233,7 @@ function setup_wikiwyg() {
             }
             $('st-edit-mode-container').style.display = 'none';
             $('st-display-mode-container').style.display = 'block';
+            $('st-all-footers').style.display = 'block';
             ww.cancelEdit();
             ww.preview_link_reset();
             window.EditQueue.reset_dialog();
@@ -672,7 +674,7 @@ proto.displayNewPageDialog = function() {
         'st-newpage-duplicate-emphasis',
         'st-newpage-duplicate-emphasis'
     );
-    // $('st-newpage-save').style.display = 'block';
+    $('st-newpage-save').style.display = 'block';
     $('st-newpage-save-pagename').focus();
 
     var divs = {

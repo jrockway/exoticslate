@@ -21,7 +21,7 @@ sub class_id { 'display' }
 const class_title => loc('Screen Layout');
 const maximum_header_attachments => 5;
 const cgi_class => 'Socialtext::Display::CGI';
-                
+
 sub register {
     my $self = shift;
     my $registry = shift;
@@ -112,7 +112,7 @@ sub locale {
     my $languages = available_locales();
     my $choices = [ map {$_ => $languages->{$_}} sort keys %$languages ];
     $p->choices($choices);
-    
+
     # XXX default value should be server locale
     $p->default(system_locale());
     return $p;
@@ -222,8 +222,8 @@ sub display {
             watching                => $self->hub->watchlist->page_watched,
             login_and_edit_path => '/challenge?'
                 . $self->uri_escape(
-                      $self->hub->current_workspace->uri . '?'
-                    . $page->name . '#edit'
+                    $self->hub->current_workspace->uri 
+                  . '?action=edit;page_name=' . $page->name
                 ),
             feeds => $self->_feeds( $self->hub->current_workspace, $page ),
             wikiwyg_double =>
@@ -418,6 +418,7 @@ sub display_html {
 
     $self->screen_template('view/page/simple_html');
     return $self->render_screen(
+        $self->hub->helpers->global_template_vars,
         html => $html,
         display_title => $title,
     );

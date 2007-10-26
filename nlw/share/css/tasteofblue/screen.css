@@ -21,68 +21,71 @@ The following selectors style major elements of the interface.
 
 */
 
-body { /* gets shared with the wikiwyg <body> */
-	margin: 0;
-	font-family: Tahoma, Helvetica, Verdana, Arial, Sans-Serif;
-	font-size: 14px;
-	color: #283033;
+body {
+    /* gets shared with the wikiwyg <body> */
+    margin: 0;
+    font-family: Tahoma, Helvetica, Verdana, Arial, Sans-Serif;
+    font-size: 14px;
+    color: #283033;
 }
+
 * html body {
-	font-size: 13px;
-	height: 100%;
+    font-size: 13px;
+    height: 100%;
 }
 
 #nlw-main-body {
-	background-color: #f2f6f1;
+    background-color: #f2f6f1;
 }
+
 * html #nlw-main-body {
-	overflow: hidden; /* to cover IE's confusion about the fixed bar */
+    overflow: hidden;
+    /* to cover IE's confusion about the fixed bar */
 }
 
 a {
-	color: #276181;
+    color: #276181;
 }
 
 a:hover {
-	text-decoration: underline;
-	color: #000;
+    text-decoration: underline;
+    color: #000;
 }
 
 li, hr, form {
-	margin-top: .2em; 
-	margin-bottom: .2em
+    margin-top: .2em;
+    margin-bottom: .2em;
 }
 
 hr {
-	padding: 0px; 
-	height: 1px; 
-	color: #8bd; 
-	background-color: transparent;
-	border: none;
-	color: #fff;
+    padding: 0px;
+    height: 1px;
+    color: #8bd;
+    background-color: transparent;
+    border: none;
+    color: #fff;
 }
+
 * html	hr {
-	margin-bottom: 0px !important;
+    margin-bottom: 0px !important;
 }
 
 img.link {
-	border: 0; /* this one's the main one */
-	margin: 0;
-	vertical-align: bottom;
-	text-decoration: none; /* for some reason this isn't working */
+    border: 0;
+    /* this one's the main one */
+    margin: 0;
+    vertical-align: bottom;
+    text-decoration: none;
+    /* for some reason this isn't working */
 }
 
-#workspace-bar a,
-.page-control-bar a,
-#content-attachments a, #content-categories a {
-	color: #276181;
+#workspace-bar a,.page-control-bar a,#content-attachments a, #content-categories a {
+    color: #276181;
 }
 
-#workspace-bar a:hover,
-.page-control-bar a:hover,
-#content-attachments a:hover, #content-categories a:hover {
-	text-decoration: underline;
-	color: #283033;
+#workspace-bar a:hover,.page-control-bar a:hover,#content-attachments a:hover, #content-categories a:hover {
+    text-decoration: underline;
+    color: #283033;
 }
 
 /*
@@ -95,26 +98,26 @@ interface.
 */
 
 #refcard {
-	background-color: white;
+    background-color: white;
 }
 
 #refcard .refcard-table {
-	background-color: #ccc;
-	margin: 1em;
-	clear: both;
-	border-spacing: 2px;
+    background-color: #ccc;
+    margin: 1em;
+    clear: both;
+    border-spacing: 2px;
 }
 
 #refcard .refcard-table-row {
-	background-color: white;
+    background-color: white;
 }
 
 #refcard .refcard-table-row td {
-	padding: 1px;
+    padding: 1px;
 }
 
 #refcard #refcard-print-button {
-	float: right;
+    float: right;
 }
 
 /*
@@ -127,13 +130,13 @@ example, when backing up the content of a wiki.
 */
 
 #html-archive {
-	background: #fff;
-	margin: 0.7em;
+    background: #fff;
+    margin: 0.7em;
 }
 
 #html-archive #html-archive-export-title {
-	margin: 0 0 0.1em 0;
-	font-size: 1.5em;
+    margin: 0 0 0.1em 0;
+    font-size: 1.5em;
 }
 
 /*
@@ -145,61 +148,60 @@ These styles apply to the Wikiwyg Open Source WYSIWYG editing system.
 */
 
 #wikiwyg_wikitext_textarea {
-	background: #fff;
-	border: 1px solid #276181;
+    background: #fff;
+    border: 1px solid #276181;
 }
 
 .wikiwyg_toolbar {
-	clear: both;
-	letter-spacing: 0;
-	padding: 3px 0 0 0;
+    clear: both;
+    letter-spacing: 0;
+    padding: 3px 0 0 0;
 }
 
 .wikiwyg_control_link a {
-	padding-right: 8px;
+    padding-right: 8px;
 }
 
 .wikiwyg_button {
-	cursor: pointer;
-	background: #D3E9F5;
-	width: 20px;
-	height: 20px;
-	margin-right: 2px;
-	border: 1px solid #407fa1;
-	vertical-align: bottom;
+    cursor: pointer;
+    background: #D3E9F5;
+    width: 20px;
+    height: 20px;
+    margin-right: 2px;
+    border: 1px solid #407fa1;
+    vertical-align: bottom;
 }
 
 .wikiwyg_button:hover {
-	border: 1px solid #fff;
+    border: 1px solid #fff;
 }
 
 .wikiwyg_button:active {
-	border: 1px solid #fff;
+    border: 1px solid #fff;
 }
 
 .wikiwyg_separator {
-	width: 10px;
-	height: 20px;
-	margin-right: 2px;
-	vertical-align: bottom;
+    width: 10px;
+    height: 20px;
+    margin-right: 2px;
+    vertical-align: bottom;
 }
 
 .wikiwyg_selector {
-	width: 70px;
+    width: 70px;
 }
 
 .wikiwyg_wysiwyg table {
-	border-collapse: collapse;
-	margin-bottom: .2em;
+    border-collapse: collapse;
+    margin-bottom: .2em;
 }
 
 .wikiwyg_wysiwyg table td {
-	border: 1px;
-	border-style: solid;
-	padding: .2em;
-	vertical-align: top;
+    border: 1px;
+    border-style: solid;
+    padding: .2em;
+    vertical-align: top;
 }
-
 
 /*
 
@@ -210,21 +212,20 @@ These styles apply to the older editing system known as "Edit In Place" (EIP).
 */
 
 .toolbar .btn- img {
-	width: 20px;
-	height: 20px;
+    width: 20px;
+    height: 20px;
 }
 
 .toolbar .btn-, .toolbar .btn-hover, .toolbar .btn-pressed {
-	height: 2.5em;
-	padding: 1px;
-	margin: 5px 0 0 0;
-	cursor: pointer;
+    height: 2.5em;
+    padding: 1px;
+    margin: 5px 0 0 0;
+    cursor: pointer;
 }
 
 .toolbar .btn- {
-	border: 1px solid #407fa1;
+    border: 1px solid #407fa1;
 }
-
 
 /*
 
@@ -235,43 +236,38 @@ create a personal page for your users, these styles apply to that form.
 
 */
 
-table.new_form_page
-{
-	border: 1px solid #353;
-	margin-bottom: 1em;
-	border-collapse: collapse;
+table.new_form_page {
+    border: 1px solid #353;
+    margin-bottom: 1em;
+    border-collapse: collapse;
 }
 
-table.new_form_page tr td
-{
-	margin: 0;
-	padding: 0.4em;
-	color: #353;
+table.new_form_page tr td {
+    margin: 0;
+    padding: 0.4em;
+    color: #353;
 }
 
-table.new_form_page tr.odd
-{
-	background-color: #cec;
+table.new_form_page tr.odd {
+    background-color: #cec;
 }
 
-table.new_form_page tr.even
-{
-	background-color: white;
+table.new_form_page tr.even {
+    background-color: white;
 }
 
-table.new_form_page span.label
-{
-	padding-right: 1em;
+table.new_form_page span.label {
+    padding-right: 1em;
 }
 
 table.new_form_page input, table.new_form_page textarea {
-	width: 260px;
-	text-align: left;
-	border: 1px solid #276181;	
+    width: 260px;
+    text-align: left;
+    border: 1px solid #276181;
 }
 
 #new_form_page_error_message_div {
-	color: red;
+    color: red;
 }
 
 /*
@@ -286,107 +282,75 @@ fixed bar to stay in place.
 
 */
 
-
 #fixed-bar {
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	z-index: 99;
-	width: 100%;
-	padding: 0;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 99;
+    width: 100%;
+    padding: 0;
 }
+
 * html #fixed-bar {
-	position: absolute;
-	padding-right: 16px;
+    position: absolute;
+    padding-right: 16px;
 }
 
 #fixed-bar-body {
-	background: #363e41 url('back_head.gif') repeat-x bottom left;
-	margin: 0px;
-	padding: 0 0 10px 0;
-	border: none;
-	border-bottom: 2px solid #888;
+    background: #363e41 url('back_head.gif') repeat-x bottom left;
+    margin: 0px;
+    padding: 0 0 10px 0;
+    border: none;
+    border-bottom: 2px solid #888;
 }
 
 #fixed-bar-body a {
-	color: #aaa;
+    color: #aaa;
 }
 
 #fixed-bar-body a:hover {
-	color: #fff;
+    color: #fff;
 }
 
 #workspace-bar {
-	width: 100%;
-}
-
-#workspace-bar-wiki-nav-container {
-
+    width: 100%;
 }
 
 #workspace-bar-wiki-nav-primary {
-	background-color: #283033;
-	border-bottom: 1px solid #666;
-	margin: 0 0 2px 0;
-	padding: 5px 20px 2px 40px;
-	vertical-align: middle;
-	font-size: 1.1em;
+    background-color: #283033;
+    border-bottom: 1px solid #666;
+    margin: 0 0 2px 0;
+    padding: 5px 20px 2px 40px;
+    vertical-align: middle;
+    font-size: 1.1em;
 }
 
 #workspace-bar-wiki-nav-secondary {
-	margin: 0 20px 0 40px;
-	padding: 0 0 8px 0;
-	font-size: 0.9em;
+    margin: 0 20px 0 40px;
+    padding: 0 0 8px 0;
+    font-size: 0.9em;
 }
 
 #workspace-bar-wiki-nav-secondary-label {
-	color: #666;
+    color: #666;
 }
 
 .workspace-bar-link-separator {
-	width: 0px;
-	margin: 0px;
-	padding: 0px;
-	margin-right: 4px;
-}
-
-#workspace-bar-home-link {
-}
-
-#workspace-bar-recentchanges-link {
-}
-
-#workspace-bar-new-page-link {
-}
-
-#workspace-bar-invite-link {
-}
-
-#workspace-bar-people-link {
-}
-
-#workspace-bar-weblogs-link {
-}
-
-#workspace-bar-categories-link {
-}
-
-#workspace-bar-attachments-link {
+    width: 0px;
+    margin: 0px;
+    padding: 0px;
+    margin-right: 4px;
 }
 
 #st-logo-link {
-	margin-right: 10px;
-	display: block;
-	float: right;
-	clear: right;
+    margin-right: 10px;
+    display: block;
+    float: right;
+    clear: right;
 }
 
 #st-logo-link:hover {
-	background-color: transparent !important;
-}
-
-#st-logo-image {
-
+    background-color: transparent !important;
 }
 
 /*
@@ -402,39 +366,18 @@ of these do not apply.
 */
 
 #workspace-bar-user-login-system {
-	color: #666;
-	position: absolute;
-	top: 6px;
-	right: 25px;
-}
-* html #workspace-bar-user-login-system {
-	right: 45px;
+    color: #666;
+    position: absolute;
+    top: 6px;
+    right: 25px;
 }
 
-#logout-link {
+* html #workspace-bar-user-login-system {
+    right: 45px;
 }
 
 #user-welcome-message {
-	color: #666;
-}
-
-#user-settings-link {
-}
-
-#user-help-link {
-
-}
-
-#user-invite-self-login-link {
-}
-
-#user-login-link {
-}
-
-.user-login-link {
-}
-
-#user-register-link {
+    color: #666;
 }
 
 /*
@@ -446,19 +389,19 @@ Styles for the containers around page-level navigational controls.
 */
 
 #workspace-bar-page-control-container {
-	margin: 0 20px 0 40px;
-	vertical-align: top;
+    margin: 0 20px 0 40px;
+    vertical-align: top;
 }
 
 #workspace-bar-page-control-container .workspace-bar-link {
-	text-decoration: underline;
-	font-weight: normal;
+    text-decoration: underline;
+    font-weight: normal;
 }
 
 #workspace-bar-page-control-bounding-box-control {
-	display: none;
-	height: 0px;
-	clear: both;
+    display: none;
+    height: 0px;
+    clear: both;
 }
 
 /*
@@ -470,288 +413,185 @@ wiki.
 
 */
 
-.page-control-bar {
+#page-control-bar a:visited,#page-control-bar a:active {
+    color: #283033;
 }
-#page-control-bar a:visited,
-#page-control-bar a:active { color: #283033; }
 
 .page-control-bar .workspace-bar-link {
-	text-decoration: underline;
-	font-weight: normal;
+    text-decoration: underline;
+    font-weight: normal;
 }
 
 #page-control-display-bar {
-	font-size: 0.9em;
-}
-
-#page-control-edit-requires-login {
-}
-
-.page-control-container {
-
+    font-size: 0.9em;
 }
 
 #page-control-display {
-	padding: 0 0 5px 0;
+    padding: 0 0 5px 0;
 }
 
 #page-control-edit-link {
-	background: #283033;
-	padding: 2px 5px;
+    background: #283033;
+    padding: 2px 5px;
 }
+
 #page-control-edit-link:hover {
-	 background-color: #8bd;
-}
-
-a.page-control-comment-link,
-a.page-control-comment-link:visited,
-a.page-control-comment-link:active {
-
+    background-color: #8bd;
 }
 
 .page-control-comment-link {
-	font-size: 0.9em;
-}
-
-#page-control-view-history-link {
-}
-
-#page-control-more-actions-dropdown {
-}
-
-#page-control-email-actions-dropdown {
-}
-
-#more-actions-dropdown-menu {
-}
-
-#email-actions-dropdown-menu {
+    font-size: 0.9em;
 }
 
 .page-control-actions-item {
-	padding: .2em 0 .2em 0;
+    padding: .2em 0 .2em 0;
 }
 
 .page-control-actions-dropdown-menu {
-	visibility: hidden;
-	display: inline;
-	position: absolute;
-	top: 5em;
-	z-index: 10;
-	background: #666;
-	min-width: 14em;
-	margin-left: 20px;
-	margin-top: 5px;
-	padding: 8px 8px 8px 8px;
-	border: 1px solid #283033;
-	font-size: 0.9em;
-	color: #fff;
+    visibility: hidden;
+    display: inline;
+    position: absolute;
+    top: 5em;
+    z-index: 10;
+    background: #666;
+    min-width: 14em;
+    margin-left: 20px;
+    margin-top: 5px;
+    padding: 8px 8px 8px 8px;
+    border: 1px solid #283033;
+    font-size: 0.9em;
+    color: #fff;
 }
 
 #more-actions-dropdown-menu .page-control-actions-item a {
-	color: #eee;
+    color: #eee;
 }
 
 #more-actions-dropdown-menu .page-control-actions-item a:hover {
-	color: #283033;
-}
-
-#page-control-printer-friendly-link {
-}
-
-#page-control-duplicate-page-link {
-}
-
-#page-control-delete-page-link {
-}
-
-a.page-control-send-page-by-email-link {
-}
-
-#page-control-send-page-to-workspace-link {
-}
-
-#more-actions-dropdown-arrow {
-}
-#email-actions-dropdown-arrow {
-}
-
-#more-actions-dropdown-link {
-}
-
-#email-actions-dropdown-link {
+    color: #283033;
 }
 
 .page-control-actions-dropdown-arrow {
-	border: 0;
-}
-
-.page-control-actions-dropdown-arrow-link {
+    border: 0;
 }
 
 #fixed-bar a.page-control-actions-dropdown-arrow-link:hover {
-	background-color: transparent;
-}
-
-
-#page-control-email-in-link {
-}
-
-#page-control-email-to-this-page-link {
-}
-
-#page-control-send-page-by-email-link {
+    background-color: transparent;
 }
 
 #page-control-edit {
-	display: none;
-	color: #333;
+    display: none;
+    color: #333;
 }
 
 #page-control-edit-eip {
-	display: none;
-	color: #333;
+    display: none;
+    color: #333;
 }
 
-#page-control-edit-eip a:visited,
-#page-control-edit-eip a:active {
-
-} 
-
 #edit-eip-controls {
-	position: relative;
+    position: relative;
 }
 
 #edit-eip-standard-links {
-	float: left;
+    float: left;
 }
 
 #edit-eip-save-link {
-	background: #ff801f;
-	padding: 2px 5px;
-	color: #000;
+    background: #ff801f;
+    padding: 2px 5px;
+    color: #000;
 }
 
 #edit-eip-preview-link {
-	background: #8bd;
-	padding: 2px 5px;
-}
-
-#edit-eip-cancel-link {
+    background: #8bd;
+    padding: 2px 5px;
 }
 
 #edit-eip-tips-link {
-	margin-left: 15px;
+    margin-left: 15px;
 }
 
 #edit-eip-bounding-box-control {
-	height: 0px;
-	clear: both;
+    height: 0px;
+    clear: both;
 }
 
 #page-control-edit-wikiwyg {
-	display: none;
-}
-
-#edit-wikiwyg-controls {
-
+    display: none;
 }
 
 #edit-wikiwyg-standard-links {
-	float: left;
+    float: left;
 }
 
 #page-control-edit #edit-wikiwyg-save-link {
-	background: #C3E0F0;
-	padding: 2px;
-	color: #000;
+    background: #C3E0F0;
+    padding: 2px;
+    color: #000;
 }
 
 #page-control-edit #edit-wikiwyg-save-link:hover {
-	background: #fff;
-}
-
-#edit-wikiwyg-preview-link {
-}
-
-#edit-wikiwyg-cancel-link {
+    background: #fff;
 }
 
 #edit-wikiwyg-mode-links {
-	float: left;
-	background: #C3E0F0;
-	margin-top: 1px;
-	margin-left: 25px;
-	padding: 1px;
-	border: 1px solid #407fa1;
-	font-size: 0.9em;
+    float: left;
+    background: #C3E0F0;
+    margin-top: 1px;
+    margin-left: 25px;
+    padding: 1px;
+    border: 1px solid #407fa1;
+    font-size: 0.9em;
 }
 
 #edit-wikiwyg-mode-label {
-	font-size: 0.9em;
+    font-size: 0.9em;
 }
 
-#edit-wikiwyg-wysiwyg-link,
-#edit-wikiwyg-wikitext-link {
-	padding-left: 6px;
-	padding-right: 6px;
+#edit-wikiwyg-wysiwyg-link,#edit-wikiwyg-wikitext-link {
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
 #edit-wikiwyg-wikitext-link.workspace-bar-link {
-	color: #000;
+    color: #000;
 }
 
 #edit-wikiwyg-whats-this-link-container {
-	float: left;
-	padding: 2px;
-	padding-top: 0px;
-	margin-top: 1px;
-	color: #666;
+    float: left;
+    padding: 2px;
+    padding-top: 0px;
+    margin-top: 1px;
+    color: #666;
 }
 
 #edit-wikiwyg-whats-this-link {
-	color: #666;
+    color: #666;
 }
 
 #edit-wikiwyg-debug-links {
-	float: left;
-	margin-left: 25px;
-}
-
-#edit-wikiwyg-html-link {
+    float: left;
+    margin-left: 25px;
 }
 
 #edit-wikiwyg-tips-link {
-	float: left;
-	margin-left: 25px;
+    float: left;
+    margin-left: 25px;
 }
 
 #page-control-preview {
-	display: none;
-	float: left;
-	clear: left;
+    display: none;
+    float: left;
+    clear: left;
 }
-#page-control-preview a:visited,
-#page-control-preview a:active {
-
-} 
-
 
 #preview-eip-controls {
-	position: relative;
-}
-
-#preview-eip-save-link {
-}
-
-#preview-eip-edit-more-link {
-}
-
-#preview-eip-cancel-link {
+    position: relative;
 }
 
 #preview-controls {
-	position: relative;
+    position: relative;
 }
 
 /*
@@ -762,15 +602,6 @@ Page-level navigational elements while viewing "Recent Changes."
 
 */
 
-#page-control-changes-bar {
-}
-
-#page-control-changes {
-}
-
-#page-control-show-all-pages-link {
-}
-
 /*
 
 =head4 Page control: revision view
@@ -779,27 +610,8 @@ Page-level navigational elements while viewing a page revision.
 
 */
 
-#page-control-revision-view-bar {
-}
-
-
-#page-control-revision-view {
-}
-
-#page-control-view-current-revision-link {
-}
-
-#page-control-all-revisions-link {
-}
-
-#page-control-revision-view-normal-link {
-}
-
-#page-control-revision-view-source-link {
-}
-
 #page-control-restore-revision-button {
-	height: 80%;
+    height: 80%;
 }
 
 /*
@@ -810,21 +622,6 @@ Page-level navigational elements while comparing two revisions of a page.
 
 */
 
-#page-control-revision-compare-bar {
-}
-
-#page-control-revision-compare {
-}
-
-#page-control-back-to-current-revision-link {
-}
-
-#page-control-view-formatted-link {
-}
-
-#page-control-view-unformatted-link {
-}
-
 /*
 
 =head4 Page control: revision list
@@ -832,12 +629,6 @@ Page-level navigational elements while comparing two revisions of a page.
 Page-level controls for viewing the revision listing of a wiki page.
 
 */
-
-#page-control-revision-list-bar {
-}
-
-#page-control-revision-list {
-}
 
 /*
 
@@ -847,26 +638,10 @@ Page-level controls for viewing a weblog.
 
 */
 
-#page-control-weblog-bar {
-
-}
-
-#page-control-weblog-bar .workspace-bar-link {
-
-}
-
-
-#page-control-weblog {
-
-}
-
-#page-control-category-selector {
-}
-
 #page-control-weblog-post-select-controls {
-margin-right: 14em;
-margin-top: -1.8em;
-text-align: right;
+    margin-right: 14em;
+    margin-top: -1.8em;
+    text-align: right;
 }
 
 /*
@@ -879,56 +654,47 @@ to users while editing pages with Wikiwyg.
 */
 
 #edit-wikiwyg-message-center {
-	font-family: sans-serif;
-	font-size: 0.9em;
-	padding: 2px;
-	padding-bottom: 0;
-	margin: 1px;
-	margin-top: 25px;
-	width: 20em;
-	position: absolute;
-	right: 20px;
-	display: none;
-	background: #ff9;
-	border: #cc0 1px solid;
+    font-family: sans-serif;
+    font-size: 0.9em;
+    padding: 2px;
+    padding-bottom: 0;
+    margin: 1px;
+    margin-top: 25px;
+    width: 20em;
+    position: absolute;
+    right: 20px;
+    display: none;
+    background: #ff9;
+    border: #cc0 1px solid;
 }
+
 * html #edit-wikiwyg-message-center {
-	right: 60px;
-}
-
-
-#edit-wikiwyg-message-center-title {
+    right: 60px;
 }
 
 #edit-wikiwyg-message-center-body {
-	display: none;
-	margin-top: 0.4em;
+    display: none;
+    margin-top: 0.4em;
 }
 
 #edit-wikiwyg-message-center-controls {
-	float: right;
+    float: right;
 }
 
 #edit-wikiwyg-message-center-controls a:hover {
-	background: none;
+    background: none;
 }
 
 #edit-wikiwyg-message-center-controls a {
-	text-decoration: none;
-	color: black;
-	font-size: 0.9em;
-	padding-left: 2px;
-	padding-right: 2px;
-}
-
-#edit-wikiwyg-message-center-arrow {
-}
-
-#edit-wikiwyg-message-center-close {
+    text-decoration: none;
+    color: black;
+    font-size: 0.9em;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 #edit-wikiwyg-message-center-close-icon {
-	border: none;
+    border: none;
 }
 
 /*
@@ -943,14 +709,14 @@ moving it to the fixed bar. These styles apply in either situation.
 */
 
 #workspace-title {
-	display: block;
-	padding: 40px 0 5px 0;
-	font-size: 1.1em;
-	color: #fff;
+    display: block;
+    padding: 40px 0 5px 0;
+    font-size: 1.1em;
+    color: #fff;
 }
 
 #workspace-title-prefix {
-	display: none;
+    display: none;
 }
 
 /*
@@ -963,74 +729,70 @@ situations throughout the wiki.
 */
 
 .error-text, .loading-message {
-	color: red;
+    color: red;
 }
 
 .status-message {
-	font-size: 0.9em;
-	color: #ff801f;
-	margin: 5px 0 0 0;
+    font-size: 0.9em;
+    color: #ff801f;
+    margin: 5px 0 0 0;
 }
 
 #fixed-bar .status-message {
-	margin: 5px 20px 0 40px;
+    margin: 5px 20px 0 40px;
 }
 
 .window-button {
-	font-size: 0.7em;
+    font-size: 0.7em;
 }
 
 .workspace-bar-link {
-	text-decoration: none;
-	padding: 0px 0px 0px 0px;
-	font-size: 0.9em;
+    text-decoration: none;
+    padding: 0px 0px 0px 0px;
+    font-size: 0.9em;
 }
 
 .revision-header-emphasis {
-	color: #ff801f;
+    color: #ff801f;
 }
 
 .important-message {
-	color: #ff801f;
+    color: #ff801f;
 }
 
 .error-message {
-	color: #ff801f;
+    color: #ff801f;
 }
 
 .edit-requires-login-label {
-	color: red;
+    color: red;
 }
 
 .disabled-link {
-	color: #666;
+    color: #666;
 }
 
 .inactive {
-	color: #ccc;
-	text-decoration: line-through;
+    color: #ccc;
+    text-decoration: line-through;
 }
 
 .w-st-even-row, .trbg-even {
-	background-color: #C3E0F0;
-}
-
-.w-st-odd-row, .trbg-odd {
+    background-color: #C3E0F0;
 }
 
 .standard-button-cancel, .popup .standard-button-cancel {
-	background-color: #276181;
-	border: 1px solid #ff801f;
-	color: #ff801f;
-	width: 8em;
-
+    background-color: #276181;
+    border: 1px solid #ff801f;
+    color: #ff801f;
+    width: 8em;
 }
 
 .standard-button-submit, .popup .standard-button-submit {
-	background-color: #276181;
-	border: 1px solid #57EC70;
-	color: #57EC70;
-	width: 8em;
+    background-color: #276181;
+    border: 1px solid #57EC70;
+    color: #57EC70;
+    width: 8em;
 }
 
 /*
@@ -1041,9 +803,6 @@ Styles for specific error messages.
 
 */
 
-#error-no-javascript {
-}
-
 /*
 
 =head2 Page Containment
@@ -1053,146 +812,132 @@ These styles apply to the containers around the page content and sidebar.
 */
 
 #page-container {
-	margin: 0px;
-	width: auto;
+    margin: 0px;
+    width: auto;
 }
+
 * html #page-container {
-	width: 100%;
-	height: 100%;
-	overflow: auto;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
 }
 
 #page-container-body {
-	height: 100%;
-	margin: 0px;
-}
-* html #page-container-body {
-	margin-top: -2px;
-	padding-left: 0px;
-	padding-right: 0px;
+    height: 100%;
+    margin: 0px;
 }
 
-#page-top-marker {
+* html #page-container-body {
+    margin-top: -2px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 #page-container-top-control {
-	display: none;
+    display: none;
 }
 
 #page-center-control-table {
-	background: #fff;
-	width: 100%;
-	padding: 0 15px;
+    background: #fff;
+    width: 100%;
+    padding: 0 15px;
 }
 
 #page-center-control-content-cell {
-	background: #bcd2de url('../../images/tasteofblue/back_wide_pale.gif') no-repeat 0 -30px;
-	padding: 0;
-	vertical-align: top;
+    background: #bcd2de url('../../images/tasteofblue/back_wide_pale.gif') no-repeat 0 -30px;
+    padding: 0;
+    vertical-align: top;
 }
 
 .page-center-control-sidebar-cell {
-	vertical-align: top;
-	width: 16em;
-	padding: 8px;
+    vertical-align: top;
+    width: 16em;
+    padding: 8px;
 }
 
 .page-center-control-sidebar-cell img {
-	border: 0px;
+    border: 0px;
 }
 
 .page-center-control-sidebar-cell .sidebar-box .wiki p {
-	margin: -10px 0 0 0;
+    margin: -10px 0 0 0;
 }
 
 #page-center-control-sidebar-left-cell, #page-center-control-sidebar-right-cell {
-	background: #83acc2 url('../../images/tasteofblue/back_narrow_dark.gif') no-repeat 100% -30px;
+    background: #83acc2 url('../../images/tasteofblue/back_narrow_dark.gif') no-repeat 100% -30px;
 }
 
 #page-center-control-sidebar-right-cell #sidebar-workspace-logo {
-	padding-right: 5px;
-	text-align: right;
+    padding-right: 5px;
+    text-align: right;
 }
 
 #page-center-control-sidebar-left-cell #sidebar-workspace-logo {
-	margin-left: -10px;
-	text-align: left;
-}
-
-#sidebar-workspace-logo-link {
-}
-
-#sidebar-workspace-logo-image {
-
+    margin-left: -10px;
+    text-align: left;
 }
 
 #sidebar-user-welcome-message {
-	font-size: 0.7em;
-	color: white;
+    font-size: 0.7em;
+    color: white;
 }
-
 
 .sidebar-box {
-	 margin-bottom: 3px;
-	 width: 16em;
+    margin-bottom: 3px;
+    width: 16em;
 }
+
 * html .sidebar-box {
-	overflow: hidden;
+    overflow: hidden;
 }
 
 .sidebar-box-header {
-	text-align: left;
-	padding: 2px 2px 2px 2px;
-	color: #fff;
-
-	cursor: pointer;
+    text-align: left;
+    padding: 2px 2px 2px 2px;
+    color: #fff;
+    cursor: pointer;
 }
 
 .sidebar-box-content {
-	background-color: #a4c8dB;
-	padding: 1px 4px 2px 4px;
-	border: 1px solid #eff3ef;
-	font-size: 0.9em;
-	line-height: 150%;
+    background-color: #a4c8dB;
+    padding: 1px 4px 2px 4px;
+    border: 1px solid #eff3ef;
+    font-size: 0.9em;
+    line-height: 150%;
 }
 
 .sidebar-box-content input {
-	background-color: #83acc2;
-	padding: 2px;
-	border: 1px solid #eff3ef;
-	color: #fff;
+    background-color: #83acc2;
+    padding: 2px;
+    border: 1px solid #eff3ef;
+    color: #fff;
 }
-
-.sidebar-box-content a:visited,
-.sidebar-box-content a:active {
-
-}
-
 
 .sidebar-box-content-open {
-	display: block;
+    display: block;
 }
 
 .sidebar-box-content-closed {
-	display: none;
+    display: none;
 }
 
 #box-search-query {
-	width: 13em;
-	margin-left: .5em;
-	margin-right: .5em;
+    width: 13em;
+    margin-left: .5em;
+    margin-right: .5em;
 }
 
 .sidebar-box-content-edit-link {
-	text-align: right;
+    text-align: right;
 }
 
 .sidebar-box-content-entry {
-	overflow: hidden;
-	white-space: nowrap;
+    overflow: hidden;
+    white-space: nowrap;
 }
+
 * html .sidebar-box-content-entry {
-	width: 100%;
+    width: 100%;
 }
 
 /*
@@ -1204,16 +949,15 @@ The product ID exists on the bottom of every page. The following styles apply.
 */
 
 #product-id {
-	margin-left: 1%;
-	margin-right: 1%;
-	padding: 5px;
+    margin-left: 1%;
+    margin-right: 1%;
+    padding: 5px;
 }
 
 #product-id-link {
-	color: #468;
-	text-decoration: none;
+    color: #468;
+    text-decoration: none;
 }
-
 
 /*
 
@@ -1223,22 +967,18 @@ These styles apply to the content section of the Socialtext wiki.
 
 */
 
-#content-display-title,
-#content-preview-title {
-	margin-bottom: 20px;
-	font-size: 1.5em;
-	color: #83acc2;
-}
-
-#content-display-title-prefix {
+#content-display-title,#content-preview-title {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #83acc2;
 }
 
 .content-display-rss-link {
-	float: right;
+    float: right;
 }
 
 .content-display-rss-link-image {
-	margin-top: 5px;
+    margin-top: 5px;
 }
 
 .content-display-watchlist-link {
@@ -1247,221 +987,137 @@ These styles apply to the content section of the Socialtext wiki.
 }
 
 #page-center-control-content {
-	border: none;
-	min-height: 80%;
-	margin: 10px 0 15px 20px;
-	padding: 0;
+    border: none;
+    min-height: 80%;
+    margin: 10px 0 15px 20px;
+    padding: 0;
 }
 
 .content-section-hidden {
-	display: none;
+    display: none;
 }
 
 .content-section-visible {
-	display: block;
-}
-
-#content-display-header {
-
-}
-
-#content-edit-header {
-
+    display: block;
 }
 
 #content-display-body {
-	margin: 15px 20px 15px 0;
-}
-
-#content-edit-body {
-}
-
-#content-edit-title {
+    margin: 15px 20px 15px 0;
 }
 
 #content-edit-title-input {
-	margin-bottom: 10px;
-	padding: 0 0 0 0;
-	border-style: inset;
-	border-width: thin;
-	font-size: 1.5em;
-	background-color: #ffffdd;
-	color: black;
+    margin-bottom: 10px;
+    padding: 0 0 0 0;
+    border-style: inset;
+    border-width: thin;
+    font-size: 1.5em;
+    background-color: #ffffdd;
+    color: black;
 }
 
 #content-preview-title {
-	color: #a00;
+    color: #a00;
 }
 
 #content-preview-title:before {
-	content: "PREVIEW:	";
+    content: "PREVIEW:	";
 }
 
-#content-display-body, #content-edit-body {
-
-}
 * html #wikipage {
-	margin-top: 0px;
-	padding-top: 0px !important;
+    margin-top: 0px;
+    padding-top: 0px !important;
 }
 
-#wikipage h1,
-#wikipage ul,
-#wikipage ol {
-	color: #276181;
-}
-
-#wikipage h2,
-#wikipage h3,
-#wikipage h4,
-#wikipage h5,
-#wikipage h6,
-#wikipage p,
-#wikipage blockqoute {
-
-}
-
-#edit-wikiwyg-iframe {
+#wikipage h1,#wikipage ul,#wikipage ol {
+    color: #276181;
 }
 
 #content-display-body-to-top {
-	font-size: 0.7em;
-	text-align: right;
-	margin-top: 1em;
+    font-size: 0.7em;
+    text-align: right;
+    margin-top: 1em;
 }
 
-#content-display-body-to-top-link,
-#content-display-body-to-top-link a:visited,
-#content-display-body-to-top-link a:active {
-
-} 
-
 #content-display-body-last-updated {
-	font-style: italic;
-	text-align: right;
-	border-bottom: 1px dashed #fff;
-	padding-bottom: 5px;
-	color: #407fa1;
+    font-style: italic;
+    text-align: right;
+    border-bottom: 1px dashed #fff;
+    padding-bottom: 5px;
+    color: #407fa1;
 }
 
 #content-edit-body-container {
-	border-top: 1px dashed #aaa;
+    border-top: 1px dashed #aaa;
 }
 
 #content-edit-body-textarea {
-	padding: 0;
-	border-style: inset;
-	border-width: 1px;
-	background-color: #ffffdd;
-	color: black;
+    padding: 0;
+    border-style: inset;
+    border-width: 1px;
+    background-color: #ffffdd;
+    color: black;
 }
 
 #content-categories, #content-attachments, #content-categories {
-	margin: 0 20px 0 0;
-	text-align: right;
-	color: #407fa1;
+    margin: 0 20px 0 0;
+    text-align: right;
+    color: #407fa1;
 }
 
-#content-categories a,
-#content-categories a:visited,
-#content-categories a:active {
-
-} 
-
 .content-attributes-list {
-	font-size: 0.9em;
+    font-size: 0.9em;
 }
 
 #content-categories-editor {
-	display: none;
-	margin: 10px 0;
-	padding: 10px;
-	border: 1px solid #fff;
-	background-color: #bcd2de;
+    display: none;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #fff;
+    background-color: #bcd2de;
 }
 
 #content-categories-editor input, #content-categories-editor textarea, #content-categories-editor select {
-	background-color: #fff;
-	margin-bottom: 5px;
-	border: 1px solid #276181;
-	color: #283033;
+    background-color: #fff;
+    margin-bottom: 5px;
+    border: 1px solid #276181;
+    color: #283033;
 }
 
 #content-categories-summary {
-	display: inline;
-}
-
-.content-categories-summary-category-link {
+    display: inline;
 }
 
 #content-categories-toggle-button {
-	font-style: italic;
+    font-style: italic;
 }
-
-#content-categories-editor-listing {
-}
-
-#content-categories-editor-new {
-}
-
-#content-categories-editor-add-new {
-}
-
-#content-attachments a,
-#content-attachments a:visited,
-#content-attacments a:active {
-
-} 
-
 
 #content-attachments-summary {
-	display: inline;
-}
-
-.content-attachments-summary-attachment-link {
+    display: inline;
 }
 
 #content-attachments-summary-overflow {
-	font-style: italic;
+    font-style: italic;
 }
 
 #content-attachments-toggle-button {
-	font-style: italic;
+    font-style: italic;
 }
 
 #content-attachments-editor {
-	display: none;
-	margin: 10px 0;
-	padding: 5px 10px;
-	border: 1px solid #fff;
-	background-color: #bcd2de;
+    display: none;
+    margin: 10px 0;
+    padding: 5px 10px;
+    border: 1px solid #fff;
+    background-color: #bcd2de;
 }
 
 #content-attachments-editor input, #content-attachments-editor textarea, #content-attachments-editor select, #content-attachments-editor checkbox, #content-attachments-editor submit {
-	background: #fff;
-	border: 1px solid #276181;
-}
-
-#content-attachments-editor-new {
-}
-
-#content-attachments-editor-upload {
+    background: #fff;
+    border: 1px solid #276181;
 }
 
 #content-attachments-upload-warning {
-	display: none;
-}
-
-#content-attachments-upload-option-embed {
-}
-
-#content-attachments-upload-option-unpack {
-}
-
-#content-attachments-weblog-return {
-}
-
-#content-attachments-weblog-return-link {
+    display: none;
 }
 
 /*
@@ -1473,28 +1129,6 @@ and category listing pages.
 
 */
 
-.sortable {
-}
-
-.sortable-header-links {
-}
-
-.sortable-header-links a:visited {
-
-}
-
-.sortable-header {
-}
-
-.sortable-header-link {
-}
-
-.sortable-row-cell {
-}
-
-.sortable-row-cell-link {
-}
-
 /*
 
 =head2 Orphans Listing
@@ -1502,12 +1136,6 @@ and category listing pages.
 Styles for the orphans listing.
 
 */
-
-#orphans-list {
-}
-
-#orphans-list-entry {
-}
 
 /*
 
@@ -1520,246 +1148,267 @@ Use these styles when changing the look and feel of content.
 */
 
 .wafl_syntax_error {
-	color: rgb(200,0,0);
-	border-bottom: 0.2em solid rgb(200,0,0);
-}
-
-.wafl_permission_error {
+    color: rgb(200,0,0);
+    border-bottom: 0.2em solid rgb(200,0,0);
 }
 
 .wafl_existence_error {
-	color: rgb(200,0,0);
-	border-bottom: 0.2em dashed rgb(200,0,0);
+    color: rgb(200,0,0);
+    border-bottom: 0.2em dashed rgb(200,0,0);
 }
 
 .wiki hr {
-	margin-top: .4em;
-	margin-bottom: .4em;
+    margin-top: .4em;
+    margin-bottom: .4em;
 }
 
 .wiki .short-rule {
-	width: 25%;
+    width: 25%;
 }
 
 .wiki .medium-rule {
-	width: 50%
+    width: 50%;
 }
 
-.wiki ul,
-.wiki ol,
-.wiki blockquote {
-	margin-left: 2em;
-	padding-left: 0em;
+.wiki ul,.wiki ol,.wiki blockquote {
+    margin-left: 2em;
+    padding-left: 0em;
 }
 
 .wiki table {
-	border-collapse: collapse;
+    border-collapse: collapse;
 }
 
 .wiki td {
-	border: 1px;
-	border-style: solid;
-	padding: .2em;
-	vertical-align: top;
+    border: 1px;
+    border-style: solid;
+    padding: .2em;
+    vertical-align: top;
 }
 
-.wiki h1,
-.wiki h2, 
-.wiki h3,
-.wiki h4,
-.wiki h5,
+.wiki h1,.wiki h2, .wiki h3,.wiki h4,.wiki h5,.wiki h6 {
+    font-style: normal;
+    margin-top: 0.4em;
+    margin-bottom: 0.2em;
+}
+
+.wiki h1 {
+    font-size: 2em;
+}
+
+.wiki h2 {
+    font-size: 1.7em;
+}
+
+.wiki h3 {
+    font-size: 1.45em;
+}
+
+.wiki h4 {
+    font-size: 1.25em;
+}
+
+.wiki h5 {
+    font-size: 1.10em;
+}
+
 .wiki h6 {
-	font-style: normal;
-	margin-top: 0.4em;
-	margin-bottom: 0.2em;
+    font-size: 1em;
 }
-
-.wiki h1 {font-size: 2em;}
-.wiki h2 {font-size: 1.7em;}
-.wiki h3 {font-size: 1.45em;}
-.wiki h4 {font-size: 1.25em;}
-.wiki h5 {font-size: 1.10em;}
-.wiki h6 {font-size: 1em;}
 
 .wiki pre {
-	background-color: #a4c8dB;
-	margin-left: 1em;
-	margin-right: 1em;
-	padding: 0.5em;
-	border: 1px solid #fff;
+    background-color: #a4c8dB;
+    margin-left: 1em;
+    margin-right: 1em;
+    padding: 0.5em;
+    border: 1px solid #fff;
 }
 
-* html .wiki p,
-* html .wiki ul,
-* html .wiki ol,
-* html .wiki table,
-* html .wiki h1,
-* html .wiki h2,
-* html .wiki h3,
-* html .wiki h4,
-* html .wiki h5,
-* html .wiki blockqoute {
-	position: relative;
+* html .wiki p,* html .wiki ul,* html .wiki ol,* html .wiki table,* html .wiki h1,* html .wiki h2,* html .wiki h3,* html .wiki h4,* html .wiki h5,* html .wiki blockqoute {
+    position: relative;
 }
 
 * html .wiki table {
-	border-collapse: collapse;
+    border-collapse: collapse;
 }
 
 .wiki .incipient {
-	text-decoration: none; 
-	border-bottom: 1px dashed;
+    text-decoration: none;
+    border-bottom: 1px dashed;
 }
 
 .sidebar-box-content .wiki * {
-	line-height: 150%;
-	white-space: normal;
+    line-height: 150%;
+    white-space: normal;
 }
 
 .formatter_pre {
-	font-family: monospace;
-	background-color: #eee;
-	padding: 2px;
-	padding-left: 10px;
-	margin-left: 20px;
-	margin-right: 20px;
+    font-family: monospace;
+    background-color: #eee;
+    padding: 2px;
+    padding-left: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .formatter_table {
-	border-collapse: collapse;
-	margin-bottom: .2em;
+    border-collapse: collapse;
+    margin-bottom: .2em;
 }
 
 .formatter_table td {
-	border: 1px solid black;
-	padding: .2em;
-	vertical-align: top;
+    border: 1px solid black;
+    padding: .2em;
+    vertical-align: top;
 }
 
 .wafl_error {
-	color: #f00;
-	text-decoration: underline;
+    color: #f00;
+    text-decoration: underline;
 }
 
 .tt {
-	font-family: monospace;
+    font-family: monospace;
 }
 
 .query_wafl_box {
-	clear: both;
-	background-color: white;
-	font-family: Arial,Helvetica,Verdana,sans-serif;
-	margin: 0px;
-	width: auto;
-	border: none;
+    clear: both;
+    background-color: white;
+    font-family: Arial,Helvetica,Verdana,sans-serif;
+    margin: 0px;
+    width: auto;
+    border: none;
 }
 
 .query_wafl_titlebox {
-	padding: 0.3em 0.5em 0.3em 0.5em;
-	background-color: #eff3ec;
-	color: #353;
+    padding: 0.3em 0.5em 0.3em 0.5em;
+    background-color: #eff3ec;
+    color: #353;
 }
 
 .query_wafl_titlebox a {
-	color: #353;
+    color: #353;
 }
 
 .query_wafl_title a {
-	color: #286aa0;
-	font-size: 0.9em;
+    color: #286aa0;
+    font-size: 0.9em;
 }
 
-.query_wafl_title { font-weight: bold; font-size: large; }
+.query_wafl_title {
+    font-weight: bold;
+    font-size: large;
+}
 
 ul.query_wafl_items {
-	 margin: 0;
-	 padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
-.query_wafl_item { margin: 0.1em 0.2em 0.1em 0em; }
+.query_wafl_item {
+    margin: 0.1em 0.2em 0.1em 0em;
+}
 
 .fetchrss_box {
-	color: #333;
-	clear: both;
-	width: 80%;
-	margin-top: 5px;
-	margin-left: 5px;
-	border: 2px solid #cec;
-	background-color: white;
-	font-family: Arial,Helvetica,Verdana,sans-serif;
+    color: #333;
+    clear: both;
+    width: 80%;
+    margin-top: 5px;
+    margin-left: 5px;
+    border: 2px solid #cec;
+    background-color: white;
+    font-family: Arial,Helvetica,Verdana,sans-serif;
 }
 
 .fetchrss_copyright {
-	font-size: 0.9em;
-	padding: 0.3em 0.5em 0.3em 0.5em;
-	background-color: #cec;
-	color: #353;
+    font-size: 0.9em;
+    padding: 0.3em 0.5em 0.3em 0.5em;
+    background-color: #cec;
+    color: #353;
 }
 
 .fetchrss_titlebox {
-	padding: 0.3em 0.5em 0.3em 0.5em;
-	color: #353;
-	background-color: #eff3ef;
+    padding: 0.3em 0.5em 0.3em 0.5em;
+    color: #353;
+    background-color: #eff3ef;
 }
 
-.googlesoap_title a,
-.fetchrss_title a {
-	color: #286aa0;
+.googlesoap_title a,.fetchrss_title a {
+    color: #286aa0;
 }
+
 .fetchrss_titlebox a {
-	color: #353;
+    color: #353;
 }
 
-.fetchrss_title { font-weight: bold; font-size: large; }
+.fetchrss_title {
+    font-weight: bold;
+    font-size: large;
+}
 
 ul.fetchrss_items {
-	 margin: 0;
-	 padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
-.fetchrss_item { margin: 0.1em 0.2em 0.1em 0em; }
+.fetchrss_item {
+    margin: 0.1em 0.2em 0.1em 0em;
+}
 
-.fetchrss_description {	font-size: 0.9em; margin: 0em 0.4em 0em 0.2em; }
+.fetchrss_description {
+    font-size: 0.9em;
+    margin: 0em 0.4em 0em 0.2em;
+}
+
 .googlesoap_box {
-	clear: both;
-	width: 80%;
-	margin-top: 5px;
-	margin-left: 5px;
-	border: 2px solid #ced;
-	background-color: white;
-	font-family: Arial,Helvetica,Verdana,sans-serif;
-	color: #333;
+    clear: both;
+    width: 80%;
+    margin-top: 5px;
+    margin-left: 5px;
+    border: 2px solid #ced;
+    background-color: white;
+    font-family: Arial,Helvetica,Verdana,sans-serif;
+    color: #333;
 }
 
 .googlesoap_titlebox {
-	padding: 0.3em 0.5em 0.3em 0.5em;
-	color: #353;
-	background-color: #eff3ef;
+    padding: 0.3em 0.5em 0.3em 0.5em;
+    color: #353;
+    background-color: #eff3ef;
 }
 
 .googlesoap_titlebox a {
-	color: #353;
+    color: #353;
 }
 
-.googlesoap_title { font-weight: bold; font-size: large; }
+.googlesoap_title {
+    font-weight: bold;
+    font-size: large;
+}
 
 ul.googlesoap_results {
-	 margin: 0;
-	 padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
-li.googlesoap_result { margin: 0.1em 0em 0.1em 0em; }
+li.googlesoap_result {
+    margin: 0.1em 0em 0.1em 0em;
+}
 
-.googlesoap_snippet {	font-size: 0.9em; margin: 0em 0.4em 0em 0.2em; }
+.googlesoap_snippet {
+    font-size: 0.9em;
+    margin: 0em 0.4em 0em 0.2em;
+}
+
 div.attachment_box_header {
-	border: 1px solid #306e87;
-	border-bottom-style: none;
-	font-size: 0.9em;
-	text-align: center;
-	color: #fff;
-	background-color: #326354;
-	padding: 2px 2px 4px 2px;
-	margin-top: 3em;
+    border: 1px solid #306e87;
+    border-bottom-style: none;
+    font-size: 0.9em;
+    text-align: center;
+    color: #fff;
+    background-color: #326354;
+    padding: 2px 2px 4px 2px;
+    margin-top: 3em;
 }
 
 /*
@@ -1771,26 +1420,12 @@ These styles are for wikipages included inside of other wiki pages.
 */
 
 .wiki .wiki {
-	padding: .25em;
-	border: none !important;
+    padding: .25em;
+    border: none !important;
 }
+
 * html .wiki .wiki {
-	position: relative;
-}
-
-.wiki-include-title {
-	color: white;
-	background-color: #eff3ec;
-	text-align: left;
-}
-
-.wiki-include-title .wiki {
-	background-color: transparent;
-	border: none;
-}
-
-.wiki-include-title a {
-	color: #286aa0;
+    position: relative;
 }
 
 /*
@@ -1802,19 +1437,19 @@ Wikitext formatted inside of a table of contents.
 */
 
 .toc {
-	padding: 0px;
-	margin: 0px;
-	position: relative;
+    padding: 0px;
+    margin: 0px;
+    position: relative;
 }
 
 .toc .wiki {
-	border: none !important;
+    border: none !important;
 }
 
 .toc p {
-	color: #286aa0;
-	padding: 3px;
-	margin: 0px;
+    color: #286aa0;
+    padding: 3px;
+    margin: 0px;
 }
 
 /*
@@ -1825,69 +1460,38 @@ Change these styles to update the look of the recent changes page.
 
 */
 
-#recent-changes-content {
+* html #recent-changes-content {
+    font-size: 0.9em;
 }
-* html #recent-changes-content { 	font-size: 0.9em;}
 
 #recent-changes-header-title {
-	text-align: left;
-}
-
-#recent-changes-header-last-edited-by {
-}
-
-#recent-changes-header-date {
-}
-
-#recent-changes-header-revisions {
+    text-align: left;
 }
 
 #recent-changes-content th {
-	padding: 2px 5px;
-	text-transform: capitalize;
-	border: 1px solid #a4c8dB;
+    padding: 2px 5px;
+    text-transform: capitalize;
+    border: 1px solid #a4c8dB;
 }
 
 #recent-changes-content th a {
-	color: #276181;
+    color: #276181;
 }
 
 #recent-changes-content th a:hover {
-	text-decoration: underline;
-	color: #283033;
+    text-decoration: underline;
+    color: #283033;
 }
 
 #recent-changes-content td {
-	padding: 2px 5px;
-	border-left: 1px dashed #a4c8dB;
-	border-right: 1px dashed #a4c8dB;
-	border-bottom: 1px solid #a4c8dB;
+    padding: 2px 5px;
+    border-left: 1px dashed #a4c8dB;
+    border-right: 1px dashed #a4c8dB;
+    border-bottom: 1px solid #a4c8dB;
 }
 
-#recent-changes-content .w-st-even-row,
-#recent-changes-content .w-st-even-row td {
-	background-color: #C3E0F0;
-}
-
-.recent-changes-row {
-}
-
-.recent-changes-row-title {
-}
-
-.recent-chagnes-row-last-edited-by {
-}
-
-.recent-chagnes-row-date {
-}
-
-.recent-changes-row-revisions {
-}
-
-.recent-changes-header-link {
-}
-
-#recent-changes-header-row {
+#recent-changes-content .w-st-even-row,#recent-changes-content .w-st-even-row td {
+    background-color: #C3E0F0;
 }
 
 /*
@@ -1898,46 +1502,22 @@ These styles apply to query results tables like recent changes and search result
 
 */
 
-.query-results-row {
-}
-
 .query-results-row-title {
-	text-align: left;
+    text-align: left;
 }
 
 .query-results-row-last-edited-by {
-	text-align: center;
-}
-
-.query-results-row-date {
+    text-align: center;
 }
 
 .query-results-row-revisions {
-	text-align: right;
-}
-
-.query-resuls-header-link {
-}
-
-.query-results-header-row {
+    text-align: right;
 }
 
 .query-results-content {
-	margin-top: 1em;
-	border-collapse: collapse;
-	border: 1px solid #ccc;
-}
-
-.query-results-header-title {
-}
-
-.query-results-header-last-edited-by {
-}
-
-.query-results-header-date {
-}
-
-.query-results-header-revisions {
+    margin-top: 1em;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
 }
 
 /*
@@ -1949,45 +1529,39 @@ These styles are specific to the weblog display.
 */
 
 .weblog-date {
-	font-size: 1.2em;
-	color: #276181;
+    font-size: 1.2em;
+    color: #276181;
 }
 
 .weblog-posttitle {
-	font-size: 1.5em;
-	margin: 0.5em 0px 0px 0px;
-	color: #276181;
+    font-size: 1.5em;
+    margin: 0.5em 0px 0px 0px;
+    color: #276181;
 }
 
 .weblog-post {
-	margin: 0px 0px 10px 0px; 
+    margin: 0px 0px 10px 0px;
 }
 
 .weblog-byline {
-	margin-right: 10px;
-	padding-bottom: 5px;
-	border-top: 1px dotted #407fa1;
-	text-align: right;
-	font-size: 0.9em;
-	color: #276181;
+    margin-right: 10px;
+    padding-bottom: 5px;
+    border-top: 1px dotted #407fa1;
+    text-align: right;
+    font-size: 0.9em;
+    color: #276181;
 }
-
-.weblog-byline a:visited,
-.weblog_byline a:active { 
-
-} 
 
 .weblog-post-links {
-	margin-right: 10px;
-	margin-bottom: 4em;
-	text-align: right;
-	font-size: 0.9em;
+    margin-right: 10px;
+    margin-bottom: 4em;
+    text-align: right;
+    font-size: 0.9em;
 }
 
-#page-control-weblog-bar a:hover,
-.weblog-post-links a:hover {
-	background-color: #8bd;
-	color: white;
+#page-control-weblog-bar a:hover,.weblog-post-links a:hover {
+    background-color: #8bd;
+    color: white;
 }
 
 /*
@@ -1998,15 +1572,8 @@ Change these styles to update the category display page.
 
 */
 
-#category-display {
-
-}
-
 #category-display-links {
-	margin-bottom: 1em;
-}
-
-.category-display-page-url {
+    margin-bottom: 1em;
 }
 
 /*
@@ -2018,62 +1585,23 @@ Change these styles to update the page revision list.
 */
 
 #revision-list-table {
-	width: 100%;
-	color: #283033;
-}
-
-.revision-list-compare-button-row {
+    width: 100%;
+    color: #283033;
 }
 
 .revision-list-compare-button-cell {
-	text-align: center;
+    text-align: center;
 }
 
 .revision-list-compare-button {
-	background: #bcd2de;
-	margin: 3px 0;
-	border: 1px solid #407fa1;
-	color: #276181;
-}
-
-#revision-list-header-row {
-}
-
-#revision-list-header-select {
-}
-
-#revision-list-header-revision {
-}
-
-#revision-list-header-edited-by {
-}
-
-#revision-list-header-date {
-}
-
-.revision-list-row {
+    background: #bcd2de;
+    margin: 3px 0;
+    border: 1px solid #407fa1;
+    color: #276181;
 }
 
 .revision-list-row-select {
-	text-align: center;
-}
-
-.revision-list-row-select-old {
-}
-
-.revision-list-row-select-new {
-}
-
-.revision-list-row-revision {
-}
-
-.revision-list-row-revision-link {
-}
-
-.revision-list-row-edited-by {
-}
-
-.revision-list-row-date {
+    text-align: center;
 }
 
 /*
@@ -2084,9 +1612,6 @@ When viewing a page, this style applies.
 
 */
 
-#source-view {
-}
-
 /*
 
 =head2 Revision Compare Display
@@ -2095,24 +1620,25 @@ When comparing two revisions of a page, these styles apply.
 
 */
 
-#revision-compare-table { 
-	background-color: #c3e0f0;
-	margin: 10px 20px 10px 5px;
-	border: 1px solid #276181;
+#revision-compare-table {
+    background-color: #c3e0f0;
+    margin: 10px 20px 10px 5px;
+    border: 1px solid #276181;
 }
 
 #revision-compare-table td {
-	background-color: #c3e0f0;
-	padding: 3px;
-	border-bottom: 1px solid #fff;
+    background-color: #c3e0f0;
+    padding: 3px;
+    border-bottom: 1px solid #fff;
 }
 
 .revision-compare-old {
-	background-color: #fdd;
-	text-decoration: line-through;
+    background-color: #fdd;
+    text-decoration: line-through;
 }
+
 .revision-compare-new {
-	background-color: #dfd;
+    background-color: #dfd;
 }
 
 /*
@@ -2124,53 +1650,29 @@ Comment" in the page display interface.
 
 */
 
-
 body#comment-ui {
-	background: #276181;
+    background: #276181;
 }
 
 #comment-ui-container {
-	background: #c3e0f0;
-	padding: 10px;
-	border: 1px solid #fff;
-}
-
-#comment-ui-container a:visited,
-#comment-ui-container a:active {
-
-} 
-
-#comment-ui-note-top {
-}
-
-#comment-ui-controls {
+    background: #c3e0f0;
+    padding: 10px;
+    border: 1px solid #fff;
 }
 
 #comment-ui-save-link {
-	background-color: #407fa1;
-	padding: 3px;
-	color: #fff;
-}
-
-#comment-ui-cancel-link {
-}
-
-.comment-ui-custom-field {
-}
-
-.comment-ui-custom-field-label {
-}
-
-.comment-ui-custom-field-input {
+    background-color: #407fa1;
+    padding: 3px;
+    color: #fff;
 }
 
 #comment-ui-textarea {
-	background-color: #fff;
-	width: 99%;
-	height: 150px;
-	padding: 0;
-	color: black;
-	border: 1px solid #276181;
+    background-color: #fff;
+    width: 99%;
+    height: 150px;
+    padding: 0;
+    color: black;
+    border: 1px solid #276181;
 }
 
 /*
@@ -2182,33 +1684,30 @@ Styles for the duplicate page popup.
 */
 
 #duplicate-page {
-	background: #276181;
-	color: #407fa1;
+    background: #276181;
+    color: #407fa1;
 }
 
 #duplicate-page form {
-	background: #c3e0f0;
-	padding: 10px;
-	border: 1px solid #fff;
-	color: #283033;
+    background: #c3e0f0;
+    padding: 10px;
+    border: 1px solid #fff;
+    color: #283033;
 }
 
 #duplicate-page-buttons {
-	margin-top: 1em;
-}
-
-#duplicate-page-page-title {
+    margin-top: 1em;
 }
 
 .duplicate-page-form-element {
-	clear: both;
-	display: block;
+    clear: both;
+    display: block;
 }
 
 .duplicate-page-form-element input {
-	background: #fff;
-	padding: 3px;
-	border: 1px solid #276181;
+    background: #fff;
+    padding: 3px;
+    border: 1px solid #276181;
 }
 
 /*
@@ -2219,9 +1718,6 @@ Styles for the content after deleting a page.
 
 */
 
-#deleted-epilogue {
-}
-
 /*
 
 =head2 Send Page by Email
@@ -2231,75 +1727,72 @@ menu on the page bar.
 
 */
 
-#email-page {
-}
-
 .email-page-row {
-	clear: both;
+    clear: both;
 }
 
 .email-page-row-label {
-	float: left;
-	width: 5em;
-	margin-left: 1.2em;
-	margin-right: 1.2em;
-	text-align: right;
+    float: left;
+    width: 5em;
+    margin-left: 1.2em;
+    margin-right: 1.2em;
+    text-align: right;
 }
 
 .email-page-row-content {
-	float: left;
-	padding-bottom: 1.2em;
+    float: left;
+    padding-bottom: 1.2em;
 }
 
 .email-page-user-select-column {
-	float: left;
-	padding-right: 1.2em;
-	width: 14em;
+    float: left;
+    padding-right: 1.2em;
+    width: 14em;
 }
 
 #email-page-user-select-column-center {
-	width: 10em;
+    width: 10em;
 }
 
 .email-page-user-select-label {
-	text-align: center;
+    text-align: center;
 }
 
 #email-page-user-select-add-label {
-	padding-top: 1em;
+    padding-top: 1em;
 }
 
 .email-page-user-select-button-group {
-	padding-bottom: 2em;
+    padding-bottom: 2em;
 }
 
 .email-page-input {
-	width: 120px;
-	clear: both;
-	display: block;
+    width: 120px;
+    clear: both;
+    display: block;
 }
 
-
 .email-page-select {
-	 width: 175px;
-	font-size: 0.9em;
+    width: 175px;
+    font-size: 0.9em;
 }
 
 #email-page-error-message {
-	text-align: center;
+    text-align: center;
 }
 
 #email-page-buttons-container {
-	clear: both;
+    clear: both;
 }
 
 #email-page-buttons {
-	text-align: center;
+    text-align: center;
 }
 
 .email-page-input-new {
-	width: 175px;
+    width: 175px;
 }
+
 /*
 
 =head2 Popup Pages
@@ -2309,31 +1802,26 @@ Styles relating to popup dialogs for the Socialtext wiki.
 */
 
 .popup {
-	background: #276181;
-	margin: 10px;
+    background: #276181;
+    margin: 10px;
 }
 
 .popup form {
-	background: #c3e0f0;
-	padding: 10px;
-	border: 1px solid #fff;
+    background: #c3e0f0;
+    padding: 10px;
+    border: 1px solid #fff;
 }
 
 .popup form input, .popup form textarea, .popup form select {
-	background: #fff;
-	padding: 3px;
-	border: 1px solid #276181;
+    background: #fff;
+    padding: 3px;
+    border: 1px solid #276181;
 }
 
 .popup p, .popup ul, .popup ol, .popup li, .popup td, .popup th, .popup hr, .popup blockquote, .popup h1, .popup h2, .popup h3, .popup h4, .popup h5, .popup h6 {
-	margin-top: 0em; margin-bottom: 0em;
+    margin-top: 0em;
+    margin-bottom: 0em;
 }
-
-.popup h1 {}
-.popup h2 {}
-.popup h3 {}
-.popup h4 {}
-.popup h5, .popup h6 {}
 
 /*
 
@@ -2344,15 +1832,12 @@ dropdown menu in the page bar.
 
 */
 
-#send-to-workspace-page-title {
-}
-
 #send-to-workspace-new-page-title {
-	clear: both;
+    clear: both;
 }
 
 #send-to-workspace-buttons-container {
-	padding-top: 1em;
+    padding-top: 1em;
 }
 
 /*
@@ -2363,53 +1848,8 @@ Styles related to search results.
 
 */
 
-#search-content {
-}
-
-#search-index-update-message {
-}
-
-#search-header-row {
-}
-
 #search-header-title {
-	text-align: left;
-}
-
-#search-header-last-edited-by {
-}
-
-#search-header-date {
-}
-
-#search-header-revisions {
-}
-
-.search-header-link {
-}
-
-.search-row {
-}
-
-.search-row-title {
-}
-
-.search-row-last-edited-by {
-}
-
-.search-row-revisions {
-}
-
-.search-attachment-row {
-}
-
-.search-attachment-filename {
-}
-
-.search-attachment-filename-link {
-}
-
-.search-attachment-date {
+    text-align: left;
 }
 
 /*
@@ -2420,12 +1860,6 @@ Styles for edit contention.
 
 */
 
-#edit-contention {
-}
-
-#edit-contention-text {
-}
-
 /*
 
 =head2 Settings Display
@@ -2434,103 +1868,87 @@ Styles for the settings section, accessed from the User Login System.
 
 */
 
-#settings-pane {
-}
-
-.settings-start-table {
-}
-
 #settings-select {
-	padding: 0px 10px 10px 10px;
-	vertical-align: top;	
-	width: 1px;
-
-	background-color: #C3E0F0;
-	border: none;
+    padding: 0px 10px 10px 10px;
+    vertical-align: top;
+    width: 1px;
+    background-color: #C3E0F0;
+    border: none;
 }
 
 #settings-section {
-	padding: 0px 10px 10px 10px;
-	vertical-align: top;	
+    padding: 0px 10px 10px 10px;
+    vertical-align: top;
 }
 
 .settings-top-header {
-	margin-top: 1em;
-	width: 15em;
+    margin-top: 1em;
+    width: 15em;
 }
 
 .settings-header {
-	margin-top: 1em;
+    margin-top: 1em;
 }
 
 .settings-selections {
-	padding: 0px 0px 0px 20px;
-	line-height: 1.5em;
-}
-
-.settings-selections a:visited, .settings-selections a:active {
-
+    padding: 0px 0px 0px 20px;
+    line-height: 1.5em;
 }
 
 .settings-link {
-	clear: both;
-	display: block;
+    clear: both;
+    display: block;
 }
 
 .settings-section-left {
-	text-align: right;
-}
-
-.settings-label {
+    text-align: right;
 }
 
 .settings-help {
-	color: #888;
-}
-
-.settings-comment {
+    color: #888;
 }
 
 .users-invite-message {
-	padding: 0.5em 0.5em 0.5em 2em;
-	background-color: #eee;
+    padding: 0.5em 0.5em 0.5em 2em;
+    background-color: #eee;
 }
 
 .workspace-entry-header {
-	margin-top: .5em;
+    margin-top: .5em;
 }
 
 .workspace-entry {
-	margin-left: 3em;
+    margin-left: 3em;
 }
 
 .workspace-entry-p {
-	margin-top: .5em;
-	margin-bottom: .75em;
+    margin-top: .5em;
+    margin-bottom: .75em;
 }
 
 .workspace-subentry {
-	font-style: italic;
-	margin-left: 1.5em;
+    font-style: italic;
+    margin-left: 1.5em;
 }
 
 .preferences-td {
-	padding:.5em 0 1.5em 0;
+    padding: .5em 0 1.5em 0;
 }
 
 .preferences-query {
-	text-align: left;
+    text-align: left;
 }
 
 .preference-radio {
-	background-color: #cec;
+    background-color: #cec;
 }
+
 .user-settings-listall-headings td {
-	background-color: #eff3ef;
+    background-color: #eff3ef;
 }
 
 #settings-save {
-	padding-bottom: 0.5em;
+    padding-bottom: 0.5em;
 }
 
 /*
@@ -2541,10 +1959,8 @@ Styles for the category listings display.
 
 */
 
-#category-list-page-url {
-}
 #category-list-body {
-	border-top: 1px dashed #aaa;
+    border-top: 1px dashed #aaa;
 }
 
 /*
@@ -2556,20 +1972,19 @@ Styles for listing all attachments in the wiki.
 */
 
 #attachments-list-body {
-	border-top: 1px dashed #aaa;
+    border-top: 1px dashed #aaa;
 }
-
 
 /* Typography */
 
 * {
-	font-weight: normal;
+    font-weight: normal;
 }
 
 strong, b {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 img {
-	border: 0;
+    border: 0;
 }

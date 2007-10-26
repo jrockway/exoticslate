@@ -739,3 +739,90 @@ div.st-weblog-entrytitle span.text {
 #st-custom-footer {
     display: none;
 }
+
+div.footerEndWrapper
+       {
+       font-size: 1.1em;
+       margin: 8px; margin-top: 20px;
+       padding-right: 14px;
+       }
+
+div.footerEnd
+       {
+       background: url("../../images/footer/top_left.gif") top left no-repeat;
+       position: relative;
+       width: 100%;
+       }
+div.footerEnd h2
+       {
+       background: url("../../images/footer/top_right.gif") top right no-repeat;
+       font-size:.75em;
+       padding:15px; padding-bottom: 0px;
+       margin:0;
+       position:relative;
+       right:-14px;
+       }
+div.footerEndBody
+       {
+       background: url("../../images/footer/right.gif") top right repeat-y;
+       margin:0;
+       margin-top:-2em;
+       padding:15px; padding-top: 0px;
+       position:relative;
+       right:-14px;
+       font-size: .64em; color: #737373;
+       line-height: 1.5em;
+       }
+
+*+html div.footerEndBody
+       {
+       padding: 0px;
+       }
+*html div.footerEndBody
+       {
+       padding: 0px;
+       margin-bottom: -8px; margin-top: -2em;
+       }
+       *html div.footerEndBody p
+       {
+       height: 1%;
+       padding: 0px; margin: 8px;
+       }
+               div.footerEndBody a:link
+               {
+               font-weight: bold; color: #737373; text-decoration: none;
+               }
+       div.footerEndBody a:visited
+               {
+               font-weight: bold; color: #737373; text-decoration: none;
+               }
+       div.footerEndBody a:hover
+               {
+               font-weight: bold; color: #737373; text-decoration: underline;
+               }
+
+       div.footerEndBody div.logo
+               {
+               float: right; width: 150px;
+               padding-top: 4px;
+               position: relative;
+               }
+       div.footerEndBody div.logo img
+               {
+               border: 0;
+               }
+div.footerEndBottom
+       {
+       background: url("../../images/footer/bottom_left.gif") bottom left no-repeat;
+       position:relative;
+       top:13px;
+       }
+div.footerEndBottom div
+       {
+       background: url("../../images/footer/bottom_right.gif") bottom right no-repeat;
+       padding:15px; padding-top:0px; padding-bottom: 7px;     padding-left:0;
+       display:block;
+       margin:-2em 0 0 0;
+       position:relative;
+       right:-14px;
+       }

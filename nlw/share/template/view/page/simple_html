@@ -4,7 +4,7 @@
   <head>
     <title>[% page_title %]</title>
     <meta content="Socialtext Workspace(tm)" name="GENERATOR" />
-    [% PROCESS css_links.html %]
+    [% PROCESS element/css_links %]
   </head>
   <body>
    <h3>[% page_title %]</h3>

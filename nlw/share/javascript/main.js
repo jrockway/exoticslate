@@ -162,6 +162,7 @@ if (typeof(Socialtext) == 'undefined') {
 }
 
 Socialtext.clear_untitled = function(input) {
-    if (input.value == loc('Untitled Page'))
+    if (is_reserved_pagename(input.value)) {
         input.value = '';
+    }
 }

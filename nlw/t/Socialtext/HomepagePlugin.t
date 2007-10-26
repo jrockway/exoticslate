@@ -26,7 +26,14 @@ Dashboard: {
         ),
     );
     my $hp = Socialtext::HomepagePlugin->new( hub => $mock_hub );
-    like $hp->homepage, qr/Dashboard/;
+    { 
+        # not essential for this test
+        no strict 'refs';
+        no warnings 'redefine';
+        local *Socialtext::Helpers::miki_path = sub { '' };
+
+        like $hp->homepage, qr/Dashboard/;
+    }
 }
 
 Weblog: {

@@ -163,4 +163,26 @@ menu on the page bar.
     width: 175px;
 }
 
+.standard-button-cancel {
+    font-weight: bold;
+    background-color: #71004b;
 
+    border-left: 1px solid #aaa;
+    border-top: 1px solid #aaa;
+    border-bottom: 2px solid #333;
+    border-right: 2px solid #333;
+    color: #f4f3b9;
+    width: 8em;
+}
+
+.standard-button-submit {
+    font-weight: bold;
+    background-color: #656084;
+
+    border-left: 1px solid #aaa;
+    border-top: 1px solid #aaa;
+    border-bottom: 2px solid #333;
+    border-right: 2px solid #333;
+    color: #f4f3b9;
+    width: 8em;
+}

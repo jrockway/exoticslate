@@ -67,28 +67,27 @@ sub _get_results {
 sub _present_results {
     my $self = shift;
     my $results = shift;
-    my $link_html;
+    my $wafl_html;
     if ($self->method =~ /[-_]full$/ and not $results->{error}) {
-        $link_html = $self->_full_page_results($results);
+        $wafl_html = $self->_full_page_results($results);
     }
     else {
-        $link_html = $self->_title_results($results);
+        $wafl_html = $self->_title_results($results);
     }
 
     return $self->template->process(
-        'query_wafl.html',
-        wafl_query_title => $self->wafl_query_title,
-        wafl_query_link  => $self->wafl_query_link,
+        'wafl_box.html',
+        wafl_title       => $self->wafl_query_title,
+        wafl_link        => $self->wafl_query_link,
         error            => $results->{error},
-        link_html        => $link_html,
-        workspace_name   => $self->target_workspace,
+        wafl_html        => $wafl_html,
     );
 }
 
 sub _full_page_results {
     my $self = shift;
     my $results = shift;
-    $self->_format_results($results, "\n\n", 'include');
+    $self->_format_results($results, "\n", 'include');
 }
 
 sub _title_results {
@@ -104,16 +103,23 @@ sub _format_results {
     my $wafl = shift;
     my $rows = $results->{rows};
 
+    unless ($rows and @$rows) {
+        my $title = $self->wafl_query_title;
+        my $link = $self->wafl_query_link;
+        $results->{error} = "<a href='$link'>$title</a> does not contain any results";
+        return;
+    }
+
     my $workspace_name = '';
     $workspace_name = $self->target_workspace
         unless $self->target_workspace eq $self->current_workspace_name;
 
-    my $wikitext = $separator . join($separator,
+    my $wikitext = $separator . join("$separator",
         map {
             "{$wafl $workspace_name [" . $_->{Subject} . ']}'
         } @$rows
     );
-    return $self->hub->viewer->text_to_html($wikitext. "\n\n");
+    return $self->hub->viewer->text_to_html("$wikitext\n");
 }
 
 1;

@@ -33,6 +33,7 @@
 <div class="settings-selections">
    [% PROCESS settings_link action = 'workspaces_settings_appearance', name = loc('Workspace Appearance') %]
    [% PROCESS settings_link action = 'workspaces_settings_features', name = loc('Workspace Features') %]
+   [% PROCESS settings_link action = 'workspaces_settings_skin', name = loc('Workspace Skin') %]
    [% PROCESS settings_link action = 'workspaces_permissions', name = loc('Workspace Privacy') %]
 </div>
 [% END %]

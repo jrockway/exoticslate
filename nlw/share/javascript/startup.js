@@ -23,4 +23,5 @@ Event.observe(window, 'load', function() {
         wl.page_id = page_id;
         wl._loadInterface(toggle);
     }
+    ST.hookCssUpload();
 });

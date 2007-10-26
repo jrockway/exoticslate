@@ -34,7 +34,7 @@ sub email_page_popup {
 
 # separated out and parameterized from action so it can
 # be called when there are error conditions
-# XXX croak without page, addresses and sender 
+# XXX croak without page, addresses and sender
 sub send_email_popup {
     my $self = shift;
     my ($page, $users, $user_count, $sender, $address_choices, $error, $note) = @_;
@@ -48,6 +48,7 @@ sub send_email_popup {
         choices      => $address_choices,
         sending_user => $sender,
         note         => $note,
+        $self->hub->helpers->global_template_vars,
     );
 }
 
@@ -95,4 +96,3 @@ cgi 'page_name';
 cgi 'email_page_add_note_check';
 
 1;
-

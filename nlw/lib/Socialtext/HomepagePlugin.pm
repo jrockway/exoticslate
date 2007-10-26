@@ -12,6 +12,9 @@ use Socialtext::l10n qw( loc );
 use URI::Escape;
 # XXX This code has no documentation
 
+my $did_you_know_title;
+my $did_you_know_text;
+
 sub class_id    () { 'homepage' }
 sub class_title () { 'Home Link' }
 
@@ -47,10 +50,17 @@ sub dashboard {
 
     my $renderer = Socialtext::TT2::Renderer->instance;
 
+    # Grab the did_you_know text now, so that we don't read the config file on
+    # every page hit.
+    $did_you_know_title ||= Socialtext::AppConfig->did_you_know_title;
+    $did_you_know_text  ||= Socialtext::AppConfig->did_you_know_text;
+
     return $renderer->render(
         template => 'view/homepage',
         vars     => {
             $self->hub->helpers->global_template_vars,
+            did_you_know_title => $did_you_know_title,
+            did_you_know_text  => $did_you_know_text,
             title          => loc('Dashboard'),
             group_notes    => $self->_get_group_notes_info,
             personal_notes => $self->_get_personal_notes_info,

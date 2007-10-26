@@ -8,9 +8,9 @@ use Test::Socialtext;
 fixtures( 'admin_no_pages' );
 
 my @tests = (
-  [ qr{\Q<input type="submit" name="Button" value="Save"},
+  [ qr{\Q<input id="st-standard-submitbutton" type="submit" name="Button" value="Save"},
     'Submit button is submit' ],
-  [ qr{\Q<input type="reset" name="Button" value="Cancel"},
+  [ qr{\Q<input id="st-standard-cancelbutton" type="reset" name="Button" value="Cancel"},
     'Cancel button is reset' ],
 );
 

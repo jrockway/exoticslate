@@ -1,16 +1,14 @@
-# @COPYRIGHT@
+# @COPYRIGHT@ 
 package Socialtext::SOAPGoogle;
 use strict;
 use warnings;
-
 use base 'Socialtext::SOAPPlugin';
-
 use Class::Field qw( const );
-
 const wsdl => 'http://api.google.com/GoogleSearch.wsdl';
 const method => 'doGoogleSearch';
 const limit => 10;
 const class_title => 'google soap retrieval';
+
 sub class_id { 'googlesoap' }
 const default_google_key => 'CTSnKAJQFHJCcVYPh0q0FD56rtcxpIHI';
 
@@ -53,6 +51,7 @@ sub get_result {
 package Socialtext::SOAP::Google::Wafl;
 
 use base 'Socialtext::SOAP::Wafl';
+use Socialtext::l10n qw(loc);
 
 sub html {
     my $self = shift;
@@ -70,10 +69,12 @@ sub pretty {
     my $googlesoap = shift;
     my $query = shift;
     my $result = shift;
-    $self->hub->template->process('google_soap.html',
+    $self->hub->template->process('wafl_box.html',
         soap_class  => $googlesoap->class_id,
         query => $query,
-        google_elements => $result->{resultElements},
+        wafl_title => loc('Search for "[_1]"', $query),
+        wafl_link => "http://www.google.com/search?q=$query",
+        items => $result->{resultElements},
         error => $result->{error},
     );
 }

@@ -1,6 +1,6 @@
 #!perl
 # @COPYRIGHT@
-use Test::Socialtext tests => 95;
+use Test::Socialtext tests => 97;
 
 use strict;
 use warnings;
@@ -217,7 +217,7 @@ sub check_errors {
         qr/one of top, bottom, or replace/,
         qr/title is a required field/,
         ) {
-            my $errors = join ', ', $e->messages;           
+            my $errors = join ', ', $e->messages;
             like $errors, $regex, "got error message matching $regex";
     }
 
@@ -506,11 +506,11 @@ NAME_IS_VALID: {
     ok( Socialtext::Workspace->NameIsValid( name => 'valid'),
         'Valid workspace name succeeds'
     );
-    
+
     #
     # Check length boundary conditions.
     #
-    
+
     ok( ! Socialtext::Workspace->NameIsValid( name => 'aa'),
         'Too-short workspace name fails'
     );
@@ -522,12 +522,12 @@ NAME_IS_VALID: {
     ok( Socialtext::Workspace->NameIsValid( name => 'aaa' ),
         'Workspace name of exactly 3 characters succeeds'
     );
-    
+
     ok( Socialtext::Workspace->NameIsValid( name => ('a' x 30) ),
         'Workspace name of exactly 30 characters succeeds'
     );
 
-    # 
+    #
     # Other miscellaneous problems
     #
 
@@ -548,11 +548,11 @@ NAME_IS_VALID: {
         my $e;
 
         eval { Socialtext::Workspace->NameIsValid( name => undef ) };
-        
+
         $e = $@;
-       
+
         like( $e->message,
-             qr/'name' parameter .+ not one of the allowed types/i, 
+             qr/'name' parameter .+ not one of the allowed types/i,
             'Undef workspace name generates expected exception'
         );
 
@@ -593,7 +593,7 @@ NAME_IS_VALID: {
         is( scalar(@errors), 2,
             'Correct number of errors for workspace name with multiple problems'
         );
-       
+
         ok( ( grep { qr/3 and 30/i } @errors ),
             'Error list contains length message'
         );
@@ -627,4 +627,16 @@ HELP_WORKSPACE_WITH_WS_NOT_MISSING: {
 
     my $ws2 = Socialtext::Workspace->new( name => "help" );
     is( $ws2->name, "help-xx", "new(name => help) DTRT" );
+}
+
+CASCADE_CSS: {
+    my $ws = Socialtext::Workspace->create(
+        name       => 'cscss-1',
+        title      => 'Cascade CSS',
+        account_id => Socialtext::Account->Socialtext()->account_id,
+    );
+    is( $ws->cascade_css, 1, 'Worksdpace defaults to cascading CSS'),
+
+    $ws->update(cascade_css => 0);
+    is( $ws->cascade_css, 0, 'Cascading CSS set correctly'),
 }

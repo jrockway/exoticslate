@@ -1,5 +1,48 @@
 Change log for Socialtext Open
 
+2.17.X
+
+Release notes, 2.17.0.0  Oct 2007
+
+  [FEATURES]
+
+  Workspace Settings Custom Skin:
+        Socialtext enables you to customize the look and feel of your
+        workspace. You can use the default skin supplied by Socialtext or
+        customize your own skin.  To customize your own skin, download the
+        Skin Customization Kit, modify the skin files to your liking, and
+        upload them here. Complete documentation on skin customization is
+        available in the Socialtext Style Customization Guide.
+
+  Workspace Template
+        Provides a workspace setting, workspace_template, which makes
+        possible multiple user interface templates running side-by-side on the
+        same Socialtext installation. This makes it possible to do agile,
+        iterative design and development without harming existing
+        customers. This is especially friendly to internal development and
+        custom skin clients. We can make fast progress without stepping on
+        others' toes.
+
+  Visible Miki
+        Link to miki is in the top bar
+        Visible Miki DYK
+
+  New Footer
+  
+  Added a common.css, that is used despite alternate skins
+
+  Make all query wafls look like toc.
+
+  [BUGS]
+
+  {rt: 27491}: Prod (2.16.0.1): untitled_page makes for messes.  There were problems with untitled_pages.
+
+  {rt: 26174}: IE7: lightbox in FF missing. Problems with the Save Page As lightbox in FF and IE7.
+
+  {rt: 26191}: Login: FF and IE7 different behavior logging into "public authenticate to edit" workspace
+
+  {rt: 27596}: IE 7.0 still putting in white spaces in simple edit mode.  More fixes for dealing with extra vertical whitespace.
+
 2.16.X
 
 Release notes, 2.16.1.0  Oct 2007

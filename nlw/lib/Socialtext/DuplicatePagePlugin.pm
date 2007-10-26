@@ -31,6 +31,7 @@ sub duplicate_popup {
     $self->template_process(
         'popup/duplicate',
         %p,
+        $self->hub->helpers->global_template_vars,
     );
 }
 
@@ -43,9 +44,11 @@ sub copy_to_workspace_popup {
         exclude       => [ $self->hub->current_workspace->workspace_id ],
     );
 
-    $self->template_process('popup/copy_to_workspace',
+    $self->template_process(
+        'popup/copy_to_workspace',
         workspaces => Template::Iterator::AlzaboWrapperCursor->new($workspaces),
         %p,
+        $self->hub->helpers->global_template_vars,
     );
 }
 
@@ -185,4 +188,3 @@ cgi 'target_workspace_id';
 cgi 'clobber';
 
 1;
-

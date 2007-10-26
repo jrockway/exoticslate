@@ -213,6 +213,34 @@ sub adjust_dst {
     return $datetime;
 }
 
+sub date_local_epoch {
+    my $self = shift;
+    my $epoch = shift;
+
+    my $locale = $self->hub->best_locale;
+
+    return unless defined $epoch;
+
+    # Make sure we have a valid time.
+    $epoch =~ /^\d+$/
+        or return $epoch;
+
+    my ( $sec, $min, $hour, $mday, $month, $year, $wday, $yday, $isdst) = gmtime($epoch);
+
+    # XXX to be fixed. in timezone_seconds, adjust time for dst.
+    # Now, the routine is deleted, so must adjust in this.
+    my $datetime = DateTime->new(
+        year      => $year+1900,
+        month     => $month+1,
+        day       => $mday,
+        hour      => $hour,
+        minute    => $min,
+        second    => $sec,
+        time_zone => 'UTC'
+    );
+    return $self->get_date_user($datetime);
+}
+
 sub date_local {
     my $self = shift;
     my $date = shift;

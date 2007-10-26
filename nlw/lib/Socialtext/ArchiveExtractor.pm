@@ -47,6 +47,12 @@ from the archive.
 
 =cut
 
+=head2 Socialtext::ArchiveExtractor->valid_archivename( filename )
+
+Returns true if the filename has a valid archive extension, false otherwise
+
+=cut
+
 {
     Readonly my %Extensions => (
         '.zip'    => \&_unzip,
@@ -73,6 +79,16 @@ from the archive.
         return unless $func;
 
         return $func->( $p{archive}, $target );
+    }
+
+    sub valid_archivename {
+        my $name = shift; # [in] Name of archive file
+
+        my $ext = ( File::Basename::fileparse( $name, keys %Extensions ) )[2];
+
+        my $func = $Extensions{$ext};
+
+        return defined($func);
     }
 }
 
@@ -119,4 +135,3 @@ sub _untar {
 
 
 1;
-

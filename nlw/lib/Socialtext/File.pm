@@ -331,7 +331,35 @@ sub files_and_dirs_under {
     return @files;
 }
 
+=head2 clean_directory($path)
 
+Remove all files and subdirectories from the specified directory.
+
+If any unexpected errors occur, this subroutine C<die()>s.
+
+=cut
+
+sub clean_directory {
+    my $directory = shift;
+
+    rmtree($directory);
+    ensure_directory($directory);
+}
+
+=head2 remove_directory($path)
+
+Delete a directory.
+
+If any unexpected errors occur, this subroutine C<die()>s.
+
+=cut
+
+sub remove_directory {
+    my $directory = shift;
+
+    eval { rmtree($directory) };
+    Carp::confess( "unable to remove directory path $directory: $@" ) if $@;
+}
 
 =head1 SEE ALSO
 

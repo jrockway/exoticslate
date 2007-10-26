@@ -677,21 +677,28 @@ sub _parse_page_for_headers {
         $page->content($content) if $content;
     }
 
-    my $contents = loc('Contents');
+    my $page_url = $self->hub->viewer->link_dictionary->format_link(
+        link       => 'interwiki',
+        workspace  => $workspace_name,
+        page_uri   => $page_id,
+        url_prefix => $self->url_prefix,
+    );
 
-    my ($title,$linkref) = ('','');
+    my $title = loc('Contents');
+
+    my $linkref = '';
     if ($self->current_workspace_name ne $workspace_name) {
-        $title = ": $workspace_name: {link: $workspace_name [$remote_page_title]}";
+        $title .= ": $workspace_name: {link: $workspace_name [$remote_page_title]}";
         $linkref = "$workspace_name [$remote_page_title]";
     }
     elsif ($cur_page_id ne $page_id) {
-        $title = ": [$remote_page_title]";
+        $title .= ": [$remote_page_title]";
         $linkref = "[$remote_page_title]";
     }
 
-    my $wikitext = "^^^ $contents$title\n";
-
     my $headers = $page->get_headers();
+    my $error;
+    my $wikitext = '';
 
     if (@$headers) {
         my $min;
@@ -706,7 +713,7 @@ sub _parse_page_for_headers {
         }
     }
     else {
-        $wikitext = "> {link: $workspace_name [$page_title]} does not have any headers.\n";
+        $error = "<a href='$page_url'>$page_title</a> does not have any headers."
     }
 
     my $html = $self->hub->viewer->text_to_html($wikitext);
@@ -715,7 +722,12 @@ sub _parse_page_for_headers {
     # all the page_name(...) parts of links
     $html =~ s/\Q$page_title\E \((.*)\)/$1/g;
 
-    return "<table class='toc'><tr><td>$html</td></tr></table>";
+    return $self->template->process(
+        'wafl_box.html',
+        wafl_title       => $title,
+        error            => $error,
+        wafl_html        => $html,
+    );
 }
 
 

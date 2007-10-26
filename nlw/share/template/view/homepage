@@ -1,6 +1,5 @@
 [% SET admin = checker.check_permission('admin_workspace') %]
 [% WRAPPER layout/html content_id = 'st-homepage' box_javascript = 0 subnav = 'element/wiki/subnav-dashboard' dropshadow = 1 %]
-
 <div id="st-wiki-logo">
     <img id="st-wiki-logo-image" src="[% wiki.logo %]" />
 </div>
@@ -90,11 +89,10 @@
       </div>
       <div id="st-dyk-content" class="st-homepage-notes-content">
         <p>
-          <strong>[% loc('Access a Community of Peers') %]</strong>
+          <strong>[% loc(did_you_know_title) %]</strong>
         </p>
         <p>
-          [% SET customer_exchange = '<a href="http://www.socialtext.net/exchange/">' _ loc("Socialtext Customer Exchange") _ '</a>'%]
-          [% loc('As a Socialtext customer, you have access to the [_1].', customer_exchange) %] [% loc("It's where you can share tips and best practices with other Socialtext customers.") %]
+          [% loc(did_you_know_text) %]
         </p>
       </div>
     </div>

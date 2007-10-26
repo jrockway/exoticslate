@@ -12,6 +12,8 @@ use Socialtext::Role;
 use Template::Iterator::AlzaboWrapperCursor;
 use Socialtext::Challenger;
 use Socialtext::l10n qw(loc);
+use Socialtext::CSS;
+use Socialtext::File::Copy::Recursive qw(dircopy);
 
 sub class_id { 'workspaces_ui' }
 const cgi_class => 'Socialtext::WorkspacesUI::CGI';
@@ -21,13 +23,16 @@ sub register {
     my $registry = shift;
     # Web UI
     $registry->add(action => 'workspaces_settings_appearance');
+    $registry->add(action => 'workspaces_settings_skin');
+    $registry->add(action => 'skin_upload');
+    $registry->add(action => 'remove_skin_files');
     $registry->add(action => 'workspaces_settings_features');
     $registry->add(action => 'workspaces_listall');
     $registry->add(action => 'workspaces_create');
     $registry->add(action => 'workspaces_created');
     $registry->add(action => 'workspaces_unsubscribe');
     $registry->add(action => 'workspaces_permissions');
-    $registry->add( action => 'workspaces_html' );
+    $registry->add(action => 'workspaces_html');
 }
 
 sub workspaces_listall {
@@ -71,6 +76,262 @@ sub workspaces_settings_appearance {
     my $self = shift;
 
     return $self->_workspace_settings('appearance');
+}
+
+sub _render_page {
+    my $self = shift;
+    my $section_template = shift;
+    my %p = @_;
+
+    my $settings_section = $self->template_process(
+        $section_template,
+        $self->hub->helpers->global_template_vars,
+        workspace => $self->hub->current_workspace,
+        $self->status_messages_for_template,
+        %p,
+    );
+
+    $self->screen_template('view/settings');
+    return $self->render_screen(
+        settings_table_id => 'settings-table',
+        settings_section  => $settings_section,
+        hub               => $self->hub,
+        display_title     => loc('Workspaces: This Workspace'),
+        pref_list         => $self->_get_pref_list,
+    );
+}
+
+sub _render_skin_settings_page {
+    my $self = shift;
+    my $settings_error = shift; # [in] page level error message
+    my $upload_error_message = shift; # [in] Error message for problems when uploading skin
+    my $reset_error_message = shift; # [in] Error message for problems when reseting the skin files
+    my $skipped_files = shift; # [in/reference] array of extracted skin files not saved
+    my $force_radio = shift;
+
+    my ($css_directory, $image_directory) = $self->custom_skin_paths();
+    my $custom_skin = $self->custom_skin_name;
+
+    my @skin_files = ();
+    if (-e $css_directory) {
+        my $sep = "/css/$custom_skin/";
+        push @skin_files, map {
+            {
+                name => (split /$sep/)[1],
+                size => -s $_,
+                date => $self->hub->timezone->date_local_epoch((stat($_))[9])
+            }
+        } Socialtext::File::files_under($css_directory);
+    }
+
+    if (-e $image_directory) {
+        my $sep = "/images/$custom_skin/";
+        push @skin_files, map {
+            {
+                name => (split /$sep/)[1],
+                size => -s $_,
+                date => $self->hub->timezone->date_local_epoch((stat($_))[9])
+            }
+        } Socialtext::File::files_under($image_directory);
+    }
+
+    return $self->_render_page(
+        "element/settings/workspaces_settings_skin_section",
+        skin_files => \@skin_files,
+        upload_error => $upload_error_message,
+        reset_error => $reset_error_message,
+        skipped_files => $skipped_files,
+        settings_error => $settings_error,
+        force_radio => $force_radio,
+    );
+}
+
+sub workspaces_settings_skin {
+    my $self = shift;
+
+    $self->hub->assert_current_user_is_admin;
+
+    my $error_message = '';
+    my @skipped_files = ();
+
+    if ($self->cgi->Button) {
+        my $new_skin = $self->cgi->skin_name;
+        if ($new_skin ne $self->hub->current_workspace->skin_name) {
+            $self->_initialize_css_directory($new_skin);
+            $self->_initialize_image_directory($new_skin);
+            $self->hub->current_workspace->update(skin_name => $new_skin)
+        }
+    }
+
+    return $self->_render_skin_settings_page($error_message, '', '', []);
+}
+
+sub skin_upload {
+    my $self = shift;
+
+    $self->hub->assert_current_user_is_admin;
+
+    my $error_message = '';
+    my @skipped_files = ();
+    $self->_extract_skin(\$error_message, \@skipped_files);
+
+    return $self->_render_skin_settings_page(
+        '',
+        $error_message,
+        '',
+        \@skipped_files,
+        ($error_message) ? '' : $self->custom_skin_name,
+    );
+}
+
+sub remove_skin_files {
+    my $self = shift;
+
+    $self->hub->assert_current_user_is_admin;
+
+    my ($css_directory, $image_directory) = $self->custom_skin_paths();
+    Socialtext::File::clean_directory($css_directory);
+    Socialtext::File::clean_directory($image_directory);
+
+    return $self->_render_skin_settings_page('', '', '', [], $self->hub->css->BaseSkin());
+}
+
+sub _initialize_css_directory {
+    my $self = shift;
+    my $skin_name = shift;
+
+    Socialtext::File::ensure_directory($self->hub->css->RootDir . "/$skin_name");
+}
+
+sub _initialize_image_directory {
+    my $self = shift;
+    my $skin_name = shift;
+
+    my $image_path = Socialtext::AppConfig->code_base() . "/images/$skin_name";
+
+    Socialtext::File::ensure_directory($image_path);
+}
+
+sub custom_skin_paths {
+    my $self = shift;
+
+    my $custom_skin = $self->hub->current_workspace->name;
+    my $image_directory = Socialtext::AppConfig->code_base() . "/images/$custom_skin";
+    my $css_directory = $self->hub->css->RootDir . "/$custom_skin";
+    return ($css_directory, $image_directory);
+}
+
+sub _unpack_skin_file {
+    my $self = shift;
+    my $file = shift;   # [in] CGI File
+    my $tmpdir = shift; # [in] Temp directory to hold the archive's files
+    my $error = shift;  # [out] Error message, if any
+    my $files = shift;  # [out] Array of files extracted from the archive
+
+    return if (!$file);
+
+    eval {
+        my $filename = File::Basename::basename( $file->{filename} );
+
+        if (!Socialtext::ArchiveExtractor::valid_archivename($filename)) {
+            $$error = loc('[_1] is not a valid archive filename. Skin files must end with .zip, .tar.gz or .tgz.', $filename );
+            return 0;
+        }
+        my $tmparchive = "$tmpdir/$filename";
+
+        open my $tmpfh, '>', $tmparchive
+            or die loc('Could not open [_1]', $file->{filename});
+        File::Copy::copy($file->{handle}, $tmpfh)
+            or die loc('Cannot extract files from [_1]', $file->{filename});
+        close $tmpfh;
+
+        push @$files, Socialtext::ArchiveExtractor->extract( archive => $tmparchive );
+    };
+    if ($@) {
+        $$error = loc('Could not extract files from the skin archive. This is most likely caused by a corrupt archive file. Please check your file and try the upload again.');
+        return 0;
+    }
+
+    return 1;
+}
+
+sub _install_skin_files {
+    my $self = shift;
+    my $files = shift;         # [in] Array of files to copy to the skin directory
+    my $error = shift;         # [out] Error message, if any
+    my $skipped_files = shift; # [out] Array of files skipped during the extraction
+
+    return if (0 == @$files);
+
+    my ($css_dir, $image_dir) = $self->custom_skin_paths();
+
+    foreach (@$files) {
+        my $basefile = $_;
+        $basefile =~ s/^\/.+?\/.+?\///;
+        my ($filename, $path, $ext) = File::Basename::fileparse($basefile);
+
+        if ($path =~ /^css/i) {
+            $path =~ s/^css\///i;
+            $basefile =~ s/^css\///i;
+            Socialtext::File::ensure_directory("$css_dir/$path");
+            if ($basefile =~ /\.[css|htc]/i) {
+                File::Copy::copy($_, "$css_dir/$basefile")
+            }
+            else {
+                push @$skipped_files, $basefile;
+            }
+        }
+        elsif ($path =~ /^images/i) {
+            $path =~ s/^images\///i;
+            $basefile =~ s/^images\///i;
+            Socialtext::File::ensure_directory("$image_dir/$path");
+            File::Copy::copy($_, "$image_dir/$basefile")
+        }
+        else {
+            push @$skipped_files, $basefile;
+        }
+    }
+
+    return 1;
+}
+
+sub custom_skin_name {
+    my $self = shift;
+
+    return $self->hub->current_workspace->name;
+}
+
+sub _extract_skin {
+    my $self = shift;
+    my $error_message = shift; # [out] String to hold any error message
+    my $skipped_files = shift; # [out] Array of files skipped during extract
+
+    my $custom_skin = $self->custom_skin_name;
+    my $file = $self->cgi->skin_file;
+
+    if (!$file) {
+        $$error_message = loc('A custom skin file was not uploaded.');
+        return 0;
+    }
+
+    # if we got a file, unpack it
+    my $ok = 1;
+    my $tmpdir = File::Temp::tempdir( CLEANUP => 1 );
+    my @archive_files = ();
+    if ($file) {
+        $ok = $self->_unpack_skin_file($file, $tmpdir, $error_message, \@archive_files);
+        return if (!$ok);
+    }
+
+    $self->_initialize_css_directory($custom_skin);
+    $self->_initialize_image_directory($custom_skin);
+
+    # Copy skin files to the custom folder(s)
+    if (0 < @archive_files) {
+        $self->_install_skin_files(\@archive_files, $error_message, $skipped_files)
+    }
+
+    return $ok;
 }
 
 sub workspaces_settings_features {
@@ -386,5 +647,8 @@ cgi 'account_name';
 cgi 'permission_set_name';
 cgi 'guest_has_email_in';
 cgi 'enable_unplugged';
+cgi 'skin_name';
+cgi 'skin_reset';
+cgi skin_file => '-upload';
 
 1;

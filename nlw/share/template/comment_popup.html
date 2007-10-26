@@ -35,19 +35,15 @@
 
 [% BLOCK comment_controls %]
   <div id="[% ns %]-controls">
-    <a id="[% ns %]-savelink" href="#" onclick="submit_comment(); return false">[% loc('Save') %]</a>
-    <a id="[% ns %]-cancellink" href="#" onclick="cancel_comment(); return false">[% loc('Cancel') %]</a>
+    <a id="[% ns %]-savelink" href="#" onclick="submit_comment(); return false">Save</a>
+    <a id="[% ns %]-cancellink" href="#" onclick="cancel_comment(); return false">Cancel</a>
   </div>
 [% END %]
 
 [% BLOCK comment_head %]
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    [% INCLUDE "element/wiki/js-bootstrap" %] 
-    [% PROCESS css_links.html + javascript_links.html %]
-    <!--[if IE]>
-        <link rel="stylesheet" type="text/css" href="[% hub.css.uri_for_css('ie.css') %]" media="screen" />
-    <![endif]-->
-    <title>[% loc('Add Comment to [_1]', page_title) %]</title>
+    [% PROCESS element/popup_css_links + javascript_links.html %]
+    <title>Add Comment to [% page_title %]</title>
   </head>
 [% END %]

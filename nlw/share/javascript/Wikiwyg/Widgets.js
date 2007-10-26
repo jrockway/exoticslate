@@ -88,7 +88,6 @@ proto.fromHtml = function(html) {
             html += "<p> </p>"
         }
         html = this.assert_padding_between_block_elements(html);
-        html = this.assert_padding_between_block_elements(html);
     }
     else {
         html = this.replace_p_with_br(html);
@@ -110,7 +109,16 @@ proto.assert_padding_between_block_elements = function(html) {
     }
 
     var node_is_a_block = function(node) {
-        return (node.nodeType == 1 && node.tagName.toLowerCase().match(/^(ul|ol|table|blockquote|p)$/));
+        if (node.nodeType == 1) {
+            var tag = node.tagName.toLowerCase();
+            if (tag.match(/^(ul|ol|table|blockquote|p)$/)) return true;
+            if (tag == 'span' && node.className == 'nlw_phrase') {
+                if (!(node.lastChild.nodeValue||"").match("include:")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     };
 
     for(var i = 1; i < doc.childNodes.length; i++) {

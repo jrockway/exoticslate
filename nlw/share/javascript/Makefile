@@ -53,6 +53,7 @@ ALL_JS_SOURCE_FILES= \
 		PageNameSupportLookahead.js \
 		PageSectionLookahead.js \
 		PageAttachmentLookahead.js \
+        settings.js \
 		startup.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Toolbar.js \

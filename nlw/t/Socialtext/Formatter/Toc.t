@@ -108,10 +108,10 @@ EOF
 $admin->pages->current($page_two);
 my $html_two = $page_two->to_html_or_default();
 like $html_two,
-    qr{<h3 id="contents">Contents</h3>},
+    qr{<div class="wafl_title">\s*Contents\s*</div>}sm,
     'page two has a title for the first table of contents';
 like $html_two,
-    qr{<h3 id="contents">Contents</h3>},
+    qr{<div class="wafl_title">\s*Contents: \[target one\]\s*</div>}sm,
     'page two has a title for the remote table of contents';
 like $html_two,
     qr{<li><span.*<a.* href="#witness_the_fitness">Witness the Fitness</a>.*</li>},
@@ -129,10 +129,10 @@ like $html_two,
     qr{class="wafl_syntax_error">\[target infinity\]},
     'page two does not link to non-existent target infinity';
 like $html_two,
-    qr{href="/admin/index.cgi\?noheaders">NoHeaders</a>.*does not have any headers.},
+    qr{href='/admin/index.cgi\?noheaders'>NoHeaders</a>.*does not have any headers.},
     'a page with no headers reports that information and links to page';
 like $html_two,
-    qr{href="/foobar/index.cgi\?noheaders">NoHeaders</a>.*does not have any headers.},
+    qr{href='/foobar/index.cgi\?noheaders'>NoHeaders</a>.*does not have any headers.},
     'a page with no headers in a different workspace links to page only';
 unlike $html_two, qr{this is a list},
     'html two does not include list content from one';

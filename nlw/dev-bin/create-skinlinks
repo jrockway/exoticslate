@@ -3,6 +3,11 @@
 use strict;
 use warnings;
 
+use Getopt::Long qw(GetOptions);
+
+my $force;
+GetOptions('force' => \$force);
+
 my $default_skin_path = "$ENV{HOME}/src/st/customer-skins";
 sub usage {
     my $msg = shift || '';
@@ -42,6 +47,9 @@ sub link_skin {
         my $src = "$skin_path/$type/$name";
         next unless -d $src;
         my $dst = "share/$type/$name";
+        if (-e $dst and $force) {
+            unlink $dst or die "Couldn't remove $dst: $!";
+        }
         if (-e $dst) {
             print "Symlink for $dst already exists... skipping\n";
             next;

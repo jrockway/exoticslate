@@ -8,6 +8,7 @@ use Test::Socialtext tests => 4;
 fixtures( 'admin' );
 
 use Socialtext::CSS;
+use Data::Dumper;
 
 my $version = $Socialtext::VERSION;
 my $css = Socialtext::CSS->new( hub => new_hub('admin') );

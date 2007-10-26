@@ -4,8 +4,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <title>[% loc("Duplicate '[_1]'", page_title) %]</title>
-    [% PROCESS css_links.html + javascript_links.html %]
+    <title>Duplicate '[% page_title %]'</title>
+    [% PROCESS element/popup_css_links + javascript_links.html %]
 
     <script type="text/javascript">
       push_onload_function( function() {
@@ -16,7 +16,7 @@
   <body id="[% ns %]" class="st-popup" onload="call_onload_functions()">
     <form name="duplicate" method="post" action="[% script_name %]" enctype="application/x-www-form-urlencoded">
       <p class="st-popup-title">
-      [% loc('Duplicate <span id="duplicate-page-page-title">"[_1]"</span>', page_title) %]
+      Duplicate <span id="duplicate-page-page-title">"[% page_title %]"</span>
       </p>
       [%
         PROCESS page_title_too_long IF page_title_too_long;
@@ -25,50 +25,53 @@
         PROCESS duplicate_form_inputs;
       %]
       <div id="duplicate-page-buttons">
-        [% PROCESS standard_popup_buttons.html submit_button_value = loc('Duplicate') %]
+        [% PROCESS standard_popup_buttons.html submit_button_value = 'Duplicate' %]
       </div>
       [% PROCESS duplicate_form_hidden_inputs %]
     </form>
-    <p class="st-popup-hint">([% loc('The main window will navigate to the new page name after you click "Duplicate".') %])</p>
+    <p class="st-popup-hint">(The main window will navigate to the new page name after you click "Duplicate".)</p>
   </body>
 </html>
 
 [% BLOCK page_title_too_long %]
   <p class="st-popup-errormessage">
-    [% loc('The page name you selected, "[_1]", is too long after URL encoding.', new_title) %]
+    The page name you selected, "[% new_title %]", is too long after
+    URL encoding.
   </p>
 [% END %]
 
 [% BLOCK page_title_error %]
   <p class="st-popup-errormessage">
-    [% loc('The page name you selected, "[_1]", is not allowed. Please enter or change the page name.', new_title) %]
+    The page name you selected, "[% new_title %]", is not allowed.
+    Please enter or change the page name.
   </p>
 [% END %]
 
 [% BLOCK page_exists_error %]
   <p class="st-popup-errormessage">
-    [% loc('The new page name you selected, "[_1]", is already in use.', new_title) %]
-    [% loc('Please choose a different name. If you are sure you wish to overwrite the existing "[_1]" page, please press "Duplicate" again.', new_title) %]
+    The new page name you selected, "[% new_title %]", is already in use.
+    Please choose a different name. If you are sure you wish to overwrite
+    the existing "[% new_title %]" page, please press "Duplicate" again.
   </p>
 [% END %]
 
 [% BLOCK duplicate_form_inputs %]
   [%
-    new_title_value = loc('Duplicate of [_1]', page_title);
+    new_title_value = "Duplicate of ${page_title}";
     SET new_title_value = new_title IF page_title_bad OR page_exists;
   %]
   <p class="input">
-  <label for="new_title" class="duplicate-page-form-element">[% loc('New page name') %]:
+  <label for="new_title" class="duplicate-page-form-element">New page name:
     <input type="text" name="new_title" value="[% new_title_value | html_encode %]" size="34" />
   </label>
   </p>
   <p class="input">
-  <label for="keep_categories" class="duplicate-page-form-element">[% loc('Keep categories') %]:
+  <label for="keep_categories" class="duplicate-page-form-element">Keep categories:
     <input type="checkbox" name="keep_categories" value="1" checked="true" />
   </label>
   </p>
   <p class="input">
-  <label for="keep_attachments" class="duplicate-page-form-element">[% loc('Keep attachments') %]:
+  <label for="keep_attachments" class="duplicate-page-form-element">Keep attachments:
     <input type="checkbox" name="keep_attachments" value="1" checked="true" />
   </label>
   </p>

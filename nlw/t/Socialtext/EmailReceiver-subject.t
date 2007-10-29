@@ -12,6 +12,7 @@ my %tests = (
     'Normal Subject'            => 'Normal Subject',
     'Re: Lalala'                => 'Lalala',
     'Fw: Lalala'                => 'Lalala',
+    'Fwd: Lalala'               => 'Lalala',
     'Re: re: Re:  Re: Lalalala' => 'Lalalala',
     'Re: Fw: Re:  Re: Lalalala' => 'Lalalala',
     'Fwd: Re:  Re: Hello'       => 'Hello',

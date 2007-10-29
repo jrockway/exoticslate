@@ -920,7 +920,7 @@ needlessly creating users.
 
 An object is created for the wiki page to be updated or added. The
 page title is the same as the email's subject, except we strip all
-instances of "Fwd:" or "Re:' at the beginning of the subject first. We
+instances of "Fw:", "Fwd:" or "Re:' at the beginning of the subject first. We
 also trim leading and trailing whitespace.
 
 If the email has no subject we create one based on the email's sender

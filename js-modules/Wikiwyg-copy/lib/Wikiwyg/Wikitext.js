@@ -79,7 +79,6 @@ proto.initialize_object = function() {
 }
 
 proto.clear_inner_text = function() {
-    if ( Wikiwyg.is_safari ) return;
     var self = this;
     this.area.onclick = function() {
         var inner_text = self.area.value;

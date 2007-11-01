@@ -2,6 +2,30 @@ Change log for Socialtext Open
 
 2.17.X
 
+Release notes, 2.17.1.0  Nov 2007
+
+  [BUGS]
+
+  {rt: 26851}: Tags with zero pages are not getting removed.
+
+  {rt: 26179}: safari: "Replace this text with your own" does not go away when clicked.
+
+  {rt: 27013}: creating a blog name ending in "Blog" gives "Blog Weblog"
+
+  {rt: 25757}: Widgets: no scrollbars in Preview mode in IE after editing a widget
+
+  {rt: 27006}: Subjects get stripped of Re: but not Fw: on mailed in pages
+
+  {rt: 19983}: Send page by email: munging wikitext
+
+  {bz: 321}:   Footer is not big enough.  2.17.0 introduced a new footer design, but it didn't scale well on really wide browser windows.  There 
+
+  [FEATURES]
+
+  Adding basic auth to Ajax.js so js-test doesn't need to login.
+
+  We were still publishing URLs for feeds in public workspaces with a /noauth prefix. This is no longer necessary. Code has been changed appropriately.
+
 Release notes, 2.17.0.0  Oct 2007
 
   [FEATURES]

@@ -49,7 +49,6 @@ sub _delete_tag {
     $self->_clean_tag(\$tag);
 
     $self->page->delete_tag($tag);
-    $self->page->store(user => $self->page->hub->current_user );
 }
 
 =head1 AUTHOR

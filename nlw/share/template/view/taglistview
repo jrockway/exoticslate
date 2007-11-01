@@ -23,6 +23,7 @@
    </thead>
    <tbody>
 [% FOREACH row = rows %]
+[% IF row.page_count != 0 %]
     <tr class="[% IF loop.index % 2 %]odd[% ELSE %]even[% END %] w-st-[% IF loop.index % 2 %]odd[% ELSE %]even[% END %]-row">
   [% IF allow_delete %]
      <td>
@@ -34,6 +35,7 @@
      </td>
      <td>[% row.page_count %]</td>
     </tr>
+[% END %]
 [% END %]
    </tbody>
   </table>

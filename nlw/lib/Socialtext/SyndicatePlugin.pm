@@ -116,15 +116,11 @@ to contemporary URIs.
 sub rss20 {
     my $self = shift;
     my $query_string = '';
-    my $auth         = '';
 
     $query_string = '?category=' . $self->uri_escape( $self->cgi->category )
         if $self->cgi->category;
 
-    $auth = '/noauth' if $self->hub->current_workspace->is_public;
-
-    $self->redirect( $auth
-            . $self->feed_redirect_path
+    $self->redirect( $self->feed_redirect_path
             . $self->hub->current_workspace->name
             . $query_string );
 }
@@ -356,8 +352,7 @@ sub feed_uri_root {
     my $self = shift;
     my $workspace = shift;
 
-    my $uri = $workspace->is_public ? '/noauth/feed/workspace/' : '/feed/workspace/';
-    return $uri . $workspace->name;
+    return '/feed/workspace/' . $workspace->name;
 }
 
 package Socialtext::Syndicate::CGI;

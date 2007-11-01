@@ -40,5 +40,5 @@ my $syndicator = $hub->syndicate;
     $event_workspace->mock('is_public', sub { return 1; } );
     $event_workspace->mock('name', sub { return 'testspace'; } );
     my $uri_root = $syndicator->feed_uri_root($event_workspace);
-    is($uri_root, '/noauth/feed/workspace/testspace', 'event workspace URI is correct');
+    is($uri_root, '/feed/workspace/testspace', 'event workspace URI is correct');
 }

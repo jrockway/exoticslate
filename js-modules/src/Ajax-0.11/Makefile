@@ -3,7 +3,7 @@
 all: doc manifest
 
 manifest:
-	find . -type f | perl -pe 's/..//' > MANIFEST
+	find . -type f | perl -pe 's/..//' | sort > MANIFEST
 
 dist: doc manifest META.yml
 	H=`pwd`; \

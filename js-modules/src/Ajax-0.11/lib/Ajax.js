@@ -14,7 +14,7 @@ AUTHORS:
 
 COPYRIGHT:
 
-Copyright Ingy döt Net 2006. All rights reserved.
+Copyright Ingy döt Net 2006, 2007. All rights reserved.
 
 Ajax.js is free software. 
 
@@ -96,7 +96,7 @@ proto.post = function(params) {
 // Set up the Ajax object with a working XHR object.
 proto._init_object = function(params) {
     for (key in params) {
-        if (! key.match(/^url|data|onComplete|contentType$/))
+        if (! key.match(/^url|data|onComplete|contentType|userid|passwd$/))
             throw("Invalid Ajax parameter: " + key);
         this[key] = params[key];
     }
@@ -124,6 +124,20 @@ proto._send = function(params, request_type, header) {
     this._init_object(params);
     this.request.open(request_type, this.url, Boolean(this.onComplete));
     this.request.setRequestHeader(header, this.contentType);
+
+    // Basic Auth
+    if (this.userid) {
+        if (! this.passwd)
+            throw("You must specify a passwd with the userid for Ajax Basic Auth request");
+
+        if (! window.Base64)
+            throw("Ajax Basic Auth requires Base64.js. Get it here: http://www.webtoolkit.info/javascript-base64.html");
+
+        this.request.setRequestHeader(
+            'Authorization',
+            Base64.encode(this.userid + ':' + this.passwd)
+        );
+    }
 
     var self = this;
     if (this.onComplete) {

@@ -1,9 +1,9 @@
-
 plan({ tests: 3 });
 
 // Initializing
 var die_msg = 'I lived';
-Ajax.prototype.die = function(message) { die_msg = message; };
+
+Ajax.Req.prototype.die = function(message) { die_msg = message; };
 
 // Testing
 
@@ -17,7 +17,7 @@ is( die_msg , 'Ajax request for "data/nonexists" failed with status: 404', 'Test
 
 // Test Object Interface
 
-var a = new Ajax();
+var a = new Ajax.Req();
 is( a.get({ 'url': 'data/basic.txt' }), 'basic test\n', 'object interface .get()' ) ;
 
 /*
@@ -25,4 +25,3 @@ a.get({ 'url': 'data/basic.txt' });
 var expected_die_msg = "Don't yet support multiple requests on the same Ajax object"
 is( die_msg, expected_die_msg, expected_die_msg);
 */
-

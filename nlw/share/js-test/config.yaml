@@ -3,6 +3,7 @@ import_libs:
   - ../../javascript/l10ns.js 
   - ../../javascript/Cookie.js
   - ../../js-modules/prototype/dist/prototype.js
+  - ../../js-modules/Base64.js
   - ../../js-modules/Ajax/lib/Ajax.js
   - ../Test/Wikiwyg.js
   - ../../javascript/main.js

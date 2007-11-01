@@ -3,7 +3,7 @@ plan({ 'tests': tests });
 
 // Initializing
 var die_msg = '';
-Ajax.prototype.die = function(message) {
+Ajax.Req.prototype.die = function(message) {
     die_msg = message;
 };
 
@@ -24,12 +24,11 @@ var cb = function(text) {
     is(text, 'basic test\n', 'Fetch basic.txt asynchrnously');
     ending();
 };
-Ajax.post('data/basic.txt', '', cb);
+Ajax.get('data/basic.txt', cb);
 
 var cb2 = function(text) {
     if( die_msg ) {
         is( die_msg , 'Ajax request for "data/nonexists" failed with status: 404', 'Testing on nonexist URL');
     }
 };
-Ajax.post('data/nonexists', '', cb2);
-
+Ajax.get('data/nonexists', cb2);

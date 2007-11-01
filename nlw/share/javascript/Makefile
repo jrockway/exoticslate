@@ -19,6 +19,7 @@ ALL_JS_SOURCE_FILES= \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Debug.js \
 		main.js \
 		$(EXTERNAL_JAVASCRIPT)/prototype/dist/prototype.js \
+		$(EXTERNAL_JAVASCRIPT)/Base64.js \
 		$(EXTERNAL_JAVASCRIPT)/Ajax/lib/Ajax.js \
 		$(EXTERNAL_JAVASCRIPT)/template.js \
 		$(EXTERNAL_JAVASCRIPT)/DOM-Ready/lib/DOM/Ready.js \

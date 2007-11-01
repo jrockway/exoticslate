@@ -56,7 +56,15 @@ proto.do_roundtrip = function(wikitext, cb) {
     var url = '/admin/index.cgi';
     var postdata = 'action=wikiwyg_wikitext_to_html;content=' +
         encodeURIComponent(wikitext);
-    var html = Ajax.post(url, postdata);
+    var html = Ajax.post(
+        url,
+        postdata,
+        null,
+        {
+            userid: 'devnull1@socialtext.com',
+            passwd: 'd3vnu11l'
+        }
+    );
     var wysiwygObject = this.create_wysiwyg_object();
     wysiwygObject.fromHtml(html);
 

@@ -388,6 +388,7 @@ body {
 }
 
 .st-homepage-section {
+    line-height: 1.1em;
     margin-bottom: 15px;
 }
 
@@ -426,11 +427,17 @@ body {
 }
 
 .st-homepage-notes-content {
+    line-height: 1.1em;
     font-size: 85%;
     margin-top: 10px;
     padding-top: 0px;
     padding-bottom: 0px;
 }
+
+*html .st-homepage-notes-content {
+    line-height: 1.3em;
+}
+
 
 #st-dyk {
     border-color: #cca !important;
@@ -568,6 +575,7 @@ body {
 }
 
 #st-page-boxes {
+    line-height: 1em;
     background: inherit;
     position: absolute;
     right: 23px;
@@ -619,6 +627,11 @@ body {
     margin-top: 6px;
     margin-bottom: 0;
     padding-bottom: 0;
+    line-height: 1.1em;
+}
+
+*html #st-page-content {
+    line-height: 1.3em;
 }
 
 #st-page-content, #st-page-content td {
@@ -1701,6 +1714,7 @@ table.page-stats-content tfoot {
 
 .workspace-entry {
     margin-left: 3em;
+    line-height: 1.1em;
 }
 
 .workspace-entry-p {
@@ -2138,6 +2152,7 @@ div.st-weblog-entryspacer {
 }
 
 #st-weblog-content {
+    line-height: 1.1em;
     margin-top: -1px;
     margin-bottom: -1px;
     border-top: 1px solid #80a9f3;

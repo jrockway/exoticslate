@@ -4,7 +4,7 @@
 use warnings;
 use strict;
 
-use Test::Socialtext tests => 37;
+use Test::Socialtext tests => 40;
 fixtures( 'admin' );
 
 use Socialtext::Page ();
@@ -192,3 +192,13 @@ like ( $html, qr{\Q<title>Admin Wiki : Category Welcome</title>},
 like ( $html, qr{<li>\s+<a.*href="/lite/page/admin/start_here".*>\s*Start here\s*</a>}ms,
     'category display for welcome links to included page' );
 
+# get category changes, different case
+my $html_from_rc_category = $lite->recent_changes('welcome');
+$html = $lite->recent_changes('Welcome');
+
+is ( lc($html_from_rc_category), lc($html), 'case of rc category does not change content' );
+# XXX case is odd
+like ( $html, qr{\Q<title>Admin Wiki : Recent Changes in Welcome</title>},
+    'rc category display for welcome has right title' );
+like ( $html, qr{<li>\s+<a.*href="/lite/page/admin/start_here".*>\s*Start here\s*</a>}ms,
+    'rc category display for welcome links to included page' );

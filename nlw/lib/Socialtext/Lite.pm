@@ -164,7 +164,7 @@ sub recent_changes {
     my $category = shift;
     my $changes = $self->hub->recent_changes->get_recent_changes_in_category(
         count    => 50,
-        category => $category,
+        category => lc($category),
     );
 
     my $title = 'Recent Changes';

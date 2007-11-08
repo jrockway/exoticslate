@@ -62,6 +62,11 @@
     # Rewrite /noauth feeds to /feed, don't escape args!
     RewriteRule ^/noauth/feed/(.+)   /feed/$1 [R,L,NE]
 
+    # Support CSS-Kit/CSS Uploader
+    # Converts: /static/0.0.0.0/skin/images/logo.gif
+    #       To: /static/0.0.0.0/images/skin/logo.gif
+    RewriteRule    ^/static/([\.0-9]+)/([^/]+)/(images|javascript|css)/(.+)$$  /static/$3/$2/$4  [PT,L]
+
     # this first one is only here for sake of doc-pages, everything
     # else should use /static
     RewriteRule    /.*/base/(.+)            /static/$1  [R,L]

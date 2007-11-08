@@ -81,8 +81,9 @@ sub new_homunculus {
         my $system_id = Socialtext::UserId->new( system_unique_id => $_[1] );
         my $driver_key = $system_id->driver_key;
         my $driver_unique_id = $system_id->driver_unique_id;
+        my $driver_username = $system_id->driver_username;
         my $driver = $class->_realize($driver_key, 'new');
-        $homunculus = $driver->new( user_id => $driver_unique_id );
+        $homunculus = $driver->new( username => $driver_username );
         $homunculus ||= Socialtext::User::Deleted->new(
             user_id    => $driver_unique_id,
             username   => $system_id->driver_username,

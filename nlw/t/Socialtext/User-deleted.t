@@ -4,11 +4,12 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 5;
+use Test::Socialtext tests => 8;
 fixtures('populated_rdbms');
 
 use Socialtext::User;
 use Socialtext::UserId;
+use Socialtext::User::Default;
 
 {
     my $users = Socialtext::User->All();
@@ -40,5 +41,26 @@ Socialtext::UserId->create(
 
 {
     my $nonexistent = Socialtext::User->new( username => 'dracula' );
-    is ($nonexistent, undef, "For users that didn't exist, they're still undef.");
+    is( $nonexistent, undef,
+        "For users that didn't exist, they're still undef." );
+}
+
+# Move the back-end record, so that user_id is out of sync with the UserId
+# table. We should still be able to find this user and treat him the same (he
+# should still have the same system_unique_id)
+{
+    my $existing
+        = Socialtext::User::Default->new( username => 'devnull1@urth.org' );
+    my $old_user_id = $existing->user_id;
+    $existing->update( user_id => 9999 );
+    my $moved = Socialtext::User->new( user_id => $old_user_id );
+    is( $moved->username, $existing->username, "Moved user still findable" );
+    is( $moved->homunculus->user_id, 9999, "Updated its UserId record, too" );
+    my $no_longer_there = Socialtext::UserId->new(
+        driver_key       => $existing->driver_name,
+        driver_unique_id => $old_user_id
+    );
+    is( $no_longer_there, undef,
+        "Old user_id is wiped out of the UserId table."
+    );
 }

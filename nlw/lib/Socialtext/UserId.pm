@@ -20,42 +20,59 @@ sub create_if_necessary {
     my $class = shift;
     my $user = shift;
 
-    my @params = (
+    my @primary_params = (
         driver_key       => $user->driver_name,
         driver_unique_id => $user->user_id,
     );
 
-    my $md = $class->new( @params );
+    my @fallback_params = (
+        driver_key      => $user->driver_name,
+        driver_username => $user->username,
+    );
 
-    if ($md) {
-        $md->update( driver_username => $user->username );
-        return $md;
+    my $user_id = $class->new( @primary_params );
+
+    if (! defined $user_id) {
+        $user_id = $class->new( @fallback_params );
     }
 
-    return $class->create( @params );
+    if ($user_id) {
+        $user_id->update(
+            driver_unique_id => $user->user_id,
+            driver_username  => $user->username
+        );
+        return $user_id;
+    }
+
+    return $class->create( @primary_params );
 }
 
 {
     Readonly my $spec => {
         driver_key            => SCALAR_TYPE( optional => 0 ),
-        driver_unique_id      => SCALAR_TYPE( optional => 0 ),
+        driver_unique_id      => SCALAR_TYPE( optional => 1 ),
         driver_username       => SCALAR_TYPE( optional => 1 ),
     };
     sub _new_row {
         my $class = shift;
         my %p     = validate( @_, $spec );
 
-        my $d_k_key = $class->table->column('driver_key');
-        my $d_k = Socialtext::String::trim( $p{driver_key} );
+        my $driver_key = Socialtext::String::trim( $p{driver_key} );
 
-        my $d_u_i_key = $class->table->column('driver_unique_id');
-        my $d_u_i = Socialtext::String::trim( $p{driver_unique_id} );
+        my $driver_user_key_column =
+            $p{driver_unique_id}
+          ? $class->table->column('driver_unique_id')
+          : $class->table->column('driver_username');
+
+        my $driver_user_key =
+          Socialtext::String::trim(
+            $p{driver_unique_id} ? $p{driver_unique_id} : $p{driver_username} );
 
         my $row = $class->table->one_row(
             where => [
-                [ $d_k_key, '=', $d_k ],
+                [ $class->table->column('driver_key'), '=', $driver_key ],
                 'and',
-                [ $d_u_i_key, '=', $d_u_i ],
+                [ $driver_user_key_column, '=', $driver_user_key ],
             ],
         );
 

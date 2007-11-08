@@ -8,6 +8,7 @@ use base 'Socialtext::Base';
 use Class::Field qw( const field );
 use Email::Valid;
 use Socialtext::File;
+use Socialtext::Log 'st_log';
 use Socialtext::Page;
 use Socialtext::Paths;
 use Socialtext::WeblogUpdates;
@@ -191,10 +192,9 @@ sub new_from_uri {
 
     my $page = Socialtext::Page->new(
         hub => $self->hub,
-        id  => Socialtext::Page->name_to_id($uri),
-    );
+        id  => Socialtext::Page->name_to_id($uri) );
 
-    die("Invalid page id: $uri") unless $page;
+    die("Invalid page URI: $uri") unless $page;
 
     my $return_id = Socialtext::Page->name_to_id($page->title);
     $page->title( $uri ) unless $return_id eq $uri;

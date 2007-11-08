@@ -1,13 +1,12 @@
 #!perl
 # @COPYRIGHT@
+use mocked qw(Socialtext::l10n system_locale); # Has to come firstest.
 use Test::Socialtext tests => 97;
 
 use strict;
 use warnings;
 
 fixtures( 'rdbms_clean', 'help' );
-
-use mocked qw(Socialtext::l10n system_locale);
 
 use Socialtext::EmailAlias;
 use Socialtext::File;

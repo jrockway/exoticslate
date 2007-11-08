@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::Socialtext tests => 15;
+use Test::Socialtext tests => 17;
 fixtures( 'ldap' );
 use Test::Exception;
 use mocked 'Net::LDAP';
@@ -52,4 +52,10 @@ Search_for_users: {
             name_and_email => 'One Loser <one@foo.bar>',
         },
     ], "Search results are complete";
+}
+
+Password_Is_Sentinal_Value: {
+    my $user = Socialtext::User::LDAP->new( username => 'one' );
+    isa_ok $user, 'Socialtext::User::LDAP';
+    ok $user->password, '*no-password*';
 }

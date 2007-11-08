@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 8;
+use Test::Socialtext tests => 9;
 fixtures('populated_rdbms');
 
 use Socialtext::User;
@@ -35,6 +35,7 @@ Socialtext::UserId->create(
 {
     is (Socialtext::User->Count, 10, "New user added only to UserId, simulating adding and deleting from the store.");
     my $nemo = Socialtext::User->new( user_id => 99 );
+    ok ($nemo->to_hash, "Nemo can be hashified" );
     is ($nemo->username, 'Nemo', "Nemo was found, no error.");
     is ($nemo->first_name, 'Deleted', "But he's still deleted.");
 }

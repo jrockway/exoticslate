@@ -1428,7 +1428,6 @@ sub _dump_users_to_yaml_file {
 
     my $users_with_roles = $self->users_with_roles;
 
-    my @c = grep { $_ ne 'user_id' } Socialtext::User->minimal_interface;
     my @dump;
     while ( 1 ) {
         my $elem = $users_with_roles->next;
@@ -1436,10 +1435,8 @@ sub _dump_users_to_yaml_file {
         my $role = $elem->[1];
         last unless defined $user;
 
-        my %dump;
-        for my $c (@c) {
-            $dump{$c} = $user->$c();
-        }
+        my %dump = %{$user->to_hash};
+        delete $dump{'user_id'};
         $dump{creator_username} = $user->creator->username;
         $dump{role_name} = $role->name;
 

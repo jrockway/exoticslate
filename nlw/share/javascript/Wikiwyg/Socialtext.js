@@ -1320,7 +1320,7 @@ proto.convertWikitextToHtml = function(wikitext, func) {
             method: 'post',
             parameters: $H({
                 action: 'wikiwyg_wikitext_to_html',
-                page_name: $('st-page-editing-pagename').value,
+                page_name: ($('st-newpage-pagename-edit') ? $('st-newpage-pagename-edit').value : $('st-page-editing-pagename').value),
                 content: wikitext
             }).toQueryString(),
             asynchronous: false

@@ -648,12 +648,6 @@ sub html {
 
     return $self->syntax_error if not $cur_page_title;
 
-    return $self->syntax_error
-        if not Socialtext::Pages->page_exists_in_workspace(
-        $cur_page_title,
-        $workspace_name,
-        );
-
     return $self->_parse_page_for_headers(
         $workspace_name, $page_id,
         $page_title
@@ -666,14 +660,14 @@ sub _parse_page_for_headers {
     my $page_id           = shift;
     my $remote_page_title = shift;
 
-    my $cur_page_id = $self->hub->viewer->page_id;
+    my $cur_page_id = $self->hub->pages->current->id;
 
     my $hub = $self->hub_for_workspace_name($workspace_name);
     my $page = $hub->pages->new_page($page_id);
     my $page_title = $page->title;
 
-    if ($cur_page_id eq $page_id) {
-        my $content = $self->hub->wikiwyg->cgi->content;
+    my $content = $self->hub->wikiwyg->cgi->content;
+    if ($content && ($cur_page_id eq $page_id || !$page->exists)) {
         $page->content($content) if $content;
     }
 
@@ -691,7 +685,8 @@ sub _parse_page_for_headers {
         $title .= ": $workspace_name: {link: $workspace_name [$remote_page_title]}";
         $linkref = "$workspace_name [$remote_page_title]";
     }
-    elsif ($cur_page_id ne $page_id) {
+    elsif ($cur_page_id ne $page_id || !$page->exists) {
+        $remote_page_title ||= $self->hub->wikiwyg->cgi->page_name;
         $title .= ": [$remote_page_title]";
         $linkref = "[$remote_page_title]";
     }

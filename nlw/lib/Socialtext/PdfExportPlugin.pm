@@ -33,8 +33,12 @@ sub class_id {'pdf_export'};
 const class_title => 'PDF Export';
 const cgi_class   => 'Socialtext::PdfExportPlugin::CGI';
 
+# The full command for converting html files to PDF.  Set TMPDIR since htmldoc
+# tends to create lots of temp files in some random compliation-specific
+# place, and then doesn't clean them up.  At least this way the temp files go
+# in a deterministic spot and standard utilities can clean up tmp regularly.
 Readonly my @COMMAND => qw(
-    htmldoc -t pdf
+    env TMPDIR=/tmp htmldoc -t pdf
     --verbose --footer '' --header ''
     --path / --textfont helvetica --bodyfont helvetica --headingfont helvetica
     --no-strict --no-title --no-toc --no-compression --webpage

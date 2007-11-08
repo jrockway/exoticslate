@@ -52,3 +52,20 @@ enable_unplugged: 0
     checked
     value="0" />
    No<br/>
+
+=== workspaces_settings_appearance - logo file
+--- query
+action: workspaces_settings_appearance
+--- match
+<input type="text" name="title"
+
+=== save changes - logo file
+--- do: chdir t/live
+--- form: 2
+--- post
+Button: Button
+logo_type: file
+logo_file: 'C:\Documents\ and\ Settings\new-file.jpg'
+--- match
+Changes saved
+

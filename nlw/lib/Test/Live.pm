@@ -120,12 +120,17 @@ sub standard_query_validation {
     $self->log_in
         unless $self->dont_log_in;
     Test::Socialtext::plan('no_plan');
+    my $working_dir = Cwd::getcwd();
     while (my $block = Test::Socialtext::next_block()) {
         my $special_contents = $self->do_special_action( $block->do, $block )
             if $block->do;
         my $whole_page = $special_contents
             || $self->request( $block, $self->noReturnOk($block) );
         $self->run_validation($whole_page, $block);
+        if( Cwd::getcwd() ne $working_dir ) {
+            Test::More::diag( "changing back to $working_dir\n" );
+            chdir $working_dir;
+        }
     }
 }
 
@@ -680,6 +685,12 @@ sub do_special_action {
                              . $self->base_url . "\n");
             local $SIG{INT} = sub { $self->stop_all };
             sleep 10 * 60;
+            return;
+        },
+        chdir => sub {
+            my ( $dir ) = @args;
+            Test::More::diag( "changing dir to $dir\n" );
+            chdir( $dir ) || die "can't chdir to $dir: $@\n";
             return;
         },
         accept => sub { # XXX

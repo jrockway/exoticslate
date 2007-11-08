@@ -10,6 +10,8 @@ use Socialtext::MultiCursor;
 use Socialtext::Schema;
 use Socialtext::Workspace;
 use base 'Socialtext::AlzaboWrapper';
+use Socialtext::SQL qw( sql_execute sql_selectrow );
+use Socialtext::Permission qw( ST_EMAIL_IN_PERM ST_READ_PERM );
 
 __PACKAGE__->SetAlzaboTable( Socialtext::Schema->Load()->table('WorkspaceBreadcrumb') );
 __PACKAGE__->MakeColumnMethods();
@@ -21,16 +23,43 @@ sub parsed_timestamp {
 
 sub List {
     my ( $class, %args ) = @_;
-    my $schema      = Socialtext::Schema->Load();
-    my $ws_bc_table = $schema->table('WorkspaceBreadcrumb');
-    my $ws_table    = $schema->table('Workspace');
-    my @ids         = $ws_bc_table->function(
-        select => $ws_bc_table->column('workspace_id'),
-        where  => [ $ws_bc_table->column('user_id'), '=', $args{user_id} ],
-        limit  => $args{limit},
-        order_by => [ $ws_bc_table->column('timestamp'), 'DESC' ],
+
+    # back to the sql
+    my $sql = <<END_SQL
+select
+  wb.workspace_id
+from
+  "WorkspaceBreadcrumb" wb
+where
+  wb.user_id = ?
+and
+  exists (select 1 from "UserWorkspaceRole" uwr where wb.user_id = uwr.user_id and wb.workspace_id = uwr.workspace_id)
+or
+  exists (select 1 from "WorkspaceRolePermission" wrp where wrp.workspace_id = wb.workspace_id and wrp.role_id = ? and wrp.permission_id = ?)
+order by
+  wb.timestamp desc
+limit $args{limit}
+END_SQL
+;
+
+    my $sth = sql_execute(
+        $sql,
+        $args{user_id},
+        Socialtext::Role->Guest()->role_id,
+        ST_READ_PERM->permission_id,
     );
-    return map { Socialtext::Workspace->new( workspace_id => $_ ) } @ids;
+
+    my $cursor = Socialtext::MultiCursor->new(
+        iterables => [ $sth->fetchall_arrayref ],
+        apply => sub { $_[0]->[0] },
+    );
+
+    my @workspaces = ();
+    while ( my $id = $cursor->next ) {
+        push @workspaces, Socialtext::Workspace->new( workspace_id => $id );
+    }
+
+    return @workspaces;
 }
 
 sub Save {
@@ -59,9 +88,9 @@ Socialtext::WorkspaceBreadcrumb - Workspace Breadcrumbs
 
 
     # Save breadcrumb
-    Socialtext::WorkspaceBreadcrumb->Save( 
-        user_id => 1, 
-        workspace_id => 1 
+    Socialtext::WorkspaceBreadcrumb->Save(
+        user_id => 1,
+        workspace_id => 1
     );
 
     # Get breadcrumbs

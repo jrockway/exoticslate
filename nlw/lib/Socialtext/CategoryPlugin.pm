@@ -178,7 +178,7 @@ sub get_page_info_for_category {
             From        => $page->last_edited_by->best_full_name(
                 workspace => $self->hub->current_workspace
             ),
-            revision_count => scalar $page->all_revision_ids,
+            revision_count => $page->revision_count,
         };
     }
 

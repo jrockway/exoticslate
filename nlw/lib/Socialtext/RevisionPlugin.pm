@@ -45,7 +45,7 @@ sub revision_list {
 
     $self->screen_template('view/page_revision_list');
     $self->render_screen(
-        revision_count => scalar $page->all_revision_ids,
+        revision_count => $page->revision_count,
         $page->all,
         page           => $page,
         display_title  => $self->html_escape( $page->title ),

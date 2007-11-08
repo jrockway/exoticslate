@@ -110,8 +110,7 @@ EDIT_CONTENT_contention_other_than_content: {
     is($return, '', 'Nothing returned because OK save redirects');
 
     $page = Socialtext::Page->new(hub => $hub, id => 'revision_page')->load();
-    my @ids = $page->all_revision_ids();
-    is(scalar(@ids), 4, '4 Revisions');
+    is($page->revision_count, 4, '4 Revisions');
     is($page->content, "Should Be No Contention\n", 'New content saved');
 }
 
@@ -178,9 +177,8 @@ SAVE: {
     is($return, '', 'Nothing returned because OK save redirects');
 
     my $page = Socialtext::Page->new(hub => $hub, id => 'save_page')->load();
-    my @ids = $page->all_revision_ids();
     is($page->metadata->Category->[0], 'one', "chomped new line on addinga  tag");
-    is(scalar(@ids), 2, '2 Revisions');
+    is($page->revision_count, 2, '2 Revisions');
     is($page->content, "Hello\n", 'New content saved');
 }
 
@@ -201,7 +199,6 @@ SAVE_contention: {
     ok($return =~ /st-editcontention/, 'Edit contention dialog displayed');
 
     my $page = Socialtext::Page->new(hub => $hub, id => 'save_page')->load();
-    my @ids = $page->all_revision_ids();
-    is(scalar(@ids), 2, '2 Revisions');
+    is($page->revision_count, 2, '2 Revisions');
     is($page->content, "Hello\n", 'New content not saved');
 }

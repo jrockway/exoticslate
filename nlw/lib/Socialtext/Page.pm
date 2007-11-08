@@ -119,6 +119,16 @@ sub all_revision_ids {
     return wantarray ? sort( @ids ) : scalar( @ids );
 }
 
+=head2 $page->revision_count()
+
+Return the count of revisions that a given page has.
+
+=cut
+sub revision_count {
+    my $self = shift;
+    return scalar $self->all_revision_ids();
+}
+
 sub original_revision {
     my $self = shift;
     my $page_id  = $self->id;
@@ -380,7 +390,7 @@ sub hash_representation {
         last_edit_time => $self->metadata->Date,
         modified_time  => $self->modified_time,
         revision_id    => $self->revision_id,
-        revision_count => scalar $self->all_revision_ids, };
+        revision_count => $self->revision_count, };
 }
 
 =head2 $page->get_headers()

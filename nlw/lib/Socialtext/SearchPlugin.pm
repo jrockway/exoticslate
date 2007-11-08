@@ -263,7 +263,7 @@ sub _make_page_row {
                 (qw(From Date Subject Revision Summary))
         ),
         DateLocal       => $page->datetime_for_user,
-        revision_count  => scalar $page->all_revision_ids,
+        revision_count  => $page->revision_count,
         page_uri        => $page->uri,
         page_id         => $page->id,
         From            => $author_name,

@@ -407,7 +407,7 @@ sub _getPage {
             SOAP::Data->name( 'author' => $page->metadata->From )
                   ->type('string')
                   ->prefix(''),
-            SOAP::Data->name( 'revisions' => scalar $page->all_revision_ids )
+            SOAP::Data->name( 'revisions' => $page->revision_count )
                   ->type('int')
                   ->prefix(''),
               ))

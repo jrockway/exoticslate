@@ -49,7 +49,7 @@ sub push_result {
     $result->{$_} = $metadata->$_
       for qw(From Date Subject Revision Summary);
     $result->{DateLocal} = $page->datetime_for_user;
-    $result->{revision_count} = scalar $page->all_revision_ids;
+    $result->{revision_count} = $page->revision_count;
     $result->{page_uri} = $page->uri;
     $result->{page_id} = $page->id;
     $result->{From} =

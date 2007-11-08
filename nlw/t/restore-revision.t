@@ -42,7 +42,7 @@ END_OF_RANT
         creator => $hub->current_user,
     );
     isa_ok( $page, "Socialtext::Page" );
-    is scalar $page->all_revision_ids, 1,
+    is $page->revision_count, 1,
         'Fresh page has exactly 1 revision id.';
 
     my $original_revision_id = $page->revision_id;

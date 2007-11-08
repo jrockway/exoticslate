@@ -298,7 +298,7 @@ sub _get_page_info {
             $page->to_html_or_default
         ),
         feeds     => $self->_feeds( $self->hub->current_workspace, $page ),
-        revisions => scalar( $page->all_revision_ids ),
+        revisions => $page->revision_count,
         revision_id => $page->revision_id || undef,
         views   => $self->hub->hit_counter->get_page_counter_value($page),
         has_stats   => $self->hub->hit_counter->page_has_stats($page),

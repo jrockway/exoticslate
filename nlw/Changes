@@ -2,6 +2,23 @@ Change log for Socialtext Open
 
 2.17.X
 
+Release notes, 2.17.3.0  Nov 2007
+
+  [FEATURES]
+
+  Socialtext has been using an Object Relational Mapping tool called Alzabo since about version 1.9.  This tool has proven to be somewhat slow and sometimes hard to work with.  Rather than stick with the tool and try and fix it, we've decided to transition ourselves away from it and away from a general purpose ORM altogether.  
+  This release introduces a new class, Socialtext::SQL and removes the Alzabo dependency from these classes:
+* Socialtext::Account
+* Socialtext::Permission
+* Socialtext::Role
+* Socialtext::UserId
+* Socialtext::UserMetadata
+* Socialtext::User::Default
+* Socialtext::Watchlist
+* Socialtext::WorkspaceBreadcrumb
+
+  Socialtext also provides some tools to manage deployment of custom skins from our customer skins repository.  There was some restructuring to the repository and the tools have changed to support that.
+
 Release notes, 2.17.2.0  Nov 2007
 
   [BUGS]

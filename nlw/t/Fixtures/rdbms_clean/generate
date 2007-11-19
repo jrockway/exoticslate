@@ -16,7 +16,7 @@ for my $class ( Socialtext::Data::Classes() ) {
     eval "use $class";
 
     my $sql =
-        'DELETE FROM ' . $dbh->quote_identifier( $class->table()->name() );
+        'DELETE FROM ' . $dbh->quote_identifier( $class->table_name() );
     $dbh->do($sql);
 }
 

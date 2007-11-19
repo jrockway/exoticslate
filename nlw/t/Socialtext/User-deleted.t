@@ -25,16 +25,15 @@ use Socialtext::User::Default;
 
 # populate a user that doesn't currently exist, even though it uses a
 # known driver.
-Socialtext::UserId->create(
-    system_unique_id => 99,
+my $user_id = Socialtext::UserId->create(
     driver_key       => 'Default',
-    driver_unique_id => "I met a man who wasn't there",
+    driver_unique_id => 999999,
     driver_username  => "Nemo",
 );
 
 {
     is (Socialtext::User->Count, 10, "New user added only to UserId, simulating adding and deleting from the store.");
-    my $nemo = Socialtext::User->new( user_id => 99 );
+    my $nemo = Socialtext::User->new( user_id => $user_id->system_unique_id );
     ok ($nemo->to_hash, "Nemo can be hashified" );
     is ($nemo->username, 'Nemo', "Nemo was found, no error.");
     is ($nemo->first_name, 'Deleted', "But he's still deleted.");

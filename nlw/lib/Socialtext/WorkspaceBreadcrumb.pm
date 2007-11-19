@@ -3,63 +3,89 @@ package Socialtext::WorkspaceBreadcrumb;
 use strict;
 use warnings;
 
+use Class::Field 'field';
 use DateTime::Format::Pg;
-use Alzabo::SQLMaker::PostgreSQL qw(CURRENT_TIMESTAMP);
-
 use Socialtext::MultiCursor;
 use Socialtext::Schema;
+use Socialtext::SQL qw( sql_execute );
 use Socialtext::Workspace;
-use base 'Socialtext::AlzaboWrapper';
 use Socialtext::SQL qw( sql_execute sql_selectrow );
 use Socialtext::Permission qw( ST_EMAIL_IN_PERM ST_READ_PERM );
 
-__PACKAGE__->SetAlzaboTable( Socialtext::Schema->Load()->table('WorkspaceBreadcrumb') );
-__PACKAGE__->MakeColumnMethods();
+field 'workspace_id';
+field 'user_id';
+field 'timestamp';
 
-sub parsed_timestamp {
-    my $self = shift;
-    return DateTime::Format::Pg->parse_timestamptz( $self->timestamp );
+sub new {
+    my ( $class, %p ) = @_;
+
+    my $new_crumb = bless {
+        user_id      => $p{user_id},
+        workspace_id => $p{workspace_id},
+    },
+    $class;
+
+    return $new_crumb->_refresh_from_db ? $new_crumb : undef;
+}
+
+sub create {
+    my ( $class, %p ) = @_;
+
+    my $sth = sql_execute(
+        'INSERT INTO "WorkspaceBreadcrumb" (user_id, workspace_id)'
+        . ' VALUES (?,?)', $p{user_id}, $p{workspace_id} );
+    return $class->new(%p);
+}
+
+sub _refresh_from_db {
+    my ($self) = @_;
+
+    my $sth = sql_execute(
+        'SELECT timestamp FROM "WorkspaceBreadcrumb"'
+        . ' WHERE user_id=? AND workspace_id=?',
+        $self->{user_id}, $self->{workspace_id} );
+
+    my @rows = @{ $sth->fetchall_arrayref };
+    if (@rows) {
+        $self->{timestamp} = $rows[0][0];
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+sub update_timestamp {
+    # Need to compose the "set" phrase from %p and the "where" phrase from $self
+    my ($self, %p) = @_;
+
+    sql_execute(
+        'UPDATE "WorkspaceBreadcrumb" SET'
+        . ' timestamp=now() WHERE user_id=? AND workspace_id=?',
+        $self->{user_id}, $self->{workspace_id} );
+    $self->_refresh_from_db;
+
+    return $self;
 }
 
 sub List {
-    my ( $class, %args ) = @_;
-
-    # back to the sql
-    my $sql = <<END_SQL
-select
-  wb.workspace_id
-from
-  "WorkspaceBreadcrumb" wb
-where
-  wb.user_id = ?
-and
-  exists (select 1 from "UserWorkspaceRole" uwr where wb.user_id = uwr.user_id and wb.workspace_id = uwr.workspace_id)
-or
-  exists (select 1 from "WorkspaceRolePermission" wrp where wrp.workspace_id = wb.workspace_id and wrp.role_id = ? and wrp.permission_id = ?)
-order by
-  wb.timestamp desc
-limit $args{limit}
-END_SQL
-;
-
+    my ( $class, %p ) = @_;
     my $sth = sql_execute(
-        $sql,
-        $args{user_id},
+        'SELECT wb.workspace_id FROM "WorkspaceBreadcrumb" wb'
+        . ' WHERE wb.user_id=? '
+        . ' AND EXISTS (SELECT 1 FROM "UserWorkspaceRole" uwr'
+        . '   WHERE wb.user_id = uwr.user_id'
+        . '   AND wb.workspace_id = uwr.workspace_id)'
+        . ' OR EXISTS (SELECT 1 FROM "WorkspaceRolePermission" wrp'
+        . '   WHERE wrp.workspace_id = wb.workspace_id'
+        . '   AND wrp.role_id=? AND wrp.permission_id=?)'
+        . ' ORDER BY wb.timestamp DESC LIMIT ?',
+        $p{user_id},
         Socialtext::Role->Guest()->role_id,
         ST_READ_PERM->permission_id,
-    );
-
-    my $cursor = Socialtext::MultiCursor->new(
-        iterables => [ $sth->fetchall_arrayref ],
-        apply => sub { $_[0]->[0] },
-    );
-
-    my @workspaces = ();
-    while ( my $id = $cursor->next ) {
-        push @workspaces, Socialtext::Workspace->new( workspace_id => $id );
-    }
-
-    return @workspaces;
+        $p{limit} );
+    return
+        map { Socialtext::Workspace->new( workspace_id => $_->[0] ) }
+        @{ $sth->fetchall_arrayref };
 }
 
 sub Save {
@@ -67,7 +93,7 @@ sub Save {
 
     my $crumb = $class->new(@_);
     if ($crumb) {
-        $crumb->update( timestamp => CURRENT_TIMESTAMP() );
+        $crumb->update_timestamp();
         return $crumb;
     }
     else {
@@ -75,6 +101,10 @@ sub Save {
     }
 }
 
+sub parsed_timestamp {
+    my $self = shift;
+    return DateTime::Format::Pg->parse_timestamptz( $self->timestamp );
+}
 
 1;
 

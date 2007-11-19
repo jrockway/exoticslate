@@ -158,7 +158,7 @@ sub give_system_admin {
     my $self = shift;
     my $user = $self->_require_user();
 
-    $user->update_metadata( is_technical_admin => 1 );
+    $user->set_technical_admin(1);
 
     my $username = $user->username();
     $self->_success("$username now has system admin access.");
@@ -168,7 +168,7 @@ sub give_accounts_admin {
     my $self = shift;
     my $user = $self->_require_user();
 
-    $user->update_metadata( is_business_admin => 1 );
+    $user->set_business_admin(1);
 
     my $username = $user->username();
     $self->_success("$username now has accounts admin access.");
@@ -178,7 +178,7 @@ sub remove_system_admin {
     my $self = shift;
     my $user = $self->_require_user();
 
-    $user->update_metadata( is_technical_admin => 0 );
+    $user->set_technical_admin(0);
 
     my $username = $user->username();
     $self->_success("$username no longer has system admin access.");
@@ -188,7 +188,7 @@ sub remove_accounts_admin {
     my $self = shift;
     my $user = $self->_require_user();
 
-    $user->update_metadata( is_business_admin => 0 );
+    $user->set_business_admin(0);
 
     my $username = $user->username();
     $self->_success("$username no longer has accounts admin access.");

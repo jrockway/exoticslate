@@ -6,20 +6,22 @@ use warnings;
 
 our $VERSION = '0.01';
 
+use Class::Field 'field';
+use Readonly;
 use Socialtext::Exceptions qw( data_validation_error );
+use Socialtext::Schema;
+use Socialtext::SQL qw( sql_execute );
+use Socialtext::String;
 use Socialtext::Validate qw( validate SCALAR_TYPE );
 use Socialtext::l10n qw(loc);
 
-use Socialtext::Schema;
-use base 'Socialtext::AlzaboWrapper';
-__PACKAGE__->SetAlzaboTable( Socialtext::Schema->Load->table('Account') );
-__PACKAGE__->MakeColumnMethods();
+field 'account_id';
+field 'name';
+field 'is_system_created';
 
-use Alzabo::SQLMaker::PostgreSQL qw(COUNT DISTINCT);
-use Socialtext::String;
-use Readonly;
+sub table_name { 'Account' }
 
-
+# FIXME: This belongs elsewhere, in fixture code or something.
 Readonly my @RequiredAccounts => qw( Unknown Socialtext );
 sub EnsureRequiredDataIsPresent {
     my $class = shift;
@@ -34,12 +36,229 @@ sub EnsureRequiredDataIsPresent {
     }
 }
 
-sub _new_row {
-    my $class = shift;
-    my %p     = validate( @_, { name => SCALAR_TYPE } );
+sub workspaces {
+    my $self = shift;
 
-    return $class->table->one_row(
-        where => [ $class->table->column('name'), '=', $p{name } ],
+    return
+        Socialtext::Workspace->ByAccountId( account_id => $self->account_id, @_ );
+}
+
+sub workspace_count {
+    my $self = shift;
+
+    my $ws_table = Socialtext::Schema->Load()->table('Workspace');
+
+    return $ws_table->row_count(
+        where => [ $ws_table->column('account_id'), '=', $self->account_id ],
+    );
+}
+
+sub users {
+    my $self = shift;
+
+    return
+        Socialtext::User->ByAccountId( account_id => $self->account_id, @_ );
+}
+
+sub user_count {
+    my $self = shift;
+
+    my $sth = sql_execute(
+        'SELECT count(distinct("UserWorkspaceRole".user_id))'
+        . ' FROM "Workspace", "UserWorkspaceRole"'
+        . ' WHERE "Workspace".account_id=?',
+        $self->account_id );
+
+    return $sth->fetchall_arrayref->[0][0];
+}
+
+sub Unknown    { $_[0]->new( name => 'Unknown' ) }
+sub Socialtext { $_[0]->new( name => 'Socialtext' ) }
+
+sub new {
+    my ( $class, %p ) = @_;
+
+    return exists $p{name} ? $class->_new_from_name(%p)
+                           : $class->_new_from_account_id(%p);
+}
+
+sub _new_from_name {
+    my ( $class, %p ) = @_;
+
+    return $class->_new_from_where('name=?', $p{name});
+}
+
+sub _new_from_account_id {
+    my ( $class, %p ) = @_;
+
+    return $class->_new_from_where('account_id=?', $p{account_id});
+}
+
+sub _new_from_where {
+    my ( $class, $where_clause, @bindings ) = @_;
+
+    my $sth = sql_execute(
+        'SELECT name, account_id, is_system_created'
+        . ' FROM "Account"'
+        . " WHERE $where_clause",
+        @bindings );
+    my @rows = @{ $sth->fetchall_arrayref };
+    return @rows    ?   bless {
+                            name              => $rows[0][0],
+                            account_id        => $rows[0][1],
+                            is_system_created => $rows[0][2],
+                        }, $class
+                    :   undef;
+}
+
+sub create {
+    my ( $class, %p ) = @_;
+
+    $class->_validate_and_clean_data(\%p);
+    exists $p{is_system_created} ? $class->_create_full(%p)
+                                 : $class->_create_from_name(%p);
+
+    return $class->new(%p);
+}
+
+sub _create_full {
+    my ( $class, %p ) = @_;
+
+    sql_execute(
+        'INSERT INTO "Account" (account_id, name, is_system_created)'
+        . ' VALUES (nextval(\'"Account___account_id"\'),?,?)',
+        $p{name}, $p{is_system_created} );
+}
+
+sub _create_from_name {
+    my ( $class, %p ) = @_;
+
+    sql_execute(
+        'INSERT INTO "Account" (account_id, name)'
+        . ' VALUES (nextval(\'"Account___account_id"\'),?)',
+        $p{name} );
+}
+
+sub delete {
+    my ($self) = @_;
+
+    sql_execute( 'DELETE FROM "Account" WHERE account_id=?',
+        $self->account_id );
+}
+
+# "update" methods: set_account_name
+sub update {
+    my ( $self, %p ) = @_;
+
+    $self->_validate_and_clean_data(\%p);
+    sql_execute( 'UPDATE "Account" SET name=? WHERE account_id=?',
+        $p{name}, $self->account_id );
+
+    $self->name($p{name});
+
+    return $self;
+}
+
+sub Count {
+    my ( $class, %p ) = @_;
+
+    my $sth = sql_execute('SELECT COUNT(*) FROM "Account"');
+    return $sth->fetchall_arrayref->[0][0];
+}
+
+{
+    Readonly my $spec => {
+        limit      => SCALAR_TYPE( default => undef ),
+        offset     => SCALAR_TYPE( default => 0 ),
+        order_by   => SCALAR_TYPE(
+            regex   => qr/^(?:name|user_count|workspace_count)$/,
+            default => 'name',
+        ),
+        sort_order => SCALAR_TYPE(
+            regex   => qr/^(?:ASC|DESC)$/i,
+            default => 'ASC',
+        ),
+    };
+    sub All {
+        my $class = shift;
+        my %p = validate( @_, $spec );
+
+        if ( $p{order_by} eq 'name' ) {
+            return $class->_All( %p );
+        }
+        elsif ( $p{order_by} eq 'workspace_count' ) {
+            return $class->_AllByWorkspaceCount( %p );
+        }
+        elsif ( $p{order_by} eq 'user_count' ) {
+            return $class->_AllByUserCount( %p );
+        }
+    }
+}
+
+sub _All {
+    my ( $self, %p ) = @_;
+
+    my $sth = sql_execute(
+        'SELECT account_id'
+        . ' FROM "Account"'
+        . " ORDER BY name $p{sort_order}"
+        . ' LIMIT ? OFFSET ?' ,
+        $p{limit}, $p{offset} );
+
+    return Socialtext::MultiCursor->new(
+        iterables => [ $sth->fetchall_arrayref ],
+        apply => sub {
+            my $row = shift;
+            return Socialtext::Account->new( account_id => $row->[0] );
+        }
+    );
+}
+
+sub _AllByWorkspaceCount {
+    my ( $self, %p ) = @_;
+
+    my $sth = sql_execute(
+        'SELECT "Account".account_id,'
+        . ' COUNT("Workspace".workspace_id) AS workspace_count'
+        . ' FROM "Account"'
+        . ' LEFT OUTER JOIN "Workspace" ON'
+        . ' "Account".account_id="Workspace".account_id'
+        . ' GROUP BY "Account".account_id, "Account".name'
+        . " ORDER BY workspace_count $p{sort_order}, \"Account\".name ASC"
+        . ' LIMIT ? OFFSET ?' ,
+        $p{limit}, $p{offset} );
+
+    return Socialtext::MultiCursor->new(
+        iterables => [ $sth->fetchall_arrayref ],
+        apply => sub {
+            my $row = shift;
+            return Socialtext::Account->new( account_id => $row->[0] );
+        }
+    );
+}
+
+sub _AllByUserCount {
+    my ( $self, %p ) = @_;
+
+    my $sth = sql_execute(
+        'SELECT "Account".account_id AS account_id,'
+        . ' COUNT("UserWorkspaceRole".user_id) AS user_count'
+        . ' FROM "Account"'
+        . ' LEFT OUTER JOIN "Workspace" ON'
+        . ' "Account".account_id="Workspace".account_id'
+        . ' LEFT OUTER JOIN "UserWorkspaceRole" ON'
+        . ' "Workspace".workspace_id="UserWorkspaceRole".workspace_id'
+        . ' GROUP BY "Account".account_id, "Account".name'
+        . " ORDER BY user_count $p{sort_order}, \"Account\".name ASC"
+        . ' LIMIT ? OFFSET ?',
+        $p{limit}, $p{offset} );
+
+    return Socialtext::MultiCursor->new(
+        iterables => [ $sth->fetchall_arrayref ],
+        apply => sub {
+            my $row = shift;
+            return Socialtext::Account->new( account_id => $row->[0] );
+        }
     );
 }
 
@@ -73,173 +292,6 @@ sub _validate_and_clean_data {
     data_validation_error errors => \@errors if @errors;
 }
 
-sub workspaces {
-    my $self = shift;
-
-    return
-        Socialtext::Workspace->ByAccountId( account_id => $self->account_id, @_ );
-}
-
-sub workspace_count {
-    my $self = shift;
-
-    my $ws_table = Socialtext::Schema->Load()->table('Workspace');
-
-    return $ws_table->row_count(
-        where => [ $ws_table->column('account_id'), '=', $self->account_id ],
-    );
-}
-
-sub users {
-    my $self = shift;
-
-    return
-        Socialtext::User->ByAccountId( account_id => $self->account_id, @_ );
-}
-
-sub user_count {
-    my $self = shift;
-
-    my $schema = Socialtext::Schema->Load();
-
-    my $ws_table = $schema->table('Workspace');
-    my $uwr_table = $schema->table('UserWorkspaceRole');
-
-    return $schema->function(
-        select => COUNT( DISTINCT( $uwr_table->column('user_id') ) ),
-        join   => [ $schema->table('Workspace'), $uwr_table ],
-        where  => [ $ws_table->column('account_id'), '=', $self->account_id ],
-    );
-}
-
-sub Unknown { shift->new( name => 'Unknown' ) }
-sub Socialtext { shift->new( name => 'Socialtext' ) }
-
-{
-    Readonly my $spec => {
-        limit      => SCALAR_TYPE( default => 0 ),
-        offset     => SCALAR_TYPE( default => 0 ),
-        order_by   => SCALAR_TYPE(
-            regex   => qr/^(?:name|user_count|workspace_count)$/,
-            default => 'name',
-        ),
-        sort_order => SCALAR_TYPE(
-            regex   => qr/^(?:ASC|DESC)$/i,
-            default => 'ASC',
-        ),
-    };
-    sub All {
-        my $class = shift;
-        my %p = validate( @_, $spec );
-
-        my %limit;
-        if ( $p{limit} ) {
-            $limit{limit} = [ @p{ 'limit', 'offset' } ];
-        }
-
-        my $schema = Socialtext::Schema->Load();
-        my $acc_table = $schema->table('Account');
-
-        my @join;
-
-        my @order_by;
-        if ( $p{order_by} eq 'name' ) {
-            @order_by = ( $acc_table->column('name'), $p{sort_order} );
-
-            @join = $acc_table;
-
-            return $class->cursor(
-                $schema->join(
-                    select   => $acc_table,
-                    join     => \@join,
-                    order_by => \@order_by,
-                    %limit,
-                )
-            );
-        }
-        elsif ( $p{order_by} eq 'workspace_count' ) {
-            return $class->_AllByWorkspaceCount(
-                sort_order => $p{sort_order},
-                %limit,
-            );
-        }
-        elsif ( $p{order_by} eq 'user_count' ) {
-            return $class->_AllByUserCount(
-                sort_order => $p{sort_order},
-                %limit,
-            );
-        }
-    }
-}
-
-sub _AllByWorkspaceCount {
-    my $class = shift;
-    my %p = @_;
-
-    my $schema = Socialtext::Schema->Load();
-    my $ws_table = $schema->table('Workspace');
-    my $acc_table = $schema->table('Account');
-
-    my %limit = $p{limit} ? ( limit => $p{limit} ) : ();
-
-    my $count = COUNT( $ws_table->column('workspace_id') );
-    my $select = $schema->select(
-        select   => [ $acc_table->column('account_id'), $count ],
-        join     => [ left_outer_join => $acc_table, $ws_table  ],
-        order_by => [ $count, $p{sort_order}, $acc_table->column('name'), 'ASC' ],
-        group_by => [ $acc_table->column('account_id'), $acc_table->column('name') ],
-        %limit,
-    );
-
-    return Socialtext::Account::ByAggregateCursor->new(
-        cursor => $select,
-    );
-}
-
-sub _AllByUserCount {
-    my $class = shift;
-    my %p = @_;
-
-    my $schema = Socialtext::Schema->Load();
-    my $ws_table = $schema->table('Workspace');
-    my $uwr_table = $schema->table('UserWorkspaceRole');
-    my $acc_table = $schema->table('Account');
-
-    my %limit = $p{limit} ? ( limit => $p{limit} ) : ();
-
-    my $count = COUNT( $uwr_table->column('user_id') );
-    my $select = $schema->select(
-        select   => [ $acc_table->column('account_id'), $count ],
-        join     => [
-            [ left_outer_join => $acc_table, $ws_table  ],
-            [ left_outer_join => $ws_table, $uwr_table  ],
-        ],
-        order_by => [ $count, $p{sort_order}, $acc_table->column('name'), 'ASC' ],
-        group_by => [ $acc_table->column('account_id'), $acc_table->column('name') ],
-        %limit,
-    );
-
-    return Socialtext::Account::ByAggregateCursor->new(
-        cursor => $select,
-    );
-}
-
-package Socialtext::Account::ByAggregateCursor;
-
-use base qw(Class::AlzaboWrapper::Cursor);
-
-sub next {
-    my $self = shift;
-
-    my @vals = $self->{cursor}->next;
-
-    return unless @vals && defined $vals[0];
-
-    return Socialtext::Account->new( account_id => $vals[0] );
-}
-
-
-
 1;
 
 __END__
@@ -262,6 +314,14 @@ This class provides methods for dealing with data from the Account
 table. Each object represents a single row from the table.
 
 =head1 METHODS
+
+=over 4
+
+=item Socialtext::Account->table_name()
+
+Returns the name of the table where Account data lives.
+
+=back
 
 =over 4
 
@@ -291,7 +351,7 @@ PARAMS can include:
 
 =item * name - required
 
-=item * is_system_generated
+=item * is_system_created
 
 =back
 
@@ -310,7 +370,7 @@ it has any workspaces.
 
 =item $account->name()
 
-=item $account->is_system_generated()
+=item $account->is_system_created()
 
 Returns the given attribute for the account.
 

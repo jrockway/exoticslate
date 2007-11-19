@@ -42,6 +42,7 @@ use Socialtext::Image;
 use Socialtext::l10n qw(loc system_locale);
 use Socialtext::Log qw( st_log );
 use Socialtext::Paths;
+use Socialtext::SQL qw( sql_execute );
 use Socialtext::String;
 use Readonly;
 use Socialtext::Account;
@@ -71,6 +72,8 @@ sub new {
         return $class->SUPER::new(%args);
     }
 }
+
+sub table_name { 'Workspace' }
 
 sub _new_row {
     my $class = shift;
@@ -927,7 +930,8 @@ sub comment_form_custom_fields {
         my $perms_with_roles = $self->permissions_with_roles();
 
         my %set;
-        while ( my ( $perm, $role ) = $perms_with_roles->next() ) {
+        while ( my $pair = $perms_with_roles->next ) {
+            my ( $perm, $role ) = @$pair;
             push @{ $set{ $role->name() } }, $perm->name();
         }
 
@@ -1051,45 +1055,48 @@ sub comment_form_custom_fields {
 
         my %p = validate( @_, $spec );
 
-        my $schema = Socialtext::Schema->Load();
+        my $sth = sql_execute(
+            'SELECT permission_id'
+            . ' FROM "WorkspaceRolePermission"'
+            . ' WHERE workspace_id=? AND role_id=?',
+            $self->workspace_id, $p{role}->role_id );
 
-        my $perm_table = $schema->table('Permission');
-        my $wrp_table  = $schema->table('WorkspaceRolePermission');
-
-        return
-            $self->cursor(
-                $schema->join(
-                    select => $perm_table,
-                    join   => [ $perm_table, $wrp_table ],
-                    where  => [
-                        [ $wrp_table->column('workspace_id'), '=', $self->workspace_id() ],
-                        [ $wrp_table->column('role_id'), '=', $p{role}->role_id() ],
-                    ],
-                )
-            );
+        return Socialtext::MultiCursor->new(
+            iterables => [ $sth->fetchall_arrayref ],
+            apply     => sub {
+                my $row = shift;
+                return Socialtext::Permission->new(
+                    permission_id => $row->[0] );
+            }
+        );
     }
 }
 
 sub permissions_with_roles {
     my $self = shift;
 
-    my $schema = Socialtext::Schema->Load();
+    my $sth = sql_execute(
+        'SELECT permission_id, role_id'
+        . ' FROM "WorkspaceRolePermission"'
+        . ' WHERE workspace_id=?',
+        $self->workspace_id);
 
-    my $role_table = $schema->table('Role');
-    my $perm_table = $schema->table('Permission');
-    my $wrp_table  = $schema->table('WorkspaceRolePermission');
+    return Socialtext::MultiCursor->new(
+        iterables => [ $sth->fetchall_arrayref ],
+        apply     => sub {
+            my $row = shift;
+            my $permission_id = $row->[0];
+            my $role_id = $row->[1];
 
-    return
-        $self->cursor(
-            $schema->join(
-                select => [ $perm_table, $role_table ],
-                join   => [ $perm_table, $wrp_table, $role_table ],
-                where => [
-                    $wrp_table->column('workspace_id'), '=',
-                    $self->workspace_id()
-                ],
-            )
-        );
+            # warn "# Row $row pid $permission_id rid $role_id\n";
+            return undef unless defined $permission_id;
+
+            return [
+                Socialtext::Permission->new( permission_id => $permission_id ),
+                Socialtext::Role->new( role_id             => $role_id )
+            ];
+        }
+    );
 }
 
 {
@@ -1506,25 +1513,76 @@ sub ImportFromTarball {
 }
 
 my %LimitAndSortSpec = (
-    limit      => SCALAR_TYPE( default => 0 ),
+    limit      => SCALAR_TYPE( default => undef ),
     offset     => SCALAR_TYPE( default => 0 ),
     order_by   => SCALAR_TYPE(
         regex   => qr/^(?:name|user_count|account_name|creation_datetime|creator)$/,
         default => 'name',
     ),
     sort_order => SCALAR_TYPE(
-        regex   => qr/^(?:ASC|DESC)$/i,
+        regex   => qr/^(?:ASC|DESC|)$/i,
         default => undef,
     ),
 );
 {
     Readonly my $spec => { %LimitAndSortSpec };
-    sub All {
+    sub All { 
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        $class->_SortedQuery(%p);
+        # We're supposed to default to DESCending if we're creation_datetime.
+        $p{sort_order} ||= $p{order_by} eq 'creation_datetime' ? 'DESC' : 'ASC';
+
+        Readonly my %SQL => (
+            name => 'SELECT workspace_id'
+                . ' FROM "Workspace"'
+                . " ORDER BY name $p{sort_order}"
+                . ' LIMIT ? OFFSET ?',
+            creation_datetime => 'SELECT workspace_id'
+                . ' FROM "Workspace"'
+                . " ORDER BY creation_datetime $p{sort_order},"
+                . ' name ASC'
+                . ' LIMIT ? OFFSET ?',
+            account_name => 'SELECT "Workspace".workspace_id'
+                . ' FROM "Workspace", "Account"'
+                . ' WHERE "Workspace".account_id = "Account".account_id'
+                . " ORDER BY \"Account\".name $p{sort_order},"
+                . ' "Workspace".name ASC'
+                . ' LIMIT ? OFFSET ?',
+            creator => 'SELECT workspace_id'
+                . ' FROM "Workspace", "UserId"'
+                . ' WHERE created_by_user_id=system_unique_id'
+                . " ORDER BY driver_username $p{sort_order}, name ASC"
+                . ' LIMIT ? OFFSET ?',
+            user_count => 'SELECT "Workspace".workspace_id,'
+                . ' COUNT(DISTINCT("UserWorkspaceRole".user_id)) AS user_count'
+                . ' FROM "Workspace"'
+                . ' LEFT OUTER JOIN "UserWorkspaceRole"'
+                . ' ON "Workspace".workspace_id = "UserWorkspaceRole".workspace_id'
+                . ' GROUP BY "Workspace".workspace_id, "Workspace".name'
+                . " ORDER BY user_count $p{sort_order}, \"Workspace\".name ASC"
+                . ' LIMIT ? OFFSET ?',
+        );
+
+        return $class->_WorkspaceCursor(
+            $SQL{ $p{order_by} },
+            [qw( limit offset)], %p
+        );
     }
+}
+
+sub _WorkspaceCursor {
+    my ( $class, $sql, $interpolations, %p ) = @_;
+
+    my $sth = sql_execute( $sql, @p{@$interpolations} );
+
+    return Socialtext::MultiCursor->new(
+        iterables => [ $sth->fetchall_arrayref ],
+        apply => sub {
+            my $row = shift;
+            return Socialtext::Workspace->new( workspace_id => $row->[0] );
+        }
+    );
 }
 
 {
@@ -1540,132 +1598,108 @@ my %LimitAndSortSpec = (
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        my $ws_table = Socialtext::Schema->Load()->table('Workspace');
+        # We're supposed to default to DESCending if we're creation_datetime.
+        $p{sort_order} ||= $p{order_by} eq 'creation_datetime' ? 'DESC' : 'ASC';
 
-        my @where = ( $ws_table->column('account_id'), '=', $p{account_id} );
+        Readonly my %SQL => (
+            name => 'SELECT workspace_id'
+                . ' FROM "Workspace"'
+                . ' WHERE account_id=?'
+                . " ORDER BY name $p{sort_order}"
+                . ' LIMIT ? OFFSET ?',
+            creation_datetime => 'SELECT workspace_id'
+                . ' FROM "Workspace"'
+                . ' WHERE account_id=?'
+                . " ORDER BY creation_datetime $p{sort_order},"
+                . ' name ASC'
+                . ' LIMIT ? OFFSET ?',
+            account_name => 'SELECT "Workspace".workspace_id'
+                . ' FROM "Workspace", "Account"'
+                . ' WHERE "Workspace".account_id = "Account".account_id'
+                . ' AND "Workspace".account_id=?'
+                . " ORDER BY \"Account\".name $p{sort_order},"
+                . ' "Workspace".name ASC'
+                . ' LIMIT ? OFFSET ?',
+            creator => 'SELECT workspace_id'
+                . ' FROM "Workspace", "UserId"'
+                . ' WHERE created_by_user_id=system_unique_id'
+                . ' AND "Workspace".account_id=?'
+                . " ORDER BY driver_username $p{sort_order}, name ASC"
+                . ' LIMIT ? OFFSET ?',
+            user_count => 'SELECT "Workspace".workspace_id,'
+                . ' COUNT(DISTINCT("UserWorkspaceRole".user_id)) AS user_count'
+                . ' FROM "Workspace"'
+                . ' LEFT OUTER JOIN "UserWorkspaceRole"'
+                . ' ON "Workspace".workspace_id = "UserWorkspaceRole".workspace_id'
+                . ' WHERE account_id=?'
+                . ' GROUP BY "Workspace".workspace_id, "Workspace".name'
+                . " ORDER BY user_count $p{sort_order}, \"Workspace\".name ASC"
+                . ' LIMIT ? OFFSET ?',
+        );
 
-        return $class->_SortedQuery( %p, where => \@where );
+        return $class->_WorkspaceCursor(
+            $SQL{ $p{order_by} },
+            [qw( account_id limit offset )], %p
+        );
     }
 }
 
 {
     Readonly my $spec => {
         %LimitAndSortSpec,
-        name => SCALAR_TYPE( regex => qr/\S/ ),
+        name => SCALAR_TYPE,
     };
     sub ByName {
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        my $ws_table = Socialtext::Schema->Load()->table('Workspace');
+        # We're supposed to default to DESCending if we're creation_datetime.
+        $p{sort_order} ||= $p{order_by} eq 'creation_datetime' ? 'DESC' : 'ASC';
 
-        my @where = ( $ws_table->column('name'), 'LIKE', '%' . $p{name} . '%' );
-
-        return $class->_SortedQuery( %p, where => \@where );
-    }
-}
-
-sub _SortedQuery {
-    my $class = shift;
-    my %p = @_;
-
-    my %limit;
-    if ( $p{limit} ) {
-        $limit{limit} = [ @p{ 'limit', 'offset' } ];
-    }
-
-    my %where;
-    if ( $p{where} ) {
-        $where{where} = $p{where};
-    }
-
-    my $schema = Socialtext::Schema->Load();
-    my $ws_table = $schema->table('Workspace');
-
-    my @join = $ws_table;
-
-    my $sort_order = (
-        defined $p{sort_order}
-        ? uc $p{sort_order}
-        : $p{order_by} eq 'creation_datetime'
-        ? 'DESC'
-        : 'ASC'
-    );
-
-    my @order_by;
-    if ( $p{order_by} eq 'name' ) {
-        @order_by = ( $ws_table->column('name'), $sort_order );
-    }
-    elsif ( $p{order_by} eq 'creation_datetime' ) {
-        @order_by = (
-            $ws_table->column('creation_datetime'), $sort_order,
-            $ws_table->column('name'), 'ASC',
-        );
-    }
-    elsif ( $p{order_by} eq 'account_name' ) {
-        my $acc_table = $schema->table('Account');
-
-        @order_by = (
-            $acc_table->column('name'), $sort_order,
-            $ws_table->column('name'), 'ASC',
+        Readonly my %SQL => (
+            name => 'SELECT workspace_id'
+                . ' FROM "Workspace"'
+                . ' WHERE name LIKE ?'
+                . " ORDER BY name $p{sort_order}"
+                . ' LIMIT ? OFFSET ?',
+            creation_datetime => 'SELECT workspace_id'
+                . ' FROM "Workspace"'
+                . ' WHERE name LIKE ?'
+                . " ORDER BY creation_datetime $p{sort_order},"
+                . ' name ASC'
+                . ' LIMIT ? OFFSET ?',
+            account_name => 'SELECT "Workspace".workspace_id'
+                . ' FROM "Workspace", "Account"'
+                . ' WHERE "Workspace".account_id = "Account".account_id'
+                . ' AND "Workspace".name LIKE ?'
+                . " ORDER BY \"Account\".name $p{sort_order},"
+                . ' "Workspace".name ASC'
+                . ' LIMIT ? OFFSET ?',
+            creator => 'SELECT workspace_id'
+                . ' FROM "Workspace", "UserId"'
+                . ' WHERE created_by_user_id=system_unique_id'
+                . ' AND "Workspace".name LIKE ?'
+                . " ORDER BY driver_username $p{sort_order}, name ASC"
+                . ' LIMIT ? OFFSET ?',
+            user_count => 'SELECT "Workspace".workspace_id,'
+                . ' COUNT(DISTINCT("UserWorkspaceRole".user_id)) AS user_count'
+                . ' FROM "Workspace"'
+                . ' LEFT OUTER JOIN "UserWorkspaceRole"'
+                . ' ON "Workspace".workspace_id = "UserWorkspaceRole".workspace_id'
+                . ' WHERE name LIKE ?'
+                . ' GROUP BY "Workspace".workspace_id, "Workspace".name'
+                . " ORDER BY user_count $p{sort_order}, \"Workspace\".name ASC"
+                . ' LIMIT ? OFFSET ?',
         );
 
-        push @join, $acc_table;
-    }
-    elsif ( $p{order_by} eq 'creator' ) {
-        my $uid_table = $schema->table('UserId');
+        # Turn our substring into a SQL pattern.
+        $p{name} = "\%$p{name}\%";
 
-        @order_by = (
-            $uid_table->column('driver_username'), $sort_order,
-            $ws_table->column('name'), 'ASC',
-        );
-
-        push @join, $uid_table;
-    }
-    elsif ( $p{order_by} eq 'user_count' ) {
-        return $class->_AllByUserCount(
-            sort_order => $sort_order,
-            %where,
-            %limit,
+        return $class->_WorkspaceCursor(
+            $SQL{ $p{order_by} },
+            [qw( name limit offset )], %p
         );
     }
-
-    return $class->cursor(
-        $schema->join(
-            distinct => $ws_table,
-            join     => \@join,
-            %where,
-            order_by => \@order_by,
-            %limit,
-        )
-    );
-}
-
-sub _AllByUserCount {
-    my $class = shift;
-    my %p = @_;
-
-    my $schema = Socialtext::Schema->Load();
-    my $ws_table = $schema->table('Workspace');
-    my $uwr_table = $schema->table('UserWorkspaceRole');
-
-    my %limit = $p{limit} ? ( limit => $p{limit} ) : ();
-    my %where = $p{where} ? ( where => $p{where} ) : ();
-
-    my $count = COUNT( DISTINCT( $uwr_table->column('user_id') ) );
-    my $select = $schema->select(
-        select   => [ $ws_table->column('workspace_id'), $count ],
-        join     => [ left_outer_join => $ws_table, $uwr_table  ],
-        %where,
-        order_by => [ $count, $p{sort_order}, $ws_table->column('name'), 'ASC' ],
-        group_by => [ $ws_table->column('workspace_id'), $ws_table->column('name') ],
-        %limit,
-    );
-
-    return Socialtext::AlzaboWrapper::Cursor::PKOnly->new(
-        cursor => $select,
-        tables => [ $ws_table ],
-    );
 }
 
 {
@@ -1911,6 +1945,10 @@ The user_id of the user who created this workspace.
 =head2
 
 =head1 METHODS
+
+=head2 Socialtext::Workspace->table_name()
+
+Returns the name of the table where Workspace data lives.
 
 =head2 Socialtext::Workspace->new(PARAMS)
 

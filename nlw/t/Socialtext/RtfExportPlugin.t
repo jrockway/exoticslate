@@ -203,26 +203,12 @@ package TestParser;
 
 use base 'RTF::Parser';
 
-# REVIEW: For some reason, Class::Field wouldn't work in here, so I wrote
-# these accessors by hand.
+use Class::Field 'field';
 
-sub states {
-    my $self = shift;
-    $self->{states} = [] unless exists $self->{states};
-    $self->{states} = $_[0] if @_;
-    return $self->{states};
-}
-
-sub text_callback {
-    my $self = shift;
-    $self->{text_callback} = $_[0] if @_;
-    return $self->{text_callback};
-}
-
-sub flag {
-    my $self = shift;
-    $self->{flag} = $_[0] if @_;
-    return $self->{flag};
+BEGIN {
+    field 'states', -init => '[]';
+    field 'text_callback';
+    field 'flag';
 }
 
 sub push_state {

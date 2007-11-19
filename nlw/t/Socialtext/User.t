@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 12;
+use Test::Socialtext tests => 15;
 fixtures( 'rdbms_clean' );
 
 use Socialtext::User;
@@ -62,10 +62,16 @@ ok( $newer_user->update_store( last_name => 'Nullius' ),
     'Can update certain data (like last name).'
 );
 
-eval { $newer_user->update_metadata( is_system_created => 1 ) };
-like( $@, qr/cannot change/,
-        'But not others (like is system created).'
-);
+is( $newer_user->last_name, 'Nullius',
+    'And when updated, the instance retains the new value' );
+
+ok( !$newer_user->is_business_admin,
+    "By default, users aren't business admins" );
+
+ok( $newer_user->set_business_admin(1), "But they can be made to be." );
+
+ok( $newer_user->is_business_admin(),
+    "And when they are, the instance is updated." );
 
 my $user3 = Socialtext::User->create(
     username      => 'nonauth@socialtext.net',

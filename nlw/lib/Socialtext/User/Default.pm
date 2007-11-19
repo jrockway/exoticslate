@@ -9,39 +9,33 @@ our $VERSION = '0.01';
 use Socialtext::Exceptions qw( data_validation_error param_error );
 use Socialtext::Validate qw( validate SCALAR_TYPE BOOLEAN_TYPE ARRAYREF_TYPE WORKSPACE_TYPE );
 
-use Socialtext::AlzaboWrapper::Cursor::Tuple;
-use Socialtext::Schema;
-
-use base qw(Socialtext::AlzaboWrapper);
-
-__PACKAGE__->SetAlzaboTable( Socialtext::Schema->Load->table('User') );
-__PACKAGE__->MakeColumnMethods();
-
-use Alzabo::SQLMaker::PostgreSQL qw(COUNT DISTINCT LOWER CURRENT_TIMESTAMP);
-use DateTime;
-use DateTime::Format::Pg;
+use Class::Field 'field';
 use Digest::SHA1 ();
 use Email::Valid;
 use Socialtext::String;
 use Readonly;
 use Socialtext::Data;
-use Socialtext::Role;
-use Socialtext::TT2::Renderer;
-use Socialtext::URI;
+use Socialtext::SQL 'sql_execute';
 use Socialtext::User;
 use Socialtext::UserId;
 use Socialtext::UserMetadata;
 use Socialtext::UserWorkspaceRole;
-use Socialtext::Workspace;
 use Socialtext::l10n qw(loc);
+
+field 'user_id';
+field 'username';
+field 'email_address';
+field 'first_name';
+field 'last_name';
+field 'password';
 
 my $SystemUsername = 'system-user';
 my $GuestUsername  = 'guest';
 
-sub driver_name {
-    return 'Default';
-}
+sub table_name { 'User' }
+sub driver_name { 'Default' }
 
+# FIXME: This belongs elsewhere, in fixture generation code, perhaps
 sub EnsureRequiredDataIsPresent {
     my $class = shift;
 
@@ -49,6 +43,8 @@ sub EnsureRequiredDataIsPresent {
         my $system_user = $class->create(
             username      => $SystemUsername,
             email_address => 'system-user@socialtext.net',
+            first_name    => 'System',
+            last_name     => 'User',
             password      => '*no-password*',
             no_crypt      => 1,
         );
@@ -59,8 +55,6 @@ sub EnsureRequiredDataIsPresent {
             )->system_unique_id;
         Socialtext::UserMetadata->create(
             user_id            => $system_unique_id,
-            first_name         => 'System',
-            last_name          => 'User',
             created_by_user_id => undef,
             is_system_created  => 1,
         );
@@ -71,6 +65,8 @@ sub EnsureRequiredDataIsPresent {
         my $guest_user = $class->create(
             username      => $GuestUsername,
             email_address => 'guest@socialtext.net',
+            first_name    => 'Guest',
+            last_name     => 'User',
             password      => '*no-password*',
             no_crypt      => 1,
         );
@@ -81,59 +77,180 @@ sub EnsureRequiredDataIsPresent {
             )->system_unique_id;
         Socialtext::UserMetadata->create(
             user_id            => $system_unique_id,
-            first_name         => 'Guest',
-            last_name          => 'User',
             created_by_user_id => $system_user->user_id,
             is_system_created  => 1,
         );
     }
 }
 
-{
-    Readonly my $spec => {
-        username      => SCALAR_TYPE( optional => 1 ),
-        email_address => SCALAR_TYPE( optional => 1 ),
-    };
-    sub _new_row {
-        my $class = shift;
-        my %p     = validate( @_, $spec );
+sub Count {
+    my ( $class, %p ) = @_;
 
-        unless ( grep { exists $p{$_} }
-                 qw( username email_address )
-               ) {
-            param_error "One of username or email_address "
-                        . "are required when calling Socialtext::User::Default->new";
-        }
-
-        my $key = $p{username} ? 'username' : 'email_address';
-
-        return $class->table->one_row(
-            where => [
-                # Need to use LOWER(...) in order to make Pg use the index
-                LOWER( $class->table->column($key) ), '=',
-                _clean_username_or_email( $p{$key} )
-            ],
-        );
-    }
+    my $sth = sql_execute('SELECT COUNT(*) FROM "User"');
+    return $sth->fetchall_arrayref->[0][0];
 }
 
-# REVIEW: cut/paste from Socialtext::Workspace.
-# REVIEW: turn a user into a hash suitable for JSON and
-# such things.
-# REVIEW: An Alzabo thing won't serialize directly, we
-# need to make queries or otherwise dig into it, so not sure
-# what to put in this hash
-# REVIEW: We may want even more info than this.
+sub new {
+    my ( $class, %p ) = @_;
+
+    return
+        exists $p{user_id} ? $class->_new_from_where( 'user_id', $p{user_id} )
+            : exists $p{username} ? $class->_new_from_where(
+                'LOWER(username)', _clean_username_or_email( lc $p{username} ) )
+            : $class->_new_from_where(
+                'LOWER(email_address)',
+                _clean_username_or_email( lc $p{email_address} )
+            );
+}
+
+sub _new_from_where {
+    my ( $class, $where_clause, @bindings ) = @_;
+
+    my $sth = sql_execute(
+        'SELECT user_id, username, email_address,'
+        . ' first_name, last_name, password'
+        . ' FROM "User"'
+        . " WHERE $where_clause=?",
+        @bindings
+    );
+    my @rows = @{ $sth->fetchall_arrayref };
+    return @rows ? bless {
+                    user_id       => $rows[0][0],
+                    username      => $rows[0][1],
+                    email_address => $rows[0][2],
+                    first_name    => $rows[0][3],
+                    last_name     => $rows[0][4],
+                    password      => $rows[0][5],
+                    }, $class
+                 : undef;
+}
+
+sub create {
+    my ( $class, %p ) = @_;
+
+    $class->_validate_and_clean_data(\%p);
+
+    $p{first_name} ||= '';
+    $p{last_name} ||= '';
+
+    sql_execute(
+        'INSERT INTO "User"'
+        . ' (user_id, username, email_address, first_name, last_name, password)'
+        . ' VALUES (nextval(\'"User___user_id"\'),?,?,?,?,?)',
+        $p{username}, $p{email_address}, $p{first_name}, $p{last_name},
+        $p{password}
+    );
+
+    return $class->new( username => $p{username} );
+}
+
+sub delete {
+    my ( $self ) = @_;
+
+    sql_execute( 'DELETE FROM "User" WHERE user_id=?', $self->user_id );
+}
+
+# "update" methods: generic update?
+sub update {
+    my ( $self, %p ) = @_;
+
+    $self->_validate_and_clean_data(\%p);
+
+    my ( @updates, @bindings );
+    while (my ($column, $value) = each %p) {
+        push @updates, "$column=?";
+        push @bindings, $value;
+    }
+
+    my $set_clause = join ', ', @updates;
+
+    sql_execute(
+        'UPDATE "User"'
+        . " SET $set_clause WHERE user_id=?",
+        @bindings, $self->user_id);
+
+    while (my ($column, $value) = each %p) {
+        $self->$column($value);
+    }
+
+    return $self;
+}
+
 sub to_hash {
     my $self = shift;
     my $hash = {};
-    foreach my $column ($self->columns) {
-        my $name = $column->name;
+    foreach my $name
+        qw( user_id username email_address first_name last_name password ) {
         my $value = $self->$name();
-        $hash->{$name} = "$value"; # to_string on some objects
+        $hash->{$name} = "$value";    # to_string on some objects
     }
     return $hash;
 }
+
+{
+    Readonly my $spec => { password => SCALAR_TYPE };
+    sub ValidatePassword {
+        shift;
+        my %p = validate( @_, $spec );
+
+        return ( loc("Passwords must be at least 6 characters long.") )
+            unless length $p{password} >= 6;
+
+        return;
+    }
+}
+
+sub has_valid_password {
+    my $self = shift;
+
+    return 1
+        if $self->password ne '*none*';
+}
+
+sub password_is_correct {
+    my $self = shift;
+    my $pw   = shift;
+
+    my $db_pw = $self->password;
+
+    return $self->_crypt( Socialtext::String::trim($pw), $db_pw ) eq $db_pw;
+}
+
+# Required Socialtext::User plugin methods
+
+sub Search {
+    my $class = shift;
+    my $search_term = shift;
+
+    my $splat_term = lc "\%$search_term\%";
+
+    my $sth = sql_execute(
+        'SELECT first_name, last_name, email_address'
+        . ' FROM "User" WHERE'
+        . ' ( LOWER( username ) LIKE ? OR'
+        . ' LOWER( email_address ) LIKE ? OR'
+        . ' LOWER( first_name ) LIKE ? OR'
+        . ' LOWER( last_name ) LIKE ? ) AND'
+        . ' ( username NOT IN ? )',
+        $splat_term, $splat_term, $splat_term, $splat_term,
+        [ $SystemUsername, $GuestUsername ]
+    );
+
+    return Socialtext::MultiCursor->new(
+        iterables => [ $sth->fetchall_arrayref ],
+        apply => sub {
+            my $row = shift;
+            my $name = Socialtext::User->FormattedEmail(@$row);
+            return {
+                driver_name    => $class->driver_name,
+                email_address  => $row->[2],
+                name_and_email => $name,
+            };
+        },
+    )->all;
+}
+
+# Helper methods
 
 sub _validate_and_clean_data {
     my $self = shift;
@@ -160,7 +277,7 @@ sub _validate_and_clean_data {
         if ( defined $p->{$k}
              and ( $is_create
                    or $p->{$k} ne $self->$k() )
-             and Socialtext::User->new( $k => $p->{$k} ) ) {
+             and Socialtext::User->new_homunculus( $k => $p->{$k} ) ) {
             push @errors, loc("The [_1] you provided ([_2]) is already in use.", Socialtext::Data::humanize_column_name($k), $p->{$k});
         }
 
@@ -218,40 +335,6 @@ sub _validate_and_clean_data {
     }
 }
 
-{
-    Readonly my $spec => { password => SCALAR_TYPE };
-    sub ValidatePassword {
-        shift;
-        my %p = validate( @_, $spec );
-
-        return ( loc("Passwords must be at least 6 characters long.") )
-            unless length $p{password} >= 6;
-
-        return;
-    }
-}
-
-sub _clean_username_or_email {
-    my $str = shift;
-    return Socialtext::String::trim(lc $str);
-}
-
-sub has_valid_password {
-    my $self = shift;
-
-    return 1
-        if $self->password ne '*none*';
-}
-
-sub password_is_correct {
-    my $self = shift;
-    my $pw   = shift;
-
-    my $db_pw = $self->password;
-
-    return $self->_crypt( Socialtext::String::trim($pw), $db_pw ) eq $db_pw;
-}
-
 sub _crypt {
     shift;
     my $pw   = shift;
@@ -261,64 +344,9 @@ sub _crypt {
     return crypt( $pw, $salt );
 }
 
-sub Search {
-    my $class = shift;
-    my $search_term = shift;
-
-    my $schema = Socialtext::Schema->Load();
-    my $user_table = $schema->table('User');
-
-    my $select = $user_table->select(
-        select => [
-            map { $user_table->column($_) }
-                qw(first_name last_name email_address)
-        ],
-        where => [
-            (
-                '(',
-                [
-                    $user_table->column('username'), 'LIKE',
-                    '%' . lc $search_term . '%'
-                ],
-                'or',
-                [
-                    $user_table->column('email_address'), 'LIKE',
-                    '%' . lc $search_term . '%'
-                ],
-                'or',
-                [
-                    $user_table->column('first_name'), 'LIKE',
-                    '%' . lc $search_term . '%'
-                ],
-                'or',
-                [
-                    $user_table->column('last_name'), 'LIKE',
-                    '%' . lc $search_term . '%'
-                ],
-                ')',
-            ),
-            'and',
-
-            # REVIEW: Not futureproof, would be better to consult UserMetadata
-            [
-                $user_table->column('username'), 'NOT IN',
-                ( $SystemUsername, $GuestUsername )
-            ],
-        ],
-    );
-
-    return Socialtext::MultiCursor->new(
-        iterables => [ $select ],
-        apply => sub {
-            my $row = shift;
-            my $name = Socialtext::User->FormattedEmail(@$row);
-            return {
-                driver_name    => $class->driver_name,
-                email_address  => $row->[2],
-                name_and_email => $name,
-            };
-        },
-    )->all;
+sub _clean_username_or_email {
+    my $str = shift;
+    return Socialtext::String::trim(lc $str);
 }
 
 1;
@@ -345,6 +373,10 @@ This class provides methods for dealing with data from the User
 table. Each object represents a single row from the table.
 
 =head1 METHODS
+
+=head2 Socialtext::User::Default->table_name()
+
+Returns the name of the table where User data lives.
 
 =head2 Socialtext::User::Default->new(PARAMS)
 
@@ -406,6 +438,10 @@ Updates the user's information with the new key/val pairs passed in.  You
 cannot change username or email_address for a row where is_system_created is
 true.
 
+=head2 $user->delete()
+
+Deletes the user record from the store.
+
 =head2 $user->user_id()
 
 =head2 $user->username()
@@ -460,6 +496,10 @@ password is invalid.
 
 Inserts required users into the DBMS if they are not present. See
 L<Socialtext::Data> for more details on required data.
+
+=head2 Socialtext::User::Default->Count()
+
+Return the number of User records in the database.
 
 =head2 Socialtext::User::Default->Search( 'foo' )
 

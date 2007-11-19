@@ -12,6 +12,8 @@ use base 'Socialtext::AlzaboWrapper';
 __PACKAGE__->SetAlzaboTable( Socialtext::Schema->Load()->table('UserWorkspaceRole') );
 __PACKAGE__->MakeColumnMethods();
 
+sub table_name { 'UserWorkspaceRole' }
+
 
 1;
 
@@ -35,6 +37,14 @@ UserWorkspaceRole table. Each object represents a single row from the
 table.
 
 =head1 METHODS
+
+=over 4
+
+=item Socialtext::UserWorkspaceRole->table_name()
+
+Returns the name of the table where UserWorkspaceRole data lives.
+
+=back
 
 =over 4
 

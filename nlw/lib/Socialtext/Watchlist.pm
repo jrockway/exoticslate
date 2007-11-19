@@ -1,10 +1,4 @@
 # @COPYRIGHT@
-=head1 NAME
-
-Socialtext::Watchlist - Represents a watchlist for a user in a given workspace
-
-=cut
-
 package Socialtext::Watchlist;
 
 use strict;
@@ -12,18 +6,81 @@ use warnings;
 
 our $VERSION = '0.01';
 
+use DBI;
 use Socialtext::Schema;
-
-use Alzabo::SQLMaker::PostgreSQL qw(COUNT DISTINCT LOWER CURRENT_TIMESTAMP);
-use Socialtext::String;
+use Class::Field 'field';
 use Readonly;
-use Socialtext::Validate qw( validate USER_TYPE WORKSPACE_TYPE PAGE_TYPE OPTIONAL_INT_TYPE );
+use Socialtext::SQL qw( sql_execute );
+use Socialtext::String;
+use Socialtext::MultiCursor;
+
+field 'user_id';
+field 'workspace_id';
+
+sub new {
+    my $class = shift;
+    my %p = @_;
+
+    return bless {
+        user_id      => $p{user}->user_id(),
+        workspace_id => $p{workspace}->workspace_id(),
+    }, $class;
+}
+
+sub has_page {
+    my ( $self, %p ) = @_;
+
+    my $sth = sql_execute(
+        'SELECT user_id FROM "Watchlist" '
+            . 'WHERE user_id=? AND workspace_id=? AND page_text_id=?',
+        $self->{user_id}, $self->{workspace_id}, $p{page}->id() );
+
+    return scalar @{ $sth->fetchall_arrayref };
+}
+
+sub add_page {
+    my ( $self, %p ) = @_;
+
+    sql_execute(
+        'INSERT INTO "Watchlist" '
+        . '(user_id, workspace_id, page_text_id) VALUES (?,?,?)',
+        $self->{user_id}, $self->{workspace_id}, $p{page}->id() );
+}
+
+sub remove_page {
+    my ( $self, %p ) = @_;
+
+    sql_execute(
+        'DELETE FROM "Watchlist" '
+        . 'WHERE user_id=? AND workspace_id=? AND page_text_id=?',
+        $self->{user_id}, $self->{workspace_id}, $p{page}->id() );
+}
+
+sub pages {
+    my ( $self, %p ) = @_;
+
+    my $sth = sql_execute(
+        'SELECT page_text_id FROM "Watchlist"'
+        . ' WHERE user_id=? AND workspace_id=?'
+        . ' LIMIT ?',
+        $self->{user_id}, $self->{workspace_id}, $p{limit} );
+
+    return map { $_->[0] } @{ $sth->fetchall_arrayref };
+}
+
+1;
+
+__END__
+
+=head1 NAME
+
+Socialtext::Watchlist - Represents a watchlist for a user in a given workspace
 
 =head1 SYNOPSIS
 
     my $watchlist = Socialtext::Watchlist->new(
-                    user => $user,
-                    workspace => $ws,
+        user      => $user,
+        workspace => $ws,
     );
 
 =head1 DESCRIPTION
@@ -33,128 +90,32 @@ they would like to keep track of.
 
 Each watchlist object refers to a single workspace/user combination.
 
-=cut
+=head1 METHODS
 
-{
-    Readonly my $spec => {
-        user      => USER_TYPE,
-        workspace => WORKSPACE_TYPE,
-    };
+=head2 Socialtext::Watchlist->new( user => $user, workspace => $ws )
 
-    sub new {
-        my $class = shift;
-        my %p     = validate( @_, $spec );
+Creates an object representing C<$user>'s watchlist in the workspace C<$ws>.
 
-        return bless {
-            user_id      => $p{user}->user_id(),
-            workspace_id => $p{workspace}->workspace_id(),
-        };
-    }
-}
+=head2 $watchlist->has_page( $page )
 
-=head1 REMOTE METHODS
-
-=head2 has_page( $page )
-
-Checks to see if the given page is present in the watchlist
-
-=cut
-
-{
-    Readonly my $spec => { page => PAGE_TYPE };
-
-    sub has_page {
-        my $self = shift;
-        my %p    = validate( @_, $spec );
-
-        my $watchlist_table = Socialtext::Schema->Load()->table('Watchlist');
-        return $watchlist_table->function(
-            select => 1,
-            where  => [
-                [
-                    $watchlist_table->column('user_id'), '=', $self->{user_id}
-                ],
-                [
-                    $watchlist_table->column('workspace_id'), '=',
-                    $self->{workspace_id}
-                ],
-                [
-                    $watchlist_table->column('page_text_id'), '=',
-                    $p{page}->id()
-                ],
-            ],
-        ) || 0;
-    }
+Returns true iff the C<$page> is in C<$watchlist>.
 
 =head2 add_page( $page )
 
 Adds the specified page to the watchlist
 
-=cut
-
-    sub add_page {
-        my $self = shift;
-        my %p    = validate( @_, $spec );
-
-        my $watchlist_table = Socialtext::Schema->Load()->table('Watchlist');
-        $watchlist_table->insert(
-            values => {
-                user_id      => $self->{user_id},
-                workspace_id => $self->{workspace_id},
-                page_text_id => $p{page}->id(),
-            }
-        );
-    }
-
 =head2 remove_page( $page )
 
 Removes the specified page from the watchlist
 
-=cut
+=head2 $watchlist->pages()
 
-    sub remove_page {
-        my $self = shift;
-        my %p    = validate( @_, $spec );
+Returns a list of the C<page_id>s of all pages in the given watchlist.
 
-        my $watchlist_table = Socialtext::Schema->Load()->table('Watchlist');
-        my $row             = $watchlist_table->row_by_pk(
-            pk => {
-                user_id      => $self->{user_id},
-                workspace_id => $self->{workspace_id},
-                page_text_id => $p{page}->id(),
-            }
-        );
-        $row->delete() if $row;
-    }
-}
+=head1 AUTHOR
 
-=head2 pages()
+Socialtext, Inc., <code@socialtext.com>
 
-List the current pages in the watchlist.
+Copyright 2007 Socialtext, Inc., All Rights Reserved.
 
 =cut
-
-{
-    Readonly my $spec => { limit => OPTIONAL_INT_TYPE };
-
-    sub pages {
-        my $self            = shift;
-        my %p               = validate( @_, $spec );
-        my $watchlist_table = Socialtext::Schema->Load()->table('Watchlist');
-
-        my %function = (
-            select => $watchlist_table->column('page_text_id'),
-            where  => [
-                [
-                    $watchlist_table->column('workspace_id'), '=',
-                    $self->{workspace_id}
-                ],
-                [ $watchlist_table->column('user_id'), '=', $self->{user_id} ],
-            ],
-            order_by => $watchlist_table->column('page_text_id'),
-        );
-        $function{limit} = $p{limit} if defined $p{limit};
-        return $watchlist_table->function(%function);
-    }
-}
-1;

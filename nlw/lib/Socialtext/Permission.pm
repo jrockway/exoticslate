@@ -1,6 +1,140 @@
 # @COPYRIGHT@
 package Socialtext::Permission;
 
+use strict;
+use warnings;
+
+our $VERSION = '0.01';
+
+use base 'Exporter';
+use Class::Field 'field';
+use Readonly;
+use Socialtext::MultiCursor;
+use Socialtext::SQL 'sql_execute';
+use Socialtext::Validate qw( validate SCALAR_TYPE );
+
+field 'permission_id';
+field 'name';
+
+sub table_name { 'Permission' }
+
+# FIXME: This belongs elsewhere, in fixture creation code, perhaps
+Readonly my @RequiredPermissions => qw(
+    read edit attachments comment delete email_in email_out edit_controls
+    admin_workspace request_invite impersonate
+);
+sub EnsureRequiredDataIsPresent {
+    my $class = shift;
+
+    for my $name (@RequiredPermissions) {
+        next if $class->new( name => $name );
+
+        $class->create( name => $name );
+    }
+}
+
+_setup_exports();
+
+sub _setup_exports {
+    our @EXPORT_OK = ();
+
+    Readonly my @ExportedPermissions => qw(
+        read edit attachments comment delete email_in email_out edit_controls
+        request_invite admin_workspace
+    );
+
+    foreach my $name (@ExportedPermissions) {
+        my $symbol = uc "ST_${name}_PERM";
+
+        eval "sub $symbol() { Socialtext::Permission->new( name => '$name' ) }";
+        die $@ if $@;
+        push @EXPORT_OK, $symbol;
+    }
+}
+
+sub new {
+    my ( $class, %p ) = @_;
+
+    return exists $p{name} ? $class->_new_from_name(%p)
+                           : $class->_new_from_permission_id(%p);
+}
+
+sub _new_from_name {
+    my ( $class, %p ) = @_;
+
+    return $class->_new_from_where('name=?', $p{name});
+}
+
+sub _new_from_permission_id {
+    my ( $class, %p ) = @_;
+
+    return $class->_new_from_where('permission_id=?', $p{permission_id});
+}
+
+sub _new_from_where {
+    my ( $class, $where_clause, @bindings ) = @_;
+
+    my $sth = sql_execute(
+        'SELECT permission_id, name'
+        . ' FROM "Permission"'
+        . " WHERE $where_clause",
+        @bindings );
+    my @rows = @{ $sth->fetchall_arrayref };
+    return @rows    ?   bless {
+                            permission_id => $rows[0][0],
+                            name          => $rows[0][1],
+                        }, $class
+                    :   undef;
+}
+
+sub create {
+    my ( $class, %p ) = @_;
+
+    sql_execute(
+        'INSERT INTO "Permission" (permission_id, name)'
+        . ' VALUES (nextval(\'"Permission___permission_id"\'),?)',
+        $p{name} );
+}
+
+sub delete {
+    my ($self) = @_;
+
+    sql_execute( 'DELETE FROM "Permission" WHERE permission_id=?',
+        $self->permission_id );
+}
+
+# "update" methods: set_permission_name
+sub update {
+    my ( $self, %p ) = @_;
+
+    sql_execute( 'UPDATE "Permission" SET name=? WHERE permission_id=?',
+        $p{name}, $self->permission_id );
+
+    $self->name($p{name});
+
+    return $self;
+}
+
+sub All {
+    my ( $class, %p ) = @_;
+
+    my $sth = sql_execute(
+        'SELECT permission_id'
+        . ' FROM "Permission"'
+        . ' ORDER BY name' );
+
+    return Socialtext::MultiCursor->new(
+        iterables => [ $sth->fetchall_arrayref ],
+        apply => sub {
+            my $row = shift;
+            return Socialtext::Permission->new( permission_id => $row->[0] );
+        }
+    );
+}
+
+1;
+
+__END__
 
 =head1 NAME
 
@@ -18,28 +152,6 @@ Socialtext::Permission - A Socialtext permission object
 
 This class provides methods for dealing with data from the Permission
 table. Each object represents a single row from the table.
-
-=cut
-
-use strict;
-use warnings;
-
-our $VERSION = '0.01';
-
-use base qw(Exporter Socialtext::AlzaboWrapper);
-use Socialtext::Validate qw( validate SCALAR_TYPE );
-use Socialtext::Schema;
-__PACKAGE__->SetAlzaboTable( Socialtext::Schema->Load->table('Permission') );
-__PACKAGE__->MakeColumnMethods();
-
-use Readonly;
-
-Readonly my @RequiredPermissions => qw(
-    read edit attachments comment delete email_in email_out edit_controls
-    admin_workspace request_invite impersonate
-);
-
-_setup_exports();
 
 =head1 IMPORTABLE SUBROUTINES
 
@@ -65,25 +177,6 @@ to access the permissions you need.
 =head2 ST_REQUEST_INVITE_PERM
 
 =head2 ST_ADMIN_WORKSPACE_PERM
-
-=cut
-
-sub _setup_exports {
-    our @EXPORT_OK = ();
-
-    Readonly my @ExportedPermissions => qw(
-        read edit attachments comment delete email_in email_out edit_controls
-        request_invite admin_workspace
-    );
-
-    foreach my $name (@ExportedPermissions) {
-        my $symbol = uc "ST_${name}_PERM";
-
-        eval "sub $symbol() { Socialtext::Permission->new( name => '$name' ) }";
-        die $@ if $@;
-        push @EXPORT_OK, $symbol;
-    }
-}
 
 =head1 CLASS METHODS
 
@@ -175,24 +268,15 @@ PARAMS can include:
 
 =back
 
+=item Socialtext::Permission->table_name()
+
+Return the name of the table where Permission data lives.
+
 =item Socialtext::Permission->All()
 
 Returns a cursor for all the permissions in the system, ordered by
 name.  See L<Socialtext::AlzaboWrapper> for more details on this
 method.
-
-=cut
-
-sub All {
-    my $class = shift;
-
-    return
-        $class->cursor
-            ( $class->table->all_rows
-                  ( order_by => $class->table->column('name') )
-            );
-}
-
 
 =item Socialtext::Permission->Count()
 
@@ -202,18 +286,6 @@ Returns a count of all permissions.
 
 Inserts required permissions into the DBMS if they are not present. See
 L<Socialtext::Data> for more details on required data.
-
-=cut
-
-sub EnsureRequiredDataIsPresent {
-    my $class = shift;
-
-    for my $name (@RequiredPermissions) {
-        next if $class->new( name => $name );
-
-        $class->create( name => $name );
-    }
-}
 
 =back
 
@@ -237,19 +309,6 @@ Deletes the permission from the DBMS.
 Returns the given attribute for the permission.
 
 =back
-
-=cut
-
-sub _new_row {
-    my $class = shift;
-    my %p     = validate( @_, { name => SCALAR_TYPE } );
-
-    return $class->table->one_row(
-        where => [ $class->table->column('name'), '=', $p{name } ],
-    );
-}
-
-1;
 
 =head1 AUTHOR
 

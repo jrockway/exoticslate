@@ -6,27 +6,24 @@ use warnings;
 
 our $VERSION = '0.01';
 
+use Class::Field 'field';
 use Socialtext::Exceptions qw( data_validation_error param_error );
+use Socialtext::SQL 'sql_execute';
 use Socialtext::Validate qw( validate SCALAR_TYPE BOOLEAN_TYPE ARRAYREF_TYPE WORKSPACE_TYPE );
 
-use Socialtext::Schema;
-use base 'Socialtext::AlzaboWrapper';
-__PACKAGE__->SetAlzaboTable( Socialtext::Schema->Load->table('UserMetadata') );
-__PACKAGE__->MakeColumnMethods();
-
-use Alzabo::SQLMaker::PostgreSQL qw(COUNT DISTINCT LOWER CURRENT_TIMESTAMP);
 use DateTime;
 use DateTime::Format::Pg;
-use Digest::SHA1 ();
-use Email::Valid;
-use Socialtext::String;
-use Readonly;
-use Socialtext::Data;
-use Socialtext::Role;
-use Socialtext::TT2::Renderer;
-use Socialtext::URI;
-use Socialtext::UserWorkspaceRole;
-use Socialtext::Workspace;
+
+field 'user_id';
+field 'creation_datetime';
+field 'last_login_datetime';
+field 'email_address_at_import';
+field 'created_by_user_id';
+field 'is_business_admin';
+field 'is_technical_admin';
+field 'is_system_created';
+
+sub table_name { 'UserMetadata' }
 
 sub create_if_necessary {
     my $class = shift;
@@ -72,10 +69,93 @@ sub to_hash {
     return $hash;
 }
 
+sub new {
+    my ( $class, %p ) = @_;
+
+    my $sth = sql_execute(
+        'SELECT user_id, creation_datetime, last_login_datetime,'
+        . ' email_address_at_import, created_by_user_id,'
+        . ' is_business_admin, is_technical_admin, is_system_created'
+        . ' FROM "UserMetadata" where user_id=?', $p{user_id} );
+
+    my @rows = @{ $sth->fetchall_arrayref };
+    return @rows ? bless {
+                    user_id                 => $rows[0][0],
+                    creation_datetime       => $rows[0][1],
+                    last_login_datetime     => $rows[0][2],
+                    email_address_at_import => $rows[0][3],
+                    created_by_user_id      => $rows[0][4],
+                    is_business_admin       => $rows[0][5],
+                    is_technical_admin      => $rows[0][6],
+                    is_system_created       => $rows[0][7],
+                   }, $class
+                 : undef;
+}
+
+sub create {
+    my ( $class, %p ) = @_;
+
+    $class->_validate_and_clean_data(%p);
+
+    $p{is_business_admin}  ||= 'f';
+    $p{is_technical_admin} ||= 'f';
+    $p{is_system_created}  ||= 'f';
+
+    sql_execute(
+        'INSERT INTO "UserMetadata"'
+        . ' (user_id, email_address_at_import,'
+        . ' created_by_user_id, is_business_admin,'
+        . ' is_technical_admin, is_system_created)'
+        . ' VALUES (?,?,?,?,?,?)',
+        $p{user_id}, $p{email_address_at_import}, $p{created_by_user_id},
+        $p{is_business_admin}, $p{is_technical_admin}, $p{is_system_created} );
+
+    return $class->new( user_id => $p{user_id} );
+}
+
+sub delete {
+    my ( $self ) = @_;
+
+    sql_execute(
+        'DELETE FROM "UserMetadata" WHERE user_id=?',
+        $self->user_id
+    );
+}
+
+# "update" methods: set_technical_admin, set_business_admin
+sub set_technical_admin {
+    my ( $self, $value ) = @_;
+
+    sql_execute(
+        'UPDATE "UserMetadata" SET is_technical_admin=?'
+        . ' WHERE user_id=?',
+        $value, $self->user_id );
+
+    $self->is_technical_admin( $value );
+
+    return $self;
+}
+
+sub set_business_admin {
+    my ( $self, $value ) = @_;
+
+    sql_execute(
+        'UPDATE "UserMetadata" SET is_business_admin=?'
+        . ' WHERE user_id=?',
+        $value, $self->user_id );
+
+    $self->is_business_admin( $value );
+
+    return $self;
+}
+
 sub record_login {
     my $self = shift;
 
-    $self->update( last_login_datetime => CURRENT_TIMESTAMP() );
+    sql_execute(
+        'UPDATE "UserMetadata" SET last_login_datetime=CURRENT_TIMESTAMP'
+        . ' WHERE user_id=?',
+        $self->user_id );
 }
 
 sub creation_datetime_object {
@@ -143,6 +223,10 @@ table. Each object represents a single row from the table.
 
 =head1 METHODS
 
+=head2 Socialtext::UserMetadata->table_name()
+
+Returns the name of the table where UserMetadata data lives.
+
 =head2 Socialtext::UserMetadata->new(PARAMS)
 
 Looks for existing user metadata matching PARAMS and returns a
@@ -181,6 +265,10 @@ Updates the user's information with the new key/val pairs passed in,
 but you cannot change is_system_created after the initial creation of
 a row.
 
+=head2 $md->delete()
+
+Delete the metadata record from the database.
+
 =head2 $md->creation_datetime()
 
 =head2 $md->last_login_datetime()
@@ -200,9 +288,17 @@ Returns the corresponding attribute for the user metadata.
 Returns a hash reference representation of the metadata, suitable for using
 with JSON, YAML, etc.  
 
-=head2 $user->record_login()
+=head2 $md->set_technical_admin($value)
 
-Updates the last_login_datetime for the user to the current datetime.
+Updates the is_technical_admin for the metadata to $value (0 or 1).
+
+=head2 $md->set_business_admin($value)
+
+Updates the is_business_admin for the metadata to $value (0 or 1).
+
+=head2 $md->record_login()
+
+Updates the last_login_datetime for the metadata to the current datetime.
 
 =head2 $md->creation_datetime_object()
 

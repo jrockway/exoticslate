@@ -6,28 +6,28 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use Readonly;
-use Alzabo::SQLMaker::PostgreSQL qw( LOWER );
-use Socialtext::Validate qw( validate SCALAR_TYPE );
-use Socialtext::Schema;
-use Socialtext::String;
-use base 'Socialtext::AlzaboWrapper';
+use Class::Field 'field';
+use Socialtext::SQL qw( sql_execute );
 
-__PACKAGE__->SetAlzaboTable( Socialtext::Schema->Load->table('UserId'));
-__PACKAGE__->MakeColumnMethods();
+field 'system_unique_id';
+field 'driver_key';
+field 'driver_unique_id';
+field 'driver_username';
+
+sub table_name { 'UserId' }
 
 sub create_if_necessary {
     my $class = shift;
-    my $user = shift;
+    my $homunculus = shift;
 
     my @primary_params = (
-        driver_key       => $user->driver_name,
-        driver_unique_id => $user->user_id,
+        driver_key       => $homunculus->driver_name,
+        driver_unique_id => $homunculus->user_id,
     );
 
     my @fallback_params = (
-        driver_key      => $user->driver_name,
-        driver_username => $user->username,
+        driver_key      => $homunculus->driver_name,
+        driver_username => $homunculus->username,
     );
 
     my $user_id = $class->new( @primary_params );
@@ -38,46 +38,113 @@ sub create_if_necessary {
 
     if ($user_id) {
         $user_id->update(
-            driver_unique_id => $user->user_id,
-            driver_username  => $user->username
+            driver_unique_id => $homunculus->user_id,
+            driver_username  => $homunculus->username
         );
         return $user_id;
     }
 
-    return $class->create( @primary_params );
+    return $class->create( @primary_params,
+        driver_username => $homunculus->username );
 }
 
-{
-    Readonly my $spec => {
-        driver_key            => SCALAR_TYPE( optional => 0 ),
-        driver_unique_id      => SCALAR_TYPE( optional => 1 ),
-        driver_username       => SCALAR_TYPE( optional => 1 ),
-    };
-    sub _new_row {
-        my $class = shift;
-        my %p     = validate( @_, $spec );
+sub new {
+    my ( $class, %p ) = @_;
 
-        my $driver_key = Socialtext::String::trim( $p{driver_key} );
+    return
+        exists $p{system_unique_id}
+        ? $class->_new_from_system_unique_id(%p)
+        : $class->_new_from_homunculus(%p);
+}
 
-        my $driver_user_key_column =
-            $p{driver_unique_id}
-          ? $class->table->column('driver_unique_id')
-          : $class->table->column('driver_username');
+sub _new_from_system_unique_id {
+    my ( $class, %p ) = @_;
 
-        my $driver_user_key =
-          Socialtext::String::trim(
-            $p{driver_unique_id} ? $p{driver_unique_id} : $p{driver_username} );
+    return $class->_new_from_where(
+        'system_unique_id=?',
+        $p{system_unique_id}
+    );
+}
 
-        my $row = $class->table->one_row(
-            where => [
-                [ $class->table->column('driver_key'), '=', $driver_key ],
-                'and',
-                [ $driver_user_key_column, '=', $driver_user_key ],
-            ],
-        );
+sub _new_from_homunculus {
+    my ( $class, %p ) = @_;
 
-        return $row;
+    my $where_clause;
+    my @args;
+
+    if (exists $p{driver_unique_id}) {
+        $where_clause = 'driver_key=? AND driver_unique_id=?';
+        @args = ($p{driver_key}, $p{driver_unique_id});
     }
+    else {
+        $where_clause = 'driver_key=? AND driver_username=?';
+        @args = ($p{driver_key}, $p{driver_username});
+    }
+
+    return $class->_new_from_where( $where_clause, @args );
+}
+
+sub _new_from_where {
+    my ( $class, $where_clause, @bindings ) = @_;
+
+    my $sth = sql_execute(
+        'SELECT system_unique_id, driver_key, driver_unique_id, driver_username'
+        . ' FROM "UserId"'
+        . " WHERE $where_clause",
+        @bindings );
+
+    my @rows = @{ $sth->fetchall_arrayref };
+    return @rows ? bless {
+                    system_unique_id => $rows[0][0],
+                    driver_key       => $rows[0][1],
+                    driver_unique_id => $rows[0][2],
+                    driver_username  => $rows[0][3],
+                    }, $class
+                 : undef;
+}
+
+sub create {
+    my ( $class, %p ) = @_;
+
+    sql_execute(
+        'INSERT INTO "UserId"'
+        . ' (system_unique_id, driver_key, driver_unique_id, driver_username)'
+        . ' VALUES (nextval(\'"UserId___system_unique_id"\'),?,?,?)',
+        $p{driver_key}, $p{driver_unique_id}, $p{driver_username} );
+
+    return $class->new(%p);
+}
+
+sub delete {
+    my $self = shift;
+
+    sql_execute(
+        'DELETE FROM "UserId" WHERE system_unique_id=?',
+        $self->system_unique_id
+    );
+}
+
+# "update" methods: set_driver_username
+sub update {
+    my ( $self, %p ) = @_;
+
+    my ( @updates, @bindings );
+    while (my ($column, $value) = each %p) {
+        push @updates, "$column=?";
+        push @bindings, $value;
+    }
+    my $set_clause = join ', ', @updates;
+
+    sql_execute(
+        qq{UPDATE "UserId" SET $set_clause WHERE system_unique_id=?},
+        @bindings, $self->system_unique_id
+    );
+
+    while (my ($column, $value) = each %p) {
+        $self->$column($value);
+    }
+
+    return $self;
 }
 
 1;
@@ -110,6 +177,10 @@ matter where they are stored. Each object represents a single row from the
 table.
 
 =head1 METHODS
+
+=head2 Socialtext::UserId->table_name()
+
+Returns the name of the table where UserId data lives.
 
 =head2 Socialtext::UserId->new(PARAMS)
 
@@ -147,6 +218,16 @@ PARAMS can include:
 
 Tries to find the appropriate UserId row corresponding to $user, updating the
 username column, if found. This keeps the username column up to date.
+
+=head2 $uid->update( driver_username => $new_username )
+
+Updates the UserId record's driver_username field. Since this is stored on the
+actual user data record, we opportunistically update it whenever we perform a
+lookup on the UserId table. 
+
+=head2 $uid->delete()
+
+Delete the record from the database.
 
 =head2 $uid->system_unique_id()
 

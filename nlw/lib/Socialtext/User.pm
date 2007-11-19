@@ -1369,12 +1369,6 @@ Returns true if the user factory supports updates.
 
 Updates the user's information with the new key/val pairs passed in.
 
-=head2 $user->update_metadata(PARAMS)
-
-Updates the user's metadata information with the new key/val pairs
-passed in, but you cannot change is_system_created after the initial
-creation of a user.
-
 =head2 $user->user_id()
 
 =head2 $user->username()

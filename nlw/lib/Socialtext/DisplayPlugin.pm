@@ -282,8 +282,10 @@ sub content_only {
 sub _get_page_info {
     my ( $self, $page ) = @_;
 
+    my $original_revision = $page->original_revision;
+
     my $updated_author = $page->last_edited_by || $self->hub->current_user;
-    my $created_author = $page->original_revision->last_edited_by;
+    my $created_author = $original_revision->last_edited_by;
 
     return {
         title           => $page->title,
@@ -318,10 +320,10 @@ sub _get_page_info {
                     )
                 : undef
             ),
-            date => $page->original_revision->datetime_for_user || undef,
+            date => $original_revision->datetime_for_user || undef,
         },
         is_original => (  $page->revision_id
-                        ? ($page->revision_id == $page->original_revision->revision_id)
+                        ? ($page->revision_id == $original_revision->revision_id)
                         : undef),
         incoming    => $self->hub->backlinks->all_backlinks_for_page($page),
         caller      => ($self->cgi->caller_action || ''),

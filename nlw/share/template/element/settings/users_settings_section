@@ -27,7 +27,6 @@
 <tr>
  <td colspan="3">
      [% loc('New passwords must be at least 6 characters long.') %] 
-     [% loc('A dialog box will pop up after your password is changed.') %] 
      [% loc('Use your email address and new password to log in again.') %]
  </td>
 </tr>

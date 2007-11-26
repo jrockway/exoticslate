@@ -158,10 +158,10 @@ sub get_base_skin_dir {
     # Deal the --branch case first, otherwise act normally.
     if ( defined $branch ) {
         $branch = "branches/$branch" unless $branch eq 'trunk';
-        @paths = ("$dir/$branch");
+        @paths = ("$dir/$branch/skins");
     }
     else {
-        @paths = ( "$dir/trunk", $dir );
+        @paths = ( "$dir/trunk/skins", "$dir/skins", "$dir" );
     }
 
     return find_first_valid_directory(@paths);

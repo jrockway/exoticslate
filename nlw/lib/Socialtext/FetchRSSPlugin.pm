@@ -126,6 +126,18 @@ sub html {
     return $self->syntax_error("Recursive Fetchrss")
         if $self->_is_recursive($url);
     my $feed = $self->hub->fetchrss->get_feed($url, $expire);
+    
+    local *XML::Feed::Entry::Atom::title = sub {
+        my $title = shift->{entry}->title(@_);
+        Encode::_utf8_on($title) unless Encode::is_utf8($title);
+        return $title;
+    };
+    local *XML::Feed::Atom::title = sub {
+        my $title = shift->{atom}->title(@_);
+        Encode::_utf8_on($title) unless Encode::is_utf8($title);
+        return $title;
+    };
+
     $self->hub->template->process('fetchrss.html',
         full => $full,
         method => $self->method,

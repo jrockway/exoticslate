@@ -15,7 +15,11 @@ my $control_base = "$ENV{HOME}/src/st/control";
 die "Control is not checked out to $control_base" unless -d $control_base;
 
 my $control_dir = "$control_base/$branch";
-die "Couldn't find control branch '$control_dir'" unless -d $control_dir;
+unless (-d $control_dir) {
+    warn "Couldn't find control branch '$control_dir' - using trunk";
+    $control_dir = "$control_base/trunk";
+    die "Couldn't find control trunk '$control_dir'" unless -d $control_dir;
+}
 
 my @libs = qw(
     lib/Socialtext/AccessHandler/IsBusinessAdmin.pm

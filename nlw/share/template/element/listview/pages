@@ -72,7 +72,7 @@
 
 [% BLOCK listing_headers %]
     <th id="st-listview-header-select">
-        <input title="Select all pages" type="checkbox" id="st-listview-allpagescb"/>
+        <input title=[% loc("Select all pages") %] type="checkbox" id="st-listview-allpagescb"/>
     </th>
   [% IF listview_extra_columns.watchlist %]
   <th id="[% style %]-header-watchlist" class="query-results-header-watchlist">

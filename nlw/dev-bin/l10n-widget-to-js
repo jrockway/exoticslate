@@ -19,6 +19,7 @@ print "Loading Widget.yaml file...";
 
 my $yaml = YAML::LoadFile($in_file);
 my $widgets = $yaml->{widgets};
+my $fields = $yaml->{fields};
 
 print "ok\n";
 print "Writing widget_resouce...";
@@ -58,6 +59,17 @@ for my $widget_type (@$widgets) {
             print FH_JS $newtext . ";\n";
             print FH_PM $newtext . ";\n";
         }
+    }
+}
+
+
+my @fieldsname = keys %$fields;
+foreach (@fieldsname)
+{
+    my $text = $fields->{$_};
+    if ( defined $text) {
+        $newtext = extract_text( 'title', $text );
+        print FH_JS $newtext . ";\n";
     }
 }
 

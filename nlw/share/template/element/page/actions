@@ -40,9 +40,14 @@
                 [% IF current_user_workspace_count > 1 %]
                 <li class="separator"><a href="index.cgi?action=copy_to_workspace_popup;page_name=[% page.id %]" onclick="query_popup('index.cgi?action=copy_to_workspace_popup;page_name=[% page.id %]'); return false;">[% loc('Copy Page to Workspace') %]</a></li>
                 [% END %]
+                [% USE encode_mailto %]
                 [% IF checker.check_permission('email_in') %]
                 <li><a href="mailto:[% wiki.email_address %]" title="[% wiki.email_address %]">[% loc('Email To This Workspace') %]</a></li>
-                <li class="separator"><a href="mailto:[% wiki.email_address %]?subject=[% page.title | html_encode %]" title="To: [% wiki.email_address %] / subject: [% page.title | html_encode %]">[% loc('Email To This Page') %]</a></li>
+                [% IF loc_lang == 'ja' %]
+                <li class="separator"><a href="mailto:[% wiki.email_address %]?subject=[% page.title | encode_mailto %]" title="To: [% wiki.email_address %] / subject: [% page.title |encode_mailto %]">[% loc('Email To This Page') %]</a></li>
+                [% ELSE %]
+                <li class="separator"><a href="mailto:[% wiki.email_address %]?subject=[% page.title | html_encode  %]" title="To: [% wiki.email_address %] / subject: [% page.title | html_encode %]">[% loc('Email To This Page') %]</a></li>
+                [% END %]
                 [% END %]
                 <li><a href="index.cgi?action=display_html;page_name=[% page.id %]" target="_new">[% loc('Export as HTML') %]</a></li>
 

@@ -595,6 +595,7 @@ body {
     padding: 5px;
     font-size: 80%;
     margin-top: 15px;
+    overflow: hidden;
 }
 
 .st-page-box-title {

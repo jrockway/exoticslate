@@ -239,7 +239,8 @@ ST.NavBar.prototype = {
         var search_match = href.match(/search_term=([^&;]+)/); 
         // ^^ will match both 'search_term' and 'orig_search_term'
         if (search_match) {
-            $(this.element.searchField).value = unescape(search_match[1]).replace(/\+/g, ' ');
+            var term = decodeURIComponent(search_match[1]).replace(/\+/g, ' ');
+            $(this.element.searchField).value = unescape(term);
         }
         
         var scope_match = href.match(/(scope=)/);

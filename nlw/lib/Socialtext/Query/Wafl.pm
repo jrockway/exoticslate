@@ -8,6 +8,7 @@ use base 'Socialtext::Formatter::WaflPhraseDiv';
 
 use Class::Field qw( field );
 use Socialtext::Permission 'ST_READ_PERM';
+use Socialtext::l10n qw( loc );
 
 field target_workspace =>
     -init => '$self->current_workspace_name';
@@ -47,7 +48,7 @@ sub _get_results {
     my $results;
 
     my $ws = Socialtext::Workspace->new( name => $workspace_name );
-    return +{error => 'no access to workspace'}
+    return +{error => loc('no access to workspace')}
         unless $ws && $self->authz->user_has_permission_for_workspace(
             user       => $self->current_user,
             permission => ST_READ_PERM,

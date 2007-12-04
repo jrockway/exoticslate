@@ -12,7 +12,8 @@
   <input type="hidden" name="action" value="weblog_display" />
   <select name="category" onchange="this.form.submit()" id="page-control-category-selector">
     [% FOREACH blog = blogs %]
-      <option[% IF blog.display == category %] selected="true"[% END %] value="[% blog.escape_html %]">[% blog.display | html %]</option>
+        [% display_string = blog.display | html %]
+      <option[% IF blog.display == category %] selected="true"[% END %] value="[% blog.escape_html %]">[% IF display_string == 'Recent Changes' %] [% loc('Recent Changes') %] [% ELSE %] [% display_string %] [% END %]</option>
     [% END %]
   </select>
   <span class="st-spacer"/>

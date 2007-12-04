@@ -41,5 +41,5 @@ ST.extend(PageAttachmentLookahead, PageNameSupportLookahead);
  * @return html string
  */
 PageAttachmentLookahead.prototype._apiErrorMessage = function() {
-    return '<span class="st-suggestion-warning">Could not retrieve attachment list from wiki</span>';
+    return '<span class="st-suggestion-warning">' + loc('Could not retrieve attachment list from wiki') + '</span>';
 }

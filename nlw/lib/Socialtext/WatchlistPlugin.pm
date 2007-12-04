@@ -12,7 +12,7 @@ use Socialtext::Helpers;
 use Socialtext::Watchlist;
 use Socialtext::User;
 use Socialtext::TT2::Renderer;
-use Socialtext::l10n qw( loc );
+use Socialtext::l10n qw( loc loc_lang system_locale);
 
 const class_id    => 'watchlist';
 const class_title => loc('Watchlist');
@@ -282,6 +282,7 @@ sub maybe_send_notifications {
 
     return unless $self->hub->current_workspace->email_notify_is_enabled;
 
+    loc_lang(system_locale());
     my $notifier = Socialtext::EmailNotifier->new(
         plugin           => $self,
         notify_frequency => 'watchlist_notify_frequency'
@@ -351,9 +352,7 @@ sub get_notification_vars {
     my $from =
       $self->hub->current_workspace->formatted_email_notification_from_address;
 
-    my $subject = 'Watchlist update for '
-        . $self->hub->current_workspace->title
-        . ' Workspace';
+    my $subject = loc('Watchlist update for [_1] Workspace', $self->hub->current_workspace->title);
 
     my $text_template = 'email/watchlist.txt';
     my $html_template = 'email/watchlist.html';

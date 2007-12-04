@@ -41,3 +41,22 @@ div#st-listtools ul ul li {
     padding-bottom: 2px;
     font-size: 12px;
 }
+
+.email-page-row-label {
+    font-weight: bold;
+    float: left;
+    width: 6em;
+    margin-left: 1.2em;
+    margin-right: 1.2em;
+    text-align: right;
+    font-size: 90%;
+}
+
+.email-page-input-new {
+    width: 205px;
+}
+
+.email-page-select {
+    width: 205px;
+}
+

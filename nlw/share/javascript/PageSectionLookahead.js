@@ -41,7 +41,7 @@ ST.extend(PageSectionLookahead, PageNameSupportLookahead);
  * @return html string
  */
 PageSectionLookahead.prototype._apiErrorMessage = function() {
-    return '<span class="st-suggestion-warning">Could not retrieve section list from wiki</span>';
+    return '<span class="st-suggestion-warning">' + loc('Could not retrieve section list from wiki') + '</span>';
 }
 
 /**

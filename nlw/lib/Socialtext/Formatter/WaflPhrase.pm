@@ -231,8 +231,9 @@ sub html {
     return qq{<a href="$link">} . $self->label ."</a>"
         if $self->label;
 
+    my $alt_text = $self->uri_unescape($image_name);
     return
-        qq{<img alt="$image_name" src="$link" />};
+        qq{<img alt="$alt_text" src="$link" />};
 }
 
 ################################################################################
@@ -536,8 +537,10 @@ package Socialtext::Formatter::CategoryLink;
 use base 'Socialtext::Formatter::WaflPhrase';
 use Class::Field qw( const );
 use Socialtext::Permission 'ST_READ_PERM';
+use Socialtext::l10n qw( loc );
 
 const wafl_id => 'category';
+my $wafl_id_str_category = loc('category');
 
 sub html {
     my $self = shift;
@@ -575,7 +578,8 @@ sub _link_to_action_display {
     );
 
     my $label = $self->label || $p{category};
-    return qq(<a title="$p{action} link" href="$link">$label</a>);
+    my $title = loc("[_1] link", loc($p{action}));
+    return qq(<a title="$title" href="$link">$label</a>);
 }
 
 ################################################################################
@@ -583,16 +587,20 @@ package Socialtext::Formatter::TagLink;
 
 use base 'Socialtext::Formatter::CategoryLink';
 use Class::Field qw( const );
+use Socialtext::l10n qw( loc );
 
 const wafl_id => 'tag';
+my $wafl_id_str_tag = loc('tag');
 
 ################################################################################
 package Socialtext::Formatter::WeblogLink;
 
 use base 'Socialtext::Formatter::CategoryLink';
 use Class::Field qw( const );
+use Socialtext::l10n qw( loc );
 
 const wafl_id => 'weblog';
+#const wafl_id_str => loc('weblog');
 
 ################################################################################
 package Socialtext::Formatter::TradeMark;
@@ -708,7 +716,10 @@ sub _parse_page_for_headers {
         }
     }
     else {
-        $error = "<a href='$page_url'>$page_title</a> does not have any headers."
+        $error = loc(
+            "[_1] does not have any headers.",
+            "<a href='$page_url'>$page_title</a>",
+        );
     }
 
     my $html = $self->hub->viewer->text_to_html($wikitext);

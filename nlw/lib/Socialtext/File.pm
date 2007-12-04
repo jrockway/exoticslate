@@ -91,6 +91,26 @@ sub get_contents {
     return $contents;
 }
 
+sub get_contents_based_on_encoding {
+    my $class = shift;
+    my $file = shift;
+    my $encoding  = shift;
+
+    my $fh;
+    open $fh, '<', $file or Carp::confess( "unable to open $file: $!" );
+    binmode($fh, ':encoding('. $encoding . ')');
+
+    if (wantarray) {
+        my @contents = <$fh>;
+        close $fh;
+        return @contents;
+    }
+
+    my $contents = do { local $/; <$fh> };
+    close $fh;
+    return $contents;
+}
+
 sub get_contents_or_empty {
     my $contents;
     eval { $contents = get_contents(@_) };

@@ -14,6 +14,7 @@
       [% escaped_page_title = '<span id="st-copy-to-workspace-page-title">"' _ escaped_page_title _ '"</span>' %]
       <p>[% loc('Copy the page [_1] to another workspace?', escaped_page_title) %]</p>
 
+      [% PROCESS page_title_too_long IF page_title_too_long %]
       [% PROCESS title_error IF page_title_bad %]
       [% PROCESS page_exists_error IF page_exists %]
       <p>
@@ -42,6 +43,12 @@
     </form>
   </body>
 </html>
+
+[% BLOCK page_title_too_long %]
+  <p class="st-popup-errormessage">
+      [% loc('The page name you selected, "[_1]", is too long after URL encoding.', new_title) %]
+  </p>
+[% END %]
 
 [% BLOCK title_error %]
   <p class="st-popup-errormessage">[% loc('The page name you selected, "[_1]", is not allowed. Please enter or change the page name.', new_title) %]</p>

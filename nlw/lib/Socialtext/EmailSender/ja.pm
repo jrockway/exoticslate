@@ -13,7 +13,7 @@ use Email::MIME;
 use Email::MIME::Creator;
 use Email::Send qw();
 use Email::Send::Sendmail;
-use Encode         ();
+use Encode qw(decode_utf8);
 use File::Basename ();
 use File::Slurp    ();
 use List::Util qw(first);
@@ -31,6 +31,9 @@ use Jcode;
 use Unicode::Japanese;
 
 $Email::Send::Sendmail::SENDMAIL = '/usr/sbin/sendmail';
+our ($H2Z, %H2Z);
+
+
 
 {
 
@@ -42,16 +45,19 @@ $Email::Send::Sendmail::SENDMAIL = '/usr/sbin/sendmail';
         bless {}, $pkg;
     }
 
-    sub _convert_specification {
+    sub _h2z {
         my $self    = shift;
         my $text    = shift;
         $text = Unicode::Japanese->new($text)->h2zKana->get();
+        $text =~ s/($H2Z)/(exists $H2Z{$1} ? $H2Z{$1} : $1)/ego;
         return $text;
     }
 
     sub _encode_address {
         my $self    = shift;
         my $address = shift;
+        
+        $address = $self->_h2z($address);
         $address = Jcode->new($address,'utf8')->mime_encode;
         return $address;
     }
@@ -71,8 +77,12 @@ $Email::Send::Sendmail::SENDMAIL = '/usr/sbin/sendmail';
 
             # This shuts up a "wide character in print" warning from
             # inside Email::Send::Sendmail.
-            $subject = $self->_convert_specification($subject);
-            $subject = Encode::encode( 'MIME-Header-ISO_2022_JP', $subject );
+            $subject = $self->_h2z($subject);
+
+            # It's not known exactly why Encode::encode(
+            # 'MIME-Header-ISO_2022_JP', $subject ) encodes to iso-2022-jp encoding,
+            # not MIME-B encoding. So use Jcode.
+            $subject = Jcode->new($subject,'utf8')->mime_encode;
         }
 
         return $subject;
@@ -111,13 +121,14 @@ $Email::Send::Sendmail::SENDMAIL = '/usr/sbin/sendmail';
         my $body     = shift;
         my $encoding = shift;
 
-        $body = $self->_convert_specification($body);
+        $body = $self->_h2z($body);
         $body = $self->_fold_body($body);
-        
+
         # solve WAVE DASH problem
         $body =~ tr/[\x{ff5e}\x{2225}\x{ff0d}\x{ffe0}\x{ffe1}\x{ffe2}]/[\x{301c}\x{2016}\x{2212}\x{00a2}\x{00a3}\x{00ac}]/;
 
         $body = Encode::encode($encoding, $body);
+
         return $body;
     }
 
@@ -126,6 +137,7 @@ $Email::Send::Sendmail::SENDMAIL = '/usr/sbin/sendmail';
         my $body     = shift;
         my $encoding = shift;
 
+        $body = $self->_h2z($body);
         $body = $self->_fold_body($body);
 
         # solve WAVE DASH problem
@@ -144,7 +156,10 @@ $Email::Send::Sendmail::SENDMAIL = '/usr/sbin/sendmail';
         $filename = $self->_uri_unescape($filename);
 
         # If filename is only ascii code, you do not encode fileme to MIME-B.
-        $filename = Encode::encode( 'MIME-Header-ISO_2022_JP', $filename );
+        # It's not known exactly why Encode::encode(
+        # 'MIME-Header-ISO_2022_JP', $subject ) encodes to iso-2022-jp encoding,
+        # not MIME-B encoding. So use Jcode.
+        $filename = Jcode->new($filename,'utf8')->mime_encode;
 
         return $filename;
     }
@@ -169,6 +184,95 @@ $Email::Send::Sendmail::SENDMAIL = '/usr/sbin/sendmail';
         return $data;
     }
 
+}
+
+BEGIN {
+    my $normalize_table = {
+                "\342\221\240" => '(1)',
+        	"\342\221\241" => '(2)',
+        	"\342\221\242" => '(3)',
+        	"\342\221\243" => '(4)',
+        	"\342\221\244" => '(5)',
+		"\342\221\245" => '(6)',
+		"\342\221\246" => '(7)',
+		"\342\221\247" => '(8)',
+		"\342\221\250" => '(9)',
+		"\342\221\251" => '(10)',
+		"\342\221\252" => '(11)',
+		"\342\221\253" => '(12)',
+		"\342\221\254" => '(13)',
+		"\342\221\255" => '(14)',
+		"\342\221\256" => '(15)',
+		"\342\221\257" => '(16)',
+		"\342\221\260" => '(17)',
+		"\342\221\261" => '(18)',
+		"\342\221\262" => '(19)',
+		"\342\221\263" => '(20)',
+		"\342\205\240" => 'I',
+		"\342\205\241" => 'II',
+		"\342\205\242" => 'III',
+		"\342\205\243" => 'IV',
+		"\342\205\244" => 'V',
+		"\342\205\245" => 'VI',
+		"\342\205\246" => 'VII',
+		"\342\205\247" => 'VIII',
+		"\342\205\250" => 'IX',
+		"\342\205\251" => 'X',
+		"\342\205\260" => 'i',
+		"\342\205\261" => 'ii',
+		"\342\205\262" => 'iii',
+		"\342\205\263" => 'iv',
+		"\342\205\264" => 'v',
+		"\342\205\265" => 'iv',
+		"\342\205\266" => 'vii',
+		"\342\205\267" => 'viii',
+		"\342\205\270" => 'ix',
+		"\342\205\271" => 'x',
+		"\343\215\211" => 'ミリ',
+		"\343\214\224" => 'キロ',
+		"\343\214\242" => 'センチ',
+		"\343\215\215" => 'メートル',
+		"\343\214\230" => 'グラム',
+		"\343\214\247" => 'トン',
+		"\343\214\203" => 'アール',
+		"\343\214\266" => 'ヘクタール',
+		"\343\215\221" => 'リットル',
+		"\343\215\227" => 'ワット',
+		"\343\214\215" => 'カロリー',
+		"\343\214\246" => 'ドル',
+		"\343\214\243" => 'セント',
+		"\343\214\253" => 'パーセント',
+		"\343\215\212" => 'ミリバール',
+		"\343\214\273" => 'ページ',
+		"\343\216\234" => 'mm',
+		"\343\216\235" => 'cm',
+		"\343\216\236" => 'km',
+		"\343\216\216" => 'mg',
+		"\343\216\217" => 'kg',
+		"\343\217\204" => 'cc',
+		"\343\216\241" => 'm2',
+		"\343\215\273" => '平成',
+		"\342\204\226" => 'No.',
+		"\343\217\215" => 'K.K.',
+		"\342\204\241" => 'TEL',
+		"\343\212\244" => '(上)',
+		"\343\212\245" => '(中)',
+		"\343\212\246" => '(下)',
+		"\343\212\247" => '(左)',
+		"\343\212\250" => '(右)',
+		"\343\210\261" => '(株)',
+		"\343\210\262" => '(有)',
+		"\343\210\271" => '(代)',
+		"\343\215\276" => '明治',
+		"\343\215\275" => '大正',
+		"\343\215\274" => '昭和',
+    };
+
+
+    while (my ($key, $val) = each %$normalize_table) {
+        $H2Z{$key} = $val;
+        $H2Z .= (defined $H2Z ? '|' : '') . quotemeta($key);
+    }
 }
 
 1;

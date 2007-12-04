@@ -1,0 +1,35 @@
+<!-- @COPYRIGHT@ -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Socialtext Wiki Temporarily Unavailable</title>
+<link rel="stylesheet" type="text/css" href="/static/css/xhtml/base.css" />
+
+</head>
+
+<body>
+
+<div class="pane">
+
+<img src="/static/images/logo-bar-18.gif" alt="logo"/>
+
+<p>Socialtext wikiでサーバーエラーが発生しました。</p>
+
+<p>ご迷惑をおかけしますが、2、3分後に再度アクセスしてみてください。</p>
+
+<p>引き続き問題が起こるようでしたら、問題の内容を
+<a href="mailto:root@talc.socialtext.net">root@talc.socialtext.net</a>
+まで報告してください。質問も受け付けております。</p>
+
+<p id="http-error-detail"><br />
+解決のヒントとなるエラーメッセージ：
+エラー500：上流サーバーでエラーが発生しました。
+</p>
+
+</body>
+</html>
+

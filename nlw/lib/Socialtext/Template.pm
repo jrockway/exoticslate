@@ -9,7 +9,7 @@ use Socialtext::BrowserDetect ();
 use Socialtext::AppConfig;
 use Socialtext::Helpers;
 use Socialtext::TT2::Renderer;
-use Socialtext::l10n qw(loc);
+use Socialtext::l10n qw(loc system_locale);
 
 sub class_id { 'template' }
 
@@ -20,6 +20,7 @@ sub process {
     my @vars = (
         loc             => \&loc,
         loc_lang        => $self->hub->best_locale(),
+        loc_system_lang => system_locale(),
         detected_ie     => Socialtext::BrowserDetect::ie(),
         detected_safari => Socialtext::BrowserDetect::safari(),
         hub             => $self->hub,

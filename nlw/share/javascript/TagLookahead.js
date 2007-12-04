@@ -39,7 +39,7 @@ ST.extend(TagLookahead, WorkspaceSupportLookahead);
  * @return Error message in HTML format
  */
 TagLookahead.prototype._apiErrorMessage = function() {
-    return '<span class="st-suggestion-warning">Could not retrieve tag list from wiki</span>';
+    return '<span class="st-suggestion-warning">' + loc('Could not retrieve tag list from wiki') + '</span>';
 }
 
 /**

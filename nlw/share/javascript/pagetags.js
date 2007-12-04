@@ -155,7 +155,7 @@ ST.Tags.prototype = {
         if (tagToAdd.length == 0) {
             return;
         }
-        this.showTagMessage('Adding tag ' + html_escape(tagToAdd));
+        this.showTagMessage(loc('Adding tag [_1]',  html_escape(tagToAdd)));
         var uri = Page.APIUriPageTag(tagToAdd);
         new Ajax.Request (
             uri,
@@ -225,7 +225,7 @@ ST.Tags.prototype = {
                     suggestions._MODIFIERS = this.socialtextModifiers;
                     this.jst.suggestion.update(suggestions);
                 } else {
-                    var help = '<span class="st-tags-nomatch">No matches</span>';
+                    var help = loc('<span class="st-tags-nomatch">No matches</span>');
                     this.jst.suggestion.set_text(help);
                 }
             }
@@ -292,7 +292,7 @@ ST.Tags.prototype = {
                 }).bind(this),
                 onFailure: (function(req, jsonHeader) {
                     this._deleted_tags.pop();
-                    alert('Could not remove tag');
+                    alert(loc('Could not remove tag'));
                     this.resetDisplayOnError();
                 }).bind(this)
             }
@@ -300,7 +300,7 @@ ST.Tags.prototype = {
     },
 
     deleteTag: function (tagToDelete) {
-        this.showTagMessage('Removing tag ' + tagToDelete);
+        this.showTagMessage(loc('Removing tag [_1]', tagToDelete));
         this._deleted_tags.push(tagToDelete);
 
         var uri = Page.UriPageTagDelete(tagToDelete);
@@ -315,7 +315,7 @@ ST.Tags.prototype = {
                 }).bind(this),
                 onFailure: (function(req, jsonHeader) {
                     this._deleted_tags.pop();
-                    alert('Could not remove tag');
+                    alert(loc('Could not remove tag'));
                     this.resetDisplayOnError();
                 }).bind(this)
             }
@@ -324,7 +324,7 @@ ST.Tags.prototype = {
 
     _update_delete_list: function () {
         if (this._deleted_tags.length > 0) {
-            Element.update(this.element.deleteTagsMessage, 'These tags have been removed: ' + this._deleted_tags.join(', '));
+            Element.update(this.element.deleteTagsMessage, loc('These tags have been removed:') +  ' ' + this._deleted_tags.join(', '));
             $(this.element.deleteTagsMessage).style.display = 'block';
         }
         else {

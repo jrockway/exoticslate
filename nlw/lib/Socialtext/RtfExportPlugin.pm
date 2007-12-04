@@ -51,13 +51,18 @@ version of multiple pages named in the CGI page variable C<page_selected>.
 
 =cut
 
-
 sub rtf_export {
     my $self = shift;
 
     my @page_names = $self->cgi->page_selected;
     if ( 0 == @page_names ) {
         return loc("Error:<pre>No pages selected for export</pre>\n");
+    }
+
+    my $index;
+    for ($index=0; $index<@page_names; $index++) {
+        Encode::_utf8_off($page_names[$index]);
+        $page_names[$index] = $self->uri_unescape($page_names[$index]); 
     }
 
     my $content;

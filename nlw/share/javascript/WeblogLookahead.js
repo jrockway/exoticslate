@@ -48,5 +48,5 @@ WeblogLookahead.prototype._getFilter = function () {
  * @return html string
  */
 WeblogLookahead.prototype._apiErrorMessage = function() {
-    return '<span class="st-suggestion-warning">Could not retrieve weblog list from wiki</span>';
+    return '<span class="st-suggestion-warning">' + loc('Could not retrieve weblog list from wiki') + '</span>';
 }

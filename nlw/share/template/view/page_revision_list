@@ -1,5 +1,5 @@
 [%# @COPYRIGHT@ -%]
-[% WRAPPER layout/html actions='element/page/revision_list_actions' content_id = 'st-revisionlist' include_javascript = 'revisions.js' box_javascript = 0 title = "${display_title}: All Revisions" subnav = 'element/wiki/subnav-default' %]
+[% WRAPPER layout/html actions='element/page/revision_list_actions' content_id = 'st-revisionlist' include_javascript = 'revisions.js' box_javascript = 0 title = loc("[_1]: All Revisions", display_title) subnav = 'element/wiki/subnav-default' %]
 <div id="st-page-title">[% display_title %]: <span class="st-revision-header-emphasis">[% loc('All Revisions') %]</span></div>
 <div id="st-revisions-list-body">
     <form name="revisions" onsubmit="return check_revisions(this);">

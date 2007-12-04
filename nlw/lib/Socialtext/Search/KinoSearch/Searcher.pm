@@ -17,9 +17,9 @@ use Socialtext::Search::Utils;
 field 'analyzer';
 field 'config';
 field 'index';
-field 'language';
 field 'searcher';
 field 'ws_name';
+field 'language';
 
 sub new {
     my ( $class, $ws_name, $language, $index, $analyzer, $config ) = @_;

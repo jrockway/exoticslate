@@ -236,7 +236,7 @@ sub html_description {
     return '<p>' . loc('The page had no Backlinks.') . '<p>'
         unless $links and @$links;
     my @items = map {
-        '<li>'.$self->hub->helpers->page_display_link($_->{page_uri}).'</li>'
+        '<li>'.$self->hub->helpers->page_display_link($_->{page_title}).'</li>'
     } @$links;
     return join "\n",
         "<p>$text_for_when_there_are_backlinks</p>",

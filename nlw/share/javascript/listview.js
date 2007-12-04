@@ -14,8 +14,8 @@ ST.ListView = function (args) {
 
 
 ST.ListView.prototype = {
-    unselectMessage : 'Unselect all pages',
-    selectMessage : 'Select all pages',
+    unselectMessage : loc('Unselect all pages'),
+    selectMessage : loc('Select all pages'),
     checkboxes : null,
     element: {
         selectToggle:   'st-listview-allpagescb',

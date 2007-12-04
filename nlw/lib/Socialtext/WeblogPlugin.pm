@@ -11,6 +11,8 @@ use Socialtext::MLDBMAccess;
 use URI;
 use URI::QueryParam;
 use Socialtext::l10n qw( loc );
+use Encode;
+use utf8;
 
 sub class_id { 'weblog' }
 const class_title => 'Weblogs';
@@ -82,7 +84,49 @@ sub _get_weblog_category_suffix {
         $weblog_category_suffix = qr/blog/;
     }
 
-    $weblog_category_suffix;
+    Encode::_utf8_on($weblog_category_suffix) if Encode::is_utf8(! $weblog_category_suffix);
+    return $weblog_category_suffix;
+}
+
+sub _create_new_page_for_data_validation_error {
+    my $self = shift;
+    my $page_name = shift;
+    my $page_id = substr(Socialtext::Page->name_to_id($page_name), 0, Socialtext::Page->_MAX_PAGE_ID_LENGTH());
+    return $self->hub->pages->new_page($page_id); 
+}
+
+sub _weblog_title_is_valid {
+    my $self = shift;
+    my $weblog_name = shift;
+    my $message;
+
+    if (length Socialtext::Page->name_to_id($weblog_name) > Socialtext::Page->_MAX_PAGE_ID_LENGTH() ) {
+       $message = loc("Weblog name is too long after URL encoding");
+       $self->add_error($message);
+       return 0;
+    }
+   
+    return 1;
+}
+
+sub _create_first_post {
+    my $self = shift;
+    my $weblog_category = shift;
+
+    my $first_post_title = loc("First Post in [_1]", $weblog_category);
+    my $first_post_id = Socialtext::Page->name_to_id($first_post_title);
+    return if (! $self->_weblog_title_is_valid($first_post_id));
+
+    my $first_post = $self->hub->pages->new_page($first_post_id);
+    if(!defined $first_post) {
+        $first_post = $self->_create_new_page_for_data_validation_error($weblog_category);
+    }
+
+    my $metadata = $first_post->metadata;
+    $metadata->Subject($first_post_title)
+        unless $metadata->Subject;
+
+    return $first_post;
 }
 
 sub _create_weblog {
@@ -91,14 +135,7 @@ sub _create_weblog {
     my $weblog_name = $weblog_category;
     $weblog_category =~ s/^\s+|\s+$//g;
 
-    if (length($weblog_name) < 2 or length($weblog_name) > 28) {
-        my $message = loc("Weblog name must be between 2 and 28 characters long.");
-        $self->add_error($message);
-        return;
-    }
-
     my $weblog_category_suffix = $self->_get_weblog_category_suffix(); 
-
     unless ( $weblog_category =~ /$weblog_category_suffix$/i ) {
         $weblog_category = loc("[_1] Weblog", $weblog_category);
     }
@@ -114,22 +151,19 @@ sub _create_weblog {
         }
     }
 
-    my $first_post_title = loc("First Post in [_1]", $weblog_category);
-    my $first_post_id = Socialtext::Page->name_to_id($first_post_title);
-    my $first_post = $self->hub->pages->new_page($first_post_id);
+    my $first_post = $self->_create_first_post($weblog_category);
+    return if (!defined $first_post);
 
-    my $metadata = $first_post->metadata;
-    $metadata->Subject($first_post_title)
-        unless $metadata->Subject;
-
-    my $categories = $metadata->Category;
+    my $categories = $first_post->metadata->Category;
 
     push @$categories, $weblog_category;
 
     my $content = loc("This is the first post in [_1]. Click *New Post* to add another post.", $weblog_category);
     $first_post->content($content);
-    $metadata->update( user => $self->hub->current_user );
+    $first_post->metadata->update( user => $self->hub->current_user );
     $first_post->store( user => $self->hub->current_user );
+
+    $weblog_category = $self->hub->pages->title_to_uri($weblog_category);
 
     $self->redirect('action=weblog_display;category=' . $weblog_category);
 }
@@ -156,7 +190,8 @@ sub _feeds {
 sub first_blog {
     my $self = shift;
     $self->hub->category->load;
-    my ($first_blog) = grep /blog/i, sort values %{$self->hub->category->all};
+    my $weblog_category_suffix = $self->_get_weblog_category_suffix();
+    my ($first_blog) = grep /$weblog_category_suffix/io, sort values %{$self->hub->category->all};
     $first_blog ||= 'recent changes';
     return $first_blog;
 }
@@ -165,7 +200,7 @@ sub current_blog_str {
     my $self = shift;
     $self->current_weblog($self->cgi->category) && $self->update_current_weblog
       if $self->cgi->category;
-    $self->cgi->category || $self->cache->{current_weblog} || loc('recent changes');
+    $self->cgi->category || loc($self->cache->{current_weblog}) || loc('recent changes');
 }
 
 sub current_blog {
@@ -202,6 +237,8 @@ sub weblog_display {
     my $weblog_limit = $self->cgi->limit || $self->preferences->weblog_depth->value;
     $self->current_weblog($weblog_id);
 
+    my $weblog_category_suffix = $self->_get_weblog_category_suffix();
+
     $self->hub->category->load;
     my $categories = $self->hub->category->all;
     $categories->{'recent changes'} = loc('Recent Changes');
@@ -210,7 +247,7 @@ sub weblog_display {
 	    display => $categories->{$_},
 	    escape_html => $self->html_escape($categories->{$_}),
 	}
-    } 'recent changes', sort (grep {/blog/} keys %$categories);
+    } 'recent changes', sort (grep {/$weblog_category_suffix/o} keys %$categories);
 
     my @entries = $self->get_entries( weblog_id => $weblog_id,
         start => $weblog_start_entry, limit => $weblog_limit );
@@ -263,6 +300,7 @@ sub weblog_display {
         weblog_next => $weblog_next,
         enable_weblog_archive_sidebox => Socialtext::AppConfig->enable_weblog_archive_sidebox(),
         caller_action => 'weblog_display',
+        loc_lang => $self->hub->best_locale,
     );
 }
 
@@ -391,17 +429,22 @@ sub box_content_filled {
     my $self = shift;
 
     my $title = $self->page_title;
-    if (Socialtext::Page->_MAX_PAGE_ID_LENGTH < length($title)) {
-        my $message = "Page title is too long; maximum length is " . Socialtext::Page->_MAX_PAGE_ID_LENGTH;
+    if ( defined $title
+         and ( length Socialtext::Page->name_to_id($title) > Socialtext::Page->_MAX_PAGE_ID_LENGTH() )
+       ) {
+        my $message = loc( "Page title is too long; maximum length is [_1]",
+            Socialtext::Page->_MAX_PAGE_ID_LENGTH );
         return $message;
     }
+
     my $page = $self->hub->pages->new_from_name($title);
     return $page->to_html;
 }
 
 sub page_title {
     my $self = shift;
-    return loc('Navigation for: [_1]', $self->current_blog);
+
+    return loc('Navigation for: [_1]', $self->current_blog_str);
 }
 
 sub page_edit_path {

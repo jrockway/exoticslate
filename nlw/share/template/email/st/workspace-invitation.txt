@@ -22,7 +22,7 @@
 [% loc("You may want to keep this email for future reference.") %]
 [% END -%]
 
-Thanks,
+[% loc('Thanks,') %]
 
 [% inviting_user %]
 

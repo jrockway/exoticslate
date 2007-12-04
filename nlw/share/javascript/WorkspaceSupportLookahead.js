@@ -61,7 +61,7 @@ WorkspaceSupportLookahead.prototype._gainFocus = function() {
  * @return Error message in HTML format
  */
 WorkspaceSupportLookahead.prototype._error404Message = function() {
-    return '<span class="st-suggestion-warning">Workspace "' + this.workspace + '" does not exist on wiki</span>';
+    return '<span class="st-suggestion-warning">' + loc('Workspace "[_1]" does not exist on wiki', this.workspace) + '</span>';
 }
 
 /**

@@ -119,6 +119,11 @@ sub new_preference {
     $self->hub->preferences->new_preference( scalar(caller), @_ );
 }
 
+sub new_dynamic_preference {
+    my $self = shift;
+    $self->hub->preferences->new_dynamic_preference( scalar(caller), @_ );
+}
+
 sub preference {
     my $self = shift;
     my $preference = shift;

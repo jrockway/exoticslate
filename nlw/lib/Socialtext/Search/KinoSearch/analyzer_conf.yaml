@@ -1,0 +1,23 @@
+# Map locales to KinoSearch analyzers.
+#
+# The structure of this file is a hash of arrays.  The keys in the hash are
+# locales, with the exception of the special key "DEFAULT".  The "DEFAULT" key
+# has as its value a locale, which is the default locale to use when no other
+# can be found.
+#
+# The other keys map locales to a list of KinoSearch-compliant analyzers.  The
+# order of the analyzers matters, since the analyzers form a processing chain.
+# The output of the first analyzer is the input to the second, etc.
+#
+# Also See: http://www.socialtext.net/stdev/index.cgi?kinosearch_analyzer_api
+---
+DEFAULT: 'en'
+en:
+    - "Socialtext::Search::KinoSearch::Analyzer::LowerCase"
+    - "Socialtext::Search::KinoSearch::Analyzer::Tokenize"
+    - "Socialtext::Search::KinoSearch::Analyzer::Stem"
+ja:
+    - "Socialtext::Search::KinoSearch::Analyzer::Ja::Tokenize"
+    - "Socialtext::Search::KinoSearch::Analyzer::LowerCase"
+    - "Socialtext::Search::KinoSearch::Analyzer::Tokenize"
+    - "Socialtext::Search::KinoSearch::Analyzer::Stem"

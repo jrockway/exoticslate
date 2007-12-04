@@ -175,6 +175,18 @@ ST.AttachmentQueue.prototype = {
             return false;
         }
 
+        filenameField.value.match(/\\|\/|:/g);
+        var filename = RegExp.rightContext;
+
+        if (encodeURIComponent(filename).length > 255) {
+            this._show_error(loc("Filename is too long after URL encoding."));
+            return false;
+        }
+        else
+        {
+            this._show_error(''); 
+        }
+
         var unpackCheckbox = $(this.element.unpackCheckbox);
         var embedCheckbox = $(this.element.embedCheckbox);
         var entry = {

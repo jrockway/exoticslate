@@ -12,7 +12,7 @@ sub load_existing_l10ns {
     my $r     = shift;
     my $title = shift;
 
-    my $content = decode_utf8( $r->get_page($title) );
+    my $content = $r->get_page($title);
     return {} if $r->response->code ne 200;
 
     #use Data::Dumper;
@@ -37,17 +37,12 @@ sub load_existing_l10ns {
 }
 
 sub make_rester {
-    my $live = shift;
-    return Socialtext::Resting->new(
-        username => 'l10n-bot@socialtext.net',
-        password => 'l10n4wiki',
-        workspace => 'stl10n',
-        server => 'http://www.socialtext.net',
-    ) if $live;
+    # Run stl10n-to-wiki if the stl10n workspace doesn't yet exist.
+    unless (-d "$ENV{HOME}/.nlw/root/data/stl10n") {
+        warn "stl10n workspace doesn't yet exist!  Creating it.\n";
+        shell_run("$ENV{HOME}/src/st/current/nlw/dev-bin/stl10n-to-wiki");
+    }
 
-    shell_run("-st-admin create-workspace --name stl10n --title stl10n");
-    shell_run('-st-admin add-member --workspace stl10n '
-            . '--email devnull1@socialtext.com');
     return Socialtext::Resting->new(
         username  => 'devnull1@socialtext.com',
         password  => 'd3vnu11l',

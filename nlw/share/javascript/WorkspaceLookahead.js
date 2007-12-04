@@ -72,7 +72,7 @@ WorkspaceLookahead.prototype.getTitleFromName = function(name) {
  * @return Error message in HTML format
  */
 WorkspaceLookahead.prototype._apiErrorMessage = function() {
-    return '<span class="st-suggestion-warning">Could not retrieve workspace list from wiki</span>';
+    return '<span class="st-suggestion-warning">' + loc('Could not retrieve workspace list from wiki') + '</span>';
 }
 
 /**

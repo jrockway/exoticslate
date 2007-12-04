@@ -20,7 +20,7 @@ use Email::Address;
 use Class::AlzaboWrapper;
 use Class::Field 'field';
 use Alzabo::SQLMaker::PostgreSQL qw(COUNT DISTINCT LOWER CURRENT_TIMESTAMP);
-use Socialtext::l10n qw(system_locale);
+use Socialtext::l10n qw(system_locale loc);
 use Socialtext::EmailSender::Factory;
 use base qw( Socialtext::MultiPlugin );
 
@@ -200,11 +200,15 @@ sub email_address {
 }
 
 sub first_name {
-    $_[0]->homunculus->first_name( @_[ 1 .. $#_ ] );
+    my $firstname = $_[0]->homunculus->first_name( @_[ 1 .. $#_ ] );
+    Encode::_utf8_on($firstname) unless Encode::is_utf8($firstname);
+    return $firstname;
 }
 
 sub last_name {
-    $_[0]->homunculus->last_name( @_[ 1 .. $#_ ] );
+    my $lastname = $_[0]->homunculus->last_name( @_[ 1 .. $#_ ] );
+    Encode::_utf8_on($lastname) unless Encode::is_utf8($lastname);
+    return $lastname;
 }
 
 sub password_is_correct {
@@ -1083,7 +1087,7 @@ sub send_confirmation_email {
     my $email_sender = Socialtext::EmailSender::Factory->create($locale);
     $email_sender->send(
         to        => $self->name_and_email(),
-        subject   => 'Please confirm your email address to register with Socialtext',
+        subject   => loc('Please confirm your email address to register with Socialtext'),
         text_body => $text_body,
         html_body => $html_body,
     );
@@ -1107,7 +1111,7 @@ sub send_confirmation_completed_email {
             uri   => $ws->uri(),
         );
 
-        $subject = 'You can now login to the ' . $ws->title() . ' workspace';
+        $subject = loc('You can now login to the [_1] workspace', $ws->title());
     }
     else {
         # REVIEW - duplicated form ST::UserSettingsPlugin - where does
@@ -1122,7 +1126,7 @@ sub send_confirmation_completed_email {
             uri   => Socialtext::URI::uri( path => '/nlw/login.html' ),
         );
 
-        $subject = "You can now login to the $app_name application";
+        $subject = loc("You can now login to the [_1] application", $app_name);
     }
 
     $vars{user}      = $self;
@@ -1137,7 +1141,6 @@ sub send_confirmation_completed_email {
         template => 'email/email-address-confirmation-completed.html',
         vars     => \%vars,
     );
-    # XXX: Fix me: get locale from hub
     my $locale = system_locale();
     my $email_sender = Socialtext::EmailSender::Factory->create($locale);
     $email_sender->send(
@@ -1171,12 +1174,11 @@ sub send_password_change_email {
         template => 'email/password-change.html',
         vars     => \%vars,
     );
-    # XXX: Fix me: get locale from hub
-    my $locale = 'en';
+    my $locale = system_locale();
     my $email_sender = Socialtext::EmailSender::Factory->create($locale);
     $email_sender->send(
         to        => $self->name_and_email(),
-        subject   => 'Please follow these instructions to change your Socialtext password',
+        subject   => loc('Please follow these instructions to change your Socialtext password'),
         text_body => $text_body,
         html_body => $html_body,
     );

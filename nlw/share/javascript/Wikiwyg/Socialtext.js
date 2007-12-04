@@ -575,6 +575,12 @@ proto.newpage_save = function(page_name, pagename_editfield) {
             pagename_editfield.focus();
         }
     }
+    else if (encodeURIComponent(page_name).length > 255) {
+        alert(loc('Page title is too long after URL encoding'));
+        if (pagename_editfield) {
+            pagename_editfield.focus();
+        }
+    }
     else {
         if (Page.active_page_exists(page_name)) {
             this.newpage_cancel();
@@ -675,7 +681,6 @@ proto.displayNewPageDialog = function() {
         'st-newpage-duplicate-emphasis'
     );
     $('st-newpage-save').style.display = 'block';
-    $('st-newpage-save-pagename').focus();
 
     var divs = {
         wrapper: $('st-newpage-save'),
@@ -684,6 +689,8 @@ proto.displayNewPageDialog = function() {
         contentWrapper: $('st-newpage-save-interface').parentNode
     }
     Widget.Lightbox.show({ 'divs': divs, 'effects': ['RoundedCorners'] });
+
+    $('st-newpage-save-pagename').focus();
 
     return false;
 }
@@ -710,12 +717,10 @@ proto.saveNewPage = function() {
             return this.newpage_saveClicked();
         }
         else  {
-
-            if (encodeURI(new_page_name.value).length > 255) {
+            if (encodeURIComponent(new_page_name.value).length > 255) {
                 alert(loc('Page title is too long after URL encoding'));
-                if (pagename_editfield) {
-                    pagename_editfield.focus();
-                }
+                this.displayNewPageDialog();
+                return;
             }
 
             edit_page_name.value = new_page_name.value;
@@ -1229,6 +1234,7 @@ proto.markupRules = {
     h4: ['start_line', '^^^^ '],
     h5: ['start_line', '^^^^^ '],
     h6: ['start_line', '^^^^^^ '],
+    hr: ['line_alone', '---- '],
     www: ['bound_phrase', '"', '"<http://...>'],
     attach: ['bound_phrase', '{file: ', '}'],
     image: ['bound_phrase', '{image: ', '}']

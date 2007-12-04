@@ -10,7 +10,10 @@ use Test::Socialtext::Search;
 use Test::Socialtext tests => 206;
 fixtures( 'admin_no_pages' );
 
-BEGIN { use_ok("Socialtext::Search::KinoSearch::Factory") }
+BEGIN { 
+    unlink "t/tmp/etc/socialtext/socialtext.conf";
+    use_ok("Socialtext::Search::KinoSearch::Factory");
+}
 
 our $workspace = 'admin';
 our $hub = new_hub('admin');

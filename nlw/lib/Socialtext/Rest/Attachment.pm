@@ -7,6 +7,7 @@ use strict;
 use base 'Socialtext::Rest';
 use IO::File;
 use Socialtext::HTTP ':codes';
+use Socialtext::l10n qw(system_locale);
 
 sub allowed_methods { 'GET, HEAD, DELETE' }
 sub permission { +{ GET => 'read', DELETE => 'attachments' } }
@@ -31,6 +32,16 @@ sub GET {
             $self->_invalid_attachment( $rest, 'not found' );
         }
 
+        my $mime_type = $attachment->mime_type;
+
+        if ( $mime_type =~ /^text/ ) {
+            my $charset = $attachment->charset(system_locale());
+            if (! defined $charset) {
+                $charset = 'UTF8';
+            }
+            $mime_type .= '; charset=' . $charset;
+        }
+
         $fh = new IO::File $file, 'r';
         die "Cannot read $file: $!" unless $fh;
 
@@ -38,7 +49,7 @@ sub GET {
         # behind Pragma and Cache-control below.
         $rest->header(
             '-content-length' => -s $file,
-            -type             => $attachment->mime_type,
+            -type             => $mime_type,
             -pragma           => undef,
             '-cache-control'  => undef,
         );
@@ -76,11 +87,13 @@ sub _invalid_attachment {
 
 sub _get_attachment {
     my $self = shift;
-
     my ( $page_uri, $attachment_id ) = split /:/, $self->attachment_id;
+
+    my $page_id =  Socialtext::Page->name_to_id($page_uri);
+
     my $attachment = $self->hub->attachments->new_attachment(
         id      => $attachment_id,
-        page_id => $page_uri,
+        page_id => $page_id,
     )->load;
 
     return $attachment;

@@ -82,6 +82,11 @@ sub new_preference {
     Socialtext::Preference->new(@_);
 }
 
+sub new_dynamic_preference {
+    my $self = shift;
+    Socialtext::Preference::Dynamic->new(@_);
+}
+
 sub _prefs_file_for_email {
     my $self = shift;
     Socialtext::File::catfile( $self->user_plugin_directory(@_), 'preferences.dd' );
@@ -230,6 +235,25 @@ sub hidden {
 END
 }
 
+package Socialtext::Preference::Dynamic;
+use base 'Socialtext::Preference';
+
+use Class::Field qw( field );
+use Socialtext::l10n qw/loc/;
+
+field 'choices_callback';
+
+sub choices { shift->_generic_callback("choices", @_) }
+
+sub _generic_callback {
+    my ($self, $name, @args) = @_;
+    my $method = "${name}_callback";
+    if ($self->$method) {
+        return $self->$method->($self, @args);
+    } else {
+        $method = "SUPER::${name}";
+        return $self->$method(@args);
+    }
+}
 
 1;
-

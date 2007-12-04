@@ -205,6 +205,15 @@ sub _default_locale {
     return get_build_setting('default-locale') || 'en';
 }
 
+sub _default_workspace {
+    my $locale = _default_locale();
+    if ($locale eq 'en') {
+        return 'help';
+    } else {
+        return lc("help-$locale");
+    }
+}
+
 sub _user_root {
     if ( $ENV{HARNESS_ACTIVE} ) {
         my $dir;
@@ -1012,7 +1021,7 @@ Default: 0
 When a user logs into the system and the app does not know what
 workspace they want, this is default workspace they are sent to.
 
-Default: help
+=for code default => _default_workspace()
 
 =for code type => SCALAR_TYPE
 

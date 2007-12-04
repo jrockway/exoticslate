@@ -54,6 +54,7 @@ use Socialtext::MultiCursor;
 use Socialtext::User;
 use Socialtext::UserWorkspaceRole;
 use Socialtext::WorkspaceBreadcrumb;
+use Socialtext::Page;
 use URI;
 
 field breadcrumbs => '';
@@ -158,7 +159,12 @@ sub _copy_default_pages {
         # Top Page is special.  We need to name the page after the current
         # workspace, not "Top Page", and we need to add the current workspace
         # title to the page content (there's some TT2 in the wikitext).
-        if ( $page->id eq 'top_page' ) {
+        my $top_page_id = 'top_page';
+        if ( system_locale() eq 'ja' ) {
+            $top_page_id = '%E3%83%88%E3%83%83%E3%83%97%E3%83%9A%E3%83%BC%E3%82%B8';
+        }
+
+        if ( $page->id eq $top_page_id ) {
             $title = $self->title;
             my $content = $page->content;
             my $content_formatted = $hub->template->process(
@@ -331,14 +337,25 @@ sub _validate_and_clean_data {
     }
 
     my @errors;
-    for my $k ( qw( name title ) ) {
-        $p->{$k} = Socialtext::String::trim( $p->{$k} )
-            if defined $p->{$k};
+    {
+        $p->{name} = Socialtext::String::trim( $p->{name} )
+            if defined $p->{name};
 
-        if ( ( exists $p->{$k} or $is_create )
+        if ( ( exists $p->{name} or $is_create )
              and not
-             ( defined $p->{$k} and length $p->{$k} ) ) {
-            push @errors, loc("Workspace [_1] is a required field.", $k);
+             ( defined $p->{name} and length $p->{name} ) ) {
+            push @errors, loc("Workspace name is a required field.");
+        }
+    }
+
+    {
+        $p->{title} = Socialtext::String::trim( $p->{title} )
+            if defined $p->{title};
+
+        if ( ( exists $p->{title} or $is_create )
+             and not
+             ( defined $p->{title} and length $p->{title} ) ) {
+            push @errors, loc("Workspace title is a required field.");
         }
     }
 
@@ -357,16 +374,9 @@ sub _validate_and_clean_data {
         }
     }
 
-    if (
-        defined $p->{title}
-        and (  length $p->{title} < 2
-            or length $p->{title} > 64
-            or $p->{title} =~ /^-/ )
-        ) {
-        push @errors,
-            loc(
-            'Workspace title must be between 2 and 64 characters long and may not begin with a -.'
-            );
+    if ( defined $p->{title} ) {
+        Socialtext::Workspace->TitleIsValid( title => $p->{title},
+                                            errors => \@errors );
     }
 
     if ( $p->{incoming_email_placement}
@@ -393,6 +403,37 @@ sub _validate_and_clean_data {
     if ($is_create) {
         $p->{created_by_user_id} ||= Socialtext::User->SystemUser()->user_id();
     }
+}
+
+
+sub TitleIsValid {
+    my $class = shift;
+
+    my %p = Params::Validate::validate( @_, {
+        title    => SCALAR_TYPE,
+        errors  => ARRAYREF_TYPE( default => [] ),
+    } );
+
+    my $title    = $p{title};
+    my $errors  = $p{errors};
+
+    unless (    defined $title
+        and ( length $title >= 2 )
+        and ( length $title <= 64 )
+        and ( $title !~ /^-/ ) ) {
+        push @{$errors},
+            loc(
+            'Workspace title must be between 2 and 64 characters long and may not begin with a -.'
+            );
+    }
+
+    if ( defined $title
+         and ( length Socialtext::Page->name_to_id($title) > Socialtext::Page->_MAX_PAGE_ID_LENGTH() )
+       ) {
+        push @{$errors}, loc('Workspace title is too long after URL encoding');
+    }
+
+    return @{$errors} > 0 ? 0 : 1;
 }
 
 
@@ -1982,6 +2023,27 @@ PARAMS can include:
 =over 4
 
 =item * name => $name - required
+
+=item * errors => \@errors - optional, an arrayref where violated constraints will be put
+
+=back
+
+=head2 Socialtext::Workspace->TitleIsValid(PARAMS)
+
+Validates whether a workspace title is valid according to syntax rules.
+It also checks the title against a list of reserved titles.  The method
+returns 1 if the title is valid, 0 if it is not.
+
+If the title is invalid and an arrayref is passed as errors, a
+description of each violated rule will be stored in the arrayref.
+
+It DOES NOT check to see if a workspace exists.
+
+PARAMS can include:
+
+=over 4
+
+=item * title => $title - required
 
 =item * errors => \@errors - optional, an arrayref where violated constraints will be put
 

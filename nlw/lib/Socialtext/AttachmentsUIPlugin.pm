@@ -194,7 +194,7 @@ sub attachments_listall {
     $self->render_screen(
         rows =>
             $self->_table_rows( $self->hub->attachments->all_in_workspace() ),
-        display_title => "All Files",
+        display_title => loc("All Files"),
     );
 }
 

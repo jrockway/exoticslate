@@ -3,6 +3,7 @@ package Socialtext::Search::KinoSearch::Factory;
 use strict;
 use warnings;
 
+use Socialtext::l10n qw(system_locale);
 use File::Basename 'dirname';
 use Socialtext::File 'ensure_directory';
 use Socialtext::Search::KinoSearch::Analyzer;
@@ -46,8 +47,8 @@ sub _create {
 
 
 sub _analyzer {
-    my ( $self, $lang ) = @_;
-    $lang ||= 'en';
+    my $self = shift;
+    my $lang = system_locale();
     return Socialtext::Search::KinoSearch::Analyzer->new( language => $lang );
 }
 

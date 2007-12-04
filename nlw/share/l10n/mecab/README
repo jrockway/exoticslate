@@ -1,0 +1,60 @@
+This directory should contain the UTF-8 Juman Dictionary for MeCab.
+Unfortuantely this dictionary is architecture dependent, and somewhat large.
+So we can't include it with Socialtext itself.  Usually MeCab ships with a
+EUC-JP encoded Juman Dictionary.  Socialtext tries to convert the EUC-JP
+dictonary at install time, but if it fails it will warn that you should read
+this file so you can do the conversion by hand.
+
+Inclusion of customized entries to the dictionary can also be
+done by placing "user.csv" file (encoded in EUC-JP) in
+$DICDIR/dicsrc, before building Socialtext, or performing the
+conversion procedure described below.
+
+You can convert the EUC-JP dictoary to a UTF-8 one as follows:
+
+# NOTE: Actual paths may differ based on how MeCab was installed
+
+# The dictinary source directory from your distribution.
+DICSRC=/usr/share/mecab/dic/juman
+
+# The output dictionary to place UTF-8 Juman Dictionary.
+DICDIR=/path/to/usr/share/nlw/mecab
+cd $DICDIR
+mkdir dicsrc
+
+
+# Convert them to UTF-8
+for i in $DICSRC/*
+do
+ file=$(basename $i)
+ iconv -c -f euc-jp -t utf-8 <"$i" >dicsrc/"$file"
+done
+
+# Allow Katakana words to be split out from unknown sequences
+mv dicsrc/char.def dicsrc/char.def+
+sed -e '/^KATAKANA/s/.*/KATAKANA	0 1 2/' \
+	<dicsrc/char.def+ >dicsrc/char.def
+rm -f dicsrc/char.def+
+
+# The dictionary sources are utf-8 now
+mv dicsrc/dicrc dicsrc/dicrc+
+sed -e 's/^\(dictionary-charset =\).*/\1 utf-8/' \
+	<dicsrc/dicrc+ >dicsrc/dicrc
+rm -f dicsrc/dicrc+
+
+# Link control tables from the source area.
+for i in dicrc left-id.def right-id.def rewrite.def
+do
+  rm -f "$i"
+  ln -s dicsrc/"$i" "$i"
+done
+
+# If you have customized entries to add to the dictionary,
+# create dicsrc/user.csv file at this point, encoded in utf-8.
+# See http://mecab.sourceforge.net/dic.html for details.
+
+
+# Build the dictionary in $DICDIR, using the modified dictionary
+# source in dicsrc/; the input dictionary is already encoded in
+# utf-8 and the resulting dictionary should be in utf-8.
+/usr/lib/mecab/mecab-dict-index -d dicsrc -o . -f utf-8 -t utf-8

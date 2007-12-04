@@ -89,7 +89,7 @@ PageNameSupportLookahead.prototype._gainFocus = function() {
  * @return error message in HTML format
  */
 PageNameSupportLookahead.prototype._error404Message = function() {
-    return '<span class="st-suggestion-warning">Workspace "' + this.workspace + '" or page"' + this.pagename + '" does not exist on wiki</span>';
+    return '<span class="st-suggestion-warning">' + loc('Workspace "[_1]" or page "[_2]" does not exist on wiki', this.workspace, this.pagename) + '</span>';
 }
 
 /**

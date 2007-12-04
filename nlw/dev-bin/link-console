@@ -18,7 +18,11 @@ my $appliance_base = "$ENV{HOME}/src/st/appliance";
 die "Appliance repo is not checked out to $appliance_base" unless -d $appliance_base;
 
 my $console_dir = "$appliance_base/$branch/libsocialtext-appliance-perl";
-die "Couldn't find console branch '$console_dir'" unless -d $console_dir;
+unless (-d $console_dir) {
+    warn "Couldn't find console branch '$console_dir' - using trunk";
+    $console_dir = "$appliance_base/trunk/libsocialtext-appliance-perl";
+    die "Couldn't find console trunk '$console_dir'" unless -d $console_dir;
+}
 
 my @libs = qx(find $console_dir/lib -name '*.pm');
 for my $f (@libs) {

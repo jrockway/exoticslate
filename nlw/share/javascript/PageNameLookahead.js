@@ -115,11 +115,11 @@ PageNameLookahead.prototype._keyHandler = function (event) {
 PageNameLookahead.prototype._findSuggestions = function () {
     if (this.editField.value.length == 0 || this.editField.value.length >= this.minEditLengthForLookup) {
         if (this.lastEditLength > 0 && this.lastEditLength < this.minEditLengthForLookup)
-            this.suggestionBlock.innerHTML = '<span class="st-lookahead-info">Searching for matching pages...</span>';
+            this.suggestionBlock.innerHTML = '<span class="st-lookahead-info">' + loc('Searching for matching pages...') + '</span>';
         PageNameLookahead.superClass._findSuggestions.call(this);
     }
     else {
-        this.suggestionBlock.innerHTML = '<span class="st-lookahead-info">Page title lookahead requires at least ' + this.minEditLengthForLookup + ' characters</span>';
+        this.suggestionBlock.innerHTML = '<span class="st-lookahead-info">' + loc('Page title lookahead requires at least [_1] characters', this.minEditLengthForLookup) + '</span>';
         this._showSuggestionBlock();
     }
     this.lastEditLength = this.editField.value.length;

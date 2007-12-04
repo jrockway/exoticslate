@@ -11,8 +11,7 @@ use JSON;
 use Encode;
 use utf8;
 
-my $live = shift;
-my $r    = make_rester($live);
+my $r    = make_rester();
 my $l10n = load_localizations();
 
 my $js_output = 'share/javascript/l10ns.js';

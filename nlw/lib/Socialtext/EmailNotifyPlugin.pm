@@ -12,7 +12,7 @@ use Socialtext::File;
 use Socialtext::Paths;
 use Socialtext::TT2::Renderer;
 use Socialtext::EmailNotifier;
-use Socialtext::l10n qw( loc );
+use Socialtext::l10n qw( loc loc_lang system_locale );
 
 sub class_id { 'email_notify' }
 const class_title => loc('Email Notification');
@@ -84,6 +84,8 @@ sub maybe_send_notifications {
     my $page_id = shift;
 
     return unless $self->hub->current_workspace->email_notify_is_enabled;
+
+    loc_lang(system_locale());
 
     my $notifier = Socialtext::EmailNotifier->new(plugin => $self,
                                     notify_frequency => 'notify_frequency');

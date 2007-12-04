@@ -66,6 +66,17 @@ sub preferences_settings {
     );
 }
 
+sub _is_favorites_page_title_valid {
+    my $self = shift;
+    my $name = shift;
+
+    if ( Socialtext::Page->_MAX_PAGE_ID_LENGTH
+         < length Socialtext::Page->name_to_id($name) ) {
+        return 0;
+    }
+    return 1;
+}
+
 # XXX this method may not have test coverage
 sub save {
     my $self = shift;
@@ -93,6 +104,14 @@ sub save {
 
             $settings->{$pref} = $cgi{$_}
               unless exists $settings->{$pref};
+
+            if( $class_id eq 'favorites' ) {
+                if(! $self->_is_favorites_page_title_valid($settings->{$pref})) {
+                    my $message = loc("Page title is too long after URL encoding");
+                    $self->add_error($message);
+                    return;
+                }
+            }
         }
     }
     if (keys %$settings) {

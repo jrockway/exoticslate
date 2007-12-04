@@ -936,12 +936,12 @@ sub age_in_english {
     my $self = shift;
     my $age = $self->age_in_seconds;
     my $english =
-    $age < 60 ? $age . ' seconds' :
-    $age < 3600 ? int($age / 60) . ' minutes' :
-    $age < 86400 ? int($age / 3600) . ' hours' :
-    $age < 604800 ? int($age / 86400) . ' days' :
-    $age < 2592000 ? int($age / 604800) . ' weeks' :
-    int($age / 2592000) . ' months';
+    $age < 60 ? loc('[_1] seconds', $age) :
+    $age < 3600 ? loc('[_1] minutes', int($age / 60)) :
+    $age < 86400 ? loc('[_1] hours', int($age / 3600)) :
+    $age < 604800 ? loc('[_1] days', int($age / 86400)) :
+    $age < 2592000 ? loc('[_1] weeks', int($age / 604800)) :
+    loc('[_1] months', int($age / 2592000));
 
     $english =~ s/^(1 .*)s$/$1/;
     return $english;

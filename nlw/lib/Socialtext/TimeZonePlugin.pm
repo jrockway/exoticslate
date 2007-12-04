@@ -73,7 +73,7 @@ sub timezone {
 }
 
 sub _default_timezone {
-    my $self;
+    my $self = shift;
     my $locale = shift;
     if ( $locale eq 'ja' ) {
         return '+0900';
@@ -119,26 +119,28 @@ sub _default_dst {
 
 sub date_display_format {
     my $self   = shift;
-    my $locale = $self->hub->best_locale;
 
-    my $p = $self->new_preference('date_display_format');
+    my $p = $self->new_dynamic_preference('date_display_format');
     $p->query( loc('How should displayed dates be formatted?') );
     $p->type('pulldown');
 
     my $time = Socialtext::Date->now( timezone => 'UTC' );
-
-    my $choices = [];
-
-    my @formats = Socialtext::Date::l10n->get_all_format_date($locale);
-    for (@formats) {
-        if ( $_ eq 'default' ) {
-            next;
+    my $hub = $self->hub;
+    $p->choices_callback(sub {
+        my $p = shift;
+        my $choices = [];
+        my $locale = $p->hub->best_locale;
+        my @formats = Socialtext::Date::l10n->get_all_format_date($locale);
+        for (@formats) {
+            if ( $_ eq 'default' ) {
+                next;
+            }
+            push @{$choices}, $_;
+            push @{$choices},
+            $self->_get_date( $time, $_, $locale );
         }
-        push @{$choices}, $_;
-        push @{$choices},
-        $self->_get_date( $time, $_, $locale );
-    }
-    $p->choices($choices);
+        return $choices;
+    });
     $p->default('default');
 
     return $p;
@@ -146,26 +148,29 @@ sub date_display_format {
 
 sub time_display_12_24 {
     my $self   = shift;
-    my $locale = $self->hub->best_locale;
-    my $p      = $self->new_preference('time_display_12_24');
+    my $p      = $self->new_dynamic_preference('time_display_12_24');
     $p->query(
         loc('Should times be displayed in 12-hour or 24-hour format?') );
 
     my $time;
-    my $choices = [];
 
     $time = Socialtext::Date->now( timezone => 'UTC' );
     $p->type('pulldown');
-    my @formats = Socialtext::Date::l10n->get_all_format_time($locale);
-    for (@formats) {
-        if ( $_ eq 'default' ) {
-            next;
+    $p->choices_callback( sub {
+        my $p = shift;
+        my $locale = $p->hub->best_locale;
+        my @formats
+            = Socialtext::Date::l10n->get_all_format_time($locale);
+        my $choices = [];
+        for (@formats) {
+            if ( $_ eq 'default' ) {
+                next;
+            }
+            push @{$choices}, $_;
+            push @{$choices}, $self->_get_time( $time, $_, $locale );
         }
-        push @{$choices}, $_;
-        push @{$choices},
-        $self->_get_time( $time, $_, $locale);
-    }
-    $p->choices($choices);
+        return $choices;
+    });
     $p->default('default');
 
     return $p;

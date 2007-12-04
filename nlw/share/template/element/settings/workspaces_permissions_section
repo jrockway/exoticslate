@@ -9,7 +9,9 @@
   <tr>
    <td>
     [% loc('You can choose the level of privacy for your workspace. For more information on choosing the level of privacy for your workspace, see') %] 
-    <a href="/help/index.cgi?roles_and_permission_sets#standard_workspace_types">[% loc('Roles and Permission Sets (standard workspace types)') %]</a>.
+    [% SET WS_SUFFIX="-${loc_lang}" %]
+    [% SET WS_SUFFIX="" IF loc_lang == 'en' %]
+    <a href="/help[% WS_SUFFIX %]/index.cgi?[% loc('roles_and_permission_sets#standard_workspace_types') %]">[% loc('Roles and Permission Sets (standard workspace types)') %]</a>.
    </td>
   </tr>
   <tr>

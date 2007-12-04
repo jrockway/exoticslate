@@ -41,7 +41,7 @@ function submit_comment(comment_window) {
     var textarea = elem('st-commentui-textarea')
     toolbar_warning(elem('st-commentui-controls'), loc('Saving...'))
     if (my_array.length > 3) {
-         textarea.value = loc('\n\nComment:') + ' ' + textarea.value 
+         textarea.value = '\n\n' + loc('Comment:') + ' ' + textarea.value 
     }
     for (var i = my_array.length; i >= 0; i--) { 
         if ( (my_array[i]) &&

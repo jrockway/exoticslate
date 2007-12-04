@@ -383,15 +383,11 @@ sub scrub_user {
 
     # remove them from control and console
     if ($user->is_business_admin()) {
-        $user->update_metadata(
-            is_business_admin => 0,
-        );
+        $user->metadata()->set_business_admin( 0 );
         push @output, "Removed Business Admin";
     }
     if ($user->is_technical_admin()) {
-        $user->update_metadata(
-            is_technical_admin => 0,
-        );
+        $user->metadata()->set_technical_admin( 0 );
         push @output, "Removed Technical Admin";
     }
 

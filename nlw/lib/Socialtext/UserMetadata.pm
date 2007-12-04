@@ -259,12 +259,6 @@ RDBMS.
 
 $user is typically an instance of one of the Socialtext::User user factories.
 
-=head2 $md->update(PARAMS)
-
-Updates the user's information with the new key/val pairs passed in,
-but you cannot change is_system_created after the initial creation of
-a row.
-
 =head2 $md->delete()
 
 Delete the metadata record from the database.

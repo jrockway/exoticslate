@@ -2,6 +2,26 @@ Change log for Socialtext Open
 
 2.17.X
 
+Release notes, 2.17.4.0  Dec 2007
+
+  [FEATURES]
+
+  st-admin scrub-user --username test2@example.com.
+  This removes test2@example.com from all the workspaces they belong too. It also removes the business admin and technical admim privileges, if they have them.
+
+  Feed Improvements - Add the page creator, page tags, and page attachments to the outgoing Atom and RSS feeds.
+
+  
+  [BUGS]
+  
+  A number of i18n and l10n localization fixes and related bug fixes.
+
+  {bz: 323} Nested tables have a tiny font size -- no more! Where nexted tables really means included tables.
+
+  {bz: 348}  The My Workspaces list was being built from a SQL query that due to bad
+logical operator grouping was listing duplicates AND all workspaces for which the
+current user had READ permission.
+
 Release notes, 2.17.3.0  Nov 2007
 
   [FEATURES]

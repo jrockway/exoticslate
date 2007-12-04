@@ -86,6 +86,37 @@ sub _item_description {
     die "subclass must implement";
 }
 
+sub _item_as_html {
+    my $self = shift;
+    my $page = shift;
+
+    my @html_headers;
+    my @html_footers;
+    my $html    = $page->to_absolute_html;
+    my @tags    = grep { $_ !~ /recent changes/i } $page->categories_sorted;
+    my $creator = $page->original_revision->last_edited_by;
+
+    if ($creator) {
+        my $ws   = $page->hub->current_workspace;
+        my $name = $creator->best_full_name( workspace => $ws );
+        push @html_headers, "<div>Creator: $name</div>";
+    }
+
+    if ( scalar @tags ) {
+       push @html_headers, "<div>Tags: " . join( ", ", @tags ) . "</div>";
+    }
+
+    my @attachments = $page->_attachments;
+    if ( scalar @attachments ) {
+        my @filenames
+            = sort { lc($a) cmp lc($b) } map { $_->filename } @attachments;
+        push @html_footers,
+            "<div>Attachments: " . join( ", ", @filenames ) . "</div>";
+    }
+
+    return join "<hr/>", @html_headers, $html, @html_footers;
+}
+
 sub _cdata {
     my $self = shift;
     my $data = shift;

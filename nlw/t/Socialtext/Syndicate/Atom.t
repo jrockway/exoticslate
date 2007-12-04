@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 70;
+use Test::Socialtext tests => 76;
 fixtures( 'admin_with_extra_pages' );
 
 BEGIN {
@@ -31,6 +31,12 @@ ATOM_1_0_HTML: {
         _content_type($feed), 'html',
         'formattingtodo becomes escaped html'
     );
+}
+
+ATOM_1_0_CATEGORIES: {
+    my $page = _make_page( 'cows', "Cow Love\n", [qw(cow love me)] );
+    my $feed = _get_feed([$page]);
+    _entry_has_categories( $feed, qw(cow love me) );
 }
 
 
@@ -82,11 +88,13 @@ ATOM_1_0_FULL: {
 sub _make_page {
     my $name = shift;
     my $content = shift;
+    my $categories = shift;
 
-    my $page = Socialtext::Page->new(hub=>$hub)->create(
-        title => $name,
+    my $page = Socialtext::Page->new( hub => $hub )->create(
+        title   => $name,
         content => $content,
         creator => $hub->current_user,
+        ( defined($categories) ? ( categories => $categories ) : () ),
     );
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
@@ -176,6 +184,23 @@ sub _check_all_entries_for_type {
     }
 
     return;
+}
+
+sub _entry_has_categories {
+    my ( $xml, @categories ) = @_;
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+    my $feed = eval { XML::Atom::Feed->new( \$xml ); };
+    ok( !$@, "No error parsing feed" );
+
+    my @entries = $feed->entries();
+    is( scalar(@entries), 1, "Expect exactly one entry" );
+
+    my $entry          = shift @entries;
+    my $reference_list = join ",", sort @categories;
+    my $actual_list    = join ",", sort map { $_->term } $entry->categories;
+    is( $reference_list, $actual_list, "Found categories: $reference_list" );
 }
 
 sub _one_entry_type {

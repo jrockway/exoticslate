@@ -54,7 +54,7 @@ sub make_entry {
 #        )
 #    );
     if ( $format eq 'html' ) {
-        $entry->content( $self->_content( $page->to_absolute_html ) );
+        $entry->content( $self->_content( $self->_item_as_html($page) ) );
     }
     elsif ( $format eq 'text' ) {
         $entry->content( $self->_content( $page->content ) );
@@ -68,7 +68,21 @@ sub make_entry {
     $entry->id( $page->full_uri );
     $entry->author( $self->_author($page) );
     $entry->updated( $self->_make_w3cdtf( $page->modified_time ) );
+    $entry->categories( $self->atom_categories($page) );
     return $entry;
+}
+
+sub atom_categories {
+    my ( $self, $page ) = @_;
+    my @categories;
+    my @tags = grep { $_ !~ /recent changes/i } $page->categories_sorted;
+    for my $tag (@tags) {
+        my $category = XML::Atom::Category->new;
+        $category->term($tag);
+        $category->label($tag);
+        push @categories, $category;
+    }
+    return @categories;
 }
 
 sub _create_feed {

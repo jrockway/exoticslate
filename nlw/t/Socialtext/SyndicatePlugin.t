@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 39;
+use Test::Socialtext tests => 44;
 fixtures( 'auth-to-edit' );
 
 use DateTime;
@@ -33,6 +33,7 @@ Socialtext::Page->new(hub => $hub)->create(
      content => ("\n^^^ This is the content\n\n* [Wiki 101]\\n\nHello.\n" x 100),
     creator => $hub->current_user,
     date => $date,
+    categories => [qw(cows blink)],
 );
 
 Socialtext::Page->new(hub => $hub)->create(
@@ -118,8 +119,19 @@ http://www.w3.org/2005/Atom
 >Auth-to-edit Wiki: this is the title</title>
 >this is the title</title>
 <h3 id="this_is_the_content">This is the content</h3>
+Creator: devnull1@hidden
+Tags: blink, cows
 --- nomatch
 >this is bad xhtml</title>
+
+===
+--- method: _syndicate_page_named
+--- type: RSS20
+--- argument: this is the title
+--- match
+Creator: devnull1@hidden
+Tags: blink, cows
+<category>blink, cows</category>
 
 ===
 --- method: _syndicate_search

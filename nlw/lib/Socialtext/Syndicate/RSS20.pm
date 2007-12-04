@@ -25,6 +25,7 @@ sub _create_feed {
     foreach my $page (@$pages) {
         my $pub_date = $page->modified_time;
         $feed_modified = $pub_date if $pub_date > $feed_modified;
+        my @tags = grep { $_ !~ /recent changes/i } $page->categories_sorted;
         $rss->add_item(
             title       => $self->_item_title($page),
             link        => $page->full_uri,
@@ -32,6 +33,7 @@ sub _create_feed {
             description => $self->_item_description($page),
             author      => $self->_author($page),
             pubDate     => $self->_format_date($pub_date),
+            category    => join( ", ", @tags)
         );
     }
 
@@ -72,8 +74,8 @@ sub _item_title {
 sub _item_description {
     my $self = shift;
     my $page = shift;
-    my $html = $page->to_absolute_html;
-    return $self->_cdata($html);
+
+    return $self->_cdata( $self->_item_as_html($page) );
 }
 
 1;

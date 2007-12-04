@@ -1,8 +1,8 @@
 Change log for Socialtext Open
 
-2.17.X
+2.18.X
 
-Release notes, 2.17.4.0  Dec 2007
+Release notes, 2.18.0.0  Dec 2007
 
   [FEATURES]
 
@@ -21,6 +21,8 @@ Release notes, 2.17.4.0  Dec 2007
   {bz: 348}  The My Workspaces list was being built from a SQL query that due to bad
 logical operator grouping was listing duplicates AND all workspaces for which the
 current user had READ permission.
+
+2.17.X
 
 Release notes, 2.17.3.0  Nov 2007
 

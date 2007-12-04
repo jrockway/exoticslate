@@ -55,6 +55,7 @@ liblist-moreutils-perl
 liblocale-maketext-simple-perl
 liblog-dispatch-perl
 liblwp-authen-wsse-perl
+libmecab-dev
 libmime-base64-perl
 libmime-types-perl
 libmldbm-perl
@@ -88,5 +89,6 @@ libxml-parser-perl
 libxml-rss-perl
 libxml-xpath-perl
 libxml2-dev
+mecab
 perlmagick
 bc

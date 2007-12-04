@@ -134,13 +134,14 @@ sub _create_test_environment {
 sub hub_for_workspace {
     my $self = shift;
     my $name = shift || die "no name provided to hub_for_workspace";
+    my $username = shift || 'devnull1@socialtext.com';
     my $ws = ref $name ? $name : Socialtext::Workspace->new( name => $name )
         or die "No such workspace: $name";
 
     my $main = Socialtext->new()->debug();
     my $hub  = $main->load_hub(
         current_workspace => $ws,
-        current_user      => Socialtext::User->new( username => 'devnull1@socialtext.com' ),
+        current_user      => Socialtext::User->new( username => $username ),
     );
 
     $hub->registry->load;

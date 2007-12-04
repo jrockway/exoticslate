@@ -202,7 +202,8 @@ sub check_manifest {
 sub new_hub() {
     no warnings 'once';
     my $name = shift or die "No name provided to new_hub\n";
-    my $hub = Test::Socialtext::Environment->instance()->hub_for_workspace($name);
+    my $username = shift;
+    my $hub = Test::Socialtext::Environment->instance()->hub_for_workspace($name, $username);
     $Test::Socialtext::Filter::main_hub = $hub;
     return $hub;
 }

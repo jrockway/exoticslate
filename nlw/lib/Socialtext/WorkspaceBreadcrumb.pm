@@ -72,12 +72,13 @@ sub List {
     my $sth = sql_execute(
         'SELECT wb.workspace_id FROM "WorkspaceBreadcrumb" wb'
         . ' WHERE wb.user_id=? '
-        . ' AND EXISTS (SELECT 1 FROM "UserWorkspaceRole" uwr'
-        . '   WHERE wb.user_id = uwr.user_id'
-        . '   AND wb.workspace_id = uwr.workspace_id)'
-        . ' OR EXISTS (SELECT 1 FROM "WorkspaceRolePermission" wrp'
-        . '   WHERE wrp.workspace_id = wb.workspace_id'
-        . '   AND wrp.role_id=? AND wrp.permission_id=?)'
+        . ' AND ( EXISTS (SELECT 1 FROM "UserWorkspaceRole" uwr'
+        . '         WHERE wb.user_id = uwr.user_id'
+        . '           AND wb.workspace_id = uwr.workspace_id)'
+        . '     OR EXISTS (SELECT 1 FROM "WorkspaceRolePermission" wrp'
+        . '         WHERE wrp.workspace_id = wb.workspace_id'
+        . '           AND wrp.role_id=? AND wrp.permission_id=?)'
+        . '     )'
         . ' ORDER BY wb.timestamp DESC LIMIT ?',
         $p{user_id},
         Socialtext::Role->Guest()->role_id,

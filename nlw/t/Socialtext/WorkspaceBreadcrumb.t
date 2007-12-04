@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use DateTime;
-use Test::Socialtext tests => 12;
+use Test::Socialtext tests => 13;
 fixtures('ALL');
 
 BEGIN {
@@ -37,6 +37,7 @@ SAVE_MULTIPLE_BREADCRUMBS: {
 
 LIST_BREADCRUMBS: {
     get_breadcrumbs_ok(
+        'devnull1@socialtext.com',
         10,
         qw(public exchange sale foobar admin help-en),
     );
@@ -44,8 +45,17 @@ LIST_BREADCRUMBS: {
 
 LIST_BREADCRUMBS_WITH_SMALL_LIMIT: {
     get_breadcrumbs_ok(
+        'devnull1@socialtext.com',
         2,
         qw(public exchange),
+    );
+}
+
+LIST_FOR_DEVNULL2_EMPTY: {
+    get_breadcrumbs_ok(
+        'devnull2@socialtext.com',
+        10,
+        qw(),
     );
 }
 
@@ -66,15 +76,15 @@ sub save_breadcrumb_ok {
 sub get_breadcrumbs_ok {
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-    my ( $limit, @result ) = @_;
-    my $hub = new_hub('admin');    # Workspace doesn't matter here
+    my ( $username, $limit, @result ) = @_;
+    my $hub = new_hub('admin', $username);    # Workspace doesn't matter here
     my @workspaces = Socialtext::WorkspaceBreadcrumb->List(
         user_id => $hub->current_user->user_id,
         limit => $limit,
     );
     is_deeply(
         [ map { $_->name } @workspaces ], \@result,
-        "Comparing breadcrumb results"
+        "Comparing breadcrumb results for $username with limit $limit"
     );
     return @workspaces;
 }

@@ -1,4 +1,5 @@
 #!/usr/bin/env perl
+# @COPYRIGHT@
 
 # Monkey patch Socialtext::Workspace to remove the magic "help workspace" code
 # from new().  This should give access to the workspace actually named "help",

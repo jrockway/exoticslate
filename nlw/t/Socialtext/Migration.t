@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 25;
+use Test::More tests => 29;
 use Socialtext::AppConfig;
 use File::Path qw/mkpath rmtree/;
 use Socialtext::File qw/set_contents get_contents/;

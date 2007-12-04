@@ -100,7 +100,6 @@ sub find_migrations {
     my @dirs;
     for my $migdir (@migrations) {
         unless( $migdir =~ m#.+/(\d+(?:\.\d+)?)-([-\w_]+)$# ) {
-            warn "Invalid migration directory: $migdir";
             next;
         }
         push @dirs, {

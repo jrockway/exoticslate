@@ -99,7 +99,7 @@ sub find_migrations {
     my (@migrations) = grep { -d $_ } glob("$dir/*");
     my @dirs;
     for my $migdir (@migrations) {
-        unless( $migdir =~ m#.+/(\d+)-([-\w_]+)$# ) {
+        unless( $migdir =~ m#.+/(\d+(?:\.\d+)?)-([-\w_]+)$# ) {
             warn "Invalid migration directory: $migdir";
             next;
         }

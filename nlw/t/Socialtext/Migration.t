@@ -38,6 +38,17 @@ Normal_migrations: {
         is get_contents($migration_output_file), "3\n";
     }
 
+    Fractional_migration: {
+        setup_test_migration_scripts($state_dir, 1.1);
+        $m->migrate;
+        is $m->migration_number, 1.1;
+        is get_contents($migration_output_file), "3\n";
+
+        $m->migrate;
+        is $m->migration_number, 1.1;
+        is get_contents($migration_output_file), "3\n";
+    }
+
     Second_migration: {
         setup_test_migration_scripts($state_dir, 2);
         $m->migrate;

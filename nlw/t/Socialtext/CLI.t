@@ -24,7 +24,7 @@ use Socialtext::CLI;
 
 use Cwd;
 
-plan tests => 263;
+plan tests => 271;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -384,6 +384,61 @@ ADD_REMOVE_MEMBER: {
         qr/test\@example\.com is not a member of the foobar workspace\./,
         'remove-member when user is not a workspace member'
     );
+}
+
+# need to set up the user to be in the right worksapces
+# and have the right perms so we can test that they go
+# away. 
+SCRUB_USER: {
+    # need to create a user
+    my $user = Socialtext::User->new( username  => 'test2@example.com' );
+    $user->update_metadata(
+        is_technical_admin => 1,
+        is_business_admin => 1,
+    );
+
+    expect_success(
+        sub {
+            Socialtext::CLI->new( argv =>
+                    [qw( --username test2@example.com --workspace foobar )] )
+                ->add_workspace_admin();
+        },
+        qr/test2\@example\.com is now a workspace/,
+        'test2 added as admin user'
+    );
+
+    expect_success(
+        sub {
+            Socialtext::CLI->new( argv =>
+                    [qw( --username test2@example.com --workspace admin )] )
+                ->add_member();
+        },
+        qr/test2\@example\.com is now a member/,
+        'test2 added as member'
+    );
+
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [qw( --username test2@example.com )]
+            )->scrub_user();
+        },
+        qr/test2\@example\.com has been removed from workspaces admin, foobar, Removed Business Admin, Removed Technical Admin/,
+        'test2 was removed from the correct workspaces'
+    );
+
+    my $user = Socialtext::User->new( username  => 'guest' );
+
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [qw( --username guest )]
+            )->scrub_user();
+        },
+        qr/You may not scrub/,
+        'The guest user cannot be scrubbed',
+    );
+
 }
 
 ADD_REMOVE_WS_ADMIN: {

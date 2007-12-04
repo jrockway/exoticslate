@@ -360,6 +360,50 @@ sub confirm_user {
                         . $password );
 }
 
+# revoke a user's access to everything
+sub scrub_user {
+    my $self = shift;
+
+    my $user = $self->_require_user();
+
+    if (   $user->user_id eq Socialtext::User->SystemUser->user_id
+        || $user->user_id eq Socialtext::User->Guest->user_id ) {
+
+        $self->_error( 'You may not scrub ' . $user->username );
+    }
+
+    my @output = ();
+
+    # remove the user from their workspaces
+    my $workspaces = $user->workspaces();
+    while ( my $workspace = $workspaces->next() ) {
+        $workspace->remove_user( user => $user );
+        push @output, $workspace->name;
+    }
+
+    # remove them from control and console
+    if ($user->is_business_admin()) {
+        $user->update_metadata(
+            is_business_admin => 0,
+        );
+        push @output, "Removed Business Admin";
+    }
+    if ($user->is_technical_admin()) {
+        $user->update_metadata(
+            is_technical_admin => 0,
+        );
+        push @output, "Removed Technical Admin";
+    }
+
+    if (@output) {
+        $self->_success(
+            $user->username . ' has been removed from workspaces ' . join ', ',
+            @output
+        );
+    }
+
+}
+
 sub add_member {
     my $self = shift;
 
@@ -2007,6 +2051,7 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   create-user --email [--username] --password [--first-name --last-name]
   invite-user --email --workspace --from [--secure]
   confirm-user --email --password
+  scrub-user --username
   change-password [--username or --email] --password
   add-member [--username or --email] --workspace
   remove-member [--username or --email] --workspace
@@ -2112,6 +2157,12 @@ secure (https) link.
 
 Confirms a new user and assigns the listed password to that user.  Requires
 an email address and a password.
+
+=head2 scrub-user --username
+
+Remove a user from all their workspaces. If the user is a business or
+technical admin, revoke those privileges. This is useful for when a
+a user departs the system for some reason.
 
 =head2 change-password [--username or --email] --password
 

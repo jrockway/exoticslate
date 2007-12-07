@@ -392,8 +392,8 @@ ADD_REMOVE_MEMBER: {
 SCRUB_USER: {
     # need to create a user
     my $user = Socialtext::User->new( username  => 'test2@example.com' );
-    $user->metadata()->set_technical_admin( 1 );
-    $user->metadata()->set_business_admin( 1 );
+    $user->set_technical_admin( 1 );
+    $user->set_business_admin( 1 );
 
     expect_success(
         sub {

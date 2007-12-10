@@ -6,13 +6,15 @@ use warnings;
 sub new {
     my $class = shift;
 
-    return bless {
+    my $self = bless {
         @_,
         email_address => 'deleted.user@socialtext.com',
         first_name    => 'Deleted',
         last_name     => 'User'
     }, $class;
 
+    $self->{username} ||= 'deleted-user';
+    return $self;
 }
 
 sub driver_name {

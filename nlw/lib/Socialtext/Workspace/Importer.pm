@@ -293,6 +293,13 @@ sub _create_user {
             if exists $info->{$c};
     }
 
+    # Bug 342 - some backups have been created with users
+    # that don't have usernames.  We shouldn't let this 
+    # break the import
+    if ($create{first_name} eq 'Deleted') {
+        $create{username} ||= 'deleted-user';
+    }
+
     return Socialtext::User->create(
         %create,
         created_by_user_id => $creator->user_id,

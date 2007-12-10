@@ -21,6 +21,8 @@ our @Import_options = qw(
 
 our %Environment_params;
 
+our @_all_apaches_to_kill;
+
 sub import {
     my $class = $_[0];
     my @passed_args;
@@ -82,6 +84,7 @@ sub prepare_apache_and_possibly_stop {
     }
 
     $self->apaches( \%apaches );
+    push @_all_apaches_to_kill,  \%apaches;
     $self->stop_all if $some_conf_dir_exists and not $ENV{NLW_LIVE_DANGEROUSLY};
 }
 
@@ -753,6 +756,12 @@ sub stop_all {
     my $self = shift;
 
     $_->stop for $self->get_apaches;
+}
+
+END {
+    for my $apaches_to_kill ( @_all_apaches_to_kill ) {
+        $_->stop for values %{ $apaches_to_kill };
+    }
 }
 
 package Socialtext::Mechanize;

@@ -206,9 +206,10 @@ sub wait_for_startup {
     until ( -f $self->pid_file ) {
         sleep $SLEEP_SECONDS;
         $self->maybe_test_verbose('.');
-        if ( $x++ == 30 ) {
+        if ( $x++ == 60 ) {
             $ENV{NLW_TESTS_DIRTY} = 1;
-            die 'Timed out while waiting for: ' . $self->pid_file . "\n"
+            die 'Timed out after ' . $x * $SLEEP_SECONDS .  ' seconds while waiting for: '
+                . $self->pid_file . "\n"
                 . "(Left t/tmp/* intact so you can inspect the aftermath)\n";
         }
     }

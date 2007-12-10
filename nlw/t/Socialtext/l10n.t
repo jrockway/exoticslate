@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::Socialtext tests => 7;
+use Test::Socialtext tests => 6;
 use Socialtext::AppConfig;
 
 fixtures('admin_no_pages');

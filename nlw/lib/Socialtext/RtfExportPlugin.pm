@@ -55,8 +55,25 @@ sub rtf_export {
     my $self = shift;
 
     my @page_names = $self->cgi->page_selected;
+
     if ( 0 == @page_names ) {
-        return loc("Error:<pre>No pages selected for export</pre>\n");
+        Socialtext::Exception::DataValidation->throw(
+            errors => [loc('No pages selected for export')] );
+    }
+
+    my @page_ids = sort$self->hub->pages->all_ids;
+    
+    foreach my $page_name (@page_names) {
+        unless ( defined $page_name && length $page_name ) {
+            Socialtext::Exception::DataValidation->throw(
+                errors => [loc('No page name given')] );
+        }
+
+        my $page_id = $self->hub->pages->new_from_name( $page_name )->id;
+        unless ( grep (/^$page_id$/,@page_ids)) {
+            Socialtext::Exception::DataValidation->throw(
+                errors => [loc("An invalid page name was given: [_1]", $page_name)] );
+        }
     }
 
     my $index;

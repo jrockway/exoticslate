@@ -67,6 +67,23 @@ sub process {
     return $self->_process;
 }
 
+# Execute some code within the context of a given workspace.  Care is taken to
+# restore the original workspace on the hub in case of premature failure.
+# XXX: The very need for this method is a sign of the Hub's suckiness.
+sub with_alternate_workspace {
+    my ( $self, $ws, $code ) = @_;
+    my $orig = $self->current_workspace();
+    my $rev;
+    eval {
+        $self->current_workspace($ws);
+        $rev = $code->();
+    };
+    my $err = $@;
+    $self->current_workspace($orig);
+    die ref($err) ? $err : "$err\n" if $err;
+    return $rev;
+}
+
 # Was Socialtext::Hub->process, but we need to be able to call this form
 # bug_safe, which is already called from process
 sub _process {

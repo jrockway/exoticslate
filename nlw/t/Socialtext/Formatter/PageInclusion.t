@@ -23,11 +23,11 @@ my $page_one = Socialtext::Page->new( hub => $hub )->create(
 
 $content_one = $page_one->to_html_or_default;
 
-like $content_one, qr{Page One.*href='/admin/index.cgi\?page_two'}sm,
-    'page one should contain a link to incipient page two';
+like $content_one, qr{Page One.*href='/admin/index.cgi\?page%20two'\s+class="incipient"}sm,
+    'page one should contain a link to incipient page two (w/ incipient class)';
 like $content_one, qr{Replace this text with your own}sm,
     'page one should contain default text for page two';
-like $content_one, qr{href='/foobar/index.cgi\?not_here'}sm,
+like $content_one, qr{href='/foobar/index.cgi\?not%20here'\s+class="incipient"}sm,
     'page one should contain a link to incipient not here page in foobar';
 
 my $page_two = Socialtext::Page->new( hub => $hub )->create(

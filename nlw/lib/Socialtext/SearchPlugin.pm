@@ -227,7 +227,7 @@ sub _make_page_row {
     my $is_page_deleted;
     my $metadata;
     my $author;
-    $self->with_alternate_workspace(
+    $self->hub->with_alternate_workspace(
         $workspace,
         sub {
             $page            = $self->hub->pages->new_page($page_uri);
@@ -273,18 +273,6 @@ sub _make_page_row {
     };
 }
 
-sub with_alternate_workspace {
-    my ( $self, $ws, $code ) = @_;
-    my $orig = $self->hub->current_workspace();
-    eval {
-        $self->hub->current_workspace($ws);
-        $code->();
-    };
-    my $err = $@;
-    $self->hub->current_workspace($orig);
-    die "$err\n" if $err;
-}
-
 sub _make_attachment_row {
     my $self = shift;
     my $hit = shift;
@@ -298,7 +286,7 @@ sub _make_attachment_row {
     };
 
     my $attachment;
-    $self->with_alternate_workspace(
+    $self->hub->with_alternate_workspace(
         $workspace,
         sub {
             my $attachment_id = $hit->attachment_id;

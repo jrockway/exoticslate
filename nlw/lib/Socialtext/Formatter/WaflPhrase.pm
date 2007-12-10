@@ -403,10 +403,20 @@ sub html {
     $self->hub->viewer->page_id($viewer_page_id);
     return $self->html_escape($self->matched) unless $html;
 
+    # bz 127.  We can either construct a URL with "?Foo%20Bar" as the page
+    # query parameter OR we can construct it with "?foo_bar".  However, the
+    # latter has unwanted consequences (c.f. bz 127) if the page doesn't exist
+    # and someone clicks on the URL.  So, we check if the page exists and use
+    # the right format.
+    my $page_exists
+        = $self->_included_page_exists( $workspace_name, $page_uri );
+    my $page_uri_for_url
+        = $self->uri_escape( $page_exists ? $page_uri : $page_title );
+
     my $view_url = $self->hub->viewer->link_dictionary->format_link(
         link       => 'interwiki',
         workspace  => $workspace_name,
-        page_uri   => $page_uri,
+        page_uri   => $page_uri_for_url,
         url_prefix => $self->url_prefix,
     );
 
@@ -416,13 +426,15 @@ sub html {
             $edit_url = $self->hub->viewer->link_dictionary->format_link(
                 link       => 'interwiki_edit',
                 workspace  => $workspace_name,
-                page_uri   => $page_uri,
+                page_uri   => $page_uri_for_url,
                 url_prefix => $self->url_prefix,
             );
         };
     }
 
-    my $link = "<a href='$view_url'>$page_title</a>";
+    my $incipient_class = $page_exists ? "" : "class=\"incipient\"";
+
+    my $link = "<a href='$view_url' $incipient_class>$page_title</a>";
 
     my $edit_icon = '';
     if ($edit_url) {
@@ -435,12 +447,33 @@ sub html {
         else {
             $edit = "$edit";
         }
-        $edit_icon = "<a class='wiki-include-edit-link' href='$edit_url'>$edit</a>";
+        $edit_icon = "<a class='wiki-include-edit-link' href='$edit_url' $incipient_class>$edit</a>";
     }
 
     return qq(<div class="wiki-include-page">\n)
         . qq(<div class="wiki-include-title">$link $edit_icon</div>\n)
         . qq(<div class="wiki-include-content">$html</div></div>);
+}
+
+sub _included_page_exists {
+    my ( $self, $ws_name, $page_uri ) = @_;
+    my $exists = 0;
+
+    # If any thing fails we just assume the page does not exist.
+    eval {
+        $self->hub->with_alternate_workspace(
+            Socialtext::Workspace->new( name => $ws_name ),
+            sub {
+                my $page = Socialtext::Page->new( 
+                    id => $page_uri,
+                    hub => $self->hub 
+                );
+                $exists = $page->exists;
+            }
+        );
+    };
+
+    return $exists;
 }
 
 sub _strip_outer_div {

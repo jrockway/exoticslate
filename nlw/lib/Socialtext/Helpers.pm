@@ -219,9 +219,8 @@ sub _get_additional_css_info {
     my ($self) = @_;
     return {
         plugin      => $self->hub->css->uris_for_plugin_css,
-        skin        => $self->hub->css->uris_for_additional_skin_css,
         local       => $self->hub->css->uris_for_additional_local_css,
-        locale       => $self->hub->css->uris_for_additional_locale_css,
+        locale      => $self->hub->css->uris_for_additional_locale_css,
     };
 }
 

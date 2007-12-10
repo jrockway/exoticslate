@@ -107,15 +107,6 @@ sub uris_for_plugin_css {
     return $self->uris_for_non_default_css($self->PluginCssDirectory  );
 }
 
-sub uris_for_additional_skin_css {
-    my $self = shift;
-
-    my $skin_name = $self->{hub}->current_workspace->skin_name;
-    return [] if ($skin_name eq $self->BaseSkin);
-
-    return $self->uris_for_non_default_css($skin_name  );
-}
-
 sub uris_for_additional_local_css {
     my $self = shift;
 

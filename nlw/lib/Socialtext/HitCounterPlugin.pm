@@ -93,7 +93,21 @@ sub page_stats {
 sub page_stats_index {
     my $self = shift;
 
-    my $page = $self->hub->pages->new_page( $self->cgi->page_id );
+    my $page_id = $self->cgi->page_id;
+
+    unless ( defined $page_id && length $page_id ) {
+        Socialtext::Exception::DataValidation->throw(
+            errors => [loc('No page ID given')] );
+    }
+
+    my @page_ids = sort$self->hub->pages->all_ids;
+
+    unless ( grep (/^$page_id$/,@page_ids)) {
+        Socialtext::Exception::DataValidation->throw(
+            errors => [loc("An invalid page ID was given: [_1]", $page_id)] );
+    }
+
+    my $page = $self->hub->pages->new_page( $page_id );
 
     my $counter_dir = $self->_page_counter_dir(
         $self->hub->current_workspace->name,
@@ -102,6 +116,8 @@ sub page_stats_index {
 
     my $title = $page->title;
 
+    $self->screen_template('view/page/stats_index');
+    
     unless ( -d $counter_dir ) {
         return $self->render_screen(
             page_id       => $page->id,
@@ -126,7 +142,6 @@ sub page_stats_index {
         );
     }
 
-    $self->screen_template('view/page/stats_index');
     return $self->render_screen(
         page_id                 => $page->id,
         display_title           => $title,

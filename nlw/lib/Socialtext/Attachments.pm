@@ -241,7 +241,15 @@ sub _add_attachment_from_index {
     my $self = shift;
     my $attachments_ref = shift;
     my $entry = shift;
-    push @$attachments_ref, grep {
+
+    push @$attachments_ref, map {
+        {
+            %$_,
+            from => Socialtext::User->MaskEmailAddress(
+                $_->{from},
+                $self->hub->current_workspace ),
+        }
+    } grep {
         -e $self->plugin_directory . '/' . $_->{page_id} . '/' . $_->{id};
     } values %$entry;
 }

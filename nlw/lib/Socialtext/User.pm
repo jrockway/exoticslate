@@ -349,7 +349,11 @@ sub _masked_email_address {
     my $self = shift;
     my $workspace = shift;
 
-    my $email = $self->email_address;
+    return $self->MaskEmailAddress( $self->email_address, $workspace );
+}
+
+sub MaskEmailAddress {
+    my ( $class, $email, $workspace ) = @_;
 
     return $email unless $workspace->email_addresses_are_hidden;
 
@@ -1584,6 +1588,12 @@ to construct a "pretty" presentation:
 =item <zac.bir@socialtext.com>
 
 =back
+
+=head2 Socialtext::User->MaskEmailAddress($email_address, $workspace)
+
+If appropriate for C<$workspace> (based on the C<email_addresses_are_hidden>
+workspace configuration setting), return a masked version of the given email
+address.  Otherwise return the email address unaltered.
 
 =head2 Socialtext::User->All(PARAMS)
 

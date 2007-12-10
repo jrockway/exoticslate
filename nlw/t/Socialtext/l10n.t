@@ -2,13 +2,13 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::Socialtext tests => 10;
+use Test::Socialtext tests => 7;
 use Socialtext::AppConfig;
 
 fixtures('admin_no_pages');
 
 BEGIN {
-    use_ok 'Socialtext::l10n', qw(loc loc_lang valid_code system_locale best_locale);
+    use_ok 'Socialtext::l10n', qw(loc loc_lang best_locale system_locale);
 }
 
 set_system_locale('en');
@@ -21,12 +21,6 @@ Default_to_english: {
 Test_locale: {
     loc_lang('zz');
     is loc('Welcome, [_1].', 'user'), 'w3lC0M3, user.';
-}
-
-Valid_codes: {
-    for (qw(en ja zz zj)) {
-        ok valid_code($_), "$_ is valid";
-    }
 }
 
 System_locale: {
@@ -47,10 +41,10 @@ exit;
 AutoBlockQuoting: {
     is(
         loc(
-            'Foo [_2] ~[cow love] [quant,_1,foo] [_1] [*,_4,blah][food][sofa]~~~~~[lick]~[love dude][_3]~[squared]man ~~~~~~[eek] [_1]',
+            'Foo [_2] ~[cow love] [quant,_4,foo,foos] [_1] [*,_4,blah][food][sofa]~~~~~[lick]~[love dude][_3]~[squared]man ~~~~~~[eek] [_1]',
             "aaa", "bbb", "ccc", 15
         ),
-        "Foo bbb [cow love] 0 foos aaa 15 blahs[food][sofa]~~[lick][love dude]ccc[squared]man ~~~[eek] aaa",
+        "Foo bbb [cow love] 15 foos aaa 15 blahs[food][sofa]~~[lick][love dude]ccc[squared]man ~~~[eek] aaa",
         "Ensure that non-variable square brackets are quoted away."
     );
 }

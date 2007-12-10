@@ -11,7 +11,8 @@ use Socialtext::User;
 use Socialtext::String;
 use Socialtext::TT2::Renderer;
 use Socialtext::BrowserDetect ();
-use Socialtext::l10n qw/loc system_locale available_locales/;
+use Socialtext::l10n qw/loc system_locale/;
+use Socialtext::Locales qw/available_locales/;
 use JSON;
 use Apache::Cookie;
 

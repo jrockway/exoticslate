@@ -4,7 +4,8 @@ use strict;
 use warnings;
 
 use base 'Socialtext::Plugin';
-use Socialtext::l10n qw( loc loc_lang valid_code );
+use Socialtext::l10n qw( loc loc_lang );
+use Socialtext::Locales qw( valid_code );
 
 use Class::Field qw( const field );
 use Socialtext::Exceptions qw( data_validation_error );

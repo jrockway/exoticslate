@@ -51,6 +51,7 @@ sub handler ($$) {
             redirect_to    => $self->{args}{redirect_to},
             static_path    => Socialtext::Helpers::static_path(),
             st_version     => $Socialtext::VERSION,
+            support_address => Socialtext::AppConfig->support_address,
             %$saved_args,
         };
 

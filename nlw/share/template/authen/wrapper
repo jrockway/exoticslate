@@ -36,7 +36,8 @@
 
     <div class="pane">
     <img id="logo" src="/static/2.11.6.1/images/logo-bar-18.gif" alt="logo"/>
-    <div id="support_link"><a href="mailto:root@talc.socialtext.net">root@talc.socialtext.net</a></div>
+
+    <div id="support_link"><a href="mailto:[% support_address | html %]">[% support_address | html %]</a></div>
  
     [% INCLUDE errors_and_messages %]
     [% content %]

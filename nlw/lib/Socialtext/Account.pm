@@ -63,11 +63,12 @@ sub users {
 sub user_count {
     my $self = shift;
 
-    my $sth = sql_execute(
-        'SELECT count(distinct("UserWorkspaceRole".user_id))'
-        . ' FROM "Workspace", "UserWorkspaceRole"'
-        . ' WHERE "Workspace".account_id=?',
-        $self->account_id );
+    my $sth = sql_execute(<<EOT, $self->account_id);                            
+SELECT count(distinct("UserWorkspaceRole".user_id))                             
+  FROM "Workspace" INNER JOIN "UserWorkspaceRole"                               
+    ON ("Workspace".workspace_id = "UserWorkspaceRole".workspace_id)            
+  WHERE "Workspace".account_id=?                                                
+EOT
 
     return $sth->fetchall_arrayref->[0][0];
 }

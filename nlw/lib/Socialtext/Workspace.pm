@@ -1689,6 +1689,7 @@ sub _WorkspaceCursor {
     Readonly my $spec => {
         %LimitAndSortSpec,
         name => SCALAR_TYPE,
+        case_insensitive => SCALAR_TYPE( default => 0),
     };
     sub ByName {
         my $class = shift;
@@ -1697,29 +1698,30 @@ sub _WorkspaceCursor {
         # We're supposed to default to DESCending if we're creation_datetime.
         $p{sort_order} ||= $p{order_by} eq 'creation_datetime' ? 'DESC' : 'ASC';
 
+        my $op = $p{case_insensitive} ? 'ILIKE' : 'LIKE';
         Readonly my %SQL => (
             name => 'SELECT workspace_id'
                 . ' FROM "Workspace"'
-                . ' WHERE name LIKE ?'
+                . " WHERE name $op ?"
                 . " ORDER BY name $p{sort_order}"
                 . ' LIMIT ? OFFSET ?',
             creation_datetime => 'SELECT workspace_id'
                 . ' FROM "Workspace"'
-                . ' WHERE name LIKE ?'
+                . " WHERE name $op ?"
                 . " ORDER BY creation_datetime $p{sort_order},"
                 . ' name ASC'
                 . ' LIMIT ? OFFSET ?',
             account_name => 'SELECT "Workspace".workspace_id'
                 . ' FROM "Workspace", "Account"'
                 . ' WHERE "Workspace".account_id = "Account".account_id'
-                . ' AND "Workspace".name LIKE ?'
+                . " AND \"Workspace\".name $op ?"
                 . " ORDER BY \"Account\".name $p{sort_order},"
                 . ' "Workspace".name ASC'
                 . ' LIMIT ? OFFSET ?',
             creator => 'SELECT workspace_id'
                 . ' FROM "Workspace", "UserId"'
                 . ' WHERE created_by_user_id=system_unique_id'
-                . ' AND "Workspace".name LIKE ?'
+                . " AND \"Workspace\".name $op ?"
                 . " ORDER BY driver_username $p{sort_order}, name ASC"
                 . ' LIMIT ? OFFSET ?',
             user_count => 'SELECT "Workspace".workspace_id,'
@@ -1727,7 +1729,7 @@ sub _WorkspaceCursor {
                 . ' FROM "Workspace"'
                 . ' LEFT OUTER JOIN "UserWorkspaceRole"'
                 . ' ON "Workspace".workspace_id = "UserWorkspaceRole".workspace_id'
-                . ' WHERE name LIKE ?'
+                . " WHERE name $op ?"
                 . ' GROUP BY "Workspace".workspace_id, "Workspace".name'
                 . " ORDER BY user_count $p{sort_order}, \"Workspace\".name ASC"
                 . ' LIMIT ? OFFSET ?',
@@ -1744,15 +1746,19 @@ sub _WorkspaceCursor {
 }
 
 {
-    Readonly my $spec => { name => SCALAR_TYPE( regex => qr/\S/ ) };
+    Readonly my $spec => { 
+        name => SCALAR_TYPE( regex => qr/\S/ ),
+        case_insensitive => SCALAR_TYPE( default => 0),
+    };
     sub CountByName {
         my $class = shift;
         my %p = validate( @_, $spec );
 
         my $ws_table = Socialtext::Schema->Load()->table('Workspace');
 
+        my $op = $p{case_insensitive} ? 'ILIKE' : 'LIKE';
         return $ws_table->row_count(
-            where => [ $ws_table->column('name'), 'LIKE', '%' . $p{name} . '%' ],
+            where => [ $ws_table->column('name'), $op, '%' . $p{name} . '%' ],
         );
     }
 }

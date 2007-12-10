@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 24;
+use Test::Socialtext tests => 26;
 fixtures( 'populated_rdbms' );
 #use Test::Socialtext tests => 24, fixtures => ['admin_no_pages'];
 
@@ -176,6 +176,14 @@ use Socialtext::Workspace;
 
     is( Socialtext::Workspace->CountByName( name => '1' ), 3,
         'Three workspaces match "%1%"' );
+
+    Case_insensitivity: {
+        is( Socialtext::Workspace->CountByName( name => 'nUmBeR' ), 0,
+            'Zero workspaces match "%nUmBeR%" case-sensitive' );
+
+        is( Socialtext::Workspace->CountByName( name => 'nUmBeR', case_insensitive => 1 ), 1,
+            'One workspaces match "%nUmBeR%" case-insensitive' );
+    }
 
     my $workspaces = Socialtext::Workspace->ByName( name => '1' );
     is_deeply(

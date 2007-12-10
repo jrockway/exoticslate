@@ -2,6 +2,32 @@ Change log for Socialtext Open
 
 2.18.X
 
+Release notes, 2.18.1.0  Dec 2007
+
+  [BUGS]
+
+  {bz: 342} Fixes a bug where a workspace with deleted ldap users could not be backed up and restored.
+
+  {rt: 27334} Bad parameters passed to RTF export would cause an app error.
+
+  Removed file name globbing when building CSS links when displaying pages.  We are now stricter about what CSS files get included.
+
+  {bz: 127} Fixed bug where clicking on an included page called "Foo Bar" brings you to an edit form where the title is set to "Foo Bar" rather than "foo_bar". Also, included pages which do not exist are now styled the same as other page links to non-existing pages.
+
+  fix-500-page: When we started generating the 500 pages using genconfig, they started getting a bunch of gunk on the top of the page. This release fixes genconfig to not stick that header there.
+
+  Remove dependency on external modules from the configure script due to localization.
+
+  {bz: 335} When we generate a list of attachments to fulfill the attachments_listall view, properly defer to workspace settings to determine if we should obscure email addresses.
+
+  {bz: 331} The login, forgot password and register screens would all display a hard coded mailto link to
+root@talc.socialtext.net. This was bogus and an artifact of a previous refactoring.
+Now the already configured support_address email address is being used.
+
+  {rt: 26987} Modified HitCounterPlugin.pm to validate page_id input and avoid template errors (due to render_screen not having a template set).  This was generating app errors.
+
+
+  
 Release notes, 2.18.0.0  Dec 2007
 
   [FEATURES]

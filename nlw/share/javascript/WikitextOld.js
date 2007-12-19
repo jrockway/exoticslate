@@ -1601,7 +1601,7 @@ for (var ii in proto.markupRules) {
 }
 
 proto.canonicalText = function() {
-    var wikitext = Wikiwyg.Wikitext.prototype.canonicalText.call(this);
+    var wikitext = Wikiwyg.WikitextOld.prototype.canonicalText.call(this);
     return this.convert_tsv_sections(wikitext);
 }
 
@@ -1613,7 +1613,7 @@ proto.convert_html_to_wikitext = function(html) {
     html = html.replace(
         /<DIV class=wiki>\r?\n<P><\/P><BR>([\s\S]*?)<\/DIV>/g, '$1<BR>'
     );
-    return Wikiwyg.Wikitext.prototype.convert_html_to_wikitext.call(this, html);
+    return Wikiwyg.WikitextOld.prototype.convert_html_to_wikitext.call(this, html);
 }
 
 proto.convert_tsv_sections = function(text) {
@@ -1636,7 +1636,7 @@ proto.detab_table = function(text) {
 
 proto.enableThis = function() {
     this.wikiwyg.set_edit_tips_span_display('inline');
-    Wikiwyg.Wikitext.prototype.enableThis.call(this);
+    Wikiwyg.WikitextOld.prototype.enableThis.call(this);
     if (Element.visible('st-page-boxes')) {
         Element.setStyle('st-page-maincontent', {marginRight: '240px'});
     }
@@ -1644,7 +1644,7 @@ proto.enableThis = function() {
 
 proto.toHtml = function(func) {
     this.wikiwyg.current_wikitext = this.canonicalText();
-    Wikiwyg.Wikitext.prototype.toHtml.call(this, func);
+    Wikiwyg.WikitextOld.prototype.toHtml.call(this, func);
 }
 
 proto.fromHtml = function(html) {
@@ -1655,21 +1655,21 @@ proto.fromHtml = function(html) {
             return this.setTextArea($('st-raw-wikitext-textarea').value);
         }
     }
-    Wikiwyg.Wikitext.prototype.fromHtml.call(this, html);
+    Wikiwyg.WikitextOld.prototype.fromHtml.call(this, html);
 }
 
 proto.disableThis = function() {
     this.wikiwyg.set_edit_tips_span_display('none');
-    Wikiwyg.Wikitext.prototype.disableThis.call(this);
+    Wikiwyg.WikitextOld.prototype.disableThis.call(this);
 }
 
 proto.setHeightOfEditor = function() {
     this.textarea.style.height = this.get_edit_height() + 'px';
 }
 
-proto.do_www = Wikiwyg.Wikitext.make_do('www');
-proto.do_attach = Wikiwyg.Wikitext.make_do('attach');
-proto.do_image = Wikiwyg.Wikitext.make_do('image');
+proto.do_www = Wikiwyg.WikitextOld.make_do('www');
+proto.do_attach = Wikiwyg.WikitextOld.make_do('attach');
+proto.do_image = Wikiwyg.WikitextOld.make_do('image');
 
 proto.convertWikitextToHtml = function(wikitext, func) {
     var uri = location.pathname;
@@ -1713,19 +1713,19 @@ proto.format_a = function(element) {
     if (this.is_opaque(element))
         return this.handle_wafl_block(element);
 
-    Wikiwyg.Wikitext.prototype.format_a.call(this, element);
+    Wikiwyg.WikitextOld.prototype.format_a.call(this, element);
 }
 
 proto.format_div = function(element) {
     if (this.is_opaque(element))
         return this.handle_wafl_block(element);
 
-    Wikiwyg.Wikitext.prototype.format_div.call(this, element);
+    Wikiwyg.WikitextOld.prototype.format_div.call(this, element);
 }
 
 proto.format_span = function(element) {
     this.treat_include_wafl(element);
-    Wikiwyg.Wikitext.prototype.format_span.call(this, element);
+    Wikiwyg.WikitextOld.prototype.format_span.call(this, element);
 }
 
 proto.format_table = function(element) {
@@ -1932,7 +1932,7 @@ proto = eval(WW_ADVANCED_MODE).prototype;
 proto.format_img = function(element) {
     var widget = element.getAttribute('widget');
     if (! widget) {
-        return Wikiwyg.Wikitext.prototype.format_img.call(this, element);
+        return Wikiwyg.WikitextOld.prototype.format_img.call(this, element);
     }
 
     if ( widget.match(/^\{include/) ) {
@@ -1952,14 +1952,14 @@ proto.format_a = function(element) {
     if (this.is_opaque(element))
         return this.handle_wafl_block(element);
 
-    Wikiwyg.Wikitext.prototype.format_a.call(this, element);
+    Wikiwyg.WikitextOld.prototype.format_a.call(this, element);
 }
 
 proto.format_div = function(element) {
     if (this.is_opaque(element))
         return this.handle_wafl_block(element);
 
-    Wikiwyg.Wikitext.prototype.format_div.call(this, element);
+    Wikiwyg.WikitextOld.prototype.format_div.call(this, element);
 }
 
 proto.destroyPhraseMarkup = function(element) {

@@ -230,8 +230,10 @@ function setup_wikiwyg() {
         try {
             if (ww.contentIsModified()) {
                 // If it's not confirmed somewhere else, do it right here.
-                if (ww.confirmed != true && !confirm(loc("If you click 'OK', all edit changes will be lost!")))
+                if (ww.confirmed != true && !confirm(loc("Are you sure you want to Cancel?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay in the editor.")))
                     return false;
+                else
+                    ww.confirmed = true;
             }
             if (Socialtext.new_page) {
                 window.location = '?action=homepage';
@@ -843,7 +845,7 @@ proto.saveChanges = function() {
 
 proto.confirmLinkFromEdit = function() {
     if (wikiwyg.contentIsModified()) {
-        var response = confirm(loc("You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to stay on the current page."));
+        var response = confirm(loc("Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page."));
 
         // wikiwyg.confirmed is for the situations when multiple confirmations
         // are considered. It store the value of this confirmation for
@@ -862,23 +864,14 @@ proto.enableLinkConfirmations = function() {
     this.originalWikitext = Wikiwyg.is_safari
         ? this.mode_objects[WW_ADVANCED_MODE].getTextArea()
         : this.get_wikitext_from_html(this.div.innerHTML);
-    Event.stopObserving(window, 'unload', Event.unloadCache, false);
-    window.onunload = function() {
-        if (wikiwyg.contentIsModified()) {
-            var the_question = [
-                loc("You have unsaved changes. Are you sure you want to navigate away from this page? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes and stay on the current page."),
-                loc("You have unsaved changes. Do you want to save those changes? If you click 'OK', all edit changes will be lost. Click 'Cancel' if you want to save changes before navigating away from this page.")
-            ];
-            if (!confirm(the_question[Wikiwyg.is_safari ? 1 : 0])) {
-                wikiwyg.lastChance = true;
-                  Event.unloadCache();
-                wikiwyg.saveButtonHandler();
-            }
-        }
-        Event.unloadCache();
-        return true;
-    };
 
+    window.onbeforeunload = function(ev) {
+        if (!ev) ev = window.event;
+        if ( wikiwyg.confirmed != true && wikiwyg.contentIsModified() ) {
+            ev.returnValue = loc("You have unsaved changes.");
+        }
+    }
+ 
     var links = document.getElementsByTagName('a');
     for (var i = 0; i < links.length; i++) {
         if (links[i].id == 'st-cancel-button-link') continue;
@@ -898,7 +891,7 @@ proto.enableLinkConfirmations = function() {
 
 proto.disableLinkConfirmations = function() {
     this.originalWikitext = null;
-    window.onunload = null;
+    window.onbeforeunload = null;
 
     var links = document.getElementsByTagName('a');
     for (var i = 0; i < links.length; i++) {

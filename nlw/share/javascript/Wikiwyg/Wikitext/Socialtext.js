@@ -877,6 +877,7 @@ proto.check_style_for_attribute = function(style, attribute) {
 }
 
 proto.squish_style_object_into_string = function(style) {
+    if (! style) return;
     if ((style.constructor+'').match('String'))
         return style;
     var interesting_attributes = [
@@ -1228,6 +1229,8 @@ proto.walk = function(elem) {
         }
 
         var method = 'format_' + part.nodeName.toLowerCase();
+        if (method != 'format_blockquote' && part.is_indented)
+            method = 'format_indent';
         window.XXX_method = method = method.replace(/#/, '');
         try {
             var text = this[method](part);
@@ -1290,6 +1293,14 @@ proto.assert_trailing_space = function(part, text) {
 }
 
 proto.no_descend = function(elem) {
+    if (elem.nodeName == 'BLOCKQUOTE')
+        elem.is_indented = true;
+    else if (elem.nodeName.match(/^(P|DIV)$/)) {
+        if (elem.style.marginLeft.match(/^(\d+)px/)) {
+            elem.is_indented = Number(RegExp.$1);
+        }
+    }
+
     return Boolean(
         (
             elem.nodeName.match(/^(DIV|SPAN)$/) && 
@@ -1388,10 +1399,11 @@ proto.handle_wafl_block = function(elem) {
 }
 
 proto.format_p = function(elem) {
-    if (elem.className == 'padding') {
+    if (elem.className == 'padding' && ! this.wikitext) {
         if (Wikiwyg.is_ie) return '\n';
         return;
     }
+
     var text = elem.wikitext;
     elem.top_level_block = true;
     if (!text) {
@@ -1464,21 +1476,34 @@ proto.format_span = function(elem) {
     ) return this.handle_nlw_phrase(elem);
 
     var style = this.squish_style_object_into_string(elem.getAttribute('style'));
+    elem.wikitext = elem.wikitext.replace(/\n/g, ' ').replace(/  */g, ' ');
     if (!style)
         return elem.wikitext;
     if (style.match(/font-weight: bold;/))
-        return this.format_b(elem);
-    else if (style.match(/font-style: italic;/))
-        return this.format_i(elem);
-    else if (style.match(/text-decoration: line-through;/))
-        return this.format_strike(elem);
-    else 
-        return elem.wikitext.replace(/\n/g, ' ').replace(/  */g, ' ');
+        elem.wikitext = this.format_b(elem);
+    if (style.match(/font-style: italic;/))
+        elem.wikitext = this.format_i(elem);
+    if (style.match(/text-decoration: line-through;/))
+        elem.wikitext = this.format_strike(elem);
+    return elem.wikitext;
+}
+
+proto.format_indent = function(elem) {
+    var px = elem.is_indented;
+    while (px > 0) {
+        elem.wikitext = this.format_blockquote(elem);
+        px -= 40;
+    }
+    return elem.wikitext;
 }
 
 proto.format_blockquote = function(elem) {
-    if (elem.parentNode.nodeName != 'BLOCKQUOTE')
-        elem.top_level_block = true;
+    if ( ! 
+        (
+            elem.parentNode.is_indented || 
+            (elem.previousSibling && elem.previousSibling.is_indented)
+        )
+    ) elem.top_level_block = true;
     else {
         this.wikitext = this.wikitext.replace(/ $/,'');
         if (this.wikitext && ! this.wikitext.match(/\n$/))
@@ -1492,12 +1517,14 @@ proto.format_blockquote = function(elem) {
 }
 
 proto.format_li = function(elem) {
-    var text =
+    return '\x07' +
         elem.wikitext.
             replace(/^\xa0$/, '').
-            replace(/ *$/, '').
-            replace(/^\s*(.*)[\s\S]*/, '\x07$1\n');
-    return text;
+            replace(/^\s*/, '').
+            replace(/\n+/g, ' ').
+            replace(/  +/, ' ').
+            replace(/ *$/, '')
+            + '\n';
 }
 
 proto.format_ul = function(elem) {
@@ -1553,6 +1580,13 @@ proto.format_td = function(elem) {
     ) {
         elem.wikitext = elem.wikitext.replace(/\n$/, ' ');
         return '| ' + elem.wikitext;
+    }
+    else {
+        var style = this.squish_style_object_into_string(
+            elem.getAttribute('style')
+        );
+        if (style && style.match(/font-weight: bold;/))
+            elem.wikitext = this.format_b(elem);
     }
 
     return '| ' + elem.wikitext + ' ';
@@ -1741,8 +1775,16 @@ proto.format_br = function(elem) {
 }
 
 proto.format_hr = function(elem) {
+    if (this.has_parent(elem, 'LI')) return '';
     elem.top_level_block = true;
     return '----\n';
+}
+
+proto.has_parent = function(elem, name) {
+    while (elem = elem.parentNode) {
+        if (elem.nodeName == name) return true;
+    }
+    return false;
 }
 
 // Build trivial bound_phrase formatters

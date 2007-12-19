@@ -329,18 +329,6 @@ proto.enableThis = function() {
     this.clear_inner_html();
 }
 
-proto.toHtml = function(func) {
-    var html = this.get_inner_html();
-    var br = "<br class=\"p\"/>";
-
-    html = this.remove_padding_material(html);
-    html = html
-        .replace(/\n*<p>\n?/ig, "")
-        .replace(/<\/p>/ig, br)
-
-    func(html);
-}
-
 proto.remove_padding_material = function(html) {
     var dom = document.createElement("div");
     dom.innerHTML = html;
@@ -412,11 +400,7 @@ proto.insert_html = function(html) {
     }
 }
 
-proto.get_inner_html = function( cb ) {
-    if ( cb ) {
-        this.get_inner_html_async( cb );
-        return;
-    }
+proto.get_inner_html = function() {
     return this.get_editable_div().innerHTML;
 }
 
@@ -437,20 +421,6 @@ proto.get_editable_div = function () {
         setTimeout(function () { self._editable_div.focus() }, 500);
     }
     return this._editable_div;
-}
-
-proto.get_inner_html_async = function( cb ) {
-    var self = this;
-    var doc = this.get_edit_document();
-    if ( doc.readyState == 'loading' ) {
-        setTimeout( function() {
-            self.get_inner_html(cb);
-        }, 50);
-    } else {
-        var html = this.get_editable_div().innerHTML;
-        cb(html);
-        return html;
-    }
 }
 
 proto.set_inner_html = function(html) {

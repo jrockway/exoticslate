@@ -4,12 +4,14 @@ use strict;
 use warnings;
 
 use DateTime;
-use Test::Socialtext tests => 33;
+use Test::Socialtext tests => 40;
 fixtures( 'admin' );
 
 BEGIN {
     use_ok( 'Socialtext::Page' );
 }
+
+use Socialtext::l10n qw(loc);
 
 # XXX: This test doesn't test enough, it was put in place as a
 # debugging aid, but should actuall test for real
@@ -219,6 +221,25 @@ MAX_ID_LENGTH: {
     };
     like( $@, qr/Page title is too long/,
           'get the expected exception when the page title is too long - with utf8 (> 255 bytes)' );
+}
+
+BAD_PAGE_TITLE: {
+    my $class      = 'Socialtext::Page';
+    my @bad_titles = (
+        "Untitled Page",
+        "Untitled ///////////////// Page",
+        "&&&& UNtiTleD ///////////////// PaGe",
+        "&&&& UNtiTleD ///////////////// PaGe *#\$*@!#*@!#\$*",
+        "Untitled_Page",
+        "",
+    );
+    for my $page (@bad_titles) {
+        ok(
+            $class->is_bad_page_title("Untitled Page"),
+            "Invalid title: \"$page\""
+        );
+    }
+    ok( !$class->is_bad_page_title("Cows Are Good"), "OK page title" );
 }
 
 __DATA__

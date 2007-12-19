@@ -4,7 +4,7 @@
 use warnings;
 use strict;
 
-use Test::Socialtext tests => 32;
+use Test::Socialtext tests => 39;
 fixtures( 'admin', 'foobar' );
 
 my $admin = new_hub('admin');
@@ -252,4 +252,23 @@ my $foobar = new_hub('foobar');
         'correct id with attachment for source');
     is( $attachments_two->[0]->{'page_id'}, 'intrawiki_copy_six',
         'correct id with attachment for dest');
+}
+
+BAD_PAGE_TITLE: {
+    my $class      = 'Socialtext::DuplicatePagePlugin';
+    my @bad_titles = (
+        "Untitled Page",
+        "Untitled ///////////////// Page",
+        "&&&& UNtiTleD ///////////////// PaGe",
+        "&&&& UNtiTleD ///////////////// PaGe *#\$*@!#*@!#\$*",
+        "Untitled_Page",
+        "",
+    );
+    for my $page (@bad_titles) {
+        ok(
+            $class->_page_title_bad("Untitled Page"),
+            "Invalid title: \"$page\""
+        );
+    }
+    ok( !$class->_page_title_bad("Cows Are Good"), "OK page title" );
 }

@@ -173,13 +173,9 @@ sub _duplicate {
     );
 }
 
-# trap titles which are not considered okay
-# for now that's just empty ones
 sub _page_title_bad {
-    my $self = shift;
-    my $title = shift;
-
-    return ($title =~ /^\s*$/);
+    my ( $self, $title ) = @_;
+    return Socialtext::Page->is_bad_page_title($title);
 }
 
 package Socialtext::DuplicatePage::CGI;

@@ -160,6 +160,7 @@ sub create {
             creator    => USER_TYPE,
         }
     );
+
     # FIXME: it's possible for this call to return undef and
     # we dont' trap it.
     my $page = $self->hub->pages->new_from_name($args{title});
@@ -1580,5 +1581,18 @@ sub active {
     return $self->exists && not $self->deleted;
 }
 
+sub is_bad_page_title {
+    my ( $class, $title ) = @_;
+    $title = defined($title) ? $title : "";
+
+    # No empty page titles.
+    return 1 if $title =~ /^\s*$/;
+
+    # Can't have a page named "Untitled Page"
+    my $untitled_page = $class->name_to_id( loc("Untitled Page") );
+    return 1 if $class->name_to_id($title) eq $untitled_page;
+
+    return 0;
+}
 
 1;

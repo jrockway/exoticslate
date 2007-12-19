@@ -783,47 +783,12 @@ proto.saveChanges = function() {
             return true;
         }
 
-        // Safari 2.0.4 crashes while submitting form in unload handler.
-        // Use XHR here to prevent it from crashing.
-        if (Wikiwyg.is_safari && wikiwyg.lastChance) {
-            saver = function() {
-                var uri = Page.ContentUri();
-                var post = new Ajax.Request (
-                        uri,
-                        {
-                            method: 'post',
-                            parameters: $H({
-                                action: 'edit_content',
-                                page_name: $('st-page-editing-pagename').value,
-                                revision_id: $('st-page-editing-revisionid').value,
-                                page_body: wikitext,
-                                caller_action: ''
-                                }).toQueryString(),
-                            asynchronous: false
-                        }
-                );
-            }
-        }
-
-        if (wikiwyg.lastChance) {
-            // You can't use a callback from within onunload!!
-            return saver();
-        }
-        else {
-            // This timeout is so that safari's text box is ready
-            setTimeout(function() { return saver() }, 1);
-        }
+        // This timeout is so that safari's text box is ready
+        setTimeout(function() { return saver() }, 1);
 
         return true;
     }
 
-    // This fixes {rt: 15680} - Navigate away from advanced mode.
-    if (wikiwyg.lastChance &&
-        this.current_mode.classname == WW_ADVANCED_MODE
-       ) {
-        submit_changes(this.current_mode.toWikitext());
-        return;
-    }
     // Safari just saves the wikitext, with no conversion.
     if (Wikiwyg.is_safari) {
         var wikitext_mode = this.modeByName(WW_ADVANCED_MODE);
@@ -865,10 +830,16 @@ proto.enableLinkConfirmations = function() {
         ? this.mode_objects[WW_ADVANCED_MODE].getTextArea()
         : this.get_wikitext_from_html(this.div.innerHTML);
 
+    wikiwyg.confirmed = false;
+
     window.onbeforeunload = function(ev) {
+        var msg = loc("You have unsaved changes.");
         if (!ev) ev = window.event;
         if ( wikiwyg.confirmed != true && wikiwyg.contentIsModified() ) {
-            ev.returnValue = loc("You have unsaved changes.");
+            if (Wikiwyg.is_safari) {
+                return msg;
+            }
+            ev.returnValue = msg;
         }
     }
  

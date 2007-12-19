@@ -2,13 +2,7 @@
 
 var t = new Test.Wikiwyg();
 
-var filters = {
-    wikitext: ['template_vars']
-};
-
 t.plan(7);
-
-t.filters(filters);
 
 t.run_roundtrip('wikitext');
 

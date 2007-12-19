@@ -4,7 +4,6 @@ t.plan(5);
 
 t.run_roundtrip('wikitext');
 
-
 /* Test
 === Labeled file widget.
 --- wikitext
@@ -27,4 +26,3 @@ t.run_roundtrip('wikitext');
 "Weblog Foo"{weblog: foo}
 
 */
-

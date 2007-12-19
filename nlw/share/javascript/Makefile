@@ -38,6 +38,7 @@ ALL_JS_SOURCE_FILES= \
 		pagetags.js \
 		pageattachments.js \
 		pageview.js \
+		$(EXTERNAL_JAVASCRIPT)/YAML/lib/YAML.js \
 		attachqueue.js \
 		StTemplateField.js \
 		tagqueue.js \
@@ -54,19 +55,20 @@ ALL_JS_SOURCE_FILES= \
 		PageNameSupportLookahead.js \
 		PageSectionLookahead.js \
 		PageAttachmentLookahead.js \
-        settings.js \
+        	settings.js \
 		startup.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Toolbar.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Preview.js \
-		$(WIKIWYG_PATH)/lib/Wikiwyg/Wikitext.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Wysiwyg.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/HTML.js \
 		Wikiwyg/Socialtext.js \
 		Wikiwyg/MessageCenter.js \
 		Widgets.js \
 		Wikiwyg/Widgets.js \
+		Wikiwyg/Wikitext/Socialtext.js \
 		Wikiwyg/DataValidator.js \
+		Debug.js \
 
 all: $(COMBINED_FILE_GZIP) Selection.htc Cyberbit.ttf
 

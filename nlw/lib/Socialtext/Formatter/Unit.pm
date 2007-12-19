@@ -270,7 +270,7 @@ use Class::Field qw( const );
 
 const formatter_id    => 'table';
 const contains_blocks => [qw(tr)];
-const pattern_block   => qr/((^\|.*?\|\n)+)/sm;
+const pattern_block   => qr/(((^\|.*\| \n(?=\|))|(^\|.*\|  +\n)|(?s:^\|.*?\|\n))+)/m;
 
 # XXX placing CSS here is sort of nasty but it gets rss and printer friendly
 # link to style in rss is hard while we are using <link>, should consider
@@ -287,7 +287,7 @@ use Class::Field qw( const );
 
 const formatter_id    => 'tr';
 const contains_blocks => [qw(td)];
-const pattern_block   => qr/(^\|.*?\|\n)/sm;
+const pattern_block   => qr/(^\|.*?\|(?:\n| \n(?=\|)|  +\n))/sm;
 const html_start      => "<tr>\n";
 const html_end        => "</tr>\n";
 
@@ -314,7 +314,7 @@ sub match {
     my $self = shift;
     my $text = shift;
 
-    return unless $text =~ /(\|(\s*.*?\s*)\|)(.*)/sm;
+    return unless $text =~ /(\|(\s*.*?\s*)\| *)(.*)/sm;
 
     $self->start_offset( $-[1] );
     $self->end_offset( $3 eq "\n" ? $+[3] : $+[2] );

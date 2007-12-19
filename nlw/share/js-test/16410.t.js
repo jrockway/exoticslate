@@ -1,13 +1,10 @@
 var t = new Test.Wikiwyg();
-t.plan(1);
+t.plan(2);
 
-if (Wikiwyg.is_safari) {
-    t.skipAll("testing roundtrip on safari");
-}
-else {
-    t.run_roundtrip('wikitext');
-}
+t.run_roundtrip('wikitext');
 
+t.simple_mode_html = false;
+t.run_roundtrip('wikitext');
 
 /* Test
 === space before a wafl phrases are kept
@@ -15,4 +12,3 @@ else {
 foo {image: bar.jpg}
 
 */
-

@@ -2,6 +2,7 @@
 package Socialtext::WikiwygPlugin;
 use strict;
 use warnings;
+no warnings 'redefine';
 
 our $VERSION = '0.10';
 
@@ -19,6 +20,7 @@ use Imager;
 use Digest::MD5;
 use Encode;
 use YAML;
+use Socialtext::Resting;
 
 sub class_id { 'wikiwyg' }
 const cgi_class => 'Socialtext::Wikiwyg::CGI';
@@ -54,6 +56,9 @@ sub register {
     $registry->add(action => 'wikiwyg_test_runner');
     $registry->add(action => 'wikiwyg_all_page_ids');
     $registry->add(action => 'wikiwyg_start_validation');
+    $registry->add(action => 'wikiwyg_dff_rest_test_pages');
+    $registry->add(action => 'wikiwyg_dff_get_page');
+    $registry->add(action => 'wikiwyg_dff_diff');
     $registry->add(preference => $self->wikiwyg_double);
     $registry->add(wafl => wikiwyg_formatting_test =>
                    'Socialtext::Wikiwyg::FormattingTest');
@@ -61,6 +66,63 @@ sub register {
                    'Socialtext::Wikiwyg::FormattingTestRunAll');
     $registry->add(wafl => wikiwyg_data_validator =>
                    'Socialtext::Wikiwyg::DataValidator');
+}
+
+sub wikiwyg_dff_diff {
+    my $self = shift;
+    my $file1 =
+        Socialtext::AppConfig->code_base . '/js-test/depth/wikitext1';
+    my $file2 =
+        Socialtext::AppConfig->code_base . '/js-test/depth/wikitext2';
+    my $diff =
+        Socialtext::AppConfig->code_base . '/js-test/depth/wikitext-diff';
+    open F1, "> $file1" or die;
+    open F2, "> $file2" or die;
+    print F1 $self->cgi->text1;
+    print F2 $self->cgi->text2;
+    system("/usr/bin/diff -u $file1 $file2 > $diff");
+    open D, $diff or die;
+    my $text = do { local $/; <D> };
+    close F1;
+    close F2;
+    close D;
+    return $text;
+}
+
+sub wikiwyg_dff_rest_test_pages {
+    my $self = shift;
+    my $rester = $self->dff_get_rester;
+    $rester->accept('application/json');
+    $rester->count($self->cgi->dff_count);
+    $rester->order('newest');
+    return $rester->get_pages;
+}
+
+sub wikiwyg_dff_get_page {
+    my $self = shift;
+    my $rester = $self->dff_get_rester;
+    $rester->accept('text/x.socialtext-wiki');
+    my $wikitext = $rester->get_page($self->cgi->page_id);
+    # run it again
+    return $wikitext;
+}
+
+sub dff_get_rester {
+    my $self = shift;
+    my $dff_config =
+        Socialtext::AppConfig->code_base . '/js-test/depth/dff.yaml';
+   
+    my $server = $self->cgi->dff_server;
+    $server =~ s/([\w\-]+)\/?$// or die;
+    my $workspace = $1;
+    my $config = YAML::LoadFile($dff_config);
+    my $rester = Socialtext::Resting->new(
+        username => ($config->{$server}{username} || $config, $server),
+        password => ($config->{$server}{password} || $config, $server),
+        server   => $server,
+    );
+    $rester->workspace($workspace);
+    return $rester;
 }
 
 sub wikiwyg_generate_widget_image {
@@ -789,8 +851,13 @@ use Socialtext::CGI qw( cgi );
 
 cgi 'content' => '-newlines';
 cgi 'page_id';
+cgi 'dff_count';
+cgi 'dff_server';
+cgi 'url';
 cgi 'session_id';
 cgi 'widget';
 cgi 'widget_string';
+cgi 'text1';
+cgi 'text2';
 
 1;

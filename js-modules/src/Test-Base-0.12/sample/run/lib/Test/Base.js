@@ -103,7 +103,21 @@ proto.create_blocks = function() {
         var hunk = hunks[i];
         if (! hunk.match(/^===/)) continue;
         var block = this.make_block(hunk);
+        if (typeof(block.data.SKIP) != 'undefined')
+            continue;
         this.state.blocks.push(block);
+        if (typeof(block.data.LAST) != 'undefined')
+            break;
+    }
+    this.handle_only();
+}
+
+proto.handle_only = function() {
+    for (var i = 0; i < this.state.blocks.length; i++) {
+        if (typeof(this.state.blocks[i].data.ONLY) != 'undefined') {
+            this.state.blocks = [ this.state.blocks[i] ];
+            break;
+        }
     }
 }
 

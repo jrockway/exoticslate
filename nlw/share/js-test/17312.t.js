@@ -14,13 +14,7 @@ var filters = {
 
 t.filters(filters);
 
-
-if(Wikiwyg.is_safari) {
-    t.skipAll("testing roundtrip on safari");
-} else {
-    t.run_roundtrip('wikitext');
-}
-
+t.run_roundtrip('wikitext');
 
 /* Test
 === Except for this failure chunk
@@ -28,4 +22,3 @@ if(Wikiwyg.is_safari) {
 "Name of this Link"<[%THIS_URL%]?page_name>
 
 */
-

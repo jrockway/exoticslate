@@ -9,6 +9,4 @@ t.run_roundtrip('wikitext');
 --- wikitext
 * *{link: enboldenated wafl yo}*
 
-
 */
-

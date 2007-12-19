@@ -1,21 +1,12 @@
 var t = new Test.Wikiwyg();
 
-var filters = {
-    html: ['html_to_wikitext']
-};
+var filters = { html: ['html_to_wikitext'] };
 
-if (Wikiwyg.is_safari) {
-        t.skipAll("firefox tests, these are.");
-}
-else {
-    t.plan(1);
+t.safari_skip_all("Firefox tests, these are.");
 
-    t.filters(filters);
-
-    t.run_is('html', 'wikitext');
-}
-
-// t.run_roundtrip('wikitext');
+t.plan(1);
+t.filters(filters);
+t.run_is('html', 'wikitext');
 
 /* Test
 === mix many phrases
@@ -25,4 +16,3 @@ else {
 *"_More Actions_"*
 
 */
-

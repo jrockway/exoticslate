@@ -1,19 +1,12 @@
 // From https://uj-trac.socialtext.net:447/trac/ticket/232
 var t = new Test.Wikiwyg();
 
-var filters = {
-    html: ['html_to_wikitext']
-};
+var filters = { html: ['html_to_wikitext'] };
 
-if (Wikiwyg.is_safari) {
-    t.skipAll("On Safari")
-}
-else {
-    t.plan(3);
-    t.filters(filters);
-    t.run_roundtrip('wikitext');
-    t.run_is('html', 'text');
-}
+t.plan(3);
+t.filters(filters);
+t.run_roundtrip('wikitext');
+t.run_is('html', 'text');
 
 /* Test
 === uj-232 - Image urls not roundtripping in IE
@@ -35,4 +28,3 @@ http:base/images/docs/search.png
 > http:base/images/docs/search.png
 
 */
-

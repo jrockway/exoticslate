@@ -1,13 +1,17 @@
 var t = new Test.Wikiwyg();
 
-var filters = {
-    html: ['html_to_wikitext']
-};
+var filters = { html: ['html_to_wikitext'] };
 
 t.plan(3);
-t.pass('#15072: Wikiwyg: Text lines separated by blank lines can collapse into one line');
-t.filters(filters);
-t.run_is('html', 'wikitext');
+
+if ( Wikiwyg.is_safari ) {
+    t.skipAll("On Safari, we do not convert HTML to wikitext");
+}
+else {
+    t.pass('#15072: Wikiwyg: Text lines separated by blank lines can collapse into one line');
+    t.filters(filters);
+    t.run_is('html', 'wikitext');
+}
 
 /* Test
 === As the first one in the ticket description

@@ -293,17 +293,17 @@ Wikiwyg.htmlUnescape = function(escaped) {
     // thanks to Randal Schwartz for the correct solution to this one
     // (from CGI.pm, CGI::unescapeHTML())
     return escaped.replace(
-        /&(.*?);/g,
-        function(dummy,s) {
-            return s.match(/^amp$/i) ? '&' :
-                s.match(/^quot$/i) ? '"' :
-                s.match(/^gt$/i) ? '>' :
-                s.match(/^lt$/i) ? '<' :
-                s.match(/^#(\d+)$/) ?
-                    String.fromCharCode(s.replace(/#/,'')) :
-                s.match(/^#x([0-9a-f]+)$/i) ?
-                    String.fromCharCode(s.replace(/#/,'0')) :
-                s
+        /&([\w\d\#]*?);/g,
+        function(match, $1) {
+            return $1.match(/^amp$/i) ? '&' :
+                $1.match(/^quot$/i) ? '"' :
+                $1.match(/^gt$/i) ? '>' :
+                $1.match(/^lt$/i) ? '<' :
+                $1.match(/^#(\d+)$/) ?
+                    String.fromCharCode($1.replace(/#/,'')) :
+                $1.match(/^#x([0-9a-f]+)$/i) ?
+                    String.fromCharCode($1.replace(/#/,'0')) :
+                match
         }
     );
 }

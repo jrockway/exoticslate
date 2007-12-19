@@ -3,9 +3,7 @@
 
 var t = new Test.Wikiwyg();
 
-var filters = {
-    wikitext: ['template_vars']
-};
+var filters = { wikitext: ['template_vars'] };
 
 t.plan(3);
 
@@ -30,4 +28,3 @@ foo "Andy presents us with a problem"<[%BASE_URL%]/index.cgi?alester_2006_09_28#
 "hello"<http:index.cgi?ass_page>
 
 */
-

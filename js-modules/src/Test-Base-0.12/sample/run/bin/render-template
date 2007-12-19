@@ -1,10 +1,11 @@
 #!/usr/bin/perl
-
+# @COPYRIGHT@
 use strict;
 use warnings;
 use Template;
 use IO::All;
 use YAML;
+use XXX;
 
 my ($template_path, $output_path) = @ARGV;
 

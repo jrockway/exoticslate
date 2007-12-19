@@ -10,6 +10,11 @@ if (Wikiwyg.is_ie)
 if (Wikiwyg.is_safari && !Wikiwyg.is_safari3 ) 
     filters.fixed.push( function() { return this.data.fixed_safari });
 
+if (Wikiwyg.is_safari_unknown) {
+    var reason =  "ingy's webkit is not safari 2 or 3. Need to research this.";
+    t.safari_skip_all(reason);
+}
+
 t.plan(2);
 t.pass('#16155: wikiwyg: bold becomes bullet due to space insertion');
 t.filters(filters);

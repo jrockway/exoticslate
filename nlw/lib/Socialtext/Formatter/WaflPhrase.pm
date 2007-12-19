@@ -23,7 +23,7 @@ sub html_start { '<span class="nlw_phrase">'}
 sub html_end {
     my $self   = shift;
     my $widget = ''
-        . ( $self->label ? '"' . $self->label . '"' : '' ) . '{'
+        . ( $self->label ? '"' . $self->escape_wafl_dashes($self->label) . '"' : '' ) . '{'
         . $self->method
         . (
         $self->arguments

@@ -1,17 +1,13 @@
 var t = new Test.Wikiwyg();
 
-var filters = {
-    html: ['html_to_wikitext']
-};
+var filters = { html: ['html_to_wikitext'] };
 
-if (Wikiwyg.is_safari) {
-        t.skipAll("firefox tests, these are.");
-}
-else {
-    t.plan(2);
-    t.filters(filters);
-    t.run_is('html', 'wikitext');
-}
+t.ie_skip_all("firefox tests, these are.");
+t.safari_skip_all("firefox tests, these are.");
+
+t.plan(2);
+t.filters(filters);
+t.run_is('html', 'wikitext');
 
 /* Test
 === normal links
@@ -27,7 +23,7 @@ Foobar
 <a target="_blank" title="(external link)" href="http://foobar.com">A link</a><br>Foobar<br><a target="_blank" title="(external link)" href="http://foobar.com"><!-- wiki-renamed-hyperlink "A link"<http://foobar.com> --></a><br class="p"><br class="p">
 
 --- wikitext
-"A link"<http://foobar.com>
+"A link"<http://foobar.com/>
 Foobar
 
 */

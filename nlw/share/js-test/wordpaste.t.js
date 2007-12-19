@@ -6,16 +6,10 @@ var filters = {
 
 t.plan(1);
 
-if ( Wikiwyg.is_safari ) {
-    t.skipAll("On Safari, we do not convert HTML to wikitext");
-}
-else {
-    t.filters(filters);
-    t.run_is('html', 'wikitext');
-}
+t.safari_skip_all("we do not convert HTML to wikitext");
 
-
-
+t.filters(filters);
+t.run_is('html', 'wikitext');
 
 /* Test
 === Strip gunk from MSWord paste

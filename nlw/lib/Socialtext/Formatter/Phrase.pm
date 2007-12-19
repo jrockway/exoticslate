@@ -127,8 +127,9 @@ sub html {
     my $space = $self->extra_space;
     # Avoid two { or } chars in a row, it screws up xgettext.pl
     $self->hub->wikiwyg->generate_widget_image("{"."{$text}"."}");
-    return qq(<span class="nlw_phrase">$text<!-- wiki: {) . qq({$text}) . 
-           qq(} --></span>$space);
+    my $escaped_text = $text;
+    $escaped_text =~ s/-/-=/g;
+    return qq(<span class="nlw_phrase">$text<!-- wiki: {) . qq({$escaped_text}) .  qq(} --></span>$space);
 }
 
 ################################################################################

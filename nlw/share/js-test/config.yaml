@@ -11,10 +11,13 @@ import_libs:
   - ../../javascript/Cookie.js
   - ../../javascript/pageview.js
   - ../../js-modules/DOM-Events/lib/DOM/Events.js
+  - ../../javascript/JSON.js
+  - ../../js-modules/YAML/lib/YAML.js
   - ../../js-modules/Widget-Lightbox/lib/Widget/Lightbox.js
   - ../../js-modules/Wikiwyg-copy/lib/Wikiwyg.js
-  - ../../js-modules/Wikiwyg-copy/lib/Wikiwyg/Wikitext.js
   - ../../js-modules/Wikiwyg-copy/lib/Wikiwyg/Wysiwyg.js
   - ../../javascript/Wikiwyg/Socialtext.js
   - ../../javascript/Widgets.js 
   - ../../javascript/Wikiwyg/Widgets.js
+  - ../../javascript/Wikiwyg/Wikitext/Socialtext.js
+  - ../../javascript/Debug.js

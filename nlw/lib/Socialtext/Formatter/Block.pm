@@ -67,6 +67,7 @@ sub text_filter {
     my $text = shift;
     $text =~ s/(\r?\n)*\z//;
     $text =~ s/\n/<br \/>\n/g;
+    $text =~ s/^( +)/'&nbsp;' x length($1)/gem;
 
     # And now remove any BRs we just added WITHIN HTML comments,
     # so they don't screw up Wikiwyg.

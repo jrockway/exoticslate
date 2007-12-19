@@ -347,6 +347,7 @@ proto.attachWidgetHandlers = function(elem) {
         e.target.setAttribute("mouseup", 0);
     });
 
+    if (! this.currentWidget) return;
     var id = this.currentWidget.id;
     if (widget_data[id] && widget_data[id].uneditable) {
         DOM.Events.addListener(elem, 'mouseup', function(e) {
@@ -472,7 +473,7 @@ proto.parseWidget = function(widget) {
     var matches;
 
     if ((matches = widget.match(/^(aim|yahoo|ymsgr|skype|callme|callto|http|asap|irc|file|ftp|https):([\s\S]*?)\s*$/)) ||
-        (matches = widget.match(/^\{(\{(.+)\})\}$/)) || // AS-IS
+        (matches = widget.match(/^\{(\{([\s\S]+)\})\}$/)) || // AS-IS
         (matches = widget.match(/^"(.+?)"<(.+?)>$/)) || // Named Links
         (matches = widget.match(/^(?:"(.*)")?\{(\w+):?\s*([\s\S]*?)\s*\}$/)) ||
         (matches = widget.match(/^\.(\w+)\s*?\n([\s\S]*?)\1\s*?$/))
@@ -1223,151 +1224,3 @@ Widget.Lightbox.Socialtext.prototype.hide = function() {
     }
 }
 
-eval(WW_ADVANCED_MODE).prototype.setup_widgets = function() {
-    var widgets_list = Wikiwyg.Widgets.widgets;
-    var widget_data = Wikiwyg.Widgets.widget;
-    var p = eval(this.classname).prototype;
-    for (var i = 0; i < widgets_list.length; i++) {
-        var widget = widgets_list[i];
-        p.markupRules['widget_' + widget] =
-            widget_data[widget].markup ||
-            ['bound_phrase', '{' + widget + ': ', '}'];
-        p['do_widget_' + widget] = Wikiwyg.Wikitext.make_do('widget_' + widget);
-    }
-}
-
-proto = eval(WW_ADVANCED_MODE).prototype;
-
-proto.format_img = function(element) {
-    var widget = element.getAttribute('widget');
-    if (! widget) {
-        return Wikiwyg.Wikitext.prototype.format_img.call(this, element);
-    }
-
-    if ( widget.match(/^\{include/) ) {
-        this.treat_include_wafl(element);
-    } else if ( widget.match(/^\.\w+\n/) ) {
-        this.assert_blank_line();
-    } else {
-        this.assert_space_or_newline();
-    }
-
-    widget = widget.replace(/-=/g, '-').replace(/==/g,'=').replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
-    this.appendOutput(widget);
-    this.smart_trailing_space(element);
-}
-
-proto.format_a = function(element) {
-    if (this.is_opaque(element))
-        return this.handle_wafl_block(element);
-
-    Wikiwyg.Wikitext.prototype.format_a.call(this, element);
-}
-
-proto.format_div = function(element) {
-    if (this.is_opaque(element))
-        return this.handle_wafl_block(element);
-
-    Wikiwyg.Wikitext.prototype.format_div.call(this, element);
-}
-
-proto.destroyPhraseMarkup = function(element) {
-    if (this.contain_widget_image(element))
-        return false;
-    if (this.start_is_no_good(element) || this.end_is_no_good(element)) {
-        return this.destroyElement(element);
-    }
-    return false;
-}
-
-proto.contain_widget_image = function(element) {
-    for(var ii = 0; ii < element.childNodes.length; ii++ ) {
-        var e = element.childNodes[ii]
-        if ( e.nodeType == 1 ) {
-            if ( e.nodeName == 'IMG' ) {
-                if ( e.getAttribute("widget") )
-                    return true;
-            }
-        }
-    }
-}
-
-proto.treat_include_wafl = function(element) {
-    // Note: element should be a <span> or an <img>
-
-    if ( element.nodeType != 1 )
-        return;
-
-    if ( element.nodeName == 'SPAN' ) {
-        var inner = element.innerHTML;
-        if(!inner.match(/<!-- wiki: \{include: \[.+\]\} -->/)) {
-            return;
-        }
-    }
-    else if ( element.nodeName == 'IMG' ) {
-        var widget = element.getAttribute("widget");
-        if (!widget.match(/^\{include/))
-            return;
-    }
-
-    // If this is a {include} widget, we squeeze
-    // whitepsaces before and after it. Becuase
-    // {include} is supposed to be in a <p> of it's own.
-    // If user type "{include: Page} Bar", that leaves
-    // an extra space in <p>.
-
-    var next = element.nextSibling;
-    if (next && next.tagName &&
-            next.tagName.toLowerCase() == 'p') {
-        next.innerHTML = next.innerHTML.replace(/^ +/,"");
-    }
-
-    var prev = element.previousSibling;
-    if (prev
-        && prev.tagName
-        && prev.tagName.toLowerCase() == 'p') {
-        if (prev.innerHTML.match(/^[ \n\t]+$/)) {
-            // format_p is already called, so it's too late
-            // to do this:
-            //     prev.parentNode.removeChild( prev );
-
-            // Remove two blank lines for it's the output
-            // of an empty <p>
-            var line1 = this.output.pop();
-            var line2 = this.output.pop();
-            // But if they are not newline, put them back
-            // beause we don't want to mass around there.
-            if ( line1 != "\n" || line2 != "\n" ) {
-                this.output.push(line2);
-                this.output.push(line1);
-            }
-        }
-    }
-}
-
-proto.handle_bound_phrase = function(element, markup) {
-    if (! this.element_has_only_image_content(element) )
-        if (! this.element_has_text_content(element))
-            return;
-
-    if (element.innerHTML.match(/^\s*<br\s*\/?\s*>/)) {
-        this.appendOutput("\n");
-        element.innerHTML = element.innerHTML.replace(/^\s*<br\s*\/?\s*>/, '');
-    }
-    this.appendOutput(markup[1]);
-    this.no_following_whitespace();
-    this.walk(element);
-    this.appendOutput(markup[2]);
-}
-
-proto.markup_bound_phrase = function(markup_array) {
-    var markup_start = markup_array[1];
-    markup_start = markup_start.replace(/\d+: $/, ': ');
-    var markup_finish = markup_array[2];
-    var scroll_top = this.area.scrollTop;
-    if (markup_finish == 'undefined')
-        markup_finish = markup_start;
-    if (this.get_words())
-        this.add_markup_words(markup_start, markup_finish, null);
-    this.area.scrollTop = scroll_top;
-}

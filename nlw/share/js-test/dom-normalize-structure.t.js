@@ -1,23 +1,15 @@
 var t = new Test.Wikiwyg();
 
-var filters = {
-    badhtml: ['dom_sanitize']
-};
+var filters = { badhtml: ['dom_sanitize'] };
 
 // XXX I can't remember exactly what this test was for, but disabling in IE
 // since it appears to be fixing a Firefox bug.
-if (Wikiwyg.is_ie) {
-    t.plan(1);
-    t.pass("Skipping these tests on IE");
-}
-else if (Wikiwyg.is_safari) {
-    t.skipAll("These tests are not meant to be ran on Safari")
-}
-else {
-    t.plan(3);
-    t.filters(filters);
-    t.run_is('badhtml', 'goodhtml');
-}
+t.ie_skip_all("Skipping these tests on IE");
+t.safari_skip_all("These tests are not meant to be ran on Safari");
+
+t.plan(3);
+t.filters(filters);
+t.run_is('badhtml', 'goodhtml');
 
 /* Test
 === Inline style on p

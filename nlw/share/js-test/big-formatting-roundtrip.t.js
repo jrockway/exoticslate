@@ -6,8 +6,12 @@ onto chunks let's do that separately.
 
 var t = new Test.Wikiwyg();
 
-t.plan(16);
+t.plan(32);
 
+t.simple_mode_html = true;
+t.run_roundtrip('wikitext');
+
+t.simple_mode_html = false;
 t.run_roundtrip('wikitext');
 
 /* Test
@@ -376,4 +380,3 @@ once
 * *{link: enboldenated wafl yo} yo yo yo {link: enboldenated wafl yo}*
 
 */
-

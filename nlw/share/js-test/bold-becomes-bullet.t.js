@@ -6,15 +6,11 @@ var filters = {
 
 t.plan(6);
 
-if ( Wikiwyg.is_safari ) {
-    t.skipAll("On Safari, we do not convert HTML to wikitext");
-}
-else {
-    t.filters(filters);
-    t.run_is('html', 'wikitext');
-    t.run_roundtrip('wikitext');
-}
+t.safari_skip_all("On Safari, we do not convert HTML to wikitext");
 
+t.filters(filters);
+t.run_is('html', 'wikitext');
+t.run_roundtrip('wikitext');
 
 t.run_is('html', 'wiitext');
 
@@ -47,4 +43,3 @@ Thru Me</span>: xxx</p>
 -Thru Me-: xxx
 
 */
-

@@ -1,8 +1,6 @@
 var t = new Test.Base();
 
-var filters = {
-    input: 'upper_case'
-};
+var filters = { input: 'upper_case' };
 
 t.plan(1);
 t.filters(filters);

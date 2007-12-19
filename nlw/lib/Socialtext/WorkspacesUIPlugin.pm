@@ -14,6 +14,7 @@ use Socialtext::Challenger;
 use Socialtext::l10n qw(loc);
 use Socialtext::CSS;
 use Socialtext::File::Copy::Recursive qw(dircopy);
+use YAML qw(LoadFile);
 
 sub class_id { 'workspaces_ui' }
 const cgi_class => 'Socialtext::WorkspacesUI::CGI';
@@ -106,6 +107,7 @@ sub _render_skin_settings_page {
     my $settings_error = shift; # [in] page level error message
     my $upload_error_message = shift; # [in] Error message for problems when uploading skin
     my $reset_error_message = shift; # [in] Error message for problems when reseting the skin files
+    my $info_yaml = shift; # [in] info.yaml information
     my $skipped_files = shift; # [in/reference] array of extracted skin files not saved
     my $force_radio = shift;
 
@@ -135,6 +137,10 @@ sub _render_skin_settings_page {
         } Socialtext::File::files_under($image_directory);
     }
 
+    if (ref($info_yaml) eq 'HASH' && exists($info_yaml->{workspace_config})) {
+        $self->_reconfigure_workspace_for_skin($info_yaml->{workspace_config});
+    }
+
     return $self->_render_page(
         "element/settings/workspaces_settings_skin_section",
         skin_files => \@skin_files,
@@ -144,6 +150,17 @@ sub _render_skin_settings_page {
         settings_error => $settings_error,
         force_radio => $force_radio,
     );
+}
+
+sub _reconfigure_workspace_for_skin {
+    my $self = shift;
+    my $config = shift; # [in] workspace config in info.yaml
+
+    if (exists($config->{cascade_css})) {
+        $self->hub->current_workspace->update(
+            cascade_css => ($config->{cascade_css} ? 1 : 0),
+        );
+    }
 }
 
 sub workspaces_settings_skin {
@@ -173,12 +190,14 @@ sub skin_upload {
 
     my $error_message = '';
     my @skipped_files = ();
-    $self->_extract_skin(\$error_message, \@skipped_files);
+    my $info_yaml;
+    $self->_extract_skin(\$error_message, \@skipped_files, \$info_yaml);
 
     return $self->_render_skin_settings_page(
         '',
         $error_message,
         '',
+        $info_yaml,
         \@skipped_files,
         ($error_message) ? '' : $self->custom_skin_name,
     );
@@ -305,6 +324,7 @@ sub _extract_skin {
     my $self = shift;
     my $error_message = shift; # [out] String to hold any error message
     my $skipped_files = shift; # [out] Array of files skipped during extract
+    my $info_yaml = shift; # [out] info.yaml parsed information
 
     my $custom_skin = $self->custom_skin_name;
     my $file = $self->cgi->skin_file;
@@ -331,7 +351,21 @@ sub _extract_skin {
         $self->_install_skin_files(\@archive_files, $error_message, $skipped_files)
     }
 
+    $self->_parse_info_yaml(\@archive_files, $error_message, $info_yaml);
+
     return $ok;
+}
+
+sub _parse_info_yaml {
+    my $self = shift;
+    my $archive_files = shift; # [in] Files in the archive.
+    my $error_message = shift; # [out] list of errors.
+    my $info_yaml = shift; # [out] info.yaml parsed information.
+
+    for my $file (@$archive_files) {
+        $$info_yaml = LoadFile($file) # YAML
+          if -e $file && $file =~ m[/info.yaml$];
+    }
 }
 
 sub workspaces_settings_features {

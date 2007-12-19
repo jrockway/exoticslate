@@ -2,6 +2,22 @@ Change log for Socialtext Open
 
 2.18.X
 
+Release notes, 2.18.2.0  Dec 2007
+
+  [BUGS]
+
+  A major refactoring was done to the html-to-wikitext converter in the Wikiwyg component.  A large number of bugs were shaken out and fixed during this refactoring.
+
+  {bz: 367} This fix updates inheritance of skin properties to allow newly created workspaces with custom skins to work properly.
+
+  {bz: 359} The CSS Kit will now properly configure a workspace when it is uploaded using the CSS Uploader tool.
+
+  The email this page popup was loading combined-source.js multiple times.
+
+  {bz: 325} Prevents renaming a page to the name "Untitled Page".
+
+  The Alzabno refactoring that came in with 2.17.3.0 in combination with work to deal with deleted ldap users introduced a useless SQL UPDATE statement being issued at least once per request, likely more often.  These extra updates are now guarded against.
+
 Release notes, 2.18.1.0  Dec 2007
 
   [BUGS]

@@ -453,6 +453,9 @@ sub _create_workspace {
             title   => $self->cgi->title,
             created_by_user_id => $self->hub->current_user->user_id,
             # begin customization inheritances
+            cascade_css => $self->hub->current_workspace->cascade_css,
+            customjs_name => $self->hub->current_workspace->customjs_name,
+            customjs_uri => $self->hub->current_workspace->customjs_uri,
             skin_name  => $self->hub->current_workspace->skin_name,
             invitation_filter => $self->hub->current_workspace->invitation_filter,
             email_notification_from_address => $self->hub->current_workspace->email_notification_from_address,

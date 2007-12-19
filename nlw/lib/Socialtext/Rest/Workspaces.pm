@@ -150,6 +150,9 @@ sub _create_workspace {
         title      => $p{title},
         account_id => $p{account_id},
 
+        cascade_css                     => $p{cascade_css},
+        customjs_name                   => $p{customjs_name},
+        customjs_uri                    => $p{customjs_uri},
         skin_name                       => $p{skin_name},
         show_welcome_message_below_logo =>
             $p{show_welcome_message_below_logo},

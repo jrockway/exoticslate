@@ -37,16 +37,29 @@ sub create_if_necessary {
     }
 
     if ($user_id) {
-        $user_id->update(
-            driver_unique_id => $homunculus->user_id,
-            driver_username  => $homunculus->username
-        );
+        if( $user_id->_homunculus_is_different( $homunculus ) ) {
+            $user_id->update(
+                             driver_unique_id => $homunculus->user_id,
+                             driver_username  => $homunculus->username
+                            );
+        }
         return $user_id;
     }
-
+    
     return $class->create( @primary_params,
         driver_username => $homunculus->username );
 }
+
+sub _homunculus_is_different {
+    my $self = shift;
+    my $homunculus = shift;
+    # if the homunculus is different from our user id, update                                               
+    # our database with homunculus data                                                                     
+    return ( $self->driver_username ne $homunculus->username ||
+             $self->driver_unique_id ne $homunculus->user_id );
+}
+
+
 
 sub new {
     my ( $class, %p ) = @_;

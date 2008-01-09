@@ -2,6 +2,26 @@ Change log for Socialtext Open
 
 2.18.X
 
+Release notes, 2.18.3.0  Jan 2008
+
+Happy New Year
+
+  [BUGS]
+
+   {rt: 27013} - When creating a new weblog from the settings page it is possible to create blogs with names like "foo Blog Weblog" when "foo Blog" should be accepted. This branch includes a fix to that problem, as well as more complete testing of blog creation.
+
+   Spike Bug 151: previous code sampled only 1000 chars of a file to guess attachment type. This wasn't sufficient for all filetypes
+
+   Spike bug 154: Properly localize the link to the japanese help docs from the workspace permissions page.
+
+   Bug fix for a login problem after a failover, failback.  There was a problem when the MAC used for verifying the authenticity of the user cookie.  There was also a problem if the user_id (PK) changed in the DBMS.
+
+   {bz: 398} Syncing in Socialtext Unplugged when using Internet Explorer has not been working, apparently for quite some time. The branch upgrades our unplugged template to the latest version of Tiddlywiki, incorporating a bug fix for the IE problem.
+
+   [FEATURES]
+
+   Work was done to improve the Socialtext Control Panel.
+
 Release notes, 2.18.2.0  Dec 2007
 
   [BUGS]

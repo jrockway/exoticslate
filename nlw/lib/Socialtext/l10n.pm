@@ -110,7 +110,11 @@ sub loc {
         }
     }
 
-    return _loc( $new_msg, @_ );
+    my $result = _loc( $new_msg, @_ );
+    
+    # Un-escape escaped %'s - Locale::Maketext::Simple should be doing this!
+    $result =~ s/%%/%/g;
+    return $result;
 }
 
 # Have to wrap this b/c we renamed the real loc() function to _loc()

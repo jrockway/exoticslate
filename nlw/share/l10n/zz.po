@@ -369,11 +369,6 @@ msgstr "<U>P4G3 lInK</u> 70 dIfF3R3N7-w0rKsP4C3"
 msgid "A custom skin file was not uploaded."
 msgstr "4 cUs70M SkIn fIl3 W4S N07 UpL04d3d."
 
-#: share/template/element/settings/users_settings_section
-#.  
-msgid "A dialog box will pop up after your password is changed."
-msgstr "4 dI4L0G 80X WiLl p0p uP 4f73R Y0Ur p4sSw0rD Is cH4Ng3d."
-
 #: share/template/element/settings/users_invite_search_section
 #.  
 msgid "A filter has been set on this workspace. All candidate email addresses must match this pattern:"
@@ -589,10 +584,15 @@ msgstr "4N 3m4iL C0NfIrMiNg y0uR R3GiS7R47i0n h4s 833N S3N7 70 %1."
 msgid "An email with instructions on changing your password has been sent to %1."
 msgstr "4N 3m4iL Wi7h iNs7rUc7i0nS 0n cH4NgInG Y0Ur p4sSw0rD H4S 833n s3n7 70 %1."
 
-#: lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
+#: lib/Socialtext/HitCounterPlugin.pm lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
 #. (
 msgid "An invalid page ID was given: %1"
 msgstr "4N InV4LiD P4G3 iD W4S GiV3N: %1"
+
+#: lib/Socialtext/RtfExportPlugin.pm
+#. (
+msgid "An invalid page name was given: %1"
+msgstr "4N InV4LiD P4G3 n4m3 W4S GiV3N: %1"
 
 #: share/template/element/settings/users_invite_section
 #.  
@@ -1119,11 +1119,6 @@ msgstr "c0uLd n07 3X7R4C7 fIl3s fR0M 7h3 SkIn 4RcHiV3. 7hIs iS M0S7 lIk3lY C4Us3
 msgid "Could not open %1"
 msgstr "c0uLd n07 0P3N %1"
 
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#.  
-msgid "Could not read/write to share"
-msgstr "c0uLd n07 r34D/WrI73 70 sH4R3"
-
 #: share/template/element/settings/weblog_create share/template/element/settings/workspaces_create_section
 #.  
 msgid "Create"
@@ -1169,7 +1164,7 @@ msgstr "cR3473 Y0Ur pR0FiL3"
 msgid "Created by %1 on %2."
 msgstr "cR3473d 8Y %1 0N %2."
 
-#: lib/Socialtext/Appliance/Model/Backup.pm
+#: lib/Socialtext/Appliance/BackupStore.pm
 #. (
 msgid "Creating backup tarball (%1) ..."
 msgstr "cR347InG 84CkUp 74r84Ll (%1) ..."
@@ -1253,11 +1248,6 @@ msgstr "d3l373 S3L3C73d fIl3s"
 #. (
 msgid "Deleted \"%1\""
 msgstr "d3l373d \"%1\""
-
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#. (
-msgid "Did not get %1"
-msgstr "dId n07 g37 %1"
 
 #: share/template/view/page/delete_epilogue
 #.  
@@ -1439,7 +1429,7 @@ msgstr "3M4Il:"
 msgid "Enable email notifications for this workspace?"
 msgstr "3N48l3 3m4iL N07iFiC47i0nS F0R 7hIs w0rKsP4C3?"
 
-#: lib/Socialtext/l10n.pm
+#: lib/Socialtext/Locales.pm
 #.  
 msgid "English"
 msgstr "3NgLiSh"
@@ -1489,7 +1479,7 @@ msgstr "3Rr0r uPd47InG Fr0m 7Im3s3rV3R %1"
 msgid "Error:"
 msgstr "3Rr0r:"
 
-#: lib/Socialtext/PdfExportPlugin.pm lib/Socialtext/RtfExportPlugin.pm
+#: lib/Socialtext/PdfExportPlugin.pm
 #.  
 msgid "Error:<pre>No pages selected for export</pre>\n"
 msgstr "3Rr0r:<Pr3>N0 p4g3s s3l3c73D F0R 3xP0R7</Pr3>\n"
@@ -1604,7 +1594,7 @@ msgstr "3Xp0r7iNg %1"
 msgid "Exporting workspaces ..."
 msgstr "3Xp0r7iNg w0rKsP4C3S ..."
 
-#: lib/Socialtext/Appliance/Model/Backup.pm
+#: lib/Socialtext/Appliance/BackupStore.pm
 #.  
 msgid "Fetching backup file from SMB share ..."
 msgstr "f37ChInG 84CkUp fIl3 Fr0m sM8 sH4R3 ..."
@@ -1698,11 +1688,6 @@ msgstr "g0 70:"
 #. (
 msgid "Google: %1"
 msgstr "g00Gl3: %1"
-
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#. (
-msgid "Got file %1"
-msgstr "g07 fIl3 %1"
 
 #: share/template/email/password-change.html share/template/email/password-change.txt
 #.  
@@ -2019,7 +2004,7 @@ msgstr "i7 L00kS LiK3 y0u 4R3 7RyInG 70 s34RcH 0n 4 fI3Ld iN 7h3 S34rCh iNd3x. 4
 msgid "It must consist of 3-30 lowercase letters or dashes."
 msgstr "i7 MuS7 c0nSiS7 0F 3-30 l0w3rC4S3 l3773Rs 0R D4Sh3s."
 
-#: lib/Socialtext/l10n.pm
+#: lib/Socialtext/Locales.pm
 #.  
 msgid "Japanese"
 msgstr "j4p4n3s3"
@@ -2369,20 +2354,25 @@ msgstr "n0 D0WnL04dS."
 msgid "No email addresses specified"
 msgstr "n0 3m4iL 4dDr3sS3S Sp3cIfI3D"
 
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#.  
-msgid "No file provided to verify"
-msgstr "n0 FiL3 pR0ViD3D 70 v3rIfY"
-
 #: share/console-template/template/backup.html
 #.  
 msgid "No files available to restore."
 msgstr "n0 FiL3S 4v4iL48l3 70 r3s70R3."
 
-#: lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
+#: lib/Socialtext/HitCounterPlugin.pm lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
 #.  
 msgid "No page ID given"
 msgstr "n0 P4G3 iD GiV3N"
+
+#: lib/Socialtext/RtfExportPlugin.pm
+#.  
+msgid "No page name given"
+msgstr "n0 P4G3 n4m3 GiV3N"
+
+#: lib/Socialtext/RtfExportPlugin.pm
+#.  
+msgid "No pages selected for export"
+msgstr "n0 P4G3S S3L3C73d f0r 3Xp0r7"
 
 #: share/template/authen/forgot_password.html
 #.  
@@ -2803,11 +2793,6 @@ msgstr "pU8LiC R34d-4Nd-c0mM3N7-0NlY"
 #.  
 msgid "Public read-only"
 msgstr "pU8LiC R34d-0NlY"
-
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#.  
-msgid "Put and retrieved test file"
-msgstr "pU7 4Nd r37Ri3v3d 73s7 FiL3"
 
 #: share/template/element/wiki/subnav-dashboard share/template/element/wiki/subnav-default share/template/element/wiki/subnav-listview share/template/element/wiki/subnav-weblog
 #.  
@@ -4158,11 +4143,6 @@ msgstr "vI3W&N8Sp;cUrR3N7&n8sP;R3ViSi0n"
 #.  
 msgid "Views"
 msgstr "vI3Ws"
-
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#.  
-msgid "Waiting for restore to finish"
-msgstr "w4i7iNg f0r r3s70R3 70 FiNiSh"
 
 #: share/template/element/settings/workspaces_permissions_section
 #.  

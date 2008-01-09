@@ -369,11 +369,6 @@ msgstr ""
 msgid "A custom skin file was not uploaded."
 msgstr ""
 
-#: share/template/element/settings/users_settings_section
-#.  
-msgid "A dialog box will pop up after your password is changed."
-msgstr ""
-
 #: share/template/element/settings/users_invite_search_section
 #.  
 msgid "A filter has been set on this workspace. All candidate email addresses must match this pattern:"
@@ -589,9 +584,14 @@ msgstr ""
 msgid "An email with instructions on changing your password has been sent to %1."
 msgstr ""
 
-#: lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
+#: lib/Socialtext/HitCounterPlugin.pm lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
 #. (
 msgid "An invalid page ID was given: %1"
+msgstr ""
+
+#: lib/Socialtext/RtfExportPlugin.pm
+#. (
+msgid "An invalid page name was given: %1"
 msgstr ""
 
 #: share/template/element/settings/users_invite_section
@@ -1119,11 +1119,6 @@ msgstr ""
 msgid "Could not open %1"
 msgstr ""
 
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#.  
-msgid "Could not read/write to share"
-msgstr ""
-
 #: share/template/element/settings/weblog_create share/template/element/settings/workspaces_create_section
 #.  
 msgid "Create"
@@ -1169,7 +1164,7 @@ msgstr ""
 msgid "Created by %1 on %2."
 msgstr ""
 
-#: lib/Socialtext/Appliance/Model/Backup.pm
+#: lib/Socialtext/Appliance/BackupStore.pm
 #. (
 msgid "Creating backup tarball (%1) ..."
 msgstr ""
@@ -1252,11 +1247,6 @@ msgstr ""
 #: lib/Socialtext/DeletePagePlugin.pm
 #. (
 msgid "Deleted \"%1\""
-msgstr ""
-
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#. (
-msgid "Did not get %1"
 msgstr ""
 
 #: share/template/view/page/delete_epilogue
@@ -1439,7 +1429,7 @@ msgstr ""
 msgid "Enable email notifications for this workspace?"
 msgstr ""
 
-#: lib/Socialtext/l10n.pm
+#: lib/Socialtext/Locales.pm
 #.  
 msgid "English"
 msgstr ""
@@ -1489,7 +1479,7 @@ msgstr ""
 msgid "Error:"
 msgstr ""
 
-#: lib/Socialtext/PdfExportPlugin.pm lib/Socialtext/RtfExportPlugin.pm
+#: lib/Socialtext/PdfExportPlugin.pm
 #.  
 msgid "Error:<pre>No pages selected for export</pre>\n"
 msgstr ""
@@ -1604,7 +1594,7 @@ msgstr ""
 msgid "Exporting workspaces ..."
 msgstr ""
 
-#: lib/Socialtext/Appliance/Model/Backup.pm
+#: lib/Socialtext/Appliance/BackupStore.pm
 #.  
 msgid "Fetching backup file from SMB share ..."
 msgstr ""
@@ -1697,11 +1687,6 @@ msgstr ""
 #: lib/Socialtext/Widget_resource.pm share/javascript/widget_resource.js
 #. (
 msgid "Google: %1"
-msgstr ""
-
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#. (
-msgid "Got file %1"
 msgstr ""
 
 #: share/template/email/password-change.html share/template/email/password-change.txt
@@ -2019,7 +2004,7 @@ msgstr ""
 msgid "It must consist of 3-30 lowercase letters or dashes."
 msgstr ""
 
-#: lib/Socialtext/l10n.pm
+#: lib/Socialtext/Locales.pm
 #.  
 msgid "Japanese"
 msgstr ""
@@ -2369,19 +2354,24 @@ msgstr ""
 msgid "No email addresses specified"
 msgstr ""
 
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#.  
-msgid "No file provided to verify"
-msgstr ""
-
 #: share/console-template/template/backup.html
 #.  
 msgid "No files available to restore."
 msgstr ""
 
-#: lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
+#: lib/Socialtext/HitCounterPlugin.pm lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
 #.  
 msgid "No page ID given"
+msgstr ""
+
+#: lib/Socialtext/RtfExportPlugin.pm
+#.  
+msgid "No page name given"
+msgstr ""
+
+#: lib/Socialtext/RtfExportPlugin.pm
+#.  
+msgid "No pages selected for export"
 msgstr ""
 
 #: share/template/authen/forgot_password.html
@@ -2802,11 +2792,6 @@ msgstr ""
 #: share/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Public read-only"
-msgstr ""
-
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#.  
-msgid "Put and retrieved test file"
 msgstr ""
 
 #: share/template/element/wiki/subnav-dashboard share/template/element/wiki/subnav-default share/template/element/wiki/subnav-listview share/template/element/wiki/subnav-weblog
@@ -4157,11 +4142,6 @@ msgstr ""
 #: share/template/view/page/stats
 #.  
 msgid "Views"
-msgstr ""
-
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#.  
-msgid "Waiting for restore to finish"
 msgstr ""
 
 #: share/template/element/settings/workspaces_permissions_section

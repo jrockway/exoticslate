@@ -140,9 +140,6 @@ sub get_guess_encoding {
 
     open (FH, $file_full_path);
     my $len = -s $file_full_path;
-    if ($len > 1000) {
-        $len = 1000;
-    }
     read FH, $data, $len;
     close FH;
 

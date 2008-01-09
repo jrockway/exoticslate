@@ -369,11 +369,6 @@ msgstr "<う>PあGえ lいnK</う> 7お dいfFえRえN7-wおrKsPあCえ"
 msgid "A custom skin file was not uploaded."
 msgstr "あ cうs7おM Skいn fいlえ WあS Nお7 うpLおあdえd."
 
-#: share/template/element/settings/users_settings_section
-#.  
-msgid "A dialog box will pop up after your password is changed."
-msgstr "あ dいあLおG 8おX WいLl pおp うP あf7えR Yおうr pあsSwおrD いs cHあNgえd."
-
 #: share/template/element/settings/users_invite_search_section
 #.  
 msgid "A filter has been set on this workspace. All candidate email addresses must match this pattern:"
@@ -589,10 +584,15 @@ msgstr "あN えmあいL CおNfいrMいNg yおうR RえGいS7Rあ7いおn hあs 
 msgid "An email with instructions on changing your password has been sent to %1."
 msgstr "あN えmあいL Wい7h いNs7rうc7いおnS おn cHあNgいnG Yおうr pあsSwおrD HあS 8ええn sえn7 7お %1."
 
-#: lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
+#: lib/Socialtext/HitCounterPlugin.pm lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
 #. (
 msgid "An invalid page ID was given: %1"
 msgstr "あN いnVあLいD PあGえ いD WあS GいVえN: %1"
+
+#: lib/Socialtext/RtfExportPlugin.pm
+#. (
+msgid "An invalid page name was given: %1"
+msgstr "あN いnVあLいD PあGえ nあmえ WあS GいVえN: %1"
 
 #: share/template/element/settings/users_invite_section
 #.  
@@ -1119,11 +1119,6 @@ msgstr "cおうLd nお7 えX7RあC7 fいlえs fRおM 7hえ Skいn あRcHいVえ.
 msgid "Could not open %1"
 msgstr "cおうLd nお7 おPえN %1"
 
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#.  
-msgid "Could not read/write to share"
-msgstr "cおうLd nお7 rえあD/Wrい7え 7お sHあRえ"
-
 #: share/template/element/settings/weblog_create share/template/element/settings/workspaces_create_section
 #.  
 msgid "Create"
@@ -1169,7 +1164,7 @@ msgstr "cRえあ7え Yおうr pRおFいLえ"
 msgid "Created by %1 on %2."
 msgstr "cRえあ7えd 8Y %1 おN %2."
 
-#: lib/Socialtext/Appliance/Model/Backup.pm
+#: lib/Socialtext/Appliance/BackupStore.pm
 #. (
 msgid "Creating backup tarball (%1) ..."
 msgstr "cRえあ7いnG 8あCkうp 7あr8あLl (%1) ..."
@@ -1253,11 +1248,6 @@ msgstr "dえlえ7え SえLえC7えd fいlえs"
 #. (
 msgid "Deleted \"%1\""
 msgstr "dえlえ7えd \"%1\""
-
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#. (
-msgid "Did not get %1"
-msgstr "dいd nお7 gえ7 %1"
 
 #: share/template/view/page/delete_epilogue
 #.  
@@ -1439,7 +1429,7 @@ msgstr "えMあいl:"
 msgid "Enable email notifications for this workspace?"
 msgstr "えNあ8lえ えmあいL Nお7いFいCあ7いおnS FおR 7hいs wおrKsPあCえ?"
 
-#: lib/Socialtext/l10n.pm
+#: lib/Socialtext/Locales.pm
 #.  
 msgid "English"
 msgstr "えNgLいSh"
@@ -1489,7 +1479,7 @@ msgstr "えRrおr うPdあ7いnG Frおm 7いmえsえrVえR %1"
 msgid "Error:"
 msgstr "えRrおr:"
 
-#: lib/Socialtext/PdfExportPlugin.pm lib/Socialtext/RtfExportPlugin.pm
+#: lib/Socialtext/PdfExportPlugin.pm
 #.  
 msgid "Error:<pre>No pages selected for export</pre>\n"
 msgstr "えRrおr:<Prえ>Nお pあgえs sえlえc7えD FおR えxPおR7</Prえ>\n"
@@ -1604,7 +1594,7 @@ msgstr "えXpおr7いNg %1"
 msgid "Exporting workspaces ..."
 msgstr "えXpおr7いNg wおrKsPあCえS ..."
 
-#: lib/Socialtext/Appliance/Model/Backup.pm
+#: lib/Socialtext/Appliance/BackupStore.pm
 #.  
 msgid "Fetching backup file from SMB share ..."
 msgstr "fえ7ChいnG 8あCkうp fいlえ Frおm sM8 sHあRえ ..."
@@ -1698,11 +1688,6 @@ msgstr "gお 7お:"
 #. (
 msgid "Google: %1"
 msgstr "gおおGlえ: %1"
-
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#. (
-msgid "Got file %1"
-msgstr "gお7 fいlえ %1"
 
 #: share/template/email/password-change.html share/template/email/password-change.txt
 #.  
@@ -2019,7 +2004,7 @@ msgstr "い7 LおおkS LいKえ yおう あRえ 7RyいnG 7お sえあRcH おn �
 msgid "It must consist of 3-30 lowercase letters or dashes."
 msgstr "い7 MうS7 cおnSいS7 おF 3-30 lおwえrCあSえ lえ77えRs おR DあShえs."
 
-#: lib/Socialtext/l10n.pm
+#: lib/Socialtext/Locales.pm
 #.  
 msgid "Japanese"
 msgstr "jあpあnえsえ"
@@ -2369,20 +2354,25 @@ msgstr "nお DおWnLおあdS."
 msgid "No email addresses specified"
 msgstr "nお えmあいL あdDrえsSえS SpえcいfいえD"
 
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#.  
-msgid "No file provided to verify"
-msgstr "nお FいLえ pRおVいDえD 7お vえrいfY"
-
 #: share/console-template/template/backup.html
 #.  
 msgid "No files available to restore."
 msgstr "nお FいLえS あvあいLあ8lえ 7お rえs7おRえ."
 
-#: lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
+#: lib/Socialtext/HitCounterPlugin.pm lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
 #.  
 msgid "No page ID given"
 msgstr "nお PあGえ いD GいVえN"
+
+#: lib/Socialtext/RtfExportPlugin.pm
+#.  
+msgid "No page name given"
+msgstr "nお PあGえ nあmえ GいVえN"
+
+#: lib/Socialtext/RtfExportPlugin.pm
+#.  
+msgid "No pages selected for export"
+msgstr "nお PあGえS SえLえC7えd fおr えXpおr7"
 
 #: share/template/authen/forgot_password.html
 #.  
@@ -2803,11 +2793,6 @@ msgstr "pう8LいC Rえあd-あNd-cおmMえN7-おNlY"
 #.  
 msgid "Public read-only"
 msgstr "pう8LいC Rえあd-おNlY"
-
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#.  
-msgid "Put and retrieved test file"
-msgstr "pう7 あNd rえ7Rいえvえd 7えs7 FいLえ"
 
 #: share/template/element/wiki/subnav-dashboard share/template/element/wiki/subnav-default share/template/element/wiki/subnav-listview share/template/element/wiki/subnav-weblog
 #.  
@@ -4158,11 +4143,6 @@ msgstr "vいえW&N8Sp;cうrRえN7&n8sP;RえVいSいおn"
 #.  
 msgid "Views"
 msgstr "vいえWs"
-
-#: lib/Socialtext/Appliance/Model/Backup.pm
-#.  
-msgid "Waiting for restore to finish"
-msgstr "wあい7いNg fおr rえs7おRえ 7お FいNいSh"
 
 #: share/template/element/settings/workspaces_permissions_section
 #.  

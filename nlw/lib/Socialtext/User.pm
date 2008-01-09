@@ -82,6 +82,7 @@ sub new_homunculus {
 
     if ($_[0] eq 'user_id') {
         my $system_id = Socialtext::UserId->new( system_unique_id => $_[1] );
+        return undef unless $system_id;
         my $driver_key = $system_id->driver_key;
         my $driver_unique_id = $system_id->driver_unique_id;
         my $driver_username = $system_id->driver_username;

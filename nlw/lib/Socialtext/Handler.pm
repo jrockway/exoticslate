@@ -53,6 +53,7 @@ sub authenticate {
     if ($credential) {
         my $user = Socialtext::User->new( username => $credential )
             || Socialtext::User->new( user_id  => $credential );
+        return undef unless $user;
         $request->connection->user($user->username);
         return $user;
     }

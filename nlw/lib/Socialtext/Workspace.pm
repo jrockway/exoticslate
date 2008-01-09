@@ -1630,7 +1630,7 @@ sub _WorkspaceCursor {
     Readonly my $spec => {
         %LimitAndSortSpec,
         order_by   => SCALAR_TYPE(
-            regex   => qr/^(?:name|user_count|creation_datetime|creator)$/,
+            regex   => qr/^(?:name|user_count|creation_datetime|creator|account_name)$/,
             default => 'name',
         ),
         account_id => SCALAR_TYPE,

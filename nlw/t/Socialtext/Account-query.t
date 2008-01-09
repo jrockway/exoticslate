@@ -4,7 +4,8 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 7;
+use Test::Socialtext tests => 18;
+use Test::More;
 fixtures( 'populated_rdbms' );
 
 BEGIN {
@@ -53,3 +54,55 @@ is_deeply(
     [ 'Unknown', 'Other 1', 'Other 2', 'Socialtext' ],
     'All() sorted in order of workspace_count',
 );
+
+Search: {
+    my @search_tests = (
+        {
+            desc => 'search',
+            args => { name => 'Social' },
+            results => ['Socialtext'],
+        },
+        {
+            desc => 'search - case sensitive',
+            args => { name => 'social' },
+            results => [],
+        },
+        {
+            desc => 'search - case insensitive',
+            args => { name => 'social', case_insensitive => 1 },
+            results => ['Socialtext'],
+        },
+        {
+            desc => 'search - case insensitive',
+            args => { name => 'sOcIaL', case_insensitive => 1 },
+            results => ['Socialtext'],
+        },
+        {
+            desc => 'search - case insensitive',
+            args => { name => 'THER', case_insensitive => 1 },
+            results => ['Other 1', 'Other 2'],
+        },
+    );
+    for my $s (@search_tests) {
+        $accounts = Socialtext::Account->ByName( %{ $s->{args} } );
+        is_deeply(
+            [ map { $_->name } $accounts->all() ],
+            $s->{results},
+            $s->{desc},
+        );
+        is( Socialtext::Account->CountByName( %{ $s->{args} } ), 
+            scalar(@{ $s->{results} }), 
+            'count matches'
+        );
+    }
+
+    Search_through_all: {
+        my $args = { name => 'sOcIaL', case_insensitive => 1 };
+        $accounts = Socialtext::Account->All( %$args );
+        is_deeply(
+            [ map { $_->name } $accounts->all() ],
+            ['Socialtext'],
+            'Searching through All()',
+        );
+    }
+}

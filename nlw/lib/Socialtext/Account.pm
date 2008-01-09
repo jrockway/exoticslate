@@ -167,6 +167,18 @@ sub Count {
     return $sth->fetchall_arrayref->[0][0];
 }
 
+sub CountByName {
+    my ( $class, %p ) = @_;
+    die "name is mandatory!" unless $p{name};
+
+    my $where = _where_by_name(\%p);
+    my $sth = sql_execute(
+        qq{SELECT COUNT(*) FROM "Account" $where},
+        $p{name},
+    );
+    return $sth->fetchall_arrayref->[0][0];
+}
+
 {
     Readonly my $spec => {
         limit      => SCALAR_TYPE( default => undef ),
@@ -179,6 +191,9 @@ sub Count {
             regex   => qr/^(?:ASC|DESC)$/i,
             default => 'ASC',
         ),
+        # For searching by account name
+        name             => SCALAR_TYPE( default => undef ),
+        case_insensitive => SCALAR_TYPE( default => undef ),
     };
     sub All {
         my $class = shift;
@@ -199,12 +214,20 @@ sub Count {
 sub _All {
     my ( $self, %p ) = @_;
 
+    my $where = '';
+    my @args = ($p{limit}, $p{offset});
+    if ($p{name}) {
+        $where = _where_by_name(\%p);
+        unshift @args, $p{name};
+    }
+
     my $sth = sql_execute(
         'SELECT account_id'
         . ' FROM "Account"'
+        . $where
         . " ORDER BY name $p{sort_order}"
         . ' LIMIT ? OFFSET ?' ,
-        $p{limit}, $p{offset} );
+        @args );
 
     return Socialtext::MultiCursor->new(
         iterables => [ $sth->fetchall_arrayref ],
@@ -218,16 +241,24 @@ sub _All {
 sub _AllByWorkspaceCount {
     my ( $self, %p ) = @_;
 
+    my $where = '';
+    my @args = ($p{limit}, $p{offset});
+    if ($p{name}) {
+        $where = _where_by_name(\%p);
+        unshift @args, $p{name};
+    }
+
     my $sth = sql_execute(
         'SELECT "Account".account_id,'
         . ' COUNT("Workspace".workspace_id) AS workspace_count'
         . ' FROM "Account"'
         . ' LEFT OUTER JOIN "Workspace" ON'
         . ' "Account".account_id="Workspace".account_id'
+        . $where
         . ' GROUP BY "Account".account_id, "Account".name'
         . " ORDER BY workspace_count $p{sort_order}, \"Account\".name ASC"
         . ' LIMIT ? OFFSET ?' ,
-        $p{limit}, $p{offset} );
+        @args );
 
     return Socialtext::MultiCursor->new(
         iterables => [ $sth->fetchall_arrayref ],
@@ -241,6 +272,13 @@ sub _AllByWorkspaceCount {
 sub _AllByUserCount {
     my ( $self, %p ) = @_;
 
+    my $where = '';
+    my @args = ($p{limit}, $p{offset});
+    if ($p{name}) {
+        $where = _where_by_name(\%p);
+        unshift @args, $p{name};
+    }
+
     my $sth = sql_execute(
         'SELECT "Account".account_id AS account_id,'
         . ' COUNT("UserWorkspaceRole".user_id) AS user_count'
@@ -249,10 +287,11 @@ sub _AllByUserCount {
         . ' "Account".account_id="Workspace".account_id'
         . ' LEFT OUTER JOIN "UserWorkspaceRole" ON'
         . ' "Workspace".workspace_id="UserWorkspaceRole".workspace_id'
+        . $where
         . ' GROUP BY "Account".account_id, "Account".name'
         . " ORDER BY user_count $p{sort_order}, \"Account\".name ASC"
         . ' LIMIT ? OFFSET ?',
-        $p{limit}, $p{offset} );
+        @args );
 
     return Socialtext::MultiCursor->new(
         iterables => [ $sth->fetchall_arrayref ],
@@ -262,6 +301,24 @@ sub _AllByUserCount {
         }
     );
 }
+
+sub ByName {
+    my $class = shift;
+    return Socialtext::Account->All( @_ );
+}
+
+sub _where_by_name {
+    my $p = shift;
+    return '' unless $p->{name};
+
+    # Turn our substring into a SQL pattern.
+    $p->{name} =~ s/^\s+//; $p->{name} =~ s/\s+$//;
+    $p->{name} = "\%$p->{name}\%";
+
+    my $comparator = $p->{case_insensitive} ? 'ILIKE' : 'LIKE';
+    return qq{ WHERE "Account".name $comparator ?};
+}
+
 
 sub _validate_and_clean_data {
     my $self = shift;
@@ -427,6 +484,14 @@ Returns a count of all accounts.
 
 Inserts required accounts into the DBMS if they are not present. See
 L<Socialtext::Data> for more details on required data.
+
+=item Socialtext::Account::ByName()
+
+Search accounts by name.  Returns a cursor for the matching counts.
+
+=item Socialtext::Account::CountByName()
+
+Returs a count of accounts matched by name.
 
 =back
 

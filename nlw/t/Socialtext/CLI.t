@@ -425,7 +425,7 @@ SCRUB_USER: {
         'test2 was removed from the correct workspaces'
     );
 
-    my $user = Socialtext::User->new( username  => 'guest' );
+    $user = Socialtext::User->new( username  => 'guest' );
 
     expect_failure(
         sub {

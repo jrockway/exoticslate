@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use utf8;
 
-use Test::Socialtext tests => 8;
+use Test::Socialtext tests => 19;
 fixtures( 'admin_no_pages' );
 
 BEGIN {
@@ -19,6 +19,34 @@ WEBLOG_CACHE: {
     $hub->weblog->update_current_weblog();
     is $hub->weblog->current_blog, 'socialtext blog',
         'cache is written with socialtext blog';
+}
+
+CREATE_WEBLOG: {
+    my $hub = new_hub('admin');
+
+    my $category = $hub->weblog->create_weblog('foo');
+    check_category($hub, $category, 'foo Weblog');
+
+    $category = $hub->weblog->create_weblog('foo blog');
+    check_category($hub, $category, 'foo blog');
+    
+    $category = $hub->weblog->create_weblog('bar Blog');
+    check_category($hub, $category, 'bar Blog');
+
+    $category = $hub->weblog->create_weblog('bar blog');
+    is ($category, undef, 'error condition when repeat name');
+    ok ((grep /There is already/, @{$hub->weblog->errors} ), 'error message correct when repeat name');
+}
+
+sub check_category {
+    my $hub      = shift;
+    my $returned = shift;
+    my $expected = shift;
+
+    is $returned, $expected, 'return category is correct category';
+    my $page = $hub->pages->new_from_name("first post in $expected");
+    like ($page->content, qr{This is the first post in $expected}, 'first post created with right content');
+    ok ((grep $expected, @{$page->metadata->Category}), 'post has right category');
 }
 
 WEBLOG_TITLE_IS_VALID: {

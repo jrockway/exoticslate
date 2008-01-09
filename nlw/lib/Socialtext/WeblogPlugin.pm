@@ -56,8 +56,23 @@ sub weblogs_create {
     return $self->redirect('action=settings')
         unless $self->hub->checker->check_permission('edit');
 
-    $self->_create_weblog
-        if $self->cgi->Button;
+    # If we have appropriate inputs, attempt to create the 
+    # weblog. Otherwise display the create diaglog and any
+    # errors we might know about.
+    if ( $self->cgi->Button and $self->cgi->weblog_title ) {
+        my $weblog_category
+            = $self->create_weblog( $self->cgi->weblog_title );
+        unless ( $self->input_errors_found ) {
+            $weblog_category
+                = $self->hub->pages->title_to_uri($weblog_category);
+            return $self->redirect(
+                'action=weblog_display;category=' . $weblog_category );
+        }
+    }
+    elsif ( $self->cgi->Button and !$self->cgi->weblog_title ) {
+        my $message = loc("A weblog title must be provided.");
+        $self->add_error($message);
+    }
 
     my $settings_section = $self->template_process(
         'element/settings/weblog_create',
@@ -79,12 +94,12 @@ sub _get_weblog_category_suffix {
     my $locale = $self->hub->best_locale;
     my $weblog_category_suffix;
     if ($locale eq 'ja') {
-        $weblog_category_suffix = qr/ブログ/;
+        $weblog_category_suffix = qr/ブログ$/i;
     } else {
-        $weblog_category_suffix = qr/blog/;
+        $weblog_category_suffix = qr/blog$/i;
     }
 
-    Encode::_utf8_on($weblog_category_suffix) if Encode::is_utf8(! $weblog_category_suffix);
+    Encode::_utf8_on($weblog_category_suffix) if not Encode::is_utf8($weblog_category_suffix);
     return $weblog_category_suffix;
 }
 
@@ -118,8 +133,9 @@ sub _create_first_post {
     return if (! $self->_weblog_title_is_valid($first_post_id));
 
     my $first_post = $self->hub->pages->new_page($first_post_id);
-    if(!defined $first_post) {
-        $first_post = $self->_create_new_page_for_data_validation_error($weblog_category);
+    if ( !defined $first_post ) {
+        $first_post = $self->_create_new_page_for_data_validation_error(
+            $weblog_category);
     }
 
     my $metadata = $first_post->metadata;
@@ -129,23 +145,38 @@ sub _create_first_post {
     return $first_post;
 }
 
-sub _create_weblog {
-    my $self = shift;
-    my $weblog_category = $self->cgi->weblog_title;
-    my $weblog_name = $weblog_category;
+=head2 create_weblog($weblog_category)
+
+Create a new weblog with the name C<$weblog_category>. Unless the name ends
+in C</blog$/i> append " Weblog" to the end of the category name.  Create a
+first post in the category by creating a page tagged with the category.
+
+=cut
+sub create_weblog {
+    my $self            = shift;
+    my $weblog_category = shift;
+
     $weblog_category =~ s/^\s+|\s+$//g;
 
-    my $weblog_category_suffix = $self->_get_weblog_category_suffix(); 
-    unless ( $weblog_category =~ /$weblog_category_suffix$/i ) {
-        $weblog_category = loc("[_1] Weblog", $weblog_category);
+    # reset errors to get around the fact that errors is effectively 
+    # class level because all the object methods in plugins aren't 
+    # really object methods.
+    $self->errors([]);
+
+    my $weblog_category_suffix = $self->_get_weblog_category_suffix();
+    unless ( $weblog_category =~ $weblog_category_suffix ) {
+        $weblog_category = loc( "[_1] Weblog", $weblog_category );
     }
 
     $self->hub->category->load;
     my $all_categories = $self->hub->category->all;
 
-    for (keys %$all_categories) {
+    for ( keys %$all_categories ) {
         if (/^\Q$weblog_category\E/i) {
-            my $message = loc("There is already a \'[_1]\' weblog. Please choose a different name.", $weblog_category);
+            my $message = loc(
+                "There is already a \'[_1]\' weblog. Please choose a different name.",
+                $weblog_category
+            );
             $self->add_error($message);
             return;
         }
@@ -158,14 +189,15 @@ sub _create_weblog {
 
     push @$categories, $weblog_category;
 
-    my $content = loc("This is the first post in [_1]. Click *New Post* to add another post.", $weblog_category);
+    my $content = loc(
+        "This is the first post in [_1]. Click *New Post* to add another post.",
+        $weblog_category );
     $first_post->content($content);
     $first_post->metadata->update( user => $self->hub->current_user );
     $first_post->store( user => $self->hub->current_user );
 
-    $weblog_category = $self->hub->pages->title_to_uri($weblog_category);
+    return $weblog_category;
 
-    $self->redirect('action=weblog_display;category=' . $weblog_category);
 }
 
 sub _feeds {

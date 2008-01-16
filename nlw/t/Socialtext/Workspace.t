@@ -1,7 +1,7 @@
 #!perl
 # @COPYRIGHT@
 use mocked qw(Socialtext::l10n system_locale); # Has to come firstest.
-use Test::Socialtext tests => 105;
+use Test::Socialtext tests => 106;
 
 use strict;
 use warnings;
@@ -680,4 +680,22 @@ CASCADE_CSS: {
 
     $ws->update(cascade_css => 0);
     is( $ws->cascade_css, 0, 'Cascading CSS set correctly'),
+}
+
+EXPORT_WITH_MISSING_DIR: {
+    my $ws = Socialtext::Workspace->create(
+        name       => 'export-1',
+        title      =>  'Export Workspace',
+        account_id => Socialtext::Account->Socialtext()->account_id,
+    );
+
+    eval {
+        $ws->export_to_tarball( dir  => '/sys/doesnt-exist',
+                                name => $ws->name );
+    };
+
+    like($@,
+        qr/Export Directory .+ does not exist./i,
+        'Non-existent export directory generates expected error message'
+    );
 }

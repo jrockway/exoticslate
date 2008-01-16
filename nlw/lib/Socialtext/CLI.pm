@@ -1176,7 +1176,15 @@ sub _export_workspace {
     $dir ||= $ENV{ST_EXPORT_DIR};
     $dir ||= File::Spec->tmpdir();
 
-    return $ws->export_to_tarball( dir => $dir, name => $name );
+    my $msg = '';
+
+    eval { $msg = $ws->export_to_tarball( dir => $dir, name => $name ); };
+
+    if ( my $e = $@ ) {
+	$self->_error($e);
+    }
+
+    return $msg;
 }
 
 sub import_workspace {

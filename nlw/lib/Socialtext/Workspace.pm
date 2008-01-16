@@ -1388,6 +1388,9 @@ sub users_with_roles {
         $p{name} ||= $self->name;
         $p{name} = lc $p{name};
 
+        die loc("Export directory [_1] does not exist.\n", $p{dir}) 
+	    if defined $p{dir} && ! -d $p{dir};
+
         my $tarball_dir
             = defined $p{dir} ? Cwd::abs_path( $p{dir} ) : $ENV{ST_TMP} || '/tmp';
 

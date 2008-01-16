@@ -2,6 +2,18 @@ Change log for Socialtext Open
 
 2.18.X
 
+Release notes, 2.18.4.0  Jon 2008
+
+  [BUGS]
+
+  {bz: 406} This fixes a bug whereby making a backup copy of a workspace fails silently if the location for the backup does not exist.
+
+  {bz: 358} Generate usage reports for workspaces that have a '_' in their name.
+
+  Refactored ceqlotron to allow for an alternate event listener that combines the current four change events into a single process call to st-admin instead of forking individual processes.
+
+  fetchrss-relative-links - Fix links without a hostname found in RSS feeds using the {fetchrss} wafl.
+
 Release notes, 2.18.3.0  Jan 2008
 
 Happy New Year

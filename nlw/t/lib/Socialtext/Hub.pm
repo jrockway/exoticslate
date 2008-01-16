@@ -18,6 +18,8 @@ use unmocked 'Socialtext::RecentChangesPlugin';
 use unmocked 'Socialtext::SyndicatePlugin';
 use unmocked 'Socialtext::TiddlyPlugin';
 use unmocked 'Socialtext::CSS';
+use unmocked 'Socialtext::FetchRSSPlugin';
+use unmocked 'Socialtext::Template';
 
 sub current_workspace {
     my $self = shift;
@@ -38,6 +40,7 @@ sub headers { $_[0]->{headers} || Socialtext::Headers->new };
 sub cgi { $_[0]->{cgi} || Socialtext::CGI->new }
 
 sub preferences_object { $_[0]->{preferences} || Socialtext::Preferences->new }
+sub preferences        { $_[0]->preferences_object }
 
 sub current_user { $_[0]->{current_user} || Socialtext::User->new }
 
@@ -51,13 +54,46 @@ sub status_message { 'mock_hub_status_message' }
 
 
 # These methods return real libraries
-sub helpers { $_[0]->{helpers} || Socialtext::Helpers->new(hub => $_[0]) }
-sub display { $_[0]->{display} || Socialtext::DisplayPlugin->new(hub => $_[0]) }
-sub css { $_[0]->{css} || Socialtext::CSS->new(hub => $_[0]) }
-sub favorites { $_[0]->{favorites} || Socialtext::FavoritesPlugin->new(hub => $_[0]) }
-sub category { $_[0]->{category} || Socialtext::CategoryPlugin->new(hub => $_[0]) }
-sub recent_changes { $_[0]->{recent_changes} || Socialtext::RecentChangesPlugin->new(hub => $_[0]) }
-sub syndicate { $_[0]->{syndicate} || Socialtext::SyndicatePlugin->new(hub => $_[0]) }
-sub tiddly { $_[0]->{tiddly} || Socialtext::TiddlyPlugin->new(hub => $_[0]) }
+sub helpers { 
+    return $_[0]->{helpers} ||= Socialtext::Helpers->new(hub => $_[0]);
+}
+
+sub display { 
+    return $_[0]->{display} ||= Socialtext::DisplayPlugin->new(hub => $_[0]);
+}
+
+sub css { 
+    return $_[0]->{css} ||= Socialtext::CSS->new(hub => $_[0]);
+}
+
+sub favorites { 
+    return $_[0]->{favorites} ||= 
+        Socialtext::FavoritesPlugin->new(hub => $_[0]);
+}
+
+sub category { 
+    return $_[0]->{category} ||= Socialtext::CategoryPlugin->new(hub => $_[0]);
+}
+
+sub recent_changes { 
+    return $_[0]->{recent_changes} ||= 
+        Socialtext::RecentChangesPlugin->new(hub => $_[0]);
+}
+
+sub syndicate { 
+    return $_[0]->{syndicate} ||= Socialtext::SyndicatePlugin->new(hub => $_[0]);
+}
+
+sub tiddly { 
+    return $_[0]->{tiddly} ||= Socialtext::TiddlyPlugin->new(hub => $_[0]);
+}
+
+sub fetchrss { 
+    return $_[0]->{fetchrss} ||= Socialtext::FetchRSSPlugin->new(hub => $_[0]);
+}
+
+sub template {
+    return $_[0]->{template} ||= Socialtext::Template->new(hub => $_[0]);
+}
 
 1;

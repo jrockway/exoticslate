@@ -1,5 +1,4 @@
 # @COPYRIGHT@
-# XXX we should think about renaming this class
 package Socialtext::FetchRSSPlugin;
 use strict;
 use warnings;
@@ -68,6 +67,21 @@ sub _get_feed {
     if (defined($content) and length($content)) {
         my $feed = XML::Feed->parse(\$content) or
                 die XML::Feed->errstr, "\n";
+
+	# fixup URLS to absolute ones
+	my $hostname = '';
+        $hostname = $1 if $url =~ m!^(\w+://[^/]+)/!;
+	my $link_expander = sub {
+		my $l = shift;
+		return $l if $l =~ m!^\w+://!;
+		return $hostname . $l;
+	};
+
+	$feed->link( $link_expander->( $feed->link ) );
+	foreach my $entry ( $feed->entries ) {
+            $entry->link( $link_expander->( $entry->link ) );
+	}
+
         return $feed;
     }
 }
@@ -127,6 +141,7 @@ sub html {
         if $self->_is_recursive($url);
     my $feed = $self->hub->fetchrss->get_feed($url, $expire);
     
+    no warnings 'redefine';
     local *XML::Feed::Entry::Atom::title = sub {
         my $title = shift->{entry}->title(@_);
         Encode::_utf8_on($title) unless Encode::is_utf8($title);

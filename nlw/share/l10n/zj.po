@@ -2001,8 +2001,8 @@ msgstr "い7 LおおkS LいKえ yおう あRえ 7RyいnG 7お sえあRcH おn �
 
 #: share/template/element/settings/workspaces_create_section
 #.  
-msgid "It must consist of 3-30 lowercase letters or dashes."
-msgstr "い7 MうS7 cおnSいS7 おF 3-30 lおwえrCあSえ lえ77えRs おR DあShえs."
+msgid "It must consist of 3-30 lowercase letters, numbers, underscores or dashes."
+msgstr "い7 MうS7 cおnSいS7 おF 3-30 lおwえrCあSえ lえ77えRs, NうM8えrS, うNdえrScおrえs おR DあShえs."
 
 #: lib/Socialtext/Locales.pm
 #.  

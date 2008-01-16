@@ -30,7 +30,7 @@ sub get_workspace_from_url {
     # st-workspace-view-edit-stats. Clean them out here.
     #
     if ($workspace) {
-        $workspace =~ s/[^a-z0-9\-]//g;
+        $workspace =~ s/[^a-z0-9\-_]//g;
     }
 
     return $workspace;

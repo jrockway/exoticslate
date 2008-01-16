@@ -2001,7 +2001,7 @@ msgstr ""
 
 #: share/template/element/settings/workspaces_create_section
 #.  
-msgid "It must consist of 3-30 lowercase letters or dashes."
+msgid "It must consist of 3-30 lowercase letters, numbers, underscores or dashes."
 msgstr ""
 
 #: lib/Socialtext/Locales.pm

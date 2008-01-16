@@ -2,7 +2,9 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::Socialtext tests => 14;
+use Test::Socialtext tests => 20;
+use Socialtext::Workspace;
+use Socialtext::Account;
 fixtures( 'admin_no_pages' );
 
 my $script = "bin/st-workspace-view-edit-stats";
@@ -28,6 +30,21 @@ Single_edit: {
         file => "t/test-data/view-edit-stats/single_edit",
         'devnull1@socialtext.com' => [1, 1, 2],
         'Workspace Total' => [1, 1, 2],
+    );
+}
+
+Workspace_with_underscore: {
+    # The workspace needs to exist.
+    Socialtext::Workspace->create(
+        name => 'ab_cd',
+        title => 'ab cd',
+        account_id => 
+            Socialtext::Account->new(name => 'Socialtext')->account_id,
+    );
+    stats_ok(
+        file => "t/test-data/view-edit-stats/workspace_with_underscore",
+        'devnull1@socialtext.com' => [1, 0, 1],
+        'Workspace Total' => [1, 0, 1],
     );
 }
 

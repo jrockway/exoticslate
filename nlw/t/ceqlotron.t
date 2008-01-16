@@ -4,15 +4,19 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 33;
+use Test::Socialtext tests => 41;
 use Test::Socialtext::Search;
 fixtures( 'admin' );
 
 use Fcntl ':flock';
 use File::chdir;
 use File::Path;
+use Socialtext::AppConfig;
+use Socialtext::EventListener::Registry;
 use Socialtext::Paths;
-use YAML 'LoadFile';
+use YAML qw(LoadFile Dump DumpFile);
+
+Socialtext::EventListener::Registry->load(); # set up default registry
 
 use Readonly;
 
@@ -26,6 +30,7 @@ Readonly my $MACGUFFIN_FILE => "/tmp/macguffin-$<.yaml";    # XXX dedup
 Readonly my $PAGE_NAME      => 'click_links';
 Readonly my $SLEEP_SECONDS  => 1;
 Readonly my $WORKSPACE      => 'admin';
+Readonly my %DEFAULT_REGISTRY => %Socialtext::EventListener::Registry::Listeners;
 
 my $hub = new_hub('admin');
 
@@ -74,6 +79,38 @@ sub test_page_symlink {
     unlink $MACGUFFIN_FILE or die "unlink '$MACGUFFIN_FILE': $!";
 
     st_admin_args_ok($macguffin_output);
+    st_admin_command_count_is( $macguffin_output, 2 );
+    for my $cmd (qw(index-page send-weblog-pings send-email-notifications 
+                    send-watchlist-emails)) {
+        st_admin_command_present(
+            $macguffin_output,
+            join( "\0", $cmd, '--workspace', 'admin', '--page', $PAGE_NAME,
+                '--ceqlotron' )
+        );
+    }
+
+    my %separate_events = (
+        Page => [
+            'Socialtext::EventListener::IndexPage::IndexPage',
+            'Socialtext::EventListener::IndexPage::RampupIndexPage',
+            'Socialtext::EventListener::Page::SendEmailNotifications',
+            'Socialtext::EventListener::Page::SendWatchlistEmails',
+            'Socialtext::EventListener::Page::SendWeblogPings',
+        ]
+    );
+    activate_handler_config( \%separate_events );
+    Socialtext::ChangeEvent->Record($page);
+
+    run_ceqlotron_with_macguffin();
+    ok(
+        -e $MACGUFFIN_FILE,
+        "$CEQLOTRON (page symlink) called the MacGuffin"
+    );
+
+    my $macguffin_output = LoadFile($MACGUFFIN_FILE);
+    unlink $MACGUFFIN_FILE or die "unlink '$MACGUFFIN_FILE': $!";
+
+    st_admin_args_ok($macguffin_output);
     st_admin_command_count_is( $macguffin_output, 5 );
     for my $cmd (qw(index-page send-weblog-pings send-email-notifications 
                     send-watchlist-emails)) {
@@ -83,6 +120,8 @@ sub test_page_symlink {
                 '--ceqlotron' )
         );
     }
+
+    activate_handler_config( \%DEFAULT_REGISTRY );
 }
 
 # This test uses dev-bin/macguffin to figure out how st-admin would be called and
@@ -184,6 +223,13 @@ sub test_rampup_produces_macguffin {
         "index-page\0--workspace\0admin\0--page\0$PAGE_NAME\0--search-config\0rampup\0--ceqlotron"
     );
     turn_off_rampup();
+}
+
+sub activate_handler_config {
+    my $config = shift;
+    my $config_file = 't/tmp/etc/socialtext/event_listeners.yaml';
+    DumpFile($config_file, Dump($config));
+    Socialtext::EventListener::Registry->_force_load();
 }
 
 sub st_admin_args_ok {

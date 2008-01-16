@@ -36,7 +36,7 @@ test_foreach_ctime();
 test_last_event();
 test_event_removal();
 
-# At runtime there should be eight listeners registered, five for Page
+# At runtime there should be five listeners registered, two for Page
 # events, two for Attachment events, and one for Workspace events
 sub test_registrations {
     Socialtext::EventListener::Registry->load();
@@ -44,8 +44,8 @@ sub test_registrations {
 
     is( scalar keys %listeners, 7,
         "There are seven event types" );
-    is( scalar @{ $listeners{Page} }, 5,
-        "There are five page listeners" );
+    is( scalar @{ $listeners{Page} }, 2,
+        "There are two page listeners" );
     is( scalar @{ $listeners{Attachment} }, 2,
         "There are two attachment listeners" );
     is( scalar @{ $listeners{Workspace} }, 1,

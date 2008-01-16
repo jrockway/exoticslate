@@ -19,8 +19,14 @@ my $config_file
 
         return if $loaded++;
 
-        %Listeners = %{ LoadFile($config_file) };
+        $class->_force_load();
     }
+}
+
+sub _force_load {
+    my $class = shift;
+
+    %Listeners = %{ LoadFile($config_file) };
 }
 
 1;

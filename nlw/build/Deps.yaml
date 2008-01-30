@@ -20,7 +20,7 @@ Archive::Tar: 1.24
 Archive::Zip: 1.14
 Cache::FileCache: 0
 Carp: 0
-CGI: 3.29
+CGI: 3.10
 CGI::Cookie: 0
 Cache::FileCache: 0
 Carp: 0

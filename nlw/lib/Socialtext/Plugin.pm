@@ -12,6 +12,9 @@ use Socialtext::File;
 use Socialtext::Paths;
 use Socialtext::User;
 
+# Look for plugins by namespace.  This exposes the ->plugins() method
+use Module::Pluggable search_path => ['Socialtext::Plugin'];
+
 const cgi_class       => '';
 
 field cgi         => -init => '$self->hub->cgi';

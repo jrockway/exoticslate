@@ -15,6 +15,7 @@ use Socialtext::BrowserDetect ();
 use Socialtext::Challenger;
 use Socialtext::l10n qw(loc);
 use Socialtext::WebApp;
+use Socialtext::Plugin;
 
 sub class_id { 'hub' }
 
@@ -327,6 +328,7 @@ sub plugin_classes { @PluginClasses }
 
 BEGIN {
     for my $class (
+        Socialtext::Plugin->plugins(),
         qw(
             Socialtext::Attachments
             Socialtext::CGI

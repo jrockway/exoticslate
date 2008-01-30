@@ -102,6 +102,7 @@ Mail::Address: 1.67
 MIME::Parser: 5.417
 MIME::Types: 1.15
 MLDBM: 2.01
+Module::Pluggable 0
 Params::Validate: 0.79
 Pod::Usage: 0
 POSIX: 1.08

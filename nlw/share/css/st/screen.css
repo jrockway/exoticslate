@@ -155,6 +155,7 @@ body {
 #st-search-form #st-search-term {
     float: left;
     font-size: 60%;
+    width: 250px;
 }
 
 #st-search-scope {

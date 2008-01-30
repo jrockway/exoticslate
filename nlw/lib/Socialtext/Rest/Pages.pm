@@ -5,6 +5,8 @@ use warnings;
 use strict;
 
 use base 'Socialtext::Rest::Collection';
+use Socialtext;
+use Socialtext::Workspace;
 use Socialtext::HTTP ':codes';
 
 use Socialtext::Page;
@@ -34,8 +36,10 @@ sub collection_name {
 # workspace. Using / on the end of the map in uri_map does not get
 # the desired results, and are they even desired?
 sub element_list_item {
-    "<li><a href='pages/$_[1]->{uri}'>"
-        . Socialtext::String::html_escape( $_[1]->{name} )
+    my ( $self, $page ) = @_;
+
+    return "<li><a href='../$page->{workspace_name}/pages/$page->{uri}'>"
+        . Socialtext::String::html_escape( $page->{name} )
         . "</a></li>\n";
 }
 
@@ -94,14 +98,35 @@ sub _entities_for_query {
 sub _searched_pages {
     my ( $self, $search_query ) = @_;
 
-    map { Socialtext::Page->new( hub => $self->hub, id => $_ ) }
-        map  { $_->page_uri }
-        grep { $_->isa('Socialtext::Search::PageHit') }
-        search_on_behalf(
+    map {
+        Socialtext::Page->new(
+            hub => $self->_hub_for_hit( $self->hub, $_->[0] ), id => $_->[1] )
+        }
+        map { [ $_->workspace_name, $_->page_uri ] }
+        grep { $_->isa('Socialtext::Search::PageHit') } search_on_behalf(
             $self->hub->current_workspace->name,
             $search_query,
-            undef, # undefined scope
-            $self->hub->current_user );
+            undef,    # undefined scope
+            $self->hub->current_user
+        );
 }
+
+sub _hub_for_hit {
+    # Mostly, evilly, stolen from Socialtext::Formatter::WaflPhrase
+    my ( $self, $hub, $workspace_name ) = @_;
+    if ( $workspace_name eq $hub->current_workspace->name ) {
+        return $hub;
+    }
+
+    my $main = Socialtext->new();
+    $main->load_hub(
+        current_user      => $hub->current_user,
+        current_workspace =>
+            Socialtext::Workspace->new( name => $workspace_name ),
+    );
+    $main->hub->registry->load;
+    return $main->hub;
+}
+
 
 1;

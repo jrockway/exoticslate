@@ -354,6 +354,10 @@ The identifier for the current revision of this page
 
 The total count of revisions for this page
 
+=item workspace_name
+
+The name of the workspace where this page lives.
+
 =back
 
 =cut
@@ -391,7 +395,9 @@ sub hash_representation {
         last_edit_time => $self->metadata->Date,
         modified_time  => $self->modified_time,
         revision_id    => $self->revision_id,
-        revision_count => $self->revision_count, };
+        revision_count => $self->revision_count,
+        workspace_name => $self->hub->current_workspace->name,
+    };
 }
 
 =head2 $page->get_headers()

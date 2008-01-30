@@ -15,6 +15,7 @@ use Test::HTTP 'no_plan';
 use Test::More;
 use JSON;
 
+
 $JSON::UTF8 = 1;
 
 $Test::HTTP::BasicUsername = 'devnull1@socialtext.com';
@@ -26,6 +27,7 @@ Readonly my $BASE          => $LIVE->base_url . '/data/workspaces/admin/pages';
 Readonly my $NEW_BODY      => "Floss. Do not forget to floss.\n";
 
 my $page_uri;
+my $all_pages_content;
 
 test_http "DELETE pages is a bad method" {
     >> DELETE $BASE
@@ -101,15 +103,66 @@ test_http "GET pages list" {
 
     my $content = eval { jsonToObj($test->response->content) };
     is( $@, '', 'JSON is well formed.' );
+    # Setting global for use in next test.  Ugly.
+    $all_pages_content = $content;
 
     for my $page (@$content) {
-        is( keys %$page, 10, "Page has 10 keys." );
+        is( keys %$page, 11, "Page has 11 keys." );
         ok( exists $page->{$_}, "Page contains $_." ) for qw(
             page_uri page_id name modified_time uri revision_id last_edit_time
-            last_editor revision_count);
+            last_editor revision_count workspace_name);
         isa_ok( $page->{tags}, 'ARRAY', "Page tags" );
 
         is_deeply( $page->{tags}, ['Welcome', 'Recent Changes'], "Quick Start has proper tags" )
             if $page->{name} eq 'Quick Start';
     }
+}
+
+test_http "GET pages search" {
+    >> GET $BASE?q=link
+    >> Accept: application/json
+
+    << 200
+
+    my $content = eval { jsonToObj($test->response->content) };
+    is( $@, '', 'JSON is well formed.' );
+    ok( @$content < @$all_pages_content, "Fewer pages in search result than workspace overall." )
+}
+
+#############
+use Socialtext::Ceqlotron;
+
+$ENV{NLW_APPCONFIG} = 'ceqlotron_synchronous=1';
+warn "# Running this ceqlotron queue.  This may take a minute or two.\n";
+Socialtext::Ceqlotron::run_current_queue();
+#############
+
+test_http "GET interworkspace search" {
+    >> GET $BASE?q=title:funny+workspaces:help-en,admin
+    >> Accept: application/json
+
+    << 200
+
+    my $content = eval { jsonToObj($test->response->content) };
+    is( $@, '', 'JSON is well formed.' );
+
+    my %workspaces_seen;
+    for my $page (@$content) {
+        ok( exists $page->{workspace_name}, "Result has workspace_name attribute." );
+        $workspaces_seen{ $page->{workspace_name} }++;
+    }
+
+    is_deeply( [ keys %workspaces_seen ], [ sort qw( admin help-en ) ], "Result set has appropriate workspaces" );
+}
+
+test_http "GET interworkspace search links via HTML" {
+    >> GET $BASE?q=title:funny+workspaces:help-en
+    >> Accept: text/html
+
+    << 200
+
+    my $body = $test->response->decoded_content();
+    like $body,
+        qr{<a href=.\.\./help-en/pages/what_s_the_funny.*?>},
+        'Interwiki results are linked relative to the current workspace';
 }

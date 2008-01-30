@@ -1160,8 +1160,8 @@ proto.convert_html_to_wikitext = function(html) {
     html = html.replace(/^<DIV class="?wiki"?>([\s\S]*)<\/DIV>\n$/ig, '$1');
 
     // XXX debugging stuff
-    if (String(location).match(/\?.*html$/))
-        YYY(html);
+//     if (String(location).match(/\?.*html$/))
+//         YYY(html);
 
     this.copyhtml = html;
     var dom = document.createElement('div');
@@ -1175,19 +1175,19 @@ proto.convert_html_to_wikitext = function(html) {
     this.normalizeDomWhitespace(dom);
     this.normalizeDomStructure(dom);
 
-    if (String(location).match(/\?.*html2$/))
-        YYY(dom.innerHTML);
+//     if (String(location).match(/\?.*html2$/))
+//         YYY(dom.innerHTML);
 
     this.dom = dom;
 
     // XXX debugging stuff
-    dom_copy = copyDom(dom);
-    if (String(location).match(/\?.*dump$/))
-        throw yyy(dom_copy);
+//     dom_copy = copyDom(dom);
+//     if (String(location).match(/\?.*dump$/))
+//         throw yyy(dom_copy);
 
     var wikitext = this.walk(dom);
-    if (String(location).match(/\?.*dump2$/))
-        throw yyy(copyDom(dom));
+//     if (String(location).match(/\?.*dump2$/))
+//         throw yyy(copyDom(dom));
     return wikitext.replace(/\n*$/, '\n');
 }
 
@@ -1231,7 +1231,8 @@ proto.walk = function(elem) {
         var method = 'format_' + part.nodeName.toLowerCase();
         if (method != 'format_blockquote' && part.is_indented)
             method = 'format_indent';
-        window.XXX_method = method = method.replace(/#/, '');
+//         window.XXX_method = method = method.replace(/#/, '');
+        method = method.replace(/#/, '');
         try {
             var text = this[method](part);
             if (part.fixup) {
@@ -1255,14 +1256,14 @@ proto.walk = function(elem) {
             this.wikitext += text;
         }
         catch(e) {
-            delete(e.stack);
-            var error = yyy({
-                'method': method,
-                'e': e,
-                'wikitext': this.wikitext
-            });
-            var dom_dump = yyy(dom_copy);
-            throw("Depth First Formatting Error:\n" + error + dom_dump);
+//             delete(e.stack);
+//             var error = yyy({
+//                 'method': method,
+//                 'e': e,
+//                 'wikitext': this.wikitext
+//             });
+//             var dom_dump = yyy(dom_copy);
+//             throw("Depth First Formatting Error:\n" + error + dom_dump);
         }
         part = part.nextSibling;
     }
@@ -1448,7 +1449,7 @@ proto.format_img = function(elem) {
         this.check_start_of_block(elem);
         return(uri);
     }
-    throw('unhandled image ' + elem.innerHTML);
+//     throw('unhandled image ' + elem.innerHTML);
 }
 
 proto.handle_include = function(text, elem) {

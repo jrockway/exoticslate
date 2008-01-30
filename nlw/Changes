@@ -2,6 +2,17 @@ Change log for Socialtext Open
 
 2.18.X
 
+Release notes, 2.18.5.0  Feb 2008
+
+  Made the search input box a bit wider.
+
+  Support Socialtext plugins that can be dropped in, without having to change any Socialtext code.
+
+  When searching accross workspaces using the REST API, links now correctly point to the correct workspaces.
+
+  Removed some JS code that alerts the page html under certain circumstances, when you try to edit it.
+
+
 Release notes, 2.18.4.0  Jon 2008
 
   [BUGS]

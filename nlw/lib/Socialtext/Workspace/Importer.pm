@@ -112,22 +112,24 @@ sub _create_workspace {
     my $account = Socialtext::Account->new( name => $info->{account_name} );
     $account ||= Socialtext::Account->create( name => $info->{account_name} );
 
-    my %create;
-    for my $c (
-        grep { $_ ne 'logo_uri' }
-        map { $_->name } Socialtext::Workspace->columns
-        ) {
-        $create{$c} = $info->{$c}
-            if exists $info->{$c};
-    }
-    $create{name} = $self->{new_name};
-
     my $ws = Socialtext::Workspace->create(
-        %create,
+        title => $info->{title},
+        name => $self->{new_name},
         created_by_user_id => $creator->user_id,
         account_id         => $account->account_id,
         skip_default_pages => 1,
     );
+
+    my %update;
+    for my $c (
+        grep { $_ ne 'logo_uri' && $_ ne 'name' && $_ ne 'created_by_user_id' && $_ ne 'account_id' }
+        map { $_->name } Socialtext::Workspace->columns
+        ) {
+        $update{$c} = $info->{$c}
+            if exists $info->{$c};
+    }
+
+    $ws->update( %update );
 
     if ( $info->{logo_filename} ) {
         open my $fh, '<', $info->{logo_filename}

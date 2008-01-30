@@ -940,16 +940,8 @@ sub comment_form_custom_fields {
                 }
             }
 
-            # XXX - maybe this belongs in a higher-level API that in
-            # turn calls set_permissions
-            if ( $p{set_name} =~ /^public/ ) {
-                $self->update(
-                    allows_html_wafl           => 0,
-                    email_notify_is_enabled    => 0,
-                    email_addresses_are_hidden => 1,
-                    homepage_is_dashboard      => 0,
-                );
-            }
+
+            $self->_set_permission_configs( set_name => $p{set_name} );
 
             $schema->commit();
         };
@@ -958,6 +950,26 @@ sub comment_form_custom_fields {
             $schema->rollback();
             rethrow_exception($e);
         }
+    }
+
+    # XXX - maybe this belongs in a higher-level API that in
+    # turn calls set_permissions
+    sub _set_permission_configs {
+	my $self = shift;
+        my %p = validate( @_, $spec );
+
+        my $html_wafl = ( $p{set_name} =~ /^(member|intranet|public\-read)/ ) ? 1 : 0;
+        my $email_addresses = ( $p{set_name} =~ /^(member|intranet)/ ) ? 0 : 1 ;
+        my $email_notify = ( $p{set_name} =~ /^public/ ) ? 0 : 1;
+        my $homepage = ( $p{set_name} eq 'member-only' ) ? 1 : 0;
+
+
+        $self->update(
+            allows_html_wafl           => $html_wafl,
+            email_notify_is_enabled    => $email_notify,
+            email_addresses_are_hidden => $email_addresses,
+            homepage_is_dashboard      => $homepage,
+        );
     }
 
     # This is just caching to make current_permission_set_name run at a

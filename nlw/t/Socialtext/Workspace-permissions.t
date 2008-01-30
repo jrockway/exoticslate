@@ -56,9 +56,11 @@ use Socialtext::Workspace;
         is( $ws->role_has_permission(%p), ( $guest_has_email_in ? 0 : 1 ),
             "guest's email_in permission is unchanged after sceond call to set_permissions()" );
 
-        my %defaults = map { $_ => ( $set_name =~ /^public/ ? 0 : 1 ) }
-            qw( allows_html_wafl email_notify_is_enabled homepage_is_dashboard );
-        $defaults{email_addresses_are_hidden} = $set_name =~ /^public/ ? 1 : 0;
+	my %defaults;
+        $defaults{allows_html_wafl} = ( $set_name =~ /^(member|intranet|public\-read)/ ) ? 1 : 0;
+        $defaults{email_addresses_are_hidden} = ( $set_name =~ /^(member|intranet)/ ) ? 0 : 1 ;
+        $defaults{email_notify_is_enabled} = ( $set_name =~ /^public/ ) ? 0 : 1;
+        $defaults{homepage_is_dashboard} = ( $set_name eq 'member-only' ) ? 1 : 0;
 
         for my $k ( sort keys %defaults ) {
             is( $ws->$k(), $defaults{$k}, "$k is $defaults{$k}" );

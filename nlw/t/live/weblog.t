@@ -60,13 +60,6 @@ category: Socialtext weblog
 --- match
 by devnull1\@socialtext.com on \d+-\d+-\d+ \d+:\d+:\d+[ap]m
 
-=== Make a new post
---- follow_link
-text_regex: New.*Post
-n: 1
---- match
-<input type="hidden" name="add_tag" value="Socialtext weblog" />
-
 === Remove edit permission for workspace admin
 --- do: removePermission workspace_admin edit
 

@@ -686,6 +686,9 @@ sub standard_params {
         || $hostname 
         || die "Could not figure out a hostname for this machine.\n";
 
+    $config{nlw_web_hostname} = Socialtext::AppConfig->web_hostname
+	|| $config{nlw_server_hostname};
+
     $config{data_root_dir} = $dirs{root};
     $config{ssl_base_dir} = $dirs{ssl_base};
 

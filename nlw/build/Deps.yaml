@@ -85,6 +85,7 @@ Lingua::JA::Fold: 0.07
 Imager: 0
 IO::File: 0
 IPC::Run: 0.79
+JavaScript::Minifier: 0
 Jcode: 2.06
 Jemplate: 0.20
 JSON: 1.07

@@ -5,6 +5,7 @@
     box_javascript = '1',
     dropshadow = 1,
     subnav = 'element/wiki/subnav-default',
+    page_action = 'display',
 %]
 <table id="st-content-page-display-width-controller" class="st-content-width-controller"><tr><td>
 [% INCLUDE side_boxes_toggle %]
@@ -20,6 +21,7 @@
 
 <div style="clear:both; height:1px;">&nbsp;</div>
 </td></tr></table>
+
 [% END %]
 
 [% BLOCK side_boxes_toggle %]

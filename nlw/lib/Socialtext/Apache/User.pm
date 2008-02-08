@@ -12,6 +12,10 @@ use Socialtext::User;
 
 use constant COOKIE_NAME => 'NLW-user';
 
+# Note: A parallel version of this code lives in Socialtext::CGI::User
+# so if this mechanism changes, we need to change the CGI version too
+# (or merge them together).
+
 
 sub set_login_cookie {
     my $r = shift;
@@ -42,22 +46,22 @@ sub _login_cookie {
 
 sub current_user {
     my $r = shift;
-    my $name_or_id = _user_id_or_username( $r );
+    my $name_or_id = _user_id_or_username( $r ) or return;
 
-    return unless $name_or_id;
+    my $user = _current_user($name_or_id);
+    $r->connection->user($user->username) unless $r->connection->user();
+    return $user;
+}
 
-    # XXX: user_id() can return things like $r->connection->user, which is
-    # not a valid id, so use username. This seems blech
-    my $user;
+sub _current_user {
+    my $name_or_id = shift;
+
     if ($name_or_id =~ /\D+/) {
-        $user = Socialtext::User->new( username => $name_or_id );
+        return Socialtext::User->new( username => $name_or_id );
     }
     else {
-        $user = Socialtext::User->new( user_id => $name_or_id );
+        return Socialtext::User->new( user_id => $name_or_id );
     }
-    $r->connection->user($user->username) unless $r->connection->user();
-
-    return $user;
 }
 
 sub _user_id_or_username {

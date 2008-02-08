@@ -82,6 +82,11 @@ Wikiwyg.is_safari_unknown = (
 function setup_wikiwyg() {
     if (! Wikiwyg.browserIsSupported) return;
 
+    Socialtext.wikiwyg_variables.loc = loc;
+    jQuery(
+        Jemplate.process('layout/edit_wikiwyg', Socialtext.wikiwyg_variables)
+    ).insertAfter('#st-display-mode-container');
+
     // The div that holds the page HTML
     var myDiv = $('wikiwyg-page-content');
     if (! myDiv)
@@ -302,20 +307,7 @@ function setup_wikiwyg() {
     ww.modeButtonMap[WW_PREVIEW_MODE] = preview_link;
     ww.modeButtonMap[WW_HTML_MODE] = html_link;
 
-    if (Socialtext.new_page || Socialtext.start_in_edit_mode || location.hash.toLowerCase() == '#edit' ) {
-        setTimeout(edit_link.onclick, 1);
-    }
 }
-
-function try_wikiwyg() {
-    try {
-        setup_wikiwyg();
-    } catch(e) {
-        alert(loc('setup_wikiwyg error') + ': ' + (e.description || e));
-    }
-}
-
-Event.observe(window, 'load', try_wikiwyg);
 
 Wikiwyg.in_transition = false;
 Wikiwyg.transition_message = function (arg) {

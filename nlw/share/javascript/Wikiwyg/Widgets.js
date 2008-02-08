@@ -637,8 +637,8 @@ proto.widget_walk = function(elem) {
 
 proto.replace_widget = function(elem) {
     var comment = elem.lastChild;
-    if (comment.nodeType != 8) return;
-    if (! comment.nodeValue.match(/^\s*wiki:/)) return;
+    if (!comment || comment.nodeType != 8) return elem;
+    if (! comment.nodeValue.match(/^\s*wiki:/)) return elem;
     var widget = comment.nodeValue.replace(/^\s*wiki:\s*([\s\S]*?)\s*$/, '$1');
     widget = widget.replace(/-=/g, '-');
 

@@ -1,5 +1,18 @@
 Change log for Socialtext Open
 
+2.19.X
+
+Release notes, 2.19.0.0  Feb 2008
+
+  Major Javascript refactorings to improve overall product speed.
+
+  Improvements to enable usage reporting (usage reporting not part of Socialtext Open)
+
+  Allow for setting the hostname used by the website, instead of using the machine's name.
+
+  Disallow <script> tags in .html WAFL blocks.
+
+
 2.18.X
 
 Release notes, 2.18.5.0  Feb 2008

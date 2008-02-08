@@ -861,6 +861,7 @@ proto.format_select = proto.skip;
 proto.format_small = proto.pass;
 proto.format_spacer = proto.skip;
 proto.format_style = proto.skip;
+proto.format_script = proto.skip;
 proto.format_sub = proto.pass;
 proto.format_submit = proto.skip;
 proto.format_sup = proto.pass;

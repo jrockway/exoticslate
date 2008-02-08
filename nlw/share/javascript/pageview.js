@@ -117,7 +117,9 @@ ST.Page.prototype = {
             if (page_info) {
                 if ((Page.revision_id < page_info.revision_id) || force_update) {
                     $('st-page-content').innerHTML = page_info.html;
-                    $('st-page-editing-revisionid').value = page_info.revision_id;
+                    Socialtext.wikiwyg_variables.page.revision_id =
+                        page_info.revision_id;
+                    // $('st-page-editing-revisionid').value = page_info.revision_id;
                     Page.revision_id = page_info.revision_id;
                     if ($('st-raw-wikitext-textarea')) {
                         $('st-raw-wikitext-textarea').value = Wikiwyg.is_safari

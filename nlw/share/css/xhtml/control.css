@@ -1,6 +1,5 @@
 #control-menu {
 
-
 }
 
 #control-menu ul {
@@ -63,3 +62,15 @@ table tr td, table tr th {
 table tr.even, table tr.w-st-even-row {
     background-color: #f2f6f1;
 }
+
+/* User Reports additions */
+
+#report-iframe { 
+   margin: 20px auto 10px auto;
+   width: 100%;
+}
+
+#data-selection { 
+   padding: 10px;
+}
+

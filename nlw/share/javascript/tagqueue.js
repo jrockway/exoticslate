@@ -176,7 +176,7 @@ ST.TagQueue.prototype = {
     },
 
     _queue_tag: function () {
-        var tag_field = $(this.element.tagField);
+        var tag_field = QQQ = $(this.element.tagField);
         return this.queue_tag(tag_field.value);
     },
 

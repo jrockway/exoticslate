@@ -1,4 +1,4 @@
-[% corners = 'straight' UNLESS corners %]
+[% DEFAULT corners = 'straight' %]
 <table class="button-table"><tr><td>
     <div class="button-[% corners %]">
         <div class="button-[% corners %]-right-top">

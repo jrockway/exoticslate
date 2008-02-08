@@ -4,7 +4,7 @@
 [% IF config.is_appliance AND config.hostname_conf_exists %]
     Include /etc/apache2/conf.d/hostname.conf
 [% ELSE %]
-    ServerName [% config.nlw_server_hostname %]
+    ServerName [% config.nlw_web_hostname %]
     [% FOREACH alias in config.nlw_server_aliases %]
     ServerAlias [% alias %]
     [% END %]
@@ -73,6 +73,7 @@
     ExpiresActive On
     <Location /static>
         ExpiresDefault "access plus 1 years"
+        FileETag none
     </Location>
 
 

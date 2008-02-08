@@ -1,27 +1,28 @@
 
 if (Socialtext.box_javascript) {
     createPageObject();
-    window.Attachments = new ST.Attachments ();
-    window.Tags = new ST.Tags ();
-    window.TagQueue = new ST.TagQueue ();
-    window.Watchlist = new ST.Watchlist();
-    Event.observe(window, 'load',
-        function() {
-            window.Watchlist._loadInterface('st-watchlist-indicator');
-        }
-    );
+
+    if (ST.Attachments) window.Attachments = new ST.Attachments ();
+    if (ST.Tags) window.Tags = new ST.Tags ();
+    if (ST.TagQueue) window.TagQueue = new ST.TagQueue ();
+    if (ST.Watchlist) window.Watchlist = new ST.Watchlist();
+
+    jQuery(function() {
+        window.Watchlist._loadInterface('st-watchlist-indicator');
+    });
 }
 
 window.NavBar = new ST.NavBar ();
 
-Event.observe(window, 'load', function() {
-    var toggles = document.getElementsByClassName('watchlist-list-toggle');
-    for (var ii = 0; ii < toggles.length; ii++) {
-        var toggle = toggles[ii];
-        var page_id = toggle.getAttribute('alt');
+jQuery(function() {
+    if (ST.Watchlist)
+    jQuery('.watchlist-list-toggle').each(function() {
+        var page_id = this.getAttribute('alt');
         var wl = new ST.Watchlist();
         wl.page_id = page_id;
-        wl._loadInterface(toggle);
-    }
+        wl._loadInterface(this);
+    });
     ST.hookCssUpload();
+
 });
+

@@ -8,7 +8,7 @@ use Socialtext::Paths;
 fixtures("admin_no_pages");
 
 ST_DB_DUMP_DATA: {
-    my $rv = system("st-db", "--dump-data");
+    my $rv = system("bin/st-db", "--dump-data");
     is($rv, 0, "Ensure st-db --dump-data has return code of 0");
 
     my $dir = Socialtext::Paths::storage_directory("db-backups");

@@ -76,6 +76,25 @@ sub user_directory {
         : $dir;
 }
 
+=head2 storage_directory([String $subdir])
+
+Location of the generic storage directory.  You can use it for whatever you
+want which doesn't fit into the per-workspace page/plugin data model. 
+
+Optionally you can pass in a string which will be added to the storage path as
+a subdir.  No guarantee is made that the directory exists.
+
+=cut
+
+sub storage_directory {
+    my $subdir = shift;
+    $subdir = "" unless defined $subdir;
+    return Socialtext::File::catdir(
+        _data_relative_path("storage"),
+        $subdir
+    );
+}
+
 sub _per_workspace_dir {
     my $subdir = shift;
     my @id = shift || ();

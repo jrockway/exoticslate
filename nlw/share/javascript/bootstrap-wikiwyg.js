@@ -1,5 +1,6 @@
 function try_wikiwyg() {
-    jQuery("#st-edit-button-link,#st-edit-actions-below-fold-edit").one("click", function() {
+
+    var boot = function(e) {
         jQuery("<script>").attr({
             type: 'text/javascript',
             src: nlw_make_static_path("/javascript/socialtext-edit-wikiwyg.js.gz")
@@ -33,7 +34,13 @@ function try_wikiwyg() {
         loader();
 
         return false;
-    });
+    };
+
+    jQuery("#st-edit-button-link,#st-edit-actions-below-fold-edit")
+    .one("click",boot);
+
+    if (Socialtext.double_click_to_edit)
+        jQuery("#st-page-content").one("dblclick", boot);
 
     if (Socialtext.new_page || Socialtext.start_in_edit_mode || location.hash.toLowerCase() == '#edit' ) {
         setTimeout(function() {

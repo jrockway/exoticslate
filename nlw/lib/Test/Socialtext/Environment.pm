@@ -119,8 +119,12 @@ sub _maybe_decache {
 sub _create_test_environment {
     my $self = shift;
     -d $self->root_dir or mkdir $self->root_dir or die $self->root_dir . ": $!";
-    unless ( -d ($self->base_dir . "/docroot") ) {
-        File::Path::mkpath( $self->base_dir . "/docroot", 0, 0775 );
+
+    # Ensure these directories are created in a dev-env / test environment.
+    for my $subdir (qw(docroot storage)) {
+        unless ( -d ( $self->base_dir . "/" . $subdir ) ) {
+            File::Path::mkpath( $self->base_dir . "/" . $subdir, 0, 0775 );
+        }
     }
 
     $self->_make_fixtures_current;

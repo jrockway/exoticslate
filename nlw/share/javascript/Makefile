@@ -114,6 +114,7 @@ OTHER_SOURCE_FILES= \
 		Watchlist.js \
 		listview.js \
         	settings.js \
+		comment.js \
 		startup.js \
 
 UNUSED_SOURCE_FILES= \

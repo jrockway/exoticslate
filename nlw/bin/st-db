@@ -16,6 +16,8 @@ use List::Util qw(first);
 use Socialtext::AppConfig;
 use Socialtext::Schema;
 use User::pwent;
+use Socialtext::Paths;
+use Socialtext::File;
 
 
 my @ORIGINAL_ARGV = @ARGV;
@@ -178,6 +180,9 @@ sub required_data {
     }
 }
 
+# Dump the DB to an SQL file in the storage_directory().  There is a
+# corresponding post-install script (share/post-install/XX-cleanup-db-backups)
+# which deletes old DB backups.
 sub dump_data {
     my $schema = shift;
 
@@ -185,7 +190,10 @@ sub dump_data {
 
     my %connect = _connect_params();
     my $time    = time;
-    my $file    = "/tmp/$connect{schema_name}-dump.$time.sql";
+    my $dir     = Socialtext::Paths::storage_directory("db-backups");
+    my $file    = Socialtext::File::catfile($dir, "$connect{schema_name}-dump.$time.sql");
+
+    Socialtext::File::ensure_directory($dir);
 
     my @parms = (
         'pg_dump',

@@ -2,6 +2,10 @@ Change log for Socialtext Open
 
 2.19.X
 
+Release notes, 2.19.0.2  Feb 2008
+
+  Store database backups in a more stable place.
+
 Release notes, 2.19.0.0  Feb 2008
 
   Major Javascript refactorings to improve overall product speed.
@@ -11,7 +15,6 @@ Release notes, 2.19.0.0  Feb 2008
   Allow for setting the hostname used by the website, instead of using the machine's name.
 
   Disallow <script> tags in .html WAFL blocks.
-
 
 2.18.X
 
@@ -26,7 +29,7 @@ Release notes, 2.18.5.0  Feb 2008
   Removed some JS code that alerts the page html under certain circumstances, when you try to edit it.
 
 
-Release notes, 2.18.4.0  Jon 2008
+Release notes, 2.18.4.0  Jan 2008
 
   [BUGS]
 

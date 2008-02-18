@@ -81,12 +81,14 @@ CONF_TARGETS = apache-config      \
 # Directories to be installed
 DATA_ROOT_DIR    = $(PREFIX)@WEBROOT@
 DOCUMENT_ROOT    = $(PREFIX)@WEBROOT@/docroot
+STORAGE_DIR      = $(DATA_ROOT_DIR)/storage
 CACHE_DIR        = $(PREFIX)@CACHEDIR@
 CRON_DIR         = $(PREFIX)/etc/cron.d
 SPOOL_DIR        = $(PREFIX)@SPOOLDIR@
 INSTALLED_DIRS   = $(INIT_D_DIR)       \
                    $(ST_INSTALL_DIR)   \
                    $(DATA_ROOT_DIR)    \
+		   $(STORAGE_DIR)      \
                    $(DOCUMENT_ROOT)    \
 		   $(CACHE_DIR)        \
 		   $(CRON_DIR)         \

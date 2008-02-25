@@ -2,6 +2,10 @@ Change log for Socialtext Open
 
 2.19.X
 
+Release notes, 2.19.0.3  Feb 2008
+
+  Fixed bug when editing pages with double quotes in the title.
+
 Release notes, 2.19.0.2  Feb 2008
 
   Store database backups in a more stable place.

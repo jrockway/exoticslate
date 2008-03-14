@@ -5,10 +5,8 @@ use strict;
 use warnings;
 
 use base 'Socialtext::Rest';
-use JSON;
+use JSON::XS;
 use XML::Parser;
-
-$JSON::UTF8 = 1;
 
 sub GET_html {
     my ( $self, $rest ) = @_;
@@ -50,7 +48,7 @@ sub POST_js {
     my ( $self, $rest ) = @_;
     warn "POST_js() called\n";
     my $msg
-        = eval { JSON->new->jsonToObj( $self->rest->getContent() )->{message} };
+        = eval { decode_json( $self->rest->getContent() )->{message} };
     return $self->error( "400", "Bad Request", $@ ) if $@;
     return $self->_response( $self->text, $msg );
 }
@@ -86,7 +84,7 @@ sub _js_response {
     my ( $self, $text, $msg ) = @_;
     $msg = "" unless defined $msg;
     $self->rest->header(-type => 'application/json');
-    return JSON->new->objToJson( { text => $text, message => $msg } );
+    return encode_json( { text => $text, message => $msg } );
 }
 
 sub _xml_response {

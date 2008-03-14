@@ -22,6 +22,8 @@ sub uri { $_[0]->{uri} || 'mock_workspace_uri' }
 
 sub cascade_css { $_[0]->{cascade_css} || 1 }
 
+sub uploaded_skin { $_[0]->{uploaded_skin} || 0 }
+
 sub email_in_address { 'mock_workspace_email_in_address' }
 
 sub comment_form_window_height { 'mock_workspace_comment_form_window_height' }
@@ -33,5 +35,7 @@ sub customjs_uri { '' }
 sub customjs_name { '' }
 
 sub read_breadcrumbs { }
+
+sub permissions { shift } # hack - just return ourselves
 
 1;

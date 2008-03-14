@@ -14,14 +14,10 @@ L<Socialtext::Rest::Collection>
 
 =cut
 
-use JSON;
-$JSON::UTF8 = 1;
-
+use JSON::XS;
 use base 'Socialtext::Rest';
-
 use Socialtext::HTTP ':codes';
 
-$JSON::UTF8 = 1;
 
 sub allowed_methods {'GET, HEAD, PUT'}
 
@@ -149,7 +145,7 @@ END_OF_HEADER
 END_OF_TRAILER
 }
 
-sub resource_to_json { objToJson($_[1]) }
-sub json_to_resource { jsonToObj($_[1]) }
+sub resource_to_json { encode_json($_[1]) }
+sub json_to_resource { decode_json($_[1]) }
 
 1;

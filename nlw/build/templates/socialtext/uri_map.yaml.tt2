@@ -171,7 +171,7 @@
         'DELETE':  [Socialtext::Rest::Attachment, DELETE]
         '*': [Socialtext::Rest::Attachment, bad_method]
 -
-    '/data/workspaces/:ws/attachments/:attachment_id/files/:filename':
+    '/data/workspaces/:ws/attachments/:attachment_id/:version/:filename':
         'GET':
             '*/*': [Socialtext::Rest::Attachment, GET]
         'DELETE':  [Socialtext::Rest::Attachment, DELETE]

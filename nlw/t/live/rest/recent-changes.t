@@ -6,12 +6,10 @@ use strict;
 
 use Test::HTTP::Socialtext '-syntax', 'no_plan';
 
-use JSON;
+use JSON::XS;
 use Readonly;
 use Test::Live fixtures => ['admin'];
 use Test::More;
-
-$JSON::UTF8 = 1;
 
 Readonly my $WORKSPACE => 'admin';
 Readonly my $BASE      => Test::HTTP::Socialtext->url('/data');
@@ -33,7 +31,7 @@ test_http "recent changes JSON" {
     ~< Content-type: ^$JSON_TYPE(;|,|$)
     ~< Last-Modified: ^(Sun|Mon|Tue|Wed|Thu|Fri|Sat),
 
-    my $result = jsonToObj($test->response->content);
+    my $result = decode_json($test->response->content);
 
     is( ref $result, 'ARRAY', "returns a list" );
 

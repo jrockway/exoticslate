@@ -127,7 +127,7 @@ sub _require_email_in_permission {
     # users in one week, which is obviously a problem over the long
     # term.
     elsif (
-        $self->{workspace}->role_has_permission(
+        $self->{workspace}->permissions->role_can(
             permission => ST_EMAIL_IN_PERM,
             role       => Socialtext::Role->Guest(),
         )
@@ -615,7 +615,6 @@ sub _get_to_address_local_part {
     # NLW::EmailReceive checked Bcc, but that makes no sense on an
     # incoming message
     for my $address (
-
         # We start with the shortest address to prevent possible bugs
         # with the use of "." as a category separator. If we have a
         # workspace named john and send mail to john@socialtext.net
@@ -624,8 +623,8 @@ sub _get_to_address_local_part {
         sort { length $a <=> length $b }
         map  { $_->user }
         map  { Email::Address->parse($_) }
-        map  { $self->{email}->header($_) }
-        qw( To Cc )
+        ( map  { $self->{email}->header($_) } qw( To Cc ) ),
+        $ENV{RECIPIENT}
         ) {
 
         return $1 if $address =~ /^\"?($ws_re[^\"]*)\"?/;

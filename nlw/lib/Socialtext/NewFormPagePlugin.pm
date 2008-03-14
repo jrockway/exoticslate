@@ -7,7 +7,6 @@ use base 'Socialtext::Plugin';
 
 use Class::Field qw( const );
 use Socialtext::AppConfig;
-use Socialtext::TT2::Renderer;
 use Socialtext::BrowserDetect ();
 use Socialtext::l10n qw(loc);
 
@@ -77,9 +76,7 @@ sub _render {
 
     # We use this rather than Socialtext::Template since we need to look in
     # additional paths for our templates.
-    my $renderer = Socialtext::TT2::Renderer->instance;
-
-    return $renderer->render(
+    return $self->template_render(
         template => $template,
         vars => {
             $self->hub->helpers->global_template_vars,
@@ -131,9 +128,9 @@ sub html {
 sub form_exists {
     my $self = shift;
     -d (
-        Socialtext::AppConfig->code_base() . '/template/' .
-            $self->hub->new_form_page->template_base_path . '/'
-            . shift
+        $self->hub->skin->skin_path('s2') . '/template/' .
+        $self->hub->new_form_page->template_base_path . '/'
+        . shift
     );
 }
 

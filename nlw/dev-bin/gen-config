@@ -234,6 +234,11 @@ sub main {
 
         push @files,
             [
+            'socialtext/stax/README' => "$dirs{socialtext_etc}/stax/README",
+            { },
+            'overwrite'
+            ],
+            [
             'socialtext/shortcuts.yaml.tt2' => "$dirs{socialtext_etc}/shortcuts.yaml",
             { },
             $is_dev_install ? 'overwrite' : 0

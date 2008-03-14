@@ -20,8 +20,6 @@ for my $class ( Socialtext::Data::Classes() ) {
     $dbh->do($sql);
 }
 
-Socialtext::AlzaboWrapper->ClearCache();
-
 # Then we repopulate requisite data
 for my $class ( Socialtext::Data::Classes() ) {
     if ( $class->can('EnsureRequiredDataIsPresent') ) {

@@ -13,7 +13,8 @@ BEGIN {
 }
 
 my $admin  = new_hub('admin');
-my $yaml_path = Socialtext::AppConfig->code_base . '/javascript/Widgets.yaml';
+my $yaml_path = Socialtext::AppConfig->code_base .
+                '/skin/s2/javascript/Widgets.yaml';
 
 SET_FIELDS_with_search: {
     my $widget = {id => 'search'};
@@ -392,15 +393,15 @@ PARSE_WIDGET_aim: {
     is( $widget->{asap_id}, 'name', 'asap user id' );
 }
 
-PARSE_WIDGET_link1: {
+PARSE_WIDGET_interworkspace_link: {
     my $widgets = YAML::LoadFile($yaml_path);
     my $wafl = '"label"{link: workspace [page] section}';
     my $widget = $admin->wikiwyg->parse_widget($wafl, $widgets);
-    is( $widget->{id}, 'link1', 'link1 widget id' );
-    is( $widget->{label}, 'label', 'link1 has label' );
-    is( $widget->{workspace_id}, 'workspace', 'link1 workspace id' );
-    is( $widget->{page_title}, 'page', 'link1 page title' );
-    is( $widget->{section_name}, 'section', 'link1 section_name' );
+    is( $widget->{id}, 'link2', 'link2 widget id' );
+    is( $widget->{label}, 'label', 'link2 has label' );
+    is( $widget->{workspace_id}, 'workspace', 'link2 workspace id' );
+    is( $widget->{page_title}, 'page', 'link2 page title' );
+    is( $widget->{section_name}, 'section', 'link2 section_name' );
 }
 
 PARSE_WIDGET_link2: {

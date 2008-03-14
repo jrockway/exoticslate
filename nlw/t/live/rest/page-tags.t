@@ -6,12 +6,10 @@ use strict;
 
 use Test::HTTP::Socialtext '-syntax', tests => 34;
 
-use JSON;
+use JSON::XS;
 use Readonly;
 use Test::Live fixtures => ['admin_with_extra_pages', 'foobar'];
 use Test::More;
-
-$JSON::UTF8 = 1;
 
 Readonly my $BASE => Test::HTTP::Socialtext->url;
 Readonly my $URI  => "$BASE/data/workspaces/admin/pages/Admin wiki/tags";
@@ -25,7 +23,7 @@ test_http "GET no tags json" {
     << 200
     ~< Content-type: \bapplication/json\b
 
-    my $representation = jsonToObj( $test->response->content );
+    my $representation = decode_json( $test->response->content );
     isa_ok( $representation, 'ARRAY', 'Tags representation' );
     is_deeply( $representation, [], 'No tags.' );
 }
@@ -58,7 +56,7 @@ test_http "POST then GET new tag" {
     << 200
     ~< Content-type: \bapplication/json\b
 
-    my $representation = jsonToObj( $test->response->content );
+    my $representation = decode_json( $test->response->content );
     isa_ok( $representation, 'ARRAY', 'Tags representation' );
     is( scalar @$representation, 1, 'Now have 1 tag.' );
     ok( exists $representation->[0]->{uri}, 'Tag has a URI.' );
@@ -125,7 +123,7 @@ test_http "GET tags weighted order" {
     ~< Content-type: application/json
 
     my $content = $test->response->content;
-    my $representation = jsonToObj( $content );
+    my $representation = decode_json( $content );
 
     isa_ok( $representation, 'ARRAY', 'Tags representation' );
     is( scalar @$representation, 3, 'Now have 3 tags.' );

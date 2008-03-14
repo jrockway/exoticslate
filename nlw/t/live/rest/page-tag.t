@@ -7,12 +7,10 @@ use utf8;
 
 use Test::HTTP::Socialtext '-syntax', tests => 18;
 
-use JSON;
+use JSON::XS;
 use Readonly;
 use Test::Live fixtures => ['admin', 'foobar']; # foobar for devnull2
 use Test::More;
-
-$JSON::UTF8 = 1;
 
 Readonly my $BASE =>
     Test::HTTP::Socialtext->url('/data/workspaces/admin/pages');
@@ -87,7 +85,7 @@ test_http "GET json rep" {
     << 200
     ~< Content-type: application/json
 
-    my $representation = jsonToObj( $test->response->content );
+    my $representation = decode_json( $test->response->content );
 
     isa_ok( $representation, 'HASH', 'Tags representation' );
     ok( exists $representation->{uri}, 'Tag has a URI.' );

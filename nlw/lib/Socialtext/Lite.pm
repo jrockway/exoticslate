@@ -343,7 +343,8 @@ sub _process_template {
         search_link     => $self->_search_link,
         brand_stamp     => $self->hub->main->version_tag,
         workspace_title => $self->hub->current_workspace->title,
-        static_path     => Socialtext::Helpers->static_path,
+        static_path     => Socialtext::Helpers::static_path,
+        skin_uri        => $self->hub->skin->default_skin_uri,
         %vars,
     );
 }

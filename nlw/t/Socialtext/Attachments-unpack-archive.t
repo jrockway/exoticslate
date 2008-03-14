@@ -22,13 +22,14 @@ my $zip = 't/attachments/flat-bundle.zip';
 open my $fh, '<', $zip
     or die "Cannot read $zip: $!";
 
-$hub->attachments()->from_file_handle(
+my ($attachment) = $hub->attachments()->create(
     page_id  => $page->id,
     fh       => $fh,
-    unpack   => 1,
     filename => 'flat-bundle.zip',
     creator  => $hub->current_user(),
 );
+$attachment->extract;
+$attachment->delete(user => $hub->current_user);
 
 is_deeply(
     [ sort map { $_->filename } @{ $hub->attachments()->all() } ],

@@ -51,21 +51,14 @@ CEQLOTRON_SCRIPT = $(INIT_D_DIR)/ceqlotron
 SERVICE_SCRIPTS  = $(APACHE_SCRIPT) $(APACHE2_SCRIPT) $(CEQLOTRON_SCRIPT)
 
 # File sets that can be installed (use install-files to get all files)
-INSTALL_BASE = install-css        \
-               install-dev        \
-               install-html       \
-               install-images     \
+INSTALL_BASE = install-html       \
                install-fonts      \
-               install-javascript \
-               install-js-test    \
-               install-test       \
                install-migrations \
                install-l10n \
                install-post-install \
                install-wsdl
 
-INSTALL_FILE_TARGETS = $(INSTALL_BASE)   \
-                       install-template 
+INSTALL_FILE_TARGETS = $(INSTALL_BASE)
 
 INSTALL_PKGS_TARGETS = install-pkgs-dapper \
                        install-pkgs-breezy \
@@ -223,7 +216,6 @@ schema: install-ok
 
 install-files: install-ok         \
                $(ST_INSTALL_DIR)  \
-               javascript         \
                favicon            \
                install-base       \
 	       mecab              \
@@ -249,15 +241,8 @@ install-base: install-ok $(INSTALL_BASE)
 mecab: 
 	build/bin/convert-mecab-juman-dict-to-utf8 || /bin/true
 
-js: javascript
-javascript:
-	if [ "@JS_MODULES@" = "1" ]; then $(MAKE) -C share/javascript all; fi
-
-js-test:
-	if [ "@JS_MODULES@" = "1" ]; then $(MAKE) -C share/js-test; fi
-
 favicon: install-ok $(DATA_ROOT_DIR)
-	$(INSTALL_ST) share/images/favicon.ico $(DATA_ROOT_DIR)/favicon.ico
+	$(INSTALL_ST) share/favicon.ico $(DATA_ROOT_DIR)/favicon.ico
 
 install-init-d: install-ok etc/init.d/ceqlotron
 	$(INSTALL_ROOT) \
@@ -350,6 +335,11 @@ MANIFEST:
 	# XXX: this hack explicitely.
 	perl -i -p -e 's/^(.*Rule #1)$$/#-#$$1/;s/^(.*O Star\.txt)$$/#-#$$1/' $@
 
+js: javascript
+javascript:
+	# XXX make javascript should be removed from the appliance
+	# debian/rules
+	echo "make javascript is only here for backwards compatability"
 
 tardist: MANIFEST $(PERL_MAKEFILE)
 	$(PERL_MAKE) tardist
@@ -399,9 +389,9 @@ critic:
         $(CONF_TARGETS)          \
         $(INSTALL_PKGS_TARGETS)  \
         install-eventspace-forms \
+	javascript               \
         js                       \
         install-base             \
-        javascript               \
         favicon                  \
         install-init-d           \
         install-st-init-d        \

@@ -7,7 +7,6 @@ use warnings;
 use File::Basename ();
 use File::Path;
 use File::Spec;
-use Socialtext::AppConfig;
 use Socialtext::File;
 use Socialtext::Workspace;
 
@@ -17,10 +16,11 @@ fixtures( 'admin' );
 my $hub = new_hub('admin');
 
 my $admin = $hub->current_workspace();
-my $tarball = $admin->export_to_tarball();
+my $tarball = $admin->export_to_tarball(dir => "t/tmp");
 
 $admin->delete();
 
+require Socialtext::AppConfig;
 my $data_root = Socialtext::AppConfig->data_root_dir();
 File::Path::rmtree($data_root);
 
@@ -31,6 +31,7 @@ mkdir $new_root
     or die "Cannot mkdir $new_root: $!";
 
 Socialtext::AppConfig->set( data_root_dir => $new_root );
+warn "File: " . Socialtext::AppConfig->instance->{file};
 Socialtext::AppConfig->write;
 
 Socialtext::Workspace->ImportFromTarball( tarball => $tarball );
@@ -59,4 +60,10 @@ Socialtext::Workspace->ImportFromTarball( tarball => $tarball );
     ok( File::Spec->file_name_is_absolute($target),
         'symlink target is an absolute path' );
     ok( -f $target, 'symlink target exists' );
+}
+
+End_block: {
+    Socialtext::AppConfig->set( data_root_dir => $data_root );
+    Socialtext::AppConfig->write;
+    File::Path::rmtree($new_root);
 }

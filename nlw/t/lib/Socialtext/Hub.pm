@@ -3,13 +3,14 @@ package Socialtext::Hub;
 use strict;
 use warnings;
 use base 'Socialtext::MockBase';
-use mocked 'Socialtext::Workspace';
-use mocked 'Socialtext::Pages';
-use mocked 'Socialtext::CGI';
-use mocked 'Socialtext::Headers';
-use mocked 'Socialtext::Preferences';
-use mocked 'Socialtext::User';
-use mocked 'Socialtext::Watchlist';
+# Because we're mocked, we load other mocked libraries.
+use Socialtext::Workspace;
+use Socialtext::Pages;
+use Socialtext::CGI;
+use Socialtext::Headers;
+use Socialtext::Preferences;
+use Socialtext::User;
+use Socialtext::Watchlist;
 use unmocked 'Socialtext::Helpers';
 use unmocked 'Socialtext::DisplayPlugin';
 use unmocked 'Socialtext::FavoritesPlugin';
@@ -20,6 +21,7 @@ use unmocked 'Socialtext::TiddlyPlugin';
 use unmocked 'Socialtext::CSS';
 use unmocked 'Socialtext::FetchRSSPlugin';
 use unmocked 'Socialtext::Template';
+use unmocked 'Socialtext::Stax';
 
 sub current_workspace {
     my $self = shift;
@@ -57,6 +59,7 @@ sub status_message { 'mock_hub_status_message' }
 sub helpers { 
     return $_[0]->{helpers} ||= Socialtext::Helpers->new(hub => $_[0]);
 }
+sub skin { $_[0]->{skin} || Socialtext::Skin->new(hub => $_[0]) }
 
 sub display { 
     return $_[0]->{display} ||= Socialtext::DisplayPlugin->new(hub => $_[0]);
@@ -94,6 +97,10 @@ sub fetchrss {
 
 sub template {
     return $_[0]->{template} ||= Socialtext::Template->new(hub => $_[0]);
+}
+
+sub stax {
+    return $_[0]->{stax} ||= Socialtext::Stax->new(hub => $_[0]);
 }
 
 1;

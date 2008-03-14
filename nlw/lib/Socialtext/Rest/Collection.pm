@@ -5,10 +5,8 @@ use strict;
 use warnings;
 
 use base 'Socialtext::Rest';
-use JSON;
+use JSON::XS;
 use Socialtext::HTTP ':codes';
-
-$JSON::UTF8 = 1;
 
 =head1 NAME
 
@@ -31,8 +29,6 @@ Socialtext::Rest::Collection - Base class for exposing collections via REST.
     }
 
 =cut
-
-$JSON::UTF8 = 1;
 
 =head1 REQUEST METHODS
 
@@ -223,8 +219,7 @@ END_OF_HEADER
 END_OF_TRAILER
 }
 
-# FIXME: Add conversion of 'is_*' slots to JSON::True/JSON::False.
-sub resource_to_json { objToJson($_[1]) }
+sub resource_to_json { encode_json($_[1]) }
 sub resource_to_text { $_[0]->_resource_to_text($_[1]) }
 sub _resource_to_text { join '', map { "$_->{name}\n" } @{$_[1]} }
 

@@ -30,31 +30,31 @@ use Socialtext::Workspace;
             skip_default_pages => 1,
         );
 
-        $ws->set_permissions( set_name => $set_name );
+        $ws->permissions->set( set_name => $set_name );
 
-        is( $ws->current_permission_set_name(), $set_name,
+        is( $ws->permissions->current_set_name(), $set_name,
             "current permission set is $set_name" );
 
         my %p = (
             role       => Socialtext::Role->Guest(),
             permission => ST_EMAIL_IN_PERM,
         );
-        my $guest_has_email_in = $ws->role_has_permission(%p);
+        my $guest_has_email_in = $ws->permissions->role_can(%p);
 
         if ($guest_has_email_in) {
-            $ws->remove_permission(%p);
+            $ws->permissions->remove(%p);
         }
         else {
-            $ws->add_permission(%p);
+            $ws->permissions->add(%p);
         }
 
-        is( $ws->current_permission_set_name(), $set_name,
+        is( $ws->permissions->current_set_name, $set_name,
             "current permission set is still $set_name regardless of guest's email_in permission" );
 
-        $ws->set_permissions( set_name => $set_name );
+        $ws->permissions->set( set_name => $set_name );
 
-        is( $ws->role_has_permission(%p), ( $guest_has_email_in ? 0 : 1 ),
-            "guest's email_in permission is unchanged after sceond call to set_permissions()" );
+        is( $ws->permissions->role_can(%p), ( $guest_has_email_in ? 0 : 1 ),
+            "guest's email_in permission is unchanged after second call to set_permissions()" );
 
 	my %defaults;
         $defaults{allows_html_wafl} = ( $set_name =~ /^(member|intranet|public\-read)/ ) ? 1 : 0;
@@ -68,12 +68,12 @@ use Socialtext::Workspace;
     }
 
     my $ws = Socialtext::Workspace->new( name => 'intranet' );
-    $ws->add_permission(
+    $ws->permissions->add(
         role       => Socialtext::Role->Guest(),
         permission => ST_ADMIN_WORKSPACE_PERM,
     );
 
-    is( $ws->current_permission_set_name(), 'custom',
+    is( $ws->permissions->current_set_name(), 'custom',
         'current permission set is custom' );
 }
 

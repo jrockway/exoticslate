@@ -57,7 +57,7 @@ I like this image {image: [quick start] socialtext-logo.gif}. Do you?
 --- match
 <div class="wiki">
 <p>
-I like this image <span class="nlw_phrase"><img src="/admin/index.cgi/socialtext-logo.gif?action=attachments_download;page_name=quick_start;id=20050915000807-1"><!-- wiki: {image: [quick start] socialtext-logo.gif} --></span>. Do you?<br />
+I like this image <span class="nlw_phrase"><img src="/data/workspaces/admin/attachments/quick_start:20050915000807-1/socialtext-logo.gif"><!-- wiki: {image: [quick start] socialtext-logo.gif} --></span>. Do you?<br />
 </p>
 </div>
 

@@ -13,7 +13,7 @@ sub new {
 
 sub value {
     my $self = shift;
-    return %{ $self->{value} };
+    return wantarray ? %{ $self->{value} } : $self->{value};
 }
 
 sub fetch {

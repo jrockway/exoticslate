@@ -5,12 +5,10 @@ use strict;
 
 use Test::HTTP::Socialtext '-syntax', 'no_plan';
 
-use JSON;
+use JSON::XS;
 use Readonly;
 use Test::Live fixtures => ['foobar'];
 use Test::More;
-
-$JSON::UTF8 = 1;
 
 Readonly my $WORKSPACE     => 'foobar';
 Readonly my $NEW_WORKSPACE => 'party';
@@ -24,7 +22,7 @@ Readonly my $WS_CREATION_HASH => {
     title => 'A Big Party House',
 };
 
-Readonly my $WS_CREATION_JSON => objToJson($WS_CREATION_HASH);
+Readonly my $WS_CREATION_JSON => encode_json($WS_CREATION_HASH);
 
 test_http "list workspaces JSON" {
     >> GET $URL
@@ -33,7 +31,7 @@ test_http "list workspaces JSON" {
     << 200
     ~< Content-type: ^$TYPE(;|,|$)
 
-    my $result = jsonToObj($test->response->content);
+    my $result = decode_json($test->response->content);
 
     is( ref $result, 'ARRAY', "returns a list" );
 

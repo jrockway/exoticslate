@@ -1,18 +1,13 @@
 #!perl
 # @COPYRIGHT@
-
 use warnings;
 use strict;
-
 use Test::HTTP::Socialtext '-syntax', 'no_plan';
-
-use JSON;
+use JSON::XS;
 use Readonly;
 use Test::Live fixtures => ['admin', 'foobar'];
 use Test::More;
 use URI;
-
-$JSON::UTF8 = 1;
 
 Readonly my $BASE => Test::HTTP::Socialtext->url('/data/users');
 
@@ -51,7 +46,7 @@ test_http "GET devnull2 JSON as devnull2" {
     << 200
     ~< Content-type: \bapplication/json\b
 
-    my $result = eval { jsonToObj($test->response->content) };
+    my $result = eval { decode_json($test->response->content) };
     is( $@, '', 'JSON is legit.' );
     isa_ok( $result, 'HASH', 'JSON response' );
 
@@ -111,7 +106,7 @@ test_http "GET devnull2 JSON as devnull1 and succeed" {
 my $NEW_USER_URL = Test::HTTP::Socialtext->url("/data/users");
 my $username = 'my-user@socialtext.com';
 my $USER_CREATION_JSON =
-  objToJson( {
+  encode_json( {
               username => $username,
               email_address => $username,
               first_name => 'my',

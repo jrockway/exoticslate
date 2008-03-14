@@ -29,7 +29,7 @@ sub new {
         my %p = validate( @_, $spec );
 
         return
-            $p{workspace}->user_has_permission(
+            $p{workspace}->permissions->user_can(
                 user       => $p{user},
                 permission => $p{permission},
             );

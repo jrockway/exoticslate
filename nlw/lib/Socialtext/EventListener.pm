@@ -60,8 +60,6 @@ sub react {
 
 Run a no-op. The equivalent of `st-admin` with no arguments.
 
-https://www2.socialtext.net/corp/index.cgi/BARF.WAV?action=attachments_download;page_name=gizmo;id=20070522210551-0-17265
-
 =cut
 
 sub _run_noop {

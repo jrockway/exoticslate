@@ -26,7 +26,7 @@ sub GET {
     my $fh;
     eval {
         my $attachment = $self->_get_attachment();
-        my $file = $attachment->full_path;
+        my $file = $attachment->full_path( $self->params->{version} );
 
         unless ( -e $file ) {
             $self->_invalid_attachment( $rest, 'not found' );
@@ -52,6 +52,7 @@ sub GET {
             -type             => $mime_type,
             -pragma           => undef,
             '-cache-control'  => undef,
+            'Content-Disposition' => 'filename="' . $attachment->filename . '"',
         );
     };
     # REVIEW: would be nice to be able to toss some kind of exception

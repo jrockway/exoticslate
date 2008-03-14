@@ -1,0 +1,3 @@
+#!/bin/sh -e
+
+st-config set syslog_level info

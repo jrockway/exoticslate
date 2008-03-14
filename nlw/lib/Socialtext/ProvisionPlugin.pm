@@ -6,7 +6,6 @@ use warnings;
 use base 'Socialtext::Plugin';
 
 use Class::Field qw( const );
-use Template::Iterator::AlzaboWrapperCursor;
 use Socialtext::User;
 use YAML;
 

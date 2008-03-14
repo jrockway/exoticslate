@@ -1,17 +1,15 @@
-# @COPYRIGHT@
 package Socialtext::User::LDAP;
+# @COPYRIGHT@
 
 use strict;
 use warnings;
-
-use Net::LDAP;
-use Encode;
-use Class::Field 'field';
-use YAML;
-use Socialtext::AppConfig;
+use Class::Field qw(field);
+use Socialtext::LDAP;
 use Socialtext::User;
+use Socialtext::Log qw(st_log);
+use Readonly;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 field 'user_id';
 field 'username';
@@ -19,81 +17,66 @@ field 'email_address';
 field 'first_name';
 field 'last_name';
 
-sub driver_name { 'LDAP' }
-sub has_valid_password { 1 }
-
-my $yaml_file = Socialtext::AppConfig->config_dir . '/ldap.yaml';
-my $yaml = YAML::LoadFile($yaml_file);
+Readonly my %valid_search_terms => (
+    user_id         => 1,
+    username        => 1,
+    email_address   => 1,
+    );
 
 sub new {
-    my ( $class, $key, $val ) = @_;
+    my ($class, $key, $val) = @_;
 
-    my $self = bless {}, $class;
-
-    my $filter_key = $yaml->{attr_map}{$key};
-    return undef unless $filter_key;
+    # SANITY CHECK: have inbound parameters
+    return undef unless $key;
     return undef unless $val;
 
-    # With stock LDAP, the best way to find a record via dn is by making that
-    # the base of the search, and restricting the scope to just that object
-    my @search_args = ( $filter_key =~ m/^(dn|distinguishedName)$/ )
-        ? ( base => $val, scope => 'base', filter => '(objectClass=*)')
-        : ( base => $yaml->{base}, scope => 'sub', filter => "($filter_key=$val)" );
+    # SANITY CHECK: search term is acceptable
+    return undef unless ($valid_search_terms{$key});
 
-    my $ldap = $class->_bind_ldap;
-
+    # connect to LDAP server
+    my $ldap = Socialtext::LDAP->new();
     return undef unless $ldap;
 
-    my $res = $ldap->search( @search_args )->shift_entry();
-
-    return $res ? $self->_init_from_result($res) : undef;
-}
-
-sub _bind_ldap {
-    my $class = shift;
-    my ($bind_user, $bind_password) = @_;
-    $bind_user     = $yaml->{bind_user}     unless defined $bind_user;
-    $bind_password = $yaml->{bind_password} unless defined $bind_password;
-    my @bind_args =
-        ( $bind_user && $bind_password )
-      ? ( $bind_user, password => $bind_password ) # authenticated bind
-      : (); # anonymous bind
-
-    my $ldap = Net::LDAP->new( $yaml->{host}, port => $yaml->{port} );
-    my $result = $ldap->bind(@bind_args);
-
-    if ($result->code) {
-        warn "# Socialtext::User::LDAP - ", $result->error, "\n";
-        return;
+    # search LDAP directory for our record
+    my $mesg = _ldap_find_user( $ldap, $key, $val );
+    if ($mesg->code()) {
+        st_log->error( "ST::User::LDAP: LDAP error while finding user; " . $mesg->error() );
+        return undef;
+    }
+    if ($mesg->count() > 1) {
+        st_log->error( "ST::User::LDAP: found multiple matches for user; $key/$val" );
+        return undef;
     }
 
-    return $ldap;
-}
+    # extract result record
+    my $result = $mesg->shift_entry();
+    unless ($result) {
+        st_log->debug( "ST::User::LDAP: unable to find user in LDAP; $key/$val" );
+        return undef;
+    }
 
-sub _init_from_result {
-    my ( $self, $result ) = @_;
-
-    # This seems necessary to account for the weirdness of the 'dn'
-    # "attribute"
-    for my $attr
-        qw( user_id username password first_name last_name email_address ) {
-        my $ldap_attr = $yaml->{attr_map}{$attr};
-        $self->$attr( $result->get_value($ldap_attr) );
-
-        # dn isn't an attribute carried by the record, it's a method of the
-        # Net::LDAP::Entry object
-        if ( $ldap_attr =~ m/^(dn|distinguishedName)$/ ) {
-            $self->$attr( $result->dn );
+    # instantiate from search results
+    my $attr_map = $ldap->config->attr_map();
+    my $self     = {};
+    while (my ($user_attr, $ldap_attr) = each %{$attr_map}) {
+        if ($ldap_attr =~ m{^(dn|distinguishedName)$}) {
+            # DN isn't an attribute, its a Net::LDAP::Entry method
+            $self->{$user_attr} = $result->dn();
+        }
+        else {
+            $self->{$user_attr} = $result->get_value( $ldap_attr );
         }
     }
-
+    bless $self, $class;
     return $self;
+}
 
-    # But I like the simplicity of the following :^( --zbir
+sub driver_name {
+    return 'LDAP';
+}
 
-    # map { $self->$_( $result->get_value( $yaml->{attr_map}{$_} ) ) }
-    #     qw( user_id username password first_name last_name email_address );
-    # return $self;
+sub has_valid_password {
+    return 1;
 }
 
 sub password {
@@ -101,59 +84,90 @@ sub password {
 }
 
 sub password_is_correct {
-    my $self = shift;
-    my $pw   = shift;
+    my ($self, $pass) = @_;
 
-    return 0 unless $pw; # No empty passwords
+    # empty passwords not allowed
+    return 0 unless ($pass);
 
-    # we probably won't have $self->password to check against, need to
-    # re-submit a query with our unique user_id and the $pw passed in - if it
-    # comes back, the password was good, if nothing comes back, it was
-    # invalid.
-    return ($self->_bind_ldap($self->user_id, $pw)) ? 1 : 0;
+    # authenticate against LDAP server
+    return Socialtext::LDAP->authenticate($self->user_id(), $pass);
 }
 
 sub Search {
-    my $class = shift;
-    my $term = shift;
-    my @users;
+    my ($class, $term) = @_;
 
+    # SANITY CHECK: have inbound parameters
+    return unless $term;
+
+    # connect to LDAP server
+    my $ldap = Socialtext::LDAP->new();
+    return unless $ldap;
+
+    # build up the search options
+    my $attr_map = $ldap->config->attr_map();
     my $filter = join ' ',
-                 map { "($_=*$term*)" }
-                 map { $yaml->{attr_map}{$_} }
-                 qw/username email_address first_name last_name/;
-
-    my $ldap = $class->_bind_ldap;
-
-    return @users unless $ldap;
-
-    my $res = $ldap->search(
-        base   => $yaml->{base},
-        scope  => 'sub',
-        filter => "(|$filter)",
-        attrs  => $yaml->{attr_map}{user_id},
-    );
-
-    for my $e ( $res->entries ) {
-        my $email = $e->get_value( $yaml->{attr_map}{email_address} );
-        my $name  = Socialtext::User->FormattedEmail(
-            $e->get_value( $yaml->{attr_map}{first_name} ),
-            $e->get_value( $yaml->{attr_map}{last_name} ),
-            $email,
+                    map { "($_=*$term*)" }
+                    values %{$attr_map};
+    my %options = (
+        base    => $ldap->config->base(),
+        scope   => 'sub',
+        filter  => "(|$filter)",
+        attrs   => [ values %{$attr_map} ],
         );
-        push @users,
-            {
-                driver_name    => $class->driver_name,
-                email_address  => $email,
-                name_and_email => $name,
+
+    # execute search against LDAP directory
+    my $mesg = $ldap->search( %options );
+    if ($mesg->code()) {
+        st_log->error( "ST::User::LDAP; LDAP error while performing search; " . $mesg->error() );
+        return;
+    }
+
+    # extract search results
+    my @users;
+    foreach my $rec ($mesg->entries()) {
+        my $email = $rec->get_value( $attr_map->{email_address} );
+        my $first = $rec->get_value( $attr_map->{first_name} );
+        my $last  = $rec->get_value( $attr_map->{last_name} );
+        push @users, {
+            driver_name     => $class->driver_name(),
+            email_address   => $email,
+            name_and_email  => Socialtext::User->FormattedEmail($first, $last, $email),
             };
     }
     return @users;
 }
 
-1;
+sub _ldap_find_user {
+    my ($ldap, $key, $val) = @_;
+    my $attr_map = $ldap->config->attr_map();
 
-__END__
+    # map the ST::User key to an LDAP attribute
+    my $search_attr = $attr_map->{$key};
+    return undef unless ($search_attr);
+
+    # build up the search options
+    my %options = (
+        base    => $ldap->config->base(),
+        scope   => 'sub',
+        attrs   => [ values %{$attr_map} ],
+        );
+    if ($search_attr =~ m{^(dn|distinguishedName)$}) {
+        # DN searches are best done as -exact- searches
+        $options{'base'}    = $val;
+        $options{'scope'}   = 'base';
+        $options{'filter'}  = '(objectClass=*)';
+    }
+    else {
+        # all other searches are done as sub-tree under Base DN
+        $options{'filter'}  = "($search_attr=$val)";
+    }
+
+    # search LDAP, and return results back to caller
+    return $ldap->search( %options );
+}
+
+
+1;
 
 =head1 NAME
 
@@ -163,27 +177,34 @@ Socialtext::User::LDAP - A Socialtext LDAP User Factory
 
   use Socialtext::User::LDAP;
 
-  my $user = Socialtext::User::LDAP->new( user_id => $user_id );
+  # instantiate user
+  $user = Socialtext::User::LDAP->new( user_id => $user_id );
+  $user = Socialtext::User::LDAP->new( username => $username );
+  $user = Socialtext::User::LDAP->new( email_address => $email );
 
-  my $user = Socialtext::User::LDAP->new( username => $username );
+  # authenticate (an already instantiated user)
+  $auth_ok = $user->password_is_correct( $password );
 
-  my $user = Socialtext::User::LDAP->new( email_address => $email_address );
+  # user search
+  @results = Socialtext::User::LDAP->Search( 'foo' );
 
 =head1 DESCRIPTION
 
-This class provides methods for dealing with data from an LDAP
-server. Each object represents a single record from LDAP.
+C<Socialtext::User::LDAP> provides an implementation for a User record that
+happens to exist in an LDAP data store.
 
 =head1 METHODS
 
-=head2 Socialtext::User::LDAP->new(PARAMS)
+=over
 
-Looks for an existing user matching PARAMS and returns a
-C<Socialtext::User::LDAP> object representing that user if it exists.
+=item B<Socialtext::User::LDAP-E<gt>new($key,$val)>
 
-PARAMS can be I<one> of:
+Searches for the specified user in the LDAP data store and returns a new
+LDAP User object if it exists.
 
-=over 4
+User lookups can be performed by I<one> of:
+
+=over
 
 =item * user_id => $user_id
 
@@ -193,56 +214,96 @@ PARAMS can be I<one> of:
 
 =back
 
-=head2 $user->user_id()
+=item B<user_id()>
 
-=head2 $user->username()
+Returns the ID for the user, as per the attribute mapping in the LDAP
+configuration.
 
-=head2 $user->email_address()
+=item B<username()>
 
-=head2 $user->first_name()
+Returns the username for the user, as per the attribute mapping in the LDAP
+configuration.
 
-=head2 $user->last_name()
+=item B<email_address()>
 
-=head2 $user->driver_name()
+Returns the e-mail address for the user, as per the attribute mapping in the
+LDAP configuration.  If the user has multiple e-mail addresses, only the
+B<first> is returned.
 
-Returns the corresponding attribute for the user.
+=item B<first_name()>
 
-=head2 $user->password_is_correct($pw)
+Returns the first name for the user, as per the attribute mapping in the LDAP
+configuration.
 
-Returns a boolean indicating whether or not the given password is
-correct.
+=item B<last_name()>
 
-=head2 $user->has_valid_password()
+Returns the last name for the user, as per the attribute mapping in the LDAP
+configuration.
+
+=item B<driver_name()>
+
+Returns the name of the driver used for the data store this user was found in.
+
+=item B<password_is_correct($pass)>
+
+Checks to see if the given password is correct for this user.  Returns true if
+the given password is correct, false otherwise.
+
+This check is performed by attempting to re-bind to the LDAP connection as the
+user.
+
+=item B<has_valid_password()>
 
 Returns true if the user has a valid password.
 
-We test this by attempting to rebind to the LDAP server using the
-credentials provided.
+=item B<Socialtext::User::LDAP-E<gt>Search($term)>
 
-=head2 Socialtext::User::LDAP->Search( 'foo' )
+Searches for user records where the given search C<$term> is found in any one
+of the following fields:
 
-Search for user records where 'foo' is found in any of username, email
-address, first name, or last name. Returns a list of hashes containing
-three key-value pairs:
+=over
 
-=over 4
+=item * username
 
-=item driver_key => Socialtext::User::LDAP->driver_key
+=item * email_address
 
-=item email_address => the email_address of the record
+=item * first_name
 
-=item name_and_email => the result of passing in the record's
-first_name, last_name, and email_address to
-Socialtext::User->name_and_email()
+=item * last_name
+
+=back
+
+The search will return back to the caller a list of hash-refs containing the
+following key/value pairs:
+
+=over
+
+=item driver_name
+
+Name of the driver for the data store that the user was found in.
+
+=item email_address
+
+The e-mail address for the user.
+
+=item name_and_email
+
+The canonical name and e-mail for this user, as produced by
+C<Socialtext::User-E<gt>FormattedEmail()>.
+
+=back
 
 =back
 
 =head1 AUTHOR
 
-Socialtext, Inc., <code@socialtext.com>
+Socialtext, Inc.  C<< <code@socialtext.com> >>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005 Socialtext, Inc., All Rights Reserved.
+Copyright 2005-2008 Socialtext, Inc., All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
 
 =cut

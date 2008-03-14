@@ -1,7 +1,0 @@
-<!-- @COPYRIGHT@ -->
-[% SET escaped_str = redirect_to | html %]
-<span class="error">
-  [% loc('To use the watchlist feature in a workspace, you must be logged in.') 
-  <br/>
-  [% loc('If you do not already have an account, you can <a href="/nlw/register.html?redirect_to=[_1]">register here</a>.', escaped_str) %]
-</span>

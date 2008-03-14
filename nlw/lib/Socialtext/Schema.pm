@@ -254,6 +254,9 @@ sub SchemaObject {
             );
     }
 
+    # The package corresponding to the following table has been alzabnobified.
+    # If you change the schema below, you won't automagically get accessors
+    # for those columns. Please also alter the corresponding package.
     {
         my $table = $schema->make_table
             ( name       => 'UserEmailConfirmation',
@@ -285,6 +288,9 @@ sub SchemaObject {
             );
     }
 
+    # The package corresponding to the following table has been alzabnobified.
+    # If you change the schema below, you won't automagically get accessors
+    # for those columns. Please also alter the corresponding package.
     {
         my $table = $schema->make_table
             ( name       => 'Workspace',
@@ -371,7 +377,7 @@ sub SchemaObject {
         $table->make_column
             ( name           => 'skin_name',
               type           => 'VARCHAR',
-              default        => 'st',
+              default        => 's2',
               length         => 30,
             );
         $table->make_column
@@ -485,9 +491,9 @@ sub SchemaObject {
               default         => 't',
             );
         $table->make_column
-            ( name           => 'workspace_template',
-              type           => 'TEXT',
-              default         => '',
+            ( name           => 'uploaded_skin',
+              type           => 'BOOLEAN',
+              default         => 'f',
             );
         $table->make_index
             ( columns  => [ $schema->table( 'Workspace' )->columns( 'name' ) ],
@@ -496,6 +502,9 @@ sub SchemaObject {
             );
     }
 
+    # The package corresponding to the following table has been alzabnobified.
+    # If you change the schema below, you won't automagically get accessors
+    # for those columns. Please also alter the corresponding package.
     {
         my $table = $schema->make_table
             ( name       => 'WorkspacePingURI',

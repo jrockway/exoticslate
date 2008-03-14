@@ -7,7 +7,7 @@ use warnings;
 use Test::Live fixtures => ['admin'];
 use Readonly;
 
-Readonly my @STATIC_FILES => (qw( css/st/screen.css javascript/combined-source.js ));
+Readonly my @STATIC_FILES => (qw( css/st/screen.css javascript/socialtext.js ));
 
 my $live_tester = Test::Live->new;
 $live_tester->standard_query_validation;
@@ -24,4 +24,4 @@ __END__
 action: weblog_display
 --- MATCH_WHOLE_PAGE
 --- match
-<link rel="stylesheet" type="text/css" href="/static/.*?/css/st/screen.css"
+<link rel="stylesheet" type="text/css" href="/static/.*?/s2/css/screen.css"

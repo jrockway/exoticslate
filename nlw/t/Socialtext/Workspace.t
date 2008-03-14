@@ -1,8 +1,7 @@
 #!perl
 # @COPYRIGHT@
 use mocked qw(Socialtext::l10n system_locale); # Has to come firstest.
-use Test::Socialtext tests => 106;
-
+use Test::Socialtext tests => 111;
 use strict;
 use warnings;
 
@@ -19,6 +18,17 @@ my $has_image_magick = eval { require Image::Magick; 1 };
 
 {
     is( Socialtext::Workspace->Count(), 1, 'Only help workspace in DBMS yet' );
+}
+
+ALL_WORKSPACE_IDS_AND_NAMES: {
+    my $info = Socialtext::Workspace->AllWorkspaceIdsAndNames();
+    is_deeply(
+        $info,
+        [
+            [ 1, 'help-en' ],
+        ],
+        "Checking AllWorkspaceIdsAndNames"
+    );
 }
 
 {
@@ -64,6 +74,8 @@ my $has_image_magick = eval { require Image::Magick; 1 };
     my $page_dir =
         Socialtext::File::catdir( Socialtext::Paths::page_data_directory('short-name'), 'quick_start' );
     ok( -d $page_dir, "$page_dir exists after workspace is created" );
+
+    is $ws->skin_name, 's2', 'default skin is s2';
 }
 
 {
@@ -109,6 +121,31 @@ NO_DASH_IN_TITLE:
         'and may not begin with a -' );
 }
 
+Different_name_case: {
+    Socialtext::Workspace->create(
+        name       => 'monkey-rubber',
+        title      => 'Monkey Rubber',
+        account_id => Socialtext::Account->Socialtext()->account_id,
+    );
+
+    ok(Socialtext::Workspace->new( name => 'monkey-rubber' ),
+       'Loaded with same case');
+    ok(Socialtext::Workspace->new( name => 'Monkey-Rubber' ),
+       'Loaded with different case');
+}
+
+Undef_skin_name: {
+    Socialtext::Workspace->create(
+        name       => 'undef-skin',
+        title      => 'Undef Skin',
+        account_id => Socialtext::Account->Socialtext()->account_id,
+        skin_name  => undef,
+    );
+
+    ok(Socialtext::Workspace->new( name => 'undef-skin' ),
+       'undef skin_name worked okay');
+}
+
 {
     Socialtext::Workspace->create(
         name       => 'short-name-2',
@@ -128,7 +165,7 @@ NO_DASH_IN_TITLE:
 }
 
 
-{
+Delete_a_workspace: {
     my $ws = Socialtext::Workspace->new( name => 'short-name' );
     $ws->delete;
 
@@ -207,29 +244,6 @@ EMAIL_NOTIFICATION_FROM_ADDRESS:
         'default from address includes workspace title and bob@example.com' );
 }
 
-sub check_errors {
-    my $e = shift;
-    ok( $e,
-        'got an error after giving bad data to Socialtext::Workspace->create'
-    );
-
-    for my $regex (
-        qr/one of top, bottom, or replace/,
-        qr/title is a required field/,
-        ) {
-            my $errors = join ', ', $e->messages;
-            like $errors, $regex, "got error message matching $regex";
-    }
-
- TODO:
-    {
-        local $TODO = 'Skins are not yet checked';
-        my $regex = qr/skin you specified/;
-        ok( ( grep {/$regex/} $e->messages ),
-            "got error message matching $regex" );
-    }
-}
-
 {
     eval {
         Socialtext::Workspace->create(
@@ -274,10 +288,7 @@ sub check_errors {
     like( $@, qr/cannot set logo_uri/i, 'cannot set logo_uri directly via update()' );
 
     my $file = 't/extra-attachments/FormattingTest/thing.png';
-    open my $fh, '<', $file
-        or die "Cannot read $file";
-    $ws->set_logo_from_filehandle(
-        filehandle => $fh,
+    $ws->set_logo_from_file(
         filename   => $file,
     );
     like( $ws->logo_uri, qr{/logos/logo-test/logo-test-.+\.png$},
@@ -285,8 +296,7 @@ sub check_errors {
     ok( -f $ws->logo_filename, 'saved logo file exists' );
 
     eval {
-        $ws->set_logo_from_filehandle(
-            filehandle => $fh,
+        $ws->set_logo_from_file(
             filename   => 'foobar.notanimage',
         );
     };
@@ -300,19 +310,16 @@ sub check_errors {
 
     # test a text file posing as an image
     my $text_file = 't/attachments/foo.txt';
-    open my $text_fh, '<', $text_file
-        or die "Cannot read $text_file";
     eval {
-        $ws->set_logo_from_filehandle(
-            filehandle => $text_fh,
-            filename   => 'foo.png',
+        $ws->set_logo_from_file(
+            filename   => $text_file,
         );
     };
 
     SKIP: {
         skip 'Image::Magick not installed.', 1 unless $has_image_magick;
         like(
-            $@, qr/Unable to process logo file\. Is it an image\?/,
+            $@, qr/\QLogo file must be a gif, jpeg, or png file\E/,
             'cannot set logo with non image file posing as one'
         );
     }
@@ -389,7 +396,7 @@ sub check_errors {
     {
         my @uris = ( 'https://example.com/ping3', 'https://example.com/ping3' );
         $ws->set_ping_uris( uris => \@uris );
-        is( $ws->ping_uris, 'https://example.com/ping3',
+        is_deeply( [ $ws->ping_uris ], ['https://example.com/ping3'],
             'set_ping_uris discards duplicates, allows https' );
     }
 
@@ -698,4 +705,30 @@ EXPORT_WITH_MISSING_DIR: {
         qr/Export Directory .+ does not exist./i,
         'Non-existent export directory generates expected error message'
     );
+}
+
+exit;
+
+
+sub check_errors {
+    my $e = shift;
+    ok( $e,
+        'got an error after giving bad data to Socialtext::Workspace->create'
+    );
+
+    for my $regex (
+        qr/one of top, bottom, or replace/,
+        qr/title is a required field/,
+        ) {
+            my $errors = join ', ', $e->messages;
+            like $errors, $regex, "got error message matching $regex";
+    }
+
+ TODO:
+    {
+        local $TODO = 'Skins are not yet checked';
+        my $regex = qr/skin you specified/;
+        ok( ( grep {/$regex/} $e->messages ),
+            "got error message matching $regex" );
+    }
 }

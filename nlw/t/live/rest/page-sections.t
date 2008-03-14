@@ -6,12 +6,10 @@ use strict;
 
 use Test::HTTP::Socialtext '-syntax', tests => 11;
 
-use JSON;
+use JSON::XS;
 use Readonly;
 use Test::Live fixtures => ['admin_no_pages'];
 use Test::More;
-
-$JSON::UTF8 = 1;
 
 Readonly my $BASE      => Test::HTTP::Socialtext->url;
 Readonly my $PAGES_URI => "$BASE/data/workspaces/admin/pages";
@@ -70,7 +68,7 @@ test_http "GET page sections JSON" {
     << 200
     ~< Content-type: \bapplication/json\b
 
-    my $representation = jsonToObj( $test->response->decoded_content );
+    my $representation = decode_json( $test->response->decoded_content );
     isa_ok $representation, 'ARRAY', 'Sections representation is an array';
     is scalar @$representation, 5, 'there are five items in the json list';
 

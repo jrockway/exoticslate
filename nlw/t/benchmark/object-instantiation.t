@@ -3,6 +3,14 @@
 
 use strict;
 use warnings;
+use Test::More;
+
+BEGIN {
+    if (! $ENV{ST_BENCHMARK_TEST}) {
+        plan skip_all => "Skipping benchmark tests - set \$ST_BENCHMARK_TEST=1 to run them";
+        exit;
+    }
+}
 
 use DateTime;
 use DateTime::Duration;

@@ -12,7 +12,7 @@ sub react {
     my ( $self, $event ) = @_;
 
     if (Socialtext::Search::Config->new(mode => 'rampup')) {
-        st_log->info( 'ST::Ceqlotron rampup index page event for '
+        st_log->debug( 'ST::Ceqlotron rampup index page event for '
               . $event->workspace_name . ' '
               . $event->page_uri );
 

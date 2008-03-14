@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 use Class::Field qw( const field );
-use JSON;
+use JSON::XS;
 use Socialtext::HTTP ':codes';
 use Socialtext::User;
 use Socialtext::Exceptions;
@@ -28,7 +28,7 @@ sub POST {
                      );
         return '';
     }
-    my $create_request_hash = jsonToObj( $rest->getContent() );
+    my $create_request_hash = decode_json( $rest->getContent() );
 
     unless ( $create_request_hash->{username} and
              $create_request_hash->{email_address} ) {

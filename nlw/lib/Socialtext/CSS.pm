@@ -8,17 +8,18 @@ use base 'Socialtext::WebFile';
 use List::MoreUtils ();
 use Socialtext::AppConfig ();
 use Socialtext::File;
+use Socialtext::Skin;
 use Class::Field 'field';
 
 field locale_dir => '';
 sub class_id { 'css' }
 
-sub RootDir       { Socialtext::AppConfig->code_base() . '/css' }
-sub RootURI       { Socialtext::Helpers->static_path . '/css' }
+sub RootDir       { Socialtext::AppConfig->code_base() }
+sub RootURI       { Socialtext::Helpers->static_path }
 
 sub LegacyPath    { 'base/css/' }
 sub StandardFiles { qw[screen.css screen.ie.css print.css print.ie.css popup.css popup.ie.css wikiwyg.css] }
-sub BaseSkin      { 'st' }
+sub BaseSkin      { $Socialtext::Skin::DEFAULT_SKIN_NAME }
 sub LocalOverride { 'local' }
 sub PluginCssDirectory { '_plugin' }
 sub LocaleCssDirectory { '_locale' }
@@ -35,16 +36,18 @@ sub _init {
 sub _set_paths {
     my $self = shift;
 
+    my $skin_name = $self->{hub}->skin->skin_name;
+
     return if ($self->{set_paths});
 
-    my $skin_name = $self->{hub}->current_workspace->skin_name;
-
     my @skins = List::MoreUtils::uniq(
-        $self->LocalOverride,
-        $self->locale_dir,
-        $skin_name,
-        $self->PluginCssDirectory,
-        ($self->{hub}->current_workspace->cascade_css ? $self->BaseSkin : ()),
+        join('/', $self->LocalOverride, 'css'),
+        join('/', $self->locale_dir, 'css'),
+        $self->{hub}->skin->skin_dir . '/css',
+        join('/', 'skin', $self->PluginCssDirectory, 'css'),
+        $self->{hub}->skin->cascade_css ?
+            join('/', 'skin', $self->BaseSkin, 'css') :
+            (),
     );
 
     $self->add_path($_) for @skins;
@@ -98,7 +101,7 @@ sub files {
 sub uri_for_common_css {
     my $self = shift;
 
-    return $self->RootURI . '/common.css';
+    return $self->RootURI . '/skin/common/css/common.css';
 }
 
 sub uris_for_plugin_css {

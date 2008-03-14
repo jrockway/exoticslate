@@ -21,7 +21,7 @@ sub GET {
 
     my $authz = Socialtext::Authz->new;
     unless (
-        $self->workspace->is_public or
+        $self->workspace->permissions->is_public or
         $authz->user_has_permission_for_workspace(
             user       => $self->rest->user,
             permission => ST_READ_PERM,

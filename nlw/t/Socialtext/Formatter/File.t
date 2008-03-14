@@ -41,11 +41,13 @@ my $html_one
     = $admin->pages->new_from_name('aa page yo')->to_html_or_default();
 
 like $html_one,
-     qr{/admin/index.cgi/rock%23it\.txt.*rock#it\.txt</a>},
+     qr{/data/workspaces/admin/attachments/aa_page_yo:[\d-]+/original/rock%23it\.txt"},
      'url for rock#it.txt is escaped';
 like $html_one,
-     qr{<img.*/admin/index.cgi/sit%23start\.png.*"\s*/>},
+     qr{/data/workspaces/admin/attachments/aa_page_yo:[\d-]+/scaled/sit%23start\.png"},
      'url for sit#start.png is escaped';
+exit;
+
 
 sub attach {
     my $filename = shift;

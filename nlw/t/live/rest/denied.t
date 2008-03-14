@@ -134,9 +134,9 @@ sub check_403 {
 
     sub grant_all_but {
         my ( $perm ) = @_;
-        $ws->add_permission(    permission => $_,    role => $role )
+        $ws->permissions->add(    permission => $_,    role => $role )
             for @all_perms;
-        $ws->remove_permission( permission => $perm, role => $role );
+        $ws->permissions->remove( permission => $perm, role => $role );
     }
 }
 

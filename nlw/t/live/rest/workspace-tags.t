@@ -6,12 +6,10 @@ use strict;
 
 use Test::HTTP::Socialtext '-syntax', tests => 40;
 
-use JSON;
+use JSON::XS;
 use Readonly;
 use Test::Live fixtures => ['admin'];
 use Test::More;
-
-$JSON::UTF8 = 1;
 
 Readonly my $URI =>
     Test::HTTP::Socialtext->url('/data/workspaces/admin/tags');
@@ -23,7 +21,7 @@ test_http "GET no tags" {
     << 200
     ~< Content-type: \bapplication/json\b
 
-    my $representation = jsonToObj( $test->response->content );
+    my $representation = decode_json( $test->response->content );
     isa_ok( $representation, 'ARRAY', 'Tags representation' );
 
     # somewhere is the welcome tag
@@ -44,7 +42,7 @@ test_http "POST then GET new tag" {
     << 200
     ~< Content-type: \bapplication/json\b
 
-    my $representation = jsonToObj( $test->response->content );
+    my $representation = decode_json( $test->response->content );
     isa_ok( $representation, 'ARRAY', 'Tags representation' );
 
     # somewhere is the foo tag
@@ -87,7 +85,7 @@ test_http "GET tags weighted order" {
     << 200
     ~< Content-type: application/json
 
-    my $representation = jsonToObj( $test->response->content );
+    my $representation = decode_json( $test->response->content );
 
     isa_ok( $representation, 'ARRAY', 'Tags representation' );
     is( scalar @$representation, 2, 'Now have 2 tags.' );
@@ -117,7 +115,7 @@ test_http "GET tags regexp" {
 
     << 200
 
-    my $representation = jsonToObj( $test->response->content );
+    my $representation = decode_json( $test->response->content );
 
     isa_ok( $representation, 'ARRAY', 'Tags representation' );
     is( scalar @$representation, 3, 'Filter on ^a gets 3 tags.' );
@@ -127,7 +125,7 @@ test_http "GET tags regexp" {
 
     << 200
 
-    $representation = jsonToObj( $test->response->content );
+    $representation = decode_json( $test->response->content );
 
     isa_ok( $representation, 'ARRAY', 'Tags representation' );
     is( scalar @$representation, 2, 'Filter on 3 gets 2 tags.' );
@@ -137,7 +135,7 @@ test_http "GET tags regexp" {
 
     << 200
 
-    $representation = jsonToObj( $test->response->content );
+    $representation = decode_json( $test->response->content );
 
     isa_ok( $representation, 'ARRAY', 'Tags representation' );
     is( scalar @$representation, 0, 'Filter on holiness gets 0 tags.' );

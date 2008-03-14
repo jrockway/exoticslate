@@ -1,18 +1,13 @@
 #!perl
 # @COPYRIGHT@
-
 use warnings;
 use strict;
-
 use Test::HTTP::Socialtext '-syntax', tests => 45;
-
-use JSON;
+use JSON::XS;
 use Readonly;
 use Socialtext::User;
 use Test::Live fixtures => ['admin_with_extra_pages'];
 use Test::More;
-
-$JSON::UTF8 = 1;
 
 Readonly my $PAGE_BASE => Test::HTTP::Socialtext->url(
     '/data/workspaces/admin/pages/FormattingTest/attachments');
@@ -67,7 +62,7 @@ test_http "GET JSON" {
     << 200
     ~< Content-type: \bapplication/json\b
 
-    my $response = jsonToObj( $test->response->content );
+    my $response = decode_json( $test->response->content );
 
     isa_ok( $response, 'ARRAY', 'JSON response' );
     is( scalar @$response, 4, "JSON has 4 entries" );
@@ -90,7 +85,7 @@ test_http "GET json from Workspace sorted alpha" {
 
     << 200
 
-    my $response = jsonToObj( $test->response->content );
+    my $response = decode_json( $test->response->content );
 
     like $response->[0]->{id}, qr{\d+-\d+-\d+},
         'id element is present and in the form of an attachment id';
@@ -107,7 +102,7 @@ test_http "GET json from Workspace sorted size" {
 
     << 200
 
-    my $response = jsonToObj( $test->response->content );
+    my $response = decode_json( $test->response->content );
 
     is $response->[0]->{name}, 'thing.png', 'first element in sorted attachments is thing.png';
     is $response->[11]->{name}, 'O Star.txt', 'fourth element in sorted attachments is O Star.txt';

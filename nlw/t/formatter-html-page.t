@@ -27,8 +27,8 @@ my $hub = new_hub('admin');
 
     my @tests =
         ( [ "{html-page html-page-wafl.html}\n" =>
-            qr{\Qhref="/admin/index.cgi/html-page-wafl.html?action=attachments_download\E},
-            qr{id=[\d-]+\Q;as_page=1\E},
+            qr{href="/data/workspaces/admin/attachments/formatter_test_for_html_page_wafl:\S+?/html-page-wafl.html},
+            qr{\Qhtml-page-wafl.html;as_page=1\E},
           ],
           [ "{html-page no-such-page.html}\n" =>
             qr{\Qno-such-page.html\E},
@@ -49,8 +49,8 @@ my $hub = new_hub('admin');
 
     my @tests =
         ( [ "{html-page [Formatter Test for html-page wafl] html-page-wafl.html}\n" =>
-            qr{\Qhref="/admin/index.cgi/html-page-wafl.html?action=attachments_download\E},
-            qr{id=[\d-]+\Q;as_page=1\E},
+            qr{href="/data/workspaces/admin/attachments/formatter_test_for_html_page_wafl:\S+?/html-page-wafl.html},
+            qr{\Qhtml-page-wafl.html;as_page=1\E},
           ],
         );
 

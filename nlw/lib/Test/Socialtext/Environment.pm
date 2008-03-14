@@ -129,10 +129,6 @@ sub _create_test_environment {
 
     $self->_make_fixtures_current;
     $self->_maybe_decache;
-    require Socialtext::AppConfig;
-    # XXX If we add this in here, AppConfig goes through parameter
-    # validation and blows up.
-    #system 'rm -fr ' . Socialtext::AppConfig->formatter_cache_dir;
 }
 
 sub hub_for_workspace {

@@ -40,11 +40,6 @@
     RewriteRule  (/nlw.*)  https://[% config.nlw_server_hostname %][% colon_port %]$1  [R,L,NE]
 [% END %]
 
-[% IF config.is_dev %]
-    # surface our selenium test runner in the static fs directory
-    RewriteRule    /test-selenium/(.*)           /static/selenium/$1 [PT,L]
-[% END %]
-
     # make sure user agents that don't do gzipped javascript use
     # the uncompressed version - Note SAFARI!!!
     # ALSO notice that this RewriteRule is NOT the last one in the chain
@@ -65,11 +60,11 @@
     # Support CSS-Kit/CSS Uploader
     # Converts: /static/0.0.0.0/skin/images/logo.gif
     #       To: /static/0.0.0.0/images/skin/logo.gif
-    RewriteRule    ^/static/([\.0-9]+)/([^/]+)/(images|javascript|css)/(.+)$$  /static/$3/$2/$4  [PT,L]
+    #RewriteRule    ^/static/([\.0-9]+)/([^/]+)/(images|javascript|css)/(.+)$$  /static/$3/$2/$4  [PT,L]
 
     # this first one is only here for sake of doc-pages, everything
     # else should use /static
-    RewriteRule    /.*/base/(.+)            /static/$1  [R,L]
+    RewriteRule    /.*/base/(.+)            /static/skin/s2/$1  [R,L]
     RewriteRule    ^/static/[\.0-9]+/(.+)$  /static/$1  [PT,L]
 
 [% IF not (config.is_appliance || !config.apache_proxy) %]

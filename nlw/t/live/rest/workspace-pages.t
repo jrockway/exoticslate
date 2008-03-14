@@ -13,10 +13,8 @@ use Test::Socialtext::Environment;
 use Test::HTTP::Syntax;
 use Test::HTTP 'no_plan';
 use Test::More;
-use JSON;
-
-
-$JSON::UTF8 = 1;
+use JSON::XS;
+use t::SocialtextTestUtils qw/index_page/;
 
 $Test::HTTP::BasicUsername = 'devnull1@socialtext.com';
 $Test::HTTP::BasicPassword = 'd3vnu11l';
@@ -81,7 +79,7 @@ test_http "DELETE a page, it goes away" {
 
     << 200
 
-    my $content = eval { jsonToObj($test->response->content) };
+    my $content = eval { decode_json($test->response->content) };
     is( $@, '', 'JSON is well formed.' );
 
     for (@$content) {
@@ -101,7 +99,7 @@ test_http "GET pages list" {
 
     << 200
 
-    my $content = eval { jsonToObj($test->response->content) };
+    my $content = eval { decode_json($test->response->content) };
     is( $@, '', 'JSON is well formed.' );
     # Setting global for use in next test.  Ugly.
     $all_pages_content = $content;
@@ -124,17 +122,25 @@ test_http "GET pages search" {
 
     << 200
 
-    my $content = eval { jsonToObj($test->response->content) };
+    my $content = eval { decode_json($test->response->content) };
     is( $@, '', 'JSON is well formed.' );
     ok( @$content < @$all_pages_content, "Fewer pages in search result than workspace overall." )
 }
 
 #############
+# Test REST Search
+# Clear the ceqlotron, then index the 2 files we're searching for
+# This is much faster than indexing everything
+#
+
 use Socialtext::Ceqlotron;
+warn "# Cleaning the Ceqlotron queue\n";
+Socialtext::Ceqlotron::clean_queue_directory();
 
 $ENV{NLW_APPCONFIG} = 'ceqlotron_synchronous=1';
-warn "# Running this ceqlotron queue.  This may take a minute or two.\n";
-Socialtext::Ceqlotron::run_current_queue();
+warn "# Indexing pages for IWS Rest test\n";
+index_page('help-en', 'what_s_the_funny_punctuation');
+index_page('admin', 'what_s_the_funny_punctuation');
 #############
 
 test_http "GET interworkspace search" {
@@ -143,7 +149,7 @@ test_http "GET interworkspace search" {
 
     << 200
 
-    my $content = eval { jsonToObj($test->response->content) };
+    my $content = eval { decode_json($test->response->content) };
     is( $@, '', 'JSON is well formed.' );
 
     my %workspaces_seen;
@@ -166,3 +172,5 @@ test_http "GET interworkspace search links via HTML" {
         qr{<a href=.\.\./help-en/pages/what_s_the_funny.*?>},
         'Interwiki results are linked relative to the current workspace';
 }
+
+exit;

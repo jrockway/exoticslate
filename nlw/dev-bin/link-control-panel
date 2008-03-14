@@ -3,18 +3,33 @@
 use strict;
 use warnings;
 use File::Path qw/mkpath/;
+use FindBin;
 
-my $branch = shift;
+my $branch_arg = shift;
+my $branch = $branch_arg;
 
-$branch = "branches/$branch" if $branch;
-$branch ||= "trunk";
+if ($branch) {
+    $branch = "branches/$branch";
+}
+else {
+    my $current_branch = qx(current-branch);
+    chomp $current_branch;
+    $branch = "branches/$current_branch";
+}
 
 print "Linking in control panel from $branch...\n\n";
-
 my $control_base = "$ENV{HOME}/src/st/control";
-die "Control is not checked out to $control_base" unless -d $control_base;
-
 my $control_dir = "$control_base/$branch";
+
+# Look for a symlink to the control panel area beside nlw/
+my $possible_dir = "$FindBin::Bin/../../control";
+if (!$branch_arg and -d $possible_dir) {
+    $control_dir = $possible_dir;
+}
+else {
+    die "Control is not checked out to $control_base" unless -d $control_base;
+}
+
 unless (-d $control_dir) {
     warn "Couldn't find control branch '$control_dir' - using trunk";
     $control_dir = "$control_base/trunk";

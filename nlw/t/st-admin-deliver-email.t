@@ -45,7 +45,7 @@ EMAIL_WITHOUT_SUBJECT: {
 
 NORMAL_MAIL: {
     my $hub = new_hub('admin');
-    $hub->current_workspace->add_permission(
+    $hub->current_workspace->permissions->add(
         role       => Socialtext::Role->Guest(),
         permission => Socialtext::Permission->new( name => 'email_in' ),
     );
@@ -64,7 +64,7 @@ NORMAL_MAIL: {
 
     check_monkey_email( new_hub('admin') );
 
-    $hub->current_workspace->remove_permission(
+    $hub->current_workspace->permissions->remove(
         role       => Socialtext::Role->Guest(),
         permission => Socialtext::Permission->new( name => 'email_in' ),
     );
@@ -72,10 +72,14 @@ NORMAL_MAIL: {
 
 CASE_OF_WORKSPACE_IN_TO_ADDRESS: {
     my $hub = new_hub('foobar');
-    $hub->current_workspace->add_permission(
+    $hub->current_workspace->permissions->add(
         role       => Socialtext::Role->Guest(),
         permission => Socialtext::Permission->new( name => 'email_in' ),
     );
+
+    my $ws = Socialtext::Workspace->new( name => 'FooBar' );
+    die "nope" unless $ws;
+
 
     my $in = get_email('EmailReceiver');
     my ($out, $err);
@@ -90,11 +94,13 @@ CASE_OF_WORKSPACE_IN_TO_ADDRESS: {
 
     check_monkey_email( new_hub('foobar') );
 
-    $hub->current_workspace->remove_permission(
+    $hub->current_workspace->permissions->remove(
         role       => Socialtext::Role->Guest(),
         permission => Socialtext::Permission->new( name => 'email_in' ),
     );
 }
+
+exit;
 
 
 sub check_monkey_email

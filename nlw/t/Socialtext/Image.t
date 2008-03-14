@@ -14,13 +14,136 @@ BEGIN {
         plan 'skip_all';
     }
     else {
-        plan  tests => 4;
+        plan  tests => 26;
     }
 }
 
 BEGIN {
     use_ok( 'Socialtext::File' );
     use_ok( 'Socialtext::Image' );
+}
+
+PROPORTIONS: {
+    my %test = (
+        "unconstrained" => {
+            new_width => 100, new_height => 200,
+            img_width => 50,  img_height => 60,
+            exp_width => 100, exp_height => 200,
+        },
+
+        # Two dimension scaling
+        "constrained to new, scaled to max_height" => {
+            new_width  => 100, new_height => 200,
+            img_width  => 50,  img_height => 60,
+            max_height => 10,
+            exp_width  => 5,   exp_height => 10,
+        },
+        "constrained to new, scaled to max_width" => {
+            new_width => 100, new_height => 200,
+            img_width => 50,  img_height => 60,
+            max_width => 10,
+            exp_width => 10,  exp_height => 20,
+        },
+        "constrained to new, scaled to max_height" => {
+            new_width  => 100, new_height => 200,
+            img_width  => 50,  img_height => 60,
+            max_width  => 7,   max_height => 10,
+            exp_width  => 5,   exp_height => 10,
+        },
+        "constrained to new, scaled to max_width" => {
+            new_width => 100, new_height => 200,
+            img_width => 50,  img_height => 60,
+            max_width => 10,  max_height => 24,
+            exp_width => 10,  exp_height => 20,
+        },
+        "constrained to new, scaled to max_width" => {
+            new_width  => 100, new_height => 200,
+            img_width  => 50,  img_height => 60,
+            max_width  => 4,   max_height => 10,
+            exp_width  => 4,   exp_height => 8,
+        },
+        "constrained to new, exceding max_height" => {
+            new_width => 100, new_height => 200,
+            img_width => 50,  img_height => 60,
+            max_width => 10,  max_height => 10,
+            exp_width => 5,   exp_height => 10,
+        },
+        
+        # One dimension scaling
+        "constrained to img, scaled to new_width" => {
+            new_width => 200, max_height => 300,
+            img_width => 50,  img_height => 75,
+            exp_width => 200, exp_height => 300,
+        },
+        "constrained to img, scaled to new height" => {
+            max_width => 200, new_height => 100,
+            img_width => 31,  img_height => 50,
+            exp_width => 62,  exp_height => 100,
+        },
+        "constrained to img, new_width, scaled to max_width" => {
+            new_width => 200,
+            max_width => 100,
+            img_width => 50,  img_height => 75,
+            exp_width => 100, exp_height => 150,
+        },
+        "constrained to img, new_height, scaled to max height" => {
+            max_height => 150,
+            new_height => 200,
+            img_width  => 31,  img_height => 50,
+            exp_width  => 93,  exp_height => 150,
+        },
+        "constrained to img, new_height, scaled to max_width" => {
+            max_width => 100, new_height => 200,
+            img_width => 50,  img_height => 20,
+            exp_width => 100, exp_height => 40,
+        },
+        "constrained to img, new_width, scaled to max height" => {
+            new_width  => 200, max_height => 150,
+            img_width  => 10,  img_height => 50,
+            exp_width  => 30,  exp_height => 150,
+        },
+
+        # Check for /0 errors
+        "never devide by zero" => {
+            new_width => 0, new_height => 0,
+            img_width => 5, img_height => 5,
+            exp_width => 5, exp_height => 5,
+        },
+        "never devide by zero" => {
+            new_width => 3, new_height => 0,
+            img_width => 5, img_height => 5,
+            exp_width => 3, exp_height => 3,
+        },
+        "never devide by zero" => {
+            new_width => 0, new_height => 3,
+            img_width => 5, img_height => 5,
+            exp_width => 3, exp_height => 3,
+        },
+        "never devide by zero" => {
+            new_width => 0, new_height => 0,
+            img_width => 5, img_height => 5,
+            max_width => 0,
+            exp_width => 5, exp_height => 5,
+        },
+        "never devide by zero" => {
+            max_height => 0,
+            new_width => 3, new_height => 0,
+            img_width => 5, img_height => 5,
+            exp_width => 3, exp_height => 3,
+        },
+        "never devide by zero" => {
+            new_width => 0, new_height => 3,
+            img_width => 0, img_height => 5,
+            exp_width => 0, exp_height => 3,
+        },
+    );
+    while (my ($name,$test) = each %test) {
+        my $ex = delete $test->{exp_width};
+        my $ey = delete $test->{exp_height};
+        my ($x,$y) = Socialtext::Image::get_proportions(%$test);
+        is($x,$ex,"X: $name");
+        is($y,$ey,"Y: $name");
+    }
 }
 
 our $original_file = "/tmp/image.t-$$.png";
@@ -31,13 +154,11 @@ RESIZE: {
 
     Socialtext::File::set_contents( $original_file, MIME::Base64::decode_base64($data) );
 
-    open my $fh, '<', $original_file
-        or die "Cannot read $original_file: $!";
+    File::Copy::copy($original_file, $resized_file);
     Socialtext::Image::resize(
-        filehandle => $fh,
         max_width  => 200,
         max_height => 60,
-        file       => $resized_file,
+        filename   => $resized_file,
     );
 
     my ( $width, $height ) = Image::Size::imgsize($resized_file);

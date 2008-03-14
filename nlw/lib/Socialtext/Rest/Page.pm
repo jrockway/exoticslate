@@ -7,14 +7,12 @@ use warnings;
 # REVIEW: Can this be made into a Socialtext::Entity?
 use base 'Socialtext::Rest';
 use HTML::WikiConverter;
-use JSON;
+use JSON::XS;
 use Readonly;
 use Socialtext::HTTP ':codes';
 
 Readonly my $DEFAULT_LINK_DICTIONARY => 'REST';
 Readonly my $S2_LINK_DICTIONARY      => 'S2';
-
-$JSON::UTF8 = 1;
 
 # REVIEW: When we get html, we're not getting <html><body> etc
 # Is this good or bad?
@@ -111,7 +109,7 @@ sub GET_json {
             if ($self->page->active) {
                 $rest->header(
                     -status => HTTP_200_OK,
-                    -type   => 'application/json',
+                    -type   => 'application/json; charset=UTF-8',
                 );
                 my $default_view      = sub { $self->page->hash_representation() };
                 my $addtional_content = sub {
@@ -119,7 +117,7 @@ sub GET_json {
                         link_dictionary => $_[1] );
                 };
 
-                return objToJson(
+                return encode_json(
                     $verbose
                     ? {
                         %{ $default_view->() },
@@ -216,7 +214,7 @@ sub PUT_json {
     my $existed_p = $self->page->content ne '';
 
     my $content = $rest->getContent();
-    my $object = jsonToObj( $content );
+    my $object = decode_json( $content );
 
     $self->page->update_from_remote(
         content => $object->{content},

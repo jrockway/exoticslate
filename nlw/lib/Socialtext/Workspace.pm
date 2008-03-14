@@ -3,21 +3,18 @@ package Socialtext::Workspace;
 
 use strict;
 use warnings;
+no warnings 'redefine';
 
 our $VERSION = '0.01';
 
+use Socialtext::Exceptions
+    qw( rethrow_exception param_error data_validation_error );
+use Socialtext::Validate qw(
+    validate validate_pos SCALAR_TYPE BOOLEAN_TYPE ARRAYREF_TYPE
+    HANDLE_TYPE URI_TYPE USER_TYPE ROLE_TYPE PERMISSION_TYPE FILE_TYPE
+    DIR_TYPE UNDEF_TYPE
+);
 
-use Socialtext::Exceptions qw( rethrow_exception param_error data_validation_error );
-use Socialtext::Validate qw( validate validate_pos SCALAR_TYPE BOOLEAN_TYPE ARRAYREF_TYPE HANDLE_TYPE
-                             URI_TYPE USER_TYPE ROLE_TYPE PERMISSION_TYPE FILE_TYPE DIR_TYPE UNDEF_TYPE );
-
-use Socialtext::Schema;
-use base 'Socialtext::AlzaboWrapper';
-__PACKAGE__->SetAlzaboTable( Socialtext::Schema->Load()->table('Workspace') );
-__PACKAGE__->MakeColumnMethods();
-
-use Alzabo::Runtime::ForeignKey;
-use Alzabo::SQLMaker::PostgreSQL qw( COUNT DISTINCT LOWER CURRENT_TIMESTAMP );
 use Class::Field 'field';
 use Cwd ();
 use DateTime;
@@ -42,11 +39,14 @@ use Socialtext::Image;
 use Socialtext::l10n qw(loc system_locale);
 use Socialtext::Log qw( st_log );
 use Socialtext::Paths;
-use Socialtext::SQL qw( sql_execute );
+use Socialtext::SQL qw(
+    sql_execute
+    sql_commit sql_rollback sql_begin_work
+    sql_singlevalue
+);
 use Socialtext::String;
 use Readonly;
 use Socialtext::Account;
-use Socialtext::AlzaboWrapper::Cursor::PKOnly;
 use Socialtext::Permission qw( ST_EMAIL_IN_PERM ST_READ_PERM );
 use Socialtext::Role;
 use Socialtext::URI;
@@ -55,9 +55,65 @@ use Socialtext::User;
 use Socialtext::UserWorkspaceRole;
 use Socialtext::WorkspaceBreadcrumb;
 use Socialtext::Page;
+use Socialtext::Workspace::Permissions;
+use Socialtext::Timer;
 use URI;
+use YAML;
+
+# workspace schema fields
+# FIXME: so god damned many. something is really wrong here
+
+Readonly our @COLUMNS => (
+    'workspace_id',
+    'name',
+    'title',
+    'logo_uri',
+    'homepage_weblog',
+    'email_addresses_are_hidden',
+    'unmasked_email_domain',
+    'prefers_incoming_html_email',
+    'incoming_email_placement',
+    'allows_html_wafl',
+    'email_notify_is_enabled',
+    'sort_weblogs_by_create',
+    'external_links_open_new_window',
+    'basic_search_only',
+    'enable_unplugged',
+    'skin_name',
+    'custom_title_label',
+    'header_logo_link_uri',
+    'show_welcome_message_below_logo',
+    'show_title_below_logo',
+    'comment_form_note_top',
+    'comment_form_note_bottom',
+    'comment_form_window_height',
+    'page_title_prefix',
+    'email_notification_from_address',
+    'email_weblog_dot_address',
+    'comment_by_email',
+    'homepage_is_dashboard',
+    'creation_datetime',
+    'account_id',
+    'created_by_user_id',
+    'restrict_invitation_to_search',
+    'invitation_filter',
+    'invitation_template',
+    'customjs_uri',
+    'customjs_name',
+    'cascade_css',
+    'uploaded_skin',
+);
+
+# Hash for quick lookup of columns
+my %COLUMNS = map { $_ => 1 } @COLUMNS;
+
+foreach my $column (@COLUMNS) {
+    field $column;
+}
 
 field breadcrumbs => '';
+
+sub table_name { 'Workspace' }
 
 # Special case the "help" workspace.  Since existing Wikitext (and rarely used
 # code) still refer to the "help" workspace, we need to capture that here and
@@ -69,35 +125,62 @@ sub new {
         delete $args{name};
         return $class->help_workspace(%args);
     }
-    else {
-        return $class->SUPER::new(%args);
-    }
+
+    return $class->_new(%args);
 }
 
-sub table_name { 'Workspace' }
+# This is in _new() b/c of now migration 13 works.  Please read that migration
+# before you move this code.
+sub _new {
+    my ( $class, %args ) = @_;
+    my $sth;
+    if (my $name = $args{name}) {
+        $sth = sql_execute(
+            qq{SELECT * FROM "Workspace" WHERE LOWER(name) = ?}, lc($name),
+        );
+    }
+    elsif (my $id = $args{workspace_id}) {
+        $sth = sql_execute(
+            qq{SELECT * FROM "Workspace" WHERE workspace_id = ?}, $id,
+        );
+    }
+    else {
+        return;
+    }
 
-sub _new_row {
-    my $class = shift;
-    my %p     = validate( @_, { name => SCALAR_TYPE } );
+    # Sure there's a better way to make use of the row we're getting back.
+    my $row = $sth->fetchrow_hashref();
+    return $class->_new_from_hash_ref($row);
+}
 
-    return $class->table->one_row(
-        where => [ LOWER( $class->table->column('name') ), '=', lc $p{name } ],
-    );
+sub _new_from_hash_ref {
+    my ( $class, $row ) = @_;
+    return $row unless $row;
+    return bless $row, $class;
 }
 
 sub create {
     my $class = shift;
     my %p = @_;
-
-    my $schema = Socialtext::Schema->Load();
+    my $timer = Socialtext::Timer->new;
 
     my $skip_pages = delete $p{skip_default_pages};
 
     my $self;
     eval {
-        $schema->begin_work();
+        sql_begin_work();
 
-        $self = $class->SUPER::create(%p);
+        $class->_validate_and_clean_data(\%p);
+        my $keys = join(',', sort keys %p);
+        my $vals = join(',', map {'?'} keys %p);
+
+        my $sql = <<EOSQL;
+INSERT INTO "Workspace" ( workspace_id, $keys )
+    VALUES (nextval('"Workspace___workspace_id"'), $vals)
+EOSQL
+        sql_execute($sql, map { $p{$_} } sort keys %p);
+
+        $self = $class->new( name => $p{name} );
 
         my $creator = $self->creator;
         unless ( $creator->is_system_created ) {
@@ -107,13 +190,12 @@ sub create {
             );
         }
 
-        $self->set_permissions( set_name => 'member-only' );
-
-        $schema->commit();
+        $self->permissions->set( set_name => 'member-only' );
+        sql_commit();
     };
 
     if ( my $e = $@ ) {
-        $schema->rollback();
+        sql_rollback();
         rethrow_exception($e);
     }
 
@@ -121,6 +203,11 @@ sub create {
     $self->_copy_default_pages()
         unless $skip_pages;
     $self->_update_aliases_file();
+
+    my $msg = 'CREATE,WORKSPACE,workspace:' . $self->name  
+              . '(' . $self->workspace_id . '),'
+              . '[' . $timer->elapsed . ']';
+    st_log()->info($msg);
 
     return $self;
 }
@@ -201,12 +288,6 @@ sub _main_and_hub {
     return ( $main, $hub );
 }
 
-#sub customjs_uri {
-#    my $self = shift;
-#
-#    return $self->{customjs_uri};
-#}
-
 sub _make_fs_paths {
     my $self = shift;
 
@@ -234,10 +315,13 @@ sub _update_aliases_file {
 
 sub update {
     my $self = shift;
+    my %args = @_;
+
+    delete $self->{skin_info}{$_} for keys %args;
 
     my $old_title = $self->title();
 
-    $self->SUPER::update(@_);
+    $self->_update(@_);
 
     if ( $self->title() ne $old_title ) {
         my ( $main, $hub ) = $self->_main_and_hub();
@@ -257,26 +341,45 @@ sub update {
     }
 }
 
+sub _update {
+    my ( $self, %p ) = @_;
 
-# REVIEW: turn a workspace into a hash suitable for JSON and
-# such things.
-# REVIEW: An Alzabo thing won't serialize directly, we
-# need to make queries or otherwise dig into it, so not sure
-# what to put in this hash
-# REVIEW: We may want even more info than this.
+    $self->_validate_and_clean_data(\%p);
+
+    my ( @updates, @bindings );
+    while (my ($column, $value) = each %p) {
+        push @updates, "$column=?";
+        push @bindings, $value;
+    }
+
+    if (@updates) {
+        my $set_clause = join ', ', @updates;
+        sql_execute(
+            'UPDATE "Workspace"'
+            . " SET $set_clause WHERE workspace_id=?",
+            @bindings, $self->workspace_id);
+
+        while (my ($column, $value) = each %p) {
+            $self->$column($value);
+        }
+    }
+
+    return $self;
+}
+
+
+# turn a workspace into a hash suitable for JSON and such things.
 sub to_hash {
     my $self = shift;
-    my $hash = {};
-    foreach my $column ($self->columns) {
-        my $name = $column->name;
-        my $value = $self->$name();
-        $hash->{$name} = "$value"; # to_string on some objects
-    }
+    my $hash = {
+        map { $_ => $self->$_ } @COLUMNS
+    };
     return $hash;
 }
 
 sub delete {
     my $self = shift;
+    my $timer = Socialtext::Timer->new;
 
     for my $dir ( $self->_data_dir_paths() ) {
         File::Path::rmtree($dir);
@@ -284,14 +387,20 @@ sub delete {
 
     Socialtext::EmailAlias::delete_alias( $self->name );
 
-    $self->SUPER::delete();
+    sql_execute( 'DELETE FROM "Workspace" WHERE workspace_id=?',
+        $self->workspace_id );
+
+    st_log()
+        ->info( 'DELETE,WORKSPACE,workspace:'
+            . $self->name . '('
+            . $self->workspace_id
+            . '),[' . $timer->elapsed . ']' );
 }
 
 my %ReservedNames = map { $_ => 1 } qw(
     account
     administrate
     administrator
-    alzabo
     atom
     attachment
     attachments
@@ -329,7 +438,7 @@ sub _validate_and_clean_data {
     if ( $p->{logo_uri} and ( $is_create or not $self->{allow_logo_uri_update_HACK} ) ) {
         my $meth = $is_create ? 'create()' : 'update()';
         die 'Cannot set logo_uri via ' . $meth . '.'
-            . ' Use set_logo_from_filehandle() or set_logo_from_uri().';
+            . ' Use set_logo_from_file() or set_logo_from_uri().';
     }
 
     if ( defined $p->{name} and not $is_create and not $self->{allow_rename_HACK} ) {
@@ -402,6 +511,12 @@ sub _validate_and_clean_data {
 
     if ($is_create) {
         $p->{created_by_user_id} ||= Socialtext::User->SystemUser()->user_id();
+    }
+
+    # Remove keys that aren't columns, or are undef
+    for my $k (keys %$p) {
+        delete $p->{$k} unless $COLUMNS{$k};
+        delete $p->{$k} unless defined $p->{$k};
     }
 }
 
@@ -478,6 +593,7 @@ sub NameIsValid {
     sub rename {
         my $self = shift;
         my %p    = validate( @_, $spec );
+        my $timer = Socialtext::Timer->new;
 
         my $old_name  = $self->name();
         my @old_paths = $self->_data_dir_paths();
@@ -488,7 +604,7 @@ sub NameIsValid {
         my @new_paths = $self->_data_dir_paths();
 
         for ( my $x = 0; $x < @old_paths; $x++ ) {
-            rename $old_paths[$x] => $new_paths[$x]
+            CORE::rename $old_paths[$x] => $new_paths[$x]
                 or die "Cannot rename $old_paths[$x] => $new_paths[$x]: $!";
         }
 
@@ -515,6 +631,13 @@ sub NameIsValid {
 
         Socialtext::EmailAlias::delete_alias($old_name);
         $self->_update_aliases_file();
+
+        st_log()
+            ->info( 'RENAME,WORKSPACE,old_workspace:'
+                . $old_name . '(' . $self->workspace_id . '),'
+                . 'new_workspace:' . $p{name} . '('
+                . $self->workspace_id
+                . '),[' . $timer->elapsed . ']' );
     }
 }
 
@@ -539,13 +662,14 @@ sub formatted_email_notification_from_address {
         $self->email_notification_from_address() )->format();
 }
 
-Readonly my $DefaultLogoURI => '/static/images/st/logo/socialtext-logo-152x26.gif';
 sub logo_uri_or_default {
     my $self = shift;
+    my ( $main, $hub ) = $self->_main_and_hub();
 
     return $self->logo_uri if $self->logo_uri;
-
-    return $DefaultLogoURI;
+    return join '/', 
+        $hub->skin->skin_uri('s2'), 
+        qw(images st logo socialtext-logo-152x26.gif);
 }
 
 sub logo_filename {
@@ -568,8 +692,7 @@ sub logo_filename {
         'image/png'  => 'png',
     );
 
-
-    sub set_logo_from_filehandle {
+    sub set_logo_from_file {
         my $self = shift;
         my %p = @_;
 
@@ -585,12 +708,13 @@ sub logo_filename {
 
         # This can fail in a variety of ways, mostly related to
         # the file not being what it says it is.
+        File::Copy::copy($p{filename}, $new_file)
+            or die "Could not copy $p{filename} to $new_file $!\n";
         eval {
             Socialtext::Image::resize(
-                filehandle => $p{filehandle},
                 max_width  => 200,
                 max_height => 60,
-                file       => $new_file,
+                filename   => $new_file,
             );
         };
         if ($@) {
@@ -665,36 +789,13 @@ sub _logo_path {
     return Socialtext::File::catdir( $self->LogoRoot, $self->name );
 }
 
-# This sort of stuff will eventually move to Socialtext::Skin, once
-# that exists.
-sub header_logo_image_uri {
-    my $self = shift;
-
-    my $logo_file = Socialtext::File::catfile(
-        Socialtext::AppConfig->code_base(), 'images',
-        $self->skin_name, 'logo-bar-12.gif' );
-
-    if ( -f $logo_file ) {
-        return join '/',
-            Socialtext::Helpers->static_path,
-            'images',
-            $self->skin_name,
-            'logo-bar-12.gif';
-    }
-
-    return join '/',
-        Socialtext::Helpers->static_path,
-        'images',
-        'logo-bar-12.gif';
-}
-
 sub title_label {
     my $self = shift;
 
     return
         $self->custom_title_label
         ? $self->custom_title_label
-        : $self->is_public
+        : $self->permissions->is_public
         ? 'Eventspace'
         : 'Workspace';
 }
@@ -723,9 +824,6 @@ sub account {
         my $self = shift;
         my %p = validate( @_, $spec );
 
-        my $schema = Socialtext::Schema->Load();
-        my $wtu = $schema->table('WorkspacePingURI');
-
         my @errors;
         my @uris;
         for my $uri ( grep { defined && length } @{ $p{uris} } ) {
@@ -741,62 +839,24 @@ sub account {
         data_validation_error errors => \@errors if @errors;
 
         eval {
-            $schema->begin_work;
-
-            my $driver = Socialtext::Schema->Load()->driver();
-
-            my $sql = 'DELETE FROM ' . $driver->quote_identifier( $wtu->name )
-                      . 'WHERE workspace_id = ?';
-
-            $driver->do( sql => $sql, bind => $self->workspace_id );
+            sql_begin_work;
+            sql_execute(
+                'DELETE FROM "WorkspacePingURI" WHERE workspace_id = ?',
+               $self->workspace_id,
+            );
 
             for my $uri ( List::MoreUtils::uniq(@uris) ) {
-                $wtu->insert( values => { workspace_id => $self->workspace_id,
-                                          uri          => $uri } );
+                sql_execute(
+                    'INSERT INTO "WorkspacePingURI" VALUES(?,?)',
+                    $self->workspace_id,
+                    $uri
+                );
             }
-
-            $schema->commit;
+            sql_commit;
         };
 
         if ( my $e = $@ ) {
-            $schema->rollback();
-            rethrow_exception($e);
-        }
-    }
-}
-
-{
-    Readonly my $spec => { fields => ARRAYREF_TYPE };
-    sub set_comment_form_custom_fields {
-        my $self = shift;
-        my %p = validate( @_, $spec );
-
-        my $schema = Socialtext::Schema->Load();
-        my $wtf = $schema->table('WorkspaceCommentFormCustomField');
-        my @fields = grep { defined && length } @{ $p{fields} };
-
-        eval {
-            $schema->begin_work;
-
-            my $driver = Socialtext::Schema->Load()->driver();
-
-            my $sql = 'DELETE FROM ' . $driver->quote_identifier( $wtf->name )
-                      . 'WHERE workspace_id = ?';
-
-            $driver->do( sql => $sql, bind => $self->workspace_id );
-
-            my $i = 1;
-            for my $field ( List::MoreUtils::uniq(@fields) ) {
-                $wtf->insert( values => { workspace_id => $self->workspace_id,
-                                          field_name   => $field,
-                                          field_order  => $i++} );
-            }
-
-            $schema->commit;
-        };
-
-        if ( my $e = $@ ) {
-            $schema->rollback();
+            sql_rollback();
             rethrow_exception($e);
         }
     }
@@ -805,400 +865,66 @@ sub account {
 sub ping_uris {
     my $self = shift;
 
-    my $wtu = Socialtext::Schema->Load()->table('WorkspacePingURI');
-    return $wtu->function(
-        select => $wtu->column('uri'),
-        where  => [ $wtu->column('workspace_id'), '=', $self->workspace_id ],
+    my $sth = sql_execute(
+        'SELECT uri FROM "WorkspacePingURI" WHERE workspace_id = ?',
+        $self->workspace_id,
     );
+    my $uris = $sth->fetchall_arrayref;
+    return map { $_->[0] } @$uris;
+}
+
+{
+    Readonly my $spec => { fields => ARRAYREF_TYPE };
+    sub set_comment_form_custom_fields {
+        my $self = shift;
+        my %p = validate( @_, $spec );
+
+        my @fields = grep { defined && length } @{ $p{fields} };
+
+        eval {
+            sql_begin_work;
+
+            sql_execute(
+                'DELETE FROM "WorkspaceCommentFormCustomField" '
+                . 'WHERE workspace_id = ?',
+                $self->workspace_id,
+            );
+
+            my $i = 1;
+            for my $field ( List::MoreUtils::uniq(@fields) ) {
+                sql_execute(
+                    'INSERT INTO "WorkspaceCommentFormCustomField"
+                        VALUES(?,?,?)',
+                    $self->workspace_id, $field, $i++,
+                );
+            }
+            sql_commit;
+        };
+
+        if ( my $e = $@ ) {
+            sql_rollback();
+            rethrow_exception($e);
+        }
+    }
 }
 
 sub comment_form_custom_fields {
     my $self = shift;
 
-    my $wtf = Socialtext::Schema->Load()->table('WorkspaceCommentFormCustomField');
-    return $wtf->function(
-        select => $wtf->column('field_name'),
-        where  => [ $wtf->column('workspace_id'), '=', $self->workspace_id ],
-        order_by => [ $wtf->column('field_order') ],
-    );
-}
-
-{
-    my %PermissionSets = (
-        'public' => {
-            guest              => [ qw( read edit comment ) ],
-            authenticated_user => [ qw( read edit comment email_in ) ],
-            member             => [ qw( read edit attachments comment delete email_in email_out ) ],
-            workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
-        },
-        'member-only' => {
-            guest              => [ ],
-            authenticated_user => [ 'email_in' ],
-            member             => [ qw( read edit attachments comment delete email_in email_out ) ],
-            workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
-        },
-        'authenticated-user-only' => {
-            guest              => [ ],
-            authenticated_user => [ qw( read edit attachments comment delete email_in email_out ) ],
-            member             => [ qw( read edit attachments comment delete email_in email_out ) ],
-            workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
-        },
-        'public-read-only' => {
-            guest              => [ 'read' ],
-            authenticated_user => [ 'read' ],
-            member             => [ qw( read edit attachments comment delete email_in email_out ) ],
-            workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
-        },
-        'public-comment-only' => {
-            guest              => [ qw( read comment ) ],
-            authenticated_user => [ qw( read comment ) ],
-            member             => [ qw( read edit attachments comment delete email_in email_out ) ],
-            workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
-        },
-        'public-authenticate-to-edit' => {
-            guest              => [ qw( read edit_controls ) ],
-            authenticated_user => [ qw( read edit attachments comment delete email_in email_out ) ],
-            member             => [ qw( read edit attachments comment delete email_in email_out ) ],
-            workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
-        },
-        'intranet' => {
-            guest              => [ qw( read edit attachments comment delete email_in email_out ) ],
-            authenticated_user => [ qw( read edit attachments comment delete email_in email_out ) ],
-            member             => [ qw( read edit attachments comment delete email_in email_out ) ],
-            workspace_admin    => [ qw( read edit attachments comment delete email_in email_out admin_workspace ) ],
-        },
-    );
-
-    my @PermissionSetsLocalize = (loc('public'), loc('member-only'), loc('authenticated-user-only'), loc('public-read-only'), loc('public-comment-only'), loc('public-authenticate-to-edit') ,loc('intranet'));
-
-    # Impersonators should be able to do everything members can do, plus
-    # impersonate.
-    $_->{impersonator} = [ 'impersonate', @{ $_->{member} } ]
-        for values %PermissionSets;
-
-    Readonly my $spec => {
-        set_name => {
-            callbacks => {
-                 'valid permission set name' =>
-                 sub { $_[0] && exists $PermissionSets{ $_[0] } },
-            },
-        },
-    };
-    sub set_permissions {
-        my $self = shift;
-        my %p = validate( @_, $spec );
-
-        my $set = $PermissionSets{ $p{set_name} };
-
-        my $schema = Socialtext::Schema->Load();
-
-        my $wrp_table = $schema->table('WorkspaceRolePermission');
-        my $current_perms =
-            $wrp_table->rows_where(
-                where => [ $wrp_table->column('workspace_id'),
-                           '=', $self->workspace_id ]
-            );
-
-        eval {
-            $schema->begin_work();
-
-            my $guest_id = Socialtext::Role->Guest()->role_id();
-            my $email_in_id = ST_EMAIL_IN_PERM->permission_id();
-
-            # XXX - Alzabo is lame and does not provide table-level
-            # update and delete, which really needs to be corrected in
-            # a near-future release.
-            my $has_existing_perms = 0;
-            while ( my $wrp = $current_perms->next ) {
-                next
-                    if $wrp->select('role_id') == $guest_id
-                    and $wrp->select('permission_id') eq $email_in_id;
-
-                $wrp->delete;
-
-                $has_existing_perms = 1;
-            }
-
-            for my $role_name ( keys %$set ) {
-                my $role = Socialtext::Role->new( name => $role_name );
-
-                for my $perm_name ( @{ $set->{$role_name} } ) {
-                    my $perm = Socialtext::Permission->new( name => $perm_name );
-
-                    next
-                        if $role_name  eq 'guest'
-                        and $perm_name eq 'email_in'
-                        and $has_existing_perms;
-
-                    $wrp_table->insert(
-                        values => {
-                            workspace_id  => $self->workspace_id,
-                            role_id       => $role->role_id,
-                            permission_id => $perm->permission_id,
-                        },
-                    );
-                }
-            }
-
-
-            $self->_set_permission_configs( set_name => $p{set_name} );
-
-            $schema->commit();
-        };
-
-        if ( my $e = $@ ) {
-            $schema->rollback();
-            rethrow_exception($e);
-        }
-    }
-
-    # XXX - maybe this belongs in a higher-level API that in
-    # turn calls set_permissions
-    sub _set_permission_configs {
-	my $self = shift;
-        my %p = validate( @_, $spec );
-
-        my $html_wafl = ( $p{set_name} =~ /^(member|intranet|public\-read)/ ) ? 1 : 0;
-        my $email_addresses = ( $p{set_name} =~ /^(member|intranet)/ ) ? 0 : 1 ;
-        my $email_notify = ( $p{set_name} =~ /^public/ ) ? 0 : 1;
-        my $homepage = ( $p{set_name} eq 'member-only' ) ? 1 : 0;
-
-
-        $self->update(
-            allows_html_wafl           => $html_wafl,
-            email_notify_is_enabled    => $email_notify,
-            email_addresses_are_hidden => $email_addresses,
-            homepage_is_dashboard      => $homepage,
-        );
-    }
-
-    # This is just caching to make current_permission_set_name run at a
-    # reasonable speed.
-    my %SetsAsStrings =
-        map { $_ => _perm_set_as_string( $PermissionSets{$_} ) }
-        keys %PermissionSets;
-
-    sub current_permission_set {
-        my $self = shift;
-        my $perms_with_roles = $self->permissions_with_roles();
-
-        my %set;
-        while ( my $pair = $perms_with_roles->next ) {
-            my ( $perm, $role ) = @$pair;
-            push @{ $set{ $role->name() } }, $perm->name();
-        }
-
-        # We need the contents of %set to match our pre-defined sets,
-        # which assign an empty arrayref for a role when it has no
-        # permissions (see authenticated-user-only).
-        my $roles = Socialtext::Role->All();
-        while ( my $role = $roles->next() ) {
-            $set{ $role->name() } ||= [];
-        }
-
-        return %set;
-    }
-
-    sub current_permission_set_name {
-        my $self = shift;
-
-        my %set = $self->current_permission_set;
-
-        my $set_string = _perm_set_as_string( \%set );
-        for my $name ( keys %SetsAsStrings ) {
-            return $name if $SetsAsStrings{$name} eq $set_string;
-        }
-
-        return 'custom';
-    }
-
-    sub _perm_set_as_string {
-        my $set = shift;
-
-        my @parts;
-        # This particular string dumps nicely, the newlines are not
-        # special or anything.
-        for my $role ( sort keys %{$set} ) {
-            my $string = "$role: ";
-            # We explicitly ignore the email_in permission as applied
-            # to guests when determining the set string so that it
-            # does not affect the calculated set name for a
-            # workspace. See RT 21831.
-            my @perms = sort @{ $set->{$role} };
-            @perms = grep { $_ ne 'email_in' } @perms
-                if $role eq 'guest';
-
-            $string .= join ', ', @perms;
-
-            push @parts, $string;
-        }
-
-        return join "\n", @parts;
-    }
-
-    sub PermissionSetNameIsValid {
-        my $class = shift;
-        my $name  = shift;
-
-        return $PermissionSets{$name} ? 1 : 0;
-    }
-}
-
-{
-    Readonly my $spec => {
-        permission => PERMISSION_TYPE,
-        role       => ROLE_TYPE,
-    };
-    sub add_permission {
-        my $self = shift;
-        my %p = validate( @_, $spec );
-
-        my $wrp_table = Socialtext::Schema->Load()->table('WorkspaceRolePermission');
-        eval {
-            $wrp_table->insert(
-                values => {
-                    workspace_id  => $self->workspace_id,
-                    role_id       => $p{role}->role_id,
-                    permission_id => $p{permission}->permission_id,
-                },
-            );
-        };
-
-        if ( my $e = $@ ) {
-            rethrow_exception($e)
-                unless $e =~ /duplicate key/;
-        }
-    }
-
-    sub remove_permission {
-        my $self = shift;
-        my %p = validate( @_, $spec );
-
-        my $wrp_table = Socialtext::Schema->Load()->table('WorkspaceRolePermission');
-        my $row = $wrp_table->row_by_pk( pk => {
-            workspace_id  => $self->workspace_id,
-            role_id       => $p{role}->role_id,
-            permission_id => $p{permission}->permission_id,
-        } );
-        $row->delete if $row;
-    }
-
-    sub role_has_permission {
-        my $self = shift;
-        my %p = validate( @_, $spec );
-
-        my $wrp_table = Socialtext::Schema->Load()->table('WorkspaceRolePermission');
-        return $wrp_table->function(
-            select => 1,
-            where  => [
-                [ $wrp_table->column('workspace_id'), '=', $self->workspace_id ],
-                [ $wrp_table->column('role_id'), '=', $p{role}->role_id ],
-                [ $wrp_table->column('permission_id'), '=', $p{permission}->permission_id ],
-            ],
-        ) ? 1 : 0;
-    }
-}
-
-{
-    Readonly my $spec => {
-        role => ROLE_TYPE,
-    };
-    sub permissions_for_role {
-        my $self = shift;
-
-        my %p = validate( @_, $spec );
-
-        my $sth = sql_execute(
-            'SELECT permission_id'
-            . ' FROM "WorkspaceRolePermission"'
-            . ' WHERE workspace_id=? AND role_id=?',
-            $self->workspace_id, $p{role}->role_id );
-
-        return Socialtext::MultiCursor->new(
-            iterables => [ $sth->fetchall_arrayref ],
-            apply     => sub {
-                my $row = shift;
-                return Socialtext::Permission->new(
-                    permission_id => $row->[0] );
-            }
-        );
-    }
-}
-
-sub permissions_with_roles {
-    my $self = shift;
-
     my $sth = sql_execute(
-        'SELECT permission_id, role_id'
-        . ' FROM "WorkspaceRolePermission"'
-        . ' WHERE workspace_id=?',
-        $self->workspace_id);
-
-    return Socialtext::MultiCursor->new(
-        iterables => [ $sth->fetchall_arrayref ],
-        apply     => sub {
-            my $row = shift;
-            my $permission_id = $row->[0];
-            my $role_id = $row->[1];
-
-            # warn "# Row $row pid $permission_id rid $role_id\n";
-            return undef unless defined $permission_id;
-
-            return [
-                Socialtext::Permission->new( permission_id => $permission_id ),
-                Socialtext::Role->new( role_id             => $role_id )
-            ];
-        }
+        'SELECT field_name FROM "WorkspaceCommentFormCustomField"
+            WHERE workspace_id = ?
+            ORDER BY field_order',
+        $self->workspace_id,
     );
+    my $fields = $sth->fetchall_arrayref;
+    return map { $_->[0] } @$fields;
 }
 
-{
-    Readonly my $spec => {
-        user       => USER_TYPE,
-        permission => PERMISSION_TYPE,
-    };
-    sub user_has_permission {
-        my $self = shift;
-        my %p = validate( @_, $spec );
-
-        my $schema = Socialtext::Schema->Load();
-
-        my $uwr_table  = $schema->table('UserWorkspaceRole');
-        my $wrp_table  = $schema->table('WorkspaceRolePermission');
-        my $fk = Alzabo::Runtime::ForeignKey->new(
-            columns_from => [ $uwr_table->columns( 'workspace_id', 'role_id' ) ],
-            columns_to   => [ $wrp_table->columns( 'workspace_id', 'role_id' ) ],
-        );
-
-        my $has_permission =
-            $schema->function(
-                select => 1,
-                join   => [ [ $uwr_table, $wrp_table, $fk ] ],
-                where  => [
-                    [ $uwr_table->column('user_id'), '=', $p{user}->user_id() ],
-                    [ $uwr_table->column('workspace_id'), '=', $self->workspace_id() ],
-                    [ $wrp_table->column('permission_id'), '=', $p{permission}->permission_id() ],
-                ],
-            );
-
-        return 1 if $has_permission;
-
-        return 1
-            if $self->role_has_permission(
-                role       => $p{user}->default_role,
-                permission => $p{permission},
-            );
-    }
-}
-
-sub is_public {
+sub permissions {
     my $self = shift;
-
-    return 1
-        if $self->role_has_permission(
-            role       => Socialtext::Role->Guest(),
-            permission => ST_READ_PERM,
-        );
+    $self->{_perms} ||= Socialtext::Workspace::Permissions->new(wksp => $self);
+    return $self->{_perms};
 }
 
 {
@@ -1225,6 +951,7 @@ sub is_public {
     sub assign_role_to_user {
         my $self = shift;
         my %p = validate( @_, $spec );
+        my $timer = Socialtext::Timer->new;
 
         if ( $p{user}->is_system_created ) {
             param_error 'Cannot give a role to a system-created user';
@@ -1239,20 +966,16 @@ sub is_public {
             workspace_id => $self->workspace_id,
         );
 
+        my $msg_action;
         if ($uwr) {
-            my $msg = join ' : ', 'CHANGE_USER_ROLE', $self->workspace_id,
-                $p{user}->user_id, $p{role}->role_id;
-            st_log()->info($msg);
+            $msg_action = 'CHANGE,USER_ROLE';
 
-            $uwr->update(
-                role_id     => $p{role}->role_id,
-                is_selected => $p{is_selected},
-            );
+            $uwr->role_id($p{role}->role_id);
+            $uwr->is_selected($p{is_selected});
+            $uwr->update();
         }
         else {
-            my $msg = join ' : ', 'ADD_USER', $self->workspace_id,
-                $p{user}->user_id, $p{role}->role_id;
-            st_log()->info($msg);
+            $msg_action = 'ASSIGN,USER_ROLE';
 
             Socialtext::UserWorkspaceRole->create(
                 user_id      => $p{user}->user_id,
@@ -1261,6 +984,14 @@ sub is_public {
                 is_selected  => $p{is_selected},
             );
         }
+
+        st_log()->info($msg_action .  ','
+             . 'role:' . $p{role}->name . ','
+             . 'user:' . $p{user}->homunculus->username
+             . '(' . $p{user}->user_id . '),'
+             . 'workspace:' . $self->name . '('
+             . $self->workspace_id . '),'
+             . '[' . $timer->elapsed . ']');
     }
 }
 
@@ -1268,15 +999,14 @@ sub has_user {
     my $self = shift;
     my $user = shift; # [in] User
 
-    my $uwr_table = Socialtext::Schema->Load()->table('UserWorkspaceRole');
-    return 1 if
-        $uwr_table->row_count(
-            where => [
-                [ $uwr_table->column('workspace_id'), '=', $self->workspace_id ],
-                [ $uwr_table->column('user_id'), '=', $user->user_id ],
-                [ $uwr_table->column('role_id'), '!=', Socialtext::Role->Guest()->role_id() ],
-            ],
-        );
+    my $sql = 'select 1 from "UserWorkspaceRole" where workspace_id = ? and user_id = ? and role_id <> ?';
+    my $exists = sql_singlevalue(
+        $sql,
+        $self->workspace_id,
+        $user->user_id,
+        Socialtext::Role->Guest()->role_id(),
+    );
+    return (defined($exists) && $exists);
 }
 
 {
@@ -1287,16 +1017,8 @@ sub has_user {
         my $self = shift;
         my %p = validate( @_, $spec );
 
-        my $uwr_table = Socialtext::Schema->Load()->table('UserWorkspaceRole');
-        my $role_id =
-            $uwr_table->function(
-                select => $uwr_table->column('role_id'),
-                where => [
-                    [ $uwr_table->column('workspace_id'), '=', $self->workspace_id ],
-                    [ $uwr_table->column('user_id'), '=', $p{user}->user_id ],
-                ],
-            );
-
+        my $sql = 'select role_id from "UserWorkspaceRole" where workspace_id = ? and user_id = ?';
+        my $role_id = sql_singlevalue($sql, $self->workspace_id, $p{user}->user_id);
         return unless $role_id;
 
         return Socialtext::Role->new( role_id => $role_id );
@@ -1305,6 +1027,7 @@ sub has_user {
     sub remove_user {
         my $self = shift;
         my %p = validate( @_, $spec );
+        my $timer = Socialtext::Timer->new;
 
         my $uwr = Socialtext::UserWorkspaceRole->new(
            workspace_id => $self->workspace_id,
@@ -1313,11 +1036,14 @@ sub has_user {
 
         return unless $uwr;
 
-        my $msg = join ' : ', 'REMOVE_USER', $self->workspace_id,
-            $p{user}->user_id;
-        st_log()->info($msg);
-
         $uwr->delete;
+
+        st_log()->info('REMOVE,USER_ROLE,'
+             . 'user:' . $p{user}->homunculus->username
+             . '(' . $p{user}->user_id . '),'
+             . 'workspace:' . $self->name . '('
+             . $self->workspace_id . '),'
+             . '[' . $timer->elapsed . ']');
     }
 }
 
@@ -1330,52 +1056,39 @@ sub has_user {
         my $self = shift;
         my %p = validate( @_, $spec );
 
-        my $uwr_table = Socialtext::Schema->Load()->table('UserWorkspaceRole');
-        return 1 if
-            $uwr_table->row_count(
-                where => [
-                    [ $uwr_table->column('workspace_id'), '=', $self->workspace_id ],
-                    [ $uwr_table->column('user_id'), '=', $p{user}->user_id ],
-                    [ $uwr_table->column('role_id'), '=', $p{role}->role_id() ],
-                ],
-            );
+        my $sql = 'select 1 from "UserWorkspaceRole" where workspace_id = ? and user_id = ? and role_id = ?';
+        return sql_singlevalue($sql, $self->workspace_id, $p{user}->user_id, $p{role}->role_id());
     }
 }
 
 sub user_count {
     my $self = shift;
 
-    my $uwr_table = Socialtext::Schema->Load()->table('UserWorkspaceRole');
-
-    return $uwr_table->function(
-        select => COUNT( DISTINCT( $uwr_table->column('user_id') ) ),
-        where  => [ $uwr_table->column('workspace_id'), '=', $self->workspace_id ],
-    );
+    my $sth = sql_execute( <<EOT, $self->workspace_id );
+SELECT COUNT( DISTINCT( "UserWorkspaceRole".user_id ) )
+    FROM "UserWorkspaceRole"
+    WHERE workspace_id = ?;
+EOT
+    return $sth->fetchall_arrayref->[0][0];
 }
 
 sub users {
     my $self = shift;
 
-    my $schema = Socialtext::Schema->Load();
+    my $sth = sql_execute(<<EOSQL, $self->workspace_id);
+SELECT "UserId".system_unique_id, "UserId".driver_username
+    FROM "UserId", "UserWorkspaceRole"
+    WHERE "UserId".system_unique_id = "UserWorkspaceRole".user_id
+        AND "UserWorkspaceRole".workspace_id = ?
+    ORDER BY driver_username
+EOSQL
 
     return Socialtext::MultiCursor->new(
-        iterables => [
-            $schema->join(
-                select => [ $schema->tables(qw( UserId )) ],
-                join   => [ $schema->tables(qw( UserWorkspaceRole UserId )) ],
-                where  => [
-                    $schema->table('UserWorkspaceRole')
-                        ->column('workspace_id'),
-                    '=', $self->workspace_id
-                ],
-                order_by =>
-                    $schema->table('UserId')->column('driver_username'),
-            )
-        ],
+        iterables => [ $sth->fetchall_arrayref ],
         apply => sub {
             my $row = shift;
             return Socialtext::User->new(
-                user_id => $row->select('system_unique_id') );
+                user_id => $row->[0] );
         }
     );
 }
@@ -1383,8 +1096,7 @@ sub users {
 sub users_with_roles {
     my $self = shift;
 
-    return
-        Socialtext::User->ByWorkspaceIdWithRoles(
+    return Socialtext::User->ByWorkspaceIdWithRoles(
             workspace_id => $self->workspace_id(), @_ );
 }
 
@@ -1458,7 +1170,7 @@ sub _dump_to_yaml_file {
     my $file = Socialtext::File::catfile( $dir, $name . '-info.yaml' );
 
     my %dump;
-    for my $c ( grep { $_ ne 'workspace_id' } map { $_->name } $self->columns ) {
+    for my $c ( grep { $_ ne 'workspace_id' } @COLUMNS ) {
         $dump{$c} = $self->$c();
     }
     $dump{creator_username} = $self->creator->username;
@@ -1489,6 +1201,7 @@ sub _dump_users_to_yaml_file {
 
     my $file = Socialtext::File::catfile( $dir, $name . '-users.yaml' );
 
+    # FIXME: this is not returning data in the expected structure.
     my $users_with_roles = $self->users_with_roles;
 
     my @dump;
@@ -1568,6 +1281,11 @@ sub ImportFromTarball {
     Socialtext::Workspace::Importer->new(@_)->import_workspace();
 }
 
+sub AllWorkspaceIdsAndNames {
+    my $sth = sql_execute('SELECT workspace_id, name FROM "Workspace" ORDER BY name');
+    return $sth->fetchall_arrayref() || [];
+}
+
 my %LimitAndSortSpec = (
     limit      => SCALAR_TYPE( default => undef ),
     offset     => SCALAR_TYPE( default => 0 ),
@@ -1582,7 +1300,7 @@ my %LimitAndSortSpec = (
 );
 {
     Readonly my $spec => { %LimitAndSortSpec };
-    sub All { 
+    sub All {
         my $class = shift;
         my %p = validate( @_, $spec );
 
@@ -1590,33 +1308,33 @@ my %LimitAndSortSpec = (
         $p{sort_order} ||= $p{order_by} eq 'creation_datetime' ? 'DESC' : 'ASC';
 
         Readonly my %SQL => (
-            name => 'SELECT workspace_id'
+            name => 'SELECT *'
                 . ' FROM "Workspace"'
                 . " ORDER BY name $p{sort_order}"
                 . ' LIMIT ? OFFSET ?',
-            creation_datetime => 'SELECT workspace_id'
+            creation_datetime => 'SELECT *'
                 . ' FROM "Workspace"'
                 . " ORDER BY creation_datetime $p{sort_order},"
                 . ' name ASC'
                 . ' LIMIT ? OFFSET ?',
-            account_name => 'SELECT "Workspace".workspace_id'
+            account_name => 'SELECT "Workspace".*'
                 . ' FROM "Workspace", "Account"'
                 . ' WHERE "Workspace".account_id = "Account".account_id'
                 . " ORDER BY \"Account\".name $p{sort_order},"
                 . ' "Workspace".name ASC'
                 . ' LIMIT ? OFFSET ?',
-            creator => 'SELECT workspace_id'
+            creator => 'SELECT *'
                 . ' FROM "Workspace", "UserId"'
                 . ' WHERE created_by_user_id=system_unique_id'
                 . " ORDER BY driver_username $p{sort_order}, name ASC"
                 . ' LIMIT ? OFFSET ?',
-            user_count => 'SELECT "Workspace".workspace_id,'
-                . ' COUNT(DISTINCT("UserWorkspaceRole".user_id)) AS user_count'
-                . ' FROM "Workspace"'
-                . ' LEFT OUTER JOIN "UserWorkspaceRole"'
-                . ' ON "Workspace".workspace_id = "UserWorkspaceRole".workspace_id'
-                . ' GROUP BY "Workspace".workspace_id, "Workspace".name'
-                . " ORDER BY user_count $p{sort_order}, \"Workspace\".name ASC"
+            user_count => 'SELECT "Workspace".*'
+                . ' FROM "Workspace",'
+                . ' (SELECT workspace_id, COUNT(DISTINCT("UserWorkspaceRole".user_id))'
+                . ' AS user_count FROM "UserWorkspaceRole" GROUP BY workspace_id) AS temp1'
+                . ' WHERE temp1.workspace_id = "Workspace".workspace_id'
+                . " ORDER BY user_count $p{sort_order},"
+                . ' "Workspace".name ASC'
                 . ' LIMIT ? OFFSET ?',
         );
 
@@ -1633,10 +1351,10 @@ sub _WorkspaceCursor {
     my $sth = sql_execute( $sql, @p{@$interpolations} );
 
     return Socialtext::MultiCursor->new(
-        iterables => [ $sth->fetchall_arrayref ],
+        iterables => [ $sth->fetchall_arrayref( {} ) ],
         apply => sub {
             my $row = shift;
-            return Socialtext::Workspace->new( workspace_id => $row->[0] );
+            return Socialtext::Workspace->_new_from_hash_ref( $row );
         }
     );
 }
@@ -1658,38 +1376,38 @@ sub _WorkspaceCursor {
         $p{sort_order} ||= $p{order_by} eq 'creation_datetime' ? 'DESC' : 'ASC';
 
         Readonly my %SQL => (
-            name => 'SELECT workspace_id'
+            name => 'SELECT *'
                 . ' FROM "Workspace"'
                 . ' WHERE account_id=?'
                 . " ORDER BY name $p{sort_order}"
                 . ' LIMIT ? OFFSET ?',
-            creation_datetime => 'SELECT workspace_id'
+            creation_datetime => 'SELECT *'
                 . ' FROM "Workspace"'
                 . ' WHERE account_id=?'
                 . " ORDER BY creation_datetime $p{sort_order},"
                 . ' name ASC'
                 . ' LIMIT ? OFFSET ?',
-            account_name => 'SELECT "Workspace".workspace_id'
+            account_name => 'SELECT "Workspace".*'
                 . ' FROM "Workspace", "Account"'
                 . ' WHERE "Workspace".account_id = "Account".account_id'
                 . ' AND "Workspace".account_id=?'
                 . " ORDER BY \"Account\".name $p{sort_order},"
                 . ' "Workspace".name ASC'
                 . ' LIMIT ? OFFSET ?',
-            creator => 'SELECT workspace_id'
+            creator => 'SELECT *'
                 . ' FROM "Workspace", "UserId"'
                 . ' WHERE created_by_user_id=system_unique_id'
                 . ' AND "Workspace".account_id=?'
                 . " ORDER BY driver_username $p{sort_order}, name ASC"
                 . ' LIMIT ? OFFSET ?',
-            user_count => 'SELECT "Workspace".workspace_id,'
-                . ' COUNT(DISTINCT("UserWorkspaceRole".user_id)) AS user_count'
-                . ' FROM "Workspace"'
-                . ' LEFT OUTER JOIN "UserWorkspaceRole"'
-                . ' ON "Workspace".workspace_id = "UserWorkspaceRole".workspace_id'
-                . ' WHERE account_id=?'
-                . ' GROUP BY "Workspace".workspace_id, "Workspace".name'
-                . " ORDER BY user_count $p{sort_order}, \"Workspace\".name ASC"
+            user_count => 'SELECT "Workspace".*'
+                . ' FROM "Workspace",'
+                . ' (SELECT workspace_id, COUNT(DISTINCT("UserWorkspaceRole".user_id))'
+                . ' AS user_count FROM "UserWorkspaceRole" GROUP BY workspace_id) AS temp1'
+                . ' WHERE temp1.workspace_id = "Workspace".workspace_id'
+                . " AND \"Workspace\".account_id=?"
+                . " ORDER BY user_count $p{sort_order},"
+                . ' "Workspace".name ASC'
                 . ' LIMIT ? OFFSET ?',
         );
 
@@ -1715,43 +1433,46 @@ sub _WorkspaceCursor {
 
         my $op = $p{case_insensitive} ? 'ILIKE' : 'LIKE';
         Readonly my %SQL => (
-            name => 'SELECT workspace_id'
+            name => 'SELECT *'
                 . ' FROM "Workspace"'
                 . " WHERE name $op ?"
                 . " ORDER BY name $p{sort_order}"
                 . ' LIMIT ? OFFSET ?',
-            creation_datetime => 'SELECT workspace_id'
+            creation_datetime => 'SELECT *'
                 . ' FROM "Workspace"'
                 . " WHERE name $op ?"
                 . " ORDER BY creation_datetime $p{sort_order},"
                 . ' name ASC'
                 . ' LIMIT ? OFFSET ?',
-            account_name => 'SELECT "Workspace".workspace_id'
+            account_name => 'SELECT "Workspace".*'
                 . ' FROM "Workspace", "Account"'
                 . ' WHERE "Workspace".account_id = "Account".account_id'
                 . " AND \"Workspace\".name $op ?"
                 . " ORDER BY \"Account\".name $p{sort_order},"
                 . ' "Workspace".name ASC'
                 . ' LIMIT ? OFFSET ?',
-            creator => 'SELECT workspace_id'
+            creator => 'SELECT *'
                 . ' FROM "Workspace", "UserId"'
                 . ' WHERE created_by_user_id=system_unique_id'
                 . " AND \"Workspace\".name $op ?"
                 . " ORDER BY driver_username $p{sort_order}, name ASC"
                 . ' LIMIT ? OFFSET ?',
-            user_count => 'SELECT "Workspace".workspace_id,'
-                . ' COUNT(DISTINCT("UserWorkspaceRole".user_id)) AS user_count'
-                . ' FROM "Workspace"'
-                . ' LEFT OUTER JOIN "UserWorkspaceRole"'
-                . ' ON "Workspace".workspace_id = "UserWorkspaceRole".workspace_id'
-                . " WHERE name $op ?"
-                . ' GROUP BY "Workspace".workspace_id, "Workspace".name'
-                . " ORDER BY user_count $p{sort_order}, \"Workspace\".name ASC"
-                . ' LIMIT ? OFFSET ?',
+            user_count => <<EOSQL,
+SELECT *
+    FROM "Workspace" LEFT OUTER JOIN (
+        SELECT workspace_id, COUNT(DISTINCT("UserWorkspaceRole".user_id))
+            AS user_count
+            FROM "UserWorkspaceRole"
+            GROUP BY workspace_id
+        ) AS X USING (workspace_id)
+    WHERE name $op ?
+    ORDER BY user_count $p{sort_order}, "Workspace".name ASC
+    LIMIT ? OFFSET ?
+EOSQL
         );
 
         # Turn our substring into a SQL pattern.
-        $p{name} = "\%$p{name}\%";
+        $p{name} = '%' . $p{name} . '%';
 
         return $class->_WorkspaceCursor(
             $SQL{ $p{order_by} },
@@ -1760,22 +1481,18 @@ sub _WorkspaceCursor {
     }
 }
 
-{
-    Readonly my $spec => { 
-        name => SCALAR_TYPE( regex => qr/\S/ ),
-        case_insensitive => SCALAR_TYPE( default => 0),
-    };
-    sub CountByName {
-        my $class = shift;
-        my %p = validate( @_, $spec );
+sub Count {
+    my $class = shift;
+    my $sth = sql_execute('SELECT COUNT(*) FROM "Workspace"');
+    return $sth->fetchrow_arrayref->[0];
+}
 
-        my $ws_table = Socialtext::Schema->Load()->table('Workspace');
-
-        my $op = $p{case_insensitive} ? 'ILIKE' : 'LIKE';
-        return $ws_table->row_count(
-            where => [ $ws_table->column('name'), $op, '%' . $p{name} . '%' ],
-        );
-    }
+sub CountByName {
+    my $class = shift;
+    my %p = @_;
+    my $op = $p{case_insensitive} ? 'ILIKE' : 'LIKE';
+    my $sth = sql_execute('SELECT COUNT(*) FROM "Workspace" WHERE name ' . $op . ' \'%' . $p{name} . '%\'');
+    return $sth->fetchrow_arrayref->[0];
 }
 
 use constant RECENT_WORKSPACES => 10;
@@ -1990,7 +1707,7 @@ and then syncing them back to the server.
 The URI to the workspace's logo.
 
 This cannot be set via C<create()> or C<update()>. Use
-C<set_logo_from_filehandle()> or C<set_logo_from_uri()> instead.
+C<set_logo_from_file()> or C<set_logo_from_uri()> instead.
 
 =head2 creation_datetime
 
@@ -2249,14 +1966,11 @@ have its own custom logo.
 If the workspace has a custom logo on the filesystem, then this
 methods returns that file's absolute path, otherwise it returns false.
 
-=head2 $workspace->set_logo_from_filehandle(PARAMS)
+=head2 $workspace->set_logo_from_file(PARAMS)
 
-This method expects two parameters, "filehandle" and "filename". The
-handle given should be opened for reading, and should contain the
-image data for the logo.
-
-The filename is used for determining the file's type, which must be a
-GIF, JPEG, or PNG.
+This method expects one parameter, a "filename". The specified file
+should contain the image data, and will be used for determining the 
+file's type, which must be a GIF, JPEG or PNG.
 
 The image is resized to a maximum size of 200px wide by 60px high, and
 saved on the filesystem in a location accessible from the web. The
@@ -2425,54 +2139,6 @@ Additionally, when a name that starts with public is given, this
 method will also change allows_html_wafl and email_notify_is_enabled
 to false.
 
-=head2 $workspace->current_permission_set()
-
-Returns the workspace's current permission set as a hash.
-
-=head2 $workspace->current_permission_set_name()
-
-Returns the name of the workspace's current permission set. If it does
-not match any of the pre-defined sets this method returns "custom".
-
-=head2 Socialtext::Workspace->PermissionSetNameIsValid($name)
-
-Returns a boolean indicating whether or not the given set name is
-valid.
-
-=head2 $workspace->add_permission( permission => $perm, role => $role );
-
-This methods adds the given permission for the specified role.
-
-=head2 $workspace->remove_permission( permission => $perm, role => $role );
-
-This methods removes the given permission for the specified role.
-
-=head2 $workspace->role_has_permission( permission => $perm, role => $role );
-
-Returns a boolean indicating whether the specified role has the given
-permission.
-
-=head2 $workspace->permissions_with_roles
-
-Returns a cursor of C<Socialtext::Permission> and C<Socialtext::Role>
-objects indicating the permissions for each role in the workspace.
-
-=head2 $workspace->permissions_for_role( role => $role );
-
-Returns a cursor of C<Socialtext::Permission> objects indicating what
-permissions the specified role has in this workspace.
-
-=head2 $workspace->user_has_permission( permission => $perm, user => $user );
-
-Returns a boolean indicating whether the specified user has the given
-permission. This is based on the user's role in workspace. If the user
-has no explicit role, then it uses the value of C<<
-$user->default_role >>.
-
-=head2 $workspace->is_public()
-
-This returns true if guests have the "read" permission for the workspace.
-
 =head2 $workspace->add_user( user => $user, role => $role )
 
 Adds the user to the workspace with the given role. If no role is
@@ -2561,6 +2227,11 @@ value.
 
 It never overwrites existing users.
 
+=head2 Socialtext::Workspace->AllWorkspaceIdsAndNames()
+
+Returns an array ref of workspace ID and name pairs.  These pairs are also
+array refs.
+
 =head2 Socialtext::Workspace->All(PARAMS)
 
 Returns a cursor for all the workspaces in the system. It accepts the
@@ -2630,6 +2301,15 @@ Save the user's breadcrumb list
 =head2 Socialtext::Workspace->drop_breadcrumb( USER )
 
 Add a workspace breadcrumb to the user's list
+
+=head2 Socialtext::Workspace->_new_from_hash_ref(hash)
+
+Returns a new instantiation of a Workspace object. Data members for the
+object are initialized from the hash reference passed to the method.
+
+=head2 Socialtext::Workspace->permissions()
+
+Return a Socialtext::Workspace::Permission object
 
 =head1 AUTHOR
 

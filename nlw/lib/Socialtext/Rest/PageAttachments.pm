@@ -46,10 +46,9 @@ sub POST {
             'You must supply a value for the "name" parameter.' );
 
     # TODO Content-type handling here and in Socialtext::Attachment.
-    my $attachment = $self->hub->attachments->from_file_handle(
+    my $attachment = $self->hub->attachments->create(
         fh           => $content_fh,
         embed        => 0,
-        'unpack'     => 0,
         filename     => $name,
         Content_type => $content_type,
         creator      => $rest->user,

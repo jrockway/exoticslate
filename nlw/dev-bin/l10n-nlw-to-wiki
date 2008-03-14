@@ -19,14 +19,15 @@ update_enterprise_features();
 
 my @exclude_rx = (
     qr/tiddlytext/,
-    qr/combined-source\.js/,
+    qr/socialtext\.js/,
+    qr#javascript/test#,
 );
 my @include_rx = (
     qr/\.(?:pm|js)$/, 
-    qr/share\/template/,
+    qr/share\/skin\/s2\/template/,
     qr/share\/console-template\/template/,
 );
-my @files = get_files( "lib/", "share/template", "share/javascript", "share/console-template" );
+my @files = get_files( "lib/", "share/skin/s2/template", "share/skin/s2/javascript", "share/console-template" );
 
 my $en_file = "nlw-en.po";
 shell_run("dev-bin/l10n-widget-to-js");

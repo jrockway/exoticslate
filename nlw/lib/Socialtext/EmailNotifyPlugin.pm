@@ -10,7 +10,6 @@ use Fcntl ':flock';
 use Socialtext::AppConfig;
 use Socialtext::File;
 use Socialtext::Paths;
-use Socialtext::TT2::Renderer;
 use Socialtext::EmailNotifier;
 use Socialtext::l10n qw( loc loc_lang system_locale );
 

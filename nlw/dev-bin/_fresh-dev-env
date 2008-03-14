@@ -8,6 +8,7 @@ use lib "$FindBin::Bin/../lib";
 use Test::Socialtext::Environment;
 use Getopt::Long;
 use File::Path;
+use Socialtext::Paths;
 
 my %opts;
 GetOptions(
@@ -34,6 +35,13 @@ Test::Socialtext::Environment->CreateEnvironment(
     ports_start_at => 20000,
     verbose        => 1,
 );
+
+my $backup_dir = Socialtext::Paths::storage_directory("db-backups");
+File::Path::mkpath($backup_dir) or die "Unable to create $backup_dir: $!";
+die "Didn't create $backup_dir!" unless -d $backup_dir;
+
+exit;
+
 
 sub show_help {
     print <<'EOF';

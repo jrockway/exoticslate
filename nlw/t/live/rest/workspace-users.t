@@ -6,15 +6,13 @@ use strict;
 
 use Test::HTTP::Socialtext '-syntax', 'no_plan';
 
-use JSON;
+use JSON::XS;
 use Readonly;
 use Socialtext::User;
 use Socialtext::Workspace;
 use Test::Live fixtures => ['foobar'];
 use Test::More;
 use URI;
-
-$JSON::UTF8 = 1;
 
 Readonly my $BASE =>
     Test::HTTP::Socialtext->url('/data/workspaces/foobar/users');
@@ -45,7 +43,7 @@ test_http "GET json" {
     << 200
     ~< Content-type: \bapplication/json\b
 
-    my $result = jsonToObj($test->response->content);
+    my $result = decode_json($test->response->content);
     isa_ok( $result, 'ARRAY', 'JSON response' );
     is( @$result, 3, 'foobar has 3 users.' );
 
@@ -85,7 +83,7 @@ test_http "GET html non-admin user" {
     my $manipulated_username = 'devnull1@socialtext.com';
 
     my $membership_payload =
-      objToJson( { username => $manipulated_username,
+      encode_json( { username => $manipulated_username,
                    rolename => $target_role } );
 
     test_http "POST membership - working" {
@@ -109,7 +107,7 @@ Socialtext::AlzaboWrapper::ClearCache();
     my $manipulated_username = 'devnull1@socialtext.com';
     my $target_role = 'workspace_admin';
     my $membership_payload =
-      objToJson( { username => $manipulated_username,
+      encode_json( { username => $manipulated_username,
                    rolename => $target_role } );
 
     test_http "POST membership - working back to workspace_admin" {
@@ -131,7 +129,7 @@ Socialtext::AlzaboWrapper::ClearCache();
 
 {
     my $membership_payload =
-      objToJson( {} );
+      encode_json( {} );
 
     test_http "POST membership - required field missing" {
         >> POST $BASE
@@ -154,7 +152,7 @@ Socialtext::AlzaboWrapper::ClearCache();
  my $manipulated_username = 'devnull8@socialtext.com';
  
  my $membership_payload =
- objToJson( { username => $manipulated_username,
+ encode_json( { username => $manipulated_username,
               rolename => $target_role,
               send_confirmation_invitation => 1 } );
 

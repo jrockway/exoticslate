@@ -10,7 +10,8 @@ use File::chdir;
 use Socialtext::AppConfig;
 use Socialtext::File;
 use Socialtext::AlzaboWrapper;
-
+use Socialtext::Skin;
+use Fcntl ':flock';
 
 sub handler {
     # This ensures that we have a good DBI handle underneath.  The
@@ -28,12 +29,21 @@ sub handler {
 }
 
 sub _regen_combined_js {
-    my $dir = Socialtext::File::catdir( Socialtext::AppConfig->code_base(),
-                                 'javascript' );
+    my $dir = Socialtext::File::catdir(
+        Socialtext::AppConfig->code_base(),
+        'skin',
+        $Socialtext::Skin::DEFAULT_SKIN_NAME,
+        'javascript'
+    );
     local $CWD = $dir;
 
-    system( 'make', 'all' )
-        and die "Cannot call 'make combined-source.js' in $dir: $!";
+    my $semaphore = "$dir/build-semaphore";
+    open( my $lock, ">>", $semaphore )
+        or die "Could not open $semaphore: $!\n";
+    flock( $lock, LOCK_EX )
+        or die "Could not get lock on $semaphore: $!\n";
+    system( 'make', 'all' ) and die "Error calling make in $dir: $!";
+    close($lock);
 }
 
 1;

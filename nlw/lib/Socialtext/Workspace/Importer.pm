@@ -9,9 +9,12 @@ use File::chdir;
 use Cwd;
 use Socialtext::File::Copy::Recursive ();
 use Readonly;
+use Socialtext::SQL qw(sql_commit sql_execute sql_begin_work sql_rollback );
 use Socialtext::Validate qw( validate FILE_TYPE BOOLEAN_TYPE SCALAR_TYPE );
 use Socialtext::Workspace;
 use Socialtext::Search::AbstractFactory;
+use Socialtext::Log qw(st_log);
+use Socialtext::Timer;
 use YAML ();
 
 # This should stay in sync with $EXPORT_VERSION in ST::Workspace.
@@ -63,6 +66,7 @@ Readonly my $MAX_VERSION => 1;
 # module is loaded.
 sub import_workspace {
     my $self = shift;
+    my $timer = Socialtext::Timer->new;
 
     my $old_cwd = getcwd();
     local $CWD = File::Temp::tempdir( CLEANUP => 1 );
@@ -98,6 +102,12 @@ sub import_workspace {
     Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
         $self->{workspace}->name )
         ->index_workspace( $self->{workspace}->name );
+
+    st_log()
+        ->info( 'IMPORT,WORKSPACE,workspace:'
+            . $self->{new_name} . '('
+            . $self->{workspace}->workspace_id
+            . '),[' . $timer->elapsed . ']');
 }
 
 sub _create_workspace {
@@ -121,22 +131,21 @@ sub _create_workspace {
     );
 
     my %update;
-    for my $c (
-        grep { $_ ne 'logo_uri' && $_ ne 'name' && $_ ne 'created_by_user_id' && $_ ne 'account_id' }
-        map { $_->name } Socialtext::Workspace->columns
-        ) {
+    my @to_update = grep { $_ ne 'logo_uri' 
+            and $_ ne 'name' 
+            and $_ ne 'created_by_user_id' 
+            and $_ ne 'account_id' }
+        map { $_ } @Socialtext::Workspace::COLUMNS;
+    for my $c (@to_update) {
         $update{$c} = $info->{$c}
             if exists $info->{$c};
     }
 
     $ws->update( %update );
 
-    if ( $info->{logo_filename} ) {
-        open my $fh, '<', $info->{logo_filename}
-            or die "Cannot read $info->{logo_filename}: $!";
-        $ws->set_logo_from_filehandle(
-            filehandle => $fh,
-            filename   => $info->{logo_filename},
+    if ( my $logo_filename = $info->{logo_filename} ) {
+        $ws->set_logo_from_file(
+            filename   => $logo_filename,
         );
     }
     elsif ( $info->{logo_uri} ) {
@@ -211,49 +220,30 @@ sub _set_permissions {
 
     my $perms = $self->_load_yaml( $self->_permissions_file() );
 
-    my $schema = Socialtext::Schema->Load();
-
-    # REVIEW - almost identical to the core of
-    # Socialtext::Workspace->set_permissions but just enough
-    # different that it's hard to think of a good way to unify
-    # them.
-    my $wrp_table     = $schema->table('WorkspaceRolePermission');
-    my $current_perms = $wrp_table->rows_where(
-        where => [
-            $wrp_table->column('workspace_id'),
-            '=', $self->{workspace}->workspace_id
-        ],
-    );
-
     eval {
-        $schema->begin_work();
+        sql_begin_work();
 
-        # XXX - Alzabo is lame and does not provide table-level
-        # update and delete, which really needs to be corrected in
-        # a near-future release.
-        while ( my $wrp = $current_perms->next ) {
-            $wrp->delete;
-        }
+        sql_execute(
+            'delete from "WorkspaceRolePermission" where workspace_id = ?',
+            $self->{workspace}->workspace_id,
+        );
 
+        my $sql =
+            'insert into "WorkspaceRolePermission" (workspace_id, role_id, permission_id) values (?,?,?)';
         for my $p (@$perms) {
-            $wrp_table->insert(
-                values => {
-                    workspace_id => $self->{workspace}->workspace_id,
-                    role_id      =>
-                        Socialtext::Role->new( name => $p->{role_name} )
-                        ->role_id,
-                    permission_id => Socialtext::Permission->new(
-                        name => $p->{permission_name}
-                        )->permission_id,
-                },
+            sql_execute(
+                $sql,
+                $self->{workspace}->workspace_id,
+                Socialtext::Role->new(name => $p->{role_name})->role_id,
+                Socialtext::Permission->new(name => $p->{permission_name})->permission_id,
             );
         }
 
-        $schema->commit();
+        sql_commit();
     };
 
     if ( my $e = $@ ) {
-        $schema->rollback();
+        sql_rollback();
         rethrow_exception($e);
     }
 }
@@ -268,7 +258,7 @@ sub _import_users {
     my @cols = Socialtext::User->minimal_interface;
     my @users;
     for my $info (@$users) {
-        my $user = Socialtext::User->new( 
+        my $user = Socialtext::User->new(
             email_address => $info->{email_address} );
         $user ||= $self->_create_user( $info, \@cols );
 
@@ -296,7 +286,7 @@ sub _create_user {
     }
 
     # Bug 342 - some backups have been created with users
-    # that don't have usernames.  We shouldn't let this 
+    # that don't have usernames.  We shouldn't let this
     # break the import
     if ($create{first_name} eq 'Deleted') {
         $create{username} ||= 'deleted-user';
@@ -313,4 +303,3 @@ sub _create_user {
 1;
 
 __END__
-

@@ -9,14 +9,11 @@ use Class::Field qw( const );
 use DateTime::Format::Strptime;
 use Socialtext::User;
 use Socialtext::String;
-use Socialtext::TT2::Renderer;
 use Socialtext::BrowserDetect ();
 use Socialtext::l10n qw/loc system_locale/;
 use Socialtext::Locales qw/available_locales/;
-use JSON;
+use JSON::XS;
 use Apache::Cookie;
-
-$JSON::UTF8 = 1;
 
 sub class_id { 'display' }
 const class_title => loc('Screen Layout');
@@ -54,7 +51,7 @@ sub page_info {
 
     my $info = $self->_get_page_info($page);
 
-    return JSON::objToJson($info);
+    return encode_json($info);
 }
 
 sub new_page {
@@ -156,8 +153,6 @@ sub display {
 
     $self->log_action("DISPLAY_PAGE");
 
-    my $renderer = Socialtext::TT2::Renderer->instance;
-
     my $is_new_page = $self->hub->pages->page_exists_in_workspace(
         $page->title,
         $self->hub->current_workspace->name,
@@ -204,14 +199,26 @@ sub display {
         $cookies->{'st-page-accessories'}->value
     ) || 'show';
 
-    return $renderer->render(
+    # Fake out a call to the REST API to get attachments.
+    # XXX - This should probably be more standard.
+    use Socialtext::Rest::Attachments;
+    my $rest_object = Socialtext::Rest::Attachments->new();
+    $rest_object->{params}->{ws} = $self->hub->current_workspace->name;
+    my $all_attachments = [
+        map {
+            $rest_object->_entity_hash($_);
+        } @{$self->hub->attachments->all(page_id => $page->id)}
+    ];
+
+    return $self->template_render(
         template => 'view/page/display',
         vars     => {
             $self->hub->helpers->global_template_vars,
             title                   => $page->title,
             page                    => $self->_get_page_info($page),
             tag_count               => scalar @{ $page->metadata->Category }, # counts recent changes!
-            initialtags             => $self->_getCurrentTags($page),
+            tags                    => $self->_getCurrentTags($page),
+            initialtags             => $self->_getCurrentTagsJSON($page),
             workspacetags           => $self->_get_workspace_tags,
             is_homepage             =>
                 ( not $self->hub->current_workspace->homepage_is_dashboard
@@ -220,6 +227,7 @@ sub display {
             is_new                  => $is_new_page,
             start_in_edit_mode      => $start_in_edit_mode,
             new_tags                => \@new_tags,
+            attachments             => $all_attachments,
             watching                => $self->hub->watchlist->page_watched,
             login_and_edit_path => '/challenge?'
                 . $self->uri_escape(
@@ -265,16 +273,14 @@ sub content_only {
     $self->log_action("DISPLAY_PAGE");
     $self->hub->breadcrumbs->drop_crumb($page);
 
-    my $renderer = Socialtext::TT2::Renderer->instance;
-
     $self->hub->hit_counter->hit_counter_increment;
-    return $renderer->render(
+    return $self->template_render(
         template    => 'view/page/content',
         vars        => {
             $self->hub->helpers->global_template_vars,
             title        => $page->title,
             page         => $self->_get_page_info($page),
-            initialtags  => $self->_getCurrentTags($page),
+            initialtags  => $self->_getCurrentTagsJSON($page),
             workspacetags  => $self->_get_workspace_tags,
         },
     );
@@ -365,20 +371,7 @@ sub _get_workspace_tags {
     my @workspace_tags = grep !/recent changes/, values %{$self->hub->category->load->all};
 
     my %tags = $self->hub->category->weight_categories(@workspace_tags);
-
-    $tags{maxCount} = JSON::Number( $tags{maxCount} );
-
-    my $text = '';
-    {
-        local $JSON::AUTOCONVERT = 0;
-        local $JSON::SingleQuote = 0;
-        my $json = JSON->new(autoconv => 0, singlequote => 0);
-        foreach my $tag (@{$tags{tags}}) {
-             $tag->{count} = JSON::Number($tag->{count});
-        }
-
-        $text = $json->objToJson(\%tags);
-    }
+    my $text = encode_json(\%tags);
     return $text;
 
 }
@@ -391,19 +384,23 @@ sub _getCurrentTags {
         @{ $page->metadata->Category } );
 
     foreach my $tag (@{$tags{tags}}) {
-        $tag->{page_count} = JSON::Number($tag->{page_count});
+        $tag->{page_count} = $tag->{page_count};
     }
-    $tags{maxCount} = JSON::Number($tags{maxCount});
+    $tags{maxCount} = $tags{maxCount};
 
-    my $text = '';
-    {
-        local $JSON::AUTOCONVERT = 0;
-        local $JSON::SingleQuote = 0;
-        my $json = JSON->new(autoconv => 0, singlequote => 0);
-        $text = $json->objToJson(\%tags);
-    }
-    return $text;
+    return \%tags;
 }
+
+sub _getCurrentTagsJSON {
+    my $self = shift;
+    my $page = shift;
+    my $tags = $self->_getCurrentTags($page);
+
+    my $text = encode_json($tags);
+    return $text;
+
+}
+
 
 # XXX - the filtering being done here should be replaced with a
 # formatter subclass or LinkDictionary that is used just when formatting

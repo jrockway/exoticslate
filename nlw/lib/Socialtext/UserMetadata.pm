@@ -51,45 +51,23 @@ sub create_if_necessary {
         );
 }
 
-# REVIEW: cut/paste from Socialtext::Workspace.
-# REVIEW: turn a user into a hash suitable for JSON and
-# such things.
-# REVIEW: An Alzabo thing won't serialize directly, we
-# need to make queries or otherwise dig into it, so not sure
-# what to put in this hash
-# REVIEW: We may want even more info than this.
-sub to_hash {
-    my $self = shift;
-    my $hash = {};
-    foreach my $column ($self->columns) {
-        my $name = $column->name;
-        my $value = $self->$name();
-        $hash->{$name} = "$value"; # to_string on some objects
-    }
-    return $hash;
-}
+# turn a user into a hash suitable for JSON and
+# such things.  Returns our very object, which 
+# should alreaby be loaded with our data
+sub to_hash { shift }
 
 sub new {
     my ( $class, %p ) = @_;
 
     my $sth = sql_execute(
-        'SELECT user_id, creation_datetime, last_login_datetime,'
-        . ' email_address_at_import, created_by_user_id,'
-        . ' is_business_admin, is_technical_admin, is_system_created'
-        . ' FROM "UserMetadata" where user_id=?', $p{user_id} );
+        'SELECT * FROM "UserMetadata" WHERE user_id=?',
+        $p{user_id},
+    );
 
-    my @rows = @{ $sth->fetchall_arrayref };
-    return @rows ? bless {
-                    user_id                 => $rows[0][0],
-                    creation_datetime       => $rows[0][1],
-                    last_login_datetime     => $rows[0][2],
-                    email_address_at_import => $rows[0][3],
-                    created_by_user_id      => $rows[0][4],
-                    is_business_admin       => $rows[0][5],
-                    is_technical_admin      => $rows[0][6],
-                    is_system_created       => $rows[0][7],
-                   }, $class
-                 : undef;
+    my $hash = $sth->fetchrow_hashref;
+    return undef unless $hash;
+    bless $hash, $class;
+    return $hash;
 }
 
 sub create {

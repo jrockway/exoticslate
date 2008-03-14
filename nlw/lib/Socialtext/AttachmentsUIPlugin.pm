@@ -36,6 +36,7 @@ sub register {
     $registry->add( action => 'attachments_download' );
     $registry->add( action => 'attachments_delete' );
     $registry->add( action => 'attachments_listall' );
+    $registry->add( action => 'attachments_extract' );
 }
 
 # backwards compatibility for old links
@@ -106,20 +107,36 @@ sub attachments_download {
     return $fh;
 }
 
+sub attachments_extract {
+    my $self = shift;
+    my $attachment_id = $self->cgi->attachment_id;
+    my $page_id = $self->cgi->page_id;
+
+    my $attachment = $self->hub->attachments->new_attachment(
+        id      => $attachment_id,
+        page_id => $page_id,
+    )->load;
+
+    $attachment->extract;
+
+    $self->log_action("EXTRACT_ATTACHMENT", $attachment_id);
+}
+
 sub attachments_upload {
     my $self = shift;
 
     my @files = $self->cgi->file;
-    my @embeds = $self->cgi->embed;
-    my @unpacks = $self->cgi->unpack;
+    my @embeds = $self->cgi->embed unless $self->cgi->editmode;
 
     my $error = $self->process_attachments_upload(
         files  => \@files,
         embed  => \@embeds,
-        unpack => \@unpacks,
     );
 
-    return $self->_finish(error => $error, files => \@files);
+    return $self->_finish(
+        error => $error,
+        files => $self->{_attachment_info},
+    );
 }
 
 sub process_attachments_upload {
@@ -128,7 +145,6 @@ sub process_attachments_upload {
 
     my @files = @{$p{files}};
     my @embeds = @{$p{embed}};
-    my @unpacks = @{$p{unpack}};
 
     my $count = grep { -s $_->{handle} } @files;
 
@@ -143,7 +159,6 @@ sub process_attachments_upload {
         my $error_code = $self->save_attachment(
             $files[$i],
             $embeds[$i],
-            $unpacks[$i],
         );
         if ($error_code) {
             $error_code =~ s/\. at.*//s;    # grr... stinkin auto-added backtrace.
@@ -167,20 +182,21 @@ sub save_attachment {
     my $self = shift;
     my $file = shift; # [in] File object/hash from CGI
     my $embed = shift; # [in/optional] boolean - true if link to file should be embedded in page; default to true
-    my $unpack = shift; # [in/optional] boolean - true if ZIP file should be unpacked; default to true
 
     my $filename;
     eval {
         $filename = $file->{filename} . '';
-        $self->hub->attachments->from_file_handle(
+        my @files = $self->hub->attachments->create(
             fh     => $file->{handle},
             embed  => $embed ? 1 : 0,
-            unpack => $unpack ? 1 : 0,
 
             # this stringification is to remove tied weirdness:
             filename => $filename,
             creator  => $self->hub->current_user,
         );
+        for my $file (@files) {
+            $self->{_attachment_info}{$file->filename} = $file->id;
+        }
         $self->log_action("UPLOAD_ATTACHMENT", $filename);
     };
 
@@ -228,15 +244,14 @@ sub _attachment_download_link {
     my $self = shift;
     my $attachment = shift;
 
-    my $script        = Socialtext::AppConfig->script_name;
+    my $workspace     = $self->hub->current_workspace->name;
     my $filename_uri  = $self->uri_escape( $attachment->{filename} );
     my $filename_html = $self->html_escape( $attachment->{filename} );
     my $page          = $self->hub->pages->new_page( $attachment->{page_id} );
     my $page_uri      = $page->uri;
-    my $attachment_id = $attachment->{id};
 
-    return qq|<a href="$script/$filename_uri?action=attachments_download;|
-        . qq|page_name=$page_uri;id=$attachment_id">$filename_html</a>|;
+    return qq|<a href="/data/workspaces/$workspace/attachments/$page_uri:|
+         . qq|$attachment->{id}/original/$filename_uri">$filename_html</a>|;
 }
 
 sub attachments_delete {
@@ -279,7 +294,10 @@ cgi 'filename';
 cgi 'caller_action';
 cgi 'page_name';
 cgi 'embed';
+cgi 'editmode';
 cgi 'as_page';
-cgi 'unpack';
+cgi 'attachment_id';
+cgi 'page_id';
+cgi 'size';
 
 1;

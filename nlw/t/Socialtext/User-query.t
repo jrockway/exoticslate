@@ -54,8 +54,7 @@ use Socialtext::User;
         'All() sorted by workspace_count',
     );
 
-    $users
-        = Socialtext::User->All( order_by => 'creation_datetime' );
+    $users = Socialtext::User->All( order_by => 'creation_datetime' );
     is_deeply(
         [ map { $_->username } $users->all() ],
         [

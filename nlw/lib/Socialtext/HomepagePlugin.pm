@@ -6,7 +6,6 @@ use warnings;
 
 use base 'Socialtext::Plugin';
 
-use Socialtext::TT2::Renderer;
 use Socialtext::Watchlist;
 use Socialtext::l10n qw( loc );
 use URI::Escape;
@@ -48,14 +47,12 @@ sub homepage {
 sub dashboard {
     my $self = shift;
 
-    my $renderer = Socialtext::TT2::Renderer->instance;
-
     # Grab the did_you_know text now, so that we don't read the config file on
     # every page hit.
     $did_you_know_title ||= Socialtext::AppConfig->did_you_know_title;
     $did_you_know_text  ||= Socialtext::AppConfig->did_you_know_text;
 
-    return $renderer->render(
+    return $self->template_render(
         template => 'view/homepage',
         vars     => {
             $self->hub->helpers->global_template_vars,

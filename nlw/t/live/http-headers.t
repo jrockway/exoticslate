@@ -29,7 +29,7 @@ my %url = (
     UI   => "$base/public/index.cgi/$filename?"
         . "action=attachments_download;page_name=formattingtest;id=$id",
     REST => "$base/data/workspaces/public/attachments/"
-        . "formattingtest:$id/files/$filename"
+        . "formattingtest:$id/original/$filename"
 );
 
 # Verify that when downloading attachments we don't send any 'no-cache'

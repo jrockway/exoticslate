@@ -4,16 +4,98 @@ package Socialtext::UserWorkspaceRole;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+use Class::Field 'field';
+use Socialtext::SQL qw(
+    sql_execute
+    sql_commit sql_rollback sql_begin_work
+    sql_convert_to_boolean sql_convert_from_boolean
+);
+use Socialtext::Exceptions qw( rethrow_exception );
+our $VERSION = '0.02';
 
+field 'user_id';
+field 'workspace_id';
+field 'role_id';
+field 'is_selected';
 
-use Socialtext::Schema;
-use base 'Socialtext::AlzaboWrapper';
-__PACKAGE__->SetAlzaboTable( Socialtext::Schema->Load()->table('UserWorkspaceRole') );
-__PACKAGE__->MakeColumnMethods();
-
+# XXX Still need for fixture set up (until that's alzabno'd as well)
 sub table_name { 'UserWorkspaceRole' }
 
+sub new {
+    my ( $class, %args ) = @_;
+
+    my $sth;
+    my $sql = 'select * from "' . table_name() . '" where';
+    my $connector = '';
+    my @params = ();
+    if ($args{workspace_id}) {
+        $sql .= " $connector workspace_id = ?";
+        $connector = 'and';
+        push @params, $args{workspace_id};
+    }
+    if ($args{user_id}) {
+        $sql .= " $connector user_id = ?";
+        $connector = 'and';
+        push @params, $args{user_id};
+    }
+    $sth = sql_execute($sql, @params);
+
+    my $row = $sth->fetchrow_hashref();
+    return undef if (!defined($row));
+
+    return $class->_new_from_hash_ref($row);
+}
+
+sub _new_from_hash_ref {
+    my ( $class, $row ) = @_;
+    return $row unless $row;
+    return bless $row, $class;
+}
+
+sub create {
+    my $class = shift;
+    my %p = @_;
+
+    my $self;
+
+    my @params = ();
+    my $sql = 'insert into "' . table_name() . '" (';
+    my $connector = '';
+    foreach ('workspace_id', 'user_id', 'role_id', 'is_selected') {
+        $sql .= "$connector $_";
+        $connector = ', ';
+        my $value = $p{$_};
+        $value = sql_convert_to_boolean($p{$_}, 't') if ($_ eq 'is_selected');
+        push @params, $value;
+    }
+    $sql .= ') values (';
+    $sql .= join(',', map {'?'} @params);
+    $sql .= ')';
+
+    sql_execute($sql, @params);
+
+    return $class->_new_from_hash_ref(\%p);
+}
+
+sub delete {
+    my $self = shift;
+
+    my $sql =
+        'delete from "' .
+        table_name() .
+        '" where workspace_id = ? and user_id = ?';
+    sql_execute($sql, $self->workspace_id, $self->user_id);
+}
+
+sub update {
+    my $self = shift;
+
+    my $sql =
+        'update "' .
+        table_name() .
+        '" set role_id = ?, is_selected = ? where workspace_id = ? and user_id = ?';
+    sql_execute($sql, $self->role_id, sql_convert_to_boolean($self->is_selected), $self->workspace_id, $self->user_id);
+}
 
 1;
 
@@ -43,6 +125,15 @@ table.
 =item Socialtext::UserWorkspaceRole->table_name()
 
 Returns the name of the table where UserWorkspaceRole data lives.
+
+=back
+
+=over 4
+
+=item Socialtext::UserWorkspaceRole->_new_from_hash_ref(hash)
+
+Returns a new instantiation of the UWR object. Data members for the object
+are initialized from the hash reference passed to the method.
 
 =back
 
@@ -83,10 +174,9 @@ PARAMS can include:
 
 =back
 
-=item $uwr->update(PARAMS)
+=item $uwr->update
 
-Updates the object's information with the new key/val pairs passed in.
-This method accepts the same PARAMS as C<new()>.
+Update the DB record with new role and is_selected values.
 
 =over 4
 

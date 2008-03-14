@@ -6,13 +6,11 @@ use strict;
 
 use Test::HTTP::Socialtext '-syntax', tests => 17;
 
-use JSON;
+use JSON::XS;
 use Readonly;
 use Socialtext::User;
 use Test::Live fixtures => ['admin', 'foobar'];
 use Test::More;
-
-$JSON::UTF8 = 1;
 
 Readonly my $BASE => Test::HTTP::Socialtext->url('/data/workspaces');
 Readonly my $WORKSPACE_NAME     => 'admin';
@@ -46,7 +44,7 @@ test_http "GET existing workspace as json by admin" {
     << 200
     ~< Content-Type: application/json
 
-    my $object = jsonToObj($test->response->content());
+    my $object = decode_json($test->response->content());
 
     ok scalar keys(%$object) > 4,
         'admin request gets lots of info for workspace';
@@ -70,7 +68,7 @@ test_http "GET existing workspace as json by peon" {
     << 200
     ~< Content-Type: application/json
 
-    my $object = jsonToObj($test->response->content());
+    my $object = decode_json($test->response->content());
 
     ok scalar keys(%$object) < 5,
         'peon gets less info for workspace';

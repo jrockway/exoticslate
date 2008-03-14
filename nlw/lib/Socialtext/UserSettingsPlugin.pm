@@ -14,7 +14,6 @@ use Socialtext::Permission qw( ST_ADMIN_WORKSPACE_PERM );
 use Socialtext::TT2::Renderer;
 use Socialtext::User;
 use Socialtext::WorkspaceInvitation;
-use Template::Iterator::AlzaboWrapperCursor;
 use Socialtext::URI;
 use Socialtext::l10n qw( loc system_locale);
 
@@ -129,9 +128,7 @@ sub users_listall {
 
     my $settings_section = $self->template_process(
         'element/settings/users_listall_section',
-        users_with_roles => Template::Iterator::AlzaboWrapperCursor->new(
-            $self->hub->current_workspace->users_with_roles
-        ),
+        users_with_roles => $self->hub->current_workspace->users_with_roles,
         $self->status_messages_for_template,
     );
 
@@ -188,22 +185,19 @@ sub _update_users_in_workspace {
             # solution is to replace the is/is not admin check with
             # something like a pull down or radio group which allows
             # for assigning of different roles.
-            next
-                if $role->name ne 'workspace_admin'
+            next if $role->name ne 'workspace_admin'
                 and $role->name ne 'member';
 
-            next
-                if $should_be_admin{ $user->user_id() }
-                and $ws->user_has_permission(
-                user       => $user,
-                permission => ST_ADMIN_WORKSPACE_PERM,
+            next if $should_be_admin{ $user->user_id() }
+                and $ws->permissions->user_can(
+                    user       => $user,
+                    permission => ST_ADMIN_WORKSPACE_PERM,
                 );
 
-            next
-                if not $should_be_admin{ $user->user_id() }
-                and not $ws->user_has_permission(
-                user       => $user,
-                permission => ST_ADMIN_WORKSPACE_PERM,
+            next if not $should_be_admin{ $user->user_id() }
+                and not $ws->permissions->user_can(
+                    user       => $user,
+                    permission => ST_ADMIN_WORKSPACE_PERM,
                 );
 
             my $is_selected = $user->workspace_is_selected(
@@ -266,9 +260,6 @@ sub users_invitation {
 
     my $settings_section = $self->template_process(
         $template,
-        users_with_roles => Template::Iterator::AlzaboWrapperCursor->new(
-            $self->hub->current_workspace->users_with_roles
-        ),
         invitation_filter         => $invitation_filter,
         workspace_invitation_body =>
             "email/$template_dir/workspace-invitation-body.html",
@@ -352,9 +343,6 @@ sub users_search {
     my $settings_section = $self->template_process(
         'element/settings/users_invite_search_section',
         invitation_filter => $filter,
-        users_with_roles => Template::Iterator::AlzaboWrapperCursor->new(
-            $self->hub->current_workspace->users_with_roles
-        ),
         $self->status_messages_for_template,
         workspace_invitation_body     => "email/$template_dir/workspace-invitation-body.html",
         users => \@users,

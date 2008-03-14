@@ -25,6 +25,7 @@ sub process {
         detected_safari => Socialtext::BrowserDetect::safari(),
         hub             => $self->hub,
         static_path     => Socialtext::Helpers->static_path,
+        skin_path       => $self->hub->skin->skin_path,
         appconfig       => Socialtext::AppConfig->instance(),
         script_name     => Socialtext::AppConfig->script_name,
         @_,
@@ -50,7 +51,7 @@ sub render {
     return $renderer->render(
         template => $template,
         vars     => \%vars,
-        paths    => $self->hub->current_workspace->skin_name,
+        paths    => $self->hub->skin->skin_name,
     );
 }
 

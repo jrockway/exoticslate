@@ -275,7 +275,7 @@ Return the name of the table where Permission data lives.
 =item Socialtext::Permission->All()
 
 Returns a cursor for all the permissions in the system, ordered by
-name.  See L<Socialtext::AlzaboWrapper> for more details on this
+name.  See L<Socialtext::MultiCursor> for more details on this
 method.
 
 =item Socialtext::Permission->Count()

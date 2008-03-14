@@ -54,12 +54,13 @@ sub _entity_hash {
         uri  => '/data/workspaces/' . $self->ws . '/attachments/'
             . $attachment->page_id . ':'
             . $attachment->id
-            . '/files/'
-            . $attachment->filename,
+            . '/original/'
+            . $attachment->db_filename,
         'content-type'   => '' . $attachment->mime_type,    # Stringify!
         'content-length' => $attachment->Content_Length,
         date             => $attachment->Date,
         uploader         => $attachment->From,
+        'page-id'        => $attachment->page_id,
     };
 }
 

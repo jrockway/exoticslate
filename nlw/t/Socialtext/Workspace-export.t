@@ -25,10 +25,7 @@ Data_paths_exist: {
 
 Export_includes_logo_and_info: {
     my $image ='t/attachments/socialtext-logo-30.gif';
-    open my $fh, '<', $image
-        or die "Cannot read $image: $!";
-    $admin->set_logo_from_filehandle(
-        filehandle => $fh,
+    $admin->set_logo_from_file(
         filename   => $image,
     );
 

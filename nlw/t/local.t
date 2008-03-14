@@ -22,7 +22,7 @@ test_templates();
 test_css();
 
 sub test_templates {
-    my $template_dir  = Socialtext::AppConfig->code_base . '/template';
+    my $template_dir  = Socialtext::AppConfig->code_base . '/skin/s2/template';
     my $local_dir     = "$template_dir/local";
     my $template_name = 'test-template';
 
@@ -57,7 +57,7 @@ sub test_css {
     my $local_path = "$local_dir/$file";
     unlink $local_path; # in case a previous test instance crashed
     is(
-        scalar grep( m{css/st/screen\.css}, $hub->css->uris ),
+        scalar grep( m{s2/css/screen\.css}, $hub->css->uris ),
         1,
         'Normal screen.css is present at start.'
     );
@@ -79,7 +79,7 @@ sub test_css {
    );
 
    is(
-       scalar grep( m{css/local/screen\.css}, $hub->css->uris ),
+       scalar grep( m{local/screen\.css}, $hub->css->uris ),
        1,
        'Local screen.css is picked up when local/screen.css is on the disk.'
    );

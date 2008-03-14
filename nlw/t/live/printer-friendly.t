@@ -12,7 +12,7 @@ __DATA__
 action: display_html
 page_name: FormattingTest
 --- match
-css/st/screen.css
+s2/css/screen.css
 NotALink
 --- nomatch
 foobar//foobar

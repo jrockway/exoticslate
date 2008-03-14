@@ -30,7 +30,7 @@ sub handler {
     my $destination_ws;
     if ($browsers_last_workspace) {
         my $user_can_access_last_workspace
-            = $browsers_last_workspace->user_has_permission(
+            = $browsers_last_workspace->permissions->user_can(
             permission => ST_READ_PERM,
             user       => $user
         );

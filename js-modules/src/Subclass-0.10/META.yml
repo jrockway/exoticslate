@@ -1,7 +1,0 @@
----
-name: Subclass
-version: 0.10
-author:
-  - Ingy döt Net <ingy@cpan.org>
-abstract: Simple Javascript Subclassing
-license: artistic

@@ -1,3 +1,0 @@
-<span class="error">
-  [% loc('You must have admin privileges to access this URI.') %]
-</span>

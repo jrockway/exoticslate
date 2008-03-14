@@ -29,11 +29,22 @@ my @skip_paths = qw(
     t/test-data
     appliance-bin
     bench
+    share/skin/common/javascript/Ajax-0.11
+    share/skin/common/javascript/DOM.Ready-0.14
+    share/skin/common/javascript/Subclass-0.10
+    share/skin/common/javascript/Test-Base-0.12
+    share/skin/common/javascript/Widget-Balloon-0.02
+    share/skin/common/javascript/Widget.Lightbox-0.06
+    share/skin/common/javascript/Widget.SortableTable-0.21
+    share/skin/common/javascript/Wikiwyg-2007-07-17
+    share/skin/common/javascript/YAML-0.11
 );
 my %skip_paths = map { ($_,1) } @skip_paths;
 
 my @skip_files = qw(
-    share/js-test/run/bin/render-template
+    share/skin/st/javascript/test/run/bin/render-template
+    share/skin/common/select/bin/gen_skins_js.pl
+    share/skin/s2/javascript/test/run/bin/render-template
     dev-bin/bad-bot-does-not-follow-redirect
 );
 my %skip_files = map { ($_,1) } @skip_files;

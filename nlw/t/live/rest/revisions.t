@@ -6,12 +6,10 @@ use strict;
 
 use Test::HTTP::Socialtext '-syntax', tests => 18;
 
-use JSON;
+use JSON::XS;
 use Readonly;
 use Test::Live fixtures => ['admin_no_pages'];
 use Test::More;
-
-$JSON::UTF8 = 1;
 
 Readonly my $TYPE => 'text/x.socialtext-wiki';
 Readonly my $BASE =>
@@ -76,7 +74,7 @@ test_http "GET revisions application/json" {
 
     << 200
 
-    my $result = jsonToObj($test->response->content);
+    my $result = decode_json($test->response->content);
 
     is ref $result, 'ARRAY', 'revisions request returns list';
     is scalar @$result, 3, '3 revisions are returned';
@@ -102,7 +100,7 @@ test_http "GET first revision as JSON" {
 
     << 200
 
-    my $result = jsonToObj($test->response->content);
+    my $result = decode_json($test->response->content);
 
     is $result->{revision_id}, $Revision_id,
         "Revision id of first revision is $Revision_id";

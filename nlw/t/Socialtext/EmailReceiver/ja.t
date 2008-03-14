@@ -938,7 +938,7 @@ FOWARDED_HTML_EMAIL: {
 }
 
 ACL_CHECKS: {
-    $ws->remove_permission(
+    $ws->permissions->remove(
         role       => Socialtext::Role->AuthenticatedUser(),
         permission => Socialtext::Permission->new( name => 'email_in' ),
     );
@@ -993,7 +993,7 @@ sub allow_guest_email_in {
     my $perm = Socialtext::Permission->new( name => 'email_in' );
     isa_ok( $perm, 'Socialtext::Permission' );
 
-    $_[0]->add_permission(
+    $_[0]->permissions->add(
         role       => Socialtext::Role->Guest(),
         permission => $perm,
     );
@@ -1004,7 +1004,7 @@ sub remove_guest_email_in {
     my $perm = Socialtext::Permission->new( name => 'email_in' );
     isa_ok( $perm, 'Socialtext::Permission' );
 
-    $_[0]->remove_permission(
+    $_[0]->permissions->remove(
         role       => Socialtext::Role->Guest(),
         permission => $perm,
     );

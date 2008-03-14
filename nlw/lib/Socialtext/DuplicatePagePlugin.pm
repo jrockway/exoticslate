@@ -46,7 +46,7 @@ sub copy_to_workspace_popup {
 
     $self->template_process(
         'popup/copy_to_workspace',
-        workspaces => Template::Iterator::AlzaboWrapperCursor->new($workspaces),
+        workspaces => $workspaces,
         %p,
         $self->hub->helpers->global_template_vars,
     );

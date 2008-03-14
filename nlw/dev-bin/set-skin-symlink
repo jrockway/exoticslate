@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use Socialtext::System qw/shell_run/;
+
+
+# We must look at our path to determine the branch, as the `current` symlink
+# is not used in testrunner.
+(my $branch = $FindBin::Bin) =~ s#.+/([^/]+)/nlw/dev-bin$#$1#;
+
+my $skin_link = "share/skin";
+unlink $skin_link if -e $skin_link;
+
+my $skin_dir = "$FindBin::Bin/../../../socialtext-skins/branches/$branch/skin";
+
+# Look for a symlink to the repo beside nlw/
+# set-branch and other tools set up this symlink
+my $possible_skin_dir = "$FindBin::Bin/../../socialtext-skins/skin";
+if (-d $possible_skin_dir) {
+    $skin_dir = $possible_skin_dir;
+}
+
+die "Skin dir ($skin_dir) not found!" unless -d $skin_dir;
+shell_run(qq{ln -sf $skin_dir $skin_link});
+

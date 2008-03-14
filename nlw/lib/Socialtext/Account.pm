@@ -10,7 +10,7 @@ use Class::Field 'field';
 use Readonly;
 use Socialtext::Exceptions qw( data_validation_error );
 use Socialtext::Schema;
-use Socialtext::SQL qw( sql_execute );
+use Socialtext::SQL qw( sql_execute sql_singlevalue);
 use Socialtext::String;
 use Socialtext::Validate qw( validate SCALAR_TYPE );
 use Socialtext::l10n qw(loc);
@@ -46,11 +46,9 @@ sub workspaces {
 sub workspace_count {
     my $self = shift;
 
-    my $ws_table = Socialtext::Schema->Load()->table('Workspace');
-
-    return $ws_table->row_count(
-        where => [ $ws_table->column('account_id'), '=', $self->account_id ],
-    );
+    my $sql = 'select count(*) from "Workspace" where account_id = ?';
+    my $count = sql_singlevalue($sql, $self->account_id);
+    return $count;
 }
 
 sub users {
@@ -63,11 +61,11 @@ sub users {
 sub user_count {
     my $self = shift;
 
-    my $sth = sql_execute(<<EOT, $self->account_id);                            
-SELECT count(distinct("UserWorkspaceRole".user_id))                             
-  FROM "Workspace" INNER JOIN "UserWorkspaceRole"                               
-    ON ("Workspace".workspace_id = "UserWorkspaceRole".workspace_id)            
-  WHERE "Workspace".account_id=?                                                
+    my $sth = sql_execute(<<EOT, $self->account_id);
+SELECT count(distinct("UserWorkspaceRole".user_id))
+  FROM "Workspace" INNER JOIN "UserWorkspaceRole"
+    ON ("Workspace".workspace_id = "UserWorkspaceRole".workspace_id)
+  WHERE "Workspace".account_id=?
 EOT
 
     return $sth->fetchall_arrayref->[0][0];

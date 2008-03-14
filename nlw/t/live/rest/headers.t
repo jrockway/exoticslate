@@ -1,18 +1,12 @@
 #!perl
 # @COPYRIGHT@
-
 use warnings;
 use strict;
-
 use Test::HTTP::Socialtext '-syntax', tests => 3;
-
-use JSON;
 use Readonly;
 use Socialtext::User;
 use Test::Live fixtures => ['admin'];
 use Test::More;
-
-$JSON::UTF8 = 1;
 
 Readonly my $PAGE_BASE => Test::HTTP::Socialtext->url(
     '/data/workspaces/admin/pages');

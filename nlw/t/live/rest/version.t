@@ -6,13 +6,11 @@ use strict;
 
 use Test::HTTP::Socialtext '-syntax', tests => 13;
 
-use JSON;
+use JSON::XS;
 use Readonly;
 use Socialtext::Rest::Version;
 use Test::More;
 use Test::Live fixtures => ['admin'];
-
-$JSON::UTF8 = 1;
 
 Readonly my $URL => Test::HTTP::Socialtext->url('/data/version');
 
@@ -42,7 +40,7 @@ test_http "application/json" {
     << 200
     ~< Content-type: \bapplication/json\b
 
-    my $representation = jsonToObj( $test->response->content );
+    my $representation = decode_json( $test->response->content );
     isa_ok( $representation, 'ARRAY', "JSON representation looks correct." );
     is( $#$representation, 0, "JSON representation has only one element." );
     is( $representation->[0], $Socialtext::Rest::Version::API_VERSION,

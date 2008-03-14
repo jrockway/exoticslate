@@ -9,17 +9,16 @@ use Socialtext::Exceptions qw( data_validation_error param_error );
 use Socialtext::Validate qw( validate SCALAR_TYPE BOOLEAN_TYPE ARRAYREF_TYPE WORKSPACE_TYPE );
 use Socialtext::AppConfig;
 use Socialtext::MultiCursor;
-use Socialtext::Schema;
+use Socialtext::SQL 'sql_execute';
 use Socialtext::TT2::Renderer;
 use Socialtext::URI;
 use Socialtext::UserMetadata;
 use Socialtext::UserId;
 use Socialtext::User::Deleted;
+use Socialtext::User::EmailConfirmation;
 use Socialtext::Workspace;
 use Email::Address;
-use Class::AlzaboWrapper;
 use Class::Field 'field';
-use Alzabo::SQLMaker::PostgreSQL qw(COUNT DISTINCT LOWER CURRENT_TIMESTAMP);
 use Socialtext::l10n qw(system_locale loc);
 use Socialtext::EmailSender::Factory;
 use base qw( Socialtext::MultiPlugin );
@@ -59,27 +58,18 @@ sub new_homunculus {
     my $class = shift;
     my $homunculus;
 
+    # if we are passed in an email confirmation hash, we look up the user_id
+    # associated with that hash
+    if ($_[0] eq 'email_confirmation_hash') {
+        my $user_id = Socialtext::User::EmailConfirmation->id_from_hash($_[1]);
+        return undef unless defined $user_id;
+
+        return $class->new_homunculus( user_id => $user_id );
+    }
+
     # if we pass in user_id, it will be one of the new system-wide
     # ids, we must short-circuit and immediately go to the driver
     # associated with that system id
-
-    # if we are passed in an email confirmation hash, we just need the
-    # user_id associated with that row in UserEmailConfirmation, and
-    # return new_homunculus( user_id => $that_id )
-
-    if ($_[0] eq 'email_confirmation_hash') {
-        my $schema = Socialtext::Schema->Load();
-        my $uce_table = $schema->table('UserEmailConfirmation');
-        my $select = $schema->one_row(
-            select => $uce_table,
-            join   => $uce_table,
-            where  => [ $uce_table->column('sha1_hash'), '=', $_[1] ],
-        );
-
-        return undef unless $select;
-        return $class->new_homunculus( user_id => $select->select('user_id') );
-    }
-
     if ($_[0] eq 'user_id') {
         my $system_id = Socialtext::UserId->new( system_unique_id => $_[1] );
         return undef unless $system_id;
@@ -290,8 +280,10 @@ sub creator {
         Socialtext::Exception->throw( error => 'You cannot delete a user.' )
             unless $p{force};
 
-        # We have three things to delete: Our store, our metadata, and our id
-        # user stores should implement a delete method, even if it is a noop.
+        # We have three things to delete: Our store, our metadata, and our id.
+        #
+        # User stores should implement a delete method, even if it is a noop.
+        #
         Socialtext::UserId->new( system_unique_id => $self->user_id )
             ->delete();
         $self->homunculus->delete();
@@ -408,31 +400,42 @@ sub guess_real_name {
 sub workspace_count {
     my $self = shift;
 
-    my $uwr_table = Socialtext::Schema->Load()->table('UserWorkspaceRole');
+    my $sth = sql_execute(
+        'SELECT count(distinct(workspace_id))'
+        . ' FROM "UserWorkspaceRole"'
+        . ' WHERE user_id=?',
+        $self->user_id );
 
-    return $uwr_table->function(
-        select => COUNT( DISTINCT( $uwr_table->column('workspace_id') ) ),
-        where  => [ $uwr_table->column('user_id'), '=',
-                    $self->user_id ],
-    );
+    return $sth->fetchall_arrayref->[0][0];
 }
 
 sub workspaces_with_selected {
     my $self = shift;
 
-    my $schema = Socialtext::Schema->Load();
-    my $ws_table = $schema->table('Workspace');
-    my $uwr_table = $schema->table('UserWorkspaceRole');
+    my $sth = sql_execute(<<EOSQL, $self->user_id);
+SELECT uwr.workspace_id
+    FROM "UserWorkspaceRole" uwr, "Workspace" w
+    WHERE uwr.user_id=? AND uwr.workspace_id = w.workspace_id
+    ORDER BY w.name
+EOSQL
 
-    return
-        Class::AlzaboWrapper->NewCursor(
-            $schema->join(
-                join     => [ $ws_table, $uwr_table ],
-                where    => [ $uwr_table->column('user_id'),
-                              '=', $self->user_id ],
-                order_by => $ws_table->column('name'),
-            )
-        );
+    return Socialtext::MultiCursor->new(
+        iterables => [ $sth->fetchall_arrayref ],
+        apply     => sub {
+            my $row          = shift;
+            my $workspace_id = $row->[0];
+
+            return undef unless defined $workspace_id;
+
+            return [
+                Socialtext::Workspace->new( workspace_id => $workspace_id ),
+                Socialtext::UserWorkspaceRole->new(
+                    user_id      => $self->user_id,
+                    workspace_id => $workspace_id
+                    )
+            ];
+        }
+    );
 }
 
 {
@@ -441,16 +444,13 @@ sub workspaces_with_selected {
         my $self = shift;
         my %p = validate( @_, $spec );
 
-        my $uwr_table = Socialtext::Schema->Load()->table('UserWorkspaceRole');
-        return $uwr_table->function(
-            select => $uwr_table->column('is_selected'),
-            where  => [
-                [ $uwr_table->column('user_id'), '=',
-                  $self->user_id ],
-                [ $uwr_table->column('workspace_id'), '=',
-                  $p{workspace}->workspace_id() ],
-            ],
-        );
+        my $sth = sql_execute(
+            'SELECT is_selected'
+            . ' FROM "UserWorkspaceRole"'
+            . ' WHERE user_id=? AND workspace_id=?',
+            $self->user_id, $p{workspace}->workspace_id );
+
+        return $sth->fetchall_arrayref->[0][0];
     }
 }
 
@@ -460,18 +460,16 @@ sub workspaces_with_selected {
         my $self = shift;
         my %p = validate( @_, $spec );
 
-        my $uwr_table = Socialtext::Schema->Load()->table('UserWorkspaceRole');
-        my $uwr_rows = $uwr_table->rows_where(
-            where => [ $uwr_table->column('user_id'), '=',
-                       $self->user_id ]
-        );
+        my $workspaces = $self->workspaces();
 
         my %selected = map { $_->workspace_id => 1 } @{ $p{workspaces} };
-        while ( my $uwr = $uwr_rows->next ) {
-            $uwr->update(
-                is_selected => $selected{ $uwr->select('workspace_id') }
-                ? 1
-                : 0 );
+        while ( my $ws = $workspaces->next ) {
+            sql_execute(
+                'UPDATE "UserWorkspaceRole"'
+                . ' SET is_selected=?'
+                . ' WHERE user_id=? AND workspace_id=?',
+                $selected{ $ws->workspace_id } ? 1 : 0,
+                $self->user_id, $ws->workspace_id );
         }
     }
 }
@@ -479,37 +477,37 @@ sub workspaces_with_selected {
 {
     Readonly my $spec => {
         selected_only => BOOLEAN_TYPE( default => 0 ),
-        exclude       => ARRAYREF_TYPE( default => [] ),
-        only          => ARRAYREF_TYPE( default => [] ),
+        exclude => ARRAYREF_TYPE( default => [] ),
     };
     sub workspaces {
         my $self = shift;
         my %p = validate( @_, $spec );
 
-        my $schema = Socialtext::Schema->Load();
-        my $ws_table = $schema->table('Workspace');
-        my $uwr_table = $schema->table('UserWorkspaceRole');
+        my $selected_only_clause
+            = $p{selected_only} ? 'AND is_selected = TRUE' : '';
 
-        my @where = [ $uwr_table->column('user_id'), '=',
-                      $self->user_id ];
-        push @where, [ $uwr_table->column('is_selected'), '=', 1 ]
-            if $p{selected_only};
-        push @where, [ $uwr_table->column('workspace_id'), 'NOT IN',
-                       @{ $p{exclude} } ]
-            if @{ $p{exclude} };
+        my $exclude_clause = '';
+        if (@{ $p{exclude} }) {
+            my $wksps = join(',', @{ $p{exclude} });
+            $exclude_clause = "AND workspace_id NOT IN ($wksps)";
+        }
 
-        push @where, [ $ws_table->column('name'), 'IN', @{ $p{only} } ]
-            if @{ $p{only} };
+        my $sth = sql_execute(<<EOSQL, $self->user_id);
+SELECT workspace_id
+    FROM "UserWorkspaceRole" LEFT OUTER JOIN "Workspace" USING (workspace_id)
+    WHERE user_id=?
+    $selected_only_clause
+    $exclude_clause
+    ORDER BY name
+EOSQL
 
-        return
-            Class::AlzaboWrapper->NewCursor(
-                $schema->join(
-                    distinct => $ws_table,
-                    join     => [ $ws_table, $uwr_table ],
-                    where    => \@where,
-                    order_by => $ws_table->column('name'),
-                )
-            );
+        return Socialtext::MultiCursor->new(
+            iterables => [ $sth->fetchall_arrayref ],
+            apply => sub {
+                my $row = shift;
+                return Socialtext::Workspace->new( workspace_id => $row->[0] );
+            }
+        );
     }
 }
 
@@ -624,8 +622,27 @@ sub Search {
     return $class->_aggregate('Search', $search_term);
 }
 
+my $standard_apply = sub {
+    my $row = shift;
+    return Socialtext::User->new( user_id => $row->[0] );
+};
+
+sub _UserCursor {
+    my ( $class, $sql, $interpolations, %p ) = @_;
+
+    my $sth = sql_execute( $sql, @p{@$interpolations} );
+
+    return Socialtext::MultiCursor->new(
+        iterables => [ $sth->fetchall_arrayref ],
+        apply => $p{apply} || sub {
+            my $row = shift;
+            return $class->new( user_id => $row->[0] );
+        }
+    );
+}
+
 my %LimitAndSortSpec = (
-    limit      => SCALAR_TYPE( default => 0 ),
+    limit      => SCALAR_TYPE( default => undef ),
     offset     => SCALAR_TYPE( default => 0 ),
     order_by   => SCALAR_TYPE(
         regex   => qr/^(?:username|workspace_count|creation_datetime|creator)$/,
@@ -636,7 +653,6 @@ my %LimitAndSortSpec = (
         default => undef,
     ),
 );
-
 {
     Readonly my $spec => { %LimitAndSortSpec };
     sub All {
@@ -644,16 +660,48 @@ my %LimitAndSortSpec = (
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        # we pick our apply before ever getting to _SortedQuery
-        my $apply;
-        if ($p{order_by} eq 'workspace_count') {
-            $apply = $by_workspace_count_apply;
-        }
-        elsif ($p{order_by} eq 'creator') {
-            $apply = $by_creator_apply;
-        }
+        # We're supposed to default to DESCending if we're creation_datetime.
+        $p{sort_order} ||= $p{order_by} eq 'creation_datetime' ? 'DESC' : 'ASC';
 
-        return $class->_SortedQuery(%p, apply => $apply);
+        Readonly my %SQL => (
+            creation_datetime => <<EOSQL,
+SELECT user_id
+    FROM "UserMetadata"
+    ORDER BY creation_datetime $p{sort_order}
+    LIMIT ? OFFSET ?
+EOSQL
+            creator => <<EOSQL,
+SELECT user_id
+    FROM "UserId" LEFT OUTER JOIN (
+        SELECT user_id, driver_username AS "creator_username"
+            FROM "UserMetadata" LEFT OUTER JOIN "UserId"
+                ON "UserMetadata".created_by_user_id = "UserId".system_unique_id
+    ) AS "X" ON "X".user_id = "UserId".system_unique_id
+    ORDER BY creator_username, driver_username
+    LIMIT ? OFFSET ?
+EOSQL
+            username => <<EOSQL,
+SELECT system_unique_id
+    FROM "UserId"
+    ORDER BY driver_username $p{sort_order}
+    LIMIT ? OFFSET ?
+EOSQL
+            workspace_count => <<EOSQL,
+SELECT "UserId".system_unique_id,
+        COUNT(DISTINCT("UserWorkspaceRole".workspace_id)) AS workspace_count
+    FROM "UserId" LEFT OUTER JOIN "UserWorkspaceRole"
+        ON "UserId".system_unique_id = "UserWorkspaceRole".user_id
+    GROUP BY "UserId".system_unique_id, "UserId".driver_username
+    ORDER BY workspace_count $p{sort_order},
+             "UserId".driver_username ASC
+    LIMIT ? OFFSET ?
+EOSQL
+        );
+
+        return $class->_UserCursor(
+            $SQL{ $p{order_by} },
+            [qw( limit offset )], %p
+        );
     }
 }
 
@@ -671,28 +719,68 @@ my %LimitAndSortSpec = (
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        my $uid_table = Socialtext::Schema->Load()->table('UserId');
-        my $uwr_table  = Socialtext::Schema->Load()->table('UserWorkspaceRole');
-        my $ws_table   = Socialtext::Schema->Load()->table('Workspace');
+        # We're supposed to default to DESCending if we're creation_datetime.
+        $p{sort_order} ||= $p{order_by} eq 'creation_datetime' ? 'DESC' : 'ASC';
 
-        my @join  = (
-            [ $uid_table, $uwr_table ],
-            [ $uwr_table, $ws_table ],
+        Readonly my %SQL => (
+            creation_datetime => <<EOSQL,
+SELECT DISTINCT "UserId".system_unique_id AS system_unique_id,
+                "UserId".driver_key AS driver_key,
+                "UserId".driver_unique_id AS driver_unique_id,
+                "UserId".driver_username AS driver_username,
+                "UserMetadata".creation_datetime AS creation_datetime,
+                "UserId".driver_username AS driver_username
+    FROM "UserId" AS "UserId",
+         "UserWorkspaceRole" AS "UserWorkspaceRole",
+         "Workspace" AS "Workspace",
+         "UserMetadata" AS "UserMetadata"
+    WHERE ("UserId".system_unique_id = "UserWorkspaceRole".user_id
+           AND "UserWorkspaceRole".workspace_id = "Workspace".workspace_id
+           AND "UserId".system_unique_id = "UserMetadata".user_id )
+        AND  ("Workspace".account_id = ? )
+    ORDER BY "UserMetadata".creation_datetime $p{sort_order},
+        "UserId".driver_username ASC
+    LIMIT ? OFFSET ?
+EOSQL
+            creator => <<EOSQL,
+SELECT DISTINCT ("UserId".system_unique_id) AS aaaaa10000,
+                 "UserId".driver_username AS driver_username,
+                 "UserId000000002".driver_username AS driver_username
+    FROM "UserMetadata" AS "UserMetadata"
+        LEFT OUTER JOIN "UserId" AS "UserId000000002"
+        ON "UserMetadata".created_by_user_id
+                = "UserId000000002".system_unique_id,
+            "UserId" AS "UserId",
+            "UserWorkspaceRole" AS "UserWorkspaceRole",
+            "Workspace" AS "Workspace"
+    WHERE ("UserId".system_unique_id = "UserWorkspaceRole".user_id
+            AND "UserWorkspaceRole".workspace_id = "Workspace".workspace_id
+            AND "UserId".system_unique_id = "UserMetadata".user_id )
+        AND  ("Workspace".account_id = ? )
+    ORDER BY "UserId000000002".driver_username $p{sort_order},
+        "UserId".driver_username ASC
+    LIMIT ? OFFSET ?
+EOSQL
+            username => <<EOSQL,
+SELECT DISTINCT "UserId".system_unique_id AS system_unique_id,
+                "UserId".driver_key AS driver_key,
+                "UserId".driver_unique_id AS driver_unique_id,
+                "UserId".driver_username AS driver_username
+    FROM "UserId" AS "UserId",
+         "UserWorkspaceRole" AS "UserWorkspaceRole",
+         "Workspace" AS "Workspace"
+    WHERE ("UserId".system_unique_id = "UserWorkspaceRole".user_id
+           AND "UserWorkspaceRole".workspace_id = "Workspace".workspace_id )
+        AND  ("Workspace".account_id = ? )
+    ORDER BY "UserId".driver_username $p{sort_order}
+    LIMIT ? OFFSET ?
+EOSQL
         );
 
-        my @where = ( $ws_table->column('account_id'), '=', $p{account_id} );
-
-        # we pick our apply before ever getting to _SortedQuery
-        my $apply;
-        if ($p{order_by} eq 'workspace_count') {
-            $apply = $by_workspace_count_apply;
-        }
-        elsif ($p{order_by} eq 'creator') {
-            $apply = $by_creator_apply;
-        }
-
-
-        return $class->_SortedQuery( %p, join => \@join, where => \@where, apply => $apply );
+        return $class->_UserCursor(
+            $SQL{ $p{order_by} },
+            [qw( account_id limit offset )], %p
+        );
     }
 }
 
@@ -711,27 +799,108 @@ my %LimitAndSortSpec = (
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        my $uid_table = Socialtext::Schema->Load()->table('UserId');
-        my $uwr_table  = Socialtext::Schema->Load()->table('UserWorkspaceRole');
-        my $role_table = Socialtext::Schema->Load()->table('Role');
+        # We're supposed to default to DESCending if we're creation_datetime.
+        $p{sort_order} ||= $p{order_by} eq 'creation_datetime' ? 'DESC' : 'ASC';
 
-        my @join  = (
-            [ $uid_table, $uwr_table ],
-            [ $uwr_table, $role_table ],
+        Readonly my %SQL => (
+            username => <<EOSQL,
+SELECT DISTINCT "UserId".system_unique_id AS system_unique_id,
+                "Role".role_id AS role_id,
+                "UserId".driver_key AS driver_key,
+                "UserId".driver_unique_id AS driver_unique_id,
+                "UserId".driver_username AS driver_username,
+                "Role".name AS name,
+                "Role".used_as_default AS used_as_default,
+                "UserId".driver_username AS driver_username
+    FROM "UserId" AS "UserId",
+         "UserWorkspaceRole" AS "UserWorkspaceRole",
+         "Role" AS "Role"
+    WHERE ("UserId".system_unique_id = "UserWorkspaceRole".user_id
+            AND "UserWorkspaceRole".role_id = "Role".role_id)
+        AND ("UserWorkspaceRole".workspace_id = ? )
+    ORDER BY "UserId".driver_username $p{sort_order}
+    LIMIT ? OFFSET ?
+EOSQL
+            creation_datetime => <<EOSQL,
+SELECT DISTINCT "UserId".system_unique_id AS system_unique_id,
+                "Role".role_id AS role_id,
+                "UserId".driver_key AS driver_key,
+                "UserId".driver_unique_id AS driver_unique_id,
+                "UserId".driver_username AS driver_username,
+                "Role".name AS name,
+                "Role".used_as_default AS used_as_default,
+                "UserMetadata".creation_datetime AS creation_datetime,
+                "UserId".driver_username AS driver_username
+    FROM "UserId" AS "UserId",
+         "UserWorkspaceRole" AS "UserWorkspaceRole",
+         "Role" AS "Role",
+         "UserMetadata" AS "UserMetadata"
+    WHERE ("UserId".system_unique_id = "UserWorkspaceRole".user_id
+            AND "UserWorkspaceRole".role_id = "Role".role_id
+            AND "UserId".system_unique_id = "UserMetadata".user_id)
+        AND ("UserWorkspaceRole".workspace_id = ? )
+    ORDER BY "UserMetadata".creation_datetime $p{sort_order},
+        "UserId".driver_username ASC
+    LIMIT ? OFFSET ?
+EOSQL
+            creator => <<EOSQL,
+SELECT DISTINCT ("UserId".system_unique_id) AS aaaaa10000,
+                "Role".role_id AS role_id,
+                "UserId".driver_username AS driver_username,
+                "UserId000000003".driver_username AS driver_username
+    FROM "UserMetadata" AS "UserMetadata"
+        LEFT OUTER JOIN "UserId" AS "UserId000000003"
+            ON "UserMetadata".created_by_user_id
+                    = "UserId000000003".system_unique_id,
+                "UserId" AS "UserId",
+                "UserWorkspaceRole" AS "UserWorkspaceRole",
+                "Role" AS "Role"
+    WHERE ("UserId".system_unique_id = "UserWorkspaceRole".user_id
+            AND "UserWorkspaceRole".role_id = "Role".role_id
+            AND "UserId".system_unique_id = "UserMetadata".user_id )
+        AND  ("UserWorkspaceRole".workspace_id = ? )
+    ORDER BY "UserId000000003".driver_username $p{sort_order},
+       "UserId".driver_username ASC
+    LIMIT ? OFFSET ?
+EOSQL
+            role_name => <<EOSQL,
+SELECT DISTINCT "UserId".system_unique_id AS system_unique_id,
+                "Role".role_id AS role_id,
+                "UserId".driver_key AS driver_key,
+                "UserId".driver_unique_id AS driver_unique_id,
+                "UserId".driver_username AS driver_username,
+                "Role".name AS name,
+                "Role".used_as_default AS used_as_default,
+                "Role".name AS name,
+                "UserId".driver_username AS driver_username
+    FROM "UserId" AS "UserId",
+        "UserWorkspaceRole" AS "UserWorkspaceRole",
+        "Role" AS "Role"
+    WHERE ("UserId".system_unique_id = "UserWorkspaceRole".user_id
+            AND "UserWorkspaceRole".role_id = "Role".role_id )
+        AND  ("UserWorkspaceRole".workspace_id = ? )
+    ORDER BY "Role".name $p{sort_order},
+        "UserId".driver_username ASC
+    LIMIT ? OFFSET ?
+EOSQL
         );
 
-        my @where
-            = ( $uwr_table->column('workspace_id'), '=', $p{workspace_id} );
+        return $class->_UserCursor(
+            $SQL{ $p{order_by} },
+            [qw( workspace_id limit offset )], %p,
+            apply => sub {
+                my $rows    = shift;
+                my $user_id = $rows->[0];
+                my $role_id = $rows->[1];
 
-        # we pick our apply before ever getting to _SortedQuery
-        my $apply = $by_workspace_with_roles_apply;
-        if ($p{order_by} eq 'creator') {
-            $apply = $by_workspace_with_roles_ordered_by_creator_apply;
-        }
+                # short circuit to not hand back undefs in a list context
+                return undef if !$user_id;
 
-        return $class->_SortedQuery(
-            %p, select => [ $role_table ], join => \@join, where => \@where,
-            apply => $apply,
+                return [
+                    Socialtext::User->new( user_id => $user_id ),
+                    Socialtext::Role->new( role_id => $role_id )
+                ];
+            },
         );
     }
 }
@@ -746,235 +915,72 @@ my %LimitAndSortSpec = (
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        my $uid_table = Socialtext::Schema->Load()->table('UserId');
+        # We're supposed to default to DESCending if we're creation_datetime.
+        $p{sort_order} ||= $p{order_by} eq 'creation_datetime' ? 'DESC' : 'ASC';
 
-        # REVIEW: Do we handle usernames with '%' in them very well? Mebbe not
-        my @where = ( $uid_table->column('driver_username'), 'LIKE',
-            '%' . lc $p{username} . '%' );
+        Readonly my %SQL => (
+            username => <<EOSQL,
+SELECT DISTINCT "UserId".system_unique_id AS system_unique_id,
+                "UserId".driver_key AS driver_key,
+                "UserId".driver_unique_id AS driver_unique_id,
+                "UserId".driver_username AS driver_username,
+                "UserId".driver_username AS driver_username
+    FROM "UserId" AS "UserId"
+    WHERE "UserId".driver_username LIKE ?
+    ORDER BY "UserId".driver_username $p{sort_order}
+    LIMIT ? OFFSET ?
+EOSQL
+            workspace_count => <<EOSQL,
+SELECT "UserId".system_unique_id AS system_unique_id,
+        COUNT(DISTINCT("UserWorkspaceRole".workspace_id)) AS aaaaa10000
+    FROM "UserId" AS "UserId"
+        LEFT OUTER JOIN "UserWorkspaceRole" AS "UserWorkspaceRole"
+            ON "UserId".system_unique_id = "UserWorkspaceRole".user_id
+    WHERE "UserId".driver_username LIKE ?
+    GROUP BY "UserId".system_unique_id, "UserId".driver_username
+    ORDER BY aaaaa10000 ASC, "UserId".driver_username $p{sort_order}
+    LIMIT ? OFFSET ?
+EOSQL
+            creation_datetime => <<EOSQL,
+SELECT DISTINCT "UserId".system_unique_id AS system_unique_id,
+                "UserId".driver_key AS driver_key,
+                "UserId".driver_unique_id AS driver_unique_id,
+                "UserId".driver_username AS driver_username,
+                "UserMetadata".creation_datetime AS creation_datetime,
+                "UserId".driver_username AS driver_username
+    FROM "UserId" AS "UserId", "UserMetadata" AS "UserMetadata"
+    WHERE ("UserId".system_unique_id = "UserMetadata".user_id )
+        AND  ("UserId".driver_username LIKE ? )
+    ORDER BY "UserMetadata".creation_datetime $p{sort_order},
+        "UserId".driver_username ASC
+    LIMIT ? OFFSET ?
+EOSQL
+            creator => <<EOSQL,
+SELECT DISTINCT("UserId".system_unique_id) AS aaaaa10000,
+        "UserId".driver_username AS driver_username,
+        "UserId000000004".driver_username AS driver_username
+    FROM "UserMetadata" AS "UserMetadata"
+        LEFT OUTER JOIN "UserId" AS "UserId000000004"
+            ON "UserMetadata".created_by_user_id
+                    = "UserId000000004".system_unique_id,
+               "UserId" AS "UserId"
+    WHERE ("UserId".system_unique_id = "UserMetadata".user_id )
+        AND ("UserId".driver_username LIKE ? )
+    ORDER BY "UserId000000004".driver_username $p{sort_order},
+        "UserId".driver_username ASC
+    LIMIT ? OFFSET ?
+EOSQL
+        );
 
-        # we pick our apply before ever getting to _SortedQuery
-        my $apply;
-        if ($p{order_by} eq 'workspace_count') {
-            $apply = $by_workspace_count_apply;
-        }
-        elsif ($p{order_by} eq 'creator') {
-            $apply = $by_creator_apply;
-        }
+        $p{username} = '%' . $p{username} . '%';
 
-        return $class->_SortedQuery(%p, where => \@where, apply => $apply);
+        return $class->_UserCursor(
+            $SQL{ $p{order_by} },
+            [ qw( username limit offset )], %p
+        );
     }
 }
 
-sub _SortedQuery {
-    my $class = shift;
-    my %p = @_;
-
-    my %select;
-    if ( $p{select} ) {
-        $select{select} = $p{select};
-    }
-
-    my %limit;
-    if ( $p{limit} ) {
-        $limit{limit} = [ @p{ 'limit', 'offset' } ];
-    }
-
-    my %where;
-    if ( $p{where} ) {
-        $where{where} = $p{where};
-    }
-
-    my $schema = Socialtext::Schema->Load();
-    my $uid_table = $schema->table('UserId');
-
-    my $sort_order = (
-        defined $p{sort_order}
-        ? uc $p{sort_order}
-        : $p{order_by} eq 'creation_datetime'
-        ? 'DESC'
-        : 'ASC'
-    );
-
-    my $apply = $p{apply} ? $p{apply} : sub {
-        my $row = shift;
-        return Socialtext::User->new(
-            user_id => $row->select('system_unique_id')
-        );
-    };
-
-    my @order_by;
-    if ( $p{order_by} eq 'username' ) {
-        @order_by = ( $uid_table->column('driver_username'), $sort_order );
-    }
-    elsif ( $p{order_by} eq 'creation_datetime' ) {
-        my $um_table = Socialtext::Schema->Load()->table('UserMetadata');
-        push @{ $p{join} }, [ $uid_table, $um_table ];
-
-        @order_by = (
-            $um_table->column('creation_datetime'), $sort_order,
-            $uid_table->column('driver_username'), 'ASC',
-        );
-    }
-    # Only valid if this was called via ByWorkspaceIdWithRoles in which
-    # case Role is already in the join
-    elsif ( $p{order_by} eq 'role_name' ) {
-        my $role_table = Socialtext::Schema->Load()->table('Role');
-
-        @order_by = (
-            $role_table->column('name'), $sort_order,
-            $uid_table->column('driver_username'), 'ASC',
-        );
-    }
-    elsif ( $p{order_by} eq 'creator' ) {
-        return $class->_ByCreator(
-            sort_order => $sort_order,
-            join       => $p{join},
-            apply      => $apply,
-            %select,
-            %where,
-            %limit,
-        );
-    }
-    elsif ( $p{order_by} eq 'workspace_count' ) {
-        return $class->_ByWorkspaceCount(
-            sort_order => $sort_order,
-            join       => $p{join},
-            apply      => $apply,
-            %select,
-            %where,
-            %limit,
-        );
-    }
-
-    my @select =
-        $p{select}
-        ? ( $uid_table, @{ $p{select} } )
-        : $uid_table;
-
-    my @join =
-        $p{join}
-        ? @{ $p{join} }
-        : $uid_table;
-
-    return Socialtext::MultiCursor->new(
-        iterables => [
-            $schema->join(
-                distinct => \@select,
-                join     => \@join,
-                %where,
-                order_by => \@order_by,
-                %limit,
-            )
-        ],
-        apply => $apply
-    );
-}
-
-sub _ByCreator {
-    my $class = shift;
-    my %p = @_;
-
-    my $schema = Socialtext::Schema->Load();
-    my $uid_table = $schema->table('UserId');
-    my $uid_table2 = $uid_table->alias;
-    my $um_table  = $schema->table('UserMetadata');
-
-    my @join;
-    @join = @{ $p{join} } if $p{join};
-
-    my $fk = Alzabo::Runtime::ForeignKey->new(
-        columns_from => [ $um_table->columns( 'created_by_user_id' ) ],
-        columns_to   => [ $uid_table2->columns( 'system_unique_id' ) ],
-    );
-    push @join,
-        [ $uid_table, $um_table ],
-        [ 'left_outer_join', $um_table, $uid_table2, $fk ];
-
-    my %where = $p{where} ? ( where => $p{where} ) : ();
-    my %limit = $p{limit} ? ( limit => $p{limit} ) : ();
-
-    my @select = DISTINCT( $uid_table->column( 'system_unique_id' ) );
-    if ( $p{select} ) {
-        push @select, map { $_->primary_key() } @{ $p{select} };
-    }
-    # The aliased table's username column must be present in the
-    # SELECT in order for us to use it in ORDER BY for Pg to be happy.
-    push @select, 
-        $uid_table->column('driver_username'),
-        $uid_table2->column('driver_username');
-
-    my $select = $schema->select(
-        select   => \@select,
-        join     => \@join,
-        %where,
-        order_by => [
-            $uid_table2->column('driver_username'), $p{sort_order},
-            $uid_table->column('driver_username'), 'ASC',
-        ],
-        %limit,
-    );
-
-    return Socialtext::MultiCursor->new(
-        iterables => [$select],
-        apply => $p{apply}
-    );
-}
-
-# TODO - this simply doesn't do the right thing if called via
-# ByAccountId or ByWorkspaceIdWithRoles - making it work requires even
-# more SQL gyrations, something like
-#
-# The query for ByWorkspaceIdWithRoles is basically this:
-#
-# SELECT U.user_id, R.role_id, COUNT( DISTINCT(UWR.workspace_id) )
-#   FROM User, UserWorkspaceRole, Role
-#  WHERE UWR.user_in IN
-#        ( SELECT UWR.user_id
-#            FROM UWR
-#           WHERE UWR.workspace_id = ? )
-#   AND [ join tables together ]
-# GROUP BY U.user_id, U.username, R.role_id
-# ORDER BY ...
-#
-# The one for ByAccountID is similar. The key in both is get the
-# workspace_count for _all_ workspaces, while limited the selection of
-# users to those in a specified account or workspace.
-sub _ByWorkspaceCount {
-    my $class = shift;
-    my %p = @_;
-
-    my $schema = Socialtext::Schema->Load();
-    my $uid_table = $schema->table('UserId');
-    my $uwr_table = $schema->table('UserWorkspaceRole');
-
-    my @join;
-    @join = @{ $p{join} } if $p{join};
-
-    # If UserWorkspaceRole is in the join already then joining it
-    # again via a left outer join will produce a very wacky query
-    unless ( grep { $_->name eq 'UserWorkspaceRole' } map { @$_} @join ) {
-        push @join,
-            [ left_outer_join => $uid_table, $uwr_table ];
-    }
-
-    my %where = $p{where} ? ( where => $p{where} ) : ();
-    my %limit = $p{limit} ? ( limit => $p{limit} ) : ();
-
-    my $count = COUNT( DISTINCT( $uwr_table->column('workspace_id') ) );
-    my $select = $schema->select(
-        select   => [ $uid_table->column('system_unique_id'), $count ],
-        join     => \@join,
-        %where,
-        order_by => [ $count, $p{sort_order}, $uid_table->column('driver_username'), 'ASC' ],
-        group_by => [ $uid_table->column('system_unique_id'), $uid_table->column('driver_username') ],
-        %limit,
-    );
-
-    return Socialtext::MultiCursor->new(
-        iterables => [$select],
-        apply => $p{apply}
-    );
-}
 
 {
     Readonly my $spec => { username => SCALAR_TYPE( regex => qr/\S/ ) };
@@ -982,23 +988,23 @@ sub _ByWorkspaceCount {
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        my $uid_table = Socialtext::Schema->Load()->table('UserId');
-
-        return $uid_table->row_count(
-            where => [ $uid_table->column('driver_username'), 'LIKE', '%' . lc $p{username} . '%' ],
-        );
+        my $sth = sql_execute(
+            'SELECT COUNT(*) FROM "UserId"'
+            . ' WHERE driver_username LIKE ?',
+            '%' . lc $p{username} . '%' );
+        return $sth->fetchall_arrayref->[0][0];
     }
 }
 
 sub Count {
-    my $class = shift;
-    my $uid_table = Socialtext::Schema->Load()->table('UserId');
-    return $uid_table->row_count;
+    my ( $class, %p ) = @_;
+
+    my $sth = sql_execute('SELECT COUNT(*) FROM "UserId"');
+    return $sth->fetchall_arrayref->[0][0];
 }
 
 # Confirmation methods
 
-# REVIEW - I don't really like this method name, "info" is so generic.
 {
     my $spec = { is_password_change => BOOLEAN_TYPE( default => 0 ) };
 
@@ -1006,59 +1012,21 @@ sub Count {
         my $self = shift;
         my %p    = validate( @_, $spec );
 
-        my $hash = $self->_generate_confirmation_hash();
-
-        my $expires = DateTime->now()->add( days => 14 );
-        my %vals = (
-            sha1_hash           => $hash,
-            expiration_datetime =>
-                DateTime::Format::Pg->format_timestamptz($expires),
-            is_password_change  => $p{is_password_change},
+        Socialtext::User::EmailConfirmation->create_or_update(
+            user_id => $self->user_id,
+            %p,
         );
-
-        if ( my $uce = $self->_uce_row() ) {
-            $uce->update(%vals);
-        }
-        else {
-            my $uce_table
-                = Socialtext::Schema->Load()->table('UserEmailConfirmation');
-            $uce_table->insert(
-                values => { user_id => $self->user_id, %vals } );
-        }
     }
-}
-
-# Reuse existing hashes before making new ones.  This helps avoid issues like
-# RT 20767, where future hashes were clobering older ones when a non-existant
-# user was invited to multiple workspaces.
-sub _generate_confirmation_hash {
-    my $self = shift;
-    my $hash = eval { $self->confirmation_hash() };
-    $hash ||= Digest::SHA1::sha1_base64(
-        $self->user_id, time,
-        Socialtext::AppConfig->MAC_secret()
-    );
-    return $hash;
 }
 
 sub confirmation_hash {
     my $self = shift;
-
-    my $uce = $self->_uce_row();
-
-    return unless $uce;
-
-    return $uce->select('sha1_hash');
+    return $self->email_confirmation->hash;
 }
 
 sub confirmation_is_for_password_change {
     my $self = shift;
-
-    my $uce = $self->_uce_row();
-
-    return unless $uce;
-
-    return $uce->select('is_password_change');
+    return $self->email_confirmation->is_password_change;
 }
 
 # REVIEW - does this belong in here, or maybe a higher level library
@@ -1066,7 +1034,7 @@ sub confirmation_is_for_password_change {
 sub send_confirmation_email {
     my $self = shift;
 
-    return unless $self->_uce_row();
+    return unless $self->email_confirmation();
 
     my $renderer = Socialtext::TT2::Renderer->instance();
 
@@ -1101,7 +1069,7 @@ sub send_confirmation_email {
 sub send_confirmation_completed_email {
     my $self = shift;
 
-    return if $self->_uce_row();
+    return if $self->email_confirmation();
 
     my $renderer = Socialtext::TT2::Renderer->instance();
 
@@ -1159,7 +1127,7 @@ sub send_confirmation_completed_email {
 sub send_password_change_email {
     my $self = shift;
 
-    return unless $self->_uce_row();
+    return unless $self->email_confirmation();
 
     my $renderer = Socialtext::TT2::Renderer->instance();
 
@@ -1203,49 +1171,28 @@ sub confirmation_uri {
 sub requires_confirmation {
     my $self = shift;
 
-    return ($self->_uce_row()) ? 1 : 0;
+    return $self->email_confirmation ? 1 : 0;
 }
 
 sub confirmation_has_expired {
     my $self = shift;
 
-    my $uce = $self->_uce_row();
-
-    return unless $uce;
-
-    return 1 if
-        DateTime::Format::Pg->parse_timestamptz( $uce->select('expiration_datetime' ) )
-        < DateTime->now();
+    return $self->email_confirmation->has_expired;
 }
 
 sub confirm_email_address {
     my $self = shift;
 
-    my $uce = $self->_uce_row();
-
+    my $uce = $self->email_confirmation;
     return unless $uce;
 
-    my $is_password_change = $uce->select('is_password_change');
-
-    $uce->delete();
-
-    # REVIEW - this works around what might be a bug (or maybe not) in
-    # Alzabo. If a row object is deleted, it stays in the cache but
-    # its state is deleted (this can be checked with is_deleted()). I
-    # think it should probably be removed from the cache but I'm not
-    # 100% that's right.
-    Alzabo::Runtime::UniqueRowCache->clear_table( $uce->table() )
-        if Alzabo::Runtime::UniqueRowCache->can('clear_table');
-
-    $self->send_confirmation_completed_email()
-        unless $is_password_change;
+    $uce->delete;
+    $self->send_confirmation_completed_email unless $uce->is_password_change;
 }
 
-sub _uce_row {
-    my $self =shift;
-
-    my $uce_table = Socialtext::Schema->Load()->table('UserEmailConfirmation');
-    return $uce_table->row_by_pk( pk => $self->user_id );
+sub email_confirmation {
+    my $self = shift;
+    return Socialtext::User::EmailConfirmation->new( $self->user_id );
 }
 
 1;
@@ -1509,14 +1456,6 @@ PARAMS can include:
 If this is true, then only workspaces for which UserWorkspaceRole.is_selected
 is true are returned.
 
-=item * exclude
-
-This should be an array reference of workspace ids to be excluded from
-the query.
-
-REVIEW - this is somewhat nasty and only used in one spot -
-Socialtext::DuplicatePagePlugin
-
 =back
 
 =head2 $user->workspaces_with_selected()
@@ -1662,9 +1601,8 @@ last_name.
 
 =head2 $user->set_confirmation_info()
 
-Creates a confirmation hash and an expiration date for this user in
-the UserEmailConfirmation table. When this exists, the C<<
-$user->requires_confirmation() >> will return true.
+Creates a confirmation hash and an expiration date for this user.
+When this exists, the C<< $user->requires_confirmation() >> will return true.
 
 This method accepts a single boolean argument, "is_password_change",
 which defaults to false. Set this to true if the confirmation is being
@@ -1703,24 +1641,28 @@ hash has expired.
 
 =head2 $user->send_confirmation_email()
 
-If the user has a row in UserEmailConfirmation, this method sends them
+If the user has a EmailConfirmation object, this method sends them
 an email with a link they can use to confirm their email address.
 
 =head2 $user->send_confirmation_completed_email()
 
-If the user I<does not> have a row in UserEmailConfirmation, this
+If the user I<does not> have a EmailConfirmation object, this
 method sends them an email saying that their email confirmation has
 been completed.
 
 =head2 $user->send_password_change_email()
 
-If the user has a row in UserEmailConfirmation, this method sends them
+If the user has a EmailConfirmation object, this method sends them
 an email with a link they can use to change their password.
 
 =head2 $user->confirm_email_address()
 
 Marks the user's email address as confirmed by deleting the row for
 the user in UserConfirmationEmail.
+
+=head2 $user->email_confirmation()
+
+Create and return an Socialtext::User::EmailConfirmation object for the user.
 
 =head1 AUTHOR
 

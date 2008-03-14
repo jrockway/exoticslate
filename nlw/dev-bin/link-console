@@ -7,17 +7,31 @@ use FindBin;
 use lib "$FindBin::Bin/../lib";
 use Socialtext::File qw/set_contents/;
 
-my $branch = shift;
+my $branch_arg = shift;
+my $branch = $branch_arg;
 
-$branch = "branches/$branch" if $branch;
-$branch ||= "trunk";
+if ($branch) {
+    $branch = "branches/$branch";
+}
+else {
+    my $current_branch = qx(current-branch);
+    chomp $current_branch;
+    $branch = "branches/$current_branch";
+}
 
 print "Linking in console from $branch...\n\n";
-
 my $appliance_base = "$ENV{HOME}/src/st/appliance";
-die "Appliance repo is not checked out to $appliance_base" unless -d $appliance_base;
-
 my $console_dir = "$appliance_base/$branch/libsocialtext-appliance-perl";
+
+# Look for a symlink to the appliance area beside nlw/
+my $possible_dir = "$FindBin::Bin/../../appliance";
+if (!$branch_arg and -d $possible_dir) {
+    $console_dir = "$possible_dir/libsocialtext-appliance-perl";
+}
+else {
+    die "Appliance repo is not checked out to $appliance_base" unless -d $appliance_base;
+}
+
 unless (-d $console_dir) {
     warn "Couldn't find console branch '$console_dir' - using trunk";
     $console_dir = "$appliance_base/trunk/libsocialtext-appliance-perl";

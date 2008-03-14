@@ -29,7 +29,7 @@ __END__
 
 =head1 NAME
 
-Socialtext::Data - Documentation and functions about for Socialtext data objects
+Socialtext::Data - Documentation and functions about Socialtext data objects
 
 =head1 DESCRIPTION
 

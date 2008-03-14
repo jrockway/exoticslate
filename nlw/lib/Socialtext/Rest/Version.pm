@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use base 'Socialtext::Rest';
-use JSON; $JSON::UTF8 = 1;
+use JSON::XS;
 use Readonly;
 
 Readonly our $API_VERSION => 0.94;
@@ -30,7 +30,7 @@ sub make_getter {
 
     *GET_text = make_getter( 'text/plain', $API_VERSION );
     *GET_json
-        = make_getter( 'application/json', objToJson( [$API_VERSION] ) );
+        = make_getter( 'application/json', encode_json( [$API_VERSION] ) );
 }
 
 1;

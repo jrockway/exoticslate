@@ -3,6 +3,10 @@ package Socialtext::Page;
 use strict;
 use warnings;
 use base 'Socialtext::MockBase';
+use unmocked 'Data::Dumper';
+use unmocked 'Class::Field', 'field';
+
+field 'name';
 
 sub uri {
     my $self = shift;

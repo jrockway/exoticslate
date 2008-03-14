@@ -310,7 +310,7 @@ sub new {
     my $real_config = validate_with(
         params      => ( $config_from_file || {} ),
         spec        => \%Options,
-        allow_extra => ! $p{strict},
+        allow_extra => $p{strict},
     );
 
     my $self = bless {}, $class;

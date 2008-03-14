@@ -89,23 +89,35 @@ sub edit_content {
         $page->store( user => $self->hub->current_user );
     }
 
-    $self->log_action("EDIT_PAGE");
+    # Move attachments uploaded to 'Untitled Page' to the actual page
+    my @attach = $self->cgi->attachment;
+    for my $a (@attach) {
+        my ($id, $page_id) = split ':', $a;
 
-    my @files = $self->cgi->file;
-    my @embeds = $self->cgi->embed;
-    my @unpacks = $self->cgi->unpack;
+        # Don't move attachments that were uploaded to the correct page
+        next if $page_id eq $self->hub->pages->current->id;
 
-    if (scalar @files) {
-        if ($self->hub->checker->check_permission('attachments')) {
-            my $args = $self->hub->attachments_ui->process_attachments_upload(
-                files  => \@files,
-                embed  => \@embeds,
-                unpack => \@unpacks,
-            );
-            # args contains an error message
-            # but it wasn't used in this section of the code
-        }
+        my $source = $self->hub->attachments->new_attachment(
+            id => $id,
+            page_id => $page_id
+        )->load;
+
+        my $target = $self->hub->attachments->new_attachment(
+            id => $source->id,
+            filename => $source->filename,
+        );
+        my $target_dir = $self->hub->attachments->plugin_directory;
+        $target->copy($source, $target, $target_dir);
+        $target->store(
+            user => $self->hub->current_user,
+            dir => $target_dir,
+        );
+        $source->delete(
+            user => $self->hub->current_user
+        );
     }
+
+    $self->log_action("EDIT_PAGE");
 
     return $self->to_display($page);
 }
@@ -238,9 +250,7 @@ cgi 'subject';
 cgi 'summary';
 cgi 'type';
 cgi 'page_title';
-cgi 'file' => '-upload';
-cgi 'unpack';
-cgi 'embed';
 cgi 'add_tag';
+cgi 'attachment';
 
 1;

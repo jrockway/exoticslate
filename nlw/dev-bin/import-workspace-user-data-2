@@ -407,16 +407,16 @@ sub set_permissions {
 
     return if $opts{dryrun};
 
-    $ws->set_permissions( set_name => $set_name );
+    $ws->permissions->set( set_name => $set_name );
 
     if ( $config->{email_from_subscribers_only} ) {
         msg( "  removing email_in for guests & authenticated users." );
 
-        $ws->remove_permission(
+        $ws->permissions->remove(
             role       => Socialtext::Role->Guest(),
             permission => Socialtext::Permission->new( name => 'email_in' ),
         );
-        $ws->remove_permission(
+        $ws->permissions->remove(
             role       => Socialtext::Role->AuthenticatedUser(),
             permission => Socialtext::Permission->new( name => 'email_in' ),
         );

@@ -195,7 +195,6 @@ sub defaultResourceHandler {
     no warnings 'once';
     local $YAML::SortKeys = 0;
     local $YAML::UseCode = 1;
-    local $YAML::UseFold = 1;
 
     $_[0]->header( -status => HTTP_404_Not_Found,
                    -type   => 'text/html' );

@@ -1,0 +1,28 @@
+dn: ou=people,dc=example,dc=com
+objectClass: organizationalUnit
+ou: people
+
+dn: cn=John Doe,dc=example,dc=com
+objectClass: inetOrgPerson
+cn: John Doe
+gn: John
+sn: Doe
+mail: john.doe@example.com
+telephoneNumber: +1 234 555-1212
+ou: people
+
+dn: cn=Jane Smith,dc=example,dc=com
+objectClass: inetOrgperson
+cn: Jane Smith
+gn: Jane
+sn: Smith
+mail: jane.smith@example.com
+ou: people
+
+dn: cn=Bubba Bo Bob Brain,dc=example,dc=com
+objectClass: inetOrgperson
+cn: Bubba Bo Bob Brain
+gn: Bubba
+sn: Brain
+mail: bubba.brain@example.com
+ou: people

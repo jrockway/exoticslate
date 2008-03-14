@@ -8,7 +8,9 @@
 # will make people upgrade modules that they don't need to.
 ---
 Algorithm::Diff: 1.1901
-Alzabo: 0.91
+# The change in 0.8902 to not use UNIVERSAL::isa exposed a bug in the
+# handling of an attempt to load a row which doesn't exist in the DBMS.
+Alzabo: 0.8903
 Apache::Constants: 1.09
 Apache::Request: 1.33
 Apache::Session: 1.81
@@ -88,7 +90,7 @@ IPC::Run: 0.79
 JavaScript::Minifier: 0
 Jcode: 2.06
 Jemplate: 0.20
-JSON: 1.07
+JSON::XS: 2.01
 KinoSearch: 0.161
 LWP::UserAgent: 2.033
 Lingua::Stem::Snowball: 0.941
@@ -117,8 +119,8 @@ SOAP::Transport::HTTP: 0
 Storable: 2.15
 Sys::Hostname: 1.11
 Template: 2.14
-Template::Iterator::AlzaboWrapperCursor: 0.01
 Template::Plugin::FillInForm: 0.04
+Template::Plugin::JSON: 0
 Text::Autoformat: 0
 # Text::Balanced 1.99.1 is the first version to not use $&.  Although
 # Text::Balanced is not a first-order dependency, Alzabo uses it, and we

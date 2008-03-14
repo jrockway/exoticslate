@@ -1,0 +1,20 @@
+#!/bin/sh
+
+if [ -n "$1" ]; then
+    branch=branches/$1
+else
+    branch=trunk
+fi
+
+cd share
+skin_dir="$HOME/src/st/socialtext-skins/$branch/skin"
+
+if [ -d $skin_dir ]; then
+    ln -sf $skin_dir skin
+    echo "linked $skin to $skin_dir"
+else
+    echo "
+$skin_dir does not exist.
+You will need to manually link share/skin to your checkout of socialtext-skins/$branch/skin
+"
+fi

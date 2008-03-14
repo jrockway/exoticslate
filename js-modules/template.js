@@ -1,1 +1,0 @@
-src/TrimPath-template-1.0.38.js

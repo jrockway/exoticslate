@@ -388,7 +388,7 @@ ADD_REMOVE_MEMBER: {
 
 # need to set up the user to be in the right worksapces
 # and have the right perms so we can test that they go
-# away. 
+# away.
 SCRUB_USER: {
     # need to create a user
     my $user = Socialtext::User->new( username  => 'test2@example.com' );
@@ -820,14 +820,14 @@ SET_PERMISSIONS: {
 
     my $ws = Socialtext::Workspace->new( name => 'admin' );
     ok(
-        $ws->role_has_permission(
+        $ws->permissions->role_can(
             role       => Socialtext::Role->Guest(),
             permission => Socialtext::Permission->new( name => 'read' ),
         ),
         'guest has read permission'
     );
     ok(
-        !$ws->role_has_permission(
+        !$ws->permissions->role_can(
             role       => Socialtext::Role->Guest(),
             permission => Socialtext::Permission->new( name => 'edit' ),
         ),
@@ -848,7 +848,7 @@ ADD_REMOVE_PERMISSION: {
 
     my $ws = Socialtext::Workspace->new( name => 'admin' );
     ok(
-        $ws->role_has_permission(
+        $ws->permissions->role_can(
             role       => Socialtext::Role->Guest(),
             permission => Socialtext::Permission->new( name => 'edit' ),
         ),
@@ -866,7 +866,7 @@ ADD_REMOVE_PERMISSION: {
     );
 
     ok(
-        !$ws->role_has_permission(
+        !$ws->permissions->role_can(
             role       => Socialtext::Role->Guest(),
             permission => Socialtext::Permission->new( name => 'edit' ),
         ),

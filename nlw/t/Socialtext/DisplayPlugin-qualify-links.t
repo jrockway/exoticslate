@@ -7,7 +7,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 6;
+use Test::Socialtext tests => 5;
 
 BEGIN {
     use_ok( 'Socialtext::DisplayPlugin' );
@@ -51,10 +51,3 @@ __DATA__
 <a href="/foobar/index.cgi?action=weblog_display"
 --- expected
 <a href="HOST/foobar/index.cgi?action=weblog_display"
-
-=== attachment
---- original
-<a href="/foobar/index.cgi/Robot.txt?action=attachments_download;page_name=formatting_test;id=20051117173632-112"
---- expected
-<a href="HOST/foobar/index.cgi/Robot.txt?action=attachments_download;page_name=formatting_test;id=20051117173632-112"
-

@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 use base 'Socialtext::Rest::Collection';
-use JSON;
+use JSON::XS;
 use Socialtext::HTTP ':codes';
 use Socialtext::WorkspaceInvitation;
 
@@ -37,7 +37,7 @@ sub get_resource {
     # which might not be the desired result. In a way it's kind of good,
     # in an information hiding sort of way, but....
     if (
-        $self->workspace->user_has_permission(
+        $self->workspace->permissions->user_can(
             user       => $acting_user,
             permission =>
                 Socialtext::Permission->new( name => 'admin_workspace' ),
@@ -65,7 +65,7 @@ sub POST {
         return '';
     }
 
-    my $create_request_hash = jsonToObj( $rest->getContent() );
+    my $create_request_hash = decode_json( $rest->getContent() );
 
     unless ( $create_request_hash->{username} and
              $create_request_hash->{rolename} ) {

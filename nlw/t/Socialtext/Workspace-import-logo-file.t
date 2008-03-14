@@ -21,20 +21,16 @@ my $hub = new_hub('admin');
 my $admin = $hub->current_workspace();
 
 my $image = 't/attachments/socialtext-logo-30.gif';
-open my $fh, '<', $image
-    or die "Cannot read $image: $!";
-$admin->set_logo_from_filehandle(
-    filehandle => $fh,
+$admin->set_logo_from_file(
     filename   => $image,
 );
-close $fh;
 
 # We need to get this sum because the image is different from the
 # original when passed through Image::Magick, even if we don't end up
 # resizing it.
 my $md5 = md5_checksum( $admin->logo_filename() );
 
-my $tarball = $admin->export_to_tarball();
+my $tarball = $admin->export_to_tarball(dir => 't/tmp');
 
 # Deleting the user is important so that we know that both user and
 # workspace data is restored

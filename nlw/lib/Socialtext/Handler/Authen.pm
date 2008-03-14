@@ -18,6 +18,7 @@ use Socialtext::User;
 use Socialtext::Session;
 use Socialtext::Helpers;
 use Socialtext::l10n qw( loc loc_lang system_locale );
+use Socialtext::WorkspaceBreadcrumb;
 use URI::Escape qw(uri_escape_utf8);
 
 sub handler ($$) {
@@ -50,6 +51,7 @@ sub handler ($$) {
             username_label => $self->username_label,
             redirect_to    => $self->{args}{redirect_to},
             static_path    => Socialtext::Helpers::static_path(),
+            skin_uri       => sub { Socialtext::Skin->skin_uri(shift) },
             st_version     => $Socialtext::VERSION,
             support_address => Socialtext::AppConfig->support_address,
             %$saved_args,
@@ -160,7 +162,15 @@ sub login {
     Socialtext::Apache::User::set_login_cookie( $r, $user->user_id, $expire );
 
     $user->record_login;
-    my $dest = $self->{args}{redirect_to} || '/';
+
+    my $dest = $self->{args}{redirect_to};
+    unless ($dest) {
+        my ($ws) = Socialtext::WorkspaceBreadcrumb->List(
+            user_id => $user->user_id,
+            limit   => 1
+        );
+        $dest = "/" . ( defined($ws) ? $ws->name : "" );
+    }
 
     st_log->info( "LOGIN: " . $user->email_address . " destination: $dest" );
 

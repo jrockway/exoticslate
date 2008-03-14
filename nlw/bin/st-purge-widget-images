@@ -28,12 +28,12 @@ GetOptions(
 
 show_help() if $opts{help};
 
-my $cache_dir = Socialtext::AppConfig->code_base . '/images/widgets';
+my $cache_dir = Socialtext::AppConfig->code_base . '/widgets';
 
 msg("Widget cache: $cache_dir\n");
 
 msg("Checking to see if cache directory exists\n");
-my @dirs = Socialtext::File::all_directory_directories(Socialtext::AppConfig->code_base . '/images');
+my @dirs = Socialtext::File::all_directory_directories(Socialtext::AppConfig->code_base);
 if (grep { /widgets/ } @dirs) {
     msg("Remove existing cache\n");
     shell_run("rm -rf $cache_dir");

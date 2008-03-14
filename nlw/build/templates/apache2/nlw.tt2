@@ -76,6 +76,11 @@
         FileETag none
     </Location>
 
+    # Cache attachments
+    <LocationMatch "^/data/.*/attachments/.+/.+">
+        ExpiresDefault "access plus 1 years"
+        FileETag none
+    </LocationMatch>
 
 [% IF config.is_dev %]
     Redirect 301 /favicon.ico http://www.socialtext.net/favicon.ico

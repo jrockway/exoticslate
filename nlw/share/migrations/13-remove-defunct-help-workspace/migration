@@ -11,7 +11,7 @@ use lib './lib', '../lib';
 require Socialtext::Workspace;
 
 no warnings 'redefine', 'once';
-*Socialtext::Workspace::new = sub { shift->SUPER::new(@_) };
+*Socialtext::Workspace::new = sub { shift->_new(@_) };
 
 # The main body of the code.  Call "st-admin delete-workspace"
 package main;

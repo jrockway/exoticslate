@@ -26,12 +26,8 @@ Dashboard: {
         ),
     );
     my $hp = Socialtext::HomepagePlugin->new( hub => $mock_hub );
-    { 
-        # not essential for this test
-        no strict 'refs';
-        no warnings 'redefine';
-        local *Socialtext::Helpers::miki_path = sub { '' };
-
+    {
+        no strict 'refs'; no warnings 'redefine', 'once';
         like $hp->homepage, qr/Dashboard/;
     }
 }

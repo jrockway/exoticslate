@@ -5,11 +5,11 @@ use warnings;
 
 use base 'Socialtext::Plugin';
 
+use File::Spec;
 use Class::Field qw( const );
 use Socialtext::AppConfig;
 use Socialtext::Permission qw( ST_EMAIL_IN_PERM );
 use Socialtext::Role;
-use Template::Iterator::AlzaboWrapperCursor;
 use Socialtext::Challenger;
 use Socialtext::l10n qw(loc);
 use Socialtext::CSS;
@@ -33,7 +33,6 @@ sub register {
     $registry->add(action => 'workspaces_created');
     $registry->add(action => 'workspaces_unsubscribe');
     $registry->add(action => 'workspaces_permissions');
-    $registry->add(action => 'workspaces_html');
 }
 
 sub workspaces_listall {
@@ -49,7 +48,7 @@ sub workspaces_listall {
     my $settings_section = $self->template_process(
         'element/settings/workspaces_listall_section',
         workspaces_with_selected =>
-        Template::Iterator::AlzaboWrapperCursor->new( $self->hub->current_user->workspaces_with_selected ),
+            $self->hub->current_user->workspaces_with_selected,
         $self->status_messages_for_template,
     );
 
@@ -104,52 +103,31 @@ sub _render_page {
 
 sub _render_skin_settings_page {
     my $self = shift;
-    my $settings_error = shift; # [in] page level error message
-    my $upload_error_message = shift; # [in] Error message for problems when uploading skin
-    my $reset_error_message = shift; # [in] Error message for problems when reseting the skin files
-    my $info_yaml = shift; # [in] info.yaml information
-    my $skipped_files = shift; # [in/reference] array of extracted skin files not saved
-    my $force_radio = shift;
+    my %args = @_;
 
-    my ($css_directory, $image_directory) = $self->custom_skin_paths();
-    my $custom_skin = $self->custom_skin_name;
+    my $skin_path = $self->custom_skin_path();
 
     my @skin_files = ();
-    if (-e $css_directory) {
-        my $sep = "/css/$custom_skin/";
+
+    if (-e $skin_path) {
         push @skin_files, map {
             {
-                name => (split /$sep/)[1],
+                name => (split m{$skin_path/(.*)})[1] || "",
                 size => -s $_,
                 date => $self->hub->timezone->date_local_epoch((stat($_))[9])
             }
-        } Socialtext::File::files_under($css_directory);
+        } Socialtext::File::files_under($skin_path);
     }
 
-    if (-e $image_directory) {
-        my $sep = "/images/$custom_skin/";
-        push @skin_files, map {
-            {
-                name => (split /$sep/)[1],
-                size => -s $_,
-                date => $self->hub->timezone->date_local_epoch((stat($_))[9])
-            }
-        } Socialtext::File::files_under($image_directory);
-    }
+    $self->_reconfigure_workspace_for_skin($args{info_yaml});
 
-    if (ref($info_yaml) eq 'HASH' && exists($info_yaml->{workspace_config})) {
-        $self->_reconfigure_workspace_for_skin($info_yaml->{workspace_config});
-    }
-
-    return $self->_render_page(
+    my $a = $self->_render_page(
         "element/settings/workspaces_settings_skin_section",
         skin_files => \@skin_files,
-        upload_error => $upload_error_message,
-        reset_error => $reset_error_message,
-        skipped_files => $skipped_files,
-        settings_error => $settings_error,
-        force_radio => $force_radio,
+        uploaded_skin => $self->hub->current_workspace->uploaded_skin,
+        %args,
     );
+    open my $fh, ">/tmp/a"; print $fh $a; return $a;
 }
 
 sub _reconfigure_workspace_for_skin {
@@ -161,6 +139,7 @@ sub _reconfigure_workspace_for_skin {
             cascade_css => ($config->{cascade_css} ? 1 : 0),
         );
     }
+    $self->hub->current_workspace->customjs_uri($config->{customjs_name} || "");
 }
 
 sub workspaces_settings_skin {
@@ -172,15 +151,15 @@ sub workspaces_settings_skin {
     my @skipped_files = ();
 
     if ($self->cgi->Button) {
-        my $new_skin = $self->cgi->skin_name;
-        if ($new_skin ne $self->hub->current_workspace->skin_name) {
-            $self->_initialize_css_directory($new_skin);
-            $self->_initialize_image_directory($new_skin);
-            $self->hub->current_workspace->update(skin_name => $new_skin)
+        my $uploaded = $self->cgi->uploaded_skin;
+        if ($uploaded ne $self->hub->current_workspace->uploaded_skin) {
+            $self->hub->current_workspace->update(uploaded_skin => $uploaded)
         }
     }
 
-    return $self->_render_skin_settings_page($error_message, '', '', []);
+    return $self->_render_skin_settings_page(
+        settings_error => $error_message
+    );
 }
 
 sub skin_upload {
@@ -194,12 +173,9 @@ sub skin_upload {
     $self->_extract_skin(\$error_message, \@skipped_files, \$info_yaml);
 
     return $self->_render_skin_settings_page(
-        '',
-        $error_message,
-        '',
-        $info_yaml,
-        \@skipped_files,
-        ($error_message) ? '' : $self->custom_skin_name,
+        settings_error => $error_message,
+        info_yaml => $info_yaml,
+        skipped_files => \@skipped_files,
     );
 }
 
@@ -208,36 +184,21 @@ sub remove_skin_files {
 
     $self->hub->assert_current_user_is_admin;
 
-    my ($css_directory, $image_directory) = $self->custom_skin_paths();
-    Socialtext::File::clean_directory($css_directory);
-    Socialtext::File::clean_directory($image_directory);
+    my $skin_path = $self->custom_skin_path();
+    Socialtext::File::clean_directory($skin_path);
 
-    return $self->_render_skin_settings_page('', '', '', [], $self->hub->css->BaseSkin());
+    $self->hub->current_workspace->update(
+        uploaded_skin => 0,
+    );
+
+    return $self->_render_skin_settings_page;
 }
 
-sub _initialize_css_directory {
+sub custom_skin_path {
     my $self = shift;
-    my $skin_name = shift;
-
-    Socialtext::File::ensure_directory($self->hub->css->RootDir . "/$skin_name");
-}
-
-sub _initialize_image_directory {
-    my $self = shift;
-    my $skin_name = shift;
-
-    my $image_path = Socialtext::AppConfig->code_base() . "/images/$skin_name";
-
-    Socialtext::File::ensure_directory($image_path);
-}
-
-sub custom_skin_paths {
-    my $self = shift;
-
-    my $custom_skin = $self->hub->current_workspace->name;
-    my $image_directory = Socialtext::AppConfig->code_base() . "/images/$custom_skin";
-    my $css_directory = $self->hub->css->RootDir . "/$custom_skin";
-    return ($css_directory, $image_directory);
+    return $self->hub->skin->skin_upload_path(
+        $self->hub->current_workspace->name
+    );
 }
 
 sub _unpack_skin_file {
@@ -266,7 +227,7 @@ sub _unpack_skin_file {
 
         push @$files, Socialtext::ArchiveExtractor->extract( archive => $tmparchive );
     };
-    if ($@) {
+    if ($@ or not @$files) {
         $$error = loc('Could not extract files from the skin archive. This is most likely caused by a corrupt archive file. Please check your file and try the upload again.');
         return 0;
     }
@@ -282,42 +243,39 @@ sub _install_skin_files {
 
     return if (0 == @$files);
 
-    my ($css_dir, $image_dir) = $self->custom_skin_paths();
+    my $skin_path = $self->custom_skin_path();
+
+    my ($basedir) = map { m{^(.*/)css/screen\.css$} } @$files;
+    unless ($basedir) {
+        $$error = loc("The uploaded skin does not contain css/screen.css");
+        return;
+    }
+
+    my $files_to_copy = qr{ ^(?: css/        |
+                                 template/   |
+                                 images/     |
+                                 javascript/ |
+                                 info\.yaml$
+                        )}xsm;
 
     foreach (@$files) {
         my $basefile = $_;
-        $basefile =~ s/^\/.+?\/.+?\///;
-        my ($filename, $path, $ext) = File::Basename::fileparse($basefile);
+        $basefile =~ s/^$basedir//;
+        my ($filename, $path) = File::Basename::fileparse($basefile);
 
-        if ($path =~ /^css/i) {
-            $path =~ s/^css\///i;
-            $basefile =~ s/^css\///i;
-            Socialtext::File::ensure_directory("$css_dir/$path");
-            if ($basefile =~ /\.[css|htc]/i) {
-                File::Copy::copy($_, "$css_dir/$basefile")
-            }
-            else {
-                push @$skipped_files, $basefile;
-            }
+        next if $filename =~ /^\./; # ignore hidden files
+
+        if ($basefile =~ $files_to_copy) {
+            Socialtext::File::ensure_directory("$skin_path/$path");
+            File::Copy::copy($_, "$skin_path/$basefile")
         }
-        elsif ($path =~ /^images/i) {
-            $path =~ s/^images\///i;
-            $basefile =~ s/^images\///i;
-            Socialtext::File::ensure_directory("$image_dir/$path");
-            File::Copy::copy($_, "$image_dir/$basefile")
-        }
-        else {
+        elsif ($basefile !~ m{^(?:samples/|README)}) {
+            warn "Not including $path";
             push @$skipped_files, $basefile;
         }
     }
 
     return 1;
-}
-
-sub custom_skin_name {
-    my $self = shift;
-
-    return $self->hub->current_workspace->name;
 }
 
 sub _extract_skin {
@@ -326,7 +284,6 @@ sub _extract_skin {
     my $skipped_files = shift; # [out] Array of files skipped during extract
     my $info_yaml = shift; # [out] info.yaml parsed information
 
-    my $custom_skin = $self->custom_skin_name;
     my $file = $self->cgi->skin_file;
 
     if (!$file) {
@@ -342,9 +299,6 @@ sub _extract_skin {
         $ok = $self->_unpack_skin_file($file, $tmpdir, $error_message, \@archive_files);
         return if (!$ok);
     }
-
-    $self->_initialize_css_directory($custom_skin);
-    $self->_initialize_image_directory($custom_skin);
 
     # Copy skin files to the custom folder(s)
     if (0 < @archive_files) {
@@ -363,8 +317,13 @@ sub _parse_info_yaml {
     my $info_yaml = shift; # [out] info.yaml parsed information.
 
     for my $file (@$archive_files) {
-        $$info_yaml = LoadFile($file) # YAML
-          if -e $file && $file =~ m[/info.yaml$];
+        eval {
+            $$info_yaml = LoadFile($file) # YAML
+              if -e $file && $file =~ m{/info.yaml$};
+        };
+        if ($@) {
+            $$error_message = "Error parsing info.yaml file"
+        }
     }
 }
 
@@ -442,8 +401,7 @@ sub _process_logo_upload {
     my $self = shift;
     my $logo = shift;
 
-    $self->hub->current_workspace->set_logo_from_filehandle(
-        filehandle => $logo->{handle},
+    $self->hub->current_workspace->set_logo_from_file(
         filename   => $logo->{filename},
     );
 }
@@ -486,21 +444,24 @@ sub _create_workspace {
             name    => $self->cgi->name,
             title   => $self->cgi->title,
             created_by_user_id => $self->hub->current_user->user_id,
+            #
             # begin customization inheritances
-            cascade_css => $self->hub->current_workspace->cascade_css,
-            customjs_name => $self->hub->current_workspace->customjs_name,
-            customjs_uri => $self->hub->current_workspace->customjs_uri,
-            skin_name  => $self->hub->current_workspace->skin_name,
-            invitation_filter => $self->hub->current_workspace->invitation_filter,
-            email_notification_from_address => $self->hub->current_workspace->email_notification_from_address,
-            restrict_invitation_to_search =>
-                    $self->hub->current_workspace->restrict_invitation_to_search,
-            invitation_template =>
-                    $self->hub->current_workspace->invitation_template,
+            #
+            cascade_css => $self->hub->skin->cascade_css,
+            customjs_name => $self->hub->skin->customjs_name,
+            skin_name  => $self->hub->skin->skin_name,
+            #
+            customjs_uri => $current_ws->customjs_uri,
+            invitation_filter => $current_ws->invitation_filter,
+            email_notification_from_address => $current_ws->email_notification_from_address,
+            restrict_invitation_to_search => $current_ws->restrict_invitation_to_search,
+            invitation_template => $current_ws->invitation_template,
             show_welcome_message_below_logo => $current_ws->show_welcome_message_below_logo,
             show_title_below_logo => $current_ws->show_title_below_logo,
             header_logo_link_uri => $current_ws->header_logo_link_uri,
+            #
             # end customization inheritances
+            #
             account_id => $account_id,
             enable_unplugged => 1,
         );
@@ -578,7 +539,7 @@ sub workspaces_permissions {
         if $self->cgi()->Button();
 
     my $set_name
-        = $self->hub->current_workspace->current_permission_set_name();
+        = $self->hub->current_workspace->permissions->current_set_name();
     my $settings_section = $self->template_process(
         'element/settings/workspaces_permissions_section',
         workspace                   => $self->hub->current_workspace,
@@ -587,7 +548,7 @@ sub workspaces_permissions {
         fill_in_data                => {
             permission_set_name => $set_name,
             guest_has_email_in  =>
-                $self->hub->current_workspace->role_has_permission(
+                $self->hub->current_workspace->permissions->role_can(
                     role       => Socialtext::Role->Guest(),
                     permission => ST_EMAIL_IN_PERM,
                 ),
@@ -614,19 +575,19 @@ sub _set_workspace_permissions {
     return
         unless $set_name
         and
-        Socialtext::Workspace->PermissionSetNameIsValid($set_name);
+        exists $Socialtext::Workspace::Permissions::PermissionSets{ $set_name };
 
     my $ws = $self->hub()->current_workspace();
-    $ws->set_permissions( set_name => $set_name );
+    $ws->permissions->set( set_name => $set_name );
 
     if ( $self->cgi()->guest_has_email_in() ) {
-        $ws->add_permission(
+        $ws->permissions->add(
             role       => Socialtext::Role->Guest(),
             permission => ST_EMAIL_IN_PERM,
         );
     }
     else {
-        $ws->remove_permission(
+        $ws->permissions->remove(
             role       => Socialtext::Role->Guest(),
             permission => ST_EMAIL_IN_PERM,
         );
@@ -636,7 +597,7 @@ sub _set_workspace_permissions {
     if ($self->cgi()->guest_has_email_in()) {
         $message .= ' ' . loc('Anyone can send email to [_1].', $ws->name());
     } else {
-        if ($ws->current_permission_set_name() =~ /public-(?:read|comment)-only/) {
+        if ($ws->permissions->current_set_name() =~ /public-(?:read|comment)-only/) {
             $message .= ' ';
             $message .= loc('Only workspace members can send email to [_1].', $ws->name());
         } else {
@@ -647,17 +608,6 @@ sub _set_workspace_permissions {
 
     $self->message( $message );
 }
-
-sub workspaces_html {
-    my $self = shift;
-    return $self->template_process(
-        'workspaces_box_filled.html',
-        workspaces =>
-        Template::Iterator::AlzaboWrapperCursor->new(
-            $self->hub->current_user->workspaces( selected_only => 1 ) ),
-    ) || ' ';
-}
-
 
 package Socialtext::WorkspacesUI::CGI;
 
@@ -684,7 +634,7 @@ cgi 'account_name';
 cgi 'permission_set_name';
 cgi 'guest_has_email_in';
 cgi 'enable_unplugged';
-cgi 'skin_name';
+cgi 'uploaded_skin';
 cgi 'skin_reset';
 cgi skin_file => '-upload';
 

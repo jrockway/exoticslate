@@ -26,11 +26,7 @@ sub class_id { 'wikiwyg' }
 const cgi_class => 'Socialtext::Wikiwyg::CGI';
 const class_title => loc('Page Editing');
 field widgets_definition => {} => -init => q{
-        my $yaml_path = Socialtext::AppConfig->code_base . '/javascript/Widgets.yaml';
-        YAML::LoadFile($yaml_path);
-};
-field widgets_definition => {} => -init => q{
-        my $yaml_path = Socialtext::AppConfig->code_base . '/javascript/Widgets.yaml';
+        my $yaml_path = Socialtext::AppConfig->code_base . "/skin/s2/javascript/Widgets.yaml";
         YAML::LoadFile($yaml_path);
 };
 
@@ -339,7 +335,6 @@ sub parse_widget {
         $self->set_fields($widget, $args, $widgets);
 
         if ($is_multiple) {
-            my $previous_id = $widget->{id};
             $widget->{id} = $self->map_multiple_same_widgets($widget, $widgets);
         }
     }
@@ -451,7 +446,7 @@ die "Invalid font table in 'fonts/config.yaml'"
 unshift @font_table, 'dummy first entry';
 
 my $font_path = Socialtext::AppConfig->code_base .  '/fonts';
-my $widgets_path = Socialtext::AppConfig->code_base . '/images/widgets';
+my $widgets_path = Socialtext::AppConfig->code_base . '/widgets';
 my $max = 300;
 #my $height = 18;
 my $height = 19;

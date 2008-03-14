@@ -7,18 +7,17 @@ use lib "$Bin/../lib";
 use Socialtext::Wikil10n qw/load_existing_l10ns make_rester/;
 use Socialtext::System qw/shell_run/;
 use Socialtext::File qw/set_contents/;
-use JSON;
 use Encode;
 use utf8;
 
 my $r    = make_rester();
 my $l10n = load_localizations();
 
-my $js_output = 'share/javascript/l10ns.js';
-my $is_js     = qr#share/javascript|share/template/element/jst#;
-my $is_po     = qr#lib/\S+\.pm|share/template|share/console-template/template#;
+my $js_output = 'share/skin/s2/javascript/l10ns.js';
+my $is_js     = qr#share/skin/s2/javascript|share/skin/s2/template/element/jst#;
+my $is_po     = qr#lib/\S+\.pm|share/skin/s2/template|share/console-template/template#;
 create_perl_l10ns( 'share/l10n', $l10n );
-create_js_l10ns( 'share/javascript/l10ns.js', $l10n );
+create_js_l10ns( 'share/skin/s2/javascript/l10ns.js', $l10n );
 exit;
 
 sub create_perl_l10ns {
@@ -153,8 +152,8 @@ function loc() {
 EOT
 
     print "Wrote $filename\n";
-    set_contents( $filename, $js_out);
-    shell_run("cd share/javascript && make");
+    set_contents( $filename, $js_out, 1);
+    shell_run("cd share/skin/s2/javascript && make");
 }
 
 sub _create_js_hash {

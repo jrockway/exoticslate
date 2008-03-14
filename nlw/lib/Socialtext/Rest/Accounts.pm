@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 use Class::Field qw( const field );
-use JSON;
+use JSON::XS;
 use Socialtext::HTTP ':codes';
 use Socialtext::Account;
 use Socialtext::Exceptions;
@@ -26,7 +26,7 @@ sub POST {
     my $self = shift;
     my $rest = shift;
     
-    my $account_request_hash = jsonToObj( $rest->getContent() );
+    my $account_request_hash = decode_json( $rest->getContent() );
     my $new_account_name = $account_request_hash->{name};
 
     unless ($self->_user_is_business_admin_p( ) ) {
@@ -50,7 +50,7 @@ sub POST {
           };
             
                                  
-        return objToJson( $account_info_hash );
+        return encode_json( $account_info_hash );
     } else {
         # hrmm, what to do here for errors, I'm going with FORBIDDEN for now
         $rest->header(

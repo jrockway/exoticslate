@@ -1,0 +1,16 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use FindBin;
+use Fatal qw/chdir/;
+use lib "$FindBin::Bin/../lib";
+use Socialtext::System qw/shell_run/;
+
+my $reports_dir = "$FindBin::Bin/../../socialtext-reports";
+unless (-d $reports_dir) {
+    die "Couldn't find reports directory at $reports_dir!\n";
+}
+
+chdir $reports_dir;
+shell_run("./setup-dev-env");

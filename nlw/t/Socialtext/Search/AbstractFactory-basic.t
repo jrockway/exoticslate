@@ -4,8 +4,12 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 9;
-fixtures( 'admin' );
+# Stick this in a begin block, so that we create the fixture right away
+# Then, when we load Test::Socialtext::Search, it will clear the ceq queue
+BEGIN {
+    use Test::Socialtext tests => 9;
+    fixtures( 'admin' );
+}
 use Test::Socialtext::Search;
 use Socialtext::Ceqlotron;
 use Socialtext::Search::AbstractFactory;
@@ -20,12 +24,8 @@ do_searches();
 
 # search for number (plucene simple no index numbers)
 search_for_term('1', 'negate');
+exit;
 
-warn "# XXX: Ditching the slow search, it canna handle it!\n";
-# switch to slow search
-#$ENV{NLW_APPCONFIG} = 'search_factory_class=Socialtext::Search::Basic::Factory';
-#do_searches();
-#search_for_term('1');
 
 sub do_searches {
     # test for a simple entry

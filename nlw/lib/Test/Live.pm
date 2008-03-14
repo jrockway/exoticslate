@@ -265,7 +265,6 @@ sub request {
                     Content_Type => 'form-data',
                     Content => [
                         embed => $post->{embed},
-                        unpack => $post->{unpack},
                         creator  => 'devnull1@socialtext.com',
                         filename => [$post->{file}],
                     ],
@@ -618,7 +617,7 @@ sub do_special_action {
 
             my $workspace
                 = Socialtext::Workspace->new( name => $self->workspace );
-            $workspace->set_permissions( @args );
+            $workspace->permissions->set( @args );
         },
         addPermission => sub {
             $self->_use_class($_)
@@ -627,7 +626,7 @@ sub do_special_action {
 
             my $workspace
                 = Socialtext::Workspace->new( name => $self->workspace );
-            $workspace->add_permission(
+            $workspace->permissions->add(
                 role       => Socialtext::Role->new( name => shift ),
                 permission => Socialtext::Permission->new( name => shift ),
             );
@@ -639,7 +638,7 @@ sub do_special_action {
 
             my $workspace
                 = Socialtext::Workspace->new( name => $self->workspace );
-            $workspace->remove_permission(
+            $workspace->permissions->remove(
                 role       => Socialtext::Role->new( name => shift ),
                 permission => Socialtext::Permission->new( name => shift ),
             );

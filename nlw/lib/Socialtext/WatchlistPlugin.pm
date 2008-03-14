@@ -11,7 +11,6 @@ use Socialtext::Paths;
 use Socialtext::Helpers;
 use Socialtext::Watchlist;
 use Socialtext::User;
-use Socialtext::TT2::Renderer;
 use Socialtext::l10n qw( loc loc_lang system_locale);
 
 const class_id    => 'watchlist';
@@ -191,8 +190,7 @@ sub display_watchlist {
         my $empty_message = loc("No watchlist for [_1] in [_2]",
             $self->hub->current_user->username, 
             $self->hub->current_workspace->title);
-        my $renderer = Socialtext::TT2::Renderer->instance;
-        return $renderer->render(
+        return $self->template_render(
             template => 'view/empty_watchlist',
             vars     => {
                 $self->hub->helpers->global_template_vars,

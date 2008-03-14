@@ -11,6 +11,7 @@ use Socialtext::Indexes;
 use Socialtext::File;
 use Socialtext::Paths;
 use Socialtext::User;
+use Socialtext::TT2::Renderer;
 
 # Look for plugins by namespace.  This exposes the ->plugins() method
 use Module::Pluggable search_path => ['Socialtext::Plugin'];
@@ -244,6 +245,16 @@ sub _create_dummy_current_for_data_validation_error {
       $self->hub->current_workspace->title;
     my $page_id = substr(Socialtext::Page->name_to_id($page_name), 0, Socialtext::Page->_MAX_PAGE_ID_LENGTH());
     return $self->hub->pages->new_page($page_id); 
+}
+
+# template_render and template_process are similar but different.  
+# template_render() is a refactoring of many calls to $renderer->render()
+sub template_render {
+    my $self = shift;
+    my %args = @_;
+    $args{skin_path} = $self->hub->skin->skin_path;
+    my $renderer = Socialtext::TT2::Renderer->instance;
+    return $renderer->render(%args);
 }
 
 sub template_process {

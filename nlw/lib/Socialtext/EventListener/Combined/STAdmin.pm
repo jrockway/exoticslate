@@ -9,7 +9,7 @@ use Socialtext::Log 'st_log';
 sub react {
     my ( $self, $event ) = @_;
 
-    st_log->info( 'ST::Ceqlotron combined page event for '
+    st_log->debug( 'ST::Ceqlotron combined page event for '
             . $event->workspace_name . ' '
             . $event->page_uri );
 

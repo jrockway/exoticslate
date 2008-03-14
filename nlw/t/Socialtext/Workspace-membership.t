@@ -43,9 +43,16 @@ ADD_USER:
     is( $ws->role_for_user( user => $user )->role_id(), $role->role_id(),
         'user has the member role in the workspace' );
 
-    my $log_msg = join ' : ', 'ADD_USER', $ws->workspace_id(),
-        $user->user_id(), $role->role_id();
-    is( $log_output, $log_msg,
+    my $log_msg = 'ASSIGN,USER_ROLE,role:'
+        . $role->name
+        . ',user:'
+        . $user->username . '('
+        . $user->user_id . '),'
+        . 'workspace:'
+        . $ws->name . '('
+        . $ws->workspace_id . '),';
+
+    like( $log_output, qr{\Q$log_msg\E\[[\d\.]+\]},
         'user addition was logged' );
 }
 
@@ -66,9 +73,16 @@ CHANGE_USER_ROLE:
     is( $ws->role_for_user( user => $user )->role_id(), $role->role_id(),
         'user has the admin role in the workspace' );
 
-    my $log_msg = join ' : ', 'CHANGE_USER_ROLE', $ws->workspace_id(),
-        $user->user_id(), $role->role_id();
-    is( $log_output, $log_msg,
+    my $log_msg = 'CHANGE,USER_ROLE,role:'
+        . $role->name
+        . ',user:'
+        . $user->username . '('
+        . $user->user_id . '),'
+        . 'workspace:'
+        . $ws->name . '('
+        . $ws->workspace_id . '),';
+
+    like( $log_output, qr{\Q$log_msg\E\[[\d\.]+\]},
         'user addition was logged' );
 }
 
@@ -87,8 +101,14 @@ REMOVE_USER:
 
     ok( ! $ws->has_user( $user ), 'user is no longer a member of the workspace' );
 
-    my $log_msg = join ' : ', 'REMOVE_USER', $ws->workspace_id(),
-        $user->user_id();
-    is( $log_output, $log_msg,
+    my $log_msg = 'REMOVE,USER_ROLE,'
+        . 'user:'
+        . $user->username . '('
+        . $user->user_id . '),'
+        . 'workspace:'
+        . $ws->name . '('
+        . $ws->workspace_id . '),';
+
+    like( $log_output, qr{\Q$log_msg\E\[[\d\.]+\]},
         'user addition was logged' );
 }

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 176;
+use Test::Socialtext tests => 178;
 fixtures( 'admin_no_pages' );
 
 use_ok('Socialtext::EmailReceiver::Factory');
@@ -60,37 +60,6 @@ RECEIVE_HANDLE_SIMPLE: {
     tests_for_email();
 
     remove_guest_email_in($ws);
-}
-
-sub tests_for_email {
-    my $page = $hub->pages()->new_from_name('[monkey] CVS monkey and ape2');
-    isa_ok( $page, 'Socialtext::Page' );
-
-    ok( $page->active(), "Found a page with the name '[monkey] CVS monkey and ape2'" );
-    is( $page->title(), '[monkey] CVS monkey and ape2',
-        'check that page title matches subject' );
-    like( $page->content(), qr{From:\s+"John Williams"\s+<mailto:williams\@tni.com>},
-          'content includes email sender name & address' );
-    like( $page->content(), qr{Date:\s+\QWed, 15 Sep 2004 13:32:14 -0600 (MDT)\E},
-          'content includes date from email headers' );
-    like( $page->content(), qr{API changed},
-          'content includes string "API changed"' );
-    is( $page->metadata()->MessageID(),
-        '<Pine.LNX.4.33.0409151241140.5203-100000@sharkey.morinda.com>',
-        'check that page metadata Message-ID matches the message id in email' );
-    like( $page->metadata()->Received(),
-          qr/\Qlists.sourceforge.net ([66.35.250.206]\E\s+\Qhelo=sc8-sf-list1.sourceforge.net)\E/,
-          'check that page metadata Received matches part of the Received header in email' );
-
-    my $categories = $page->metadata()->Category();
-    ok( scalar @$categories, 'page has category metadata' );
-    is_deeply( [ sort @$categories ],
-               [ 'Email', 'ape', 'monkey' ],
-               'categories are ape, Email, & monkey' );
-
-    my $attachments = $page->hub()->attachments()->all( page_id => $page->id );
-    is( @$attachments, 0,
-        'an email without attachments generates a page without attachments' );
 }
 
 WS_INCOMING_EMAIL_PLACEMENT_REPLACE: {
@@ -290,6 +259,36 @@ EOF
         [ sort @{ $page->metadata()->Category() } ],
         [ 'Email', 'New Cat2' ],
         'page is in Email and New Cat2 categories'
+    );
+}
+
+# This is necessary for integration with mailing lists, where
+# the envelope to (the address subscribed to the list) is different
+# from the Header to (which is the list address).
+CATEGORY_IN_VIA_ENV_VARS: {
+    my $email = <<'EOF';
+From: devnull1@socialtext.com
+To: unrelated-list@listservs-r-us.com
+Subject: Lists Rule
+
+Blah blah
+EOF
+
+    local $ENV{RECIPIENT} = 'admin+awesome@example.com';
+    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
+                {
+                    locale => $test_locale,
+                    string    => $email,
+                    workspace => $ws
+                });
+    $email_receiver->receive();
+
+    my $page = $hub->pages()->new_from_name('Lists Rule');
+    isa_ok( $page, 'Socialtext::Page' );
+    is_deeply(
+        [ sort @{ $page->metadata()->Category() } ],
+        [ 'Email', 'awesome' ],
+        'page is in Email and awesome categories'
     );
 }
 
@@ -938,7 +937,7 @@ FOWARDED_HTML_EMAIL: {
 }
 
 ACL_CHECKS: {
-    $ws->remove_permission(
+    $ws->permissions->remove(
         role       => Socialtext::Role->AuthenticatedUser(),
         permission => Socialtext::Permission->new( name => 'email_in' ),
     );
@@ -993,7 +992,7 @@ sub allow_guest_email_in {
     my $perm = Socialtext::Permission->new( name => 'email_in' );
     isa_ok( $perm, 'Socialtext::Permission' );
 
-    $_[0]->add_permission(
+    $_[0]->permissions->add(
         role       => Socialtext::Role->Guest(),
         permission => $perm,
     );
@@ -1004,7 +1003,7 @@ sub remove_guest_email_in {
     my $perm = Socialtext::Permission->new( name => 'email_in' );
     isa_ok( $perm, 'Socialtext::Permission' );
 
-    $_[0]->remove_permission(
+    $_[0]->permissions->remove(
         role       => Socialtext::Role->Guest(),
         permission => $perm,
     );
@@ -1157,3 +1156,38 @@ TEXT_HTML_BODY_DIALECT: {
               qr{Definition List},
                         'page contains expected HTML content as wikitext' );
 }
+
+exit;
+
+
+sub tests_for_email {
+    my $page = $hub->pages()->new_from_name('[monkey] CVS monkey and ape2');
+    isa_ok( $page, 'Socialtext::Page' );
+
+    ok( $page->active(), "Found a page with the name '[monkey] CVS monkey and ape2'" );
+    is( $page->title(), '[monkey] CVS monkey and ape2',
+        'check that page title matches subject' );
+    like( $page->content(), qr{From:\s+"John Williams"\s+<mailto:williams\@tni.com>},
+          'content includes email sender name & address' );
+    like( $page->content(), qr{Date:\s+\QWed, 15 Sep 2004 13:32:14 -0600 (MDT)\E},
+          'content includes date from email headers' );
+    like( $page->content(), qr{API changed},
+          'content includes string "API changed"' );
+    is( $page->metadata()->MessageID(),
+        '<Pine.LNX.4.33.0409151241140.5203-100000@sharkey.morinda.com>',
+        'check that page metadata Message-ID matches the message id in email' );
+    like( $page->metadata()->Received(),
+          qr/\Qlists.sourceforge.net ([66.35.250.206]\E\s+\Qhelo=sc8-sf-list1.sourceforge.net)\E/,
+          'check that page metadata Received matches part of the Received header in email' );
+
+    my $categories = $page->metadata()->Category();
+    ok( scalar @$categories, 'page has category metadata' );
+    is_deeply( [ sort @$categories ],
+               [ 'Email', 'ape', 'monkey' ],
+               'categories are ape, Email, & monkey' );
+
+    my $attachments = $page->hub()->attachments()->all( page_id => $page->id );
+    is( @$attachments, 0,
+        'an email without attachments generates a page without attachments' );
+}
+

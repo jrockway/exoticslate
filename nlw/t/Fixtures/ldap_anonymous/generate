@@ -1,0 +1,26 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+
+warn "# generating the fixture\n" if $ENV{TEST_VERBOSE};
+#use lib "$ENV{NLW_DIR}/lib";
+
+my $ldap_yaml = <<EOY;
+host: localhost
+port: 389
+base: dc=foo,dc=bar
+attr_map:
+  user_id: dn
+  username: cn
+  password: userPassword
+  email_address: mail
+  first_name: gn
+  last_name: sn
+EOY
+
+open LDAP, ">t/tmp/etc/socialtext/ldap.yaml" || die "I just can't! $!\n";
+print LDAP $ldap_yaml;
+close LDAP;
+

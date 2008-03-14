@@ -18,8 +18,8 @@ my %DEFAULTLINKS = (
     special_http => '%{arg1}',
     category => '/%{workspace}/index.cgi?action=category_display;category=%{category}',
     weblog => '/%{workspace}/index.cgi?action=weblog_display;category=%{category}',
-    file => '/%{workspace}/index.cgi/%{filename}?action=attachments_download;page_name=%{page_uri};id=%{id}',
-    image => '/%{workspace}/index.cgi/%{filename}?action=attachments_download;page_name=%{page_uri};id=%{id}',
+    file => '/data/workspaces/%{workspace}/attachments/%{page_uri}:%{id}/original/%{filename}',
+    image => '/data/workspaces/%{workspace}/attachments/%{page_uri}:%{id}/%{size}/%{filename}',
 );
 
 my $hub = new_hub('admin');

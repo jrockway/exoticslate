@@ -7,15 +7,13 @@ use utf8;
 
 use Test::HTTP::Socialtext '-syntax', tests => 93;
 
-use JSON;
+use JSON::XS;
 use Readonly;
 use Socialtext::Page;
 use Socialtext::User;
 use Socialtext::Workspace;
 use Test::Live fixtures => ['admin_with_extra_pages', 'help', 'foobar'];
 use Test::More;
-
-$JSON::UTF8 = 1;
 
 Readonly my $BASE =>
     Test::HTTP::Socialtext->url('/data/workspaces/admin/pages');
@@ -46,14 +44,14 @@ Readonly my $JSON_ADMIN_HASH => {
     from    => 'devnull9@socialtext.com',
     date    => 'Sat, 30 Sep 2006 22:22:22 GMT',
 };
-Readonly my $JSON_ADMIN_OBJ => objToJson($JSON_ADMIN_HASH);
+Readonly my $JSON_ADMIN_OBJ => encode_json($JSON_ADMIN_HASH);
 Readonly my $JSON_ADMIN_TAG_HASH => {
     content => $JSON_BODY,
     from    => 'devnull9@socialtext.com',
     date    => 'Sat, 30 Sep 2006 23:23:23 GMT',
     tags    => [ 'apple', 'orange', $UTF8_PAGE],
 };
-Readonly my $JSON_ADMIN_TAG_OBJ => objToJson($JSON_ADMIN_TAG_HASH);
+Readonly my $JSON_ADMIN_TAG_OBJ => encode_json($JSON_ADMIN_TAG_HASH);
 
 Readonly my $HTML_BODY =><<'EOF';
 <h1>Hello</h1>
@@ -153,7 +151,7 @@ test_http "GET existing page as json" {
     << 200
     ~< Content-Type: application/json
 
-    my $result = jsonToObj($test->response->decoded_content);
+    my $result = decode_json($test->response->decoded_content);
 
     is ref($result), 'HASH', 'result is a hash ref';
 
@@ -344,7 +342,7 @@ test_http "GET JSON created page" {
 
     << 200
 
-    my $info = jsonToObj($test->response->decoded_content());
+    my $info = decode_json($test->response->decoded_content());
 
     like $info->{last_edit_time}, qr{22:22:22},
         'last modified time appears correct';
@@ -370,7 +368,7 @@ test_http "GET JSON created page (again)" {
 
     << 200
 
-    my $info = jsonToObj($test->response->decoded_content());
+    my $info = decode_json($test->response->decoded_content());
 
     unlike $info->{last_edit_time}, qr{2006-09-30},
         'last modified time was not to older time';
@@ -429,7 +427,7 @@ test_http "GET JSON verbose rep" {
 
     << 200
 
-    my $info = jsonToObj( $test->response->decoded_content() );
+    my $info = decode_json( $test->response->decoded_content() );
 
     # check meta
     is $info->{page_id}, 'html_page', 'html_page id is html_page';
@@ -450,7 +448,7 @@ test_http "GET JSON non-verbose rep" {
 
     << 200
 
-    my $info = jsonToObj( $test->response->decoded_content() );
+    my $info = decode_json( $test->response->decoded_content() );
 
     ok( !defined( $info->{html} ),
         'html is not defined in non verbose json rep' );
@@ -474,7 +472,7 @@ test_http "GET JSON verbose default (REST) link_dictionary" {
 
     << 200
 
-    my $info = jsonToObj( $test->response->decoded_content() );
+    my $info = decode_json( $test->response->decoded_content() );
     my $html = $info->{html};
 
     like $html, qr{href="monkey"[^>]*>monkey</a>}, 'monkey link is RESTish';
@@ -486,7 +484,7 @@ test_http "GET JSON verbose alternate link_dictionary" {
 
     << 200
 
-    my $info = jsonToObj( $test->response->decoded_content() );
+    my $info = decode_json( $test->response->decoded_content() );
     my $html = $info->{html};
 
     like $html, qr{href="index.cgi\?monkey"[^>]*>monkey</a>}, 'monkey link is s2 style';

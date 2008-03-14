@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 <title>Socialtext Wiki Temporarily Unavailable</title>
-<link rel="stylesheet" type="text/css" href="/static/css/xhtml/base.css" />
+<link rel="stylesheet" type="text/css" href="/static/skin/common/css/xhtml/base.css" />
 
 </head>
 
@@ -15,7 +15,7 @@
 
 <div class="pane">
 
-<img src="/static/images/logo-bar-18.gif" alt="logo"/>
+<img src="/static/skin/s2/images/logo-bar-18.gif" alt="logo"/>
 
 <p>Socialtext wikiは一時的に使えない状態になっています。</p>
 

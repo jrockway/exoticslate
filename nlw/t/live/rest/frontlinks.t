@@ -6,12 +6,10 @@ use strict;
 
 use Test::HTTP::Socialtext '-syntax', tests => 18;
 
-use JSON;
+use JSON::XS;
 use Readonly;
 use Test::Live fixtures => ['admin_no_pages'];
 use Test::More;
-
-$JSON::UTF8 = 1;
 
 Readonly my $BASE =>
     Test::HTTP::Socialtext->url('/data/workspaces/admin/pages');
@@ -60,7 +58,7 @@ test_http "get incipient frontlinks of page one, none" {
 
     << 200
 
-    my $result = jsonToObj($test->response->content);
+    my $result = decode_json($test->response->content);
 
     is ref($result), 'ARRAY', 'result is an array';
     is scalar @$result, 0, '0 items in the array';
@@ -102,7 +100,7 @@ test_http "DELETE page two, check frontlinks empty" {
 
     << 200
 
-    my $result = jsonToObj($test->response->content);
+    my $result = decode_json($test->response->content);
 
     is ref($result), 'ARRAY', 'result is an array';
     is scalar @$result, 0, '0 items in the array';

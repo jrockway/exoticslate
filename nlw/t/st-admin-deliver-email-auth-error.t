@@ -14,12 +14,13 @@ use Socialtext::Workspace;
 
 my $hub = new_hub('admin');
 my $ws  = $hub->current_workspace();
-$ws->remove_permission(
+my $perms = $ws->permissions();
+$perms->remove(
     role       => Socialtext::Role->Guest(),
     permission => Socialtext::Permission->new( name => 'email_in' ),
 );
 
-$ws->remove_permission(
+$perms->remove(
     role       => Socialtext::Role->AuthenticatedUser(),
     permission => Socialtext::Permission->new( name => 'email_in' ),
 );

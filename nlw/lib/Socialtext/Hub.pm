@@ -333,6 +333,7 @@ BEGIN {
             Socialtext::Attachments
             Socialtext::CGI
             Socialtext::CSS
+            Socialtext::Skin
             Socialtext::Formatter
             Socialtext::Formatter::Viewer
             Socialtext::Headers
@@ -340,6 +341,7 @@ BEGIN {
             Socialtext::Log
             Socialtext::Pages
             Socialtext::PreferencesPlugin
+            Socialtext::Stax
             Socialtext::Template
 
             Socialtext::SearchPlugin

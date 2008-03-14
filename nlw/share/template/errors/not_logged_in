@@ -1,2 +1,0 @@
-<!-- @COPYRIGHT@ -->
-<span class="error">[% loc('You must login to view this page.') %]</span>

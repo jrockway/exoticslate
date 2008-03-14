@@ -23,9 +23,7 @@ my $hub = Test::Socialtext::Environment->instance()
     ->hub_for_workspace('admin');
 my $admin = $hub->current_workspace();
 my $image = 't/attachments/socialtext-logo-30.gif';
-open my $fh, '<', $image or die "Cannot read $image: $!";
-$admin->set_logo_from_filehandle( filehandle => $fh, filename => $image, );
-close $fh;
+$admin->set_logo_from_file( filename => $image );
 ok( ( -f $admin->logo_filename ), "logo exists" );
 
 my $logo_path = "logos/admin/" . basename( $admin->logo_filename );

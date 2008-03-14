@@ -15,7 +15,7 @@ use Socialtext::Authz;
 use Socialtext::Permission 'ST_READ_PERM';
 use Socialtext::Validate qw( validate SCALAR_TYPE USER_TYPE WORKSPACE_TYPE );
 
-our $VERSION = '2.19.0.4';
+our $VERSION = '2.20.1.0';
 
 const product_version => $VERSION;
 field using_debug => 0;
@@ -31,6 +31,10 @@ sub process {
     $self->hub->registry->load;
     $self->check_uid;
     $self->check_user_authorization;
+
+    my $skin_type = $self->hub->skin->skin_info->{skin_type};
+    $self->hub->action('skin_handler_' . $skin_type)
+        if $skin_type ne 's2';
 
     my $html = $self->hub->process;
 

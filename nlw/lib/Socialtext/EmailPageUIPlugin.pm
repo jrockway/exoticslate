@@ -7,7 +7,6 @@ use base 'Socialtext::Plugin';
 
 use Class::Field qw( const );
 use Readonly;
-use Template::Iterator::AlzaboWrapperCursor;
 
 sub class_id { 'email_page_ui' }
 const class_title => 'Email Page';
@@ -44,7 +43,7 @@ sub send_email_popup {
         error        => $error,
         page         => $page,
         user_count   => $user_count,
-        users        => ( $users ? Template::Iterator::AlzaboWrapperCursor->new($users) : undef ),
+        users        => $users,
         choices      => $address_choices,
         sending_user => $sender,
         note         => $note,

@@ -187,6 +187,7 @@ sub dump_data {
     my $schema = shift;
 
     return unless _schema_exists_in_backend($schema);
+    return if $ENV{ST_TEST_SKIP_DB_DUMP};
 
     my %connect = _connect_params();
     my $time    = time;

@@ -1,17 +1,12 @@
 #!perl
 # @COPYRIGHT@
-
 use warnings;
 use strict;
-
 use Test::HTTP::Socialtext '-syntax', tests => 11;
-
-use JSON;
+use JSON::XS;
 use Readonly;
 use Test::Live fixtures => ['admin_no_pages'];
 use Test::More;
-
-$JSON::UTF8 = 1;
 
 Readonly my $BASE =>
     Test::HTTP::Socialtext->url('/data/workspaces/admin/pages');
@@ -79,7 +74,7 @@ test_http "DELETE page two, check backlinks 404" {
 
     << 200
 
-    my $result = jsonToObj($test->response->content);
+    my $result = decode_json($test->response->content);
 
     is ref($result), 'ARRAY', 'result is an array';
     is scalar @$result, 0, '0 items in the array';

@@ -14,7 +14,8 @@ use Socialtext::System qw/shell_run/;
 my $skin_link = "share/skin";
 unlink $skin_link if -e $skin_link;
 
-my $skin_dir = "$FindBin::Bin/../../../socialtext-skins/branches/$branch/skin";
+$branch = "branches/$branch" if $branch ne 'trunk';
+my $skin_dir = "$FindBin::Bin/../../../socialtext-skins/$branch/skin";
 
 # Look for a symlink to the repo beside nlw/
 # set-branch and other tools set up this symlink

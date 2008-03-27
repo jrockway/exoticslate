@@ -380,6 +380,8 @@ sub attachdir {
 
 sub dimensions {
     my ($self, $size) = @_;
+    $size ||= '';
+    return if $size eq 'scaled' and $self->hub->current_workspace->no_max_image_size;
     return unless $size;
     return [0, 0] if $size eq 'scaled';
     return [100, 0] if $size eq 'small';

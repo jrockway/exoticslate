@@ -452,6 +452,8 @@ sub _create_workspace {
             skin_name  => $self->hub->skin->skin_name,
             #
             customjs_uri => $current_ws->customjs_uri,
+            uploaded_skin => $current_ws->uploaded_skin,
+            no_max_image_size => $current_ws->no_max_image_size,
             invitation_filter => $current_ws->invitation_filter,
             email_notification_from_address => $current_ws->email_notification_from_address,
             restrict_invitation_to_search => $current_ws->restrict_invitation_to_search,

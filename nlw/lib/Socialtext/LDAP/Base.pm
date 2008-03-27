@@ -4,6 +4,7 @@ package Socialtext::LDAP::Base;
 use strict;
 use warnings;
 use Class::Field qw(field);
+use Net::LDAP;
 use Socialtext::Log qw(st_log);
 
 field 'config';

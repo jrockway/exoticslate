@@ -7,7 +7,7 @@ DEFAULT=$3
 DB=`st-config echo db_schema_name`
 DB_USER=`st-config echo db_user`
 
-SQL_REMOVE_NULL="UPDATE \"$TABLE\" SET \"$COLUMN\" = $DEFAULT WHERE workspace_template IS NULL;"
+SQL_REMOVE_NULL="UPDATE \"$TABLE\" SET \"$COLUMN\" = $DEFAULT WHERE \"$COLUMN\" IS NULL;"
 
 SQL="ALTER TABLE \"$TABLE\" ALTER COLUMN \"$COLUMN\" SET NOT NULL"
 

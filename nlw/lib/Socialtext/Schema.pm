@@ -486,6 +486,11 @@ sub SchemaObject {
               default         => '',
             );
         $table->make_column
+            ( name           => 'no_max_image_size',
+              type           => 'BOOLEAN',
+              default         => 'false',
+            );
+        $table->make_column
             ( name           => 'cascade_css',
               type           => 'BOOLEAN',
               default         => 't',

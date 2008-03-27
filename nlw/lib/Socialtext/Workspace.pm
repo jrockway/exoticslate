@@ -100,6 +100,7 @@ Readonly our @COLUMNS => (
     'invitation_template',
     'customjs_uri',
     'customjs_name',
+    'no_max_image_size',
     'cascade_css',
     'uploaded_skin',
 );

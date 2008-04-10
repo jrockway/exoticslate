@@ -2,6 +2,12 @@ Change log for Socialtext Open
 
 2.20.X
 
+Release notes, 2.20.1.2  April 2008
+
+  Fixed inconsistent Database schemas
+
+  Updated migrations that were causing problems
+
 Release notes, 2.20.1.0  March 2008
 
   Fixed sidebar positioning with CSS

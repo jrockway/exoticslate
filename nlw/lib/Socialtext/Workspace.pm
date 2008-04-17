@@ -1058,7 +1058,7 @@ sub has_user {
         my %p = validate( @_, $spec );
 
         my $sql = 'select 1 from "UserWorkspaceRole" where workspace_id = ? and user_id = ? and role_id = ?';
-        return sql_singlevalue($sql, $self->workspace_id, $p{user}->user_id, $p{role}->role_id());
+        return sql_singlevalue($sql, $self->workspace_id, $p{user}->user_id, $p{role}->role_id()) || 0;
     }
 }
 

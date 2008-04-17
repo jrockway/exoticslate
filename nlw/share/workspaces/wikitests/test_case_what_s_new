@@ -1,0 +1,109 @@
+| *Comment* | Test Case: What's New |  |
+
+| setSpeed | 150 |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-newpage-link |  |
+
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | st-newpage-pagename-edit | hey whatsnew %%start_time%% 0001 |
+| type_ok | wikiwyg_wikitext_textarea | hey whatsnew %%start_time%% 0001/content |
+| click_and_wait | st-save-button-link |  |
+| click_and_wait | st-home-link |  |
+
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | st-newpage-pagename-edit | hey whatsnew %%start_time%% 0002 |
+| type_ok | wikiwyg_wikitext_textarea | hey whatsnew %%start_time%% 0002/content |
+| click_and_wait | st-save-button-link |  |
+| click_and_wait | st-home-link |  |
+
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | st-newpage-pagename-edit | hey whatsnew %%start_time%% 0003 |
+| type_ok | wikiwyg_wikitext_textarea | hey whatsnew %%start_time%% 0003/content |
+| click_and_wait | st-save-button-link |  |
+| click_and_wait | st-home-link |  |
+
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | st-newpage-pagename-edit | hey whatsnew %%start_time%% 0004 |
+| type_ok | wikiwyg_wikitext_textarea | hey whatsnew %%start_time%% 0004/content |
+| click_and_wait | st-save-button-link |  |
+| click_and_wait | st-home-link |  |
+
+| text_like | st-wiki-title | Dashboard: |
+| click_and_wait | st-whats-new-title-link |  |
+| text_like | Changes in Last |  |
+| clickAndWait | link=All Pages |  |
+| text_like | All Pages ( |  |
+
+| *Comment* | Test Case: What's New Sorting tests |
+
+| click_and_wait | link=What's New |  |
+| click_and_wait | link=Title |  |
+| text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0001.+hey whatsnew %%start_time%% 0004/ |
+| click_and_wait | link=Title |  |
+| text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0001/ |
+
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | st-newpage-pagename-edit | hey whatsnew %%start_time%% 0005 |
+| type_ok | wikiwyg_wikitext_textarea | hey whatsnew %%start_time%% 0005/content |
+| click_and_wait | st-save-button-link |  |
+| click_and_wait | st-home-link |  |
+
+| clickAndWait | st-wiki-subnav-link-whats-new |  |
+| text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0005.+hey whatsnew %%start_time%% 0004/ |
+| click_and_wait | link=Date |  |
+| text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0005/ |
+| click_and_wait | link=Date |  |
+| text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0003.+hey whatsnew %%start_time%% 0002/ |
+
+| open_ok | /%%workspace%%/index.cgi?hey whatsnew %%start_time%% 0005 |  |
+| click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | revision 1 |
+| click_and_wait | st-save-button-link |  |
+| click_and_wait | st-wiki-subnav-link-whats-new |  |
+
+| click_and_wait | link=Revisions |  |
+| text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0005.+hey whatsnew %%start_time%% 0004/ |
+| click_and_wait | link=Revisions |  |
+| text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0005/ |
+
+This test assumes that a certain date/time format is selected (Oct 3 12:34am)
+but does not set up for that format. 
+Remove the test until the the test setup enforces the format
+
+text_like | qr/\w+ \d+ \d+:\d+\w+/ | |
+
+| *Comment* | Test Case: What's New delete page |
+
+| open_ok | /%%workspace%%/index.cgi?hey_whatsnew_%%start_time%%_0004 |  |
+| click_ok | link=Delete Page |  |
+
+| *Comment* | pause so Windows VM can catch up |  |
+| pause | 5000 | i hate pause |
+| confirmation_like | Are you sure you want to delete this page? |  |
+| wait_for_element_visible_ok | st-home-link | 30000 |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-wiki-subnav-link-whats-new |  |
+| text_unlike | st-listview | hey whatsnew %%start_time%% 0004 |
+
+| open_ok | /%%workspace%%/index.cgi?hey whatsnew %%start_time%% 0003 |  |
+| click_and_wait | st-rewind-revision-count |  |
+| text_like | st-page-title | All Revisions |
+| text_unlike | st-revisionlist | Revision 2 |
+| VerifyValue | Button | Compare Revisions |
+
+| *Comment* | Test Case: What's New Teardown |
+| click_and_wait | st-home-link | set up for next included test |
+| st-admin | purge-page --workspace %%workspace%% --page hey_whatsnew_%%start_time%%_0001 |  |
+| st-admin | purge-page --workspace %%workspace%% --page hey_whatsnew_%%start_time%%_0002 |  |
+| st-admin | purge-page --workspace %%workspace%% --page hey_whatsnew_%%start_time%%_0003 |  |
+| st-admin | purge-page --workspace %%workspace%% --page hey_whatsnew_%%start_time%%_0005 |  |
+
+| *Comment* | Test Case: What's New COMPLETED |  |

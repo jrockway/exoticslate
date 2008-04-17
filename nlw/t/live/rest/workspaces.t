@@ -15,7 +15,7 @@ Readonly my $NEW_WORKSPACE => 'party';
 Readonly my $URL           => Test::HTTP::Socialtext->url("/data/workspaces");
 Readonly my $TYPE          => 'application/json';
 
-Readonly my $WS_CREATION_HASH => {
+my $WS_CREATION_HASH = {
     name => $NEW_WORKSPACE,
     account_id => '1',
     logo_uri => 'http://www.burningchrome.com/~cdent/images/iocnm.png',

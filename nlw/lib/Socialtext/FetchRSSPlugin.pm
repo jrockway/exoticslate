@@ -72,14 +72,16 @@ sub _get_feed {
 	my $hostname = '';
         $hostname = $1 if $url =~ m!^(\w+://[^/]+)/!;
 	my $link_expander = sub {
-		my $l = shift;
-		return $l if $l =~ m!^\w+://!;
-		return $hostname . $l;
+            my $l = shift;
+            return $l if $l =~ m!^\w+://!;
+            return $hostname . $l;
 	};
 
 	$feed->link( $link_expander->( $feed->link ) );
 	foreach my $entry ( $feed->entries ) {
-            $entry->link( $link_expander->( $entry->link ) );
+            my $link = $entry->link;
+            next unless $link;
+            $entry->link( $link_expander->( $link ) );
 	}
 
         return $feed;

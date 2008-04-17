@@ -1,0 +1,86 @@
+| *Comment* | STARTING Test Case : Hide sidebar |  |
+| setSpeed | 100 |  |
+| clickAndWait | st-home-link |  |
+| clickAndWait | st-newpage-link |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | st-newpage-pagename-edit | TC Hide Sidebar 1 %%start_time%% |
+| type_ok | wikiwyg_wikitext_textarea | TC Hide Sidebar 1 %%start_time%% Content |
+| clickAndWait | st-save-button-link |  |
+
+| clickAndWait | st-home-link |  |
+| clickAndWait | st-newpage-link |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | st-newpage-pagename-edit | TC Hide Sidebar 2 %%start_time%% |
+| type_ok | wikiwyg_wikitext_textarea | TC Hide Sidebar 2 %%start_time%% Content |
+| clickAndWait | st-save-button-link |  |
+
+| *Comment* | Test Case : Hide sidebar sidebar should be open |  |
+| wait_for_element_visible_ok | st-page-boxes-toggle-link | 30000 |
+| wait_for_element_visible_ok | st-no-tags-placeholder | 30000 |
+| text_like | st-page-boxes-toggle-link | V |
+| text_like | st-no-tags-placeholder | There are no tags for this page. |
+| text_like | //p | There are no pages that link to this page yet. |
+| text_like | st-attachments-title | Attachments |
+
+| *Comment* | Test Case : Hide sidebar close the sidebar |  |
+| click_ok | link=V |  |
+
+ wait_for_element_not_visible_ok | st-page-boxes | 10000 |
+
+| pause | 10000 |  |
+
+| *Comment* | Test Case : Hide sidebar sidebar should be closed |  |
+| text_like | st-page-boxes-toggle-link | > |
+
+| *Comment* | Test Case : Hide sidebar open the sidebar |  |
+| click_ok | link=> |  |
+
+| *Comment* | Test Case : Hide sidebar sidebar should be open |  |
+| wait_for_element_visible_ok | st-page-boxes | 30000 |
+| wait_for_element_visible_ok | st-page-boxes-toggle-link | 30000 |
+| text_like | st-page-boxes-toggle-link | V |
+| text_like | st-no-tags-placeholder | There are no tags for this page. |
+| text_like | //p | There are no pages that link to this page yet. |
+| text_like | st-attachments-title | Attachments |
+
+| *Comment* | Test Case : Hide sidebar close the sidebar navigate away |  |
+| click_ok | link=V |  |
+| clickAndWait | st-wiki-subnav-link-whats-new |  |
+| clickAndWait | link=TC Hide Sidebar 1 %%start_time%% |  |
+
+| *Comment* | Test Case : Hide sidebar sidebar should still be closed |  |
+| wait_for_element_visible_ok | st-page-boxes-toggle-link | 30000 |
+| text_like | st-page-boxes-toggle-link | > |
+
+| *Comment* | Test Case : Hide sidebar open the sidebar on the second page |  |
+| click_ok | link=> |  |
+
+| *Comment* | Test Case : Hide sidebar sidebar should be open |  |
+| wait_for_element_visible_ok | st-attachments-title | 30000 |
+| wait_for_element_visible_ok | st-page-boxes-toggle-link | 30000 |
+| text_like | st-page-boxes-toggle-link | V |
+| text_like | st-no-tags-placeholder | There are no tags for this page. |
+| text_like | //p | There are no pages that link to this page yet. |
+| text_like | st-attachments-title | Attachments |
+
+| *Comment* | Test Case : Hide sidebar navigate to original page |  |
+| clickAndWait | st-wiki-subnav-link-whats-new |  |
+| clickAndWait | link=TC Hide Sidebar 2 %%start_time%% |  |
+
+| *Comment* | Test Case : Hide sidebar sidebar should still be open |  |
+| wait_for_element_visible_ok | st-attachments-title | 30000 |
+| wait_for_element_visible_ok | st-page-boxes-toggle-link | 30000 |
+| text_like | st-page-boxes-toggle-link | V |
+| text_like | st-no-tags-placeholder | There are no tags for this page. |
+| text_like | //p | There are no pages that link to this page yet. |
+| text_like | st-attachments-title | Attachments |
+
+| *Comment* | Test Case : Hide sidebar Cleaning up |  |
+
+| st-admin | purge-page --w %%workspace%% --page tc_hide_sidebar_1_%%start_time%% | The TC Hide Sidebar 1 %%start_time%% page was purged from the %%workspace%% workspace. |
+| st-admin | purge-page --w %%workspace%% --page tc_hide_sidebar_2_%%start_time%% | The TC Hide Sidebar 2 %%start_time%% page was purged from the %%workspace%% workspace. |
+
+| *Comment* | Test Case : Hide sidebar COMPLETED |  |

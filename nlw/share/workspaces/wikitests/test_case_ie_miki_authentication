@@ -1,0 +1,90 @@
+| *Comment* | Test Case: IE Miki Authentication |  |
+
+If this test fails it leaves the workspace in auth-to-edit mode because it does not run teardown and that breaks all tests
+that follow it. So we do this test in a scratch workspace instead.
+
+This version of the Miki Authentication test is deliberately jiggered to defeat IE 6 caching. It is not as strong a test as 
+the original but it is better than failing completely because IE 6 caches Miki pages.
+
+| *Comment* | Test Case: IE Miki Authentication setup |  |
+| set | miki_space | miki-%%start_time%% |
+| st-admin | create-workspace --name %%miki_space%% --title "Miki %%start_time%%" |  |
+| st-admin | add-workspace-admin --workspace %%miki_space%% --email %%email%% |  |
+
+| *Comment* | Test Case: IE Miki Authentication Login and Logout from Miki/Lite UI |  |
+| open_ok | /lite/page/%%miki_space%% |  |
+| text_like | link=Home | Home |
+| text_like | link=Recent Changes | Recent Changes |
+| text_like | link=Search | Search |
+| text_like | link=Log out | Log out |
+| click_and_wait | link=Log out |  |
+| text_like | //label | Email Address: |
+| text_like | //div[2]/label | Password: |
+
+Because IE 6 caches the Miki page, if you try to open the homepage again, even though you are logged out
+you will appear to succeed. The workaround is to open a non-existent page instead
+
+| *Comment* | Test Case: IE Miki Authentication defeat IE 6 caching |  |
+| open_ok | /lite/page/%%miki_space%%/%%start_time%%_1 |  |
+| text_like | You must login to view this page. |  |
+| type_ok | username | %%username%% |
+| type_ok | password | %%password%% |
+| click_and_wait | //input[@value='Log in'] |  |
+
+| *Comment* | Test Case: IE Miki Authentication now open homepage |  |
+| open_ok | /lite/page/%%miki_space%% |  |
+| text_like | link=Home | Home |
+| text_like | link=Recent Changes | Recent Changes |
+| text_like | link=Search | Search |
+| text_like | link=Edit | Edit |
+| click_and_wait | link=Log out |  |
+
+test latest login scheme:
+
+* Look at your dev-env at /lite/page/auth-to-edit
+* Pick a link on that page (start here?)
+* Click on the Log In link, make sure you get redirected appropriately back to 'Start Here'
+* Check that the links now say "Log Out" (at the bottom) and "Edit" at the top
+* Log out and in a few times to make sure everything behaves right
+
+| *Comment* | Test Case: IE Miki Authentication test auth-to-edit |  |
+| st-admin | set-permissions --workspace %%miki_space%% --permissions public-authenticate-to-edit |  |
+| open_ok | /lite/page/%%miki_space%%/ |  |
+| click_and_wait | link=start here |  |
+| click_and_wait | link=Log in |  |
+
+| *Comment* | Test Case: Miki Authentication test login and redirect |  |
+| type_ok | username | %%username%% |
+| type_ok | password | %%password%% |
+| click_and_wait | //input[@value='Log in'] |  |
+| location_like | /lite/page/%%miki_space%%/start_here |  |
+
+| *Comment* | Test Case: Miki Authentication test logged in after redirect |  |
+| text_like | link=Edit | Edit |
+| text_like | link=Log out | Log out |
+| text_unlike | //a[contains(@href,'/nlw/submit/logout')] | Log in |
+| click_and_wait | link=Log out |  |
+
+Because IE 6 caches the Miki page, if you try to open the homepage again, even though you are logged out
+you will appear to succeed. The workaround is to open a non-existent page instead
+
+| *Comment* | Test Case: IE Miki Authentication defeat IE 6 caching auth-to-edit |  |
+| open_ok | /lite/page/%%miki_space%%/%%start_time%%_2 |  |
+| text_like | link=Log in | Log in |
+| click_and_wait | link=Log in |  |
+| type_ok | username | %%username%% |
+| type_ok | password | %%password%% |
+| click_and_wait | //input[@value='Log in'] |  |
+| open_ok | /lite/page/%%miki_space%% |  |
+| text_like | link=Home | Home |
+| text_like | link=Recent Changes | Recent Changes |
+| text_like | link=Search | Search |
+| text_like | link=Edit | Edit |
+| text_like | link=Log out | Log out |
+| click_and_wait | link=Log out |  |
+| location_like | /nlw/login.html |  |
+
+| *Comment* | Test Case: IE Miki Authentication Teardown |  |
+| st-admin | delete-workspace --workspace %%miki_space%% --no-export |  |
+
+| *Comment* | Test case: IE Miki Authentication COMPLETED |  |

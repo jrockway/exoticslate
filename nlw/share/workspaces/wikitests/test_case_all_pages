@@ -1,0 +1,117 @@
+| *Comment* | Test Case: All Pages |  |
+| *Comment* | Test Case: All Pages Set up |  |
+| setSpeed | 100 |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | allpages %%start_time%% 0001 content |
+| type_ok | st-newpage-pagename-edit | allpages %%start_time%% 0001 |
+| click_and_wait | st-save-button-link |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | st-newpage-pagename-edit | allpages %%start_time%% 0002 |
+
+| type_ok | wikiwyg_wikitext_textarea | allpages %%start_time%% 0002 content |
+| click_and_wait | st-save-button-link |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | st-newpage-pagename-edit | allpages %%start_time%% 0003 |
+| type_ok | wikiwyg_wikitext_textarea | allpages %%start_time%% 0003 content |
+| click_and_wait | st-save-button-link |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | st-newpage-pagename-edit | allpages %%start_time%% 0004 |
+| type_ok | wikiwyg_wikitext_textarea | allpages %%start_time%% 0004 content |
+| click_and_wait | st-save-button-link |  |
+| click_and_wait | st-home-link |  |
+
+| *Comment* | Test Case: All Pages name sorting |  |
+| click_and_wait | st-wiki-subnav-link-all-pages |  |
+| text_like | st-list-title | All Pages ( |
+| click_and_wait | link=allpages %%start_time%% 0001 |  |
+| text_like | st-page-titletext | allpages %%start_time%% 0001 |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-wiki-subnav-link-all-pages |  |
+| click_and_wait | link=Title |  |
+| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0004/ |
+| click_and_wait | link=Title |  |
+| text_like | st-listview | qr/allpages %%start_time%% 0004.+allpages %%start_time%% 0001/ |
+
+| *Comment* | Test Case: All Pages date sort |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | st-newpage-pagename-edit | allpages %%start_time%% 0005 |
+| type_ok | wikiwyg_wikitext_textarea | allpages %%start_time%% 0005 content |
+| click_and_wait | st-save-button-link |  |
+
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-wiki-subnav-link-all-pages |  |
+| click_and_wait | link=Date |  |
+| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0005/ |
+| click_and_wait | link=Date |  |
+| text_like | st-listview | qr/allpages %%start_time%% 0005.+allpages %%start_time%% 0001/ |
+
+| *Comment* | Test Case: All Pages revision sort |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | link=allpages %%start_time%% 0004 |  |
+| click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| pause | 1000 |  |
+| type_ok | wikiwyg_wikitext_textarea | revision 1 |
+| click_and_wait | st-save-button-link |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-wiki-subnav-link-all-pages |  |
+
+| click_and_wait | link=Revisions |  |
+| text_like | st-listview | qr/allpages %%start_time%% 0004.+allpages %%start_time%% 0003/ |
+| click_and_wait | link=Revisions |  |
+| text_like | st-listview | qr/allpages %%start_time%% 0003.+allpages %%start_time%% 0004/ |
+
+| *Comment* | Test Case: All Pages edited by sort |  |
+
+create a user that lexically precedes the logged in user by prepending %%email%% with %%start_time%%
+
+| st-admin | create-user --email %%start_time%%.%%email%% --password 123456 |  |
+| st-admin | add-member --email %%start_time%%.%%email%% --workspace %%workspace%% |  |
+| st-logout |  |  |
+| st-login | %%start_time%%.%%email%% | 123456 |
+
+For some reason, IE 6 blows up when open_ok is used in some places. We avoid it.
+
+| *Comment* | Test Case: All Pages revision by new user |  |
+
+| wait_for_element_visible_ok | st-wiki-subnav-link-all-pages | 15000 |
+| click_and_wait | st-wiki-subnav-link-all-pages |
+| click_and_wait | link=allpages %%start_time%% 0003 |  |
+
+| click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | revision by user %%start_time%%.%%email%% |
+| click_and_wait | st-save-button-link |  |
+
+| *Comment* | Test Case: All Pages verify revision by user %%start_time%%.%%email%% |  |
+
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-wiki-subnav-link-all-pages |  |
+| click_and_wait | link=Last Edited By |  |
+| text_like | st-listview | qr/allpages %%start_time%% 0003.+allpages %%start_time%% 0001/ |
+| click_and_wait | link=Last Edited By |  |
+| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0003/ |
+
+| *Comment* | Test Case: All Pages Teardown |  |
+| st-logout |  |  |
+| st-login | %%username%% | %%password%% |
+
+| st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0001 |  |
+| st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0002 |  |
+| st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0003 |  |
+| st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0004 |  |
+| st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0005 |  |
+| st-admin | remove-member --email newuser_%%start_time%%@ken.socialtext.net --workspace %%workspace%% |  |
+
+| *Comment* | Test Case: All Pages COMPLETED |  |

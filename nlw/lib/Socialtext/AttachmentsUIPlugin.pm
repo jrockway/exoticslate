@@ -85,7 +85,6 @@ sub attachments_download {
 
     # Add the headers for an attachment
     my $filename = $attachment->filename;
-    $self->log_action("DOWNLOAD_ATTACHMENT", $filename);
     
     # XXX: should test with safari
     if( Socialtext::BrowserDetect::ie() ) {
@@ -118,8 +117,6 @@ sub attachments_extract {
     )->load;
 
     $attachment->extract;
-
-    $self->log_action("EXTRACT_ATTACHMENT", $attachment_id);
 }
 
 sub attachments_upload {
@@ -197,7 +194,6 @@ sub save_attachment {
         for my $file (@files) {
             $self->{_attachment_info}{$file->filename} = $file->id;
         }
-        $self->log_action("UPLOAD_ATTACHMENT", $filename);
     };
 
     return $@;

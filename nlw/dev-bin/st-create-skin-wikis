@@ -1,0 +1,2 @@
+for i in ` ls $ST_CURRENT/nlw/share/skin/  |  grep -v '^st\/' | grep -v '^s2\/' | grep -v '^skin@'  | sed "s/\///" ` ; do st-admin create-workspace --n st-$i-skin  --t "Skin $i" ; st-admin add-workspace-admin --w st-$i-skin  --e devnull1@socialtext.com ; st-admin set-workspace-config --w st-$i-skin  skin_name $i ; done ;
+

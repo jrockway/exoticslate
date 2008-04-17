@@ -39,13 +39,13 @@ Visit "recent changes"<http:index.cgi?action=recent_changes>.
 EOF
 
 Readonly my $JSON_BODY => "This is the json $UTF8_PAGE version\n";
-Readonly my $JSON_ADMIN_HASH => {
+my $JSON_ADMIN_HASH = {
     content => $JSON_BODY,
     from    => 'devnull9@socialtext.com',
     date    => 'Sat, 30 Sep 2006 22:22:22 GMT',
 };
 Readonly my $JSON_ADMIN_OBJ => encode_json($JSON_ADMIN_HASH);
-Readonly my $JSON_ADMIN_TAG_HASH => {
+my $JSON_ADMIN_TAG_HASH = {
     content => $JSON_BODY,
     from    => 'devnull9@socialtext.com',
     date    => 'Sat, 30 Sep 2006 23:23:23 GMT',

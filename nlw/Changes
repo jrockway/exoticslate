@@ -2,6 +2,18 @@ Change log for Socialtext Open
 
 2.20.X
 
+Release notes, 2.20.1.3  April 2008
+
+  Additional and standardized application logging
+
+  Updated help docs
+
+  Bug: remove deleted attachments in search results
+
+  IE 7: Stack overflow
+  
+  Improved usability of the insert menu
+
 Release notes, 2.20.1.2  April 2008
 
   Fixed inconsistent Database schemas

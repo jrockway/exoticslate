@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Create the wikitests workspace, and populate it with content from the branch
+
+PORT=`perl -e 'print $> + 20000'`
+SERVER=http://`hostname`:$PORT
+
+echo Creating wikitests workspace
+$ST_CURRENT/nlw/bin/st-admin create-workspace --title 'Wikitests' --name wikitests
+$ST_CURRENT/nlw/bin/st-admin add-workspace-admin  --email devnull1@socialtext.com --workspace wikitests
+
+echo Adding user tester to wikitests workspace
+$ST_CURRENT/nlw/bin/st-admin  create-user --e tester@ken.socialtext.net --p wikitest
+$ST_CURRENT/nlw/bin/st-admin add-member  --e tester@ken.socialtext.net --w wikitests
+
+echo Server is $SERVER
+
+DIR=$ST_CURRENT/nlw/share/workspaces/wikitests
+stu-local-copy -s $SERVER -w wikitests  -u devnull1@socialtext.com -p d3vnu11l --from $DIR
+
+$ST_CURRENT/nlw/bin/st-admin index-workspace --w wikitests --sync
+
+echo
+echo "Wikitests are now available at: $SERVER/wikitests"
+echo Use run-wiki-tests --plan-server $SERVER  --plan-workspace wikitests
+echo
+echo
+
+#for USER in {ken.pier,chris.mcmahon,rick.scott,shahed.hossain,matt.heusser} ;
+#do
+#    $ST_CURRENT/nlw/bin/st-admin add-workspace-admin --workspace wikitests --email  $USER@socialtext.com ;
+#done ;
+
+

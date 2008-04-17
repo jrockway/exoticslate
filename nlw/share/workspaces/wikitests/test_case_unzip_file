@@ -1,0 +1,73 @@
+* HighPermissions
+
+*NOTE: This test only works if selenium_browser has higher powers, i.e. *chrome for firefox*
+
+| *Comment* | Test Case: Unzip File |  |
+| *Comment* | wikitest files should be in %%wikitest_files%% on the browser server |  |
+| *Comment* | *This test only works if selenium_browser has higher powers, i.e. *chrome for firefox* |  |
+
+| *Comment* | Test Case: Unzip File set permissions to member-only |  |
+| st-admin | set-permissions --workspace %%workspace%% --permission member-only |  |
+
+| *Comment* | Test Case: Unzip File upload wikitest.txt and wikitestzip.zip |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| type_ok | st-newpage-pagename-edit | Unzip File %%start_time%% |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | Some Content For Unzip File %%start_time%% |
+| click_and_wait | st-save-button-link |  |
+
+| *Comment* | Test Case: Unzip File upload txt and zip |  |
+| wait_for_element_visible_ok | st-attachments-uploadbutton |  |
+| click_ok | st-attachments-uploadbutton |  |
+| wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
+| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.txt |
+| wait_for_text_present_ok | Uploaded files: | 10000 |
+
+| wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
+| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitestzip.zip |
+| wait_for_text_present_ok | Uploaded files: | 10000 |
+
+| *Comment* | Test Case: Unzip File wikitestzip.zip upload waits for the Done button |  |
+| wait_for_element_visible_ok | st-attachments-attach-closebutton | 30000 |
+| pause | 10000 | You have to wait for the page to repaint |
+| click_ok | st-attachments-attach-closebutton |  |
+
+| *Comment* | Test Case: Unzip File delete the links from the page |  |
+| wait_for_element_visible_ok | st-edit-button-link | 30000 |
+| click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | DELETE THE CONTENT OF Unzip File %%start_time%% |
+| click_and_wait | st-save-button-link |  |
+
+| wait_for_element_visible_ok | st-attachments-title | 30000 |
+| wait_for_element_visible_ok | st-attachments-listing | 30000 |
+| text_like | //a[contains(@href,'original/wikitest.txt')] | wikitest.txt |
+| text_like | //a[contains(@href,'original/wikitestzip.zip')] | wikitestzip.zip |
+
+| *Comment* | Test Case: Unzip File reload the page to unzip file |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | link=Unzip File %%start_time%% |  |
+| wait_for_element_visible_ok | st-attachments-managebutton | 30000 |
+| click_ok | st-attachments-managebutton |  |
+| wait_for_element_visible_ok | link=extract | 30000 |
+| click_ok | link=extract |  |
+| wait_for_text_present_ok | publictests-2-2.xls | 30000 |
+| wait_for_text_present_ok | O Star.txt | 30000 |
+| wait_for_text_present_ok | Poem By Robert Frost.pdf | 30000 |
+| wait_for_text_present_ok | st-logo-symbol.jpg | 30000 |
+| text-like | st-attachments-manage-interface | publictests-2-2.xls |
+| text-like | st-attachments-manage-interface | O Star.txt |
+| text-like | st-attachments-manage-interface | Poem By Robert Frost.pdf |
+| text-like | st-attachments-manage-interface | st-logo-symbol.jpg |
+| click_ok | st-attachments-manage-closebutton |  |
+
+| *Comment* | Test Case: Unzip File Teardown |  |
+
+| st-admin | purge-page --workspace %%workspace%% --page unzip_file_%%start_time%% |  |
+
+| *Comment* | Test Case: Unzip File COMPLETED |

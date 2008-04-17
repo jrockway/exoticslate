@@ -1,0 +1,41 @@
+*Note: Assumes is being run on test-data workspace*
+
+| *Comment* | Test Case: Weblog Archive and Navigation |
+
+| setSpeed | 100 |  |
+| open_ok | /%%workspace%%/index.cgi?action=weblog_display&category=recent+changes |  |
+| wait_for_text_present_ok | December 2006 | 60000 |
+| text_like | st-weblog-archives | qr/2007.+2006/ |
+| click_and_wait | link=December 2006 |  |
+| text_unlike | st-weblog-content | 2007 |
+| wait_for_text_present_ok | January 2007 |  |
+| click_and_wait | link=January 2007 |  |
+| wait_for_text_present_ok | Jan | 30000 |
+| text_like | st-weblog-content | Jan |
+
+| *Comment* | Test Case: Weblog Archive and Navigation edit |
+| wait_for_element_visible_ok | link=edit | 10000 |
+| click_and_wait | link=edit |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | newcontent_%%start_time%% |
+| click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | link=edit | 30000 |
+| text_like | st-weblog-navigation | newcontent_%%start_time%% |
+
+| *Comment* | Test Case: Weblog Archive and Navigation cancel |
+| click_and_wait | link=edit |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | 2ndcontent_%%start_time%% |
+| click_and_wait | st-cancel-button-link |  |
+| confirmation_like | Are you sure you want to Cancel?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay in the editor. |  |
+| wait_for_element_visible_ok | link=edit | 30000 |
+| text_unlike | st-weblog-navigation | 2ndcontent_%%start_time%% |
+
+| *Comment* | Test Case: Weblog Archive and Navigation teardown |  |
+| st-admin | purge-page --w %%workspace%% --page navigation_for_recent_changes |  |
+
+| *Comment* | Test Case: Weblog Archive and Navigation COMPLETED |

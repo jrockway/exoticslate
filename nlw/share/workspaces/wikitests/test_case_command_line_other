@@ -1,0 +1,53 @@
+| *Comment* | STARTED Test Case: Command Line Tests OTHER |  |
+
+ set-logo-from-file --workspace --file /path/to/file.jpg
+
+| set | cli_user | `cli-%%start_time%%@ken.socialtext.net` |
+| st-admin | create-user --email %%cli_user%% --password d3vnu1ll |  |
+
+| set | cmdline_workspace | clw_%%start_time%% |
+| st-admin | create-workspace --name %%cmdline_workspace%% --title %%cmdline_workspace%% | A new workspace named "%%cmdline_workspace%%" was created |
+
+| *Comment* | Test Case: Command Line Tests OTHER set-logo-from-file |  |
+| *Comment* | Test Case: Command Line Tests OTHER set-logo-from file needs %%wikitest_files%%/wikitest.jpg on the CLIENT, not the server |  |
+| st-admin | set-logo-from-file | qr/The command you called \(set_logo_from_file\) requires a workspace to be specified/ |
+| st-admin | set-logo-from-file --workspace %%cmdline_workspace%% | qr/The command you called \(set_logo_from_file\) requires a file to be specified with the --file option/ |
+
+ st-admin | set-logo-from-file --workspace %%cmdline_workspace%% --file /foo/bar | Cannot read /foo/bar: No such file or directory
+
+| st-admin | set-logo-from-file --workspace %%cmdline_workspace%% --file /foo/bar | Logo file must be a gif, jpeg, or png file. |
+| st-admin | set-logo-from-file --workspace %%cmdline_workspace%% --file %%wikitest_client_files%%wikitest.jpg | The logo file was imported as the new logo for the %%cmdline_workspace%% workspace. |
+
+| *Comment* | Test Case: Command Line Tests OTHER set-comment-form-custom-fields succeeds with no arguments |  |
+
+| st-admin | set-comment-form-custom-fields | qr/The command you called \(set_comment_form_custom_fields\) requires a workspace to be specified/ |
+| st-admin | set-comment-form-custom-fields --workspace %%cmdline_workspace%% | qr/The custom comment form fields for the %%cmdline_workspace%% workspace have been updated/ |
+
+ set-ping-uris --workspace <uri> <uri>
+
+| *Comment* | Test Case: Command Line Tests OTHER set-ping-uris succeeds with no arguments |  |
+
+| st-admin | set-ping-uris | qr/The command you called \(set_ping_uris\) requires a workspace to be specified/ |
+| st-admin | set-ping-uris --workspace %%cmdline_workspace%% | qr/The ping uris for the %%cmdline_workspace%% workspace have been updated/ |
+
+ send-weblog-pings --workspace --page
+
+| st-admin | send-weblog-pings | qr/The command you called \(send_weblog_pings\) requires a workspace to be specified/ |
+| st-admin | send-weblog-pings --workspace %%cmdline_workspace%% | qr/The %%cmdline_workspace%% workspace has no ping uris/ |
+
+ update-page --workspace --page [--username or --email] < page-body.txt
+
+| st-admin | update-page | qr/The command you called \(update_page\) requires a workspace to be specified/ |
+| st-admin | update-page --workspace %%cmdline_workspace%% | qr/The command you called \(update_page\) requires a user to be specified/ |
+| st-admin | update-page --workspace %%cmdline_workspace%% --page %%cmdline_wiki%%_wiki | qr/The command you called \(update_page\) requires a user to be specified/ |
+| st-admin | update-page --workspace %%cmdline_workspace%% --user %%cli_user%% | qr/The command you called \(update_page\) requires a page to be specified/ |
+
+ from-input < <list of commands>
+ version
+ help
+
+| *Comment* | Test Case: Command Line Tests OTHER from-input requires STDIN |  |
+| st-admin | version | qr/Socialtext v.+Copyright 2004-200.+ Socialtext, Inc./ |
+| st-admin | help | qr/Socialtext::CLI.+USERS.+WORKSPACES.+INDEXING.+ACCOUNTS.+EMAIL.+OTHER.+Copyright.+Socialtext/ |
+
+| *Comment* | Test Case: Command Line Tests OTHER COMPLETED |  |

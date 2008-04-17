@@ -134,6 +134,7 @@ sub _record_object {
     # REVIEW: The arguments to _link_to suggest an interface that
     # all these object should support, perhaps path()?
     if ($object->isa('Socialtext::Page')) {
+        $self->_log_page_action($object);
         $self->_link_to($object->file_path);
     }
     elsif ($object->isa('Socialtext::Attachment')) {
@@ -147,6 +148,30 @@ sub _record_object {
     }
 }
 
+sub _log_page_action {
+    my $self   = shift;
+    my $object = shift;
+
+    return if $object->hub->rest->query->param('clobber');
+
+    if ( $object->hub->action eq 'edit_content' ||
+         $object->hub->action eq 'rename_page' ) {
+         return unless $object->restored || $object->revision_count == 1;
+    }
+
+    my $action = ($object->hub->action eq 'delete_page') ? 'DELETE' : 'CREATE';
+    my $ws     = $object->hub->current_workspace;
+    my $user   = $object->hub->current_user;
+    my $page   = $object->hub->pages->current;
+
+    st_log()->info("$action,PAGE,"
+                   . 'workspace:' . $ws->name . '(' . $ws->workspace_id . '),'
+                   . 'page:' . $page->id . ','
+                   . 'user:' . $user->username . '(' . $user->user_id . '),'
+                   . '[NA]'
+    );
+}
+
 # symlink the provided path
 sub _link_to {
     my $self   = shift;
@@ -157,8 +182,6 @@ sub _link_to {
     
     my $directory = Socialtext::Paths::change_event_queue_dir();
     my $link_name = Socialtext::File::catfile($directory, $file_name);
-
-    st_log->debug("writing change event for $path");
 
     symlink( $path, $link_name ) or die "unable to symlink $link_name to $path: $!";
 }

@@ -1,0 +1,25 @@
+| *Comment* | STARTING Test Case Command Line INDEXING |  |
+
+| set | cmdline_workspace | clw_%%start_time%% |
+| st-admin | create-workspace --name %%cmdline_workspace%% --title %%cmdline_workspace%% | A new workspace named "%%cmdline_workspace%%" was created |
+
+| *Comment* | Test Case: Command Line Tests INDEXING index-workspace, delete-search-index, index-page, index-attachment |  |
+
+| st-admin | index-workspace | qr/The command you called \(index_workspace\) requires a workspace to be specified/ |
+| st-admin | delete-search-index | qr/The command you called \(delete_search_index\) requires a workspace to be specified/ |
+| st-admin | delete-search-index --workspace %%cmdline_workspace%% | qr/The search index for the %%cmdline_workspace%% workspace has been deleted/ |
+| st-admin | index-workspace --workspace %%cmdline_workspace%% | qr/The %%cmdline_workspace%% workspace has been indexed/ |
+
+| st-admin | index-page | qr/The command you called \(index_page\) requires a workspace to be specified/ |
+| st-admin | index-attachment | qr/The command you called \(index_attachment\) requires a workspace to be specified/ |
+| st-admin | index-page --workspace %%cmdline_workspace%% | qr/The command you called \(index_page\) requires a page to be specified/ |
+| st-admin | index-attachment --workspace %%cmdline_workspace%% | qr/The command you called \(index_attachment\) requires a page to be specified/ |
+| st-admin | index-attachment --workspace %%cmdline_workspace%% --page %%cmdline_workspace%% | qr/The command you called \(index_attachment\) requires an attachment to be specified/ |
+| st-admin | index-page --workspace %%cmdline_workspace%% --page %%cmdline_workspace%%_wiki | There is no page with the id "%%cmdline_workspace%%_wiki" in the %%cmdline_workspace%% workspace. |
+
+| st-admin | index-page --workspace %%cmdline_workspace%% --page advanced_getting_around | The Advanced Getting Around page in the %%cmdline_workspace%% workspace has been indexed. |
+
+TODO: find a way to calculate the attachment ID
+ st-admin | index-attachment --workspace %%cmdline_workspace%% --page advanced_getting_around --attachment 20080320064508-16-27288 | The Navbar-All-tags.png attachment in the %%cmdline_workspace%% workspace has been indexed. |
+
+| *Comment* | Test Case Command Line INDEXING COMPLETED |  |

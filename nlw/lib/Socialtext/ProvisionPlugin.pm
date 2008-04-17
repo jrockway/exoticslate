@@ -158,10 +158,6 @@ sub _workspaces_create_full {
     # XXX - I think this is being called just to make sure it exists (HACK)
     $self->user_plugin_directory( $user->email_address );
 
-    $self->log_action(
-        "INVITE_USER_FROM_CLONE_WORKSPACE",
-        $user->email_address );
-
     return $response;
 }
 

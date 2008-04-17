@@ -15,10 +15,12 @@ our @EXPORT = qw(
     next_log_like
     logged_is
     logged_like
+    logged_not_like
     );
 
 our @EXPORT_OK = qw(
     st_log
+    st_timed_log
     );
 
 our %EXPORT_TAGS = (
@@ -29,6 +31,8 @@ our %EXPORT_TAGS = (
 ###############################################################################
 # Set up mock object
 my $Instance;
+
+sub class_id { 'logging_class' }
 
 sub st_log {
     my $method = shift;
@@ -41,6 +45,10 @@ sub st_log {
 
 sub new {
     return st_log();
+}
+
+sub st_timed_log {
+    return;
 }
 
 ###############################################################################
@@ -124,6 +132,19 @@ sub logged_like($$;$) {
     my ($level, $rgx, $name) = @_;
     $name ||= "log contained: $level => $rgx";
 
+    _generic_log_like( $level, $rgx, $name, 1, 0 );
+}
+
+sub logged_not_like($$;$) {
+    my ($level, $rgx, $name) = @_;
+    $name ||= "log did not contain: $level => $rgx";
+
+    _generic_log_like( $level, $rgx, $name, 0, 1 );
+}
+
+sub _generic_log_like {
+    my ($level, $rgx, $name, $match_result, $no_match_result) = @_;
+
     my $offset = 0;
     while (1) {
         $offset ++;
@@ -134,11 +155,11 @@ sub logged_like($$;$) {
 
         my @args = st_log->call_args($offset);
         if ($args[1] and ($args[1] =~ $rgx)) {
-            return $Test->ok(1, $name);
+            return $Test->ok($match_result, $name);
         }
     }
 
-    $Test->ok(0, $name);
+    $Test->ok($no_match_result, $name);
 }
 
 1;

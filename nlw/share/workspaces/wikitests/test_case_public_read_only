@@ -1,0 +1,41 @@
+| *Comment* | Test Case: Public-Read-Only |
+
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Workspace Privacy |  |
+| click_ok | document.forms[1].permission_set_name[2] |  |
+| click_and_wait | Button |  |
+| st-logout |  |  |
+| text_unlike | st-actions-bar | Edit |
+| text_unlike | st-actions-bar | Comment |
+| text_unlike | st-tags | Add tag |
+| text_unlike | st-attachments | Upload files |
+| text_unlike | st-attachments | Manage files |
+| text_like | st-display-mode-container | Login |
+| text_like | st-display-mode-container | Register |
+| click_and_wait | link=Settings |  |
+| text_like | errors-and-messages | To set your preferences for a workspace, you must be logged in. |
+| st-admin | create-user --email user_%%start_time%%@ken.socialtext.net --password 123456 |  |
+| type_ok | username | user_%%start_time%%@ken.socialtext.net |
+| type_ok | password | 123456 |
+| click_and_wait | //input[@value='Log in'] |  |
+| text_like | st-settings-select | My Settings |
+| text_like | st-settings-select | List All Users |
+| text_like | st-settings-select | My Workspaces |
+| text_like | st-settings-select | Unsubscribe |
+| text_like | st-settings-select | Page Editing |
+| text_like | st-settings-select | Screen Layout |
+| text_like | st-settings-select | Your Notepad |
+| text_like | st-settings-select | What's New |
+| text_like | st-settings-select | Syndicate |
+| text_like | st-settings-select | Time |
+| text_like | st-settings-select | Watchlist |
+| text_like | st-settings-select | Weblogs |
+| text_unlike | st-settings-select | Manage All Users |
+
+ text_like | st-settings-select | Email Notification | Note: Defaults for test-data have changed, email is no longer default on.
+
+| *Comment* | Test Case: Public-Read-Only Teardown |  |
+| st-logout |  |  |
+| st-admin | set-permissions --workspace %%workspace%% --permissions member-only |  |
+
+| *Comment* | Test Case: Public-Read-Only COMPLETED |

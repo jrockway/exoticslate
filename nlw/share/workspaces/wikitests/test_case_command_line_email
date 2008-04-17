@@ -1,0 +1,27 @@
+| *Comment* | STARTED Test Case: Command Line Tests EMAIL |  |
+
+send_email_notifications --workspace --page
+send_watchlist_emails --workspace --page
+
+| *Comment* | Test Case: Command Line Tests EMAILcreate a page in %%workspace%% for notification |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | st-newpage-pagename-edit | cmdline_%%start_time%% |
+| type_ok | wikiwyg_wikitext_textarea | cmdline_%%start_time%% |
+| click_and_wait | st-save-button-link |  |
+
+| *Comment* | Test Case: Command Line Tests EMAILsend notifications |  |
+| st-admin | set-workspace-config --workspace %%workspace%% email_notify_is_enabled 1 |  |
+| st-admin | send_email_notifications --workspace %%workspace%% --page cmdline_%%start_time%%_xxx | qr/There is no page with the id "cmdline_%%start_time%%_xxx" in the %%workspace%% workspace/ |
+| st-admin | send_email_notifications --workspace %%workspace%% --page cmdline_%%start_time%% | qr/Email notifications were sent for the cmdline_%%start_time%% page/ |
+| st-admin | send_watchlist_emails --workspace %%workspace%% --page cmdline_%%start_time%% | qr/Watchlist emails were sent for the cmdline_%%start_time%% page/ |
+
+deliver-email --workspace
+
+| *Comment* | Test Case: Command Line Tests deliver-email need email in on stdin-- used by exim to hand off mail to ST |  |
+| st-admin | deliver-email | qr/The command you called \(deliver_email\) requires a workspace to be specified/ |
+
+| *Comment* | Test Case: Command Line Tests COMPLETED |  |

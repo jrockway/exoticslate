@@ -1,0 +1,44 @@
+The error conditions for this case are covered in {link: [Test case: self register]} and are not repeated here. This case only covers inviting anonymous users into the test workspace. It uses {link: [Test case: self register] st-force-confirmation}
+
+* [Test: Login/Registration Workflow]
+* [Test case: Invite Anonymous User Results]
+
+| *Comment* | Test Case: Invite Anonymous User Invite new users |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Invite New Users |  |
+| st-admin | remove-member --email %%start_time%%.one@ken.socialtext.net --workspace %%workspace%% |  |
+| st-admin | remove-member --email %%start_time%%.two@ken.socialtext.net --workspace %%workspace%% |  |
+| type_ok | users_new_ids | %%start_time%%.one@ken.socialtext.net\n%%start_time%%.two@ken.socialtext.net\n%%start_time%%.malformed@ken.socialtext. |
+| click_ok | append_invitation |  |
+| click_and_wait | //input[@value='Invite'] |  |
+| text_like | st-settings-section | qr/The following email addresses were invalid.+%%start_time%%\.malformed\@ken\.socialtext\./ |
+| text_like | st-settings-section | qr/Your request to invite the following users has been sent.+%%start_time%%\.one\@ken\.socialtext\.net.+%%start_time%%\.two\@ken\.socialtext\.net/ |
+
+| *Comment* | Test Case: Invite Anonymous User Make user an admin |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Manage All Users |  |
+| st-should-be-admin | %%start_time%%.one@ken.socialtext.net | 1 |
+| st-logout |  |  |
+| st-force-confirmation | %%start_time%%.one@ken.socialtext.net | password |
+| st-force-confirmation | %%start_time%%.two@ken.socialtext.net | password |
+| st-login | %%start_time%%.one@ken.socialtext.net | password |
+| text_like | st-wiki-title-invite | Invite your colleagues |
+| st-logout |  |  |
+| st-login | %%start_time%%.two@ken.socialtext.net | password |
+| text_unlike | //body | Invite your colleagues |
+| st-logout |  |  |
+
+| *Comment* | Test Case: Invite Anonymous User explicitly login |  |
+| type_ok | username | %%username%% |
+| type_ok | password | %%password%% |
+| click_and_wait | //input[@value='Log in'] |  |
+
+| *Comment* | Test Case: Invite Anonymous User Teardown |  |
+| st-admin | remove-member --email %%start_time%%.one@ken.socialtext.net --workspace %%workspace%% |  |
+| st-admin | remove-member --email %%start_time%%.two@ken.socialtext.net --workspace %%workspace%% |  |
+
+| *Comment* | Test case: Invite Anonymous User COMPLETED |  |
+
+----
+
+ st-should-be-admin makes listed user an admin. You must be in the Manage All Users screen

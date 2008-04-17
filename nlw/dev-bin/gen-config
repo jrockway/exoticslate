@@ -524,7 +524,7 @@ sub apache2_params {
 
         # For the same reason as above, we set this here rather than in the
         # logic in Socialtext::AppConfig.
-        $config{syslog_level} = 'debug';
+        $config{syslog_level} = 'info';
     }
     else {
         $config{user} = get_build_setting( 'st-user' );

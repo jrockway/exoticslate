@@ -1,0 +1,158 @@
+| *Comment* | START Test Case: Settings: User |
+
+| set | new_user | user_%%start_time%%@ken.socialtext.net |
+| set | new_name | user %%start_time%% |
+
+| *Comment* | Test Case: Settings: User RT 25472 |  |
+| *Comment* | "Your workspaces" displays workspace that user is no longer member of |  |
+
+| st-admin | create-workspace --name rt-25472%%start_time%% --title "rt 25472%%start_time%%" |  |
+| st-admin | add-member --email %%email%% --workspace rt-25472%%start_time%% |  |
+| open_ok | /rt-25472%%start_time%% |  |
+| open_ok | /test-data |  |
+| text_like | rt 25472%%start_time%% |  |
+| st-admin | remove-member --email %%email%% --workspace rt-25472%%start_time%% |  |
+| click_ok | st-home-link |  |
+| wait_for_text_not_present_ok | rt 25472%%start_time%% | 5000 |
+| st-admin | delete-workspace --workspace rt-25472%%start_time%% --no-export |  |
+| *Comment* | Test Case: Settings: User END RT 25472 |  |
+
+| *Comment* | Test Case: Settings: User create user-level account for testing |  |
+| st-admin | create-user --email %%new_user%% --password 123456 |  |
+| st-admin | add-member --email %%new_user%% --workspace %%workspace%% |  |
+| st-logoutin | %%new_user%% | 123456 |
+
+| *Comment* | Test Case: Settings: User verify settings menu |  |
+| st-admin | set-workspace-config --workspace %%workspace%% email_notify_is_enabled 1 |  |
+| click_and_wait | link=Settings |  |
+| text_like | st-settings-select | My Settings |
+| text_like | st-settings-select | List All Users |
+| text_like | st-settings-select | My Workspaces |
+| text_like | st-settings-select | Unsubscribe |
+| text_like | st-settings-select | Create New Weblog |
+| text_like | st-settings-select | Page Editing |
+| text_like | st-settings-select | Screen Layout |
+| text_like | st-settings-select | Email Notification |
+| text_like | st-settings-select | Your Notepad |
+| text_like | st-settings-select | What's New |
+| text_like | st-settings-select | Syndicate |
+| text_like | st-settings-select | Time |
+| text_like | st-settings-select | Watchlist |
+| text_like | st-settings-select | Weblogs |
+| text_unlike | st-settings-select | Manage All Users |
+
+| *Comment* | Test Case: Settings: User test my settings functionality |  |
+| text_like | st-settings-section | First Name: |
+| text_like | st-settings-section | New password: |
+| type_ok | first_name | First %%start_time%% |
+| type_ok | last_name | Last %%start_time%% |
+| type_ok | old_password | 123456 |
+| type_ok | new_password | 654321 |
+| type_ok | new_password_retype | 654321 |
+| click_and_wait | Button |  |
+| click_and_wait | st-home-link |  |
+| text_like | st-user-welcome | Welcome, First %%start_time%% Last %%start_time%% |
+
+| *Comment* | Test Case: Settings: User test list all users functionality |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=List All Users |  |
+| text_like | st-settings-section | First %%start_time%% Last %%start_time%% |
+
+| *Comment* | Test Case: Settings: User test my workspaces functionality |  |
+| click_and_wait | link=My Workspaces |  |
+| text_like | st-settings-section | %%workspace%% |
+
+| *Comment* | bz-265 |  |
+| wait_for_text_not_present_ok | qr/help-en.+help-en/ |  |
+| *Comment* | end bz-265 | *Comment* | Test Case: Settings: User test create new weblog functionality |  |
+| click_and_wait | link=Create New Weblog |  |
+| text_like | st-settings-section | Create A Weblog |
+| type_ok | weblog_title | No Brackets %%start_time%% Weblog |
+| click_and_wait | Button |  |
+| text_like | st-weblog-content | First Post in No Brackets %%start_time%% Weblog |
+
+| *Comment* | Test Case: Settings: User new weblog with brackets RT 26696 |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Create New Weblog |  |
+| text_like | st-settings-section | Create A Weblog |
+| type_ok | weblog_title | `[Brackets] %%start_time%%` |
+| click_and_wait | Button |  |
+| text_like | st-weblog-content | `First Post in [Brackets] %%start_time%% Weblog` |
+
+| *Comment* | Test Case: Settings: User test page editing functionality |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Page Editing |  |
+| text_like | st-settings-section | Double-click to edit a page? |
+
+| *Comment* | Test Case: Settings: User test screen layout functionality |  |
+| click_and_wait | link=Screen Layout |  |
+| text_like | st-settings-section | Should hovering |
+| text_like | st-settings-section | Include Recently |
+| click_ok | display__include_breadcrumbs |  |
+| click_and_wait | Button |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | link=Announcements and Links |  |
+| text_like | st-breadcrumbs | Recently Viewed |
+
+| *Comment* | Test Case: Settings: User test email notification functionality |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Email Notification |  |
+| text_like | st-settings-section | How often |
+| text_like | st-settings-section | What order |
+| text_like | st-settings-section | What information |
+
+| *Comment* | Test Case: Settings: User test your notepad functionality |  |
+| click_and_wait | link=Your Notepad |  |
+| type_ok | favorites__which_page | %%new_name%% |
+| click_and_wait | Button |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | link=Your Notepad |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| type_ok | wikiwyg_wikitext_textarea | TC: Notepad %%start_time%% |
+| clickAndWait | st-save-button-link |  |
+
+| *Comment* | Test Case: Settings: User test what's new functionality |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=What's New |  |
+| click_ok | recent_changes__include_in_pages |  |
+| click_and_wait | Button |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | link=Announcements and Links |  |
+| wait_for_text_present_ok | First Post | 1000 |
+| text_like | st-recent-changes | First Post in No Brackets %%start_time%% Weblog |
+
+| *Comment* | Test Case: Settings: User test syndicate functionality |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Syndicate |  |
+| text_like | st-settings-section | How many posts |
+
+| *Comment* | Test Case: Settings: User test time functionality |  |
+| click_and_wait | link=Time |  |
+| text_like | st-settings-section | What time zone |
+| text_like | st-settings-section | How should Daylight |
+| text_like | st-settings-section | How should displayed |
+| text_like | st-settings-section | Should times be |
+| text_like | st-settings-section | Should seconds be |
+
+| *Comment* | Test Case: Settings: User test watchlist functionality |  |
+| click_and_wait | link=Watchlist |  |
+| text_like | st-settings-section | How frequently would |
+| text_like | st-settings-section | What information about |
+| text_like | st-settings-section | How many items |
+
+| *Comment* | Test Case: Settings: User test weblogs functionality |  |
+| open_ok | /%%workspace%%/index.cgi?action=preferences_settings;preferences_class_id=weblog |  |
+| text_like | st-settings-section | How many posts |
+
+| *Comment* | Test Case: Settings: User test unsubscribe functionality |  |
+| click_and_wait | link=Unsubscribe |  |
+| click_and_wait | Button |  |
+| st-login | %%new_user%% | 654321 |
+| text_like | errors-and-messages | You are not authorized to view this workspace. |
+
+| *Comment* | Test Case: Settings: User Teardown |  |
+| st-admin | purge-page --w %%workspace%% --p first_post_in_brackets_%%start_time%%_weblog | qr/.+ was purged .+/ |
+| st-admin | purge-page --w %%workspace%% --p first_post_in_no_brackets_%%start_time%%_weblog | qr/.+ was purged .+/ |
+
+| *Comment* | Test Case: Settings: User COMPLETED |

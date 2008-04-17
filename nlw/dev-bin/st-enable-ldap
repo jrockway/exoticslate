@@ -1,0 +1,7 @@
+#!/bin/bash
+
+$ST_CURRENT/nlw/bin/st-config set user_factories LDAP:Default
+cp $ST_CURRENT/nlw/dev-bin/ldap.yaml.st  $HOME/.nlw/etc/socialtext/ldap.yaml
+echo " Copied Socialtext ldap.yaml.st  to $HOME/.nlw/etc/socialtext/ldap.yaml"
+echo
+$ST_CURRENT/nlw/dev-bin/nlwctl restart

@@ -1,0 +1,171 @@
+* HighPermissions
+
+| *Comment* | Test Case: Manage Sorting Files |  |
+| *Comment* | wikitest files should be in %%wikitest_files%% on the browser server |  |
+| *Comment* | *This test only works if selenium_browser has higher powers, i.e. *chrome for firefox* |  |
+
+| setSpeed | 100 |  |
+| set | user_1 | user1_%%start_time%%@ken.socialtext.net |
+| set | user_1_regex | user1_%%start_time%%\@ken\.socialtext\.net |
+| set | user_2 | user2_%%start_time%%@ken.socialtext.net |
+| set | user_2_regex | user2_%%start_time%%\@ken\.socialtext\.net |
+| set | user_3 | user3_%%start_time%%@ken.socialtext.net |
+| set | user_3_regex | user3_%%start_time%%\@ken\.socialtext\.net |
+| set | user_4 | user4_%%start_time%%@ken.socialtext.net |
+| set | user_4_regex | user4_%%start_time%%\@ken\.socialtext\.net |
+| set | user_5 | user5_%%start_time%%@ken.socialtext.net |
+| set | user_5_regex | user5_%%start_time%%\@ken\.socialtext\.net |
+| set | sorting_workspace | manage-file-sorting-%%start_time%% |
+
+| *Comment* | Test Case: Manage Sorting Files Create new ws %%sorting_workspace%% |  |
+| st-admin | create-workspace --name %%sorting_workspace%% --title %%sorting_workspace%% --empty | A new workspace named "%%sorting_workspace%%" was created. |
+
+| *Comment* | Test Case: Sorting Files setup user1 ... user5 |  |
+| st-admin | create-user --email %%user_1%% --password 123456 |  |
+| st-admin | add-member --email %%user_1%% --workspace %%sorting_workspace%% |  |
+| st-admin | create-user --email %%user_2%% --password 123456 |  |
+| st-admin | add-member --email %%user_2%% --workspace %%sorting_workspace%% |  |
+| st-admin | create-user --email %%user_3%% --password 123456 |  |
+| st-admin | add-member --email %%user_3%% --workspace %%sorting_workspace%% |  |
+| st-admin | create-user --email %%user_4%% --password 123456 |  |
+| st-admin | add-member --email %%user_4%% --workspace %%sorting_workspace%% |  |
+| st-admin | create-user --email %%user_5%% --password 123456 |  |
+| st-admin | add-member --email %%user_5%% --workspace %%sorting_workspace%% |  |
+
+| *Comment* | Test Case: Manage Sorting Files Create a new page for uploading |  |
+| st-admin | update-page --email %%user_1%% --workspace %%sorting_workspace%% --page "page1 %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "page1 %%start_time%%" page has been created. |
+
+| *Comment* | Test Case: Manage Sorting Files files user_1 uploads wikitest.jpg |  |
+| open_ok | /%%sorting_workspace%%/index.cgi?page1_%%start_time%% |  |
+| type_ok | username | %%user_1%% |
+| type_ok | password | 123456 |
+| click_and_wait | //input[@value='Log in'] |  |
+| wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
+| click_ok | st-attachments-uploadbutton |  |
+| wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
+| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.jpg |
+| wait_for_text_present_ok | Uploaded files: | 10000 |
+| wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
+| click_ok | st-attachments-attach-closebutton |  |
+| wait_for_element_visible_ok | st-attachments-title | 30000 |
+| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| text_like | //a[contains(@href,'original/wikitest.jpg')] | wikitest.jpg |
+
+| *Comment* | Test Case: Manage Sorting Files user_2 uploads wikitest.doc |  |
+| st-logout |  |  |
+| open_ok | /%%sorting_workspace%%/index.cgi?page1_%%start_time%% |  |
+| type_ok | username | %%user_2%% |
+| type_ok | password | 123456 |
+| click_and_wait | //input[@value='Log in'] |  |
+| wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
+| click_ok | st-attachments-uploadbutton |  |
+| wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
+| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.doc |
+| wait_for_text_present_ok | Uploaded files: | 10000 |
+| wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
+| click_ok | st-attachments-attach-closebutton |  |
+| wait_for_element_visible_ok | st-attachments-title | 30000 |
+| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| text_like | //a[contains(@href,'original/wikitest.doc')] | wikitest.doc |
+
+| *Comment* | Test Case: Manage Sorting Files user_3 uploads wikitestzip.zip |  |
+| st-logout |  |  |
+| open_ok | /%%sorting_workspace%%/index.cgi?page1_%%start_time%% |  |
+| type_ok | username | %%user_3%% |
+| type_ok | password | 123456 |
+| click_and_wait | //input[@value='Log in'] |  |
+| wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
+| click_ok | st-attachments-uploadbutton |  |
+| wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
+| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitestzip.zip |
+| wait_for_text_present_ok | Uploaded files: | 10000 |
+| wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
+| click_ok | st-attachments-attach-closebutton |  |
+| wait_for_element_visible_ok | st-attachments-title | 30000 |
+| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| text_like | //a[contains(@href,'original/wikitestzip.zip')] | wikitestzip.zip |
+
+| *Comment* | Test Case: Manage Sorting Files user_4 uploads wikitest.pdf |  |
+| st-logout |  |  |
+| open_ok | /%%sorting_workspace%%/index.cgi?page1_%%start_time%% |  |
+| type_ok | username | %%user_4%% |
+| type_ok | password | 123456 |
+| click_and_wait | //input[@value='Log in'] |  |
+| wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
+| click_ok | st-attachments-uploadbutton |  |
+| wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
+| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.pdf |
+| wait_for_text_present_ok | Uploaded files: | 10000 |
+| wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
+| click_ok | st-attachments-attach-closebutton |  |
+| wait_for_element_visible_ok | st-attachments-title | 30000 |
+| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| text_like | //a[contains(@href,'original/wikitest.pdf')] | wikitest.pdf |
+
+| *Comment* | Test Case: Manage Sorting Files user_5 uploads wikitest.txt |  |
+| st-logout |  |  |
+| open_ok | /%%sorting_workspace%%/index.cgi?page1_%%start_time%% |  |
+| type_ok | username | %%user_5%% |
+| type_ok | password | 123456 |
+| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Time |  |
+| check_ok | timezone__time_display_seconds |  |
+| click_and_wait | Button |  |
+| open_ok | /%%sorting_workspace%%/?page1_%%start_time%% |  |
+| wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
+| click_ok | st-attachments-uploadbutton |  |
+| wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
+| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.txt |
+| wait_for_text_present_ok | Uploaded files: | 10000 |
+| wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
+| click_ok | st-attachments-attach-closebutton |  |
+| wait_for_element_visible_ok | st-attachments-title | 30000 |
+| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| text_like | //a[contains(@href,'original/wikitest.txt')] | wikitest.txt |
+
+| *Comment* | Test Case: Manage Sorting Files |  |
+| wait_for_element_visible_ok | st-attachments-managebutton |  |
+| click_ok | st-attachments-managebutton |  |
+| wait_for_element_visible_ok | link=File Name |  |
+| click_ok | link=File Name |  |
+| pause | 3000 |  |
+| text_like | st-attachments-manage-filetable | qr/wikitestzip\.zip.+wikitest\.txt.+wikitest\.pdf.+wikitest\.jpg.+wikitest\.doc/ |
+| click_ok | link=File Name |  |
+| pause | 3000 |  |
+| text_like | st-attachments-manage-filetable | qr/wikitest\.doc.+wikitest\.jpg.+wikitest\.pdf.+wikitest\.txt.+wikitestzip\.zip/ |
+| click_ok | link=Author |  |
+| pause | 3000 |  |
+| text_like | st-attachments-manage-filetable | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_3_regex%%.+%%user_4_regex%%.+%%user_5_regex%%/ |
+| click_ok | link=Author |  |
+| pause | 3000 |  |
+| text_like | st-attachments-manage-filetable | qr/%%user_5_regex%%.+%%user_4_regex%%.+%%user_3_regex%%.+%%user_2_regex%%.+%%user_1_regex%%/ |
+| click_ok | link=Size |  |
+| pause | 3000 |  |
+| text_like | st-attachments-manage-filetable | qr/42B.+20\.2K.+24\.5K.+27\.0K.+30\.5K/ |
+| click_ok | link=Size |  |
+| pause | 3000 |  |
+| text_like | st-attachments-manage-filetable | qr/30\.5K.+27\.0K.+24\.5K.+20\.2K.+42B/ |
+
+We do not have much control on data under "Date Uploaded" column to verify expected and actual sort result. So instead of verifying sort results directly to "Date Uploaded" column, we tried to verify it through the data of other columns. Means that if we do a sort asc or desc on Date Uploaded, we verified the corresponding expected changes of data in other columns to make sure that Date Uploaded sort is working. We have done it twice, one for asc and other one for desc sort by "Date Uploaded".
+
+| *Comment* | Date Uploaded sort is just plain broken and bug number is 513 |  |
+
+TODO:
+*Reinsert the following tests when bug 513 gets fixed*
+click_ok | link=Date Uploaded | |
+pause | 3000 | |
+text_like | st-attachments-manage-filetable | qr/%%user_5_regex%%.+%%user_4_regex%%.+%%user_3_regex%%.+%%user_2_regex%%.+%%user_1_regex%%/ |
+text_like | st-attachments-manage-filetable | qr/wikitest\.txt.+wikitest\.pdf.+wikitestzip\.zip.+wikitest\.doc.+wikitest\.jpg/ |
+text_like | st-attachments-manage-filetable | qr/42B.+30\.5K.+24\.5K.+27\.0K.+20\.2K/ |
+click_ok | link=Date Uploaded | |
+pause | 3000 | |
+text_like | st-attachments-manage-filetable | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_4_regex%%.+%%user_5_regex%%.+%%user_3_regex%%/ |
+text_like | st-attachments-manage-filetable | qr/wikitest\.jpg.+wikitest\.doc.+wikitestzip\.zip.+wikitest\.pdf.+wikitest\.txt/ |
+text_like | st-attachments-manage-filetable | qr/20\.2K.+27\.0K.+24\.5K.+30\.5K.+42B/ |
+click_ok | st-attachments-manage-closebutton | |
+
+| *Comment* | Test Case: Manage Sorting Files Teardown |  |
+| st-admin | delete-workspace --workspace %%sorting_workspace%% --no-export |  |
+
+| *Comment* | Test Case: Manage Sorting Files COMPLETED |

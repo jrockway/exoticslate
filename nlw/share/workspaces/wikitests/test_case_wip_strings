@@ -1,0 +1,33 @@
+| *Comment* | Test Case: WIP Strings |  |
+
+| setSpeed | 100 |  |
+
+| set | test_string | `人的口音言語，都是一樣` |
+| set | test_string_esc | `人的口音言語，都是一樣` |
+| set | test_id | 人的口音言語，都是一樣 |
+
+| *Comment* | Test Case: String testing %%test_string%% |  |
+| include | [Test Case: String Use] |
+
+| set | test_string | `Double dashes -- are double trouble` |
+| set | test_string_esc | `Double dashes \-\- are double trouble` |
+| set | test_id | `double_dashes_are_double_trouble` |
+
+| *Comment* | Test Case: Strings testing %%test_string%% |  |
+| include | [Test Case: String Use] |  |
+
+| set | test_string | `C++ Stuff` |
+| set | test_string_esc | `C\+\+ Stuff` |
+| set | test_id | c_stuff |
+
+| *Comment* | Test Case: Strings testing %%test_string%% |  |
+| include | [Test Case: String Use] |  |
+
+| set | test_string | `%%start_time%%3*5*7*9*12*15*18*21*24*27*30*33*36*39*42*45*48*51*54*57*60*63*66*69*72*75*78*81*84*87*90*93*96*100` |
+| set | test_string_esc | `%%start_time%%3\*5\*7\*9\*12\*15\*18\*21\*24\*27\*30\*33\*36\*39\*42\*45\*48\*51\*54\*57\*60\*63\*66\*69\*72\*75\*78\*81\*84\*87\*90\*93\*96\*100` |
+| set | test_id | %%start_time%%35791215182124273033363942454851545760636669727578818487909396100 |
+
+| *Comment* | Testing Case: Strings testing %%test_string%% |  |
+| include | [Test Case: String Use] |
+
+| *Comment* | Test Case: WIP Strings COMPLETED |

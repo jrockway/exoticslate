@@ -272,6 +272,35 @@ sub st_is_watched {
     return $self->st_watch_page($watch_on, $page_name, 'verify only');
 }
 
+
+=head2 st_rm_rf( $command_options )
+
+Runs an command-line rm -Rf command with the supplied options.
+
+Note that this will delete files, directories, and not prompt.  Use at your own risk.
+
+=cut
+
+sub st_rm_rf {
+    my $self = shift;
+    my $options = shift;
+    unless (defined $options) {
+        die "parameter required in call to st_rm_rf\n";
+    }
+    
+    _run_command("rm -Rf $options", 'ignore output');
+}
+
+=head2 st_qa_setup_reports 
+
+Run the command-line script st_qa_setup_reports that populates reports in order to test the usage growth report
+
+=cut
+
+sub st_qa_setup_reports {
+    _run_command("st-qa-setup-reports",'ignore output');
+}
+
 =head2 st_admin( $command_options )
 
 Runs st_admin command line script with the supplied options.
@@ -431,11 +460,12 @@ sub _click_user_row {
 
 sub _run_command {
     my $command = shift;
-    my $verify = shift;
+    my $verify = shift || '';
     my $output = qx($command 2>&1);
+    return if $verify eq 'ignore output';
 
     if ($verify) {
-        like $output, $verify, $command if $verify;
+        like $output, $verify, $command;
     }
     else {
         warn $output;

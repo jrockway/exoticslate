@@ -160,13 +160,14 @@ sub _duplicate {
                );
 
 
-    my $page_exists = $self->hub->pages->page_exists_in_workspace($self->cgi->new_title, $workspace->name);
+    my $page_title = $self->cgi->new_title;
+    my $page_exists = $self->hub->pages->page_exists_in_workspace($page_title, $workspace->name);
 
-    return 0 if ($page_exists && $self->cgi->clobber ne $self->cgi->new_title);
+    return 0 if ($page_exists && $self->cgi->clobber ne $page_title);
 
     return $self->hub->pages->current->duplicate(
         $workspace,
-        $self->cgi->new_title,
+        $page_title,
         $self->cgi->keep_categories || '',
         $self->cgi->keep_attachments || '',
         $self->cgi->clobber,

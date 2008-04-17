@@ -1,0 +1,119 @@
+TODO: try automating email to weblog using Email This Page with the right address to create a weblog entry
+
+RSS feeds are tested in a separate test
+
+| *Comment* | Test Case: Weblogs |
+
+| setSpeed | 100 |  |
+| *Comment* | Test Case: Weblogs Create test weblog |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Create New Weblog |  |
+| type_ok | weblog_title | test_%%start_time%%_weblog |
+| click_and_wait | Button |  |
+
+| *Comment* | Test Case: Weblogs Test Weblog pulldown |  |
+| *Comment* | reliably open Recent Changes, navigate away then revisit it |  |
+| open_ok | /%%workspace%%/index.cgi?action=weblog_display&category=recent+changes |  |
+| wait_for_element_visible_ok | page-control-category-selector | 3000 |
+| select_ok | page-control-category-selector | test_%%start_time%%_weblog |
+| wait_for_text_present_ok | Weblog: test_%%start_time%%_weblog | 30000 |
+| select_ok | page-control-category-selector | Recent Changes |
+| wait_for_text_present_ok | Weblog: Recent Changes | 30000 |
+| select_ok | page-control-category-selector | test_%%start_time%%_weblog |
+| wait_for_text_present_ok | Weblog: test_%%start_time%%_weblog | 30000 |
+
+Selenium can't "see" feed pages
+ open_ok | /feed/workspace/%%workspace%%?category=test_%%start_time%%_weblog | |
+ text_like | feedSubscribeLine | Subscribe to this feed |
+ text_like | feedBody | This is the first post in test_%%start_time%%_weblog |
+ open_ok | /%%workspace%%/index.cgi?action=weblog_display&category=test_%%start_time%%_weblog | |
+
+| *Comment* | Test Case: Weblogs new post |  |
+| click_and_wait | st-weblog-newpost-button |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| type_ok | st-newpage-pagename-edit | post1_%%start_time%% |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | post1_content_%%start_time%% |
+| click_and_wait | st-save-button-link |  |
+| text_like | st-weblog-content | qr/post1_%%start_time%%.+post1_content_%%start_time%%.+comment.+edit this post.+permalink.+attachments/ |
+
+| *Comment* | Test Case: Weblogs add comment |  |
+| click_ok | link=comment |  |
+| open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=post1_%%start_time%%;caller_action=weblog_display |  |
+| type_ok | st-commentui-textarea | comment1_%%start_time%% |
+| click_and_wait | st-commentui-savelink |  |
+| open_ok | /%%workspace%%/index.cgi?action=weblog_display&category=test_%%start_time%%_weblog |  |
+| text_like | st-weblog-content | comment1_%%start_time%% |
+| click_and_wait | link=edit this post |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | edit1_%%start_time%% |
+| click_and_wait | st-save-button-link |  |
+| text_like | st-weblog-content | edit1_%%start_time%% |
+| click_and_wait | link=permalink |  |
+| text_like | st-page-maincontent | edit1_%%start_time%% |
+| open_ok | /%%workspace%%/index.cgi?action=weblog_display&category=test_%%start_time%%_weblog |  |
+| click_and_wait | link=attachments |  |
+| text_like | st-page-maincontent | edit1_%%start_time%% |
+
+| *Comment* | Test Case: Weblogs square brackets are legal for weblog titles |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Create New Weblog |  |
+| type_ok | weblog_title | `test_[%%start_time%%]_weblog` |
+| click_and_wait | Button |  |
+| select_ok | page-control-category-selector | Recent Changes |
+| wait_for_text_present_ok | Weblog: Recent Changes | 30000 |
+| select_ok | page-control-category-selector | `test_[%%start_time%%]_weblog` |
+| wait_for_text_present_ok | `Weblog: test_[%%start_time%%]_weblog` | 30000 |
+
+| *Comment* | Test Case: Weblogs RT 27013 |  |
+| *Comment* | Test Case: blog or weblog ending respected |  |
+
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Create New Weblog |  |
+| type_ok | weblog_title | X%%start_time%% blog |
+| click_and_wait | Button |  |
+
+| text_like | st-weblog-titletext | Weblog: X%%start_time%% blog |
+
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Create New Weblog |  |
+| type_ok | weblog_title | Y%%start_time%% weblog |
+| click_and_wait | Button |  |
+
+| text_like | st-weblog-titletext | Weblog: Y%%start_time%% weblog |
+
+| *Comment* | Test Case: Weblogs END RT 27013 |  |
+
+| *Comment* | Test Case: Weblogs Duplicate Names |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Create New Weblog |  |
+| type_ok | weblog_title | Z%%start_time%% weblog |
+| click_and_wait | Button |  |
+| text_like | st-weblog-titletext | Weblog: Z%%start_time%% weblog |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Create New Weblog |  |
+| type_ok | weblog_title | Z%%start_time%% |
+| click_and_wait | Button |  |
+| text_like | st-settings-save | error: There is already a 'Z%%start_time%% Weblog' weblog. |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Create New Weblog |  |
+| type_ok | weblog_title | Z%%start_time%% |
+| click_and_wait | Button |  |
+| text_like | st-settings-save | error: There is already a 'Z%%start_time%% Weblog' weblog. |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Create New Weblog |  |
+| type_ok | weblog_title | Z%%start_time%% weblog |
+| click_and_wait | Button |  |
+| text_like | st-settings-save | error: There is already a 'Z%%start_time%% weblog' weblog. |
+
+removed weblog name length test. There is no reason to limit weblog names to 28 chars
+
+| *Comment* | Test Case: Weblogs Teardown |  |
+| st-admin | purge-page --w %%workspace%% --page post1_%%start_time%% |  |
+| st-admin | purge-page --w %%workspace%% --page first_post_in_test_%%start_time%%_weblog |  |
+| st-admin | purge-page --w %%workspace%% --page first_post_in_x%%start_time%%_blog |  |
+| st-admin | purge-page --w %%workspace%% --page first_post_in_y%%start_time%%_weblog |  |
+| st-admin | purge-page --w %%workspace%% --page first_post_in_z%%start_time%%_weblog |  |
+
+| *Comment* | Test Case: Weblogs COMPLETED |

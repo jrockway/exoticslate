@@ -1,0 +1,74 @@
+| *Comment* | STARTING Test Case: Link Interface |  |
+| *Comment* | Test Case: Link Interface create page to be linked to |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | st-newpage-pagename-edit | link_interface_linkme_%%start_time%% |
+| type_ok | wikiwyg_wikitext_textarea |  |
+
+| click_ok | st-save-button-link |  |
+
+| *Comment* | Test Case: Link Interface create page with the link |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | st-newpage-pagename-edit | link_interface_%%start_time%% |
+| type_ok | wikiwyg_wikitext_textarea | link_interface_content_%%start_time%% |
+
+| click_ok | wikiwyg_button_link |  |
+| click_ok | add-wiki-link |  |
+
+ click_ok | wiki-link-text | |
+
+| type_ok | wiki-link-text | TC: Link Interface |
+| type_ok | st-widget-workspace_id | %%workspace%% |
+| type_ok | st-widget-page_title | link_interface_linkme_%%start_time%% |
+| type_ok | wiki-link-section | section two |
+| click_ok | st-widget-savebutton |  |
+| click_and_wait | st-save-button-link |  |
+| click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| *Comment* | Test Case: Link Interface NOTE: this action MUST be verifyValue. Neither text_like nor verify_value_ok work correctly here |  |
+| verifyValue | wikiwyg_wikitext_textarea | "TC: Link Interface"{link: test-data [link_interface_linkme_%%start_time%%] section two} |
+
+| *Comment* | Test Case: Link Interface Valid Web Input |  |
+| click_ok | wikiwyg_button_link |  |
+| text_like | Linked text: |  |
+| click_ok | add-wiki-link |  |
+| type_ok | web-link-text | Socialtext |
+| type_ok | web-link-destination | http://www.socialtext.com |
+| click_ok | st-widget-savebutton |  |
+| click_and_wait | st-save-button-link |  |
+| click_ok | st-edit-button-link |  |
+| wait_for_text_present_ok | Editing: | 10000 |
+| verifyValue | wikiwyg_wikitext_textarea | "Socialtext"<http://www.socialtext.com> |
+
+| *Comment* | Test Case: Link Interface Valid Section Input |  |
+
+| click_ok | wikiwyg_button_link |  |
+| text_like | Linked text: |  |
+| click_ok | add-section-link |  |
+| type_ok | section-link-text | a_section_link |  |
+| click_ok | st-widget-savebutton |  |
+| click_and_wait | st-save-button-link |  |
+| click_ok | st-edit-button-link |  |
+| wait_for_text_present_ok | Editing: | 10000 |
+| verifyValue | wikiwyg_wikitext_textarea | {link: a_section_link} |
+
+| *Comment* | Test Case: Link Interface Bogus Input |  |
+| click_ok | wikiwyg_button_link |  |
+| click_ok | add-web-link |  |
+| type_ok | wiki-link-text | TC: Link Interface |
+| type_ok | st-widget-workspace_id | DoesNotExist |
+| click_ok | st-widget-page_title |  |
+
+| *Comment* | Test Case: Link Interface pause is necessary for the little blue dropdown to appear |  |
+| pause | 2000 |  |
+| text_like | Workspace "DoesNotExist" does not exist on wiki |  |
+| click_ok | st-widget-cancelbutton |  |
+
+| *Comment* | Text Case: Link Interface COMPLETED |  |

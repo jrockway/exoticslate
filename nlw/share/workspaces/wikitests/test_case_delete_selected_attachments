@@ -1,0 +1,84 @@
+* HighPermissions
+
+| *Comment* | Test Case: Delete Selected Attachments |  |
+| *Comment* | wikitest files should be in %%wikitest_files%% on the browser server |  |
+| *Comment* | *This test only works if selenium_browser has higher powers, i.e. *chrome for firefox* |  |
+
+| *Comment* | Test Case: Delete Selected Attachments uploads wikitest.doc and wikitest.jpg |  |
+| *Comment* | Use a page name that will sort to the top of the All Files display |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 10000 |
+| type_ok | st-newpage-pagename-edit | AAAAAA Delete Attachments %%start_time%% |
+| click_and_wait | st-save-button-link |  |
+
+| wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
+| click_ok | st-attachments-uploadbutton |  |
+| wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
+| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.doc |
+| wait_for_text_present_ok | Uploaded files: | 30000 |
+
+| *Comment* | Test Case: Delete Selected Attachments wikitest.doc upload waits for the Done button |  |
+| wait_for_element_visible_ok | st-attachments-attach-closebutton | 60000 |
+| wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
+| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.jpg |
+| wait_for_text_present_ok | Uploaded files: | 30000 |
+
+| *Comment* | Test Case: Delete Selected Attachments wikitest.jpg upload waits for the Done button |  |
+| wait_for_element_visible_ok | st-attachments-attach-closebutton | 60000 |
+| click_ok | st-attachments-attach-closebutton |  |
+
+| *Comment* | Test Case: Delete Selected Attachments Search the attachment and verify that it is present |  |
+| *Comment* | Indexing a page does not index its attachments, so you are stuck indexing the workspace |  |
+| st-admin | index-workspace --workspace %%workspace%% --sync |  |
+| type_ok | st-search-term | Mudville |
+| click_and_wait | st-search-submit |  |
+| text_like | st-search-content | AAAAAA Delete Attachments %%start_time%% |
+| text_like | st-search-content | qr/\Q» Attachment: wikitest.doc\E/ |
+
+| *Comment* | Navigate away and come back in hopes of solidifying this test |  |
+| open_ok | /%%workspace%%/index.cgi? |  |
+| click_and_wait | link=All files |  |
+
+| *Comment* | Test Case: Delete Selected Attachments delete wikitest.doc |  |
+| *Comment* | checking the first checkbox named "selected" because there are no other ids or easily constructed locators. This is bogus. TODO: fix this to positively select wikitest.doc and not rely on it being the first one. |  |
+
+| wait_for_element_visible_ok | selected | 30000 |
+| check_ok | selected |  |
+| is_checked_ok | selected |  |
+| click_and_wait | button | Delete Selected Attachments |
+
+| *Comment* | Test Case: Delete Selected Attachments. See if wikitest.doc got deleted |  |
+| open_ok | /%%workspace%%/index.cgi? |  |
+| wait_for_element_visible_ok | link=AAAAAA Delete Attachments %%start_time%% | 30000 |
+| click_and_wait | link=AAAAAA Delete Attachments %%start_time%% |  |
+
+| *Comment* | Test Case: Delete Selected Attachments delete the links from the page |  |
+| wait_for_element_visible_ok | st-edit-button-link | 30000 |
+| click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | DELETE THE CONTENT OF AAAAAA Delete Attachments %%start_time%% |
+| click_and_wait | st-save-button-link |  |
+
+| wait_for_element_visible_ok | st-attachments-title | 30000 |
+| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| text_like | //a[contains(@href,'original/wikitest.jpg')] | wikitest.jpg |
+| text_unlike | st-attachments | wikitest.doc |
+
+| *Comment* | Test Case: Delete Selected Attachments Search page and verify that no left over ">>attachment:" word in it |  |
+| *Comment* | Deleting an attachment requires reindexing, so you are stuck indexing the workspace |  |
+| st-admin | index-workspace --workspace %%workspace%% --sync |  |
+| type_ok | st-search-term | Mudville |
+| click_and_wait | st-search-submit |  |
+| text_unlike | st-search-content | AAAAAA Delete Attachments %%start_time%% |
+| text_unlike | st-search-content | qr/\Q» Attachment:\E/ |
+
+| *Comment* | Test Case: Delete Selected Attachments teardown |  |
+
+| st-admin | purge-page --workspace %%workspace%% --page aaaaaa_delete_attachments_%%start_time%% |  |
+
+| *Comment* | Test Case: Delete Selected Attachments COMPLETED |  |

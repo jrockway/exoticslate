@@ -117,8 +117,6 @@ sub edit_content {
         );
     }
 
-    $self->log_action("EDIT_PAGE");
-
     return $self->to_display($page);
 }
 
@@ -173,7 +171,6 @@ sub save {
         subject          => $subject,
         user             => $self->hub->current_user,
     );
-    $self->log_action("EDIT_PAGE");
     return $self->to_display($page);
 }
 

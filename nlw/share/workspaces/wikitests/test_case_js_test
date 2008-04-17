@@ -1,0 +1,19 @@
+incorporate JS Tests into WikiTests
+
+| *Comment* | Test Case: JS Test |  |
+| *Comment* | !!! Browser must be set to *firefox, NOT *chrome for this test to work !!! |  |
+| *Comment* | need to explicitly set timeout - 260 seconds |  |
+| set_timeout | 260000 |  |
+| *Comment* | Test Case: JS Test: load the js-test package |  |
+| open | /static/%%start_time%%/js-test/run |  |
+| *Comment* | Test Case: JS Test: wait no more than 260 seconds |  |
+
+Note: because of the way the js-test works, selenium does not "see" the intermediate results.
+But it does "see" the final printout.
+
+| wait_for_text_present_ok | All tests successful | 260000 |
+
+| *Comment* | Test Case: JS Test: pause 5 seconds to admire the view |  |
+| pause | 5000 |  |
+
+| *Comment* | Test case: JS Test COMPLETED |  |

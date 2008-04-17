@@ -104,20 +104,6 @@ sub box {
     return $box;
 }
 
-sub log_action {
-    my $self = shift;
-    my $action = shift;
-    my $extra  = shift;
-    my $workspace = $self->hub->current_workspace->name;
-    my $page_name = $self->hub->pages->current->id;
-    my $user_name = $self->hub->current_user->user_id;
-    my $log_msg = "$action : $workspace : $page_name : $user_name";
-    if ($extra) {
-        $log_msg .= " : $extra";
-    }
-    $self->hub->log->info("$log_msg");
-}
-
 sub new_preference {
     my $self = shift;
     $self->hub->preferences->new_preference( scalar(caller), @_ );

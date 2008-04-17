@@ -109,7 +109,6 @@ sub invite_one_user {
         role => Socialtext::Role->Member(),
     );
 
-    $self->log_action( "INVITE USER", $user->email_address );
     $self->invite_notify ($user);
 }
 

@@ -3,7 +3,6 @@
 
 perl -MCwd -le'print "Running ", Cwd::abs_path(shift)' $0
 
-
 START_PORT=21000 # for SSL
 
 function rm_dir {
@@ -48,6 +47,15 @@ dev-bin/_fresh-dev-env
 
 # Setup robots.txt file to prevent dev-env heat death
 perl -le 'print "User-agent: *\nDisallow: /"' > ~/.nlw/root/docroot/robots.txt
+
+echo "Linking in extra modules ..."
+# We set +e here so that if these fail, fdefs continues
+# otherwise everyone is forced to have all this code checked out
+set +e
+dev-bin/link-control-panel
+dev-bin/link-console
+dev-bin/link-reports
+set -e
 
 if [ $FDEFS_PROXY = 0 ]; then
     echo "Starting in single-Apache mode";

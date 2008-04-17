@@ -16,9 +16,11 @@ use Socialtext::ChangeEvent;
 use Socialtext::Encode;
 use Socialtext::File;
 use Socialtext::Formatter::AbsoluteLinkDictionary;
+use Socialtext::Log qw( st_log );
 use Socialtext::Paths;
 use Socialtext::PageMeta;
 use Socialtext::Search::AbstractFactory;
+use Socialtext::Timer;
 use Socialtext::EmailSender::Factory;
 use Socialtext::l10n qw(loc system_locale);
 
@@ -661,6 +663,8 @@ sub add_comment {
     my $self     = shift;
     my $wikitext = shift;
 
+    my $timer = Socialtext::Timer->new;
+
     # Clean it up.
     $wikitext =~ s/\s*\z/\n/;
 
@@ -670,7 +674,9 @@ sub add_comment {
             . $self->_comment_attribution );
 
     $self->metadata->update( user => $self->hub->current_user );
-    $self->store( user => $self->hub->current_user );
+    my $user = $self->hub->current_user;
+
+    $self->store( user => $user );
 }
 
 sub _comment_attribution {
@@ -682,6 +688,10 @@ sub _comment_attribution {
     }
 
     return '';
+}
+
+sub restored {
+    return ( defined $_[0]->{_restored} ) ? 1 : 0;
 }
 
 sub store {
@@ -700,6 +710,8 @@ sub store {
         my $message = loc("Page title is too long after URL encoding");
         Socialtext::Exception::DataValidation->throw( errors => [ $message ] );
     }
+
+    $self->{_restored} = 1 if $self->deleted;
 
     my $original_categories =
       ref($self)->new(hub => $self->hub, id => $self->id)->metadata->Category;
@@ -1056,6 +1068,9 @@ sub to_absolute_html {
 sub delete {
     my $self = shift;
     my %p = @_;
+
+    my $timer = Socialtext::Timer->new;
+
     Carp::confess('no user given to Socialtext::Page->delete')
         unless $p{user};
 
@@ -1472,6 +1487,7 @@ Loads and stores the revision specified by I<$id>.
         my $self = shift;
         my %p = validate( @_, $spec );
         my $id = shift;
+
         $self->revision_id( $p{revision_id} );
         $self->load;
         $self->store( user => $p{user} );

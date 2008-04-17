@@ -1,0 +1,130 @@
+| *Comment* | Test Case: Settings: Admin |
+
+| *Comment* | Test Case: Settings: Admin make sure user is an admin |  |
+| st-admin | add-workspace-admin --email %%email%% --workspace %%workspace%% |  |
+| st-logoutin |  |  |
+
+| *Comment* | Test Case: Settings: Admin verify content of settings menu |  |
+| click_and_wait | link=Settings |  |
+| text_like | st-settings-select | My Settings |
+| text_like | st-settings-select | Manage All Users |
+| text_like | st-settings-select | Invite New Users |
+| text_like | st-settings-select | My Workspaces |
+| text_like | st-settings-select | Create New Workspace |
+| text_like | st-settings-select | Unsubscribe |
+| text_like | st-settings-select | Workspace Appearance |
+| text_like | st-settings-select | Workspace Features |
+| text_like | st-settings-select | Workspace Privacy |
+| text_like | st-settings-select | Create New Weblog |
+| text_like | st-settings-select | Page Editing |
+| text_like | st-settings-select | Screen Layout |
+| text_like | st-settings-select | Email Notification |
+| text_like | st-settings-select | Your Notepad |
+| text_like | st-settings-select | What's New |
+| text_like | st-settings-select | Syndicate |
+| text_like | st-settings-select | Time |
+| text_like | st-settings-select | Watchlist |
+| text_like | st-settings-select | Weblogs |
+| text_unlike | st-settings-select | List All Users |
+
+| *Comment* | Test Case: Settings: Admin test Manage All Users functionality |  |
+| st-admin | create-user --email user_%%start_time%%@ken.socialtext.net --password 123456 |  |
+| st-admin | add-member --email user_%%start_time%%@ken.socialtext.net --workspace %%workspace%% |  |
+| click_and_wait | link=Manage All Users |  |
+| text_like | st-settings-section | user_%%start_time%%@ken.socialtext.net |
+| st-should-be-admin | user_%%start_time%%@ken.socialtext.net | 1 |
+| st-logout |  |  |
+| st-login | user_%%start_time%%@ken.socialtext.net | 123456 |
+| text_like | st-wiki-title-invite | Invite your colleagues |
+| st-logout |  |  |
+| st-login |  |  |
+
+| *Comment* | Test Case: Settings: Admin test Invite New Users functionality |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Invite New Users |  |
+| type_ok | users_new_ids | invite_%%start_time%%@ken.socialtext.net |
+| text_like | st-settings-section | If you wish |
+| click_and_wait | Button |  |
+| st-logout |  |  |
+| st-login | invite_%%start_time%%@ken.socialtext.net |  |
+| text_like | errors-and-messages | You need to confirm |
+| st-login |  |  |
+
+| *Comment* | Test Case: Settings: Admin workspace title cannot begin with a dash |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Create New Workspace |  |
+| type_ok | title | -newspace %%start_time%% |
+| type_ok | name | newspace%%start_time%% |
+| click_and_wait | Button |  |
+| text_like | Workspace title must be between 2 and 64 characters long and may not begin with a - |
+
+| *Comment* | Test Case: Settings: Admin test Create New Workspace functionality |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Create New Workspace |  |
+| type_ok | title | newspace %%start_time%% |
+| type_ok | name | newspace-%%start_time%% |
+| click_and_wait | Button |  |
+| text_like | st-settings-section | You have just created "newspace %%start_time%%" |
+| click_and_wait | link=Go to |  |
+| text_like | st-homepage | Dashboard: newspace %%start_time%% |
+
+| *Comment* | Test Case: Settings: Admin test Workspace Appearance functionality using newspace-%%start_time%% |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Workspace Appearance |  |
+| type_ok | title | newtitle %%start_time%% |
+| text_like | st-settings-section | choose an image |
+| text_like | st-settings-section | When users click |
+| click_and_wait | Button |  |
+| click_and_wait | st-home-link |  |
+| text_like | st-homepage | Dashboard: newtitle %%start_time%% |
+
+| *Comment* | Test Case: Settings: Admin test Workspace Features using newspace-%%start_time%% |  |
+| *Comment* | Test Case: Settings: Admin set up testing weblog |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Time |  |
+| click_ok | timezone__time_display_seconds |  |
+| click_and_wait | Button |  |
+| click_and_wait | link=Create New Weblog |  |
+| type_ok | weblog_title | %%start_time%% Weblog |
+| click_and_wait | Button |  |
+| wait_for_text_present_ok | New Post | 30000 |
+| click_and_wait | st-weblog-newpost-button |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| type_ok | st-newpage-pagename-edit | post2 %%start_time%% |
+
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | post2 %%start_time%% content |
+| click_and_wait | st-save-button-link |  |
+
+| *Comment* | Test Case: Settings: Admin test weblog sort order using newspace-%%start_time%% |  |
+| text_like | st-weblog-content | qr/post2 %%start_time%%.+first post/ |
+| open_ok | /newspace-%%start_time%%/index.cgi?action=display;page_name=first_post_in_%%start_time%%_weblog;caller_action=weblog_display;category=%%start_time%%_weblog;js=show_edit_div#edit |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | edit |
+| click_and_wait | st-save-button-link |  |
+| text_like | st-weblog-content | qr/edit.+post2 %%start_time%%/ |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Workspace Features |  |
+| click_ok | document.forms[1].sort_weblogs_by_create[1] |  |
+| click_and_wait | Button |  |
+| click_and_wait | st-wiki-subnav-link-weblogs |  |
+| text_like | st-weblog-content | qr/post2 %%start_time%%.+edit/ |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Workspace Features |  |
+| click_ok | document.forms[1].sort_weblogs_by_create[0] |  |
+| click_and_wait | Button |  |
+| click_and_wait | link=Time |  |
+| click_ok | timezone__time_display_seconds |  |
+| click_and_wait | Button |  |
+
+*Privacy features are tested in separate test cases.*
+
+| *Comment* | Test Case: Settings: Admin Teardown |  |
+| st-admin | delete-workspace --workspace newspace-%%start_time%% --no-export |  |
+| st-admin | remove-member --email invite_%%start_time%%@ken.socialtext.net --workspace %%workspace%% |  |
+| st-admin | remove-member --email user_%%start_time%%@ken.socialtext.net --workspace %%workspace%% |  |
+
+| *Comment* | Test Case: Settings: Admin COMPLETED |

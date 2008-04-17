@@ -1,0 +1,193 @@
+| *Comment* | STARTING Test case: Reports |  |
+
+| *Comment* | Test case: Reports pre-reqs: |
+| *Comment* | cd into dev-bin directory |
+| *Comment* | run ./st-populate-reports-db to populate the data |
+
+| *Comment* | Test case: Reports - Setup |  |
+| st-admin | remove-accounts-admin --email %%email%% | %%email%% no longer has accounts admin access |
+| st-admin | give-accounts-admin --email %%email%% | %%email%% now has accounts admin access |
+| st_qa_setup_reports |  |  |
+| set_default | testingwrkspace | growth_report_test | default workspace to test against |
+
+| *Comment* | Test case: Reports - Open Control Panel and Navigate |  |
+| open_ok | /nlw/control |  |
+| clickAndWait | link=Workspaces |  |
+| type_ok | name | %%testingwrkspace%% |
+| st-submit |  |  |
+| click_and_wait | link=%%testingwrkspace%% |  |
+| clickAndWait | link=Usage Reports |  |
+
+| *Comment* | Test Case: Reports page text tests |  |
+| text_like | Usage ending midnight of: |  |
+| text_like | %%testingwrkspace%% Workspace Usage Report |  |
+
+| *Comment* | Test Case: Reports check select boxes |  |
+| select_ok | report_month | January |
+| select_ok | report_month | December |
+| select_ok | report_month | March |
+| select_ok | report_day | 1 |
+| select_ok | report_day | 31 |
+| select_ok | report_day | 25 |
+| select_ok | report_year | 2006 |
+| select_ok | report_year | 2008 |
+| select_ok | report_duration | 1 Week |
+| select_ok | report_duration | 1 Month |
+| select_ok | report_duration | 1 Quarter |
+| select_ok | report_day | 25 |
+
+| *Comment* | Test Case: Reports check export buttons |  |
+| text_like | report-link | Printer Friendly Report |
+| text_like | report-summary-link | Export summary data as CSV |
+| text_like | report-detail-link | Export user data as CSV |
+
+| *Comment* | Test Case:Reports create report with Create button |  |
+| click_and_wait | //input[@value='Create'] |  |
+
+| selectFrame | report-iframe |  |  |
+| text_like | Usage By Workspace - %%testingwrkspace%% |  |  |
+| text_like | qr/Total unique contributors: \d+/ |  |  |
+| text_like | qr/Total unique visitors: \d+/ |  |  |
+| text_like | qr/Total members \(current\): \d+/ |  |  |
+| text_like | Collaborativeness: |  |  |
+| text_like | (unique contributors as a percent of unique viewers) |  |  |
+| text_like | Total unique contributors: 4 |  |  |
+| text_like | Total unique visitors: 8 |  |  |
+| text_like | Total members (current): 8 |  |  |
+| text_like | Collaborativeness: 50% (unique contributors as a percent of unique viewers) |  |  |
+| text_like | devnull1@socialtext.net 16 8 0 |  |  |
+| selectFrame | relative=top |  |  |
+
+| *Comment* | Test case: Reports - Workspace Growth |  |
+| set_default | testingwrkspace | growth_report_test | default workspace to test against |
+| st_qa_setup_reports |  |  |  |
+| open_ok | /nlw/control |  |  |
+
+| clickAndWait | link=Workspaces |  |
+| type_ok | name | %%testingwrkspace%% |
+| st-submit |  |  |
+| click_and_wait | link=%%testingwrkspace%% |  |
+
+| clickAndWait | link=Growth Reports |  |
+| *Comment* | Test Case: Reports - Workspace Growth page text tests |  |
+| text_like | %%testingwrkspace%% Workspace Growth Report |  |
+| text_like | Printer Friendly Report |  |
+| text_like | //a[contains(@href,'download=1')] | Export data as CSV |
+| text_like | Export data as CSV |  |
+
+| *Comment* | Test Case: Reports - Workspace Growth page body exists |  |
+| selectFrame | report-iframe |  |
+| text_like | Workspace Growth - %%testingwrkspace%% |  |
+| text_like | Date Unique Members Unique contributors Pages Page views Contributions |  |
+
+| *Comment* | Test Case: Reports - Workspace Growth page Data Tests |  |
+| *Comment* | 1) We should probaby have some kind of product management signoff on interpertation |  |
+| text_like | Mar 2008 8 4 0 24 5 |  |
+| text_like | Feb 2008 7 3 0 22 4 |  |
+| text_like | Jan 2008 4 2 0 14 3 |  |
+| text_like | Dec 2007 1 1 0 4 2 |  |
+| text_like | qr/\w\w\w\s*\d\d\d\d\s*\d+\s*\d+\s*\d+\s*\d+\s*\d+/ |  |
+
+| *Comment* | Test Case:Reports - Workspace Growth Printer Friendly |  |
+| selectFrame | relative=top |  |
+| clickAndWait | link=Printer Friendly Report |  |
+| text_like | Workspace Growth - %%testingwrkspace%% |  |
+| text_like | Mar 2008 8 4 0 24 5 |  |
+| text_like | Feb 2008 7 3 0 22 4 |  |
+| text_like | Jan 2008 4 2 0 14 3 |  |
+| text_like | Dec 2007 1 1 0 4 2 |  |
+| text_like | qr/\w\w\w\s*\d\d\d\d\s*\d+\s*\d+\s*\d+\s*\d+\s*\d+/ |  |
+
+TODO: Add this to slideshow?
+ open_ok | /nlw/reports/workspace_growth.csv?workspace=growth_report_test&download=1 | pause | 20000 |
+
+| *Comment* | Test Case: Reports (Account-Level, Growth) Setup |  |
+| set_default | testingwrkspace | growth_report_test | default workspace to test against |
+| set_default | testingaccount | test_stub_account | default account to test against |
+
+| *Comment* | Test Case: Reports (Account-level, Growth Report) |  |
+| open_ok | /nlw/control |  |  |
+| clickAndWait | link=Accounts |  |
+| clickAndWait | link=%%testingaccount%% |  |
+| clickAndWait | link=Growth Reports |  |
+
+| *Comment* | Test Case: Reports (Account-level, Growth Report) text tests |  |
+| text_like | %%testingaccount%% Account Growth Report |  |
+| text_like | Printer Friendly Report |  |
+| text_like | //a[contains(@href,'download=1')] | Export data as CSV |
+| text_like | Export data as CSV |  |
+
+| *Comment* | Test Case: Reports (Account-level, Growth) page body exists |  |
+| selectFrame | report-iframe |  |
+| text_like | Account Growth - %%testingaccount%% |  |
+| text_like | Date Workspaces Unique Members Unique contributors Pages Page Views Contributions |  |
+| text_like | Apr 2008 2 6 0 7 0 0 |  |
+| text_like | Mar 2008 2 6 4 37 157 34 |  |
+| text_like | Feb 2008 2 6 4 7 76 17 |  |
+| text_like | Jan 2008 2 4 2 6 46 9 |  |
+| text_like | Dec 2007 2 2 1 2 24 7 |  |
+
+| *Comment* | Test Case: Reports (Account-level, Growth) Printer Friendly |  |
+| selectFrame | relative=top |  |
+| clickAndWait | link=Printer Friendly Report |  |
+| text_like | Apr 2008 2 6 0 7 0 0 |  |
+| text_like | Mar 2008 2 6 4 37 157 34 |  |
+| text_like | Feb 2008 2 6 4 7 76 17 |  |
+| text_like | Jan 2008 2 4 2 6 46 9 |  |
+| text_like | Dec 2007 2 2 1 2 24 7 |  |
+
+| *Comment* | Test case: Reports (Account-level) Get Usage |  |
+| open_ok | /nlw/control |  |
+| clickAndWait | link=Accounts |  |
+| clickAndWait | link=%%testingaccount%% |  |
+| clickAndWait | link=Usage Reports |  |
+
+| *Comment* | Test Case: Reports page text tests |  |
+| text_like | Usage ending midnight of: |  |
+| text_like | %%testingaccount%% Account Usage Report |  |
+
+| *Comment* | Test Case: Reports check select boxes |  |
+| select_ok | report_month | January |
+| select_ok | report_month | December |
+| select_ok | report_month | March |
+| select_ok | report_day | 1 |
+| select_ok | report_day | 31 |
+| select_ok | report_day | 25 |
+| select_ok | report_year | 2006 |
+| select_ok | report_year | 2008 |
+| select_ok | report_duration | 1 Week |
+| select_ok | report_duration | 1 Month |
+| select_ok | report_duration | 1 Quarter |
+| select_ok | report_day | 25 |
+
+| *Comment* | Test Case: Reports check export buttons |  |
+| text_like | report-link | Printer Friendly Report |
+| text_like | report-summary-link | Export summary data as CSV |
+| text_like | report-detail-link | Export user data as CSV |
+
+| *Comment* | Test Case: Reports create report with Create button |  |
+| click_and_wait | //input[@value='Create'] |  |
+
+| selectFrame | report-iframe |  |  |
+| text_like | Usage By Account - %%testingaccount%% |  |  |
+| text_like | qr/Total unique contributors: \d+/ |  |  |
+| text_like | qr/Total unique visitors: \d+/ |  |  |
+| text_like | qr/Total members \(current\): \d+/ |  |  |
+| text_like | Collaborativeness: |  |  |
+| text_like | (unique contributors as a percent of unique viewers) |  |  |
+| text_like | Total unique contributors: 4 |  |  |
+| text_like | Total unique visitors: 6 |  |  |
+| text_like | Total members (current): 6 |  |  |
+| text_like | Collaborativeness: 66% (unique contributors as a percent of unique viewers) |  |  |
+| text_like | UsernameViewsEditsComments |
+| text_like | t_stub01@socialtext.com 71 35 0 |  |
+| text_like | t_stub02@socialtext.com 50 0 0 |  |
+| text_like | t_stub03@socialtext.com 56 0 8 |  |
+| text_like | t_stub04@socialtext.com 44 0 0 |  |
+| text_like | t_stub05@socialtext.com 42 21 0 |  |
+| text_like | t_stub06@socialtext.com 36 0 3 |  |
+| selectFrame | relative=top |  |  |
+
+| *Comment* | Test Case: Workspace Growth Report COMPLETED |  |  |
+
+| *Comment* | Test Case: Reports COMPLETED |  |  |

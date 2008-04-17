@@ -1,0 +1,13 @@
+* HighPermissions
+
+The following tests require higher security privileges for the browser, such as `*chrome` for Firefox
+
+| *Comment* | File Testcases |
+
+| include | [Test Case: Upload file] |
+| include | [Test Case: Manage files] |
+| include | [Test Case: All Files] |
+| include | [Test Case: Delete Selected Attachments] |
+| include | [Test Case: Unzip File] |
+
+| *Comment* | File Testcases COMPLETED |

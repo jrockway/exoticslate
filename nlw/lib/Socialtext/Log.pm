@@ -43,7 +43,7 @@ man page for details.
 
 =cut
 
-our @EXPORT_OK = qw( st_log );
+our @EXPORT_OK = qw( st_log st_timed_log );
 
 sub class_id { 'log' }
 
@@ -81,6 +81,35 @@ BEGIN {
 }
 
 my $Instance;
+
+sub st_timed_log {
+    my $method = shift;
+    my $command = shift;
+    my $name = shift;
+    my $data = shift;
+    my $times = shift;
+
+    my $message = uc($command) . ',' . uc($name);
+    my $key;
+    my $value;
+
+    while (($key, $value) = each(%$data)) {
+        $message .= ",$key:$value";
+    }
+    my $time = '';
+    while (($key, $value) = each(%$times)) {
+        $time .= "$key:$value,";
+    }
+    chop $time;
+    $message .= ",[$time]" if ($time);
+
+    __PACKAGE__->new;
+    return $method
+        ? $Instance->$method($message)
+        : $Instance;
+
+
+}
 
 =head1 IMPORTABLE SUBROUTINE
 

@@ -309,7 +309,7 @@ sub _make_attachment_row {
     );
 
     return $attachment->deleted
-        ? {}
+        ? ()
         : {
         id              => $attachment->id,
         filename        => $attachment->filename,

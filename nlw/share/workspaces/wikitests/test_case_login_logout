@@ -1,0 +1,132 @@
+Original test definition: [Test: Login/Logout]
+
+| *Comment* | Test Case: Login/Logout Login redirect |  |
+| st-logout |  |  |
+| open | /%%workspace%% |  |
+| st-message | You must login to view this page |  |
+
+| *Comment* | Test Case: Login/Logout Empty email address: |  |
+| type_ok | username |  |
+| type_ok | password | monkey |
+| click_and_wait | //input[@value='Log in'] |  |
+| st-message | You must provide a valid email address. |  |
+
+| *Comment* | Test Case: Login/Logout Malformed email address: |  |
+| type_ok | username | mr.poopypants |
+| type_ok | password | monkey |
+| click_and_wait | //input[@value='Log in'] |  |
+| st-message | "mr.poopypants" is not a valid email address. Please use your email address to log in. |  |
+
+| *Comment* | Test Case: Login/Logout Unregistered email address: |  |
+| type_ok | username | mr.poopypants@socialtext.net |
+| type_ok | password | monkey |
+| click_and_wait | //input[@value='Log in'] |  |
+| st-message | Wrong email address or password - please try again. |  |
+
+| *Comment* | Test Case: Login/Logout Registered addr, wrong password |  |
+| st-login | %%username%% | wrong_password |
+| st-message | Wrong email address or password - please try again. |  |
+
+| *Comment* | Test Case: Login/Logout Login with real admin user/pass |  |
+| st-login | %%username%% | %%password%% |
+| text_like | st-wiki-title | Dashboard: |
+| text_like | st-wiki-title-invite | Invite your colleagues to this workspace. |
+| st-logout |  |  |
+
+| *Comment* | Test Case: Login/Logout Login with real non-admin user/pass |  |
+| st-admin | create-user --email InOut_%%start_time%%@ken.socialtext.net --password 123456 |  |
+| st-admin | add-member --email InOut_%%start_time%%@ken.socialtext.net --workspace %%workspace%% |  |
+| st-login | InOut_%%start_time%%@ken.socialtext.net | 123456 |
+| text_like | st-wiki-title | Dashboard: |
+| text_unlike | st-wiki-title-invite | Invite your colleagues to this workspace. |
+| st-logout |  |  |
+
+| *Comment* | Test Case: Login/Logout Forgotten password (bad user): |  |
+| click_and_wait | link=I don't know my password. |  |
+| text_like | Socialtext password help |  |
+| type_ok | username | mr.poopypants |
+| click_and_wait | //input[@value='Submit'] |  |
+| st-message | mr.poopypants is not registered as a user. Try a different email address? |  |
+
+| *Comment* | Test Case: Login/Logout Forgotten password (good user): |  |
+| text_like | Socialtext password help |  |
+| type_ok | username | %%username%% |
+| click_and_wait | //input[@value='Submit'] |  |
+| st-message | An email with instructions on changing your password has been sent to %%username%% |  |
+| st-force-confirmation | %%username%% | %%password%% |
+
+| *Comment* | Test Case: Login/Logout Browse to test space |  |
+| open | /%%workspace%% |  |
+| location_like | qr/\/nlw\/login\.html/ |  |
+| st-login |  |  |
+| text_like | st-wiki-title | Dashboard: |
+
+| *Comment* | Test Case: Login/Logout Settings: old password incorrect |  |
+| click_and_wait | link=Settings |  |
+| type_ok | old_password | incorrect_password |
+| type_ok | new_password | new_password |
+| type_ok | new_password_retype | new_password |
+| click_and_wait | Button |  |
+| text_like | st-settings-save | error: Old password is incorrect |
+
+| *Comment* | Test Case: Login/Logout Settings: new password < 6 chars |  |
+| click_and_wait | link=Settings |  |
+| type_ok | old_password | %%password%% |
+| type_ok | new_password | bad |
+| type_ok | new_password_retype | bad |
+| click_and_wait | Button |  |
+| text_like | st-settings-save | error: Passwords must be at least 6 characters long. |
+
+| *Comment* | Test Case: Login/Logout Settings: new password mismatch |  |
+| click_and_wait | link=Settings |  |
+| type_ok | old_password | %%password%% |
+| type_ok | new_password | new_password1 |
+| type_ok | new_password_retype | new_password2 |
+| click_and_wait | Button |  |
+| text_like | st-settings-save | error: New passwords do not match |
+
+| *Comment* | Test Case: Login/Logout Settings: utf8 password |  |
+| click_and_wait | link=Settings |  |
+| type_ok | old_password | %%password%% |
+| type_ok | new_password | äååæ±éé·ç»çæå |
+| type_ok | new_password_retype | äååæ±éé·ç»çæå |
+| click_and_wait | Button |  |
+| text_like | st-settings-save | Changes Saved |
+
+| *Comment* | Test Case: Login/Logout Set a new password |  |
+| type_ok | old_password | äååæ±éé·ç»çæå |
+| type_ok | new_password | new_password |
+| type_ok | new_password_retype | new_password |
+| click_and_wait | Button |  |
+| text_like | st-settings-save | Changes Saved |
+| st-logout |  |  |
+
+| *Comment* | Test Case: Login/Logout Login with old password |  |
+| st-login | %%username%% | %%password%% |
+| st-message | Wrong email address or password - please try again. |  |
+
+| *Comment* | Test Case: Login/Logout Login with new password |  |
+| st-login | %%username%% | new_password |
+| text_like | st-wiki-title | Dashboard: |
+
+| *Comment* | Test Case: Login/Logout restore original password |  |
+| click_and_wait | link=Settings |  |
+| type_ok | old_password | new_password |
+| type_ok | new_password | %%password%% |
+| type_ok | new_password_retype | %%password%% |
+| click_and_wait | Button |  |
+| text_like | st-settings-section | Changes Saved |
+
+| *Comment* | Test Case: Login/Logout Login with original password |  |
+| st-logout |  |  |
+| st-login |  |  |
+| text_like | st-wiki-title | Dashboard: |
+
+| *Comment* | Test Case: Login/Logout Teardown |  |
+| st-admin | remove-member --email InOut_%%start_time%%@ken.socialtext.net --workspace %%workspace%% |  |
+
+| *Comment* | Test case: Login/Logout COMPLETED |  |
+
+^ Future automation
+
+| support@socialtext.com | message pops up with support addr |  |

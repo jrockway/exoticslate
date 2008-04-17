@@ -151,8 +151,6 @@ sub display {
             errors => [loc('Not a valid page name')] );
     }
 
-    $self->log_action("DISPLAY_PAGE");
-
     my $is_new_page = $self->hub->pages->page_exists_in_workspace(
         $page->title,
         $self->hub->current_workspace->name,
@@ -270,7 +268,6 @@ sub content_only {
     my $page = $self->hub->pages->current;
 
     $page->load;
-    $self->log_action("DISPLAY_PAGE");
     $self->hub->breadcrumbs->drop_crumb($page);
 
     $self->hub->hit_counter->hit_counter_increment;

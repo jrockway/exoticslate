@@ -27,6 +27,9 @@ my @dev_bin_programs = make_prog_list('dev-bin/', qw(
     memory-watchdog
     diffable
     l10n-nlw-to-wiki
+    st-create-account-data
+    st-qa-growth-report-populate-db
+    st-qa-growth-report-add-members
 ));
 
 my @programs = grep {-f} @bin_programs, 

@@ -1,0 +1,86 @@
+IE6 seems to need low permissions to run this test successfully.
+
+Selenium seems to need to run multi-window to run this test successfully, because the test
+uses "location_like" to determine if the RSS feed window opened
+
+First, delete a page that contains a search term so you can test RSS feeds for for deleted pages
+Then, find an instance of each of the RSS icons and click it to see if you get a feed page
+It seems that Selenium cannot analyze the content of feed pages because they are not HTML pages.
+
+| *Comment* | Test Case: RSS Icons |  |
+| *Comment* | Test Case: RSS Icons NEEDS higher security such as *chrome or *iehta |  |
+| *Comment* | Test Case: RSS Icons create a page with the word "simple" in it |  |
+| st-admin | update-page --email %%email%% --workspace %%workspace%% --page "RSS Icons %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "RSS Icons %%start_time%%" page has been created |
+
+| *Comment* | Purge the Chinese page if it is already there |  |
+| st-admin | purge-page --workspace %%workspace%% --page %E7%89%9B%E6%84%9B%E6%88%91 |  |
+
+| *Comment* | Test Case: RSS Icons page with Chinese chars in title can't do from command line
+and can't do it in combination with ASCII chars from start_time |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | A simple page with a Chinese character title |
+| type_ok | st-newpage-pagename-edit | 牛愛我 |
+| click_and_wait | st-save-button-link |  |
+
+| *Comment* | Test Case: RSS Icons. Force index since this is testing for indexed pages that have been deleted. |  |
+| st-admin | index-workspace --workspace %%workspace%% --sync | The %%workspace%% workspace has been indexed. |
+| *Comment* | Test Case: RSS Icons. Purge the page you just indexed |  |
+| st-admin | purge-page --workspace %%workspace%% --page rss_icons_%%start_time%% | The RSS Icons %%start_time%% page was purged from the %%workspace%% workspace. |
+| st-admin | purge-page --workspace %%workspace%% --page %E7%89%9B%E6%84%9B%E6%88%91 | qr/The .+ page was purged from the %%workspace%% workspace/ |
+| st-admin | index-workspace --workspace %%workspace%% --sync | The %%workspace%% workspace has been indexed. |
+
+| *Comment* | Test Case: RSS Icons search for the deleted page |  |
+| st-search | simple | Pages containing |
+| click_and_wait | //img[contains(@src,'feed-icon-14x14.png')] |  |
+| location_like | /feed/workspace/%%workspace%% |  |
+
+Where are all the RSS icons?
+Search result. Dashboard. Single Page. What's New. Watchlist. All Pages. Weblogs.
+
+| *Comment* | Test Case: RSS Icons Dashboard |  |
+| open_ok | /%%workspace%%/index.cgi |  |
+| wait_for_text_present_ok | Dashboard: | 30000 |
+| click_and_wait | //img[contains(@src,'feed-icon-14x14.png')] |  |
+| location_like | /feed/workspace/%%workspace%% |  |
+
+| *Comment* | Test Case: RSS Icons Start Here page |  |
+| open_ok | /%%workspace%%/index.cgi?Start Here |  |
+| wait_for_text_present_ok | Start here | 30000 |
+| click_and_wait | //img[contains(@src,'feed-icon-14x14.png')] |  |
+| location_like | /feed/workspace/%%workspace%% |  |
+
+| *Comment* | Test Case: RSS Icons What's New |  |
+| open_ok | /%%workspace%%/index.cgi?Start Here |  |
+| wait_for_text_present_ok | Start here | 30000 |
+| click_and_wait | link=What's new |  |
+| click_and_wait | //img[contains(@src,'feed-icon-14x14.png')] |  |
+| location_like | /feed/workspace/%%workspace%% |  |
+
+| *Comment* | Test Case: RSS Icons Watchlist |  |
+| open_ok | /%%workspace%%/index.cgi?Start Here |  |
+| wait_for_text_present_ok | Start here | 30000 |
+| click_and_wait | link=What's new |  |
+| click_and_wait | link=Your Watchlist |  |
+| click_and_wait | //img[contains(@src,'feed-icon-14x14.png')] |  |
+| location_like | /feed/workspace/%%workspace%% |  |
+
+| *Comment* | Test Case: RSS Icons All Pages |  |
+| open_ok | /%%workspace%%/index.cgi?Start Here |  |
+| wait_for_text_present_ok | Start here | 30000 |
+| click_and_wait | link=What's new |  |
+| click_and_wait | link=All Pages |  |
+| click_and_wait | //img[contains(@src,'feed-icon-14x14.png')] |  |
+| location_like | /feed/workspace/%%workspace%% |  |
+
+| *Comment* | Test Case: RSS Icons Weblogs |  |
+| open_ok | /%%workspace%%/index.cgi?Start Here |  |
+| wait_for_text_present_ok | Start here | 30000 |
+| click_and_wait | link=Weblogs |  |
+| click_and_wait | //img[contains(@src,'feed-icon-14x14.png')] |  |
+| location_like | /feed/workspace/%%workspace%% |  |
+
+| *Comment* | Test Case: RSS Icons COMPLETED |  |

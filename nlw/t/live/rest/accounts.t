@@ -18,7 +18,7 @@ Readonly my $BASE => Test::HTTP::Socialtext->url('/data/accounts');
 my $NEW_ACCOUNT_NAME = 'account-1';
 my $NEW_ACCOUNT_URL = "$BASE";
 
-Readonly my $ACCOUNT_CREATION_HASH => {
+my $ACCOUNT_CREATION_HASH = {
     name => $NEW_ACCOUNT_NAME,
 };
 

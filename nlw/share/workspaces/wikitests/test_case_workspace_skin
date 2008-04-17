@@ -1,0 +1,112 @@
+* HighPermissions
+
+Test for the new Workspace Skin interface for uploading custom css.
+Need skin.tgz and badskin.tgz to be in wikitest_files directory.
+
+| *Comment* | Test Case: Workspace Skin |  |
+| *Comment* | Need skin.tgz and badskin.tgz to be in %%wikitest_files%% |  |
+| setTimeout | 120000 |  |
+
+| *Comment* | Test Case: Workspace Skin Need skin.tgz and badskin.tgz in %%wikitest_files%% |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Workspace Skin |  |
+| wait_for_element_visible_ok | link=Skin Customization Kit | 5000 |
+| wait_for_element_visible_ok | link=Socialtext Style Customization Guide | 5000 |
+
+| *Comment* | Test Case: Workspace Skin upload button |  |
+| click_ok | st-workspaceskin-submit |  |
+| wait_for_element_visible_ok | st-errorbox | 30000 |
+| text_like | st-errorbox | A custom skin file was not uploaded. |
+
+| *Comment* | Test Case: Workspace Skin navigate away and back to clear error box |  |
+| click_and_wait | link=Workspace Privacy |  |
+| click_and_wait | link=Workspace Skin |  |
+
+| *Comment* | Test Case: Workspace Skin upload badskin.tgz |  |
+| wait_for_element_visible_ok | st-workspaceskin-file | 30000 |
+| type_ok | st-workspaceskin-file | %%wikitest_files%%badskin.tgz |
+| click_ok | st-workspaceskin-submit |  |
+| wait_for_element_visible_ok | st-errorbox | 120000 |
+| text_like | st-errorbox | Could not extract files from the skin archive |
+
+| *Comment* | Test Case: Workspace Skin navigate away and back to clear error box |  |
+| click_and_wait | link=Workspace Privacy |  |
+| click_and_wait | link=Workspace Skin |  |
+
+| *Comment* | Test Case: Workspace Skin upload good skin.tgz |  |
+| wait_for_element_visible_ok | st-workspaceskin-file | 30000 |
+| type_ok | st-workspaceskin-file | %%wikitest_files%%skin.tgz |
+| click_ok | st-workspaceskin-submit |  click_and_wait times out so just click and then wait for element visible |
+| wait_for_element_visible_ok | st-errorbox | 120000 |
+| text_like | st-errorbox | Files are imported only from ZIP/TGZ css/ and images/ paths. Files with other paths are not imported. |
+| text_like | st-workspaceskin-filelist | screen_beforefixIEexport.css |
+| text_like | st-workspaceskin-filelist | button-green/left-top.gif |
+
+| *Comment* | Test Case: Workspace Skin cancel button |  |
+| check_ok | st-workspaceskin-custom |  |
+| click_ok | st-standard-cancelbutton |  |
+| is_checked_ok | st-workspaceskin-default |  |
+
+| *Comment* | Test Case: Workspace Skin swap to custom skin  |  |
+| check_ok | st-workspaceskin-custom |  |
+| is_checked_ok | st-workspaceskin-custom |  |
+| click_ok | Button | Save |
+| wait_for_element_visible_ok | link=Webtime | 30000 |
+| is_checked_ok | st-workspaceskin-custom |  |
+| *Comment* | Test Case: Workspace Skin swap to default skin |  |
+| check_ok | st-workspaceskin-default |  |
+| is_checked_ok | st-workspaceskin-default |  |
+| click_ok | Button | Save |
+| wait_for_text_not_present_ok | Webtime | 30000 |
+| wait_for_element_visible_ok | st-socialtext-attribution-image | 30000 |
+| is_checked_ok | st-workspaceskin-default |  |
+| *Comment* | Test Case: Workspace Skin swap back to custom skin |  |
+| check_ok | st-workspaceskin-custom |  |
+| click_and_wait | Button | Save |
+| wait_for_element_visible_ok | link=Webtime | 30000 |
+
+| *Comment* | Test Case: Workspace Skin remove existing files |  |
+| click_ok | st-workspaceskin-removesubmit |  |
+| wait_for_text_not_present_ok | screen_beforefixIEexport.css | 120000 |
+| wait_for_text_not_present_ok | button-green/left-top.gif | 30000 |
+| wait_for_element_visible_ok | st-socialtext-attribution-image | 30000 |
+| is_checked_ok | st-workspaceskin-default |  |
+
+| *Comment* | Test Case: Workspace Skin did the skin break when you deleted custom files? |  |
+| *Comment* | If it did, an "Add file" link will appear in the busted page |  |
+| *Comment* | ADD FILE LINK NO LONGER EXISTS: IS THIS CORRECT? |  |
+
+ wait_for_element_not_visible_ok | link=Add file | 30000
+
+| *Comment* | Test Case: Workspace Skin navigate away and back to clear error box |  |
+| click_and_wait | link=Workspace Privacy |  |
+| click_and_wait | link=Workspace Skin |  |
+
+| *Comment* | Test Case: Workspace Skin upload non-archive |  |
+| wait_for_element_visible_ok | st-workspaceskin-file | 30000 |
+| type_ok | st-workspaceskin-file | %%wikitest_files%%wikitest.txt |
+| click_ok | st-workspaceskin-submit |  |
+| wait_for_text_present_ok | Could not extract files from the skin archive | 120000 |
+| text_like | st-errorbox | Could not extract files from the skin archive |
+
+| *Comment* | Test Case: Workspace Skin navigate away and back to clear error box |  |
+| click_and_wait | link=Workspace Privacy |  |
+| click_and_wait | link=Workspace Skin |  |
+
+| wait_for_element_visible_ok | st-workspaceskin-file | 30000 |
+| type_ok | st-workspaceskin-file | %%wikitest_files%%wikitest.tgz |
+| click_ok | st-workspaceskin-submit |  |
+| wait_for_text_present_ok | Could not extract files from the skin archive | 120000 |
+| text_like | st-errorbox | Could not extract files from the skin archive |
+
+| *Comment* | Test Case: Workspace Skin navigate away and back to clear error box |  |
+| click_and_wait | link=Workspace Privacy |  |
+| click_and_wait | link=Workspace Skin |  |
+
+| wait_for_element_visible_ok | st-workspaceskin-file | 30000 |
+| type_ok | st-workspaceskin-file | xxxx |
+| click_ok | st-workspaceskin-submit |  |
+| wait_for_text_present_ok | A custom skin file was not uploaded | 60000 |
+| text_like | st-errorbox | A custom skin file was not uploaded |
+
+| *Comment* | Test Case: Workspace Skin COMPLETED |  |

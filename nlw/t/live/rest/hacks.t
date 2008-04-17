@@ -77,7 +77,7 @@ test_http "GET JSON when HTML accept" {
     >> Accept: text/html
 
     << 200
-    << Content-type: application/json
+    << Content-type: application/json; charset=UTF-8
 }
 
 test_http "Tunneling over GET does nothing." {

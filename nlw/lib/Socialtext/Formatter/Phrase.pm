@@ -422,7 +422,11 @@ const pattern_start => qr/[\w+%\-\.]+@(?:[\w\-]+\.)+[\w\-]+/;
 
 sub html {
     my $self = shift;
-    '<a href="mailto:' . $self->matched . '">' . $self->matched . '</a>';
+    my $email_address = $self->matched;
+    my $href = $email_address;
+    $href =~ s/\%/\%25/g;
+
+    '<a href="mailto:' . $href . '">' . $email_address . '</a>';
 }
 
 ################################################################################

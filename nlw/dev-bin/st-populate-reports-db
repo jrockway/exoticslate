@@ -1,0 +1,114 @@
+#!/usr/bin/perl -w
+#@COPYRIGHT@
+use strict;
+use Sys::Hostname;
+use Cwd;
+use File::Basename;
+
+chdir( File::Basename::dirname($0));
+
+#Globals
+my $host = hostname;
+
+
+#Touch and chmod the logs
+grant_write_permissions_to_local_logs($host);
+
+
+#Create the account data
+#--------------------------------------------#
+my $exec = './st-create-account-data';
+my $strGrowth = './st-qa-growth-report-add-members';
+
+unless (is_dev_env($host)) {
+   $exec = 'sudo -u www-data ' . $exec;   
+   $strGrowth ='sudo -u www-data ' . $exec;
+}
+
+
+my $results = `$strGrowth`;
+my $str = `$exec`;
+$str=~/Account ID: (\d*)\n/;
+my $account_id = $1;
+print "ID Is $account_id, host is $host\n";
+
+
+#Process the logs to catch up the changes
+#----------------------------------------------#
+if (!(is_dev_env($host))) {
+   `sudo /usr/bin/st-reports-consume-nlw-log /var/log/nlw.log 2>&1`;
+}
+
+
+#We just caught up the logs with the new id's
+#But we will insert older, fake id's into the DB
+#So we'll delete these
+#----------------------------------------------#
+my $userid = `whoami`;
+chomp($userid);
+print "User ID is '$userid' \n\n";
+my $u = '';
+my $db = 'NLW_reports';
+if (is_dev_env($host)) {
+    $db.="_".$userid;
+} else {
+    $u = '-U nlw ';
+}
+my $delete_1 = 'psql ' . $u . $db . ' -c "delete from actions_by_user where account_id =' . $account_id . '; "';
+`$delete_1`;
+my $delete_2 = 'psql ' . $u . $db . ' -c "delete from nlw_log_actions where account_id =' . $account_id . '; "';
+`$delete_2`;
+
+
+#Data is deleted, now we can re-add the workspace reports
+#-----------------------------------------------#
+my $populate_db = './st-qa-growth-report-populate-db';
+unless (is_dev_env($host)) {
+   $populate_db ='sudo -u www-data ' . $populate_db;
+}
+system($populate_db);
+
+
+#... and the account-level reports
+#-----------------------------------------------#
+if (is_dev_env($host)) {
+   `./st-consume-stub-reports`;
+} else {
+   `sudo /usr/bin/st-reports-import-nlw-data test_nlw.log`;
+   `sudo /usr/bin/st-reports-consume-access-log test_access.log`;
+   `sudo /usr/bin/st-reports-consume-nlw-log test_nlw.log`;
+}
+
+print "Completed Reports data set-up (If you saw no errors)\n";
+#---------------------------------------------------------------#
+# End Main Routine Subroutines Follow                           #
+#---------------------------------------------------------------#
+#
+
+
+sub is_dev_env {
+    my $host = shift;
+    if ($host=~/talc/ || $host=~/topaz/) {
+        return 1; 
+    } else {
+        return 0;
+    }
+}
+
+sub grant_write_permissions_to_local_logs {  
+    my $host = shift;
+    `chmod 777 ./`;
+    `touch test_access.log`;
+    `touch test_nlw.log`;
+    `chmod 666 test_access.log`;
+    `chmod 666 test_nlw.log`;
+    if (is_dev_env($host)) {
+        `rm ~/.nlw/cache/logreader/test* >& /dev/null`;
+        `st-admin give-accounts-admin --email devnull1\@socialtext.com`;
+        `st-admin give-system-admin --email devnull1\@socialtext.com`;
+    } else {
+        `sudo rm /var/cache/socialtext/logreader/test*`;
+        `sudo st-admin give-accounts-admin --email devnull1\@socialtext.com`;
+        `sudo st-admin give-system-admin --email devnull1\@socialtext.com`;
+    }    
+}

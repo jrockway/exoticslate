@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<messagebundle>
+  <msg name="title" desc="description">
+      My Example Title
+  </msg>
+  <msg name="description" desc="description">
+      Very cool gadget for testing
+  </msg>
+</messagebundle>

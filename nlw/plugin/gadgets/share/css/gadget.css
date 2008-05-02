@@ -1,0 +1,479 @@
+.visible { display : block }
+.hidden { display : none }
+div.myContent h4 a {
+	color: #005295;
+	font-weight: normal;
+	font-size:12px;
+	line-height: 20px;
+}
+
+/* 
+Site: Socialtext Wiki
+Author: Mark Schuber :: Aracuaria Design
+Date: March 13, 2008
+*/
+
+/* CSS Style Reset Start */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+
+/* remember to define focus styles! */
+:focus {
+	outline: 0;
+}
+
+/* remember to highlight inserts somehow! */
+ins {
+	text-decoration: none;
+}
+del {
+	text-decoration: line-through;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+/* CSS Style Reset End */
+
+
+body {
+	text-align: center;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 10px;
+}
+
+a {
+	color: #0e93d8;
+	font-size: 10px;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+
+/* Gadget content */
+
+img.avatar {
+	width: 27px;
+	height: 27px;
+	border: #c5c5c5 1px solid;
+} 
+
+img.bigAvatar {
+	width: 62px;
+	height: 62px;
+	border: #c5c5c5 1px solid;
+	float: left;
+} 
+
+div.border {
+	width: 263px;
+	border-bottom: #cacaca 1px dotted;
+	clear: both; 
+	margin: 0 auto 10px;
+	height: 10px;
+	
+}
+
+div#bigWidgetContent div.border {
+	width: 558px;
+	border-bottom: #cacaca 1px dotted;
+	clear: both; 
+	margin: 0 auto 10px;
+	height: 10px;
+	
+}
+
+div.clear {
+	clear: both;
+}
+
+div#bigWidgetContent div.clear {
+	clear: both;
+}
+
+/* widget Styles Start */
+
+/* profile widget Start */
+
+
+div#profile {
+	width: 240px;
+	margin: 0 auto;
+	text-align: left;
+	line-height: 16px;
+	color: #666;
+}
+
+
+div#profile dl.mainInfo {
+	float: left;
+	margin-left: 15px;
+}
+
+div#profile dl dt {
+	font-weight: bold;
+	font-size: 11px;
+	text-transform: uppercase;
+}
+
+
+div#profile dl.mainInfo dt {
+	font-size: 13px;
+	text-transform: capitalize;
+	}
+
+/* profile widget End */
+
+/* my content widget Start */
+
+div.myContent {
+	width: 240px;
+	margin: 0 auto;
+	text-align: left;
+	line-height: 16px;
+	color: #666;
+}
+
+div.myContent h4 {
+	color: #005295;
+	font-weight: normal;
+	font-size:12px;
+	line-height: 20px;
+}
+
+div.myContent div.commentInfo {
+	margin-top: 10px;
+}
+
+
+div.myContent div.commentInfo img {
+	float: left;
+
+}
+
+div.myContent div.commentInfo ul {
+	float: left;
+	margin-left: 10px;
+} 
+
+div.myContent div.commentInfo ul li.time {
+	font-style: italic;
+}
+
+/* my content widget End */
+
+/* calendar widget End */
+
+div#calendarControl {
+	width: 240px;
+	margin: 0 auto;
+	text-align: left;
+}
+
+div#calendarControl ul {
+	width: 100%;
+	float: left;
+}
+
+div#calendarControl ul li.previous {
+	float: left;
+}
+
+div#calendarControl ul li.previous a {
+	background: url(../images/previousArrow.png) no-repeat center left;
+	padding-left: 15px;
+}
+
+div#calendarControl ul li.next {
+	float: right;
+}
+
+div#calendarControl ul li.next a {
+	background: url(../images/nextArrow.png) no-repeat center right;
+	padding-right: 15px;
+}
+
+div.calendarList {
+	width: 265px;
+	margin: 0 auto;
+	text-align: left;
+	color: #005295;
+}
+
+
+div.calendarList table {
+	width: 100%;
+	
+	}
+
+div.calendarList table tr td,div.calendarList table tr th {
+	line-height: 23px;
+	}	
+	
+div.calendarList table tr th {
+	font-weight: normal;
+	text-indent: 17px;
+}	
+
+div.calendarList table tr.oddRow td,div.calendarList table tr.oddRow th {
+	background: #f1fbea;
+}	
+
+
+	
+/* calendar widget End */
+
+/* people list widget Start */
+
+div#peopleList {
+	width: 265px;
+	text-align: left;
+	margin: 0 auto;
+}
+
+div#bigWidgetContent div#peopleList {
+	width: 558px;
+	text-align: left;
+	margin: 0 auto;
+}
+
+div#peopleList ul {
+	width: 100%;
+}
+
+
+div#peopleList ul li {
+	width: 100%;
+	line-height: 43px;
+	color: #005295;
+}
+
+
+div#peopleList ul li.oddRow {
+	background: #f1fbea;
+}
+
+
+div#peopleList ul li img {
+	margin-left: 14px;
+	position: relative;
+	top: 9px;
+	}
+
+div#peopleList ul li a {
+	margin-left: 14px;
+	line-height: 43px;
+}
+
+div#peopleList ul input {
+	margin-left: 17px;
+}
+
+/* people list widget End */
+
+/* workspaces list widget Start */
+
+div#workList {
+	width: 265px;
+	text-align: left;
+	margin: 0 auto;
+}
+
+
+div#workList ul {
+	width: 100%;
+}
+
+
+div#workList ul li {
+	width: 100%;
+	line-height: 20px;
+	color: #005295;
+	text-indent: 14px;
+}
+
+
+div#workList ul li.oddRow {
+	background: #f1fbea;
+}
+
+
+
+/* workspaces list widget End */
+
+
+/* tag widget Start */
+
+div#tagWidget {
+	width: 240px;
+	text-align: left;
+	margin: 0 auto;
+}
+
+
+div#tagWidget a { 
+	text-decoration: none;
+}
+
+div#tagWidget a.cloudOne { 
+	font-size: 10px;
+}
+
+div#tagWidget a.cloudTwo { 
+	font-size: 14px;
+}
+
+div#tagWidget a.cloudThree { 
+	font-size: 20px;
+}
+div#tagWidget a.cloudFour { 
+	font-size: 26px;
+}
+
+/* tag widget End */
+
+/* big tag widget Start */
+
+div#bigWidgetContent div#tagControl {
+	width: 545px;
+	margin: 0 auto;
+	text-align: left;
+}
+
+div#bigWidgetContent div#tagControl ul {
+	width: 100%;
+	float: left;
+}
+
+div#bigWidgetContent div#tagControl ul li.previous {
+	float: left;
+}
+
+div#bigWidgetContent div#tagControl ul li.previous a {
+	background: url(../images/previousArrow.png) no-repeat center left;
+	padding-left: 15px;
+}
+
+div#bigWidgetContent div#tagControl ul li.next {
+	float: right;
+}
+
+div#bigWidgetContent div#tagControl ul li.next a {
+	background: url(../images/nextArrow.png) no-repeat center right;
+	padding-right: 15px;
+}
+
+
+div#bigWidgetContent div#tagControl ul li.paging {
+	text-align: center;
+	float: left;
+	width: 440px;
+}
+
+
+div#bigWidgetContent div#tagControl ul li.paging span {
+	color: #666;
+}
+
+
+div#bigWidgetContent div#tagList {
+	width: 560px;
+	margin: 0 auto;
+	text-align: left;
+	color: #005295;
+}
+
+
+div#bigWidgetContent div#tagList table {
+	width: 100%;
+	
+	}
+
+div#bigWidgetContent div#tagList table tr td,div#bigWidgetContent div#tagList table tr th {
+	line-height: 23px;
+	}	
+	
+div#bigWidgetContent div#tagList table tr td {
+	text-align: right;
+	padding-right: 17px;
+}	
+	
+div#bigWidgetContent div#tagList table tr th {
+	font-weight: normal;
+	text-indent: 17px;
+}	
+
+div#bigWidgetContent div#tagList table tr.oddRow td,div#bigWidgetContent div#tagList table tr.oddRow th {
+	background: #f1fbea;
+}	
+
+/* big tag widget End */
+
+/* footer Start */
+
+div#footerWrap {
+	color: #666666;
+	background: #e4e4e4 url(../images/footerTile.png) repeat-x top left;
+	
+}
+
+div#footerWrap span {
+	line-height: 27px;
+	margin-left: 16px;
+	float: left;
+}
+
+div#footerWrap ul {
+	float: right;
+	margin-right: 17px;
+}
+
+div#footerWrap ul li {
+	float: left;
+	margin-left: 7px;
+}
+
+div#footerWrap ul li.first {
+	padding-right: 7px;
+	margin-left: 0;
+	background: url(../images/footerDivider.png) no-repeat center right;
+}
+
+div#footerWrap ul li a {
+	color: #666666;
+	float: left;
+	line-height: 27px;
+}
+
+/* footer End */

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Prefs"
+               description="Preferences test Gadget"
+               author="Socialtext"
+               author_location="All over the place"
+               category="test"
+               render_inline="optional"
+               scrolling="false"
+               singleton="false">
+    <Locale lang="en" messages="lang/en_ALL.xml" />
+  </ModulePrefs>
+  <Require feature="test"/>
+  <Require feature="setprefs"/>
+  <UserPref name="test_pref_string" display_name="Test Pref String" default_value="My Test Pref String"/>
+  <UserPref name="test_pref_enum" display_name="Test Pref Enum" datatype="enum" default_value="second">
+    <EnumValue value="first" display_value="Number One"/>
+    <EnumValue value="second" display_value="Number Two"/>
+    <EnumValue value="third" display_value="Number Three"/>
+  </UserPref>
+  <Content type="html">
+  <![CDATA[
+    <div style="padding-left:5px;text-align:left">
+        <script>
+
+          gadgets.util.registerOnLoadHandler(function() {  
+                doit();
+            ;});
+
+            function doit() {
+                var t = new Test.Base();
+                t.plan(2);
+
+                t.is("__PREF_title__", "My Example Title", "__MSG_title__");
+                t.is("__MSG_title__ bob", "My Example Title", "__MSG_title__");
+            }
+
+
+      </script>
+    </div>
+  ]]>
+  </Content>
+</Module>
+

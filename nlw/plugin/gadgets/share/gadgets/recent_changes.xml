@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="All Changes">
+  <Require feature="dynamic-height" />
+  </ModulePrefs>
+  <Content type="html">
+      <![CDATA[
+        <div id="__MODULE_ID__-content"></div>
+<script>
+    jQuery('#__MODULE_ID__-list').html("");
+    var guanxi_base = 'http://demo.socialtext.net:6200/people';
+    var guanxi = 'http://demo.socialtext.net:6200/people/';
+
+
+
+    function avatar (args) {
+        var personurl = guanxi_base+'/'+args.username;
+        var imagesrc = personurl + '/small_photo';
+        return jQuery('<div class="commentInfo">').append(
+            jQuery('<img class="avatar" alt="avatar" src="'+imagesrc+'"/>'),
+            jQuery('<ul>').append(
+                jQuery('<li>').append(
+                    jQuery('<a>')
+                        .attr('href',personurl)
+                        .attr('target','parent')
+                        .append(args.fullname)
+                ),
+                args.date ? jQuery('<li class="time">').append(args.date) : ''
+            )
+        )
+    }
+
+    jQuery.getJSON(
+        '/data/changes',
+        {count:5, accept:'application/json'},
+        function (data) {
+            for (var i=0; i<data.length; i++) {
+                var page = data[i];
+                var url = "/"+page.workspace+'?'+page.page_id;
+                jQuery('#__MODULE_ID__-content').append(
+                    jQuery('<div class="myContent">').append(
+                        jQuery('<h4>').append(
+                            jQuery('<a target="parent" style="text-decoration: none" href="'+url+'">').append(page.Subject)
+                        ),
+                        jQuery('<p>').append(
+                            page.Summary
+                        ),
+                         avatar({
+                            username: page.username,
+                            fullname: page.From,
+                            date: page.DateLocal
+                        })
+                    ),
+                    jQuery('<div class="border">')
+               );
+          }
+          gadgets.window.adjustHeight();
+       }
+    );
+
+</script>
+
+    ]]>
+  </Content>
+</Module>

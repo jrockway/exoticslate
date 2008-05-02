@@ -1,0 +1,25 @@
+[% WRAPPER layout %]
+<div id="widgetContainer">
+    <div id="columnCombined">
+        <div class="gadget-col" name="0" id="columnLeft">
+            &nbsp;
+            [% FOR gadget = gadgets.0 %]
+                [% INCLUDE gadget gadget=gadget %]
+            [% END %]
+        </div>
+        <div class="gadget-col" name="1" id="columnMiddle">
+            &nbsp;
+            [% FOR gadget = gadgets.1 %]
+                [% INCLUDE gadget gadget=gadget %]
+            [% END %]
+        </div>
+
+    </div>
+    <div class="gadget-col" name="2" id="columnRight">
+        &nbsp;
+        [% FOR gadget = gadgets.2 %]
+            [% INCLUDE gadget gadget=gadget %]
+        [% END %]
+    </div>
+</div><!-- widgetContainer END -->
+[% END %]

@@ -17,6 +17,7 @@ my $code_base = Socialtext::AppConfig->code_base;
 # Class Methods
 
 my %hooks;
+my %rest_hooks;
 my %rests;
 
 field hub => -weak;
@@ -26,8 +27,8 @@ field uri => -init => '$self->hub->current_workspace->uri . Socialtext::AppConfi
 #    path = '' & query => {}
 
 sub make_uri {
-  my ($self,%args) = @_;
-  return Socialtext::URI::uri(%args);
+    my ( $self, %args ) = @_;
+    return Socialtext::URI::uri(%args);
 }
 
 sub code_base {
@@ -40,15 +41,22 @@ sub current_workspace {
 }
 
 sub add_rest {
-    my ($self,%rest) = @_;
+    my ($self,$path,$sub) = @_;
     my $class = ref($self) || $self;
-    push @{$rests{$class}}, \%rest;
+    push @{$rests{$class}}, {
+        $path => [ 'Socialtext::Pluggable::Adapter', "_rest_hook_$sub"],
+    };
+    push @{$rest_hooks{$class}}, {
+        method => $sub,
+        name => $sub,
+        class => $class,
+    };
 }
-
 
 sub add_hook {
     my ($self,$hook,$method) = @_;
     my $class = ref($self) || $self;
+    warn "Adding hook named $hook";
     push @{$hooks{$class}}, {
         method => $method,
         name => $hook,
@@ -60,6 +68,12 @@ sub hooks {
     my $self = shift;
     my $class = ref($self) || $self;
     return $hooks{$class} ? @{$hooks{$class}} : ();
+}
+
+sub rest_hooks {
+    my $self = shift;
+    my $class = ref($self) || $self;
+    return $rest_hooks{$class} ? @{$rest_hooks{$class}} : ();
 }
 
 sub rests {
@@ -120,8 +134,6 @@ sub template_render {
     my $name = $self->name;
     my $plugin_dir = $self->plugin_dir;
     my $share = "/nlw/plugin/$prod_ver";
-
-    warn "NO MAIN!!" unless %template_vars;
     
     my $renderer = Socialtext::TT2::Renderer->instance;
     return $renderer->render(

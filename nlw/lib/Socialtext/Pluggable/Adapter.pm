@@ -3,18 +3,56 @@ package Socialtext::Pluggable::Adapter;
 use strict;
 use warnings;
 
-use base 'Socialtext::Plugin';
-
 our @libs;
+our $AUTOLOAD;
+my %hooks;
+
+use base 'Socialtext::Plugin';
+use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
+                      search_dirs => \@libs, require => 1;
+use Socialtext::Pluggable::WaflPhraseDiv;
+
+
 BEGIN {
     our $code_base = Socialtext::AppConfig->code_base;
     @libs = glob("$code_base/../plugin/*/lib");
     push @INC, @libs;
 }
 
-use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
-                      search_dirs => \@libs, require => 1;
-use Socialtext::Pluggable::WaflPhraseDiv;
+sub AUTOLOAD {
+    my ($self,$rest_handler,$args) = @_;
+    my $type = ref($self)
+        or die "$self is not an object in " . __PACKAGE__ . "\n";
+
+    my $name = $AUTOLOAD;
+    $name =~ s/.*://;    # strip fully-qualified portion
+    return if $name eq 'DESTROY';
+    
+    my ($hook_name) = $name =~ /_rest_hook_(.*)/;
+    die "Not a REST hook call '$name'\n" unless $hook_name;
+
+    $self->register_rest;
+
+    $self->make_hub(
+        $rest_handler->user,
+        Socialtext::Workspace->new( name => 'help-en' ),
+    );
+
+    return $self->hook($hook_name, $rest_handler, $args);
+}
+
+sub make_hub {
+    my ($self,$user,$ws) = @_;
+    my $main = Socialtext->new;
+    $main->load_hub(
+        current_user      => $user,
+        current_workspace => $ws,
+    );
+    $main->hub->registry->load;
+    $main->debug;
+    $self->{made_hub} = $main->hub;
+}
+
 
 sub class_id { 'pluggable' };
 sub class_title { 'Pluggable' };
@@ -22,8 +60,6 @@ sub class_title { 'Pluggable' };
 for my $plugin (__PACKAGE__->plugins) {
     $plugin->register;
 }
-
-my %hooks;
 
 sub rest_hooks {
     my $class = shift;
@@ -64,20 +100,32 @@ sub register {
     }
 }
 
+sub register_rest {
+    my $self = shift;
+    return if $self->{_registered_rest}++;
+    for my $plugin ($self->plugins) {
+        for my $hook ($plugin->rest_hooks) {
+            $hooks{$hook->{name}} = $hook;
+        }
+    }
+}
+
 sub registered {
     my ($self, $name) = @_;
     return exists $hooks{$name};
 }
 
 sub hook {
-   my ($self,$name,@args) = @_;
-   if (my $hook = $hooks{$name}) {
-       my $method = $hook->{method};
-       $hook->{obj} ||= $hook->{class}->new();
-       $hook->{obj}->hub($self->hub);
-       return $hook->{obj}->$method(@args)
-   }
-   return ""
+    my ( $self, $name, @args ) = @_;
+    if ( my $hook = $hooks{$name} ) {
+        my $method = $hook->{method};
+        $hook->{obj} ||= $hook->{class}->new();
+        $hook->{obj}->hub( $self->hub || $self->{made_hub});
+        return $hook->{obj}->$method(@args);    # do some magic here
+    }
+    else {
+        die "No hook '$name' defined\n";
+    }
 }
 
 return 1;

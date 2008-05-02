@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+use XML::LibXML;
+
+use FindBin qw($Bin);
+
+my $filename = $ARGV[0];
+
+print "CHECKING: $filename\n\n";
+
+my $schema_file = "$Bin/po.xsd";
+my $document    = $filename;
+
+my $schema = XML::LibXML::Schema->new(location => $schema_file);
+
+my $parser = XML::LibXML->new;
+my $doc    = $parser->parse_file($document);
+
+eval { $schema->validate($doc) };
+die $@ if $@;
+
+print "$document validated successfully\n";

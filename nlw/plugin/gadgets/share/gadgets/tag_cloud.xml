@@ -1,0 +1,99 @@
+<Module>
+  <ModulePrefs title="Tags For __UP_workspace__ workspace">
+    <Require feature="dynamic-height" />
+    <Require feature="setprefs" />
+    <Require feature="settitle" />
+     <Require feature="dynamic-height" />
+     <UserPref name="workspace" display_name="Workspace" dataType="workspace" default_value="help-en"/>
+  </ModulePrefs>
+  <Content type="html">
+     <![CDATA[
+<style>
+    html, body, div, span, applet, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, font, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    b, u, i, center,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            outline: 0;
+            font-size: 100%;
+            vertical-align: baseline;
+            background: transparent;
+            text-align: left;
+    }
+    #my__MODULE_ID__-content {
+       width: 100%;
+       padding: 10px;
+    }
+</style>
+
+    <!-- tagcloud module needs prototype, maybe we should write our own instead? -->
+    <script src="/plugin/gadgets/javascript/tagcloud.js"></script>
+
+    <div id="my__MODULE_ID__-content"> </div>
+    <script>
+
+        function startTagGeneration() {
+            jQuery.ajax({
+                   url: '/data/workspaces/__UP_workspace__/tags?order=weighted&accept=application/json',
+                   success: handleTagResponse,
+                   contentType: 'json',
+                   dataType: 'json'
+                   });
+        }
+
+        // randomization function from the net, shuffles a passed array for us
+        function fisherYates ( myArray ) {
+            var i = myArray.length;
+            if ( i == 0 ) return false;
+            while ( --i ) {
+                var j = Math.floor( Math.random() * ( i + 1 ) );
+                var tempi = myArray[i];
+                var tempj = myArray[j];
+                myArray[i] = tempj;
+                myArray[j] = tempi;
+           }
+        }
+
+        function handleTagResponse(data) {
+            // This is horrible, we need to get them from the server in order so we can take the top
+            // X of them, but we need to add them into our cloud randomly so it looks right :(
+            var toptags = data.slice(0,25);
+            var hottags = new Array();
+            for(var ix = 0; ix < toptags.length && ix < 3; ix++) {
+               hottags[ix] = toptags[ix].name; // flatten this to just the name
+            }
+            fisherYates(toptags);
+            var tc = TagCloud.create();
+            for(var ix = 0; ix < toptags.length && ix < 25; ix++) {
+                var tag = toptags[ix];
+                tc.add(tag.name, tag.page_count, '/__UP_workspace__/index.cgi?action=category_display;category='+tag.name);
+            } 
+
+            tc.loadEffector("CountSize");
+
+            var html = tc.generateHTML(); 
+            jQuery(html).find('span').each(function() {
+                 jQuery('#my__MODULE_ID__-content').append(' ' , this , ' ');
+            });
+            gadgets.window.adjustHeight(); 
+
+        }
+ 
+        gadgets.util.registerOnLoadHandler( function () {
+            gadgets.window.setTitle('Tags for __UP_workspace__ workspace');
+            startTagGeneration();
+        });
+
+    </script>
+
+
+    ]]>
+  </Content>
+</Module>

@@ -1,0 +1,78 @@
+<Module>
+  <ModulePrefs title="__UP_title__">
+    <Require feature="dynamic-height" />
+    <Require feature="setprefs" />
+    <Require feature="settitle" />
+     <Require feature="dynamic-height" />
+  </ModulePrefs>
+ <UserPref name="rss_feed" display_name="RSS Feed" default_value="http://www.socialtext.com/blog/feed"/>
+ <UserPref name="title" default_value="RSS Viewer" datatype="hidden"/>
+  <Content type="html">
+    <![CDATA[
+
+<style>
+
+  #my__MODULE_ID__-content {
+    text-align: left;
+    margin-left: 5px;
+  }
+  .rss_item {
+    padding: 5px;  
+  }
+
+  .rss_title {
+  }
+  a {
+    text-decoration: none;  
+    font-size: 1.2em;
+  }
+  .rss_body {
+    font-size: 1.2em;
+  }
+
+</style>
+<div id="my__MODULE_ID__-content"></div>
+<script>
+  var params = {};
+  var url = '__UP_rss_feed__';
+  var title = '__UP_title__';
+  var prefs = new gadgets.Prefs();
+  
+  gadgets.window.setTitle(title);
+
+  var rurl = 'http://topaz.socialtext.net:22081/data/gadget/json_feed_proxy';
+  params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.FEED;
+  params[gadgets.io.RequestParameters.POST_DATA] = 'url=' + url;
+  params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.POST;
+
+   var callback = function(feed) {
+      var items = feed.data.items;
+      var ix = 0;
+      for( ix = 0; ix < items.length && ix < 5; ix++) {
+           var item = items[ix];
+	   var summary = jQuery(item.content).text();
+	   summary = summary.substr(0,250);
+           jQuery('#my__MODULE_ID__-content').append(
+	       '<div class="rss_item">',
+	        '<div class="rss_title">',
+	         '<a href="' + item.link + '" target="parent">' + item.title + '</a>',
+	        '</div>',
+		'<div class="rss_body">',summary,'</div>',
+	       '</div>'
+           );
+      }
+      gadgets.window.setTitle(feed.data.title);
+      prefs.set('title',feed.data.title);
+      gadgets.window.adjustHeight();
+   }
+   gadgets.util.registerOnLoadHandler( function() {
+      gadgets.io.makeRequest(rurl, callback, params);
+     // jQuery.post(rurl, callback, {url : url});
+   });
+
+</script>
+
+    ]]>
+
+  </Content>
+</Module>

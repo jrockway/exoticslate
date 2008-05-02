@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+    <ModulePrefs title="Last.fm Neighbors">
+        <UserPref name="user_id" display_name="Last.fm username" type="string" required="true" default="" />
+    </ModulePrefs>
+    <Content type="html">
+        <![CDATA[
+            <div id="__MODULE_ID__">
+                <ul id="__MODULE_ID__-list">
+                </ul>
+            </div>
+            <script>
+                var prefs = new gadgets.Prefs;
+
+                if ( prefs.getString('user_id') ) {
+                    var template_url = 'http://ws.audioscrobbler.com/1.0/user/USER_ID/neighbours.xml';
+                    var full_url = template_url.replace('USER_ID', prefs.getString('user_id'));
+
+                    _IG_FetchXmlContent(full_url, function ( xml ) {
+                        jQuery(xml).find('user').each(function() {
+                            var username = jQuery(this).attr('username');
+                            var user_url = jQuery(this).text(jQuery(this).find('url'));
+                            var match    = jQuery(this).text(jQuery(this).find('match'));
+                            jQuery('#__MODULE_ID__-list').append(
+                                jQuery('<li>').append(
+                                    jQuery('<a href="' + user_url + '">').append( username + ': ' + match + '%' )
+                                )
+                            )
+                        } )
+                    } );
+                } else {
+                    jQuery('#__MODULE_ID__').html(jQuery('<p>').append('You must configure this gadget.'));
+                }
+            </script>
+        ]]>
+    </Content>
+</Module>

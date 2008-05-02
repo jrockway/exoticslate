@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<messagebundle>
+    <msg name="test_de_1">test de data 1</msg>
+    <msg name="test_de_2">test de data 2</msg>
+</messagebundle>

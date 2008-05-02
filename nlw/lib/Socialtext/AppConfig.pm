@@ -571,6 +571,13 @@ EOF
     }
 }
 
+# NOTE: AppConfig.pm is a dependency of ST/l10n.pm, so we cannot rely on
+# l10n's loc() at compile time.  But we still must call loc() so that 
+# the strings can be captured by gettext.pl
+#
+# So, l10n.pm will over-ride this method on load to be the correct method.
+sub loc { shift }
+
 1;
 
 __END__
@@ -877,7 +884,7 @@ Default: 5
 
 The did you know title
 
-Default: Access a Community of Peers
+=for code default => loc('Access a Community of Peers')
 
 =for code type => SCALAR_TYPE
 
@@ -885,7 +892,7 @@ Default: Access a Community of Peers
 
 The did you know text
 
-Default: As a Socialtext customer, you have access to the <a href="http://www.socialtext.net/exchange/">Socialtext Customer Exchange</a>.  It's where you can share tips and best practices with other Socialtext customers.
+=for code default => loc('As a Socialtext customer, you have access to the <a href="http://www.socialtext.net/exchange/">Socialtext Customer Exchange</a>. It is where you can share tips and best practices with other Socialtext customers.')
 
 =for code type => SCALAR_TYPE
 

@@ -67,6 +67,8 @@
     RewriteRule    /.*/base/(.+)            /static/skin/s2/$1  [R,L]
     RewriteRule    ^/static/[\.0-9]+/(.+)$  /static/$1  [PT,L]
 
+    RewriteRule    ^/nlw/plugin/[\.0-9]+/(.+)$  /nlw/plugin/$1  [PT,L]
+
 [% IF not (config.is_appliance || !config.apache_proxy) %]
     RewriteRule    ^/my/$        http://www.socialtext.net/
 [% END %]
@@ -102,6 +104,7 @@
 [% IF not config.single %]
     # webplugin is supported for 'drop-in' third party apps
     RewriteRule    !^/webplugin             -           [C]
+    RewriteRule    !^/nlw/plugin            -           [C]
     RewriteRule    !^/static                -           [C]
     RewriteRule    !^/logos                 -           [C]
     RewriteRule    !^/favicon\.ico          -           [C]
@@ -112,4 +115,3 @@
 [% END %]
 
     Alias /static  [% config.static_dir %]
-

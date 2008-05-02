@@ -12,6 +12,7 @@ use Apache::Cookie;
 use Socialtext::User;
 use LWP::UserAgent;
 use Socialtext::WebApp;
+use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
 use URI::Escape qw (uri_unescape);
 
 =head1 NAME
@@ -133,22 +134,17 @@ sub _set_cookie {
     my $user_id = $user->user_id;
     my $value   = {
         user_id => $user_id,
-        MAC     => _MAC_for_user_id($user_id),
+        MAC     => Socialtext::HTTP::Cookie->MAC_for_user_id($user_id),
     };
     my $request = Apache::Request->instance( Apache->request );
     my $cookie  = Apache::Cookie->new(
         $request,
-        -name    => 'NLW-user',
+        -name    => USER_DATA_COOKIE,
         -value   => $value,
         -expires => '+12M',
         -path    => '/',
     )->bake;
     return $user_id;
-}
-
-sub _MAC_for_user_id {
-    return Digest::SHA1::sha1_base64( $_[0],
-        Socialtext::AppConfig->MAC_secret );
 }
 
 1;

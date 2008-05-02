@@ -38,8 +38,13 @@ sub formatter_classes {
 }
 
 sub wafl_classes {
+    my $self = shift;
     qw(
         Preformatted Html Selenium PageInclusion
+    ),
+    $self->hub->current_workspace->enable_spreadsheet
+      ? (qw(SpreadsheetInclusion)) : (),
+    qw(
         Image File HtmlPage CSS InterWikiLink TradeMark
         WeblogLink CategoryLink TagLink TeleType Toc
     );

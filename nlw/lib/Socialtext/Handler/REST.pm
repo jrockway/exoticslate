@@ -7,6 +7,7 @@ use warnings;
 use base 'REST::Application::Routes';
 use base 'Socialtext::Handler';
 use Socialtext::HTTP ':codes';
+use Socialtext::Pluggable::Adapter;
 
 use Apache;
 use Apache::Constants qw(OK AUTH_REQUIRED);
@@ -291,9 +292,11 @@ sub _load_resource_hooks {
     my $authinfo = YAML::LoadFile( File::Spec->catfile( $config_dir, $AUTH_MAP ) );
     my $hooks = YAML::LoadFile( File::Spec->catfile( $config_dir, $URI_MAP ) );
 
+    my @rest = Socialtext::Pluggable::Adapter->rest_hooks;
+
     $class->_load_resource_hook_classes($hooks);
     $class->_duplicate_gets_to_heads($hooks);
-    @ResourceHooks = (map {%$_} @$hooks );
+    @ResourceHooks = (map {%$_} @$hooks, @rest);
     @AuthInfo = (map {%$_} @$authinfo );
 }
 

@@ -9,13 +9,14 @@ use Socialtext::System qw/shell_run/;
 use Socialtext::File qw/set_contents/;
 use Encode;
 use utf8;
+use JSON::XS;
 
 my $r    = make_rester();
 my $l10n = load_localizations();
 
 my $js_output = 'share/skin/s2/javascript/l10ns.js';
 my $is_js     = qr#share/skin/s2/javascript|share/skin/s2/template/element/jst#;
-my $is_po     = qr#lib/\S+\.pm|share/skin/s2/template|share/console-template/template#;
+my $is_po     = qr#lib/\S+\.pm|share/skin/s2/template|share/console-template/template|search_config\.yaml\.tt2#;
 create_perl_l10ns( 'share/l10n', $l10n );
 create_js_l10ns( 'share/skin/s2/javascript/l10ns.js', $l10n );
 exit;
@@ -51,7 +52,12 @@ msgstr ""
 EOT
     for my $id ( sort keys %$dict ) {
         my $l = $dict->{$id};
-        next unless $l->{reference} =~ $is_po;
+        unless ($l->{reference} =~ $is_po) {
+            unless ($l->{reference} =~ $is_js) {
+                warn "String ($id) is not being written to the PO or the JS!";
+            }
+            next;
+        };
         $output .= "#: $l->{reference}\n";
         $output .= "#. $l->{other}\n" if $l->{other};
         my $str;
@@ -115,7 +121,7 @@ sub create_js_l10ns {
         delete $js_hash->{$locale} unless %{ $js_hash->{$locale} };
     }
 
-    my $js_out = "var LocalizedStrings = " . objToJson($js_hash) . ";\n";
+    my $js_out = "var LocalizedStrings = " . encode_json($js_hash) . ";\n";
     $js_out .= <<'EOT';
 
 function loc() {

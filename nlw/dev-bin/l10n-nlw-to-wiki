@@ -17,23 +17,32 @@ link_enterprise_features();
 link_enterprise_features();
 update_enterprise_features();
 
-my @exclude_rx = (
-    qr/tiddlytext/,
-    qr/socialtext\.js/,
-    qr#javascript/test#,
+my @files = get_files( 
+    dirs => [
+        "lib/", 
+        "share/skin/s2/template", 
+        "share/skin/s2/javascript", 
+        "share/console-template", 
+        "build/templates/socialtext",
+    ],
+    includes => [
+        qr#\.(?:pm|js|tt2)$#, 
+        qr#share/skin/s2/template#,
+        qr#share/console-template/template#,
+    ],
+    excludes => [
+        qr/tiddlytext/,
+        qr/socialtext\.js/,
+        qr#javascript/test#,
+        qr/widget_edit\.tt2/,
+    ],
 );
-my @include_rx = (
-    qr/\.(?:pm|js)$/, 
-    qr/share\/skin\/s2\/template/,
-    qr/share\/console-template\/template/,
-);
-my @files = get_files( "lib/", "share/skin/s2/template", "share/skin/s2/javascript", "share/console-template" );
 
 my $en_file = "nlw-en.po";
 shell_run("dev-bin/l10n-widget-to-js");
 call_xgettext( $en_file => @files );
 po_to_wiki($en_file);
-unlink $en_file;
+# unlink $en_file;
 exit;
 
 sub update_enterprise_features {
@@ -83,15 +92,18 @@ sub call_xgettext {
 }
 
 sub get_files {
-    my @dirs  = @_;
-    my @files = File::Find::Rule->file()->in(@dirs);
+    my %opts = @_;
+    my $dirs  = $opts{dirs};
+    my $excludes = $opts{excludes};
+    my $includes = $opts{includes};
+    my @files = File::Find::Rule->file()->in(@$dirs);
     my @new_files;
 
     FILE: for my $file (@files) {
-        for my $rx (@exclude_rx) {
+        for my $rx (@$excludes) {
            next FILE if $file =~ $rx;
         }
-        for my $rx (@include_rx) {
+        for my $rx (@$includes) {
             next unless $file =~ $rx;
             push @new_files, $file;
             last;

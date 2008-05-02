@@ -46,6 +46,7 @@ sub available_locales {
     return {
         'en' => loc('English'),
         'ja' => loc('Japanese'),
+        'it' => loc('Italian'),
     };
 }
 

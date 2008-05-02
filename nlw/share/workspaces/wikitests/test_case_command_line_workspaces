@@ -246,4 +246,11 @@ TODO: figure out a way to calculate the attachment ID
 
 | st-admin | customjs | qr/The command you called \(customjs\) requires a workspace to be specified./ |
 
+| *Comment* | Test Case: Command Line Tests WORKSPACE Teardown |  |
+| st-admin | delete-workspace --w %%cmdline_workspace%% --no-export |  |
+| st-admin | delete-workspace --w %%target_workspace%% --no-export |  |
+| st-admin | delete-workspace --w import-name%%start_time%% --no-export |  |
+| st-admin | delete-workspace --w %%cmdline_workspace%%-clone --no-export |  |
+| st-admin | delete-workspace --w %%cmdline_workspace%%_2 --no-export |  |
+
 | *Comment* | Test Case: Command Line Tests WORKSPACE COMPLETED |  |

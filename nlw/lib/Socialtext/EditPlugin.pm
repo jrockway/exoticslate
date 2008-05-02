@@ -70,6 +70,7 @@ sub edit_content {
     $metadata->loaded(1);
     $metadata->update( user => $self->hub->current_user );
     $metadata->Subject($page_name);
+    $metadata->Type($self->cgi->page_type);
 
     $page->name($page_name);
     if ($self->cgi->append_mode eq 'bottom') {
@@ -239,10 +240,10 @@ cgi 'caller_action';
 cgi 'category';
 cgi 'header';
 cgi 'revision_id';
+cgi 'page_type';
 cgi 'original_page_id';
 cgi 'page_body';
 cgi 'revision';
-cgi 'revision_id';
 cgi 'subject';
 cgi 'summary';
 cgi 'type';

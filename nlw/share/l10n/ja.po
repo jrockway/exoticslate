@@ -9,11 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: lib/Socialtext/WeblogPlugin.pm
-#. (
-msgid "%1"
-msgstr ""
-
 #: lib/Socialtext/SearchPlugin.pm
 #. (
 msgid "%1 - Atom Search for %2"
@@ -26,6 +21,11 @@ msgstr "%1 - RSS で %2 を検索する"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
+msgid "%1 Account Growth Report"
+msgstr ""
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
 msgid "%1 Account Usage Report"
 msgstr ""
 
@@ -33,6 +33,11 @@ msgstr ""
 #. (
 msgid "%1 Weblog"
 msgstr "%1 ウェブログ"
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "%1 Workspace Growth Report"
+msgstr ""
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -344,10 +349,20 @@ msgstr "他の人を%2へ<a href=\"/%1/?action=users_invitation\">招待する</
 msgid "<a href=\"/%1/\">Go to</a> the %2 home page."
 msgstr "%2 ホームページ<a href=\"/%1/\">に行く</a>。"
 
+#: share/skin/s2/template/element/settings/workspaces_settings_skin_section
+#.  
+msgid "<a href=\"/help-en/index.cgi?socialtext_style_customization_guide\">Socialtext Style Customization Guide</a>"
+msgstr ""
+
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "<a href=\"?action=users_invitation\">Invite your colleagues<b></b></a> to this workspace."
 msgstr "このワークスペースに<a href=\"?action=users_invitation\">新しいユーザを招待する<b></b></a>"
+
+#: share/skin/s2/template/element/settings/workspaces_settings_skin_section
+#.  
+msgid "<a href=\"http://www.socialtext.net/open/index.cgi?css_kit\">Skin Customization Kit</a>"
+msgstr ""
 
 #: lib/Socialtext/FavoritesPlugin.pm
 #.  
@@ -429,6 +444,11 @@ msgstr "AOL ユーザ aim:aimuser プレゼンス"
 msgid "AOL user aimuser presence"
 msgstr "AOL ユーザ aimuser プレゼンス"
 
+#: lib/Socialtext/AppConfig.pm
+#.  
+msgid "Access a Community of Peers"
+msgstr ""
+
 #: lib/Socialtext/Account.pm
 #.  
 msgid "Account name is a required field."
@@ -473,6 +493,11 @@ msgstr "タグを追加"
 #.  
 msgid "Add&nbsp;tag"
 msgstr "タグを追加"
+
+#: share/skin/s2/template/layout/edit_wikiwyg
+#.  
+msgid "Add&nbsp;tags&nbsp;..."
+msgstr ""
 
 #: share/skin/s2/template/element/settings/users_listall_section
 #.  
@@ -694,6 +719,11 @@ msgstr "%1 にアプリケーションエラー発生: %2"
 msgid "Archive Directory"
 msgstr "アーカイブディレクトリ"
 
+#: lib/Socialtext/AppConfig.pm
+#.  
+msgid "As a Socialtext customer, you have access to the <a href=\"http://www.socialtext.net/exchange/\">Socialtext Customer Exchange</a>. It is where you can share tips and best practices with other Socialtext customers."
+msgstr ""
+
 #: share/skin/s2/template/search_help_field.html
 #.  
 msgid "As we continue to develop the search system, the options you will have and the interface you have to make use of them will improve."
@@ -803,6 +833,11 @@ msgstr "ページの一番下"
 #.  
 msgid "Brought to you by Socialtext."
 msgstr "Socialtext でお楽しみください。"
+
+#: share/skin/s2/template/element/settings/workspaces_settings_skin_section
+#.  
+msgid "Browse ..."
+msgstr ""
 
 #: lib/Socialtext/BugsPlugin.pm
 #.  
@@ -924,7 +959,7 @@ msgstr "このページにコメントを追加するには、このボタンを
 msgid "Click this button to add a file to the page"
 msgstr "このページにファイルを追加するには、このボタンをクリックしてください。"
 
-#: share/skin/s2/template/element/page/tags
+#: share/skin/s2/template/element/page/tags share/skin/s2/template/layout/edit_wikiwyg
 #.  
 msgid "Click this button to add a tag to the page"
 msgstr "このページにタグを追加するには、このボタンをクリックしてください。"
@@ -964,10 +999,20 @@ msgstr "このページを編集するには、このボタンをクリックし
 msgid "Click this button to manage files attached to the page"
 msgstr "このページの添付ファイルを管理するには、このボタンをクリックしてください。"
 
+#: build/templates/socialtext/search/search_config.yaml.tt2
+#.  
+msgid "Click this button to perform your search"
+msgstr ""
+
 #: share/skin/s2/template/element/page/edit
 #.  
 msgid "Click this button to preview your page before saving it"
 msgstr "保存する前にページを確認するには、このボタンをクリックしてください。"
+
+#: share/skin/s2/template/element/page/actions
+#.  
+msgid "Click this button to refresh this spreadsheet"
+msgstr ""
 
 #: lib/Socialtext/BreadCrumbsPlugin.pm
 #.  
@@ -1014,6 +1059,11 @@ msgstr "ページを保存するには、このボタンをクリックしてく
 msgid "Click this button to save your tag"
 msgstr "タグを保存するには、このボタンをクリックしてください。"
 
+#: share/skin/s2/template/layout/edit_wikiwyg
+#.  
+msgid "Click this button to upload a file to the page"
+msgstr ""
+
 #: share/skin/s2/template/view/page/display share/skin/s2/template/view/page/display
 #.  
 msgid "Click to view previous versions of this page."
@@ -1037,7 +1087,7 @@ msgstr "コメント"
 #: share/skin/s2/template/element/page/footer_end
 #.  
 msgid "Community"
-msgstr ""
+msgstr "コミュニティ"
 
 #: share/skin/s2/template/view/page_revision_list
 #.  
@@ -1119,10 +1169,20 @@ msgstr "ウェブログを作成する"
 msgid "Create Initial Workspace"
 msgstr "最初のワークスペースを作成する"
 
+#: share/skin/s2/template/element/page/actions
+#.  
+msgid "Create New Spreadsheet"
+msgstr ""
+
 #: lib/Socialtext/WeblogPlugin.pm share/skin/s2/template/element/settings/select
 #.  
 msgid "Create New Weblog"
 msgstr "ウェブログの新規作成"
+
+#: share/skin/s2/template/element/page/actions
+#.  
+msgid "Create New Wiki Page"
+msgstr ""
 
 #: share/skin/s2/template/element/settings/select
 #.  
@@ -1153,6 +1213,11 @@ msgstr ""
 #. (
 msgid "Created by %1 on %2."
 msgstr "%2 に %1 が作成"
+
+#: lib/Socialtext/Page.pm
+#.  
+msgid "Creating a New Spreadsheet..."
+msgstr ""
 
 #: lib/Socialtext/Appliance/BackupStore.pm
 #. (
@@ -1339,7 +1404,7 @@ msgstr "ページの複製"
 msgid "Earlier entries"
 msgstr "以前の投稿"
 
-#: share/skin/s2/template/element/page/actions share/skin/s2/template/element/page/actions
+#: lib/Socialtext/Lite.pm share/skin/s2/template/element/page/actions share/skin/s2/template/element/page/actions
 #.  
 msgid "Edit"
 msgstr "編集"
@@ -1611,7 +1676,7 @@ msgstr "アップロードするファイル:"
 
 #: share/skin/s2/template/element/settings/list_skipped_files
 #.  
-msgid "Files are imported only from ZIP/TGZ css/ and images/ paths.  Files\nwith other paths are not imported."
+msgid "Files are imported only from ZIP/TGZ javascript/, css/ and images/ paths. Files with other paths are not imported."
 msgstr ""
 
 #: share/skin/s2/template/lite/changes/changes.html
@@ -1704,7 +1769,7 @@ msgstr "ヘルプ"
 msgid "Hi,"
 msgstr "こんにちは。"
 
-#: share/skin/s2/template/element/wiki/nav
+#: lib/Socialtext/Lite.pm share/skin/s2/template/element/wiki/nav
 #.  
 msgid "Home"
 msgstr "ホーム"
@@ -1889,7 +1954,7 @@ msgstr "'%1' Atom フィードを挿入します。クリックして編集し�
 msgid "Include the '%1' RSS feed. Click to edit."
 msgstr "'%1' RSS フィードを挿入します。クリックして編集してください。"
 
-#: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
+#: lib/Socialtext/Widget_resource.pm lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Include the page '%1'. Click to edit."
 msgstr "'%1' ページを挿入します。クリックして編集してください。"
@@ -1996,6 +2061,11 @@ msgstr ""
 
 #: lib/Socialtext/Locales.pm
 #.  
+msgid "Italian"
+msgstr ""
+
+#: lib/Socialtext/Locales.pm
+#.  
 msgid "Japanese"
 msgstr "日本語"
 
@@ -2079,7 +2149,7 @@ msgstr "手動バックアップはありません。"
 msgid "Last name:"
 msgstr "姓:"
 
-#: share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/widget_resource.js share/skin/s2/javascript/widget_resource.js share/skin/s2/template/view/refcard
+#: share/skin/s2/javascript/widget_resource.js share/skin/s2/javascript/widget_resource.js share/skin/s2/template/view/refcard
 #.  
 msgid "Link text"
 msgstr "リンクの文字"
@@ -2109,7 +2179,7 @@ msgstr "'%1' ウェブログへのリンク: クリックして編集してく�
 msgid "List All Users"
 msgstr "ユーザ一覧"
 
-#: share/skin/s2/javascript/Wikiwyg/Socialtext.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/template/layout/html share/skin/s2/template/view/weblog share/skin/s2/template/view/weblog
+#: share/skin/s2/javascript/Wikiwyg/Socialtext.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/template/element/page/actions share/skin/s2/template/element/settings/actions share/skin/s2/template/view/listview share/skin/s2/template/view/weblog share/skin/s2/template/view/weblog
 #.  
 msgid "Loading..."
 msgstr "読み込み中..."
@@ -2207,7 +2277,7 @@ msgstr "会議メモ カテゴリ"
 #: share/skin/s2/template/element/wiki/nav
 #.  
 msgid "Mobile"
-msgstr ""
+msgstr "モビル"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -2254,6 +2324,11 @@ msgstr "コントロールパネルで別のセクションを選択するナビ
 msgid "Never"
 msgstr "受け取らない"
 
+#: share/skin/s2/template/element/page/actions
+#.  
+msgid "New"
+msgstr ""
+
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "New Page"
@@ -2272,7 +2347,7 @@ msgstr "新しい管理者の Email アドレス:"
 #: share/skin/s2/template/element/page/actions
 #.  
 msgid "New page"
-msgstr ""
+msgstr "新規ページ作成"
 
 #: share/skin/s2/template/popup/copy_to_workspace
 #.  
@@ -2293,6 +2368,11 @@ msgstr "新しいパスワードが一致しません。"
 #.  
 msgid "New passwords must be at least 6 characters long."
 msgstr "新しいパスワードは6文字以上にしてください。"
+
+#: build/templates/socialtext/search/search_config.yaml.tt2 share/skin/s2/javascript/pageview.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-other-mini.js share/skin/s2/javascript/socialtext-other.js
+#.  
+msgid "New search"
+msgstr "ワードを入力"
 
 #: share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
 #.  
@@ -2804,7 +2884,7 @@ msgstr "アプライアンスを再起動しますか？"
 msgid "Reboot Now"
 msgstr "今すぐ再起動する"
 
-#: lib/Socialtext/WeblogPlugin.pm share/skin/s2/template/element/weblog/actions
+#: lib/Socialtext/Lite.pm lib/Socialtext/WeblogPlugin.pm share/skin/s2/template/element/weblog/actions
 #.  
 msgid "Recent Changes"
 msgstr "最近の更新"
@@ -2858,6 +2938,11 @@ msgstr "最近見たページ"
 #. (
 msgid "Redirecting to %1"
 msgstr "%1 にリダイレクトする"
+
+#: share/skin/s2/template/element/page/actions
+#.  
+msgid "Refresh"
+msgstr ""
 
 #: share/console-template/template/backup.html
 #.  
@@ -3069,6 +3154,11 @@ msgstr "違う名前で保存する:"
 msgid "Screen Layout"
 msgstr "画面のレイアウト"
 
+#: build/templates/socialtext/search/search_config.yaml.tt2 lib/Socialtext/Lite.pm
+#.  
+msgid "Search"
+msgstr ""
+
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Search Google for '%1'. Click to edit."
@@ -3107,7 +3197,7 @@ msgstr "招待するユーザを検索する"
 #: lib/Socialtext/SOAPGoogle.pm
 #. (
 msgid "Search for \"%1\""
-msgstr ""
+msgstr "\"%1\" を検索する。"
 
 #: share/skin/s2/template/lite/search/search.html
 #.  
@@ -3283,6 +3373,11 @@ msgstr "Socialtext Email"
 #.  
 msgid "Socialtext Home Page"
 msgstr "Socialtext ホームページ"
+
+#: share/skin/s2/template/element/settings/workspaces_settings_features_section
+#.  
+msgid "Socialtext Unplugged"
+msgstr ""
 
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
@@ -3816,7 +3911,7 @@ msgstr "パスワードの変更はこのリンクから:"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #. (
-msgid "To customize your own skin, download the %1, modify the skin files to your liking, and upload them here. Complete documentation on skin customization is available in the %2."
+msgid "To customize your own skin, download the %1, modify the skin files to your liking, and upload them here. Complete documentation on skin customization is available in the %2.<h4>Skin support is not included in basic support. Users who upload skins are responsible for keeping copies of their skin files and for keeping their skins current as the Socialtext application changes.</h4>"
 msgstr ""
 
 #: share/skin/s2/template/email/email-address-confirmation-completed.html share/skin/s2/template/email/email-address-confirmation-completed.txt
@@ -3998,6 +4093,11 @@ msgstr "ファイルのアップロード"
 #.  
 msgid "Upload files"
 msgstr "ファイルのアップロード"
+
+#: share/skin/s2/template/layout/edit_wikiwyg
+#.  
+msgid "Upload&nbsp;files&nbsp;..."
+msgstr ""
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -5073,6 +5173,11 @@ msgstr "セクションリンク"
 #. (
 msgid "section: %1"
 msgstr "セクション: %1"
+
+#: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
+#. (
+msgid "ss: %1 (%2)"
+msgstr ""
 
 #: lib/Socialtext/Formatter/Phrase.pm lib/Socialtext/Formatter/Phrase.pm
 #.  

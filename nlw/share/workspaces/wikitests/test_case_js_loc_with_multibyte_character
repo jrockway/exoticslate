@@ -1,8 +1,4 @@
-This is automation of [Test: Js Loc with Multibyte character]
-
-Test results: [Test Case: Js Loc with Multibyte character Results]
-
-| *Command* | *Opt 1* | *Opt 2* |
+| *Comment* | Test Case: JS Loc with Multibyte Character start |  |
 | st-admin | set-locale --email %%email%% --locale ja --workspace %%workspace%% |  |
 | clickAndWait | st-home-link |  |
 | clickAndWait | st-newpage-link |  |

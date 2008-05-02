@@ -27,7 +27,7 @@ Set default values if they are not defined by the caller
 | click_and_wait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | %%test_string%% content |
 | type_ok | st-newpage-pagename-edit | %%test_string%% title |
 | click_ok | st-edit-mode-tagbutton |  |
@@ -66,11 +66,15 @@ Set default values if they are not defined by the caller
 
 | *Comment* | Test Case: String Use: duplicate |  |
 | open_ok | /%%workspace%%/index.cgi?%%test_id%%_title |  |
+| wait_for_element_visible_ok | st-page-titletext | 30000 |
+| text_like | st-page-titletext | %%test_string%% title |
 | click_ok | link=Duplicate Page |  |
 | open_ok | /%%workspace%%/index.cgi?action=duplicate_popup;page_name=%%test_id%%_title |  |
+| wait_for_element_present_ok | new_title | 30000 |
 | type_ok | new_title | %%test_string%% dupe |
 | click_and_wait | Button |  |
 | open_ok | /%%workspace%%/index.cgi?%%test_id%%_dupe |  |
+| wait_for_element_visible_ok | st-page-titletext | 30000 |
 | text_like | st-page-titletext | %%test_string%% dupe |
 | text_like | st-page-maincontent | %%test_string%% content |
 | text_like | st-tags | %%test_string%% tag 2 |
@@ -78,11 +82,13 @@ Set default values if they are not defined by the caller
 | *Comment* | Test Case: String Use: rename |  |
 | click_ok | link=Rename Page |  |
 | open_ok | /%%workspace%%/index.cgi?action=rename_popup;page_name=%%test_id%%_dupe |  |
+| wait_for_element_present_ok | new_title | 30000 |
 | type_ok | new_title | %%test_string%% rename |
 | click_and_wait | Button |  |
 
 | *Comment* | Test Case: String Use: verify rename |  |
 | open_ok | /%%workspace%%/index.cgi?%%test_id%%_rename |  |
+| wait_for_element_visible_ok | st-page-titletext | 30000 |
 | text_like | st-page-titletext | %%test_string%% rename |
 | text_like | st-page-maincontent | %%test_string%% content |
 | text_like | st-tags | %%test_string%% tag 2 |
@@ -90,19 +96,22 @@ Set default values if they are not defined by the caller
 | *Comment* | Test Case: String Use: Comment on the rename page |  |
 | click_ok | st-comment-button-link |  |
 | open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=%%test_id%%_rename;caller_action=display |  |
+| wait_for_element_visible_ok | st-commentui-textarea | 30000 |
 | type_ok | st-commentui-textarea | %%test_string%% comment |
 | click_and_wait | st-commentui-savelink |  |
 
 | *Comment* | Test Case: String Use: verify comment on the rename page |  |
 | open_ok | /%%workspace%%/index.cgi?%%test_id%%_rename |  |
+| wait_for_element_visible_ok | st-page-maincontent | 30000 |
 | text_like | st-page-maincontent | %%test_string%% comment |
 | text_like | st-page-maincontent | contributed by |
 
 | *Comment* | Test Case: String Use: Roundtripping Link Text for a widget in the duplicate page |  |
 | *Comment* | The following test DOES NOT actually find errors that trash the UI because Selenium manages to "click" all the buttons even when the interface is completely bolluxed by nasty data in the page. |  |
 | open_ok | /%%workspace%%/index.cgi?%%test_id%%_dupe |  |
+| wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | `"%%test_string%%"{link: help [Socialtext Documentation]}` |
 
 | *Comment* | Test Case: String Use: try the roundtrip |  |
@@ -126,9 +135,9 @@ Set default values if they are not defined by the caller
 | *Comment* | Your Notepad wants an existing page |  |
 | click_and_wait | st-home-link |  |
 | click_and_wait | st-newpage-link |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | %%test_string%% pad |
 | type_ok | wikiwyg_wikitext_textarea | %%test_string%% pad content |
 | click_and_wait | st-save-button-link |  |
@@ -150,8 +159,9 @@ Set default values if they are not defined by the caller
 
 | *Comment* | Test Case: String Use: try TOC |  |
 | open_ok | /%%workspace%%/index.cgi?%%test_id%%_rename |  |
+| wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | `{toc}` |
 
 | *Comment* | Test Case: String Use: try the TOC roundtrip |  |

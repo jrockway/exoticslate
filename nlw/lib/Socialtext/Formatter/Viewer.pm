@@ -44,13 +44,13 @@ sub to_html {
         $in_paragraph = 1;
     }
     # get the internal units
-    for ( @{ $_[TREE]->units } ) {
-        if ( ref ($_) ) {
-            $_->{hub} = $_[HUB];
-            $html .= $_[SELF]->to_html($_, $_[HUB]);
+    for my $unit ( @{ $_[TREE]->units } ) {
+        if ( ref ($unit) ) {
+            $unit->{hub} = $_[HUB];
+            $html .= $_[SELF]->to_html($unit, $_[HUB]);
         }
         else {
-            $html .= $_[TREE]->escape_html($_);
+            $html .= $_[TREE]->escape_html($unit);
         }
     }
 

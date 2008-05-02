@@ -10,12 +10,13 @@ use Class::Field qw( field );
 
 sub class_id { 'metadata' }
 
+field Control   => '';
+field Subject   => '';
 field From      => '';
 field Date      => '';
 field Received  => '';
 field Revision  => '';
-field Control   => '';
-field Subject   => '';
+field Type      => 'wiki';  # Page type - (wiki|spreadsheet)
 field Summary   => '';
 field MessageID => '';
 field Category  => [];
@@ -32,6 +33,7 @@ sub key_order {
         Date
         Received
         Revision
+        Type
         Summary
         MessageID
         Category

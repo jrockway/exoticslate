@@ -22,4 +22,7 @@
 TODO: find a way to calculate the attachment ID
  st-admin | index-attachment --workspace %%cmdline_workspace%% --page advanced_getting_around --attachment 20080320064508-16-27288 | The Navbar-All-tags.png attachment in the %%cmdline_workspace%% workspace has been indexed. |
 
+| *Comment* | Test Case: Command Line Tests INDEXING Teardown |  |
+| st-admin | delete-workspace --w %%cmdline_workspace%% --no-export |  |
+
 | *Comment* | Test Case Command Line INDEXING COMPLETED |  |

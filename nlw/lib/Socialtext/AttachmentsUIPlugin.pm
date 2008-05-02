@@ -180,6 +180,9 @@ sub save_attachment {
     my $file = shift; # [in] File object/hash from CGI
     my $embed = shift; # [in/optional] boolean - true if link to file should be embedded in page; default to true
 
+    $embed = 0
+        if ($self->hub->pages->current->metadata->Type eq 'spreadsheet');
+
     my $filename;
     eval {
         $filename = $file->{filename} . '';

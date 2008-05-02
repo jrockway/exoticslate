@@ -467,12 +467,26 @@ sub html {
         else {
             $edit = "$edit";
         }
-        $edit_icon = "<a class='wiki-include-edit-link' href='$edit_url' $incipient_class>$edit</a>";
+        $edit_icon = $self->edit_icon($edit_url, $incipient_class, $edit);
     }
 
+    my $class = (Socialtext::Page->new( 
+        id => $page_uri,
+        hub => $self->hub 
+    )->metadata->Type eq 'spreadsheet') ? ' spreadsheet' : '';
+    my $activity =
+        $self->hub->current_workspace->enable_spreadsheet
+        ? qq{<span class="st-include-activity$class">&nbsp;</span>}
+        : '';
     return qq(<div class="wiki-include-page">\n)
-        . qq(<div class="wiki-include-title">$link $edit_icon</div>\n)
+        . qq(<div class="wiki-include-title">$activity$link $edit_icon</div>\n)
         . qq(<div class="wiki-include-content">$html</div></div>);
+}
+
+sub edit_icon {
+    my $self = shift;
+    my ($edit_url, $incipient_class, $edit) = @_;
+    return "<a class='wiki-include-edit-link' href='$edit_url' $incipient_class>$edit</a>";
 }
 
 sub _included_page_exists {
@@ -504,6 +518,112 @@ sub _strip_outer_div {
     $html =~ s/<\/div>\n*\z//;
     return $html;
 }
+
+################################################################################
+# XXX just other pages, maybe in another workspace, for now...
+# could also do web pages etc
+package Socialtext::Formatter::SpreadsheetInclusion;
+use base 'Socialtext::Formatter::PageInclusion';
+use Class::Field qw( const );
+use Socialtext::Permission 'ST_READ_PERM';
+use Socialtext::l10n qw( loc );
+use pQuery::DOM;
+
+const wafl_id => 'ss';
+
+sub edit_icon {
+    my $self = shift;
+    my ($edit_url, $incipient_class, $edit) = @_;
+    $edit_url =~ s/\?([^=]+)#edit$/?page_name=$1;page_type=spreadsheet#edit/;
+    return "<a class='wiki-include-edit-link' href='$edit_url' $incipient_class>$edit</a>";
+}
+
+sub html {
+    my $self = shift;
+    my ( $workspace_name, $page_title, $section_id, $page_id, $page_uri )
+        = $self->parse_wafl_reference;
+
+    return $self->syntax_error unless $page_title;
+
+    return $self->cell_value($page_id, $section_id) if $section_id;
+
+    return $self->SUPER::html(@_);
+}
+
+sub cell_value {
+    my $self = shift;
+
+    my ($page_id, $cell_id) = @_;
+    $cell_id = uc($cell_id);
+    my $content = $self->hub->pages->new_from_name($page_id)->content;
+    if ($content =~ /^name:${cell_id}:(.*?):([\w\\]+)$/m) {
+        my $label = $1;
+        my $cell_range = $2;
+        if ($cell_range =~ /\\c/) {
+            return $self->sheet_range(
+                $content, $cell_range, $label, $page_id, $cell_id
+            );
+        }
+    }
+    if ($content =~ /^${cell_id}:\s*(.*)/m) {
+        return $1;
+    }
+    return $cell_id;
+}
+
+sub sheet_range {
+    my $self = shift;
+    my ($content, $cell_range, $label, $page_id, $cell_id) = @_;
+    my ($A1, $A2, $N1, $N2);
+    if ($cell_range =~ /^([A-Z]+)([0-9]+)\\c([A-Z]+)([0-9]+)$/ and
+        $1 le $3 and $2 <= $4
+    ) {
+        ($A1, $A2, $N1, $N2) = ($1, $3, $2, $4);
+    }
+    else {
+        my $error = "<div>Cell range '$cell_id' is not valid</div>\n";
+        $error = "<h3>$label</h3>\n" . $error
+            if $label;
+        return $error;
+    }
+
+
+    $content =~ /\n__SPREADSHEET_HTML__\n(.*?)\n__SPREADSHEET_/;
+    my $html = $1;
+
+    my $dom = pQuery::DOM->fromHTML($html);
+
+    my ($table) = ($html =~ /(<table.*?>)/g);
+    my @cols = ($html =~ /(<col .*?>)/g);
+
+    my @offset = 'A'..$A1;
+    my @length = $A1..$A2;
+    @cols = splice(@cols, @offset - 1, @length - 0);
+
+    my $width = 0;
+    for (@cols) {
+        $width += $1 if /width="(\d+)/;
+    }
+    $table =~ s/width:\s*\d+/width: $width/;
+
+    my $output = $table . '<colgroup>' . join('', @cols) . '</colgroup>';
+    for my $n ($N1..$N2) {
+        $output .= "<tr>";
+        for my $a ($A1..$A2) {
+             my $cell = $dom->getElementById("cell_$a$n")
+                 or next;
+             $output .= $cell->toHTML;
+        }
+        $output .= "</tr>";
+    }
+    $output .= "</table>";
+
+    $output = qq{<h3><a href="?$page_id">$label</a></h3>\n} . $output
+        if $label;
+
+    return $output;
+}
+
 
 ################################################################################
 package Socialtext::Formatter::InterWikiLink;

@@ -399,6 +399,8 @@ sub hash_representation {
         revision_id    => $self->revision_id,
         revision_count => $self->revision_count,
         workspace_name => $self->hub->current_workspace->name,
+
+        type => $self->metadata->Type,
     };
 }
 
@@ -759,7 +761,9 @@ sub is_system_page {
 
 sub content_or_default {
     my $self = shift;
-    return $self->content || loc('Replace this text with your own.') . '   ';
+    return ($self->metadata->Type eq 'spreadsheet')
+        ? ($self->content || loc('Creating a New Spreadsheet...') . '   ')
+        : ($self->content || loc('Replace this text with your own.') . '   ');
 }
 
 sub content {
@@ -1020,12 +1024,22 @@ sub to_html_or_default {
     $self->to_html($self->content_or_default, $self);
 }
 
+sub spreadsheet_to_html {
+    my $self = shift;
+    my $content = shift;
+    $content =~ s/.*\n__SPREADSHEET_HTML__\n//s;
+    $content =~ s/\n__SPREADSHEET_\w+__.*/\n/s;
+    return $content;
+}
+
 sub to_html {
     my $self = shift;
     my $content = @_ ? shift : $self->content;
     my $page = shift;
     $content = '' unless defined $content;
-    $self->hub->viewer->process($content, $page);
+    return ($self->metadata->Type eq 'spreadsheet')
+    ? $self->spreadsheet_to_html($content, $self)
+    : $self->hub->viewer->process($content, $page);
 }
 
 =head2 to_absolute_html($content)
@@ -1176,6 +1190,8 @@ sub duplicate {
       if $keep_categories;
     $target_page->metadata->update( user => $dest_hub->current_user );
 
+    $target_page->metadata->Type($self->metadata->Type);
+
     if ($keep_attachments) {
         my @attachments = $self->_attachments();
         for my $source_attachment (@attachments) {
@@ -1234,6 +1250,7 @@ sub rename {
         $localized_str =~ s/^Page\ renamed\ to\ /Page\ renamed\ to\ \[/;
         $localized_str =~ s/$/\]/;
         $self->content($localized_str);
+        $self->metadata->Type("wiki");
         $self->store( user => $self->hub->current_user );
     }
 
@@ -1360,6 +1377,7 @@ sub load_metadata {
       or die "No metadata object in content object";
     my ($headers) = $self->get_data();
     $metadata->from_hash($self->parse_headers($headers));
+    $metadata->{Type} ||= 'wiki';
     return $self;
 }
 

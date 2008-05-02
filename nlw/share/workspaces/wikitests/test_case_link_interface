@@ -35,6 +35,19 @@
 | *Comment* | Test Case: Link Interface NOTE: this action MUST be verifyValue. Neither text_like nor verify_value_ok work correctly here |  |
 | verifyValue | wikiwyg_wikitext_textarea | "TC: Link Interface"{link: test-data [link_interface_linkme_%%start_time%%] section two} |
 
+| *Comment* | Test Case: Link Interface Bogus Input |  |
+| *Comment* | Test Case: Link Interface moved this here so if the cancel fails, the test will fail |  |
+| click_ok | wikiwyg_button_link |  |
+| click_ok | add-web-link |  |
+| type_ok | wiki-link-text | TC: Link Interface |
+| type_ok | st-widget-workspace_id | DoesNotExist |
+| click_ok | st-widget-page_title |  |
+
+| *Comment* | Test Case: Link Interface pause is necessary for the little blue dropdown to appear |  |
+| pause | 2000 |  |
+| text_like | Workspace "DoesNotExist" does not exist on wiki |  |
+| click_ok | st-widget-cancelbutton |  |
+
 | *Comment* | Test Case: Link Interface Valid Web Input |  |
 | click_ok | wikiwyg_button_link |  |
 | text_like | Linked text: |  |
@@ -58,17 +71,5 @@
 | click_ok | st-edit-button-link |  |
 | wait_for_text_present_ok | Editing: | 10000 |
 | verifyValue | wikiwyg_wikitext_textarea | {link: a_section_link} |
-
-| *Comment* | Test Case: Link Interface Bogus Input |  |
-| click_ok | wikiwyg_button_link |  |
-| click_ok | add-web-link |  |
-| type_ok | wiki-link-text | TC: Link Interface |
-| type_ok | st-widget-workspace_id | DoesNotExist |
-| click_ok | st-widget-page_title |  |
-
-| *Comment* | Test Case: Link Interface pause is necessary for the little blue dropdown to appear |  |
-| pause | 2000 |  |
-| text_like | Workspace "DoesNotExist" does not exist on wiki |  |
-| click_ok | st-widget-cancelbutton |  |
 
 | *Comment* | Text Case: Link Interface COMPLETED |  |

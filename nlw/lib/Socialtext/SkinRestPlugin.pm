@@ -9,6 +9,7 @@ use base 'Socialtext::Plugin';
 use Class::Field qw(field const);
 use LWP::UserAgent;
 use Socialtext::Resting;
+use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
 use JSON::XS;
 use YAML;
 use Template;
@@ -152,7 +153,7 @@ sub handle_logout {
     if ( Apache::Cookie->can('fetch') ) {
         my $cookies = Apache::Cookie->fetch;
         if ($cookies) {
-            my $cookie = $cookies->{'NLW-user'};
+            my $cookie = $cookies->{USER_DATA_COOKIE()};
             $cookie->expires("-1d");
             $cookie->bake;
         }
@@ -182,7 +183,7 @@ sub init_st_rest {
     if ( Apache::Cookie->can('fetch') ) {
         my $cookies = Apache::Cookie->fetch;
         if ($cookies) {
-            my $cookie = $cookies->{'NLW-user'};
+            my $cookie = $cookies->{USER_DATA_COOKIE()};
             if ($cookie) {
                 $Rester->cookie($cookie->as_string);
             }

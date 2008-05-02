@@ -150,6 +150,7 @@ the recipient list as if the Add Additional User button had been pushed. Do the 
 | *Comment* | end RT 27006 |  |
 
 | *Comment* | Test Case: Email Teardown |  |
+| st-admin | purge-page --w %%workspace%% --page email_title_%%start_time%% |  |
 | st-admin | purge-page --w %%workspace%% --page email_subject_%%start_time%% |  |
 | st-admin | remove-member --email %%start_time%%_one@ken.socialtext.net --workspace %%workspace%% |  |
 | st-admin | remove-member --email %%start_time%%_two@ken.socialtext.net --workspace %%workspace%% |  |

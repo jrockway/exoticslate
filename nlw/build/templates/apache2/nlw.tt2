@@ -76,6 +76,14 @@
         FileETag none
     </Location>
 
+    AliasMatch ^/nlw/plugin/([^/]+)/(.*) [% config.static_dir %]/../plugin/$1/share/$2
+    <LocationMatch /nlw/plugin>
+        Order allow,deny
+        Allow from all
+        ExpiresDefault "access plus 1 years"
+        FileETag none
+    </LocationMatch>
+
     # Cache attachments
     <LocationMatch "^/data/.*/attachments/.+/.+">
         ExpiresDefault "access plus 1 years"

@@ -9,8 +9,7 @@ use Digest::SHA1 ();
 use Socialtext::AppConfig;
 use Socialtext::CredentialsExtractor;
 use Socialtext::User;
-
-use constant COOKIE_NAME => 'NLW-user';
+use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
 
 # Note: A parallel version of this code lives in Socialtext::CGI::User
 # so if this mechanism changes, we need to change the CGI version too
@@ -23,7 +22,7 @@ sub set_login_cookie {
     my $expire = shift;
 
     my $value = { user_id => $id,
-                  MAC     => _MAC_for_user_id($id),
+                  MAC     => Socialtext::HTTP::Cookie->MAC_for_user_id($id),
                 };
 
     _login_cookie( $r, $value, $expire );
@@ -41,7 +40,7 @@ sub _login_cookie {
     my $value = shift;
     my $expire = shift;
 
-    _set_cookie( $r, COOKIE_NAME, $value, $expire );
+    _set_cookie( $r, USER_DATA_COOKIE, $value, $expire );
 }
 
 sub current_user {
@@ -73,10 +72,6 @@ sub _user_id_or_username {
     }
 
     return Socialtext::CredentialsExtractor->ExtractCredentials($request);
-}
-
-sub _MAC_for_user_id {
-    return Digest::SHA1::sha1_base64( $_[0], Socialtext::AppConfig->MAC_secret );
 }
 
 sub _set_cookie {

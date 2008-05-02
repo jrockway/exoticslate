@@ -150,4 +150,7 @@ TODO: revise this test when {bz: 499} is fixed and there is no SQL error
 | st-admin | set-user-names --email foo%%start_time%%@bar.com --first-name Foo --last-name Bar | User "foo%%start_time%%@bar.com" was updated. |
 | st-admin | show-members --workspace %%cmdline_workspace%% | qr/Email Address.+First.+Last.+foo%%start_time%%\@bar.com.+Foo.+Bar/ |
 
+| *Comment* | Test Case: Command Line USERS Teardown |  |
+| st-admin | delete-workspace --w %%cmdline_workspace%% --no-export |  |
+
 | *Comment* | Test Case: Command Line: USERS COMPLETED |  |

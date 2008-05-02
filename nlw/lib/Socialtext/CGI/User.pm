@@ -7,6 +7,7 @@ our @EXPORT_OK = qw/get_current_user/;
 use Digest::SHA1;
 use CGI::Cookie;
 use Socialtext::Apache::User;
+use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
 
 # Note: A parallel version of this code lives in Socialtext::Apache::User
 # so if this mechanism changes, we need to change the CGI version too
@@ -19,10 +20,10 @@ sub get_current_user {
 }
 
 sub _user_id_or_username {
-    my %user_data = _get_cookie_value('NLW-user');
+    my %user_data = _get_cookie_value(USER_DATA_COOKIE);
     return unless keys %user_data;
 
-    my $mac = Socialtext::Apache::User::_MAC_for_user_id( $user_data{user_id} );
+    my $mac = Socialtext::HTTP::Cookie->MAC_for_user_id( $user_data{user_id} );
     unless ($mac eq $user_data{MAC}) {
         warn "Invalid MAC in cookie presented for $user_data{user_id}\n";
         return;

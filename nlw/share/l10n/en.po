@@ -9,11 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: lib/Socialtext/WeblogPlugin.pm
-#. (
-msgid "%1"
-msgstr ""
-
 #: lib/Socialtext/SearchPlugin.pm
 #. (
 msgid "%1 - Atom Search for %2"
@@ -26,12 +21,22 @@ msgstr ""
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
+msgid "%1 Account Growth Report"
+msgstr ""
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
 msgid "%1 Account Usage Report"
 msgstr ""
 
 #: lib/Socialtext/WeblogPlugin.pm
 #. (
 msgid "%1 Weblog"
+msgstr ""
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "%1 Workspace Growth Report"
 msgstr ""
 
 #: lib/Socialtext/Handler/ControlPanel.pm
@@ -344,9 +349,19 @@ msgstr ""
 msgid "<a href=\"/%1/\">Go to</a> the %2 home page."
 msgstr ""
 
+#: share/skin/s2/template/element/settings/workspaces_settings_skin_section
+#.  
+msgid "<a href=\"/help-en/index.cgi?socialtext_style_customization_guide\">Socialtext Style Customization Guide</a>"
+msgstr ""
+
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "<a href=\"?action=users_invitation\">Invite your colleagues<b></b></a> to this workspace."
+msgstr ""
+
+#: share/skin/s2/template/element/settings/workspaces_settings_skin_section
+#.  
+msgid "<a href=\"http://www.socialtext.net/open/index.cgi?css_kit\">Skin Customization Kit</a>"
 msgstr ""
 
 #: lib/Socialtext/FavoritesPlugin.pm
@@ -429,6 +444,11 @@ msgstr ""
 msgid "AOL user aimuser presence"
 msgstr ""
 
+#: lib/Socialtext/AppConfig.pm
+#.  
+msgid "Access a Community of Peers"
+msgstr ""
+
 #: lib/Socialtext/Account.pm
 #.  
 msgid "Account name is a required field."
@@ -472,6 +492,11 @@ msgstr ""
 #: share/skin/s2/template/element/page/tag_queue_interface
 #.  
 msgid "Add&nbsp;tag"
+msgstr ""
+
+#: share/skin/s2/template/layout/edit_wikiwyg
+#.  
+msgid "Add&nbsp;tags&nbsp;..."
 msgstr ""
 
 #: share/skin/s2/template/element/settings/users_listall_section
@@ -694,6 +719,11 @@ msgstr ""
 msgid "Archive Directory"
 msgstr ""
 
+#: lib/Socialtext/AppConfig.pm
+#.  
+msgid "As a Socialtext customer, you have access to the <a href=\"http://www.socialtext.net/exchange/\">Socialtext Customer Exchange</a>. It is where you can share tips and best practices with other Socialtext customers."
+msgstr ""
+
 #: share/skin/s2/template/search_help_field.html
 #.  
 msgid "As we continue to develop the search system, the options you will have and the interface you have to make use of them will improve."
@@ -802,6 +832,11 @@ msgstr ""
 #: share/skin/s2/template/email/standard-footer.html share/skin/s2/template/email/standard-footer.txt
 #.  
 msgid "Brought to you by Socialtext."
+msgstr ""
+
+#: share/skin/s2/template/element/settings/workspaces_settings_skin_section
+#.  
+msgid "Browse ..."
 msgstr ""
 
 #: lib/Socialtext/BugsPlugin.pm
@@ -924,7 +959,7 @@ msgstr ""
 msgid "Click this button to add a file to the page"
 msgstr ""
 
-#: share/skin/s2/template/element/page/tags
+#: share/skin/s2/template/element/page/tags share/skin/s2/template/layout/edit_wikiwyg
 #.  
 msgid "Click this button to add a tag to the page"
 msgstr ""
@@ -964,9 +999,19 @@ msgstr ""
 msgid "Click this button to manage files attached to the page"
 msgstr ""
 
+#: build/templates/socialtext/search/search_config.yaml.tt2
+#.  
+msgid "Click this button to perform your search"
+msgstr ""
+
 #: share/skin/s2/template/element/page/edit
 #.  
 msgid "Click this button to preview your page before saving it"
+msgstr ""
+
+#: share/skin/s2/template/element/page/actions
+#.  
+msgid "Click this button to refresh this spreadsheet"
 msgstr ""
 
 #: lib/Socialtext/BreadCrumbsPlugin.pm
@@ -1012,6 +1057,11 @@ msgstr ""
 #: share/skin/s2/template/element/page/tags
 #.  
 msgid "Click this button to save your tag"
+msgstr ""
+
+#: share/skin/s2/template/layout/edit_wikiwyg
+#.  
+msgid "Click this button to upload a file to the page"
 msgstr ""
 
 #: share/skin/s2/template/view/page/display share/skin/s2/template/view/page/display
@@ -1119,9 +1169,19 @@ msgstr ""
 msgid "Create Initial Workspace"
 msgstr ""
 
+#: share/skin/s2/template/element/page/actions
+#.  
+msgid "Create New Spreadsheet"
+msgstr ""
+
 #: lib/Socialtext/WeblogPlugin.pm share/skin/s2/template/element/settings/select
 #.  
 msgid "Create New Weblog"
+msgstr ""
+
+#: share/skin/s2/template/element/page/actions
+#.  
+msgid "Create New Wiki Page"
 msgstr ""
 
 #: share/skin/s2/template/element/settings/select
@@ -1152,6 +1212,11 @@ msgstr ""
 #: share/skin/s2/template/element/page/details
 #. (
 msgid "Created by %1 on %2."
+msgstr ""
+
+#: lib/Socialtext/Page.pm
+#.  
+msgid "Creating a New Spreadsheet..."
 msgstr ""
 
 #: lib/Socialtext/Appliance/BackupStore.pm
@@ -1339,7 +1404,7 @@ msgstr ""
 msgid "Earlier entries"
 msgstr ""
 
-#: share/skin/s2/template/element/page/actions share/skin/s2/template/element/page/actions
+#: lib/Socialtext/Lite.pm share/skin/s2/template/element/page/actions share/skin/s2/template/element/page/actions
 #.  
 msgid "Edit"
 msgstr ""
@@ -1611,7 +1676,7 @@ msgstr ""
 
 #: share/skin/s2/template/element/settings/list_skipped_files
 #.  
-msgid "Files are imported only from ZIP/TGZ css/ and images/ paths.  Files\nwith other paths are not imported."
+msgid "Files are imported only from ZIP/TGZ javascript/, css/ and images/ paths. Files with other paths are not imported."
 msgstr ""
 
 #: share/skin/s2/template/lite/changes/changes.html
@@ -1704,7 +1769,7 @@ msgstr ""
 msgid "Hi,"
 msgstr ""
 
-#: share/skin/s2/template/element/wiki/nav
+#: lib/Socialtext/Lite.pm share/skin/s2/template/element/wiki/nav
 #.  
 msgid "Home"
 msgstr ""
@@ -1889,7 +1954,7 @@ msgstr ""
 msgid "Include the '%1' RSS feed. Click to edit."
 msgstr ""
 
-#: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
+#: lib/Socialtext/Widget_resource.pm lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Include the page '%1'. Click to edit."
 msgstr ""
@@ -1996,6 +2061,11 @@ msgstr ""
 
 #: lib/Socialtext/Locales.pm
 #.  
+msgid "Italian"
+msgstr ""
+
+#: lib/Socialtext/Locales.pm
+#.  
 msgid "Japanese"
 msgstr ""
 
@@ -2079,7 +2149,7 @@ msgstr ""
 msgid "Last name:"
 msgstr ""
 
-#: share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/widget_resource.js share/skin/s2/javascript/widget_resource.js share/skin/s2/template/view/refcard
+#: share/skin/s2/javascript/widget_resource.js share/skin/s2/javascript/widget_resource.js share/skin/s2/template/view/refcard
 #.  
 msgid "Link text"
 msgstr ""
@@ -2109,7 +2179,7 @@ msgstr ""
 msgid "List All Users"
 msgstr ""
 
-#: share/skin/s2/javascript/Wikiwyg/Socialtext.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/template/layout/html share/skin/s2/template/view/weblog share/skin/s2/template/view/weblog
+#: share/skin/s2/javascript/Wikiwyg/Socialtext.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/template/element/page/actions share/skin/s2/template/element/settings/actions share/skin/s2/template/view/listview share/skin/s2/template/view/weblog share/skin/s2/template/view/weblog
 #.  
 msgid "Loading..."
 msgstr ""
@@ -2254,6 +2324,11 @@ msgstr ""
 msgid "Never"
 msgstr ""
 
+#: share/skin/s2/template/element/page/actions
+#.  
+msgid "New"
+msgstr ""
+
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "New Page"
@@ -2292,6 +2367,11 @@ msgstr ""
 #: share/skin/s2/template/element/settings/users_settings_section
 #.  
 msgid "New passwords must be at least 6 characters long."
+msgstr ""
+
+#: build/templates/socialtext/search/search_config.yaml.tt2 share/skin/s2/javascript/pageview.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-other-mini.js share/skin/s2/javascript/socialtext-other.js
+#.  
+msgid "New search"
 msgstr ""
 
 #: share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
@@ -2804,7 +2884,7 @@ msgstr ""
 msgid "Reboot Now"
 msgstr ""
 
-#: lib/Socialtext/WeblogPlugin.pm share/skin/s2/template/element/weblog/actions
+#: lib/Socialtext/Lite.pm lib/Socialtext/WeblogPlugin.pm share/skin/s2/template/element/weblog/actions
 #.  
 msgid "Recent Changes"
 msgstr ""
@@ -2857,6 +2937,11 @@ msgstr ""
 #: lib/Socialtext/Appliance/ConsoleController.pm
 #. (
 msgid "Redirecting to %1"
+msgstr ""
+
+#: share/skin/s2/template/element/page/actions
+#.  
+msgid "Refresh"
 msgstr ""
 
 #: share/console-template/template/backup.html
@@ -3067,6 +3152,11 @@ msgstr ""
 #: lib/Socialtext/DisplayPlugin.pm
 #.  
 msgid "Screen Layout"
+msgstr ""
+
+#: build/templates/socialtext/search/search_config.yaml.tt2 lib/Socialtext/Lite.pm
+#.  
+msgid "Search"
 msgstr ""
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
@@ -3282,6 +3372,11 @@ msgstr ""
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "Socialtext Home Page"
+msgstr ""
+
+#: share/skin/s2/template/element/settings/workspaces_settings_features_section
+#.  
+msgid "Socialtext Unplugged"
 msgstr ""
 
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
@@ -3816,7 +3911,7 @@ msgstr ""
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #. (
-msgid "To customize your own skin, download the %1, modify the skin files to your liking, and upload them here. Complete documentation on skin customization is available in the %2."
+msgid "To customize your own skin, download the %1, modify the skin files to your liking, and upload them here. Complete documentation on skin customization is available in the %2.<h4>Skin support is not included in basic support. Users who upload skins are responsible for keeping copies of their skin files and for keeping their skins current as the Socialtext application changes.</h4>"
 msgstr ""
 
 #: share/skin/s2/template/email/email-address-confirmation-completed.html share/skin/s2/template/email/email-address-confirmation-completed.txt
@@ -3997,6 +4092,11 @@ msgstr ""
 #: share/skin/s2/template/element/page/attachments
 #.  
 msgid "Upload files"
+msgstr ""
+
+#: share/skin/s2/template/layout/edit_wikiwyg
+#.  
+msgid "Upload&nbsp;files&nbsp;..."
 msgstr ""
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
@@ -5072,6 +5172,11 @@ msgstr ""
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "section: %1"
+msgstr ""
+
+#: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
+#. (
+msgid "ss: %1 (%2)"
 msgstr ""
 
 #: lib/Socialtext/Formatter/Phrase.pm lib/Socialtext/Formatter/Phrase.pm

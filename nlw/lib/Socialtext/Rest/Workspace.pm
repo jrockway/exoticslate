@@ -5,6 +5,8 @@ use strict;
 use warnings;
 
 use base 'Socialtext::Rest::Entity';
+use Socialtext::HTTP ':codes';
+use JSON::XS;
 
 sub permission      { +{ GET => 'read' } }
 sub allowed_methods {'GET, HEAD'}
@@ -60,6 +62,28 @@ sub get_resource {
                       : { &$extra_data, &$peon_view };
 }
 
+sub PUT {
+    my( $self, $rest ) = @_;
+
+    my $is_admin = $self->hub->checker->check_permission('admin_workspace');
+    unless ($is_admin or $self->_user_is_business_admin_p( ) ) {
+        $rest->header(
+                      -status => HTTP_401_Unauthorized,
+                     );
+        return '';
+    }
+
+    my $workspace = $self->workspace;
+    my $update_request_hash = decode_json( $rest->getContent() );
+
+    my $uri = $update_request_hash->{customjs_uri};
+    if (defined $uri) {
+        $workspace->update(customjs_uri => $uri);
+    }
+
+    $rest->header( -status => HTTP_204_No_Content );
+    return '';
+}
 
 sub validate_resource_id {
     my( $self, $rest, $errors ) = @_;

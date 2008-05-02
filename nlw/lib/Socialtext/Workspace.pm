@@ -112,6 +112,19 @@ foreach my $column (@COLUMNS) {
     field $column;
 }
 
+field enable_spreadsheet =>
+    -init => '$self->set_workspace_option("enable_spreadsheet")';
+
+sub set_workspace_option {
+    my ($self, $option) = @_;
+    return -e File::Spec->catdir(  
+        Socialtext::AppConfig->config_dir(),
+        "workspace_options",
+        $self->name,
+        $option
+    );
+}
+
 field breadcrumbs => '';
 
 sub table_name { 'Workspace' }

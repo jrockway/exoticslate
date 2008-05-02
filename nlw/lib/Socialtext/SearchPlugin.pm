@@ -271,7 +271,7 @@ sub _make_page_row {
     return +{
         (
             map { ( $_ => $metadata->$_ ) }
-                (qw(From Date Subject Revision Summary))
+                (qw(From Date Subject Revision Summary Type))
         ),
         DateLocal       => $page->datetime_for_user,
         revision_count  => $page->revision_count,

@@ -12,6 +12,7 @@ use Digest::SHA1;
 use MIME::Base64;
 use Test::Socialtext;
 use Socialtext::AppConfig;
+use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
 
 plan tests => 7;
 fixtures('admin_no_pages'); # we need some users
@@ -41,7 +42,7 @@ UNAUTHENTICATED: {
 
 COOKIE_AUTHENTICATED: {
     local $Apache::Cookie::DATA = {
-        'NLW-user' => Apache::Cookie->new(
+        USER_DATA_COOKIE() => Apache::Cookie->new(
             value => {
                 user_id => 'devnull1@socialtext.com',
                 MAC     => Digest::SHA1::sha1_base64(
@@ -60,7 +61,7 @@ COOKIE_AUTHENTICATED: {
 
 COOKIE_BAD_MAC: {
     local $Apache::Cookie::DATA = {
-        'NLW-user' => Apache::Cookie->new(
+        USER_DATA_COOKIE() => Apache::Cookie->new(
             value => {
                 user_id => 'monkey',
                 MAC => 'BAD-MAC',

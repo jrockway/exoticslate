@@ -384,29 +384,31 @@ sub _edit_link {
     }
 
     my $workspace_name = $self->hub->current_workspace->name;
+    my $edit = loc('Edit');
     return qq{<a href="/lite/page/$workspace_name/}
         . $page->uri
-        . qq{?action=edit">Edit</a>};
+        . qq{?action=edit">$edit</a>};
 }
 
 sub _home_link {
     my $self           = shift;
     my $workspace_name = $self->hub->current_workspace->name;
-    return qq{<a href="/lite/page/$workspace_name/">Home</a>};
+    my $home = loc("Home");
+    return qq{<a href="/lite/page/$workspace_name/">$home</a>};
 }
 
 sub _recent_changes_link {
     my $self           = shift;
     my $workspace_name = $self->hub->current_workspace->name;
-    return qq{<a href="/lite/changes/$workspace_name">}
-        . qq{Recent Changes</a>};
+    my $rc = loc('Recent Changes');
+    return qq{<a href="/lite/changes/$workspace_name">$rc</a>};
 }
 
 sub _search_link {
     my $self           = shift;
     my $workspace_name = $self->hub->current_workspace->name;
-    return qq{<a href="/lite/search/$workspace_name">}
-        . qq{Search</a>};
+    my $search = loc('Search');
+    return qq{<a href="/lite/search/$workspace_name">$search</a>};
 }
 
 1;

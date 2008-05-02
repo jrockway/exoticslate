@@ -66,6 +66,11 @@ test env properly and are not testing the test-workspace
 * [Test Case: Page Open Errors]
 * [Test Case: Return to last login]
 * [Test Case: Link Interface]
+* [Test Case: Nasty Double Dashes]
+
+TC Insert Menu will fail as the menu is being reworked. Revise the test.
+
+* [Test Case: Insert Menu]
 
 uses default wikiemail or `$ENV{WIKIEMAIL}`
 

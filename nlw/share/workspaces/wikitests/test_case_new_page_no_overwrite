@@ -3,6 +3,26 @@
 | *Comment* | Test Case: New Page No Overwrite: Create a new page with a unique name |  |
 | st-admin | update-page --workspace %%workspace%% --email %%email%% --page "%%start_time%% npno 1" < %%wikitest_client_files%%wikitest.txt |
 
+Well, folks, we missed one test case. The simplest test case. And I am seeing it fail manually in IE 7
+occasionally but this test does not fail
+
+| *Comment* | Test Case: New Page No Overwrite: title already in use |  |
+| clickAndWait | st-home-link |  |
+| clickAndWait | st-newpage-link |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| type_ok | st-newpage-pagename-edit | %%start_time%% npno 1 |
+| click_ok | st-save-button-link |  |
+
+| *Comment* | Test Case: New Page No Overwrite save with existing title should fail |  |
+| wait_for_element_visible_ok | st-newpage-duplicate-pagename | 5000 |
+| text_like | st-newpage-duplicate-emphasis | already a page |
+| check_ok | st-newpage-duplicate-option-append |  |
+| click_and_wait | st-newpage-duplicate-okbutton |  |
+| *Comment* | Test Case: New Page No Overwrite append should succeed |  |
+| wait_for_element_visible_ok | st-page-titletext | 30000 |
+| text_like | st-page-titletext | %%start_time%% npno 1 |
+
 | *Comment* | Test Case: New Page No Overwrite: save Untitled Page |  |
 | clickAndWait | st-home-link |  |
 | clickAndWait | st-newpage-link |  |

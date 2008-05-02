@@ -6,9 +6,9 @@
 | setSpeed | 100 |  |
 | clickAndWait | st-home-link |  |
 | clickAndWait | st-newpage-link |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | orphan_page_1_%%start_time%% |
 | type_ok | wikiwyg_wikitext_textarea | orphan_page_1_%%start_time%% |
 | click_and_wait | link=Save |  |
@@ -16,7 +16,7 @@
 | *Comment* | Test Case: Orphans List. Create another orphan page. |  |
 | clickAndWait | st-home-link |  |
 | clickAndWait | st-newpage-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | orphan_page_2_%%start_time%% |
 | type_ok | wikiwyg_wikitext_textarea | orphan_page_2_%%start_time%% |
 | click_and_wait | link=Save |  |

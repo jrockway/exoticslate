@@ -12,9 +12,9 @@ use Test::HTTP::Socialtext 'no_plan';
 
 use CGI::Cookie;
 use HTTP::Cookies;
-use Socialtext::Apache::User;
 use Socialtext::User;
 use Socialtext::HTTP ':codes';
+use Socialtext::HTTP::Cookie;
 use Test::Live;
 
 our $TODO;
@@ -194,10 +194,10 @@ sub _make_http_cookie {
 
     return '' . CGI::Cookie->new(
         -domain => Socialtext::AppConfig->cookie_domain,
-        -name   => 'NLW-user',
+        -name   => Socialtext::HTTP::Cookie->USER_DATA_COOKIE,
         -value  => {
             user_id => $user_id,
-            MAC     => Socialtext::Apache::User::_MAC_for_user_id($user_id),
+            MAC     => Socialtext::HTTP::Cookie->MAC_for_user_id($user_id),
         }
     );
 }

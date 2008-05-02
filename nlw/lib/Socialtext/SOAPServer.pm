@@ -5,7 +5,6 @@ use strict;
 use warnings;
 use SOAP::Transport::HTTP;
 use Socialtext::Log 'st_log';
-use Digest::SHA1 ();
 
 use base 'Socialtext::Rest';
 
@@ -95,16 +94,15 @@ use URI::Escape qw(uri_unescape);
 use Readonly;
 
 use Socialtext;
-use Socialtext::AppConfig;
 use Socialtext::Authen;
 use Socialtext::Log 'st_log';
 use Socialtext::Role;
 use Socialtext::Workspace;
 use Socialtext::User;
 use Socialtext::Validate qw ( validate SCALAR_TYPE );
+use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
 
 Readonly my $URN => 'urn:NLWSOAP';
-Readonly my $COOKIE_NAME => 'NLW-User';
 
 =head1 REMOTE METHODS
 
@@ -550,10 +548,10 @@ sub _pageMetadata {
 sub _get_cookie {
     my $id = shift;
 
-    my $mac = _MAC_for_user_id($id);
+    my $mac = Socialtext::HTTP::Cookie->MAC_for_user_id($id);
 
     my $cookie = CGI::Cookie->new(
-        -name => $COOKIE_NAME,
+        -name => USER_DATA_COOKIE,
         -value => {
             user_id => $id,
             MAC => $mac,
@@ -568,8 +566,8 @@ sub _authenticate {
     my $key = shift;
 
     my %cookies = CGI::Cookie->parse($key);
-    my %user_data = $cookies{$COOKIE_NAME}->value;
-    my $mac = _MAC_for_user_id( $user_data{user_id} );
+    my %user_data = $cookies{USER_DATA_COOKIE()}->value;
+    my $mac = Socialtext::HTTP::Cookie->MAC_for_user_id( $user_data{user_id} );
     unless ( $mac eq $user_data{MAC} ) {
         _raise_client_fault(
             "Invalid MAC Secret for $user_data{user_id}: $user_data{MAC}");
@@ -582,10 +580,6 @@ sub _authenticate {
         workspace_id => $user_data{workspace_id},
         act_as => $user_data{act_as},
     }
-}
-
-sub _MAC_for_user_id {
-    return Digest::SHA1::sha1_base64( $_[0], Socialtext::AppConfig->MAC_secret );
 }
 
 sub _has_permission {

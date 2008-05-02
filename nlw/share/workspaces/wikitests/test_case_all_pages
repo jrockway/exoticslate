@@ -74,12 +74,16 @@
 
 | *Comment* | Test Case: All Pages edited by sort |  |
 
-create a user that lexically precedes the logged in user by prepending %%email%% with %%start_time%%
+create a user that lexically precedes the logged in user by creating a user that begins with start_time
+However, don't use %%email%% in that username because that permanently creates another user name in the user DB that
+contains %%email%% as a substring and that messes up other tests like Test Case: Email
 
-| st-admin | create-user --email %%start_time%%.%%email%% --password 123456 |  |
-| st-admin | add-member --email %%start_time%%.%%email%% --workspace %%workspace%% |  |
+| set | s_user | %%start_time%%@%%start_time%%.socialtext.net |
+
+| st-admin | create-user --email %%s_user%% --password 123456 |  |
+| st-admin | add-member --email %%s_user%% --workspace %%workspace%% |  |
 | st-logout |  |  |
-| st-login | %%start_time%%.%%email%% | 123456 |
+| st-login | %%s_user%% | 123456 |
 
 For some reason, IE 6 blows up when open_ok is used in some places. We avoid it.
 
@@ -91,10 +95,10 @@ For some reason, IE 6 blows up when open_ok is used in some places. We avoid it.
 
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | wikiwyg_wikitext_textarea | revision by user %%start_time%%.%%email%% |
+| type_ok | wikiwyg_wikitext_textarea | revision by user %%s_user%% |
 | click_and_wait | st-save-button-link |  |
 
-| *Comment* | Test Case: All Pages verify revision by user %%start_time%%.%%email%% |  |
+| *Comment* | Test Case: All Pages verify revision by user %%s_user%% |  |
 
 | click_and_wait | st-home-link |  |
 | click_and_wait | st-wiki-subnav-link-all-pages |  |
@@ -103,15 +107,13 @@ For some reason, IE 6 blows up when open_ok is used in some places. We avoid it.
 | click_and_wait | link=Last Edited By |  |
 | text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0003/ |
 
-| *Comment* | Test Case: All Pages Teardown |  |
-| st-logout |  |  |
-| st-login | %%username%% | %%password%% |
+| *Comment* | Test Case: All Pages Teardown. No need to login again. |  |
 
 | st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0001 |  |
 | st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0002 |  |
 | st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0003 |  |
 | st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0004 |  |
 | st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0005 |  |
-| st-admin | remove-member --email newuser_%%start_time%%@ken.socialtext.net --workspace %%workspace%% |  |
+| st-admin | remove-member --email %%s_user%% --workspace %%workspace%% |  |
 
 | *Comment* | Test Case: All Pages COMPLETED |  |

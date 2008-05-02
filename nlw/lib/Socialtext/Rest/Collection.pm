@@ -126,6 +126,7 @@ sub _initialize {
     $self->{FilterParameters} = {
         'filter' => 'name',
         'name_filter' => 'name',
+        'type' => 'type',
     };
 }
 

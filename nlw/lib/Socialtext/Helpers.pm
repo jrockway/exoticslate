@@ -168,6 +168,7 @@ sub global_template_vars {
     );
 
     return (
+        pluggable          => $self->hub->pluggable,
         loc                => \&loc,
         loc_lang           => $self->hub->display->preferences->locale->value,
         css                => $self->_get_css_info,
@@ -228,6 +229,7 @@ sub _get_user_info {
     my $user = $self->hub->current_user;
     return {
         username    => $user->guess_real_name,
+        userid      => $user->username,
         is_guest    => $user->is_guest,
     };
 }

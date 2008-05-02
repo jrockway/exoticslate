@@ -140,6 +140,7 @@ TODO: change the first-name and last-name parameters to include spaces after {bz
 | clickAndWait | link=Name |  |
 | text_like | qr/0-sort-1-workspace1-%%start_time%%.+0-sort-2-workspace2-%%start_time%%.+0-sort-3-workspace3-%%start_time%%/ |  |
 
+| *Comment* | THE FOLLOWING TWO TESTS FAIL UNTIL {bz: 472} IS FIXED |  |
 | clickAndWait | link=Number of Users |  |
 | text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_time%%.+0-sort-3-workspace2-%%start_time%%/ |  |
 | clickAndWait | link=Number of Users |  |

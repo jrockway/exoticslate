@@ -66,6 +66,12 @@ sub new_page {
     }
     $uri = $uri . ';caller_action=' . $self->cgi->caller_action
         if $self->cgi->caller_action;
+
+    if ($self->hub->current_workspace->enable_spreadsheet) {
+        $uri = $uri . ';page_type=' . $self->cgi->page_type
+            if $self->cgi->page_type;
+    }
+
     $uri = $uri . ';page_name=' . $page->uri . '#edit';
     $self->redirect($uri);
 }
@@ -158,6 +164,9 @@ sub display {
 
     my @new_tags = ();
     if ($is_new_page) {
+        $page->metadata->Type(
+            $self->cgi->page_type eq 'spreadsheet' && 'spreadsheet' || 'wiki'
+        );
         push @new_tags, $self->_new_tags_to_add();
     }
     else {
@@ -207,6 +216,7 @@ sub display {
             $rest_object->_entity_hash($_);
         } @{$self->hub->attachments->all(page_id => $page->id)}
     ];
+
 
     return $self->template_render(
         template => 'view/page/display',
@@ -303,12 +313,14 @@ sub _get_page_info {
         content => $self->hub->wikiwyg->html_formatting_hack(
             $page->to_html_or_default
         ),
+        page_type => $page->metadata->Type,
         feeds     => $self->_feeds( $self->hub->current_workspace, $page ),
         revisions => $page->revision_count,
         revision_id => $page->revision_id || undef,
         views   => $self->hub->hit_counter->get_page_counter_value($page),
         has_stats   => $self->hub->hit_counter->page_has_stats($page),
         updated => {
+            user_id => $updated_author ? $updated_author->username : undef,
             author => (
                 $updated_author ? $updated_author->best_full_name(
                     workspace => $self->hub->current_workspace
@@ -318,6 +330,7 @@ sub _get_page_info {
             date => $page->datetime_for_user || undef,
         },
         created => {
+            user_id => $created_author ? $created_author->username : undef,
             author => (
                 $created_author ? $created_author->best_full_name(
                     workspace => $self->hub->current_workspace
@@ -454,6 +467,7 @@ use Socialtext::CGI qw( cgi );
 
 cgi 'new_category';
 cgi 'caller_action';
+cgi 'page_type';
 cgi 'wiki_text';
 cgi 'js';
 cgi 'attachment_error';

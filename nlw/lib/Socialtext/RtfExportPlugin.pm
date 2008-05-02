@@ -178,6 +178,7 @@ use File::Temp;
 use LWP::UserAgent;
 use RTF::Writer qw(rtfesc);
 use RTF::Writer::TableRowDecl;
+use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
 
 my $InHref = 0;
 my $In_Table = 0;
@@ -373,7 +374,8 @@ sub _gif_to_png {
 }
 
 
-# If $uri is on our own host, add the 'NLW-user' cookie to $ua's headers.
+# If $uri is on our own host, add the User Authentication information cookie
+# to $ua's headers.
 sub _proxy_cookies {
     my ( $self, $uri, $ua ) = @_;
 
@@ -388,9 +390,7 @@ sub _proxy_cookies {
         # -mml 2007-01-16
         my $cookies = Apache::Cookie->fetch;
         if ($cookies) {
-
-            # FIXME: constant
-            my $cookie = $cookies->{'NLW-user'};
+            my $cookie = $cookies->{USER_DATA_COOKIE()};
             if ($cookie) {
                 $ua->default_header( 'Cookie' => $cookie->as_string );
             }

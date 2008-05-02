@@ -7,7 +7,7 @@ use base 'Socialtext::Rest';
 use JSON::XS;
 use Readonly;
 
-Readonly our $API_VERSION => 0.94;
+Readonly our $API_VERSION => 0.95;
 Readonly our $MTIME       => ( stat(__FILE__) )[9];
 
 sub allowed_methods {'GET, HEAD'}

@@ -50,4 +50,7 @@
 | st-admin | version | qr/Socialtext v.+Copyright 2004-200.+ Socialtext, Inc./ |
 | st-admin | help | qr/Socialtext::CLI.+USERS.+WORKSPACES.+INDEXING.+ACCOUNTS.+EMAIL.+OTHER.+Copyright.+Socialtext/ |
 
+| *Comment* | Test Case: Command Line Tests OTHER Teardown |  |
+| st-admin | delete-workspace --w %%cmdline_workspace%% --no-export |  |
+
 | *Comment* | Test Case: Command Line Tests OTHER COMPLETED |  |

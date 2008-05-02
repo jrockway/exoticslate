@@ -72,9 +72,9 @@ sub is_in_cgi {
 
 sub plugin_directory {
     my $self = shift;
+    my $name = shift || $self->hub->current_workspace->name;
     my $dir = File::Spec->catdir(
-        Socialtext::Paths::plugin_directory( $self->hub->current_workspace->name ),
-        $self->class_id,
+        Socialtext::Paths::plugin_directory( $name ), $self->class_id,
     );
     Socialtext::File::ensure_directory($dir) unless -d $dir;
     return $dir;

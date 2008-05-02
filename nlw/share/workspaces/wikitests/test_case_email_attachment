@@ -53,7 +53,7 @@
 | pause | 5000 |
 | text_like | st-search-content | qr/Email subject %%start_time%%/ |
 | text_like | Email subject %%start_time%% |  |
-| text_unlike | st-search-content | qr/\Q» Attachment:\E/ |
+| text_unlike | st-search-content | qr/Attachment:/ |
 
 | *Comment* | Test Case: Email attachment Teardown |  |
 | st-admin | purge-page --w %%workspace%% --page email_subject_%%start_time%% |  |

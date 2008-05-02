@@ -8,9 +8,9 @@ Navigate to a page known to have zero incoming links | system displays "There ar
 | setSpeed | 100 |  |
 | clickAndWait | st-home-link |  |
 | clickAndWait | st-newpage-link |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | tc_sidebar_%%start_time%% |
 | type_ok | wikiwyg_wikitext_textarea | [tc_sidebar_newpage%%start_time%%] |
 | clickAndWait | st-save-button-link |  |

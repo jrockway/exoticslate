@@ -5,20 +5,17 @@ use strict;
 use warnings;
 
 use Apache::Cookie;
-use Digest::SHA1;
-use Socialtext::AppConfig;
-
-use constant COOKIE_NAME => 'NLW-user';
+use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
 
 sub extract_credentials {
     my $class = shift;
     my $request = shift;
 
-    my %user_data = _get_cookie_value(COOKIE_NAME);
+    my %user_data = _get_cookie_value(USER_DATA_COOKIE);
 
     return unless keys %user_data;
 
-    my $mac = _MAC_for_user_id( $user_data{user_id} );
+    my $mac = Socialtext::HTTP::Cookie->MAC_for_user_id( $user_data{user_id} );
 
     unless ( $mac eq $user_data{MAC} ) {
         $request->log_reason(
@@ -43,10 +40,6 @@ sub _get_cookie_value {
     return $cookie->value;
 }
 
-sub _MAC_for_user_id {
-    return Digest::SHA1::sha1_base64( $_[0], Socialtext::AppConfig->MAC_secret );
-}
-
 1;
 
 __END__
@@ -57,14 +50,15 @@ Socialtext::CredentialsExtractor::Cookie - a credentials extractor plugin
 
 =head1 DESCRIPTION
 
-This plugin class will look in the browser's provided cookies for 'NLW-user'
-and attempt to extract and return a user_id from it.
+This plugin class will look in the browser's provided cookies for the User
+Authentication information cookie and attempt to extract and return a user_id
+from it.
 
 =head1 METHODS
 
 =head2 $extractor->extract_credentials( $request )
 
-Return the value for the cookie 'NLW-user' or undef.
+Return the value for the User Authentication information cookie or undef.
 
 =head1 AUTHOR
 

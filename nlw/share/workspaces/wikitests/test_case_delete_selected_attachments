@@ -36,7 +36,7 @@
 | type_ok | st-search-term | Mudville |
 | click_and_wait | st-search-submit |  |
 | text_like | st-search-content | AAAAAA Delete Attachments %%start_time%% |
-| text_like | st-search-content | qr/\Q» Attachment: wikitest.doc\E/ |
+| text_like | st-search-content | qr/Attachment: wikitest.doc/ |
 
 | *Comment* | Navigate away and come back in hopes of solidifying this test |  |
 | open_ok | /%%workspace%%/index.cgi? |  |
@@ -75,7 +75,7 @@
 | type_ok | st-search-term | Mudville |
 | click_and_wait | st-search-submit |  |
 | text_unlike | st-search-content | AAAAAA Delete Attachments %%start_time%% |
-| text_unlike | st-search-content | qr/\Q» Attachment:\E/ |
+| text_unlike | st-search-content | qr/Attachment:/ |
 
 | *Comment* | Test Case: Delete Selected Attachments teardown |  |
 

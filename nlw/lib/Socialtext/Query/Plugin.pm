@@ -47,13 +47,15 @@ sub push_result {
     my $metadata = $page->metadata;
     my $result;
     $result->{$_} = $metadata->$_
-      for qw(From Date Subject Revision Summary);
+      for qw(From Date Subject Revision Summary Type);
     $result->{DateLocal} = $page->datetime_for_user;
     $result->{revision_count} = $page->revision_count;
     $result->{page_uri} = $page->uri;
     $result->{page_id} = $page->id;
     $result->{From} =
         $page->last_edited_by->best_full_name( workspace => $self->hub->current_workspace );
+    $result->{username} =
+        $page->last_edited_by->username;
 
     push @{$self->result_set->{rows}}, $result;
     return 1;

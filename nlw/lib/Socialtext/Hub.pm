@@ -374,6 +374,7 @@ BEGIN {
             Socialtext::PreferencesPlugin
             Socialtext::Stax
             Socialtext::Template
+            Socialtext::Pluggable::Adapter
 
             Socialtext::SearchPlugin
             Socialtext::AttachmentsUIPlugin
@@ -417,6 +418,7 @@ BEGIN {
             Socialtext::RtfExportPlugin
             Socialtext::WorkspacesUIPlugin
             Socialtext::ProvisionPlugin
+            Socialtext::PageActivityPlugin
         ) ) {
         eval "use $class ()";
         die $@ if $@;

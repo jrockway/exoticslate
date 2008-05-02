@@ -117,7 +117,7 @@ sub _authenticates {
 
 =head2 check_cookie
 
-Looks for a standard C<NLW-User> login cookie.
+Looks for a standard login cookie (ST::HTTP::Cookie->USER_DATA_COOKIE).
 
 =cut
 

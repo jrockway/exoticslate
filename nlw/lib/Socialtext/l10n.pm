@@ -130,6 +130,12 @@ sub system_locale {
     return Socialtext::AppConfig->new->locale();
 }
 
+# Override AppConfig's loc(), b/c of a module cross-dependency
+{
+    no warnings 'redefine';
+    *Socialtext::AppConfig::loc = \&loc;
+}
+
 =head1 AUTHOR
 
 Socialtext, Inc., <code@socialtext.com>

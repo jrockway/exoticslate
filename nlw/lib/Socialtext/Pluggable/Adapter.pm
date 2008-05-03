@@ -124,7 +124,15 @@ sub hook {
         return $hook->{obj}->$method(@args);    # do some magic here
     }
     else {
-        die "No hook '$name' defined\n";
+# XXX - This was making trunk die. Ingy needed trunk to not die, so he made it
+# not die. Long live trunk.
+#
+# Here's the error i got:
+# Socialtext::__ANON__('No hook \'template.head.prepend\' defined\x{a}')
+# called at /home/ingy/src/st/trunk/nlw/lib/Socialtext/Pluggable/Adapter.pm
+# line 127
+#
+#         die "No hook '$name' defined\n";
     }
 }
 

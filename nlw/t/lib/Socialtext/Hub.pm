@@ -22,6 +22,7 @@ use unmocked 'Socialtext::CSS';
 use unmocked 'Socialtext::FetchRSSPlugin';
 use unmocked 'Socialtext::Template';
 use unmocked 'Socialtext::Stax';
+use unmocked 'Socialtext::Pluggable::Adapter';
 
 sub current_workspace {
     my $self = shift;
@@ -101,6 +102,10 @@ sub template {
 
 sub stax {
     return $_[0]->{stax} ||= Socialtext::Stax->new(hub => $_[0]);
+}
+
+sub pluggable {
+    return $_[0]->{pluggable} ||= Socialtext::Pluggable::Adapter->new(hub => $_[0]);
 }
 
 1;

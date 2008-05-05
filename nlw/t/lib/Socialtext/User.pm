@@ -18,4 +18,6 @@ sub is_guest { $_[0]->{is_guest} }
 
 sub user_id { 1 }
 
+sub username { 'one@foo.bar' }
+
 1;

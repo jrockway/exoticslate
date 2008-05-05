@@ -46,6 +46,7 @@ my @skip_files = qw(
     share/skin/common/select/bin/gen_skins_js.pl
     share/skin/s2/javascript/test/run/bin/render-template
     dev-bin/bad-bot-does-not-follow-redirect
+    lib/Socialtext/Widget_resource.pm
 );
 my %skip_files = map { ($_,1) } @skip_files;
 

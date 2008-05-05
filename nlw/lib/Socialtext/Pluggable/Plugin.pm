@@ -8,7 +8,7 @@ use Socialtext::TT2::Renderer;
 use Socialtext::AppConfig;
 use Class::Field 'field';
 use Socialtext::URI;
-use Socialtext::Storage;
+use Socialtext::Storage::YAML;
 use Socialtext::AppConfig;
 
 my $prod_ver = Socialtext->product_version;
@@ -62,6 +62,9 @@ sub username {
     if ($self->rest) {
         return $self->rest->user->username;
     }
+    else {
+        return $self->hub->current_user->username,
+    }
 }
 
 sub header {
@@ -92,7 +95,6 @@ sub add_rest {
 sub add_hook {
     my ($self,$hook,$method) = @_;
     my $class = ref($self) || $self;
-    warn "Adding hook named $hook";
     push @{$hooks{$class}}, {
         method => $method,
         name => $hook,
@@ -133,18 +135,13 @@ sub new {
 sub storage {
     my ($self,$id) = @_;
     die "Id is required for storage\n" unless $id;
-    return Socialtext::Storage->new($id);
+    return Socialtext::Storage::YAML->new($id);
 }
 
 sub plugin_dir {
     my $self = shift;
     my $name = $self->name || die "Plugins must define a 'name' subroutine";
     return "$code_base/../plugin/$name";
-}
-
-sub username {
-    my $self = shift;
-    return $self->hub->current_user->username,
 }
 
 sub cgi_vars {

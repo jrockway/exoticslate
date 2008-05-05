@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# @COPYRIGHT@
 use JSON::Syck qw(Dump Load);
 use LWP::Simple;
 use strict;

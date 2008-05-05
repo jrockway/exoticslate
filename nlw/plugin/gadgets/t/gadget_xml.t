@@ -1,4 +1,5 @@
 #!perl
+# @COPYRIGHT@
 use warnings;
 use strict;
 use lib 'lib';

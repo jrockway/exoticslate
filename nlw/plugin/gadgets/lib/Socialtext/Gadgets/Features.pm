@@ -1,4 +1,5 @@
 package Socialtext::Gadgets::Features;
+# @COPYRIGHT@
 use strict;
 use warnings;
 

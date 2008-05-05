@@ -104,11 +104,11 @@ test_http "GET pages list" {
     # Setting global for use in next test.  Ugly.
     $all_pages_content = $content;
 
+    my @keys = qw( page_uri page_id name modified_time uri revision_id 
+        last_edit_time last_editor revision_count workspace_name type tags);
     for my $page (@$content) {
-        is( keys %$page, 11, "Page has 11 keys." );
-        ok( exists $page->{$_}, "Page contains $_." ) for qw(
-            page_uri page_id name modified_time uri revision_id last_edit_time
-            last_editor revision_count workspace_name);
+        is( keys %$page, scalar(@keys), "Page has correct number of keys." );
+        ok( exists $page->{$_}, "Page contains $_." ) for @keys;
         isa_ok( $page->{tags}, 'ARRAY', "Page tags" );
 
         is_deeply( $page->{tags}, ['Welcome', 'Recent Changes'], "Quick Start has proper tags" )

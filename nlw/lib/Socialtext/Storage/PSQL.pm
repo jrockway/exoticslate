@@ -2,6 +2,7 @@ package Socialtext::Storage::PSQL;
 # @COPYRIGHT@
 use strict;
 use base 'Socialtext::Storage';
+use YAML;
 use Carp qw(croak);
 use Socialtext::SQL qw( sql_execute sql_singlevalue);
 
@@ -38,7 +39,7 @@ SELECT value
   FROM "Storage"
   WHERE class=? AND key=?
 EOT
-    return $sth->fetchall_arrayref->[0][0];
+    return $self->{_cache}{$key} = YAML::Load($sth->fetchall_arrayref->[0][0]);
 }
 
 sub set {
@@ -54,7 +55,7 @@ sub save {
     my $mods = $self->{_modified};
 
     for my $key (keys %$mods) {
-        my $val  = $self->{_cache}{$key};
+        my $val = YAML::Dump($self->{_cache}{$key});
         if ($keys{$key}) {
             sql_execute('
                 UPDATE "Storage"

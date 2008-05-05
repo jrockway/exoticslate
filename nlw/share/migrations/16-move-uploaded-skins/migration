@@ -28,7 +28,7 @@ for dir in $CODE_BASE/css/*; do
     if [ "$?" = "0" ]; then
 	skin_pkg=`echo -n $skin_pkg | sed 's/:.*$//'`
         echo "$skin was not upgraded during dist-upgrade!! Reverting to s2 skin!"
-        run_sql "UPDATE \"Workspace\" SET \"skin_name\" = 's2' WHERE \"skin_name\" = '$skin'"
+        run_sql "UPDATE \"Workspace\" SET \"skin_name\" = 's2' WHERE \"skin_name\" = '$skin' OR \"skin_name\" = 'nlw'"
         apt-get remove --yes st-$skin-skin
         continue 
     fi

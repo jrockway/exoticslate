@@ -17,8 +17,8 @@
 	</ModulePrefs>
   	<Content type="html">
     	<![CDATA[ 
-                <script src="/plugin/gadgets/prototype.js" type="text/javascript"></script>
-                <script src="/plugin/gadgets/ig-check.js" type="text/javascript"></script>
+                <script src="/nlw/plugin/gadgets/prototype.js" type="text/javascript"></script>
+                <script src="/nlw/plugin/gadgets/ig-check.js" type="text/javascript"></script>
 			<script>
 
 	 			_IG_RegisterOnloadHandler(mainFunction);

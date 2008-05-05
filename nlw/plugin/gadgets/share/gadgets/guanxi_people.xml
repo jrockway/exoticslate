@@ -2,6 +2,7 @@
 <Module>
   <ModulePrefs title="All People">
   <Require feature="dynamic-height" />
+  <Require feature="socialtext" />
   </ModulePrefs>
   <Content type="html">
     <![CDATA[

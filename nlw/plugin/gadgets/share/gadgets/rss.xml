@@ -3,8 +3,9 @@
     <Require feature="dynamic-height" />
     <Require feature="setprefs" />
     <Require feature="settitle" />
-      <UserPref name="rss_feed" display_name="RSS URL" default_value="http://www.news1130.com/rss/local.jsp"/>
-      <Require feature="dynamic-height" />
+    <Require feature="socialtext" />
+    <UserPref name="rss_feed" display_name="RSS URL" default_value="http://www.news1130.com/rss/local.jsp"/>
+    <Require feature="dynamic-height" />
   </ModulePrefs>
   <Content type="html">
     <![CDATA[

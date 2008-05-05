@@ -21,6 +21,7 @@ my %rest_hooks;
 my %rests;
 
 field hub => -weak;
+field 'rest';
 field uri => -init => '$self->hub->current_workspace->uri . Socialtext::AppConfig->script_name';
 
 # perldoc Socialtext::URI for arguments
@@ -33,6 +34,41 @@ sub make_uri {
 
 sub code_base {
    return Socialtext::AppConfig->code_base;
+}
+
+sub query {
+    my $self = shift;
+    if ($self->rest) {
+        return $self->rest->query;
+    }
+}
+
+sub getContent {
+    my $self = shift;
+    if ($self->rest) {
+        return $self->rest->getContent;
+    }
+}
+
+sub getContentPrefs {
+    my $self = shift;
+    if ($self->rest) {
+        return $self->rest->getContentPrefs;
+    }
+}
+
+sub username {
+    my $self = shift;
+    if ($self->rest) {
+        return $self->rest->user->username;
+    }
+}
+
+sub header {
+    my $self = shift;
+    if ($self->rest) {
+        return $self->rest->header(@_);
+    }
 }
 
 sub current_workspace {

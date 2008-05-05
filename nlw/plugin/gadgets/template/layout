@@ -5,23 +5,7 @@
         <link rel="stylesheet" href="[% share_path('css/window.css') %]" type="text/css" media="screen" />
 
         [% IF gadgets %]
-            <script src="[% wiki.skin_uri('common') %]/javascript/jquery-1.2.1.pack.js"></script>
-            <script src="[% share_path('javascript/jquery.ui-1.0.1a/jquery.dimensions.js') %]"></script>
-            <script src="[% share_path('javascript/jquery.ui-1.0.1a/ui.mouse.js') %]"></script>
-            <script src="[% share_path('javascript/jquery.ui-1.0.1a/ui.draggable.js') %]"></script>
-            <script src="[% share_path('javascript/jquery.ui-1.0.1a/ui.draggable.ext.js') %]"></script>
-
-            [% FOR feature = features %]
-                [% IF feature.src %]
-                    <script src="[% feature.src %]"></script>
-                [% ELSIF feature.content %]
-                    <script>[% feature.content %]</script>
-                [% ELSE %]
-                    <!-- ERROR: [% feature.error %] -->
-                [% END %]
-            [% END %]
-            <script src="[% share_path('javascript/gadgets.js') %]"></script>
-            <script src="[% share_path('javascript/drag-and-drop.js') %]"></script>
+            <script src="[% share_path('javascript/container.js') %]"></script>
         [% END %]
 
         [% INCLUDE "element/wiki/js-bootstrap" %]

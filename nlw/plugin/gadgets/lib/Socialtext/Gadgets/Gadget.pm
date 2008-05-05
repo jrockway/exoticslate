@@ -25,7 +25,6 @@ field 'module_prefs', -init => '$self->get_module_prefs';
 field 'arg_string',   -init => '$self->get_arg_string';
 field 'href',         -init => '$self->get_href';
 field 'content',      -init => '$self->get_content';
-field 'features',     -init => '$self->get_features';
 field 'messages',     -init => '$self->get_messages';
 field 'storage',      -init => '$self->_get_storage';
 field 'code_base',    -init => '$self->api->code_base';
@@ -121,7 +120,6 @@ sub _get_gadget_data {
 
     my %module;
     $module{prefs_def} = [];
-    $module{requires}  = [];
   
      
     # find all the locale nodes in the gadget payload, download them from off
@@ -193,15 +191,29 @@ sub _get_gadget_data {
     foreach my $modpref ($modprefs->attributes) {
         $module{module_prefs}->{$modpref->name} = $modpref->value;
     }
- 
-    foreach my $require ($doc->getElementsByTagName('Require')) {
-        push(@{$module{requires}},$require->getAttribute('feature'));
-    }
 
+    my $js = Socialtext::Gadgets::Features->new($self->api, type => 'gadget');
 
     $self->{module} = \%module;
     $self->storage->set('module',\%module);
 
+    my @features;
+    foreach my $require ($doc->getElementsByTagName('Require')) {
+        my $feature = $require->getAttribute('feature');
+        push @features, $feature;
+    }
+
+    $self->storage->set('features', \@features);
+}
+
+sub javascript {
+    my $self = shift;
+    my $js = Socialtext::Gadgets::Features->new($self->api, type => 'gadget');
+    my $features = $self->storage->get('features');
+    for my $feature (@$features) {
+        $js->load($feature);
+    }
+    return $js->as_minified;
 }
 
 sub error {
@@ -346,11 +358,6 @@ sub get_prefs_def {
    return $self->{module}{prefs_def};
 }
 
-sub requires {
-   my $self = shift;
-   return ref($self->{module}{requires}) ? @{$self->{module}{requires}} : ();
-}
-
 sub get_user_prefs {
     my $self = shift;
     my $stored = $self->storage->get('user_prefs') || {};
@@ -371,15 +378,6 @@ sub get_module_prefs {
     my $m = $self->{module}{module_prefs};
     my %prefs =  map { $_ => $self->expand_hangman($m->{$_}) } keys %{$m};
     return \%prefs;
-}
-
-
-
-sub get_features {
-    my ($self) = shift;
-    my $features = Socialtext::Gadgets::Features->new($self->api,type=>'gadget');
-    $features->load($_) for $self->requires;
-    return $features->scripts;
 }
 
 1;

@@ -3,6 +3,7 @@
   <ModulePrefs title="All People">
   <Require feature="dynamic-height" />
   <Require feature="tabs" />
+  <Require feature="socialtext" />
   </ModulePrefs>
   <Content type="html">
     <![CDATA[
@@ -63,7 +64,7 @@
                 else {
                     info.fullname = info.name;
                 }
-                var firstc = info.last_name.substring(0,1);
+                var firstc = info.last_name ? info.last_name.substring(0,1) : '';
                 if (! firstc) {
                     firstc = info.name.substring(0,1);
                 } 

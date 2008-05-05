@@ -26,6 +26,7 @@ sub register {
 
     $class->add_rest('/data/gadget/instance/:id/render' => 'render_gadget');
     $class->add_rest('/data/gadget/instance/:id/prefs' => 'set_prefs');
+    $class->add_rest('/data/gadget/instance/:id/js' => 'get_js');
     $class->add_rest('/data/gadget/proxy' => 'proxy');
     $class->add_rest('/data/gadget/json_proxy' => 'json_proxy');
     $class->add_rest('/data/gadget/json_feed_proxy' => 'json_feed_proxy');
@@ -80,7 +81,6 @@ sub test_gadgets {
     my $container = Socialtext::Gadgets::Container->test($self);
 
     return $self->template_render('dashboard',
-        features => $container->feature_scripts,
         gadgets => $container->template_vars,
     );
 
@@ -92,7 +92,6 @@ sub html {
     my $container = Socialtext::Gadgets::Container->new($self, $self->username);
 
     return $self->template_render('dashboard',
-        features => $container->feature_scripts,
         gadgets => $container->template_vars,
         gallery_uri => $self->make_uri( path=>'/admin/index.cgi') . "?action=gadget_gallery",
         #gallery_uri => $self->uri . "?action=gadget_gallery",
@@ -100,12 +99,11 @@ sub html {
 }
 
 sub render_gadget {
-    my ($self,$rest,$args) = @_;
+    my ($self,$args) = @_;
     my $gadget = Socialtext::Gadgets::Gadget->restore($self, $args->{id});
     return $self->template_render('gadget_rendered',
         id => $gadget->id,
         content => $gadget->content,
-        features => $gadget->features,
         messages => $gadget->messages,
     );
 }
@@ -113,14 +111,14 @@ sub render_gadget {
 # set the position and location of gadgets on the desktop to the passed json
 # payload
 sub desktop {
-    my ($self,$rest) = @_;
+    my ($self) = @_;
     my $api = Socialtext::Pluggable::Plugin->new();
-    my $container = Socialtext::Gadgets::Container->new($api,$rest->user->username);
+    my $container = Socialtext::Gadgets::Container->new($api,$self->username);
 
-    my $desktop = $rest->query->{desktop};
+    my $desktop = $self->query->{desktop};
     $desktop = $desktop->[0] if ref $desktop eq 'ARRAY';
 
-    my $delete = $rest->query->{delete};
+    my $delete = $self->query->{delete};
     $delete = $delete->[0] if ref $delete eq 'ARRAY';
 
     if ($delete) {
@@ -144,16 +142,24 @@ sub desktop {
     return '1'; #JSON::Syck::Dump(\%gadgets);
 }
 
+sub get_js {
+    my ($self, $args) = @_;
+    my $api = Socialtext::Pluggable::Plugin->new();
+    my $gadget = Socialtext::Gadgets::Gadget->restore($api,$args->{id});
+    $self->header(-type => 'application/javascript');
+    return $gadget->javascript;
+}
+
 sub set_prefs {
-    my ($self,$rest,$args) = @_;
+    my ($self,$args) = @_;
     my $api = Socialtext::Pluggable::Plugin->new();
     my $gadget = Socialtext::Gadgets::Gadget->restore($api,$args->{id});
     # XXX Ugly
     my $set;
     my %prefs;
-    for my $key ($rest->query->param) {
+    for my $key ($self->query->param) {
         if ($key =~ /^up_(.*)/) {
-            my $val = $rest->query->param($key);
+            my $val = $self->query->param($key);
             $prefs{$1} = $val;
         }
     }
@@ -164,23 +170,23 @@ sub set_prefs {
 }
 
 sub json_feed_proxy {
-    my ( $self, $rest, $args ) = @_;
+    my ( $self, $args ) = @_;
 
-    my $url = $rest->query->{url};
+    my $url = $self->query->{url};
     $url = $url->[0] if ref $url eq 'ARRAY';
 
-    my $content = $rest->getContent();
+    my $content = $self->getContent();
 
     my $agent = LWP::UserAgent->new; 
     $agent->agent('Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.2) ' .
                   'Gecko/20060601 Firefox/2.0.0.2 (Ubu ntu-edgy)');
     my $request = HTTP::Request->new(GET => $url);
     $agent->default_headers->push_header(
-        'Accept' => join(',',$rest->getContentPrefs)
+        'Accept' => join(',',$self->getContentPrefs)
     );
 
     my $result = $agent->request($request);
-    $rest->header(-type => $result->header('Content-type'));  
+    $self->header(-type => $result->header('Content-type'));  
     my $data = $result->decoded_content;
     # undefined value in here somewhere, status_line? body? XXX TODO:
    
@@ -210,11 +216,11 @@ sub json_feed_proxy {
 }
 
 sub json_proxy  {
-    my ( $self, $rest, $args ) = @_;
+    my ( $self, $args ) = @_;
 
     my %args;
     foreach my $key ( qw( authz headers httpMethod postData st url ) ) {
-      $args{$key} = $rest->query->{$key};
+      $args{$key} = $self->query->{$key};
       $args{$key} = $args{$key}->[0] if ref($args{$key}) eq 'ARRAY';
     }
 
@@ -234,7 +240,7 @@ sub json_proxy  {
     }
 
     my $result = $agent->request($request);
-    $rest->header(-type => $result->header('Content-type'));  
+    $self->header(-type => $result->header('Content-type'));  
     my $data = $result->decoded_content;
 
     # undefined value in here somewhere, status_line? body? XXX TODO:
@@ -249,9 +255,9 @@ sub json_proxy  {
 }
 
 sub proxy  {
-    my ( $self, $rest, $args ) = @_;
+    my ( $self, $args ) = @_;
 
-    my $url = $rest->query->{url};
+    my $url = $self->query->{url};
     $url = $url->[0] if ref $url eq 'ARRAY';
 
     my $agent = LWP::UserAgent->new; 
@@ -259,11 +265,11 @@ sub proxy  {
                   'Gecko/20060601 Firefox/2.0.0.2 (Ubu ntu-edgy)');
     my $request = HTTP::Request->new(GET => $url);
     $agent->default_headers->push_header(
-        'Accept' => join(',',$rest->getContentPrefs)
+        'Accept' => join(',',$self->getContentPrefs)
     );
 
     my $result = $agent->request($request);
-    $rest->header(-type => $result->header('Content-type'));  
+    $self->header(-type => $result->header('Content-type'));  
     return $result->decoded_content;
 }
 

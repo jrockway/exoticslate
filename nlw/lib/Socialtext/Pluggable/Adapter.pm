@@ -38,7 +38,9 @@ sub AUTOLOAD {
         Socialtext::Workspace->new( name => 'help-en' ),
     );
 
-    return $self->hook($hook_name, $rest_handler, $args);
+    $self->{_rest_handler} = $rest_handler;
+
+    return $self->hook($hook_name, $args);
 }
 
 sub make_hub {
@@ -121,18 +123,8 @@ sub hook {
         my $method = $hook->{method};
         $hook->{obj} ||= $hook->{class}->new();
         $hook->{obj}->hub( $self->hub || $self->{made_hub});
+        $hook->{obj}->rest( delete $self->{_rest_handler} );
         return $hook->{obj}->$method(@args);    # do some magic here
-    }
-    else {
-# XXX - This was making trunk die. Ingy needed trunk to not die, so he made it
-# not die. Long live trunk.
-#
-# Here's the error i got:
-# Socialtext::__ANON__('No hook \'template.head.prepend\' defined\x{a}')
-# called at /home/ingy/src/st/trunk/nlw/lib/Socialtext/Pluggable/Adapter.pm
-# line 127
-#
-#         die "No hook '$name' defined\n";
     }
 }
 

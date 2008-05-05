@@ -101,7 +101,6 @@ sub get_gadgets {
         my $ginfo = $gadgets->{$id};
         $ginfo->{obj} = $self->{_gadgets}{$id} ||
                          Socialtext::Gadgets::Gadget->restore($self->api,$id);
-        $self->features->load_gadget_features($ginfo->{obj});
     }
     return $gadgets;
 }
@@ -136,11 +135,6 @@ sub template_vars {
         ];
     }
     return \@columns;
-}
-
-sub feature_scripts {
-    my $self = shift;
-    return $self->features->scripts;
 }
 
 return 1;

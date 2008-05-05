@@ -23,7 +23,7 @@ gadgets.config.init({
         "jsonProxyUrl" : "/data/gadget/json_proxy"
     },
     "rpc" : {
-        "parentRelayUrl" : "/plugin/gadgets/rpc_relay.html",
+        "parentRelayUrl" : "/nlw/plugin/gadgets/rpc_relay.html",
         "useLegacyProtocol" : false
     }
 }, true);

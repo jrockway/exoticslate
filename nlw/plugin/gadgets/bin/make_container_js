@@ -1,0 +1,27 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+use FindBin;
+use XML::LibXML;
+use lib "$FindBin::Bin/../lib";
+use Socialtext::Gadgets::Features;
+
+my $jdir = "$FindBin::Bin/../share/javascript";
+my $fdir = "$jdir/shindig";
+my $file = "$jdir/container.js";
+
+my $js = Socialtext::Gadgets::Features->new(undef,
+    feature_dir => $fdir,
+    type => 'container',
+);
+
+for my $feature (glob("$fdir/*/feature.xml")) {
+    $feature =~ s{.*?/([^/]+)/feature.xml$}{$1};
+    $js->load($feature);
+}
+
+open my $fh, ">$file" or die "Can't open $file: $!";
+print $fh $js->as_minified;
+close $fh or die "Couldn't close $file: $!";
+

@@ -3,7 +3,8 @@
     <Require feature="dynamic-height" />
     <Require feature="setprefs" />
     <Require feature="settitle" />
-     <Require feature="dynamic-height" />
+    <Require feature="dynamic-height" />
+    <Require feature="socialtext" />
   </ModulePrefs>
  <UserPref name="rss_feed" display_name="RSS Feed" default_value="http://www.socialtext.com/blog/feed"/>
  <UserPref name="title" default_value="RSS Viewer" datatype="hidden"/>

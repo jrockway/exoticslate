@@ -2,53 +2,39 @@ package Socialtext::Gadgets::Features;
 use strict;
 use warnings;
 
+use JavaScript::Minifier::XS qw(minify);
 use Class::Field qw(field);
 use XML::LibXML;
 
-my $feature_url = "/nlw/plugin/gadgets/javascript/shindig";
-
-field 'code_base';
-field 'feature_dir', -init => '$self->code_base . "/../plugin/gadgets/share/javascript/shindig"';
+field 'feature_dir';
 
 sub new {
     my ($class,$api,%args) = @_;
     die "type required" unless $args{type};
     my $self = {
-        _scripts => [],
+        _loaded => {},
+        _js => '',
         %args,
     };
     bless $self, $class;
-    $self->code_base($api->code_base);
+    $self->feature_dir(
+        $args{feature_dir} || 
+            $api->code_base . "/../plugin/gadgets/share/javascript/shindig"
+    );
     $self->load('core'); # Default requirement
     $self->load('core.io'); # Default requirement
     $self->load('rpc'); # Default requirement
     return $self;
 }
 
-# XXX: this sub sucks
-sub error {
-    my ($self, $error) = @_;
-    $self->{_error} = $error;
-}
-
-sub load_gadget_features {
-    my ($self, $gadget) = @_;
-    for my $feature ($gadget->requires) {
-        $self->load($feature);
-        if ($self->{_error}) {
-            # TODO XXX it is fine to have features that you don't support, it's not a
-            # fatal error
-        }
-    }
-}
-
 sub load {
-    my ($self, $name, $type) = @_;
-    $type ||= $self->{type};
+    my ($self, $name) = @_;
     return if $self->{_loaded}{$name};
     $self->{_loaded}{$name} = 1;
 
-    my $xmlfile = $self->feature_dir . "/$name/feature.xml";
+    my $feature_dir = $self->feature_dir;
+
+    my $xmlfile = "$feature_dir/$name/feature.xml";
     unless (-f $xmlfile) {
         warn "No feature named $name exists\n";
         return;
@@ -61,35 +47,53 @@ sub load {
         return;
     }
 
-    #return $self->error("Error parsing feature: $name") if $@;
-
     for my $dep ($xml->getElementsByTagName('dependency')) {
         $self->load($dep->textContent);
     }
 
     # Either get gadget scripts or container scripts
-    my ($section) = $xml->getElementsByTagName($type);
+    my ($section) = $xml->getElementsByTagName($self->{type});
     return unless $section;
 
     for my $s ($section->getElementsByTagName('script')) {
         if (my $src = $s->getAttribute('src')) {
             if ($src =~ /^http/) {
-                push @{$self->{_scripts}}, {
-                    src => $src,
-                };
+                $self->{ua} ||= LWP::UserAgent->new;
+                my $res = $self->{ua}->get($src);
+                die "Couldn't fetch $src: " . $res->status_line
+                    unless $res->is_success;
+                $self->_add_js($src, $res->content);
             }
             else {
-                push @{$self->{_scripts}}, {
-                    src => "$feature_url/$name/$src",
-                };
+                my $file = "$feature_dir/$name/$src";
+                open my $fh, $file or die "Couldn't open $file: $!";
+                my $js = join "", <$fh>;
+                $self->_add_js("$name/$src", $js);
             }
         }
         else {
-            push @{$self->{_scripts}}, {
-                content => $s->textContent,
-            };
+            $self->_add_js("Inline", $s->textContent);
         }
     }
+}
+
+sub as_js {
+    my $self = shift;
+    return $self->{_js};
+}
+
+sub as_minified {
+    my $self = shift;
+    return $self->as_js;
+    return minify($self->as_js);
+}
+
+sub _add_js {
+    my ($self, $title, $js) = @_;
+    $self->{_js} .= <<EOT;
+/* FILE: $title */
+$js
+EOT
 }
 
 sub scripts {

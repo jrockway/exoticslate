@@ -1,16 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="[% share_path("css/gadget.css") %]" type="text/css" media="screen" />
-        [% FOR feature = features %]
-            [% IF feature.src %]
-                <script src="[% feature.src %]"></script>
-            [% ELSE %]
-                <script>
-                    [% feature.content %]
-                </script>
-            [% END %]
-        [% END %]
-        <script src="/static/2.20.0.3/skin/s2/javascript/socialtext-other.js.gz"></script>
+        <script src="/data/gadget/instance/[% id %]/js"></script>
         <script src="[% share_path('javascript/syndicator.js') %]"></script>
         <script>
             var msgs = [% as_json(messages) %];

@@ -7,18 +7,7 @@
             var msgs = [% as_json(messages) %];
         </script>
     </head>
-    <body>
+    <body onload="gadgets.util.runOnLoadHandlers()">
         [% content %]
-        <script>
-            jQuery(function () {
-                try {
-                    gadgets.util.runOnLoadHandlers()
-                }
-                catch (e) {
-                    var error = String(e) + " in " + e.fileName + " at line " + e.lineNumber;
-                    alert(error)
-                }
-            })
-        </script>
     </body>
 </html>

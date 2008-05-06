@@ -109,6 +109,7 @@ Module::Pluggable 0
 Params::Validate: 0.79
 Pod::Usage: 0
 POSIX: 1.08
+pQuery: 0
 Readonly: 1.03
 Readonly::XS: 1.03
 REST::Application: 0.992

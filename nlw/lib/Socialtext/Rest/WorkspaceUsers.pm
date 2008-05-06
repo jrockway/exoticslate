@@ -107,10 +107,7 @@ sub POST {
             my $role = Socialtext::Role->new( name => $rolename );
         
             unless( $user && $role ) {
-                $rest->header(
-                              -status => HTTP_400_Bad_Request,
-                              -type  => 'text/plain', );
-                return "both username, rolename must be valid";
+                die "both username, rolename must be valid\n";
             }
         
             $workspace->add_user( user => $user,

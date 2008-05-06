@@ -8,7 +8,7 @@ use Socialtext::TT2::Renderer;
 use Socialtext::AppConfig;
 use Class::Field 'field';
 use Socialtext::URI;
-use Socialtext::Storage::YAML;
+use Socialtext::Storage::PSQL;
 use Socialtext::AppConfig;
 
 my $prod_ver = Socialtext->product_version;
@@ -135,7 +135,7 @@ sub new {
 sub storage {
     my ($self,$id) = @_;
     die "Id is required for storage\n" unless $id;
-    return Socialtext::Storage::YAML->new($id);
+    return Socialtext::Storage::PSQL->new($id);
 }
 
 sub plugin_dir {

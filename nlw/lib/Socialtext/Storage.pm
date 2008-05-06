@@ -3,6 +3,21 @@ package Socialtext::Storage;
 use strict;
 use warnings;
 
+use Carp qw(croak);
+
+sub new {
+    my ($class, $id) = @_;
+    croak "id required" unless $id;
+    my $self = { id => $id };
+    bless $self, $class;
+    $self->load_data;
+    return $self;
+}
+
+sub load_data {
+    die "Sub must be overridden";
+}
+
 sub get {
     my ($self,$key) = @_;
     die "Sub must be overridden";
@@ -10,11 +25,6 @@ sub get {
 
 sub set {
     my ($self,$key,$val) = @_;
-    die "Sub must be overridden";
-}
-
-sub save {
-    my $self = shift;
     die "Sub must be overridden";
 }
 

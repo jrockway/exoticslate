@@ -6,23 +6,17 @@ use base 'Socialtext::Storage';
 use Socialtext::Paths;
 use File::Path qw(mkpath);
 use YAML;
-use Carp qw(croak);
 
 # This will be replaced by the database
 my $root = Socialtext::Paths::storage_directory('stored');
 
-sub new {
-    my ($class, $id) = @_;
-    croak "id required" unless $id;
-    my $self = {
-        file => "$root/$id.yaml"
-    };
+sub load_data {
+    my $self = shift;
     mkpath $root unless -d $root;
-    bless $self, $class;
+    $self->{file} ||= "$root/$self->{id}.yaml";
     if (-f $self->{file}) {
         $self->{yaml} = YAML::LoadFile($self->{file});
     }
-    return $self;
 }
 
 sub get {
@@ -33,9 +27,16 @@ sub get {
 sub set {
     my ($self,$key,$val) = @_;
     $self->{yaml}{$key} = $val;
+    $self->_save;
 }
 
-sub save {
+sub delete {
+    my ($self, $key) = @_;
+    delete $self->{yaml}{$key};
+    $self->_save;
+}
+
+sub _save {
     my $self = shift;
     die "No filename!" unless $self->{file};
     YAML::DumpFile($self->{file}, $self->{yaml});
@@ -44,7 +45,12 @@ sub save {
 sub purge {
     my $self = shift;
     $self->{yaml} = undef;
-    $self->save;
+    $self->_save;
+}
+
+sub exists {
+    my ($self,$key) = @_;
+    return exists $self->{yaml}{$key};
 }
 
 sub remove {

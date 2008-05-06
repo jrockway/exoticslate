@@ -86,7 +86,6 @@ sub install {
     $self->storage->set('url', $url);
 
     $self->_parse_gadget($url);
-    $self->storage->save;
     return $self;
 }
 

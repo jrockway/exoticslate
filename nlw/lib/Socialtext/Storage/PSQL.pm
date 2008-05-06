@@ -3,21 +3,10 @@ package Socialtext::Storage::PSQL;
 use strict;
 use base 'Socialtext::Storage';
 use YAML;
-use Carp qw(croak);
 use Socialtext::SQL qw( sql_execute sql_singlevalue);
+use Carp qw(croak);
 
-sub new {
-    my ($class, $id) = @_;
-    croak "id required" unless $id;
-    my $self = {
-        id => $id,
-    };
-    bless $self, $class;
-    $self->_create;
-    return $self;
-}
-
-sub _create {
+sub load_data {
     my $self = shift;
     eval { sql_execute('SELECT COUNT(*) FROM "Storage"') };
     if ($@) {
@@ -29,47 +18,62 @@ sub _create {
             )
         ');
     }
+    $self->{_cache} = {};
 }
 
 sub get {
     my ($self,$key) = @_;
+    croak 'key is required' unless $key;
     return $self->{_cache}{$key} if $self->{_cache}{$key};
-    my $sth = sql_execute(<<EOT, $self->{id}, $key);
-SELECT value
-  FROM "Storage"
-  WHERE class=? AND key=?
-EOT
-    return $self->{_cache}{$key} = YAML::Load($sth->fetchall_arrayref->[0][0]);
+    my $val = sql_singlevalue('
+        SELECT value
+          FROM "Storage"
+          WHERE class=? AND key=?
+    ', $self->{id}, $key);
+    return unless defined $val;
+    return $self->{_cache}{$key} = YAML::Load($val . "\n");
 }
 
 sub set {
     my ($self,$key,$val) = @_;
-    $self->{_cache}{$key} = $val;
-    $self->{_modified}{$key} = 1;
+    croak 'key is required' unless $key;
+    my $yaml_val = YAML::Dump($val);
+
+    if ($self->exists($key)) {
+        $self->{_cache}{$key} = $val;
+        my $sth = sql_execute('
+            UPDATE "Storage"
+              SET value=?
+              WHERE class=? AND key=?
+        ', $yaml_val, $self->{id}, $key);
+    }
+    else {
+        $self->{_cache}{$key} = $val;
+        my $a=sql_execute('
+            INSERT INTO "Storage"
+              VALUES (?,?,?)
+        ', $self->{id}, $key, $yaml_val);
+    }
 }
 
-sub save {
-    my $self = shift;
+sub delete {
+    my ($self, $key) = @_;
+    delete $self->{_cache}{$key};
+    sql_execute(
+        'DELETE FROM "Storage" WHERE class=? AND key=?',
+        $self->{id}, $key
+    );
+}
 
-    my %keys = map { $_ => 1 } $self->keys;
-    my $mods = $self->{_modified};
-
-    for my $key (keys %$mods) {
-        my $val = YAML::Dump($self->{_cache}{$key});
-        if ($keys{$key}) {
-            sql_execute('
-                UPDATE "Storage"
-                  SET value=?
-                  WHERE class=? AND key=?
-            ', $val, $self->{id}, $key);
-        }
-        else {
-            sql_execute('
-                INSERT INTO "Storage"
-                  VALUES (?,?,?)
-            ', $self->{id}, $key, $val);
-        }
-    }
+sub exists {
+    my ($self,$key) = @_;
+    croak 'key is required' unless $key;
+    return 1 if exists $self->{_cache}{$key};
+    return sql_singlevalue('
+        SELECT COUNT(*)
+          FROM "Storage"
+          WHERE class=? AND key=?
+    ', $self->{id}, $key);
 }
 
 sub purge {
@@ -78,6 +82,7 @@ sub purge {
         'DELETE FROM "Storage" WHERE class=?',
         $self->{id},
     );
+    $self->{_cache} = {};
 }
 
 sub remove {
@@ -93,7 +98,7 @@ sub keys {
         $self->{id},
     );
     my $res = $sth->fetchall_arrayref;
-    return map { $_->[0] } @$res;
+    return map({ $_->[0] } @$res);
 }
 
 

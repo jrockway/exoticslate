@@ -136,7 +136,6 @@ sub desktop {
             }
         }
         $container->storage->set('gadgets',\%gadgets);
-        $container->storage->save();
     }
     
     return '1'; #JSON::Syck::Dump(\%gadgets);
@@ -165,7 +164,6 @@ sub set_prefs {
     }
     if (%prefs) {
         $gadget->storage->set('user_prefs', \%prefs);
-        $gadget->storage->save;
     }
 }
 

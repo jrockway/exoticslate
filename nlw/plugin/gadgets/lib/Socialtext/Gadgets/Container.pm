@@ -63,7 +63,6 @@ sub install_gadget {
     };
 
     $self->storage->set('gadgets', $gadgets);
-    $self->storage->save;
 }
 
 sub get_test_gadgets {
@@ -116,7 +115,6 @@ sub test {
     $self->id('test');
     $self->api($api);
     $self->storage->set('gadgets', {});
-    $self->storage->save;
     $self->get_test_gadgets();
     return $self;
 }

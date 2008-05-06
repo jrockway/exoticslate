@@ -113,9 +113,9 @@ foreach my $column (@COLUMNS) {
 }
 
 field enable_spreadsheet =>
-    -init => '$self->set_workspace_option("enable_spreadsheet")';
+    -init => '$self->_set_workspace_option("enable_spreadsheet")';
 
-sub set_workspace_option {
+sub _set_workspace_option {
     my ($self, $option) = @_;
     return -e File::Spec->catdir(  
         Socialtext::AppConfig->config_dir(),

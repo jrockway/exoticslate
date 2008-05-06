@@ -24,12 +24,12 @@ test_css();
 sub test_templates {
     my $template_dir  = Socialtext::AppConfig->code_base . '/skin/s2/template';
     my $local_dir     = "$template_dir/local";
-    my $template_name = 'test-template';
-
-    my $orig_path  = "$template_dir/$template_name";
-    my $local_path = "$local_dir/$template_name";
 
     {
+        my $template_name = 'test-template';
+        my $orig_path  = "$template_dir/$template_name";
+        my $local_path = "$local_dir/$template_name";
+
         unlink $local_path; # in case a previous test instance crashed
         write_to( $orig_path, 'xyzzy' );
         my $output = $hub->template->render($template_name);
@@ -38,7 +38,12 @@ sub test_templates {
     }
 
     {
+        my $template_name = 'test-template2';
+        my $orig_path  = "$template_dir/$template_name";
+        my $local_path = "$local_dir/$template_name";
+
         mkpath( [$local_dir] );
+        write_to( $orig_path, 'xyzzy' );
         write_to( $local_path, 'fnord' );
         my $output = $hub->template->render($template_name);
 

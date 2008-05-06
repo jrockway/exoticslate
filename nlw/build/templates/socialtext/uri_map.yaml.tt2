@@ -193,6 +193,10 @@
             'text/plain':       [Socialtext::Rest::WorkspaceAttachments, GET_text]
         '*': [Socialtext::Rest::WorkspaceAttachments, bad_method]
 -
+    '/data/workspaces/:ws/users/:username':
+        'DELETE':  [Socialtext::Rest::WorkspaceUser, DELETE]
+        '*':       [Socialtext::Rest::WorkspaceUser, bad_method]
+-
     '/data/workspaces/:ws/users':
         'GET':
             '*/*':     &default [Socialtext::Rest::WorkspaceUsers, GET_html]

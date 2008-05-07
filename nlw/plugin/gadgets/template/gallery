@@ -24,7 +24,7 @@
             <h2>3rd Party</h2>
             <BR> 
             [% FOREACH gadget IN gadgets3rd %]
-              <a href="[% current_uri %]?action=add_gadget;url=[% share_path("gadgets/3rdparty/${gadget}.xml") %]>
+              <a href="[% current_uri %]?action=add_gadget;url=[% share_path("gadgets/3rdparty/${gadget}.xml") %]">
                 [% gadget %]
               </a> <BR>
 

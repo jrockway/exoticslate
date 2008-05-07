@@ -80,7 +80,7 @@ sub install {
 
     my @url_parts = $url =~ m{^(\w+://[^/]*)?/?(.*)/([^/]+)$};
     $url_parts[0] ||= $base_uri;
-    $url = join '/', @url_parts;
+    $url = join '/', grep { $_ } @url_parts;
 
     $self->storage->set('url_parts', \@url_parts);
     $self->storage->set('url', $url);

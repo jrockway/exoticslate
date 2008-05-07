@@ -3,6 +3,7 @@ package Socialtext::Pluggable::Plugin::Gadgets;
 use strict;
 use warnings;
 
+use Encode;
 use JSON::Syck;
 use Socialtext::Helpers;
 use Socialtext::AppConfig;
@@ -258,17 +259,25 @@ sub proxy  {
     my $url = $self->query->{url};
     $url = $url->[0] if ref $url eq 'ARRAY';
 
-    my $agent = LWP::UserAgent->new; 
-    $agent->agent('Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.2) ' .
+    my $ua = LWP::UserAgent->new; 
+
+    $ua->agent('Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.2) ' .
                   'Gecko/20060601 Firefox/2.0.0.2 (Ubu ntu-edgy)');
-    my $request = HTTP::Request->new(GET => $url);
-    $agent->default_headers->push_header(
+    $ua->default_header("Accept-Encoding" => "gzip, deflate");
+    $ua->default_headers->push_header(
         'Accept' => join(',',$self->getContentPrefs)
     );
 
-    my $result = $agent->request($request);
-    $self->header(-type => $result->header('Content-type'));  
-    return $result->decoded_content;
+    my $res = $ua->get($url);
+    # XXX 500? 404?
+
+    my $content = $res->decoded_content(default_charset=>"utf-8");
+
+    my $ctype = $res->header('Content-type') || 'text/plain; charset=utf-8';
+    $ctype .= '; charset=utf-8' if Encode::is_utf8($content) and $ctype !~ m{charset=};
+    $self->header('Content-type' => $ctype);
+
+    return $content;
 }
 
 1;

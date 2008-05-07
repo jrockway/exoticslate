@@ -4,6 +4,13 @@
   <Require feature="dynamic-height" />
   <Require feature="socialtext" />
   </ModulePrefs>
+  <UserPref name="count" display_name="Items Displayed" datatype="enum" default_value="5">
+      <EnumValue value="5"/>
+      <EnumValue value="10"/>
+      <EnumValue value="15"/>
+      <EnumValue value="20"/>
+      <EnumValue value="25"/>
+  </UserPref>
   <Content type="html">
       <![CDATA[
         <div id="__MODULE_ID__-content"></div>
@@ -33,7 +40,7 @@
 
     jQuery.getJSON(
         '/data/changes',
-        {count:5, accept:'application/json'},
+        {count:__UP_count__, accept:'application/json'},
         function (data) {
             for (var i=0; i<data.length; i++) {
                 var page = data[i];

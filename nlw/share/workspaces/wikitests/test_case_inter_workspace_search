@@ -10,7 +10,7 @@
 | st-admin | set-workspace-config --workspace test-data3 title test-data3 | The workspace config for test-data3 has been updated. |
 
 | *Comment* | Test Case: Inter Workspace Search Search all the workspaces where %%username%% is a member |  |
-| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (3) |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (5) |
 | click_ok | link=Workspace |  |
 | pause | 5000 |  |
 | st-result | qr/jabber.+Canonical Test Data Set.+jabber.+test-data2.+jabber.+test-data3/ |  |
@@ -19,7 +19,7 @@
 
 | *Comment* | Test Case: Inter Workspace Search Remove %%username%% from test-data2 and search again |  |
 | st-admin | remove-member --workspace test-data2 --email %%email%% |  |
-| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (4) |
 | click_ok | link=Workspace |  |
 | pause | 5000 |  |
 | st-result | qr/jabber.+Canonical Test Data Set.+jabber.+test-data3/ |  |
@@ -42,7 +42,7 @@
 
 | *Comment* | Test Case: Inter Workspace Search Login to test-data ws and search again |  |
 | st-login |  |  |
-| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (4) |
 | click_ok | link=Workspace |  |
 | pause | 5000 |  |
 | st-result | qr/jabber.+Canonical Test Data Set.+jabber.+test-data3/ |  |
@@ -51,14 +51,14 @@
 | *Comment* | add user back to test-data2, delete test-data2 |  |
 
 | st-admin | add-member --workspace test-data2 --email %%email%% | qr/%%username%% .+ a member of the test-data2 workspace\./ |
-| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (3) |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (5) |
 | click_ok | link=Workspace |  |
 | pause | 5000 |  |
 | st-result | qr/jabber.+Canonical Test Data Set.+jabber.+test-data2.+jabber.+test-data3/ |  |
 
 | st-admin | delete-workspace --workspace test-data2 --no-export | The test-data2 workspace has been deleted. |
 
-| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (4) |
 | click_ok | link=Workspace |  |
 | pause | 5000 |  |
 | st-result | qr/jabber.+Canonical Test Data Set.+jabber.+test-data3/ |  |
@@ -89,7 +89,7 @@
 | click_and_wait | link=Unsubscribe |  |
 | click_and_wait | Button |  |
 | open_ok | /test-data |  |
-| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (4) |
 | click_ok | link=Workspace |  |
 | pause | 5000 |  |
 | st-result | qr/jabber.+Canonical Test Data Set.+jabber.+test-data2/ |  |
@@ -115,7 +115,7 @@
 | *Comment* | Test Case: Inter Workspace Search index new page explicitly just in case ceq is tetchy |  |
 | st-admin | index-page -workspace from-scratch --page jabber | The jabber page in the from-scratch workspace has been indexed. |
 
-| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (3) |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (5) |
 | click_ok | link=Workspace |  |
 | pause | 5000 |  |
 | st-result | qr/jabber.+Canonical Test Data Set.+jabber.+From-Scratch.+jabber.+test-data2/ |  |

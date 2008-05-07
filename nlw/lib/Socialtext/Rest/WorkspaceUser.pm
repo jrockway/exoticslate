@@ -40,7 +40,9 @@ sub _admin_or_user_reflect {
     my $self        = shift;
     my $target_user = shift;
 
-    return $self->hub->checker->check_permission('admin_workspace')
+    return $self->rest->user->is_business_admin()
+        || $self->rest->user->is_technical_admin()
+        || $self->hub->checker->check_permission('admin_workspace')
         || ( $target_user
         && $self->rest->user->user_id eq $target_user->user_id );
 }

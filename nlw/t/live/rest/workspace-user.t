@@ -4,7 +4,7 @@
 use warnings;
 use strict;
 
-use Test::HTTP::Socialtext '-syntax', tests => 31;
+use Test::HTTP::Socialtext '-syntax', tests => 53;
 
 use JSON::XS;
 use Readonly;
@@ -73,14 +73,71 @@ $Test::HTTP::BasicUsername = $WEAK_USER;
 delete_user( $TEST_USER, '403', 'User not authorized' );
 
 
-TODO: {
-    local $TODO
-        = 'proper behavior: user removing self from unsub workspace is undef';
-    # as TEST_USER
-    #   attempt to delete now unsub'd TEST_USER from WORKSPACE
-    #   correct response is 403 or 404?
-    $Test::HTTP::BasicUsername = $TEST_USER;
-    delete_user( $TEST_USER, '404', "$TEST_USER is not a member of $WORKSPACE" );
+# as TEST_USER
+#   attempt to delete now unsub'd TEST_USER from WORKSPACE
+#   correct response is 404
+$Test::HTTP::BasicUsername = $TEST_USER;
+delete_user( $TEST_USER, '404', "$TEST_USER is not a member of $WORKSPACE" );
+
+# as ADMIN_USER
+#   subscribe TEST_USER back to workspace
+#   confirm ADMIN_USER is_business_admin and is_technical_admin
+#   remove ADMIN_USER from workspace
+#   attempt to delete TEST_USER from WORKSPACE
+#   correct response is 204
+$Test::HTTP::BasicUsername = $ADMIN_USER;
+subscribe_user($TEST_USER);
+user_is_role($ADMIN_USER, 'business_admin');
+user_is_role($ADMIN_USER, 'technical_admin');
+delete_user($ADMIN_USER, '204', '');
+delete_user($TEST_USER, '204', '');
+
+# add the user back and then remove business_admin
+subscribe_user($TEST_USER);
+my $admin_user = Socialtext::User->new(username=>$ADMIN_USER);
+$admin_user->set_business_admin(0);
+user_is_role($ADMIN_USER, 'business_admin', 'not');
+
+# as just technical_admin
+delete_user($TEST_USER, '204', '');
+
+# put the TEST_USER back in, we need business admin
+# because only business admin can add to workspace
+$admin_user->set_business_admin(1);
+subscribe_user($TEST_USER);
+
+# remove business_admin and technical_admin, now no powers
+$admin_user->set_business_admin(0);
+$admin_user->set_technical_admin(0);
+user_is_role($ADMIN_USER, 'technical_admin', 'not');
+user_is_role($ADMIN_USER, 'business_admin', 'not');
+delete_user($TEST_USER, '403', 'User not authorized');
+
+# give back business_admin powers
+$admin_user->set_business_admin(1);
+subscribe_user($TEST_USER);
+delete_user($TEST_USER, '204', '');
+
+sub user_is_role {
+    my $username = shift;
+    my $role = shift;
+    my $notness = shift || undef;
+
+    test_http "confirm $username is $role" {
+        >> GET $NEW_USER_URL/$username
+        >> Accept: application/json
+
+        << 200
+
+        my $content = $test->response->content;
+        my $info = decode_json($content);
+
+        if ($notness) {
+            ok( ! $info->{"is_$role"}, "is_$role should not be set" );
+        } else {
+            ok( $info->{"is_$role"}, "is_$role should be set" );
+        }
+    }
 }
 
 sub check_methods {
@@ -160,18 +217,6 @@ sub subscribe_user {
     my $workspace = Socialtext::Workspace->new( name => $WORKSPACE );
     my $role_name = $workspace->role_for_user( user => $user )->name;
     is( $role_name, 'member',  "role is member" );
-
-    test_http "confirm $target_user present" {
-        >> GET $BASE
-        >> Accept: application/json
-
-        << 200
-
-        my $content = $test->response->content;
-        my $info = decode_json($content);
-        my @users = map $_->{name}, @$info;
-        ok( grep(/^$target_user$/, @users), "$target_user in workspace");
-    }
 }
 
 sub user_not_subscribed {

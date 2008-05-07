@@ -45,7 +45,10 @@
 | *Comment* | Test Case: New Page from Page View |  |
 | click_and_wait | link=np %%start_time%% 2 |  |
 | wait_for_element_visible_ok | st-pagetools-newpage | 20000 |
-| click_ok | st-pagetools-newpage |  |
+
+ click_ok | st-pagetools-newpage *REMOVED FOR SOCIALCALC INTERFACE*
+
+| click_ok | link=Create New Wiki Page |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | type_ok | st-newpage-pagename-edit | np %%start_time%% 3 |
 | click_ok | st-save-button-link |  |

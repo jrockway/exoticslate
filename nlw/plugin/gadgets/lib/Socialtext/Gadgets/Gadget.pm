@@ -22,6 +22,7 @@ field 'id';
 
 field 'ua',           -init => 'LWP::UserAgent->new';
 field 'prefs_def',    -init => '$self->get_prefs_def';
+field 'defaults',     -init => '$self->get_defaults';
 field 'module_prefs', -init => '$self->get_module_prefs';
 field 'arg_string',   -init => '$self->get_arg_string';
 field 'href',         -init => '$self->get_href';
@@ -272,6 +273,7 @@ sub expand_hangman {
     return '' unless $text;
     my $userprefs = $self->user_prefs;
     for my $pref (@$userprefs) {
+        $pref->{val} ||= '';
         $text =~ s{__UP_$pref->{name}__}{$pref->{val}}g;
     }
     $text = $self->expand_messages($text);
@@ -337,6 +339,7 @@ sub get_arg_string {
     );
     my $userprefs = $self->user_prefs;
     for my $pref (@$userprefs) {
+        $pref->{val} ||= '';
         $args{"up_$pref->{name}"} = uri_escape($pref->{val});
     }
     return join('&', map { "$_=$args{$_}" } keys %args);
@@ -358,6 +361,13 @@ sub get_prefs_def {
    return $self->{module}{prefs_def};
 }
 
+sub get_defaults {
+    my $self = shift;
+    return {
+        username => $self->api->username,
+    };
+}
+
 sub get_user_prefs {
     my $self = shift;
     my $stored = $self->storage->get('user_prefs') || {};
@@ -366,7 +376,9 @@ sub get_user_prefs {
     for my $def (@$def) {
         my %pref = %$def;
         my $name = $def->{name};
-        $pref{val} = $stored->{$name} || $def->{default_value};
+        $pref{val} = $stored->{$name}
+                     || $def->{default_value}
+                     || $self->defaults->{$name};
         $pref{display_name} = $self->expand_messages($pref{display_name});
         push @prefs, \%pref;
     }

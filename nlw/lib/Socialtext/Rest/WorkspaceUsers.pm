@@ -54,14 +54,20 @@ sub get_resource {
     return [];
 }
 
+sub _user_may_subscribe {
+    my $self = shift;
+
+    return $self->rest->user->is_business_admin()
+        || $self->rest->user->is_technical_admin()
+        || $self->hub->checker->check_permission('admin_workspace');
+}
+
 sub POST {
     my $self = shift;
     my $rest = shift;
 
-    unless ($self->_user_is_business_admin_p( ) ) {
-        $rest->header(
-                      -status => HTTP_401_Unauthorized,
-                     );
+    unless ( $self->_user_may_subscribe() ) {
+        $rest->header( -status => HTTP_403_Forbidden );
         return '';
     }
 

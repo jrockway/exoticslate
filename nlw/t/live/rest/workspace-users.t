@@ -4,7 +4,7 @@
 use warnings;
 use strict;
 
-use Test::HTTP::Socialtext '-syntax', 'no_plan';
+use Test::HTTP::Socialtext '-syntax', tests => 43;
 
 use JSON::XS;
 use Readonly;
@@ -74,58 +74,78 @@ test_http "GET html non-admin user" {
 # we want to all 'membership' by POSTING to /data/workspaces/:ws/users
 # where the 'payload' has either a 'username' or a 'user_id' and
 # a role_name to assign
-# note that for now, ONLY a business admin can do this, but they can do 
-# it anywhere.
-{
-    $Test::HTTP::BasicUsername = 'devnull1@socialtext.com';
+# note that for now, ONLY a business admin or technical admin
+# can do this, but they can do it anywhere.
 
-    my $target_role = 'member';
-    my $manipulated_username = 'devnull1@socialtext.com';
+# do member add of devnull2 add as devnull1
+# do workspace_admin add of devnull2 add as devnull1
+add_user('devnull1@socialtext.com', 'devnull2@socialtext.com', 'member');
+add_user('devnull1@socialtext.com', 'devnull2@socialtext.com', 'workspace_admin');
+
+# remove business_admin and technical_admin powers and it should
+# still work because devnull1 is a workspace admin
+my $admin_user
+    = Socialtext::User->new( username => 'devnull1@socialtext.com' );
+$admin_user->set_business_admin(0);
+$admin_user->set_technical_admin(0);
+add_user( 'devnull1@socialtext.com', 'devnull2@socialtext.com', 'member' );
+
+# get rid of workspace_admin for devnull1 and see what happens
+# should fail now
+Socialtext::Workspace->new(name => 'foobar')->remove_user( user => $admin_user );
+add_user(
+    'devnull1@socialtext.com', 'devnull2@socialtext.com', 'member',
+    'FAIL'
+);
+
+# reset business_admin to on, should work again
+$admin_user->set_business_admin(1);
+add_user('devnull1@socialtext.com', 'devnull2@socialtext.com', 'member');
+
+# just technical admin should work
+$admin_user->set_business_admin(0);
+$admin_user->set_technical_admin(1);
+add_user('devnull1@socialtext.com', 'devnull2@socialtext.com', 'member');
+
+$admin_user->set_business_admin(1);
+
+sub add_user {
+    my $acting_user = shift;
+    my $target_user = shift;
+    my $target_role = shift;
+    my $fail        = shift || undef;
+
+    $Test::HTTP::BasicUsername = $acting_user;
 
     my $membership_payload =
-      encode_json( { username => $manipulated_username,
+      encode_json( { username => $target_user,
                    rolename => $target_role } );
 
-    test_http "POST membership - working" {
+    test_http "POST membership - working for $target_role" {
         >> POST $BASE
         >> Content-type: application/json
         >>
         >> $membership_payload
 
-        << 201
-        ~< Location: $BASE
+        if ($fail) {
+
+            << 403
+
+            return;
+
+        } else {
+
+            << 201
+            ~< Location: $BASE
+
+        }
     }
     # now check the db to see if it made it through
-    my $user = Socialtext::User->new( username => $manipulated_username );
+    my $user = Socialtext::User->new( username => $target_user );
     my $workspace = Socialtext::Workspace->new( name => 'foobar' );
     my $role_name = $workspace->role_for_user( user => $user )->name;
     is( $role_name, $target_role,  "role is $target_role" );
 }
-
-{
-Socialtext::AlzaboWrapper::ClearCache();
-    my $manipulated_username = 'devnull1@socialtext.com';
-    my $target_role = 'workspace_admin';
-    my $membership_payload =
-      encode_json( { username => $manipulated_username,
-                   rolename => $target_role } );
-
-    test_http "POST membership - working back to workspace_admin" {
-        >> POST $BASE
-        >> Content-type: application/json
-        >>
-        >> $membership_payload
-
-        << 201
-        ~< Location: $BASE
-    }
-    # now check the db to see if it made it through
-    my $user = Socialtext::User->new( username => $manipulated_username );
-    my $workspace = Socialtext::Workspace->new( name => 'foobar' );
-    my $role_name = $workspace->role_for_user( user => $user )->name;
-    is( $role_name, $target_role,  "role is $target_role" );
-}
-
 
 {
     my $membership_payload =
@@ -166,8 +186,6 @@ Socialtext::AlzaboWrapper::ClearCache();
   << 201
 
   $test->header_like( Location => qr{$BASE} );
-
-  diag( "POST returned:\n" .  $test->response->content . "\n" );
 
   # now check the db to see if it made it through
   my $user = Socialtext::User->new( username => $manipulated_username );

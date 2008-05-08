@@ -26,8 +26,6 @@
    var rurl = '/data/gadget/proxy?url='+url;
    var show_desc = false;
    
-   gadgets.io.makeRequest('index.cgi', function () { console.log('hi') });
-
    jQuery.ajax({
           type: "GET",
           url: rurl,

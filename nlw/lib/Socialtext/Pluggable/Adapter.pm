@@ -87,14 +87,21 @@ sub register {
             elsif ($type eq 'action') {
                 no strict 'refs';
                 my $class = ref $self;
-                if (UNIVERSAL::can($self, $parts[0])) {
-                    die "An action or sub named $parts[0] already exists";
+                my $action = $parts[0];
+                my $sub = "${class}::$action";
+
+                if (my $old = $hooks{$hook->{name}}) {
+                    if ($old->{class} ne $hook->{class}) {
+                        die "Can't register $action for $hook->{class}! " .
+                            "$old->{class} already registered this action.\n";
+                    }
                 }
-                my $sub = "${class}::$parts[0]";
-                *{$sub} = sub {
-                    return $_[0]->hook($hook->{name});
-                };
-                $registry->add( 'action' => $parts[0] );
+                elsif (UNIVERSAL::can($self, $action)) {
+                    die "$class already defines a subroutine named $action that is not an action!";
+                }
+
+                *{$sub} = sub { return $_[0]->hook($hook->{name}) };
+                $registry->add(action => $action);
             }
 
             $hooks{$hook->{name}} = $hook;

@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 use base 'Socialtext::Rest::Collection';
-use JSON::XS;
+use Socialtext::JSON;
 use Socialtext::HTTP ':codes';
 use Socialtext::WorkspaceInvitation;
 

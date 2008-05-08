@@ -13,7 +13,7 @@ use Socialtext::Exceptions;
 use Socialtext::TT2::Renderer;
 use Socialtext::l10n qw(loc system_locale);
 use Socialtext::BrowserDetect;
-use JSON::XS;
+use Socialtext::JSON;
 use Encode;
 
 sub class_id { 'page_activity' }
@@ -29,7 +29,6 @@ sub register {
 
 sub page_activity {
     my $self = shift;
-    my $json = JSON::XS->new->utf8;
     if ($self->cgi->activities) {
         my $text = $self->cgi->activities;
 
@@ -37,7 +36,7 @@ sub page_activity {
             Encode::_utf8_off( $text );
         }
 
-        my $activities = $json->decode( $text );
+        my $activities = decode_json( $text );
         my $res = {};
         for my $a (@$activities) {
             if ($a->{page_activity}) {
@@ -51,14 +50,14 @@ sub page_activity {
                 $self->find_all_by_page_id( $a->{page_id} );
         }
         $res->{"__current_time"} = time;
-        return $json->encode($res);
+        return encode_json($res);
     }
 
     if ($self->cgi->page_activity) {
         $self->create;
     }
 
-    return $json->encode($self->find_all_by_page_id)
+    return encode_json($self->find_all_by_page_id)
 }
 
 sub find_all_by_page_id {
@@ -70,7 +69,7 @@ sub find_all_by_page_id {
     $sth->execute( $page_id, time - 30*60 );
 
     # Need to encode each single scalar here to UTF8 for being able to be
-    # correctly encode to JSON with JSON::XS.
+    # correctly encode to JSON with Socialtext::JSON
     my @all = 
         map { [ map { Encode::decode_utf8($_) } @$_] }
         @{$sth->fetchall_arrayref};

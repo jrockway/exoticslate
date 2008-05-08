@@ -6,8 +6,8 @@ use strict;
 
 use Test::HTTP::Socialtext '-syntax', tests => 17;
 
-use JSON::XS;
 use Readonly;
+use Socialtext::JSON;
 use Socialtext::User;
 use Test::Live fixtures => ['admin', 'foobar'];
 use Test::More;

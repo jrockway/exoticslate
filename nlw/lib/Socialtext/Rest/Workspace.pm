@@ -6,7 +6,7 @@ use warnings;
 
 use base 'Socialtext::Rest::Entity';
 use Socialtext::HTTP ':codes';
-use JSON::XS;
+use Socialtext::JSON;
 
 sub permission      { +{ GET => 'read' } }
 sub allowed_methods {'GET, HEAD'}

@@ -7,8 +7,8 @@ use utf8;
 
 use Test::HTTP::Socialtext '-syntax', tests => 93;
 
-use JSON::XS;
 use Readonly;
+use Socialtext::JSON;
 use Socialtext::Page;
 use Socialtext::User;
 use Socialtext::Workspace;

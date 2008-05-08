@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use base 'Socialtext::Rest';
-use JSON::XS;
+use Socialtext::JSON;
 use XML::Parser;
 
 sub GET_html {

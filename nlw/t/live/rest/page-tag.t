@@ -7,8 +7,8 @@ use utf8;
 
 use Test::HTTP::Socialtext '-syntax', tests => 18;
 
-use JSON::XS;
 use Readonly;
+use Socialtext::JSON;
 use Test::Live fixtures => ['admin', 'foobar']; # foobar for devnull2
 use Test::More;
 

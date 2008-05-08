@@ -10,7 +10,7 @@ use Class::Field qw(field const);
 use LWP::UserAgent;
 use Socialtext::Resting;
 use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
-use JSON::XS;
+use Socialtext::JSON;
 use YAML;
 use Template;
 

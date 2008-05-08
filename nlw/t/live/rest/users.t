@@ -3,8 +3,8 @@
 use warnings;
 use strict;
 use Test::HTTP::Socialtext '-syntax', 'no_plan';
-use JSON::XS;
 use Readonly;
+use Socialtext::JSON;
 use Test::Live fixtures => ['admin', 'foobar'];
 use Test::More;
 use URI;

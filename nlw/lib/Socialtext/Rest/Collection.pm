@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use base 'Socialtext::Rest';
-use JSON::XS;
+use Socialtext::JSON;
 use Socialtext::HTTP ':codes';
 
 =head1 NAME

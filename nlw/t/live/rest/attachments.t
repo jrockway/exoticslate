@@ -3,8 +3,8 @@
 use warnings;
 use strict;
 use Test::HTTP::Socialtext '-syntax', tests => 45;
-use JSON::XS;
 use Readonly;
+use Socialtext::JSON;
 use Socialtext::User;
 use Test::Live fixtures => ['admin_with_extra_pages'];
 use Test::More;

@@ -12,7 +12,7 @@ use Socialtext::String;
 use Socialtext::BrowserDetect ();
 use Socialtext::l10n qw/loc system_locale/;
 use Socialtext::Locales qw/available_locales/;
-use JSON::XS;
+use Socialtext::JSON;
 use Apache::Cookie;
 
 sub class_id { 'display' }

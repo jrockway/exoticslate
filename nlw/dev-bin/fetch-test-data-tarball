@@ -5,7 +5,7 @@ use warnings;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use Socialtext::Resting::RegressionTest;
-use JSON::XS;
+use Socialtext::JSON;
 
 my $filename = shift || 'test-data.tar.gz';
 

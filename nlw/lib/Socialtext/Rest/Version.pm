@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use base 'Socialtext::Rest';
-use JSON::XS;
+use Socialtext::JSON;
 use Readonly;
 
 Readonly our $API_VERSION => 0.95;

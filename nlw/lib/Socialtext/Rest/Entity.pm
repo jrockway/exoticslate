@@ -14,7 +14,7 @@ L<Socialtext::Rest::Collection>
 
 =cut
 
-use JSON::XS;
+use Socialtext::JSON;
 use base 'Socialtext::Rest';
 use Socialtext::HTTP ':codes';
 

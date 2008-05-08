@@ -9,11 +9,11 @@ use strict;
 use Test::Live fixtures => ['admin'];
 
 use Readonly;
+use Socialtext::JSON;
 use Test::Socialtext::Environment;
 use Test::HTTP::Syntax;
 use Test::HTTP 'no_plan';
 use Test::More;
-use JSON::XS;
 use t::SocialtextTestUtils qw/index_page/;
 
 $Test::HTTP::BasicUsername = 'devnull1@socialtext.com';

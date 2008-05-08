@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+<ModulePrefs title="OnePageWiki">
+  <Require feature="dynamic-height" />
+  <Require feature="setprefs" />
+  <Require feature="socialtext" />
+  <Require feature="core.io" />
+
+  <UserPref name="workspace_name" display_name="Workspace" default_value="admin"/>
+  <UserPref name="page_title" display_name="Page" default_value="quick_start"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+  <style type='text/css'>
+    #display__MODULE_ID__ {
+        text-align: left;
+        padding: 0;
+    }
+    #displayarea__MODULE_ID__ {
+        overflow: auto;
+    }
+    #editarea__MODULE_ID__ {
+        font-size: 9px;
+        width: 100%;
+    }
+    #edit__MODULE_ID__ {
+        display: none;
+        padding: 0;
+    }
+  </style>
+
+  <div id="display__MODULE_ID__" style="">
+    <a href="#" onClick="edit_page(); return false">Edit this page</a>
+    <div id="displayarea__MODULE_ID__"></div>
+  </div>
+  <div id="edit__MODULE_ID__" style="">
+    <a href="#" onclick="save_page(); return false">Save</a>
+    <a href="#" onClick="display_html(); return false">Cancel</a>
+    <textarea id="editarea__MODULE_ID__" rows="16"></textarea>
+  </div>
+
+  <script type="text/javascript">
+
+    function edit_page () {
+      var workspace_name = '__UP_workspace_name__';
+      var page_title = '__UP_page_title__';
+      var url = '/data/workspaces/'+workspace_name+'/pages/'+page_title;
+      var editdiv = document.getElementById('edit__MODULE_ID__');
+      var dispdiv = document.getElementById('display__MODULE_ID__');
+      var editarea = document.getElementById('editarea__MODULE_ID__');
+
+      editarea.value = "Loading...";
+      dispdiv.style.display = "none";
+      editdiv.style.display = "block";
+
+      // TODO: this sometimes returns cached content
+      jQuery.get(url, {accept:'text/x.socialtext-wiki'}, 
+        function (data) {
+          editarea.value = data;
+          gadgets.window.adjustHeight(); 
+        }
+      );
+    }
+
+
+    function display_html () {
+      var workspace_name = '__UP_workspace_name__';
+      var page_title = '__UP_page_title__';
+      var url = '/data/workspaces/'+workspace_name+'/pages/'+page_title;
+      var editdiv = document.getElementById('edit__MODULE_ID__');
+      var dispdiv = document.getElementById('display__MODULE_ID__');
+      var displayarea = document.getElementById('displayarea__MODULE_ID__');
+
+      displayarea.innerHTML = "Loading...";
+      editdiv.style.display = "none";
+      dispdiv.style.display = "block";
+
+      // TODO: this sometimes returns cached content
+      jQuery.get(url, {accept:'text/html'}, 
+        function (data) {
+          displayarea.innerHTML = data;
+          gadgets.window.adjustHeight(); 
+        }
+      );
+    }
+
+    function save_failed (XMLHttpRequest, textStatus, errorThrown) {
+      alert('saving failed!');
+    }
+
+    function save_page () {
+      var workspace_name = '__UP_workspace_name__';
+      var page_title = '__UP_page_title__';
+      var url = '/data/workspaces/'+workspace_name+'/pages/'+page_title;
+      var editarea = document.getElementById('editarea__MODULE_ID__');
+      var success = 0;
+      jQuery.ajax({
+        url: url,
+        type: "POST",
+        dataType: "text",
+        contentType: "text/x.socialtext-wiki",
+        processData: false,
+        global: false,
+// XXX: jQuery apparently can't handle recursive requests (i.e. initiating
+// a second ajax request in the 'complete' handler below):
+        async: false, 
+        data: editarea.value,
+        success: function () { success = 1 },
+        complete: function () { if(success){display_html()} },
+        error: save_failed,
+        charset: "",
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader('X-Http-Method', 'PUT');
+        },
+      });
+    }
+
+    gadgets.util.registerOnLoadHandler( display_html );
+
+  </script>
+]]></Content>
+</Module>

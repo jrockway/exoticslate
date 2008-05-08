@@ -5,7 +5,7 @@ use warnings;
 use strict;
 use utf8;
 
-use Test::HTTP::Socialtext '-syntax', tests => 93;
+use Test::HTTP::Socialtext '-syntax', tests => 97;
 
 use Readonly;
 use Socialtext::JSON;
@@ -22,6 +22,7 @@ Readonly my $UTF8_PAGE      => 'Και';
 
 # http://www.homestarrunner.com/sbemail147.html
 Readonly my $NEW_NAME      => 'Wretched Simmons';
+Readonly my $NEW_NAME_FF3_B5      => 'Wretched Simmons FF3';
 Readonly my $NEW_BODY =>
     "You got to $UTF8_PAGE drop her like a trig class.\n";
 Readonly my $NEWER_BODY =><<"EOF";
@@ -207,10 +208,9 @@ test_http "GET page list doesn't match $EXISTING_NAME" {
         "page list does not contain $EXISTING_NAME";
 }
 
-
 test_http "PUT new page" {
     >> PUT $BASE/$NEW_NAME
-    >> Content-type: text/x.socialtext-wiki; charset=UTF-8
+    >> Content-type: text/x.socialtext-wiki
     >>
     >> $NEW_BODY
     
@@ -218,6 +218,25 @@ test_http "PUT new page" {
     << 201
 
     >> GET $BASE/$NEW_NAME
+    >> Accept: text/x.socialtext-wiki
+
+    << 200
+    ~< Content-type: \btext/x.socialtext-wiki\b
+    <<
+    << $NEW_BODY
+}
+
+
+test_http "PUT new page FF3" {
+    >> PUT $BASE/$NEW_NAME_FF3_B5
+    >> Content-type: text/x.socialtext-wiki; charset=UTF-8
+    >>
+    >> $NEW_BODY
+    
+
+    << 201
+
+    >> GET $BASE/$NEW_NAME_FF3_B5
     >> Accept: text/x.socialtext-wiki
 
     << 200

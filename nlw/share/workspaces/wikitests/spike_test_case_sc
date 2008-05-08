@@ -1,0 +1,18 @@
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | st-newpage-pagename-edit | sc spike %%start_time%% 0001 |
+| type_ok | wikiwyg_wikitext_textarea | sc spike %%start_time%% 0001/content |
+| click_and_wait | st-save-button-link |  |
+
+| click_and_wait | st-pagetools-newspreadsheet |  |
+| pause | 3000 |  |
+| answerOnNextPrompt | spiky %%start_time%% |  |
+| verifyPrompt | Enter Spreadsheet Page Name |  |
+| pause | 3000 |  |
+| click_ok | cell_A1 |  |
+| click_ok | cell_A1 |  |
+| type_ok | //div/textarea | 100\n |
+| click_and_wait | st-save-button-link |  |

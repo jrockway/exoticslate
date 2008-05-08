@@ -210,7 +210,7 @@ test_http "GET page list doesn't match $EXISTING_NAME" {
 
 test_http "PUT new page" {
     >> PUT $BASE/$NEW_NAME
-    >> Content-type: text/x.socialtext-wiki
+    >> Content-type: text/x.socialtext-wiki; charset=UTF-8
     >>
     >> $NEW_BODY
     

@@ -223,6 +223,9 @@ sub getContentPrefs {
     if ( not $self->{_gcp_hack} and $method =~ /^(POST|PUT)$/i ) {
         my $ct = $self->request->header_in('Content-Type');
         $ct ||= '*/*';
+        # throw away '; charset=' junk (and anything else since our YAML
+        # config doesn't support it anyway):
+        $ct =~ s/;.*$//;
         return ( $ct, '*/*' );
     }
     if (my $type = $self->query->param('accept')) {

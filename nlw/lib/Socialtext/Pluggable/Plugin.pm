@@ -10,6 +10,7 @@ use Class::Field 'field';
 use Socialtext::URI;
 use Socialtext::Storage::PSQL;
 use Socialtext::AppConfig;
+use Socialtext::JSON qw(encode_json);
 
 my $prod_ver = Socialtext->product_version;
 my $code_base = Socialtext::AppConfig->code_base;
@@ -185,7 +186,7 @@ sub template_render {
                 }
             },
             workspaces => [$self->hub->current_user->workspaces->all],
-            as_json => sub { JSON::Syck::Dump(@_) },
+            as_json => sub { encode_json(@_) },
             %template_vars,
             %args,
         },

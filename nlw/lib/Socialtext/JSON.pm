@@ -15,6 +15,15 @@ our @EXPORT = @EXPORT_OK;
 
 sub encode_json {
     # defer to JSON::XS
+    
+
+    unless (ref $_[0]) {
+        # manually encode a string because heaven forbid anyone would be
+        # stupid enough to *want* to do that. 
+        my $val = shift;
+        $val =~ s|"|\\"|g;
+        return qq("$val");
+    }
     return JSON::XS::encode_json($_[0]);
 }
 

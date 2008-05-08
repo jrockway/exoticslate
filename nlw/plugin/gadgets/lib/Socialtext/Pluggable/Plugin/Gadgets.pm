@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Encode;
-use JSON::Syck;
+use Socialtext::JSON;
 use Socialtext::Helpers;
 use Socialtext::AppConfig;
 use Socialtext::Gadgets::Container;
@@ -127,7 +127,7 @@ sub desktop {
     }
 
     if ($desktop) {
-        my $positions = JSON::Syck::Load($desktop);
+        my $positions = decode_json($desktop);
 
         my %gadgets;
         foreach my $col ( sort keys %$positions ) {
@@ -139,7 +139,7 @@ sub desktop {
         $container->storage->set('gadgets',\%gadgets);
     }
     
-    return '1'; #JSON::Syck::Dump(\%gadgets);
+    return '1'; #encode_json(\%gadgets);
 }
 
 sub get_js {
@@ -211,7 +211,7 @@ sub json_feed_proxy {
         $response{error} =  XML::Feed->errstr . "\n";
     }
 
-    return JSON::Syck::Dump(\%response);
+    return encode_json(\%response);
 }
 
 sub json_proxy  {
@@ -243,7 +243,7 @@ sub json_proxy  {
     my $data = $result->decoded_content;
 
     # undefined value in here somewhere, status_line? body? XXX TODO:
-    my $json = JSON::Syck::Dump({
+    my $json = encode_json({
         $args{url} => {
             body => $data,
             rc => $result->status_line,

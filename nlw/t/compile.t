@@ -2,8 +2,8 @@
 # @COPYRIGHT@
 use warnings;
 use strict;
-
 use Test::More;
+use lib "$ENV{ST_SRC_BASE}/current/socialtext-reports/lib";
 
 my @modules = all_modules();
 

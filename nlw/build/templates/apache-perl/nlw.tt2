@@ -1,7 +1,12 @@
+[% required = {} %]
 [% MACRO simple_handler( loc, handler ) BLOCK %]
     <Location [% loc %]>
         SetHandler  perl-script
-        PerlHandler +[% handler %]
+        [% UNLESS required.$handler %]
+            PerlModule [% handler %]
+            [% required.$handler = 1 %]
+        [% END %]
+        PerlHandler [% handler %]
     </Location>
 [% END %][%# simple_handler() %]
 

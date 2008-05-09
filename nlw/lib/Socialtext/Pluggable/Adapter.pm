@@ -9,7 +9,7 @@ my %hooks;
 
 use base 'Socialtext::Plugin';
 use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
-                      search_dirs => \@libs, require => 1;
+                      search_dirs => \@libs;
 use Socialtext::Pluggable::WaflPhraseDiv;
 
 
@@ -60,6 +60,8 @@ sub class_id { 'pluggable' };
 sub class_title { 'Pluggable' };
 
 for my $plugin (__PACKAGE__->plugins) {
+    eval "require $plugin";
+    die $@ if $@;
     $plugin->register;
 }
 

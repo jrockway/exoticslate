@@ -28,6 +28,7 @@ test env properly and are not testing the test-workspace
 * [Test Case: stemming]
 * [Test Case: Tags]
 * [Test Case: Tagging]
+* [Test Case: Tagging in the Editor]
 * [Test Case: Hide sidebar]
 * [Test Case: Sidebar: Incoming Links]
 * [Test Case: Orphans List]

@@ -1,0 +1,42 @@
+# source this file to point to a selenium server
+# via an SSH tunnel on localhost:PORT
+
+USAGE="usage: source setup-selenium  PORT [BROWSER [PLATFORM]]"
+BROWSER="*chrome"
+PORT="4444"
+HOST="localhost"
+PLATFORM="linux"
+DEBUGPRINT="1"
+
+if [ !  $1  ]
+    then
+        echo  $USAGE
+    else
+        PORT="$1"
+fi
+
+
+if [ $2 ]
+    then
+        BROWSER=*"$2"
+fi
+                
+if [ $3 ]
+    then
+        PLATFORM="$3"
+fi
+                                                                                
+if [ "$DEBUGPRINT" ]
+    then
+        echo PORT IS $PORT
+        echo BROWSER  IS $BROWSER
+        echo HOST IS $HOST
+        echo PLATFORM IS $PLATFORM
+fi
+
+export selenium_port=$PORT
+export selenium_host=$HOST
+export selenium_browser=$BROWSER
+export selenium_server_platform=$PLATFORM
+
+echo DONE

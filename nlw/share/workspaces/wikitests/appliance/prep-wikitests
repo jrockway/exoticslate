@@ -1,0 +1,20 @@
+#!/bin/bash
+
+echo SETTING TIME
+source ./set-time
+
+echo INSTALLING wikitest_files
+if [ ! -e /opt/wikitest_files ]; then
+    sudo mkdir /opt/wikitest_files
+fi
+sudo unzip ./wikitestfiles.zip -d /opt/wikitest_files/
+
+echo CREATING test-data  WORKSPACE
+sudo -u www-data ./create-test-data-workspace
+
+echo IMPORTING wikitests WORKSPACE
+sudo -u www-data /usr/bin/st-admin import-workspace --tarball ./wikitests.1.tar.gz --overwrite
+
+echo GRANTING Accounts and System admin to devnull1
+sudo -u www-data /usr/bin/st-admin give-system-admin --e devnull1@socialtext.com
+sudo -u www-data /usr/bin/st-admin give-accounts-admin --e devnull1@socialtext.com

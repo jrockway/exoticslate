@@ -1,0 +1,184 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use Socialtext::Resting;
+use Socialtext::WikiObject::TestPlan;
+use Getopt::Long;
+use Test::More;
+use Sys::Hostname qw/hostname/;
+use POSIX qw(strftime);
+
+our $VERSION = 1.0;
+
+$SIG{INT} = sub { warn "Caught SIGINT\n"; exit 255 };
+
+# Script to run wiki tests outside of `make test` harness.
+
+my $dev_port = 20000 + $>;
+my $hostname = hostname();
+
+my $plan_server     = "http://$hostname:$dev_port";
+my $plan_workspace  = 'wikitests';
+my $plan_page       = 'Test Plan';
+
+my $test_server     = "http://$hostname:$dev_port";
+my $test_workspace  = 'test-data';
+my $test_username   = 'devnull1@socialtext.com';
+my $test_email      = $test_username;
+my $test_password   = 'd3vnu11l';
+my $maximize        = 1;
+
+my $version;
+my $verbose;
+my $time_out        = '10000';
+my $fake_content_file;
+GetOptions(
+    'plan-server=s'     => \$plan_server,
+    'plan-workspace=s'  => \$plan_workspace,
+    'plan-page=s'       => \$plan_page,
+    'test-server=s'     => \$test_server,
+    'test-workspace=s'  => \$test_workspace,
+    'test-username=s'   => \$test_username,
+    'test-email=s'      => \$test_email,
+    'test-password=s'   => \$test_password,
+    'f|fake-content-file=s' => \$fake_content_file,
+    'timeout=i'         => \$time_out,
+    'maximize!'         => \$maximize,
+    'verbose'           => \$verbose,
+    'version'           => \$version,
+) or usage();
+
+# Add current branch's lib to our include path
+my $st_admin = qx(which st-admin);
+(my $nlw_path = $st_admin) =~ s#/bin/st-admin.+##s;
+unshift @INC, "$nlw_path/lib";
+diag "Added $nlw_path/lib to \@INC...";
+
+if ($version) {
+
+    my @libs = qw(
+        WWW::Selenium
+        Test::WWW::Selenium
+        Socialtext::Resting
+        Socialtext::WikiObject
+        Socialtext::WikiObject::TestPlan
+        Socialtext::WikiFixture
+        Socialtext::WikiFixture::Selenese
+        Socialtext::WikiFixture::Socialtext
+    );
+
+    my $mod = (stat $0)[9];
+    $mod = strftime('%F %R', localtime($mod));
+    print "$0 v$VERSION last-modified: $mod\n\n";
+
+    for my $lib (@libs) {
+        eval "require $lib";
+        (my $file = "$lib.pm") =~ s{::}{/}g;
+        my $ver = eval "\$${lib}::VERSION" || '???';
+        my $mod = (stat $INC{$file})[9];
+        $mod = strftime('%F %R', localtime($mod));
+        print "$lib v$ver last-modified: $mod\n";
+        if ($verbose) {
+            require Digest::MD5;
+            Digest::MD5->import('md5_hex');
+            my $md5 = md5_hex($INC{$file});
+            print "\t-- $INC{$file}\n";
+            print "\t-- $md5\n";
+        }
+    }
+
+    exit;
+}
+
+plan('no_plan');
+
+my $rester;
+if (!defined $fake_content_file) {
+    $rester = Socialtext::Resting->new(
+        server => $plan_server,
+        username => 'tester@ken.socialtext.net',
+        password => 'wikitest',
+        workspace => $plan_workspace,
+    );
+}
+else {
+    require Socialtext::Resting::Mock;
+    $rester = Socialtext::Resting::Mock->new(file => $fake_content_file);
+}
+
+# Set  the location of files for upload tests, depending on the
+# selenium client and server platforms
+my $wikitest_client_files_dir = {
+    linux => '/opt/wikitest_files/',
+    windows => 'C:\\wikitest_files\\',
+    osx => '/private/wikitest_files/',
+}->{$ENV{selenium_client_platform} || 'linux'};
+
+my $wikitest_files_dir = {
+    linux => '/opt/wikitest_files/',
+    windows => 'C:\\wikitest_files\\',
+    osx => '/private/wikitest_files/',
+}->{$ENV{selenium_server_platform} || 'linux'};
+
+diag "Testing $test_server\n";
+my $test_plan = Socialtext::WikiObject::TestPlan->new(
+    rester => $rester,
+    page => $plan_page,
+    default_fixture => 'Socialtext',
+    fixture_args => {
+        maximize => $maximize,
+        verbose => $verbose,
+        host => $ENV{selenium_host} || 'galena.socialtext.net',
+        port => $ENV{selenium_port} || 4444,
+        browser => $ENV{selenium_browser} || '*firefox',
+        browser_url => $test_server,
+        workspace => $test_workspace,
+        username => $test_username,
+        password => $test_password,
+        email => $test_email,
+        selenium_timeout => $time_out,
+        wikitest_files => $wikitest_files_dir,
+        wikitest_client_files => $wikitest_client_files_dir,
+    },
+);
+$test_plan->run_tests;
+exit;
+
+
+sub usage {
+    print <<EOT;
+USAGE: $0 [options]
+
+This script executes testcases as defined on a wiki page.
+
+Options:
+ --plan-server [server] Specify which server has Test cases
+                        Default '$plan_server'
+ --plan-workspace [ws]  Specify which workspace contains the test plans
+                        Default: '$plan_workspace'
+ --plan-page [page]     Specify which page contains the test plan
+                        Default: '$plan_page'
+ --test-server [server] Specify which server the testing should occur on
+                        Default '$test_server'
+ --test-workspace [ws]  Specify which workspace the testing should occur on
+                        Default: '$test_workspace'
+ --test-username [user] Specify which username the testing should use
+                        Default: '$test_username'
+ --test-password [pass] Specify which password the testing should use
+                        Default: '$test_password'
+ --test-email [email]   Specify which email the testing should use
+                        Default: '$test_email'
+ --timeout [ms]         Number of milliesconds to wait before timing out
+                        Default: '10000'
+ --fake-content-file [file] Specify a file to read from instead of the wiki.
+ --verbose              Show debugging information
+ --nomaximize           Don't remove the selenium-rc frame in the browser
+
+Environment Variables:
+  selenium_host    => machine running the Selenium RC server
+  selenium_port    => Selenium RC port
+  selenium_browser => browser string to pass to server
+EOT
+    exit -1;
+}

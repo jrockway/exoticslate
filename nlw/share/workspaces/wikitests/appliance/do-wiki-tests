@@ -1,0 +1,13 @@
+
+if [ "$1" == "" ]; then
+    echo USAGE: source do-wiki-tests HOSTNAME  
+else
+    export WIKIEMAIL=$1
+    USERNAME="wikitester@ken.socialtext.net"
+    alias tail='tail'
+    sudo -u www-data ./run-wiki-tests --no-maximize --test-username $USERNAME --test-email $USERNAME  --plan-server http://$1  --test-server http://$1  --timeout 60000 --plan-page "OSR Testcases" >&  testcases.out & 
+    echo ""
+    echo RUNNING OSR Testcases to testcases.out on host $1
+    echo use tail -f testcases.out to obseve the test run
+    echo ""
+fi

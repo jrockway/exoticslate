@@ -1,0 +1,12 @@
+## #!/bin/bash
+
+if [ "$1" == "" ]; then
+    echo USAGE: source one-wiki-test HOSTNAME TESTCASE  
+else
+    export WIKIEMAIL=$1
+    USERNAME="wikitester@ken.socialtext.net"
+    alias tail='tail'
+    echo $1
+    echo $2
+    sudo -u www-data  ./run-wiki-tests --no-maximize --test-username $USERNAME --test-email $USERNAME  --plan-server http://$1  --test-server http://$1  --timeout 60000 --plan-page "$2"   
+fi

@@ -20,10 +20,10 @@ specific language governing permissions and limitations under the License.
   <name>socialtext</name>
   <dependency>core</dependency>
   <gadget>
-    <script src="jquery-1.2.1.pack.js"/>
+    <script src="jquery-1.2.2.pack.js"/>
   </gadget>
   <container>
-    <script src="jquery-1.2.1.pack.js"/>
+    <script src="jquery-1.2.2.pack.js"/>
     <script src="jquery.dimensions.js"/>
     <script src="ui.mouse.js"/>
     <script src="ui.draggable.js"/>

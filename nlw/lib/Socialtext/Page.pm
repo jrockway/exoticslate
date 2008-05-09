@@ -747,8 +747,6 @@ sub _perform_store_actions {
     Socialtext::ChangeEvent->Record($self);
 }
 
-# REVIEW: in the future this will be more complex.
-# For now we just match st-workspace-view-edit-stats output
 sub is_system_page {
     my $self = shift;
 

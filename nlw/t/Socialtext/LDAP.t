@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use mocked 'Net::LDAP';
 use mocked 'Socialtext::Log', qw(:tests);
-use Test::Socialtext tests => 34;
+use Test::Socialtext tests => 49;
 use Test::MockObject::Extends;
 
 use_ok 'Socialtext::LDAP';
@@ -14,6 +14,8 @@ use_ok 'Socialtext::LDAP';
 ### TEST DATA
 ###############################################################################
 our %data = (
+    id   => 'deadbeef',
+    name => 'Test LDAP Connection',
     base => 'ou=Development,dc=example,dc=com',
     host => '127.0.0.1',
     port => 389,
@@ -27,53 +29,91 @@ our %data = (
 );
 
 ###############################################################################
-### MANUALLY REPLACE 'ST::LDAP::Config->load()' so that it always uses our
-### test data from above.
-###
-### We always want to use this test data, and this is the easiest way to mock
-### this in.
-###############################################################################
-{
-    no strict 'refs';
-    no warnings;
-    *Socialtext::LDAP::Config::load = sub {
-        return Socialtext::LDAP::Config->new(%data);
-        };
+# List available LDAP connections (when only one exists)
+available_ldap_connections_one: {
+    # create the LDAP configuration file
+    my $config = Socialtext::LDAP::Config->new(%data);
+    Socialtext::LDAP::Config->save($config);
+
+    # get the list of available LDAP configurations
+    my @available = Socialtext::LDAP->available();
+    ok @available, 'got list of available LDAP connections';
+    is scalar @available, 1, '... contains a single connection';
+    is $available[0], $config->id, '... ... and its the right one';
 }
 
 ###############################################################################
-# List of available LDAP connections; only "Default"
-available_ldap_connections: {
-    my @conns = Socialtext::LDAP->available();
-    is @conns, 1, 'only one available LDAP configuration';
-    is $conns[0], 'Default', '... the "Default" one';
+# List available LDAP connections (when more than one exist)
+available_ldap_connections_more_than_one: {
+    # create the LDAP configuration file
+    my $first = Socialtext::LDAP::Config->new(%data);
+    $first->id( Socialtext::LDAP::Config->generate_driver_id() );
+
+    my $second = Socialtext::LDAP::Config->new(%data);
+    $second->id( Socialtext::LDAP::Config->generate_driver_id() );
+
+    Socialtext::LDAP::Config->save($first, $second);
+
+    # get the list of available LDAP configurations
+    my @available = Socialtext::LDAP->available();
+    ok @available, 'got list of available LDAP connections';
+    is scalar @available, 2, '... contains right number of connections';
+    is $available[0], $first->id, '... ... first one was first';
+    is $available[1], $second->id, '... ... second one was second';
 }
 
 ###############################################################################
-# Fail to read configuration.
-get_configuration_failure: {
-    no strict 'refs';
-    no warnings;
-    local *Socialtext::LDAP::Config::load = sub { };
-
-    my $config = Socialtext::LDAP->config('Default');
-    ok !$config, 'failed to load LDAP config';
-}
-
-###############################################################################
-# Get named configuration.
-# - doesn't matter what the name is (current implementation always reads from
-#   the same YAML file), but it should return the right thing
-get_configuration_named: {
-    my $config = Socialtext::LDAP->config('Foo');
-    isa_ok $config, 'Socialtext::LDAP::Config';
-}
-
-###############################################################################
-# Get default configuration.
+# Get default configuration
 get_configuration_default: {
+    # create the LDAP configuration file
+    my $first = Socialtext::LDAP::Config->new(%data);
+    $first->name('First LDAP Config');
+
+    my $second = Socialtext::LDAP::Config->new(%data);
+    $second->name('Second LDAP Config');
+
+    Socialtext::LDAP::Config->save($first, $second);
+
+    # get the default configuration
     my $config = Socialtext::LDAP->default_config();
-    isa_ok $config, 'Socialtext::LDAP::Config';
+    isa_ok $config, 'Socialtext::LDAP::Config', 'retrieved default config';
+    is_deeply $config, $first, '... and its the FIRST config in the file';
+}
+
+###############################################################################
+# Get configuration by driver id.
+get_configuration_by_id: {
+    # create the LDAP configuration file
+    my $first = Socialtext::LDAP::Config->new(%data);
+    $first->id( Socialtext::LDAP::Config->generate_driver_id() );
+
+    my $second = Socialtext::LDAP::Config->new(%data);
+    my $driver_id = Socialtext::LDAP::Config->generate_driver_id();
+    $second->id( $driver_id );
+
+    Socialtext::LDAP::Config->save($first, $second);
+
+    # get the named configuration
+    my $config = Socialtext::LDAP->config($driver_id);
+    isa_ok $config, 'Socialtext::LDAP::Config', 'retrieved named config';
+    is_deeply $config, $second, '... and its the correct config';
+}
+
+###############################################################################
+# Get unknown configuration; should return empty handed.
+get_configuration_unknown: {
+    # create the LDAP configuration file
+    my $first = Socialtext::LDAP::Config->new(%data);
+    $first->id( Socialtext::LDAP::Config->generate_driver_id() );
+
+    my $second = Socialtext::LDAP::Config->new(%data);
+    $second->id( Socialtext::LDAP::Config->generate_driver_id() );
+
+    Socialtext::LDAP::Config->save($first, $second);
+
+    # get the named configuration
+    my $config = Socialtext::LDAP->config('this-is-not-a-known-driver-id');
+    ok !$config, 'unknown named configuration';
 }
 
 ###############################################################################
@@ -144,10 +184,12 @@ connect_explicit_backend: {
 ###############################################################################
 # Instantiation; failure to read configuration
 instantiation_failure_to_read_config: {
-    no strict 'refs';
-    no warnings;
-    local *Socialtext::LDAP::Config::load = sub { };
+    # remove any existing configuration file
+    my $filename = Socialtext::LDAP::Config->config_filename();
+    unlink $filename;
+    ok !-e $filename, 'config file not there any more';
 
+    # attempt to connect
     my $ldap = Socialtext::LDAP->new();
     ok !$ldap, 'failed to instantiate; failed to read config';
 }
@@ -160,6 +202,11 @@ instantiation_connection_failure: {
         );
     clear_log();
 
+    # create the LDAP configuration file
+    my $config = Socialtext::LDAP::Config->new(%data);
+    Socialtext::LDAP::Config->save($config);
+
+    # attempt to connect
     my $ldap = Socialtext::LDAP->new();
     ok !$ldap, 'failed to instantiate; connection failure';
 
@@ -176,6 +223,11 @@ instantiation_bind_failure: {
         );
     clear_log();
 
+    # create the LDAP configuration file
+    my $config = Socialtext::LDAP::Config->new(%data);
+    Socialtext::LDAP::Config->save($config);
+
+    # attempt to connect
     my $ldap = Socialtext::LDAP->new();
     ok !$ldap, 'failed to instantiate; bind failure';
 
@@ -190,6 +242,11 @@ instantiation: {
     Net::LDAP->set_mock_behaviour();
     clear_log();
 
+    # create the LDAP configuration file
+    my $config = Socialtext::LDAP::Config->new(%data);
+    Socialtext::LDAP::Config->save($config);
+
+    # attempt to connect
     my $ldap = Socialtext::LDAP->new();
     isa_ok $ldap, 'Socialtext::LDAP::Base';
 
@@ -201,11 +258,17 @@ instantiation: {
 ###############################################################################
 # Authentication; failure to read config
 authentication_failure_to_read_config: {
-    no strict 'refs';
-    no warnings;
-    local *Socialtext::LDAP::Config::load = sub { };
+    # remove any existing configuration file
+    my $filename = Socialtext::LDAP::Config->config_filename();
+    unlink $filename;
+    ok !-e $filename, 'config file not there any more';
 
-    my $auth_ok = Socialtext::LDAP->authenticate('dn', 'password');
+    # attempt to authenticate
+    my %opts = (
+        user_id  => 'myDn',
+        password => 'myPassword',
+    );
+    my $auth_ok = Socialtext::LDAP->authenticate(%opts);
     ok !$auth_ok, 'auth; failed to read config';
 }
 
@@ -217,7 +280,16 @@ authentication_failure_to_connect: {
         );
     clear_log();
 
-    my $auth_ok = Socialtext::LDAP->authenticate('dn', 'password');
+    # create the LDAP configuration file
+    my $config = Socialtext::LDAP::Config->new(%data);
+    Socialtext::LDAP::Config->save($config);
+
+    # attempt to authenticate
+    my %opts = (
+        user_id  => 'myDn',
+        password => 'myPassword',
+    );
+    my $auth_ok = Socialtext::LDAP->authenticate(%opts);
     ok! $auth_ok, 'auth; failed to connect';
 
     # VERIFY logs; want to make sure we failed for the right reason
@@ -233,7 +305,16 @@ authentication_failure: {
         );
     clear_log();
 
-    my $auth_ok = Socialtext::LDAP->authenticate('dn', 'password');
+    # create the LDAP configuration file
+    my $config = Socialtext::LDAP::Config->new(%data);
+    Socialtext::LDAP::Config->save($config);
+
+    # attempt to authenticate
+    my %opts = (
+        user_id  => 'myDn',
+        password => 'myPassword',
+    );
+    my $auth_ok = Socialtext::LDAP->authenticate(%opts);
     ok! $auth_ok, 'auth; failed to authenticate';
 
     # VERIFY logs; want to make sure we failed for the right reason
@@ -248,8 +329,24 @@ authentication_success: {
         bind_requires_authentication => 1,
         );
 
-    my $auth_ok = Socialtext::LDAP->authenticate('dn', 'password');
+    # create the LDAP configuration file
+    my $config = Socialtext::LDAP::Config->new(%data);
+    Socialtext::LDAP::Config->save($config);
+
+    # attempt to authenticate
+    my %opts = (
+        user_id  => 'myDn',
+        password => 'myPassword',
+    );
+    my $auth_ok = Socialtext::LDAP->authenticate(%opts);
     ok $auth_ok, 'authentication success';
+
+    # VERIFY logs; want to make sure the bind was done w/user_id+password
+    my $mock = Net::LDAP->mocked_object();
+    $mock->called_pos_ok( 1, 'bind' );
+    my ($self, $dn, %args) = $mock->call_args(1);
+    is $dn, $opts{user_id}, '... correct bind dn for authentication';
+    is $args{password}, $opts{password}, '... correct bind password for authentication';
 }
 
 ###############################################################################
@@ -257,6 +354,18 @@ authentication_success: {
 authentication_anonymous_success: {
     Net::LDAP->set_mock_behaviour();
 
+    # create the LDAP configuration file
+    my $config = Socialtext::LDAP::Config->new(%data);
+    Socialtext::LDAP::Config->save($config);
+
+    # attempt to authenticate
     my $auth_ok = Socialtext::LDAP->authenticate();
     ok $auth_ok, 'authentication (anonymous) success';
+
+    # VERIFY logs; want to make sure the bind was done anonymously
+    my $mock = Net::LDAP->mocked_object();
+    $mock->called_pos_ok( 1, 'bind' );
+    my ($self, $dn, %args) = $mock->call_args(1);
+    ok !$dn, '... empty bind dn (anonymous)';
+    ok !$args{password}, '... empty bind password (anonymous)';
 }

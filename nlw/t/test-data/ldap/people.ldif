@@ -9,6 +9,7 @@ gn: John
 sn: Doe
 mail: john.doe@example.com
 telephoneNumber: +1 234 555-1212
+userPassword: foobar
 ou: people
 
 dn: cn=Jane Smith,dc=example,dc=com
@@ -17,6 +18,7 @@ cn: Jane Smith
 gn: Jane
 sn: Smith
 mail: jane.smith@example.com
+userPassword: bleargh
 ou: people
 
 dn: cn=Bubba Bo Bob Brain,dc=example,dc=com
@@ -25,4 +27,5 @@ cn: Bubba Bo Bob Brain
 gn: Bubba
 sn: Brain
 mail: bubba.brain@example.com
+userPassword: abc123
 ou: people

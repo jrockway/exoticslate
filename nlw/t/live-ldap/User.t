@@ -6,9 +6,9 @@ use warnings;
 use Socialtext::AppConfig;
 use Socialtext::LDAP;
 use Socialtext::User;
-use Socialtext::User::Default;
+use Socialtext::User::Default::Factory;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 20;
+use Test::Socialtext tests => 18;
 
 # FIXTURE: rdbms_clean
 #
@@ -21,7 +21,7 @@ fixtures( 'rdbms_clean' );
 ### Create a test user in the Default user store (Pg) that conflicts with one
 ### of the users in our LDAP test data.
 ###############################################################################
-my $default_user = Socialtext::User::Default->create(
+my $default_user = Socialtext::User::Default::Factory->new->create(
     username        => 'John Doe',
     email_address   => 'john.doe@example.com',
     password        => 'pg-password',
@@ -33,12 +33,14 @@ isa_ok $default_user, 'Socialtext::User::Default', 'added Pg data; people';
 # - want to make sure that if LDAP is the first declared factory, that it
 #   picks up the user from here first
 instantiate_user_from_ldap_even_when_exists_in_postgresql: {
-    # bootstrap OpenLDAP, and save config to YAML
+    # bootstrap OpenLDAP
     my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
-    my $filename = Socialtext::LDAP->config_filename('Default');
-    ok $openldap->save_ldap_config($filename), 'saved LDAP config to YAML';
+    # save LDAP config to YAML
+    my $config = $openldap->ldap_config();
+    my $rc = Socialtext::LDAP::Config->save($config);
+    ok $rc, 'saved LDAP config to YAML';
 
     # populate OpenLDAP with users
     ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
@@ -46,9 +48,9 @@ instantiate_user_from_ldap_even_when_exists_in_postgresql: {
 
     # set ordering of "user_factories"; LDAP first, Pg second
     my $appconfig = Socialtext::AppConfig->new();
-    $appconfig->set( 'user_factories' => 'LDAP:Default' );
+    $appconfig->set( 'user_factories' => 'LDAP;Default' );
     $appconfig->write();
-    is $appconfig->user_factories(), 'LDAP:Default', 'user_factories set';
+    is $appconfig->user_factories(), 'LDAP;Default', 'user_factories set';
 
     # instantiate user; should get from LDAP, not Pg
     my $user = Socialtext::User->new(
@@ -64,20 +66,17 @@ instantiate_user_from_ldap_even_when_exists_in_postgresql: {
 # - want to make sure that if LDAP contains a non-user entry that we pick up
 #   the user from PostgreSQL (even if LDAP is the first factory)
 instantiate_user_from_postgresql_when_only_contact_in_ldap: {
-    # bootstrap OpenLDAP, and save config to YAML
+    # bootstrap OpenLDAP
     my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
-    my $filename = Socialtext::LDAP->config_filename('Default');
-    ok $openldap->save_ldap_config($filename), 'saved LDAP config to YAML';
-
-    # add global filter to LDAP YAML for "only users"
-    my $ldapcfg = Socialtext::LDAP::Config->load($filename);
-    my $filter  = '(objectClass=inetOrgPerson)';
-    isa_ok $ldapcfg, 'Socialtext::LDAP::Config', 'loaded LDAP config from YAML';
-    $ldapcfg->filter( $filter );
-    is $ldapcfg->filter(), $filter, '... set global LDAP filter';
-    ok $ldapcfg->save($filename), 'saved updated LDAP config back to YAML';
+    # set global filter into config, and save LDAP config to YAML
+    my $config = $openldap->ldap_config();
+    my $filter = '(objectClass=inetOrgPerson)';
+    $config->filter($filter);
+    is $config->filter(), $filter, '... set global LDAP filter';
+    my $rc = Socialtext::LDAP::Config->save($config);
+    ok $rc, 'saved LDAP config to YAML';
 
     # populate OpenLDAP with contacts (-NOT- users)
     ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
@@ -85,9 +84,9 @@ instantiate_user_from_postgresql_when_only_contact_in_ldap: {
 
     # set ordering of "user_factories"; LDAP first, Pg second
     my $appconfig = Socialtext::AppConfig->new();
-    $appconfig->set( 'user_factories' => 'LDAP:Default' );
+    $appconfig->set( 'user_factories' => 'LDAP;Default' );
     $appconfig->write();
-    is $appconfig->user_factories(), 'LDAP:Default', 'user_factories set';
+    is $appconfig->user_factories(), 'LDAP;Default', 'user_factories set';
 
     # instantiate user; should get from Pg, not LDAP
     my $user = Socialtext::User->new(

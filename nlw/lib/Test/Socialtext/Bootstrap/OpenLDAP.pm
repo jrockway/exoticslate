@@ -15,6 +15,7 @@ use Test::Socialtext::Environment;
 use Socialtext::LDAP::Config;
 
 # XXX: these should be treated as "read-only" fields after instantiation
+field 'name';
 field 'host';
 field 'port';
 field 'base_dn';
@@ -45,6 +46,7 @@ sub new {
     my $port = $config{port} || _autodetect_port();
     my $self = {
         # generic parameters; could be factored to common base class
+        name            => "Bootstrapped, port $port",
         host            => $config{host}            || 'localhost',
         port            => $port,
         base_dn         => $config{base_dn}         || 'dc=example,dc=com',
@@ -267,10 +269,12 @@ sub running {
     return ($pid and kill(0,$pid));
 }
 
-sub save_ldap_config {
-    my ($self, $filename) = @_;
+sub ldap_config {
+    my $self = shift;
     # create ST::LDAP::Config object based on our config
     my $config = Socialtext::LDAP::Config->new(
+        id          => Socialtext::LDAP::Config->generate_driver_id(),
+        name        => $self->name(),
         backend     => 'OpenLDAP',
         host        => $self->host(),
         port        => $self->port(),
@@ -285,8 +289,8 @@ sub save_ldap_config {
         );
     $self->root_dn() && $config->bind_user( $self->root_dn() );
     $self->root_pw() && $config->bind_password( $self->root_pw() );
-    # save the config out to the specified file
-    $config->save( $filename );
+    # return ST::LDAP::Config
+    return $config;
 }
 
 sub setup {
@@ -434,12 +438,8 @@ Test::Socialtext::Bootstrap::OpenLDAP - Bootstrap OpenLDAP instances
   $openldap->add($ldif_filename);
   $openldap->remove($ldif_filename);
 
-  # write OpenLDAP configuration to ST::LDAP::Config file
-  $yamlfile = File::Spec->catfile(
-      Socialtext::AppConfig->config_dir(),
-      'ldap.yaml'
-      );
-  $openldap->save_ldap_config($yamlfile);
+  # get LDAP config object
+  $config = $openldap->ldap_config();
 
   # query config of the OpenLDAP instance
   #
@@ -567,14 +567,13 @@ Checks to see if the OpenLDAP instance is running.  An optional C<$pid> may be
 provided if you wish to check if some other process is running; by default we
 use the PID of our OpenLDAP instance.
 
-=item B<save_ldap_config($filename)>
+=item B<ldap_config()>
 
-Saves the current configuration of the OpenLDAP instance as YAML to the given
-filename.  Configuration is saved in a format suitable for use by
-C<Socialtext::LDAP::Config>.
+Returns the current LDAP configuration back to the caller as a
+C<Socialtext::LDAP::Config> object.
 
-Useful for bootstrapping OpenLDAP, then creating the YAML file to go along with
-it for the rest of your testing.
+Useful for bootstrapping OpenLDAP, then saving the configuration out to YAML
+so that it can be used by the rest of your testing.
 
 =item B<setup()>
 

@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use mocked 'Socialtext::Log', qw(:tests);
 use Socialtext::LDAP;
-use Socialtext::User::LDAP;
+use Socialtext::User::LDAP::Factory;
 use Test::Socialtext::Bootstrap::OpenLDAP;
 use Test::Socialtext tests => 30;
 use Test::Deep;
@@ -16,20 +16,20 @@ use Test::Deep;
 ###############################################################################
 my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
 isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
-
-my $filename = Socialtext::LDAP->config_filename('Default');
-ok $filename, 'know where to save config file to';
-
-ok $openldap->save_ldap_config($filename), 'saved LDAP config to YAML';
+my $rc = Socialtext::LDAP::Config->save($openldap->ldap_config());
+ok $rc, 'saved LDAP config to YAML';
 
 ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
 ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
+
+my $factory = Socialtext::User::LDAP::Factory->new();
+isa_ok $factory, 'Socialtext::User::LDAP::Factory';
 
 ###############################################################################
 # Instantiate known user against OpenLDAP directory, by "user_id"
 instantiate_known_user_by_user_id: {
     # get the user out of OpenLDAP
-    my $user = Socialtext::User::LDAP->new( user_id => 'cn=John Doe,dc=example,dc=com' );
+    my $user = $factory->GetUser( user_id => 'cn=John Doe,dc=example,dc=com' );
     isa_ok $user, 'Socialtext::User::LDAP', 'instantiated via user_id';
 
     # verify that all fields were extracted properly
@@ -44,7 +44,7 @@ instantiate_known_user_by_user_id: {
 # Instantiate known user against OpenLDAP directory, by "username"
 instantiate_known_user_by_username: {
     # get the user out of OpenLDAP
-    my $user = Socialtext::User::LDAP->new( username => 'Jane Smith' );
+    my $user = $factory->GetUser( username => 'Jane Smith' );
     isa_ok $user, 'Socialtext::User::LDAP', 'instantiated via username';
 
     # verify that all fields were extracted properly
@@ -59,7 +59,7 @@ instantiate_known_user_by_username: {
 # Instantiate known user against OpenLDAP directory, by "email_address"
 instantiate_known_user_by_email_address: {
     # get the user out of OpenLDAP
-    my $user = Socialtext::User::LDAP->new( email_address => 'john.doe@example.com' );
+    my $user = $factory->GetUser( email_address => 'john.doe@example.com' );
     isa_ok $user, 'Socialtext::User::LDAP', 'instantiated via email_address';
 
     # verify that all fields were extracted properly
@@ -75,7 +75,7 @@ instantiate_known_user_by_email_address: {
 instantiation_missing_user: {
     clear_log();
 
-    my $user = Socialtext::User::LDAP->new( username => 'User Does Not Exist' );
+    my $user = $factory->GetUser( username => 'User Does Not Exist' );
     ok !$user, 'cannot find missing user';
 
     logged_like 'debug', qr/unable to find user/, 'logged message; unable to find user';
@@ -89,18 +89,18 @@ instantiation_missing_user: {
 ###############################################################################
 # Search; no results
 search_no_results: {
-    my @results = Socialtext::User::LDAP->Search('does-not-exist-in-directory');
+    my @results = $factory->Search('does-not-exist-in-directory');
     ok !@results, 'search; no matches';
 }
 
 ###############################################################################
 # Search; single result
 search_single_result: {
-    my @results = Socialtext::User::LDAP->Search('BUBBA');
+    my @results = $factory->Search('BUBBA');
     is scalar(@results), 1, 'search; single result';
 
     my @expect = (
-        { driver_name       => 'LDAP',
+        { driver_name       => $factory->driver_key(),
           email_address     => 'bubba.brain@example.com',
           name_and_email    => 'Bubba Brain <bubba.brain@example.com>',
         } );
@@ -110,19 +110,19 @@ search_single_result: {
 ###############################################################################
 # Search; multiple results
 search_multiple_results: {
-    my @results = Socialtext::User::LDAP->Search('example.com');
+    my @results = $factory->Search('example.com');
     is scalar(@results), 3, 'search; multiple results';
 
     my @expect = (
-        { driver_name       => 'LDAP',
+        { driver_name       => $factory->driver_key(),
           email_address     => 'john.doe@example.com',
           name_and_email    => 'John Doe <john.doe@example.com>',
         },
-        { driver_name       => 'LDAP',
+        { driver_name       => $factory->driver_key(),
           email_address     => 'jane.smith@example.com',
           name_and_email    => 'Jane Smith <jane.smith@example.com>',
         },
-        { driver_name       => 'LDAP',
+        { driver_name       => $factory->driver_key(),
           email_address     => 'bubba.brain@example.com',
           name_and_email    => 'Bubba Brain <bubba.brain@example.com>',
         } );

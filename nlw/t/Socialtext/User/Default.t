@@ -1,84 +1,108 @@
-#!perl
+#!/usr/bin/perl
 # @COPYRIGHT@
 
 use strict;
-use warnings;
+use warnings FATAL => 'all';
+use Test::Socialtext tests => 19;
 
-use Test::Socialtext tests => 14;
-fixtures( 'rdbms_clean' );
+use_ok 'Socialtext::User::Default';
 
-use DateTime::Format::Pg;
-use Socialtext::User::Default;
-
-my $user;
-
-# Test initial users that we always have available
-is( Socialtext::User::Default->Count(), 2, 'expected to find two users' );
-ok( Socialtext::User::Default->new( username => 'system-user' ),
-    'system user exists' );
-ok( Socialtext::User::Default->new( username => 'guest' ),
-    'guest user exists' );
-
-$user = Socialtext::User::Default->new(
-    username => 'devnull9@socialtext.net',
-);
-is( $user, undef, 'the bogus user does not exist yet' );
-
-my $now = DateTime->now( time_zone => 'UTC' );
-$user = Socialtext::User::Default->create(
-    username      => 'devnull9@socialtext.net',
-    email_address => 'devnull9@socialtext.net',
-    password      => 'password'
-);
-ok( $user, 'create returned a new user' );
-is(
-    $user->username, 'devnull9@socialtext.net',
-    "new user's username matches the email address passed in to create"
-);
-ok( $user->password_is_correct('password'), 'password_is_correct() works' );
-
-is( Socialtext::User::Default->Count(), 3, 'expected to find three users' );
-
-my $user2 = Socialtext::User::Default->create(
-    username           => 'devnull8@socialtext.net',
-    email_address      => 'devnull8@socialtext.net',
-    password           => 'unencrypted',
-    no_crypt           => 1,
+###############################################################################
+### TEST DATA
+###############################################################################
+my %TEST_USER = (
+    user_id         => 123,
+    username        => 'test-user',
+    email_address   => 'test-user@example.com',
+    first_name      => 'First',
+    last_name       => 'Last',
+    password        => Socialtext::User::Default->_crypt('foobar', 'random-salt'),
+    driver_name     => 'Default',
 );
 
-is( $user2->password, 'unencrypted', 'password was not passed to crypt()' );
+###############################################################################
+# Instantiation with no parameters; should fail
+instantiation_no_parameters: {
+    my $user = Socialtext::User::Default->new();
+    ok !defined $user, 'instantiation, no parameters';
+}
 
-ok(
-    Socialtext::User::Default->new( username => 'DEVNULL8@socialtext.NET' ),
-    'lookup by username is case insensitive'
-);
+###############################################################################
+# Instantiation via data HASH
+instantiation_via_hash: {
+    my $user = Socialtext::User::Default->new( %TEST_USER );
+    isa_ok $user, 'Socialtext::User::Default', 'instantiation via hash';
+}
 
-$user = Socialtext::User::Default->create(
-    username      => 'DEVNULL7@socialtext.net',
-    email_address => ' devnull7@SOCIALTEXT.NET  ',
-    password      => 'foobar',
-);
+###############################################################################
+# Instantiation via data HASH-REF
+instantiation_via_hashref: {
+    my $user = Socialtext::User::Default->new( { %TEST_USER } );
+    isa_ok $user, 'Socialtext::User::Default', 'instantiation via hash-ref';
+}
 
-is(
-    $user->username, 'devnull7@socialtext.net',
-    'username is always returned in lower case'
-);
+###############################################################################
+# User has a valid password.
+has_valid_password: {
+    my $user = Socialtext::User::Default->new( %TEST_USER );
+    isa_ok $user, 'Socialtext::User::Default';
+    ok $user->has_valid_password(), 'has valid password';
+}
 
-is(
-    $user->email_address, 'devnull7@socialtext.net',
-    'email address is always returned in lower case'
-);
+###############################################################################
+# User DOESN'T have a valid password.
+does_not_have_valid_password: {
+    my $user = Socialtext::User::Default->new( %TEST_USER, password => '*none*' );
+    isa_ok $user, 'Socialtext::User::Default';
+    ok !$user->has_valid_password(), 'does not have valid password';
+}
 
-eval {
-    Socialtext::User::Default->new( username => 'system-user' )
-        ->update( username => 'foobar' );
-};
-like( $@, qr/cannot change/,
-    'cannot change the username of a system-created user' );
+###############################################################################
+# Can we access the user's password?
+can_access_password: {
+    my $user = Socialtext::User::Default->new( %TEST_USER );
+    isa_ok $user, 'Socialtext::User::Default';
+    is $user->password(), $TEST_USER{password}, 'can access users password';
+}
 
-eval {
-    Socialtext::User::Default->new( username => 'system-user' )
-        ->update( email_address => 'foobar@example.com' );
-};
-like( $@, qr/cannot change/,
-    'cannot change the email address of a system-created user' );
+###############################################################################
+# Verify user's password?
+verify_users_password: {
+    my $user = Socialtext::User::Default->new( %TEST_USER );
+    isa_ok $user, 'Socialtext::User::Default';
+    ok  $user->password_is_correct('foobar'),  'verify password; success';
+    ok !$user->password_is_correct('bleargh'), 'verify password; failure';
+
+}
+
+###############################################################################
+# Convert the user record back into a hash.
+to_hash: {
+    my $user = Socialtext::User::Default->new( %TEST_USER );
+    isa_ok $user, 'Socialtext::User::Default';
+
+    my $hashref = $user->to_hash();
+    my @fields  = qw(user_id username email_address first_name last_name password);
+    my %expected = map { $_=>$TEST_USER{$_} } @fields;
+    is_deeply $hashref, \%expected, 'converted user to hash, with right structure';
+}
+
+###############################################################################
+# Password constraints/restrictions.
+password_constraints: {
+    my $str;
+
+    # password is required
+    eval { $str = Socialtext::User::Default->ValidatePassword() };
+    like $@, qr/mandatory.*password/i, 'password constraint; mandatory';
+
+    # must be at least 6 chars in length
+    $str = Socialtext::User::Default->ValidatePassword(password=>'12345');
+    like $str, qr/must be at least/, 'password constraint; 5 chars too short';
+
+    $str = Socialtext::User::Default->ValidatePassword(password=>'123456');
+    ok !$str, 'password constraint; 6 chars ok';
+
+    $str = Socialtext::User::Default->ValidatePassword(password=>'1234567');
+    ok !$str, 'password constraint; 7 chars ok';
+}

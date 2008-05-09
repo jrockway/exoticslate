@@ -30,6 +30,8 @@ our @LDAP_DATA = (
     },
 );
 our %data = (
+    id   => '0deadbeef0',
+    name => 'Test LDAP Config',
     base => 'ou=Development,dc=example,dc=com',
     host => '127.0.0.1',
     port => 389,

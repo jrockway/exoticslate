@@ -4,14 +4,14 @@ use strict;
 use warnings FATAL => 'all';
 use mocked 'Net::LDAP';
 use mocked 'Socialtext::Log', qw(:tests);
-use Test::Socialtext tests => 25;
+use Test::Socialtext tests => 26;
 
 # FIXTURE:  ldap_*
 #
 # These tests have no specific requirement as to whether we're using an
 # anonymous or authenticated LDAP connection.
 fixtures( 'ldap_anonymous' );
-use_ok 'Socialtext::User::LDAP';
+use_ok 'Socialtext::User::LDAP::Factory';
 
 ###############################################################################
 ### TEST DATA
@@ -34,36 +34,6 @@ my @TEST_USERS = (
 );
 
 ###############################################################################
-# Search; connect failure should return empty handed
-search_connect_failure: {
-    Net::LDAP->set_mock_behaviour(
-        connect_fail => 1,
-        );
-    clear_log();
-
-    my @users = Socialtext::User::LDAP->Search('foo');
-    ok !@users, 'search w/failure to connect is empty handed';
-
-    # VERIFY logs; make sure we failed for the right reason
-    logged_like 'error', qr/unable to connect/, '... logged connection failure';
-}
-
-###############################################################################
-# Search; bind failure should return empty handed
-search_bind_failure: {
-    Net::LDAP->set_mock_behaviour(
-        bind_fail => 1,
-        );
-    clear_log();
-
-    my @users = Socialtext::User::LDAP->Search('foo');
-    ok !@users, 'search w/bind failure is empty handed';
-
-    # VERIFY logs; make sure we failed for the right reason
-    logged_like 'error', qr/unable to bind/, '... logged bind failure';
-}
-
-###############################################################################
 # Search; empty search should return empty handed
 search_empty_should_return_empty_handed: {
     Net::LDAP->set_mock_behaviour(
@@ -71,7 +41,10 @@ search_empty_should_return_empty_handed: {
         );
     clear_log();
 
-    my @users = Socialtext::User::LDAP->Search();
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+
+    my @users = $factory->Search();
     is scalar(@users), 0, 'search w/empty terms should be empty handed';
 
     # VERIFY logs; should be empty
@@ -86,7 +59,10 @@ search_no_results: {
         );
     clear_log();
 
-    my @users = Socialtext::User::LDAP->Search('foo');
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+
+    my @users = $factory->Search('foo');
     is scalar(@users), 0, 'search w/no results has correct number of results';
 
     # VERIFY logs; should be empty
@@ -99,7 +75,11 @@ search_single_result: {
     Net::LDAP->set_mock_behaviour(
         search_results => [ $TEST_USERS[0] ],
         );
-    my @users = Socialtext::User::LDAP->Search('foo');
+
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+
+    my @users = $factory->Search('foo');
     is scalar(@users), 1, 'search w/single result has correct number of results';
 }
 
@@ -109,7 +89,11 @@ search_multiple_results: {
     Net::LDAP->set_mock_behaviour(
         search_results => [ @TEST_USERS ],
         );
-    my @users = Socialtext::User::LDAP->Search('foo');
+
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+
+    my @users = $factory->Search('foo');
     is scalar(@users), 2, 'search w/multiple results has correct number of results';
 }
 
@@ -119,14 +103,18 @@ search_sanity_checks: {
     Net::LDAP->set_mock_behaviour(
         search_results => [ @TEST_USERS ],
         );
-    my @users = Socialtext::User::LDAP->Search('foo');
+
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+
+    my @users = $factory->Search('foo');
     is scalar(@users), 2;
 
     # check format/content of results
     my $user = $users[0];
     isa_ok $user, 'HASH', 'search results are plain hash-refs';
     is scalar(keys(%{$user})), 3, 'search results have right # of keys';
-    is $user->{'driver_name'}, 'LDAP', 'result key: driver_name';
+    is $user->{'driver_name'}, $factory->driver_key(), 'result key: driver_name';
     is $user->{'email_address'}, 'user@example.com', 'result key: email_address';
     is $user->{'name_and_email'}, 'First Last <user@example.com>', 'result key: name_and_email';
 

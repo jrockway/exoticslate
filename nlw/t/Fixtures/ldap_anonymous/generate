@@ -8,6 +8,22 @@ warn "# generating the fixture\n" if $ENV{TEST_VERBOSE};
 #use lib "$ENV{NLW_DIR}/lib";
 
 my $ldap_yaml = <<EOY;
+---
+id: 0deadbeef0
+name: First
+host: localhost
+port: 389
+base: dc=foo,dc=bar
+attr_map:
+  user_id: dn
+  username: cn
+  password: userPassword
+  email_address: mail
+  first_name: gn
+  last_name: sn
+---
+id: 1deadbeef1
+name: Second
 host: localhost
 port: 389
 base: dc=foo,dc=bar

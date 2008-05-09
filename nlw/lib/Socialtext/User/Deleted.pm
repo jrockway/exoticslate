@@ -2,43 +2,20 @@
 package Socialtext::User::Deleted;
 use strict;
 use warnings;
+use base qw(Socialtext::User::Base);
 
 sub new {
     my $class = shift;
-
-    my $self = bless {
-        @_,
-        email_address => 'deleted.user@socialtext.com',
-        first_name    => 'Deleted',
-        last_name     => 'User'
-    }, $class;
-
-    $self->{username} ||= 'deleted-user';
+    my $self  = $class->SUPER::new(@_);
+    $self->{email_address} = 'deleted.user@socialtext.com';
+    $self->{first_name}    = 'Deleted';
+    $self->{last_name}     = 'User';
+    $self->{username}    ||= 'deleted-user';
     return $self;
 }
 
-sub driver_name {
-    return shift->{driver_key};
-}
-
-sub user_id {
-    return shift->{user_id};
-}
-
-sub username {
-    return shift->{username};
-}
-
-sub email_address {
-    return shift->{email_address};
-}
-
-sub first_name {
-    return shift->{first_name};
-}
-
-sub last_name {
-    return shift->{last_name};
+sub password {
+    return '*no-password*';
 }
 
 sub has_valid_password {
@@ -49,10 +26,6 @@ sub has_valid_password {
 sub password_is_correct {
     # this is a deleted user, shouldn't have a password that can be validated.
     return 0;
-}
-
-sub password {
-    return '*no-password*';
 }
 
 1;
@@ -72,77 +45,85 @@ Socialtext::User::Deleted - A Socialtext user object placeholder
 =head1 DESCRIPTION
 
 This class provides methods for dealing with users that can no longer
-be instantiated via their canonical drivers.
+be instantiated via their canonical drivers, and is derived from
+C<Socialtext::User::Base>.
 
 =head1 METHODS
 
-=head2 Socialtext::User::Deleted->new(PARAMS)
+=over
 
-Creates a satisfactory user matching PARAMS.
+=item B<Socialtext::User::Deleted-E<gt>new($data)>
 
-PARAMS should be:
+Creates a new user object based on the provided C<$data> (which could be a HASH
+or HASH-REF of data).
 
-=over 4
+The C<$data> provided should be that from the original driver that had
+jurisdiction over the user.
 
-=item * user_id => $user_id
-
-The original user_id associated with the deleted user's record. It was
-unique within the driver's scope.
-
-=item * username => $username
-
-The username used the last time the deleted user logged into the system.
-
-=item * driver_key => $driver_key
-
-The original driver that had jurisdiction over the user.
-
-=back
-
-=head2 Socialtext::User::Deleted->driver_name()
+=item B<driver_name()>
 
 Returns the name of the original driver that owned the deleted user.
 
-=head2 Socialtext::User::Deleted->user_id()
+=item B<driver_id()>
+
+Returns the unique ID for the instance of the original driver that owned the
+deleted user.
+
+=item B<driver_key()>
+
+Returns the fully qualified driver key ("name:id") of the original driver that
+owned the deleted user.
+
+If no unique C<driver_id> is available, this method returns the C<driver_name>
+(e.g. "Default").
+
+=item B<user_id()>
 
 Returns the original unique user_id the deleted user had within the
 driver's scope.
 
-=head2 Socialtext::User::Deleted->username()
+=item B<username()>
 
 Returns the original username the deleted user had within the driver's scope.
 
-=head2 Socialtext::User::Deleted->email_address()
+=item B<email_address()>
 
 Since we don't cache email addresses for users, we give a default
 email address.
 
-=head2 Socialtext::User::Deleted->first_name()
+=item B<first_name()>
 
 Returns 'Deleted'.
 
-=head2 Socialtext::User::Deleted->last_name()
+=item B<last_name()>
 
 Returns 'User'.
 
-=head2 Socialtext::User::Deleted->has_valid_password()
-
-Returns 0.
-
-=head2 Socialtext::User::Deleted->password_is_correct()
-
-Returns 0, no matter what is passed in.
-
-=head2 Socialtext::User::Deleted->password()
+=item B<password()>
 
 Returns '*no-password*'.
 
+=item B<has_valid_password()>
+
+Returns 0; deleted Users aren't valid, so they obviously don't have a valid
+password.
+
+=item B<password_is_correct()>
+
+Returns 0, no matter what is passed in.
+
+=back
+
 =head1 AUTHOR
 
-Socialtext, Inc., <code@socialtext.com>
+Socialtext, Inc., C<< <code@socialtext.com> >>
 
 =head1 COPYRIGHT & LICENSE
 
 Copyright 2007 Socialtext, Inc., All Rights Reserved.
+
+=head1 SEE ALSO
+
+L<Socialtext::User::Base>.
 
 =cut

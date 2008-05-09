@@ -21,12 +21,12 @@ sub create_if_necessary {
     my $homunculus = shift;
 
     my @primary_params = (
-        driver_key       => $homunculus->driver_name,
+        driver_key       => $homunculus->driver_key,
         driver_unique_id => $homunculus->user_id,
     );
 
     my @fallback_params = (
-        driver_key      => $homunculus->driver_name,
+        driver_key      => $homunculus->driver_key,
         driver_username => $homunculus->username,
     );
 

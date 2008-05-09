@@ -24,6 +24,13 @@ if (-d $possible_skin_dir) {
     $skin_dir = $possible_skin_dir;
 }
 
+# If no skin directory is available fall back to using the trunk, but complain
+# about it so people know we didn't find a skin for this branch.
+unless (-d $skin_dir) {
+    warn "Skin dir ($skin_dir) not found! Using 'trunk' skin.\n";
+    $skin_dir = "$FindBin::Bin/../../../socialtext-skins/trunk/skin";
+}
+
 die "Skin dir ($skin_dir) not found!" unless -d $skin_dir;
 shell_run(qq{ln -sf $skin_dir $skin_link});
 

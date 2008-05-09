@@ -4,9 +4,14 @@ package Socialtext::LDAP::Config;
 use strict;
 use warnings;
 use Class::Field qw(field);
+use File::Spec;
+use Time::HiRes qw(gettimeofday);
 use YAML;
+use Socialtext::AppConfig;
 use Socialtext::Log qw(st_log);
 
+field 'id';
+field 'name';
 field 'backend';
 field 'base';
 field 'host';
@@ -20,13 +25,18 @@ field 'attr_map';
 #           timeout
 #           localaddr
 
+# XXX: the 'id' field does NOT need to be exposed to users via any sort of UI;
+#      its for internally segregating one LDAP configuration from another,
+#      even if the user goes in and changes all of the other information about
+#      the connection (hostname, port, descriptive name, etc).
+
 sub new {
     my ($class, %opts) = @_;
     my $self = \%opts;
     bless $self, $class;
 
     # make sure we've got all required fields and mapped attributes
-    foreach my $field (qw( host attr_map )) {
+    foreach my $field (qw( id host attr_map )) {
         unless ($opts{$field}) {
             st_log->warning( "ST::LDAP::Config: LDAP config missing '$field'" );
             return undef;
@@ -43,29 +53,69 @@ sub new {
     return $self;
 }
 
+sub config_filename {
+    my $yaml_file = File::Spec->catfile(
+        Socialtext::AppConfig->config_dir(),
+        'ldap.yaml',
+        );
+    return $yaml_file;
+}
+
 sub load {
+    my $class = shift;
+    my $filename = $class->config_filename();
+    return $class->load_from($filename);
+}
+
+sub load_from {
     my ($class, $file) = @_;
-    my $config = eval { YAML::LoadFile($file) };
+    my @config = eval { YAML::LoadFile($file) };
     if ($@) {
         st_log->error( "ST::LDAP::Config: error reading LDAP config in '$file'; $@" );
         return;
     }
 
-    my $self = $class->new( %{$config} );
-    unless ($self) {
-        st_log->error( "ST::LDAP::Config: error with LDAP config in '$file'" );
+    my @objects;
+    foreach my $cfg (@config) {
+        my $obj = $class->new(%{$cfg});
+        unless ($obj) {
+            st_log->error( "ST::LDAP::Config: error with LDAP config in '$file'" );
+            return;
+        }
+        push @objects, $obj;
     }
-    return $self;
+    return wantarray ? @objects : $objects[0];
 }
 
 sub save {
-    my ($self, $file) = @_;
-    # save an un-blessed version of ourselves (without the YAML header that
-    # says that it came from an ST::LDAP::Config).
+    my ($class, @objects) = @_;
+    my $filename = $class->config_filename();
+    return $class->save_to( $filename, @objects );
+}
+
+sub save_to {
+    my ($class, $file, @objects) = @_;
+    # save un-blessed versions of the config objects (without the YAML header
+    # that says that they came from ST::LDAP::Config).
     if ($file) {
         local $YAML::UseHeader=0;
-        YAML::DumpFile( $file, { %{$self} } );
+        my @unblessed = map { {%{$_}} } @objects;
+        return YAML::DumpFile( $file, @unblessed );
     }
+    return 0;
+}
+
+sub generate_driver_id {
+    # NOTE: generated ID only has to be unique for -THIS- system, it doesn't
+    # have to be universally unique across every install.
+
+    # NOTE: generated ID should also be ugly enough that users aren't inclined
+    # to want to go in and twiddle the value themselves; hex should be
+    # sufficient to deter most users.
+
+    my ($sec, $msec) = gettimeofday();
+    my $id = sprintf( '%05x%05x', $msec, $$ );
+    return $id;
 }
 
 1;
@@ -78,14 +128,28 @@ Socialtext::LDAP::Config - Configuration object for LDAP connections
 
   use Socialtext::LDAP::Config;
 
-  # load YAML file as LDAP config
-  $config = Socialtext::LDAP::Config->load($yaml_file);
+  # load LDAP config, from default config filename
+  @cfg_objects  = Socialtext::LDAP::Config->load();
+  $first_config = Socialtext::LDAP::Config->load();
+
+  # load LDAP config from explicit YAML file
+  @cfg_objects  = Socialtext::LDAP::Config->load_from($filename);
+  $first_config = Socialtext::LDAP::Config->load_from($filename);
+
+  # save LDAP config, to default config filename
+  Socialtext::LDAP::Config->save(@cfg_objects);
+
+  # save LDAP config to explicit YAML file
+  Socialtext::LDAP::Config->save_to($filename, @cfg_objects);
+
+  # get path to LDAP configuration file
+  $filename = Socialtext::LDAP::Config->config_filename();
 
   # instantiate based on config hash
   $config = Socialtext::LDAP::Config->new(%ldap_configuration);
 
-  # save config as YAML file
-  $config->save( $yaml_file );
+  # generate a new unique driver ID
+  $driver_id = Socialtext::LDAP::Config->generate_driver_id();
 
 =head1 DESCRIPTION
 
@@ -96,6 +160,19 @@ LDAP configuration objects can either be loaded from YAML files or created from
 a hash of configuration values:
 
 =over
+
+=item B<id> (required)
+
+A B<unique identifier> for the LDAP connection.  This identifier will be used
+internally to help denote which LDAP configuration users reside in.
+
+B<DO NOT change this value.>  Doing so will cause any existing users to no
+longer be associated with this LDAP configuration.
+
+=item B<name>
+
+Specifies the name for the LDAP connection.  This is a I<descriptive name>,
+B<not> the I<host name>.
 
 =item B<backend>
 
@@ -153,14 +230,45 @@ Maps Socialtext user attributes to their underlying LDAP representations.
 Instantiates a new configuration object based on the provided hash of
 configuration options.
 
-=item B<Socialtext::LDAP::Config-E<gt>load($file)>
+=item B<Socialtext::LDAP::Config-E<gt>config_filename()>
 
-Loads configuration from the specified YAML file and instantiates a new
-configuration object.
+Returns the full path to the LDAP configuration file.
 
-=item B<save($file)>
+=item B<Socialtext::LDAP::Config-E<gt>load()>
 
-Saves the configuration object out to the given YAML file.
+Loads LDAP configuration from the default LDAP configuration file.
+
+Contents of the configuration file are returned in an appropriate context.  In
+list context you get a list of all of the known LDAP configurations (as
+C<Socialtext::LDAP::Config> objects).  In scalar context you get a
+C<Socialtext::LDAP::Config> object for the I<first> LDAP configuration defined
+in the file.
+
+=item B<Socialtext::LDAP::Config-E<gt>load_from($filename)>
+
+Loads LDAP configuration from the specified configuration file.
+
+Contents returned in an appropriate context, as outlined in L<load()> above.
+
+=item B<Socialtext::LDAP::Config-E<gt>save(@objects)>
+
+Saves the given C<Socialtext::LDAP::Config> objects out to the default LDAP
+configuration file.  Any existing configuration present in the file is
+over-written.
+
+Returns true if we're able to save the configuration, false otherwise.
+
+=item B<Socialtext::LDAP::Config-E<gt>save_to($filename, @objects)>
+
+Saves the given C<Socialtext::LDAP::Config> objects out to the specified
+configuration file.  Any existing configuration present in the file is
+over-written.
+
+Returns true if we're able to save the configuration, false otherwise.
+
+=item B<Socialtext::LDAP::Config->generate_driver_id()>
+
+Generates a new unique driver identifier.
 
 =back
 

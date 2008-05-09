@@ -9,7 +9,7 @@ fixtures('populated_rdbms');
 
 use Socialtext::User;
 use Socialtext::UserId;
-use Socialtext::User::Default;
+use Socialtext::User::Default::Factory;
 
 {
     my $users = Socialtext::User->All();
@@ -49,8 +49,9 @@ my $user_id = Socialtext::UserId->create(
 # table. We should still be able to find this user and treat him the same (he
 # should still have the same system_unique_id)
 {
-    my $existing
-        = Socialtext::User::Default->new( username => 'devnull1@urth.org' );
+    my $existing = Socialtext::User::Default::Factory->new->GetUser(
+        username => 'devnull1@urth.org',
+    );
     my $old_user_id = $existing->user_id;
     $existing->update( user_id => 9999 );
     my $moved = Socialtext::User->new( user_id => $old_user_id );

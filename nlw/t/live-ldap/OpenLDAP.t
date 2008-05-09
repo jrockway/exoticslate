@@ -6,21 +6,21 @@ use warnings;
 use mocked 'Socialtext::Log', qw(:tests);
 use Socialtext::LDAP;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 70;
+use Test::Socialtext tests => 58;
 
 use_ok 'Socialtext::LDAP::OpenLDAP';
 
 ###############################################################################
 # Instantiation; connecting to a live OpenLDAP server.
 instantiation_ok: {
-    # bootstrap OpenLDAP and save the config out to YAML
+    # bootstrap OpenLDAP
     my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
-    my $filename = Socialtext::LDAP->config_filename('Default');
-    ok $filename, 'know where to save config file to';
-
-    ok $openldap->save_ldap_config($filename), 'saved LDAP config to YAML';
+    # save LDAP config to YAML
+    my $config = $openldap->ldap_config();
+    my $rc = Socialtext::LDAP::Config->save($config);
+    ok $rc, 'saved LDAP config to YAML';
 
     # try to connect
     my $ldap = Socialtext::LDAP->new();
@@ -30,20 +30,15 @@ instantiation_ok: {
 ###############################################################################
 # Instantiation; failure to bind due to invalid credentials.
 instantiation_invalid_credentials: {
-    # bootstrap OpenLDAP and save the config out to YAML
+    # bootstrap OpenLDAP
     my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
-    my $filename = Socialtext::LDAP->config_filename('Default');
-    ok $filename, 'know where to save config file to';
-
-    ok $openldap->save_ldap_config($filename), 'saved LDAP config to YAML';
-
-    # set incorrect password into config
-    my $config = Socialtext::LDAP::Config->load($filename);
-    isa_ok $config, 'Socialtext::LDAP::Config', 'loaded config from YAML';
+    # set incorrect password into config, and save LDAP config to YAML
+    my $config = $openldap->ldap_config();
     $config->bind_password( 'this-is-the-wrong-password' );
-    $config->save($filename);
+    my $rc = Socialtext::LDAP::Config->save($config);
+    ok $rc, 'saved updated LDAP config back out to YAML';
 
     # try to connect; should fail
     clear_log();
@@ -59,10 +54,10 @@ instantiation_requires_auth: {
     my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new(requires_auth=>1);
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
-    my $filename = Socialtext::LDAP->config_filename('Default');
-    ok $filename, 'know where to save config file to';
-
-    ok $openldap->save_ldap_config($filename), 'saved LDAP config to YAML';
+    # save LDAP config to YAML
+    my $config = $openldap->ldap_config();
+    my $rc = Socialtext::LDAP::Config->save($config);
+    ok $rc, 'saved LDAP config to YAML';
 
     # connect, to make sure that it works fine with required auth
     my $ldap = Socialtext::LDAP->new();
@@ -70,11 +65,10 @@ instantiation_requires_auth: {
     $ldap = undef;
 
     # remove user/pass from config, so we do an anonymous bind.
-    my $config = Socialtext::LDAP::Config->load($filename);
-    isa_ok $config, 'Socialtext::LDAP::Config', 'loaded config from YAML';
     $config->bind_user( undef );
     $config->bind_password( undef );
-    $config->save($filename);
+    $rc = Socialtext::LDAP::Config->save($config);
+    ok $rc, 'saved updated LDAP config back out to YAML';
 
     # connect w/anonymous bind; should fail
     clear_log();
@@ -86,52 +80,58 @@ instantiation_requires_auth: {
 ###############################################################################
 # Authentication failure.
 authentication_failure: {
-    # bootstrap OpenLDAP and save the config out to YAML
+    # bootstrap OpenLDAP
     my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
-    my $filename = Socialtext::LDAP->config_filename('Default');
-    ok $filename, 'know where to save config file to';
-
-    ok $openldap->save_ldap_config($filename), 'saved LDAP config to YAML';
+    # save LDAP config to YAML
+    my $config = $openldap->ldap_config();
+    my $rc = Socialtext::LDAP::Config->save($config);
+    ok $rc, 'saved LDAP config to YAML';
 
     # attempt to authenticate, using wrong password
     clear_log();
-    my $user = $openldap->root_dn();
-    my $pass = 'this-is-the-wrong-password';
-    ok !Socialtext::LDAP->authenticate($user,$pass), 'authentication failed';
+    my %opts = (
+        user_id     => $openldap->root_dn(),
+        password    => 'this-is-the-wrong-password',
+    );
+    my $authok = Socialtext::LDAP->authenticate(%opts);
+    ok !$authok, 'authentication failed';
     logged_like 'info', qr/authentication failed/, '... auth failed';
 }
 
 ###############################################################################
 # Authentication success.
 authentication_ok: {
-    # bootstrap OpenLDAP and save the config out to YAML
+    # bootstrap OpenLDAP
     my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
-    my $filename = Socialtext::LDAP->config_filename('Default');
-    ok $filename, 'know where to save config file to';
+    # save LDAP config to YAML
+    my $config = $openldap->ldap_config();
+    my $rc = Socialtext::LDAP::Config->save($config);
+    ok $rc, 'saved LDAP config to YAML';
 
-    ok $openldap->save_ldap_config($filename), 'saved LDAP config to YAML';
-
-    # attempt to authenticate, using wrong password
-    my $user = $openldap->root_dn();
-    my $pass = $openldap->root_pw();
-    ok( Socialtext::LDAP->authenticate($user,$pass), 'authentication ok' );
+    # attempt to authenticate, using a known username/password
+    my %opts = (
+        user_id     => $openldap->root_dn(),
+        password    => $openldap->root_pw(),
+    );
+    my $authok = Socialtext::LDAP->authenticate(%opts);
+    ok $authok, 'authentication ok';
 }
 
 ###############################################################################
 # Search, no results.
 search_no_results: {
-    # bootstrap OpenLDAP and save the config out to YAML
+    # bootstrap OpenLDAP
     my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
-    my $filename = Socialtext::LDAP->config_filename('Default');
-    ok $filename, 'know where to save config file to';
-
-    ok $openldap->save_ldap_config($filename), 'saved LDAP config to YAML';
+    # save LDAP config to YAML
+    my $config = $openldap->ldap_config();
+    my $rc = Socialtext::LDAP::Config->save($config);
+    ok $rc, 'saved LDAP config to YAML';
 
     # populate OpenLDAP with some data
     ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
@@ -152,14 +152,14 @@ search_no_results: {
 ###############################################################################
 # Search, with results.
 search_with_results: {
-    # bootstrap OpenLDAP and save the config out to YAML
+    # bootstrap OpenLDAP
     my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
-    my $filename = Socialtext::LDAP->config_filename('Default');
-    ok $filename, 'know where to save config file to';
-
-    ok $openldap->save_ldap_config($filename), 'saved LDAP config to YAML';
+    # save LDAP config to YAML
+    my $config = $openldap->ldap_config();
+    my $rc = Socialtext::LDAP::Config->save($config);
+    ok $rc, 'saved LDAP config to YAML';
 
     # populate OpenLDAP with some data
     ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
@@ -187,14 +187,14 @@ search_with_results: {
 ###############################################################################
 # Search with -NO- global "filter"; should return both "users" and "contacts"
 search_without_filter_gets_users_and_contacts: {
-    # bootstrap OpenLDAP and save the config out to YAML
+    # bootstrap OpenLDAP
     my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
-    my $filename = Socialtext::LDAP->config_filename('Default');
-    ok $filename, 'know where to save config file to';
-
-    ok $openldap->save_ldap_config($filename), 'saved LDAP config to YAML';
+    # save LDAP config to YAML
+    my $config = $openldap->ldap_config();
+    my $rc = Socialtext::LDAP::Config->save($config);
+    ok $rc, 'saved LDAP config to YAML';
 
     # populate OpenLDAP with some data
     ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
@@ -225,25 +225,20 @@ search_without_filter_gets_users_and_contacts: {
 ###############################################################################
 # Search with global "filter"; restricts us to just "users"
 search_with_filter_gets_users_only: {
-    # bootstrap OpenLDAP and save the config out to YAML
+    # bootstrap OpenLDAP
     my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
-    my $filename = Socialtext::LDAP->config_filename('Default');
-    ok $filename, 'know where to save config file to';
-
-    ok $openldap->save_ldap_config($filename), 'saved LDAP config to YAML';
+    # set filter into our config, and save LDAP config to YAML
+    my $config = $openldap->ldap_config();
+    $config->filter( '(objectClass=inetOrgPerson)' );
+    my $rc = Socialtext::LDAP::Config->save($config);
+    ok $rc, 'saved LDAP config to YAML';
 
     # populate OpenLDAP with some data
     ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
     ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
     ok $openldap->add('t/test-data/ldap/contacts.ldif'), 'added data; contacts';
-
-    # add a filter to our LDAP config
-    my $config = Socialtext::LDAP::Config->load($filename);
-    isa_ok $config, 'Socialtext::LDAP::Config', 'loaded LDAP config from YAML';
-    $config->filter( '(objectClass=inetOrgPerson)' );
-    ok $config->save($filename), 'saved updated LDAP config back out to YAML';
 
     # filtered results should have single result (an inetOrgPerson)
     my $ldap = Socialtext::LDAP->new();

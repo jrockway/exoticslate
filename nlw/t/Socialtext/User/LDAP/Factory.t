@@ -1,0 +1,234 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings FATAL => 'all';
+use mocked 'Net::LDAP';
+use mocked 'Socialtext::Log', qw(:tests);
+use Test::Socialtext tests => 41;
+
+# FIXTURE:  ldap_*
+#
+# These tests have no specific requirement as to whether we're using an
+# anonymous or authenticated LDAP connection.
+fixtures( 'ldap_anonymous' );
+use_ok 'Socialtext::User::LDAP::Factory';
+
+###############################################################################
+### TEST DATA
+###############################################################################
+my @TEST_USERS = (
+    { dn            => 'cn=First Last,dc=example,dc=com',
+      cn            => 'First Last',
+      authPassword  => 'abc123',
+      gn            => 'First',
+      sn            => 'Last',
+      mail          => 'user@example.com',
+    },
+    { dn            => 'cn=Another User,dc=example,dc=com',
+      cn            => 'Another User',
+      authPassword  => 'def987',
+      gn            => 'Another',
+      sn            => 'User',
+      mail          => 'user@example.com',
+    },
+);
+
+###############################################################################
+# Factory instantiation with no parameters; should pick up some sort of LDAP
+# connection (we don't dictate which, so we're not going to presume which one
+# it is; we'll leave that to the testing in ST::LDAP).
+instantiation_no_parameters: {
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+    # make sure it has a name, but don't care which one it is
+    like $factory->driver_key, qr/^LDAP:.+/, '... driver has a name';
+}
+
+###############################################################################
+# Factory instantiation with named LDAP connection; should use specified LDAP
+# connection.
+instantiation_named_ldap_connection: {
+    my $factory = Socialtext::User::LDAP::Factory->new('1deadbeef1');
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+    is $factory->driver_key, 'LDAP:1deadbeef1', '... driver name: LDAP:1deadbeef1';
+}
+
+###############################################################################
+# Instantiation with failed connection; should fail
+instantiation_fail_to_ldap_connect: {
+    Net::LDAP->set_mock_behaviour(
+        connect_fail    => 1,
+        );
+    clear_log();
+
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    ok !defined $factory, 'failed to LDAP connect';
+
+    # VERIFY logs; make sure we failed for the right reason
+    logged_like 'error', qr/unable to connect/, '... logged connection failure';
+}
+
+###############################################################################
+# Instantiation when unable to bind; returns empty handed
+instantiation_bind_failure: {
+    Net::LDAP->set_mock_behaviour(
+        bind_fail => 1,
+        );
+    clear_log();
+
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    ok !defined $factory, 'failed to LDAP connect';
+
+    # VERIFY logs; make sure we failed for the right reason
+    logged_like 'error', qr/unable to bind/, '... logged bind failure';
+}
+
+###############################################################################
+# Verify list of valid search terms when retrieving a user record.
+get_user_valid_search_terms: {
+    Net::LDAP->set_mock_behaviour(
+        search_results => [ $TEST_USERS[0] ],
+        );
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+
+    # "username" is valid search term
+    my $user = $factory->GetUser(username=>'First Last');
+    isa_ok $user, 'Socialtext::User::LDAP', 'username; valid search term';
+
+    # "user_id" is valid search term
+    $user = $factory->GetUser(user_id=>'cn=First Last, dc=example,dc=com');
+    isa_ok $user, 'Socialtext::User::LDAP', 'user_id; valid search term';
+
+    # "email_address" is valid search term
+    $user = $factory->GetUser(email_address=>'user@example.com');
+    isa_ok $user, 'Socialtext::User::LDAP', 'email_address; valid search term';
+
+    # "first_name" is mapped, but is -NOT- a valid search term
+    $user = $factory->GetUser(first_name=>'First');
+    ok !defined $user, 'first_name; INVALID search term';
+
+    # "cn" isn't a valid search term
+    $user = $factory->GetUser(cn=>'First Last');
+    ok !defined $user, 'cn; INVALID search term';
+}
+
+###############################################################################
+# Verify that retrieving a user record with blank/undefined value returns
+# empty handed.
+get_user_blank_values: {
+    Net::LDAP->set_mock_behaviour(
+        search_results => [ $TEST_USERS[0] ],
+        );
+
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+
+    my $user = $factory->GetUser(username=>undef);
+    ok !defined $user, 'get user w/undef value returns empty-handed';
+}
+
+###############################################################################
+# Verify that retrieving a user record which fails to find a match in LDAP
+# returns empty handed.
+get_user_unknown_user: {
+    Net::LDAP->set_mock_behaviour(
+        search_results => [],
+        );
+    clear_log();
+
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+
+    my $user = $factory->GetUser(username=>'First Last');
+    ok !defined $user, 'get user w/o user in LDAP returns empty-handed';
+
+    # VERIFY logs; make sure we failed for the right reason
+    is logged_count(), 1, '... logged right number of entries';
+    next_log_like 'debug', qr/unable to find user/, '... logged inability to find user';
+}
+
+###############################################################################
+# Retrieving a user record with multiple matches should fail; how do we know
+# which one to choose?
+get_user_multiple_matches: {
+    Net::LDAP->set_mock_behaviour(
+        search_results => [ @TEST_USERS ],
+        );
+    clear_log();
+
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+
+    my $user = $factory->GetUser(email_address=>'user@example.com');
+    ok !defined $user, 'get user w/multiple matches should fail';
+
+    # VERIFY logs; make sure we failed for the right reason
+    is logged_count(), 1, '... logged right number of entries';
+    next_log_like 'error', qr/found multiple matches/, '... logged multiple matches';
+}
+
+###############################################################################
+# User retrieval via "username" is done as a sub-tree search
+get_user_via_username_is_subtree: {
+    Net::LDAP->set_mock_behaviour(
+        search_results => [ $TEST_USERS[0] ],
+        );
+
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+
+    my $user = $factory->GetUser(username=>'First Last');
+    isa_ok $user, 'Socialtext::User::LDAP';
+
+    # VERIFY mocks...
+    my $mock = Net::LDAP->mocked_object();
+    $mock->called_pos_ok( 1, 'bind' );
+    $mock->called_pos_ok( 2, 'search' );
+    my ($self, %opts) = $mock->call_args(2);
+    is $opts{'scope'}, 'sub', 'username search is sub-tree';
+}
+
+###############################################################################
+# User retrieval via "email_address" is done as a sub-tree search
+get_user_via_email_address_is_subtree: {
+    Net::LDAP->set_mock_behaviour(
+        search_results => [ $TEST_USERS[0] ],
+        );
+
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+
+    my $user = $factory->GetUser(email_address=>'user@example.com');
+    isa_ok $user, 'Socialtext::User::LDAP';
+
+    # VERIFY mocks...
+    my $mock = Net::LDAP->mocked_object();
+    $mock->called_pos_ok( 1, 'bind' );
+    $mock->called_pos_ok( 2, 'search' );
+    my ($self, %opts) = $mock->call_args(2);
+    is $opts{'scope'}, 'sub', 'email_address search is sub-tree';
+}
+
+###############################################################################
+# User retrieval via "user_id" is optimized to be done as an exact search
+get_user_via_user_id_is_exact: {
+    Net::LDAP->set_mock_behaviour(
+        search_results => [ $TEST_USERS[0] ],
+        );
+    my $dn = 'cn=First Last,dc=example,dc=com';
+
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory';
+
+    my $user = $factory->GetUser(user_id=>$dn);
+    isa_ok $user, 'Socialtext::User::LDAP';
+
+    # VERIFY mocks...
+    my $mock = Net::LDAP->mocked_object();
+    $mock->called_pos_ok( 1, 'bind' );
+    $mock->called_pos_ok( 2, 'search' );
+    my ($self, %opts) = $mock->call_args(2);
+    is $opts{'scope'}, 'base', 'user_id search is exact';
+    is $opts{'base'}, $dn, 'user_id search base is DN';
+}

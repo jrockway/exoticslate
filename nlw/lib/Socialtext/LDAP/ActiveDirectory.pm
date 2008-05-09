@@ -1,4 +1,4 @@
-package SocialText::LDAP::ActiveDirectory;
+package Socialtext::LDAP::ActiveDirectory;
 # @COPYRIGHT@
 
 use strict;
@@ -10,6 +10,24 @@ use base 'Socialtext::LDAP::Base';
 =head1 NAME
 
 Socialtext::LDAP::ActiveDirectory - LDAP plug-in for Active Directory servers
+
+=head1 SYNOPSIS
+
+  # Example entry in ldap.yaml
+  id: 78226073fb
+  name: Our Active Directory server
+  backend: ActiveDirectory
+  host: ad.example.com
+  port: 389
+  base: cn=Sales,dc=example,dc=com
+  filter: (&(objectClass=user)(objectCategory=person))
+  attr_map:
+    user_id: dn
+    username: sAMAccountName
+    password: unicodePwd
+    email_address: mail
+    first_name: givenName
+    last_name: sn
 
 =head1 DESCRIPTION
 
@@ -23,6 +41,39 @@ The following versions of Active Directory are supported by this plug-in:
 =over
 
 =item * not supported at this time
+
+=back
+
+=head1 NOTES
+
+=over
+
+=item Filter for just users
+
+To filter all LDAP queries/searches so that they only result in "user" objects
+being returned (as opposed to "contacts", "computers", "printers", etc), set a
+filter that restricts searches to I<just> those objects that have the C<user>
+object class and that are in the "person" object category:
+
+  filter: (&(objectClass=user)(objectCategory=person))
+
+=item Login by "Windows user name"
+
+If you wish to have users log in using their "Windows user name", you can do
+this by setting up the attribute mapping so that the "username" field maps to
+the Active Directory "sAMAccountName" field:
+
+  attr_map:
+    username: sAMAccountName
+
+=item Login by "email address"
+
+If you wish to have users log in using their "email address", you can do this
+by setting up the attribute mapping for the "username" field so that it maps
+to the LDAP "Mail Address" field:
+
+  attr_map:
+    username: mail
 
 =back
 

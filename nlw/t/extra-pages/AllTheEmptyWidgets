@@ -1,55 +1,59 @@
 This is the page used to drive testing of Widget editing.
 Use it to regression test Widget editing and to develop Widget test automation.
-It contains an example of an EMPTY version of every Link and WAFL type.
+It contains an example of an empty instance of every Link and WAFL type.
+Even if you type `{file: }`, wikiwyg turns it into `{file}`
 
 ----
 
 | *Non-Widget Links* |  |
 | Wiki page link | [] |
-| Network Share | "AD Social"<> | `"Ad Social"<\\ad-social\shared\testme.txt>`
-See {rt: 15184} |
-| URL (plus irc ftp etc) | "Socialtext Hosted"<> |
-| Named link to external image | "Ken"<> |
-| Named Web link to wiki page | "Link to Socialtext search documentation"<> |
+| Network Share
+`"Ad Social"<\\ad-social\shared\testme.txt>`
+See {rt: 15184} | "AD Social"<file:> |
+| Sharepoint | {sharepoint: } |
+| URL (plus irc ftp etc) | "Socialtext Hosted"<http://> |
+| Named link to external image | "Ken"<http://> |
+| Named Web link to wiki page | "Link to Socialtext search documentation"<http://> |
 |  |  |
 | *Widgets* |  |
-| Cross link | {link} |
-| Cross link missing workspace | {link: [Foobar Wiki] } | this will appear to be a section link |
-| File | {file} |
-| Image | {image} |
-| Relative link | http: |
+| Spreadsheet | {ss: } |
+| Cross link | "Look over there"{link} |
+| File | "This is the name of a file"{file} |
+| Image
+empty image disappears | "Click to see some talc"{image: none} |
+| Relative link | http:base/images/docs/ |
 | Section | {section} |
 | Section link | {link} |
 |  |  |
-| Weblog | {weblog} |
-| Tag | {tag} |
-| Category | {category} | This WAFL will get canonicalized to tag |
-| Table of contents | {toc: } |
+| Weblog | "This is a weblog Name"{weblog} |
+| Tag | "This is a tag name"{tag} |
+| Category
+This WAFL will get canonicalized to tag | {category} |
+| Table of contents | {toc: }|
 | Include page | {include: } |
-| Recent changes | {recent_changes: } |
+| Recent changes | {recent_changes: }|
 |  |  |
-| Recent changes in tagged pages | {tag_list: } |
-| Recent changes in categorized pages | {category_list: } | This WAFL will get canonicalized to tag_list |
-| Recent changes in weblog | {weblog_list: } |
-| Search (text/tag/title) | {search: } |
+| Recent changes in tagged pages | {tag_list: }|
+| Recent changes in categorized pages
+This WAFL will get canonicalized to tag | {category_list: }|
+| Recent changes in weblog | {weblog_list: }|
+| Search (text/tag/title) | {search: }|
 |  |  |
-| RSS feed | {fetchrss: } |
-| Atom feed | {fetchatom: } |
-| Google search | {googlesoap: } |
-| Technorati blog search | {technorati: } |
-| Empty Connections are seen as plaintext, not as Widgets |  |
+| RSS feed | {fetchrss: }|
+| Atom feed | {fetchatom: }|
+| Google search | {googlesoap: }|
+| Technorati blog search | {technorati: }|
+|  |  |
 | AIM | aim: |
 | Yahoo (yahoo) | yahoo: |
 | Yahoo (ymsgr) | ymsgr: |
 | Skype (skype) | skype: |
 | Skype (callme) | callme: |
-| Convoq | asap: |
+| Convoq
+This WAFL is OBSOLETE | asap: |
 |  |  |
 | date | {date} |
 | user | {user} |
-| as is | {{ need to leave this non-empty for the moment }} |
+| as is | {{  }} |
 | new form | {new_form_page} |
-| .html .html |  |
-|  |  |
-| Sharepoint | {sharepoint: SubFolder/filename.jpg} |
 | tm | {tm} |

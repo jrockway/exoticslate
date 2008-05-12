@@ -1,6 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="[% share_path("css/gadget.css") %]" type="text/css" media="screen" />
+        <base target="_newWindow"/>
         <script src="/data/gadget/instance/[% id %]/js"></script>
         <script src="[% share_path('javascript/syndicator.js') %]"></script>
         <script>

@@ -110,7 +110,7 @@
         charset: "",
         beforeSend: function (xhr) {
           xhr.setRequestHeader('X-Http-Method', 'PUT');
-        },
+        }
       });
     }
 

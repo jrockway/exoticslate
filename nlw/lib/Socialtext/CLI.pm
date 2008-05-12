@@ -332,7 +332,7 @@ sub _require_create_user_params {
     for my $key ( grep { defined $opts{$_} } 'first-name', 'last-name' ) {
         my $val = $opts{$key};
 
-        unless ( Encode::is_utf8($val) or $val =~ /^[\0x00-\xff]*$/ ) {
+        unless ( Encode::is_utf8($val) or $val =~ /^[\x00-\xff]*$/ ) {
             $self->_error(
                 "The value you provided for the $key option is not a valid UTF8 string."
             );

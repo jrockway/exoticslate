@@ -40,10 +40,9 @@ my $e = $@;
 is( $e, '', "send without exception" );
 
 
-my @cases = ( { label        => 'non-appliance with password',
+my @cases = ( { label        => 'non-appliance',
                 is_appliance => 0,
                 username     => 'devnull8@socialtext.com',
-                password     => 'secret',
                 tests        => [ qr/From: devnull1\@socialtext\.com/,
                                   qr/to join Admin Wiki/,
                                   qr{/submit/confirm_email},
@@ -55,7 +54,7 @@ my @cases = ( { label        => 'non-appliance with password',
                 tests        => [ qr/already have a Socialtext account/,
                                 ],
               },
-              { label        => 'appliance without password',
+              { label        => 'appliance',
                 is_appliance => 1,
                 username     => 'devnull9@socialtext.com',
                 tests        => [ qr/I'm inviting you/,
@@ -72,8 +71,9 @@ my @cases = ( { label        => 'non-appliance with password',
 
 
 for my $c (@cases) {
-    local $SIG{__DIE__};
+    print "# Starting test $c->{label}\n";
 
+    local $SIG{__DIE__};
     local $ENV{NLW_IS_APPLIANCE} = $c->{is_appliance};
 
     Email::Send::Test->clear;
@@ -95,9 +95,7 @@ for my $c (@cases) {
     }
 
     my @emails = Email::Send::Test->emails;
-
-    is( scalar @emails, $expected, '$expected email(s) were sent: ' . $c->{label} );
-
+    is scalar @emails, $expected, "$expected email(s) were sent: $c->{label}";
     for my $rx ( @{ $c->{tests} } ) {
         like( $emails[0]->as_string, $rx,
               "$c->{label} - email matches $rx" );
@@ -153,8 +151,10 @@ sub _confirm_user_if_neccessary {
     my $username = shift;
 
     my $user = Socialtext::User->new( username => $username );
+    warn "_confirm_user_if_necessary($username) - $user";
 
     if ($user && $user->requires_confirmation ) {
+        print "# Confirming user $username\n";
         $user->confirm_email_address();
         $user->update_store( password => 'secret' );
         return 1;

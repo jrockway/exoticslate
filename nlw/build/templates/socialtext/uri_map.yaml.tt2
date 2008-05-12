@@ -215,6 +215,7 @@
         'PUT':    
             '*/*':     &default [Socialtext::Rest::Workspace, bad_type]
             'application/json': [Socialtext::Rest::Workspace, PUT]
+        'DELETE':               [Socialtext::Rest::Workspace, DELETE]
         '*':                    [Socialtext::Rest::Workspace, bad_method]
 -
     '/data/workspaces':

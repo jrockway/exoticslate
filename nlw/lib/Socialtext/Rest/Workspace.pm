@@ -85,6 +85,44 @@ sub PUT {
     return '';
 }
 
+sub DELETE {
+    my ( $self, $rest ) = @_;
+
+    unless ($self->_can_delete_workspace()) {
+        $rest->header(
+            -status => HTTP_403_Forbidden,
+        );
+        # Be ambivalent about why deletion not allowed.
+        return $self->ws . ' cannot be deleted.';
+    }
+
+    if ( $self->workspace ) {
+        Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
+            $self->workspace->name )
+            ->delete_workspace( $self->workspace->name );
+        $self->workspace->delete;
+        $rest->header(
+            -status => HTTP_204_No_Content,
+        );
+        return $self->ws . ' removed';
+    }
+    else {
+        return $self->http_404($rest);
+    }
+}
+
+# REVIEW: this is starting to look like an idiom.
+# Might already exist somewhere in the code.
+sub _can_delete_workspace {
+    my $self = shift;
+
+    my $user = $self->rest->user;
+    return $user->is_business_admin()
+        || $user->is_technical_admin()
+        || ( $self->workspace
+        && $self->hub->checker->check_permission('admin_workspace') );
+}
+
 sub validate_resource_id {
     my( $self, $rest, $errors ) = @_;
 

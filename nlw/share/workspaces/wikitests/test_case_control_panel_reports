@@ -78,7 +78,7 @@
 | *Comment* | Test Case: Control Panel Reports - Workspace Growth page body exists |  |
 | selectFrame | report-iframe |  |
 | text_like | Workspace Growth - %%testingwrkspace%% |  |
-| text_like | Date Unique Members Unique contributors Pages Page views Contributions |  |
+| text_like | Date Unique Members Unique Contributors Pages Page views Contributions |  |
 
 | *Comment* | Test Case: Control Panel Reports - Workspace Growth page Data Tests |  |
 | *Comment* | 1) We should probaby have some kind of product management signoff on interpertation |  |
@@ -120,7 +120,7 @@ TODO: Add this to slideshow?
 | *Comment* | Test Case: Control Panel Reports (Account-level, Growth) page body exists |  |
 | selectFrame | report-iframe |  |
 | text_like | Account Growth - %%testingaccount%% |  |
-| text_like | Date Workspaces Unique Members Unique contributors Pages Page Views Contributions |  |
+| text_like | Date Workspaces Unique Members Unique Contributors Pages Page Views Contributions |  |
 | text_like | Apr 2008 2 6 0 7 0 0 |  |
 | text_like | Mar 2008 2 6 4 37 158 36 |  |
 | text_like | Feb 2008 2 6 4 7 76 17 |  |

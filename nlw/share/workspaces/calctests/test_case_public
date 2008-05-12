@@ -1,0 +1,17 @@
+| *Comment* | Test Case: Public |
+
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Workspace Privacy |  |
+| click_ok | document.forms[1].permission_set_name[4] |  |
+| click_and_wait | Button |  |
+| st-logout |  |  |
+| text_like | st-page-maincontent | This is the home page for |
+| text_like | st-editing-tools | Edit |
+| text_like | st-editing-tools | Comment |
+| click_and_wait | link=Settings |  |
+| text_like | errors-and-messages | To set your preferences for a workspace, you must be logged in. |
+
+| *Comment* | Test Case: Public Teardown |  |
+| st-admin | set-permissions --workspace %%workspace%% --permissions member-only |  |
+
+| *Comment* | Test Case: Public COMPLETED |

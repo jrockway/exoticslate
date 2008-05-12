@@ -1,0 +1,6 @@
+| *Comment* | Test Case: Perl Loc with Multibyte character start | Opt 2 |
+| st-admin | set-locale --email %%email%% --locale ja --workspace %%workspace%% |  |
+| clickAndWait | st-home-link |  |
+| verifyText | st-user-welcome | ようこそ  |
+| st-admin | set-locale --email %%email%% --locale en --workspace %%workspace%% |  |
+| *Comment* | Test case: Perl Loc with Multibyte character COMPLETED |  |

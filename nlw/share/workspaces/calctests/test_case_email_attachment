@@ -1,0 +1,61 @@
+| *Comment* | Test Case: Email attachment |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | `[RT 29682 or Bug 489]` |
+| type_ok | st-newpage-pagename-edit | Email subject %%start_time%% |
+| click_and_wait | st-save-button-link |  |
+
+| *Comment* | Test Case: Email attachment open the email-page |  |
+| click_ok | st-pagetools-email |  |
+| open_ok | /%%workspace%%/index.cgi?action=email_page_popup;page_name=Email_subject_%%start_time%% |  |
+| wait_for_element_visible_ok | Button | 5000 |
+
+| *Comment* | Test Case: Email attachment add receipients |  |
+| type_ok | email_page_add_one | %%workspace%%@%%wikiemail%% |
+| click_ok | email_page_add_one_button |  |
+| text_like | email_page_user_choices | %%workspace%%@%%wikiemail%% |
+
+| *Comment* | Test Case: Email attachment Email Note and Attachments |  |
+| text_like | email_page_add_note | Hello, this is a page from the workspace that I wanted you to see. This page is also available for viewing or editing on the web at: |
+| text_like | email_page_add_note | /%%workspace%%/index.cgi?email_subject_%%start_time%% |
+| type_ok | email_page_add_note | Note %%start_time%% from Test Case: Email |
+
+| *Comment* | Test Case: Email attachment email sending page to %%workspace%%@%%wikiemail%% |  |
+| click_ok | //input[@value='Send'] |  |
+
+| *Comment* | Pausing 60 seconds for email delivery |
+| pause | 60000 |
+| pause | 5000 |
+
+| *Comment* | Test Case: Email attachment email Check Reception |  |
+| open_ok | /%%workspace%%/index.cgi?Email subject %%start_time%% |  |
+| wait_for_element_visible_ok | st-page-title | 10000 |
+| text_like | st-page-title | Email subject %%start_time%% |
+| text_like | st-page-maincontent | qr/^\s*RT 29682 or Bug 489$/m |
+
+| *Comment* | Test Case: Email attachment Deleting dot html attachment files |  |
+| wait_for_element_visible_ok | st-attachments-managebutton |  |
+| click_ok | st-attachments-managebutton |  |
+| wait_for_element_visible_ok | link=File Name |  |
+| click_ok | link=File Name |  |
+| check_ok | select-file |  |
+| click_ok | st-attachments-manage-deletebutton |  |
+| click_ok | st-attachments-manage-closebutton |  |
+| wait_for_element_visible_ok | st-attachments-title | 30000 |
+| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+
+| *Comment* | Test Case: Email attachment Search for attachment page and verify that no left over attachment: word in it |  |
+| st-admin | index-workspace --workspace %%workspace%% --sync |  |
+| type_ok | st-search-term | RT 29682 |
+| click_and_wait | st-search-submit |  |
+| pause | 5000 |
+| text_like | st-search-content | qr/Email subject %%start_time%%/ |
+| text_like | Email subject %%start_time%% |  |
+| text_unlike | st-search-content | qr/Attachment:/ |
+
+| *Comment* | Test Case: Email attachment Teardown |  |
+| st-admin | purge-page --w %%workspace%% --page email_subject_%%start_time%% |  |
+
+| *Comment* | Test Case: Email attachment COMPLETED |

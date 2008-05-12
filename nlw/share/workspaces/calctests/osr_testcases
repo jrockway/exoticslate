@@ -1,0 +1,101 @@
+If Test Case: Verify Location fails, you have not configured your 
+test env properly and are not testing the test-workspace
+
+* [Test Case: Verify Location]
+
+* [Test Case: Home]
+* [Test Case: Miki]
+* [Test case: Watchlist]
+* [Test Case: Edit This Page]
+* [Test Case: Double Click to Edit]
+* [Test Case: Preview Format]
+* [Test Case: New Page]
+* [Test Case: New Page No Overwrite]
+* [Test case: functional search tests]
+* [Test Case: Phrase search]
+* [Test Case: stemming]
+* [Test Case: Tags]
+* [Test Case: Tagging]
+* [Test Case: Tagging in the Editor]
+* [Test Case: Hide sidebar]
+* [Test Case: Sidebar: Incoming Links]
+* [Test Case: Orphans List]
+* [Test Case: Sidebar: Recently Viewed]
+* [Test Case: Sidebar: Recent Changes]
+* [Test Case: Revisions]
+* [Test Case: What's New]
+* [Test Case: All Pages]
+* [Test Case: Tools: Duplicate Page]
+* [Test Case: Tools: Rename Page]
+* [Test Case: Tools: Delete Page]
+* [Test Case: Tools: Copy Page to Workspace]
+* [Test Case: Tools: Export as HTML]
+* [Test Case: Add Comment]
+* [Test Case: Comment Form Fields]
+* [Test Case: Connections]
+* [Test Case: Authenticated-User-Only]
+* [Test Case: Public Authenticate to Edit]
+* [Test Case: Public]
+* [Test Case: Public-Read-Only]
+* [Test Case: Public-Comment-Only]
+* [Test Case: Intranet]
+* [Test Case: Settings: Email Notification]
+* [Test Case: Direct URI]
+* [Test Case: Strings]
+* [Test Case: Single Dash]
+* [Test Case: Inter Workspace Search]
+* [Test Case: RSS Icons]
+* [Test Case: Untitled Page]
+* [Test Case: Page Open Errors]
+* [Test Case: Return to last login]
+* [Test Case: Link Interface]
+* [Test Case: Nasty Double Dashes]
+
+TC Insert Menu will fail as the menu is being reworked. Revise the test.
+
+* [Test Case: Insert Menu]
+
+uses default wikiemail or `$ENV{WIKIEMAIL}`
+
+* [Test Case: Email]
+
+The following tests require higher security privileges for the browser, such as `*chrome` for Firefox
+uses `$ENV{selenium_browser}` set to `*chrome` which is now the default setting
+
+* [Test Case: Upload file]
+* [Test Case: Manage files]
+* [Test Case: Delete Selected Attachments]
+* [Test Case: Unzip File]
+* [Test Case: Sorting Files]
+* [Test Case: Manage Files Sorting]
+
+These tests cause all subsequent tests to fail if they fail, so run them last
+
+* [Test Case: Perl Loc]
+* [Test Case: Js Loc]
+* [Test Case: Perl Loc with Multibyte character]
+* [Test Case: Js Loc with Multibyte character]
+
+js-test is run separately after `make` in nlw/share/js-test in a dev env
+use the xwjst alias to run it
+
+----
+
+These are Test Cases that are not in OSR Testcases. Why not?
+Test Case: Help (don't know how to switch to a new tab)
+
+----
+
+^ All pages tagged 'Testcase' (only a list, visit the pages above for tests)
+
+Tests do not run out of the list since it isn't really here.
+
+{search: category:testcase AND NOT category:obsolete}
+
+^^^ Obsolete testcases
+
+{search: category:testcase AND category:obsolete}
+
+----
+
+{include: [Known Failing Testcases]}

@@ -1,0 +1,56 @@
+{rt: 27491}
+
+| *Comment* | Test Case: Untitled Page |  |
+
+Click New Page on the dashboard
+On the edit form focus the page title field
+Verify the field is now empty.
+Set the field to `Untitled ---------- &&&&& ---- PaGe`
+Focus away from the field
+Focus the field the again
+Verify the field is now empty.
+Set the field to `Untitled ---------- &&&&& ---- PaGe`
+Save the page
+Verify the page rename popup shows up, signaling you picked an invalid name
+Type Untitled Page into the popup name box
+Click Save
+Alert: Untitled Page is a Reserved Page Name. Please use a different name
+Type Untitled Page 2
+Save
+
+| *Comment* | Test Case: Untitled Page new page |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| click_ok | st-newpage-pagename-edit |  |
+
+| *Comment* | Test Case: Untitled Page title field is empty after focus |  |
+| text_unlike | st-newpage-pagename-edit | Untitled Page |
+
+| *Comment* | Test Case: Untitled Page try bad title |  |
+| type_ok | st-newpage-pagename-edit | `Untitled ---------- &&&&& ---- PaGe` |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| click_ok | wikiwyg_wikitext_textarea |  |
+| type_ok | wikiwyg_wikitext_textarea | untitled page %%start_time%% content |
+| click_ok | st-newpage-pagename-edit |  |
+
+| *Comment* | Test Case: Untitled Page title field is empty after focus back |  |
+| text_unlike | st-newpage-pagename-edit | `Untitled ---------- &&&&& ---- PaGe` |
+
+| *Comment* | Test Case: Untitled Page save attempt using bad title |  |
+| type_ok | st-newpage-pagename-edit | `Untitled ---------- &&&&& ---- PaGe` |
+| click_ok | st-save-button-link |  |
+| wait_for_element_visible_ok | st-newpage-save-pagename | 5000 |
+
+| *Comment* | Test Case: Untitled Page save attempt using "Untitled Page" |  |
+| type_ok | st-newpage-save-pagename | untitled page |
+| click_ok | st-newpage-save-savebutton |  |
+| verifyAlert | "untitled page" is a reserved page name. Please use a different name |  |
+
+| *Comment* | Test Case: Untitled Page save attempt using legal title |  |
+| type_ok | st-newpage-save-pagename | untitled page %%start_time%% |
+| click_ok | st-newpage-save-savebutton |  |
+| wait_for_element_visible_ok | st-created | 10000 |
+| text_like | st-page-maincontent | untitled page %%start_time%% content |
+
+| *Comment* | Test Case: Untitled Page COMPLETED |  |

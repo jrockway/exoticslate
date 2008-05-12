@@ -1,0 +1,41 @@
+| set_default | wiki | %%workspace%% | defaults to the test workspace |
+| set_default | pt | 5000 | defaults to five seconds |
+| set_default | popup | 8000 | cancel popups in 8 seconds |
+| set_default | wikititle | Canonical Test Data Set | defaults to the test workspace |
+
+| open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |  |
+
+| click_ok | link=Duplicate Page |  |
+| *Comment* | SlideShow CANCEL Duplicate Page popup |  |
+| pause | %%popup%% |  |
+
+| click_ok | link=Rename Page |  |
+| *Comment* | SlideShow CANCEL Rename Page popup |  |
+| pause | %%popup%% |  |
+
+| *Comment* | Skipping Delete Page - can't seem to get the popup right |
+
+| click_ok | link=Copy Page to Workspace |  |
+| *Comment* | SlideShow CANCEL Copy Page popup |  |
+| pause | %%popup%% |  |
+
+| click_ok | link=Export as HTML |  |
+| *Comment* | SlideShow SEE Exported HTML |  |
+| *Comment* | CTRL-W HTML ON WINDOWS |  |
+| *Comment* | APPLE-W HTML ON MAC |  |
+| pause | %%popup%% |  |
+| pause | %%pt%% | some extra time to close HTML window |
+
+| *Comment* | moved PDF and RTF EXPORT to end because IE has problems with it in SlideShow |  |
+
+| open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |  |
+
+| wait_for_element_visible_ok | st-pagetools-print | 30000 |
+| click_ok | st-pagetools-print |  |
+| *Comment* | SlideShow CANCEL Print popup |  |
+| pause | %%popup%% |  |
+
+| click_ok | st-pagetools-email |  |
+| *Comment* | SlideShow CANCEL Email This Page popup |  |
+| pause | %%popup%% |  |
+| pause | %%pt%% | extra pause for Email This Page popup |

@@ -1,0 +1,47 @@
+Adding High Permissions to this test in order to upload a file causes it to not only break in IE but to break all tests that follow it. If you want to test with a file in a pristine workspace, you can either write a separate HighPermissions test for OSR testcases only or put an attachment in a pristine /test-data and export a new one. That is a better solution and should be tested before committing to see if other tests are affected.
+
+| *Comment* | Test Case: Public Authenticate to Edit |
+
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Workspace Privacy |  |
+| click_ok | document.forms[1].permission_set_name[1] |  |
+| click_and_wait | Button |  |
+| st-logout |  |  |
+
+| open_ok | /%%workspace%%/index.cgi |  |
+| text_like | Edit |  |
+| click_and_wait | link=Edit |  |
+| text_like | errors-and-messages | You must login to view this page |
+| st-admin | create-user --email nonmember_%%start_time%%@ken.socialtext.net --password 123456 |  |
+| type_ok | username | nonmember_%%start_time%%@ken.socialtext.net |
+| type_ok | password | 123456 |
+| click_and_wait | //input[@value='Log in'] |  |
+| wait_for_element_visible_ok | st-editing-title | 30000 |
+| text_like | st-editing-title | Editing: |
+| click_and_wait | st-save-button-link |  |
+| text_like | st-editing-tools | Edit |
+| text_like | st-editing-tools | Comment |
+| wait_for_element_visible_ok | link=Settings | 20000 |
+| click_and_wait | link=Settings |  |
+
+| text_like | st-settings-select | My Settings |
+| text_like | st-settings-select | List All Users |
+| text_like | st-settings-select | My Workspaces |
+| text_like | st-settings-select | Unsubscribe |
+| text_like | st-settings-select | Create New Weblog |
+| text_like | st-settings-select | Page Editing |
+| text_like | st-settings-select | Screen Layout |
+| text_like | st-settings-select | Your Notepad |
+| text_like | st-settings-select | What's New |
+| text_like | st-settings-select | Syndicate |
+| text_like | st-settings-select | Time |
+| text_like | st-settings-select | Watchlist |
+| text_like | st-settings-select | Weblogs |
+| text_unlike | st-settings-select | Manage All Users |
+
+| *Comment* | Test Case: Public Authenticate to Edit Teardown |  |
+| st-logout |  |  |
+| text_like | st-login-to-edit-button-link | Edit |
+| st-admin | set-permissions --workspace %%workspace%% --permissions member-only |  |
+
+| *Comment* | Test Case: Public Authenticate to Edit COMPLETED |

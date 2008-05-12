@@ -1,0 +1,103 @@
+If Test Case: Verify Location fails, you have not configured your 
+test env properly and are not testing the test-workspace
+
+* [Test Case: Verify Location]
+
+* [Test Case: Home]
+* [Test case: Watchlist]
+* [Test Case: Edit This Page]
+* [Test Case: Double Click to Edit]
+* [Test Case: New Page]
+* [Test Case: New Page No Overwrite]
+* [Test case: functional search tests]
+* [Test Case: Phrase search]
+* [Test Case: stemming]
+* [Test Case: Tags]
+* [Test Case: Tagging]
+* [Test Case: Tagging in the Editor]
+* [Test Case: Hide sidebar]
+* [Test Case: Sidebar: Incoming Links]
+* [Test Case: Orphans List]
+* [Test Case: Sidebar: Recently Viewed]
+* [Test Case: Sidebar: Recent Changes]
+* [Test Case: Revisions]
+* [Test Case: What's New]
+* [Test Case: All Pages]
+* [Test Case: Tools: Duplicate Page]
+* [Test Case: Tools: Rename Page]
+* [Test Case: Tools: Delete Page]
+* [Test Case: Tools: Copy Page to Workspace]
+* [Test Case: Tools: Export as HTML]
+* [Test Case: Add Comment]
+* [Test Case: Comment Form Fields]
+* [Test Case: Connections]
+* [Test Case: Authenticated-User-Only]
+* [Test Case: Public Authenticate to Edit]
+* [Test Case: Public]
+* [Test Case: Public-Read-Only]
+* [Test Case: Public-Comment-Only]
+* [Test Case: Intranet]
+* [Test Case: Settings: Email Notification]
+* [Test Case: Direct URI]
+* [Test Case: Strings]
+* [Test Case: Single Dash]
+* [Test Case: Inter Workspace Search]
+* [Test Case: Untitled Page]
+* [Test Case: Page Open Errors]
+* [Test Case: Return to last login]
+* [Test Case: Link Interface]
+* [Test Case: Nasty Double Dashes]
+
+TC Insert Menu will fail as the menu is being reworked. Revise the test.
+
+* [Test Case: Insert Menu]
+
+uses default wikiemail or `$ENV{WIKIEMAIL}`
+
+* [Test Case: Email]
+
+RSS Icon Tests are different for IE 6 and IE 7
+
+See [IE 7 Testcases] for IE 7
+See [IE 6 Testcases] for IE 6
+
+^ TESTCASES BELOW DO NOT WORK IN IE
+
+These tests cause IE 6 to segfault but are OK when run manually.
+Low priority TODO: refactor these to see if you can get IE 6 to run them
+
+* Test Case: Perl Loc
+* Test Case: Js Loc
+* Test Case: Perl Loc with Multibyte character
+* Test Case: Js Loc with Multibyte character
+
+The following tests require higher security privileges for the browser, *iehta for IE. Due to cross-site-scripting limitations enforced by IE, even *iehta won't work unless the browser and the server run on the same host machine. Investigate other ways to make this work.
+
+* Test Case: Upload file
+* Test Case: Manage files
+* Test Case: All Files
+* Test Case: Delete Selected Attachments
+
+js-test is run separately after `make` in nlw/share/js-test in a dev env
+use alias xwjsti to run js-test for IE
+
+----
+
+These are Test Cases that are not in OSR Testcases. Why not?
+Test Case: Help (don't know how to switch to a new tab)
+
+----
+
+^ All pages tagged 'Testcase' (only a list, visit the pages above for tests)
+
+Tests do not run out of the list since it isn't really here.
+
+{search: category:testcase AND NOT category:obsolete}
+
+^^^ Obsolete testcases
+
+{search: category:testcase AND category:obsolete}
+
+----
+
+{include: [Known Failing Testcases]}

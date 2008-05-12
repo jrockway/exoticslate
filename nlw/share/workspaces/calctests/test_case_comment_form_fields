@@ -1,0 +1,29 @@
+| *Comment* | Test Case: Comment Form Fields |
+
+| st-admin | set-comment-form-custom-fields --workspace %%workspace%% field1 field2 |  |
+
+| *Comment* | Test Case: Comment Form Fields: Create Test Page |  |
+| click_and_wait | st-newpage-link |  |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | st-newpage-pagename-edit | fields_testpage_%%start_time%% |
+| type_ok | wikiwyg_wikitext_textarea | fields_testpage_content_%%start_time%% |
+| click_and_wait | st-save-button-link |  |
+
+| *Comment* | Test Case: Comment Form Fields: fill in Comment Fields |
+| click_ok | st-comment-button-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=fields_testpage_%%start_time%%;caller_action=display |  |
+| type_ok | st-commentui-textarea | comment_%%start_time%% |
+| type_ok | field1 | fieldone_content_%%start_time%% |
+| type_ok | field2 | fieldtwo_content_%%start_time%% |
+| click_and_wait | st-commentui-savelink |  |
+| open_ok | /%%workspace%%/index.cgi?fields_testpage_%%start_time%% |  |
+| text_like | st-page-maincontent | qr/field1: fieldone_content_%%start_time%%.+field2: fieldtwo_content_%%start_time%%.+Comment: comment_%%start_time%%/ |
+
+| *Comment* | Test Case: Comment Form Fields: Teardown |  |
+| click_and_wait | link=Delete Page |  |
+| confirmation_like | Are you sure you want to delete this page? |  |
+| st-admin | set-comment-form-custom-fields --workspace %%workspace%% |  |
+
+| *Comment* | Test Case: Comment Form Fields COMPLETED |  |

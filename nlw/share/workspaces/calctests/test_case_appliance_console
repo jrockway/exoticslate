@@ -1,0 +1,269 @@
+*Invalid user logs in to console*
+
+* Fixture: ApplianceConfig
+
+| st-admin | remove-system-admin --email %%username%% | no longer has system admin access |
+| open | /console |
+| is_text_present_ok | Log in to Socialtext |
+
+*Valid user logs in to console*
+
+| st-admin | give-system-admin --email %%username%% | now has system admin access |
+| open | /console |
+| is_text_present_ok | Socialtext Appliance |
+
+*Login goes to overview tab*
+
+| is_text_present_ok | Workspaces |
+| is_text_present_ok | To see a list of all the workspaces and users on the system, go to the Socialtext Accounts Admin tool. |
+| is_element_present_ok | link=Socialtext Accounts Admin |
+| is_text_present_ok | Disk Usage |
+| is_text_present_ok | total |
+| is_text_present_ok | free |
+| is_text_present_ok | percent free |
+| is_element_present_ok | link=Backup |
+| is_element_present_ok | link=Setup |
+| is_element_present_ok | link=Shutdown |
+| is_element_present_ok | link=Help |
+| is_element_present_ok | link=Socialtext Accounts Admin |
+| is_element_present_ok | link=Socialtext, Inc. |
+
+*Backup tab*
+
+| click_ok | link=Backup |
+| wait_for_page_to_load_ok | 10000 |
+| is_element_present_ok | link=Overview |
+| is_element_present_ok | link=Setup |
+| is_element_present_ok | link=Shutdown |
+| is_element_present_ok | link=Help |
+| is_element_present_ok | link=Socialtext, Inc. |
+| is_text_present_ok | Perform Backup Now |
+| is_element_present_ok | backup_now |
+| is_text_present_ok | Perform Restore |
+| is_text_present_ok | Perform Restore |
+| is_element_present_ok | link=Refresh file list |
+| is_element_present_ok | save_schedule |
+| is_text_present_ok | Automatic Backup Schedule |
+| is_text_present_ok | Mon |
+| is_text_present_ok | Tue |
+| is_text_present_ok | Wed |
+| is_text_present_ok | Thu |
+| is_text_present_ok | Fri |
+| is_text_present_ok | Sat |
+| is_text_present_ok | Sun |
+| is_text_present_ok | Time each day: |
+| is_element_present_ok | hour |
+| is_element_present_ok | minutes |
+| is_element_present_ok | set_destination |
+| is_text_present_ok | Backup Destination |
+| is_text_present_ok | The appliance can store backup files on a Windows- or SMB-compatible shared directory/folder on another computer. Set the backup server, directory and username here. |
+| is_text_present_ok | Backup Server name |
+| is_element_present_ok | smbhost |
+| is_text_present_ok | Shared Directory Name |
+| is_element_present_ok | smbshare |
+| is_text_present_ok | Username |
+| is_element_present_ok | smbuser |
+| is_text_present_ok | Password |
+| is_element_present_ok | smbuser |
+| is_text_present_ok | Archive Directory |
+| is_element_present_ok | archivedir |
+
+*Change stuff in backup*
+
+| uncheck_ok | chk_1 |
+| uncheck_ok | chk_2 |
+| uncheck_ok | chk_3 |
+| uncheck_ok | chk_4 |
+| uncheck_ok | chk_5 |
+| uncheck_ok | chk_6 |
+| uncheck_ok | chk_7 |
+| select_ok | hour | label=0 |
+| select_ok | minutes | label=0 | should do a submit here, but it doesn't work |
+| check_ok | chk_1 |
+| check_ok | chk_3 |
+| check_ok | chk_5 |
+| click_ok | save_schedule |
+| wait_for_page_to_load_ok | 30000 |
+| type_ok | smbhost | test_server |
+| type_ok | smbshare | test_dir |
+| type_ok | smbuser | test_user |
+| type_ok | smbpass | test_pass |
+| click_ok | set_destination |
+| wait_for_page_to_load_ok | 30000 |
+
+*Check Backup*
+
+| config_is | backdays | 1,3,5 |
+| config_is | backhour | 0 |
+| config_is | backminutes | 0 |
+| config_is | smbhost | test_server |
+| config_is | smbpass | test_pass |
+| config_is | smbshare | test_dir |
+| config_is | smbuser | test_user |
+
+*Change Backup Schedule to none*
+
+| uncheck_ok | chk_1 |
+| uncheck_ok | chk_2 |
+| uncheck_ok | chk_3 |
+| uncheck_ok | chk_4 |
+| uncheck_ok | chk_5 |
+| uncheck_ok | chk_6 |
+| select_ok | hour | label=0 |
+| select_ok | minutes | label=0 |
+| click_ok | save_schedule |
+| wait_for_page_to_load_ok | 30000 |
+| config_is | backdays |  | this is a comment |
+| config_is | backhour | 0 |
+| config_is | backminutes | 0 |
+
+*Change Backup Schedule to 2,4,6*
+
+| check_ok | chk_2 |
+| check_ok | chk_4 |
+| check_ok | chk_6 |
+| select_ok | hour | label=0 |
+| select_ok | minutes | label=0 |
+| click_ok | save_schedule |
+| wait_for_page_to_load_ok | 30000 |
+| config_is | backdays | 2,4,6 |
+| config_is | backhour | 0 |
+| config_is | backminutes | 0 |
+| config_is | smbhost | test_server |
+| config_is | smbpass | test_pass |
+| config_is | smbshare | test_dir |
+| config_is | smbuser | test_user |
+
+* Setup Tab*
+
+| click_ok | link=Setup |
+| wait_for_page_to_load_ok | 10000 |
+| is_element_present_ok | link=Overview |
+| is_element_present_ok | link=Backup |
+| is_element_present_ok | link=Shutdown |
+| is_element_present_ok | link=Help |
+| is_element_present_ok | link=Socialtext, Inc. |
+| is_text_present_ok | Internet Time Server |
+| is_text_present_ok | Appliance clock when this screen was generated: |
+| is_text_present_ok | Internet Time Server |
+| is_text_present_ok | You can synchronize the appliance clock with another computer using the Internet Time protocol. The appliance must be able to contact that server via port 37. |
+| is_text_present_ok | Apache Logs |
+| is_text_present_ok | Set Email Configuration |
+| is_text_present_ok | Outgoing mail server |
+| is_text_present_ok | (leave blank to use appliance's built-in SMTP server) |
+| is_text_present_ok | Send Test Email |
+| is_text_present_ok | Email address for testing |
+| is_text_present_ok | Add Appliance Administrators |
+| is_text_present_ok | Create Initial Workspace |
+| is_text_present_ok | This action will delete all existing workspaces and users on this appliance, and create the Admin workspace. |
+| is_element_present_ok | timeserver |
+| is_element_present_ok | timeserver_config |
+| is_element_present_ok | timeserver_sync |
+| is_element_present_ok | apache_error_log |
+| is_element_present_ok | smarthost |
+| is_element_present_ok | config_email |
+| is_element_present_ok | recipient_email |
+| is_element_present_ok | test_email |
+| is_element_present_ok | admin_email |
+| is_element_present_ok | add_admin |
+| is_element_present_ok | create_workspace |
+
+*Change stuff in Setup*
+
+| type_ok | timeserver | mytimeserver |
+| click_ok | timeserver_config |
+| wait_for_page_to_load_ok | 30000 |
+| type_ok | smarthost | myeximhost |
+| click_ok | config_email |
+| wait_for_page_to_load_ok | 30000 |
+
+*Check Setup*
+
+| config_is | timeserver | mytimeserver |
+| config_is | eximsmarthost | myeximhost |
+
+*Reset Setup*
+
+| click_ok | link=Backup |
+| wait_for_page_to_load_ok | 30000 |
+| click_ok | link=Setup |
+| wait_for_page_to_load_ok | 30000 |
+| type_ok | timeserver |  |
+| click_ok | timeserver_config |
+| wait_for_page_to_load_ok | 30000 |
+| type_ok | smarthost |  |
+| click_ok | config_email |
+| wait_for_page_to_load_ok | 30000 |
+| value_is | timeserver | ntp.ubuntu.org | make sure the default setting is ntp.ubuntu.org |
+
+*Shutdown tab*
+
+| click_ok | link=Shutdown |
+| wait_for_page_to_load_ok | 30000 |
+| is_element_present_ok | link=Overview |
+| is_element_present_ok | link=Backup |
+| is_element_present_ok | link=Setup |
+| is_element_present_ok | link=Help |
+| is_element_present_ok | link=Socialtext, Inc. |
+| is_text_present_ok | Shut Down Appliance |
+| is_element_present_ok | shutdown |
+| is_text_present_ok | Reboot Appliance |
+| is_element_present_ok | reboot |
+| click_ok | link=Shutdown |
+| wait_for_page_to_load_ok | 30000 |
+
+*Help tab*
+
+| click_ok | link=Help |
+| wait_for_page_to_load_ok | 30000 |
+| is_element_present_ok | link=Overview |
+| is_element_present_ok | link=Backup |
+| is_element_present_ok | link=Setup |
+| is_element_present_ok | link=Shutdown |
+| is_element_present_ok | link=Socialtext, Inc. |
+| is_text_present_ok | Appliance Documentation |
+| is_element_present_ok | link=Appliance Manual Workspace |
+| is_element_present_ok | link=Socialtext Support |
+| is_text_present_ok | Contact Socialtext Support |
+| is_element_present_ok | link=support@socialtext.com |
+
+^ Test Description
+
+These tests should be refactored into executable tests:
+
+^^ Overview tab
+
+* Disk usage should match actual disk usage
+* Disk usage should only show one partition, 'System'
+
+^^ Backup tab
+
+* Set Backup Destination
+** Should save the values to `/etc/socialtext/appliance.conf`
+* Automatic Backup Schedule
+** Should write a new crontab (it overwrites the current crontab)
+* Perform Backup
+** Should save a backup file to the configured Samba share
+* Restore Backup
+** Should list the available backups on the Samba share
+** Should restore a backup from the Samba share
+
+^^ Setup tab
+
+* Set Date and Time to valid and invalid timestamps
+
+* Set time server to valid and invalid servers
+* Click synchronize timeserver now!
+** Time should be change to proper time
+* Apache Logs
+** Should show the apache log file
+* Set Email Configuration
+** If empty and set, `/etc/exim4/update-exim4.conf.conf` set to internet style
+** If host provided, `/etc/exim4/update-exim4.conf.conf` set to smarthost style
+* Create Initial Workspace
+** click, should blow away all users/workspaces, and re-create admin/help workspaces
+
+^^ Shutdown tab
+
+* Reboot should reboot the box
+* Shutdown should shutdown the box

@@ -12,8 +12,13 @@ sudo unzip ./wikitestfiles.zip -d /opt/wikitest_files/
 echo CREATING test-data  WORKSPACE
 sudo -u www-data ./create-test-data-workspace
 
+if [ -e /var/www/socialtext/data/wikitests ]; then
+    echo DELETING old wikitests workspace
+    sudo -u www-data /usr/bin/st-admin delete-workspace --w wikitests --no-export
+fi
+
 echo IMPORTING wikitests WORKSPACE
-sudo -u www-data /usr/bin/st-admin import-workspace --tarball ./wikitests.1.tar.gz --overwrite
+sudo -u www-data /usr/bin/st-admin import-workspace --tarball ./wikitests.1.tar.gz
 
 echo GRANTING Accounts and System admin to devnull1
 sudo -u www-data /usr/bin/st-admin give-system-admin --e devnull1@socialtext.com

@@ -6,6 +6,7 @@ use warnings;
 use YAML qw();
 use File::Spec;
 use File::Temp;
+use POSIX qw(fcntl_h);
 use mocked 'Socialtext::Log', qw(:tests);
 use Test::Socialtext tests => 64;
 

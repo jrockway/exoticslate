@@ -2,11 +2,40 @@
 <Module>
   <ModulePrefs title="All People">
   <Require feature="dynamic-height" />
+  <Require feature="tabs" />
   <Require feature="socialtext" />
   </ModulePrefs>
   <Content type="html">
     <![CDATA[
-        <div id="__MODULE_ID__-content"> </div>
+    <style> 
+     .myContent {
+        padding-top: 5px;
+     }
+    </style>
+    <div id="__MODULE_ID__-content"> </div>
+    <script>
+       var alpha = Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+       var tabs;
+       var tid = {};
+       
+       function doResize() {
+         gadgets.window.adjustHeight();
+       }
+
+       gadgets.util.registerOnLoadHandler(function() {
+           tabs = new gadgets.TabSet;
+           var ix = 0;
+           for (var i=0; i < alpha.length; i++) {
+             var char = alpha[i];
+             var dom_id = tabs.addTab(char, {callback: doResize });
+             tid[char] = { id: dom_id, ix: ix };
+             ix++;
+           }
+       });
+    </script>
+    
+<!-- test tabs -->
+
         <script>
     var guanxi_base = 'http://demo.socialtext.net:6200';
     var guanxi = 'http://demo.socialtext.net:6200/people/json';
@@ -21,9 +50,10 @@
     function putdata(result) {
         var people = gadgets.json.parse(result.data);
         var ix =0;
+        var first_with_info = 27;
         for (var i=0; i<people.length; i++) {
             var person = people[i];
-            if (ix++ < 100) {
+            if (ix++) {
                 var info = person; 
 
                 if (info.first_name) {
@@ -34,9 +64,17 @@
                 else {
                     info.fullname = info.name;
                 }
-                    
+                var firstc = info.last_name ? info.last_name.substring(0,1) : '';
+                if (! firstc) {
+                    firstc = info.name.substring(0,1);
+                } 
+                var destination = tid[firstc.toUpperCase()].id;
+                if(tid[firstc.toUpperCase()].ix < first_with_info) {
+                    first_with_info = tid[firstc.toUpperCase()].ix;
+                }
                 photo = "http://demo.socialtext.net:6200/people/" + info.name + "/small_photo";
-                jQuery('#__MODULE_ID__-content').append(
+                jQuery('#'+destination).append(
+                // jQuery('#__MODULE_ID__-content').append(
                 jQuery('<div class="myContent">').append(
                         avatar({
                             fullname: info.fullname,
@@ -46,7 +84,12 @@
                     jQuery('<div class="border">')
                 );
               }
-          }
+       }
+
+       if (first_with_info > 26) {
+           first_with_info = 0 
+       }
+       tabs.setSelectedTab(first_with_info);
        gadgets.window.adjustHeight();
     }
 

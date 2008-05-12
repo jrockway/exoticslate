@@ -5,8 +5,7 @@ use strict;
 use warnings;
 use YAML qw();
 use File::Spec;
-use File::Temp;
-use POSIX qw(fcntl_h);
+use File::Temp 0.18 qw(:seekable);
 use mocked 'Socialtext::Log', qw(:tests);
 use Test::Socialtext tests => 64;
 

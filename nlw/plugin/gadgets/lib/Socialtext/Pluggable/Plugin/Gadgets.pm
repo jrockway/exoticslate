@@ -11,6 +11,7 @@ use Socialtext::Gadgets::Container;
 use XML::LibXML;
 use LWP;
 use HTTP::Request;
+use URI::Escape qw(uri_unescape);
 
 use base 'Socialtext::Pluggable::Plugin';
 
@@ -46,7 +47,7 @@ sub add_gadget {
 
     $container->install_gadget($vars{url});
 
-    $self->redirect('?action=gadgets');
+    $self->redirect('index.cgi?action=gadgets');
 }
 
 sub gallery {

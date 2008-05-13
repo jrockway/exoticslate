@@ -42,6 +42,10 @@ my @skip_paths = qw(
 );
 my %skip_paths = map { ($_,1) } @skip_paths;
 
+my @skip_matching = (
+    qr#share/skin/common/javascript/SocialCalc#,
+);
+
 my @skip_files = qw(
     share/skin/st/javascript/test/run/bin/render-template
     share/skin/common/select/bin/gen_skins_js.pl
@@ -58,6 +62,9 @@ my $iter =
         descend_filter => sub {
             return if $_ eq '.svn';
             return if $skip_paths{$File::Next::dir};
+            for (@skip_matching) {
+                return if $File::Next::dir =~ $_;
+            }
             return 1;
         },
         sort_files => 1,

@@ -269,10 +269,13 @@ sub _getContent {
     }
     else {
         # REVIEW: this is problematic for very large attachments
-        my $buff;
-        my $content_length = $self->request->header_in('Content-Length');
-        my $result = read( \*STDIN, $buff, $content_length, 0 );
-        die "unable to read buffer $!" if not defined($result);
+        my $buff = $self->query->param('PUTDATA');
+        # if we are using old CGI, there is no PUTDATA, so fall back to read()
+        unless ($buff) {
+            my $content_length = $self->request->header_in('Content-Length');
+            my $result = read( \*STDIN, $buff, $content_length, 0 );
+            die "unable to read buffer $!" if not defined($result);
+        }
         return $buff;
     }
 }

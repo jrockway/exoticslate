@@ -4,7 +4,7 @@
 use warnings;
 use strict;
 
-use Test::HTTP::Socialtext '-syntax', tests => 26;
+use Test::HTTP::Socialtext '-syntax', tests => 34;
 
 use Readonly;
 use Socialtext::JSON;
@@ -18,6 +18,16 @@ Readonly my $BAD_WORKSPACE_NAME => 'partay';
 Readonly my $WORKSPACE_TITLE    => 'Admin Wiki';
 Readonly my $PEON               => 'devnull2@socialtext.com';
 Readonly my $ADMIN              => 'devnull1@socialtext.com';
+Readonly my $GOOD_PUT_PAYLOAD   => encode_json(
+    { customjs_uri => 'http://example.com', permission_set => 'intranet' } );
+Readonly my $BAD_PUT_PAYLOAD => encode_json(
+    {
+        customjs_uri    => 'http://example.com',
+        permission_set => 'flaky-access'
+    }
+);
+Readonly my $MEMBER_PUT_PAYLOAD =>
+    encode_json( { permission_set => 'member-only' } );
 
 test_http "GET existing workspace as html" {
     >> GET $BASE/$WORKSPACE_NAME
@@ -49,6 +59,9 @@ test_http "GET existing workspace as json by admin" {
 
     ok scalar keys(%$object) > 4,
         'admin request gets lots of info for workspace';
+
+    ok grep( $_ eq 'permission_set', keys(%$object) ),
+        'admin request has permission set key';
 }
 
 $Test::HTTP::BasicUsername = $PEON;
@@ -101,6 +114,56 @@ test_http "GET short workspace name return 400 with error content" {
 
     like( $test->response->content(), qr/3 and 30/,
         'error message was returned for "aa"' );
+}
+
+# test doing a PUT to set the permission_set for the workspace
+# and the customjs_uri, and generally test workspace PUT
+$Test::HTTP::BasicUsername = $PEON;
+test_http "peon can't PUT to workspace, 403" {
+    >> PUT $BASE/$WORKSPACE_NAME
+    >> Content-type: application/json
+    >>
+    >> $GOOD_PUT_PAYLOAD
+
+    << 403
+}
+
+$Test::HTTP::BasicUsername = $ADMIN;
+test_http "admin can PUT to payload 204" {
+    >> PUT $BASE/$WORKSPACE_NAME
+    >> Content-type: application/json
+    >>
+    >> $GOOD_PUT_PAYLOAD
+
+    << 204
+
+    my $workspace = Socialtext::Workspace->new( name => $WORKSPACE_NAME );
+    is $workspace->permissions()->current_set_name, 'intranet',
+        'workspace permissions set changed to intranet';
+    is $workspace->customjs_uri, 'http://example.com',
+        'workspace customjs_uri set to example.com';
+}
+
+test_http "admin PUT of bad payload gives 400" {
+    >> PUT $BASE/$WORKSPACE_NAME
+    >> Content-Type: application/json
+    >>
+    >> $BAD_PUT_PAYLOAD
+
+    << 400
+}
+
+test_http "restore member settings to admin, 204" {
+    >> PUT $BASE/$WORKSPACE_NAME
+    >> Content-Type: application/json
+    >>
+    >> $MEMBER_PUT_PAYLOAD
+
+    << 204
+
+    my $workspace = Socialtext::Workspace->new( name => $WORKSPACE_NAME );
+    is $workspace->permissions()->current_set_name, 'member-only',
+        'workspace permissions set changed to member-only';
 }
 
 $Test::HTTP::BasicUsername = $PEON;

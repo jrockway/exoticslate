@@ -22,6 +22,7 @@ field 'base_dn';
 field 'root_dn';
 field 'root_pw';
 field 'requires_auth';
+field 'raw_conf';
 field 'datadir';
 field 'logfile';
 field 'slapd';
@@ -54,6 +55,7 @@ sub new {
         root_pw         => $config{root_pw}         || 'its-a-secret',
         requires_auth   => $config{requires_auth}   || 0,
         # openldap specific parameters
+        raw_conf        => $config{raw_conf}        || '',
         datadir         => $config{datadir}         || File::Spec->catdir($env->root_dir(),'ldap',$port),
         logfile         => $config{logfile}         || File::Spec->catfile($env->root_dir(),'log',"ldap-$port.log"),
         slapd           => $config{slapd}           || _autodetect_slapd(),
@@ -330,6 +332,8 @@ rootpw "$self->{root_pw}"
 directory "$self->{datadir}"
 # auth requirements
 $requires_auth
+# raw config additions
+$self->{raw_conf}
 END_SLAPD_CONF
         close $fout;
     }
@@ -452,6 +456,7 @@ Test::Socialtext::Bootstrap::OpenLDAP - Bootstrap OpenLDAP instances
   $root_dn          = $openldap->root_dn();
   $root_pw          = $openldap->root_pw();
   $requires_auth    = $openldap->requires_auth();
+  $raw_conf         = $openldap->raw_conf();
   $datadir          = $openldap->datadir();
   $logfile          = $openldap->logfile();
   $slapd            = $openldap->slapd();
@@ -525,6 +530,11 @@ Specifies the password for the root/admin user for the LDAP directory.
 
 Specifies whether or not the OpenLDAP server I<requires> that the connection be
 authenticated (if required, anonymous binds will fail).
+
+=item raw_conf
+
+Specifies I<raw> OpenLDAP configuration directives that you want to have
+included in the OpenLDAP configuration file.
 
 =item datadir
 
@@ -626,6 +636,11 @@ Returns the "Root Password" for the OpenLDAP instance.
 Returns a flag stating whether or not the OpenLDAP instance I<requires> that
 all connections be authenticated.  If true, then anonymous binds will be
 refused.
+
+=item B<raw_conf()>
+
+Returns any I<raw> OpenLDAP configuration that you asked to have included into
+the configuration file.
 
 =item B<datadir()>
 

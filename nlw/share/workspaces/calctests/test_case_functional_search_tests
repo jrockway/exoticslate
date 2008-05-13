@@ -1,224 +1,203 @@
 Note: Heavily dependent on the default content of current test-data workspace
 
 | *Comment* | Test case: Functional Search Tests easy searches |  |
-| st-search | =Jabber | Titles containing 'Jabber' (1) |
-| st-result | jabber |
-| st-search | tag: carroll | Pages containing 'tag: carroll' (5) |
-| st-result | jabber |
-| st-result | Jabberwocky |
-| st-result | The Vorpal Sword |
-| st-result | Wock |
-| st-search | 1.2 | Pages containing '1.2' (2) |
-| st-result | jabber |
-| st-result | Wock |
-| st-search | 100% | Pages containing '100%' (4) |
-| st-result | jabber |
-| st-result | Canonical Test Data Set |
-| st-result | Jabberwocky |
-| st-result | Project Plans |
+| st-search | =Payment | Titles containing 'Payment' (2) |
+| st-result | House Payment |  |
+| st-result | Credit Card Payment |  |
+| st-search | tag: calculator | Pages containing 'tag: calculator' (5) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-result | Credit Card Payment |  |
+| st-result | House Payment |  |
+| st-result | Car Loan |  |
+| st-search | 600 | Pages containing '600' (2) |
+| st-result | House Payment |  |
+| st-result | Credit Card Payment |  |
+| st-search | 5% | Pages containing '5%' (1) |
+| st-result | House Payment |  |
 
 | *Comment* | Test case: Functional Search partial match |  |
-| st-search | jab | Pages containing 'jab' (0) |
-| st-search | jab* | Pages containing 'jab*' (3) |
-| st-result | Jabberwocky |
-| st-result | beamish boy |
-| st-result | jabber |
-| st-search | vorp | Pages containing 'vorp' (0) |
-| st-search | vorp* | Pages containing 'vorp*' (2) |
-| st-result | Jabberwocky |
-| st-result | The Vorpal Sword |
-| st-search | jab* OR vorp* | Pages containing 'jab* OR vorp*' (4) |
-| st-result | Jabberwocky |
-| st-result | beamish boy |
-| st-result | jabber |
-| st-result | The Vorpal Sword |
+| st-search | sala | Pages containing 'sala' (0) |
+| st-search | sala* | Pages containing 'sala*' (2) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-search | mont | Pages containing 'mont' (0) |
+| st-search | mont* | Pages containing 'mont*' (3) |
+| st-result | House Payment |  |
+| st-result | Car Loan |  |
+| st-result | Credit Card Payment |
+
+| st-search | sal* OR mont* | Pages containing 'sal* OR mont*' (5) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-result | House Payment |  |
+| st-result | Car Loan |  |
+| st-result | Credit Card Payment |  |
 
 | *Comment* | Test case: Functional Search tag match and partial |  |
-| st-search | tag:carr | Pages containing 'tag:carr' (0) |
+| st-search | tag:calc | Pages containing 'tag:calc' (0) |
 | *Comment* | Test case: Functional Search tag match and partial |  |
-| st-search | tag:carr* | Pages containing 'tag:carr*' (5) |
-| st-result | Jabberwocky |
-| st-result | beamish boy |
-| st-result | jabber |
-| st-result | The Vorpal Sword |
-| st-result | Wock |
+| st-search | tag:calc* | Pages containing 'tag:calc*' (5) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-result | House Payment |  |
+| st-result | Car Loan |  |
+| st-result | Credit Card Payment |  |
 
 | *Comment* | Test case: Functional Search title match and partial |  |
-| st-search | title:Woc | Pages containing 'title:Woc' (0) |
+| st-search | title:Sal | Pages containing 'title:Sal' (0) |
 | *Comment* | Test case: Functional Search tag match and partial |  |
-| st-search | title:Woc* | Pages containing 'title:Woc*' (1) |
-| st-result | Wock |
+| st-search | title:Sal* | Pages containing 'title:Sal*' (2) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
 
 *AND searches:*
 
 Title searches
 
 | *Comment* | Test case: Functional Search Tests AND title searches |  |
-| st-search | =Jabber AND brillig | Titles containing 'Jabber AND brillig' (1) |
-| st-result | jabber |
-| st-search | =Jabber AND NOT brillig | Titles containing 'Jabber AND NOT brillig' (0) |
-| st-search | =Jabber AND tag:carroll | Titles containing 'Jabber AND tag:carroll' (1) |
-| st-result | jabber |
-| st-search | =Jabber AND NOT tag:carroll | Titles containing 'Jabber AND NOT tag:carroll' (0) |
-| st-search | =Jabber AND -tag:carroll | Titles containing 'Jabber AND -tag:carroll' (0) |
-| st-search | ="beamish boy" AND tag:"carroll's poem" | Titles containing '"beamish boy" AND tag:"carroll's poem"' (1) |
-| st-result | beamish boy |  |
+| st-search | =Credit* AND spen* | Titles containing 'Credit* AND spen*' (1) |
+| st-result | Credit Card Payment |  |
+| st-search | =Credit* AND NOT amou* | Titles containing 'Credit* AND NOT amou*' (0) |
+| st-search | =Sala* AND tag:retirement | Titles containing 'Sala* AND tag:retirement' (2) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-search | =Sala* AND NOT tag:retirement | Titles containing 'Sala* AND NOT tag:retirement' (0) |
+| st-search | =Sala* AND -tag:retirement | Titles containing 'Sala* AND -tag:retirement' (0) |
+| st-search | ="Another Salary" AND tag:"Bob The Bellhop" | Titles containing '"Another Salary" AND tag:"Bob The Bellhop"' (1) |
+| st-result | Another Salary |  |
 | *Comment* | Use equal sign and title as second component of search |  |
-| st-search | tag:carrol AND title:beamish | Pages containing 'tag:carrol AND title:beamish' (1) |
-| st-result | beamish boy |  |
-| st-search | tag:carrol AND =beamish | Pages containing 'tag:carrol AND =beamish' (1) |
-| st-result | beamish boy |  |
+| st-search | tag:retirement AND title:Salary | Pages containing 'tag:retirement AND title:Salary' (2) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-search | tag:retirement AND =Salary | Pages containing 'tag:retirement AND =Salary' (2) |
+| st-result | Another Salary |  |
 
 | *Comment* | Test case: Functional Search Tests AND tag searches |  |
-| st-search | brillig AND tag:Carroll | Pages containing 'brillig AND tag:Carroll' (2) |
-| st-result | jabber |
-| st-result | Jabberwocky |
-| st-search | tag:carroll AND tag:jabber | Pages containing 'tag:carroll AND tag:jabber' (4) |
-| st-result | jabber |
-| st-result | Jabberwocky |
-| st-result | The Vorpal Sword |
-| st-search | tag:carroll AND tag:foobar | Pages containing 'tag:carroll AND tag:foobar' (0) |
-| st-search | tag:carroll AND tag:jabber AND tag:foobar | Pages containing 'tag:carroll AND tag:jabber AND tag:foobar' (0) |
-| st-search | tag:"carroll's poem" AND tag:jabber | Pages containing 'tag:"carroll's poem" AND tag:jabber' (2) |
-| st-result | Jabberwocky |  |
-| st-result | beamish boy |  |
+| st-search | year AND tag:retirement | Pages containing 'year AND tag:retirement' (2) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-search | tag:retirement AND tag:calculator | Pages containing 'tag:retirement AND tag:calculator' (2) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-search | tag:retirement AND tag:foobar | Pages containing 'tag:retirement AND tag:foobar' (0) |
+| st-search | tag:retirement AND tag:calculator AND tag:foobar | Pages containing 'tag:retirement AND tag:calculator AND tag:foobar' (0) |
+| st-search | tag:"Bob The Bellhop" AND tag:retirement | Pages containing 'tag:"Bob The Bellhop" AND tag:retirement' (1) |
+| st-result | Another Salary |  |
 
 | *Comment* | Test case: Functional Search Tests AND token searches |  |
-| st-search | tag:carroll AND 1.2 | Pages containing 'tag:carroll AND 1.2' (2) |
-| st-result | jabber |
-| st-result | Wock |
-| st-search | brillig AND 1.2 | Pages containing 'brillig AND 1.2' (1) |
-| st-result | jabber |
-| st-search | 100% AND 1.2 | Pages containing '100% AND 1.2' (1) |
-| st-result | jabber |
-| st-search | tag:"carroll's poem" AND 1.4 | Pages containing 'tag:"carroll's poem" AND 1.4' (1) |
-| st-result | Jabberwocky |  |
+| st-search | tag:retirement AND 2121.8 | Pages containing 'tag:retirement AND 2121.8' (2) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-search | Salary AND 2121.8 | Pages containing 'Salary AND 2121.8' (2) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-search | 5.0% AND 500 | Pages containing '5.0% AND 500' (1) |
+| st-result | Car Loan |  |
+| st-search | tag:"Bob The Bellhop" AND 3.0% | Pages containing 'tag:"Bob The Bellhop" AND 3.0%' (1) |
+| st-result | Another Salary |  |
 
 | *Comment* | Test case: Functional Search Tests OR title searches |  |
-| st-search | =jabberwocky OR brillig | Titles containing 'jabberwocky OR brillig' (2) |
-| st-result | jabber |
-| st-result | Jabberwocky |
-| st-search | slithy OR title:jabber | Pages containing 'slithy OR title:jabber' (4) |
-| st-result | jabber |
-| st-result | Jabberwocky |
-| st-result | Slithy |
-| st-result | Wock |
-| st-search | ="beamish boy" OR tag:"carroll's poem" | Titles containing '"beamish boy" OR tag:"carroll's poem"' (2) |
-| st-result | Jabberwocky |
-| st-result | beamish boy |
+| st-search | =Salary OR Month | Titles containing 'Salary OR Month' (5) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-result | House Payment |  |
+| st-result | Car Loan |  |
+| st-result | Credit Card Payment |  |
+
+| st-search | Month OR title:Salary | Pages containing 'Month OR title:Salary' (5) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-result | House Payment |  |
+| st-result | Car Loan |  |
+| st-result | Credit Card Payment |  |
+
+| st-search | ="Another Salary" OR tag:"my next thirty years" | Titles containing '"Another Salary" OR tag:"my next thirty years"' (2) |
+| st-result | House Payment |  |
+| st-result | Another Salary |  |
 
 | *Comment* | Test case: Functional Search Tests OR tag searches |  |
-| st-search | slithy OR tag:carroll | Pages containing 'slithy OR tag:carroll' (6) |
-| st-result | jabber |
-| st-result | Jabberwocky |
-| st-result | The Vorpal Sword |
-| st-result | Slithy |
-| st-result | Wock |
-| st-result | beamish boy |
-| st-search | tag:carroll OR tag:jabber | Pages containing 'tag:carroll OR tag:jabber' (6) |
-| st-result | beamish boy |
-| st-result | jabber |
-| st-result | Jabberwocky |
-| st-result | The Vorpal Sword |
-| st-result | Stemming test page 2 |
-| st-result | Wock |
-| st-search | stem OR tag:carroll OR tag:jabber | Pages containing 'stem OR tag:carroll OR tag:jabber' (7) |
-| st-result | Stemming test page 1 |
-| st-result | beamish boy |
-| st-result | jabber |
-| st-result | Jabberwocky |
-| st-result | The Vorpal Sword |
-| st-result | Stemming test page 2 |
-| st-result | Wock |
-| st-search | tag:"carroll's poem" OR tag:jabber | Pages containing 'tag:"carroll's poem" OR tag:jabber' (5) |
-| st-result | Jabberwocky |
-| st-result | beamish boy |
-| st-result | The Vorpal Sword |
-| st-result | jabber |
-| st-result | Stemming test page 2 |
+| st-search | Month OR tag:retirement | Pages containing 'Month OR tag:retirement' (5) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-result | House Payment |  |
+| st-result | Car Loan |  |
+| st-result | Credit Card Payment |  |
+
+| st-search | tag:retirement OR tag:"my next thirty years" | Pages containing 'tag:retirement OR tag:"my next thirty years"' (3) |
+| st-result | House Payment |  |
+| st-result | Another Salary |  |
+| st-result | Salary |  |
+
+| st-search | Biggie OR tag:retirement OR tag:mortgage | Pages containing 'Biggie OR tag:retirement OR tag:mortgage' (4) |
+| st-result | Car Loan |  |
+| st-result | House Payment |  |
+| st-result | Another Salary |  |
+| st-result | Salary |  |
+
+| st-search | tag:"my next thirty years" OR tag:BMAC | Pages containing 'tag:"my next thirty years" OR tag:BMAC' (2) |
+| st-result | Car Loan |  |
+| st-result | House Payment |  |
 
 | *Comment* | Test case: Functional Search Tests OR token searches |  |
-| st-search | 1.2 OR 1.5 | Pages containing '1.2 OR 1.5' (2) |
-| st-result | jabber |  |
-| st-result | Wock |  |
-| st-search | 1.2 OR 100% | Pages containing '1.2 OR 100%' (5) |
-| st-result | jabber |  |
-| st-result | Canonical Test Data Set |  |
-| st-result | Jabberwocky |  |
-| st-result | Wock |  |
-| st-result | Project Plans |  |
-| st-search | =jabber OR 1.2 | Titles containing 'jabber OR 1.2' (2) |
-| st-result | jabber |  |
-| st-result | Wock |  |
-| st-search | =jabber OR 100% | Titles containing 'jabber OR 100%' (4) |
-| st-result | jabber |  |
-| st-result | Canonical Test Data Set |  |
-| st-result | Jabberwocky |  |
-| st-result | Project Plans |  |
-| st-search | tag:"carroll's poem" OR 1.2 | Pages containing 'tag:"carroll's poem" OR 1.2' (4) |
-| st-result | Jabberwocky |
-| st-result | beamish boy |
-| st-result | jabber |
-| st-result | wock |
+| st-search | 500 OR 600 | Pages containing '500 OR 600' (3) |
+| st-result | Car Loan |  |
+| st-result | House Payment |  |
+| st-result | Credit Card Payment |  |
+| st-search | =Salary OR 5% | Titles containing 'Salary OR 5%' (3) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-result | House Payment |  |
+| st-search | tag:"my next thirty years" OR 600 | Pages containing 'tag:"my next thirty years" OR 600' (2) |
+| st-result | House Payment |  |
+| st-result | Credit Card Payment |  |
 
 | *Comment* | Test case: Functional Search Tests NOT title searches |  |
-| st-search | title:jabber NOT slithy | Pages containing 'title:jabber NOT slithy' (1) |
-| st-result | jabber |  |
-| st-search | title:jabber OR slithy | Pages containing 'title:jabber OR slithy' (4) |
-| st-result | jabber |  |
-| st-result | Jabberwocky |  |
-| st-result | Slithy |  |
-| st-result | Wock |  |
-| st-search | slithy NOT title:jabber | Pages containing 'slithy NOT title:jabber' (3) |
-| st-result | Jabberwocky |  |
-| st-result | Slithy |  |
-| st-result | wock |  |
-| st-search | ="vorpal sword" NOT tag:"carroll's poem" | Titles containing '"vorpal sword" NOT tag:"carroll's poem"' (1) |
-| st-result | The Vorpal Sword |
+| st-search | title:Salary NOT another | Pages containing 'title:Salary NOT another' (1) |
+| st-result | Salary |  |
+| st-search | title:Salary OR another | Pages containing 'title:Salary OR another' (4) |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+| st-result | Kinosearch test page: truth & falsity |  |
+| st-search | salary NOT title:salary | Pages containing 'salary NOT title:salary' (0) |
+
+| st-search | ="Another Salary" NOT tag:"foo" | Titles containing '"Another Salary" NOT tag:"foo"' (1) |
+| st-result | Another Salary |
 
 | *Comment* | Test case: Functional Search Tests NOT tag searches |  |
-| st-search | tag:carroll -slithy | Pages containing 'tag:carroll -slithy' (3) |
-| st-result | jabber |  |
-| st-result | The Vorpal Sword |  |
-| st-search | tag:carroll NOT slithy | Pages containing 'tag:carroll NOT slithy' (3) |
-| st-result | jabber |  |
-| st-result | The Vorpal Sword |  |
-| st-search | slithy -tag:carroll | Pages containing 'slithy -tag:carroll' (1) |
-| st-result | Slithy |  |
-| st-search | slithy NOT tag:carroll | Pages containing 'slithy NOT tag:carroll' (1) |
-| st-result | Slithy |  |
-| st-search | tag:"carroll's poem" NOT tag:jabber | Pages containing 'tag:"carroll's poem" NOT tag:jabber' (0) |
+| st-search | tag:calculator -BMAC | Pages containing 'tag:calculator -BMAC' (4) |
+| st-result | House Payment |  |
+| st-result | Credit Card Payment |  |
+| st-result | Salary |  |
+| st-result | Another Salary |  |
+
+| st-search | tag:calculator NOT 600 | Pages containing 'tag:calculator NOT 600' (3) |
+| st-result | Car Loan |  |
+| st-result | Another Salary |  |
+| st-result | Salary |  |
+
+| st-search | Salary -tag:calculator | Pages containing 'Salary -tag:calculator' (0) |
+
+| st-search | Salary NOT tag:calculator | Pages containing 'Salary NOT tag:calculator | ' (0) |
+
+| st-search | tag:"my next thirty years" NOT tag:BMAC | Pages containing 'tag:"my next thirty years" NOT tag:BMAC' (1) |
+| st-result | House Payment |  |
 
 | *Comment* | Test case: Functional Search Tests NOT token searches |  |
-| st-search | 1.2 NOT 1.5 | Pages containing '1.2 NOT 1.5' (2) |
-| st-result | jabber |  |
-| st-result | Wock |  |
-| st-search | 1.2 NOT =jabber | Pages containing '1.2 NOT =jabber' (1) |
-| st-result | Wock |  |
-| st-search | 1.2 NOT jabber | Pages containing '1.2 NOT jabber' (1) |
-| st-result | Wock |  |
-| st-search | tag:"carroll's poem" NOT 1.2 | Pages containing 'tag:"carroll's poem" NOT 1.2' (2) |
-| st-result | beamish boy |  |
-| st-result | Jabberwocky |  |
+| st-search | 600 NOT 1250 | Pages containing '600 NOT 1250' (1) |
+| st-result | House Payment |  |
 
-| *Comment* | Test case: Functional Search Tests Phrase title searches |  |
-| st-search | ="beamish boy" | Titles containing '"beamish boy"' (1) |
-| st-result | beamish boy |  |
-| st-search | title:"beamish boy" | Pages containing 'title:"beamish boy"' (1) |
-| st-result | beamish boy |  |
+| st-search | 200 NOT =Salary | Pages containing '200 NOT =Salary' (1) |
+| st-result | Credit Card Payment |  |
 
-| *Comment* | Test case: Functional Search Tests Phrase tag searches |  |
-| st-search | tag:"stemming test" | Pages containing 'tag:"stemming test"' (2) |
-| st-result | Stemming test page 1 |  |
-| st-result | Stemming test page 2 |  |
+| st-search | 200 NOT Salary | Pages containing '200 NOT Salary' (1) |
+| st-result | Credit Card Payment |  |
+
+| st-search | tag:"my next thirty years" NOT 600 | Pages containing 'tag:"my next thirty years" NOT 600' (0) |
 
 | *Comment* | Test case: Functional Search Tests Phrase token searches |  |
-| st-search | "has thou slain the jabberwock" | Pages containing '"has thou slain the jabberwock"' (2) |
-| st-result | Jabberwocky |  |
-| st-result | beamish boy |  |
-| st-search | "has thou slain the jabberwock" | Pages containing '"has thou slain the jabberwock"' (2) |
-| st-result | Jabberwocky |  |
-| st-result | beamish boy |  |
+| st-search | "Biggie Motors" | Pages containing '"Biggie Motors"' (1) |
+| st-result | Car Loan |  |
 
 | *Comment* | Test case: Functional Search Tests COMPLETED |  |
 

@@ -31,7 +31,6 @@ sub register {
     $class->add_rest('/data/gadget/instance/:id/js' => 'get_js');
     $class->add_rest('/data/gadget/proxy' => 'proxy');
     $class->add_rest('/data/gadget/json_proxy' => 'json_proxy');
-    $class->add_rest('/data/gadget/json_feed_proxy' => 'json_feed_proxy');
     $class->add_rest('/data/gadget/desktop' => 'desktop');
 }
 
@@ -167,52 +166,6 @@ sub set_prefs {
     if (%prefs) {
         $gadget->storage->set('user_prefs', \%prefs);
     }
-}
-
-sub json_feed_proxy {
-    my ( $self, $args ) = @_;
-
-    my $url = $self->query->{url};
-    $url = $url->[0] if ref $url eq 'ARRAY';
-
-    my $content = $self->getContent();
-
-    my $agent = LWP::UserAgent->new; 
-    $agent->agent('Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.2) ' .
-                  'Gecko/20060601 Firefox/2.0.0.2 (Ubu ntu-edgy)');
-    my $request = HTTP::Request->new(GET => $url);
-    $agent->default_headers->push_header(
-        'Accept' => join(',',$self->getContentPrefs)
-    );
-
-    my $result = $agent->request($request);
-    $self->header(-type => $result->header('Content-type'));  
-    my $data = $result->decoded_content;
-    # undefined value in here somewhere, status_line? body? XXX TODO:
-   
-    my %response = ( rc => $result->status_line );
-
-   
-    if (my $feed = XML::Feed->parse(\$data) ) {
-        $response{title} = $feed->title();
-        $response{items} = [];
-        foreach my $e ($feed->entries) {
-            my %item;
-            $item{title} = $e->title;
-            $item{summary} = $e->summary->body;
-            $item{link} = $e->link;
-            $item{content} = $e->content->body;
-            $item{author} = $e->author;
-            $item{id} = $e->id;
-            $item{issued} = $e->issued->datetime;
-            push(@{$response{items}},\%item);
-        }
-
-    } else {
-        $response{error} =  XML::Feed->errstr . "\n";
-    }
-
-    return encode_json(\%response);
 }
 
 sub json_proxy  {

@@ -8,6 +8,18 @@
   </ModulePrefs>
  <UserPref name="rss_feed" display_name="RSS Feed" default_value="http://www.socialtext.com/blog/feed"/>
  <UserPref name="title" default_value="RSS Viewer" datatype="hidden"/>
+ <UserPref name="count" display_name="Items Displayed" datatype="enum" default_value="5">
+     <EnumValue value="5"/>
+     <EnumValue value="10"/>
+     <EnumValue value="15"/>
+     <EnumValue value="20"/>
+     <EnumValue value="25"/>
+ </UserPref>
+ <UserPref name="max_desc" display_name="Maximum description characters" datatype="enum" default_value="250">
+     <EnumValue value="100"/>
+     <EnumValue value="250"/>
+     <EnumValue value="0" display_value="Unlimited"/>
+ </UserPref>
   <Content type="html">
     <![CDATA[
 
@@ -53,22 +65,34 @@
     function get_items (node) {
         var items = [];
         var nodes = node.getElementsByTagName('item');
-        for (var i=0; i<nodes.length; i++) {
+        for (var i=0; i<nodes.length && i < __UP_count__; i++) {
             var title = nodes[i].getElementsByTagName('title')[0];
             var link  = nodes[i].getElementsByTagName('link')[0];
             var desc  = nodes[i].getElementsByTagName('description')[0];
-            items.push({
-                title : title ? title.textContent : '',
-                link  : link  ? link.textContent  : '',
-                desc  : desc  ? desc.childNodes[0].nodeValue.substr(0,250) : '',
-            });
+
+            var item = {
+                title : title ? title.childNodes[0].nodeValue : '',
+                link  : link  ? link.childNodes[0].nodeValue : '',
+                desc  : ''
+            };
+
+            if (desc) {
+                var full_desc = item.desc = desc.childNodes[0].nodeValue.replace(/<[^>]+>/g,'');
+                if (__UP_max_desc__ && full_desc.length > __UP_max_desc__) {
+                    var max = full_desc.indexOf(' ', __UP_max_desc__) + 1;
+
+                    item.desc = full_desc.substr(0,max);
+                    item.rest = full_desc.substr(max, full_desc.length - max);
+                }
+            }
+
+            items.push(item);
         }
         return items;
     }
 
     var callback = function(xml) {
         var title = get_title(xml.data);
-        console.log(title);
         if (title) {
             gadgets.window.setTitle(title);
             prefs.set('title',title);
@@ -94,6 +118,9 @@
             a.style['text-decoration'] = 'none';
 
             desc_div.innerHTML = item.desc;
+            if (item.rest) {
+                desc_div.innerHTML += '<a href="#" title="' + item.rest + '">...</a>';
+            }
 
             item_div.appendChild(h4);
             h4.appendChild(a);

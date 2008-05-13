@@ -136,7 +136,7 @@ sub delete {
         my ($self, $uri, $accept) = @_;
             $accept ||= 'text/html';
 
-                $self->_get($uri, [Accept => $accept]);
+                $self->_delete($uri, [Accept => $accept]);
             }
             
 
@@ -195,6 +195,12 @@ sub _get {
     my ($self, $uri, $opts) = @_;
     $self->{http}->get( $self->{browser_url} . $uri, $opts );
 }
+
+sub _delete {      
+        my ($self, $uri, $opts) = @_;
+            $self->{http}->delete( $self->{browser_url} . $uri, $opts );
+}
+
 
 =head1 AUTHOR
 

@@ -34,43 +34,81 @@
 </style>
 <div id="my__MODULE_ID__-content"></div>
 <script>
-  var params = {};
-  var url = '__UP_rss_feed__';
-  var title = '__UP_title__';
-  var prefs = new gadgets.Prefs();
-  
-  gadgets.window.setTitle(title);
+    var params = {};
+    var url = '__UP_rss_feed__';
+    var prefs = new gadgets.Prefs();
 
-  var rurl = 'http://topaz.socialtext.net:22081/data/gadget/json_feed_proxy';
-  params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.FEED;
-  params[gadgets.io.RequestParameters.POST_DATA] = 'url=' + url;
-  params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.POST;
+    if ('__UP_title__')
+        gadgets.window.setTitle('__UP_title__');
 
-   var callback = function(feed) {
-      var items = feed.data.items;
-      var ix = 0;
-      for( ix = 0; ix < items.length && ix < 5; ix++) {
-           var item = items[ix];
-	   var summary = jQuery(item.content).text();
-	   summary = summary.substr(0,250);
-           jQuery('#my__MODULE_ID__-content').append(
-	       '<div class="rss_item">',
-	        '<div class="rss_title">',
-	         '<a href="' + item.link + '" target="parent">' + item.title + '</a>',
-	        '</div>',
-		'<div class="rss_body">',summary,'</div>',
-	       '</div>'
-           );
-      }
-      gadgets.window.setTitle(feed.data.title);
-      prefs.set('title',feed.data.title);
-      gadgets.window.adjustHeight();
-   }
-   gadgets.util.registerOnLoadHandler( function() {
-      gadgets.io.makeRequest(rurl, callback, params);
-     // jQuery.post(rurl, callback, {url : url});
-   });
+    function get_title (node) {
+        var title = 'Untitled';
+        var tit_els = node.getElementsByTagName('title');
+        if (tit_els && tit_els.length) {
+            title = tit_els[0].textContent;
+        }
+        return title;
+    }
 
+    function get_items (node) {
+        var items = [];
+        var nodes = node.getElementsByTagName('item');
+        for (var i=0; i<nodes.length; i++) {
+            var title = nodes[i].getElementsByTagName('title')[0];
+            var link  = nodes[i].getElementsByTagName('link')[0];
+            var desc  = nodes[i].getElementsByTagName('description')[0];
+            items.push({
+                title : title ? title.textContent : '',
+                link  : link  ? link.textContent  : '',
+                desc  : desc  ? desc.childNodes[0].nodeValue.substr(0,250) : '',
+            });
+        }
+        return items;
+    }
+
+    var callback = function(xml) {
+        var title = get_title(xml.data);
+        console.log(title);
+        if (title) {
+            gadgets.window.setTitle(title);
+            prefs.set('title',title);
+        }
+
+        var items = get_items(xml.data);
+
+        var content_node = document.getElementById('my__MODULE_ID__-content');
+
+        for (var i=0; i<items.length; i++) {
+            var item = items[i];
+
+            var item_div = document.createElement('div');
+            var h4 = document.createElement('h4');
+            var a = document.createElement('a');
+            var border = document.createElement('div');
+            var desc_div = document.createElement('p');
+
+            item_div.className = 'myContent';
+            border.className = 'border';
+            a.href = item.link
+            a.style['text-size'] = '10px';
+            a.style['text-decoration'] = 'none';
+
+            desc_div.innerHTML = item.desc;
+
+            item_div.appendChild(h4);
+            h4.appendChild(a);
+            a.appendChild(document.createTextNode(item.title));
+            item_div.appendChild(desc_div);
+
+            content_node.appendChild(item_div);
+            content_node.appendChild(border);
+        }
+        gadgets.window.adjustHeight();
+    }
+    gadgets.util.registerOnLoadHandler( function() {
+        params.CONTENT_TYPE = "DOM";
+        gadgets.io.makeRequest(url, callback, params);
+    });
 </script>
 
     ]]>

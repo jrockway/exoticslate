@@ -19,6 +19,7 @@ field 'port';
 field 'bind_user';
 field 'bind_password';
 field 'filter';
+field 'follow_referrals' => 1;
 field 'attr_map';
 
 # XXX: possible future config options:
@@ -214,6 +215,11 @@ Specifies the password that should be used when binding to the LDAP connection.
 
 Specifies a LDAP filter (e.g. C<(objectClass=inetOrgPerson)>) that should be
 applied and used with B<ALL> queries/searches.
+
+=item B<follow_referrals>
+
+Specifies whether or not LDAP referral responses from this server are followed
+or not.  Defaults to "1" (follow referrals).
 
 =item B<attr_map> (required)
 

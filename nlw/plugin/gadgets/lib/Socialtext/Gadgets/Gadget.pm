@@ -272,7 +272,7 @@ sub expand_hangman {
     return '' unless $text;
     my $userprefs = $self->user_prefs;
     for my $pref (@$userprefs) {
-        $pref->{val} ||= '';
+        $pref->{val} = '' unless defined $pref->{val};
         $text =~ s{__UP_$pref->{name}__}{$pref->{val}}g;
     }
     $text = $self->expand_messages($text);
@@ -338,7 +338,7 @@ sub get_arg_string {
     );
     my $userprefs = $self->user_prefs;
     for my $pref (@$userprefs) {
-        $pref->{val} ||= '';
+        $pref->{val} = '' unless defined $pref->{val};
         $args{"up_$pref->{name}"} = uri_escape($pref->{val});
     }
     return join('&', map { "$_=$args{$_}" } keys %args);

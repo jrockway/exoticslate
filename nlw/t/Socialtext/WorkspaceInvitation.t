@@ -20,8 +20,6 @@ BEGIN {
     use_ok( 'Socialtext::WorkspaceInvitation' );
 }
 
-
-# fixtures( 'rdbms_clean' );
 fixtures( 'admin_no_pages' );
 
 $Socialtext::EmailSender::Base::SendClass = 'Test';
@@ -29,16 +27,23 @@ $Socialtext::EmailSender::Base::SendClass = 'Test';
 my $admin_workspace = Socialtext::Workspace->new( name => 'admin' );
 my $current_user    = Socialtext::User->new( username => 'devnull1@socialtext.com' );
 
-my $invitation = Socialtext::WorkspaceInvitation->new( workspace => $admin_workspace,
-                                                       from_user => $current_user,
-                                                       invitee   => 'devnull7@socialtext.com',
-                                                     );
+Can_send_without_exception: {
+    my $invitation = Socialtext::WorkspaceInvitation->new(
+        workspace => $admin_workspace,
+        from_user => $current_user,
+        invitee   => 'devnull7@socialtext.com',
+    );
 
-eval { $invitation->send(); };
+    eval { $invitation->send(); };
+    my $e = $@;
+    is( $e, '', "send without exception" );
+}
 
-my $e = $@;
-is( $e, '', "send without exception" );
-
+# These test cases Ass-U-Me that the user_factories option in socialtext.conf
+# will be set to it's default value.  Other tests may have messed with this,
+# so we will explicitly set it to defaults.
+system("$^X -pi -e 's/^user_factories.+$/# user_factories: Default/m' "
+       . "t/tmp/etc/socialtext/socialtext.conf");
 
 my @cases = ( { label        => 'non-appliance',
                 is_appliance => 0,
@@ -71,19 +76,16 @@ my @cases = ( { label        => 'non-appliance',
 
 
 for my $c (@cases) {
-    print "# Starting test $c->{label}\n";
-
     local $SIG{__DIE__};
     local $ENV{NLW_IS_APPLIANCE} = $c->{is_appliance};
 
     Email::Send::Test->clear;
 
-    my $invitation =
-      Socialtext::WorkspaceInvitation->new(
-                                           workspace => $admin_workspace,
-                                           from_user => $current_user,
-                                           invitee   => $c->{username},
-                                          );
+    my $invitation = Socialtext::WorkspaceInvitation->new(
+        workspace => $admin_workspace,
+        from_user => $current_user,
+        invitee   => $c->{username},
+    );
 
     $invitation->send() ;
 
@@ -107,9 +109,6 @@ my $viewer = $hub->viewer;
 ok( $viewer, "viewer acquired" );
 {
     Email::Send::Test->clear;
-
-    # my $user = _user('devnull9@socialtext.com');
-
     my $extra_text = <<'EOF';
 Here is a paragraph of text. Lalalala.
 
@@ -119,19 +118,16 @@ Here is a paragraph of text. Lalalala.
 Another paragraph.
 EOF
 
-    my $invitation =
-      Socialtext::WorkspaceInvitation->new(
-                                           workspace  => $admin_workspace,
-                                           from_user  => $current_user,
-                                           invitee    => 'devnull9@socialtext.com',
-                                           extra_text => $extra_text,
-                                           viewer => $viewer,
-                                          );
-
+    my $invitation = Socialtext::WorkspaceInvitation->new(
+        workspace  => $admin_workspace,
+        from_user  => $current_user,
+        invitee    => 'devnull9@socialtext.com',
+        extra_text => $extra_text,
+        viewer     => $viewer,
+    );
     $invitation->send();
 
     my @emails = Email::Send::Test->emails;
-
     is( scalar @emails, 1, 'one email was sent' );
 
     my $plain_body = ( $emails[0]->parts() )[0]->body();
@@ -151,10 +147,9 @@ sub _confirm_user_if_neccessary {
     my $username = shift;
 
     my $user = Socialtext::User->new( username => $username );
-    warn "_confirm_user_if_necessary($username) - $user";
 
     if ($user && $user->requires_confirmation ) {
-        print "# Confirming user $username\n";
+        warn "# Confirming user $username\n";
         $user->confirm_email_address();
         $user->update_store( password => 'secret' );
         return 1;

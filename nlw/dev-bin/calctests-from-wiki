@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Pull localizations from the local stl10n workspace into a directory
+
+PORT=`perl -e 'print $> + 20000'`
+SERVER=http://`hostname`:$PORT
+DIR=$ST_CURRENT/nlw/share/workspaces/calctests
+echo "Using: $SERVER"
+stu-local-copy -s $SERVER -w calctests  -u devnull1@socialtext.com -p d3vnu11l --to $DIR --tag testcase
+stu-local-copy -s $SERVER -w calctests  -u devnull1@socialtext.com -p d3vnu11l --to $DIR --tag testset
+
+echo
+echo "$DIR has been updated."

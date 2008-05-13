@@ -119,10 +119,6 @@ sub _parse_gadget {
 sub _get_gadget_data {
     my ($self,$doc) = @_;
 
-    my %module;
-    $module{prefs_def} = [];
-  
-     
     # find all the locale nodes in the gadget payload, download them from off
     # the net, parse them and add them into our msgs hash.
     my @locale_nodes = $doc->getElementsByTagName('Locale');
@@ -136,41 +132,43 @@ sub _get_gadget_data {
         if ($messages) {
             my $xml = XML::LibXML->new->parse_string($messages);
 
+            my %messages;
             for my $msg ($xml->getElementsByTagName('msg')) {
                 my $name = $msg->getAttribute('name');
-                ($module{messages}->{$lang}{$name} = $msg->textContent)
+                ($messages{$lang}{$name} = $msg->textContent)
                     =~ s{(?:^\s*\n\s*|\s*\n\s*$)}{}g; # XXX assumed this is correct
             }
+            $self->storage->set('messages', \%messages);
         }
     }
     
 
     # get the content of the gadget now
     my ($content) = $doc->getElementsByTagName('Content');
-    $module{content} = $content->textContent;
+    $self->storage->set('content', $content->textContent);
 
     # get the type of gadget and set the URL appropriately
     my $type = $content->getAttribute('type');
 
     if ($type eq 'url') {
-        $module{href} = $content->getAttribute('href');
+        $self->storage->set('href', $content->getAttribute('href'));
     } elsif ($type eq 'html') {
-        $module{href} = "/data/gadget/instance/" . $self->id . "/render";
+        $self->storage->set('href', "/data/gadget/instance/" . $self->id . "/render");
     } elsif ($type eq 'dev') {
         # secret type to make dev easier.  HTML/Javascript payload is kept
         # at the referenced url and merged at install time.  Makes it much
         # easier to dev
         my $url = $content->getAttribute('href');
         die "Type dev requires a href attribute" unless $url;
-        $module{content} = $self->get_www($url) || "Error fetching url: $url";
-        $module{dev_src} = $url;
-        $module{href} = "/data/gadget/instance/" . $self->id . "/render";
+        $self->storage->set('content', $self->get_www($url) || "Error fetching url: $url");
+        $self->storage->set('dev_src', $url);
+        $self->storage->set('href', "/data/gadget/instance/" . $self->id . "/render");
     } else {
         # XXX: Return an error gadget
         die "Unsupported content type: $type";
     }
 
-
+    my @prefs_def;
     for my $pref ($doc->getElementsByTagName('UserPref')) {
         my %def = map { lc($_->name) => $_->value } $pref->attributes;
         my $datatype = $def{datatype} || '';
@@ -184,19 +182,19 @@ sub _get_gadget_data {
             }
             $def{options} = \@options;
         }
-        push @{$module{prefs_def}}, \%def;
+        push @prefs_def, \%def;
     }
+    $self->storage->set('prefs_def', \@prefs_def);
 
     my ($modprefs) = $doc->getElementsByTagName('ModulePrefs');
     
+    my %module_prefs;
     foreach my $modpref ($modprefs->attributes) {
-        $module{module_prefs}->{$modpref->name} = $modpref->value;
+        $module_prefs{$modpref->name} = $modpref->value;
     }
+    $self->storage->set('module_prefs', \%module_prefs);
 
     my $js = Socialtext::Gadgets::Features->new($self->api, type => 'gadget');
-
-    $self->{module} = \%module;
-    $self->storage->set('module',\%module);
 
     my @features;
     foreach my $require ($doc->getElementsByTagName('Require')) {
@@ -251,8 +249,9 @@ sub get_messages {
   #                 } $doc->getElementsByTagName('Locale');
 
   # if we can't find a more exact lang use the '*' lang 
-  my $lang = exists($self->{module}{messages}->{$LANG}) ? $LANG : '*';
-  return $self->{module}{messages}->{$lang};
+  my $messages = $self->storage->get('messages');
+  my $lang = exists $messages->{$LANG} ? $LANG : '*';
+  return $messages->{$lang};
 }
 
 sub expand_messages {
@@ -348,17 +347,17 @@ sub get_arg_string {
 
 sub get_href {
   my $self = shift;
-  return $self->{module}{href} . '?' . $self->get_arg_string;
+  return $self->storage->get('href') . '?' . $self->get_arg_string;
 }
 
 sub get_content {
   my $self = shift;
-  return $self->expand_hangman($self->{module}{content});
+  return $self->expand_hangman($self->storage->get('content'));
 }
 
 sub get_prefs_def {
    my $self = shift;
-   return $self->{module}{prefs_def};
+   return $self->storage->get('prefs_def');
 }
 
 sub get_defaults {
@@ -376,9 +375,9 @@ sub get_user_prefs {
     for my $def (@$def) {
         my %pref = %$def;
         my $name = $def->{name};
-        $pref{val} = $stored->{$name}
-                     || $def->{default_value}
-                     || $self->defaults->{$name};
+        $pref{val} = $stored->{$name};
+        $pref{val} = $def->{default_value} unless defined $pref{val};
+        $pref{val} = $self->defaults->{$name} unless defined $pref{val};
         $pref{display_name} = $self->expand_messages($pref{display_name});
         push @prefs, \%pref;
     }
@@ -387,7 +386,7 @@ sub get_user_prefs {
 
 sub get_module_prefs {
     my $self = shift;
-    my $m = $self->{module}{module_prefs};
+    my $m = $self->storage->get('module_prefs');
     my %prefs =  map { $_ => $self->expand_hangman($m->{$_}) } keys %{$m};
     return \%prefs;
 }

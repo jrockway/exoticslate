@@ -8,14 +8,20 @@ use Carp qw(croak);
 
 sub load_data {
     my $self = shift;
-    eval { sql_execute('SELECT COUNT(*) FROM "Storage"') };
+    eval { sql_execute('SELECT COUNT(datatype) FROM "Storage"') };
     if ($@) {
+        eval {
+            sql_execute('
+                CREATE TABLE "Storage" (
+                    class    VARCHAR(128),
+                    key      VARCHAR(128),
+                    value    TEXT
+                )
+            ');
+        };
         sql_execute('
-            CREATE TABLE "Storage" (
-                class VARCHAR(128),
-                key   VARCHAR(128),
-                value TEXT
-            )
+            ALTER TABLE "Storage"
+                ADD COLUMN datatype VARCHAR(10)
         ');
     }
     $self->{_cache} = {};
@@ -25,34 +31,41 @@ sub get {
     my ($self,$key) = @_;
     croak 'key is required' unless $key;
     return $self->{_cache}{$key} if $self->{_cache}{$key};
-    my $val = sql_singlevalue('
-        SELECT value
+    my $sth = sql_execute('
+        SELECT value, datatype
           FROM "Storage"
           WHERE class=? AND key=?
     ', $self->{id}, $key);
-    return unless defined $val;
-    return $self->{_cache}{$key} = YAML::Load($val . "\n");
+
+    my $res = $sth->fetchall_arrayref;
+    return unless @$res;
+    my ($val, $type) = @{$res->[0]};
+    $val = YAML::Load($val) if $type ne 'STRING';
+    return $self->{_cache}{$key} = $val;
 }
 
 sub set {
     my ($self,$key,$val) = @_;
     croak 'key is required' unless $key;
-    my $yaml_val = YAML::Dump($val);
+    my $type = ref $val || 'STRING';
 
-    if ($self->exists($key)) {
-        $self->{_cache}{$key} = $val;
-        my $sth = sql_execute('
+    my $exists = $self->exists($key);
+
+    $self->{_cache}{$key} = $val;
+    $val = YAML::Dump($val) if $type ne 'STRING';
+
+    if ($exists) {
+        sql_execute('
             UPDATE "Storage"
-              SET value=?
+              SET value=?, datatype=?
               WHERE class=? AND key=?
-        ', $yaml_val, $self->{id}, $key);
+        ', $val, $type, $self->{id}, $key);
     }
     else {
-        $self->{_cache}{$key} = $val;
-        my $a=sql_execute('
+        sql_execute('
             INSERT INTO "Storage"
-              VALUES (?,?,?)
-        ', $self->{id}, $key, $yaml_val);
+              VALUES (?,?,?,?)
+        ', $self->{id}, $key, $val, $type);
     }
 }
 

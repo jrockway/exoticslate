@@ -10,6 +10,7 @@ use Socialtext::AppConfig;
 
 for my $sub (qw(YAML PSQL)) {
     use_ok "Socialtext::Storage::$sub";
+
     INIT_SET: {
         my $storage = "Socialtext::Storage::$sub"->new($tempid);
         $storage->purge;

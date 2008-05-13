@@ -1,0 +1,90 @@
+Test case to test `/data/workspaces`
+
+* Fixture: SocialRest
+
+This test case assumes a logged in user.
+
+Test set up:
+
+| comment | STARTING Test case: REST Users |  |
+
+| st-admin | remove-system-admin --username %%username%% | no longer has |
+| st-admin | give-accounts-admin --username %%username%% | now has |
+| set | wksp | w%%start_time%% |
+| set | account_id | 2 |
+
+| comment | Test case: REST Users POST a workspace |  |
+| post | /data/workspaces | Content-Type=application/json | { "name":"%%wksp%%", "title":"W%%start_time%%", "account_id":"%%account_id%%" } |
+| code-is | 201 |  |
+| header-like | Location | /data/workspaces/%%wksp%% |
+
+| comment | Test case: REST Users Add an admin user to a workspace |  |
+| post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"member", "send_confirmation_invitation":0 } |
+| code-is | 201 |  |
+
+| comment | Add a test user |  |
+| set | test_user | test_user%%start_time%%@example.com |  |
+| st-admin | create-user --email %%test_user%% --password d3vnu11l |  |
+| post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%test_user%%", "rolename":"member", "send_confirmation_invitation":0 } |
+| code-is | 201 |  |
+
+| comment | Test case: REST Users Remove member as accounts-admin |
+| comment | remove the member |  |
+| delete | /data/workspaces/%%wksp%%/users/%%username%% |  |
+| code-is | 204 |  |
+
+| comment | Test case: REST Users Remove member as system-admin |  |
+| st-admin | remove-accounts-admin --username %%username%% | no longer has |
+| st-admin | give-system-admin --username %%username%% | now has |
+| post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%test_user%%", "rolename":"member", "send_confirmation_invitation":0 } |
+| code-is | 201 |  |
+
+| comment | remove the member |  |
+| delete | /data/workspaces/%%wksp%%/users/%%test_user%% |  |
+| code-is | 204 |  |
+
+| comment | Test case: REST Users Remove the member as workspace-admin |  |
+| post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"workspace_admin" } |
+| code-is | 201 |  |
+| st-admin | remove-accounts-admin --username %%username%% | no longer has |
+| st-admin | remove-system-admin --username %%username%% | no longer has |
+
+| post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%test_user%%", "rolename":"member", "send_confirmation_invitation":0 } |
+| code-is | 201 |  |
+
+| comment | remove the member |  |
+| delete | /data/workspaces/%%wksp%%/users/%%test_user%% |  |
+| code-is | 204 |  |
+
+| comment | Test case: REST Users Member can remove himself |  |
+| comment | Make admin user regular member |  |
+| post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"member" } |
+| code-is | 201 |  |
+| delete | /data/workspaces/%%wksp%%/users/%%username%% |  |
+| code-is | 204 |  |
+
+Tests where remove should fail
+
+| comment | Test case: REST Users Member cannot remove another member |  |
+| comment | Make admin user regular member |  |
+| st-admin | give-system-admin --username %%username%% | now has |
+| post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"member" } |
+| code-is | 201 |  |
+| post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%test_user%%", "rolename":"member" } |
+| code-is | 201 |  |
+| st-admin | remove-system-admin --username %%username%% | no longer has |
+| delete | /data/workspaces/%%wksp%%/users/%%test_user%% |  |
+| code-is | 403 |  |
+
+| comment | Test case: REST Users Workspace admin deletes self then attempts to remove another member |  |
+| comment | Make admin user regular member |  |
+| st-admin | give-system-admin --username %%username%% | now has |
+| post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"workspace_admin" } |
+| code-is | 201 |  |
+| delete | /data/workspaces/%%wksp%%/users/%%username%% |  |
+| code-is | 204 |  |
+| st-admin | remove-system-admin --username %%username%% | no longer has |
+| delete | /data/workspaces/%%wksp%%/users/%%test_user%% |  |
+| code-is | 403 |  |
+
+| comment | Test case: REST Users COMPLETED |  |

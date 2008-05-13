@@ -6,11 +6,13 @@ This test case assumes a logged in user.
 
 Test set up:
 
+| comment | STARTING Test case: REST Workspace |  |
+| st-admin | remove-system-admin --username %%username%% | no longer has |
 | st-admin | give-accounts-admin --username %%username%% | now has |
 | set | wksp | w%%start_time%% |
 | set | account_id | 2 |
 
-| comment | GET non-existing workspace |  |
+| comment | Test case: REST Workspace GET non-existing workspace |  |
 | get | /data/workspaces/%%wksp%% |  |
 | code-is | 404 |  |
 
@@ -18,7 +20,7 @@ Test set up:
 | get | /data/workspaces/%%wksp%% |  |
 | code-is | 404 |  |
 
-| comment | POST a workspace |  |
+| comment | Test case: REST Workspace POST a workspace |  |
 | post | /data/workspaces | Content-Type=application/json | { "name":"%%wksp%%", "title":"W%%start_time%%", "account_id":"%%account_id%%" } |
 | code-is | 201 |  |
 | header-like | Location | /data/workspaces/%%wksp%% |
@@ -27,7 +29,7 @@ Test set up:
 | post | /data/workspaces | Content-Type=application/json | { "name":"%%wksp%%", "title":"W%%start_time%%", "account_id":"%%account_id%%" } |
 | code-is | 409 |  |
 
-| comment | GET existing workspace as HTML by unauthorized user |  |
+| comment | Test case: REST Workspace GET existing workspace as HTML by unauthorized user |  |
 | get | /data/workspaces/%%wksp%% | text/html |
 | code-is | 403 | User not authorized |
 
@@ -41,7 +43,7 @@ Test set up:
 | code-is | 200 |  |
 | body-like | me":"w%%start_time%%","title":"W%%start_time%%" |
 
-| comment | Add a user to a workspace |  |
+| comment | Test case: REST Workspace Add a user to a workspace |  |
 | post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"member", "send_confirmation_invitation":0 } |
 | code-is | 201 |  |
 
@@ -55,7 +57,7 @@ Test set up:
 | code-is | 200 |  |
 | body-like | me":"w%%start_time%%","title":"W%%start_time%%" |
 
-| comment | Promote a user to workspace admin |  |
+| comment | Test case: REST Workspace Promote a user to workspace admin |  |
 | post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"workspace_admin" } |
 | code-is | 201 |  |
 
@@ -68,7 +70,7 @@ Test set up:
 | get | /data/workspaces/aa | text/html |
 | code-is | 400 |
 
-| comment | GET short workspace name as JSON |  |
+| comment | Test case: REST Workspace GET short workspace name as JSON |  |
 | get | /data/workspaces/aa | application/json |
 | code-is | 400 |
 
@@ -76,7 +78,7 @@ Test set up:
 
 These tests are from "Story: Add Backlink to IBM Lotus Connections via REST"<https://www2.socialtext.net/dev-tasks/index.cgi?story_add_backlink_to_ibm_lotus_connections_via_rest>.
 
-| comment | Create a workspace with a customjs_uri |  |
+| comment | Test case: REST Workspace Create a workspace with a customjs_uri |  |
 | set | wksp | c%%start_time%% |
 | post | /data/workspaces | Content-Type=application/json | { "name":"%%wksp%%", "title":"W%%start_time%%", "account_id":"%%account_id%%", "customjs_uri":"/monkey.js" } |
 | code-is | 201 |  |
@@ -93,7 +95,7 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | get | /%%wksp%%/index.cgi |  |
 | body-like | /monkey.js |  |
 
-| comment | Update the customjs_uri of a workspace |  |
+| comment | Test case: REST Workspace Update the customjs_uri of a workspace |  |
 | put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "customjs_uri":"/buddha.js" } |
 | code-is | 204 |  |
 | get | /data/workspaces/%%wksp%% | application/json |
@@ -102,7 +104,7 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | get | /%%wksp%%/index.cgi |  |
 | body-like | /buddha.js |  |
 
-| comment | Unset the customjs_uri of a workspace |  |
+| comment | Test case: REST Workspace Unset the customjs_uri of a workspace |  |
 | put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "customjs_uri":"" } |
 | code-is | 204 |  |
 | get | /data/workspaces/%%wksp%% | application/json |
@@ -111,7 +113,7 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | get | /%%wksp%%/index.cgi |  |
 | body-unlike | /monkey.js |  |
 
-| comment | Update the customjs_uri as a workspace admin |  |
+| comment | Test case: REST Workspace Update the customjs_uri as a workspace admin |  |
 | st-admin | remove-accounts-admin --username %%username%% | no longer has |
 | put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "customjs_uri":"/kamma.js" } |
 | code-is | 204 |  |
@@ -119,24 +121,45 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | code-is | 200 |  |
 | body-like | "customjs_uri":"/kamma.js" |
 
-| comment | Update the customjs_uri as a member |  |
+| comment | Test case: REST Workspace Update the customjs_uri as a member |  |
 | st-admin | remove-workspace-admin --username %%username%% --workspace=%%wksp%% | is no longer |
 | put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "customjs_uri":"/eraser.js" } |
-| code-is | 401 |  |
+| code-is | 403 |  |
 | get | /data/workspaces/%%wksp%% | application/json |
 | code-is | 200 |  |
 | body-like | "name":" |  |
 | body-unlike | "customjs_uri":" |  |
 
-| comment | Update the customjs_uri as a nobody |  |
+| comment | Test case: REST Workspace Update the customjs_uri as a nobody |  |
 | st-admin | remove-member --username %%username%% --workspace=%%wksp%% | is no longer |
 | put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "customjs_uri":"/pencil.js" } |
-| code-is | 401 |  |
+| code-is | 403 |  |
+
+| comment | Test case: REST Workspace Fetch the customjs_uri as a nobody |  |
+| get | /data/workspaces/%%wksp%% | application/json |
+| code-is | 403 |  |
+
+| comment | Test case: REST Workspace Update the customjs_uri as a system admin |  |
+| st-admin | give-system-admin --email %%username%% | now has |
+| put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "customjs_uri":"/pencil.js" } |
+| code-is | 204 |  |
+
+| get | /data/workspaces/%%wksp%% | application/json |
+| code-is | 403 |  |
+| st-admin | remove-system-admin --email %%username%% | no longer has |
+
+| comment | Update the customjs_uri as a accounts admin |  |
+| st-admin | give-accounts-admin --email %%username%% | now has |
+| put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "customjs_uri":"/pencil.js" } |
+| code-is | 204 |  |
 
 | comment | Fetch the customjs_uri as a nobody |  |
 | get | /data/workspaces/%%wksp%% | application/json |
 | code-is | 403 |  |
+| st-admin | remove-accounts-admin --email %%username%% | no longer has |
 
-| comment | Promote a user to workspace admin FAILS without permissions |  |
+| comment | Test case: REST Workspace Promote a user to workspace admin FAILS without permissions |  |
 | post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"workspace_admin" } |
-| code-is | 401 |  |
+| code-is | 403 |  |
+
+| comment | Test case: REST Workspace COMPLETED |  |

@@ -72,6 +72,7 @@ test env properly and are not testing the test-workspace
 * [Test Case: Return to last login]
 * [Test Case: Link Interface]
 * [Test Case: Nasty Double Dashes]
+* [Test Case: REST Workspace]
 
 TC Insert Menu will fail as the menu is being reworked. Revise the test.
 

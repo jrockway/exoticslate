@@ -201,7 +201,8 @@ sub json_proxy  {
     }
 
     my $result = $agent->request($request);
-    $self->header_out(-type => $result->header('Content-type'));  
+    my $ctype = $result->header('Content-type');
+    $self->header_out(-type => $ctype) if $ctype;
     my $data = $result->decoded_content;
 
     if ($args{contentType} eq 'FEED') {

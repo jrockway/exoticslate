@@ -22,6 +22,7 @@ Socialtext::LDAP::OpenLDAP - LDAP plug-in for OpenLDAP servers
   base: cn=IT,dc=example,dc=com
   filter: (objectClass=inetOrgPerson)
   follow_referrals: 1
+  max_referral_depth: 3
   attr_map:
     user_id: dn
     username: cn

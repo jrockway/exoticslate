@@ -22,6 +22,7 @@ Socialtext::LDAP::ActiveDirectory - LDAP plug-in for Active Directory servers
   base: cn=Sales,dc=example,dc=com
   filter: (&(objectClass=user)(objectCategory=person))
   follow_referrals: 1
+  max_referral_depth: 3
   attr_map:
     user_id: dn
     username: sAMAccountName

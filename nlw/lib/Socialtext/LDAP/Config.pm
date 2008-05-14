@@ -20,6 +20,7 @@ field 'bind_user';
 field 'bind_password';
 field 'filter';
 field 'follow_referrals' => 1;
+field 'max_referral_depth' => 3;
 field 'attr_map';
 
 # XXX: possible future config options:
@@ -220,6 +221,11 @@ applied and used with B<ALL> queries/searches.
 
 Specifies whether or not LDAP referral responses from this server are followed
 or not.  Defaults to "1" (follow referrals).
+
+=item B<max_referral_depth>
+
+Specifies the maximum depth to which LDAP referrals are followed.  Defaults to
+"3".
 
 =item B<attr_map> (required)
 

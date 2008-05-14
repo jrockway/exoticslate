@@ -161,7 +161,7 @@ proto.save = function (id) {
     });
 
     self.toggleSetup(id)
-    iframe.attr('src', '/plugin/gadgets/loading.html');
+    iframe.attr('src', '/nlw/plugin/gadgets/loading.html');
 
     var data = args.join('&');
     jQuery.ajax({
@@ -223,3 +223,4 @@ proto.remove = function (id) {
 }
 
 gadgets.container = new gadgets.Container();
+

@@ -21,6 +21,7 @@ Socialtext::LDAP::ActiveDirectory - LDAP plug-in for Active Directory servers
   port: 389
   base: cn=Sales,dc=example,dc=com
   filter: (&(objectClass=user)(objectCategory=person))
+  follow_referrals: 1
   attr_map:
     user_id: dn
     username: sAMAccountName

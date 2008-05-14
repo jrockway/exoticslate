@@ -21,6 +21,7 @@ Socialtext::LDAP::OpenLDAP - LDAP plug-in for OpenLDAP servers
   port: 389
   base: cn=IT,dc=example,dc=com
   filter: (objectClass=inetOrgPerson)
+  follow_referrals: 1
   attr_map:
     user_id: dn
     username: cn

@@ -68,10 +68,28 @@ sub username {
     }
 }
 
-sub header {
+sub header_out {
     my $self = shift;
     if ($self->rest) {
         return $self->rest->header(@_);
+    }
+    else {
+        die "Not implemented!";
+    }
+}
+
+sub header_in {
+    my $self = shift;
+    if ($self->rest) {
+        if (@_) {
+            return $self->rest->request->header_in(@_);
+        }
+        else {
+            return $self->rest->request->headers_in;
+        }
+    }
+    else {
+        die "Not implemented!";
     }
 }
 

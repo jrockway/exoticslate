@@ -59,7 +59,10 @@ ldap_anonymous_bind: {
 # Instantiation with missing authentication returns empty handed.
 instantiation_bind_requires_additional_auth: {
     Net::LDAP->set_mock_behaviour(
-        bind_requires_authentication => 1,
+        bind_credentials => {
+            user => 'doesnt',
+            pass => 'matter',
+            },
         );
     clear_log();
 

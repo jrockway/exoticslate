@@ -38,7 +38,11 @@ my @TEST_USERS = (
 ldap_authenticated_bind: {
     Net::LDAP->set_mock_behaviour(
         search_results => [ $TEST_USERS[0] ],
-        bind_requires_authentication => 1,
+        bind_credentials => {
+            # matches credentials in 'ldap_authenticated' fixture
+            user => 'cn=First Last,dc=example,dc=com',
+            pass => 'abc123',
+            },
         );
     clear_log();
 

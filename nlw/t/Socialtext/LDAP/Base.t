@@ -150,7 +150,10 @@ bind_failure: {
 # Bind requires authentication, none provided; should fail
 bind_requires_auth: {
     Net::LDAP->set_mock_behaviour(
-        bind_requires_authentication => 1,
+        bind_credentials => {
+            user => 'doesnt',
+            pass => 'matter',
+            },
         );
     clear_log();
 
@@ -189,14 +192,19 @@ bind_anonymous_ok: {
 ###############################################################################
 # Authenticated bind ok
 bind_authenticated_ok: {
+    my $bind_user = 'cn=Manager,dc=example,dc=com';
+    my $bind_pass = 'abc123';
     Net::LDAP->set_mock_behaviour(
-        bind_requires_authentication => 1,
+        bind_credentials => {
+            user => $bind_user,
+            pass => $bind_pass,
+            },
         );
     clear_log();
 
     my $config = Socialtext::LDAP::Config->new(%data);
-    $config->bind_user('cn=Manager,dc=example,dc=com');
-    $config->bind_password('abc123');
+    $config->bind_user($bind_user);
+    $config->bind_password($bind_pass);
 
     my $ldap = Socialtext::LDAP::Base->new($config);
     isa_ok $ldap, 'Socialtext::LDAP::Base';

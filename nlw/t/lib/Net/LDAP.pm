@@ -38,11 +38,14 @@ sub new {
         ? $mocked->mock( 'bind', sub {
             return Net::LDAP::Message->new(code=>LDAP_INVALID_CREDENTIALS)
             } )
-        : $behaviour{'bind_requires_authentication'}
+        : $behaviour{'bind_credentials'}
             ? $mocked->mock( 'bind', sub {
                 # auth, requiring authentication
-                my ($self, $user, $pass) = @_;
-                ($user && $pass)
+                my ($self, $user, %opts) = @_;
+                my $pass = $opts{'password'};
+                ( ($user && ($user eq $behaviour{'bind_credentials'}{'user'})) &&
+                  ($pass && ($pass eq $behaviour{'bind_credentials'}{'pass'}))
+                  ) 
                     ? return Net::LDAP::Message->new(code=>LDAP_SUCCESS)
                     : return Net::LDAP::Message->new(code=>LDAP_INVALID_CREDENTIALS);
                 } )
@@ -169,11 +172,9 @@ All connection attempts will fail.
 
 All bind attempts will fail.
 
-=item bind_requires_authentication=>1
+=item bind_credentials => { user => 'foo', pass => 'bar' }
 
-Any bind attempt will require authentication.  If a username and password are
-provided then the bind will succeed (doesn't matter what they are, so long as
-they're provided).
+Bind attempts require specific credentials.
 
 =item search_fail=>1
 
@@ -189,7 +190,10 @@ should contain the LDAP attributes/values that are expected to be returned.
 Example:
 
   Net::LDAP->set_mock_behaviour(
-    bind_requires_authentication => 1,
+    bind_credentials => {
+      user => 'cn=First Last,dc=example,dc=com',
+      pass => 'foobar',
+      },
     search_results => [
       { dn => 'cn=First Last,dc=example,dc=com',
         cn => 'First Last',

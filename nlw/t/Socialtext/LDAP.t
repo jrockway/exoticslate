@@ -325,8 +325,13 @@ authentication_failure: {
 ###############################################################################
 # Authentication success
 authentication_success: {
+    my $bind_user = 'myDn';
+    my $bind_pass = 'myPassword';
     Net::LDAP->set_mock_behaviour(
-        bind_requires_authentication => 1,
+        bind_credentials => {
+            user => $bind_user,
+            pass => $bind_pass,
+            },
         );
 
     # create the LDAP configuration file
@@ -335,8 +340,8 @@ authentication_success: {
 
     # attempt to authenticate
     my %opts = (
-        user_id  => 'myDn',
-        password => 'myPassword',
+        user_id  => $bind_user,
+        password => $bind_pass,
     );
     my $auth_ok = Socialtext::LDAP->authenticate(%opts);
     ok $auth_ok, 'authentication success';

@@ -10,16 +10,22 @@ use Socialtext::Gadgets::Features;
 
 my $jdir = "$FindBin::Bin/../share/javascript";
 my $fdir = "$jdir/shindig";
-my $file = "$jdir/container.js";
+my $file = "$jdir/generated_container.js";
 
 my $js = Socialtext::Gadgets::Features->new(undef,
     feature_dir => $fdir,
     type => 'container',
 );
 
-for my $feature (glob("$fdir/*/feature.xml")) {
-    $feature =~ s{.*?/([^/]+)/feature.xml$}{$1};
-    $js->load($feature);
+if (@ARGV) {
+    $js->load($_) for @ARGV;
+}
+else {
+    for my $feature (glob("$fdir/*/feature.xml")) {
+        $feature =~ s{.*?/([^/]+)/feature.xml$}{$1};
+        warn "Loading $feature...\n";
+        $js->load($feature);
+    }
 }
 
 open my $fh, ">$file" or die "Can't open $file: $!";

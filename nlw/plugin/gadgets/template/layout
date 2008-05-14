@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="[% share_path('css/window.css') %]" type="text/css" media="screen" />
 
         [% IF gadgets %]
-            <script src="[% share_path('javascript/container.js') %]"></script>
+            <script src="[% share_path('javascript/generated_container.js') %]"></script>
         [% END %]
 
         [% INCLUDE "element/wiki/js-bootstrap" %]

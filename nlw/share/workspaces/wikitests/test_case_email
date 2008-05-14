@@ -13,7 +13,7 @@ the recipient list as if the Add Additional User button had been pushed. Do the 
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | wikiwyg_wikitext_textarea | `[Announcements and Links]` |
+| type_ok | wikiwyg_wikitext_textarea | `[Announcements and Links] àèéìòù` |
 | type_ok | st-newpage-pagename-edit | Email title %%start_time%% |
 | click_and_wait | st-save-button-link |  |
 
@@ -76,7 +76,7 @@ the recipient list as if the Add Additional User button had been pushed. Do the 
 | open_ok | /%%workspace%%/index.cgi?Email subject %%start_time%% |  |
 | wait_for_element_visible_ok | st-page-title | 10000 |
 | text_like | st-page-title | Email subject %%start_time%% |
-| text_like | st-page-maincontent | qr/^\s*Announcements and Links$/m |
+| text_like | st-page-maincontent | qr/^\s*Announcements and Links àèéìòù$/m |
 
 | *Comment* | Test Case: Email RT 27006 |  |
 | *Comment* | Test Case: Email Send an email to add to page contents the normal way |  |
@@ -99,7 +99,7 @@ the recipient list as if the Add Additional User button had been pushed. Do the 
 | open_ok | /%%workspace%%/index.cgi?Email_subject_%%start_time%% |  |
 | wait_for_element_visible_ok | st-page-title | 10000 |
 | text_like | st-page-title | Email subject %%start_time%% |
-| text_like | st-page-maincontent | qr/Announcements and Links/ |
+| text_like | st-page-maincontent | qr/Announcements and Links àèéìòù/ |
 
 | *Comment* | Test Case: Email send another email with Fwd: Fw: Re: in front of the title |  |
 
@@ -145,7 +145,7 @@ the recipient list as if the Add Additional User button had been pushed. Do the 
 | wait_for_element_visible_ok | st-page-title | 10000 |
 | text_like | st-page-title | Email subject %%start_time%% |
 
-| text_like | st-page-maincontent | qr/Announcements and Links.+Announcements and Links.+Announcements and Links.+Announcements and Links.+Announcements and Links.+Announcements and Links.+Announcements and Links/ |
+| text_like | st-page-maincontent | qr/Announcements and Links àèéìòù.+Announcements and Links.+Announcements and Links.+Announcements and Links.+Announcements and Links.+Announcements and Links.+Announcements and Links àèéìòù/ |
 
 | *Comment* | end RT 27006 |  |
 

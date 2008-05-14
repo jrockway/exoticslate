@@ -37,6 +37,11 @@ gadgets.io = function() {
   var config = {};
 
   /**
+   * Holds state for OAuth.
+   */
+  var oauthState;
+
+  /**
    * Internal facility to create an xhr request.
    */
   function makeXhr() {
@@ -83,7 +88,10 @@ gadgets.io = function() {
     if (hadError(xobj, callback)) {
       return;
     }
-    callback(transformResponseData(params, xobj.responseText));
+    var data = {
+      body: xobj.responseText
+    };
+    callback(transformResponseData(params, data));
   }
 
   var UNPARSEABLE_CRUFT = "throw 1; < don't be evil' >";
@@ -110,13 +118,17 @@ gadgets.io = function() {
     // trusted source, and json parsing is slow in IE.
     var data = eval("(" + txt + ")");
     data = data[url];
-
-    callback(transformResponseData(params, data.body));
+    // Save off any transient OAuth state the server wants back later.
+    if (data.oauthState) {
+      oauthState = data.oauthState;
+    }
+    callback(transformResponseData(params, data));
   }
 
-  function transformResponseData(params, serverResponse) {
+  function transformResponseData(params, data) {
     var resp = {
-     text: serverResponse,
+     text: data.body,
+     approvalUrl: data.approvalUrl,
      errors: []
     };
     switch (params.CONTENT_TYPE) {
@@ -159,7 +171,7 @@ gadgets.io = function() {
   }
 
   /**
-   * Sends an XHR post request
+   * Sends an XHR post or get request
    *
    * @param realUrl The url to fetch data from that was requested by the gadget
    * @param proxyUrl The url to proxy through
@@ -169,17 +181,24 @@ gadgets.io = function() {
    * @param processResponseFunction The function that should process the
    *     response from the sever before calling the callback
    */
-  function makePostRequest(realUrl, proxyUrl, callback, postData, params,
-      processResponseFunction) {
+  function makeXhrRequest(realUrl, proxyUrl, callback, paramData, method,
+      params, processResponseFunction) {
     var xhr = makeXhr();
-    xhr.open("POST", proxyUrl, true);
+
+    xhr.open(method, proxyUrl, true);
     if (callback) {
       xhr.onreadystatechange = gadgets.util.makeClosure(
           null, processResponseFunction, realUrl, callback, params, xhr);
     }
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send(postData);
+    if (paramData != null) {
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(paramData);
+    } else {
+        xhr.send(null);
+    }
   }
+
+
 
   /**
    * Satisfy a request with data that is prefetched as per the gadget Preload
@@ -195,12 +214,12 @@ gadgets.io = function() {
   function respondWithPreload(postData, params, callback) {
     if (gadgets.io.preloaded_ && gadgets.io.preloaded_[postData.url]) {
       var preload = gadgets.io.preloaded_[postData.url];
-      if (postData.httpMethod == "GET" && postData.authz == "none") {
+      if (postData.httpMethod == "GET") {
         delete gadgets.io.preloaded_[postData.url];
         if (preload.rc !== 200) {
           callback({errors : ["Error " + preload.rc]});
         } else {
-          callback(transformResponseData(params, preload.body));
+          callback(transformResponseData(params, { body: preload.body }));
         }
         return true;
       }
@@ -251,28 +270,63 @@ gadgets.io = function() {
 
       // Check if authorization is requested
       var auth, st;
+      var reqState, oauthService, oauthToken;
       if (params.AUTHORIZATION && params.AUTHORIZATION !== "NONE") {
         auth = params.AUTHORIZATION.toLowerCase();
         st = gadgets.util.getUrlParameters().st;
+        if (params.AUTHORIZATION === "AUTHENTICATED") {
+          reqState = oauthState;
+          oauthService = params.OAUTH_SERVICE;
+          oauthToken = params.OAUTH_TOKEN;
+        }
+      } else {
+        // Non auth'd & non post'd requests are cachable
+        if (!params.REFRESH_INTERVAL && !params.POST_DATA) {
+          params.REFRESH_INTERVAL = 3600;
+         }
       }
+      var signOwner = params.OWNER_SIGNED;
+      var signViewer = params.VIEWER_SIGNED;
 
       var headers = params.HEADERS || {};
       if (params.METHOD === "POST" && !headers["Content-Type"]) {
         headers["Content-Type"] = "application/x-www-form-urlencoded";
       }
 
-      var postData = {
+      var paramData = {
         url: url,
         httpMethod : params.METHOD || "GET",
         headers: gadgets.io.encodeValues(headers, false),
         postData : params.POST_DATA || "",
-        authz : auth || "none",
-        st : st || ""
+        authz : auth || "",
+        st : st || "",
+        oauthState : reqState || "",
+        oauthService : oauthService || "",
+        oauthToken : oauthToken || "",
+        contentType : params.CONTENT_TYPE || "TEXT",
+        numEntries : params.NUM_ENTRIES || "3",
+        getSummaries : !!params.GET_SUMMARIES,
+        signOwner : signOwner || "true",
+        signViewer : signViewer || "true"
       };
 
-      if (!respondWithPreload(postData, params, callback, processResponse)) {
-        makePostRequest(url, config.jsonProxyUrl, callback,
-            gadgets.io.encodeValues(postData), params, processResponse);
+      if (!respondWithPreload(paramData, params, callback, processResponse)) {
+        var refreshInterval = params.REFRESH_INTERVAL || 0;
+
+        if (refreshInterval > 0) {
+          // this content should be cached
+          // Add paramData to the URL
+          var extraparams = "&refresh=" + refreshInterval + '&'
+              + gadgets.io.encodeValues(paramData);
+
+          makeXhrRequest(url, config.jsonProxyUrl + extraparams, callback,
+              null, "GET", params, processResponse);
+
+        } else {
+          makeXhrRequest(url, config.jsonProxyUrl, callback,
+              gadgets.io.encodeValues(paramData), "POST", params,
+              processResponse);
+        }
       }
     },
 
@@ -281,8 +335,8 @@ gadgets.io = function() {
      */
     makeNonProxiedRequest : function (relativeUrl, callback, opt_params) {
       var params = opt_params || {};
-      makePostRequest(relativeUrl, relativeUrl, callback, params.POST_DATA,
-          params, processNonProxiedResponse);
+      makeXhrRequest(relativeUrl, relativeUrl, callback, params.POST_DATA,
+          params.METHOD, params, processNonProxiedResponse);
     },
 
     /**
@@ -335,7 +389,10 @@ gadgets.io.RequestParameters = gadgets.util.makeEnum([
   "HEADERS",
   "AUTHORIZATION",
   "NUM_ENTRIES",
-  "GET_SUMMARIES"
+  "GET_SUMMARIES",
+  "REFRESH_INTERVAL",
+  "OAUTH_SERVICE",
+  "OAUTH_TOKEN"
 ]);
 
 // PUT, DELETE, and HEAD not supported currently.

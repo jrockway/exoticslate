@@ -457,12 +457,11 @@ gadgets.TabSet.prototype.createTabTable_ = function() {
   navTr.appendChild(rightNavTd);
 
   // Register onclick event handlers for smooth scrolling.
-  var me = this;
   leftNav.onclick = function(event) {
-    me.smoothScroll_(wrapper, -120);
+    this.smoothScroll_(wrapper, -120);
   };
   rightNav.onclick = function(event) {
-    me.smoothScroll_(wrapper, 120);
+    this.smoothScroll_(wrapper, 120);
   };
 
   // Swap left and right scrolling if direction is RTL.

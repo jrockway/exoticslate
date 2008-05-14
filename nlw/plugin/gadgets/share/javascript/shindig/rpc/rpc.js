@@ -95,6 +95,37 @@ gadgets.rpc = function() {
           throw new Error("Invalid auth token.");
         }
       }
+
+      // The Gecko engine used by FireFox etc. allows an IFrame to directly call
+      // methods on the frameElement property added by the container page even
+      // if their domains don't match.
+      // Here we try to set up a relay channel using the frameElement technique
+      // to greatly reduce the latency of cross-domain calls if the postMessage
+      // method is not supported.
+      if (relayChannel === 'ifpc') {
+        if (rpc.f === '..') {
+          // Container-to-gadget call
+          try {
+            var fel = window.frameElement;
+            if (typeof fel.__g2c_rpc === 'function' &&
+                typeof fel.__g2c_rpc.__c2g_rpc != 'function') {
+              fel.__g2c_rpc.__c2g_rpc = function(args) {
+                process(gadgets.json.parse(args));
+              };
+            }
+          } catch (e) {
+          }
+        } else {
+          // Gadget-to-container call
+          var iframe = document.getElementById(rpc.f);
+          if (iframe && typeof iframe.__g2c_rpc != 'function') {
+            iframe.__g2c_rpc = function(args) {
+              process(gadgets.json.parse(args));
+            };
+          }
+        }
+      }
+
       var result = (services[rpc.s] || services['']).apply(rpc, rpc.a);
       if (rpc.c) {
         gadgets.rpc.call(rpc.f, '__cb', null, rpc.c, result);
@@ -113,24 +144,24 @@ gadgets.rpc = function() {
     for (var i = iframePool.length - 1; i >=0; --i) {
       var ifr = iframePool[i];
       try {
-	      if (ifr && (ifr.recyclable || ifr.readyState === 'complete')) {
-	        ifr.parentNode.removeChild(ifr);
-	        if (window.ActiveXObject) {
-	          // For MSIE, delete any iframes that are no longer being used. MSIE
-	          // cannot reuse the IFRAME because a navigational click sound will
-	          // be triggered when we set the SRC attribute.
-	          // Other browsers scan the pool for a free iframe to reuse.
-	          iframePool[i] = ifr = null;
-	          iframePool.splice(i, 1);
-	        } else {
-	          ifr.recyclable = false;
-	          iframe = ifr;
-	          break;
-	        }
-	      }
+        if (ifr && (ifr.recyclable || ifr.readyState === 'complete')) {
+          ifr.parentNode.removeChild(ifr);
+          if (window.ActiveXObject) {
+            // For MSIE, delete any iframes that are no longer being used. MSIE
+            // cannot reuse the IFRAME because a navigational click sound will
+            // be triggered when we set the SRC attribute.
+            // Other browsers scan the pool for a free iframe to reuse.
+            iframePool[i] = ifr = null;
+            iframePool.splice(i, 1);
+          } else {
+            ifr.recyclable = false;
+            iframe = ifr;
+            break;
+          }
+        }
       } catch (e) {
-      	// Ignore; IE7 throws an exception when trying to read readyState and
-      	// readyState isn't set.
+        // Ignore; IE7 throws an exception when trying to read readyState and
+        // readyState isn't set.
       }
     }
     // Create IFrame if necessary
@@ -267,6 +298,25 @@ gadgets.rpc = function() {
         targetWin.postMessage(rpcData);
         break;
       default: // use 'ifpc' as a fallback mechanism
+        // Try the frameElement channel if available
+        try {
+          if (from === '..') {
+            // Container-to-gadget
+            var iframe = document.getElementById(targetId);
+            if (typeof iframe.__g2c_rpc.__c2g_rpc === 'function') {
+              iframe.__g2c_rpc.__c2g_rpc(rpcData);
+              return;
+            }
+          } else {
+            // Gadget-to-container
+            if (typeof window.frameElement.__g2c_rpc === 'function') {
+              window.frameElement.__g2c_rpc(rpcData);
+              return;
+            }
+          }
+        } catch (e) {
+        }
+
         var relay = gadgets.rpc.getRelayUrl(targetId);
 
         // TODO split message if too long

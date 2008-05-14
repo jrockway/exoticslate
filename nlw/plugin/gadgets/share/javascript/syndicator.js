@@ -20,7 +20,7 @@
 gadgets.config.init({
     "core.io" : {
         "proxyUrl" : "/data/gadget/proxy?url=%url%",
-        "jsonProxyUrl" : "/data/gadget/json_proxy"
+        "jsonProxyUrl" : "/data/gadget/json_proxy?fake=1"
     },
     "rpc" : {
         "parentRelayUrl" : "/nlw/plugin/gadgets/rpc_relay.html",

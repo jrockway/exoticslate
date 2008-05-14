@@ -1,38 +1,25 @@
-| *Comment* | STARTING Test Case: Miki |  |
-| *Comment* | TODO: more miki |  |
+| *Comment* | STARTING Test Case: Miki |
+| *Comment* | Test Case: Mikie - View a spreadsheet in the Miki |
+| click_and_wait | st-home-link |
+| open_ok | /%%workspace%%/index.cgi?car_loan |
+| click_ok | link=Mobile |
+| wait_for_element_present_ok | link=Edit |
+| text_like | This loan is offered through the Biggie Motors Automation Corporation |
+| text_like | 3890.40 |
+| text_like | Loan Amount |
+| click_and_wait | link=Home |
+| wait_for_element_visible_ok | link=start here |
 
-| *Comment* | Test Case: Miki RT 26984 |  |
-| *Comment* | Test Case: Miki create test weblog for capitalization test |  |
-| click_and_wait | link=Settings |  |
-| click_and_wait | link=Create New Weblog |  |
-| type_ok | weblog_title | Caps Test Weblog %%start_time%% |
-| click_and_wait | Button |  |
-
-| *Comment* | Test Case: Miki Open the weblog with caps |  |
-| open_ok | /lite/category/%%workspace%%/Caps%20Test%20Weblog%20%%start_time%%%20Weblog |  |
-| text_like | link=First Post in Caps Test Weblog %%start_time%% Weblog | First Post in Caps Test Weblog %%start_time%% Weblog |
-| text_like | link=Recent changes in Caps Test Weblog %%start_time%% Weblog category | Recent changes in Caps Test Weblog %%start_time%% Weblog category |
-
-| *Comment* | Test Case: Miki Open the weblog without caps |  |
-| open_ok | /lite/category/%%workspace%%/caps%20test%20weblog%20%%start_time%%%20Weblog |  |
-| text_like | link=First Post in Caps Test Weblog %%start_time%% Weblog | First Post in Caps Test Weblog %%start_time%% Weblog |
-| text_like | link=Recent changes in caps test weblog %%start_time%% Weblog category | Recent changes in caps test weblog %%start_time%% Weblog category |
-
-| click_ok | link=Recent Changes |  |
-
-| *Comment* | What's with all the pauses? |  |
-
-| pause | 5000 |  |
-| click_ok | link=Filter by category |  |
-| pause | 5000 |  |
-| click_ok | link=caps test weblog %%start_time%% weblog |  |
-| pause | 5000 |  |
-| click_ok | link=First Post in Caps Test Weblog %%start_time%% Weblog |  |
-| pause | 5000 |  |
-| text_like | qr/This is the first post in Caps Test Weblog %%start_time%% Weblog/ |  |
-
-| *Comment* | Test Case: Miki Teardown |  |
-| st-admin | purge-page --workspace %%workspace%% --page first_post_in_caps_test_weblog_%%start_time%%_weblog |  |
-| *Comment* | Test Case: Miki END RT 26984 |
-
+| *Comment* | Test Case: Miki Open a socialcalc page |  |
+| open_ok | /lite/page/%%workspace%%/car_loan |  |
+| wait_for_element_present_ok | link=Edit |  |
+| text_like | This loan is offered through the Biggie Motors Automation Corporation |  |
+| text_like | 3890.40 |  |
+| text_like | Loan Amount |  |
+| click_ok | link=Edit |  |
+| wait_for_element_visible_ok | link=Cancel Edit |  |
+| pause | 3000 |
+| text_like | edit_textarea | cell:C4:vtc:n%:0.05:5.0% |
+| click_and_wait | link=Cancel Edit |  |
+| open_ok | /%%workspace%%/ |  |
 | *Comment* | Test Case: Miki COMPLETED |  |

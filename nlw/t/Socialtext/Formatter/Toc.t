@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 21;
+use Test::Socialtext tests => 23;
 fixtures( 'ALL' );
 
 # Confirm that we can create tables of contents of 
@@ -209,16 +209,21 @@ Bad_recursion_bug_598: {
         warn $warning;
     };
 
-    my $recurse_page = Socialtext::Page->new( hub => $public )->create(
-        title => 'recurse',
-        content => <<'EOF',
-^^^ {recent_changes} {toc: }
-EOF
-        creator => $public->current_user,
+    my @bad_wikitexts = (
+        q/^^^ {recent_changes} {toc: }/,
+        q/^^^ {recent_changes} {toc}/,
+        q/^ {toc} I'm OK{tm}/,
     );
-    my $html;
-    eval { 
-        $html = $recurse_page->to_html_or_default();
-    };
-    ok !$@, 'did not recurse forevar';
+    for my $text (@bad_wikitexts) {
+        my $recurse_page = Socialtext::Page->new( hub => $public )->create(
+            title => 'recurse',
+            content => "$text\n",
+            creator => $public->current_user,
+        );
+        my $html;
+        eval { 
+            $html = $recurse_page->to_html_or_default();
+        };
+        ok !$@, 'did not recurse forevar';
+    }
 }

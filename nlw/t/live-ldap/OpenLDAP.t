@@ -6,7 +6,7 @@ use warnings;
 use mocked 'Socialtext::Log', qw(:tests);
 use Socialtext::LDAP;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 58;
+use Test::Socialtext tests => 62;
 
 use_ok 'Socialtext::LDAP::OpenLDAP';
 
@@ -89,10 +89,14 @@ authentication_failure: {
     my $rc = Socialtext::LDAP::Config->save($config);
     ok $rc, 'saved LDAP config to YAML';
 
+    # populate OpenLDAP with some data
+    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+    ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
+
     # attempt to authenticate, using wrong password
     clear_log();
     my %opts = (
-        user_id     => $openldap->root_dn(),
+        user_id     => 'cn=John Doe,dc=example,dc=com',
         password    => 'this-is-the-wrong-password',
     );
     my $authok = Socialtext::LDAP->authenticate(%opts);
@@ -112,10 +116,14 @@ authentication_ok: {
     my $rc = Socialtext::LDAP::Config->save($config);
     ok $rc, 'saved LDAP config to YAML';
 
+    # populate OpenLDAP with some data
+    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+    ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
+
     # attempt to authenticate, using a known username/password
     my %opts = (
-        user_id     => $openldap->root_dn(),
-        password    => $openldap->root_pw(),
+        user_id     => 'cn=John Doe,dc=example,dc=com',
+        password    => 'foobar',
     );
     my $authok = Socialtext::LDAP->authenticate(%opts);
     ok $authok, 'authentication ok';

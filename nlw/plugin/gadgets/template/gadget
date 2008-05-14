@@ -1,6 +1,9 @@
 <div class="widgetWrap static" id="[% gadget.id %]">
     <div class='widgetHeader'>
         <div style="padding:11px; position:relative; text-align: right; float:right; width:70px">
+            [% IF debug %]
+                <a href='#' onclick="jQuery('#[% gadget.id %]-iframe').src = '[% gadget.href %]'">R</a>
+            [% END %]
             [% IF gadget.has_prefs %]
                 <img src="[% share_path("images/iconSettings.png") %]" style="cursor: pointer"
                    onclick="gadgets.container.toggleSetup('[% gadget.id %]')"/>

@@ -46,7 +46,10 @@ sub add_gadget {
 
     $container->install_gadget($vars{url});
 
-    $self->redirect('index.cgi?action=gadgets');
+    $self->redirect(
+        'index.cgi?action=gadgets' .
+        ($vars{debug} ? ';debug=1' : '')
+    );
 }
 
 sub gallery {
@@ -67,11 +70,14 @@ sub gallery {
         { name => "BeTwittered", uri => "http://hosting.gmodules.com/ig/gadgets/file/106092714974714025177/TwitterGadget.xml" },
     );
 
+    my %vars = $self->cgi_vars;
+
     return $self->template_render('gallery',
         gadgetsST => \@gadgets, 
         gadgets3rd => \@gadgets3rd,
         gadgets3rdh => \@gadgets3rdh,
         current_uri => $self->uri,
+        debug => $vars{debug},
     );
 
 }
@@ -82,6 +88,7 @@ sub test_gadgets {
     my $container = Socialtext::Gadgets::Container->test($self);
 
     return $self->template_render('dashboard',
+        debug => 1,
         gadgets => $container->template_vars,
     );
 
@@ -90,12 +97,14 @@ sub test_gadgets {
 sub html {
     my $self = shift;
 
+    my %vars = $self->cgi_vars;
+
     my $container = Socialtext::Gadgets::Container->new($self, $self->username);
 
     return $self->template_render('dashboard',
+        debug => $vars{debug},
         gadgets => $container->template_vars,
-        gallery_uri => $self->make_uri( path=>'/admin/index.cgi') . "?action=gadget_gallery",
-        #gallery_uri => $self->uri . "?action=gadget_gallery",
+        gallery_uri => $self->make_uri( path=>'/admin/index.cgi') . "?action=gadget_gallery" . ($vars{debug} ? ';debug=1' : ''),
     );
 }
 
@@ -146,7 +155,7 @@ sub get_js {
     my ($self, $args) = @_;
     my $api = Socialtext::Pluggable::Plugin->new();
     my $gadget = Socialtext::Gadgets::Gadget->restore($api,$args->{id});
-    $self->header(-type => 'application/javascript');
+    $self->header_out(-type => 'application/javascript');
     return $gadget->javascript;
 }
 
@@ -172,9 +181,8 @@ sub json_proxy  {
     my ( $self, $args ) = @_;
 
     my %args;
-    foreach my $key ( qw( authz headers httpMethod postData st url ) ) {
-      $args{$key} = $self->query->{$key};
-      $args{$key} = $args{$key}->[0] if ref($args{$key}) eq 'ARRAY';
+    foreach my $key ($self->query->param) {
+      $args{$key} = $self->query->param($key);
     }
 
     $args{httpMethod} = 'GET' unless grep { $_ eq $args{httpMethod} } qw( POST GET);
@@ -193,8 +201,41 @@ sub json_proxy  {
     }
 
     my $result = $agent->request($request);
-    $self->header(-type => $result->header('Content-type'));  
+    $self->header_out(-type => $result->header('Content-type'));  
     my $data = $result->decoded_content;
+
+    if ($args{contentType} eq 'FEED') {
+        my %feed_data;
+        if (my $feed = XML::Feed->parse(\$data) ) {
+            $feed_data{Author} = $feed->author;
+            $feed_data{Description} = $feed->description;
+            # XXX arabic and farsi probably aren't a huge priority right now...
+            $feed_data{LanguageDirection} = 'ltr';
+            $feed_data{Link} = $feed->link;
+            $feed_data{Title} = $feed->title;
+            $feed_data{URL} = $args{url};
+
+            my @entries;
+            foreach my $e ($feed->entries) {
+                push @entries, {
+                    BodyAvailable => 1,
+                    Date => $e->issued->datetime,
+                    ID => $e->id,
+                    LanguageDirection => 'ltr',
+                    Link => $e->link,
+                    Summary => $e->summary->body || $e->content->body,
+                    Title => $e->title,
+                };
+
+                last if $args{numEntries} and @entries >= $args{numEntries};
+            }
+            $feed_data{Entry} = \@entries;
+
+        } else {
+            $feed_data{error} =  XML::Feed->errstr . "\n";
+        }
+        $data = encode_json(\%feed_data);
+    }
 
     # undefined value in here somewhere, status_line? body? XXX TODO:
     my $json = encode_json({
@@ -229,7 +270,7 @@ sub proxy  {
 
     my $ctype = $res->header('Content-type') || 'text/plain; charset=utf-8';
     $ctype .= '; charset=utf-8' if Encode::is_utf8($content) and $ctype !~ m{charset=};
-    $self->header('Content-type' => $ctype);
+    $self->header_out('Content-type' => $ctype);
 
     return $content;
 }

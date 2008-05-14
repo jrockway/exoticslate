@@ -123,8 +123,9 @@ sub _get_gadget_data {
     # the net, parse them and add them into our msgs hash.
     my @locale_nodes = $doc->getElementsByTagName('Locale');
 
+    my %messages;
     foreach my $node (@locale_nodes) {
-        my $lang = $node->getAttribute('lang') || 'en';
+        my $lang = $node->getAttribute('lang') || '*';
         my $url = $self->absolute_url($node->getAttribute('messages'));
 
         my $messages = $self->get_www($url) || '';
@@ -132,15 +133,15 @@ sub _get_gadget_data {
         if ($messages) {
             my $xml = XML::LibXML->new->parse_string($messages);
 
-            my %messages;
             for my $msg ($xml->getElementsByTagName('msg')) {
                 my $name = $msg->getAttribute('name');
                 ($messages{$lang}{$name} = $msg->textContent)
                     =~ s{(?:^\s*\n\s*|\s*\n\s*$)}{}g; # XXX assumed this is correct
             }
-            $self->storage->set('messages', \%messages);
         }
     }
+
+    $self->storage->set('messages', \%messages);
     
 
     # get the content of the gadget now
@@ -251,7 +252,7 @@ sub get_messages {
   # if we can't find a more exact lang use the '*' lang 
   my $messages = $self->storage->get('messages');
   my $lang = exists $messages->{$LANG} ? $LANG : '*';
-  return $messages->{$lang};
+  return $messages->{$lang} || $messages->{'*'};
 }
 
 sub expand_messages {

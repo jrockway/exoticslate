@@ -94,6 +94,7 @@ sub _add_js {
     $self->{_js} .= <<EOT;
 /* FILE: $title */
 $js
+
 EOT
 }
 

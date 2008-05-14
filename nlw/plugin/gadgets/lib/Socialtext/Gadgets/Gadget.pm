@@ -46,10 +46,13 @@ sub error_gadget_uri {
 
 sub _get_storage {
     my $self = shift;
-    return $self->api->storage($self->id);
+    my $id = $self->id || die "Gadget has no id!";
+    return $self->api->storage("gadget.$id");
 }
 
-sub _create_id { return time . int(rand 1000)  }
+sub _create_id {
+    join('.', grep { $_ } shift, time, int(rand 1000));
+}
 
 sub restore {
     my ($class, $api, $id) = @_;
@@ -73,15 +76,17 @@ sub install {
     croak 'url required' unless $url;
     my $self = {};
     bless $self, $class;
-    $self->id($id || _create_id);
-    $self->api($api);
-
-    # XXX Probably don't just remove the existing gadget
-    $self->storage->purge;
 
     my @url_parts = $url =~ m{^(\w+://[^/]*)?/?(.*)/([^/]+)$};
     $url_parts[0] ||= $base_uri;
     $url = join '/', grep { $_ } @url_parts;
+
+    (my $name = $url_parts[2]) =~ s/\.xml$//;
+    $self->id($id || _create_id($name));
+    $self->api($api);
+
+    # XXX Probably don't just remove the existing gadget
+    $self->storage->purge;
 
     $self->storage->set('url_parts', \@url_parts);
     $self->storage->set('url', $url);

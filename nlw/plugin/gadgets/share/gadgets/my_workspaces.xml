@@ -31,7 +31,7 @@
             jQuery('#__MODULE_ID__-table').append(
                 jQuery('<tr>').append(
                     jQuery('<td style="padding-left: 10px;">').append(
-                        jQuery('<a target="_top">').attr('href','/'+ws_name).append(ws_title)
+                        jQuery('<a>').attr('href','/'+ws_name).append(ws_title)
                     )
                 ).append(
                     jQuery('<td>').attr('class','ws-views__MODULE_ID__')

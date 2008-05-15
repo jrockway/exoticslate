@@ -30,7 +30,6 @@
                 jQuery('<li>').append(
                     jQuery('<a>')
                         .attr('href',personurl)
-                        .attr('target','parent')
                         .append(args.fullname)
                 ),
                 args.date ? jQuery('<li class="time">').append(args.date) : ''
@@ -48,7 +47,7 @@
                 jQuery('#__MODULE_ID__-content').append(
                     jQuery('<div class="myContent">').append(
                         jQuery('<h4>').append(
-                            jQuery('<a target="parent" style="text-decoration: none" href="'+url+'">').append(page.Subject)
+                            jQuery('<a style="text-decoration: none" href="'+url+'">').append(page.Subject)
                         ),
                         jQuery('<p>').append(
                             page.Summary

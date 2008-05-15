@@ -8,8 +8,8 @@
             var msgs = [% as_json(messages) %];
         </script>
     </head>
-    <body onload="console.log('onload')">
+    <body>
         [% content %]
-        <script>console.log('beforerunonloadhandlers');gadgets.util.runOnLoadHandlers();console.log('runonloadhandlers')</script>
+        <script>gadgets.util.runOnLoadHandlers()</script>
     </body>
 </html>

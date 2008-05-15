@@ -1,4 +1,4 @@
-    export WIKIEMAIL=$1
+    export WIKIEMAIL=$HOSTNAME
     USERNAME="wikitester@ken.socialtext.net"
     alias tail='tail'
     sudo -u www-data ./run-wiki-tests --no-maximize --test-username $USERNAME --test-email $USERNAME  --plan-server http://$HOSTNAME  --test-server http://$HOSTNAME  --timeout 60000 --plan-page "OSR Testcases" >&  testcases.out & 

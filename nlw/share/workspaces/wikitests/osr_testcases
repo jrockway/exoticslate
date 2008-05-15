@@ -74,8 +74,6 @@ test env properly and are not testing the test-workspace
 * [Test Case: Nasty Double Dashes]
 * [Test Case: REST Workspace]
 
-TC Insert Menu will fail as the menu is being reworked. Revise the test.
-
 * [Test Case: Insert Menu]
 
 uses default wikiemail or `$ENV{WIKIEMAIL}`

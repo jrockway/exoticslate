@@ -10,6 +10,7 @@ use Socialtext::File qw/set_contents/;
 use Socialtext::JSON;
 use Encode;
 use utf8;
+use JSON::XS;
 
 my $r    = make_rester();
 my $l10n = load_localizations();

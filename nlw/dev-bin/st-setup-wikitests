@@ -4,11 +4,12 @@
 echo Creating test-data workspace
 $ST_CURRENT/nlw/dev-bin/create-test-data-workspace
 
+# instantiate wikitests wiki
+echo Creating  wikitests wiki
+$ST_CURRENT/nlw/dev-bin/wikitests-to-wiki
+
 # install reports data
 echo Creating reports db
 $ST_CURRENT/nlw/dev-bin/st-populate-reports-db
 
-# instantiate wikitests wiki
-echo Creating  wikitests wiki
-$ST_CURRENT/nlw/dev-bin/wikitests-to-wiki
 

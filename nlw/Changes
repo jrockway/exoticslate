@@ -2,6 +2,12 @@ Change log for Socialtext Open
 
 2.20.X
 
+Release notes, 2.20.3.2  May 2008
+
+  Bug: Deep recursion for specifically formatted wikitext
+
+  Updated Help docs
+
 Release notes, 2.20.3.1  May 2008
 
   Allow configuration of workspace custom Javascript URI via REST

@@ -51,7 +51,7 @@ sub _get_storage {
 }
 
 sub _create_id {
-    join('.', grep { $_ } shift, time, int(rand 1000));
+    join('_', grep { $_ } shift, time, int(rand 1000));
 }
 
 sub restore {

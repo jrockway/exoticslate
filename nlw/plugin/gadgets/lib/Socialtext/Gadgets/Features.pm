@@ -85,7 +85,6 @@ sub as_js {
 
 sub as_minified {
     my $self = shift;
-    return $self->as_js;
     return minify($self->as_js);
 }
 

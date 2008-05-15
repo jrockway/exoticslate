@@ -1,21 +1,14 @@
 | *Comment* | STARTING Test Case : Hide sidebar |  |
-| setSpeed | 100 |  |
-| clickAndWait | st-home-link |  |
-| clickAndWait | st-newpage-link |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | st-newpage-pagename-edit | TC Hide Sidebar 1 %%start_time%% |
-| type_ok | wikiwyg_wikitext_textarea | TC Hide Sidebar 1 %%start_time%% Content |
-| clickAndWait | st-save-button-link |  |
 
 | clickAndWait | st-home-link |  |
-| clickAndWait | st-newpage-link |  |
-| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| type_ok | st-newpage-pagename-edit | TC Hide Sidebar 2 %%start_time%% |
-| type_ok | wikiwyg_wikitext_textarea | TC Hide Sidebar 2 %%start_time%% Content |
-| clickAndWait | st-save-button-link |  |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=TC%20Hide%20Sidebar%20Spreadsheet1%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| click_and_wait | st-save-button-link |  |
+
+| clickAndWait | st-home-link |  |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=TC%20Hide%20Sidebar%20Spreadsheet2%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case : Hide sidebar sidebar should be open |  |
 | wait_for_element_visible_ok | st-page-boxes-toggle-link | 30000 |
@@ -49,7 +42,7 @@
 | *Comment* | Test Case : Hide sidebar close the sidebar navigate away |  |
 | click_ok | link=V |  |
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
-| clickAndWait | link=TC Hide Sidebar 1 %%start_time%% |  |
+| clickAndWait | link=TC Hide Sidebar Spreadsheet1 %%start_time%% |  |
 
 | *Comment* | Test Case : Hide sidebar sidebar should still be closed |  |
 | wait_for_element_visible_ok | st-page-boxes-toggle-link | 30000 |
@@ -68,7 +61,7 @@
 
 | *Comment* | Test Case : Hide sidebar navigate to original page |  |
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
-| clickAndWait | link=TC Hide Sidebar 2 %%start_time%% |  |
+| clickAndWait | link=TC Hide Sidebar Spreadsheet1 %%start_time%% |  |
 
 | *Comment* | Test Case : Hide sidebar sidebar should still be open |  |
 | wait_for_element_visible_ok | st-attachments-title | 30000 |
@@ -80,7 +73,7 @@
 
 | *Comment* | Test Case : Hide sidebar Cleaning up |  |
 
-| st-admin | purge-page --w %%workspace%% --page tc_hide_sidebar_1_%%start_time%% | The TC Hide Sidebar 1 %%start_time%% page was purged from the %%workspace%% workspace. |
-| st-admin | purge-page --w %%workspace%% --page tc_hide_sidebar_2_%%start_time%% | The TC Hide Sidebar 2 %%start_time%% page was purged from the %%workspace%% workspace. |
+| st-admin | purge-page --w %%workspace%% --page tc_hide_sidebar_spreadsheet1_%%start_time%% | The TC Hide Sidebar Spreadsheet1 %%start_time%% page was purged from the %%workspace%% workspace. |
+| st-admin | purge-page --w %%workspace%% --page tc_hide_sidebar_spreadsheet2_%%start_time%% | The TC Hide Sidebar Spreadsheet2 %%start_time%% page was purged from the %%workspace%% workspace. |
 
 | *Comment* | Test Case : Hide sidebar COMPLETED |  |

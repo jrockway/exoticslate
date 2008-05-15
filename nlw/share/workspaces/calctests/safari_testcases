@@ -2,6 +2,7 @@ These testcases are run by the unit tests. Make sure this list only contains fin
 
 * [Test Case: Home]
 * [Test case: Watchlist]
+* [Test Case: View Spreadsheet Page]
 * [Test Case: Double Click to Edit]
 * [Test Case: New Page]
 * [Test Case: New Page No Overwrite]

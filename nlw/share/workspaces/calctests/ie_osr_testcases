@@ -5,6 +5,7 @@ test env properly and are not testing the test-workspace
 
 * [Test Case: Home]
 * [Test case: Watchlist]
+* [Test Case: View Spreadsheet Page]
 * [Test Case: Edit This Page]
 * [Test Case: Double Click to Edit]
 * [Test Case: New Page]

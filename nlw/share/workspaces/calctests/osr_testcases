@@ -9,7 +9,6 @@ test env properly and are not testing the test-workspace
 * [Test Case: View Spreadsheet Page]
 * [Test Case: Edit This Page]
 * [Test Case: Double Click to Edit]
-* [Test Case: Preview Format]
 * [Test Case: New Page]
 * [Test Case: New Page No Overwrite]
 * [Test case: functional search tests]

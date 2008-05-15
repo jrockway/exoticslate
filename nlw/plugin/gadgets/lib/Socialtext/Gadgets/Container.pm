@@ -80,7 +80,7 @@ sub get_test_gadgets {
 
 sub delete_gadget {
     my ($self,$id) = @_;
-    $self->api->storage($id)->remove;
+    $self->api->storage("gadget.$id")->remove;
 }
 
 sub get_gadgets {

@@ -186,7 +186,7 @@ proto.toggleSetup = function (id) {
     return;
 }
 
-proto._update_desktop = function () {
+proto._desktop_layout = function () {
     var cols = {};
     jQuery('.gadget-col').each(function(col) {
         cols[col] = {};
@@ -195,7 +195,11 @@ proto._update_desktop = function () {
             cols[col][row] = id;
         });
     });
+    return cols;
+}
 
+proto._update_desktop = function () {
+    var cols = this._desktop_layout();
     jQuery.ajax({
         type: 'POST',
         url:  '/data/gadget/desktop',
@@ -205,10 +209,11 @@ proto._update_desktop = function () {
 }
 
 proto._delete_gadget = function (id) {
+    var cols = this._desktop_layout();
     jQuery.ajax({
         type: 'POST',
         url:  '/data/gadget/desktop',
-        data: 'delete=' + id
+        data: 'delete=' + id + '&desktop=' + gadgets.json.stringify(cols)
     });
 
 }
@@ -217,7 +222,6 @@ proto._delete_gadget = function (id) {
 proto.remove = function (id) {
     jQuery('#'+id).fadeOut('slow',function() {
         jQuery('#'+id).remove();
-        gadgets.container._update_desktop();
         gadgets.container._delete_gadget(id);
     });
 }

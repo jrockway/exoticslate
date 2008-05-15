@@ -4,7 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 use mocked 'Net::LDAP';
 use mocked 'Socialtext::Log', qw(:tests);
-use Test::Socialtext tests => 18;
+use Test::Socialtext tests => 20;
 
 # FIXTURE:  ldap_*
 #
@@ -63,16 +63,22 @@ ldap_auth_password_wrong: {
 
     # re-mock for Auth... (it'll re-bind)
     Net::LDAP->set_mock_behaviour(
-        bind_fail => 1,
+        search_results => [ $TEST_USERS[0] ],
+        bind_credentials => {
+            user => $TEST_USERS[0]->{dn},
+            pass => $TEST_USERS[0]->{authPassword},
+            },
         );
     clear_log();
 
+    # attempt Auth, with wrong password
     ok !$user->password_is_correct('bad'), 'LDAP auth; password mismatch';
 
     # VERIFY auth mocks...
     my $mock = Net::LDAP->mocked_object();
-    $mock->called_pos_ok( 1, 'bind' );
-    my ($self, $dn, %opts) = $mock->call_args(1);
+    $mock->called_pos_ok( 1, 'search' );
+    $mock->called_pos_ok( 2, 'bind' );
+    my ($self, $dn, %opts) = $mock->call_args(2);
     is $dn, $user->user_id(), 'LDAP auth; password mismatch used correct DN';
     is $opts{'password'}, 'bad', 'LDAP auth; password mismatch used correct password';
 
@@ -94,15 +100,26 @@ ldap_auth_password_ok: {
     my $user = $factory->GetUser(username=>'First Last');
     isa_ok $user, 'Socialtext::User::LDAP';
 
-    # no need to re-mock for Auth (existing behaviour is ok)
-    ok $user->password_is_correct('good'), 'LDAP auth; password match';
+    # re-mock for Auth... (it'll re-bind)
+    Net::LDAP->set_mock_behaviour(
+        search_results => [ $TEST_USERS[0] ],
+        bind_credentials => {
+            user => $TEST_USERS[0]->{dn},
+            pass => $TEST_USERS[0]->{authPassword},
+            },
+        );
+
+    # attempt Auth, with *correct* password
+    my $good_pass = $TEST_USERS[0]->{authPassword};
+    ok $user->password_is_correct($good_pass), 'LDAP auth; password match';
 
     # VERIFY auth mocks...
     my $mock = Net::LDAP->mocked_object();
-    $mock->called_pos_ok( 1, 'bind' );
-    my ($self, $dn, %opts) = $mock->call_args(1);
+    $mock->called_pos_ok( 1, 'search' );
+    $mock->called_pos_ok( 2, 'bind' );
+    my ($self, $dn, %opts) = $mock->call_args(2);
     is $dn, $user->user_id(), 'LDAP Auth; password match used correct DN';
-    is $opts{'password'}, 'good', 'LDAP auth; password match used correct password';
+    is $opts{'password'}, $good_pass, 'LDAP auth; password match used correct password';
 
     # VERIFY logs; should be empty
     is logged_count(), 0, '... logged right number of entries';

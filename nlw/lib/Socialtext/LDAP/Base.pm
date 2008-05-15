@@ -5,6 +5,8 @@ use strict;
 use warnings;
 use Class::Field qw(field);
 use Net::LDAP;
+use Net::LDAP::Constant qw(LDAP_REFERRAL);
+use URI::ldap;
 use Socialtext::Log qw(st_log);
 
 field 'config';
@@ -38,23 +40,28 @@ sub DESTROY {
 }
 
 sub connect {
-    my $self = shift;
-    my $host = $self->config->host();
+    my ($self, %opts) = @_;
 
-    # set up connection options
-    my %opts = ();
+    # default connection options
+    my $host = delete $opts{'host'} || $self->config->host();
     if ($self->config->port()) {
-        $opts{port} = $self->config->port();
+        $opts{port} ||= $self->config->port();
     }
 
     # attempt connection
-    $self->{ldap} = Net::LDAP->new( $host, %opts );
+    $self->{ldap} = _ldap_connect($host, %opts);
     unless ($self->{ldap}) {
         my $host_str = ref($host) eq 'ARRAY' ? join(', ', @{$host}) : $host;
         st_log->error( "ST::LDAP::Base: unable to connect to LDAP server; $host_str" );
         return;
     }
     return $self;
+}
+
+sub _ldap_connect {
+    my ($host, %opts) = @_;
+    my $ldap = Net::LDAP->new($host, %opts);
+    return $ldap;
 }
 
 sub bind {
@@ -68,7 +75,7 @@ sub bind {
     }
 
     # attempt to bind to LDAP connection
-    my $mesg = $self->{ldap}->bind( $user, %opts );
+    my $mesg = _ldap_bind($self->{ldap}, $user, %opts);
     if ($mesg->code()) {
         st_log->error( "ST::LDAP::Base: unable to bind to LDAP connection; " . $mesg->error() );
         return;
@@ -76,9 +83,52 @@ sub bind {
     return $self;
 }
 
+sub _ldap_bind {
+    my ($ldap, $user, %opts) = @_;
+    my $mesg = $ldap->bind($user, %opts);
+    return $mesg;
+}
+
 sub authenticate {
     my ($self, $user_id, $password) = @_;
-    my $mesg = $self->{ldap}->bind( $user_id, password => $password );
+
+    # preserve our LDAP connection, in case we end up following referrals
+    local $self->{ldap} = $self->{ldap};
+
+    # if we're configured to follow referrals *AND* we've got a User ID to
+    # authenticate with, go find out which LDAP server that user lives in;
+    # might need to follow some referrals to do that.
+    if ($user_id && $self->config->follow_referrals()) {
+        my $user_id_field = $self->config->attr_map->{user_id};
+        my $mesg = $self->_do_following_referrals(
+            action => sub {
+                my $ldap = shift;
+                return $ldap->search(
+                    base    => $self->config->base(),
+                    attrs   => [$user_id_field],
+                    scope   => 'sub',
+                    filter  => "(${user_id_field}=$user_id)",
+                );
+            },
+        );
+        unless ($mesg) {
+            st_log->info( "ST::LDAP::Base: unable to find user to authenticate as" );
+            return;
+        }
+        if ($mesg->code()) {
+            st_log->info( "ST::LDAP::Base: authentication failed; unable to find user '$user_id': " . $mesg->error() );
+            return;
+        }
+    }
+
+    # attempt to bind to the LDAP server with the provided credentials.
+    my $mesg = $self->_do_following_referrals(
+        'bind'   => sub { },
+        'action' => sub {
+            my $ldap = shift;
+            return $ldap->bind($user_id, password=>$password);
+        },
+    );
     if ($mesg->code()) {
         st_log->info( "ST::LDAP::Base: authentication failed for user; $user_id" );
         return;
@@ -88,6 +138,10 @@ sub authenticate {
 
 sub search {
     my ($self, %args) = @_;
+
+    # preserve our LDAP connection, in case we end up following referrals
+    local $self->{ldap} = $self->{ldap};
+
     # add global filter to search args
     my $filter = $self->config->filter();
     if ($filter) {
@@ -99,8 +153,109 @@ sub search {
         }
     }
     # do search, return results
-    return $self->{ldap}->search(%args);
+    return $self->_do_following_referrals(
+        action => sub {
+            my $ldap = shift;
+            return $ldap->search(%args);
+        }
+    );
 }
+
+# Performs an LDAP lookup, while also following LDAP referrals.
+#
+# Accepts a series of callback methods as arguments:
+#
+#   connect
+#       method used to connect to the next LDAP server
+#       called as: connect($host, %opts)
+#
+#   bind
+#       method used to bind to the LDAP connection
+#       called as: bind($ldap_conn, $user, %bind_options)
+#
+#
+#   action
+#       method used to perform requested LDAP lookup
+#       called as: action($ldap_conn)
+#
+# LDAP referrals are followed in a "depth first" manner, and the first
+# non-referral response retrieved is returned back to the caller.  If all of
+# the LDAP referrals are exhausted before a suitable response is found, this
+# method returns empty-handed.
+sub _do_following_referrals {
+    my $self = shift;
+    my %callbacks = (
+        'connect'   => \&_ldap_connect,
+        'bind'      => \&_ldap_bind,
+        'action'    => sub { die "no 'action' provided in call to _do_following_referrals()" },
+        @_,
+        );
+
+    # invoke the CB and get the LDAP response message
+    my $mesg = $callbacks{action}->( $self->{ldap} );
+
+    # return the LDAP response immediately if either:
+    #   a) its *not* an LDAP referral,
+    #   b) we're not configured to follow LDAP referrals
+    return $mesg unless ($mesg->code() == LDAP_REFERRAL);
+    unless ($self->config->follow_referrals()) {
+        st_log->info( "received LDAP referral response, but referral following disabled; not following" );
+        return $mesg;
+    }
+
+    # follow the LDAP referrals in a depth-first manner, returning the first
+    # answer we get thats *not* another LDAP referral response.
+    my $max_depth = $self->config->max_referral_depth();
+    my @referrals = map { [1, $_] } $mesg->referrals();
+  REFERRAL:
+    while (my $entry = shift @referrals) {
+        my ($curr_depth, $referral) = @{$entry};
+
+        # if we've reached the max referral depth, skip this referral
+        if ($curr_depth > $max_depth) {
+            st_log->warning( "max referral depth reached; not following LDAP referral: $referral" );
+            next REFERRAL;
+        }
+        st_log->debug( "following LDAP referral: $referral" );
+
+        # extract the info out of the LDAP referral response
+        my $uri = URI::ldap->new($referral);
+        my $scheme  = $uri->scheme();
+        my $host    = $uri->host();
+        my $port    = $uri->port();
+
+        # connect to the LDAP server we've been referred to
+        $self->{ldap} = $callbacks{connect}->("${scheme}://${host}", port=>$port);
+        unless ($self->{ldap}) {
+            st_log->warning( "ST::LDAP::Base: unable to connect while following LDAP referral: $referral" );
+            next REFERRAL;
+        }
+
+        # bind the LDAP connection
+        my $bind_user = $self->config->bind_user();
+        my $bind_pass = $self->config->bind_password();
+        st_log->debug( "ST::LDAP::Base: binding to LDAP referral as: $bind_user" );
+        $mesg = $callbacks{bind}->($self->{ldap}, $bind_user, ($bind_pass ? (password=>$bind_pass) : ()));
+        if ($mesg && $mesg->code()) {
+            st_log->warning( "ST::LDAP::Base: unable to bind to LDAP referral; " . $mesg->error() );
+            next REFERRAL;
+        }
+
+        # invoke CB, and return immediately if its *NOT* an LDAP referral
+        # response.
+        $mesg = $callbacks{action}->( $self->{ldap} );
+        return $mesg unless ($mesg->code() == LDAP_REFERRAL);
+
+        # add the referrals to the list of things to follow
+        my @more_referrals = map { [$curr_depth+1, $_ ]} $mesg->referrals();
+        unshift @referrals, @more_referrals;
+    }
+
+    # XXX: if we got this far, we haven't found a suitable non-referral
+    # response to hand back to the caller; all referrals led us to the maximum
+    # referral depth.
+    return;
+} 
 
 1;
 
@@ -159,6 +314,10 @@ instantiation.  Returns true on success, false on failure.
 
 Attempts to authenticate against the LDAP connection, using the provided
 C<$user_id> and C<$password>.  Returns true if successful, false otherwise.
+
+If following of LDAP referrals is enabled, a search is done to locate the user
+in your LDAP directory prior to authentication (so we know we're connected to
+the LDAP server that contains the user we're authenticating as).
 
 B<NOTE:> after calling C<authenticate()>, the LDAP connection will be bound
 using the provided C<$user_id>; any further method calls will be done

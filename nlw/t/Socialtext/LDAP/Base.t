@@ -35,6 +35,7 @@ our %data = (
     base => 'ou=Development,dc=example,dc=com',
     host => '127.0.0.1',
     port => 389,
+    follow_referrals => 1,
     attr_map => {
         user_id         => 'dn',
         username        => 'cn',
@@ -242,8 +243,14 @@ authentication_failure: {
 
 ###############################################################################
 # Authentication success
+#
+# NOTE: w/follow_referrals on, authentication does a search first to find the
+# user record and make sure we're speaking to the right LDAP server; make sure
+# that we've got a test user around to return.
 authentication_success: {
-    Net::LDAP->set_mock_behaviour();
+    Net::LDAP->set_mock_behaviour(
+        search_results => [ $LDAP_DATA[0] ],
+        );
     clear_log();
 
     my $ldap = Socialtext::LDAP::Base->new($config);

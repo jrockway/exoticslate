@@ -59,6 +59,10 @@ sub GetUser {
 
     # search LDAP directory for our record
     my $mesg = $self->_find_user( $key, $val );
+    unless ($mesg) {
+        st_log->error( "ST::User::LDAP: no suitable LDAP response" );
+        return undef;
+    }
     if ($mesg->code()) {
         st_log->error( "ST::User::LDAP: LDAP error while finding user; " . $mesg->error() );
         return undef;
@@ -113,6 +117,10 @@ sub Search {
 
     # execute search against LDAP directory
     my $mesg = $ldap->search( %options );
+    unless ($mesg) {
+        st_log->error( "ST::User::LDAP; no suitable LDAP response" );
+        return;
+    }
     if ($mesg->code()) {
         st_log->error( "ST::User::LDAP; LDAP error while performing search; " . $mesg->error() );
         return;

@@ -6,9 +6,7 @@ use warnings;
 use File::Slurp qw(slurp write_file);
 use Socialtext::LDAP::Config;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 32;
-
-use_ok 'Socialtext::LDAP::OpenLDAP';
+use Test::Socialtext tests => 34;
 
 ###############################################################################
 # Authenticate, with LDAP referrals enabled; should succeed
@@ -17,15 +15,14 @@ authenticate_with_referrals: {
     # set up the OpenLDAP servers
     my ($ldap_src, $ldap_tgt) = setup_ldap_servers_with_referrals();
 
-TODO: {
-local $TODO = 'referral support not added yet';
     # find user record; should succeed
     my $user = Socialtext::User->new( username => 'John Doe' );
     isa_ok $user, 'Socialtext::User', 'found user';
-    #is $user->driver_name(), 'LDAP', '... in LDAP store';
-    #ok $user->password_is_correct('foobar'), '... authen w/correct password';
-    #ok !$user->password_is_correct('BADPASS'), '... authen w/bad password';
-}
+    is $user->driver_name(), 'LDAP', '... in LDAP store';
+
+    # authenticate as the user
+    ok $user->password_is_correct('foobar'), '... authen w/correct password';
+    ok !$user->password_is_correct('BADPASS'), '... authen w/bad password';
 }
 
 ###############################################################################
@@ -53,15 +50,12 @@ search_with_referrals: {
     # set up the OpenLDAP servers
     my ($ldap_src, $ldap_tgt) = setup_ldap_servers_with_referrals();
 
-TODO: {
-local $TODO = 'referral support not added yet';
     # search for users; should succeed
     my @users = Socialtext::User->Search('john');
     is scalar(@users), 1, 'search returned a single user';
 
     my $user = shift @users;
-    is $user->{driver_name}, 'LDAP', '... in LDAP store';
-}
+    like $user->{driver_name}, qr/^LDAP:/, '... in LDAP store';
 }
 
 ###############################################################################
@@ -90,7 +84,7 @@ search_no_referrals: {
 sub setup_ldap_servers_with_referrals {
     # bootstrap the OpenLDAP referral target
     my $openldap_target = Test::Socialtext::Bootstrap::OpenLDAP->new();
-    isa_ok $openldap_target, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP for referral target';
+    isa_ok $openldap_target, 'Test::Socialtext::Bootstrap::OpenLDAP', 'referral target';
 
     my $target_host = $openldap_target->host();
     my $target_port = $openldap_target->port();
@@ -100,7 +94,7 @@ sub setup_ldap_servers_with_referrals {
     my $openldap_source = Test::Socialtext::Bootstrap::OpenLDAP->new(
         raw_conf => "referral ldap://${target_host}:${target_port}",
     );
-    isa_ok $openldap_source, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP for referral source';
+    isa_ok $openldap_source, 'Test::Socialtext::Bootstrap::OpenLDAP', 'referral source';
 
     # save LDAP config for the referral *source*; the only way we get to the
     # target is through a referral (*not* through our config)
@@ -109,10 +103,12 @@ sub setup_ldap_servers_with_referrals {
     ok $rc, 'saved LDAP config to YAML';
 
     # set user_factories to use the LDAP server first, Default second
+    my $ldap_id = $ldap_config->id();
+    my $factories = "LDAP:$ldap_id;Default";
     my $appconfig = Socialtext::AppConfig->new();
-    $appconfig->set( 'user_factories' => 'LDAP;Default' );
+    $appconfig->set( 'user_factories' => $factories );
     $appconfig->write();
-    is $appconfig->user_factories(), 'LDAP;Default', 'user_factories set to LDAP, then Default';
+    is $appconfig->user_factories(), $factories, 'user_factories set to LDAP, then Default';
 
     # populate OpenLDAP servers with data
     ok $openldap_target->add('t/test-data/ldap/base_dn.ldif'), 'added base_dn to referral target';

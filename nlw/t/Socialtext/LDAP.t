@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use mocked 'Net::LDAP';
 use mocked 'Socialtext::Log', qw(:tests);
-use Test::Socialtext tests => 49;
+use Test::Socialtext tests => 50;
 use Test::MockObject::Extends;
 
 use_ok 'Socialtext::LDAP';
@@ -19,6 +19,7 @@ our %data = (
     base => 'ou=Development,dc=example,dc=com',
     host => '127.0.0.1',
     port => 389,
+    follow_referrals => 1,
     attr_map => {
         user_id         => 'dn',
         username        => 'cn',
@@ -332,6 +333,7 @@ authentication_success: {
             user => $bind_user,
             pass => $bind_pass,
             },
+        search_results => [ { dummy => 'user' } ],
         );
 
     # create the LDAP configuration file
@@ -346,10 +348,12 @@ authentication_success: {
     my $auth_ok = Socialtext::LDAP->authenticate(%opts);
     ok $auth_ok, 'authentication success';
 
-    # VERIFY logs; want to make sure the bind was done w/user_id+password
+    # VERIFY logs; we should have searched first for the user, then bound
+    # w/user_id+password
     my $mock = Net::LDAP->mocked_object();
-    $mock->called_pos_ok( 1, 'bind' );
-    my ($self, $dn, %args) = $mock->call_args(1);
+    $mock->called_pos_ok( 1, 'search' );
+    $mock->called_pos_ok( 2, 'bind' );
+    my ($self, $dn, %args) = $mock->call_args(2);
     is $dn, $opts{user_id}, '... correct bind dn for authentication';
     is $args{password}, $opts{password}, '... correct bind password for authentication';
 }

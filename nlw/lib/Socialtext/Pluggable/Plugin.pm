@@ -10,6 +10,7 @@ use Class::Field 'field';
 use Socialtext::URI;
 use Socialtext::Storage::PSQL;
 use Socialtext::AppConfig;
+use Socialtext::JSON qw(encode_json);
 
 my $prod_ver = Socialtext->product_version;
 my $code_base = Socialtext::AppConfig->code_base;
@@ -17,21 +18,79 @@ my $code_base = Socialtext::AppConfig->code_base;
 # Class Methods
 
 my %hooks;
+my %rest_hooks;
 my %rests;
 
 field hub => -weak;
+field 'rest';
 field uri => -init => '$self->hub->current_workspace->uri . Socialtext::AppConfig->script_name';
 
 # perldoc Socialtext::URI for arguments
 #    path = '' & query => {}
 
 sub make_uri {
-  my ($self,%args) = @_;
-  return Socialtext::URI::uri(%args);
+    my ( $self, %args ) = @_;
+    return Socialtext::URI::uri(%args);
 }
 
 sub code_base {
    return Socialtext::AppConfig->code_base;
+}
+
+sub query {
+    my $self = shift;
+    if ($self->rest) {
+        return $self->rest->query;
+    }
+}
+
+sub getContent {
+    my $self = shift;
+    if ($self->rest) {
+        return $self->rest->getContent;
+    }
+}
+
+sub getContentPrefs {
+    my $self = shift;
+    if ($self->rest) {
+        return $self->rest->getContentPrefs;
+    }
+}
+
+sub username {
+    my $self = shift;
+    if ($self->rest) {
+        return $self->rest->user->username;
+    }
+    else {
+        return $self->hub->current_user->username,
+    }
+}
+
+sub header_out {
+    my $self = shift;
+    if ($self->rest) {
+        return $self->rest->header(@_);
+    }
+    else {
+        die "Not implemented!";
+    }
+}
+
+sub header_in {
+    my $self = shift;
+    if ($self->rest) {
+        if (@_) {
+            return $self->rest->request->header_in(@_);
+        }
+        else {
+            return $self->rest->request->headers_in;
+        }
+    }
+    else {
+        die "Not implemented!";
+    }
 }
 
 sub current_workspace {
@@ -40,11 +99,17 @@ sub current_workspace {
 }
 
 sub add_rest {
-    my ($self,%rest) = @_;
+    my ($self,$path,$sub) = @_;
     my $class = ref($self) || $self;
-    push @{$rests{$class}}, \%rest;
+    push @{$rests{$class}}, {
+        $path => [ 'Socialtext::Pluggable::Adapter', "_rest_hook_$sub"],
+    };
+    push @{$rest_hooks{$class}}, {
+        method => $sub,
+        name => $sub,
+        class => $class,
+    };
 }
-
 
 sub add_hook {
     my ($self,$hook,$method) = @_;
@@ -60,6 +125,12 @@ sub hooks {
     my $self = shift;
     my $class = ref($self) || $self;
     return $hooks{$class} ? @{$hooks{$class}} : ();
+}
+
+sub rest_hooks {
+    my $self = shift;
+    my $class = ref($self) || $self;
+    return $rest_hooks{$class} ? @{$rest_hooks{$class}} : ();
 }
 
 sub rests {
@@ -92,11 +163,6 @@ sub plugin_dir {
     return "$code_base/../plugin/$name";
 }
 
-sub username {
-    my $self = shift;
-    return $self->hub->current_user->username,
-}
-
 sub cgi_vars {
     my $self = shift;
     return $self->hub->cgi->vars;
@@ -120,8 +186,6 @@ sub template_render {
     my $name = $self->name;
     my $plugin_dir = $self->plugin_dir;
     my $share = "/nlw/plugin/$prod_ver";
-
-    warn "NO MAIN!!" unless %template_vars;
     
     my $renderer = Socialtext::TT2::Renderer->instance;
     return $renderer->render(
@@ -140,7 +204,7 @@ sub template_render {
                 }
             },
             workspaces => [$self->hub->current_user->workspaces->all],
-            as_json => sub { JSON::Syck::Dump(@_) },
+            as_json => sub { encode_json(@_) },
             %template_vars,
             %args,
         },

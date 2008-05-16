@@ -146,6 +146,11 @@ sub main {
             'apache2/empty.conf' => "$dirs{apache2_etc}/conf.d/socialtext-empty.conf",
             $params,
             0,
+            ],
+            [
+            'apache2/empty.conf' => "$dirs{apache2_etc}/socialtext-conf.d/socialtext-empty.conf",
+            $params,
+            0,
             ];
     }
 

@@ -54,3 +54,6 @@ Include [% config.apache2_etc_dir %]/auto-generated.d/*.conf
 [% IF !config.is_dev %]
 Include [% config.apache2_etc_dir %]/conf.d/*.conf
 [% END %]
+
+# Unconditionally include local Socialtext-provided add-ons
+Include [% config.apache2_etc_dir %]/socialtext-conf.d/include-*.conf

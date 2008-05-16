@@ -1,0 +1,16 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use FindBin;
+use Fatal qw/chdir/;
+use lib "$FindBin::Bin/../lib";
+use Socialtext::System qw/shell_run/;
+
+my $people_dir = "$FindBin::Bin/../../guanxi";
+unless (-d $people_dir) {
+    die "Couldn't find people directory at $people_dir!\n";
+}
+
+chdir $people_dir;
+shell_run("./bin/build-config");

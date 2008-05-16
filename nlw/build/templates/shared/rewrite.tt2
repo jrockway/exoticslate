@@ -7,6 +7,9 @@
     # include file for rewrite rules on this system
     Include conf.d/rewrite*
 [% END %]
+
+    # unconditionally include local socialtext add-on rewrite rules on this system
+    Include socialtext-conf.d/rewrite*
 [% IF for_ssl_vhost %]
     [% IF config.eu_httpsd_exists %]
         # include file for redirecting for the remote proxies (https)

@@ -10,8 +10,9 @@
         <style type="text/css">
             .ws-views__MODULE_ID__ { color: #0e93d8; text-align: right; }
             .ws-contrib__MODULE_ID__ { color: #093; text-align: right; }
-            #table__MODULE_ID__ td { line-height: 100%; }
+            #table__MODULE_ID__ td { line-height: 120%; padding: 2px; }
             #error__MODULE_ID__ { color: #f00; font-weight: bold; }
+            li { list-style: none; }
         </style>
 
         <div id='error__MODULE_ID__'></div>
@@ -22,7 +23,7 @@
 <script src="/nlw/plugin/gadgets/javascript/madlibs.js"></script>
 <script>
 var report_url__MODULE_ID__ = "/webplugin/cgi/reports/report.cgi/user_conversations/now/-1week.json";
-var people_base__MODULE_ID__ = "http://demo.socialtext.net:6200/people/";
+var people_base__MODULE_ID__ = "/data/people/";
 var icon_base__MODULE_ID__ = "/nlw/plugin/gadgets/images/asset-icons/";
 var action_to_icon__MODULE_ID__ = new Array();
 action_to_icon__MODULE_ID__["comment"] = "page-comments-24.png";
@@ -77,9 +78,8 @@ jQuery.getJSON( report_url__MODULE_ID__, { }, function ( data ) {
             .attr("src",icon_base__MODULE_ID__ + icon)
         )
         .append(
-          jQuery('<img style="float:left" height="48" width="48">')
-            //.attr("src",people_base__MODULE_ID__ + user_id + "/small_photo")
-            .attr("src",icon_base__MODULE_ID__ + "person-48.png")
+          jQuery('<img style="float:left" height="27" width="27">')
+            .attr("src",people_base__MODULE_ID__ + user_id + "/small_photo")
         )
         .append(
             madlib_render_event(evt,0)
@@ -87,8 +87,8 @@ jQuery.getJSON( report_url__MODULE_ID__, { }, function ( data ) {
       )
     )
   }
-  jQuery('#__MODULE_ID__ .border:last').remove();
-  jQuery('#__MODULE_ID__-table tr:odd').addClass('oddRow');
+  jQuery('#table__MODULE_ID__ .border:last').remove();
+  jQuery('#table__MODULE_ID__ tr:odd').addClass('oddRow');
   gadgets.window.adjustHeight();
 });
 </script>

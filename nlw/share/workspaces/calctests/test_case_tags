@@ -14,39 +14,36 @@ use or create a workspace with several tags and tagged pages
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag1%20content%20spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | st-tags-addlink | 30000 |
 | click_ok | st-tags-addlink |  |
+| wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tag1 %%start_time%% |
-| pause | 1000 |  |
+| wait_for_element_visible_ok | st-tags-addbutton | 20000 |
 | click_ok | st-tags-addbutton |  |
-| pause | 1000 |  |
-| click_ok | st-tags-addbutton |  |
-| pause | 1000 |  |
 
 | *Comment* | Test Case: Tags Create tag12 page tagged tag1 |  |
 | clickAndWait | st-home-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag12%20content%20spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | st-tags-addlink | 30000 |
 | click_ok | st-tags-addlink |  |
+| wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tag1 %%start_time%% |
-| pause | 1000 |  |
+| wait_for_element_visible_ok | st-tags-addbutton | 20000 |
 | click_ok | st-tags-addbutton |  |
-| pause | 1000 |  |
-| click_ok | st-tags-addbutton |  |
-| pause | 1000 |  |
 
 | *Comment* | Test Case: Tags Create tag2 page tagged tag2 |  |
 | clickAndWait | st-home-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag2%20content%20spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | st-tags-addlink | 30000 |
 | click_ok | st-tags-addlink |  |
+| wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tag2 %%start_time%% |
-| pause | 1000 |  |
+| wait_for_element_visible_ok | st-tags-addbutton | 20000 |
 | click_ok | st-tags-addbutton |  |
-| pause | 1000 |  |
-| click_ok | st-tags-addbutton |  |
-| pause | 1000 |  |
 
 click on several tag links | Category (Tag) page with table containing links to tagged pages appears
 click on several page links | Pages appear; each page has its that tag displayed in Tags sidebar.

@@ -1,16 +1,18 @@
 #!/bin/bash
 
+WIKITESTS="/usr/share/nlw/wikitests"
+
 echo SETTING TIME
-source ./set-time
+source $WIKITESTS/set-time
 
 echo INSTALLING wikitest_files
 if [ ! -e /opt/wikitest_files ]; then
     sudo mkdir /opt/wikitest_files
 fi
-sudo unzip ./wikitestfiles.zip -d /opt/wikitest_files/
+sudo unzip $WIKITESTS//wikitestfiles.zip -d /opt/wikitest_files/
 
 echo CREATING test-data  WORKSPACE
-sudo -u www-data ./create-test-data-workspace
+sudo -u www-data create-test-data-workspace
 
 if [ -e /var/www/socialtext/data/wikitests ]; then
     echo DELETING old wikitests workspace
@@ -18,7 +20,7 @@ if [ -e /var/www/socialtext/data/wikitests ]; then
 fi
 
 echo IMPORTING wikitests WORKSPACE
-sudo -u www-data /usr/bin/st-admin import-workspace --tarball ./wikitests.1.tar.gz
+sudo -u www-data /usr/bin/st-admin import-workspace --tarball $WIKITESTS/wikitests.1.tar.gz
 
 echo GRANTING Accounts and System admin to devnull1
 sudo -u www-data /usr/bin/st-admin give-system-admin --e devnull1@socialtext.com

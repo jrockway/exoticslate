@@ -1,15 +1,16 @@
-README for appliance-wikitests.tar.gz
 
 This is a set of scripts for running wikitests on an appliance.
-It is not a dpkg repository yet, but it has the elements needed
 
-To use this script set
-
-1. tar zxf appliance-wikitests.tar.gz
-2. ./prep-wiki-tests
+1. install the wikitests DEB:  sudo dpkg --install wikitests_VERSION.deb
+2. prep-wiki-tests
 3. source setup-selenium PORT BROWSER SERVER_PLATFORM if you are not using the defaults: 4444 firefox linux
-4. source ./do-wiki-tests HOSTNAME.DOMAIN.TLD
+4. cd /usr/share/nlw/wikitests/
+4. source ./do-wiki-tests
 
 will run OSR Testcases with output to file testcases.out from a local /wikitests wiki.
 
 Use tail -f testcases.out to observe the run.
+
+"source ./one-wiki-test TESTCASE"   will run one testcase in the current shell
+
+

@@ -14,10 +14,12 @@ var constructors = {
         'sentence': "%(actor)s has commented on %(context)s.",
         'context_func': linked_page },
     'tag_page': {
-        'sentence': "%(actor)s has tagged %(context)s with %(object)s.",
+        'sentence': "%(actor)s has tagged %(context)s.",
+        //'sentence': "%(actor)s has tagged %(context)s with %(object)s.",
         'context_func': linked_page },
     'upload_file_page': {
-        'sentence': "%(actor)s has uploaded %(object)s to %(context)s.",
+        'sentence': "%(actor)s has uploaded a file to %(context)s.",
+        //'sentence': "%(actor)s has uploaded %(object)s to %(context)s.",
         'context_func': linked_page },
 }
 

@@ -1,9 +1,6 @@
 | *Comment* | Test Case: Tags |
 
- observe tag list | Welcome tag is definitely present; all other tags are present
-
-| setSpeed | 100 |  |
-| Comment | Test Case: Tags All Tags |  |
+| *Comment* | Test Case: Tags All Tags |  |
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
 | clickAndWait | link=All Tags |  |
 | text_like | link=Welcome | Welcome |
@@ -11,52 +8,56 @@
 use or create a workspace with several tags and tagged pages
 
 | *Comment* | Test Case: Tags Create tag1 page tagged tag1 |  |
+| *Comment* | Test Case: NOTICE THE PATTERN OF SAVE TAG-PAUSE-SAVE AGAIN |  |
+| *Comment* | Test Case: THIS IS DONE TO ELIMINATE SOME ODD TIMING ISSUES |  |
 | clickAndWait | st-home-link |  |
-| clickAndWait | st-newpage-link |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| type_ok | st-newpage-pagename-edit | tag1_content_title %%start_time%% |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | wikiwyg_wikitext_textarea | tag1_content_page %%start_time%% |
-| click_ok | st-edit-mode-tagbutton |  |
-| type_ok | st-tagqueue-field | tag1 %%start_time%% |
-| click_ok | st-tagqueue-submitbutton |  |
-| click_ok | st-tagqueue-closebutton |  |
-| clickAndWait | st-save-button-link |  |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag1%20content%20spreadsheet%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| click_and_wait | st-save-button-link |  |
+| click_ok | st-tags-addlink |  |
+| type_ok | st-tags-field | tag1 %%start_time%% |
+| pause | 1000 |  |
+| click_ok | st-tags-addbutton |  |
+| pause | 1000 |  |
+| click_ok | st-tags-addbutton |  |
+| pause | 1000 |  |
 
 | *Comment* | Test Case: Tags Create tag12 page tagged tag1 |  |
 | clickAndWait | st-home-link |  |
-| clickAndWait | st-newpage-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | st-newpage-pagename-edit | tag12_content_title %%start_time%% |
-| type_ok | wikiwyg_wikitext_textarea | tag12_content_page %%start_time%% |
-| click_ok | st-edit-mode-tagbutton |  |
-| type_ok | st-tagqueue-field | tag1 %%start_time%% |
-| click_ok | st-tagqueue-submitbutton |  |
-| click_ok | st-tagqueue-closebutton |  |
-| clickAndWait | st-save-button-link |  |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag12%20content%20spreadsheet%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| click_and_wait | st-save-button-link |  |
+| click_ok | st-tags-addlink |  |
+| type_ok | st-tags-field | tag1 %%start_time%% |
+| pause | 1000 |  |
+| click_ok | st-tags-addbutton |  |
+| pause | 1000 |  |
+| click_ok | st-tags-addbutton |  |
+| pause | 1000 |  |
 
 | *Comment* | Test Case: Tags Create tag2 page tagged tag2 |  |
 | clickAndWait | st-home-link |  |
-| clickAndWait | st-newpage-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | st-newpage-pagename-edit | tag2_content_title %%start_time%% |
-| type_ok | wikiwyg_wikitext_textarea | tag2_content_page %%start_time%% |
-| click_ok | st-edit-mode-tagbutton |  |
-| type_ok | st-tagqueue-field | tag2 %%start_time%% |
-| click_ok | st-tagqueue-submitbutton |  |
-| click_ok | st-tagqueue-closebutton |  |
-| clickAndWait | st-save-button-link |  |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag2%20content%20spreadsheet%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| click_and_wait | st-save-button-link |  |
+| click_ok | st-tags-addlink |  |
+| type_ok | st-tags-field | tag2 %%start_time%% |
+| pause | 1000 |  |
+| click_ok | st-tags-addbutton |  |
+| pause | 1000 |  |
+| click_ok | st-tags-addbutton |  |
+| pause | 1000 |  |
 
- click on several tag links | Category (Tag) page with table containing links to tagged pages appears
- click on several page links | Pages appear; each page has its that tag displayed in Tags sidebar.
+click on several tag links | Category (Tag) page with table containing links to tagged pages appears
+click on several page links | Pages appear; each page has its that tag displayed in Tags sidebar.
 
 | *Comment* | Test Case: Tags Checking tag2 links and pages |  |
 | clickAndWait | st-home-link |  |
 | clickAndWait | st-wiki-subnav-link-all-tags |  |
+
 | text_like | link=tag2 %%start_time%% | tag2 %%start_time%% |
 | clickAndWait | link=tag2 %%start_time%% |  |
-| clickAndWait | link=tag2_content_title %%start_time%% |  |
+| clickAndWait | link=tag2 content spreadsheet %%start_time%% |  |
 | text_like | link=tag2 %%start_time%% | tag2 %%start_time%% |
 
 | *Comment* | Test Case: Tags Checking tag1 links and pages |  |
@@ -64,14 +65,14 @@ use or create a workspace with several tags and tagged pages
 | clickAndWait | st-wiki-subnav-link-all-tags |  |
 | text_like | link=tag1 %%start_time%% | tag1 %%start_time%% |
 | clickAndWait | link=tag1 %%start_time%% |  |
-| clickAndWait | link=tag1_content_title %%start_time%% |  |
+| clickAndWait | link=tag1 content spreadsheet %%start_time%% |  |
 | text_like | link=tag1 %%start_time%% | tag1 %%start_time%% |
 
  click: View {link: Category as a weblog} | All pages with that tag appear in weblog form
 
 | *Comment* | Test Case: Tags Checking weblog view |  |
 | clickAndWait | st-home-link |  |
-| clickAndWait | link=tag2_content_title %%start_time%% |  |
+| clickAndWait | link=tag2 content spreadsheet %%start_time%% |  |
 | clickAndWait | link=tag2 %%start_time%% |  |
 | clickAndWait | link=tag2 %%start_time%% as a weblog |  |
 | text_like | st-weblog-titletext | Weblog: tag2 %%start_time%% |
@@ -93,13 +94,13 @@ Delete tag from pages until tag is gone from all pages.
 Go to All Tags | The deleted tag should not appear in list
 
 | *Comment* | Test Case: Tags Delete a tag from all pages |  |
-| open_ok | /%%workspace%%/index.cgi?tag1_content_title_%%start_time%% |  |
+| open_ok | /%%workspace%%/index.cgi?tag1_content_spreadsheet_%%start_time%% |  |
 | wait_for_element_present_ok | link=[x] | 20000 |
 | click_ok | `link=[x]` |  |
 | *Comment* | Test Case: Tags first wait |  |
 | wait_for_text_present_ok | tags have been removed | 30000 |
 
-| open_ok | /%%workspace%%/index.cgi?tag12_content_title_%%start_time%% |  |
+| open_ok | /%%workspace%%/index.cgi?tag12_content_spreadsheet_%%start_time%% |  |
 | wait_for_element_present_ok | link=[x] | 20000 |
 | click_ok | `link=[x]` |  |
 | *Comment* | Test Case: Tags second wait |  |
@@ -115,7 +116,7 @@ Make a new page and add a new tag (a tag not already in use in workspace) | tag 
 
 | *Comment* | Test Case: Tags. Tags with zero pages should not appear in the tag list |  |
 | click_and_wait | st-home-link |  |
-| click_and_wait | link=tag2_content_title %%start_time%% |  |
+| click_and_wait | link=tag2 content spreadsheet %%start_time%% |  |
 | click_and_wait | link=Delete Page |  |
 | confirmation_like | Are you sure you want to delete this page? |  |
 | click_and_wait | st-home-link |  |
@@ -123,7 +124,7 @@ Make a new page and add a new tag (a tag not already in use in workspace) | tag 
 | text_unlike | st-listview | tag2 %%start_time%% |
 
 | *Comment* | Test Case: Tags Teardown |  |
-| st-admin | purge-page --w %%workspace%% --page tag1_content_title_%%start_time%% |  |
-| st-admin | purge-page --w %%workspace%% --page tag12_content_title_%%start_time%% |  |
+| st-admin | purge-page --w %%workspace%% --page tag1_content_spreadsheet_%%start_time%% |  |
+| st-admin | purge-page --w %%workspace%% --page tag12_content_spreadsheet_%%start_time%% |  |
 
 | *Comment* | Test Case: Tags COMPLETED |

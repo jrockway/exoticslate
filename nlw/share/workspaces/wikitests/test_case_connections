@@ -5,9 +5,9 @@
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
 | type_ok | st-newpage-pagename-edit | connections_testpage_%%start_time%% |
-| type_ok | wikiwyg_wikitext_textarea | `FetchRSS Test\n{fetchrss: http://www.socialtext.com/rss.xml}\nTechnorati Test\n{technorati: www.socialtext.com}\nGoogle Soap Test\n{googlesoap: socialtext}\n*AIM.* aim:example *Yahoo!* *alternatively:* ymsgr:example yahoo:example *Skype.* *alternatively:* callto:example skype:example *Convoq ASAP.* asap:example` |
+| type_ok | wikiwyg_wikitext_textarea | `FetchRSS Test\n{fetchrss: http://feeds.feedburner.com/ross}\nTechnorati Test\n{technorati: www.socialtext.com}\nGoogle Soap Test\n{googlesoap: socialtext}\n*AIM.* aim:example *Yahoo!* *alternatively:* ymsgr:example yahoo:example *Skype.* *alternatively:* callto:example skype:example *Convoq ASAP.* asap:example` |
 | click_and_wait | st-save-button-link |  |
-| text_like | st-page-maincontent | Socialtext Enterprise Wiki - |
+| text_like | st-page-maincontent | Ross Mayfield's Weblog |
 | text_like | st-page-maincontent | Blog reactions to www.socialtext.com |
 | text_like | st-page-maincontent | Search for "socialtext" |
 | text_like | st-page-maincontent | AIM. |

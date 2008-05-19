@@ -97,16 +97,14 @@
 | st-admin | create-workspace --name 0-sort-3-workspace2-%%start_time%% --title "0 sort 3 workspace2 %%start_time%%" --account "0 sort 3 account %%start_time%%" |  |
 | st-admin | create-workspace --name 0-sort-3-workspace3-%%start_time%% --title "0 sort 3 workspace3 %%start_time%%" --account "0 sort 3 account %%start_time%%" |  |
 
-TODO: change the first-name and last-name parameters to include spaces after {bz: 414} is fixed
-
 | *Comment* | Test case: Business Control Panel: TODO: change the first-name and last-name parameters to include spaces |  |
 
-| st-admin | create-user --email 0_sort_1_user1@%%start_time%%.com --password sort1user1 --first-name "0sort11" --last-name "0user11" |
-| st-admin | create-user --email 0_sort_2_user1@%%start_time%%.com --password sort2user1 --first-name "0sort21" --last-name "0user21" |
-| st-admin | create-user --email 0_sort_3_user1@%%start_time%%.com --password sort3user1 --first-name "0sort31" --last-name "0user31" |
-| st-admin | create-user --email 0_sort_2_user2@%%start_time%%.com --password 0sort2user2 --first-name "0sort22" --last-name "0user22" |
-| st-admin | create-user --email 0_sort_3_user2@%%start_time%%.com --password 0sort3user2 --first-name "0sort22" --last-name "0user32" |
-| st-admin | create-user --email 0_sort_3_user3@%%start_time%%.com --password 0sort3user3 --first-name "0sort33" --last-name "0user33" |
+| st-admin | create-user --email 0_sort_1_user1@%%start_time%%.com --password sort1user1 --first-name "0 sort 11" --last-name "0 user 11" |
+| st-admin | create-user --email 0_sort_2_user1@%%start_time%%.com --password sort2user1 --first-name "0 sort 21" --last-name "0 user 21" |
+| st-admin | create-user --email 0_sort_3_user1@%%start_time%%.com --password sort3user1 --first-name "0 sort 31" --last-name "0 user 31" |
+| st-admin | create-user --email 0_sort_2_user2@%%start_time%%.com --password 0sort2user2 --first-name "0 sort 22" --last-name "0 user 22" |
+| st-admin | create-user --email 0_sort_3_user2@%%start_time%%.com --password 0sort3user2 --first-name "0 sort 22" --last-name "0 user 32" |
+| st-admin | create-user --email 0_sort_3_user3@%%start_time%%.com --password 0sort3user3 --first-name "0 sort 33" --last-name "0 user 33" |
 
 | st-admin | add-member --email 0_sort_1_user1@%%start_time%%.com --workspace 0-sort-1-workspace1-%%start_time%% |
 | st-admin | add-member --email 0_sort_2_user2@%%start_time%%.com --workspace 0-sort-1-workspace1-%%start_time%% |

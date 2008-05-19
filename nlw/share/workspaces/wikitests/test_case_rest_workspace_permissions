@@ -1,0 +1,110 @@
+Test case to test `/data/workspaces`
+
+* Fixture: SocialRest
+
+This test case assumes a logged in user.
+
+Test set up:
+
+| comment | STARTING Test case: REST Workspace Permissions |  |
+
+| comment | we have 3 admins and seven permissions sets. accounts-admin updates 2 permission sets, system-admin updates two other permission sets, workspace-admin updates the final 3 permissions sets. This gives us good coverage (all admins, all permissions). Having every admin update every permission set (21 operations) would take a long time for very little advantage. |  |
+
+| st-admin | remove-system-admin --username %%username%% | no longer has |
+| st-admin | give-accounts-admin --username %%username%% | now has |
+| set | wksp | wperm%%start_time%% |
+| set | account_id | 2 |
+
+| comment | Test case: REST Workspace POST a workspace |  |
+| post | /data/workspaces | Content-Type=application/json | { "name":"%%wksp%%", "title":"W%%start_time%%", "account_id":"%%account_id%%" } |
+| code-is | 201 |  |
+| header-like | Location | /data/workspaces/%%wksp%% |
+
+| comment | Test case: REST Workspace Permissions accounts-admin sets public permissions |  |
+| put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "permission_set": "public" } |
+| code-is | 204 |  |
+
+| comment | TODO: remove the following line when perms are consistent for all admins |  |
+| comment | Test case: REST Workspace Permissions do GET to make sure it worked |  |
+| st-admin | add-workspace-admin --email %%username%% --workspace %%wksp%% | is now |
+| get | /data/workspaces/%%wksp%% | application/json |
+| code-is | 200 |  |
+| body-like | public |  |
+| st-admin | remove-workspace-admin --email %%username%% --workspace %%wksp%% | no longer |
+
+| comment | Test case: REST Workspace Permissions accounts-admin sets authenticated-user-only permissions |  |
+| put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "permission_set": "authenticated-user-only" } |
+| code-is | 204 |  |
+
+| comment | TODO: remove the following line when perms are consistent for all admins |  |
+| comment | Test case: REST Workspace Permissions do GET to make sure it worked |  |
+| st-admin | add-workspace-admin --email %%username%% --workspace %%wksp%% | is now |
+| get | /data/workspaces/%%wksp%% | application/json |
+| code-is | 200 |  |
+| body-like | authenticated-user-only |  |
+| st-admin | remove-workspace-admin --email %%username%% --workspace %%wksp%% | no longer |
+
+| comment | Test case: REST Workspace Permissions system-admin sets permissions member-only |  |
+
+| st-admin | remove-accounts-admin --username %%username%% | no longer has |
+| st-admin | give-system-admin --username %%username%% | now has |
+
+| put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "permission_set": "member-only" } |
+| code-is | 204 |  |
+
+| comment | TODO: remove the following line when perms are consistent for all admins |  |
+| comment | Test case: REST Workspace Permissions do GET to make sure it worked |  |
+| st-admin | add-workspace-admin --email %%username%% --workspace %%wksp%% | is now |
+| get | /data/workspaces/%%wksp%% | application/json |
+| code-is | 200 |  |
+| body-like | member-only |  |
+| st-admin | remove-workspace-admin --email %%username%% --workspace %%wksp%% | no longer |
+
+| comment | Test case: REST Workspace Permissions system-admin sets permissions public-read-only |  |
+
+| put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "permission_set": "public-read-only" } |
+| code-is | 204 |  |
+
+| comment | TODO: remove the following line when perms are consistent for all admins |  |
+| comment | Test case: REST Workspace do GET to make sure it worked |  |
+| st-admin | add-workspace-admin --email %%username%% --workspace %%wksp%% | is now |
+| get | /data/workspaces/%%wksp%% | application/json |
+| code-is | 200 |  |
+| body-like | public-read-only |  |
+
+| comment | Test case: REST Workspace Permissions workspace-admin sets permissions public-comment-only, public-authenticate-to-edit, intranet |  |
+| st-admin | remove-system-admin --username %%username%% | no longer has |
+| st-admin | remove-accounts-admin --username %%username%% | no longer has |
+
+| put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "permission_set": "public-comment-only" } |
+| code-is | 204 |  |
+
+| comment | Test case: REST Workspace Permissions do GET to make sure it worked |  |
+| get | /data/workspaces/%%wksp%% | application/json |
+| code-is | 200 |  |
+| body-like | public-comment-only |  |
+
+| put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "permission_set": "public-authenticate-to-edit" } |
+| code-is | 204 |  |
+
+| comment | Test case: REST Workspace Permissions do GET to make sure it worked |  |
+| get | /data/workspaces/%%wksp%% | application/json |
+| code-is | 200 |  |
+| body-like | public-authenticate-to-edit |  |
+
+| put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "permission_set": "intranet" } |
+| code-is | 204 |  |
+
+| comment | Test case: REST Workspace Permissions do GET to make sure it worked |  |
+| get | /data/workspaces/%%wksp%% | application/json |
+| code-is | 200 |  |
+| body-like | intranet |  |
+
+| comment | Test Case: REST Workspace Permissions regular user can't get this info |  |
+
+| st-admin | remove-workspace-admin --email %%username%% --workspace %%wksp%% | no longer |
+| get | /data/workspaces/%%wksp%% | application/json |
+| code-is | 200 |  |
+| body-unlike | intranet |  |
+
+| comment | Test Case" REST Workspace Permissions COMPLETED |  |

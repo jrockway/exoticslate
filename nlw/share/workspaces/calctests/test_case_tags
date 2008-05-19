@@ -8,8 +8,6 @@
 use or create a workspace with several tags and tagged pages
 
 | *Comment* | Test Case: Tags Create tag1 page tagged tag1 |  |
-| *Comment* | Test Case: NOTICE THE PATTERN OF SAVE TAG-PAUSE-SAVE AGAIN |  |
-| *Comment* | Test Case: THIS IS DONE TO ELIMINATE SOME ODD TIMING ISSUES |  |
 | clickAndWait | st-home-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag1%20content%20spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
@@ -20,6 +18,12 @@ use or create a workspace with several tags and tagged pages
 | type_ok | st-tags-field | tag1 %%start_time%% |
 | wait_for_element_visible_ok | st-tags-addbutton | 20000 |
 | click_ok | st-tags-addbutton |  |
+
+| *Comment* | Test Case: Tags. Text "Adding tag" should appear where textarea was |  |
+| wait_for_text_present_ok | Adding tag | 30000 |
+| *Comment* | Test Case: Tags. Wait for the tag textarea to reappear |  |
+| wait_for_element_visible_ok | st-tags-field | 30000 |
+| text_like | link=tag1 %%start_time%% | tag1 %%start_time%% |
 
 | *Comment* | Test Case: Tags Create tag12 page tagged tag1 |  |
 | clickAndWait | st-home-link |  |
@@ -33,6 +37,12 @@ use or create a workspace with several tags and tagged pages
 | wait_for_element_visible_ok | st-tags-addbutton | 20000 |
 | click_ok | st-tags-addbutton |  |
 
+| *Comment* | Test Case: Tags. Text "Adding tag" should appear where textarea was |  |
+| wait_for_text_present_ok | Adding tag | 30000 |
+| *Comment* | Test Case: Tags. Wait for the tag textarea to reappear |  |
+| wait_for_element_visible_ok | st-tags-field | 30000 |
+| text_like | link=tag1 %%start_time%% | tag1 %%start_time%% |
+
 | *Comment* | Test Case: Tags Create tag2 page tagged tag2 |  |
 | clickAndWait | st-home-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag2%20content%20spreadsheet%20%%start_time%%#edit |  |
@@ -44,6 +54,12 @@ use or create a workspace with several tags and tagged pages
 | type_ok | st-tags-field | tag2 %%start_time%% |
 | wait_for_element_visible_ok | st-tags-addbutton | 20000 |
 | click_ok | st-tags-addbutton |  |
+
+| *Comment* | Test Case: Tags. Text "Adding tag" should appear where textarea was |  |
+| wait_for_text_present_ok | Adding tag | 30000 |
+| *Comment* | Test Case: Tags. Wait for the tag textarea to reappear |  |
+| wait_for_element_visible_ok | st-tags-field | 30000 |
+| text_like | link=tag2 %%start_time%% | tag2 %%start_time%% |
 
 click on several tag links | Category (Tag) page with table containing links to tagged pages appears
 click on several page links | Pages appear; each page has its that tag displayed in Tags sidebar.
@@ -80,12 +96,13 @@ click on several page links | Pages appear; each page has its that tag displayed
  Toggle sort link at top of each column | tables sort and reverse sort correctly
 
 | *Comment* | Test Case: Tags Checking tag sorting |  |
-| open_ok | /%%workspace%%/index.cgi?action=category_list |  |
 | clickAndWait | st-home-link |  |
 | clickAndWait | st-wiki-subnav-link-all-tags |  |
 | text_like | qr/tag1 %%start_time%%.+tag2 %%start_time%%/ |  |
 | click_ok | link=Tag |  |
 | text_like | qr/tag2 %%start_time%%.+tag1 %%start_time%%/ |  |
+| click_ok | link=Tag |  |
+| text_like | qr/tag1 %%start_time%%.+tag2 %%start_time%%/ |  |
 
 Delete tag from pages until tag is gone from all pages.
 Go to All Tags | The deleted tag should not appear in list

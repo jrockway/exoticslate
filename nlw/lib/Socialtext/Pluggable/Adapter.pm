@@ -10,7 +10,7 @@ my %hooks;
 use base 'Socialtext::Plugin';
 use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
                       search_dirs => \@libs;
-use Socialtext::Pluggable::WaflPhraseDiv;
+use Socialtext::Pluggable::WaflPhrase;
 
 
 BEGIN {
@@ -83,7 +83,7 @@ sub register {
 
             if ($type eq 'wafl') {
                 $registry->add(
-                    'wafl', $parts[0], 'Socialtext::Pluggable::WaflPhraseDiv',
+                    'wafl', $parts[0], 'Socialtext::Pluggable::WaflPhrase',
                 );
             }
             elsif ($type eq 'action') {

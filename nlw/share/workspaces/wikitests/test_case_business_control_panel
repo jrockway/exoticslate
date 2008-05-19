@@ -1,5 +1,5 @@
 | *Comment* | Test case: Business Control Panel |  |
-| *Comment* | Test case: Business Control Panel ONLY PASSES IN A ST development environment |  |
+| *Comment* | Test case: Business Control Panel passes in a dev env and a clean appliance VE |  |
 
 | st-admin | remove-accounts-admin --email %%email%% | %%email%% no longer has accounts admin access |
 | st-admin | give-accounts-admin --email %%email%% | %%email%% now has accounts admin access |

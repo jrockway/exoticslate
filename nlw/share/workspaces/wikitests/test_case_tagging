@@ -121,7 +121,8 @@ Add any other tag to three different pages | tag is added
 | text_like | link=tagtest %%start_time%% | tagtest %%start_time%% |
 
 | *Comment* | Tag Page 2 |  |
-| clickAndWait | link=New page |  |
+| clickAndWait | st-home-link |  |
+| clickAndWait | st-newpage-link |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | tag page 2 %%start_time%% content |
 | type_ok | st-newpage-pagename-edit | tag page 2 %%start_time%% |

@@ -105,7 +105,8 @@ sub revision_compare {
     $self->screen_template('view/page/revision_compare');
     $self->render_screen(
         $page->all,
-        print => $differ->framed_comparison,
+        diff_rows => $differ->diff_rows,
+        header => $differ->header,
         display_title    => $self->html_escape( $page->title ),
         display_title_decorator  => loc("Compare Revisions [_1] and [_2]", $old_revision, $new_revision),
     );
@@ -131,54 +132,34 @@ use base 'Socialtext::Base';
 use Class::Field qw( field );
 use Socialtext::Helpers;
 use Socialtext::l10n qw( loc );
+use Socialtext::TT2::Renderer;
 
 field 'before_page';
 field 'after_page';
 field 'hub';
 
-
-sub framed_comparison {
-    my $self = shift;
-    return join '',
-        $self->header,
-        $self->from_wikitext_to_html,
-        $self->footer;
-}
-
 sub header {
     my $self = shift;
-    my @headings = map {
-        my $pretty_revision = $_->metadata->Revision;
+    my @header;
+    for my $page ($self->before_page, $self->after_page) {
+        my %col;
+        my $pretty_revision = $page->metadata->Revision;
         my $rev_text = loc('Revision [_1]', $pretty_revision);
-        my $link            = Socialtext::Helpers->script_link(
+        $col{link} = Socialtext::Helpers->script_link(
             "<strong>$rev_text</strong></a>",
             action      => 'revision_view',
-            page_id     => $_->id,
-            revision_id => $_->revision_id,
+            page_id     => $page->id,
+            revision_id => $page->revision_id,
         );
-        my $tags = join ', ', grep $_ ne 'Recent Changes', $_->html_escaped_categories;
-        my $tags_message = loc('Tags:');
-        my $editor = $_->last_edited_by->best_full_name(
-            workspace => $self->hub->current_workspace );
-        qq{
-      <td width="50%" bgcolor="#ffffff">
-        <h3 class="st-revision-view-link">$link</h3>
-        <div class="st-revision-tags">$tags_message $tags</div>
-        <div class="st-revision-attribution">by $editor</div>
-      </td>\n};
-    } ( $self->before_page, $self->after_page );
-
-    return qq{
-<table id="st-revision-compare-table" cellpadding="2" cellspacing="2">
- <tr>
- @headings
- </tr>
-};
-}
-
-sub footer {
-    my $self = shift;
-    return '</table>';
+        $col{tags} = join ', ', 
+                     grep $_ ne 'Recent Changes',
+                     $page->html_escaped_categories;
+        $col{editor} = $page->last_edited_by->best_full_name(
+            workspace => $self->hub->current_workspace,
+        );
+        push @header, \%col;
+    }
+    return \@header;
 }
 
 # XXX this doesn't actually do any comparison. =(
@@ -186,13 +167,12 @@ package Socialtext::RenderedSideBySideDiff;
 
 use base 'Socialtext::SideBySideDiff';
 
-sub from_wikitext_to_html {
+sub diff_rows {
     my $self = shift;
-    return
-        '<tr>'
-        . '<td valign="top">' . $self->before_page->to_html . '</td>'
-        . '<td valign="top">' . $self->after_page->to_html .  '</td>'
-        . '</tr>';
+    return [{
+        before => $self->before_page->to_html,
+        after => $self->after_page->to_html,
+    }];
 }
 
 package Socialtext::WikitextSideBySideDiff;
@@ -200,7 +180,7 @@ package Socialtext::WikitextSideBySideDiff;
 use base 'Socialtext::SideBySideDiff';
 use Algorithm::Diff;
 
-sub from_wikitext_to_html {
+sub diff_rows {
     my $self = shift;
     return $self->compare(
         $self->before_page->content,
@@ -213,20 +193,16 @@ sub compare {
     my $before = shift;
     my $after = shift;
 
-    my $html = '';
     my @chunks = $self->split_into_diffable_divs($before, $after);
 
-    for my $ii (0 .. $#chunks) {
-        $html .= "<tr>\n";
-        for my $desired_output (qw(before after)) {
-            my $contents = $self->compare_chunk(
-                $chunks[$ii][0], $chunks[$ii][1], $desired_output
-            );
-            $html .= "  <td>\n$contents\n  </td>\n";
-        }
-        $html .= "</tr>\n";
-    }
-    return $html
+    my @sections;
+    for my $chunk (@chunks) {
+        push @sections, {
+            before => $self->compare_chunk($chunk->[0], $chunk->[1], 'before'),
+            after => $self->compare_chunk($chunk->[0], $chunk->[1], 'after'),
+        };
+    };
+    return \@sections;
 }
 
 sub split_into_diffable_divs {

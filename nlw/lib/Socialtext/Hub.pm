@@ -374,7 +374,6 @@ BEGIN {
             Socialtext::PreferencesPlugin
             Socialtext::Stax
             Socialtext::Template
-            Socialtext::Pluggable::Adapter
 
             Socialtext::SearchPlugin
             Socialtext::AttachmentsUIPlugin
@@ -419,7 +418,11 @@ BEGIN {
             Socialtext::WorkspacesUIPlugin
             Socialtext::ProvisionPlugin
             Socialtext::PageActivityPlugin
-        ) ) {
+            ),
+            # keep this last if you want pluggable plugins
+            # to be able to override wafls, etc!
+            'Socialtext::Pluggable::Adapter',
+        ) {
         eval "use $class ()";
         die $@ if $@;
 

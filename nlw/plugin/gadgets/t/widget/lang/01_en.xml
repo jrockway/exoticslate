@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<messagebundle>
-    <msg name="test_en_1">test en data 1</msg>
-    <msg name="test_en_2">test en data 2</msg>
-    <msg name="title_en">TEST TITLE EN</msg>
-</messagebundle>

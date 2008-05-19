@@ -42,12 +42,21 @@ TODO: Figure out a way to test the other config functions
 | st-admin | set_workspace_config --workspace %%workspace%% homepage_is_dashboard 1 |  |
 
 | *Comment* | Test Case: Workspace Configuration Invitation Settings |  |
-| st-admin | set_workspace_config --workspace %%workspace%% invitation_filter Hello |  |
+| st-admin | set_workspace_config --workspace %%workspace%% invitation_filter %%username%% |  |
 | st-admin | set_workspace_config --workspace %%workspace%% restrict_invitation_to_search 1 |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Invite New Users |  |
-| text_like | st-settings-section | match this pattern: Hello |
+| text_like | st-settings-section | match this pattern: %%username%% |
 | text_like | st-settings-section | Search for Users |
+
+| *Comment* | Test Case: Workspace Configuration Invitation search and invite user {bz: 547} |  |
+| type_ok | user_search | %%username%% |
+| click_and_wait | Button |  |
+| text_like | Select/Deselect All |  |
+| text_like | st-settings-pane | %%username%% |
+| check_ok | all |  |
+| click_and_wait | //input[@value='Invite'] |  |
+| text_like | st-settings-section | %%username%% |
 
 | *Comment* | Test Case: Workspace Configuration Weblog Sort Order |  |
 | st-admin | set_workspace_config --workspace %%workspace%% sort_weblogs_by_create 1 |  |

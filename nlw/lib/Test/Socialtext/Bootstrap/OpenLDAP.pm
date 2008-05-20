@@ -287,6 +287,7 @@ sub ldap_config {
             email_address   => 'mail',
             first_name      => 'givenName',
             last_name       => 'sn',
+            password        => 'userPassword',
             },
         );
     $self->root_dn() && $config->bind_user( $self->root_dn() );

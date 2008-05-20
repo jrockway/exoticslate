@@ -1,4 +1,4 @@
-Original test definition: [Test: Login/Logout]
+| set | inout_user | inout_%%start_time%%@ken.socialtext.net |
 
 | *Comment* | Test Case: Login/Logout Login redirect |  |
 | st-logout |  |  |
@@ -34,9 +34,9 @@ Original test definition: [Test: Login/Logout]
 | st-logout |  |  |
 
 | *Comment* | Test Case: Login/Logout Login with real non-admin user/pass |  |
-| st-admin | create-user --email InOut_%%start_time%%@ken.socialtext.net --password 123456 |  |
-| st-admin | add-member --email InOut_%%start_time%%@ken.socialtext.net --workspace %%workspace%% |  |
-| st-login | InOut_%%start_time%%@ken.socialtext.net | 123456 |
+| st-admin | create-user --email %%inout_user%% --password 123456 |  |
+| st-admin | add-member --email %%inout_user%% --workspace %%workspace%% |  |
+| st-login | %%inout_user%% | 123456 |
 | text_like | st-wiki-title | Dashboard: |
 | text_unlike | st-wiki-title-invite | Invite your colleagues to this workspace. |
 | st-logout |  |  |
@@ -50,15 +50,15 @@ Original test definition: [Test: Login/Logout]
 
 | *Comment* | Test Case: Login/Logout Forgotten password (good user): |  |
 | text_like | Socialtext password help |  |
-| type_ok | username | %%username%% |
+| type_ok | username | %%inout_user%% |
 | click_and_wait | //input[@value='Submit'] |  |
-| st-message | An email with instructions on changing your password has been sent to %%username%% |  |
-| st-force-confirmation | %%username%% | %%password%% |
+| st-message | An email with instructions on changing your password has been sent to %%inout_user%% |  |
+| st-force-confirmation | %%inout_user%% | 123456 |
 
 | *Comment* | Test Case: Login/Logout Browse to test space |  |
 | open | /%%workspace%% |  |
 | location_like | qr/\/nlw\/login\.html/ |  |
-| st-login |  |  |
+| st-login | %%inout_user%% | 123456 |
 | text_like | st-wiki-title | Dashboard: |
 
 | *Comment* | Test Case: Login/Logout Settings: old password incorrect |  |
@@ -71,7 +71,7 @@ Original test definition: [Test: Login/Logout]
 
 | *Comment* | Test Case: Login/Logout Settings: new password < 6 chars |  |
 | click_and_wait | link=Settings |  |
-| type_ok | old_password | %%password%% |
+| type_ok | old_password | 123456 |
 | type_ok | new_password | bad |
 | type_ok | new_password_retype | bad |
 | click_and_wait | Button |  |
@@ -79,7 +79,7 @@ Original test definition: [Test: Login/Logout]
 
 | *Comment* | Test Case: Login/Logout Settings: new password mismatch |  |
 | click_and_wait | link=Settings |  |
-| type_ok | old_password | %%password%% |
+| type_ok | old_password | 123456 |
 | type_ok | new_password | new_password1 |
 | type_ok | new_password_retype | new_password2 |
 | click_and_wait | Button |  |
@@ -87,14 +87,14 @@ Original test definition: [Test: Login/Logout]
 
 | *Comment* | Test Case: Login/Logout Settings: utf8 password |  |
 | click_and_wait | link=Settings |  |
-| type_ok | old_password | %%password%% |
-| type_ok | new_password | äååæ±éé·ç»çæå |
-| type_ok | new_password_retype | äååæ±éé·ç»çæå |
+| type_ok | old_password | 123456 |
+| type_ok | new_password | 所以那城名叫巴別 |
+| type_ok | new_password_retype | 所以那城名叫巴別 |
 | click_and_wait | Button |  |
 | text_like | st-settings-save | Changes Saved |
 
 | *Comment* | Test Case: Login/Logout Set a new password |  |
-| type_ok | old_password | äååæ±éé·ç»çæå |
+| type_ok | old_password | 所以那城名叫巴別 |
 | type_ok | new_password | new_password |
 | type_ok | new_password_retype | new_password |
 | click_and_wait | Button |  |
@@ -102,28 +102,28 @@ Original test definition: [Test: Login/Logout]
 | st-logout |  |  |
 
 | *Comment* | Test Case: Login/Logout Login with old password |  |
-| st-login | %%username%% | %%password%% |
+| st-login | %%inout_user%% | 所以那城名叫巴別 |
 | st-message | Wrong email address or password - please try again. |  |
 
 | *Comment* | Test Case: Login/Logout Login with new password |  |
-| st-login | %%username%% | new_password |
+| st-login | %%inout_user%% | new_password |
 | text_like | st-wiki-title | Dashboard: |
 
 | *Comment* | Test Case: Login/Logout restore original password |  |
 | click_and_wait | link=Settings |  |
 | type_ok | old_password | new_password |
-| type_ok | new_password | %%password%% |
-| type_ok | new_password_retype | %%password%% |
+| type_ok | new_password | 123456 |
+| type_ok | new_password_retype | 123456 |
 | click_and_wait | Button |  |
 | text_like | st-settings-section | Changes Saved |
 
 | *Comment* | Test Case: Login/Logout Login with original password |  |
 | st-logout |  |  |
-| st-login |  |  |
+| st-login | %%inout_user%% | 123456 |
 | text_like | st-wiki-title | Dashboard: |
 
 | *Comment* | Test Case: Login/Logout Teardown |  |
-| st-admin | remove-member --email InOut_%%start_time%%@ken.socialtext.net --workspace %%workspace%% |  |
+| st-admin | remove-member --email %%inout_user%% --workspace %%workspace%% |  |
 
 | *Comment* | Test case: Login/Logout COMPLETED |  |
 

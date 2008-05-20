@@ -60,7 +60,7 @@ confirm-user
 | st-admin | change-password --email %%cli_user%% --password | qr/ The command you called \(change_password\) requires a password to be specified with the --password option/ |
 | st-admin | change-password --email %%cli_user%% --password xxxxx | qr/errors occurred when changing the password.+ Passwords must be at least 6 characters long/ |
 | st-admin | change-password --email %%cli_user%% --password '@#$%^*()_+' | The password for %%cli_user%% has been changed |
-| st-admin | change-password --email %%cli_user%% --password æä¥é£ååå«å´å¥ | The password for %%cli_user%% has been changed |
+| st-admin | change-password --email %%cli_user%% --password 所以那城名叫巴別 | The password for %%cli_user%% has been changed |
 | st-admin | change-password --email %%cli_user%% --password 123456 | The password for %%cli_user%% has been changed. |
 | st-admin | change-password --email cli-%%start_time%%-not@ken.socialtext.net --password 654321 | No user with the email address "cli-%%start_time%%-not@ken.socialtext.net" could be found. |
 

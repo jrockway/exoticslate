@@ -150,11 +150,17 @@ sub _find_user {
     my $search_attr = $attr_map->{$key};
     return undef unless ($search_attr);
 
+    # we want all of the attributes in our attr_map *EXCEPT* the password.
+    # we NEVER, EVER, EVER want to query the password.
+    my @attrs = map { $attr_map->{$_} }
+                    grep { $_ ne 'password' }
+                    keys %{$attr_map};
+
     # build up the search options
     my %options = (
         base    => $ldap->config->base(),
         scope   => 'sub',
-        attrs   => [ values %{$attr_map} ],
+        attrs   => \@attrs,
         );
     if ($search_attr =~ m{^(dn|distinguishedName)$}) {
         # DN searches are best done as -exact- searches

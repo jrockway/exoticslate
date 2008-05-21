@@ -5,7 +5,6 @@ These testcases are run by the unit tests. Make sure this list only contains fin
 * [Test Case: View Spreadsheet Page]
 * [Test Case: Double Click to Edit]
 * [Test Case: New Page]
-* [Test Case: New Page No Overwrite]
 * [Test case: functional search tests]
 * [Test Case: Phrase search]
 * [Test Case: stemming]

@@ -20,6 +20,10 @@
 | *Comment* | Test Case: Manage Sorting Files Create new ws %%sorting_workspace%% |  |
 | st-admin | create-workspace --name %%sorting_workspace%% --title %%sorting_workspace%% --empty | A new workspace named "%%sorting_workspace%%" was created. |
 
+| *Comment* | Test Case: Manage Sorting Files. Adding %%email%% so you can login to this workspace |  |
+| st-admin | add-workspace-admin --e %%email%% --w %%sorting_workspace%% |  |
+| st-logout |  |  |
+
 | *Comment* | Test Case: Sorting Files setup user1 ... user5 |  |
 | st-admin | create-user --email %%user_1%% --password 123456 |  |
 | st-admin | add-member --email %%user_1%% --workspace %%sorting_workspace%% |  |

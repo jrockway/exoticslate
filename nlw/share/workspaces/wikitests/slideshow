@@ -135,15 +135,16 @@ Post by Email popup
 
 | type | st-search-term | wiki |
 | clickAndWait | st-search-submit |  |
-| *Comment* | SlideShow SEE search results |
-| pause | %%pt%% |
+| *Comment* | SlideShow SEE search results |  |
+
+| pause | %%pt%% |  |
 
 * an interwiki search result
 
 | type | st-search-term | `wiki workspaces:*` |
 | clickAndWait | st-search-submit |  |
-| *Comment* | SlideShow SEE interwiki search results with workspace names |
-| pause | %%pt%% |
+| *Comment* | SlideShow SEE interwiki search results with workspace names |  |
+| pause | %%pt%% |  |
 
 * Mobile
 ** Mobile views
@@ -224,7 +225,7 @@ Post by Email popup
 
 | open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | link=Advanced |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | *Comment* | SlideShow SEE Advanced Mode |  |
 | pause | %%pt%% |  |
@@ -319,7 +320,7 @@ Popup and pulldown dialogs:
 ** sidebar on
 ** sidebar off
 
-| wait_for_element_visible_ok | st-page-boxes-toggle-link |  |
+| wait_for_element_visible_ok | st-page-boxes-toggle-link | 30000 |
 | click_ok | st-page-boxes-toggle-link |  |
 | *Comment* | SlideShow TOGGLED SIDEBAR OFF |  |
 | pause | %%pt%% |  |
@@ -330,15 +331,15 @@ Popup and pulldown dialogs:
 
 * page tag view
 
-| open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |
-| wait_for_element_visible_ok | st-tags-addlink |
-| click_ok | st-tags-addlink |
-| *Comment* | SlideShow: SEE add tag box open |
-| pause | %%pt%% |
-| wait_for_element_visible_ok | st-tags-field |
+| open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |  |
+| wait_for_element_visible_ok | st-tags-addlink | 30000 |
+| click_ok | st-tags-addlink |  |
+| *Comment* | SlideShow: SEE add tag box open |  |
+| pause | %%pt%% |  |
+| wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | FOOBAR |
-| *Comment* | SlideShow: SEE FOOBAR in tag box |
-| pause | %%pt%% |
+| *Comment* | SlideShow: SEE FOOBAR in tag box |  |
+| pause | %%pt%% |  |
 
 * Incoming link(s)
 
@@ -360,13 +361,13 @@ Popup and pulldown dialogs:
 
 * page revisions view
 
-| open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |
+| open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | link=Save |
-| clickAndWait | link=Save |
-| clickAndWait | //a[contains(@href,'?action=revision_list')] |
-| *Comment* | SlideShow: SEE Revisions List |
-| pause | %%pt%% |
+| wait_for_element_visible_ok | link=Save | 30000 |
+| clickAndWait | link=Save |  |
+| clickAndWait | //a[contains(@href,'?action=revision_list')] |  |
+| *Comment* | SlideShow: SEE Revisions List |  |
+| pause | %%pt%% |  |
 
 compare two revisions view unformatted
 
@@ -400,7 +401,7 @@ single revision view unformatted
 
 back to current revision view
 
-| clickAndWait | link=View Current Revision |  |
+| clickAndWait | link=View Current Revision |
 | *Comment* | SlideShow: SEE CURRENT Revision |
 | pause | %%pt%% |
 
@@ -465,7 +466,7 @@ Lightbox screens:
 
 | clickAndWait | link=Home |  |
 | clickAndWait | st-newpage-link |  |
-| wait_for_element_visible_ok | st-save-button-link |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_ok | st-save-button-link |  |
 | *Comment* | SlideShow SEE SAVE PAGE AS LIGHTBOX |  |
 | *Comment* | DO NOT CANCEL |  |
@@ -475,7 +476,7 @@ Lightbox screens:
 | pause | %%pt%% |  |
 | verifyAlert | You must specify a page name |  |
 | click_ok | st-newpage-save-cancelbutton |  |
-| wait_for_element_visible_ok | st-newpage-pagename-edit |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | type_ok | st-newpage-pagename-edit | Announcements and Links |
 | click_ok | st-save-button-link |  |
 | *Comment* | SlideShow SEE PAGE ALREADY EXISTS LIGHTBOX |  |
@@ -496,7 +497,7 @@ Lightbox screens:
 | clickAndWait | link=Announcements and Links |  |
 | click_ok | st-edit-button-link |  |
 | *Comment* | SlideShow upload while editing |  |
-| wait_for_element_visible_ok | st-edit-mode-uploadbutton |  |
+| wait_for_element_visible_ok | st-edit-mode-uploadbutton | 30000 |
 | click_ok | st-edit-mode-uploadbutton |  |
 | *Comment* | SlideShow SEE EDIT Upload Files LIGHTBOX |  |
 | *Comment* | DO NOT CANCEL |  |
@@ -651,7 +652,7 @@ moved Edit Tips to end because FF on galena can't close it. Bug.
 
 | open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | link=Advanced |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | click_ok | link=Edit Tips |  |
 | *Comment* | SlideShow CANCEL Edit Tips or SELECT MAIN WINDOW |  |

@@ -41,5 +41,5 @@ cp  do-wiki-tests  one-wiki-test  README  set-time  setup-selenium  wikitestfile
 
 echo PACKAGING wikitests using dir2deb
 rm -f $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/wikitests*.deb
-dir2deb --dir $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr  --package  wikitests  --description Package wikitests for appliances -X package.bash -X appliance-wikitests.tar.gz -X ".svn" 
+dir2deb --dir $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr  --package  wikitests  --description Package wikitests for appliances  --dir-perms 777
 

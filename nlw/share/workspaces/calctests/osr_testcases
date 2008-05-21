@@ -11,11 +11,11 @@ test env properly and are not testing the test-workspace
 * [Test case: functional search tests]
 * [Test Case: Sidebar: Recently Viewed]
 * [Test Case: Sidebar: Recent Changes]
-
-* [Test Case: Edit This Page]
-* [Test Case: Double Click to Edit]
+* [Test Case: Tools: Rename Page]
+* [Test Case: Tools: Delete Page]
 * [Test Case: New Page]
-* [Test Case: New Page No Overwrite]
+* TODO: Test Case New Page No Overwrite
+
 * [Test Case: Phrase search]
 * [Test Case: stemming]
 * [Test Case: Tagging]
@@ -26,8 +26,7 @@ test env properly and are not testing the test-workspace
 * [Test Case: What's New]
 * [Test Case: All Pages]
 * [Test Case: Tools: Duplicate Page]
-* [Test Case: Tools: Rename Page]
-* [Test Case: Tools: Delete Page]
+
 * [Test Case: Tools: Copy Page to Workspace]
 * [Test Case: Tools: Export as HTML]
 * [Test Case: Add Comment]

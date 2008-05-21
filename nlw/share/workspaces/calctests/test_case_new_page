@@ -1,66 +1,18 @@
 | *Comment* | Test Case: New Page |  |
-| st-admin | update-page --email %%email%% --workspace %%workspace%% --page "np %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "np %%start_time%%" page has been created. |
+| open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=ns%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 
-| setSpeed | 100 |  |
 | *Comment* | Test Case: New Page. Page Already Exists |  |
+| *Comment* | With out current page new technology, the 2nd new page command looks like an edit, and works just fine. ugh! |  |
 | click_and_wait | st-home-link |  |
-| click_and_wait | st-newpage-link |  |
-| wait_for_element_visible_ok | st-newpage-pagename-edit | 10000 |
-| type_ok | st-newpage-pagename-edit | np %%start_time%% |
-| click_ok | st-save-button-link |  |
-| wait_for_element_visible_ok | st-newpage-duplicate-pagename | 5000 |
-| type_ok | st-newpage-duplicate-pagename | np %%start_time%% 2 |
 
-| *Comment* | Test Case: New Page. About to check duplicate option different |  |
-| wait_for_element_visible_ok | st-newpage-duplicate-option-different | 5000 |
-| check_ok | st-newpage-duplicate-option-different |  |
-| wait_for_element_visible_ok | st-newpage-duplicate-okbutton | 5000 |
-| click_and_wait | st-newpage-duplicate-okbutton |  |
-| wait_for_text_present_ok | Incoming Links | 30000 |
+| open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=ns%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 
-| *Comment* | Test Case: New Page. What's New on dashboard |  |
-| click_and_wait | st-home-link |  |
-| click_and_wait | link=np %%start_time%% |  |
-| click_and_wait | st-home-link |  |
-| click_and_wait | link=np %%start_time%% 2 |  |
-
-| *Comment* | Test Case: New Page. Click on Save options, then cancel |  |
-| click_and_wait | st-home-link |  |
-| click_and_wait | st-newpage-link |  |
-| wait_for_element_visible_ok | st-newpage-pagename-edit | 10000 |
-| type_ok | st-newpage-pagename-edit | np %%start_time%% |
-| click_ok | st-save-button-link |  |
-| text_like | st-newpage-duplicate-title | Page Already Exists |
-| click_ok | st-newpage-duplicate-option-suggest |  |
-| click_ok | st-newpage-duplicate-option-different |  |
-| click_ok | st-newpage-duplicate-option-append |  |
-| click_ok | st-newpage-duplicate-option-different |  |
-| click_ok | st-newpage-duplicate-cancelbutton |  |
-| click_and_wait | st-cancel-button-link |  |
-
- verifyConfirmation | Are you sure you want to Cancel?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay in the editor.
-
-| wait_for_text_present_ok | Dashboard: | 30000 |
-
-| *Comment* | Test Case: New Page from Page View |  |
-| click_and_wait | link=np %%start_time%% 2 |  |
-| wait_for_element_visible_ok | st-pagetools-newpage | 20000 |
-
- click_ok | st-pagetools-newpage *REMOVED FOR SOCIALCALC INTERFACE*
-
-| click_ok | link=Create New Wiki Page |  |
-| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
-| type_ok | st-newpage-pagename-edit | np %%start_time%% 3 |
-| click_ok | st-save-button-link |  |
-| wait_for_text_present_ok | Incoming Links | 30000 |
-| wait_for_element_visible_ok | st-page-title | 20000 |
-| text_like | st-page-title | np %%start_time%% 3 |
-
-| *Comment* | Test Case: New Page. Teardown |  |
-
-| st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%%_2 |  |
-| st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%% |  |
-| st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%%_3 |  |
+| st-admin | purge-page --workspace %%workspace%% --page ns_%%start_time%% |  |
 | click_and_wait | st-home-link | set up for next included test |
 
+| *Comment* | TODO: Make this test lie test_case_new_page for wikitests. That will first require that the editing conflict {bz 596} bug be fixed. |  |
 | *Comment* | Test Case: New Page COMPLETED |  |

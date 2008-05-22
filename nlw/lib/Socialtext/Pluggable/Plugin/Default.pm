@@ -14,7 +14,7 @@ sub register {
 sub username {
     my ($self, $username) = @_;
     my $person = Socialtext::User->new(username => $username);
-    return $person ? $person->best_full_name || $username : $username;
+    return $person ? $person->best_full_name : $username;
 }
 
 1;

@@ -187,8 +187,7 @@ sub display_watchlist {
 
     my @pages = $watchlist->pages;
     if ( $#pages < 0 ) {
-        my $empty_message = loc("No watchlist for [_1] in [_2]",
-            $self->hub->current_user->username, 
+        my $empty_message = loc("Your Watchlist in [_1] is empty.",
             $self->hub->current_workspace->title);
         return $self->template_render(
             template => 'view/empty_watchlist',

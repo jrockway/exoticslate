@@ -278,6 +278,7 @@ sub _make_page_row {
         page_uri        => $page->uri,
         page_id         => $page->id,
         From            => $author_name,
+        username        => $author->username,
         Workspace       => $workspace->title,
         workspace_name  => $workspace->name,
         workspace_title => $workspace->title,

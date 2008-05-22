@@ -39,6 +39,9 @@ sub send_email_popup {
     my ($page, $users, $user_count, $sender, $address_choices, $error, $note) = @_;
     $error ||= '';
 
+    die "Can't email spreadsheets yet"
+        if $page->metadata->Type eq 'spreadsheet';
+
     $self->template_process('popup/email_page',
         error        => $error,
         page         => $page,
@@ -53,6 +56,7 @@ sub send_email_popup {
 
 sub email_page {
     my $self = shift;
+
     unless ( $self->hub->checker->check_permission('email_out') ) {
         return $self->template_process('close_window.html');
     }

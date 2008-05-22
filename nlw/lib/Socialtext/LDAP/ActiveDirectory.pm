@@ -26,7 +26,6 @@ Socialtext::LDAP::ActiveDirectory - LDAP plug-in for Active Directory servers
   attr_map:
     user_id: dn
     username: sAMAccountName
-    password: unicodePwd
     email_address: mail
     first_name: givenName
     last_name: sn

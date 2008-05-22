@@ -152,6 +152,12 @@ sub _find_user {
 
     # we want all of the attributes in our attr_map *EXCEPT* the password.
     # we NEVER, EVER, EVER want to query the password.
+    #
+    # The "password" attr_map entry has been deprecated and removed from all
+    # docs/code, *but* its still possible that some legacy installs have it
+    # set up.  *DON'T* remove this code unless a migration script is put in
+    # place that cleans up LDAP configs and removes unknown attributes from
+    # the map.
     my @attrs = map { $attr_map->{$_} }
                     grep { $_ ne 'password' }
                     keys %{$attr_map};

@@ -17,7 +17,6 @@ base: dc=foo,dc=bar
 attr_map:
   user_id: dn
   username: cn
-  password: userPassword
   email_address: mail
   first_name: gn
   last_name: sn
@@ -30,7 +29,6 @@ base: dc=foo,dc=bar
 attr_map:
   user_id: dn
   username: cn
-  password: userPassword
   email_address: mail
   first_name: gn
   last_name: sn

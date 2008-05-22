@@ -19,7 +19,6 @@ bind_password: abc123
 attr_map:
   user_id: dn
   username: cn
-  password: userPassword
   email_address: mail
   first_name: gn
   last_name: sn
@@ -34,7 +33,6 @@ bind_password: abc123
 attr_map:
   user_id: dn
   username: cn
-  password: userPassword
   email_address: mail
   first_name: gn
   last_name: sn

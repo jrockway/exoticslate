@@ -26,7 +26,6 @@ Socialtext::LDAP::OpenLDAP - LDAP plug-in for OpenLDAP servers
   attr_map:
     user_id: dn
     username: cn
-    password: userPassword
     email_address: mail
     first_name: givenName
     last_name: sn

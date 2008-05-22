@@ -34,8 +34,7 @@ sub revision_list {
         $row->{id}     = $revision_id;
         $row->{number} = $revision->metadata->Revision;
         $row->{date}   = $revision->datetime_for_user;
-        $row->{from}   =
-            $revision->last_edited_by->best_full_name( workspace => $self->hub->current_workspace );
+        $row->{from}   = $revision->last_edited_by->username;
         $row->{class} = @$rows % 2 ? 'trbg-odd' : 'trbg-even';
 
         $rows->[-1]{next} = $row
@@ -154,9 +153,7 @@ sub header {
         $col{tags} = join ', ', 
                      grep $_ ne 'Recent Changes',
                      $page->html_escaped_categories;
-        $col{editor} = $page->last_edited_by->best_full_name(
-            workspace => $self->hub->current_workspace,
-        );
+        $col{editor} = $page->last_edited_by->username;
         push @header, \%col;
     }
     return \@header;

@@ -433,8 +433,7 @@ sub format_page_for_entry {
     $entry->{raw_time} = $raw_time;
     $entry->{title} = $metadata->Subject;
     $entry->{author} = $metadata->From;
-    $entry->{fullname} =
-        $page->last_edited_by->best_full_name( workspace => $self->hub->current_workspace );
+    $entry->{username} = $page->last_edited_by->username;
     $entry->{post} = $page->to_html_or_default unless $args{no_post};
     $entry->{attachment_count} =
       scalar @{$attachments->all( page_id => $page->id )};

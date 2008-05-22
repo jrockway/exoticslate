@@ -6,7 +6,7 @@ use warnings;
 use Socialtext;
 use Socialtext::TT2::Renderer;
 use Socialtext::AppConfig;
-use Class::Field 'field';
+use Class::Field qw(const field);
 use Socialtext::URI;
 use Socialtext::Storage::PSQL;
 use Socialtext::AppConfig;
@@ -21,12 +21,17 @@ my %hooks;
 my %rest_hooks;
 my %rests;
 
+const priority => 100;
 field hub => -weak;
 field 'rest';
-field uri => -init => '$self->hub->current_workspace->uri . Socialtext::AppConfig->script_name';
 
 # perldoc Socialtext::URI for arguments
 #    path = '' & query => {}
+
+sub uri {
+    my $self = shift;
+    return $self->hub->current_workspace->uri . Socialtext::AppConfig->script_name;
+}
 
 sub make_uri {
     my ( $self, %args ) = @_;

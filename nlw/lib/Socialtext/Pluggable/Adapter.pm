@@ -12,7 +12,6 @@ use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
                       search_dirs => \@libs;
 use Socialtext::Pluggable::WaflPhrase;
 
-
 BEGIN {
     our $code_base = Socialtext::AppConfig->code_base;
     push @INC, glob("$code_base/plugin/*/lib");
@@ -54,7 +53,6 @@ sub make_hub {
     $self->{made_hub} = $main->hub;
 }
 
-
 sub class_id { 'pluggable' };
 sub class_title { 'Pluggable' };
 
@@ -76,7 +74,10 @@ sub rest_hooks {
 sub register {
     my ($self,$registry) = @_;
 
-    for my $plugin ($self->plugins) {
+    my @plugins = sort { $b->priority <=> $a->priority }
+                  $self->plugins;
+
+    for my $plugin (@plugins) {
         for my $hook ($plugin->hooks) {
             my ($type, @parts) = split /\./, $hook->{name};
 
@@ -91,7 +92,8 @@ sub register {
                 my $action = $parts[0];
                 my $sub = "${class}::$action";
 
-                if (my $old = $hooks{$hook->{name}}) {
+                if (my $old_hooks = $hooks{$hook->{name}}) {
+                    my $old = $old_hooks->[0];
                     if ($old->{class} ne $hook->{class}) {
                         die "Can't register $action for $hook->{class}! " .
                             "$old->{class} already registered this action.\n";
@@ -105,7 +107,7 @@ sub register {
                 $registry->add(action => $action);
             }
 
-            $hooks{$hook->{name}} = $hook;
+            push @{$hooks{$hook->{name}}}, $hook;
         }
     }
 }
@@ -115,7 +117,7 @@ sub register_rest {
     return if $self->{_registered_rest}++;
     for my $plugin ($self->plugins) {
         for my $hook ($plugin->rest_hooks) {
-            $hooks{$hook->{name}} = $hook;
+            push @{$hooks{$hook->{name}}}, $hook;
         }
     }
 }
@@ -127,7 +129,9 @@ sub registered {
 
 sub hook {
     my ( $self, $name, @args ) = @_;
-    if ( my $hook = $hooks{$name} ) {
+    if ( my $hooks = $hooks{$name} ) {
+        my $hook = $hooks->[0];
+        return unless $hook;
         my $method = $hook->{method};
         $hook->{obj} ||= $hook->{class}->new();
         $hook->{obj}->hub( $self->hub || $self->{made_hub});

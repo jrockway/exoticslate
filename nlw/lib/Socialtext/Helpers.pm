@@ -183,7 +183,8 @@ sub global_template_vars {
         skin_name          => $self->hub->skin->skin_name,
         search_box_snippet => $search_box,
         miki_url           => $self->miki_path,
-        stax_info         => $self->hub->stax->hacks_info,
+        stax_info          => $self->hub->stax->hacks_info,
+        home_href          => '?',
     );
 }
 

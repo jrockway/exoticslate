@@ -151,6 +151,7 @@ sub new {
     bless $self, $class;
     return $self;
 }
+
 sub storage {
     my ($self,$id) = @_;
     die "Id is required for storage\n" unless $id;
@@ -160,7 +161,7 @@ sub storage {
 sub plugin_dir {
     my $self = shift;
     my $name = $self->name || die "Plugins must define a 'name' subroutine";
-    return "$code_base/../plugin/$name";
+    return "$code_base/plugin/$name";
 }
 
 sub cgi_vars {

@@ -15,8 +15,7 @@ use Socialtext::Pluggable::WaflPhrase;
 
 BEGIN {
     our $code_base = Socialtext::AppConfig->code_base;
-    @libs = glob("$code_base/../plugin/*/lib");
-    push @INC, @libs;
+    push @INC, glob("$code_base/plugin/*/lib");
 }
 
 sub AUTOLOAD {

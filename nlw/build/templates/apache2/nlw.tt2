@@ -76,7 +76,7 @@
         FileETag none
     </Location>
 
-    AliasMatch ^/nlw/plugin/([^/]+)/(.*) [% config.static_dir %]/../plugin/$1/share/$2
+    AliasMatch ^/nlw/plugin/([^/]+)/(.*) [% config.static_dir %]/plugin/$1/share/$2
     <LocationMatch /nlw/plugin>
         Order allow,deny
         Allow from all

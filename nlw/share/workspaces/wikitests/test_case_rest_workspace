@@ -72,7 +72,8 @@ Test set up:
 
 | comment | Test case: REST Workspace GET short workspace name as JSON |  |
 | get | /data/workspaces/aa | application/json |
-| code-is | 400 |
+| code-is | 400 |  |
+| body-like | Workspace name must be between 3 and 30 characters long, and must contain only upper- or lower-case letters, numbers, underscores, and dashes |  |
 
 ----
 
@@ -161,5 +162,49 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | comment | Test case: REST Workspace Promote a user to workspace admin FAILS without permissions |  |
 | post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"workspace_admin" } |
 | code-is | 403 |  |
+
+----
+
+| comment | Test case: REST Workspace delete non-existing ws as nobody gets 403 |  |
+| delete | /data/workspaces/nonesuch |  |
+| code-is | 403 |  |
+
+| st-admin | give-accounts-admin --username %%username%% | now has |
+| comment | Test case: REST Workspace delete non-existing ws as admin gets 404 |  |
+| delete | /data/workspaces/nonesuch |  |
+| code-is | 404 |  |
+
+| comment | Test case: REST Workspace delete ws as accounts-admin |  |
+| post | /data/workspaces | Content-Type=application/json | { "name":"deleteme%%wksp%%", "title":"deleteme%%start_time%%", "account_id":"%%account_id%%" } |
+| code-is | 201 |  |
+| delete | /data/workspaces/deleteme%%wksp%% |  |
+| code-is | 204 |  |
+| get | /data/workspaces/deleteme%%wksp%% |  |
+| code_is | 404 |  |
+
+| comment | re-add ws |  |
+| post | /data/workspaces | Content-Type=application/json | { "name":"deleteme%%wksp%%", "title":"deleteme%%start_time%%", "account_id":"%%account_id%%" } |
+| code-is | 201 |  |
+| st-admin | remove-accounts-admin --username %%username%% | no longer |
+| st-admin | give-system-admin --username %%username%% | now has |
+| comment | Test case: REST Workspace delete ws as system-admin |  |
+| delete | /data/workspaces/deleteme%%wksp%% |  |
+| code-is | 204 |  |
+| get | /data/workspaces/deleteme%%wksp%% |  |
+| code_is | 404 |  |
+
+| comment | re-add ws only accounts-admin can add a ws go figure |  |
+| st-admin | give-accounts-admin --username %%username%% | now has |
+| post | /data/workspaces | Content-Type=application/json | { "name":"deleteme%%wksp%%", "title":"deleteme%%start_time%%", "account_id":"%%account_id%%" } |
+| code-is | 201 |  |
+| st-admin | remove-accounts-admin --username %%username%% | no longer |
+
+| comment | Test case: REST Workspace delete ws as ws-admin |  |
+| st-admin | remove-system-admin --username %%username%% | no longer |
+| st-admin | add-workspace-admin --email %%username%% --workspace deleteme%%wksp%% | is now |
+| delete | /data/workspaces/deleteme%%wksp%% |  |
+| code-is | 204 |  |
+| get | /data/workspaces/deleteme%%wksp%% |  |
+| code_is | 404 |  |
 
 | comment | Test case: REST Workspace COMPLETED |  |

@@ -163,9 +163,21 @@ sub storage {
     return Socialtext::Storage::PSQL->new($id);
 }
 
+sub name {
+    my $self = shift;
+    return $self->{_name} if ref $self and $self->{_name};
+
+    (my $class = ref $self || $self) =~ s{::}{/}g;
+
+    my $name = $INC{"$class.pm"} or die "$class.pm is not in your INC";
+    $name =~ s{^$code_base/plugin/([^/]+).*$}{$1};
+    $self->{_name} = $name if ref $self;
+    return $name;
+}
+
 sub plugin_dir {
     my $self = shift;
-    my $name = $self->name || die "Plugins must define a 'name' subroutine";
+    my $name = $self->name;
     return "$code_base/plugin/$name";
 }
 

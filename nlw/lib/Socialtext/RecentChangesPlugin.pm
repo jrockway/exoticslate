@@ -231,9 +231,9 @@ sub _set_titles {
     my $self = shift;
     my $title_info;;
     if ($self->target_workspace ne $self->current_workspace_name) {
-        $title_info = loc("What\'s in workspace [_1]", $self->target_workspace);
+        $title_info = loc("What\'s New in workspace [_1]", $self->target_workspace);
     } else {
-        $title_info = loc("What's New");
+        $title_info = loc("What\'s New");
     }
     $self->wafl_query_title($title_info);
     $self->wafl_query_link($self->_set_query_link);

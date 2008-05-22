@@ -197,11 +197,22 @@ sub _add_attachment_from_index {
     push @$attachments_ref, map {
         {
             %$_,
-            from => Socialtext::User->new( email_address => $_->{from} )->username,
+            from => $self->_extract_username_or_email_address( $_->{from} ),
         }
     } grep {
         -e $self->plugin_directory . '/' . $_->{page_id} . '/' . $_->{id};
     } values %$entry;
+}
+
+sub _extract_username_or_email_address {
+    my $self = shift;
+    my $from = shift;
+
+    my $user = Socialtext::User->new( email_address => $_->{from} );
+    if ( $user ) {
+        return $user->username;
+    }
+    return $from;
 }
 
 #------------------------------------------------------------------------------#

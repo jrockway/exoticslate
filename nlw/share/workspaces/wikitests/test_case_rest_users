@@ -56,6 +56,14 @@ Test set up:
 | delete | /data/workspaces/%%wksp%%/users/%%test_user%% |  |
 | code-is | 204 |  |
 
+| comment | 404 on DELETE for removed member |  |
+| delete | /data/workspaces/%%wksp%%/users/%%test_user%% |  |
+| code-is | 404 |  |
+
+| comment | Test case: REST Users 405 for removed member |  |
+| get | /data/workspaces/%%wksp%%/users/%%username%% |  |
+| code-is | 405 |  |
+
 | comment | Test case: REST Users Member can remove himself |  |
 | comment | Make admin user regular member |  |
 | post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"member" } |

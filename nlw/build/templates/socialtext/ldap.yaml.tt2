@@ -13,6 +13,8 @@
 #   host: openldap.example.com
 #   port: 389
 #   base: cn=IT,dc=example,dc=com
+#   bind_user: CN=Manager,dc=example,dc=com
+#   bind_password: its-a-secret
 #   filter: (objectClass=inetOrgPerson)
 #   attr_map:
 #       user_id: dn

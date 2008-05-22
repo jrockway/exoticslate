@@ -59,6 +59,7 @@ sub dashboard {
             did_you_know_title => $did_you_know_title,
             did_you_know_text  => $did_you_know_text,
             title          => loc('Dashboard'),
+            username       => $self->hub->current_user->username,
             group_notes    => $self->_get_group_notes_info,
             personal_notes => $self->_get_personal_notes_info,
             whats_new      => $self->_get_whats_new_info,
@@ -127,7 +128,7 @@ sub _get_whats_new_page_info {
         title   => $self->hub->helpers->html_escape($page->title),
         date    => $page->datetime_for_user,
         author  => (  $updated_author
-                    ? $updated_author->best_full_name(workspace => $self->hub->current_workspace)
+                    ? $updated_author->username
                     : undef),
         preview => (  $show_preview
                     ? $page->preview_text
@@ -169,7 +170,7 @@ sub _get_watchlist_info {
             link    => $self->hub->helpers->page_display_path($_),
             date    => $page->datetime_for_user,
             author  => (  $updated_author
-                        ? $updated_author->best_full_name(workspace => $self->hub->current_workspace)
+                        ? $updated_author->username
                         : undef),
             preview => (  $show_preview
                         ? $page->preview_text

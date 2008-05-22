@@ -183,8 +183,7 @@ sub actually_start {
     $self->output_action('Starting');
     eval { $self->try_system(@command); };
     if ($@) {
-        die 'Cannot start ', $self->short_binary, " with @command.\n",
-            $self->error_log, "\n";
+        die 'Cannot start ', $self->short_binary, " with @command.\n";
     }
     $self->maybe_test_verbose("\nStarting ", $self->short_binary, " .\n");
 }

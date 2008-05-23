@@ -1,4 +1,5 @@
 package Socialtext::Pluggable::Plugin::Default;
+# @COPYRIGHT@
 use strict;
 use warnings;
 

@@ -14,19 +14,19 @@ test env properly and are not testing the test-workspace
 * [Test Case: Tools: Rename Page]
 * [Test Case: Tools: Delete Page]
 * [Test Case: New Page]
-* TODO: Test Case New Page No Overwrite
-
+* [Test Case: Tools: Duplicate Page]
 * [Test Case: Phrase search]
+* [Test Case: Hide sidebar]
+
+* TODO: Test Case New Page No Overwrite (Features to do this now are missing from socialcalc)
+
 * [Test Case: stemming]
 * [Test Case: Tagging]
-* [Test Case: Hide sidebar]
 * [Test Case: Sidebar: Incoming Links]
 * [Test Case: Orphans List]
 * [Test Case: Revisions]
 * [Test Case: What's New]
 * [Test Case: All Pages]
-* [Test Case: Tools: Duplicate Page]
-
 * [Test Case: Tools: Copy Page to Workspace]
 * [Test Case: Tools: Export as HTML]
 * [Test Case: Add Comment]

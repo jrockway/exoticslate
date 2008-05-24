@@ -17,15 +17,17 @@ test env properly and are not testing the test-workspace
 * [Test Case: Tools: Duplicate Page]
 * [Test Case: Phrase search]
 * [Test Case: Hide sidebar]
-
-* TODO: Test Case New Page No Overwrite (Features to do this now are missing from socialcalc)
-
-* [Test Case: stemming]
 * [Test Case: Tagging]
-* [Test Case: Sidebar: Incoming Links]
 * [Test Case: Orphans List]
-* [Test Case: Revisions]
 * [Test Case: What's New]
+
+^ END
+
+ `[Test Case New Page No Overwrite]` (Features to do this now are missing from socialcalc)
+ `[Test Case: stemming]` DO WE WANT TO ADD STEMMING TESTS TO SOCIALCALC PAGES ?
+ `[Test Case: Sidebar: Incoming Links]` (Features to do this now are missing from socialcalc)
+ `[Test Case: Revisions]` (Features to do this now are missing from socialcalc)
+
 * [Test Case: All Pages]
 * [Test Case: Tools: Copy Page to Workspace]
 * [Test Case: Tools: Export as HTML]

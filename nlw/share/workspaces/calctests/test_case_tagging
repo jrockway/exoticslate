@@ -1,21 +1,8 @@
-*user action* | *correct response* | *comment*
-Add tag "foo", return | appears in sidebar 
-Add two word tag "foo bar" to another page, return | appears in sidebar 
-Add tag "Foster City", return | appears in sidebar with correct capitalization 
-Look ahead: start to type "fo" | sidebar autosuggests "foo", "foo bar", "foster city"
+| *Comment* | Starting Test Case: Socialcalc Tagging |  |
 
-| *Comment* | Starting Test Case: Tagging |  |
-
-| setSpeed | 100 |  |
-| clickAndWait | st-home-link |  |
-| clickAndWait | st-newpage-link |  |
-
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | wikiwyg_wikitext_textarea | tag page %%start_time%% content |
-| type_ok | st-newpage-pagename-edit | tag page %%start_time%% |
-| clickAndWait | st-save-button-link |  |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag%20page%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| click_ok | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
 | click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
@@ -35,16 +22,14 @@ Look ahead: start to type "fo" | sidebar autosuggests "foo", "foo bar", "foster 
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | text_like | link=foo bar %%start_time%% | foo bar %%start_time%% |
 
-TODO: revisit when {bz: 371} is resolved
+| *Comment* | Test Case: Tagging - special chars |  |
 
-| *Comment* | Test Case: Tagging - special chars (limited to ascii until we ca get bz 371 resolved) |  |
-
-| type_ok | st-tags-field | special chars @#$ %%start_time%% |
+| type_ok | st-tags-field | `special chars &@#$ %%start_time%%` |
 | wait_for_element_visible_ok | st-tags-addbutton | 20000 |
 | click_ok | st-tags-addbutton |  |
 | wait_for_text_present_ok | Adding tag | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
-| text_like | link=special chars @#$ %%start_time%% | special chars @#$ %%start_time%% |
+| text_like | link=special chars &@#$ %%start_time%% | `special chars &@#$ %%start_time%%` |
 
 | *Comment* | Test Case: Tagging - Chinese chars |  |
 | type_ok | st-tags-field | 所以 |
@@ -54,14 +39,12 @@ TODO: revisit when {bz: 371} is resolved
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | text_like | st-tags-listing | 所以 |
 
-text_like st-tags-listing correctly detects the Chinese chars
-
-| type_ok | st-tags-field | special chars ,[] %%start_time%% |
+| type_ok | st-tags-field | `special chars ,[] %%start_time%%` |
 | wait_for_element_present_ok | st-tags-addbutton | 20000 |
 | click_ok | st-tags-addbutton |  |
 | wait_for_text_present_ok | Adding tag | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
-| text_like | link=special chars ,[] %%start_time%% | special chars ,[] %%start_time%% |
+| text_like | link=special chars ,[] %%start_time%% | `special chars ,[] %%start_time%%` |
 
 | *Comment* | Test Case: Tagging reverify foo bar link |  |
 | text_like | link=foo bar %%start_time%% | foo bar %%start_time%% |
@@ -79,8 +62,6 @@ text_like st-tags-listing correctly detects the Chinese chars
 | text_like | st-tags | fog %%start_time%% |
 | text_like | st-tags | foo bar %%start_time%% |
 | text_like | st-tags | Foster City %%start_time%% |
-
-TODO: see if Selenium can recognize the suggestion. May not because it is done with JS
 
 Remove tag: click on little box next to "foo" | tag disappears, system displays: These tags have been removed: foo 
 Click on tag "foo bar" | system navigates to the list of pages with the tag "foo bar"
@@ -104,11 +85,8 @@ Add any other tag to three different pages | tag is added
 | *Comment* | Test Case: Tagging add the same tag to three new pages |  |
 
 | *Comment* | Tag Page 1 |  |
-| clickAndWait | st-home-link |  |
-| clickAndWait | st-newpage-link |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| type_ok | wikiwyg_wikitext_textarea | tag page 1 %%start_time%% content |
-| type_ok | st-newpage-pagename-edit | tag page 1 %%start_time%% |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag%20page%201%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
 | clickAndWait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
 | click_ok | st-tags-addlink |  |
@@ -121,10 +99,8 @@ Add any other tag to three different pages | tag is added
 | text_like | link=tagtest %%start_time%% | tagtest %%start_time%% |
 
 | *Comment* | Tag Page 2 |  |
-| clickAndWait | link=New page |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| type_ok | wikiwyg_wikitext_textarea | tag page 2 %%start_time%% content |
-| type_ok | st-newpage-pagename-edit | tag page 2 %%start_time%% |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag%20page%202%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
 | clickAndWait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
 | click_ok | st-tags-addlink |  |
@@ -137,10 +113,8 @@ Add any other tag to three different pages | tag is added
 | text_like | link=tagtest %%start_time%% | tagtest %%start_time%% |
 
 | *Comment* | Tag Page 3 |  |
-| clickAndWait | link=New page |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| type_ok | wikiwyg_wikitext_textarea | tag page 3 %%start_time%% content |
-| type_ok | st-newpage-pagename-edit | tag page 3 %%start_time%% |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag%20page%203%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
 | clickAndWait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
 | click_ok | st-tags-addlink |  |
@@ -154,13 +128,15 @@ Add any other tag to three different pages | tag is added
 
 | *Comment* | Test Case: Tagging checking revisions |  |
 
-Click Revisions | new revision created for new tag 
-Compare top two revisions | only difference is in added tag
+Click Revisions | new revision created for new tag
 
 | *Comment* | Test Case: Tagging Compare Revisions |  |
 | clickAndWait | st-page-stats-revisions |  |
-| clickAndWait | Button |  |
-| text_like | qr/Tags:.+Tags: tagtest %%start_time%%/ |  |
+
+| *Comment* | TODO: revive Revision Compare test after SC has revision compare implemented |  |
+
+clickAndWait | Button | |
+text_like | qr/Tags:.+Tags: tagtest %%start_time%%/ | |
 
 Click on that tag in third page | list appears with correct three pages 
 Click on any link in list | that page appears
@@ -188,9 +164,10 @@ TODO: check for an incremented revision after fixing RT 25664
 | *Comment* | Test Case: Tagging. Compare revisions for deleted tag |  |
 | *Comment* | The revision number did not change but the tag should be gone |  |
 | clickAndWait | st-page-stats-revisions |  |
-| clickAndWait | Button |  |
-| text_like | qr/Tags: tagtest %%start_time%%/m |  |
-| text_like | qr/Tags:\s*$/m |  |
+
+ clickAndWait | Button | |
+ text_like | qr/Tags: tagtest %%start_time%%/m | |
+ text_like | qr/Tags:\s*$/m | |
 
 Navigate to All Tags in list view | All Tags appears 
 Observe that tag | tag is still in list 
@@ -204,10 +181,11 @@ Click that tag | Tag list page appears with two remaining tagged pages
 | text_like | st-listview | tag page 2 %%start_time%% |
 
 | *Comment* | Test Case: Tagging Teardown |  |
-| clickAndWait | st-home-link | set up for next included test |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_%%start_time%% |  |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_1_%%start_time%% |  |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_2_%%start_time%% |  |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_3_%%start_time%% |  |
+
+| clickAndWait | st-home-link | set up for next included test |
 
 | *Comment* | Test Case : Tagging COMPLETED |  |

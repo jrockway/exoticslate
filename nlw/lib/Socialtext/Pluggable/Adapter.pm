@@ -92,17 +92,6 @@ sub register {
                 my $action = $parts[0];
                 my $sub = "${class}::$action";
 
-                if (my $old_hooks = $hooks{$hook->{name}}) {
-                    my $old = $old_hooks->[0];
-                    if ($old->{class} ne $hook->{class}) {
-                        die "Can't register $action for $hook->{class}! " .
-                            "$old->{class} already registered this action.\n";
-                    }
-                }
-                elsif (UNIVERSAL::can($self, $action)) {
-                    die "$class already defines a subroutine named $action that is not an action!";
-                }
-
                 *{$sub} = sub { return $_[0]->hook($hook->{name}) };
                 $registry->add(action => $action);
             }

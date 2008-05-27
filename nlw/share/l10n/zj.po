@@ -9,6 +9,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: lib/Socialtext/Formatter/WaflPhrase.pm
+#.  
+msgid ""
+msgstr ""
+
 #: lib/Socialtext/SearchPlugin.pm
 #. (
 msgid "%1 - Atom Search for %2"
@@ -64,7 +69,7 @@ msgstr "%1 Dおえs nお7 hあvえ あnY HえあdえrS."
 msgid "%1 hours"
 msgstr "%1 HおうrS"
 
-#: lib/Socialtext/User/Default.pm
+#: lib/Socialtext/User/Default/Factory.pm
 #. (
 msgid "%1 is a required field."
 msgstr "%1 いs あ rえqういRえD FいえlD."
@@ -74,7 +79,7 @@ msgstr "%1 いs あ rえqういRえD FいえlD."
 msgid "%1 is not a valid archive filename. Skin files must end with .zip, .tar.gz or .tgz."
 msgstr "%1 いs nお7 あ vあlいd あRcHいVえ fいlえnあmえ. sKいN FいLえS MうS7 えNd wい7H .zいp, .7あr.gZ おr .7gZ."
 
-#: lib/Socialtext/User/Default.pm
+#: lib/Socialtext/User/Default/Factory.pm
 #. (
 msgid "%1 is not a valid email address."
 msgstr "%1 いs nお7 あ vあlいd えMあいl あDdRえSs."
@@ -414,7 +419,7 @@ msgstr "あ pあgえ MうS7 hあvえ あ 8おDy 7お 8え sあvえd."
 msgid "A page must have a title to be saved."
 msgstr "あ pあgえ MうS7 hあvえ あ 7い7lえ 7お 8え SあVえD."
 
-#: lib/Socialtext/User/Default.pm
+#: lib/Socialtext/User/Default/Factory.pm
 #.  
 msgid "A password is required to create a new user."
 msgstr "あ pあsSwおrD いs rえqういRえD 7お cRえあ7え あ NえW うsえr."
@@ -496,8 +501,8 @@ msgstr "あDd&n8sP;7あG"
 
 #: share/skin/s2/template/layout/edit_wikiwyg
 #.  
-msgid "Add&nbsp;tags&nbsp;..."
-msgstr "あDd&n8sP;7あGs&n8sP;..."
+msgid "Add&nbsp;tags..."
+msgstr "あDd&n8sP;7あGs..."
 
 #: share/skin/s2/template/element/settings/users_listall_section
 #.  
@@ -2236,8 +2241,8 @@ msgstr "lおgお FいLえ mうs7 8え あ gいf, Jpえg, おr pNg fいlえ."
 
 #: share/skin/s2/template/view/empty_watchlist
 #. (
-msgid "Look for <img border=\"0\" src=\"%1/images/st/pagetools/watch-hover.gif\"/> on a page you want to watch and then click on it to add the page to your Watchlist.."
-msgstr "lおおK FおR <いMg 8おrDえR=\"0\" SrC=\"%1/いMあGえS/S7/pあgえ7おおLs/wあ7Ch-hおvえr.gいf\"/> おN あ PあGえ yおう wあn7 7お wあ7Ch あNd 7HえN ClいcK おn い7 7お あDd 7Hえ pあgえ 7お yおうR Wあ7cHlいs7.."
+msgid "Look for <img border=\"0\" src=\"%1/images/st/pagetools/watch-hover.gif\"/> on a page you want to watch and then click on it to add the page to your Watchlist."
+msgstr "lおおK FおR <いMg 8おrDえR=\"0\" SrC=\"%1/いMあGえS/S7/pあgえ7おおLs/wあ7Ch-hおvえr.gいf\"/> おN あ PあGえ yおう wあn7 7お wあ7Ch あNd 7HえN ClいcK おn い7 7お あDd 7Hえ pあgえ 7お yおうR Wあ7cHlいs7."
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
@@ -2468,11 +2473,6 @@ msgstr "nお うpLおあdS."
 #.  
 msgid "No users entered"
 msgstr "nお うsえrS えn7えRえD"
-
-#: lib/Socialtext/WatchlistPlugin.pm
-#. (
-msgid "No watchlist for %1 in %2"
-msgstr "nお Wあ7cHlいs7 FおR %1 いN %2"
 
 #: share/skin/s2/template/element/page/revision_view_actions
 #.  
@@ -3204,7 +3204,7 @@ msgstr "sえあRcH FおR \"%1\""
 msgid "Search for the following terms:"
 msgstr "sえあRcH FおR 7hえ FおLlおwいnG 7えRmS:"
 
-#: share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/template/view/refcard
+#: share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/template/view/refcard
 #.  
 msgid "Section"
 msgstr "sえc7いおn"
@@ -3419,6 +3419,11 @@ msgstr "sおcいあL7えx7, 7Hえ えN7えrPrいsえ WいKい"
 msgid "Somebody else made changes to the page while you were editing it."
 msgstr "sおmえ8おdY えlSえ mあdえ ChあnGえS 7お 7Hえ pあgえ Whいlえ Yおう WえRえ えDい7いNg い7."
 
+#: share/skin/s2/template/element/page/actions
+#.  
+msgid "Sorry, this feature is not available for spreadsheets"
+msgstr "sおrRy, 7hいs fえあ7うRえ いS Nお7 あvあいLあ8lえ FおR SpRえあdShええ7s"
+
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
 msgid "Sort by account in ascending order"
@@ -3579,7 +3584,7 @@ msgstr "7あgS"
 msgid "Tags to apply:"
 msgstr "7あgS 7お あPpLy:"
 
-#: lib/Socialtext/RevisionPlugin.pm
+#: share/skin/s2/template/view/page/revision_compare
 #.  
 msgid "Tags:"
 msgstr "7あgS:"
@@ -3609,7 +3614,7 @@ msgstr "7Hえ %1 うsえr wあs cおnFいRmえd."
 msgid "The %1 workspace is now part of the %2 account."
 msgstr "7Hえ %1 WおRkSpあcえ いs nおw pあr7 おf 7Hえ %2 あcCおうn7."
 
-#: lib/Socialtext/User/Default.pm
+#: lib/Socialtext/User/Default/Factory.pm
 #. (
 msgid "The %1 you provided (%2) is already in use."
 msgstr "7Hえ %1 Yおう Prおvいdえd (%2) いs あLrえあDy いN うsえ."
@@ -4096,8 +4101,8 @@ msgstr "うPlおあD FいLえS"
 
 #: share/skin/s2/template/layout/edit_wikiwyg
 #.  
-msgid "Upload&nbsp;files&nbsp;..."
-msgstr "うPlおあD&N8Sp;fいlえs&n8sP;..."
+msgid "Upload&nbsp;files..."
+msgstr "うPlおあD&N8Sp;fいlえs..."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -4321,8 +4326,8 @@ msgstr "wHあ7'S NえW"
 
 #: lib/Socialtext/RecentChangesPlugin.pm
 #. (
-msgid "What's in workspace %1"
-msgstr "wHあ7'S いn wおrKsPあCえ %1"
+msgid "What's New in workspace %1"
+msgstr "wHあ7'S NえW いn wおrKsPあCえ %1"
 
 #: share/skin/s2/template/element/wiki/subnav-dashboard share/skin/s2/template/element/wiki/subnav-default share/skin/s2/template/element/wiki/subnav-default share/skin/s2/template/element/wiki/subnav-weblog share/skin/s2/template/element/wiki/subnav-weblog
 #.  
@@ -4599,7 +4604,7 @@ msgstr "yおう cあn sYnChRおNいZえ 7Hえ あPpLいあnCえ cLおCk wい7H �
 msgid "You cannot change is_system_created for an account after it has been created."
 msgstr "yおう cあnNお7 ChあnGえ いS_SyS7えm_cRえあ7えd fおr あN あcCおうn7 あf7えR い7 hあs 8ええN Crえあ7えD."
 
-#: lib/Socialtext/User/Default.pm
+#: lib/Socialtext/User/Default/Factory.pm
 #.  
 msgid "You cannot change the email address of a system-created user."
 msgstr "yおう cあnNお7 ChあnGえ 7Hえ えMあいl あDdRえSs おF あ SyS7えm-cRえあ7えd うSえR."
@@ -4609,7 +4614,7 @@ msgstr "yおう cあnNお7 ChあnGえ 7Hえ えMあいl あDdRえSs おF あ SyS
 msgid "You cannot change the name of a system-created account."
 msgstr "yおう cあnNお7 ChあnGえ 7Hえ nあmえ おf あ sYs7えM-Crえあ7えD あcCおうn7."
 
-#: lib/Socialtext/User/Default.pm
+#: lib/Socialtext/User/Default/Factory.pm
 #.  
 msgid "You cannot change the name of a system-created user."
 msgstr "yおう cあnNお7 ChあnGえ 7Hえ nあmえ おf あ sYs7えM-Crえあ7えD うsえr."
@@ -4723,6 +4728,11 @@ msgstr "yおうR Nお7えPあD"
 #.  
 msgid "Your Watchlist"
 msgstr "yおうR Wあ7cHlいs7"
+
+#: lib/Socialtext/WatchlistPlugin.pm
+#. (
+msgid "Your Watchlist in %1 is empty."
+msgstr "yおうR Wあ7cHlいs7 いn %1 いs えMp7y."
 
 #: share/skin/s2/template/email/email-address-confirmation-completed.html
 #.  

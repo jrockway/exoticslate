@@ -9,6 +9,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: lib/Socialtext/Formatter/WaflPhrase.pm
+#.  
+msgid ""
+msgstr ""
+
 #: lib/Socialtext/SearchPlugin.pm
 #. (
 msgid "%1 - Atom Search for %2"
@@ -64,7 +69,7 @@ msgstr ""
 msgid "%1 hours"
 msgstr ""
 
-#: lib/Socialtext/User/Default.pm
+#: lib/Socialtext/User/Default/Factory.pm
 #. (
 msgid "%1 is a required field."
 msgstr ""
@@ -74,7 +79,7 @@ msgstr ""
 msgid "%1 is not a valid archive filename. Skin files must end with .zip, .tar.gz or .tgz."
 msgstr ""
 
-#: lib/Socialtext/User/Default.pm
+#: lib/Socialtext/User/Default/Factory.pm
 #. (
 msgid "%1 is not a valid email address."
 msgstr ""
@@ -414,7 +419,7 @@ msgstr ""
 msgid "A page must have a title to be saved."
 msgstr ""
 
-#: lib/Socialtext/User/Default.pm
+#: lib/Socialtext/User/Default/Factory.pm
 #.  
 msgid "A password is required to create a new user."
 msgstr ""
@@ -496,7 +501,7 @@ msgstr ""
 
 #: share/skin/s2/template/layout/edit_wikiwyg
 #.  
-msgid "Add&nbsp;tags&nbsp;..."
+msgid "Add&nbsp;tags..."
 msgstr ""
 
 #: share/skin/s2/template/element/settings/users_listall_section
@@ -2236,7 +2241,7 @@ msgstr ""
 
 #: share/skin/s2/template/view/empty_watchlist
 #. (
-msgid "Look for <img border=\"0\" src=\"%1/images/st/pagetools/watch-hover.gif\"/> on a page you want to watch and then click on it to add the page to your Watchlist.."
+msgid "Look for <img border=\"0\" src=\"%1/images/st/pagetools/watch-hover.gif\"/> on a page you want to watch and then click on it to add the page to your Watchlist."
 msgstr ""
 
 #: share/skin/s2/template/element/settings/users_invite_section
@@ -2467,11 +2472,6 @@ msgstr ""
 #: lib/Socialtext/OpenIdPlugin.pm
 #.  
 msgid "No users entered"
-msgstr ""
-
-#: lib/Socialtext/WatchlistPlugin.pm
-#. (
-msgid "No watchlist for %1 in %2"
 msgstr ""
 
 #: share/skin/s2/template/element/page/revision_view_actions
@@ -3204,7 +3204,7 @@ msgstr ""
 msgid "Search for the following terms:"
 msgstr ""
 
-#: share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/template/view/refcard
+#: share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/template/view/refcard
 #.  
 msgid "Section"
 msgstr ""
@@ -3419,6 +3419,11 @@ msgstr ""
 msgid "Somebody else made changes to the page while you were editing it."
 msgstr ""
 
+#: share/skin/s2/template/element/page/actions
+#.  
+msgid "Sorry, this feature is not available for spreadsheets"
+msgstr ""
+
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
 msgid "Sort by account in ascending order"
@@ -3579,7 +3584,7 @@ msgstr ""
 msgid "Tags to apply:"
 msgstr ""
 
-#: lib/Socialtext/RevisionPlugin.pm
+#: share/skin/s2/template/view/page/revision_compare
 #.  
 msgid "Tags:"
 msgstr ""
@@ -3609,7 +3614,7 @@ msgstr ""
 msgid "The %1 workspace is now part of the %2 account."
 msgstr ""
 
-#: lib/Socialtext/User/Default.pm
+#: lib/Socialtext/User/Default/Factory.pm
 #. (
 msgid "The %1 you provided (%2) is already in use."
 msgstr ""
@@ -4096,7 +4101,7 @@ msgstr ""
 
 #: share/skin/s2/template/layout/edit_wikiwyg
 #.  
-msgid "Upload&nbsp;files&nbsp;..."
+msgid "Upload&nbsp;files..."
 msgstr ""
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
@@ -4321,7 +4326,7 @@ msgstr ""
 
 #: lib/Socialtext/RecentChangesPlugin.pm
 #. (
-msgid "What's in workspace %1"
+msgid "What's New in workspace %1"
 msgstr ""
 
 #: share/skin/s2/template/element/wiki/subnav-dashboard share/skin/s2/template/element/wiki/subnav-default share/skin/s2/template/element/wiki/subnav-default share/skin/s2/template/element/wiki/subnav-weblog share/skin/s2/template/element/wiki/subnav-weblog
@@ -4599,7 +4604,7 @@ msgstr ""
 msgid "You cannot change is_system_created for an account after it has been created."
 msgstr ""
 
-#: lib/Socialtext/User/Default.pm
+#: lib/Socialtext/User/Default/Factory.pm
 #.  
 msgid "You cannot change the email address of a system-created user."
 msgstr ""
@@ -4609,7 +4614,7 @@ msgstr ""
 msgid "You cannot change the name of a system-created account."
 msgstr ""
 
-#: lib/Socialtext/User/Default.pm
+#: lib/Socialtext/User/Default/Factory.pm
 #.  
 msgid "You cannot change the name of a system-created user."
 msgstr ""
@@ -4722,6 +4727,11 @@ msgstr ""
 #: share/skin/s2/template/element/listview/actionbar
 #.  
 msgid "Your Watchlist"
+msgstr ""
+
+#: lib/Socialtext/WatchlistPlugin.pm
+#. (
+msgid "Your Watchlist in %1 is empty."
 msgstr ""
 
 #: share/skin/s2/template/email/email-address-confirmation-completed.html

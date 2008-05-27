@@ -73,6 +73,7 @@ test env properly and are not testing the test-workspace
 * [Test Case: Link Interface]
 * [Test Case: Nasty Double Dashes]
 * [Test Case: REST Workspace]
+* [Test Case: LDAP Deleted User]
 
 * [Test Case: Insert Menu]
 

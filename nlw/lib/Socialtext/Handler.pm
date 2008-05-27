@@ -54,6 +54,7 @@ sub authenticate {
         my $user = Socialtext::User->new( username => $credential )
             || Socialtext::User->new( user_id  => $credential );
         return undef unless $user;
+        return undef if $user->is_deleted();
         $request->connection->user($user->username);
         return $user;
     }

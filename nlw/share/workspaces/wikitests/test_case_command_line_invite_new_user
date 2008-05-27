@@ -26,7 +26,7 @@ Ticket inspiring this test case: {rt: 13214}.
 | st-logout |  |  |
 | st-force-confirmation | %%inu_email_1%% | inu_email_1 |
 | st-login | %%inu_email_1%% | inu_email_1 |
-| is_location_ok | /%%workspace%%/index.cgi |  |
+| get_location_ok | /%%workspace%%/index.cgi |  |
 | wait_for_text_present_ok | Dashboard: | 5000 |
 
 | *Comment* | items to verify manually in the confirmation email |  |

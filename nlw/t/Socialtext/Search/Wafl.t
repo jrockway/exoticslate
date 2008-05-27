@@ -29,24 +29,24 @@ __DATA__
 {search title:page}
 --- htmlre
 action=search;search_term=title%3Apage
-admin page six
 admin page five
 admin page four
 admin page three
-admin page two
 admin page one
+admin page two
+admin page six
 
 === {search <foobar> title:page}
 --- kwiki
 {search <foobar> title:page}
 --- htmlre
 foobar/index.cgi\?action=search;search_term=title%3Apage
-foobar page six
 foobar page five
 foobar page four
 foobar page three
-foobar page two
 foobar page one
+foobar page two
+foobar page six
 
 === {search-full title:admin}
 --- kwiki
@@ -61,25 +61,25 @@ foobar page one
 {search title:page workspaces:admin,foobar}
 --- htmlre
 action=search;search_term=title%3Apage%20workspaces%3Aadmin%2Cfoobar
-foobar page six
+admin page five
+admin page four
+admin page three
+admin page one
+admin page two
 admin page six
 foobar page five
-admin page five
 foobar page four
-admin page four
 foobar page three
-admin page three
-foobar page two
-admin page two
 foobar page one
-admin page one
+foobar page two
+foobar page six
 
 === {search-full title:admin workspaces:admin,foobar}
 --- kwiki
 {search-full title:page workspaces:admin,foobar}
 --- htmlre
-<!-- wiki: {include: foobar \[foobar page one\]} --></span>
 <!-- wiki: {include: \[admin page one\]} --></span>
+<!-- wiki: {include: foobar \[foobar page one\]} --></span>
 <!-- wiki: {search_full: title:page workspaces:admin,foobar}
 --></div><br /></div>
 

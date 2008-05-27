@@ -73,7 +73,8 @@ sub search {
             scope       => $self->cgi->scope
         );
     }
-    $self->result_set( $self->sorted_result_set( \%sortdir ) );
+    warn "# Not bothering to sort the result set.\n";
+    #$self->result_set( $self->sorted_result_set( \%sortdir ) );
 
     my $uri_escaped_search_term
         = $self->uri_escape( $search_term );
@@ -195,30 +196,41 @@ sub _new_search {
         $self->hub->current_user,
         sub { }, # FIXME: We'd rather message the user than ignore these.
         sub { }); # FIXME: We'd rather message the user than ignore these.
-    my ( %page_row, @attachment_rows, $parent_key );
-    foreach my $hit (@hits) {
-        $page_row{ $hit->composed_key } = $self->_make_page_row( $hit )
-            if $hit->isa('Socialtext::Search::PageHit');
-    }
-    foreach my $hit (@hits) {
-        if ($hit->isa('Socialtext::Search::AttachmentHit')) {
-            # we want to act on the parent page's key,
-            # rather than the attachment hit's key
-            # XXX: This needs a generalized function in the package that
-            # defines the key munging.
-            $hit->key =~ m/(.*)?\:/;
-            $parent_key = $hit->workspace_name . " " . $1;
-            $page_row{ $parent_key }
-                = $self->_make_page_row( $hit )
-                unless exists $page_row{ $parent_key };
 
-            push @{ $page_row{ $parent_key }->{attachments} },
-                $self->_make_attachment_row( $hit );
+    # Turn page/attachment hits into result rows.  When get an attachment hit
+    # we also implicitly add its page whether or not that page was in the
+    # original result list.  The attachment row is then hung off it's page's
+    # row.
+    my @results;
+    my %cache;   # Remember page rows, so we add attachments later.
+    foreach my $hit (@hits) {
+        if ( $hit->isa('Socialtext::Search::PageHit') ) {
+            my $key = $hit->composed_key;
+            next if exists $cache{$key};
+            $cache{$key} = $self->_make_page_row($hit);
+            push @results, $cache{$key};
+        }
+        elsif ( $hit->isa('Socialtext::Search::AttachmentHit') ) {
+            my $parent_key = _make_parent_page_key($hit);
+            unless (exists $cache{$parent_key}) {
+                $cache{$parent_key} = $self->_make_page_row($hit);
+                push @results, $cache{$parent_key};
+            }
+            push @{ $cache{$parent_key}->{attachments} },
+                $self->_make_attachment_row($hit);
         }
     }
 
     # Only add non-empty rows to the result_set.
-    return grep { keys %$_ } values %page_row;
+    return grep { keys %$_ } @results;
+}
+
+# XXX: This needs a generalized function in the package that
+# defines the key munging.
+sub _make_parent_page_key {
+    my $hit = shift;
+    $hit->key =~ m/(.*)?\:/;
+    return $hit->workspace_name . " " . $1;
 }
 
 sub _make_page_row {
@@ -324,7 +336,8 @@ sub get_result_set {
     my ( $self, %query ) = @_;
     my %sortdir = %{$self->sortdir};
     $self->search_for_term(%query);
-    return $self->sorted_result_set(\%sortdir);
+    return $self->result_set;
+    #return $self->sorted_result_set(\%sortdir);
 }
 
 sub write_result_set {

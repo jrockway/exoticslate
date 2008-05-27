@@ -502,7 +502,7 @@ msgstr "Aggiungi&nbsp;un&nbsp;tag"
 #: share/skin/s2/template/layout/edit_wikiwyg
 #.  
 msgid "Add&nbsp;tags..."
-msgstr ""
+msgstr "Aggiungi&nbsp;tag"
 
 #: share/skin/s2/template/element/settings/users_listall_section
 #.  
@@ -2242,7 +2242,7 @@ msgstr "Il logo deve essere un file in formato gif, jpeg o png"
 #: share/skin/s2/template/view/empty_watchlist
 #. (
 msgid "Look for <img border=\"0\" src=\"%1/images/st/pagetools/watch-hover.gif\"/> on a page you want to watch and then click on it to add the page to your Watchlist."
-msgstr ""
+msgstr "Cerca <img border=\"0\" src=\"%1/images/st/pagetools/watch-hover.gif\"/> su una pagina che vuoi tenere sotto controllo e cliccaci sopra per aggiungerla alla tua Watchlist."
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
@@ -4327,7 +4327,7 @@ msgstr "Cosa c'è di nuovo"
 #: lib/Socialtext/RecentChangesPlugin.pm
 #. (
 msgid "What's New in workspace %1"
-msgstr ""
+msgstr "Cosa c'è nello spazio di lavoro %1"
 
 #: share/skin/s2/template/element/wiki/subnav-dashboard share/skin/s2/template/element/wiki/subnav-default share/skin/s2/template/element/wiki/subnav-default share/skin/s2/template/element/wiki/subnav-weblog share/skin/s2/template/element/wiki/subnav-weblog
 #.  

@@ -9,6 +9,7 @@ use Net::LDAP;
 use Net::LDAP::LDIF;
 use POSIX qw(:sys_wait_h);
 use File::Path qw(mkpath rmtree);
+use File::Basename qw(dirname);
 use File::Spec;
 use Time::HiRes qw(sleep);
 use Test::Socialtext::Environment;
@@ -204,6 +205,12 @@ sub start {
     my $pid;
     unless ($pid = fork()) {
         die "fork: $!" unless defined $pid;
+
+        # make sure that the log directory exists
+        my $logdir = dirname($self->{logfile});
+        unless (-e $logdir) {
+            mkpath($logdir, 0, 0755) or die "cannot create log directory '$logdir'; $!";
+        }
 
         # set up logging; we run slapd in debug mode and it doesn't detach
         open STDERR, ">$self->{logfile}";

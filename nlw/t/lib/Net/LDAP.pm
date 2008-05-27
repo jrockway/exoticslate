@@ -43,9 +43,14 @@ sub new {
                 # auth, requiring authentication
                 my ($self, $user, %opts) = @_;
                 my $pass = $opts{'password'};
-                ( ($user && ($user eq $behaviour{'bind_credentials'}{'user'})) &&
-                  ($pass && ($pass eq $behaviour{'bind_credentials'}{'pass'}))
-                  ) 
+                if ($user) {
+                    # authenticated bind attempt
+                    return ($behaviour{'bind_credentials'}{$user} eq $pass)
+                        ? return Net::LDAP::Message->new(code=>LDAP_SUCCESS)
+                        : return Net::LDAP::Message->new(code=>LDAP_INVALID_CREDENTIALS);
+                }
+                # anonymous bind attempt
+                return $behaviour{'bind_credentials'}{'anonymous'}
                     ? return Net::LDAP::Message->new(code=>LDAP_SUCCESS)
                     : return Net::LDAP::Message->new(code=>LDAP_INVALID_CREDENTIALS);
                 } )
@@ -172,9 +177,12 @@ All connection attempts will fail.
 
 All bind attempts will fail.
 
-=item bind_credentials => { user => 'foo', pass => 'bar' }
+=item bind_credentials => { 'username' => 'password', 'user2' => 'pass2', ... }
 
-Bind attempts require specific credentials.
+Bind attempts require any one of the specified credentials.
+
+Use a username of "anonymous" to control whether or not anonymous binds
+succeed/fail.  e.g. anonymous=>1
 
 =item search_fail=>1
 
@@ -191,8 +199,7 @@ Example:
 
   Net::LDAP->set_mock_behaviour(
     bind_credentials => {
-      user => 'cn=First Last,dc=example,dc=com',
-      pass => 'foobar',
+      'cn=First Last,dc=example,dc=com' => 'foobar',
       },
     search_results => [
       { dn => 'cn=First Last,dc=example,dc=com',

@@ -152,8 +152,7 @@ bind_failure: {
 bind_requires_auth: {
     Net::LDAP->set_mock_behaviour(
         bind_credentials => {
-            user => 'doesnt',
-            pass => 'matter',
+            'requires' => 'authentication',
             },
         );
     clear_log();
@@ -197,8 +196,7 @@ bind_authenticated_ok: {
     my $bind_pass = 'abc123';
     Net::LDAP->set_mock_behaviour(
         bind_credentials => {
-            user => $bind_user,
-            pass => $bind_pass,
+            $bind_user => $bind_pass,
             },
         );
     clear_log();

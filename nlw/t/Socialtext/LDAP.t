@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use mocked 'Net::LDAP';
 use mocked 'Socialtext::Log', qw(:tests);
-use Test::Socialtext tests => 50;
+use Test::Socialtext tests => 58;
 use Test::MockObject::Extends;
 
 use_ok 'Socialtext::LDAP';
@@ -299,10 +299,16 @@ authentication_failure_to_connect: {
 }
 
 ###############################################################################
-# Authentication; auth failure
+# Authentication; auth failure (bad password)
 authentication_failure: {
+    my $bind_user = 'myDn';
+    my $bind_password = 'myPassword';
     Net::LDAP->set_mock_behaviour(
-        bind_fail => 1,
+        bind_credentials => {
+            anonymous  => 1,
+            $bind_user => $bind_password,
+            },
+        search_results => [ { dummy => 'user' } ],
         );
     clear_log();
 
@@ -312,15 +318,30 @@ authentication_failure: {
 
     # attempt to authenticate
     my %opts = (
-        user_id  => 'myDn',
-        password => 'myPassword',
+        user_id  => $bind_user,
+        password => 'this-is-the-wrong-password',
     );
     my $auth_ok = Socialtext::LDAP->authenticate(%opts);
     ok! $auth_ok, 'auth; failed to authenticate';
 
-    # VERIFY logs; want to make sure we failed for the right reason
+    # VERIFY logs; want to make sure we failed for the right reason, and on
+    # the right bind
     is logged_count(), 1, '... logged right number of reasons';
     next_log_like 'info', qr/authentication failed/, '... auth failure';
+
+    my $mock = Net::LDAP->mocked_object();
+    my ($self, $dn, %args);
+
+    $mock->called_pos_ok( 1, 'bind' );
+    ($self, $dn, %args) = $mock->call_args(1);
+    ok !$dn, '... initial bind anonymous';
+
+    $mock->called_pos_ok( 2, 'search' );
+
+    $mock->called_pos_ok( 3, 'bind' );
+    ($self, $dn, %args) = $mock->call_args(3);
+    is $dn, $opts{user_id}, '... correct bind dn for authentication';
+    is $args{password}, $opts{password}, '... correct bind password for authentication';
 }
 
 ###############################################################################
@@ -330,8 +351,8 @@ authentication_success: {
     my $bind_pass = 'myPassword';
     Net::LDAP->set_mock_behaviour(
         bind_credentials => {
-            user => $bind_user,
-            pass => $bind_pass,
+            anonymous  => 1,
+            $bind_user => $bind_pass,
             },
         search_results => [ { dummy => 'user' } ],
         );
@@ -348,12 +369,19 @@ authentication_success: {
     my $auth_ok = Socialtext::LDAP->authenticate(%opts);
     ok $auth_ok, 'authentication success';
 
-    # VERIFY logs; we should have searched first for the user, then bound
-    # w/user_id+password
+    # VERIFY logs; bind anonymously, then search for user, then bind
+    # w/user+pass
     my $mock = Net::LDAP->mocked_object();
-    $mock->called_pos_ok( 1, 'search' );
-    $mock->called_pos_ok( 2, 'bind' );
-    my ($self, $dn, %args) = $mock->call_args(2);
+    my ($self, $dn, %args);
+
+    $mock->called_pos_ok( 1, 'bind' );
+    ($self, $dn, %args) = $mock->call_args(1);
+    ok !$dn, '... initial bind anonymous';
+
+    $mock->called_pos_ok( 2, 'search' );
+
+    $mock->called_pos_ok( 3, 'bind' );
+    ($self, $dn, %args) = $mock->call_args(3);
     is $dn, $opts{user_id}, '... correct bind dn for authentication';
     is $args{password}, $opts{password}, '... correct bind password for authentication';
 }

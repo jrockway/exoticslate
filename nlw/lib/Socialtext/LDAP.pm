@@ -51,15 +51,8 @@ sub authenticate {
     my $user_id   = $opts{user_id};
     my $password  = $opts{password};
 
-    # get the config for this driver
-    my $config =
-        $driver_id
-        ? Socialtext::LDAP->config($driver_id)
-        : Socialtext::LDAP->default_config();
-    return unless $config;
-
-    # connect to the LDAP server using this config
-    my $ldap = _get_connection($config);
+    # get an LDAP connection
+    my $ldap = $class->new($driver_id);
     return unless $ldap;
 
     # attempt to authenticate the user against LDAP

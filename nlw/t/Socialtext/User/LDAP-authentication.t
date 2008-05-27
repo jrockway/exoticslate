@@ -4,7 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 use mocked 'Net::LDAP';
 use mocked 'Socialtext::Log', qw(:tests);
-use Test::Socialtext tests => 20;
+use Test::Socialtext tests => 24;
 
 # FIXTURE:  ldap_*
 #
@@ -65,8 +65,8 @@ ldap_auth_password_wrong: {
     Net::LDAP->set_mock_behaviour(
         search_results => [ $TEST_USERS[0] ],
         bind_credentials => {
-            user => $TEST_USERS[0]->{dn},
-            pass => $TEST_USERS[0]->{authPassword},
+            anonymous => 1,
+            $TEST_USERS[0]->{dn} => $TEST_USERS[0]->{authPassword},
             },
         );
     clear_log();
@@ -76,9 +76,16 @@ ldap_auth_password_wrong: {
 
     # VERIFY auth mocks...
     my $mock = Net::LDAP->mocked_object();
-    $mock->called_pos_ok( 1, 'search' );
-    $mock->called_pos_ok( 2, 'bind' );
-    my ($self, $dn, %opts) = $mock->call_args(2);
+    my ($self, $dn, %opts);
+
+    $mock->called_pos_ok( 1, 'bind' );
+    ($self, $dn, %opts) = $mock->call_args(1);
+    ok !$dn, '... initial bind is anonymous';
+
+    $mock->called_pos_ok( 2, 'search' );
+
+    $mock->called_pos_ok( 3, 'bind' );
+    ($self, $dn, %opts) = $mock->call_args(3);
     is $dn, $user->user_id(), 'LDAP auth; password mismatch used correct DN';
     is $opts{'password'}, 'bad', 'LDAP auth; password mismatch used correct password';
 
@@ -104,8 +111,8 @@ ldap_auth_password_ok: {
     Net::LDAP->set_mock_behaviour(
         search_results => [ $TEST_USERS[0] ],
         bind_credentials => {
-            user => $TEST_USERS[0]->{dn},
-            pass => $TEST_USERS[0]->{authPassword},
+            anonymous => 1,
+            $TEST_USERS[0]->{dn} => $TEST_USERS[0]->{authPassword},
             },
         );
 
@@ -115,9 +122,16 @@ ldap_auth_password_ok: {
 
     # VERIFY auth mocks...
     my $mock = Net::LDAP->mocked_object();
-    $mock->called_pos_ok( 1, 'search' );
-    $mock->called_pos_ok( 2, 'bind' );
-    my ($self, $dn, %opts) = $mock->call_args(2);
+    my ($self, $dn, %opts);
+
+    $mock->called_pos_ok( 1, 'bind' );
+    ($self, $dn, %opts) = $mock->call_args(1);
+    ok !$dn, '... initial bind is anonymous';
+
+    $mock->called_pos_ok( 2, 'search' );
+
+    $mock->called_pos_ok( 3, 'bind' );
+    ($self, $dn, %opts) = $mock->call_args(3);
     is $dn, $user->user_id(), 'LDAP Auth; password match used correct DN';
     is $opts{'password'}, $good_pass, 'LDAP auth; password match used correct password';
 

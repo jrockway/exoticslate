@@ -60,8 +60,7 @@ ldap_anonymous_bind: {
 instantiation_bind_requires_additional_auth: {
     Net::LDAP->set_mock_behaviour(
         bind_credentials => {
-            user => 'doesnt',
-            pass => 'matter',
+            'requires' => 'authentication',
             },
         );
     clear_log();

@@ -40,8 +40,7 @@ ldap_authenticated_bind: {
         search_results => [ $TEST_USERS[0] ],
         bind_credentials => {
             # matches credentials in 'ldap_authenticated' fixture
-            user => 'cn=First Last,dc=example,dc=com',
-            pass => 'abc123',
+            'cn=First Last,dc=example,dc=com' => 'abc123',
             },
         );
     clear_log();

@@ -8,15 +8,20 @@ Test set up:
 
 | comment | STARTING Test case: REST Workspace |  |
 | st-admin | remove-system-admin --username %%username%% | no longer has |
-| st-admin | give-accounts-admin --username %%username%% | now has |
 | set | wksp | w%%start_time%% |
 | set | account_id | 2 |
+
+| comment | Test case: REST Workspace POST by non-admin gets 401 |  |
+| post | /data/workspaces | Content-Type=application/json | { "name":"%%wksp%%", "title":"W%%start_time%%", "account_id":"%%account_id%%" } |
+| code-is | 401 |  |
+
+| st-admin | give-accounts-admin --username %%username%% | now has |
 
 | comment | Test case: REST Workspace GET non-existing workspace |  |
 | get | /data/workspaces/%%wksp%% |  |
 | code-is | 404 |  |
 
-| comment | HEAD non-existant workspace |  |
+| comment | HEAD non-existent workspace |  |
 | get | /data/workspaces/%%wksp%% |  |
 | code-is | 404 |  |
 
@@ -33,7 +38,7 @@ Test set up:
 | get | /data/workspaces/%%wksp%% | text/html |
 | code-is | 403 | User not authorized |
 
-| comment | GET existing workspace as json by unathorized user |  |
+| comment | GET existing workspace as json by unauthorized user |  |
 | get | /data/workspaces/%%wksp%% | application/json |
 | code-is | 403 | User not authorized |
 
@@ -75,6 +80,12 @@ Test set up:
 | code-is | 400 |  |
 | body-like | Workspace name must be between 3 and 30 characters long, and must contain only upper- or lower-case letters, numbers, underscores, and dashes |  |
 
+| comment | get list of all workspaces |  |
+| get | /data/workspaces | application/json |
+| code-is | 200 |
+| body-like | {"name":"test-data","title":"Canonical Test Data Set" |  |
+| body-like | {"name":"%%wksp%%","title":"W%%start_time%%" |  |
+
 ----
 
 These tests are from "Story: Add Backlink to IBM Lotus Connections via REST"<https://www2.socialtext.net/dev-tasks/index.cgi?story_add_backlink_to_ibm_lotus_connections_via_rest>.
@@ -92,7 +103,7 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"workspace_admin", "send_confirmation_invitation":0 } |
 | get | /data/workspaces/%%wksp%% | application/json |
 | code-is | 200 |  |
-| body-like | "customjs_uri":"/monkey.js" |
+| body-like | "customjs_uri":"/monkey.js" |  |
 | get | /%%wksp%%/index.cgi |  |
 | body-like | /monkey.js |  |
 
@@ -101,7 +112,7 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | code-is | 204 |  |
 | get | /data/workspaces/%%wksp%% | application/json |
 | code-is | 200 |  |
-| body-like | "customjs_uri":"/buddha.js" |
+| body-like | "customjs_uri":"/buddha.js" |  |
 | get | /%%wksp%%/index.cgi |  |
 | body-like | /buddha.js |  |
 
@@ -197,6 +208,7 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | st-admin | give-accounts-admin --username %%username%% | now has |
 | post | /data/workspaces | Content-Type=application/json | { "name":"deleteme%%wksp%%", "title":"deleteme%%start_time%%", "account_id":"%%account_id%%" } |
 | code-is | 201 |  |
+
 | st-admin | remove-accounts-admin --username %%username%% | no longer |
 
 | comment | Test case: REST Workspace delete ws as ws-admin |  |

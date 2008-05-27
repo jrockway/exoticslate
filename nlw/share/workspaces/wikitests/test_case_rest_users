@@ -18,16 +18,62 @@ Test set up:
 | code-is | 201 |  |
 | header-like | Location | /data/workspaces/%%wksp%% |
 
+| st-admin | remove-accounts-admin --username %%username%% | no longer has |
+| comment | Test case: REST Users Add an user to a workspace fails for non-admin |  |
+| post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"member", "send_confirmation_invitation":0 } |
+| code-is | 403 |  |
+
+| st-admin | give-accounts-admin --username %%username%% | now has |
+
 | comment | Test case: REST Users Add an admin user to a workspace |  |
 | post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"member", "send_confirmation_invitation":0 } |
 | code-is | 201 |  |
 
-| comment | Add a test user |  |
+| comment | Add a test user missing fields |  |
 | set | test_user | test_user%%start_time%%@example.com |  |
 | st-admin | create-user --email %%test_user%% --password d3vnu11l |  |
-| post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%test_user%%", "rolename":"member", "send_confirmation_invitation":0 } |
+| post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { } |
+| code-is | 400 |  |
+
+| comment | Add a test user |  |
+| post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%test_user%%", "rolename":"member", "send_confirmation_invitation":1 } |
 | code-is | 201 |  |
 
+| comment | Test case: REST Users don't check for timestamps or for user ID |  |
+| comment | get user html |  |
+| get | /data/users/%%test_user%% |  |
+| code-is | 200 |  |
+| body-like | <tr><td>email_address</td><td>%%test_user%%</td></tr> |  |
+| body-like | <tr><td>is_business_admin</td><td>0</td></tr> |  |
+| body-like | <tr><td>is_system_created</td><td>0</td></tr> |  |
+| body-like | <tr><td>username</td><td>%%test_user%%</td></tr> |  |
+| body-like | <tr><td>last_name</td><td></td></tr> |  |
+| body-like | <tr><td>created_by_user_id</td><td>1</td></tr> |  |
+| body-like | <tr><td>is_technical_admin</td><td>0</td></tr> |  |
+| body-like | <tr><td>email_address_at_import</td><td>%%test_user%%</td></tr> |  |
+| body-like | <tr><td>last_login_datetime</td><td>-infinity</td></tr> |  |
+| body-like | <tr><td>first_name</td><td></td></tr> |  |
+
+| comment | get user json |  |
+| get | /data/users/%%test_user%% | application/json |
+| code-is | 200 |  |
+| body-like | {"email_address":"%%test_user%%","is_business_admin":"0","is_system_created":"0","username":"%%test_user%%","last_name":"","created_by_user_id":"1","is_technical_admin":"0" |  |
+| body_like | "email_address_at_import":"%%test_user%%" |  |
+| body_like | "last_login_datetime":"-infinity" |  |
+
+| st-admin | remove-accounts-admin --username %%username%% | no longer |
+
+| comment | Test case: REST Users non-admin doesn't get info |  |
+| comment | get user html |  |
+| get | /data/users/%%test_user%% |  |
+| code-is | 404 |  |
+
+| comment | Test case: REST Users non-admin gets own info |  |
+| comment | get user html |  |
+| get | /data/users/%%username%% |  |
+| code-is | 200 |  |
+
+| st-admin | give-accounts-admin --username %%username%% | now has |
 | comment | Test case: REST Users Remove member as accounts-admin |
 | comment | remove the member |  |
 | delete | /data/workspaces/%%wksp%%/users/%%username%% |  |

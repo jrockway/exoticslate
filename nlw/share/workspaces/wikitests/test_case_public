@@ -9,6 +9,11 @@
 | open_ok | /%%workspace%%/?Announcements and Links |  |
 | wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
+
+| *Comment* | Test Case: Public. You have to wait for the wikiwyg area to appear before you Save or the page can go blank! |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
 
@@ -24,10 +29,15 @@
 | text_like | st-update | qr/\@hidden/ |
 
 | *Comment* | Verify guest can edit |  |
+| *Comment* | Test Case: Public. Wait for the wikiwyg area to appear before you Save |  |
+| wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
-| text_like | st-update | qr/by guest/ |
+| text_like | st-update | qr/by Guest User/ |
 
 | *Comment* | Test Case: Public Teardown |  |
 | st-admin | set-permissions --workspace %%workspace%% --permissions member-only |  |

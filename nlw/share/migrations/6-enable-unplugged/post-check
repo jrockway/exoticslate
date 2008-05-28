@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DB_USER=`st-config echo db_user`
-DB_SCHEMA=`st-config echo db_schema_name`
+DB_SCHEMA=`st-config echo db_name`
 
 COUNT=`psql -U $DB_USER -d $DB_SCHEMA -t -c 'SELECT COUNT(workspace_id) FROM "Workspace" WHERE enable_unplugged = false;' | grep "." | awk "{print $1}"`
 

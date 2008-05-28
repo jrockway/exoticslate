@@ -5,13 +5,18 @@ use warnings;
 
 use Test::Socialtext tests => 5;
 use Socialtext::Paths;
+use File::Path qw/mkpath/;
 fixtures("admin_no_pages");
 
-ST_DB_DUMP_DATA: {
-    my $rv = system("bin/st-db", "--dump-data");
-    is($rv, 0, "Ensure st-db --dump-data has return code of 0");
+# This is normally created by fdefs, but doesn't exist in the unit-test
+# environment
+my $dir = Socialtext::Paths::storage_directory("db-backups");
+mkpath $dir unless -d $dir;
 
-    my $dir = Socialtext::Paths::storage_directory("db-backups");
+ST_DB_DUMP_DATA: {
+    my $rv = system("bin/st-db", "dump");
+    is($rv, 0, "Ensure st-db dump has return code of 0");
+
     ok((-d $dir), "db-backups directory exists");
     $rv = opendir(my $fh, $dir);
     ok($rv, "Safely opened $dir");

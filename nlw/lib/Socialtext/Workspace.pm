@@ -19,6 +19,7 @@ use Class::Field 'field';
 use Cwd ();
 use DateTime;
 use DateTime::Format::Pg;
+use Digest::MD5;
 use Email::Address;
 use File::chdir;
 use File::Copy ();
@@ -1245,21 +1246,19 @@ sub _dump_permissions_to_yaml_file {
 
     my $file = Socialtext::File::catfile( $dir, $name . '-permissions.yaml' );
 
-    my $wrp_table = Socialtext::Schema->Load()->table('WorkspaceRolePermission');
-    my $current_perms =
-        $wrp_table->rows_where(
-            where => [ $wrp_table->column('workspace_id'),
-                       '=', $self->workspace_id ],
-        );
+    my $sth = sql_execute(<<EOT, $self->workspace_id);
+SELECT role_id, permission_id from "WorkspaceRolePermission"
+    WHERE workspace_id = ?
+EOT
+    my $rows = $sth->fetchall_arrayref;
 
     my @dump;
-    while ( my $wrp = $current_perms->next ) {
+    for my $r (@$rows) {
         push @dump, {
-            role_name       =>
-            Socialtext::Role->new( role_id => $wrp->select('role_id') )->name,
-            permission_name =>
-            Socialtext::Permission->new( permission_id => $wrp->select('permission_id') )->name,
-        };
+            role_name => Socialtext::Role->new( role_id => $r->[0] )->name,
+            permission_name => Socialtext::Permission->new( 
+                permission_id => $r->[1])->name,
+        }
     }
 
     _dump_yaml( $file, \@dump );

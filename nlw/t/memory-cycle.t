@@ -20,12 +20,6 @@ my $hub = new_hub('admin');
 
 {
     $hub->pages->new_from_name('FormattingTest')->to_html;
-
-    # Alzabo does create cycles between the schema and tables (and
-    # then tables and columns), but this does not matter because it is
-    # designed so that the schema, and therefore all the objects it
-    # contains, are singleton. They are loaded once and never released
-    # (that is the point of the Socialtext::Schema module).
     $hub->current_user(undef);
     $hub->current_workspace(undef);
 

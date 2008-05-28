@@ -6,14 +6,14 @@ cc    -c -o test.o test.c
 make: `test.o' is up to date.
 Algorithm::Diff
 
-Alzabo
-    Class::Factory::Util
-    DBI
-    Exception::Class
-        Class::Data::Inheritable
-        Devel::StackTrace
-    Params::Validate
-    Tie::IxHash
+alzabo
+    class::factory::util
+    dbi
+    exception::class
+        class::data::inheritable
+        devel::stacktrace
+    params::validate
+    tie::ixhash
 
 Apache::Constants
 

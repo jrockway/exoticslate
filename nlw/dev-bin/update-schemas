@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use Socialtext::Schema;
+use Socialtext::System qw/shell_run/;
+
+my $schema = Socialtext::Schema->new;
+my $schema_file = $schema->_schema_filename;
+$schema_file =~ s#.+/(etc/socialtext.+)#$1#;
+my $schema_name = $schema->schema_name;
+
+shell_run("pglist > $schema_file");
+
+print "Appendding the updated schema version to the schema file.\n";
+my $version = $schema->current_version;
+open(my $fh, ">>$schema_file") or die;
+print $fh <<EOT;
+
+DELETE FROM "System" WHERE field = '$schema_name-schema-version';
+INSERT INTO "System" VALUES ('$schema_name-schema-version', '$version');
+EOT
+close $fh or die "Can't write $schema_file: $!";
+
+shell_run("cp $FindBin::Bin/../etc/socialtext/db/* ~/.nlw/etc/socialtext/db");

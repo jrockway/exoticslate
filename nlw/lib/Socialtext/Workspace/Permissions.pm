@@ -136,7 +136,7 @@ EOSQL
         my $perms_to_keep = $sth->fetchall_arrayref->[0];
 
         # Delete the old permissions, and count how many we deleted
-        my $dbh = Socialtext::SQL::_dbh();
+        my $dbh = Socialtext::SQL::get_dbh();
         $sth = $dbh->prepare(<<EOSQL);
 DELETE FROM "WorkspaceRolePermission"
     WHERE workspace_id = ?

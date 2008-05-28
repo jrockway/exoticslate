@@ -3,8 +3,38 @@
 
 use strict;
 use warnings;
-use Socialtext::SQL qw( sql_convert_to_boolean sql_convert_from_boolean );
-use Test::Socialtext tests => 5;
+use Test::Socialtext qw/no_plan/;
+fixtures 'rdbms_clean';
+
+BEGIN {
+    use_ok 'Socialtext::Schema';
+    use_ok 'Socialtext::SQL', qw( 
+        sql_execute
+        sql_convert_to_boolean sql_convert_from_boolean 
+    );
+}
+
+sql_execute: {
+    my $sth;
+    sql_execute('CREATE TABLE foo (name text)');
+    $sth = sql_execute('SELECT * FROM foo');
+    is_deeply $sth->fetchall_arrayref, [], 'no data found in table';
+
+    sql_execute(q{INSERT INTO foo VALUES ('luke')});
+    $sth = sql_execute('SELECT * FROM foo');
+    is_deeply $sth->fetchall_arrayref, [ ['luke' ] ], 'data found in table';
+
+    { 
+        local $SIG{__WARN__} = sub { };
+        sql_execute('DROP TABLE foo');
+        eval { sql_execute('SELECT * FROM foo') };
+        ok $@, "table was deleted";
+    }
+}
+
+Transactions: {
+    ok 1;
+}
 
 SQL_CONVERT_TO_BOOLEAN: {
     my $value = 0;

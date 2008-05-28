@@ -7,7 +7,6 @@ use warnings;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 
-use Alzabo::Runtime::UniqueRowCache;
 use DateTime::Format::Pg;
 use DB_File;
 use Encode;
@@ -17,6 +16,7 @@ use MLDBM;
 use Socialtext;
 use Socialtext::AppConfig;
 use Socialtext::File;
+use Socialtext::SQL qw/get_dbh/;
 
 
 my %opts = (
@@ -125,7 +125,7 @@ sub update_user_data {
     # XXX - we seem to have a bunch of users that were imported at one
     # time (by looking through htpasswd.db) who are _not_ in users.db
     # - shocking!
-    my $dbh = Socialtext::Schema->LoadAndConnect()->driver()->handle();
+    my $dbh = get_dbh();
     $dbh->do( <<'EOF', {}, Socialtext::User->SystemUser()->user_id() );
 UPDATE "User"
    SET created_by_user_id = ?

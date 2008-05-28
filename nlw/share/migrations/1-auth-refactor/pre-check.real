@@ -2,7 +2,7 @@
 
 # N.B. Run this script as the instance user.
 
-DB=`st-config echo db_schema_name`
+DB=`st-config echo db_name`
 DB_USER=`st-config echo db_user`
 
 # check the schema of "User", if it's already changed, check for schema of

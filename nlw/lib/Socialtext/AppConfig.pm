@@ -186,7 +186,7 @@ sub _default_admin_script {
     return ( ( -x $script ) ? $script : "/usr/local/bin/st-admin" );
 }
 
-sub _default_db_schema_name {
+sub _default_db_name {
     return 'NLW' unless _startup_user_is_human_user();
 
     my $name = 'NLW_' . $StartupUser->name;
@@ -194,6 +194,8 @@ sub _default_db_schema_name {
 
     return $name;
 }
+
+sub _default_schema_name { 'socialtext' }
 
 sub _default_db_user {
     return ( _startup_user_is_human_user()
@@ -410,7 +412,10 @@ sub db_connect_params {
     $self = $self->instance()
         unless ref $self;
 
-    my %connect_params = ( db_schema_name => $self->db_schema_name() );
+    my %connect_params = ( 
+        db_name => $self->db_name(),
+        schema_name => $self->schema_name(),
+    );
 
     for my $field (qw( db_user db_password db_host db_port )) {
         next unless defined $self->$field();
@@ -962,15 +967,23 @@ Optional.
 
 =for code type => SCALAR_TYPE
 
-=head2 db_schema_name
+=head2 db_name
 
-The name of the schema in the DBMS to which we connect.
+The name of the database in the DBMS to which we connect.
 
 If the startup user was root, this defaults to "NLW". Otherwise, this
 defaults to "NLW_<username>_testing" under the test harness, and
 "NLW_<username>" otherwise.
 
-=for code default => _default_db_schema_name()
+=for code default => _default_db_name()
+
+=for code type => SCALAR_TYPE
+
+=head2 schema_name
+
+The name of the schema in the DBMS to which we connect.
+
+=for code default => _default_schema_name()
 
 =for code type => SCALAR_TYPE
 
@@ -1162,7 +1175,7 @@ Returns a list of valid configuration variable names.
 =head2 Socialtext::AppConfig->db_connect_params()
 
 Returns a hash of parameters for connecting to the DBMS suitable for
-use by Alzabo. The hash returned will always have a "db_schema_name"
+use by your code. The hash returned will always have a "db_name"
 key, the name of the schema to which we connect. It may also have any
 of "user", "password", "host", and "port" if these are set in the
 configuration object. If they are not set, the key is not present.

@@ -2,7 +2,9 @@
 set -e
 
 BASE=$(dirname $0)
-st-db-sync
+# We can no longer call st-db sync, as it will use the 
+# new post-alza-bo schema.
+#   st-db-sync
 $BASE/remove-ws-breadcrumbs
 
 exit 0;

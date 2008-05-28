@@ -38,7 +38,6 @@ for my $ws_name ( grep { -d "$data_dir/$_" } readdir $dh ) {
         wait;
     }
     else {
-        Socialtext::Schema->CheckDBH();
         purge_pages($ws_name);
         exit;
     }

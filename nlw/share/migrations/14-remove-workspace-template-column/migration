@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DB=`st-config echo db_schema_name`
+DB=`st-config echo db_name`
 DB_USER=`st-config echo db_user`
 COLUMN=workspace_template
 

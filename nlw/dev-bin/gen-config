@@ -292,7 +292,7 @@ sub _get_search_config_version {
 sub local_dirs {
     my $root_dir = shift;
 
-    my %dirs = map { ($_, File::Spec->catdir( $root_dir, $_ )) } qw( etc run lock root alzabo );
+    my %dirs = map { ($_, File::Spec->catdir( $root_dir, $_ )) } qw( etc run lock root );
 
     %dirs = (
         %dirs,

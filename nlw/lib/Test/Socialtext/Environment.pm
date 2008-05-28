@@ -10,7 +10,6 @@ use base 'Socialtext::Base';
 
 use Class::Field qw( field );
 use File::chdir;
-use File::Copy ();
 use File::Path;
 use Socialtext::Workspace;
 use Test::More;

@@ -9,11 +9,11 @@ use lib "$FindBin::Bin/../lib";
 
 use Socialtext::Permission;
 use Socialtext::Role;
-use Socialtext::Schema;
+use Socialtext::SQL qw/get_dbh/;
 use Socialtext::Workspace;
 
 
-my $dbh = Socialtext::Schema->LoadAndConnect()->driver()->handle();
+my $dbh = get_dbh();
 my $member_perms_sth = $dbh->prepare( <<'EOF' );
 SELECT wrp.permission_id
   FROM "WorkspaceRolePermission" AS wrp,

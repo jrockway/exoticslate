@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 15;
-fixtures( 'rdbms_clean' );
+fixtures( 'fresh' );
 
 use Socialtext::User;
 

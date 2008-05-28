@@ -9,7 +9,7 @@ use Class::Field qw( const field );
 use Socialtext::AppConfig;
 use Socialtext::Statistics qw( stat_call );
 use DateTime;
-use POSIX;
+# use POSIX;
 use Readonly;
 use Socialtext::Authz;
 use Socialtext::Permission 'ST_READ_PERM';

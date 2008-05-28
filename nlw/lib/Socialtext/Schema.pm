@@ -1,919 +1,357 @@
 # @COPYRIGHT@
 package Socialtext::Schema;
-
 use strict;
 use warnings;
-
-our $VERSION = '0.01';
-
-use Alzabo::Create;
-use Alzabo::Runtime;
+use File::Spec;
+use Socialtext::Paths;
 use Socialtext::AppConfig;
+use Socialtext::System qw/shell_run/;
+use Socialtext::SQL qw/sql_singlevalue sql_execute sql_begin_work 
+                       sql_commit sql_rollback/;
 
+=head1 NAME
 
-{
-    no warnings 'redefine';
+Socialtext::Schema - management of the database Schema
 
-    # We want to be able to load the schema without connecting it, but
-    # on the flipside we want to try to connect to the dbms
-    # transparently whenever we need to, without requiring the end
-    # user of our libraries to explicitly connect.
-    #
-    # This needs to be done at a fairly low level in order to catch
-    # the moment when we know we need a connection but do not have
-    # one. In the future, we may want to add some sort of hook to
-    # Alzabo that can be called when it detects an attempt to do
-    # something that needs to talk to the DBMS before
-    # Alzabo::Schema->connect() has been called.
-    #
-    # For now, this is the simplest solution, though it's a bit of a
-    # nasty hack.
-    sub Alzabo::Driver::_ensure_valid_dbh {
-        my $self = shift;
+=head1 SYNOPSIS
 
-        if ( ! $self->{dbh}
-             and $self->{schema}->name eq 'NLW' ) {
-            Socialtext::Schema->_Connect();
+  use Socialtext::Schema;
+
+  Socialtext::Schema->new->sync();
+
+=head1 DESCRIPTION
+
+This class provides the behaviour to create, dump and upgrade the database
+schema.  The schema is upgraded through a series of SQL patch files.
+
+=head1 Package Methods
+
+=head2 schema_dir()
+
+Returns the directory schemas should be found in.
+
+=cut
+
+sub schema_dir {
+    return $ENV{ST_SCHEMA_DIR} || File::Spec->catfile(
+        Socialtext::AppConfig->config_dir(), 'db',
+    );
+}
+
+=head1 Methods
+
+=head2 new()
+
+Create a new schema object.  Doesn't need any parameters.
+
+=cut
+
+sub new {
+    my $class = shift;
+    my $self = {
+        @_,
+    };
+    bless $self, $class;
+    return $self;
+}
+
+=head2 schema_name()
+
+Returns the name of the schema to modify.
+
+=cut
+
+sub schema_name {
+    my $self = shift;
+    my %params = $self->connect_params();
+    return $self->{schema_name} || $params{schema_name};
+}
+
+=head2 connect_params()
+
+Returns a hash of the parameters to connect to the specified schema.
+
+=cut
+
+sub connect_params {
+    my %params = Socialtext::AppConfig->db_connect_params();
+    $params{psql} = "psql -U $params{user} $params{db_name}";
+    return %params;
+}
+
+=head2 recreate()
+
+Dumps, drops, and then re-creates the schema.
+
+Optionally, you may pass in a list of key-value pairs as options.
+
+=head3 recreate() options:
+
+=over 4
+
+=item no_dump
+
+Don't do a database dump before dropping.  Useful for testing.
+
+=back
+
+=cut
+
+sub recreate {
+    my $self = shift;
+    my %opts = @_;
+
+    eval { $self->dump } unless $opts{no_dump};
+    $self->dropdb;
+    $self->createdb;
+    $self->_run_sql_file($self->_schema_filename);
+    $self->_add_required_data;
+}
+
+=head2 sync()
+
+Create or update the schema to the latest version.
+
+=cut
+
+sub sync {
+    my $self = shift;
+
+    eval { $self->createdb };
+    my $current_version = $self->current_version;
+    $self->_display("Current schema version is $current_version\n")
+        if $self->{verbose};
+    if ($current_version == 0) {
+        $self->_run_sql_file($self->_schema_filename);
+        $self->_add_required_data;
+        $self->_display("Set up fresh schema\n");
+    }
+    else {
+        my @scripts = $self->_update_scripts_from($current_version);
+        if (@scripts) {
+            eval { $self->dump };
+    
+            for my $s (@scripts) {
+                $self->_run_sql_file($s->{name});
+                $self->_set_schema_version($s->{to});
+            }
+        }
+        else {
+            $self->_display("No updates necessary.\n");
+            return;
         }
 
-        $self->{dbh} = $self->_dbi_connect( $self->{connect_params} )
-            if $$ != $self->{connect_pid};
+        print "\n";
+        # Double check that we're up-to-date
+        my $old_version = $current_version;
+        $current_version = $self->current_version;
+        if ($old_version == $current_version) {
+            $self->_display("No updates were successfully applied.\n");
+            return;
+        }
+
+        my $up_msg = "Updated from $old_version to $current_version.";
+        if ($self->_update_scripts_from($current_version)) {
+            $self->_display("Not all updates applied.  $up_msg\n");
+            return;
+        }
+        $self->_display("$up_msg  Schema is up-to-date.\n");
     }
 }
 
-my $Schema;
-sub Load {
-    unless ($Schema) {
-        my $create = SchemaObject();
-        $Schema = $create->runtime_clone;
+sub _add_required_data {
+    my $self = shift;
+    return unless $self->schema_name eq 'socialtext';
+    require Socialtext::Data;
 
-        # FIXME - This is a nasty hack that should be fixed by
-        # changing Alzabo so that it supports other ways of creating
-        # runtime schemas besides simply loading them from schema
-        # files.
-        $Schema->{driver} = Alzabo::Driver->new( rdbms => 'PostgreSQL',
-                                                 schema => $Schema );
-        $Schema->{rules} = Alzabo::RDBMSRules->new( rdbms => 'PostgreSQL' );
-        $Schema->{sql} = Alzabo::SQLMaker->load( rdbms => 'PostgreSQL' );
+    for my $c ( Socialtext::Data::Classes() ) {
+        eval "require $c";
+        die $@ if $@;
 
-        $Schema->prefetch_all_but_blobs();
-
-        $Schema->set_quote_identifiers(1);
+        if ($c->can('EnsureRequiredDataIsPresent')) {
+            $self->_display("Adding required data for $c\n") 
+                if $self->{verbose};
+            $c->EnsureRequiredDataIsPresent;
+        }
     }
-
-    return $Schema;
 }
 
-sub LoadAndConnect {
-    my $schema = Load();
+sub _update_scripts_from {
+    my $self = shift;
+    my $from_version = shift;
 
-    CheckDBH();
+    my $schema_dir = $self->schema_dir;
+    my $schema_name = $self->schema_name;
+    my @all_scripts = 
+        map { $_->{name} }
+        sort { $a->{from} <=> $b->{from} }
+        map { m/-(\d+)-to-\d+\.sql/; { name => $_, from => $1 } }
+        glob("$schema_dir/$schema_name-*-to-*.sql");
 
-    return $schema;
+
+    my @to_run;
+    for my $s (@all_scripts) {
+        next unless $s =~ m#/$schema_name-(\d+)-to-(\d+)\.sql$#;
+        my ($s_from, $s_to) = ($1, $2);
+        next if $s_from < $from_version;
+        push @to_run, {
+            name => $s,
+            from => $s_from,
+            to => $s_to,
+        };
+    }
+    return @to_run;
 }
 
-sub CheckDBH {
-    my $schema = Load();
+=head2 version()
 
-    _Connect()
-        unless $schema->driver()->handle()
-               and $schema->driver()->handle()->ping();
+Prints out the current schema version.
+
+=cut
+
+sub version {
+    my $self = shift;
+    my $version = $self->current_version;
+    my $schema = $self->schema_name;
+    $self->_display("Schema $schema version: $version\n");
 }
 
-sub _Connect {
-    my $schema = Load();
+=head2 current_version()
 
-    my %connect_params = Socialtext::AppConfig->db_connect_params();
-    for my $p ( keys %connect_params ) {
-        my $meth = "set_$p";
-        $schema->$meth( $connect_params{$p} );
-    }
+Returns the version of the schema currently used by the database.
 
-    # Leaving pg_server_prepare on causes strange random errors of the
-    # form 'prepared statement "dbdpg_3" does not exist' every 10-20
-    # requests. This feature only exists for Pg 8.0+, so it's not an
-    # issue with what's on our prod/staging systems at present anyway,
-    # but I have 8.0 locally (Dave).
-    $schema->connect( pg_server_prepare => 0,
-                      pg_enable_utf8    => 1,
-                    );
+=cut
+
+# If the "System" table exists, read the version out of that for our schema.
+# Otherwise: if a certain table exists, assume it is version 1
+# Otherwise: assume it is a fresh database, and return version 0
+sub current_version {
+    my $self = shift;
+    my %c = $self->connect_params();
+
+    my $version = 0;
+    my $schema_field = $self->schema_name . '-schema-version';
+    eval {
+        $version = sql_singlevalue(<<EOT, $schema_field);
+SELECT value FROM "System"
+    WHERE field = ?
+EOT
+    };
+    eval { sql_rollback() };
+    return $version if $version;
+
+    # If we couldn't find a version, check for a given SQL returning something
+    # to determine if this is a fresh database, or just one without a version
+    # yet.  The SQL we run is dependent on the schema being used.
+    # Subclasses of this class can provide their own check method
+    return 0 if $self->_is_fresh_database;
+    return 1;
 }
 
-sub SchemaObject {
-    my $schema = Alzabo::Create::Schema->new( name  => 'NLW',
-                                              rdbms => 'PostgreSQL',
-                                            );
+# This method allows us to do special things when migrating from systems
+# before this module was refactored.
+sub _is_fresh_database {
+    my $self = shift;
+    my $name = $self->schema_name;
 
-    # The package corresponding to the following table has been alzabnobified.
-    # If you change the schema below, you won't automagically get accessors
-    # for those columns. Please also alter the corresponding package.
-    {
-        my $table = $schema->make_table
-            ( name       => 'User',
-            );
-        $table->make_column
-            ( name           => 'user_id',
-              type           => 'INT8',
-              sequenced      => 1,
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'username',
-              type           => 'VARCHAR',
-              length         => 250,
-            );
-        $table->make_column
-            ( name           => 'email_address',
-              type           => 'VARCHAR',
-              length         => 250,
-            );
-        $table->make_column
-            ( name           => 'password',
-              type           => 'VARCHAR',
-              length         => 40,
-            );
-        $table->make_column
-            ( name           => 'first_name',
-              type           => 'VARCHAR',
-              default        => '',
-              default_is_raw => 0,
-              length         => 200,
-            );
-        $table->make_column
-            ( name           => 'last_name',
-              type           => 'VARCHAR',
-              default        => '',
-              default_is_raw => 0,
-              length         => 200,
-            );
-        $table->make_index
-            ( columns  => [ $schema->table( 'User' )->columns( 'username' ) ],
-              unique   => 1,
-              function => 'lower(username)',
-            );
-        $table->make_index
-            ( columns  => [ $schema->table( 'User' )->columns( 'email_address' ) ],
-              unique   => 1,
-              function => 'lower(email_address)',
-            );
+    if ($name eq 'socialtext') {
+        eval {
+            sql_execute(q{SELECT account_id FROM "Account" LIMIT 1});
+        };
+        return 0 if !$@;
     }
+    return 1;
+}
 
-    # The package corresponding to the following table has been alzabnobified.
-    # If you change the schema below, you won't automagically get accessors
-    # for those columns. Please also alter the corresponding package.
-    {
-        my $table = $schema->make_table
-            ( name       => 'UserId',
-            );
-        $table->make_column
-            ( name           => 'system_unique_id',
-              type           => 'INT8',
-              sequenced      => 1,
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'driver_key',
-              type           => 'VARCHAR',
-              length         => 250,
-            );
-        $table->make_column
-            ( name           => 'driver_unique_id',
-              type           => 'VARCHAR',
-              length         => 250,
-            );
-        $table->make_column
-            ( name           => 'driver_username',
-              type           => 'VARCHAR',
-              length         => 250,
-              nullable       => 1,
-            );
-        $table->make_index
-            (
-                columns => [
-                    $schema->table('UserId')
-                        ->columns( 'driver_key', 'driver_unique_id' )
-                ],
-                unique => 1,
-                function => 'driver_key, driver_unique_id',
+=head2 dump()
 
-            );
-    }
+Dumps out the database to a sql dump file.
 
-    # The package corresponding to the following table has been alzabnobified.
-    # If you change the schema below, you won't automagically get accessors
-    # for those columns. Please also alter the corresponding package.
-    {
-        my $table = $schema->make_table
-            ( name       => 'UserMetadata',
-            );
-        $table->make_column
-            ( name           => 'user_id',
-              type           => 'INT8',
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'creation_datetime',
-              type           => 'TIMESTAMPTZ',
-              default        => 'CURRENT_TIMESTAMP',
-              default_is_raw => 1,
-            );
-        $table->make_column
-            ( name           => 'last_login_datetime',
-              type           => 'TIMESTAMPTZ',
-              default        => '-infinity',
-            );
-        $table->make_column
-            ( name           => 'email_address_at_import',
-              type           => 'VARCHAR',
-              nullable       => 1,
-              length         => 250,
-            );
-        $table->make_column
-            ( name           => 'created_by_user_id',
-              type           => 'INT8',
-              nullable       => 1,
-            );
-        $table->make_column
-            ( name           => 'is_business_admin',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-        $table->make_column
-            ( name           => 'is_technical_admin',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-        $table->make_column
-            ( name           => 'is_system_created',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-        $table->make_index
-            ( columns  => [ $schema->table( 'UserMetadata' )->columns( 'user_id' ) ],
-              unique   => 1,
-            );
-    }
+=cut
 
-    # The package corresponding to the following table has been alzabnobified.
-    # If you change the schema below, you won't automagically get accessors
-    # for those columns. Please also alter the corresponding package.
-    {
-        my $table = $schema->make_table
-            ( name       => 'UserEmailConfirmation',
-            );
-        $table->make_column
-            ( name           => 'user_id',
-              type           => 'INT8',
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'sha1_hash',
-              type           => 'VARCHAR',
-              length         => 27,
-              comment        => 'An SHA1 hash, base64 encoded',
-            );
-        $table->make_column
-            ( name           => 'expiration_datetime',
-              type           => 'TIMESTAMPTZ',
-              default        => '-infinity',
-            );
-        $table->make_column
-            ( name           => 'is_password_change',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-        $table->make_index
-            ( columns  => [ $table->columns( 'sha1_hash' ) ],
-              unique   => 1,
-            );
-    }
+sub dump {
+    my $self    = shift;
+    my %c = $self->connect_params();
+    my $time    = time;
+    my $dir     = Socialtext::Paths::storage_directory("db-backups");
+    my $file    = Socialtext::File::catfile($dir, "$c{db_name}-dump.$time.sql");
 
-    # The package corresponding to the following table has been alzabnobified.
-    # If you change the schema below, you won't automagically get accessors
-    # for those columns. Please also alter the corresponding package.
-    {
-        my $table = $schema->make_table
-            ( name       => 'Workspace',
-            );
-        $table->make_column
-            ( name           => 'workspace_id',
-              type           => 'INT8',
-              sequenced      => 1,
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'name',
-              type           => 'VARCHAR',
-              length         => 30,
-            );
-        $table->make_column
-            ( name           => 'title',
-              type           => 'TEXT',
-            );
-        $table->make_column
-            ( name           => 'logo_uri',
-              type           => 'TEXT',
-              default        => '',
-            );
-        $table->make_column
-            ( name           => 'homepage_weblog',
-              type           => 'TEXT',
-              default        => '',
-            );
-        $table->make_column
-            ( name           => 'email_addresses_are_hidden',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-        $table->make_column
-            ( name           => 'unmasked_email_domain',
-              type           => 'VARCHAR',
-              default        => '',
-              length         => 250,
-            );
-        $table->make_column
-            ( name           => 'prefers_incoming_html_email',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-        $table->make_column
-            ( name           => 'incoming_email_placement',
-              type           => 'VARCHAR',
-              default        => 'bottom',
-              length         => 10,
-              comment        => 'One of \'top\', \'bottom\', or \'replace\'',
-            );
-        $table->make_column
-            ( name           => 'allows_html_wafl',
-              type           => 'BOOLEAN',
-              default        => 't',
-            );
-        $table->make_column
-            ( name           => 'email_notify_is_enabled',
-              type           => 'BOOLEAN',
-              default        => 't',
-            );
-        $table->make_column
-            ( name           => 'sort_weblogs_by_create',
-              type           => 'BOOLEAN',
-              default        => 'f',
-              comment        => 'The defualt is to sort by last update datetime',
-            );
-        $table->make_column
-            ( name           => 'external_links_open_new_window',
-              type           => 'BOOLEAN',
-              default        => 't',
-            );
-        $table->make_column
-            ( name           => 'basic_search_only',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-        $table->make_column
-            ( name           => 'enable_unplugged',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-        $table->make_column
-            ( name           => 'skin_name',
-              type           => 'VARCHAR',
-              default        => 's2',
-              length         => 30,
-            );
-        $table->make_column
-            ( name           => 'custom_title_label',
-              type           => 'VARCHAR',
-              default        => '',
-              length         => 100,
-            );
-        $table->make_column
-            ( name           => 'header_logo_link_uri',
-              type           => 'VARCHAR',
-              default        => 'http://www.socialtext.com/',
-              length         => 100,
-            );
-        $table->make_column
-            ( name           => 'show_welcome_message_below_logo',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-        $table->make_column
-            ( name           => 'show_title_below_logo',
-              type           => 'BOOLEAN',
-              default        => 't',
-            );
-        $table->make_column
-            ( name           => 'comment_form_note_top',
-              type           => 'TEXT',
-              default        => '',
-            );
-        $table->make_column
-            ( name           => 'comment_form_note_bottom',
-              type           => 'TEXT',
-              default        => '',
-            );
-        $table->make_column
-            ( name           => 'comment_form_window_height',
-              type           => 'INT8',
-              default        => '200',
-            );
-        $table->make_column
-            ( name           => 'page_title_prefix',
-              type           => 'VARCHAR',
-              length         => 100,
-              default        => '',
-            );
-        $table->make_column
-            ( name           => 'email_notification_from_address',
-              type           => 'VARCHAR',
-              length         => 100,
-              default        => 'noreply@socialtext.com',
-            );
-        $table->make_column
-            ( name           => 'email_weblog_dot_address',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-         $table->make_column
-            ( name           => 'comment_by_email',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-        $table->make_column
-            ( name           => 'homepage_is_dashboard',
-              type           => 'BOOLEAN',
-              default        => 't',
-            );
-        $table->make_column
-            ( name           => 'creation_datetime',
-              type           => 'TIMESTAMPTZ',
-              default        => 'CURRENT_TIMESTAMP',
-              default_is_raw => 1,
-            );
-        $table->make_column
-            ( name           => 'account_id',
-              type           => 'INT8',
-            );
-        $table->make_column
-            ( name           => 'created_by_user_id',
-              type           => 'INT8',
-            );
-        $table->make_column
-            ( name           => 'restrict_invitation_to_search',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-        $table->make_column
-            ( name           => 'invitation_filter',
-              type           => 'VARCHAR',
-              length         => 100,
-              nullable       => 1,
-            );
-        $table->make_column
-            ( name           => 'invitation_template',
-              type           => 'VARCHAR',
-              length         => 30,
-              default        => 'st',
-            );
-        $table->make_column
-            ( name           => 'customjs_uri',
-              type           => 'TEXT',
-              default         => '',
-            );
-        $table->make_column
-            ( name           => 'customjs_name',
-              type           => 'TEXT',
-              default         => '',
-            );
-        $table->make_column
-            ( name           => 'no_max_image_size',
-              type           => 'BOOLEAN',
-              default         => 'false',
-            );
-        $table->make_column
-            ( name           => 'cascade_css',
-              type           => 'BOOLEAN',
-              default         => 't',
-            );
-        $table->make_column
-            ( name           => 'uploaded_skin',
-              type           => 'BOOLEAN',
-              default         => 'f',
-            );
-        $table->make_index
-            ( columns  => [ $schema->table( 'Workspace' )->columns( 'name' ) ],
-              unique   => 1,
-              function => 'lower(name)',
-            );
-    }
+    my @parms = (
+        'pg_dump',
+        '-C',
+        '-D',
+        '-U' => $c{user},
+        '-f' => $file,
+    );
+    push( @parms, '--password' => $c{password} )  if $c{password};
+    push( @parms, '--host'     => $c{host} )      if $c{host};
+    push( @parms, $c{db_name} );
 
-    # The package corresponding to the following table has been alzabnobified.
-    # If you change the schema below, you won't automagically get accessors
-    # for those columns. Please also alter the corresponding package.
-    {
-        my $table = $schema->make_table
-            ( name       => 'WorkspacePingURI',
-            );
-        $table->make_column
-            ( name           => 'workspace_id',
-              type           => 'INT8',
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'uri',
-              type           => 'VARCHAR',
-              length         => 250,
-              primary_key    => 1,
-            );
-    }
+    $self->_db_shell_run( join ' ', @parms );
+    $self->_display("Dumped data to $file\n");
+}
 
-    # The package corresponding to the following table has been alzabnobified.
-    # If you change the schema below, you won't automagically get accessors
-    # for those columns. Please also alter the corresponding package.
-    {
-        my $table = $schema->make_table
-            ( name          => 'Watchlist',
-            );
-        $table->make_column
-            ( name          => 'workspace_id',
-              type          => 'INT8',
-              primary_key   => 1,
-            );
-        $table->make_column
-            ( name          => 'user_id',
-              type          => 'INT8',
-              primary_key   => 1,
-            );
-        $table->make_column
-            ( name          => 'page_text_id',
-              type          => 'VARCHAR',
-              length        => 255,
-              primary_key   => 1,
-            );
-    }
+sub _display {
+    my $self = shift;
+    my $msg = shift;
 
-    {
-        my $table = $schema->make_table
-            ( name       => 'WorkspaceCommentFormCustomField',
-            );
-        $table->make_column
-            ( name           => 'workspace_id',
-              type           => 'INT8',
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'field_name',
-              type           => 'VARCHAR',
-              length         => 250,
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'field_order',
-              type           => 'INT8',
-            );
-    }
+    print $self->schema_name . ": $msg";
+}
 
-    # The package corresponding to the following table has been alzabnobified.
-    # If you change the schema below, you won't automagically get accessors
-    # for those columns. Please also alter the corresponding package.
-    {
-        my $table = $schema->make_table
-            ( name       => 'Account',
-            );
-        $table->make_column
-            ( name           => 'account_id',
-              type           => 'INT8',
-              sequenced      => 1,
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'name',
-              type           => 'VARCHAR',
-              length         => 250,
-            );
-        $table->make_column
-            ( name           => 'is_system_created',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-        $table->make_index
-            ( columns  => [ $schema->table( 'Account' )->columns( 'name' ) ],
-              unique   => 1,
-            );
-    }
+sub _run_sql_file {
+    my $self = shift;
+    my $file = shift;
 
-    # The package corresponding to the following table has been alzabnobified.
-    # If you change the schema below, you won't automagically get accessors
-    # for those columns. Please also alter the corresponding package.
-    {
-        my $table = $schema->make_table
-            ( name       => 'Permission',
-            );
-        $table->make_column
-            ( name           => 'permission_id',
-              type           => 'INTEGER',
-              sequenced      => 1,
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'name',
-              type           => 'VARCHAR',
-              length         => 50,
-            );
-        $table->make_index
-            ( columns  => [ $schema->table( 'Permission' )->columns( 'name' ) ],
-              unique   => 1,
-            );
-    }
+    my %c = $self->connect_params();
+    $self->_db_shell_run("$c{psql} -e -f $file");
+}
 
-    # The package corresponding to the following table has been alzabnobified.
-    # If you change the schema below, you won't automagically get accessors
-    # for those columns. Please also alter the corresponding package.
-    {
-        my $table = $schema->make_table
-            ( name       => 'Role',
-            );
-        $table->make_column
-            ( name           => 'role_id',
-              type           => 'INTEGER',
-              sequenced      => 1,
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'name',
-              type           => 'VARCHAR',
-              length         => 20,
-            );
-        $table->make_column
-            ( name           => 'used_as_default',
-              type           => 'BOOLEAN',
-              default        => 'f',
-            );
-        $table->make_index
-            ( columns  => [ $schema->table( 'Role' )->columns( 'name' ) ],
-              unique   => 1,
-            );
-    }
+sub _set_schema_version {
+    my $self = shift;
+    my $new_version = shift;
 
-    {
-        my $table = $schema->make_table
-            ( name       => 'UserWorkspaceRole',
-              comment    => 'Defines a user as having a given role for a workspace.',
-            );
-        $table->make_column
-            ( name           => 'user_id',
-              type           => 'INT8',
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'workspace_id',
-              type           => 'INT8',
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'role_id',
-              type           => 'INTEGER',
-            );
-        $table->make_column
-            ( name           => 'is_selected',
-              type           => 'BOOLEAN',
-              default        => 't',
-            );
-    }
+    # ideally, this would happen in the same transaction as the SQL patch
+    my $schema_field = $self->schema_name . '-schema-version';
+    sql_begin_work();
+    sql_execute('DELETE FROM "System" WHERE field = ?', $schema_field);
+    sql_execute('INSERT INTO "System" VALUES (?,?)', 
+        $schema_field, $new_version);
+    sql_commit();
+}
 
-    # The package corresponding to the following table has been alzabnobified.
-    # If you change the schema below, you won't automagically get accessors
-    # for those columns. Please also alter the corresponding package.
-    {
-        my $table = $schema->make_table
-            ( name       => 'WorkspaceBreadcrumb',
-              comment    => 'Defines a user as having a given role for a workspace.',
-            );
-        $table->make_column
-            ( name           => 'user_id',
-              type           => 'INT8',
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'workspace_id',
-              type           => 'INT8',
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'timestamp',
-              type           => 'TIMESTAMPTZ',
-              default        => 'CURRENT_TIMESTAMP',
-              default_is_raw => 1,
-            );
-    }
 
-    {
-        my $table = $schema->make_table
-            ( name       => 'WorkspaceRolePermission',
-              comment    => 'Defines what permissions each role has for a workspace',
-            );
-        $table->make_column
-            ( name           => 'workspace_id',
-              type           => 'INT8',
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'role_id',
-              type           => 'INTEGER',
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'permission_id',
-              type           => 'INTEGER',
-              primary_key    => 1,
-            );
-    }
+sub _schema_filename {
+    my $self = shift;
+    my $schema_file = File::Spec->catfile(
+        schema_dir(), $self->schema_name . '-schema.sql',
+    );
+    return $schema_file;
+}
 
-    {
-        my $table = $schema->make_table
-            ( name       => 'sessions',
-            );
-        $table->make_column
-            ( name           => 'id',
-              type           => 'CHAR',
-              length         => 32,
-              primary_key    => 1,
-            );
-        $table->make_column
-            ( name           => 'a_session',
-              type           => 'TEXT',
-            );
-        $table->make_column
-            ( name           => 'last_updated',
-              type           => 'TIMESTAMPTZ',
-            );
-    }
-    {
-        my $table = $schema->make_table(
-            name        => 'search_sets', );
-        $table->make_column(
-            name        => 'search_set_id',
-            type        => 'INT8',
-            sequenced   => 1,
-            primary_key => 1, );
-        $table->make_column(
-            name        => 'name',
-            type        => 'VARCHAR',
-            length      => 40, );
-        $table->make_column(
-            name        => 'owner_user_id',
-            type        => 'INT8', );
-        $table->make_index (
-            columns => [
-                $schema->table('search_sets')
-                    ->columns( 'owner_user_id', 'name' )
-            ],
-            unique => 1,
-            function => 'owner_user_id, lower(name)',);
-    }
-    {
-        my $table = $schema->make_table(
-            name        => 'search_set_workspaces', );
-        $table->make_column(
-            name        => 'search_set_id',
-            type        => 'INT8', );
-        $table->make_column(
-            name        => 'workspace_id',
-            type        => 'INT8', );
-        $table->make_index (
-            columns => [
-                $schema->table('search_set_workspaces')
-                    ->columns( 'search_set_id', 'workspace_id' )
-            ],
-            unique => 1,
-            function => 'search_set_id, workspace_id', );
-    }
+sub createdb {
+    my $self = shift;
+    my %c = $self->connect_params();
+    $self->_db_shell_run("createdb $c{db_name}");
+}
 
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'UserId' )->columns( 'system_unique_id' ) ],
-              columns_to   => [ $schema->table( 'UserWorkspaceRole' )->columns( 'user_id' ) ],
-              cardinality  => ['1', 'n'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'UserId' )->columns( 'system_unique_id' ) ],
-              columns_to   => [ $schema->table( 'WorkspaceBreadcrumb' )->columns( 'user_id' ) ],
-              cardinality  => ['1', 'n'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'UserId' )->columns( 'system_unique_id' ) ],
-              columns_to   => [ $schema->table( 'UserMetadata' )->columns( 'user_id' ) ],
-              cardinality  => ['1', '1'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'UserId' )->columns( 'system_unique_id' ) ],
-              columns_to   => [ $schema->table( 'UserEmailConfirmation' )->columns( 'user_id' ) ],
-              cardinality  => ['1', '1'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'UserId' )->columns( 'system_unique_id' ) ],
-              columns_to   => [ $schema->table( 'Workspace' )->columns( 'created_by_user_id' ) ],
-              cardinality  => ['1', 'n'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-            #$schema->add_relationship
-            #( columns_from => [ $schema->table( 'UserId' )->columns( 'system_unique_id' ) ],
-            #columns_to   => [ $schema->table( 'UserMetadata' )->columns( 'created_by_user_id' ) ],
-            #cardinality  => ['1', 'n'],
-            #from_is_dependent => 0,
-            #to_is_dependent   => 0,
-            #);
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'Workspace' )->columns( 'workspace_id' ) ],
-              columns_to   => [ $schema->table( 'UserWorkspaceRole' )->columns( 'workspace_id' ) ],
-              cardinality  => ['1', 'n'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'Workspace' )->columns( 'workspace_id' ) ],
-              columns_to   => [ $schema->table( 'WorkspaceBreadcrumb' )->columns( 'workspace_id' ) ],
-              cardinality  => ['1', 'n'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'Workspace' )->columns( 'workspace_id' ) ],
-              columns_to   => [ $schema->table( 'WorkspaceRolePermission' )->columns( 'workspace_id' ) ],
-              cardinality  => ['1', 'n'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'Workspace' )->columns( 'account_id' ) ],
-              columns_to   => [ $schema->table( 'Account' )->columns( 'account_id' ) ],
-              cardinality  => ['n', '1'],
-              from_is_dependent => 1,
-              to_is_dependent   => 0,
-            );
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'Workspace' )->columns( 'workspace_id' ) ],
-              columns_to   => [ $schema->table( 'WorkspacePingURI' )->columns( 'workspace_id' ) ],
-              cardinality  => ['1', 'n'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'Workspace' )->columns( 'workspace_id' ) ],
-              columns_to   => [ $schema->table( 'WorkspaceCommentFormCustomField' )->columns( 'workspace_id' ) ],
-              cardinality  => ['1', 'n'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'Permission' )->columns( 'permission_id' ) ],
-              columns_to   => [ $schema->table( 'WorkspaceRolePermission' )->columns( 'permission_id' ) ],
-              cardinality  => ['1', 'n'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'Role' )->columns( 'role_id' ) ],
-              columns_to   => [ $schema->table( 'UserWorkspaceRole' )->columns( 'role_id' ) ],
-              cardinality  => ['1', 'n'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-    $schema->add_relationship
-            ( columns_from => [ $schema->table( 'Role' )->columns( 'role_id' ) ],
-              columns_to   => [ $schema->table( 'WorkspaceRolePermission' )->columns( 'role_id' ) ],
-              cardinality  => ['1', 'n'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-    $schema->add_relationship
-            ( columns_from  => [
-                $schema->table( 'UserId' )->columns( 'system_unique_id' ) ],
-              columns_to    => [
-                $schema->table( 'Watchlist' )->columns('user_id') ],
-              cardinality   => ['1', 'n'],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
-    $schema->add_relationship
-            ( columns_from => [
-                  $schema->table('Workspace')->columns('workspace_id') ],
-              columns_to => [
-                  $schema->table('Watchlist')->columns('workspace_id') ],
-              cardinality       => [ '1', 'n' ],
-              from_is_dependent => 0,
-              to_is_dependent   => 1,
-            );
+sub dropdb {
+    my $self = shift;
+    my %c = $self->connect_params();
+    sleep 2;
+    eval {
+        $self->_db_shell_run("dropdb $c{db_name}");
+    };
+    warn "Error dropping: $@" if $@;
+}
 
-    return $schema;
+sub _log_file { Socialtext::Paths::log_directory() . '/st-db.log' }
+
+sub _db_shell_run {
+    my $self = shift;
+    my $command = shift;
+    my $log_file = _log_file();
+    local $Socialtext::System::SILENT_RUN = !$self->{verbose};
+    shell_run($command . " >> $log_file 2>&1");
 }
 
 1;
@@ -922,61 +360,22 @@ __END__
 
 =head1 NAME
 
-Socialtext::Schema - Loads an Alzabo::Runtime::Schema object and connects it to the DBMS
+Socialtext::Schema - management of the database Schema
 
 =head1 SYNOPSIS
 
   use Socialtext::Schema;
 
-  my $schema = Socialtext::Schema->Load();
+  # From command line:
+  Socialtext::Schema::Run();
 
-  Socialtext::Schema->CheckDBH();
+  # Recreate the database
+  Socialtext::Schema->new->recreate();
 
 =head1 DESCRIPTION
 
-This module provides some methods to load the Alzabo schema object and
-make sure it is connected to the DBMS. If a class which uses the
-schema tries to perform an operation that requires a DBMS connection,
-it will transparently connect to the DBMS if necessary.
-
-=head1 METHODS
-
-This module provides the following methods:
-
-=over 4
-
-=item Load()
-
-This retrieves the current C<Alzabo::Runtime::Schema> object. The
-returned schema may not be connected to the DBMS.
-
-=item LoadAndConnect()
-
-This retrieves the current C<Alzabo::Runtime::Schema> object and makes
-sure it is connected to the DBMS before returning it.
-
-=item CheckDBH()
-
-This ensure that the schema object is connected the DBMS. Calling this
-causes a query, so it should not be called too often. Under mod_perl,
-calling it once per request is a good way to ensure that the database
-connection has not gone stale. Outside of a persistent process, there
-is no need to call this, just call C<LoadAndConnect()> to get a schema
-object with a valid database connection.
-
-=item SchemaObject()
-
-Returns a C<Alzabo::Create::Schema> object for the schema. Use this to
-generate DDL SQL.
-
-=back
-
-=head1 AUTHOR
-
-Socialtext, Inc., <code@socialtext.com>
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2005-2006 Socialtext, Inc., All Rights Reserved.
+This class provides the behaviour to create, dump and upgrade the database
+schema.  The schema is upgraded through a series of SQL patch files.
 
 =cut
+

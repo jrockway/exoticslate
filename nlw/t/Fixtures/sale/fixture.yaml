@@ -1,5 +1,5 @@
 fixtures:
-  - alzabo
+  - db
 
 workspaces:
   sale:

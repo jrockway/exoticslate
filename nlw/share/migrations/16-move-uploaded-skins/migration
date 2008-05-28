@@ -11,7 +11,7 @@ $MIG_DIR/add-column/$SCRIPT_NAME Workspace uploaded_skin boolean "'f'"
 
 function run_sql () {
     echo $1;
-    psql -U `st-config echo db_user` -d `st-config echo db_schema_name` -t -c "$1"
+    psql -U `st-config echo db_user` -d `st-config echo db_name` -t -c "$1"
 }
 
 rm -rf $CODE_BASE/images/widgets

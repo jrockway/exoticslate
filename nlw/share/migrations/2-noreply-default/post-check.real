@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-DB=`st-config echo db_schema_name`
+DB=`st-config echo db_name`
 DB_USER=`st-config echo db_user`
 
 empty=`psql -U $DB_USER -d $DB -t -c "SELECT COUNT(1) FROM \"Workspace\" WHERE email_notification_from_address = ''" | awk '{print $1}'`

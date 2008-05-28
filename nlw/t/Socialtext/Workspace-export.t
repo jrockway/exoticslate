@@ -65,10 +65,11 @@ Export_permissions_dumped: {
     ok( -f $users_file, 'permissions data yaml dump exists' );
 
     my $perm_dump = YAML::LoadFile($users_file);
-    ok( Socialtext::Role->new( name => $perm_dump->[0]{role_name} ),
-        'valid role name in first dumped perm' );
-    ok( Socialtext::Permission->new( name => $perm_dump->[0]{permission_name} ),
-        'valid permission name in first dumped perm' );
+    my $p = $perm_dump->[0];
+    ok( Socialtext::Role->new( name => $p->{role_name} ),
+        "valid role name in first dumped perm ($p->{role_name})" );
+    ok( Socialtext::Permission->new( name => $p->{permission_name} ),
+        "valid permission name in first dumped perm ($p->{permission_name})" );
 }
 
 Export_tarball_format: {

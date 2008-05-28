@@ -1,6 +1,6 @@
 #!/bin/sh
 
-OLDDB=`st-config echo db_schema_name`
+OLDDB=`st-config echo db_name`
 NEWDB="${OLDDB}_reimport"
 PGUSER=`st-config echo db_user`
 MIGDIR=`dirname $0`
@@ -9,7 +9,7 @@ MIGDIR=`dirname $0`
 $MIGDIR/summarize-db $OLDDB $PGUSER > /tmp/$OLDDB-before-$$
 
 # Make a backup
-su - www-data -c 'st-db --dump-data'
+su - www-data -c 'st-db dump'
 
 # Create a new temporary database
 su - postgres -c "dropdb -e $NEWDB" 2> /dev/null

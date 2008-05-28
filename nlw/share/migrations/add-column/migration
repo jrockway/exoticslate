@@ -5,7 +5,7 @@ COLUMN=$2
 TYPE=$3
 DEFAULT=$4
 
-DB=`st-config echo db_schema_name`
+DB=`st-config echo db_name`
 DB_USER=`st-config echo db_user`
 
 SQL="ALTER TABLE \"$TABLE\" ADD COLUMN \"$COLUMN\" $TYPE"

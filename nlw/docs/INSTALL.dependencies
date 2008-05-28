@@ -42,15 +42,6 @@ from Dapper.  The CPAN modules won't ask lots of questions, mostly
 you will just be prompted if as to whether or not you want to install
 dependencies of other packages.  Always select yes.
 
-The only module which asks you any questions that you should pay
-attention to is Alzabo.  Pick /var/lib/alzabo as the Alzabo root,
-unless you need it in another location.  If so, you'll need to
-update nlw.conf as well.  Choose no to MySQL support (unless you
-want MySQL support) and make sure to choose yes to Postgresql
-support.  It's safe to not run the tests against the Postgres DB,
-so skip the tests unless you have Postgres running and a user setup
-to use.
-
 == CPAN dependencies that fail ==
 
 Not all the CPAN modules will pass their tests.

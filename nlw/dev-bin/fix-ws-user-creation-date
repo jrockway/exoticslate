@@ -12,7 +12,7 @@ use DateTime::Format::Pg;
 use Fcntl qw( O_RDONLY );
 use Getopt::Long;
 use MLDBM;
-use Socialtext::Schema;
+use Socialtext::SQL qw/get_dbh/;
 use Socialtext::User;
 
 
@@ -63,7 +63,7 @@ sub update_workspaces {
     my @workspace_names = 
         grep { ! $workspaces_db{$_}{create_time} } keys %workspaces_db;
 
-    my $dbh = Socialtext::Schema->LoadAndConnect()->driver()->handle();
+    my $dbh = get_dbh();
     my $sql = 'UPDATE "Workspace" SET creation_datetime = ? WHERE name IN (';
     $sql .= join ', ', ('?') x @workspace_names;
     $sql .= ')';

@@ -66,11 +66,6 @@ sudo ./configure --socialtext-open=1 --apache-proxy=0 --hostname=yourhost.com --
 You will have to answer a few questions:
 
 Install these missing dependencies from CPAN? YES
-Alzabo root?  /var/lib/alzabo
-Do you want to use the MySQL driver?  NO
-Do you want to use the PostgreSQL driver? YES
-Do tests with Postgres RDBMS?   NO
-
 
 5) Setting up Postgres.  This step takes about 5 minutes.
 

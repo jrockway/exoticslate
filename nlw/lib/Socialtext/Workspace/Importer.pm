@@ -12,6 +12,7 @@ use Readonly;
 use Socialtext::SQL qw(sql_commit sql_execute sql_begin_work sql_rollback );
 use Socialtext::Validate qw( validate FILE_TYPE BOOLEAN_TYPE SCALAR_TYPE );
 use Socialtext::Workspace;
+use Socialtext::Exceptions qw/rethrow_exception/;
 use Socialtext::Search::AbstractFactory;
 use Socialtext::Log qw(st_log);
 use Socialtext::Timer;
@@ -224,12 +225,12 @@ sub _set_permissions {
         sql_begin_work();
 
         sql_execute(
-            'delete from "WorkspaceRolePermission" where workspace_id = ?',
+            'DELETE FROM "WorkspaceRolePermission" WHERE workspace_id = ?',
             $self->{workspace}->workspace_id,
         );
 
         my $sql =
-            'insert into "WorkspaceRolePermission" (workspace_id, role_id, permission_id) values (?,?,?)';
+            'INSERT INTO "WorkspaceRolePermission" (workspace_id, role_id, permission_id) VALUES (?,?,?)';
         for my $p (@$perms) {
             sql_execute(
                 $sql,

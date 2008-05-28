@@ -2,7 +2,7 @@
 
 COLUMN='workspace_template'
 
-DB=`st-config echo db_schema_name`
+DB=`st-config echo db_name`
 DB_USER=`st-config echo db_user`
 
 output=$(psql -U $DB_USER -d $DB -t -c '\d "Workspace"' | grep $COLUMN)

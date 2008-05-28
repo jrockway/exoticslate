@@ -275,7 +275,7 @@ role.
 =item Socialtext::Role->All()
 
 Returns a cursor for all the accounts in the system, ordered by name.
-See L<Socialtext::AlzaboWrapper> for more details on this method.
+See L<Socialtext::MultiCursor> for more details on this method.
 
 =item Socialtext::Role->Count()
 

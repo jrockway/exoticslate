@@ -14,6 +14,9 @@ use File::Slurp qw(slurp write_file);
 use File::Spec;
 use Socialtext::ApacheDaemon;
 use Socialtext::Build qw( get_build_setting );
+use File::Path qw/mkpath rmtree/;
+use FindBin;
+use Socialtext::Schema;
 
 my $DefaultUsername = 'devnull1@socialtext.com';
 
@@ -69,33 +72,35 @@ sub _generate_base_config {
 
     my $env               = $self->env;
 
-    if (!-e 't/tmp/base-config-generated') {
-        my $testing = $ENV{HARNESS_ACTIVE} ? '--testing' : '';
-        my $gen_config = $env->nlw_dir . '/dev-bin/gen-config';
-        my $apache_proxy    = get_build_setting('apache-proxy');
-        my $socialtext_open = get_build_setting('socialtext-open');
+    my $testing = $ENV{HARNESS_ACTIVE} ? '--testing' : '';
+    my $gen_config = $env->nlw_dir . '/dev-bin/gen-config';
+    my $apache_proxy    = get_build_setting('apache-proxy');
+    my $socialtext_open = get_build_setting('socialtext-open');
 
-        _system_or_die(
-            $gen_config,
-            '--quiet',
-            '--root',           $env->root_dir,
-            '--ports-start-at', $env->ports_start_at,
-            '--apache-proxy=' . $apache_proxy,
-            '--socialtext-open=' . $socialtext_open,
-            '--dev=0',    # Don't create the files in ~/.nlw
-            $testing,
-        );
-        if (-d ('t/tmp')) {
-            open(my $fh, ">t/tmp/base-config-generated") or die;
-            print $fh scalar(localtime), "\n";
-            close $fh or die;
-        }
-    }
+    _system_or_die(
+        $gen_config,
+        '--quiet',
+        '--root',           $env->root_dir,
+        '--ports-start-at', $env->ports_start_at,
+        '--apache-proxy=' . $apache_proxy,
+        '--socialtext-open=' . $socialtext_open,
+        '--dev=0',    # Don't create the files in ~/.nlw
+        $testing,
+    );
+
+    # Put the schemas in place
+    my $schema_dir = $env->root_dir . '/etc/socialtext/db';
+    rmtree $schema_dir;
+    mkpath $schema_dir;
+    _system_or_die("cp " . $env->nlw_dir . "/etc/socialtext/db/* $schema_dir");
+
+    # Need to disconnect from the database before we re-create it
+    require Socialtext::SQL;
+    Socialtext::SQL::get_dbh()->disconnect();
 
     local $ENV{ST_TEST_SKIP_DB_DUMP} = 1;
-    my $st_db      = $env->nlw_dir . '/bin/st-db';
-    _system_or_die( $st_db, '--recreate',      '--quiet' );
-    _system_or_die( $st_db, '--required-data', '--quiet' );
+    Socialtext::Schema->new->recreate(no_dump => 1);
+    Socialtext::SQL::get_dbh()->disconnect();
 
     $BaseConfigGenerated = 1;
 }
@@ -130,7 +135,6 @@ sub is_current {
 sub encache {
     my $self = shift;
 
-    $self->_encache_database;
     $self->_encache_filesystem;
 }
 
@@ -146,27 +150,12 @@ sub _encache_filesystem {
           . join ' ', @contents );
 }
 
-sub _encache_database {
-    my $self = shift;
-
-    foreach my $cache_item (@{$self->config->{cache}}) {
-        if ($cache_item eq 'USERS') {
-            my $file = $self->db_cache_file;
-
-            require Socialtext::AppConfig;
-            _system_or_die(
-                'pg_dump -c ' . Socialtext::AppConfig->db_schema_name . " > $file" );
-        }
-    }
-}
-
 sub decache {
     my $self = shift;
 
     # Note that order is important here.  We'll need AppConfig to be able to
     # decache the database.
     $self->_decache_filesystem;
-    $self->_decache_database;
 }
 
 sub _decache_filesystem {
@@ -176,18 +165,6 @@ sub _decache_filesystem {
 
     local $CWD = $self->env->root_dir or die;
     _system_or_die('tar xzf ' . $self->fs_cache_file);
-}
-
-sub _decache_database {
-    my $self = shift;
-
-    my $file = $self->db_cache_file;
-    if (-f $file) {
-        require Socialtext::AppConfig;
-        _system_or_die( "psql -q -o /tmp/psql.out.$> "
-              . Socialtext::AppConfig->db_schema_name
-              . " -f $file > /tmp/psql.notice.$> 2>&1 " );
-    }
 }
 
 sub generate {

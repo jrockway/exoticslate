@@ -12,15 +12,20 @@ use Sys::Hostname ();
 # system where we know what results to expect. On a system that's
 # misconfigured we can easily get entirely bogus results.
 my %KnownHosts = (
-    'houseabsolute.urth.org' => {
-        hostname => 'houseabsolute',
-        domain   => 'urth.org',
-        fqdn     => 'houseabsolute.urth.org',
-    },
     'talc.socialtext.net' => {
         hostname => 'talc',
         domain   => 'socialtext.net',
         fqdn     => 'talc.socialtext.net',
+    },
+    'topaz.socialtext.net' => {
+        hostname => 'topaz',
+        domain   => 'socialtext.net',
+        fqdn     => 'topaz.socialtext.net',
+    },
+    'galena.socialtext.net' => {
+        hostname => 'galena',
+        domain   => 'socialtext.net',
+        fqdn     => 'galena.socialtext.net',
     },
 );
 

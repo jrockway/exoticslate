@@ -5,7 +5,6 @@ use warnings;
 
 use Carp ();
 use File::Path ();
-use Socialtext::AlzaboWrapper;
 use Socialtext::Workspace;
 use Socialtext::File;
 
@@ -14,8 +13,6 @@ init() if $ENV{MOD_PERL};
 
 sub init {
     $SIG{USR2} ||= sub { Carp::cluck('Caught SIGUSR2') };
-
-    Socialtext::AlzaboWrapper->UseCache();
 
     _create_and_chown_logo_root_dir();
 }
@@ -50,8 +47,6 @@ Loading this module does the following:
 
 * set up a USR2 signal handler that calls C<Carp::cluck()> per
 http://perl.apache.org/docs/1.0/guide/debug.html#Using_the_Perl_Trace
-
-* Call C<< Socialtext::AlzaboWrapper->UseCache() >>
 
 * Chowns all the files and dirs under C<<
   Socialtext::Workspace->LogoRoot() >> to be owned by the Apache

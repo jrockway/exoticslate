@@ -6,14 +6,16 @@ use Test::More;
 use Test::Exception;
 
 BEGIN {
-    unless ( $ENV{ST_RUN_WIKIFIXTURE_TESTS} ) {
-        plan skip_all => 'Skip wikifixture tests';
+    my $test_it = $ENV{ST_RUN_WIKIFIXTURE_TESTS};
+    unless ( $test_it ) {
+        plan tests => 1;
         # These tests are somewhat fragile, and can be broken by
         # enhancements to the Selenium fixture.  So lets keep them
         # from bothering Socialtext developers, but keep them around
         # for when we need to hack the fixture.
     }
     use_ok 'Socialtext::WikiObject::TestPlan';
+    exit unless $test_it;
 }
 
 plan tests => 401;

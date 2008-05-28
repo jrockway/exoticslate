@@ -78,7 +78,7 @@ Once you've got the keyring set up, installing dependencies is simple:
     Reading package lists... Done
     Building dependency tree... Done
     The following extra packages will be installed:
-      libalzabo-perl libapache-reload-perl libapache-request-perl
+      libapache-reload-perl libapache-request-perl
       ...
       ...
     0 upgraded, 121 newly installed, 0 to remove and 1 not upgraded.

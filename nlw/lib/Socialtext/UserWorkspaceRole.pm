@@ -5,11 +5,7 @@ use strict;
 use warnings;
 
 use Class::Field 'field';
-use Socialtext::SQL qw(
-    sql_execute
-    sql_commit sql_rollback sql_begin_work
-    sql_convert_to_boolean sql_convert_from_boolean
-);
+use Socialtext::SQL qw( sql_execute sql_convert_to_boolean );
 use Socialtext::Exceptions qw( rethrow_exception );
 our $VERSION = '0.02';
 

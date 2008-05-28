@@ -53,7 +53,7 @@ sub get_fk_constraints {
 }
 
 sub get_dbh {
-    my $schema   = Socialtext::AppConfig->db_schema_name();
+    my $schema   = Socialtext::AppConfig->db_name();
     my $user     = Socialtext::AppConfig->db_user();
     my $password = Socialtext::AppConfig->db_password();
     my $db_host  = Socialtext::AppConfig->db_host();

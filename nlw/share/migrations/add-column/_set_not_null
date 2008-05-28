@@ -4,7 +4,7 @@ TABLE=$1
 COLUMN=$2
 DEFAULT=$3
 
-DB=`st-config echo db_schema_name`
+DB=`st-config echo db_name`
 DB_USER=`st-config echo db_user`
 
 SQL_REMOVE_NULL="UPDATE \"$TABLE\" SET \"$COLUMN\" = $DEFAULT WHERE \"$COLUMN\" IS NULL;"

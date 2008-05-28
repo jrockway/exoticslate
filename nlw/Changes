@@ -52,7 +52,7 @@ Release notes, 2.20.1.0  March 2008
 
   Infrastructure improvements for supporting javascript plugins
 
-  More database refactoring - removing Alzabo framework
+  More database refactoring - removing Alz-abo framework
 
   Major refactoring of HTML, JavaScript and CSS skin architecture
 
@@ -202,8 +202,8 @@ Release notes, 2.17.3.0  Nov 2007
 
   [FEATURES]
 
-  Socialtext has been using an Object Relational Mapping tool called Alzabo since about version 1.9.  This tool has proven to be somewhat slow and sometimes hard to work with.  Rather than stick with the tool and try and fix it, we've decided to transition ourselves away from it and away from a general purpose ORM altogether.  
-  This release introduces a new class, Socialtext::SQL and removes the Alzabo dependency from these classes:
+  Socialtext has been using an Object Relational Mapping tool called Alz-abo since about version 1.9.  This tool has proven to be somewhat slow and sometimes hard to work with.  Rather than stick with the tool and try and fix it, we've decided to transition ourselves away from it and away from a general purpose ORM altogether.  
+  This release introduces a new class, Socialtext::SQL and removes the Alz-abo dependency from these classes:
 * Socialtext::Account
 * Socialtext::Permission
 * Socialtext::Role

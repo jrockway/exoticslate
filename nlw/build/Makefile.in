@@ -78,6 +78,7 @@ STORAGE_DIR      = $(DATA_ROOT_DIR)/storage
 CACHE_DIR        = $(PREFIX)@CACHEDIR@
 CRON_DIR         = $(PREFIX)/etc/cron.d
 SPOOL_DIR        = $(PREFIX)@SPOOLDIR@
+SCHEMA_DIR	 = $(PREFIX)/etc/socialtext/db
 INSTALLED_DIRS   = $(INIT_D_DIR)       \
                    $(ST_INSTALL_DIR)   \
                    $(DATA_ROOT_DIR)    \
@@ -86,8 +87,9 @@ INSTALLED_DIRS   = $(INIT_D_DIR)       \
 		   $(CACHE_DIR)        \
 		   $(CRON_DIR)         \
                    $(PREFIX)@PIDDIR@   \
-		   $(SPOOL_DIR) \
-		   $(SPOOL_DIR)/ceq \
+		   $(SPOOL_DIR)        \
+		   $(SCHEMA_DIR)       \
+		   $(SPOOL_DIR)/ceq    \
                    $(PREFIX)@HTTPD_LOCKDIR@ \
                    $(PREFIX)@HTTPD_LOGDIR@  \
                    $(PREFIX)@HTTPD_PIDDIR@  \
@@ -209,9 +211,11 @@ TARG=$(subst -config,,$@)
 $(CONF_TARGETS): install-ok
 	$(GENCONFIG) --sitewide --target=$(TARG)
 
+install-schema-files: install-ok
+	$(INSTALL_ROOT) -m 644 etc/socialtext/db/* $(SCHEMA_DIR)
+
 schema: install-ok
-	$(SUDO) -u $(ST_USER) $(STDB) --sync
-	$(SUDO) -u $(ST_USER) $(STDB) --required-data
+	$(SUDO) -u $(ST_USER) $(STDB) sync
 	$(DB_LOGIN_TEST) template1 NLW
 
 install-files: install-ok         \
@@ -219,6 +223,7 @@ install-files: install-ok         \
                favicon            \
                install-base       \
 	       mecab              \
+	       install-schema-files \
                $(INSTALL_FILE_TARGETS)
 
 DIR=$(subst install-,,$@)
@@ -401,6 +406,7 @@ critic:
         install-post-install     \
 	run-post-install         \
 	install-cron-jobs        \
+	install-schema-files     \
         upgrade                  \
         stop-start               \
         stop-services            \

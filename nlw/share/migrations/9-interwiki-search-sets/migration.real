@@ -1,12 +1,9 @@
 #!/bin/sh -e
 
-DB=`st-config echo db_schema_name`
+DB=`st-config echo db_name`
 DB_USER=`st-config echo db_user`
 
 # run sql to convert the tables
 
 script_dir=`dirname $0`
 psql -U $DB_USER -d $DB -f $script_dir/migration.sql
-
-# run st-db --sync to pull in other schema changes
-

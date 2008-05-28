@@ -187,7 +187,7 @@ Return a flattened array of all elements from all iterables, applying
 
 =head2 $cursor->all_rows()
 
-Alias for all() - harkens back to Alzabo Cursor origins.
+Alias for all() - harkens back to Alz-abo Cursor origins.
 
 =head2 $cursor->reset()
 

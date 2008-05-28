@@ -129,4 +129,17 @@ sub aliases_file {
     }
 }
 
+=head2 log_directory()
+
+Returns the location that log files should be stored at.
+
+=cut
+
+sub log_directory {
+    if (Socialtext::AppConfig::_startup_user_is_human_user()) {
+        return Socialtext::AppConfig::_user_root() . '/log'
+    }
+    return '/var/log';
+}
+
 1;

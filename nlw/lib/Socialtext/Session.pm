@@ -8,7 +8,7 @@ our $VERSION = '0.01';
 
 use Apache::Session::Wrapper 0.28;
 use Data::Dumper ();
-use Socialtext::Schema;
+use Socialtext::SQL qw/get_dbh/;
 
 Apache::Session::Wrapper->RegisterFlexClass(
     type => 'store',
@@ -38,9 +38,8 @@ sub _wrapper {
             lock        => 'Null',
             generate    => 'MD5',
             serialize   => 'Base64',
-            handle      => Socialtext::Schema->LoadAndConnect()->driver->handle,
-            # handle has AutoCommit on by default
-            commit      => 0,
+            handle      => get_dbh(),
+            commit      => 1,
         );
 
     return $_[0]->{wrapper};

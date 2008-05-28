@@ -1,283 +1,69 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 # @COPYRIGHT@
-
 use strict;
 use warnings;
-
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-
-use File::Basename ();
-use File::Copy     ();
-use File::Path     ();
-use File::Spec;
+use lib ($ENV{ST_SRC_BASE} || '') ."/current/socialtext-reports/lib";
 use Getopt::Long;
-use List::Util qw(first);
-use Socialtext::AppConfig;
+use YAML qw/LoadFile/;
 use Socialtext::Schema;
-use User::pwent;
-use Socialtext::Paths;
-use Socialtext::File;
 
+my %opts = (
+    'schema' => '*',
+);
+GetOptions( \%opts,
+    'verbose',
+    'schema|s=s',
+) or usage();
+my $command = shift @ARGV;
+usage("No command supplied!") unless $command;
+my %valid_command = map { $_ => 1 } 
+    qw/sync recreate dump createdb dropdb version/;
+usage("Invalid command: $command\n") unless $valid_command{$command};
 
-my @ORIGINAL_ARGV = @ARGV;
-my @Commands = qw( sync_sql sync recreate ddl dump_data required_data );
-
-my %opts = ( maxretries => 8 );
-GetOptions(
-    'help'  => \$opts{help},
-    'quiet' => \$opts{quiet},
-    'retrynum:i' => \$opts{retrynum},
-    'maxretries:i' => \$opts{maxretries},
-    ( map { $_->[0] => \$opts{ $_->[1] } }
-      map { my $dash = $_; $dash =~ s/_/-/g; [ $dash, $_ ] }
-      @Commands ),
-) or die "\n";
-
-usage() if $opts{help};
-
-sub show {
-    if ( !$opts{quiet} ) {
-        for ( @_ ) {
-            print STDERR $_, "\n";
-        }
-    }
+if ($command eq 'recreate' and !$opts{force}) {
+    usage("recreate option requires --force - it is dangerous!");
 }
 
-my $command = first { $opts{$_} && $_ } @Commands;
+my $schema_dir = Socialtext::Schema::schema_dir();
+my @schemas = sort {$a cmp $b} glob("$schema_dir/$opts{schema}.yaml");
+usage("No schemas found in $schema_dir!\n") unless @schemas;
 
-{
-    no strict 'refs';
-    unless ( defined &{$command} ) {
-        usage();
-        exit;
-    }
-}
+for my $schema_config_file (@schemas) {
+    my $schema_config = LoadFile($schema_config_file);
+    
+    my $class = delete $schema_config->{class};
+    eval "require $class";
+    die $@ if $@;
 
-my $schema = Socialtext::Schema::SchemaObject();
-
-{
-    no strict 'refs';
-    _repeat_ignoring_other_access( sub { &{$command}($schema) } );
-}
-
-sub recreate {
-    my $schema = shift;
-
-    my %connect = _connect_params();
-
-    show("\nRecreating schema as $connect{schema_name}");
-
-    dump_data($schema);
-
-    if ( _schema_exists_in_backend($schema) ) {
-        _repeat_ignoring_other_access( sub { $schema->drop(%connect) } );
-    }
-
-    $schema->set_instantiated(0);
-
-    # shuts up notice messages from postgres
-    local $SIG{__WARN__} = sub { };
-    _repeat_ignoring_other_access( sub { $schema->create(%connect) } );
-}
-
-sub _repeat_ignoring_other_access {
-    my $sub = shift;
-
-    # Try to run the command.
-    eval { $sub->() };
-    my $e = $@;
-    return unless $e;
-    die $e if $e and $e !~ /database "\w+" is being accessed/;
-
-    # If we got this far, it's time to retry.
-    my $attempt = $opts{retrynum} || 1;
-    chomp( my $message = ref($e) ? $e->error : $e );
-    show("Got error: $message, attempt $attempt");
-
-    # Launch a retry
-    if ( $attempt < $opts{maxretries} ) {
-        # Sleep here, before we retry anything.  This is to avoid errors like: 
-        #       source database "template1" is being accessed by other users
-        # We also do a reexec to retry, but sleeping throttles the whole action a bit
-        # to prevent these kinds of things in the first place.
-        sleep 10;
-
-        # We exec() on retry, rather than just loop, because Alzabo carries
-        # around some global state which we need to eradicate.  exec()'ing
-        # make sure we start clean.
-        exec( $0, @ORIGINAL_ARGV, "--retrynum", $attempt + 1 );
-    }
-    else {
-        die $e;
-    }
-}
-
-sub sync_sql {
-    my $schema = shift;
-
-    my %connect = _connect_params();
-
-    my @sync_sql = $schema->sync_backend_sql(%connect);
-    unless (@sync_sql) {
-        show( "\nNo changes needed to sync $connect{schema_name}" );
-        return;
-    }
-
-    show( @sync_sql );
-}
-
-sub sync {
-    my $schema = shift;
-
-    my %connect = _connect_params();
-
-    my @sync_sql = $schema->sync_backend_sql(%connect);
-    unless (@sync_sql) {
-        show( "\nNo changes needed to sync $connect{schema_name}" );
-        return;
-    }
-
-    dump_data($schema);
-
-    show( "\nSyncing schema to $connect{schema_name}" );
-
-    show( @sync_sql );
-
-    local $SIG{__WARN__} = sub { };
-    $schema->sync_backend(%connect);
-
-    # This works around a bug in the Alzabo schema reverse engineering
-    # code where it does not realize it needs to create the sequence when it
-    # alters the table.  N.B.: We're just ignoring any possible errors because
-    # we know the sequence might already exist.  This will all get moved into an
-    # Alzabo patch eventually.  We hope.
-    eval {
-        my $driver = $schema->driver;
-        $driver->connect(%connect);
-        $driver->do( sql => 'CREATE SEQUENCE "User___user_id"' );
-    };
-}
-
-sub ddl {
-    my $schema = shift;
-
-    show("\nSchema SQL:");
-
-    $schema->set_instantiated(0);
-    show( $schema->make_sql() );
-}
-
-sub required_data {
-    require Socialtext::Data;
-
-    for my $c ( Socialtext::Data::Classes() ) {
-        eval "require $c";
-        die $@ if $@;
-
-        $c->EnsureRequiredDataIsPresent
-            if $c->can('EnsureRequiredDataIsPresent');
-    }
-}
-
-# Dump the DB to an SQL file in the storage_directory().  There is a
-# corresponding post-install script (share/post-install/XX-cleanup-db-backups)
-# which deletes old DB backups.
-sub dump_data {
-    my $schema = shift;
-
-    return unless _schema_exists_in_backend($schema);
-    return if $ENV{ST_TEST_SKIP_DB_DUMP};
-
-    my %connect = _connect_params();
-    my $time    = time;
-    my $dir     = Socialtext::Paths::storage_directory("db-backups");
-    my $file    = Socialtext::File::catfile($dir, "$connect{schema_name}-dump.$time.sql");
-
-    Socialtext::File::ensure_directory($dir);
-
-    my @parms = (
-        'pg_dump',
-        '-C',
-        '-D',
-        '-U' => $connect{user},
-        '-f' => $file,
+    my $schema = $class->new(
+        %$schema_config,
+        verbose => delete $opts{verbose},
     );
-    push( @parms, '--password' => $connect{password} )  if $connect{password};
-    push( @parms, '--host'     => $connect{host} )      if $connect{host};
-    push( @parms, $connect{schema_name} );
-
-    system( @parms ) and die "Cannot call @parms";
-
-    show( "Dumped data to $file" );
+    $schema->$command();
 }
+exit;
 
-# XXX This is very close to Socialtext::AppConfig::db_connect_params()
-# Let's try to refactor and hoist.
-sub _connect_params {
-    my %connect = ( schema_name => 'NLW' );
-
-    for my $k (qw( db_schema_name db_user db_password db_host db_port )) {
-        next unless Socialtext::AppConfig->can($k);
-
-        my $connect_k = $k;
-        $connect_k =~ s/^db_//;
-
-        $connect{$connect_k} = Socialtext::AppConfig->$k();
-    }
-
-    return %connect;
-}
-
-sub _schema_exists_in_backend {
-    my $schema = shift;
-
-    my %connect = _connect_params();
-    my $name    = delete $connect{schema_name};
-
-    return grep { $_ eq $name } $schema->driver->schemas(%connect);
-}
 
 sub usage {
-    my $msg = shift;
+    my $msg = shift || '';
+    warn "$msg\n\n" if $msg;
+    die <<EOT;
+USAGE: $0 <command>
 
-    show($msg) if $msg;
+Runs the command against all configured schemas.
 
-    show( <<"EOF" );
+Commands:
+  sync     - Sync the database schema
+  dump     - Dump the database to a SQL file
+  version  - Print the current schema version number
+  recreate - Dump, drop and create a new fresh database
+             (Requires --force option)
 
-  st-db --recreate --sync
-
-This program can be used to manage the Socialtext Postgres database
-schema.  It can drop and create (--recreate) or sync to an existing
-schema (--sync).
-
-It will get the schema name and connection params by using the
-Socialtext::AppConfig module, so you need to have an up-to-date config file
-for this to work.
-
-It accepts the following options:
-
-  --help           Produce this message
-
-  --quiet          Produce output only if there's an error
-
-  --ddl            Dump a human-readable SQL DDL of the schema
-
-  --recreate       Drop and create the schema
-
-  --sync-sql       Shows the SQL to sync the schema,
-                   but does not execute it.
-
-  --sync           Sync the schema.
-
-  --dump-data      Dump the entire schema (DDL & DML) to a temp file
-
-  --required-data  Make sure that required data for the application is present
-
-  --maxretries     Number of times the command should try, if the first time it 
-                   fails to connect to the DB.  Default: 8
-
-EOF
-
-    exit;
+Options:
+  -s|--schema <foo> - only operate on the specified schema
+  -v|--verbose      - show more output
+  --force           - must be used with the recreate option
+EOT
 }

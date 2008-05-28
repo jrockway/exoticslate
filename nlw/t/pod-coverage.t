@@ -12,7 +12,6 @@ BEGIN {
 
 my %Modules = (
     'Socialtext::Account'       => { trustme => [qr/DefaultOrderByColumn/] },
-    'Socialtext::AlzaboWrapper' => {},
     'Socialtext::Data'          => {},
     'Socialtext::Permission'    => {},
     'Socialtext::Role'          => {},
@@ -40,6 +39,7 @@ my %Modules = (
     'Socialtext::ChangeEvent::Attachment' => {},
     'Socialtext::ChangeEvent::Workspace'  => {},
     'Socialtext::Lite'                    => {},
+    'Socialtext::SQL'                     => {},
     'Socialtext::Search::AbstractFactory' => {},
     'Socialtext::Search::Indexer'         => {},
     'Socialtext::Search::Searcher'        => {},

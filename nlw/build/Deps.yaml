@@ -10,7 +10,6 @@
 Algorithm::Diff: 1.1901
 # The change in 0.8902 to not use UNIVERSAL::isa exposed a bug in the
 # handling of an attempt to load a row which doesn't exist in the DBMS.
-Alzabo: 0.8903
 Apache::Constants: 1.09
 Apache::Request: 1.33
 Apache::Session: 1.81
@@ -26,8 +25,6 @@ CGI: 3.10
 CGI::Cookie: 0
 Cache::FileCache: 0
 Carp: 0
-Class::AlzaboWrapper: 0.13
-Class::AlzaboWrapper::Cursor: 0
 Class::Field: 0.12
 Class::Singleton: 1.03
 Cwd: 3.07
@@ -123,10 +120,6 @@ Template: 2.19
 Template::Plugin::FillInForm: 0.04
 Template::Plugin::JSON: 0
 Text::Autoformat: 0
-# Text::Balanced 1.99.1 is the first version to not use $&.  Although
-# Text::Balanced is not a first-order dependency, Alzabo uses it, and we
-# list it here to make sure we get the minimal acceptable version.
-Text::Balanced: 2.00
 Text::Flowed: 0.14
 Text::MeCab: 0.17
 Tie::IxHash: 1.21

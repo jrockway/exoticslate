@@ -1,28 +1,99 @@
 # @COPYRIGHT@
 package Socialtext::SQL;
-use Socialtext::Schema;
+use Socialtext::AppConfig;
 use DBI;
 use base 'Exporter';
+use Carp qw/croak/;
+
+=head1 NAME
+
+Socialtext::SQL - wrapper interface around SQL methods
+
+=head1 SYNOPSIS
+
+  use Socialtext::SQL qw/sql_execute sql_begin_work sql_commit sql_rollback/;
+
+  # Regular, auto-commit style:
+  my $sth = sql_execute( $SQL, @BIND );
+   
+  # DIY commit:
+  sql_begin_work();
+  eval { sql_execute( $SQL, @BIND ) };
+  if ($@) {
+      sql_roll_back();
+  }
+  else {
+      sql_commit();
+  }
+
+=head1 DESCRIPTION
+
+Provides methods with extra error checking and connections to the database.
+
+=head1 METHODS
+
+=cut
 
 our @EXPORT_OK = qw(
     sql_execute sql_selectrow sql_commit sql_begin_work
     sql_singlevalue sql_rollback sql_in_transaction
     sql_convert_to_boolean sql_convert_from_boolean
+    get_dbh
 );
 
-sub _dbh() { Socialtext::Schema::LoadAndConnect->driver->handle }
+
+our $DEBUG;
+our %DBH;
+
+=head2 get_dbh()
+
+Returns a handle to the database.
+
+=cut
+
+sub get_dbh {
+    if ($DBH{handle} and $DBH{handle}->ping) {
+        warn "Returning existing handle $DBH{handle}" if $DEBUG;
+        return $DBH{handle} 
+    }
+    warn "Creating a new DBH" if $DEBUG;
+    my %params = Socialtext::AppConfig->db_connect_params();
+    my $dsn = "dbi:Pg:database=$params{db_name}";
+
+    $DBH{handle} = DBI->connect($dsn, $params{user}, "",  {AutoCommit => 0})
+        or die "Could not connect to database with dsn: $dsn: $!";
+    $DBH{st_in_transaction} = 0;
+    return $DBH{handle};
+}
+
+=head2 sql_execute( $SQL, @BIND )
+
+sql_execute() will wrap the execution in a begin/commit block
+UNLESS the caller has already set up a transaction
+
+Returns a statement handle.
+
+=cut
 
 sub sql_execute {
     my ( $statement, @bindings ) = @_;
 
+    my $in_tx = sql_in_transaction();
+    warn "In transaction at start of sql_execute() - $in_tx" 
+        if $in_tx and $DEBUG;
+
     my ($sth, $rv);
     eval {
-        $sth = _dbh->prepare($statement);
+        warn "Preparing ($statement) - Bindings:(" . join(',', @bindings) . ")" 
+            if $DEBUG;
+        $sth = get_dbh->prepare($statement);
         $sth->execute(@bindings) ||
             die "Error during execute - bindings=("
-                . join(', ', @bindings) . ')';
+                . join(', ', @bindings) . ') - '
+                . $sth->errstr;
+
     };
-    if ($@) {
+    if (my $err = $@) {
         my $msg = "Error during sql_execute:\n$statement\n";
         if (@bindings) {
             local $" = ',';
@@ -30,16 +101,42 @@ sub sql_execute {
                   . join(', ', map { defined $_ ? $_ : 'undef' } @bindings)
                   . ")\n";
         }
-        die "${msg}Error: $@";
+        unless ($in_tx) {
+            warn "Rolling back in sql_execute()" if $DEBUG;
+            sql_rollback();
+        }
+        die "${msg}Error: $err";
     }
+
+    # Unless the caller has explicitly specified a transaction via
+    # sql_begin_work(), we will commit each chunk.
+    # If the caller is using a transaction, they are responsible for
+    # committing or rolling back
+    unless ($in_tx) {
+        warn "Committing in sql_execute()" if $DEBUG;
+        sql_commit();
+    }
+
     return $sth;
 }
+
+=head2 sql_selectrow( $SQL, @BIND )
+
+Wrapper around $sth->selectrow_array 
+
+=cut
 
 sub sql_selectrow {
     my ( $statement, @bindings ) = @_;
 
-    return _dbh->selectrow_array($statement, undef, @bindings);
+    return get_dbh->selectrow_array($statement, undef, @bindings);
 }
+
+=head2 sql_singlevalue( $SQL, @BIND )
+
+Wrapper around returning a single value from a query.
+
+=cut
 
 sub sql_singlevalue {
     my ( $statement, @bindings ) = @_;
@@ -53,29 +150,57 @@ sub sql_singlevalue {
     return $value;
 }
 
+=head2 sql_in_transaction()
+
+Returns true if we currently in a transaction
+
+=head2 sql_begin_work()
+
+Starts a transaction, so sql_execute will not auto-commit.
+
+=head2 sql_commit()()
+
+Commit a transaction started by the calling code.
+
+=head2 sql_rollback()()
+
+Rollback a transaction started by the calling code.
+
+=cut
+
 # Only allow 1 transaction at a time, ignore nested transactions.  This
 # may or may not be a good strategy.  Ponder.
 {
-    my $In_transaction = 0;
-    sub sql_in_transaction { $In_transaction }
+    sub sql_in_transaction { 
+        return $DBH{st_in_transaction};
+    }
 
     sub sql_begin_work {
-        return if $In_transaction;
-        eval { _dbh->begin_work() or die _dbh->errstr; };
-        if ($@) {
-            die $@ unless ($@ =~ /Already in a transaction/);
+        if ($DBH{st_in_transaction}) {
+            croak "Already in a transaction!";
         }
-        return $In_transaction++;
+        warn "Beginning transaction" if $DEBUG;
+        $DBH{st_in_transaction}++;
     }
     sub sql_commit {
-        $In_transaction = 0;
-        return _dbh->commit()
+        my $dbh = get_dbh();
+        $DBH{st_in_transaction}-- if $DBH{st_in_transaction};
+        warn "Committing transaction" if $DEBUG;
+        return $dbh->commit()
     }
     sub sql_rollback {
-        $In_transaction = 0;
-        return _dbh->rollback()
+        my $dbh = get_dbh();
+        $DBH{st_in_transaction}-- if $DBH{st_in_transaction};
+        warn "Rolling back transaction" if $DEBUG;
+        return $dbh->rollback()
     }
 }
+
+=head2 sql_convert_to_boolean()
+
+Perl true-false to sql boolean.
+
+=cut
 
 sub sql_convert_to_boolean {
     my $value= shift;
@@ -84,6 +209,12 @@ sub sql_convert_to_boolean {
     return $default if (!defined($value));
     return $value ? 't' : 'f';
 }
+
+=head2 sql_convert_from_boolean()
+
+Maps SQL t/f to perl true-false.
+
+=cut
 
 sub sql_convert_from_boolean {
     my $value= shift;

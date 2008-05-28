@@ -165,8 +165,8 @@ NOT_DEFAULT: {
           'default admin_script ends in bin/st-admin, but is not */local/bin/st-admin' );
 
     my $db_name = 'NLW_' . $user->name . '_testing';
-    is( Socialtext::AppConfig->new->db_schema_name, $db_name,
-          "default db_schema_name is $db_name" );
+    is( Socialtext::AppConfig->new->db_name, $db_name,
+          "default db_name is $db_name" );
 
     is( Socialtext::AppConfig->new->db_user, $user->name,
           'default db_user is ' . $user->name );
@@ -205,7 +205,7 @@ CHECK_ALL_METHODS: {
         db_host
         db_password
         db_port
-        db_schema_name
+        db_name
         db_user
         debug
         email_errors_to

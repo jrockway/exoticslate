@@ -7,7 +7,7 @@ SCHEMA="$MIGDIR/nlw-schema.sql"
 PGLIST="$MIGDIR/pglist"
 
 TMP_SCHEMA="/tmp/NLW-current-schema.$$"
-export PGDATABASE=`st-config echo db_schema_name`
+export PGDATABASE=`st-config echo db_name`
 export PGUSER=`st-config echo db_user`
 sh $PGLIST > $TMP_SCHEMA
 

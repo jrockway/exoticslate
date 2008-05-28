@@ -1,76 +1,59 @@
 | *Comment* | Test Case: All Pages |  |
 | *Comment* | Test Case: All Pages Set up |  |
-| setSpeed | 100 |  |
-| click_and_wait | st-newpage-link |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | wikiwyg_wikitext_textarea | allpages %%start_time%% 0001 content |
-| type_ok | st-newpage-pagename-edit | allpages %%start_time%% 0001 |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0001%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
-| click_and_wait | st-home-link |  |
-| click_and_wait | st-newpage-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | st-newpage-pagename-edit | allpages %%start_time%% 0002 |
-
-| type_ok | wikiwyg_wikitext_textarea | allpages %%start_time%% 0002 content |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0002%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
-| click_and_wait | st-home-link |  |
-| click_and_wait | st-newpage-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | st-newpage-pagename-edit | allpages %%start_time%% 0003 |
-| type_ok | wikiwyg_wikitext_textarea | allpages %%start_time%% 0003 content |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0003%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
-| click_and_wait | st-home-link |  |
-| click_and_wait | st-newpage-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | st-newpage-pagename-edit | allpages %%start_time%% 0004 |
-| type_ok | wikiwyg_wikitext_textarea | allpages %%start_time%% 0004 content |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0004%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
-| click_and_wait | st-home-link |  |
 
 | *Comment* | Test Case: All Pages name sorting |  |
-| click_and_wait | st-wiki-subnav-link-all-pages |  |
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |  |
+| wait_for_element_visible_ok | link=Title |  |
 | text_like | st-list-title | All Pages ( |
-| click_and_wait | link=allpages %%start_time%% 0001 |  |
-| text_like | st-page-titletext | allpages %%start_time%% 0001 |
-| click_and_wait | st-home-link |  |
-| click_and_wait | st-wiki-subnav-link-all-pages |  |
+| click_and_wait | link=allpages spreadsheet0001%%start_time%% |  |
+| text_like | st-page-titletext | allpages spreadsheet0001%%start_time%% |
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |  |
+| wait_for_element_visible_ok | link=Title |  |
 | click_and_wait | link=Title |  |
-| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0004/ |
+| text_like | st-listview | qr/allpages spreadsheet0001%%start_time%%.+allpages spreadsheet0004%%start_time%%/ |
+| pause | 2000 |
 | click_and_wait | link=Title |  |
-| text_like | st-listview | qr/allpages %%start_time%% 0004.+allpages %%start_time%% 0001/ |
-
+| text_like | st-listview | qr/allpages spreadsheet0004%%start_time%%.+allpages spreadsheet0001%%start_time%%/ |
+| pause | 2000 |  |
 | *Comment* | Test Case: All Pages date sort |  |
-| click_and_wait | st-home-link |  |
-| click_and_wait | st-newpage-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | st-newpage-pagename-edit | allpages %%start_time%% 0005 |
-| type_ok | wikiwyg_wikitext_textarea | allpages %%start_time%% 0005 content |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0005%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
 
-| click_and_wait | st-home-link |  |
-| click_and_wait | st-wiki-subnav-link-all-pages |  |
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |
+| wait_for_element_visible_ok | link=Date |
 | click_and_wait | link=Date |  |
-| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0005/ |
+| text_like | st-listview | qr/allpages spreadsheet0001%%start_time%%.+allpages spreadsheet0005%%start_time%%/ |
 | click_and_wait | link=Date |  |
-| text_like | st-listview | qr/allpages %%start_time%% 0005.+allpages %%start_time%% 0001/ |
+| text_like | st-listview | qr/allpages spreadsheet0005%%start_time%%.+allpages spreadsheet0001%%start_time%%/ |
 
 | *Comment* | Test Case: All Pages revision sort |  |
-| click_and_wait | st-home-link |  |
-| click_and_wait | link=allpages %%start_time%% 0004 |  |
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |
+| click_and_wait | link=allpages spreadsheet0004%%start_time%% |  |
+| wait_for_element_visible_ok | st-edit-button-link |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| pause | 1000 |  |
-| type_ok | wikiwyg_wikitext_textarea | revision 1 |
+| wait_for_element_visible_ok | st-save-button-link |  |
 | click_and_wait | st-save-button-link |  |
-| click_and_wait | st-home-link |  |
-| click_and_wait | st-wiki-subnav-link-all-pages |  |
+| wait_for_element_visible_ok | st-edit-button-link |  |
 
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |
+| wait_for_element_visible_ok | link=Revisions |
 | click_and_wait | link=Revisions |  |
-| text_like | st-listview | qr/allpages %%start_time%% 0004.+allpages %%start_time%% 0003/ |
+| text_like | st-listview | qr/allpages spreadsheet0004%%start_time%%.+allpages spreadsheet0003%%start_time%%/ |
 | click_and_wait | link=Revisions |  |
-| text_like | st-listview | qr/allpages %%start_time%% 0003.+allpages %%start_time%% 0004/ |
+| text_like | st-listview | qr/allpages spreadsheet0003%%start_time%%.+allpages spreadsheet0004%%start_time%%/ |
 
 | *Comment* | Test Case: All Pages edited by sort |  |
 
@@ -88,32 +71,31 @@ contains %%email%% as a substring and that messes up other tests like Test Case:
 For some reason, IE 6 blows up when open_ok is used in some places. We avoid it.
 
 | *Comment* | Test Case: All Pages revision by new user |  |
-
-| wait_for_element_visible_ok | st-wiki-subnav-link-all-pages | 15000 |
-| click_and_wait | st-wiki-subnav-link-all-pages |
-| click_and_wait | link=allpages %%start_time%% 0003 |  |
-
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |  |
+| wait_for_element_visible_ok | link=Title |  |
+| click_and_wait | link=allpages spreadsheet0003%%start_time%% |  |
+| wait_for_element_visible_ok | st-edit-button-link |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | wikiwyg_wikitext_textarea | revision by user %%s_user%% |
+| wait_for_element_visible_ok | st-save-button-link |  |
 | click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | st-edit-button-link |  |
 
 | *Comment* | Test Case: All Pages verify revision by user %%s_user%% |  |
 
-| click_and_wait | st-home-link |  |
-| click_and_wait | st-wiki-subnav-link-all-pages |  |
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |  |
+| wait_for_element_visible_ok | link=Title |  |
 | click_and_wait | link=Last Edited By |  |
-| text_like | st-listview | qr/allpages %%start_time%% 0003.+allpages %%start_time%% 0001/ |
+| text_like | st-listview | qr/allpages spreadsheet0003%%start_time%%.+allpages spreadsheet0001%%start_time%%/ |
 | click_and_wait | link=Last Edited By |  |
-| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0003/ |
+| text_like | st-listview | qr/allpages spreadsheet0001%%start_time%%.+allpages spreadsheet0003%%start_time%%/ |
 
 | *Comment* | Test Case: All Pages Teardown. No need to login again. |  |
 
-| st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0001 |  |
-| st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0002 |  |
-| st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0003 |  |
-| st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0004 |  |
-| st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0005 |  |
+| st-admin | purge-page --workspace %%workspace%% --page allpages_spreadsheet_0001%%start_time%% |  |
+| st-admin | purge-page --workspace %%workspace%% --page allpages_spreadsheet_0002%%start_time%% |  |
+| st-admin | purge-page --workspace %%workspace%% --page allpages_spreadsheet_0003%%start_time%% |  |
+| st-admin | purge-page --workspace %%workspace%% --page allpages_spreadsheet_0004%%start_time%% |  |
+| st-admin | purge-page --workspace %%workspace%% --page allpages_spreadsheet_0005%%start_time%% |  |
 | st-admin | remove-member --email %%s_user%% --workspace %%workspace%% |  |
 
 | *Comment* | Test Case: All Pages COMPLETED |  |

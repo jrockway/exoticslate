@@ -14,8 +14,11 @@ sub register {
 
 sub username {
     my ($self, $username) = @_;
+    my $workspace = $self->hub->current_workspace;
     my $person = Socialtext::User->new(username => $username);
-    return $person ? $person->best_full_name : $username;
+    return $person
+        ? $person->best_full_name( workspace => $workspace )
+        : $username;
 }
 
 1;

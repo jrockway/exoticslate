@@ -128,9 +128,7 @@ sub _get_whats_new_page_info {
         title   => $self->hub->helpers->html_escape($page->title),
         date    => $page->datetime_for_user,
         author  => (  $updated_author
-                    ? $updated_author->best_full_name(
-                        workspace => $self->hub->current_workspace
-                        )
+                    ? $updated_author->username
                     : undef),
         preview => (  $show_preview
                     ? $page->preview_text

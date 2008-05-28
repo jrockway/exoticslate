@@ -104,7 +104,7 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | get | /data/workspaces/%%wksp%% | application/json |
 | code-is | 200 |  |
 | body-like | "customjs_uri":"/monkey.js" |  |
-| get | /%%wksp%%/index.cgi |  |
+| get | /%%wksp%%/index.cgi?action=dashboard |  |
 | body-like | /monkey.js |  |
 
 | comment | Test case: REST Workspace Update the customjs_uri of a workspace |  |
@@ -113,7 +113,8 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | get | /data/workspaces/%%wksp%% | application/json |
 | code-is | 200 |  |
 | body-like | "customjs_uri":"/buddha.js" |  |
-| get | /%%wksp%%/index.cgi |  |
+
+| get | /%%wksp%%/index.cgi?action=dashboard |  |
 | body-like | /buddha.js |  |
 
 | comment | Test case: REST Workspace Unset the customjs_uri of a workspace |  |
@@ -122,7 +123,7 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | get | /data/workspaces/%%wksp%% | application/json |
 | code-is | 200 |  |
 | body-like | "customjs_uri":"" |
-| get | /%%wksp%%/index.cgi |  |
+| get | /%%wksp%%/index.cgi?action=dashboard |  |
 | body-unlike | /monkey.js |  |
 
 | comment | Test case: REST Workspace Update the customjs_uri as a workspace admin |  |

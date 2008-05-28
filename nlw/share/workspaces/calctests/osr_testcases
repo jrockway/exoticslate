@@ -20,6 +20,7 @@ test env properly and are not testing the test-workspace
 * [Test Case: Tagging]
 * [Test Case: Orphans List]
 * [Test Case: What's New]
+* [Test Case: All Pages]
 
 ^ END
 
@@ -28,7 +29,6 @@ test env properly and are not testing the test-workspace
  `[Test Case: Sidebar: Incoming Links]` (Features to do this now are missing from socialcalc)
  `[Test Case: Revisions]` (Features to do this now are missing from socialcalc)
 
-* [Test Case: All Pages]
 * [Test Case: Tools: Copy Page to Workspace]
 * [Test Case: Tools: Export as HTML]
 * [Test Case: Add Comment]

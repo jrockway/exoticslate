@@ -227,7 +227,8 @@ sub no_workspace {
 sub full_url {
     my $self = shift;
 
-    return join '', $self->rest->query->url( -full => 1, -path_info => 1 ), @_;
+    return join '',
+        $self->rest->query->url( -absolute => 1, -path_info => 1 ), @_;
 }
 
 # Automatic getters for query parameters.

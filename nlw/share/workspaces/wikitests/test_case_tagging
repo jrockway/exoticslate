@@ -190,7 +190,7 @@ TODO: check for an incremented revision after fixing RT 25664
 | *Comment* | The revision number did not change but the tag should be gone |  |
 | clickAndWait | st-page-stats-revisions |  |
 | clickAndWait | Button |  |
-| text_like | qr/Tags: tagtest %%start_time%%/m |  |
+| text_like | qr/Tags:\s*tagtest %%start_time%%/m |  |
 | text_like | qr/Tags:\s*$/m |  |
 
 Navigate to All Tags in list view | All Tags appears 

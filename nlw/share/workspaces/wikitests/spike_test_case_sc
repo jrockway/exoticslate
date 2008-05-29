@@ -5,6 +5,7 @@
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
 | type_ok | st-newpage-pagename-edit | sc spike %%start_time%% 0001 |
 | type_ok | wikiwyg_wikitext_textarea | sc spike %%start_time%% 0001/content |
+| pause | 1500 |  |
 | click_and_wait | st-save-button-link |  |
 
 | click_and_wait | st-pagetools-newspreadsheet |  |
@@ -12,7 +13,23 @@
 | answerOnNextPrompt | spiky %%start_time%% |  |
 | verifyPrompt | Enter Spreadsheet Page Name |  |
 | pause | 3000 |  |
-| click_ok | cell_A1 |  |
-| click_ok | cell_A1 |  |
-| type_ok | //div/textarea | 100\n |
+
+ click_ok | cell_B2 | |
+ click_ok | cell_B2 | |
+
+| mouseDown | cell_B2 |  |
+| mouseUp | cell_B2 |
+| type_ok | st-spreadsheet-formular-input | 100 |
+
+ submit | st-spreadsheet-formular-input | |
+
+| fireEvent | st-spreadsheet-formular-input | blur |
+
+| pause | 5000 |  |
+
+ getEval | this.page().getCurrentWindow()["st-spreadsheet-formular-input"].SetValue("100") | |
+
+| keyPress | cell_B2 | \13 |
+
+| pause | 10000 |  |
 | click_and_wait | st-save-button-link |  |

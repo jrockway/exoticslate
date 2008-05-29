@@ -7,7 +7,7 @@ use Socialtext::Paths;
 use Socialtext::AppConfig;
 use Socialtext::System qw/shell_run/;
 use Socialtext::SQL qw/sql_singlevalue sql_execute sql_begin_work 
-                       sql_commit sql_rollback/;
+                       sql_commit sql_rollback disconnect_dbh/;
 
 =head1 NAME
 
@@ -331,12 +331,14 @@ sub _schema_filename {
 sub createdb {
     my $self = shift;
     my %c = $self->connect_params();
+    disconnect_dbh();
     $self->_db_shell_run("createdb $c{db_name}");
 }
 
 sub dropdb {
     my $self = shift;
     my %c = $self->connect_params();
+    disconnect_dbh();
     sleep 2;
     eval {
         $self->_db_shell_run("dropdb $c{db_name}");

@@ -38,7 +38,7 @@ our @EXPORT_OK = qw(
     sql_execute sql_selectrow sql_commit sql_begin_work
     sql_singlevalue sql_rollback sql_in_transaction
     sql_convert_to_boolean sql_convert_from_boolean
-    get_dbh
+    get_dbh disconnect_dbh
 );
 
 
@@ -65,6 +65,20 @@ sub get_dbh {
     $DBH{st_in_transaction} = 0;
     return $DBH{handle};
 }
+
+=head2 disconnect_dbh
+
+Forces the DBH to disconnect.  Useful for scripts to avoid deadlocks.
+
+=cut
+
+sub disconnect_dbh {
+    if ($DBH{handle}) {
+        $DBH{handle}->disconnect;
+        %DBH = ();
+    }
+}
+
 
 =head2 sql_execute( $SQL, @BIND )
 

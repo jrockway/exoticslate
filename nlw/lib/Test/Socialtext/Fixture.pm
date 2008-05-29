@@ -94,13 +94,9 @@ sub _generate_base_config {
     mkpath $schema_dir;
     _system_or_die("cp " . $env->nlw_dir . "/etc/socialtext/db/* $schema_dir");
 
-    # Need to disconnect from the database before we re-create it
-    require Socialtext::SQL;
-    Socialtext::SQL::get_dbh()->disconnect();
-
     local $ENV{ST_TEST_SKIP_DB_DUMP} = 1;
-    Socialtext::Schema->new->recreate(no_dump => 1);
-    Socialtext::SQL::get_dbh()->disconnect();
+    my $s = Socialtext::Schema->new( verbose => 1);
+    $s->recreate(no_dump => 1);
 
     $BaseConfigGenerated = 1;
 }

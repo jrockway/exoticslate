@@ -14,22 +14,31 @@
 | verifyPrompt | Enter Spreadsheet Page Name |  |
 | pause | 3000 |  |
 
- click_ok | cell_B2 | |
+ fireEvent | cell_B2 | focus |
+
  click_ok | cell_B2 | |
 
-| mouseDown | cell_B2 |  |
-| mouseUp | cell_B2 |
+| keyPress | st-page-content | \11 |
+| keyPress | st-page-content | \13 |
+| keyPress | st-page-content | \11 |
+| keyPress | st-page-content | \13 |
+
+ mouseDown | cell_B2 | |
+ mouseUp | cell_B2 |
+
+| click_ok | st-spreadsheet-formular-input |  |
 | type_ok | st-spreadsheet-formular-input | 100 |
 
  submit | st-spreadsheet-formular-input | |
 
-| fireEvent | st-spreadsheet-formular-input | blur |
-
-| pause | 5000 |  |
+ pause | 5000 | |
 
  getEval | this.page().getCurrentWindow()["st-spreadsheet-formular-input"].SetValue("100") | |
 
-| keyPress | cell_B2 | \13 |
+ keyPress | cell_B2 | \13 |
 
-| pause | 10000 |  |
-| click_and_wait | st-save-button-link |  |
+| keyPress | st-spreadsheet-formular-input | \13 |
+
+| pause | 1000 |  |
+| click_and_wait | link=Save | 30000 |
+| click_and_wait | link=Save | 30000 |

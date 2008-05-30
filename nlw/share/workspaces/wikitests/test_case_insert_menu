@@ -32,125 +32,125 @@ TODO: Selenium up to 9.2 only recognizes the first prompt for table size. Check 
 | verifyValue | wikiwyg_wikitext_textarea | foo |
 
 | click_ok | link=Horizontal Line |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Table |  |
 | answerOnNextPrompt | 3 |  |
 | verifyPrompt | Please enter the number of table rows: |  |
 
 | click_ok | link=A different wiki page |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{link: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{link: ----}/s |
 | click_ok | link=A different wiki page |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=A page on the web |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{link: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{link: ----}/s |
 | click_ok | link=A page on the web |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=A section in this page |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{link: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{link: ----}/s |
 | click_ok | link=A section in this page |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Section marker |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{section: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{section: ----}/s |
 | click_ok | link=Section marker |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Pages related to a tag |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{tag: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{tag: ----}/s |
 | click_ok | link=Pages related to a tag |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=A person's blog |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{weblog: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{weblog: ----}/s |
 | click_ok | link=A person's blog |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=A file attached to this page |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{file: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{file: ----}/s |
 | click_ok | link=A file attached to this page |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Table of contents |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{toc: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{toc: ----}/s |
 | click_ok | link=Table of contents |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=A page include |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{include: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{include: ----}/s |
 | click_ok | link=A page include |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Recent changes |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{recent_changes: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{recent_changes: ----}/s |
 | click_ok | link=Recent changes |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Blog postings |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{weblog_list: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{weblog_list: ----}/s |
 | click_ok | link=Blog postings |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Tagged pages |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{tag_list: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{tag_list: ----}/s |
 | click_ok | link=Tagged pages |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Wiki search results |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{search: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{search: ----}/s |
 | click_ok | link=Wiki search results |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Google search results |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{googlesoap: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{googlesoap: ----}/s |
 | click_ok | link=Google search results |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=User name |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{user: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{user: ----}/s |
 | click_ok | link=User name |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Local Date & Time |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{date: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{date: ----}/s |
 | click_ok | link=Local Date & Time |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=AIM link |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\naim:---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+aim:----/s |
 | click_ok | link=AIM link |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Yahoo! Messenger link |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\nyahoo:---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+yahoo:----/s |
 | click_ok | link=Yahoo! Messenger link |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Skype link |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\nskype:---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+skype:----/s |
 | click_ok | link=Skype link |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=RSS feed items |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{fetchrss: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{fetchrss: ----}/s |
 | click_ok | link=RSS feed items |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Atom feed items |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{fetchatom: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{fetchatom: ----}/s |
 | click_ok | link=Atom feed items |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Technorati results |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{technorati: ----} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{technorati: ----}/s |
 | click_ok | link=Technorati results |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | click_ok | link=Unformatted text... |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n{{----}} |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+{{----}}/s |
 | click_ok | link=Unformatted text... |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo\n---- |
+| verifyValue | wikiwyg_wikitext_textarea | qr/foo.+----/s |
 
 | *Comment* | Test Case: Insert Menu COMPLETED |  |

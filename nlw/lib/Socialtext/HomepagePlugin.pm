@@ -28,7 +28,7 @@ sub homepage {
     my $self = shift;
 
     if ( $self->hub->current_workspace->homepage_is_dashboard ) {
-        return $self->redirect('?action=dashboard');
+        return $self->dashboard;
     }
 
     if ( my $weblog = $self->hub->current_workspace->homepage_weblog ) {

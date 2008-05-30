@@ -32,9 +32,6 @@ my $VERS_REGEXP = qr/ # match a VERSION definition
 my %opts = process_opts();
 my %deps = LoadDeps( 'Deps.yaml' );
 
-if ( !$opts{'socialtext-open'} ) {
-    %deps = (%deps, LoadDeps( 'EnterpriseDeps.yaml' ));
-}
 if ( $opts{dev} ) {
     %deps = (%deps, LoadDeps( 'DevDeps.yaml' ));
 }
@@ -198,7 +195,6 @@ sub process_opts {
         'dump|D'        => \$opts{dump},
         'help|h'        => \$opts{help},
         'dev=i'         => \$opts{dev},
-        'socialtext-open=i' => \$opts{'socialtext-open'},
     ) or exit 1;
 
     $opts{verbose} ||= 0;
@@ -230,9 +226,6 @@ This program lists module dependencies.
 
     --dev
         Include dependencies from build/DevDeps.yaml.
-
-    --socialtext-open=[0|1]
-        Don't include build/EnterpriseDeps.yaml.
 
     -v --verbose
         Print extra information about the dependencies.

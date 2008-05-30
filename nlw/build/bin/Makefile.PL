@@ -28,7 +28,7 @@ GetOptions(
 );
 
 my $LIST_DEPS
-   = "$^X $DEV_BIN/list-module-deps --socialtext-open=$option{'socialtext-open'}";
+   = "$^X $DEV_BIN/list-module-deps";
 
 @ARGV = grep { !/^--/ } @ARGV;
 

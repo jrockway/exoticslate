@@ -326,7 +326,7 @@ cpan:
 
 check-deps: check-dependencies
 check-dependencies:
-	$(PERL) dev-bin/list-module-deps -u --socialtext-open=@SOCIALTEXT_OPEN@
+	$(PERL) dev-bin/list-module-deps -u
 
 diff:
 	svndiff

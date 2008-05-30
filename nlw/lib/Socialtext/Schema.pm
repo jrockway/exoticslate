@@ -328,12 +328,24 @@ sub _schema_filename {
     return $schema_file;
 }
 
+=head2 createdb 
+
+Creates the database for the schema to live in.
+
+=cut
+
 sub createdb {
     my $self = shift;
     my %c = $self->connect_params();
     disconnect_dbh();
     $self->_db_shell_run("createdb $c{db_name}");
 }
+
+=head2 dropdb 
+
+Removes the current database, without dumping it.
+
+=cut
 
 sub dropdb {
     my $self = shift;

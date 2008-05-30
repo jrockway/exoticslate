@@ -5,40 +5,43 @@ Test case to verify that deleting an LDAP user from their LDAP store removes all
 Bug 365: Logged in LDAP user still has access when account is deleted
 
 This test case assumes the following:
+
 * OpenLDAP fixture has been bootstrapped and is running
 * test workspace has been configured as "member-only"
 
-| *Comment* | Setup: add users from LDAP store, and choose one for testing |
-| add-ldif-data | t/test-data/ldap/base_dn.ldif | |
-| add-ldif-data | t/test-data/ldap/people.ldif | |
+| *Comment* | Test Case: LDAP Deleted User |  |
+
+| *Comment* | Setup: add users from LDAP store, and choose one for testing |  |
+| add-ldif-data | t/test-data/ldap/base_dn.ldif |  |
+| add-ldif-data | t/test-data/ldap/people.ldif |  |
 | set | test_email | john.doe@example.com |
 | set | test_username | John Doe |
 | set | test_password | foobar |
 
-| *Comment* | Setup: add the user to the workspace and create a page to test against |
-| st-admin | add-member --email %%test_email%% --workspace %%workspace%% | |
+| *Comment* | Setup: add the user to the workspace and create a page to test against |  |
+| st-admin | add-member --email %%test_email%% --workspace %%workspace%% |  |
 | st-admin | update-page --email %%test_email%% --workspace %%workspace%% --page "eraseme %%start_time%%" < %%wikitest_client_files%%wikitest.txt | page has been created |
 
-| *Comment* | Test case: LDAP user can login |
+| *Comment* | Test case: LDAP user can login |  |  |
 | st-login | %%test_username%% | %%test_password%% |
-| text_like | st-homepage | Welcome, %%test_username%% | 
+| text_like | st-homepage | Welcome, %%test_username%% |
 
-| *Comment* | Test case: user is treated as being logged in; "Edit" button is present, and so is "Logout" link |
-| click_and_wait | st-home-link | |
-| click_and_wait | link=eraseme %%start_time%% |
+| *Comment* | Test case: user is treated as being logged in; "Edit" button is present, and so is "Logout" link |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | link=eraseme %%start_time%% |  |
 | text_like | st-editing-tools | Edit |
-| wait_for_element_visible_ok | st-edit-button-link | 1000 |
-| wait_for_element_visible_ok | st-wikinav-logout | 1000 |
+| wait_for_element_visible_ok | st-edit-button-link | 30000 |
+| wait_for_element_visible_ok | st-wikinav-logout | 30000 |
 
-| *Comment* | DELETE user from LDAP directory |
-| remove-ldif-data | t/test-data/ldap/people.ldif | |
+| *Comment* | DELETE user from LDAP directory |  |
+| remove-ldif-data | t/test-data/ldap/people.ldif |  |
 
 | *Comment* | Test case: now deleted user should be treated as *not* logged in |
-| refresh | |
-| wait_for_page_to_load_ok | 10000 | |
-| st-message | You must login to view this page | |
+| refresh |  |  |
+| wait_for_page_to_load_ok | 30000 |  |
+| st-message | You must login to view this page |  |
 
-| *Comment* | Test case: should not be able to log in as now deleted LDAP user |
+| *Comment* | Test case: should not be able to log in as now deleted LDAP user |  |
 | st-login | %%test_username%% | %%test_password%% |
 | st-message | Wrong email address or password - please try again. |  |
 
@@ -46,7 +49,9 @@ This test case assumes the following:
 trying to remove the user from the workspace; otherwise st-admin can't
 instantiate a User object to find his memberships.
 
-| *Comment* | Teardown: remove the user and the new page we created | |
-| add-ldif-data | t/test-data/ldap/people.ldif | |
+| *Comment* | Teardown: remove the user and the new page we created |  |
+| add-ldif-data | t/test-data/ldap/people.ldif |  |
 | st-admin | remove-member --email %%test_email%% --workspace %%workspace%% | no longer a member |
 | st-admin | purge-page --workspace %%workspace%% --page "eraseme_%%start_time%%" | page was purged |
+
+| *Comment* | Test Case: LDAP Deleted User COMPLETED |  |

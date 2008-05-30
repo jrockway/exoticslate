@@ -1,6 +1,6 @@
 | *Comment* | STARTING Test case: Control Panel Reports |  |
 
-| *Comment* | Test case: Control Panel Reports s pre-reqs: |
+| *Comment* | Test case: Control Panel Reports pre-reqs: |
 | *Comment* | cd into dev-bin directory |
 | *Comment* | run ./st-populate-reports-db to populate the data |
 
@@ -8,9 +8,9 @@
 | st-admin | remove-accounts-admin --email %%email%% | %%email%% no longer has accounts admin access |
 | st-admin | give-accounts-admin --email %%email%% | %%email%% now has accounts admin access |
 | st_qa_setup_reports |  |  |
-| set_default | testingwrkspace | growth_report_test | default workspace to test against |
+| set_default | testingwrkspace | growth_report_test |
 
-| *Comment* | Test case: Reports - Open Control Panel and Navigate |  |
+| *Comment* | Test case: Control Panel Reports - Open Control Panel and Navigate |  |
 | open_ok | /nlw/control |  |
 | clickAndWait | link=Workspaces |  |
 | type_ok | name | %%testingwrkspace%% |
@@ -59,9 +59,9 @@
 | selectFrame | relative=top |  |  |
 
 | *Comment* | Test case: Control Panel Reports - Workspace Growth |  |
-| set_default | testingwrkspace | growth_report_test | default workspace to test against |
-| st_qa_setup_reports |  |  |  |
-| open_ok | /nlw/control |  |  |
+| set_default | testingwrkspace | growth_report_test |
+| st_qa_setup_reports |  |  |
+| open_ok | /nlw/control |  |
 
 | clickAndWait | link=Workspaces |  |
 | type_ok | name | %%testingwrkspace%% |
@@ -102,11 +102,11 @@ TODO: Add this to slideshow?
  open_ok | /nlw/reports/workspace_growth.csv?workspace=growth_report_test&download=1 | pause | 20000 |
 
 | *Comment* | Test Case: Control Panel Reports (Account-Level, Growth) Setup |  |
-| set_default | testingwrkspace | growth_report_test | default workspace to test against |
-| set_default | testingaccount | test_stub_account | default account to test against |
+| set_default | testingwrkspace | growth_report_test |
+| set_default | testingaccount | test_stub_account |
 
 | *Comment* | Test Case: Control Panel Reports (Account-level, Growth Report) |  |
-| open_ok | /nlw/control |  |  |
+| open_ok | /nlw/control |  |
 | clickAndWait | link=Accounts |  |
 | clickAndWait | link=%%testingaccount%% |  |
 | clickAndWait | link=Growth Reports |  |
@@ -168,24 +168,24 @@ TODO: Add this to slideshow?
 | *Comment* | Test Case: Control Panel Reports create report with Create button |  |
 | click_and_wait | //input[@value='Create'] |  |
 
-| selectFrame | report-iframe |  |  |
-| text_like | Usage By Account - %%testingaccount%% |  |  |
-| text_like | qr/Total unique contributors: \d+/ |  |  |
-| text_like | qr/Total unique visitors: \d+/ |  |  |
-| text_like | qr/Total members \(current\): \d+/ |  |  |
-| text_like | Collaborativeness: |  |  |
-| text_like | (unique contributors as a percent of unique visitors) |  |  |
-| text_like | Total unique contributors: 4 |  |  |
-| text_like | Total unique visitors: 6 |  |  |
-| text_like | Total members (current): 6 |  |  |
-| text_like | Collaborativeness: 66% (unique contributors as a percent of unique visitors) |  |  |
-| text_like | UsernameViewsEditsComments |
+| selectFrame | report-iframe |  |
+| text_like | Usage By Account - %%testingaccount%% |  |
+| text_like | qr/Total unique contributors: \d+/ |  |
+| text_like | qr/Total unique visitors: \d+/ |  |
+| text_like | qr/Total members \(current\): \d+/ |  |
+| text_like | Collaborativeness: |  |
+| text_like | (unique contributors as a percent of unique visitors) |  |
+| text_like | Total unique contributors: 4 |  |
+| text_like | Total unique visitors: 6 |  |
+| text_like | Total members (current): 6 |  |
+| text_like | Collaborativeness: 66% (unique contributors as a percent of unique visitors) |  |
+| text_like | UsernameViewsEditsComments |  |
 | text_like | t_stub01@socialtext.com 71 35 0 |  |
 | text_like | t_stub02@socialtext.com 50 0 0 |  |
 | text_like | t_stub03@socialtext.com 56 0 8 |  |
 | text_like | t_stub04@socialtext.com 44 0 0 |  |
 | text_like | t_stub05@socialtext.com 42 21 0 |  |
 | text_like | t_stub06@socialtext.com 36 0 3 |  |
-| selectFrame | relative=top |  |  |
+| selectFrame | relative=top |  |
 
-| *Comment* | Test Case: Control Panel Reports COMPLETED |  |  |
+| *Comment* | Test Case: Control Panel Reports COMPLETED |  |

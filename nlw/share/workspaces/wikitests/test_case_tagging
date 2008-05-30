@@ -161,7 +161,7 @@ Compare top two revisions | only difference is in added tag
 | *Comment* | Test Case: Tagging Compare Revisions |  |
 | clickAndWait | st-page-stats-revisions |  |
 | clickAndWait | Button |  |
-| text_like | qr/Tags:.+Tags: tagtest %%start_time%%/ |  |
+| text_like | qr/Tags:.+Tags:\s*tagtest %%start_time%%/ |  |
 
 Click on that tag in third page | list appears with correct three pages 
 Click on any link in list | that page appears

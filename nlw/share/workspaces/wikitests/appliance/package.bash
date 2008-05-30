@@ -16,6 +16,10 @@ if [ -e ~/.nlw/root/data/wikitests ]; then
     echo CREATING new wikitests.1.tar.gz
     $ST_CURRENT/nlw/bin/st-admin export-workspace --w wikitests --dir $ST_CURRENT/nlw/share/workspaces/wikitests/
     cp $ST_CURRENT/nlw/share/workspaces/wikitests/wikitests.1.tar.gz $ST_CURRENT/nlw/share/workspaces/wikitests/appliance
+else
+    echo "There is no /wikitests wiki to export.  Run wikitests-to-wiki."
+    echo EXITING
+    exit
 fi
 
 
@@ -28,6 +32,10 @@ if [ -e ~/.nlw/root/data/calctests ]; then
     echo CREATING new calctests.1.tar.gz
     $ST_CURRENT/nlw/bin/st-admin export-workspace --w calctests --dir $ST_CURRENT/nlw/share/workspaces/calctests/
     cp $ST_CURRENT/nlw/share/workspaces/calctests/calctests.1.tar.gz $ST_CURRENT/nlw/share/workspaces/wikitests/appliance
+else
+    echo "There is no /calctests wiki to export.  Run calctests-to-wiki."
+    echo EXITING
+    exit
 fi
 
 rm -rf $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr

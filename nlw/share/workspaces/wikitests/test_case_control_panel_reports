@@ -78,7 +78,7 @@
 | *Comment* | Test Case: Control Panel Reports - Workspace Growth page body exists |  |
 | selectFrame | report-iframe |  |
 | text_like | Workspace Growth - %%testingwrkspace%% |  |
-| text_like | Date Unique Members Unique Contributors Pages Page views Contributions |  |
+| text_like | Date Unique Members Unique Contributors Pages Page Views Contributions |  |
 
 | *Comment* | Test Case: Control Panel Reports - Workspace Growth page Data Tests |  |
 | *Comment* | 1) We should probaby have some kind of product management signoff on interpertation |  |

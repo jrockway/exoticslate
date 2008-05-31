@@ -5,7 +5,10 @@
 | click_ok | document.forms[1].permission_set_name[4] |  |
 | click_and_wait | Button |  |
 
-| *Comment* | Setup email addresses are hidden |  |
+| *Comment* | Test Case: Public. Remove first and last names |  |
+| st-admin | set-user-names --e %%email%% --first "" --last "" | User "%%username%%" was updated |
+
+| *Comment* | Test Case: Public. Setup email addresses are hidden |  |
 | open_ok | /%%workspace%%/?Announcements and Links |  |
 | wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
@@ -24,11 +27,11 @@
 | click_and_wait | link=Settings |  |
 | text_like | errors-and-messages | To set your preferences for a workspace, you must be logged in. |
 
-| *Comment* | Verify email addresses are hidden |  |
+| *Comment* | Test Case: Public. Verify email addresses are hidden |  |
 | open_ok | /%%workspace%%/?Announcements and Links |  |
 | text_like | st-update | qr/\@hidden/ |
 
-| *Comment* | Verify guest can edit |  |
+| *Comment* | Test Case: Public. Verify guest can edit |  |
 | *Comment* | Test Case: Public. Wait for the wikiwyg area to appear before you Save |  |
 | wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |

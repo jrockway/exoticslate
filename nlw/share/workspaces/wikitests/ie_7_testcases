@@ -8,3 +8,10 @@ For some reason, no combination of Selenium servers and multiwindow and
 no-maximize will run the RSS Icons test any longer.
 
 Test Case: RSS Icons
+
+These old testcases cause IE 6 to segfault but should work in IE 7
+
+* [Test Case: Perl Loc]
+* [Test Case: Js Loc]
+* [Test Case: Perl Loc with Multibyte character]
+* [Test Case: Js Loc with Multibyte character]

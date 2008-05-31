@@ -37,14 +37,8 @@ test env properly and are not testing the test-workspace
 * [Test Case: Revisions]
 * [Test Case: What's New]
 * [Test Case: All Pages]
-* [Test Case: Tools: Duplicate Page]
-* [Test Case: Tools: Rename Page]
 * [Test Case: Tools: Delete Page]
-* [Test Case: Tools: Copy Page to Workspace]
 * [Test Case: Tools: Export as HTML]
-* [Test Case: Add Comment]
-* [Test Case: Comment Form Fields]
-* [Test Case: Weblogs]
 * [Test Case: Weblog Archive and Navigation]
 * [Test Case: Connections]
 * [Test Case: Settings: User]
@@ -58,8 +52,6 @@ test env properly and are not testing the test-workspace
 * [Test Case: Settings: Email Notification]
 * [Test Case: Workspace Configuration]
 * [Test Case: Direct URI]
-* [Test Case: Strings]
-* [Test Case: Single Dash]
 * [Test Case: Workspace Privacy]
 * [Test Case: Inter Workspace Search]
 * [Test Case: Untitled Page]
@@ -68,29 +60,25 @@ test env properly and are not testing the test-workspace
 * [Test Case: Return to last login]
 * [Test Case: Link Interface]
 * [Test Case: Nasty Double Dashes]
-
-TC Insert Menu will fail as the menu is being reworked. Revise the test.
-
 * [Test Case: Insert Menu]
 
-uses default wikiemail or `$ENV{WIKIEMAIL}`
+These tests use popup windows and fail in IE 6 because they need single window mode and New Page is failing in IE 6 using single window mode.
+Moved them to the end to isolate failures.
 
+* [Test Case: Tools: Duplicate Page]
+* [Test Case: Tools: Rename Page]
+* [Test Case: Tools: Copy Page to Workspace]
+* [Test Case: Add Comment]
+* [Test Case: Comment Form Fields]
+* [Test Case: Weblogs]
+* [Test Case: Strings]
+* [Test Case: Single Dash]
 * [Test Case: Email]
 
 RSS Icon Tests are different for IE 6 and IE 7
 
 See [IE 7 Testcases] for IE 7
 See [IE 6 Testcases] for IE 6
-
-^ TESTCASES BELOW DO NOT WORK IN IE
-
-These tests cause IE 6 to segfault but are OK when run manually.
-Low priority TODO: refactor these to see if you can get IE 6 to run them
-
-* Test Case: Perl Loc
-* Test Case: Js Loc
-* Test Case: Perl Loc with Multibyte character
-* Test Case: Js Loc with Multibyte character
 
 The following tests require higher security privileges for the browser, *iehta for IE. Due to cross-site-scripting limitations enforced by IE, even *iehta won't work unless the browser and the server run on the same host machine. Investigate other ways to make this work.
 
@@ -99,9 +87,6 @@ The following tests require higher security privileges for the browser, *iehta f
 * Test Case: All Files
 * Test Case: Delete Selected Attachments
 * Test Case: Workspace Skin
-
-js-test is run separately after `make` in nlw/share/js-test in a dev env
-use alias xwjsti to run js-test for IE
 
 ----
 
@@ -112,14 +97,6 @@ Test Case: Help (don't know how to switch to a new tab)
 
 ^ All pages tagged 'Testcase' (only a list, visit the pages above for tests)
 
-Tests do not run out of the list since it isn't really here.
+^^ Tests do not run out of the list since it isn't really here.
 
-{search: category:testcase AND NOT category:obsolete}
-
-^^^ Obsolete testcases
-
-{search: category:testcase AND category:obsolete}
-
-----
-
-{include: [Known Failing Testcases]}
+{search: category:testcase}

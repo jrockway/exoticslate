@@ -44,23 +44,17 @@ sub code_base {
 
 sub query {
     my $self = shift;
-    if ($self->rest) {
-        return $self->rest->query;
-    }
+    return $self->hub->rest->query;
 }
 
 sub getContent {
     my $self = shift;
-    if ($self->rest) {
-        return $self->rest->getContent;
-    }
+    return $self->hub->rest->getContent;
 }
 
 sub getContentPrefs {
     my $self = shift;
-    if ($self->rest) {
-        return $self->rest->getContentPrefs;
-    }
+    return $self->hub->rest->getContentPrefs;
 }
 
 sub username {
@@ -75,26 +69,16 @@ sub username {
 
 sub header_out {
     my $self = shift;
-    if ($self->rest) {
-        return $self->rest->header(@_);
-    }
-    else {
-        die "Not implemented!";
-    }
+    return $self->hub->rest->header(@_);
 }
 
 sub header_in {
     my $self = shift;
-    if ($self->rest) {
-        if (@_) {
-            return $self->rest->request->header_in(@_);
-        }
-        else {
-            return $self->rest->request->headers_in;
-        }
+    if (@_) {
+        return $self->hub->rest->request->header_in(@_);
     }
     else {
-        die "Not implemented!";
+        return $self->hub->rest->request->headers_in;
     }
 }
 
@@ -184,6 +168,11 @@ sub plugin_dir {
 sub cgi_vars {
     my $self = shift;
     return $self->hub->cgi->vars;
+}
+
+sub full_uri {
+    my $self = shift;
+    return $self->hub->cgi->full_uri_with_query;
 }
 
 sub redirect {

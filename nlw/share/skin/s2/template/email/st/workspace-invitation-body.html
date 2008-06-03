@@ -1,0 +1,55 @@
+[%# @COPYRIGHT@ -%]
+
+[% IF extra_text %]
+[% extra_text -%]
+[% END %]
+
+<p>
+[% loc('Hi,') %]
+</p>
+
+<p>
+[% SET wksp_title = workspace_title | html %]
+[% loc("I'm inviting you to join [_1], one of our shared workspaces.", wksp_title) %]
+[% UNLESS requires_confirmation %]
+[% loc('Sign in using the information below:') %]
+[% END %]
+</p>
+
+[% IF requires_confirmation %]
+<p>
+[% SET confirm_uri = confirmation_uri | html %]
+[% loc('Please <a href="[_1]">click on this link</a> to confirm your email address.', confirm_uri) %]
+</p>
+
+<p>
+[% loc('Once you have confirmed your account, you will receive a second email with login details.') %]
+</p>
+[% ELSE %]
+<p>
+[% loc('web address:') %] <a href="[% workspace_uri | html %]">[% workspace_uri | html %]</a><br />
+[% loc('username:') %] [% username | html %]
+</p>
+
+[% IF appconfig.is_default('user_factories') %]
+[% IF app_name; a = 'a'; ELSE; a = 'an'; END %]
+<p>
+[% loc("Because you already have [_1] [_2] account, the password is the same as the password you use for your other [_3] workspaces.", a, app_name, app_name) %]
+[% loc("If you don't remember it, just <a href=\"[_4]\">click here to select a new password</a>.", forgot_password_uri) %]
+</p>
+[% END %]
+<p>
+[% loc('You may want to keep this email for future reference.') %]
+</p>
+[% END %]
+
+<p>
+[% loc('Thanks,') %]
+</p>
+
+<p>
+[% inviting_user %]
+</p>
+
+[% PROCESS 'email/standard-footer.html'
+   support_link = 1 %]

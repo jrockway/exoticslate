@@ -1,0 +1,33 @@
+[%# @COPYRIGHT@ -%]
+[% WRAPPER authen/wrapper title = loc("Login") %]
+    <h3>[% loc('Log in to Socialtext') %]</h3>
+
+    <form name="login" method="post" action="/nlw/submit/login">
+     <input type="hidden" name="redirect_to" value="[% redirect_to | html %]" />
+     <div class="label-value">
+      <label for="username">[% username_label %]</label>
+      <input id="username" name="username" type="text" size="30" value="[% username %]" />
+     </div>
+
+     <div class="label-value">
+      <label for="password">[% loc('Password:') %]</label>
+      <input id="password" name="password" type="password" size="30" value="" />
+     </div>
+
+     <div class="form-element">
+      <input class="checkbox" name="remember" type="checkbox" id="remember" value="1" />
+      <span class="description">
+       <label for="remember">[% loc('Remember me on this computer.') %]</label>
+      </span>
+     </div>
+     <div class="form-element">
+      <input class="button" type="submit" value="[% loc('Log in') %]" id="login_btn" />
+     </div>
+    </form>
+<p><a href="/nlw/forgot_password.html">[% loc("I don't know my password.") %]</a></p>
+
+[% IF login_message %]
+<div id="login-message">[% login_message %]</div>
+[% END %]
+
+[% END %]

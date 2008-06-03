@@ -1,0 +1,12 @@
+[%# @COPYRIGHT@ -%]
+        [%- IF rows.size %]
+        <ul>
+        [%- FOREACH row = rows %]
+            <li>
+                <a title="[% row.Subject | html %]"
+                    href="/lite/page/[% row.workspace_name || workspace_name %]/[% row.page_uri %]">[% row.Subject |html %]</a>
+                - [% row.DateLocal %]
+            </li>
+        [% END -%]
+        </ul>
+        [% END -%]

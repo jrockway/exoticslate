@@ -1,0 +1,4 @@
+<!-- @COPYRIGHT@ -->
+<span class="error">
+ [% loc('You must be logged in to edit the [_1] workspace.', workspace_name) %]
+</span>

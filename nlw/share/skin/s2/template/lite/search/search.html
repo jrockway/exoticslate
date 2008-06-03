@@ -1,0 +1,17 @@
+[%# @COPYRIGHT@ -%]
+[% PROCESS lite/header.html %]
+<div>
+    <form name="searchform"
+        method="get"
+        action="/lite/search/[% workspace_name %]"
+        enctype="application/x-www-form-urlencoded">
+    [% loc("Search for the following terms:") %] 
+        <input name="search_term" value="[% search_term | html %]" />
+        <input name="search" value="Search" type="submit" />
+    </form>
+</div>
+[% IF search_error %]
+<div>[% loc("Error:") %] [% search_error %]</div>
+[% END %]
+[% PROCESS lite/page_list.html %]
+[% PROCESS lite/footer.html %]

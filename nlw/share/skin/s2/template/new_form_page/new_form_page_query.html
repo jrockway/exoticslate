@@ -1,0 +1,34 @@
+[%# @COPYRIGHT@ -%]
+<script type='text/javascript'>
+    function new_form_page_validators() {
+        return [
+            'one_of_these_is_required("first_name", "last_name")',
+            //'field_required("email_address")',
+            'email_check("email_address")'
+        ]
+    }
+</script>
+<div class='new_form_page_query'>
+    <span class='new_form_page_label'>
+        [% loc("First name:") %]
+    </span>
+    <span class='new_form_page_input'>
+        <input type="text" name="first_name" value="">
+    </span>
+</div>
+<div class='new_form_page_query'>
+    <span class='new_form_page_label'>
+         [% loc("Last name:") %]
+    </span>
+    <span class='new_form_page_input'>
+        <input type="text" name="last_name" value="">
+    </span>
+</div>
+<div class='new_form_page_query'>
+    <span class='new_form_page_label'>
+        [% loc("Email:") %]
+    </span>
+    <span class='new_form_page_input'>
+        <input type="text" name="email_address" value="">
+    </span>
+</div>

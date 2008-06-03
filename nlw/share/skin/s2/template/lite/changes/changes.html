@@ -1,0 +1,21 @@
+[%# @COPYRIGHT@ -%]
+[% PROCESS lite/header.html %]
+[% PROCESS category_link %]
+[% PROCESS lite/page_list.html %]
+[% PROCESS lite/footer.html %]
+
+[% BLOCK category_link %]
+<div>
+    [% IF category == 'recent changes' %]
+    <a href="/lite/category/[% workspace_name %]/">
+        [% loc('Filter by category') %]
+    </a>
+    [% ELSE %]
+    <a href="/lite/category/[% workspace_name %]/[% category | uri |html %]">
+        [% SET escaped_str = category | html %]
+        [% loc('All Pages in [_1]', escaped_str) %]
+    </a>
+    [% END %]
+</div>
+<hr>
+[% END %]

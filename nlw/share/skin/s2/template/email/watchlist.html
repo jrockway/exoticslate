@@ -1,0 +1,42 @@
+[%# @COPYRIGHT@ -%]
+<html>
+<head>
+ [% SET escaped_str1 = workspace.title | html %]
+ <title>[% loc('Watchlist Update for [_1]', escaped_str1) %]</title>
+</head>
+
+<body>
+
+<p>
+[% user.guess_real_name | html %],
+</p>
+
+<p>
+[% SET escaped_str2 = watchlist_preference_uri | html %]
+[% loc('To stop receiving or change how often you receive emails about changes to your watchlist in [_1], you can <a href="[_2]">change your preferences</a>.',  escaped_str1, escaped_str2) %]
+</p>
+
+<hr />
+
+<p>
+[% loc('The following pages you are watching in [_1] have recently changed:', escaped_str1) %]
+</p>
+
+<ul>
+[%- FOR page = pages %]
+ <li><a href="[% workspace.uri %]?[% page.uri %]">[% page.metadata.Subject %]</a>
+  [%- IF include_editor %]
+     <br />
+     [% SET escaped_str3 = page.last_edited_by.best_full_name( workspace => workspace ) | html %]
+     [% SET escaped_str4 = page.metadata.Date | html %]
+     [% loc('(by [_1] on [_2])', escaped_str3, escaped_str4) %]
+  [%- END %]
+ </li>
+[%- END %]
+</ul>
+
+[% PROCESS 'email/standard-footer.html'
+   support_link = 0 %]
+
+</body>
+</html>

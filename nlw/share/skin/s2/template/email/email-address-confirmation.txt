@@ -1,0 +1,16 @@
+[% PROCESS system_name %]
+Welcome to [% system_name %].
+
+[% loc('You signed up for a new account with our system and we need to confirm your email address.') %]
+[% loc('Please follow this link to confirm your address:') %]
+
+  [% confirmation_uri %]
+
+[% loc('We hope you enjoy using the Socialtext wiki.') %]
+
+[% BLOCK system_name -%]
+[% IF appconfig.is_appliance %]Socialtext Appliance[% ELSE %]Socialtext[% END %]
+[%- END %]
+
+[% PROCESS 'email/standard-footer.txt'
+   support_link = 1 %]

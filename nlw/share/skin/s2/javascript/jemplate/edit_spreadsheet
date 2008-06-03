@@ -1,0 +1,247 @@
+<div id="st-edit-mode-container">
+    <div id="st-spreadsheet-tabs">
+        <a href="#" class="button active" title="Edit"
+            id="st-edit-mode-button-link">Edit</a> 
+        <a href="#" class="button" title="Preview"
+            id="st-preview-mode-button-link">Preview</a> 
+        <a href="#" class="button" title="Audit"
+            id="st-audit-mode-button-link">Audit</a> 
+    </div>
+    <div id="st-spreadsheet-buttons">
+        <a href="#" class="button" title="Save Changes"
+            id="st-save-button-link">Save</a>
+        <a href="#" class="button" title="Cancel Edit"
+            id="st-cancel-button-link">Cancel</a>
+
+        <span id="st-spreadsheet-title">
+            SocialCalc:
+            <span id="st-spreadsheet-name"></span>
+        </span>
+    </div>
+
+    <span style="clear: both" />
+
+    <div id="st-spreadsheet-toolbar-container">
+    <div id="st-spreadsheet-toolbar" class="spreadsheet-toolbar for-edit-mode">
+
+        <a href="#" class="button" title="Undo"
+            id="st-undo-button-link">Undo</a>
+        <a href="#" class="button" title="Redo"
+            id="st-redo-button-link">Redo</a>
+
+        <a href="#" class="button" title="Cut"
+            id="st-cut-button-link">Cut</a>
+        <a href="#" class="button" title="Copy"
+            id="st-copy-button-link">Copy</a>
+        <a href="#" class="button" title="Paste"
+            id="st-paste-button-link">Paste</a>
+        <a href="#" class="button" title="Erase Cells"
+            id="st-erase-button-link">Erase</a>
+
+        <a href="#" class="button" title="Insert Row"
+            id="st-insert-row-button-link">Insert Row</a>
+        <a href="#" class="button" title="Delete Row"
+            id="st-delete-row-button-link">Delete Row</a>
+        <a href="#" class="button" title="Insert Column"
+            id="st-insert-col-button-link">Insert Column</a>
+        <a href="#" class="button" title="Delete Column"
+            id="st-delete-col-button-link">Delete Column</a>
+
+        <select id="st-spreadsheet-cell-number-format" style="float: left;margin-left:8px;margin-right:10px;">
+            <option value="">Number Format</option>
+            <option value="0">1234</option>
+            <option value="#,##0">1,234</option>
+            <option value="#,##0.0">1,234.5</option>
+            <option value="#,##0.00">1,234.56</option>
+            <option value="#,##0.000">1,234.567</option>
+
+            <option value="#,##0%">1,234%</option>
+            <option value="#,##0.0%">1,234.5%</option>
+
+            <option value="#,##0_);(#,##0)">(1,234)</option>
+            <option value="#,##0.0_);(#,##0.0)">(1,234.5)</option>
+            <option value="#,##0.00_);(#,##0.00)">(1,234.56)</option>
+
+            <option value="00">00</option>
+            <option value="000">000</option>
+            <option value="0000">0000</option>
+
+            <option value="$#,##0.00">$1,234.56</option>
+            <option value="yyyy-mm-dd">2008-05-29</option>
+            <option value="hh:mm:ss">01:23:45</option>
+            <option value="yyyy-mm-dd hh:mm:ss">2008-05-29 01:23:45</option>
+
+            <option value="hidden">Hidden</option>
+        </select>
+
+        <a href="#" class="button" title="Bold"
+            id="st-bold-button-link">Bold</a>
+        <a href="#" class="button" title="Italic"
+            id="st-italic-button-link">Italic</a>
+
+        <a href="#" class="button" title="Align Left"
+            id="st-left-button-link">Left</a>
+        <a href="#" class="button" title="Align Center"
+            id="st-center-button-link">Center</a>
+        <a href="#" class="button" title="Align Right"
+            id="st-right-button-link">Right</a>
+        <a href="#" class="button" title="Fill Down"
+            id="st-filldown-button-link">Fill Down</a>
+        <a href="#" class="button" title="Fill Right"
+            id="st-fillright-button-link">Fill Right</a>
+ 
+        <a href="#" class="button" title="Text Color"
+            id="st-color-button-link">Text Color</a>
+        <a href="#" class="button" title="Background Color"
+            id="st-bgcolor-button-link">Background Color</a>
+
+        <select name="cell_content" style="float: left;margin-left:8px;margin-right:10px;">
+            <option value="">Cell Options</option>
+            <option value="wiki_on">Wiki Text On</option>
+            <option value="wiki_off">Wiki Text Off</option>
+            <option value="border_on">Borders On</option>
+            <option value="border_off">Borders Off</option>
+            <option value="merge">Merge Cells</option>
+            <option value="unmerge">Unmerge Cells</option>
+        </select>
+
+        <a href="#" title="Sort Data"
+            class="button st-drawer-button-link"
+            id="st-sort-button-link">Sort</a>
+        <a href="#" title="Name Data"
+            class="button st-drawer-button-link"
+            id="st-name-button-link">Name</a>
+        <a href="#" title="Cell Comment"
+            class="button st-drawer-button-link"
+            id="st-comment-button-link">Comment</a>
+        <a href="#" title="Clipboard"
+            class="button st-drawer-button-link"
+            id="st-clipboard-button-link">Clipboard</a>
+
+        <div id="st-spreadsheet-toolbar-colorpicker"></div>
+        <div id="st-spreadsheet-toolbar-bgcolorpicker"></div>
+    </div>
+    <div id="st-spreadsheet-toolbar-drawer">
+        <div id="st-spreadsheet-sort-tools"
+             class="st-spreadsheet-drawer"
+             style="display: none">
+             <table><tr>
+
+             <td>
+                 <div class="st-spreadsheet-drawer-label">Major</div>
+                 <select id="st-spreadsheet-sort-major-columns"></select>
+                 <select id="st-spreadsheet-sort-major-direction">
+                    <option value="up">Up</option>
+                    <option value="down">Down</option>
+                 </select>
+             </td>
+
+             <td>
+                 <div class="st-spreadsheet-drawer-label">Minor</div>
+                 <select id="st-spreadsheet-sort-minor-columns"></select>
+                 <select id="st-spreadsheet-sort-minor-direction">
+                    <option value="up">Up</option>
+                    <option value="down">Down</option>
+                 </select>
+             </td>
+
+             <td>
+                 <div class="st-spreadsheet-drawer-label">Last</div>
+                 <select id="st-spreadsheet-sort-last-columns"></select>
+                 <select id="st-spreadsheet-sort-last-direction">
+                    <option value="up">Up</option>
+                    <option value="down">Down</option>
+                 </select>
+             <td>
+
+             </tr></table><br/>
+        </div>
+        <div id="st-spreadsheet-name-tools"
+             class="st-spreadsheet-drawer"
+             style="display: none">
+            <table><tbody><tr>
+                  <td >
+                      <div class="st-spreadsheet-drawer-label">Existing Names</div>
+                      <select id="st-spreadsheet-range-names">
+                          <option>[New]</option>
+                      </select>
+                  </td>
+
+                  <td >
+                      <div class="st-spreadsheet-drawer-label" >Name</div>
+                      <input type="text" id="st-spreadsheet-range-name"/>
+                  </td>
+
+                  <td >
+                      <div class="st-spreadsheet-drawer-label" >Description</div>
+                      <input type="text" id="st-spreadsheet-range-description"/>
+                  </td>
+
+                  <td >
+                      <div class="st-spreadsheet-drawer-label">Range</div>
+                      <input id="st-spreadsheet-range-value" type="text"/>
+                  </td>
+
+                  <td >
+                    <div class="st-spreadsheet-range-title" > </div>
+                    <input type="button" id="st-spreadsheet-range-save" value="Save"/>
+
+                    <input style="display:none;" type="button" id="st-spreadsheet-range-delete" value="Delete"/>
+                     <input type="button" id="st-spreadsheet-range-cancel" value="Cancel"/>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+        <div id="st-spreadsheet-comment-tools"
+             class="st-spreadsheet-drawer"
+             style="display: none">
+             <input type="button" id="st-spreadsheet-comment-save" value="Save"/>
+             <input type="button" id="st-spreadsheet-comment-clear" value="Clear"/>
+             <input type="button" id="st-spreadsheet-comment-cancel" value="Cancel"/><br/>
+             <textarea id="st-spreadsheet-comment-input"></textarea>
+        </div>
+
+        <div id="st-spreadsheet-clipboard-tools"
+             class="st-spreadsheet-drawer"
+             style="display: none">
+             <input type="button" value="Paste" id="st-spreadsheet-clipboard-paste"/>
+             <input type="button" value="Clear" id="st-spreadsheet-clipboard-clear"/>
+             <input type="button" value="Cancel" id="st-spreadsheet-clipboard-cancel"/><br/>
+            <textarea id="st-spreadsheet-clipboard-input"></textarea>
+        </div>
+    </div>
+    <div id="st-spreadsheet-formula-bar">
+        <input id="st-spreadsheet-formular-input"
+               type="text" value="" size="60"/>
+    </div>
+    </div><!-- END st-spreadsheet-toolbar-container -->
+
+    <div id="st-spreadsheet-preview"></div>
+    <div id="st-spreadsheet-edit"></div>
+
+    <!-- Page Submit Form -->
+    <form id="st-page-editing-form"
+          name="st-page-editing-form"
+          method="post"
+          enctype="multipart/form-data"
+          action="index.cgi">
+        <input id="st-page-editing-pagename" type="hidden"
+            name="page_name" value="[% page.title | html_encode %]"/>
+        <input id="st-page-editing-revisionid" type="hidden"
+            name="revision_id" value="[% page.revision_id %]" />
+        <input id="st-page-editing-pagetype" type="hidden"
+            name="page_type" value="[% page.page_type %]" />
+        <input id="st-page-editing-pagebody" type="hidden"
+            name="page_body" value="" />
+        <input id="st-page-editing-action" type="hidden"
+            name="action" value="edit_content" />
+        <input id="st-page-editing-caller" type="hidden"
+            name="caller_action" value="[% page.caller %]" />
+        <input id="st-page-editing-append" type="hidden"
+            name="append_mode" value="" />
+        <textarea id="st-page-editing-pagebody-decoy" wrap="virtual"
+            name="page_body_decoy"></textarea>
+        <div style="display: none" id="st-page-editing-files"></div>
+    </form>
+</div>

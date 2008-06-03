@@ -1,0 +1,15 @@
+<hr />
+
+[% IF support_link %]
+<p>
+[% SET support_address = appconfig.support_address | html %]
+[% SET support_link = '<a href="mailto:' _ support_address _ '">' _ support_address _ '</a>' %]
+[% loc('If you have questions about this email, contact your wiki support at [_1]', support_address) %]
+</p>
+[% END %]
+
+<p>
+[% loc('Brought to you by Socialtext.') %]
+<br />
+<a href="http://www.socialtext.com/">http://www.socialtext.com/</a>
+</p>

@@ -1,0 +1,31 @@
+[%# @COPYRIGHT@ -%]
+<script type='text/javascript'>
+    function new_form_page_validators() {
+        return [
+            'one_of_these_is_required("first_name", "last_name")',
+            'field_required("email_address")',
+            'email_check("email_address")',
+        ]
+    }
+</script>
+
+<table class="new_form_page">
+
+ <tr class="odd">
+  <td><span class="label">[% loc("First name:") %] *</span></td>
+  <td><input type="text" name="first_name" value=""></td>
+ </tr>
+
+ <tr class="even">
+  <td><span class="label">[% loc("Last name:") %] *</span></td>
+  <td><input type="text" name="last_name" value=""></td>
+ </tr>
+
+ <tr class="odd">
+  <td><span class="label">[% loc("Email:") %] *</span></td>
+  <td><input type="text" name="email_address" value=""></td>
+ </tr>
+
+</table>
+
+

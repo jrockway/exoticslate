@@ -1,0 +1,11 @@
+<span class="error">
+  [% loc('You need to confirm your email address to activate this account.') %]
+  <br/>
+  [% loc('You should have received an email with a confirmation link.') %]
+</span>
+
+<form action="/nlw/submit/resend_confirmation" method="post">
+  <input type="hidden" name="email_address" value="[% username | html %]" />
+  <input type="hidden" name="redirect_to" value="[% redirect_to | html %]" />
+  <input class="button" type="submit" value="[% loc("Resend confirmation") %]" />
+</form>

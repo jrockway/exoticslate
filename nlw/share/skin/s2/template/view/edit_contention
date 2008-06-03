@@ -1,0 +1,9 @@
+[%# @COPYRIGHT@ -%]
+[% WRAPPER layout/html content_id = 'st-editcontention' box_javascript = 0 %]
+  <p class="error-message">[% loc('Somebody else made changes to the page while you were editing it.') %]</p>
+  <p><a href="[% script_name %]?[% page.uri %]">[% loc('Click here to go to the latest version of the page.') %]</a></p>
+  <p>[% loc('The text you just edited is shown below. You can copy and paste your changes from there:') %]</p>
+
+  <hr />
+  <pre id="st-editcontention-text">[% page_body %]</pre>
+[% END %]

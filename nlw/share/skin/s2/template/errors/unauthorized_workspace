@@ -1,0 +1,4 @@
+<!-- @COPYRIGHT@ -->
+<span class="error">
+  [% loc('You are not authorized to view this workspace.') %]
+</span>

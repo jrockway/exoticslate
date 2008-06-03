@@ -1,0 +1,246 @@
+Changes
+
+2007-12-27:
+Fixed missing 'nl' entry in typelookup plus entry. (=false+1 was failing)
+Renamed scjstest to socialcalc-1.js.
+Added load and save of sheetobj.names.
+Added names to data sent by simpleedit to server.
+
+2008-01-02:
+Added ExecuteSheetCommand with "set sheet" commands.
+Added GetStyleNum.
+Added Parse class.
+Added UndoStack class.
+
+2008-01-03:
+Added Undo/Redo and implemented it for set sheet commands.
+
+2008-01-04:
+Started set cell commands.
+
+2008-01-07:
+Split undo into PushChange, AddDo, and AddUndo.
+Added CellFromStringParts and CellToString and "set coord all".
+Added more set cell commands.
+Added EditorApplySetCommandsToRange.
+
+2008-01-08:
+Fixed bug with clicking on cell below stuff not rendered yet.
+
+2008-01-11:
+Added more set commands
+
+2008-01-14:
+Moved to SocialCalcJSv2 hierarchy for revision control
+Changed programs to use new hierarchy, e.g., image/ and data/
+
+2008-01-15,16,17,18:
+Created formula1.js to parse and execute formulas.
+Added start of RecalcSheet to socialcalc-2.js.
+
+2008-01-21:
+Implemented function scaffolding.
+Added range support to formulas.
+Implemented series functions, including SUM, etc.
+Fixed OLPC Fn key bug.
+
+2008-01-23:
+SocialCalc2Demo command/slist control.
+Better keyboard focus handling when document window loses focus (passThru).
+Added Home key to MoveECellWithKey.
+Added multi-line to ExecuteSheetCommand, Parse class.
+
+2008-01-24:
+Built SocialCalc2Demo tabs: Plain, Source, Help, About
+
+2008-01-26:
+Added IF(condition,true-value,false-value) function.
+Added erase All/Contents/Formats command.
+Added filldown and fillright commands and SocialCalc.OffsetFormulaCoords.
+Released Sweet SocialCalc 0.1.
+
+2008-01-28:
+Changed order of display on Show Source/doNewSheet for iPhone bug.
+Added Math1 functions: ABS, ACOS, ASIN, ATAN, COS, DEGREES, EVEN, EXP, FACT, INT, 
+ LN, LOG10, ODD, RADIANS, SIN, TAN
+Added ZeroArgFunctions: FALSE(), NA(), NOW(), PI(), TODAY(), TRUE()
+Added Math2Functions: ATAN2, MOD, POWER, TRUNC
+
+2008-01-30:
+Removed uses of "for (i in arrayobj)" for Prototype, etc., compatibility
+
+2008-01-31:
+Added clipboard to sheet, as well as to save/load sheet
+Bumped save version to 1.4
+Added copy, cut, paste, loadclipboard, clearclipboard commands
+Added clipboard to Sweet SocialCalc source tab, with undo
+
+2008-02-02:
+Made clipboard global to SocialCalc object.
+Updated simpleedit8.pl to have command list of socialcalc2demo1
+
+2008-02-05:
+Added merge and unmerge commands.
+Added insertcol/row commands.
+
+2008-02-06:
+Added deletecol/row commands.
+Added special values to formula parsing, like #REF!.
+
+2008-02-07:
+Added licensing information, breaking out socialcalctableeditor.js.
+Released as version 0.6.
+
+2008-02-08:
+Changed URLs to be specific for About details and Attribution.
+Bumped to 0.6.1
+
+2008-02-09:
+Removed substr(-numbers), which are not handled correctly by IE, in formula1.js, formatnumber2.js.
+Fixed a bug with "+coord" - changed "sheetdata" to "sheet".
+
+2008-02-10:
+Made UI Sugar-like with more tabs, grayscale scrollbars.
+
+2008-02-11:
+Added ConvertSaveToOtherFormat and ConvertOtherFormatToSave to give multiple clipboard views
+
+2008-02-13:
+Added sort command.
+
+2008-02-14:
+Add primitive graph command.
+
+2008-02-15:
+Released 0.6.3.
+
+2008-02-18:
+Fixed sort "constant" bug which left a numeric constant (vtc) treated as text, not a number
+Added SocialCalc.TestCriteria.
+
+2008-02-19:
+Added DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, and DVARP.
+Added HLOOKUP, VLOOKUP, MATCH, INDEX, COUNTIF, and SUMIF.
+
+2008-02-21:
+Added the rest of the wikiCalc/SocialCalc 1.1 normal functions.
+
+2008-03-10:
+Replaced cursor use of editor.ReplaceCell with editor.UpdateCellCSS for speedup.
+
+2008-03-12:
+Made 702 maximum number of columns (ZZ) for number to characters.
+
+2008-03-14:
+First implementation of socialcalcspeadsheetcontrol.js.
+
+2008-03-20:
+Fixed up name support in formulas, including getting names defined by formulas working.
+
+2008-03-24:
+Added SocialCalc.Formula.loadsheet for inter-sheet references.
+
+2008-03-25:
+Added comment value to cells.
+Finished other places that were waiting for names or sheet references.
+
+2008-03-27:
+Added SaveEditorSettings and LoadEditorSettings.
+
+2008-04-01:
+Added tabs and views lists to SpreadsheetControl.
+Tried rudimentary "audit" tab.
+
+2008-04-03:
+Finished audit tab and comment tab.
+
+2008-04-04:
+Changed formula parsing to allow "." inside alpha and made "_" alpha.
+Added name commands to socialcalc-3.js.
+Started and Names tab.
+
+2008-04-05:
+Finished Names tab.
+
+2008-04-07:
+Added SpreadsheetControlCreateSpreadsheetSave and DecodeSpreadsheetSave,
+along with multipart-mime save format.
+Fixed SocialCalc.SizeSSDiv: this.requestedHeight/Width => spreadsheet.requested...
+
+2008-04-09:
+Moved the Audit, Comment, and Names tab definition code into socialcalcspreadsheetcontrol.js.
+Added linkstyle to RenderSheet, carried through RenderCell, passed to expand_markup.
+Added text formats to list (plain, HTML, wiki, hidden), fixed bug with default text format.
+Parameterized toolbarbackground and tabbackground.
+
+2008-04-10:
+Fixed bug introduced with linkstyle in rendering with linkstyle!=null.
+Changed names of determine_value_type and format_value_for_display to camel case:
+ DetermineValueType and FormatValueForDisplay.
+Added Clipboard tab and view to facilitate interim moving of data from Excel and web.
+
+2008-04-13:
+Fixed requestedHeight/Width not working in SpreadsheetControl.
+
+2008-04-14:
+Changed rowneedsrefresh in scroll up/down one row to be object instead of array for Prototype compatibility.
+Added SocialCalc.SpreadsheetControlCreateCellHTML and SocialCalc.SpreadsheetControlCreateCellHTMLSave.
+
+2008-04-16:
+Fixed SocialCalc.Formula.OperandAsSheetName not handling coords and names to get sheet name.
+
+2008-04-17:
+Keyboard handing: Fixed initial "[" being ignored, backspace passing through to browser at top level (now treated as delete).
+Fixed sheetname!range_name not working and numerous other sheetname! bugs.
+Fixed handling of space after coord in formula.
+If SocialCalc.Formula.SheetCache.loadsheet returns null, an error is displayed in addition to #REF!.
+
+2008-04-18:
+Added dorecalc argument to SocialCalc.ConvertSaveToOtherFormat.
+
+2008-04-21:
+Added editor.SettingsCallbacks.
+Added named ranges to Sort.
+
+2008-04-23:
+Added SocialCalc.defaultvalues.minimumcolwidth.
+Added column drag resizing.
+Fixed bug with dragging cursor out of grid losing capture on Firefox and Safari.
+
+2008-04-24:
+Made drag resize display work in Opera.
+Removed dependency on body setting for font-size:small.
+Added more button bar buttons: Reverse, Wiki Text, Align, etc.
+Added spreadsheet control ExportCallback.
+
+2008-04-25:
+Fixed thumbstatus font size.
+More drag resize for Opera and Firefox 3.
+
+2008-04-26:
+Fixed merge button bug.
+
+
+TO DO:
+
+Handle unknown function better - should be error message but propogate OK.
+
+Limit undo size?
+Break out visible strings
+1 row scroll of high cells doesn't update row height values or something -
+ scroll in Merges and Scrolling when 2 panes -- may be dragging when scrolled
+ doesn't know trying to set too far: check test
+Bug in SocialCalc.pm: adjust_formula_coords refs to deleted cells -- doesn't handle multiple
+Bug in Sheet.pm: test_criteria tests "value" instead of "type" for left error
+Check SheetFunctions.pm: Dseries with criteria of "0" -- checks for blank as !criteria, not length
+ Also, see double testcol setting.
+INDEX function (and range return from evaluate polish) does not handle other sheets.
+ Make DecodeRangeParts get that stuff to make it easy?
+Bug in SheetFunctions.pm: StringFunctions error doesn't return right away
+ RIGHT has -1 args?
+ InterestFunctions: should be -3 args?
+ IRR check for values?
+Bug in Sheet.pm: evaluate_parsed_formula return of range doesn't swap sheetname!coord
+
+
+

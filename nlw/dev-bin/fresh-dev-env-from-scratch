@@ -18,16 +18,11 @@ fi
 
 cd $(dirname $0)/..
 
-dev-bin/set-skin-symlink
-target=`readlink share/skin`
-echo "Verifying symlink target: $target"
-if [ ! -d $target ]
-then
-    echo
-    echo You need to checkout https://repo.socialtext.net:8999/svn/socialtext-skins/ 
-    echo next to this branch, before running this script.
-    exit 1
-fi
+for skin in `ls ../socialtext-skins/skin`; do
+    target=../../../socialtext-skins/skin/$skin
+    link=share/skin/$skin
+    [ -s $link ] || ln -sf $target $link
+done
 
 set -x
 PORT=$(($START_PORT+$UID)) ./configure --dev=1 --apache-proxy=$FDEFS_PROXY --server-admin=support@socialtext.com

@@ -1,0 +1,19 @@
+[% extra_text -%]
+
+[% loc('Hi,') %]
+
+[% loc("I'm inviting you to join [_1], one of our shared workspaces. Sign in using the information below:", workspace_title) %]
+
+[% loc('web address:') %] [% workspace_uri | html %]
+[% loc('username:') %][% username | html %]
+
+[% loc('You can now sign into our system using OpenID. On the Socialtext login screen, please input your OpenID into the indicated field and you will be redirected to the OpenID site to verify your identity. Once you have verified your identity, you will be sent back to the Socialtext site and be able to access the workspace.') %]
+
+[% loc('You may want to keep this email for future reference.') %]
+
+[% loc('Thanks,') %]
+
+[% inviting_user %]
+
+[% PROCESS 'email/standard-footer.txt'
+   support_link = 1 %]

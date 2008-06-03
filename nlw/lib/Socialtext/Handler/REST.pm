@@ -17,6 +17,8 @@ use File::Spec;
 use Readonly;
 use Scalar::Util qw(blessed);
 use YAML;
+use Socialtext::Log 'st_timed_log';
+use Socialtext::Timer;
 
 Readonly my $URI_MAP => 'uri_map.yaml';
 Readonly my $AUTH_MAP => 'auth_map.yaml';
@@ -33,13 +35,17 @@ sub handler ($$) {
     my $class = shift;
     my $r     = shift;
 
+    my %timings = ();
+    my $timer = Socialtext::Timer->new;
+    my $auth_timer = Socialtext::Timer->new;
     my $auth_info = $class->getAuthForURI($r->uri);
 
     my $user = $class->authenticate($r) || $class->guest($r, $auth_info);
+    $timings{web_auth} = $auth_timer->elapsed;
 
     return $class->challenge(request => $r, auth_info => $auth_info) unless $user;
 
-    return $class->real_handler($r, $user);
+    return $class->real_handler($r, $user, \%timings, $timer);
 }
 
 sub guest {
@@ -74,11 +80,22 @@ sub challenge {
 
 # FIXME: We do not want to return OK here in all cases.
 sub real_handler {
-    my $class = shift;
-    my $r     = shift;
-    my $user  = shift;
+    my $class   = shift;
+    my $r       = shift;
+    my $user    = shift;
+    my $timings = shift;
+    my $timer   = shift;
 
-    __PACKAGE__->new( request => $r, user => $user )->run();
+    my $handler = __PACKAGE__->new( request => $r, user => $user );
+    my $run_timer = Socialtext::Timer->new();
+    $handler->run();
+    $timings->{handler_run} = $run_timer->elapsed;
+
+    my $message = $handler->getRequestMethod() . ' '
+        . $r->uri
+        . ( $r->args ? '?' . scalar( $r->args ) : '' );
+    $timings->{overall} = $timer->elapsed;
+    st_timed_log('info', 'WEB', $message, {}, $timings);
     return OK;
 }
 

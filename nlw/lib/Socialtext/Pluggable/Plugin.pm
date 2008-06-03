@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Socialtext;
+use Socialtext::HTTP ':codes';
 use Socialtext::TT2::Renderer;
 use Socialtext::AppConfig;
 use Class::Field qw(const field);
@@ -69,16 +70,18 @@ sub username {
 
 sub header_out {
     my $self = shift;
-    return $self->hub->rest->header(@_);
+    my $rest = $self->rest || $self->hub->rest;
+    return $rest->header(@_);
 }
 
 sub header_in {
     my $self = shift;
+    my $rest = $self->rest || $self->hub->rest;
     if (@_) {
-        return $self->hub->rest->request->header_in(@_);
+        return $rest->request->header_in(@_);
     }
     else {
-        return $self->hub->rest->request->headers_in;
+        return $rest->request->headers_in;
     }
 }
 
@@ -180,7 +183,12 @@ sub redirect {
     unless ($target =~ /^(https?:|\/)/i or $target =~ /\?/) {
         $target = $self->hub->cgi->full_uri . '?' . $target;
     }
-    $self->hub->headers->redirect($target);
+
+    $self->header_out(
+        -status => HTTP_302_Found,
+        -Location => '/',
+    );
+    return;
 }
 
 sub template_render {

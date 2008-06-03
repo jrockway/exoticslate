@@ -16,6 +16,21 @@ sub allowed_methods {'GET, HEAD'}
 sub collection_name { "Changes" }
 sub permission { +{} }
 
+sub _get_user_bfn_and_id {
+    my ($self, $username, $ws) = @_;
+    my $user = Socialtext::User->new(username => $username);
+    my $bfn = $user->best_full_name(workspace => $ws);
+    return ($bfn, $user->user_id);
+}
+# TODO: memoize the above if too slow, reset _bfn_cache on each call to
+# _entities_for_query()
+#   use Memoize;
+#   my $_bfn_cache = {};
+#   memoize '_get_user_bfn_and_id',
+#       LIST_CACHE => ['HASH', $_bfn_cache],
+#       NORMALIZER => '_bfn_normalizer';
+#   sub _bfn_normalizer { $_[1]."\000".$_[2]->name }
+
 sub _entities_for_query {
     my ($self, $rest) = @_;
 
@@ -30,9 +45,11 @@ sub _entities_for_query {
         my $res = $self->hub->recent_changes->default_result_set;
         # for each result that is returned get a summary of it
         foreach my $row (@{$res->{rows}}) {
-           my $page = $self->hub->pages->new_page($row->{page_id});
-           my $summary = $page->preview_text();
-           $row->{Summary} = $summary;
+            my $page = $self->hub->pages->new_page($row->{page_id});
+            my $summary = $page->preview_text();
+            $row->{Summary} = $summary;
+            ($row->{best_full_name}, $row->{user_id}) = 
+                $self->_get_user_bfn_and_id($row->{username}, $ws);
         }
 
         push @changes, grep { $_->{workspace} = $ws->name } @{$res->{rows}};

@@ -289,14 +289,14 @@ Socialtext.render_spreadsheet_editor = function() {
     jQuery(".st-drawer-button-link").bind("click", function() {
         var prevtype = '';
         jQuery(".st-spreadsheet-drawer:visible").each(function() {
-            prevtype = this.id.replace(/.*-(name|sort|comment|clipboard)-.*/, '$1')
+            prevtype = this.id.replace(/.*-(name|sort|comment|clipboard|cell-settings|sheet-settings)-.*/, '$1')
         });
-        var type = this.id.replace(/.*-(name|sort|comment|clipboard)-.*/, '$1');
+        var type = this.id.replace(/.*-(name|sort|comment|clipboard|cell-settings|sheet-settings)-.*/, '$1');
         jQuery(".st-spreadsheet-drawer")
             .not('#st-spreadsheet-' + type + '-tools')
             .hide();
         jQuery('#st-spreadsheet-' + type + '-tools').show();
-            $drawer.width($drawer.parent().width() - 5);
+        $drawer.width($drawer.parent().width() - 5);
         if ($drawer.is(':hidden')) {
             slideDown($drawer, type);
         }
@@ -502,6 +502,18 @@ Socialtext.render_spreadsheet_editor = function() {
         jQuery(this).val("");
         return false;
     });
+
+    jQuery("#st-spreadsheet-cell-settings-tools select.st-spreadsheet-calignvert")
+    .bind("change", function() {
+        var cmd = "set " + current_spreadsheet_range()
+            + " layout padding: * * * *;"
+            + "vertical-align:" + jQuery(this).val() + ";";
+
+        ss.sheet.ExecuteSheetCommand(cmd, true);
+        ss.FullRefreshAndRender();
+        return false;
+    });
+
 
 };
 

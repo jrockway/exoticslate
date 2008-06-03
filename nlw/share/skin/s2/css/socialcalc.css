@@ -104,6 +104,12 @@
     margin: 0 auto 10px 0px;
 }
 
+#st-spreadsheet-cell-settings-tools,
+#st-spreadsheet-sheet-settings-tools {
+    height: 300px;
+    overflow: auto;
+}
+
 .st-spreadsheet-drawer-label {
     font-size: 75%;
     font-weight: bold;
@@ -246,6 +252,15 @@
 #st-spreadsheet-toolbar #st-clipboard-button-link {
     background: url("../images/socialcalc/clipboard.png") bottom left no-repeat;
 }
+
+#st-spreadsheet-toolbar #st-cell-settings-button-link {
+    background: url("../images/socialcalc/cell-settings.png") bottom left no-repeat;
+}
+
+#st-spreadsheet-toolbar #st-sheet-settings-button-link {
+    background: url("../images/socialcalc/sheet-settings.png") bottom left no-repeat;
+}
+
 
 #st-spreadsheet-toolbar #st-filldown-button-link {
     background: transparent url("../images/socialcalc/fill-down.png") bottom left no-repeat;

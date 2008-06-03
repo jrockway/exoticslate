@@ -118,6 +118,13 @@
             class="button st-drawer-button-link"
             id="st-clipboard-button-link">Clipboard</a>
 
+        <a href="#" title="Cell Settings"
+            class="button st-drawer-button-link"
+            id="st-cell-settings-button-link">Cell Settings</a>
+        <a href="#" title="Sheet Settings"
+            class="button st-drawer-button-link"
+            id="st-sheet-settings-button-link">Sheet Settings</a>
+
         <div id="st-spreadsheet-toolbar-colorpicker"></div>
         <div id="st-spreadsheet-toolbar-bgcolorpicker"></div>
     </div>
@@ -209,6 +216,17 @@
              <input type="button" value="Clear" id="st-spreadsheet-clipboard-clear"/>
              <input type="button" value="Cancel" id="st-spreadsheet-clipboard-cancel"/><br/>
             <textarea id="st-spreadsheet-clipboard-input"></textarea>
+        </div>
+
+        <div id="st-spreadsheet-cell-settings-tools"
+             class="st-spreadsheet-drawer"
+             style="display: none">
+            [% INCLUDE socialcalc_cell_settings %]
+        </div>
+        <div id="st-spreadsheet-sheet-settings-tools"
+             class="st-spreadsheet-drawer"
+             style="display: none">
+            [% INCLUDE socialcalc_cell_settings %]
         </div>
     </div>
     <div id="st-spreadsheet-formula-bar">

@@ -54,9 +54,6 @@
     # files.  This rewrites the URL so it'll get sent to the backend.
     RewriteRule ^/static/wsdl/(.+)   /wsdl/$1 [R,L]
 
-    # Rewrite / to /index.cgi
-    RewriteRule    ^/$ /index.cgi  [R,L]
-
     # Rewrite /noauth feeds to /feed, don't escape args!
     RewriteRule ^/noauth/feed/(.+)   /feed/$1 [R,L,NE]
 

@@ -305,7 +305,7 @@
     '/:ws/index.cgi':
         '*':                    [Socialtext::Rest::App, handler]
 -
-    '/index.cgi':
+    '/':
         '*':                    [Socialtext::Rest::NoWorkspace, handler]
 # -
 #     '/hydra':

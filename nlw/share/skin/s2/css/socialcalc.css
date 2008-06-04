@@ -106,8 +106,10 @@
 
 #st-spreadsheet-cell-settings-tools,
 #st-spreadsheet-sheet-settings-tools {
+    /*
     height: 300px;
     overflow: auto;
+    */
 }
 
 .st-spreadsheet-drawer-label {

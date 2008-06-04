@@ -2,147 +2,6 @@
   <tbody>
     <tr>
       <td class="c1"><br />
-      Format:</td>
-
-      <td class="c4">
-        <table cellspacing="0" cellpadding="0">
-          <tbody>
-            <tr>
-              <td class="c3">
-                <div class="c2">
-                  Number
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cformatnumber-dd">
-                  <option value="">
-                    Default
-                  </option>
-
-                  <option value="">
-                    Custom
-                  </option>
-
-                  <option value="general">
-                    Automatic
-                  </option>
-
-                  <option value="[,]General">
-                    Auto w/ commas
-                  </option>
-
-                  <option value="0">
-                    1234
-                  </option>
-
-                  <option value="#,##01,234.5:#,##0.0">
-                    1,234
-                  </option>
-
-                  <option value="#,##0.00">
-                    1,234.56
-                  </option>
-
-                  <option value="#,##0.000">
-                    1,234.567
-                  </option>
-
-                  <option value="#,##0%">
-                    1,234%
-                  </option>
-
-                  <option value="#,##0.0%">
-                    1,234.5%
-                  </option>
-
-                  <option value="#,##0_);(#,##0)">
-                    (1,234)
-                  </option>
-
-                  <option value="#,##0.0_);(#,##0.0)">
-                    (1,234.5)
-                  </option>
-
-                  <option value="#,##0.00_);(#,##0.00)">
-                    (1,234.56)
-                  </option>
-
-                  <option value="00">
-                    00
-                  </option>
-
-                  <option value="000">
-                    000
-                  </option>
-
-                  <option value="0000">
-                    0000
-                  </option>
-
-                  <option value="$#,##0">
-                    $1,234
-                  </option>
-
-                  <option value="$#,##0.00">
-                    $1,234.56
-                  </option>
-
-                  <option value="yyyy-mm-dd">
-                    2006-01-04
-                  </option>
-
-                  <option value="hh:mm:ss">
-                    01:23:45
-                  </option>
-
-                  <option value="yyyy-mm-dd hh:mm:ss">
-                    2006-01-04 01:23:45
-                  </option>
-
-                  <option value="hidden">
-                    Hidden
-                  </option>
-                </select> <input type="text" value="" size="15" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cformatnumber-ib" />
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Text
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cformattext-dd">
-                  <option value="">
-                    Default
-                  </option>
-
-                  <option value="">
-                    Custom
-                  </option>
-
-                  <option value="general">
-                    Automatic
-                  </option>
-
-                  <option value="text-plain">
-                    Plain Text
-                  </option>
-
-                  <option value="text-html">
-                    HTML
-                  </option>
-
-                  <option value="text-wiki">
-                    Wiki
-                  </option>
-
-                  <option value="hidden">
-                    Hidden
-                  </option>
-                </select> <input type="text" value="" size="15" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cformattext-ib" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td class="c1"><br />
       Alignment:</td>
 
       <td class="c4">
@@ -175,59 +34,20 @@
               <td class="c3">
                 <div class="c2">
                   Family
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cfontfamily-dd">
-                  <option value="">
-                    Default
-                  </option>
-
-                  <option value="">
-                    Custom
-                  </option>
-
-                  <option value="Verdana,Arial,Helvetica,sans-serif">
-                    Verdana
-                  </option>
-
-                  <option value="arial,helvetica,sans-serif">
-                    Arial
-                  </option>
-
-                  <option value="'Courier New',Courier,monospace">
-                    Courier
-                  </option>
-                </select> <input type="text" value="" size="7" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cfontfamily-ib" />
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Bold &amp; Italics
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cfontlook-dd">
-                  <option value="">
-                    Default
-                  </option>
-
-                  <option value="normal normal">
-                    Normal
-                  </option>
-
-                  <option value="normal bold">
-                    Bold
-                  </option>
-
-                  <option value="italic normal">
-                    Italic
-                  </option>
-
-                  <option value="italic bold">
-                    Bold Italic
-                  </option>
+                </div>
+                <select size="1" id="SocialCalc-cfontfamily-dd">
+          <option value="* * * * *">Default</option>
+          <option value="* Verdana,Arial,Helvetica,sans-serif">Verdana</option>
+          <option value="* * arial,helvetica,sans-serif">Arial</option>
+          <option value="* * 'Courier New',Courier,monospace">Courier</option>
                 </select>
               </td>
+
 
               <td class="c3">
                 <div class="c2">
                   Size
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cfontsize-dd">
+                </div><select size="1" id="SocialCalc-cfontsize-dd">
                   <option value="">
                     Default
                   </option>
@@ -379,7 +199,7 @@
                   <option value="36px">
                     36 pixels
                   </option>
-                </select> <input type="text" value="" size="7" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cfontsize-ib" />
+                </select> <input type="text" value="" size="7" id="SocialCalc-cfontsize-ib" />
               </td>
             </tr>
           </tbody>
@@ -388,591 +208,27 @@
     </tr>
 
     <tr>
-      <td class="c1"><br />
-      Color:</td>
-
-      <td class="c4">
-        <table cellspacing="0" cellpadding="0">
-          <tbody>
-            <tr>
-              <td class="c3">
-                <div class="c2">
-                  Text
-                </div>
-                  <select size="1" id="SocialCalc-ctextcolor-dd">
-                  <option value="">
-                    Default
-                  </option>
-
-                  <option value="">
-                    Custom
-                  </option>
-
-                  <option value="rgb(0,0,0)">
-                    Black
-                  </option>
-
-                  <option value="rgb(102,102,102)">
-                    Dark-Gray
-                  </option>
-
-                  <option value="rgb(204,204,204)">
-                    Gray
-                  </option>
-
-                  <option value="rgb(255,255,255)">
-                    White
-                  </option>
-
-                  <option value="rgb(255,0,0)">
-                    Red
-                  </option>
-
-                  <option value="rgb(153,0,0)">
-                    Dark Red
-                  </option>
-
-                  <option value="rgb(255,153,0)">
-                    Orange
-                  </option>
-
-                  <option value="rgb(255,255,0)">
-                    Yellow
-                  </option>
-
-                  <option value="rgb(255,255,204)">
-                    Light Yellow
-                  </option>
-
-                  <option value="rgb(0,255,0)">
-                    Green
-                  </option>
-
-                  <option value="rgb(0,153,0)">
-                    Dark Green
-                  </option>
-
-                  <option value="rgb(0,0,255)">
-                    Blue
-                  </option>
-
-                  <option value="rgb(0,0,153)">
-                    Dark Blue
-                  </option>
-
-                  <option value="rgb(204,204,255)">
-                    Light Blue
-                  </option>
-                </select> <input type="text" value="" size="7" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-ctextcolor-ib" /> <span id="SocialCalc-ctextcolor-cs" class="c5"></span>
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Background
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cbgcolor-dd">
-                  <option value="">
-                    Default
-                  </option>
-
-                  <option value="">
-                    Custom
-                  </option>
-
-                  <option value="rgb(0,0,0)">
-                    Black
-                  </option>
-
-                  <option value="rgb(102,102,102)">
-                    Dark-Gray
-                  </option>
-
-                  <option value="rgb(204,204,204)">
-                    Gray
-                  </option>
-
-                  <option value="rgb(255,255,255)">
-                    White
-                  </option>
-
-                  <option value="rgb(255,0,0)">
-                    Red
-                  </option>
-
-                  <option value="rgb(153,0,0)">
-                    Dark Red
-                  </option>
-
-                  <option value="rgb(255,153,0)">
-                    Orange
-                  </option>
-
-                  <option value="rgb(255,255,0)">
-                    Yellow
-                  </option>
-
-                  <option value="rgb(255,255,204)">
-                    Light Yellow
-                  </option>
-
-                  <option value="rgb(0,255,0)">
-                    Green
-                  </option>
-
-                  <option value="rgb(0,153,0)">
-                    Dark Green
-                  </option>
-
-                  <option value="rgb(0,0,255)">
-                    Blue
-                  </option>
-
-                  <option value="rgb(0,0,153)">
-                    Dark Blue
-                  </option>
-
-                  <option value="rgb(204,204,255)">
-                    Light Blue
-                  </option>
-                </select> <input type="text" value="" size="7" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cbgcolor-ib" /> <span id="SocialCalc-cbgcolor-cs" class="c5"></span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
+    [% PROCESS border_control type="Top" %]
+    [% PROCESS border_control type="Bottom" %]
     </tr>
 
     <tr>
-      <td class="c1"><br />
-      Top Border:</td>
-
-      <td class="c4">
-        <table cellspacing="0" cellpadding="0">
-          <tbody>
-            <tr>
-              <td class="c3">
-                <div class="c2">
-                  On/Off
-                </div><input type="checkbox" onclick="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbt-onoff-bcb" value="" />
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Thickness
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbt-thickness-bdd" disabled="disabled">
-                  <option value="1px">
-                    1 pixel
-                  </option>
-                </select>
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Style
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbt-style-bdd" disabled="disabled">
-                  <option value="solid">
-                    Solid
-                  </option>
-                </select>
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Color
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbt-color-bcdd" disabled="disabled">
-                  <option value="">
-                    Custom
-                  </option>
-
-                  <option value="rgb(0,0,0)">
-                    Black
-                  </option>
-
-                  <option value="rgb(102,102,102)">
-                    Dark-Gray
-                  </option>
-
-                  <option value="rgb(204,204,204)">
-                    Gray
-                  </option>
-
-                  <option value="rgb(255,255,255)">
-                    White
-                  </option>
-
-                  <option value="rgb(255,0,0)">
-                    Red
-                  </option>
-
-                  <option value="rgb(153,0,0)">
-                    Dark Red
-                  </option>
-
-                  <option value="rgb(255,153,0)">
-                    Orange
-                  </option>
-
-                  <option value="rgb(255,255,0)">
-                    Yellow
-                  </option>
-
-                  <option value="rgb(255,255,204)">
-                    Light Yellow
-                  </option>
-
-                  <option value="rgb(0,255,0)">
-                    Green
-                  </option>
-
-                  <option value="rgb(0,153,0)">
-                    Dark Green
-                  </option>
-
-                  <option value="rgb(0,0,255)">
-                    Blue
-                  </option>
-
-                  <option value="rgb(0,0,153)">
-                    Dark Blue
-                  </option>
-
-                  <option value="rgb(204,204,255)">
-                    Light Blue
-                  </option>
-                </select> <input type="text" value="" size="7" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbt-color-bcib" disabled="disabled" /> <span id="SocialCalc-cbt-color-cs" class="c5"></span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td class="c1"><br />
-      Right Border:</td>
-
-      <td class="c4">
-        <table cellspacing="0" cellpadding="0">
-          <tbody>
-            <tr>
-              <td class="c3">
-                <div class="c2">
-                  On/Off
-                </div><input type="checkbox" onclick="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbr-onoff-bcb" value="" />
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Thickness
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbr-thickness-bdd" disabled="disabled">
-                  <option value="1px">
-                    1 pixel
-                  </option>
-                </select>
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Style
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbr-style-bdd" disabled="disabled">
-                  <option value="solid">
-                    Solid
-                  </option>
-                </select>
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Color
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbr-color-bcdd" disabled="disabled">
-                  <option value="">
-                    Custom
-                  </option>
-
-                  <option value="rgb(0,0,0)">
-                    Black
-                  </option>
-
-                  <option value="rgb(102,102,102)">
-                    Dark-Gray
-                  </option>
-
-                  <option value="rgb(204,204,204)">
-                    Gray
-                  </option>
-
-                  <option value="rgb(255,255,255)">
-                    White
-                  </option>
-
-                  <option value="rgb(255,0,0)">
-                    Red
-                  </option>
-
-                  <option value="rgb(153,0,0)">
-                    Dark Red
-                  </option>
-
-                  <option value="rgb(255,153,0)">
-                    Orange
-                  </option>
-
-                  <option value="rgb(255,255,0)">
-                    Yellow
-                  </option>
-
-                  <option value="rgb(255,255,204)">
-                    Light Yellow
-                  </option>
-
-                  <option value="rgb(0,255,0)">
-                    Green
-                  </option>
-
-                  <option value="rgb(0,153,0)">
-                    Dark Green
-                  </option>
-
-                  <option value="rgb(0,0,255)">
-                    Blue
-                  </option>
-
-                  <option value="rgb(0,0,153)">
-                    Dark Blue
-                  </option>
-
-                  <option value="rgb(204,204,255)">
-                    Light Blue
-                  </option>
-                </select> <input type="text" value="" size="7" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbr-color-bcib" disabled="disabled" /> <span id="SocialCalc-cbr-color-cs" class="c5"></span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td class="c1"><br />
-      Bottom Border:</td>
-
-      <td class="c4">
-        <table cellspacing="0" cellpadding="0">
-          <tbody>
-            <tr>
-              <td class="c3">
-                <div class="c2">
-                  On/Off
-                </div><input type="checkbox" onclick="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbb-onoff-bcb" value="" />
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Thickness
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbb-thickness-bdd" disabled="disabled">
-                  <option value="1px">
-                    1 pixel
-                  </option>
-                </select>
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Style
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbb-style-bdd" disabled="disabled">
-                  <option value="solid">
-                    Solid
-                  </option>
-                </select>
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Color
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbb-color-bcdd" disabled="disabled">
-                  <option value="">
-                    Custom
-                  </option>
-
-                  <option value="rgb(0,0,0)">
-                    Black
-                  </option>
-
-                  <option value="rgb(102,102,102)">
-                    Dark-Gray
-                  </option>
-
-                  <option value="rgb(204,204,204)">
-                    Gray
-                  </option>
-
-                  <option value="rgb(255,255,255)">
-                    White
-                  </option>
-
-                  <option value="rgb(255,0,0)">
-                    Red
-                  </option>
-
-                  <option value="rgb(153,0,0)">
-                    Dark Red
-                  </option>
-
-                  <option value="rgb(255,153,0)">
-                    Orange
-                  </option>
-
-                  <option value="rgb(255,255,0)">
-                    Yellow
-                  </option>
-
-                  <option value="rgb(255,255,204)">
-                    Light Yellow
-                  </option>
-
-                  <option value="rgb(0,255,0)">
-                    Green
-                  </option>
-
-                  <option value="rgb(0,153,0)">
-                    Dark Green
-                  </option>
-
-                  <option value="rgb(0,0,255)">
-                    Blue
-                  </option>
-
-                  <option value="rgb(0,0,153)">
-                    Dark Blue
-                  </option>
-
-                  <option value="rgb(204,204,255)">
-                    Light Blue
-                  </option>
-                </select> <input type="text" value="" size="7" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbb-color-bcib" disabled="disabled" /> <span id="SocialCalc-cbb-color-cs" class="c5"></span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td class="c1"><br />
-      Left Border:</td>
-
-      <td class="c4">
-        <table cellspacing="0" cellpadding="0">
-          <tbody>
-            <tr>
-              <td class="c3">
-                <div class="c2">
-                  On/Off
-                </div><input type="checkbox" onclick="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbl-onoff-bcb" value="" />
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Thickness
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbl-thickness-bdd" disabled="disabled">
-                  <option value="1px">
-                    1 pixel
-                  </option>
-                </select>
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Style
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbl-style-bdd" disabled="disabled">
-                  <option value="solid">
-                    Solid
-                  </option>
-                </select>
-              </td>
-
-              <td class="c3">
-                <div class="c2">
-                  Color
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbl-color-bcdd" disabled="disabled">
-                  <option value="">
-                    Custom
-                  </option>
-
-                  <option value="rgb(0,0,0)">
-                    Black
-                  </option>
-
-                  <option value="rgb(102,102,102)">
-                    Dark-Gray
-                  </option>
-
-                  <option value="rgb(204,204,204)">
-                    Gray
-                  </option>
-
-                  <option value="rgb(255,255,255)">
-                    White
-                  </option>
-
-                  <option value="rgb(255,0,0)">
-                    Red
-                  </option>
-
-                  <option value="rgb(153,0,0)">
-                    Dark Red
-                  </option>
-
-                  <option value="rgb(255,153,0)">
-                    Orange
-                  </option>
-
-                  <option value="rgb(255,255,0)">
-                    Yellow
-                  </option>
-
-                  <option value="rgb(255,255,204)">
-                    Light Yellow
-                  </option>
-
-                  <option value="rgb(0,255,0)">
-                    Green
-                  </option>
-
-                  <option value="rgb(0,153,0)">
-                    Dark Green
-                  </option>
-
-                  <option value="rgb(0,0,255)">
-                    Blue
-                  </option>
-
-                  <option value="rgb(0,0,153)">
-                    Dark Blue
-                  </option>
-
-                  <option value="rgb(204,204,255)">
-                    Light Blue
-                  </option>
-                </select> <input type="text" value="" size="7" onchange="SocialCalc.SettingsControlOnchangeBorder(this);" id="SocialCalc-cbl-color-bcib" disabled="disabled" /> <span id="SocialCalc-cbl-color-cs" class="c5"></span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
+    [% PROCESS border_control type="Left" %]
+    [% PROCESS border_control type="Right" %]
     </tr>
 
     <tr>
       <td class="c1"><br />
       Padding:</td>
 
-      <td class="c4">
+      <td class="c4" colspan="3">
         <table cellspacing="0" cellpadding="0">
           <tbody>
             <tr>
               <td class="c3">
                 <div class="c2">
                   Top
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cpadtop-dd">
+                </div><select size="1" id="SocialCalc-cpadtop-dd">
                   <option value="">
                     Default
                   </option>
@@ -1068,13 +324,13 @@
                   <option value="36px">
                     36 pixels
                   </option>
-                </select> <input type="text" value="" size="3" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cpadtop-ib" />
+                </select> <input type="text" value="" size="3" id="SocialCalc-cpadtop-ib" />
               </td>
 
               <td class="c3">
                 <div class="c2">
                   Right
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cpadright-dd">
+                </div><select size="1" id="SocialCalc-cpadright-dd">
                   <option value="">
                     Default
                   </option>
@@ -1170,13 +426,13 @@
                   <option value="36px">
                     36 pixels
                   </option>
-                </select> <input type="text" value="" size="3" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cpadright-ib" />
+                </select> <input type="text" value="" size="3" id="SocialCalc-cpadright-ib" />
               </td>
 
               <td class="c3">
                 <div class="c2">
                   Bottom
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cpadbottom-dd">
+                </div><select size="1" id="SocialCalc-cpadbottom-dd">
                   <option value="">
                     Default
                   </option>
@@ -1272,13 +528,13 @@
                   <option value="36px">
                     36 pixels
                   </option>
-                </select> <input type="text" value="" size="3" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cpadbottom-ib" />
+                </select> <input type="text" value="" size="3" id="SocialCalc-cpadbottom-ib" />
               </td>
 
               <td class="c3">
                 <div class="c2">
                   Left
-                </div><select size="1" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cpadleft-dd">
+                </div><select size="1" id="SocialCalc-cpadleft-dd">
                   <option value="">
                     Default
                   </option>
@@ -1374,7 +630,7 @@
                   <option value="36px">
                     36 pixels
                   </option>
-                </select> <input type="text" value="" size="3" onchange="SocialCalc.SettingsControlOnchange(this);" id="SocialCalc-cpadleft-ib" />
+                </select> <input type="text" value="" size="3" id="SocialCalc-cpadleft-ib" />
               </td>
             </tr>
           </tbody>
@@ -1385,3 +641,109 @@
 </table>
 
 
+
+
+[% BLOCK border_control %]
+      <td class="c1"><br />
+      [% type %] Border:</td>
+
+      <td class="c4">
+        <table cellspacing="0" cellpadding="0">
+          <tbody>
+            <tr>
+              <td class="c3">
+                <div class="c2">
+                  On/Off
+                </div><input type="checkbox" value="" />
+              </td>
+
+              <td class="c3">
+                <div class="c2">
+                  Thickness
+                </div><select size="1" id="SocialCalc-cbt-thickness-bdd" disabled="disabled">
+                  <option value="1px">
+                    1 pixel
+                  </option>
+                </select>
+              </td>
+
+              <td class="c3">
+                <div class="c2">
+                  Style
+                </div><select size="1" id="SocialCalc-cbt-style-bdd" disabled="disabled">
+                  <option value="solid">
+                    Solid
+                  </option>
+                </select>
+              </td>
+
+              <td class="c3">
+                <div class="c2">
+                  Color
+                </div><select size="1" id="SocialCalc-cbt-color-bcdd" disabled="disabled">
+                  <option value="">
+                    Custom
+                  </option>
+
+                  <option value="rgb(0,0,0)">
+                    Black
+                  </option>
+
+                  <option value="rgb(102,102,102)">
+                    Dark-Gray
+                  </option>
+
+                  <option value="rgb(204,204,204)">
+                    Gray
+                  </option>
+
+                  <option value="rgb(255,255,255)">
+                    White
+                  </option>
+
+                  <option value="rgb(255,0,0)">
+                    Red
+                  </option>
+
+                  <option value="rgb(153,0,0)">
+                    Dark Red
+                  </option>
+
+                  <option value="rgb(255,153,0)">
+                    Orange
+                  </option>
+
+                  <option value="rgb(255,255,0)">
+                    Yellow
+                  </option>
+
+                  <option value="rgb(255,255,204)">
+                    Light Yellow
+                  </option>
+
+                  <option value="rgb(0,255,0)">
+                    Green
+                  </option>
+
+                  <option value="rgb(0,153,0)">
+                    Dark Green
+                  </option>
+
+                  <option value="rgb(0,0,255)">
+                    Blue
+                  </option>
+
+                  <option value="rgb(0,0,153)">
+                    Dark Blue
+                  </option>
+
+                  <option value="rgb(204,204,255)">
+                    Light Blue
+                  </option>
+                </select> <input type="text" value="" size="7" id="SocialCalc-cbt-color-bcib" disabled="disabled" /> <span id="SocialCalc-cbt-color-cs" class="c5"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+[% END %]

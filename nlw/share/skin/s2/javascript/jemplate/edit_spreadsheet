@@ -226,7 +226,7 @@
         <div id="st-spreadsheet-sheet-settings-tools"
              class="st-spreadsheet-drawer"
              style="display: none">
-            [% INCLUDE socialcalc_cell_settings %]
+Sheet Menu Goes Here...
         </div>
     </div>
     <div id="st-spreadsheet-formula-bar">

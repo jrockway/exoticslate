@@ -514,6 +514,19 @@ Socialtext.render_spreadsheet_editor = function() {
         return false;
     });
 
+    jQuery("#st-spreadsheet-cell-settings-tools select#SocialCalc-cfontfamily-dd")
+    .bind("change", function() {
+        var cmd = "set " + current_spreadsheet_range()
+            + " font "
+            + jQuery(this).val() + ";";
+
+        console.log(cmd);
+
+        ss.sheet.ExecuteSheetCommand(cmd, true);
+        ss.FullRefreshAndRender();
+        return false;
+    });
+
 
 };
 

@@ -14,6 +14,7 @@ use Carp 'croak';
 
 use Socialtext::Workspace;
 use Socialtext::HTTP ':codes';
+use Socialtext::URI;
 
 our $AUTOLOAD;
 
@@ -227,8 +228,9 @@ sub no_workspace {
 sub full_url {
     my $self = shift;
 
-    return join '',
-        $self->rest->query->url( -absolute => 1, -path_info => 1 ), @_;
+    my $path = $self->rest->query->url( -absolute => 1, -path_info => 1 );
+    my $uri = Socialtext::URI::uri( path => $path, @_ );
+    return $uri;
 }
 
 # Automatic getters for query parameters.

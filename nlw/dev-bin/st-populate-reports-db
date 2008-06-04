@@ -98,6 +98,8 @@ sub is_dev_env {
 sub grant_write_permissions_to_local_logs {  
     my $host = shift;
     `chmod 777 ./`;
+    `rm test_access.log`;
+    `rm test_nlw.log`;
     `touch test_access.log`;
     `touch test_nlw.log`;
     `chmod 666 test_access.log`;

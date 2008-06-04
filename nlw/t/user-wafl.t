@@ -33,4 +33,4 @@ __DATA__
 --- wiki
 By {user devnull1@socialtext.com}
 --- match
-/index.cgi\?devnull1_socialtext.com/
+/devnull1(\@|_)socialtext.com/

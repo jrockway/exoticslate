@@ -1,4 +1,5 @@
 #!/bin/bash
+# @COPYRIGHT@
 
 WIKITESTS="/usr/share/nlw/wikitests"
 
@@ -11,14 +12,17 @@ if [ ! -e /opt/wikitest_files ]; then
 fi
 sudo unzip $WIKITESTS//wikitestfiles.zip -d /opt/wikitest_files/
 
-echo CREATING test-data  WORKSPACE
-sudo -u www-data create-test-data-workspace
+if [ -e /var/www/socialtext/data/test-data ]; then
+    echo "DELETING old test-data workspace"
+    sudo -u www-data /usr/bin/st-admin delete-workspace --w test-data  --no-export
+fi
+echo "IMPORTING  test-data  WORKSPACE"
+sudo -u www-data /usr/bin/st-admin import-workspace --tarball $WIKITESTS/test-data.tar.gz
 
 if [ -e /var/www/socialtext/data/wikitests ]; then
     echo DELETING old wikitests workspace
     sudo -u www-data /usr/bin/st-admin delete-workspace --w wikitests --no-export
 fi
-
 echo IMPORTING wikitests WORKSPACE
 sudo -u www-data /usr/bin/st-admin import-workspace --tarball $WIKITESTS/wikitests.1.tar.gz
 
@@ -26,7 +30,6 @@ if [ -e /var/www/socialtext/data/calctests ]; then
     echo DELETING old calctests workspace
     sudo -u www-data /usr/bin/st-admin delete-workspace --w calctests --no-export
 fi
-
 echo IMPORTING calctests WORKSPACE
 sudo -u www-data /usr/bin/st-admin import-workspace --tarball $WIKITESTS/calctests.1.tar.gz
 

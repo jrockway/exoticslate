@@ -205,9 +205,7 @@ sub share {
 sub template_render {
     my ($self, $template, %args) = @_;
 
-    my %template_vars = $self->hub->main ?
-                        $self->hub->helpers->global_template_vars :
-                        ();
+    my %template_vars = $self->hub->helpers->global_template_vars;
 
     my $name = $self->name;
     my $plugin_dir = $self->plugin_dir;
@@ -219,16 +217,6 @@ sub template_render {
         paths => [ $self->plugin_dir . "/template" ],
         vars     => {
             share => "$share/$name",
-            share_path => sub { 
-                my $file = "$plugin_dir/share/$_[0]";
-                if (-f $file) {
-                    my $t = (stat $file)[9];
-                    return "/nlw/plugin/$t/$name/$_[0]";
-                }
-                else {
-                    return "$share/$name/$_[0]";
-                }
-            },
             workspaces => [$self->hub->current_user->workspaces->all],
             as_json => sub { encode_json(@_) },
             %template_vars,

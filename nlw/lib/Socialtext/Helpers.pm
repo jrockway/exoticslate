@@ -255,7 +255,8 @@ sub _get_wiki_info {
             $self->hub->skin->skin_uri( shift || $skin )
         },
         comment_form_window_height => $wiki->comment_form_window_height,
-        system_status              => $self->hub->main->status_message(),
+        system_status              => $self->hub->main ?
+            $self->hub->main->status_message() : undef,
         comment_by_email           => $wiki->comment_by_email,
         email_in_address           => $wiki->email_in_address,
     };

@@ -20,10 +20,6 @@ COMMENT_FILE=socialtext-comment.js
 COMMENT_FILE_MINI=socialtext-comment-mini.js
 COMMENT_FILE_GZIP=$(COMMENT_FILE).gz
 
-SOCIALCALC_FILE=socialtext-socialcalc.js
-SOCIALCALC_FILE_MINI=socialtext-socialcalc-mini.js
-SOCIALCALC_FILE_GZIP=$(SOCIALCALC_FILE).gz
-
 STAX_FILE=socialtext-stax.js
 STAX_FILE_MINI=socialtext-stax-mini.js
 STAX_FILE_GZIP=$(STAX_FILE).gz
@@ -106,9 +102,6 @@ DISPLAY_UI_SOURCE_FILES= \
 		Wikiwyg/Widgets.js \
 		Wikiwyg/Wikitext/Socialtext.js \
 		Wikiwyg/DataValidator.js \
-		SocialCalc/Control.js \
-		SocialCalc/Toolbar.js \
-		SocialCalc/Socialtext.js \
 		$(COMMON_JAVASCRIPT)/YAML-0.11/lib/YAML.js \
 		Debug.js \
 		ui-last-source.js
@@ -123,13 +116,6 @@ COMMENT_SOURCE_FILES= \
 		GuiEdit.js \
 		comment_popup.js \
 		email_page.js \
-
-SOCIALCALC_SOURCE_FILES=\
-	$(COMMON_JAVASCRIPT)/SocialCalc/socialcalcconstants.js \
-	$(COMMON_JAVASCRIPT)/SocialCalc/socialcalc-3.js \
-	$(COMMON_JAVASCRIPT)/SocialCalc/socialcalctableeditor.js \
-	$(COMMON_JAVASCRIPT)/SocialCalc/formatnumber2.js \
-	$(COMMON_JAVASCRIPT)/SocialCalc/formula1.js \
 
 STAX_SOURCE_FILES= \
 		stax-1.0.js \
@@ -160,21 +146,13 @@ all: \
 	$(DISPLAY_FILE_GZIP) \
 	$(DISPLAY_UI_FILE_GZIP) \
 	$(COMMENT_FILE_GZIP) \
-	$(SOCIALCALC_FILE_GZIP) \
 	$(STAX_FILE_GZIP) \
 	$(OTHER_FILE_GZIP) \
 	$(DISPLAY_FILE_MINI) \
 	$(DISPLAY_UI_FILE_MINI) \
 	$(COMMENT_FILE_MINI) \
-	$(SOCIALCALC_FILE_MINI) \
 	$(STAX_FILE_MINI) \
 	$(OTHER_FILE_MINI) \
-	$(DISPLAY_FILE_GZIP) \
-	$(DISPLAY_UI_FILE_GZIP) \
-	$(COMMENT_FILE_GZIP) \
-	$(SOCIALCALC_FILE_GZIP) \
-	$(STAX_FILE_GZIP) \
-	$(OTHER_FILE_GZIP) \
 	Selection.htc \
 	Cyberbit.ttf \
 
@@ -187,19 +165,16 @@ clean:
 		$(DISPLAY_FILE) \
 		$(DISPLAY_UI_FILE) \
 		$(COMMENT_FILE) \
-		$(SOCIALCALC_FILE) \
 		$(STAX_FILE) \
 		$(OTHER_FILE) \
 		$(DISPLAY_FILE_MINI) \
 		$(DISPLAY_UI_FILE_MINI) \
 		$(COMMENT_FILE_MINI) \
-		$(SOCIALCALC_FILE_MINI) \
 		$(STAX_FILE_MINI) \
 		$(OTHER_FILE_MINI) \
 		$(DISPLAY_FILE_GZIP) \
 		$(DISPLAY_UI_FILE_GZIP) \
 		$(COMMENT_FILE_GZIP) \
-		$(SOCIALCALC_FILE_GZIP) \
 		$(STAX_FILE_GZIP) \
 		$(OTHER_FILE_GZIP) \
 		$(ALL_JEMPLATES) \
@@ -235,15 +210,6 @@ $(COMMENT_FILE): $(WIKIWYG_PATH) $(COMMENT_SOURCE_FILES) Makefile
 	for js in $(COMMENT_SOURCE_FILES); do       \
 	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
 	done
-
-$(SOCIALCALC_FILE): $(WIKIWYG_PATH) $(SOCIALCALC_SOURCE_FILES) Makefile
-	rm -f $@;
-	for js in $(SOCIALCALC_SOURCE_FILES); do       \
-	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
-	done
-
-$(SOCIALCALC_FILE_MINI): $(SOCIALCALC_FILE)
-	cp $< $@
 
 $(STAX_FILE): $(WIKIWYG_PATH) $(STAX_SOURCE_FILES) Makefile
 	rm -f $@;

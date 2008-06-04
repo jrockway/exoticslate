@@ -191,6 +191,12 @@ sub redirect {
     return;
 }
 
+sub share {
+    my $self = shift;
+    my $name = $self->name;
+    return "/nlw/plugin/$prod_ver/$name";
+}
+
 sub template_render {
     my ($self, $template, %args) = @_;
 

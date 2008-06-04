@@ -49,6 +49,10 @@ function nlw_make_static_path(rest) {
     return "[% wiki.static_path %]" + rest;
 }
 
+function nlw_make_plugin_path(rest) {
+    return "[% wiki.static_path %]".replace(/static/, 'nlw/plugin') + rest;
+}
+
 [% USE JSON %]
 
 [% DEFAULT attachments = [] %]

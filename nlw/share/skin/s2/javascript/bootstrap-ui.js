@@ -33,10 +33,7 @@ jQuery(function () {
 
     }
 
-    var load_ui_source = function(cb) {
-        var script_url =
-            nlw_make_s2_path("/javascript/socialtext-display-ui.js.gz")
-            .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time) ;
+    var load_script = function(script_url) {
         var script = jQuery("<script>").attr({
             type: 'text/javascript',
             src: script_url
@@ -46,7 +43,14 @@ jQuery(function () {
             jQuery(script).appendTo('head');
         else
             document.getElementsByTagName('head')[0].appendChild(script);
+    };
 
+    var load_ui = function(cb) {
+        var script_url =
+            nlw_make_s2_path("/javascript/socialtext-display-ui.js.gz")
+            .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time) ;
+
+        load_script( script_url ); 
         var self = this;
         var loader = function() {
             // Test if it's fully loaded.
@@ -54,6 +58,25 @@ jQuery(function () {
                 setTimeout(arguments.callee, 500);
                 return;
             }
+            cb.call(self);
+        }
+        setTimeout(loader, 500);
+    };
+
+    var load_socialcalc = function(cb) {
+        var script_url =
+            nlw_make_plugin_path("/socialcalc/javascript/socialtext-socialcalc.js.gz")
+            .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time) ;
+
+        load_script( script_url ); 
+        var self = this;
+        var loader = function() {
+            // Test if it's fully loaded.
+            if (SocialCalc.bootstrap_finished != true)  {
+                setTimeout(arguments.callee, 500);
+                return;
+            }
+            console.log("calls cb");
             cb.call(self);
         }
         setTimeout(loader, 500);
@@ -67,7 +90,7 @@ jQuery(function () {
 
         jQuery(window).trigger("boostrapping");
 
-        load_ui_source.call(this, function() {
+        load_ui.call(this, function() {
             startup();
             window.setup_wikiwyg();
             cb.call(this);
@@ -90,9 +113,11 @@ jQuery(function () {
         setTimeout(function() {
             window.wikiwyg.start_nlw_wikiwyg();
             if (Socialtext.page_type == 'spreadsheet' && Socialtext.wikiwyg_variables.hub.current_workspace.enable_spreadsheet) {
-                jQuery("#st-all-footers, #st-display-mode-container").hide();
-                jQuery("#st-edit-mode-container, #st-editing-tools-edit").show();
-                start_spreadsheet_editor();
+                load_socialcalc(function() {
+                    jQuery("#st-all-footers, #st-display-mode-container").hide();
+                    jQuery("#st-edit-mode-container, #st-editing-tools-edit").show();
+                    start_spreadsheet_editor();
+                });
                 return false;
             }
 

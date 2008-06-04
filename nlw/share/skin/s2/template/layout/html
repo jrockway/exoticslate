@@ -28,12 +28,6 @@
         </script>
         [% END %]
 
-        [% IF current_workspace.enable_spreadsheet %]
-        <script type="text/javascript" charset="utf-8"
-            src="[% wiki.skin_uri('s2') %]/javascript/socialtext-socialcalc.js.gz">
-        </script>
-        [% END %]
-
         [% combined_file = 'socialtext-other' %]
         [% IF page_action == 'display' %]
             [% combined_file = "socialtext-display" %]

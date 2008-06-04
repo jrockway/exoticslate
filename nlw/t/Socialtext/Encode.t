@@ -51,6 +51,7 @@ symlink "123.txt", "$bad_utf8_dir/index.txt";
     # Note: due to some unknown code change, we get warnings twice now
     # maybe this shouldn't be the case.
     ok @warnings == 4, '...but it\'s not too noisy.';
+    diag @warnings.join("\n----------\n");
 }
 
 # Socialtext::Encode::ensure_is_utf8

@@ -10,12 +10,15 @@ use File::chdir;
 use Socialtext::AppConfig;
 use Socialtext::File;
 use Socialtext::Skin;
+use Socialtext::Pluggable::Adapter;
 use Fcntl ':flock';
 
 sub handler {
     # This env var is set in the apache-perl config file (nlw.conf)
-    _regen_combined_js()
-        if $ENV{NLW_DEV_MODE} && ! Socialtext::AppConfig->benchmark_mode;
+    if ($ENV{NLW_DEV_MODE} && ! Socialtext::AppConfig->benchmark_mode) {
+        _regen_combined_js();
+        Socialtext::Pluggable::Adapter->make;
+    }
 }
 
 sub _regen_combined_js {

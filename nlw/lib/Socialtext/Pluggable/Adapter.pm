@@ -8,6 +8,8 @@ our $AUTOLOAD;
 my %hooks;
 
 use base 'Socialtext::Plugin';
+use Fcntl ':flock';
+use File::chdir;
 use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
                       search_dirs => \@libs;
 use Socialtext::Pluggable::WaflPhrase;
@@ -60,6 +62,27 @@ for my $plugin (__PACKAGE__->plugins) {
     eval "require $plugin";
     die $@ if $@;
     $plugin->register;
+}
+
+sub make {
+    my $class = shift;
+    my $dir = Socialtext::File::catdir(
+        Socialtext::AppConfig->code_base(),
+        'plugin',
+    );
+    for my $plugin ($class->plugins) {
+        my $name = $plugin->name;
+        local $CWD = "$dir/$name";
+        next unless -f 'Makefile';
+
+        my $semaphore = "$dir/build-semaphore";
+        open( my $lock, ">>", $semaphore )
+            or die "Could not open $semaphore: $!\n";
+        flock( $lock, LOCK_EX )
+            or die "Could not get lock on $semaphore: $!\n";
+        system( 'make', 'all' ) and die "Error calling make in $dir: $!";
+        close($lock);
+    }
 }
 
 sub rest_hooks {

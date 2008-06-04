@@ -64,6 +64,11 @@ jQuery(function () {
     };
 
     var load_socialcalc = function(cb) {
+        if (typeof SocialCalc != 'undefined'
+             && SocialCalc.bootstrap_finished)  {
+            cb.call(this);
+        }
+
         var script_url =
             nlw_make_plugin_path("/socialcalc/javascript/socialtext-socialcalc.js.gz")
             .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time) ;
@@ -76,7 +81,6 @@ jQuery(function () {
                 setTimeout(arguments.callee, 500);
                 return;
             }
-            console.log("calls cb");
             cb.call(self);
         }
         setTimeout(loader, 500);
@@ -145,13 +149,11 @@ jQuery(function () {
             SocialCalc.Constants.defaultCommentStyle.replace(
                 /url\(.*?\)/,
                 'url(' +
-                nlw_make_s2_path("").replace(
-                    "s2", 'common/javascript/SocialCalc/images/sc'
-                ) +
-                '-commentbg.gif)'
+                nlw_make_plugin_path('/socialcalc/javascript/dBrick/images/sc')
+                + '-commentbg.gif)'
             );
         ss = new SocialCalc.SpreadsheetControl();
-        ss.editor.imageprefix= nlw_make_s2_path("").replace("s2", 'common/javascript/SocialCalc/images/sc');
+        ss.editor.imageprefix= nlw_make_plugin_path('/socialcalc/javascript/dBrick/images/sc');
         ss.InitializeSpreadsheetControl('st-spreadsheet-edit');
 
         setup_socialcalc();
@@ -166,99 +168,8 @@ jQuery(function () {
     jQuery("#st-refresh-button-link")
     .addClass("bootstrapper")
     .bind("click", bootstrap(function() {
-        jQuery("#st-all-footers, #st-display-mode-container, #st-preview-button, #st-mode-wysiwyg-button, #st-mode-wikitext-button, #st-edit-tips").hide();
-        jQuery("#st-edit-mode-container, #st-editing-tools-edit").show();
-
-//         sheet = new SocialCalc.Sheet();
-//         context = new SocialCalc.RenderContext(sheet);
-//         context.CalculateCellSkipData();
-//         context.PrecomputeSheetFonts();
-//         context.CalculateColWidthData();
-
-        var invisible_edit =
-        jQuery("<div id='st-spreadsheet-invisible-edit'></div>")
-            .appendTo("body").css({ "position": "absolute", "width": "1px", "height":"1px", 'left': '-5000px' });
-
-        ss = new SocialCalc.SpreadsheetControl();
-        ss.editor.imageprefix= nlw_make_s2_path("").replace("s2", 'common/javascript/SocialCalc/images/sc');
-        ss.InitializeSpreadsheetControl('st-spreadsheet-invisible-edit');
-
-// %     do render here
-// %   editor.EditorRenderSheet();
-
-        jQuery.get(
-            Page.restApiUri(),
-            {
-                _: (new Date()).getTime(),
-                accept: 'text/x.socialtext-wiki'
-            },
-            function(serialization) {
-                serialization = serialization
-                    .replace(/^__SPREADSHEET_HTML__[\s\S]*/m, '');
-                ss.DecodeSpreadsheetSave(serialization);
-                var parts = ss.DecodeSpreadsheetSave(serialization);
-                if (parts) {
-                    if (parts.sheet) {
-                        ss.sheet.ResetSheet();
-                        ss.ParseSheetSave(
-                            serialization.substring(
-                                parts.sheet.start,
-                                parts.sheet.end
-                            )
-                        );
-                    }
-                    if (parts.edit) {
-                        ss.editor.LoadEditorSettings(
-                            serialization.substring(
-                                parts.edit.start,
-                                parts.edit.end
-                            )
-                        );
-                    }
-                }
-                ss.sheet.RecalcSheet();
-                ss.FullRefreshAndRender();
-
-                jQuery("#st-content-page-edit")
-                    .children().hide().end()
-                    .append(
-                        "<tr><td>" + ss.CreateSheetHTML() + "</td></tr>"
-                    );
-
-//                 jQuery("#st-edit-border").hide().before("<h4 id='st-spreadsheet-name'></h4><div id='st-spreadsheet-edit'></div>");
-//                 jQuery("#st-spreadsheet-edit").css({ background: '#fff'})
-//                 .html( ss.CreateSheetHTML() );
-
-                // invisible_edit.remove();
-            }
-        );
-
-        jQuery('#st-save-button-link, #st-preview-button-link')
-        .each(function() { this.onclick = function() { return true }; })
-
-        jQuery("#st-cancel-button-link").unbind().one("click", function() {
-            jQuery("#st-edit-mode-container").hide();
-            jQuery("#st-display-mode-container, #st-all-footers").show();
-
-            return false;
-        });
-
-        jQuery("#st-save-button-link").unbind().bind("click", function() {
-            var saver = function() {
-                var serialization =
-                    ss.CreateSpreadsheetSave() +
-                    "\n__SPREADSHEET_HTML__\n" +
-                    ss.CreateSheetHTML() +
-                    "\n__SPREADSHEET_VALUES__\n" +
-                    ss.CreateCellHTMLSave() +
-                    "\n";
-                jQuery('#st-page-editing-pagebody').val(serialization);
-                jQuery('#st-page-editing-form').submit();
-                return true;
-            }
-            saver();
-
-            return false;
+        load_socialcalc(function() {
+            SocialCalc.refresh_spreadsheet();
         });
     }));
 

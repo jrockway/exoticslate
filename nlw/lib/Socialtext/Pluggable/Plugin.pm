@@ -186,9 +186,14 @@ sub redirect {
 
     $self->header_out(
         -status => HTTP_302_Found,
-        -Location => '/',
+        -Location => $target,
     );
     return;
+}
+
+sub logged_in {
+    my $self = shift;
+    return !$self->hub->current_user->is_guest()
 }
 
 sub share {

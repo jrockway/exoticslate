@@ -18,7 +18,6 @@ use Socialtext::User;
 use Socialtext::Session;
 use Socialtext::Helpers;
 use Socialtext::l10n qw( loc loc_lang system_locale );
-use Socialtext::WorkspaceBreadcrumb;
 use URI::Escape qw(uri_escape_utf8);
 
 sub handler ($$) {
@@ -165,11 +164,7 @@ sub login {
 
     my $dest = $self->{args}{redirect_to};
     unless ($dest) {
-        my ($ws) = Socialtext::WorkspaceBreadcrumb->List(
-            user_id => $user->user_id,
-            limit   => 1
-        );
-        $dest = "/" . ( defined($ws) ? $ws->name : "" );
+        $dest = "/";
     }
 
     st_log->info( "LOGIN: " . $user->email_address . " destination: $dest" );

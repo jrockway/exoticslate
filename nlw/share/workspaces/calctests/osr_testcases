@@ -9,8 +9,6 @@ test env properly and are not testing the test-workspace
 * [Test Case: View Spreadsheet Page]
 * [Test Case: Tags]
 * [Test case: functional search tests]
-* [Test Case: Sidebar: Recently Viewed]
-* [Test Case: Sidebar: Recent Changes]
 * [Test Case: Tools: Rename Page]
 * [Test Case: Tools: Delete Page]
 * [Test Case: New Page]
@@ -21,6 +19,7 @@ test env properly and are not testing the test-workspace
 * [Test Case: Orphans List]
 * [Test Case: What's New]
 * [Test Case: All Pages]
+* [Test Case: Tools: Export as HTML]
 
 ^ END
 
@@ -30,31 +29,12 @@ test env properly and are not testing the test-workspace
  `[Test Case: Revisions]` (Features to do this now are missing from socialcalc)
 
 * [Test Case: Tools: Copy Page to Workspace]
-* [Test Case: Tools: Export as HTML]
-* [Test Case: Add Comment]
-* [Test Case: Comment Form Fields]
-* [Test Case: Connections]
-* [Test Case: Authenticated-User-Only]
-* [Test Case: Public Authenticate to Edit]
-* [Test Case: Public]
-* [Test Case: Public-Read-Only]
-* [Test Case: Public-Comment-Only]
-* [Test Case: Intranet]
-* [Test Case: Settings: Email Notification]
-* [Test Case: Direct URI]
-* [Test Case: Strings]
-* [Test Case: Single Dash]
+
 * [Test Case: Inter Workspace Search]
-* [Test Case: RSS Icons]
 * [Test Case: Untitled Page]
 * [Test Case: Page Open Errors]
-* [Test Case: Return to last login]
-* [Test Case: Link Interface]
-* [Test Case: Nasty Double Dashes]
-
-TC Insert Menu will fail as the menu is being reworked. Revise the test.
-
-* [Test Case: Insert Menu]
+* [Test Case: Sidebar: Recently Viewed]
+* [Test Case: Sidebar: Recent Changes]
 
 uses default wikiemail or `$ENV{WIKIEMAIL}`
 
@@ -72,18 +52,7 @@ uses `$ENV{selenium_browser}` set to `*chrome` which is now the default setting
 
 These tests cause all subsequent tests to fail if they fail, so run them last
 
-* [Test Case: Perl Loc]
-* [Test Case: Js Loc]
-* [Test Case: Perl Loc with Multibyte character]
-* [Test Case: Js Loc with Multibyte character]
-
-js-test is run separately after `make` in nlw/share/js-test in a dev env
-use the xwjst alias to run it
-
 ----
-
-These are Test Cases that are not in OSR Testcases. Why not?
-Test Case: Help (don't know how to switch to a new tab)
 
 ----
 

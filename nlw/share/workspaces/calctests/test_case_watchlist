@@ -92,7 +92,7 @@ and the watchlist is not empty |
 
 Set up to check sorting.
 
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=watchlist%20aaa%20spreadsheet%20%%start_time%% |
 | click_and_wait | st-wiki-subnav-link-whats-new |  |
 | click_and_wait | link=Your Watchlist |  |
 

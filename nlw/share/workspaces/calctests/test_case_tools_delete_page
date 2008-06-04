@@ -33,7 +33,6 @@
 
 | click_and_wait | st-rewind-revision-count |  |
 | text_like | st-revisionlist | qr/revision 1.+revision 1/ |
-| click_and_wait | Button |  |
 
 | *Comment* | Tools: Delete Page: Teardown |  |
 | click_and_wait | st-home-link | prepare for next included test |

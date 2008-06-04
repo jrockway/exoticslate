@@ -1,6 +1,5 @@
 | *Comment* | STARTING Test Case: Miki |
 | *Comment* | Test Case: Mikie - View a spreadsheet in the Miki |
-| click_and_wait | st-home-link |
 | open_ok | /%%workspace%%/index.cgi?car_loan |
 | click_ok | link=Mobile |
 | wait_for_element_present_ok | link=Edit |

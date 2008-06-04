@@ -1,22 +1,16 @@
 | *Comment* | Test Case: Tools: Export as HTML |
 
 | *Comment* | Test Case: Tools: Export as HTML Create test page |  |
-| click_and_wait | st-newpage-link |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| type_ok | st-newpage-pagename-edit | HTML_%%start_time%% |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | wikiwyg_wikitext_textarea | HTML_%%start_time%%_content |
+| open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=export_HTML_%20Spreadsheet%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link |  |
 | click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: Tools: Export as HTML Test Export |  |
-| open_ok | /%%workspace%%/index.cgi?action=display_html;page_name=HTML_%%start_time%% |  |
+| open_ok | /%%workspace%%/index.cgi?action=display_html;page_name=export_HTML_%20Spreadsheet%20%%start_time%% |  |
 | text_like | HTML_%%start_time%% |  |
 | text_like | HTML_%%start_time%%_content |  |
 
 | *Comment* | Test Case: Tools: Export as HTML Teardown |  |
-| open_ok | /%%workspace%%/index.cgi?HTML_%%start_time%% |  |
-| click_and_wait | link=Delete Page |  |
-| confirmation_like | Are you sure you want to delete this page? |  |
+| st-admin | purge-page --w %%workspace%% --page export_HTML__Spreadsheet_%%start_time%% |  |
 
 | *Comment* | Test Case: Tools: Export as HTML COMPLETED |

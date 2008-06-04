@@ -61,8 +61,6 @@
 | open_ok | /%%workspace%%/index.cgi?rename_spreadsheet_%%start_time%% |  |
 | click_and_wait | st-rewind-revision-count |  |
 | text_like | st-revisionlist | revision 2 |
-| click_and_wait | Button |  |
-| text_like | st-revision-compare-table | Page renamed to [renamed_spreadsheet_%%start_time%%] |
 
 | *Comment* | Test Case: Tools: Rename Page Teardown |  |
 | st-admin | purge-page --w %%workspace%% --page rename_spreadsheet_%%start_time%% |  |

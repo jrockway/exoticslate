@@ -48,7 +48,7 @@ mkdir -p $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/bin
 cp   prep-wikitests run-wiki-tests $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/bin/
 
 mkdir -p $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/share/nlw/wikitests
-cp  do-wiki-tests  one-wiki-test  README  set-time  setup-selenium  test-data.tar.gz wikitestfiles.zip  wikitests.1.tar.gz calctests.1.tar.gz $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/share/nlw/wikitests/
+cp  do-tests do-calc-tests do-wiki-tests  one-wiki-test  one-calc-test README  set-time  setup-selenium  test-data.tar.gz wikitestfiles.zip  wikitests.1.tar.gz calctests.1.tar.gz $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/share/nlw/wikitests/
 
 echo PACKAGING wikitests using dir2deb
 rm -f $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/wikitests*.deb

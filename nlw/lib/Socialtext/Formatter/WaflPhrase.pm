@@ -881,7 +881,7 @@ sub _parse_page_for_headers {
             # and causes infinite recursion.  So lets put {{ }} around it
             # so it doesn't render, but still looks weird, so the user
             # can fix it. - Bug 598
-            $header->{text} =~ s/{(toc:?\s*.*?)}/{{{$1}}}/;
+            $header->{text} =~ s/{(toc:?\s*.*?)}/{{{$1}}}/g;
 
             my $stars = '*' x ($header->{level} - ($min-1));
             $wikitext .= "$stars {link: $linkref $header->{text}}\n";

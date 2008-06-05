@@ -77,7 +77,7 @@ jQuery(function () {
         var self = this;
         var loader = function() {
             // Test if it's fully loaded.
-            if (SocialCalc.bootstrap_finished != true)  {
+            if (! (SocialCalc && SocialCalc.bootstrap_finished == true))  {
                 setTimeout(arguments.callee, 500);
                 return;
             }

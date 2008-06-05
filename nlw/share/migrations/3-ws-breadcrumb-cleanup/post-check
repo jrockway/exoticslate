@@ -14,8 +14,4 @@ if [ $? -ne 0 ]; then
     fi
 fi
 
-# Ensure the FK constraints are there.
-DIR=$(dirname $0)
-$DIR/fk-constraint-check
-
 exit 0;

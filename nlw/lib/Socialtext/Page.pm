@@ -726,6 +726,7 @@ sub store {
         $body =~ s/\{now\}/$self->formatted_date/egi;
         $body =~ s/\n*\z/\n/;
         $metadata->Control('');
+        $metadata->Summary( $self->preview_text( $body ) );
         $self->content($body);
     }
     else {
@@ -1129,30 +1130,31 @@ sub purge {
     File::Path::rmtree($page_path);
 }
 
-Readonly my $MouseoverLength => 100;
+Readonly my $ExcerptLength => 350;
 sub preview_text {
-    my $self = shift;
+    my $self    = shift;
+    my $content = shift || $self->content;
 
-    my $content = $self->_preview_content;
-    return '(' . $self->age_in_english . ') ' . $content;
+    my $excerpt = $self->_to_plain_text( $content );
+    $excerpt = substr( $excerpt, 0, $ExcerptLength ) . '...'
+        if length $excerpt > $ExcerptLength;
+    return $excerpt;
 }
 
-sub _preview_content {
-    my $self = shift;
+sub _to_plain_text {
+    my $self    = shift;
+    my $content = shift;
 
-    my $preview = $self->load->content;
-    $preview = substr( $preview, 0, $MouseoverLength + 100 )
-        if length $preview > $MouseoverLength + 100;
+    use Socialtext::WikiText::Parser;
+    use Socialtext::WikiText::Emitter::SearchSnippets;
 
-    $preview =~ s/[^\w\.\,\-\@\&\(\)\[\]]/ /g;
-    $preview =~ s/\s+/ /g;
-    $preview =~ s/--+//g;
-    $preview =~ s/&/&amp;/g;
+    my $parser = Socialtext::WikiText::Parser->new(
+        receiver => Socialtext::WikiText::Emitter::SearchSnippets->new,
+    );
 
-    $preview = substr( $preview, 0, $MouseoverLength ) . '...'
-        if length $preview > $MouseoverLength;
-    return $preview;
+    return $parser->parse( $content );
 }
+
 
 # REVIEW: We should consider throwing exceptions here rather than return codes.
 sub duplicate {

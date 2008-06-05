@@ -54,6 +54,9 @@ sub push_result {
     $result->{page_id} = $page->id;
     $result->{username} =
         $page->last_edited_by->username;
+    if ( $self->cgi->summaries ) {
+        $result->{Summary} = $result->{Summary} || $page->preview_text;
+    }
 
     push @{$self->result_set->{rows}}, $result;
     return 1;
@@ -96,6 +99,8 @@ sub display_results {
     $self->result_set(undef);
     $self->render_screen(
         %$result_set,
+        summaries => $self->cgi->summaries || 0,
+        sortby => $self->cgi->sortby || 'Date',
         sortdir => $sortdir,
         error_message => $self->error_message,
         listview_extra_columns => $self->listview_extra_columns,

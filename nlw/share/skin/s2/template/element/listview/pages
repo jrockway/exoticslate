@@ -1,7 +1,34 @@
 [%# @COPYRIGHT@ -%]
 [% USE decorate %]
-<table id="[% style %]-content" class="query-results-content">
-    <tr id="[% style %]-header-row" class="query-results-header-row">[% PROCESS listing_headers %]</tr>
+<div id="[% style %]-content" class="query-results-content">
+    <div id="[% style %]-header-row" class="query-results-header-row">
+      <div id="select-all"><input title=[% loc("Select all pages") %] type="checkbox" id="st-listview-allpagescb"/></div>
+      <div id="show-titles-or-summaries">
+        [% loc('Show:') %]
+        <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];titles=1">[% loc('Titles') %]</a> | <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1">[% loc('Summaries') %]</a></div>
+      <div id="sort-by-picker">[% loc('Sort by:') %]
+  <script language="javascript">
+  var query_start = "?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %]";
+  function sort_by() {
+      var selected = jQuery('select#sort-picker').val();
+      window.location = query_start + ';' + selected;
+  }
+  </script>
+
+        <select id="sort-picker" onchange="sort_by();">
+          [% IF allow_relevance %]
+          <option [% IF sortby == 'Relevance' %]selected="selected"[% END %] value="sortby=Relevance;direction=[% sortdir.Relevance %]">[% loc('Relevance') %]</option>
+          [% END %]
+          <option [% IF sortby == 'Subject' %]selected="selected"[% END %] value="sortby=Subject;direction=[% sortdir.Subject %]">[% loc('Title') %]</option>
+          [% IF show_workspace %]
+          <option [% IF sortby == 'Workspace' %]selected="selected"[% END %] value="sortby=Workspace;direction=[% sortdir.Workspace %]">[% loc('Workspace') %]</option>
+          [% END %]
+          <option [% IF sortby == 'From' %]selected="selected"[% END %] value="sortby=From;direction=[% sortdir.From %]">[% loc('Last Edited By') %]</option>
+          <option [% IF sortby == 'Date' %]selected="selected"[% END %] value="sortby=Date;direction=[% sortdir.Date %]">[% loc('Date') %]</option>
+          <option [% IF sortby == 'revision_count' %]selected="selected"[% END %] value="sortby=revision_count;direction=[% sortdir.revision_count %]">[% loc('Revisions') %]</option>
+        </select>
+      </div>
+    </div>
 [%
     FOREACH row = rows;
       PROCESS listing_row page_uri        = row.page_uri,
@@ -19,33 +46,39 @@
                           revisions       = row.revision_count;
     END;
 %]
-</table>
+</div>
 
 [% BLOCK listing_row %]
-    <tr class="[% style %]-row query-results-row w-st-[% IF odd %]even[% ELSE %]odd[% END %]-row">
-        <td class="st-listview-select">
+    <div class="[% style %]-row query-results-row">
+        <div class="st-listview-select">
             <input class="st-listview-selectpage-checkbox" type="checkbox" name="page_selected" value="[% page_id %]">
-        </td>
+        </div>
     [% IF listview_extra_columns.watchlist %]
-        <td class="[% style %]-row-watchlist query-results-row-watchlist">
+        <div class="[% style %]-row-watchlist query-results-row-watchlist">
            [% IF loc_lang == 'en' %]
                <img src="[% wiki.skin_uri('s2') %]/images/st/pagetools/watch-on-list.gif" alt="[% row.page_uri %]" class="watchlist-list-toggle" />
            [% ELSE %]
                <img src="[% wiki.skin_uri('s2') %]/images/st/pagetools/watch-star-on.gif" alt="[% row.page_uri %]" class="watchlist-list-toggle" />
            [% END %]
 
-        </td>
+        </div>
     [% END %]
-        <td class="[% style %]-row-title query-results-row-title">
-            [% IF current_workspace.enable_spreadsheet %]
+        <div class="[% style %]-row-title query-results-row-title">
                 [% IF page_type == 'spreadsheet' %]
                    <img src="[% wiki.skin_uri('s2') %]/images/st/pagetools/ss16.png" />
                 [% ELSE %]
                    <img src="[% wiki.skin_uri('s2') %]/images/st/pagetools/doc16.png" />
                 [% END %]
-            [% END %]
 
-            <a class="[% style %]-row-title-link query-results-row-title-link" href="/[% workspace_name %]/index.cgi?[% page_uri %]" title="[% summary %]">[% subject | html %]</a>
+            <a class="[% style %]-row-title-link query-results-row-title-link" href="/[% workspace_name %]/index.cgi?[% page_uri %]">[% subject | html %]</a>
+        [% IF show_workspace %]
+        <span class="[% style %]-row-workspace query-results-row-workspace">
+            in <a href="/[% workspace_name %]/">[% workspace_title %]</a>
+        </span>
+        [% END %]
+            [% IF summaries %]
+            <div class="[% style %]-row-summary query-results-row-summary">[% summary %]</div>
+            [% END %]
 
       [% IF row.attachments;
              FOREACH attachment = row.attachments;
@@ -57,14 +90,9 @@
           END;
       %]
 
-        </td>
-        [% IF show_workspace_column %]
-        <td class="[% style %]-row-workspace query-results-row-workspace">
-            <a href="/[% workspace_name %]/">[% workspace_title %]</a>
-        </td>
-        [% END %]
-        <td class="[% style %]-row-last-edited-by query-results-row-last-edited-by">[% username | decorate('username') %]</td>
-        <td class="[% style %]-row-date query-results-row-date">
+        </div>
+        <div class="[% style %]-row-last-edited-by query-results-row-last-edited-by">[% username | decorate('username') %]</div>
+        <div class="[% style %]-row-date query-results-row-date">
         [%
            page_date;
            IF row.attachments;
@@ -74,11 +102,11 @@
            END;
         %]
 
-        </td>
-        <td class="[% style %]-row-revisions query-results-row-revisions">
+        </div>
+        <div class="[% style %]-row-revisions query-results-row-revisions">
           <a href="[% script_name %]?action=revision_list;page_name=[% page_uri %]">[% revisions %]</a>
-        </td>
-    </tr>
+        </div>
+    </div>
 [% END %]
 
 [% BLOCK listing_headers %]

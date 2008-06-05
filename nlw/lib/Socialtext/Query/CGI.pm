@@ -6,6 +6,8 @@ use warnings;
 use base 'Socialtext::CGI';
 use Socialtext::CGI qw( cgi );
 
+cgi 'titles';
+cgi 'summaries';
 cgi 'direction';
 cgi 'search_term';
 cgi 'orig_search_term';

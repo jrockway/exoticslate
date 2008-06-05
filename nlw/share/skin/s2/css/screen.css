@@ -1348,27 +1348,92 @@ tr.w-st-odd-row, tr.w-st-odd-row td {
 }
 
 .query-results-row-revisions {
-    text-align: right;
+    text-align: left;
+    white-space:nowrap;
+    margin-left:4.7em;
+    display:inline;
+    color:gray;
+    font-size:85%;
+}
+
+.query-results-row-revisions:before {
+}
+.query-results-row-revisions:after {
+    content:" revisions";
 }
 
 .query-results-content {
     font-size: 85%;
-    border-collapse: collapse;
-    border: 1px dashed #ddd;
-    border-left: 1px solid #ddd;
     width: 100%;
-    border-right: 1px solid #ddd;
 }
 
 .query-results-row {
     border-collapse: collapse;
-    border: 1px dashed #ddd;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
+    margin:0;
+    padding:0.5em 0 3em 0;
+    clear:both;
+}
+
+.st-listview-select {
+    float:left;
+    display:block;
+    margin:0;
+    padding:0;
+    width:3%;
+}
+
+.query-results-row-title {
+    display:block;
+    float:left;
+    margin:0;
+    padding:0;
+    width:90%;
+}
+
+.query-results-row-title img {
+    float:left;
+}
+
+.query-results-row-title a {
+    font-weight:bold;
+    display:block;
+    margin-left:2em;
+}
+
+.query-results-row-title div {
+    display:block;
+    margin-left:2em;
+}
+
+.query-results-row-last-edited-by {
+    display:block;
+    float:right;
+    margin:0;
+    padding:0;
+    font-style:italic;
+    color:gray;
+    width:30%;
+    text-align:right;
+}
+
+.query-results-row-last-edited-by:before {
+    content:"Last edited by ";
+}
+
+.query-results-row-date {
+    display:block;
+    float:right;
+    clear:right;
+    margin:0;
+    padding:0;
+    font-style:italic;
+    color:gray;
+    width:25%;
+    text-align:right;
 }
 
 .query-results-row a {
-    text-decoration: underline;
+    text-decoration: none;
     color: #00f;
 }
 
@@ -1382,9 +1447,31 @@ tr.w-st-odd-row, tr.w-st-odd-row td {
 
 .query-results-header-row {
     border-collapse: collapse;
-    border: 1px dashed #ddd;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
+    border:1px #ccc solid;
+    background:#f8f8f8;
+    padding:4px 8px;
+    height:1.4em;
+}
+
+#select-all {
+    display:inline;
+    width:3%;
+}
+
+#show-titles-or-summaries {
+    display:inline;
+    width:50%;
+}
+
+#sort-by-picker {
+    float:right;
+    position:relative;
+    top:-1.4em;
+}
+
+#sort-by-picker select {
+    border:1px #666 solid;
+    padding:1px 2px;
 }
 
 .query-results-header-row a {

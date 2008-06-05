@@ -90,7 +90,7 @@ sub search {
         search_term => $self->cgi->search_term
             || $self->cgi->orig_search_term,
         scope => $self->cgi->scope || '',
-        show_workspace_column =>
+        show_workspace =>
             (          ( $self->cgi->scope ne '_' )
                     || ( $self->cgi->search_term      =~ /\bworkspaces:\S+/ )
                     || ( $self->cgi->orig_search_term =~ /\bworkspaces:\S+/ )

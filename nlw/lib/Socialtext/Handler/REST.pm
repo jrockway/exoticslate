@@ -91,13 +91,52 @@ sub real_handler {
     $handler->run();
     $timings->{handler_run} = $run_timer->elapsed;
 
-    my $message = $handler->getRequestMethod() . ' '
-        . $r->uri
-        . ( $r->args ? '?' . scalar( $r->args ) : '' );
-    $timings->{overall} = $timer->elapsed;
-    st_timed_log('info', 'WEB', $message, {}, $timings);
+    $class->log_timings($handler, $timer, $timings);
     return OK;
 }
+
+# record to st_timed_log a record of how long this
+# current request took
+sub log_timings {
+    my $class   = shift;
+    my $handler = shift;
+    my $timer   = shift;
+    my $timings = shift;
+
+    # Only log timing information on a successful request
+    # ie status is either 2xx or 3xx
+    my %headers = $handler->header();
+
+    # we use -status throughout the handlers, byproduct of CGI.pm
+    my $status_string = $headers{-status};
+    my $path = $handler->getLastMatchTemplate();
+    my $status = 'UNDEF';
+    if ( !$status_string || $status_string =~ /^([23]\d{2})\D/ ) {
+        $status = $1 if $status_string;
+
+        # get the template we matched
+        my $message
+            = $handler->getRequestMethod() . ',' . $path . ',' . $status;
+
+        # get the hash which is the keys and values of the :word things
+        # in the template path
+        my %template_vars = $handler->getTemplateVars($path);
+
+        # get any query string data
+        my $query_string =
+            $handler->request->args
+            ? scalar( $handler->request->args )
+            : '';
+
+        my $data
+            = { %template_vars, ( $query_string ? (q => $query_string) : () ) };
+
+        # stop the overall timer
+        $timings->{overall} = $timer->elapsed;
+        st_timed_log( 'info', 'WEB', $message, $data, $timings );
+    }
+}
+
 
 # overrride from REST::Application so we can return file handles effectively
 sub run {

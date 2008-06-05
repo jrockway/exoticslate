@@ -215,7 +215,7 @@ install-schema-files: install-ok
 	$(INSTALL_ROOT) -m 644 etc/socialtext/db/* $(SCHEMA_DIR)
 
 schema: install-ok
-	$(SUDO) -u $(ST_USER) $(STDB) sync
+	$(SUDO) -u $(DB_SUPERUSER) $(STDB) sync
 	$(DB_LOGIN_TEST) template1 NLW
 
 install-files: install-ok         \

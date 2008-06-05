@@ -20,6 +20,7 @@ test env properly and are not testing the test-workspace
 * [Test Case: What's New]
 * [Test Case: All Pages]
 * [Test Case: Tools: Export as HTML]
+* [Test Case: Tools: Copy Page to Workspace]
 
 ^ END
 
@@ -27,8 +28,6 @@ test env properly and are not testing the test-workspace
  `[Test Case: stemming]` DO WE WANT TO ADD STEMMING TESTS TO SOCIALCALC PAGES ?
  `[Test Case: Sidebar: Incoming Links]` (Features to do this now are missing from socialcalc)
  `[Test Case: Revisions]` (Features to do this now are missing from socialcalc)
-
-* [Test Case: Tools: Copy Page to Workspace]
 
 * [Test Case: Inter Workspace Search]
 * [Test Case: Untitled Page]

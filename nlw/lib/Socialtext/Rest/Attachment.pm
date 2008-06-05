@@ -48,6 +48,7 @@ sub GET {
         # See Socialtext::Headers::add_attachments for the IE6/7 motivation
         # behind Pragma and Cache-control below.
         $rest->header(
+            -status           => HTTP_200_OK,
             '-content-length' => -s $file,
             -type             => $mime_type,
             -pragma           => undef,

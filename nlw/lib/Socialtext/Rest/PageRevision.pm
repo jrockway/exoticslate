@@ -53,7 +53,11 @@ sub make_GETter {
                 }
                 else {
                     $rest->header(
+                        -status        => HTTP_200_OK,
                         -type => $content_type . '; charset=UTF-8',
+                        -Last_Modified => $self->make_http_date(
+                            $self->page->modified_time()
+                        ),
                     );
                     return $self->page->content_as_type(
                         type => $content_type,

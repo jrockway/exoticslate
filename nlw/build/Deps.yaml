@@ -133,6 +133,7 @@ URI::FromHash: 0.02
 # Part of URI
 URI::QueryParam: 0
 User::pwent: 1.00
+Wikitext::Socialtext: 0
 XML::Atom: 0.22
 XML::Feed: 0.12
 XML::RSS: 1.05

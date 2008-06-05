@@ -1,8 +1,8 @@
 
 export OUTFILE=testcases.out
 export PLANPAGE="OSR Testcases"
-export PLANWS=wikitests
+export PLANWS=calctests
 
 source do-tests
 
-echo wikitests started
+echo calctests started

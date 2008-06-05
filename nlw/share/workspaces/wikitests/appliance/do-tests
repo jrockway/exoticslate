@@ -1,0 +1,13 @@
+# source this file to run the suite of OSR Testcases
+
+alias tail='tail'
+USERNAME="wikitester@ken.socialtext.net"
+export WIKIEMAIL=$HOSTNAME
+
+    echo PLAN WORKSPACE is $PLANWS
+    sudo -u www-data run-wiki-tests --no-maximize --test-username $USERNAME --test-email $USERNAME  --plan-server http://$HOSTNAME  --plan-workspace $PLANWS --test-server http://$HOSTNAME  --timeout 60000 --plan-page \"$PLANPAGE\" >& $OUTFILE  & 
+    echo ""
+    echo RUNNING "$PLANPAGE" with output to $OUTFILE on host $HOSTNAME
+    echo use tail -f $OUTFILE  to obseve the test run
+    echo ""
+

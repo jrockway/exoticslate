@@ -49,8 +49,7 @@
 | type_ok | new_title | New Copy Page %%start_time%% |
 | click_ok | Button |  |
 | pause | 5000 |  |
-| text_like | //body | The new page name you selected, "New Copy Page %%start_time%%", is
-already in use in workspace "newspace-%%start_time%%" |
+| text_like | //body | The new page name you selected, "New Copy Page %%start_time%%", is already in use in workspace "newspace-%%start_time%%" |
 | click_ok | Button |  |
 | pause | 5000 |  |
 

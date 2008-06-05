@@ -61,8 +61,7 @@ sub handler {
          if (Exception::Class->caught('Socialtext::WebApp::Exception::NotFound') or $e =~ /current_workspace/ ) {
             $rest->header(
                 -status   => HTTP_302_Found,
-                -Location => $self->rest->query->url( -base => 1 )
-                    . '/index.cgi'
+                -Location => '/',
             );
              return ''; # XXX real content here!
          }

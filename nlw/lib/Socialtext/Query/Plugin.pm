@@ -13,11 +13,11 @@ use Storable ();
 # The question to answer with that, though, is if we would
 # need to degrade well in a non javascript situation?
 const sortdir => {
-    Summary        => 1,
-    Subject        => 0,
-    From           => 0,
-    Date           => 0,
-    revision_count => 1,
+    Summary        => 'asc',
+    Subject        => 'asc',
+    From           => 'asc',
+    Date           => 'desc',
+    revision_count => 'desc',
 };
 
 const listview_extra_columns => {};
@@ -93,6 +93,9 @@ sub display_results {
     my $self = shift;
     my $sortdir = shift;
 
+    my $sortby = $self->cgi->sortby || 'Date';
+    my $direction = $self->cgi->direction || $sortdir->{ $sortby };
+
     $self->screen_template('view/listview');
 
     my $result_set = $self->result_set;
@@ -100,8 +103,9 @@ sub display_results {
     $self->render_screen(
         %$result_set,
         summaries => $self->cgi->summaries || 0,
-        sortby => $self->cgi->sortby || 'Date',
+        sortby => $sortby,
         sortdir => $sortdir,
+        direction => $direction,
         error_message => $self->error_message,
         listview_extra_columns => $self->listview_extra_columns,
         @_,
@@ -115,9 +119,7 @@ sub sorted_result_set {
 
     my $sortby = $self->cgi->sortby || 'Date';
 
-    my $direction = length $self->cgi->direction
-      ? $self->cgi->direction ? 1 : 0
-      : $sortdir_map->{$sortby};
+    my $direction = $self->cgi->direction || $sortdir_map->{$sortby};
 
     my $sortsub
         = $self->_gen_sort_closure( $sortdir_map, $sortby, $direction );
@@ -136,22 +138,43 @@ sub sorted_result_set {
 
 sub _gen_sort_closure {
     my $self        = shift;
-    my $sortdir_map = shift;
-    my $sortby      = shift;
-    my $direction   = shift;
+    my $sortdir_map = shift; # the default mapping of sortby to a direction
+    my $sortby      = shift; # the attribute being sorted on
+    my $direction   = shift; # the direction ('asc' or 'desc')
 
-    $sortdir_map->{$sortby} = 1 - $direction;
-    return $sortby eq 'revision_count'
-      ? $direction
-        ? sub { $b->{$sortby} <=> $a->{$sortby} or
-                lc($a->{Subject}) cmp lc($b->{Subject}) }
-        : sub { $a->{$sortby} <=> $b->{$sortby} or
-                lc($a->{Subject}) cmp lc($b->{Subject}) }
-      : $direction
-        ? sub { lc($b->{$sortby}) cmp lc($a->{$sortby}) or
-                lc($a->{Subject}) cmp lc($b->{Subject}) }
-        : sub { lc($a->{$sortby}) cmp lc($b->{$sortby}) or
-                lc($a->{Subject}) cmp lc($b->{Subject}) }
+    # Toggle the const for the current sortby, so that it reverses sort
+    # direction on the values being passed to the template
+    $sortdir_map->{$sortby} = $direction eq 'asc' ? 'desc' : 'asc';
+
+    # cleverness should really just FOAD.
+    if ( $sortby eq 'revision_count' ) { # The only integral attribute, so use numeric sort
+        if ( $direction eq 'asc' ) {
+            return sub {
+                $a->{revision_count} <=> $b->{revision_count}
+                    or lc( $a->{Subject} ) cmp lc( $b->{Subject} );
+                }
+        }
+        else {
+            return sub {
+                $b->{revision_count} <=> $a->{revision_count}
+                    or lc( $a->{Subject} ) cmp lc( $b->{Subject} );
+                }
+        }
+    }
+    else { # We're sorting on anything else - most likely a string
+        if ( $direction eq 'asc' ) {
+            return sub {
+                lc( $a->{$sortby} ) cmp lc( $b->{$sortby} )
+                    or lc( $a->{Subject} ) cmp lc( $b->{Subject} );
+            };
+        }
+        else {
+            return sub {
+                lc( $b->{$sortby} ) cmp lc( $a->{$sortby} )
+                    or lc( $a->{Subject} ) cmp lc( $b->{Subject} );
+            };
+        }
+    }
 }
 
 sub default_result_set {

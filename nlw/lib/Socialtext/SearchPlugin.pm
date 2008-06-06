@@ -19,12 +19,13 @@ const class_title => 'Search';
 const cgi_class => 'Socialtext::Search::CGI';
 
 const sortdir => {
-    Summary        => 1,
-    Subject        => 0,
-    From           => 0,
-    Workspace      => 0,
-    Date           => 1,
-    revision_count => 1,
+    Relevance      => 'desc',
+    Summary        => 'asc',
+    Subject        => 'asc',
+    From           => 'asc',
+    Workspace      => 'asc',
+    Date           => 'desc',
+    revision_count => 'desc',
 };
 
 field 'category_search';

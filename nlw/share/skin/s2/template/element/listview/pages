@@ -17,15 +17,15 @@
 
         <select id="sort-picker" onchange="sort_by();">
           [% IF allow_relevance %]
-          <option [% IF sortby == 'Relevance' %]selected="selected"[% END %] value="sortby=Relevance;direction=[% sortdir.Relevance %]">[% loc('Relevance') %]</option>
+            [% PROCESS sort_by_option name = loc('Relevance') field = 'Relevance' %]
           [% END %]
-          <option [% IF sortby == 'Subject' %]selected="selected"[% END %] value="sortby=Subject;direction=[% sortdir.Subject %]">[% loc('Title') %]</option>
+            [% PROCESS sort_by_option name = loc('Title') field = 'Subject' %]
           [% IF show_workspace %]
-          <option [% IF sortby == 'Workspace' %]selected="selected"[% END %] value="sortby=Workspace;direction=[% sortdir.Workspace %]">[% loc('Workspace') %]</option>
+            [% PROCESS sort_by_option name = loc('Workspace') field = 'Workspace' %]
           [% END %]
-          <option [% IF sortby == 'From' %]selected="selected"[% END %] value="sortby=From;direction=[% sortdir.From %]">[% loc('Last Edited By') %]</option>
-          <option [% IF sortby == 'Date' %]selected="selected"[% END %] value="sortby=Date;direction=[% sortdir.Date %]">[% loc('Date') %]</option>
-          <option [% IF sortby == 'revision_count' %]selected="selected"[% END %] value="sortby=revision_count;direction=[% sortdir.revision_count %]">[% loc('Revisions') %]</option>
+            [% PROCESS sort_by_option name = loc('Last Edited By') field = 'From' %]
+            [% PROCESS sort_by_option name = loc('Date') field = 'Date' %]
+            [% PROCESS sort_by_option name = loc('Revisions') field = 'revision_count' %]
         </select>
       </div>
     </div>
@@ -109,36 +109,11 @@
     </div>
 [% END %]
 
-[% BLOCK listing_headers %]
-    <th id="st-listview-header-select">
-        <input title=[% loc("Select all pages") %] type="checkbox" id="st-listview-allpagescb"/>
-    </th>
-  [% IF listview_extra_columns.watchlist %]
-  <th id="[% style %]-header-watchlist" class="query-results-header-watchlist">
-
-  </th>
-  [% END %]
-  <th id="[% style %]-header-title" class="query-results-header-title">
-    [% PROCESS listing_header_link name = loc('Title') field = 'Subject' %]
-  </th>
-  [% IF show_workspace_column %]
-  <th id="[% style %]-header-workspace" class="query-results-header-workspace">
-    [% PROCESS listing_header_link name = 'Workspace' field = 'Workspace' %]
-  </th>
-  [% END %]
-  <th id="[% style %]-header-last-edited-by" class="query-results-header-last-edited-by">
-    [% PROCESS listing_header_link name = loc('Last Edited By') field = 'From' %]
-  </th>
-  <th id="[% style %]-header-date" class="query-results-header-date">
-    [% PROCESS listing_header_link name = loc('Date') field = 'Date' %]
-  </th>
-  <th id="[% style %]-header-revisions" class="query-results-header-revisions">
-    [% PROCESS listing_header_link name = loc('Revisions') field = 'revision_count' %]
-  </th>
-[% END %]
-
-[% BLOCK listing_header_link %]
-  <a href="?[% predicate %];sortby=[% field %];direction=[% sortdir.$field %];scope=[% scope %];orig_search_term=[% search_term %]">[% name %]</a>
+[% BLOCK sort_by_option %]
+          <option [% IF sortby == field %]selected="selected"[% END %] value="sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</option>
+          [% IF sortby == field %]
+          <option value="sortby=[% field %];direction=[% direction == 'asc' ? 'desc' : 'asc' %]">[% name %] [% direction == 'asc' ? '(desc)' : '(asc)' %]</option>
+          [% END %]
 [% END %]
 
 [% BLOCK attachment_link %]

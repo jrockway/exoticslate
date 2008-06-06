@@ -726,7 +726,7 @@ sub store {
         $body =~ s/\{now\}/$self->formatted_date/egi;
         $body =~ s/\n*\z/\n/;
         $metadata->Control('');
-        $metadata->Summary( $self->preview_text( $body ) );
+        $metadata->Summary( $self->preview_text( $body ) ) unless $metadata->Type eq 'spreadsheet';
         $self->content($body);
     }
     else {

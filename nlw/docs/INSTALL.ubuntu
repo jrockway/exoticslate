@@ -1,4 +1,4 @@
-Installing Socialtext Open release 2.11.5.2 on Ubuntu
+Installing Socialtext Open release 2.20 on Ubuntu
 
 @COPYRIGHT@
 
@@ -11,8 +11,8 @@ See http://www.socialtext.net/open/index.cgi?socialtext_open for updates.
 
 1) Downloading. This step takes a minute or two.
 * Download Socialtext Open
-* tar xvf Socialtext-Open-2.9.5.2.tar.gz 
-* cd Socialtext-Open-2.9.5.2 
+* tar xvf Socialtext-Open-2.20.y.z.tar.gz 
+* cd Socialtext-Open-2.20.y.z 
 
 
 2) Running apt-get. This step takes 15-20 minutes.
@@ -69,24 +69,7 @@ Install these missing dependencies from CPAN? YES
 
 5) Setting up Postgres.  This step takes about 5 minutes.
 
-* With sudo, edit /etc/postgresql/7.4/main/pg_hba.conf
- Add these 2 lines to /etc/postgresql/7.4/main/pg_hba.conf
- (BEFORE the local template1 "all" lines)
- 
-    local   template1   nlw                   trust
-    local   NLW            nlw                   trust
- 
-* sudo /etc/init.d/postgresql-7.4 stop    
-* sudo /etc/init.d/postgresql-7.4 start
-* Create the user
-**  sudo -u postgres createuser nlw
-** sudo -u postgres createdb -O nlw NLW   
-** sudo -u postgres createuser defaultuser
-** sudo -u postgres createdb -O defaultuser NLW_$defaultuser_testing
- * make
- * sudo make install
- * sudo /etc/init.d/apache-perl stop 
- * sudo /etc/init.d/st-apache start 
+See docs/INSTALL.postgres
 
 6) Setting up mail
 

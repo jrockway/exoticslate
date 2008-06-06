@@ -78,7 +78,8 @@ STORAGE_DIR      = $(DATA_ROOT_DIR)/storage
 CACHE_DIR        = $(PREFIX)@CACHEDIR@
 CRON_DIR         = $(PREFIX)/etc/cron.d
 SPOOL_DIR        = $(PREFIX)@SPOOLDIR@
-SCHEMA_DIR	 = $(PREFIX)/etc/socialtext/db
+ST_CONFIG_DIR	 = $(PREFIX)/etc/socialtext
+SCHEMA_DIR	 = $(ST_CONFIG_DIR)/db
 INSTALLED_DIRS   = $(INIT_D_DIR)       \
                    $(ST_INSTALL_DIR)   \
                    $(DATA_ROOT_DIR)    \
@@ -180,7 +181,11 @@ shared-install: install-ok  \
 
 # Run st-migrate --initialize if this is a fresh install
 initialize-st-migrate:
-	if [ "$(FRESH_INSTALL_P)" = "1"  ]; then st-migrate --initialize; fi
+	if [ "$(FRESH_INSTALL_P)" = "1" || \
+	     ! -f $(ST_CONFIG_DIR)/migration.state ]; \
+	then \
+	    st-migrate --initialize; \
+	fi
 
 # If a target does install tasks, make this a dependency, then it will fail if
 # /etc/dont-install-nlw-here exists.

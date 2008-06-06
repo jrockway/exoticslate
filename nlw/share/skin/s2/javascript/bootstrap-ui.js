@@ -71,8 +71,8 @@ jQuery(function () {
 
         var script_url =
             nlw_make_plugin_path("/socialcalc/javascript/socialtext-socialcalc.js.gz")
-            .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time) ;
-
+                .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time) ;
+        // console.log(script_url); // Parag
         load_script( script_url ); 
         var self = this;
         var loader = function() {

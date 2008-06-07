@@ -22,8 +22,6 @@
 | click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
 | click_ok | st-attachments-uploadbutton |  |
-| wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
-| click_ok | st-attachments-uploadbutton |  |
 | wait_for_text_present_ok | Click "Browse" | 30000 |
 | wait_for_element_visible_ok | st-attachments-attach-filename |  |
 | type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.txt |
@@ -42,14 +40,15 @@
 | text_like | st-listview | qr/\@hidden/ |
 
 | *Comment* | Test Case: Hidden email Add Comments to verify that it shows comments added with hidden email |  |
-| open_ok | /%%workspace%%/index.cgi?Hidden_email_%%start_time%% | click_ok | st-comment-button-link |  |
+| open_ok | /%%workspace%%/index.cgi?Hidden_email_%%start_time%% |  |
+| click_ok | st-comment-button-link |  |
 | open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=Hidden_email_%%start_time%%;caller_action=display |  |
 | wait_for_element_visible_ok | st-commentui-textarea | 30000 |
 | type_ok | st-commentui-textarea | Comment 1 %%start_time%% |
 | click_and_wait | st-commentui-savelink |  |
 | open_ok | /%%workspace%%/index.cgi?Hidden_email__%%start_time%% |  |
 | text_like | st-content-page-display | Comment 1 %%start_time%% |
-| text_like | //body | Updated by wikitester@hidden |
+| text_like | //body | qr/Updated by.+\@hidden/ |
 
 | *Comment* | Test Case: Hidden email at weblog |  |
 | click_and_wait | link=Settings |  |
@@ -72,7 +71,7 @@
 
 | *Comment* | Test Case: Hidden email address in home page |  |
 | click_and_wait | st-home-link |  |
-| text_like | qr/\@hidden/ |
+| text_like | qr/\@hidden/ |  |
 
 | *Comment* | Test Case: Hidden Email Address Teardown |  |
 | st-logout |  |  |

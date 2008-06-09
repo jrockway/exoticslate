@@ -229,7 +229,8 @@ sub full_url {
     my $self = shift;
 
     my $path = $self->rest->query->url( -absolute => 1, -path_info => 1 );
-    my $uri = Socialtext::URI::uri( path => $path, @_ );
+    $path = join('', $path, @_);
+    my $uri = Socialtext::URI::uri( path => $path );
     return $uri;
 }
 

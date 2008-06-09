@@ -24,7 +24,14 @@ $JSON::UTF8 = 1;
 # when query parameter order is set to newest, so we need to make
 # a change here. One option is to traverse the list in this method,
 # but we likely already did that somewhere else, so why do it again?
-sub last_modified { @$_[1] ? $_[1]->[0]->{modified_time} : time }
+sub last_modified { 
+    my $self = shift;
+    my $r = shift;
+    if (ref($r) eq 'ARRAY' and @$r) {
+        return $r->[0]{modified_time};
+    }
+    return time;
+}
 
 # REVIEW: This need to be different depending on the query?
 sub collection_name {

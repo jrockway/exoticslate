@@ -85,6 +85,7 @@ sub _make_getter {
                             $self->last_modified($resource)
                         )
                     );
+                    
                     $self->$sub($resource);
                 }
             );
@@ -94,6 +95,9 @@ sub _make_getter {
                 return $self->not_authorized;
             } elsif ($except->isa('Socialtext::Exception::NoSuchWorkspace')) {
                 return $self->no_workspace;
+            }
+            else {
+                warn "Error in ST::Rest::Collection: $except";
             }
         }
 

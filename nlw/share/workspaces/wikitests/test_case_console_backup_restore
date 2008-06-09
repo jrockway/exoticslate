@@ -39,10 +39,10 @@ Open the console and verify it is there
 
 Verify the values in smbhost, smbshare, smbuser, and archivedir but not smbpass
 
-| verifyValue | smbhost | topaz.socialtext.net |
-| verifyValue | smbshare | socialtext |
-| verifyValue | smbuser | qa1 |
-| verifyValue | archivedir | qr/^$/ |
+ verifyValue | smbhost | |
+ verifyValue | smbshare | |
+ verifyValue | smbuser | |
+ verifyValue | archivedir | qr/^$/ |
 
 | click_and_wait | //input[@value='Backup'] |  |
 

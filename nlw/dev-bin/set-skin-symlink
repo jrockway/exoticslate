@@ -12,6 +12,10 @@ use Socialtext::System qw/shell_run/;
 (my $branch = $FindBin::Bin) =~ s#.+/([^/]+)/nlw/dev-bin$#$1#;
 
 my $skin_link = "share/skin";
+if (-d $skin_link) {
+    print "Skin dir is a dir, not a link, so we'll leave it in place...\n";
+    exit;
+}
 unlink $skin_link if -e $skin_link;
 
 $branch = "branches/$branch" if $branch ne 'trunk';

@@ -181,8 +181,7 @@ shared-install: install-ok  \
 
 # Run st-migrate --initialize if this is a fresh install
 initialize-st-migrate:
-	if [ "$(FRESH_INSTALL_P)" = "1" || \
-	     ! -f $(ST_CONFIG_DIR)/migration.state ]; \
+	if [ ! -f $(ST_CONFIG_DIR)/migration.state ]; \
 	then \
 	    st-migrate --initialize; \
 	fi
@@ -220,6 +219,8 @@ install-schema-files: install-ok
 	$(INSTALL_ROOT) -m 644 etc/socialtext/db/* $(SCHEMA_DIR)
 
 schema: install-ok
+	$(SUDO) touch /var/log/st-db.log
+	$(SUDO) chown $(DB_SUPERUSER) /var/log/st-db.log
 	$(SUDO) -u $(DB_SUPERUSER) $(STDB) sync
 	$(DB_LOGIN_TEST) template1 NLW
 

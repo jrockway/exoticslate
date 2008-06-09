@@ -244,7 +244,7 @@ Selection.htc:
 	cp -f $(WIKIWYG_PATH)/lib/Selection.htc $@
 
 Widgets.js: $(WIDGETS_YAML)
-	perl -MYAML -MJSON -e 'print "Wikiwyg.Widgets =\n"; print objToJson(YAML::LoadFile(shift(@ARGV))); print ";\n"' \
+	perl -MYAML -MJSON::XS -e 'print "Wikiwyg.Widgets =\n"; print encode_json(YAML::LoadFile(shift(@ARGV))); print ";\n"' \
 		$< > $@
 
 split-js:

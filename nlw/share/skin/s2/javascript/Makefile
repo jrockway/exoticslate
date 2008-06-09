@@ -181,6 +181,8 @@ clean:
 		Jemplate.js \
 		$(JEMPLATE_MODULE) \
 		$(JEMPLATE_WIKIWYG_MODULE) \
+		Widgets.js \
+
 
 .SUFFIXES: .js -mini.js .js.gz
 
@@ -244,7 +246,7 @@ Selection.htc:
 	cp -f $(WIKIWYG_PATH)/lib/Selection.htc $@
 
 Widgets.js: $(WIDGETS_YAML)
-	perl -MYAML -MJSON::XS -e 'print "Wikiwyg.Widgets =\n"; print encode_json(YAML::LoadFile(shift(@ARGV))); print ";\n"' \
+	perl -MYAML -I../../../../lib -MSocialtext::JSON -e 'print "Wikiwyg.Widgets =\n"; print encode_json(YAML::LoadFile(shift(@ARGV))); print ";\n"' \
 		$< > $@
 
 split-js:

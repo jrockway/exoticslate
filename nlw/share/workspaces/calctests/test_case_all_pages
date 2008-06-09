@@ -2,15 +2,19 @@
 | *Comment* | Test Case: All Pages Set up |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0001%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0002%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0003%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0004%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: All Pages name sorting |  |
@@ -30,6 +34,7 @@
 | *Comment* | Test Case: All Pages date sort |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0005%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 
 | open_ok | %%workspace%%/index.cgi?action=changes&changes=all |
@@ -45,6 +50,7 @@
 | wait_for_element_visible_ok | st-edit-button-link |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | st-save-button-link |  |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-edit-button-link |  |
 
@@ -77,6 +83,7 @@ For some reason, IE 6 blows up when open_ok is used in some places. We avoid it.
 | wait_for_element_visible_ok | st-edit-button-link |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | st-save-button-link |  |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-edit-button-link |  |
 

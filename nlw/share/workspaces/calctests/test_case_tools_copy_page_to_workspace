@@ -7,6 +7,7 @@
 | *Comment* | Test Case: Tools: Copy Page to Workspace. Create a page and a tag to copy |  |
 | open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=copy%20page%20spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link |  |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
 | click_ok | st-tags-addlink |  |

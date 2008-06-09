@@ -3,7 +3,6 @@ test env properly and are not testing the test-workspace
 
 * [Test Case: Verify Location]
 
-* [Test Case: Home]
 * [Test Case: Miki]
 * [Test case: Watchlist]
 * [Test Case: View Spreadsheet Page]
@@ -14,7 +13,7 @@ test env properly and are not testing the test-workspace
 * [Test Case: New Page]
 * [Test Case: Tools: Duplicate Page]
 * [Test Case: Phrase search]
-* [Test Case: Hide sidebar]
+* [Test Case: Explore Spreadsheet sidebar]
 * [Test Case: Tagging]
 * [Test Case: Orphans List]
 * [Test Case: What's New]
@@ -24,34 +23,19 @@ test env properly and are not testing the test-workspace
 
 ^ END
 
+----
+
+^ TODOs and Consider-s
+
  `[Test Case New Page No Overwrite]` (Features to do this now are missing from socialcalc)
  `[Test Case: stemming]` DO WE WANT TO ADD STEMMING TESTS TO SOCIALCALC PAGES ?
  `[Test Case: Sidebar: Incoming Links]` (Features to do this now are missing from socialcalc)
  `[Test Case: Revisions]` (Features to do this now are missing from socialcalc)
+ `[Test Case: Home]` (This behavior relies on the old home page and is dependent on dashboard. Calctests should not do that.)
+ `[Test Case: Inter Workspace Search]` - TBD.
 
-* [Test Case: Inter Workspace Search]
-* [Test Case: Untitled Page]
-* [Test Case: Page Open Errors]
 * [Test Case: Sidebar: Recently Viewed]
 * [Test Case: Sidebar: Recent Changes]
-
-uses default wikiemail or `$ENV{WIKIEMAIL}`
-
-* [Test Case: Email]
-
-The following tests require higher security privileges for the browser, such as `*chrome` for Firefox
-uses `$ENV{selenium_browser}` set to `*chrome` which is now the default setting
-
-* [Test Case: Upload file]
-* [Test Case: Manage files]
-* [Test Case: Delete Selected Attachments]
-* [Test Case: Unzip File]
-* [Test Case: Sorting Files]
-* [Test Case: Manage Files Sorting]
-
-These tests cause all subsequent tests to fail if they fail, so run them last
-
-----
 
 ----
 

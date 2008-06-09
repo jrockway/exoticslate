@@ -1,6 +1,7 @@
 | *Comment* | Test Case: New Page |  |
 | open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=ns%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link |  |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: New Page. Page Already Exists |  |
@@ -12,6 +13,7 @@
 | click_and_wait | st-save-button-link |  |
 
 | st-admin | purge-page --workspace %%workspace%% --page ns_%%start_time%% |  |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-home-link | set up for next included test |
 
 | *Comment* | TODO: Make this test lie test_case_new_page for wikitests. That will first require that the editing conflict {bz 596} bug be fixed. |  |

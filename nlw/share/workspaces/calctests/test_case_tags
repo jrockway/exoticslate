@@ -11,6 +11,7 @@ use or create a workspace with several tags and tagged pages
 | clickAndWait | st-home-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag1%20content%20spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
 | click_ok | st-tags-addlink |  |
@@ -29,6 +30,7 @@ use or create a workspace with several tags and tagged pages
 | clickAndWait | st-home-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag12%20content%20spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
 | click_ok | st-tags-addlink |  |
@@ -47,6 +49,7 @@ use or create a workspace with several tags and tagged pages
 | clickAndWait | st-home-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag2%20content%20spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
 | click_ok | st-tags-addlink |  |

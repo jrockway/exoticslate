@@ -2,15 +2,19 @@
 
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=hey whatsnew %%start_time%% 0001#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_ok | st-save-button-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=hey whatsnew %%start_time%% 0002#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_ok | st-save-button-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=hey whatsnew %%start_time%% 0003#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_ok | st-save-button-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=hey whatsnew %%start_time%% 0004#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_ok | st-save-button-link |  |
 
 | open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
@@ -29,6 +33,7 @@
 
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=hey whatsnew %%start_time%% 0005#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_ok | st-save-button-link |  |
 
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
@@ -41,6 +46,7 @@
 | open_ok | /%%workspace%%/index.cgi?hey whatsnew %%start_time%% 0005 |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 
 | open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |

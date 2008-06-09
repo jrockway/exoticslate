@@ -8,7 +8,7 @@
         <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];titles=1">[% loc('Titles') %]</a> | <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1">[% loc('Summaries') %]</a></div>
       <div id="sort-by-picker">[% loc('Sort by:') %]
   <script language="javascript">
-  var query_start = "?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %]";
+  var query_start = "?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %][% IF summaries == 1 %];summaries=1[% END %]";
   function sort_by() {
       var selected = jQuery('select#sort-picker').val();
       window.location = query_start + ';' + selected;

@@ -1,0 +1,152 @@
+Automated backup and restore testing
+requires that /etc/socialtext/appliance.conf contain smbhost,smbpass,smbshare,smbuser
+Those values are not set by the test so that smbpass is not exposed in the code repository
+
+Give system admin rights to username
+
+| st_admin | create-user --e %%email%% --p %%password%% |  |
+| st_admin | give-system-admin --e %%email%% |  |
+
+Verify that the help-en space exists
+
+| open_ok | /help-en |  |
+| text_like | Socialtext Documentation |  |
+
+Create a test page in the empty admin directory
+
+| st-admin | add-member --w admin --e %%email%% |  |
+| open_ok | /admin/index.cgi?action=new_page |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| type_ok | st-newpage-pagename-edit | Backup Restore %%start_time%% |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | Backup Restore content %%start_time%% |
+| click_and_wait | st-save-button-link |  |
+| open_ok | /admin/index.cgi?action=recent_changes |  |
+| click_and_wait | link=Backup Restore %%start_time%% |  |
+| wait_for_element_visible_ok | st-page-titletext | 30000 |
+| text_like | st-page-titletext | Backup Restore %%start_time%% |
+
+Create a new empty workspace
+
+| st_admin | create-workspace --name empty-%%start_time%% --title "Empty %%start_time%%" |
+
+Open the console and verify it is there
+
+| open_ok | /console/index.cgi?rm=Backup |  |
+| text_like | Perform Backup Now |  |
+
+Verify the values in smbhost, smbshare, smbuser, and archivedir but not smbpass
+
+| verifyValue | smbhost | topaz.socialtext.net |
+| verifyValue | smbshare | socialtext |
+| verifyValue | smbuser | qa1 |
+| verifyValue | archivedir | qr/^$/ |
+
+| click_and_wait | //input[@value='Backup'] |  |
+
+| text_like | Backup is in progress |  |
+
+AFAIK, the console freezes at this point, so just wait a long time
+
+| pause | 180000 | three minutes |
+
+| click_ok | link=Refresh file list |  |
+
+create a second test page in admin
+
+| st_admin | update-page --w admin --e %%email%% --page --page "backup restore page 2 %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "backup restore page 2 %%start_time%%" page has been created. |
+
+create a second empty workspace
+
+| st_admin | create-workspace --name empty-2-%%start_time%% --title "Empty 2 %%start_time%%" |
+
+delete help-en workspace
+
+| st_admin | delete-workspace --w help-en --no-export | The help-en workspace has been deleted. |
+
+wait_for_element_visible_ok name_of _dropdown_list
+
+| wait_for_element_visible_ok | restore_file | 30000 |
+
+select_ok most recent element. How to do that? is it element 0? may need to muck with template
+
+| select_ok | //select[@name='restore_file']/option[1] |  |
+
+| click_and_wait | //input[@value='Restore'] |
+| text_like | Restore in progress |  |
+
+AFAIK, the console freezes at this point, so just wait a long time
+
+| pause | 180000 | three minutes |
+
+verify the backup
+
+| st_admin | create-user --e %%email%% --p %%password%% |  |
+| st_admin | give-system-admin --e %%email%% |  |
+
+help-en is there with reasonable content
+
+| open_ok | /help-en |  |
+| text_like | Socialtext Documentation |  |
+| click_and_wait | link=Start Here |  |
+| text_like | st_page_titletext | Start Here |
+| click_and_wait | link=Workspace Tour - Table of Contents |  |
+| wait_for_element_visible_ok | st-incoming-links-listing | link=How do I make links? |
+
+admin is there containing first new page and missing second new
+
+| open_ok | /admin/index.cgi?backup_restore_%%start_time%% |  |
+| text_like | Backup Restore content %%start_time%% |  |
+| open_ok | /admin/index.cgi?action=recent_changes |  |
+| wait_for_element_present_ok | link=Backup Restore %%start_time%% |  |
+| text_unlike | st-recent_changes-content | backup restore page 2 %%start_time%% |
+
+second new workspace is gone
+
+| open_ok | empty-2-%%start_time%% |  |
+| location_like | help-en |  |
+
+do some operations in admin to verify a working installation
+
+| open_ok | /admin/index.cgi?action=new_page |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| type_ok | st-newpage-pagename-edit | Backup Restore 3 %%start_time%% |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | Backup Restore 3 content %%start_time%% |
+| click_and_wait | st-save-button-link |  |
+| open_ok | /admin/index.cgi?action=recent_changes |  |
+| click_and_wait | link=Backup Restore 3 %%start_time%% |  |
+| wait_for_element_visible_ok | st-page-titletext | 30000 |
+| text_like | st-page-titletext | Backup Restore 3 %%start_time%% |
+
+----
+
+.pre
+adminemail: support\@socialtext.com
+archivedir: ~
+auto-cleanup: 0
+auto-cleanup-count: 10
+auto-cleanup-size: 50G
+backdays: '2,3,4,5,6'
+backhour: 03
+backminutes: 30
+backupfiles: /var/www/socialtext
+detail_report_to_socialtext: 0
+eximsmarthost: ~
+last_restore: ~
+local_archivedir: ''
+report_cc: ~
+report_to_admin: 1
+smbhost: topaz.socialtext.net
+smbpass: PASSWORD
+smbshare: socialtext
+smbuser: qa1
+ssl_certificate_file: /etc/ssl/st-certs/st-cert.cert
+ssl_key_file: /etc/ssl/st-certs/st-cert.key
+timeserver: ~
+user_report_post_url: https://apt.socialtext.net/cgi-bin/receive/receiver.cgi
+.pre

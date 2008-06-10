@@ -596,8 +596,7 @@ sub sheet_range {
         return $error;
     }
 
-
-    $content =~ /\n__SPREADSHEET_HTML__\n(.*?)\n__SPREADSHEET_/;
+    $content =~ /\n__SPREADSHEET_HTML__\n(.*?\n)__SPREADSHEET_/s;
     my $html = $1;
 
     my $dom = pQuery::DOM->fromHTML($html);

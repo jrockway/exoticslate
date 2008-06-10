@@ -1,0 +1,154 @@
+Automated backup and restore testing
+*NOTE: workspace admin and all the help workspaces are automatically restored during a backup
+regardless of the status of the incoming tarball*
+
+| *Comment* | Test Case: Console Backup and Restore |  |
+
+| *Comment* | Give system admin rights and add member |  |
+
+| st_admin | create-user --e %%email%% --p %%password%% |  |
+| st_admin | give-system-admin --e %%email%% |  |
+| st-admin | add-member --w admin --e %%email%% |  |
+
+| *Comment* | Verify that the help-en space exists |  |
+
+| open_ok | /help-en |  |
+| text_like | Socialtext Documentation |  |
+
+| *Comment* | Create a test page in the admin workspace |  |
+
+| open_ok | /admin/index.cgi?action=new_page |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| type_ok | st-newpage-pagename-edit | Backup Restore %%start_time%% |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | Backup Restore content %%start_time%% |
+| click_and_wait | st-save-button-link |  |
+| open_ok | /admin/index.cgi?action=recent_changes |  |
+| click_and_wait | link=Backup Restore %%start_time%% |  |
+| wait_for_element_visible_ok | st-page-titletext | 30000 |
+| text_like | st-page-titletext | Backup Restore %%start_time%% |
+
+| *Comment* | Create a new empty workspace |  |
+
+| st_admin | create-workspace --name empty-%%start_time%% --title "Empty %%start_time%%" --empty |
+| st-admin | add-member --w empty-%%start_time%% --e %%email%% |  |
+
+| *Comment* | Open the console and verify it is there |  |
+
+| open_ok | /console/index.cgi?rm=Backup |  |
+| text_like | Perform Backup Now |  |
+
+| *Comment* | Set the Samba share values |  |
+
+| type_ok | smbhost | topaz.socialtext.net |
+| type_ok | smbshare | socialtext |
+| type_ok | smbuser | qa1 |
+| type_ok | smbpass | il8jeeNg |
+| type_ok | archivedir | qa1 |
+| click_and_wait | //input[@value='Set'] |  |
+
+| *Comment* | Verify the Samba share values |  |
+| open_ok | /console/index.cgi?rm=Backup |  |
+| verifyValue | smbhost | topaz.socialtext.net |
+| verifyValue | smbshare | socialtext |
+| verifyValue | smbuser | qa1 |
+| verifyValue | archivedir | qa1 |
+| verifyValue | smbpass | il8jeeNg |
+
+| *Comment* | Do the Backup |  |
+| click_and_wait | //input[@value='Backup'] |  |
+| text_like | Backup is in progress |  |
+
+| *Comment* | AFAIK, the console freezes at this point, so just wait 30 seconds |  |
+
+| pause | 30000 | thirty seconds |
+
+| *Comment* | create a second test page in admin. It should be gone after restore. |  |
+
+| st_admin | update-page --w admin --e %%email%% --page --page "Backup Restore Page 2 %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "Backup Restore Page 2 %%start_time%%" page has been created. |
+
+| *Comment* | create a second empty workspace. It should be gone after restore. |  |
+
+| st_admin | create-workspace --name empty-2-%%start_time%% --title "Empty 2 %%start_time%%" --empty |
+
+| *Comment* | Do the Restore |  |
+
+| open_ok | /console/index.cgi?rm=Backup |  |
+| wait_for_element_visible_ok | restore_file | 30000 |
+
+| *Comment* | Select most recent element |  |
+
+| select_ok | restore_file | index=0 |
+
+| click_and_wait | //input[@value='Restore'] |  |
+| text_like | Restore in progress |  |
+
+| *Comment* | AFAIK, the console freezes at this point, so just wait a long time |  |
+
+| pause | 180000 | three minutes |
+
+| *Comment* | Verify that the restore completed |  |
+
+| st_admin | give-system-admin --e %%email%% |  |
+
+| open_ok | /console/index.cgi?rm=Backup |  |
+| text_unlike | //body | Restore in progress |
+
+| *Comment* | help-en is there with reasonable content |  |
+
+| open_ok | /help-en |  |
+| text_like | Socialtext Documentation |  |
+| click_and_wait | link=start here |  |
+| text_like | st-page-titletext | Start here |
+| click_and_wait | link=Workspace Tour - Table of Contents |  |
+| wait_for_element_visible_ok | st-incoming-links-listing | 30000 |
+| text_like | st-incoming-links-listing | How do I make links? |
+
+| *Comment* | the RESTORED admin is there containing first new page and missing second new page |  |
+| st_login |  |  |
+| open_ok | /admin/index.cgi?action=recent_changes |  |
+| wait_for_element_present_ok | link=Backup Restore %%start_time%% |  |
+| text_unlike | st-recent_changes-content | Backup Restore Page 2 %%start_time%% |
+| click_and_wait | link=Backup Restore %%start_time%% |
+| wait_for_element_visible_ok | st-page-titletext | 30000 |
+| text_like | st-page-titletext | Backup Restore %%start_time%% |
+| text_like | st-page-content | Backup Restore content %%start_time%% |
+
+| *Comment* | first new workspace is there |  |
+| open_ok | /help-en |  |
+| open_ok | /empty-%%start_time%% |  |
+| location_like | empty-%%start_time%% |  |
+
+| *Comment* | second new workspace is gone, end up at admin instead |  |
+| open_ok | /help-en |  |
+| open_ok | /empty-2-%%start_time%% |  |
+| location_like | admin |  |
+
+| *Comment* | do some operations in admin to verify a working installation |  |
+
+| open_ok | /admin/index.cgi?action=new_page |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| type_ok | st-newpage-pagename-edit | Backup Restore 3 %%start_time%% |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | Backup Restore 3 content %%start_time%% |
+| click_and_wait | st-save-button-link |  |
+| open_ok | /admin/index.cgi?action=recent_changes |  |
+| click_and_wait | link=Backup Restore 3 %%start_time%% |  |
+| wait_for_element_visible_ok | st-page-titletext | 30000 |
+| text_like | st-page-titletext | Backup Restore 3 %%start_time%% |
+
+| *Comment* | Teardown |  |
+
+| st-admin | delete-workspace --no-export --w empty-%%start_time%% | The empty-%%start_time%% workspace has been deleted. |
+| st-admin | purge-page --w admin --p backup_restore_%%start_time%% | was purged |
+| st-admin | purge-page --w admin --p backup_restore_3_%%start_time%% | was purged |
+
+| *Comment* | empty-2 should already be gone. Tear it down anyway. |  |
+
+| st-admin | delete-workspace --no-export --w empty-2-%%start_time%% |  |
+
+| *Comment* | Test Case: Console Backup and Restore COMPLETED |  |

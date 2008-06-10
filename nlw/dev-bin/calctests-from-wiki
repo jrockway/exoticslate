@@ -1,13 +1,24 @@
 #!/bin/bash
 
-# Pull localizations from the local stl10n workspace into a directory
+# Pull localizations from the local calctests  workspace into a directory
+
+if [ "$1" != "" ] && [ "$1" != "testcase" ] && [ "$1" != "testset" ]; then
+    echo "Usage: calctests-from-wiki [testcase|testset]"
+    exit
+fi
 
 PORT=`perl -e 'print $> + 20000'`
 SERVER=http://`hostname`:$PORT
 DIR=$ST_CURRENT/nlw/share/workspaces/calctests
 echo "Using: $SERVER"
-stu-local-copy -s $SERVER -w calctests  -u devnull1@socialtext.com -p d3vnu11l --to $DIR --tag testcase
-stu-local-copy -s $SERVER -w calctests  -u devnull1@socialtext.com -p d3vnu11l --to $DIR --tag testset
 
-echo
+
+if [ "$1" == "testcase" ] || [ "$1" == "" ] ; then
+    stu-local-copy -s $SERVER -w calctests  -u devnull1@socialtext.com -p d3vnu11l --to $DIR --tag testcase
+fi
+
+if [ "$1" == "testset" ] || [ "$1" == "" ]; then
+    stu-local-copy -s $SERVER -w calctests  -u devnull1@socialtext.com -p d3vnu11l --to $DIR --tag testset
+fi
+
 echo "$DIR has been updated."

@@ -30,7 +30,6 @@ jQuery(function () {
         if (ST.TagQueue) window.TagQueue = new ST.TagQueue();
         window.NavBar = new ST.NavBar ();
         ST.hookCssUpload();
-
     }
 
     var load_script = function(script_url) {
@@ -96,9 +95,17 @@ jQuery(function () {
 
         load_ui.call(this, function() {
             startup();
-            window.setup_wikiwyg();
-            cb.call(this);
-            jQuery(window).trigger("bootstrapped");
+            if (Socialtext.page_type == 'spreadsheet') {
+                load_socialcalc.call(this, function() {
+                    cb.call(this);
+                    jQuery(window).trigger("bootstrapped");
+                });
+            }
+            else {
+                window.setup_wikiwyg();
+                cb.call(this);
+                jQuery(window).trigger("bootstrapped");
+            }
         });
     };
 
@@ -115,16 +122,14 @@ jQuery(function () {
     var start_editor = function() {
         // This setTimeout is required to get around of some simple mode bug in IE and FF.
         setTimeout(function() {
-            window.wikiwyg.start_nlw_wikiwyg();
             if (Socialtext.page_type == 'spreadsheet' && Socialtext.wikiwyg_variables.hub.current_workspace.enable_spreadsheet) {
-                load_socialcalc(function() {
-                    jQuery("#st-all-footers, #st-display-mode-container").hide();
-                    jQuery("#st-edit-mode-container, #st-editing-tools-edit").show();
-                    start_spreadsheet_editor();
-                });
+                jQuery("#st-all-footers, #st-display-mode-container").hide();
+                jQuery("#st-edit-mode-container, #st-editing-tools-edit").show();
+                start_spreadsheet_editor();
                 return false;
             }
 
+            window.wikiwyg.start_nlw_wikiwyg();
             // for "Upload files" and "Add tags" buttons
             jQuery( "#st-edit-mode-uploadbutton" ).unbind().click(function() {
                 window.Attachments._display_attach_interface();

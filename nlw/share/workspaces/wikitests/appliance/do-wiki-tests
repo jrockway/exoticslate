@@ -1,6 +1,6 @@
 
 export OUTFILE=testcases.out
-export PLANPAGE="OSR Testcases"
+export PLANPAGE="Appliance Testcases"
 export PLANWS=wikitests
 
 source do-tests

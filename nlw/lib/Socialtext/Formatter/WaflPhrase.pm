@@ -556,6 +556,12 @@ sub cell_value {
     my ($page_id, $cell_id) = @_;
     $cell_id = uc($cell_id);
     my $content = $self->hub->pages->new_from_name($page_id)->content;
+    if ($cell_id =~ /^[A-Z]+\d+:[A-Z]+\d+$/) {
+        (my $cell_range = $cell_id) =~ s/:/\\c/;
+        return $self->sheet_range(
+            $content, $cell_range, '', $page_id, $cell_id
+        );
+    }
     if ($content =~ /^name:${cell_id}:(.*?):([\w\\]+)$/m) {
         my $label = $1;
         my $cell_range = $2;
@@ -563,6 +569,9 @@ sub cell_value {
             return $self->sheet_range(
                 $content, $cell_range, $label, $page_id, $cell_id
             );
+        }
+        else {
+            $cell_id = $cell_range;
         }
     }
     if ($content =~ /^${cell_id}:\s*(.*)/m) {

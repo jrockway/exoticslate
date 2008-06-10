@@ -121,7 +121,7 @@ CHOWN        = chown
 CHMOD        = chmod
 MKDIR        = mkdir -p
 RM_DIR       = $(RM) -R
-CP_DIR       = $(CP) -Lpr
+CP_DIR       = $(CP) -pr
 CHOWN_DIR_ST = $(CHOWN) -R $(ST_USER):$(ST_GROUP)
 
 ##############################################################################
@@ -349,9 +349,7 @@ MANIFEST:
 
 js: javascript
 javascript:
-	# XXX make javascript should be removed from the appliance
-	# debian/rules
-	echo "make javascript is only here for backwards compatability"
+	cd share/skin/s2/javascript && make
 
 tardist: MANIFEST $(PERL_MAKEFILE)
 	$(PERL_MAKE) tardist

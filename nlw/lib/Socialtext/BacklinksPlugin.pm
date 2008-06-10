@@ -346,7 +346,7 @@ use Socialtext::CGI qw( cgi );
 cgi 'page_id';
 cgi 'sortby';
 cgi 'direction';
-
+cgi 'summaries';
 
 1;
 

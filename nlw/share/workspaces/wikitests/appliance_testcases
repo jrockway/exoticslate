@@ -1,0 +1,7 @@
+These testcases are run by the unit tests. Make sure this list only contains finished testcases that should always pass.
+These tests will be run against Firefox on an appliance by the do-wiki-tests appliance script
+
+* [OSR Testcases]
+* [Test case: Business Control Panel]
+* [Test case: Appliance Console]
+* [Test case: Console Backup and Restore]

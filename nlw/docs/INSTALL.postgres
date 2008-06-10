@@ -91,8 +91,8 @@ And then restart your postgres database.
 Finally, create the nlw user and database:
 
     # Create the "nlw" user, without any super privileges
-    sudo -u postgres createuser nlw
     # Allow it to create new databases, but not new users
+    sudo -u postgres createuser --no-superuser --createdb --no-createrole nlw
 
     # Create the "NLW" database, owned by "nlw"
     sudo -u postgres createdb -O nlw NLW

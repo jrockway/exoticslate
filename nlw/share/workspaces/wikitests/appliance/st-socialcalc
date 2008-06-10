@@ -1,0 +1,14 @@
+#!/bin/bash
+
+sudo mkdir -p /etc/socialtext/workspace_options
+cd /etc/socialtext/workspace_options
+
+if [ "$1" == "enable" ]; then 
+    echo ENABLING socialcalc for all workspaces
+    for i in `/usr/bin/st-admin list-workspaces` ; do sudo mkdir -p $i ; sudo touch $i/enable_spreadsheet ; done ;
+elif [ "$1" == "disable" ]; then
+        echo DISABLING socialcalc for all workspaces
+        sudo find . -name enable_spreadsheet | sudo xargs rm -f || true
+else
+    echo "Usage: st-socialcalc [enable|disable]"
+fi

@@ -1,7 +1,7 @@
 [% USE decorate %]
 [% MACRO user BLOCK %]
-    [% name | decorate('username') %]
-[% END %]
+    [% name | decorate('user_avatar') %]
+[%- END %]
 
 [% SET admin = checker.check_permission('admin_workspace') %]
 [% WRAPPER layout/html content_id = 'st-homepage' box_javascript = 0 subnav = 'element/wiki/subnav-dashboard' dropshadow = 1 %]

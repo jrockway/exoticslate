@@ -72,7 +72,7 @@
     <td class="st-revision-list-row-revision">
       <a class="st-revision-list-row-revision-link" href="[% script_name %]?action=revision_view;page_name=[% page_uri %];revision_id=[% id %]">[% loc('revision') %]&nbsp;[% revision %]</a>
     </td>
-    <td class="st-revision-list-row-edited-by">[% from | decorate('username') %]</td>
+    <td class="st-revision-list-row-edited-by">[% from | decorate('user_avatar') %]</td>
     <td class="st-revision-list-row-date">[% date %]</td>
 </tr>
 [% END %]

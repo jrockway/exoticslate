@@ -1,6 +1,6 @@
 [% USE decorate %]
 [% MACRO user BLOCK %]
-    [% name | decorate('username') %]
+    [% name | decorate('user_avatar') %]
 [% END %]
 
 <!-- top footer bits -->

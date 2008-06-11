@@ -1,7 +1,7 @@
 [%# @COPYRIGHT@ -%]
 [% USE decorate %]
 [% MACRO user BLOCK %]
-    [% name | decorate('username') %]
+    [% name | decorate('user_avatar') %]
 [% END %]
 [% WRAPPER layout/html
     content_id='st-weblog',

@@ -9,16 +9,16 @@ const priority => 0;
 
 sub register {
     my $class = shift;
-    $class->add_hook('template.username.content', 'username');
+    $class->add_hook('template.user_avatar.content', 'user_name');
+    $class->add_hook('template.user_name.content', 'user_name');
+    $class->add_hook('template.user_image.content', 'user_image');
 }
 
-sub username {
+sub user_image { '' }
+
+sub user_name {
     my ($self, $username) = @_;
-    my $workspace = $self->hub->current_workspace;
-    my $person = Socialtext::User->new(username => $username);
-    return $person
-        ? $person->best_full_name( workspace => $workspace )
-        : $username;
+    return $self->best_full_name($username);
 }
 
 1;

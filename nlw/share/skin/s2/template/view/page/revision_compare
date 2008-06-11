@@ -21,7 +21,7 @@
       <td width="50%" bgcolor="#ffffff">
         <h3 class="st-revision-view-link">[% col.link %]</h3>
         <div class="st-revision-tags">[% loc('Tags:') %][% col.tags %]</div>
-        <div class="st-revision-attribution">by [% col.editor | decorate('username') %]</div>
+        <div class="st-revision-attribution">by [% col.editor | decorate('user_avatar') %]</div>
       </td>
       [% END %]
     </tr>

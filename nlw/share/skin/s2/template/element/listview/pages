@@ -91,7 +91,7 @@
       %]
 
         </div>
-        <div class="[% style %]-row-last-edited-by query-results-row-last-edited-by">[% username | decorate('username') %]</div>
+        <div class="[% style %]-row-last-edited-by query-results-row-last-edited-by">[% username | decorate('user_avatar') %]</div>
         <div class="[% style %]-row-date query-results-row-date">
         [%
            page_date;

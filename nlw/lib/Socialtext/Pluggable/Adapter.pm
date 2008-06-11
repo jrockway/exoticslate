@@ -8,6 +8,7 @@ our $AUTOLOAD;
 my %hooks;
 
 use base 'Socialtext::Plugin';
+use Socialtext::Workspace;
 use Fcntl ':flock';
 use File::chdir;
 use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
@@ -33,10 +34,7 @@ sub AUTOLOAD {
 
     $self->register_rest;
 
-    $self->make_hub(
-        $rest_handler->user,
-        Socialtext::Workspace->new( name => 'help-en' ),
-    );
+    $self->make_hub($rest_handler->user);
 
     $self->{_rest_handler} = $rest_handler;
 
@@ -47,8 +45,8 @@ sub make_hub {
     my ($self,$user,$ws) = @_;
     my $main = Socialtext->new;
     $main->load_hub(
-        current_user      => $user,
-        current_workspace => $ws,
+        current_user => $user,
+        current_workspace => Socialtext::NoWorkspace->new,
     );
     $main->hub->registry->load;
     $main->debug;

@@ -73,6 +73,15 @@ sub username {
     }
 }
 
+sub best_full_name {
+    my ($self,$username) = @_;
+    my $workspace = $self->hub->current_workspace;
+    my $person = Socialtext::User->new(username => $username);
+    return $person
+        ? $person->best_full_name( workspace => $workspace )
+        : $username;
+}
+
 sub header_out {
     my $self = shift;
     my $rest = $self->rest || $self->hub->rest;
@@ -152,7 +161,7 @@ sub new {
 sub storage {
     my ($self,$id) = @_;
     die "Id is required for storage\n" unless $id;
-    return Socialtext::Storage::PSQL->new($id);
+    return Socialtext::Storage::PSQL->new($id, 0);
 }
 
 sub name {

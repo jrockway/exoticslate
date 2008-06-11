@@ -1559,6 +1559,23 @@ sub drop_breadcrumb {
     );
 }
 
+package Socialtext::NoWorkspace;
+use strict;
+use warnings;
+
+use base 'Socialtext::Workspace';
+use Class::Field 'const';
+
+sub new { return bless {}, $_[0] }
+
+const name => '';
+const title => '';
+const workspace_id => 0;
+const email_addresses_are_hidden => 0;
+const skin_name => '';
+
+sub _set_workspace_option { return 1; }
+
 1;
 
 __END__
@@ -2333,3 +2350,4 @@ Socialtext, Inc., <code@socialtext.com>
 Copyright 2005 Socialtext, Inc., All Rights Reserved.
 
 =cut
+

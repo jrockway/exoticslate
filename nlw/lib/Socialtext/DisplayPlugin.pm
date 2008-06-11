@@ -13,6 +13,7 @@ use Socialtext::BrowserDetect ();
 use Socialtext::l10n qw/loc system_locale/;
 use Socialtext::Locales qw/available_locales/;
 use Socialtext::JSON;
+use Socialtext::Timer;
 use Apache::Cookie;
 
 sub class_id { 'display' }
@@ -301,6 +302,10 @@ sub _get_page_info {
     my $updated_author = $page->last_edited_by || $self->hub->current_user;
     my $created_author = $original_revision->last_edited_by;
 
+    Socialtext::Timer->Start('s2_page_html');
+    my $page_html = $page->to_html_or_default;
+    Socialtext::Timer->Stop('s2_page_html');
+
     return {
         title           => $page->title,
         display_title   => Socialtext::String::html_escape( $page->title ),
@@ -311,7 +316,7 @@ sub _get_page_info {
             )
         ),
         content => $self->hub->wikiwyg->html_formatting_hack(
-            $page->to_html_or_default
+            $page_html
         ),
         page_type => $page->metadata->Type,
         feeds     => $self->_feeds( $self->hub->current_workspace, $page ),

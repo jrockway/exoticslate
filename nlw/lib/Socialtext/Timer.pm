@@ -5,7 +5,7 @@ use warnings;
 
 use Time::HiRes qw( gettimeofday tv_interval );
 
-our $Timings;
+our $Timings = {};
 
 sub Reset {
     my $class = shift;

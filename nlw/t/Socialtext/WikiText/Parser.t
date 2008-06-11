@@ -18,6 +18,10 @@ filters({wikitext => 'parse_wikitext'});
 
 run_is 'wikitext' => 'wikibyte';
 
+sub pod_workaround {
+    s/^= /=/gm;
+}
+
 __DATA__
 === Multiline Paragraphs
 
@@ -227,8 +231,8 @@ but *bold* here
 {foo: bar}
 
 some text
---- wikibyte
-=waflparagraph function="foo" options="bar"
+--- wikibyte pod_workaround
+= waflparagraph function="foo" options="bar"
 +p
  some text
 -p
@@ -241,11 +245,11 @@ line
 
 goes here
 
---- wikibyte
+--- wikibyte pod_workaround
 +p
  line
 -p
-=hr
+= hr
 +p
  goes here
 -p
@@ -335,11 +339,11 @@ This is a "renamed"{wafly: with options} yo.
 --- wikitext
 * Ingy - aim:ingydotnet
 
---- wikibyte
+--- wikibyte pod_workaround
 +ul
 +li
  Ingy - 
-=im id="ingydotnet" type="aim"
+= im id="ingydotnet" type="aim"
 -li
 -ul
 

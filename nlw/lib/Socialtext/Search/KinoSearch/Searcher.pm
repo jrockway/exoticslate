@@ -5,6 +5,7 @@ use warnings;
 
 use base 'Socialtext::Search::Searcher';
 use Class::Field qw(field);
+use KinoSearch::Highlight::Highlighter;
 use KinoSearch::Searcher;
 use Socialtext::Log qw(st_log);
 use Socialtext::Search::AbstractFactory;
@@ -101,24 +102,33 @@ sub _process_hits {
     my @results;
     my %seen;
 
+    if ( $self->config->excerpt_text ) {
+        my $highlighter = KinoSearch::Highlight::Highlighter->new(
+            excerpt_field  => 'text',
+            excerpt_length => 400
+        );
+        $hits->create_excerpts( highlighter => $highlighter );
+    }
+
     $hits->seek( 0, $hits->total_hits );
     while ( my $hit = $hits->fetch_hit_hashref ) {
         next if exists $seen{ $hit->{key} };
         $seen{ $hit->{key} } = 1;
         _debug( "Contructing hit object for " . $hit->{key} );
-        push @results, $self->_make_result( $hit->{key}, $self->ws_name );
+        push @results, $self->_make_result( $hit, $self->ws_name );
     }
 
     return @results;
 }
 
 sub _make_result {
-    my ( $self, $key, $ws_name ) = @_;
+    my ( $self, $hit, $ws_name ) = @_;
+    my $key = $hit->{key};
     my ( $page, $attachment ) = split /:/, $key, 2;
     return
         defined $attachment
-        ? Socialtext::Search::SimpleAttachmentHit->new( $page, $attachment, $ws_name, $key )
-        : Socialtext::Search::SimplePageHit->new( $page, $ws_name, $key );
+        ? Socialtext::Search::SimpleAttachmentHit->new( $hit, $ws_name, $page, $attachment )
+        : Socialtext::Search::SimplePageHit->new( $hit, $ws_name, $page );
 }
 
 # Send a debugging message to syslog.

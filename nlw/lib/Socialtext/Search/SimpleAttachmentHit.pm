@@ -9,17 +9,19 @@ Socialtext::Search::SimpleAttachmentHit - A basic implementation of Socialtext::
 =head1 SYNOPSIS
 
     $hit = Socialtext::Search::SimpleAttachmentHit->new(
+        $hit,
+        $workspace_name,
         $page_uri,
         $attachment_id,
-        $workspace_name,
-        $key
 
     );
 
     $hit->page_uri();              # returns $page_uri
     $hit->attachment_id();         # returns $attachment_id
     $hit->workspace_name();        # returns $workspace_name
-    $hit->key();                   # returns $key 
+    $hit->key();                   # returns our hit's key
+    $hit->snippet();               # returns an excerpt
+    $hit->hit();                   # returns the raw hit from the search engine
 
 =head1 DESCRIPTION
 
@@ -33,7 +35,7 @@ use base 'Socialtext::Search::AttachmentHit';
 
 =head1 CONSTRUCTOR
 
-=head2 Socialtext::Search::SimpleAttachmentHit->new( $page_uri, $attachment_id, $workspace_name, $key )
+=head2 Socialtext::Search::SimpleAttachmentHit->new( $hit, $workspace_name, $page_uri, $attachment_id )
 
 Creates an AttachmentHit pointing at the given attachment (attached to the
 page with URI $page_uri).
@@ -41,13 +43,16 @@ page with URI $page_uri).
 =cut
 
 sub new {
-    my ( $class, $page_uri, $attachment_id, $workspace_name, $key ) = @_;
+    my ( $class, $hit, $workspace_name, $page_uri, $attachment_id ) = @_;
 
     bless {
+        hit            => $hit,
+        workspace_name => $workspace_name,
         page_uri       => $page_uri,
         attachment_id  => $attachment_id,
-        workspace_name => $workspace_name,
-        key            => $key,
+
+        key            => $hit->{key},
+        snippet        => $hit->{excerpt},
     }, $class;
 }
 
@@ -90,6 +95,30 @@ Change the document key this hit points to.
 
 sub set_key { $_[0]->{key} = $_[1] }
 sub key     { $_[0]->{key} }
+
+=head2 $page_hit->set_snippet($snippet)
+
+The snippet of the hit.
+
+=head2 $hit->snippet()
+
+Return the hit's snippet
+=cut
+
+sub set_snippet { $_[0]->{snippet} = $_[1] }
+sub snippet     { $_[0]->{snippet} }
+
+=head2 $hit->set_hit($hit)
+
+Change the raw hit this hit was made from.
+
+=head2 $hit->hit()
+
+Return the raw hit
+=cut
+
+sub set_hit { $_[0]->{hit} = $_[1] }
+sub hit     { $_[0]->{hit} }
 
 =head2 $hit->composed_key()
 

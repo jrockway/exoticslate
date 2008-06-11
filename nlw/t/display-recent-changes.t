@@ -29,7 +29,7 @@ $hub->preload;
     my $output = $hub->recent_changes->recent_changes;
 
     ok($output ne '', 'output exists');
-    like($output, qr/index.cgi\?this_is_a_new_page" title/,
+    like($output, qr/index.cgi\?this_is_a_new_page"/,
         'output is somewhat reasonable');
     unlike($output, qr/called at lib\/.*line\s\d+/,
         'does not have error output');

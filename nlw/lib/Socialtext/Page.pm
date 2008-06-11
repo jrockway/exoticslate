@@ -15,6 +15,8 @@ use Socialtext::AppConfig;
 use Socialtext::ChangeEvent;
 use Socialtext::Encode;
 use Socialtext::File;
+use Socialtext::Formatter::Parser;
+use Socialtext::Formatter::Viewer;
 use Socialtext::Formatter::AbsoluteLinkDictionary;
 use Socialtext::Log qw( st_log );
 use Socialtext::Paths;
@@ -23,6 +25,8 @@ use Socialtext::Search::AbstractFactory;
 use Socialtext::Timer;
 use Socialtext::EmailSender::Factory;
 use Socialtext::l10n qw(loc system_locale);
+use Socialtext::WikiText::Parser;
+use Socialtext::WikiText::Emitter::SearchSnippets;
 
 use Carp ();
 use Class::Field qw( field );
@@ -1143,18 +1147,34 @@ sub preview_text {
 
 sub _to_plain_text {
     my $self    = shift;
-    my $content = shift;
+    my $content = shift || $self->content;
 
-    use Socialtext::WikiText::Parser;
-    use Socialtext::WikiText::Emitter::SearchSnippets;
-
-    my $parser = Socialtext::WikiText::Parser->new(
-        receiver => Socialtext::WikiText::Emitter::SearchSnippets->new,
-    );
-
-    return $parser->parse( $content );
+    return $self->_to_socialtext_wikitext_parser_plain_text( $content );
+    #return $self->_to_socialtext_formatter_parser_plain_text( $content );
 }
 
+sub _to_socialtext_formatter_parser_plain_text {
+    my $self    = shift;
+    my $content = shift;
+
+    my $parser = Socialtext::Formatter::Parser->new(
+        table => $self->hub->formatter->table,
+        wafl_table => $self->hub->formatter->wafl_table,
+    );
+    my $units = $parser->text_to_parsed($content);
+    return Socialtext::Formatter::Viewer->to_text( $units );
+}
+
+sub _to_socialtext_wikitext_parser_plain_text {
+    my $self    = shift;
+    my $content = shift;
+
+    my $parser = Socialtext::WikiText::Parser->new(
+       receiver => Socialtext::WikiText::Emitter::SearchSnippets->new,
+    );
+
+    return $parser->parse($content);
+}
 
 # REVIEW: We should consider throwing exceptions here rather than return codes.
 sub duplicate {

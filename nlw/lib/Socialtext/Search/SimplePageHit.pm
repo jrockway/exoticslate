@@ -8,9 +8,9 @@ Socialtext::Search::SimplePageHit - A basic implementation of Socialtext::Search
 
 =head1 SYNOPSIS
 
-    $hit = Socialtext::Search::SimplePageHit->new($uri, $workspace_name, $key);
+    $hit = Socialtext::Search::SimplePageHit->new($hit, $workspace_name, $page_uri);
 
-    $hit->page_uri(); # returns $uri
+    $hit->page_uri(); # returns $page_uri
 
     $hit->set_page_uri('foo');
 
@@ -31,19 +31,22 @@ use base 'Socialtext::Search::PageHit';
 
 =head1 CONSTRUCTOR
 
-=head2 Socialtext::Search::SimplePageHit->new($page_uri, $workspace_name, $key)
+=head2 Socialtext::Search::SimplePageHit->new($hit, $workspace_name, $page_uri)
 
 Creates a PageHit pointing at the given URI.
 
 =cut
 
 sub new {
-    my ( $class, $page_uri, $workspace_name, $key ) = @_;
+    my ( $class, $hit, $workspace_name, $page_uri )= @_;
 
     bless {
-        page_uri       => $page_uri,
+        hit            => $hit,
         workspace_name => $workspace_name,
-        key            => $key,
+        page_uri       => $page_uri,
+
+        snippet        => $hit->{excerpt},
+        key            => $hit->{key},
     }, $class;
 }
 
@@ -77,6 +80,32 @@ Change the index document key that this hit points to.
 
 sub set_key { $_[0]->{key} = $_[1] }
 sub key     { $_[0]->{key} }
+
+=head2 $page_hit->set_snippet($snippet)
+
+The snippet of the hit.
+
+=head2 $page_hit->snippet()
+
+Return the snippet of the hit.
+
+=cut
+
+sub set_snippet { $_[0]->{snippet} = $_[1] }
+sub snippet     { $_[0]->{snippet} }
+
+=head2 $page_hit->set_hit($hit)
+
+The raw (original) hit.
+
+=head2 $page_hit->hit()
+
+Return the raw hit.
+
+=cut
+
+sub set_hit { $_[0]->{hit} = $_[1] }
+sub hit     { $_[0]->{hit} }
 
 =head2 $page_hit->composed_key()
 

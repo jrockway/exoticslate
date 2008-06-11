@@ -62,6 +62,9 @@ sub search {
     my $search_term;
     my $workspace_in_search_term;
     my %sortdir = %{$self->sortdir};
+
+    $self->sortby( $self->cgi->sortby || 'Relevance' );
+
     if ( $self->cgi->defined('search_term') ) {
         $search_term = $self->cgi->search_term;
         if ( $search_term =~ m/workspace\:/ ) {
@@ -88,6 +91,8 @@ sub search {
 
     $self->display_results(
         \%sortdir,
+        sortby => $self->sortby || 'Relevance',
+        allow_relevance => 1,
         search_term => $self->cgi->search_term
             || $self->cgi->orig_search_term,
         scope => $self->cgi->scope || '',
@@ -194,62 +199,75 @@ sub _new_search {
         $query{search_term},
         $query{scope},
         $self->hub->current_user,
-        sub { }, # FIXME: We'd rather message the user than ignore these.
-        sub { }); # FIXME: We'd rather message the user than ignore these.
-    my ( %page_row, @attachment_rows, $parent_key );
-    foreach my $hit (@hits) {
-        $page_row{ $hit->composed_key } = $self->_make_page_row( $hit )
-            if $hit->isa('Socialtext::Search::PageHit');
-    }
-    foreach my $hit (@hits) {
-        if ($hit->isa('Socialtext::Search::AttachmentHit')) {
-            # we want to act on the parent page's key,
-            # rather than the attachment hit's key
-            # XXX: This needs a generalized function in the package that
-            # defines the key munging.
-            $hit->key =~ m/(.*)?\:/;
-            $parent_key = $hit->workspace_name . " " . $1;
-            $page_row{ $parent_key }
-                = $self->_make_page_row( $hit )
-                unless exists $page_row{ $parent_key };
+        sub { },    # FIXME: We'd rather message the user than ignore these.
+        sub { }     # FIXME: We'd rather message the user than ignore these.
+    );
 
-            push @{ $page_row{ $parent_key }->{attachments} },
-                $self->_make_attachment_row( $hit );
+    my %cache;
+    my @results;
+
+    for my $hit (@hits) {
+        my $key = $hit->composed_key;
+        next if $cache{$key};
+        my $row;
+        eval {
+            $row = $self->_make_row($hit);
+        };
+        next if $@; # REVIEW: this seems weird, it wasn't necessary before
+        # Only add non-empty rows to the result_set.
+        if (defined $row and keys %$row) {
+            $cache{$key}++;
+            push @results, $row;
         }
     }
 
-    # Only add non-empty rows to the result_set.
-    return grep { keys %$_ } values %page_row;
+    return @results;
 }
 
-sub _make_page_row {
-    my $self = shift;
-    my $hit = shift;
+sub _hub_for_workspace {
+    my ( $self, $workspace ) = @_;
 
-    my $workspace = my $orig_workspace = $self->hub->current_workspace();
+    my $hub = $self->hub;
+    if ( $workspace->name ne $self->hub->current_workspace->name ) {
+        my $main = Socialtext->new();
+        $main->load_hub(
+            current_user      => $self->hub->current_user,
+            current_workspace => $workspace
+        );
+        $main->hub->registry->load;
 
-    my $page_uri = $hit->page_uri;
+        $hub = $main->hub;
+    }
 
+    return $hub;
+}
+
+sub _make_row {
+    my ( $self, $hit ) = @_;
+
+    # Establish the proper hub for the hit
+    my $workspace = $self->hub->current_workspace();
     eval {
         $workspace
             = Socialtext::Workspace->new( name => $hit->workspace_name );
     };
+    my $hit_hub = $self->_hub_for_workspace( $workspace );
 
     my $page;
+    my $attachment;
     my $is_page_deleted;
     my $metadata;
     my $author;
-    $self->hub->with_alternate_workspace(
-        $workspace,
-        sub {
-            $page            = $self->hub->pages->new_page($page_uri);
-            $is_page_deleted = $page->deleted;
-            if ( not $is_page_deleted ) {
-                $metadata = $page->metadata;
-                $author   = $page->last_edited_by;
-            }
-        }
-    );
+    my $resource_link;
+    
+    my $page_uri = $hit->page_uri;
+    $page = $hit_hub->pages->new_page($page_uri);
+    $is_page_deleted = $page->deleted;
+
+    if ( not $is_page_deleted ) {
+        $metadata      = $page->metadata;
+        $author        = $page->last_edited_by;
+    }
 
     return {} if $is_page_deleted;
 
@@ -268,57 +286,46 @@ sub _make_page_row {
     my $author_name = $author->best_full_name(
         workspace => $workspace );
 
+    my $document_title = $metadata->Subject;
+    my $date = $metadata->Date;
+    my $date_local = $page->datetime_for_user;
+    my $snippet = $hit->snippet || $page->preview_text;
+    my $id = $page->id;
+
+    if ( $hit->isa('Socialtext::Search::AttachmentHit') ) {
+        my $attachment_id = $hit->attachment_id;
+        $attachment = $hit_hub->attachments->new_attachment(
+            id      => $attachment_id,
+            page_id => $page_uri,
+        )->load();
+
+        return {} if $attachment->deleted;
+        $snippet = $hit->snippet || $attachment->preview_text;
+        $document_title = $attachment->{filename};
+        $date = $attachment->{Date};
+        $date_local = $self->hub->timezone->date_local( $date );
+        $id = $attachment->id;
+        $author = $attachment->uploaded_by;
+    }
 
     return +{
-        (
-            map { ( $_ => $metadata->$_ ) }
-                (qw(From Date Subject Revision Summary Type))
-        ),
-        DateLocal       => $page->datetime_for_user,
-        revision_count  => $page->revision_count,
-        page_uri        => $page->uri,
-        page_id         => $page->id,
-        From            => $author_name,
-        username        => $author->username,
-        Workspace       => $workspace->title,
-        workspace_name  => $workspace->name,
-        workspace_title => $workspace->title,
+        Relevance           => $hit->hit->{score},
+        Date                => $date,
+        Revision            => $metadata->Revision,
+        Summary             => $snippet,
+        document_title      => $document_title,
+        Subject             => $metadata->Subject,
+        DateLocal           => $date_local,
+        revision_count      => $page->revision_count,
+        page_uri            => $page->uri,
+        page_id             => $page->id,
+        id                  => $id,
+        username            => $author->username,
+        Workspace           => $workspace->title,
+        workspace_name      => $workspace->name,
+        workspace_title     => $workspace->title,
+        is_attachment       => $hit->isa('Socialtext::Search::AttachmentHit'),
     };
-}
-
-sub _make_attachment_row {
-    my $self = shift;
-    my $hit = shift;
-
-    my $workspace = my $orig_workspace = $self->hub->current_workspace();
-
-    my $page_uri = $hit->page_uri;
-
-    eval {
-        $workspace = Socialtext::Workspace->new( name => $hit->workspace_name );
-    };
-
-    my $attachment;
-    $self->hub->with_alternate_workspace(
-        $workspace,
-        sub {
-            my $attachment_id = $hit->attachment_id;
-            $attachment = $self->hub->attachments->new_attachment(
-                id      => $attachment_id,
-                page_id => $page_uri,
-            )->load;
-        }
-    );
-
-    return $attachment->deleted
-        ? ()
-        : {
-        id              => $attachment->id,
-        filename        => $attachment->filename,
-        DateLocal       => $self->hub->timezone->date_local( $attachment->{Date} ),
-        workspace_name  => $workspace->name,
-        workspace_title => $workspace->title,
-        };
 }
 
 sub get_result_set {

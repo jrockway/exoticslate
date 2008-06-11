@@ -35,7 +35,7 @@ ok( !keys(%{make_page_row('Start Here')}) || $^O =~ /darwin/,
 
 sub make_page_row {
     my $uri_candidate = shift;
-    my $output = $hub->search->_make_page_row(
+    my $output = $hub->search->_make_row(
         FakePageHit->new(
             $uri_candidate,
             $hub->current_workspace->name
@@ -48,7 +48,7 @@ package FakePageHit;
 
 sub new {
     my ( $class, $page_uri, $workspace_name ) = @_;
-    return bless { page_uri => $page_uri, workspace_name => $workspace_name },
+    return bless { page_uri => $page_uri, workspace_name => $workspace_name, snippet => "... I'm a snippet ..." },
         $class;
 }
 
@@ -62,4 +62,8 @@ sub workspace_name {
     return $self->{workspace_name};
 }
 
+sub snippet {
+    my $self = shift;
+    return $self->{snippet};
+}
 1;

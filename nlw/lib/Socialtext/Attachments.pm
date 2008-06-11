@@ -563,9 +563,9 @@ sub page {
 # XXX - a copy of Socialtext::Page->last_edited_by()
 sub uploaded_by {
     my $self = shift;
-    return unless $self->metadata->From;
+    return unless $self->From;
 
-    my $email_address = $self->metadata->From;
+    my $email_address = $self->From;
     # We have some very bogus data on our system, so this is a really
     # horrible hack to fix it.
     unless ( Email::Valid->address($email_address) ) {
@@ -705,6 +705,18 @@ sub assert_dirpath {
 
     File::Path::mkpath($path)
         unless -d $path;
+}
+
+sub preview_text {
+    my $self = shift;
+    my $content = shift || $self->content;
+
+    my $ExcerptLength = 350;
+
+    my $excerpt = $self->to_string;
+    $excerpt = substr( $excerpt, 0, $ExcerptLength ) . '...'
+        if length $excerpt > $ExcerptLength;
+    return $excerpt;
 }
 
 sub to_string {

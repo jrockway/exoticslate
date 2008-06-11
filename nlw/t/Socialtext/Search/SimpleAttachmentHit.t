@@ -9,6 +9,12 @@ use Readonly;
 
 Readonly my $PAGE_URI          => 'mml_work_log_2006_04_27';
 Readonly my $NEW_PAGE_URI      => 'mml_work_log_2006_04_28';
+Readonly my $ATTACHMENT_HIT    => {
+    excerpt => '... blah blah blah .. ',
+    key     => 'somethin'
+};
+
+Readonly my $WS_NAME           => 'socialtext';
 Readonly my $ATTACHMENT_ID     => '20060427183122-0';
 Readonly my $NEW_ATTACHMENT_ID => '20060427183122-1';
 
@@ -18,8 +24,8 @@ BEGIN {
 
 # Test constructor/getters
 {
-    my $hit
-        = Socialtext::Search::SimpleAttachmentHit->new( $PAGE_URI, $ATTACHMENT_ID );
+    my $hit = Socialtext::Search::SimpleAttachmentHit->new( $ATTACHMENT_HIT,
+        $WS_NAME, $PAGE_URI, $ATTACHMENT_ID );
 
     ok( $hit->isa('Socialtext::Search::AttachmentHit'),
         'isa Socialtext::Search::AttachmentHit' );
@@ -32,8 +38,8 @@ BEGIN {
 
 # Test set_page_uri
 {
-    my $hit
-        = Socialtext::Search::SimpleAttachmentHit->new( $PAGE_URI, $ATTACHMENT_ID );
+    my $hit = Socialtext::Search::SimpleAttachmentHit->new( $ATTACHMENT_HIT,
+        $WS_NAME, $PAGE_URI, $ATTACHMENT_ID );
 
     $hit->set_page_uri($NEW_PAGE_URI);
 
@@ -45,8 +51,8 @@ BEGIN {
 
 # Test set_attachment_id
 {
-    my $hit
-        = Socialtext::Search::SimpleAttachmentHit->new( $PAGE_URI, $ATTACHMENT_ID );
+    my $hit = Socialtext::Search::SimpleAttachmentHit->new( $ATTACHMENT_HIT,
+        $WS_NAME, $PAGE_URI, $ATTACHMENT_ID );
 
     $hit->set_attachment_id($NEW_ATTACHMENT_ID);
 

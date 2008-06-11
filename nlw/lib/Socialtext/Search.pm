@@ -60,7 +60,8 @@ sub search_on_behalf {
         }
     }
 
-    return @hits;
+    # Re-rank all hits by the raw_hit's score (this bleeds some implementation)
+    return sort { $b->hit->{score} cmp $a->hit->{score} } @hits;
 }
 
 sub _search_for_query_in_workspace_for_user {

@@ -7,6 +7,12 @@ use Test::More tests => 4;
 use Readonly;
 
 Readonly my $PAGE_URI     => 'a_page';
+Readonly my $PAGE_HIT => {
+    excerpt => '... blah blah blah ...',
+    key     => 'somethin'
+};
+
+Readonly my $WS_NAME      => 'socialtext';
 Readonly my $NEW_PAGE_URI => 'another_page';
 
 BEGIN {
@@ -16,7 +22,8 @@ BEGIN {
 # This test could be moved to t/Socialtext/PageHit.t and used to test multiple
 # PageHit implementations when we have them.
 
-my $page_hit = Socialtext::Search::SimplePageHit->new($PAGE_URI);
+my $page_hit = Socialtext::Search::SimplePageHit->new( $PAGE_HIT, $WS_NAME,
+    $PAGE_URI );
 
 ok( $page_hit->isa('Socialtext::Search::PageHit'), 'isa Socialtext::Search::PageHit' );
 

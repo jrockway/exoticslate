@@ -26,6 +26,7 @@ field result_set =>
       -init => '$self->read_result_set';
 
 field 'error_message';
+field 'sortby';
 
 sub register {
     my $self = shift;
@@ -117,7 +118,7 @@ sub sorted_result_set {
     my $sortdir_map = shift;
     my $limit = shift;
 
-    my $sortby = $self->cgi->sortby || 'Date';
+    my $sortby = $self->sortby || $self->cgi->sortby || 'Date';
 
     my $direction = $self->cgi->direction || $sortdir_map->{$sortby};
 

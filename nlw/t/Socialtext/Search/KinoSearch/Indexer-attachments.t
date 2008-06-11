@@ -37,6 +37,7 @@ run {
 
     open my $fh, $filepath or die "unable to open $filepath: $!";
     my $attachment = $hub->attachments->create(
+        page_id => 'a_test_page',
         filename => $filename,
         fh => $fh,
         creator => $hub->current_user,

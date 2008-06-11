@@ -75,8 +75,8 @@ sub search_for_term_in_attach {
     $search->search_for_term(search_term => $term);
     my $set = $search->result_set;
     ok( $set->{hits} > 0, "have page hits via term $term");
-    ok( grep(@{$_->{attachments}} > 0, @{$set->{rows}}), "have attachments");
-    is( $set->{rows}->[0]->{attachments}->[0]->{filename}, $filename,
+    ok( grep($_->{is_attachment}, @{$set->{rows}}), "have attachments");
+    is( $set->{rows}->[0]->{document_title}, $filename,
         "found right file: $filename");
 }
 

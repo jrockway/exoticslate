@@ -29,6 +29,7 @@ field 'settings';
 field 'search_box_snippet';
 field 'key_generator';
 field 'search_term_decorator';
+field 'excerpt_text';
 field 'version';
 
 sub new {
@@ -62,12 +63,13 @@ sub _load_search_config {
     $self->directory_pattern($config->{directory_pattern});
     $self->search_engine($config->{search_engine});
     $self->index_type($config->{index_type});
-    $self->version($config->{version});
     $self->query_parser_method($config->{query_parser_method});
     $self->hits_processor_method($config->{hits_processor_method});
     $self->key_generator($config->{key_generator});
     $self->search_term_decorator($config->{search_term_decorator});
     $self->search_box_snippet($config->{search_box_snippet});
+    $self->excerpt_text($config->{excerpt_text});
+    $self->version($config->{version});
 
     return $self;
 }

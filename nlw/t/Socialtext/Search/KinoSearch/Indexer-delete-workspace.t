@@ -10,15 +10,18 @@ BEGIN {
 use Test::Socialtext;
 fixtures( 'admin_no_pages' );
 use Test::Socialtext::Search;
+use Socialtext::Search::Config;
 
 plan tests => 19;
 
 my $hub            = Test::Socialtext::Search::hub();
 my $workspace_name = $hub->current_workspace->name;
-my $index_dir = Socialtext::Paths::plugin_directory($workspace_name) . '/kinosearch';
-my $segments_file = $index_dir . '/segments';
+my $config = Socialtext::Search::Config->new;
+my $segments_file
+    = $config->index_directory( workspace => $workspace_name )
+    . '/segments';
 
-# make an index and confirm it's workiness
+# make an index and confirm it works
 index_exists();
 
 # remove the index

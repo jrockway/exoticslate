@@ -1,0 +1,136 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+
+use Fcntl ':flock';
+use FindBin;
+use File::Spec;
+use lib "$FindBin::Bin/../lib";
+use Socialtext::Search::Config;
+use Socialtext::AppConfig;
+use Socialtext::File;
+use Socialtext::Paths;
+use Socialtext::Log 'st_log';
+
+my $LOCKFILE = '/tmp/st-process-rampup-index.lock';
+my $INDEXING_COLLATERAL_DIR = Socialtext::Paths::storage_directory( 'indexing' );
+my $WORKSPACES_LIST_FILE = Socialtext::File::catfile( $INDEXING_COLLATERAL_DIR, 
+        'workspaces-to-be-rampup-indexed' );
+my $rampup_config = Socialtext::Search::Config->new( mode => 'rampup' );
+my $live_config   = Socialtext::Search::Config->new( mode => 'live' );
+
+unless (self_lock()) {
+    print "Can't get lock.  Exiting.\n";
+    exit 0;
+}
+
+if ( $rampup_config ) {
+    if ( few_enough_rampup_events() ) {
+        if ( -s $WORKSPACES_LIST_FILE ) {
+            # for i in range(5):
+            my @workspaces_batch = split /\n/, `head -5 $WORKSPACES_LIST_FILE`;
+            for my $workspace (@workspaces_batch) {
+                print "Indexing $workspace\n";
+                index_workspace($workspace);
+                (system "tail -n+2 $WORKSPACES_LIST_FILE "
+                    . "> $WORKSPACES_LIST_FILE.tmp") == 0
+                    or die "tail exited nonzero: $?";
+                rename "$WORKSPACES_LIST_FILE.tmp", $WORKSPACES_LIST_FILE
+                    or die "rename $WORKSPACES_LIST_FILE.tmp ",
+                        "-> $WORKSPACES_LIST_FILE: $!";
+            }
+        }
+        else {
+            my $r_conf_file = $rampup_config->config_file_name;
+            my $l_conf_file = $live_config->config_file_name;
+            my $live_backup = "$l_conf_file.bak";
+
+            # Keep the previous live.yaml as live.yaml.bak
+            print "Backing up $l_conf_file to $live_backup...";
+            link $l_conf_file, $live_backup
+                or die "link $l_conf_file -> $live_backup: $!";
+            # Promote rampup.yaml to live.yaml
+            print "done.\n", "Moving rampup configuration to live...";
+            rename $r_conf_file, $l_conf_file
+                or die "rename $r_conf_file -> $l_conf_file: $!";
+            # As a final gesture of cleaning up, remove our entry from
+            # /etc/cron.d, if it exists
+            print "done.\n", "Removing our cron entry from /etc/cron.d...";
+            unlink "/etc/cron.d/st-process-rampup-index"
+                or die "unlink cron file: $!";
+            print "done.\n";
+        } 
+    }
+    else {
+        print "Still processing a workspace.  Not adding anything.\n";
+        exit 1;
+    }
+}
+else {
+    print "rampup is not ready\n";
+    exit 1;
+}
+
+sub rampup_index_is_present {
+    my $index_directory = $rampup_config->index_directory;
+
+    return -e File::Spec->catfile( $index_directory, 'segments' );
+}
+
+sub few_enough_rampup_events {
+    my $ceq_dir = Socialtext::AppConfig->change_event_queue_dir;
+
+    opendir DH, $ceq_dir;
+    my $found_no_rampup = 125;
+    while ( my $file = readdir DH ) {
+        if ( $file =~ /Rampup/ ) {
+            $found_no_rampup--;
+            last if $found_no_rampup == 0;
+        }
+    }
+    closedir DH;
+
+    return $found_no_rampup;
+}
+
+sub index_workspace {
+    my $workspace = shift;
+    my $sync;
+    my $thing_count;
+
+    my $page_dir = Socialtext::AppConfig->data_root_dir . "/data/$workspace";
+    if ( -d $page_dir ) {
+        opendir DH, $page_dir;
+        $thing_count = grep !/^\./, readdir DH;
+	closedir DH;
+    }
+
+    my $attachment_dir = Socialtext::AppConfig->data_root_dir . "/plugin/$workspace/attachments";
+    foreach my $page_dir (glob "$attachment_dir/*") {
+	if ( -d $page_dir ) {
+	    opendir DH, $page_dir;
+	    $thing_count += grep !/^\./, readdir DH;
+            closedir DH;
+	}
+    }
+
+    st_log->debug("Thing count for $workspace is $thing_count.");
+
+    if ( $thing_count < 50) {
+        $sync = '--sync';
+    }
+    (system
+        "st-admin index-workspace "
+        . "--workspace=$workspace "
+        . "--search-config=rampup "
+        . "$sync") == 0
+    or die "st-admin exited nonzero: $?";
+}
+
+sub self_lock {
+    Socialtext::File::ensure_empty_file($LOCKFILE);
+    open LOCK, $LOCKFILE or die "$LOCKFILE: $!";
+    return flock LOCK, LOCK_EX | LOCK_NB;
+}

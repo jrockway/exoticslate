@@ -177,10 +177,11 @@ sub delete_page {
 sub _add_page_doc {
     my ( $self, $page ) = @_;
     my $doc = $self->_create_new_document();
+    
     $self->_set_fields(
         $doc,
         key       => $self->generate_key($page->uri),
-        text      => $page->content,
+        text      => $page->_to_plain_text(),
         type      => Socialtext::Search::ContentTypes->lookup( ref $page ),
         title     => $page->title,
         tag       => $self->_get_page_tags($page),

@@ -9,6 +9,7 @@ use Socialtext::String;
 use Socialtext::Permission 'ST_EDIT_PERM';
 use Socialtext::Helpers;
 use Socialtext::l10n qw(loc);
+use Socialtext::Timer;
 
 =head1 NAME
 
@@ -303,10 +304,14 @@ sub _frame_page {
 
     $self->hub->viewer->link_dictionary(
         Socialtext::Formatter::LiteLinkDictionary->new() );
+    
+    Socialtext::Timer->Start('lite_page_html');
+    my $html = $page->to_html_or_default;
+    Socialtext::Timer->Stop('lite_page_html');
 
     return $self->_process_template(
         $DISPLAY_TEMPLATE,
-        page_html        => $page->to_html_or_default,
+        page_html        => $html,
         title            => $page->title,
         edit_link        => $edit_link,
         login_logout     => $self->_login_logout($page->uri),

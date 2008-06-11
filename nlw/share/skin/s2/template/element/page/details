@@ -49,7 +49,7 @@
 [% SET create_date = '<span class="st-createdate">' _ (page.created.date) _ '</span>' %]
 [% SET update_author = '<span class="st-username">' _ user(name=page.updated.user_id) _ '</span>' %]
 [% SET update_date = '<span class="st-updatedate">' _ (page.updated.date) _ '</span>' %]
-[% IF page.revisions > 0 %]
+[% IF page.revisions && page.revisions > 0 %]
     <div id="st-attribution">
         <span id="st-created">
             [% loc('Created by [_1] on [_2].', create_author, create_date) %]

@@ -48,6 +48,11 @@ sub query {
     return $self->hub->rest->query;
 }
 
+sub query_string {
+    my $self = shift;
+    return $self->hub->cgi->query_string;
+}
+
 sub getContent {
     my $self = shift;
     return $self->hub->rest->getContent;

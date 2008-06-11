@@ -99,6 +99,8 @@
 | clickAndWait | link=Delete Page |  |
 | confirmation_like | Are you sure you want to delete this page? |  |
 | clickAndWait | st-home-link |  |
+| *Comment* | Test Case: Sidebar: Recently Viewed make sure deleted page removed from home view |  |
+| wait_for_element_not_present_ok | link=tc_sidebar_recently_viewed_3_%%start_time%% | 10000 |
 
 | clickAndWait | link=tc_sidebar_recently_viewed_2_%%start_time%% |  |
 | clickAndWait | link=Delete Page |  |

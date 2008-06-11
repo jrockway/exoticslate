@@ -29,85 +29,79 @@
 | click_and_wait | st-save-button-link |  |
 | click_and_wait | st-home-link |  |
 
-| *Comment* | Test Case: All Pages name sorting |  |
+| *Comment* | Test Case: All Pages Title sorting |  |
 | click_and_wait | st-wiki-subnav-link-all-pages |  |
 | text_like | st-list-title | All Pages ( |
 | click_and_wait | link=allpages %%start_time%% 0001 |  |
 | text_like | st-page-titletext | allpages %%start_time%% 0001 |
 | click_and_wait | st-home-link |  |
 | click_and_wait | st-wiki-subnav-link-all-pages |  |
-| click_and_wait | link=Title |  |
+| click_and_wait | link=Titles |  |
+
+| select_ok | sort-picker | label=Title |
+| wait_for_text_present_ok | Advanced Getting Around | 20000 |
 | text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0004/ |
-| click_and_wait | link=Title |  |
+| wait_for_text_present_ok | Title (desc) | 10000 |
+| select_ok | sort-picker | label=Title (desc) |
+| wait_for_text_present_ok | Workspace Tour | 20000 |
+| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0004/ |
+| wait_for_text_present_ok | Title (asc) | 10000 |
+| select_ok | sort-picker | label=Title (asc) |
 | text_like | st-listview | qr/allpages %%start_time%% 0004.+allpages %%start_time%% 0001/ |
 
-| *Comment* | Test Case: All Pages date sort |  |
-| click_and_wait | st-home-link |  |
-| click_and_wait | st-newpage-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | st-newpage-pagename-edit | allpages %%start_time%% 0005 |
-| type_ok | wikiwyg_wikitext_textarea | allpages %%start_time%% 0005 content |
-| click_and_wait | st-save-button-link |  |
+| select_ok | sort-picker | label=Date |
+| wait_for_text_present_ok | jabber | 20000 |
+| text_like | st-listview | qr/allpages %%start_time%% 0004.+allpages %%start_time%% 0001/ |
+| wait_for_text_present_ok | Date (asc) | 10000 |
+| select_ok | sort-picker | label=Date (asc) |
+| text_like | st-listview | qr/allpages %%start_time%% 0004.+allpages %%start_time%% 0001/ |
+| wait_for_text_present_ok | Date (desc) | 10000 |
+| select_ok | sort-picker | label=Date (desc) |
+| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0004/ |
 
-| click_and_wait | st-home-link |  |
-| click_and_wait | st-wiki-subnav-link-all-pages |  |
-| click_and_wait | link=Date |  |
-| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0005/ |
-| click_and_wait | link=Date |  |
-| text_like | st-listview | qr/allpages %%start_time%% 0005.+allpages %%start_time%% 0001/ |
-
-| *Comment* | Test Case: All Pages revision sort |  |
-| click_and_wait | st-home-link |  |
-| click_and_wait | link=allpages %%start_time%% 0004 |  |
-| click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| pause | 1000 |  |
-| type_ok | wikiwyg_wikitext_textarea | revision 1 |
-| click_and_wait | st-save-button-link |  |
-| click_and_wait | st-home-link |  |
-| click_and_wait | st-wiki-subnav-link-all-pages |  |
-
-| click_and_wait | link=Revisions |  |
-| text_like | st-listview | qr/allpages %%start_time%% 0004.+allpages %%start_time%% 0003/ |
-| click_and_wait | link=Revisions |  |
-| text_like | st-listview | qr/allpages %%start_time%% 0003.+allpages %%start_time%% 0004/ |
-
-| *Comment* | Test Case: All Pages edited by sort |  |
+| select_ok | sort-picker | label=Revisions |
+| wait_for_text_present_ok | jabber | 20000 |
+| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0004/ |
+| wait_for_text_present_ok | Revisions (asc) | 10000 |
+| select_ok | sort-picker | label=Revisions (asc) |
+| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0004/ |
+| wait_for_text_present_ok | Revisions (desc) | 10000 |
+| select_ok | sort-picker | label=Revisions (desc) |
+| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0004/ |
 
 create a user that lexically precedes the logged in user by creating a user that begins with start_time
 However, don't use %%email%% in that username because that permanently creates another user name in the user DB that
 contains %%email%% as a substring and that messes up other tests like Test Case: Email
 
-| set | s_user | %%start_time%%@%%start_time%%.socialtext.net |
+ *Comment* | Test Case: All Pages verify revision by user %%s_user%% | |
 
+| set | s_user | %%start_time%%@%%start_time%%.socialtext.net |
 | st-admin | create-user --email %%s_user%% --password 123456 |  |
 | st-admin | add-member --email %%s_user%% --workspace %%workspace%% |  |
 | st-logout |  |  |
 | st-login | %%s_user%% | 123456 |
 
-For some reason, IE 6 blows up when open_ok is used in some places. We avoid it.
-
-| *Comment* | Test Case: All Pages revision by new user |  |
-
 | wait_for_element_visible_ok | st-wiki-subnav-link-all-pages | 15000 |
 | click_and_wait | st-wiki-subnav-link-all-pages |
 | click_and_wait | link=allpages %%start_time%% 0003 |  |
-
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
 | type_ok | wikiwyg_wikitext_textarea | revision by user %%s_user%% |
 | click_and_wait | st-save-button-link |  |
 
-| *Comment* | Test Case: All Pages verify revision by user %%s_user%% |  |
-
 | click_and_wait | st-home-link |  |
 | click_and_wait | st-wiki-subnav-link-all-pages |  |
-| click_and_wait | link=Last Edited By |  |
+| select_ok | sort-picker | label=Last Edited By |
+| wait_for_text_present_ok | Another Salary | 20000 |
 | text_like | st-listview | qr/allpages %%start_time%% 0003.+allpages %%start_time%% 0001/ |
-| click_and_wait | link=Last Edited By |  |
+| wait_for_text_present_ok | Last Edited By (desc) | 10000 |
+| select_ok | sort-picker | label=Last Edited By (desc) |
+| text_like | st-listview | qr/allpages %%start_time%% 0003.+allpages %%start_time%% 0001/ |
+| wait_for_text_present_ok | Last Edited By (asc) |  |
+| select_ok | sort-picker | label=Last Edited By (asc) |
 | text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0003/ |
 
-| *Comment* | Test Case: All Pages Teardown. No need to login again. |  |
+ *Comment* | Test Case: All Pages Teardown. No need to login again. | |
 
 | st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0001 |  |
 | st-admin | purge-page --workspace %%workspace%% --page allpages_%%start_time%%_0002 |  |

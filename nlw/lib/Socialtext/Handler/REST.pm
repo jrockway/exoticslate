@@ -35,17 +35,16 @@ sub handler ($$) {
     my $class = shift;
     my $r     = shift;
 
-    my %timings = ();
-    my $timer = Socialtext::Timer->new;
-    my $auth_timer = Socialtext::Timer->new;
+    Socialtext::Timer->Reset();
+    Socialtext::Timer->Start('web_auth');
     my $auth_info = $class->getAuthForURI($r->uri);
 
     my $user = $class->authenticate($r) || $class->guest($r, $auth_info);
-    $timings{web_auth} = $auth_timer->elapsed;
+    Socialtext::Timer->Stop('web_auth');
 
     return $class->challenge(request => $r, auth_info => $auth_info) unless $user;
 
-    return $class->real_handler($r, $user, \%timings, $timer);
+    return $class->real_handler($r, $user);
 }
 
 sub guest {
@@ -83,15 +82,13 @@ sub real_handler {
     my $class   = shift;
     my $r       = shift;
     my $user    = shift;
-    my $timings = shift;
-    my $timer   = shift;
 
     my $handler = __PACKAGE__->new( request => $r, user => $user );
-    my $run_timer = Socialtext::Timer->new();
+    Socialtext::Timer->Start('handler_run');
     $handler->run();
-    $timings->{handler_run} = $run_timer->elapsed;
+    Socialtext::Timer->Stop('handler_run');
 
-    $class->log_timings($handler, $timer, $timings);
+    $class->log_timings($handler);
     return OK;
 }
 
@@ -100,8 +97,6 @@ sub real_handler {
 sub log_timings {
     my $class   = shift;
     my $handler = shift;
-    my $timer   = shift;
-    my $timings = shift;
 
     # Only log timing information on a successful request
     # ie status is either 2xx or 3xx
@@ -131,9 +126,7 @@ sub log_timings {
         my $data
             = { %template_vars, ( $query_string ? (q => $query_string) : () ) };
 
-        # stop the overall timer
-        $timings->{overall} = $timer->elapsed;
-        st_timed_log( 'info', 'WEB', $message, $data, $timings );
+        st_timed_log( 'info', 'WEB', $message, $data, Socialtext::Timer->Report() );
     }
 }
 

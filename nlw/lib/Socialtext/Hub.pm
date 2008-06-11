@@ -92,17 +92,16 @@ sub with_alternate_workspace {
 sub _process {
     my $self = shift;
 
-    my %timings = ();
-    my $timer = Socialtext::Timer->new;
+    Socialtext::Timer->Start('hub_process');
     $self->preload;
     $self->no_plugin_action
       unless defined $self->registry->lookup->action->{$self->action};
     my ($class_id, $method) =
       @{$self->registry->lookup->action->{$self->action}};
     $method ||= $self->action;
-    my $bct = Socialtext::Timer->new;
+    Socialtext::Timer->Start('drop_workspace_breadcrumb');
     $self->drop_workspace_breadcrumb($method);
-    $timings{drop_workspace_breadcrumb} = $bct->elapsed;
+    Socialtext::Timer->Stop('drop_workspace_breadcrumb');
     my $html = eval { $self->$class_id->$method };
     my $e = $@;
     if ( Exception::Class->caught('Socialtext::Exception::DataValidation') ) {
@@ -118,32 +117,8 @@ sub _process {
         $html =~ s/([^\x00-\xa0])/sprintf('&#x%x;', unpack('U', $1))/egs;
     }
 
-    my %cgip = $self->$class_id->cgi->all;
-    $self->log_action($self->action, \%cgip, \%timings, $timer);
-
+    Socialtext::Timer->Stop('hub_process');
     return $html;
-}
-
-sub log_action {
-    my $self = shift;
-    my $action = shift;
-    my $parameters = shift;
-    my $timings = shift;
-    my $timer = shift;
-
-    my %params = (
-        PAGE => $self->pages->current->id, 
-        WORKSPACE => $self->current_workspace->workspace_id, 
-        USER => $self->current_user->user_id,
-    );
-    my $key;
-    my $value;
-    while(($key, $value) = each(%{$parameters})) {
-        $params{$key} = $value if ($value ne '' && lc($key) ne 'action' && !exists($params{$key}));
-    }
-    $timings->{overall} = $timer->elapsed;
-
-    st_timed_log('info', 'ACTION', $action, \%params, $timings);
 }
 
 sub drop_workspace_breadcrumb {

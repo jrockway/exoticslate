@@ -18,7 +18,7 @@ use Socialtext::Search::AbstractFactory;
 use Socialtext::Validate qw( validate SCALAR_TYPE ARRAYREF_TYPE );
 use Socialtext::l10n qw( loc loc_lang system_locale );
 use Socialtext::Locales qw( valid_code );
-use Socialtext::Log qw( st_log );
+use Socialtext::Log qw( st_log st_timed_log );
 use Socialtext::Workspace;
 use Socialtext::User;
 use Socialtext::Timer;
@@ -33,6 +33,7 @@ my %CommandAliases = (
     Readonly my $spec => { argv => ARRAYREF_TYPE( default => [] ) };
 
     sub new {
+        Socialtext::Timer->Reset();
         my $class = shift;
         my %p     = validate( @_, $spec );
 
@@ -87,6 +88,7 @@ sub run {
     }
 
     $self->{command} = $command;
+    Socialtext::Timer->Start("CLI_$command");
     $self->$command();
 }
 
@@ -1999,6 +2001,14 @@ sub _success {
     print $msg
         if defined $msg
         and not $self->{ceqlotron};
+
+    my $data = {
+        args => join ' ', @ARGV,
+    };
+    st_timed_log(
+        'info', 'CLI', $self->{command}, $data,
+        Socialtext::Timer->Report()
+    );
 
     _exit(0);
 }

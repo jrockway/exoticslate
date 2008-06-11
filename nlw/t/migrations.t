@@ -8,7 +8,7 @@ use Socialtext::Migration;
 my $migration_dir = 'share/migrations';
 my @migrations = Socialtext::Migration::find_migrations($migration_dir);
 
-plan tests => scalar(@migrations);
+plan tests => scalar(@migrations) + 1;
 
 Duplicate_migration_check: {
     my %nums_seen;
@@ -23,4 +23,15 @@ Duplicate_migration_check: {
             ok 1, $d->{name};
         }
     }
+}
+
+Un_named_migration_check: {
+    my %okay_unnumbered = map { $_ => 1 } qw/add-column/;
+    my @unnumbered = 
+        grep { ! $okay_unnumbered{$_} }
+        grep { ! m/^\d+-/ }
+        map { s/\Q$migration_dir\E\///; $_ }
+        glob("$migration_dir/*");
+    
+    is_deeply \@unnumbered, [], 'No un-numbered migrations';
 }

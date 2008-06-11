@@ -10,7 +10,7 @@ ST.Comment = function () {
                 return;
             }
 
-            jQuery('#st-comment-button-link').click(function() {
+            jQuery('#st-comment-button-link').unbind('click').bind('click', function() {
                 ST.Comment.launchCommentInterface({
                     page_name: Socialtext.page_id,
                     action: 'display',
@@ -24,7 +24,7 @@ ST.Comment = function () {
                     return;
                 }
 
-                jQuery('#st-edit-actions-below-fold-comment').bind('click', function () {
+                jQuery('#st-edit-actions-below-fold-comment').unbind('click').bind('click', function () {
                     ST.Comment.launchCommentInterface({
                         page_name: Socialtext.page_id,
                         action: 'display',

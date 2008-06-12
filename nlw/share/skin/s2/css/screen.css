@@ -1347,44 +1347,12 @@ tr.w-st-odd-row, tr.w-st-odd-row td {
     text-align: left;
 }
 
-.query-results-row-revisions {
-    text-align: right;
-}
-
-.query-results-content {
-    font-size: 85%;
-    border-collapse: collapse;
-    border: 1px dashed #ddd;
-    border-left: 1px solid #ddd;
-    width: 100%;
-    border-right: 1px solid #ddd;
-}
-
-.query-results-row {
-    border-collapse: collapse;
-    border: 1px dashed #ddd;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-}
-
-.query-results-row a {
-    text-decoration: underline;
-    color: #00f;
-}
-
 .query-results-row td {
     padding: 0.3em;
     border-left: 1px dashed #ddd;
     border-right: 1px dashed #ddd;
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
-}
-
-.query-results-header-row {
-    border-collapse: collapse;
-    border: 1px dashed #ddd;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
 }
 
 .query-results-header-row a {

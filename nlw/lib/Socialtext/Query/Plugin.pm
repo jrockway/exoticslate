@@ -143,11 +143,6 @@ sub _gen_sort_closure {
     my $sortby      = shift; # the attribute being sorted on
     my $direction   = shift; # the direction ('asc' or 'desc')
 
-    # Toggle the const for the current sortby, so that it reverses sort
-    # direction on the values being passed to the template
-    $sortdir_map->{$sortby} = $direction eq 'asc' ? 'desc' : 'asc';
-
-    # cleverness should really just FOAD.
     if ( $sortby eq 'revision_count' ) { # The only integral attribute, so use numeric sort
         if ( $direction eq 'asc' ) {
             return sub {

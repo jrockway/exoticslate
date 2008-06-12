@@ -489,14 +489,18 @@ sub weight_categories {
     my %data = ();
 
     %data = ( tags => [] );
+    my $tag_db = $self->index->read_only_hash;
 
+    my $max_count = 0;
     foreach my $tag (@categories) {
         next if ( lc($tag) eq 'recent changes' );
+        my $count = keys %{ $tag_db->{lc $tag} };
         push @{ $data{tags} },
             {
             'name'   => $tag,
-            'page_count' => $self->page_count( lc($tag) )
+            'page_count' => $count,
             };
+        $max_count = $count if $max_count < $count;
     }
 
     @{ $data{tags} } = sort {
@@ -508,23 +512,9 @@ sub weight_categories {
         }
     } @{ $data{tags} };
 
-    $data{maxCount} = $self->_max_tag_count_for_workspace();
+    $data{maxCount} = $max_count;
 
     return %data;
-}
-
-sub _max_tag_count_for_workspace {
-    my $self = shift;
-
-    my @tags = grep !/\Arecent changes\z/i,
-        values %{ $self->load->all };
-    my $maxCount = 0;
-    foreach my $tag (@tags) {
-        my $count = $self->page_count( lc($tag) );
-        $maxCount = $count if ( $maxCount < $count );
-    }
-
-    return $maxCount;
 }
 
 sub index_generate {

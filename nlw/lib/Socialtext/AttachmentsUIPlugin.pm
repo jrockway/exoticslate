@@ -17,15 +17,9 @@ use Socialtext::BrowserDetect;
 sub class_id { 'attachments_ui' }
 const class_title => 'Attachments';
 const cgi_class   => 'Socialtext::AttachmentsUI::CGI';
-field 'display_limit_value';
 
-const sortdir => {    #default directions
-    Subject        => 0,
-    From           => 0,
-    Content_Length => 0,
-    Date           => 1,
-    Content_MD5    => 0
-};
+field 'sortdir';
+field 'display_limit_value';
 
 sub register {
     my $self = shift;
@@ -205,11 +199,27 @@ sub save_attachment {
 sub attachments_listall {
     my $self = shift;
 
+    $self->sortdir(
+        {
+            filename => 'asc',
+            subject  => 'asc',
+            user     => 'asc',
+            size     => 'desc',
+            date     => 'desc',
+        }
+    );
+
+    my $sortby = $self->cgi->sortby || 'filename';
+    my $direction = $self->cgi->direction || $self->sortdir->{$sortby};
+
     $self->screen_template('view/attachmentslist');
     $self->render_screen(
         rows =>
             $self->_table_rows( $self->hub->attachments->all_in_workspace() ),
         display_title => loc("All Files"),
+        sortby => $sortby,
+        sortdir => $self->sortdir,
+        direction => $direction,
     );
 }
 
@@ -221,23 +231,109 @@ sub _table_rows {
     for my $att (@$attachments) {
         my $page = $self->hub->pages->new_page( $att->{page_id} );
 
-        push @rows, {
-            link     => $self->_attachment_download_link($att),
-            id       => $att->{id},
-            filename => $att->{filename},
-            user     => $att->{from},
-            date     => $self->hub->timezone->date_local( $att->{date} ),
-            page     => {
-                uri   => $page->uri,
-                link  =>
-                    Socialtext::Helpers->page_display_link_from_page($page),
-            },
-            size => $att->{length},
-        };
+        push @rows,
+            {
+            link      => $self->_attachment_download_link($att),
+            id        => $att->{id},
+            filename  => $att->{filename},
+            subject   => $page->title,
+            user      => $att->{from},
+            date      => $self->hub->timezone->date_local( $att->{date} ),
+            page_uri  => $page->uri,
+            page_link =>
+                Socialtext::Helpers->page_display_link_from_page($page),
+            size                => $att->{length},
+            human_readable_size =>
+                $self->_human_readable_size( $att->{length} ),
+            };
     }
 
-    return \@rows;
+    return $self->sorted_result_set( \@rows );
 }
+
+sub _human_readable_size {
+    my ( $self, $size ) = @_;
+
+    # calculate size in gb, mb, kb, or bytes, and present a useful-er string
+    my $KB = 1024;
+    my $MB = 1024 * $KB;
+    my $GB = 1024 * $MB;
+
+    my $unit;
+
+    if ( $size / $GB > 1 ) {
+        $unit = int($size / $GB) . "gb";
+    }
+    elsif ( $size / $MB > 1 ) {
+        $unit = int($size / $MB) . "mb";
+    }
+    elsif ( $size / $KB > 1 ) {
+        $unit = int($size / $KB) . "kb";
+    }
+    else {
+        $unit = $size . "bytes";
+    }
+
+    return $unit;
+}
+
+sub sorted_result_set {
+    my $self = shift;
+    my $rows = shift;
+    my $limit = shift;
+
+    my $sortby = $self->cgi->sortby || 'filename';
+    my $direction = $self->cgi->direction || $self->sortdir->{$sortby};
+
+    my $sortsub
+        = $self->_gen_sort_closure( $sortby, $direction );
+
+    @{$rows} = sort $sortsub @{$rows};
+    splice @{$rows}, $limit
+        if defined($limit) and @{$rows} > $limit;
+    return $rows;
+}
+
+sub _gen_sort_closure {
+    my $self        = shift;
+    my $sortby      = shift; # the attribute being sorted on
+    my $direction   = shift; # the direction ('asc' or 'desc')
+
+    # Toggle the const for the current sortby, so that it reverses sort
+    # direction on the values being passed to the template
+    # $self->sortdir->{$sortby} = $direction eq 'asc' ? 'desc' : 'asc';
+
+    # cleverness should really just FOAD.
+    if ( $sortby eq 'size' ) { # The only integral attribute, so use numeric sort
+        if ( $direction eq 'asc' ) {
+            return sub {
+                $a->{size} <=> $b->{size}
+                    or lc( $a->{subject} ) cmp lc( $b->{subject} );
+                }
+        }
+        else {
+            return sub {
+                $b->{size} <=> $a->{size}
+                    or lc( $a->{subject} ) cmp lc( $b->{subject} );
+                }
+        }
+    }
+    else { # We're sorting on anything else - most likely a string
+        if ( $direction eq 'asc' ) {
+            return sub {
+                lc( $a->{$sortby} ) cmp lc( $b->{$sortby} )
+                    or lc( $a->{subject} ) cmp lc( $b->{subject} );
+            };
+        }
+        else {
+            return sub {
+                lc( $b->{$sortby} ) cmp lc( $a->{$sortby} )
+                    or lc( $a->{subject} ) cmp lc( $b->{subject} );
+            };
+        }
+    }
+}
+
 
 sub _attachment_download_link {
     my $self = shift;

@@ -8,63 +8,82 @@
             <div id="st-list-title">[% loc('All Files in [_1]', wiki.title) %]</div>
             <div id="st-actions-bar-spacer-clear">&nbsp;</div>
         </div>
+        <div id="[% style %]-content" class="query-results-content">
+            <div id="[% style %]-header-row" class="query-results-header-row">
+                <div id="select-all"><input title=[% loc("Select all pages") %] type="checkbox" id="st-listview-allpagescb"/></div>
+                <div id="sort-by-picker">[% loc('Sort by:') %]
+  <script language="javascript">
+  var query_start = "?action=attachments_listall";
+  function sort_by() {
+      var selected = jQuery('select#sort-picker').val();
+      window.location = query_start + ';' + selected;
+  }
+  </script>
+
+        <select id="sort-picker" onchange="sort_by();">
+            [% PROCESS sort_by_option name = loc('Filename') field = 'filename' %]
+            [% PROCESS sort_by_option name = loc('Page Title') field = 'subject' %]
+            [% PROCESS sort_by_option name = loc('Uploaded By') field = 'user' %]
+            [% PROCESS sort_by_option name = loc('Date Uploaded') field = 'date' %]
+            [% PROCESS sort_by_option name = loc('Size') field = 'size' %]
+        </select>
+                </div>
+            </div>
+            <div>
         [% IF checker.check_permission('delete') %]
             <form action="[% script_name %]" method="post">
         [% END %]
-            <table id="attachments-listall-table" class="standard-table">
-             <thead>
-              <tr>
-               <th></th>
-               <th>[% loc('Filename') %]</th>
-               <th>[% loc('Page Title') %]</th>
-               <th>[% loc('Uploaded By') %]</th>
-               <th>[% loc('Date Uploaded') %]</th>
-               <th>[% loc('Size') %]</th>
-              </tr>
-             </thead>
-             <tbody>
-        [% FOREACH row IN rows %]
-              <tr>
-               <td>
-          [% IF checker.check_permission('delete') %]
-                <input type="checkbox" name="selected" value="[% row.page.uri %],[% row.id %]" />
-          [% END %]
-               </td>
-               <td>[% row.link %]</td>
-               <td>[% row.page.link %]</td>
-               <td>[% row.user | decorate( 'username' ) %]</td>
-               <td>[% row.date | html %]</td>
-               <td>[% row.size | html %]</td>
-              </tr>
-        [% END %]
-             </tbody>
-            </table>
+        [% FOREACH row IN rows;
+           PROCESS listing_row page_uri            = row.page_uri,
+                               id                  = row.id,
+                               can_delete          = checker.check_permission( 'delete' ),
+                               link                = row.link,
+                               page_link           = row.page_link,
+                               username            = row.user,
+                               date                = row.date,
+                               size                = row.size,
+                               human_readable_size = row.human_readable_size;
+           END; %]
         [% IF checker.check_permission('delete') %]
             [% IF rows.size %]
+            <div id="files-operations">
                 [% PROCESS element/formbutton name = "button" value = loc('Delete Selected Attachments') %]
                 <input type="hidden" name="action" value="attachments_delete" />
                 <input type="hidden" name="caller_action" value="[% hub.action %]" />
+            </div>
             [% END %]
             </form>
         [% END %]
+        </div>
     </div>
-    <script type="text/javascript">
-    /* REVIEW - there must be a better spot to put this, but where? */
-    /* This had to be moved to the end of the file to avoid IE browser race
-     * conditions */
-    /* It should be done onload */
-    new Widget.SortableTable( {
-        "tableId": "attachments-listall-table",
-        "initialSortColumn": 1,
-        "secondarySortColumn": 1,
-        "columnSpecs": [
-            { skip: true },
-            { sort: "text" },
-            { sort: "text" },
-            { sort: "text" },
-            { sort: "date" },
-            { sort: "number" }
-        ]
-    } );
-    </script>
+
+[% BLOCK listing_row %]
+    <div class="[% style %]-row query-results-row">
+        <div class="st-listview-select">
+            [% IF can_delete %]
+            <input class="st-listview-selectpage-checkbox" type="checkbox" name="selected" value="[% page_uri %],[% id %]" />
+            [% END %]
+        </div>
+        <div class="[% style %]-row-title query-results-row-title">
+
+        <span class="[% style %]-row-title-link query-results-row-title-link">
+            [% link %] ([% human_readable_size %]), attached to [% page_link %]
+        </span>
+
+        </div>
+        <div class="[% style %]-row-uploaded-by query-results-row-uploaded-by">[% username | decorate('user_avatar') %]</div>
+        <div class="[% style %]-row-date query-results-row-date">
+        [% date %]
+
+        </div>
+    </div>
+[% END %]
+
+[% BLOCK sort_by_option %]
+          <option [% IF sortby == field %]selected="selected"[% END %] value="sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</option>
+          [% IF sortby == field %]
+          <option value="sortby=[% field %];direction=[% direction == 'asc' ? 'desc' : 'asc' %]">[% name %] [% direction == 'asc' ? '(desc)' : '(asc)' %]</option>
+          [% END %]
+[% END %]
+
 [% END %]

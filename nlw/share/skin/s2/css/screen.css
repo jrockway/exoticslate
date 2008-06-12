@@ -1405,7 +1405,7 @@ tr.w-st-odd-row, tr.w-st-odd-row td {
     margin-left:2em;
 }
 
-.query-results-row-last-edited-by {
+.query-results-row-last-edited-by .query-results-row-uploaded-by {
     display:block;
     float:right;
     margin:0;
@@ -1418,6 +1418,10 @@ tr.w-st-odd-row, tr.w-st-odd-row td {
 
 .query-results-row-last-edited-by:before {
     content:"Last edited by ";
+}
+
+.query-results-row-uploaded-by:before {
+    content:"Uploaded by ";
 }
 
 .query-results-row-date {

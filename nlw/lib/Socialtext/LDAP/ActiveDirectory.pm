@@ -41,7 +41,7 @@ The following versions of Active Directory are supported by this plug-in:
 
 =over
 
-=item * not supported at this time
+=item Active Directory 2003
 
 =back
 

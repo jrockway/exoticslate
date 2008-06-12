@@ -40,7 +40,7 @@ The following versions of OpenLDAP are supported by this plug-in:
 
 =over
 
-=item * not supported at this time
+=item OpenLDAP v2.x
 
 =back
 

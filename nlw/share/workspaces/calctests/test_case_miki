@@ -7,7 +7,6 @@
 | text_like | 3890.40 |
 | text_like | Loan Amount |
 | click_and_wait | link=Home |
-| wait_for_element_visible_ok | link=start here |
 
 | *Comment* | Test Case: Miki Open a socialcalc page |  |
 | open_ok | /lite/page/%%workspace%%/car_loan |  |

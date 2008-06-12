@@ -48,6 +48,7 @@ sub _make_getter {
             sub {
                 if ( defined( my $resource = $self->get_resource($rest) ) ) {
                     $rest->header(
+                        -status        => HTTP_200_OK,
                         -type          => $content_type . '; charset=UTF-8',
                         -Last_Modified => $self->make_http_date(
                             $self->last_modified($resource)

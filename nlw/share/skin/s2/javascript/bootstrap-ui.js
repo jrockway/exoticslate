@@ -170,14 +170,6 @@ jQuery(function () {
     .addClass("bootstrapper")
     .one("click", bootstrap(start_editor));
 
-    jQuery("#st-refresh-button-link")
-    .addClass("bootstrapper")
-    .bind("click", bootstrap(function() {
-        load_socialcalc(function() {
-            SocialCalc.refresh_spreadsheet();
-        });
-    }));
-
     jQuery(window).bind("boostrapping", function() {
         jQuery("#bootstrap-loader").show();
     });

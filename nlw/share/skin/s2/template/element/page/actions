@@ -15,8 +15,6 @@
       [% END %]
       [% IF page.page_type == 'wiki' %]
       [% INCLUDE element/colorbutton style='comment', label=loc('Comment'), href=comment_href, tooltip=loc('Click this button to add a comment to the page') %]
-      [% ELSIF page.page_type == 'spreadsheet' %]
-      [% INCLUDE element/colorbutton style='refresh', label=loc('Refresh'), href='#', tooltip=loc('Click this button to refresh this spreadsheet') %]
       [% END %]
 
     [% END %]

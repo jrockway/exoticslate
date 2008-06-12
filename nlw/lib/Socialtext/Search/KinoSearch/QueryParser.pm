@@ -32,8 +32,9 @@ sub parse {
 
     # Get the default query tree from the query string.
     my $query = KinoSearch::QueryParser::QueryParser->new(
-        analyzer       => $self->{searcher}->analyzer,
-        fields         => [qw(title text)],   # Default fields to be searched.
+        analyzer => $self->{searcher}->analyzer,
+        fields   => [qw(title text)]
+        , # Default fields to be searched. XXX: Some day, someone's gonna want to include docs that are tagged with the search term by default. When they do, add 'tag' to the list and voila. --zbir
         default_boolop => 'AND',
     )->parse($query_string);
 

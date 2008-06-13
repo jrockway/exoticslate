@@ -119,7 +119,7 @@ Sys::Hostname: 1.11
 Template: 2.19
 Template::Plugin::FillInForm: 0.04
 Template::Plugin::JSON: 0
-Text::Autoformat: 0
+Text::Autoformat: 1.14.0
 Text::Flowed: 0.14
 Text::MeCab: 0.17
 Tie::IxHash: 1.21

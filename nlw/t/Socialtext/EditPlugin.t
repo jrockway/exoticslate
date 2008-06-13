@@ -127,7 +127,7 @@ _EDIT_CONTENTION_SCREEN: {
     my $page = Socialtext::Page->new(hub => $hub, id => 'revision_page')->load;
 
     my $return = $hub->edit->_edit_contention_screen($page);
-    ok($return =~ /Somebody else made changes to the page/, 'HTML contains contention message');
+    like($return, qr/Somebody else made changes to the document/, 'HTML contains contention message');
     ok($return =~ /This is an edit contention/, 'HTML contains new content');
 }
 

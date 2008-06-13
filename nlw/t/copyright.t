@@ -43,7 +43,8 @@ my @skip_paths = qw(
 my %skip_paths = map { ($_,1) } @skip_paths;
 
 my @skip_matching = (
-    qr#share/skin/common/javascript/SocialCalc#,
+    qr#share/plugin/socialcalc/share/javascript/SocialCalc#
+    qr#share/plugin/socialcalc/share/javascript/dBrick#
 );
 
 my @skip_files = qw(

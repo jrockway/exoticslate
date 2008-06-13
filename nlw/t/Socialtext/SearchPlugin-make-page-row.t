@@ -48,8 +48,12 @@ package FakePageHit;
 
 sub new {
     my ( $class, $page_uri, $workspace_name ) = @_;
-    return bless { page_uri => $page_uri, workspace_name => $workspace_name, snippet => "... I'm a snippet ..." },
-        $class;
+    return bless { 
+        page_uri => $page_uri, 
+        workspace_name => $workspace_name, 
+        snippet => "... I'm a snippet ...",
+        hit => { score => 100 },
+    }, $class;
 }
 
 sub page_uri {
@@ -65,5 +69,10 @@ sub workspace_name {
 sub snippet {
     my $self = shift;
     return $self->{snippet};
+}
+
+sub hit {
+    my $self = shift;
+    return $self->{hit};
 }
 1;

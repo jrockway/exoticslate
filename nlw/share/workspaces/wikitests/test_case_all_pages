@@ -41,7 +41,7 @@
 
 | select_ok | sort-picker | label=Title |
 | wait_for_element_present_ok | st-listview | 20000 |
-| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0004/ |
+| text_like | st-listview | qr/allpages %%start_time%% 0004.+allpages %%start_time%% 0001/ |
 | wait_for_text_present_ok | Title (desc) | 10000 |
 | select_ok | sort-picker | label=Title (desc) |
 | wait_for_text_present_ok | Workspace Tour | 20000 |
@@ -83,7 +83,7 @@
 
 | select_ok | sort-picker | label=Title |
 | wait_for_text_present_ok | Advanced Getting Around | 20000 |
-| text_like | st-listview | qr/allpages %%start_time%% 0001.+allpages %%start_time%% 0004/ |
+| text_like | st-listview | qr/allpages %%start_time%% 0004.+allpages %%start_time%% 0001/ |
 | wait_for_text_present_ok | Title (desc) | 10000 |
 | select_ok | sort-picker | label=Title (desc) |
 | wait_for_text_present_ok | Workspace Tour | 20000 |

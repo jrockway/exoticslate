@@ -11,18 +11,18 @@
 
 | *Comment* | Test Case: Inter Workspace Search Search all the workspaces where %%username%% is a member |  |
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (3) |
-| click_ok | link=Workspace |  |
-| pause | 5000 |  |
-| st-result | qr/jabber.+Canonical Test Data Set.+jabber.+test-data2.+jabber.+test-data3/ |  |
+| select_ok | sort-picker | label=Workspace |
+| wait_for_element_present_ok | st-listview | 20000 |
+| st-result | qr/jabber.+test-data2.+jabber.+test-data3.+jabber.+Canonical Test Data Set/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search RT 27423 |  |
 
 | *Comment* | Test Case: Inter Workspace Search Remove %%username%% from test-data2 and search again |  |
 | st-admin | remove-member --workspace test-data2 --email %%email%% |  |
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
-| click_ok | link=Workspace |  |
-| pause | 5000 |  |
-| st-result | qr/jabber.+Canonical Test Data Set.+jabber.+test-data3/ |  |
+| select_ok | sort-picker | label=Workspace |
+| wait_for_element_present_ok | st-listview | 20000 |
+| st-result | qr/jabber.+test-data3.+jabber.+Canonical Test Data Set/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search Logout and open Help so we can issue a search |  |
 | st-logout |  |  |
@@ -36,32 +36,32 @@
 
 | st-admin | set-permissions --workspace test-data3 --permissions public-authenticate-to-edit | The permissions for the test-data3 workspace have been changed to public-authenticate-to-edit. |
 | st-search | jabber workspaces:test-data3 | Pages containing 'jabber workspaces:test-data3' (1) |
-| click_ok | link=Workspace |  |
-| pause | 5000 |  |
+| select_ok | sort-picker | label=Workspace |
+| wait_for_element_present_ok | st-listview | 20000 |
 | st-result | qr/jabber.+test-data3/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search Login to test-data ws and search again |  |
 | st-login |  |  |
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
-| click_ok | link=Workspace |  |
-| pause | 5000 |  |
-| st-result | qr/jabber.+Canonical Test Data Set.+jabber.+test-data3/ |  |
+| select_ok | sort-picker | label=Workspace |
+| wait_for_element_present_ok | st-listview | 20000 |
+| st-result | qr/jabber.+test-data3.+jabber.+Canonical Test Data Set/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search DELETE WORKSPACE |  |
 | *Comment* | add user back to test-data2, delete test-data2 |  |
 
 | st-admin | add-member --workspace test-data2 --email %%email%% | qr/%%username%% .+ a member of the test-data2 workspace\./ |
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (3) |
-| click_ok | link=Workspace |  |
-| pause | 5000 |  |
-| st-result | qr/jabber.+Canonical Test Data Set.+jabber.+test-data2.+jabber.+test-data3/ |  |
+| select_ok | sort-picker | label=Workspace |
+| wait_for_element_present_ok | st-listview | 20000 |
+| st-result | qr/jabber.+test-data3.+jabber.+test-data2.+jabber.+Canonical Test Data Set/ |  |
 
 | st-admin | delete-workspace --workspace test-data2 --no-export | The test-data2 workspace has been deleted. |
 
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
-| click_ok | link=Workspace |  |
-| pause | 5000 |  |
-| st-result | qr/jabber.+Canonical Test Data Set.+jabber.+test-data3/ |  |
+| select_ok | sort-picker | label=Workspace |
+| wait_for_element_present_ok | st-listview | 20000 |
+| st-result | qr/jabber.+test-data3.+jabber.+Canonical Test Data Set/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search PUBLIC TO PRIVATE CONVERSION |  |
 | *Comment* | Logout, search, change test-data3 back to private, search again. |  |
@@ -69,8 +69,8 @@
 | st-logout |  |  |
 | open_ok | /help-en |  |
 | st-search | jabber workspaces:test-data3 | Pages containing 'jabber workspaces:test-data3' (1) |
-| click_ok | link=Workspace |  |
-| pause | 5000 |  |
+| select_ok | sort-picker | label=Workspace |
+| wait_for_element_present_ok | st-listview | 20000 |
 | st-result | qr/jabber.+test-data3/ |  |
 
 | st-admin | set-permissions --workspace test-data3 --permissions authenticated-user-only | The permissions for the test-data3 workspace have been changed to authenticated-user-only. |
@@ -90,9 +90,9 @@
 | click_and_wait | Button |  |
 | open_ok | /test-data |  |
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
-| click_ok | link=Workspace |  |
-| pause | 5000 |  |
-| st-result | qr/jabber.+Canonical Test Data Set.+jabber.+test-data2/ |  |
+| select_ok | sort-picker | label=Workspace |
+| wait_for_element_present_ok | st-listview | 20000 |
+| st-result | qr/jabber.+test-data2.+jabber.+Canonical Test Data Set/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search CREATE NEW WORKSPACE, ADD MEMBER |  |
 | *Comment* | Test Case: Inter Workspace Search Create new ws empty because ceq takes too long to index |  |
@@ -116,9 +116,9 @@
 | st-admin | index-page -workspace from-scratch --page jabber | The jabber page in the from-scratch workspace has been indexed. |
 
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (3) |
-| click_ok | link=Workspace |  |
-| pause | 5000 |  |
-| st-result | qr/jabber.+Canonical Test Data Set.+jabber.+From-Scratch.+jabber.+test-data2/ |  |
+| select_ok | sort-picker | label=Workspace |
+| wait_for_element_present_ok | st-listview | 20000 |
+| st-result | qr/jabber.+test-data2.+jabber.+Canonical Test Data Set.+jabber.+From-Scratch/ |  |
 
 | st-admin | delete-workspace --workspace test-data2 --no-export | The test-data2 workspace has been deleted. |
 | st-admin | delete-workspace --workspace test-data3 --no-export | The test-data3 workspace has been deleted. |

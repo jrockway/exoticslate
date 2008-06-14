@@ -141,24 +141,38 @@
 | wait_for_element_visible_ok | st-wiki-subnav-link-whats-new |  |
 | click_and_wait | st-wiki-subnav-link-whats-new |  |
 | click_and_wait | link=All Files |  |
-| click_ok | link=Filename |  |
-| text_like | st-allfiles | qr/wikitestzip\.zip.+wikitest\.txt.+wikitest\.pdf.+wikitest\.jpg.+wikitest\.doc/ |
-| click_ok | link=Filename |  |
-| text_like | st-allfiles | qr/wikitest\.doc.+wikitest\.jpg.+wikitest\.pdf.+wikitest\.txt.+wikitestzip\.zip/ |
-| click_ok | link=Page Title |  |
-| text_like | st-allfiles | qr/page1 %%start_time%%.+page2 %%start_time%%.+page3 %%start_time%%.+page4 %%start_time%%.+page5 %%start_time%%/ |
-| click_ok | link=Page Title |  |
-| text_like | st-allfiles | qr/page5 %%start_time%%.+page4 %%start_time%%.+page3 %%start_time%%.+page2 %%start_time%%.+page1 %%start_time%%/ |
+
+| select_ok | sort-picker | label=Filename |
+| wait_for_element_present_ok | st-attachments_ui-content | 20000 |
+| text_like | st-attachments_ui-content | qr/wikitest\.doc.+wikitest\.jpg.+wikitest\.pdf.+wikitest\.txt.+wikitestzip\.zip/ |
+| wait_for_text_present_ok | Filename (desc) | 10000 |
+| select_ok | sort-picker | label=Filename (desc) |
+| text_like | st-attachments_ui-content | qr/wikitest\.doc.+wikitest\.jpg.+wikitest\.pdf.+wikitest\.txt.+wikitestzip\.zip/ |
+| wait_for_text_present_ok | Filename (asc) | 10000 |
+| select_ok | sort-picker | label=Filename (asc) |
+| text_like | st-attachments_ui-content | qr/wikitestzip\.zip.+wikitest\.txt.+wikitest\.pdf.+wikitest\.jpg.+wikitest\.doc/ |
 
 | *Comment* | Test Case: Sorting Files sort by uploaded by, date, size |  |
-| click_ok | link=Uploaded By |  |
-| text_like | st-allfiles | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_3_regex%%.+%%user_4_regex%%.+%%user_5_regex%%/ |
-| click_ok | link=Uploaded By |  |
-| text_like | st-allfiles | qr/%%user_5_regex%%.+%%user_4_regex%%.+%%user_3_regex%%.+%%user_2_regex%%.+%%user_1_regex%%/ |
-| click_ok | link=Size |  |
-| text_like | st-allfiles | qr/42.+20721.+25038.+27648.+31250/ |
-| click_ok | link=Size |  |
-| text_like | st-allfiles | qr/31250.+27648.+25038.+20721.+42/ |
+| select_ok | sort-picker | label=Uploaded By |
+| wait_for_element_present_ok | st-attachments_ui-content | 20000 |
+| text_like | st-attachments_ui-content | qr/%%user_3_regex%%.+%%user_5_regex%%.+%%user_4_regex%%.+%%user_1_regex%%.+%%user_2_regex%%/ |
+| wait_for_text_present_ok | Uploaded By (desc) | 10000 |
+| select_ok | sort-picker | label=Uploaded By (desc) |
+| text_like | st-attachments_ui-content | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_3_regex%%.+%%user_4_regex%%.+%%user_5_regex%%/ |
+| wait_for_text_present_ok | Uploaded By (asc) | 10000 |
+| select_ok | sort-picker | label=Uploaded By (asc) |
+| text_like | st-attachments_ui-content | qr/%%user_5_regex%%.+%%user_4_regex%%.+%%user_3_regex%%.+%%user_2_regex%%.+%%user_1_regex%%/ |
+
+| *Comment* | Test Case: Sorting Files sort by uploaded by, date, size |  |
+| select_ok | sort-picker | label=Size |
+| wait_for_element_present_ok | st-attachments_ui-content | 20000 |
+| text_like | st-attachments_ui-content | qr/42bytes.+30kb.+24kb.+27kb.+20kb/ |
+| wait_for_text_present_ok | Size (asc) | 10000 |
+| select_ok | sort-picker | label=Size (asc) |
+| text_like | st-attachments_ui-content | qr/30kb.+27kb.+24kb.+20kb.+42bytes/ |
+| wait_for_text_present_ok | Size (desc) | 10000 |
+| select_ok | sort-picker | label=Size (desc) |
+| text_like | st-attachments_ui-content | qr/42bytes.+20kb.+24kb.+27kb.+30kb/ |
 
 We do not have much control on data under "Date Uploaded" column to verify expected and actual sort result. So instead of verifying sort results directly to "Date Uploaded" column, we tried to verify it through the data of other columns. Means that if we do a sort asc or desc on Date Uploaded, we verified the corresponding expected changes of data in other columns to make sure that Date Uploaded sort is working. We have done it twice, one for asc and other one for desc sort by "Date Uploaded".
 

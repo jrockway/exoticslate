@@ -79,6 +79,6 @@
 
 | *Comment* | Test Case: Delete Selected Attachments teardown |  |
 
-| st-admin | purge-page --workspace %%workspace%% --page aaaaaa_delete_attachments_%%start_time%% |  |
+ st-admin | purge-page --workspace %%workspace%% --page aaaaaa_delete_attachments_%%start_time%% | |
 
 | *Comment* | Test Case: Delete Selected Attachments COMPLETED |  |

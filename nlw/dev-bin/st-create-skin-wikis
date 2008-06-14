@@ -2,6 +2,12 @@
 
 echo BUILDING WIKIS FOR ALL CUSTOM SKINS
 
-for i in ` ls $ST_CURRENT/nlw/share/skin/  |  grep -v '^st\/' | grep -v '^s2\/' | grep -v '^common\/'  | sed "s/\@//" ` ; do st-admin create-workspace --n st-$i-skin  --t "Skin $i" || true ; st-admin add-workspace-admin --w st-$i-skin  --e devnull1@socialtext.com || true ; st-admin set-workspace-config --w st-$i-skin  skin_name $i || true  ; done ;
+for i in ` ls $ST_CURRENT/nlw/share/skin/  |  grep -v '^st$' | grep -v '^s2$' | grep -v '^common$' | grep -v '^skin$' ` ; do 
+    $ST_CURRENT/nlw/bin/st-admin create-workspace --n st-$i-skin  --t "Skin $i" || true ;
+    $ST_CURRENT/nlw/bin/st-admin add-workspace-admin --w st-$i-skin  --e devnull1@socialtext.com || true ;
+    $ST_CURRENT/nlw/bin/st-admin set-workspace-config --w st-$i-skin  skin_name $i || true  ;
+done ;
 
+$ST_CURRENT/nlw/bin/ceq-rm /.+/
+    
 echo FINISHED BUILDING WIKIS FOR ALL CUSTOM SKINS

@@ -13,7 +13,10 @@
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (3) |
 | select_ok | sort-picker | label=Workspace |
 | wait_for_element_present_ok | st-listview | 20000 |
-| st-result | qr/jabber.+test-data2.+jabber.+test-data3.+jabber.+Canonical Test Data Set/ |  |
+| *Comment* | Test Case: Inter Workspace Search unsorted results can appear in any order, so don't check order |  |
+| st-result | qr/jabber.+test-data2/ |  |
+| st-result | qr/jabber.+test-data3 |  |
+| st-result | qr/jabber.+Canonical Test Data Set/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search RT 27423 |  |
 
@@ -22,7 +25,10 @@
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
 | select_ok | sort-picker | label=Workspace |
 | wait_for_element_present_ok | st-listview | 20000 |
-| st-result | qr/jabber.+test-data3.+jabber.+Canonical Test Data Set/ |  |
+| *Comment* | Test Case: Inter Workspace Search unsorted results can appear in any order, so don't check order |  |
+| st-result | qr/jabber.+test-data2/ |  |
+| st-result | qr/jabber.+test-data3 |  |
+| st-result | qr/jabber.+Canonical Test Data Set/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search Logout and open Help so we can issue a search |  |
 | st-logout |  |  |

@@ -36,7 +36,7 @@
 | type_ok | st-search-term | Mudville |
 | click_and_wait | st-search-submit |  |
 | text_like | st-search-content | AAAAAA Delete Attachments %%start_time%% |
-| text_like | st-search-content | qr/Attachment: wikitest.doc/ |
+| text_like | st-search-content | qr/wikitest.doc, attached to page AAAAAA Delete Attachments %%start_time%%/ |
 
 | *Comment* | Navigate away and come back in hopes of solidifying this test |  |
 | open_ok | /%%workspace%%/index.cgi? |  |

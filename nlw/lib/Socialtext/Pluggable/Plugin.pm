@@ -63,14 +63,14 @@ sub getContentPrefs {
     return $self->hub->rest->getContentPrefs;
 }
 
+sub user {
+    my $self = shift;
+    return $self->hub->current_user;
+}
+
 sub username {
     my $self = shift;
-    if ($self->rest) {
-        return $self->rest->user->username;
-    }
-    else {
-        return $self->hub->current_user->username,
-    }
+    return $self->user->username;
 }
 
 sub best_full_name {
@@ -161,7 +161,7 @@ sub new {
 sub storage {
     my ($self,$id) = @_;
     die "Id is required for storage\n" unless $id;
-    return Socialtext::Storage::PSQL->new($id, 0);
+    return Socialtext::Storage::PSQL->new($id, $self->user->user_id);
 }
 
 sub name {

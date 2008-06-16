@@ -3,6 +3,8 @@ SET client_encoding = 'UTF8';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 
+COMMENT ON SCHEMA public IS 'Standard public schema';
+
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
@@ -47,7 +49,7 @@ CREATE SEQUENCE "Role___role_id"
 CREATE TABLE "System" (
     field varchar(1024) NOT NULL,
     value varchar(1024) NOT NULL,
-    last_update timestamptz DEFAULT CURRENT_TIMESTAMP
+    last_update timestamptz DEFAULT now()
 );
 
 CREATE TABLE "User" (
@@ -175,6 +177,7 @@ CREATE TABLE "WorkspaceRolePermission" (
 );
 
 CREATE SEQUENCE "Workspace___workspace_id"
+    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -202,6 +205,14 @@ CREATE TABLE sessions (
     id character(32) NOT NULL,
     a_session text NOT NULL,
     last_updated timestamptz NOT NULL
+);
+
+CREATE TABLE "storage" (
+    user_id bigint NOT NULL,
+    "class" varchar(128),
+    "key" varchar(128),
+    value text,
+    datatype varchar(10)
 );
 
 ALTER TABLE ONLY "Account"
@@ -385,6 +396,5 @@ ALTER TABLE ONLY "Workspace"
             FOREIGN KEY (account_id)
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
-
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '2');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '3');

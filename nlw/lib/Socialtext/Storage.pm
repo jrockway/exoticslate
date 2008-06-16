@@ -6,15 +6,19 @@ use warnings;
 use Carp qw(croak);
 
 sub new {
-    my ($class, $id) = @_;
+    my ($class, $id, $user_id) = @_;
     croak "id required" unless $id;
-    my $self = { id => $id };
+    my $self = {
+        id => $id,
+        user_id => $user_id || 0,
+    };
     bless $self, $class;
     $self->load_data;
     return $self;
 }
 
-sub load_data {
+sub classes {
+    my $self = shift;
     die "Sub must be overridden";
 }
 

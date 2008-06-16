@@ -8,19 +8,6 @@ use Carp qw(croak);
 
 sub load_data {
     my $self = shift;
-    eval { sql_execute('SELECT COUNT(datatype) FROM storage') };
-    if ($@) {
-        eval {
-            sql_execute('
-                CREATE TABLE storage (
-                    class    VARCHAR(128),
-                    key      VARCHAR(128),
-                    value    TEXT,
-                    datatype VARCHAR(10)
-                )
-            ');
-        };
-    }
     $self->{_cache} = {};
 }
 
@@ -31,8 +18,8 @@ sub get {
     my $sth = sql_execute('
         SELECT value, datatype
           FROM storage
-          WHERE class=? AND key=?
-    ', $self->{id}, $key);
+          WHERE class=? AND key=? AND user_id=?
+    ', $self->{id}, $key, $self->{user_id});
 
     my $res = $sth->fetchall_arrayref;
     return unless @$res;
@@ -61,8 +48,8 @@ sub set {
     else {
         sql_execute('
             INSERT INTO storage
-              VALUES (?,?,?,?)
-        ', $self->{id}, $key, $val, $type);
+              VALUES (?,?,?,?,?)
+        ', $self->{user_id}, $self->{id}, $key, $val, $type);
     }
 }
 
@@ -111,5 +98,15 @@ sub keys {
     return map({ $_->[0] } @$res);
 }
 
+sub classes {
+    my $self = shift;
+    my $sth = sql_execute('
+        SELECT distinct class
+          FROM storage
+          WHERE user_id=?
+    ', $self->{user_id});
+    my $res = $sth->fetchall_arrayref;
+    return map({ $_->[0] } @$res);
+}
 
 1;

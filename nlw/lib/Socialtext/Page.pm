@@ -27,6 +27,7 @@ use Socialtext::EmailSender::Factory;
 use Socialtext::l10n qw(loc system_locale);
 use Socialtext::WikiText::Parser;
 use Socialtext::WikiText::Emitter::SearchSnippets;
+use Socialtext::String;
 
 use Carp ();
 use Class::Field qw( field );
@@ -1142,7 +1143,7 @@ sub preview_text {
     my $excerpt = $self->_to_plain_text( $content );
     $excerpt = substr( $excerpt, 0, $ExcerptLength ) . '...'
         if length $excerpt > $ExcerptLength;
-    return $excerpt;
+    return Socialtext::String::html_escape($excerpt);
 }
 
 sub _to_plain_text {

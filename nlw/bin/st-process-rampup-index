@@ -97,7 +97,7 @@ sub few_enough_rampup_events {
 
 sub index_workspace {
     my $workspace = shift;
-    my $sync;
+    my $sync = '';
     my $thing_count;
 
     my $page_dir = Socialtext::AppConfig->data_root_dir . "/data/$workspace";

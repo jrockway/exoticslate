@@ -217,7 +217,7 @@ sub st_watch_page {
     my $found_page = 0;
     (my $short_name = lc($page_name)) =~ s/\s/_/g;
     while (1) {
-        my $xpath = qq{//table[\@id='st-watchlist-content']/tbody/tr[$row]/td[2]/img};
+        my $xpath = qq{//div[\@id='st-watchlist-content']/div[$row]/div[2]/img}; 
         my $alt;
         eval { $alt = $sel->get_attribute("$xpath/\@alt") };
         last unless $alt;

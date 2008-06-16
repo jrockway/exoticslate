@@ -1,6 +1,6 @@
 #!/bin/bash
 
-$ST_CURRENT/nlw/bin/st-config set user_factories LDAP:Default
+$ST_CURRENT/nlw/bin/st-config set user_factories 'LDAP:oak-testing;Default' 
 cp $ST_CURRENT/nlw/dev-bin/ldap.yaml.st  $HOME/.nlw/etc/socialtext/ldap.yaml
 echo " Copied Socialtext ldap.yaml.st  to $HOME/.nlw/etc/socialtext/ldap.yaml"
 echo

@@ -1,0 +1,11 @@
+cascade_css: 1
+name: aclcorporate
+version: 1.0.0
+abstract: Custom Uploaded Skin - aclcorporate
+skin_type: s2
+author:
+  name: Your name here
+  email: your-email@domain.tld
+license: CPAL
+depends:
+  - s2

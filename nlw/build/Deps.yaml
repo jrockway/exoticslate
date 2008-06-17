@@ -77,6 +77,7 @@ HTML::FillInForm: 1.05
 HTML::FillInForm::ForceUTF8: 0.02
 HTML::FormatRTF: 2.04
 HTML::PrettyPrinter: 0.03
+HTML::Scrubber: 0.08
 HTML::TreeBuilder: 3.13
 HTML::WikiConverter: 0.61
 HTML::WikiConverter::Socialtext: 0.03

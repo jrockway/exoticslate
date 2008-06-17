@@ -19,6 +19,7 @@ use Scalar::Util qw(blessed);
 use YAML;
 use Socialtext::Log 'st_timed_log';
 use Socialtext::Timer;
+use Socialtext::CGI::Scrubbed;
 
 Readonly my $URI_MAP => 'uri_map.yaml';
 Readonly my $AUTH_MAP => 'auth_map.yaml';
@@ -134,6 +135,8 @@ sub log_timings {
 # overrride from REST::Application so we can return file handles effectively
 sub run {
     my $self = shift;
+
+    $self->defaultQueryObject(Socialtext::CGI::Scrubbed->new);
 
     # Get resource.
     $self->preRun(); # A no-op by default.

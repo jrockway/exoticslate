@@ -80,12 +80,13 @@
 
     RewriteRule    ^/lite/page/([^/]+)$ /lite/page/$1/ [R,L,NE]
 
+    RewriteRule    ^/index.cgi$ / [R,L,NE]
+
     RewriteRule    !^/data(/.*)?$   -  [C]
     RewriteRule    !^/nlw    -  [C]
     RewriteRule    !^/challenge - [C]
     RewriteRule    !^/logos  -  [C]
     RewriteRule    !^/favicon\.ico  -  [C]
-    RewriteRule    ^/index.cgi$ / [R,L,NE]
     RewriteRule    ^/([^/\.]+)/?$  /$1/index.cgi  [R,L,NE]
     RewriteRule    ^/([^/\.]+)/emailprefs$ /$1/index.cgi?action=preferences_settings&preferences_class_id=email_notify [R,L,NE,QSA]
     RewriteRule    ^/([^/\.]+)/watchlistprefs$ /$1/index.cgi?action=preferences_settings&preferences_class_id=watchlist [R,L,NE,QSA]

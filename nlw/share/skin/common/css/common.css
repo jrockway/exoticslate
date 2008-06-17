@@ -548,42 +548,6 @@ div#st-pagetools ul.level2 {
 
 /* Listview selectors */
 
-.query-results-row-revisions {
-    text-align: left;
-    white-space: nowrap;
-    margin-left: 4.7em;
-    display: inline;
-    color: gray;
-    font-size: 85%;
-}
-
-.query-results-row-revisions:before {
-}
-
-.query-results-row-revisions:after {
-    content: " revisions";
-}
-
-.query-results-content {
-    font-size: 85%;
-    width: 100%;
-}
- 
-.query-results-row {
-    border-collapse: collapse;
-    margin: 0;
-    padding: 0.5em 0 3em 0;
-    clear: both;
-}
- 
-.st-listview-select {
-    float: left;
-    display: block;
-    margin: 0;
-    padding: 0;
-    width: 3%;
-}
-
 .query-results-row-title {
     display: block;
     float: left;
@@ -596,50 +560,92 @@ div#st-pagetools ul.level2 {
     float: left;
 }
 
+.query-results-row-title .avatar {
+    float: none;
+}
+
 .query-results-row-title a {
     font-weight: bold;
-    display: block;
-    margin-left: 2em;
+    display: inline;
+    font-size:120%;
+    padding-left:8px;
+    line-height:21px;
 }
 
-.query-results-row-title div {
-    display: block;
-    margin-left: 2em;
+.query-results-row-title-attached-to a,
+.query-results-row-workspace a {
+    padding-left:0;
+    font-size:100%;
+    font-weight:normal;
 }
 
-.query-results-row-last-edited-by .query-results-row-uploaded-by {
+.query-results-row-summary strong {
+    background:#ffd;
+    padding:2px;
+}
+
+.query-results-row-title .query-results-row-summary {
     display: block;
-    float: right;
+    margin-left: 24px;
+}
+
+.query-results-row-revisions {
+    font-style: italic;
+    font-size:90%;
+    white-space:nowrap;
+    color:gray;
+}
+
+.query-results-row-title .query-results-row-revisions a {
+    display: inline;
+    margin: 0;
+    font-size:12px;
+    line-height:100%;
+    padding:0;
+}
+
+.query-results-content {
+    font-size: 85%;
+    width: 100%;
+}
+ 
+.query-results-row {
+    border-collapse: collapse;
+    margin: 0.5em 0 0 0;
+    padding: 0;
+    clear: both;
+}
+ 
+.st-listview-select {
+    float: left;
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 2em;
+}
+.query-results-row-last-edited-by {
+    text-align:right;
+    font-style:italic;
+    color:#666;
+    white-space:nowrap;
+    clear:left;
+}
+
+.query-results-row-last-edited-by .query-results-row-uploaded-by,
+.query-results-row-title .query-results-row-uploaded-by {
     margin: 0;
     padding: 0;
     font-style: italic;
     color: gray;
-    width: 30%;
     text-align: right;
-}
-
-.query-results-row-last-edited-by:before {
-    content: "Last edited by ";
-}
-
-.query-results-row-uploaded-by:before {
-    content: "Uploaded by ";
 }
 
 .query-results-row-date {
-    display: block;
-    float: right;
-    clear: right;
     margin: 0;
     padding: 0;
-    font-style: italic;
-    color: gray;
-    width: 25%;
-    text-align: right;
 }
 
 .query-results-row a {
-    text-decoration: none;
     color: #00f;
 }
 
@@ -647,27 +653,56 @@ div#st-pagetools ul.level2 {
     border-collapse: collapse;
     border: 1px #ccc solid;
     background: #f8f8f8;
-    padding: 4px 8px;
+    padding: 4px 0;
     height: 1.4em;
+    margin:0;
 }
+
+.query-results-row-watchlist {
+    float: right;
+}
+
+.query-results-row-title-attached-to {
+    margin:0;
+    padding:0;
+}
+/* END list-view selectors */
  
 #select-all {
-    display: inline;
-    width: 3%;
+    display: block;
+    float:left;
+    margin:0;
+    padding:0 0.25em 0 0;
+    border-right:1px dashed #999;
 }
 
 #show-titles-or-summaries {
     display: inline;
-    width: 50%;
+    margin:0 0 0 0.75em;
+    padding:0;
+    line-height:20px;
+}
+
+#show-titles-or-summaries a.selected {
+    font-weight:bold;
+    text-decoration:none;
+    color:black;
 }
 
 #sort-by-picker {
-    float: right;
-    position: relative;
-    top: -1.4em;
+    height: 22px;
+    display:block;
+    float:right;
+    padding-right:1em;
 }
 
 #sort-by-picker select {
     border: 1px #666 solid;
     padding: 1px 2px;
+    margin:0;
+}
+
+#sort-picker {
+    padding:0;
+    margin:0;
 }

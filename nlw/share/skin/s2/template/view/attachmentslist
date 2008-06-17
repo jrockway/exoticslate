@@ -67,14 +67,15 @@
         <div class="[% style %]-row-title query-results-row-title">
 
         <span class="[% style %]-row-title-link query-results-row-title-link">
-            [% link %] ([% human_readable_size %]), attached to [% page_link %]
+            [% link %] ([% human_readable_size %]), attached to <span class="[% style %]-row-title-attached-to query-results-row-title-attached-to">[% page_link %]</span>
         </span>
 
-        </div>
-        <div class="[% style %]-row-uploaded-by query-results-row-uploaded-by">[% username | decorate('user_avatar') %]</div>
-        <div class="[% style %]-row-date query-results-row-date">
-        [% date %]
-
+          <span class="[% style %]-row-uploaded-by query-results-row-uploaded-by">
+            [% loc('Uploaded by') %]
+            [% username | decorate('user_avatar') %]
+            [% loc('on') %]
+            <span class="[% style %]-row-date query-results-row-date">[% date %]</span>
+          </span>
         </div>
     </div>
 [% END %]
@@ -82,7 +83,7 @@
 [% BLOCK sort_by_option %]
           <option [% IF sortby == field %]selected="selected"[% END %] value="sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</option>
           [% IF sortby == field %]
-          <option value="sortby=[% field %];direction=[% direction == 'asc' ? 'desc' : 'asc' %]">[% name %] [% direction == 'asc' ? '(desc)' : '(asc)' %]</option>
+          <option value="sortby=[% field %];direction=[% direction == 'asc' ? 'desc' : 'asc' %]">[% name %] [% direction == 'asc' ? '(&darr;)' : '(&uarr;)' %]</option>
           [% END %]
 [% END %]
 

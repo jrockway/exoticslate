@@ -3,12 +3,9 @@
 <div id="[% style %]-content" class="query-results-content">
     <div id="[% style %]-header-row" class="query-results-header-row">
       <div id="select-all"><input title=[% loc("Select all pages") %] type="checkbox" id="st-listview-allpagescb"/></div>
-      <div id="show-titles-or-summaries">
-        [% loc('Show:') %]
-        <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];titles=1">[% loc('Titles') %]</a> | <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1">[% loc('Summaries') %]</a></div>
       <div id="sort-by-picker">[% loc('Sort by:') %]
   <script language="javascript">
-  var query_start = "?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %][% IF summaries == 1 %];summaries=1[% END %]";
+  var query_start = "?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];summaries=[% summaries %]";
   function sort_by() {
       var selected = jQuery('select#sort-picker').val();
       window.location = query_start + ';' + selected;
@@ -27,6 +24,11 @@
             [% PROCESS sort_by_option name = loc('Date') field = 'Date' %]
             [% PROCESS sort_by_option name = loc('Revisions') field = 'revision_count' %]
         </select>
+      </div>
+      <div id="show-titles-or-summaries">
+        [% loc('Show:') %]
+        <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=0" [% IF ! summaries %] class="selected" [% END %]>[% loc('Titles') %]</a> | 
+        <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
       </div>
     </div>
 [%
@@ -62,49 +64,57 @@
            [% ELSE %]
                <img src="[% wiki.skin_uri('s2') %]/images/st/pagetools/watch-star-on.gif" alt="[% row.page_uri %]" class="watchlist-list-toggle" />
            [% END %]
-
         </div>
     [% END %]
         <div class="[% style %]-row-title query-results-row-title">
-                [% IF page_type == 'spreadsheet' %]
-                   <img src="[% wiki.skin_uri('s2') %]/images/st/pagetools/ss16.png" />
-                [% ELSIF is_attachment %]
-                   <img src="[% wiki.skin_uri('s2') %]/images/st/pagetools/attachment.png" />
-                [% ELSE %]
-                   <img src="[% wiki.skin_uri('s2') %]/images/st/pagetools/doc16.png" />
-                [% END %]
-
-        <span class="[% style %]-row-title-link query-results-row-title-link">
-        [% IF is_attachment %]
-            <a href="/[% workspace_name %]/[% script_name %]/[% document_title %]?action=attachments_download;page_name=[% page_uri %];id=[% id %]">[% document_title %]</a>, attached to page [% subject %]
+        [% IF page_type == 'spreadsheet' %]
+           <img src="[% wiki.skin_uri('s2') %]/images/st/pagetools/ss16.png" />
+        [% ELSIF is_attachment %]
+           <img src="[% wiki.skin_uri('s2') %]/images/st/pagetools/attachment.png" />
         [% ELSE %]
-            <a href="/[% workspace_name %]/index.cgi?[% page_uri %]">[% subject | html %]</a>
+           <img src="[% wiki.skin_uri('s2') %]/images/st/pagetools/doc16.png" />
         [% END %]
-        [% IF show_workspace %]
-        <span class="[% style %]-row-workspace query-results-row-workspace">
-            in <a href="/[% workspace_name %]/">[% workspace_title %]</a>
-        </span>
+          <span class="[% style %]-row-title-link query-results-row-title-link">
+          [% IF is_attachment %]
+              <a href="/[% workspace_name %]/[% script_name %]/[% document_title %]?action=attachments_download;page_name=[% page_uri %];id=[% id %]">[% document_title %]</a>, attached to page [% subject %]
+          [% ELSE %]
+              <a href="/[% workspace_name %]/index.cgi?[% page_uri %]">[% subject | html %]</a>
+          [% END %]
+          [% IF show_workspace %]
+            <span class="[% style %]-row-workspace query-results-row-workspace">
+                in <a href="/[% workspace_name %]/">[% workspace_title %]</a>
+            </span>
+          [% END %]
+          [% IF ! summaries %]
+            <span class="[% style %]-row-revisions query-results-row-revisions">
+              (<a href="/[% workspace_name %]/[% script_name %]?action=revision_list;page_name=[% page_uri %]">[% revisions %]</a> [% loc('revisions') %])
+            </span>
+          [% END %]
+          </span>
+          [% IF ! summaries %]
+          <span class="[% style %]-row-last-edited-by query-results-row-last-edited-by">[% loc('Last updated by') %] [% username | decorate('user_avatar') %] [% loc('on') %]
+              <span class="[% style %]-row-date query-results-row-date">[% date %]</span>
+          </span>
+          [% END %]
+          [% IF summaries %]
+          <div class="[% style %]-row-summary query-results-row-summary">[% summary %]
+             <span class="[% style %]-row-revisions query-results-row-revisions">
+                 (<a href="/[% workspace_name %]/[% script_name %]?action=revision_list;page_name=[% page_uri %]">[% revisions %]</a> [% loc('revisions') %])
+             </span>
+          </div>
+          [% END %]
+        </div>
+        [% IF summaries %]
+        <div class="[% style %]-row-last-edited-by query-results-row-last-edited-by">[% loc('Last updated by') %] [% username | decorate('user_avatar') %] [% loc('on') %]
+            <span class="[% style %]-row-date query-results-row-date">[% date %]</span>
+        </div>
         [% END %]
-        </span>
-            [% IF summaries %]
-            <div class="[% style %]-row-summary query-results-row-summary">[% summary %]</div>
-            [% END %]
-
-        </div>
-        <div class="[% style %]-row-last-edited-by query-results-row-last-edited-by">[% username | decorate('user_avatar') %]</div>
-        <div class="[% style %]-row-date query-results-row-date">
-        [% date %]
-
-        </div>
-        <div class="[% style %]-row-revisions query-results-row-revisions">
-          <a href="/[% workspace_name %]/[% script_name %]?action=revision_list;page_name=[% page_uri %]">[% revisions %]</a>
-        </div>
     </div>
 [% END %]
 
 [% BLOCK sort_by_option %]
           <option [% IF sortby == field %]selected="selected"[% END %] value="sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</option>
           [% IF sortby == field %]
-          <option value="sortby=[% field %];direction=[% direction == 'asc' ? 'desc' : 'asc' %]">[% name %] [% direction == 'asc' ? '(desc)' : '(asc)' %]</option>
+          <option value="sortby=[% field %];direction=[% direction == 'asc' ? 'desc' : 'asc' %]">[% name %] [% direction == 'asc' ? '(&darr;)' : '(&uarr;)' %]</option>
           [% END %]
 [% END %]

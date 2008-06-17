@@ -103,14 +103,20 @@ sub display_results {
     $self->result_set(undef);
     $self->render_screen(
         %$result_set,
-        summaries => $self->cgi->summaries || 0,
-        sortby => $sortby,
-        sortdir => $sortdir,
-        direction => $direction,
-        error_message => $self->error_message,
+        summaries              => $self->show_summaries,
+        sortby                 => $sortby,
+        sortdir                => $sortdir,
+        direction              => $direction,
+        error_message          => $self->error_message,
         listview_extra_columns => $self->listview_extra_columns,
         @_,
     );
+}
+
+sub show_summaries {
+    my $self = shift;
+
+    return $self->cgi->summaries || 0;
 }
 
 sub sorted_result_set {

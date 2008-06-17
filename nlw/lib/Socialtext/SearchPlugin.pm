@@ -346,6 +346,14 @@ sub write_result_set {
     }
 }
 
+sub show_summaries {
+    my $self = shift;
+
+    return ( defined $self->cgi->summaries and $self->cgi->summaries ne '' )
+        ? $self->cgi->summaries
+        : 1;
+}
+
 package Socialtext::Search::CGI;
 
 use base 'Socialtext::Query::CGI';

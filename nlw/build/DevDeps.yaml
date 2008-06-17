@@ -44,4 +44,4 @@ Socialtext::WikiFixture::Socialtext: 0
 Socialtext::WikiTest: 0.05
 
 # For mocking libraries
-mocked: 0.07
+mocked: 0.09

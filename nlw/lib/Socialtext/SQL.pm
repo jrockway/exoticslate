@@ -3,7 +3,7 @@ package Socialtext::SQL;
 use Socialtext::AppConfig;
 use DBI;
 use base 'Exporter';
-use Carp qw/croak/;
+use Carp qw/croak cluck/;
 
 =head1 NAME
 
@@ -56,7 +56,7 @@ sub get_dbh {
         warn "Returning existing handle $DBH{handle}" if $DEBUG;
         return $DBH{handle} 
     }
-    warn "Creating a new DBH" if $DEBUG;
+    cluck "Creating a new DBH" if $DEBUG;
     my %params = Socialtext::AppConfig->db_connect_params();
     my $dsn = "dbi:Pg:database=$params{db_name}";
 

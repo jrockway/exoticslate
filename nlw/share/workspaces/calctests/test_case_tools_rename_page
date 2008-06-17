@@ -11,9 +11,9 @@
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | rename_tag_%%start_time%% |
 | wait_for_element_visible_ok | st-tags-addbutton | 20000 |
-| click_ok | st-tags-addbutton |  |  |
-| click_ok | st-edit-mode-tagbutton |  |
-| type_ok | st-tagqueue-field | rename_tag_%%start_time%% |
+| click_ok | st-tags-addbutton |  |
+| wait_for_element_present_ok | st-tags-field |  |
+| type_ok | st-tags-field | rename_tag_%%start_time%% |
 | click_ok | st-tagqueue-submitbutton |  |
 | click_ok | st-tagqueue-closebutton |  |
 

@@ -5,13 +5,19 @@ use base 'CGI';
 use Class::Field 'field';
 use HTML::Scrubber;
 
-field 'scrubber', -init => 'HTML::Scrubber->new(deny => [qw(script)])';
+field 'scrubber', -init => 'HTML::Scrubber->new';
+
+my %dont_scrub = map { $_ => 1 } qw(page_body content);
 
 sub param {
     my $self = shift;
-    my @result = map { $self->scrubber->scrub($_) }
-                 $self->SUPER::param(@_);
-    return wantarray ? @result : $result[0];
+    if (@_ == 1) {
+        my $key = $_[0];
+        my @res = map { $dont_scrub{$key} ? $_ : $self->scrubber->scrub($_) }
+                  $self->SUPER::param($key);
+        return wantarray ? @res : $res[0];
+    }
+    return $self->SUPER::param(@_);
 }
 
 1;

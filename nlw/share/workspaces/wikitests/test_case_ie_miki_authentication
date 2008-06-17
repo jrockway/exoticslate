@@ -18,8 +18,8 @@ the original but it is better than failing completely because IE 6 caches Miki p
 | text_like | link=Search | Search |
 | text_like | link=Log out | Log out |
 | click_and_wait | link=Log out |  |
-| text_like | //label | Email Address: |
-| text_like | //div[2]/label | Password: |
+| wait_for_element_visible_ok | username | 30000 |
+| wait_for_element_visible_ok | password | 30000 |
 
 Because IE 6 caches the Miki page, if you try to open the homepage again, even though you are logged out
 you will appear to succeed. The workaround is to open a non-existent page instead

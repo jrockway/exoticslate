@@ -1,7 +1,6 @@
 | *Comment* | Test Case: What's New |  |
 
-| setSpeed | 150 |  |
-| click_and_wait | st-home-link |  |
+| *Comment* | TODO: Sorting by Last Edited By | click_and_wait | st-home-link |  |
 | click_and_wait | st-newpage-link |  |
 
 | wait_for_element_visible_ok | link=Advanced | 10000 |
@@ -42,9 +41,14 @@
 | *Comment* | Test Case: What's New Sorting tests |
 
 | click_and_wait | link=What's New |  |
-| click_and_wait | link=Title |  |
+| select_ok | sort-picker | label=Title |
+| wait_for_element_present_ok | st-listview | 20000 |
+| text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0001/ |
+| wait_for_text_present_ok | Title (desc) | 10000 |
+| select_ok | sort-picker | label=Title (desc) |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0001.+hey whatsnew %%start_time%% 0004/ |
-| click_and_wait | link=Title |  |
+| wait_for_text_present_ok | Title (asc) | 10000 |
+| select_ok | sort-picker | label=Title (asc) |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0001/ |
 
 | click_and_wait | st-home-link |  |
@@ -57,10 +61,17 @@
 
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0005.+hey whatsnew %%start_time%% 0004/ |
-| click_and_wait | link=Date |  |
-| text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0005/ |
-| click_and_wait | link=Date |  |
+| select_ok | sort-picker | label=Date |
+| wait_for_element_present_ok | st-listview | 20000 |
+| text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0005.+hey whatsnew %%start_time%% 0004/ |
+| wait_for_text_present_ok | Date (asc) | 10000 |
+| select_ok | sort-picker | label=Date (asc) |
+| wait_for_element_present_ok | st-listview | 20000 |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0003.+hey whatsnew %%start_time%% 0002/ |
+| wait_for_text_present_ok | Date (desc) | 10000 |
+| select_ok | sort-picker | label=Date (desc) |
+| wait_for_element_present_ok | st-listview | 20000 |
+| text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0005/ |
 
 | open_ok | /%%workspace%%/index.cgi?hey whatsnew %%start_time%% 0005 |  |
 | click_ok | st-edit-button-link |  |
@@ -69,9 +80,16 @@
 | click_and_wait | st-save-button-link |  |
 | click_and_wait | st-wiki-subnav-link-whats-new |  |
 
-| click_and_wait | link=Revisions |  |
+| select_ok | sort-picker | label=Revisions |
+| wait_for_element_present_ok | st-listview | 20000 |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0005.+hey whatsnew %%start_time%% 0004/ |
-| click_and_wait | link=Revisions |  |
+| wait_for_text_present_ok | Revisions (asc) | 10000 |
+| select_ok | sort-picker | label=Revisions (asc) |
+| wait_for_element_present_ok | st-listview | 20000 |
+| text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0005.+hey whatsnew %%start_time%% 0004/ |
+| wait_for_text_present_ok | Revisions (desc) | 10000 |
+| select_ok | sort-picker | label=Revisions (desc) |
+| wait_for_element_present_ok | st-listview | 20000 |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0005/ |
 
 This test assumes that a certain date/time format is selected (Oct 3 12:34am)

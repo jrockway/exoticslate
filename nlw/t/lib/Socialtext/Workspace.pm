@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use base 'Socialtext::MockBase';
 
+our @BREADCRUMBS = ();
+
 sub new {
     my $class = shift;
     return if @_ == 2 and ! defined $_[1];
@@ -44,9 +46,10 @@ sub customjs_uri { '' }
 
 sub customjs_name { '' }
 
-sub read_breadcrumbs { }
+sub read_breadcrumbs { @BREADCRUMBS }
 
 sub permissions { shift } # hack - just return ourselves
 
-sub user_can { $_[0]->{user_can} }
+sub user_can { $_[0]->{user_can} || 1 }
+
 1;

@@ -41,7 +41,10 @@ sub handler {
         }
     }
 
-    $destination_ws ||= $user->workspaces->next;
+    unless ($destination_ws) {
+        my @recent = Socialtext::Workspace->read_breadcrumbs($user);
+        $destination_ws = shift @recent;
+    }
 
     $destination_ws ||= Socialtext::Workspace->new(
         name => Socialtext::AppConfig->default_workspace() );

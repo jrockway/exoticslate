@@ -126,8 +126,6 @@ sub _set_workspace_option {
     );
 }
 
-field breadcrumbs => '';
-
 sub table_name { 'Workspace' }
 
 # Special case the "help" workspace.  Since existing Wikitext (and rarely used
@@ -1512,10 +1510,6 @@ use constant RECENT_WORKSPACES => 10;
 sub read_breadcrumbs {
     my ( $self, $user ) = @_;
 
-    # Returned the cached result if we have one.
-    my $list = $self->breadcrumbs || [];
-    return @$list if $list and @$list;
-
     # Get the crumbs
     my @list = Socialtext::WorkspaceBreadcrumb->List(
         user_id => $user->user_id,
@@ -1530,8 +1524,6 @@ sub read_breadcrumbs {
             if @list > RECENT_WORKSPACES;
     }
 
-    # Cache the result and return the list.
-    $self->breadcrumbs( \@list );
     return @list;
 }
 
@@ -2310,10 +2302,6 @@ Returns the number of workspaces in the system.
 
 Returns the number of workspaces in the system containing the
 specified string anywhere in their name.
-
-=head2 Socialtext::Workspace->breadcrumbs_path( USER )
-
-Returns the path to the user's workspace breadcrumb file.
 
 =head2 Socialtext::Workspace->read_breadcrumbs( USER )
 

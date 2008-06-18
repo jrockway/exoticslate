@@ -25,13 +25,16 @@ Last_workspace_from_session: {
     is $rest->{headers}{-status}, '302 Found';
 }
 
-User_workspace: {
+Read_breadcrumbs: {
     my $handler = Socialtext::Rest::NoWorkspace->new;
 
-    local $Socialtext::User::WORKSPACES = [ [ 2 ] ];
+    local @Socialtext::Workspace::BREADCRUMBS = (
+        Socialtext::Workspace->new( name => 'foo' ),
+        Socialtext::Workspace->new( name => 'bar' ),
+    );
     my $rest = Socialtext::Rest->new;
     is $handler->handler($rest), '';
-    like $rest->{headers}{-Location}, qr#/workspace_2/#;
+    like $rest->{headers}{-Location}, qr#/workspace_foo/#;
     is $rest->{headers}{-status}, '302 Found';
 }
 

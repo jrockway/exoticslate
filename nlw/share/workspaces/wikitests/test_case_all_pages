@@ -100,7 +100,7 @@ create a user that lexically precedes the logged in user by creating a user that
 However, don't use %%email%% in that username because that permanently creates another user name in the user DB that
 contains %%email%% as a substring and that messes up other tests like Test Case: Email
 
- *Comment* | Test Case: All Pages verify revision by user %%s_user%% | |
+| *Comment* | Test Case: All Pages verify revision by different user |  |
 
 | set | s_user | %%start_time%%@%%start_time%%.socialtext.net |
 | st-admin | create-user --email %%s_user%% --password 123456 |  |

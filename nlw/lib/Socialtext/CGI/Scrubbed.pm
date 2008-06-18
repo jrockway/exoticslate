@@ -1,4 +1,5 @@
 package Socialtext::CGI::Scrubbed;
+# @COPYRIGHT@
 use strict;
 use warnings;
 use base 'CGI';

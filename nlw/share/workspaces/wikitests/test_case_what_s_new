@@ -15,6 +15,7 @@
 
 | *Comment* | Test Case: What's New Sorting tests |  |
 | click_and_wait | link=What's New |  |
+| text_like | Changes in Last |  |
 
 | *Comment* | Test Case: What's New default sorted Date desc |  |
 | text_like | st-recent_changes-content | qr/hey whats new %%start_time%% 0004.+hey whats new %%start_time%% 0001/ |
@@ -24,14 +25,14 @@
 | pause | 10000 |  |
 | text_like | st-recent_changes-content | qr/hey whats new %%start_time%% 0001.+hey whats new %%start_time%% 0004/ |
 
- label=Title (↓ )
+| *Comment* | label=Title (↓ ) |  |
 
 | *Comment* | Test Case: What's New sort Title desc |  |
 | select_ok | sort-picker | index=1 |
 | pause | 10000 |  |
 | text_like | st-recent_changes-content | qr/hey whats new %%start_time%% 0004.+hey whats new %%start_time%% 0001/ |
 
-label=Title (↑)
+| *Comment* | label=Title (↑) |  |
 
 | *Comment* | Test Case: What's New sort Title asc |  |
 | select_ok | sort-picker | index=1 |
@@ -44,14 +45,14 @@ label=Title (↑)
 | click_and_wait | st-home-link |  |
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
 
-label=Date (↑)
+| *Comment* | label=Date (↑) |  |
 
 | *Comment* | Test Case: What's New sort Date asc |  |
 | select_ok | sort-picker | index=3 |
 | pause | 10000 |  |
 | text_like | st-recent_changes-content | qr/hey whats new %%start_time%% 0004.+hey whats new %%start_time%% 0005/ |
 
-label=Date (↓ )
+| *Comment* | label=Date (↓ ) |  |
 
 | *Comment* | Test Case: What's New sort Date desc |  |
 | select_ok | sort-picker | index=3 |
@@ -68,14 +69,14 @@ label=Date (↓ )
 | pause | 10000 |  |
 | text_like | st-recent_changes-content | qr/hey whats new %%start_time%% 0005.+hey whats new %%start_time%% 0004/ |
 
-label=Revisions (↑)
+| *Comment* | label=Revisions (↑) |  |
 
 | *Comment* | Test Case: What's New sort Revisions asc |  |
 | select_ok | sort-picker | index=4 |
 | pause | 10000 |  |
 | text_like | st-recent_changes-content | qr/hey whats new %%start_time%% 0004.+hey whats new %%start_time%% 0005/ |
 
-label=Revisions (↓ )
+| *Comment* | label=Revisions (↓ ) |  |
 
 | *Comment* | Test Case: What's New sort Revisions desc |  |
 | select_ok | sort-picker | index=4 |

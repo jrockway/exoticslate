@@ -221,10 +221,9 @@ ST.Attachments.prototype = {
             return false;
         }
 
-        var filename = filenameField.value;
-        filename.replace(/^.*\\|\/:/, '');
+        var filename = filenameField.value.replace(/^.*\\|\/:/, '');
 
-        if ( encodeURIComponent(filename).length > 255 ) {
+        if (encodeURIComponent(filename).length > 255 ) {
             this._show_attach_error(loc("Filename is too long after URL encoding."));
             return false;
         }

@@ -2,6 +2,38 @@ Change log for Socialtext Open
 
 2.20.X
 
+Release notes, 2.20.6.1  June 2008
+
+  Searches include "Snippets" from KinoSearch.
+
+  Fix performance hotspot for workspaces with many tags
+
+  Bug: extra comment box pop-up
+
+  Bug: problem with orphaned pages listing (may not have been seen in the wild)
+
+Release notes, 2.20.5.x  June 2008
+
+  Remove dependency on Alzabo (making this the "Alzab-no" release)
+  
+  Re-add common and s2 skins
+
+  Make OSR buildable again
+
+  Improved migration architecture (Alzab-no and more)
+
+  Improved LDAP compatibility
+
+  Italian Help documentation
+
+Release notes, 2.20.4.x  May 2008
+
+  Bug: migration issue when upgrading from 2.11 (Bug 663)
+
+  Improved ReST API - delete users and workspaces, configure user-workspace permissions
+
+  Improved LDAP configuration
+
 Release notes, 2.20.3.3  May 2008
 
   Add support for pluggable web parts

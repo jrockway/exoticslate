@@ -246,7 +246,7 @@ Selection.htc:
 	cp -f $(WIKIWYG_PATH)/lib/Selection.htc $@
 
 Widgets.js: $(WIDGETS_YAML)
-	perl -MYAML -I../../../../lib -MSocialtext::JSON -e 'print "Wikiwyg.Widgets =\n"; print encode_json(YAML::LoadFile(shift(@ARGV))); print ";\n"' \
+	perl -MYAML -I../../../../lib -I../../../lib -MSocialtext::JSON -e 'print "Wikiwyg.Widgets =\n"; print encode_json(YAML::LoadFile(shift(@ARGV))); print ";\n"' \
 		$< > $@
 
 split-js:

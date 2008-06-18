@@ -1347,25 +1347,13 @@ tr.w-st-odd-row, tr.w-st-odd-row td {
     text-align: left;
 }
 
-.query-results-row td {
-    padding: 0.3em;
-    border-left: 1px dashed #ddd;
-    border-right: 1px dashed #ddd;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
+.query-results-content {
+    width: 100%;
 }
 
 .query-results-header-row a {
     text-decoration: underline;
     color: #00f;
-}
-
-.query-results-header-row th {
-    padding: 0.3em;
-    border-left: 1px dashed #ddd;
-    border-right: 1px dashed #ddd;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
 }
 
 div.st-actionbutton {

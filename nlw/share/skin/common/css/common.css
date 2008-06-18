@@ -556,12 +556,23 @@ div#st-pagetools ul.level2 {
     width: 90%;
 }
 
+.query-results-titles .query-results-row-title {
+    line-height: 35px;
+}
+
+.query-results-titles img {
+    display: block;
+    padding-top: 12px;
+}
+
 .query-results-row-title img {
     float: left;
 }
 
 .query-results-row-title .avatar {
+    display: inline;
     float: none;
+    padding: 0;
 }
 
 .query-results-row-title a {
@@ -573,7 +584,8 @@ div#st-pagetools ul.level2 {
 }
 
 .query-results-row-title-attached-to a,
-.query-results-row-workspace a {
+.query-results-row-workspace a,
+.person a {
     padding-left:0;
     font-size:100%;
     font-weight:normal;
@@ -591,9 +603,9 @@ div#st-pagetools ul.level2 {
 
 .query-results-row-revisions {
     font-style: italic;
-    font-size:90%;
-    white-space:nowrap;
-    color:gray;
+    font-size: 90%;
+    white-space: nowrap;
+    color: gray;
 }
 
 .query-results-row-title .query-results-row-revisions a {
@@ -606,11 +618,9 @@ div#st-pagetools ul.level2 {
 
 .query-results-content {
     font-size: 85%;
-    width: 100%;
 }
  
 .query-results-row {
-    border-collapse: collapse;
     margin: 0.5em 0 0 0;
     padding: 0;
     clear: both;
@@ -623,12 +633,21 @@ div#st-pagetools ul.level2 {
     padding: 0;
     width: 2em;
 }
+
+.query-results-titles .st-listview-select {
+    padding-top: 12px;
+}
+
 .query-results-row-last-edited-by {
-    text-align:right;
-    font-style:italic;
-    color:#666;
-    white-space:nowrap;
-    clear:left;
+    text-align: right;
+    font-style: italic;
+    color: #666;
+    white-space: nowrap;
+    clear: left;
+}
+
+.query-results-row-title .query-results-row-last-edited-by {
+    clear: none;
 }
 
 .query-results-row-last-edited-by .query-results-row-uploaded-by,
@@ -650,7 +669,6 @@ div#st-pagetools ul.level2 {
 }
 
 .query-results-header-row {
-    border-collapse: collapse;
     border: 1px #ccc solid;
     background: #f8f8f8;
     padding: 4px 0;
@@ -705,4 +723,8 @@ div#st-pagetools ul.level2 {
 #sort-picker {
     padding:0;
     margin:0;
+}
+
+#files-operations {
+    clear: left;
 }

@@ -53,7 +53,7 @@
 </div>
 
 [% BLOCK listing_row %]
-    <div class="[% style %]-row query-results-row">
+    <div class="[% style %]-row query-results-row query-results-[% IF summaries %]summaries[% ELSE %]titles[% END %]">
         <div class="st-listview-select">
             <input class="st-listview-selectpage-checkbox" type="checkbox" name="page_selected" value="[% page_id %]" [% IF is_attachment %]disabled="disabled"[% END %]>
         </div>

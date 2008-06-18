@@ -83,10 +83,12 @@ ST.ListView.prototype = {
     _hideSorter: function() {
         var sorter = $('sort-picker');
  
-        // Stupid IE7 doesn't like this solution, so exit if that's
-        // what we're using. Any of you javascript gurus, please feel free
+        // Stupid IE7 and Safari don't like this solution, so exit if we're 
+        // using anything other than IE6. 
+        // Any of you javascript gurus, please feel free
         // to make this work a little better.
-        if ( ! sorter || navigator.appVersion.indexOf("MSIE 7.") != -1 ) {
+        if ( ! sorter 
+            || navigator.appVersion.indexOf("MSIE 6.") == -1 ) {
             return;
         }
 
@@ -97,8 +99,9 @@ ST.ListView.prototype = {
         var sorter = $('sort-picker');
 
         // See comment in _hideSorter.
-        if ( ! sorter || navigator.appVersion.indexOf("MSIE 7.") != -1 ) {
-            return;
+        if ( ! sorter 
+            || navigator.appVersion.indexOf("MSIE 6.") == -1 ) {
+           return;
         }
 
         sorter.style.display = 'inline';

@@ -8,7 +8,8 @@ use HTML::Scrubber;
 
 field 'scrubber', -init => 'HTML::Scrubber->new';
 
-my %dont_scrub = map { $_ => 1 } qw(page_body content);
+my %dont_scrub = map { $_ => 1 } 
+                 qw(page_body content file logo_file skin_file);
 
 sub param {
     my $self = shift;

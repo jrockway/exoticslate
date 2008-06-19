@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 18;
+use Test::More tests => 33;
 use File::Temp qw/tempdir/;
 
 my $gen_config = "dev-bin/gen-config";
@@ -39,9 +39,57 @@ Dev_env: {
         like $output, qr#\Q$full_path\E#;
         ok -e $full_path, "$full_path exists";
     }
+
+    check_apache_config(
+        MinSpareServers     => 2,
+        MaxSpareServers     => 2,
+        StartServers        => 2,
+        MaxClients          => 90,
+        MaxRequestsPerChild => 1000,
+    );
+}
+
+# This means anything greater than 2.2G of RAM.
+Full_memory: {
+    $ENV{ST_MEMTOTAL} = 8000000;
+    run_test("--quiet --root $test_root --ports-start-at 20000 "
+        . "--apache-proxy=1 --socialtext-open=0 --dev=0");
+    check_apache_config(
+        MinSpareServers     => 10,
+        MaxSpareServers     => 18,
+        StartServers        => 15,
+        MaxClients          => 22,
+        MaxRequestsPerChild => 1000,
+    );
+}
+
+# This means <= 2.2G of RAM.
+Less_memory: {
+    $ENV{ST_MEMTOTAL} = 1024;
+    run_test("--quiet --root $test_root --ports-start-at 20000 "
+        . "--apache-proxy=1 --socialtext-open=0 --dev=0");
+    check_apache_config(
+        MinSpareServers     => 5,
+        MaxSpareServers     => 9,
+        StartServers        => 7,
+        MaxClients          => 11,
+        MaxRequestsPerChild => 1000,
+    );
 }
 
 exit;
+
+sub check_apache_config {
+    my %attr = @_;
+
+    open CONF, "$test_root/etc/apache-perl/nlw-httpd.conf";
+    my $lines = join "\n", <CONF>;
+    close CONF;
+
+    for my $key ( keys %attr ) {
+        like $lines, qr($key\s+$attr{$key}\s), "Checking $key";
+    }
+}
 
 sub run_test {
     my $args = shift;

@@ -1,6 +1,9 @@
 package Socialtext::LDAP::Config;
 # @COPYRIGHT@
 
+# NOTE: if you change the behaviour here, please make sure all of the pages
+# listed in the "SEE ALSO" section are updated accordingly.
+
 use strict;
 use warnings;
 use Class::Field qw(field);
@@ -294,5 +297,9 @@ Copyright 2008 Socialtext, Inc., All Rights Reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
+
+=head1 SEE ALSO
+
+L<http://www.socialtext.net/open/index.cgi?ldap_configuration_options>.
 
 =cut

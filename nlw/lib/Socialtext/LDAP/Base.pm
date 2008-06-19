@@ -1,6 +1,9 @@
 package Socialtext::LDAP::Base;
 # @COPYRIGHT@
 
+# NOTE: if you change the behaviour here, please make sure all of the pages
+# listed in the "SEE ALSO" section are updated accordingly.
+
 use strict;
 use warnings;
 use Class::Field qw(field);
@@ -350,6 +353,7 @@ under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-L<Net::LDAP>.
+L<Net::LDAP>,
+L<http://www.socialtext.net/open/index.cgi?howto_configure_the_ldap_plugin>.
 
 =cut

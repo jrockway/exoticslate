@@ -159,9 +159,12 @@ test Edit Tips
 | clickAndWait | link=Edit This Page %%start_time%% |  |
 | click_ok | st-edit-actions-below-fold-edit |  |
 | wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
+| wait_for_element_visible_ok | link=Save | 30000 |
 | clickAndWait | link=Save |  |
 | wait_for_text_present_ok | Edit This Page %%start_time%% | 30000 |
+
 | *Comment* | Test Case: Edit This Page edit tips |  |
+| wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | link=Simple | 30000 |
 | click_ok | link=Simple |  |

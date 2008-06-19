@@ -57,7 +57,9 @@
 | click_ok | st-widget-savebutton |  |
 | click_and_wait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
 | wait_for_text_present_ok | Editing: | 10000 |
+| pause | 5000 |  |
 | verifyValue | wikiwyg_wikitext_textarea | "Socialtext"<http://www.socialtext.com> |
 
 | *Comment* | Test Case: Link Interface Valid Section Input |  |
@@ -70,6 +72,6 @@
 | click_and_wait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_text_present_ok | Editing: | 10000 |
+| pause | 5000 |  |
 | verifyValue | wikiwyg_wikitext_textarea | {link: a_section_link} |
-
 | *Comment* | Text Case: Link Interface COMPLETED |  |

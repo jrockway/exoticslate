@@ -641,13 +641,6 @@ sub apache_perl_params {
         nlw_config_file => File::Spec->catfile( $dirs{socialtext_etc}, 'socialtext.conf' ),
         app_prefix      => $app_prefix,
         log_prefix => 'nlw',
-        servers => {
-            min_spare              => 10,
-            max_spare              => 18,
-            start                  => 15,
-            max_clients            => 22,
-            max_requests_per_child => 1000,
-        },
         'apache-proxy' => $opts{'apache-proxy'},
         single => $single,
         nlw_server_aliases => [],
@@ -661,21 +654,53 @@ sub apache_perl_params {
     if ($is_dev_install) {
         $config{user}  = $user->name;
         $config{group} = scalar getgrgid( $user->gid );
-        $config{servers} = {
-            min_spare               => 2,
-            max_spare               => 2,
-            start                   => 2,
-            max_clients             => 90,
-            max_requests_per_child  => 1000,
-        };
+        $config{servers} =
+            ( $ENV{ST_MEMTOTAL} )
+            ? detect_server_settings()
+            : {
+                min_spare              => 2,
+                max_spare              => 2,
+                start                  => 2,
+                max_clients            => 90,
+                max_requests_per_child => 1000,
+            };
         $config{use_canonical_name} = 'Off';
     }
     else {
-        $config{user} = get_build_setting( 'st-user' );
-        $config{group} = get_build_setting( 'st-group' );
+        $config{servers} = detect_server_settings();
+        $config{user}    = get_build_setting( 'st-user' );
+        $config{group}   = get_build_setting( 'st-group' );
     }
 
     return \%config;
+}
+
+# VM's will have different amounts of memory, we'll need to account for
+# that and set server settings accordingly. For now, we're only interested
+# in two settings: <= 1.7Gb of RAM and everything else.
+# 
+# ST_MEMTOTAL environment variable can be use for testing specific amounts of
+# memory.
+sub detect_server_settings {
+
+    my $mem_total = $ENV{ST_MEMTOTAL}
+        || qx#cat /proc/meminfo | grep MemTotal | awk '{print \$2}'#;
+
+    return ( $mem_total <= 2310000 )
+        ? {
+            min_spare              => 5,
+            max_spare              => 9,
+            start                  => 7,
+            max_clients            => 11,
+            max_requests_per_child => 1000,
+        }
+        : { # Typical prod/appliance 4G of ram configuration
+            min_spare              => 10,
+            max_spare              => 18,
+            start                  => 15,
+            max_clients            => 22,
+            max_requests_per_child => 1000,
+        };
 }
 
 sub _get_inc {

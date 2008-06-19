@@ -22,7 +22,7 @@ This test case assumes the following:
 | st-admin | add-member --email %%test_email%% --workspace %%workspace%% |  |
 | st-admin | update-page --email %%test_email%% --workspace %%workspace%% --page "eraseme %%start_time%%" < %%wikitest_client_files%%wikitest.txt | page has been created |
 
-| *Comment* | Test case: LDAP user can login |  |  |
+| *Comment* | Test case: LDAP user can login |  |
 | st-login | %%test_username%% | %%test_password%% |
 | text_like | st-homepage | Welcome, %%test_username%% |
 
@@ -36,7 +36,7 @@ This test case assumes the following:
 | *Comment* | DELETE user from LDAP directory |  |
 | remove-ldif-data | t/test-data/ldap/people.ldif |  |
 
-| *Comment* | Test case: now deleted user should be treated as *not* logged in |
+| *Comment* | Test case: now deleted user should be treated as *not* logged in | |
 | refresh |  |  |
 | wait_for_page_to_load_ok | 30000 |  |
 | st-message | You must login to view this page |  |

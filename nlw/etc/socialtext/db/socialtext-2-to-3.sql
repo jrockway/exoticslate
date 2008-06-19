@@ -1,6 +1,7 @@
 BEGIN;
 
-DROP TABLE IF EXISTS storage;
+IF EXISTS (SELECT 1 FROM pg_tables WHERE tablename = "storage")
+    DROP TABLE storage;
 
 CREATE TABLE "storage" (
     user_id bigint NOT NULL,

@@ -1,6 +1,6 @@
-DROP TABLE storage;
-
 BEGIN;
+
+DROP TABLE IF EXISTS storage;
 
 CREATE TABLE "storage" (
     user_id bigint NOT NULL,

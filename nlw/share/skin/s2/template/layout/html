@@ -52,6 +52,15 @@
         <meta name="keywords" content="[% loc('Confluence wiki, Enterprise 2.0 wiki, Mediawiki, Microsoft wiki, Sharepoint wiki, Twiki, Web 2.0 wiki, business wiki, document management, enterprise wiki, intranet wiki, knowledge management, online collaboration, open source wiki, portal wiki, hosted wiki, project collaboration, team collaboration, wiki appliance, wiki software') %]"/>
 
       [% END %]
+      [% IF page_action == 'display' %]
+        <!-- Universal Edit Button - http://universaleditbutton.org/ -->
+        <link rel="alternate" type="application/x-wiki"
+        [% IF checker.check_permission('edit') %]
+             href="/[% wiki.name.replace('\'', '\\\'') %]/?page_id=[% page.id %]&action=edit">
+        [% ELSE %]
+            href="[% login_and_edit_path %]">
+        [% END %]
+      [% END %]
     </head>
     <body id="socialtext-wiki">
         <table style="width: 100%;border-collapse: collapse"><tr><td><div id="st-display-mode-container" style="display: block;">

@@ -119,8 +119,7 @@ sub sync {
 
     eval { $self->createdb };
     my $current_version = $self->current_version;
-    $self->_display("Current schema version is $current_version\n")
-        if $self->{verbose};
+    $self->_display("Current schema version is $current_version\n");
     if ($current_version == 0) {
         $self->_run_sql_file($self->_schema_filename);
         $self->_add_required_data;

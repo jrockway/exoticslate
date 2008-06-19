@@ -1,4 +1,6 @@
 #!/bin/sh
 set -e
 
+# These are now *also* run as part of the libsocialtext-reports-perl post-install.
 sudo -u postgres st-db sync
+sudo -u postgres st-reports-db sync

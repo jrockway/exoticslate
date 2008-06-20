@@ -11,8 +11,11 @@ use POSIX qw(:sys_wait_h);
 use File::Path qw(mkpath rmtree);
 use File::Basename qw(dirname);
 use File::Spec;
+use File::Temp qw(tempdir);
 use Time::HiRes qw(sleep);
+use User::pwent;
 use Test::Socialtext::Environment;
+use Socialtext::AppConfig;
 use Socialtext::LDAP::Config;
 
 # XXX: these should be treated as "read-only" fields after instantiation
@@ -43,7 +46,6 @@ sub verbose {
 
 sub new {
     my ($class, %config) = @_;
-    my $env = Test::Socialtext::Environment->instance();
 
     # extract parameters
     my $port = $config{port} || _autodetect_port();
@@ -58,9 +60,9 @@ sub new {
         requires_auth   => $config{requires_auth}   || 0,
         # openldap specific parameters
         raw_conf        => $config{raw_conf}        || '',
-        statedir        => $config{statedir}        || File::Spec->catdir($env->root_dir(),'run'),
-        datadir         => $config{datadir}         || File::Spec->catdir($env->root_dir(),'ldap',$port),
-        logfile         => $config{logfile}         || File::Spec->catfile($env->root_dir(),'log',"ldap-$port.log"),
+        statedir        => $config{statedir}        || File::Spec->catdir(_ldap_root_dir(),'run'),
+        datadir         => $config{datadir}         || File::Spec->catdir(_ldap_root_dir(),'ldap',$port),
+        logfile         => $config{logfile}         || File::Spec->catfile(_ldap_root_dir(),'log',"ldap-$port.log"),
         slapd           => $config{slapd}           || _autodetect_slapd(),
         schemadir       => $config{schemadir}       || _autodetect_schema_dir(),
         moduledir       => $config{moduledir}       || _autodetect_module_dir(),
@@ -74,6 +76,29 @@ sub new {
 
     # return newly created object
     return $self;
+}
+
+my $ldap_root_dir;
+sub _ldap_root_dir {
+    unless ($ldap_root_dir) {
+        # figure out what the right place is for us to be putting our files
+        # that we need to bootstrap OpenLDAP.
+        # - if running as a user it'll be either "nlw/t/tmp/" or "~/.nlw/"
+        # - otherwise, its "/tmp/st-bootstrap-openldap-USERNAME-XXXXXX"
+        #
+        # NOTE: although Test::Socialtext::Environment provides a "root_dir()"
+        # method, we *DON'T* want to use that; we're not necessariy running
+        # unit tests.
+        if (Socialtext::AppConfig->_startup_user_is_human_user()) {
+            $ldap_root_dir = Socialtext::AppConfig->_user_root();
+        }
+        else {
+            my $username = getpwuid($>)->name();
+            my $template = "st-bootstrap-openldap-$username-XXXXXX";
+            $ldap_root_dir = tempdir( $template, TMPDIR=>1, CLEANUP=>1 );
+        }
+    }
+    return $ldap_root_dir;
 }
 
 sub _autodetect_port {

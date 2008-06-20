@@ -46,6 +46,7 @@
 
 | *Comment* | Test Case: Sorting Files files user_1 uploads wikitest.jpg |  |
 | open_ok | /%%sorting_workspace%%/index.cgi?page1_%%start_time%% |  |
+| wait_for_element_present_ok | username | 10000 |
 | type_ok | username | %%user_1%% |
 | type_ok | password | 123456 |
 | click_and_wait | //input[@value='Log in'] |  |
@@ -58,12 +59,15 @@
 | click_ok | st-attachments-attach-closebutton |  |
 | wait_for_element_visible_ok | st-attachments-title | 30000 |
 | wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| wait_for_text_present_ok | wikitest.jpg | 10000 |
 | text_like | //a[contains(@href,'original/wikitest.jpg')] | wikitest.jpg |
 
 | *Comment* | Test Case: Sorting Files user_2 uploads wikitest.doc |  |
 | wait_for_element_visible_ok | link=Log out |  |
 | st-logout |  |  |
+| pause | 5000 |  |
 | open_ok | /%%sorting_workspace%%/?page2_%%start_time%% |  |
+| wait_for_element_present_ok | username | 10000 |
 | type_ok | username | %%user_2%% |
 | type_ok | password | 123456 |
 | click_and_wait | //input[@value='Log in'] |  |
@@ -76,12 +80,15 @@
 | click_ok | st-attachments-attach-closebutton |  |
 | wait_for_element_visible_ok | st-attachments-title | 30000 |
 | wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| wait_for_text_present_ok | wikitest.doc | 10000 |
 | text_like | //a[contains(@href,'original/wikitest.doc')] | wikitest.doc |
 
 | *Comment* | Test Case: Sorting Files user_3 uploads wikitestzip.zip |  |
 | wait_for_element_visible_ok | link=Log out |  |
 | st-logout |  |  |
+| pause | 5000 |  |
 | open_ok | /%%sorting_workspace%%/?page3_%%start_time%% |  |
+| wait_for_element_present_ok | username | 10000 |
 | type_ok | username | %%user_3%% |
 | type_ok | password | 123456 |
 | click_and_wait | //input[@value='Log in'] |  |
@@ -94,12 +101,15 @@
 | click_ok | st-attachments-attach-closebutton |  |
 | wait_for_element_visible_ok | st-attachments-title | 30000 |
 | wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| wait_for_text_present_ok | wikitestzip.zip | 10000 |
 | text_like | //a[contains(@href,'original/wikitestzip.zip')] | wikitestzip.zip |
 
 | *Comment* | Test Case: Sorting Files user_4 uploads wikitest.pdf |  |
 | wait_for_element_visible_ok | link=Log out |  |
 | st-logout |  |  |
+| pause | 5000 |  |
 | open_ok | /%%sorting_workspace%%/?page4_%%start_time%% |  |
+| wait_for_element_present_ok | username | 10000 |
 | type_ok | username | %%user_4%% |
 | type_ok | password | 123456 |
 | click_and_wait | //input[@value='Log in'] |  |
@@ -112,12 +122,15 @@
 | click_ok | st-attachments-attach-closebutton |  |
 | wait_for_element_visible_ok | st-attachments-title | 30000 |
 | wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| wait_for_text_present_ok | wikitest.pdf | 10000 |
 | text_like | //a[contains(@href,'original/wikitest.pdf')] | wikitest.pdf |
 
 | *Comment* | Test Case: Sorting Files user_5 uploads wikitest.txt |  |
-| wait_for_element_visible_ok | link=Log out |  |
+| wait_for_element_visible_ok | logout_btn |  |
 | st-logout |  |  |
+| pause | 5000 |  |
 | open_ok | /%%sorting_workspace%%/?page5_%%start_time%% |  |
+| wait_for_element_present_ok | username | 10000 |
 | type_ok | username | %%user_5%% |
 | type_ok | password | 123456 |
 | click_and_wait | //input[@value='Log in'] |  |
@@ -135,6 +148,7 @@
 | click_ok | st-attachments-attach-closebutton |  |
 | wait_for_element_visible_ok | st-attachments-title | 30000 |
 | wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| wait_for_text_present_ok | wikitest.txt | 10000 |
 | text_like | //a[contains(@href,'original/wikitest.txt')] | wikitest.txt |
 
 | *Comment* | Test Case: Sorting Files Sorting by filename and page title |  |
@@ -145,34 +159,40 @@
 | select_ok | sort-picker | label=Filename |
 | wait_for_element_present_ok | st-attachments_ui-content | 20000 |
 | text_like | st-attachments_ui-content | qr/wikitest\.doc.+wikitest\.jpg.+wikitest\.pdf.+wikitest\.txt.+wikitestzip\.zip/ |
-| wait_for_text_present_ok | Filename (desc) | 10000 |
-| select_ok | sort-picker | label=Filename (desc) |
-| text_like | st-attachments_ui-content | qr/wikitest\.doc.+wikitest\.jpg.+wikitest\.pdf.+wikitest\.txt.+wikitestzip\.zip/ |
-| wait_for_text_present_ok | Filename (asc) | 10000 |
-| select_ok | sort-picker | label=Filename (asc) |
+| wait_for_text_present_ok | Filename ( | 10000 |
+| select_ok | sort-picker | index=1 |
+| pause | 10000 |  |
 | text_like | st-attachments_ui-content | qr/wikitestzip\.zip.+wikitest\.txt.+wikitest\.pdf.+wikitest\.jpg.+wikitest\.doc/ |
+| wait_for_text_present_ok | Filename ( | 10000 |
+| select_ok | sort-picker | index=1 |
+| pause | 10000 |  |
+| text_like | st-attachments_ui-content | qr/wikitest\.doc.+wikitest\.jpg.+wikitest\.pdf.+wikitest\.txt.+wikitestzip\.zip/ |
 
 | *Comment* | Test Case: Sorting Files sort by uploaded by, date, size |  |
 | select_ok | sort-picker | label=Uploaded By |
 | wait_for_element_present_ok | st-attachments_ui-content | 20000 |
-| text_like | st-attachments_ui-content | qr/%%user_3_regex%%.+%%user_5_regex%%.+%%user_4_regex%%.+%%user_1_regex%%.+%%user_2_regex%%/ |
-| wait_for_text_present_ok | Uploaded By (desc) | 10000 |
-| select_ok | sort-picker | label=Uploaded By (desc) |
-| text_like | st-attachments_ui-content | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_3_regex%%.+%%user_4_regex%%.+%%user_5_regex%%/ |
-| wait_for_text_present_ok | Uploaded By (asc) | 10000 |
-| select_ok | sort-picker | label=Uploaded By (asc) |
+| text_like | st-attachments_ui-content | qr/%%user_2_regex%%.+%%user_1_regex%%.+%%user_4_regex%%.+%%user_5_regex%%.+%%user_3_regex%%/ |
+| wait_for_text_present_ok | Uploaded By ( | 10000 |
+| select_ok | sort-picker | index=3 |
+| pause | 10000 |  |
 | text_like | st-attachments_ui-content | qr/%%user_5_regex%%.+%%user_4_regex%%.+%%user_3_regex%%.+%%user_2_regex%%.+%%user_1_regex%%/ |
+| wait_for_text_present_ok | Uploaded By ( | 10000 |
+| select_ok | sort-picker | index=3 |
+| pause | 10000 |  |
+| text_like | st-attachments_ui-content | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_3_regex%%.+%%user_4_regex%%.+%%user_5_regex%%/ |
 
 | *Comment* | Test Case: Sorting Files sort by uploaded by, date, size |  |
 | select_ok | sort-picker | label=Size |
 | wait_for_element_present_ok | st-attachments_ui-content | 20000 |
-| text_like | st-attachments_ui-content | qr/42bytes.+30kb.+24kb.+27kb.+20kb/ |
-| wait_for_text_present_ok | Size (asc) | 10000 |
-| select_ok | sort-picker | label=Size (asc) |
-| text_like | st-attachments_ui-content | qr/30kb.+27kb.+24kb.+20kb.+42bytes/ |
-| wait_for_text_present_ok | Size (desc) | 10000 |
-| select_ok | sort-picker | label=Size (desc) |
+| text_like | st-attachments_ui-content | qr/20kb.+27kb.+24kb.+30kb.+42bytes/ |
+| wait_for_text_present_ok | Size ( | 10000 |
+| select_ok | sort-picker | index=5 |
+| pause | 10000 |  |
 | text_like | st-attachments_ui-content | qr/42bytes.+20kb.+24kb.+27kb.+30kb/ |
+| wait_for_text_present_ok | Size ( | 10000 |
+| select_ok | sort-picker | index=5 |
+| pause | 10000 |  |
+| text_like | st-attachments_ui-content | qr/30kb.+27kb.+24kb.+20kb.+42bytes/ |
 
 We do not have much control on data under "Date Uploaded" column to verify expected and actual sort result. So instead of verifying sort results directly to "Date Uploaded" column, we tried to verify it through the data of other columns. Means that if we do a sort asc or desc on Date Uploaded, we verified the corresponding expected changes of data in other columns to make sure that Date Uploaded sort is working. We have done it twice, one for asc and other one for desc sort by "Date Uploaded".
 

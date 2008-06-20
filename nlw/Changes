@@ -2,7 +2,7 @@ Change log for Socialtext Open
 
 2.20.X
 
-Release notes, 2.20.6.3  June 2008
+Release notes, 2.20.6.5  June 2008
 
   Searches include "Snippets" from KinoSearch.
 
@@ -11,6 +11,8 @@ Release notes, 2.20.6.3  June 2008
   Bug: extra comment box pop-up
 
   Bug: problem with orphaned pages listing (may not have been seen in the wild)
+
+  Bug: firefox 3 file uploads
 
 Release notes, 2.20.5.x  June 2008
 

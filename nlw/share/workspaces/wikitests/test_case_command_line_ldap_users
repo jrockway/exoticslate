@@ -1,5 +1,4 @@
 | *Comment* | STARTING Test Case: Command Line LDAP USERS |  |
-| set | cli_user_email | `devnull3@socialtext.com` |
 | set | cli_user | `devnull3` |
 | set | cmdline_workspace | clw_%%start_time%% |
 | st-admin | create-workspace --name %%cmdline_workspace%% --title %%cmdline_workspace%% | A new workspace named "%%cmdline_workspace%%" was created. |

@@ -83,10 +83,15 @@ sub _autodetect_port {
     #   <ports_start_at> + <user-id> + <ldap-port>
     # and increments by 1000 each time we find that the port is already busy
     # and that someone else is listening on it.
+    #
+    # NOTE: *DON'T* instantiate Test::Socialtext::Environment when figuring
+    # out where the ports start; that'll trigger it to try to create tmp
+    # directories to work with and we don't want to do that (we should be
+    # useful for things outside of just unit tests).
     verbose( "# finding empty port to run OpenLDAP on" );
     my $attempts = 0;
     while ($attempts < 10) {
-        my $port = Test::Socialtext::Environment->instance->ports_start_at()
+        my $port = Test::Socialtext::Environment::ports_start_at()
                  + $ports{'ldap'}
                  + $<
                  + ($attempts * 1000);

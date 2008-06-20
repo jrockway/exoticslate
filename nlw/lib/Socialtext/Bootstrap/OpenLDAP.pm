@@ -635,6 +635,11 @@ refused.
 Returns any I<raw> OpenLDAP configuration that you asked to have included into
 the configuration file.
 
+=item B<statedir()>
+
+Returns the path to the directory to which OpenLDAP should be placing its PID
+file.
+
 =item B<datadir()>
 
 Returns the path to the data directory that is being used by this OpenLDAP

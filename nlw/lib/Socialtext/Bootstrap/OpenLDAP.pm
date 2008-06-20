@@ -303,6 +303,13 @@ sub setup {
         mkpath( $path, 0, 0755 ) or die "can't create '$path'; $!";
     }
 
+    # create state directory
+    unless (-d $self->statedir()) {
+        my $path = $self->statedir();
+        verbose( "# creating OpenLDAP state directory: $path" );
+        mkpath( $path, 0, 0755 ) or die "can't create '$path'; $!";
+    }
+
     # rebuild config file
     my $conf = $self->conffile();
     unless (-f $conf) {

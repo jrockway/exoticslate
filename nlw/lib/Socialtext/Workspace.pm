@@ -171,7 +171,7 @@ sub _new_from_hash_ref {
     my ( $class, $row ) = @_;
     return $row unless $row;
 
-    # XXX: make sure that workspaces with UTF-8 titles display properly.
+    # Make sure that workspaces with UTF-8 titles display properly.
     # Keep an eye out for other places that we may need to do this.
     $row->{title} = decode_utf8( $row->{title} );
 

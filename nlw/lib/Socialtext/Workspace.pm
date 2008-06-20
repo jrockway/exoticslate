@@ -60,6 +60,7 @@ use Socialtext::Workspace::Permissions;
 use Socialtext::Timer;
 use URI;
 use YAML;
+use Encode qw(decode_utf8);
 
 # workspace schema fields
 # FIXME: so god damned many. something is really wrong here
@@ -169,6 +170,11 @@ sub _new {
 sub _new_from_hash_ref {
     my ( $class, $row ) = @_;
     return $row unless $row;
+
+    # XXX: make sure that workspaces with UTF-8 titles display properly.
+    # Keep an eye out for other places that we may need to do this.
+    $row->{title} = decode_utf8( $row->{title} );
+
     return bless $row, $class;
 }
 

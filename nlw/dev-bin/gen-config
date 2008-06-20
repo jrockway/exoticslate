@@ -686,7 +686,7 @@ sub detect_server_settings {
     my $mem_total = $ENV{ST_MEMTOTAL}
         || qx#cat /proc/meminfo | grep MemTotal | awk '{print \$2}'#;
 
-    return ( $mem_total <= 2310000 )
+    return ( $mem_total <= 2450000 )
         ? {
             min_spare              => 5,
             max_spare              => 9,

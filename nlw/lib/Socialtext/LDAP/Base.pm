@@ -80,7 +80,8 @@ sub bind {
     # attempt to bind to LDAP connection
     my $mesg = _ldap_bind($self->{ldap}, $user, %opts);
     if ($mesg->code()) {
-        st_log->error( "ST::LDAP::Base: unable to bind to LDAP connection; " . $mesg->error() );
+        my $conn_str = $self->config->name() || $self->config->id();
+        st_log->error( "ST::LDAP::Base: unable to bind to LDAP connection '$conn_str'; " . $mesg->error() );
         return;
     }
     return $self;
@@ -240,7 +241,7 @@ sub _do_following_referrals {
         st_log->debug( "ST::LDAP::Base: binding to LDAP referral as: $bind_user" );
         $mesg = $callbacks{bind}->($self->{ldap}, $bind_user, ($bind_pass ? (password=>$bind_pass) : ()));
         if ($mesg && $mesg->code()) {
-            st_log->warning( "ST::LDAP::Base: unable to bind to LDAP referral; " . $mesg->error() );
+            st_log->warning( "ST::LDAP::Base: unable to bind to LDAP referral '$referral'; " . $mesg->error() );
             next REFERRAL;
         }
 

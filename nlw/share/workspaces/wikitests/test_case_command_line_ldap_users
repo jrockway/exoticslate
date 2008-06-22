@@ -43,7 +43,24 @@
 | *Comment* | Test Case: Command Line LDAP user Remove member |  |
 | st-admin | remove-member --username %%cli_user%% --workspace %%cmdline_workspace%% | %%cli_user%% is no longer a member of the %%cmdline_workspace%% workspace. |
 
+| *Comment* | Test Case: Command Line LDAP user Add member again |  |
+| st-admin | add-member --username %%cli_user%% --workspace %%cmdline_workspace%% | %%cli_user%% is now a member of the %%cmdline_workspace%% workspace. |
+
+| *Comment* | Test Case: Command Line LDAP user scrub user |  |
+| st-admin | scrub-user --username %%cli_user%% | %%cli_user%% has been removed from workspaces %%cmdline_workspace%%, %%workspace%% |
+
+| *Comment* | Test Case: Command Line LDAP user Add member BACK to %%workspace%%|  |
+| st-admin | add-member --username %%cli_user%% --workspace %%workspace%% | %%cli_user%% is now a member of the %%workspace%% workspace. |
+
+| *Comment* | Test Case: Command Line LDAP USERS commands should fail |  |
+| st-admin | create-user --username %%cli_user%% | The username you provided, "%%cli_user%%", is already in use. |
+| st-admin | change-password --username %%cli_user%% --p betternot | Can't locate object method "update" via package "Socialtext::User::LDAP" |
+| st-admin | set-user-names --username %%cli_user%% --first-name CLI --last-name USER | Can't locate object method "update" via package "Socialtext::User::LDAP" |
+
 | *Comment* | Test Case: Command Line LDAP user Teardown |  |
 | st-admin | delete-workspace --workspace %%cmdline_workspace%% --no-export |  |
+
+| *Comment* | Test Case: Command Line LDAP user Add member BACK to %%workspace%% again |  |
+| st-admin | add-member --username %%cli_user%% --workspace %%workspace%% | qr/%%cli_user%% is .+ a member of the %%workspace%% workspace./ |
 
 | *Comment* | Test Case: Command Line: LDAP USERS COMPLETED |

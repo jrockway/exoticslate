@@ -45,7 +45,7 @@ rm -rf $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr
 
 echo COPYING FILES FOR PACKAGING
 mkdir -p $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/bin
-cp st-enable-ldap  st-socialcalc prep-wikitests run-wiki-tests $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/bin/
+cp st-ldap  st-socialcalc prep-wikitests run-wiki-tests $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/bin/
 
 mkdir -p $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/share/nlw/wikitests
 cp ldap.yaml.st do-tests do-calc-tests do-wiki-tests  one-wiki-test  one-calc-test README  set-time  setup-selenium  test-data.tar.gz wikitestfiles.zip  wikitests.1.tar.gz calctests.1.tar.gz $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/share/nlw/wikitests/

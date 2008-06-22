@@ -1,0 +1,5 @@
+A testset solely for the purpose of disabling LDAP from other testsets
+
+| *Comment* | Disable LDAP: disabling LDAP |  |
+| st-ldap | disable | LDAP disabled |
+| *Comment* | Disable LDAP: COMPLETED |  |

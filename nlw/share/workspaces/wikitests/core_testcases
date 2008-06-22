@@ -1,0 +1,101 @@
+Core testcases should pass for any browser, for any user type (LDAP or Default), in any environment (dev env or appliance). 
+If a testcase is browser-specific, put it in the corresponding {tag: browser testset}.
+If a testcase is Default user specific, put it in [Default User Testcases]
+If it is LDAP specific, put it in [LDAP Testcases]. 
+If it is appliance specific, put it in [Appliance Testcases].
+
+If Test Case: Verify Location fails, you have not configured your 
+test env properly and are not testing the test-workspace
+
+* [Test Case: Verify Location]
+
+* [Test Case: Home]
+* [Test case: Miki Authentication]
+* [Test Case: Miki]
+* [Test case: Invite Anonymous User]
+* [Test case: Self Register]
+* [Test case: Watchlist]
+* [Test Case: Edit This Page]
+* [Test Case: Double Click to Edit]
+* [Test Case: Preview Format]
+* [Test Case: New Page]
+* [Test Case: New Page No Overwrite]
+* [Test Case: Command Line: USERS]
+* [Test Case: Command Line: WORKSPACES]
+* [Test Case: Command Line: INDEXING]
+* [Test Case: Command Line: ACCOUNTS]
+* [Test Case: Command Line: EMAIL]
+* [Test Case: Command Line: OTHER]
+* [Test Case: Command Line: INVITE NEW USER]
+* [Test Case: Workspace Config Preservation]
+* [Test case: functional search tests]
+* [Test Case: Phrase search]
+* [Test Case: stemming]
+* [Test Case: Tags]
+* [Test Case: Tagging]
+* [Test Case: Tagging in the Editor]
+* [Test Case: Hide sidebar]
+* [Test Case: Sidebar: Incoming Links]
+* [Test Case: Orphans List]
+* [Test Case: Sidebar: Recently Viewed]
+* [Test Case: Sidebar: Recent Changes]
+* [Test Case: Revisions]
+* [Test Case: What's New]
+* [Test Case: All Pages]
+* [Test Case: Tools: Delete Page]
+* [Test Case: Tools: Export as HTML]
+* [Test Case: Weblog Archive and Navigation]
+* [Test Case: Connections]
+* [Test Case: Settings: User]
+* [Test Case: Settings: Admin]
+* [Test Case: Authenticated-User-Only]
+* [Test Case: Public Authenticate to Edit]
+* [Test Case: Public-Read-Only]
+* [Test Case: Public-Comment-Only]
+* [Test Case: Intranet]
+* [Test Case: Settings: Email Notification]
+* [Test Case: Direct URI]
+* [Test Case: Inter Workspace Search]
+* [Test Case: RSS Icons]
+* [Test Case: Untitled Page]
+* [Test Case: Weblog Naming]
+* [Test Case: Page Open Errors]
+* [Test Case: Return to last login]
+* [Test Case: Link Interface]
+* [Test Case: Nasty Double Dashes]
+* [Test Case: REST Workspace]
+* [Test Case: Insert Menu]
+
+These tests use popup windows and fail in IE 6 because they need single window mode and New Page is failing in IE 6 using single window mode.
+Moved them to the end to isolate failures.
+
+* [Test Case: Tools: Duplicate Page]
+* [Test Case: Tools: Rename Page]
+* [Test Case: Tools: Copy Page to Workspace]
+* [Test Case: Add Comment]
+* [Test Case: Comment Form Fields]
+* [Test Case: Weblogs]
+* [Test Case: Strings]
+* [Test Case: Single Dash]
+* [Test Case: Email]
+
+----
+
+These are Test Cases that are not in OSR Testcases. Why not?
+Test Case: Help (don't know how to switch to a new tab)
+
+----
+
+^ All pages tagged 'Testcase' (only a list, visit the pages above for tests)
+
+Tests do not run out of the list since it isn't really here.
+
+{search: category:testcase AND NOT category:obsolete}
+
+^^^ Obsolete testcases
+
+{search: category:testcase AND category:obsolete}
+
+----
+
+{include: [Known Failing Testcases]}

@@ -1,0 +1,8 @@
+These testcases exercise localization capabilities. For reasons we don't understand, they cause IE 6 to segfault.
+
+These tests can cause all subsequent tests to fail if they fail, so run them last.
+
+* [Test Case: Perl Loc]
+* [Test Case: Js Loc]
+* [Test Case: Perl Loc with Multibyte character]
+* [Test Case: Js Loc with Multibyte character]

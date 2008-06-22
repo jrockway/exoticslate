@@ -1,0 +1,6 @@
+A testset solely for the purpose of enabling LDAP from other testsets
+
+| *Comment* | Enable LDAP: enabling LDAP |  |
+| st-ldap | enable | LDAP enabled |
+| st-admin | add-workspace-admin --username %%username%% --w %%workspace%% | qr/%%username%% is .+ a workspace admin for the %%workspace%% workspace./ |
+| *Comment* | Enable LDAP: COMPLETED |  |

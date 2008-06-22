@@ -1,0 +1,23 @@
+Firefox is our primary testing browser. As many testcases as possible are run here.
+
+We run with LDAP enabled for a more robust test
+
+* [Enable LDAP]
+
+* [Core Testcases]
+* [File Testcases]
+* [LDAP Testcases]
+* [Localization Testcases]
+* [Test case: Business Control Panel]
+* [Test case: Control Panel Reports]
+
+Then we turn off LDAP and run the Default user testcases
+
+* [Disable LDAP]
+* [Default User Testcases]
+
+^ All pages tagged 'Testcase' (only a list, visit the pages above for tests)
+
+Tests do not run out of the list since it isn't really here.
+
+{search: category:testcase}

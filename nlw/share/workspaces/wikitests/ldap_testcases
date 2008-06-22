@@ -1,0 +1,29 @@
+These testcases work for an LDAP user but not for a default user.
+These testcases REQUIRE that LDAP be enabled.
+Any LDAP user specific testcases should go here.
+
+* [Enable LDAP]
+
+* [Test Case: Verify LDAP Enabled]
+
+These are variations on Default user testcases
+
+* [Test case: LDAP Login Logout]
+* [Test case: LDAP User Resets Password]
+* [Test case: LDAP Admin Resets Password]
+* [Test Case: LDAP Dashboard]
+* [Test Case: LDAP Public]
+* [Test Case: LDAP Workspace Configuration]
+* [Test Case: LDAP Workspace Privacy]
+
+Special test case for LDAP user using CLI
+
+* [Test Case: Command Line: LDAP USERS]
+
+Special test for LDAP user deletion.
+
+TODO: this testcases is broken until the OpenLDAP local server is implemented
+
+`* [Test Case: LDAP Deleted User]`
+
+* [Disable LDAP]

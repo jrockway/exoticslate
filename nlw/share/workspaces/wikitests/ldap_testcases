@@ -2,12 +2,20 @@ These testcases work for an LDAP user but not for a default user.
 These testcases REQUIRE that LDAP be enabled.
 Any LDAP user specific testcases should go here.
 
+Every test should override the passed in values as follows:
+
+| set | username | devnull3 |
+| set | email | devnull3@socialtext.com |
+| set | password | Ko013344 |
+| set | email_esc | devnull3\@socialtext.com |
+
 * [Enable LDAP]
 
+These are variations on Default user testcases.
+They must explicitly use the above ldap username, email, and pwd so LDAP Testcases can be called
+from tests where a Default user is logged in.
+
 * [Test Case: Verify LDAP Enabled]
-
-These are variations on Default user testcases
-
 * [Test case: LDAP Login Logout]
 * [Test case: LDAP User Resets Password]
 * [Test case: LDAP Admin Resets Password]
@@ -25,5 +33,3 @@ Special test for LDAP user deletion.
 TODO: this testcases is broken until the OpenLDAP local server is implemented
 
 `* [Test Case: LDAP Deleted User]`
-
-* [Disable LDAP]

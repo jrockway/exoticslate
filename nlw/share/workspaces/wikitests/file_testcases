@@ -1,5 +1,7 @@
 * HighPermissions
 
+These testcases require high browser permissions. In general, they run in Firefox but not IE or Safari.
+
 * [Test Case: Upload file]
 * [Test Case: Manage files]
 * [Test Case; All files]

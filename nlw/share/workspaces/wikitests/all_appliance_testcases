@@ -1,24 +1,18 @@
-Firefox is our primary testing browser. As many testcases as possible are run here.
-In addition, the Appliance specific test cases are run.
-
-We run with LDAP enabled for a more robust test
-
-* [Enable LDAP]
-
-* [Core Testcases]
-* [File Testcases]
-* [LDAP Testcases]
-* [Localization Testcases]
-* [Test case: Business Control Panel]
-* [Test case: Control Panel Reports]
-
-Then we turn off LDAP and run the Default user testcases
+*As many Appliance testcases as possible are run here*.
+*For File Testcases to pass, Firefox is required*
+*For Default User Testcases to pass, a Default user is required*
 
 * [Disable LDAP]
 
+* [Core Testcases]
+* [File Testcases]
 * [Default User Testcases]
+* [Localization Testcases]
+* [Test case: Business Control Panel]
+* [Appliance Testcases]
 
-These testcases are specific to the appliance.
+*LDAP Testcases will use a known LDAP user*
 
-* [Test case: Appliance Console]
-* [Test case: Console Backup and Restore]
+* [LDAP Testcases]
+
+*Note that we do not run Test Case: Control Panel Reports as they require a special test setup in a dev env*

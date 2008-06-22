@@ -1,15 +1,49 @@
 This testcase traverses the UI to all the places that differ from the Default UI when LDAP is enabled.
 
-Login/Logout (Username instead of Email Address)
-I forgot my Password (no pwd reset)
-Attempt to register with an LDAP email address should fail
-My Settings (no settings)
-Manage All Users (no pwd reset)
-
 | *Comment* | Test Case: Verify LDAP Enabled |  |
 
-| *Comment* | THIS IS A STUB TEST. WRITE ME! |  |
-| *Comment* | THIS IS A STUB TEST. WRITE ME! |  |
-| *Comment* | THIS IS A STUB TEST. WRITE ME! |  |
+| *Comment* | Override username, email and password with LDAP values |  |
+
+| set | username | devnull3 |
+| set | email | devnull3@socialtext.com |
+| set | password | Ko013344 |
+| set | email_esc | devnull3\@socialtext.com |
+
+| *Comment* | %%username%% : %%password%% : %%email%% |  |
+
+| st-logout |  |  |
+
+| *Comment* | Test Case: Verify LDAP Enabled: Login (Username instead of Email Address) |  |
+| wait_for_element_visible_ok | username | 30000 |
+| text_like | Username: |  |
+
+| *Comment* | Test Case: Verify LDAP Enabled: I forgot my Password (no pwd reset) |
+| click_and_wait | link=I don't know my password. |  |
+| text_like | there is no way to reset your password |  |
+| click_and_wait | link=Log in to Socialtext |  |
+
+| *Comment* | Test Case: Verify LDAP Enabled: Attempt to register with an LDAP email address should fail |  |
+| open_ok | /help-en |  |
+| wait_for_element_visible_ok | link=Register | 30000 |
+| click_and_wait | link=Register |  |
+| wait_for_element_visible_ok | email_address | 30000 |
+| type_ok | email_address | %%email%% |
+| type_ok | password | %%password%% |
+| type_ok | password2 | %%password%% |
+| click_and_wait | //input[@value='Register'] |  |
+| text-like | A user with this email address (%%email%%) already exists. |  |
+
+| *Comment* | Test Case: Verify LDAP Enabled: My Settings (no settings) |  |
+| *Comment* | Test Case: Verify LDAP Enabled: st-login should login as LDAP user |  |
+| st-login | %%username%% | %%password%% |
+| wait_for_element_visible_ok | link=Settings | 30000 |
+| click_and_wait | link=Settings |  |
+| text_like | Your settings cannot be changed |  |
+
+| *Comment* | Test Case: Verify LDAP Enabled: Manage All Users (no pwd reset) |  |
+| click_and_wait | link=Manage All Users |  |
+| wait_for_element_visible_ok | st-settings-pane | 30000 |
+| text_like | st-settings-pane | Admin |
+| text_unlike | st-settings-pane | Reset Password |
 
 | *Comment* | Test Case: Verify LDAP Enabled COMPLETED |  |

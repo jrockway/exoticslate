@@ -1,8 +1,8 @@
 Core testcases should pass for any browser, for any user type (LDAP or Default), in any environment (dev env or appliance). 
 If a testcase is browser-specific, put it in the corresponding {tag: browser testset}.
-If a testcase is Default user specific, put it in [Default User Testcases]
-If it is LDAP specific, put it in [LDAP Testcases]. 
-If it is appliance specific, put it in [Appliance Testcases].
+If a testcase is Default user specific, put it in `[Default User Testcases]`
+If it is LDAP specific, put it in `[LDAP Testcases]`
+If it is appliance specific, put it in `[Appliance Testcases]`
 
 If Test Case: Verify Location fails, you have not configured your 
 test env properly and are not testing the test-workspace

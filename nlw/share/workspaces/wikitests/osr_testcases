@@ -73,8 +73,6 @@ test env properly and are not testing the test-workspace
 * [Test Case: Link Interface]
 * [Test Case: Nasty Double Dashes]
 * [Test Case: REST Workspace]
-* [Test Case: LDAP Deleted User]
-
 * [Test Case: Insert Menu]
 
 uses default wikiemail or `$ENV{WIKIEMAIL}`
@@ -98,6 +96,10 @@ These tests cause all subsequent tests to fail if they fail, so run them last
 * [Test Case: Js Loc]
 * [Test Case: Perl Loc with Multibyte character]
 * [Test Case: Js Loc with Multibyte character]
+
+This test case is broken and should be replaced when the new OpenLDAP local server comes up
+
+* Test Case: LDAP Deleted User
 
 js-test is run separately after `make` in nlw/share/js-test in a dev env
 use the xwjst alias to run it

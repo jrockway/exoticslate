@@ -7,7 +7,7 @@ This test case assumes a logged in user.
 Test set up:
 
 | comment | STARTING Test case: REST Workspace |  |
-| st-admin | remove-system-admin --username %%username%% | no longer has |
+| st-admin | remove-system-admin --email %%email%% | no longer has |
 | set | wksp | w%%start_time%% |
 | set | account_id | 2 |
 
@@ -15,7 +15,7 @@ Test set up:
 | post | /data/workspaces | Content-Type=application/json | { "name":"%%wksp%%", "title":"W%%start_time%%", "account_id":"%%account_id%%" } |
 | code-is | 401 |  |
 
-| st-admin | give-accounts-admin --username %%username%% | now has |
+| st-admin | give-accounts-admin --email %%email%% | now has |
 
 | comment | Test case: REST Workspace GET non-existing workspace |  |
 | get | /data/workspaces/%%wksp%% |  |
@@ -86,8 +86,6 @@ Test set up:
 | body-like | {"name":"test-data","title":"Canonical Test Data Set" |  |
 | body-like | {"name":"%%wksp%%","title":"W%%start_time%%" |  |
 
-----
-
 These tests are from "Story: Add Backlink to IBM Lotus Connections via REST"<https://www2.socialtext.net/dev-tasks/index.cgi?story_add_backlink_to_ibm_lotus_connections_via_rest>.
 
 | comment | Test case: REST Workspace Create a workspace with a customjs_uri |  |
@@ -127,7 +125,7 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | body-unlike | /monkey.js |  |
 
 | comment | Test case: REST Workspace Update the customjs_uri as a workspace admin |  |
-| st-admin | remove-accounts-admin --username %%username%% | no longer has |
+| st-admin | remove-accounts-admin --email %%email%% | no longer has |
 | put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "customjs_uri":"/kamma.js" } |
 | code-is | 204 |  |
 | get | /data/workspaces/%%wksp%% | application/json |
@@ -135,7 +133,7 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | body-like | "customjs_uri":"/kamma.js" |
 
 | comment | Test case: REST Workspace Update the customjs_uri as a member |  |
-| st-admin | remove-workspace-admin --username %%username%% --workspace=%%wksp%% | is no longer |
+| st-admin | remove-workspace-admin --email %%email%% --workspace %%wksp%% | is no longer |
 | put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "customjs_uri":"/eraser.js" } |
 | code-is | 403 |  |
 | get | /data/workspaces/%%wksp%% | application/json |
@@ -144,7 +142,7 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | body-unlike | "customjs_uri":" |  |
 
 | comment | Test case: REST Workspace Update the customjs_uri as a nobody |  |
-| st-admin | remove-member --username %%username%% --workspace=%%wksp%% | is no longer |
+| st-admin | remove-member --email %%email%% --workspace %%wksp%% | is no longer |
 | put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "customjs_uri":"/pencil.js" } |
 | code-is | 403 |  |
 
@@ -153,35 +151,33 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | code-is | 403 |  |
 
 | comment | Test case: REST Workspace Update the customjs_uri as a system admin |  |
-| st-admin | give-system-admin --email %%username%% | now has |
+| st-admin | give-system-admin --email %%email%% | now has |
 | put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "customjs_uri":"/pencil.js" } |
 | code-is | 204 |  |
 
 | get | /data/workspaces/%%wksp%% | application/json |
 | code-is | 403 |  |
-| st-admin | remove-system-admin --email %%username%% | no longer has |
+| st-admin | remove-system-admin --email %%email%% | no longer has |
 
 | comment | Update the customjs_uri as a accounts admin |  |
-| st-admin | give-accounts-admin --email %%username%% | now has |
+| st-admin | give-accounts-admin --email %%email%% | now has |
 | put | /data/workspaces/%%wksp%% | Content-Type=application/json | { "customjs_uri":"/pencil.js" } |
 | code-is | 204 |  |
 
 | comment | Fetch the customjs_uri as a nobody |  |
 | get | /data/workspaces/%%wksp%% | application/json |
 | code-is | 403 |  |
-| st-admin | remove-accounts-admin --email %%username%% | no longer has |
+| st-admin | remove-accounts-admin --email %%email%% | no longer has |
 
 | comment | Test case: REST Workspace Promote a user to workspace admin FAILS without permissions |  |
 | post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"workspace_admin" } |
 | code-is | 403 |  |
 
-----
-
 | comment | Test case: REST Workspace delete non-existing ws as nobody gets 403 |  |
 | delete | /data/workspaces/nonesuch |  |
 | code-is | 403 |  |
 
-| st-admin | give-accounts-admin --username %%username%% | now has |
+| st-admin | give-accounts-admin --email %%email%% | now has |
 | comment | Test case: REST Workspace delete non-existing ws as admin gets 404 |  |
 | delete | /data/workspaces/nonesuch |  |
 | code-is | 404 |  |
@@ -197,8 +193,8 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | comment | re-add ws |  |
 | post | /data/workspaces | Content-Type=application/json | { "name":"deleteme%%wksp%%", "title":"deleteme%%start_time%%", "account_id":"%%account_id%%" } |
 | code-is | 201 |  |
-| st-admin | remove-accounts-admin --username %%username%% | no longer |
-| st-admin | give-system-admin --username %%username%% | now has |
+| st-admin | remove-accounts-admin --email %%email%% | no longer |
+| st-admin | give-system-admin --email %%email%% | now has |
 | comment | Test case: REST Workspace delete ws as system-admin |  |
 | delete | /data/workspaces/deleteme%%wksp%% |  |
 | code-is | 204 |  |
@@ -206,15 +202,15 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | code_is | 404 |  |
 
 | comment | re-add ws only accounts-admin can add a ws go figure |  |
-| st-admin | give-accounts-admin --username %%username%% | now has |
+| st-admin | give-accounts-admin --email %%email%% | now has |
 | post | /data/workspaces | Content-Type=application/json | { "name":"deleteme%%wksp%%", "title":"deleteme%%start_time%%", "account_id":"%%account_id%%" } |
 | code-is | 201 |  |
 
-| st-admin | remove-accounts-admin --username %%username%% | no longer |
+| st-admin | remove-accounts-admin --email %%email%% | no longer |
 
 | comment | Test case: REST Workspace delete ws as ws-admin |  |
-| st-admin | remove-system-admin --username %%username%% | no longer |
-| st-admin | add-workspace-admin --email %%username%% --workspace deleteme%%wksp%% | is now |
+| st-admin | remove-system-admin --email %%email%% | no longer |
+| st-admin | add-workspace-admin --email %%email%% --workspace deleteme%%wksp%% | is now |
 | delete | /data/workspaces/deleteme%%wksp%% |  |
 | code-is | 204 |  |
 | get | /data/workspaces/deleteme%%wksp%% |  |

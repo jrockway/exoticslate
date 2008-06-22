@@ -1,0 +1,33 @@
+#!/bin/bash
+
+BIN="/usr/bin"
+DATA="/usr/share/nlw/wikitests"
+ETC="/etc/socialtext"
+SUDO="sudo -u www-data"
+
+if [ "$1" == "enable" ]; then 
+    echo ENABLING LDAP
+    sudo $BIN/st-config set user_factories 'LDAP:oak-testing;Default' 
+    sudo  cp $DATA/ldap.yaml.st  $ETC/ldap.yaml
+    echo " Copied Socialtext ldap.yaml.st  to $ETC/ldap.yaml"
+    echo Creating test-data workspace
+    $SUDO $BIN/st-admin delete-workspace --w test-data --no-export || true
+    $SUDO $BIN/st-admin import-workspace --t $DATA/test-data.tar.gz
+    echo Adding LDAP user devnull3  as test-data workspace admin
+    $SUDO $BIN/st-admin add-workspace-admin --u devnull3  --w test-data
+# removed apache restart.  Should not be needed.
+    echo ""
+    echo use run-wiki-tests --test-username devnull3  --test-email devnull3@socialtext.com --test-password Ko013344 for LDAP wiki and calc tests
+    echo or use aliases xlwt and xlct to run test with the devnull3 LDAP user
+elif [ "$1" == "disable" ]; then
+    echo DISABLING LDAP
+    sudo  $BIN/st-config set user_factories 'Default' 
+    echo "Removed LDAP from user factories."
+    echo Recreating test-data workspace
+    $SUDO $BIN/st-admin delete-workspace --w test-data --no-export || true
+    $SUDO $BIN/st-admin import-workspace --t $DATA/test-data.tar.gz
+# removed apache restart.  Should not be needed.
+else
+    echo "Usage: st-ldap [enable|disable]"
+fi
+

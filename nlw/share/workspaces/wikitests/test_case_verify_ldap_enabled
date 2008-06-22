@@ -1,0 +1,15 @@
+This testcase traverses the UI to all the places that differ from the Default UI when LDAP is enabled.
+
+Login/Logout (Username instead of Email Address)
+I forgot my Password (no pwd reset)
+Attempt to register with an LDAP email address should fail
+My Settings (no settings)
+Manage All Users (no pwd reset)
+
+| *Comment* | Test Case: Verify LDAP Enabled |  |
+
+| *Comment* | THIS IS A STUB TEST. WRITE ME! |  |
+| *Comment* | THIS IS A STUB TEST. WRITE ME! |  |
+| *Comment* | THIS IS A STUB TEST. WRITE ME! |  |
+
+| *Comment* | Test Case: Verify LDAP Enabled COMPLETED |  |

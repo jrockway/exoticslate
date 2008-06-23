@@ -7,14 +7,17 @@
 
 | *Comment* | Test Case: Public. Verify guest can edit |  |
 | st-logout |  |  |
-| open_ok | /%%workspace%%/?Announcements and Links |  |
+| click_and_wait | st-home-link |  |
+| click_and_wait | st-pagetools-newpage |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| type_ok | st-newpage-pagename-edit | set user %%start_time%% |
+| click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | st-update | 30000 |
 | text_like | st-update | by Guest User |
 
 | *Comment* | Test Case: Public. Verify central page is home page |  |

@@ -11,7 +11,7 @@
 | wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
-| click_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: Set User Names: should be updated by a hidden address |  |
 | st-admin | set-permissions --w %%workspace%% --p public | The permissions for the %%workspace%% workspace have been changed to public |

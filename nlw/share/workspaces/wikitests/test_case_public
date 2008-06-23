@@ -7,8 +7,9 @@
 
 | *Comment* | Test Case: Public. Verify guest can edit |  |
 | st-logout |  |  |
-| click_and_wait | st-home-link |  |
-| click_and_wait | st-pagetools-newpage |  |
+
+| *Comment* | Test Case: Public. Use URL for new page to assure this test does not disturb existing pages |  |
+| open_ok | /%%workspace%%/index.cgi?action=display;page_name=Untitled%20Page#edit |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | type_ok | st-newpage-pagename-edit | set user %%start_time%% |

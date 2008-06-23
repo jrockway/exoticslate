@@ -84,6 +84,7 @@ Moved them to the end to isolate failures.
 * [Test Case: Strings]
 * [Test Case: Single Dash]
 * [Test Case: Email]
+* [Test Case: Email Attachment]
 
 ----
 

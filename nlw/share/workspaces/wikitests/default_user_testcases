@@ -6,3 +6,4 @@ These testcases work for a Default user but not for an LDAP user
 * [Test case: User Resets Password]
 * [Test case: Admin Resets Password]
 * [Test Case: Set User Names]
+* [Test Case: Hidden Email Address for Public Wiki]

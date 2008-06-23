@@ -68,6 +68,8 @@ test env properly and are not testing the test-workspace
 * [Test Case: Link Interface]
 * [Test Case: Nasty Double Dashes]
 * [Test Case: REST Workspace]
+* [Test Case: REST Users]
+* [Test Case: REST Workspace Permissions]
 * [Test Case: Insert Menu]
 
 These tests use popup windows and fail in IE 6 because they need single window mode and New Page is failing in IE 6 using single window mode.
@@ -85,7 +87,7 @@ Moved them to the end to isolate failures.
 
 ----
 
-These are Test Cases that are not in OSR Testcases. Why not?
+These are Test Cases that are not in Core Testcases. Why not?
 Test Case: Help (don't know how to switch to a new tab)
 
 ----
@@ -95,11 +97,3 @@ Test Case: Help (don't know how to switch to a new tab)
 Tests do not run out of the list since it isn't really here.
 
 {search: category:testcase AND NOT category:obsolete}
-
-^^^ Obsolete testcases
-
-{search: category:testcase AND category:obsolete}
-
-----
-
-{include: [Known Failing Testcases]}

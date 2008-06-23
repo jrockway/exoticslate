@@ -166,7 +166,7 @@ userPassword: ld@pu53r
 dn: cn=devnull3,dc=socialtext,dc=com
 objectClass: inetOrgPerson
 cn: devnull3
-gn: Dummy
-sn: User
+gn: Dev Null
+sn: Three
 mail: devnull3@socialtext.com
 userPassword: d3vnull1

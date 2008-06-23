@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use Test::More qw/no_plan/;
+use Time::HiRes qw/usleep/;
 
 BEGIN {
     use_ok 'Socialtext::Timer';
@@ -16,16 +17,58 @@ Basic_usage: {
 
 Singleton_usage: {
     Socialtext::Timer->Reset();
-    sleep 1;
+    usleep 1000;
     Socialtext::Timer->Start('funky');
     Socialtext::Timer->Start('unstopped');
-    sleep 1;
+    usleep 1000;
     Socialtext::Timer->Stop('funky');
-    sleep 1;
+    usleep 1000;
     my $timings = Socialtext::Timer->Report();
-    ok $timings->{overall} >= 3, 'singleton times overall';
-    ok $timings->{funky} >= 1, 'singleton times funky over 1';
-    ok $timings->{funky} <= 2, 'singleton times funky under 2';
-    ok $timings->{unstopped} >=2, 'simgle times unstopped over 2';
-    ok $timings->{unstopped} <=3, 'simgle times unstopped under 3';
+    ok $timings->{overall} >= .003, 'singleton times overall';
+    ok $timings->{funky} >= .001, 'singleton times funky over .001';
+    ok $timings->{funky} <= .002, 'singleton times funky under .002';
+    ok $timings->{unstopped} >= .002, 'simgle times unstopped over .002';
+    ok $timings->{unstopped} <= .003, 'simgle times unstopped under .003';
+}
+
+Singleton_pause: {
+    Socialtext::Timer->Reset();
+    Socialtext::Timer->Start('pausable');
+    usleep 1000;
+    Socialtext::Timer->Pause('pausable');
+    usleep 1000;
+    Socialtext::Timer->Continue('pausable');
+    usleep 1000;
+    Socialtext::Timer->Pause('pausable');
+    usleep 1000;
+    Socialtext::Timer->Continue('pausable');
+    usleep 1000;
+    my $timings = Socialtext::Timer->Report();
+    ok $timings->{overall} >= .005, 'overall time correct';
+    ok $timings->{pausable} >= .003, 'pausable time greater than .003';
+    ok $timings->{pausable} <= .004, 'pausable time less than .004';
+}
+
+Singleton_continue_means_start: {
+    Socialtext::Timer->Reset();
+    Socialtext::Timer->Continue('pausable');
+    usleep 1000;
+    Socialtext::Timer->Pause('pausable');
+    usleep 1000;
+    my $timings = Socialtext::Timer->Report();
+    ok $timings->{overall} >= .002, 'overall time correct';
+    ok $timings->{pausable} >= .001, 'pausable time greater than .001';
+    ok $timings->{pausable} <= .002, 'pausable time less than .002';
+}
+
+Singleton_continue_twice: {
+    # basically just checking for lack of blow up when
+    # we continue a timer that was never paused, but has
+    # started
+    Socialtext::Timer->Reset();
+    Socialtext::Timer->Continue('pausable');
+    usleep 1000;
+    Socialtext::Timer->Continue('pausable');
+    my $timings = Socialtext::Timer->Report();
+    ok $timings->{'pausable'} >= .001, 'double continue did not blow up';
 }

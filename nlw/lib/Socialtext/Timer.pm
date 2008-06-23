@@ -29,6 +29,26 @@ sub Start {
     $Timings->{$timed} = $class->new();
 }
 
+sub Pause {
+    my $class = shift;
+    my $timed = shift;
+    $class->Stop($timed);
+}
+
+sub Continue {
+    my $class = shift;
+    my $timed = shift;
+    if ($Timings->{$timed}) {
+        if (ref($Timings->{$timed})) {
+            $class->Stop($timed);
+        }
+        $Timings->{$timed} = $class->new($Timings->{$timed});
+    }
+    else {
+        $class->Start($timed);
+    }
+}
+
 sub Stop {
     my $class = shift;
     my $timed = shift;
@@ -37,15 +57,17 @@ sub Stop {
 
 sub new {
     my $class = shift;
+    my $start_offset = shift || 0;
     my $self = {};
     bless $self, $class;
-    $self->start_timing;
+    $self->start_timing($start_offset);
     return $self;
 }
 
 sub start_timing {
     my $self = shift;
-    $self->{_start_time} = [gettimeofday];
+    my $offset = shift;
+    $self->{_start_time} = [gettimeofday - $offset];
 }
 
 sub elapsed {

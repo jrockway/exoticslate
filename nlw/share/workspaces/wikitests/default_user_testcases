@@ -1,9 +1,8 @@
 These testcases work for a Default user but not for an LDAP user
 
+* [Disable LDAP]
+
 * [Test case: Login Logout]
 * [Test case: User Resets Password]
 * [Test case: Admin Resets Password]
-* [Test Case: Dashboard]
-* [Test Case: Public]
-* [Test Case: Workspace Configuration]
-* [Test Case: Workspace Privacy]
+* [Test Case: Set User Names]

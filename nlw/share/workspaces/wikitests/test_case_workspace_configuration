@@ -12,17 +12,6 @@ TODO: Figure out a way to test the other config functions
 | text_like | st-commentui-notetop | All Hands Topside |
 | open_ok | /%%workspace%%/index.cgi |  |
 
-| *Comment* | Test Case: Workspace Configuration Hide Email Addresses |  |
-| st-admin | set_workspace_config --workspace %%workspace%% email_addresses_are_hidden 1 |  |
-| st-admin | set-user-names --e %%email%% --first "" --last "" | User "%%username%%" was updated |
-| click_and_wait | link=Announcements and Links |  |
-| click_ok | st-edit-button-link |  |
-| *Comment* | Test Case: Workspace Configuration: make a new revision by editing and saving |  |
-| wait_for_element_visible_ok | st-save-button-link | 10000 |
-| click_and_wait | st-save-button-link |  |
-| *Comment* | Test Case: Workspace Configuration: should be updated by a hidden address |  |
-| text_like | st-update | hidden |
-
 | *Comment* | Test Case: Workspace Configuration Email Notification |  |
 | st-admin | set_workspace_config --workspace %%workspace%% email_notify_is_enabled 0 |  |
 | click_and_wait | link=Settings |  |

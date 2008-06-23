@@ -4,10 +4,10 @@ Any LDAP user specific testcases should go here.
 
 Every test should override the passed in values as follows:
 
-| set | username | devnull3 |
-| set | email | devnull3@socialtext.com |
-| set | password | Ko013344 |
-| set | email_esc | devnull3\@socialtext.com |
+ set | username | devnull3 |
+ set | email | devnull3@socialtext.com |
+ set | password | Ko013344 |
+ set | email_esc | devnull3\@socialtext.com |
 
 * [Enable LDAP]
 
@@ -16,13 +16,12 @@ They must explicitly use the above ldap username, email, and pwd so LDAP Testcas
 from tests where a Default user is logged in.
 
 * [Test Case: Verify LDAP Enabled]
-* [Test case: LDAP Login Logout]
-* [Test case: LDAP User Resets Password]
-* [Test case: LDAP Admin Resets Password]
-* [Test Case: LDAP Dashboard]
-* [Test Case: LDAP Public]
-* [Test Case: LDAP Workspace Configuration]
-* [Test Case: LDAP Workspace Privacy]
+
+Test Case: Verify LDAP Enabled is a substitute for these testcases:
+
+`[Test case: LDAP Login Logout]`
+`[Test case: LDAP User Resets Password]`
+`[Test case: LDAP Admin Resets Password]`
 
 Special test case for LDAP user using CLI
 

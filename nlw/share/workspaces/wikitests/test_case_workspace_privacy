@@ -123,7 +123,7 @@ logout | browser navigates to central page. Edit and comment buttons are present
 | *Comment* | Test Case: Workspace Privacy verify private |  |
 | wait_for_element_visible_ok | username | 5000 |
 | wait_for_element_visible_ok | password | 5000 |
-| text_like | Email Address: |  |
+| text_like | Log in to Socialtext |  |
 | text_like | Password: |  |
 
 | *Comment* | Test Case: Workspace Privacy email from guest/authenticated user |  |

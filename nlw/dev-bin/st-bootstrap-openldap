@@ -1,0 +1,170 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+use Getopt::Long;
+use File::Slurp qw(slurp write_file);
+use Socialtext::AppConfig;
+use Socialtext::Bootstrap::OpenLDAP;
+
+###############################################################################
+# Depending on our cmd line arg, start/stop OpenLDAP
+my $action = shift @ARGV;
+if (!defined $action) {
+    print "Usage: $0 [start|stop|status]\n";
+}
+elsif ($action eq 'start') {
+    start();
+}
+elsif ($action eq 'stop') {
+    stop();
+}
+elsif ($action eq 'status') {
+    status();
+}
+else {
+    die "unknown action '$action'\n";
+}
+exit;
+
+
+
+###############################################################################
+# Start.  Bootstraps a copy of OpenLDAP, adds data to it, and sets it up as a
+# viable user factory.  This method does *NOT* return.
+sub start {
+    # kill off any other running copy of st-bootstrap-openldap; we only allow
+    # for a single copy of this to be running per-user.
+    _kill_running_copy_of_ourselves();
+
+    # update PID file to show that *we* are running.
+    my $pidfile = _pidfile();
+    write_file($pidfile, $$);
+
+    # bootstrap OpenLDAP, and populate it with data.
+    #
+    # also set up a signal handler so that we properly shut down OpenLDAP when
+    # we get killed off
+    my $openldap;
+    $SIG{INT} = sub { undef $openldap; exit; };
+    $openldap = Socialtext::Bootstrap::OpenLDAP->new(
+        base_dn     => 'dc=socialtext,dc=com',
+        root_dn     => 'cn=Manager,dc=socialtext,dc=com',
+        );
+    $openldap->add(\*DATA) || die "can't add data to LDAP server\n";
+
+    # configure ldap.yaml based on this bootstrapped OpenLDAP instance
+    my $ldapcfg   = $openldap->ldap_config();
+    my $ldap_id   = $ldapcfg->id();
+    my $factories = "LDAP:$ldap_id;Default";
+
+    Socialtext::LDAP::Config->save($ldapcfg);
+
+    # configure user_factories so OpenLDAP can be used as a user source
+    my $appconfig = Socialtext::AppConfig->new();
+    $appconfig->set( 'user_factories', $factories );
+    $appconfig->write();
+
+    # let user know we're done, then pause indefinately.
+    print qq{
+OpenLDAP has been bootstrapped, is running, has been populated with users, and
+the Wiki has been configured to use it as a source for users.
+
+Press ^C to abort.
+};
+    sleep(1) while 1;
+}
+
+###############################################################################
+# Stop.  Kills off any running copy, and resets the user factories back to
+# their default value.
+sub stop {
+    # kill off any other running copy of st-bootstrap-openldap
+    _kill_running_copy_of_ourselves();
+
+    # reset the user_factories back to the default
+    my $appconfig = Socialtext::AppConfig->new();
+    $appconfig->set( 'user_factories', 'Default' );
+    $appconfig->write();
+}
+
+###############################################################################
+# Status.  Checks to see if there's a bootstrapped copy of OpenLDAP running
+# already.
+sub status {
+    # check if there's a copy of ourselves already running
+    my $pidfile = _pidfile();
+    if (-e $pidfile) {
+        my $pid = slurp($pidfile);
+        if (_is_running($pid)) {
+            print "$0 running; pid $pid\n";
+            exit;
+        }
+    }
+    print "$0 not running\n";
+}
+
+###############################################################################
+# Returns the full path to the file we use to hold our PID.
+sub _pidfile {
+    return "$ENV{HOME}/.st-bootstrap-openldap.pid";
+}
+
+###############################################################################
+# Check to see if the given PID is running.
+sub _is_running {
+    return kill(0, shift);
+}
+
+###############################################################################
+# Kills off a running copy of ourselves, *if* one is running.
+sub _kill_running_copy_of_ourselves {
+    my $pidfile = _pidfile();
+    return unless (-e $pidfile);
+
+    my $pid = slurp($pidfile);
+    if (_is_running($pid)) {
+        print "killing off $0...\n";
+        kill(2, $pid);
+        for (0 .. 5) {
+            sleep(1);
+            return unless _is_running($pid);
+        }
+
+        print "... didn't die off; killing -9 ...\n";
+        kill(9, $pid);
+        for (0 .. 5) {
+            sleep(1);
+            return unless _is_running($pid);
+        }
+
+        die "... can't kill $0; aborting\n";
+    }
+}
+
+__DATA__
+# Base organization
+dn: dc=socialtext,dc=com
+objectClass: dcObject
+objectClass: organization
+dc: socialtext
+o: socialtext dot com
+
+# A user that only exists in LDAP
+dn: cn=ldapuser,dc=socialtext,dc=com
+objectClass: inetOrgPerson
+cn: ldapuser
+gn: LDAP
+sn: User
+mail: ldapuser@null.socialtext.com
+userPassword: ld@pu53r
+
+# QAs test user
+dn: cn=devnull3,dc=socialtext,dc=com
+objectClass: inetOrgPerson
+cn: devnull3
+gn: Dummy
+sn: User
+mail: devnull3@socialtext.com
+userPassword: d3vnull1

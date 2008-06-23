@@ -9,7 +9,7 @@
 * [Default User Testcases]
 * [Localization Testcases]
 * [Test case: Business Control Panel]
-* [Test case: Control Panel Reports]
+* [Report Testcases]
 
 LDAP Testcases will use a known LDAP user instead of a Default user
 

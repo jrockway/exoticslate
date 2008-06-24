@@ -53,8 +53,10 @@ Returns a handle to the database.
 =cut
 
 sub get_dbh {
+    Socialtext::Timer->Continue('get_dbh');
     if ($DBH{handle} and $DBH{handle}->ping) {
         warn "Returning existing handle $DBH{handle}" if $DEBUG;
+        Socialtext::Timer->Pause('get_dbh');
         return $DBH{handle} 
     }
     cluck "Creating a new DBH" if $DEBUG;
@@ -64,6 +66,7 @@ sub get_dbh {
     $DBH{handle} = DBI->connect($dsn, $params{user}, "",  {AutoCommit => 0})
         or die "Could not connect to database with dsn: $dsn: $!";
     $DBH{st_in_transaction} = 0;
+    Socialtext::Timer->Pause('get_dbh');
     return $DBH{handle};
 }
 
@@ -102,7 +105,9 @@ sub sql_execute {
     eval {
         warn "Preparing ($statement) - Bindings:(" . join(',', @bindings) . ")" 
             if $DEBUG;
+        Socialtext::Timer->Continue('sql_prepare');
         $sth = get_dbh->prepare($statement);
+        Socialtext::Timer->Pause('sql_prepare');
         $sth->execute(@bindings) ||
             die "Error during execute - bindings=("
                 . join(', ', @bindings) . ') - '

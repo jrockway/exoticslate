@@ -53,6 +53,7 @@
 | *Comment* | Test Case: Workspace Config Preservation Delete and Re-import Workspace |  |
 
 | st-admin | delete-workspace --workspace %%temp_ws_name%% | The %%temp_ws_name%% workspace has been exported to %%temp_ws_tarball%% and deleted. |
+| pause | 10000 | give KS time to clean up |
 | st-admin | import-workspace --tarball %%temp_ws_tarball%% | Workspace has been imported |
 
 | *Comment* | Test Case: Workspace Config Preservation Check Workspace Settings |  |

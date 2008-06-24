@@ -1,6 +1,7 @@
 # @COPYRIGHT@
 package Socialtext::SQL;
 use Socialtext::AppConfig;
+use Socialtext::Timer;
 use DBI;
 use base 'Exporter';
 use Carp qw/croak cluck/;
@@ -91,6 +92,7 @@ Returns a statement handle.
 
 sub sql_execute {
     my ( $statement, @bindings ) = @_;
+    Socialtext::Timer->Continue('sql_execute');
 
     my $in_tx = sql_in_transaction();
     warn "In transaction at start of sql_execute() - $in_tx" 
@@ -131,6 +133,7 @@ sub sql_execute {
         sql_commit();
     }
 
+    Socialtext::Timer->Pause('sql_execute');
     return $sth;
 }
 

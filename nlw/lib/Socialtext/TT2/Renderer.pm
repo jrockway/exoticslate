@@ -23,6 +23,7 @@ use Template::Provider;
 use Socialtext::Build qw( get_build_setting );
 use Socialtext::l10n qw( loc system_locale );
 use Socialtext::Skin;
+use Socialtext::Timer;
 
 use Template::Plugin::FillInForm;
 
@@ -73,6 +74,7 @@ sub _maybe_fetch {
         paths     => SCALAR_OR_ARRAYREF_TYPE( default => [] ),
     };
     sub render {
+        Socialtext::Timer->Continue('tt2_render');
         my $self = shift;
         my %p = validate( @_, $spec );
 
@@ -118,6 +120,7 @@ sub _maybe_fetch {
             die "Template Toolkit error:\n$e";
         }
 
+        Socialtext::Timer->Pause('tt2_render');
         return $output;
     }
 }

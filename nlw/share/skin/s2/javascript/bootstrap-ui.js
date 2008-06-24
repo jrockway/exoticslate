@@ -125,7 +125,8 @@ jQuery(function () {
             if (Socialtext.page_type == 'spreadsheet' && Socialtext.wikiwyg_variables.hub.current_workspace.enable_spreadsheet) {
                 jQuery("#st-all-footers, #st-display-mode-container").hide();
                 jQuery("#st-edit-mode-container, #st-editing-tools-edit").show();
-                start_spreadsheet_editor();
+                Socialtext.render_spreadsheet_editor();
+
                 return false;
             }
 
@@ -141,30 +142,6 @@ jQuery(function () {
             });
         }, 0);
     };
-
-    var start_spreadsheet_editor = function() {
-        Socialtext.render_spreadsheet_editor();
-
-        jQuery("#st-edit-border").hide().before("<h4 id='st-spreadsheet-name'></h4><div id='st-spreadsheet-edit'></div><div id='st-spreadsheet-preview'></div>");
-        jQuery("#st-spreadsheet-edit").css({ background: '#fff'});
-        jQuery("#st-spreadsheet-preview").css({ background: '#fff' }).hide();
-
-        // var ss
-        SocialCalc.Constants.defaultCommentStyle =
-            SocialCalc.Constants.defaultCommentStyle.replace(
-                /url\(.*?\)/,
-                'url(' +
-                nlw_make_plugin_path('/socialcalc/javascript/dBrick/images/sc')
-                + '-commentbg.gif)'
-            );
-        ss = new SocialCalc.SpreadsheetControl();
-        ss.editor.imageprefix= nlw_make_plugin_path('/socialcalc/javascript/dBrick/images/sc');
-        ss.InitializeSpreadsheetControl('st-spreadsheet-edit');
-
-        setup_socialcalc();
-
-        return false;
-    }
 
     jQuery("#st-edit-button-link,#st-edit-actions-below-fold-edit")
     .addClass("bootstrapper")

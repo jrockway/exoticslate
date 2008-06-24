@@ -3,7 +3,7 @@ package Socialtext::Timer;
 use strict;
 use warnings;
 
-use Time::HiRes qw( gettimeofday tv_interval );
+use Time::HiRes qw( time );
 
 our $Timings = {};
 
@@ -67,12 +67,12 @@ sub new {
 sub start_timing {
     my $self = shift;
     my $offset = shift;
-    $self->{_start_time} = [gettimeofday - $offset];
+    $self->{_start_time} = time - $offset;
 }
 
 sub elapsed {
     my $self = shift;
-    return tv_interval($self->{_start_time});
+    return time - $self->{_start_time};
 }
 
 1;

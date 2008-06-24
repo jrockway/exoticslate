@@ -68,6 +68,7 @@
     RewriteRule    ^/static/[\.0-9]+/(.+)$  /static/$1  [PT,L]
 
     RewriteRule    ^/nlw/plugin/[\.0-9]+/(.+)$  /nlw/plugin/$1  [PT,L]
+    RewriteRule    ^/nlw/plugin/:[^/]+/(.+)$  /nlw/plugin/$1  [PT,L]
 
 [% IF not (config.is_appliance || !config.apache_proxy) %]
     RewriteRule    ^/my/$        http://www.socialtext.net/

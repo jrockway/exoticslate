@@ -223,14 +223,13 @@ sub template_render {
 
     my $name = $self->name;
     my $plugin_dir = $self->plugin_dir;
-    my $share = "/nlw/plugin/$prod_ver";
     
     my $renderer = Socialtext::TT2::Renderer->instance;
     return $renderer->render(
         template => $template,
         paths => [ glob("$code_base/plugin/*/template") ],
         vars     => {
-            share => "$share/$name",
+            share => $self->share,
             workspaces => [$self->hub->current_user->workspaces->all],
             as_json => sub { encode_json(@_) },
             %template_vars,

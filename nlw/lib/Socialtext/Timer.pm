@@ -32,7 +32,12 @@ sub Start {
 sub Pause {
     my $class = shift;
     my $timed = shift;
-    $class->Stop($timed);
+    if (ref($Timings->{$timed})) {
+        $class->Stop($timed);
+    }
+    else {
+        $Timings->{$timed} = 'reentered';
+    }
 }
 
 sub Continue {

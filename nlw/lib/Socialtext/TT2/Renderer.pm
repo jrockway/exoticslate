@@ -74,9 +74,9 @@ sub _maybe_fetch {
         paths     => SCALAR_OR_ARRAYREF_TYPE( default => [] ),
     };
     sub render {
-        Socialtext::Timer->Continue('tt2_render');
         my $self = shift;
         my %p = validate( @_, $spec );
+        Socialtext::Timer->Continue('tt2_render');
 
         if (! defined $p{vars}{loc} ) {$p{vars}{loc} = \&loc;}
         if (! defined $p{vars}{loc_lang} ) {$p{vars}{loc_lang} = system_locale();}

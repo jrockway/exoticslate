@@ -27,8 +27,8 @@ Singleton_usage: {
     ok $timings->{overall} >= .003, 'singleton times overall';
     ok $timings->{funky} >= .001, 'singleton times funky over .001';
     ok $timings->{funky} <= .002, 'singleton times funky under .002';
-    ok $timings->{unstopped} >= .002, 'simgle times unstopped over .002';
-    ok $timings->{unstopped} <= .003, 'simgle times unstopped under .003';
+    ok $timings->{unstopped} >= .002, 'single times unstopped over .002';
+    ok $timings->{unstopped} <= .003, 'single times unstopped under .003';
 }
 
 Singleton_pause: {
@@ -71,4 +71,17 @@ Singleton_continue_twice: {
     Socialtext::Timer->Continue('pausable');
     my $timings = Socialtext::Timer->Report();
     ok $timings->{'pausable'} >= .001, 'double continue did not blow up';
+}
+
+Singleton_pause_twice: {
+    # basically just checking for lack of blow up when
+    # we pause a timer that was already paused.
+    Socialtext::Timer->Reset();
+    Socialtext::Timer->Continue('pausable');
+    usleep 1000;
+    Socialtext::Timer->Continue('pausable');
+    Socialtext::Timer->Pause('pausable');
+    Socialtext::Timer->Pause('pausable');
+    my $timings = Socialtext::Timer->Report();
+    ok $timings->{'pausable'} eq 'reentered', 'double pause caused reentry';
 }

@@ -1174,7 +1174,10 @@ sub _to_socialtext_wikitext_parser_plain_text {
        receiver => Socialtext::WikiText::Emitter::SearchSnippets->new,
     );
 
-    return $parser->parse($content);
+    my $return = "";
+    eval { $return = $parser->parse($content) };
+    warn $@ if $@;
+    return $return;
 }
 
 # REVIEW: We should consider throwing exceptions here rather than return codes.

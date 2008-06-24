@@ -36,6 +36,7 @@ sub Pause {
         $class->Stop($timed);
     }
     else {
+        # FIXME: make the Timer reentrant
         $Timings->{$timed} = 'reentered';
     }
 }
@@ -47,7 +48,10 @@ sub Continue {
         if (ref($Timings->{$timed})) {
             $class->Stop($timed);
         }
-        $Timings->{$timed} = $class->new($Timings->{$timed});
+        # FIXME: make the Timer reentrant
+        unless ($Timings->{$timed} eq 'reentered') {
+            $Timings->{$timed} = $class->new($Timings->{$timed});
+        }
     }
     else {
         $class->Start($timed);

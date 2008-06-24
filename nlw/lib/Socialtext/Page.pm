@@ -1137,8 +1137,16 @@ sub purge {
 
 Readonly my $ExcerptLength => 350;
 sub preview_text {
-    my $self    = shift;
+    my $self = shift;
     my $content = shift || $self->content;
+    my $max_length = $ExcerptLength * 2;
+
+    # Gigantic pages caused Perl segfaults. Only need the beginning of the
+    # content.
+    if (length($content) > $max_length) {
+        $content = substr($content, 0, $max_length);
+        $content =~ s/(.*\n).*/$1/s;
+    }
 
     my $excerpt = $self->_to_plain_text( $content );
     $excerpt = substr( $excerpt, 0, $ExcerptLength ) . '...'

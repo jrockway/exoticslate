@@ -32,7 +32,7 @@
 | text_like | qr/This is the first post in Caps Test Weblog %%start_time%% Weblog/ |  |
 
 | *Comment* | Test Case: Miki Teardown |  |
-| st-admin | purge-page --workspace %%workspace%% --page first_post_in_caps_test_weblog_%%start_time%%_weblog |  |
+| st-admin | purge-page --workspace %%workspace%% --page first_post_in_caps_test_weblog_%%start_time%%_weblog | page was purged |
 | *Comment* | Test Case: Miki END RT 26984 |
 
 | *Comment* | Test Case: Miki COMPLETED |  |

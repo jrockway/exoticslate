@@ -48,7 +48,7 @@
 
 | *Comment* | Tools: Delete Page: Teardown |  |
 | click_and_wait | st-home-link | prepare for next included test |
-| st-admin | purge-page --workspace %%workspace%% --page delete_testpage_%%start_time%% |  |
-| st-admin | purge-page --workspace %%workspace%% --page backlink_testpage_%%start_time%% |  |
+| st-admin | purge-page --workspace %%workspace%% --page delete_testpage_%%start_time%% | page was purged |
+| st-admin | purge-page --workspace %%workspace%% --page backlink_testpage_%%start_time%% | page was purged |
 
 | *Comment* | Test Case: Tools: Delete Page COMPLETED |

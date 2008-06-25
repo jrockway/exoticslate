@@ -171,8 +171,8 @@
 | text_like | st-allfiles | qr/All Files %%start_time%% 1.+All Files %%start_time%% 2/ |
 
 | *Comment* | Test Case: All Files Teardown |  |
-| st-admin | purge-page --workspace %%workspace%% --page all_files_%%start_time%%_1 |  |
-| st-admin | purge-page --workspace %%workspace%% --page all_files_%%start_time%%_2 |  |
+| st-admin | purge-page --workspace %%workspace%% --page all_files_%%start_time%%_1 | page was purged |
+| st-admin | purge-page --workspace %%workspace%% --page all_files_%%start_time%%_2 | page was purged |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Time |  |
 | uncheck_ok | timezone__time_display_seconds |  |

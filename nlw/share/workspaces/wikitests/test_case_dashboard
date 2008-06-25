@@ -258,9 +258,9 @@ Click Invite Your Colleagues | Invite New Users interface page appears
 | click_and_wait | link=revision 1 |  |
 | click_and_wait | document.forms[1].elements['Restore Revision'] |  |
 
-| st-admin | purge-page --w %%workspace%% --page tc_dashboard1_%%start_time%% |  |
-| st-admin | purge-page --w %%workspace%% --page tc_dashboard2_%%start_time%% |  |
-| st-admin | purge-page --w %%workspace%% --page notepad_for_%%start_time%% |  |
+| st-admin | purge-page --w %%workspace%% --page tc_dashboard1_%%start_time%% | page was purged |
+| st-admin | purge-page --w %%workspace%% --page tc_dashboard2_%%start_time%% | page was purged |
+| st-admin | purge-page --w %%workspace%% --page notepad_for_%%start_time%% | page was purged |
 
 | *Comment* | Test Case: Dashboard COMPLETED |  |
 

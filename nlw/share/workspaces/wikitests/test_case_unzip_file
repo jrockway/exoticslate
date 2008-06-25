@@ -68,6 +68,6 @@
 
 | *Comment* | Test Case: Unzip File Teardown |  |
 
-| st-admin | purge-page --workspace %%workspace%% --page unzip_file_%%start_time%% |  |
+| st-admin | purge-page --workspace %%workspace%% --page unzip_file_%%start_time%% | page was purged |
 
 | *Comment* | Test Case: Unzip File COMPLETED |

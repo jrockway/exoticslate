@@ -100,7 +100,7 @@ occasionally but this test does not fail
 | text_like | st-page-titletext | : %%start_time%% npno 1 |
 
 | *Comment* | Test Case: New Page No Overwrite Teardown |  |
-| st-admin | purge-page --workspace %%workspace%% --page %%start_time%%_npno_2 |  |
-| st-admin | purge-page --workspace %%workspace%% --page %%start_time%%_npno_1 |  |
+| st-admin | purge-page --workspace %%workspace%% --page %%start_time%%_npno_2 | page was purged |
+| st-admin | purge-page --workspace %%workspace%% --page %%start_time%%_npno_1 | page was purged |
 
 | *Comment* | Test Case: New Page No Overwrite COMPLETED |  |

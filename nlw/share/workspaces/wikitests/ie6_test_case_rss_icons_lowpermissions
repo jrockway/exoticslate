@@ -13,7 +13,7 @@ It seems that Selenium cannot analyze the content of feed pages because they are
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "RSS Icons %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "RSS Icons %%start_time%%" page has been created |
 
 | *Comment* | Purge the Chinese page if it is already there |  |
-| st-admin | purge-page --workspace %%workspace%% --page %E7%89%9B%E6%84%9B%E6%88%91 |  |
+| st-admin | purge-page --workspace %%workspace%% --page %E7%89%9B%E6%84%9B%E6%88%91 | page was purged |
 
 | *Comment* | Test Case: RSS Icons page with Chinese chars in title can't do from command line
 and can't do it in combination with ASCII chars from start_time |  |

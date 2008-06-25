@@ -150,10 +150,10 @@ contains %%email%% as a substring and that messes up other tests like Test Case:
 
 | *Comment* | Test Case: All Pages Teardown. No need to login again. |  |
 
-| st-admin | purge-page --workspace %%workspace%% --page all_pages_%%start_time%%_0001 |  |
-| st-admin | purge-page --workspace %%workspace%% --page all_pages_%%start_time%%_0002 |  |
-| st-admin | purge-page --workspace %%workspace%% --page all_pages_%%start_time%%_0003 |  |
-| st-admin | purge-page --workspace %%workspace%% --page all_pages_%%start_time%%_0005 |  |
+| st-admin | purge-page --workspace %%workspace%% --page all_pages_%%start_time%%_0001 | page was purged |
+| st-admin | purge-page --workspace %%workspace%% --page all_pages_%%start_time%%_0002 | page was purged |
+| st-admin | purge-page --workspace %%workspace%% --page all_pages_%%start_time%%_0003 | page was purged |
+| st-admin | purge-page --workspace %%workspace%% --page all_pages_%%start_time%%_0005 | page was purged |
 | st-admin | remove-member --email %%s_user%% --workspace %%workspace%% |  |
 
 | *Comment* | Test Case: All Pages COMPLETED |  |

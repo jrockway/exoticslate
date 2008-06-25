@@ -12,7 +12,8 @@
 | *Comment* | Test Case: Inter Workspace Search Search all the workspaces where %%username%% is a member |  |
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (3) |
 | select_ok | sort-picker | label=Workspace |
-| wait_for_element_present_ok | st-listview | 20000 |
+| pause | 5000 |  |
+| wait_for_element_visible_ok | st-search-content | 20000 |
 | *Comment* | Test Case: Inter Workspace Search unsorted results can appear in any order, so don't check order |  |
 | st-result | qr/jabber.+test-data2/ |  |
 | st-result | qr/jabber.+test-data3/ |  |
@@ -24,7 +25,8 @@
 | st-admin | remove-member --workspace test-data2 --email %%email%% |  |
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
 | select_ok | sort-picker | label=Workspace |
-| wait_for_element_present_ok | st-listview | 20000 |
+| wait_for_element_visible_ok | st-search-content | 20000 |
+| pause | 5000 |  |
 | *Comment* | Test Case: Inter Workspace Search unsorted results can appear in any order, so don't check order |  |
 | st-result | qr/jabber.+test-data3/ |  |
 | st-result | qr/jabber.+Canonical Test Data Set/ |  |
@@ -42,14 +44,16 @@
 | st-admin | set-permissions --workspace test-data3 --permissions public-authenticate-to-edit | The permissions for the test-data3 workspace have been changed to public-authenticate-to-edit. |
 | st-search | jabber workspaces:test-data3 | Pages containing 'jabber workspaces:test-data3' (1) |
 | select_ok | sort-picker | label=Workspace |
-| wait_for_element_present_ok | st-listview | 20000 |
+| pause | 5000 |  |
+| wait_for_element_visible_ok | st-search-content | 20000 |
 | st-result | qr/jabber.+test-data3/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search Login to test-data ws and search again |  |
 | st-login |  |  |
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
 | select_ok | sort-picker | label=Workspace |
-| wait_for_element_present_ok | st-listview | 20000 |
+| pause | 5000 |  |
+| wait_for_element_visible_ok | st-search-content | 20000 |
 
  st-result | qr/jabber.+test-data3.+jabber.+Canonical Test Data Set/ | |
 
@@ -62,7 +66,8 @@
 | st-admin | add-member --workspace test-data2 --email %%email%% | qr/%%username%% .+ a member of the test-data2 workspace\./ |
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (3) |
 | select_ok | sort-picker | label=Workspace |
-| wait_for_element_present_ok | st-listview | 20000 |
+| pause | 5000 |  |
+| wait_for_element_visible_ok | st-search-content | 20000 |
 
  st-result | qr/jabber.+test-data3.+jabber.+test-data2.+jabber.+Canonical Test Data Set/ | |
 
@@ -74,7 +79,8 @@
 
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
 | select_ok | sort-picker | label=Workspace |
-| wait_for_element_present_ok | st-listview | 20000 |
+| pause | 5000 |  |
+| wait_for_element_visible_ok | st-search-content | 20000 |
 
  st-result | qr/jabber.+test-data3.+jabber.+Canonical Test Data Set/ | |
 
@@ -88,7 +94,8 @@
 | open_ok | /help-en |  |
 | st-search | jabber workspaces:test-data3 | Pages containing 'jabber workspaces:test-data3' (1) |
 | select_ok | sort-picker | label=Workspace |
-| wait_for_element_present_ok | st-listview | 20000 |
+| pause | 5000 |  |
+| wait_for_element_visible_ok | st-search-content | 20000 |
 | st-result | qr/jabber.+test-data3/ |  |
 
 | st-admin | set-permissions --workspace test-data3 --permissions authenticated-user-only | The permissions for the test-data3 workspace have been changed to authenticated-user-only. |
@@ -109,7 +116,8 @@
 | open_ok | /test-data |  |
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
 | select_ok | sort-picker | label=Workspace |
-| wait_for_element_present_ok | st-listview | 20000 |
+| pause | 5000 |  |
+| wait_for_element_visible_ok | st-search-content | 20000 |
 
  st-result | qr/jabber.+test-data2.+jabber.+Canonical Test Data Set/ | |
 
@@ -139,7 +147,8 @@
 
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (3) |
 | select_ok | sort-picker | label=Workspace |
-| wait_for_element_present_ok | st-listview | 20000 |
+| pause | 5000 |  |
+| wait_for_element_visible_ok | st-search-content | 20000 |
 
  st-result | qr/jabber.+test-data2.+jabber.+Canonical Test Data Set.+jabber.+From-Scratch/ | |
 

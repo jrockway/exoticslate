@@ -187,6 +187,6 @@ for some reason, the test for edit tips element visible fails in IE even though 
 
 | *Comment* | Test Case: Edit This Page teardown |  |
 | open_ok | /%%workspace%%/index.cgi |  |
-| st-admin | purge-page --workspace %%workspace%% --page edit_this_page_%%start_time%% |  |
+| st-admin | purge-page --workspace %%workspace%% --page edit_this_page_%%start_time%% | page was purged |
 
 | *Comment* | Test Case: Edit This Page COMPLETED |  |

@@ -36,6 +36,6 @@
 | text_unlike | st-weblog-navigation | 2ndcontent_%%start_time%% |
 
 | *Comment* | Test Case: Weblog Archive and Navigation teardown |  |
-| st-admin | purge-page --w %%workspace%% --page navigation_for_recent_changes |  |
+| st-admin | purge-page --w %%workspace%% --page navigation_for_recent_changes | page was purged |
 
 | *Comment* | Test Case: Weblog Archive and Navigation COMPLETED |

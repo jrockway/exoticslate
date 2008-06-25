@@ -123,7 +123,7 @@ Make a new page and add a new tag (a tag not already in use in workspace) | tag 
 | text_unlike | st-listview | tag2 %%start_time%% |
 
 | *Comment* | Test Case: Tags Teardown |  |
-| st-admin | purge-page --w %%workspace%% --page tag1_content_title_%%start_time%% |  |
-| st-admin | purge-page --w %%workspace%% --page tag12_content_title_%%start_time%% |  |
+| st-admin | purge-page --w %%workspace%% --page tag1_content_title_%%start_time%% | page was purged |
+| st-admin | purge-page --w %%workspace%% --page tag12_content_title_%%start_time%% | page was purged |
 
 | *Comment* | Test Case: Tags COMPLETED |

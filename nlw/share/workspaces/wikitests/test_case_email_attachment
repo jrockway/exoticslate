@@ -56,6 +56,6 @@
 | text_unlike | st-search-content | qr/Attachment:/ |
 
 | *Comment* | Test Case: Email attachment Teardown |  |
-| st-admin | purge-page --w %%workspace%% --page email_subject_%%start_time%% |  |
+| st-admin | purge-page --w %%workspace%% --page email_subject_%%start_time%% | page was purged |
 
 | *Comment* | Test Case: Email attachment COMPLETED |

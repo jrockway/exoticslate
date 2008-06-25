@@ -76,7 +76,7 @@
 | *Comment* | Test Case: Hidden Email Address Teardown |  |
 | st-logout |  |  |
 | st-admin | set-permissions --workspace %%workspace%% --permissions member-only |  |
-| st-admin | purge-page --workspace %%workspace%% --page hidden_email_%%start_time%% |  |
-| st-admin | purge-page --workspace %%workspace%% --page first_post_in_test_%%start_time%%_weblog |  |
+| st-admin | purge-page --workspace %%workspace%% --page hidden_email_%%start_time%% | page was purged |
+| st-admin | purge-page --workspace %%workspace%% --page first_post_in_test_%%start_time%%_weblog | page was purged |
 
 | *Comment* | Test Case: Hidden Email Address COMPLETED |

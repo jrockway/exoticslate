@@ -110,10 +110,10 @@ Selenium can't "see" feed pages
 removed weblog name length test. There is no reason to limit weblog names to 28 chars
 
 | *Comment* | Test Case: Weblogs Teardown |  |
-| st-admin | purge-page --w %%workspace%% --page post1_%%start_time%% |  |
-| st-admin | purge-page --w %%workspace%% --page first_post_in_test_%%start_time%%_weblog |  |
-| st-admin | purge-page --w %%workspace%% --page first_post_in_x%%start_time%%_blog |  |
-| st-admin | purge-page --w %%workspace%% --page first_post_in_y%%start_time%%_weblog |  |
-| st-admin | purge-page --w %%workspace%% --page first_post_in_z%%start_time%%_weblog |  |
+| st-admin | purge-page --w %%workspace%% --page post1_%%start_time%% | page was purged |
+| st-admin | purge-page --w %%workspace%% --page first_post_in_test_%%start_time%%_weblog | page was purged |
+| st-admin | purge-page --w %%workspace%% --page first_post_in_x%%start_time%%_blog | page was purged |
+| st-admin | purge-page --w %%workspace%% --page first_post_in_y%%start_time%%_weblog | page was purged |
+| st-admin | purge-page --w %%workspace%% --page first_post_in_z%%start_time%%_weblog | page was purged |
 
 | *Comment* | Test Case: Weblogs COMPLETED |

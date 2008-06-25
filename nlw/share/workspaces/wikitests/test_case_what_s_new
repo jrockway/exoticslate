@@ -98,9 +98,9 @@
 
 | *Comment* | Test Case: What's New Teardown |  |
 | click_and_wait | st-home-link | set up for next included test |
-| st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0001 |  |
-| st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0002 |  |
-| st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0003 |  |
-| st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0005 |  |
+| st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0001 | page was purged |
+| st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0002 | page was purged |
+| st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0003 | page was purged |
+| st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0005 | page was purged |
 
 | *Comment* | Test Case: What's New COMPLETED |  |

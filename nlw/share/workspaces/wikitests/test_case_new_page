@@ -55,9 +55,9 @@
 
 | *Comment* | Test Case: New Page. Teardown |  |
 
-| st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%%_2 |  |
-| st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%% |  |
-| st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%%_3 |  |
+| st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%%_2 | page was purged |
+| st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%% | page was purged |
+| st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%%_3 | page was purged |
 | click_and_wait | st-home-link | set up for next included test |
 
 | *Comment* | Test Case: New Page COMPLETED |  |

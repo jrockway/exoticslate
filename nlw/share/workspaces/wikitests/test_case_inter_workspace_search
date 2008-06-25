@@ -25,6 +25,7 @@
 | st-admin | remove-member --workspace test-data2 --email %%email%% |  |
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (2) |
 | select_ok | sort-picker | label=Workspace |
+| pause | 5000 |  |
 | wait_for_element_visible_ok | st-search-content | 20000 |
 | pause | 5000 |  |
 | *Comment* | Test Case: Inter Workspace Search unsorted results can appear in any order, so don't check order |  |

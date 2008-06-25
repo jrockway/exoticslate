@@ -157,6 +157,7 @@
 | click_and_wait | link=All Files |  |
 
 | select_ok | sort-picker | label=Filename |
+| pause | 10000 |  |
 | wait_for_element_present_ok | st-attachments_ui-content | 20000 |
 | text_like | st-attachments_ui-content | qr/wikitest\.doc.+wikitest\.jpg.+wikitest\.pdf.+wikitest\.txt.+wikitestzip\.zip/ |
 | wait_for_text_present_ok | Filename ( | 10000 |
@@ -170,6 +171,7 @@
 
 | *Comment* | Test Case: Sorting Files sort by uploaded by, date, size |  |
 | select_ok | sort-picker | label=Uploaded By |
+| pause | 10000 |  |
 | wait_for_element_present_ok | st-attachments_ui-content | 20000 |
 | text_like | st-attachments_ui-content | qr/%%user_2_regex%%.+%%user_1_regex%%.+%%user_4_regex%%.+%%user_5_regex%%.+%%user_3_regex%%/ |
 | wait_for_text_present_ok | Uploaded By ( | 10000 |
@@ -183,6 +185,7 @@
 
 | *Comment* | Test Case: Sorting Files sort by uploaded by, date, size |  |
 | select_ok | sort-picker | label=Size |
+| pause | 10000 |  |
 | wait_for_element_present_ok | st-attachments_ui-content | 20000 |
 | text_like | st-attachments_ui-content | qr/20kb.+27kb.+24kb.+30kb.+42bytes/ |
 | wait_for_text_present_ok | Size ( | 10000 |

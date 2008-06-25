@@ -1,0 +1,108 @@
+| *Comment* | Test Case: All Pages |  |
+| *Comment* | Test Case: All Pages Set up |  |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0001%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
+| click_and_wait | st-save-button-link |  |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0002%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
+| click_and_wait | st-save-button-link |  |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0003%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
+| click_and_wait | st-save-button-link |  |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0004%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
+| click_and_wait | st-save-button-link |  |
+
+| *Comment* | Test Case: All Pages name sorting |  |
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |  |
+| wait_for_element_visible_ok | link=Title |  |
+| text_like | st-list-title | All Pages ( |
+| click_and_wait | link=allpages spreadsheet0001%%start_time%% |  |
+| text_like | st-page-titletext | allpages spreadsheet0001%%start_time%% |
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |  |
+| wait_for_element_visible_ok | link=Title |  |
+| click_and_wait | link=Title |  |
+| text_like | st-listview | qr/allpages spreadsheet0001%%start_time%%.+allpages spreadsheet0004%%start_time%%/ |
+| pause | 2000 |
+| click_and_wait | link=Title |  |
+| text_like | st-listview | qr/allpages spreadsheet0004%%start_time%%.+allpages spreadsheet0001%%start_time%%/ |
+| pause | 2000 |  |
+| *Comment* | Test Case: All Pages date sort |  |
+| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=allpages%20spreadsheet0005%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | 5000 | I hate pause; needed for entire page load |
+| click_and_wait | st-save-button-link |  |
+
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |
+| wait_for_element_visible_ok | link=Date |
+| click_and_wait | link=Date |  |
+| text_like | st-listview | qr/allpages spreadsheet0001%%start_time%%.+allpages spreadsheet0005%%start_time%%/ |
+| click_and_wait | link=Date |  |
+| text_like | st-listview | qr/allpages spreadsheet0005%%start_time%%.+allpages spreadsheet0001%%start_time%%/ |
+
+| *Comment* | Test Case: All Pages revision sort |  |
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |
+| click_and_wait | link=allpages spreadsheet0004%%start_time%% |  |
+| wait_for_element_visible_ok | st-edit-button-link |  |
+| click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | st-save-button-link |  |
+| pause | 5000 | I hate pause; needed for entire page load |
+| click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | st-edit-button-link |  |
+
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |
+| wait_for_element_visible_ok | link=Revisions |
+| click_and_wait | link=Revisions |  |
+| text_like | st-listview | qr/allpages spreadsheet0004%%start_time%%.+allpages spreadsheet0003%%start_time%%/ |
+| click_and_wait | link=Revisions |  |
+| text_like | st-listview | qr/allpages spreadsheet0003%%start_time%%.+allpages spreadsheet0004%%start_time%%/ |
+
+| *Comment* | Test Case: All Pages edited by sort |  |
+
+create a user that lexically precedes the logged in user by creating a user that begins with start_time
+However, don't use %%email%% in that username because that permanently creates another user name in the user DB that
+contains %%email%% as a substring and that messes up other tests like Test Case: Email
+
+| set | s_user | %%start_time%%@%%start_time%%.socialtext.net |
+
+| st-admin | create-user --email %%s_user%% --password 123456 |  |
+| st-admin | add-member --email %%s_user%% --workspace %%workspace%% |  |
+| st-logout |  |  |
+| st-login | %%s_user%% | 123456 |
+
+For some reason, IE 6 blows up when open_ok is used in some places. We avoid it.
+
+| *Comment* | Test Case: All Pages revision by new user |  |
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |  |
+| wait_for_element_visible_ok | link=Title |  |
+| click_and_wait | link=allpages spreadsheet0003%%start_time%% |  |
+| wait_for_element_visible_ok | st-edit-button-link |  |
+| click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | st-save-button-link |  |
+| pause | 5000 | I hate pause; needed for entire page load |
+| click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | st-edit-button-link |  |
+
+| *Comment* | Test Case: All Pages verify revision by user %%s_user%% |  |
+
+| open_ok | %%workspace%%/index.cgi?action=changes&changes=all |  |
+| wait_for_element_visible_ok | link=Title |  |
+| click_and_wait | link=Last Edited By |  |
+| text_like | st-listview | qr/allpages spreadsheet0003%%start_time%%.+allpages spreadsheet0001%%start_time%%/ |
+| click_and_wait | link=Last Edited By |  |
+| text_like | st-listview | qr/allpages spreadsheet0001%%start_time%%.+allpages spreadsheet0003%%start_time%%/ |
+
+| *Comment* | Test Case: All Pages Teardown. No need to login again. |  |
+
+| st-admin | purge-page --workspace %%workspace%% --page allpages_spreadsheet_0001%%start_time%% |  |
+| st-admin | purge-page --workspace %%workspace%% --page allpages_spreadsheet_0002%%start_time%% |  |
+| st-admin | purge-page --workspace %%workspace%% --page allpages_spreadsheet_0003%%start_time%% |  |
+| st-admin | purge-page --workspace %%workspace%% --page allpages_spreadsheet_0004%%start_time%% |  |
+| st-admin | purge-page --workspace %%workspace%% --page allpages_spreadsheet_0005%%start_time%% |  |
+| st-admin | remove-member --email %%s_user%% --workspace %%workspace%% |  |
+
+| *Comment* | Test Case: All Pages COMPLETED |  |

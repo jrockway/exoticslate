@@ -1,0 +1,23 @@
+| *Comment* | STARTING Test Case: Miki |
+| *Comment* | Test Case: Mikie - View a spreadsheet in the Miki |
+| open_ok | /%%workspace%%/index.cgi?car_loan |
+| click_ok | link=Mobile |
+| wait_for_element_present_ok | link=Edit |
+| text_like | This loan is offered through the Biggie Motors Automation Corporation |
+| text_like | 3890.40 |
+| text_like | Loan Amount |
+| click_and_wait | link=Home |
+
+| *Comment* | Test Case: Miki Open a socialcalc page |  |
+| open_ok | /lite/page/%%workspace%%/car_loan |  |
+| wait_for_element_present_ok | link=Edit |  |
+| text_like | This loan is offered through the Biggie Motors Automation Corporation |  |
+| text_like | 3890.40 |  |
+| text_like | Loan Amount |  |
+| click_ok | link=Edit |  |
+| wait_for_element_visible_ok | link=Cancel Edit |  |
+| pause | 3000 |
+| text_like | edit_textarea | cell:C4:vtc:n%:0.05:5.0% |
+| click_and_wait | link=Cancel Edit |  |
+| open_ok | /%%workspace%%/ |  |
+| *Comment* | Test Case: Miki COMPLETED |  |

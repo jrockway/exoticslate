@@ -1,0 +1,54 @@
+If Test Case: Verify Location fails, you have not configured your 
+test env properly and are not testing the test-workspace
+
+* [Test Case: Verify Location]
+
+* [Test Case: Calc Miki]
+* [Test case: Calc Watchlist]
+* [Test Case: Calc View Spreadsheet Page]
+* [Test Case: Calc Tags]
+* [Test case: Calc functional search tests]
+* [Test Case: Calc Tools: Rename Page]
+* [Test Case: Calc Tools: Delete Page]
+* [Test Case: Calc New Page]
+* [Test Case: Calc Tools: Duplicate Page]
+* [Test Case: Calc Phrase search]
+* [Test Case: Calc Explore Spreadsheet sidebar]
+* [Test Case: Calc Tagging]
+* [Test Case: Calc Orphans List]
+* [Test Case: Calc What's New]
+* [Test Case: Calc All Pages]
+* [Test Case: Calc Tools: Export as HTML]
+* [Test Case: Calc Tools: Copy Page to Workspace]
+
+^ END
+
+----
+
+^ TODOs and Consider-s
+
+ `[Test Case New Page No Overwrite]` (Features to do this now are missing from socialcalc)
+ `[Test Case: stemming]` DO WE WANT TO ADD STEMMING TESTS TO SOCIALCALC PAGES ?
+ `[Test Case: Sidebar: Incoming Links]` (Features to do this now are missing from socialcalc)
+ `[Test Case: Revisions]` (Features to do this now are missing from socialcalc)
+ `[Test Case: Home]` (This behavior relies on the old home page and is dependent on dashboard. Calctests should not do that.)
+ `[Test Case: Inter Workspace Search]` - TBD.
+
+* [Test Case: Sidebar: Recently Viewed]
+* [Test Case: Sidebar: Recent Changes]
+
+----
+
+^ All pages tagged 'Testcase' (only a list, visit the pages above for tests)
+
+Tests do not run out of the list since it isn't really here.
+
+{search: category:testcase AND NOT category:obsolete}
+
+^^^ Obsolete testcases
+
+{search: category:testcase AND category:obsolete}
+
+----
+
+{include: [Known Failing Testcases]}

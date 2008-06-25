@@ -1,0 +1,39 @@
+Note: Cannot automate attachments, test is slightly reduced
+
+| *Comment* | Test Case: Duplicate Spreadsheet |  |
+
+| *Comment* | Test Case: Tools: Duplicate Spreadsheet Create test page |  |
+| open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=Dupe%20Spreadsheet%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link |  |
+| pause | 5000 | I hate pause; needed for entire page load |
+| click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | st-edit-button-link |  |
+
+| *Comment* | Test Case: Tools: Duplicate Page Test Duplicate popup, duplicate the page |  |
+| MouseOver | st-pagetools-tools |  |
+| click_ok | link=Duplicate Page |  |
+| pause | 1000 |  |
+| open_ok | /%%workspace%%/index.cgi?action=duplicate_popup;page_name=dupe_spreadsheet_%%start_time%% |  |
+| wait_for_text_present_ok | Duplicate | 30000 |
+| click_and_wait | Button |  |
+| open_ok | /%%workspace%%/index.cgi?duplicate_of_dupe_spreadsheet_%%start_time%% |  |
+| wait_for_element_visible_ok | link=Refresh |
+| open_ok | /%%workspace%%/index.cgi?dupe_spreadsheet_%%start_time%% |  |
+
+| *Comment* | Test Case: Tools: Duplicate Page Edit first page, save over second page |  |
+| click_ok | link=Duplicate Page |  |
+| pause | 1000 |  |
+| open_ok | /%%workspace%%/index.cgi?action=duplicate_popup;page_name=dupe_spreadsheet_%%start_time%% |  |
+| wait_for_text_present_ok | Duplicate | 30000 |
+| click_and_wait | Button |  |
+| text_like | st-popup-duplicate | The new page name you selected, "Duplicate of Dupe Spreadsheet %%start_time%%", is already in use. Please choose a different name. If you are sure you wish to overwrite the existing "Duplicate of Dupe Spreadsheet %%start_time%%" page, please press "Duplicate" again. |
+| click_and_wait | Button |  |
+| open_ok | /%%workspace%%/index.cgi?duplicate_of_dupe_spreadsheet_%%start_time%% |  |
+| wait_for_element_visible_ok | st-page-titletext |
+| text_like | st-page-titletext | Duplicate of Dupe Spreadsheet %%start_time%% |
+
+| *Comment* | Test Case: Tools: Duplicate Page Teardown |  |
+| st-admin | purge-page --w %%workspace%% --page dupe_spreadsheet_%%start_time%% |  |
+| st-admin | purge-page --w %%workspace%% --page duplicate_of_dupe_spreadsheet_%%start_time%% |  |
+
+| *Comment* | Test Case: Tools: Duplicate Spreadsheet COMPLETED |  |

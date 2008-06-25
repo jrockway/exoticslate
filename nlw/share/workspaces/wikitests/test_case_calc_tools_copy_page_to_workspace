@@ -1,0 +1,89 @@
+| *Comment* | Test Case: Tools: Copy Page to Workspace |
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Create a target workspace |  |
+| setSpeed | 100 |  |
+| st-admin | create-workspace --name newspace-ss-%%start_time%% --title "newspace-ss %%start_time%%" --account %%username%% |  |
+| st-admin | add-member --email %%username%% --workspace newspace-ss-%%start_time%% |  |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Create a page and a tag to copy |  |
+| open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=copy%20page%20spreadsheet%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link |  |
+| pause | 5000 | I hate pause; needed for entire page load |
+| click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | st-tags-addlink | 30000 |
+| click_ok | st-tags-addlink |  |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Add Tag |  |
+| wait_for_element_visible_ok | st-tags-field | 30000 |
+| type_ok | st-tags-field | Copy Spreadsheet Tag %%start_time%% |
+| wait_for_element_visible_ok | st-tags-addbutton | 20000 |
+| click_ok | st-tags-addbutton |  |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Text "Adding tag" should appear where textarea was |  |
+| wait_for_text_present_ok | Adding tag | 30000 |
+| *Comment* | Test Case: Tags. Wait for the tag textarea to reappear |  |
+| wait_for_element_visible_ok | st-tags-field | 30000 |
+| text_like | link=Copy Spreadsheet Tag %%start_time%% | Copy Spreadsheet Tag %%start_time%% |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Test Copy popup, then copy the page |  |
+| pause | 1000 |  |
+| open_ok | /%%workspace%%/index.cgi?action=copy_to_workspace_popup;page_name=copy_page_spreadsheet_%%start_time%% |  |
+| wait_for_text_present_ok | Copy | 30000 |
+| pause | 15000 |
+| select_ok | target_workspace_id | label=newspace-ss %%start_time%% (newspace-ss-%%start_time%%) |
+| type_ok | new_title | New Copy Page Spreadsheet %%start_time%% |
+| click_ok | Button |  |
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Verify copy by opening target wiki Dashboard and clicking What's New link to allow time for copy to complete |  |
+| open_ok | /newspace-ss-%%start_time%% |  |
+| open_ok | /newspace-ss-%%start_time%%/index.cgi?new_copy_page_spreadsheet_%%start_time%% |  |
+| text_like | st-tags | Copy Spreadsheet Tag %%start_time%% |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Create new content. |  |
+| open_ok | /%%workspace%%/index.cgi?copy_page_spreadsheet_%%start_time%% |  |
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Add 2nd Tag |  |
+| wait_for_element_visible_ok | st-tags-addlink | 30000 |
+| click_ok | st-tags-addlink |  |
+| wait_for_element_visible_ok | st-tags-field | 30000 |
+| type_ok | st-tags-field | Copy Spreadsheet Tag 2 %%start_time%% |
+| wait_for_element_visible_ok | st-tags-addbutton | 20000 |
+| click_ok | st-tags-addbutton |  |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Text "Adding tag" should appear where textarea was |  |
+| wait_for_text_present_ok | Adding tag | 30000 |
+| *Comment* | Test Case: Tags. Wait for the tag textarea to reappear |  |
+| wait_for_element_visible_ok | st-tags-field | 30000 |
+| text_like | link=Copy Spreadsheet Tag 2 %%start_time%% | Copy Spreadsheet Tag 2 %%start_time%% |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Overwrite old page with new content. |  |
+| open_ok | /%%workspace%%/index.cgi?action=copy_to_workspace_popup;page_name=copy_page_spreadsheet_%%start_time%% |  |
+| wait_for_text_present_ok | Copy | 10000 |
+| select_ok | target_workspace_id | label=newspace-ss %%start_time%% (newspace-ss-%%start_time%%) |
+| type_ok | new_title | New Copy Page Spreadsheet %%start_time%% |
+| click_ok | Button |  |
+| pause | 5000 |
+| text_like | //body | The new page name you selected, "New Copy Page Spreadsheet %%start_time%%", is already in use in workspace "newspace-ss-%%start_time%%" |
+| click_ok | Button |  |
+| pause | 5000 |  |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Verify overwrite by opening target wiki Dashboard and clicking What's New link to allow time for copy to complete |  |
+| open_ok | /newspace-ss-%%start_time%%/index.cgi?action=recent_changes |  |
+| wait_for_element_present_ok | link=New Copy Page Spreadsheet %%start_time%% |  |
+| click_ok | link=New Copy Page Spreadsheet %%start_time%% |  |
+| wait_for_element_present_ok | st-tags |  |
+| text_like | st-tags | Copy Spreadsheet Tag 2 %%start_time%% |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Single-space user cannot Copy |  |
+| st-admin | create-user --email newuser_%%start_time%%@ken.socialtext.net --password 123456 |  |
+| st-admin | add-member --email newuser_%%start_time%%@ken.socialtext.net --workspace newspace-ss-%%start_time%% |  |
+| st-logout |  |  |
+| open_ok | /newspace-ss-%%start_time%%/index.cgi?new_copy_page_spreadsheet_%%start_time%% |  |
+| type_ok | username | newuser_%%start_time%%@ken.socialtext.net |
+| type_ok | password | 123456 |
+| click_and_wait | //input[@value='Log in'] |  |
+| *Comment* | Test Case: Tools: Copy Page to Workspace. User has no copy to workspace menu item. |  |
+| text_unlike | //body | Copy Page to Workspace |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace Teardown |  |
+| st-admin | purge-page --w %%workspace%% --page copy_page_spreadsheet_%%start_time%% | was purged |
+| st-admin | delete-workspace --workspace newspace-ss-%%start_time%% --no-export |  |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace COMPLETED |

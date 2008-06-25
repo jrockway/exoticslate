@@ -77,11 +77,17 @@ Singleton_pause_twice: {
     # basically just checking for lack of blow up when
     # we pause a timer that was already paused.
     Socialtext::Timer->Reset();
+    usleep 1000;
     Socialtext::Timer->Continue('pausable');
     usleep 1000;
     Socialtext::Timer->Continue('pausable');
+    usleep 1000;
     Socialtext::Timer->Pause('pausable');
+    usleep 1000;
     Socialtext::Timer->Pause('pausable');
+    usleep 1000;
     my $timings = Socialtext::Timer->Report();
-    ok $timings->{'pausable'} eq 'reentered', 'double pause caused reentry';
+    ok $timings->{overall} >= .005, 'overall time greater than .005';
+    ok $timings->{pausable} >= .004, 'pausable time less than .004';
+    ok $timings->{pausable} <= .005, 'pausable time less than .005';
 }

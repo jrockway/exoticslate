@@ -16,42 +16,34 @@ sub Reset {
 sub Report {
     my $class = shift;
     foreach my $timer (keys(%$Timings)) {
-        if (ref($Timings->{$timer})) {
+        if (ref($Timings->{$timer}->{timer})) {
             $class->Stop($timer);
         }
     }
-    return {map {$_ => $Timings->{$_}} keys(%$Timings)}
+    return {map {$_ => $Timings->{$_}->{timer}} keys(%$Timings)}
 }
 
 sub Start {
     my $class = shift;
     my $timed = shift;
-    $Timings->{$timed} = $class->new();
+    $Timings->{$timed}->{counter}++;
+    $Timings->{$timed}->{timer} = $class->new();
 }
 
 sub Pause {
     my $class = shift;
     my $timed = shift;
-    if (ref($Timings->{$timed})) {
+    if (ref($Timings->{$timed}->{timer}) && $Timings->{$timed}->{counter} <= 1) {
         $class->Stop($timed);
-    }
-    else {
-        # FIXME: make the Timer reentrant
-        $Timings->{$timed} = 'reentered';
     }
 }
 
 sub Continue {
     my $class = shift;
     my $timed = shift;
-    if ($Timings->{$timed}) {
-        if (ref($Timings->{$timed})) {
-            $class->Stop($timed);
-        }
-        # FIXME: make the Timer reentrant
-        unless ($Timings->{$timed} eq 'reentered') {
-            $Timings->{$timed} = $class->new($Timings->{$timed});
-        }
+    if (ref($Timings->{$timed}->{timer})) {
+        $class->Stop($timed);
+        $Timings->{$timed}->{timer} = $class->new($Timings->{$timed}->{timer});
     }
     else {
         $class->Start($timed);
@@ -61,7 +53,8 @@ sub Continue {
 sub Stop {
     my $class = shift;
     my $timed = shift;
-    $Timings->{$timed} = $Timings->{$timed}->elapsed();
+    $Timings->{$timed}->{counter}++;
+    $Timings->{$timed}->{timer} = $Timings->{$timed}->{timer}->elapsed();
 }
 
 sub new {

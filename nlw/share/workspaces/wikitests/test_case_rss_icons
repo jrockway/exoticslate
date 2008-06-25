@@ -18,7 +18,7 @@ DONE {bz: 310} test deleting pages with Chinese chars in the title
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "RSS Icons %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "RSS Icons %%start_time%%" page has been created |
 
 | *Comment* | Test Case: RSS Icons purge the Chinese page in case it is already there. |  |
-| st-admin | purge-page --workspace %%workspace%% --page %E7%89%9B%E6%84%9B%E6%88%91 | page was purged |
+| st-admin | purge-page --workspace %%workspace%% --page %E7%89%9B%E6%84%9B%E6%88%91 |  |
 
 | *Comment* | Test Case: RSS Icons page with Chinese chars in title can't do from command line |  |
 | click_and_wait | st-home-link |  |

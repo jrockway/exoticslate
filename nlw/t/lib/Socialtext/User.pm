@@ -20,7 +20,7 @@ sub is_authenticated { ! $_[0]->is_guest() }
 
 sub is_guest { $_[0]->{is_guest} }
 
-sub user_id { 1 }
+sub user_id { $_[0]->{user_id} || 1 }
 
 sub username { 'one@foo.bar' }
 

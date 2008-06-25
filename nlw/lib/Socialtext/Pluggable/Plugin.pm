@@ -221,6 +221,8 @@ sub template_render {
 
     my %template_vars = $self->hub->helpers->global_template_vars;
 
+    $self->header_out('Content-Type' => 'text/html; charset=utf-8');
+
     my $name = $self->name;
     my $plugin_dir = $self->plugin_dir;
     

@@ -2,7 +2,12 @@ Change log for Socialtext Open
 
 2.20.X
 
-Release notes, 2.20.6.5  June 2008
+Release notes, 2.20.7.0  June 2008
+
+  Introduced dependency on plpgsql language.  
+    See docs/INSTALL.postgres about CREATE LANGUAGE
+
+Release notes, 2.20.6.6  June 2008
 
   Searches include "Snippets" from KinoSearch.
 

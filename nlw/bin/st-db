@@ -14,6 +14,7 @@ my %opts = (
 );
 GetOptions( \%opts,
     'verbose',
+    'force',
     'schema|s=s',
 ) or usage();
 my $command = shift @ARGV;

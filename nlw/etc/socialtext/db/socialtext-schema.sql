@@ -7,6 +7,16 @@ COMMENT ON SCHEMA public IS 'Standard public schema';
 
 SET search_path = public, pg_catalog;
 
+CREATE FUNCTION auto_vivify_person() RETURNS "trigger"
+    AS $$
+BEGIN
+    INSERT INTO person (id, name) 
+        VALUES (NEW.system_unique_id, NEW.driver_username);
+    RETURN NEW;
+END
+$$
+    LANGUAGE plpgsql;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -177,11 +187,60 @@ CREATE TABLE "WorkspaceRolePermission" (
 );
 
 CREATE SEQUENCE "Workspace___workspace_id"
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+CREATE TABLE event (
+    id integer NOT NULL,
+    "timestamp" timestamptz,
+    actor_id integer,
+    "action" text,
+    "object" text,
+    context text
+);
+
+CREATE SEQUENCE event_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
     CACHE 1;
+
+CREATE TABLE person (
+    id integer NOT NULL,
+    name text,
+    photo text,
+    small_photo text,
+    first_name text,
+    middle_name text,
+    last_name text,
+    "position" text,
+    "location" text,
+    email text,
+    work_phone text,
+    mobile_phone text,
+    home_phone text,
+    aol_sn text,
+    yahoo_sn text,
+    gtalk_sn text,
+    skype_sn text,
+    sametime_sn text,
+    twitter_sn text,
+    blog text,
+    personal_url text,
+    linkedin_url text,
+    facebook_url text,
+    company text,
+    supervisor_id integer,
+    assistant_id integer
+);
+
+CREATE TABLE person_watched_people__person (
+    person_id1 integer NOT NULL,
+    person_id2 integer NOT NULL
+);
 
 CREATE TABLE search_set_workspaces (
     search_set_id bigint NOT NULL,
@@ -213,6 +272,23 @@ CREATE TABLE "storage" (
     "key" varchar(128),
     value text,
     datatype varchar(10)
+);
+
+CREATE TABLE tag (
+    id integer NOT NULL,
+    name text
+);
+
+CREATE SEQUENCE tag_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+CREATE TABLE tag_people__person_tags (
+    person_id integer NOT NULL,
+    tag_id integer NOT NULL
 );
 
 ALTER TABLE ONLY "Account"
@@ -271,6 +347,18 @@ ALTER TABLE ONLY "Workspace"
     ADD CONSTRAINT "Workspace_pkey"
             PRIMARY KEY (workspace_id);
 
+ALTER TABLE ONLY event
+    ADD CONSTRAINT event_pkey
+            PRIMARY KEY (id);
+
+ALTER TABLE ONLY person
+    ADD CONSTRAINT person_pkey
+            PRIMARY KEY (id);
+
+ALTER TABLE ONLY person_watched_people__person
+    ADD CONSTRAINT person_watched_people__person_pkey
+            PRIMARY KEY (person_id1, person_id2);
+
 ALTER TABLE ONLY search_sets
     ADD CONSTRAINT search_sets_pkey
             PRIMARY KEY (search_set_id);
@@ -282,6 +370,14 @@ ALTER TABLE ONLY sessions
 ALTER TABLE ONLY "System"
     ADD CONSTRAINT system_pkey
             PRIMARY KEY (field);
+
+ALTER TABLE ONLY tag_people__person_tags
+    ADD CONSTRAINT tag_people__person_tags_pkey
+            PRIMARY KEY (person_id, tag_id);
+
+ALTER TABLE ONLY tag
+    ADD CONSTRAINT tag_pkey
+            PRIMARY KEY (id);
 
 CREATE UNIQUE INDEX "Account___name"
 	    ON "Account" (name);
@@ -310,11 +406,30 @@ CREATE UNIQUE INDEX "User___lower___username"
 CREATE UNIQUE INDEX "Workspace___lower___name"
 	    ON "Workspace" (lower((name)::text));
 
+CREATE INDEX ix_event_actor_id
+	    ON event (actor_id);
+
+CREATE INDEX ix_person_assistant_id
+	    ON person (assistant_id);
+
+CREATE INDEX ix_person_supervisor_id
+	    ON person (supervisor_id);
+
 CREATE UNIQUE INDEX search_set_workspaces___search_set_id___search_set_id___workspa
 	    ON search_set_workspaces (search_set_id, workspace_id);
 
 CREATE UNIQUE INDEX search_sets___owner_user_id___owner_user_id___name
 	    ON search_sets (owner_user_id, lower((name)::text));
+
+CREATE TRIGGER person_ins
+    AFTER INSERT ON "UserId"
+    FOR EACH ROW
+    EXECUTE PROCEDURE auto_vivify_person();
+
+ALTER TABLE ONLY event
+    ADD CONSTRAINT event_actor_id_fk
+            FOREIGN KEY (actor_id)
+            REFERENCES "UserId"(system_unique_id);
 
 ALTER TABLE ONLY "WorkspacePingURI"
     ADD CONSTRAINT fk_040b7e8582f72e5921dc071311fc4a5f
@@ -381,6 +496,41 @@ ALTER TABLE ONLY "WorkspaceRolePermission"
             FOREIGN KEY (workspace_id)
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY person
+    ADD CONSTRAINT person_assistant_id_fk
+            FOREIGN KEY (assistant_id)
+            REFERENCES "UserId"(system_unique_id);
+
+ALTER TABLE ONLY person
+    ADD CONSTRAINT person_id_fk
+            FOREIGN KEY (id)
+            REFERENCES "UserId"(system_unique_id);
+
+ALTER TABLE ONLY person
+    ADD CONSTRAINT person_supervisor_id_fk
+            FOREIGN KEY (supervisor_id)
+            REFERENCES "UserId"(system_unique_id);
+
+ALTER TABLE ONLY tag_people__person_tags
+    ADD CONSTRAINT person_tags_fk
+            FOREIGN KEY (person_id)
+            REFERENCES "UserId"(system_unique_id);
+
+ALTER TABLE ONLY person_watched_people__person
+    ADD CONSTRAINT person_watched_people_fk
+            FOREIGN KEY (person_id1)
+            REFERENCES "UserId"(system_unique_id);
+
+ALTER TABLE ONLY person_watched_people__person
+    ADD CONSTRAINT person_watched_people_inverse_fk
+            FOREIGN KEY (person_id2)
+            REFERENCES "UserId"(system_unique_id);
+
+ALTER TABLE ONLY tag_people__person_tags
+    ADD CONSTRAINT tag_people_fk
+            FOREIGN KEY (tag_id)
+            REFERENCES tag(id);
+
 ALTER TABLE ONLY "UserWorkspaceRole"
     ADD CONSTRAINT userworkspacerole___role___role_id___role_id___n___1___1___0
             FOREIGN KEY (role_id)
@@ -395,6 +545,7 @@ ALTER TABLE ONLY "Workspace"
     ADD CONSTRAINT workspace___account___account_id___account_id___n___1___1___0
             FOREIGN KEY (account_id)
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
+
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
 INSERT INTO "System" VALUES ('socialtext-schema-version', '3');

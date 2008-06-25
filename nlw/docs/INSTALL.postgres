@@ -97,6 +97,9 @@ Finally, create the nlw user and database:
     # Create the "NLW" database, owned by "nlw"
     sudo -u postgres createdb -O nlw NLW
 
+    # Add the plpgsql language to the database
+    sudo -u postgres psql NLW -c 'CREATE LANGUAGE plpgsql'
+
 Verify that the database was created by accessing it from the
 Postgres shell.
 

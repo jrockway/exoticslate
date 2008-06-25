@@ -104,7 +104,7 @@ sub recreate {
     eval { $self->dump } unless $opts{no_dump};
     $self->dropdb;
     $self->createdb;
-    $self->_run_sql_file($self->_schema_filename);
+    $self->run_sql_file($self->_schema_filename);
     $self->_add_required_data;
 }
 
@@ -121,7 +121,7 @@ sub sync {
     my $current_version = $self->current_version;
     $self->_display("Current schema version is $current_version\n");
     if ($current_version == 0) {
-        $self->_run_sql_file($self->_schema_filename);
+        $self->run_sql_file($self->_schema_filename);
         $self->_add_required_data;
         $self->_display("Set up fresh schema\n");
     }
@@ -131,8 +131,8 @@ sub sync {
             eval { $self->dump };
     
             for my $s (@scripts) {
-                $self->_run_sql_file($s->{name});
-                $self->_set_schema_version($s->{to});
+                $self->run_sql_file($s->{name});
+                $self->set_schema_version($s->{to});
             }
         }
         else {
@@ -297,7 +297,13 @@ sub _display {
     print $self->schema_name . ": $msg";
 }
 
-sub _run_sql_file {
+=head2 run_sql_file 
+
+Executes the SQL file with psql.
+
+=cut
+
+sub run_sql_file {
     my $self = shift;
     my $file = shift;
 
@@ -305,7 +311,13 @@ sub _run_sql_file {
     $self->_db_shell_run("$c{psql} -e -f $file");
 }
 
-sub _set_schema_version {
+=head2 set_schema_version 
+
+Sets the schema version to the given value in the "System" table.
+
+=cut
+
+sub set_schema_version {
     my $self = shift;
     my $new_version = shift;
 
@@ -338,6 +350,7 @@ sub createdb {
     my %c = $self->connect_params();
     disconnect_dbh();
     $self->_db_shell_run("createdb $c{db_name}");
+    $self->_db_shell_run("sudo -u postgres psql $c{db_name} -c 'CREATE LANGUAGE plpgsql'");
 }
 
 =head2 dropdb 

@@ -1,21 +1,21 @@
 Automated backup and restore testing
-*NOTE: workspace admin and all the help workspaces are automatically restored during a backup
-regardless of the status of the incoming tarball*
+*NOTE: THIS TEST RELIES ON HAVING VERY FEW WORKSPACES ON THE APPLIANCE AND WILL TIMEOUT OTHERWISE AND FAIL*
 
-| *Comment* | Test Case: Console Backup and Restore |  |
+| *Comment* | Test Case: Console Backup and Restore: Test Case: Console Backup and Restore |  |
 
-| *Comment* | Give system admin rights and add member |  |
+| *Comment* | Test Case: Console Backup and Restore: Give system admin rights and add member |  |
 
 | st_admin | create-user --e %%email%% --p %%password%% |  |
 | st_admin | give-system-admin --e %%email%% |  |
 | st-admin | add-member --w admin --e %%email%% |  |
 
-| *Comment* | Verify that the help-en space exists |  |
+| *Comment* | Test Case: Console Backup and Restore: Verify that the help-en space exists |  |
 
 | open_ok | /help-en |  |
 | text_like | Socialtext Documentation |  |
+| st-admin | add-member --w help-en --e %%email%% |  |
 
-| *Comment* | Create a test page in the admin workspace |  |
+| *Comment* | Test Case: Console Backup and Restore: Create a test page in the admin workspace |  |
 
 | open_ok | /admin/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
@@ -30,17 +30,17 @@ regardless of the status of the incoming tarball*
 | wait_for_element_visible_ok | st-page-titletext | 30000 |
 | text_like | st-page-titletext | Backup Restore %%start_time%% |
 
-| *Comment* | Create a new empty workspace |  |
+| *Comment* | Test Case: Console Backup and Restore: Create a new empty workspace |  |
 
 | st_admin | create-workspace --name empty-%%start_time%% --title "Empty %%start_time%%" --empty |
 | st-admin | add-member --w empty-%%start_time%% --e %%email%% |  |
 
-| *Comment* | Open the console and verify it is there |  |
+| *Comment* | Test Case: Console Backup and Restore: Open the console and verify it is there |  |
 
 | open_ok | /console/index.cgi?rm=Backup |  |
 | text_like | Perform Backup Now |  |
 
-| *Comment* | Set the Samba share values |  |
+| *Comment* | Test Case: Console Backup and Restore: Set the Samba share values |  |
 
 | type_ok | smbhost | topaz.socialtext.net |
 | type_ok | smbshare | socialtext |
@@ -49,7 +49,7 @@ regardless of the status of the incoming tarball*
 | type_ok | archivedir | qa1 |
 | click_and_wait | //input[@value='Set'] |  |
 
-| *Comment* | Verify the Samba share values |  |
+| *Comment* | Test Case: Console Backup and Restore: Verify the Samba share values |  |
 | open_ok | /console/index.cgi?rm=Backup |  |
 | verifyValue | smbhost | topaz.socialtext.net |
 | verifyValue | smbshare | socialtext |
@@ -57,46 +57,46 @@ regardless of the status of the incoming tarball*
 | verifyValue | archivedir | qa1 |
 | verifyValue | smbpass | il8jeeNg |
 
-| *Comment* | Do the Backup |  |
+| *Comment* | Test Case: Console Backup and Restore: Do the Backup |  |
 | click_and_wait | //input[@value='Backup'] |  |
 | text_like | Backup is in progress |  |
 
-| *Comment* | AFAIK, the console freezes at this point, so just wait 30 seconds |  |
+| *Comment* | Test Case: Console Backup and Restore: AFAIK, the console freezes at this point, so just wait 30 seconds |  |
 
 | pause | 30000 | thirty seconds |
 
-| *Comment* | create a second test page in admin. It should be gone after restore. |  |
+| *Comment* | Test Case: Console Backup and Restore: create a second test page in admin. It should be gone after restore. |  |
 
 | st_admin | update-page --w admin --e %%email%% --page --page "Backup Restore Page 2 %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "Backup Restore Page 2 %%start_time%%" page has been created. |
 
-| *Comment* | create a second empty workspace. It should be gone after restore. |  |
+| *Comment* | Test Case: Console Backup and Restore: create a second empty workspace. It should be gone after restore. |  |
 
 | st_admin | create-workspace --name empty-2-%%start_time%% --title "Empty 2 %%start_time%%" --empty |
 
-| *Comment* | Do the Restore |  |
+| *Comment* | Test Case: Console Backup and Restore: Do the Restore |  |
 
 | open_ok | /console/index.cgi?rm=Backup |  |
 | wait_for_element_visible_ok | restore_file | 30000 |
 
-| *Comment* | Select most recent element |  |
+| *Comment* | Test Case: Console Backup and Restore: Select most recent element |  |
 
 | select_ok | restore_file | index=0 |
 
 | click_and_wait | //input[@value='Restore'] |  |
 | text_like | Restore in progress |  |
 
-| *Comment* | AFAIK, the console freezes at this point, so just wait a long time |  |
+| *Comment* | Test Case: Console Backup and Restore: AFAIK, the console freezes at this point, so just wait a long time |  |
 
 | pause | 180000 | three minutes |
 
-| *Comment* | Verify that the restore completed |  |
+| *Comment* | Test Case: Console Backup and Restore: Verify that the restore completed |  |
 
 | st_admin | give-system-admin --e %%email%% |  |
 
 | open_ok | /console/index.cgi?rm=Backup |  |
 | text_unlike | //body | Restore in progress |
 
-| *Comment* | help-en is there with reasonable content |  |
+| *Comment* | Test Case: Console Backup and Restore: help-en is there with reasonable content |  |
 
 | open_ok | /help-en |  |
 | text_like | Socialtext Documentation |  |
@@ -106,7 +106,7 @@ regardless of the status of the incoming tarball*
 | wait_for_element_visible_ok | st-incoming-links-listing | 30000 |
 | text_like | st-incoming-links-listing | How do I make links? |
 
-| *Comment* | the RESTORED admin is there containing first new page and missing second new page |  |
+| *Comment* | Test Case: Console Backup and Restore: the RESTORED admin is there containing first new page and missing second new page |  |
 | st_login |  |  |
 | open_ok | /admin/index.cgi?action=recent_changes |  |
 | wait_for_element_present_ok | link=Backup Restore %%start_time%% |  |
@@ -116,17 +116,19 @@ regardless of the status of the incoming tarball*
 | text_like | st-page-titletext | Backup Restore %%start_time%% |
 | text_like | st-page-content | Backup Restore content %%start_time%% |
 
-| *Comment* | first new workspace is there |  |
+| *Comment* | Test Case: Console Backup and Restore: first new workspace is there |  |
 | open_ok | /help-en |  |
 | open_ok | /empty-%%start_time%% |  |
 | location_like | empty-%%start_time%% |  |
 
-| *Comment* | second new workspace is gone, end up at admin instead |  |
+| *Comment* | Test Case: Console Backup and Restore: second new workspace is gone, end up at admin instead |  |
 | open_ok | /help-en |  |
 | open_ok | /empty-2-%%start_time%% |  |
-| location_like | admin |  |
 
-| *Comment* | do some operations in admin to verify a working installation |  |
+| *Comment* | Test Case: Console Backup and Restore: return to last login |  |
+| location_like | help-en |  |
+
+| *Comment* | Test Case: Console Backup and Restore: do some operations in admin to verify a working installation |  |
 
 | open_ok | /admin/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
@@ -141,13 +143,13 @@ regardless of the status of the incoming tarball*
 | wait_for_element_visible_ok | st-page-titletext | 30000 |
 | text_like | st-page-titletext | Backup Restore 3 %%start_time%% |
 
-| *Comment* | Teardown |  |
+| *Comment* | Test Case: Console Backup and Restore: Teardown |  |
 
 | st-admin | delete-workspace --no-export --w empty-%%start_time%% | The empty-%%start_time%% workspace has been deleted. |
 | st-admin | purge-page --w admin --p backup_restore_%%start_time%% | was purged |
 | st-admin | purge-page --w admin --p backup_restore_3_%%start_time%% | was purged |
 
-| *Comment* | empty-2 should already be gone. Tear it down anyway. |  |
+| *Comment* | Test Case: Console Backup and Restore: empty-2 should already be gone. Tear it down anyway. |  |
 
 | st-admin | delete-workspace --no-export --w empty-2-%%start_time%% |  |
 

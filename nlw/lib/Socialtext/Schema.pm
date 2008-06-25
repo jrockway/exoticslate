@@ -350,7 +350,6 @@ sub createdb {
     my %c = $self->connect_params();
     disconnect_dbh();
     $self->_db_shell_run("createdb $c{db_name}");
-    $self->_db_shell_run("sudo -u postgres psql $c{db_name} -c 'CREATE LANGUAGE plpgsql'");
 }
 
 =head2 dropdb 

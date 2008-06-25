@@ -94,11 +94,14 @@ Finally, create the nlw user and database:
     # Allow it to create new databases, but not new users
     sudo -u postgres createuser --no-superuser --createdb --no-createrole nlw
 
+    # Add the plpgsql language to the database
+    # We specify the template1 database, so that all subsequent databases
+    # get the plpgsql language.  You could replace template1 with nlw
+    # if you have already created the database.
+    sudo -u postgres psql template1 -c 'CREATE LANGUAGE plpgsql'
+
     # Create the "NLW" database, owned by "nlw"
     sudo -u postgres createdb -O nlw NLW
-
-    # Add the plpgsql language to the database
-    sudo -u postgres psql NLW -c 'CREATE LANGUAGE plpgsql'
 
 Verify that the database was created by accessing it from the
 Postgres shell.

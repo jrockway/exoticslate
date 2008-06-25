@@ -2,18 +2,20 @@
 *Firefox is required*
 *Default user is required*
 
-* [Disable LDAP]
+* [Enable LDAP]
 
 * [Core Testcases]
 * [File Testcases]
-* [Default User Testcases]
+* [LDAP Testcases]
 * [Localization Testcases]
 * [Test case: Business Control Panel]
 * [Report Testcases]
 
 LDAP Testcases will use a known LDAP user instead of a Default user
 
-* [LDAP Testcases]
+Default User Testcases will Disable LDAP so it can test wiki functions that only work for the Default user
+
+* [Default User Testcases]
 
 ^ All pages tagged 'Testcase' (only a list, visit the pages above for tests)
 

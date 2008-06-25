@@ -26,8 +26,6 @@
 | *Comment* | Test Case: All Files user_1 uploads wikitest.doc and wikitest.jpg |  |
 | st-logout |  |  |
 | st-login | %%all_files_user_1%% | 123456 |
-| click_and_wait | st-home-link |  |
-| wait_for_element_visible_ok | st-newpage-link | 30000 |
 | click_and_wait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
@@ -41,7 +39,7 @@
 
 | *Comment* | Test Case: All Files wikitest.jpg upload waits for the Done button |  |
 | wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
-| pause | 5000 | i hate pause |
+| pause | 5000 |  |
 | wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
 | type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.doc |
 | wait_for_text_present_ok | Uploaded files: | 10000 |
@@ -99,32 +97,78 @@
 | wait_for_element_visible_ok | st-attachments-listing | 10000 |
 | text_like | //a[contains(@href,'original/wikitestzip.zip')] | wikitestzip.zip |
 
-| *Comment* | Test Case: All Files Sorting filename and page title |  |
+| *Comment* | Test Case: All Files list view |  |
 | st-logoutin |  |  |
 | click_and_wait | st-wiki-subnav-link-whats-new |  |
-| click_and_wait | link=All Files |  |
-| click_ok | link=Filename |  |
-| text_like | st-allfiles | qr/wikitestzip.+wikitest\.jpg/ |
-| click_ok | link=Filename |  |
+| text_like | Changes in Last |  |
+| clickAndWait | link=All Files |  |
+| text_like | All Files |  |
+
+| *Comment* | Test Case: All Files Sorting tests |  |
+
+| *Comment* | Test Case: All Files default sorted Filename asc |  |
 | text_like | st-allfiles | qr/wikitest\.jpg.+wikitestzip/ |
-| click_ok | link=Page Title |  |
+
+| *Comment* | label=File name (↓ ) |  |
+
+| *Comment* | Test Case: All Files sorted Filename desc |  |
+| select_ok | sort-picker | index=1 |
+| pause | 10000 |  |
+| text_like | st-allfiles | qr/wikitestzip.+wikitest\.jpg/ |
+
+| *Comment* | label=Size (↓ ) |  |
+
+| *Comment* | Test Case: All Files sort File size desc |  |
+| select_ok | sort-picker | label=Size |
+| pause | 10000 |  |
 | text_like | st-allfiles | qr/All Files %%start_time%% 1.+All Files %%start_time%% 2/ |
-| click_ok | link=Page Title |  |
+
+| *Comment* | label=Size |  |
+
+| *Comment* | Test Case: All Files sort File size asc |  |
+| select_ok | sort-picker | index=5 |
+| pause | 10000 |  |
 | text_like | st-allfiles | qr/All Files %%start_time%% 2.+All Files %%start_time%% 1/ |
 
-| *Comment* | Test Case: All Files Sorting uploaded by, date, size |  |
-| click_ok | link=Uploaded By |  |
-| text_like | st-allfiles | qr/%%user_1_regex%%.+%%user_2_regex%%/ |
-| click_ok | link=Uploaded By |  |
-| text_like | st-allfiles | qr/%%user_2_regex%%.+%%user_1_regex%%/ |
-| click_ok | link=Date Uploaded |  |
-| text_like | st-allfiles | qr/All Files %%start_time%% 2.+All Files %%start_time%% 1/ |
-| click_ok | link=Date Uploaded |  |
+| *Comment* | label=Title |  |
+
+| *Comment* | Test Case: All Files sort Title asc |  |
+| select_ok | sort-picker | label=Page Title |
+| pause | 10000 |  |
 | text_like | st-allfiles | qr/All Files %%start_time%% 1.+All Files %%start_time%% 2/ |
-| click_ok | link=Size |  |
-| text_like | st-allfiles | qr/All Files %%start_time%% 1.+All Files %%start_time%% 2/ |
-| click_ok | link=Size |  |
+
+| *Comment* | label=Title (↓ ) |  |
+
+| *Comment* | Test Case: All Files sort Title desc |  |
+| select_ok | sort-picker | index=2 |
+| pause | 10000 |  |
 | text_like | st-allfiles | qr/All Files %%start_time%% 2.+All Files %%start_time%% 1/ |
+
+| *Comment* | Test Case: All Files sort Uploaded by asc |  |
+| select_ok | sort-picker | label=Uploaded By |
+| pause | 10000 |  |
+| text_like | st-allfiles | qr/All Files %%start_time%% 1.+All Files %%start_time%% 2/ |
+
+| *Comment* | label=Uploaded By (↓ ) |  |
+
+| *Comment* | Test Case: All Files sort Uploaded by desc |  |
+| select_ok | sort-picker | index=3 |
+| pause | 10000 |  |
+| text_like | st-allfiles | qr/All Files %%start_time%% 2.+All Files %%start_time%% 1/ |
+
+| *Comment* | label=Date (↓) |  |
+
+| *Comment* | Test Case: All Files sort Date desc |  |
+| select_ok | sort-picker | label=Date Uploaded |
+| pause | 10000 |  |
+| text_like | st-allfiles | qr/All Files %%start_time%% 2.+All Files %%start_time%% 1/ |
+
+| *Comment* | label=Date |  |
+
+| *Comment* | Test Case: All Files sort Date asc |  |
+| select_ok | sort-picker | index=4 |
+| pause | 10000 |  |
+| text_like | st-allfiles | qr/All Files %%start_time%% 1.+All Files %%start_time%% 2/ |
 
 | *Comment* | Test Case: All Files Teardown |  |
 | st-admin | purge-page --workspace %%workspace%% --page all_files_%%start_time%%_1 |  |

@@ -1,3 +1,4 @@
+#@COPYRIGHT@
 package Socialtext::SQL;
 use strict;
 use warnings;

@@ -97,7 +97,7 @@
 | VerifyValue | Button | Compare Revisions |
 
 | *Comment* | Test Case: What's New Teardown |  |
-| click_and_wait | st-home-link | set up for next included test |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0001 | page was purged |
 | st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0002 | page was purged |
 | st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0003 | page was purged |

@@ -190,6 +190,6 @@ Click that tag | Tag list page appears with two remaining tagged pages
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_2_%%start_time%% |  |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_3_%%start_time%% |  |
 
-| clickAndWait | st-home-link | set up for next included test |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 
 | *Comment* | Test Case: Calc Tagging COMPLETED |  |

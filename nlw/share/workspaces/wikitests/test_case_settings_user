@@ -12,7 +12,7 @@
 | open_ok | /test-data |  |
 | text_like | rt 25472%%start_time%% |  |
 | st-admin | remove-member --email %%email%% --workspace rt-25472%%start_time%% |  |
-| click_ok | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | wait_for_text_not_present_ok | rt 25472%%start_time%% | 5000 |
 | st-admin | delete-workspace --workspace rt-25472%%start_time%% --no-export |  |
 | *Comment* | Test Case: Settings: User END RT 25472 |  |

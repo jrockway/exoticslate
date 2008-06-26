@@ -47,7 +47,7 @@
 | text_like | st-revision-compare-table | new_content_%%start_time%% |
 
 | *Comment* | Tools: Delete Page: Teardown |  |
-| click_and_wait | st-home-link | prepare for next included test |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | st-admin | purge-page --workspace %%workspace%% --page delete_testpage_%%start_time%% | page was purged |
 | st-admin | purge-page --workspace %%workspace%% --page backlink_testpage_%%start_time%% | page was purged |
 

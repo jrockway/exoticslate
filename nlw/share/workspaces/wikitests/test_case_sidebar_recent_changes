@@ -115,7 +115,7 @@
 | wait_for_element_not_present_ok | st-recent-changes-title | 5000 |
 
 | *Comment* | Test Case: SRC: Teardown |  |
-| clickAndWait | st-home-link | set up for next included test |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | st-admin | purge-page --workspace %%workspace%% --page side_%%start_time%%_1 | qr/The side-%%start_time%%-1 page was purged/ |
 | st-admin | purge-page --workspace %%workspace%% --page side_%%start_time%%_2 | qr/The side-%%start_time%%-2 page was purged/ |
 | st-admin | purge-page --workspace %%workspace%% --page side_%%start_time%%_3 | qr/The side-%%start_time%%-3 page was purged/ |

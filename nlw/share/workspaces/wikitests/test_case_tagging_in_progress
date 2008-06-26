@@ -180,7 +180,7 @@ Observe that tag | tag is still in list
 Click that tag | Tag list page appears with two remaining tagged pages
 
 | *Comment* | Test Case: Tagging Teardown |  |
-| clickAndWait | st-home-link | set up for next included test |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page%%start_time%% | page was purged |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page1%%start_time%% | page was purged |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page2%%start_time%% | page was purged |

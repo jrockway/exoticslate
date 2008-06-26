@@ -26,7 +26,7 @@ TODO: Figure out a way to test the other config functions
 
 | *Comment* | Test Case: Workspace Configuration Homepage Setting |  |
 | st-admin | set_workspace_config --workspace %%workspace%% homepage_is_dashboard 0 |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | st-page-maincontent | This is the home page for |
 | st-admin | set_workspace_config --workspace %%workspace%% homepage_is_dashboard 1 |  |
 
@@ -80,7 +80,7 @@ TODO: Figure out a way to test the other config functions
 
 | *Comment* | Test Case: Workspace Configuration Comment Custom Fields |  |
 | st-admin | set-comment-form-custom-fields --workspace %%workspace%% "Field A" "Bee Field" "Red Field" |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | link=Announcements and Links |  |
 | click_ok | st-comment-button-link |  |
 | open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=announcements_and_links;caller_action=display |  |

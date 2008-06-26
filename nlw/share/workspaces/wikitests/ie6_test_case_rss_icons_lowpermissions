@@ -17,7 +17,7 @@ It seems that Selenium cannot analyze the content of feed pages because they are
 
 | *Comment* | Test Case: RSS Icons page with Chinese chars in title can't do from command line
 and can't do it in combination with ASCII chars from start_time |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |

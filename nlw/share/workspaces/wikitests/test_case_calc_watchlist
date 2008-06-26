@@ -23,7 +23,7 @@ user removes page from watchlist by clicking the star on the page icon reverses 
 Visit some individual pages in the workspace; add them to the watchlist. View watchlist; pages appear in watchlist
 
 | *Comment* | Test case: Watchlist check watchlist |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=watchlist%20aaa%20spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for save |
@@ -31,7 +31,7 @@ Visit some individual pages in the workspace; add them to the watchlist. View wa
 | st-watch-page | 1 |  |
 | st-is-watched | 1 |  |
 
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=watchlist%20bbb%20spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 12000 | I hate pause; needed for save |
@@ -39,7 +39,7 @@ Visit some individual pages in the workspace; add them to the watchlist. View wa
 | st-watch-page | 1 |  |
 | st-is-watched | 1 |  |
 
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=watchlist%20ccc%20spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for save |
@@ -123,7 +123,7 @@ check for title sorting
 add a new page for date and revision sorting
 
 | *Comment* | Test case: Watchlist date and rev sort |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=watchlist%20newpage%20spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for save |

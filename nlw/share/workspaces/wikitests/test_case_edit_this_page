@@ -4,7 +4,7 @@
 | st-admin | update-page --workspace %%workspace%% --email %%email%% --page "Edit This Page %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "Edit This Page %%start_time%%" page has been created. |
 
 | *Comment* | Test Case: Edit This Page content |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | link=Edit This Page %%start_time%% |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |

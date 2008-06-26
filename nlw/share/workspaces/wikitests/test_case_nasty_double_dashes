@@ -10,7 +10,7 @@ Unfortunately, Selenium keeps right on going, delivering a false PASS, while a r
 | set | test_string | `Hello -- World %%start_time%%` |
 | set | test_string_escaped | `Hello \-\- World %%start_time%%` |
 
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |

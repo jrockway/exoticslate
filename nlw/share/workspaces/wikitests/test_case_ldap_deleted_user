@@ -27,7 +27,7 @@ This test case assumes the following:
 | text_like | st-homepage | Welcome, %%test_username%% |
 
 | *Comment* | Test case: user is treated as being logged in; "Edit" button is present, and so is "Logout" link |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | link=eraseme %%start_time%% |  |
 | text_like | st-editing-tools | Edit |
 | wait_for_element_visible_ok | st-edit-button-link | 30000 |

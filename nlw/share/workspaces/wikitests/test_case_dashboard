@@ -247,7 +247,7 @@ Click Invite Your Colleagues | Invite New Users interface page appears
 
 | *Comment* | Test Case: Dashboard Teardown |  |
 
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Your Notepad |  |
 | type_ok | favorites__which_page |  |

@@ -2,7 +2,7 @@
 
 | *Comment* | Test Case: Set User Names Email Addresses are hidden in Public workspace |  |
 | st-admin | set-permissions --w %%workspace%% --p member-only | The permissions for the %%workspace%% workspace have been changed to member-only |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | st-newpage-link |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |

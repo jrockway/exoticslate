@@ -1,6 +1,6 @@
 | *Comment* | STARTING Test Case: Link Interface |  |
 | *Comment* | Test Case: Link Interface create page to be linked to |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
@@ -11,7 +11,7 @@
 | click_ok | st-save-button-link |  |
 
 | *Comment* | Test Case: Link Interface create page with the link |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |

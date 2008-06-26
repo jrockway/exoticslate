@@ -70,7 +70,7 @@
 | text_like | st-search-content | qr/\@hidden/ |
 
 | *Comment* | Test Case: Hidden email address in home page |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | qr/\@hidden/ |  |
 
 | *Comment* | Test Case: Hidden Email Address Teardown |  |

@@ -22,7 +22,7 @@
 | text_like | st-update | by Guest User |
 
 | *Comment* | Test Case: Public. Verify central page is home page |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | st-page-maincontent | This is the home page for |
 | text_like | st-editing-tools | Edit |
 | text_like | st-editing-tools | Comment |

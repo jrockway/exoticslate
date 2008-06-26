@@ -26,7 +26,7 @@
 | *Comment* | Test Case: Manage Files user_1 uploads wikitest.doc and wikitest.pdf |  |
 | st-logout |  |  |
 | st-login | %%manage_files_user_1%% | 123456 |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
@@ -108,7 +108,7 @@
 | text_like | //a[contains(@href,'original/wikitest.txt')] | wikitest.txt |
 
 | *Comment* | Test Case: Manage Files reload the page or selenium barfs on Manage Files |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | link=Manage Files %%start_time%% |  |
 
 | *Comment* | Test Case: Manage Files Sorting |  |
@@ -200,6 +200,6 @@
 | click_and_wait | Button |  |
 | st-admin | remove-member --email %%manage_files_user_1%% --workspace %%workspace%% |  |
 | st-admin | remove-member --email %%manage_files_user_2%% --workspace %%workspace%% |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 
 | *Comment* | Test Case: Manage Files COMPLETED |

@@ -50,7 +50,7 @@
 | type_ok | new_password | 654321 |
 | type_ok | new_password_retype | 654321 |
 | click_and_wait | Button |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | st-user-welcome | Welcome, First %%start_time%% Last %%start_time%% |
 
 | *Comment* | Test Case: Settings: User test list all users functionality |  |
@@ -90,7 +90,7 @@
 | text_like | st-settings-section | Include Recently |
 | click_ok | display__include_breadcrumbs |  |
 | click_and_wait | Button |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | link=Announcements and Links |  |
 | text_like | st-breadcrumbs | Recently Viewed |
 
@@ -105,7 +105,7 @@
 | click_and_wait | link=Your Notepad |  |
 | type_ok | favorites__which_page | %%new_name%% |
 | click_and_wait | Button |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | link=Your Notepad |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
@@ -117,7 +117,7 @@
 | click_and_wait | link=What's New |  |
 | click_ok | recent_changes__include_in_pages |  |
 | click_and_wait | Button |  |
-| click_and_wait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | click_and_wait | link=Announcements and Links |  |
 | wait_for_text_present_ok | First Post | 1000 |
 | text_like | st-recent-changes | First Post in No Brackets %%start_time%% Weblog |

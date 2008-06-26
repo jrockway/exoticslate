@@ -429,7 +429,7 @@ CREATE TRIGGER person_ins
 ALTER TABLE ONLY event
     ADD CONSTRAINT event_actor_id_fk
             FOREIGN KEY (actor_id)
-            REFERENCES "UserId"(system_unique_id);
+            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY "WorkspacePingURI"
     ADD CONSTRAINT fk_040b7e8582f72e5921dc071311fc4a5f
@@ -499,10 +499,8 @@ ALTER TABLE ONLY "WorkspaceRolePermission"
 ALTER TABLE ONLY person
     ADD CONSTRAINT person_assistant_id_fk
             FOREIGN KEY (assistant_id)
-            REFERENCES "UserId"(system_unique_id);
+            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
 
--- Set ON DELETE CASCADE here becuase there is a ST::UserId->delete method
--- that will blow up if it's missing.
 ALTER TABLE ONLY person
     ADD CONSTRAINT person_id_fk
             FOREIGN KEY (id)
@@ -511,22 +509,22 @@ ALTER TABLE ONLY person
 ALTER TABLE ONLY person
     ADD CONSTRAINT person_supervisor_id_fk
             FOREIGN KEY (supervisor_id)
-            REFERENCES "UserId"(system_unique_id);
+            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT person_tags_fk
             FOREIGN KEY (person_id)
-            REFERENCES "UserId"(system_unique_id);
+            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY person_watched_people__person
     ADD CONSTRAINT person_watched_people_fk
             FOREIGN KEY (person_id1)
-            REFERENCES "UserId"(system_unique_id);
+            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY person_watched_people__person
     ADD CONSTRAINT person_watched_people_inverse_fk
             FOREIGN KEY (person_id2)
-            REFERENCES "UserId"(system_unique_id);
+            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT tag_people_fk
@@ -550,4 +548,4 @@ ALTER TABLE ONLY "Workspace"
 
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '3');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '4');

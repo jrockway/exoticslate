@@ -84,6 +84,7 @@ ServerSignature On
     AddType application/x-tar .tgz
     AddType image/bmp .bmp
     AddType text/x-hdml .hdml
+    AddType application/json .json
 </IfModule>
 
 AddDefaultCharset utf-8

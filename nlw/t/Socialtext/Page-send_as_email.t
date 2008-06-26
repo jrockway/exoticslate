@@ -257,6 +257,6 @@ EOF
 
     unlike( $text, qr/^.{80,}/m, 'no lines longer than 79 characters' );
     
-    like( $text, qr/\Q| This | Is | A | Table |\E\n\Q| Do   | Not | F It | Up |/,
+    like( $text, qr/\Q| This | Is | A | Table |\E\n\Q| Do   | Not | F It | Up |\E/,
           'the table in the page was not reformatted.' );
 }

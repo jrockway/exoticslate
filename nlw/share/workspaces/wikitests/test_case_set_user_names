@@ -2,7 +2,7 @@
 
 | *Comment* | Test Case: Set User Names Email Addresses are hidden in Public workspace |  |
 | st-admin | set-permissions --w %%workspace%% --p member-only | The permissions for the %%workspace%% workspace have been changed to member-only |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | click_and_wait | st-newpage-link |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
@@ -26,12 +26,12 @@ Dashboard: observe Welcome message | go to Settings->My settings and change user
 | st-admin | set-permissions --w %%workspace%% --p member-only | The permissions for the %%workspace%% workspace have been changed to member-only |
 | st-admin | set-user-names --e %%email%% --first "" --last "" | User "%%username%%" was updated |
 
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | link=Settings |  |
 | type_ok | first_name | Firstly - %%start_time%% |
 | type_ok | last_name | Lastly |
 | clickAndWait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | text_like | st-user-welcome | Welcome, Firstly - %%start_time%% Lastly |
 
 | *Comment* | Test Case: Set User Names Teardown (just in case) |  |

@@ -1,7 +1,7 @@
 This is automation of [Test: Home]
 
 | *Comment* | Test Case: Home |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | text_like | st-wiki-subnav-left | What's new |
 | text_like | st-wiki-subnav-left | Weblogs |
 
@@ -12,7 +12,7 @@ This is automation of [Test: Home]
 | click_ok | document.forms[1].homepage_is_dashboard[1] |  |
 | click_and_wait | Button |  |
 | text_like | Changes saved |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | text_like | This is the home page for |  |
 
 | *Comment* | Test Case: Home homepage is Dashboard |  |
@@ -24,7 +24,7 @@ This is automation of [Test: Home]
 | click_ok | homepage_is_dashboard |  |
 | click_and_wait | Button |  |
 | text_like | Changes saved |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | text_like | Dashboard: |  |
 | text_like | st-wiki-subnav-left | What's new |
 | text_like | st-wiki-subnav-left | Weblogs |

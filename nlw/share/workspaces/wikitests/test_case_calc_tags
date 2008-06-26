@@ -1,7 +1,7 @@
 | *Comment* | Test Case Calc: Tags |
 
 | *Comment* | Test Case Calc: Tags All Tags |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
 | clickAndWait | link=All Tags |  |
 | text_like | link=Welcome | Welcome |
@@ -120,7 +120,7 @@ Go to All Tags | The deleted tag should not appear in list
 
 | *Comment* | Test Case Calc: Tags second wait |  |
 | wait_for_text_present_ok | tags have been removed | 30000 |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | open_ok | %%workspace%%/index.cgi?action=category_list |  |
 | text_unlike | st-listview | tag1 %%start_time%% |
 
@@ -129,12 +129,12 @@ Make a new page and add a new tag (a tag not already in use in workspace) | tag 
  Go to All Tags | The tag from the deleted page should not appear in list.
 
 | *Comment* | Test Case Calc: Tags. Tags with zero pages should not appear in the tag list |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | open_ok | %%workspace%%/index.cgi?action=recent_changes |  |
 | click_and_wait | link=tag2 content spreadsheet %%start_time%% |  |
 | click_and_wait | link=Delete Page |  |
 | confirmation_like | Are you sure you want to delete this page? |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | open_ok | %%workspace%%/index.cgi?action=category_list |  |
 | text_unlike | st-listview | tag2 %%start_time%% |
 

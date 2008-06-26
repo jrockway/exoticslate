@@ -15,14 +15,14 @@
  Choose a time interval, check the sidebar display box, choose number of items to display. Save | Settings take effect
 
 | *Comment* | Test Case: SRC: 2 entries within 24 hours |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | link=Settings |  |
 | clickAndWait | link=What's New |  |
 | select_ok | recent_changes__changes_depth | label=Last 24 hours |
 | check_ok | recent_changes__include_in_pages |  |
 | select_ok | recent_changes__sidebox_changes_depth | label=2 |
 | clickAndWait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 
  Observe What's New in Dashboard | verify only the number of items chosen
 
@@ -63,7 +63,7 @@
 | check_ok | recent_changes__include_in_pages |  |
 | select_ok | recent_changes__sidebox_changes_depth | label=4 |
 | clickAndWait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 
  Observe What's New in Dashboard | verify only the number of items chosen
 
@@ -107,7 +107,7 @@
 | clickAndWait | link=What's New |  |
 | uncheck_ok | recent_changes__include_in_pages |  |
 | clickAndWait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 
 | *Comment* | Test Case: SRC: What's New sidebar gone |  |
 | clickAndWait | link=side-%%start_time%%-8 |  |
@@ -115,7 +115,7 @@
 | wait_for_element_not_present_ok | st-recent-changes-title | 5000 |
 
 | *Comment* | Test Case: SRC: Teardown |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | st-admin | purge-page --workspace %%workspace%% --page side_%%start_time%%_1 | qr/The side-%%start_time%%-1 page was purged/ |
 | st-admin | purge-page --workspace %%workspace%% --page side_%%start_time%%_2 | qr/The side-%%start_time%%-2 page was purged/ |
 | st-admin | purge-page --workspace %%workspace%% --page side_%%start_time%%_3 | qr/The side-%%start_time%%-3 page was purged/ |

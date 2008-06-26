@@ -8,7 +8,7 @@
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "all pages %%start_time%% 0004" < %%wikitest_client_files%%wikitest.txt | The "all pages %%start_time%% 0004" page has been created. |
 
 | *Comment* | Test Case: All Pages list view |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | text_like | st-wiki-title | Dashboard: |
 | click_and_wait | st-whats-new-title-link |  |
 | text_like | Changes in Last |  |
@@ -42,7 +42,7 @@
 | *Comment* | Test Case: All Pages add a new page |  |
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "all pages %%start_time%% 0005" < %%wikitest_client_files%%wikitest.txt | The "all pages %%start_time%% 0005" page has been created. |
 
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
 
 | *Comment* | label=Date (↑) |  |
@@ -61,7 +61,7 @@
 
 | *Comment* | Test Case: All Pages create Rev 2 |  |
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "all pages %%start_time%% 0005" < %%wikitest_client_files%%wikitest.txt | The "all pages %%start_time%% 0005" page has been updated. |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | click_and_wait | st-wiki-subnav-link-whats-new |  |
 
 | *Comment* | Test Case: All Pages sort Revisions desc |  |
@@ -86,7 +86,7 @@
 | *Comment* | Test Case: All Pages delete page |  |
 | st-admin | purge-page --w %%workspace%% --p all_pages_%%start_time%%_0004 | purged |
 
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | click_and_wait | st-wiki-subnav-link-whats-new |  |
 | text_unlike | st-listview | all pages %%start_time%% 0004 |
 
@@ -110,7 +110,7 @@ contains %%email%% as a substring and that messes up other tests like Test Case:
 
 | st-admin | update-page --email %%s_user%% --workspace %%workspace%% --page "all pages %%start_time%% 0003" < %%wikitest_client_files%%wikitest.txt | The "all pages %%start_time%% 0003" page has been updated. |
 
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | click_and_wait | st-wiki-subnav-link-all-pages |  |
 | select_ok | sort-picker | label=Last Edited By |
 | pause | 10000 |  |

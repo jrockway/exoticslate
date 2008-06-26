@@ -4,7 +4,7 @@
 
 | *Comment* | Test Case: Sidebar: Recently Viewed. Set up test data |  |
 
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
@@ -13,7 +13,7 @@
 | type_ok | wikiwyg_wikitext_textarea | tc_sidebar_recently_viewed_1_%%start_time%% |
 | clickAndWait | st-save-button-link |  |
 
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
@@ -22,7 +22,7 @@
 | type_ok | wikiwyg_wikitext_textarea | tc_sidebar_recently_viewed_2_%%start_time%% |
 | clickAndWait | st-save-button-link |  |
 
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
@@ -40,7 +40,7 @@
 | clickAndWait | link=Screen Layout |  |
 | check_ok | display__include_breadcrumbs |  |
 | clickAndWait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 
  Visit any page. Open the sidebar | Sidebar contains recently viewed section
  Observe values in sidebar | Sidebar contains list of most recently viewed pages in most recently viewed order
@@ -56,7 +56,7 @@
  "What's New,"<http://> then Recently Viewed tab | same list appears in same order
 
 | *Comment* | Test Case: Sidebar: Recently Viewed. list view |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
 | clickAndWait | link=Recently Viewed |  |
 | text_like | link=tc_sidebar_recently_viewed_1_%%start_time%% | tc_sidebar_recently_viewed_1_%%start_time%% |
@@ -67,13 +67,13 @@
  "What's New,"<http:///> then Recently Viewed tab | same list appears in same order
 
 | *Comment* | Test Case: Sidebar: Recently Viewed. Visit several pages |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | link=Announcements and Links |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | link=tc_sidebar_recently_viewed_3_%%start_time%% |  |
 
 | *Comment* | Test Case: Sidebar: Recently Viewed Visit A&L again to force Sidebar update |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | link=Announcements and Links |  |
 | text_like | link=tc_sidebar_recently_viewed_1_%%start_time%% | tc_sidebar_recently_viewed_1_%%start_time%% |
 | text_like | link=tc_sidebar_recently_viewed_2_%%start_time%% | tc_sidebar_recently_viewed_2_%%start_time%% |
@@ -84,28 +84,28 @@
  Visit any page. Open the sidebar | Sidebar *DOES NOT* contain recently viewed section
 
 | *Comment* | Test Case: Sidebar: Recently Viewed. uncheck sidebar |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | link=Settings |  |
 | clickAndWait | link=Screen Layout |  |
 | uncheck_ok | display__include_breadcrumbs |  |
 | clickAndWait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | link=tc_sidebar_recently_viewed_3_%%start_time%% |  |
 | wait_for_element_not_present_ok | st-breadcrumbs-title | 2000 |
 
 | *Comment* | Test Case: Sidebar: Recently Viewed. Teardown |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | link=tc_sidebar_recently_viewed_3_%%start_time%% |  |
 | clickAndWait | link=Delete Page |  |
 | confirmation_like | Are you sure you want to delete this page? |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | *Comment* | Test Case: Sidebar: Recently Viewed make sure deleted page removed from home view |  |
 | wait_for_element_not_present_ok | link=tc_sidebar_recently_viewed_3_%%start_time%% | 10000 |
 
 | clickAndWait | link=tc_sidebar_recently_viewed_2_%%start_time%% |  |
 | clickAndWait | link=Delete Page |  |
 | confirmation_like | Are you sure you want to delete this page? |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 
 | clickAndWait | link=tc_sidebar_recently_viewed_1_%%start_time%% |  |
 | clickAndWait | link=Delete Page |  |

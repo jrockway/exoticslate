@@ -75,7 +75,7 @@
 | text_like | st-settings-section | choose an image |
 | text_like | st-settings-section | When users click |
 | click_and_wait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | text_like | st-homepage | Dashboard: newtitle %%start_time%% |
 
 | *Comment* | Test Case: Settings: Admin test Workspace Features using newspace-%%start_time%% |  |

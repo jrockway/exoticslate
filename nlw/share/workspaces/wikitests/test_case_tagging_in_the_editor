@@ -1,6 +1,6 @@
 | *Comment* | Starting Test Case: Tagging in the Editor |  |
 
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | st-newpage-link |  |
 
 | wait_for_element_visible_ok | link=Advanced | 10000 |

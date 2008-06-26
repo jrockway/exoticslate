@@ -4,7 +4,7 @@ Note: Cannot automate attachments, test is slightly reduced
 
 | setSpeed | 150 |  |
 | *Comment* | Test Case: Tools: Duplicate Page Create test page |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | click_and_wait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |

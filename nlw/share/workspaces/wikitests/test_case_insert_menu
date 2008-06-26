@@ -1,7 +1,7 @@
 | *Comment* | STARTING Test Case: Insert Menu |  |
 
 | *Comment* | Test Case: Insert Menu make a test page |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |

@@ -29,7 +29,7 @@
 | click_ok | Button |  |
 | *Comment* | Test Case: Tools: Copy Page to Workspace. Verify copy by opening target wiki Dashboard and clicking What's New link to allow time for copy to complete |  |
 | open_ok | /newspace-%%start_time%% |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | click_and_wait | link=New Copy Page %%start_time%% |  |
 | *Comment* | /newspace-%%start_time%%/index.cgi?new_copy_page_%%start_time%% |  |
 | text_like | st-page-maincontent | Copy Page Content %%start_time%% |
@@ -57,7 +57,7 @@
 wiki Dashboard and clicking What's New link to allow time for copy to
 complete |  |
 | open_ok | /newspace-%%start_time%% |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | click_and_wait | link=New Copy Page %%start_time%% |  |
 | text_like | st-page-maincontent | New Content %%start_time%% |
 | text_like | st-tags | Copy Tag %%start_time%% |

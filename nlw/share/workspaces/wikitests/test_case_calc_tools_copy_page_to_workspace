@@ -34,7 +34,7 @@
 | click_ok | Button |  |
 
 | *Comment* | Test Case: Calc Tools: Copy Page to Workspace. Verify copy by opening target wiki Dashboard and clicking What's New link to allow time for copy to complete |  |
-| open_ok | /newspace-ss-%%start_time%%?index.cgi?action=dashboard |  |
+| open_ok | /newspace-ss-%%start_time%%?index.cgi?action=homepage |  |
 | open_ok | /newspace-ss-%%start_time%%/index.cgi?new_copy_page_spreadsheet_%%start_time%% |  |
 | text_like | st-tags | Copy Spreadsheet Tag %%start_time%% |
 

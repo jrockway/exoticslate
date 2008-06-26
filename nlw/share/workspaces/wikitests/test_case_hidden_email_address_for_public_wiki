@@ -12,7 +12,7 @@
 | click_and_wait | Button |  |
 
 | *Comment* | Test Case: Hidden Email Address Upload File so that you can verify hidden address in All Files |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | wait_for_element_visible_ok | st-newpage-link | 30000 |
 | click_and_wait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
@@ -70,7 +70,7 @@
 | text_like | st-search-content | qr/\@hidden/ |
 
 | *Comment* | Test Case: Hidden email address in home page |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | text_like | qr/\@hidden/ |  |
 
 | *Comment* | Test Case: Hidden Email Address Teardown |  |

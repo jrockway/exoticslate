@@ -8,7 +8,7 @@ Set test_string to such a string, then make a widget with that as the link text,
 | set | test_string | `Hello - World %%start_time%%` |
 | set | test_string_escaped | `Hello \- World %%start_time%%` |
 
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | click_and_wait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |

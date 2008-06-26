@@ -6,7 +6,7 @@
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "hey whats new %%start_time%% 0004" < %%wikitest_client_files%%wikitest.txt | The "hey whats new %%start_time%% 0004" page has been created. |
 
 | *Comment* | Test Case: What's New list view |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | text_like | st-wiki-title | Dashboard: |
 | click_and_wait | st-whats-new-title-link |  |
 | text_like | Changes in Last |  |
@@ -42,7 +42,7 @@
 | *Comment* | Test Case: What's New add a new page |  |
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "hey whats new %%start_time%% 0005" < %%wikitest_client_files%%wikitest.txt | The "hey whats new %%start_time%% 0005" page has been created. |
 
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
 
 | *Comment* | label=Date (↑) |  |
@@ -61,7 +61,7 @@
 
 | *Comment* | Test Case: What's New create Rev 2 |  |
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "hey whats new %%start_time%% 0005" < %%wikitest_client_files%%wikitest.txt | The "hey whats new %%start_time%% 0005" page has been updated. |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | click_and_wait | st-wiki-subnav-link-whats-new |  |
 
 | *Comment* | Test Case: What's New sort Revisions desc |  |
@@ -86,7 +86,7 @@
 | *Comment* | Test Case: What's New delete page |  |
 | st-admin | purge-page --w %%workspace%% --p hey_whats_new_%%start_time%%_0004 | purged |
 
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | click_and_wait | st-wiki-subnav-link-whats-new |  |
 | text_unlike | st-listview | hey whats new %%start_time%% 0004 |
 
@@ -97,7 +97,7 @@
 | VerifyValue | Button | Compare Revisions |
 
 | *Comment* | Test Case: What's New Teardown |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0001 | page was purged |
 | st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0002 | page was purged |
 | st-admin | purge-page --workspace %%workspace%% --page hey_whats_new_%%start_time%%_0003 | page was purged |

@@ -4,7 +4,7 @@
 | st-admin | update-page --workspace %%workspace%% --email %%email%% --page "Edit This Page %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "Edit This Page %%start_time%%" page has been created. |
 
 | *Comment* | Test Case: Edit This Page content |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | click_and_wait | link=Edit This Page %%start_time%% |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
@@ -92,14 +92,14 @@
 | click_ok | st-edit-button-link |  |
 | type_ok | wikiwyg_wikitext_textarea | hijklmno |
 | chooseCancelOnNextConfirmation |  |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 
 | *Comment* | Cancel and keep unsaved edits |  |
 | confirmation_is | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
 | verifyValue | wikiwyg_wikitext_textarea | hijklmno |
 
 | *Comment* | Navigate away |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | verifyConfirmation | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
 | wait_for_text_present_ok | Dashboard | 30000 |
 | text_like | Announcements and Links |  |
@@ -142,12 +142,12 @@
 | click_ok | link=Simple |  |
 
 | chooseCancelOnNextConfirmation |  |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | *Comment* | Cancel and keep unsaved edits |  |
 | confirmation_is | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
 
 | *Comment* | Navigate away |  |
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | verifyConfirmation | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
 | wait_for_text_present_ok | Dashboard | 30000 |
 | text_like | Announcements and Links |  |

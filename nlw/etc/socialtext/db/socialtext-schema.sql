@@ -501,10 +501,12 @@ ALTER TABLE ONLY person
             FOREIGN KEY (assistant_id)
             REFERENCES "UserId"(system_unique_id);
 
+-- Set ON DELETE CASCADE here becuase there is a ST::UserId->delete method
+-- that will blow up if it's missing.
 ALTER TABLE ONLY person
     ADD CONSTRAINT person_id_fk
             FOREIGN KEY (id)
-            REFERENCES "UserId"(system_unique_id);
+            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY person
     ADD CONSTRAINT person_supervisor_id_fk

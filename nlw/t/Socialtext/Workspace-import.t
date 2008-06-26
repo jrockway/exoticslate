@@ -37,9 +37,10 @@ $page->update(
 
 my $tarball = $admin->export_to_tarball(dir => 't/tmp');
 
+$admin->delete();
+
 # Deleting the user is important so that we know that both user and
 # workspace data is restored
-$admin->delete();
 $user->delete( force => 1 );
 
 Socialtext::Workspace->ImportFromTarball( tarball => $tarball );

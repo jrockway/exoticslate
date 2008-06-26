@@ -189,11 +189,5 @@ Click that tag | Tag list page appears with two remaining tagged pages
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_1_%%start_time%% |  |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_2_%%start_time%% |  |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_3_%%start_time%% |  |
-
-<<<<<<< .mine
 | open_ok | /%%workspace%%/index.cgi?action=dashboard | set up for next included test |
-=======
-| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
->>>>>>> .r8082
-
 | *Comment* | Test Case: Calc Tagging COMPLETED |  |

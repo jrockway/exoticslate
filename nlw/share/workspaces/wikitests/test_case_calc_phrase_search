@@ -1,9 +1,9 @@
-| *Comment* | Test Case: Phrase Search |
+| *Comment* | Test Case: Calc Phrase Search |
 | *Comment* | test searching on "quoted phrases". |
 
 Note: ticket inspiring this series of tests (amongst others:) {rt: 26849}
 
-| *Comment* | Test case: Phrase Search: easy searches |  |
+| *Comment* | Test Case: Calc Phrase Search: easy searches |  |
 | *Comment* | important to include a few quoted phrase searches with colons |  |
 | st-search | "offered through the biggie" | Pages containing '"offered through the biggie"' (1) |
 | st-result | Car Loan |  |
@@ -11,7 +11,7 @@ Note: ticket inspiring this series of tests (amongst others:) {rt: 26849}
 | st-result | Another Salary |  |
 | st-result | Salary |  |
 
-| *Comment* | Test case: Phrase Search: titles |  |
+| *Comment* | Test Case: Calc Phrase Search: titles |  |
 | *Comment* | exercise both 'title:foo' and '=foo' |  |
 | st-search | title:"Another Salary" | Pages containing 'title:"Another Salary"' (1) |
 | st-result | Another Salary |  |
@@ -19,14 +19,14 @@ Note: ticket inspiring this series of tests (amongst others:) {rt: 26849}
 | st-search | ="Another Salary" | Titles containing '"Another Salary"' (1) |
 | st-result | Another Salary |  |
 
-| *Comment* | Test case: Phrase Search: tags |  |
+| *Comment* | Test Case: Calc Phrase Search: tags |  |
 | *Comment* | exercise both 'tag:foo' and 'category:foo' |  |
 | st-search | tag:"Bob the Bellhop" | Pages containing 'tag:"Bob the Bellhop"' (1) |
 | st-result | Another Salary |  |
 | st-search | category:"Bob the Bellhop" | Pages containing 'category:"Bob the Bellhop"' (1) |
 | st-result | Another Salary |  |
 
-| *Comment* | Test case: Phrase Search: new tag syntax |  |
+| *Comment* | Test Case: Calc Phrase Search: new tag syntax |  |
 | *Comment* | 'tag:(foo bar)' should be equivalent to 'tag:foo tag:bar' |  |
 | *Comment* | exercise both 'tag:(foo bar)' and 'category:(foo bar)' |  |
 | st-search | tag:calculator tag:401 | Pages containing 'tag:calculator tag:401' (2) |
@@ -47,7 +47,7 @@ Note: ticket inspiring this series of tests (amongst others:) {rt: 26849}
 
 | *Comment* | test AND, OR, (NOT, -) with combinations of different search value types (text, title, tag) |  |
 
-| *Comment* | Test case: Phrase Search: homogenous AND searches |  |
+| *Comment* | Test Case: Calc Phrase Search: homogenous AND searches |  |
 | st-search | BMAC AND offered | Pages containing 'BMAC AND offered' (1) |
 | st-result | Car Loan |  |
 | st-search | "the Biggie Motors" AND "BMAC" | Pages containing '"the Biggie Motors" AND "BMAC"' (1) |
@@ -55,16 +55,16 @@ Note: ticket inspiring this series of tests (amongst others:) {rt: 26849}
 | st-search | "the Biggie Motors" AND "Automation Corporation" | Pages containing '"the Biggie Motors" AND "Automation Corporation"' (1) |
 | st-result | Car Loan |  |
 
-| *Comment* | Test case: Phrase Search: heterogenous AND searches |  |
+| *Comment* | Test Case: Calc Phrase Search: heterogenous AND searches |  |
 | st-search | title:"Another Salary" AND "Savings" | Pages containing 'title:"Another Salary" AND "Savings"' (1) |
 | st-result | Another Salary |  |
 | st-search | tag:"401" AND "Salary" | Pages containing 'tag:"401" AND "Salary"' (2) |
 | st-result | Another Salary |  |
 
-| *Comment* | Test case: Phrase Search: homogenous OR searches |  |
+| *Comment* | Test Case: Calc Phrase Search: homogenous OR searches |  |
 | *Comment* | The high hit rate is due to {bz 614} on savings, which is stemmed to 'save' |  |
 | st-search | "Salary" OR "Savings" | Pages containing '"Salary" OR "Savings"' (7) |
 | st-result | Another Salary |  |
 | st-result | House Payment |  |
 
-| *Comment* | Test case: Phrase Search COMPLETED |  |
+| *Comment* | Test Case: Calc Phrase Search COMPLETED |  |

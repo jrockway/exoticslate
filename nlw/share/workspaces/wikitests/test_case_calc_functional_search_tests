@@ -1,6 +1,6 @@
 Note: Heavily dependent on the default content of current test-data workspace
 
-| *Comment* | Test case: Functional Search Tests easy searches |  |
+| *Comment* | Test case: Calc Functional Search Tests easy searches |  |
 | st-search | =Payment | Titles containing 'Payment' (2) |
 | st-result | House Payment |  |
 | st-result | Credit Card Payment |  |
@@ -16,7 +16,7 @@ Note: Heavily dependent on the default content of current test-data workspace
 | st-search | 5% | Pages containing '5%' (1) |
 | st-result | House Payment |  |
 
-| *Comment* | Test case: Functional Search partial match |  |
+| *Comment* | Test case: Calc Functional Search partial match |  |
 | st-search | sala | Pages containing 'sala' (0) |
 | st-search | sala* | Pages containing 'sala*' (2) |
 | st-result | Salary |  |
@@ -34,9 +34,9 @@ Note: Heavily dependent on the default content of current test-data workspace
 | st-result | Car Loan |  |
 | st-result | Credit Card Payment |  |
 
-| *Comment* | Test case: Functional Search tag match and partial |  |
+| *Comment* | Test case: Calc Functional Search tag match and partial |  |
 | st-search | tag:calc | Pages containing 'tag:calc' (0) |
-| *Comment* | Test case: Functional Search tag match and partial |  |
+| *Comment* | Test case: Calc Functional Search tag match and partial |  |
 | st-search | tag:calc* | Pages containing 'tag:calc*' (5) |
 | st-result | Salary |  |
 | st-result | Another Salary |  |
@@ -44,9 +44,9 @@ Note: Heavily dependent on the default content of current test-data workspace
 | st-result | Car Loan |  |
 | st-result | Credit Card Payment |  |
 
-| *Comment* | Test case: Functional Search title match and partial |  |
+| *Comment* | Test case: Calc Functional Search title match and partial |  |
 | st-search | title:Sal | Pages containing 'title:Sal' (0) |
-| *Comment* | Test case: Functional Search tag match and partial |  |
+| *Comment* | Test case: Calc Functional Search tag match and partial |  |
 | st-search | title:Sal* | Pages containing 'title:Sal*' (2) |
 | st-result | Salary |  |
 | st-result | Another Salary |  |
@@ -55,7 +55,7 @@ Note: Heavily dependent on the default content of current test-data workspace
 
 Title searches
 
-| *Comment* | Test case: Functional Search Tests AND title searches |  |
+| *Comment* | Test case: Calc Functional Search Tests AND title searches |  |
 | st-search | =Credit* AND spen* | Titles containing 'Credit* AND spen*' (1) |
 | st-result | Credit Card Payment |  |
 | st-search | =Credit* AND NOT amou* | Titles containing 'Credit* AND NOT amou*' (0) |
@@ -73,7 +73,7 @@ Title searches
 | st-search | tag:retirement AND =Salary | Pages containing 'tag:retirement AND =Salary' (2) |
 | st-result | Another Salary |  |
 
-| *Comment* | Test case: Functional Search Tests AND tag searches |  |
+| *Comment* | Test case: Calc Functional Search Tests AND tag searches |  |
 | st-search | year AND tag:retirement | Pages containing 'year AND tag:retirement' (2) |
 | st-result | Salary |  |
 | st-result | Another Salary |  |
@@ -85,7 +85,7 @@ Title searches
 | st-search | tag:"Bob The Bellhop" AND tag:retirement | Pages containing 'tag:"Bob The Bellhop" AND tag:retirement' (1) |
 | st-result | Another Salary |  |
 
-| *Comment* | Test case: Functional Search Tests AND token searches |  |
+| *Comment* | Test case: Calc Functional Search Tests AND token searches |  |
 | st-search | tag:retirement AND 2121.8 | Pages containing 'tag:retirement AND 2121.8' (2) |
 | st-result | Salary |  |
 | st-result | Another Salary |  |
@@ -97,7 +97,7 @@ Title searches
 | st-search | tag:"Bob The Bellhop" AND 3.0% | Pages containing 'tag:"Bob The Bellhop" AND 3.0%' (1) |
 | st-result | Another Salary |  |
 
-| *Comment* | Test case: Functional Search Tests OR title searches |  |
+| *Comment* | Test case: Calc Functional Search Tests OR title searches |  |
 | st-search | =Salary OR Month | Titles containing 'Salary OR Month' (5) |
 | st-result | Salary |  |
 | st-result | Another Salary |  |
@@ -116,7 +116,7 @@ Title searches
 | st-result | House Payment |  |
 | st-result | Another Salary |  |
 
-| *Comment* | Test case: Functional Search Tests OR tag searches |  |
+| *Comment* | Test case: Calc Functional Search Tests OR tag searches |  |
 | st-search | Month OR tag:retirement | Pages containing 'Month OR tag:retirement' (5) |
 | st-result | Salary |  |
 | st-result | Another Salary |  |
@@ -139,7 +139,7 @@ Title searches
 | st-result | Car Loan |  |
 | st-result | House Payment |  |
 
-| *Comment* | Test case: Functional Search Tests OR token searches |  |
+| *Comment* | Test case: Calc Functional Search Tests OR token searches |  |
 | st-search | 500 OR 600 | Pages containing '500 OR 600' (3) |
 | st-result | Car Loan |  |
 | st-result | House Payment |  |
@@ -152,7 +152,7 @@ Title searches
 | st-result | House Payment |  |
 | st-result | Credit Card Payment |  |
 
-| *Comment* | Test case: Functional Search Tests NOT title searches |  |
+| *Comment* | Test case: Calc Functional Search Tests NOT title searches |  |
 | st-search | title:Salary NOT another | Pages containing 'title:Salary NOT another' (1) |
 | st-result | Salary |  |
 | st-search | title:Salary OR another | Pages containing 'title:Salary OR another' (4) |
@@ -164,7 +164,7 @@ Title searches
 | st-search | ="Another Salary" NOT tag:"foo" | Titles containing '"Another Salary" NOT tag:"foo"' (1) |
 | st-result | Another Salary |
 
-| *Comment* | Test case: Functional Search Tests NOT tag searches |  |
+| *Comment* | Test case: Calc Functional Search Tests NOT tag searches |  |
 | st-search | tag:calculator -BMAC | Pages containing 'tag:calculator -BMAC' (4) |
 | st-result | House Payment |  |
 | st-result | Credit Card Payment |  |
@@ -183,7 +183,7 @@ Title searches
 | st-search | tag:"my next thirty years" NOT tag:BMAC | Pages containing 'tag:"my next thirty years" NOT tag:BMAC' (1) |
 | st-result | House Payment |  |
 
-| *Comment* | Test case: Functional Search Tests NOT token searches |  |
+| *Comment* | Test case: Calc Functional Search Tests NOT token searches |  |
 | st-search | 600 NOT 1250 | Pages containing '600 NOT 1250' (1) |
 | st-result | House Payment |  |
 
@@ -195,11 +195,11 @@ Title searches
 
 | st-search | tag:"my next thirty years" NOT 600 | Pages containing 'tag:"my next thirty years" NOT 600' (0) |
 
-| *Comment* | Test case: Functional Search Tests Phrase token searches |  |
+| *Comment* | Test case: Calc Functional Search Tests Phrase token searches |  |
 | st-search | "Biggie Motors" | Pages containing '"Biggie Motors"' (1) |
 | st-result | Car Loan |  |
 
-| *Comment* | Test case: Functional Search Tests COMPLETED |  |
+| *Comment* | Test case: Calc Functional Search Tests COMPLETED |  |
 
 ----
 

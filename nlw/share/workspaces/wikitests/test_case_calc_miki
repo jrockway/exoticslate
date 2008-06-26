@@ -2,7 +2,7 @@
 | *Comment* | Test Case: Mikie - View a spreadsheet in the Miki |
 | open_ok | /%%workspace%%/index.cgi?car_loan |
 | click_ok | link=Mobile |
-| wait_for_element_present_ok | link=Edit |
+| wait_for_element_present_ok | link=Home |
 | text_like | This loan is offered through the Biggie Motors Automation Corporation |
 | text_like | 3890.40 |
 | text_like | Loan Amount |

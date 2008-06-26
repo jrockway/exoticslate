@@ -3,23 +3,24 @@ test env properly and are not testing the test-workspace
 
 * [Test Case: Verify Location]
 
+* [Test Case: Calc View Spreadsheet Page]
+* [Test Case: Calc New Page]
 * [Test Case: Calc Miki]
 * [Test case: Calc Watchlist]
-* [Test Case: Calc View Spreadsheet Page]
 * [Test Case: Calc Tags]
-* [Test case: Calc functional search tests]
 * [Test Case: Calc Tools: Rename Page]
 * [Test Case: Calc Tools: Delete Page]
-* [Test Case: Calc New Page]
 * [Test Case: Calc Tools: Duplicate Page]
-* [Test Case: Calc Phrase search]
-* [Test Case: Calc Explore Spreadsheet sidebar]
-* [Test Case: Calc Tagging]
-* [Test Case: Calc Orphans List]
-* [Test Case: Calc What's New]
-* [Test Case: Calc All Pages]
-* [Test Case: Calc Tools: Export as HTML]
 * [Test Case: Calc Tools: Copy Page to Workspace]
+* [Test Case: Calc Tools: Export as HTML]
+
+* [Test case: Calc functional search tests]
+* [Test Case: Calc Phrase search]
+* [Test Case: Calc Explore Spreadsheet sidebar] - this test uploads files so is not a Core test. Change that?
+* [Test Case: Calc Tagging]
+* [Test Case: Calc What's New]
+* [Test Case: Calc Orphans List]
+* [Test Case: Calc All Pages]
 
 ^ END
 

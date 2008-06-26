@@ -1,13 +1,13 @@
-| *Comment* | Test Case: Tools: Rename Page |
+| *Comment* | Test Case: Calc Tools: Rename Page |
 
-| *Comment* | Test Case: Tools: Rename Page Create test page |  |
+| *Comment* | Test Case: Calc Tools: Rename Page Create test page |  |
 | open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=rename%20Spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link |  |
 | pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
-| click_ok | st-tags-addlink |  |  |
+| click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | rename_tag_%%start_time%% |
 | wait_for_element_visible_ok | st-tags-addbutton | 20000 |
@@ -17,7 +17,7 @@
 | click_ok | st-tagqueue-submitbutton |  |
 | click_ok | st-tagqueue-closebutton |  |
 
-| *Comment* | Test Case: Tools: Rename Page Test Rename popup, rename the page |  |
+| *Comment* | Test Case: Calc Tools: Rename Page Test Rename popup, rename the page |  |
 | MouseOver | st-pagetools-tools |  |
 | click_ok | link=Rename Page |  |
 | pause | 1000 |  |
@@ -63,8 +63,8 @@
 | click_and_wait | st-rewind-revision-count |  |
 | text_like | st-revisionlist | revision 2 |
 
-| *Comment* | Test Case: Tools: Rename Page Teardown |  |
-| st-admin | purge-page --w %%workspace%% --page rename_spreadsheet_%%start_time%% |  |
-| st-admin | purge-page --w %%workspace%% --page renamed_spreadsheet_%%start_time%% |  |
+| *Comment* | Test Case: Calc Tools: Rename Page Teardown |  |
+| st-admin | purge-page --w %%workspace%% --page rename_spreadsheet_%%start_time%% | was purged |
+| st-admin | purge-page --w %%workspace%% --page renamed_spreadsheet_%%start_time%% | was purged |
 
-| *Comment* | Test Case: Tools: Rename Page COMPLETED |
+| *Comment* | Test Case: Calc Tools: Rename Page COMPLETED |

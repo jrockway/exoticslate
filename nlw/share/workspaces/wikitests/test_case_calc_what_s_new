@@ -1,4 +1,4 @@
-| *Comment* | Test Case: Socialcalc What's New |  |
+| *Comment* | Test Case: Calc What's New |  |
 
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=hey whatsnew %%start_time%% 0001#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
@@ -23,12 +23,18 @@
 | clickAndWait | link=All Pages |  |
 | text_like | All Pages ( |  |
 
-| *Comment* | Test Case: What's New Sorting tests |
+| *Comment* | Test Case: Calc What's New Sorting tests |
 
 | click_and_wait | link=What's New |  |
-| click_and_wait | link=Title |  |
+
+| *Comment* | Test Case: Calc What's New Sorting Title ascending |
+| select_ok | sort-picker | label=Title |
+| pause | 10000 |  |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0001.+hey whatsnew %%start_time%% 0004/ |
-| click_and_wait | link=Title |  |
+
+| *Comment* | Test Case: Calc What's New Sorting Title descending |
+| select_ok | sort-picker | index=1 |
+| pause | 10000 |  |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0001/ |
 
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=hey whatsnew %%start_time%% 0005#edit |  |
@@ -38,9 +44,15 @@
 
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0005.+hey whatsnew %%start_time%% 0004/ |
-| click_and_wait | link=Date |  |
+
+| *Comment* | Test Case: Calc What's New Sorting Date ascending |
+| select_ok | sort-picker | index=3 |
+| pause | 10000 |  |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0005/ |
-| click_and_wait | link=Date |  |
+
+| *Comment* | Test Case: Calc What's New Sorting Date descending |
+| select_ok | sort-picker | index=3 |
+| pause | 10000 |  |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0003.+hey whatsnew %%start_time%% 0002/ |
 
 | open_ok | /%%workspace%%/index.cgi?hey whatsnew %%start_time%% 0005 |  |
@@ -52,9 +64,14 @@
 | open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
 | wait_for_element_visible_ok | st-list-title | 30000 |
 
-| click_and_wait | link=Revisions |  |
+| *Comment* | Test Case: Calc What's New Sorting Revisions descending |
+| select_ok | sort-picker | index=4 |
+| pause | 10000 |  |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0005.+hey whatsnew %%start_time%% 0004/ |
-| click_and_wait | link=Revisions |  |
+
+| *Comment* | Test Case: Calc What's New Sorting Revisions ascending |
+| select_ok | sort-picker | index=4 |
+| pause | 10000 |  |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0005/ |
 
 This test assumes that a certain date/time format is selected (Oct 3 12:34am)
@@ -63,9 +80,9 @@ Remove the test until the the test setup enforces the format
 
 text_like | qr/\w+ \d+ \d+:\d+\w+/ | |
 
-| *Comment* | Test Case: What's New delete page |
+| *Comment* | Test Case: Calc What's New delete page |
 
-| st-admin | purge-page --w %%workspace%% --page hey_whatsnew_%%start_time%%_0004 | purged |
+| st-admin | purge-page --w %%workspace%% --page hey_whatsnew_%%start_time%%_0004 | was purged |
 
 | open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
 | wait_for_element_visible_ok | st-list-title | 30000 |
@@ -78,11 +95,10 @@ text_like | qr/\w+ \d+ \d+:\d+\w+/ | |
 
  VerifyValue | Button | Compare Revisions |
 
-| *Comment* | Test Case: What's New Teardown |
+| *Comment* | Test Case: Calc What's New Teardown |
 | st-admin | purge-page --workspace %%workspace%% --page hey_whatsnew_%%start_time%%_0001 |  |
 | st-admin | purge-page --workspace %%workspace%% --page hey_whatsnew_%%start_time%%_0002 |  |
 | st-admin | purge-page --workspace %%workspace%% --page hey_whatsnew_%%start_time%%_0003 |  |
 | st-admin | purge-page --workspace %%workspace%% --page hey_whatsnew_%%start_time%%_0005 |  |
-| click_and_wait | st-home-link | set up for next included test |
 
-| *Comment* | Test Case: What's New COMPLETED |  |
+| *Comment* | Test Case: Calc What's New COMPLETED |  |

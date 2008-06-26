@@ -11,7 +11,7 @@
 use or create a workspace with several tags and tagged pages
 
 | *Comment* | Test Case: Tags Create tag1 page tagged tag1 |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
@@ -25,7 +25,7 @@ use or create a workspace with several tags and tagged pages
 | clickAndWait | st-save-button-link |  |
 
 | *Comment* | Test Case: Tags Create tag12 page tagged tag1 |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
 | type_ok | st-newpage-pagename-edit | tag12_content_title %%start_time%% |
@@ -37,7 +37,7 @@ use or create a workspace with several tags and tagged pages
 | clickAndWait | st-save-button-link |  |
 
 | *Comment* | Test Case: Tags Create tag2 page tagged tag2 |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
 | type_ok | st-newpage-pagename-edit | tag2_content_title %%start_time%% |
@@ -52,7 +52,7 @@ use or create a workspace with several tags and tagged pages
  click on several page links | Pages appear; each page has its that tag displayed in Tags sidebar.
 
 | *Comment* | Test Case: Tags Checking tag2 links and pages |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-wiki-subnav-link-all-tags |  |
 | text_like | link=tag2 %%start_time%% | tag2 %%start_time%% |
 | clickAndWait | link=tag2 %%start_time%% |  |
@@ -60,7 +60,7 @@ use or create a workspace with several tags and tagged pages
 | text_like | link=tag2 %%start_time%% | tag2 %%start_time%% |
 
 | *Comment* | Test Case: Tags Checking tag1 links and pages |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-wiki-subnav-link-all-tags |  |
 | text_like | link=tag1 %%start_time%% | tag1 %%start_time%% |
 | clickAndWait | link=tag1 %%start_time%% |  |
@@ -70,7 +70,7 @@ use or create a workspace with several tags and tagged pages
  click: View {link: Category as a weblog} | All pages with that tag appear in weblog form
 
 | *Comment* | Test Case: Tags Checking weblog view |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | link=tag2_content_title %%start_time%% |  |
 | clickAndWait | link=tag2 %%start_time%% |  |
 | clickAndWait | link=tag2 %%start_time%% as a weblog |  |
@@ -83,7 +83,7 @@ use or create a workspace with several tags and tagged pages
 
 | *Comment* | Test Case: Tags Checking tag sorting |  |
 | open_ok | /%%workspace%%/index.cgi?action=category_list |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-wiki-subnav-link-all-tags |  |
 | text_like | qr/tag1 %%start_time%%.+tag2 %%start_time%%/ |  |
 | click_ok | link=Tag |  |

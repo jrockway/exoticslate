@@ -15,14 +15,14 @@
  Choose a time interval, check the sidebar display box, choose number of items to display. Save | Settings take effect
 
 | *Comment* | Test Case: SRC: 2 entries within 24 hours |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | link=Settings |  |
 | clickAndWait | link=What's New |  |
 | select_ok | recent_changes__changes_depth | label=Last 24 hours |
 | check_ok | recent_changes__include_in_pages |  |
 | select_ok | recent_changes__sidebox_changes_depth | label=2 |
 | clickAndWait | Button |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 
  Observe What's New in Dashboard | verify only the number of items chosen
 
@@ -63,7 +63,7 @@
 | check_ok | recent_changes__include_in_pages |  |
 | select_ok | recent_changes__sidebox_changes_depth | label=4 |
 | clickAndWait | Button |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 
  Observe What's New in Dashboard | verify only the number of items chosen
 
@@ -107,7 +107,7 @@
 | clickAndWait | link=What's New |  |
 | uncheck_ok | recent_changes__include_in_pages |  |
 | clickAndWait | Button |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 
 | *Comment* | Test Case: SRC: What's New sidebar gone |  |
 | clickAndWait | link=side-%%start_time%%-8 |  |

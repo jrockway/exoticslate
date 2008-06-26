@@ -7,7 +7,7 @@ Well, folks, we missed one test case. The simplest test case. And I am seeing it
 occasionally but this test does not fail
 
 | *Comment* | Test Case: New Page No Overwrite: title already in use |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
@@ -24,7 +24,7 @@ occasionally but this test does not fail
 | text_like | st-page-titletext | %%start_time%% npno 1 |
 
 | *Comment* | Test Case: New Page No Overwrite: save Untitled Page |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
@@ -52,7 +52,7 @@ occasionally but this test does not fail
 | text_like | st-page-titletext | %%start_time%% npno 2 |
 
 | *Comment* | Test Case: New Page No Overwrite: test Save Page As cancel |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
@@ -85,7 +85,7 @@ occasionally but this test does not fail
 | text_like | st-page-titletext | %%start_time%% npno 1 |
 
 | *Comment* | Test Case: New Page No Overwrite: Overwrite should fail - take suggested name instead |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_present_ok | st-newpage-pagename-edit | 10000 |
 | type_ok | st-newpage-pagename-edit | %%start_time%% npno 1 |

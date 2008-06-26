@@ -7,26 +7,26 @@
 | text_like | st-wiki-title | Dashboard: |
 | clickAndWait | link=Settings |  |
 | text_like | st-settings-select | Settings |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
 | text_like | st-list-title | Changes in Last |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-wiki-subnav-link-weblogs |  |
 | text_like | st-weblog-titletext | Weblog: |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-wiki-subnav-link-all-files |  |
 | text_like | st-list-title | All Files in |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-wiki-subnav-link-all-tags |  |
 | text_like | st-list-title | All Tags in |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-wiki-subnav-link-all-pages |  |
 | text_like | st-list-title | All Pages |
 
 *Create some new pages for this series of tests*
 
 | *Comment* | Test Case: Dashboard Create new pages |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
@@ -36,7 +36,7 @@
 | clickAndWait | st-save-button-link |  |
 | st-watch-page | 1 |  |
 | st-is-watched | 1 |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
 | type_ok | st-newpage-pagename-edit | tc_dashboard2_%%start_time%% |
@@ -48,7 +48,7 @@
 *Observe "What's New" breadcrumb*
 
 | *Comment* | Test Case: Dashboard What's New |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
 | text_like | st-list-title | Changes in Last |
 | text_like | st-recent_changes-header-row | Title |
@@ -81,7 +81,7 @@
 | clickAndWait | Button |  |
 
 | *Comment* | Test Case: Dashboard What's new in WORKSPACE |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | st-whats-new-title-link | What's new in |
 | text_like | st-newpage-link | New Page |
 | text_like | st-whats-new-content | tc_dashboard1_%%start_time%% |
@@ -99,7 +99,7 @@
 *Observe "Your Watchlist" link | System displays Watchlist*
 
 | *Comment* | Test Case: Dashboard Watchlist |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | st-watchlist-title-link | Your watchlist |
 | text_like | st-watchlist-content | tc_dashboard1_%%start_time%% |
 | text_like | st-watchlist-content | tc_dashboard2_%%start_time%% |
@@ -127,7 +127,7 @@ NOTE: in general, there is no way to know the Title of any workspace in the list
  *Comment* Test depends on new version of template workspaces_listall_section
 
 | *Comment* | Test Case: Dashboard Your workspaces |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | st-wikis-title-link | Your workspaces |
 | clickAndWait | link=Your workspaces |  |
 | text_like | The ten most recently visited |  |
@@ -135,7 +135,7 @@ NOTE: in general, there is no way to know the Title of any workspace in the list
 | text_like | st-settings-section | Workspace Name |
 
 | *Comment* | Test Case: Dashboard test New Workspace link |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | st-newwiki-link | New Workspace |
 | clickAndWait | link=New Workspace |  |
 | text_like | st-settings-section | This is the title of your workspace |
@@ -144,14 +144,14 @@ NOTE: in general, there is no way to know the Title of any workspace in the list
 *Click on Announcements and Links title | System navigates to Announcements and Links page*
 
 | *Comment* | Test Case: Dashboard A and L link |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | link=Announcements and Links |  |
 | text_like | st-page-titletext | Announcements and Links |
 
 *Edit Announcements and Links | Page is displayed for editing, when page is saved, content is saved and displays properly in the dashboard view.*
 
 | *Comment* | Test Case: Dashboard edit A and L |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-group-notes-edit-link |  |
 | *Comment* | Create a link in the A and L page |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
@@ -163,7 +163,7 @@ NOTE: in general, there is no way to know the Title of any workspace in the list
 | type_ok | wikiwyg_wikitext_textarea | AandL by Test Case: Dashboard-%%start_time%% in my wikis |
 | clickAndWait | st-save-button-link |  |
 | text_like | AandL by Test Case: Dashboard-%%start_time%% |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | AandL by Test Case: Dashboard-%%start_time%% |  |
 
 Click on Your Notepad title | System navigates to settings => Your notepad the first time the user clicks this link. 
@@ -173,7 +173,7 @@ After a page has been selected for Your Notepad, clicking the title will navigat
 
 | *Comment* | Test Case: Dashboard set up Notepad |  |
 | *Comment* | Create a unique notepad page |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | link=Settings |  |
 | clickAndWait | link=Your Notepad |  |
 | type_ok | favorites__which_page | Notepad for %%start_time%% |
@@ -182,7 +182,7 @@ After a page has been selected for Your Notepad, clicking the title will navigat
 Edit Your Notepad | Page is displayed for editing, when page is saved, content is saved and displays properly in dashboard view
 
 | *Comment* | Test Case: Dashboard open Notepad from Dashboard |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | link=Your Notepad |  |
 | *Comment* | incipient Notepad opens for Editing | *Editing: loads after the page* |
 | wait_for_text_present_ok | Editing: | 30000 |
@@ -192,36 +192,36 @@ Edit Your Notepad | Page is displayed for editing, when page is saved, content i
 | type_ok | wikiwyg_wikitext_textarea | Notepad entry for %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 | text_like | Notepad entry for %%start_time%% |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | Notepad entry for %%start_time%% |  |
 
 | *Comment* | Test Case: Dashboard open Notepad from Dashboard |  |
 | *Comment* | existing Notepad opens for display |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | link=Your Notepad |  |
 | text_like | Notepad entry for %%start_time%% |  |
 
 | *Comment* | Test Case: Dashboard edit Notepad from Dashboard |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-personal-notes-edit-link |  |
 | wait_for_text_present_ok | Editing: | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
 | type_ok | wikiwyg_wikitext_textarea | Another Notepad entry for %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 | text_like | Another Notepad entry for %%start_time%% |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | Another Notepad entry for %%start_time%% |  |
 
 View infobox | something sensible displays; a message from Socialtext.
 
 | *Comment* | Test Case: Dashboard test for DYK |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | st-dyk-title | Did you know? |
 | text_like | st-dyk-content | Socialtext Customer Exchange |
 | *Comment* | tests for default values only |  |
 
 | *Comment* | Test Case: Dashboard Test for presence of logos |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | mouseOver | st-wiki-logo-image |  |
 | mouseOver | st-socialtext-attribution-image |  |
 
@@ -231,7 +231,7 @@ observe link to Central Page | central page matches title of workspace, navigate
 
 | *Comment* | This test depends on current version of test-data. Universal application would require an id for the Central Page link. |
 
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | st-wiki-title-central-page-link | Central page: |
 | clickAndWait | link=Canonical Test Data Set |  |
 | text_like | Welcome to the |  |
@@ -240,7 +240,7 @@ Observe Invite your colleagues
 Click Invite Your Colleagues | Invite New Users interface page appears
 
 | *Comment* | Test Case: Dashboard test for Invite Colleagues link |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | st-wiki-title-invite | Invite your colleagues |
 | clickAndWait | //a[contains(@href, '?action=users_invitation')] |  |
 | text_like | Invite Other Users |  |

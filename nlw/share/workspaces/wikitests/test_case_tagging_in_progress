@@ -7,7 +7,7 @@ Look ahead: start to type "fo" | sidebar autosuggests "foo", "foo bar", "foster 
 | *Comment* | Starting Test Case: Tagging |  |
 
 | setSpeed | 100 |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 
 | wait_for_element_visible_ok | link=Advanced | 10000 |
@@ -104,7 +104,7 @@ Add any other tag to three different pages | tag is added
 
 | *Comment* | Test Case: Tagging add tag to three new pages |  |
 | *Comment* | Tag Page 1 |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | type_ok | st-newpage-pagename-edit | tag_page1%%start_time%% |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
@@ -117,7 +117,7 @@ Add any other tag to three different pages | tag is added
 | wait_for_text_present_ok | tagtest%%start_time%% | 30000 |
 
 | *Comment* | Tag Page 2 |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | type_ok | st-newpage-pagename-edit | tag_page2%%start_time%% |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
@@ -130,7 +130,7 @@ Add any other tag to three different pages | tag is added
 | wait_for_text_present_ok | tagtest%%start_time%% | 30000 |
 
 | *Comment* | Tag Page 3 |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | type_ok | st-newpage-pagename-edit | tag_page3%%start_time%% |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |

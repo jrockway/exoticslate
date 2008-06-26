@@ -4,7 +4,7 @@ Test results: [Test Case: Js Loc Results]
 
 | *Comment* | Test case: Js Loc |  |
 | st-admin | set-locale --email %%email%% --locale zz --workspace %%workspace%% | l0c4l3 F0R %%username%% iS N0W zz |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | verifyValue | st-newpage-pagename-edit | uN7I7L3D P4G3 |

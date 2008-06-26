@@ -6,7 +6,7 @@
 Navigate to a page known to have zero incoming links | system displays "There are no pages that link to this page yet."
 
 | setSpeed | 100 |  |
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
@@ -36,7 +36,7 @@ Navigate to a page known to have zero incoming links | system displays "There ar
 | clickAndWait | link=Delete Page |  |
 | confirmation_like | Are you sure you want to delete this page? |  |
 
-| clickAndWait | st-home-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
 | clickAndWait | link=tc_sidebar_newpage%%start_time%% |  |
 

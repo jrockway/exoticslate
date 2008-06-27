@@ -103,7 +103,7 @@ sub start {
     #
     # we do this *after* starting OpenLDAP, so that if we're daemonizing then
     # our parent process knows that we're all done.
-    write_file($pidfile, $$);
+    write_file($pidfile, { atomic => 1 }, $$);
 
     # let user know we're done, then pause indefinately.
     print qq{
@@ -200,20 +200,21 @@ sub _kill_running_copy_of_ourselves {
             kill(2, $pid);
             for (0 .. 5) {
                 sleep(1);
-                return unless _is_running($pid);
+                goto DONE_KILLING_OFF_SELF unless _is_running($pid);
             }
 
             print "... didn't die off; killing -9 ...\n";
             kill(9, $pid);
             for (0 .. 5) {
                 sleep(1);
-                return unless _is_running($pid);
+                goto DONE_KILLING_OFF_SELF unless _is_running($pid);
             }
 
             die "... can't kill $0; aborting\n";
         }
     }
 
+  DONE_KILLING_OFF_SELF:
     unlink $pidfile;
 }
 

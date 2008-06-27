@@ -27,9 +27,9 @@
 | select_ok | target_workspace_id | label=newspace %%start_time%% (newspace-%%start_time%%) |
 | type_ok | new_title | New Copy Page %%start_time%% |
 | click_ok | Button |  |
+
 | *Comment* | Test Case: Tools: Copy Page to Workspace. Verify copy by opening target wiki Dashboard and clicking What's New link to allow time for copy to complete |  |
 | open_ok | /newspace-%%start_time%% |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | click_and_wait | link=New Copy Page %%start_time%% |  |
 | *Comment* | /newspace-%%start_time%%/index.cgi?new_copy_page_%%start_time%% |  |
 | text_like | st-page-maincontent | Copy Page Content %%start_time%% |
@@ -37,6 +37,7 @@
 
 | *Comment* | Test Case: Tools: Copy Page to Workspace. Create new content. |  |
 | open_ok | /%%workspace%%/index.cgi?copy_page_%%start_time%% |  |
+| pause | 2000 |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
 | type_ok | wikiwyg_wikitext_textarea | New Content %%start_time%% |
@@ -51,13 +52,12 @@
 | pause | 5000 |  |
 | text_like | //body | The new page name you selected, "New Copy Page %%start_time%%", is already in use in workspace "newspace-%%start_time%%" |
 | click_ok | Button |  |
-| pause | 5000 |  |
+| pause | 20000 |  |
 
 | *Comment* | Test Case: Tools: Copy Page to Workspace. Verify overwrite by opening target
 wiki Dashboard and clicking What's New link to allow time for copy to
 complete |  |
-| open_ok | /newspace-%%start_time%% |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| open_ok | /newspace-%%start_time%%?action=homepage |  |
 | click_and_wait | link=New Copy Page %%start_time%% |  |
 | text_like | st-page-maincontent | New Content %%start_time%% |
 | text_like | st-tags | Copy Tag %%start_time%% |

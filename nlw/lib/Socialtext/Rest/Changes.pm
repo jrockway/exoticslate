@@ -19,6 +19,7 @@ sub permission { +{} }
 sub _get_user_bfn_and_id {
     my ($self, $username, $ws) = @_;
     my $user = Socialtext::User->new(username => $username);
+    return unless $user;
     my $bfn = $user->best_full_name(workspace => $ws);
     return ($bfn, $user->user_id);
 }
@@ -50,9 +51,11 @@ sub _entities_for_query {
             $row->{Summary} = $summary;
             ($row->{best_full_name}, $row->{user_id}) = 
                 $self->_get_user_bfn_and_id($row->{username}, $ws);
+            $row = undef unless $row->{user_id};
         }
 
-        push @changes, grep { $_->{workspace} = $ws->name } @{$res->{rows}};
+        push @changes,
+            grep { $_ and $_->{workspace} = $ws->name } @{ $res->{rows} };
     }
 
     @changes = sort { $b->{Date} cmp $a->{Date} } @changes;

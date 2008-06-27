@@ -1,6 +1,5 @@
 A testset solely for the purpose of enabling LDAP from other testsets
 
-| *Comment* | Enable LDAP: enabling LDAP |  |
-| st-ldap  | start | qr/openldap running/m |
+| st-ldap | start | openldap running |
 | st-admin | add-workspace-admin --username %%username%% --w %%workspace%% | qr/.+ is .+ a workspace admin for the %%workspace%% workspace./ |
 | *Comment* | Enable LDAP: COMPLETED |  |

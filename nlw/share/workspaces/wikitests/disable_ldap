@@ -1,6 +1,6 @@
 A testset solely for the purpose of disabling LDAP from other testsets
 
 | *Comment* | Disable LDAP: disabling LDAP |  |
-| st-ldap   | stop   | |
-| st-ldap   | status | not running |
+| st-ldap | stop |  |
+| st-ldap | status | not running |
 | *Comment* | Disable LDAP: COMPLETED |  |

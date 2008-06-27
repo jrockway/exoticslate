@@ -6,7 +6,7 @@ Every test should override the passed in values as follows:
 
  set | username | devnull3 |
  set | email | devnull3@socialtext.com |
- set | password | Ko013344 |
+ set | password | ldapd3v |
  set | email_esc | devnull3\@socialtext.com |
 
 * [Enable LDAP]

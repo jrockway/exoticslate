@@ -1,15 +1,15 @@
 | *Comment* | Starting Test Case: Calc Tagging |  |
-| *Comment* | | |
+
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag%20page%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-save-button-link |  |
+| click_ok | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-tags-addlink |  |
+| click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | fog %%start_time%% |
 | wait_for_element_present_ok | st-tags-addbutton | 20000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-tags-addbutton |  |
+| click_ok | st-tags-addbutton |  |
 
 | *Comment* | Test Case: Calc Tagging. Text "Adding tag" should appear where textarea was |  |
 | wait_for_text_present_ok | Adding tag | 30000 |
@@ -18,7 +18,7 @@
 | text_like | link=fog %%start_time%% | fog %%start_time%% |
 | type_ok | st-tags-field | foo bar %%start_time%% |
 | wait_for_element_present_ok | st-tags-addbutton | 20000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-tags-addbutton |  |
+| click_ok | st-tags-addbutton |  |
 | wait_for_text_present_ok | Adding tag | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | text_like | link=foo bar %%start_time%% | foo bar %%start_time%% |
@@ -27,7 +27,7 @@
 
 | type_ok | st-tags-field | `special chars &@#$ %%start_time%%` |
 | wait_for_element_present_ok | st-tags-addbutton | 20000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-tags-addbutton |  |
+| click_ok | st-tags-addbutton |  |
 | wait_for_text_present_ok | Adding tag | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | text_like | link=special chars &@#$ %%start_time%% | `special chars &@#$ %%start_time%%` |
@@ -35,14 +35,14 @@
 | *Comment* | Test Case: Calc Tagging - Chinese chars |  |
 | type_ok | st-tags-field | 所以 |
 | wait_for_element_present_ok | st-tags-addbutton | 20000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-tags-addbutton |  |
+| click_ok | st-tags-addbutton |  |
 | wait_for_text_present_ok | Adding tag | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | text_like | st-tags-listing | 所以 |
 
 | type_ok | st-tags-field | `special chars ,[] %%start_time%%` |
 | wait_for_element_present_ok | st-tags-addbutton | 20000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-tags-addbutton |  |
+| click_ok | st-tags-addbutton |  |
 | wait_for_text_present_ok | Adding tag | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | text_like | link=special chars ,[] %%start_time%% | `special chars ,[] %%start_time%%` |
@@ -52,7 +52,7 @@
 
 | type_ok | st-tags-field | Foster City %%start_time%% |
 | wait_for_element_present_ok | st-tags-addbutton | 20000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-tags-addbutton |  |
+| click_ok | st-tags-addbutton |  |
 | wait_for_text_present_ok | Adding tag | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | text_like | link=Foster City %%start_time%% | Foster City %%start_time%% |
@@ -69,14 +69,14 @@ Click on tag "foo bar" | system navigates to the list of pages with the tag "foo
 
 | *Comment* | Test Case: Calc Tagging deleting tags |  |
 | wait_for_element_visible_ok | `link=[x]` | 20000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| `link=[x]` |  |
+| click_ok | `link=[x]` |  |
 | wait_for_element_visible_ok | st-tags-deletemessage | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 
 *Comment*: Unfortunately, tags can show up in any order. Maybe we need ids for the [x] delete button?
 
 | text_like | st-tags-deletemessage | qr/These tags have been removed:/ |
-| open_ok | link=foo bar %%start_time%% |  |
+| clickAndWait | link=foo bar %%start_time%% |  |
 
 | *Comment* | Test Case: Calc Tagging tag list view: tag foo bar %%start_time%% |  |
 | text_like | link=foo bar %%start_time%% as a weblog | foo bar %%start_time%% as a weblog |
@@ -89,13 +89,13 @@ Add any other tag to three different pages | tag is added
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag%20page%201%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| open_ok | st-save-button-link |  |
+| clickAndWait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-tags-addlink |  |
+| click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tagtest %%start_time%% |
 | wait_for_element_present_ok | st-tags-addbutton | 30000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-tags-addbutton |  |
+| click_ok | st-tags-addbutton |  |
 | wait_for_text_present_ok | Adding tag | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | text_like | link=tagtest %%start_time%% | tagtest %%start_time%% |
@@ -104,13 +104,13 @@ Add any other tag to three different pages | tag is added
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag%20page%202%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| open_ok | st-save-button-link |  |
+| clickAndWait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-tags-addlink |  |
+| click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tagtest %%start_time%% |
 | wait_for_element_present_ok | st-tags-addbutton | 30000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-tags-addbutton |  |
+| click_ok | st-tags-addbutton |  |
 | wait_for_text_present_ok | Adding tag | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | text_like | link=tagtest %%start_time%% | tagtest %%start_time%% |
@@ -119,13 +119,13 @@ Add any other tag to three different pages | tag is added
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag%20page%203%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| open_ok | st-save-button-link |  |
+| clickAndWait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-tags-addlink |  |
+| click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tagtest %%start_time%% |
 | wait_for_element_present_ok | st-tags-addbutton | 30000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| st-tags-addbutton |  |
+| click_ok | st-tags-addbutton |  |
 | wait_for_text_present_ok | Adding tag | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | text_like | link=tagtest %%start_time%% | tagtest %%start_time%% |
@@ -135,19 +135,19 @@ Add any other tag to three different pages | tag is added
 Click Revisions | new revision created for new tag
 
 | *Comment* | Test Case: Calc Tagging Compare Revisions |  |
-| open_ok | st-page-stats-revisions |  |
+| clickAndWait | st-page-stats-revisions |  |
 
 | *Comment* | TODO: revive Revision Compare test after SC has revision compare implemented |  |
 
-open_ok | Button | |
+clickAndWait | Button | |
 text_like | qr/Tags:.+Tags: tagtest %%start_time%%/ | |
 
 Click on that tag in third page | list appears with correct three pages 
 Click on any link in list | that page appears
 
-| open_ok | st-back-to-current-revision-link |  |
-| open_ok | link=tagtest %%start_time%% |  |
-| open_ok | link=tag page 3 %%start_time%% |  |
+| clickAndWait | st-back-to-current-revision-link |  |
+| clickAndWait | link=tagtest %%start_time%% |  |
+| clickAndWait | link=tag page 3 %%start_time%% |  |
 | text_like | st-page-titletext | tag page 3 %%start_time%% |
 
 Remove that tag | tag is removed 
@@ -155,7 +155,7 @@ Click Revisions | observe new revision is created
 Compare top two revisions | only difference is in deleted tag
 
 | wait_for_element_visible_ok | `link=[x]` | 30000 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage| `link=[x]` |  |
+| click_ok | `link=[x]` |  |
 | wait_for_element_visible_ok | st-tags-deletemessage | 30000 |
 | wait_for_element_visible_ok | st-no-tags-placeholder | 30000 |
 | text_like | st-tags-deletemessage | These tags have been removed: tagtest %%start_time%% |
@@ -167,9 +167,9 @@ TODO: check for an incremented revision after fixing RT 25664
 
 | *Comment* | Test Case: Calc Tagging. Compare revisions for deleted tag |  |
 | *Comment* | The revision number did not change but the tag should be gone |  |
-| open_ok | st-page-stats-revisions |  |
+| clickAndWait | st-page-stats-revisions |  |
 
- open_ok | Button | |
+ clickAndWait | Button | |
  text_like | qr/Tags: tagtest %%start_time%%/m | |
  text_like | qr/Tags:\s*$/m | |
 
@@ -177,10 +177,10 @@ Navigate to All Tags in list view | All Tags appears
 Observe that tag | tag is still in list 
 Click that tag | Tag list page appears with two remaining tagged pages
 
-| open_ok | link=What's new |  |
-| open_ok | link=All Tags |  |
+| clickAndWait | link=What's new |  |
+| clickAndWait | link=All Tags |  |
 | text_like | st-listview | tagtest %%start_time%% |
-| open_ok | link=tagtest %%start_time%% |  |
+| clickAndWait | link=tagtest %%start_time%% |  |
 | text_like | st-listview | tag page 1 %%start_time%% |
 | text_like | st-listview | tag page 2 %%start_time%% |
 
@@ -189,5 +189,7 @@ Click that tag | Tag list page appears with two remaining tagged pages
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_1_%%start_time%% |  |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_2_%%start_time%% |  |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_3_%%start_time%% |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage | set up for next included test |
+
+| clickAndWait | st-home-link | set up for next included test |
+
 | *Comment* | Test Case: Calc Tagging COMPLETED |  |

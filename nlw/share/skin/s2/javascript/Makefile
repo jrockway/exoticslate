@@ -226,7 +226,7 @@ $(OTHER_FILE): $(WIKIWYG_PATH) $(OTHER_SOURCE_FILES) Makefile
 	done
 
 Jemplate.js:
-	jemplate --runtime > $@
+	jemplate --runtime=jquery > $@
 
 $(JEMPLATE_MODULE): jemplate $(ALL_JEMPLATES)
 	jemplate --compile $< > $@

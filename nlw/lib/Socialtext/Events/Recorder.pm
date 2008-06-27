@@ -19,17 +19,14 @@ This method logs an event to the event storage system.  Parameters:
 
 =item action
 
-What the actor did to the object (e.g. View, Edit, Delete).
+The action token string.  These are currently free-form, but may or may not
+get restricted to an actual set of valid tokens at some later point.
 
 =item actor
 
 Who did the event.  
 
 Can be a Socialtext::User object, or a user_id from the "User" table.
-
-=item class
-
-To which type of object did the event happen (e.g. Page, Workspace, Person, Attachment, Spreadsheet, etc).
 
 =item object
 
@@ -52,17 +49,18 @@ sub record_event {
     }
     $p->{context} ||= '';
 
-    my @fields = qw/timestamp action actor class object context/;
+    my @fields = qw/timestamp action actor object context/;
     for (@fields) {
         die "$_ parameter is missing" unless defined $p->{$_};
     }
 
-    if (ref( my $a = $p->{actor} ) ) {
-        $p->{actor} = $a->user_id;
+    my $actor = $p->{actor};
+    if (ref $actor && $actor->can('user_id')) {
+        $p->{actor} = $actor->user_id;
     }
 
     sql_execute(
-        q{INSERT INTO event VALUES ( '?'::timestamptz, ?, ?, ?, ?, ? )},
+        q{INSERT INTO event VALUES ( '?'::timestamptz, ?, ?, ?, ? )},
         @{ $p }{ @fields },
     );
 }

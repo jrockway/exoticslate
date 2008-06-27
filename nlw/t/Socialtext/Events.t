@@ -4,7 +4,7 @@ use warnings FATAL => 'all';
 use strict;
 use Test::More qw/no_plan/;
 use mocked 'Socialtext::User';
-use mocked 'Socialtext::SQL';
+use mocked 'Socialtext::SQL', 'sql_ok';
 
 BEGIN {
     use_ok('Socialtext::Events');
@@ -27,11 +27,16 @@ Getting_events: {
     }
 
     Get_some_events: {
-        my @event = ( '2008-06-25 11:39:21.509539-07', 
-                      qw/View 1 Page hello_world/, '' );
-        local @Socialtext::SQL::RETURN_VALUES = ( { return => [ \@event ] } );
+        my %event = ( 
+            timestamp => '2008-06-25 11:39:21.509539-07', 
+            action => 'view_page',
+            actor => 1,
+            object => 'hello_world',
+            context => '',
+        );
+        local @Socialtext::SQL::RETURN_VALUES = ( { return => [ \%event ] } );
         my $events = Socialtext::Events->Get();
-        is_deeply $events, [ \@event ], 'found event';
+        is_deeply $events, [ \%event ], 'found event';
 
         sql_ok( 
             sql => "SELECT * FROM event",
@@ -44,6 +49,22 @@ Getting_events: {
         sql_ok( 
             sql => "SELECT * FROM event LIMIT ?",
             args => ['5'],
+        );
+    }
+
+    Get_offset_events: {
+        Socialtext::Events->Get( offset => 5 );
+        sql_ok( 
+            sql => "SELECT * FROM event OFFSET ?",
+            args => ['5'],
+        );
+    }
+
+    Get_limit_and_offset_events: {
+        Socialtext::Events->Get( limit => 5, offset => 10 );
+        sql_ok( 
+            sql => "SELECT * FROM event LIMIT ? OFFSET ?",
+            args => ['5', '10'],
         );
     }
 
@@ -103,38 +124,36 @@ Getting_events: {
 Creating_events: {
     Record_valid_event: {
         Socialtext::Events->Record( {
-            action => 'View',
+            action => 'view_page',
             actor => 1,
-            class => 'Page',
             object => 'hello_world',
         } );
         sql_ok(
             sql => qr/^INSERT INTO event VALUES/,
-            args => [ 'now', 'View', 1, 'Page', 'hello_world', '' ],
+            args => [ 'now', 'view_page', 1, 'hello_world', '' ],
         );
     }
 
     Record_valid_event_with_context: {
         Socialtext::Events->Record( {
-            action => 'View',
+            action => 'edit_page',
             actor => 1,
-            class => 'Page',
             object => 'hello_world',
             context => { foo => 'bar' },
         } );
         sql_ok(
             sql => qr/^INSERT INTO event VALUES/,
             args => [ 
-                'now', 'View', 1, 'Page', 'hello_world', '{"foo":"bar"}',
+                'now', 'edit_page', 1, 'hello_world', '{"foo":"bar"}',
             ],
         );
     }
 
     Record_event_missing_params: {
         my %params = (
-            action => 'foo', actor => 1, class => 'Page', object => 'page title',
+            action => 'foo', actor => 1, object => 'page title',
         );
-        for my $field (qw/action actor class object/) {
+        for my $field (qw/action actor object/) {
             my %p = %params;
             delete $p{$field};
             eval { Socialtext::Events->Record(\%p) };
@@ -145,49 +164,27 @@ Creating_events: {
     Record_event_specified_timestamp: {
         Socialtext::Events->Record( {
             timestamp => 'yesterday',
-            action => 'View',
+            action => 'tag_page',
             actor => 1,
-            class => 'Page',
             object => 'hello_world',
         } );
         sql_ok(
             sql => qr/^INSERT INTO event VALUES/,
-            args => [ 'yesterday', 'View', 1, 'Page', 'hello_world', '' ],
+            args => [ 'yesterday', 'tag_page', 1, 'hello_world', '' ],
         );
     }
 
     Record_event_with_user_object: {
         Socialtext::Events->Record( {
-            action => 'View',
+            action => 'view_page',
             actor => Socialtext::User->new( user_id => 42 ),
-            class => 'Page',
             object => 'hello_world',
         } );
         sql_ok(
             sql => qr/^INSERT INTO event VALUES/,
-            args => [ 'now', 'View', 42, 'Page', 'hello_world', '' ],
+            args => [ 'now', 'view_page', 42, 'hello_world', '' ],
         );
     }
 }
 
 exit;
-
-sub sql_ok {
-    my %p = @_;
-
-    my $sql = shift @Socialtext::SQL::SQL;
-    if ($p{sql}) {
-        if (ref($p{sql})) {
-            like $sql->{sql}, $p{sql}, 'SQL matches';
-        }
-        else {
-            $sql->{sql} =~ s/\s+/ /sg;
-            $sql->{sql} =~ s/\s*$//;
-            is $sql->{sql}, $p{sql}, 'SQL matches exactly';
-        }
-    }
-
-    if ($p{args}) {
-        is_deeply $sql->{args}, $p{args}, 'SQL args match';
-    }
-}

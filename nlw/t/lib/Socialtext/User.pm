@@ -7,6 +7,18 @@ use unmocked 'Socialtext::MultiCursor';
 
 our $WORKSPACES = [ [ 1 ] ];
 
+sub new {
+    my $class = shift;
+    my $type = shift;
+    my $value = shift;
+    if ($type and $type eq 'username' and $value =~ m/^bad/) {
+        return undef;
+    }
+    my $self = { $type ? ($type => $value) : (), @_ };
+    bless $self, $class;
+    return $self;
+}
+
 sub confirm_email_address {}
 
 sub confirmation_uri { 'blah/nlw/submit/confirm/foo' }
@@ -22,7 +34,7 @@ sub is_guest { $_[0]->{is_guest} }
 
 sub user_id { $_[0]->{user_id} || 1 }
 
-sub username { 'one@foo.bar' }
+sub username { $_[0]->{username} || 'one@foo.bar' }
 
 sub default_role { 
     return Socialtext::Role->AuthenticatedUser();

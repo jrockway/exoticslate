@@ -24,4 +24,6 @@ sub name_to_id {
     return lc($id);
 }
 
+sub preview_text { 'preview text' }
+
 1;

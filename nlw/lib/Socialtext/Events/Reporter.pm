@@ -55,13 +55,19 @@ sub get_events {
         $limit = 'LIMIT ?';
         push @args, $l;
     }
+    my $offset = '';
+    if (my $o = $opts{offset}) {
+        $offset = 'OFFSET ?';
+        push @args, $o;
+    }
 
     my $sth = sql_execute(<<EOSQL, @args);
 SELECT * FROM event
     $where
     $limit
+    $offset
 EOSQL
-    return $sth->fetchall_arrayref;
+    return $sth->fetchall_arrayref({});
 }
 
 1;

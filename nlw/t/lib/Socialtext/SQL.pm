@@ -2,8 +2,9 @@
 package Socialtext::SQL;
 use strict;
 use warnings;
+use Test::More;
 use base 'Exporter';
-our @EXPORT_OK = qw/Reset_mock_sql sql_execute/;
+our @EXPORT_OK = qw/sql_execute sql_ok sql_selectrow sql_singlevalue get_dbh/;
 
 our @SQL;
 our @RETURN_VALUES;
@@ -13,6 +14,33 @@ sub sql_execute {
     
     my $sth_args = shift @RETURN_VALUES;
     return mock_sth->new(%{ $sth_args || {} });
+}
+
+sub get_dbh { }
+sub sql_selectrow { sql_execute(@_) };
+sub sql_singlevalue { sql_execute(@_) };
+
+sub sql_ok {
+    my %p = @_;
+
+    # Booya - stash rocks - show test failures in the right file.
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+    my $sql = shift @SQL;
+    if ($p{sql}) {
+        $sql->{sql} =~ s/\s+/ /sg;
+        $sql->{sql} =~ s/\s*$//;
+        if (ref($p{sql})) {
+            like $sql->{sql}, $p{sql}, 'SQL matches';
+        }
+        else {
+            is $sql->{sql}, $p{sql}, 'SQL matches exactly';
+        }
+    }
+
+    if ($p{args}) {
+        is_deeply $sql->{args}, $p{args}, 'SQL args match';
+    }
 }
 
 package mock_sth;

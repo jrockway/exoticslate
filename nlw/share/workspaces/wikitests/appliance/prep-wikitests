@@ -26,13 +26,6 @@ fi
 echo IMPORTING wikitests WORKSPACE
 sudo -u www-data /usr/bin/st-admin import-workspace --tarball $WIKITESTS/wikitests.1.tar.gz
 
-if [ -e /var/www/socialtext/data/calctests ]; then
-    echo DELETING old calctests workspace
-    sudo -u www-data /usr/bin/st-admin delete-workspace --w calctests --no-export
-fi
-echo IMPORTING calctests WORKSPACE
-sudo -u www-data /usr/bin/st-admin import-workspace --tarball $WIKITESTS/calctests.1.tar.gz
-
 echo GRANTING Accounts and System admin to devnull1
 sudo -u www-data /usr/bin/st-admin give-system-admin --e devnull1@socialtext.com
 sudo -u www-data /usr/bin/st-admin give-accounts-admin --e devnull1@socialtext.com

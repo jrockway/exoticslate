@@ -16,7 +16,7 @@ test env properly and are not testing the test-workspace
 
 * [Test case: Calc functional search tests]
 * [Test Case: Calc Phrase search]
-* [Test Case: Calc Explore Spreadsheet sidebar] - this test uploads files so is not a Core test. Change that?
+* [Test Case: Calc Explore Spreadsheet sidebar]
 * [Test Case: Calc Tagging]
 * [Test Case: Calc What's New]
 * [Test Case: Calc Orphans List]

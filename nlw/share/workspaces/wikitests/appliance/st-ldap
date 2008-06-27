@@ -13,8 +13,8 @@ if [ "$1" == "enable" ]; then
     echo Adding LDAP user devnull3  as test-data workspace admin
     $SUDO $BIN/st-admin add-workspace-admin --u devnull3  --w test-data
     echo ""
-    echo use run-wiki-tests --test-username devnull3  --test-email devnull3@socialtext.com --test-password Ko013344 for LDAP wiki and calc tests
-    echo or use aliases xlwt and xlct to run test with the devnull3 LDAP user
+    echo use run-wiki-tests --test-username devnull3  --test-email devnull3@socialtext.com --test-password Ko013344 for LDAP wikitests
+    echo or use alias xlwt to run test with the devnull3 LDAP user
 elif [ "$1" == "disable" ]; then
     echo DISABLING LDAP
     sudo  $BIN/st-config set user_factories 'Default' 

@@ -1,8 +1,7 @@
 
-export OUTFILE=testcases.out
-export PLANPAGE="OSR Testcases"
-export PLANWS=calctests
+export OUTFILE=calctestcases.out
+export PLANPAGE="Calc Testcases"
 
 source do-tests
 
-echo calctests started
+echo "Calc Testcases started, output to calctestcases.out"

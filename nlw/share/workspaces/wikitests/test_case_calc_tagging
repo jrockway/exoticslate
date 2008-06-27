@@ -177,6 +177,7 @@ Navigate to All Tags in list view | All Tags appears
 Observe that tag | tag is still in list 
 Click that tag | Tag list page appears with two remaining tagged pages
 
+| wait_for_element_visible_ok | link=What's new | 30000 |
 | clickAndWait | link=What's new |  |
 | clickAndWait | link=All Tags |  |
 | text_like | st-listview | tagtest %%start_time%% |

@@ -113,63 +113,8 @@
 | uncheck_ok | display__include_breadcrumbs |  |
 | clickAndWait | Button |  |
 
-| open_ok | /%%workspace%%/index.cgi?tc_hide_sidebar_spreadsheet2_%%start_time%% |  |
-
 | *Comment* | Test Case: Calc Explore Spreadsheet Sidebar Upload File |  |
-| *Comment* | wikitest files should be in %%wikitest_files%% on the browser server |  |
-| *Comment* | *This test only works if selenium_browser has higher powers, i.e. *chrome for firefox* |  |
-
-| *Comment* | Test Case: Calc Explore Spreadsheet Upload File Lightbox error checks |  |
-| wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
-| click_ok | st-attachments-uploadbutton |  |
-
-| *Comment* | Test Case: Calc Explore Spreadsheet Upload File Lightbox Text |  |
-| wait_for_text_present_ok | Upload Files | 30000 |
-| text_like | st-attachments-attach-limit | Maximum file size: 50MB |
-
-| *Comment* | Test Case: Calc Explore Spreadsheet Close Upload file lightbox |  |
-| click_ok | st-attachments-attach-closebutton |  |
-| wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
-| click_ok | st-attachments-uploadbutton |  |
-| wait_for_text_present_ok | Click "Browse" | 30000 |
-| wait_for_element_visible_ok | st-attachments-attach-filename |  |
-| type_ok | st-attachments-attach-filename | %%wikitest_files%%aintnosuchfile.txt |
-
-| *Comment* | Test Case: Calc Explore Spreadsheet Upload File: Selenium can't detect the file does not exist message |  |
-| wait_for_text_present_ok | Uploading | 30000 |
-| wait_for_text_not_present_ok | Uploading | 30000 |
-
-| *Comment* | Test Case: Calc Explore Spreadsheet Sidebar Upload File wikitest.doc |  |
-| wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
-| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.doc |
-| wait_for_text_present_ok | Uploaded files: | 30000 |
-| click_ok | st-attachments-attach-closebutton |  |
-
-| *Comment* | Test Case: Calc Explore Spreadsheet Sidebar Upload File verify doc upload |  |
-| wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 30000 |
-
-| pause | 5000 | I hate pause; needed |
-| text_like | //a[contains(@href,'original/wikitest.doc')] | wikitest.doc |
-
-| *Comment* | Test Case: Calc Explore Spreadsheet Sidebar Upload File wikitest.pdf, wikitestzip.zip |
-| wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
-| click_ok | st-attachments-uploadbutton |  |
-| wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
-| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitestzip.zip |
-| wait_for_text_present_ok | Uploaded files: | 30000 |
-
-| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.pdf |
-| wait_for_text_present_ok | Uploaded files: | 30000 |
-| wait_for_element_visible_ok | st-attachments-attach-closebutton | 60000 |
-| click_ok | st-attachments-attach-closebutton |  |
-
-| *Comment* | Test Case: Calc Explore Spreadsheet Sidebar Upload File verify pdf and zip uploads |  |
-| wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 30000 |
-| pause | 5000 | still hate it |
-| text_like | //a[contains(@href,'original/wikitest.pdf')] | wikitest.pdf |
-| text_like | //a[contains(@href,'original/wikitestzip.zip')] | wikitestzip.zip |
+| *Comment* | Removed file upload tests since they are duplicates of other file upload tests |  |
 
 | *Comment* | Test Case: Explore Spreadsheet Sidebar Teardown |  |
 

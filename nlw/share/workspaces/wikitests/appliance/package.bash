@@ -22,22 +22,6 @@ else
     exit
 fi
 
-
-if [ -e ~/.nlw/root/data/calctests ]; then
-    if [ -e $ST_CURRENT/nlw/share/workspaces/calctests/calctests.1.tar.gz ]; then
-        echo DELETING old calctests.1.tar.gz
-        rm $ST_CURRENT/nlw/share/workspaces/calctests/calctests.1.tar.gz
-    fi
-    
-    echo CREATING new calctests.1.tar.gz
-    $ST_CURRENT/nlw/bin/st-admin export-workspace --w calctests --dir $ST_CURRENT/nlw/share/workspaces/calctests/
-    cp $ST_CURRENT/nlw/share/workspaces/calctests/calctests.1.tar.gz $ST_CURRENT/nlw/share/workspaces/wikitests/appliance
-else
-    echo "There is no /calctests wiki to export.  Run calctests-to-wiki."
-    echo EXITING
-    exit
-fi
-
 echo FETCHING test-data.tar.gz
 $ST_CURRENT/nlw/dev-bin/fetch-test-data-tarball
 
@@ -49,7 +33,7 @@ RWT=`which run-wiki-tests`
 cp $RWT st-ldap  st-socialcalc prep-wikitests  $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/bin/
 
 mkdir -p $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/share/nlw/wikitests
-cp ldap.yaml.st do-tests do-calc-tests do-wiki-tests  one-wiki-test  one-calc-test README  set-time  setup-selenium  test-data.tar.gz wikitestfiles.zip  wikitests.1.tar.gz calctests.1.tar.gz $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/share/nlw/wikitests/
+cp ldap.yaml.st do-tests do-calc-tests do-wiki-tests  one-wiki-test aliases README  set-time  setup-selenium  test-data.tar.gz wikitestfiles.zip  wikitests.1.tar.gz $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/share/nlw/wikitests/
 
 echo PACKAGING wikitests using dir2deb
 rm -f $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/wikitests*.deb

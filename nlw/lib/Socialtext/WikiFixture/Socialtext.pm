@@ -329,6 +329,31 @@ sub st_admin {
     _run_command("st-admin $options", $verify);
 }
 
+=head2 st_ldap( $command_options )
+
+Runs st_bootstrap_openldap command line script with the supplied options.
+
+If the "start" command is used, the OpenLDAP instance is fired off into the
+background, which may take a second or two while we wait for it to start.
+
+=cut
+
+sub st_ldap {
+    my $self = shift;
+    my $options = shift || '';
+    my $verify = shift;
+    $verify = $self->quote_as_regex($verify) if $verify;
+
+    # If we're starting up an LDAP server, be sure to daemonize it and make
+    # sure that it gets fired off into the background on its own.
+    if ($options eq 'start') {
+        $options .= ' --daemonize';
+    }
+
+    diag "st-ldap $options";
+    _run_command("st-bootstrap-openldap $options", $verify);
+}
+
 =head2 st_config( $command_options )
 
 Runs st_config command line script with the supplied options.

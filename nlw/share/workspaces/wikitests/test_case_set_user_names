@@ -22,7 +22,7 @@
 
 Dashboard: observe Welcome message | go to Settings->My settings and change user's name. Go back to dashboard and confirm that welcome message is updated.
 
-| *Comment* | Test Case: Dashboard test for Welcome message |  |
+| *Comment* | Test Case: Set User Names: test for Welcome message |  |
 | st-admin | set-permissions --w %%workspace%% --p member-only | The permissions for the %%workspace%% workspace have been changed to member-only |
 | st-admin | set-user-names --e %%email%% --first "" --last "" | User "%%username%%" was updated |
 

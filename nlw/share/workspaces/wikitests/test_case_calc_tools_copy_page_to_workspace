@@ -1,8 +1,11 @@
 | *Comment* | Test Case: Calc Tools: Copy Page to Workspace |
-| *Comment* | Test Case: Calc Tools: Copy Page to Workspace. Create a target workspace |  |
 
-| st-admin | create-workspace --name newspace-ss-%%start_time%% --title "newspace-ss %%start_time%%" --account %%username%% |  |
-| st-admin | add-member --email %%username%% --workspace newspace-ss-%%start_time%% |  |
+| set | newspace | newspace-ss-%%start_time%% |
+| set | newtitle | Newspace %%start_time%% |
+
+| *Comment* | Test Case: Calc Tools: Copy Page to Workspace. Create a target workspace |  |
+| st-admin | create-workspace --name %%newspace%% --title "%%newtitle%%" | was created |
+| st-admin | add-member --email %%email%% --workspace %%newspace%% | a member of |
 
 | *Comment* | Test Case: Calc Tools: Copy Page to Workspace. Create a page and a tag to copy |  |
 | open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=copy%20page%20spreadsheet%20%%start_time%%#edit |  |
@@ -29,13 +32,13 @@
 | open_ok | /%%workspace%%/index.cgi?action=copy_to_workspace_popup;page_name=copy_page_spreadsheet_%%start_time%% |  |
 | wait_for_text_present_ok | Copy | 30000 |
 | wait_for_element_visible_ok | target_workspace_id | 30000 |
-| select_ok | target_workspace_id | label=newspace-ss %%start_time%% (newspace-ss-%%start_time%%) |
+| select_ok | target_workspace_id | label=%%newtitle%% (%%newspace%%) |
 | type_ok | new_title | New Copy Page Spreadsheet %%start_time%% |
 | click_ok | Button |  |
 
-| *Comment* | Test Case: Calc Tools: Copy Page to Workspace. Verify copy by opening target wiki Dashboard and clicking What's New link to allow time for copy to complete |  |
-| open_ok | /newspace-ss-%%start_time%%?index.cgi?action=homepage |  |
-| open_ok | /newspace-ss-%%start_time%%/index.cgi?new_copy_page_spreadsheet_%%start_time%% |  |
+| *Comment* | Test Case: Calc Tools: Copy Page to Workspace. Verify copy by opening target wiki Dashboard to allow time for copy to complete |  |
+| open_ok | /%%newspace%%/?index.cgi?action=homepage |  |
+| open_ok | /%%newspace%%/index.cgi?new_copy_page_spreadsheet_%%start_time%% |  |
 | text_like | st-tags | Copy Spreadsheet Tag %%start_time%% |
 
 | *Comment* | Test Case: Calc Tools: Copy Page to Workspace. Create new content. |  |
@@ -60,16 +63,16 @@
 | open_ok | /%%workspace%%/index.cgi?action=copy_to_workspace_popup;page_name=copy_page_spreadsheet_%%start_time%% |  |
 | wait_for_text_present_ok | Copy | 10000 |
 | wait_for_element_visible_ok | target_workspace_id | 30000 |
-| select_ok | target_workspace_id | label=newspace-ss %%start_time%% (newspace-ss-%%start_time%%) |
+| select_ok | target_workspace_id | label=%%newtitle%% (%%newspace%%) |
 | type_ok | new_title | New Copy Page Spreadsheet %%start_time%% |
 | click_ok | Button |  |
 | pause | 5000 |
-| text_like | //body | The new page name you selected, "New Copy Page Spreadsheet %%start_time%%", is already in use in workspace "newspace-ss-%%start_time%%" |
+| text_like | //body | The new page name you selected, "New Copy Page Spreadsheet %%start_time%%", is already in use in workspace "%%newspace%%" |
 | click_ok | Button |  |
 | pause | 5000 |  |
 
 | *Comment* | Test Case: Calc Tools: Copy Page to Workspace. Verify overwrite by opening target wiki Dashboard and clicking What's New link to allow time for copy to complete |  |
-| open_ok | /newspace-ss-%%start_time%%/index.cgi?action=recent_changes |  |
+| open_ok | /%%newspace%%/index.cgi?action=recent_changes |  |
 | wait_for_element_present_ok | link=New Copy Page Spreadsheet %%start_time%% |  |
 | click_ok | link=New Copy Page Spreadsheet %%start_time%% |  |
 | wait_for_element_present_ok | st-tags |  |
@@ -77,9 +80,9 @@
 
 | *Comment* | Test Case: Calc Tools: Copy Page to Workspace. Single-space user cannot Copy |  |
 | st-admin | create-user --email newuser_%%start_time%%@ken.socialtext.net --password 123456 |  |
-| st-admin | add-member --email newuser_%%start_time%%@ken.socialtext.net --workspace newspace-ss-%%start_time%% |  |
+| st-admin | add-member --email newuser_%%start_time%%@ken.socialtext.net --workspace %%newspace%% |  |
 | st-logout |  |  |
-| open_ok | /newspace-ss-%%start_time%%/index.cgi?new_copy_page_spreadsheet_%%start_time%% |  |
+| open_ok | /%%newspace%%/index.cgi?new_copy_page_spreadsheet_%%start_time%% |  |
 | type_ok | username | newuser_%%start_time%%@ken.socialtext.net |
 | type_ok | password | 123456 |
 | click_and_wait | //input[@value='Log in'] |  |
@@ -89,6 +92,6 @@
 
 | *Comment* | Test Case: Calc Tools: Copy Page to Workspace Teardown |  |
 | st-admin | purge-page --w %%workspace%% --page copy_page_spreadsheet_%%start_time%% | was purged |
-| st-admin | delete-workspace --workspace newspace-ss-%%start_time%% --no-export |  |
+| st-admin | delete-workspace --workspace %%newspace%% --no-export | has been deleted |
 
 | *Comment* | Test Case: Calc Tools: Copy Page to Workspace COMPLETED |

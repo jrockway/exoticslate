@@ -1,9 +1,27 @@
-These testcases work for a Default user but not for an LDAP user
+These testcases work for a Default user but not for an LDAP user, but it is possible that an LDAP user has called Default User Testcases.
+Carefully set up the environment so the tests will run.
 
-* [Disable LDAP]
+| *Comment* | Set up required Default user values to override possibly being logged in as an LDAP user |  |
 
-* [Test case: Login Logout]
-* [Test case: User Resets Password]
-* [Test case: Admin Resets Password]
-* [Test Case: Set User Names]
-* [Test Case: Hidden Email Address for Public Wiki]
+| set | username | wikitester@ken.socialtext.net |
+| set | password | d3vnu11l |
+| set | email | wikitester@ken.socialtext.net |
+
+| *Comment* | Disable LDAP and remove user devnull3 from the system |  |
+| include | [Disable LDAP] |  |
+
+| *Comment* | You must immediately logout since your LDAP user is gone |  |
+| st-logout |  |  |
+| *Comment* | You may now login as wikitester |  |
+| st-login | %%username%% | %%password%% |
+
+| *Comment* | By INCLUDING these tests, they will run with the overridden username, pwd, and email |  |
+
+| include | [Test case: Login Logout] |  |
+| include | [Test case: User Resets Password] |  |
+| include | [Test case: Admin Resets Password] |  |
+| include | [Test Case: Set User Names] |  |
+| include | [Test Case: Hidden Email Address for Public Wiki] |  |
+
+| *Comment* | Re-enable LDAP. Bring the LDAP user back to life |  |
+| include | [Enable LDAP] |  |

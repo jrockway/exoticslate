@@ -1,4 +1,5 @@
-A testset solely for the purpose of disabling LDAP from other testsets
+| *Comment* | A testset solely for the purpose of disabling LDAP from other testsets |  |
+| *Comment* | NOTE: THIS REMOVES ALL LDAP USERS FROM THE SYSTEM WHICH MAY HAVE UNINTENDED SIDE EFFECTS! |  |
 
 | *Comment* | Disable LDAP: disabling LDAP |  |
 | st-ldap | stop |  |

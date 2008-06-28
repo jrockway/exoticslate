@@ -12,9 +12,7 @@
 | click_and_wait | Button |  |
 
 | *Comment* | Test Case: Hidden Email Address Upload File so that you can verify hidden address in All Files |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| wait_for_element_visible_ok | st-newpage-link | 30000 |
-| click_and_wait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |

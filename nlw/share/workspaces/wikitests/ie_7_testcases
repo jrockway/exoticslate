@@ -1,15 +1,28 @@
 *IE 7 is required*
-*Default user is required*
 *File testcases don't work in IE because iehta permissions not implemented in Selenium*
+*Socialcalc enabled is required because we run Calc Testcases*
 
-* [Disable LDAP]
+*It is possible to run as the default LDAP user*
+*if you first run `xwt enable_ldap` to get LDAP enabled so the default LDAP user may successfully login.*
+
+* [Enable LDAP]
+
+* [Test case: IE Miki Authentication]
 
 * [Core Testcases]
 * [Calc Testcases]
-* [Default User Testcases]
-* [Test case: IE Miki Authentication]
+* [Localization Testcases]
 * [Test case: Business Control Panel]
 * [Report Testcases]
+
+LDAP Testcases will Enable LDAP and use a known LDAP user instead of a Default user where required
+
+* [LDAP Testcases]
+
+Default User Testcases will Disable LDAP so it can test wiki functions that only work for the Default user
+It should be the last testset in this run, but it will re-enable LDAP when it finishes.
+
+* [Default User Testcases]
 
 IE 7 uses the RSS Icons High Permissions test case
 
@@ -17,7 +30,3 @@ For some reason, no combination of Selenium servers and multiwindow and
 no-maximize will run the RSS Icons test any longer.
 
 `Test Case: RSS Icons`
-
-These localization testcases cause IE 6 to segfault but should work in IE 7
-
-* [Localization Testcases]

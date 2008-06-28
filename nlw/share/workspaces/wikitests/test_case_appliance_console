@@ -2,13 +2,13 @@
 
 * Fixture: ApplianceConfig
 
-| st-admin | remove-system-admin --email %%username%% | no longer has system admin access |
+| st-admin | remove-system-admin --email %%email%% | no longer has system admin access |
 | open | /console |  |
 | is_text_present_ok | Log in to Socialtext |  |
 
 *Valid user logs in to console*
 
-| st-admin | give-system-admin --email %%username%% | now has system admin access |
+| st-admin | give-system-admin --email %%email%% | now has system admin access |
 | open | /console |  |
 | is_text_present_ok | Socialtext Appliance |  |
 

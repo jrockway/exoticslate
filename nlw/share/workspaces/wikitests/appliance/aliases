@@ -17,7 +17,7 @@
     alias cdjs='cd /usr/share/nlw/skin/s2/javascript'
     alias cdplugins='cd /usr/share/nlw/plugins'
     alias yesplugins='sudo /etc/init.d/apache-perl stop; sudo apt-get install socialtext-plugin-people socialtext-people socialtext-plugin-gadgets socialtext-plugin-socialcalc; sudo /etc/init.d/apache-perl start'
-    alias noplugins='sudo /etc/init.d/apache-perl stop; sudo apt-get remove --purge  socialtext-plugin-people socialtext-people socialtext-plugin-gadgets socialtext-plugin-socialcalc; sudo /etc/init.d/apache-perl start'
+    alias noplugins='sudo /etc/init.d/apache-perl stop; sudo apt-get remove --purge  socialtext-plugin-people socialtext-people socialtext-plugin-gadgets; sudo /etc/init.d/apache-perl start'
     alias xwt='export WIKIEMAIL=$HOSTNAME; sudo -u www-data run-wiki-tests --no-maximize --test-username wikitester@ken.socialtext.net  --test-email wikitester@ken.socialtext.net --timeout 60000 --plan-server http://$HOSTNAME --test-server http://$HOSTNAME --plan-page  '
-    alias xlwt='export WIKIEMAIL=$HOSTNAME; sudo -u www-data run-wiki-tests --no-maximize --test-username devnull3 --test-password ldapd3v  --test-email devnull3@socialtext.com  --timeout 6000 --plan-server http://$HOSTNAME --test-server http://$HOSTNAME  0 --plan-page  '
+    alias xlwt='export WIKIEMAIL=$HOSTNAME; sudo -u www-data run-wiki-tests --no-maximize --test-username devnull3 --test-password ldapd3v  --test-email devnull3@socialtext.com  --timeout 60000 --plan-server http://$HOSTNAME --test-server http://$HOSTNAME  0 --plan-page  '
 

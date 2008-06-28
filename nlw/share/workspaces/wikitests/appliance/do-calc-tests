@@ -1,6 +1,7 @@
 
 export OUTFILE=calctestcases.out
 export PLANPAGE="Calc Testcases"
+export PLANWS=wikitests
 
 source do-tests
 

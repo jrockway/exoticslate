@@ -2,7 +2,6 @@
 
 | setSpeed | 100 |  |
 | *Comment* | Test Case: Add Comment Create Test Page |  |
-| st-admin | set-user-names --e %%email%% --first Commenting --last User | User "%%username%%" was updated |
 | click_and_wait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
@@ -27,10 +26,9 @@
 | open_ok | /%%workspace%%/index.cgi?comment_test_page_%%start_time%% |  |
 | wait_for_element_visible_ok | st-content-page-display | 30000 |
 | text_like | st-content-page-display | qr/Comment 1.+Comment 2/ |
-| text_like | st-content-page-display | contributed by Commenting User |
+| text_like | st-content-page-display | qr/contributed by/i |
 
 | *Comment* | Test Case: Add Comment Teardown |  |
 | st-admin | purge-page --w %%workspace%% --p comment_test_page_%%start_time%% | The Comment Test Page %%start_time%% page was purged from the %%workspace%% workspace. |
-| st-admin | set-user-names --e %%email%% --first "" --last "" | User "%%username%%" was updated |
 
 | *Comment* | Test Case: Add Comment COMPLETED |

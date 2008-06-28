@@ -47,9 +47,9 @@
 | st-admin | add-member --username %%cli_user%% --workspace %%cmdline_workspace%% | %%cli_user%% is now a member of the %%cmdline_workspace%% workspace. |
 
 | *Comment* | Test Case: Command Line LDAP user scrub user |  |
-| st-admin | scrub-user --username %%cli_user%% | %%cli_user%% has been removed from workspaces %%cmdline_workspace%%, %%workspace%% |
+| st-admin | scrub-user --username %%cli_user%% | qr/%%cli_user%% has been removed from workspaces.+%%cmdline_workspace%%,.+%%workspace%%/ |
 
-| *Comment* | Test Case: Command Line LDAP user Add member BACK to %%workspace%%|  |
+| *Comment* | Test Case: Command Line LDAP user Add member BACK to %%workspace%% |  |
 | st-admin | add-workspace-admin --username %%cli_user%% --workspace %%workspace%% | %%cli_user%% is now a workspace admin for the %%workspace%% workspace. |
 
 | *Comment* | Test Case: Command Line LDAP USERS commands should fail |  |
@@ -60,7 +60,7 @@
 | *Comment* | Test Case: Command Line LDAP user Teardown |  |
 | st-admin | delete-workspace --workspace %%cmdline_workspace%% --no-export |  |
 
-| *Comment* | Test Case: Command Line LDAP user Add member BACK to %%workspace%% again |  |
+| *Comment* | Test Case: Command Line LDAP user Add member BACK to %%workspace%% just in case needed |  |
 | st-admin | add-workspace-admin --username %%cli_user%% --workspace %%workspace%% | qr/%%cli_user%% is .+ a workspace admin for the %%workspace%% workspace./ |
 
 | *Comment* | Test Case: Command Line: LDAP USERS COMPLETED |

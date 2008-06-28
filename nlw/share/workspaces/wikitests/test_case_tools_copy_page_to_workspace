@@ -1,9 +1,8 @@
 | *Comment* | Test Case: Tools: Copy Page to Workspace |
 
 | *Comment* | Test Case: Tools: Copy Page to Workspace. Create a target workspace |  |
-| setSpeed | 100 |  |
-| st-admin | create-workspace --name newspace-%%start_time%% --title "newspace %%start_time%%" --account %%username%% |  |
-| st-admin | add-member --email %%username%% --workspace newspace-%%start_time%% |  |
+| st-admin | create-workspace --name newspace-%%start_time%% --title "newspace %%start_time%%" |  |
+| st-admin | add-member --email %%email%% --workspace newspace-%%start_time%% |  |
 
 | *Comment* | Test Case: Tools: Copy Page to Workspace. Create a page and a tag to copy |  |
 | click_and_wait | st-newpage-link |  |

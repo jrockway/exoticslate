@@ -26,27 +26,27 @@ the recipient list as if the Add Additional User button had been pushed. Do the 
 | text_like | st-popup-emailpage-errormessage | To send email, you must specify a recipient |
 | value_like | email_page_subject | Email title %%start_time%% |
 | text_like | email_page_form | From: |
-| text_like | email_page_form | <%%username%%> |
+| text_like | email_page_form | <%%email%%> |
 | type_ok | email_page_subject | Email subject %%start_time%% |
 
 | *Comment* | Test Case: Email Add Recipients |  |
-| select_ok | email_page_user_source | %%username%% |
+| select_ok | email_page_user_source | %%email%% |
 | click_ok | email_page_select_add |  |
-| text_like | email_page_user_choices | %%username%% |
+| text_like | email_page_user_choices | %%email%% |
 | text_unlike | email_page_user_choices | %%start_time%%_one@ken.socialtext.net |
 | text_unlike | email_page_user_choices | %%start_time%%_two@ken.socialtext.net |
 | click_ok | email_page_select_all |  |
-| text_like | email_page_user_choices | %%username%% |
+| text_like | email_page_user_choices | %%email%% |
 | text_like | email_page_user_choices | %%start_time%%_one@ken.socialtext.net |
 | text_like | email_page_user_choices | %%start_time%%_two@ken.socialtext.net |
 
 | *Comment* | Test Case: Email Remove Recipients |  |
-| select_ok | email_page_user_choices | %%username%% |
+| select_ok | email_page_user_choices | %%email%% |
 | click_ok | email_page_select_remove |  |
 | text_like | email_page_user_choices | %%start_time%%_one@ken.socialtext.net |
 | text_like | email_page_user_choices | %%start_time%%_two@ken.socialtext.net |
-| text_unlike | email_page_user_choices | %%username%% |
-| text_like | email_page_user_source | %%username%% |
+| text_unlike | email_page_user_choices | %%email%% |
+| text_like | email_page_user_source | %%email%% |
 | click_ok | email_page_select_none |  |
 | text_like | email_page_user_source | %%start_time%%_one@ken.socialtext.net |
 | text_like | email_page_user_source | %%start_time%%_two@ken.socialtext.net |

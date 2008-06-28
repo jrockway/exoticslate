@@ -17,7 +17,7 @@
 | *Comment* | Test Case: Inter Workspace Search unsorted results can appear in any order, so don't check order |  |
 | st-result | qr/jabber.+test-data2/ |  |
 | st-result | qr/jabber.+test-data3/ |  |
-| st-result | qr/jabber.+Canonical Test Data Set/ |  |
+| st-result | qr/jabber.+%%title%%/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search RT 27423 |  |
 
@@ -30,7 +30,7 @@
 | pause | 5000 |  |
 | *Comment* | Test Case: Inter Workspace Search unsorted results can appear in any order, so don't check order |  |
 | st-result | qr/jabber.+test-data3/ |  |
-| st-result | qr/jabber.+Canonical Test Data Set/ |  |
+| st-result | qr/jabber.+%%title%%/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search Logout and open Help so we can issue a search |  |
 | st-logout |  |  |
@@ -56,10 +56,10 @@
 | pause | 5000 |  |
 | wait_for_element_visible_ok | st-search-content | 20000 |
 
- st-result | qr/jabber.+test-data3.+jabber.+Canonical Test Data Set/ | |
+ st-result | qr/jabber.+test-data3.+jabber.+%%title%%/ | |
 
 | st-result | qr/jabber.+test-data3/ |  |
-| st-result | qr/jabber.+Canonical Test Data Set/ |  |
+| st-result | qr/jabber.+%%title%%/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search DELETE WORKSPACE |  |
 | *Comment* | add user back to test-data2, delete test-data2 |  |
@@ -70,11 +70,11 @@
 | pause | 5000 |  |
 | wait_for_element_visible_ok | st-search-content | 20000 |
 
- st-result | qr/jabber.+test-data3.+jabber.+test-data2.+jabber.+Canonical Test Data Set/ | |
+ st-result | qr/jabber.+test-data3.+jabber.+test-data2.+jabber.+%%title%%/ | |
 
 | st-result | qr/jabber.+test-data3/ |  |
 | st-result | qr/jabber.+test-data2/ |  |
-| st-result | qr/jabber.+Canonical Test Data Set/ |  |
+| st-result | qr/jabber.+%%title%%/ |  |
 
 | st-admin | delete-workspace --workspace test-data2 --no-export | The test-data2 workspace has been deleted. |
 
@@ -83,10 +83,10 @@
 | pause | 5000 |  |
 | wait_for_element_visible_ok | st-search-content | 20000 |
 
- st-result | qr/jabber.+test-data3.+jabber.+Canonical Test Data Set/ | |
+ st-result | qr/jabber.+test-data3.+jabber.+%%title%% | |
 
 | st-result | qr/jabber.+test-data3/ |  |
-| st-result | qr/jabber.+Canonical Test Data Set/ |  |
+| st-result | qr/jabber.+%%title%%/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search PUBLIC TO PRIVATE CONVERSION |  |
 | *Comment* | Logout, search, change test-data3 back to private, search again. |  |
@@ -120,10 +120,10 @@
 | pause | 5000 |  |
 | wait_for_element_visible_ok | st-search-content | 20000 |
 
- st-result | qr/jabber.+test-data2.+jabber.+Canonical Test Data Set/ | |
+ st-result | qr/jabber.+test-data2.+jabber.+%%title%%/ | |
 
 | st-result | qr/jabber.+test-data2/ |  |
-| st-result | qr/jabber.+Canonical Test Data Set/ |  |
+| st-result | qr/jabber.+%%title%%/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search CREATE NEW WORKSPACE, ADD MEMBER |  |
 | *Comment* | Test Case: Inter Workspace Search Create new ws empty because ceq takes too long to index |  |
@@ -132,8 +132,7 @@
 | st-admin | delete-workspace --workspace from-scratch --no-export |  |
 | st-admin | create-workspace --name from-scratch --title From-Scratch --empty | A new workspace named "from-scratch" was created. |
 | st-admin | add-member --workspace from-scratch --email %%email%% | qr/%%username%% .+ a member of the from-scratch workspace\./ |
-| open_ok | /from-scratch |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| open_ok | /from-scratch/index.cgi?action=homepage |  |
 | clickAndWait | st-newpage-link |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
@@ -151,10 +150,10 @@
 | pause | 5000 |  |
 | wait_for_element_visible_ok | st-search-content | 20000 |
 
- st-result | qr/jabber.+test-data2.+jabber.+Canonical Test Data Set.+jabber.+From-Scratch/ | |
+ st-result | qr/jabber.+test-data2.+jabber.+%%title%%.+jabber.+From-Scratch/ | |
 
 | st-result | qr/jabber.+test-data2/ |  |
-| st-result | qr/jabber.+Canonical Test Data Set/ |  |
+| st-result | qr/jabber.+%%title%%/ |  |
 | st-result | qr/jabber.+From-Scratch/ |  |
 
 | st-admin | delete-workspace --workspace test-data2 --no-export | The test-data2 workspace has been deleted. |

@@ -171,7 +171,8 @@ Set default values if they are not defined by the caller
 | click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: String Use: test for TOC blow up |  |
-| text_like | st-page-maincontent | does not have any headers |
+| pause | 30000 |  |
+| text_like | st-page-maincontent | qr/does not have any headers/ |
 
 | *Comment* | Test Case: String Use: Teardown |  |
 | st-admin | purge-page --w %%workspace%% --page %%test_id%%_pad | The %%test_string%% pad page was purged from the %%workspace%% workspace. |

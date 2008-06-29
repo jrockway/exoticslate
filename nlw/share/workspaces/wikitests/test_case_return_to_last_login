@@ -1,6 +1,8 @@
-﻿| *Comment* | Wikitests for {link: dev-tasks [Story: Login takes user to last workspace]} |
+| *Comment* | Wikitests for {link: dev-tasks [Story: Login takes user to last workspace]} |
 
 | *Comment* | Test Case: Return to last login |  |
+| *Comment* | When Personal Dashboard is installed, this test is not relevant because logout followed by login takes you to the Dashboard. This test only works when Socialtext People and Dashboard are not installed. |  |
+
 | *Comment* | Create a test user, workspaces, give that user permissions to workspaces |  |
 
 | set | login_user | user_%%start_time%%@ken.socialtext.net |  |

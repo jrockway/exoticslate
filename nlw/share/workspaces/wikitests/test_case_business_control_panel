@@ -1,5 +1,6 @@
 | *Comment* | Test case: Business Control Panel |  |
 | *Comment* | Test case: Business Control Panel passes in a dev env and a clean appliance VE |  |
+| *Comment* | If there are too many users or workspaces to fit on a single display page, it will fail |  |
 
 | st-admin | remove-accounts-admin --email %%email%% | %%username%% no longer has accounts admin access |
 | st-admin | give-accounts-admin --email %%email%% | %%username%% now has accounts admin access |
@@ -9,14 +10,18 @@
 | set | cli_user | cli_%%start_time%%@ken.socialtext.net |
 
 | *Comment* | Test case: Business Control Panel Socialtext Account exists |  |
-| open | /nlw/control/account |  |
-| verifyTextPresent | Accounts |  |
+| open_ok | /nlw/control/account |  |
+| wait_for_element_visible_ok | name | 30000 |
+| text_like | Accounts |  |
 | clickAndWait | link=Socialtext |  |
 | text_like | Socialtext account |  |
 
+TODO: add reasonable IDs to input boxes and buttons and eliminate xpath expressions
+
 | *Comment* | Test case: Business Control Panel Create and verify new account |  |
 | clickAndWait | link=Accounts |  |
-| type | //form[2]/input[@id='name'] | %%new_acct%% |
+| wait_for_element_visible_ok | name | 30000 |
+| type_ok | //form[2]/input[@id='name'] | %%new_acct%% |
 | clickAndWait | //form[2]/input[2] |  |
 | text_like | The %%new_acct%% account has been created. |  |
 | *Comment* | Test case: Business Control Panel Create a new workspace in the new account |  |
@@ -26,42 +31,46 @@
 | text_like | %%new_workspace%% workspace |  |
 
 | *Comment* | Test case: Business Control Panel Socialtext Search Accounts |  |
-| open | /nlw/control/account |  |
-| type | //form[1]/input[@id='name'] | Socialtext |
+| open_ok | /nlw/control/account |  |
+| wait_for_element_visible_ok | name | 30000 |
+| type_ok | //form[1]/input[@id='name'] | Socialtext |
 | clickAndWait | //form[1]/input[2] |  |
 | text_like | link=Socialtext | Socialtext |
-| type | //form[1]/input[@id='name'] | %%new_acct%% |
+| type_ok | //form[1]/input[@id='name'] | %%new_acct%% |
 | clickAndWait | //form[1]/input[2] |  |
 | text_like | link=%%new_acct%% | %%new_acct%% |
 
 | *Comment* | Test case: Business Control Panel Change new workspace account to Socialtext |  |
-| open | /nlw/control/workspace |  |
-| type | name | %%new_workspace%% |
+| open_ok | /nlw/control/workspace |  |
+| wait_for_element_visible_ok | name | 30000 |
+| type_ok | name | %%new_workspace%% |
 | st-submit |  |  |
 | clickAndWait | link=%%new_workspace%% |  |
 | text_like | %%new_workspace%% |  |
-| select | account_id | label=Socialtext |
+| select_ok | account_id | label=Socialtext |
 | st-submit |  |  |
 | text_like | The %%new_workspace%% workspace is now part of the Socialtext account. |  |
 | text_like | URI: |  |
 
 | *Comment* | Test case: Business Control Panel Search for a non-existant workspace |  |
 | clickAndWait | link=Workspaces |  |
-| type | name | zildjian |
+| wait_for_element_visible_ok | name | 30000 |
+| type_ok | name | zildjian |
 | st-submit |  |  |
 | text_like | Showing 0 - 0 of 0 total. |  |
 
 | *Comment* | Test case: Business Control Panel search for an existing workspace |  |
-| type | name | %%new_workspace%% |
+| type_ok | name | %%new_workspace%% |
 | st-submit |  |  |
 | text_like | Showing 1 - 1 of 1 total. |  |
 
 | *Comment* | Test case: Business Control Panel create a user, add as admin, verify admin |  |
-| open | /nlw/control/user |  |
+| open_ok | /nlw/control/user |  |
 | st-admin | create-user --email %%cli_user%% --password wikicli --first-name Wiki --last-name CLI | A new user with the username "%%cli_user%%" was created |
 | st-admin | add-workspace-admin --email %%cli_user%% --workspace %%new_workspace%% |  |
 | clickAndWait | link=Workspaces |  |
-| type | name | %%new_workspace%% |
+| wait_for_element_visible_ok | name | 30000 |
+| type_ok | name | %%new_workspace%% |
 | st-submit |  |  |
 | clickAndWait | link=%%new_workspace%% |  |
 | text_like | workspace admin |  |
@@ -80,7 +89,8 @@
 
 | *Comment* | Test case: Business Control Panel search for new user |  |
 | clickAndWait | link=Users |  |
-| type | username | %%cli_user%% |
+| wait_for_element_visible_ok | username | 30000 |
+| type_ok | username | %%cli_user%% |
 | st-submit |  |  |
 | text_like | Showing 1 - 1 of 1 total. |  |
 
@@ -114,7 +124,7 @@
 | st-admin | add-member --email 0_sort_3_user3@%%start_time%%.com --workspace 0-sort-3-workspace3-%%start_time%% |
 
 | *Comment* | Test case: Business Control Panel sorting Accounts display |  |
-| open | /nlw/control/account |  |
+| open_ok | /nlw/control/account |  |
 
 | clickAndWait | link=Name |  |
 | text_like | qr/0 sort 3 account %%start_time%%.+0 sort 2 account %%start_time%%.+0 sort 1 account %%start_time%%/ |  |

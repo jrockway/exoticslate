@@ -63,7 +63,6 @@ test env properly and are not testing the test-workspace
 * [Test Case: Untitled Page]
 * [Test Case: Weblog Naming]
 * [Test Case: Page Open Errors]
-* [Test Case: Return to last login]
 * [Test Case: Link Interface]
 * [Test Case: Nasty Double Dashes]
 * [Test Case: REST Workspace]
@@ -84,6 +83,11 @@ Moved them to the end to isolate failures.
 * [Test Case: Single Dash]
 * [Test Case: Email]
 * [Test Case: Email Attachment]
+
+Return to last login fails when People and Dashboard are installed. Keep the test because
+we are going to test in a mode where People and Dashboard are not installed.
+
+* [Test Case: Return to last login]
 
 ----
 

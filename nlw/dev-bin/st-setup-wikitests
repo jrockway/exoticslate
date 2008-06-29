@@ -1,15 +1,37 @@
 #!/bin/bash
 
-# create test-data workspace
-echo Creating test-data workspace
-$ST_CURRENT/nlw/dev-bin/create-test-data-workspace
+NLW_BIN="$ST_CURRENT/nlw/bin"
+NLW_DEVBIN="$ST_CURRENT/nlw/dev-bin"
+USERNAME="wikitester@ken.socialtext.net"
 
-# instantiate wikitests wiki
-echo Creating  wikitests wiki
-$ST_CURRENT/nlw/dev-bin/wikitests-to-wiki
+echo Set up  test-data workspace
+$NLW_DEVBIN/create-test-data-workspace
+$NLW_BIN/st-admin create-user --e $USERNAME >/dev/null 2>/dev/null || true
+$NLW_BIN/st-admin add-workspace-admin --w test-data --e $USERNAME >/dev/null 2>/dev/null || true
+$NLW_BIN/st-admin give-accounts-admin  --e $USERNAME  >/dev/null 2>/dev/null || true
+$NLW_BIN/st-admin give-system-admin  --e $USERNAME  >/dev/null 2>/dev/null || true
 
-# install reports data
-echo Creating reports db
-$ST_CURRENT/nlw/dev-bin/st-populate-reports-db
+echo ""
+echo Populating reports DB
+$NLW_DEVBIN/st-populate-reports-db
+# run report populater again because that seems to be necessary for the
+# report tests to pass
+$NLW_DEVBIN/st-populate-reports-db
 
+echo "Set up wikitests"
+read -p  "Build wikitests wiki from scratch? y/n: " wikitest
+if [ "$wikitest" == "y" ]; then
+    $NLW_DEVBIN/wikitests-to-wiki
+else
+    echo ""
+    read -p  "Build wikitests wiki from tarball? y/n: " wikitest
+    [ "$wikitest" == "y" ] && $NLW_BIN/st-admin import-workspace --tarball $ST_CURRENT/nlw/share/workspaces/wikitests/wikitests.1.tar.gz  
+fi
 
+echo ENABLING Socialcalc for all workspaces
+$NLW_DEVBIN/st-socialcalc enable
+
+echo Removing all ceqlotron tasks to stop unnecessary indexing
+$NLW_BIN/ceq-rm /.+/
+
+echo Done setting up wikitests

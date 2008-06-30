@@ -10,7 +10,8 @@ Test set up:
 
 | st-admin | remove-system-admin --email %%email%% | no longer has |
 | st-admin | give-accounts-admin --email %%email%% | now has |
-| set | wksp | w%%start_time%% |
+
+| set | wksp | rest-users-%%start_time%% |
 | set | account_id | 2 |
 
 | comment | Test case: REST Users POST a workspace |  |
@@ -19,6 +20,7 @@ Test set up:
 | header-like | Location | /data/workspaces/%%wksp%% |
 
 | st-admin | remove-accounts-admin --email %%email%% | no longer has |
+
 | comment | Test case: REST Users Add an user to a workspace fails for non-admin |  |
 | post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"member", "send_confirmation_invitation":0 } |
 | code-is | 403 |  |
@@ -29,12 +31,13 @@ Test set up:
 | post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"member", "send_confirmation_invitation":0 } |
 | code-is | 201 |  |
 
-| comment | Add a test user missing fields |  |
+| comment | Test case: REST Users Add a test user missing fields |  |
 | set | test_user | test_user%%start_time%%@example.com |  |
 
  st-admin | create-user --email %%test_user%% --password d3vnu11l | |
 
-| comment | create the user | post | /data/users | { "username":%%test_user%%, "email_address":%%test_user%%, "password":"d3vnu11l" } |
+| comment | Test case: REST Users create the user |  |
+| post | /data/users | { "username":%%test_user%%, "email_address":%%test_user%%, "password":"d3vnu11l" } |
 | code-is | 201 |  |
 
 | post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { } |
@@ -145,5 +148,8 @@ Tests where remove should fail
 | st-admin | remove-system-admin --email %%email%% | no longer has |
 | delete | /data/workspaces/%%wksp%%/users/%%test_user%% |  |
 | code-is | 403 |  |
+
+| comment | Test case: REST Users Teardown |  |
+| st-admin | delete-workspace --w %%wksp%% --no-export | deleted |
 
 | comment | Test case: REST Users COMPLETED |  |

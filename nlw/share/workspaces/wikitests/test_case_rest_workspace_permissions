@@ -12,7 +12,8 @@ Test set up:
 
 | st-admin | remove-system-admin --email %%email%% | no longer has |
 | st-admin | give-accounts-admin --email %%email%% | now has |
-| set | wksp | wperm%%start_time%% |
+
+| set | wksp | rest-perm-%%start_time%% |
 | set | account_id | 2 |
 
 | comment | Test case: REST Workspace POST a workspace |  |
@@ -106,5 +107,8 @@ Test set up:
 | get | /data/workspaces/%%wksp%% | application/json |
 | code-is | 200 |  |
 | body-unlike | intranet |  |
+
+| comment | Test Case" REST Workspace Permissions Teardown |  |
+| st-admin | delete-workspace --w %%wksp%% --no-export | deleted |
 
 | comment | Test Case" REST Workspace Permissions COMPLETED |  |

@@ -8,7 +8,8 @@ Test set up:
 
 | comment | STARTING Test case: REST Workspace |  |
 | st-admin | remove-system-admin --email %%email%% | no longer has |
-| set | wksp | w%%start_time%% |
+
+| set | wksp | rest-workspace-%%start_time%% |
 | set | account_id | 2 |
 
 | comment | Test case: REST Workspace POST by non-admin gets 401 |  |
@@ -46,7 +47,7 @@ Test set up:
 | st-admin | set-permissions --workspace %%wksp%% --permissions public | have been changed to public |
 | get | /data/workspaces/%%wksp%% | application/json |
 | code-is | 200 |  |
-| body-like | me":"w%%start_time%%","title":"W%%start_time%%" |
+| body-like | me":"%%wksp%%","title":"W%%start_time%%" |
 
 | comment | Test case: REST Workspace Add a user to a workspace |  |
 | post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"member", "send_confirmation_invitation":0 } |
@@ -60,7 +61,7 @@ Test set up:
 | comment | GET existing workspace as json by user |  |
 | get | /data/workspaces/%%wksp%% | application/json |
 | code-is | 200 |  |
-| body-like | me":"w%%start_time%%","title":"W%%start_time%%" |
+| body-like | me":"%%wksp%%","title":"W%%start_time%%" |
 
 | comment | Test case: REST Workspace Promote a user to workspace admin |  |
 | post | /data/workspaces/%%wksp%%/users | Content-Type=application/json | { "username":"%%username%%", "rolename":"workspace_admin" } |
@@ -83,12 +84,14 @@ Test set up:
 | comment | get list of all workspaces |  |
 | get | /data/workspaces | application/json |
 | code-is | 200 |
-| body-like | {"name":"test-data","title":"Canonical Test Data Set" |  |
+| body-like | {"name":"test-data","title":"%%title%%" |  |
 | body-like | {"name":"%%wksp%%","title":"W%%start_time%%" |  |
 
 These tests are from "Story: Add Backlink to IBM Lotus Connections via REST"<https://www2.socialtext.net/dev-tasks/index.cgi?story_add_backlink_to_ibm_lotus_connections_via_rest>.
 
 | comment | Test case: REST Workspace Create a workspace with a customjs_uri |  |
+
+| st-admin | delete-workspace --w %%wksp%% --no-export | deleted |
 | set | wksp | c%%start_time%% |
 | post | /data/workspaces | Content-Type=application/json | { "name":"%%wksp%%", "title":"W%%start_time%%", "account_id":"%%account_id%%", "customjs_uri":"/monkey.js" } |
 | code-is | 201 |  |
@@ -215,5 +218,8 @@ Business admin can't read the workspace's json, so we will add the user as a wor
 | code-is | 204 |  |
 | get | /data/workspaces/deleteme%%wksp%% |  |
 | code_is | 404 |  |
+
+| comment | Test case: REST Workspace Teardown |  |
+| st-admin | delete-workspace --w %%wksp%% --no-export | deleted |
 
 | comment | Test case: REST Workspace COMPLETED |  |

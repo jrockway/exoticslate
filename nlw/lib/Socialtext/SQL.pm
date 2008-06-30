@@ -95,6 +95,7 @@ Returns a statement handle.
 
 sub sql_execute {
     my ( $statement, @bindings ) = @_;
+    my $dbh = get_dbh();
     Socialtext::Timer->Continue('sql_execute');
 
     my $in_tx = sql_in_transaction();
@@ -106,7 +107,7 @@ sub sql_execute {
         warn "Preparing ($statement) - Bindings:(" . join(',', @bindings) . ")" 
             if $DEBUG;
         Socialtext::Timer->Continue('sql_prepare');
-        $sth = get_dbh->prepare($statement);
+        $sth = $dbh->prepare($statement);
         Socialtext::Timer->Pause('sql_prepare');
         $sth->execute(@bindings) ||
             die "Error during execute - bindings=("

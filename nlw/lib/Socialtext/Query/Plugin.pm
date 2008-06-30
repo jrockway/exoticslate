@@ -55,9 +55,7 @@ sub push_result {
     $result->{page_id} = $page->id;
     $result->{username} =
         $page->last_edited_by->username;
-    if ( $self->cgi->summaries ) {
-        $result->{Summary} = $result->{Summary} || $page->preview_text;
-    }
+    $result->{Summary} = $result->{Summary} || $page->preview_text;
 
     push @{$self->result_set->{rows}}, $result;
     return 1;

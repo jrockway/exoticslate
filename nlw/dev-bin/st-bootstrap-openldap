@@ -9,7 +9,8 @@ use lib "$FindBin::Bin/../lib";
 use Getopt::Long;
 use Pod::Usage;
 use File::Slurp qw(slurp write_file);
-use IO::String;
+use File::Temp qw(tempfile);
+use Fcntl qw(SEEK_SET);
 use Socialtext::AppConfig;
 use Socialtext::Bootstrap::OpenLDAP;
 
@@ -84,8 +85,13 @@ sub start {
         base_dn     => 'dc=socialtext,dc=com',
         root_dn     => 'cn=Manager,dc=socialtext,dc=com',
         );
-    my $ldif_fh = IO::String->new($ldif_data);
+
+
+    my $ldif_fh = tempfile();
+    $ldif_fh->print($ldif_data);
+    seek $ldif_fh, 0, SEEK_SET;
     $openldap->add($ldif_fh) || die "can't add data to LDAP server\n";
+    $ldif_fh->close();
 
     # configure ldap.yaml based on this bootstrapped OpenLDAP instance
     my $ldapcfg   = $openldap->ldap_config();

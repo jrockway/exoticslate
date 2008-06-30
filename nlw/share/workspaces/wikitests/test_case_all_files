@@ -112,29 +112,25 @@
 | *Comment* | label=File name (↓ ) |  |
 
 | *Comment* | Test Case: All Files sorted Filename desc |  |
-| select_ok | sort-picker | index=1 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=1 |
 | text_like | st-allfiles | qr/wikitestzip.+wikitest\.jpg/ |
 
 | *Comment* | label=Size (↓ ) |  |
 
 | *Comment* | Test Case: All Files sort File size desc |  |
-| select_ok | sort-picker | label=Size |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Size |
 | text_like | st-allfiles | qr/All Files %%start_time%% 1.+All Files %%start_time%% 2/ |
 
 | *Comment* | label=Size |  |
 
 | *Comment* | Test Case: All Files sort File size asc |  |
-| select_ok | sort-picker | index=5 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=5 |
 | text_like | st-allfiles | qr/All Files %%start_time%% 2.+All Files %%start_time%% 1/ |
 
 | *Comment* | label=Title |  |
 
 | *Comment* | Test Case: All Files sort Title asc |  |
-| select_ok | sort-picker | label=Page Title |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Page Title |
 | text_like | st-allfiles | qr/All Files %%start_time%% 1.+All Files %%start_time%% 2/ |
 
 | *Comment* | label=Title (↓ ) |  |
@@ -145,29 +141,25 @@
 | text_like | st-allfiles | qr/All Files %%start_time%% 2.+All Files %%start_time%% 1/ |
 
 | *Comment* | Test Case: All Files sort Uploaded by asc |  |
-| select_ok | sort-picker | label=Uploaded By |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Uploaded By |
 | text_like | st-allfiles | qr/All Files %%start_time%% 1.+All Files %%start_time%% 2/ |
 
 | *Comment* | label=Uploaded By (↓ ) |  |
 
 | *Comment* | Test Case: All Files sort Uploaded by desc |  |
-| select_ok | sort-picker | index=3 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=3 |
 | text_like | st-allfiles | qr/All Files %%start_time%% 2.+All Files %%start_time%% 1/ |
 
 | *Comment* | label=Date (↓) |  |
 
 | *Comment* | Test Case: All Files sort Date desc |  |
-| select_ok | sort-picker | label=Date Uploaded |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Date Uploaded |
 | text_like | st-allfiles | qr/All Files %%start_time%% 2.+All Files %%start_time%% 1/ |
 
 | *Comment* | label=Date |  |
 
 | *Comment* | Test Case: All Files sort Date asc |  |
-| select_ok | sort-picker | index=4 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=4 |
 | text_like | st-allfiles | qr/All Files %%start_time%% 1.+All Files %%start_time%% 2/ |
 
 | *Comment* | Test Case: All Files Teardown |  |

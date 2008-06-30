@@ -28,13 +28,11 @@
 | click_and_wait | link=What's New |  |
 
 | *Comment* | Test Case: Calc What's New Sorting Title ascending |
-| select_ok | sort-picker | label=Title |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Title |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0001.+hey whatsnew %%start_time%% 0004/ |
 
 | *Comment* | Test Case: Calc What's New Sorting Title descending |
-| select_ok | sort-picker | index=1 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=1 |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0001/ |
 
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=hey whatsnew %%start_time%% 0005#edit |  |
@@ -46,13 +44,11 @@
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0005.+hey whatsnew %%start_time%% 0004/ |
 
 | *Comment* | Test Case: Calc What's New Sorting Date ascending |
-| select_ok | sort-picker | index=3 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=3 |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0005/ |
 
 | *Comment* | Test Case: Calc What's New Sorting Date descending |
-| select_ok | sort-picker | index=3 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=3 |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0003.+hey whatsnew %%start_time%% 0002/ |
 
 | open_ok | /%%workspace%%/index.cgi?hey whatsnew %%start_time%% 0005 |  |
@@ -65,13 +61,11 @@
 | wait_for_element_visible_ok | st-list-title | 30000 |
 
 | *Comment* | Test Case: Calc What's New Sorting Revisions descending |
-| select_ok | sort-picker | index=4 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=4 |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0005.+hey whatsnew %%start_time%% 0004/ |
 
 | *Comment* | Test Case: Calc What's New Sorting Revisions ascending |
-| select_ok | sort-picker | index=4 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=4 |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0004.+hey whatsnew %%start_time%% 0005/ |
 
 This test assumes that a certain date/time format is selected (Oct 3 12:34am)

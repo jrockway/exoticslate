@@ -153,44 +153,33 @@
 | click_and_wait | link=All Files |  |
 
 | *Comment* | Test Case: Sorting Files Sorting by filename descending, then ascending |  |
-| select_ok | sort-picker | index=1 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=1 |
 | text_like | st-attachments_ui-content | qr/wikitestzip\.zip.+wikitest\.txt.+wikitest\.pdf.+wikitest\.jpg.+wikitest\.doc/ |
-| select_ok | sort-picker | index=1 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=1 |
 | text_like | st-attachments_ui-content | qr/wikitest\.doc.+wikitest\.jpg.+wikitest\.pdf.+wikitest\.txt.+wikitestzip\.zip/ |
 
 | *Comment* | Test Case: Sorting Files Sorting by page title ascending, then descending |  |
-| select_ok | sort-picker | label=Page Title |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Page Title |
 | text_like | st-attachments_ui-content | qr/page1 %%start_time%%.+page2 %%start_time%%.+page3 %%start_time%%.+page4 %%start_time%%.+page5 %%start_time%%/ |
-| select_ok | sort-picker | index=2 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=2 |
 | text_like | st-attachments_ui-content | qr/page5 %%start_time%%.+page4 %%start_time%%.+page3 %%start_time%%.+page2 %%start_time%%.+page1 %%start_time%%/ |
-| select_ok | sort-picker | index=2 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=2 |
 | text_like | st-attachments_ui-content | qr/page1 %%start_time%%.+page2 %%start_time%%.+page3 %%start_time%%.+page4 %%start_time%%.+page5 %%start_time%%/ |
 
 | *Comment* | Test Case: Sorting Files sort by uploaded by, ascending, then descending |  |
-| select_ok | sort-picker | label=Uploaded By |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Uploaded By |
 | text_like | st-attachments_ui-content | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_3_regex%%.+%%user_4_regex%%.+%%user_5_regex%%/ |
-| select_ok | sort-picker | index=3 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=3 |
 | text_like | st-attachments_ui-content | qr/%%user_5_regex%%.+%%user_4_regex%%.+%%user_3_regex%%.+%%user_2_regex%%.+%%user_1_regex%%/ |
-| select_ok | sort-picker | index=3 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=3 |
 | text_like | st-attachments_ui-content | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_3_regex%%.+%%user_4_regex%%.+%%user_5_regex%%/ |
 
 | *Comment* | Test Case: Sorting Files sort by size, descending, then ascending |  |
-| select_ok | sort-picker | label=Size |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Size |
 | text_like | st-attachments_ui-content | qr/30kb.+27kb.+24kb.+20kb.+42bytes/ |
-| select_ok | sort-picker | index=5 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=5 |
 | text_like | st-attachments_ui-content | qr/42bytes.+20kb.+24kb.+27kb.+30kb/ |
-| select_ok | sort-picker | index=5 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=5 |
 | text_like | st-attachments_ui-content | qr/30kb.+27kb.+24kb.+20kb.+42bytes/ |
 
 We do not have much control on data under "Date Uploaded" column to verify expected and actual sort result. So instead of verifying sort results directly to "Date Uploaded" column, we tried to verify it through the data of other columns. Means that if we do a sort asc or desc on Date Uploaded, we verified the corresponding expected changes of data in other columns to make sure that Date Uploaded sort is working. We have done it twice, one for asc and other one for desc sort by "Date Uploaded".

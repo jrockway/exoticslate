@@ -121,18 +121,15 @@ check for title sorting
 | *Comment* | Test case: Watchlist unfortunately have to use pause because all pages data and elements are always the same |  |
 
 | *Comment* | Test case: Watchlist title sort |  |
-| select_ok | sort-picker | label=Title |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Title |
 | text_like | st-listview | qr/aaa_%%start_time%%.+bbb_%%start_time%%.+ccc_%%start_time%%/ |
 
 | *Comment* | label=Title (desc) |  |
-| select_ok | sort-picker | index=1 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=1 |
 | text_like | st-listview | qr/ccc_%%start_time%%.+bbb_%%start_time%%.+aaa_%%start_time%%/ |
 
 | *Comment* | label=Title (asc) |  |
-| select_ok | sort-picker | index=1 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=1 |
 | text_like | st-listview | qr/aaa_%%start_time%%.+bbb_%%start_time%%.+ccc_%%start_time%%/ |
 
 add a new page for date and revision sorting
@@ -161,52 +158,44 @@ add a new page for date and revision sorting
 check for date sorting
 
 | *Comment* | Test case: Watchlist sort by Date |  |
-| select_ok | sort-picker | label=Date |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Date |
+| pause | 10000 | No, really, this one is needed |
 | text_like | st-listview | qr/newpage_%%start_time%%.+ccc_%%start_time%%.+bbb_%%start_time%%.+aaa_%%start_time%%/ |
 
 | *Comment* | label=Date (asc) |  |
-| select_ok | sort-picker | index=3 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=3 |
 | text_like | st-listview | qr/aaa_%%start_time%%.+bbb_%%start_time%%.+ccc_%%start_time%%.+newpage_%%start_time%%/ |
 
 | *Comment* | label=Date (desc) |  |
-| select_ok | sort-picker | index=3 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=3 |
 | text_like | st-listview | qr/newpage_%%start_time%%.+ccc_%%start_time%%.+bbb_%%start_time%%.+aaa_%%start_time%%/ |
 
 title sort
 
 | *Comment* | Test case: Watchlist sort by title |  |
-| select_ok | sort-picker | label=Title |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Title |
 | text_like | st-listview | qr/aaa_%%start_time%%.+bbb_%%start_time%%.+ccc_%%start_time%%.+newpage_%%start_time%%/ |
 
 | *Comment* | label=Title (desc) |  |
-| select_ok | sort-picker | index=1 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=1 |
 | text_like | st-listview | qr/newpage_%%start_time%%.+ccc_%%start_time%%.+bbb_%%start_time%%.+aaa_%%start_time%%/ |
 
 | *Comment* | label=Title (asc) |  |
-| select_ok | sort-picker | index=1 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=1 |
 | text_like | st-listview | qr/aaa_%%start_time%%.+bbb_%%start_time%%.+ccc_%%start_time%%.+newpage_%%start_time%%/ |
 
 Revisions sort
 
 | *Comment* | Test case: Watchlist sort by Revisions |  |
-| select_ok | sort-picker | label=Revisions |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Revisions |
 | text_like | st-listview | qr/newpage_%%start_time%%.+aaa_%%start_time%%/ |
 
 | *Comment* | label=Revisions (asc) |  |
-| select_ok | sort-picker | index=4 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=4 |
 | text_like | st-listview | qr/aaa_%%start_time%%.+newpage_%%start_time%%/ |
 
 | *Comment* | label=Revisions (desc) |  |
-| select_ok | sort-picker | index=4 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=4 |
 | text_like | st-listview | qr/newpage_%%start_time%%.+aaa_%%start_time%%/ |
 
 create a user that lexically precedes the logged in user by creating a user that begins with start_time
@@ -228,18 +217,15 @@ contains %%email%% as a substring and that messes up other tests like Test Case:
 Last Edited By sort
 
 | *Comment* | Test case: Watchlist sort by Last Edited By |  |
-| select_ok | sort-picker | label=Last Edited By |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Last Edited By |
 | text_like | st-listview | qr/bbb_%%start_time%%.+aaa_%%start_time%%.+ccc_%%start_time%%.+newpage_%%start_time%%/ |
 
 | *Comment* | label=Last Edited By (desc) |  |
-| select_ok | sort-picker | index=2 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=2 |
 | text_like | st-listview | qr/aaa_%%start_time%%.+ccc_%%start_time%%.+newpage_%%start_time%%.+bbb_%%start_time%%/ |
 
 | *Comment* | label=Last Edited By (asc) |  |
-| select_ok | sort-picker | index=2 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=2 |
 | text_like | st-listview | qr/bbb_%%start_time%%.+aaa_%%start_time%%.+ccc_%%start_time%%.+newpage_%%start_time%%/ |
 
 | *Comment* | Test case: Watchlist Teardown |  |

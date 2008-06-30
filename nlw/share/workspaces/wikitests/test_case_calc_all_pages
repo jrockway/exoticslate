@@ -27,12 +27,10 @@
 
 | open_ok | %%workspace%%/index.cgi?action=changes&changes=all |  |
 
-| select_ok | sort-picker | label=Title |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Title |
 | text_like | st-listview | qr/allpages spreadsheet0001%%start_time%%.+allpages spreadsheet0004%%start_time%%/ |
 
-| select_ok | sort-picker | index=1 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=1 |
 | text_like | st-listview | qr/allpages spreadsheet0004%%start_time%%.+allpages spreadsheet0001%%start_time%%/ |
 
 | *Comment* | Test Case: Calc All Pages date sort |  |
@@ -45,12 +43,10 @@
 
 | text_like | st-listview | qr/allpages spreadsheet0005%%start_time%%.+allpages spreadsheet0001%%start_time%%/ |
 
-| select_ok | sort-picker | index=3 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=3 |
 | text_like | st-listview | qr/allpages spreadsheet0001%%start_time%%.+allpages spreadsheet0005%%start_time%%/ |
 
-| select_ok | sort-picker | index=3 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=3 |
 | text_like | st-listview | qr/allpages spreadsheet0005%%start_time%%.+allpages spreadsheet0004%%start_time%%/ |
 
 | *Comment* | Test Case: Calc All Pages revision sort |  |
@@ -66,12 +62,10 @@
 
 | open_ok | %%workspace%%/index.cgi?action=changes&changes=all |
 
-| select_ok | sort-picker | label=Revisions |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Revisions |
 | text_like | st-listview | qr/allpages spreadsheet0004%%start_time%%.+allpages spreadsheet0003%%start_time%%/ |
 
-| select_ok | sort-picker | index=4 |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=4 |
 | text_like | st-listview | qr/allpages spreadsheet0003%%start_time%%.+allpages spreadsheet0004%%start_time%%/ |
 
 | *Comment* | Test Case: Calc All Pages sort by Last Edited By |  |
@@ -103,12 +97,10 @@ For some reason, IE 6 blows up when open_ok is used in some places. We avoid it.
 
 | open_ok | %%workspace%%/index.cgi?action=changes&changes=all |  |
 
-| select_ok | sort-picker | label=Last Edited By |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | label=Last Edited By |
 | text_like | st-listview | qr/allpages spreadsheet0003%%start_time%%.+allpages spreadsheet0001%%start_time%%/ |
 
-| select_ok | sort-picker | index=2 |  |
-| pause | 10000 |  |
+| select_and_wait | sort-picker | index=2 |  |
 | text_like | st-listview | qr/allpages spreadsheet0001%%start_time%%.+allpages spreadsheet0003%%start_time%%/ |
 
 | *Comment* | Test Case: Calc All Pages Teardown. No need to login again. |  |

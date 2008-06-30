@@ -52,8 +52,7 @@
 
 | *Comment* | Test Case: Delete Selected Attachments delete wikitest.doc |  |
 | *Comment* | Sort by Date Uploaded to get wikitest.doc to the top |  |
-| select_ok | sort-picker | label=Date Uploaded |
-| pause | 10000 | I hate pause |
+| select_and_wait | sort-picker | label=Date Uploaded |
 
 | *Comment* | Tick the top box |  |
 | wait_for_element_visible_ok | selected | 30000 |

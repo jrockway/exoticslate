@@ -2210,7 +2210,7 @@ span.st-weblog-previousentries, span.st-weblog-nextentries {
     padding: .2em;
 }
 
-.wiki .incipient {
+a.incipient {
     text-decoration: none;
     border-bottom: 1px dashed;
 }

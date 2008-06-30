@@ -109,6 +109,7 @@ sub sql_execute {
         Socialtext::Timer->Continue('sql_prepare');
         $sth = $dbh->prepare($statement);
         Socialtext::Timer->Pause('sql_prepare');
+        Socialtext::Timer->Pause('sql_prepare');
         $sth->execute(@bindings) ||
             die "Error during execute - bindings=("
                 . join(', ', @bindings) . ') - '

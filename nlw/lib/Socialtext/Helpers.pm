@@ -171,8 +171,7 @@ sub global_template_vars {
         pluggable          => $self->hub->pluggable,
         loc                => \&loc,
         loc_lang           => $self->hub->display->preferences->locale->value,
-        css                => $self->_get_css_info,
-        additional_css     => $self->_get_additional_css_info,
+        css                => $self->hub->skin->css_info,
         user               => $self->_get_user_info,
         wiki               => $self->_get_wiki_info,
         checker            => $self->hub->checker,
@@ -200,29 +199,6 @@ sub miki_path {
         workspace  => $workspace_name,
         page_uri   => $page_name,
     );
-}
-
-sub _get_css_info {
-    my ($self) = @_;
-    return {
-        common    => $self->hub->css->uri_for_common_css,
-        screen    => $self->hub->css->uris_for_css('screen.css'),
-        screen_ie => $self->hub->css->uris_for_css('screen.ie.css'),
-        print     => $self->hub->css->uris_for_css('print.css'),
-        wikiwyg   => $self->hub->css->uris_for_css('wikiwyg.css'),
-        print_ie  => $self->hub->css->uris_for_css('print.ie.css'),
-        popup     => $self->hub->css->uris_for_css('popup.css'),
-        popup_ie  => $self->hub->css->uris_for_css('popup.ie.css'),
-    };
-}
-
-sub _get_additional_css_info {
-    my ($self) = @_;
-    return {
-        plugin      => $self->hub->css->uris_for_plugin_css,
-        local       => $self->hub->css->uris_for_additional_local_css,
-        locale      => $self->hub->css->uris_for_additional_locale_css,
-    };
 }
 
 sub _get_user_info {

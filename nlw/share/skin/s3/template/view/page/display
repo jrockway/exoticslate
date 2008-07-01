@@ -1,0 +1,27 @@
+[% WRAPPER layout/html
+    subnav = "element/page_subnav"
+%]
+<div id="contentTitle">
+    <h2 class="tableTitle">[% page.display_title %]</h2>
+    <a class="hideTab">Hide</a>
+</div>
+<div id="contentColumns">
+    <div id="contentLeft">
+        [% page.content %]
+    </div>
+    <div id="contentRight">
+    </div>
+</div>
+<div class="clear"></div>
+<div id="bottomButtons">
+    <ul>
+        <li><a class="editButton" href="#">Edit</a></li>
+        <li><a class="commentButton" href="#">Comment</a></li>
+    </ul>
+    <ul class="buttonRight">    
+        <li><a class="newPageButton" href="#">New Page</a></li>
+        <li><a class="watchButton" href="#">Watch this Page</a></li>
+    </ul>   
+</div><!-- bottomButtons -->
+
+[% END %]

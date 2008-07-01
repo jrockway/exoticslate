@@ -1,0 +1,54 @@
+[% USE html_encode %]
+[% USE decorate %]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <!--doc version: 6-10-08h-->
+    [% INCLUDE element/head %]
+    <body id="socialtext-wiki">
+        <div id="mainWrap">
+            <div id="header" class="st-wiki-nav">
+                <div id="logo"><a href="index.html"><img src="[% wiki.skin_uri('s3') %]/images/logo.png" alt="Socialtext" /></a></div><!-- logo END -->
+                <div id="globalNav" class="st-wiki-nav-content">
+                    <ul  class="st-wiki-nav-actions">
+                        <li id="st-wikinav-mobile"><a href="#">Mobile</a></li>
+                        <li id="st-wikinav-setting"><a href="#">Settings</a></li>
+                        <li id="st-wikinav-help"><a href="#">Help</a></li>
+                        <li id="st-wikinav-logout" class="last"><a id="logout_btn" href="#">Logout</a></li>
+                    </ul>
+                    <div id="st-search-form"><label>Search:</label><input id="st-search-term" name="search_term" class="searchText" type="text" /><input id="st-search-submit" class="searchButton"  type="button" /></div>
+                </div><!-- globalNav END -->
+            </div><!-- header END -->
+            <div id="mainNav" class="st-wiki-subnav-dashboard">
+                <ul id="st-wiki-subnav-left" >
+                    <li id="st-home"><a  id="st-home-link" href="#">Home</a></li>
+                    <li class="selected"><a  id="st-wiki-subnav-link-whats-new" href="#">What's New</a></li>
+                    <li><a id="st-wiki-subnav-link-weblogs" href="#">Weblogs</a></li>
+                </ul>
+                <div id="workSpaceLink">
+                    <a href="#">You Workspaces</a>
+                </div><!-- workSpaceLink END -->
+            </div><!-- mainNav END -->
+            <div id="contentWrap" class="st-content">
+                [% INCLUDE $subnav %]
+                <div id="contentContainer">
+                    [% content %]
+                </div><!-- contentContainer -->	
+                <div id="footer">
+                    <div id="footerLinks">
+                        <ul>
+                            <li class="first"><a href="#">Socialtext, the Enterprise Wiki v2.20.1.1</a></li>
+                            <li><a href="#">Community</a></li>
+                        </ul>
+                    </div><!-- footerLinks END -->
+                    <div id="footerGlobal">
+                        <ul>
+                            <li class="first"><a href="#">Mobile</a></li>
+                            <li><a href="#">Settings</a></li>
+                            <li><a href="#">Help</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </div><!-- footerGlobal END -->
+                </div><!-- footer END -->
+            </div><!-- contentWrap END -->
+        </div><!-- mainWrap END -->
+    </body>
+</html>

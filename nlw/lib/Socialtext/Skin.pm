@@ -34,14 +34,41 @@ sub name {
 
 sub skin_info {
     my $self = shift;
+    return $self->{_skin_info} if $self->{_skin_info};
     my $skin_path = $self->skin_path;
-    my $info_path = File::Spec->catfile($skin_path, 'info.yaml');
-    my $skin_info = -f $info_path ? YAML::LoadFile($info_path) : {};
-    $skin_info->{skin_type} ||= $self->default_skin_name;
-    $skin_info->{skin_name} = $self->name;
-    $skin_info->{skin_path} = $skin_path;
-    return $skin_info;
+    my $info_path = File::Spec->catfile( $skin_path, 'info.yaml' );
+    $self->{_skin_info} = -f $info_path ? YAML::LoadFile($info_path) : {};
+    $self->{_skin_info}{skin_type} ||= $self->default_skin_name;
+    $self->{_skin_info}{skin_name} = $self->name;
+    $self->{_skin_info}{skin_path} = $skin_path;
+    return $self->{_skin_info};
 }
+
+sub common_css {
+    my $self = shift;
+
+    return $self->skin_info->{no_common}
+        ? ''
+        : $self->hub->css->uri_for_common_css
+}
+
+sub css_info {
+    my ($self) = @_;
+    return {
+        common    => $self->common_css,
+        screen    => $self->hub->css->uris_for_css('screen.css'),
+        screen_ie => $self->hub->css->uris_for_css('screen.ie.css'),
+        print     => $self->hub->css->uris_for_css('print.css'),
+        wikiwyg   => $self->hub->css->uris_for_css('wikiwyg.css'),
+        print_ie  => $self->hub->css->uris_for_css('print.ie.css'),
+        popup     => $self->hub->css->uris_for_css('popup.css'),
+        popup_ie  => $self->hub->css->uris_for_css('popup.ie.css'),
+        plugin    => $self->hub->css->uris_for_plugin_css,
+        local     => $self->hub->css->uris_for_additional_local_css,
+        locale    => $self->hub->css->uris_for_additional_locale_css,
+    };
+}
+
 
 sub skin_dir {
     my $self = shift;

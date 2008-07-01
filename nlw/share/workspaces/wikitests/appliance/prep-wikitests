@@ -33,4 +33,6 @@ sudo -u www-data /usr/bin/st-admin give-accounts-admin --e devnull1@socialtext.c
 echo INSTALLING slapd
 sudo apt-get install slapd
 
+echo ENABLING Socialcalc for all workspaces
+/usr/bin/st-socialcalc enable
 echo ""

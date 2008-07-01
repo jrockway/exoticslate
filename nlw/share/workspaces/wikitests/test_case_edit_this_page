@@ -92,15 +92,17 @@
 | click_ok | st-edit-button-link |  |
 | type_ok | wikiwyg_wikitext_textarea | hijklmno |
 | chooseCancelOnNextConfirmation |  |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| *Comment* | *MUST* CLICK st-home-link IN ORDER TO TRIGGER JS POPUP |  |
+| click_ok | st-home-link |  |
 
 | *Comment* | Cancel and keep unsaved edits |  |
 | confirmation_is | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
 | verifyValue | wikiwyg_wikitext_textarea | hijklmno |
 
 | *Comment* | Navigate away |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| click_ok | st-home-link |  |
 | verifyConfirmation | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | wait_for_text_present_ok | Dashboard | 30000 |
 | text_like | Announcements and Links |  |
 
@@ -142,13 +144,14 @@
 | click_ok | link=Simple |  |
 
 | chooseCancelOnNextConfirmation |  |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| click_ok | st-home-link |  |
 | *Comment* | Cancel and keep unsaved edits |  |
 | confirmation_is | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
 
 | *Comment* | Navigate away |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| click_and_wait | st-home-link |  |
 | verifyConfirmation | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | wait_for_text_present_ok | Dashboard | 30000 |
 | text_like | Announcements and Links |  |
 

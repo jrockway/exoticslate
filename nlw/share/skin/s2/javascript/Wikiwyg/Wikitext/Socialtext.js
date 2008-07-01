@@ -1273,6 +1273,16 @@ if (! window.Page) {
 proto.convert_html_to_wikitext = function(html) {
     html = html.replace(/^<DIV class="?wiki"?>([\s\S]*)<\/DIV>\n$/ig, '$1');
 
+    // This pattern identified an user pasted paragraph. With extra gecko-introduced \n
+    // characters in there, which we need to remove.
+    html = html.replace(
+        /((?:<br class="p">)+)([\s\S]+)(<br class="p">)+/g,
+        function(matched, br1, inner, br2) {
+            var ret = br1 + inner.replace(/^\n/,'').replace(/\n$/, '').replace(/\n/g, ' ').replace(/$/, "\n") + br2;
+            return ret;
+        }
+    );
+
     // XXX debugging stuff
 //     if (String(location).match(/\?.*html$/))
 //         YYY(html);

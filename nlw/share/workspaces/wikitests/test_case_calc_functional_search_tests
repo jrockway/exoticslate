@@ -155,7 +155,7 @@ Title searches
 | *Comment* | Test case: Calc Functional Search Tests NOT title searches |  |
 | st-search | title:Salary NOT another | Pages containing 'title:Salary NOT another' (1) |
 | st-result | Salary |  |
-| st-search | title:Salary OR another | Pages containing 'title:Salary OR another' (4) |
+| st-search | title:Salary OR sophocles | Pages containing 'title:Salary OR sophocles' (4) |
 | st-result | Salary |  |
 | st-result | Another Salary |  |
 | st-result | Kinosearch test page: truth & falsity |  |

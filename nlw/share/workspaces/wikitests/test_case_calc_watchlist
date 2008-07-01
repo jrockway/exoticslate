@@ -136,18 +136,6 @@ add a new page for date and revision sorting
 | click_and_wait | st-wiki-subnav-link-whats-new |  |
 | click_and_wait | link=Your Watchlist |  |
 
-| *Comment* | Test case: Watchlist sort by Date |  |
-| select_and_wait | sort-picker | label=Date |
-| text_like | st-listview | qr/watchlist newpage spreadsheet %%start_time%%.+watchlist ccc spreadsheet %%start_time%%.+watchlist bbb spreadsheet %%start_time%%.+watchlist aaa spreadsheet %%start_time%%/ |
-
-| *Comment* | label=Date (asc) |  |
-| select_and_wait | sort-picker | index=3 |
-| text_like | st-listview | qr/watchlist aaa spreadsheet %%start_time%%.+watchlist bbb spreadsheet %%start_time%%.+watchlist ccc spreadsheet %%start_time%%.+watchlist newpage spreadsheet %%start_time%%/ |
-
-| *Comment* | label=Date (desc) |  |
-| select_and_wait | sort-picker | index=3 |
-| text_like | st-listview | qr/watchlist newpage spreadsheet %%start_time%%.+watchlist ccc spreadsheet %%start_time%%.+watchlist bbb spreadsheet %%start_time%%.+watchlist aaa spreadsheet %%start_time%%/ |
-
 title sort
 
 | *Comment* | Test case: Watchlist sort by title |  |
@@ -161,6 +149,18 @@ title sort
 | *Comment* | label=Title (asc) |  |
 | select_and_wait | sort-picker | index=1 |
 | text_like | st-listview | qr/watchlist aaa spreadsheet %%start_time%%.+watchlist bbb spreadsheet %%start_time%%.+watchlist ccc spreadsheet %%start_time%%.+watchlist newpage spreadsheet %%start_time%%/ |
+
+| *Comment* | Test case: Watchlist sort by Date |  |
+| select_and_wait | sort-picker | label=Date |
+| text_like | st-listview | qr/watchlist newpage spreadsheet %%start_time%%.+watchlist ccc spreadsheet %%start_time%%.+watchlist bbb spreadsheet %%start_time%%.+watchlist aaa spreadsheet %%start_time%%/ |
+
+| *Comment* | label=Date (asc) |  |
+| select_and_wait | sort-picker | index=3 |
+| text_like | st-listview | qr/watchlist aaa spreadsheet %%start_time%%.+watchlist bbb spreadsheet %%start_time%%.+watchlist ccc spreadsheet %%start_time%%.+watchlist newpage spreadsheet %%start_time%%/ |
+
+| *Comment* | label=Date (desc) |  |
+| select_and_wait | sort-picker | index=3 |
+| text_like | st-listview | qr/watchlist newpage spreadsheet %%start_time%%.+watchlist ccc spreadsheet %%start_time%%.+watchlist bbb spreadsheet %%start_time%%.+watchlist aaa spreadsheet %%start_time%%/ |
 
 Revisions sort
 

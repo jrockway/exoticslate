@@ -1,0 +1,55 @@
+| *Comment* | Test Case: Precooked Widgets |
+
+| open_ok | ?action=container;type=test | 60000 |
+| pause | 2000 | |
+| text_like | My Conversations | |
+| text_like | All People | |
+| text_like | My Workspaces | |
+| text_like | Recent Conversa | |
+| text_like | RSS Feed | |
+| text_like | Recent Conversations | |
+| selectFrame | a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_6-iframe | |
+| text_like | Canonical Test Data Set | |
+
+| selectFrame | relative=top | |
+
+| *Comment* | Test Case: Precooked widgets Click And Modify OnePageWiki | |
+| click_ok | //div[@id="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_5"]/div[@class="widgetHeader"]/div/img[1] | |
+| pause | 3000 | |
+| text_like | //div[@id="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_5-setup"]/ | Workspace: |
+| text_like | //div[@id="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_5-setup"]/ | Page: |
+| click_ok | //div[@id="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_5-setup"]//input[@value="save"][1] | |
+| selectFrame | a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_5-iframe | |
+| selectFrame | relative=top | |
+| pause | 4000 | |
+| selectFrame | a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_5-iframe | |
+
+does not work yet| wait_for_text_present_ok | Then type as you like. | |
+
+| *Comment* | Test Case: Precooked widgets Click and Modify RSS Widget - First Pass | |
+| selectFrame | relative=top | |
+| click_ok | //div[@id="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_2"]/div[@class="widgetHeader"]/div/img[1] | |
+| text_like | //div[@id="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_2-setup"]/ | RSS Feed: |
+| type_ok | //div[@id="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_2-setup"]//input[@name="up_rss_feed"][1] | http://www.socialtext.com/blog/feed |
+| pause | 20000 | |
+| click_ok | //div[@id="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_2-setup"]//input[@value="save"][1] | |
+| pause | 20000 | |
+
+| selectFrame | a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_2-iframe | |
+| selectFrame | relative=top | |
+| text_like | Socialtext Blog | |
+
+| *Comment* | Test Case: Precooked widgets Click And Modify RSS Widget | |
+| selectFrame | relative=top | |
+| click_ok | //div[@id="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_2"]/div[@class="widgetHeader"]/div/img[1] | |
+| text_like | //div[@id="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_2-setup"]/ | RSS Feed: |
+| type_ok | //div[@id="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_2-setup"]//input[@name="up_rss_feed"][1] | http://feeds.feedburner.com/CreativeChaos |
+| pause | 20000 | |
+| click_ok | //div[@id="a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_2-setup"]//input[@value="save"][1] | |
+| pause | 20000 | |
+
+| selectFrame | a94a8fe5ccb19ba61c4c0873d391e987982fbbd3_2-iframe | |
+| selectFrame | relative=top | |
+| text_like | Creative Chaos | |
+
+| *Comment* | Test Case: Precooked Widgets COMPLETED |

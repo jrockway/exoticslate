@@ -34,5 +34,5 @@ echo INSTALLING slapd
 sudo apt-get install slapd
 
 echo ENABLING Socialcalc for all workspaces
-/usr/bin/st-socialcalc enable
+sudo /usr/bin/st-socialcalc enable
 echo ""

@@ -15,7 +15,9 @@
 | clickAndWait | st-save-button-link |  |
 
  "Edit This Page"<http://...> | editing toolbar and edit textarea with page content appears
+
  switch "Simple/Advanced"<http://...> modes | editing mode and content presentation changes
+
  "Advanced"<http://...> | "Edit Tips"<http://...> appears in toolbar
  "Edit Tips"<http://...> | Advanced edit tips window pops up with content
 
@@ -61,7 +63,7 @@
 
  edit the page in Advanced mode; then "Cancel Edit"<http://...> | warning pops up
  click Cancel in popup | return to editing or close edit (browser dependent) | Edits are NOT LOST 
- edit the page in Advanced mode; then "Cancel Edit"<http://.../> ; click OK in popup | edits lost; return to original page
+ edit the page in Advanced mode; then "Cancel Edit"<http://...></http> ; click OK in popup | edits lost; return to original page
 
 | *Comment* | Test Case: Edit This Page cancel edit Advanced mode |  |
 | click_ok | link=Advanced |  |
@@ -84,30 +86,33 @@
 | text_like | st-page-content | Edit This Page content %%start_time%% |
 
  edit the page in Advanced mode; then use browser location/address bar to navigate away from page to a destination URL warning pops up
+
  click Cancel in popup | return to editing or close edit (browser dependent) | Edits are NOT LOST 
  edit the page in Advanced mode; then use browser location/address bar to navigate away from page to a destination URL warning pops up
+
  click OK in popup | edits lost; destination URL appears
 
 | *Comment* | Test Case: Edit This Page navigate away Advanced mode |  |
 | click_ok | st-edit-button-link |  |
 | type_ok | wikiwyg_wikitext_textarea | hijklmno |
 | chooseCancelOnNextConfirmation |  |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| click_ok | st-home-link |  |
 
 | *Comment* | Cancel and keep unsaved edits |  |
 | confirmation_is | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
 | verifyValue | wikiwyg_wikitext_textarea | hijklmno |
 
 | *Comment* | Navigate away |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| click_ok | st-home-link |  |
 | verifyConfirmation | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
 | open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | wait_for_text_present_ok | Dashboard | 30000 |
 | text_like | Announcements and Links |  |
 
  edit the page in Simple mode; then "Cancel Edit"<http://...> | warning pops up
+
  click Cancel in popup | return to editing or close edit (browser dependent) | Edits are NOT LOST 
- edit the page in Simple mode; then "Cancel Edit"<http://.../> ; click OK in popup | edits lost; return to original page
+ edit the page in Simple mode; then "Cancel Edit"<http://...></http> ; click OK in popup | edits lost; return to original page
 
 | *Comment* | Test Case: Edit This Page navigate away Simple mode |  |
 | clickAndWait | link=Edit This Page %%start_time%% |  |
@@ -132,6 +137,7 @@
  edit the page in Simple mode; then use browser location/address bar to navigate away from page to a destination URL | warning pops up
  click Cancel in popup | return to editing or close edit (browser dependent) | Edits are NOT LOST 
  edit the page in Simple mode; then use browser location/address bar to navigate away from page to a destination URL | warning pops up
+
  click OK in popup | edits lost; destination URL appears
 
 | *Comment* | Test Case: Edit This Page navigate away Simple mode |  |
@@ -143,18 +149,19 @@
 | click_ok | link=Simple |  |
 
 | chooseCancelOnNextConfirmation |  |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| click_ok | st-home-link |  |
 | *Comment* | Cancel and keep unsaved edits |  |
 | confirmation_is | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
 
 | *Comment* | Navigate away |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| click_ok | st-home-link |  |
 | verifyConfirmation | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
 | open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | wait_for_text_present_ok | Dashboard | 30000 |
 | text_like | Announcements and Links |  |
 
-click "edit"<http://> link in lower left corner of page | page opens in editing mode
+ click "edit"<http://> link in lower left corner of page | page opens in editing mode
+
 test Edit Tips
 
 | *Comment* | Test Case: Edit This Page lower left edit link |  |

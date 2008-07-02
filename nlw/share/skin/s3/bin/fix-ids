@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use FindBin;
+(my $s3 = $FindBin::Bin) =~ s{/bin$}{};
+chdir $s3 or die "Failed to chdir to $s3: $!";
+
+my %files = map { ("$_.html" => "$_.fixed.html") }
+           grep { s{\.html$}{} }
+           grep { !/\.fixed\.html$/ }
+           glob("html/*.html");
+
+$files{'css/screen.css'} = 'css/screen.css';
+$files{'css/screen.ie.css'} = 'css/screen.ie.css';
+
+use Data::Dump 'dump'; dump \%files; exit;
+
+my %regex = (
+);
+
+for my $orig (%files) {
+    my $new = $files{$orig};
+    open my $in, $orig or die "Can't open $orig: $!";
+    my @lines = <$in>;
+    close $in or die "Can't close $orig: $!";
+
+    open my $out, ">$new" or die "Can't open $new: $!";
+    for (@lines) {
+        while (my ($k,$v) = each %regex) {
+            s{$k}{$v}g;
+            print $out $_;
+        }
+    }
+    close $out or die "Couldn't write to $out: $!";
+}
+

@@ -28,10 +28,7 @@
                 </div><!-- workSpaceLink END -->
             </div><!-- mainNav END -->
             <div id="contentWrap" class="st-content">
-                [% INCLUDE $subnav %]
-                <div id="contentContainer">
-                    [% content %]
-                </div><!-- contentContainer -->	
+                [% content %]
                 <div id="footer">
                     <div id="footerLinks">
                         <ul>

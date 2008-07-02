@@ -13,23 +13,59 @@ my %files = map { ("$_.html" => "$_.fixed.html") }
 $files{'css/screen.css'} = 'css/screen.css';
 $files{'css/screen.ie.css'} = 'css/screen.ie.css';
 
-use Data::Dump 'dump'; dump \%files; exit;
+my %done;
 
-my %regex = (
-);
-
-for my $orig (%files) {
-    my $new = $files{$orig};
+while (my ($orig,$new) = each %files) {
+    print STDERR "Modifying $orig\n";
     open my $in, $orig or die "Can't open $orig: $!";
     my @lines = <$in>;
     close $in or die "Can't close $orig: $!";
 
+    my $last = '';
     open my $out, ">$new" or die "Can't open $new: $!";
     for (@lines) {
-        while (my ($k,$v) = each %regex) {
-            s{$k}{$v}g;
-            print $out $_;
+        s{><html>}{>\n<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">};
+
+        if ($last =~ /<head>/) {
+            s{(\s*)}{$1<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />\n$1};
         }
+        if ($last =~ /id="globalNav"/) {
+            s{<ul}{<ul class="st-wiki-nav-actions"};
+        }
+
+        if (my ($name) = m{(Mobile|Settings|Help|Logout)}) {
+            ($name = lc $name) =~ s/settings/setting/;;
+            if (!$done{$name}) {
+                $done{$name} = 1;
+                s{<li}{<li id="st-wikinav-$name"};
+                s{<a}{<a id="logout_btn"} if $name eq 'logout';
+            }
+        }
+
+        s{css/styles.css}{css/screen.css};
+        s{<div id="header">}{<div id="header" class="st-wiki-nav">};
+        s{(id="globalNav")}{$1 class="st-wiki-nav-content"};
+        s{<div><label>Search:}{<div id="st-search-form"><label>Search:};
+        s{(id="mainNav")}{$1 class="st-wiki-subnav-dashboard"};
+        s{(href="#">Home)}{id="st-home-link" $1};
+        s{(id="contentWrap")}{$1 class="st-content"};
+        s{<h1>Workspace Title}{<h1 id="st-wiki-title">Workspace Title};
+        s{(id="contentLeft")}{$1 class="st-homepage-layout-cell"};
+        s{(class="searchText")}{id="st-search-term" name="search_term" $1};
+        s{(class="searchButton")}{id="st-search-submit" $1};
+
+        if ($last =~ /id="homeLink"/) {
+            s{<ul}{<ul id="st-wiki-subnav-left"};
+        }
+
+        if (m{(What's New|Weblogs)}) {
+            (my $name = lc $1) =~ tr/ /-/;
+            $name =~ tr/'//d;
+            s{<a}{<a id="st-wiki-subnav-link-$name"};
+        }
+
+        print $out $_;
+        $last = $_;
     }
     close $out or die "Couldn't write to $out: $!";
 }

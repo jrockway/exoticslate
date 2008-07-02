@@ -4,13 +4,12 @@
 | pause | 10000 |  |
 | text_like | TEST TITLE |  |
 
-text_unlike | NEW TITLE | |
+ text_unlike | NEW TITLE | |
 
 | selectFrame | da7791d34df1dfae30cfe996dee2fa47cdaa48ae_1-iframe |  |
 | text_like | Test 1 - simple Ajax |  |
 | click_ok | link=Click me to change title |  |
 | click_ok | link=Click me to do Simple Ajax |  |
-| click_ok | link=Click me to do JSON Ajax |  |  |
 
 | pause | 3000 |  |
 | selectFrame | relative=top |  |

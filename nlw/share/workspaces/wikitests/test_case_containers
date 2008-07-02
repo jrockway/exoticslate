@@ -1,18 +1,17 @@
 | *Comment* | Test Case: Containers |
 
-| open_ok | /?test_container | 60000 |
-| pause | 10000 |  |
+| open_ok | ?test_container | 60000 |
+| pause | 100 |  |
 | text_like | TEST TITLE |  |
-
- text_unlike | NEW TITLE | |
+| wait_for_text_not_present_ok | qr/NEW TITLE/i |  |
 
 | selectFrame | da7791d34df1dfae30cfe996dee2fa47cdaa48ae_1-iframe |  |
 | text_like | Test 1 - simple Ajax |  |
 | click_ok | link=Click me to change title |  |
 | click_ok | link=Click me to do Simple Ajax |  |
-
 | pause | 3000 |  |
+| text_like | qr/success/i |  |
 | selectFrame | relative=top |  |
-| text_like | new title |  |
+| text_like | qr/new title/i |  |
 | pause | 10000 |  |
 | *Comment* | Test Case: Containers |  |

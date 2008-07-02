@@ -138,7 +138,7 @@ Title searches
 | st-result | Stemming test page 2 |
 
 | *Comment* | Test case: Functional Search Tests OR token searches |  |
-| st-search | 1.2 OR 1.5 | Pages containing '1.2 OR 1.5' (7) |
+| st-search | 1.2 OR 1.5 | Pages containing '1.2 OR 1.5' (2) |
 | st-result | jabber |  |
 | st-result | Wock |  |
 | st-search | 1.2 OR 100% | Pages containing '1.2 OR 100%' (5) |

@@ -6,7 +6,7 @@ var filters = {
 };
 
 if (Wikiwyg.is_gecko) {
-    t.plan(1);
+    t.plan(2);
     t.filters(filters);
     t.run_is('html', 'text');
 }

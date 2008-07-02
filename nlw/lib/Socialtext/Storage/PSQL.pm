@@ -18,8 +18,8 @@ sub get {
     my $sth = sql_execute('
         SELECT value, datatype
           FROM storage
-          WHERE class=? AND key=? AND user_id=?
-    ', $self->{id}, $key, $self->{user_id});
+          WHERE class=? AND key=?
+    ', $self->{id}, $key);
 
     my $res = $sth->fetchall_arrayref;
     return unless @$res;

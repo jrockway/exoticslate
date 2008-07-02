@@ -319,6 +319,7 @@ sub _get_page_info {
             $page_html
         ),
         page_type => $page->metadata->Type,
+        size      => $page->size,
         feeds     => $self->_feeds( $self->hub->current_workspace, $page ),
         revisions => $page->revision_count,
         revision_id => $page->revision_id || undef,

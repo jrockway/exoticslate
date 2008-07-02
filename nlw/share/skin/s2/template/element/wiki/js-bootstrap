@@ -13,6 +13,7 @@ Socialtext.start_in_edit_mode = [% IF start_in_edit_mode %] true; [% ELSE %] fal
 Socialtext.page_id = '[% page.id %]';
 Socialtext.page_title = '[% page.title.replace('\'', '\\\'') %]';
 Socialtext.page_type = '[% page.page_type %]';
+Socialtext.page_size = [% page.size || 0 %];
 Socialtext.wiki_title = '[% wiki.title.replace('\'', '\\\'') %]';
 Socialtext.revision_id = '[% page.revision_id %]';
 Socialtext.comment_form_window_height = '[% wiki.comment_form_window_height %]'

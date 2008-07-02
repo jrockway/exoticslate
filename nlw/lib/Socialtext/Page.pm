@@ -916,7 +916,10 @@ sub last_edited_by {
 
 sub size {
     my $self = shift;
-    (stat($self->file_path))[7];
+    my $filename = readlink($self->file_path . '/index.txt');
+    return -f $filename
+        ? scalar((stat($filename))[7])
+        : 0;
 }
 
 sub modified_time {

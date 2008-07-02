@@ -1167,7 +1167,7 @@ sub preview_text_spreadsheet {
     $content = substr( $content, 0, $ExcerptLength ) . '...'
         if length $content > $ExcerptLength;
 
-    return $content;
+    return Socialtext::String::html_escape($content);
 }
 
 sub _to_plain_text {

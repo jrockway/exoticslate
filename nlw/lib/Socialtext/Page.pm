@@ -731,7 +731,7 @@ sub store {
         $body =~ s/\{now\}/$self->formatted_date/egi;
         $body =~ s/\n*\z/\n/;
         $metadata->Control('');
-        $metadata->Summary( $self->preview_text( $body ) ) unless $metadata->Type eq 'spreadsheet';
+        $metadata->Summary( $self->preview_text( $body ) );
         $self->content($body);
     }
     else {
@@ -1138,11 +1138,15 @@ sub purge {
 Readonly my $ExcerptLength => 350;
 sub preview_text {
     my $self = shift;
+
+    return $self->preview_text_spreadsheet(@_)
+        if $self->metadata->Type eq 'spreadsheet';
+
     my $content = shift || $self->content;
-    my $max_length = $ExcerptLength * 2;
 
     # Gigantic pages caused Perl segfaults. Only need the beginning of the
     # content.
+    my $max_length = $ExcerptLength * 2;
     if (length($content) > $max_length) {
         $content = substr($content, 0, $max_length);
         $content =~ s/(.*\n).*/$1/s;
@@ -1154,9 +1158,25 @@ sub preview_text {
     return Socialtext::String::html_escape($excerpt);
 }
 
+sub preview_text_spreadsheet {
+    my $self = shift;
+
+    my $content = shift || $self->content;
+    $content = $self->_to_spreadsheet_plain_text($content);
+
+    $content = substr( $content, 0, $ExcerptLength ) . '...'
+        if length $content > $ExcerptLength;
+
+    return $content;
+}
+
 sub _to_plain_text {
     my $self    = shift;
     my $content = shift || $self->content;
+
+    if ($self->metadata->Type eq 'spreadsheet') {
+        return $self->_to_spreadsheet_plain_text( $content );
+    }
 
     return $self->_to_socialtext_wikitext_parser_plain_text( $content );
     #return $self->_to_socialtext_formatter_parser_plain_text( $content );
@@ -1186,6 +1206,35 @@ sub _to_socialtext_wikitext_parser_plain_text {
     eval { $return = $parser->parse($content) };
     warn $@ if $@;
     return $return;
+}
+
+sub _to_spreadsheet_plain_text {
+    my $self    = shift;
+    my $content = shift;
+
+    $content = substr(
+        $content,
+        index($content, "\n__SPREADSHEET_HTML__\n") + 21
+    );
+    $content = substr(
+        $content,
+        0,
+        index($content, "\n__SPREADSHEET_VALUES__\n")
+    );
+
+    $content =~ s/<td[^>]*><\/td>//sg;
+    $content =~ s/<tr[^>]*><\/tr>//sg;
+    $content =~ s/<td.*?>/ \| /sg;
+    $content .= ' |';
+
+    $content =~ s/<.*?>//sg;
+    $content =~ s/&nbsp;/ /g;
+    $content =~ s/\s+/ /g;
+    $content =~ s/\|\s+(?=\|)//g;
+
+    # Since we are starting with HTML (for spreadsheets) things will
+    # already be escaped.
+    return Socialtext::String::html_unescape($content);
 }
 
 # REVIEW: We should consider throwing exceptions here rather than return codes.
@@ -1227,15 +1276,15 @@ sub duplicate {
     if ($keep_attachments) {
         my @attachments = $self->_attachments();
         for my $source_attachment (@attachments) {
-	    my $target_attachment = $dest_hub->attachments->new_attachment(
-		    id => $source_attachment->id,
-		    page_id => $target_page_id,
-		    filename => $source_attachment->filename,
-		);
+            my $target_attachment = $dest_hub->attachments->new_attachment(
+                    id => $source_attachment->id,
+                    page_id => $target_page_id,
+                    filename => $source_attachment->filename,
+                );
 
-	    my $target_directory = $dest_hub->attachments->plugin_directory;
-	    $target_attachment->copy($source_attachment, $target_attachment, $target_directory);
-	    $target_attachment->store( user => $dest_hub->current_user,
+            my $target_directory = $dest_hub->attachments->plugin_directory;
+            $target_attachment->copy($source_attachment, $target_attachment, $target_directory);
+            $target_attachment->store( user => $dest_hub->current_user,
                                        dir  => $target_directory );
         }
     }

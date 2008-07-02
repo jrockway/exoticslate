@@ -20,7 +20,7 @@ sub Report {
             $class->Stop($timer);
         }
     }
-    return {map {$_ => $Timings->{$_}->{timer}} keys(%$Timings)}
+    return {map {$_ => sprintf('%0.03f', $Timings->{$_}->{timer})} keys(%$Timings)}
 }
 
 sub Start {

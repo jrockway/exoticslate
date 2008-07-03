@@ -11,19 +11,18 @@
 
 | *Comment* | Test case: Business Control Panel Socialtext Account exists |  |
 | open_ok | /nlw/control/account |  |
-| wait_for_element_visible_ok | name | 30000 |
+| wait_for_element_visible_ok | st-search-by-name | 30000 |
 | text_like | Accounts |  |
 | clickAndWait | link=Socialtext |  |
 | text_like | Socialtext account |  |
 
-TODO: add reasonable IDs to input boxes and buttons and eliminate xpath expressions
-
 | *Comment* | Test case: Business Control Panel Create and verify new account |  |
 | clickAndWait | link=Accounts |  |
-| wait_for_element_visible_ok | name | 30000 |
-| type_ok | //form[2]/input[@id='name'] | %%new_acct%% |
-| clickAndWait | //form[2]/input[2] |  |
+| wait_for_element_visible_ok | st-new-account-name | 30000 |
+| type_ok | st-new-account-name | %%new_acct%% |
+| click_and_wait | st-submit-new-account-name |  |
 | text_like | The %%new_acct%% account has been created. |  |
+
 | *Comment* | Test case: Business Control Panel Create a new workspace in the new account |  |
 | st-admin | create-workspace --name %%new_workspace%% --title %%new_workspace%% --account "%%new_acct%%" |  |
 | clickAndWait | link=%%new_acct%% |  |
@@ -32,12 +31,12 @@ TODO: add reasonable IDs to input boxes and buttons and eliminate xpath expressi
 
 | *Comment* | Test case: Business Control Panel Socialtext Search Accounts |  |
 | open_ok | /nlw/control/account |  |
-| wait_for_element_visible_ok | name | 30000 |
-| type_ok | //form[1]/input[@id='name'] | Socialtext |
-| clickAndWait | //form[1]/input[2] |  |
+| wait_for_element_visible_ok | st-search-by-name | 30000 |
+| type_ok | st-search-by-name | Socialtext |
+| clickAndWait | st-submit-search-by-name |  |
 | text_like | link=Socialtext | Socialtext |
-| type_ok | //form[1]/input[@id='name'] | %%new_acct%% |
-| clickAndWait | //form[1]/input[2] |  |
+| type_ok | st-search-by-name | %%new_acct%% |
+| clickAndWait | st-submit-search-by-name |  |
 | text_like | link=%%new_acct%% | %%new_acct%% |
 
 | *Comment* | Test case: Business Control Panel Change new workspace account to Socialtext |  |

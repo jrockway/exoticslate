@@ -6,8 +6,9 @@ var filters = {
 };
 
 if (Wikiwyg.is_gecko) {
-    t.plan(2);
+    t.plan(4);
     t.filters(filters);
+    t.run_roundtrip('wikitext');
     t.run_is('html', 'text');
 }
 else {
@@ -15,6 +16,35 @@ else {
 }
 
 /* Test
+=== multi-line table
+--- wikitext
+foo bar
+
+| lorem ipusm | foo
+bar baz | hi |
+
+| lorem ipusm | foo
+bar baz | hi |
+
+42 43 44.
+
+
+=== bigger multi-line table
+--- wikitext
+Lorem Ipsum foobar. Lorem Ipsum foobar.. Lorem Ipsum foobar.. Lorem Ipsum foobar.. Lorem Ipsum foobar..Lorem Ipsum foobar.. Lorem Ipsum foobar...
+
+| Lorem Ipsum foobar.. Lorem Ipsum foobar.. | 
+* Lorem Ipsum foobar..
+* Lorem Ipsum foobar..
+* Lorem Ipsum foobar..
+* Lorem Ipsum foobar.. | Lorem Ipsum foobar..Lorem Ipsum foobar.. |
+
+| Lorem Ipsum foobar.. Lorem Ipsum foobar.. | Lorem Ipsum foobar.. 
+ Lorem Ipsum foobar..v Lorem Ipsum foobar..
+ Lorem Ipsum foobar.. | Lorem Ipsum foobar..Lorem Ipsum foobar.. |
+
+lkadfla
+
 === bz: 552 description
 --- html
 aaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb cccccccccccccccc dddddddddddddd eeeeeeeeeeeeeeee ffffffffffff gggggggggggggggg hhhhhhhhhhhhhh iiiiiiiiiiiii kkkkkkkkkkkkkkkkk jjjjjjjjjjjjjjjjjjjjjj<br class="p">aaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb cccccccccccccccc dddddddddddddd

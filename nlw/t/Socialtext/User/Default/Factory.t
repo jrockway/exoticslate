@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 88;
+use Test::Socialtext tests => 90;
 use Socialtext::User;
 
 fixtures( 'rdbms_clean' );
@@ -319,6 +319,17 @@ get_user_via_user_id: {
 
     # cleanup
     ok $factory->delete($user), '... cleanup';
+}
+
+###############################################################################
+# User retrieval with non-numeric "user_id" returns empty-handed (as opposed
+# to throwing a DB error)
+get_user_non_numeric_user_id: {
+    my $factory = Socialtext::User::Default::Factory->new();
+    isa_ok $factory, 'Socialtext::User::Default::Factory';
+
+    my $found = $factory->GetUser(user_id => 'something non-numeric');
+    ok !defined $found, '... returned empty-handed with non-numeric user_id';
 }
 
 ###############################################################################

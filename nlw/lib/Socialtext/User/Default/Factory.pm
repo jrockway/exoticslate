@@ -94,6 +94,17 @@ sub Count {
 sub GetUser {
     my ( $self, %p ) = @_;
 
+    # 'user_id' should *only* ever be numeric; if its anything else, fail
+    # quietly.
+    #
+    # Need this check as other User Factories may have non-numeric user ids,
+    # and a lookup by "user_id" may get passed through to this factory with a
+    # non-numeric value.
+    if (exists $p{user_id} && ($p{user_id} =~ /\D/)) {
+        return undef;
+    }
+
+    # get the user record
     return
         exists $p{user_id} ? $self->_new_from_where( 'user_id', $p{user_id} )
             : exists $p{username} ? $self->_new_from_where(

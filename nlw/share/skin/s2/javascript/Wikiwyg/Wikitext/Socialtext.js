@@ -1276,9 +1276,10 @@ proto.convert_html_to_wikitext = function(html) {
     // This pattern identified an user pasted paragraph. With extra gecko-introduced \n
     // characters in there, which we need to remove.
     html = html.replace(
-        /((?:<br(?: class="p")?>)+)([\s\S]+?\n[\s\S]+?)(<br(?: class="p")?>)+/g,
+        /((?:<br(?: class="p")?>)+)([\s\S]+?\n[\s\S]*?)(<br(?: class="p")?>)+/g,
         function(matched, br1, inner, br2) {
-            if (matched.match(/<\/td>/)) return matched;
+            if (inner == "\n") return matched;
+            if (inner.match(/</)) return matched;
             var ret = br1 + inner.replace(/^\n/,'').replace(/\n$/, '').replace(/\n/g, ' ').replace(/$/, "\n") + br2;
             return ret;
         }

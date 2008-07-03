@@ -29,7 +29,8 @@ Acme Widgets is proud to present our new, advanced Z-1000 weed-trimmer and hair-
 
 * a newly-designed rotor with twice the weed-trimming power
 * 7 new hair-trimming attachments
-* special bulk-pricing options for schools and institutions |
+* special bulk-pricing options for schools and institutions
+|
 
 ...not to mention to have [conversations] among team members.
 
@@ -49,7 +50,8 @@ Call-in number: 512-555-1212
 
 * [Widget Product Questions] - Bob
 * [Widget Performance Standards] - Akash
-* [Widget Production Issues] - Janice |
+* [Widget Production Issues] - Janice
+|
 
 ...a Workspace can also help you with [project plans]...
 

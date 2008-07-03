@@ -12,4 +12,6 @@ ALTER TABLE ONLY "System"
     ADD CONSTRAINT system_pkey
             PRIMARY KEY (field);
 
+INSERT INTO "System" (field, value) VALUES ('socialtext-schema-version', 2);
+
 COMMIT;

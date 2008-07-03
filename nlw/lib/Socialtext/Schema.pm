@@ -132,7 +132,6 @@ sub sync {
     
             for my $s (@scripts) {
                 $self->run_sql_file($s->{name});
-                $self->set_schema_version($s->{to});
             }
         }
         else {
@@ -313,7 +312,10 @@ sub run_sql_file {
 
 =head2 set_schema_version 
 
-Sets the schema version to the given value in the "System" table.
+Forcibly set the schema version to the given value in the "System" table.
+
+Instead of relying on this method getting called, schema upgrade SQL scripts
+*MUST* do a version bump within the same transaction as it's DDL updates.
 
 =cut
 
@@ -321,7 +323,6 @@ sub set_schema_version {
     my $self = shift;
     my $new_version = shift;
 
-    # ideally, this would happen in the same transaction as the SQL patch
     my $schema_field = $self->schema_name . '-schema-version';
     sql_begin_work();
     sql_execute('DELETE FROM "System" WHERE field = ?', $schema_field);

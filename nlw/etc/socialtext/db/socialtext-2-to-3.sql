@@ -105,4 +105,8 @@ END
 CREATE TRIGGER person_ins AFTER INSERT ON "UserId"
     FOR EACH ROW EXECUTE PROCEDURE auto_vivify_person();
 
+UPDATE "System"
+    SET value = 3
+    WHERE field = "socialtext-schema-version";
+
 COMMIT;

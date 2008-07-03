@@ -44,6 +44,11 @@ sub get_events {
         $where = q{WHERE timestamp > '?'::timestamptz};
         push @args, $a;
     }
+    if (my $a = $opts{class}) {
+        $where .= $where ? ' AND ' : 'WHERE ';
+        $where .= 'class = ?';
+        push @args, $a;
+    }
     if (my $a = $opts{action}) {
         $where .= $where ? ' AND ' : 'WHERE ';
         $where .= 'action = ?';

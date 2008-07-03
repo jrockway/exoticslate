@@ -101,6 +101,14 @@ Getting_events: {
         );
     }
 
+    Get_action_events_for_class: {
+        Socialtext::Events->Get( action => 'View', class => 'thingers' );
+        sql_ok( 
+            sql => "SELECT * FROM event WHERE class = ? AND action = ?",
+            args => ['thingers', 'View'],
+        );
+    }
+
     Get_action_and_before_events: {
         Socialtext::Events->Get( action => 'View', before => 'then' );
         sql_ok( 
@@ -112,77 +120,90 @@ Getting_events: {
 
     Get_action_and_before_events_with_count: {
         # count and limit are synonyms
-        Socialtext::Events->Get(action => 'View', before => 'then', count => 5);
+        Socialtext::Events->Get(action => 'view', before => 'then', count => 5);
         sql_ok( 
+            name => 'Get_action_and_before_events_with_count',
             sql => "SELECT * FROM event WHERE timestamp < '?'::timestamptz "
                    . "AND action = ? LIMIT ?",
-            args => ['then', 'View', 5],
+            args => ['then', 'view', 5],
+        );
+    }
+
+    Get_action_and_before_events_with_count_and_class: {
+        Socialtext::Events->Get(action => 'view', before => 'then', count => 5,
+                                class => 'page');
+        sql_ok( 
+            name => 'Get_action_and_before_events_with_count_and_class',
+            sql => "SELECT * FROM event WHERE timestamp < '?'::timestamptz "
+                   . "AND class = ? AND action = ? LIMIT ?",
+            args => ['then', 'page', 'view', 5],
         );
     }
 }
 
+use constant INSERT_EVENT_SQL => qr/^INSERT INTO event /;
+
 Creating_events: {
     Record_valid_event: {
         Socialtext::Events->Record( {
-            action => 'view_page',
+            action => 'view',
+            class => 'page',
             actor => 1,
             object => 'hello_world',
+            workspace => 'foobar',
         } );
         sql_ok(
-            sql => qr/^INSERT INTO event VALUES/,
-            args => [ 'now', 'view_page', 1, 'hello_world', '' ],
+            name => "Record valid event",
+            sql => INSERT_EVENT_SQL,
+            args => [ 'now', 'page', 'view', 1, 'hello_world', 'foobar' ],
         );
     }
 
-    Record_valid_event_with_context: {
-        Socialtext::Events->Record( {
-            action => 'edit_page',
-            actor => 1,
-            object => 'hello_world',
-            context => { foo => 'bar' },
-        } );
-        sql_ok(
-            sql => qr/^INSERT INTO event VALUES/,
-            args => [ 
-                'now', 'edit_page', 1, 'hello_world', '{"foo":"bar"}',
-            ],
-        );
-    }
-
-    Record_event_missing_params: {
+    Record_event_missing_page_params: {
         my %params = (
-            action => 'foo', actor => 1, object => 'page title',
+            action => 'view', 
+            class => 'page',
+            actor => 1, 
+            object => 'page_url_id',
+            workspace => 'foobar',
         );
-        for my $field (qw/action actor object/) {
+        for my $field (qw/action actor object workspace class/) {
             my %p = %params;
             delete $p{$field};
             eval { Socialtext::Events->Record(\%p) };
-            like $@, qr/\Q$field\E parameter is missing/;
+            like $@, qr/\Q$field\E parameter is missing/,
+                "Record event missing page params for '$field'";
         }
     }
 
     Record_event_specified_timestamp: {
         Socialtext::Events->Record( {
             timestamp => 'yesterday',
-            action => 'tag_page',
+            class => 'page',
+            action => 'tag',
             actor => 1,
             object => 'hello_world',
+            workspace => 'foobr',
         } );
         sql_ok(
-            sql => qr/^INSERT INTO event VALUES/,
-            args => [ 'yesterday', 'tag_page', 1, 'hello_world', '' ],
+            name => 'Record event specified timestamp',
+            sql => INSERT_EVENT_SQL,
+            args => [ 'yesterday', 'page', 'tag', 1, 'hello_world', 'foobr' ],
         );
     }
 
     Record_event_with_user_object: {
         Socialtext::Events->Record( {
-            action => 'view_page',
+            class => 'page',
+            action => 'comment',
             actor => Socialtext::User->new( user_id => 42 ),
             object => 'hello_world',
+            workspace => 'foobar',
         } );
         sql_ok(
-            sql => qr/^INSERT INTO event VALUES/,
-            args => [ 'now', 'view_page', 42, 'hello_world', '' ],
+            name => 'Record event with user object',
+            sql => INSERT_EVENT_SQL,
+            args => [ 'now', 'page', 'comment', 42, 'hello_world', 'foobar' ],
         );
     }
 }

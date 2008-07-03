@@ -27,19 +27,20 @@ sub sql_ok {
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
     my $sql = shift @SQL;
+    $p{name} = $p{name} ? "$p{name} " : '';
     if ($p{sql}) {
         $sql->{sql} =~ s/\s+/ /sg;
         $sql->{sql} =~ s/\s*$//;
         if (ref($p{sql})) {
-            like $sql->{sql}, $p{sql}, 'SQL matches';
+            like $sql->{sql}, $p{sql}, $p{name} . 'SQL matches';
         }
         else {
-            is $sql->{sql}, $p{sql}, 'SQL matches exactly';
+            is $sql->{sql}, $p{sql}, $p{name} . 'SQL matches exactly';
         }
     }
 
     if ($p{args}) {
-        is_deeply $sql->{args}, $p{args}, 'SQL args match';
+        is_deeply $sql->{args}, $p{args}, $p{name} . 'SQL args match';
     }
 }
 

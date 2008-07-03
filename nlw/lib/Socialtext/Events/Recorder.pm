@@ -3,7 +3,6 @@ package Socialtext::Events::Recorder;
 use warnings;
 use strict;
 use Socialtext::SQL qw/sql_execute/;
-use Socialtext::JSON qw/encode_json/;
 
 sub new {
     my $class = shift;
@@ -44,15 +43,13 @@ sub record_event {
     my $self = shift;
     my $p = shift || die 'Requires Event parameters';
     $p->{timestamp} ||= "now";
-    if ($p->{context} and ref($p->{context})) {
-        $p->{context} = encode_json($p->{context});
-    }
-    $p->{context} ||= '';
 
-    my @fields = qw/timestamp action actor object context/;
+    my @fields = qw/timestamp action actor object class/;
     for (@fields) {
         die "$_ parameter is missing" unless defined $p->{$_};
     }
+    die "workspace parameter is missing for a page event"
+        if ($p->{class} eq 'page' && !$p->{workspace});
 
     my $actor = $p->{actor};
     if (ref $actor && $actor->can('user_id')) {
@@ -60,8 +57,10 @@ sub record_event {
     }
 
     sql_execute(
-        q{INSERT INTO event VALUES ( '?'::timestamptz, ?, ?, ?, ? )},
-        @{ $p }{ @fields },
+        'INSERT INTO event ' .
+            '(timestamp, class, action, actor, object, workspace) ' .
+            q{VALUES ( '?'::timestamptz, ?, ?, ?, ? )},
+        @$p{qw(timestamp class action actor object workspace)},
     );
 }
 

@@ -61,6 +61,6 @@ ALTER TABLE ONLY event
 
 UPDATE "System"
     SET value = 4
-    WHERE field = "socialtext-schema-version";
+    WHERE field = 'socialtext-schema-version';
 
 COMMIT;

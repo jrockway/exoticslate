@@ -155,21 +155,6 @@ add a new page for date and revision sorting
 | click_and_wait | st-wiki-subnav-link-whats-new |  |
 | click_and_wait | link=Your Watchlist |  |
 
-check for date sorting
-
-| *Comment* | Test case: Watchlist sort by Date |  |
-| select_and_wait | sort-picker | label=Date |
-| pause | 10000 | No, really, this one is needed |
-| text_like | st-listview | qr/newpage_%%start_time%%.+ccc_%%start_time%%.+bbb_%%start_time%%.+aaa_%%start_time%%/ |
-
-| *Comment* | label=Date (asc) |  |
-| select_and_wait | sort-picker | index=3 |
-| text_like | st-listview | qr/aaa_%%start_time%%.+bbb_%%start_time%%.+ccc_%%start_time%%.+newpage_%%start_time%%/ |
-
-| *Comment* | label=Date (desc) |  |
-| select_and_wait | sort-picker | index=3 |
-| text_like | st-listview | qr/newpage_%%start_time%%.+ccc_%%start_time%%.+bbb_%%start_time%%.+aaa_%%start_time%%/ |
-
 title sort
 
 | *Comment* | Test case: Watchlist sort by title |  |

@@ -26,11 +26,11 @@ from Recent Changes list view page: click a revisions link for a page with at le
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | wikiwyg_wikitext_textarea | revision number four %%start_time%% |
+| type_ok | wikiwyg_wikitext_textarea | `[revision number four] %%start_time%%` |
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | wikiwyg_wikitext_textarea | revision number five %%start_time%% |
+| type_ok | wikiwyg_wikitext_textarea | `[revision number five] %%start_time%%` |
 | clickAndWait | st-save-button-link |  |
 
 | clickAndWait | st-page-stats-revisions |  |
@@ -41,6 +41,7 @@ from Recent Changes list view page: click a revisions link for a page with at le
 | verifyValue | document.revisions.Button[1] | Compare Revisions |
 
  text_like | Button | Compare Revisions
+
  text_like | Compare Revisions
 
 | *Comment* | Test Case: Revisions: Check the correct radio buttons are set |  |
@@ -48,7 +49,9 @@ from Recent Changes list view page: click a revisions link for a page with at le
 | verifyValue | document.revisions.old_revision_id[1] | on |
 
  click BackTo Current Revision | page appears
+
  from same page: click Revisions link at bottom of page | correct All Revisions page appears
+
  All Revisions page | check page for correctness | top 2 revisions are selected
 
 | clickAndWait | st-back-to-current-revision-link |  |
@@ -95,7 +98,9 @@ NOTE: validated when creating data for this test
  Back to Current Revision | current page appears
 
  Click Revisions link at the top of the sidebar for a page with at least five revisions | All Revisions page appears with correct number of revisions
+
  Compare Revisions: older vs. younger | page appears with correct revisions. Diffs are reasonable and correct. | older on left, younger on right
+
  Compare Revisions: younger vs. older | page appears with correct revisions. Diffs are reasonable and correct. | younger on left, older on right
 
 | clickAndWait | st-back-to-current-revision-link |  |
@@ -109,21 +114,30 @@ NOTE: validated when creating data for this test
 | text_like | qr/Revision 5.+Revision 4.+five.+four/ |  |
 
  Back To Current Revision | current revision appears
+
  Click Revisions link again | All Revisions page appears with top two items selected
+
  click Compare Revisions | revision compare page appears
+
  toggle "View Formatted" | Formatted/unformatted views appear correctly.
+
  link at top of older revision | older revision page appears and correct.
+
  link at top of newer revision | newer revision page appears and correct.
 
 | *Comment* | Test Case: Revisions: Checking revision formatting views |  |
 | clickAndWait | st-back-to-current-revision-link |  |
 | clickAndWait | st-page-stats-revisions |  |
 | clickAndWait | Button |  |
+
 | text_like | //td[1]/span | four |
 | text_like | //td[2]/span | five |
-| clickAndWait | st-view-formatted-link |  |
+| text_like | st-page-title | Compare Revisions 4 and 5 |
+| text_like | `[revision number five] %%start_time%%` |  |
 
-*Comment* TODO: validate spans are missing when we have verify_element_not_present_ok
+| clickAndWait | st-view-formatted-link |  |
+| text_like | st-page-title | Compare Revisions 4 and 5 |
+| text_unlike | st-revision-compare-table | `[revision number five] %%start_time%%` |
 
 | clickAndWait | st-view-unformatted-link |  |
 | text_like | //td[1]/span | four |
@@ -138,10 +152,15 @@ NOTE: validated when creating data for this test
 | text_like | qr/Revision 5.+five/ |  |
 
  Click All Revisions | all revisions page appears with correct content
+
  Back To Current Revision | Current revision appears
- Click "N revisions" at bottom of page | All Revisions page appears with N revisions | Note 1. 
+
+ Click "N revisions" at bottom of page | All Revisions page appears with N revisions | Note 1.
+
  Select the same revision in both columns | selection successful
+
  click Compare Revisions | popup: You cannot compare a revision to itself
+
  click OK | popup dismissed
 
 NOTE: these steps already tested above.
@@ -171,7 +190,9 @@ NOTE: these steps already tested above.
 
  *user action* | *correct response* | *comment*
  from All Revisions, click an older version | older version appears
+
  from Compare Revisions, click the link above the older version | older version appears
+
  All Revisions | All Revisions page appears
 
 | clickAndWait | st-page-stats-revisions |  |
@@ -186,12 +207,19 @@ NOTE: these steps already tested above.
 | clickAndWait | st-all-revisions-link |  |
 
  click the older version again
+
  toggle "Source View" link | Formatted/unformatted views appear correctly.
+
  Restore revision X | Revision X appears in view mode as current revision
+
  Revisions at top of sidebar | All Revisions page appears
+
  All Revisions | restored revision is latest revision at top of revisions list
+
  Check revision number | revision number is the same as the revision number from which it was restored | revision numbers are not
-monotonically increasing
+
+ monotonically increasing
+
  Back to Current Revision | restored revision appears
 
 | *Comment* | Test Case: Revisions: Restoring revision |  |

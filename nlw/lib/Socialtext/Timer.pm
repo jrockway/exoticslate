@@ -53,7 +53,7 @@ sub Continue {
 sub Stop {
     my $class = shift;
     my $timed = shift;
-    $Timings->{$timed}->{counter}++;
+    $Timings->{$timed}->{counter} = 0;
     $Timings->{$timed}->{timer} = $Timings->{$timed}->{timer}->elapsed();
 }
 

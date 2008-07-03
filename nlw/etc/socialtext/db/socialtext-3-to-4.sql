@@ -59,4 +59,8 @@ ALTER TABLE ONLY event
             FOREIGN KEY (actor_id)
             REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
 
+UPDATE "System"
+    SET value = 4
+    WHERE field = "socialtext-schema-version";
+
 COMMIT;

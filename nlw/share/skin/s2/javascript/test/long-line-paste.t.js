@@ -6,7 +6,7 @@ var filters = {
 };
 
 if (Wikiwyg.is_gecko) {
-    t.plan(4);
+    t.plan(6);
     t.filters(filters);
     t.run_roundtrip('wikitext');
     t.run_is('html', 'text');
@@ -16,6 +16,43 @@ else {
 }
 
 /* Test
+=== document that people are working on
+--- wikitext
+Up: [Workspace Tour: Table of Contents]
+Back: [What else is here?]
+
+You could create a page in a workspace to collaborate on document drafts:
+
+| ^^^ Z-1000 Draft Marketing Collateral
+
+Acme Widgets is proud to present our new, advanced Z-1000 weed-trimmer and hair-styling widget. Its features include:
+
+* a newly-designed rotor with twice the weed-trimming power
+* 7 new hair-trimming attachments
+* special bulk-pricing options for schools and institutions |
+
+...not to mention to have [conversations] among team members.
+
+=== meeting agenda page
+--- wikitext
+Up: [Workspace Tour - Table of Contents]
+Back: [Conversations]
+
+* Log the outline of an upcoming meeting or phone conference, and give the address out to participants.
+* Make links out to separate pages detailing issues as needed.
+* Update the agenda before the meeting, or on the fly during the meeting as new discussion points come up.
+
+| ^^^^ Project Widget Planning Meeting
+
+January 13, 2004
+Call-in number: 512-555-1212
+
+* [Widget Product Questions] - Bob
+* [Widget Performance Standards] - Akash
+* [Widget Production Issues] - Janice |
+
+...a Workspace can also help you with [project plans]...
+
 === multi-line table
 --- wikitext
 foo bar

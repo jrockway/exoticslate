@@ -33,14 +33,10 @@
 | *Comment* | Test Case: Preview Format If TOC were broken, "head" links would not appear |  |
 | text_like | qr/head1.+head1.+head2.+head3.+head2.+head3/ |  |
 
-| *Comment* | Test Case: Preview Format Click the links to be sure they exist |  |
-| click_ok | link=head1 |  |
-
- verifyConfirmation | qr/Are you sure you want to navigate away from this page?.+You have unsaved changes.+Press OK to continue, or Cancel to stay on the current page./
-
-| click_ok | link=head2 |  |
-
-| click_ok | link=head3 |  |
+| *Comment* | Test Case: Preview Format Check that the links exist |  |
+| wait_for_element_present_ok | link=head1 | 10000 |
+| wait_for_element_present_ok | link=head2 | 10000 |
+| wait_for_element_present_ok | link=head3 | 10000 |
 
 | text_like | st-preview-button-link | Edit More |
 | click_ok | st-preview-button-link |  |

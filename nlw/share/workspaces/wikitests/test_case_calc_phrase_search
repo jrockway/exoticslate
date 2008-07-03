@@ -63,8 +63,8 @@ Note: ticket inspiring this series of tests (amongst others:) {rt: 26849}
 
 | *Comment* | Test Case: Calc Phrase Search: homogenous OR searches |  |
 | *Comment* | The high hit rate is due to {bz 614} on savings, which is stemmed to 'save' |  |
-| st-search | "Salary" OR "Savings" | Pages containing '"Salary" OR "Savings"' (7) |
+| st-search | "Salary" OR "Savings" | Pages containing '"Salary" OR "Savings"' (4) |
 | st-result | Another Salary |  |
-| st-result | House Payment |  |
+| st-result | Salary |  |
 
 | *Comment* | Test Case: Calc Phrase Search COMPLETED |  |

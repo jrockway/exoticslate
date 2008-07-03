@@ -1,0 +1,15 @@
+Note: Cannot automate attachments, test is slightly reduced
+
+| *Comment* | Test Case: Calc Slideshow |  |
+
+| *Comment* | Test Case: Calc Slideshow |  |
+| open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=calc%20slideshow%20%%start_time%%#edit |  |
+| wait_for_element_visible_ok | st-save-button-link |  |
+| pause | 5000 | I hate pause; needed for entire page load |
+| click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | st-edit-button-link |  |
+
+| *Comment* | Test Case: Calc Slideshow Teardown |  |
+| st-admin | purge-page --w %%workspace%% --page calc_slideshow_%%start_time%% |  |
+
+| *Comment* | Test Case: Calc Slideshow COMPLETED |  |

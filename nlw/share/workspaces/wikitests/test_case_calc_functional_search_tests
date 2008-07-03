@@ -13,8 +13,9 @@ Note: Heavily dependent on the default content of current test-data workspace
 | st-search | 600 | Pages containing '600' (2) |
 | st-result | House Payment |  |
 | st-result | Credit Card Payment |  |
-| st-search | 5% | Pages containing '5%' (1) |
+| st-search | 5.0% | Pages containing '5.0%' (2) |
 | st-result | House Payment |  |
+| st-result | Car Loan |  |
 
 | *Comment* | Test case: Calc Functional Search partial match |  |
 | st-search | sala | Pages containing 'sala' (0) |

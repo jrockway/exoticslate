@@ -11,7 +11,7 @@ my $schema_dir = "$FindBin::Bin/../etc/socialtext/db/";
 my $schema_file = "$schema_dir/socialtext-schema.sql";
 my @sql_patches = glob("$schema_dir/*-to-*.sql");
 
-plan tests => @sql_patches * 2 + 3;
+plan tests => @sql_patches * 3 + 3;
 
 ok -d $schema_dir;
 ok -e $schema_file;
@@ -24,6 +24,8 @@ for my $s (@sql_patches) {
     my $contents = get_contents($s);
     like $contents, qr/^BEGIN;/is, "$s starts with BEGIN";
     like $contents, qr/COMMIT;$/is, "$s ends with COMMIT";
+    like $contents, qr/socialtext-schema-version/,
+        'patch file mentions the version number';
 }
 
 

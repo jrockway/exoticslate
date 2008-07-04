@@ -34,6 +34,7 @@ sub Pause {
     my $class = shift;
     my $timed = shift;
     if (ref($Timings->{$timed}->{timer}) && $Timings->{$timed}->{counter} <= 1) {
+        $Timings->{$timed}->{counter}--;
         $class->Stop($timed);
     }
 }
@@ -43,17 +44,14 @@ sub Continue {
     my $timed = shift;
     if (ref($Timings->{$timed}->{timer})) {
         $class->Stop($timed);
-        $Timings->{$timed}->{timer} = $class->new($Timings->{$timed}->{timer});
     }
-    else {
-        $class->Start($timed);
-    }
+    $Timings->{$timed}->{counter}++;
+    $Timings->{$timed}->{timer} = $class->new($Timings->{$timed}->{timer});
 }
 
 sub Stop {
     my $class = shift;
     my $timed = shift;
-    $Timings->{$timed}->{counter}--;
     $Timings->{$timed}->{timer} = $Timings->{$timed}->{timer}->elapsed();
 }
 

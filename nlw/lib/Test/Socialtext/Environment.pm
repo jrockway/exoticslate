@@ -29,6 +29,9 @@ field 'nlw_dir';
 
 my $Self;
 
+# NLW directory for the current branch, under which tests are run.
+my $nlw_dir = $ENV{ST_CURRENT} ? "$ENV{ST_CURRENT}/nlw" : $CWD;
+
 # A place to keep mains so they aren't garbage collected.
 my @RememberedMains;
 
@@ -46,9 +49,9 @@ sub new {
     my $class = shift;
 
     my $self = $class->SUPER::new(
-        nlw_dir  => $CWD,
-        root_dir => "$CWD/t/tmp",
-        base_dir => "$CWD/t/tmp/root",
+        nlw_dir  => $nlw_dir,
+        root_dir => "$nlw_dir/t/tmp",
+        base_dir => "$nlw_dir/t/tmp/root",
 
         # set by Module::Build for Test::Harness ...
         verbose => $ENV{TEST_VERBOSE},

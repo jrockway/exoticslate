@@ -107,6 +107,11 @@ sub new_homunculus {
             driver_key => $driver_key,
         );
     }
+    # searches by "driver_unique_id" get handled as searches for "user_id", but
+    # mapped accordingly for each user factory driver.
+    elsif ($_[0] eq 'driver_unique_id') {
+        $homunculus = $class->_first('GetUser', 'user_id' => $_[1] );
+    }
     # system generated users MUST come from the Default user store; we don't
     # allow for them to live anywhere else.
     #
@@ -1289,6 +1294,8 @@ PARAMS can be I<one> of:
 =item * username => $username
 
 =item * email_address => $email_address
+
+=item * driver_unique_id => $driver_unique_id
 
 =back
 

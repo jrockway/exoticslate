@@ -30,7 +30,9 @@ field 'nlw_dir';
 my $Self;
 
 # NLW directory for the current branch, under which tests are run.
-my $nlw_dir = $ENV{ST_CURRENT} ? "$ENV{ST_CURRENT}/nlw" : $CWD;
+my $nlw_dir = $ENV{ST_CURRENT}  ? "$ENV{ST_CURRENT}/nlw"
+            : $ENV{ST_SRC_BASE} ? "$ENV{ST_SRC_BASE}/current/nlw"
+            : $CWD;
 
 # A place to keep mains so they aren't garbage collected.
 my @RememberedMains;

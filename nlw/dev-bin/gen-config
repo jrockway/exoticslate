@@ -44,7 +44,16 @@ my %opt_specs;
 # allow for command to be run from -outside- of the current branch
 #
 # NOTE: it *must* be a relative path, otherwise TT2 chokes on it.
-my $inc = -d 'build/' ? 'build/' : File::Spec->abs2rel("$ENV{ST_CURRENT}/nlw/build/");
+my $inc;
+foreach my $maybe ('build', "$ENV{ST_CURRENT}/nlw/build", "$ENV{ST_SRC_BASE}/current/nlw/build") {
+    if (-d $maybe) {
+        $inc = File::Spec->abs2rel($maybe);
+        last;
+    }
+}
+unless (-d $inc) {
+    die "unable to locate 'build' directory!";
+}
 
 # These passthru options are options from the original call to
 # configure that may be overridden in the call to gen-config.

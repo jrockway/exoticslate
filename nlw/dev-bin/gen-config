@@ -45,7 +45,7 @@ my %opt_specs;
 #
 # NOTE: it *must* be a relative path, otherwise TT2 chokes on it.
 my $inc;
-foreach my $maybe ('build', "$ENV{ST_CURRENT}/nlw/build", "$ENV{ST_SRC_BASE}/current/nlw/build") {
+foreach my $maybe ("$ENV{ST_CURRENT}/nlw/build", "$ENV{ST_SRC_BASE}/current/nlw/build", 'build') {
     if (-d $maybe) {
         $inc = File::Spec->abs2rel($maybe);
         last;

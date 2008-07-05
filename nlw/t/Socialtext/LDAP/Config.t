@@ -5,7 +5,8 @@ use strict;
 use warnings;
 use YAML qw();
 use File::Spec;
-use File::Temp 0.18 qw(:seekable);
+use File::Temp;
+use POSIX qw(fcntl_h);
 use mocked 'Socialtext::Log', qw(:tests);
 use Test::Socialtext tests => 64;
 
@@ -94,7 +95,7 @@ load_invalid_yaml: {
     my $fh = File::Temp->new();
     $fh->print( "# YAML file, with invalid LDAP entry\n" );
     $fh->print( "name: Missing All Config\n" );
-    $fh->seek( 0, SEEK_SET );
+    seek( $fh, 0, SEEK_SET );
 
     # run the test
     clear_log();
@@ -112,7 +113,7 @@ load_valid_yaml: {
     # write out a valid YAML file
     my $fh = File::Temp->new();
     $fh->print( $yaml );
-    $fh->seek( 0, SEEK_SET );
+    seek( $fh, 0, SEEK_SET );
 
     # run the test
     my $config = Socialtext::LDAP::Config->load_from($fh);

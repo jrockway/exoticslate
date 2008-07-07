@@ -2,7 +2,7 @@ Note: Cannot automate attachments, test is slightly reduced
 
 | *Comment* | Test Case: Calc Slideshow |  |
 
-| *Comment* | Test Case: Calc Slideshow |  |
+| *Comment* | Test Case: Calc Slideshow - Create a forumla, a number, and some text |  |
 | open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=calc%20slideshow%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link |  |
 | pause | 5000 | I hate pause; needed for entire page load |
@@ -11,15 +11,16 @@ Note: Cannot automate attachments, test is slightly reduced
 | keyPress | st-spreadsheet-formular-input | \9 |
 | click_ok | st-spreadsheet-formular-input |  |
 | type_ok | st-spreadsheet-formular-input | =9 |
-| keyPress | st-page-content | \13 |
+| keyPress | st-page-content | \9 |
 | click_ok | st-spreadsheet-formular-input |  |
 | type_ok | st-spreadsheet-formular-input | 'Slideshow test. See formula, number, text |
 | keyPress | st-spreadsheet-formular-input | \9 |
 
+| *Comment* | Test Case: Calc Slideshow - Demo bold, italic, justification, borders, and combinations |
 | click_ok | st-bold-button-link |  |
 | click_ok | st-spreadsheet-formular-input |  |
 | type_ok | st-spreadsheet-formular-input | 'This should become bold |  |
-| keyPress | st-page-content | \13 |  |
+| keyPress | st-page-content | \9 |  |
 
 | click_ok | st-italic-button-link |  |
 | click_ok | st-spreadsheet-formular-input |  |
@@ -32,6 +33,14 @@ Note: Cannot automate attachments, test is slightly reduced
 | type_ok | st-spreadsheet-formular-input | '[bar] [Car Loan] |  |
 | keyPress | st-page-content | \13 |
 
+| ShiftKeyDown |  |  |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| ShiftKeyUp |  |  |
+
 | click_ok | st-right-button-link |  |
 | click_ok | st-spreadsheet-formular-input |  |
 | type_ok | st-spreadsheet-formular-input | 'Right J. |  |
@@ -39,8 +48,8 @@ Note: Cannot automate attachments, test is slightly reduced
 
 | click_ok | st-cell-borders-button-link |  |
 | click_ok | st-spreadsheet-formular-input |  |
-| type_ok | st-spreadsheet-formular-input | 'Borders |  |
-| keyPress | st-page-content | \13 |
+| type_ok | st-spreadsheet-formular-input | 'Borders |
+| keyPress | st-page-content | \9 |
 
 | click_ok | st-bold-button-link |  |
 | click_ok | st-italic-button-link |  |
@@ -51,7 +60,50 @@ Note: Cannot automate attachments, test is slightly reduced
 | type_ok | st-spreadsheet-formular-input | 'B, I, [Car Loan] wtext, R, Brds |  |
 | keyPress | st-page-content | \9 |
 
-| pause | 20000 |  |
+| *Comment* | Test Case: Calc Slideshow - Demo Foreground/Background Color |  |
+| click_ok | st-color-button-link |  |
+| click_ok | st-color-660000 |  |
+| click_ok | st-spreadsheet-formular-input |  |
+| type_ok | st-spreadsheet-formular-input | 'Dark Red Foreground |
+| keyPress | st-page-content | \9 |
+
+| click_ok | st-bgcolor-button-link |  |
+| click_ok | st-bgcolor-ff6666 |  |
+| click_ok | st-spreadsheet-formular-input |  |
+| type_ok | st-spreadsheet-formular-input | 'Light Red Background |
+| keyPress | st-page-content | \9 |
+
+| *Comment* | Test Case: Calc Slideshow Setup Sort |
+| keyPress | st-page-content | \13 |
+| ShiftKeyDown |  |  |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| ShiftKeyUp |  |  |
+
+| click_ok | st-spreadsheet-formular-input |  |
+| type_ok | st-spreadsheet-formular-input | =6 |
+| keyPress | st-page-content | \9 |
+| click_ok | st-spreadsheet-formular-input |  |
+| type_ok | st-spreadsheet-formular-input | =4 |
+| keyPress | st-page-content | \9 |
+| click_ok | st-spreadsheet-formular-input |  |
+| type_ok | st-spreadsheet-formular-input | =2 |
+| keyPress | st-page-content | \9 |
+| click_ok | st-spreadsheet-formular-input |  |
+| type_ok | st-spreadsheet-formular-input | =1 |
+| keyPress | st-page-content | \9 |
+| click_ok | st-spreadsheet-formular-input |  |  |
+| type_ok | st-spreadsheet-formular-input | =3 |
+| keyPress | st-page-content | \9 |
+| click_ok | st-spreadsheet-formular-input |  |  |
+| type_ok | st-spreadsheet-formular-input | =5 |
+| keyPress | st-page-content | \9 |
+
+| click_ok | st-sort-button-link |  |  | pause | 20000 |  |
 
 | click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-edit-button-link |  |

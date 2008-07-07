@@ -6,13 +6,13 @@
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=orphan%20sheet%201%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| click_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: Calc Orphans List. Create another orphan sheet. |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=orphan%20sheet%202%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| click_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 
 "What's New -> Orphans List"<http://...> | list of links to orphan sheets appears
 

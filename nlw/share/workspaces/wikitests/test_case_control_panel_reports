@@ -7,7 +7,9 @@
 | *Comment* | Test case: Control Panel Reports - Setup |  |
 | st-admin | remove-accounts-admin --email %%email%% | %%username%% no longer has accounts admin access |
 | st-admin | give-accounts-admin --email %%email%% | %%username%% now has accounts admin access |
-| st_qa_setup_reports |  |  |
+
+ st_qa_setup_reports | | |
+
 | set_default | testingwrkspace | growth_report_test |
 
 | *Comment* | Test case: Control Panel Reports - Open Control Panel and Navigate |  |

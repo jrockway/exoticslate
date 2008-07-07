@@ -145,10 +145,9 @@ Title searches
 | st-result | Car Loan |  |
 | st-result | House Payment |  |
 | st-result | Credit Card Payment |  |
-| st-search | =Salary OR 5% | Titles containing 'Salary OR 5%' (3) |
+| st-search | =Salary OR 5% | Titles containing 'Salary OR 5%' (2) |
 | st-result | Salary |  |
 | st-result | Another Salary |  |
-| st-result | House Payment |  |
 | st-search | tag:"my next thirty years" OR 600 | Pages containing 'tag:"my next thirty years" OR 600' (2) |
 | st-result | House Payment |  |
 | st-result | Credit Card Payment |  |

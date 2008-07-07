@@ -3,24 +3,24 @@
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=hey whatsnew %%start_time%% 0001#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| click_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=hey whatsnew %%start_time%% 0002#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| click_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=hey whatsnew %%start_time%% 0003#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| click_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=hey whatsnew %%start_time%% 0004#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| click_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 
 | open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
 | wait_for_element_visible_ok | st-list-title | 30000 |
 | text_like | Changes in Last |  |
-| clickAndWait | link=All Pages |  |
+| click_and_wait | link=All Pages |  |
 | text_like | All Pages ( |  |
 
 | *Comment* | Test Case: Calc What's New Sorting tests |
@@ -38,7 +38,7 @@
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=hey whatsnew %%start_time%% 0005#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| click_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
 | text_like | st-recent_changes-content | qr/hey whatsnew %%start_time%% 0005.+hey whatsnew %%start_time%% 0004/ |

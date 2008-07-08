@@ -35,10 +35,12 @@ print "ID Is $account_id, host is $host\n";
 
 #Process the logs to catch up the changes
 #----------------------------------------------#
+#if (!(is_dev_env($host))) {
+#   `sudo /usr/bin/st-reports-consume-nlw-log /var/log/nlw.log 2>&1`;
+#}
 if (!(is_dev_env($host))) {
-   `sudo /usr/bin/st-reports-consume-nlw-log /var/log/nlw.log 2>&1`;
-}
-
+       `../../socialtext-reports/parse-dev-env-logs /var/log/nlw.log 2>&1`;
+    }
 
 #We just caught up the logs with the new id's
 #But we will insert older, fake id's into the DB

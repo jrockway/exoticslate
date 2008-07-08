@@ -11,7 +11,7 @@ use Socialtext::Permission 'ST_READ_PERM';
 
 const formatter_id  => 'wafl_phrase';
 const pattern_start =>
-    qr/(^|(?<=[\s\-]))(".+?")?\{[\w-]+(?=[\:\ \}])(\s*:)?\s*.*?\}(?=[^A-Za-z0-9]|\z)/;
+    qr/(^|(?<=[\s\-]))("[^"]+")?\{[\w-]+(?=[\:\ \}])(\s*:)?\s*.*?\}(?=[^A-Za-z0-9]|\z)/;
 const wafl_reference_parse => qr/^\s*(?:([\w\-]+)?\s*\[(.*?)\])?\s*(\S.*?)?\s*$/;
 field 'method';
 field 'arguments';
@@ -44,7 +44,7 @@ sub match {
     my $self = shift;
     return unless $self->SUPER::match(@_);
 
-    my $label_re = qr/"(.+?)"/;
+    my $label_re = qr/"([^"]+)"/;
     my $wafl_re  = qr/\{([\w\-]+)(?:\s*\:)?\s*(.*)\}/;
     if ( $self->matched =~ /^${label_re}${wafl_re}$/ ) {
         $self->label($1);

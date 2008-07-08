@@ -124,12 +124,19 @@ sub _weblog_title_is_valid {
     return 1;
 }
 
+sub _first_post_title_id {
+    my $self             = shift;
+    my $weblog_category  = shift;
+    my $first_post_title = loc( "First Post in [_1]", $weblog_category );
+    my $first_post_id    = Socialtext::Page->name_to_id($first_post_title);
+    return ( $first_post_title, $first_post_id );
+}
+
 sub _create_first_post {
     my $self = shift;
     my $weblog_category = shift;
 
-    my $first_post_title = loc("First Post in [_1]", $weblog_category);
-    my $first_post_id = Socialtext::Page->name_to_id($first_post_title);
+    my ($first_post_title, $first_post_id) = $self->_first_post_title_id($weblog_category);
     return if (! $self->_weblog_title_is_valid($first_post_id));
 
     my $first_post = $self->hub->pages->new_page($first_post_id);
@@ -171,8 +178,14 @@ sub create_weblog {
     $self->hub->category->load;
     my $all_categories = $self->hub->category->all;
 
+    # If the weblog category is already in use OR
+    # there is a similar enough category that the
+    # first post title will have the same id as an
+    # existing weblog, tell the user to try again.
     for ( keys %$all_categories ) {
-        if (/^\Q$weblog_category\E/i) {
+        if ( /^\Q$weblog_category\E/i
+            || ($self->_first_post_title_id($_))[1] eq
+            ($self->_first_post_title_id($weblog_category))[1] ) {
             my $message = loc(
                 "There is already a \'[_1]\' weblog. Please choose a different name.",
                 $weblog_category

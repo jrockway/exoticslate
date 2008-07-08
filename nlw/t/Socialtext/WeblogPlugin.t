@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use utf8;
 
-use Test::Socialtext tests => 19;
+use Test::Socialtext tests => 21;
 fixtures( 'admin_no_pages' );
 
 BEGIN {
@@ -36,6 +36,10 @@ CREATE_WEBLOG: {
     $category = $hub->weblog->create_weblog('bar blog');
     is ($category, undef, 'error condition when repeat name');
     ok ((grep /There is already/, @{$hub->weblog->errors} ), 'error message correct when repeat name');
+
+    $category = $hub->weblog->create_weblog('bar!!blog');
+    is ($category, undef, 'error condition when similar name');
+    ok ((grep /There is already/, @{$hub->weblog->errors} ), 'error message correct when similar name');
 }
 
 sub check_category {

@@ -454,7 +454,7 @@ sub html {
 
     my $incipient_class = $page_exists ? "" : "class=\"incipient\"";
 
-    my $link = "<a href='$view_url' $incipient_class>$page_title</a>";
+    my $link = qq(<a href="$view_url" $incipient_class>$page_title</a>);
 
     my $edit_icon = '';
     if ($edit_url) {
@@ -486,7 +486,7 @@ sub html {
 sub edit_icon {
     my $self = shift;
     my ($edit_url, $incipient_class, $edit) = @_;
-    return "<a class='wiki-include-edit-link' href='$edit_url' $incipient_class>$edit</a>";
+    return qq(<a class='wiki-include-edit-link' href="$edit_url" $incipient_class>$edit</a>);
 }
 
 sub _included_page_exists {

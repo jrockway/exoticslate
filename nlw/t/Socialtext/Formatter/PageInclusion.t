@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 9;
+use Test::Socialtext tests => 11;
 fixtures( 'admin', 'foobar' );
 use Socialtext::Pages;
 
@@ -20,14 +20,13 @@ my $page_one = Socialtext::Page->new( hub => $hub )->create(
     creator => $hub->current_user,
 );
 
-
 $content_one = $page_one->to_html_or_default;
 
-like $content_one, qr{Page One.*href='/admin/index.cgi\?page%20two'\s+class="incipient"}sm,
+like $content_one, qr{Page One.*href="/admin/index.cgi\?page%20two"\s+class="incipient"}sm,
     'page one should contain a link to incipient page two (w/ incipient class)';
 like $content_one, qr{Replace this text with your own}sm,
     'page one should contain default text for page two';
-like $content_one, qr{href='/foobar/index.cgi\?not%20here'\s+class="incipient"}sm,
+like $content_one, qr{href="/foobar/index.cgi\?not%20here"\s+class="incipient"}sm,
     'page one should contain a link to incipient not here page in foobar';
 
 my $page_two = Socialtext::Page->new( hub => $hub )->create(
@@ -68,3 +67,17 @@ unlike $content_three,
 like $content_one,
     qr{<div [^>]*class="wiki-include-page">.*<div class="wiki-include-title">.*<div class="wiki-include-content">}sm,
     'included page is wrapped in the properly classed divs';
+
+my $page_incipient = Socialtext::Page->new( hub => $hub )->create(
+    title   => "page inicipient",
+    content =>
+        "Page One\n\n{include [this page isn't cool]}\n\n",
+    creator => $hub->current_user,
+);
+
+my $incipient_content = $page_incipient->to_html_or_default;
+like $incipient_content,
+    qr{<a href="/admin/index.cgi\?this%20page%20isn't%20cool" class="incipient">}, 'href is double quoted';
+like $incipient_content,
+    qr{href="/admin/index.cgi\?this%20page%20isn't%20cool#edit"}, 'href edit link is double quoted';
+

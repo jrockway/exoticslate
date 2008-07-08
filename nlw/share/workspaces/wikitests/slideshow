@@ -506,6 +506,27 @@ Lightbox screens:
 | *Comment* | SlideShow GOODBYE EDIT Upload Files LIGHTBOX |  |
 | pause | %%pt%% |  |
 
+* View actual file Upload while editing in Simple and Advanced mode.
+
+| *Comment* | SlideShow SEE Simple Mode File Upload |  |
+| wait_for_element_visible_ok | link=Simple | 30000 |
+| click_ok | link=Simple |  |
+| wait_for_element_visible_ok | st-edit-mode-uploadbutton | 30000 |
+| click_ok | st-edit-mode-uploadbutton |  |
+| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.jpg |
+| clickAndWait | st-attachments-attach-closebutton |  |
+| pause | %%pt%% |  |
+| pause | %%pt%% |  |
+
+| *Comment* | SlideShow SEE Advanced Mode File Upload |  |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | st-edit-mode-uploadbutton | 30000 |
+| click_ok | st-edit-mode-uploadbutton |  |
+| pause | %%pt%% |  |
+| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.jpg |
+| click_ok | st-attachments-attach-closebutton |  |
+| pause | %%pt%% |  |
+
 * Add tag while editing
 
 | *Comment* | SlideShow tag while editing |  |

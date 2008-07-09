@@ -254,7 +254,25 @@ Note: Cannot automate attachments, test is slightly reduced
 | keyPress | st-page-content | \9 |
 | ShiftKeyUp |  |  |
 
-| *Comment* | Test Case: Calc Slideshow SEE inserted row/col |  |
+| *Comment* | Test Case: Calc Slideshow SEE Number Formatting |  |
+| click_ok | st-spreadsheet-formular-input |  |  |
+| type_ok | st-spreadsheet-formular-input | =9876543.21 |  |
+| keyPress | st-page-content | \9 |
+| ShiftKeyDown |  |  |
+| keyPress | st-page-content | \9 |
+| ShiftKeyUp |  |  |
+| select_ok | st-spreadsheet-cell-number-format | 1,234 |
+| pause | 1000 |
+| select_ok | st-spreadsheet-cell-number-format | 1,234.5 |
+| pause | 1000 |
+| select_ok | st-spreadsheet-cell-number-format | 1,234.56 |
+| pause | 1000 |
+| select_ok | st-spreadsheet-cell-number-format | 1,234.567 |
+| pause | 1000 |
+| select_ok | st-spreadsheet-cell-number-format | 1,234% |
+| pause | 1000 |
+| select_ok | st-spreadsheet-cell-number-format | $1,234.56 |
+| pause | 1000 |  | *Comment* | Test Case: Calc Slideshow SEE inserted row/col |  |
 | click_ok | st-insert-col-button-link |  |
 | click_ok | st-insert-row-button-link |  |
 | pause | 5000 |  |

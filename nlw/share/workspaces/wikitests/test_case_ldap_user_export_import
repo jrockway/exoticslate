@@ -1,0 +1,92 @@
+| *Comment* | Test Case: LDAP User Export Import |  |
+| set | ldapWS | ldap-%%start_time%% |
+| set | ldapUser | ldap-user-%%start_time%% |
+| set | ldapPwd | ldap-pwd-%%start_time%% |
+| set | ldapName | ldap-name-%%start_time%% |
+| set | ldapTarball | /tmp/%%ldapWS%%.1.tar.gz |
+
+| *Comment* | Test Case: LDAP User Export Import |  |
+| st-admin | create-workspace --n %%ldapWS%% --t %%ldapWS%% | has been created |
+
+| *Comment* | Test Case: LDAP User Export Import - 1 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-1 | %%ldapPwd%% | %%ldapName%%-1 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-1 | is now a member |  | A |
+| st-admin | export-workspace --w %%ldapWS%% | has been exported |  | AX |
+| st-admin-export-workspace-ok | %%ldapWS%% |  |  |  |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  |  |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | AI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+| *Comment* | Test Case: LDAP User Export Import - 8 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-8 | %%ldapPwd%% | %%ldapName%%-8 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-8 | is now a member |  | A |
+| st-admin | delete-workspace --w %%ldapWS%% | has been deleted |  | AX |
+| st-ldap-delete-user | %%ldapUser%%-8 |  |  | B |
+| st-ldap-add-user | %%ldapUser%%-8 | %%ldapPwd%% | %%ldapName%%-8 | C |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | CI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+| *Comment* | Test Case: LDAP User Export Import - 12 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-12 | %%ldapPwd%% | %%ldapName%%-12 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-12 | is now a member |  | A |
+| st-ldap-delete-user | %%ldapUser%%-12 |  |  | B |
+| st-admin | delete-workspace --w %%ldapWS%% | has been deleted |  | B X |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | BI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  |  |
+| st-ldap-add-user | %%ldapUser%%-12 | %%ldapPwd%% | %%ldapName%%-12 | C |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | CI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+| *Comment* | Test Case: LDAP User Export Import - 20 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-20 | %%ldapPwd%% | %%ldapName%%-20 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-20 | is now a member |  | A |
+| st-ldap-delete-user | %%ldapUser%%-12 |  |  | B |
+| st-ldap-add-user | %%ldapUser%%-20 | %%ldapPwd%% | %%ldapName%%-20 | C |
+| st-ldap-delete-user | %%ldapUser%%-12 |  |  | D |
+| st-admin | delete-workspace --w %%ldapWS%% | has been deleted |  | DX |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | DI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+^ END
+
+^^^ LDAP User states
+
+| A | The LDAP user has (just) been created. |
+| B | The LDAP user has been deleted. |
+| C | The LDAP user has been resurrected. |
+| D | The LDAP user has been re-deleted. |
+
+^^^ Test results
+
+| *serial* | *state on export* | *state before first import* | *state before second import* | *result - first pass* | *result - second pass* |
+| 1 | A | A | A | ok | ok |
+| 2 | A | A | B | ok | ok |
+| 3 | A | A | C | ok | ok |
+| 4 | A | A | D | ok | ok |
+| 5 | A | B | B | ok | ok |
+| 6 | A | B | C | ok | ok |
+| 7 | A | B | D | ok | ok |
+| 8 | A | C | C | ⚠ *NOT OK* -- bug {bz: 761} | RETEST |
+| 9 | A | C | D | ok |  |
+| 10 | A | D | D | ok |  |
+| 11 | B | B | B | ok | ok |
+| 12 | B | B | C | ⚠ *NOT OK* -- bug {bz: 342} | ok |
+| 13 | B | B | D | ok |  |
+| 14 | B | C | C | ok |  |
+| 15 | B | C | D | ok |  |
+| 16 | B | D | D | ok |  |
+| 17 | C | C | C | ok |  |
+| 18 | C | C | D | ok |  |
+| 19 | C | D | D | ok |  |
+| 20 | D | D | D | ok |  |

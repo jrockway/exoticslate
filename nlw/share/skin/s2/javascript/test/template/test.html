@@ -1,14 +1,15 @@
+[% USE date %]
 <!-- @COPYRIGHT@ -->
 <html>
 <head>
     <script type="text/javascript">
     function nlw_make_static_path(rest) { return "../../" + rest;}
     </script>
-    <script type="text/javascript" src="lib/Subclass.js"></script>
-    <script type="text/javascript" src="lib/Test/Builder.js"></script>
-    <script type="text/javascript" src="lib/Test/Base.js"></script>
+    <script type="text/javascript" src="lib/Subclass.js?[% date.format(format = '%s') %]"></script>
+    <script type="text/javascript" src="lib/Test/Builder.js?[% date.format(format = '%s') %]"></script>
+    <script type="text/javascript" src="lib/Test/Base.js?[% date.format(format = '%s') %]"></script>
 [% FOR lib = import_libs -%]
-    <script type="text/javascript" src="[% lib %]"></script>
+    <script type="text/javascript" src="[% lib %]?[% date.format(format = '%s') %]"></script>
 [% END -%]
     <script type="text/javascript">
         ST.Testing = true

@@ -1300,6 +1300,14 @@ proto.convert_html_to_wikitext = function(html) {
                 .replace(/\n/g, ' ');
 
             }
+            else if ( $(this).is("p") ) {
+                if ( this.childNodes.length == 1 && this.childNodes[0].nodeType == 3) {
+                    this.childNodes[0].nodeValue = this.childNodes[0].nodeValue
+                        .replace(/^\n/, '')
+                        .replace(/\n$/, '')
+                        .replace(/\n/g, ' ');
+                }
+            }
         });
 
         html = $dom.html();

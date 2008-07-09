@@ -6,7 +6,7 @@ var filters = {
 };
 
 if (Wikiwyg.is_gecko) {
-    t.plan(7);
+    t.plan(8);
     t.filters(filters);
     t.run_roundtrip('wikitext');
     t.run_is('html', 'text');
@@ -134,6 +134,31 @@ Wisi velit laoreet accumsan autem. Hendrerit te consequat eu, ut illum erat ut d
 Wisi velit laoreet accumsan autem. Hendrerit te consequat eu, ut illum erat ut duis, ex. Feugiat tincidunt molestie illum odio ut dolor, dolor veniam vero sit illum exerci dolor vel. Enim autem in magna dolor in nulla eum vero duis. Ipsum, eum esse ullamcorper tincidunt lorem vel
 
 Wisi velit laoreet accumsan autem. Hendrerit te consequat eu, ut illum erat ut duis, ex. Feugiat tincidunt molestie illum odio ut dolor, dolor veniam vero sit illum exerci dolor vel. Enim autem in magna dolor in nulla eum vero duis. Ipsum, eum esse ullamcorper tincidunt lorem vel
+
+=== yet another possible html out of pasting (p inside div.wiki)
+--- html
+<div class="wiki">aaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbb ccccccccccccccccccccccccccc dddddddddddddd eeeeeeeeeeeeeeeeeeeeeeeee ffffffffffffff gggggggggggggggggggggg qqqqqqqqqqqqq aaaaaaaaaaaaa aaaaaaaaa zzzzzzzzzzz<br class="p"><br class="p">
+<p>
+aaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbb ccccccccccccccccccccccccccc dddddddddddddd eeeeeeeeeeeeeeeeeeeeeeeee ffffffffffffff gggggggggggggggggggggg qqqqqqqqqqqqq aaaaaaaaaaaaa aaaaaaaaa zzzzzzzzzzz</p>
+<br></div>
+<div class="wiki">aaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbb
+ccccccccccccccccccccccccccc dddddddddddddd eeeeeeeeeeeeeeeeeeeeeeeee
+ffffffffffffff gggggggggggggggggggggg qqqqqqqqqqqqq aaaaaaaaaaaaa
+aaaaaaaaa zzzzzzzzzzz<br class="p"><br class="p">
+<p>
+aaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbb ccccccccccccccccccccccccccc
+dddddddddddddd eeeeeeeeeeeeeeeeeeeeeeeee ffffffffffffff
+gggggggggggggggggggggg qqqqqqqqqqqqq aaaaaaaaaaaaa aaaaaaaaa zzzzzzzzzzz</p>
+<br></div>
+
+--- text
+aaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbb ccccccccccccccccccccccccccc dddddddddddddd eeeeeeeeeeeeeeeeeeeeeeeee ffffffffffffff gggggggggggggggggggggg qqqqqqqqqqqqq aaaaaaaaaaaaa aaaaaaaaa zzzzzzzzzzz
+
+aaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbb ccccccccccccccccccccccccccc dddddddddddddd eeeeeeeeeeeeeeeeeeeeeeeee ffffffffffffff gggggggggggggggggggggg qqqqqqqqqqqqq aaaaaaaaaaaaa aaaaaaaaa zzzzzzzzzzz
+
+aaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbb ccccccccccccccccccccccccccc dddddddddddddd eeeeeeeeeeeeeeeeeeeeeeeee ffffffffffffff gggggggggggggggggggggg qqqqqqqqqqqqq aaaaaaaaaaaaa aaaaaaaaa zzzzzzzzzzz
+
+aaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbb ccccccccccccccccccccccccccc dddddddddddddd eeeeeeeeeeeeeeeeeeeeeeeee ffffffffffffff gggggggggggggggggggggg qqqqqqqqqqqqq aaaaaaaaaaaaa aaaaaaaaa zzzzzzzzzzz
 
 */
 

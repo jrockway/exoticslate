@@ -70,31 +70,42 @@ sub new {
         : $class->_new_from_homunculus(%p);
 }
 
-sub _new_from_system_unique_id {
-    my ( $class, %p ) = @_;
 
-    return $class->_new_from_where(
-        'system_unique_id=?',
-        $p{system_unique_id}
-    );
-}
+{
+    my %User_cache;
+    sub ResetUserCache { %User_cache = () }
 
-sub _new_from_homunculus {
-    my ( $class, %p ) = @_;
+    sub _new_from_system_unique_id {
+        my ( $class, %p ) = @_;
 
-    my $where_clause;
-    my @args;
-
-    if (exists $p{driver_unique_id}) {
-        $where_clause = 'driver_key=? AND driver_unique_id=?';
-        @args = ($p{driver_key}, $p{driver_unique_id});
-    }
-    else {
-        $where_clause = 'driver_key=? AND driver_username=?';
-        @args = ($p{driver_key}, $p{driver_username});
+        my $key = "system_unique_id=$p{system_unique_id}";
+        return $User_cache{$key} ||= $class->_new_from_where(
+            'system_unique_id=?' => $p{system_unique_id}
+        );
     }
 
-    return $class->_new_from_where( $where_clause, @args );
+    sub _new_from_homunculus {
+        my ( $class, %p ) = @_;
+
+        my $where_clause;
+        my @args;
+
+        my $key;
+        if (exists $p{driver_unique_id}) {
+            $key = "$p{driver_key}-id=$p{driver_unique_id}";
+            $where_clause = 'driver_key=? AND driver_unique_id=?';
+            @args = ($p{driver_key}, $p{driver_unique_id});
+        }
+        else {
+            $key = "$p{driver_key}-user=$p{driver_username}";
+            $where_clause = 'driver_key=? AND driver_username=?';
+            @args = ($p{driver_key}, $p{driver_username});
+        }
+
+        return $User_cache{$key} ||= $class->_new_from_where( 
+            $where_clause => @args,
+        );
+    }
 }
 
 sub _new_from_where {

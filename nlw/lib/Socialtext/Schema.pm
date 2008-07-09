@@ -350,7 +350,17 @@ sub createdb {
     my $self = shift;
     my %c = $self->connect_params();
     disconnect_dbh();
-    $self->_db_shell_run("createdb $c{db_name}");
+    my $owner = $c{user} || 'nlw';
+    eval {
+        $self->_db_shell_run("createdb -E UTF8 -O $owner $c{db_name}");
+    };
+    my $createdb_err = $@;
+    eval {
+        $self->_db_shell_run("createlang plpgsql $c{db_name}");
+    };
+    warn "Warning: $@" if $@;
+    $@ = $createdb_err;
+    die $@ if $@;
 }
 
 =head2 dropdb 

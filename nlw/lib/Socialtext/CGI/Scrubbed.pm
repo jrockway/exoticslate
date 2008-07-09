@@ -8,14 +8,13 @@ use HTML::Scrubber;
 
 field 'scrubber', -init => 'HTML::Scrubber->new';
 
-my %dont_scrub = map { $_ => 1 } 
-                 qw(page_body content file logo_file skin_file);
+my %dont_scrub = map { $_ => 1 } qw(page_body content);
 
 sub param {
     my $self = shift;
     if (@_ == 1) {
         my $key = $_[0];
-        my @res = map { $dont_scrub{$key} ? $_ : $self->scrubber->scrub($_) }
+        my @res = map { (ref $_ || $dont_scrub{$key}) ? $_ : $self->scrubber->scrub($_) }
                   $self->SUPER::param($key);
         return wantarray ? @res : $res[0];
     }

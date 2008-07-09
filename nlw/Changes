@@ -1,8 +1,10 @@
-Release notes, 2.21.0.0 June 2008
-
-  Production release of 2.20.6.5
-
 Change log for Socialtext Open
+
+2.21.X
+
+Release notes, 2.21.0.3  July 2008
+
+  Fixes to avoid extra DB lookups for User objects
 
 2.20.X
 

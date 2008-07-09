@@ -56,18 +56,24 @@ sub create_if_necessary {
 # should alreaby be loaded with our data
 sub to_hash { shift }
 
-sub new {
-    my ( $class, %p ) = @_;
+{
+    my %User_cache;
+    sub ResetUserCache { %User_cache = () }
 
-    my $sth = sql_execute(
-        'SELECT * FROM "UserMetadata" WHERE user_id=?',
-        $p{user_id},
-    );
+    sub new {
+        my ( $class, %p ) = @_;
+        return $User_cache{ $p{user_id} } if $User_cache{ $p{user_id} };
 
-    my $hash = $sth->fetchrow_hashref;
-    return undef unless $hash;
-    bless $hash, $class;
-    return $hash;
+        my $sth = sql_execute(
+            'SELECT * FROM "UserMetadata" WHERE user_id=?',
+            $p{user_id},
+        );
+
+        my $hash = $sth->fetchrow_hashref;
+        return undef unless $hash;
+        bless $hash, $class;
+        return $User_cache{ $p{user_id} } = $hash;
+    }
 }
 
 sub create {

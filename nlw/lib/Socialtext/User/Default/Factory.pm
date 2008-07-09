@@ -91,29 +91,39 @@ sub Count {
     return $sth->fetchall_arrayref->[0][0];
 }
 
-sub GetUser {
-    my ( $self, %p ) = @_;
+{
+    my %User_cache;
+    sub ResetUserCache { %User_cache = () }
+    sub GetUser {
+        my ( $self, %p ) = @_;
 
-    # 'user_id' should *only* ever be numeric; if its anything else, fail
-    # quietly.
-    #
-    # Need this check as other User Factories may have non-numeric user ids,
-    # and a lookup by "user_id" may get passed through to this factory with a
-    # non-numeric value.
-    if (exists $p{user_id} && ($p{user_id} =~ /\D/)) {
-        return undef;
-    }
+        # 'user_id' should *only* ever be numeric; if its anything else, fail
+        # quietly.
+        #
+        # Need this check as other User Factories may have non-numeric user
+        # ids, and a lookup by "user_id" may get passed through to this
+        # factory with a non-numeric value.
+        if (exists $p{user_id} && ($p{user_id} =~ /\D/)) {
+            return undef;
+        }
 
-    # get the user record
-    return
-        exists $p{user_id} ? $self->_new_from_where( 'user_id', $p{user_id} )
-            : exists $p{username} ? $self->_new_from_where(
-                'LOWER(username)', _clean_username_or_email( lc $p{username} ) )
-            : $self->_new_from_where(
-                'LOWER(email_address)',
-                _clean_username_or_email( lc $p{email_address} )
+        if (exists $p{user_id}) {
+            return $User_cache{ $p{user_id} } ||= $self->_new_from_where( 
+                'user_id', $p{user_id} 
             );
+        }
+        if (exists $p{username}) {
+            return $User_cache{ $p{username} } ||= $self->_new_from_where(
+                'LOWER(username)' => _clean_username_or_email( lc $p{username} ),
+            );
+        }
+        return $User_cache{ $p{email_address} } ||= $self->_new_from_where(
+            'LOWER(email_address)' => 
+                _clean_username_or_email(lc $p{email_address}),
+        );
+    }
 }
+
 
 sub _new_from_where {
     my ( $self, $where_clause, @bindings ) = @_;

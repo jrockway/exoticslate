@@ -136,8 +136,6 @@ sub log_timings {
 sub run {
     my $self = shift;
 
-    $self->defaultQueryObject(Socialtext::CGI::Scrubbed->new);
-
     # Get resource.
     $self->preRun(); # A no-op by default.
     my $repr = $self->loadResource(@_);
@@ -159,6 +157,26 @@ sub run {
     print $output if not $ENV{REST_APP_RETURN_ONLY};
 
     return $output;
+}
+
+# Rather than calling defaultQueryObject, we need to override
+# Rest::Application->new so that CGI->new is only called once
+#
+# Without this, file uploads do not work with CGI.pm 3.10
+# Once we upgrade CGI.pm, we can remove this function and go back to calling
+# defaultQueryObject. 
+#
+# It might be the problem fixed in CGI.pm 3.29 where file handles were not
+# being reset to zero each time CGI->new is called.
+sub new {
+    my ($proto, %args) = @_;
+    my $class = ref($proto) ? ref($proto) : $proto;
+    my $self = bless(
+        { __defaultQuery => Socialtext::CGI::Scrubbed->new() },
+        $class,
+    );
+    $self->setup(%args);
+    return $self;
 }
 
 sub setup {

@@ -1173,6 +1173,43 @@ sub preview_text_spreadsheet {
     return Socialtext::String::html_escape($content);
 }
 
+sub _store_preview_text {
+    my $self = shift;
+    my $preview_text = shift;
+    $preview_text = '...' if $preview_text =~ /^\s*$/;
+
+    my $dirpath = $self->directory_path;
+    return unless -e $dirpath;
+    my $filename = readlink "$dirpath/index.txt"
+      or die "No index.txt file for '$dirpath' - ID is: '" . $self->id . "'";
+    if (not -f $filename) {
+        warn "$filename is no good for _store_preview_text";
+        return;
+    }
+
+    my $mtime = $self->modified_time;
+    my $data = Socialtext::File::get_contents_utf8($filename);
+    my $headers = substr($data, 0, index($data, "\n\n"));
+    my $old_length = length($headers);
+    return if $headers =~ /^Summary:\ +\S/m;
+    $headers =~ s/^Summary:.*\n?//mg;
+    warn "Storing preview text into $filename\n";
+    $preview_text =~ s/\s*\z//;
+    return if $preview_text =~ /\n/;
+    $headers =~ s/\s+\z//;
+    $headers .= "\nSummary: $preview_text";
+    my $body = substr($data, $old_length);
+
+    my $tmp_file = "$filename.tmp";
+    Socialtext::File::set_contents_utf8($tmp_file, $headers . $body);
+    rename $tmp_file => $filename 
+        or warn "rename $tmp_file => $filename failed: $!";
+    utime $mtime, $mtime, $filename 
+        or warn "utime $mtime, $filename failed: $!";
+    utime $mtime, $mtime, $dirpath 
+        or warn "utime $mtime, $dirpath failed: $!";
+}
+
 sub _to_plain_text {
     my $self    = shift;
     my $content = shift || $self->content;

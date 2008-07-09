@@ -121,6 +121,14 @@ sub css_info {
     return \%files;
 }
 
+sub css_files {
+    my $self = shift;
+    my $css_info = $self->css_info;
+    my @files;
+    push @files, @$_ for values %$css_info;
+    return @files;
+}
+
 sub skin_dir {
     my $self = shift;
     if ($self->hub->current_workspace->uploaded_skin) {

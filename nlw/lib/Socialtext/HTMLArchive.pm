@@ -83,7 +83,7 @@ sub create_zip {
         }
     }
 
-    for my $css ( $self->{hub}->css->files ) {
+    for my $css ( $self->{hub}->skin->css_files ) {
         my $file = Socialtext::File::catfile( $dir, File::Basename::basename($css) );
         File::Copy::copy( $css => $file );
     }
@@ -101,7 +101,7 @@ sub create_zip {
 sub css_uris {
     my $self = shift;
 
-    return map { File::Basename::basename($_) } $self->{hub}->css->files;
+    return map { File::Basename::basename($_) } $self->{hub}->skin->css_files;
 }
 
 ################################################################################

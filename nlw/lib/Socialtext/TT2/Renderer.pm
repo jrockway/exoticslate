@@ -16,7 +16,7 @@ use Socialtext::Helpers;
 use Socialtext::Statistics 'stat_call';
 use Readonly;
 use Socialtext::Validate
-    qw( validate SCALAR_TYPE SCALAR_OR_ARRAYREF_TYPE HASHREF_TYPE SCALAR SCALARREF );
+    qw( validate SCALAR_TYPE SCALAR_OR_ARRAYREF_TYPE ARRAYREF_TYPE HASHREF_TYPE SCALAR SCALARREF );
 use Template;
 use Template::Constants ':debug';
 use Template::Provider;
@@ -29,8 +29,6 @@ use Template::Plugin::FillInForm;
 
 # This needs to be a global so we can call local on it later.
 use vars qw($CurrentPaths);
-
-our $DefaultTemplateDir = Socialtext::Skin->default_skin_path('template');
 
 sub _new_instance {
     my $class = shift;
@@ -46,9 +44,10 @@ sub PreloadTemplates {
     my $class = shift;
 
     my $renderer = $class->instance();
-    local $CurrentPaths = [ $renderer->_standard_paths() ];
+    my @paths = Socialtext::Skin->PreloadTemplateDirs;
+    local $CurrentPaths = \@paths;
 
-    find( sub { _maybe_fetch($renderer) }, $DefaultTemplateDir);
+    find(sub { _maybe_fetch($renderer) }, @paths);
 }
 
 sub _maybe_fetch {
@@ -69,9 +68,8 @@ sub _maybe_fetch {
 {
     Readonly my $spec => {
         template  => { type => SCALAR | SCALARREF },
-        skin_path => { type => SCALAR, default => $DefaultTemplateDir },
         vars      => HASHREF_TYPE( default => {} ),
-        paths     => SCALAR_OR_ARRAYREF_TYPE( default => [] ),
+        paths     => ARRAYREF_TYPE( default => [] ),
     };
     sub render {
         my $self = shift;
@@ -85,8 +83,7 @@ sub _maybe_fetch {
         # each template we process, but we don't have to _reset_ them
         # afterwards, and we don't need to create a new Template.pm
         # object each time either.
-        local $CurrentPaths = 
-            $self->_paths_for_render( "$p{skin_path}/template", $p{paths} );
+        local $CurrentPaths = $self->_paths_for_render($p{paths});
 
         # XXX Unix dependent - File::Spec::Unix::catfile (canonpath actually)
         # is rather slow, and this is a little speed-up hack
@@ -126,30 +123,14 @@ sub _maybe_fetch {
 }
 
 sub _paths_for_render {
-    my $self      = shift;
-    my $skin_path = shift;
-    my $extra     = shift;
+    my $self  = shift;
+    my $paths = shift;
 
-    my @paths = $self->_standard_paths();
+    my @paths;
 
-    my $local_skin_path = _local_path($skin_path);
-    unshift @paths, $local_skin_path, $skin_path;
-
-    # For backwards compatibility:
-    #   Allows you to pass paths to render()
-    #   This is probably not used.
-    if ($extra) {
-        unshift @paths, 
-        grep { -d }
-        map {
-            m{^\/} 
-                ? $_
-                : Socialtext::File::catfile(
-                    $skin_path, $_ 
-                  ) 
-        }
-        grep { defined and length }
-        ref $extra eq 'ARRAY' ? @$extra : $extra;
+    for my $skin_path (@$paths) {
+        my $local_skin_path = _local_path($skin_path);
+        unshift @paths, $local_skin_path, $skin_path;
     }
 
     push @paths, Socialtext::File::catfile(
@@ -157,11 +138,6 @@ sub _paths_for_render {
     );
 
     return \@paths;
-}
-
-{
-    my @StandardPaths = ( _local_path($DefaultTemplateDir), $DefaultTemplateDir );
-    sub _standard_paths { return @StandardPaths }
 }
 
 sub _local_path { Socialtext::File::catfile( shift, 'local' ) }

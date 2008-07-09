@@ -12,7 +12,6 @@ use Socialtext::Permission qw( ST_EMAIL_IN_PERM );
 use Socialtext::Role;
 use Socialtext::Challenger;
 use Socialtext::l10n qw(loc);
-use Socialtext::CSS;
 use Socialtext::File::Copy::Recursive qw(dircopy);
 use YAML qw(LoadFile);
 

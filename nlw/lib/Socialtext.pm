@@ -32,10 +32,6 @@ sub process {
     $self->check_uid;
     $self->check_user_authorization;
 
-    my $skin_type = $self->hub->skin->skin_info->{skin_type};
-    $self->hub->action('skin_handler_' . $skin_type)
-        if $skin_type ne 's2';
-
     my $html = $self->hub->process;
 
     stat_call(nlw_process_et => 'toc');

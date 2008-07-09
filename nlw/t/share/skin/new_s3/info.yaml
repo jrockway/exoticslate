@@ -1,4 +1,5 @@
-name: s3
+name: new_s3
+parent: s3
 version: 1.0.0
 abstract: Socialtext Way Prettier Skin
 cascade_css: 0

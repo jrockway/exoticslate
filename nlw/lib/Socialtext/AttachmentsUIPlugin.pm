@@ -164,6 +164,7 @@ sub _finish {
     my ($self, %args) = @_;
     my $renderer = Socialtext::TT2::Renderer->instance;
     return $renderer->render(
+        paths    => $self->hub->skin->template_paths,
         template => 'view/attachmentresult',
         vars     => \%args,
     );

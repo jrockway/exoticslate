@@ -31,7 +31,6 @@ use List::MoreUtils ();
 use MIME::Types;
 use Socialtext;
 use Socialtext::AppConfig;
-use Socialtext::CSS;
 use Socialtext::EmailAlias;
 use Socialtext::File;
 use Socialtext::File::Copy::Recursive qw(dircopy);

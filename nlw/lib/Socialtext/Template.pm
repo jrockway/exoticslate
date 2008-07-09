@@ -51,7 +51,7 @@ sub render {
     return $renderer->render(
         template => $template,
         vars     => \%vars,
-        paths    => $self->hub->skin->skin_name,
+        paths    => $self->hub->skin->template_paths,
     );
 }
 

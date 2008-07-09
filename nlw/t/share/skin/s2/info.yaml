@@ -1,0 +1,11 @@
+name: s2
+version: 1.0.0
+abstract: Socialtext Classic Skin
+skin_type: s2
+cascade_css: 0
+author:
+  name: Socialtext Dev Team
+  email: dev@lists.socialtext.com
+license: CPAL
+depends:
+  - common

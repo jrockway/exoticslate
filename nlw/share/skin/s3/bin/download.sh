@@ -19,3 +19,4 @@ for i in $files; do
 done
 
 wget http://clients.araucariadesign.com/Socialtext/wiki/css/styles.css --user social --password guest -O css/screen.css
+wget http://clients.araucariadesign.com/Socialtext/wiki/css/ieStyles.css --user social --password guest -O css/screen.ie.css

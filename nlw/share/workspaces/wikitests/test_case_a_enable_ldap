@@ -1,0 +1,6 @@
+| *Comment* | A testset solely for the purpose of enabling LDAP from other testsets. |  |
+| *Comment* | Always makes default LDAP user devnull3 a workspace admin in the test workspace |  |
+
+| st-ldap | start | openldap running |
+| st-admin | add-workspace-admin --username devnull3 --w %%workspace%% | qr/.+ is .+ a workspace admin for the %%workspace%% workspace./ |
+| *Comment* | Enable LDAP: COMPLETED |  |

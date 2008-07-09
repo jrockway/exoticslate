@@ -9,7 +9,7 @@ Every test should override the passed in values as follows:
  set | password | ldapd3v |
  set | email_esc | devnull3\@socialtext.com |
 
-* [Enable LDAP]
+* [Test Case: A Enable LDAP]
 
 These are variations on Default user testcases.
 They must explicitly use the above ldap username, email, and pwd so LDAP Testcases can be called

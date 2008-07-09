@@ -5,7 +5,7 @@
 *It is possible to run as the default LDAP user*
 *if you first run `xwt enable_ldap` to get LDAP enabled so the default LDAP user may successfully login.*
 
-* [Enable LDAP]
+* [Test Case: A Enable LDAP]
 
 * [Test case: IE Miki Authentication]
 

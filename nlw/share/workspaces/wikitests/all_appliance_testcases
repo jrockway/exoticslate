@@ -5,7 +5,7 @@ Socialcalc enabled is required because we run Calc Testcases
 *It is possible to run Firefox testcases as the default LDAP user*
 *if you first run `xwt enable_ldap` to get LDAP enabled so the default LDAP user may successfully login.*
 
-* [Enable LDAP]
+* [Test Case: A Enable LDAP]
 
 * [Core Testcases]
 * [Test Case: Miki Authentication]

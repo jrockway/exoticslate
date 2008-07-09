@@ -24,4 +24,4 @@ Carefully set up the environment so the tests will run.
 | include | [Test Case: Hidden Email Address for Public Wiki] |  |
 
 | *Comment* | Re-enable LDAP. Bring the LDAP user back to life |  |
-| include | [Enable LDAP] |  |
+| include | [Test Case: A Enable LDAP] |  |

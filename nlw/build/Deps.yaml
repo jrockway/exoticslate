@@ -135,7 +135,7 @@ URI::FromHash: 0.02
 URI::QueryParam: 0
 User::pwent: 1.00
 WikiText: 0.09
-WikiText::Socialtext: 0.11
+WikiText::Socialtext: 0.14
 XML::Atom: 0.22
 XML::Feed: 0.12
 XML::RSS: 1.05

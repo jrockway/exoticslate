@@ -1,0 +1,10 @@
+index_title: Socialtext Javascript Testing
+import_libs:
+#   - ../ST.js
+  - ../../../../../common/javascript/prototype-1.4.0/dist/prototype.js
+  - ../../../pageview.js
+  - ../../../../../common/javascript/jquery-1.2.1.pack.js
+  - ../../../../../common/javascript/Ajax-0.11/lib/Ajax.js
+  - ../../../../../common/javascript/Subclass-0.10/lib/Subclass.js
+  - ../Test/Performance.js
+  - ../../../Debug.js

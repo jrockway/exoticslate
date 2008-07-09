@@ -1,8 +1,8 @@
 name: new_s3
 parent: s3
 version: 1.0.0
+cascade_css: 1
 abstract: Socialtext Way Prettier Skin
-cascade_css: 0
 author:
   name: Mark Schuber (Araucaria Design)
 license: CPAL

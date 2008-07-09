@@ -65,6 +65,10 @@ sub skin_info {
     $self->{_skin_info}{parent} ||= $DEFAULT_PARENT;
     $self->{_skin_info}{skin_name} = $skin;
     $self->{_skin_info}{skin_path} = $skin_path;
+    unless (defined $self->{_skin_info}{cascade_css}) {
+        $self->{_skin_info}{cascade_css} =
+            $self->hub->current_workspace->cascade_css;
+    }
     return $self->{_skin_info};
 }
 
@@ -91,6 +95,8 @@ sub css_info {
 
     my %files;
 
+    my $add_common = 1;
+
     for my $skin ($self->inheritence) {
         my $info = $self->skin_info($skin);
 
@@ -103,11 +109,12 @@ sub css_info {
                                      @$files;
         }
 
+        $add_common = 0 if $info->{no_common};
         last unless $info->{cascade_css};
     }
 
     # Common CSS
-    if ($skin_info->{parent} eq 's2') {
+    if ($add_common) {
         push @{$files{common}}, $self->_uri('skin/common/css/common.css');
     }
 

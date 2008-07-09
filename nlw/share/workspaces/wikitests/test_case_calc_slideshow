@@ -20,7 +20,7 @@ Note: Cannot automate attachments, test is slightly reduced
 | click_ok | st-bold-button-link |  |
 | click_ok | st-spreadsheet-formular-input |  |
 | type_ok | st-spreadsheet-formular-input | 'This should become bold |
-| keyPress | st-page-content | \9 |  |
+| keyPress | st-page-content | \9 |
 
 | click_ok | st-italic-button-link |  |
 | click_ok | st-spreadsheet-formular-input |  |
@@ -185,7 +185,8 @@ Note: Cannot automate attachments, test is slightly reduced
 | pause | 5000 |  |
 | click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | link=edit |  |
-| click_and_wait | link=edit |  |
+| click_ok | link=edit |  |
+| wait_for_element_visible_ok | st-save-button-link |
 
 | *Comment* | Test Case: Calc Slideshow Copy, Paste, Cut, Paste, Undo, Redo |
 | ShiftKeyDown |  |  |
@@ -220,8 +221,17 @@ Note: Cannot automate attachments, test is slightly reduced
 | click_ok | st-paste-button-link |  |
 | pause | 1000 |
 | keyPress | st-page-content | \9 |  |
+| click_ok | st-spreadsheet-formular-input |  |  |
+| type_ok | st-spreadsheet-formular-input | =14 |  |
+| keyPress | st-page-content | \9 |
+| click_ok | st-spreadsheet-formular-input |  |  |
+| type_ok | st-spreadsheet-formular-input | =16 |  |
+| keyPress | st-page-content | \9 |
+| click_ok | st-spreadsheet-formular-input |  |  |
+| type_ok | st-spreadsheet-formular-input | =18 |  |
 
 | *Comment* | Test Case: Calc Slideshow UNDO |  |  | click_ok | st-undo-button-link |  |
+| click_ok | st-undo-button-link |  |
 | click_ok | st-undo-button-link |  |
 | click_ok | st-undo-button-link |  |
 | click_ok | st-undo-button-link |  |
@@ -231,6 +241,29 @@ Note: Cannot automate attachments, test is slightly reduced
 | click_ok | st-redo-button-link |  |
 | click_ok | st-redo-button-link |  |
 | click_ok | st-redo-button-link |  |
+
+| ShiftKeyDown |  |  |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| keyPress | st-page-content | \9 |
+| ShiftKeyUp |  |  |
+
+| *Comment* | Test Case: Calc Slideshow SEE inserted row/col |  |
+| click_ok | st-insert-col-button-link |  |
+| click_ok | st-insert-row-button-link |  |
+| pause | 5000 |  |
+| *Comment* | Test Case: Calc Slideshow SEE deleted row/col, then 2nd delete row/col |  |
+| click_ok | st-delete-row-button-link |  |
+| click_ok | st-delete-col-button-link |  |
+| pause | 2000 |  |
+| click_ok | st-delete-row-button-link |  |
+| click_ok | st-delete-col-button-link |  |
 
 | *Comment* | Test Case: Calc Slideshow Create/Delete rows/columns |
 

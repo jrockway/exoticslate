@@ -157,7 +157,9 @@ sub global_template_vars {
 
     my $search_box = $renderer->render(
         template => \$snippet,
-        paths => $self->hub->skin->template_paths,
+        paths => [
+            $self->hub->skin->skin_path('s2') . '/template'
+        ],
         vars => {
             current_workspace => $self->hub->current_workspace,
             show_search_set   => $show_search_set,

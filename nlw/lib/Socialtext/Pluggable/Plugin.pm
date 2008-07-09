@@ -225,11 +225,13 @@ sub template_render {
 
     my $name = $self->name;
     my $plugin_dir = $self->plugin_dir;
+    my $paths = $self->hub->skin->template_paths;
+    push @$paths, glob("$code_base/plugin/*/template");
     
     my $renderer = Socialtext::TT2::Renderer->instance;
     return $renderer->render(
         template => $template,
-        paths => [ glob("$code_base/plugin/*/template") ],
+        paths => $paths,
         vars     => {
             share => $self->share,
             workspaces => [$self->hub->current_user->workspaces->all],

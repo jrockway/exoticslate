@@ -1271,19 +1271,41 @@ if (! window.Page) {
 }
 
 proto.convert_html_to_wikitext = function(html) {
-    html = html.replace(/^<DIV class="?wiki"?>([\s\S]*)<\/DIV>\n$/ig, '$1');
+    (function($) {
+        $dom = $("<div/>").html( html );
 
-    // This pattern identified an user pasted paragraph. With extra gecko-introduced \n
-    // characters in there, which we need to remove.
-    html = html.replace(
-        /((?:<br(?: class="p")?>)+)([\s\S]+?\n[\s\S]*?)(<br(?: class="p")?>)+/g,
-        function(matched, br1, inner, br2) {
-            if (inner == "\n") return matched;
-            if (inner.match(/</)) return matched;
-            var ret = br1 + inner.replace(/^\n/,'').replace(/\n$/, '').replace(/\n/g, ' ').replace(/$/, "\n") + br2;
-            return ret;
-        }
-    );
+        $dom
+        .find("div.wiki").each(function() { 
+            var new_html = $(this).html() + ($.browser.msie ? "<br>\n" : "");
+
+            // A very special edge case case: <div class="wiki">&nbsp;</div>
+            if ($.browser.mozilla) {
+                if ( $(this).html() == "&nbsp;" ) {
+                    new_html = "";
+                }
+            }
+            $(this).replaceWith(new_html);
+        }).end();
+
+        // Try to find an user-pasted paragraph. With extra gecko-introduced \n
+        // characters in there, which we need to remove.
+        $dom.contents().each(function() {
+            if (this.nodeType == 3
+                && this.previousSibling
+                && this.previousSibling.nodeType == 1
+                && this.previousSibling.nodeName == 'BR'
+                && this.nextSibling
+                && this.nextSibling.nodeType == 1
+                && this.nextSibling.nodeName == 'BR') {
+                this.nodeValue = this.nodeValue
+                .replace(/^\n/, '')
+                .replace(/\n$/, '')
+                .replace(/\n/g, ' ');
+            }
+        });
+
+        html = $dom.html();
+    })(jQuery);
 
     // XXX debugging stuff
 //     if (String(location).match(/\?.*html$/))

@@ -17,3 +17,5 @@ for i in $files; do
     wget http://clients.araucariadesign.com/Socialtext/wiki/$i --user social --password guest -O html/$i
     sed -i 's/\t/    /g' html/$i
 done
+
+wget http://clients.araucariadesign.com/Socialtext/wiki/css/styles.css --user social --password guest -O css/screen.css

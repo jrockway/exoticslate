@@ -1271,36 +1271,34 @@ if (! window.Page) {
 }
 
 proto.convert_html_to_wikitext = function(html) {
+    html = this.strip_msword_gunk(html);
+
     (function($) {
-        $dom = $("<div/>").html( html );
+        var $dom = $("<div/>");
+        $dom.get(0).innerHTML = html;
 
         $dom
         .find("div.wiki").each(function() { 
-            var new_html = $(this).html() + ($.browser.msie ? "<br>\n" : "");
-
-            // A very special edge case case: <div class="wiki">&nbsp;</div>
-            if ($.browser.mozilla) {
-                if ( $(this).html() == "&nbsp;" ) {
-                    new_html = "";
-                }
-            }
-            $(this).replaceWith(new_html);
+            $(this).replaceWith( $(this).html() + "<br\n" );
         }).end();
 
         // Try to find an user-pasted paragraph. With extra gecko-introduced \n
         // characters in there, which we need to remove.
         $dom.contents().each(function() {
-            if (this.nodeType == 3
-                && this.previousSibling
-                && this.previousSibling.nodeType == 1
-                && this.previousSibling.nodeName == 'BR'
-                && this.nextSibling
-                && this.nextSibling.nodeType == 1
-                && this.nextSibling.nodeName == 'BR') {
+            if (this.nodeType == 3 ) {
+                if (this.previousSibling && this.previousSibling.nodeType == 1 && this.previousSibling.nodeName != 'BR' ) {
+                    return;
+                }
+
+                if (this.nextSibling && this.nextSibling.nodeType == 1 && this.nextSibling.nodeName != 'BR' ) {
+                    return;
+                }
+
                 this.nodeValue = this.nodeValue
                 .replace(/^\n/, '')
                 .replace(/\n$/, '')
                 .replace(/\n/g, ' ');
+
             }
         });
 
@@ -1313,7 +1311,7 @@ proto.convert_html_to_wikitext = function(html) {
 
     this.copyhtml = html;
     var dom = document.createElement('div');
-    dom.innerHTML = this.strip_msword_gunk(html);
+    dom.innerHTML = html;
     this.output = [];
     this.list_type = [];
     this.indent_level = 0;

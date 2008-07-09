@@ -6,7 +6,7 @@ var filters = {
 };
 
 if (Wikiwyg.is_gecko) {
-    t.plan(6);
+    t.plan(7);
     t.filters(filters);
     t.run_roundtrip('wikitext');
     t.run_is('html', 'text');
@@ -110,6 +110,30 @@ tincidunt!<br class="p"><br class="p">
 Elit tation ipsum dolore aliquam enim dolor accumsan? Esse duis nibh commodo at nulla veniam facilisi tation erat nisl exerci duis euismod eros. Aliquip sed suscipit aliquip ut aliquam sit augue duis at consectetuer. Lobortis autem, duis ea et nibh. Dolor; laoreet zzril, iriure euismod veniam. Zzril veniam vero in blandit lorem. Dignissim feugait enim vero autem zzril amet diam. Suscipit aliquam tincidunt magna feugait consequat adipiscing exerci, feugiat nulla iusto tincidunt!
 
 Elit tation ipsum dolore aliquam enim dolor accumsan? Esse duis nibh commodo at nulla veniam facilisi tation erat nisl exerci duis euismod eros. Aliquip sed suscipit aliquip ut aliquam sit augue duis at consectetuer. Lobortis autem, duis ea et nibh. Dolor; laoreet zzril, iriure euismod veniam. Zzril veniam vero in blandit lorem. Dignissim feugait enim vero autem zzril amet diam. Suscipit aliquam tincidunt magna feugait consequat adipiscing exerci, feugiat nulla iusto tincidunt!
+
+=== another possible results following bz: 552 description
+--- html
+<div class="wiki">Wisi velit laoreet accumsan autem. Hendrerit te consequat eu, ut illum erat ut duis, ex. Feugiat tincidunt molestie illum odio ut dolor, dolor veniam vero sit illum exerci dolor vel. Enim autem in magna dolor in nulla eum vero duis. Ipsum, eum esse ullamcorper tincidunt lorem vel<br class="p"><br class="p">
+<br></div>
+<div class="wiki">Wisi velit laoreet accumsan autem. Hendrerit te
+consequat eu, ut illum erat ut duis, ex. Feugiat tincidunt molestie
+illum odio ut dolor, dolor veniam vero sit illum exerci dolor vel. Enim
+autem in magna dolor in nulla eum vero duis. Ipsum, eum esse
+ullamcorper tincidunt lorem vel<br class="p"><br class="p">
+<br></div>
+<div class="wiki">Wisi velit laoreet accumsan autem. Hendrerit te
+consequat eu, ut illum erat ut duis, ex. Feugiat tincidunt molestie
+illum odio ut dolor, dolor veniam vero sit illum exerci dolor vel. Enim
+autem in magna dolor in nulla eum vero duis. Ipsum, eum esse
+ullamcorper tincidunt lorem vel<br class="p"><br class="p">
+<br></div>
+
+--- text
+Wisi velit laoreet accumsan autem. Hendrerit te consequat eu, ut illum erat ut duis, ex. Feugiat tincidunt molestie illum odio ut dolor, dolor veniam vero sit illum exerci dolor vel. Enim autem in magna dolor in nulla eum vero duis. Ipsum, eum esse ullamcorper tincidunt lorem vel
+
+Wisi velit laoreet accumsan autem. Hendrerit te consequat eu, ut illum erat ut duis, ex. Feugiat tincidunt molestie illum odio ut dolor, dolor veniam vero sit illum exerci dolor vel. Enim autem in magna dolor in nulla eum vero duis. Ipsum, eum esse ullamcorper tincidunt lorem vel
+
+Wisi velit laoreet accumsan autem. Hendrerit te consequat eu, ut illum erat ut duis, ex. Feugiat tincidunt molestie illum odio ut dolor, dolor veniam vero sit illum exerci dolor vel. Enim autem in magna dolor in nulla eum vero duis. Ipsum, eum esse ullamcorper tincidunt lorem vel
 
 */
 

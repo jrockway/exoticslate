@@ -1,0 +1,80 @@
+| *Comment* | Test Case: Recent Changes |
+
+| set | newspace | recent-%%start_time%% |
+| set | newtitle | recent %%start_time%% |
+
+| *Comment* | Test Case: Recent Changes. Create a target workspace |  |
+| st-admin | create-workspace --name %%newspace%% --title "%%newtitle%%" | A new workspace named "%%newspace%%" was created. |
+| st-admin | add-member --email %%email%% --workspace %%newspace%% | %%username%% is now a member of the %%newspace%% workspace. |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Verify copy by opening target wiki Dashboard and clicking What's New link to allow time for copy to complete |  |
+| open_ok | /%%newspace%% |  |
+
+| open_ok | /%%newspace%%/index.cgi?action=new_page |  |
+| wait_for_element_present_ok | st-newpage-pagename-edit |  |
+| wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
+| type_ok | st-newpage-pagename-edit | created_page_1 |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | I have created a page called created_page_1. woot. |
+| click_ok | st-save-button-link |  |
+| wait_for_element_present_ok | st-edit-button-link | 25000 |
+
+| open_ok | /%%newspace%%/index.cgi?action=new_page |  |
+| wait_for_element_present_ok | st-newpage-pagename-edit |  |
+| wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
+| type_ok | st-newpage-pagename-edit | created_page_2 |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | I have created a page called created_page_2. woot. |
+| click_ok | st-save-button-link |  |
+| wait_for_element_present_ok | st-edit-button-link | 25000 |
+
+| open_ok | /%%newspace%%/index.cgi?action=new_page |  |
+| wait_for_element_present_ok | st-newpage-pagename-edit |  |
+| wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
+| type_ok | st-newpage-pagename-edit | created_page_3 |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | I have created a page called created_page_2. woot. |
+| click_ok | st-save-button-link |  |
+| wait_for_element_present_ok | st-edit-button-link | 25000 |
+
+| open_ok | /%%newspace%%/index.cgi?action=new_page |  |
+| wait_for_element_present_ok | st-newpage-pagename-edit |  |
+| wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
+| type_ok | st-newpage-pagename-edit | created_page_4 |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | I have created a page called created_page_2. woot. |
+| click_ok | st-save-button-link |  |
+| wait_for_element_present_ok | st-edit-button-link | 25000 |
+
+| open_ok | /%%newspace%%/index.cgi?action=new_page |  |
+| wait_for_element_present_ok | st-newpage-pagename-edit |  |
+| wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
+| type_ok | st-newpage-pagename-edit | created_page_5 |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | I have created a page called created_page_2. woot. |
+| click_ok | st-save-button-link |  |
+| wait_for_element_present_ok | st-edit-button-link | 25000 |
+
+| *comment* | Test Case: Recent Changes Comment on a page |  |
+| open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=created_page_1;caller_action=display |  |
+| wait_for_element_visible_ok | st-commentui-textarea | 30000 |
+| type_ok | st-commentui-textarea | see, I commented |
+| click_and_wait | st-commentui-savelink |  |
+
+| *comment* | Test Case: Recent Changes check answers at /data/changes |  |
+| pause | 10000 |
+
+| *Comment* | Test Case: Recent Changes Workspace Teardown |  |
+| st-admin | delete-workspace --workspace %%newspace%% --no-export | The %%newspace%% workspace has been deleted. |
+
+| *Comment* | Test Case: Recent Changes COMPLETED |

@@ -1273,44 +1273,63 @@ if (! window.Page) {
 proto.convert_html_to_wikitext = function(html) {
     html = this.strip_msword_gunk(html);
 
-    (function($) {
-        var $dom = $("<div/>");
-        $dom.get(0).innerHTML = html;
+    (function ($) {
+        var dom = document.createElement("div");
+        dom.innerHTML = html;
 
-        $dom
-        .find("div.wiki").each(function() { 
-            $(this).replaceWith( $(this).html() + "<br\n" );
-        }).end();
+        // This needs to be done by hand for IE.
+        // jQuery().replaceWith considered dangerous in IE.
+        // It was causing stack overflow.
+        if ($.browser.msie) {
+            var elems = dom.getElementsByTagName("div");
+            for (var i = 0, l = elems.length; i < l; i++) {
+                if (elems[i].className != 'wiki') continue;
+                var span = document.createElement('span');
+                span.innerHTML = elems[i].innerHTML + '<br>\n';
+                elems[i].parentNode.replaceChild(
+                    span,
+                    elems[i]
+                );
+            }
+            html = dom.innerHTML;
+        }
+        else {
+            var $dom = $(dom);
+
+            $dom
+            .find("div.wiki").each(function() { 
+                $(this).replaceWith( $(this).html() + "<br>\n" );
+            });
 
         // Try to find an user-pasted paragraph. With extra gecko-introduced \n
         // characters in there, which we need to remove.
-        $dom.contents().each(function() {
-            if (this.nodeType == 3 ) {
-                if (this.previousSibling && this.previousSibling.nodeType == 1 && this.previousSibling.nodeName != 'BR' ) {
-                    return;
+            $dom.contents().each(function() {
+                if (this.nodeType == 3 ) {
+                    if (this.previousSibling && this.previousSibling.nodeType == 1 && this.previousSibling.nodeName != 'BR' ) {
+                        return;
+                    }
+
+                    if (this.nextSibling && this.nextSibling.nodeType == 1 && this.nextSibling.nodeName != 'BR' ) {
+                        return;
+                    }
+
+                    this.nodeValue = this.nodeValue
+                    .replace(/^\n/, '')
+                    .replace(/\n$/, '')
+                    .replace(/\n/g, ' ');
+
                 }
-
-                if (this.nextSibling && this.nextSibling.nodeType == 1 && this.nextSibling.nodeName != 'BR' ) {
-                    return;
+                else if ( $(this).is("p") ) {
+                    if ( this.childNodes.length == 1 && this.childNodes[0].nodeType == 3) {
+                        this.childNodes[0].nodeValue = this.childNodes[0].nodeValue
+                            .replace(/^\n/, '')
+                            .replace(/\n$/, '')
+                            .replace(/\n/g, ' ');
+                    }
                 }
-
-                this.nodeValue = this.nodeValue
-                .replace(/^\n/, '')
-                .replace(/\n$/, '')
-                .replace(/\n/g, ' ');
-
-            }
-            else if ( $(this).is("p") ) {
-                if ( this.childNodes.length == 1 && this.childNodes[0].nodeType == 3) {
-                    this.childNodes[0].nodeValue = this.childNodes[0].nodeValue
-                        .replace(/^\n/, '')
-                        .replace(/\n$/, '')
-                        .replace(/\n/g, ' ');
-                }
-            }
-        });
-
-        html = $dom.html();
+            });
+            html = $dom.html();
+        }
     })(jQuery);
 
     // XXX debugging stuff

@@ -30,7 +30,93 @@
             [% page.content %]
         </div>
         <div id="contentRight">
-        </div>
+            <div class="widget">
+                <div class="widgetHeader">
+                <h4>Tags</h4>
+                </div><!-- widgetHeader END -->
+                <div class="widgetContent">
+                    <ul>
+                    [% FOR tag = tags.tags %]
+                        <li>[% tag.name %] <a href="#">[x]</a></li>
+                    [% END %]
+                    </ul>
+                    <ul class="widgetButton">
+                        <li><a class="addTagButton" href="#">Tag</a></li>
+                    </ul>
+                    <div class="clear"></div>
+                </div><!-- widgetContent -->
+                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
+            </div><!-- widget END -->
+            <div class="widget">
+                <div class="widgetHeader">
+                <h4>Incoming Links</h4>
+                </div><!-- widgetHeader END -->
+                <div class="widgetContent">
+                    <ul>
+                    [% FOR in = page.incoming %]
+                        <li><a href="?[% in.page_id %]">[% in.page_title %]</a></li>
+                    [% END %]
+                    </ul>
+                    <div class="clear"></div>
+                </div><!-- widgetContent -->    
+                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                        
+            </div><!-- widget END -->
+
+            <div class="widget">
+                <div class="widgetHeader">
+                <h4>[% loc('Attachments') %]</h4>
+                </div><!-- widgetHeader END -->
+                <div class="widgetContent">
+                    <ul>
+                    [% FOR file = attachments %]
+                        <li><a title="[% loc("Uploaded by [_1]", file.uploader) %]" href="[% file.uri %]">[% file.name %]</a></li>
+                    [% END %]
+                    </ul>
+                    [% IF checker.check_permission('attachments') %]
+                    <ul class="widgetButton">
+                        <li><a id="st-attachments-uploadbutton" class="uploadButton" href="#">[% loc('Upload Files') %]</a></li>
+                        <li><a id="st-attachments-managebutton" class="manageButton" href="#">[% loc('Manage Files') %]</a></li>
+                    </ul>
+                    [% END %]
+                    <div class="clear"></div>
+                </div><!-- widgetContent -->
+                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
+            </div><!-- widget END -->
+            
+            [% IF include_recent_changes %]
+            <div class="widget">
+                <div class="widgetHeader">
+                <h4>[% loc("What's New") %]</h4>
+                </div><!-- widgetHeader END -->
+                <div class="widgetContent">
+                    <ul>
+                    [% FOR page = recent_changes %]
+                        <li><a href="[% page.link %]">[% page.title %]</a></li>
+                    [% END %]
+                    </ul>
+                    <div class="clear"></div>
+                </div><!-- widgetContent -->
+                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
+            </div><!-- widget END -->
+            [% END %]
+
+            [% IF include_breadcrumbs %]
+            <div class="widget">
+                <div class="widgetHeader">
+                <h4>[% loc('Recently Viewed') %]</h4>
+                </div><!-- widgetHeader END -->
+                <div class="widgetContent">
+                    <ul>
+                    [% FOREACH page IN breadcrumbs %]
+                        <li><a href="[% page.link %]">[% page.title %]</a></li>
+                    [% END %]
+                    </ul>
+                    <div class="clear"></div>
+                </div><!-- widgetContent -->
+                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
+            </div><!-- widget END -->
+            [% END %]
+        </div><!-- contentRight -->
     </div>
 
     <div class="clear"></div>

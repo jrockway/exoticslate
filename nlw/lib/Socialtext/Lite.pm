@@ -349,7 +349,7 @@ sub _process_template {
         brand_stamp     => $self->hub->main->version_tag,
         workspace_title => $self->hub->current_workspace->title,
         static_path     => Socialtext::Helpers::static_path,
-        skin_uri        => $self->hub->skin->default_skin_uri,
+        skin_uri        => sub { $self->hub->skin->skin_uri($_[0]) },
         %vars,
     );
 }

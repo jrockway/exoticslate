@@ -30,16 +30,6 @@ sub PreloadTemplateDirs {
     return map { $class->_path('skin', $_, 'template') } @PRELOAD_SKINS;
 }
 
-sub default_skin_path {
-    my $self = shift;
-    $self->_path('skin', $self->default_skin_name, @_);
-}
-
-sub default_skin_uri {
-    my $self = shift;
-    $self->_uri('skin', $self->default_skin_name, @_);
-}
-
 sub name {
     my $self = shift;
     $self->hub->current_workspace->skin_name;

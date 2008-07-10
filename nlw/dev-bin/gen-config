@@ -563,7 +563,7 @@ sub apache2_params {
             min_spare               => 2,
             max_spare               => 2,
             start                   => 2,
-            max_clients             => 4,
+            max_clients             => 12,
             max_requests_per_child  => 0,
         };
 

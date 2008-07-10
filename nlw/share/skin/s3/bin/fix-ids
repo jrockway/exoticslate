@@ -42,6 +42,8 @@ while (my ($orig,$new) = each %files) {
             }
         }
 
+        s{#contentPage}{#socialtext-wiki}g;
+        s{id="contentPage"}{id="socialtext-wiki"};
         s{css/styles.css}{css/screen.css};
         s{<div id="header">}{<div id="header" class="st-wiki-nav">};
         s{(id="globalNav")}{$1 class="st-wiki-nav-content"};

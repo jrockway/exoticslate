@@ -358,7 +358,7 @@ div#controls {
 	background: url(../images/controlsTile.png) repeat-x top left;
 }
 
-body#contentPage div#controls,body#settingsPage div#controls {
+body#socialtext-wiki div#controls,body#settingsPage div#controls {
 	height: 44px;
 	background: url(../images/contentControlsTile.png) repeat-x top left;
 }
@@ -380,7 +380,7 @@ div#controls div#controlsLeft {
        width: auto !important;
 }
 
-body#contentPage div#controls div#controlsLeft,body#settingsPage div#controls div#controlsLeft {
+body#socialtext-wiki div#controls div#controlsLeft,body#settingsPage div#controls div#controlsLeft {
 	background: url(../images/contentControlsLeft.png) no-repeat top left;
 	height: 44px;
 	padding-left: 8px;
@@ -454,7 +454,7 @@ body#dashboard div#controls div#controlsLeft ul#quickLinks li img,body#blog div#
 	margin-right: 5px;
 }
 
-body#contentPage div#controls div#controlsLeft ul li,body#settingsPage div#controls div#controlsLeft ul li {
+body#socialtext-wiki div#controls div#controlsLeft ul li,body#settingsPage div#controls div#controlsLeft ul li {
 	line-height: 44px;
 }
 
@@ -465,7 +465,7 @@ div#controls div#controlsLeft ul li a {
 	margin-left: 10px;
 }
 
-body#contentPage div#controlsLeft ul li a,body#settingsPage div#controlsLeft ul li a {
+body#socialtext-wiki div#controlsLeft ul li a,body#settingsPage div#controlsLeft ul li a {
 	top: 13px;
 }
 
@@ -585,7 +585,7 @@ div#controls div#controlsRight {
        height: 100%;
 }
 
-body#contentPage div#controls div#controlsRight,body#settingsPage div#controls div#controlsRight {
+body#socialtext-wiki div#controls div#controlsRight,body#settingsPage div#controls div#controlsRight {
 	background: url(../images/contentControlsRight.png) no-repeat top right;
 	height: 44px;
 	width: 250px !important;
@@ -636,7 +636,7 @@ div#controls div#controlsRight ul li {
 	padding-left: 14px;
 	}
 	
-body#contentPage div#controls div#controlsRight ul li,body#settingsPage div#controls div#controlsRight ul li {
+body#socialtext-wiki div#controls div#controlsRight ul li,body#settingsPage div#controls div#controlsRight ul li {
 	line-height: 44px;
 	} 	
 	

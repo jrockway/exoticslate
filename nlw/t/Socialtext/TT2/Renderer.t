@@ -31,7 +31,7 @@ EOF
     my $output =
         Socialtext::TT2::Renderer->render(
             template => $template_name,
-            paths    => $tempdir,
+            paths    => [ $tempdir ],
             vars     => { foo => 42 },
         );
 
@@ -62,7 +62,7 @@ EOF
     $output =
         Socialtext::TT2::Renderer->render(
             template => $template_name,
-            paths    => $tempdir,
+            paths    => [ $tempdir ],
             vars     => { foo => 42 },
         );
     is( $output, $expect, 'output matches old version of template' );

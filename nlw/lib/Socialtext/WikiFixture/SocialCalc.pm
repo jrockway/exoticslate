@@ -26,9 +26,6 @@ Are identical to it's parent object.  I will just overload the command handler.
 
 =cut
 
-
-=cut
-
 =head2 sc_right_cursor
 
 Move the selected field to the right on a socialcalc page open for edit
@@ -94,14 +91,11 @@ You can find documentation for this module with the perldoc command.
 
 You can also look for information at:
 
-=over 4
-
 =head1 ACKNOWLEDGEMENTS
 
 =head1 COPYRIGHT & LICENSE
 
 Copyright 2008 Matthew Heusser, all rights reserved.
-
 
 =cut
 

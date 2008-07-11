@@ -1,8 +1,5 @@
-# @COPYRIGHT@
-use strict;
-use warnings;
-use base 'Socialtext::WikiFixture::Socialtext';
 package Socialtext::WikiFixture::SocialCalc;
+# @COPYRIGHT@
 use strict;
 use warnings;
 use base 'Socialtext::WikiFixture::Socialtext';

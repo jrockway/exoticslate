@@ -13,7 +13,7 @@
 | open_ok | /%%newspace%%/index.cgi?action=new_page |  |
 | wait_for_element_present_ok | st-newpage-pagename-edit |  |
 | wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
-| type_ok | st-newpage-pagename-edit | created_page_1 |
+| type_ok | st-newpage-pagename-edit | Created Page 1 |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
@@ -24,7 +24,7 @@
 | open_ok | /%%newspace%%/index.cgi?action=new_page |  |
 | wait_for_element_present_ok | st-newpage-pagename-edit |  |
 | wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
-| type_ok | st-newpage-pagename-edit | created_page_2 |
+| type_ok | st-newpage-pagename-edit | Created Page 2 |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
@@ -35,7 +35,7 @@
 | open_ok | /%%newspace%%/index.cgi?action=new_page |  |
 | wait_for_element_present_ok | st-newpage-pagename-edit |  |
 | wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
-| type_ok | st-newpage-pagename-edit | created_page_3 |
+| type_ok | st-newpage-pagename-edit | Created Page 3 |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
@@ -46,7 +46,7 @@
 | open_ok | /%%newspace%%/index.cgi?action=new_page |  |
 | wait_for_element_present_ok | st-newpage-pagename-edit |  |
 | wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
-| type_ok | st-newpage-pagename-edit | created_page_4 |
+| type_ok | st-newpage-pagename-edit | Created Page 4 |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
@@ -57,7 +57,7 @@
 | open_ok | /%%newspace%%/index.cgi?action=new_page |  |
 | wait_for_element_present_ok | st-newpage-pagename-edit |  |
 | wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
-| type_ok | st-newpage-pagename-edit | created_page_5 |
+| type_ok | st-newpage-pagename-edit | Created Page 5 |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
@@ -66,13 +66,38 @@
 | wait_for_element_present_ok | st-edit-button-link | 25000 |
 
 | *comment* | Test Case: Recent Changes Comment on a page |  |
-| open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=created_page_1;caller_action=display |  |
+| open_ok | /%%newspace%%/index.cgi?action=enter_comment;page_name=created_page_1;caller_action=display |  |
 | wait_for_element_visible_ok | st-commentui-textarea | 30000 |
 | type_ok | st-commentui-textarea | see, I commented |
 | click_and_wait | st-commentui-savelink |  |
 
+| pause | 5000 |
+
 | *comment* | Test Case: Recent Changes check answers at /data/changes |  |
-| pause | 10000 |
+| open_ok | /data/changes/ |  |
+
+| *comment* | Test Case: Recent Changes /data/changes should render in < 4 seconds |  |
+| wait_for_element_present_ok | link=created_page_1 | 4000 |
+| wait_for_element_present_ok | link=created_page_2 | 4000 |
+| wait_for_element_present_ok | link=created_page_3 | 4000 |
+| wait_for_element_present_ok | link=created_page_4 | 4000 |
+| wait_for_element_present_ok | link=created_page_5 | 4000 |
+| text_like | qr/created_page_1.+created_page_5.+created_page_4.+created_page_3.+created_page_2/ |  |
+| pause | 3000 |  |
+
+| *comment* | Test Case: Recent Changes Comment on a page |  |
+| open_ok | /%%newspace%%/index.cgi?action=enter_comment;page_name=created_page_3;caller_action=display |  |
+| wait_for_element_visible_ok | st-commentui-textarea | 30000 |
+| type_ok | st-commentui-textarea | see, I commented |
+| click_and_wait | st-commentui-savelink |  |
+
+| pause | 5000 |
+
+| *comment* | Test Case: Recent Changes check answers at /data/changes |  |
+| open_ok | /data/changes/ |  |
+| *comment* | Test Case: Recent Changes /data/changes should render in < 4 seconds |  |
+| wait_for_element_present_ok | link=created_page_1 | 4000 |
+| text_like | qr/created_page_3.+created_page_1.+created_page_5.+created_page_4.+created_page_2/ |  |
 
 | *Comment* | Test Case: Recent Changes Workspace Teardown |  |
 | st-admin | delete-workspace --workspace %%newspace%% --no-export | The %%newspace%% workspace has been deleted. |

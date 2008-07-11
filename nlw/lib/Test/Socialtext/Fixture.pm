@@ -298,14 +298,19 @@ sub _generate_help_workspace {
     my $self = shift;
     my $user = shift;
     my $ws_name = shift || 'help-en';
-    my $tarball = "share/l10n/help/$ws_name.tar.gz";
+    my $tarball = $self->env->nlw_dir . "/share/l10n/help/$ws_name.tar.gz";
 
     # Workspace already exists.
     return if Socialtext::Workspace->new( name => $ws_name );
 
     # Load up the workspace from a previous export.
+    my $st_admin = $self->env->nlw_dir . '/bin/st-admin';
     _system_or_die(
-        "bin/st-admin import-workspace --tarball $tarball --overwrite");
+        $st_admin,
+        'import-workspace',
+        '--tarball',    $tarball,
+        '--overwrite',
+    );
     my $ws = Socialtext::Workspace->new( name => $ws_name );
     $ws ->add_user(
         user => $user,
@@ -334,7 +339,7 @@ sub _clean_workspace_ceqlotron_tasks {
     Socialtext::Ceqlotron::ensure_queue_directory();
     Socialtext::Ceqlotron::ensure_lock_file();
 
-    my $program = 'bin/ceq-rm';
+    my $program = $self->env->nlw_dir . '/bin/ceq-rm';
     system($program, $workspace_name) and die "$program failed: $!";
 }
 
@@ -374,8 +379,9 @@ sub _create_extra_pages {
     my $ws = shift;
 
     my $hub = $self->env->hub_for_workspace($ws);
+    my $xtra_pgs_dir = $self->env->nlw_dir . '/t/extra-pages';
 
-    for my $file ( grep { -f && ! /(?:\.sw.|~)$/ } glob "t/extra-pages/*" ) {
+    for my $file ( grep { -f && ! /(?:\.sw.|~)$/ } glob "$xtra_pgs_dir/*" ) {
         my $name = Encode::decode( 'utf8', File::Basename::basename( $file ) );
         $name =~ s{_SLASH_}{/}g;
 
@@ -438,7 +444,7 @@ sub _create_extra_attachments {
 
     my $hub = $self->env->hub_for_workspace($ws);
 
-    local $CWD = 't/extra-attachments';
+    local $CWD = $self->env->nlw_dir . '/t/extra-attachments';
     for my $dir ( grep { -d && ! /\.svn/ } glob '*' ) {
         $hub->pages->current( $hub->pages->new_from_name( $dir ) );
 

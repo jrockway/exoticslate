@@ -169,7 +169,12 @@ sub create {
 
 sub delete {
     my ( $self, $user ) = @_;
-    sql_execute( 'DELETE FROM "User" WHERE user_id=?', $user->user_id );
+    my $rc = sql_execute( 'DELETE FROM "User" WHERE user_id=?', $user->user_id );
+
+    # flush cache; removed a User from the DB
+    $rc && $self->ResetUserCache();
+
+    return $rc;
 }
 
 # "update" methods: generic update?
@@ -194,6 +199,9 @@ sub update {
     while (my ($column, $value) = each %p) {
         $user->$column($value);
     }
+
+    # flush cache; updated User in DB
+    $self->ResetUserCache();
 
     return $user;
 }

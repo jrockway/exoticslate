@@ -18,7 +18,6 @@ use unmocked 'Socialtext::CategoryPlugin';
 use unmocked 'Socialtext::RecentChangesPlugin';
 use unmocked 'Socialtext::SyndicatePlugin';
 use unmocked 'Socialtext::TiddlyPlugin';
-use unmocked 'Socialtext::CSS';
 use unmocked 'Socialtext::FetchRSSPlugin';
 use unmocked 'Socialtext::Template';
 use unmocked 'Socialtext::Stax';
@@ -64,10 +63,6 @@ sub skin { $_[0]->{skin} || Socialtext::Skin->new(hub => $_[0]) }
 
 sub display { 
     return $_[0]->{display} ||= Socialtext::DisplayPlugin->new(hub => $_[0]);
-}
-
-sub css { 
-    return $_[0]->{css} ||= Socialtext::CSS->new(hub => $_[0]);
 }
 
 sub favorites { 

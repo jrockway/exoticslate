@@ -54,7 +54,7 @@ Move the selected field to the right on a socialcalc page open for edit
 
 =cut
 
-sub socialcalc_left_cursor {
+sub sc_left_cursor {
     my $self = shift;
     $self->handle_command('ShiftKeyDown',$terminator);
     $self->handle_command('keyPress','st-page-content', $tab, $terminator);
@@ -70,7 +70,7 @@ Move the cursor down
 
 sub sc_down_arrow {
     my $self = shift;
-    $self->handle_command('keyPress','st-page-content', $tab, $down);
+    $self->handle_command('keyPress','st-page-content', $down, $terminator);
 }
 
 

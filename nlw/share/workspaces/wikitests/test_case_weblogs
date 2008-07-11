@@ -14,7 +14,7 @@ RSS feeds are tested in a separate test
 | *Comment* | Test Case: Weblogs Test Weblog pulldown |  |
 | *Comment* | reliably open Recent Changes, navigate away then revisit it |  |
 | open_ok | /%%workspace%%/index.cgi?action=weblog_display&category=recent+changes |  |
-| wait_for_element_visible_ok | page-control-category-selector | 3000 |
+| wait_for_element_visible_ok | page-control-category-selector | 30000 |
 | select_ok | page-control-category-selector | test_%%start_time%%_weblog |
 | wait_for_text_present_ok | Weblog: test_%%start_time%%_weblog | 30000 |
 | select_ok | page-control-category-selector | Recent Changes |
@@ -30,10 +30,10 @@ Selenium can't "see" feed pages
 
 | *Comment* | Test Case: Weblogs new post |  |
 | click_and_wait | st-weblog-newpost-button |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | type_ok | st-newpage-pagename-edit | post1_%%start_time%% |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | post1_content_%%start_time%% |
 | click_and_wait | st-save-button-link |  |
 | text_like | st-weblog-content | qr/post1_%%start_time%%.+post1_content_%%start_time%%.+comment.+edit this post.+permalink.+attachments/ |
@@ -46,7 +46,7 @@ Selenium can't "see" feed pages
 | open_ok | /%%workspace%%/index.cgi?action=weblog_display&category=test_%%start_time%%_weblog |  |
 | text_like | st-weblog-content | comment1_%%start_time%% |
 | click_and_wait | link=edit this post |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | edit1_%%start_time%% |
 | click_and_wait | st-save-button-link |  |
 | text_like | st-weblog-content | edit1_%%start_time%% |
@@ -61,6 +61,7 @@ Selenium can't "see" feed pages
 | click_and_wait | link=Create New Weblog |  |
 | type_ok | weblog_title | `test_[%%start_time%%]_weblog` |
 | click_and_wait | Button |  |
+| wait_for_element_visible_ok | page-control-category-selector | 30000 |
 | select_ok | page-control-category-selector | Recent Changes |
 | wait_for_text_present_ok | Weblog: Recent Changes | 30000 |
 | select_ok | page-control-category-selector | `test_[%%start_time%%]_weblog` |

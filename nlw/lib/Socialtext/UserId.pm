@@ -142,15 +142,15 @@ sub create {
 sub delete {
     my $self = shift;
 
-    my $rc = sql_execute(
+    my $sth = sql_execute(
         'DELETE FROM "UserId" WHERE system_unique_id=?',
         $self->system_unique_id
     );
 
     # flush cache; removed a UserId from the DB
-    $rc && $self->ResetUserCache();
+    $self->ResetUserCache();
 
-    return $rc;
+    return $sth;
 }
 
 # "update" methods: set_driver_username

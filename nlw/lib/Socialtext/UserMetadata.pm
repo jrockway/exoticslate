@@ -100,15 +100,15 @@ sub create {
 sub delete {
     my ( $self ) = @_;
 
-    my $rc = sql_execute(
+    my $sth = sql_execute(
         'DELETE FROM "UserMetadata" WHERE user_id=?',
         $self->user_id
     );
 
     # flush cache; removed a UserMetadata from the DB
-    $rc && $self->ResetUserCache();
+    $self->ResetUserCache();
 
-    return $rc;
+    return $sth;
 }
 
 # "update" methods: set_technical_admin, set_business_admin

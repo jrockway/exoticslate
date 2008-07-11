@@ -169,12 +169,12 @@ sub create {
 
 sub delete {
     my ( $self, $user ) = @_;
-    my $rc = sql_execute( 'DELETE FROM "User" WHERE user_id=?', $user->user_id );
+    my $sth = sql_execute( 'DELETE FROM "User" WHERE user_id=?', $user->user_id );
 
     # flush cache; removed a User from the DB
-    $rc && $self->ResetUserCache();
+    $self->ResetUserCache();
 
-    return $rc;
+    return $sth;
 }
 
 # "update" methods: generic update?

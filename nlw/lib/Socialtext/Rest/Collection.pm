@@ -7,6 +7,7 @@ use warnings;
 use base 'Socialtext::Rest';
 use Socialtext::JSON;
 use Socialtext::HTTP ':codes';
+use Socialtext::Timer;
 
 =head1 NAME
 
@@ -70,13 +71,16 @@ sub _make_getter {
     return sub {
         my ( $self, $rest ) = @_;
 
+        Socialtext::Timer->Start("GET_$content_type");
         my $rv;
         eval {
             $rv = $self->if_authorized(
                 'GET',
                 sub {
                     # REVIEW: should eval this for errors
+                    Socialtext::Timer->Start('get_resource');
                     my $resource = $self->get_resource($rest);
+                    Socialtext::Timer->Start('get_resource');
                     $resource = [] unless @$resource; # protect against weird data
                     $rest->header(
                         -status        => HTTP_200_OK,
@@ -90,7 +94,8 @@ sub _make_getter {
                 }
             );
         };
-        if (my $except = $@) {
+       Socialtext::Timer->Stop("GET_$content_type");
+       if (my $except = $@) {
             if ($except->isa('Socialtext::Exception::Auth')) {
                 return $self->not_authorized;
             } elsif ($except->isa('Socialtext::Exception::NoSuchWorkspace')) {
@@ -167,7 +172,13 @@ but subclasses can override this.
 sub _hashes_for_query {
     my $self = shift;
 
-    return map { $self->_entity_hash($_) } $self->_entities_for_query;
+    Socialtext::Timer->Start('_entities_for_query');
+    my @results =  $self->_entities_for_query;
+    Socialtext::Timer->Stop('_entities_for_query');
+    Socialtext::Timer->Start('_entity_hash_map');
+    @results = map { $self->_entity_hash($_) } @results;
+    Socialtext::Timer->Stop('_entity_hash_map');
+    return @results;
 }
 
 =head2 $obj->add_text_element($text);

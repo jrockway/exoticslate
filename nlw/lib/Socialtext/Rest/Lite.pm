@@ -48,7 +48,6 @@ sub changes {
         'GET',
         sub {
             my $category = $self->_category_from_uri();
-            $category ||= 'recent changes';
             my $content = Socialtext::Lite->new( hub => $self->hub )
                 ->recent_changes($category);
 

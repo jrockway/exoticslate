@@ -113,11 +113,11 @@ sub Count {
             );
         }
         if (exists $p{username}) {
-            return $User_cache{ $p{username} } ||= $self->_new_from_where(
+            return $User_cache{ lc $p{username} } ||= $self->_new_from_where(
                 'LOWER(username)' => _clean_username_or_email( lc $p{username} ),
             );
         }
-        return $User_cache{ $p{email_address} } ||= $self->_new_from_where(
+        return $User_cache{ lc $p{email_address} } ||= $self->_new_from_where(
             'LOWER(email_address)' => 
                 _clean_username_or_email(lc $p{email_address}),
         );

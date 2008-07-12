@@ -15,6 +15,7 @@ use Socialtext::Validate qw( validate SCALAR_TYPE USER_TYPE );
 use Socialtext::Indexes ();
 use URI::Escape ();
 use Socialtext::l10n qw(loc);
+use Socialtext::Timer;
 
 sub class_id {'category'}
 const class_title => 'Category Managment';
@@ -278,7 +279,7 @@ sub get_pages_by_seconds_limit {
     my $seconds     = shift;
     my $max_returns = shift;
     my $limit       = time - $seconds;
-
+    Socialtext::Timer->Start('get_pages_by_seconds_limit');
     # XXX If we use some other module for this, we don't have to load
     # the massive POSIX library in Apache.
     my $date_limit_string = POSIX::strftime( '%Y%m%d%H%M%S', gmtime($limit) );
@@ -309,6 +310,7 @@ PAGE:
         }
         push @pages, $page;
     }
+    Socialtext::Timer->Stop('get_pages_by_seconds_limit');
     return \@pages;
 }
 
@@ -627,13 +629,10 @@ sub _set_query_link {
 sub _get_wafl_data {
     my $self = shift;
     my $hub            = shift;
-    my $category       = shift;
+    my $category       = shift || '';
     my $workspace_name = shift;
 
-    $category = 'recent changes' unless $category;
-
     $hub = $self->hub_for_workspace_name($workspace_name);
-
     $hub->recent_changes->get_recent_changes_in_category(
         count    => 10,
         category => lc($category),

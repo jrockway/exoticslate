@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 19;
+use Test::Socialtext tests => 24;
 fixtures( 'admin' );
 use Readonly;
 
@@ -42,8 +42,8 @@ END_OF_RANT
         creator => $hub->current_user,
     );
     isa_ok( $page, "Socialtext::Page" );
-    is $page->revision_count, 1,
-        'Fresh page has exactly 1 revision id.';
+    is $page->revision_count, 1, 'Fresh page has exactly 1 revision id.';
+    is $page->metadata->Revision, 1, 'Fresh metadata is Revision 1';
 
     my $original_revision_id = $page->revision_id;
 
@@ -62,11 +62,16 @@ END_OF_RANT
 
     is_deeply [ $page->all_revision_ids ], \@revision_ids,
         'new_from_name produces the same revision ids';
+    is $page->metadata->Revision, 2, 'metadata is Revision 2';
 
     $page->revision_id($original_revision_id);
     is $page->revision_id, $original_revision_id, 'revision_id setter works.';
+    is $page->metadata->Revision, 2, 'metadata is still Revision 2 before load';
 
     $page->load;
+    is $page->revision_id, $original_revision_id,
+        'load does not molest revision_id.';
+    is $page->metadata->Revision, 1, 'metadata is back to  Revision 1';
     is_deeply [ $page->all_revision_ids ], \@revision_ids,
         'loading old content does not molest the revision id list.';
 
@@ -74,10 +79,9 @@ END_OF_RANT
     @revision_ids = $page->all_revision_ids;
     is scalar @revision_ids, 3,
         '$page->store adds a revision id.';
-
     is $page->metadata->Revision, 1, 'After load/store, Revision no. is 1.';
-    is $page->revision_id, $original_revision_id,
-        'load/store does not molest revision_id.';
+    ok $page->revision_id != $original_revision_id,
+        '$page->store updates revision_id';
     is $page->content, $CREED, 'After load/store, page content is restored.';
 
     # restore a revision and check its version:
@@ -88,8 +92,8 @@ END_OF_RANT
         q{When there are multiple revisions, $page->original_revision returns an object distinct from $page.};
 
     my $changes = $hub->recent_changes->get_recent_changes;
-    use YAML; warn Dump($changes);
     my $row     = $changes->{rows}->[0];
+    use YAML; warn Dump($row);
     is( $row->{Subject}, $TITLE, "most recently modified page is $TITLE" );
     is($row->{Revision}, 1, 'recent_changes revision number is restored.');
     is($row->{revision_count}, 3, 'recent_changes revision count is correct.');

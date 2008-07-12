@@ -6,7 +6,7 @@
 
 [% BLOCK category_link %]
 <div>
-    [% IF category == 'recent changes' %]
+    [% IF !category %]
     <a href="/lite/category/[% workspace_name %]/">
         [% loc('Filter by category') %]
     </a>

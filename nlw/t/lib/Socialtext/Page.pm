@@ -18,6 +18,16 @@ sub to_html_or_default {
     return $self->{html} || "$self->{title} Mock HTML";
 }
 
+sub to_absolute_html {
+    my $self = shift;
+    return $self->{absolute_html} || "$self->{page_id} Absolute HTML";
+}
+
+sub to_html {
+    my $self = shift;
+    return $self->{html} || "$self->{page_id} HTML";
+}
+
 sub name_to_id {
     my $self = shift;
     my $id = shift || '';
@@ -25,5 +35,7 @@ sub name_to_id {
 }
 
 sub preview_text { 'preview text' }
+
+sub directory_path { '/directory/path' }
 
 1;

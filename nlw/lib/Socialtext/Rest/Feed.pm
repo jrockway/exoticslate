@@ -6,16 +6,19 @@ use warnings;
 use Socialtext::Authz;
 use Socialtext::HTTP ':codes';
 use Socialtext::Permission 'ST_READ_PERM';
+use Socialtext::Timer;
 
 use base 'Socialtext::Rest';
 
 sub GET {
     my ($self, $rest) = @_;
 
+    Socialtext::Timer->Start('GET_feed');
     if (! $self->workspace) {
         $rest->header(
             -status => HTTP_404_Not_Found,
         );
+        Socialtext::Timer->Stop('GET_feed');
         return 'Invalid Workspace';
     }
 
@@ -33,6 +36,7 @@ sub GET {
             -status             => HTTP_401_Unauthorized,
             '-WWW-Authenticate' => 'Basic realm="Socialtext"'
         );
+        Socialtext::Timer->Stop('GET_feed');
         return 'Invalid Workspace';
     }
 
@@ -42,19 +46,29 @@ sub GET {
 
     # XXX uses default type and category, need to improve that
     # syndicate($type, $category)
-    my $feed = eval { $self->hub->syndicate->syndicate };
+    my $feed; 
+    my $xml;
+    eval { 
+        $feed = $self->hub->syndicate->syndicate;
+        Socialtext::Timer->Start('GET_feed_as_xml');
+        $xml = $feed->as_xml;
+        Socialtext::Timer->Stop('GET_feed_as_xml');
+    };
 
     if (Exception::Class->caught('Socialtext::Exception::NoSuchPage')) {
         $rest->header(
             -status => HTTP_404_Not_Found,
         );
+        Socialtext::Timer->Stop('GET_feed');
         return 'Page Not Found';
     }
 
     if ($@ and not Exception::Class->caught('MasonX::WebApp::Exception::Abort')) {
+        warn $@;
         $rest->header(
             -status => HTTP_500_Internal_Server_Error,
         );
+        Socialtext::Timer->Stop('GET_feed');
         return $@;
     }
 
@@ -62,7 +76,8 @@ sub GET {
         -status => HTTP_200_OK,
         -type => $feed->content_type,
     );
-    return $feed->as_xml;
+    Socialtext::Timer->Stop('GET_feed');
+    return $xml;
 }
 
 1;

@@ -9,6 +9,8 @@ use Socialtext::JSON qw/encode_json decode_json/;
 use Class::Field 'field';
 use Socialtext::User;
 
+our $VERSION = '0.1';
+
 sub allowed_methods {'GET, POST'}
 sub collection_name { "Events" }
 sub permission { +{} }

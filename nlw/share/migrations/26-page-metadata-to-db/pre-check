@@ -1,0 +1,14 @@
+#!/usr/bin/perl
+#@COPYRIGHT@
+
+use strict;
+use warnings;
+use Socialtext::SQL qw/sql_singlevalue/;
+
+my $metadata_count = sql_singlevalue('SELECT COUNT(*) FROM page');
+if ($metadata_count) {
+    # Rows exist in this table already, ass-u-me no need to migrate.
+    exit 1;
+}
+# No rows exist, we should migrate metadata
+exit 0;

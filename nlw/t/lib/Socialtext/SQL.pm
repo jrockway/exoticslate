@@ -4,8 +4,9 @@ use strict;
 use warnings;
 use Test::More;
 use base 'Exporter';
-our @EXPORT_OK = qw/sql_execute sql_ok sql_selectrow sql_singlevalue get_dbh/;
 
+our @EXPORT_OK = qw/sql_execute sql_ok sql_selectrow sql_singlevalue get_dbh
+                    sql_begin_work sql_commit sql_rollback/;
 our @SQL;
 our @RETURN_VALUES;
 
@@ -17,6 +18,9 @@ sub sql_execute {
 }
 
 sub get_dbh { }
+sub sql_begin_work { }
+sub sql_commit { }
+sub sql_rollback { }
 sub sql_selectrow { sql_execute(@_) };
 sub sql_singlevalue { sql_execute(@_) };
 
@@ -28,20 +32,29 @@ sub sql_ok {
 
     my $sql = shift @SQL;
     $p{name} = $p{name} ? "$p{name} " : '';
-    if ($p{sql}) {
-        $sql->{sql} =~ s/\s+/ /sg;
-        $sql->{sql} =~ s/\s*$//;
+    my $expected_sql = $p{sql};
+    if ($expected_sql) {
+        my $observed_sql = _normalize_sql($sql->{sql});
         if (ref($p{sql})) {
-            like $sql->{sql}, $p{sql}, $p{name} . 'SQL matches';
+            like $observed_sql, $expected_sql, 
+                 $p{name} . 'SQL matches';
         }
         else {
-            is $sql->{sql}, $p{sql}, $p{name} . 'SQL matches exactly';
+            is $observed_sql, _normalize_sql($expected_sql), 
+               $p{name} . 'SQL matches exactly';
         }
     }
 
     if ($p{args}) {
         is_deeply $sql->{args}, $p{args}, $p{name} . 'SQL args match';
     }
+}
+
+sub _normalize_sql {
+    my $sql = shift;
+    $sql =~ s/\s+/ /sg;
+    $sql =~ s/\s*$//;
+    return $sql;
 }
 
 package mock_sth;
@@ -52,6 +65,11 @@ use base 'Socialtext::MockBase';
 sub fetchall_arrayref {
     my $self = shift;
     return $self->{return} || [];
+}
+
+sub fetchrow_arrayref {
+    my $self = shift;
+    return shift @{ $self->{return} };
 }
 
 1;

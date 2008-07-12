@@ -1,0 +1,180 @@
+package Socialtext::Model::Pages;
+# @COPYRIGHT@
+use strict;
+use warnings;
+use Socialtext::Model::Page;
+use Socialtext::SQL qw/sql_execute/;
+use Socialtext::Timer;
+use Carp qw/croak/;
+
+sub By_seconds_limit {
+    my $class    = shift;
+    my %p        = @_;
+
+    Socialtext::Timer->Start('By_seconds_limit');
+    my $where;
+    my @bind;
+    if ( $p{since} ) {
+        $where = q{AND last_edit_time > ?::timestamptz};
+        @bind  = ( $p{since} );
+    }
+    elsif ( $p{seconds} ) {
+        $where = q{AND last_edit_time > 'now'::timestamptz - ?::interval};
+        @bind  = ("$p{seconds} seconds");
+    }
+    else {
+        croak "seconds or count parameter is required";
+    }
+
+    my $pages = $class->_fetch_pages(
+        hub => $p{hub},
+        $p{workspace_ids} ? ( workspace_ids => $p{workspace_ids} ) : (),
+        where        => $where,
+        limit        => $p{count} || $p{limit},
+        tag          => $p{tag} || $p{category},
+        bind         => \@bind,
+        order_by     => 'page.last_edit_time',
+        workspace_id => $p{workspace_id},
+    );
+    Socialtext::Timer->Stop('By_seconds_limit');
+    return $pages;
+}
+
+sub All_active {
+    my $class = shift;
+    my %p     = @_;
+
+    Socialtext::Timer->Start('All_active');
+    my $pages = $class->_fetch_pages(
+        hub          => $p{hub},
+        limit        => $p{count} || $p{limit},
+        workspace_id => $p{workspace_id},
+    );
+    Socialtext::Timer->Stop('All_active');
+    return $pages;
+}
+
+sub By_tag {
+    my $class = shift;
+    my %p     = @_;
+
+    Socialtext::Timer->Start('By_category');
+    my $pages = $class->_fetch_pages(
+        hub          => $p{hub},
+        workspace_id => $p{workspace_id},
+        limit        => $p{count} || $p{limit},
+        tag          => $p{tag},
+        order_by     => 'page.last_edit_time',
+    );
+    Socialtext::Timer->Stop('By_category');
+    return $pages;
+}
+
+sub _fetch_pages {
+    my $class = shift;
+    my %p     = (
+        bind    => [],
+        where   => '',
+        deleted => 0,
+        @_,
+    );
+
+    my $tag       = '';
+    my $more_join = '';
+    if ( $p{tag} ) {
+        $more_join = 'JOIN page_tag USING (page_id, workspace_id)';
+        $p{where} .= ' AND LOWER(page_tag.tag) = LOWER(?)';
+        push @{ $p{bind} }, $p{tag};
+    }
+
+    my $workspace_filter = '';
+    my @workspace_ids;
+    if ( $p{workspace_ids} ) {
+        $workspace_filter = '.workspace_id IN ('
+            . join( ',', map {'?'} @{ $p{workspace_ids} } ) . ')';
+        push @workspace_ids, @{ $p{workspace_ids} };
+    }
+    else {
+        $workspace_filter = '.workspace_id = ?';
+        push @workspace_ids, $p{workspace_id} 
+                ? $p{workspace_id}
+                : $p{hub} ? $p{hub}->current_workspace->workspace_id
+                          : die "No workspace filter supplied";
+    }
+
+    my $order_by = '';
+    if ( $p{order_by} ) {
+        $order_by = "ORDER BY $p{order_by} DESC";
+    }
+
+    my $limit = '';
+    if ( $p{limit} ) {
+        $limit = 'LIMIT ?';
+        push @{ $p{bind} }, $p{limit};
+    }
+
+    my $sth = sql_execute(
+        <<EOT,
+SELECT page.workspace_id, 
+       "Workspace".name AS workspace_name, 
+       page.page_id, 
+       page.name, 
+       page.last_editor_id AS last_editor_id,
+       editor.username AS last_editor_username, 
+       page.last_edit_time, 
+       page.creator_id,
+       creator.username AS creator_username, 
+       page.create_time, 
+       page.current_revision_id, 
+       page.current_revision_num, 
+       page.revision_count, 
+       page.page_type, 
+       page.deleted, 
+       page.summary
+    FROM page 
+        JOIN "Workspace" USING (workspace_id)
+        JOIN "User" editor  ON (page.last_editor_id = editor.user_id)
+        JOIN "User" creator ON (page.creator_id     = creator.user_id)
+        $more_join
+    WHERE page.deleted = ?::bool
+      AND page$workspace_filter
+        $p{where}
+    $order_by
+    $limit
+EOT
+        $p{deleted},
+        @workspace_ids,
+        @{ $p{bind} },
+    );
+
+    my @pages = map { Socialtext::Model::Page->new_from_row($_) }
+        map { $_->{hub} = $p{hub}; $_ } @{ $sth->fetchall_arrayref( {} ) };
+
+    # Fetch all the tags for these pages
+    # We will fetch all the page_tag, and then filter out which pages
+    # we're interested in ourselves.
+    # Alternatively, we could pass Pg in a potentially huge list of page_ids
+    # we were interested in.  We ass-u-me this would be slower.
+    my %ids;
+    for my $p (@pages) {
+        $p->{tags} = [];
+        my $key = "$p->{workspace_id}-$p->{page_id}";
+        $ids{$key} = $p;
+    }
+    $sth = sql_execute( <<EOT, @workspace_ids );
+SELECT workspace_id, page_id, tag 
+    FROM page_tag 
+    WHERE page_tag$workspace_filter
+EOT
+    while ( my $row = $sth->fetchrow_arrayref ) {
+        next unless $row;
+        my $key = "$row->[0]-$row->[1]";
+        if ( my $page = $ids{$key} ) {
+            push @{ $page->{tags} }, $row->[2];
+        }
+    }
+
+    return \@pages;
+}
+
+1;

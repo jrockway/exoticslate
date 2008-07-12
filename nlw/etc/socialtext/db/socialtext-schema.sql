@@ -187,6 +187,7 @@ CREATE TABLE "WorkspaceRolePermission" (
 );
 
 CREATE SEQUENCE "Workspace___workspace_id"
+    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -207,6 +208,28 @@ CREATE SEQUENCE event_id_seq
     NO MAXVALUE
     NO MINVALUE
     CACHE 1;
+
+CREATE TABLE page (
+    workspace_id bigint NOT NULL,
+    page_id text NOT NULL,
+    name text,
+    last_editor_id bigint NOT NULL,
+    last_edit_time timestamptz NOT NULL,
+    creator_id bigint NOT NULL,
+    create_time timestamptz NOT NULL,
+    current_revision_id text NOT NULL,
+    current_revision_num integer NOT NULL,
+    revision_count integer NOT NULL,
+    page_type text NOT NULL,
+    deleted boolean NOT NULL,
+    summary text
+);
+
+CREATE TABLE page_tag (
+    workspace_id bigint NOT NULL,
+    page_id text NOT NULL,
+    tag text NOT NULL
+);
 
 CREATE TABLE person (
     id integer NOT NULL,
@@ -350,6 +373,10 @@ ALTER TABLE ONLY "Workspace"
 ALTER TABLE ONLY event
     ADD CONSTRAINT event_pkey
             PRIMARY KEY (id);
+
+ALTER TABLE ONLY page
+    ADD CONSTRAINT page_pkey
+            PRIMARY KEY (workspace_id, page_id);
 
 ALTER TABLE ONLY person
     ADD CONSTRAINT person_pkey
@@ -496,6 +523,21 @@ ALTER TABLE ONLY "WorkspaceRolePermission"
             FOREIGN KEY (workspace_id)
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY page_tag
+    ADD CONSTRAINT page_tag_workspace_id_page_id_fkey
+            FOREIGN KEY (workspace_id, page_id)
+            REFERENCES page(workspace_id, page_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY page
+    ADD CONSTRAINT page_workspace_id_fk
+            FOREIGN KEY (workspace_id)
+            REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY page
+    ADD CONSTRAINT page_last_editor_id_fk
+    FOREIGN KEY (last_editor_id)
+    REFERENCES "User" (user_id) ON DELETE CASCADE;
+
 ALTER TABLE ONLY person
     ADD CONSTRAINT person_assistant_id_fk
             FOREIGN KEY (assistant_id)
@@ -548,4 +590,4 @@ ALTER TABLE ONLY "Workspace"
 
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '4');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '5');

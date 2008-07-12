@@ -12,6 +12,7 @@ use Socialtext::HTTP ':codes';
 use Socialtext::Page;
 use Socialtext::Search 'search_on_behalf';
 use Socialtext::String;
+use Socialtext::Timer;
 
 $JSON::UTF8 = 1;
 
@@ -97,15 +98,20 @@ sub _entities_for_query {
     # REVIEW: borrowing the 'q' name from google and others.  It's short.
     my $search_query = $self->rest->query->param('q');
 
-    return defined $search_query
+    Socialtext::Timer->Start('entities_for_query');
+    my @entities = defined $search_query
         ? $self->_searched_pages($search_query)
         : $self->hub->pages->all_active;
+
+    Socialtext::Timer->Stop('entities_for_query');
+    return @entities;
 }
 
 sub _searched_pages {
     my ( $self, $search_query ) = @_;
 
-    map {
+    Socialtext::Timer->Start('searched_pages');
+    my @pages = map {
         Socialtext::Page->new(
             hub => $self->_hub_for_hit( $self->hub, $_->[0] ), id => $_->[1] )
         }
@@ -116,6 +122,8 @@ sub _searched_pages {
             undef,    # undefined scope
             $self->hub->current_user
         );
+    Socialtext::Timer->Stop('searched_pages');
+    return @pages;
 }
 
 sub _hub_for_hit {

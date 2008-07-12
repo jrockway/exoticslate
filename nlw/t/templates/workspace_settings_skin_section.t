@@ -12,18 +12,21 @@ use Test::More tests => 7;
 use Test::Socialtext;
 fixtures( 'admin_no_pages' );
 use Socialtext::TT2::Renderer;
+use Socialtext::Skin;
 
 my $renderer;
+my $skin;
 
 BEGIN {
     $renderer = Socialtext::TT2::Renderer->instance;
+    $skin = Socialtext::Skin->new;
 }
 
 SKIN_RADIO_BUTTON: {
     my $html = $renderer->render(
         template => 'element/settings/workspaces_settings_skin_section',
         vars     => { uploaded_skin => 0 },
-        paths => ['share/template'],
+        paths => $skin->template_paths('s2'),
     );
 
     like $html, qr/<input id="st-workspaceskin-default" type="radio" name="uploaded_skin" value="0" checked="true"/, 'default skin selected';
@@ -37,7 +40,7 @@ SKIN_RADIO_BUTTON: {
                 {name => 'test1', size => 132456, date => '2007-07-15'}
             ],
         },
-        paths => ['share/template'],
+        paths => $skin->template_paths('s2'),
     );
 
     like $html, qr/<input id="st-workspaceskin-default" type="radio" name="uploaded_skin" value="0" >/, 'default skin not selected';
@@ -48,7 +51,7 @@ NO_FILES: {
     my $html = $renderer->render(
         template => 'element/settings/workspaces_settings_skin_section',
         vars     => { name => 'admin', skin_files => [] },
-        paths => ['share/template'],
+        paths => $skin->template_paths('s2'),
     );
 
     like $html, qr/<div class="workspace-entry-p" style="display: none;">/, 'Files title hidden with no files and custom skin';
@@ -63,7 +66,7 @@ IS_DEFAULT_SKIN: {
                 {name => 'test1', size => 132456, date => '2007-07-15'}
             ],
         },
-        paths => ['share/template'],
+        paths => $skin->template_paths('s2'),
     );
 
     like $html, qr/<table class="standard-table"\s*>/, 'File table is block: display with files and default skin';

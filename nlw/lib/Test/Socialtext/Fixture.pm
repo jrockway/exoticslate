@@ -17,6 +17,9 @@ use Socialtext::Build qw( get_build_setting );
 use File::Path qw/mkpath rmtree/;
 use FindBin;
 use Socialtext::Schema;
+use Socialtext::Hub;
+use Socialtext::Pages;
+use Socialtext::User;
 
 my $DefaultUsername = 'devnull1@socialtext.com';
 
@@ -97,6 +100,7 @@ sub _generate_base_config {
     local $ENV{ST_TEST_SKIP_DB_DUMP} = 1;
     my $s = Socialtext::Schema->new( verbose => 1);
     $s->recreate(no_dump => 1);
+    _system_or_die("psql -f " . $env->nlw_dir . "/etc/socialtext/db/dev.sql");
 
     $BaseConfigGenerated = 1;
 }
@@ -116,7 +120,6 @@ sub is_current {
 
     if (-f $self->fs_cache_file) {
         if (-M $dir < -M $self->fs_cache_file) {
-            warn "mtimedir ", $self->name, "\n";
             return 0;
         }
     }
@@ -323,10 +326,16 @@ sub _unlink_existing_pages {
     my $ws = shift;
     my $workspace_name = $ws->name;
 
-    my $data_dir = Socialtext::Paths::page_data_directory($workspace_name);
+    my $user = Socialtext::User->SystemUser();
+    my $hub = Socialtext::Hub->new(
+        current_workspace => $ws,
+        current_user => $user,
+    );
+    my @pages = Socialtext::Pages->new(hub => $hub)->all;
+    for my $p (@pages) {
+        $p->delete(user => $user);
+    }
 
-    # clean out the pages we don't want
-    File::Path::rmtree($data_dir);
     $self->_clean_workspace_ceqlotron_tasks($workspace_name);
 }
 

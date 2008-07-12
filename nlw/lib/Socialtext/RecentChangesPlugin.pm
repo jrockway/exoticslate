@@ -2,6 +2,8 @@
 package Socialtext::RecentChangesPlugin;
 use Socialtext::CategoryPlugin;
 use Socialtext::l10n qw/loc/;
+use Socialtext::Timer;
+use Socialtext::Model::Pages;
 use strict;
 use warnings;
 
@@ -75,6 +77,8 @@ sub include_in_pages {
     return $p;
 }
 
+
+*changes = \&recent_changes;
 sub recent_changes {
     my $self = shift;
 
@@ -88,6 +92,7 @@ sub recent_changes {
 
     # if we call sorted_result_set with an unset result_set the
     # cached version will be magically read
+    Socialtext::Timer->Start('get_result_set');
     if ($self->cgi->sortby) {
         $self->result_set( $self->sorted_result_set( \%sortdir ) );
     }
@@ -103,6 +108,7 @@ sub recent_changes {
         }
         $self->write_result_set;
     }
+    Socialtext::Timer->Stop('get_result_set');
 
     $self->display_results(
         \%sortdir,
@@ -130,13 +136,13 @@ sub _feeds {
     return $feeds;
 }
 
-# XXX this little thing is ugly.
-*changes = \&recent_changes;
 
 sub recent_changes_html {
     my $self = shift;
     my $count = $self->preferences->sidebox_changes_depth->value;
+    Socialtext::Timer->Start('get_recent_changes');
     my $changes = $self->get_recent_changes($count);
+    Socialtext::Timer->Stop('get_recent_changes');
     $self->template_process('recent_changes_box_filled.html',
         %$changes,
     );
@@ -147,7 +153,6 @@ sub get_recent_changes {
     my $count = shift;
     return $self->get_recent_changes_in_category(
         count    => $count,
-        category => $self->default_category,
     );
 }
 
@@ -162,7 +167,7 @@ sub new_changes {
     my $self = shift;
     my %p = @_;
     my $type = $p{type} || '';
-    my $category = $p{category} || $self->default_category;
+    my $category = $p{category};
 
     $self->result_set($self->new_result_set($type));
 
@@ -170,7 +175,9 @@ sub new_changes {
     my $pages_ref;
     if (defined $type && $type eq 'all') {
         $display_title = loc("All Pages");
-        $pages_ref = [$self->hub->pages->all_active];
+        $pages_ref = Socialtext::Model::Pages->All_active(
+            hub => $self->hub,
+        );
     }
     else {
         my $depth = $self->preferences->changes_depth;
@@ -178,20 +185,22 @@ sub new_changes {
         $display_title = loc('Changes in [_1]', $last_changes_time);
         my $days = $depth->value;
         my $minutes = $days * 1440;
-        $pages_ref =
-            $self->hub->category->get_pages_by_seconds_limit(
-                $category,
-                $minutes * 60,
-                $p{count},
-            );
+
+        $pages_ref = Socialtext::Model::Pages->By_seconds_limit(
+            hub => $self->hub,
+            $category ? ( tag => $category ) : (),
+            seconds => $minutes * 60,
+            count => $p{count},
+        );
     }
 
+    Socialtext::Timer->Start('new_changes_push_result');
     for my $page (@$pages_ref) {
         $self->push_result($page);
     }
+    Socialtext::Timer->Stop('new_changes_push_result');
 
-    my $hits = $self->result_set->{hits} =
-      @{$self->result_set->{rows}};
+    my $hits = $self->result_set->{hits} = @{$self->result_set->{rows}};
     $self->result_set->{display_title} = "$display_title ($hits)";
 }
 

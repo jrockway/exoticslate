@@ -35,7 +35,7 @@ sub make_entry {
     $format ||= 'html';
 
     my $entry = XML::Atom::Entry->new();
-    $entry->title( $page->metadata->Subject );
+    $entry->title( $page->title );
 
     # XXX full_uri fails on pages that have InterWikiLinks
     # possible scoping issue
@@ -46,13 +46,6 @@ sub make_entry {
             rel  => 'alternate'
         )
     );
-#    $entry->add_link(
-#        $self->_make_link(
-#            url  => $page->page_uri,
-#            type => 'application/atom+xml',
-#            rel  => 'service.edit',
-#        )
-#    );
     if ( $format eq 'html' ) {
         $entry->content( $self->_content( $self->_item_as_html($page) ) );
     }

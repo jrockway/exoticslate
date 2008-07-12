@@ -9,6 +9,7 @@ use Class::Field qw( const field );
 use Socialtext::Formatter::LinkDictionary;
 use Socialtext::Formatter::Parser;
 use Socialtext::Statistics 'stat_call';
+use Socialtext::Timer;
 use Readonly;
 
 sub class_id { 'viewer' }
@@ -73,16 +74,22 @@ sub process {
     my $raw_text        = shift;
     my $page            = shift;
     
+    Socialtext::Timer->Continue('viewer_process');
     my $large_formatted = $self->_large_check(\$raw_text);
-    return $large_formatted if $large_formatted;
+    if ($large_formatted) {
+        Socialtext::Timer->Pause('viewer_process');
+        return $large_formatted;
+    }
 
     # XXX is there a difference between this and pages->current->id
     $self->page_id($page->id) if $page;
 
     # XXX note, if we assign to something before returning here,
     # the cost of this sub SKYrockets
-    return $self->to_html( $self->_get_parse_tree( $raw_text, $page ),
+    my $html = $self->to_html( $self->_get_parse_tree( $raw_text, $page ),
         $self->hub );
+    Socialtext::Timer->Pause('viewer_process');
+    return $html;
 }
 
 sub _get_parse_tree {

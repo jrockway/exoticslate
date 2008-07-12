@@ -8,6 +8,7 @@ use base 'Socialtext::Syndicate::Feed';
 use XML::RSS;
 use DateTime;
 use DateTime::Format::Mail;
+use Socialtext::Timer;
 
 sub _New {
     my $class = shift;
@@ -21,6 +22,7 @@ sub _create_feed {
 
     my $rss = new XML::RSS( version => '2.0' );
 
+    Socialtext::Timer->Start('_create_feed_items');
     my $feed_modified = 0;
     foreach my $page (@$pages) {
         my $pub_date = $page->modified_time;
@@ -36,7 +38,9 @@ sub _create_feed {
             category    => join( ", ", @tags)
         );
     }
+    Socialtext::Timer->Stop('_create_feed_items');
 
+    Socialtext::Timer->Start('_create_feed_channel');
     $rss->channel(
         title     => $self->_feed_title,
         link      => $self->_html_link,
@@ -44,8 +48,12 @@ sub _create_feed {
         generator => $self->_generator,
         pubDate   => $self->_format_date($feed_modified),
     );
+    Socialtext::Timer->Stop('_create_feed_channel');
 
-    return $rss->as_string;
+    Socialtext::Timer->Start('_create_feed_as_string');
+    my $xml = $rss->as_string;
+    Socialtext::Timer->Stop('_create_feed_as_string');
+    return $xml;
 }
 
 # IE6 will do display the content if we use this content-type, whereas
@@ -68,7 +76,7 @@ sub _feed_title {
 sub _item_title {
     my $self = shift;
     my $page = shift;
-    return $self->_cdata( $page->metadata->Subject );
+    return $self->_cdata( $page->title );
 }
 
 sub _item_description {

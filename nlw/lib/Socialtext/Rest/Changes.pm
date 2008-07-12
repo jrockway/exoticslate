@@ -9,6 +9,7 @@ use base 'Socialtext::Rest::Collection';
 use Socialtext::HTTP ':codes';
 use Socialtext::Workspace;
 use Class::Field 'field';
+use Socialtext::SQL qw/sql_execute/;
 
 field ws => '';
 
@@ -16,60 +17,38 @@ sub allowed_methods {'GET, HEAD'}
 sub collection_name { "Changes" }
 sub permission { +{} }
 
-sub _get_user_bfn_and_id {
-    my ($self, $username, $ws) = @_;
-    my $user = Socialtext::User->new(username => $username);
-    return unless $user;
-    my $bfn = $user->best_full_name(workspace => $ws);
-    return ($bfn, $user->user_id);
-}
-# TODO: memoize the above if too slow, reset _bfn_cache on each call to
-# _entities_for_query()
-#   use Memoize;
-#   my $_bfn_cache = {};
-#   memoize '_get_user_bfn_and_id',
-#       LIST_CACHE => ['HASH', $_bfn_cache],
-#       NORMALIZER => '_bfn_normalizer';
-#   sub _bfn_normalizer { $_[1]."\000".$_[2]->name }
-
 sub _entities_for_query {
     my ($self, $rest) = @_;
 
-    my @changes;
-
     my $count = $self->rest->query->param('count') || 20;
+    my $since = $self->rest->query->param('since');
+    my $pages_ref = Socialtext::Model::Pages->By_seconds_limit(
+        workspace_ids => [
+            map { $_->workspace_id } $self->rest->user->workspaces->all
+        ],
+        # Default to 7 days
+        $since ? (since => $since) : (seconds => 7 * 1440 * 60),
+        count => $count,
+    );
 
-    for my $ws ($self->rest->user->workspaces->all) {
-        $self->ws($ws->name);
-        $self->hub->current_workspace($ws);
-        
-        my $res = $self->hub->recent_changes->default_result_set;
-        # for each result that is returned get a summary of it
-        foreach my $row (@{$res->{rows}}) {
-            my $page = $self->hub->pages->new_page($row->{page_id});
-            my $summary = $page->preview_text();
-            $row->{Summary} = $summary;
-            ($row->{best_full_name}, $row->{user_id}) = 
-                $self->_get_user_bfn_and_id($row->{username}, $ws);
-            $row = undef unless $row->{user_id};
-        }
-
-        push @changes,
-            grep { $_ and $_->{workspace} = $ws->name } @{ $res->{rows} };
+    my @changes;
+    my %bfn;
+    for my $page (@$pages_ref) {
+        my $row = $page->to_result();
+        $row->{user_id} = $page->{last_editor_id};
+        $row->{workspace} = $page->{workspace_name};
+        $row->{name} = $row->{page_id};
+        $row->{uri} = "/data/changes/$row->{workspace}/$row->{page_id}";
+        my $ws = Socialtext::Workspace->new(
+            workspace_id => $page->{workspace_id} );
+        my $user = Socialtext::User->new( user_id => $row->{user_id} );
+        $row->{best_full_name} = $user->best_full_name(workspace => $ws);
+        push @changes, $row;
     }
 
-    @changes = sort { $b->{Date} cmp $a->{Date} } @changes;
-
-    return grep { $_ } @changes[0 .. $count-1];
+    return @changes;
 }
 
-sub _entity_hash {
-    my ($self, $change) = @_;
-    return {
-        name => $change->{page_id},
-        uri => "/data/changes/$change->{workspace}/$change->{page_id}",
-        %$change,
-    };
-}
+sub _entity_hash { $_[1] }
 
 1;

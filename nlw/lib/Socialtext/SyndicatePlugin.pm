@@ -10,9 +10,11 @@ use Socialtext::AppConfig;
 use Socialtext::Exceptions qw( no_such_page_error );
 use Socialtext::Search 'search_on_behalf';
 use Socialtext::Syndicate::Feed;
+use Socialtext::Timer;
 use Socialtext::Watchlist;
 use Socialtext::User;
 use Socialtext::l10n qw (loc);
+use Socialtext::Model::Pages;
 
 =head1 NAME
 
@@ -89,6 +91,9 @@ sub syndicate {
     my $self = shift;
     my $type = $self->cgi->type || $self->default_type;
 
+    my $count = $self->cgi->count || $self->preference('syndication_depth');
+    my $category = $self->cgi->category;
+    $category = '' if $category and $category eq $self->default_category;
     if ( my $search = $self->cgi->search_term ) {
         return $self->_syndicate_search( $type, $search );
     }
@@ -98,10 +103,11 @@ sub syndicate {
     elsif ( $self->cgi->watchlist ) {
         return $self->_syndicate_watchlist( $type, $self->cgi->watchlist );
     }
-    else {
-        my $category = $self->cgi->category || $self->default_category;
-        my $count = $self->cgi->count || $self->preference('syndication_depth');
+    elsif ( $category ) {
         return $self->_syndicate_category( $type, $category, $count );
+    }
+    else {
+        return $self->_syndicate_changes( $type, $count );
     }
 }
 
@@ -156,12 +162,15 @@ sub _syndicate_search {
     my $type  = shift;
     my $query = shift;
 
-    return $self->_syndicate(
+    Socialtext::Timer->Start('_syndicate_search');
+    my $feed = $self->_syndicate(
         title => $self->_search_feed_title($query),
         link  => $self->_search_html_link($query),
         pages => $self->_search_get_items($query),
         type  => $type,
     );
+    Socialtext::Timer->Stop('_syndicate_search');
+    return $feed;
 }
 
 sub _syndicate_watchlist {
@@ -169,18 +178,22 @@ sub _syndicate_watchlist {
     my $type  = shift;
     my $watchlist  = shift;
     my $user;
+
+    Socialtext::Timer->Start('_syndicate_watchlist');
     if ($watchlist =~ /default/) {
         $user = $self->hub->current_user;
     } else {
         $user = Socialtext::User->new (username => $watchlist);
     }
 
-    return $self->_syndicate(
+    my $feed = $self->_syndicate(
         title => $self->_watchlist_feed_title($user),
         link  => $self->_watchlist_html_link($user),
         pages => $self->_watchlist_get_items($user),
         type  => $type,
     );
+    Socialtext::Timer->Stop('_syndicate_watchlist');
+    return $feed;
 }
 
 sub _syndicate_page_named {
@@ -193,12 +206,15 @@ sub _syndicate_page_named {
     no_such_page_error name => $name, error => "$name does not exist"
         unless $page->active;
 
-    return $self->_syndicate(
+    Socialtext::Timer->Start('_syndicate_page_named');
+    my $feed = $self->_syndicate(
         title => $self->_page_feed_title($page),
         link  => $page->full_uri,
         pages => [$page],
         type  => $type,
     );
+    Socialtext::Timer->Stop('_syndicate_page_named');
+    return $feed;
 }
 
 sub _syndicate_category {
@@ -207,17 +223,35 @@ sub _syndicate_category {
     my $category = shift;
     my $count = shift;
 
-    return $self->_syndicate(
+    Socialtext::Timer->Start('_syndicate_category');
+    my $feed = $self->_syndicate(
         title => $self->_category_feed_title($category),
         link  => $self->_category_html_link($category),
         pages => $self->_category_get_items($category, $count),
         type  => $type,
     );
+    Socialtext::Timer->Stop('_syndicate_category');
+    return $feed;
+}
+
+sub _syndicate_changes {
+    my $self = shift;
+    my $type = shift;
+    my $count = shift;
+
+    Socialtext::Timer->Start('_syndicate_changes');
+    my $feed = $self->_syndicate(
+        title => $self->_changes_feed_title,
+        link  => $self->_changes_html_link,
+        pages => $self->_changes_get_items($count),
+        type  => $type,
+    );
+    Socialtext::Timer->Stop('_syndicate_changes');
+    return $feed;
 }
 
 sub _syndicate {
     my $self = shift;
-    # XXX validate me
     my %p = @_;
 
     my $type = $self->_canonicalize_type( $p{type} );
@@ -251,25 +285,40 @@ sub _canonicalize_type {
 
 sub _category_get_items {
     my $self = shift;
-    my $category = shift;
+    my $tag = shift;
     my $count = shift;
 
-    my @pages = $self->hub->category->get_pages_for_category(
-        $category,
-        $count,
+    my $pages = Socialtext::Model::Pages->By_tag(
+        hub => $self->hub,
+        tag => $tag,
+        count => $count,
     );
+    return $pages;
+}
 
-    return \@pages;
+sub _changes_get_items {
+    my $self = shift;
+    my $count = shift;
+
+    my $days = $self->hub->recent_changes->preferences->changes_depth->value;
+    my $pages = Socialtext::Model::Pages->By_seconds_limit(
+        hub => $self->hub,
+        count => $count,
+        seconds => $days * 1440 * 60,
+    );
+    return $pages;
 }
 
 sub _watchlist_get_items {
     my $self = shift;
     my $user = shift;
+    Socialtext::Timer->Start('_watchlist_get_items');
     my $watchlist = Socialtext::Watchlist->new(
         user      => $user,
         workspace => $self->hub->current_workspace
     );
     my @pages = map { $self->hub->pages->new_page( $_ ) } $watchlist->pages;
+    Socialtext::Timer->Stop('_watchlist_get_items');
     return \@pages;
 }
 
@@ -277,6 +326,7 @@ sub _search_get_items {
     my $self = shift;
     my $query = shift;
 
+    Socialtext::Timer->Start('_search_get_items');
     my @pages = map { $self->hub->pages->new_page( $_->page_uri ) }
         grep { $_->isa('Socialtext::Search::PageHit') }
         search_on_behalf(
@@ -286,6 +336,7 @@ sub _search_get_items {
             $self->hub->current_user,
             sub { },   # FIXME: swallowing this error for now
             sub { } ); # FIXME: swallowing this error for now
+    Socialtext::Timer->Stop('_search_get_items');
 
     return \@pages;
 }
@@ -295,6 +346,11 @@ sub _category_feed_title {
     my $category = shift;
 
     return $self->hub->current_workspace->title . ': ' . $category;
+}
+
+sub _changes_feed_title {
+    my $self = shift;
+    return $self->hub->current_workspace->title . ': ' . loc('Recent Changes');
 }
 
 sub _search_feed_title {
@@ -327,6 +383,14 @@ sub _category_html_link {
            Socialtext::AppConfig->script_name .
            '?action=weblog_display;category=' .
            $self->uri_escape($category);
+}
+
+sub _changes_html_link {
+    my $self = shift;
+
+    return $self->hub->current_workspace->uri .
+           Socialtext::AppConfig->script_name .
+           '?action=recent_changes';
 }
 
 sub _watchlist_html_link {

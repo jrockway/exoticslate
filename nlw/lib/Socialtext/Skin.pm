@@ -36,12 +36,12 @@ sub name {
 }
 
 sub template_paths {
-    my $self = shift;
-    my $info = $self->skin_info;
+    my ($self,$skin) = @_;
+    my $info = $self->skin_info($skin);
     return [
         grep { -d $_ }
         map { $self->_path('skin', $_, 'template') }
-        reverse $self->inheritence
+        reverse $self->inheritence($skin)
     ];
 }
 
@@ -63,19 +63,19 @@ sub skin_info {
 }
 
 sub inheritence {
-    my $self = shift;
-    return @{$self->{_inheritence}} if $self->{_inheritence};
+    my ($self,$skin) = @_;
+    $skin ||= $self->name;
+    return @{$self->{_inheritence}{$skin}} if $self->{_inheritence}{$skin};
 
     my %done;
     my @inherit;
-    my $skin = $self->name;
     while ($skin and not $done{$skin}) {
         $done{$skin} = 1; # protect against infinit loops
         my $info = $self->skin_info($skin);
         push @inherit, $skin;
         $skin = $info->{parent};
     }
-    $self->{_inheritence} = \@inherit;
+    $self->{_inheritence}{$skin} = \@inherit;
     return @inherit;
 }
 

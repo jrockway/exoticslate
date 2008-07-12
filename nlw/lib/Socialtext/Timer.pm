@@ -33,7 +33,9 @@ sub Start {
 sub Pause {
     my $class = shift;
     my $timed = shift;
-    if (ref($Timings->{$timed}->{timer}) && $Timings->{$timed}->{counter} <= 1) {
+    if (ref($Timings->{$timed}->{timer}) 
+        && $Timings->{$timed}->{counter} <= 1) {
+        $Timings->{$timed}->{counter}--;
         $Timings->{$timed}->{counter}--;
         $class->Stop($timed);
     }

@@ -19,7 +19,8 @@ BEGIN {
 
 my $hub = new_hub('auth-to-edit');
 no warnings 'redefine';
-local *Socialtext::Workspace::uri = sub { 'http://local.example.com/auth-to-edit/' };
+local *Socialtext::URI::_host = sub { host => 'local.example.com' };
+local *Socialtext::URI::_port = sub { () };
 Socialtext::Ceqlotron::clean_queue_directory();
 
 my $date = DateTime->now->add( seconds => 600 );

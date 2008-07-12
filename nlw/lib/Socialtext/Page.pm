@@ -11,13 +11,13 @@ use strict;
 use warnings;
 
 use base 'Socialtext::Base';
+use base 'Socialtext::Page::Base';
 use Socialtext::AppConfig;
 use Socialtext::ChangeEvent;
 use Socialtext::Encode;
 use Socialtext::File;
 use Socialtext::Formatter::Parser;
 use Socialtext::Formatter::Viewer;
-use Socialtext::Formatter::AbsoluteLinkDictionary;
 use Socialtext::Log qw( st_log );
 use Socialtext::Paths;
 use Socialtext::PageMeta;
@@ -28,6 +28,7 @@ use Socialtext::l10n qw(loc system_locale);
 use Socialtext::WikiText::Parser;
 use Socialtext::WikiText::Emitter::SearchSnippets;
 use Socialtext::String;
+use Socialtext::SQL qw/sql_execute sql_begin_work sql_commit/;
 
 use Carp ();
 use Class::Field qw( field );
@@ -100,52 +101,20 @@ sub name {
     return $self->{name};
 }
 
-=head2 $page->all_revision_ids()
-
-Returns a sorted list of all the revision filenames for a given page.
-
-In scalar context, returns only the count and doesn't bother sorting.
-
-=cut
-
-sub all_revision_ids {
-    my $self = shift;
-    return unless $self->exists;
-
-    my $dirname = $self->id;
-    my $datadir = $self->directory_path;
-
-    # REVIEW: Why isn't this a glob("*.txt")?
-    opendir my $dir, $datadir or die "Couldn't open $datadir";
-
-    # XXX This is a bug.  $1 doesn't change over time.
-    my @ids = grep defined, map { /(\d+)\.txt$/; $1; } readdir $dir;
-    closedir $dir;
-
-    # No point in sorting if the caller only wants a count.
-    return wantarray ? sort( @ids ) : scalar( @ids );
-}
-
 =head2 $page->revision_count()
 
 Return the count of revisions that a given page has.
 
 =cut
+
 sub revision_count {
     my $self = shift;
     return scalar $self->all_revision_ids();
 }
 
-sub original_revision {
+sub creator {
     my $self = shift;
-    my $page_id  = $self->id;
-    my $orig_id  = ($self->all_revision_ids)[0];
-    return $self if !$page_id || !$orig_id || $page_id eq $orig_id;
-
-    my $orig_page = ref($self)->new(hub => $self->hub, id => $page_id);
-    $orig_page->revision_id( $orig_id );
-    $orig_page->load;
-    return $orig_page;
+    return $self->original_revision->last_edited_by;
 }
 
 =head2 create( %args )
@@ -751,6 +720,54 @@ sub _perform_store_actions {
     my $self = shift;
     $self->hub->backlinks->update($self);
     Socialtext::ChangeEvent->Record($self);
+    $self->update_db_metadata();
+}
+
+sub update_db_metadata {
+    my $self = shift;
+
+    my $hash = $self->hash_representation;
+    my $wksp_id = $self->hub->current_workspace->workspace_id;
+    sql_begin_work();
+
+    my $sth = sql_execute(
+        'SELECT creator_id, create_time FROM page
+            WHERE workspace_id = ? AND page_id = ?',
+        $wksp_id, $hash->{page_id},
+    );
+    my $rows = $sth->fetchall_arrayref();
+    my ($creator_id, $create_time);
+    if (@$rows) {
+        $creator_id = $rows->[0][0];
+        $create_time = $rows->[0][1];
+    }
+    else {
+        my $orig_page = $self->original_revision;
+        $creator_id = $orig_page->last_edited_by->user_id;
+        $create_time = $orig_page->metadata->Date;
+    }
+
+    sql_execute(
+        'DELETE FROM page WHERE workspace_id = ? AND page_id = ?',
+        $wksp_id, $hash->{page_id},
+    );
+    sql_execute(
+        'INSERT INTO page VALUES (?,?,?,?,?::timestamptz,?,?::timestamptz,?,?,?,?,?::bool,?)',
+        $wksp_id, $hash->{page_id}, $hash->{name},
+        $self->last_edited_by->user_id, $hash->{last_edit_time},
+        $creator_id, $create_time,
+        $hash->{revision_id}, $self->metadata->Revision,
+        $hash->{revision_count}, $hash->{type},
+        $self->deleted ? '1' : '0',
+        $self->metadata->Summary,
+    );
+    for my $tag (@{ $self->metadata->Category }) {
+        sql_execute(
+            'INSERT INTO page_tag VALUES (?,?,?)',
+            $wksp_id, $hash->{page_id}, $tag,
+        );
+    }
+    sql_commit();
 }
 
 sub is_system_page {
@@ -765,7 +782,7 @@ sub is_system_page {
 
 sub content_or_default {
     my $self = shift;
-    return ($self->metadata->Type eq 'spreadsheet')
+    return $self->is_spreadsheet
         ? ($self->content || loc('Creating a New Spreadsheet...') . '   ')
         : ($self->content || loc('Replace this text with your own.') . '   ');
 }
@@ -868,7 +885,7 @@ sub doctor_links_with_prefix {
 
 sub categories_sorted {
     my $self = shift;
-    return sort {lc($a) cmp lc($b)} @{$self->{metadata}->Category};
+    return sort {lc($a) cmp lc($b)} @{$self->metadata->Category};
 }
 
 sub html_escaped_categories {
@@ -901,8 +918,8 @@ sub last_edited_by {
 
     my $user = Socialtext::User->new( email_address => $email_address );
 
-    # There are many usernames in pages that were never in users.db or
-    # any htpasswd.db file. We need to have all users in the DBMS, so
+    # There are many usernames in pages that were never in the users
+    # table.  We need to have all users in the DBMS, so
     # we assume that if they don't exist, they should be created. When
     # we import pages into the DBMS, we'll need to create any
     # non-existent users at the same time, for referential integrity.
@@ -942,6 +959,7 @@ is the maximum number of seconds since the last change for that change to
 be considered recent.
 
 =cut
+
 sub is_recently_modified {
     my $self = shift;
     my $limit = shift;
@@ -991,6 +1009,7 @@ sub hard_set_date {
     $self->metadata->Date($date->strftime('%Y-%m-%d %H:%M:%S GMT'));
     $self->store( user => $user );
     utime $date->epoch, $date->epoch, $self->file_path;
+    $self->{modified_time} = $date->epoch;
 }
 
 sub datetime_for_user {
@@ -1031,60 +1050,7 @@ sub to_html_or_default {
     $self->to_html($self->content_or_default, $self);
 }
 
-sub spreadsheet_to_html {
-    my $self = shift;
-    my $content = shift;
-    $content =~ s/.*\n__SPREADSHEET_HTML__\n//s;
-    $content =~ s/\n__SPREADSHEET_\w+__.*/\n/s;
-    return $content;
-}
-
-sub to_html {
-    my $self = shift;
-    my $content = @_ ? shift : $self->content;
-    my $page = shift;
-    $content = '' unless defined $content;
-    return ($self->metadata->Type eq 'spreadsheet')
-    ? $self->spreadsheet_to_html($content, $self)
-    : $self->hub->viewer->process($content, $page);
-}
-
-=head2 to_absolute_html($content)
-
-Turn the provided $content or the content of this page into html
-with the URLs formatted as fully qualified links.
-
-As written this code modifies the L<Socialtext::Formatter::LinkDictionary>
-in the L<Socialtext::Formatter::Viewer> used by the current hub. This
-means that unless this hub terminates, further formats in this
-session will be absolute. This is probably a bug.
-
-=cut
-sub to_absolute_html {
-    my $self = shift;
-    my $content = shift;
-
-    my %p = @_;
-    $p{link_dictionary}
-        ||= Socialtext::Formatter::AbsoluteLinkDictionary->new();
-
-    my $url_prefix = $self->hub->current_workspace->uri;
-
-    $url_prefix =~ s{/[^/]+/?$}{};
-
-
-    $self->hub->viewer->url_prefix($url_prefix);
-    $self->hub->viewer->link_dictionary($p{link_dictionary});
-    # REVIEW: Too many paths to setting of page_id and too little
-    # clearness about what it is for. appears to only be used
-    # in WaflPhrase::parse_wafl_reference
-    $self->hub->viewer->page_id($self->id);
-
-    if ($content) {
-        return $self->to_html($content);
-    }
-    return $self->to_html($self->content, $self);
-}
+sub is_spreadsheet { $_[0]->metadata->Type eq 'spreadsheet' }
 
 sub delete {
     my $self = shift;
@@ -1099,7 +1065,7 @@ sub delete {
         = Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
         $self->hub->current_workspace->name );
 
-    foreach my $attachment ( $self->_attachments ) {
+    foreach my $attachment ( $self->attachments ) {
         $indexer->delete_attachment( $self->uri, $attachment->id );
     }
 
@@ -1117,7 +1083,7 @@ sub purge {
         = Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
         $self->hub->current_workspace->name );
 
-    foreach my $attachment ( $self->_attachments ) {
+    foreach my $attachment ( $self->attachments ) {
         $indexer->delete_attachment( $self->uri, $attachment->id );
     }
 
@@ -1143,7 +1109,7 @@ sub preview_text {
     my $self = shift;
 
     return $self->preview_text_spreadsheet(@_)
-        if $self->metadata->Type eq 'spreadsheet';
+        if $self->is_spreadsheet;
 
     my $content = shift || $self->content;
 
@@ -1214,7 +1180,7 @@ sub _to_plain_text {
     my $self    = shift;
     my $content = shift || $self->content;
 
-    if ($self->metadata->Type eq 'spreadsheet') {
+    if ($self->is_spreadsheet) {
         return $self->_to_spreadsheet_plain_text( $content );
     }
 
@@ -1314,7 +1280,7 @@ sub duplicate {
     $target_page->metadata->Type($self->metadata->Type);
 
     if ($keep_attachments) {
-        my @attachments = $self->_attachments();
+        my @attachments = $self->attachments();
         for my $source_attachment (@attachments) {
             my $target_attachment = $dest_hub->attachments->new_attachment(
                     id => $source_attachment->id,
@@ -1331,12 +1297,6 @@ sub duplicate {
 
     $target_page->store( user => $dest_hub->current_user );
     return 1; # success
-}
-
-sub _attachments {
-    my $self = shift;
-
-    return @{ $self->hub->attachments->all( page_id => $self->id ) };
 }
 
 # REVIEW: We should consider throwing exceptions here rather than return codes.
@@ -1436,7 +1396,7 @@ sub send_as_email {
     );
     $email{cc} = $p{cc} if defined $p{cc};
     $email{attachments} =
-        [ map { $_->full_path() } $self->_attachments ]
+        [ map { $_->full_path() } $self->attachments ]
             if $p{include_attachments};
 
     my $locale = system_locale();
@@ -1449,16 +1409,6 @@ sub is_in_category {
     my $category = shift;
 
     grep {$_ eq $category} @{$self->metadata->Category};
-}
-
-sub directory_path {
-    my $self = shift;
-    my $id = $self->id
-        or Carp::confess( 'No ID for content object' );
-    return Socialtext::File::catfile(
-        $self->database_directory,
-        $id
-    );
 }
 
 sub deleted {
@@ -1524,7 +1474,8 @@ sub parse_headers {
 sub get_data {
     my $self = shift;
     my ($source) = @_;
-    my $buffer =  # REVIEW: Looks like not all these _read_* options are actually used -- alester
+    # REVIEW: Looks like not all these _read_* options are actually used -- alester
+    my $buffer =  
       (not defined $source) ? $self->_read_revision :
       (ref($source) eq 'GLOB') ? $self->_read_handle(@_) :
       (ref($source) eq 'SCALAR') ? $self->_read_string_ref(@_) :
@@ -1676,7 +1627,7 @@ sub write_file {
     my ($headers, $body) = @_;
     my $id = $self->id
       or die "No id for content object";
-    my $revision_file = $self->revision_file( $self->new_revision_id );
+    my $revision_file = $self->revision_file( $self->_new_revision_id );
     my $page_path = join '/', Socialtext::Paths::page_data_directory( $self->hub->current_workspace->name ), $id;
     File::Path::mkpath($page_path, 0, 0755);
     Socialtext::File::set_contents_utf8($revision_file, join "\n", $headers, $body);
@@ -1701,7 +1652,7 @@ sub revision_file {
     return join '/', $self->database_directory, $self->id, $revision_id . '.txt';
 }
 
-sub new_revision_id {
+sub _new_revision_id {
     my $self = shift;
     my ($sec,$min,$hour,$mday,$mon,$year) = gmtime(time);
     my $id = sprintf(
@@ -1713,9 +1664,12 @@ sub new_revision_id {
     # indecision that the wrong way sticks around in pursuit of the 
     # right way. So here's something adequate that does not cascade 
     # changes in the rest of the code.
-    return $id unless -f $self->revision_file($id);
+    unless (-f $self->revision_file($id)) {
+        $self->revision_id($id);
+        return $id;
+    }
     sleep 1;
-    return $self->new_revision_id();
+    return $self->_new_revision_id();
 
 }
 
@@ -1725,16 +1679,6 @@ sub formatted_date {
     sprintf("%4d-%02d-%02d %02d:%02d:%02d GMT",
             $year + 1901, $mon+1, $mday, $hour, $min, $sec,
            );
-}
-
-sub file_path {
-    my $self = shift;
-    join '/', $self->database_directory, $self->id;
-}
-
-sub exists {
-    my $self = shift;
-    -e $self->file_path;
 }
 
 sub active {
@@ -1754,6 +1698,28 @@ sub is_bad_page_title {
     return 1 if $class->name_to_id($title) eq $untitled_page;
 
     return 0;
+}
+
+# This is called by Socialtext::Query::Plugin::push_result
+sub to_result {
+    my $self = shift;
+    my $metadata = $self->metadata;
+
+    my $result = {};
+    $result->{$_} = $metadata->$_
+      for qw(From Date Subject Revision Summary Type);
+    $result->{DateLocal} = $self->datetime_for_user;
+    $result->{revision_count} = $self->revision_count;
+    $result->{page_uri} = $self->uri;
+    $result->{page_id} = $self->id;
+    my $user = $self->last_edited_by;
+    $result->{username} = $user ? $user->username : '';
+    if (not $result->{Summary}) {
+        my $text = $self->preview_text;
+        $self->_store_preview_text($text);
+        $result->{Summary} = $text;
+    }
+    return $result;
 }
 
 1;

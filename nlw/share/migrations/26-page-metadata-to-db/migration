@@ -1,0 +1,41 @@
+#!/usr/bin/perl
+#@COPYRIGHT@
+use strict;
+use warnings;
+use Socialtext::Workspace;
+use Socialtext::System qw/shell_run/;
+use Socialtext::Timer;
+
+my $populator = "st-populate-page-table";
+
+my $wksp_timer = Socialtext::Timer->new;
+my $total_timer = Socialtext::Timer->new;
+
+my $workspaces = Socialtext::Workspace->All;
+my $failures = 0;
+
+$total_timer->start_timing(0);
+while (my $wksp = $workspaces->next) {
+    $wksp_timer->start_timing(0);
+    my $name = $wksp->name;
+    print "Populating page table with data from $name workspace.\n";
+    eval {
+        shell_run("$populator --workspace $name");
+    };
+    if ($@) {
+        $failures++;
+        warn $@;
+    }
+   
+    my $elapsed = int($wksp_timer->elapsed*100 + 0.5)/100;
+    print "Spent " . $elapsed  . " seconds "
+        . " on workspace " . $wksp->name . ".\n\n";
+}
+
+print "TOTAL TIME: " . $total_timer->elapsed . " seconds.\n";
+
+if ($failures) {
+    warn "$failures workspaces failed to populate the DB\n";
+    exit $failures;
+}
+exit 0;

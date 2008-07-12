@@ -1,0 +1,48 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use Socialtext::Timer;
+use Socialtext::System qw/shell_run/;
+$Socialtext::System::SILENT_RUN = 1;
+use Sys::Hostname qw/hostname/;
+use Term::ANSIColor;
+
+my $workspace = shift || usage();
+
+my $wget = q{wget -q --user devnull1@socialtext.com --password d3vnu11l};
+my $server = "http://" . hostname() . ':' . ($< + 20000);
+
+my @urls = (
+    {
+        name => 'REST workspace pages',
+        path => q{/data/workspaces/:ws/pages},
+    },
+    {
+        name => 'NLW All pages',
+        path => q{/:ws/index.cgi?action=changes&changes=all},
+    },
+    {
+        name => 'Feed Recent Changes',
+        path => q{/feed/workspace/:ws?category=Recent%20Changes&count=100},
+    },
+);
+
+for my $url (@urls) {
+    $url->{path} =~ s/:ws/$workspace/g;
+    my $t = Socialtext::Timer->new;
+    shell_run("-$wget '$server$url->{path}' -O timing.out");
+    print color('green'), 
+          sprintf('%.3f  %s (%s)', $t->elapsed, $url->{name}, $workspace), 
+          color('reset'), "\n";
+}
+
+exit;
+
+sub usage {
+    die <<EOT;
+USAGE: $0 <workspace>
+EOT
+}

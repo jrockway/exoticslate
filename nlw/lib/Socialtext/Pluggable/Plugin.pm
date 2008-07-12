@@ -12,6 +12,7 @@ use Socialtext::URI;
 use Socialtext::Storage::PSQL;
 use Socialtext::AppConfig;
 use Socialtext::JSON qw(encode_json);
+use Socialtext::User;
 
 my $prod_ver = Socialtext->product_version;
 my $code_base = Socialtext::AppConfig->code_base;

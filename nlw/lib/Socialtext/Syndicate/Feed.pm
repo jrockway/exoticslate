@@ -5,6 +5,7 @@ use warnings;
 
 use DateTime;
 use DateTime::Format::W3CDTF;
+use Socialtext::Timer;
 
 our $VERSION = 0.01;
 
@@ -92,27 +93,35 @@ sub _item_as_html {
 
     my @html_headers;
     my @html_footers;
+    Socialtext::Timer->Continue('_item_as_html_html');
     my $html    = $page->to_absolute_html;
-    my @tags    = grep { $_ !~ /recent changes/i } $page->categories_sorted;
-    my $creator = $page->original_revision->last_edited_by;
+    Socialtext::Timer->Pause('_item_as_html_html');
 
+    Socialtext::Timer->Continue('_item_as_html_creator');
+    my $creator = $page->creator;
     if ($creator) {
         my $ws   = $page->hub->current_workspace;
         my $name = $creator->best_full_name( workspace => $ws );
         push @html_headers, "<div>Creator: $name</div>";
     }
+    Socialtext::Timer->Pause('_item_as_html_creator');
 
+    Socialtext::Timer->Continue('_item_as_html_tags');
+    my @tags    = grep { $_ !~ /recent changes/i } $page->categories_sorted;
     if ( scalar @tags ) {
        push @html_headers, "<div>Tags: " . join( ", ", @tags ) . "</div>";
     }
+    Socialtext::Timer->Pause('_item_as_html_tags');
 
-    my @attachments = $page->_attachments;
+    Socialtext::Timer->Continue('_item_as_html_attach');
+    my @attachments = $page->attachments;
     if ( scalar @attachments ) {
         my @filenames
             = sort { lc($a) cmp lc($b) } map { $_->filename } @attachments;
         push @html_footers,
             "<div>Attachments: " . join( ", ", @filenames ) . "</div>";
     }
+    Socialtext::Timer->Pause('_item_as_html_attach');
 
     return join "<hr/>", @html_headers, $html, @html_footers;
 }

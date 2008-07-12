@@ -16,6 +16,7 @@ use Socialtext::Exceptions qw/rethrow_exception/;
 use Socialtext::Search::AbstractFactory;
 use Socialtext::Log qw(st_log);
 use Socialtext::Timer;
+use Socialtext::System qw/shell_run/;
 use YAML ();
 
 # This should stay in sync with $EXPORT_VERSION in ST::Workspace.
@@ -91,6 +92,8 @@ sub import_workspace {
     $self->_fixup_page_symlinks();
 
     $self->_set_permissions();
+
+    $self->_populate_db_metadata();
 
     for my $u (@users) {
         $self->{workspace}->add_user(
@@ -247,6 +250,15 @@ sub _set_permissions {
         sql_rollback();
         rethrow_exception($e);
     }
+}
+
+sub  _populate_db_metadata {
+    my $self = shift;
+    my $populator = "st-populate-page-table";
+    Socialtext::Timer->Start('populate_db');
+    local $Socialtext::System::SILENT_RUN = 1;
+    shell_run("$populator --workspace $self->{new_name}");
+    Socialtext::Timer->Stop('populate_db');
 }
 
 sub _permissions_file { $_[0]->{old_name} . '-permissions.yaml' }

@@ -2,15 +2,20 @@
 # @COPYRIGHT@
 use warnings FATAL => 'all';
 use strict;
-use Test::More qw/no_plan/;
+use Test::More;
 use mocked 'Socialtext::SQL', 'sql_ok';
 use mocked 'Socialtext::Rest';
 use Socialtext::CGI::Scrubbed;
 use Socialtext::JSON qw/decode_json/;
+use Socialtext::Rest::Events;
 
-BEGIN {
-    use_ok('Socialtext::Rest::Events');
+if ($Socialtext::Rest::Events::VERSION eq '0.1') {
+    plan skip_all => 'The Rest interface is not fully implemented';
 }
+else {
+    plan 'no_plan';
+}
+
 
 Empty_JSON_GET: {
     my $params = Socialtext::CGI::Scrubbed->new;

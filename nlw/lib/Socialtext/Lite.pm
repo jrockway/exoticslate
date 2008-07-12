@@ -160,18 +160,17 @@ Returns HTML representing the list of the fifty (or less) most
 recently changed pages in the current workspace.
 
 =cut 
+
 sub recent_changes {
     my $self     = shift;
-    my $category = shift;
+    my $category = shift || '';
     my $changes = $self->hub->recent_changes->get_recent_changes_in_category(
         count    => 50,
-        category => lc($category),
+        category => $category,
     );
 
     my $title = 'Recent Changes';
-    $title .= " in $category"
-        if defined $category
-        and $category ne 'recent changes';
+    $title .= " in $category" if $category;
 
     return $self->_process_template(
         $CHANGES_TEMPLATE,

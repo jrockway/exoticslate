@@ -45,23 +45,7 @@ sub get_result_set_path {
 sub push_result {
     my $self = shift;
     my $page = shift;
-    my $metadata = $page->metadata;
-    my $result;
-    $result->{$_} = $metadata->$_
-      for qw(From Date Subject Revision Summary Type);
-    $result->{DateLocal} = $page->datetime_for_user;
-    $result->{revision_count} = $page->revision_count;
-    $result->{page_uri} = $page->uri;
-    $result->{page_id} = $page->id;
-    $result->{username} =
-        $page->last_edited_by->username;
-    if (not $result->{Summary}) {
-        my $text = $page->preview_text;
-        $page->_store_preview_text($text);
-        $result->{Summary} = $text;
-    }
-
-    push @{$self->result_set->{rows}}, $result;
+    push @{$self->result_set->{rows}}, $page->to_result;
     return 1;
 }
 

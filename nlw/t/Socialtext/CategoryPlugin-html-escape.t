@@ -11,6 +11,7 @@ use YAML;
 
 package MockMetadata;
 sub Category { [ 'Useless Info', 'Odds & Ends', 'Blöde' ] }
+sub loaded { return 1; }
 
 package main;
 

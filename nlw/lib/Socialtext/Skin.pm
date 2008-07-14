@@ -113,9 +113,18 @@ sub css_info {
 
 sub css_files {
     my $self = shift;
-    my $css_info = $self->css_info;
+
+    my $info = $self->css_info;
+
     my @files;
-    push @files, @$_ for values %$css_info;
+    for my $paths (values %$info) {
+        for my $path (@$paths) {
+            if (my ($skin, $file) = $path =~ m{skin/([^/]+)/css/(.*)}) {
+                push @files, $self->_path("skin/$skin/css/$file");
+            }
+        }
+    }
+
     return @files;
 }
 

@@ -22,6 +22,8 @@ use unmocked 'Socialtext::FetchRSSPlugin';
 use unmocked 'Socialtext::Template';
 use unmocked 'Socialtext::Stax';
 use unmocked 'Socialtext::Pluggable::Adapter';
+use unmocked 'Socialtext::Formatter::Viewer';
+use unmocked 'Socialtext::Formatter';
 
 sub current_workspace {
     my $self = shift;
@@ -102,5 +104,24 @@ sub stax {
 sub pluggable {
     return $_[0]->{pluggable} ||= Socialtext::Pluggable::Adapter->new(hub => $_[0]);
 }
+
+# Timezone plugin mocked up here
+sub timezone { $_[0] } # return ourself
+sub date_local { $_[1] } # return the date we passed in
+
+sub viewer {
+    $_[0]->{viewer} ||= Socialtext::Formatter::Viewer->new( hub => $_[0] );
+}
+
+sub formatter {
+    $_[0]->{formatter} ||= Socialtext::Formatter->new( hub => $_[0] );
+}
+
+sub registry_loaded { 1 }
+
+# Mock up the registry here
+sub registry { $_[0] } # return ourself
+sub lookup { $_[0] } # return ourself
+sub wafl { +{} } # empty registry hash
 
 1;

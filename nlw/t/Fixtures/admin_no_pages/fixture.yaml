@@ -2,7 +2,8 @@ fixtures:
   - db
 
 workspaces:
-  admin: { }
+  admin: 
+    no_pages: 1
 
 cache:
   - WORKSPACES

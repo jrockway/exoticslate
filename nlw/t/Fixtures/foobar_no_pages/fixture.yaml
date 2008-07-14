@@ -3,6 +3,7 @@ fixtures:
 
 workspaces:
   foobar: { }
+    no_pages: 1
 
 cache:
   - WORKSPACES

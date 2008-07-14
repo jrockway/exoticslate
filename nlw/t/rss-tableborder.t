@@ -1,9 +1,7 @@
 #!perl
 # @COPYRIGHT@
-
 use strict;
 use warnings;
-
 use Test::Socialtext;
 fixtures( 'admin_no_pages' );
 use Socialtext::Pages;
@@ -14,11 +12,17 @@ my @tests = (
     qr{\Q<table style="border-collapse: collapse;" class="formatter_table">},
 );
 
-plan tests => scalar @tests + 2;
+plan tests => scalar @tests + 3;
 
 $ENV{GATEWAY_INTERFACE} = 1;
 $ENV{QUERY_STRING} = 'category=Recent%20Changes';
 $ENV{REQUEST_METHOD} = 'GET';
+
+# Verify that there are no pages in the workspace before we start
+my $pages_ref = Socialtext::Model::Pages->All_active(
+    workspace_id => $hub->current_workspace->workspace_id,
+);
+is @$pages_ref, 0, 'no pages found to start';
 
 Socialtext::Page->new(hub => $hub)->create(
     title => 'a table page',

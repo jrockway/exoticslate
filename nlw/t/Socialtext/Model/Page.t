@@ -6,6 +6,7 @@ use Test::More qw/no_plan/;
 use mocked 'Socialtext::File';
 use mocked 'Socialtext::Page';
 use mocked 'Socialtext::User';
+use mocked 'Socialtext::Hub';
 
 BEGIN {
     use_ok 'Socialtext::Model::Page';
@@ -13,6 +14,7 @@ BEGIN {
 
 Create_from_row: {
     my $data = {
+        workspace_id => 3,
         workspace_name => 'workspace_name',
         page_id => 'page_id',
         name => 'name',
@@ -23,12 +25,13 @@ Create_from_row: {
         creator_username => 'creator_username',
         create_time => '2007-01-01 23:12:01',
         current_revision_id => 'current_revision_id',
+        current_revision_num => 'current_revision_num',
         revision_count => 'revision_count',
         page_type => 'page_type',
         deleted => 'deleted',
         summary => 'summary',
         tags => ['tag'],
-        hub => 'hub',
+        hub => Socialtext::Hub->new,
     };
     my $page = Socialtext::Model::Page->new_from_row($data);
     isa_ok $page, 'Socialtext::Model::Page';
@@ -37,14 +40,16 @@ Create_from_row: {
     # many of these fields are named after the mime-like file format
     is_deeply $page->to_result, {
         Type => 'page_type',
-        Revision => 'revision_count',
+        Revision => 'current_revision_num',
         Subject => 'name',
         Summary => 'summary',
         Date => '2008-01-01 23:12:01',
+        DateLocal => '2008-01-01 23:12:01',
         From => 'last_editor_username',
         username => 'last_editor_username',
         page_uri => 'page_id',
         page_id => 'page_id',
+        revision_count => 'revision_count',
     };
 
     is $page->title, 'name';
@@ -52,7 +57,7 @@ Create_from_row: {
     is $page->uri, 'page_id';
     is $page->summary, 'summary';
     is_deeply $page->tags, ['tag'];
-    is $page->hub, 'hub';
+    isa_ok $page->hub, 'Socialtext::Hub';
 
     my $hash = $page->hash_representation;
     like delete $hash->{page_uri}, qr{\Q/workspace_name/index.cgi?page_id\E$};
@@ -74,10 +79,22 @@ Create_from_row: {
     $page->add_tag('abba');
     is_deeply [ $page->categories_sorted ], [qw/abba tag zed/];
 
-    is $page->to_absolute_html, 'page_id Absolute HTML';
-    is $page->to_html, 'page_id HTML';
-    local $Socialtext::File::CONTENT{'/directory/path/current_revision_id.txt'}
-        = "header\n\nfoo content\n";
+    no warnings 'redefine';
+    local *Socialtext::Paths::page_data_directory = sub { "/directory/$_[0]" };
+    my $fake_path = '/directory/workspace_name/page_id/current_revision_id.txt';
+    local $Socialtext::File::CONTENT{$fake_path} = "header\n\nfoo content\n";
+    is $page->to_absolute_html, <<EOT;
+<div class="wiki">
+<p>
+foo content</p>
+</div>
+EOT
+    is $page->to_html, <<EOT;
+<div class="wiki">
+<p>
+foo content</p>
+</div>
+EOT
     is $page->content, "foo content\n";
 
     is $page->last_edited_by->user_id, 'last_editor_id';

@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 77;
+use Test::Socialtext tests => 71;
 fixtures( 'admin_with_extra_pages' );
 
 BEGIN {
@@ -37,23 +37,6 @@ ATOM_1_0_CATEGORIES: {
     my $page = _make_page( 'cows', "Cow Love\n", [qw(cow love me)] );
     my $feed = _get_feed([$page]);
     _entry_has_categories( $feed, qw(cow love me) );
-}
-
-
-# these next two blocks test that content which should
-# be impossible in our system result in content that
-# is unusable in aggregators.
-# XXX: We need to decide if that's what we want.
-ATOM_1_0_CRAP: {
-    my $page = _make_page(
-        'html',
-        "* hello\n** \xdamn\n* goodbye\n\n.html\n<h1>Hello\n.html\n\n"
-    );
-   my $feed = _get_feed([$page]);
-    is(
-        _content_type($feed), 'base64',
-        'bad content becomes unusable base64'
-    );
 }
 
 ATOM_1_0_KNOWN_BAD: {

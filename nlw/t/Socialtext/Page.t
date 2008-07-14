@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use DateTime;
-use Test::Socialtext tests => 40;
+use Test::Socialtext tests => 41;
 fixtures( 'admin' );
 
 BEGIN {
@@ -242,6 +242,18 @@ BAD_PAGE_TITLE: {
     ok( !$class->is_bad_page_title("Cows Are Good"), "OK page title" );
 }
 
+INVALID_UTF8: {
+    my $hub = new_hub('admin');
+    eval {
+        my $page = Socialtext::Page->new( hub => $hub )->create(
+            title   => 'new page',
+            content => "* hello\n** \xdamn\n",
+            creator => $hub->current_user,
+        );
+    };
+
+    ok($@, "Check that our crap UTF8 generates an exception");
+}
 __DATA__
 I was takin' a trip out to LA
 Toolin' along in my Chevrolet

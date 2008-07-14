@@ -29,8 +29,10 @@ sub logo_uri_or_default { 'logo_uri_or_default' }
 
 sub is_public { $_[0]->{is_public} }
 
-sub uri { $_[0]->{uri} || 
-            '/workspace_' . ($_[0]->{workspace_id} || $_[0]->{name}) . '/' }
+sub uri { $_[0]->{uri} ||
+            '/workspace_' 
+            . ($_[0]->{workspace_id} || $_[0]->{name} || $_[0]->{title}) 
+            . '/' }
 
 sub cascade_css { $_[0]->{cascade_css} || 1 }
 
@@ -51,5 +53,7 @@ sub read_breadcrumbs { @BREADCRUMBS }
 sub permissions { shift } # hack - just return ourselves
 
 sub user_can { $_[0]->{user_can} || 1 }
+
+sub enable_spreadsheet { $_[0]->{enabled_spreadsheet}++ }
 
 1;

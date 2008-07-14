@@ -21,7 +21,7 @@ field 'ports_start_at' => 30000;
 # skip_cache implies three things: don't create the cache, don't extract from
 # the cache, and always create the environment from scratch
 field 'skip_cache' => 0;
-field 'verbose';
+field 'verbose' => 1;
 field 'wiki_url_base';
 field 'fixtures' => [];
 field 'fixture_objects' => [];

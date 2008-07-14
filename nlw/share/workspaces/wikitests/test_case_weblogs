@@ -56,16 +56,23 @@ Selenium can't "see" feed pages
 | click_and_wait | link=attachments |  |
 | text_like | st-page-maincontent | edit1_%%start_time%% |
 
-| *Comment* | Test Case: Weblogs square brackets are legal for weblog titles |  |
+| *Comment* | Test Case: Weblogs weblogs that differ only by square brackets cause error |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Create New Weblog |  |
 | type_ok | weblog_title | `test_[%%start_time%%]_weblog` |
 | click_and_wait | Button |  |
+| text_like | error: There is already a 'test_[%%start_time%%]_weblog' weblog. Please choose a different name. |  |
+
+| *Comment* | Test Case: Weblogs square brackets are legal for weblog titles |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Create New Weblog |  |
+| type_ok | weblog_title | `testX_[%%start_time%%]_weblog` |
+| click_and_wait | Button |  |
 | wait_for_element_visible_ok | page-control-category-selector | 30000 |
 | select_ok | page-control-category-selector | Recent Changes |
 | wait_for_text_present_ok | Weblog: Recent Changes | 30000 |
-| select_ok | page-control-category-selector | `test_[%%start_time%%]_weblog` |
-| wait_for_text_present_ok | `Weblog: test_[%%start_time%%]_weblog` | 30000 |
+| select_ok | page-control-category-selector | `testX_[%%start_time%%]_weblog` |
+| wait_for_text_present_ok | `Weblog: testX_[%%start_time%%]_weblog` | 30000 |
 
 | *Comment* | Test Case: Weblogs RT 27013 |  |
 | *Comment* | Test Case: blog or weblog ending respected |  |

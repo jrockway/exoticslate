@@ -18,5 +18,6 @@ for i in $files; do
     sed -i 's/\t/    /g' html/$i
 done
 
-wget http://clients.araucariadesign.com/Socialtext/wiki/css/styles.css --user social --password guest -O css/screen.css
-wget http://clients.araucariadesign.com/Socialtext/wiki/css/ieStyles.css --user social --password guest -O css/screen.ie.css
+wget http://clients.araucariadesign.com/Socialtext/wiki/css/styles.css --user social --password guest -O css/styles.css
+wget http://clients.araucariadesign.com/Socialtext/wiki/css/ieStyles.css --user social --password guest -O css/ieStyles.css
+bin/fix-ids

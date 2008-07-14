@@ -20,13 +20,19 @@
             [% END %]
         [% END %]
 
-        [% INCLUDE "element/wiki/js-bootstrap" %]
-
         [% IF loc_lang != 'en' %]
         <script type="text/javascript" charset="utf-8"
             src="[% wiki.skin_uri('s2') %]/javascript/l10ns.js.gz">
         </script>
         [% END %]
+
+        <script type="text/javascript" charset="utf-8"
+            src="[% wiki.skin_uri('s3') %]/javascript/socialtext-s3.js">
+        </script>
+
+        [% INCLUDE "element/wiki/js-bootstrap" %]
+
+[% IF 0 %]
 
         [% combined_file = 'socialtext-other' %]
         [% IF page_action == 'display' %]
@@ -35,35 +41,13 @@
         <script type="text/javascript" charset="utf-8"
             src="[% wiki.skin_uri('s2') %]/javascript/[% combined_file %].js.gz">
         </script>
-        [% IF customjs %]
-        <script type="text/javascript" charset="utf-8" src="[% customjs %]"></script>
-        [% END %]
-
-        [% IF stax_info.paths.size > 0 %]
-        <script type="text/javascript" charset="utf-8"
-            src="[% wiki.skin_uri('s2') %]/javascript/socialtext-stax.js.gz">
-        </script>
-        [% END %]
-
-        [% FOREACH hack_path = stax_info.paths %]
-        <script class="stax-pro-hack" type="text/javascript" charset="utf-8" src="[% hack_path %]"></script>
-        [% END %]
+[% END %]
 
         <meta name="keywords" content="[% loc('Confluence wiki, Enterprise 2.0 wiki, Mediawiki, Microsoft wiki, Sharepoint wiki, Twiki, Web 2.0 wiki, business wiki, document management, enterprise wiki, intranet wiki, knowledge management, online collaboration, open source wiki, portal wiki, hosted wiki, project collaboration, team collaboration, wiki appliance, wiki software') %]"/>
-
-      [% END %]
-      [% IF page_action == 'display' %]
-        <!-- Universal Edit Button - http://universaleditbutton.org/ -->
-        <link rel="alternate" type="application/x-wiki"
-        [% IF checker.check_permission('edit') %]
-             href="/[% wiki.name.replace('\'', '\\\'') %]/?page_id=[% page.id %]&action=edit">
-        [% ELSE %]
-            href="[% login_and_edit_path %]">
         [% END %]
-      [% END %]
     </head>
     <body id="socialtext-wiki">
-        <div id="mainWrap">
+        <div id="st-display-mode-container">
             <div id="header" class="st-wiki-nav">
                 <div id="logo"><a href="[% home_href | decorate('home_href') %]">[% loc('Socialtext') %]</a></div><!-- logo END -->
                 <div id="globalNav" class="st-wiki-nav-content">

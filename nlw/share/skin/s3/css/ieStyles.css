@@ -1,0 +1,16 @@
+/*
+
+Socialtext ie 6 specific Style Sheet
+Author: Mark Schuber :: Araucaria Design
+Date: 05/12/2008
+
+*/
+
+div.widget div.widgetBottom {
+	background: url(../images/widgetBottom.png) no-repeat 1px bottom;
+	height: 10px;
+}
+
+div#controls div#controlsLeft ul li a {
+	margin-left: 12px;
+}

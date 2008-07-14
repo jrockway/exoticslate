@@ -10,8 +10,15 @@ my %files = map { ("$_.html" => "$_.fixed.html") }
            grep { !/\.fixed\.html$/ }
            glob("html/*.html");
 
-$files{'css/screen.css'} = 'css/screen.css';
-$files{'css/screen.ie.css'} = 'css/screen.ie.css';
+$files{'css/styles.css'} = 'css/styles.css';
+$files{'css/ieStyles.css'} = 'css/ieStyles.css';
+
+my %ids = (
+    contentPage => 'socialtext-wiki',
+    contentRight => 'st-page-boxes',
+    contentLeft => 'st-page-maincontent',
+    mainWrap => 'st-display-mode-container',
+);
 
 my %done;
 
@@ -42,8 +49,11 @@ while (my ($orig,$new) = each %files) {
             }
         }
 
-        s{#contentPage}{#socialtext-wiki}g;
-        s{id="contentPage"}{id="socialtext-wiki"};
+        while (my ($from,$to) = each %ids) {
+            s{#$from}{#$to}g;
+            s{id="$from"}{id="$to"}g;
+        }
+
         s{css/styles.css}{css/screen.css};
         s{<div id="header">}{<div id="header" class="st-wiki-nav">};
         s{(id="globalNav")}{$1 class="st-wiki-nav-content"};

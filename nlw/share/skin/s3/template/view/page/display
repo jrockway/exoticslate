@@ -1,8 +1,15 @@
-[% WRAPPER layout/html %]
+[% WRAPPER layout/html
+    box_javascript = 1,
+    page_action = 'display',
+%]
 <div id="controls">
     <div id="controlsLeft">
         <ul>
-            <li><a class="editButton" href="#">Edit</a></li>
+            [% IF checker.check_permission('edit') %]
+            <li><a title="[% loc('Click this button to edit the page') %]" id="st-edit-button-link" class="editButton" href="#">[% loc('Edit') %]</a></li>
+            [% ELSIF checker.check_permission('edit_controls') %]
+            <li><a title="[% loc('Click this button to edit the page') %]" id="st-login-to-edit-button-link" class="editButton" href="[% login_and_edit_path %]">[% loc('Edit') %]</a></li>
+            [% END %]
             <li><a class="commentButton" href="#">Comment</a></li>
         </ul>
         <ul class="buttonRight">        
@@ -10,6 +17,13 @@
             <li><a class="watchButton" href="#">Watch this Page</a></li>
         </ul>                                   
     </div><!-- controlsLeft END -->
+
+    <!-- XXX: move this somewhere or style it in screen.css -->
+    <div style="float:left;position:relative;padding:11px;display:none" id="bootstrap-loader">
+        [% loc("Loading...") %]
+        <img src="[% wiki.skin_uri("s2") %]/images/ajax-loader.gif">
+    </div>
+
     <div id="controlsRight">
         <ul>
             <li><a class="print" href="#">Print</a></li>
@@ -22,27 +36,44 @@
 <div id="contentContainer">
     <div id="contentTitle">
         <h2 class="tableTitle">[% page.display_title %]</h2>
-        <a class="hideTab">Hide</a>
+        <a id="st-page-boxes-toggle-link" class="hideTab" href="#">[% IF st_page_accessories == 'show' %][% loc('hide') %][% ELSE %][% loc('show') %][% END %]</a>
     </div>
 
     <div id="contentColumns">
-        <div id="contentLeft">
-            [% page.content %]
+        <div id="st-page-maincontent">
+            <div id="st-page-content">
+                [% page.content %]
+            </div>
         </div>
-        <div id="contentRight">
+        <div id="st-page-boxes" style="display:[% IF st_page_accessories == 'show'%]block[% ELSE %]none[% END %]">
             <div class="widget">
                 <div class="widgetHeader">
                 <h4>Tags</h4>
                 </div><!-- widgetHeader END -->
                 <div class="widgetContent">
-                    <ul>
+                    <ul id="st-tags-listing">
                     [% FOR tag = tags.tags %]
-                        <li>[% tag.name %] <a href="#">[x]</a></li>
+                        <li>
+                            <a href="?action=category_display;category=[% tag.name %]">[% tag.name %]</a>
+                            <a onclick="Page.delTag('[% tag.name %]')" href="#">[x]</a>
+                        </li>
                     [% END %]
                     </ul>
-                    <ul class="widgetButton">
-                        <li><a class="addTagButton" href="#">Tag</a></li>
+                    [% IF checker.check_permission('edit') %]
+                    <ul id="st-tags-addlink" class="widgetButton">
+                        <li><a class="addTagButton" href="#">[% loc('Tag') %]</a></li>
                     </ul>
+                    <form id="st-tags-form" onsubmit="return false;">
+                        <input style="margin:10px;display:none" id="st-tags-field" name="tagfield" type="text" />
+                    </form>
+                    <div id="st-tags-message"></div>
+                    <div style="display:none" id="st-tags-suggestion">
+                        <span class="st-tags-hint">
+                            [% loc("Suggestions:") %]
+                        </span>
+                        <span id="st-tags-suggestionlist"></span>
+                    </div>
+                    [% END %]
                     <div class="clear"></div>
                 </div><!-- widgetContent -->
                 <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
@@ -67,15 +98,15 @@
                 <h4>[% loc('Attachments') %]</h4>
                 </div><!-- widgetHeader END -->
                 <div class="widgetContent">
-                    <ul>
+                    <ul id="st-attachment-listing">
                     [% FOR file = attachments %]
-                        <li><a title="[% loc("Uploaded by [_1]", file.uploader) %]" href="[% file.uri %]">[% file.name %]</a></li>
+                        <li><a title="[% loc("Uploaded by [_1]", file.uploader) %]" href="[% file.uri %]">[% file.name %]</a> <a href="#" onclick="Page.delAttachment('[% file.uri %]')">[x]</a></li>
                     [% END %]
                     </ul>
                     [% IF checker.check_permission('attachments') %]
                     <ul class="widgetButton">
                         <li><a id="st-attachments-uploadbutton" class="uploadButton" href="#">[% loc('Upload Files') %]</a></li>
-                        <li><a id="st-attachments-managebutton" class="manageButton" href="#">[% loc('Manage Files') %]</a></li>
+                        <!--<li><a id="st-attachments-managebutton" class="manageButton" href="#">[% loc('Manage Files') %]</a></li>-->
                     </ul>
                     [% END %]
                     <div class="clear"></div>
@@ -90,8 +121,8 @@
                 </div><!-- widgetHeader END -->
                 <div class="widgetContent">
                     <ul>
-                    [% FOR page = recent_changes %]
-                        <li><a href="[% page.link %]">[% page.title %]</a></li>
+                    [% FOR rc = recent_changes %]
+                        <li><a href="[% rc.link %]">[% rc.title %]</a></li>
                     [% END %]
                     </ul>
                     <div class="clear"></div>
@@ -107,8 +138,8 @@
                 </div><!-- widgetHeader END -->
                 <div class="widgetContent">
                     <ul>
-                    [% FOREACH page IN breadcrumbs %]
-                        <li><a href="[% page.link %]">[% page.title %]</a></li>
+                    [% FOREACH bc IN breadcrumbs %]
+                        <li><a href="[% bc.link %]">[% bc.title %]</a></li>
                     [% END %]
                     </ul>
                     <div class="clear"></div>
@@ -132,3 +163,36 @@
     </div><!-- bottomButtons -->
 </div><!-- contentContainer -->
 [% END %]
+
+<div style="display:none" id="st-attachments-attachinterface">
+    <div id="st-attachments-attach-attachinterface-overlay"></div>
+    <div id="st-attachments-attach-interface-wrapper">
+    <div id="st-attachments-attach-interface" style="text-align: left; padding:20px;">
+        <iframe style="display:none" id="st-attachments-attach-formtarget" class="st-action-formtarget" name="st-attachments-attach-formtarget" src="[% wiki.static_path %]/html/blank.html"></iframe>
+        <form id="st-attachments-attach-form" name="attachForm" method="post" action="index.cgi" enctype="multipart/form-data" target="st-attachments-attach-formtarget">
+            <input type="hidden" name="page_name" value="[% page.id %]"/>
+            <input type="hidden" name="action" value="attachments_upload"/>
+            <div id="st-attachments-attach-title">[% loc('Upload Files') %]</div>
+
+            <p id="st-attachments-attach-message">
+            [% loc('Click "Browse" and select an image or file to upload.') %]
+            <br />
+            [% loc('Click "Done" to close this window.') %]
+            </p>
+            <p id="st-attachments-attach-limit">[% loc('Maximum file size: 50MB') %]</p>
+            <p id="st-attachments-attach-fileprompt">
+                <input id="st-attachments-attach-filename" size="45" type="file" name="file"/>
+            </p>
+            <input type="hidden" id="st-attachments-attach-editmode" name="editmode" value="0"/>
+            <input type="hidden" id="st-attachments-attach-embed" name="embed" value="1"/>
+            <div id="st-attachments-attach-error">&nbsp;</div>
+            <div id="st-attachments-attach-uploadmessage">&nbsp;</div>
+            <div id="st-attachments-attach-list"></div>
+            <div id="st-attachments-attach-buttons">
+                <input id="st-attachments-attach-closebutton" type="button" value="[% loc('Done') %]"/>
+            </div>
+            <div style="clear:both;">&nbsp;</div>
+        </form>
+    </div>
+    </div>
+</div>

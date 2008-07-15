@@ -1,6 +1,6 @@
 .PHONY: default runnable
 
-default: $(EXTERNAL_JAVASCRIPT_SYMLINK) runnable
+all: $(EXTERNAL_JAVASCRIPT_SYMLINK) runnable
 
 runnable: 
 	make -C run all

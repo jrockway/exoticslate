@@ -1,4 +1,7 @@
+default: all
+
 all clean:
-	make -c wikiwyg $@
-	make -c socialcalc $@
-	make -c performance $@
+	make -C wikiwyg $@
+	make -C performance $@
+
+# 	make -C socialcalc $@

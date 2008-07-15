@@ -1133,11 +1133,19 @@ sub users_with_roles {
         die loc("Export directory [_1] does not exist.\n", $p{dir}) 
 	    if defined $p{dir} && ! -d $p{dir};
 
+        die loc("Export directory [_1] is not writeable.\n", $p{dir})
+            unless defined $p{dir} && -w $p{dir};
+
         my $tarball_dir
             = defined $p{dir} ? Cwd::abs_path( $p{dir} ) : $ENV{ST_TMP} || '/tmp';
 
         my $tarball = Socialtext::File::catfile( $tarball_dir,
             $p{name} . '.' . $EXPORT_VERSION . '.tar' );
+
+        for my $file ( ($tarball, "$tarball.gz") ) {
+            die loc("Cannot write export file [_1], aborting.\n", $file)
+                if -f $file && ! -w $file;
+        }
 
         $self->_create_export_tarball($tarball, $p{name});
 

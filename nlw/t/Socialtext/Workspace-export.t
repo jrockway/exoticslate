@@ -73,10 +73,11 @@ Export_permissions_dumped: {
 }
 
 Export_tarball_format: {
-    my $tarball = $admin->export_to_tarball();
+    my $dir = File::Temp::tempdir( CLEANUP => 1 );
+
+    my $tarball = $admin->export_to_tarball( dir => $dir);
     ok( -f $tarball, 'tarball exists' );
 
-    my $dir = File::Temp::tempdir( CLEANUP => 1 );
     system( 'tar', 'xzf', $tarball, '-C', $dir )
         and die "Cannot untar $tarball: $!";
 
@@ -91,11 +92,11 @@ Export_tarball_format: {
 }
 
 Export_to_different_name: {
-    my $tarball = $admin->export_to_tarball(name => 'monkey');
+    my $dir = File::Temp::tempdir( CLEANUP => 1 );
+    my $tarball = $admin->export_to_tarball(name => 'monkey', dir => $dir);
     like $tarball, qr/monkey/, 'tarball named like a monkey';
     ok( -f $tarball, 'tarball exists' );
 
-    my $dir = File::Temp::tempdir( CLEANUP => 1 );
     system( 'tar', 'xzf', $tarball, '-C', $dir )
         and die "Cannot untar $tarball: $!";
 

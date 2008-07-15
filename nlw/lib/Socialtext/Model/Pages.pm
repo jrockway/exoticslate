@@ -8,62 +8,76 @@ use Socialtext::Timer;
 use Carp qw/croak/;
 
 sub By_seconds_limit {
-    my $class    = shift;
-    my %p        = @_;
+    my $class         = shift;
+    my %p             = @_;
+    my $since         = $p{since};
+    my $seconds       = $p{seconds};
+    my $workspace_ids = $p{workspace_ids};
+    my $workspace_id  = $p{workspace_id};
+    my $limit         = $p{count} || $p{limit};
+    my $tag           = $p{tag} || $p{category};
+    my $hub           = $p{hub};
 
     Socialtext::Timer->Start('By_seconds_limit');
     my $where;
     my @bind;
-    if ( $p{since} ) {
+    if ( $since ) {
         $where = q{AND last_edit_time > ?::timestamptz};
-        @bind  = ( $p{since} );
+        @bind  = ( $since );
     }
-    elsif ( $p{seconds} ) {
+    elsif ( $seconds ) {
         $where = q{AND last_edit_time > 'now'::timestamptz - ?::interval};
-        @bind  = ("$p{seconds} seconds");
+        @bind  = ("$seconds seconds");
     }
     else {
         croak "seconds or count parameter is required";
     }
 
     my $pages = $class->_fetch_pages(
-        hub => $p{hub},
-        $p{workspace_ids} ? ( workspace_ids => $p{workspace_ids} ) : (),
+        hub => $hub,
+        $workspace_ids ? ( workspace_ids => $workspace_ids ) : (),
         where        => $where,
-        limit        => $p{count} || $p{limit},
-        tag          => $p{tag} || $p{category},
+        limit        => $limit,
+        tag          => $tag,
         bind         => \@bind,
         order_by     => 'page.last_edit_time',
-        workspace_id => $p{workspace_id},
+        workspace_id => $workspace_id,
     );
     Socialtext::Timer->Stop('By_seconds_limit');
     return $pages;
 }
 
 sub All_active {
-    my $class = shift;
-    my %p     = @_;
+    my $class        = shift;
+    my %p            = @_;
+    my $hub          = $p{hub};
+    my $limit        = $p{count} || $p{limit};
+    my $workspace_id = $p{workspace_id};
 
     Socialtext::Timer->Start('All_active');
     my $pages = $class->_fetch_pages(
-        hub          => $p{hub},
-        limit        => $p{count} || $p{limit},
-        workspace_id => $p{workspace_id},
+        hub          => $hub,
+        limit        => $limit,
+        workspace_id => $workspace_id,
     );
     Socialtext::Timer->Stop('All_active');
     return $pages;
 }
 
 sub By_tag {
-    my $class = shift;
-    my %p     = @_;
+    my $class        = shift;
+    my %p            = @_;
+    my $hub          = $p{hub};
+    my $workspace_id = $p{workspace_id};
+    my $limit        = $p{count} || $p{limit};
+    my $tag          = $p{tag};
 
     Socialtext::Timer->Start('By_category');
     my $pages = $class->_fetch_pages(
-        hub          => $p{hub},
-        workspace_id => $p{workspace_id},
-        limit        => $p{count} || $p{limit},
-        tag          => $p{tag},
+        hub          => $hub,
+        workspace_id => $workspace_id,
+        limit        => $limit,
+        tag          => $tag,
         order_by     => 'page.last_edit_time',
     );
     Socialtext::Timer->Stop('By_category');
@@ -72,10 +86,15 @@ sub By_tag {
 
 sub _fetch_pages {
     my $class = shift;
-    my %p     = (
-        bind    => [],
-        where   => '',
-        deleted => 0,
+    my %p = (
+        bind          => [],
+        where         => '',
+        deleted       => 0,
+        tag           => undef,
+        workspace_id  => undef,
+        workspace_ids => undef,
+        order_by      => undef,
+        limit         => undef,
         @_,
     );
 

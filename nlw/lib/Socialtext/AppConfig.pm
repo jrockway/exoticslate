@@ -142,10 +142,14 @@ sub _default_code_base {
 }
 
 sub _user_checkout_dir {
-    return
-        Cwd::abs_path(
-            File::Spec->catdir( File::Basename::dirname(
-                $INC{'Socialtext/AppConfig.pm'} ), File::Spec->updir, File::Spec->updir ) );
+    return Cwd::abs_path(
+        $ENV{ST_SRC_BASE}
+        ? File::Spec->catdir( $ENV{ST_SRC_BASE}, 'current', 'nlw' )
+        : File::Spec->catdir(
+            File::Basename::dirname( $INC{'Socialtext/AppConfig.pm'} ),
+            File::Spec->updir, File::Spec->updir
+        )
+    );
 }
 
 sub _default_template_compile_dir {
@@ -177,11 +181,21 @@ sub _default_pid_file_dir {
 }
 
 sub _default_admin_script {
-    my $script =
-        _startup_user_is_human_user()
-        ? File::Spec->catfile( _user_checkout_dir(), 'bin', 'st-admin' )
-        : File::Spec->catfile( $Config{installscript}, 'st-admin' );
+    my $script = File::Spec->catfile( bin_path(), 'st-admin' );
     return ( ( -x $script ) ? $script : "/usr/local/bin/st-admin" );
+}
+
+=head2 bin_path()
+
+Returns the location that executable scripts should be stored at.
+
+=cut
+
+sub bin_path {
+    if ( _startup_user_is_human_user() ) {
+        return File::Spec->catfile( _user_checkout_dir(), 'bin' );
+    }
+    return $Config{installscript};
 }
 
 sub _default_db_name {

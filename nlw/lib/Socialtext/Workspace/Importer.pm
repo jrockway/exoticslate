@@ -5,13 +5,13 @@ use strict;
 use warnings;
 
 use Encode::Guess qw( ascii iso-8859-1 utf8 );
-use FindBin;
 use File::chdir;
 use Cwd;
 use Socialtext::File::Copy::Recursive ();
 use Readonly;
 use Socialtext::SQL qw(sql_commit sql_execute sql_begin_work sql_rollback );
 use Socialtext::Validate qw( validate FILE_TYPE BOOLEAN_TYPE SCALAR_TYPE );
+use Socialtext::AppConfig;
 use Socialtext::Workspace;
 use Socialtext::Exceptions qw/rethrow_exception/;
 use Socialtext::Search::AbstractFactory;
@@ -253,10 +253,11 @@ sub _set_permissions {
     }
 }
 
-sub  _populate_db_metadata {
+sub _populate_db_metadata {
     my $self = shift;
-    # This code ass-u-mes we're being run by bin/st-admin
-    my $populator = "$FindBin::Bin/st-populate-page-table";
+
+    my $populator = Socialtext::AppConfig::bin_path() 
+                    . "/st-populate-page-table";
     Socialtext::Timer->Start('populate_db');
     local $Socialtext::System::SILENT_RUN = 1;
     shell_run("$populator --workspace $self->{new_name}");

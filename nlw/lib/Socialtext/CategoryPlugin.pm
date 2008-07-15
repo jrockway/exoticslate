@@ -29,6 +29,7 @@ sub Decode_category_email {
     $category =~ s/(?<=\w)_(?!_)/=20/g;
     $category =~ s/__/_/g;
     $category =~ s/=/%/g;
+    Encode::_utf8_off($category);
     $category = $class->uri_unescape($category);
     return $category;
 }

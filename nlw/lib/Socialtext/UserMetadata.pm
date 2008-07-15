@@ -298,6 +298,12 @@ has never logged in.
 Returns a C<Socialtext::User> object for the user which created this
 user.
 
+=head1 CLASS METHODS
+
+=head2 ResetUserCache()
+
+Clears the cache of UserId objects.
+
 =head1 AUTHOR
 
 Socialtext, Inc., <code@socialtext.com>

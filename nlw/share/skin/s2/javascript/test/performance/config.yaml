@@ -1,6 +1,5 @@
 index_title: Socialtext Javascript Testing
 import_libs:
-#   - ../ST.js
   - ../../../../../common/javascript/prototype-1.4.0/dist/prototype.js
   - ../../../pageview.js
   - ../../../../../common/javascript/jquery-1.2.1.pack.js

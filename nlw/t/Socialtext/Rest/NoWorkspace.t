@@ -3,12 +3,14 @@
 use strict;
 use warnings;
 use Test::More qw/no_plan/;
-use mocked 'Socialtext::Rest';
-use mocked 'Socialtext::Session';
-use mocked 'Socialtext::Workspace';
-use mocked 'Socialtext::AppConfig';
-use mocked 'Socialtext::Challenger';
+use mocked 'Socialtext::Authz';
 use mocked 'Socialtext::Permission';
+use mocked 'Socialtext::AppConfig';
+use mocked 'Socialtext::l10n';
+use mocked 'Socialtext::Workspace';
+use mocked 'Socialtext::Session';
+use mocked 'Socialtext::Rest';
+use mocked 'Socialtext::Challenger';
 use Socialtext::SQL;
 $Socialtext::SQL::DEBUG = 1;
 
@@ -22,8 +24,8 @@ Last_workspace_from_session: {
 
     my $rest = Socialtext::Rest->new;
     is $handler->handler($rest), '';
-    like $rest->{headers}{-Location}, qr#/workspace_1/#;
-    is $rest->{headers}{-status}, '302 Found';
+    like $rest->{header}{-Location}, qr#/workspace_1/#;
+    is $rest->{header}{-status}, '302 Found';
 }
 
 Read_breadcrumbs: {
@@ -35,8 +37,8 @@ Read_breadcrumbs: {
     );
     my $rest = Socialtext::Rest->new;
     is $handler->handler($rest), '';
-    like $rest->{headers}{-Location}, qr#/workspace_foo/#;
-    is $rest->{headers}{-status}, '302 Found';
+    like $rest->{header}{-Location}, qr#/workspace_foo/#;
+    is $rest->{header}{-status}, '302 Found';
 }
 
 Default_workspace: {
@@ -45,8 +47,8 @@ Default_workspace: {
     local $Socialtext::User::WORKSPACES = [ ];
     my $rest = Socialtext::Rest->new;
     is $handler->handler($rest), '';
-    like $rest->{headers}{-Location}, qr#/workspace_default/#;
-    is $rest->{headers}{-status}, '302 Found';
+    like $rest->{header}{-Location}, qr#/workspace_default/#;
+    is $rest->{header}{-status}, '302 Found';
 }
 
 Fall_through_to_help: {
@@ -56,7 +58,7 @@ Fall_through_to_help: {
     local $Socialtext::AppConfig::DEFAULT_WORKSPACE = undef;
     my $rest = Socialtext::Rest->new;
     is $handler->handler($rest), '';
-    like $rest->{headers}{-Location}, qr#/workspace_help/#;
-    is $rest->{headers}{-status}, '302 Found';
+    like $rest->{header}{-Location}, qr#/workspace_help/#;
+    is $rest->{header}{-status}, '302 Found';
 }
 

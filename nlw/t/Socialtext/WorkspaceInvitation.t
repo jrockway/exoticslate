@@ -9,9 +9,10 @@ BEGIN {
     unless ( eval { require Email::Send::Test; 1 } ) {
         plan skip_all => 'These tests require Email::Send::Test to run.';
     }
+    else {
+        plan tests => 19;
+    }
 }
-
-plan tests => 18;
 
 use Socialtext::User;
 use Socialtext::Workspace;

@@ -39,8 +39,6 @@ sub pages {
     return $self->{pages};
 }
 
-sub headers { $_[0]->{headers} || Socialtext::Headers->new };
-
 sub cgi { $_[0]->{cgi} || Socialtext::CGI->new }
 
 sub preferences_object { $_[0]->{preferences} || Socialtext::Preferences->new }

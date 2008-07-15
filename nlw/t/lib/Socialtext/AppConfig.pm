@@ -12,4 +12,6 @@ sub syslog_level { 1 }
 
 sub default_workspace { $DEFAULT_WORKSPACE }
 
+sub code_base { '/codebase' }
+sub script_name { '/scripts' }
 1;

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 210;
+use Test::Socialtext tests => 255;
 fixtures( 'admin_no_pages' );
 
 use_ok('Socialtext::EmailReceiver::Factory');
@@ -21,13 +21,7 @@ RECEIVE_STRING_SIMPLE: {
 
     allow_guest_email_in($ws);
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok(string => $email);
 
     tests_for_email();
 
@@ -49,13 +43,7 @@ RECEIVE_HANDLE_SIMPLE: {
 
     allow_guest_email_in($ws);
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    handle => $fh,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     tests_for_email();
 
@@ -103,13 +91,7 @@ Subject: Start Here
 
 This replaces the start here page.
 EOF
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('Start Here');
     isa_ok( $page, 'Socialtext::Page' );
@@ -129,13 +111,7 @@ Subject: Start Here
 
 This goes at the top.
 EOF
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('Start Here');
     like( $page->content(),
@@ -158,14 +134,7 @@ Subject: Start Here
 This goes at the bottom.
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
-
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('Start Here');
     isa_ok( $page, 'Socialtext::Page' );
@@ -191,13 +160,7 @@ Replace: 1
 This replaces the existing text.
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('Start Here');
     isa_ok( $page, 'Socialtext::Page' );
@@ -220,13 +183,7 @@ Append: Top
 And this goes at the top.
 EOF
     
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('Start Here');
     isa_ok( $page, 'Socialtext::Page' );
@@ -249,13 +206,7 @@ Subject: In New Cat
 Blah blah
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('In New Cat');
     isa_ok( $page, 'Socialtext::Page' );
@@ -276,13 +227,7 @@ Subject: In New Cat2
 Blah blah
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('In New Cat2');
     isa_ok( $page, 'Socialtext::Page' );
@@ -303,13 +248,7 @@ Subject: In New Cat3
 Blah blah
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('In New Cat3');
     isa_ok( $page, 'Socialtext::Page' );
@@ -329,13 +268,7 @@ Subject: utf8 category
 Blah blah
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $singapore = join '', map { chr($_) } 26032, 21152, 22369;
     my $singapore_category = "$singapore Weblog";
@@ -359,13 +292,7 @@ Subject: mixed case ws name
 Blah blah
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('mixed case ws name');
     isa_ok( $page, 'Socialtext::Page' );
@@ -392,13 +319,7 @@ category: Cat3
 Blah blah
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('Cats in Body');
     isa_ok( $page, 'Socialtext::Page' );
@@ -425,13 +346,7 @@ tag: Cat3
 Blah blah
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('Tags in Body');
     is_deeply(
@@ -454,13 +369,7 @@ Category: Cat1
 Blah blah
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('Cats in Body2');
     isa_ok( $page, 'Socialtext::Page' );
@@ -490,14 +399,7 @@ BAD_FLOWED_CATEGORIES: {
         open my $fh, '<', $file
             or die "Cannot read $file: $!";
 
-        my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    handle    => $fh,,
-                    workspace => $ws
-                });
-        $email_receiver->receive();
-
+        receive_ok( handle => $fh );
 
         my $page = $hub->pages()->new_from_name("Bad Format=Flowed Category $num");
         isa_ok( $page, 'Socialtext::Page' );
@@ -514,13 +416,7 @@ ONE_ATTACHMENT: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                handle    => $fh,,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('attachments');
     isa_ok( $page, 'Socialtext::Page' );
@@ -551,13 +447,7 @@ ATTACHMENT_DF_CHECK: {
     no warnings 'redefine', 'once';
     local *Filesys::DfPortable::dfportable = sub { return { bavail => 5 } };
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                handle    => $fh,,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('attachments');
     isa_ok( $page, 'Socialtext::Page' );
@@ -576,13 +466,7 @@ ATTACHED_IMAGE: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                handle    => $fh,,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('Attached Image');
     isa_ok( $page, 'Socialtext::Page' );
@@ -618,13 +502,7 @@ NESTED_MULTIPART_ATTACHMENT: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                handle    => $fh,,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $subject = 'Nested Multipart with Attachment';
 
@@ -652,13 +530,7 @@ BIG5_IN_BODY: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                handle    => $fh,,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('Big5 Email');
     isa_ok( $page, 'Socialtext::Page' );
@@ -678,13 +550,7 @@ TEXT_HTML_BODY_ONLY: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                handle    => $fh,,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('Text/HTML Body');
     isa_ok( $page, 'Socialtext::Page' );
@@ -712,13 +578,7 @@ MP_ALT_PREFER_PLAIN: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                handle    => $fh,,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('MP Alt');
     isa_ok( $page, 'Socialtext::Page' );
@@ -751,13 +611,7 @@ MP_ALT_PREFER_HTML: {
 
     $ws->update( prefers_incoming_html_email => 1 );
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                handle    => $fh,,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('MP Alt');
     isa_ok( $page, 'Socialtext::Page' );
@@ -795,13 +649,7 @@ GMAIL_HTML_MAIL: {
 
     $ws->update( prefers_incoming_html_email => 1 );
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                handle    => $fh,,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('Gmail HTML');
     isa_ok( $page, 'Socialtext::Page' );
@@ -827,13 +675,7 @@ Date: Thu, 20 Jul 2006 12:00:00
 
 No subject
 EOF
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                string    => $email,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok(string => $email);
 
     my $subject = 'Mail from devnull1, Thu, 20 Jul 2006 12:00:00';
 
@@ -848,13 +690,7 @@ UTF8_SUBJECT_AND_BODY: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                    {
-                        locale => $test_locale,
-                        handle    => $fh,
-                        workspace => $ws
-                    });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $subject = Encode::decode( 'utf8', "HÉY" );
 
@@ -877,13 +713,7 @@ CID_IMG_URIS: {
 
     $ws->update( prefers_incoming_html_email => 1 );
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                    {
-                        locale => $test_locale,
-                        handle    => $fh,
-                        workspace => $ws
-                    });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('HTML with cid: image');
     isa_ok( $page, 'Socialtext::Page' );
@@ -919,13 +749,7 @@ FOWARDED_HTML_EMAIL: {
 
     $ws->update( prefers_incoming_html_email => 1 );
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                    {
-                        locale => $test_locale,
-                        handle    => $fh,
-                        workspace => $ws
-                    });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('Forwarded gmail');
     isa_ok( $page, 'Socialtext::Page' );
@@ -952,13 +776,7 @@ No subject
 EOF
 
     eval {
-        my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                    {
-                       locale => $test_locale,
-                       string    => $email,
-                       workspace => $ws
-                    });
-        $email_receiver->receive();
+        receive_ok( string => $email );
     };
 
     ok( $@, 'exception was thrown delivering mail from guest to admin' );
@@ -975,13 +793,7 @@ No subject
 EOF
 
     eval {
-        my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                    {
-                       locale => $test_locale,
-                       string    => $email,
-                       workspace => $ws
-                    });
-        $email_receiver->receive();
+        receive_ok( string => $email );
     };
 
     ok( $@, 'exception was thrown delivering mail from authenticated user to admin' );
@@ -1021,13 +833,7 @@ Subject: 日本語タイトル
 abcdefg
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('日本語タイトル');
     isa_ok( $page, 'Socialtext::Page' );
@@ -1044,13 +850,7 @@ Subject: 日本語ﾀｲﾄﾙ
 abcdefg
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('日本語ﾀｲﾄﾙ');
     isa_ok( $page, 'Socialtext::Page' );
@@ -1067,13 +867,7 @@ Subject: Start Here by Japanese 1
 日本語ボディ
 EOF
     
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('Start Here by Japanese 1');
     like( $page->content(), qr/\Q日本語ボディ\E/,
@@ -1089,13 +883,7 @@ Subject: Start Here by Japanese 2
 日本語ﾎﾞﾃﾞｨ
 EOF
     
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('Start Here by Japanese 2');
     like( $page->content(), qr/\Q日本語ﾎﾞﾃﾞｨ\E/,
@@ -1111,13 +899,7 @@ Subject: In New Cat by Japanese
 Blah blah
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('In New Cat by Japanese');
     isa_ok( $page, 'Socialtext::Page' );
@@ -1138,13 +920,7 @@ Subject: In New Cat2 by Japanese
 Blah blah
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('In New Cat2 by Japanese');
     isa_ok( $page, 'Socialtext::Page' );
@@ -1168,13 +944,7 @@ category: タグ３
 Blah blah
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('Cats in Body by Japanese');
     isa_ok( $page, 'Socialtext::Page' );
@@ -1201,13 +971,7 @@ tag: タグ３
 Blah blah
 EOF
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-                {
-                    locale => $test_locale,
-                    string    => $email,
-                    workspace => $ws
-                });
-    $email_receiver->receive();
+    receive_ok( string => $email );
 
     my $page = $hub->pages()->new_from_name('Tags in Body by Japanese');
     is_deeply(
@@ -1225,13 +989,7 @@ ONE_ATTACHMENT_JA: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                handle    => $fh,,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('添付ファイル１');
     isa_ok( $page, 'Socialtext::Page' );
@@ -1259,13 +1017,7 @@ ATTACHED_IMAGE_JA: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                handle    => $fh,,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('添付ファイル２');
     isa_ok( $page, 'Socialtext::Page' );
@@ -1287,13 +1039,7 @@ TEXT_HTML_BODY_ONLY_JA: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                handle    => $fh,,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('Text/HTML Body by Japanese');
     isa_ok( $page, 'Socialtext::Page' );
@@ -1321,13 +1067,7 @@ TEXT_HTML_BODY_DIALECT: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    my $email_receiver = Socialtext::EmailReceiver::Factory->create(
-            {
-                locale => $test_locale,
-                handle    => $fh,,
-                workspace => $ws
-            });
-    $email_receiver->receive();
+    receive_ok( handle => $fh );
 
     my $page = $hub->pages()->new_from_name('Text/HTML Dialect');
     isa_ok( $page, 'Socialtext::Page' );
@@ -1462,4 +1202,16 @@ TEXT_HTML_BODY_DIALECT: {
     like( $page->content(),
               qr{Definition List},
                         'page contains expected HTML content as wikitext' );
+}
+
+sub receive_ok {
+    my $args = {
+        locale => $test_locale,
+        workspace => $ws,
+        @_
+    };
+    my $email_receiver = Socialtext::EmailReceiver::Factory->create($args);
+    isa_ok( $email_receiver, 'Socialtext::EmailReceiver::ja' );
+    $email_receiver->receive();
+    return;
 }

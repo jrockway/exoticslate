@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use Encode::Guess qw( ascii iso-8859-1 utf8 );
+use FindBin;
 use File::chdir;
 use Cwd;
 use Socialtext::File::Copy::Recursive ();
@@ -254,7 +255,8 @@ sub _set_permissions {
 
 sub  _populate_db_metadata {
     my $self = shift;
-    my $populator = "st-populate-page-table";
+    # This code ass-u-mes we're being run by bin/st-admin
+    my $populator = "$FindBin::Bin/st-populate-page-table";
     Socialtext::Timer->Start('populate_db');
     local $Socialtext::System::SILENT_RUN = 1;
     shell_run("$populator --workspace $self->{new_name}");

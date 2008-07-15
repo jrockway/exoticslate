@@ -14,10 +14,10 @@ use Test::Socialtext;
 use Socialtext::AppConfig;
 use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
 
-plan tests => 7;
 fixtures('admin_no_pages'); # we need some users
 
 BEGIN {
+    plan tests => 8;
     use_ok 'Socialtext::CredentialsExtractor';
 }
 

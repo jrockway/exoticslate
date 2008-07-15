@@ -4,11 +4,12 @@
 use strict;
 use warnings;
 
+use mocked 'Apache::Request';
+use mocked 'Apache::Cookie';
+
 use MIME::Base64;
 use Test::Socialtext;
 use Socialtext::User;
-use mocked 'Apache::Request';
-use mocked 'Apache::Cookie';
 
 BEGIN {
     plan tests => 4;

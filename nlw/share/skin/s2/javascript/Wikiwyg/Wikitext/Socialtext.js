@@ -1281,13 +1281,13 @@ proto.convert_html_to_wikitext = function(html) {
         // jQuery().replaceWith considered dangerous in IE.
         // It was causing stack overflow.
         if ($.browser.msie) {
-            var elems = dom.getElementsByTagName("div");
+            var elems = dom.getElementsByTagName('div');
             for (var i = 0, l = elems.length; i < l; i++) {
                 if (elems[i].className != 'wiki') continue;
-                var span = document.createElement('span');
-                span.innerHTML = elems[i].innerHTML + '<br>\n';
+                var div = document.createElement('div');
+                div.innerHTML = elems[i].innerHTML + '<br>\n';
                 elems[i].parentNode.replaceChild(
-                    span,
+                    div,
                     elems[i]
                 );
             }

@@ -25,8 +25,8 @@ use warnings;
 #    render $new_page
 #    check value of current_workspace on hub is foo
 
-use Test::Socialtext 'no_plan';
 use mocked 'Apache::Cookie';
+use Test::Socialtext 'no_plan';
 
 BEGIN { use_ok("Socialtext::Search::KinoSearch::Factory") }
 fixtures( 'admin_no_pages', 'foobar' );

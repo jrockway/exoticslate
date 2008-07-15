@@ -156,7 +156,7 @@ _THERE_IS_AN_EDIT_CONTENTION_different_revision_ids_same_content: {
     $page->store(user => $hub->current_user);
 
     my $return = $hub->edit->_there_is_an_edit_contention($page, $previous_revision);
-    is($return, 0, 'No edit contention');
+    ok !$return, 'No edit contention';
 }
 
 SAVE: {

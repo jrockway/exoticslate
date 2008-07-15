@@ -13,7 +13,6 @@ use Socialtext::l10n qw(loc);
 sub class_id { 'new_form_page' }
 const class_title => 'New Form Page';
 
-const template_base_path => 'new_form_page';
 const cgi_class => 'Socialtext::NewFormPage::CGI';
 
 sub register {
@@ -24,11 +23,18 @@ sub register {
     $registry->add(action => 'new_form_page_process');
 }
 
+sub template_path {
+    my $self = shift;
+    return join '/',
+        $self->hub->skin->skin_path('s2'),
+        'template/new_form_page',
+        @_;
+}
+
 sub new_form_page {
     my $self = shift;
     $self->_render(
-        template_base_path() . '/new_form_page_input.html',
-#        $self->screen_template,
+        'new_form_page_input.html',
         display_title => loc('Create Your Profile'),
         self => $self,
         $self->cgi->all,
@@ -88,8 +94,8 @@ sub _render {
             @_,
         },
         paths => [
-            $self->template_base_path . '/' . $self->cgi->form_id,
-            $self->template_base_path,
+            $self->template_path($self->cgi->form_id),
+            $self->template_path,
         ],
     );
 }
@@ -127,11 +133,7 @@ sub html {
 
 sub form_exists {
     my $self = shift;
-    -d (
-        $self->hub->skin->skin_path('s2') . '/template/' .
-        $self->hub->new_form_page->template_base_path . '/'
-        . shift
-    );
+    $self->hub->new_form_page->template_path(shift) ? 1 : 0;
 }
 
 package Socialtext::NewFormPage::CGI;

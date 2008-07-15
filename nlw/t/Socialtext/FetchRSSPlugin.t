@@ -6,12 +6,12 @@ use Test::More;
 use mocked 'Socialtext::Hub';
 use Socialtext::File qw/get_contents/;
 
-my $have_net_access = $ENV{NLW_TEST_FETCHRSS} || $ENV{NLW_TEST_NETWORK};
-my $tests = 6;
-my $net_tests = $have_net_access ? 1 : 0;
-plan tests => $tests + $net_tests;
-
+my $have_net_access;
 BEGIN {
+    $have_net_access = $ENV{NLW_TEST_FETCHRSS} || $ENV{NLW_TEST_NETWORK};
+    my $tests = 7;
+    my $net_tests = $have_net_access ? 1 : 0;
+    plan tests => $tests + $net_tests;
     use_ok 'Socialtext::FetchRSSPlugin';
 }
 

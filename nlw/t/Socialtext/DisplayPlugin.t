@@ -3,8 +3,8 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 7;
 use mocked 'Apache::Cookie';
+use Test::Socialtext tests => 7;
 fixtures( 'admin' );
 
 BEGIN {

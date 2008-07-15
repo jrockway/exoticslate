@@ -238,7 +238,9 @@ sub _create_dummy_current_for_data_validation_error {
 sub template_render {
     my $self = shift;
     my %args = @_;
-    $args{paths} = $self->hub->skin->template_paths;
+    my $paths = $self->hub->skin->template_paths;
+    push @$paths, @{$args{paths}} if ref $args{paths} eq 'ARRAY';
+    $args{paths} = $paths;
     my $renderer = Socialtext::TT2::Renderer->instance;
     return $renderer->render(%args);
 }

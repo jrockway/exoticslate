@@ -8,7 +8,7 @@ use HTML::Scrubber;
 
 field 'scrubber', -init => 'HTML::Scrubber->new';
 
-my %dont_scrub = map { $_ => 1 } qw(page_body content);
+my %dont_scrub = map { $_ => 1 } qw(page_body content comment);
 
 sub param {
     my $self = shift;

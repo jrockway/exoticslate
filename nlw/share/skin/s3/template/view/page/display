@@ -162,7 +162,6 @@
         </ul>   
     </div><!-- bottomButtons -->
 </div><!-- contentContainer -->
-[% END %]
 
 <div style="display:none" id="st-attachments-attachinterface">
     <div id="st-attachments-attach-attachinterface-overlay"></div>
@@ -196,3 +195,4 @@
     </div>
     </div>
 </div>
+[% END %]

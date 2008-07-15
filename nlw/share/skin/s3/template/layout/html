@@ -1,7 +1,7 @@
 [% USE html_encode %]
 [% USE decorate %]
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <!--doc version: 6-10-08h-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
       [% FILTER decorate "head" %]
         <title>[% title || display_title %] / [% wiki.title %]</title>
@@ -31,17 +31,6 @@
         </script>
 
         [% INCLUDE "element/wiki/js-bootstrap" %]
-
-[% IF 0 %]
-
-        [% combined_file = 'socialtext-other' %]
-        [% IF page_action == 'display' %]
-            [% combined_file = "socialtext-display" %]
-        [% END %]
-        <script type="text/javascript" charset="utf-8"
-            src="[% wiki.skin_uri('s2') %]/javascript/[% combined_file %].js.gz">
-        </script>
-[% END %]
 
         <meta name="keywords" content="[% loc('Confluence wiki, Enterprise 2.0 wiki, Mediawiki, Microsoft wiki, Sharepoint wiki, Twiki, Web 2.0 wiki, business wiki, document management, enterprise wiki, intranet wiki, knowledge management, online collaboration, open source wiki, portal wiki, hosted wiki, project collaboration, team collaboration, wiki appliance, wiki software') %]"/>
         [% END %]

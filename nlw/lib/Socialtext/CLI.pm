@@ -83,7 +83,7 @@ sub run {
             $self->_check_privs();
         }
         else {
-            $self->_drop_privs();
+            Drop_privs();
         }
     }
 
@@ -115,7 +115,7 @@ EOF
     _exit(1);
 }
 
-sub _drop_privs {
+sub Drop_privs {
     my ( $uid, $gid )
         = ( stat Socialtext::AppConfig->data_root_dir() )[ 4, 5 ];
 

@@ -15,10 +15,9 @@ $files{'css/styles.css'} = 'css/styles.css';
 $files{'css/ieStyles.css'} = 'css/ieStyles.css';
 
 my %ids = (
-    contentPage => 'socialtext-wiki',
     contentRight => 'st-page-boxes',
-    contentLeft => 'st-page-maincontent',
-    contentWrap => 'st-display-mode-container',
+    contentLeft  => 'st-page-maincontent',
+    contentWrap  => 'st-display-mode-container',
     controlsLeft => 'st-editing-tools-edit',
 );
 

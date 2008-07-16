@@ -35,7 +35,7 @@
         <meta name="keywords" content="[% loc('Confluence wiki, Enterprise 2.0 wiki, Mediawiki, Microsoft wiki, Sharepoint wiki, Twiki, Web 2.0 wiki, business wiki, document management, enterprise wiki, intranet wiki, knowledge management, online collaboration, open source wiki, portal wiki, hosted wiki, project collaboration, team collaboration, wiki appliance, wiki software') %]"/>
         [% END %]
     </head>
-    <body id="socialtext-wiki">
+    <body id="[% id || 'socialtext-wiki' %]">
         <div id="mainWrap">
             <div id="header" class="st-wiki-nav">
                 <div id="logo"><a href="[% home_href | decorate('home_href') %]">[% loc('Socialtext') %]</a></div><!-- logo END -->

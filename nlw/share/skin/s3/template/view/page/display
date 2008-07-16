@@ -1,7 +1,4 @@
-[% WRAPPER layout/html
-    box_javascript = 1,
-    page_action = 'display',
-%]
+[% WRAPPER layout/html id="contentPage" %]
 <div id="controls">
     <div id="st-editing-tools-edit">
         <ul>

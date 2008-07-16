@@ -44,15 +44,16 @@ my %opt_specs;
 # allow for command to be run from -outside- of the current branch
 #
 # NOTE: it *must* be a relative path, otherwise TT2 chokes on it.
-my $inc;
-foreach my $maybe ("$ENV{ST_CURRENT}/nlw/build", "$ENV{ST_SRC_BASE}/current/nlw/build", 'build') {
+my $inc = 'build';
+foreach my $maybe (
+        $ENV{ST_CURRENT} ? "$ENV{ST_CURRENT}/nlw/build" : (), 
+        $ENV{ST_SRC_BASE} ? "$ENV{ST_SRC_BASE}/current/nlw/build" : (),
+        ) {
     if (-d $maybe) {
         $inc = File::Spec->abs2rel($maybe);
+        die "unable to locate 'build' directory!" unless -d $inc;
         last;
     }
-}
-unless (-d $inc) {
-    die "unable to locate 'build' directory!";
 }
 
 # These passthru options are options from the original call to

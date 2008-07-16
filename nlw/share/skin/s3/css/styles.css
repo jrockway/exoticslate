@@ -80,20 +80,20 @@ div.clear {
 	clear: both;
 }
 
-div#st-display-mode-container {
+div#mainWrap {
 	min-width: 720px;
 }
 
 
-body#dashboard div#st-display-mode-container,body#blog div#st-display-mode-container {
+body#dashboard div#mainWrap,body#blog div#mainWrap {
        min-width: 795px;
 }
 
-body#listPage div#st-display-mode-container {
+body#listPage div#mainWrap {
 	min-width: 800px;
 }
 
-div#st-display-mode-container {
+div#mainWrap {
 	width: 90%;
 	margin: 0 auto;
 	text-align: left;
@@ -246,7 +246,7 @@ div#mainNav div#workSpaceLink a:hover {
 /* mainNav End */
 
 /* contentWrap Start */
-div#contentWrap {
+div#st-display-mode-container {
 	width: 100%;
 	margin-top: 4px;
 }	
@@ -255,7 +255,7 @@ div#contentWrap {
 
 /* tabs Start */
 	
-div#contentWrap div#tabs {
+div#st-display-mode-container div#tabs {
 	height: 41px;
 	background: url(../images/tabTile.png) repeat-x top left;
 }	
@@ -368,7 +368,7 @@ body#dashboard div#controls,body#blog div#controls {
 	background: url(../images/dashControlsTile.png) repeat-x top left;
 }
 
-div#controls div#controlsLeft {
+div#controls div#st-editing-tools-edit {
 	background: url(../images/controlsLeft.png) no-repeat top left;
 	float: left;
 	width: 60%;
@@ -376,28 +376,28 @@ div#controls div#controlsLeft {
 }
 
 
-div#controls div#controlsLeft {
+div#controls div#st-editing-tools-edit {
        width: auto !important;
 }
 
-body#socialtext-wiki div#controls div#controlsLeft,body#settingsPage div#controls div#controlsLeft {
+body#socialtext-wiki div#controls div#st-editing-tools-edit,body#settingsPage div#controls div#st-editing-tools-edit {
 	background: url(../images/contentControlsLeft.png) no-repeat top left;
 	height: 44px;
 	padding-left: 8px;
 }
 
 
-body#listPage div#controls div#controlsLeft {
+body#listPage div#controls div#st-editing-tools-edit {
 	padding-left: 8px;
 }
 
-body#dashboard div#controls div#controlsLeft,body#blog div#controls div#controlsLeft {
+body#dashboard div#controls div#st-editing-tools-edit,body#blog div#controls div#st-editing-tools-edit {
 	background: url(../images/dashControlsLeft.png) no-repeat top left;
 	height: 83px;
 	width: 80%;
 }
 
-div#controls div#controlsLeft ul {
+div#controls div#st-editing-tools-edit ul {
 	float: left;
 	height: 41px;
 }
@@ -407,36 +407,36 @@ ul.buttonRight {
 	padding-left: 10px;
 }
 
-div#controls div#controlsLeft ul li {
+div#controls div#st-editing-tools-edit ul li {
 	float: left;
 	line-height: 41px;
 }
 
-body#dashboard div#controls div#controlsLeft h1,body#blog div#controls div#controlsLeft h1 {
+body#dashboard div#controls div#st-editing-tools-edit h1,body#blog div#controls div#st-editing-tools-edit h1 {
 	font-size: 20px;
 	margin:21px 0 0 21px;}
 	
-body#dashboard div#controls div#controlsLeft ul#quickLinks,body#blog div#controls div#controlsLeft ul#quickLinks {
+body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks,body#blog div#controls div#st-editing-tools-edit ul#quickLinks {
 	margin: 15px 0 0 21px;
 }	
 
 
-body#dashboard div#st-display-mode-container div#contentWrap div#controls div#controlsLeft ul#quickLinks,body#blog div#st-display-mode-container div#contentWrap div#controls div#controlsLeft ul#quickLinks {
+body#dashboard div#mainWrap div#st-display-mode-container div#controls div#st-editing-tools-edit ul#quickLinks,body#blog div#mainWrap div#st-display-mode-container div#controls div#st-editing-tools-edit ul#quickLinks {
        height: auto;
 }
 
-body#dashboard div#controls div#controlsLeft ul#quickLinks li,body#blog div#controls div#controlsLeft ul#quickLinks li {
+body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks li,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li {
 	line-height: normal;
 	padding: 0 10px 0 10px;
 	border-right: #8b8b8b 1px dotted;
 }	
 
 
-body#dashboard div#controls div#controlsLeft ul#quickLinks li.noBorder,body#blog div#controls div#controlsLeft ul#quickLinks li.noBorder {
+body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks li.noBorder,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li.noBorder {
 	border-right: none;
 }
 
-body#dashboard div#controls div#controlsLeft ul#quickLinks li a,body#blog div#controls div#controlsLeft ul#quickLinks li a {
+body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks li a,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li a {
 	display: inline;
 	line-height: normal;
 	position: static;
@@ -444,28 +444,28 @@ body#dashboard div#controls div#controlsLeft ul#quickLinks li a,body#blog div#co
 }	
 
 
-body#dashboard div#controls div#controlsLeft ul#quickLinks li.quickTitle,body#blog div#controls div#controlsLeft ul#quickLinks li.quickTitle {
+body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks li.quickTitle,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li.quickTitle {
 	border: none;
 	padding: 0 0 0 10px;
 }
 
-body#dashboard div#controls div#controlsLeft ul#quickLinks li img,body#blog div#controls div#controlsLeft ul#quickLinks li img {
+body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks li img,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li img {
 	float: left;
 	margin-right: 5px;
 }
 
-body#socialtext-wiki div#controls div#controlsLeft ul li,body#settingsPage div#controls div#controlsLeft ul li {
+body#socialtext-wiki div#controls div#st-editing-tools-edit ul li,body#settingsPage div#controls div#st-editing-tools-edit ul li {
 	line-height: 44px;
 }
 
-div#controls div#controlsLeft ul li a {
+div#controls div#st-editing-tools-edit ul li a {
 	float: left;
 	position: relative;
 	top: 10px;
 	margin-left: 10px;
 }
 
-body#socialtext-wiki div#controlsLeft ul li a,body#settingsPage div#controlsLeft ul li a {
+body#socialtext-wiki div#st-editing-tools-edit ul li a,body#settingsPage div#st-editing-tools-edit ul li a {
 	top: 13px;
 }
 

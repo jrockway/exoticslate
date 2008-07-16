@@ -18,7 +18,8 @@ my %ids = (
     contentPage => 'socialtext-wiki',
     contentRight => 'st-page-boxes',
     contentLeft => 'st-page-maincontent',
-    mainWrap => 'st-display-mode-container',
+    contentWrap => 'st-display-mode-container',
+    controlsLeft => 'st-editing-tools-edit',
 );
 
 my %done;

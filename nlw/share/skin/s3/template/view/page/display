@@ -3,7 +3,7 @@
     page_action = 'display',
 %]
 <div id="controls">
-    <div id="controlsLeft">
+    <div id="st-editing-tools-edit">
         <ul>
             [% IF checker.check_permission('edit') %]
             <li><a title="[% loc('Click this button to edit the page') %]" id="st-edit-button-link" class="editButton" href="#">[% loc('Edit') %]</a></li>
@@ -16,7 +16,7 @@
             <li><a class="newPageButton" href="#">New Page</a></li>
             <li><a class="watchButton" href="#">Watch this Page</a></li>
         </ul>                                   
-    </div><!-- controlsLeft END -->
+    </div><!-- st-editing-tools-edit END -->
 
     <!-- XXX: move this somewhere or style it in screen.css -->
     <div style="float:left;position:relative;padding:11px;display:none" id="bootstrap-loader">

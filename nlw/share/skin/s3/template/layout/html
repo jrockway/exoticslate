@@ -36,7 +36,7 @@
         [% END %]
     </head>
     <body id="socialtext-wiki">
-        <div id="st-display-mode-container">
+        <div id="mainWrap">
             <div id="header" class="st-wiki-nav">
                 <div id="logo"><a href="[% home_href | decorate('home_href') %]">[% loc('Socialtext') %]</a></div><!-- logo END -->
                 <div id="globalNav" class="st-wiki-nav-content">
@@ -72,7 +72,7 @@
                     <a href="#">You Workspaces</a>
                 </div><!-- workSpaceLink END -->
             </div><!-- mainNav END -->
-            <div id="contentWrap" class="st-content">  	
+            <div id="st-display-mode-container" class="st-content">  	
                 [% content %]
                 <div id="footer">
                     <div id="footerLinks">

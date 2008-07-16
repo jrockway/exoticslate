@@ -131,50 +131,6 @@ var load_ui = function(cb) {
     setTimeout(loader, 500);
 };
 
-var bootstrap2 = function(cb) {
-    if (Socialtext.boostrap_ui_finished == true)  {
-        cb.call(this);
-        return;
-    }
-
-    jQuery(window).trigger("boostrapping");
-
-    load_ui.call(this, function() {
-        console.log('load_ui cb');
-        if (Socialtext.page_type == 'spreadsheet') {
-            load_socialcalc.call(this, function() {
-                cb.call(this);
-                jQuery(window).trigger("bootstrapped");
-            });
-        }
-        else {
-            window.setup_wikiwyg();
-            cb.call(this);
-            jQuery(window).trigger("bootstrapped");
-        }
-    });
-};
-
-var bootstrap = function(cb) {
-    return function() { bootstrap2.call(this, cb); };
-};
-
-var start_editor = function() {
-    // This setTimeout is required to get around of 
-    // some simple mode bug in IE and FF.
-    setTimeout(function() {
-        if (Socialtext.page_type == 'spreadsheet' && Socialtext.wikiwyg_variables.hub.current_workspace.enable_spreadsheet) {
-            jQuery("#st-all-footers, #st-display-mode-container").hide();
-            jQuery("#st-edit-mode-container, #st-editing-tools-edit").show();
-            Socialtext.render_spreadsheet_editor();
-
-            return false;
-        }
-
-        window.wikiwyg.start_nlw_wikiwyg();
-    }, 0);
-}
-
 jQuery(function() {
     jQuery('#st-page-boxes-toggle-link')
         .bind('click', function() {
@@ -258,7 +214,18 @@ jQuery(function() {
             return false;
         });
 
+
+    var editor_uri = nlw_make_s3_path('/javascript/socialtext-editor.js')
+        .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
+
     jQuery("#st-edit-button-link,#st-edit-actions-below-fold-edit")
         .addClass("bootstrapper")
-        .one("click", bootstrap(start_editor));
+        .one("click", function () {
+            jQuery('#bootstrap-loader').show();
+            jQuery.ajaxSettings.cache = true;
+            jQuery('<script>')
+                .attr('src', editor_uri)
+                .attr('language', 'javascript')
+                .appendTo('head');
+        });
 });

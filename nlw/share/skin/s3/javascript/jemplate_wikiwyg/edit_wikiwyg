@@ -1,0 +1,94 @@
+<div id="st-edit-mode-container" style="display: none">
+    <div id="controls">
+        <div id="st-editing-tools-edit">
+            <ul>
+                <li><a title="[% loc('Click this button to save the page') %]" id="st-save-button-link" class="saveButton" href="#">[% loc('Save') %]</a></li>
+                <li><a class="previewButton" id="st-preview-button-link" href="#">[% loc('Preview') %]</a></li>
+                <li><a class="commentButton" id="st-cancel-button-link" href="#">[% loc('Cancel') %]</a></li>
+            </ul>
+            <ul class="buttonRight">        
+                <li><a href="#" id="st-mode-wysiwyg-button" onclick="return false;">[% loc('Simple') %]</a></li>
+                <li><a href="#" id="st-mode-wikitext-button" onclick="return false;">[% loc('Advanced') %]</a></li>
+                <li><a href="#" style="display:none" id="st-edit-tips"
+                       onclick="help_popup('index.cgi?action=refcard', 680);return false;">[% loc('Edit Tips') %]</a>
+                </li>
+            </ul>                                   
+        </div><!-- st-editing-tools-edit END -->
+
+        <!-- XXX: move this somewhere or style it in screen.css -->
+        <div style="float:left;position:relative;padding:11px;display:none" id="bootstrap-loader">
+            [% loc("Loading...") %]
+            <img src="[% wiki.skin_uri("s2") %]/images/ajax-loader.gif">
+        </div>
+
+        <div id="controlsRight">
+            <ul>
+                <li><a class="print" href="#">Print</a></li>
+                <li><a class="email" href="#">Email</a></li>
+                <li class="last"><a class="tools" href="#">Tools</a></li>
+            </ul>
+        </div><!-- controlsRight END -->
+    </div><!-- controls END -->
+    <div id="st-edit-mode-view">
+        <div id="st-edit-border">
+        [% IF dropshadow.defined AND dropshadow %]
+            <div id="st-edit-border-left"><div id="st-edit-border-right"><div id="st-edit-border-top"><div id="st-edit-border-bottom">
+            <div id="st-edit-border-left-top"><div id="st-edit-border-right-top"><div id="st-edit-border-left-bottom"><div id="st-edit-border-right-bottom">
+        [% END %]
+            <div class="st-content" id="st-content-page-edit">
+            <div id="st-edit-mode-toolbar"
+                 style="clear:both; margin-top: 5px;">
+                <div id="st-page-editing">
+                    <div id="st-editing-prefix-container">
+                    <div id="st-editing-title">
+                        Editing:
+                        [% IF is_new %]
+                            <input type="text" size="65" id="st-newpage-pagename-edit" value="[% page.title | html_encode %]" onclick="Socialtext.clear_untitled(this)"/>
+                        [% ELSE %]
+                            [% page.display_title %]
+                        [% END %]
+                    </div>
+                    <div id="st-page-editing-toolbar-container">
+                    <div id="st-page-editing-toolbar"></div>
+                     <div id="st-page-editing-widget-menu">
+                        [% INCLUDE insert_widget_menu %]
+                    </div>
+                    <div id="st-page-editing-toolbar-closer"></div>
+                    <div id="st-page-editing-tagbutton">
+                        <a id="st-edit-mode-tagbutton" class="button" href="#" title="[% loc('Click this button to add a tag to the page') %]">[% loc('Add&nbsp;tags...') %]</a>
+                    </div>
+                    <div id="st-page-editing-uploadbutton">
+                        <a id="st-edit-mode-uploadbutton" class="button" href="#" title="[% loc('Click this button to upload a file to the page') %]">[% loc('Upload&nbsp;files...') %]</a>
+                    </div>
+                    </div>
+                    </div>
+                    <br style="clear: both; height: 1px;" />
+                    <form id="st-page-editing-form" name="st-page-editing-form" method="post" enctype="multipart/form-data" action="index.cgi">
+                        <input id="st-page-editing-pagename"  type="hidden" name="page_name" value="[% page.title | html_encode %]"/>
+                        <input id="st-page-editing-revisionid"  type="hidden" name="revision_id" value="[% page.revision_id %]" />
+                        <input id="st-page-editing-pagetype"  type="hidden" name="page_type" value="[% page.page_type %]" />
+                        <input id="st-page-editing-pagebody"  type="hidden" name="page_body" value="" />
+                        <input id="st-page-editing-action" type="hidden" name="action" value="edit_content" />
+                        <input id="st-page-editing-caller" type="hidden" name="caller_action" value="[% page.caller %]" />
+                        [% FOREACH tag = new_tags %]
+                        <input type="hidden" name="add_tag" value="[% tag %]" />
+                        [% END %]
+                        <input id="st-page-editing-append" type="hidden" name="append_mode" value="" />
+                        <textarea id="st-page-editing-pagebody-decoy" wrap="virtual" name="page_body_decoy"></textarea>
+                        <div style="display: none" id="st-page-editing-files"></div>
+                    </form>
+                    <iframe frameborder="0" id="st-page-editing-wysiwyg" src="[% wiki.static_path %]/html/blank.html"></iframe>
+                    <div id="st-page-preview"></div>
+                </div>
+            </div>
+            <div id="wikiwyg-page-content">
+            </div>
+            <br style="clear: both; height: 1px" />
+            </div>
+        [% IF dropshadow.defined AND dropshadow %]
+            </div></div></div></div>
+            </div></div></div></div>
+        [% END %]
+        </div>
+    </div>
+</div><!-- controls END -->

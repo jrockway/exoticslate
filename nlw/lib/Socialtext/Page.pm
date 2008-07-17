@@ -1102,6 +1102,18 @@ sub purge {
     );
 
     File::Path::rmtree($page_path);
+
+    my $hash    = $self->hash_representation;
+    my $wksp_id = $self->hub->current_workspace->workspace_id;
+
+    sql_begin_work();
+    sql_execute('DELETE FROM page WHERE workspace_id = ? and page_id = ?',
+        $wksp_id, $hash->{page_id}
+    );
+    sql_execute('DELETE FROM page_tag WHERE workspace_id = ? and page_id = ?',
+        $wksp_id, $hash->{page_id}
+    );
+    sql_commit();
 }
 
 Readonly my $ExcerptLength => 350;

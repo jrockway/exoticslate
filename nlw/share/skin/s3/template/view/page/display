@@ -7,7 +7,9 @@
             [% ELSIF checker.check_permission('edit_controls') %]
             <li><a title="[% loc('Click this button to edit the page') %]" id="st-login-to-edit-button-link" class="editButton" href="[% login_and_edit_path %]">[% loc('Edit') %]</a></li>
             [% END %]
-            <li><a class="commentButton" href="#">Comment</a></li>
+            [% IF checker.check_permission('comment') %]
+            <li><a id="st-comment-button-link" class="commentButton" href="#" title="[% loc('Click this button to add a comment to the page') %]">[% loc('Comment') %]</a></li>
+            [% END %]
         </ul>
         <ul class="buttonRight">        
             <li><a class="newPageButton" href="#">New Page</a></li>

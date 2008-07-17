@@ -13,11 +13,21 @@ files="
     listPage4.html
 "
 
+function get () {
+    wget http://clients.araucariadesign.com/Socialtext/wiki/$1 --user social --password guest -O $2
+}
+
 for i in $files; do
-    wget http://clients.araucariadesign.com/Socialtext/wiki/$i --user social --password guest -O html/$i
+    get $i html/$i
     sed -i 's/\t/    /g' html/$i
 done
 
-wget http://clients.araucariadesign.com/Socialtext/wiki/css/styles.css --user social --password guest -O css/styles.css
-wget http://clients.araucariadesign.com/Socialtext/wiki/css/ieStyles.css --user social --password guest -O css/ieStyles.css
+get css/styles.css css/styles.css
+get css/ieStyles.css css/ieStyles.css
+
 bin/fix-ids
+
+for image in `grep '/images/' css/styles.css css/ieStyles.css | sed 's/.*\/images\/\(\w*\.\w*\).*/\1/' | uniq`; do
+    get images/$image images/$image
+    continue;
+done

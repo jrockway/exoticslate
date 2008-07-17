@@ -218,8 +218,27 @@ jQuery(function() {
     var editor_uri = nlw_make_s3_path('/javascript/socialtext-editor.js')
         .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
 
+    jQuery("#st-comment-button-link")
+        .click(function () { 
+            var display_width = (window.offsetWidth ||
+                                 document.body.clientWidth ||
+                                 600
+                                );
+            window.open(
+                'index.cgi?action=enter_comment;page_name=' +
+                Socialtext.page_id + ';caller_action=display',
+                '_blank',
+                'toolbar=no, location=no, directories=no, status=no, ' +
+                'menubar=no, titlebar=no, scrollbars=yes, resizable=yes, ' +
+                'width=' + display_width + ', height=200, left=50, top=200'
+            );
+
+            if ( navigator.userAgent.toLowerCase().indexOf("safari") != -1 ) {
+                window.location.reload();
+            }
+        });
+
     jQuery("#st-edit-button-link,#st-edit-actions-below-fold-edit")
-        .addClass("bootstrapper")
         .one("click", function () {
             jQuery('#bootstrap-loader').show();
             jQuery.ajaxSettings.cache = true;

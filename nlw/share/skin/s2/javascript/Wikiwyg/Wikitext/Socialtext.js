@@ -1881,6 +1881,9 @@ proto.make_wikitext_link = function(label, href, elem) {
 
     if (this.is_renamed_hyper_link(elem)) {
         var link = this.get_wiki_comment(elem).data.
+            // The following line is a workaround for an apparent jQuery bug
+            // that I couldn't fix.
+            replace(/><\/http>\s$/, '/>').
             replace(/^\s*wiki-renamed-hyperlink\s*/, '').
             replace(/\s*$/, '').
             replace(/=-/g, '-');

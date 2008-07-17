@@ -52,6 +52,7 @@ SERVICE_SCRIPTS  = $(APACHE_SCRIPT) $(APACHE2_SCRIPT) $(CEQLOTRON_SCRIPT)
 
 # File sets that can be installed (use install-files to get all files)
 INSTALL_BASE = install-html       \
+	       install-template	  \
                install-fonts      \
                install-migrations \
                install-l10n \

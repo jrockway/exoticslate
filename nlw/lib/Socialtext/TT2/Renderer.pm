@@ -44,7 +44,7 @@ sub PreloadTemplates {
     my $class = shift;
 
     my $renderer = $class->instance();
-    my @paths = Socialtext::Skin->PreloadTemplateDirs;
+    my @paths = grep { -d $_ } Socialtext::Skin->PreloadTemplateDirs;
     local $CurrentPaths = \@paths;
 
     find(sub { _maybe_fetch($renderer) }, @paths);

@@ -16,10 +16,11 @@ my $workspace_hub = new_hub('admin');
 
 ceqlotron_run_synchronously();
 
+my $order_doesnt_matter = 1;
 run {
     my $case = shift;
     my $got = $workspace_hub->viewer->text_to_html($case->kwiki);
-    smarter_like($got, $case->htmlre, $case->name);
+    smarter_like($got, $case->htmlre, $case->name, $order_doesnt_matter);
 };
 
 __DATA__

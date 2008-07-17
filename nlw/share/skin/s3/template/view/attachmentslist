@@ -34,27 +34,14 @@
             <tr>
                 <th width="1%"><input type="checkbox" /></th>
                 <th class="toggle"><div class="toggle">
-                   [% loc('Show:') %]
-                   [% IF summaries %]
-                       <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=0" [% IF ! summaries %] class="selected" [% END %]>[% loc('Titles') %]</a> | 
-                       [% loc('Summaries') %]
-                   [% ELSE %]
-                       [% loc('Titles') %]
-                       <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
-                    [% END %]
                 </div></th>
                 <th class="sort">[% loc('Sort by:') %]
                     <select id="sort-picker" onchange="sort_by();">
-                        [% IF allow_relevance %]
-                            [% PROCESS sort_by_option name = loc('Relevance') field = 'Relevance' %]
-                        [% END %]
-                            [% PROCESS sort_by_option name = loc('Title') field = 'Subject' %]
-                        [% IF show_workspace %]
-                            [% PROCESS sort_by_option name = loc('Workspace') field = 'Workspace' %]
-                        [% END %]
-                        [% PROCESS sort_by_option name = loc('Last Edited By') field = 'From' %]
-                        [% PROCESS sort_by_option name = loc('Date') field = 'Date' %]
-                        [% PROCESS sort_by_option name = loc('Revisions') field = 'revision_count' %]
+                        [% PROCESS sort_by_option name = loc('Filename') field = 'filename' %]
+                        [% PROCESS sort_by_option name = loc('Page Title') field = 'subject' %]
+                        [% PROCESS sort_by_option name = loc('Uploaded By') field = 'user' %]
+                        [% PROCESS sort_by_option name = loc('Date Uploaded') field = 'date' %]
+                        [% PROCESS sort_by_option name = loc('Size') field = 'size' %]
                 </select>
                             </select>
                     </div>
@@ -71,14 +58,14 @@
             </tr>
             [% FOREACH row = rows %]
                 [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
-                <td><input type="checkbox" /></td>
-                <td colspan="2"><a class="titleLink" href="/[% row.workspace_name || current_workspace.name %]/index.cgi?[% row.page_uri %]">[% row.Subject %]</a>
-                [% IF row.workspace_title %][% loc('in') %] <a href="/[% row.workspace_name %]">[% row.workspace_title %]</a>[% END %]
-                [% IF summaries %]
-                    <span class="summary">[% row.Summary %]</span>
-                [% END %]
-                <em>(<a href="#">[% row.revision_count %]</a> [% loc('Revisions') %])
-                [% loc('Last updated by') %] [% row.username | decorate('user_link') %] [% loc('on') %] [% row.DateLocal %]</em></td>                    
+                <td><input value="[% row.page_uri %],[% row.id %]" type="checkbox" /></td>
+                <td colspan="2">
+                    [% row.link %] ([% row.human_readable_size %]), [% loc('attached to') %] <span class="[% row.style %]-row-title-attached-to query-results-row-title-attached-to">[% row.page_link %]</span>
+                [% loc('Uploaded by') %]
+                [% row.user | decorate('user_link') %]
+                [% loc('on') %]
+                [% row.date %]
+                </td>                    
                 </tr>
             [% END %]
         </table><!-- dataTable END -->

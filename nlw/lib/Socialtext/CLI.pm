@@ -79,17 +79,21 @@ sub run {
     }
 
     if ( $command ne 'help' ) {
-        if ($>) {
-            $self->_check_privs();
-        }
-        else {
-            Drop_privs();
-        }
+        Check_and_drop_privs();
     }
 
     $self->{command} = $command;
     Socialtext::Timer->Start("CLI_$command");
     $self->$command();
+}
+
+sub Check_and_drop_privs {
+    if ($>) {
+        _check_privs();
+    }
+    else {
+        _drop_privs();
+    }
 }
 
 sub _check_privs {
@@ -115,7 +119,7 @@ EOF
     _exit(1);
 }
 
-sub Drop_privs {
+sub _drop_privs {
     my ( $uid, $gid )
         = ( stat Socialtext::AppConfig->data_root_dir() )[ 4, 5 ];
 

@@ -1,5 +1,5 @@
 ALL_JS = \
-	 ../javascript/jquery-1.2.1.js \
+	 ../javascript/jquery-1.2.6.js \
 	 javascript/separator.js \
 	 javascript/noconflict.js \
 	 javascript/separator.js \

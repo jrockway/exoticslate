@@ -41,12 +41,14 @@ ALL_WIKIWYG_JEMPLATES:=$(shell find jemplate_wikiwyg)
 
 ALL_JEMPLATE_PLUGINS:=$(shell find JemplatePlugin -name \*.js)
 
+JQUERY=$(COMMON_JAVASCRIPT)/jquery-1.2.6.js
+
 DISPLAY_SOURCE_FILES= \
 		timestamp.js \
 		$(OTHER_DISPLAY_SOURCE_FILES) \
 
 OTHER_DISPLAY_SOURCE_FILES= \
-		$(COMMON_JAVASCRIPT)/jquery-1.2.3.js \
+		$(JQUERY) \
 		loc.js \
 		bootstrap-ui.js \
 		comment.js \
@@ -107,7 +109,7 @@ DISPLAY_UI_SOURCE_FILES= \
 		ui-last-source.js
 
 COMMENT_SOURCE_FILES= \
-		$(COMMON_JAVASCRIPT)/jquery-1.2.3.js \
+		$(JQUERY) \
 		loc.js \
 		bootstrap-ui.js \
 		$(COMMON_JAVASCRIPT)/prototype-1.4.0/dist/prototype.js \
@@ -122,7 +124,7 @@ STAX_SOURCE_FILES= \
 		Jemplate.js \
 
 OTHER_SOURCE_FILES= \
-		$(COMMON_JAVASCRIPT)/jquery-1.2.3.js \
+		$(JQUERY) \
 		loc.js \
 		bootstrap-ui.js \
 		main.js \

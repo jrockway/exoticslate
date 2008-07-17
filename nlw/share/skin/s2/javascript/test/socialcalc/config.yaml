@@ -2,7 +2,7 @@ index_title: SocialCalc Javascript Testing
 import_libs:
   - ../../../../../common/javascript/prototype-1.4.0/dist/prototype.js
   - ../../../pageview.js
-  - ../../../../../common/javascript/jquery-1.2.1.pack.js
+  - ../../../../../common/javascript/jquery-1.2.6.js
   - ../Test/Socialcalc.js
   - ../common/plugins/socialcalc/share/javascript/socialtext-socialcalc.js
 

@@ -24,7 +24,7 @@ JEMPLATE_MODULE=$(S2_JAVASCRIPT)/Wikiwyg/Jemplate.js
 JEMPLATE_WIKIWYG_MODULE=jemplate_wikiwyg.js
 
 S3_SOURCE_FILES= \
-		$(COMMON_JAVASCRIPT)/jquery-1.2.3.js \
+		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
 		$(S2_JAVASCRIPT)/loc.js \
 		cookie.js \
 		lightbox.js \

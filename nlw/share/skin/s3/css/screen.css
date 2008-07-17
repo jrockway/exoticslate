@@ -1,5 +1,9 @@
 @import url('styles.css');
 
+#wikiwyg_wikitext_textarea {
+    background-color: #FFFFDD !important;
+}
+
 /* Wafl Boxes */
 
 #st-page-content .wafl_container td {

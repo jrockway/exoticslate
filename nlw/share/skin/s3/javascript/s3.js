@@ -246,5 +246,11 @@ jQuery(function() {
                 .attr('src', editor_uri)
                 .attr('language', 'javascript')
                 .appendTo('head');
+            jQuery('<link>')
+                .attr('href', nlw_make_s3_path('/css/wikiwyg.css'))
+                .attr('rel', 'stylesheet')
+                .attr('media', 'wikiwyg')
+                .attr('type', 'text/css')
+                .appendTo('head');
         });
 });

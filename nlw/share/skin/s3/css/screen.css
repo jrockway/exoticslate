@@ -509,16 +509,10 @@ div#st-pagetools ul.level2 {
     font-weight: bold;
 }
 
-#st-page-editing-toolbar-container {
-    height: 29px;
-    background: transparent url("../../s2/images/wikiwyg_icons/background-left.gif") no-repeat left top;
-}
-
 #st-page-editing-toolbar-closer {
     float: right;
     height: 29px;
     width: 20px;
-    background: transparent url("../../s2/images/wikiwyg_icons/background-right.gif") no-repeat right top;
 }
 
 #st-editing-prefix-container {

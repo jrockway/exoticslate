@@ -3,7 +3,7 @@
         <div id="st-editing-tools-edit">
             <ul>
                 <li><a title="[% loc('Click this button to save the page') %]" id="st-save-button-link" class="saveButton" href="#">[% loc('Save') %]</a></li>
-                <li><a class="previewButton" id="st-preview-button-link" href="#">[% loc('Preview') %]</a></li>
+                <li style="display:none"><a class="previewButton" id="st-preview-button-link" href="#">[% loc('Preview') %]</a></li>
                 <li><a class="commentButton" id="st-cancel-button-link" href="#">[% loc('Cancel') %]</a></li>
             </ul>
             <ul class="buttonRight">        
@@ -30,24 +30,22 @@
         </div><!-- controlsRight END -->
     </div><!-- controls END -->
     <div id="st-edit-mode-view">
-        <div id="st-edit-border">
-        [% IF dropshadow.defined AND dropshadow %]
-            <div id="st-edit-border-left"><div id="st-edit-border-right"><div id="st-edit-border-top"><div id="st-edit-border-bottom">
-            <div id="st-edit-border-left-top"><div id="st-edit-border-right-top"><div id="st-edit-border-left-bottom"><div id="st-edit-border-right-bottom">
-        [% END %]
+        <div id="contentContainer">
+            <div id="contentTitle">
+                <h2 id="st-editing-title" class="tableTitle">
+                    Editing:
+                    [% IF is_new %]
+                        <input type="text" size="65" id="st-newpage-pagename-edit" value="[% page.title | html_encode %]" onclick="Socialtext.clear_untitled(this)"/>
+                    [% ELSE %]
+                        [% page.display_title %]
+                    [% END %]
+                </h2>
+            </div>
             <div class="st-content" id="st-content-page-edit">
             <div id="st-edit-mode-toolbar"
                  style="clear:both; margin-top: 5px;">
                 <div id="st-page-editing">
                     <div id="st-editing-prefix-container">
-                    <div id="st-editing-title">
-                        Editing:
-                        [% IF is_new %]
-                            <input type="text" size="65" id="st-newpage-pagename-edit" value="[% page.title | html_encode %]" onclick="Socialtext.clear_untitled(this)"/>
-                        [% ELSE %]
-                            [% page.display_title %]
-                        [% END %]
-                    </div>
                     <div id="st-page-editing-toolbar-container">
                     <div id="st-page-editing-toolbar"></div>
                      <div id="st-page-editing-widget-menu">
@@ -85,10 +83,6 @@
             </div>
             <br style="clear: both; height: 1px" />
             </div>
-        [% IF dropshadow.defined AND dropshadow %]
-            </div></div></div></div>
-            </div></div></div></div>
-        [% END %]
         </div>
     </div>
 </div><!-- controls END -->

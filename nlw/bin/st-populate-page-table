@@ -202,7 +202,7 @@ sub editor_to_id {
         # there are some 'email addresses' in the system that aren't email
         # addresses at all, be sure to check for that and return a reasonable
         # default, the System User.
-        return '1' unless Email::Valid->address( $email );
+        return '1' unless Email::Valid->address( $editor );
 
         # Load or create a new user with the given email address.
         my $user = Socialtext::User->new(email_address => $editor );

@@ -9,6 +9,13 @@ use Test::Socialtext::Bootstrap::OpenLDAP;
 use Test::Socialtext tests => 34;
 
 ###############################################################################
+# FIXTURE: rdbms_clean
+#
+# Need the most minimal of fixtures set up, so that we've got config files
+# and test directories created.
+fixtures( 'rdbms_clean' );
+
+###############################################################################
 # Authenticate, with LDAP referrals enabled; should succeed
 authenticate_with_referrals: {
     diag "TEST: authenticate_with_referrals";

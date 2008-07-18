@@ -141,15 +141,23 @@ sub _default_code_base {
     );
 }
 
-sub _user_checkout_dir {
-    return Cwd::abs_path(
-        $ENV{ST_SRC_BASE}
-        ? File::Spec->catdir( $ENV{ST_SRC_BASE}, 'current', 'nlw' )
-        : File::Spec->catdir(
-            File::Basename::dirname( $INC{'Socialtext/AppConfig.pm'} ),
-            File::Spec->updir, File::Spec->updir
-        )
-    );
+{
+    # hold the initial CWD of when we we started, so we can fix up relative
+    # paths here if needed.
+    my $initial_cwd = Cwd::cwd();
+
+    sub _user_checkout_dir {
+        my $base = File::Basename::dirname(__FILE__);
+        return Cwd::abs_path(
+            $ENV{ST_SRC_BASE}
+            ? File::Spec->catdir( $ENV{ST_SRC_BASE}, 'current', 'nlw' )
+            : File::Spec->catdir(
+                (File::Spec->file_name_is_absolute($base) ? () : $initial_cwd),
+                $base,
+                File::Spec->updir, File::Spec->updir
+            )
+        );
+    }
 }
 
 sub _default_template_compile_dir {
@@ -238,8 +246,9 @@ sub _user_root {
             $dir =~ s{(.+t/tmp).*}{$1};
         }
         else {
-            my $base = File::Basename::dirname(__FILE__);
-            $dir = Cwd::abs_path("$base/../../t/tmp");
+            $dir = Cwd::abs_path(
+                File::Spec->catdir( _user_checkout_dir(), 't', 'tmp' )
+            );
         }
 
         die "Cannot find the user root with the HARNESS_ACTIVE env var set\n"

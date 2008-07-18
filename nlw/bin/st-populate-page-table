@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use Getopt::Long;
+use Email::Valid;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use Socialtext::Workspace;
@@ -197,6 +198,12 @@ sub fetch_metadata {
 sub editor_to_id {
     my $editor = shift;
     unless ( $email_to_id{ $editor } ) {
+
+        # there are some 'email addresses' in the system that aren't email
+        # addresses at all, be sure to check for that and return a reasonable
+        # default, the System User.
+        return '1' unless Email::Valid->address( $email );
+
         # Load or create a new user with the given email address.
         my $user = Socialtext::User->new(email_address => $editor );
         $user ||= Socialtext::User->create(

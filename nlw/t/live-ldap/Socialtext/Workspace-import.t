@@ -143,4 +143,8 @@ deleted_ldap_user_shouldnt_prevent_workspace_import: {
     # reset user_factories back to default, so we don't throw other tests out
     $appconfig->set( 'user_factories' => 'Default' );
     $appconfig->write();
+
+    ###########################################################################
+    # unlink the tarball now that we're done with it.
+    unlink $tarball;
 }

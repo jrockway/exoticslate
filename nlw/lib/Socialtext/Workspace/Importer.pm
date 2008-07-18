@@ -275,7 +275,7 @@ sub _import_users {
     my @users;
     for my $info (@$users) {
         my $user = Socialtext::User->new(
-            email_address => $info->{email_address} );
+            username => $info->{username} );
         $user ||= $self->_create_user( $info, \@cols );
 
         push @users, [ $user, $info->{role_name} ];

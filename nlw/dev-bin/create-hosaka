@@ -1,0 +1,8 @@
+#!/bin/sh
+# @COPYRIGHT@
+set -e
+
+
+st-admin create-user --email Naomi.Hayhurst@istori.com --password hosaka
+create-test-data-workspae hosaka.1.tar.gz
+exit 0

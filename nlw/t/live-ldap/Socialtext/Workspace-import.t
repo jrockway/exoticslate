@@ -49,7 +49,7 @@ deleted_ldap_user_shouldnt_prevent_workspace_import: {
     # save LDAP config, and set up user_factories to use this LDAP server
     my $openldap_cfg = $openldap->ldap_config();
     my $rc = Socialtext::LDAP::Config->save($openldap_cfg);
-    ok $rc, 'saved LDAP config to YAMNL';
+    ok $rc, 'saved LDAP config to YAML';
 
     my $openldap_id = $openldap_cfg->id();
     my $user_factories = "LDAP:$openldap_id;Default";

@@ -1,8 +1,0 @@
-* [IE OSR Testcases]
-
-IE 7 uses the RSS Icons High Permissions test case
-
-For some reason, no combination of Selenium servers and multiwindow and
-no-maximize will run the RSS Icons test any longer.
-
-Test Case: RSS Icons

@@ -1,7 +1,0 @@
-| *Comment* | Test Case: Double Click to Edit |  |
-| open_ok | /%%workspace%%/?Announcements and Links |  |
-| double_click_ok | st-page-content |  |
-| *Comment* | Test Case: Double Click to Edit waiting for Save button |  |
-| wait_for_element_visible_ok | st-save-button-link | 10000 |
-| text_like | st-editing-title | Editing: Announcements and Links |
-| *Comment* | Test Case: Double Click to Edit COMPLETED |  |

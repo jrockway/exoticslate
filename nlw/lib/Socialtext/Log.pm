@@ -152,6 +152,7 @@ sub new {
     my $self = bless {}, $class;
     $self->_syslog_output;
     $self->_screen_output if $ENV{NLW_DEBUG_SCREEN};
+    $self->_devenv_output if Socialtext::AppConfig->_startup_user_is_human_user();
 
     $Instance = $self;
     return $Instance;
@@ -195,6 +196,31 @@ sub _screen_output {
             min_level => 'debug',
             callbacks => [ \&_add_newline, \&_add_hash_for_tests ],
         )
+    );
+}
+
+sub _devenv_output {
+    my $self = shift;
+
+    require Socialtext::Paths;
+    my $logpath = Socialtext::Paths->log_directory();
+
+    require Log::Dispatch::File::Locked;
+    $self->log->add(
+        Log::Dispatch::File::Locked->new(
+            name        => 'devenv',
+            min_level   => 'debug',
+            mode        => 'append',
+            filename    => "$logpath/nlw.log",
+            close_after_write => 1,
+            callbacks   => [ sub {
+                my %p = @_;
+                my $now = localtime();
+                my $prefix = "[$now] [$$] [$p{level}]";
+                my @lines  = map { "$prefix $_" } split /^/, $p{message};
+                return join '', @lines;
+            }, \&_add_newline],
+        ) 
     );
 }
 

@@ -1277,21 +1277,32 @@ proto.convert_html_to_wikitext = function(html) {
         var dom = document.createElement("div");
         dom.innerHTML = html;
 
-        var elems = dom.getElementsByTagName('div');
-        for (var i = 0, l = elems.length; i < l; i++) {
-            if (elems[i].className != 'wiki') continue;
-            var div = document.createElement('div');
-            div.innerHTML = elems[i].innerHTML + '<br>\n';
-            elems[i].parentNode.replaceChild(
-                div,
-                elems[i]
-            );
+        // This needs to be done by hand for IE.
+        // jQuery().replaceWith considered dangerous in IE.
+        // It was causing stack overflow.
+        if ($.browser.msie) {
+            var elems = dom.getElementsByTagName('div');
+            for (var i = 0, l = elems.length; i < l; i++) {
+                if (elems[i].className != 'wiki') continue;
+                var div = document.createElement('div');
+                div.innerHTML = elems[i].innerHTML + '<br>\n';
+                elems[i].parentNode.replaceChild(
+                    div,
+                    elems[i]
+                );
+            }
+            html = dom.innerHTML;
         }
-        if ($.browser.mozilla) {
+        else {
             var $dom = $(dom);
 
-            // Try to find an user-pasted paragraph. With extra gecko-introduced \n
-            // characters in there, which we need to remove.
+            $dom
+            .find("div.wiki").each(function() { 
+                $(this).replaceWith( $(this).html() + "<br>\n" );
+            });
+
+        // Try to find an user-pasted paragraph. With extra gecko-introduced \n
+        // characters in there, which we need to remove.
             $dom.contents().each(function() {
                 if (this.nodeType == 3 ) {
                     if (this.previousSibling && this.previousSibling.nodeType == 1 && this.previousSibling.nodeName != 'BR' ) {
@@ -1317,8 +1328,8 @@ proto.convert_html_to_wikitext = function(html) {
                     }
                 }
             });
+            html = $dom.html();
         }
-        html = dom.innerHTML;
     })(jQuery);
 
     // XXX debugging stuff

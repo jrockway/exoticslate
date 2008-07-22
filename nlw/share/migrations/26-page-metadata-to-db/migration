@@ -3,10 +3,8 @@
 use strict;
 use warnings;
 use Socialtext::Workspace;
-use Socialtext::System qw/shell_run/;
+use Socialtext::Page::TablePopulator;
 use Socialtext::Timer;
-
-my $populator = "st-populate-page-table";
 
 my $wksp_timer = Socialtext::Timer->new;
 my $total_timer = Socialtext::Timer->new;
@@ -20,7 +18,9 @@ while (my $wksp = $workspaces->next) {
     my $name = $wksp->name;
     print "Populating page table with data from $name workspace.\n";
     eval {
-        shell_run("$populator --workspace $name");
+        my $populator = Socialtext::Page::TablePopulator->new(
+            workspace_name => $name );
+        $populator->populate;
     };
     if ($@) {
         $failures++;
@@ -29,7 +29,7 @@ while (my $wksp = $workspaces->next) {
    
     my $elapsed = int($wksp_timer->elapsed*100 + 0.5)/100;
     print "Spent " . $elapsed  . " seconds "
-        . " on workspace " . $wksp->name . ".\n\n";
+        . " on workspace $name.\n\n";
 }
 
 print "TOTAL TIME: " . $total_timer->elapsed . " seconds.\n";

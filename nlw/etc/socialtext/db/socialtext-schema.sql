@@ -17,6 +17,30 @@ END
 $$
     LANGUAGE plpgsql;
 
+CREATE FUNCTION execute_if_table_exists(table_name text, sql text) RETURNS boolean
+    AS $$
+BEGIN
+    IF (SELECT relname FROM pg_class WHERE relname = table_name GROUP BY relname) IS NOT NULL THEN
+        EXECUTE sql;
+        RETURN(TRUE);
+    END IF;
+    RETURN(FALSE);
+END
+$$
+    LANGUAGE plpgsql;
+
+CREATE FUNCTION execute_unless_table_exists(table_name text, sql text) RETURNS boolean
+    AS $$
+BEGIN
+    IF (SELECT relname FROM pg_class WHERE relname = table_name GROUP BY relname) IS NULL THEN
+        EXECUTE sql;
+        RETURN(TRUE);
+    END IF;
+    RETURN(FALSE);
+END
+$$
+    LANGUAGE plpgsql;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -536,7 +560,12 @@ ALTER TABLE ONLY page
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_last_editor_id_fk
     FOREIGN KEY (last_editor_id)
-    REFERENCES "User" (user_id) ON DELETE CASCADE;
+    REFERENCES "UserId" (system_unique_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY page
+    ADD CONSTRAINT page_creator_id_fk
+    FOREIGN KEY (creator_id)
+    REFERENCES "UserId" (system_unique_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY person
     ADD CONSTRAINT person_assistant_id_fk

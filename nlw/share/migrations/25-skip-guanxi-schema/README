@@ -1,3 +1,9 @@
+This migration wasn't implemented using the proper database upgrade mechanism, and instead messed with the version and incorrectly tried to upgrade the schema itself. Using PL/PGSQL functions in the 2-3 db migration, we can properly upgrade the database.
+
+Therefore, the pre-check in this migration will always return 1 and skip this migration.
+
+===========
+
 This migration exists to migrate beta branches of code back to a known point.
 
 There are two issues in some released beta code.  This migration corrects the released beta code:

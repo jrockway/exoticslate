@@ -46,8 +46,10 @@ SELECT page.workspace_id,
        page.summary 
     FROM page 
         JOIN "Workspace" USING (workspace_id) 
-        JOIN "User" editor ON (page.last_editor_id = editor.user_id) 
-        JOIN "User" creator ON (page.creator_id = creator.user_id) 
+        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
+        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
+        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
+        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
         JOIN page_tag USING (page_id, workspace_id) 
     WHERE page.deleted = ?::bool 
       AND page.workspace_id = ? 
@@ -101,8 +103,10 @@ SELECT page.workspace_id,
        page.summary 
     FROM page 
         JOIN "Workspace" USING (workspace_id) 
-        JOIN "User" editor ON (page.last_editor_id = editor.user_id) 
-        JOIN "User" creator ON (page.creator_id = creator.user_id) 
+        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
+        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
+        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
+        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
         JOIN page_tag USING (page_id, workspace_id) 
     WHERE page.deleted = ?::bool 
       AND page.workspace_id IN (?,?,?)
@@ -156,8 +160,10 @@ SELECT page.workspace_id,
        page.summary 
     FROM page 
         JOIN "Workspace" USING (workspace_id) 
-        JOIN "User" editor ON (page.last_editor_id = editor.user_id) 
-        JOIN "User" creator ON (page.creator_id = creator.user_id) 
+        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
+        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
+        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
+        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
         JOIN page_tag USING (page_id, workspace_id) 
     WHERE page.deleted = ?::bool 
       AND page.workspace_id = ? 
@@ -223,8 +229,10 @@ SELECT page.workspace_id,
        page.summary 
     FROM page 
         JOIN "Workspace" USING (workspace_id) 
-        JOIN "User" editor ON (page.last_editor_id = editor.user_id) 
-        JOIN "User" creator ON (page.creator_id = creator.user_id) 
+        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
+        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
+        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
+        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
         JOIN page_tag USING (page_id, workspace_id) 
     WHERE page.deleted = ?::bool 
       AND page.workspace_id = ? 
@@ -279,8 +287,10 @@ SELECT page.workspace_id,
        page.summary 
     FROM page 
         JOIN "Workspace" USING (workspace_id) 
-        JOIN "User" editor ON (page.last_editor_id = editor.user_id) 
-        JOIN "User" creator ON (page.creator_id = creator.user_id) 
+        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
+        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
+        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
+        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
         JOIN page_tag USING (page_id, workspace_id) 
     WHERE page.deleted = ?::bool 
       AND page.workspace_id = ? 
@@ -334,8 +344,10 @@ SELECT page.workspace_id,
        page.summary 
     FROM page 
         JOIN "Workspace" USING (workspace_id) 
-        JOIN "User" editor ON (page.last_editor_id = editor.user_id) 
-        JOIN "User" creator ON (page.creator_id = creator.user_id) 
+        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
+        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
+        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
+        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
     WHERE page.deleted = ?::bool 
       AND page.workspace_id = ? 
     LIMIT ?
@@ -387,8 +399,10 @@ SELECT page.workspace_id,
        page.summary 
     FROM page 
         JOIN "Workspace" USING (workspace_id) 
-        JOIN "User" editor ON (page.last_editor_id = editor.user_id) 
-        JOIN "User" creator ON (page.creator_id = creator.user_id) 
+        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
+        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
+        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
+        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
         JOIN page_tag USING (page_id, workspace_id) 
     WHERE page.deleted = ?::bool 
       AND page.workspace_id = ? 

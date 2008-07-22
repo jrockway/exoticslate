@@ -31,7 +31,11 @@ my $Self;
 
 # NLW directory for the current branch, under which tests are run.
 my $nlw_dir;
-foreach my $maybe ("$ENV{ST_CURRENT}/nlw", "$ENV{ST_SRC_BASE}/current/nlw", $CWD) {
+foreach my $maybe (
+        $ENV{ST_CURRENT} ? "$ENV{ST_CURRENT}/nlw" : (),
+        $ENV{ST_SRC_BASE} ? "$ENV{ST_SRC_BASE}/current/nlw" : (),
+        $CWD
+        ) {
     if (-d $maybe) {
         $nlw_dir = $maybe;
         last;

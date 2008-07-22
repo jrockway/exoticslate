@@ -29,6 +29,8 @@ sub handler ($$) {
 
     loc_lang( system_locale() );
 
+    warn "Got Here";
+
     (my $uri = $r->uri) =~ s[^/nlw/?][];
     if ($uri =~ m[submit/]) {
         my ($action) = $uri =~ m[submit/(\w+)];

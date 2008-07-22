@@ -32,11 +32,13 @@
                 );
         }
 
-        var width = document.body.clientWidth;
-        var height = document.body.clientHeight;
+        var width = jQuery(window).width();
+        var height = jQuery(window).height();
+
+        $('body').css('overflow', 'hidden');
 
         $('#lightbox')
-            .append($(opts.content).show())
+            .append($(opts.content).fadeIn())
             .css({
                 display: 'none',
                 position: this.is_ie ? 'absolute': 'fixed',
@@ -82,5 +84,6 @@
             $('#overlay').remove();
         });
         $('#lightbox').remove();
+        $('body').css('overflow', 'visible');
     };
 })(jQuery);

@@ -4,19 +4,16 @@ Automated backup and restore testing
 | *Comment* | Test Case: Console Backup and Restore: Test Case: Console Backup and Restore |  |
 
 | *Comment* | Test Case: Console Backup and Restore: Give system admin rights and add member |  |
-
 | st_admin | create-user --e %%email%% --p %%password%% |  |
 | st_admin | give-system-admin --e %%email%% |  |
 | st-admin | add-member --w admin --e %%email%% |  |
 
 | *Comment* | Test Case: Console Backup and Restore: Verify that the help-en space exists |  |
-
 | open_ok | /help-en |  |
 | text_like | Socialtext Documentation |  |
 | st-admin | add-member --w help-en --e %%email%% |  |
 
 | *Comment* | Test Case: Console Backup and Restore: Create a test page in the admin workspace |  |
-
 | open_ok | /admin/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
@@ -31,17 +28,14 @@ Automated backup and restore testing
 | text_like | st-page-titletext | Backup Restore %%start_time%% |
 
 | *Comment* | Test Case: Console Backup and Restore: Create a new empty workspace |  |
-
 | st_admin | create-workspace --name empty-%%start_time%% --title "Empty %%start_time%%" --empty |
 | st-admin | add-member --w empty-%%start_time%% --e %%email%% |  |
 
 | *Comment* | Test Case: Console Backup and Restore: Open the console and verify it is there |  |
-
 | open_ok | /console/index.cgi?rm=Backup |  |
 | text_like | Perform Backup Now |  |
 
 | *Comment* | Test Case: Console Backup and Restore: Set the Samba share values |  |
-
 | type_ok | smbhost | topaz.socialtext.net |
 | type_ok | smbshare | socialtext |
 | type_ok | smbuser | qa1 |
@@ -61,43 +55,35 @@ Automated backup and restore testing
 | click_and_wait | //input[@value='Backup'] |  |
 | text_like | Backup is in progress |  |
 
-| *Comment* | Test Case: Console Backup and Restore: AFAIK, the console freezes at this point, so just wait 30 seconds |  |
-
-| pause | 30000 | thirty seconds |
+| *Comment* | Test Case: Console Backup and Restore: AFAIK, the console freezes at this point, so just wait 3 minutes |  |
+| *Comment* | WAITING THREE MINUTES FOR BACKUP TO COMPLETE |  |
+| pause | 180000 | three minutes |
 
 | *Comment* | Test Case: Console Backup and Restore: create a second test page in admin. It should be gone after restore. |  |
-
 | st_admin | update-page --w admin --e %%email%% --page --page "Backup Restore Page 2 %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "Backup Restore Page 2 %%start_time%%" page has been created. |
 
 | *Comment* | Test Case: Console Backup and Restore: create a second empty workspace. It should be gone after restore. |  |
-
 | st_admin | create-workspace --name empty-2-%%start_time%% --title "Empty 2 %%start_time%%" --empty |
 
 | *Comment* | Test Case: Console Backup and Restore: Do the Restore |  |
-
 | open_ok | /console/index.cgi?rm=Backup |  |
 | wait_for_element_visible_ok | restore_file | 30000 |
 
 | *Comment* | Test Case: Console Backup and Restore: Select most recent element |  |
-
 | select_ok | restore_file | index=0 |
-
 | click_and_wait | //input[@value='Restore'] |  |
 | text_like | Restore in progress |  |
 
 | *Comment* | Test Case: Console Backup and Restore: AFAIK, the console freezes at this point, so just wait a long time |  |
-
-| pause | 180000 | three minutes |
+| *Comment* | WAITING FOUR MINUTES FOR RESTORE TO COMPLETE |  |
+| pause | 240000 | FOUR minutes |
 
 | *Comment* | Test Case: Console Backup and Restore: Verify that the restore completed |  |
-
 | st_admin | give-system-admin --e %%email%% |  |
-
 | open_ok | /console/index.cgi?rm=Backup |  |
 | text_unlike | //body | Restore in progress |
 
 | *Comment* | Test Case: Console Backup and Restore: help-en is there with reasonable content |  |
-
 | open_ok | /help-en |  |
 | text_like | Socialtext Documentation |  |
 | click_and_wait | link=start here |  |
@@ -111,7 +97,7 @@ Automated backup and restore testing
 | open_ok | /admin/index.cgi?action=recent_changes |  |
 | wait_for_element_present_ok | link=Backup Restore %%start_time%% |  |
 | text_unlike | st-recent_changes-content | Backup Restore Page 2 %%start_time%% |
-| click_and_wait | link=Backup Restore %%start_time%% |
+| click_and_wait | link=Backup Restore %%start_time%% |  |
 | wait_for_element_visible_ok | st-page-titletext | 30000 |
 | text_like | st-page-titletext | Backup Restore %%start_time%% |
 | text_like | st-page-content | Backup Restore content %%start_time%% |
@@ -121,15 +107,15 @@ Automated backup and restore testing
 | open_ok | /empty-%%start_time%% |  |
 | location_like | empty-%%start_time%% |  |
 
-| *Comment* | Test Case: Console Backup and Restore: second new workspace is gone, end up at admin instead |  |
+| *Comment* | Test Case: Console Backup and Restore: second new workspace is gone, end up at SD instead |  |
 | open_ok | /help-en |  |
 | open_ok | /empty-2-%%start_time%% |  |
-
-| *Comment* | Test Case: Console Backup and Restore: return to last login |  |
-| location_like | help-en |  |
+| text_like | Home |  |
+| text_like | Profile |  |
+| text_like | People |  |
+| text_like | Tags |  |
 
 | *Comment* | Test Case: Console Backup and Restore: do some operations in admin to verify a working installation |  |
-
 | open_ok | /admin/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
@@ -144,13 +130,11 @@ Automated backup and restore testing
 | text_like | st-page-titletext | Backup Restore 3 %%start_time%% |
 
 | *Comment* | Test Case: Console Backup and Restore: Teardown |  |
-
 | st-admin | delete-workspace --no-export --w empty-%%start_time%% | The empty-%%start_time%% workspace has been deleted. |
 | st-admin | purge-page --w admin --p backup_restore_%%start_time%% | was purged |
 | st-admin | purge-page --w admin --p backup_restore_3_%%start_time%% | was purged |
 
 | *Comment* | Test Case: Console Backup and Restore: empty-2 should already be gone. Tear it down anyway. |  |
-
 | st-admin | delete-workspace --no-export --w empty-2-%%start_time%% |  |
 
 | *Comment* | Test Case: Console Backup and Restore COMPLETED |  |

@@ -105,8 +105,6 @@ var load_script = function(script_url) {
         src: script_url
     }).get(0);
 
-    console.log('loading ' + script_url);
-
     if (jQuery.browser.msie)
         jQuery(script).appendTo('head');
     else

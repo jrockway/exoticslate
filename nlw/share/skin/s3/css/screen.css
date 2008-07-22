@@ -4,6 +4,63 @@
     background-color: #FFFFDD !important;
 }
 
+#st-widgets-moreoptionspanel {
+    display: none;
+    background-color: #F0F0F0;
+    padding: 2px 4px 4px 4px;
+    margin: 6px 0 4px 0;
+    border: 1px solid #B0CCFF;
+}
+
+#st-widgets-moreoptions {
+    padding-left: 8px;
+}
+
+span.st-widget-dialog-title {
+    padding-left: 0;
+    font-weight: bold;
+    display: block;
+}
+
+p.st-widget-description {
+    padding: 0;
+    margin: 0.2em 0 0.8em 0;
+}
+
+.widget_edit_advanced {
+    font-family: monospace;
+}
+
+table.st-widgets-optionstable {
+    border-collapse: separate;
+    border-spacing: 0px 6px;
+}
+
+table.st-widgets-moreoptionstable {
+    border-collapse: separate;
+    border-spacing: 0px 6px;
+}
+
+td.st-widget-dialog-editlabel {
+    padding-right: 0.5em;
+    white-space: nowrap;
+    vertical-align: top;
+    font-weight: 600;
+}
+
+td.st-widget-dialog-editfield {
+    padding: 0;
+}
+
+.widget_edit_error_msg {
+    border-top: 1px solid #BA4949;
+    border-bottom: 1px solid #BA4949;
+    background-color: #F5F5F5;
+    color: #800000;
+    padding: 4px;
+    display: none;
+}
+
 /* Wafl Boxes */
 
 #st-page-content .wafl_container td {

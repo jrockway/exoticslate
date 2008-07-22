@@ -1,6 +1,15 @@
 (function($){
     var opts;
 
+    $.hideLightbox = function() {
+        $(this).lightbox.stop();
+    };
+
+    $.showLightbox = function(options) {
+        opts = options;
+        $(this).lightbox.start();
+    };
+
     $.fn.lightbox = function(options){
         opts = options;
         this.each(function(){

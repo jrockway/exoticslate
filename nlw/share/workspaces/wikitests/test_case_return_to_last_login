@@ -2,6 +2,11 @@
 
 | *Comment* | Test Case: Return to last login |  |
 | *Comment* | When Personal Dashboard is installed, this test is not relevant because logout followed by login takes you to the Dashboard. This test only works when Socialtext People and Dashboard are not installed. |  |
+| *Comment* | RESTORE THIS TEST IF WE TEST A CONFIGURATION WITHOUT People and Dashboard |  |
+
+| *Comment* | Test Case: Return to last login COMPLETED. |  |
+
+^ END UNTIL WE TEST A CONFIGURATION WITHOUT People and Dashboard
 
 | *Comment* | Create a test user, workspaces, give that user permissions to workspaces |  |
 

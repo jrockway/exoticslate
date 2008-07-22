@@ -7,6 +7,7 @@ use base 'Exporter';
 use Log::Dispatch;
 use Log::Dispatch::Syslog;
 use Socialtext::AppConfig;
+use Socialtext::Date;
 use Class::Field qw(field);
 use Encode;
 
@@ -213,15 +214,15 @@ sub _devenv_output {
             mode        => 'append',
             filename    => "$logpath/nlw.log",
             close_after_write => 1,
-            callbacks   => [ sub {
-                my %p = @_;
-                my $now = localtime();
-                my $prefix = "[$now] [$$] [$p{level}]";
-                my @lines  = map { "$prefix $_" } split /^/, $p{message};
-                return join '', @lines;
-            }, \&_add_newline],
+            callbacks   => [ \&_remove_embedded_newlines, \&_add_apache_uid, \&_add_fake_syslog_prefix, \&_add_newline ],
         ) 
     );
+}
+
+sub _add_fake_syslog_prefix {
+    my %p = @_;
+    my $now = Socialtext::Date->now->strftime('%b %d %H:%M:%S');
+    return "$now socialtext nlw[$$]: $p{message}";
 }
 
 sub _add_apache_uid {
@@ -246,6 +247,12 @@ sub _add_hash_for_tests {
     $p{message} =~ s/^/# /gm
         if $ENV{HARNESS_ACTIVE};
 
+    return $p{message};
+}
+
+sub _remove_embedded_newlines {
+    my %p = @_;
+    $p{message} =~ s/\n/ /g;
     return $p{message};
 }
 

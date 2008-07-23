@@ -8,14 +8,28 @@ use Socialtext::Workspace;
 use Socialtext::Hub;
 use Socialtext::CLI;
 use Fatal qw/opendir closedir chdir open/;
+use Cwd qw/abs_path/;
 
 $| = 1; # turn on autoflush
 
 die "Must be run as root!\n" if $<;
 Socialtext::CLI->_drop_privs();
 
-my $workspaces = Socialtext::Workspace->All;
-while ( my $wksp = $workspaces->next ) {
+my $only_workspace = shift;
+if ($only_workspace) {
+    my $wksp = Socialtext::Workspace->new(name => $only_workspace);
+    process_workspace($wksp);
+}
+else {
+    my $workspaces = Socialtext::Workspace->All;
+    while ( my $wksp = $workspaces->next ) {
+	process_workspace($wksp);
+    }
+}
+exit;
+
+sub process_workspace {
+    my $wksp = shift;
     print "Storing preview text for workspace " . $wksp->name . ": ";
     my $hub = Socialtext::Hub->new(current_workspace => $wksp);
     my $workspace_dir = Socialtext::Paths::page_data_directory($wksp->name);
@@ -25,6 +39,21 @@ while ( my $wksp = $workspaces->next ) {
         next unless -d $dir;
         next if $dir =~ m/^\./;
 
+        # Check the index.txt page link for a relative link.  Rewrite
+        # them to be absolute links.
+	my $page_link_name = "$dir/index.txt";
+	my $page_link = readlink($page_link_name) 
+	    or die "Couldn't readlink $page_link_name: $!";
+	unless ($page_link =~ m#^/#) {
+	    my $tmp_link = "$page_link_name.tmp";
+	    my $abs_page = abs_path("$dir/$page_link");
+            die "Could not find symlinked page ($abs_page)" unless -f $abs_page;
+	    symlink($abs_page, $tmp_link) 
+		or die "Could not symlink $abs_page, $tmp_link: $!";
+	    rename $tmp_link => $page_link_name 
+		or die "Could not rename $tmp_link, $page_link_name: $!";
+	    warn "Fixed relative symlink $page_link_name\n";
+	}
         my $page = $hub->pages->new_from_name($dir);
         if ($page->metadata->{Summary}) {
             print '.';

@@ -18,6 +18,7 @@ use Socialtext::Search::AbstractFactory;
 use Socialtext::Log qw(st_log);
 use Socialtext::Timer;
 use Socialtext::System qw/shell_run/;
+use Socialtext::Page::TablePopulator;
 use YAML ();
 
 # This should stay in sync with $EXPORT_VERSION in ST::Workspace.
@@ -256,11 +257,10 @@ sub _set_permissions {
 sub _populate_db_metadata {
     my $self = shift;
 
-    my $populator = Socialtext::AppConfig::bin_path() 
-                    . "/st-populate-page-table";
     Socialtext::Timer->Start('populate_db');
-    local $Socialtext::System::SILENT_RUN = 1;
-    shell_run("$populator --workspace $self->{new_name}");
+    my $populator = Socialtext::Page::TablePopulator->new(
+        workspace_name => $self->{new_name} );
+    $populator->populate;
     Socialtext::Timer->Stop('populate_db');
 }
 

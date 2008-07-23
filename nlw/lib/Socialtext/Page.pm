@@ -1166,7 +1166,7 @@ sub _store_preview_text {
     }
 
     my $mtime = $self->modified_time;
-    my $data = Socialtext::File::get_contents_utf8($filename);
+    my $data = Socialtext::File::get_contents($filename);
     my $headers = substr($data, 0, index($data, "\n\n"));
     my $old_length = length($headers);
     return if $headers =~ /^Summary:\ +\S/m;

@@ -49,7 +49,9 @@ sub skin_info {
     my ($self, $skin) = @_;
     $skin ||= $self->name;
     return $self->{_skin_info}{$skin} if $self->{_skin_info}{$skin};
-    my $skin_path = $self->skin_path($skin);
+    my $skin_path = $skin =~ m{^uploaded-skin/}
+        ? $self->_path($skin)
+        : $self->skin_path($skin);
     my $info_path = File::Spec->catfile( $skin_path, 'info.yaml' );
     $self->{_skin_info} = -f $info_path ? YAML::LoadFile($info_path) : {};
     $self->{_skin_info}{parent} ||= $DEFAULT_PARENT;
@@ -64,6 +66,12 @@ sub skin_info {
 
 sub inheritence {
     my ($self,$skin) = @_;
+
+    if (!$skin and $self->hub->current_workspace->uploaded_skin) {
+        my $ws = $self->hub->current_workspace->name;
+        $skin = "uploaded-skin/$ws";
+    }
+
     $skin ||= $self->name;
     return @{$self->{_inheritence}{$skin}} if $self->{_inheritence}{$skin};
 
@@ -149,6 +157,9 @@ sub skin_upload_path {
 sub skin_path {
     my $self = shift;
     if (my $skin = shift) {
+        if ($skin =~ m{^(?:skin|uploaded-skin)/}) {
+            return $self->_path($skin);
+        }
         return $self->_path('skin', $skin);
     }
     else {
@@ -160,6 +171,9 @@ sub skin_uri {
     my $self = shift;
 
     if (my $skin = shift) {
+        if ($skin =~ m{^(?:skin|uploaded-skin)/}) {
+            return $self->_uri($skin);
+        }
         return $self->_uri('skin', $skin);
     }
     else {

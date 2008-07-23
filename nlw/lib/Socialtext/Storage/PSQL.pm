@@ -12,20 +12,30 @@ sub load_data {
 }
 
 sub get {
-    my ($self,$key) = @_;
-    croak 'key is required' unless $key;
-    return $self->{_cache}{$key} if exists $self->{_cache}{$key};
-    my $sth = sql_execute('
-        SELECT value, datatype
-          FROM storage
-          WHERE class=? AND key=?
-    ', $self->{id}, $key);
+    my ($self,@keys) = @_;
+    croak 'key is required' unless @keys;
 
-    my $res = $sth->fetchall_arrayref;
-    return $self->{_cache}{$key} = undef unless @$res;
-    my ($val, $type) = @{$res->[0]};
-    $val = YAML::Load($val) if $type ne 'STRING';
-    return $self->{_cache}{$key} = $val;
+    if (@keys == grep { exists $self->{_cache}{$_} } @keys) {
+        return $self->{_cache}{$keys[0]} if @keys == 1;
+        return map { $self->{_cache}{$_} } @keys;
+    }
+
+    my $key_query = join ',', map { "?" } @keys;
+    my $sth = sql_execute("
+        SELECT key, value, datatype
+          FROM storage
+          WHERE class=? AND key IN ($key_query)
+    ", $self->{id}, @keys);
+
+    while (my $row = $sth->fetchrow_hashref) {
+        $self->{_cache}{ $row->{key} } =
+            $row->{datatype} eq 'STRING'
+            ? $row->{value}
+            : YAML::Load( $row->{value} );
+    }
+        
+    return $self->{_cache}{$keys[0]} if @keys == 1;
+    return grep { defined $_ } map { $self->{_cache}{$_} } @keys;
 }
 
 sub set {

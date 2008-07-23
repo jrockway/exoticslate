@@ -19,6 +19,12 @@ for my $sub (qw(PSQL)) {
         $storage->set('test_var2', 'myvalue2');
     }
 
+    MULTI_GET: {
+        my $storage = "Socialtext::Storage::$sub"->new($tempid);
+        my @get = $storage->get('test_var', 'test_var2');
+        is_deeply \@get, [qw(myvalue myvalue2)], "multi get";
+    }
+
     INIT_GET: {
         my $storage = "Socialtext::Storage::$sub"->new($tempid);
         ok $storage->exists('test_var'), 'test_var exists';

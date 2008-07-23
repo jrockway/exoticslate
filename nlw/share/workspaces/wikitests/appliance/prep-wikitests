@@ -10,7 +10,7 @@ echo INSTALLING wikitest_files
 if [ ! -e /opt/wikitest_files ]; then
     sudo mkdir /opt/wikitest_files
 fi
-sudo unzip $WIKITESTS//wikitestfiles.zip -d /opt/wikitest_files/
+sudo unzip $WIKITESTS/wikitestfiles.zip -d /opt/wikitest_files/
 
 if [ -e /var/www/socialtext/data/test-data ]; then
     echo "DELETING old test-data workspace"
@@ -35,4 +35,6 @@ sudo apt-get install slapd
 
 echo ENABLING Socialcalc for all workspaces
 sudo /usr/bin/st-socialcalc enable
+
+sudo chown www-data:www-data /etc/socialtext/socialtext.conf
 echo ""

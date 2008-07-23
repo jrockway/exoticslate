@@ -14,7 +14,10 @@ sub load_data {
 sub get {
     my ($self,$key) = @_;
     croak 'key is required' unless $key;
-    return $self->{_cache}{$key} if $self->{_cache}{$key};
+    return $self->{_cache}{$key} if exists $self->{_cache}{$key};
+    my $mod = (caller)[0];
+    my $line = (caller)[2];
+    warn "GET $key in $mod line $line for $self->{id}\n";
     my $sth = sql_execute('
         SELECT value, datatype
           FROM storage
@@ -22,7 +25,7 @@ sub get {
     ', $self->{id}, $key);
 
     my $res = $sth->fetchall_arrayref;
-    return unless @$res;
+    return $self->{_cache}{$key} = undef unless @$res;
     my ($val, $type) = @{$res->[0]};
     $val = YAML::Load($val) if $type ne 'STRING';
     return $self->{_cache}{$key} = $val;

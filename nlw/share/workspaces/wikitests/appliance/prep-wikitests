@@ -36,5 +36,7 @@ sudo apt-get install slapd
 echo ENABLING Socialcalc for all workspaces
 sudo /usr/bin/st-socialcalc enable
 
-sudo chown www-data:www-data /etc/socialtext/socialtext.conf
+# Make www-data own /etc/socialtext/ files so st-bootstrap-openldap will
+# succeed from wikitests.
+sudo chown -R www-data:www-data /etc/socialtext/
 echo ""

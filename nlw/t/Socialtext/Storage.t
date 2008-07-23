@@ -8,7 +8,7 @@ my $tempid = 'TESTING';
 
 use Socialtext::AppConfig;
 
-for my $sub (qw(YAML PSQL)) {
+for my $sub (qw(PSQL)) {
     use_ok "Socialtext::Storage::$sub";
 
     INIT_SET: {

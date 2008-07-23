@@ -65,7 +65,7 @@ sub delete {
 sub exists {
     my ($self,$key) = @_;
     croak 'key is required' unless $key;
-    return 1 if exists $self->{_cache}{$key};
+    return 1 if defined $self->{_cache}{$key};
     return sql_singlevalue('
         SELECT COUNT(*)
           FROM storage

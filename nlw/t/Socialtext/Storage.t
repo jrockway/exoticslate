@@ -19,10 +19,13 @@ for my $sub (qw(PSQL)) {
         $storage->set('test_var2', 'myvalue2');
     }
 
-    MULTI_GET: {
+    PRELOAD: {
         my $storage = "Socialtext::Storage::$sub"->new($tempid);
-        my @get = $storage->get('test_var', 'test_var2');
-        is_deeply \@get, [qw(myvalue myvalue2)], "multi get";
+        $storage->preload(qw(test_var test_var2));
+        is_deeply $storage->{_cache}, {
+            test_var => 'myvalue',
+            test_var2 => 'myvalue2',
+        }, "preload";
     }
 
     INIT_GET: {

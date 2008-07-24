@@ -7,7 +7,6 @@ use base 'Exporter';
 use Log::Dispatch;
 use Log::Dispatch::Syslog;
 use Socialtext::AppConfig;
-use Socialtext::Date;
 use Class::Field qw(field);
 use Encode;
 
@@ -221,7 +220,8 @@ sub _devenv_output {
 
 sub _add_fake_syslog_prefix {
     my %p = @_;
-    my $now = Socialtext::Date->now->strftime('%b %d %H:%M:%S');
+    require POSIX;
+    my $now = POSIX::strftime('%b %d %H:%M:%S', localtime());
     return "$now socialtext nlw[$$]: $p{message}";
 }
 

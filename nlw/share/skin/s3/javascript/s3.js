@@ -277,4 +277,30 @@ jQuery(function() {
     jQuery('#st-listview-selectall').click(function () {
         jQuery('input[type=checkbox]').attr('checked', this.checked);
     });
+
+    jQuery('#st-watchlist-indicator').click(function () {
+        var self = this;
+        if (jQuery(this).hasClass('on')) {
+            jQuery.get(
+                location.pathname + '?action=remove_from_watchlist'+
+                ';page=' + Socialtext.page_id +
+                ';_=' + (new Date()).getTime(),
+                function () {
+                    jQuery(self).attr('title', loc('Watch this page'));
+                    jQuery(this).removeClass('on');
+                }
+            );
+        }
+        else {
+            jQuery.get(
+                location.pathname + '?action=add_to_watchlist'+
+                ';page=' + Socialtext.page_id +
+                ';_=' + (new Date()).getTime(),
+                function () {
+                    jQuery(self).attr('title', loc('Stop watching this page'));
+                    jQuery(this).addClass('on');
+                }
+            );
+        }
+    });
 });

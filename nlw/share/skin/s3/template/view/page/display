@@ -13,7 +13,13 @@
         </ul>
         <ul class="buttonRight">        
             <li><a class="newPageButton" href="#">New Page</a></li>
-            <li><a class="watchButton" href="#">Watch this Page</a></li>
+            [% UNLESS user.is_guest %]
+                [% IF watching %]
+                <li><a id="st-watchlist-indicator" class="on watchButton" href="#" title="[% loc('Stop watching this Page') %]">[% loc('Stop watching this Page') %]</a></li>
+                [% ELSE %]
+                <li><a id="st-watchlist-indicator" class="watchButton" href="#" title="[% loc('Watch this Page') %]">[% loc('Watch this Page') %]</a></li>
+                [% END %]
+            [% END %]
         </ul>                                   
     </div><!-- st-editing-tools-edit END -->
 

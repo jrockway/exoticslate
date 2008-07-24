@@ -23,9 +23,6 @@
                             
         </div><!-- controlsLeft END -->
         <div id="controlsRight">
-            <ul>
-                <li><a class="export" href="#">Export</a></li>
-            </ul>
         </div><!-- controlsRight END -->
     </div><!-- controls END -->
     <div id="contentContainer">

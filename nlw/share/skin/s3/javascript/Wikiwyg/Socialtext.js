@@ -151,25 +151,17 @@ function setup_wikiwyg() {
 
     ww.message = new Wikiwyg.MessageCenter();
 
-    // node handles
-    var edit_bar = $('st-editing-tools-edit'); // XXX I think this is wrong
-    var edit_link = $('st-edit-button-link');
-    var save_link = $('st-save-button-link');
-    var html_link = $('edit-wikiwyg-html-link');
-    var preview_link = $('st-preview-button-link');
-    var cancel_link = $('st-cancel-button-link');
-    var wysiwyg_link = $('st-mode-wysiwyg-button');
-    var wikitext_link = $('st-mode-wikitext-button');
-
     // For example, because of a unregistered user on a self-register space:
-    if (!edit_bar || !edit_link)
-        return;
+    if (!jQuery('#st-editing-tools-edit').size() ||
+        !jQuery('#st-edit-button-link').size())
+        throw new Error('Unauthorized');
 
-    ww.wikitext_link = wikitext_link;
+    ww.wikitext_link = jQuery('#st-mode-wikitext-button').get(0);
 
     Wikiwyg.setup_newpage();
 
-    Wikiwyg.Socialtext.edit_bar = edit_bar;
+    Wikiwyg.Socialtext.edit_bar = jQuery('#st-editing-tools-edit').get(0);
+
     // XXX Surely we could use plain HTML here
     Wikiwyg.Socialtext.loading_bar = document.createElement("div");
     Wikiwyg.Socialtext.loading_bar.innerHTML =
@@ -238,20 +230,20 @@ function setup_wikiwyg() {
         return false;
     }
 
-    jQuery(edit_link).bind("click", ww.start_nlw_wikiwyg);
-
-    jQuery("#st-edit-actions-below-fold-edit").bind("click", ww.start_nlw_wikiwyg);
+    jQuery('#st-edit-button-link').click(ww.start_nlw_wikiwyg);
+    jQuery("#st-edit-actions-below-fold-edit").click(ww.start_nlw_wikiwyg);
 
     if (Socialtext.double_click_to_edit) {
         jQuery("#st-page-content").bind("dblclick", ww.start_nlw_wikiwyg);
     }
 
-    jQuery(save_link).bind("click", function() {
+    jQuery('#st-save-button-link').click(function() {
         ww.is_editing = false;
         return ww.saveButtonHandler();
     });
 
-    jQuery(cancel_link).bind("click", function() {
+    // node handles
+    jQuery('#st-cancel-button-link').click(function() {
         try {
             if (ww.contentIsModified()) {
                 // If it's not confirmed somewhere else, do it right here.
@@ -269,7 +261,6 @@ function setup_wikiwyg() {
 
             ww.cancelEdit();
             ww.preview_link_reset();
-            window.TagQueue.clear_list();
             jQuery("#st-pagetools, #st-editing-tools-display").show();
             jQuery("#st-editing-tools-edit").hide();
             jQuery("#st-page-maincontent").css('margin-right', '0px');
@@ -287,43 +278,85 @@ function setup_wikiwyg() {
         return false;
     });
 
-    preview_link.onclick = function() {
+    jQuery('#st-preview-button-link').click(function () {
         return ww.preview_link_action();
-    };
+    });
 
     if (window.wikiwyg_nlw_debug) {
-        jQuery(html_link).bind("click", function() {
+        jQuery('#edit-wikiwyg-html-link').click( function() {
             ww.switchMode(WW_HTML_MODE);
             return false;
         })
     }
 
-    wysiwyg_link.onclick = function() {
+    jQuery('#st-mode-wysiwyg-button').click(function () {
         ww.button_enabled_func(WW_SIMPLE_MODE)();
         return false;
-    };
+    });
 
     // Disable simple mode button for Safari browser.
     if ( Wikiwyg.is_safari )  {
-        jQuery(wysiwyg_link)
-        .css("text-decoration", "line-through")
-        .unbind("click")
-        .bind("click", function() {
-            alert(loc("Safari does not support simple mode editing"));
-            return false;
-        });
+        jQuery('#st-mode-wysiwyg-button')
+            .css("text-decoration", "line-through")
+            .unbind("click")
+            .bind("click", function() {
+                alert(loc("Safari does not support simple mode editing"));
+                return false;
+            });
     }
 
-    wikitext_link.onclick = function() {
+    jQuery('#st-mode-wikitext-button').click(function() {
         ww.button_enabled_func(WW_ADVANCED_MODE)();
         return false;
-    };
+    });
 
-    ww.modeButtonMap = {};
-    ww.modeButtonMap[WW_SIMPLE_MODE] = wysiwyg_link;
-    ww.modeButtonMap[WW_ADVANCED_MODE] = wikitext_link;
-    ww.modeButtonMap[WW_PREVIEW_MODE] = preview_link;
-    ww.modeButtonMap[WW_HTML_MODE] = html_link;
+    jQuery('#st-edit-mode-tagbutton').click(function() {
+        jQuery.showLightbox({
+            content:'#st-tagqueue-interface',
+            close:'#st-tagqueue-close'
+        });
+    });
+
+    jQuery('#st-tagqueue').bind('submit', function () {
+        var tag = jQuery('#st-tagqueue-field').val();
+        jQuery('<input type="hidden" name="add_tag">')
+            .attr('id', 'st-tagqueue-'+tag)
+            .attr('value', tag)
+            .appendTo('#st-page-editing-files');
+
+        jQuery('#st-tagqueue-list').show()
+        jQuery('<span class="st-tagqueue-taglist-name">')
+            .attr('id', 'st-taglist-' + tag)
+            .append(
+                jQuery('.st-tagqueue-taglist-name').size() ? ', ' : '',
+                tag,
+                jQuery('<a class="st-tagqueue-taglist-delete">')
+                    .attr('title', loc("Remove _[0] from the queue", tag))
+                    .attr('href', '#')
+                    .click(function () {
+                        jQuery('#st-taglist-'+tag).remove();
+                        jQuery('#st-tagqueue-'+tag).remove();
+                        if (!jQuery('.st-tagqueue-taglist-name').size())
+                            jQuery('#st-tagqueue-list').hide();
+
+                    })
+                    .html('[x]')
+            )
+            .appendTo('#st-tagqueue-list');
+        return false;
+    });
+
+    jQuery('#st-edit-mode-uploadbutton')
+        .lightbox({
+            content:'#st-attachments-attachinterface',
+            close:'#st-attachments-attach-closebutton'
+        });
+
+    ww.modeButtonMap = bmap = {};
+    bmap[WW_SIMPLE_MODE] = jQuery('#st-mode-wysiwyg-button').get(0);
+    bmap[WW_ADVANCED_MODE] = jQuery('#st-mode-wikitext-button').get(0);
+    bmap[WW_PREVIEW_MODE] = jQuery('#st-preview-button-link').get(0);
+    bmap[WW_HTML_MODE] = jQuery('#edit-wikiwyg-html-link').get(0);
 }
 
 Wikiwyg.setup_newpage = function() {
@@ -754,33 +787,6 @@ proto.saveChanges = function() {
         */
 
         var saver = function() {
-            var editList = $('st-page-editing-files');
-            var new_page_name = $('st-newpage-pagename-edit');
-
-            for (var i=0; i < window.TagQueue.count(); i++) {
-                var new_input = document.createElement( 'input' );
-                new_input.type = 'hidden';
-                new_input.name = 'add_tag';
-                new_input.value = window.TagQueue.tag(i);
-                editList.appendChild(new_input);
-            }
-            window.TagQueue.clear_list();
-
-            // Move Images from "Current Page" to the new page
-            if (false && Socialtext.new_page) {
-                var recent = Attachments.get_new_attachments();
-
-                for (var i=0; i < recent.length; i++) {
-                    var new_input = document.createElement( 'input' );
-                    new_input.type = 'hidden';
-                    new_input.name = 'attachment';
-                    new_input.value = [ recent[i]['id'],
-                                        recent[i]['page-id']
-                                      ].join(':');
-                    editList.appendChild(new_input);
-                }
-            }
-
             $('st-page-editing-pagebody').value = wikitext;
             $('st-page-editing-form').submit();
             return true;

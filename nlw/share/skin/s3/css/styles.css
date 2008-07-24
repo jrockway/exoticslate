@@ -386,16 +386,29 @@ body#contentPage div#controls div#st-editing-tools-edit,body#settingsPage div#co
 	padding-left: 8px;
 }
 
+div#controls div#st-editing-tools-edit h2 {
+	font-size: 14px;
+	color: #333;
+	line-height: 44px;
+	padding-left: 10px;
+}
 
 body#listPage div#controls div#st-editing-tools-edit {
 	padding-left: 8px;
 }
 
-body#dashboard div#controls div#st-editing-tools-edit,body#blog div#controls div#st-editing-tools-edit {
+body#dashboard div#controls div#st-editing-tools-edit {
 	background: url(../images/dashControlsLeft.png) no-repeat top left;
 	height: 83px;
 	width: 80%;
 }
+
+body#blog div#controls div#st-editing-tools-edit {
+	background: url(../images/dashControlsLeft.png) no-repeat top left;
+	height: 83px;
+	width: 50%;
+}
+
 
 div#controls div#st-editing-tools-edit ul {
 	float: left;
@@ -417,7 +430,7 @@ body#dashboard div#controls div#st-editing-tools-edit h1,body#blog div#controls 
 	margin:21px 0 0 21px;}
 	
 body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks,body#blog div#controls div#st-editing-tools-edit ul#quickLinks {
-	margin: 15px 0 0 21px;
+	margin: 15px 0 0 12px;
 }	
 
 
@@ -490,6 +503,34 @@ ul li a.compareButton {
 ul li a.newPageButton:hover {
 	background-position: top right;
 }
+
+ul li a.newPostButton {
+	display: block;
+	width: 96px;
+	height: 22px;
+	background: url(../images/newPostButton.png) no-repeat;
+	background-position: top left;
+	text-indent: -9999px;
+}
+
+a.newPostButton {
+	display: block;
+	width: 96px;
+	height: 22px;
+	background: url(../images/newPostButton.png) no-repeat;
+	background-position: top left;
+	text-indent: -9999px;
+}
+
+
+ul li a.newPostButton:hover {
+	background-position: top right;
+}
+
+a.newPostButton:hover {
+	background-position: top right;
+}
+
 
 ul li a.compareButton {
 	display: block;
@@ -591,12 +632,25 @@ body#contentPage div#controls div#controlsRight,body#settingsPage div#controls d
 	width: 250px !important;
 }
 
-body#dashboard div#controls div#controlsRight,body#blog div#controls div#controlsRight {
+body#dashboard div#controls div#controlsRight {
 	background: url(../images/dashControlsRight.png) no-repeat top right;
 	height: 83px;
 	width: 20%;
 	
+	
 }
+
+body#blog div#controls div#controlsRight {
+	background: url(../images/dashControlsRight.png) no-repeat top right;
+	height: 83px;
+	width: 50%;
+}
+
+body#blog div#controls div#controlsRight {
+       width: 500px !important;
+       height: 100%;
+}
+
 
 div#controlsRight div#frame {
 	float: right;
@@ -627,7 +681,7 @@ div#controls div#controlsRight ul {
 	float: right;
 	margin-right: 20px;
 	}
-	
+		
 	
 div#controls div#controlsRight ul li {
 	float: left;
@@ -645,7 +699,39 @@ div#controls div#controlsRight ul li a {
 	color: #333;
 	font-weight: bold;
 	font-size: 9px;
-	}		
+	}			
+
+div#controls div#controlsRight ul.blogControls {
+	float: right;
+	}
+
+div#controls div#controlsRight ul.blogControls li {
+	float: none;
+	background: none;
+	line-height: 18px;
+	padding-left: 0;
+	}
+	
+div#controls div#controlsRight ul.blogControls li a {
+	float: none;
+	color: #333;
+	font-weight: normal;
+	font-size: 9px;
+	}	
+		
+div#controls div#controlsRight div.goTo {
+	float: right;
+	clear: both;
+	margin:15px 20px 0 0;
+}	
+
+div#controls div#controlsRight div.goTo a.newPostButton,div#controls div#controlsRight div.goTo span {
+	float: right;
+}	
+
+div#controls div#controlsRight div.goTo a.newPostButton {
+	margin-left: 10px;
+}
 
 div#controls div#controlsRight ul li a.export {
 	background: url(../images/exportIcon.png) no-repeat center left;
@@ -830,13 +916,12 @@ body#settingsPage div#contentColumns div#st-page-boxes	{
 
 
 body#settingsPage div#contentColumns div#st-page-boxes form {
-	margin-top: 10px;
 	width: 97%;
 }
 
 div#st-page-boxes form ul.formButtons {
 	float: left;
-	margin-top: 30px
+	margin-top: 13px
 }
 
 div#st-page-boxes form ul.formButtons li {
@@ -994,6 +1079,15 @@ body#settingsPage div.widget div.widgetContent ul {
 
 }
 
+
+div.widgetContent ul.leftNavList li a {
+	color: #666;
+}
+
+div.widgetContent ul.leftNavList li a:hover {
+	color: #333;
+	text-decoration: underline;
+}
 
 body#settingsPage div.widget div.widgetContent ul li {
 	background: url(../images/navArrow.gif) no-repeat center left;
@@ -1168,9 +1262,10 @@ table.dataTable th {
 	line-height: 30px;
 	background: #d0e6f6;
 	border-right: #fff 3px solid;
-	padding:0 7px 0 6px;
+	padding:0 10px 0 6px;
 	color: #005295;
 	font-weight: bold;
+	padding-right: 15px;
 	
 }
 
@@ -1244,8 +1339,20 @@ table.dataTable td span.summary {
 	line-height: 18px;
 }
 
+
+span.keyword {
+	background: #fffa97;
+}
+
 table.dataTable tr:hover td,table.dataTable tr.oddRow:hover td {
 	background:#d0e6f6;
+}
+
+
+table.dataTable th.selectColumn {
+	width: 1%;
+	padding:0 15px 0 15px;
+	text-align: center;
 }
 
 
@@ -1401,7 +1508,6 @@ div#footerGlobal ul li.first {
 }
 	
 /* footer End */
-
 
 
 

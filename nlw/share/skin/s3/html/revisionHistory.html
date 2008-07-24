@@ -3,7 +3,7 @@
         <title>Socialtext</title>
         <link rel="stylesheet" href="css/styles.css" type="text/css" media="screen" />
     </head>
-    <body id="listPage">
+    <body id="contentPage">
         <div id="mainWrap">
             <div id="header">
                 <div id="logo"><a href="index.html">Socialtext</a></div><!-- logo END -->
@@ -27,21 +27,10 @@
                 <a href="#">Your Workspaces</a>
                 </div><!-- workSpaceLink END -->
             </div><!-- mainNav END -->
-            <div id="contentWrap">
-            <div id="tabs">
-                <div class="tableTabs">
-                    <ul>
-                        <li class="selected"><a class="first" href="#">All Revisions</a></li>    
-                        <li><a href="#">Current Revisions</a></li>
-                    </ul>                
-                </div><!-- tableTabs END -->
-                <div class="tableFilter">
-                    
-                </div><!-- tableFilter END -->
-            </div><!-- tabs END -->      
+            <div id="contentWrap">     
                 <div id="controls">
                     <div id="controlsLeft">
-                            <ul>
+                        <ul>
                             <li><a class="compareButton" href="#">Compare Revisions</a></li>
                         </ul>                
                     </div><!-- controlsLeft END -->
@@ -50,45 +39,56 @@
                     </div><!-- controlsRight END -->
                 </div><!-- controls END -->
                 <div id="contentContainer">
-                    <h2 class="tableTitle">Developer Virtual Conference</h2>
+                    <h2 class="tableTitle">Developer Virtual Conference: <a href="#">Back to Current Revisions</a></h2>
                     <table class="dataTable">
                         <tr>
-                            <th width="1%">Select</th>
+                            <th colspan="2" class="selectColumn">Select</th>
                             <th>View Revision</th>
                             <th>Edited By</th>
                             <th>Date</th>
                         </tr>
                         <tr>
-                            <td><input type="checkbox" /></td>
+                            <td><input name="radio1" type="radio" /></td>
+                            <td><input name="radio1" type="radio" /></td>
                             <td><a href="#">Revision 5</a></td>
                             <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
                             <td>Apr 6 7:01am</td>
                         </tr>
                         <tr class="oddRow">
-                            <td><input type="checkbox" /></td>
+                            <td><input name="radio2" type="radio" /></td>
+                            <td><input name="radio2" type="radio" /></td>
                             <td><a href="#">Revision 4</a></td>
                             <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
                             <td>Apr 6 7:01am</td>
                         </tr>
                         <tr>
-                            <td><input type="checkbox" /></td>
+                            <td><input name="radio3" type="radio" /></td>
+                            <td><input name="radio3" type="radio" /></td>
                             <td><a href="#">Revision 3</a></td>
                             <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
                             <td>Apr 6 7:01am</td>
                         </tr>
                         <tr class="oddRow">
-                            <td><input type="checkbox" /></td>
+                            <td><input name="radio4" type="radio" /></td>
+                            <td><input name="radio4" type="radio" /></td>
                             <td><a href="#">Revision 2</a></td>
                             <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
                             <td>Apr 6 7:01am</td>
                         </tr>
                         <tr>
-                            <td><input type="checkbox" /></td>
+                            <td><input name="radio5" type="radio" /></td>
+                            <td><input name="radio5" type="radio" /></td>
                             <td><a href="#">Revision 1</a></td>
                             <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
                             <td>Apr 6 7:01am</td>
                         </tr>
                     </table><!-- dataTable END -->
+                        <div class="clear"></div><!-- clear END -->
+                    <div id="bottomButtons">
+                        <ul>
+                            <li><a class="compareButton" href="#">Compare Revisions</a></li>
+                        </ul>
+                    </div><!-- bottomButtons -->
                 </div><!-- contentContainer -->    
                     <div id="footer">
                         <div id="footerLinks">                        

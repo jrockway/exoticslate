@@ -8,7 +8,7 @@ use File::chdir;
 use Socialtext::File;
 
 BEGIN {
-    use Test::Socialtext tests => 13;
+    use Test::Socialtext tests => 15;
     use_ok( 'Socialtext::Skin' );
     $Socialtext::Skin::CODE_BASE = 't/share';
     $Socialtext::Skin::PROD_VER = '1.0';
@@ -100,4 +100,27 @@ BEGIN {
         "t/share/skin/s3/template",
         "t/share/skin/new_s3/template",
     ], 'Custom s3 skin has both template dirs');
+}
+
+# Uploaded skin
+{
+    my $hub = new_hub('admin');
+    $hub->current_workspace->skin_name('s2');
+    $hub->current_workspace->uploaded_skin('1');
+
+    my $info = $hub->skin->css_info;
+
+    is_deeply($info->{standard}, [
+        "/static/1.0/skin/s2/css/screen.css",
+        "/static/1.0/skin/s2/css/screen.ie.css",
+        "/static/1.0/skin/s2/css/print.css",
+        "/static/1.0/skin/s2/css/print.ie.css",
+
+        "/static/1.0/uploaded-skin/admin/css/screen.css",
+    ], 'Uploaded skin css is included');
+
+    is_deeply($hub->skin->template_paths, [
+        "t/share/skin/s2/template",
+        "t/share/uploaded-skin/admin/template",
+    ], 'Uploaded templates are included in template_paths');
 }

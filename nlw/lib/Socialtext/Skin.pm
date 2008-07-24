@@ -15,7 +15,6 @@ use YAML;
 our $CODE_BASE = Socialtext::AppConfig->code_base;
 our $PROD_VER = Socialtext->product_version();
 our $DEFAULT_PARENT = 's2';
-our @PRELOAD_SKINS = qw(s3 s2);
 my %css_files = (
     standard => [qw(screen.css screen.ie.css print.css print.ie.css)],
     popup    => [qw(popup.css popup.ie.css)],
@@ -27,12 +26,7 @@ sub class_id { 'skin' }
 # Returns an array of full paths to the preloaded templates
 sub PreloadTemplateDirs {
     my $class = shift;
-    return map { $class->_path('skin', $_, 'template') } @PRELOAD_SKINS;
-}
-
-sub name {
-    my $self = shift;
-    $self->hub->current_workspace->skin_name;
+    return glob($class->_path('skin', '*', 'template'));
 }
 
 sub template_paths {
@@ -40,18 +34,16 @@ sub template_paths {
     my $info = $self->skin_info($skin);
     return [
         grep { -d $_ }
-        map { $self->_path('skin', $_, 'template') }
+        map { $self->skin_path($_) . '/template' }
         reverse $self->inheritence($skin)
     ];
 }
 
 sub skin_info {
     my ($self, $skin) = @_;
-    $skin ||= $self->name;
+    $skin ||= $self->current_skin;
     return $self->{_skin_info}{$skin} if $self->{_skin_info}{$skin};
-    my $skin_path = $skin =~ m{^uploaded-skin/}
-        ? $self->_path($skin)
-        : $self->skin_path($skin);
+    my $skin_path = $self->skin_path($skin);
     my $info_path = File::Spec->catfile( $skin_path, 'info.yaml' );
     $self->{_skin_info} = -f $info_path ? YAML::LoadFile($info_path) : {};
     $self->{_skin_info}{parent} ||= $DEFAULT_PARENT;
@@ -66,13 +58,8 @@ sub skin_info {
 
 sub inheritence {
     my ($self,$skin) = @_;
+    $skin ||= $self->current_skin;
 
-    if (!$skin and $self->hub->current_workspace->uploaded_skin) {
-        my $ws = $self->hub->current_workspace->name;
-        $skin = "uploaded-skin/$ws";
-    }
-
-    $skin ||= $self->name;
     return @{$self->{_inheritence}{$skin}} if $self->{_inheritence}{$skin};
 
     my %done;
@@ -136,15 +123,14 @@ sub css_files {
     return @files;
 }
 
-sub skin_dir {
+sub current_skin {
     my $self = shift;
     if ($self->hub->current_workspace->uploaded_skin) {
         my $ws = $self->hub->current_workspace->name;
         return "uploaded-skin/$ws";
     }
     else {
-        my $skin = $self->name;
-        return "skin/$skin";
+        return $self->hub->current_workspace->skin_name;
     }
 }
 
@@ -156,29 +142,21 @@ sub skin_upload_path {
 
 sub skin_path {
     my $self = shift;
-    if (my $skin = shift) {
-        if ($skin =~ m{^(?:skin|uploaded-skin)/}) {
-            return $self->_path($skin);
-        }
-        return $self->_path('skin', $skin);
+    my $skin = shift || $self->current_skin;
+    if ($skin =~ m{^(?:skin|uploaded-skin)/}) {
+        return $self->_path($skin);
     }
-    else {
-        return $self->_path($self->skin_dir);
-    }
+    return $self->_path('skin', $skin);
 }
 
 sub skin_uri {
     my $self = shift;
 
-    if (my $skin = shift) {
-        if ($skin =~ m{^(?:skin|uploaded-skin)/}) {
-            return $self->_uri($skin);
-        }
-        return $self->_uri('skin', $skin);
+    my $skin = shift || $self->current_skin;
+    if ($skin =~ m{^(?:skin|uploaded-skin)/}) {
+        return $self->_uri($skin);
     }
-    else {
-        return $self->_uri($self->skin_dir);
-    }
+    return $self->_uri('skin', $skin);
 }
 
 sub customjs {
@@ -191,13 +169,14 @@ sub customjs {
         $name = $self->customjs_name;
     }
 
-    return $uri if $uri;
-
-    my $path = $self->skin_path($name);
-    if (-f "$path/javascript/custom.js") {
-        my $uri = $self->skin_uri($name);
-        return "$uri/javascript/custom.js";
+    unless ($uri) {
+        my $path = $self->skin_path($name);
+        if (-f "$path/javascript/custom.js") {
+            $uri = $self->skin_uri($name) . '/javascript/custom.js';
+        }
     }
+
+    return $uri;
 }
 
 sub skin_name {

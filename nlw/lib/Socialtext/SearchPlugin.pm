@@ -30,6 +30,7 @@ const sortdir => {
 
 field 'category_search';
 field 'title_search';
+field 'workspace_cache' => {};
 
 =head1 DESCRIPTION
 
@@ -224,34 +225,44 @@ sub _new_search {
     return @results;
 }
 
-sub _hub_for_workspace {
-    my ( $self, $workspace ) = @_;
+sub _load_hit_workspace_and_hub {
+    my $self = shift;
+    my $workspace_name  = shift;
 
+    if (my $hit = $self->workspace_cache->{$workspace_name}) {
+        return ($hit->{workspace}, $hit->{hub});
+    }
+
+    # Establish the proper hub for the hit
+    my $workspace;
+    eval {
+        $workspace
+            = Socialtext::Workspace->new( name => $workspace_name );
+    };
     my $hub = $self->hub;
-    if ( $workspace->name ne $self->hub->current_workspace->name ) {
+    if ( $workspace->name ne $hub->current_workspace->name ) {
         my $main = Socialtext->new();
         $main->load_hub(
-            current_user      => $self->hub->current_user,
+            current_user      => $hub->current_user,
             current_workspace => $workspace
         );
         $main->hub->registry->load;
-
         $hub = $main->hub;
     }
 
-    return $hub;
+    # Seed the cache for next time
+    $self->workspace_cache->{$workspace_name} = {
+        workspace => $workspace,
+        hub       => $hub,
+    };
+    return ($workspace, $hub);
 }
 
 sub _make_row {
     my ( $self, $hit ) = @_;
 
-    # Establish the proper hub for the hit
-    my $workspace = $self->hub->current_workspace();
-    eval {
-        $workspace
-            = Socialtext::Workspace->new( name => $hit->workspace_name );
-    };
-    my $hit_hub = $self->_hub_for_workspace( $workspace );
+    my ($workspace, $hit_hub)
+        = $self->_load_hit_workspace_and_hub($hit->workspace_name);
 
     my $page;
     my $attachment;

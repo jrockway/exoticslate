@@ -168,7 +168,7 @@ sub title_to_disposition {
 
     my $disposition = '';
     if ( $self->show_mouseover && $self->hub->action eq 'display' ) {
-        my $preview = $page->preview_text;
+        my $preview = $page->summary;
         $disposition = qq|title="$preview"|;
     }
 

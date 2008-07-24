@@ -1712,6 +1712,8 @@ sub is_bad_page_title {
     return 0;
 }
 
+sub summary { $_[0]->metadata->{Summary} }
+
 # This is called by Socialtext::Query::Plugin::push_result
 sub to_result {
     my $self = shift;

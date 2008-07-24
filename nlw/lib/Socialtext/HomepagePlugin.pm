@@ -130,9 +130,7 @@ sub _get_whats_new_page_info {
         author  => (  $updated_author
                     ? $updated_author->username
                     : undef),
-        preview => (  $show_preview
-                    ? $page->preview_text
-                    : '' ),
+        preview => (  $show_preview ? $page->summary : '' ),
     }
 }
 
@@ -172,9 +170,7 @@ sub _get_watchlist_info {
             author  => (  $updated_author
                         ? $updated_author->username
                         : undef),
-            preview => (  $show_preview
-                        ? $page->preview_text
-                        : '' ),
+            preview => (  $show_preview ? $page->summary : '' ),
         };
         last if @pages >= $self->hub->favorites->preferences->watchlist_dashboard_length->value;
      }

@@ -63,8 +63,10 @@ sub get_dbh {
     my %params = Socialtext::AppConfig->db_connect_params();
     my $dsn = "dbi:Pg:database=$params{db_name}";
 
-    $DBH{handle} = DBI->connect($dsn, $params{user}, "",  {AutoCommit => 0})
-        or die "Could not connect to database with dsn: $dsn: $!";
+    $DBH{handle} = DBI->connect($dsn, $params{user}, "",  {
+            AutoCommit => 0,
+            pg_enable_utf8 => 1,
+        }) or die "Could not connect to database with dsn: $dsn: $!";
     $DBH{st_in_transaction} = 0;
     Socialtext::Timer->Pause('get_dbh');
     return $DBH{handle};

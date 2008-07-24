@@ -26,8 +26,8 @@ This implementation simply stores a page URI in a blessed scalar.
 =cut
 
 package Socialtext::Search::SimplePageHit;
-
 use base 'Socialtext::Search::PageHit';
+use Socialtext::Encode;
 
 =head1 CONSTRUCTOR
 
@@ -45,7 +45,7 @@ sub new {
         workspace_name => $workspace_name,
         page_uri       => $page_uri,
 
-        snippet        => $hit->{excerpt},
+        snippet        => Socialtext::Encode::ensure_is_utf8($hit->{excerpt}),
         key            => $hit->{key},
     }, $class;
 }
@@ -91,7 +91,11 @@ Return the snippet of the hit.
 
 =cut
 
-sub set_snippet { $_[0]->{snippet} = $_[1] }
+sub set_snippet { 
+    my $self = shift;
+    $self->{snippet} = Socialtext::Encode::ensure_is_utf8(shift);
+}
+
 sub snippet     { $_[0]->{snippet} }
 
 =head2 $page_hit->set_hit($hit)

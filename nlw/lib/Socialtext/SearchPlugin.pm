@@ -300,7 +300,7 @@ sub _make_row {
     my $document_title = $metadata->Subject;
     my $date = $metadata->Date;
     my $date_local = $page->datetime_for_user;
-    my $snippet = $hit->snippet || $page->preview_text;
+    my $snippet = $hit->snippet || $page->summary;
     my $id = $page->id;
 
     if ( $hit->isa('Socialtext::Search::AttachmentHit') ) {

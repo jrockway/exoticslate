@@ -23,16 +23,27 @@
                             
         </div><!-- controlsLeft END -->
         <div id="controlsRight">
-            <ul>
-                <li><a class="export" href="#">Export</a></li>
+            <ul class="level1">
+                <li class="submenu">
+                    <a class="export" href="#" id="st-listtools-export">[% loc('Export') %]</a>
+                    <ul class="level2">
+                        [% IF loc_system_lang != 'ja' %]
+                        <li class="first"><a title="[% loc('Create PDF document from checked pages') %]" id="st-listview-submit-pdfexport" href="#">[% loc('Export to PDF') %]</a></li>
+                        [% END %]
+                        <li class="separator"><a title="[% loc('Create Word document from checked pages') %]" id="st-listview-submit-rtfexport" href="#">[% loc('Export to Word') %]</a></li>
+                    </ul>
+                </li>
             </ul>
         </div><!-- controlsRight END -->
     </div><!-- controls END -->
     <div id="contentContainer">
         <h2 class="tableTitle">[% display_title | html %]</h2>
+        <form id="st-listview-form" method="get" action="index.cgi">
+        <input id="st-listview-action" name="action" value="" type="hidden">
+        <input id="st-listview-filename" name="filename" value="" type="hidden">
         <table class="dataTable">
             <tr>
-                <th width="1%"><input type="checkbox" /></th>
+                <th width="1%"><input type="checkbox" id="st-listview-selectall"/></th>
                 <th class="toggle"><div class="toggle">
                    [% loc('Show:') %]
                    [% IF summaries %]
@@ -71,7 +82,7 @@
             </tr>
             [% FOREACH row = rows %]
                 [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
-                <td><input type="checkbox" /></td>
+                <td><input type="checkbox" name="page_selected" class="st-listview-selectpage-checkbox" value="[% row.page_uri %]"/></td>
                 <td colspan="2"><a class="titleLink" href="/[% row.workspace_name || current_workspace.name %]/index.cgi?[% row.page_uri %]">[% row.Subject %]</a>
                 [% IF row.workspace_title %][% loc('in') %] <a href="/[% row.workspace_name %]">[% row.workspace_title %]</a>[% END %]
                 [% IF summaries %]
@@ -82,6 +93,7 @@
                 </tr>
             [% END %]
         </table><!-- dataTable END -->
+        </form>
     </div><!-- contentContainer -->    
 [% END %]
 

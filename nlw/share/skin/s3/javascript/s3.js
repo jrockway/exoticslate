@@ -251,4 +251,30 @@ jQuery(function() {
                 .attr('type', 'text/css')
                 .appendTo('head');
         });
+
+    jQuery('#st-listview-submit-pdfexport').click(function() {
+        if (!jQuery('.st-listview-selectpage-checkbox:checked').size()) {
+            alert(loc("You must check at least one page in order to create a PDF."));
+        }
+        else {
+            jQuery('#st-listview-action').val('pdf_export')
+            jQuery('#st-listview-filename').val(Socialtext.wiki_id + '.pdf');
+            jQuery('#st-listview-form').trigger('submit');
+        }
+    });
+
+    jQuery('#st-listview-submit-rtfexport').click(function() {
+        if (!jQuery('.st-listview-selectpage-checkbox:checked').size()) {
+            alert(loc("You must check at least one page in order to create a Word document."));
+        }
+        else {
+            jQuery('#st-listview-action').val('rtf_export')
+            jQuery('#st-listview-filename').val(Socialtext.wiki_id + '.rtf');
+            jQuery('#st-listview-form').trigger('submit');
+        }
+    });
+
+    jQuery('#st-listview-selectall').click(function () {
+        jQuery('input[type=checkbox]').attr('checked', this.checked);
+    });
 });

@@ -362,6 +362,154 @@ html>body #st-page-details {
     color: #4949BA;
 }
 
+/* Listview Tools */
+
+#listPage #controlsRight {
+    z-index: 300;
+    font-size: 10px;
+    float: right;
+    margin: 0px 0px 0px 0px;
+    color: #000;
+    vertical-align: bottom;
+    position: relative;
+}
+
+#st-listtools a {
+    text-decoration: none;
+    color: black;
+    padding-left: 17px;
+}
+
+#st-listtools span {
+    color: inherit;
+    padding-left: 17px;
+    vertical-align: top;
+    text-align: right;
+}
+
+#listPage #controlsRight li {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    float: left;
+    width: 5em;
+}
+
+#listPage #controlsRight ul li {
+    line-height: 18px;
+    font-size: 14px;
+    padding-top: 2px;
+}
+
+#listPage #controlsRight ul ul li:hover {
+    background: #BFE2FF;
+}
+
+#listPage #controlsRight li a {
+    display: block;
+    text-decoration: none;
+}
+
+#listPage #controlsRight>ul a {
+    width: auto;
+}
+
+#listPage #controlsRight ul ul {
+    position: absolute;
+    width: auto;
+    display: none;
+}
+
+#listPage #controlsRight ul.level2 {
+    z-index: 300;
+    margin: 0;
+    padding: 0;
+    background: white;
+    border: 1px solid #CCC;
+    border-width: 0 1px;
+}
+
+#listPage #controlsRight ul ul li {
+    line-height: 1.5em;
+    width: 10.6em;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    font-size: 12px;
+}
+
+#listPage #controlsRight ul ul li a {
+    border-bottom: 1px solid #CCC;
+    padding-left: 19px;
+    padding-right: 3px;
+    margin-right: 3px;
+    border: 0px;
+}
+
+#listPage #controlsRight li.submenu li.submenu:hover {
+    z-index: 300;
+    background-color: #BFE2FF;
+}
+
+#listPage #controlsRight ul.level1 li.submenu:hover ul.level2 {
+    display: block;
+}
+
+#listPage #controlsRight ul.level2 {
+    top: 1.3em;
+    left: -4.2em;
+}
+
+#st-listview-submit-pdfexport {
+    background: url("../images/pdficon_small.gif") left center no-repeat;
+}
+
+#st-listview-submit-rtfexport {
+    background: url("../images/page_word.png") left center no-repeat;
+}
+/* Queue Tag Dialog */
+
+#st-tagqueue-interface {
+    text-align: left;
+}
+
+#st-tagqueue-fileprompt {
+    margin-bottom: 0.4em;
+    margin-top: 0;
+    padding-bottom: 0;
+}
+
+#st-tagqueue-title {
+    font-weight: bold;
+}
+
+#st-tagqueue-close {
+    float: right;
+    margin-top: 6px;
+}
+
+#st-tagqueue-addbutton {
+    float: right;
+    margin-right: 6px;
+    margin-top: 6px;
+    padding-bottom: 0;
+}
+
+#st-tagqueue-list {
+    display: none;
+    color: #666;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border-top: 1px solid #4949BA;
+    border-bottom: 1px solid #4949BA;
+    background-color: #F5F5F5;
+    padding: 3px;
+}
+
+.st-tagqueue-listlabel {
+    color: #4949BA;
+}
+
+
 /* Add a link lightbox */
 
 #add-wiki-link-section,

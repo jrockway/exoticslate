@@ -1,0 +1,12 @@
+[%# @COPYRIGHT@ -%]
+[% PROCESS element/settings/start %]
+<dl class="form">
+    <dt><label>[% loc('Preferences') %]</label></dt>
+    [% FOREACH preference = preference_list %]
+        [% IF preference.query %]
+            <dd>[% loc(preference.query) %]</dt>
+        [% END %]
+        <dd>[% preference.form_element %]</dd>
+    [% END %]
+</dl>
+[% PROCESS element/settings/stop %]

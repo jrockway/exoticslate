@@ -30,7 +30,10 @@ const sortdir => {
 
 field 'category_search';
 field 'title_search';
-field 'workspace_cache' => {};
+
+# Per object (request) cache mapping a workspace name to a 
+# Workspace object;
+field '_workspace_cache' => {};
 
 =head1 DESCRIPTION
 
@@ -112,7 +115,6 @@ sub search {
         unplug_phrase =>
             loc('Click this button to save the pages from this search to your computer for offline use'),
     );
-    
 }
 
 sub _feeds {
@@ -151,6 +153,7 @@ sub search_for_term {
     my $search_term = $query{search_term};
     $self->hub->log->debug("searchquery '" . $search_term . "'");
 
+    Socialtext::Timer->Start('search_for_term');
     $self->result_set( $self->new_result_set );
     eval {
         @{ $self->result_set->{rows} } = $self->_new_search(%query);
@@ -190,6 +193,7 @@ sub search_for_term {
             $self->hub->log->warning("searchdie '$@'");
         }
     }
+    Socialtext::Timer->Stop('search_for_term');
 }
 
 sub _new_search {
@@ -229,17 +233,14 @@ sub _load_hit_workspace_and_hub {
     my $self = shift;
     my $workspace_name  = shift;
 
-    if (my $hit = $self->workspace_cache->{$workspace_name}) {
+    if (my $hit = $self->_workspace_cache->{$workspace_name}) {
         return ($hit->{workspace}, $hit->{hub});
     }
 
     # Establish the proper hub for the hit
-    my $workspace;
-    eval {
-        $workspace
-            = Socialtext::Workspace->new( name => $workspace_name );
-    };
     my $hub = $self->hub;
+    my $workspace;
+    eval { $workspace = Socialtext::Workspace->new(name => $workspace_name) };
     if ( $workspace->name ne $hub->current_workspace->name ) {
         my $main = Socialtext->new();
         $main->load_hub(
@@ -251,7 +252,7 @@ sub _load_hit_workspace_and_hub {
     }
 
     # Seed the cache for next time
-    $self->workspace_cache->{$workspace_name} = {
+    $self->_workspace_cache->{$workspace_name} = {
         workspace => $workspace,
         hub       => $hub,
     };

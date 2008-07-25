@@ -1,0 +1,62 @@
+[%# @COPYRIGHT@ -%]
+[% save_button_value = loc('Invite') %]
+<dl class="form">
+    <dt><label>[% loc('Invite Other Users') %]</label></dt>
+    <dd>[% loc('Enter a list of email addresses (one address per line) of people you would like to invite to this Workspace.') %]</dd>
+
+    [% IF invitation_filter %]
+        [% loc('A filter has been set on this workspace. All candidate email addresses must match this pattern: <span style="color: red"> [_1] </span>', invitation_filter) %]
+    [% END %]
+
+    <dd><textarea name="users_new_ids" rows="4" cols="50">[% users_new_ids %]</textarea></dd>
+    <dd>
+        [% loc('Example:') %]
+        <pre>[% loc('your.friend@example.com') %]
+[% loc('another.friend@example.com') %]
+        </pre>
+    </dd>
+</dl>
+
+[% IF hub.checker.check_permission('admin_workspace') %]
+<dl class="form">
+    <dt><label>[% loc('Personal Message') %]</label></dt>
+    <dd>[% loc('If you wish, you can include a personal message in the invitation email. You can edit the message to say anything you want.') %]</dd>
+    <dd>
+        <input name="append_invitation" type="checkbox" value="1" />
+        [% loc('Append the personal message below?') %]
+    </dd>
+    <dd>
+        <textarea name="invitation_text" rows="8" cols="50" class="clear-line">[% loc('The Workspace is easy to use. Click links to browse through the pages.') %]
+
+[% loc("If you see something you'd like to add to or change, click the \"Edit\" link at the top of each page.") %] [% loc('Make your contributions in the text box, then click "Save".') %]
+
+[% loc("When you're entering text, just type in paragraphs.") %] [% loc("And don't worry about breaking anything - previous versions of the page are saved, so there's always a backup copy of the page you're working on.") %]
+
+[% loc("To make a link to another page (even if it doesn't exist yet), put square brackets around a word or phrase.") %]</textarea>
+    </dd>
+</dl> 
+
+<dl class="form">
+    <dt><label>[% loc('Standard Welcome Message') %]</label></dt>
+    <dd>[% loc('New users will be sent the following welcome email:') %]</dd>
+    <dd>
+        <div class="messageBox">
+            <div class="messageBoxRight">
+                <div class="messageBoxBottomRight">
+                    <div class="messageBoxBottomLeft">
+                       [% INCLUDE $workspace_invitation_body
+                          workspace_title       => hub.current_workspace.title,
+                          user                  => 'invitee@example.com',
+                          requires_confirmation => 1,
+                          inviting_user         => hub.current_user.best_full_name,
+                          confirmation_uri      => ''
+                          extra_text            => loc('<Your personal message goes here.>'),
+                        %]
+                    </div><!-- messageBoxBottomLeft -->
+                </div><!-- messageBoxBottomRight -->
+            </div><!-- messageBoxRight END -->
+        </div><!-- messageBox END -->
+    </dd>
+</dl>
+[% END %]
+

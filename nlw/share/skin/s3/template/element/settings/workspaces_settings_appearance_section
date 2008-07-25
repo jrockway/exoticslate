@@ -1,0 +1,61 @@
+[%# @COPYRIGHT@ -%]
+[% PROCESS element/settings/start %]
+<dl class="form">
+    <dt><label>[% loc('Workspace Title') %]</label></dt>
+    <dd>[% loc('This is the title of your workspace. It may be changed at any time.') %]</dd>
+
+    <dd>
+        <input type="text" name="title" value="[% workspace.title | html %]" size="50" />
+        ([% loc('required') %])
+    </dd>
+    <dd>
+        <i>[% loc('Example: Acme Widgets Product Development') %]</i>
+    </dd>
+</dl>
+
+<dl class="form">
+    <dt><label>[% loc('Workspace Logo Image') %]</label></dt>
+    <dd>[% loc('You can choose an image to use as the workspace logo. You may enter the web address of an image already on the web, or you may upload an image from your computer.') %]</dd>
+    <dd>[% loc("If you don't select an image, a Socialtext logo will be used instead.") %]</dd>
+
+    <dd>
+        <b>[% loc('Image Already On The Web') %]</b>
+        ([% loc('optional') %])<br/>
+        <input type="radio" checked="checked" name="logo_type" value="uri" /> <input type="text" name="logo_uri" value="[% workspace.logo_uri %]" size="30" />
+    </dd>
+    <dd>
+        <i>[% loc('Example: http://www.socialtext.com/images/socialtext-logo-30.gif') %]</i>
+    </dd>
+    <dd>
+        <b>[% loc('Upload An Image') %]</b>
+        ([% loc('optional') %])<br/>
+        <input type="radio" name="logo_type" value="file" /> <input type="file" name="logo_file" size="35" />
+    </dd>
+    <dd>
+        <i>[% loc('Example: C:\My Pictures\socialtext-logo-30.gif') %]</i>
+    </dd>
+</dl>
+
+<dl class="form">
+    <dt><label>[% loc('Workspace Home Link') %]</label></dt>
+    <dd>
+        [% loc('When users click "Home" in this workspace, should they see a personal dashboard, or the central page of the workspace? The central page of the workspace has the same title as the workspace ("[_1]").', workspace.title) | html %]<br/><br/>
+        [% loc('Dashboard is best if most users have a number of other workspaces. Central page is best for a close-knit community in which most users only have one workspace.') %]
+    </dd>
+    <dd>
+        <input type="radio" name="homepage_is_dashboard"
+           [%- IF workspace.homepage_is_dashboard %]
+            checked="checked"
+           [%- END %]
+            value="1" />
+           [% loc('Dashboard') %]<br/>
+
+           <input type="radio" name="homepage_is_dashboard"
+           [%- UNLESS workspace.homepage_is_dashboard %]
+            checked="checked"
+           [%- END %]
+            value="0" />
+           [% loc('Central page') %]<br/>
+   </dd>
+</dl>
+[% PROCESS element/settings/stop %]

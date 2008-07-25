@@ -1,0 +1,27 @@
+[%# @COPYRIGHT@ -%]
+<dl class="form">
+    <dt><label>[% loc('Workspaces') %]</label></dt>
+    <dd>[% loc('The ten most recently visited of these workspaces are displayed in the Dashboard.') %]</dd>
+</dl>
+
+<table>
+    <tr>
+        <td width="50%" class="text-align-left">
+            <label>[% loc('Workspace Title') %]</label>
+        </td>
+        <td class="text-align-left">
+            <label>[% loc('Workspace Name') %]</label>
+        </td>
+    </tr>
+[% WHILE (wws = workspaces_with_selected.next) %]
+  [% SET workspace = wws.0;
+     SET uwr = wws.1 %]
+    <tr>
+        <td>
+            <input type="hidden" name="selected_workspace_id" value="[% workspace.workspace_id %]"[% IF uwr.is_selected %] checked="checked"[% END %] />
+            <a href="/[% workspace.name %]/">[% workspace.title %]</a>
+        </td>
+        <td>[% workspace.name %]</td>
+    </tr>
+[% END %]
+</table>

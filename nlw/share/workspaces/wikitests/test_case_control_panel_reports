@@ -14,6 +14,7 @@
 
 | *Comment* | Test case: Control Panel Reports - Open Control Panel and Navigate |  |
 | open_ok | /nlw/control |  |
+| wait_for_element_visible_ok | link=Workspaces | 20000 |
 | clickAndWait | link=Workspaces |  |
 | type_ok | name | %%testingwrkspace%% |
 | st-submit |  |  |

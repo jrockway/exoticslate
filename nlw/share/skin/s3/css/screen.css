@@ -66,6 +66,11 @@ td.st-widget-dialog-editfield {
     padding: 4px;
 }
 
+#settingsPage th {
+    padding: 4px;
+    font-weight: bold;
+}
+
 #settingsPage dd {
     line-height: 1.2em;
     margin-bottom: 4px;

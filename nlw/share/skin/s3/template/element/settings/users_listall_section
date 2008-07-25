@@ -7,12 +7,12 @@
 <table>
 <tr>
   [% IF perm_admin %]
-    <td>[% loc('Remove') %]</td>
+    <th>[% loc('Remove') %]</th>
   [% END %]
-    <td>[% loc('Email Address') %]</td>
-    <td>[% loc('Admin') %]</td>
+    <th>[% loc('Email Address') %]</th>
+    <th>[% loc('Admin') %]</th>
   [% IF perm_admin && appconfig.is_default('user_factories') %]
-    <td>[% loc('Reset Password') %]</td>
+    <th>[% loc('Reset Password') %]</th>
   [% END %]
 </tr>
 

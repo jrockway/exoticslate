@@ -7,12 +7,12 @@
 
 <table>
     <tr>
-        <td width="50%" class="text-align-left">
+        <th>
             <label>[% loc('Workspace Title') %]</label>
-        </td>
-        <td class="text-align-left">
+        </th>
+        <th>
             <label>[% loc('Workspace Name') %]</label>
-        </td>
+        </th>
     </tr>
 [% WHILE (wws = workspaces_with_selected.next) %]
   [% SET workspace = wws.0;

@@ -16,7 +16,7 @@
             <div id="st-page-maincontent">
                 <div class="widget">
                     <div class="widgetHeader">
-                    <h4>Conversation Settings</h4>
+                    <h4>[% loc('Settings') %]</h4>
                     </div><!-- widgetHeader END -->
                     <div class="widgetContent">
                         <h4>[% loc('Users') %]</h4>

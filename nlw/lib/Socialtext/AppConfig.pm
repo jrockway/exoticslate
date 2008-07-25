@@ -153,7 +153,7 @@ sub _default_code_base {
             File::Spec->catdir( $ENV{ST_SRC_BASE}, 'current', 'nlw' )
         );
 
-        return $dir if -d $dir;
+        return $dir if defined $dir && -d $dir;
 
         return Cwd::abs_path(
             File::Spec->catdir(

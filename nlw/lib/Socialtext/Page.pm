@@ -1529,11 +1529,13 @@ sub read_and_decode_file {
 
     if ($return_content) { 
         local $/ = undef;
-        $buffer = <$fh>;
+        $buffer = <$fh> || '';
     }
 
-    $buffer = Socialtext::Encode::noisy_decode( input => $buffer,
-        blame => $filename );
+    $buffer = Socialtext::Encode::noisy_decode(
+            input => $buffer,
+            blame => $filename
+    );
 
     $buffer =~ s/\015\012/\n/g;
     $buffer =~ s/\015/\n/g;
@@ -1653,7 +1655,9 @@ sub current_revision_file {
 sub revision_file {
     my $self = shift;
     my $revision_id = shift;
-    return join '/', $self->database_directory, $self->id, $revision_id . '.txt';
+    my $filename = join '/', 
+        ( $self->database_directory, $self->id, $revision_id . '.txt' );
+    return $filename;
 }
 
 sub _new_revision_id {

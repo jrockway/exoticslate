@@ -38,19 +38,18 @@ symlink "123.txt", "$bad_utf8_dir/index.txt";
     local $SIG{__WARN__} = sub { push @warnings, @_ };
     my $page = $hub->pages->new_from_name('bad_utf8');
     my $output = $page->to_html;
+    use Data::Dumper;
+    warn Dumper( \@warnings );
     like $output, qr/<div\s+class="wiki">.*asdf/s,
         'did not cause infinite loop in the Perl interpreter';
     unlike $output, qr/\x92\n/, 'non-UTF-8 filtered';
     like $warnings[0], qr/bad_utf8\/123\.txt: doesn't seem to be valid utf-8/,
         'emitted warnings - to help track down bad data';
-    like $warnings[2], qr/bad_utf8\/123\.txt: doesn't seem to be valid utf-8/,
-        'emitted warnings - to help track down bad data';
     like $warnings[1], qr/Treating as/, 'Guessing an encoding.';
-    like $warnings[3], qr/Treating as/, 'Guessing an encoding.';
 
     # Note: due to some unknown code change, we get warnings twice now
     # maybe this shouldn't be the case.
-    ok @warnings == 4, '...but it\'s not too noisy.';
+    ok @warnings == 2, '...but it\'s not too noisy.';
     diag @warnings.join("\n----------\n");
 }
 

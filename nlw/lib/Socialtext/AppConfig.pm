@@ -148,13 +148,23 @@ sub _default_code_base {
 
     sub _user_checkout_dir {
         my $base = File::Basename::dirname(__FILE__);
+
+        my $dir = Cwd::abs_path( 
+            File::Spec->catdir( $ENV{ST_SRC_BASE}, 'current', 'nlw' )
+        );
+
+        return $dir if -d $dir;
+
         return Cwd::abs_path(
-            $ENV{ST_SRC_BASE}
-            ? File::Spec->catdir( $ENV{ST_SRC_BASE}, 'current', 'nlw' )
-            : File::Spec->catdir(
-                (File::Spec->file_name_is_absolute($base) ? () : $initial_cwd),
+            File::Spec->catdir(
+                (
+                    File::Spec->file_name_is_absolute($base)
+                    ? ()
+                    : $initial_cwd
+                ),
                 $base,
-                File::Spec->updir, File::Spec->updir
+                File::Spec->updir,
+                File::Spec->updir
             )
         );
     }

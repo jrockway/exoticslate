@@ -1,4 +1,5 @@
 [%# @COPYRIGHT@ -%]
+[% INCLUDE element/settings/start %]
 <dl class="form">
     <dt><label>[% loc('Workspaces') %]</label></dt>
     <dd>[% loc('The ten most recently visited of these workspaces are displayed in the Dashboard.') %]</dd>
@@ -25,3 +26,4 @@
     </tr>
 [% END %]
 </table>
+[% INCLUDE element/settings/stop %]

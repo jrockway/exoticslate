@@ -1,0 +1,7 @@
+    <ul class="formButtons">
+        [% IF hub.action != 'users_listall' OR perm_admin %]
+        <li><a class="saveButton" href="#">[% loc('Save') %]</a></li>
+        [% END %]
+        <li><a class="cancelButton" href="#">[% loc('Cancel') %]</a></li>
+    </ul>
+</form>

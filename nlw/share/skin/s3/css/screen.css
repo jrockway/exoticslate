@@ -66,6 +66,11 @@ td.st-widget-dialog-editfield {
     padding: 4px;
 }
 
+#settingsPage dd {
+    line-height: 1.2em;
+    margin-bottom: 4px;
+}
+
 /* Wafl Boxes */
 
 #st-page-content .wafl_container td {

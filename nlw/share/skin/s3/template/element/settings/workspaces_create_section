@@ -15,7 +15,7 @@
 
 <dl class="form">
     <dt><label>[% loc('Workspace Name') %]</label></dt>
-    <dd style="line-height:1.2em">
+    <dd>
         [% loc("This is a short unique identifier used as part of your workspace's web address and email address.") %] 
         [% loc('It must consist of 3-30 lowercase letters, numbers, underscores or dashes.') %]
     </dd>
@@ -23,7 +23,7 @@
         <input type="text" name="name" value="[% name %]" size="30" />
         ([% loc('required') %])
     </dd>
-    <dd style="line-height:1.2em">
+    <dd>
         [% loc('Example: acme-product-dev creates this workspace address:') %]
         http://[% appconfig.web_hostname %]/acme-product-dev
         [% loc('and this email address:') %]

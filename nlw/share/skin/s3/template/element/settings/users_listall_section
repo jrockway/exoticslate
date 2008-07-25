@@ -1,5 +1,6 @@
 [%# @COPYRIGHT@ -%]
 [% perm_admin = hub.checker.check_permission('admin_workspace') %]
+[% INCLUDE element/settings/start %]
 <dl class="form">
 <dt><label>[% loc('Manage') %]</label></dt>
 </dl>
@@ -50,3 +51,4 @@
   </tr>
 [% END %]
 </table>
+[% INCLUDE element/settings/stop %]

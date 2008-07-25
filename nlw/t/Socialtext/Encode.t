@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 19;
+use Test::Socialtext tests => 17;
 fixtures( 'admin_no_pages' );
 use Socialtext::Encode;
 
@@ -38,8 +38,6 @@ symlink "123.txt", "$bad_utf8_dir/index.txt";
     local $SIG{__WARN__} = sub { push @warnings, @_ };
     my $page = $hub->pages->new_from_name('bad_utf8');
     my $output = $page->to_html;
-    use Data::Dumper;
-    warn Dumper( \@warnings );
     like $output, qr/<div\s+class="wiki">.*asdf/s,
         'did not cause infinite loop in the Perl interpreter';
     unlike $output, qr/\x92\n/, 'non-UTF-8 filtered';

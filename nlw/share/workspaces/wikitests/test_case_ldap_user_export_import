@@ -43,6 +43,74 @@
 | location_like | %%ldapWS%%/index.cgi |  |  |  |
 | st-logout |  |  |  |  |
 
+| *Comment* | Test Case: LDAP User Export Import - 3 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-3 | %%ldapPwd%% | %%ldapName%%-3 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-3 | is now a member |  | A |
+| st-admin | export-workspace --w %%ldapWS%% | has been exported |  | AX |
+| st-admin-export-workspace-ok | %%ldapWS%% |  |  |  |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  |  |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | AI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+| st-ldap-delete-user | %%ldapUser%%-3 |  |  | B |
+| st-ldap-add-user | %%ldapUser%%-3 | %%ldapPwd%% | %%ldapName%%-3 | C |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  | CX |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | CI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+| *Comment* | Test Case: LDAP User Export Import - 4 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-4 | %%ldapPwd%% | %%ldapName%%-4 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-4 | is now a member |  | A |
+| st-admin | export-workspace --w %%ldapWS%% | has been exported |  | AX |
+| st-admin-export-workspace-ok | %%ldapWS%% |  |  |  |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  |  |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | AI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+| st-ldap-delete-user | %%ldapUser%%-4 |  |  | B |
+| st-ldap-add-user | %%ldapUser%%-4 | %%ldapPwd%% | %%ldapName%%-4 | C |
+| st-ldap-delete-user | %%ldapUser%%-4 |  |  | D |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  | DX |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | DI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+| *Comment* | Test Case: LDAP User Export Import - 5 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-5 | %%ldapPwd%% | %%ldapName%%-5 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-5 | is now a member |  | A |
+| st-admin | delete-workspace --w %%ldapWS%% | has been deleted |  | AX |
+| st-ldap-delete-user | %%ldapUser%%-5 |  |  | B |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | BI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  | BX |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | BI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+| *Comment* | Test Case: LDAP User Export Import - 6 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-6 | %%ldapPwd%% | %%ldapName%%-6 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-6 | is now a member |  | A |
+| st-admin | delete-workspace --w %%ldapWS%% | has been deleted |  | AX |
+| st-ldap-delete-user | %%ldapUser%%-6 |  |  | B |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | BI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-6 | %%ldapPwd%% | %%ldapName%%-6 | C |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  | CX |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | CI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
 | *Comment* | Test Case: LDAP User Export Import - 7 |  |  |  |
 | st-ldap-add-user | %%ldapUser%%-7 | %%ldapPwd%% | %%ldapName%%-7 |  |
 | st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-7 | is now a member |  | A |
@@ -76,6 +144,40 @@
 | location_like | %%ldapWS%%/index.cgi |  |  |  |
 | st-logout |  |  |  |  |
 
+| *Comment* | Test Case: LDAP User Export Import - 9 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-9 | %%ldapPwd%% | %%ldapName%%-9 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-9 | is now a member |  | A |
+| st-admin | delete-workspace --w %%ldapWS%% | has been deleted |  | AX |
+| st-ldap-delete-user | %%ldapUser%%-9 |  |  | B |
+| st-ldap-add-user | %%ldapUser%%-9 | %%ldapPwd%% | %%ldapName%%-9 | C |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | CI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+| st-ldap-delete-user | %%ldapUser%%-9 |  |  | D |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  | DX |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | DI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+| *Comment* | Test Case: LDAP User Export Import - 10 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-10 | %%ldapPwd%% | %%ldapName%%-10 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-10 | is now a member |  | A |
+| st-admin | delete-workspace --w %%ldapWS%% | has been deleted |  | AX |
+| st-ldap-delete-user | %%ldapUser%%-10 |  |  | B |
+| st-ldap-add-user | %%ldapUser%%-10 | %%ldapPwd%% | %%ldapName%%-10 | C |
+| st-ldap-delete-user | %%ldapUser%%-10 |  |  | D |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | DI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  | DX |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | DI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
 | *Comment* | Test Case: LDAP User Export Import - 11 |  |  |  |
 | st-ldap-add-user | %%ldapUser%%-11 | %%ldapPwd%% | %%ldapName%%-11 |  |
 | st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-11 | is now a member |  | A |
@@ -104,6 +206,106 @@
 | st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  |  |
 | st-ldap-add-user | %%ldapUser%%-12 | %%ldapPwd%% | %%ldapName%%-12 | C |
 | st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | CI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+| *Comment* | Test Case: LDAP User Export Import - 13 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-13 | %%ldapPwd%% | %%ldapName%%-13 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-13 | is now a member |  | A |
+| st-ldap-delete-user | %%ldapUser%%-13 |  |  | B |
+| st-admin | delete-workspace --w %%ldapWS%% | has been deleted |  | B X |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | BI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-13 | %%ldapPwd%% | %%ldapName%%-13 | C |
+| st-ldap-delete-user | %%ldapUser%%-13 |  |  | D |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  | DX |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | DI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+| *Comment* | Test Case: LDAP User Export Import - 14 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-14 | %%ldapPwd%% | %%ldapName%%-14 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-14 | is now a member |  | A |
+| st-ldap-delete-user | %%ldapUser%%-14 |  |  | B |
+| st-admin | delete-workspace --w %%ldapWS%% | has been deleted |  | BX |
+| st-ldap-add-user | %%ldapUser%%-14 | %%ldapPwd%% | %%ldapName%%-14 | C |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | CI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  | CX |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | CI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+| *Comment* | Test Case: LDAP User Export Import - 15 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-15 | %%ldapPwd%% | %%ldapName%%-15 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-15 | is now a member |  | A |
+| st-ldap-delete-user | %%ldapUser%%-15 |  |  | B |
+| st-admin | delete-workspace --w %%ldapWS%% | has been deleted |  | BX |
+| st-ldap-add-user | %%ldapUser%%-15 | %%ldapPwd%% | %%ldapName%%-15 | C |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | CI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+| st-ldap-delete-user | %%ldapUser%%-15 |  |  | D |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  | DX |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | DI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+| *Comment* | Test Case: LDAP User Export Import - 16 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-16 | %%ldapPwd%% | %%ldapName%%-16 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-16 | is now a member |  | A |
+| st-ldap-delete-user | %%ldapUser%%-16 |  |  | B |
+| st-admin | delete-workspace --w %%ldapWS%% | has been deleted |  | BX |
+| st-ldap-add-user | %%ldapUser%%-16 | %%ldapPwd%% | %%ldapName%%-16 | C |
+| st-ldap-delete-user | %%ldapUser%%-16 |  |  | D |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | DI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  | DX |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | DI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+| *Comment* | Test Case: LDAP User Export Import - 17 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-17 | %%ldapPwd%% | %%ldapName%%-17 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-17 | is now a member |  | A |
+| st-ldap-delete-user | %%ldapUser%%-17 |  |  | B |
+| st-ldap-add-user | %%ldapUser%%-17 | %%ldapPwd%% | %%ldapName%%-17 | C |
+| st-admin | delete-workspace --w %%ldapWS%% | has been deleted |  | C X |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | CI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  | CX |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | CI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+
+| *Comment* | Test Case: LDAP User Export Import - 18 |  |  |  |
+| st-ldap-add-user | %%ldapUser%%-18 | %%ldapPwd%% | %%ldapName%%-18 |  |
+| st-admin | add-member --w %%ldapWS%% --u %%ldapUser%%-18 | is now a member |  | A |
+| st-ldap-delete-user | %%ldapUser%%-18 |  |  | B |
+| st-ldap-add-user | %%ldapUser%%-18 | %%ldapPwd%% | %%ldapName%%-18 | C |
+| st-admin | delete-workspace --w %%ldapWS%% | has been deleted |  | C X |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | CI |
+| open_ok | /%%ldapWS%% |  |  |  |
+| location_like | %%ldapWS%%/index.cgi |  |  |  |
+| st-logout |  |  |  |  |
+| st-ldap-delete-user | %%ldapUser%%-18 |  |  | D |
+| st-admin | delete-workspace --w %%ldapWS%% --no-export | has been deleted |  | DX |
+| st-admin | import-workspace --t %%ldapTarball%% | has been imported |  | DI |
 | open_ok | /%%ldapWS%% |  |  |  |
 | location_like | %%ldapWS%%/index.cgi |  |  |  |
 | st-logout |  |  |  |  |

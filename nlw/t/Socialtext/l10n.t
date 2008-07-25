@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::Socialtext tests => 6;
+use Test::Socialtext tests => 7;
 use Socialtext::AppConfig;
 
 fixtures('admin_no_pages');
@@ -19,7 +19,8 @@ Default_to_english: {
 }
 
 Test_locale: {
-    loc_lang('zz');
+    my $result = loc_lang('zz');
+    isa_ok($result, 'Socialtext::l10n::I18N::zz', 'found locale.');
     is loc('Welcome, [_1].', 'user'), 'w3lC0M3, user.';
 }
 

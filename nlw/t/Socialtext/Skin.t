@@ -6,6 +6,7 @@ use File::Path qw/mkpath/;
 use Socialtext::File qw/set_contents/;
 use File::chdir;
 use Socialtext::File;
+fixtures('admin');
 
 BEGIN {
     use Test::Socialtext tests => 15;

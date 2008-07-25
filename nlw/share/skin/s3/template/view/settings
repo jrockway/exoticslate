@@ -1,0 +1,102 @@
+[%# @COPYRIGHT@ -%]
+[% WRAPPER layout/html id="settingsPage" %]
+    [% perm_admin = checker.check_permission('admin_workspace') %]
+    [% perm_invite = checker.check_permission('request_invite') %]
+    [% perm_edit = checker.check_permission('edit') %]
+    <div id="controls">
+        <div id="st-editing-tools-edit">
+            
+        </div><!-- controlsLeft END -->
+        <div id="controlsRight">
+            
+        </div><!-- controlsRight END -->
+    </div><!-- controls END -->
+    <div id="contentContainer">
+        <div id="contentColumns">
+            <div id="st-page-maincontent">
+                <div class="widget">
+                    <div class="widgetHeader">
+                    <h4>Conversation Settings</h4>
+                    </div><!-- widgetHeader END -->
+                    <div class="widgetContent">
+                        <h4>[% loc('Users') %]</h4>
+                        <ul class="leftNavList">
+                            <li><a href="?action=users_settings">[% loc('My Settings') %]</a></li>
+                            <li><a href="?action=users_listall">[% IF perm_admin %][% loc('Manage All Users') %][% ELSE %][% loc('List All Users') %][% END %]</a></li>
+                            [% IF perm_admin || perm_invite %]
+                                <li><a href="?action=users_invitation">[% loc('Invite New Users') %]</a></li>
+                            [% END %]
+                        </ul>
+                        <h4>[% loc('Workspaces') %]</h4>
+                        <ul class="leftNavList">
+                            <li><a href="?action=workspaces_listall">[% loc('My Workspaces') %]</a></li>
+                            [% IF perm_admin %]
+                            <li><a href="?action=workspaces_create">[% loc('Create New Workspace') %]</a></li>
+                            [% END %]
+                            <li><a href="?action=workspaces_unsubscribe">[% loc('Unsubscribe') %]</a></li>
+                        </ul>
+                        [% IF perm_admin %]
+                        <h4>[% loc('This Workpace') %]</h4>
+                        <ul class="leftNavList">
+                            <li><a href="?action=workspaces_settings_appearance">[% loc('Workspace Appearance') %]</a></li>
+                            <li><a href="?action=workspaces_settings_features">[% loc('Workspace Features') %]</a></li>
+                            <li><a href="?action=workspaces_settings_skin">[% loc('Workspace Skin') %]</a></li>
+                            <li><a href="?action=workspaces_permissions">[% loc('Workspace Privacy') %]</a></li>
+                        </ul>
+                        [% END %]
+                        [% IF perm_edit %]
+                        <h4>[% loc('Weblogs') %]</h4>
+                        <ul class="leftNavList">
+                            <li><a href="?action=weblogs_create">[% loc('Create New Weblog') %]</a></li>
+                        </ul>
+                        [% END %]
+                        <h4>[% loc('Preferences') %]</h4>
+                        <ul class="leftNavList">
+                        [% FOR pref = pref_list %]
+                            [% NEXT IF pref.id == 'email_notify' && !hub.current_workspace.email_notify_is_enabled %]
+                            <li><a href="?action=preferences_settings;preferences_class_id=[% pref.id %]">[% loc(pref.title) %]</a></li>
+                        [% END %]
+                        </ul>
+                        <div class="clear"></div>
+                    </div><!-- widgetContent -->
+                    <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
+                </div><!-- widget END -->
+
+            </div><!-- contentLeft -->
+            <div id="st-page-boxes">
+                [%
+                  enctype = 'application/x-www-form-urlencoded';
+                  SET enctype = 'multipart/form-data'
+                    IF (hub.action == 'workspaces_settings_appearance');
+                %]
+                <form method="post" name="settings" action="[% script_name %]" enctype="[% enctype %]">
+                    <input type="hidden" name="Button" value="[% loc('Save') %]"/>
+                    <input type="hidden" name="action" value="[% hub.action %]" />
+                    <input type="hidden" name="preferences_class_id" value="[% preferences_class_id %]" />
+                    [%- IF settings_error %]<div class="st-errorbox">[% settings_error %]</div>[% END -%]
+                    <ul class="formButtons">
+                        [% IF hub.action != 'users_listall' OR perm_admin %]
+                        <li><a class="saveButton" onclick="document.forms['settings'].submit()" href="#">[% loc('Save') %]</a></li>
+                        [% END %]
+                        <li><a class="cancelButton" href="#">[% loc('Cancel') %]</a></li>
+                    </ul>
+                    <div class="message">[% message %]</div>
+                    [% FOREACH warning = warnings %] 
+                      <div class="error-message">[% loc('warning:') %] [% warning %]</div>
+                    [% END %]
+                    [% FOREACH error = errors %] 
+                      <div class="error-message">[% loc('error:') %] [% error %]</div>
+                    [% END %]
+                    [% settings_section %]
+                    <ul class="formButtons">
+                        [% IF hub.action != 'users_listall' OR perm_admin %]
+                        <li><a class="saveButton" href="#">[% loc('Save') %]</a></li>
+                        [% END %]
+                        <li><a class="cancelButton" href="#">[% loc('Cancel') %]</a></li>
+                    </ul>
+                </form>
+            </div><!-- contentRight -->
+        </div><!-- contentColumns END -->
+        <div class="clear"></div><!-- clear END -->
+    </div><!-- contentContainer -->    
+[% END %]

@@ -1,0 +1,40 @@
+[%# @COPYRIGHT@ -%]
+<dl class="form">
+    <dt><label>[% loc('Name') %]</label></dt>
+    <dd>
+        <label>[% loc('Email') %]</label>
+        <a href="mailto:[% user.email_address %]">[% user.email_address %]</a>
+    </dt>
+    <dd>
+        <label>[% loc('Last name:') %]</label>
+        <div><input name="last_name" value="[% user.last_name %]"/></div>
+    </dd>
+    <dd>
+        <label>[% loc('First name:') %]</label>
+        <div><input name="first_name" value="[% user.first_name %]"/></div>
+    </dd>
+    <dl class="form">
+        <dt><label>[% loc('Change Password') %]</label></dt>
+        <dd class="noMargin">
+            [% loc('New passwords must be atleast 6 characters long.') %]
+            [% loc('Use your email address and new password to log in again.') %]
+        </dd>
+        <dd>
+            <label>[% loc('Current password:') %]</label>
+            <div>
+                <input name="old_password" type="password" maxlength="30" />
+            </div>
+        </dd>
+        <dd>
+            <label>[% loc('New password:') %]</label>
+            <div>
+                <input name="new_password" type="password" maxlength="30" />
+            </div>
+        </dd>
+        <dd>
+            <label>[% loc('Type new Password again:') %]</label>
+            <div>
+                <input name="new_password_retype" type="password" maxlength="30" />
+            </div>
+        </dd>
+    </dl>

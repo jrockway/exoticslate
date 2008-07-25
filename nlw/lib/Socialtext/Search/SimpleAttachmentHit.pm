@@ -30,8 +30,8 @@ This implementation simply stores the URI and attachment id in a blessed hash.
 =cut
 
 package Socialtext::Search::SimpleAttachmentHit;
-
 use base 'Socialtext::Search::AttachmentHit';
+use Socialtext::Encode;
 
 =head1 CONSTRUCTOR
 
@@ -52,7 +52,7 @@ sub new {
         attachment_id  => $attachment_id,
 
         key            => $hit->{key},
-        snippet        => $hit->{excerpt},
+        snippet        => Socialtext::Encode::ensure_is_utf8($hit->{excerpt}),
     }, $class;
 }
 
@@ -105,7 +105,11 @@ The snippet of the hit.
 Return the hit's snippet
 =cut
 
-sub set_snippet { $_[0]->{snippet} = $_[1] }
+sub set_snippet { 
+    my $self = shift;
+    $self->{snippet} = Socialtext::Encode::ensure_is_utf8(shift);
+}
+
 sub snippet     { $_[0]->{snippet} }
 
 =head2 $hit->set_hit($hit)

@@ -7,12 +7,13 @@ use lib "$FindBin::Bin/../lib";
 use Socialtext::Workspace;
 use Socialtext::Hub;
 use Socialtext::CLI;
+use Socialtext::Encode;
 use Fatal qw/opendir closedir chdir open/;
 use Cwd qw/abs_path/;
 
 $| = 1; # turn on autoflush
 
-die "Must be run as root!\n" if $<;
+die "Must be run as root!\n" if $< and !$ENV{ST_DEV};
 Socialtext::CLI->_drop_privs();
 
 my $only_workspace = shift;
@@ -39,6 +40,9 @@ sub process_workspace {
         next unless -d $dir;
         next if $dir =~ m/^\./;
 
+        # Ignore really old pages that have invalid page_ids
+        next unless Socialtext::Encode::is_valid_utf8($dir);
+
         # Check the index.txt page link for a relative link.  Rewrite
         # them to be absolute links.
 	my $page_link_name = "$dir/index.txt";
@@ -52,17 +56,33 @@ sub process_workspace {
 		or die "Could not symlink $abs_page, $tmp_link: $!";
 	    rename $tmp_link => $page_link_name 
 		or die "Could not rename $tmp_link, $page_link_name: $!";
-	    warn "Fixed relative symlink $page_link_name\n";
+	    warn "\nFixed relative symlink $page_link_name\n";
 	}
-        my $page = $hub->pages->new_from_name($dir);
-        if ($page->metadata->{Summary}) {
-            print '.';
-            next;
-        }
-        print '+';
+	my $char = '?';
         eval {
-            $page->_store_preview_text($page->preview_text);
+            # Ignore non-UTF-8 warnings
+	    local $SIG{__WARN__} = sub { 
+                my $warning = shift;
+                if ($warning =~ m/\Qdoesn't seem to be valid utf-8\E/ or
+                    $warning =~ m/\QTreating as iso-8859-1\E/) {
+                    $char = '!';  
+                }
+                else {
+                    $char = '';
+                    warn "\n\n$warning\n";
+                }
+            };
+	    my $page = $hub->pages->new_from_name($dir);
+	    if ($page->metadata->{Summary}) {
+		$char = '.';
+	    }
+	    else {
+		my $text = $page->preview_text;
+		$page->_store_preview_text($text);
+		$char = "<$dir>";
+	    }
         };
+        print $char;
         warn "Error storing preview text: $@" if $@;
     }
     closedir($dfh);

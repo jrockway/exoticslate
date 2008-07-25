@@ -1433,23 +1433,30 @@ sub load_revision {
     my $revision_id = shift;
 
     $self->revision_id($revision_id);
-    return $self->load(@_);
+    return $self->load;
 }
 
 sub load {
-    my $self = shift;
+    my $self        = shift;
+    my $page_string = shift;
 
     my $metadata = $self->{metadata}
-      or die "No metadata object in content object";
-    my ($headers, $content) = $self->get_data(@_);
+        or die "No metadata object in content object";
+
+    my $headers;
+    if ($page_string) {
+        $headers = $self->_read_page_string($page_string);
+    }
+    else {
+        $headers = $self->_read_page_file();
+    }
     $metadata->from_hash($self->parse_headers($headers));
-    $self->content($content);
     return $self;
 }
 
 sub load_content {
     my $self = shift;
-    my (undef, $content) = $self->get_data();
+    my $content = $self->_read_page_file(content => 1);
     $self->content($content);
     return $self;
 }
@@ -1458,7 +1465,7 @@ sub load_metadata {
     my $self = shift;
     my $metadata = $self->{metadata}
       or die "No metadata object in content object";
-    my ($headers) = $self->get_data();
+    my $headers = $self->_read_page_file();
     $metadata->from_hash($self->parse_headers($headers));
     $metadata->{Type} ||= 'wiki';
     return $self;
@@ -1483,69 +1490,54 @@ sub parse_headers {
     return $metadata;
 }
 
-sub get_data {
+# This method is used only by testing tool.
+sub _read_page_string {
     my $self = shift;
-    my ($source) = @_;
-    # REVIEW: Looks like not all these _read_* options are actually used -- alester
-    my $buffer =  
-      (not defined $source) ? $self->_read_revision :
-      (ref($source) eq 'GLOB') ? $self->_read_handle(@_) :
-      (ref($source) eq 'SCALAR') ? $self->_read_string_ref(@_) :
-      (not ref($source)) ?
-        ($source =~ /[\015\012]/) ? $self->_read_string(@_) :
-        (not length $source) ? $self->_read_empty :
-        (-f $source) ? $self->_read_filename(@_) :
-        die "Invalid call to get_data" :
-      die "Invalid call to get_data";
+    my $string = shift;
 
-    $buffer =~ s/\015\012/\n/g;
-    $buffer =~ s/\015/\n/g;
-
-    my ($headers, $content) = split /(?<=\n)\n/, $buffer, 2;
-    $headers = ''
-      unless defined $headers;
-    $content = ''
-      unless defined $content;
-    return ($headers, $content);
+    die "Not a string ($string)" if ref($string);
+    my ($headers, $content) = split "\n\n", $string, 2;
+    $self->content($content);
+    return $headers;
 }
 
-sub _read_filename {
-    my $self = shift;
-    my $file_path = shift;
-    die "No such file $file_path"
-      unless -f $file_path;
-    die "File path contains '..', which is not allowed."
-      if $file_path =~ /\.\./;
-    my $page = Socialtext::File::get_contents($file_path);
-    return Socialtext::Encode::noisy_decode(input => $page, blame => $file_path);
-}
+sub _read_page_file {
+    my $self   = shift;
+    my %p      = @_;
+    my $return_content = $p{content};
 
-
-sub _read_revision {
-    my $self = shift;
     my $revision_id = $self->assert_revision_id;
     return $self->_read_empty unless $revision_id;
     my $filename = $self->current_revision_file;
-    $self->_read_filename($filename);
+    return read_and_decode_file($filename, $return_content);
 }
 
-sub _read_handle {
-    my $self = shift;
-    my $handle = shift;
-    local $/;
-    my $text = <$handle>;
-    $self->utf8_decode($text);
-}
+sub read_and_decode_file {
+    my $filename       = shift;
+    my $return_content = shift;
+    die "No such file $filename" unless -f $filename;
+    die "File path contains '..', which is not allowed."
+        if $filename =~ /\.\./;
 
-sub _read_string {
-    my $self = shift;
-    $self->utf8_decode(shift);
-}
+    my $buffer;
+    open(my $fh, '<:raw', $filename)
+        or die "Can't open $filename: $!";
+    {
+        local $/ = "\n\n";
+        $buffer = <$fh>;
+    }
 
-sub _read_string_ref {
-    my $self = shift;
-    my $ref = shift;
-    $self->utf8_decode($$ref);
+    if ($return_content) { 
+        local $/ = undef;
+        $buffer = <$fh>;
+    }
+
+    $buffer = Socialtext::Encode::noisy_decode( input => $buffer,
+        blame => $filename );
+
+    $buffer =~ s/\015\012/\n/g;
+    $buffer =~ s/\015/\n/g;
+    return $buffer;
 }
 
 sub _read_empty {

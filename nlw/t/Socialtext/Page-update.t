@@ -18,6 +18,9 @@ my $content1  = 'one content';
 my $content2  = 'two content';
 my $content3  = 'thr content';
 
+# Note: While these test blocks look independent, they're not.
+# They must run in order.
+
 UPDATE_AS_CREATE: {
     my $page = _page_object($page_name);
 
@@ -126,6 +129,6 @@ sub _validate_page {
     is( $page->metadata->Revision, $p{revision},
         "page revision should $p{revision}" );
     if ($p{tags}) {
-        is_deeply($p{tags}, $page->metadata->Category, 'tags are correct');
+        is_deeply($page->metadata->Category, $p{tags}, 'tags are correct');
     }
 }

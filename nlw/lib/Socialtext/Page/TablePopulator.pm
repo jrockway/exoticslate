@@ -53,6 +53,9 @@ sub populate {
             next unless -d $dir;
             next if $dir =~ m/^\./;
 
+            # Ignore really old pages that have invalid page_ids
+            next unless Socialtext::Encode::is_valid_utf8($dir);
+
             eval {
                 my $page = $self->read_metadata($dir);
                 my $workspace_id = $workspace->workspace_id;
@@ -82,8 +85,8 @@ sub populate {
         add_to_db('page_tag', \@page_tags);
     };
     if ($@) {
-        warn "Error during populate of $workspace_name: $@";
         sql_rollback();
+        die "Error during populate of $workspace_name: $@";
     }
     else {
         sql_commit();
@@ -184,13 +187,9 @@ sub add_to_db {
 INSERT INTO $table VALUES ($vals);
 EOT
     my $row;
-    eval {
-        for $row (@$rows) {
-            $sth->execute(@$row);
-        }
-    };
-    if ($@) {
-        die "Error during execute - (INSERT INTO $table) - bindings=("
+    for $row (@$rows) {
+        $sth->execute(@$row)
+            or die "Error during execute - (INSERT INTO $table) - bindings=("
             . join(', ', @$row) . ') - '
             . $sth->errstr;
     }
@@ -215,13 +214,7 @@ sub load_original_revision {
 sub fetch_metadata {
     my $file = shift;
 
-    my $content = '';
-    open(my $fh, $file);
-    while(my $line = <$fh>) {
-        last if $line eq "\n";
-        $content .= $line;
-    }
-
+    my $content = Socialtext::Page::read_and_decode_file($file);
     return parse_headers($content);
 }
 

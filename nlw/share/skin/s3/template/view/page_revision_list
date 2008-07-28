@@ -3,7 +3,9 @@
 [% WRAPPER layout/html id="revisions" title = loc("[_1]: All Revisions", display_title) %]
 <div id="controls">
     <div id="st-editing-tools-edit">
-    [% IF page.metatdata.Type != 'spreadsheet'; PROCESS compare_revisions; END %]
+    [% IF page.metatdata.Type != 'spreadsheet';
+        PROCESS compare_revisions;
+    END %]
     </div><!-- controlsLeft END -->
     <div id="controlsRight">
         
@@ -18,45 +20,21 @@
             <th>[% loc("Edited By") %]</th>
             <th>[% loc("Date") %]</th>
         </tr>
-        <tr>
-            <td><input name="radio1" type="radio" /></td>
-            <td><input name="radio1" type="radio" /></td>
-            <td><a href="#">Revision 5</a></td>
-            <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
-            <td>Apr 6 7:01am</td>
-        </tr>
-        <tr class="oddRow">
-            <td><input name="radio2" type="radio" /></td>
-            <td><input name="radio2" type="radio" /></td>
-            <td><a href="#">Revision 4</a></td>
-            <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
-            <td>Apr 6 7:01am</td>
-        </tr>
-        <tr>
-            <td><input name="radio3" type="radio" /></td>
-            <td><input name="radio3" type="radio" /></td>
-            <td><a href="#">Revision 3</a></td>
-            <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
-            <td>Apr 6 7:01am</td>
-        </tr>
-        <tr class="oddRow">
-            <td><input name="radio4" type="radio" /></td>
-            <td><input name="radio4" type="radio" /></td>
-            <td><a href="#">Revision 2</a></td>
-            <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
-            <td>Apr 6 7:01am</td>
-        </tr>
-        <tr>
-            <td><input name="radio5" type="radio" /></td>
-            <td><input name="radio5" type="radio" /></td>
-            <td><a href="#">Revision 1</a></td>
-            <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
-            <td>Apr 6 7:01am</td>
-        </tr>
-    </table><!-- dataTable END -->
+        [% FOREACH row IN rows;
+            PROCESS revision_row id        = row.id,
+                                 odd       = loop.cound % 2,
+                                 check_old = loop.index == 1,
+                                 check_new = loop.index == 0,
+                                 revision  = row.number,
+                                 from      = row.from,
+                                 date      = row.date;
+        END %]
+            </table><!-- dataTable END -->
         <div class="clear"></div><!-- clear END -->
     <div id="bottomButtons">
-     [% IF page.metatdata.Type != 'spreadsheet'; PROCESS compare_revisions; END %]
+    [% IF page.metatdata.Type != 'spreadsheet'; 
+        PROCESS compare_revisions; 
+    END %]
      </div><!-- bottomButtons -->
 </div><!-- contentContainer -->    
 [% END %]
@@ -71,11 +49,13 @@
 
 [% BLOCK revision_row %]
     <tr class="[% IF odd %]odd[% ELSE %]even[% END %]Row">
-        <td><input name="old_revision_id" value="[% id %]" 
-                   [% IF check_old %] checked="checked"[% END %] type="radio" />
+        <td><input name="old_revision_id" value="[% id %]" type="radio"
+            [% IF check_old %] checked="checked"[% END %] 
+            [% UNLESS page.metadata.Type != 'spreadsheet' %] disabled="disabled"[% END %] />
         </td>
-        <td><input name="new_revision_id" value="[% id %]" 
-                   [% IF check_new %] checked="checked"[% END %] type="radio" />
+        <td><input name="new_revision_id" value="[% id %]" type="radio"
+            [% IF check_new %] checked="checked"[% END %] 
+            [% UNLESS page.metadata.Type != 'spreadsheet' %] disabled="disabled"[% END %] />
         </td>
         <td><a href="[% script_name %]?action=revision_view;page_name=[% page_uri %];revision_id=[% id %]">
                 [% loc("Revision [_1]", revision) %]

@@ -7,6 +7,20 @@
     <title>Sending '[% page_title %]' page by email</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     [% PROCESS element/popup_css_links + javascript_links.html %]
+    <script>
+        jQuery(function () {
+            jQuery('form[name=email_page_form]').bind('submit', function () {
+                var opts = jQuery('select[name=email_page_user_choices] option');
+                if (!opts.size()) {
+                    jQuery('#[% ns %]-errormessage').html(
+                        loc("You must select at least one recipient")
+                    );
+                    return false;
+                }
+                return true;
+            });
+        });
+    </script>
   </head>
 
   <body id="[% ns %]" class="st-popup">

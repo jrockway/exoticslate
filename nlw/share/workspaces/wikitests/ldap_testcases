@@ -9,21 +9,15 @@ Every test should override the passed in values as follows:
  set | password | ldapd3v |
  set | email_esc | devnull3\@socialtext.com |
 
+LDAP test cases must explicitly use the above ldap username, email, and pwd so LDAP Testcases can be called from tests where a Default user is logged in.
+
 * [Test Case: A Enable LDAP]
 
-These are variations on Default user testcases.
-They must explicitly use the above ldap username, email, and pwd so LDAP Testcases can be called
-from tests where a Default user is logged in.
+Test Case: Verify LDAP Enabled verifies the LDAP user screens for Login/Logout, Password Reset, Admin resets password, and self register
 
 * [Test Case: Verify LDAP Enabled]
 
-Test Case: Verify LDAP Enabled is a substitute for these testcases:
-
-`[Test case: LDAP Login Logout]`
-`[Test case: LDAP User Resets Password]`
-`[Test case: LDAP Admin Resets Password]`
-
-Special test case for LDAP user using CLI
+Special test case for LDAP user CLI commands
 
 * [Test Case: Command Line: LDAP USERS]
 
@@ -32,3 +26,7 @@ Special test for LDAP user deletion.
 TODO: this testcases is broken until the OpenLDAP local server is implemented
 
 `* [Test Case: LDAP Deleted User]`
+
+Run a fairly complex testcase logged in as the LDAP user
+
+* [Test Case: LDAP Watchlist]

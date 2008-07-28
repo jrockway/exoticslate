@@ -25,9 +25,13 @@ my @files = get_files(
         "share/console-template", 
         "build/templates/socialtext",
     ],
+    extra_dirs => [ # glob() files in these symlinks
+        "share/template/control",
+    ],
     includes => [
         qr#\.(?:pm|js|tt2)$#, 
         qr#share/skin/s2/template#,
+        qr#share/template/control#,
         qr#share/console-template/template#,
     ],
     excludes => [
@@ -46,8 +50,10 @@ po_to_wiki($en_file);
 exit;
 
 sub update_enterprise_features {
-    shell_run("svk up -s $ENV{HOME}/src/st/appliance/");
-    shell_run("svk up -s $ENV{HOME}/src/st/control/");
+    for my $dir (qw/appliance control/) {
+        my $fulldir = readlink "$ENV{ST_CURRENT}/$dir";
+        shell_run("svk up -s $fulldir");
+    }
 }
 
 sub link_enterprise_features {
@@ -94,9 +100,14 @@ sub call_xgettext {
 sub get_files {
     my %opts = @_;
     my $dirs  = $opts{dirs};
+    my $extra_dirs = $opts{extra_dirs};
     my $excludes = $opts{excludes};
     my $includes = $opts{includes};
+
     my @files = File::Find::Rule->file()->in(@$dirs);
+    for my $dir (@{ $opts{extra_dirs} }) {
+        push @files, glob("$dir/*");
+    }
     my @new_files;
 
     FILE: for my $file (@files) {

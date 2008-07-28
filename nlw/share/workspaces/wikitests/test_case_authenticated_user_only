@@ -1,16 +1,15 @@
 | *Comment* | Test Case: Authenticated-User-Only |
 
 | st-admin | set-permissions --workspace %%workspace%% --permissions authenticated-user-only |  |
-| *Comment* | make sure to set dashboard_is_homepage to 1 |  |
-| st-admin | set-workspace-config --workspace %%workspace%% homepage_is_dashboard 1 |  |
 
 | st-logout |  |  |
-| open_ok | /%%workspace%% |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | errors-and-messages | You must login to view this page. |
 | st-admin | create-user --email newuser_%%start_time%%@ken.socialtext.net --password 123456 |  |
 | st-login | newuser_%%start_time%%@ken.socialtext.net | 123456 |
 
-| text_like | st-homepage | Welcome, newuser |
+| open-ok | /%%workspace%%/index.cgi?action=dashboard |  |
+| text_like | st-homepage | qr/Welcome,\s+newuser_%%start_time%%\@hidden/ |
 | click_and_wait | link=Announcements and Links |  |
 
 | text_like | st-editing-tools | Edit |

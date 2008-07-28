@@ -5,7 +5,7 @@
       <div id="select-all"><input title=[% loc("Select all pages") %] type="checkbox" id="st-listview-allpagescb"/></div>
       <div id="sort-by-picker">[% loc('Sort by:') %]
   <script language="javascript">
-  var query_start = "?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];summaries=[% summaries %]";
+  var query_start = "?[% predicate %];scope=[% scope %];orig_search_term=[% search_term | html %];summaries=[% summaries %]";
   function sort_by() {
       var selected = jQuery('select#sort-picker').val();
       window.location = query_start + ';' + selected;
@@ -27,8 +27,8 @@
       </div>
       <div id="show-titles-or-summaries">
         [% loc('Show:') %]
-        <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=0" [% IF ! summaries %] class="selected" [% END %]>[% loc('Titles') %]</a> | 
-        <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
+        <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term | html %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=0" [% IF ! summaries %] class="selected" [% END %]>[% loc('Titles') %]</a> | 
+        <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term | html %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
       </div>
     </div>
 [%

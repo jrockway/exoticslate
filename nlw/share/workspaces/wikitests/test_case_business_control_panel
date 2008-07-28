@@ -9,6 +9,10 @@
 | set | new_workspace | wksp-%%start_time%% |
 | set | cli_user | cli_%%start_time%%@ken.socialtext.net |
 
+| *Comment* | Test case: Business Control Panel force en locale by visiting EN workspace |  |
+| st-admin | set-locale --w %%workspace%% --l en --e %%email%% | Locale for %%username%% is now en |
+| open-ok | /%%workspace%% |  |
+
 | *Comment* | Test case: Business Control Panel Socialtext Account exists |  |
 | open_ok | /nlw/control/account |  |
 | wait_for_element_visible_ok | st-search-by-name | 30000 |

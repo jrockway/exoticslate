@@ -49,6 +49,11 @@ msgstr "Resoconto crescita spazio di lavoro %1"
 msgid "%1 Workspace Usage Report"
 msgstr "Resoconto utilizzo spazio di lavoro %1"
 
+#: share/template/control/account.html
+#. (
+msgid "%1 account"
+msgstr ""
+
 #: share/skin/s2/template/view/category_display
 #. (
 msgid "%1 as a weblog"
@@ -114,10 +119,10 @@ msgstr "%1 secondi"
 msgid "%1 weeks"
 msgstr "%1 settimane"
 
-#: share/skin/s2/template/email/openid/invite-request-email.html share/skin/s2/template/email/openid/invite-request-email.txt share/skin/s2/template/email/st/invite-request-email.html share/skin/s2/template/email/st/invite-request-email.txt
+#: share/template/control/workspace.html
 #. (
-msgid "%1 would like to ask you to invite new users into the %2 workspace:"
-msgstr "%1 ti chiede di invitare i seguenti nuovi utenti allo spazio di lavoro %2 :"
+msgid "%1 workspace"
+msgstr ""
 
 #: lib/Socialtext/FavoritesPlugin.pm
 #. (
@@ -158,16 +163,6 @@ msgstr "'%1' è un nome riservato per gli spazi di lavoro e non può essere util
 #. (
 msgid "'%1' is not a valid locale"
 msgstr "'%1' non è un locale valido"
-
-#: share/skin/s2/template/authen/register.html share/skin/s2/template/authen/register.html
-#.  
-msgid "(Optional)"
-msgstr "(Optional)"
-
-#: share/skin/s2/template/email/recent-changes.html share/skin/s2/template/email/recent-changes.txt share/skin/s2/template/email/watchlist.html share/skin/s2/template/email/watchlist.txt
-#. (
-msgid "(by %1 on %2)"
-msgstr "(di %1 su %2)"
 
 #: share/console-template/template/help.html
 #.  
@@ -329,6 +324,21 @@ msgstr "-1100 Nome"
 msgid "-1200 International Date Line West"
 msgstr "-1200 Linea internazionale di cambio data Ovest"
 
+#: share/template/control/report.html
+#.  
+msgid "1 Month"
+msgstr ""
+
+#: share/template/control/report.html
+#.  
+msgid "1 Quarter"
+msgstr ""
+
+#: share/template/control/report.html
+#.  
+msgid "1 Week"
+msgstr ""
+
 #: share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "<Your personal message goes here.>"
@@ -454,12 +464,17 @@ msgstr "Stato utente AOL aimuser"
 msgid "Access a Community of Peers"
 msgstr "Accedi alla Community"
 
+#: share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
+#.  
+msgid "Account"
+msgstr ""
+
 #: lib/Socialtext/Account.pm
 #.  
 msgid "Account name is a required field."
 msgstr "Nome Utente è un campo obbligatorio"
 
-#: lib/Socialtext/Handler/ControlPanel.pm
+#: lib/Socialtext/Handler/ControlPanel.pm share/template/control/wrapper
 #.  
 msgid "Accounts"
 msgstr "Utenti"
@@ -584,11 +599,6 @@ msgstr "Tutti i tag"
 msgid "All&nbsp;Revisions"
 msgstr "Tutte&nbsp;le&nbsp;revisioni"
 
-#: share/skin/s2/template/email/workspace-invitation.html
-#. (
-msgid "An Invitation to join %1"
-msgstr "Invito a partecipare a %1"
-
 #: lib/Socialtext/Workspace.pm
 #.  
 msgid "An account must be specified for all new workspaces."
@@ -598,11 +608,6 @@ msgstr "E' necessario specificare almeno un account per ogni nuovo spazio di lav
 #. (
 msgid "An account with this name (%1) already exists."
 msgstr "Esiste già un account con questo nome (%1)."
-
-#: share/skin/s2/template/bugs_content.html
-#.  
-msgid "An application error has occurred in the Socialtext Workspace system."
-msgstr "Si è verificato un errore dell'applicazione nel Socialtext Workspace system."
 
 #: lib/Socialtext/Handler/Authen.pm
 #. (
@@ -689,16 +694,6 @@ msgstr "Spazio di Lavoro del Manuale (Appliance)"
 msgid "Appliance clock when this screen was generated:"
 msgstr "Orario dell'Appliance nel momento in cui è stata generata questa schermata:"
 
-#: share/skin/s2/template/bugs_content.html
-#.  
-msgid "Application Error"
-msgstr "Application Error"
-
-#: share/skin/s2/template/bugs_dump.html
-#.  
-msgid "Application Error Bug Dump"
-msgstr "Application Error: dettagli del bug"
-
 #: lib/Socialtext/BugsPlugin.pm
 #. (
 msgid "Application error for %1 on %2: %3"
@@ -719,6 +714,11 @@ msgstr "Application error per %1 su %2: %3"
 msgid "Application error on %1: %2"
 msgstr "Application error su %1: %2"
 
+#: share/template/control/report.html
+#.  
+msgid "April"
+msgstr ""
+
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
 msgid "Archive Directory"
@@ -734,6 +734,11 @@ msgstr "In qualità di cliente SocialText, hai accesso a <a href=\"http://www.so
 msgid "As we continue to develop the search system, the options you will have and the interface you have to make use of them will improve."
 msgstr "Dal momento che noi continuiamo a sviluppare il sistema di ricerca, le opzioni che hai e l'interfaccia che hai per usarle miglioreranno."
 
+#: share/template/control/workspace.html
+#.  
+msgid "Assign to a new account"
+msgstr ""
+
 #: lib/Socialtext/AttachmentsUIPlugin.pm
 #.  
 msgid "Attachment not found. The page name, file name or identifer number in the link may be incorrect, or the attachment may have been deleted or is not present in this workspace."
@@ -748,6 +753,11 @@ msgstr "Allegati"
 #.  
 msgid "Attachments for this page:"
 msgstr "Allegati per questa pagina"
+
+#: share/template/control/report.html
+#.  
+msgid "August"
+msgstr ""
 
 #: share/skin/s2/template/element/page/attachment_manage_interface
 #.  
@@ -769,10 +779,15 @@ msgstr "Rapporti disponibili"
 msgid "Back To Current Revision"
 msgstr "Tona alla versione corrente"
 
-#: share/skin/s2/template/authen/forgot_password.html
-#. (
-msgid "Back to <a href=\"%1\">Log in to Socialtext</a>."
-msgstr "Torna al <a href=\"%1\">Socialtext Log in </a>."
+#: share/template/control/growth_report.html share/template/control/report.html
+#.  
+msgid "Back to the account page"
+msgstr ""
+
+#: share/template/control/growth_report.html share/template/control/report.html
+#.  
+msgid "Back to the workspace page"
+msgstr ""
 
 #: share/console-template/template/console_wrapper.tmpl
 #.  
@@ -814,11 +829,6 @@ msgstr "Backup in corso - iniziato alle %1"
 msgid "Backup is in progress - started at never"
 msgstr "Backup in corso - iniziato alle %1"
 
-#: share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#. (
-msgid "Because you already have %1 %2 account, the password is the same as the password you use for your other %3 workspaces."
-msgstr "Dato che hai già un account su %2, la password è la stessa che utilizzi per i tuoi altri spazi di lavoro su %3."
-
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "Block of HTML"
@@ -833,11 +843,6 @@ msgstr "Blocco di testo senza punteggiatura *speciale*"
 #.  
 msgid "Bottom of page"
 msgstr "A fondo pagina"
-
-#: share/skin/s2/template/email/standard-footer.html share/skin/s2/template/email/standard-footer.txt
-#.  
-msgid "Brought to you by Socialtext."
-msgstr "Realizzato da Socialtext."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -884,6 +889,11 @@ msgstr "Non è possibile estrarre i file da %1"
 msgid "Cannot undelete a page with only one revision. Returning to front page."
 msgstr "Non è possibile annullare la cancellazione di una pagina che ha una sola versione. Ritorno alla pagina iniziale."
 
+#: lib/Socialtext/Workspace.pm
+#. (
+msgid "Cannot write export file %1, aborting.\n"
+msgstr ""
+
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section share/skin/s2/template/view/homepage
 #.  
 msgid "Central page"
@@ -914,16 +924,6 @@ msgstr "Modifiche salvate"
 msgid "Check with your %1 administrator."
 msgstr "Verifica con il tuo amministratore %1."
 
-#: share/skin/s2/template/authen/choose_password.html
-#.  
-msgid "Choose Password"
-msgstr "Scegli una password"
-
-#: share/skin/s2/template/authen/choose_password.html
-#.  
-msgid "Choose Password:"
-msgstr "Scegli una password:"
-
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
 msgid "Chronologically (Oldest First)"
@@ -950,9 +950,9 @@ msgid "Click \"Done\" to close this window."
 msgstr "Premi \"Eseguito\" per chiudere questa finestra."
 
 #: share/skin/s2/template/view/edit_contention
-#.  
-msgid "Click here to go to the latest version of the page."
-msgstr "Fai click qui per andare alla versione più recente della pagina"
+#. (
+msgid "Click here to go to the latest version of the %1."
+msgstr ""
 
 #: share/skin/s2/template/element/page/actions
 #.  
@@ -1013,11 +1013,6 @@ msgstr "Fai click su questo pulsante per effettuare la tua ricerca"
 #.  
 msgid "Click this button to preview your page before saving it"
 msgstr "Fai click su questo pulsante per avere un'anteprima della pagina, prima di salvarla"
-
-#: share/skin/s2/template/element/page/actions
-#.  
-msgid "Click this button to refresh this spreadsheet"
-msgstr "Premi questo bottone per aggiornare questo foglio di calcolo"
 
 #: lib/Socialtext/BreadCrumbsPlugin.pm
 #.  
@@ -1104,6 +1099,11 @@ msgstr "Confronta le revisioni"
 msgid "Compare Revisions %1 and %2"
 msgstr "Confronta le revisioni %1 e %2"
 
+#: share/template/control/user.html
+#.  
+msgid "Confirm user"
+msgstr ""
+
 #: share/skin/s2/template/layout/html
 #.  
 msgid "Confluence wiki, Enterprise 2.0 wiki, Mediawiki, Microsoft wiki, Sharepoint wiki, Twiki, Web 2.0 wiki, business wiki, document management, enterprise wiki, intranet wiki, knowledge management, online collaboration, open source wiki, portal wiki, hosted wiki, project collaboration, team collaboration, wiki appliance, wiki software"
@@ -1159,7 +1159,7 @@ msgstr "Non è stato possibile estrarre i file dall'archivio della skin. questo 
 msgid "Could not open %1"
 msgstr "Non è stato possibile aprire %1"
 
-#: share/skin/s2/template/element/settings/weblog_create share/skin/s2/template/element/settings/workspaces_create_section
+#: share/skin/s2/template/element/settings/weblog_create share/skin/s2/template/element/settings/workspaces_create_section share/template/control/report.html
 #.  
 msgid "Create"
 msgstr "Crea"
@@ -1209,10 +1209,30 @@ msgstr "Crea un documento Word dalle pagine selezionate"
 msgid "Create Your Profile"
 msgstr "Crea il tuo profilo"
 
+#: share/template/control/accounts.html
+#.  
+msgid "Create a New Account"
+msgstr ""
+
 #: share/skin/s2/template/element/page/actions
 #.  
 msgid "Create new page"
 msgstr "Crea una nuova pagina"
+
+#: share/template/control/user.html share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
+#.  
+msgid "Created"
+msgstr ""
+
+#: share/template/control/workspace_table share/template/control/workspace_table
+#.  
+msgid "Created By"
+msgstr ""
+
+#: share/template/control/workspace.html
+#.  
+msgid "Created by"
+msgstr ""
 
 #: share/skin/s2/template/element/page/details
 #. (
@@ -1283,6 +1303,11 @@ msgstr "Data di caricamento"
 #.  
 msgid "Date:"
 msgstr "Data:"
+
+#: share/template/control/report.html
+#.  
+msgid "December"
+msgstr ""
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -1449,7 +1474,7 @@ msgstr "Indirizzo email"
 msgid "Email Address for this user:"
 msgstr "Indirizzo email dell'utente:"
 
-#: lib/Socialtext/Handler/Authen.pm share/skin/s2/template/authen/forgot_password.html share/skin/s2/template/authen/register.html
+#: lib/Socialtext/Handler/Authen.pm
 #.  
 msgid "Email Address:"
 msgstr "Indirizzo email:"
@@ -1494,11 +1519,6 @@ msgstr "Abilita la notifica via email per questo spazio di lavoro?"
 msgid "English"
 msgstr "Inglese"
 
-#: share/skin/s2/template/email/password-change.html share/skin/s2/template/email/password-change.txt
-#.  
-msgid "Enjoy!"
-msgstr "Divertiti!"
-
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "Enter a list of email addresses (one address per line) of people you would like to invite to this Workspace."
@@ -1523,11 +1543,6 @@ msgstr "Inserisci parte del nome o cognome, o indirizzo email di un utente."
 #.  
 msgid "Enter the information for the user you would like to invite to this workspace."
 msgstr "Inserisci l'informazione per l'utente che vuoi invitare allo spazio di lavoro."
-
-#: share/skin/s2/template/authen/forgot_password.html
-#.  
-msgid "Enter your email address below. Enter the email address you normally use for your Socialtext account. If you got here by clicking a link you received in an email message, look at that message, and use the email address it was sent to."
-msgstr "Inserisci il tuo indirizzo email qui sotto. Inserisci l'indirizzo che usi normalmente per il tuo account Socialtext. Se sei arrivato qui facendo click su un link che hai ricevuto in un messaggio email, controlla quel messaggio e usa l'indirizzo email cui è stato spedito."
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
@@ -1629,10 +1644,25 @@ msgstr "Esporta"
 msgid "Export as HTML"
 msgstr "Esporta come HTML"
 
+#: share/template/control/growth_report.html
+#.  
+msgid "Export data as CSV"
+msgstr ""
+
 #: lib/Socialtext/Workspace.pm
 #. (
 msgid "Export directory %1 does not exist.\n"
 msgstr "La directory di esportazione %1 non esiste.\n"
+
+#: lib/Socialtext/Workspace.pm
+#. (
+msgid "Export directory %1 is not writeable.\n"
+msgstr ""
+
+#: share/template/control/report.html
+#.  
+msgid "Export summary data as CSV"
+msgstr ""
 
 #: share/skin/s2/template/element/listview/actions share/skin/s2/template/element/page/actions
 #.  
@@ -1644,6 +1674,11 @@ msgstr "Esporta in PDF"
 msgid "Export to Word"
 msgstr "Esporta in Word"
 
+#: share/template/control/report.html
+#.  
+msgid "Export user data as CSV"
+msgstr ""
+
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #. (
 msgid "Exporting %1"
@@ -1653,6 +1688,11 @@ msgstr "Esporto %1"
 #.  
 msgid "Exporting workspaces ..."
 msgstr "Esporto spazi di lavoro ..."
+
+#: share/template/control/report.html
+#.  
+msgid "February"
+msgstr ""
 
 #: lib/Socialtext/Appliance/BackupStore.pm
 #.  
@@ -1694,11 +1734,6 @@ msgstr "Filtra per categoria:"
 msgid "First Name"
 msgstr "Nome"
 
-#: share/skin/s2/template/authen/register.html
-#.  
-msgid "First Name:"
-msgstr "Nome:"
-
 #: lib/Socialtext/WeblogPlugin.pm
 #. (
 msgid "First Post in %1"
@@ -1708,11 +1743,6 @@ msgstr "Primo post in %1"
 #.  
 msgid "First name:"
 msgstr "Nome:"
-
-#: share/skin/s2/template/authen/forgot_password.html
-#.  
-msgid "Forgot Password"
-msgstr "Password dimenticata"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -1739,6 +1769,21 @@ msgstr "Accesso assegnato agli account SocialText %1"
 msgid "Gave Socialtext System Management access to %1"
 msgstr "Gestione di sistema assegnato a %1"
 
+#: share/template/control/user.html
+#.  
+msgid "Give Access to Socialtext Accounts"
+msgstr ""
+
+#: share/template/control/user.html
+#.  
+msgid "Give Access to Socialtext System Management"
+msgstr ""
+
+#: share/template/control/workspace.html
+#. (
+msgid "Go to the %1 workspace"
+msgstr ""
+
 #: share/skin/s2/template/element/weblog/actions
 #.  
 msgid "Go to:"
@@ -1749,15 +1794,10 @@ msgstr "Vai a:"
 msgid "Google: %1"
 msgstr "Google: %1"
 
-#: share/skin/s2/template/email/password-change.html share/skin/s2/template/email/password-change.txt
+#: share/template/control/account.html share/template/control/workspace.html
 #.  
-msgid "Greetings from Socialtext,"
-msgstr "Saluti da Socialtext"
-
-#: share/skin/s2/template/email/email-address-confirmation-completed.html share/skin/s2/template/email/email-address-confirmation-completed.txt share/skin/s2/template/email/openid/invite-request-email.html share/skin/s2/template/email/openid/invite-request-email.txt share/skin/s2/template/email/st/invite-request-email.html share/skin/s2/template/email/st/invite-request-email.txt
-#.  
-msgid "Hello,"
-msgstr "Salve,"
+msgid "Growth Reports"
+msgstr ""
 
 #: share/skin/s2/template/popup/email_page
 #. (
@@ -1768,11 +1808,6 @@ msgstr "Salve, questa è una pagina dallo spazio di lavoro che voglio mostrarti.
 #.  
 msgid "Help"
 msgstr "Aiuto"
-
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/openid/workspace-invitation.txt share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "Hi,"
-msgstr "Ciao,"
 
 #: lib/Socialtext/Lite.pm share/skin/s2/template/element/wiki/nav
 #.  
@@ -1824,25 +1859,10 @@ msgstr "Come devono essere gestite l'ora legale e l'ora solare?"
 msgid "How should displayed dates be formatted?"
 msgstr "In che formato vuoi visualizzare la data?"
 
-#: share/skin/s2/template/authen/login.html
-#.  
-msgid "I don't know my password."
-msgstr "Non so la mia password."
-
 #: lib/Socialtext/WorkspaceInvitation.pm
 #. (
 msgid "I'm inviting you into the %1 workspace"
 msgstr "Ti invito nello spazio di lavoro %1."
-
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#. (
-msgid "I'm inviting you to join %1, one of our shared workspaces."
-msgstr "Ti invito a partecipare a %1, uno dei nostri spazi di lavoro condivisi."
-
-#: share/skin/s2/template/email/openid/workspace-invitation.txt
-#. (
-msgid "I'm inviting you to join %1, one of our shared workspaces. Sign in using the information below:"
-msgstr "Ti invito a partecipare a %1, uno dei nostri spazi di lavoro condivisi. Accedi usando le informazioni qui sotto:"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
@@ -1854,55 +1874,10 @@ msgstr "Se c'è già una pagina esistente con questo titolo, dove dev'essere agg
 msgid "If you are sure you wish to overwrite the \"%1\" page on \"%2\", please press \"Copy\" again."
 msgstr "Se sei sicuro di voler sovrascrivere la pagina \"%1\" su \"%2\", per favore premi nuovamente \"Copia\"."
 
-#: share/skin/s2/template/errors/settings_requires_account share/skin/s2/template/errors/watchlist_requires_account
-#. (
-msgid "If you do not already have an account, you can <a href=\"/nlw/register.html?redirect_to=%1\">register here</a>."
-msgstr "Se non hai già un account, puoi <a href=\"/nlw/register.html?redirect_to=%1\">registrarti qui</a>."
-
-#: share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "If you don't remember it, follow this link to select a new password:"
-msgstr "Se non la ricordi, segui questo link per scegliere una nuova password:"
-
-#: share/skin/s2/template/email/st/workspace-invitation-body.html
-#. (
-msgid "If you don't remember it, just <a href=\"%4\">click here to select a new password</a>."
-msgstr "Se non la ricordi, fai semplicemente <a href=\"%4\">click qui per scegliere una nuova password</a>."
-
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "If you don't select an image, a Socialtext logo will be used instead."
 msgstr "Se non scegli un'immagine, verrà usato a suo posto il logo Socialtext."
-
-#: share/skin/s2/template/email/password-change.txt
-#. (
-msgid "If you have any questions, please feel free to send email to %1."
-msgstr "Per qualsiasi domanda, non esitare a spedire un'email a %1."
-
-#: share/skin/s2/template/email/password-change.html
-#. (
-msgid "If you have any questions, please feel free to send email to <a href=\"mailto:%1\">%2</a>."
-msgstr "Per qualsiasi domanda, per favore non esitare a spedire un'email a<a href=\"mailto:%1\">%2</a>."
-
-#: share/skin/s2/template/email/standard-footer.html
-#. (
-msgid "If you have questions about this email, contact your wiki support at %1"
-msgstr "Se hai domande riguardo questa email, contatta l'assistenza a %1"
-
-#: share/skin/s2/template/email/standard-footer.txt
-#. (
-msgid "If you have questions about this email, contact your wiki support at %1."
-msgstr "Se hai domande riguardo questa email, contatta l'assistenza a %1."
-
-#: share/skin/s2/template/email/email-address-confirmation-completed.html
-#.  
-msgid "If you have questions, please contact your wiki support at"
-msgstr "Se hai domande, per favore contatta l'assistenza a"
-
-#: share/skin/s2/template/email/email-address-confirmation-completed.txt
-#. (
-msgid "If you have questions, please contact your wiki support at %1."
-msgstr "Se hai domande, per favore contatta l'assistenza a %1."
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
@@ -1924,7 +1899,7 @@ msgstr "Se provi a cercare in un campo che non esiste (<tt>link:hello</tt>) o se
 msgid "If you wish, you can include a personal message in the invitation email. You can edit the message to say anything you want."
 msgstr "Se vuoi, puoi includere un messaggio personale nella tua email di invito. Puoi modificare il messaggio per dire quello che vuoi."
 
-#: lib/Socialtext/BugsPlugin.pm share/skin/s2/template/bugs_content.html
+#: lib/Socialtext/BugsPlugin.pm
 #.  
 msgid "Ignore Bug"
 msgstr "Ignora il bug"
@@ -2029,11 +2004,6 @@ msgstr "Carattere '/' invalido fra i parametri di modifica"
 msgid "Invalid host: %1"
 msgstr "Host no valido: %1"
 
-#: share/skin/s2/template/email/openid/invite-request-email.html share/skin/s2/template/email/st/invite-request-email.html
-#.  
-msgid "Invitation Request"
-msgstr "Richiesta d'invito"
-
 #: lib/Socialtext/OpenIdPlugin.pm
 #. (
 msgid "Invitation to join %1"
@@ -2054,6 +2024,26 @@ msgstr "Invita nuovi utenti"
 msgid "Invite Other Users"
 msgstr "Invita altri utenti"
 
+#: share/template/control/user_table
+#.  
+msgid "Invited"
+msgstr ""
+
+#: share/template/control/workspace.html
+#.  
+msgid "Invited (to system)"
+msgstr ""
+
+#: share/template/control/user_table
+#.  
+msgid "Invited By"
+msgstr ""
+
+#: share/template/control/user.html
+#.  
+msgid "Invited by"
+msgstr ""
+
 #: share/skin/s2/template/search_help_field.html
 #.  
 msgid "It looks like you are trying to search on a field in the search index. At this time the fields available are:"
@@ -2069,10 +2059,25 @@ msgstr "Deve contenere fra 3 e 30 lettere minuscole, numeri, underscore o tratti
 msgid "Italian"
 msgstr "Italiano"
 
+#: share/template/control/report.html
+#.  
+msgid "January"
+msgstr ""
+
 #: lib/Socialtext/Locales.pm
 #.  
 msgid "Japanese"
 msgstr "Giapponese"
+
+#: share/template/control/report.html
+#.  
+msgid "July"
+msgstr ""
+
+#: share/template/control/report.html
+#.  
+msgid "June"
+msgstr ""
 
 #: share/skin/s2/template/popup/copy_to_workspace
 #.  
@@ -2119,11 +2124,6 @@ msgstr "Ultimo mese"
 msgid "Last Name"
 msgstr "Cognome"
 
-#: share/skin/s2/template/authen/register.html
-#.  
-msgid "Last Name:"
-msgstr "Cognome:"
-
 #: lib/Socialtext/RecentChangesPlugin.pm
 #.  
 msgid "Last Week"
@@ -2139,6 +2139,11 @@ msgstr "Modificato l'ultima volta da %1"
 msgid "Last edited by <span class=\"st-homepage-whatsnew-author\">%1</span> on <span class=\"st-homepage-whatsnew-date\">%2</span>"
 msgstr "Modificato l'ultima volta da <span class=\"st-homepage-whatsnew-author\">%1</span> il <span class=\"st-homepage-whatsnew-date\">%2</span>"
 
+#: share/template/control/user.html
+#.  
+msgid "Last login"
+msgstr ""
+
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #. (
 msgid "Last manual backup was %1"
@@ -2153,6 +2158,11 @@ msgstr "Non è mai stato fatto un backup manuale."
 #.  
 msgid "Last name:"
 msgstr "Cognome:"
+
+#: share/skin/s2/template/element/listview/pages share/skin/s2/template/element/listview/pages
+#.  
+msgid "Last updated by"
+msgstr ""
 
 #: share/skin/s2/javascript/widget_resource.js share/skin/s2/javascript/widget_resource.js share/skin/s2/template/view/refcard
 #.  
@@ -2194,26 +2204,6 @@ msgstr "Caricamento..."
 msgid "Locale for %1 is now %2"
 msgstr "\"Locale\" per %1 ora è %2"
 
-#: share/skin/s2/template/authen/login.html
-#.  
-msgid "Log in"
-msgstr "Autenticazione"
-
-#: share/skin/s2/template/authen/choose_password.html share/skin/s2/template/authen/login.html
-#.  
-msgid "Log in to Socialtext"
-msgstr "Autenticati su SocialText"
-
-#: share/skin/s2/template/authen/choose_password.html share/skin/s2/template/authen/register.html
-#.  
-msgid "Log in with an existing account"
-msgstr "Autenticati con un account esistente"
-
-#: share/skin/s2/template/email/email-address-confirmation-completed.html share/skin/s2/template/email/email-address-confirmation-completed.txt
-#.  
-msgid "Log in with your email address:"
-msgstr "Autenticati con il tuo indirizzo email"
-
 #: share/skin/s2/template/element/wiki/nav
 #.  
 msgid "Log out"
@@ -2229,7 +2219,7 @@ msgstr ""
 msgid "Log&nbsp;out"
 msgstr ""
 
-#: share/skin/s2/template/authen/login.html share/skin/s2/template/element/wiki/nav
+#: share/skin/s2/template/element/wiki/nav
 #.  
 msgid "Login"
 msgstr "Autenticazione"
@@ -2264,10 +2254,20 @@ msgstr "Gestisci tutti gli utenti"
 msgid "Manage files"
 msgstr "Gestisci file"
 
+#: share/template/control/report.html
+#.  
+msgid "March"
+msgstr ""
+
 #: share/skin/s2/template/element/page/attachment_attach_interface
 #.  
 msgid "Maximum file size: 50MB"
 msgstr "Dimensione massima del file: 50MB"
+
+#: share/template/control/report.html
+#.  
+msgid "May"
+msgstr ""
 
 #: share/skin/s2/template/view/refcard
 #.  
@@ -2309,10 +2309,15 @@ msgstr "Il weblog del mio weblog"
 msgid "My Workspaces"
 msgstr "I mei spazi di lavoro"
 
-#: share/skin/s2/template/element/settings/users_settings_section share/skin/s2/template/view/refcard
+#: share/skin/s2/template/element/settings/users_settings_section share/skin/s2/template/view/refcard share/template/control/account_table share/template/control/user_table share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Name"
 msgstr "Nome"
+
+#: share/template/control/accounts.html
+#.  
+msgid "Name:"
+msgstr ""
 
 #: lib/Socialtext/WeblogPlugin.pm
 #. (
@@ -2434,11 +2439,6 @@ msgstr "Non è stato assegnato nessun nome alla pagina"
 msgid "No pages selected for export"
 msgstr "Non è stata selezionata alcuna pagina da esportare"
 
-#: share/skin/s2/template/authen/forgot_password.html
-#.  
-msgid "No problem, we can send you an email that will help. You will be able to change your password back to something you know."
-msgstr "Nessun problema, possiamo mandarti un'email che ti potrà aiutare. Potrai cambiare la tua password ad una che ti sia nota."
-
 #: share/skin/s2/template/view/page/display
 #.  
 msgid "No revisions"
@@ -2484,6 +2484,26 @@ msgstr "Vista Normale"
 msgid "Not a valid page name"
 msgstr "Nome pagina non valido"
 
+#: share/template/control/report.html
+#.  
+msgid "Novemeber"
+msgstr ""
+
+#: share/template/control/account_table share/template/control/workspace_table share/template/control/workspace_table
+#.  
+msgid "Number of Users"
+msgstr ""
+
+#: share/template/control/account_table share/template/control/user_table share/template/control/user_table share/template/control/workspace.html
+#.  
+msgid "Number of Workspaces"
+msgstr ""
+
+#: share/template/control/report.html
+#.  
+msgid "October"
+msgstr ""
+
 #: share/skin/s2/template/element/page/newpage_duplicate
 #.  
 msgid "Ok"
@@ -2493,11 +2513,6 @@ msgstr "Ok"
 #.  
 msgid "Old password is incorrect"
 msgstr "La vecchia password non è corretta"
-
-#: share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "Once you have confirmed your account, you will receive a second email with login details."
-msgstr "Una volta che avrai validato il tuo account, riceverai una seconda email con i dettagli per l'autenticazione."
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #. (
@@ -2659,11 +2674,6 @@ msgstr "Pagine col tag '%1'. Clicca per modificare."
 msgid "Password"
 msgstr "Password"
 
-#: share/skin/s2/template/authen/login.html share/skin/s2/template/authen/register.html
-#.  
-msgid "Password:"
-msgstr "Password:"
-
 #: lib/Socialtext/User/Default.pm
 #.  
 msgid "Passwords must be at least 6 characters long."
@@ -2684,35 +2694,10 @@ msgstr "Esegui un ripristino"
 msgid "Personal Message"
 msgstr "Messaggio personale"
 
-#: share/skin/s2/template/email/email-address-confirmation.html
-#. (
-msgid "Please <a href=\"%1\">click on this link to confirm your email address.</a>"
-msgstr "Per favore <a href=\"%1\">clicca su questo link per confermare il tuo indirizzo email.</a>"
-
-#: share/skin/s2/template/email/st/workspace-invitation-body.html
-#. (
-msgid "Please <a href=\"%1\">click on this link</a> to confirm your email address."
-msgstr "Per favore <a href=\"%1\">clicca su questo link</a> per confermare il tuo indirizzo email."
-
 #: share/skin/s2/template/popup/copy_to_workspace
 #.  
 msgid "Please choose a different name."
 msgstr "Per favore scegli un nome differente."
-
-#: share/skin/s2/template/email/password-change.html
-#.  
-msgid "Please choose a new Socialtext password"
-msgstr "Per favore scegli una nuova password per SocialText"
-
-#: share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "Please click on this link to confirm your email address:"
-msgstr "Per favore clicca su questo link per confermare il tuo indirizzo email:"
-
-#: share/skin/s2/template/email/email-address-confirmation.html
-#.  
-msgid "Please confirm your email address"
-msgstr "Per favore, conferma il tuo indirizzo email"
 
 #: lib/Socialtext/User.pm
 #.  
@@ -2738,11 +2723,6 @@ msgstr "Per favore, inserisci un indirizzo email."
 #.  
 msgid "Please follow these instructions to change your Socialtext password"
 msgstr "Per favore,segui queste istruzioni per cambiare la tua password SocialText."
-
-#: share/skin/s2/template/email/email-address-confirmation.txt
-#.  
-msgid "Please follow this link to confirm your address:"
-msgstr "Per favore, segui questo link per confermare il tuo indirizzo email:"
 
 #: share/skin/s2/template/element/settings/weblog_create
 #.  
@@ -2829,6 +2809,11 @@ msgstr "Stampa questa pagina"
 msgid "Print this weblog"
 msgstr "Stampa questo weblog"
 
+#: share/template/control/growth_report.html share/template/control/report.html
+#.  
+msgid "Printer Friendly Report"
+msgstr ""
+
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Private"
@@ -2859,11 +2844,6 @@ msgstr "Vai a"
 msgid "RFC 868 Time Server"
 msgstr "RFC 868 Time Server"
 
-#: share/skin/s2/template/authen/choose_password.html share/skin/s2/template/authen/register.html
-#.  
-msgid "Re-type Password:"
-msgstr "Reinserisci la password"
-
 #: lib/Socialtext/Appliance/ConsoleController.pm
 #.  
 msgid "Reboot"
@@ -2884,7 +2864,7 @@ msgstr "Riavviare l'appliance?"
 msgid "Reboot Now"
 msgstr "Riavvia ora"
 
-#: lib/Socialtext/Lite.pm lib/Socialtext/WeblogPlugin.pm share/skin/s2/template/element/weblog/actions
+#: lib/Socialtext/Lite.pm lib/Socialtext/SyndicatePlugin.pm lib/Socialtext/WeblogPlugin.pm share/skin/s2/template/element/weblog/actions
 #.  
 msgid "Recent Changes"
 msgstr "Modifiche recenti"
@@ -2914,11 +2894,6 @@ msgstr "Post recenti da %1"
 msgid "Recent Posts from %1 in workspace %2"
 msgstr "Post recenti da %1 nello spazio di lavoro %2"
 
-#: share/skin/s2/template/email/recent-changes.html
-#. (
-msgid "Recent changes in %1"
-msgstr "Cambiamenti recenti in %1"
-
 #: share/skin/s2/template/lite/category/category.html
 #. (
 msgid "Recent changes in %1 category"
@@ -2939,25 +2914,20 @@ msgstr "Pagine visitate di recente"
 msgid "Redirecting to %1"
 msgstr "Redirezione a %1 in corso"
 
-#: share/skin/s2/template/element/page/actions
-#.  
-msgid "Refresh"
-msgstr "Aggiorna"
-
 #: share/console-template/template/backup.html
 #.  
 msgid "Refresh file list"
 msgstr "Aggiorna l'elenco dei file"
 
-#: share/skin/s2/template/authen/register.html share/skin/s2/template/element/wiki/nav
+#: share/skin/s2/template/element/wiki/nav
 #.  
 msgid "Register"
 msgstr "Registra"
 
-#: share/skin/s2/template/authen/login.html
+#: share/skin/s2/template/element/listview/pages
 #.  
-msgid "Remember me on this computer."
-msgstr "Ricordati di me su questo computer"
+msgid "Relevance"
+msgstr ""
 
 #: share/skin/s2/template/element/settings/users_listall_section share/skin/s2/template/popup/email_page
 #.  
@@ -2973,6 +2943,16 @@ msgstr "Rimuovi %1 dalla coda"
 #. (
 msgid "Remove %1 tag from page"
 msgstr "Rimuovi il tag %1 dalla pagina"
+
+#: share/template/control/user.html
+#.  
+msgid "Remove Access to Socialtext Accounts"
+msgstr ""
+
+#: share/template/control/user.html
+#.  
+msgid "Remove Access to Socialtext System Management"
+msgstr ""
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -3004,20 +2984,20 @@ msgstr "Sostituisci la pagina esistente"
 msgid "Replace this text with your own."
 msgstr "Sostituisci questo testo col tuo"
 
-#: lib/Socialtext/BugsPlugin.pm share/skin/s2/template/bugs_content.html
+#: lib/Socialtext/BugsPlugin.pm
 #.  
 msgid "Report Bug"
 msgstr "Notifica un Bug"
+
+#: share/template/control/report.html
+#.  
+msgid "Report Period:"
+msgstr ""
 
 #: lib/Socialtext/UserSettingsPlugin.pm
 #. (
 msgid "Request to invite new users to the %1 workspace"
 msgstr "Richiedi di invitare nuovi utenti allo spazio di lavoro %1"
-
-#: share/skin/s2/template/errors/requires_confirmation
-#.  
-msgid "Resend confirmation"
-msgstr "Rispedisci la conferma"
 
 #: share/skin/s2/template/element/settings/users_listall_section
 #.  
@@ -3104,6 +3084,11 @@ msgstr "Revisioni"
 msgid "Revisions to the current document"
 msgstr "Revisioni al documento attuale"
 
+#: share/template/control/workspace.html
+#.  
+msgid "Role"
+msgstr ""
+
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Roles and Permission Sets (standard workspace types)"
@@ -3174,6 +3159,16 @@ msgstr "Risultati della ricerca"
 msgid "Search Technorati for '%1'. Click to edit."
 msgstr "Cerca Technorati di '%1'. Fai click per modificare."
 
+#: share/template/control/accounts.html share/template/control/workspaces.html
+#.  
+msgid "Search by name"
+msgstr ""
+
+#: share/template/control/users.html
+#.  
+msgid "Search by username"
+msgstr ""
+
 #: lib/Socialtext/SearchPlugin.pm
 #. (
 msgid "Search for %1"
@@ -3229,7 +3224,7 @@ msgstr "Scegli"
 msgid "Select a workspace skin:"
 msgstr "Scegli una skin per lo spazio di lavoro:"
 
-#: share/skin/s2/javascript/listview.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-other-mini.js share/skin/s2/javascript/socialtext-other.js share/skin/s2/template/element/listview/pages
+#: share/skin/s2/javascript/listview.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-other-mini.js share/skin/s2/javascript/socialtext-other.js share/skin/s2/template/element/listview/pages share/skin/s2/template/view/attachmentslist
 #.  
 msgid "Select all pages"
 msgstr "Seleziona tutte le pagine"
@@ -3248,6 +3243,11 @@ msgstr "Spedisci email di prova"
 #. (
 msgid "Sent test email to %1"
 msgstr "Manda email di prova a %1"
+
+#: share/template/control/report.html
+#.  
+msgid "September"
+msgstr ""
 
 #: share/console-template/template/backup.html
 #.  
@@ -3304,6 +3304,16 @@ msgstr "Gli utenti di questo spazio di lavoro devono ricevere delle email di mot
 msgid "Show full name for '%1'. Click to edit."
 msgstr "Mostra il nome completo di '%1'. Fai click per modificare."
 
+#: share/skin/s2/template/element/listview/pages
+#.  
+msgid "Show:"
+msgstr ""
+
+#: share/template/control/paging_controls
+#. (
+msgid "Showing %1 - %2 of %3 total."
+msgstr ""
+
 #: share/console-template/template/shutdown.html
 #.  
 msgid "Shut Down Appliance"
@@ -3324,20 +3334,10 @@ msgstr "Spegni"
 msgid "Shutdown Appliance?"
 msgstr "Spegnere l'Appliance?"
 
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "Sign in using the information below:"
-msgstr "Accedi usando le informazioni sottostanti:"
-
 #: share/skin/s2/template/element/page/edit
 #.  
 msgid "Simple"
 msgstr "Semplice"
-
-#: share/skin/s2/template/authen/forgot_password.html
-#.  
-msgid "Since your password is stored in the directory for your organization, there is no way to reset your password within the Socialtext system. Please contact your directory administrator for assistance."
-msgstr "Dal momento che le tue password sono conservate nella directory per la tua organizzazione, non ci sono modi per resettare la tua password nel sistema Socialtext. Per favore contatta l'amministratore della tua directory per avere assistenza."
 
 #: share/skin/s2/template/element/page/attachment_manage_interface share/skin/s2/template/view/attachmentslist
 #.  
@@ -3353,6 +3353,11 @@ msgstr "Dimensione (byte)"
 #. (
 msgid "Skype: %1"
 msgstr "Skype: %1"
+
+#: share/template/control/user.html
+#.  
+msgid "Socialtext Accounts Access?"
+msgstr ""
 
 #: share/console-template/template/console_wrapper.tmpl share/console-template/template/console_wrapper.tmpl
 #.  
@@ -3373,6 +3378,11 @@ msgstr "Email Socialtext"
 #.  
 msgid "Socialtext Home Page"
 msgstr "Homepage Socialtext"
+
+#: share/template/control/user.html
+#.  
+msgid "Socialtext System Management Access?"
+msgstr ""
 
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
@@ -3399,22 +3409,27 @@ msgstr "SocialText Unplugged abilitato"
 msgid "Socialtext Workspace Punctuation Help"
 msgstr "Aiuto sulla punteggiatura dello spazio di lavoro Socialtext"
 
+#: share/template/control/wrapper
+#. (
+msgid "Socialtext Workspace<sup>&trade;</sup> %1"
+msgstr ""
+
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "Socialtext enables you to customize the look and feel of your workspace. You can use the default skin supplied by Socialtext or customize your own skin."
 msgstr "Socialtext ti permette di personalizzare l'aspetto del tuo spazio di lavoro. Puoi usare la skin standard fornita da socialtext o crearne una personalizzata."
-
-#: share/skin/s2/template/authen/forgot_password.html
-#.  
-msgid "Socialtext password help"
-msgstr "Help password SocialText"
 
 #: share/skin/s2/template/element/page/footer_end
 #.  
 msgid "Socialtext, the Enterprise Wiki"
 msgstr "Socialtext, il wiki per imprese"
 
-#: share/skin/s2/template/lite/page/contention.html share/skin/s2/template/view/edit_contention
+#: share/skin/s2/template/view/edit_contention
+#. (
+msgid "Somebody else made changes to the %1 while you were editing it."
+msgstr ""
+
+#: share/skin/s2/template/lite/page/contention.html
 #.  
 msgid "Somebody else made changes to the page while you were editing it."
 msgstr "Qualcun altro ha apportato delle modifiche alla pagina mentre la stavi cambiando."
@@ -3484,6 +3499,11 @@ msgstr "Riordina per numero di spazi di lavoro in ordine ascendente"
 msgid "Sort by number of workspaces in descending order"
 msgstr "Riordina per numero di spazi di lavoro in ordine discendente"
 
+#: share/skin/s2/template/element/listview/pages share/skin/s2/template/view/attachmentslist
+#.  
+msgid "Sort by:"
+msgstr ""
+
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "Sort entries by first posted time"
@@ -3509,7 +3529,7 @@ msgstr "Messaggio di benvenuto standard"
 msgid "Statistics Reports"
 msgstr "Resoconti statistiche"
 
-#: share/skin/s2/template/authen/choose_password.html share/skin/s2/template/authen/forgot_password.html share/skin/s2/template/new_form_page/new_form_page_buttons.html
+#: share/skin/s2/template/new_form_page/new_form_page_buttons.html share/template/control/accounts.html share/template/control/accounts.html share/template/control/users.html share/template/control/workspace.html share/template/control/workspaces.html
 #.  
 msgid "Submit"
 msgstr "Sottoscrivi"
@@ -3523,6 +3543,11 @@ msgstr "Somma parziale per questo allegato"
 #.  
 msgid "Suggestions:"
 msgstr "Suggerimenti:"
+
+#: share/skin/s2/template/element/listview/pages
+#.  
+msgid "Summaries"
+msgstr ""
 
 #: share/skin/s2/template/view/page/stats
 #.  
@@ -3594,11 +3619,6 @@ msgstr "Tag:"
 msgid "Technorati: %1"
 msgstr "Technorati: %1"
 
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/openid/workspace-invitation.txt share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "Thanks,"
-msgstr "Grazie,"
-
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "The %1 account has been created."
@@ -3614,15 +3634,15 @@ msgstr "L'utente %1 è stato confermato."
 msgid "The %1 workspace is now part of the %2 account."
 msgstr "Lo spazio di lavoro %1 ora è parte dell'account %2."
 
+#: share/skin/s2/template/view/edit_contention
+#. (
+msgid "The %1 you just edited is shown below. You can copy and paste your changes from here:"
+msgstr ""
+
 #: lib/Socialtext/User/Default/Factory.pm
 #. (
 msgid "The %1 you provided (%2) is already in use."
 msgstr "L'%1 che hai fornito( %2) è già in uso."
-
-#: share/skin/s2/template/email/openid/invite-request-email.txt share/skin/s2/template/email/st/invite-request-email.txt
-#.  
-msgid "The User Invite page can be found at:"
-msgstr "Puoi trovare la pagina d'invito dell'utente al:"
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
@@ -3659,11 +3679,6 @@ msgstr "L'email di conferma è stata spedita. Per favore segui il link in questa
 msgid "The email address for %1 has already been confirmed."
 msgstr "L'indirizzo email per %1 è già stato confermato."
 
-#: share/skin/s2/template/authen/forgot_password.html
-#. (
-msgid "The email we will send you will come from <strong>%1</strong>. To ensure you receive it, please add <strong>%1</strong> to your address book or safe list."
-msgstr "L'email ti verrà spedita da<strong>%1</strong>. Per essere sicuro di riceverla, per favore aggiungi<strong>%1</strong> alla tua rubrica o lista sicura."
-
 #: lib/Socialtext/AttachmentsUIPlugin.pm
 #.  
 msgid "The file you are trying to upload does not exist"
@@ -3673,16 +3688,6 @@ msgstr "Il file che stai tentando di caricare non esiste"
 #.  
 msgid "The following email addresses were invalid"
 msgstr "I seguenti indirizzi email non erano validi"
-
-#: share/skin/s2/template/email/recent-changes.html share/skin/s2/template/email/recent-changes.txt
-#. (
-msgid "The following pages in %1 have recently changed:"
-msgstr "Le seguenti pagine in %1 sono state cambiate di recente:"
-
-#: share/skin/s2/template/email/watchlist.html share/skin/s2/template/email/watchlist.txt
-#. (
-msgid "The following pages you are watching in %1 have recently changed:"
-msgstr "Le seguenti pagine che stai visualizzando in %1 sono state cambiate di recente:"
 
 #: share/skin/s2/template/element/settings/users_invited_section
 #.  
@@ -3749,7 +3754,7 @@ msgstr "La skin che hai indicato, %1, non esiste"
 msgid "The ten most recently visited of these workspaces are displayed in the Dashboard."
 msgstr "I dieci spazi di lavoro visitati più di frequente, fra questi, sono visualizzati nella Dashboard."
 
-#: share/skin/s2/template/lite/page/contention.html share/skin/s2/template/view/edit_contention
+#: share/skin/s2/template/lite/page/contention.html
 #.  
 msgid "The text you just edited is shown below. You can copy and paste your changes from there:"
 msgstr "Il testo che hai appena modificato è mostrato sotto. Puoi copiare e incollare i tuoi cambiamenti da qui:"
@@ -3899,6 +3904,11 @@ msgstr "Suggerimento: potrai trovare questa pagina in un secondo momento, usando
 msgid "Title"
 msgstr "Titolo"
 
+#: share/skin/s2/template/element/listview/pages
+#.  
+msgid "Titles"
+msgstr ""
+
 #: lib/Socialtext/SearchPlugin.pm
 #. (
 msgid "Titles containing '%1' (%2)"
@@ -3909,35 +3919,10 @@ msgstr "Il titolo contiente '%1' (%2)"
 msgid "To Get This..."
 msgstr "Vai a...."
 
-#: share/skin/s2/template/email/password-change.txt
-#.  
-msgid "To change your password, please follow this link:"
-msgstr "Per cambiare la tua password, per favore segui questo link:"
-
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #. (
 msgid "To customize your own skin, download the %1, modify the skin files to your liking, and upload them here. Complete documentation on skin customization is available in the %2.<h4>Skin support is not included in basic support. Users who upload skins are responsible for keeping copies of their skin files and for keeping their skins current as the Socialtext application changes.</h4>"
 msgstr "Per personalizzare la tua skin, scarica %1, modifica i file contenuti in base alle tue preferenze, e caricali qui. La documentazione completa riguardo la personalizzazione delel skin è disponibile nella %2<h4>Il supporto alle skin non è incluso nel supporto base. Gli utenti che caricano le skin si devono preoccupare di mantenerne una copia locale e di aggiornarle quando i cambiamenti nell'applicazione dovessero richiederlo</h4>"
-
-#: share/skin/s2/template/email/email-address-confirmation-completed.html share/skin/s2/template/email/email-address-confirmation-completed.txt
-#.  
-msgid "To do so, go to this web address:"
-msgstr "Per farlo, vai a questo indirizzo email:"
-
-#: share/skin/s2/template/email/openid/invite-request-email.html
-#.  
-msgid "To invite these users into the workspace, visit the user invite page for the <br /> workspace and copy and paste the list above into the invite box. The User <br />Invite page can be found at:"
-msgstr "Per invitare questi utenti al tuo spazio di lavoro, visita la pagina di invito utenti per lo <br /> spazio di lavoro e copia e incolla l'elenco qui sopra nella casella d'invito. Puoi trovare la pagina <br /> di invito utenti qui:"
-
-#: share/skin/s2/template/email/st/invite-request-email.html
-#.  
-msgid "To invite these users into the workspace, visit the user invite page for the <br />workspace and copy and paste the list above into the invite box. The User <br />Invite page can be found at:"
-msgstr "Per invitare questi utenti allo spazio di lavoro, visita la pagina di invito utenti per lo <br />spazio di lavoro e copia e incolla l'elenco qui sopra nella casella di invito. Puoi trovare la pagina <br /> di invito utenti qui:"
-
-#: share/skin/s2/template/email/openid/invite-request-email.txt share/skin/s2/template/email/st/invite-request-email.txt
-#.  
-msgid "To invite these users into the workspace, visit the user invite page for the workspace and copy and paste the list above into the invite box."
-msgstr "Per invitare questi utenti allo spazio di lavoro, visita la pagina di invito utenti per lo spazio di lavoro e copia e incolla l'elenco qui sopra nella casella di invito."
 
 #: share/skin/s2/template/element/settings/users_invite_search_section
 #.  
@@ -3949,45 +3934,10 @@ msgstr "Per aggiungere un link ad un'altra pagina( anche se non esiste ancora), 
 msgid "To make a link to another page (even if it doesn't exist yet), put square brackets around a word or phrase."
 msgstr "Per aggiungere un link ad un'altra pagina( anche se non esiste ancora), metti fra parentesi quadre una parola o frase."
 
-#: share/skin/s2/template/authen/choose_password.html
-#.  
-msgid "To proceed, please choose a password."
-msgstr "Per proseguire, per favore scegli una password."
-
 #: share/console-template/template/overview.html
 #.  
 msgid "To see a list of all the workspaces and users on the system, go to the <a href=\"/nlw/control/\">Socialtext Accounts Admin</a> tool."
 msgstr "Per visualizzare l'elenco di tutti gli spazi di lavoro e di tutti gli utenti del sistema, vai al <a href=\"/nlw/control/\">Socialtext Accounts Admin</a>."
-
-#: share/skin/s2/template/errors/settings_requires_account
-#.  
-msgid "To set your preferences for a workspace, you must be logged in."
-msgstr "Per impostare le tue preferenze per uno spazio di lavoro, devi aver fatto log in."
-
-#: share/skin/s2/template/email/recent-changes.txt
-#. (
-msgid "To stop receiving or change how often you receive emails about changes to %1, go to"
-msgstr "Per non ricevere più o per modificare la frequenza con cui ricevi email riguardo i cambiamenti a %1, vai a"
-
-#: share/skin/s2/template/email/recent-changes.html
-#. (
-msgid "To stop receiving or change how often you receive emails about changes to %1, you can <a href=\"%2\">change your preferences</a>."
-msgstr "Per non ricevere più o per modificare la frequenza con cui ricevi email riguardo i cambiamenti a %1, puoi <a href=\"%2\">cambiare le tue preferenze</a>."
-
-#: share/skin/s2/template/email/watchlist.txt
-#. (
-msgid "To stop receiving or change how often you receive emails about changes to your watchlist in %1, go to:"
-msgstr "Per non ricevere più o per modificare la frequenza con cui ricevi email riguardo i cambiamenti alla tua watchlist in %1, vai a:"
-
-#: share/skin/s2/template/email/watchlist.html
-#. (
-msgid "To stop receiving or change how often you receive emails about changes to your watchlist in %1, you can <a href=\"%2\">change your preferences</a>."
-msgstr "PPer non ricevere più o per modificare la frequenza con cui ricevi email riguardo i cambiamenti alla tua watchlist in %1, puoi <a href=\"%2\">modificare le tue preferenze</a>."
-
-#: share/skin/s2/template/errors/watchlist_requires_account
-#.  
-msgid "To use the watchlist feature in a workspace, you must be logged in."
-msgstr "Per usare le funzioni della watchlist in uno spazio di lavoro, devi aver fatto log in."
 
 #: share/skin/s2/template/element/page/actions
 #.  
@@ -4028,6 +3978,11 @@ msgstr "Digita questo"
 #.  
 msgid "Type new password again"
 msgstr "Digita un'altra volta la nuova password"
+
+#: share/template/control/workspace.html
+#.  
+msgid "URI"
+msgstr ""
 
 #: lib/Socialtext/Workspace.pm
 #.  
@@ -4114,6 +4069,11 @@ msgstr "Caricato"
 msgid "Uploaded By"
 msgstr "Caricato da"
 
+#: share/skin/s2/template/view/attachmentslist
+#.  
+msgid "Uploaded by"
+msgstr ""
+
 #: share/skin/s2/template/element/page/attachments
 #.  
 msgid "Uploaded by $uploader"
@@ -4128,6 +4088,16 @@ msgstr "Caricato da %1"
 #.  
 msgid "Uploads"
 msgstr "Caricamenti"
+
+#: share/template/control/account.html share/template/control/workspace.html
+#.  
+msgid "Usage Reports"
+msgstr ""
+
+#: share/template/control/report.html
+#.  
+msgid "Usage ending midnight of:"
+msgstr ""
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
@@ -4144,20 +4114,35 @@ msgstr "Usa l'indirizzo email che hai digitato qui sopra come nome utente, e la 
 msgid "Use your email address and new password to log in again."
 msgstr "Usa il tuo indirizzo email e la tua nuova password per fare log in di nuovo."
 
-#: lib/Socialtext/Appliance/Model/Backup.pm lib/Socialtext/WebApp.pm
+#: share/template/control/user.html
+#.  
+msgid "User is confirmed"
+msgstr ""
+
+#: share/template/control/user.html
+#.  
+msgid "User requires confirmation"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Backup.pm lib/Socialtext/WebApp.pm share/template/control/user.html
 #.  
 msgid "Username"
 msgstr "Nome utente"
 
-#: lib/Socialtext/Handler/Authen.pm share/skin/s2/template/authen/choose_password.html
+#: lib/Socialtext/Handler/Authen.pm
 #.  
 msgid "Username:"
 msgstr "Nomeutente:"
 
-#: lib/Socialtext/Handler/ControlPanel.pm share/skin/s2/template/element/settings/select
+#: lib/Socialtext/Handler/ControlPanel.pm share/skin/s2/template/element/settings/select share/template/control/wrapper
 #.  
 msgid "Users"
 msgstr "Utenti"
+
+#: share/template/control/account.html share/template/control/workspace.html
+#. (
+msgid "Users (%1)"
+msgstr ""
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -4234,20 +4219,10 @@ msgstr "Visualizza questa pagina"
 msgid "Watchlist"
 msgstr "Watchlist"
 
-#: share/skin/s2/template/email/watchlist.html
-#. (
-msgid "Watchlist Update for %1"
-msgstr "Aggiornamento della watchlist per &1"
-
 #: lib/Socialtext/WatchlistPlugin.pm
 #. (
 msgid "Watchlist update for %1 Workspace"
 msgstr "Aggiornamento della watchlist per lo spazio di lavoro &1"
-
-#: share/skin/s2/template/email/email-address-confirmation.html share/skin/s2/template/email/email-address-confirmation.txt
-#.  
-msgid "We hope you enjoy using the Socialtext wiki."
-msgstr "Speriamo che ti piaccia usare il wiki Socialtext."
 
 #: share/skin/s2/template/view/weblog
 #.  
@@ -4354,16 +4329,6 @@ msgstr "Quando uno spazio di lavoro riceve un'email, il soggetto dell'email dive
 msgid "When users click \"Home\" in this workspace, should they see a personal dashboard, or the central page of the workspace? The central page of the workspace has the same title as the workspace (\"%1\")."
 msgstr "Quando gli utenti fanno click su \"Home\" in questo spazio di lavoro, devono visualizzare una dashboard personale, o la pagina centrale dello spazio di lavoro? La pagina centrale dello spazio di lavoro ha lo stesso titolo dello spazio di lavoro (\"%1\")."
 
-#: share/skin/s2/template/email/password-change.html
-#. (
-msgid "When you <a href=\"%1\">click on this link</a>, you will be taken to a page which allows you to choose a new password."
-msgstr "Quando <a href=\"%1\">fai click su questo link</a>, verrai portato ad una pagina che ti permetterà di scegliere una nuova password."
-
-#: share/skin/s2/template/email/password-change.txt
-#.  
-msgid "When you click on this link, you will be taken to a page which allows you to choose a new password."
-msgstr "Quando fai click su questo link, verrai portato ad una pagina che ti permetterà di scegliere una nuova password."
-
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "When you're entering text, just type in paragraphs."
@@ -4383,6 +4348,11 @@ msgstr "Che lingua vuoi usare?"
 #.  
 msgid "Who can send email to this workspace?"
 msgstr "Chi può spedire email a questo spazio di lavoro?"
+
+#: share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/widget_resource.js share/skin/s2/template/element/listview/pages
+#.  
+msgid "Workspace"
+msgstr "Spazio di lavoro"
 
 #: share/skin/s2/template/element/settings/select share/skin/s2/template/workspaces_created_section.html
 #.  
@@ -4469,10 +4439,15 @@ msgstr "Il titolo dello spazio di lavoro è troppo lungo dopo la codifica dell'U
 msgid "Workspace title must be between 2 and 64 characters long and may not begin with a -."
 msgstr "Il nome degli spazi di lavoro deve contenere da 2 a 64 caratteri e non iniziare con -."
 
-#: lib/Socialtext/Handler/ControlPanel.pm share/console-template/template/overview.html share/skin/s2/template/element/settings/select
+#: lib/Socialtext/Handler/ControlPanel.pm share/console-template/template/overview.html share/skin/s2/template/element/settings/select share/template/control/wrapper
 #.  
 msgid "Workspaces"
 msgstr "Spazi di lavoro"
+
+#: share/template/control/account.html share/template/control/user.html
+#. (
+msgid "Workspaces (%1)"
+msgstr ""
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
@@ -4539,20 +4514,10 @@ msgstr "IM Yahoo!: %1"
 msgid "Yes"
 msgstr "Sì"
 
-#: share/skin/s2/template/errors/unauthorized_workspace
-#.  
-msgid "You are not authorized to view this workspace."
-msgstr "Non sei autorizzato a visitare questo spazio di lavoro."
-
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "You can also put links here to pages you want to remember."
 msgstr "Puoi anche inserire qui link a pagine che vuoi ricordare."
-
-#: share/skin/s2/template/bugs_content.html
-#. (
-msgid "You can assist the Socialtext team to fix this bug by entering a comment about what actions you were performing when this bug occurred<a href=\"%1?action=bugs_dump;bug_id=%2\" style=\"text-color: black; text-decoration: none;\">.</a> Please enter your comments in the box below."
-msgstr "Puoi aiutare la squadra Socialtext a risolvere questo bug inserendo un commento su quale azione stavi compiendo quando questo errore si è verificato<a href=\"%1?action=bugs_dump;bug_id=%2\" style=\"text-color: black; text-decoration: none;\">.</a>Per favore inserisci i tuoi commenti nel contenitore sottostante."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #.  
@@ -4584,16 +4549,6 @@ msgstr "Ora puoi fare login all'applicazione %1."
 msgid "You can now login to the %1 workspace"
 msgstr "Ora puoi fare login allo spazio di lavoro &1."
 
-#: share/skin/s2/template/email/openid/workspace-invitation.txt
-#.  
-msgid "You can now sign into our system using OpenID. On the Socialtext login screen, please input your OpenID into the indicated field and you will be redirected to the OpenID site to verify your identity. Once you have verified your identity, you will be sent back to the Socialtext site and be able to access the workspace."
-msgstr "Ora puoi accedere al tuo sistema usando OpenID. Nella schermata di login di Socialtext, per favore inserisci il tuo OpenID nel campo indicato e verrai reindirizzato al sito OpenID per verificare la tua identità. Una volta che sarà verificata la tua identità, verrai mandato nuovamente al sito Socialtext e potrai accedere allo spazio di lavoro."
-
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html
-#.  
-msgid "You can sign into our system using OpenID. On the Socialtext login screen, please input your OpenID into the indicated field and you will be redirected to the OpenID site to verify your identity. Once you have verified your identity, you will be sent back to the Socialtext site and be able to access the workspace."
-msgstr "Puoi accedere al tuo sistema usando OpenID. Nella schermata di login di Socialtext, per favore inserisci il tuo OpenID nel campo indicato e verrai reindirizzato al sito OpenID per verificare la tua identità. Una volta che sarà verificata la tua identità, verrai mandato nuovamente al sito Socialtext e potrai accedere allo spazio di lavoro."
-
 #: share/console-template/template/form.tmpl
 #.  
 msgid "You can synchronize the appliance clock with another computer using the Internet Time protocol. The appliance must be able to contact that server via port 37."
@@ -4624,45 +4579,15 @@ msgstr "Non puoi cambiare il nome di un utente creato dal sistema."
 msgid "You dont have permission to upload attachments"
 msgstr "Non sei abilitato a caricare allegati"
 
-#: share/skin/s2/template/email/email-address-confirmation-completed.html share/skin/s2/template/email/email-address-confirmation-completed.txt
-#. (
-msgid "You have confirmed your email address and can now log on to the %1 workspace."
-msgstr "Hai confermato il tuo indirizzo email ed ora puoi accedere allo spazio di lavoro %1."
-
 #: share/skin/s2/template/search_help_field.html
 #.  
 msgid "You may search on a field by separating the field name from the query with a colon, like this:"
 msgstr "Puoi cercare in un campo separando il nome del campo dalla richiesta con due punti, come questi:"
 
-#: share/skin/s2/template/email/email-address-confirmation-completed.html share/skin/s2/template/email/email-address-confirmation-completed.txt share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/openid/workspace-invitation.txt share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "You may want to keep this email for future reference."
-msgstr "Potresti voler tenere questa email per riferimenti futuri."
-
-#: share/skin/s2/template/errors/login_to_edit
-#. (
-msgid "You must be logged in to edit the %1 workspace."
-msgstr "Devi aver fatto log in per modificare lo spazio di lavoro %1."
-
-#: share/skin/s2/template/errors/authenticate_to_read
-#. (
-msgid "You must be logged in to view the %1 workspace. If you already have an account, please login now.<br /> Otherwise, you can <a href=\"/nlw/register.html?redirect_to=%2\">create a new account</a>"
-msgstr "Devi aver fatto log in per visualizzare lo spazio di lavoro %1. Se hai già un account, per favore fai login ora. <br /> altrimenti, puoi <a href=\"/nlw/register.html?redirect_to=%2\">creare un nuovo account</a>"
-
-#: share/skin/s2/template/errors/require_business_admin
-#.  
-msgid "You must have admin privileges to access this URI."
-msgstr "Devi avere dei privilegi amministrativi per accedere a questo URI."
-
 #: lib/Socialtext/OpenIdPlugin.pm
 #.  
 msgid "You must input both an OpenID and an email."
 msgstr "Devi inserire sia OpenID che email."
-
-#: share/skin/s2/template/errors/not_logged_in
-#.  
-msgid "You must login to view this page."
-msgstr "Devi fare login per visualizzare questa pagina."
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -4694,20 +4619,10 @@ msgstr "Devi fornire uno spazio di lavoro ed un account a questo URI (%1)"
 msgid "You must provide a workspace_id to this URI (%1)."
 msgstr ""
 
-#: share/skin/s2/template/errors/requires_confirmation
+#: share/skin/s2/template/popup/email_page
 #.  
-msgid "You need to confirm your email address to activate this account."
-msgstr "Devi confermare il tuo indirizzo email per attivare questo account."
-
-#: share/skin/s2/template/errors/requires_confirmation
-#.  
-msgid "You should have received an email with a confirmation link."
-msgstr "Dovresti aver ricevuto un'email con un link di conferma."
-
-#: share/skin/s2/template/email/email-address-confirmation.html share/skin/s2/template/email/email-address-confirmation.txt
-#.  
-msgid "You signed up for a new account with our system and we need to confirm your email address."
-msgstr "Hai effettuato l'accesso ad un nuovo account con il nostro sistema e noi dobbiamo confermare il tuo indirizzo email."
+msgid "You must select at least one recipient"
+msgstr ""
 
 #: share/console-template/template/popup.html
 #.  
@@ -4733,11 +4648,6 @@ msgstr "La tua watchlist"
 #. (
 msgid "Your Watchlist in %1 is empty."
 msgstr ""
-
-#: share/skin/s2/template/email/email-address-confirmation-completed.html
-#.  
-msgid "Your email address has been confirmed"
-msgstr "Il tuo indirizzo email è stato confermato"
 
 #: lib/Socialtext/Handler/Authen.pm
 #. (
@@ -5074,15 +4984,30 @@ msgstr "solo membri"
 msgid "monospace"
 msgstr "spazio unico"
 
+#: share/template/control/date_cell
+#.  
+msgid "never"
+msgstr ""
+
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "never in DST"
 msgstr "mai in DST"
 
+#: share/template/control/user.html share/template/control/user.html
+#.  
+msgid "no"
+msgstr ""
+
 #: lib/Socialtext/Query/Wafl.pm
 #.  
 msgid "no access to workspace"
 msgstr "nessun accesso allo spazio di lavoro"
+
+#: share/skin/s2/template/element/listview/pages share/skin/s2/template/element/listview/pages share/skin/s2/template/view/attachmentslist
+#.  
+msgid "on"
+msgstr ""
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
@@ -5163,6 +5088,11 @@ msgstr "richiesto"
 #.  
 msgid "revision"
 msgstr "versione"
+
+#: share/skin/s2/template/element/listview/pages share/skin/s2/template/element/listview/pages
+#.  
+msgid "revisions"
+msgstr ""
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
@@ -5269,25 +5199,20 @@ msgstr "non formattato: %1"
 msgid "user: %1"
 msgstr "utente: %1"
 
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/openid/workspace-invitation.txt share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "username:"
-msgstr "nomeutente:"
-
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "value"
 msgstr "valore"
 
+#: share/template/control/account_link share/template/control/user_link share/template/control/workspace_link
+#. (
+msgid "view %1"
+msgstr ""
+
 #: share/skin/s2/template/element/settings/save
 #.  
 msgid "warning:"
 msgstr "attenzione:"
-
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/openid/workspace-invitation.txt share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "web address:"
-msgstr "indirizzo web:"
 
 #: lib/Socialtext/Formatter/WaflPhrase.pm
 #.  
@@ -5313,6 +5238,11 @@ msgstr "spazio di lavoro"
 #.  
 msgid "workspace members"
 msgstr "utenti dello spazio di lavoro"
+
+#: share/template/control/user.html share/template/control/user.html
+#.  
+msgid "yes"
+msgstr ""
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  

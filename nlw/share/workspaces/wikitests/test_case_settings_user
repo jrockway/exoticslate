@@ -13,7 +13,7 @@
 | text_like | rt 25472%%start_time%% |  |
 | st-admin | remove-member --email %%email%% --workspace rt-25472%%start_time%% |  |
 | open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| wait_for_text_not_present_ok | rt 25472%%start_time%% | 5000 |
+| wait_for_text_not_present_ok | rt 25472%%start_time%% | 30000 |
 | st-admin | delete-workspace --workspace rt-25472%%start_time%% --no-export |  |
 | *Comment* | Test Case: Settings: User END RT 25472 |  |
 
@@ -51,7 +51,7 @@
 | type_ok | new_password_retype | 654321 |
 | click_and_wait | Button |  |
 | open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| text_like | st-user-welcome | Welcome, First %%start_time%% Last %%start_time%% |
+| text_like | st-user-welcome | qr/Welcome,\s+First %%start_time%% Last %%start_time%%/ |
 
 | *Comment* | Test Case: Settings: User test list all users functionality |  |
 | click_and_wait | link=Settings |  |
@@ -61,10 +61,9 @@
 | *Comment* | Test Case: Settings: User test my workspaces functionality |  |
 | click_and_wait | link=My Workspaces |  |
 | text_like | st-settings-section | %%workspace%% |
+| wait_for_text_not_present_ok | qr/help-en.+help-en/ | 30000 |
 
-| *Comment* | bz-265 |  |
-| wait_for_text_not_present_ok | qr/help-en.+help-en/ |  |
-| *Comment* | end bz-265 | *Comment* | Test Case: Settings: User test create new weblog functionality |  |
+| *Comment* | Test Case: Settings: User test create new weblog functionality |  |
 | click_and_wait | link=Create New Weblog |  |
 | text_like | st-settings-section | Create A Weblog |
 | type_ok | weblog_title | No Brackets %%start_time%% Weblog |

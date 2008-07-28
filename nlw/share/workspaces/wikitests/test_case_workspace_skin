@@ -50,20 +50,23 @@ Need skin.tgz and badskin.tgz to be in wikitest_files directory.
 | *Comment* | Test Case: Workspace Skin swap to custom skin |  |
 | check_ok | st-workspaceskin-custom |  |
 | is_checked_ok | st-workspaceskin-custom |  |
-| click_ok | Button | Save |
-| wait_for_element_visible_ok | link=Webtime | 30000 |
+| click_and_wait | Button | Save |
+
+| *Comment* | use text_like to check for uploaded-skin link because wait_for_element has a bug when trying to wait for links or anchors |  |
+| text_like | //link[contains(@href,'uploaded-skin')] | qr/^$/ |
 | is_checked_ok | st-workspaceskin-custom |  |
+
 | *Comment* | Test Case: Workspace Skin swap to default skin |  |
 | check_ok | st-workspaceskin-default |  |
 | is_checked_ok | st-workspaceskin-default |  |
-| click_ok | Button | Save |
-| wait_for_text_not_present_ok | Webtime | 30000 |
+| click_and_wait | Button | Save |
 | wait_for_element_visible_ok | st-socialtext-attribution-image | 30000 |
 | is_checked_ok | st-workspaceskin-default |  |
+
 | *Comment* | Test Case: Workspace Skin swap back to custom skin |  |
 | check_ok | st-workspaceskin-custom |  |
 | click_and_wait | Button | Save |
-| wait_for_element_visible_ok | link=Webtime | 30000 |
+| text_like | //link[contains(@href,'uploaded-skin')] | qr/^$/ |
 
 | *Comment* | Test Case: Workspace Skin remove existing files |  |
 | click_ok | st-workspaceskin-removesubmit |  |
@@ -71,12 +74,6 @@ Need skin.tgz and badskin.tgz to be in wikitest_files directory.
 | wait_for_text_not_present_ok | button-green/left-top.gif | 30000 |
 | wait_for_element_visible_ok | st-socialtext-attribution-image | 30000 |
 | is_checked_ok | st-workspaceskin-default |  |
-
-| *Comment* | Test Case: Workspace Skin did the skin break when you deleted custom files? |  |
-| *Comment* | If it did, an "Add file" link will appear in the busted page |  |
-| *Comment* | ADD FILE LINK NO LONGER EXISTS: IS THIS CORRECT? |  |
-
- wait_for_element_not_visible_ok | link=Add file | 30000
 
 | *Comment* | Test Case: Workspace Skin navigate away and back to clear error box |  |
 | click_and_wait | link=Workspace Privacy |  |

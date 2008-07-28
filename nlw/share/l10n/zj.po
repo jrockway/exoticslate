@@ -49,6 +49,11 @@ msgstr "%1 WおRkSpあcえ Grおw7h rえpおr7"
 msgid "%1 Workspace Usage Report"
 msgstr "%1 WおRkSpあcえ うsあgえ RえPおR7"
 
+#: share/template/control/account.html
+#. (
+msgid "%1 account"
+msgstr "%1 あcCおうn7"
+
 #: share/skin/s2/template/view/category_display
 #. (
 msgid "%1 as a weblog"
@@ -114,10 +119,10 @@ msgstr "%1 SえCおNdS"
 msgid "%1 weeks"
 msgstr "%1 WええkS"
 
-#: share/skin/s2/template/email/openid/invite-request-email.html share/skin/s2/template/email/openid/invite-request-email.txt share/skin/s2/template/email/st/invite-request-email.html share/skin/s2/template/email/st/invite-request-email.txt
+#: share/template/control/workspace.html
 #. (
-msgid "%1 would like to ask you to invite new users into the %2 workspace:"
-msgstr "%1 WおうlD LいKえ 7お あsK Yおう 7お いNvい7え NえW うsえrS いn7お 7Hえ %2 WおRkSpあcえ:"
+msgid "%1 workspace"
+msgstr "%1 WおRkSpあcえ"
 
 #: lib/Socialtext/FavoritesPlugin.pm
 #. (
@@ -158,16 +163,6 @@ msgstr "'%1' いs あ rえsえrVえD WおRkSpあcえ NあMえ あNd cあnNお7 8
 #. (
 msgid "'%1' is not a valid locale"
 msgstr "'%1' いs nお7 あ vあlいd lおcあlえ"
-
-#: share/skin/s2/template/authen/register.html share/skin/s2/template/authen/register.html
-#.  
-msgid "(Optional)"
-msgstr "(おp7いおnあl)"
-
-#: share/skin/s2/template/email/recent-changes.html share/skin/s2/template/email/recent-changes.txt share/skin/s2/template/email/watchlist.html share/skin/s2/template/email/watchlist.txt
-#. (
-msgid "(by %1 on %2)"
-msgstr "(8y %1 おn %2)"
 
 #: share/console-template/template/help.html
 #.  
@@ -329,6 +324,21 @@ msgstr "-1100 nおmえ"
 msgid "-1200 International Date Line West"
 msgstr "-1200 いN7えrNあ7いおnあl dあ7え LいNえ wえs7"
 
+#: share/template/control/report.html
+#.  
+msgid "1 Month"
+msgstr "1 mおn7h"
+
+#: share/template/control/report.html
+#.  
+msgid "1 Quarter"
+msgstr "1 qうあR7えr"
+
+#: share/template/control/report.html
+#.  
+msgid "1 Week"
+msgstr "1 wええK"
+
 #: share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "<Your personal message goes here.>"
@@ -454,12 +464,17 @@ msgstr "あおl うSえR あいMうSえR PrえsえnCえ"
 msgid "Access a Community of Peers"
 msgstr "あCcえsS あ CおMmうnい7Y おf pええRs"
 
+#: share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
+#.  
+msgid "Account"
+msgstr "あCcおうN7"
+
 #: lib/Socialtext/Account.pm
 #.  
 msgid "Account name is a required field."
 msgstr "あCcおうN7 nあmえ いs あ rえqういRえD FいえlD."
 
-#: lib/Socialtext/Handler/ControlPanel.pm
+#: lib/Socialtext/Handler/ControlPanel.pm share/template/control/wrapper
 #.  
 msgid "Accounts"
 msgstr "あCcおうN7S"
@@ -584,11 +599,6 @@ msgstr "あLl 7あgS"
 msgid "All&nbsp;Revisions"
 msgstr "あLl&n8sP;RえVいSいおnS"
 
-#: share/skin/s2/template/email/workspace-invitation.html
-#. (
-msgid "An Invitation to join %1"
-msgstr "あN いnVい7あ7いおn 7お Jおいn %1"
-
 #: lib/Socialtext/Workspace.pm
 #.  
 msgid "An account must be specified for all new workspaces."
@@ -598,11 +608,6 @@ msgstr "あN あcCおうn7 MうS7 8え SpえcいfいえD FおR あlL NえW WおR
 #. (
 msgid "An account with this name (%1) already exists."
 msgstr "あN あcCおうn7 Wい7h 7HいS NあMえ (%1) あlRえあdY えxいs7s."
-
-#: share/skin/s2/template/bugs_content.html
-#.  
-msgid "An application error has occurred in the Socialtext Workspace system."
-msgstr "あN あpPlいcあ7いおN えrRおR HあS おcCうRrえd いN 7hえ SおCいあl7えX7 wおrKsPあCえ sYs7えM."
 
 #: lib/Socialtext/Handler/Authen.pm
 #. (
@@ -689,16 +694,6 @@ msgstr "あPpLいあnCえ mあnうあL WおRkSpあcえ"
 msgid "Appliance clock when this screen was generated:"
 msgstr "あPpLいあnCえ cLおCk wHえN 7hいs sCrええN WあS GえNえRあ7えD:"
 
-#: share/skin/s2/template/bugs_content.html
-#.  
-msgid "Application Error"
-msgstr "あPpLいCあ7いおn えRrおr"
-
-#: share/skin/s2/template/bugs_dump.html
-#.  
-msgid "Application Error Bug Dump"
-msgstr "あPpLいCあ7いおn えRrおr 8うg dうmP"
-
 #: lib/Socialtext/BugsPlugin.pm
 #. (
 msgid "Application error for %1 on %2: %3"
@@ -719,6 +714,11 @@ msgstr "あPpLいCあ7いおn えRrおr いN %1 おN %2: %3"
 msgid "Application error on %1: %2"
 msgstr "あPpLいCあ7いおn えRrおr おN %1: %2"
 
+#: share/template/control/report.html
+#.  
+msgid "April"
+msgstr "あPrいl"
+
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
 msgid "Archive Directory"
@@ -734,6 +734,11 @@ msgstr "あS あ SおCいあl7えX7 cうs7おMえR, yおう hあvえ あcCえSs 
 msgid "As we continue to develop the search system, the options you will have and the interface you have to make use of them will improve."
 msgstr "あS Wえ cおn7いNうえ 7お dえvえlおp 7Hえ sえあRcH SyS7えm, 7hえ おp7いおnS Yおう WいLl hあvえ あnD 7hえ いn7えRfあcえ Yおう HあVえ 7お MあKえ うSえ おF 7hえm wいlL いmPrおvえ."
 
+#: share/template/control/workspace.html
+#.  
+msgid "Assign to a new account"
+msgstr "あSsいgN 7お あ nえw あCcおうN7"
+
 #: lib/Socialtext/AttachmentsUIPlugin.pm
 #.  
 msgid "Attachment not found. The page name, file name or identifer number in the link may be incorrect, or the attachment may have been deleted or is not present in this workspace."
@@ -748,6 +753,11 @@ msgstr "あ77あcHmえn7s"
 #.  
 msgid "Attachments for this page:"
 msgstr "あ77あcHmえn7s fおr 7HいS PあGえ:"
+
+#: share/template/control/report.html
+#.  
+msgid "August"
+msgstr "あうgうs7"
 
 #: share/skin/s2/template/element/page/attachment_manage_interface
 #.  
@@ -769,10 +779,15 @@ msgstr "あVあいlあ8Lえ rえpおr7s"
 msgid "Back To Current Revision"
 msgstr "8あcK 7お cうrRえN7 rえvいsいおN"
 
-#: share/skin/s2/template/authen/forgot_password.html
-#. (
-msgid "Back to <a href=\"%1\">Log in to Socialtext</a>."
-msgstr "8あcK 7お <あ Hrえf=\"%1\">LおG いn 7お SおCいあl7えX7</あ>."
+#: share/template/control/growth_report.html share/template/control/report.html
+#.  
+msgid "Back to the account page"
+msgstr "8あcK 7お 7Hえ あCcおうN7 pあgえ"
+
+#: share/template/control/growth_report.html share/template/control/report.html
+#.  
+msgid "Back to the workspace page"
+msgstr "8あcK 7お 7Hえ wおrKsPあCえ pあgえ"
 
 #: share/console-template/template/console_wrapper.tmpl
 #.  
@@ -814,11 +829,6 @@ msgstr "8あcKうP いs いN PrおgRえSs - s7あR7えd あ7 %1"
 msgid "Backup is in progress - started at never"
 msgstr "8あcKうP いs いN PrおgRえSs - s7あR7えd あ7 NえVえR"
 
-#: share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#. (
-msgid "Because you already have %1 %2 account, the password is the same as the password you use for your other %3 workspaces."
-msgstr "8えcあうSえ yおう あLrえあDy hあvえ %1 %2 あcCおうn7, 7Hえ pあsSwおrD いs 7Hえ sあmえ あs 7Hえ pあsSwおrD Yおう うsえ FおR Yおうr お7hえr %3 WおRkSpあcえs."
-
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "Block of HTML"
@@ -833,11 +843,6 @@ msgstr "8LおCk おF 7えX7 wい7H Nお *SpえcいあL* pうnC7うあ7いおn"
 #.  
 msgid "Bottom of page"
 msgstr "8お77おM おf pあgえ"
-
-#: share/skin/s2/template/email/standard-footer.html share/skin/s2/template/email/standard-footer.txt
-#.  
-msgid "Brought to you by Socialtext."
-msgstr "8RおうgH7 7お Yおう 8y sおcいあL7えx7."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -884,6 +889,11 @@ msgstr "cあnNお7 えx7rあc7 FいLえS Frおm %1"
 msgid "Cannot undelete a page with only one revision. Returning to front page."
 msgstr "cあnNお7 うnDえLえ7え あ pあgえ Wい7h おNlY おnえ RえVいSいおn. Rえ7うRnいnG 7お fRおN7 pあgえ."
 
+#: lib/Socialtext/Workspace.pm
+#. (
+msgid "Cannot write export file %1, aborting.\n"
+msgstr "cあnNお7 Wrい7え えxPおR7 fいlえ %1, あ8おr7いNg.\N"
+
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section share/skin/s2/template/view/homepage
 #.  
 msgid "Central page"
@@ -914,16 +924,6 @@ msgstr "cHあNgえs sあvえd"
 msgid "Check with your %1 administrator."
 msgstr "cHえCk wい7H Yおうr %1 あdMいNいS7Rあ7おR."
 
-#: share/skin/s2/template/authen/choose_password.html
-#.  
-msgid "Choose Password"
-msgstr "cHおおsえ PあSsWおRd"
-
-#: share/skin/s2/template/authen/choose_password.html
-#.  
-msgid "Choose Password:"
-msgstr "cHおおsえ PあSsWおRd:"
-
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
 msgid "Chronologically (Oldest First)"
@@ -950,9 +950,9 @@ msgid "Click \"Done\" to close this window."
 msgstr "cLいCk \"dおnえ\" 7お cLおSえ 7HいS WいNdおw."
 
 #: share/skin/s2/template/view/edit_contention
-#.  
-msgid "Click here to go to the latest version of the page."
-msgstr "cLいCk hえrえ 7お gお 7お 7Hえ lあ7えs7 VえRsいおN おf 7Hえ pあgえ."
+#. (
+msgid "Click here to go to the latest version of the %1."
+msgstr "cLいCk hえrえ 7お gお 7お 7Hえ lあ7えs7 VえRsいおN おf 7Hえ %1."
 
 #: share/skin/s2/template/element/page/actions
 #.  
@@ -1013,11 +1013,6 @@ msgstr "cLいCk 7HいS 8う77おn 7お PえRfおrM Yおうr sえあRcH"
 #.  
 msgid "Click this button to preview your page before saving it"
 msgstr "cLいCk 7HいS 8う77おn 7お PrえvいえW Yおうr pあgえ 8えFおRえ sあvいnG い7"
-
-#: share/skin/s2/template/element/page/actions
-#.  
-msgid "Click this button to refresh this spreadsheet"
-msgstr "cLいCk 7HいS 8う77おn 7お RえFrえsH 7hいs sPrえあDsHええ7"
 
 #: lib/Socialtext/BreadCrumbsPlugin.pm
 #.  
@@ -1104,6 +1099,11 @@ msgstr "cおmPあRえ rえvいsいおNs"
 msgid "Compare Revisions %1 and %2"
 msgstr "cおmPあRえ rえvいsいおNs %1 あnD %2"
 
+#: share/template/control/user.html
+#.  
+msgid "Confirm user"
+msgstr "cおnFいRm うSえR"
+
 #: share/skin/s2/template/layout/html
 #.  
 msgid "Confluence wiki, Enterprise 2.0 wiki, Mediawiki, Microsoft wiki, Sharepoint wiki, Twiki, Web 2.0 wiki, business wiki, document management, enterprise wiki, intranet wiki, knowledge management, online collaboration, open source wiki, portal wiki, hosted wiki, project collaboration, team collaboration, wiki appliance, wiki software"
@@ -1159,7 +1159,7 @@ msgstr "cおうLd nお7 えX7RあC7 fいlえs fRおM 7hえ Skいn あRcHいVえ.
 msgid "Could not open %1"
 msgstr "cおうLd nお7 おPえN %1"
 
-#: share/skin/s2/template/element/settings/weblog_create share/skin/s2/template/element/settings/workspaces_create_section
+#: share/skin/s2/template/element/settings/weblog_create share/skin/s2/template/element/settings/workspaces_create_section share/template/control/report.html
 #.  
 msgid "Create"
 msgstr "cRえあ7え"
@@ -1209,10 +1209,30 @@ msgstr "cRえあ7え WおRd dおcうmえn7 Frおm cHえCkえd pあgえs"
 msgid "Create Your Profile"
 msgstr "cRえあ7え Yおうr pRおFいLえ"
 
+#: share/template/control/accounts.html
+#.  
+msgid "Create a New Account"
+msgstr "cRえあ7え あ NえW あcCおうn7"
+
 #: share/skin/s2/template/element/page/actions
 #.  
 msgid "Create new page"
 msgstr "cRえあ7え NえW PあGえ"
+
+#: share/template/control/user.html share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
+#.  
+msgid "Created"
+msgstr "cRえあ7えd"
+
+#: share/template/control/workspace_table share/template/control/workspace_table
+#.  
+msgid "Created By"
+msgstr "cRえあ7えd 8Y"
+
+#: share/template/control/workspace.html
+#.  
+msgid "Created by"
+msgstr "cRえあ7えd 8Y"
 
 #: share/skin/s2/template/element/page/details
 #. (
@@ -1283,6 +1303,11 @@ msgstr "dあ7え うpLおあdえd"
 #.  
 msgid "Date:"
 msgstr "dあ7え:"
+
+#: share/template/control/report.html
+#.  
+msgid "December"
+msgstr "dえcえm8えR"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -1449,7 +1474,7 @@ msgstr "えMあいl あDdRえSs"
 msgid "Email Address for this user:"
 msgstr "えMあいl あDdRえSs fおr 7HいS うsえr:"
 
-#: lib/Socialtext/Handler/Authen.pm share/skin/s2/template/authen/forgot_password.html share/skin/s2/template/authen/register.html
+#: lib/Socialtext/Handler/Authen.pm
 #.  
 msgid "Email Address:"
 msgstr "えMあいl あDdRえSs:"
@@ -1494,11 +1519,6 @@ msgstr "えNあ8lえ えmあいL Nお7いFいCあ7いおnS FおR 7hいs wおrKsP
 msgid "English"
 msgstr "えNgLいSh"
 
-#: share/skin/s2/template/email/password-change.html share/skin/s2/template/email/password-change.txt
-#.  
-msgid "Enjoy!"
-msgstr "えNjおy!"
-
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "Enter a list of email addresses (one address per line) of people you would like to invite to this Workspace."
@@ -1523,11 +1543,6 @@ msgstr "えN7えr pあr7 おf あ うSえR'S FいRs7 おr lあs7 NあMえ, おr 
 #.  
 msgid "Enter the information for the user you would like to invite to this workspace."
 msgstr "えN7えr 7Hえ いNfおrMあ7いおn fおr 7Hえ うSえR Yおう WおうlD LいKえ 7お いnVい7え 7お 7hいs wおrKsPあCえ."
-
-#: share/skin/s2/template/authen/forgot_password.html
-#.  
-msgid "Enter your email address below. Enter the email address you normally use for your Socialtext account. If you got here by clicking a link you received in an email message, look at that message, and use the email address it was sent to."
-msgstr "えN7えr yおうR えmあいL あdDrえsS 8えLおW. えN7えr 7Hえ えMあいl あDdRえSs yおう nおrMあLlY うsえ FおR Yおうr sおcいあL7えx7 あcCおうn7. いF Yおう Gお7 HえRえ 8Y ClいcKいNg あ lいnK Yおう RえCえいvえd いN あn えMあいl mえsSあGえ, Lおおk あ7 7hあ7 mえsSあGえ, あnD うsえ 7hえ えmあいL あdDrえsS い7 wあs sえn7 7お."
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
@@ -1629,10 +1644,25 @@ msgstr "えXpおr7"
 msgid "Export as HTML"
 msgstr "えXpおr7 あs h7mL"
 
+#: share/template/control/growth_report.html
+#.  
+msgid "Export data as CSV"
+msgstr "えXpおr7 Dあ7あ あS CsV"
+
 #: lib/Socialtext/Workspace.pm
 #. (
 msgid "Export directory %1 does not exist.\n"
 msgstr "えXpおr7 DいRえC7おrY %1 dおえS Nお7 えxいs7.\n"
+
+#: lib/Socialtext/Workspace.pm
+#. (
+msgid "Export directory %1 is not writeable.\n"
+msgstr "えXpおr7 DいRえC7おrY %1 いS Nお7 Wrい7えあ8lえ.\n"
+
+#: share/template/control/report.html
+#.  
+msgid "Export summary data as CSV"
+msgstr "えXpおr7 SうMmあrY Dあ7あ あS CsV"
 
 #: share/skin/s2/template/element/listview/actions share/skin/s2/template/element/page/actions
 #.  
@@ -1644,6 +1674,11 @@ msgstr "えXpおr7 7お pDf"
 msgid "Export to Word"
 msgstr "えXpおr7 7お wおrD"
 
+#: share/template/control/report.html
+#.  
+msgid "Export user data as CSV"
+msgstr "えXpおr7 うsえr dあ7あ あs cSv"
+
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #. (
 msgid "Exporting %1"
@@ -1653,6 +1688,11 @@ msgstr "えXpおr7いNg %1"
 #.  
 msgid "Exporting workspaces ..."
 msgstr "えXpおr7いNg wおrKsPあCえS ..."
+
+#: share/template/control/report.html
+#.  
+msgid "February"
+msgstr "fえ8RうあrY"
 
 #: lib/Socialtext/Appliance/BackupStore.pm
 #.  
@@ -1694,11 +1734,6 @@ msgstr "fいl7えR 8y cあ7えgおrY"
 msgid "First Name"
 msgstr "fいrS7 nあmえ"
 
-#: share/skin/s2/template/authen/register.html
-#.  
-msgid "First Name:"
-msgstr "fいrS7 nあmえ:"
-
 #: lib/Socialtext/WeblogPlugin.pm
 #. (
 msgid "First Post in %1"
@@ -1708,11 +1743,6 @@ msgstr "fいrS7 pおs7 いn %1"
 #.  
 msgid "First name:"
 msgstr "fいrS7 nあmえ:"
-
-#: share/skin/s2/template/authen/forgot_password.html
-#.  
-msgid "Forgot Password"
-msgstr "fおrGお7 PあSsWおRd"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -1739,6 +1769,21 @@ msgstr "gあvえ SおCいあl7えX7 あCcおうN7S あcCえSs 7お %1"
 msgid "Gave Socialtext System Management access to %1"
 msgstr "gあvえ SおCいあl7えX7 sYs7えM MあNあGえMえN7 あCcえsS 7お %1"
 
+#: share/template/control/user.html
+#.  
+msgid "Give Access to Socialtext Accounts"
+msgstr "gいvえ あcCえSs 7お SおCいあl7えX7 あCcおうN7S"
+
+#: share/template/control/user.html
+#.  
+msgid "Give Access to Socialtext System Management"
+msgstr "gいvえ あcCえSs 7お SおCいあl7えX7 sYs7えM MあNあGえMえN7"
+
+#: share/template/control/workspace.html
+#. (
+msgid "Go to the %1 workspace"
+msgstr "gお 7お 7Hえ %1 WおRkSpあcえ"
+
 #: share/skin/s2/template/element/weblog/actions
 #.  
 msgid "Go to:"
@@ -1749,15 +1794,10 @@ msgstr "gお 7お:"
 msgid "Google: %1"
 msgstr "gおおGlえ: %1"
 
-#: share/skin/s2/template/email/password-change.html share/skin/s2/template/email/password-change.txt
+#: share/template/control/account.html share/template/control/workspace.html
 #.  
-msgid "Greetings from Socialtext,"
-msgstr "gRええ7いnGs fRおM SおCいあl7えX7,"
-
-#: share/skin/s2/template/email/email-address-confirmation-completed.html share/skin/s2/template/email/email-address-confirmation-completed.txt share/skin/s2/template/email/openid/invite-request-email.html share/skin/s2/template/email/openid/invite-request-email.txt share/skin/s2/template/email/st/invite-request-email.html share/skin/s2/template/email/st/invite-request-email.txt
-#.  
-msgid "Hello,"
-msgstr "hえlLお,"
+msgid "Growth Reports"
+msgstr "gRおW7H RえPおR7S"
 
 #: share/skin/s2/template/popup/email_page
 #. (
@@ -1768,11 +1808,6 @@ msgstr "hえlLお, 7hいs いS あ PあGえ fRおM 7hえ WおRkSpあcえ 7hあ7 
 #.  
 msgid "Help"
 msgstr "hえlP"
-
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/openid/workspace-invitation.txt share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "Hi,"
-msgstr "hい,"
 
 #: lib/Socialtext/Lite.pm share/skin/s2/template/element/wiki/nav
 #.  
@@ -1824,25 +1859,10 @@ msgstr "hおw sHおうlD DあYlいgH7 sあvいnGs/sうmMえR 7いMえ 8え HあN
 msgid "How should displayed dates be formatted?"
 msgstr "hおw sHおうlD DいSpLあYえD Dあ7えS 8え fおrMあ77えd?"
 
-#: share/skin/s2/template/authen/login.html
-#.  
-msgid "I don't know my password."
-msgstr "い dおn'7 kNおW My pあsSwおrD."
-
 #: lib/Socialtext/WorkspaceInvitation.pm
 #. (
 msgid "I'm inviting you into the %1 workspace"
 msgstr "い'm いNvい7いnG Yおう いn7お 7Hえ %1 WおRkSpあcえ"
-
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#. (
-msgid "I'm inviting you to join %1, one of our shared workspaces."
-msgstr "い'm いNvい7いnG Yおう 7お jおいN %1, おnえ おf おうr sHあRえD WおRkSpあcえs."
-
-#: share/skin/s2/template/email/openid/workspace-invitation.txt
-#. (
-msgid "I'm inviting you to join %1, one of our shared workspaces. Sign in using the information below:"
-msgstr "い'm いNvい7いnG Yおう 7お jおいN %1, おnえ おf おうr sHあRえD WおRkSpあcえs. SいGn いN うsいnG 7hえ いnFおRmあ7いおN 8えLおW:"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
@@ -1854,55 +1874,10 @@ msgstr "いF 7hえrえ いs あLrえあDy あN えxいs7いNg pあgえ Wい7h 7H
 msgid "If you are sure you wish to overwrite the \"%1\" page on \"%2\", please press \"Copy\" again."
 msgstr "いF Yおう あrえ SうRえ yおう wいsH 7お おVえRwRい7え 7Hえ \"%1\" PあGえ おN \"%2\", PlえあSえ pRえSs \"cおpY\" あgあいN."
 
-#: share/skin/s2/template/errors/settings_requires_account share/skin/s2/template/errors/watchlist_requires_account
-#. (
-msgid "If you do not already have an account, you can <a href=\"/nlw/register.html?redirect_to=%1\">register here</a>."
-msgstr "いF Yおう Dお nお7 あLrえあDy hあvえ あn あCcおうN7, Yおう CあN <あ hRえF=\"/nLw/rえgいs7えR.H7Ml?rえdいrえc7_7お=%1\">RえGいS7えr hえrえ</あ>."
-
-#: share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "If you don't remember it, follow this link to select a new password:"
-msgstr "いF Yおう DおN'7 RえMえM8えr い7, fおlLおW 7hいs lいnK 7お sえlえc7 あ NえW PあSsWおRd:"
-
-#: share/skin/s2/template/email/st/workspace-invitation-body.html
-#. (
-msgid "If you don't remember it, just <a href=\"%4\">click here to select a new password</a>."
-msgstr "いF Yおう DおN'7 RえMえM8えr い7, jうs7 <あ hRえF=\"%4\">cLいCk hえrえ 7お sえlえc7 あ NえW PあSsWおRd</あ>."
-
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "If you don't select an image, a Socialtext logo will be used instead."
 msgstr "いF Yおう DおN'7 SえLえC7 あN いmあgえ, あ sおcいあL7えx7 LおGお wいlL 8え うSえD いnS7えあD."
-
-#: share/skin/s2/template/email/password-change.txt
-#. (
-msgid "If you have any questions, please feel free to send email to %1."
-msgstr "いF Yおう HあVえ あNy qうえS7いおNs, PlえあSえ fええL Frええ 7お SえNd えMあいl 7お %1."
-
-#: share/skin/s2/template/email/password-change.html
-#. (
-msgid "If you have any questions, please feel free to send email to <a href=\"mailto:%1\">%2</a>."
-msgstr "いF Yおう HあVえ あNy qうえS7いおNs, PlえあSえ fええL Frええ 7お SえNd えMあいl 7お <あ hRえF=\"Mあいl7お:%1\">%2</あ>."
-
-#: share/skin/s2/template/email/standard-footer.html
-#. (
-msgid "If you have questions about this email, contact your wiki support at %1"
-msgstr "いF Yおう HあVえ qうえS7いおNs あ8おう7 7HいS えmあいL, cおn7あC7 yおうR WいKい sうpPおR7 あ7 %1"
-
-#: share/skin/s2/template/email/standard-footer.txt
-#. (
-msgid "If you have questions about this email, contact your wiki support at %1."
-msgstr "いF Yおう HあVえ qうえS7いおNs あ8おう7 7HいS えmあいL, cおn7あC7 yおうR WいKい sうpPおR7 あ7 %1."
-
-#: share/skin/s2/template/email/email-address-confirmation-completed.html
-#.  
-msgid "If you have questions, please contact your wiki support at"
-msgstr "いF Yおう HあVえ qうえS7いおNs, PlえあSえ cおn7あC7 yおうR WいKい sうpPおR7 あ7"
-
-#: share/skin/s2/template/email/email-address-confirmation-completed.txt
-#. (
-msgid "If you have questions, please contact your wiki support at %1."
-msgstr "いF Yおう HあVえ qうえS7いおNs, PlえあSえ cおn7あC7 yおうR WいKい sうpPおR7 あ7 %1."
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
@@ -1924,7 +1899,7 @@ msgstr "いF Yおう 7rY 7お sえあRcH おn あ fいえLd 7Hあ7 Dおえs nお
 msgid "If you wish, you can include a personal message in the invitation email. You can edit the message to say anything you want."
 msgstr "いF Yおう WいSh, Yおう CあN いnClうdえ あ PえRsおnあl mえsSあGえ いN 7hえ いnVい7あ7いおn えMあいl. Yおう CあN えdい7 7Hえ mえsSあGえ 7お SあY あnY7HいNg yおう wあn7."
 
-#: lib/Socialtext/BugsPlugin.pm share/skin/s2/template/bugs_content.html
+#: lib/Socialtext/BugsPlugin.pm
 #.  
 msgid "Ignore Bug"
 msgstr "いGnおrえ 8うG"
@@ -2029,11 +2004,6 @@ msgstr "いNvあlいd cHあRあC7えr '/' いN ChあnGえS PあRあMえ7えR"
 msgid "Invalid host: %1"
 msgstr "いNvあlいd hおs7: %1"
 
-#: share/skin/s2/template/email/openid/invite-request-email.html share/skin/s2/template/email/st/invite-request-email.html
-#.  
-msgid "Invitation Request"
-msgstr "いNvい7あ7いおN RえQうえs7"
-
 #: lib/Socialtext/OpenIdPlugin.pm
 #. (
 msgid "Invitation to join %1"
@@ -2054,6 +2024,26 @@ msgstr "いNvい7え NえW うsえrS"
 msgid "Invite Other Users"
 msgstr "いNvい7え お7HえR うsえrS"
 
+#: share/template/control/user_table
+#.  
+msgid "Invited"
+msgstr "いNvい7えd"
+
+#: share/template/control/workspace.html
+#.  
+msgid "Invited (to system)"
+msgstr "いNvい7えd (7お sYs7えM)"
+
+#: share/template/control/user_table
+#.  
+msgid "Invited By"
+msgstr "いNvい7えd 8Y"
+
+#: share/template/control/user.html
+#.  
+msgid "Invited by"
+msgstr "いNvい7えd 8Y"
+
 #: share/skin/s2/template/search_help_field.html
 #.  
 msgid "It looks like you are trying to search on a field in the search index. At this time the fields available are:"
@@ -2069,10 +2059,25 @@ msgstr "い7 MうS7 cおnSいS7 おF 3-30 lおwえrCあSえ lえ77えRs, NうM8�
 msgid "Italian"
 msgstr "い7あLいあn"
 
+#: share/template/control/report.html
+#.  
+msgid "January"
+msgstr "jあnうあRy"
+
 #: lib/Socialtext/Locales.pm
 #.  
 msgid "Japanese"
 msgstr "jあpあnえsえ"
+
+#: share/template/control/report.html
+#.  
+msgid "July"
+msgstr "jうlY"
+
+#: share/template/control/report.html
+#.  
+msgid "June"
+msgstr "jうnえ"
 
 #: share/skin/s2/template/popup/copy_to_workspace
 #.  
@@ -2119,11 +2124,6 @@ msgstr "lあs7 MおN7H"
 msgid "Last Name"
 msgstr "lあs7 NあMえ"
 
-#: share/skin/s2/template/authen/register.html
-#.  
-msgid "Last Name:"
-msgstr "lあs7 NあMえ:"
-
 #: lib/Socialtext/RecentChangesPlugin.pm
 #.  
 msgid "Last Week"
@@ -2139,6 +2139,11 @@ msgstr "lあs7 えdい7えd 8Y %1"
 msgid "Last edited by <span class=\"st-homepage-whatsnew-author\">%1</span> on <span class=\"st-homepage-whatsnew-date\">%2</span>"
 msgstr "lあs7 えdい7えd 8Y <sPあN ClあsS=\"S7-hおmえpあgえ-Whあ7Snえw-あう7HおR\">%1</Spあn> おn <Spあn cLあSs=\"s7-HおMえPあGえ-wHあ7sNえW-Dあ7え\">%2</sPあN>"
 
+#: share/template/control/user.html
+#.  
+msgid "Last login"
+msgstr "lあs7 LおGいN"
+
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #. (
 msgid "Last manual backup was %1"
@@ -2153,6 +2158,11 @@ msgstr "lあs7 MあNうあl 8あcKうP WあS NえVえR"
 #.  
 msgid "Last name:"
 msgstr "lあs7 NあMえ:"
+
+#: share/skin/s2/template/element/listview/pages share/skin/s2/template/element/listview/pages
+#.  
+msgid "Last updated by"
+msgstr "lあs7 うpDあ7えD 8y"
 
 #: share/skin/s2/javascript/widget_resource.js share/skin/s2/javascript/widget_resource.js share/skin/s2/template/view/refcard
 #.  
@@ -2194,26 +2204,6 @@ msgstr "lおあDいNg..."
 msgid "Locale for %1 is now %2"
 msgstr "lおcあlえ FおR %1 いS NおW %2"
 
-#: share/skin/s2/template/authen/login.html
-#.  
-msgid "Log in"
-msgstr "lおg いN"
-
-#: share/skin/s2/template/authen/choose_password.html share/skin/s2/template/authen/login.html
-#.  
-msgid "Log in to Socialtext"
-msgstr "lおg いN 7お sおcいあL7えx7"
-
-#: share/skin/s2/template/authen/choose_password.html share/skin/s2/template/authen/register.html
-#.  
-msgid "Log in with an existing account"
-msgstr "lおg いN Wい7h あN えxいs7いNg あCcおうN7"
-
-#: share/skin/s2/template/email/email-address-confirmation-completed.html share/skin/s2/template/email/email-address-confirmation-completed.txt
-#.  
-msgid "Log in with your email address:"
-msgstr "lおg いN Wい7h yおうR えmあいL あdDrえsS:"
-
 #: share/skin/s2/template/element/wiki/nav
 #.  
 msgid "Log out"
@@ -2229,7 +2219,7 @@ msgstr "lおg&n8sP;いn"
 msgid "Log&nbsp;out"
 msgstr "lおg&n8sP;おう7"
 
-#: share/skin/s2/template/authen/login.html share/skin/s2/template/element/wiki/nav
+#: share/skin/s2/template/element/wiki/nav
 #.  
 msgid "Login"
 msgstr "lおgいn"
@@ -2264,10 +2254,20 @@ msgstr "mあnあgえ あlL うsえrS"
 msgid "Manage files"
 msgstr "mあnあgえ FいLえS"
 
+#: share/template/control/report.html
+#.  
+msgid "March"
+msgstr "mあrCh"
+
 #: share/skin/s2/template/element/page/attachment_attach_interface
 #.  
 msgid "Maximum file size: 50MB"
 msgstr "mあxいmうm fいlえ SいZえ: 50M8"
+
+#: share/template/control/report.html
+#.  
+msgid "May"
+msgstr "mあy"
 
 #: share/skin/s2/template/view/refcard
 #.  
@@ -2309,10 +2309,15 @@ msgstr "mY Wえ8lおg wえ8LおG"
 msgid "My Workspaces"
 msgstr "mY WおRkSpあcえs"
 
-#: share/skin/s2/template/element/settings/users_settings_section share/skin/s2/template/view/refcard
+#: share/skin/s2/template/element/settings/users_settings_section share/skin/s2/template/view/refcard share/template/control/account_table share/template/control/user_table share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Name"
 msgstr "nあmえ"
+
+#: share/template/control/accounts.html
+#.  
+msgid "Name:"
+msgstr "nあmえ:"
 
 #: lib/Socialtext/WeblogPlugin.pm
 #. (
@@ -2434,11 +2439,6 @@ msgstr "nお PあGえ nあmえ GいVえN"
 msgid "No pages selected for export"
 msgstr "nお PあGえS SえLえC7えd fおr えXpおr7"
 
-#: share/skin/s2/template/authen/forgot_password.html
-#.  
-msgid "No problem, we can send you an email that will help. You will be able to change your password back to something you know."
-msgstr "nお Prお8LえM, wえ CあN SえNd yおう あN えmあいL 7hあ7 wいlL HえLp. Yおう WいLl 8え あ8Lえ 7お ChあnGえ yおうR PあSsWおRd 8あcK 7お sおmえ7HいNg yおう kNおW."
-
 #: share/skin/s2/template/view/page/display
 #.  
 msgid "No revisions"
@@ -2484,6 +2484,26 @@ msgstr "nおrMあL Vいえw"
 msgid "Not a valid page name"
 msgstr "nお7 あ vあlいd pあgえ NあMえ"
 
+#: share/template/control/report.html
+#.  
+msgid "Novemeber"
+msgstr "nおvえmえ8えr"
+
+#: share/template/control/account_table share/template/control/workspace_table share/template/control/workspace_table
+#.  
+msgid "Number of Users"
+msgstr "nうm8えR おf うSえRs"
+
+#: share/template/control/account_table share/template/control/user_table share/template/control/user_table share/template/control/workspace.html
+#.  
+msgid "Number of Workspaces"
+msgstr "nうm8えR おf wおrKsPあCえS"
+
+#: share/template/control/report.html
+#.  
+msgid "October"
+msgstr "おC7お8えr"
+
 #: share/skin/s2/template/element/page/newpage_duplicate
 #.  
 msgid "Ok"
@@ -2493,11 +2513,6 @@ msgstr "おK"
 #.  
 msgid "Old password is incorrect"
 msgstr "おLd pあsSwおrD いs いNcおrRえC7"
-
-#: share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "Once you have confirmed your account, you will receive a second email with login details."
-msgstr "おNcえ Yおう HあVえ cおnFいRmえd yおうR あcCおうn7, yおう wいlL RえCえいvえ あ SえCおNd えMあいl wい7H LおGいN Dえ7あいlS."
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #. (
@@ -2659,11 +2674,6 @@ msgstr "pあgえs wい7H 7hえ '%1' 7あg. ClいcK 7お えDい7."
 msgid "Password"
 msgstr "pあsSwおrD"
 
-#: share/skin/s2/template/authen/login.html share/skin/s2/template/authen/register.html
-#.  
-msgid "Password:"
-msgstr "pあsSwおrD:"
-
 #: lib/Socialtext/User/Default.pm
 #.  
 msgid "Passwords must be at least 6 characters long."
@@ -2684,35 +2694,10 @@ msgstr "pえrFおRm rえs7おRえ"
 msgid "Personal Message"
 msgstr "pえrSおNあL MえSsあgえ"
 
-#: share/skin/s2/template/email/email-address-confirmation.html
-#. (
-msgid "Please <a href=\"%1\">click on this link to confirm your email address.</a>"
-msgstr "pLえあsえ <あ hRえF=\"%1\">cLいCk おN 7hいs lいnK 7お cおnFいRm yおうR えmあいL あdDrえsS.</あ>"
-
-#: share/skin/s2/template/email/st/workspace-invitation-body.html
-#. (
-msgid "Please <a href=\"%1\">click on this link</a> to confirm your email address."
-msgstr "pLえあsえ <あ hRえF=\"%1\">cLいCk おN 7hいs lいnK</あ> 7お cおnFいRm yおうR えmあいL あdDrえsS."
-
 #: share/skin/s2/template/popup/copy_to_workspace
 #.  
 msgid "Please choose a different name."
 msgstr "pLえあsえ ChおおSえ あ dいfFえRえN7 nあmえ."
-
-#: share/skin/s2/template/email/password-change.html
-#.  
-msgid "Please choose a new Socialtext password"
-msgstr "pLえあsえ ChおおSえ あ nえw sおcいあL7えx7 PあSsWおRd"
-
-#: share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "Please click on this link to confirm your email address:"
-msgstr "pLえあsえ ClいcK おn 7HいS LいNk 7お CおNfいrM Yおうr えMあいl あDdRえSs:"
-
-#: share/skin/s2/template/email/email-address-confirmation.html
-#.  
-msgid "Please confirm your email address"
-msgstr "pLえあsえ CおNfいrM Yおうr えMあいl あDdRえSs"
 
 #: lib/Socialtext/User.pm
 #.  
@@ -2738,11 +2723,6 @@ msgstr "pLえあsえ えn7えR あn えMあいl あDdRえSs."
 #.  
 msgid "Please follow these instructions to change your Socialtext password"
 msgstr "pLえあsえ FおLlおw 7HえSえ いNs7rうc7いおnS 7お cHあNgえ Yおうr sおcいあL7えx7 PあSsWおRd"
-
-#: share/skin/s2/template/email/email-address-confirmation.txt
-#.  
-msgid "Please follow this link to confirm your address:"
-msgstr "pLえあsえ FおLlおw 7HいS LいNk 7お CおNfいrM Yおうr あDdRえSs:"
 
 #: share/skin/s2/template/element/settings/weblog_create
 #.  
@@ -2829,6 +2809,11 @@ msgstr "pRいN7 7HいS PあGえ"
 msgid "Print this weblog"
 msgstr "pRいN7 7HいS Wえ8lおg"
 
+#: share/template/control/growth_report.html share/template/control/report.html
+#.  
+msgid "Printer Friendly Report"
+msgstr "pRいN7えr fRいえnDlY RえPおR7"
+
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Private"
@@ -2859,11 +2844,6 @@ msgstr "qういCk jうmP"
 msgid "RFC 868 Time Server"
 msgstr "rFc 868 7いmえ SえRvえr"
 
-#: share/skin/s2/template/authen/choose_password.html share/skin/s2/template/authen/register.html
-#.  
-msgid "Re-type Password:"
-msgstr "rえ-7yPえ pあsSwおrD:"
-
 #: lib/Socialtext/Appliance/ConsoleController.pm
 #.  
 msgid "Reboot"
@@ -2884,7 +2864,7 @@ msgstr "rえ8おお7 あpPlいあNcえ?"
 msgid "Reboot Now"
 msgstr "rえ8おお7 NおW"
 
-#: lib/Socialtext/Lite.pm lib/Socialtext/WeblogPlugin.pm share/skin/s2/template/element/weblog/actions
+#: lib/Socialtext/Lite.pm lib/Socialtext/SyndicatePlugin.pm lib/Socialtext/WeblogPlugin.pm share/skin/s2/template/element/weblog/actions
 #.  
 msgid "Recent Changes"
 msgstr "rえcえn7 ChあnGえS"
@@ -2914,11 +2894,6 @@ msgstr "rえcえn7 PおS7S Frおm %1"
 msgid "Recent Posts from %1 in workspace %2"
 msgstr "rえcえn7 PおS7S Frおm %1 いn wおrKsPあCえ %2"
 
-#: share/skin/s2/template/email/recent-changes.html
-#. (
-msgid "Recent changes in %1"
-msgstr "rえcえn7 ChあnGえS いn %1"
-
 #: share/skin/s2/template/lite/category/category.html
 #. (
 msgid "Recent changes in %1 category"
@@ -2939,25 +2914,20 @@ msgstr "rえcえn7lY Vいえwえd pあgえs"
 msgid "Redirecting to %1"
 msgstr "rえdいrえc7いNg 7お %1"
 
-#: share/skin/s2/template/element/page/actions
-#.  
-msgid "Refresh"
-msgstr "rえfRえSh"
-
 #: share/console-template/template/backup.html
 #.  
 msgid "Refresh file list"
 msgstr "rえfRえSh fいlえ LいS7"
 
-#: share/skin/s2/template/authen/register.html share/skin/s2/template/element/wiki/nav
+#: share/skin/s2/template/element/wiki/nav
 #.  
 msgid "Register"
 msgstr "rえgいs7えR"
 
-#: share/skin/s2/template/authen/login.html
+#: share/skin/s2/template/element/listview/pages
 #.  
-msgid "Remember me on this computer."
-msgstr "rえmえm8えR Mえ おN 7hいs cおmPう7えR."
+msgid "Relevance"
+msgstr "rえlえvあnCえ"
 
 #: share/skin/s2/template/element/settings/users_listall_section share/skin/s2/template/popup/email_page
 #.  
@@ -2973,6 +2943,16 @@ msgstr "rえmおvえ %1 fRおM 7hえ Qうえうえ"
 #. (
 msgid "Remove %1 tag from page"
 msgstr "rえmおvえ %1 7あg fRおM PあGえ"
+
+#: share/template/control/user.html
+#.  
+msgid "Remove Access to Socialtext Accounts"
+msgstr "rえmおvえ あcCえSs 7お SおCいあl7えX7 あCcおうN7S"
+
+#: share/template/control/user.html
+#.  
+msgid "Remove Access to Socialtext System Management"
+msgstr "rえmおvえ あcCえSs 7お SおCいあl7えX7 sYs7えM MあNあGえMえN7"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -3004,20 +2984,20 @@ msgstr "rえpLあCえ えXいS7いnG PあGえ"
 msgid "Replace this text with your own."
 msgstr "rえpLあCえ 7HいS 7えX7 wい7H Yおうr おWn."
 
-#: lib/Socialtext/BugsPlugin.pm share/skin/s2/template/bugs_content.html
+#: lib/Socialtext/BugsPlugin.pm
 #.  
 msgid "Report Bug"
 msgstr "rえpおr7 8うG"
+
+#: share/template/control/report.html
+#.  
+msgid "Report Period:"
+msgstr "rえpおr7 PえRいおd:"
 
 #: lib/Socialtext/UserSettingsPlugin.pm
 #. (
 msgid "Request to invite new users to the %1 workspace"
 msgstr "rえqうえS7 7お いnVい7え nえw うSえRs 7お 7hえ %1 wおrKsPあCえ"
-
-#: share/skin/s2/template/errors/requires_confirmation
-#.  
-msgid "Resend confirmation"
-msgstr "rえsえnD CおNfいrMあ7いおn"
 
 #: share/skin/s2/template/element/settings/users_listall_section
 #.  
@@ -3104,6 +3084,11 @@ msgstr "rえvいsいおNs"
 msgid "Revisions to the current document"
 msgstr "rえvいsいおNs 7お 7hえ CうRrえn7 DおCうMえN7"
 
+#: share/template/control/workspace.html
+#.  
+msgid "Role"
+msgstr "rおlえ"
+
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Roles and Permission Sets (standard workspace types)"
@@ -3174,6 +3159,16 @@ msgstr "sえあRcH RえSうL7S"
 msgid "Search Technorati for '%1'. Click to edit."
 msgstr "sえあRcH 7えChNおRあ7い fおr '%1'. cLいCk 7お えdい7."
 
+#: share/template/control/accounts.html share/template/control/workspaces.html
+#.  
+msgid "Search by name"
+msgstr "sえあRcH 8y nあmえ"
+
+#: share/template/control/users.html
+#.  
+msgid "Search by username"
+msgstr "sえあRcH 8y うSえRnあmえ"
+
 #: lib/Socialtext/SearchPlugin.pm
 #. (
 msgid "Search for %1"
@@ -3229,7 +3224,7 @@ msgstr "sえlえc7"
 msgid "Select a workspace skin:"
 msgstr "sえlえc7 あ WおRkSpあcえ Skいn:"
 
-#: share/skin/s2/javascript/listview.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-other-mini.js share/skin/s2/javascript/socialtext-other.js share/skin/s2/template/element/listview/pages
+#: share/skin/s2/javascript/listview.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-other-mini.js share/skin/s2/javascript/socialtext-other.js share/skin/s2/template/element/listview/pages share/skin/s2/template/view/attachmentslist
 #.  
 msgid "Select all pages"
 msgstr "sえlえc7 あlL PあGえS"
@@ -3248,6 +3243,11 @@ msgstr "sえnD 7えS7 えMあいl"
 #. (
 msgid "Sent test email to %1"
 msgstr "sえn7 7えS7 えMあいl 7お %1"
+
+#: share/template/control/report.html
+#.  
+msgid "September"
+msgstr "sえp7えM8えr"
 
 #: share/console-template/template/backup.html
 #.  
@@ -3304,6 +3304,16 @@ msgstr "sHおうlD うsえrS おf 7HいS WおRkSpあcえ RえCえいvえ えmあ
 msgid "Show full name for '%1'. Click to edit."
 msgstr "sHおW FうLl nあmえ FおR '%1'. ClいcK 7お えDい7."
 
+#: share/skin/s2/template/element/listview/pages
+#.  
+msgid "Show:"
+msgstr "sHおW:"
+
+#: share/template/control/paging_controls
+#. (
+msgid "Showing %1 - %2 of %3 total."
+msgstr "sHおWいNg %1 - %2 おF %3 7お7あl."
+
 #: share/console-template/template/shutdown.html
 #.  
 msgid "Shut Down Appliance"
@@ -3324,20 +3334,10 @@ msgstr "sHう7dおwN"
 msgid "Shutdown Appliance?"
 msgstr "sHう7dおwN あpPlいあNcえ?"
 
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "Sign in using the information below:"
-msgstr "sいgN いn うSいNg 7Hえ いNfおrMあ7いおn 8えlおw:"
-
 #: share/skin/s2/template/element/page/edit
 #.  
 msgid "Simple"
 msgstr "sいmPlえ"
-
-#: share/skin/s2/template/authen/forgot_password.html
-#.  
-msgid "Since your password is stored in the directory for your organization, there is no way to reset your password within the Socialtext system. Please contact your directory administrator for assistance."
-msgstr "sいnCえ yおうR PあSsWおRd いS S7おrえd いN 7hえ DいRえC7おrY FおR Yおうr おRgあnいzあ7いおN, 7HえRえ いS Nお wあy 7お RえSえ7 Yおうr pあsSwおrD Wい7hいn 7Hえ sおcいあL7えx7 SyS7えm. PlえあSえ cおn7あC7 yおうR DいRえC7おrY あdMいNいS7Rあ7おR FおR あsSいS7あnCえ."
 
 #: share/skin/s2/template/element/page/attachment_manage_interface share/skin/s2/template/view/attachmentslist
 #.  
@@ -3353,6 +3353,11 @@ msgstr "sいzえ (8Y7えs)"
 #. (
 msgid "Skype: %1"
 msgstr "sKyPえ: %1"
+
+#: share/template/control/user.html
+#.  
+msgid "Socialtext Accounts Access?"
+msgstr "sおcいあL7えx7 あcCおうn7s あCcえsS?"
 
 #: share/console-template/template/console_wrapper.tmpl share/console-template/template/console_wrapper.tmpl
 #.  
@@ -3373,6 +3378,11 @@ msgstr "sおcいあL7えx7 えmあいL"
 #.  
 msgid "Socialtext Home Page"
 msgstr "sおcいあL7えx7 HおMえ pあgえ"
+
+#: share/template/control/user.html
+#.  
+msgid "Socialtext System Management Access?"
+msgstr "sおcいあL7えx7 SyS7えm mあnあgえmえn7 あcCえSs?"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
@@ -3399,22 +3409,27 @@ msgstr "sおcいあL7えx7 うnPlうgGえD えnあ8LえD"
 msgid "Socialtext Workspace Punctuation Help"
 msgstr "sおcいあL7えx7 WおRkSpあcえ PうNc7うあ7いおN HえLp"
 
+#: share/template/control/wrapper
+#. (
+msgid "Socialtext Workspace<sup>&trade;</sup> %1"
+msgstr "sおcいあL7えx7 WおRkSpあcえ<SうP>&7RあDえ;</sうp> %1"
+
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "Socialtext enables you to customize the look and feel of your workspace. You can use the default skin supplied by Socialtext or customize your own skin."
 msgstr "sおcいあL7えx7 えnあ8LえS Yおう 7お cうs7おMいZえ 7Hえ lおおK あnD Fええl おF Yおうr wおrKsPあCえ. Yおう CあN うsえ 7hえ DえFあうl7 Skいn sうpPlいえD 8y sおcいあL7えx7 おr cうs7おMいZえ yおうR おwN Skいn."
-
-#: share/skin/s2/template/authen/forgot_password.html
-#.  
-msgid "Socialtext password help"
-msgstr "sおcいあL7えx7 PあSsWおRd hえlP"
 
 #: share/skin/s2/template/element/page/footer_end
 #.  
 msgid "Socialtext, the Enterprise Wiki"
 msgstr "sおcいあL7えx7, 7Hえ えN7えrPrいsえ WいKい"
 
-#: share/skin/s2/template/lite/page/contention.html share/skin/s2/template/view/edit_contention
+#: share/skin/s2/template/view/edit_contention
+#. (
+msgid "Somebody else made changes to the %1 while you were editing it."
+msgstr "sおmえ8おdY えlSえ mあdえ ChあnGえS 7お 7Hえ %1 Whいlえ Yおう WえRえ えDい7いNg い7."
+
+#: share/skin/s2/template/lite/page/contention.html
 #.  
 msgid "Somebody else made changes to the page while you were editing it."
 msgstr "sおmえ8おdY えlSえ mあdえ ChあnGえS 7お 7Hえ pあgえ Whいlえ Yおう WえRえ えDい7いNg い7."
@@ -3484,6 +3499,11 @@ msgstr "sおr7 8y nうm8えR おf wおrKsPあCえS いn あScえnDいNg おRdえ
 msgid "Sort by number of workspaces in descending order"
 msgstr "sおr7 8y nうm8えR おf wおrKsPあCえS いn dえsCえNdいnG おrDえR"
 
+#: share/skin/s2/template/element/listview/pages share/skin/s2/template/view/attachmentslist
+#.  
+msgid "Sort by:"
+msgstr "sおr7 8y:"
+
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "Sort entries by first posted time"
@@ -3509,7 +3529,7 @@ msgstr "s7あNdあrD WえLcおmえ MえSsあgえ"
 msgid "Statistics Reports"
 msgstr "s7あ7いS7いcS RえPおR7S"
 
-#: share/skin/s2/template/authen/choose_password.html share/skin/s2/template/authen/forgot_password.html share/skin/s2/template/new_form_page/new_form_page_buttons.html
+#: share/skin/s2/template/new_form_page/new_form_page_buttons.html share/template/control/accounts.html share/template/control/accounts.html share/template/control/users.html share/template/control/workspace.html share/template/control/workspaces.html
 #.  
 msgid "Submit"
 msgstr "sう8Mい7"
@@ -3523,6 +3543,11 @@ msgstr "sう87お7あL FおR 7hいs あ77あcHmえn7"
 #.  
 msgid "Suggestions:"
 msgstr "sうgGえS7いおNs:"
+
+#: share/skin/s2/template/element/listview/pages
+#.  
+msgid "Summaries"
+msgstr "sうmMあRいえs"
 
 #: share/skin/s2/template/view/page/stats
 #.  
@@ -3594,11 +3619,6 @@ msgstr "7あgS:"
 msgid "Technorati: %1"
 msgstr "7えcHnおrあ7い: %1"
 
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/openid/workspace-invitation.txt share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "Thanks,"
-msgstr "7HあNkS,"
-
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "The %1 account has been created."
@@ -3614,15 +3634,15 @@ msgstr "7Hえ %1 うsえr wあs cおnFいRmえd."
 msgid "The %1 workspace is now part of the %2 account."
 msgstr "7Hえ %1 WおRkSpあcえ いs nおw pあr7 おf 7Hえ %2 あcCおうn7."
 
+#: share/skin/s2/template/view/edit_contention
+#. (
+msgid "The %1 you just edited is shown below. You can copy and paste your changes from here:"
+msgstr "7Hえ %1 Yおう JうS7 えDい7えD いs sHおWn 8えlおw. Yおう CあN CおPy あNd pあs7え yおうR ChあnGえS Frおm hえrえ:"
+
 #: lib/Socialtext/User/Default/Factory.pm
 #. (
 msgid "The %1 you provided (%2) is already in use."
 msgstr "7Hえ %1 Yおう Prおvいdえd (%2) いs あLrえあDy いN うsえ."
-
-#: share/skin/s2/template/email/openid/invite-request-email.txt share/skin/s2/template/email/st/invite-request-email.txt
-#.  
-msgid "The User Invite page can be found at:"
-msgstr "7Hえ うSえR いnVい7え pあgえ CあN 8え fおうNd あ7:"
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
@@ -3659,11 +3679,6 @@ msgstr "7Hえ cおnFいRmあ7いおN えmあいL HあS 8ええn rえsえn7. pL�
 msgid "The email address for %1 has already been confirmed."
 msgstr "7Hえ えMあいl あDdRえSs fおr %1 HあS あlRえあdY 8ええn cおnFいRmえd."
 
-#: share/skin/s2/template/authen/forgot_password.html
-#. (
-msgid "The email we will send you will come from <strong>%1</strong>. To ensure you receive it, please add <strong>%1</strong> to your address book or safe list."
-msgstr "7Hえ えMあいl wえ WいLl sえnD Yおう WいLl cおmえ Frおm <S7RおNg>%1</s7rおnG>. 7お えNsうrえ Yおう RえCえいvえ い7, PlえあSえ あDd <S7RおNg>%1</s7rおnG> 7お Yおうr あDdRえSs 8おおK おr sあfえ LいS7."
-
 #: lib/Socialtext/AttachmentsUIPlugin.pm
 #.  
 msgid "The file you are trying to upload does not exist"
@@ -3673,16 +3688,6 @@ msgstr "7Hえ fいlえ Yおう あrえ 7rYいNg 7お うpLおあd dおえS Nお7
 #.  
 msgid "The following email addresses were invalid"
 msgstr "7Hえ fおlLおWいNg えMあいl あDdRえSsえs wえrえ いnVあLいD"
-
-#: share/skin/s2/template/email/recent-changes.html share/skin/s2/template/email/recent-changes.txt
-#. (
-msgid "The following pages in %1 have recently changed:"
-msgstr "7Hえ fおlLおWいNg pあgえs いN %1 hあvえ RえCえN7Ly cHあNgえd:"
-
-#: share/skin/s2/template/email/watchlist.html share/skin/s2/template/email/watchlist.txt
-#. (
-msgid "The following pages you are watching in %1 have recently changed:"
-msgstr "7Hえ fおlLおWいNg pあgえs yおう あRえ wあ7ChいnG いn %1 HあVえ rえcえn7lY ChあnGえD:"
 
 #: share/skin/s2/template/element/settings/users_invited_section
 #.  
@@ -3749,7 +3754,7 @@ msgstr "7Hえ sKいN Yおう SpえcいfいえD,%1, Dおえs nお7 えXいS7."
 msgid "The ten most recently visited of these workspaces are displayed in the Dashboard."
 msgstr "7Hえ 7えn mおs7 RえCえN7Ly vいsい7えd おF 7hえsえ WおRkSpあcえs あRえ dいsPlあyえd いN 7hえ DあSh8おあrD."
 
-#: share/skin/s2/template/lite/page/contention.html share/skin/s2/template/view/edit_contention
+#: share/skin/s2/template/lite/page/contention.html
 #.  
 msgid "The text you just edited is shown below. You can copy and paste your changes from there:"
 msgstr "7Hえ 7えx7 Yおう JうS7 えDい7えD いs sHおWn 8えlおw. Yおう CあN CおPy あNd pあs7え yおうR ChあnGえS Frおm 7HえRえ:"
@@ -3899,6 +3904,11 @@ msgstr "7いp: Yおう'Ll 8え あ8Lえ 7お FいNd 7HいS PあGえ lあ7えr 8Y
 msgid "Title"
 msgstr "7い7Lえ"
 
+#: share/skin/s2/template/element/listview/pages
+#.  
+msgid "Titles"
+msgstr "7い7LえS"
+
 #: lib/Socialtext/SearchPlugin.pm
 #. (
 msgid "Titles containing '%1' (%2)"
@@ -3909,35 +3919,10 @@ msgstr "7い7LえS CおN7あいNいNg '%1' (%2)"
 msgid "To Get This..."
 msgstr "7お Gえ7 7hいs..."
 
-#: share/skin/s2/template/email/password-change.txt
-#.  
-msgid "To change your password, please follow this link:"
-msgstr "7お ChあnGえ yおうR PあSsWおRd, PlえあSえ fおlLおW 7hいs lいnK:"
-
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #. (
 msgid "To customize your own skin, download the %1, modify the skin files to your liking, and upload them here. Complete documentation on skin customization is available in the %2.<h4>Skin support is not included in basic support. Users who upload skins are responsible for keeping copies of their skin files and for keeping their skins current as the Socialtext application changes.</h4>"
 msgstr "7お CうS7おmいzえ Yおうr おWn sKいN, dおwNlおあD 7hえ %1, MおDいFy 7Hえ sKいN FいLえS 7お yおうR LいKいNg, あnD うpLおあd 7HえM HえRえ. CおMpLえ7え dおcうmえn7あ7いおn おN Skいn cうs7おMいZあ7いおn いS あvあいLあ8lえ いn 7Hえ %2.<h4>Skいn sうpPおR7 いS Nお7 いnClうdえd いN 8あSいC SうPpおr7. うSえRs wHお うPlおあD SkいnS あrえ RえSpおnSい8lえ FおR KええpいnG CおPいえs おF 7hえいR Skいn fいlえs あNd fおr kええPいNg 7Hえいr sKいNs cうrRえN7 あS 7hえ SおCいあl7えX7 あPpLいCあ7いおn cHあNgえs.</h4>"
-
-#: share/skin/s2/template/email/email-address-confirmation-completed.html share/skin/s2/template/email/email-address-confirmation-completed.txt
-#.  
-msgid "To do so, go to this web address:"
-msgstr "7お Dお sお, gお 7お 7HいS Wえ8 あdDrえsS:"
-
-#: share/skin/s2/template/email/openid/invite-request-email.html
-#.  
-msgid "To invite these users into the workspace, visit the user invite page for the <br /> workspace and copy and paste the list above into the invite box. The User <br />Invite page can be found at:"
-msgstr "7お いnVい7え 7HえSえ うSえRs いN7お 7hえ WおRkSpあcえ, vいsい7 7Hえ うSえR いnVい7え pあgえ FおR 7hえ <8R /> wおrKsPあCえ あNd cおpY あnD PあS7え 7hえ LいS7 あ8おVえ いN7お 7hえ いnVい7え 8おx. 7hえ うsえr <8r />いNvい7え PあGえ cあn 8え FおうnD あ7:"
-
-#: share/skin/s2/template/email/st/invite-request-email.html
-#.  
-msgid "To invite these users into the workspace, visit the user invite page for the <br />workspace and copy and paste the list above into the invite box. The User <br />Invite page can be found at:"
-msgstr "7お いnVい7え 7HえSえ うSえRs いN7お 7hえ WおRkSpあcえ, vいsい7 7Hえ うSえR いnVい7え pあgえ FおR 7hえ <8R />WおRkSpあcえ あnD CおPy あNd pあs7え 7Hえ lいs7 あ8おvえ いn7お 7Hえ いNvい7え 8おX. 7Hえ うSえR <8R />いnVい7え pあgえ CあN 8え fおうNd あ7:"
-
-#: share/skin/s2/template/email/openid/invite-request-email.txt share/skin/s2/template/email/st/invite-request-email.txt
-#.  
-msgid "To invite these users into the workspace, visit the user invite page for the workspace and copy and paste the list above into the invite box."
-msgstr "7お いnVい7え 7HえSえ うSえRs いN7お 7hえ WおRkSpあcえ, vいsい7 7Hえ うSえR いnVい7え pあgえ FおR 7hえ WおRkSpあcえ あnD CおPy あNd pあs7え 7Hえ lいs7 あ8おvえ いn7お 7Hえ いNvい7え 8おX."
 
 #: share/skin/s2/template/element/settings/users_invite_search_section
 #.  
@@ -3949,45 +3934,10 @@ msgstr "7お MあKえ あ lいnK 7お あNお7hえr pあgえ (えVえN いf い7
 msgid "To make a link to another page (even if it doesn't exist yet), put square brackets around a word or phrase."
 msgstr "7お MあKえ あ lいnK 7お あNお7hえr pあgえ (えVえN いf い7 DおえsN'7 えxいs7 Yえ7), Pう7 SqうあRえ 8RあCkえ7S あrおうNd あ wおrD おr pHrあsえ."
 
-#: share/skin/s2/template/authen/choose_password.html
-#.  
-msgid "To proceed, please choose a password."
-msgstr "7お PrおcええD, pLえあsえ ChおおSえ あ pあsSwおrD."
-
 #: share/console-template/template/overview.html
 #.  
 msgid "To see a list of all the workspaces and users on the system, go to the <a href=\"/nlw/control/\">Socialtext Accounts Admin</a> tool."
 msgstr "7お Sええ あ LいS7 おF あlL 7hえ WおRkSpあcえs あNd うSえRs おN 7hえ SyS7えm, Gお 7お 7hえ <あ hRえF=\"/nLw/cおn7rおl/\">SおCいあl7えX7 あCcおうN7S あdMいN</あ> 7おおl."
-
-#: share/skin/s2/template/errors/settings_requires_account
-#.  
-msgid "To set your preferences for a workspace, you must be logged in."
-msgstr "7お Sえ7 Yおうr pRえFえRえNcえs fおr あ wおrKsPあCえ, Yおう MうS7 8え LおGgえd いN."
-
-#: share/skin/s2/template/email/recent-changes.txt
-#. (
-msgid "To stop receiving or change how often you receive emails about changes to %1, go to"
-msgstr "7お S7おp rえcえいVいNg おR ChあnGえ hおw おF7えn yおう rえcえいVえ えMあいlS あ8おう7 ChあnGえS 7お %1, gお 7お"
-
-#: share/skin/s2/template/email/recent-changes.html
-#. (
-msgid "To stop receiving or change how often you receive emails about changes to %1, you can <a href=\"%2\">change your preferences</a>."
-msgstr "7お S7おp rえcえいVいNg おR ChあnGえ hおw おF7えn yおう rえcえいVえ えMあいlS あ8おう7 ChあnGえS 7お %1, yおう cあn <あ Hrえf=\"%2\">ChあnGえ yおうR PrえfえrえnCえS</あ>."
-
-#: share/skin/s2/template/email/watchlist.txt
-#. (
-msgid "To stop receiving or change how often you receive emails about changes to your watchlist in %1, go to:"
-msgstr "7お S7おp rえcえいVいNg おR ChあnGえ hおw おF7えn yおう rえcえいVえ えMあいlS あ8おう7 ChあnGえS 7お yおうR Wあ7cHlいs7 いn %1, gお 7お:"
-
-#: share/skin/s2/template/email/watchlist.html
-#. (
-msgid "To stop receiving or change how often you receive emails about changes to your watchlist in %1, you can <a href=\"%2\">change your preferences</a>."
-msgstr "7お S7おp rえcえいVいNg おR ChあnGえ hおw おF7えn yおう rえcえいVえ えMあいlS あ8おう7 ChあnGえS 7お yおうR Wあ7cHlいs7 いn %1, yおう cあn <あ Hrえf=\"%2\">ChあnGえ yおうR PrえfえrえnCえS</あ>."
-
-#: share/skin/s2/template/errors/watchlist_requires_account
-#.  
-msgid "To use the watchlist feature in a workspace, you must be logged in."
-msgstr "7お うsえ 7hえ Wあ7cHlいs7 Fえあ7うrえ いn あ wおrKsPあCえ, Yおう MうS7 8え LおGgえd いN."
 
 #: share/skin/s2/template/element/page/actions
 #.  
@@ -4028,6 +3978,11 @@ msgstr "7Ypえ 7hいs"
 #.  
 msgid "Type new password again"
 msgstr "7Ypえ NえW PあSsWおRd あGあいn"
+
+#: share/template/control/workspace.html
+#.  
+msgid "URI"
+msgstr "うRい"
 
 #: lib/Socialtext/Workspace.pm
 #.  
@@ -4114,6 +4069,11 @@ msgstr "うPlおあDえD"
 msgid "Uploaded By"
 msgstr "うPlおあDえD 8y"
 
+#: share/skin/s2/template/view/attachmentslist
+#.  
+msgid "Uploaded by"
+msgstr "うPlおあDえD 8y"
+
 #: share/skin/s2/template/element/page/attachments
 #.  
 msgid "Uploaded by $uploader"
@@ -4128,6 +4088,16 @@ msgstr "うPlおあDえD 8y %1"
 #.  
 msgid "Uploads"
 msgstr "うPlおあDs"
+
+#: share/template/control/account.html share/template/control/workspace.html
+#.  
+msgid "Usage Reports"
+msgstr "うSあGえ rえpおr7s"
+
+#: share/template/control/report.html
+#.  
+msgid "Usage ending midnight of:"
+msgstr "うSあGえ えNdいnG MいDnいgH7 おF:"
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
@@ -4144,20 +4114,35 @@ msgstr "うSえ 7Hえ えMあいl あDdRえSs yおう えN7えrえd あ8おVえ 
 msgid "Use your email address and new password to log in again."
 msgstr "うSえ yおうR えmあいL あdDrえsS あnD NえW PあSsWおRd 7お LおG いn あGあいn."
 
-#: lib/Socialtext/Appliance/Model/Backup.pm lib/Socialtext/WebApp.pm
+#: share/template/control/user.html
+#.  
+msgid "User is confirmed"
+msgstr "うSえR いs cおnFいRmえd"
+
+#: share/template/control/user.html
+#.  
+msgid "User requires confirmation"
+msgstr "うSえR RえQういrえs cおnFいRmあ7いおN"
+
+#: lib/Socialtext/Appliance/Model/Backup.pm lib/Socialtext/WebApp.pm share/template/control/user.html
 #.  
 msgid "Username"
 msgstr "うSえRnあmえ"
 
-#: lib/Socialtext/Handler/Authen.pm share/skin/s2/template/authen/choose_password.html
+#: lib/Socialtext/Handler/Authen.pm
 #.  
 msgid "Username:"
 msgstr "うSえRnあmえ:"
 
-#: lib/Socialtext/Handler/ControlPanel.pm share/skin/s2/template/element/settings/select
+#: lib/Socialtext/Handler/ControlPanel.pm share/skin/s2/template/element/settings/select share/template/control/wrapper
 #.  
 msgid "Users"
 msgstr "うSえRs"
+
+#: share/template/control/account.html share/template/control/workspace.html
+#. (
+msgid "Users (%1)"
+msgstr "うSえRs (%1)"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -4234,20 +4219,10 @@ msgstr "wあ7ChいnG 7hいs pあgえ"
 msgid "Watchlist"
 msgstr "wあ7ChLいS7"
 
-#: share/skin/s2/template/email/watchlist.html
-#. (
-msgid "Watchlist Update for %1"
-msgstr "wあ7ChLいS7 うPdあ7え FおR %1"
-
 #: lib/Socialtext/WatchlistPlugin.pm
 #. (
 msgid "Watchlist update for %1 Workspace"
 msgstr "wあ7ChLいS7 うPdあ7え FおR %1 wおrKsPあCえ"
-
-#: share/skin/s2/template/email/email-address-confirmation.html share/skin/s2/template/email/email-address-confirmation.txt
-#.  
-msgid "We hope you enjoy using the Socialtext wiki."
-msgstr "wえ HおPえ yおう えNjおy うSいNg 7Hえ sおcいあL7えx7 WいKい."
 
 #: share/skin/s2/template/view/weblog
 #.  
@@ -4354,16 +4329,6 @@ msgstr "wHえN 7hえ WおRkSpあcえ RえCえいvえs あN えmあいL, 7Hえ s�
 msgid "When users click \"Home\" in this workspace, should they see a personal dashboard, or the central page of the workspace? The central page of the workspace has the same title as the workspace (\"%1\")."
 msgstr "wHえN うsえrS ClいcK \"HおMえ\" いN 7hいs wおrKsPあCえ, ShおうLd 7HえY Sええ あ PえRsおnあl dあsH8おあRd, おr 7Hえ cえn7rあl pあgえ おf 7Hえ wおrKsPあCえ? 7hえ CえN7RあL PあGえ おF 7hえ WおRkSpあcえ HあS 7hえ SあMえ 7い7Lえ あS 7hえ WおRkSpあcえ (\"%1\")."
 
-#: share/skin/s2/template/email/password-change.html
-#. (
-msgid "When you <a href=\"%1\">click on this link</a>, you will be taken to a page which allows you to choose a new password."
-msgstr "wHえN Yおう <あ hRえF=\"%1\">cLいCk おN 7hいs lいnK</あ>, yおう wいlL 8え 7あkえn 7お あ PあGえ wHいCh あLlおwS Yおう 7お cHおおsえ あ NえW PあSsWおRd."
-
-#: share/skin/s2/template/email/password-change.txt
-#.  
-msgid "When you click on this link, you will be taken to a page which allows you to choose a new password."
-msgstr "wHえN Yおう ClいcK おn 7HいS LいNk, Yおう WいLl 8え 7あKえN 7お あ pあgえ WhいcH あlLおWs yおう 7お ChおおSえ あ nえw pあsSwおrD."
-
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "When you're entering text, just type in paragraphs."
@@ -4383,6 +4348,11 @@ msgstr "wHいCh lあnGうあgえ Dお yおう うSえ?"
 #.  
 msgid "Who can send email to this workspace?"
 msgstr "wHお cあn sえnD えmあいL 7お 7HいS WおRkSpあcえ?"
+
+#: share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/widget_resource.js share/skin/s2/template/element/listview/pages
+#.  
+msgid "Workspace"
+msgstr "wおrKsPあCえ"
 
 #: share/skin/s2/template/element/settings/select share/skin/s2/template/workspaces_created_section.html
 #.  
@@ -4469,10 +4439,15 @@ msgstr "wおrKsPあCえ 7い7Lえ いS 7おお LおNg あF7えr うRl えNcおd�
 msgid "Workspace title must be between 2 and 64 characters long and may not begin with a -."
 msgstr "wおrKsPあCえ 7い7Lえ mうs7 8え 8え7Wええn 2 あNd 64 Chあrあc7えRs lおnG あnD MあY Nお7 8えGいN Wい7h あ -."
 
-#: lib/Socialtext/Handler/ControlPanel.pm share/console-template/template/overview.html share/skin/s2/template/element/settings/select
+#: lib/Socialtext/Handler/ControlPanel.pm share/console-template/template/overview.html share/skin/s2/template/element/settings/select share/template/control/wrapper
 #.  
 msgid "Workspaces"
 msgstr "wおrKsPあCえS"
+
+#: share/template/control/account.html share/template/control/user.html
+#. (
+msgid "Workspaces (%1)"
+msgstr "wおrKsPあCえS (%1)"
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
@@ -4539,20 +4514,10 @@ msgstr "yあhおお! いm: %1"
 msgid "Yes"
 msgstr "yえs"
 
-#: share/skin/s2/template/errors/unauthorized_workspace
-#.  
-msgid "You are not authorized to view this workspace."
-msgstr "yおう あRえ nお7 あう7HおRいZえD 7お vいえW 7hいs wおrKsPあCえ."
-
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "You can also put links here to pages you want to remember."
 msgstr "yおう cあn あLsお Pう7 LいNkS HえRえ 7お PあGえS Yおう WあN7 7お RえMえM8えr."
-
-#: share/skin/s2/template/bugs_content.html
-#. (
-msgid "You can assist the Socialtext team to fix this bug by entering a comment about what actions you were performing when this bug occurred<a href=\"%1?action=bugs_dump;bug_id=%2\" style=\"text-color: black; text-decoration: none;\">.</a> Please enter your comments in the box below."
-msgstr "yおう cあn あSsいs7 7hえ SおCいあl7えX7 7えあM 7お fいx 7HいS 8うG 8y えN7えrいnG あ CおMmえn7 あ8おう7 Whあ7 あC7いおNs yおう wえrえ PえRfおrMいNg wHえN 7hいs 8うg おCcうrRえD<あ Hrえf=\"%1?あc7いおn=8うgS_DうMp;8うg_いD=%2\" s7yLえ=\"7えx7-CおLおR: 8LあCk; 7えX7-dえcおrあ7いおN: nおnえ;\">.</あ> pLえあsえ えn7えR Yおうr cおmMえN7S いn 7Hえ 8おx 8えlおw."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #.  
@@ -4584,16 +4549,6 @@ msgstr "yおう cあn nおw lおgいn 7お 7hえ %1 あPpLいCあ7いおn"
 msgid "You can now login to the %1 workspace"
 msgstr "yおう cあn nおw lおgいn 7お 7hえ %1 wおrKsPあCえ"
 
-#: share/skin/s2/template/email/openid/workspace-invitation.txt
-#.  
-msgid "You can now sign into our system using OpenID. On the Socialtext login screen, please input your OpenID into the indicated field and you will be redirected to the OpenID site to verify your identity. Once you have verified your identity, you will be sent back to the Socialtext site and be able to access the workspace."
-msgstr "yおう cあn nおw sいgN いn7お おうr sYs7えM うsいnG おpえnいd. おn 7Hえ sおcいあL7えx7 LおGいN ScRええn, PlえあSえ いNpう7 yおうR おpえnいd いN7お 7hえ いnDいCあ7えD FいえlD あnD Yおう WいLl 8え RえDいRえC7えd 7お 7hえ おpえnいd sい7え 7お vえrいfY Yおうr いDえN7い7Y. おNcえ Yおう HあVえ vえrいfいえD Yおうr いDえN7い7Y, yおう wいlL 8え sえn7 8あCk 7お 7hえ SおCいあl7えX7 sい7え あnD 8え あ8lえ 7お あCcえsS 7hえ WおRkSpあcえ."
-
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html
-#.  
-msgid "You can sign into our system using OpenID. On the Socialtext login screen, please input your OpenID into the indicated field and you will be redirected to the OpenID site to verify your identity. Once you have verified your identity, you will be sent back to the Socialtext site and be able to access the workspace."
-msgstr "yおう cあn sいgN いn7お おうr sYs7えM うsいnG おpえnいd. おn 7Hえ sおcいあL7えx7 LおGいN ScRええn, PlえあSえ いNpう7 yおうR おpえnいd いN7お 7hえ いnDいCあ7えD FいえlD あnD Yおう WいLl 8え RえDいRえC7えd 7お 7hえ おpえnいd sい7え 7お vえrいfY Yおうr いDえN7い7Y. おNcえ Yおう HあVえ vえrいfいえD Yおうr いDえN7い7Y, yおう wいlL 8え sえn7 8あCk 7お 7hえ SおCいあl7えX7 sい7え あnD 8え あ8lえ 7お あCcえsS 7hえ WおRkSpあcえ."
-
 #: share/console-template/template/form.tmpl
 #.  
 msgid "You can synchronize the appliance clock with another computer using the Internet Time protocol. The appliance must be able to contact that server via port 37."
@@ -4624,45 +4579,15 @@ msgstr "yおう cあnNお7 ChあnGえ 7Hえ nあmえ おf あ sYs7えM-Crえあ7
 msgid "You dont have permission to upload attachments"
 msgstr "yおう dおn7 HあVえ pえrMいSsいおN 7お うPlおあD あ77あChMえN7S"
 
-#: share/skin/s2/template/email/email-address-confirmation-completed.html share/skin/s2/template/email/email-address-confirmation-completed.txt
-#. (
-msgid "You have confirmed your email address and can now log on to the %1 workspace."
-msgstr "yおう hあvえ CおNfいrMえD Yおうr えMあいl あDdRえSs あNd cあn nおw lおg おN 7お 7Hえ %1 WおRkSpあcえ."
-
 #: share/skin/s2/template/search_help_field.html
 #.  
 msgid "You may search on a field by separating the field name from the query with a colon, like this:"
 msgstr "yおう mあy sえあRcH おn あ fいえLd 8Y SえPあRあ7いNg 7Hえ fいえLd nあmえ Frおm 7Hえ qうえRy wい7H あ CおLおN, lいkえ 7hいs:"
 
-#: share/skin/s2/template/email/email-address-confirmation-completed.html share/skin/s2/template/email/email-address-confirmation-completed.txt share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/openid/workspace-invitation.txt share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "You may want to keep this email for future reference."
-msgstr "yおう mあy wあn7 7お kええP 7hいs えMあいl fおr fう7うrえ RえFえRえNcえ."
-
-#: share/skin/s2/template/errors/login_to_edit
-#. (
-msgid "You must be logged in to edit the %1 workspace."
-msgstr "yおう mうs7 8え lおgGえD いn 7お えdい7 7Hえ %1 WおRkSpあcえ."
-
-#: share/skin/s2/template/errors/authenticate_to_read
-#. (
-msgid "You must be logged in to view the %1 workspace. If you already have an account, please login now.<br /> Otherwise, you can <a href=\"/nlw/register.html?redirect_to=%2\">create a new account</a>"
-msgstr "yおう mうs7 8え lおgGえD いn 7お Vいえw 7Hえ %1 WおRkSpあcえ. いF Yおう あlRえあdY HあVえ あN あcCおうn7, pLえあsえ LおGいN NおW.<8R /> お7hえrWいSえ, Yおう CあN <あ hRえF=\"/nLw/rえgいs7えR.H7Ml?rえdいrえc7_7お=%2\">Crえあ7え あ nえw あCcおうN7</あ>"
-
-#: share/skin/s2/template/errors/require_business_admin
-#.  
-msgid "You must have admin privileges to access this URI."
-msgstr "yおう mうs7 HあVえ あDmいn pRいVいLえGえS 7お あCcえsS 7hいs うRい."
-
 #: lib/Socialtext/OpenIdPlugin.pm
 #.  
 msgid "You must input both an OpenID and an email."
 msgstr "yおう mうs7 いnPう7 8お7h あN おpえnいd あNd あN えmあいL."
-
-#: share/skin/s2/template/errors/not_logged_in
-#.  
-msgid "You must login to view this page."
-msgstr "yおう mうs7 LおGいN 7お vいえW 7hいs pあgえ."
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -4694,20 +4619,10 @@ msgstr "yおう mうs7 Prおvいdえ あ WおRkSpあcえ あnD あcCおうn7 7�
 msgid "You must provide a workspace_id to this URI (%1)."
 msgstr "yおう mうs7 Prおvいdえ あ WおRkSpあcえ_いd 7お 7hいs うRい (%1)."
 
-#: share/skin/s2/template/errors/requires_confirmation
+#: share/skin/s2/template/popup/email_page
 #.  
-msgid "You need to confirm your email address to activate this account."
-msgstr "yおう nええD 7お cおnFいRm yおうR えmあいL あdDrえsS 7お あC7いvあ7え 7hいs あCcおうN7."
-
-#: share/skin/s2/template/errors/requires_confirmation
-#.  
-msgid "You should have received an email with a confirmation link."
-msgstr "yおう sHおうlD HあVえ rえcえいVえD あn えMあいl wい7H あ CおNfいrMあ7いおn lいnK."
-
-#: share/skin/s2/template/email/email-address-confirmation.html share/skin/s2/template/email/email-address-confirmation.txt
-#.  
-msgid "You signed up for a new account with our system and we need to confirm your email address."
-msgstr "yおう sいgNえD うp fおr あ nえw あCcおうN7 wい7H おうR SyS7えm あNd wえ Nええd 7お CおNfいrM Yおうr えMあいl あDdRえSs."
+msgid "You must select at least one recipient"
+msgstr "yおう mうs7 SえLえC7 あ7 Lえあs7 おnえ RえCいPいえn7"
 
 #: share/console-template/template/popup.html
 #.  
@@ -4733,11 +4648,6 @@ msgstr "yおうR Wあ7cHlいs7"
 #. (
 msgid "Your Watchlist in %1 is empty."
 msgstr "yおうR Wあ7cHlいs7 いn %1 いs えMp7y."
-
-#: share/skin/s2/template/email/email-address-confirmation-completed.html
-#.  
-msgid "Your email address has been confirmed"
-msgstr "yおうR えmあいL あdDrえsS HあS 8ええn cおnFいRmえd"
 
 #: lib/Socialtext/Handler/Authen.pm
 #. (
@@ -5074,15 +4984,30 @@ msgstr "mえm8えR-おnLy"
 msgid "monospace"
 msgstr "mおnおsPあCえ"
 
+#: share/template/control/date_cell
+#.  
+msgid "never"
+msgstr "nえvえr"
+
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "never in DST"
 msgstr "nえvえr いN Ds7"
 
+#: share/template/control/user.html share/template/control/user.html
+#.  
+msgid "no"
+msgstr "nお"
+
 #: lib/Socialtext/Query/Wafl.pm
 #.  
 msgid "no access to workspace"
 msgstr "nお あcCえSs 7お WおRkSpあcえ"
+
+#: share/skin/s2/template/element/listview/pages share/skin/s2/template/element/listview/pages share/skin/s2/template/view/attachmentslist
+#.  
+msgid "on"
+msgstr "おN"
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
@@ -5163,6 +5088,11 @@ msgstr "rえqういRえD"
 #.  
 msgid "revision"
 msgstr "rえvいsいおN"
+
+#: share/skin/s2/template/element/listview/pages share/skin/s2/template/element/listview/pages
+#.  
+msgid "revisions"
+msgstr "rえvいsいおNs"
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
@@ -5269,25 +5199,20 @@ msgstr "うNfおrMあ77えd: %1"
 msgid "user: %1"
 msgstr "うSえR: %1"
 
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/openid/workspace-invitation.txt share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "username:"
-msgstr "うSえRnあmえ:"
-
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "value"
 msgstr "vあlうえ"
 
+#: share/template/control/account_link share/template/control/user_link share/template/control/workspace_link
+#. (
+msgid "view %1"
+msgstr "vいえW %1"
+
 #: share/skin/s2/template/element/settings/save
 #.  
 msgid "warning:"
 msgstr "wあrNいNg:"
-
-#: share/skin/s2/template/email/openid/workspace-invitation-body.html share/skin/s2/template/email/openid/workspace-invitation.txt share/skin/s2/template/email/st/workspace-invitation-body.html share/skin/s2/template/email/st/workspace-invitation.txt
-#.  
-msgid "web address:"
-msgstr "wえ8 あDdRえSs:"
 
 #: lib/Socialtext/Formatter/WaflPhrase.pm
 #.  
@@ -5313,6 +5238,11 @@ msgstr "wおrKsPあCえ"
 #.  
 msgid "workspace members"
 msgstr "wおrKsPあCえ mえm8えRs"
+
+#: share/template/control/user.html share/template/control/user.html
+#.  
+msgid "yes"
+msgstr "yえs"
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  

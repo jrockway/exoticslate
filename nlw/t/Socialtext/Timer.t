@@ -4,10 +4,18 @@ use strict;
 use warnings;
 use Test::More qw/no_plan/;
 use Time::HiRes qw/usleep/;
+use Sys::Load qw/getload/;
 
 BEGIN {
     use_ok 'Socialtext::Timer';
 }
+
+# Some of these tests like to fail randomly. We think that it's
+# because the system is under higher load. Let's dip our toes
+# in that water and record where load is so we can prove or
+# disprove that theory
+my ( $one_min, $five_min, $fifteen_min ) = getload();
+warn "Load during test: $one_min, $five_min, $fifteen_min\n";
 
 Basic_usage: {
     my $t = Socialtext::Timer->new;

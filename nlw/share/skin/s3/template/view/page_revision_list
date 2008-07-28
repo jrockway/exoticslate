@@ -1,0 +1,87 @@
+[%# @COPYRIGHT@ -%]
+[% USE decorate %]
+[% WRAPPER layout/html id="revisions" title = loc("[_1]: All Revisions", display_title) %]
+<div id="controls">
+    <div id="st-editing-tools-edit">
+    [% IF page.metatdata.Type != 'spreadsheet'; PROCESS compare_revisions; END %]
+    </div><!-- controlsLeft END -->
+    <div id="controlsRight">
+        
+    </div><!-- controlsRight END -->
+</div><!-- controls END -->
+<div id="contentContainer">
+    <h2 class="tableTitle">[% display_title %]: <a href="[% "${script_name}?${page_uri}" %]">[% loc("Back to Current Revision") %]</a></h2>
+    <table class="dataTable">
+        <tr>
+            <th colspan="2" class="selectColumn">[% loc("Select") %]</th>
+            <th>[% loc("View Revision") %]</th>
+            <th>[% loc("Edited By") %]</th>
+            <th>[% loc("Date") %]</th>
+        </tr>
+        <tr>
+            <td><input name="radio1" type="radio" /></td>
+            <td><input name="radio1" type="radio" /></td>
+            <td><a href="#">Revision 5</a></td>
+            <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
+            <td>Apr 6 7:01am</td>
+        </tr>
+        <tr class="oddRow">
+            <td><input name="radio2" type="radio" /></td>
+            <td><input name="radio2" type="radio" /></td>
+            <td><a href="#">Revision 4</a></td>
+            <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
+            <td>Apr 6 7:01am</td>
+        </tr>
+        <tr>
+            <td><input name="radio3" type="radio" /></td>
+            <td><input name="radio3" type="radio" /></td>
+            <td><a href="#">Revision 3</a></td>
+            <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
+            <td>Apr 6 7:01am</td>
+        </tr>
+        <tr class="oddRow">
+            <td><input name="radio4" type="radio" /></td>
+            <td><input name="radio4" type="radio" /></td>
+            <td><a href="#">Revision 2</a></td>
+            <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
+            <td>Apr 6 7:01am</td>
+        </tr>
+        <tr>
+            <td><input name="radio5" type="radio" /></td>
+            <td><input name="radio5" type="radio" /></td>
+            <td><a href="#">Revision 1</a></td>
+            <td class="person"><img src="images/mugshot.jpg" /><a href="mailto:john.smith@socialtext.com">John Smith</a></td>
+            <td>Apr 6 7:01am</td>
+        </tr>
+    </table><!-- dataTable END -->
+        <div class="clear"></div><!-- clear END -->
+    <div id="bottomButtons">
+     [% IF page.metatdata.Type != 'spreadsheet'; PROCESS compare_revisions; END %]
+     </div><!-- bottomButtons -->
+</div><!-- contentContainer -->    
+[% END %]
+
+[% BLOCK compare_revisions %]
+    <ul>
+        <li>
+            <a class="compareButton" href="#">[% loc("Compare Revisions") %]</a>
+        </li>
+    </ul>               
+[% END %]
+
+[% BLOCK revision_row %]
+    <tr class="[% IF odd %]odd[% ELSE %]even[% END %]Row">
+        <td><input name="old_revision_id" value="[% id %]" 
+                   [% IF check_old %] checked="checked"[% END %] type="radio" />
+        </td>
+        <td><input name="new_revision_id" value="[% id %]" 
+                   [% IF check_new %] checked="checked"[% END %] type="radio" />
+        </td>
+        <td><a href="[% script_name %]?action=revision_view;page_name=[% page_uri %];revision_id=[% id %]">
+                [% loc("Revision [_1]", revision) %]
+            </a>
+        </td>
+        <td class="person">[% from | decorate('user_avatar') %]</td>
+        <td>[% date %]</td>
+    </tr>
+[% END %]

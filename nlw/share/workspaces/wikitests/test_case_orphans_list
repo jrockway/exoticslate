@@ -21,6 +21,14 @@
 | type_ok | wikiwyg_wikitext_textarea | orphan_page_2_%%start_time%% |
 | click_and_wait | link=Save |  |
 
+| *Comment* | Test Case: Orphans List. Create a third orphan page. |  |
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| clickAndWait | st-newpage-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | st-newpage-pagename-edit | orphan_page_3_%%start_time%% |
+| type_ok | wikiwyg_wikitext_textarea | orphan_page_3_%%start_time%% |
+| click_and_wait | link=Save |  |
+
 "What's New -> Orphans List"<http://...> | list of links to orphan pages appears
 
 | *Comment* | Test Case: Orphans List. Orphan page list |  |
@@ -28,6 +36,31 @@
 | click_and_wait | link=Orphaned Pages |  |
 | text_like | link=orphan_page_1_%%start_time%% | orphan_page_1_%%start_time%% |
 | text_like | link=orphan_page_2_%%start_time%% | orphan_page_2_%%start_time%% |
+| text_like | link=orphan_page_3_%%start_time%% | orphan_page_3_%%start_time%% |
+
+| *Comment* | Test Case: Orphans List Sorting Title |
+| select_and_wait | sort-picker | label=Title |
+| text_like | st-backlinks-content | qr/orphan_page_1_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_3_%%start_time%%/ |
+| select_and_wait | sort-picker | index=1 |
+| text_like | st-backlinks-content | qr/orphan_page_3_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_1_%%start_time%%/ |
+
+| *Comment* | Test Case: Orphans List Sorting Last Edited By |
+| select_and_wait | sort-picker | label=Last Edited By |
+| text_like | st-backlinks-content | qr/orphan_page_1_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_3_%%start_time%%/ |
+| select_and_wait | sort-picker | index=2 |
+| text_like | st-backlinks-content | qr/orphan_page_1_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_3_%%start_time%%/ |
+
+| *Comment* | Test Case: Orphans List Sorting Date |
+| select_and_wait | sort-picker | label=Date |
+| text_like | st-backlinks-content | qr/orphan_page_3_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_1_%%start_time%%/ |
+| select_and_wait | sort-picker | index=3 |
+| text_like | st-backlinks-content | qr/orphan_page_1_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_3_%%start_time%%/ |
+
+| *Comment* | Test Case: Orphans List Sorting Revisions |
+| select_and_wait | sort-picker | label=Revisions |
+| text_like | st-backlinks-content | qr/orphan_page_1_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_3_%%start_time%%/ |
+| select_and_wait | sort-picker | index=4 |
+| text_like | st-backlinks-content | qr/orphan_page_1_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_3_%%start_time%%/ |
 
  click on several links | correct page appear
 
@@ -73,6 +106,11 @@ edit a page to include a link to an orphan page | link appears in page
 
 | open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | clickAndWait | link=orphan_page_2_%%start_time%% |  |
+| clickAndWait | link=Delete Page |  |
+| confirmation_like | Are you sure you want to delete this page? |  |
+
+| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| clickAndWait | link=orphan_page_3_%%start_time%% |  |
 | clickAndWait | link=Delete Page |  |
 | confirmation_like | Are you sure you want to delete this page? |  |
 

@@ -7,7 +7,7 @@
                 <li class="recentchanges[% IF action == 'recent_changes' %] selected[% END %]"><a class="first" href="index.cgi?action=recent_changes">[% loc("What's New") %]</a></li>
                 <li class="recentlyviewed[% IF action == 'breadcrumbs_list' %] selected[% END %]"><a href="index.cgi?action=breadcrumbs_list">[% loc("Recently Viewed") %]</a></li>
                 [% UNLESS user.is_guest %]
-                <li class="yourwatchlist[% IF action == 'display_watchlist' %] selected[% END %]"><a href="index.cgi?action=display_watchlist">[% loc("Your Watchlist") %]</a></li>
+                <li class="yourwatchlist[% IF action == 'watchlist' %] selected[% END %]"><a href="index.cgi?action=watchlist">[% loc("Your Watchlist") %]</a></li>
                 [% END %]
                 <li class="orphanpages[% IF action == 'orphans_list' %] selected[% END %]"><a href="index.cgi?action=orphans_list">[% loc("Orphaned Pages") %]</a></li>
             </ul>                
@@ -53,7 +53,7 @@
                        <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=0" [% IF ! summaries %] class="selected" [% END %]>[% loc('Titles') %]</a> | 
                        [% loc('Summaries') %]
                    [% ELSE %]
-                       [% loc('Titles') %]
+                       [% loc('Titles') %] |
                        <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
                     [% END %]
                 </div></th>

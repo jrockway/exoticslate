@@ -7,6 +7,7 @@ This test case assumes a logged in user.
 Test set up:
 
 | comment | STARTING Test case: REST Workspace |  |
+| st-admin | remove-accounts-admin --email %%email%% | no longer has |
 | st-admin | remove-system-admin --email %%email%% | no longer has |
 
 | set | wksp | rest-workspace-%%start_time%% |

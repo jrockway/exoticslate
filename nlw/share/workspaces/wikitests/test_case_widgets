@@ -25,9 +25,8 @@ Test set up:
 | st-minimize-widget | logical | |
 | pause | 1000 | |
 
-| st-set-current-widget | logical | |
-| st-widget-title-like | All C| |
-| st-widget-body-like | fullname| |
+| st-widget-title-like | logical | All C|
+| st-widget-body-like | logical | fullname|
 | st-select-widget-frame | logical | |
 | text-present-like | fullname | |
 | select-frame | relative=parent | | 

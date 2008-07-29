@@ -25,9 +25,12 @@ function abs_path() { perl -MCwd -le "print Cwd::abs_path(shift)" $1; }
 TARBALL=$1
 if  [ -z "$TARBALL" ] || [ "$TARBALL" == "hosaka.1.tar.gz" ]; then
     
-    if [ -z "$TARBALL" ] && [ "$TARBALL" != "hosaka.1.tar.gz" ]; then
+    if [ "$TARBALL" == "hosaka.1.tar.gz" ]; then
+       TARBALL="hosaka.1.tar.gz"
+    else
        TARBALL="/tmp/test-data.$$.tar.gz"
-    fi
+    fi 
+    echo "FOO $TARBALL"
     fetch-test-data-tarball $TARBALL
 fi
 TARBALL=$(abs_path $TARBALL)

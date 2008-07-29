@@ -9,11 +9,25 @@ use Socialtext::System qw/shell_run/;
 $Socialtext::System::SILENT_RUN = 1;
 use Sys::Hostname qw/hostname/;
 use Term::ANSIColor;
+use Getopt::Long;
 
-my $workspace = shift || usage();
+my $workspace;
+my $server       = "http://" . hostname() . ':' . ($< + 20000);
+my $username     = 'devnull1@socialtext.com';
+my $password     = 'd3vnu11l';
+my $num_requests = 10;
+my $concurrency  = 1;
+my $testnum;
+GetOptions(
+    'workspace=s'   => \$workspace,
+    'server=s'      => \$server,
+    'username=s'    => \$username,
+    'password=s'    => \$password,
+    'num=s'         => \$num_requests,
+    'concurrency=s' => \$concurrency,
+    'testnum=s'     => \$testnum,
+) or usage();
 
-my $wget = q{wget -q --user devnull1@socialtext.com --password d3vnu11l};
-my $server = "http://" . hostname() . ':' . ($< + 20000);
 
 my @urls = (
     {
@@ -29,20 +43,34 @@ my @urls = (
         path => q{/feed/workspace/:ws?category=Recent%20Changes&count=100},
     },
 );
+if (defined $testnum) {
+    @urls = ($urls[$testnum]);
+}
 
 for my $url (@urls) {
     $url->{path} =~ s/:ws/$workspace/g;
-    my $t = Socialtext::Timer->new;
-    shell_run("-$wget '$server$url->{path}' -O timing.out");
-    print color('green'), 
-          sprintf('%.3f  %s (%s)', $t->elapsed, $url->{name}, $workspace), 
-          color('reset'), "\n";
+    my $start_time = time;
+    shell_run("ab -A $username:$password -c $concurrency -n $num_requests "
+        . "'$server$url->{path}'");
+    my $end_time = time;
+
+    my $summarizer = '/usr/sbin/st-appliance-summarize-perf';
+    die "Can't find summarizer" unless -x $summarizer;
+    shell_run("$summarizer --start-time $start_time --end-time $end_time");
 }
 
 exit;
 
 sub usage {
     die <<EOT;
-USAGE: $0 <workspace>
+USAGE: $0 <options>
+Where options are:
+  --server <server>     server to test
+  --workspace <name>    workspace to test
+  --username <user>     http auth username
+  --password <pass>     http auth password
+
+  --num  <num>          Number of requests to make
+  --concurrency <num>   Concurrent requests
 EOT
 }

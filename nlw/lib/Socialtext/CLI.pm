@@ -1190,7 +1190,8 @@ sub _export_workspace {
 
 sub import_workspace {
     my $self = shift;
-    my %opts = $self->_get_options( "tarball:s", "overwrite", "name:s" );
+    my %opts
+        = $self->_get_options("tarball:s", "overwrite", "name:s", "noindex");
     $self->_help_as_error("--tarball required.")
         unless defined $opts{tarball};
 
@@ -1198,6 +1199,7 @@ sub import_workspace {
         $opts{name} ? ( name => $opts{name} ) : (),
         tarball   => $opts{tarball},
         overwrite => $opts{overwrite},
+        noindex   => $opts{noindex},
     );
 
     $self->_success('Workspace has been imported');
@@ -2095,7 +2097,7 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   create-workspace --name --title --account [--empty]
   delete-workspace --workspace [--dir] [no-export]
   export-workspace --workspace [--dir] [--name]
-  import-workspace --tarball [--overwrite] [--name]
+  import-workspace --tarball [--overwrite] [--name] [--noindex]
   clone-workspace --workspace --target [--overwrite]
   rename-workspace --workspace --name
   list-workspaces [--ids]

@@ -29,6 +29,7 @@ Readonly my $MAX_VERSION => 1;
         name      => SCALAR_TYPE(optional => 1),
         tarball   => FILE_TYPE,
         overwrite => BOOLEAN_TYPE( default => 0 ),
+        noindex   => BOOLEAN_TYPE( default => 0 ),
     };
     sub new {
         my $class = shift;
@@ -61,6 +62,7 @@ Readonly my $MAX_VERSION => 1;
             workspace => $ws,
             tarball   => $tarball,
             version   => $version,
+            noindex   => $p{noindex},
             },
             $class;
     }
@@ -104,10 +106,12 @@ sub import_workspace {
         );
     }
 
-    chdir( $old_cwd );
-    Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
-        $self->{workspace}->name )
-        ->index_workspace( $self->{workspace}->name );
+    unless ($self->{noindex}) {
+        chdir( $old_cwd );
+        Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
+            $self->{workspace}->name )
+            ->index_workspace( $self->{workspace}->name );
+    }
 
     st_log()
         ->info( 'IMPORT,WORKSPACE,workspace:'

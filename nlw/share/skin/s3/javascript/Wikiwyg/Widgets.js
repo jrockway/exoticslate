@@ -488,9 +488,7 @@ proto.pullTitleFromServer = function (field, id, data) {
     var uri = Wikiwyg.Widgets.api_for_title[field];
     uri = uri.replace(new RegExp(":" + field), id);
 
-    console.log('pulling title from server');
     var details = jQuery.getJSON(uri);
-    console.log({dets: details});
     if (!(field in wikiwyg_widgets_title_lookup))
         wikiwyg_widgets_title_lookup[field] = {};
     wikiwyg_widgets_title_lookup[field][id] = details.title;

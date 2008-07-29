@@ -648,11 +648,8 @@ proto.newpage_save = function(page_name, pagename_editfield) {
     }
     else {
         if (this.active_page_exists(page_name)) {
-            console.log('here');
             this.newpage_cancel();
-            console.log('here');
             this.newpage_display_duplicate_dialog(page_name);
-            console.log('here');
         } else {
             jQuery('#st-page-editing-pagename').val(page_name);
             this.saveContent();
@@ -777,7 +774,6 @@ proto.saveNewPage = function() {
     var new_page_name = jQuery('#st-newpage-pagename-edit').val();
     if (! is_reserved_pagename(new_page_name)) {
         if (this.active_page_exists(new_page_name)) {
-            console.log('or here');
             jQuery('#st-page-editing-pagename, #st-newpage-pagename-edit')
                 .val(new_page_name);
             return this.newpage_saveClicked();

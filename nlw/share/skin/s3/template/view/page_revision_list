@@ -1,15 +1,17 @@
 [%# @COPYRIGHT@ -%]
 [% USE decorate %]
 [% WRAPPER layout/html id="revisions" title = loc("[_1]: All Revisions", display_title) %]
+<form id="compare_revisions" onsubmit="return check_revisions(this);">
+    <input type="hidden" name="action" value="revision_compare" />
+    <input type="hidden" name="page_name" value="[% page_name %]" />
+    <input type="hidden" name="mode" value="source" />
 <div id="controls">
     <div id="st-editing-tools-edit">
-    [% IF page.metatdata.Type != 'spreadsheet';
-        PROCESS compare_revisions;
-    END %]
-    </div><!-- controlsLeft END -->
-    <div id="controlsRight">
-        
-    </div><!-- controlsRight END -->
+     [% IF page.metatdata.Type != 'spreadsheet';
+         PROCESS compare_revisions;
+     END %]
+     </div><!-- controlsLeft END -->
+     <div id="controlsRight"></div><!-- controlsRight END -->
 </div><!-- controls END -->
 <div id="contentContainer">
     <h2 class="tableTitle">[% display_title %]: <a href="[% "${script_name}?${page_uri}" %]">[% loc("Back to Current Revision") %]</a></h2>
@@ -35,14 +37,18 @@
     [% IF page.metatdata.Type != 'spreadsheet'; 
         PROCESS compare_revisions; 
     END %]
-     </div><!-- bottomButtons -->
+    </div><!-- bottomButtons -->
 </div><!-- contentContainer -->    
+</form>
 [% END %]
 
 [% BLOCK compare_revisions %]
     <ul>
         <li>
-            <a class="compareButton" href="#">[% loc("Compare Revisions") %]</a>
+            <a class="compareButton" href="#" 
+               onclick="document.getElementById('compare_revisions').submit()">
+                [% loc("Compare Revisions") %]
+            </a>
         </li>
     </ul>               
 [% END %]

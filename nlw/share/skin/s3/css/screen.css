@@ -856,3 +856,10 @@ div#st-pagetools li {
 #files-operations {
     clear: left;
 }
+
+/* Revision comparison */
+
+.st-revision-compare-old {
+    background-color: #ccc;
+    text-decoration: line-through;
+}

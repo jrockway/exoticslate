@@ -9,7 +9,7 @@
     <div id="st-editing-tools-edit">
      [% IF page.metatdata.Type != 'spreadsheet';
          PROCESS compare_revisions;
-     END %]
+     END %]&nbsp;
      </div><!-- controlsLeft END -->
      <div id="controlsRight"></div><!-- controlsRight END -->
 </div><!-- controls END -->

@@ -16,10 +16,13 @@ $| = 1; # turn on autoflush
 die "Must be run as root!\n" if $< and !$ENV{ST_DEV};
 Socialtext::CLI->_drop_privs();
 
-my $only_workspace = shift;
-if ($only_workspace) {
-    my $wksp = Socialtext::Workspace->new(name => $only_workspace);
-    process_workspace($wksp);
+if ( @ARGV ) {
+    for my $ws_name ( @ARGV ) {
+        my $dir = Socialtext::Paths::page_data_directory($ws_name);
+        next unless ( -d $dir );
+        my $wksp = Socialtext::Workspace->new(name => $ws_name);
+        process_workspace($wksp);
+    }
 }
 else {
     my $workspaces = Socialtext::Workspace->All;
@@ -43,8 +46,6 @@ sub process_workspace {
         # Ignore really old pages that have invalid page_ids
         next unless Socialtext::Encode::is_valid_utf8($dir);
 
-        # Check the index.txt page link for a relative link.  Rewrite
-        # them to be absolute links.
 	my $page_link_name = "$dir/index.txt";
 	my $page_link = readlink($page_link_name) 
 	    or die "Couldn't readlink $page_link_name: $!";
@@ -79,7 +80,8 @@ sub process_workspace {
 	    else {
 		my $text = $page->preview_text;
 		$page->_store_preview_text($text);
-		$char = "<$dir>";
+		#$char = "<$dir>";
+		$char = "+";
 	    }
         };
         print $char;

@@ -14,14 +14,16 @@ Test set up:
 
 | *Comment* | Test case: Reset Dashboard|  |
 | st-reset-container | | |
+| st-wait-for-all-widgets-load | | |
 
 | *Comment* | Test case: Add Recent Changes Widget |  |
 | st-add-widget| gadgets/share/gadgets/recent_changes.xml | logical  |
+| st_wait_for_widget_load| logical | 5000 |
 | st-name-widget | 1 | foo |
 | st-widget-settings | logical | |
-| pause | 3000 | |
+| pause | 1000 | |
 | st-minimize-widget | logical | |
-| pause | 3000 | |
+| pause | 1000 | |
 
 | st-set-current-widget | logical | |
 | st-widget-title-like | All C| |

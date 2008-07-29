@@ -11,7 +11,6 @@ sub init {
     my ($self) = @_;
     $self->{mandatory_args} = [qw(username password)];
     $self->{workspace}="";
-    $self->{selenium_timeout} = 30000 ;
     $self->{_widgets}={};
     # Also $self->{_curwidget}
     $self->SUPER::init;
@@ -92,6 +91,35 @@ sub st_widget_body_like {
 sub st_select_widget_frame {
     my ($self, $logical) = @_;
     $self->{selenium}->select_frame('xpath=//iframe[@id="'.$self->{_widgets}{$logical}.'-iframe"]');
+}
+
+sub st_wait_for_widget_load {
+    my ($self, $logical, $timeout) = @_;
+    $timeout = $timeout || 10000;
+    my $widget=$self->{_widgets}{$logical};
+    my $js = <<ENDJS;
+    var curwin=selenium.browserbot.getCurrentWindow();
+    var myframe=curwin.document.getElementById("$widget-iframe");
+    myframe.contentDocument.loaded;
+ENDJS
+    $self->{selenium}->wait_for_condition_ok($js, $timeout);
+}
+
+sub st_wait_for_all_widgets_load {
+    my ($self, $timeout) = @_;
+    $timeout = $timeout || 10000;
+    my $js = <<ENDJS2;
+    var curwin=selenium.browserbot.getCurrentWindow();
+    var iframeIterator=curwin.document.evaluate('//iframe', curwin.document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    var thisNode = iframeIterator.iterateNext();
+    var allLoaded=true;
+    while (thisNode) {
+        allLoaded = allLoaded && thisNode.contentDocument.loaded;
+        thisNode = iframeIterator.iterateNext();
+    }    
+    allLoaded;
+ENDJS2
+    $self->{selenium}->wait_for_condition_ok($js, $timeout);
 }
 
 sub _getWidgetList {

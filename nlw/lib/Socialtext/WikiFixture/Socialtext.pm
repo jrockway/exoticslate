@@ -50,7 +50,9 @@ workspace.
 
 sub init {
     my ($self) = @_;
-    for (qw(workspace username password)) {
+
+    $self->{mandatory_args} ||= [qw(workspace username password)];
+    for (@{ $self->{mandatory_args} }) {
         die "$_ is mandatory!" unless $self->{$_};
     }
 
@@ -61,7 +63,7 @@ sub init {
         $self->{wikiemail} = $ENV{WIKIEMAIL} || "$ENV{USER}.$host";
         diag  "wikiemail:  $self->{wikiemail}";
     }
-
+    diag "Browser url is ".$self->{browser_url};
     $self->st_login;
 }
 

@@ -1,13 +1,18 @@
 Page = {
-    pageUrl: function () {
+    pageUrl: function (page_name) {
+        if (!page_name) page_name = Socialtext.page_id;
         return '/data/workspaces/' + Socialtext.wiki_id +
-               '/pages/' + Socialtext.page_id;
+               '/pages/' + page_name;
     },
 
     refreshPageContent: function () {
         jQuery.get(this.pageUrl(), function (html) {
             jQuery('#st-page-content').html(html);
         });
+    },
+
+    ContentUri: function () {
+        return '/'+Socialtext.wiki_id;
     },
 
     tagUrl: function (tag) {
@@ -213,7 +218,7 @@ jQuery(function() {
         });
 
 
-    var editor_uri = nlw_make_s3_path('/javascript/socialtext-editor.js')
+    var editor_uri = nlw_make_s3_path('/javascript/socialtext-editor.js.gz')
         .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
 
     jQuery("#st-comment-button-link")
@@ -240,10 +245,7 @@ jQuery(function() {
         .one("click", function () {
             jQuery('#bootstrap-loader').show();
             jQuery.ajaxSettings.cache = true;
-            jQuery('<script>')
-                .attr('src', editor_uri)
-                .attr('language', 'javascript')
-                .appendTo('head');
+            jQuery.getScript(editor_uri);
             jQuery('<link>')
                 .attr('href', nlw_make_s3_path('/css/wikiwyg.css'))
                 .attr('rel', 'stylesheet')
@@ -303,4 +305,12 @@ jQuery(function() {
             );
         }
     });
+
+    if (Socialtext.new_page ||
+        Socialtext.start_in_edit_mode ||
+        location.hash.toLowerCase() == '#edit' ) {
+        setTimeout(function() {
+            jQuery("#st-edit-button-link").trigger("click");
+        }, 500);
+    }
 });

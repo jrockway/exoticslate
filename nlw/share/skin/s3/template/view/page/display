@@ -11,8 +11,12 @@
             <li><a id="st-comment-button-link" class="commentButton" href="#" title="[% loc('Click this button to add a comment to the page') %]">[% loc('Comment') %]</a></li>
             [% END %]
         </ul>
-        <ul class="buttonRight">        
-            <li><a class="newPageButton" href="#">New Page</a></li>
+        <ul class="buttonRight">
+        [% IF checker.check_permission('edit') %]
+            <li><a class="newPageButton" title="[% loc('Create New Wiki Page') %]" id="st-pagetools-newpage" href="?action=new_page">[% loc('New Page') %]</a></li>
+            [% IF current_workspace.enable_spreadsheet %]
+            <li><a class="newPageButton" title="[% loc('Create New Spreadsheet') %]" id="st-pagetools-newspreadsheet" href="?action=new_page;page_type=spreadsheet">[% loc('Create New Spreadsheet') %]</a></li>
+            [% END %]
             [% UNLESS user.is_guest %]
                 [% IF watching %]
                 <li><a id="st-watchlist-indicator" class="on watchButton" href="#" title="[% loc('Stop watching this Page') %]">[% loc('Stop watching this Page') %]</a></li>
@@ -20,6 +24,7 @@
                 <li><a id="st-watchlist-indicator" class="watchButton" href="#" title="[% loc('Watch this Page') %]">[% loc('Watch this Page') %]</a></li>
                 [% END %]
             [% END %]
+        [% END %]
         </ul>                                   
     </div><!-- st-editing-tools-edit END -->
 
@@ -46,9 +51,7 @@
 
     <div id="contentColumns">
         <div id="st-page-maincontent">
-            <div id="st-page-content">
-                [% page.content %]
-            </div>
+            <div id="st-page-content">[% page.content %]</div>
         </div>
         <div id="st-page-boxes" style="display:[% IF st_page_accessories == 'show'%]block[% ELSE %]none[% END %]">
             <div class="widget">

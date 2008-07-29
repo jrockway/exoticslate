@@ -79,6 +79,37 @@ Wikiwyg.is_safari_unknown = (
     Wikiwyg.ua.indexOf("version/") == -1
 );
 
+function nlw_name_to_id(name) {
+    if (name == '')
+        return '';
+    return encodeURI(
+        name.replace(/[^A-Za-z0-9_+]/g, '_') /* For Safari, the similar regex below doesn't work in Safari */
+            .replace(/[^A-Za-z0-9_+\u00C0-\u00FF]/g, '_')
+            .replace(/_+/g, '_')
+            .replace(/^_*(.*?)_*$/g, '$1')
+            .replace(/^0$/, '_')
+            .replace(/^$/, '_')
+            .toLocaleLowerCase()
+    );
+}
+
+function trim(value) {
+    var ltrim = /\s*((\s*\S+)*)/;
+    var rtrim = /((\s*\S+)*)\s*/;
+    return value.replace(rtrim, "$1").replace(ltrim, "$1");
+};
+
+function is_reserved_pagename(pagename) {
+    if (pagename && pagename.length > 0) {
+        var name = nlw_name_to_id(trim(pagename));
+        var untitled = nlw_name_to_id(loc('Untitled Page'))
+        return name == untitled;
+    }
+    else {
+        return false;
+    }
+}
+
 function setup_wikiwyg() {
     if (! Wikiwyg.browserIsSupported) return;
 
@@ -159,15 +190,6 @@ function setup_wikiwyg() {
     ww.wikitext_link = jQuery('#st-mode-wikitext-button').get(0);
 
     Wikiwyg.setup_newpage();
-
-    Wikiwyg.Socialtext.edit_bar = jQuery('#st-editing-tools-edit').get(0);
-
-    // XXX Surely we could use plain HTML here
-    Wikiwyg.Socialtext.loading_bar = document.createElement("div");
-    Wikiwyg.Socialtext.loading_bar.innerHTML =
-        '<span style="color: red" id="loading-message">' + loc('Loading...') + '</span>';
-    Wikiwyg.Socialtext.loading_bar.style.display = 'none';
-    Wikiwyg.Socialtext.edit_bar.parentNode.appendChild(Wikiwyg.Socialtext.loading_bar);
 
     // XXX start_nlw_wikiwyg goes in the object because display_edit.js
     // wants it there.
@@ -360,54 +382,51 @@ function setup_wikiwyg() {
 }
 
 Wikiwyg.setup_newpage = function() {
-    var newpage_saveName;
-    var newpage_saveButton;
-    var newpage_cancelButton;
-    var newpage_duplicate_saveButton;
-    var newpage_duplicate_cancelButton;
     if (Socialtext.new_page) {
-        newpage_saveButton = $('st-newpage-save-savebutton');
-        newpage_saveButton.onclick = function() {
+        jQuery('#st-save-button-link').click(function () {
             return wikiwyg.newpage_saveClicked();
-        };
+        });
 
-        newpage_cancelButton = $('st-newpage-save-cancelbutton');
-        newpage_cancelButton.onclick = function() {
+        jQuery('#st-cancel-button-link').click(function () {
             return wikiwyg.newpage_cancel();
-        };
+        });
 
         // XXX Observe
-        newpage_saveName = $('st-newpage-save-pagename');
-        newpage_saveName.onkeyup = function(event) {
+        jQuery('#st-newpage-save-pagename').bind('keyup', function(event) {
             wikiwyg.newpage_keyupHandler(event);
-        }
+        });
 
-        newpage_duplicate_okButton = $('st-newpage-duplicate-okbutton');
-        newpage_duplicate_okButton.onclick = function() {
+        jQuery('#st-newpage-duplicate-okbutton').click(function () {
             wikiwyg.newpage_duplicate_ok();
             return false;
-        };
+        });
 
-        newpage_duplicate_cancelButton = $('st-newpage-duplicate-cancelbutton');
-        newpage_duplicate_cancelButton.onclick = function() {
+        jQuery('#st-newpage-duplicate-cancelbutton').click(function () {
             wikiwyg.newpage_duplicate_cancel();
             return false;
-        };
+        });
 
         // XXX Observe
-        $('st-newpage-duplicate-pagename').onkeyup = function(event) {
-            wikiwyg.newpage_duplicate_pagename_keyupHandler(event);
-        }
-        $('st-newpage-duplicate-option-different').onkeyup = function(event) {
-            wikiwyg.newpage_duplicate_keyupHandler(event);
-        }
-        $('st-newpage-duplicate-option-suggest').onkeyup = function(event) {
-            wikiwyg.newpage_duplicate_keyupHandler(event);
-        }
-        $('st-newpage-duplicate-option-append').onkeyup = function(event) {
-            wikiwyg.newpage_duplicate_keyupHandler(event);
-        }
-
+        jQuery('#st-newpage-duplicate-pagename').bind('keyup', 
+            function(event) {
+                wikiwyg.newpage_duplicate_pagename_keyupHandler(event);
+            }
+        );
+        jQuery('#st-newpage-duplicate-option-different').bind('keyup',
+            function(event) {
+                wikiwyg.newpage_duplicate_keyupHandler(event);
+            }
+        );
+        jQuery('#st-newpage-duplicate-option-suggest').bind('keyup',
+            function(event) {
+                wikiwyg.newpage_duplicate_keyupHandler(event);
+            }
+        );
+        jQuery('#st-newpage-duplicate-option-append').bind('keyup',
+            function(event) {
+                wikiwyg.newpage_duplicate_keyupHandler(event);
+            }
+        );
     }
 }
 
@@ -425,12 +444,8 @@ if (window.wikiwyg_nlw_debug)
     proto.default_config.modeClasses.push(WW_HTML_MODE);
 
 proto.placeToolbar = function(toolbar_div) {
-    var wikiwyg_edit_page_bar =
-        $('st-page-editing-toolbar');
-    if (! wikiwyg_edit_page_bar) {
-        return;
-    }
-    wikiwyg_edit_page_bar.appendChild(toolbar_div);
+    jQuery('#st-page-editing-toolbar')
+        .append(toolbar_div);
 }
 
 proto.resizeEditor = function () {
@@ -552,10 +567,19 @@ proto.newpage_keyupHandler = function(event) {
     }
 }
 
+proto.active_page_exists = function (page_name) {
+    page_name = trim(page_name);
+    var data = jQuery.ajax({
+        url: Page.pageUrl(page_name),
+        async: false
+    });
+    return data.status == '200';
+}
+
 proto.newpage_duplicate_pagename_keyupHandler = function(event) {
-    $('st-newpage-duplicate-option-different').checked = true;
-    $('st-newpage-duplicate-option-suggest').checked = false;
-    $('st-newpage-duplicate-option-append').checked = false;
+    jQuery('#st-newpage-duplicate-option-different').attr('checked', false);
+    jQuery('#st-newpage-duplicate-option-suggest').attr('checked', false);
+    jQuery('#st-newpage-duplicate-option-append').attr('checked', false);
     return this.newpage_duplicate_keyupHandler(event);
 }
 
@@ -576,28 +600,26 @@ proto.newpage_duplicate_keyupHandler = function(event) {
 }
 
 proto.newpage_display_duplicate_dialog = function(page_name) {
-    Element.update('st-newpage-duplicate-suggest',
-        Socialtext.fullname + ': ' + page_name
-    );
-    Element.update('st-newpage-duplicate-appendname', page_name);
-    Element.update('st-newpage-duplicate-link', page_name);
-    $('st-newpage-duplicate-link').href = Page.ContentUri() + "?" + page_name;
-    $('st-newpage-duplicate-link').target = page_name;
-    $('st-newpage-duplicate-pagename').value = page_name;
-    $('st-newpage-duplicate-option-different').checked = true;
-    $('st-newpage-duplicate-option-suggest').checked = false;
-    $('st-newpage-duplicate-option-append').checked = false;
-    $('st-newpage-duplicate').style.display = 'block';
-    $('st-newpage-duplicate-pagename').focus();
+    jQuery('#st-newpage-duplicate-suggest')
+        .html(Socialtext.fullname + ': ' + page_name);
+    jQuery('#st-newpage-duplicate-appendname').html(page_name);
 
-    var divs = {
-        wrapper: $('st-newpage-duplicate'),
-        background: $('st-newpage-duplicate-overlay'),
-        content: $('st-newpage-duplicate-interface'),
-        contentWrapper: $('st-newpage-duplicate-interface').parentNode
-    }
-    Widget.Lightbox.show({ divs:divs, effects:['RoundedCorners'] });
-    divs.contentWrapper.style.width="520px";
+    jQuery('#st-newpage-duplicate-link')
+        .html(page_name)
+        .attr('href', Page.ContentUri() + "?" + page_name)
+        .attr('target', page_name);
+    
+    jQuery('#st-newpage-duplicate-pagename').val(page_name);
+    jQuery('#st-newpage-duplicate-option-different').attr('checked', true);
+    jQuery('#st-newpage-duplicate-option-suggest').attr('checked', false);
+    jQuery('#st-newpage-duplicate-option-append').attr('checked', false);
+    jQuery('#st-newpage-duplicate').show();
+    jQuery('#st-newpage-duplicate-pagename').trigger('focus');
+
+    jQuery.showLightbox({
+        content:'#st-newpage-duplicate-interface',
+        close:'#st-newpage-duplicate-cancelbutton'
+    });
 
     return false;
 }
@@ -625,12 +647,14 @@ proto.newpage_save = function(page_name, pagename_editfield) {
         }
     }
     else {
-        if (Page.active_page_exists(page_name)) {
+        if (this.active_page_exists(page_name)) {
+            console.log('here');
             this.newpage_cancel();
+            console.log('here');
             this.newpage_display_duplicate_dialog(page_name);
+            console.log('here');
         } else {
-            var formPageNameField = $('st-page-editing-pagename');
-            formPageNameField.value = page_name;
+            jQuery('#st-page-editing-pagename').val(page_name);
             this.saveContent();
             saved = true;
         }
@@ -639,25 +663,27 @@ proto.newpage_save = function(page_name, pagename_editfield) {
 }
 
 proto.saveContent = function() {
-    Wikiwyg.Socialtext.edit_bar.style.display = 'none';
-    Wikiwyg.Socialtext.loading_bar.innerHTML =
-        '<span style="color: red" id="saving-message">' + loc('Saving...') + '</span>';
-    Wikiwyg.Socialtext.loading_bar.style.display = 'block';
+    jQuery('#st-editing-title')
+        .html('')
+        .append(
+            jQuery('<span id="saving-message">')
+                .css('color', 'red').html(loc('Saving...'))
+        );
     this.saveChanges();
 }
 
 
 proto.newpage_saveClicked = function() {
-    var edit_field = $('st-newpage-save-pagename');
-    var saved = this.newpage_save(edit_field.value, edit_field);
+    var edit_field = jQuery('#st-newpage-pagename-edit');
+    var saved = this.newpage_save(edit_field.val() || '', edit_field.get(0));
     if (saved) {
-        $('st-newpage-save').style.display = 'none';
+        jQuery('#st-newpage-save').hide();
     }
     return saved;
 }
 
 proto.newpage_cancel = function() {
-    $('st-newpage-save').style.display = 'none';
+    jQuery('#st-newpage-save').hide();
     return false;
 }
 
@@ -668,8 +694,8 @@ proto.newpage_duplicate_ok = function() {
     var option;
     for (var i=0; i< options.length; i++) {
         var node = $('st-newpage-duplicate-option-' + options[i]);
-        if (node.checked) {
-            option = node.value;
+        if (node.is(':checked')) {
+            option = node.val();
             break;
         }
     }
@@ -679,15 +705,13 @@ proto.newpage_duplicate_ok = function() {
     }
     switch(option) {
         case 'different':
-            var edit_field = $('st-newpage-duplicate-pagename');
-            if (this.newpage_save(edit_field.value, edit_field)) {
-                $('st-newpage-duplicate').style.display = 'none';
+            var edit_field = jQuery('#st-newpage-duplicate-pagename');
+            if (this.newpage_save(edit_field.val(), edit_field.get(0))) {
+                jQuery('#st-newpage-duplicate').hide();
             } else {
-                if (!is_reserved_pagename(edit_field.value)) {
-                    Element.addClassName(
-                        'st-newpage-duplicate-emphasis',
-                        'st-newpage-duplicate-emphasis'
-                    );
+                if (!is_reserved_pagename(edit_field.val())) {
+                    jQuery('#st-newpage-duplicate-emphasis')
+                        .addClass('st-newpage-duplicate-emphasis');
                 }
             }
             break;
@@ -750,23 +774,21 @@ proto.saveButtonHandler = function() {
 }
 
 proto.saveNewPage = function() {
-    var new_page_name = $('st-newpage-pagename-edit');
-    var edit_page_name = $('st-page-editing-pagename');
-    if (! is_reserved_pagename(new_page_name.value)
-    ) {
-        if (Page.active_page_exists(new_page_name.value)) {
-            edit_page_name.value = new_page_name.value;
-            $('st-newpage-save-pagename').value = new_page_name.value;
+    var new_page_name = jQuery('#st-newpage-pagename-edit').val();
+    if (! is_reserved_pagename(new_page_name)) {
+        if (this.active_page_exists(new_page_name)) {
+            console.log('or here');
+            jQuery('#st-page-editing-pagename, #st-newpage-pagename-edit')
+                .val(new_page_name);
             return this.newpage_saveClicked();
         }
         else  {
-            if (encodeURIComponent(new_page_name.value).length > 255) {
+            if (encodeURIComponent(new_page_name).length > 255) {
                 alert(loc('Page title is too long after URL encoding'));
                 this.displayNewPageDialog();
                 return;
             }
-
-            edit_page_name.value = new_page_name.value;
+            jQuery('#st-page-editing-pagename').val(new_page_name);
             this.saveContent();
         }
     }
@@ -787,8 +809,8 @@ proto.saveChanges = function() {
         */
 
         var saver = function() {
-            $('st-page-editing-pagebody').value = wikitext;
-            $('st-page-editing-form').submit();
+            jQuery('#st-page-editing-pagebody').val(wikitext);
+            jQuery('#st-page-editing-form').trigger('submit');
             return true;
         }
 

@@ -330,9 +330,14 @@ sub weblog_display {
         $weblog_next = $weblog_start_entry + $weblog_limit;
     }
 
+    my $blog_category = $self->current_blog;
+    my $archive = $self->hub->weblog_archive->assemble_archive($blog_category);
+
     $self->update_current_weblog;
     $self->screen_template('view/weblog');
     return $self->render_screen(
+        box_content_filled => $self->box_content_filled,
+        archive => $archive,
         display_title => loc($weblog_id),
         sections => \@sections,
         feeds => $self->_feeds($self->hub->current_workspace),

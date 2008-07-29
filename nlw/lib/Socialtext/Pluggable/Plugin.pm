@@ -9,7 +9,7 @@ use Socialtext::TT2::Renderer;
 use Socialtext::AppConfig;
 use Class::Field qw(const field);
 use Socialtext::URI;
-use Socialtext::Storage::PSQL;
+use Socialtext::Storage;
 use Socialtext::AppConfig;
 use Socialtext::JSON qw(encode_json);
 use Socialtext::User;
@@ -162,7 +162,7 @@ sub new {
 sub storage {
     my ($self,$id) = @_;
     die "Id is required for storage\n" unless $id;
-    return Socialtext::Storage::PSQL->new($id, $self->user->user_id);
+    return Socialtext::Storage->new($id, $self->user->user_id);
 }
 
 sub name {

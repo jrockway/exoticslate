@@ -3,6 +3,7 @@
 set -e
 
 
-st-admin create-user --email Naomi.Hayhurst@istori.com --password hosaka
+st-admin create-user --email naomi.hayhurst@istori.com --password hosaka
 create-test-data-workspace hosaka.1.tar.gz
+st-admin add-member --email naomi.hayhurst@istori.com --workspace Hosaka
 exit 0

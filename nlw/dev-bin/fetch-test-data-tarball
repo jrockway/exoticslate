@@ -9,13 +9,20 @@ use Socialtext::JSON;
 
 my $filename = shift || 'test-data.tar.gz';
 
+my $searched_name;
+if ($filename ne 'test-data.tar.gz') {
+    $searched_name = $filename;   
+} else {
+    $searched_name = 'test-data.1.tar.gz';
+}
+
 my $rester = Socialtext::Resting::RegressionTest->new;
 
 $rester->accept('application/json');
 my $attachments = decode_json( $rester->get_page_attachments('Test data') );
 
 for my $a (@$attachments) {
-    next if $a->{name} ne 'test-data.1.tar.gz';
+    next if $a->{name} ne $searched_name;
 
     (my $attachment_id = $a->{uri}) =~ s#.+/attachments/([^/]+)/.+#$1#;
     print "fetching $attachment_id\n";

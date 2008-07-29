@@ -23,8 +23,11 @@ function abs_path() { perl -MCwd -le "print Cwd::abs_path(shift)" $1; }
 
 # Get the tarball and puzzle out the workspace name from it.
 TARBALL=$1
-if [ -z "$TARBALL" ]; then
-    TARBALL="/tmp/test-data.$$.tar.gz"
+if  [ -z "$TARBALL" ] || [ "$TARBALL" == "hosaka.1.tar.gz" ]; then
+    
+    if [ -z "$TARBALL" ] && [ "$TARBALL" != "hosaka.1.tar.gz" ]; then
+       TARBALL="/tmp/test-data.$$.tar.gz"
+    fi
     fetch-test-data-tarball $TARBALL
 fi
 TARBALL=$(abs_path $TARBALL)

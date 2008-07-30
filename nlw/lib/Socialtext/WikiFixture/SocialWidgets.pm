@@ -104,8 +104,10 @@ sub st_add_widget {
 
 Assigns a name to the widget in the container which is at the given position. This
 is useful for precooked containers where specific widgets are always placed in a specific
-order. The position parameter is used to match against the part of the widget id after
-the underscore (e.g. "5" would match the widget with id 2349038923048320_5). 
+order. The position parameter is used to match against the insertion order in the 
+yaml file describing this container or the order in which the widget was installed.
+
+The position is 1-based (1st widget matches position, etc). 
 
 The logical_name parameter is the logical name that is assigned to this instance of the
 widget. All future references to this widget will be made using this logical name. 

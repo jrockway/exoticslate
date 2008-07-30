@@ -130,7 +130,7 @@ sub sql_execute {
             warn "Rolling back in sql_execute()" if $DEBUG;
             sql_rollback();
         }
-        die "${msg}Error: $err";
+        croak "${msg}Error: $err";
     }
 
     # Unless the caller has explicitly specified a transaction via

@@ -208,7 +208,9 @@ sub _extract_username_or_email_address {
     my $self = shift;
     my $from = shift;
 
-    my $user = Socialtext::User->new( email_address => $_->{from} );
+    my $user;
+    eval { $user = Socialtext::User->new( email_address => $_->{from} ) };
+    warn $@ if $@;
     if ( $user ) {
         return $user->username;
     }

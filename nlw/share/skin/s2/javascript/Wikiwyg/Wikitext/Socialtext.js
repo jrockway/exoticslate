@@ -1787,37 +1787,37 @@ proto.format_tbody = function(elem) {
 
 proto.format_h1 = function(elem) {
     elem.top_level_block = true;
-    text = '^ ' + elem.wikitext;
+    var text = '^ ' + elem.wikitext;
     return text.replace(/\n*$/, '\n');
 }
 
 proto.format_h2 = function(elem) {
     elem.top_level_block = true;
-    text = '^^ ' + elem.wikitext;
+    var text = '^^ ' + elem.wikitext;
     return text.replace(/\n*$/, '\n');
 }
 
 proto.format_h3 = function(elem) {
     elem.top_level_block = true;
-    text = '^^^ ' + elem.wikitext;
+    var text = '^^^ ' + elem.wikitext;
     return text.replace(/\n*$/, '\n');
 }
 
 proto.format_h4 = function(elem) {
     elem.top_level_block = true;
-    text = '^^^^ ' + elem.wikitext;
+    var text = '^^^^ ' + elem.wikitext;
     return text.replace(/\n*$/, '\n');
 }
 
 proto.format_h5 = function(elem) {
     elem.top_level_block = true;
-    text = '^^^^^ ' + elem.wikitext;
+    var text = '^^^^^ ' + elem.wikitext;
     return text.replace(/\n*$/, '\n');
 }
 
 proto.format_h6 = function(elem) {
     elem.top_level_block = true;
-    text = '^^^^^^ ' + elem.wikitext;
+    var text = '^^^^^^ ' + elem.wikitext;
     return text.replace(/\n*$/, '\n');
 }
 

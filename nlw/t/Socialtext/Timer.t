@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More qw/no_plan/;
+use Test::More tests => 17;
 use Time::HiRes qw/usleep/;
 use Sys::Load qw/getload/;
 

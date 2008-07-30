@@ -1171,7 +1171,6 @@ sub _store_preview_text {
     my $old_length = length($headers);
     return if $headers =~ /^Summary:\ +\S/m;
     $headers =~ s/^Summary:.*\n?//mg;
-    warn "Storing preview text into $filename\n";
     $preview_text =~ s/\s*\z//;
     return if $preview_text =~ /\n/;
     $headers =~ s/\s+\z//;
@@ -1196,8 +1195,20 @@ sub _to_plain_text {
         return $self->_to_spreadsheet_plain_text( $content );
     }
 
-    return $self->_to_socialtext_wikitext_parser_plain_text( $content );
-    #return $self->_to_socialtext_formatter_parser_plain_text( $content );
+    # The WikiText::Parser doesn't yet handle really large chunks,
+    # so we should chunk this up ourself.
+    my $chunk_start = 0;
+    my $chunk_size  = 100 * 1024;
+    my $plain_text  = '';
+    while (1) {
+        my $chunk = substr( $content, $chunk_start, $chunk_size );
+        last unless length $chunk;
+        $chunk_start += length $chunk;
+
+        $plain_text
+            .= $self->_to_socialtext_wikitext_parser_plain_text($chunk);
+    }
+    return $plain_text;
 }
 
 sub _to_socialtext_formatter_parser_plain_text {

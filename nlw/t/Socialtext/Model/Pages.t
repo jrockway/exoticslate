@@ -11,6 +11,31 @@ BEGIN {
     use_ok 'Socialtext::Model::Pages';
 }
 
+my $COMMON_SELECT = <<EOSQL;
+SELECT page.workspace_id, 
+       "Workspace".name AS workspace_name, 
+       page.page_id, 
+       page.name, 
+       page.last_editor_id AS last_editor_id, 
+       editor.username AS last_editor_username, 
+       page.last_edit_time AT TIME ZONE 'GMT' AS last_edit_time, 
+       page.creator_id, 
+       creator.username AS creator_username, 
+       page.create_time AT TIME ZONE 'GMT' AS create_time, 
+       page.current_revision_id, 
+       page.current_revision_num, 
+       page.revision_count, 
+       page.page_type, 
+       page.deleted, 
+       page.summary 
+    FROM page 
+        JOIN "Workspace" USING (workspace_id) 
+        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
+        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
+        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
+        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
+EOSQL
+
 By_seconds_limit: {
     Regular: {
         local @Socialtext::SQL::RETURN_VALUES = (
@@ -28,28 +53,7 @@ By_seconds_limit: {
         sql_ok(
             name => 'by_seconds_limit',
             sql => <<EOT,
-SELECT page.workspace_id, 
-       "Workspace".name AS workspace_name, 
-       page.page_id, 
-       page.name, 
-       page.last_editor_id AS last_editor_id, 
-       editor.username AS last_editor_username, 
-       page.last_edit_time, 
-       page.creator_id, 
-       creator.username AS creator_username, 
-       page.create_time, 
-       page.current_revision_id, 
-       page.current_revision_num, 
-       page.revision_count, 
-       page.page_type, 
-       page.deleted, 
-       page.summary 
-    FROM page 
-        JOIN "Workspace" USING (workspace_id) 
-        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
-        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
-        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
-        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
+$COMMON_SELECT
         JOIN page_tag USING (page_id, workspace_id) 
     WHERE page.deleted = ?::bool 
       AND page.workspace_id = ? 
@@ -85,28 +89,7 @@ EOT
         sql_ok(
             name => 'by_seconds_limit',
             sql => <<EOT,
-SELECT page.workspace_id, 
-       "Workspace".name AS workspace_name, 
-       page.page_id, 
-       page.name, 
-       page.last_editor_id AS last_editor_id, 
-       editor.username AS last_editor_username, 
-       page.last_edit_time, 
-       page.creator_id, 
-       creator.username AS creator_username, 
-       page.create_time, 
-       page.current_revision_id, 
-       page.current_revision_num, 
-       page.revision_count, 
-       page.page_type, 
-       page.deleted, 
-       page.summary 
-    FROM page 
-        JOIN "Workspace" USING (workspace_id) 
-        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
-        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
-        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
-        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
+$COMMON_SELECT
         JOIN page_tag USING (page_id, workspace_id) 
     WHERE page.deleted = ?::bool 
       AND page.workspace_id IN (?,?,?)
@@ -142,28 +125,7 @@ EOT
         sql_ok(
             name => 'by_since_limit',
             sql => <<EOT,
-SELECT page.workspace_id, 
-       "Workspace".name AS workspace_name, 
-       page.page_id, 
-       page.name, 
-       page.last_editor_id AS last_editor_id, 
-       editor.username AS last_editor_username, 
-       page.last_edit_time, 
-       page.creator_id, 
-       creator.username AS creator_username, 
-       page.create_time, 
-       page.current_revision_id, 
-       page.current_revision_num, 
-       page.revision_count, 
-       page.page_type, 
-       page.deleted, 
-       page.summary 
-    FROM page 
-        JOIN "Workspace" USING (workspace_id) 
-        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
-        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
-        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
-        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
+$COMMON_SELECT
         JOIN page_tag USING (page_id, workspace_id) 
     WHERE page.deleted = ?::bool 
       AND page.workspace_id = ? 
@@ -211,28 +173,7 @@ EOT
         sql_ok(
             name => 'by_seconds_limit',
             sql => <<EOT,
-SELECT page.workspace_id, 
-       "Workspace".name AS workspace_name, 
-       page.page_id, 
-       page.name, 
-       page.last_editor_id AS last_editor_id, 
-       editor.username AS last_editor_username, 
-       page.last_edit_time, 
-       page.creator_id, 
-       creator.username AS creator_username, 
-       page.create_time, 
-       page.current_revision_id, 
-       page.current_revision_num, 
-       page.revision_count, 
-       page.page_type, 
-       page.deleted, 
-       page.summary 
-    FROM page 
-        JOIN "Workspace" USING (workspace_id) 
-        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
-        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
-        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
-        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
+$COMMON_SELECT
         JOIN page_tag USING (page_id, workspace_id) 
     WHERE page.deleted = ?::bool 
       AND page.workspace_id = ? 
@@ -269,28 +210,7 @@ EOT
         sql_ok(
             name => 'by_seconds_limit',
             sql => <<EOT,
-SELECT page.workspace_id, 
-       "Workspace".name AS workspace_name, 
-       page.page_id, 
-       page.name, 
-       page.last_editor_id AS last_editor_id, 
-       editor.username AS last_editor_username, 
-       page.last_edit_time, 
-       page.creator_id, 
-       creator.username AS creator_username, 
-       page.create_time, 
-       page.current_revision_id, 
-       page.current_revision_num, 
-       page.revision_count, 
-       page.page_type, 
-       page.deleted, 
-       page.summary 
-    FROM page 
-        JOIN "Workspace" USING (workspace_id) 
-        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
-        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
-        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
-        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
+$COMMON_SELECT
         JOIN page_tag USING (page_id, workspace_id) 
     WHERE page.deleted = ?::bool 
       AND page.workspace_id = ? 
@@ -326,28 +246,7 @@ All_active: {
         sql_ok(
             name => 'all_active',
             sql => <<EOT,
-SELECT page.workspace_id, 
-       "Workspace".name AS workspace_name, 
-       page.page_id, 
-       page.name, 
-       page.last_editor_id AS last_editor_id, 
-       editor.username AS last_editor_username, 
-       page.last_edit_time, 
-       page.creator_id, 
-       creator.username AS creator_username, 
-       page.create_time, 
-       page.current_revision_id, 
-       page.current_revision_num, 
-       page.revision_count, 
-       page.page_type, 
-       page.deleted, 
-       page.summary 
-    FROM page 
-        JOIN "Workspace" USING (workspace_id) 
-        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
-        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
-        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
-        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
+$COMMON_SELECT
     WHERE page.deleted = ?::bool 
       AND page.workspace_id = ? 
     LIMIT ?
@@ -381,28 +280,7 @@ By_tag: {
         sql_ok(
             name => 'by_tag',
             sql => <<EOT,
-SELECT page.workspace_id, 
-       "Workspace".name AS workspace_name, 
-       page.page_id, 
-       page.name, 
-       page.last_editor_id AS last_editor_id, 
-       editor.username AS last_editor_username, 
-       page.last_edit_time, 
-       page.creator_id, 
-       creator.username AS creator_username, 
-       page.create_time, 
-       page.current_revision_id, 
-       page.current_revision_num, 
-       page.revision_count, 
-       page.page_type, 
-       page.deleted, 
-       page.summary 
-    FROM page 
-        JOIN "Workspace" USING (workspace_id) 
-        JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
-        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
-        JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
-        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
+$COMMON_SELECT
         JOIN page_tag USING (page_id, workspace_id) 
     WHERE page.deleted = ?::bool 
       AND page.workspace_id = ? 

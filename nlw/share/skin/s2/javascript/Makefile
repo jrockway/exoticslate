@@ -41,7 +41,8 @@ ALL_WIKIWYG_JEMPLATES:=$(shell find jemplate_wikiwyg)
 
 ALL_JEMPLATE_PLUGINS:=$(shell find JemplatePlugin -name \*.js)
 
-JQUERY=$(COMMON_JAVASCRIPT)/jquery-1.2.6.js
+JQUERY=$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
+       $(COMMON_JAVASCRIPT)/jquery-noConflict.js
 
 DISPLAY_SOURCE_FILES= \
 		timestamp.js \

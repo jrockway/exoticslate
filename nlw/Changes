@@ -1,6 +1,10 @@
-2.21.3.0
+2.22.0.0
 
   * Bumped REST API version to 1.00
+  * Various performance improvements
+  * Page metadata stored in database, several views use DB for page content
+  * Migration 26 reads page metadata, generates preview_text for each page
+    and populates page table in NLW database
 
 2.21.2.2
 

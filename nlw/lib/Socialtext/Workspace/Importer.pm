@@ -74,50 +74,50 @@ sub import_workspace {
     my $self = shift;
     my $timer = Socialtext::Timer->new;
 
-    my $old_cwd = getcwd();
-    local $CWD = File::Temp::tempdir( CLEANUP => 1 );
+    eval {
+        my $old_cwd = getcwd();
+        local $CWD = File::Temp::tempdir( CLEANUP => 1 );
+        system( 'tar', 'xzf', $self->{tarball} );
 
-    # XXX - I'm afraid to use Archive::Tar here cause it will load all
-    # the data into memory, which could be enormous for workspaces
-    # with many pages and attachments.
-    system( 'tar', 'xzf', $self->{tarball} );
+        # We have an exported workspace from before workspace info was in
+        # the DBMS
+        die 'Cannot import old format of workspace export'
+            if -d "workspace/$self->{old_name}";
 
-    # We have an exported workspace from before workspace info was in
-    # the DBMS
-    die 'Cannot import old format of workspace export'
-        if -d "workspace/$self->{old_name}";
+        my @users = $self->_import_users();
+        $self->_create_workspace();
+        $self->_import_data_dirs();
+        $self->_fixup_page_symlinks();
+        $self->_set_permissions();
+        $self->_populate_db_metadata();
 
-    my @users = $self->_import_users();
+        for my $u (@users) {
+            $self->{workspace}->add_user(
+                user => $u->[0],
+                role => Socialtext::Role->new( name => $u->[1] ),
+            );
+        }
 
-    $self->_create_workspace();
+        unless ($self->{noindex}) {
+            chdir( $old_cwd );
+            Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
+                $self->{workspace}->name )
+                ->index_workspace( $self->{workspace}->name );
+        }
 
-    $self->_import_data_dirs();
-
-    $self->_fixup_page_symlinks();
-
-    $self->_set_permissions();
-
-    $self->_populate_db_metadata();
-
-    for my $u (@users) {
-        $self->{workspace}->add_user(
-            user => $u->[0],
-            role => Socialtext::Role->new( name => $u->[1] ),
-        );
+        st_log()
+            ->info( 'IMPORT,WORKSPACE,workspace:'
+                . $self->{new_name} . '('
+                . $self->{workspace}->workspace_id
+                . '),[' . $timer->elapsed . ']');
+    };
+    if (my $err = $@) {
+        if ($self->{workspace}) {
+            eval { $self->{workspace}->delete };
+            warn $@ if $@;
+        }
+        die "Error importing workspace $self->{new_name}: $err";
     }
-
-    unless ($self->{noindex}) {
-        chdir( $old_cwd );
-        Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
-            $self->{workspace}->name )
-            ->index_workspace( $self->{workspace}->name );
-    }
-
-    st_log()
-        ->info( 'IMPORT,WORKSPACE,workspace:'
-            . $self->{new_name} . '('
-            . $self->{workspace}->workspace_id
-            . '),[' . $timer->elapsed . ']');
 }
 
 sub _create_workspace {

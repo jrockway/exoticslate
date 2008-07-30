@@ -106,7 +106,9 @@ sub get_contents_based_on_encoding {
         return @contents;
     }
 
-    my $contents = do { local $/; <$fh> };
+    my $contents = '';
+    eval { local $/; <$fh> };
+    warn $@ if $@;
     close $fh;
     return $contents;
 }

@@ -53,6 +53,9 @@ dev-bin/link-reports
 dev-bin/link-people
 set -e
 
+echo "Adding special dev-env SQL hacks"
+psql -f etc/socialtext/db/dev.sql
+
 if [ $FDEFS_PROXY = 0 ]; then
     echo "Starting in single-Apache mode";
     dev-bin/gen-config --root=$HOME/.nlw --ports-start-at=20000 --apache-proxy=$FDEFS_PROXY --socialtext-open=0;

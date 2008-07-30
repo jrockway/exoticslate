@@ -23,7 +23,7 @@ the recipient list as if the Add Additional User button had been pushed. Do the 
 | wait_for_element_visible_ok | Button | 5000 |
 | click_ok | //input[@value='Cancel'] |  |
 | click_ok | //input[@value='Send'] |  |
-| text_like | st-popup-emailpage-errormessage | qr/you must select at least one recipient/i |
+| text_like | st-popup-emailpage-errormessage | qr/To send email, you must specify a recipient/i |
 | value_like | email_page_subject | Email title %%start_time%% |
 | text_like | email_page_form | From: |
 | text_like | email_page_form | <%%email%%> |

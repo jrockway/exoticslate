@@ -5,6 +5,37 @@ use YAML;
 use Socialtext::SQL qw( sql_execute sql_singlevalue);
 use Carp qw(croak);
 
+sub Search {
+    my ($class, %terms) = @_;
+    die "Terms required" unless %terms;
+
+    my @keys = keys %terms;
+    s/;// for @keys;
+
+    my @selects;
+    for my $i (0 .. $#keys) {
+        my $key = $keys[$i];
+        push @selects, "
+            (SELECT class, value AS $key
+             FROM storage
+             WHERE key = ? AND value = ?
+            ) AS select_$key
+        ";
+        push @selects, "JOIN" unless $i == $#keys;
+        push @selects, "USING(class)" if $i;
+    }
+
+    my $all_keys = join ", ", @keys;
+    my $all_selects = join "\n", @selects;
+    my $sql = "SELECT class, $all_keys FROM ( $all_selects )";
+
+    my $sth = sql_execute($sql, map { $_ => $terms{$_} } @keys);
+    my $res = $sth->fetchall_arrayref;
+    die "Search returned more than one result" if @$res > 1;
+    return unless @$res;
+    return $class->new($res->[0][0]);
+}
+
 sub new {
     my ($class, $id, $user_id) = @_;
     croak "id required" unless $id;
@@ -15,6 +46,11 @@ sub new {
     bless $self, $class;
     $self->load_data;
     return $self;
+}
+
+sub id {
+    my $self = shift;
+    return $self->{id};
 }
 
 sub load_data {

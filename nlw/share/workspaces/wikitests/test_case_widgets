@@ -1,23 +1,15 @@
-Test case to test widgets
+| *Comment* | STARTING Test case: WIDGETS| |
 
-* Fixture: SocialWidgets
-
-This test case assumes a logged in user.
-
-Test set up:
-
-| *Comment* | STARTING Test case: WIDGETS|  |
-
-| *Comment* | Test case: Clear Dashboard|  |
+| *Comment* | Test case: Clear Dashboard| |
 | open_ok | /?dashboard | |
 | st-empty-container | | |
 
-| *Comment* | Test case: Reset Dashboard|  |
+| *Comment* | Test case: Reset Dashboard| |
 | st-reset-container | | |
 | st-wait-for-all-widgets-load | | |
 
-| *Comment* | Test case: Add Recent Changes Widget |  |
-| st-add-widget| gadgets/share/gadgets/recent_changes.xml | logical  |
+| *Comment* | Test case: Add Recent Changes Widget | |
+| st-add-widget| gadgets/share/gadgets/recent_changes.xml | logical |
 | st_wait_for_widget_load| logical | 5000 |
 | st-name-widget | 1 | foo |
 | st-widget-settings | logical | |
@@ -29,4 +21,4 @@ Test set up:
 | st-widget-body-like | logical | fullname|
 | st-select-widget-frame | logical | |
 | text-present-like | fullname | |
-| select-frame | relative=parent | | 
+| select-frame | relative=parent | |

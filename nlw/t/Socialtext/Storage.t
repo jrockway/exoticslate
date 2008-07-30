@@ -104,11 +104,10 @@ SEARCH: {
     is Socialtext::Storage->Search(
         term_1 => 'value_id1_1',
         term_2 => 'value_id1_2',
-    )->id, 'id1', 'Searching for id1 works';
+    )->id, 'id1', 'Searching for two terms';
 
     is Socialtext::Storage->Search(
         term_1 => 'value_id2_1',
-        term_2 => 'value_id2_2',
-    )->id, 'id2', 'Searching for id2 works';
+    )->id, 'id2', 'Searching for one term';
 }
                                 

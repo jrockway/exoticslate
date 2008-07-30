@@ -112,9 +112,9 @@
     <div>
     <div id="st-newpage-duplicate-interface">
         <div id="st-newpage-duplicate-title">[% loc('Page Already Exists') %]</div>
-        <p class="st-newpage-duplicate-prompt">[% loc('There is <span id="st-newpage-duplicate-emphasis">already a page</span> named <a id="[_1]-link" href="#" target="">XXX</a>. Would you like to:', ns)%]</p>
+        <p class="st-newpage-duplicate-prompt">[% loc('There is <span id="st-newpage-duplicate-emphasis">already a page</span> named <a id="st-newpage-duplicate-link" href="#" target="">XXX</a>. Would you like to:')%]</p>
         <p class="st-newpage-duplicate-option"><input type="radio" name="st-newpage-duplicate-option" id="st-newpage-duplicate-option-different" value="different"/> [% loc('Save with a different name:')%] <input id="st-newpage-duplicate-pagename" size="40" type="text" name="pagename"/></p>
-        <p class="st-newpage-duplicate-option"><input type="radio" name="st-newpage-duplicate-option" id="st-newpage-duplicate-option-suggest" value="suggest"/> [% loc('Save the page with the name "<span id="[_1]-suggest">XXX</span>"', ns)%]</p>
+        <p class="st-newpage-duplicate-option"><input type="radio" name="st-newpage-duplicate-option" id="st-newpage-duplicate-option-suggest" value="suggest"/> [% loc('Save the page with the name "<span id="st-newpage-duplicate-suggest">XXX</span>"')%]</p>
         <p class="st-newpage-duplicate-option"><input type="radio" name="st-newpage-duplicate-option" id="st-newpage-duplicate-option-append" value="append"/> [% loc('Append your text to the bottom of the existing page named:')%] "<span id="st-newpage-duplicate-appendname">XXX</span>"</p>
         <div id="st-newpage-duplicate-buttons">
             <table width="100%" border="0">
@@ -128,3 +128,28 @@
     </div>
     </form>
 </div>
+
+<div id="st-newpage-save" style="display:none">
+    <form id="st-newpage-save-form">
+    <div id="st-newpage-save-overlay" class="popup-overlay"></div>
+    <div>
+    <div id="st-newpage-save-interface">
+        <div id="st-newpage-save-title">[% loc('Save Page As') %]</div>
+        <p id="st-newpage-save-prompt">[% loc('Enter a meaningful and distinctive title for your page.') %]</p>
+        <p id="st-newpage-save-field-pagename">
+            [% loc('Page Title:') %] <input id="st-newpage-save-pagename" size="45" type="text" name="pagename"/>
+        </p>
+        <p id="st-newpage-save-tip">[% loc("Tip: You'll be able to find this page later by using the title you choose.") %]</p>
+        <div id="st-newpage-save-buttons">
+            <table width="100%" border="0">
+            <tr>
+            <td align="right"><input type="button" id="st-newpage-save-cancelbutton" value="[% loc('Cancel') %]"/></td>
+            <td width="70px" align="right"><input type="submit" id="st-newpage-save-savebutton" value="[% loc('Save') %]" /></td>
+            </tr>
+            </table>
+        </div>
+    </div>
+    </div>
+    </form>
+</div>
+

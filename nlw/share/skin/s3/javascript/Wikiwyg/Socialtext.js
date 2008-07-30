@@ -259,10 +259,13 @@ function setup_wikiwyg() {
         jQuery("#st-page-content").bind("dblclick", ww.start_nlw_wikiwyg);
     }
 
-    jQuery('#st-save-button-link').click(function() {
-        ww.is_editing = false;
-        return ww.saveButtonHandler();
-    });
+    if (!Socialtext.new_page) {
+        jQuery('#st-save-button-link').click(function() {
+            console.log('actual save button link');
+            ww.is_editing = false;
+            return ww.saveButtonHandler();
+        });
+    }
 
     // node handles
     jQuery('#st-cancel-button-link').click(function() {
@@ -384,16 +387,11 @@ function setup_wikiwyg() {
 Wikiwyg.setup_newpage = function() {
     if (Socialtext.new_page) {
         jQuery('#st-save-button-link').click(function () {
-            return wikiwyg.newpage_saveClicked();
+            return wikiwyg.saveNewPage();
         });
 
         jQuery('#st-cancel-button-link').click(function () {
-            return wikiwyg.newpage_cancel();
-        });
-
-        // XXX Observe
-        jQuery('#st-newpage-save-pagename').bind('keyup', function(event) {
-            wikiwyg.newpage_keyupHandler(event);
+            jQuery.hideLightbox();
         });
 
         jQuery('#st-newpage-duplicate-okbutton').click(function () {
@@ -402,7 +400,7 @@ Wikiwyg.setup_newpage = function() {
         });
 
         jQuery('#st-newpage-duplicate-cancelbutton').click(function () {
-            wikiwyg.newpage_duplicate_cancel();
+            jQuery.hideLightbox();
             return false;
         });
 
@@ -551,22 +549,6 @@ proto.button_disabled_func = function(mode_name) {
     return function() { return false }
 }
 
-proto.newpage_keyupHandler = function(event) {
-    var key;
-
-    if (window.event) {
-        key = window.event.keyCode;
-    }
-    else if (event.which) {
-        key = event.which;
-    }
-
-    if (key == Event.KEY_RETURN) {
-        this.newpage_saveClicked();
-        return false;
-    }
-}
-
 proto.active_page_exists = function (page_name) {
     page_name = trim(page_name);
     var data = jQuery.ajax({
@@ -577,7 +559,7 @@ proto.active_page_exists = function (page_name) {
 }
 
 proto.newpage_duplicate_pagename_keyupHandler = function(event) {
-    jQuery('#st-newpage-duplicate-option-different').attr('checked', false);
+    jQuery('#st-newpage-duplicate-option-different').attr('checked', true);
     jQuery('#st-newpage-duplicate-option-suggest').attr('checked', false);
     jQuery('#st-newpage-duplicate-option-append').attr('checked', false);
     return this.newpage_duplicate_keyupHandler(event);
@@ -647,9 +629,12 @@ proto.newpage_save = function(page_name, pagename_editfield) {
         }
     }
     else {
+        console.log('exists2 ' + page_name);
         if (this.active_page_exists(page_name)) {
-            this.newpage_cancel();
-            this.newpage_display_duplicate_dialog(page_name);
+            jQuery.hideLightbox();
+            setTimeout(function () {
+                wikiwyg.newpage_display_duplicate_dialog(page_name)
+            }, 1000);
         } else {
             jQuery('#st-page-editing-pagename').val(page_name);
             this.saveContent();
@@ -660,42 +645,32 @@ proto.newpage_save = function(page_name, pagename_editfield) {
 }
 
 proto.saveContent = function() {
-    jQuery('#st-editing-title')
-        .html('')
-        .append(
-            jQuery('<span id="saving-message">')
-                .css('color', 'red').html(loc('Saving...'))
-        );
+    console.log('saveContent');
+    jQuery('#st-editing-title').hide()
+    jQuery('<span id="saving-message">')
+        .css('color', 'red')
+        .html(loc('Saving...'))
+        .insertBefore('#st-editing-title');
     this.saveChanges();
 }
 
 
 proto.newpage_saveClicked = function() {
-    var edit_field = jQuery('#st-newpage-pagename-edit');
-    var saved = this.newpage_save(edit_field.val() || '', edit_field.get(0));
+    var field = jQuery('#st-page-editing-pagename');
+    console.log('newpage_save ' + field.val());
+    var saved = this.newpage_save(field.val() || '', field.get(0));
     if (saved) {
-        jQuery('#st-newpage-save').hide();
+        console.log('closing lightbox');
+        jQuery.hideLightbox();
     }
     return saved;
-}
-
-proto.newpage_cancel = function() {
-    jQuery('#st-newpage-save').hide();
-    return false;
 }
 
 proto.newpage_duplicate_ok = function() {
     // Ok - this is the suck. I am duplicating the radio buttons in the HTML form here
     // in the JavaScript code. Damn deadlines
     var options = ['different', 'suggest', 'append'];
-    var option;
-    for (var i=0; i< options.length; i++) {
-        var node = $('st-newpage-duplicate-option-' + options[i]);
-        if (node.is(':checked')) {
-            option = node.val();
-            break;
-        }
-    }
+    var option = jQuery('input[name=st-newpage-duplicate-option]:checked').val();
     if (!option) {
         alert(loc('You must select one of the options or click cancel'));
         return;
@@ -704,62 +679,53 @@ proto.newpage_duplicate_ok = function() {
         case 'different':
             var edit_field = jQuery('#st-newpage-duplicate-pagename');
             if (this.newpage_save(edit_field.val(), edit_field.get(0))) {
-                jQuery('#st-newpage-duplicate').hide();
-            } else {
+                console.log('hideLightbox ovah hear');
+                jQuery.hideLightbox();
+            }
+            else {
+                console.log('checkres');
                 if (!is_reserved_pagename(edit_field.val())) {
-                    jQuery('#st-newpage-duplicate-emphasis')
-                        .addClass('st-newpage-duplicate-emphasis');
+                    console.log('isres');
                 }
             }
             break;
         case 'suggest':
-            var suggest_name = $('st-newpage-duplicate-suggest');
-            if (this.newpage_save(suggest_name.innerHTML)) {
-                $('st-newpage-duplicate').style.display = 'none';
+            var name = jQuery('#st-newpage-duplicate-suggest').html();
+            if (this.newpage_save(suggest.html())) {
+                console.log('close da lightbox');
+                jQuery.hideLightbox();
             }
             break;
         case 'append':
-            $('st-page-editing-append').value='bottom';
-            var pagename = $('st-newpage-duplicate-appendname').innerHTML;
-            var formPageNameField = $('st-page-editing-pagename');
-            formPageNameField.value = pagename;
-            $('st-newpage-duplicate').style.display = 'none';
+            jQuery('#st-page-editing-append').val('bottom');
+            jQuery('#st-page-editing-pagename').val(
+                jQuery('#st-newpage-duplicate-appendname').html()
+            );
+            jQuery.hideLightbox();
             this.saveContent();
             break;
     }
     return false;
 }
 
-proto.newpage_duplicate_cancel = function() {
-    $('st-newpage-duplicate').style.display = 'none';
-    return false;
-}
-
 proto.displayNewPageDialog = function() {
-    $('st-newpage-save-pagename').value = '';
-    $('st-newpage-duplicate-option-different').checked = false;
-    $('st-newpage-duplicate-option-suggest').checked = false;
-    $('st-newpage-duplicate-option-append').checked = false;
-    Element.removeClassName(
-        'st-newpage-duplicate-emphasis',
-        'st-newpage-duplicate-emphasis'
-    );
-    $('st-newpage-save').style.display = 'block';
-
-    var divs = {
-        wrapper: $('st-newpage-save'),
-        background: $('st-newpage-save-overlay'),
-        content: $('st-newpage-save-interface'),
-        contentWrapper: $('st-newpage-save-interface').parentNode
-    }
-    Widget.Lightbox.show({ 'divs': divs, 'effects': ['RoundedCorners'] });
-
-    $('st-newpage-save-pagename').focus();
-
+    jQuery('#st-newpage-save-pagename').val('');
+    jQuery.showLightbox({
+        content: '#st-newpage-save',
+        close: '#st-newpage-save-cancelbutton'
+    });
+    jQuery('#st-newpage-save-form').bind('submit', function () {
+        jQuery('#st-page-editing-pagename').val(
+            jQuery('#st-newpage-save-pagename').val()
+        );
+        wikiwyg.newpage_saveClicked();
+        return false;
+    });
     return false;
 }
 
 proto.saveButtonHandler = function() {
+        console.log('saveButtonHandler');
     if (Socialtext.new_page) {
         this.saveNewPage();
     }
@@ -771,11 +737,11 @@ proto.saveButtonHandler = function() {
 }
 
 proto.saveNewPage = function() {
+    console.log('saveNewPage ' + new_page_name);
     var new_page_name = jQuery('#st-newpage-pagename-edit').val();
     if (! is_reserved_pagename(new_page_name)) {
         if (this.active_page_exists(new_page_name)) {
-            jQuery('#st-page-editing-pagename, #st-newpage-pagename-edit')
-                .val(new_page_name);
+            jQuery('#st-page-editing-pagename').val(new_page_name);
             return this.newpage_saveClicked();
         }
         else  {
@@ -794,6 +760,7 @@ proto.saveNewPage = function() {
 }
 
 proto.saveChanges = function() {
+    console.log('saveChanges');
     this.disableLinkConfirmations();
     var submit_changes = function(wikitext) {
         /*
@@ -969,15 +936,18 @@ proto.get_edit_height = function() {
 }
 
 proto.enableStarted = function() {
-    Wikiwyg.Socialtext.edit_bar.style.display = 'none';
-    Wikiwyg.Socialtext.loading_bar.style.display = 'block';
+    jQuery('#st-editing-tools-edit, #st-editing-title').hide();
+    jQuery('<span id="saving-message">')
+        .css('color','red')
+        .html(loc('Loading...'))
+        .insertBefore('#st-editing-title')
     this.wikiwyg.disable_button(this.classname);
     this.wikiwyg.enable_button(this.wikiwyg.current_mode.classname);
 }
 
 proto.enableFinished = function() {
-    Wikiwyg.Socialtext.loading_bar.style.display = 'none';
-    Wikiwyg.Socialtext.edit_bar.style.display = 'block';
+    jQuery('#saving-message').remove();
+    jQuery('#st-editing-tools-edit').show();
 }
 
 var WW_ERROR_TABLE_SPEC_BAD =

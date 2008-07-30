@@ -1,7 +1,7 @@
 | *Comment* | Test Case: Include Page |  |
 
-This is a stub. Some test ideas
 Include a page. Test for included content. Test for edit button.
+Test backlink to including page
 Repeat test using Miki/Lite access.
 remove include wafl. Test that content disappears.
 Repeat test using Miki/Lite access.
@@ -10,14 +10,46 @@ Repeat test using Miki/Lite access.
 Logout. Test for content and absence of edit button.
 Repeat test using Miki/Lite access.
 
-| *Comment* | Test Case: Include Page FIRST TEST |  |
-|  |  |  |
+| *Comment* | Test Case: Include Page. Make a page and include the central page in it |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| type_ok | st-newpage-pagename-edit | TC Include Page %%start_time%% |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | `{include: [%%title%%]}` |
+| click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | link=%%title%% | 30000 |
+| text_like | //div[@class='wiki-include-title'] | %%title%% |
+| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
 
-| *Comment* | Test Case: Include Page SECOND TEST |  |
-|  |  |  |
+| *Comment* | Test Case: Include Page. Open the included page for editing |  |
+| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| click_ok | link=Advanced |  |
+| text_like | st-editing-title | `Editing: %%title%%` |
+| verifyValue | wikiwyg_wikitext_textarea | qr/.+This is the home page for %%title%%.+/ |
 
-| *Comment* | Test Case: Include Page THIRD TEST |  |
-|  |  |  |
+| *Comment* | Test Case: Include Page. Verify backlink to including page |  |
+| click_and_wait | st-save-button-link | Save is easier than Cancel |
+| wait_for_element_visible_ok | link=TC Include Page %%start_time%% | 30000 |
+| text_like | st-incoming-links | TC Include Page %%start_time%% |
+
+| *Comment* | Test Case: Include Page. Run the same test in Miki |  |
+| open_ok | /lite/page/%%workspace%%/tc_include_page_%%start_time%% |  |
+
+| wait_for_element_visible_ok | link=%%title%% | 30000 |
+| text_like | //div[@class='wiki-include-title'] | %%title%% |
+| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+
+| *Comment* | Test Case: Include Page. Open the included page for editing |  |
+| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| wait_for_element_visible_ok | edit_textarea | 30000 |
+| wait_for_element_visible_ok | link=Cancel Edit | 30000 |
+| verifyValue | edit_textarea | qr/.+This is the home page for %%title%%.+/ |
+
+^ END
 
 | *Comment* | Test Case: Include Page Teardown |  |
 |  |  |  |

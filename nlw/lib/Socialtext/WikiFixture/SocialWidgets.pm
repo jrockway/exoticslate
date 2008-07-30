@@ -61,7 +61,7 @@ sub st_empty_container {
     $self->{selenium}->open_ok("?action=clear_widgets");
     $self->{selenium}->wait_for_page_to_load_ok(10000);
     my $widgetlist = $self->{selenium}->get_value("id=widgetList");
-    diag "Widgets: $widgetlist\n"; 
+    diag "Widgets after empty: $widgetlist\n"; 
 }
 
 =head2 st_reset_container ( )
@@ -95,7 +95,6 @@ sub st_add_widget {
     $self->{selenium}->wait_for_page_to_load_ok(10000);
     my @widgetsafter = $self->_getWidgetList;
     my @newwidgets = $self->_listDiff(\@widgetsafter, \@widgetsbefore);
-    diag "New Widgets: ".join(",", @newwidgets). "\n"; 
     $self->{_widgets}{$logical} = $newwidgets[0];
     diag "Named this widget '$logical': ".$self->{_widgets}{$logical}."\n";
 }

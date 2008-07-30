@@ -892,6 +892,10 @@ td.person a {
     padding-top: 20px;
 }
 
+body#contentPage div#st-editing-tools-edit ul#revision-tools li a {
+    top: 0px;
+}
+
 /* 
  * Override default behaviour when we don't have to contend with the
  * sideboxes.

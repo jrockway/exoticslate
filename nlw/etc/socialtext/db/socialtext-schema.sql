@@ -619,4 +619,4 @@ ALTER TABLE ONLY "Workspace"
 
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '5');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '6');

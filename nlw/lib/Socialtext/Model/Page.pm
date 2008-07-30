@@ -64,10 +64,21 @@ sub title          { $_[0]->{name} }
 sub id             { $_[0]->{page_id} }
 sub uri            { $_[0]->{page_id} }
 sub summary        { $_[0]->{summary} }
-sub tags           { $_[0]->{tags} }
+sub deleted        { $_[0]->{deleted} }
+sub last_edit_time { $_[0]->{last_edit_time} }
 sub add_tag        { push @{ shift->{tags} }, @_ }
 sub hub            { $_[0]->{hub} || die "No hub was given to the page object"}
 sub is_spreadsheet { $_[0]->{page_type} eq 'spreadsheet' }
+sub current_revision_num { $_[0]->{current_revision_num} }
+sub revision_count { $_[0]->{revision_count} }
+
+sub tags {
+    my $self = shift;
+    unless ($self->{tags}) {
+        die "tags not loaded, and lazy loading is not yet supported.";
+    }
+    return $self->{tags};
+}
 
 sub hash_representation {
     my $self = shift;

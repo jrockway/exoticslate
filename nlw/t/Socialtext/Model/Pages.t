@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More qw/no_plan/;
+use Test::More tests => 46;
 use mocked 'Socialtext::SQL', qw/sql_ok/;
 use mocked 'Socialtext::Page';
 use mocked 'Socialtext::User';
@@ -254,13 +254,41 @@ EOT
             args => [0,9,20],
         );
         sql_ok(
-            name => 'by_seconds_limit',
+            name => 'all_active',
             sql => <<EOT,
 SELECT workspace_id, page_id, tag 
     FROM page_tag 
     WHERE page_tag.workspace_id = ?
 EOT
             args => [9],
+        );
+    }
+    No_workspace_filter: {
+        local @Socialtext::SQL::RETURN_VALUES = (
+            {
+                return => [{workspace_id => 9, page_id => 'page_id'}],
+            },
+        );
+        Socialtext::Model::Pages->All_active(
+            hub => 'hub',
+            count => 20,
+        );
+        sql_ok(
+            name => 'all_active',
+            sql => <<EOT,
+$COMMON_SELECT
+    WHERE page.deleted = ?::bool 
+    LIMIT ?
+EOT
+            args => [0,20],
+        );
+        sql_ok(
+            name => 'all_active',
+            sql => <<EOT,
+SELECT workspace_id, page_id, tag 
+    FROM page_tag 
+EOT
+            args => [],
         );
     }
 }
@@ -289,7 +317,7 @@ EOT
             args => [0,9,'foo',33],
         );
         sql_ok(
-            name => 'by_seconds_limit',
+            name => 'by_tag',
             sql => <<EOT,
 SELECT workspace_id, page_id, tag 
     FROM page_tag 
@@ -297,5 +325,93 @@ SELECT workspace_id, page_id, tag
 EOT
             args => [9],
         );
+    }
+}
+
+By_id: {
+    single_page: {
+        local @Socialtext::SQL::RETURN_VALUES = (
+            {
+                return => [{workspace_id => 9, page_id => 'monkey'}],
+            },
+        );
+        Socialtext::Model::Pages->By_id(
+            workspace_id => 9,
+            page_id => 'monkey',
+        );
+        sql_ok(
+            name => 'by_id',
+            sql => <<EOT,
+$COMMON_SELECT
+    WHERE page.deleted = ?::bool 
+      AND page.workspace_id = ? 
+      AND page_id = ?
+EOT
+            args => [0,9,'monkey'],
+        );
+        sql_ok(
+            name => 'by_id',
+            sql => <<EOT,
+SELECT workspace_id, page_id, tag 
+    FROM page_tag 
+    WHERE page_tag.workspace_id = ?
+EOT
+            args => [9],
+        );
+    }
+
+    several_pages: {
+        local @Socialtext::SQL::RETURN_VALUES = (
+            {
+                return => [{workspace_id => 9, page_id => 'monkey'}],
+            },
+        );
+        Socialtext::Model::Pages->By_id(
+            workspace_id => 9,
+            page_id => ['monkey', 'ape', 'chimp'],
+        );
+        sql_ok(
+            name => 'by_id',
+            sql => <<EOT,
+$COMMON_SELECT
+    WHERE page.deleted = ?::bool 
+      AND page.workspace_id = ? 
+      AND page_id IN (?,?,?)
+EOT
+            args => [0,9,'monkey', 'ape', 'chimp'],
+        );
+        sql_ok(
+            name => 'by_id',
+            sql => <<EOT,
+SELECT workspace_id, page_id, tag 
+    FROM page_tag 
+    WHERE page_tag.workspace_id = ?
+EOT
+            args => [9],
+        );
+    }
+
+    several_pages_no_tags: {
+        local @Socialtext::SQL::RETURN_VALUES = (
+            {
+                return => [{workspace_id => 9, page_id => 'monkey'}],
+            },
+        );
+        Socialtext::Model::Pages->By_id(
+            workspace_id     => 9,
+            page_id          => [ 'monkey', 'ape', 'chimp' ],
+            do_not_need_tags => 1,
+        );
+        sql_ok(
+            name => 'by_id',
+            sql => <<EOT,
+$COMMON_SELECT
+    WHERE page.deleted = ?::bool 
+      AND page.workspace_id = ? 
+      AND page_id IN (?,?,?)
+EOT
+            args => [0,9,'monkey', 'ape', 'chimp'],
+        );
+        is scalar(@Socialtext::SQL::SQL), 0, 'no other SQL calls were made';
     }
 }

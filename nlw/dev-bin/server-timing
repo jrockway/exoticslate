@@ -17,6 +17,7 @@ my $username     = 'devnull1@socialtext.com';
 my $password     = 'd3vnu11l';
 my $num_requests = 10;
 my $concurrency  = 1;
+my $dev_env      = 0;
 my $testnum;
 GetOptions(
     'workspace=s'   => \$workspace,
@@ -26,8 +27,9 @@ GetOptions(
     'num=s'         => \$num_requests,
     'concurrency=s' => \$concurrency,
     'testnum=s'     => \$testnum,
+    'dev-env'       => \$dev_env,
 ) or usage();
-
+usage('Workspace is mandatory') unless $workspace;
 
 my @urls = (
     {
@@ -42,8 +44,13 @@ my @urls = (
         name => 'Feed Recent Changes',
         path => q{/feed/workspace/:ws?category=Recent%20Changes&count=100},
     },
+    {
+        name => 'Basic Search',
+        path => q{/:ws/index.cgi?search_term=the&action=search},
+    },
 );
 if (defined $testnum) {
+    die "testnum should be between 0 and $#urls!\n" if $testnum >= @urls;
     @urls = ($urls[$testnum]);
 }
 
@@ -53,16 +60,30 @@ for my $url (@urls) {
     shell_run("ab -A $username:$password -c $concurrency -n $num_requests "
         . "'$server$url->{path}'");
     my $end_time = time;
-
-    my $summarizer = '/usr/sbin/st-appliance-summarize-perf';
-    die "Can't find summarizer" unless -x $summarizer;
-    shell_run("$summarizer --start-time $start_time --end-time $end_time");
+    summarize($start_time, $end_time);
 }
 
 exit;
 
+sub summarize {
+    my $start_time = shift;
+    my $end_time   = shift;
+    my $toolname   = "st-appliance-summarize-perf";
+    my $summarizer = "/usr/sbin/$toolname";
+    if ($dev_env) {
+        $summarizer = "$^X -I$ENV{ST_CURRENT}/nlw/lib"
+            . " -I$ENV{ST_CURRENT}/appliance/libsocialtext-appliance-perl/lib"
+            . " $ENV{ST_CURRENT}/appliance/libsocialtext-appliance-perl/sbin/$toolname";
+    }
+    die "Can't find $summarizer" unless $dev_env or -x $summarizer;
+    shell_run("$summarizer --start-time $start_time --end-time $end_time");
+}
+
 sub usage {
+    my $msg = shift || '';
     die <<EOT;
+$msg
+
 USAGE: $0 <options>
 Where options are:
   --server <server>     server to test

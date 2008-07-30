@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More qw/no_plan/;
+use Test::More tests => 23;
 use mocked 'Socialtext::File';
 use mocked 'Socialtext::Page';
 use mocked 'Socialtext::User';
@@ -110,5 +110,31 @@ EOT
 }
 
 
+Lazy_load_tags: {
+    my $data = {
+        workspace_id => 3,
+        workspace_name => 'workspace_name',
+        page_id => 'page_id',
+        name => 'name',
+        last_editor_id => 'last_editor_id',
+        last_editor_username => 'last_editor_username',
+        last_edit_time => '2008-01-01 23:12:01',
+        creator_id => 'creator_id',
+        creator_username => 'creator_username',
+        create_time => '2007-01-01 23:12:01',
+        current_revision_id => 'current_revision_id',
+        current_revision_num => 'current_revision_num',
+        revision_count => 'revision_count',
+        page_type => 'page_type',
+        deleted => 'deleted',
+        summary => 'summary',
+        hub => Socialtext::Hub->new,
+    };
+    my $page = Socialtext::Model::Page->new_from_row($data);
+    isa_ok $page, 'Socialtext::Model::Page';
+
+    eval { $page->tags };
+    like $@, qr/tags not loaded, and lazy loading is not yet supported/;
+}
 
 ok 'TODO: bad new_from_row';

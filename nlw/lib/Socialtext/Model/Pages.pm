@@ -22,11 +22,11 @@ sub By_seconds_limit {
     my $where;
     my @bind;
     if ( $since ) {
-        $where = q{AND last_edit_time > ?::timestamptz};
+        $where = q{last_edit_time > ?::timestamptz};
         @bind  = ( $since );
     }
     elsif ( $seconds ) {
-        $where = q{AND last_edit_time > 'now'::timestamptz - ?::interval};
+        $where = q{last_edit_time > 'now'::timestamptz - ?::interval};
         @bind  = ("$seconds seconds");
     }
     else {
@@ -84,17 +84,51 @@ sub By_tag {
     return $pages;
 }
 
+sub By_id {
+    my $class            = shift;
+    my %p                = @_;
+    my $hub              = $p{hub};
+    my $workspace_id     = $p{workspace_id};
+    my $page_id          = $p{page_id};
+    my $do_not_need_tags = $p{do_not_need_tags};
+
+    my $where;
+    my $bind;
+    if (ref($page_id) eq 'ARRAY') {
+        $where = 'page_id IN (' 
+            . join(',', map { '?' } @$page_id) . ')';
+        $bind = $page_id;
+    }
+    else {
+        $where = 'page_id = ?';
+        $bind = [$page_id];
+    }
+
+    Socialtext::Timer->Continue('By_id');
+    my $pages = $class->_fetch_pages(
+        hub              => $hub,
+        workspace_id     => $workspace_id,
+        where            => $where,
+        bind             => $bind,
+        do_not_need_tags => $do_not_need_tags,
+    );
+    die "No page found for ($workspace_id, $page_id)" unless @$pages;
+    Socialtext::Timer->Pause('By_id');
+    return @$pages == 1 ? $pages->[0] : $pages;
+}
+
 sub _fetch_pages {
     my $class = shift;
     my %p = (
-        bind          => [],
-        where         => '',
-        deleted       => 0,
-        tag           => undef,
-        workspace_id  => undef,
-        workspace_ids => undef,
-        order_by      => undef,
-        limit         => undef,
+        bind             => [],
+        where            => '',
+        deleted          => 0,
+        tag              => undef,
+        workspace_id     => undef,
+        workspace_ids    => undef,
+        order_by         => undef,
+        limit            => undef,
+        do_not_need_tags => 0,
         @_,
     );
 
@@ -102,7 +136,8 @@ sub _fetch_pages {
     my $more_join = '';
     if ( $p{tag} ) {
         $more_join = 'JOIN page_tag USING (page_id, workspace_id)';
-        $p{where} .= ' AND LOWER(page_tag.tag) = LOWER(?)';
+        $p{where} .= ' AND ' if $p{where};
+        $p{where} .= 'LOWER(page_tag.tag) = LOWER(?)';
         push @{ $p{bind} }, $p{tag};
     }
 
@@ -113,7 +148,7 @@ sub _fetch_pages {
             . join( ',', map {'?'} @{ $p{workspace_ids} } ) . ')';
         push @workspace_ids, @{ $p{workspace_ids} };
     }
-    else {
+    elsif ($p{workspace_id}) {
         $workspace_filter = '.workspace_id = ?';
         push @workspace_ids, $p{workspace_id} 
                 ? $p{workspace_id}
@@ -132,6 +167,11 @@ sub _fetch_pages {
         push @{ $p{bind} }, $p{limit};
     }
 
+    my $page_workspace_filter = " AND page$workspace_filter";
+    my $page_workspace_filter = $workspace_filter
+                                   ? " AND page$workspace_filter"
+                                   : '';
+    $p{where} = "AND $p{where}" if $p{where};
     my $sth = sql_execute(
         <<EOT,
 SELECT page.workspace_id, 
@@ -158,8 +198,8 @@ SELECT page.workspace_id,
         JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
         $more_join
     WHERE page.deleted = ?::bool
-      AND page$workspace_filter
-        $p{where}
+      $page_workspace_filter
+      $p{where}
     $order_by
     $limit
 EOT
@@ -170,6 +210,7 @@ EOT
 
     my @pages = map { Socialtext::Model::Page->new_from_row($_) }
         map { $_->{hub} = $p{hub}; $_ } @{ $sth->fetchall_arrayref( {} ) };
+    return \@pages if $p{do_not_need_tags};
 
     # Fetch all the tags for these pages
     # We will fetch all the page_tag, and then filter out which pages
@@ -182,10 +223,13 @@ EOT
         my $key = "$p->{workspace_id}-$p->{page_id}";
         $ids{$key} = $p;
     }
+    my $pagetag_workspace_filter = $workspace_filter
+                                     ? " WHERE page_tag$workspace_filter"
+                                     : '';
     $sth = sql_execute( <<EOT, @workspace_ids );
 SELECT workspace_id, page_id, tag 
     FROM page_tag 
-    WHERE page_tag$workspace_filter
+    $pagetag_workspace_filter
 EOT
     while ( my $row = $sth->fetchrow_arrayref ) {
         next unless $row;

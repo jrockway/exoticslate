@@ -8,6 +8,7 @@ use Socialtext::Exceptions qw( data_validation_error );
 
 use Digest::SHA1 ();
 use Email::Valid;
+use Socialtext::Cache;
 use Socialtext::Data;
 use Socialtext::String;
 use Socialtext::SQL 'sql_execute';
@@ -91,39 +92,46 @@ sub Count {
     return $sth->fetchall_arrayref->[0][0];
 }
 
-{
-    my %User_cache;
-    sub ResetUserCache { %User_cache = () }
-    sub GetUser {
-        my ( $self, %p ) = @_;
-
-        # 'user_id' should *only* ever be numeric; if its anything else, fail
-        # quietly.
-        #
-        # Need this check as other User Factories may have non-numeric user
-        # ids, and a lookup by "user_id" may get passed through to this
-        # factory with a non-numeric value.
-        if (exists $p{user_id} && ($p{user_id} =~ /\D/)) {
-            return undef;
-        }
-
-        if (exists $p{user_id}) {
-            return $User_cache{ $p{user_id} } ||= $self->_new_from_where( 
-                'user_id', $p{user_id} 
-            );
-        }
-        if (exists $p{username}) {
-            return $User_cache{ lc $p{username} } ||= $self->_new_from_where(
-                'LOWER(username)' => _clean_username_or_email( lc $p{username} ),
-            );
-        }
-        return $User_cache{ lc $p{email_address} } ||= $self->_new_from_where(
-            'LOWER(email_address)' => 
-                _clean_username_or_email(lc $p{email_address}),
-        );
-    }
+sub _cache {
+    return Socialtext::Cache->cache('user_default_factory');
 }
 
+sub GetUser {
+    my ( $self, %p ) = @_;
+
+    # 'user_id' should *only* ever be numeric; if its anything else, fail
+    # quietly.
+    #
+    # Need this check as other User Factories may have non-numeric user
+    # ids, and a lookup by "user_id" may get passed through to this
+    # factory with a non-numeric value.
+    if ( exists $p{user_id} && ( $p{user_id} =~ /\D/ ) ) {
+        return undef;
+    }
+
+    # look up the user in the DB, caching where possible
+    my ( $key, $where );
+    if ( exists $p{user_id} ) {
+        $key   = $p{user_id};
+        $where = 'user_id';
+    }
+    elsif ( exists $p{username} ) {
+        $key   = _clean_username_or_email( lc $p{username} );
+        $where = 'LOWER(username)';
+    }
+    else {
+        $key   = _clean_username_or_email( lc $p{email_address} );
+        $where = 'LOWER(email_address)';
+    }
+
+    my $cache = $self->_cache();
+    my $user  = $cache->get($key);
+    unless ($user) {
+        $user = $self->_new_from_where( $where, $key );
+        $cache->set( $key, $user );
+    }
+    return $user;
+}
 
 sub _new_from_where {
     my ( $self, $where_clause, @bindings ) = @_;
@@ -172,7 +180,7 @@ sub delete {
     my $sth = sql_execute( 'DELETE FROM "User" WHERE user_id=?', $user->user_id );
 
     # flush cache; removed a User from the DB
-    $self->ResetUserCache();
+    $self->_cache->clear();
 
     return $sth;
 }
@@ -201,7 +209,7 @@ sub update {
     }
 
     # flush cache; updated User in DB
-    $self->ResetUserCache();
+    $self->_cache->clear();
 
     return $user;
 }

@@ -124,7 +124,7 @@ sub date_display_format {
     $p->query( loc('How should displayed dates be formatted?') );
     $p->type('pulldown');
 
-    my $time = Socialtext::Date->now( timezone => 'UTC' );
+    my $time = $self->_now;
     my $hub = $self->hub;
     $p->choices_callback(sub {
         my $p = shift;
@@ -152,9 +152,7 @@ sub time_display_12_24 {
     $p->query(
         loc('Should times be displayed in 12-hour or 24-hour format?') );
 
-    my $time;
-
-    $time = Socialtext::Date->now( timezone => 'UTC' );
+    my $time = $self->_now;
     $p->type('pulldown');
     $p->choices_callback( sub {
         my $p = shift;
@@ -185,7 +183,7 @@ sub time_display_seconds {
     return $p;
 }
 
-sub adjust_timezone {
+sub _timezone_offset {
     my $self     = shift;
     my $datetime     = shift;
     my $timezone = $self->preferences->timezone->value;
@@ -194,13 +192,10 @@ sub adjust_timezone {
     $timezone =~ /([-+])(\d\d)(\d\d)/;
     my $offset = ( ( $2 * 60 ) + $3 ) * 60;
     $offset *= -1 if $1 eq '-';
-
-    $datetime->add( seconds => $offset );
-
-    return $datetime;
+    return $offset;
 }
 
-sub adjust_dst {
+sub _dst_offset {
     my $self = shift;
     my $datetime     = shift;
     my $dst = $self->preferences->dst->value;
@@ -213,9 +208,7 @@ sub adjust_dst {
         : ( $dst eq 'auto-us' and $isdst ) ? 3600
         : 0;
 
-    $datetime->add( seconds => $offset );
-
-    return $datetime;
+    return $offset;
 }
 
 sub date_local_epoch {
@@ -347,19 +340,20 @@ sub get_date {
 
     my $locale = $self->hub->best_locale;
 
-    my $time_display_format = $time_display_12_24;
-    $time = $self->adjust_timezone($time);
-    $time = $self->adjust_dst($time);
+    # $time->add is slow, so only do it once here
+    my $offset = $self->_timezone_offset($time) + $self->_dst_offset($time);
+    $time->add( seconds => $offset );
 
     # When display year is not equal this year,
     # the formats skipped year must be added year (ref. %WithYear).
-    my $now = Socialtext::Date->now( timezone => 'UTC');
+    my $now = $self->_now;
     if ($time->year != $now->year){
         $date_display_format = Socialtext::Date::l10n->get_date_to_year_key_map( $date_display_format, $locale );
     }
 
     $d = $self->_get_date( $time, $date_display_format, $locale );
 
+    my $time_display_format = $time_display_12_24;
     if ($time_display_seconds) {
         $t = $self->_get_time_sec( $time, $time_display_format, $locale );
     }else {
@@ -369,6 +363,14 @@ sub get_date {
     return ("$d $t");
 }
 
+# No sence fetching now more than once per request, eh?
+sub _now {
+    my $self = shift;
+    unless ($self->{_now}) {
+        $self->{_now} = Socialtext::Date->now( timezone => 'UTC' );
+    }
+    return $self->{_now};
+}
 
 sub timezone_seconds {
     my $self     = shift;

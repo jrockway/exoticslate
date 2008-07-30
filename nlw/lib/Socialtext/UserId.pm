@@ -7,6 +7,7 @@ use warnings;
 our $VERSION = '0.01';
 
 use Class::Field 'field';
+use Socialtext::Cache;
 use Socialtext::SQL qw( sql_execute );
 
 field 'system_unique_id';
@@ -70,42 +71,51 @@ sub new {
         : $class->_new_from_homunculus(%p);
 }
 
+sub _cache {
+    return Socialtext::Cache->cache('user_id');
+}
 
-{
-    my %User_cache;
-    sub ResetUserCache { %User_cache = () }
+sub _new_from_system_unique_id {
+    my ( $class, %p ) = @_;
+    my $cache = $class->_cache();
+    my $key   = "system_unique_id=$p{system_unique_id}";
 
-    sub _new_from_system_unique_id {
-        my ( $class, %p ) = @_;
+    my $user_id = $cache->get($key);
+    unless ($user_id) {
+        $user_id = $class->_new_from_where(
+            'system_unique_id=?' => $p{system_unique_id} );
+        $cache->set( $key, $user_id );
+    }
+    return $user_id;
+}
 
-        my $key = "system_unique_id=$p{system_unique_id}";
-        return $User_cache{$key} ||= $class->_new_from_where(
-            'system_unique_id=?' => $p{system_unique_id}
-        );
+sub _new_from_homunculus {
+    my ( $class, %p ) = @_;
+
+    my $where_clause;
+    my @args;
+
+    my $key;
+    if (exists $p{driver_unique_id}) {
+        $key = "$p{driver_key}-id=$p{driver_unique_id}";
+        $where_clause = 'driver_key=? AND driver_unique_id=?';
+        @args = ($p{driver_key}, $p{driver_unique_id});
+    }
+    else {
+        $key = "$p{driver_key}-user=$p{driver_username}";
+        $where_clause = 'driver_key=? AND driver_username=?';
+        @args = ($p{driver_key}, $p{driver_username});
     }
 
-    sub _new_from_homunculus {
-        my ( $class, %p ) = @_;
-
-        my $where_clause;
-        my @args;
-
-        my $key;
-        if (exists $p{driver_unique_id}) {
-            $key = "$p{driver_key}-id=$p{driver_unique_id}";
-            $where_clause = 'driver_key=? AND driver_unique_id=?';
-            @args = ($p{driver_key}, $p{driver_unique_id});
-        }
-        else {
-            $key = "$p{driver_key}-user=$p{driver_username}";
-            $where_clause = 'driver_key=? AND driver_username=?';
-            @args = ($p{driver_key}, $p{driver_username});
-        }
-
-        return $User_cache{$key} ||= $class->_new_from_where( 
+    my $cache   = $class->_cache();
+    my $user_id = $cache->get($key);
+    unless ($user_id) {
+        $user_id = $class->_new_from_where(
             $where_clause => @args,
         );
+        $cache->set( $key, $user_id );
     }
+    return $user_id;
 }
 
 sub _new_from_where {
@@ -148,7 +158,7 @@ sub delete {
     );
 
     # flush cache; removed a UserId from the DB
-    $self->ResetUserCache();
+    $self->_cache->clear();
 
     return $sth;
 }
@@ -174,7 +184,7 @@ sub update {
     }
 
     # flush cache; updated UserId record
-    $self->ResetUserCache();
+    $self->_cache->clear();
 
     return $self;
 }
@@ -270,12 +280,6 @@ Delete the record from the database.
 =head2 $uid->driver_username()
 
 Returns the corresponding attribute for the sparse user information.
-
-=head1 CLASS METHODS
-
-=head2 ResetUserCache()
-
-Clears the cache of UserId objects.
 
 =head1 AUTHOR
 

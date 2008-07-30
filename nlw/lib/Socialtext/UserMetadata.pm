@@ -7,6 +7,7 @@ use warnings;
 our $VERSION = '0.01';
 
 use Class::Field 'field';
+use Socialtext::Cache;
 use Socialtext::Exceptions qw( data_validation_error param_error );
 use Socialtext::SQL 'sql_execute';
 use Socialtext::Validate qw( validate SCALAR_TYPE BOOLEAN_TYPE ARRAYREF_TYPE WORKSPACE_TYPE );
@@ -56,24 +57,30 @@ sub create_if_necessary {
 # should alreaby be loaded with our data
 sub to_hash { shift }
 
-{
-    my %User_cache;
-    sub ResetUserCache { %User_cache = () }
+sub _cache {
+    return Socialtext::Cache->cache('user_metadata');
+}
 
-    sub new {
-        my ( $class, %p ) = @_;
-        return $User_cache{ $p{user_id} } if $User_cache{ $p{user_id} };
+sub new {
+    my ( $class, %p ) = @_;
 
+    my $cache = $class->_cache();
+    my $key   = $p{user_id};
+
+    my $metadata = $cache->get($key);
+    unless ($metadata) {
         my $sth = sql_execute(
             'SELECT * FROM "UserMetadata" WHERE user_id=?',
             $p{user_id},
         );
 
-        my $hash = $sth->fetchrow_hashref;
-        return undef unless $hash;
-        bless $hash, $class;
-        return $User_cache{ $p{user_id} } = $hash;
+        $metadata = $sth->fetchrow_hashref;
+        return undef unless $metadata;
+        bless $metadata, $class;
+
+        $cache->set( $key, $metadata );
     }
+    return $metadata;
 }
 
 sub create {
@@ -106,7 +113,7 @@ sub delete {
     );
 
     # flush cache; removed a UserMetadata from the DB
-    $self->ResetUserCache();
+    $self->_cache->clear();
 
     return $sth;
 }
@@ -297,12 +304,6 @@ has never logged in.
 
 Returns a C<Socialtext::User> object for the user which created this
 user.
-
-=head1 CLASS METHODS
-
-=head2 ResetUserCache()
-
-Clears the cache of UserId objects.
 
 =head1 AUTHOR
 

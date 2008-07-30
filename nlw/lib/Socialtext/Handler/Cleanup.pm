@@ -5,17 +5,13 @@ use warnings;
 
 use Apache;
 use File::Temp 0.16 ();
-use Socialtext::User::Default::Factory;
-use Socialtext::UserId;
-use Socialtext::UserMetadata;;
+use Socialtext::Cache;
 
 sub handler {
     my $r = shift;
 
-    # Clean up DB lookup caches
-    Socialtext::User::Default::Factory->ResetUserCache();
-    Socialtext::UserId->ResetUserCache();
-    Socialtext::UserMetadata->ResetUserCache();
+    # Clean up lookup caches
+    Socialtext::Cache->clear();
 
     File::Temp::cleanup();
 

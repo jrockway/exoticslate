@@ -127,7 +127,7 @@ sub best_locale {
 }
 
 sub system_locale {
-    return Socialtext::AppConfig->new->locale();
+    return Socialtext::AppConfig->instance->locale();
 }
 
 # Override AppConfig's loc(), b/c of a module cross-dependency

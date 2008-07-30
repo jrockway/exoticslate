@@ -8,7 +8,7 @@ use base 'Socialtext::Query::Plugin';
 use Class::Field qw( const field );
 use Socialtext::Search qw( search_on_behalf );
 use Socialtext::Search::AbstractFactory;
-use Socialtext::Pages;
+use Socialtext::Model::Pages;
 use Socialtext::Workspace;
 use Socialtext::l10n qw(loc);
 use Socialtext::Log qw( st_log );
@@ -56,31 +56,21 @@ sub register {
 sub search {
     my $self = shift;
     my $timer = Socialtext::Timer->new;
-    # since we dispatch to the heavyweight search in the presence of
-    # 'search_term', and since we want to keep track of the original search
-    # term when we use the cached results set, we keep a parallel
-    # 'orig_search_term' around to populate those links.
-    #
-    # REVIEW: Icky, gross, patches welcome.
-    #
-    my $search_term;
-    my $workspace_in_search_term;
-    my %sortdir = %{$self->sortdir};
 
     $self->sortby( $self->cgi->sortby || 'Relevance' );
 
+    my $search_term;
+    my $scope = $self->cgi->scope || '_';
     if ( $self->cgi->defined('search_term') ) {
         $search_term = $self->cgi->search_term;
-        if ( $search_term =~ m/workspace\:/ ) {
-            $workspace_in_search_term = 1;
-        }
         $self->hub->log->debug( 'performing search for '
                 . $search_term );
         $self->search_for_term(
             search_term => $search_term,
-            scope       => $self->cgi->scope
+            scope       => $scope
         );
     }
+    my %sortdir = %{$self->sortdir};
     $self->result_set( $self->sorted_result_set( \%sortdir ) );
 
     my $uri_escaped_search_term
@@ -88,7 +78,7 @@ sub search {
 
     st_log()
         ->info( "SEARCH,WORKSPACE,term:'"
-            . $search_term
+            . ($search_term || '')
             . "',num_results:"
             . $self->result_set->{hits}
             . ',[' . $timer->elapsed . ']');
@@ -99,15 +89,16 @@ sub search {
         allow_relevance => 1,
         search_term => $self->cgi->search_term
             || $self->cgi->orig_search_term,
-        scope => $self->cgi->scope || '',
+        scope => $scope || '',
         show_workspace =>
-            (          ( $self->cgi->scope ne '_' )
+            (          ( $scope ne '_' )
                     || ( $self->cgi->search_term      =~ /\bworkspaces:\S+/ )
                     || ( $self->cgi->orig_search_term =~ /\bworkspaces:\S+/ )
                     || 0 ),
         feeds => $self->_feeds(
-            $self->hub->current_workspace, search_term => $search_term,
-            scope => $self->cgi->scope,
+            $self->hub->current_workspace, 
+            search_term => $search_term,
+            scope => $scope,
         ),
         title      => loc('Search Results'),
         unplug_uri => "?action=unplug;search_term="
@@ -199,6 +190,7 @@ sub search_for_term {
 sub _new_search {
     my ( $self, %query ) = @_;
 
+    Socialtext::Timer->Start('search_on_behalf');
     my @hits = search_on_behalf(
         $self->hub->current_workspace->name,
         $query{search_term},
@@ -207,26 +199,58 @@ sub _new_search {
         sub { },    # FIXME: We'd rather message the user than ignore these.
         sub { }     # FIXME: We'd rather message the user than ignore these.
     );
+    Socialtext::Timer->Stop('search_on_behalf');
+
+    eval { $self->_load_pages_for_hits(\@hits) };
+    warn $@ if $@;
 
     my %cache;
     my @results;
-
+    Socialtext::Timer->Start('hitrows');
     for my $hit (@hits) {
         my $key = $hit->composed_key;
         next if $cache{$key};
-        my $row;
-        eval {
-            $row = $self->_make_row($hit);
-        };
-        next if $@; # REVIEW: this seems weird, it wasn't necessary before
+        my $row = $self->_make_row($hit);
+
         # Only add non-empty rows to the result_set.
         if (defined $row and keys %$row) {
             $cache{$key}++;
             push @results, $row;
         }
     }
+    Socialtext::Timer->Stop('hitrows');
 
     return @results;
+}
+
+# Fetch pages in the bulk per workspace for search results
+# We'll stick the pageref in the hit object for later
+sub _load_pages_for_hits {
+    my $self = shift;
+    my $hits = shift;
+    
+    my %pages;
+    for my $hit (@$hits) {
+        push @{$pages{$hit->workspace_name}{$hit->page_uri}}, $hit;
+    }
+    for my $workspace_name (keys %pages) {
+        my ($workspace, $hit_hub)
+            = $self->_load_hit_workspace_and_hub($workspace_name);
+        my $wksp_pages = $pages{$workspace_name};
+        my $pages = Socialtext::Model::Pages->By_id(
+            hub              => $hit_hub,
+            workspace_id     => $workspace->workspace_id,
+            page_id          => [ keys %$wksp_pages ],
+            do_not_need_tags => 1,
+        );
+
+        for my $page (@$pages) {
+            my $page_hits = $wksp_pages->{$page->id};
+            for my $hit (@$page_hits) {
+                $hit->{page} = $page;
+            }
+        }
+    }
 }
 
 sub _load_hit_workspace_and_hub {
@@ -265,45 +289,22 @@ sub _make_row {
     my ($workspace, $hit_hub)
         = $self->_load_hit_workspace_and_hub($hit->workspace_name);
 
-    my $page;
-    my $attachment;
-    my $is_page_deleted;
-    my $metadata;
-    my $author;
-    my $resource_link;
-    
     my $page_uri = $hit->page_uri;
-    $page = $hit_hub->pages->new_page($page_uri);
-    $is_page_deleted = $page->deleted;
+    my $page = $hit->{page} || Socialtext::Model::Pages->By_id(
+        hub          => $hit_hub,
+        workspace_id => $workspace->workspace_id,
+        page_id      => $page_uri,
+    );
 
-    if ( not $is_page_deleted ) {
-        $metadata      = $page->metadata;
-        $author        = $page->last_edited_by;
-    }
+    return {} if $page->deleted;
 
-    return {} if $is_page_deleted;
-
-    # $author will be undef if the page_uri in the index
-    # does not correspond with any existing page. This can happen
-    # when pages with page ids are created (happened in the
-    # way past, but is cleared up now).
-    unless ($author) {
-        $self->hub->log->warning( 'search result skipped: '
-                . $workspace->name . ': \''
-                . $page_uri
-                . '\' has no author or is a bad page id' );
-        return {};
-    }
-
-    my $author_name = $author->best_full_name(
-        workspace => $workspace );
-
-    my $document_title = $metadata->Subject;
-    my $date = $metadata->Date;
+    my $author = $page->last_edited_by;
+    my $document_title = $page->title;
+    my $date = $page->last_edit_time;
     my $date_local = $page->datetime_for_user;
     my $snippet = $hit->snippet || $page->summary;
     my $id = $page->id;
-
+    my $attachment;
     if ( $hit->isa('Socialtext::Search::AttachmentHit') ) {
         my $attachment_id = $hit->attachment_id;
         $attachment = $hit_hub->attachments->new_attachment(
@@ -323,10 +324,10 @@ sub _make_row {
     return +{
         Relevance           => $hit->hit->{score},
         Date                => $date,
-        Revision            => $metadata->Revision,
+        Revision            => $page->current_revision_num,
         Summary             => $snippet,
         document_title      => $document_title,
-        Subject             => $metadata->Subject,
+        Subject             => $page->title,
         DateLocal           => $date_local,
         revision_count      => $page->revision_count,
         page_uri            => $page->uri,

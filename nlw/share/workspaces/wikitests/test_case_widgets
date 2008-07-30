@@ -23,5 +23,5 @@
 | st-widget-body-like | logical | fullname |
 | st-select-widget-frame | logical |  |
 | text-present-like | fullname |  |
-| select-frame | relative=parent |  |
+| select-frame | relative=top |  |
 | pause | 3000 |  |

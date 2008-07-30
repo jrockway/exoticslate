@@ -60,7 +60,7 @@ sub st_empty_container {
     my ($self) = @_;
     $self->{selenium}->open_ok("?action=clear_widgets");
     $self->{selenium}->wait_for_page_to_load_ok(10000);
-    my $widgetlist = $self->{selenium}->get_text("id=widgetList");
+    my $widgetlist = $self->{selenium}->get_value("id=widgetList");
     diag "Widgets: $widgetlist\n"; 
 }
 
@@ -115,7 +115,7 @@ widget. All future references to this widget will be made using this logical nam
 sub st_name_widget {
     my ($self, $position, $logical) = @_;
     my @widgetlist = $self->_getWidgetList;
-    $self->{_widgets}{$logical} = (grep {/^[^_]+_$position$/} @widgetlist)[0];
+    $self->{_widgets}{$logical} = $widgetlist[$position-1];
     diag "Named this widget '$logical': ".$self->{_widgets}{$logical}."\n";
 }
 
@@ -191,7 +191,7 @@ sub st_widget_body_like {
     my ($self, $logical, $opt1) = @_;
     $self->{selenium}->select_frame('xpath=//iframe[@id="'.$self->{_widgets}{$logical}.'-iframe"]');
     $self->{selenium}->text_like('//body', $opt1);
-    $self->{selenium}->select_frame("relative=parent");
+    $self->{selenium}->select_frame("relative=top");
 }
 
 =head2 st_select_widget_frame ( logical_name )
@@ -263,7 +263,7 @@ ENDJS2
 
 sub _getWidgetList {
     my ($self) = @_;
-    my $widgetlist = $self->{selenium}->get_text("id=widgetList");
+    my $widgetlist = $self->{selenium}->get_value("id=widgetList");
     return split(/,/, $widgetlist);
 }
 

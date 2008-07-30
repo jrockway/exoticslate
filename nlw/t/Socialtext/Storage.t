@@ -8,7 +8,7 @@ my $tempid = 'TESTING';
 
 use Socialtext::AppConfig;
 
-use_ok Socialtext::Storage;
+use_ok 'Socialtext::Storage';
 
 INIT_SET: {
     my $storage = Socialtext::Storage->new($tempid);

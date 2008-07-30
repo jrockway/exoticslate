@@ -27,7 +27,7 @@ sub Search {
 
     my $all_keys = join ", ", @keys;
     my $all_selects = join "\n", @selects;
-    my $sql = "SELECT class, $all_keys FROM ( $all_selects )";
+    my $sql = "SELECT class, $all_keys FROM $all_selects";
 
     my $sth = sql_execute($sql, map { $_ => $terms{$_} } @keys);
     my $res = $sth->fetchall_arrayref;

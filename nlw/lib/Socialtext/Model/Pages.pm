@@ -167,7 +167,6 @@ sub _fetch_pages {
         push @{ $p{bind} }, $p{limit};
     }
 
-    my $page_workspace_filter = " AND page$workspace_filter";
     my $page_workspace_filter = $workspace_filter
                                    ? " AND page$workspace_filter"
                                    : '';

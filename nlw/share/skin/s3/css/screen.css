@@ -870,3 +870,20 @@ td.person a {
     background-color: #ccc;
     text-decoration: line-through;
 }
+
+.st-revision-compare-new {
+    background-color: yellow;
+}
+
+.revision-compare-table-header div {
+    padding-bottom: 10px
+}
+
+.revision-chunk-before {
+    padding-bottom: 10px;
+    padding-right: 10px;
+}
+
+#st-revision-tags {
+    padding-top: 20px;
+}

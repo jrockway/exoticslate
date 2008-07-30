@@ -1,6 +1,6 @@
 [%# @COPYRIGHT@ -%]
 [% USE decorate %]
-[% WRAPPER layout/html id="st-revisioncompare" title="${display_title}: ${display_title_decorator}" %]
+[% WRAPPER layout/html id="contentPage" title="${display_title}: ${display_title_decorator}" %]
 
 <div id="controls">
     <div id="st-editing-tools-edit">
@@ -11,12 +11,17 @@
            <li><a href="[% script_name %]?action=revision_list;page_id=[% page_uri %]">
                [% loc('All Revisions') %]</a>
            </li>
-           <li><a href="[% script_name %]?action=revision_compare;page_name=[% page_uri %];new_revision_id=[% new_revision_id %];old_revision_id=[% old_revision_id %]">
-               [% loc('View Formatted') %]</a>
+           <li><a href="[% script_name %]?action=revision_compare;page_name=[% page_uri %];new_revision_id=[% new_revision_id %];old_revision_id=[% old_revision_id %][% IF mode != 'source' %];mode=source[% END %]">
+               [% IF mode != 'source' %]
+                   [% loc('Color View (Unformatted)') %]
+               [% ELSE %]
+                   [% loc('View Formatted') %]
+               [% END %]
+               </a>
            </li>
        </ul>
     </div><!-- controlsLeft END -->
-    <div id="controlsRight">
+    <div id="controlsRight">&nbsp;
     </div><!-- controlsRight END -->
 </div><!-- controls END -->
 <div id="contentContainer">
@@ -26,20 +31,24 @@
             [% tag.name | html %]</span>
     [% END %]
     </div>
-    <table>
+    <table id="revision-compare-table">
         <tr>
         [% FOR col IN header %]
-            <td>
+            <td class="revision-compare-table-header">
+            <div class=st-revision-view-link">
+                <h2>[% col.link %]</h2>
+            </div>
             <div class="st-revision-tags">
-                [% loc('Tags:') %][% col.tags %]</div>
+                [% loc('Tags:') %][% col.tags %]
+            </div>
             <div class="st-revision-attribution">[% loc('By:') %][% col.editor | decorate('user_avatar') %]</div>
             </td>
         [% END %]
         </tr>
     [% FOR row IN diff_rows %]
         <tr>
-            <td valign="top">[% row.before %]</td>
-            <td valign="top">[% row.after %]</td>
+            <td valign="top" class="revision-chunk-before">[% row.before %]</td>
+            <td valign="top" class="revision-chunk-after">[% row.after %]</td>
         </tr>
     [% END %]
     </table>

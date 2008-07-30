@@ -1,24 +1,27 @@
-| *Comment* | STARTING Test case: WIDGETS| |
+| *Comment* | STARTING Test case: WIDGETS |  |
 
-| *Comment* | Test case: Clear Dashboard| |
-| open_ok | /?dashboard | |
-| st-empty-container | | |
+* Fixture: SocialWidgets
 
-| *Comment* | Test case: Reset Dashboard| |
-| st-reset-container | | |
-| st-wait-for-all-widgets-load | | |
+| *Comment* | Test case: WIDGETS |  |
+| open_ok | /?dashboard | 60000 |
+| st-empty-container |  |  |
 
-| *Comment* | Test case: Add Recent Changes Widget | |
-| st-add-widget| gadgets/share/gadgets/recent_changes.xml | logical |
-| st_wait_for_widget_load| logical | 5000 |
+| *Comment* | Test case: WIDGETS |  |
+| st-reset-container |  |  |
+| st-wait-for-all-widgets-load |  |  |
+
+| *Comment* | Test case: WIDGETS |  |
+| st-add-widget | gadgets/share/gadgets/recent_changes.xml | logical |
+| st_wait_for_widget_load | logical | 15000 |
 | st-name-widget | 1 | foo |
-| st-widget-settings | logical | |
-| pause | 1000 | |
-| st-minimize-widget | logical | |
-| pause | 1000 | |
+| st-widget-settings | logical |  |
+| pause | 3000 |  |
+| st-minimize-widget | logical |  |
+| pause | 3000 |  |
 
-| st-widget-title-like | logical | All C|
-| st-widget-body-like | logical | fullname|
-| st-select-widget-frame | logical | |
-| text-present-like | fullname | |
-| select-frame | relative=parent | |
+| st-widget-title-like | logical | All C |
+| st-widget-body-like | logical | fullname |
+| st-select-widget-frame | logical |  |
+| text-present-like | fullname |  |
+| select-frame | relative=parent |  |
+| pause | 3000 |  |

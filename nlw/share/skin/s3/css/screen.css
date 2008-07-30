@@ -866,6 +866,10 @@ td.person a {
 
 /* Revision comparison */
 
+#st-page-title {
+    padding-bottom: 12px;
+}
+
 .st-revision-compare-old {
     background-color: #ccc;
     text-decoration: line-through;
@@ -886,4 +890,13 @@ td.person a {
 
 #st-revision-tags {
     padding-top: 20px;
+}
+
+/* 
+ * Override default behaviour when we don't have to contend with the
+ * sideboxes.
+ */
+#st-revision-display #contentColumns #st-page-maincontent {
+    float: none;
+    width: auto;
 }

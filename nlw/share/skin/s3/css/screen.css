@@ -719,6 +719,13 @@ div#st-pagetools li {
     font-weight:normal;
 }
 
+/* 
+ * Override the default location of a person's link when looking at tabular
+ * data.
+ */
+td.person a {
+    top: 0px !important;
+}
 .query-results-row-summary strong {
     background:#ffd;
     padding:2px;

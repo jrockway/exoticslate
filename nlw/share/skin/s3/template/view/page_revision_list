@@ -1,21 +1,25 @@
 [%# @COPYRIGHT@ -%]
 [% USE decorate %]
-[% WRAPPER layout/html id="revisions" title = loc("[_1]: All Revisions", display_title) %]
-<form id="compare_revisions" onsubmit="return check_revisions(this);">
-    <input type="hidden" name="action" value="revision_compare" />
-    <input type="hidden" name="page_name" value="[% page_name %]" />
-    <input type="hidden" name="mode" value="source" />
+[% WRAPPER layout/html id="contentPage" title = loc("[_1]: All Revisions", display_title) %]
 <div id="controls">
     <div id="st-editing-tools-edit">
+        <ul>
      [% IF page.metatdata.Type != 'spreadsheet';
          PROCESS compare_revisions;
-     END %]&nbsp;
-     </div><!-- controlsLeft END -->
+     END %]
+         </ul>
+     </div><!-- st-editing-tools-edit END -->
      <div id="controlsRight"></div><!-- controlsRight END -->
 </div><!-- controls END -->
+
 <div id="contentContainer">
     <h2 class="tableTitle">[% display_title %]: <a href="[% "${script_name}?${page_uri}" %]">[% loc("Back to Current Revision") %]</a></h2>
+    <form id="compare_revisions" onsubmit="return check_revisions(this);">
+        <input type="hidden" name="action" value="revision_compare" />
+        <input type="hidden" name="page_name" value="[% page_name %]" />
+        <input type="hidden" name="mode" value="source" />
     <table class="dataTable">
+        <tbody>
         <tr>
             <th colspan="2" class="selectColumn">[% loc("Select") %]</th>
             <th>[% loc("View Revision") %]</th>
@@ -24,37 +28,38 @@
         </tr>
         [% FOREACH row IN rows;
             PROCESS revision_row id        = row.id,
-                                 odd       = loop.cound % 2,
+                                 even      = loop.count % 2,
                                  check_old = loop.index == 1,
                                  check_new = loop.index == 0,
                                  revision  = row.number,
                                  from      = row.from,
                                  date      = row.date;
         END %]
-            </table><!-- dataTable END -->
-        <div class="clear"></div><!-- clear END -->
+        </tbody>
+    </table><!-- dataTable END -->
+    </form>
+    <div class="clear"></div><!-- clear END -->
     <div id="bottomButtons">
-    [% IF page.metatdata.Type != 'spreadsheet'; 
-        PROCESS compare_revisions; 
-    END %]
+        <ul>
+        [% IF page.metatdata.Type != 'spreadsheet'; 
+            PROCESS compare_revisions; 
+        END %]
+        </ul>
     </div><!-- bottomButtons -->
 </div><!-- contentContainer -->    
-</form>
 [% END %]
 
 [% BLOCK compare_revisions %]
-    <ul>
         <li>
             <a class="compareButton" href="#" 
                onclick="document.getElementById('compare_revisions').submit()">
                 [% loc("Compare Revisions") %]
             </a>
         </li>
-    </ul>               
 [% END %]
 
 [% BLOCK revision_row %]
-    <tr class="[% IF odd %]odd[% ELSE %]even[% END %]Row">
+    <tr class="[% IF even %]even[% ELSE %]odd[% END %]Row">
         <td><input name="old_revision_id" value="[% id %]" type="radio"
             [% IF check_old %] checked="checked"[% END %] 
             [% UNLESS page.metadata.Type != 'spreadsheet' %] disabled="disabled"[% END %] />

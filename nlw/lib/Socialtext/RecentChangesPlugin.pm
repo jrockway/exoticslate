@@ -177,6 +177,7 @@ sub new_changes {
         $display_title = loc("All Pages");
         $pages_ref = Socialtext::Model::Pages->All_active(
             hub => $self->hub,
+            workspace_id => $self->hub->current_workspace->workspace_id,
         );
     }
     else {
@@ -191,6 +192,7 @@ sub new_changes {
             $category ? ( tag => $category ) : (),
             seconds => $minutes * 60,
             count => $p{count},
+            workspace_id => $self->hub->current_workspace->workspace_id,
         );
     }
 

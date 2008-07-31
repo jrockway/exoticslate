@@ -5,23 +5,56 @@
 | *Comment* | Test case: WIDGETS |  |
 | open_ok | /?dashboard | 60000 |
 | st-empty-container |  |  |
+| pause | 2000 |  |
 
-| *Comment* | Test case: WIDGETS |  |
-| st-reset-container |  |  |
-| st-wait-for-all-widgets-load |  |  |
+| *Comment* | Test Case: Widgets - Workspaces Widget |  |
+| st-add-widget | gadgets/share/gadgets/my_workspaces.xml | myworkspace |
+| st_wait_for_widget_load | myworkspace | 45000 |
+| pause | 10000 |  |
+| st-select-widget-frame | myworkspace |  |
+| text-present-like | Canonical Test Data Set |  |
+| select-frame | relative=parent |  |
+| st-widget-title-like | myworkspace | Workspaces |
 
-| *Comment* | Test case: WIDGETS |  |
-| st-add-widget | gadgets/share/gadgets/recent_changes.xml | logical |
-| st_wait_for_widget_load | logical | 15000 |
-| st-name-widget | 2 | foo |
-| st-widget-settings | logical |  |
-| pause | 3000 |  |
-| st-minimize-widget | logical |  |
+| *Comment* | Test Case: Widgets - OnePageWiki - Make Fake Page |  |
+| open_ok | /test-data/index.cgi?action=new_page |  |
+| wait_for_element_present_ok | st-newpage-pagename-edit |  |
+| wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
+| type_ok | st-newpage-pagename-edit | one page %%start_time%% |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | I have created a page called one_page_%%start_time%%. woot. |
+| click_ok | st-save-button-link |  |
+| wait_for_element_present_ok | st-edit-button-link | 25000 |
+
+| *Comment* | Test Case: Widgets - True OnePageWiki |  |
+| open_ok | /?dashboard | 60000 |
+| st-empty-container |  |  |
+| pause | 2000 |  |
+| st-add-widget | gadgets/share/gadgets/one_page.xml | onepage |
+| st_wait_for_widget_load | onepage | 25000 |
+| st-widget-settings | onepage |  |
+| wait_for_element_present_ok | name=up_workspace_name |  |
+| type_ok | up_workspace_name | test-data |
+| type_ok | up_page_title | one_page_%%start_time%% |
+| click_ok | st-savebutton |  |
+| st-select-widget-frame | onepage |  |
+| wait_for_element_present_ok | link=Edit this page |  |
+| text-present-like | I have create a page call one page %%start_time%% |  |
+| click_ok | link=Edit this page |
+| wait_for_element_present_ok | link=Save |
+| wait_for_element_present_ok | link=Cancel |
+
+*** Text-Like will go here once I can figure out the field
+*** Catch up changes
+
+| *Comment* | Test case: Widgets - recent change |  |
+| st-empty-container |  |  |
+| st-add-widget | gadgets/share/gadgets/recent_changes.xml | recentchanges |
+| st_wait_for_widget_load | recentchanges | 15000 |
+| select-frame | relative=parent |  |
+
 | pause | 3000 |  |
 
-| st-widget-title-like | logical | All C |
-| st-widget-body-like | logical | fullname |
-| st-select-widget-frame | logical |  |
-| text-present-like | fullname |  |
-| select-frame | relative=top |  |
-| pause | 3000 |  |
+^ END

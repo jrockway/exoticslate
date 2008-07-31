@@ -10,13 +10,17 @@ our $DefaultExpiresIn = '1m';
 # cache class used
 our $CacheClass = 'Cache::MemoryCache';
 
+# keep track of named caches we've instantiated; its faster that way.
+our %CACHES;
+
 sub cache {
     my ($class, $name) = @_;
-    return $CacheClass->new( {
+    $CACHES{$name} ||= $CacheClass->new( {
         namespace           => $name,
         default_expires_in  => $DefaultExpiresIn,
         auto_purge_on_get   => 1,
         } );
+    return $CACHES{$name};
 }
 
 sub clear {

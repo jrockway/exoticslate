@@ -1,17 +1,17 @@
 | *Comment* | Test Case: Include Page |  |
 
+| set | tcipw | tc-include-page-%%start_time%% |
+| set | title | TC Include Page |
+
+| st-admin | create-workspace --name %%tcipw%% --title "%%title%%" | A new workspace named "%%tcipw%%" was created. |
+| st-admin | add-member --w %%tcipw%% --e %%email%% | %%username%% is now a member of the %%tcipw%% workspace. |
+
 Include a page. Test for included content. Test for edit button.
 Test backlink to including page
 Repeat test using Miki/Lite access.
-remove include wafl. Test that content disappears.
-Repeat test using Miki/Lite access.
-Include a page in a public wiki page when logged in. Test for content and edit button.
-Repeat test using Miki/Lite access.
-Logout. Test for content and absence of edit button.
-Repeat test using Miki/Lite access.
 
 | *Comment* | Test Case: Include Page. Make a page and include the central page in it |  |
-| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
+| open_ok | /%%tcipw%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
@@ -37,7 +37,7 @@ Repeat test using Miki/Lite access.
 | text_like | st-incoming-links | TC Include Page %%start_time%% |
 
 | *Comment* | Test Case: Include Page. Run the same test in Miki |  |
-| open_ok | /lite/page/%%workspace%%/tc_include_page_%%start_time%% |  |
+| open_ok | /lite/page/%%tcipw%%/tc_include_page_%%start_time%% |  |
 
 | wait_for_element_visible_ok | link=%%title%% | 30000 |
 | text_like | //div[@class='wiki-include-title'] | %%title%% |
@@ -49,9 +49,195 @@ Repeat test using Miki/Lite access.
 | wait_for_element_visible_ok | link=Cancel Edit | 30000 |
 | verifyValue | edit_textarea | qr/.+This is the home page for %%title%%.+/ |
 
-^ END
+Include a page in a public wiki page when logged in. Test for content and edit button.
+Repeat test using Miki/Lite access.
+
+| *Comment* | Test Case: Include Page. Include a page in a public wiki page when logged in |  |
+| st-admin | set-permissions --w %%tcipw%% --p public | The permissions for the %%tcipw%% workspace have been changed to public. |
+
+| open_ok | /%%tcipw%%/?TC Include Page %%start_time%% |  |
+| wait_for_element_visible_ok | link=%%title%% | 30000 |
+| text_like | //div[@class='wiki-include-title'] | %%title%% |
+| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+
+| *Comment* | Test Case: Include Page. PUBLIC Open the included page for editing |  |
+| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| click_ok | link=Advanced |  |
+| text_like | st-editing-title | `Editing: %%title%%` |
+| verifyValue | wikiwyg_wikitext_textarea | qr/.+This is the home page for %%title%%.+/ |
+
+| *Comment* | Test Case: Include Page. PUBLIC MIKI Run the same test in Miki |  |
+| open_ok | /lite/page/%%tcipw%%/tc_include_page_%%start_time%% |  |
+
+| wait_for_element_visible_ok | link=%%title%% | 30000 |
+| text_like | //div[@class='wiki-include-title'] | %%title%% |
+| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+
+| *Comment* | Test Case: Include Page. PUBLIC MIKI Open the included page for editing |  |
+| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| wait_for_element_visible_ok | edit_textarea | 30000 |
+| wait_for_element_visible_ok | link=Cancel Edit | 30000 |
+| verifyValue | edit_textarea | qr/.+This is the home page for %%title%%.+/ |
+| click_and_wait | link=Cancel Edit |  |
+
+Logout from Miki. Test for content and edit button in page view.
+Repeat test using Miki/Lite access.
+
+| *Comment* | Test Case: Include Page. PUBLIC MIKI. LOGOUT from Miki |  |
+| click_and_wait | link=Log out |  |
+| text_like | Log in to Socialtext |  |
+
+| *Comment* | Test Case: Include Page. PUBLIC LOGGED OUT. Open page in page view while logged out |  |
+| open_ok | /%%tcipw%%/?TC Include Page %%start_time%% |  |
+| wait_for_element_visible_ok | link=%%title%% | 30000 |
+| text_like | //div[@class='wiki-include-title'] | %%title%% |
+| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+
+| *Comment* | Test Case: Include Page. PUBLIC LOGGED OUT. Open the included page for editing |  |
+| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| click_ok | link=Advanced |  |
+| text_like | st-editing-title | `Editing: %%title%%` |
+| verifyValue | wikiwyg_wikitext_textarea | qr/.+This is the home page for %%title%%.+/ |
+
+| *Comment* | Test Case: Include Page. PUBLIC MIKI LOGGED OUT. Run the same test in Miki |  |
+| open_ok | /lite/page/%%tcipw%%/tc_include_page_%%start_time%% |  |
+
+| wait_for_element_visible_ok | link=%%title%% | 30000 |
+| text_like | //div[@class='wiki-include-title'] | %%title%% |
+| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+
+| *Comment* | Test Case: Include Page. PUBLIC MIKI LOGGED OUT. Open the included page for editing |  |
+| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| wait_for_element_visible_ok | edit_textarea | 30000 |
+| wait_for_element_visible_ok | link=Cancel Edit | 30000 |
+| verifyValue | edit_textarea | qr/.+This is the home page for %%title%%.+/ |
+
+| *Comment* | Test Case: Include Page. AUTH. Login. Open the included page for editing |  |
+| st-admin | set-permissions --w %%tcipw%% --p public-authenticate-to-edit | The permissions for the %%tcipw%% workspace have been changed to public-authenticate-to-edit. |
+| st-login |  |  |
+
+| open_ok | /%%tcipw%%/?TC Include Page %%start_time%% |  |
+| wait_for_element_visible_ok | link=%%title%% | 30000 |
+| text_like | //div[@class='wiki-include-title'] | %%title%% |
+| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+
+| *Comment* | Test Case: Include Page. AUTH Open the included page for editing |  |
+| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| click_ok | link=Advanced |  |
+| text_like | st-editing-title | `Editing: %%title%%` |
+| verifyValue | wikiwyg_wikitext_textarea | qr/.+This is the home page for %%title%%.+/ |
+
+| *Comment* | Test Case: Include Page. AUTH MIKI Run the same test in Miki |  |
+| open_ok | /lite/page/%%tcipw%%/tc_include_page_%%start_time%% |  |
+| wait_for_element_visible_ok | link=%%title%% | 30000 |
+| text_like | //div[@class='wiki-include-title'] | %%title%% |
+| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+
+| *Comment* | Test Case: Include Page. AUTH MIKI Open the included page for editing |  |
+| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| wait_for_element_visible_ok | edit_textarea | 30000 |
+| wait_for_element_visible_ok | link=Cancel Edit | 30000 |
+| verifyValue | edit_textarea | qr/.+This is the home page for %%title%%.+/ |
+| click_and_wait | link=Cancel Edit |  |
+
+Logout from Miki. Test for content and edit button in page view.
+Repeat test using Miki/Lite access.
+
+| *Comment* | Test Case: Include Page. AUTH MIKI. LOGOUT from Miki |  |
+| click_and_wait | link=Log out |  |
+| text_like | Log in to Socialtext |  |
+
+| *Comment* | Test Case: Include Page. AUTH LOGGED OUT. Open page in page view while logged out |  |
+| open_ok | /%%tcipw%%/?TC Include Page %%start_time%% |  |
+| wait_for_element_visible_ok | link=%%title%% | 30000 |
+| text_like | //div[@class='wiki-include-title'] | %%title%% |
+| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+
+| *Comment* | Test Case: Include Page. AUTH LOGGED OUT. CANNOT Open the included page for editing |  |
+| wait_for_element_not_present_ok | //img[contains(@src,'edit-icon.gif')] | 10000 |
+
+| *Comment* | Test Case: Include Page. AUTH MIKI LOGGED OUT. Run the same test in Miki |  |
+| open_ok | /lite/page/%%tcipw%%/tc_include_page_%%start_time%% |  |
+
+| wait_for_element_visible_ok | link=%%title%% | 30000 |
+| text_like | //div[@class='wiki-include-title'] | %%title%% |
+| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+
+| *Comment* | Test Case: Include Page. AUTH MIKI LOGGED OUT. CANNOT Open the included page for editing |  |
+| wait_for_element_not_present_ok | //img[contains(@src,'edit-icon.gif')] | 10000 |
+
+Incipient include works in browser and MIKI
+
+| set | tcipii | Incipient Include %%start_time%% |
+
+| *Comment* | Test Case: Include Page. Create an Incipient Include |  |
+| st-login |  |  |
+| open_ok | /%%tcipw%%/?TC Include Page %%start_time%% |  |
+| click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | `{include: [%%tcipii%%]}` |
+| click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | link=%%tcipii%% | 30000 |
+| text_like | //div[@class='wiki-include-title'] | %%tcipii%% |
+| text_like | //div[@class='wiki-include-content'] | qr/Replace this text with your own/ |
+
+| *Comment* | Test Case: Include Page. Open the incipient included page for editing using the Edit button |  |
+| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| click_ok | link=Advanced |  |
+| text_like | st-editing-title | `Editing:` |
+| verifyValue | st-newpage-pagename-edit | %%tcipii%% |
+| verifyValue | wikiwyg_wikitext_textarea | qr/Replace this text with your own/ |
+
+| *Comment* | Test Case: Include Page. Open the incipient included page for editing using the link |  |
+| open_ok | /%%tcipw%%/?TC Include Page %%start_time%% |  |
+| click_and_wait | link=%%tcipii%% |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| click_ok | link=Advanced |  |
+| text_like | st-editing-title | `Editing:` |
+| verifyValue | st-newpage-pagename-edit | %%tcipii%% |
+| verifyValue | wikiwyg_wikitext_textarea | qr/Replace this text with your own/ |
+
+repeat in Miki
+
+| *Comment* | Test Case: Include Page MIKI. Open the including page |  |
+| open_ok | /lite/page/%%tcipw%%/tc_include_page_%%start_time%% |  |
+| wait_for_element_visible_ok | link=%%tcipii%% | 30000 |
+| text_like | //div[@class='wiki-include-title'] | %%tcipii%% |
+| text_like | //div[@class='wiki-include-content'] | qr/Replace this text with your own/ |
+
+| *Comment* | Test Case: Include Page MIKI. Open the incipient included page for editing using the Edit button |  |
+| *Comment* | Test Case: Include Page MIKI. Page opens for editing |  |
+| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| wait_for_element_visible_ok | edit_textarea | 30000 |
+| wait_for_element_visible_ok | link=Cancel Edit | 30000 |
+| verifyValue | edit_textarea | qr/^$/ |
+| click_and_wait | link=Cancel Edit |  |
+
+| *Comment* | Test Case: Include Page MIKI. Open the incipient included page for editing using the link |  |
+| *Comment* | Test Case: Include Page MIKI. Page appears but not in edit mode. Use Edit link. |  |
+| open_ok | /lite/page/%%tcipw%%/tc_include_page_%%start_time%% |  |
+| click_and_wait | link=%%tcipii%% |  |
+| text_like | qr/Replace this text with your own/ |  |
+| click_and_wait | link=Edit |  |
+| wait_for_element_visible_ok | edit_textarea | 30000 |
+| type_ok | edit_textarea | %%tcipii%% Hello From Miki |
+| click_and_wait | //input[@value='Save'] |  |
+
+| wait_for_element_visible_ok | link=Edit | 30000 |
+| text_like | %%tcipii%% Hello From Miki |  |
 
 | *Comment* | Test Case: Include Page Teardown |  |
-|  |  |  |
+| st-admin | delete-workspace --w %%tcipw%% --no-export |  |
 
 | *Comment* | Test Case: Include Page COMPLETED |  |

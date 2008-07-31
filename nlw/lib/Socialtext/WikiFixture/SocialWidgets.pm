@@ -202,7 +202,7 @@ sub st_widget_settings {
     ok( !$@, "st-widget-settings" );
 }
 
-=head2 st_widget_title_like ( logical_name )
+=head2 st_widget_title_like ( logical_name, regex )
 
 This performs a regex text match on the title of the widget (outside the iframe) with the 
 given logical name.
@@ -216,7 +216,7 @@ sub st_widget_title_like {
     $self->{selenium}->text_like("//span[\@class='gadget_title' and \@id='".$self->{_widgets}{$logical}."-title-text']", $opt1);
 }
 
-=head2 st_widget_body_like ( logical_name )
+=head2 st_widget_body_like ( logical_name, regex )
 
 This performs a regex text match on the body (body element inside the iframe) of the widget 
 with the given logical name.

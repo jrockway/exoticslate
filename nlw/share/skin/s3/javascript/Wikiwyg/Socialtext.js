@@ -881,8 +881,7 @@ proto.get_wikitext_from_html = function(html) {
 }
 
 proto.set_edit_tips_span_display = function(display) {
-    var edit_tips = $('st-edit-tips');
-    edit_tips.style.display = display;
+    jQuery('#st-edit-tips').show();
 }
 
 proto.editMode = function() {
@@ -1010,20 +1009,20 @@ proto._do_link = function(widget_element) {
         var widget = this.parseWidgetElement(widget_element);
         if (widget.section_name && !widget.label && !widget.workspace_id && !widget.page_title) {
             // pre-populate the section link section
-            $("section-link-text").value  = widget.section_name;
-            $("add-section-link").checked = true;
+            jQuery("#section-link-text").val(widget.section_name);
+            jQuery("#add-section-link").attr('checked', true);
         } else { 
             // Pre-populate the wiki link section
-            $("wiki-link-text").value = widget.label || "";
+            jQuery("#wiki-link-text").val(widget.label || "");
 
             var ws_id    = widget.workspace_id || "";
             var ws_title = this.lookupTitle( "workspace_id", ws_id );
             dummy_widget.title_and_id.workspace_id.id    = ws_id;
             dummy_widget.title_and_id.workspace_id.title = ws_title || "";
-            $("st-widget-workspace_id").value            = ws_title || ws_id || "";
+            jQuery("#st-widget-workspace_id").val(ws_title || ws_id || "");
 
-            $("st-widget-page_title").value = widget.page_title || "";
-            $("wiki-link-section").value = widget.section_name || "";
+            jQuery("#st-widget-page_title").val(widget.page_title || "");
+            jQuery("#wiki-link-section").val(widget.section_name || "");
         }
     } else if (selection) {
         // IE returns the actual selection element as a string, rather than
@@ -1032,21 +1031,21 @@ proto._do_link = function(widget_element) {
             selection = selection.replace( /<[^>]+>/g, '' );
         }
 
-        $('st-widget-page_title').value = selection;
-        $('web-link-text').value = selection;
+        jQuery('#st-widget-page_title').val(selection);
+        jQuery('#web-link-text').val(selection);
     }
 
-    if (! $("st-widget-page_title").value ) {
-        $("st-widget-page_title").value = Socialtext.page_title || "";
+    if (! jQuery("#st-widget-page_title").val() ) {
+        jQuery('#st-widget-page_title').val(Socialtext.page_title || "");
     }
 
-    var tmp = $("st-widget-workspace_id").value;
+    var tmp = jQuery("#st-widget-workspace_id").val();
     this.setup_add_a_link_lookahead(box.divs.contentWrapper, dummy_widget);
-    $("st-widget-workspace_id").value = tmp;
+    jQuery('#st-widget-workspace_id').val(tmp);
 
     var self = this;
     var callback = function(element) {
-        var form    = $("add-a-link-form");
+        var form    = jQuery("#add-a-link-form").get(0);
         var onreset = function() {
             box.releaseFocus();
             box.release();
@@ -1058,9 +1057,9 @@ proto._do_link = function(widget_element) {
             if ( jQuery.browser.msie )
                 jQuery("<input type='text'>").appendTo(document.body).focus().remove();
 
-            if ($('add-wiki-link').checked) {
+            if (jQuery('#add-wiki-link').is(':checked')) {
                 if (!self.add_wiki_link(widget_element, dummy_widget)) { return false; }
-            } else if ($('add-section-link').checked) {
+            } else if (jQuery('#add-section-link').is(':checked')) {
                 if (!self.add_section_link(widget_element)) { return false; }
             } else {
                 if (!self.add_web_link()) { return false; }
@@ -1104,7 +1103,8 @@ proto.setup_add_a_link_lookahead = function(dialog, widget) {
     );
 
     this.update_page_lookahead_workspace = function() {
-        var new_ws = $('st-widget-workspace_id').value || Socialtext.wiki_id;
+        var new_ws = jQuery('#st-widget-workspace_id').val() ||
+                     Socialtext.wiki_id;
         if (new_ws != window.pageLookahead.defaultWorkspace) {
             window.pageLookahead.defaultWorkspace = new_ws;
         }
@@ -1132,11 +1132,9 @@ proto.load_add_a_link_focus_handlers = function(radio_id) {
 }
 
 proto.set_add_a_link_error = function(msg) {
-    var div = $("add-a-link-error");
-    if (div) {
-        div.style.display = 'block';
-        div.innerHTML = '<span>' + msg + '</span>';
-    }
+    jQuery("#add-a-link-error")
+        .show()
+        .html('<span>' + msg + '</span>')
 }
 
 proto.create_link_wafl = function(label, workspace, pagename, section) {

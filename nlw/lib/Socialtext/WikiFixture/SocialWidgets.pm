@@ -94,7 +94,9 @@ Adds a widget to the container. The widget is identified with the widgetpath par
 and is the same value that is used by the file parameter in the add_widget action.
 
 The logical_name parameter is the logical name that is assigned to this instance of the
-widget. All future references to this widget will be made using this logical name. 
+widget. All future references to this widget will be made using this logical name. In
+addition, the logical name can be used as a wikitest substitution var (%%logical_name%%)
+whose value is the id of the widget (ie the value of __MODULE_ID__)
 
 3rd Party Hosted widgets are not yet supported.
 
@@ -127,7 +129,10 @@ yaml file describing this container or the order in which the widget was install
 The position is 1-based (1st widget matches position, etc). 
 
 The logical_name parameter is the logical name that is assigned to this instance of the
-widget. All future references to this widget will be made using this logical name. 
+widget. All future references to this widget will be made using this logical name. In
+addition, the logical name can be used as a wikitest substitution var (%%logical_name%%)
+whose value is the id of the widget (ie the value of __MODULE_ID__)
+ 
 
 =cut
 

@@ -676,15 +676,10 @@ proto.newpage_duplicate_ok = function() {
             if (this.newpage_save(edit_field.val(), edit_field.get(0))) {
                 jQuery.hideLightbox();
             }
-            else {
-                if (!is_reserved_pagename(edit_field.val())) {
-                    // What did we do here before?
-                }
-            }
             break;
         case 'suggest':
             var name = jQuery('#st-newpage-duplicate-suggest').html();
-            if (this.newpage_save(suggest.html())) {
+            if (this.newpage_save(name)) {
                 jQuery.hideLightbox();
             }
             break;

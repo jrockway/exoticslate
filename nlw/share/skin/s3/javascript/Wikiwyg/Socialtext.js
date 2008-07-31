@@ -645,12 +645,11 @@ proto.newpage_save = function(page_name, pagename_editfield) {
 }
 
 proto.saveContent = function() {
-    console.log('saveContent');
-    jQuery('#st-editing-title').hide()
-    jQuery('<span id="saving-message">')
-        .css('color', 'red')
+    jQuery('#st-editing-tools-edit ul').hide()
+    jQuery('<div id="saving-message">')
         .html(loc('Saving...'))
-        .insertBefore('#st-editing-title');
+        .css('color', 'red')
+        .appendTo('#st-editing-tools-edit');
     this.saveChanges();
 }
 
@@ -874,12 +873,14 @@ proto.disableLinkConfirmations = function() {
 
 proto.contentIsModified = function() {
     if (this.originalWikitext == null) {
+        console.log('1');
         return true;
     }
     // XXX This could be done more upstream...
     var current_wikitext = this.get_current_wikitext().replace(
         /\r/g, ''
     );
+    console.log('2');
     return (current_wikitext != this.originalWikitext);
 }
 
@@ -936,18 +937,17 @@ proto.get_edit_height = function() {
 }
 
 proto.enableStarted = function() {
-    jQuery('#st-editing-tools-edit, #st-editing-title').hide();
-    jQuery('<span id="saving-message">')
-        .css('color','red')
+    jQuery('#st-editing-tools-edit ul').hide()
+    jQuery('<div id="loading-message">')
         .html(loc('Loading...'))
-        .insertBefore('#st-editing-title')
+        .appendTo('#st-editing-tools-edit');
     this.wikiwyg.disable_button(this.classname);
     this.wikiwyg.enable_button(this.wikiwyg.current_mode.classname);
 }
 
 proto.enableFinished = function() {
-    jQuery('#saving-message').remove();
-    jQuery('#st-editing-tools-edit').show();
+    jQuery('#loading-message').remove();
+    jQuery('#st-editing-tools-edit ul').show();
 }
 
 var WW_ERROR_TABLE_SPEC_BAD =

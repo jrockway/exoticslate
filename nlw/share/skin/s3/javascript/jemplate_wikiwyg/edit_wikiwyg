@@ -3,8 +3,8 @@
         <div id="st-editing-tools-edit">
             <ul>
                 <li><a title="[% loc('Click this button to save the page') %]" id="st-save-button-link" class="saveButton" href="#">[% loc('Save') %]</a></li>
-                <li style="display:none"><a class="previewButton" id="st-preview-button-link" href="#">[% loc('Preview') %]</a></li>
-                <li><a class="commentButton" id="st-cancel-button-link" href="#">[% loc('Cancel') %]</a></li>
+                <li><a class="previewButton" id="st-preview-button-link" href="#">[% loc('Preview') %]</a></li>
+                <li><a class="cancelButton" id="st-cancel-button-link" href="#">[% loc('Cancel') %]</a></li>
             </ul>
             <ul class="buttonRight">        
                 <li><a href="#" id="st-mode-wysiwyg-button" onclick="return false;">[% loc('Simple') %]</a></li>

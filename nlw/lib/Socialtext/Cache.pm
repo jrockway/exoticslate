@@ -2,13 +2,13 @@ package Socialtext::Cache;
 
 use strict;
 use warnings;
-use Cache::MemoryCache;
+use Socialtext::Cache::Hash;
 
 # if we ever forget to clear, make sure that caches auto-purge periodically.
 our $DefaultExpiresIn = '1m';
 
 # cache class used
-our $CacheClass = 'Cache::MemoryCache';
+our $CacheClass = 'Socialtext::Cache::Hash';
 
 # keep track of named caches we've instantiated; its faster that way.
 our %CACHES;
@@ -60,7 +60,7 @@ Socialtext::Cache - In-memory named caches
 =head1 DESCRIPTION
 
 C<Socialtext::Cache> implements a single point of entry for a series of named
-in-memory caches (using C<Cache::MemoryCache>).
+in-memory caches.
 
 Need a cache somewhere?  Just create a new one and start using it.
 
@@ -111,7 +111,6 @@ under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-L<Cache::Cache>,
-L<Cache::MemoryCache>.
+L<Cache::Cache>.
 
 =cut

@@ -969,6 +969,14 @@ Default: BasicAuth:Cookie:Guest
 
 =for code type => SCALAR_TYPE
 
+=head2 logout_redirect_uri
+
+The URI that users are redirected to after they log out.
+
+Default: /nlw/login.html
+
+=for code type => SCALAR_TYPE
+
 =head2 user_factories
 
 The semicolon-separated list of drivers to use for user creation.

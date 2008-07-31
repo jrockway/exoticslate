@@ -174,11 +174,12 @@ sub login {
 }
 
 sub logout {
-    my $self = shift;
+    my $self     = shift;
+    my $redirect = $self->{args}{redirect_to}
+        || Socialtext::AppConfig->logout_redirect_uri();
 
     Socialtext::Apache::User::unset_login_cookie();
-
-    $self->redirect($self->{args}{redirect_to} || '/nlw/login.html');
+    $self->redirect($redirect);
 }
 
 sub forgot_password {

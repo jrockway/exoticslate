@@ -5,6 +5,7 @@ test env properly and are not testing the test-workspace
 
 * [Test Case: Home]
 * [Test case: Login Logout]
+* [Test Case: logout_redirect_uri]
 * [Test case: Miki Authentication]
 * [Test Case: Miki]
 * [Test case: User Resets Password]

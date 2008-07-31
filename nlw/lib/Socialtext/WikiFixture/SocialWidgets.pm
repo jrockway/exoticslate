@@ -4,6 +4,9 @@ use strict;
 use warnings;
 use base 'Socialtext::WikiFixture::Socialtext';
 use Test::More;
+use URI;
+use URI::QueryParam;
+
 =head1 NAME
 
 Socialtext::WikiFixture::SocialWidgets - Test the Widgets using Selenium
@@ -58,10 +61,14 @@ You should navigate to the container URL using normal Selenese test command like
 =cut
 sub st_empty_container { 
     my ($self) = @_;
-    $self->{selenium}->open_ok("?action=clear_widgets");
-    $self->{selenium}->wait_for_page_to_load_ok(10000);
-    my $widgetlist = $self->{selenium}->get_value("id=widgetList");
-    diag "Widgets after empty: $widgetlist\n"; 
+    my $location = $self->_adjust_location(action => "clear_widgets");
+    eval {
+        $self->{selenium}->open($location);
+        $self->{selenium}->wait_for_page_to_load(10000);
+        my $widgetlist = $self->{selenium}->get_value("id=widgetList");
+        diag "Widgets after empty: $widgetlist\n"; 
+    };
+    ok( !$@, 'st_empty_container' );
 }
 
 =head2 st_reset_container ( )
@@ -72,8 +79,13 @@ You should navigate to the container URL using normal Selenese test command like
 =cut
 sub st_reset_container {
     my ($self) = @_;
-    $self->{selenium}->open_ok("?action=reset_container");
-    $self->{selenium}->wait_for_page_to_load_ok(10000);
+    my $location = $self->_adjust_location(action => "reset_container");
+    eval {
+        $self->{selenium}->open($location);
+        $self->{selenium}->wait_for_page_to_load(10000);
+    };
+    ok( !$@, 'st_reset_container' );
+     
 }
 
 =head2 st_add_widget ( widgetpath, logical_name )
@@ -90,13 +102,19 @@ widget. All future references to this widget will be made using this logical nam
 
 sub st_add_widget {
     my ($self, $widgetpath, $logical) = @_;
-    my @widgetsbefore = $self->_getWidgetList;
-    $self->{selenium}->open_ok("?action=add_widget;file=$widgetpath");
-    $self->{selenium}->wait_for_page_to_load_ok(10000);
-    my @widgetsafter = $self->_getWidgetList;
-    my @newwidgets = $self->_listDiff(\@widgetsafter, \@widgetsbefore);
-    $self->{_widgets}{$logical} = $newwidgets[0];
-    diag "Named this widget '$logical': ".$self->{_widgets}{$logical}."\n";
+    my $location = $self->_adjust_location(action => "add_widget", 
+                                           file => $widgetpath);
+    eval {
+        my @widgetsbefore = $self->_getWidgetList;
+        $self->{selenium}->open($location);
+        $self->{selenium}->wait_for_page_to_load(10000);
+        my @widgetsafter = $self->_getWidgetList;
+        my @newwidgets = $self->_listDiff(\@widgetsafter, \@widgetsbefore);
+        $self->{_widgets}{$logical} = $newwidgets[0];
+        $self->set($logical, $newwidgets[0]); # Set a varname for %%substitution%% 
+        diag "Named this widget '$logical': ".$self->{_widgets}{$logical}."\n";
+    };
+    ok( !$@, "st-add-widget" );
 }
 
 =head2 st_name_widget ( position, logical_name )
@@ -115,9 +133,13 @@ widget. All future references to this widget will be made using this logical nam
 
 sub st_name_widget {
     my ($self, $position, $logical) = @_;
-    my @widgetlist = $self->_getWidgetList;
-    $self->{_widgets}{$logical} = $widgetlist[$position-1];
-    diag "Named this widget '$logical': ".$self->{_widgets}{$logical}."\n";
+    eval {
+        my @widgetlist = $self->_getWidgetList;
+        $self->{_widgets}{$logical} = $widgetlist[$position-1];
+        $self->set($logical, $widgetlist[$position-1]); # Set a varname for %%substitution%% 
+        diag "Named this widget '$logical': ".$self->{_widgets}{$logical}."\n";
+    };
+    ok( !$@, "st-name-widget");
 }
 
 =head2 st_minimize_widget ( logical_name )
@@ -131,8 +153,11 @@ This assumes that the currently selected frame is the "parent" container frame.
 
 sub st_minimize_widget {
     my ($self, $logical) = @_;
-    my $widget = $self->{_widgets}{$logical};
-    $self->{selenium}->click("xpath=//div[\@id='$widget']//img[\@id='st-dashboard-minimize']");
+    eval {
+        my $widget = $self->{_widgets}{$logical};
+        $self->{selenium}->click("xpath=//div[\@id='$widget']//img[\@id='st-dashboard-minimize']");
+    };
+    ok( !$@, "st-minimize-widget" );
 }
 
 =head2 st_remove_widget ( logical_name )
@@ -145,12 +170,15 @@ This assumes that the currently selected frame is the "parent" container frame.
 
 sub st_remove_widget {
     my ($self, $logical) = @_;
-    my $widget = $self->{_widgets}{$logical};
-    # This removes from the javascript container - but not from the 
-    # widgetList element in the page
-    $self->{selenium}->click("xpath=//div[\@id='$widget']//img[\@id='st-dashboard-close']");
-    $self->{selenium}->pause(2000);
-    delete($self->{_widgets}{$logical});
+    eval {
+        my $widget = $self->{_widgets}{$logical};
+        # This removes from the javascript container - but not from the 
+        # widgetList element in the page
+        $self->{selenium}->click("xpath=//div[\@id='$widget']//img[\@id='st-dashboard-close']");
+        $self->{selenium}->pause(2000);
+        delete($self->{_widgets}{$logical});
+    };
+    ok ( !$@, "st-remove-widget" );
 }
 
 =head2 st_widget_settings ( logical_name )
@@ -162,8 +190,11 @@ This assumes that the currently selected frame is the "parent" container frame.
 =cut
 sub st_widget_settings {
     my ($self, $logical) = @_;
-    my $widget = $self->{_widgets}{$logical};
-    $self->{selenium}->click("xpath=//div[\@id='$widget']//img[\@id='st-dashboard-settings']");
+    eval {
+        my $widget = $self->{_widgets}{$logical};
+        $self->{selenium}->click("xpath=//div[\@id='$widget']//img[\@id='st-dashboard-settings']");
+    };
+    ok( !$@, "st-widget-settings" );
 }
 
 =head2 st_widget_title_like ( logical_name )
@@ -190,9 +221,12 @@ This assumes that the currently selected frame is the "parent" container frame.
 =cut
 sub st_widget_body_like {
     my ($self, $logical, $opt1) = @_;
-    $self->{selenium}->select_frame('xpath=//iframe[@id="'.$self->{_widgets}{$logical}.'-iframe"]');
-    $self->{selenium}->text_like('//body', $opt1);
-    $self->{selenium}->select_frame("relative=top");
+    eval {
+        $self->{selenium}->select_frame('xpath=//iframe[@id="'.$self->{_widgets}{$logical}.'-iframe"]');
+        $self->{selenium}->text_like('//body', $opt1);
+        $self->{selenium}->select_frame("relative=top");
+    };
+    ok( !$@, "st-widget-body-like" );
 }
 
 =head2 st_select_widget_frame ( logical_name )
@@ -226,13 +260,16 @@ it does not wait for the widget to complete any behavior it is programmed to per
 sub st_wait_for_widget_load {
     my ($self, $logical, $timeout) = @_;
     $timeout = $timeout || 10000;
-    my $widget=$self->{_widgets}{$logical};
-    my $js = <<ENDJS;
-    var curwin=selenium.browserbot.getCurrentWindow();
-    var myframe=curwin.document.getElementById("$widget-iframe");
-    myframe.contentDocument.loaded;
+    eval {
+        my $widget=$self->{_widgets}{$logical};
+        my $js = <<ENDJS;
+        var curwin=selenium.browserbot.getCurrentWindow();
+        var myframe=curwin.document.getElementById("$widget-iframe");
+        myframe.contentDocument.loaded;
 ENDJS
-    $self->{selenium}->wait_for_condition_ok($js, $timeout);
+        $self->{selenium}->wait_for_condition($js, $timeout);
+    };
+    ok( !$@, "st-wait-for-widget-load");
 }
 
 =head2 st_wait_for_all_widgets_load (logical_name, timeout )
@@ -248,18 +285,34 @@ it does not wait for the widget to complete any behavior it is programmed to per
 sub st_wait_for_all_widgets_load {
     my ($self, $timeout) = @_;
     $timeout = $timeout || 10000;
-    my $js = <<ENDJS2;
-    var curwin=selenium.browserbot.getCurrentWindow();
-    var iframeIterator=curwin.document.evaluate('//iframe', curwin.document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-    var thisNode = iframeIterator.iterateNext();
-    var allLoaded=true;
-    while (thisNode) {
-        allLoaded = allLoaded && thisNode.contentDocument.loaded;
-        thisNode = iframeIterator.iterateNext();
-    }    
-    allLoaded;
+    eval {
+        my $js = <<ENDJS2;
+        var curwin=selenium.browserbot.getCurrentWindow();
+        var iframeIterator=curwin.document.evaluate('//iframe', curwin.document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+        var thisNode = iframeIterator.iterateNext();
+        var allLoaded=true;
+        while (thisNode) {
+            allLoaded = allLoaded && thisNode.contentDocument.loaded;
+            thisNode = iframeIterator.iterateNext();
+        }    
+        allLoaded;
 ENDJS2
-    $self->{selenium}->wait_for_condition_ok($js, $timeout);
+        $self->{selenium}->wait_for_condition($js, $timeout);
+    };
+    ok( !$@, "st-wait-for-all-widgets-load");
+}
+
+
+sub _adjust_location {
+    my ($self, %params) = @_;
+
+    (my $uriraw = $self->{selenium}->get_location()) =~ s/;/&/g;
+    my $uri = URI->new($uriraw);
+    while (my ($k,$v) = each %params) {
+        $uri->query_param($k, $v);
+    }
+    (my $adjusted_uri = $uri->as_string) =~ s/&/;/g;
+    return $adjusted_uri;
 }
 
 sub _getWidgetList {
@@ -328,5 +381,3 @@ This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
 =cut
-
-

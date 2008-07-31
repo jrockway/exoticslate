@@ -33,14 +33,11 @@
     $.fn.lightbox.start = function() {
         var self = this;
 
-        var width = $(window).width();
-        var height = $(window).height();
-
         if (!$('#lightbox').size()) {
             $('<div id="lightbox">')
                 .css({
                     display: 'none',
-                    position: this.is_ie ? 'absolute': 'fixed',
+                    position: $.browser.msie ? 'absolute': 'fixed',
                     zIndex: 2001,
                     padding: 0,
                     background: '#fff',
@@ -50,16 +47,18 @@
                 })
                 .appendTo('body')
                 .css({
-                    left: ((width - $('#lightbox').width()) / 2) + 'px',
-                    top:  ((height - $('#lightbox').height()) /3) + 'px'
-                })
+                    left: (($(window).width() -
+                            $('#lightbox').width()) / 2) + 'px',
+                    top:  (($(window).height() -
+                            $('#lightbox').height()) /5) + 'px'
+                });
         }
         if (!$('#overlay').size()) {
             $('<div id="overlay">')
                 .click(function () { self.stop() })
                 .css({
                     display: 'none',
-                    position: this.is_ie ? 'absolute': 'fixed',
+                    position: $.browser.msie ? 'absolute': 'fixed',
                     background: "#000",
                     opacity: "0.5",
                     filter :  "alpha(opacity=50)",

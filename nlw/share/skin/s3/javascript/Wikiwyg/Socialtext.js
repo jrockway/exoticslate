@@ -261,7 +261,6 @@ function setup_wikiwyg() {
 
     if (!Socialtext.new_page) {
         jQuery('#st-save-button-link').click(function() {
-            console.log('actual save button link');
             ww.is_editing = false;
             return ww.saveButtonHandler();
         });
@@ -629,7 +628,6 @@ proto.newpage_save = function(page_name, pagename_editfield) {
         }
     }
     else {
-        console.log('exists2 ' + page_name);
         if (this.active_page_exists(page_name)) {
             jQuery.hideLightbox();
             setTimeout(function () {
@@ -656,10 +654,8 @@ proto.saveContent = function() {
 
 proto.newpage_saveClicked = function() {
     var field = jQuery('#st-page-editing-pagename');
-    console.log('newpage_save ' + field.val());
     var saved = this.newpage_save(field.val() || '', field.get(0));
     if (saved) {
-        console.log('closing lightbox');
         jQuery.hideLightbox();
     }
     return saved;
@@ -678,20 +674,17 @@ proto.newpage_duplicate_ok = function() {
         case 'different':
             var edit_field = jQuery('#st-newpage-duplicate-pagename');
             if (this.newpage_save(edit_field.val(), edit_field.get(0))) {
-                console.log('hideLightbox ovah hear');
                 jQuery.hideLightbox();
             }
             else {
-                console.log('checkres');
                 if (!is_reserved_pagename(edit_field.val())) {
-                    console.log('isres');
+                    // What did we do here before?
                 }
             }
             break;
         case 'suggest':
             var name = jQuery('#st-newpage-duplicate-suggest').html();
             if (this.newpage_save(suggest.html())) {
-                console.log('close da lightbox');
                 jQuery.hideLightbox();
             }
             break;
@@ -724,7 +717,6 @@ proto.displayNewPageDialog = function() {
 }
 
 proto.saveButtonHandler = function() {
-        console.log('saveButtonHandler');
     if (Socialtext.new_page) {
         this.saveNewPage();
     }
@@ -736,7 +728,6 @@ proto.saveButtonHandler = function() {
 }
 
 proto.saveNewPage = function() {
-    console.log('saveNewPage ' + new_page_name);
     var new_page_name = jQuery('#st-newpage-pagename-edit').val();
     if (! is_reserved_pagename(new_page_name)) {
         if (this.active_page_exists(new_page_name)) {
@@ -759,7 +750,6 @@ proto.saveNewPage = function() {
 }
 
 proto.saveChanges = function() {
-    console.log('saveChanges');
     this.disableLinkConfirmations();
     var submit_changes = function(wikitext) {
         /*
@@ -873,14 +863,12 @@ proto.disableLinkConfirmations = function() {
 
 proto.contentIsModified = function() {
     if (this.originalWikitext == null) {
-        console.log('1');
         return true;
     }
     // XXX This could be done more upstream...
     var current_wikitext = this.get_current_wikitext().replace(
         /\r/g, ''
     );
-    console.log('2');
     return (current_wikitext != this.originalWikitext);
 }
 

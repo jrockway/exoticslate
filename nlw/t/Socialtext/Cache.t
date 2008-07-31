@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 28;
+use Test::More tests => 21;
 
 use_ok 'Socialtext::Cache';
 
@@ -89,29 +89,4 @@ clear_all_named_caches: {
 
     $count = scalar $c2->get_keys();
     is $count, 0, 'second cache now empty';
-}
-
-###############################################################################
-# get list of named caches
-list_named_caches: {
-    my $c1 = Socialtext::Cache->cache('first');
-    isa_ok $c1, $Socialtext::Cache::CacheClass;
-
-    my $c2 = Socialtext::Cache->cache('second');
-    isa_ok $c2, $Socialtext::Cache::CacheClass;
-
-    my $c3 = Socialtext::Cache->cache('third');
-    isa_ok $c3, $Socialtext::Cache::CacheClass;
-
-    # add some data to the caches
-    $c1->set( 'foo', 'bar' );
-    $c2->set( 'abc', '123' );
-
-    # the list of named caches should contain the caches we've added data to
-    # above, and shouldn't contain the one that had any data.
-    my @names = sort Socialtext::Cache->names();
-    ok @names, 'retrieved list of named caches';
-    ok  grep( { $_ eq 'first' } @names ),  '... containing the "first" cache with data in it';
-    ok  grep( { $_ eq 'second' } @names ), '... containing the "second" cache with data in it';
-    ok !grep( { $_ eq 'third' } @names ),  '... but not containing the "third" empty cache';
 }

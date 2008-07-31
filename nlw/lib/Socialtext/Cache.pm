@@ -34,11 +34,6 @@ sub clear {
     }
 }
 
-sub names {
-    my $class = shift;
-    return $class->cache('only-so-we-can-instantiate-a-cache-object')->get_namespaces();
-}
-
 1;
 
 =head1 NAME
@@ -61,9 +56,6 @@ Socialtext::Cache - In-memory named caches
 
   # clear/flush *all* named caches
   Socialtext::Cache->clear();
-
-  # get the list of named caches 
-  @names = Socialtext::Cache->names();
 
 =head1 DESCRIPTION
 
@@ -103,16 +95,6 @@ doesn't already exist.
 Clears the given named cache, removing B<all> entries from the cache.
 
 If no C<$name> is provided, this method clears B<ALL> of the caches.
-
-=item B<Socialtext::Cache-E<gt>names()>
-
-Returns a list of the named caches that have data in them.  If a cache was
-created but then never had any data placed into it, it won't appear in this
-list.
-
-This method is provided solely for debugging purposes.  You shouldn't need to
-iterate across a list of named caches in any common usage; just create the
-named cache you want/need and start using it.
 
 =back
 

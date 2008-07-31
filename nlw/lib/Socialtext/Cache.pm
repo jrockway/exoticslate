@@ -30,7 +30,7 @@ sub clear {
         $cache->clear()
     }
     else {
-        $CacheClass->Clear();
+        map { $_->clear() } values %CACHES;
     }
 }
 

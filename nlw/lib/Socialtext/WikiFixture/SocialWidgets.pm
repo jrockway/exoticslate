@@ -277,7 +277,7 @@ ENDJS
     ok( !$@, "st-wait-for-widget-load");
 }
 
-=head2 st_wait_for_all_widgets_load (logical_name, timeout )
+=head2 st_wait_for_all_widgets_load ( timeout )
 
 Waits for all widgets in the container to finish loading, waiting for up to timeout milliseconds. 
 Timeout defaults to 10000 (10 seconds).

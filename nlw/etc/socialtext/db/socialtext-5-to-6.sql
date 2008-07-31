@@ -38,5 +38,8 @@ DROP FUNCTION update_container_ids ();
 
 SELECT DISTINCT class FROM storage;
 
-COMMIT;
+UPDATE "System"
+   SET value = 6
+ WHERE field = 'socialtext-schema-version';
 
+COMMIT;

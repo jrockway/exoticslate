@@ -46,7 +46,7 @@ sub make_hub {
     my $main = Socialtext->new;
     $main->load_hub(
         current_user => $user,
-        current_workspace => Socialtext::NoWorkspace->new,
+        current_workspace => $ws || Socialtext::NoWorkspace->new,
     );
     $main->hub->registry->load;
     $main->debug;

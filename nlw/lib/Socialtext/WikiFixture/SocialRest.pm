@@ -93,6 +93,9 @@ sub handle_command {
     if ($command eq 'st_admin') {
         return Socialtext::WikiFixture::Socialtext::st_admin($self, @opts);
     }
+    elsif ($command eq 'st_config') {
+        return Socialtext::WikiFixture::Socialtext::st_config($self, @opts);
+    }
 
     die "Unknown command for the fixture: ($command)\n";
 

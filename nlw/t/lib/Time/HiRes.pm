@@ -1,4 +1,5 @@
 package Time::HiRes;
+# @COPYRIGHT@
 use strict;
 use warnings;
 use base 'Exporter';

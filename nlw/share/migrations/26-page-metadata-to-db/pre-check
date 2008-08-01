@@ -1,9 +1,13 @@
 #!/usr/bin/perl
 #@COPYRIGHT@
-
 use strict;
 use warnings;
 use Socialtext::SQL qw/sql_singlevalue/;
+use Socialtext::Migration::Utils qw/ensure_socialtext_schema/;
+
+# We rely on the page table existing, so make sure that is the case.
+# Version 5 is where the page table was introduced.
+ensure_socialtext_schema(5);
 
 my $metadata_count = sql_singlevalue('SELECT COUNT(*) FROM page');
 if ($metadata_count) {

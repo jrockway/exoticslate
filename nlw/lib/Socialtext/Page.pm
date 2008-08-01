@@ -1239,10 +1239,9 @@ sub _to_spreadsheet_plain_text {
     my $self    = shift;
     my $content = shift;
 
-    $content = substr(
-        $content,
-        index($content, "\n__SPREADSHEET_HTML__\n") + 21
-    );
+    my $html_offset = index($content, "\n__SPREADSHEET_HTML__\n") + 21;
+    return '' unless length($content) > $html_offset;
+    $content = substr( $content, $html_offset );
     $content = substr(
         $content,
         0,

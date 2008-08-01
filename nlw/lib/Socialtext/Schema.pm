@@ -377,10 +377,12 @@ sub _createlang {
 
     eval {
         # grep returning 1 (== no match) will cause shell_run to die
-        shell_run("createlang -l $c{db_name} | grep plpgsql");
+        local $Socialtext::System::SILENT_RUN = 1;
+        shell_run("createlang -U $c{user} -l $c{db_name} | grep plpgsql"
+                  . " > /dev/null");
     };
     if ($@) {
-        $self->_db_shell_run("createlang plpgsql $c{db_name}");
+        $self->_db_shell_run("createlang -U $c{user} plpgsql $c{db_name}");
     }
 }
 

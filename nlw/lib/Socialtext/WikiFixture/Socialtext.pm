@@ -329,6 +329,14 @@ sub st_admin {
 
     diag "st-admin $options";
     _run_command("st-admin $options", $verify);
+
+    if ($ENV{ST_SKIN_NAME} and $options =~ /^\s*create.workspace/ ) {
+        $options =~ /--n(?:ame)?\s+(\S*)/;   # extract the workspace name
+        my $ws_name = $1;
+
+        diag "st-admin set-workspace-config --w $ws_name skin_name $ENV{ST_SKIN_NAME}";
+        _run_command("st-admin set-workspace-config --w $ws_name skin_name $ENV{ST_SKIN_NAME}");
+    }
 }
 
 =head2 st_ldap( $command_options )

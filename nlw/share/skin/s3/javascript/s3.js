@@ -1,3 +1,5 @@
+(function ($) {
+
 Page = {
     pageUrl: function (page_name) {
         if (!page_name) page_name = Socialtext.page_id;
@@ -6,8 +8,8 @@ Page = {
     },
 
     refreshPageContent: function () {
-        jQuery.get(this.pageUrl(), function (html) {
-            jQuery('#st-page-content').html(html);
+        $.get(this.pageUrl(), function (html) {
+            $('#st-page-content').html(html);
         });
     },
 
@@ -26,17 +28,17 @@ Page = {
 
     refreshTags: function () {
         var tag_url = '?action=category_display;category=';
-        jQuery.getJSON( this.pageUrl() + '/tags', function (tags) {
-            jQuery('#st-tags-listing').html('');
+        $.getJSON( this.pageUrl() + '/tags', function (tags) {
+            $('#st-tags-listing').html('');
             for (var i=0; i< tags.length; i++) {
                 var tag = tags[i];
-                jQuery('#st-tags-listing').append(
-                    jQuery('<li>').append(
-                        jQuery('<a>')
+                $('#st-tags-listing').append(
+                    $('<li>').append(
+                        $('<a>')
                             .html(tag.name)
                             .attr('href', tag_url + tag.name),
                         ' ',
-                        jQuery('<a href="#">')
+                        $('<a href="#">')
                             .html('[x]')
                             .attr('name', tag.name)
                             .bind('click', function () {
@@ -49,17 +51,17 @@ Page = {
     },
 
     refreshAttachments: function () {
-        jQuery.getJSON( this.pageUrl() + '/attachments', function (list) {
-            jQuery('#st-attachment-listing').html('');
+        $.getJSON( this.pageUrl() + '/attachments', function (list) {
+            $('#st-attachment-listing').html('');
             for (var i=0; i< list.length; i++) {
                 var item = list[i];
-                jQuery('#st-attachment-listing').append(
-                    jQuery('<li>').append(
-                        jQuery('<a>')
+                $('#st-attachment-listing').append(
+                    $('<li>').append(
+                        $('<a>')
                             .html(item.name)
                             .attr('href', item.uri),
                         ' ',
-                        jQuery('<a href="#">')
+                        $('<a href="#">')
                             .html('[x]')
                             .attr('name', item.uri)
                             .bind('click', function () {
@@ -72,7 +74,7 @@ Page = {
     },
 
     delTag: function (tag) {
-        jQuery.ajax({
+        $.ajax({
             type: "DELETE",
             url: this.tagUrl(tag),
             complete: function () {
@@ -82,7 +84,7 @@ Page = {
     },
 
     delAttachment: function (url) {
-        jQuery.ajax({
+        $.ajax({
             type: "DELETE",
             url: url,
             complete: function () {
@@ -93,25 +95,25 @@ Page = {
     },
 
     addTag: function (tag) {
-        jQuery.ajax({
+        $.ajax({
             type: "PUT",
             url: this.tagUrl(tag),
             complete: function () {
                 Page.refreshTags();
-                jQuery('#st-tags-field').val('');
+                $('#st-tags-field').val('');
             }
         });
     }
 };
 
 var load_script = function(script_url) {
-    var script = jQuery("<script>").attr({
+    var script = $("<script>").attr({
         type: 'text/javascript',
         src: script_url
     }).get(0);
 
-    if (jQuery.browser.msie)
-        jQuery(script).appendTo('head');
+    if ($.browser.msie)
+        $(script).appendTo('head');
     else
         document.getElementsByTagName('head')[0].appendChild(script);
 };
@@ -134,49 +136,49 @@ var load_ui = function(cb) {
     setTimeout(loader, 500);
 };
 
-jQuery(function() {
-    jQuery('#st-page-boxes-toggle-link')
+$(function() {
+    $('#st-page-boxes-toggle-link')
         .bind('click', function() {
-            jQuery('#st-page-boxes').toggle();
-            var hidden = jQuery('#st-page-boxes').is(':hidden');
+            $('#st-page-boxes').toggle();
+            var hidden = $('#st-page-boxes').is(':hidden');
             this.innerHTML = hidden ? 'show' : 'hide';
             Cookie.set('st-page-accessories', hidden ? 'hide' : 'show');
         });
 
-    jQuery('#st-tags-addlink')
+    $('#st-tags-addlink')
         .bind('click', function () {
-            jQuery(this).hide();
-            jQuery('#st-tags-field')
+            $(this).hide();
+            $('#st-tags-field')
                 .val('')
                 .show()
                 .trigger('focus');
         })
 
-    jQuery('#st-tags-field')
+    $('#st-tags-field')
         .bind('blur', function () {
-            jQuery(this).hide();
-            jQuery('#st-tags-addlink').show()
+            $(this).hide();
+            $('#st-tags-addlink').show()
         });
             
 
-    jQuery('#st-tags-form')
+    $('#st-tags-form')
         .bind('submit', function () {
-            var tag = jQuery('#st-tags-field').val();
+            var tag = $('#st-tags-field').val();
             Page.addTag(tag);
         });
 
-    jQuery('#st-attachments-uploadbutton')
+    $('#st-attachments-uploadbutton')
         .lightbox({
             content:'#st-attachments-attachinterface',
             close:'#st-attachments-attach-closebutton'
         });
 
-    jQuery('#st-attachments-attach-filename')
+    $('#st-attachments-attach-filename')
         .val('')
         .bind('change', function () {
-            var filename = jQuery(this).val();
+            var filename = $(this).val();
             if (!filename) {
-                jQuery('#st-attachments-attach-uploadmessage').html(
+                $('#st-attachments-attach-uploadmessage').html(
                     loc("Please click browse and select a file to upload.")
                 );
                 return false;
@@ -185,34 +187,34 @@ jQuery(function() {
             var filename = filename.replace(/^.*\\|\/:/, '');
 
             if (encodeURIComponent(filename).length > 255 ) {
-                jQuery('#st-attachments-attach-uploadmessage').html(
+                $('#st-attachments-attach-uploadmessage').html(
                     loc("Filename is too long after URL encoding.")
                 );
                 return false;
             }
 
-            jQuery('#st-attachments-attach-uploadmessage').html(
-                loc('Uploading [_1]...', filename.match(/[^\\\/]+jQuery/))
+            $('#st-attachments-attach-uploadmessage').html(
+                loc('Uploading [_1]...', filename.match(/[^\\\/]+$/))
             );
 
-            jQuery('#st-attachments-attach-formtarget')
+            $('#st-attachments-attach-formtarget')
                 .bind('load', function () {
-                    jQuery('#st-attachments-attach-uploadmessage').html(
+                    $('#st-attachments-attach-uploadmessage').html(
                         loc('Upload Complete')
                     );
-                    jQuery('#st-attachments-attach-filename').attr(
+                    $('#st-attachments-attach-filename').attr(
                         'disabled', false
                     );
-                    jQuery('#st-attachments-attach-closebutton').attr(
+                    $('#st-attachments-attach-closebutton').attr(
                         'disabled', false
                     );
                     Page.refreshAttachments();
                     Page.refreshPageContent();
                 });
 
-            jQuery('#st-attachments-attach-form').submit();
-            jQuery('#st-attachments-attach-closebutton').attr('disabled', true);
-            jQuery(this).attr('disabled', true);
+            $('#st-attachments-attach-form').submit();
+            $('#st-attachments-attach-closebutton').attr('disabled', true);
+            $(this).attr('disabled', true);
 
             return false;
         });
@@ -221,32 +223,25 @@ jQuery(function() {
     var editor_uri = nlw_make_s3_path('/javascript/socialtext-editor.js.gz')
         .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
 
-    jQuery("#st-comment-button-link")
-        .click(function () { 
-            var display_width = (window.offsetWidth ||
-                                 document.body.clientWidth ||
-                                 600
-                                );
-            window.open(
-                'index.cgi?action=enter_comment;page_name=' +
-                Socialtext.page_id + ';caller_action=display',
-                '_blank',
-                'toolbar=no, location=no, directories=no, status=no, ' +
-                'menubar=no, titlebar=no, scrollbars=yes, resizable=yes, ' +
-                'width=' + display_width + ', height=200, left=50, top=200'
+    $("#st-comment-button-link")
+        .click(function () {
+            $.getScript(nlw_make_s3_path('/javascript/comment.js'),
+                function () {
+                    var ge = new GuiEdit;
+                    ge.show();
+                }
             );
-
-            if ( navigator.userAgent.toLowerCase().indexOf("safari") != -1 ) {
-                window.location.reload();
-            }
         });
 
-    jQuery("#st-edit-button-link,#st-edit-actions-below-fold-edit")
+    $("#st-pagetools-email")
+
+    $("#st-edit-button-link,#st-edit-actions-below-fold-edit")
         .one("click", function () {
-            jQuery('#bootstrap-loader').show();
-            jQuery.ajaxSettings.cache = true;
-            jQuery.getScript(editor_uri);
-            jQuery('<link>')
+            $('#bootstrap-loader').show();
+            $.ajaxSettings.cache = true;
+            $.getScript(editor_uri);
+            $.ajaxSettings.cache = false;
+            $('<link>')
                 .attr('href', nlw_make_s3_path('/css/wikiwyg.css'))
                 .attr('rel', 'stylesheet')
                 .attr('media', 'wikiwyg')
@@ -254,53 +249,53 @@ jQuery(function() {
                 .appendTo('head');
         });
 
-    jQuery('#st-listview-submit-pdfexport').click(function() {
-        if (!jQuery('.st-listview-selectpage-checkbox:checked').size()) {
+    $('#st-listview-submit-pdfexport').click(function() {
+        if (!$('.st-listview-selectpage-checkbox:checked').size()) {
             alert(loc("You must check at least one page in order to create a PDF."));
         }
         else {
-            jQuery('#st-listview-action').val('pdf_export')
-            jQuery('#st-listview-filename').val(Socialtext.wiki_id + '.pdf');
-            jQuery('#st-listview-form').trigger('submit');
+            $('#st-listview-action').val('pdf_export')
+            $('#st-listview-filename').val(Socialtext.wiki_id + '.pdf');
+            $('#st-listview-form').trigger('submit');
         }
     });
 
-    jQuery('#st-listview-submit-rtfexport').click(function() {
-        if (!jQuery('.st-listview-selectpage-checkbox:checked').size()) {
+    $('#st-listview-submit-rtfexport').click(function() {
+        if (!$('.st-listview-selectpage-checkbox:checked').size()) {
             alert(loc("You must check at least one page in order to create a Word document."));
         }
         else {
-            jQuery('#st-listview-action').val('rtf_export')
-            jQuery('#st-listview-filename').val(Socialtext.wiki_id + '.rtf');
-            jQuery('#st-listview-form').trigger('submit');
+            $('#st-listview-action').val('rtf_export')
+            $('#st-listview-filename').val(Socialtext.wiki_id + '.rtf');
+            $('#st-listview-form').trigger('submit');
         }
     });
 
-    jQuery('#st-listview-selectall').click(function () {
-        jQuery('input[type=checkbox]').attr('checked', this.checked);
+    $('#st-listview-selectall').click(function () {
+        $('input[type=checkbox]').attr('checked', this.checked);
     });
 
-    jQuery('#st-watchlist-indicator').click(function () {
+    $('#st-watchlist-indicator').click(function () {
         var self = this;
-        if (jQuery(this).hasClass('on')) {
-            jQuery.get(
+        if ($(this).hasClass('on')) {
+            $.get(
                 location.pathname + '?action=remove_from_watchlist'+
                 ';page=' + Socialtext.page_id +
                 ';_=' + (new Date()).getTime(),
                 function () {
-                    jQuery(self).attr('title', loc('Watch this page'));
-                    jQuery(this).removeClass('on');
+                    $(self).attr('title', loc('Watch this page'));
+                    $(this).removeClass('on');
                 }
             );
         }
         else {
-            jQuery.get(
+            $.get(
                 location.pathname + '?action=add_to_watchlist'+
                 ';page=' + Socialtext.page_id +
                 ';_=' + (new Date()).getTime(),
                 function () {
-                    jQuery(self).attr('title', loc('Stop watching this page'));
-                    jQuery(this).addClass('on');
+                    $(self).attr('title', loc('Stop watching this page'));
+                    $(this).addClass('on');
                 }
             );
         }
@@ -310,7 +305,9 @@ jQuery(function() {
         Socialtext.start_in_edit_mode ||
         location.hash.toLowerCase() == '#edit' ) {
         setTimeout(function() {
-            jQuery("#st-edit-button-link").trigger("click");
+            $("#st-edit-button-link").trigger("click");
         }, 500);
     }
 });
+
+})(jQuery);

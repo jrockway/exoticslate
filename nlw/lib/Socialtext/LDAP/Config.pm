@@ -281,7 +281,7 @@ over-written.
 
 Returns true if we're able to save the configuration, false otherwise.
 
-=item B<Socialtext::LDAP::Config->generate_driver_id()>
+=item B<Socialtext::LDAP::Config-E<gt>generate_driver_id()>
 
 Generates a new unique driver identifier.
 

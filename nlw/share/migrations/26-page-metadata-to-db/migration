@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Socialtext::Workspace;
 use Socialtext::Page::TablePopulator;
+use Socialtext::Schema;
 use Socialtext::Timer;
 
 my $wksp_timer = Socialtext::Timer->new;
@@ -11,6 +12,11 @@ my $total_timer = Socialtext::Timer->new;
 
 my $workspaces = Socialtext::Workspace->All;
 my $failures = 0;
+
+# This migration requires that we be running at least version 5 of the
+# DBMS schema; the 'page' table _needs_ to be present, see {bz 850} for what
+# happens if it is not.
+Socialtext::Schema->new->sync( to => 5 );
 
 $total_timer->start_timing(0);
 while (my $wksp = $workspaces->next) {

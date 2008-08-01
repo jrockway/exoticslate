@@ -6,12 +6,14 @@ use Email::Valid;
 use Socialtext::Workspace;
 use Socialtext::Paths;
 use Socialtext::Page;
+use Socialtext::Page::Base;
 use Socialtext::Hub;
 use Socialtext::User;
 use Socialtext::AppConfig;
-use Fatal qw/opendir closedir chdir open/;
 use Socialtext::SQL qw/sql_execute sql_begin_work sql_commit get_dbh 
                        sql_rollback/;
+use Fatal qw/opendir closedir chdir open/;
+use Cwd   qw/abs_path/;
 
 sub new {
     my $class = shift;
@@ -227,6 +229,17 @@ sub load_original_revision {
 sub fetch_metadata {
     my $file = shift;
 
+    # Ignore non-UTF-8 warnings
+    local $SIG{__WARN__} = sub {
+        my $warning = shift;
+        if ($warning =~ m/\Qdoesn't seem to be valid utf-8\E/ or
+            $warning =~ m/\QTreating as iso-8859-1\E/) {
+        }
+        else {
+            warn "\n\n$warning\n";
+        }
+    };
+
     my $content = Socialtext::Page::read_and_decode_file($file);
     return parse_headers($content);
 }
@@ -287,6 +300,9 @@ sub fix_relative_page_link {
         rename $tmp_link => $page_link_name
             or die "Could not rename $tmp_link, $page_link_name: $!";
         warn "\nFixed relative symlink $page_link_name\n";
+        
+        my $mtime = (stat($abs_page))[9] || time;
+        Socialtext::Page::Base->set_mtime($mtime, $page_link_name);
     }
 }
 

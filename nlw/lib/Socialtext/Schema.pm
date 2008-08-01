@@ -115,7 +115,8 @@ Create or update the schema to the latest version.
 =cut
 
 sub sync {
-    my $self = shift;
+    my $self      = shift;
+    my %sync_opts = @_;
 
     eval { $self->createdb };
     my $current_version = $self->current_version;
@@ -126,7 +127,10 @@ sub sync {
         $self->_display("Set up fresh schema\n");
     }
     else {
-        my @scripts = $self->_update_scripts_from($current_version);
+        my @scripts = $self->_update_scripts(
+            from => $current_version,
+            to   => $sync_opts{to_version},
+        );
         if (@scripts) {
             eval { $self->dump };
     
@@ -149,7 +153,11 @@ sub sync {
         }
 
         my $up_msg = "Updated from $old_version to $current_version.";
-        if ($self->_update_scripts_from($current_version)) {
+        if ( $self->_update_scripts(
+                from => $current_version,
+                to   => $sync_opts{to_version},
+            )
+            ) {
             $self->_display("Not all updates applied.  $up_msg\n");
             return;
         }
@@ -174,9 +182,11 @@ sub _add_required_data {
     }
 }
 
-sub _update_scripts_from {
+sub _update_scripts {
     my $self = shift;
-    my $from_version = shift;
+    my %opts = @_;
+    my $from_version = $opts{from};
+    my $to_version = $opts{to};
 
     my $schema_dir = $self->schema_dir;
     my $schema_name = $self->schema_name;
@@ -191,7 +201,8 @@ sub _update_scripts_from {
     for my $s (@all_scripts) {
         next unless $s =~ m#/$schema_name-(\d+)-to-(\d+)\.sql$#;
         my ($s_from, $s_to) = ($1, $2);
-        next if $s_from < $from_version;
+        next if $from_version and $s_from < $from_version;
+        last if $to_version   and $s_to > $to_version;
         push @to_run, {
             name => $s,
             from => $s_from,

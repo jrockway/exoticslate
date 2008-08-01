@@ -1181,10 +1181,8 @@ sub _store_preview_text {
     Socialtext::File::set_contents_utf8($tmp_file, $headers . $body);
     rename $tmp_file => $filename 
         or warn "rename $tmp_file => $filename failed: $!";
-    utime $mtime, $mtime, $filename 
-        or warn "utime $mtime, $filename failed: $!";
-    utime $mtime, $mtime, $dirpath 
-        or warn "utime $mtime, $dirpath failed: $!";
+
+    $self->set_mtime($mtime, $filename);
 }
 
 sub _to_plain_text {

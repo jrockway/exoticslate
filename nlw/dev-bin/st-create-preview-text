@@ -8,6 +8,7 @@ use Socialtext::Workspace;
 use Socialtext::Hub;
 use Socialtext::CLI;
 use Socialtext::Encode;
+use Socialtext::Page::TablePopulator;
 use Fatal qw/opendir closedir chdir open/;
 use Cwd qw/abs_path/;
 
@@ -46,19 +47,8 @@ sub process_workspace {
         # Ignore really old pages that have invalid page_ids
         next unless Socialtext::Encode::is_valid_utf8($dir);
 
-	my $page_link_name = "$dir/index.txt";
-	my $page_link = readlink($page_link_name) 
-	    or die "Couldn't readlink $page_link_name: $!";
-	unless ($page_link =~ m#^/#) {
-	    my $tmp_link = "$page_link_name.tmp";
-	    my $abs_page = abs_path("$dir/$page_link");
-            die "Could not find symlinked page ($abs_page)" unless -f $abs_page;
-	    symlink($abs_page, $tmp_link) 
-		or die "Could not symlink $abs_page, $tmp_link: $!";
-	    rename $tmp_link => $page_link_name 
-		or die "Could not rename $tmp_link, $page_link_name: $!";
-	    warn "\nFixed relative symlink $page_link_name\n";
-	}
+        Socialtext::Page::TablePopulator::fix_relative_page_link($dir);
+
 	my $char = '?';
         eval {
             # Ignore non-UTF-8 warnings
@@ -73,7 +63,7 @@ sub process_workspace {
                     warn "\n\n$warning\n";
                 }
             };
-	    my $page = $hub->pages->new_from_name($dir);
+	    my $page = $hub->pages->new_page($dir);
 	    if ($page->metadata->{Summary}) {
 		$char = '.';
 	    }

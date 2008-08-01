@@ -14,7 +14,7 @@
     alias ceqrm='/usr/bin/ceq-rm'
     alias cdwt='cd /usr/share/nlw/wikitests'
     alias cdskin='cd /usr/share/nlw/skin'
-    alias cdjs='cd /usr/share/nlw/skin/s2/javascript'
+    alias cds2js='cd /usr/share/nlw/skin/s2/javascript'
     alias cdplugins='cd /usr/share/nlw/plugins'
     alias yesplugins='sudo /etc/init.d/apache-perl stop; sudo apt-get install socialtext-plugin-people socialtext-people socialtext-plugin-gadgets socialtext-plugin-socialcalc; sudo /etc/init.d/apache-perl start'
     alias noplugins='sudo /etc/init.d/apache-perl stop; sudo apt-get remove --purge  socialtext-plugin-people socialtext-people socialtext-plugin-gadgets; sudo /etc/init.d/apache-perl start'

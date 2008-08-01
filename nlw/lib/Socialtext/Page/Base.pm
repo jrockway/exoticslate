@@ -133,4 +133,20 @@ sub attachments {
     return @{ $self->hub->attachments->all( page_id => $self->id ) };
 }
 
+sub set_mtime {
+    my $self = shift;
+    my $mtime = shift;
+    my $filename = shift;
+
+    (my $dirpath = $filename) =~ s#(.+)/.+#$1#;
+
+    # Several parts of NLW look at the mtime of the page directory
+    # to determine the last edit.  So if we don't change the mtimes,
+    # notification emails (say) could be sent out.
+    utime $mtime, $mtime, $filename 
+        or warn "utime $mtime, $filename failed: $!";
+    utime $mtime, $mtime, $dirpath 
+        or warn "utime $mtime, $dirpath failed: $!";
+}
+
 1;

@@ -237,6 +237,22 @@ repeat in Miki
 | wait_for_element_visible_ok | link=Edit | 30000 |
 | text_like | %%tcipii%% Hello From Miki |  |
 
+Include a page from a different workspace. This test assumes the existence of help-en
+
+| *Comment* | Test Case: Include Page. Include a page from a different workspace |  |
+| open_ok | /%%tcipw%%/?TC Include Page %%start_time%% |  |
+| wait_for_element_visible_ok | st-edit-button-link | 30000 |
+| click_ok | st-edit-button-link |  |
+| wait_for_text_present_ok | Editing: TC Include Page %%start_time%% | 30000 |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | `{include: help-en [socialtext documentation]}` |
+| click_and_wait | st-save-button-link |  |
+| wait_for_element_visible_ok | link=socialtext documentation | 30000 |
+| text_like | st-page-titletext | TC Include Page %%start_time%% |
+| text_like | //div[@class='wiki-include-content'] | This is an index of the help topics available. |
+
 | *Comment* | Test Case: Include Page Teardown |  |
 | st-admin | delete-workspace --w %%tcipw%% --no-export |  |
 

@@ -233,9 +233,7 @@ $(function() {
     });
 
     $("#st-pagetools-email").click(function () {
-        $.showLightbox({
-            content: 
-        });
+        alert('not implemented');
     });
 
     $("#st-edit-button-link,#st-edit-actions-below-fold-edit")

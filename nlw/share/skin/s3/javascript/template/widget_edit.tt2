@@ -1,4 +1,4 @@
-<span class="st-widget-dialog-title">[% loc('<! widget.label !>') %]</span>
+<span class="title">[% loc('<! widget.label !>') %]</span>
 <form>
 <div class="st-widget-dialog">
 <p class="st-widget-description">[% loc('<! widget.desc !>') %]</p>
@@ -29,7 +29,7 @@
 
 <! IF type == 'search' !>
 <tr>
-<td class="st-widget-dialog-editlabel">
+<td class="label">
 [% loc('Search type:') %]
 </td>
 <td class="st-widget-dialog-editfield">
@@ -48,7 +48,7 @@
 
 <! IF widget.full !>
 <tr>
-<td class="st-widget-dialog-editlabel">
+<td class="label">
   [% loc('Full results:') %]
 </td>
 <td class="st-widget-dialog-editfield">
@@ -74,7 +74,7 @@
 <! PROCESS SIZE -!>
 <! ELSE -!>
 <tr>
-<td class="st-widget-dialog-editlabel">[% loc('<! widget.labels.$field || data.fields.$field !>:') %]</td>
+<td class="label">[% loc('<! widget.labels.$field || data.fields.$field !>:') %]</td>
   <td class="st-widget-dialog-editfield">
     <input size="40" type="text" id="st-widget-<! field !>" name="<! field !>" value="[% <! field !> | html %]"/>
   </td>
@@ -84,7 +84,7 @@
 
 <! BLOCK RADIO -!>
 <tr>
-  <td class="st-widget-dialog-editlabel">[% loc('<! widget.labels.$field || data.fields.$field !>:') %]</td>
+  <td class="label">[% loc('<! widget.labels.$field || data.fields.$field !>:') %]</td>
   <td class="st-widget-dialog-editfield">
     <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-<! field !>-rb" value="current" checked>
 <! IF field == 'workspace_id' -!>
@@ -110,7 +110,7 @@
 
 <! BLOCK SIZE -!>
 <tr>
-  <td class="st-widget-dialog-editlabel">
+  <td class="label">
     [% loc('<! widget.labels.$field || data.fields.$field !>:') %]
   </td>
   <td class="st-widget-dialog-editfield">

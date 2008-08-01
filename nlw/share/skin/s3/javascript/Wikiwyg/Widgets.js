@@ -1202,6 +1202,7 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
 
     jQuery('<div>')
         .attr('id', 'widget-' + widget)
+        .attr('class', 'lightbox')
         .html(html)
         .appendTo('body');
 

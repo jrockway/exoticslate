@@ -86,18 +86,19 @@
         </div>
     </div>
 </div><!-- controls END -->
-<div style="display:none" id="st-tagqueue-interface">
+
+<div class="lightbox" id="st-tagqueue-interface">
     <form id="st-tagqueue" onsubmit="return false">
-        <div id="st-tagqueue-title">[% loc('Add Tags') %]</div>
+        <div class="title" id="st-tagqueue-title">[% loc('Add Tags') %]</div>
         <p id="st-tagqueue-tagprompt">
             [% loc('Tag:') %] <input id="st-tagqueue-field" class="st-tagqueue-input" type="text" name="tagfield"/>
         </p>
-        <div id="st-tagqueue-list" style="display: none">
+        <div class="list" id="st-tagqueue-list" style="display: none">
             <span class="st-tagqueue-listlabel">
                 [% loc('Tags to apply:') %]
             </span>
         </div>
-        <div id="st-tagqueue-buttons">
+        <div class="buttons" id="st-tagqueue-buttons">
             <input type="button" id="st-tagqueue-close" 
                    value="[% loc('Close') %]" />
             <input type="submit" id="st-tagqueue-addbutton"
@@ -106,17 +107,14 @@
     </form>
 </div>
 
-<div style="display:none" id="st-newpage-duplicate">
+<div class="lightbox" id="st-newpage-duplicate-interface">
     <form onsubmit="return false;">
-    <div id="st-newpage-duplicate-overlay" class="popup-overlay"></div>
-    <div>
-    <div id="st-newpage-duplicate-interface">
-        <div id="st-newpage-duplicate-title">[% loc('Page Already Exists') %]</div>
+        <div class="title" id="st-newpage-duplicate-title">[% loc('Page Already Exists') %]</div>
         <p class="st-newpage-duplicate-prompt">[% loc('There is <span id="st-newpage-duplicate-emphasis">already a page</span> named <a id="st-newpage-duplicate-link" href="#" target="">XXX</a>. Would you like to:')%]</p>
         <p class="st-newpage-duplicate-option"><input type="radio" name="st-newpage-duplicate-option" id="st-newpage-duplicate-option-different" value="different"/> [% loc('Save with a different name:')%] <input id="st-newpage-duplicate-pagename" size="40" type="text" name="pagename"/></p>
         <p class="st-newpage-duplicate-option"><input type="radio" name="st-newpage-duplicate-option" id="st-newpage-duplicate-option-suggest" value="suggest"/> [% loc('Save the page with the name "<span id="st-newpage-duplicate-suggest">XXX</span>"')%]</p>
         <p class="st-newpage-duplicate-option"><input type="radio" name="st-newpage-duplicate-option" id="st-newpage-duplicate-option-append" value="append"/> [% loc('Append your text to the bottom of the existing page named:')%] "<span id="st-newpage-duplicate-appendname">XXX</span>"</p>
-        <div id="st-newpage-duplicate-buttons">
+        <div class="buttons" id="st-newpage-duplicate-buttons">
             <table width="100%" border="0">
             <tr>
             <td align="right"><input type="button" id="st-newpage-duplicate-cancelbutton" value="[% loc('Cancel') %]"/></td>
@@ -124,23 +122,19 @@
             </tr>
             </table>
         </div>
-    </div>
-    </div>
     </form>
 </div>
 
-<div id="st-newpage-save" style="display:none">
+<div id="st-newpage-save" class="lightbox">
     <form id="st-newpage-save-form">
-    <div id="st-newpage-save-overlay" class="popup-overlay"></div>
-    <div>
     <div id="st-newpage-save-interface">
-        <div id="st-newpage-save-title">[% loc('Save Page As') %]</div>
+        <div class="title" id="st-newpage-save-title">[% loc('Save Page As') %]</div>
         <p id="st-newpage-save-prompt">[% loc('Enter a meaningful and distinctive title for your page.') %]</p>
         <p id="st-newpage-save-field-pagename">
             [% loc('Page Title:') %] <input id="st-newpage-save-pagename" size="45" type="text" name="pagename"/>
         </p>
         <p id="st-newpage-save-tip">[% loc("Tip: You'll be able to find this page later by using the title you choose.") %]</p>
-        <div id="st-newpage-save-buttons">
+        <div class="buttons" id="st-newpage-save-buttons">
             <table width="100%" border="0">
             <tr>
             <td align="right"><input type="button" id="st-newpage-save-cancelbutton" value="[% loc('Cancel') %]"/></td>
@@ -148,7 +142,6 @@
             </tr>
             </table>
         </div>
-    </div>
     </div>
     </form>
 </div>

@@ -16,49 +16,70 @@
     padding-left: 8px;
 }
 
-span.st-widget-dialog-title {
-    padding-left: 0;
+/* Lightbox */
+
+.lightbox {
+    padding: 10px;
+    line-height: 1.5em;
+    text-align: left;
+    display: none;
+}
+
+.lightbox input {
+    margin: 4px;
+}
+
+.lightbox .title {
     font-weight: bold;
-    display: block;
+    font-size: 120%;
 }
 
-p.st-widget-description {
-    padding: 0;
-    margin: 0.2em 0 0.8em 0;
-}
-
-.widget_edit_advanced {
-    font-family: monospace;
-}
-
-table.st-widgets-optionstable {
-    border-collapse: separate;
-    border-spacing: 0px 6px;
-}
-
-table.st-widgets-moreoptionstable {
-    border-collapse: separate;
-    border-spacing: 0px 6px;
-}
-
-td.st-widget-dialog-editlabel {
-    padding-right: 0.5em;
-    white-space: nowrap;
-    vertical-align: top;
+.lightbox .label {
     font-weight: 600;
 }
 
-td.st-widget-dialog-editfield {
-    padding: 0;
+.lightbox .buttons {
+    float: right;
+    margin-top: 20px;
 }
 
-.widget_edit_error_msg {
-    border-top: 1px solid #BA4949;
-    border-bottom: 1px solid #BA4949;
-    background-color: #F5F5F5;
-    color: #800000;
-    padding: 4px;
+.lightbox .fileprompt {
+    margin: 0.2em 0 0.4em 0;
+    padding-bottom: 0px;
+}
+
+.lightbox .message {
+    font-weight: bold;
+    margin-bottom: 1em;
     display: none;
+}
+
+.lightbox .error {
+    font-weight: bold;
+    color: #f00;
+    margin-bottom: 1em;
+    display: none;
+}
+
+.lightbox .list {
+    display: none;
+    font-size: 90%;
+    color: #666;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border-top: 1px solid #4949BA;
+    border-bottom: 1px solid #4949BA;
+    background-color: #F5F5F5;
+    padding: 3px;
+}
+
+.lightbox .listlabel {
+    color: #4949BA;
+}
+
+.lightbox .hint {
+    font-size: 90%;
+    font-style: italic;
 }
 
 /* Additional Settings styles */
@@ -315,68 +336,6 @@ html>body #st-page-details {
 }
 
 
-/* Attachments Dialog */
-
-#st-attachments-attach-title {
-    font-weight: bold;
-    font-size: 120%;
-}
-
-#st-attachments-attach-buttons {
-    float: right;
-    margin-top: 20px;
-}
-
-#st-attachments-attach-uploadbutton {
-    float: right;
-    margin-right: 6px;
-    margin-top: 6px;
-    padding-bottom: 0;
-}
-
-#st-attachments-attach-fileprompt {
-    margin: 0.2em 0 0.4em 0;
-    padding-bottom: 0px;
-}
-
-#st-attachments-attach-submit {
-    font-weight: bold;
-}
-
-#st-attachments-attach-uploadmessage {
-    font-weight: bold;
-    margin-bottom: 1em;
-    display: none;
-}
-
-#st-attachments-attach-error {
-    font-weight: bold;
-    color: #f00;
-    margin-bottom: 1em;
-    display: none;
-}
-
-#st-attachments-attach-list {
-    display: none;
-    font-size: 90%;
-    color: #666;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    border-top: 1px solid #4949BA;
-    border-bottom: 1px solid #4949BA;
-    background-color: #F5F5F5;
-    padding: 3px;
-}
-
-#st-attachments-attach-limit {
-    font-size: 90%;
-    font-style: italic;
-}
-
-.st-attachments-attach-listlabel {
-    color: #4949BA;
-}
-
 /* Listview Tools */
 
 #listPage #controlsRight {
@@ -481,49 +440,6 @@ html>body #st-page-details {
 #st-listview-submit-rtfexport {
     background: url("../images/page_word.png") left center no-repeat;
 }
-/* Queue Tag Dialog */
-
-#st-tagqueue-interface {
-    text-align: left;
-}
-
-#st-tagqueue-fileprompt {
-    margin-bottom: 0.4em;
-    margin-top: 0;
-    padding-bottom: 0;
-}
-
-#st-tagqueue-title {
-    font-weight: bold;
-}
-
-#st-tagqueue-close {
-    float: right;
-    margin-top: 6px;
-}
-
-#st-tagqueue-addbutton {
-    float: right;
-    margin-right: 6px;
-    margin-top: 6px;
-    padding-bottom: 0;
-}
-
-#st-tagqueue-list {
-    display: none;
-    color: #666;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    border-top: 1px solid #4949BA;
-    border-bottom: 1px solid #4949BA;
-    background-color: #F5F5F5;
-    padding: 3px;
-}
-
-.st-tagqueue-listlabel {
-    color: #4949BA;
-}
-
 
 /* Add a link lightbox */
 
@@ -571,6 +487,19 @@ html>body #st-page-details {
     padding-bottom: 5px;
 }
 
+#loading-message, #saving-message {
+    padding: 15px;
+}
+
+/*
+ * XXX: Hack around the fact that we don't have buttons for these elements yet
+ */
+a#st-mode-wysiwyg-button,
+a#st-preview-button-link,
+a#st-mode-wikitext-button,
+a#st-edit-tips {
+    top: 0 !important;
+}
 
 /* Loading... message */
 div#bootstrap-loader {

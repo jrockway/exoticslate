@@ -36,8 +36,11 @@
 
     <div id="controlsRight">
         <ul>
-            <li><a class="print" href="#">Print</a></li>
-            <li><a class="email" href="#">Email</a></li>
+            <li><a class="print" title="[% loc('Print this page') %]" id="st-pagetools-print" href="JavaScript:window.print()">[% loc('Print') %]</a></li>
+            [% IF checker.check_permission('email_out') &&
+                  page.page_type != 'spreadsheet' %]
+            <li><a class="email" title="[% loc('Email this page') %]" id="st-pagetools-email" href="#">[% loc('Email') %]</a></li>
+            [% END %]
             <li class="last"><a class="tools" href="#">Tools</a></li>
         </ul>
     </div><!-- controlsRight END -->
@@ -198,4 +201,18 @@
         <div style="clear:both;">&nbsp;</div>
     </form>
 </div>
+
+<div class="lightbox" id="st-commentui-container">
+  [% IF hub.current_workspace.comment_form_note_top %]
+    <div id="st-commentui-notetop">[% hub.current_workspace.comment_form_note_top %]</div>
+  [% END %]
+  <form id="comment-form" name="comment_form" method="post" action="[% script_name %]" enctype="application/x-www-form-urlencoded">
+  <textarea style="width: 100%; height: 100px" id="st-commentui-textarea" name="comment" wrap="virtual"></textarea>
+  <div class="buttons">
+    <input id="st-commentui-savelink" type="submit" value="[% loc('save') %]"/>
+    <input id="st-commentui-cancellink" type="button" value="[% loc('Cancel') %]"/>
+  </div>
+  </form>
+</div>
+
 [% END %]

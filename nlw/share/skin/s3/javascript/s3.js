@@ -223,17 +223,20 @@ $(function() {
     var editor_uri = nlw_make_s3_path('/javascript/socialtext-editor.js.gz')
         .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
 
-    $("#st-comment-button-link")
-        .click(function () {
-            $.getScript(nlw_make_s3_path('/javascript/comment.js'),
-                function () {
-                    var ge = new GuiEdit;
-                    ge.show();
-                }
-            );
-        });
+    $("#st-comment-button-link").click(function () {
+        $.getScript(nlw_make_s3_path('/javascript/comment.js'),
+            function () {
+                var ge = new GuiEdit;
+                ge.show();
+            }
+        );
+    });
 
-    $("#st-pagetools-email")
+    $("#st-pagetools-email").click(function () {
+        $.showLightbox({
+            content: 
+        });
+    });
 
     $("#st-edit-button-link,#st-edit-actions-below-fold-edit")
         .one("click", function () {

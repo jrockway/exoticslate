@@ -153,7 +153,7 @@ sub status {
 ###############################################################################
 # Returns the full path to the file we use to hold our PID.
 sub _pidfile {
-    return "$ENV{HOME}/.st-bootstrap-openldap.pid";
+    return "/tmp/st-bootstrap-openldap-$<.pid";
 }
 
 ###############################################################################

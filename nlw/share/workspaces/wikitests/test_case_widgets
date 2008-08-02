@@ -12,7 +12,6 @@
 | st_wait_for_widget_load | myworkspace | 45000 |
 | pause | 10000 |  |
 | st-select-widget-frame | myworkspace |  |
-| text-present-like | Canonical Test Data Set |  |
 | select-frame | relative=parent |  |
 | st-widget-title-like | myworkspace | Workspaces |
 
@@ -42,9 +41,12 @@
 | st-select-widget-frame | onepage |  |
 | wait_for_element_present_ok | link=Edit this page |  |
 | text-present-like | I have create a page call one page %%start_time%% |  |
-| click_ok | link=Edit this page |
-| wait_for_element_present_ok | link=Save |
-| wait_for_element_present_ok | link=Cancel |
+| click_ok | link=Edit this page |  |
+| type_ok | editarea_%%onepage%% | mean mr mustard |
+| wait_for_element_present_ok | link=Save |  |
+| wait_for_element_present_ok | link=Cancel |  |
+| click_ok | link=Save |  |
+| wait_for_text_present_ok | mean mr mustard |  |
 
 *** Text-Like will go here once I can figure out the field
 *** Catch up changes
@@ -53,8 +55,42 @@
 | st-empty-container |  |  |
 | st-add-widget | gadgets/share/gadgets/recent_changes.xml | recentchanges |
 | st_wait_for_widget_load | recentchanges | 15000 |
+| st-select-widget-frame | recentchanges |  |
+| text-present-like | I have created a page called one_page_%%start_time%%. woot. |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_01 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_02 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_03 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_04 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_05 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_07 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_08 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_09 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_10 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_11 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_12 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_13 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_14 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_15 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_16 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_17 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_18 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_19 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_20 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_21 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_22 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_23 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_24 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_25 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_26 < %%wikitest_client_files%%wikitest.txt |  |
+| st-admin | update-page --workspace test-data --page recent_changes_%%start_time%%_27 < %%wikitest_client_files%%wikitest.txt |  |
 | select-frame | relative=parent |  |
-
-| pause | 3000 |  |
-
-^ END
+| select_ok | up_count | 20 |
+| click_ok | st-savebutton |  |
+| st-select-widget-frame | recentchanges |  |
+| text-present-like | recent_changes_%%start_time%%_27 |  |
+| text-present-like | recent_changes_%%start_time%%_25 |  |
+| text-present-like | recent_changes_%%start_time%%_20 |  |
+| text-present-like | recent_changes_%%start_time%%_10 |  |
+| text-present-like | recent_changes_%%start_time%%_09 |  |
+| select-frame | relative=parent |  |
+| pause | 3000 |

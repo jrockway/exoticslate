@@ -361,40 +361,39 @@ html>body #st-page-details {
     text-align: right;
 }
 
-#listPage #controlsRight li {
+#controlsRight li {
     position: relative;
     list-style: none;
     margin: 0;
+    padding-right: 5px;
     float: left;
     width: 5em;
 }
 
-#listPage #controlsRight ul li {
-    line-height: 18px;
+body#listView #controlsRight ul li {
     font-size: 14px;
-    padding-top: 2px;
 }
 
-#listPage #controlsRight ul ul li:hover {
+#controlsRight ul ul li:hover {
     background: #BFE2FF;
 }
 
-#listPage #controlsRight li a {
+#controlsRight li a {
     display: block;
     text-decoration: none;
 }
 
-#listPage #controlsRight>ul a {
+#controlsRight>ul a {
     width: auto;
 }
 
-#listPage #controlsRight ul ul {
+#controlsRight ul ul {
     position: absolute;
     width: auto;
     display: none;
 }
 
-#listPage #controlsRight ul.level2 {
+#controlsRight ul.level2 {
     z-index: 300;
     margin: 0;
     padding: 0;
@@ -403,15 +402,22 @@ html>body #st-page-details {
     border-width: 0 1px;
 }
 
-#listPage #controlsRight ul ul li {
-    line-height: 1.5em;
+#controlsRight ul ul li {
+    line-height: 1.5em !important;
     width: 10.6em;
     padding-top: 2px;
     padding-bottom: 2px;
-    font-size: 12px;
 }
 
-#listPage #controlsRight ul ul li a {
+#controlsRight li.first {
+    border-top: 1px solid #CCC;
+}
+
+#controlsRight li.separator {
+    border-bottom: 1px solid #CCC;
+}
+
+#controlsRight ul ul li a {
     border-bottom: 1px solid #CCC;
     padding-left: 19px;
     padding-right: 3px;
@@ -419,18 +425,26 @@ html>body #st-page-details {
     border: 0px;
 }
 
-#listPage #controlsRight li.submenu li.submenu:hover {
+#controlsRight li.submenu li.submenu:hover {
     z-index: 300;
     background-color: #BFE2FF;
 }
 
-#listPage #controlsRight ul.level1 li.submenu:hover ul.level2 {
+#controlsRight ul.level1 li.submenu:hover ul.level2 {
     display: block;
 }
 
-#listPage #controlsRight ul.level2 {
+#controlsRight ul.level2 {
     top: 1.3em;
     left: -4.2em;
+}
+
+body#listView #controlsRight ul ul li {
+    font-size: 12px;
+}
+
+body#contentPage #controlsRight ul.level2 {
+    top: 2em;
 }
 
 #st-listview-submit-pdfexport {
@@ -508,29 +522,6 @@ div#bootstrap-loader {
 }
 
 /* pagetools : the top right New Page, Print, Email, and Tools items at top right */
-
-div#st-pagetools {
-    z-index: 300;
-    color: #484848; font-size: .7em; /* changed to a relative measure */
-    position: relative; float: right;
-    margin: 0px;
-}
-
-div#st-pagetools li {
-    position: relative; float: left;
-    list-style: none;
-    margin: 0px; padding-left: 21px;
-}
-
-#st-pagetools a {
-    text-decoration: none;
-    color: #484848; text-transform: uppercase; letter-spacing: .05em;
-    padding-left: 21px; padding-top: 5px; padding-bottom: 1px;
-}
-
-#st-pagetools li.submenu { 
-    margin-top: 6px;
-}
 
 
 #st-page-editing-toolbar {

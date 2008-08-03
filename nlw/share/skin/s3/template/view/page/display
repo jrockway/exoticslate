@@ -35,13 +35,51 @@
     </div>
 
     <div id="controlsRight">
-        <ul>
+        <ul class="level1">
             <li><a class="print" title="[% loc('Print this page') %]" id="st-pagetools-print" href="JavaScript:window.print()">[% loc('Print') %]</a></li>
             [% IF checker.check_permission('email_out') &&
                   page.page_type != 'spreadsheet' %]
             <li><a class="email" title="[% loc('Email this page') %]" id="st-pagetools-email" href="#">[% loc('Email') %]</a></li>
             [% END %]
-            <li class="last"><a class="tools" href="#">Tools</a></li>
+            <li class="last submenu"><a class="tools" id="st-pagetools-tools" href="#">[% loc('Tools') %]</a>
+                <ul class="level2">
+                    [% IF checker.check_permission('email_out') &&
+                          page.page_type != 'spreadsheet' %]
+                    <li>
+                        <a title="[% loc('Email this page') %]" id="st-pagetools-email" href="?action=email_page_popup;page_name=[% page.id %]" onclick="query_popup('index.cgi?action=email_page_popup;page_name=[% page.id %]',750,580); return false;">[% loc('Email') %]</a>
+                    </li>
+                    [% END %]
+                    [% IF checker.check_permission('edit') %]
+                    <li class="first"><a onclick="query_popup('index.cgi?action=duplicate_popup;page_name=[% page.id %]',410,300); return false;" href="index.cgi?action=duplicate_popup;page_name=[% page.id %]">[% loc('Duplicate Page') %]</a></li>
+                    <li><a onclick="query_popup('index.cgi?action=rename_popup;page_name=[% page.id %]',410,300); return false;" href="index.cgi?action=rename_popup;page_name=[% page.id %]">[% loc('Rename Page') %]</a></li>
+                    [% END %]
+                    [% IF checker.check_permission('delete') %]
+                    <li [% current_user_workspace_count == 1 ? "class=\"separator\"":"" %]><a href="index.cgi?[% page.id %]" onclick="confirm_delete('[% page.id %]'); return false">[% loc('Delete Page') %]</a></li>
+                    [% END %]
+                    [% IF current_user_workspace_count > 1 %]
+                    <li class="separator"><a href="index.cgi?action=copy_to_workspace_popup;page_name=[% page.id %]" onclick="query_popup('index.cgi?action=copy_to_workspace_popup;page_name=[% page.id %]'); return false;">[% loc('Copy Page to Workspace') %]</a></li>
+                    [% END %]
+                    [% USE encode_mailto %]
+                    [% IF checker.check_permission('email_in') &&
+                          page.page_type != 'spreadsheet' %]
+                    <li><a href="mailto:[% wiki.email_address %]" title="[% wiki.email_address %]">[% loc('Email To This Workspace') %]</a></li>
+                        [% IF page.page_type == 'spreadsheet' %]
+                    <li class="separator"><a href="mailto:[% wiki.email_address %]?subject=[% page.title | html_encode  %]" title="To: [% wiki.email_address %] / subject: [% page.title | html_encode %]" onclick="alert(loc('Sorry, this feature is not available for spreadsheets')); return false;" >[% loc('Email To This Page') %]</a></li>
+                        [% ELSE %]
+                    <li class="separator"><a href="mailto:[% wiki.email_address %]?subject=[% page.title | html_encode  %]" title="To: [% wiki.email_address %] / subject: [% page.title | html_encode %]">[% loc('Email To This Page') %]</a></li>
+                        [% END %]
+                    [% END %]
+                    <li><a href="index.cgi?action=display_html;page_name=[% page.id %]" target="_new">[% loc('Export as HTML') %]</a></li>
+
+                    [% IF loc_lang != 'ja' %]
+                    <li><a href="index.cgi?action=pdf_export;page_selected=[% page.id %]" target="_new">[% loc('Export to PDF') %]</a></li>
+                    [% END %]
+                    <li class="separator"><a href="index.cgi?action=rtf_export;page_selected=[% page.id %]" target="_new">[% loc('Export to Word') %]</a></li>
+                    [% FOREACH tool = tools.keys %]
+                    <li class="separator"><a href="index.cgi?action=[% tools.$tool.0 %];page_name=[% page.id %]">[% tool %]</a></li>
+                    [% END %]
+                </ul>
+            </li>
         </ul>
     </div><!-- controlsRight END -->
 </div><!-- controls END -->

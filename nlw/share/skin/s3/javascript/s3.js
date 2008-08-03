@@ -7,9 +7,18 @@ Page = {
                '/pages/' + page_name;
     },
 
-    refreshPageContent: function () {
-        $.get(this.pageUrl(), function (html) {
-            $('#st-page-content').html(html);
+    refreshPageContent: function (force_update) {
+        $.getJSON(this.pageUrl(), function (data) {
+            var newRev = data.revision_id;
+            var oldRev = Socialtext.revision_id;
+            if ((oldRev < newRev) || force_update) {
+                $.get(Page.pageUrl(), function (html) {
+                    $('#st-page-content').html(html);
+                    Socialtext.wikiwyg_variables.page.revision_id =
+                        Socialtext.revision_id = newRev
+                    $('#st-rewind-revision-count').html(newRev);
+                });
+            }
         });
     },
 

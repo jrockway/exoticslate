@@ -51,6 +51,7 @@ GuiEdit.prototype.show = function () {
     });
     this.area = jQuery('#st-commentui-textarea').get(0);
     jQuery('#st-commentui-textarea').trigger('focus').val('');
+    jQuery('#comment-form').unbind('submit');
     jQuery('#comment-form').bind('submit', function () {
         jQuery.post(
             '/' + Socialtext.wiki_id + '/index.cgi',

@@ -180,11 +180,12 @@ $(function() {
             Page.addTag(tag);
         });
 
-    $('#st-attachments-uploadbutton')
-        .lightbox({
+    $('#st-attachments-uploadbutton').click(function () {
+        $.showLightbox({
             content:'#st-attachments-attachinterface',
             close:'#st-attachments-attach-closebutton'
         });
+    });
 
     $('#st-attachments-attach-filename')
         .val('')
@@ -254,9 +255,11 @@ $(function() {
         alert('not implemented');
     });
     
-    $("#st-pagetools-rename").lightbox({
-        content:'#st-rename-lightbox',
-        close:'#st-rename-cancellink'
+    $("#st-pagetools-rename").click(function () {
+        $.showLightbox({
+            content:'#st-rename-lightbox',
+            close:'#st-rename-cancellink'
+        });
     });
 
     $('#st-rename-form').submit(function () {

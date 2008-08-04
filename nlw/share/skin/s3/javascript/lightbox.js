@@ -2,37 +2,18 @@
     var opts;
 
     $.hideLightbox = function() {
-        $(this).lightbox.stop();
+        console.log(1);
+        $(this).hideLightbox();
     };
 
     $.showLightbox = function(options) {
+        console.log(3);
         opts = options;
-        $(this).lightbox.start();
+        $(this).showLightbox();
     };
 
-    $.fn.lightbox = function(options){
-        opts = options;
-        this.each(function(){
-            $(this).click(function(){
-                $(this).lightbox.start();
-                return false;
-            });
-        });
-    };
-
-    $.fn.lightbox.is_ie = function() {
-        ua = navigator.userAgent.toLowerCase();
-        is_ie = (
-            ua.indexOf("msie") != -1 &&
-            ua.indexOf("opera") == -1 &&
-            ua.indexOf("webtv") == -1
-        );
-        return is_ie;
-    };
-    
-    $.fn.lightbox.start = function() {
-        var self = this;
-
+    $.fn.showLightbox = function() {
+        console.log(4);
         if (!$('#lightbox').size()) {
             $('<div id="lightbox">')
                 .css({
@@ -55,7 +36,7 @@
         }
         if (!$('#overlay').size()) {
             $('<div id="overlay">')
-                .click(function () { self.stop() })
+                .click(function () { $.hideLightbox() })
                 .css({
                     display: 'none',
                     position: $.browser.msie ? 'absolute': 'fixed',
@@ -76,14 +57,15 @@
         $('body').css('overflow', 'hidden');
 
         if (opts.close)
-            $(opts.close).click(function () { self.stop() })
+            $(opts.close).click(function () { $.hideLightbox() })
 
         $('#overlay').fadeIn(function () {
             $('#lightbox').append($(opts.content).show()).fadeIn();
         });
     };
 
-    $.fn.lightbox.stop = function() {
+    $.fn.hideLightbox = function() {
+        console.log(2);
         $(opts.content).hide().appendTo('body');
         $('#overlay').fadeOut()
         $('#lightbox').hide();

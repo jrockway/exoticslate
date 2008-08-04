@@ -3,7 +3,9 @@ package Socialtext::WikiFixture::Socialtext;
 use strict;
 use warnings;
 use base 'Socialtext::WikiFixture::Selenese';
+use Sys::Hostname;
 use Test::More;
+use Cwd;
 
 =head1 NAME
 
@@ -471,6 +473,27 @@ sub st_click_reset_password {
     ok !$self->is_checked($chk_xpath), 'reset password checkbox not checked';
 }
 
+
+=head2 st_catchup_logs
+  Runs the script to import the nlw_log into the reports database
+=cut
+
+sub st_catchup_logs {
+   if (_is_dev_env()) {
+       my $current_dir = cwd;
+       my $new_dir =  $ENV{ST_CURRENT} . "/socialtext-reports/";
+       chdir($new_dir);
+       my $str = $ENV{ST_CURRENT} . "/socialtext-reports/parse-dev-env-logs /var/log/nlw.log 2>&1";
+       print "in dev env $str\n";
+       `$str`;
+       chdir($current_dir);
+   } else {
+      `sudo /usr/bin/st-reports-consume-access-log /var/log/apache-perl/access.log >> /var/log/st-reports.log 2>&1`;
+      `sudo /usr/bin/st-reports-consume-nlw-log /var/log/nlw.log >> /var/log/st-reports.log 2>&1`;
+   }
+}
+
+
 sub _click_user_row {
     my ($self, $email, $method_name, $click_col) = @_;
     my $sel = $self->{selenium};
@@ -507,6 +530,14 @@ sub _run_command {
     }
 }
 
+sub _is_dev_env {
+    my $host = hostname;
+    if ($host=~/talc/ || $host=~/topaz/) {
+        return 1;
+    } else {
+         return 0;
+    }
+}
 =head1 AUTHOR
 
 Luke Closs, C<< <luke.closs at socialtext.com> >>

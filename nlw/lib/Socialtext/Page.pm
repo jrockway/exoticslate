@@ -18,6 +18,7 @@ use Socialtext::Encode;
 use Socialtext::File;
 use Socialtext::Formatter::Parser;
 use Socialtext::Formatter::Viewer;
+use Socialtext::Formatter::AbsoluteLinkDictionary;
 use Socialtext::Log qw( st_log );
 use Socialtext::Paths;
 use Socialtext::PageMeta;
@@ -28,10 +29,11 @@ use Socialtext::l10n qw(loc system_locale);
 use Socialtext::WikiText::Parser;
 use Socialtext::WikiText::Emitter::SearchSnippets;
 use Socialtext::String;
+use Socialtext::Events;
 use Socialtext::SQL qw/sql_execute sql_begin_work sql_commit/;
 
 use Carp ();
-use Class::Field qw( field );
+use Class::Field qw( field const );
 use Cwd ();
 use Email::Valid;
 use File::Path;
@@ -210,8 +212,15 @@ sub update_from_remote {
 
     $self->load;
 
-    die "Contention: page has been updated since retrieved\n"
-        unless $self->revision_id eq $revision_id;
+    if ( $self->revision_id ne $revision_id ) {
+        Socialtext::Events->Record({
+            class => 'page',
+            action => 'edit_contention',
+            page => $self,
+        });
+
+        die "Contention: page has been updated since retrieved\n";
+    }
 
     # REVIEW: cateories/tag naming mismatch, using tag in this
     # method because it is close to the exterior
@@ -224,6 +233,12 @@ sub update_from_remote {
         user             => $user,
         $p{date} ? ( date => $p{date} ) : (),
     );
+
+    Socialtext::Events->Record({
+        class => 'page',
+        action => 'edit_save',
+        page => $self,
+    });
 }
 
 =head2 update( %args )
@@ -591,11 +606,19 @@ sub add_tags {
 
     if ( $self->hub->checker->check_permission('edit') ) {
         my $meta = $self->metadata;
-        foreach (@tags) {
-            $meta->add_category($_);
+        foreach my $tag (@tags) {
+            $meta->add_category($tag);
         }
         $self->metadata->update( user => $self->hub->current_user );
         $self->store( user => $self->hub->current_user );
+        foreach my $tag (@tags) {
+            Socialtext::Events->Record({
+                class => 'page',
+                action => 'tag',
+                page => $self,
+                tag_name => $tag,
+            });
+        }
     }
 }
 
@@ -653,6 +676,15 @@ sub add_comment {
     my $user = $self->hub->current_user;
 
     $self->store( user => $user );
+
+    my $summary = $self->preview_text($wikitext);
+    Socialtext::Events->Record({
+        class => 'page',
+        action => 'comment',
+        page => $self,
+        summary => $summary,
+    });
+    return;
 }
 
 sub _comment_attribution {
@@ -1073,6 +1105,13 @@ sub delete {
     $self->content('');
     $self->metadata->Category([]);
     $self->store( user => $p{user} );
+
+    Socialtext::Events->Record({
+        class => 'page',
+        action => 'delete',
+        page => $self,
+    });
+    return;
 }
 
 sub purge {
@@ -1271,6 +1310,7 @@ sub duplicate {
     my $keep_categories = shift;
     my $keep_attachments = shift;
     my $clobber = shift || '';
+    my $is_rename = shift || 0;
 
     my $dest_main = Socialtext->new;
     $dest_main->load_hub(
@@ -1316,6 +1356,21 @@ sub duplicate {
     }
 
     $target_page->store( user => $dest_hub->current_user );
+
+    Socialtext::Events->Record({
+        class => 'page',
+        action => ($is_rename) ? 'rename' : 'duplicate',
+        page => $self,
+        target_workspace => $dest_hub->current_workspace,
+        target_page => $target_page,
+    });
+
+    Socialtext::Events->Record({
+        class => 'page',
+        action => 'edit_save',
+        page => $target_page,
+    });
+
     return 1; # success
 }
 
@@ -1344,6 +1399,7 @@ sub rename {
         $keep_categories,
         $keep_attachments,
         $clobber,
+        'rename'
     );
 
     if ($return) {
@@ -1641,18 +1697,13 @@ sub write_file {
     my ($headers, $body) = @_;
     my $id = $self->id
       or die "No id for content object";
-    my $revision_file = $self->revision_file( $self->_new_revision_id );
+    my $revision_file = $self->revision_file( $self->new_revision_id );
     my $page_path = join '/', Socialtext::Paths::page_data_directory( $self->hub->current_workspace->name ), $id;
-    File::Path::mkpath($page_path, 0, 0755);
+    Socialtext::File::ensure_directory($page_path, 0, 0755);
     Socialtext::File::set_contents_utf8($revision_file, join "\n", $headers, $body);
 
-    # Update the index symlink using a rename
     my $index_path = join '/', $page_path, 'index.txt';
-    my $temp_index = "$index_path.$$";
-    symlink $revision_file, $temp_index
-        or die "Can't create symlink: $!";
-    CORE::rename $temp_index => $index_path
-        or die "Can't rename $temp_index to $index_path: $!";
+    Socialtext::File::safe_symlink($revision_file => $index_path);
 }
 
 sub current_revision_file {
@@ -1668,7 +1719,7 @@ sub revision_file {
     return $filename;
 }
 
-sub _new_revision_id {
+sub new_revision_id {
     my $self = shift;
     my ($sec,$min,$hour,$mday,$mon,$year) = gmtime(time);
     my $id = sprintf(
@@ -1685,7 +1736,7 @@ sub _new_revision_id {
         return $id;
     }
     sleep 1;
-    return $self->_new_revision_id();
+    return $self->new_revision_id();
 
 }
 

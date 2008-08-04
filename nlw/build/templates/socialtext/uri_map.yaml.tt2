@@ -1,4 +1,13 @@
 --- !!omap
+-
+    '/data/events':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::Events, GET_json]
+            'application/json': [Socialtext::Rest::Events, GET_json]
+        'POST':
+            '*/*':              [Socialtext::Rest::Events, POST_form]
+            'application/json': [Socialtext::Rest::Events, POST_json]
+        '*':                    [Socialtext::Rest::Events, bad_method]
 - 
     '/data/echo/:text':
         'GET':

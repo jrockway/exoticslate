@@ -339,6 +339,7 @@ BEGIN {
             Socialtext::Attachments
             Socialtext::CGI
             Socialtext::Skin
+            Socialtext::Events
             Socialtext::Formatter
             Socialtext::Formatter::Viewer
             Socialtext::Headers

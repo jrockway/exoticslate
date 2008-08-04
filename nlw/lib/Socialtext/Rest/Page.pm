@@ -10,6 +10,7 @@ use HTML::WikiConverter;
 use Socialtext::JSON;
 use Readonly;
 use Socialtext::HTTP ':codes';
+use Socialtext::Events;
 
 Readonly my $DEFAULT_LINK_DICTIONARY => 'REST';
 Readonly my $S2_LINK_DICTIONARY      => 'S2';
@@ -24,7 +25,8 @@ sub make_GETter {
         $self->if_authorized(
             'GET',
             sub {
-                if ( $self->page->content eq '' ) {
+                my $page = $self->page;
+                if ( $page->content eq '' ) {
                     $rest->header(
                         -status => HTTP_404_Not_Found,
                         -type   => 'text/plain'
@@ -35,7 +37,7 @@ sub make_GETter {
                     my @etag = ();
 
                     if ( $content_type eq 'text/x.socialtext-wiki' ) {
-                        my $etag = $self->page->revision_id();
+                        my $etag = $page->revision_id();
                         @etag = ( -Etag => $etag );
 
                         my $match_header
@@ -53,16 +55,18 @@ sub make_GETter {
                         -status        => HTTP_200_OK,
                         -type          => $content_type . '; charset=UTF-8',
                         -Last_Modified => $self->make_http_date(
-                            $self->page->modified_time()
+                            $page->modified_time()
                         ),
                         @etag,
                     );
-                    return $self->page->content_as_type(
+                    my $content_to_return = $page->content_as_type(
                         type => $content_type,
 
                         # FIXME: this should be a CGI paramter in some cases
                         link_dictionary => $self->_link_dictionary($rest),
                     );
+                    $self->_record_view($page);
+                    return $content_to_return;
                 }
             }
         );
@@ -105,27 +109,32 @@ sub GET_json {
             my $verbose = $rest->query->param('verbose');
 
             my $link_dictionary = $self->_link_dictionary($rest);
+            my $page = $self->page;
 
-            if ($self->page->active) {
+            if ($page->active) {
                 $rest->header(
                     -status => HTTP_200_OK,
                     -type   => 'application/json; charset=UTF-8',
                 );
-                my $default_view      = sub { $self->page->hash_representation() };
+                my $default_view      = sub { $page->hash_representation() };
                 my $addtional_content = sub {
-                    $self->page->content_as_type( type => $_[0],
+                    $page->content_as_type( type => $_[0],
                         link_dictionary => $_[1] );
                 };
 
-                return encode_json(
+                my $json = encode_json(
                     $verbose
                     ? {
                         %{ $default_view->() },
-                        wikitext => $addtional_content->('text/x.socialtext-wiki'),
-                        html     => $addtional_content->( 'text/html', $link_dictionary )
+                        wikitext => 
+                            $addtional_content->('text/x.socialtext-wiki'),
+                        html => 
+                            $addtional_content->('text/html', $link_dictionary)
                         }
                     : $default_view->()
                 );
+                $self->_record_view($page);
+                return $json;
             }
             else {
                 $rest->header(
@@ -136,6 +145,17 @@ sub GET_json {
             }
         }
     );
+}
+
+sub _record_view {
+    my ($self, $page) = @_;
+    if ($page->id ne 'untitled_page') {
+        Socialtext::Events->Record({
+            class => 'page',
+            action => 'view',
+            page => $page,
+        });
+    }
 }
 
 sub DELETE {
@@ -158,19 +178,20 @@ sub PUT_wikitext {
     return $self->no_workspace() unless $self->workspace;
     return $self->not_authorized() unless $self->user_can('edit');
 
-    my $existed_p = $self->page->content ne '';
+    my $page = $self->page;
+    my $existed_p = $page->content ne '';
 
     my $match_header = $self->rest->request->header_in('If-Match');
     if (   $existed_p
         && $match_header
-        && ( $match_header ne $self->page->revision_id() ) ) {
+        && ( $match_header ne $page->revision_id() ) ) {
         $rest->header(
             -status => HTTP_412_Precondition_Failed,
         );
         return '';
     }
 
-    $self->page->update_from_remote(
+    $page->update_from_remote(
         content => $rest->getContent(),
     );
 
@@ -187,14 +208,15 @@ sub PUT_html {
     return $self->no_workspace() unless $self->workspace;
     return $self->not_authorized() unless $self->user_can('edit');
 
-    my $existed_p = $self->page->content ne '';
+    my $page = $self->page;
+    my $existed_p = $page->content ne '';
 
     my $html = $rest->getContent(),
 
     my $wc = new HTML::WikiConverter( dialect => 'Socialtext');
     my $wikitext = $wc->html2wiki( html => $html );
 
-    $self->page->update_from_remote(
+    $page->update_from_remote(
         content => $wikitext,
     );
 
@@ -211,12 +233,13 @@ sub PUT_json {
     return $self->no_workspace() unless $self->workspace;
     return $self->not_authorized() unless $self->user_can('edit');
 
-    my $existed_p = $self->page->content ne '';
+    my $page = $self->page;
+    my $existed_p = $page->content ne '';
 
     my $content = $rest->getContent();
     my $object = decode_json( $content );
 
-    $self->page->update_from_remote(
+    $page->update_from_remote(
         content => $object->{content},
         from    => $object->{from},
         date    => $self->make_date_time_date($object->{date}),

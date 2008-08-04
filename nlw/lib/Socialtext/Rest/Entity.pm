@@ -87,7 +87,7 @@ sub http_400 {
 
 # FIXME: No permissions checking here YET as its not used
 # and what permission to check may need to be passed in as
-# an argument.
+# an argument. The same applies to _make_poster below.
 sub _make_putter {
     my ( $sub ) = @_;
     return sub {
@@ -103,6 +103,31 @@ sub _make_putter {
                 -status => $status,
                 $type     ? ( -type     => $type )     : (),
                 $location ? ( -Location => $location ) : () );
+            return $content;
+        };
+        if ($@) {
+            $rest->header(
+                -status => HTTP_400_Bad_Request
+                -type   => 'text/plain' );
+            return $@;
+        }
+        return $content;
+    }
+}
+
+# see also: _make_putter
+sub _make_poster {
+    my ( $sub ) = @_;
+    return sub {
+        my ( $self, $rest ) = @_;
+        my $content = eval {
+            my ( $type, $content )
+                = $self->post_generic( $self->$sub( $rest->getContent ) );
+            my $status = $content  ? HTTP_200_OK : HTTP_204_No_Content;
+            $rest->header(
+                -status => $status,
+                $type     ? ( -type     => $type )     : (),
+            );
             return $content;
         };
         if ($@) {
@@ -148,5 +173,32 @@ END_OF_TRAILER
 
 sub resource_to_json { encode_json($_[1]) }
 sub json_to_resource { decode_json($_[1]) }
+
+# decodes x-www-form-encoded data into a resource (i.e. a hash)
+sub form_to_resource {
+    my $self = shift;
+    my $form_data = shift;
+
+    my $resource = {};
+
+    my $cgi = Socialtext::CGI::Scrubbed->new($form_data);
+    my %params = $cgi->Vars();
+    foreach my $key (keys %params) {
+        my $res = $resource;
+        my $res_key = $key;
+
+        # resolve dotted names to nested hashes
+        while ($res_key =~ /^([^.]+)\.(.+)$/) {
+            my ($before,$after) = ($1,$2);
+            $res->{$before} ||= {};
+            $res = $res->{$before};
+            $res_key = $after;
+        }
+
+        $res->{$res_key} = $params{$key};
+    }
+
+    return $resource;
+}
 
 1;

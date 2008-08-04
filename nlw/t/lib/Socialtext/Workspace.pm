@@ -14,7 +14,6 @@ sub new {
     return $self;
 }
 
-
 sub title { $_[0]->{title} || 'mock_workspace_title' }
 sub name { $_[0]->{name} || $_[0]->{title} || 'mock_workspace_name' }
 sub workspace_id { $_[0]->{id} || 'mock_workspace_id' }

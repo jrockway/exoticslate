@@ -43,7 +43,9 @@ sub skin_info {
     my ($self, $skin) = @_;
     $skin ||= $self->current_skin;
     return $self->{_skin_info}{$skin} if $self->{_skin_info}{$skin};
-    my $skin_path = $self->skin_path($skin);
+    my $skin_path = $skin =~ m{^uploaded-skin/}
+        ? $self->_path($skin)
+        : $self->skin_path($skin);
     my $info_path = File::Spec->catfile( $skin_path, 'info.yaml' );
     $self->{_skin_info} = -f $info_path ? YAML::LoadFile($info_path) : {};
     $self->{_skin_info}{parent} ||= $DEFAULT_PARENT;

@@ -15,6 +15,7 @@ use Socialtext::Locales qw/available_locales/;
 use Socialtext::JSON;
 use Socialtext::Timer;
 use Apache::Cookie;
+use Socialtext::Events;
 
 sub class_id { 'display' }
 const class_title => loc('Screen Layout');
@@ -175,6 +176,30 @@ sub display {
     }
     $page->load;
 
+    if (!$is_new_page &&
+        $page->id ne 'untitled_page') 
+    {
+        eval {
+            Socialtext::Events->Record({
+                class => 'page',
+                action => 'view',
+                page => $page,
+            });
+        };
+        warn "Error storing view event: $@" if $@;
+    }
+
+    return $self->_render_display($page, $is_new_page, $start_in_edit_mode,
+                                  \@new_tags);
+}
+
+sub _render_display {
+    my $self = shift;
+    my $page = shift;
+    my $is_new_page = shift;
+    my $start_in_edit_mode = shift;
+    my $new_tags = shift;
+
     my $include_recent_changes
         = $self->preferences->include_in_pages->value;
 
@@ -218,7 +243,6 @@ sub display {
         } @{$self->hub->attachments->all(page_id => $page->id)}
     ];
 
-
     return $self->template_render(
         template => 'view/page/display',
         vars     => {
@@ -235,7 +259,7 @@ sub display {
                     $self->hub->current_workspace->title ),
             is_new                  => $is_new_page,
             start_in_edit_mode      => $start_in_edit_mode,
-            new_tags                => \@new_tags,
+            new_tags                => $new_tags,
             attachments             => $all_attachments,
             watching                => $self->hub->watchlist->page_watched,
             login_and_edit_path => '/challenge?'

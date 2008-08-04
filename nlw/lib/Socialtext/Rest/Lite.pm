@@ -9,6 +9,7 @@ use base 'Socialtext::Rest';
 use Socialtext::Lite;
 use Socialtext::Challenger;
 use Socialtext::HTTP ':codes';
+use Socialtext::Events;
 
 
 # basically just a dispatcher to NLW::Lite
@@ -132,6 +133,14 @@ sub get_page {
                         $page->modified_time()
                     ),
                 );
+
+                if ($page->id ne 'untitled_page') {
+                    Socialtext::Events->Record({
+                        class => 'page',
+                        action => 'view',
+                        page => $page,
+                    });
+                }
             }
             return $content;
         }

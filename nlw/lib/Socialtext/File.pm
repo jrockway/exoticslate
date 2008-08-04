@@ -187,8 +187,9 @@ sub _guess_string_encoding {
 
 sub ensure_directory {
     my $directory = shift;
+    my $mode = shift || 0755;
     return if -e $directory;
-    eval { File::Path::mkpath $directory };
+    eval { File::Path::mkpath $directory, 0, $mode };
     Carp::confess( "unable to create directory path $directory: $@" ) if $@;
 }
 
@@ -322,7 +323,7 @@ directories and below.
 =cut
 
 sub files_under {
-    my @starting = shift;
+    my @starting = @_;
 
     my @files;
 
@@ -340,7 +341,7 @@ directories in those directories and below.
 =cut
 
 sub files_and_dirs_under {
-    my @starting = shift;
+    my @starting = @_;
 
     my @files;
 
@@ -378,6 +379,22 @@ sub remove_directory {
 
     eval { rmtree($directory) };
     Carp::confess( "unable to remove directory path $directory: $@" ) if $@;
+}
+
+=head2 safe_symlink($filename, $symlink)
+
+Safely create a symlink 'symlink' that refers to 'filename'.
+
+=cut
+
+sub safe_symlink {
+    my $filename = shift;
+    my $symlink = shift;
+    my $tmp_symlink = "$symlink.$$";
+    symlink $filename, $tmp_symlink
+        or die "Can't create symlink '$tmp_symlink': $!";
+    rename $tmp_symlink => $symlink
+        or die "Can't rename '$tmp_symlink' to '$symlink': $!";
 }
 
 =head1 SEE ALSO

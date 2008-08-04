@@ -4,9 +4,10 @@ use strict;
 use warnings;
 use Test::More;
 use base 'Exporter';
+use unmocked 'Data::Dumper';
 
 our @EXPORT_OK = qw/sql_execute sql_ok sql_selectrow sql_singlevalue get_dbh
-                    sql_begin_work sql_commit sql_rollback/;
+                    sql_in_transaction sql_begin_work sql_commit sql_rollback/;
 our @SQL;
 our @RETURN_VALUES;
 
@@ -18,6 +19,7 @@ sub sql_execute {
 }
 
 sub get_dbh { }
+sub sql_in_transaction { 0 }
 sub sql_begin_work { }
 sub sql_commit { }
 sub sql_rollback { }
@@ -46,7 +48,8 @@ sub sql_ok {
     }
 
     if ($p{args}) {
-        is_deeply $sql->{args}, $p{args}, $p{name} . 'SQL args match';
+        is_deeply $sql->{args}, $p{args}, $p{name} . 'SQL args match'
+            or warn Dumper($sql->{args});
     }
 }
 
@@ -62,12 +65,19 @@ use strict;
 use warnings;
 use base 'Socialtext::MockBase';
 
+sub finish {}
+
 sub fetchall_arrayref {
     my $self = shift;
     return $self->{return} || [];
 }
 
 sub fetchrow_arrayref {
+    my $self = shift;
+    return shift @{ $self->{return} };
+}
+
+sub fetchrow_hashref {
     my $self = shift;
     return shift @{ $self->{return} };
 }

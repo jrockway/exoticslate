@@ -217,21 +217,25 @@ CREATE SEQUENCE "Workspace___workspace_id"
     NO MINVALUE
     CACHE 1;
 
-CREATE TABLE event (
-    id integer NOT NULL,
-    "timestamp" timestamptz,
-    actor_id integer,
-    "action" text,
-    "object" text,
-    context text
-);
-
 CREATE SEQUENCE event_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
     CACHE 1;
+
+CREATE TABLE event (
+    id bigint NOT NULL DEFAULT nextval('event_id_seq'),
+    at timestamptz NOT NULL,
+    action text NOT NULL,
+    actor_id integer,
+    event_class text NOT NULL,
+    context text,
+    page_id text,
+    page_workspace_id bigint,
+    person_id integer,
+    tag_name text
+);
 
 CREATE TABLE page (
     workspace_id bigint NOT NULL,
@@ -457,9 +461,6 @@ CREATE UNIQUE INDEX "User___lower___username"
 CREATE UNIQUE INDEX "Workspace___lower___name"
 	    ON "Workspace" (lower((name)::text));
 
-CREATE INDEX ix_event_actor_id
-	    ON event (actor_id);
-
 CREATE INDEX ix_person_assistant_id
 	    ON person (assistant_id);
 
@@ -472,6 +473,30 @@ CREATE UNIQUE INDEX search_set_workspaces___search_set_id___search_set_id___work
 CREATE UNIQUE INDEX search_sets___owner_user_id___owner_user_id___name
 	    ON search_sets (owner_user_id, lower((name)::text));
 
+CREATE INDEX ix_event_at
+	    ON event (at);
+
+CREATE INDEX ix_event_event_class_at
+	    ON event (event_class, at);
+
+CREATE INDEX ix_event_event_class_action_at
+	    ON event (event_class, action, at);
+
+CREATE INDEX ix_event_person_time
+	    ON event (person_id, at)
+            WHERE (event_class = 'person');
+
+CREATE INDEX ix_event_actor_time
+	    ON event (actor_id, at);
+
+CREATE INDEX ix_event_for_page
+	    ON event (page_workspace_id, page_id, at)
+            WHERE (event_class = 'page');
+
+CREATE INDEX ix_event_tag
+	    ON event (tag_name, at)
+            WHERE (event_class = 'page' OR event_class = 'person');
+
 CREATE TRIGGER person_ins
     AFTER INSERT ON "UserId"
     FOR EACH ROW
@@ -481,6 +506,16 @@ ALTER TABLE ONLY event
     ADD CONSTRAINT event_actor_id_fk
             FOREIGN KEY (actor_id)
             REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY event
+    ADD CONSTRAINT event_person_id_fk
+            FOREIGN KEY (person_id)
+            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY event
+    ADD CONSTRAINT event_page_fk
+            FOREIGN KEY (page_workspace_id, page_id)
+            REFERENCES "page"(workspace_id, page_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY "WorkspacePingURI"
     ADD CONSTRAINT fk_040b7e8582f72e5921dc071311fc4a5f
@@ -619,4 +654,4 @@ ALTER TABLE ONLY "Workspace"
 
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '6');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '7');

@@ -3,14 +3,41 @@
 use strict;
 use warnings;
 use FindBin;
-use Fatal qw/chdir/;
+use Fatal qw/chdir mkdir symlink/;
 use lib "$FindBin::Bin/../lib";
 use Socialtext::System qw/shell_run/;
 
-my $people_dir = "$FindBin::Bin/../../guanxi";
+my $people_dir = "$FindBin::Bin/../../plugins/people";
 unless (-d $people_dir) {
     die "Couldn't find people directory at $people_dir!\n";
 }
 
+my $uri_map_dir = "$ENV{HOME}/.nlw/etc/socialtext/uri_map.d";
+mkdir $uri_map_dir unless -d $uri_map_dir;
+for my $map ( glob("$people_dir/etc/socialtext/uri_map.d/*.yaml") ) {
+    (my $basename = $map) =~ s#.+/##;
+    my $map_link = "$uri_map_dir/$basename";
+    unlink $map_link;
+    symlink $map => $map_link;
+}
+
+# link lib directory
+my $people_lib = "$FindBin::Bin/../lib/Socialtext/People";
+unlink $people_lib;
+symlink "$people_dir/lib/Socialtext/People" => $people_lib;
+
+# link tests
+my $people_tests = "$FindBin::Bin/../t/Socialtext/People";
+unlink $people_tests;
+symlink "$people_dir/t/Socialtext/People" => $people_tests;
+
+my $people_mock = "$FindBin::Bin/../t/lib/Socialtext/People";
+unlink $people_mock;
+symlink "$people_dir/t/lib/Socialtext/People" => $people_mock;
+
 chdir $people_dir;
-shell_run("./bin/build-config");
+$Socialtext::System::SILENT_RUN = 1;
+shell_run("make");
+
+print "People is now linked in!\n";
+

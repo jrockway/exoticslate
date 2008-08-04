@@ -13,11 +13,18 @@ my @sql_patches = glob("$schema_dir/*-to-*.sql");
 
 plan tests => @sql_patches * 3 + 3;
 
-ok -d $schema_dir;
-ok -e $schema_file;
-my $schema = get_contents($schema_file);
-like $schema, qr/\QINSERT INTO "System" VALUES ('socialtext-schema-version',\E/,
-    'schema includes setting the version';
+
+Schema_is_okay: {
+    ok -d $schema_dir;
+    ok -e $schema_file;
+
+    my @patches = sort {$b cmp $a} @sql_patches;
+    my $highest = shift @patches;
+    (my $to_version = $highest) =~ s/.+-to-(\d+)\.sql/$1/;
+    my $schema = get_contents($schema_file);
+    like $schema, qr/\QINSERT INTO "System" VALUES ('socialtext-schema-version', '$to_version')\E/,
+        'schema includes setting the version';
+}
 
 for my $s (@sql_patches) {
     (my $name = $s) =~ s#.+/##;
@@ -27,5 +34,3 @@ for my $s (@sql_patches) {
     like $contents, qr/socialtext-schema-version/,
         'patch file mentions the version number';
 }
-
-

@@ -1,4 +1,5 @@
 package Socialtext::Schema;
+# @COPYRIGHT@
 use strict;
 use warnings;
 use base 'Socialtext::MockBase';

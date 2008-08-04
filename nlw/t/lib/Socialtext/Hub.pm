@@ -11,8 +11,13 @@ use Socialtext::Headers;
 use Socialtext::Preferences;
 use Socialtext::User;
 use Socialtext::Watchlist;
+use Socialtext::BreadCrumbsPlugin;
+use Socialtext::HitCounterPlugin;
+
+# use real classes unless already mocked
 use unmocked 'Socialtext::Helpers';
 use unmocked 'Socialtext::DisplayPlugin';
+use unmocked 'Socialtext::BacklinksPlugin';
 use unmocked 'Socialtext::FavoritesPlugin';
 use unmocked 'Socialtext::CategoryPlugin';
 use unmocked 'Socialtext::RecentChangesPlugin';
@@ -22,8 +27,10 @@ use unmocked 'Socialtext::FetchRSSPlugin';
 use unmocked 'Socialtext::Template';
 use unmocked 'Socialtext::Stax';
 use unmocked 'Socialtext::Pluggable::Adapter';
-use unmocked 'Socialtext::Formatter::Viewer';
 use unmocked 'Socialtext::Formatter';
+use unmocked 'Socialtext::Formatter::Viewer';
+
+#warn "MOCKED HUB";
 
 sub current_workspace {
     my $self = shift;
@@ -35,9 +42,11 @@ sub current_workspace {
 
 sub pages {
     my $self = shift;
-    $self->{pages} ||= Socialtext::Pages->new;
+    $self->{pages} ||= Socialtext::Pages->new(hub => $self);
     return $self->{pages};
 }
+
+sub headers { $_[0]->{headers} || Socialtext::Headers->new };
 
 sub cgi { $_[0]->{cgi} || Socialtext::CGI->new }
 
@@ -63,6 +72,10 @@ sub skin { $_[0]->{skin} || Socialtext::Skin->new(hub => $_[0]) }
 
 sub display { 
     return $_[0]->{display} ||= Socialtext::DisplayPlugin->new(hub => $_[0]);
+}
+
+sub css { 
+    return $_[0]->{css} ||= Socialtext::CSS->new(hub => $_[0]);
 }
 
 sub favorites { 
@@ -103,17 +116,35 @@ sub pluggable {
     return $_[0]->{pluggable} ||= Socialtext::Pluggable::Adapter->new(hub => $_[0]);
 }
 
-# Timezone plugin mocked up here
-sub timezone { $_[0] } # return ourself
-sub date_local { $_[1] } # return the date we passed in
+sub check_permission { 1 }
 
-sub viewer {
-    $_[0]->{viewer} ||= Socialtext::Formatter::Viewer->new( hub => $_[0] );
+sub backlinks {
+    return $_[0]->{backlinks} ||= Socialtext::BacklinksPlugin->new(hub => $_[0]);
 }
 
 sub formatter {
-    $_[0]->{formatter} ||= Socialtext::Formatter->new( hub => $_[0] );
+    return $_[0]->{formatter} ||= Socialtext::Formatter->new(hub => $_[0]);
 }
+
+sub attachments {
+    return $_[0]->{formatter} ||= Socialtext::Attachments->new(hub => $_[0]);
+}
+
+sub breadcrumbs {
+    return $_[0]->{breadcrumbs} ||= Socialtext::BreadCrumbsPlugin->new(hub => $_[0]);
+}
+
+sub hit_counter {
+    return $_[0]->{hit_counter} ||= Socialtext::HitCounterPlugin->new(hub => $_[0]);
+}
+
+sub viewer {
+    return $_[0]->{viewer} ||= Socialtext::Formatter::Viewer->new(hub => $_[0]);
+}
+
+# Timezone plugin mocked up here
+sub timezone { $_[0] } # return ourself
+sub date_local { $_[1] } # return the date we passed in
 
 sub registry_loaded { 1 }
 

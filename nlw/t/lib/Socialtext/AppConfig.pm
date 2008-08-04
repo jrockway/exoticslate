@@ -14,4 +14,20 @@ sub default_workspace { $DEFAULT_WORKSPACE }
 
 sub code_base { '/codebase' }
 sub script_name { '/scripts' }
+
+sub user_factories { 'Default' }
+
+sub data_root_dir { '/datadir' }
+
+sub stats { 'stats' }
+sub config_dir { '/config_dir' }
+sub template_compile_dir { 't/tmp' }
+
+sub locale { 'en' }
+sub debug { 0 }
+
+sub web_hostname { 'mock_web_hostname' }
+sub custom_http_port { 'custom_http_port' }
+sub instance { Socialtext::AppConfig->new }
+
 1;

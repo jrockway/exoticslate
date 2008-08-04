@@ -16,6 +16,7 @@ Socialtext.page_type = '[% page.page_type %]';
 Socialtext.page_size = [% page.size || 0 %];
 Socialtext.wiki_title = '[% wiki.title.replace('\'', '\\\'') %]';
 Socialtext.revision_id = '[% page.revision_id %]';
+Socialtext.revision_count = '[% page.revisions %]';
 Socialtext.comment_form_window_height = '[% wiki.comment_form_window_height %]'
 
 Socialtext.stax = {};

@@ -12,6 +12,7 @@ use Socialtext::Helpers;
 use Socialtext::Watchlist;
 use Socialtext::User;
 use Socialtext::l10n qw( loc loc_lang system_locale);
+use Socialtext::Events;
 
 const class_id    => 'watchlist';
 const class_title => loc('Watchlist');
@@ -133,6 +134,12 @@ sub add_to_watchlist {
     if ( !$watchlist->has_page( page => $page ) ) {
         $watchlist->add_page( page => $page );
     }
+
+    Socialtext::Events->Record({
+        class => 'page',
+        action => 'watch_add',
+        page => $page,
+    });
     return '1';
 }
 
@@ -147,6 +154,7 @@ sub remove_from_watchlist {
     if ( $self->cgi->page ) {
         my $page = $self->hub->pages->new_from_name( $self->cgi->page );
         $watchlist->remove_page( page => $page );
+        $self->_record_watch_delete($page);
         return '0';
     }
     else {
@@ -154,9 +162,24 @@ sub remove_from_watchlist {
         for my $checked_page (@pages_to_remove) {
             my $page = $self->hub->pages->new_page($checked_page);
             $watchlist->remove_page( page => $page );
+            $self->_record_watch_delete($page);
         }
         $self->redirect("action=display_watchlist");
     }
+}
+
+sub _record_watch_delete {
+    my ($self, $page) = @_;
+
+    Socialtext::Events->Record({
+        class => 'page',
+        action => 'watch_delete',
+        actor => $self->hub->current_user,
+        workspace => $self->hub->current_workspace,
+        object => $page->id,
+        revision_count => $page->revision_count,
+        revision_id => $page->revision_id,
+    });
 }
 
 sub _reject_guest {

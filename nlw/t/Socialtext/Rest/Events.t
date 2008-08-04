@@ -2,252 +2,166 @@
 # @COPYRIGHT@
 use warnings FATAL => 'all';
 use strict;
-use Test::More;
-use mocked 'Socialtext::SQL', 'sql_ok';
-use mocked 'Socialtext::Rest';
+use XXX;
+use Test::More tests => 20;
+use URI::Escape qw/uri_escape/;
+use Socialtext::JSON qw/encode_json decode_json/;
 use Socialtext::CGI::Scrubbed;
-use Socialtext::JSON qw/decode_json/;
-use Socialtext::Rest::Events;
 
-if ($Socialtext::Rest::Events::VERSION eq '0.1') {
-    plan skip_all => 'The Rest interface is not fully implemented';
-}
-else {
-    plan 'no_plan';
+use mocked 'Socialtext::Events', 'event_ok', 'is_event_count';
+use mocked 'Socialtext::SQL', 'sql_ok';
+use mocked 'Socialtext::Workspace';
+use mocked 'Socialtext::Rest';
+
+BEGIN {
+    use_ok 'Socialtext::Rest::Events';
 }
 
+our $actor = Socialtext::User->new(
+    id => 27,
+    name => 'username',
+    email => 'username@example.com',
+    first_name => 'User',
+    last_name => 'Name',
+    is_guest => 0
+);
 
 Empty_JSON_GET: {
-    my $params = Socialtext::CGI::Scrubbed->new;
-    my $rest = Socialtext::Rest->new(query => $params);
-    my $e = Socialtext::Rest::Events->new($rest, $params);
+    my ($rest, $result) = do_get();
 
-    my $result = $e->GET_json($rest);
-    is $rest->{header}{-status}, '200 OK';
+    is $rest->header->{-status}, '200 OK', "request succeeded";
     my $events = decode_json($result);
-    is_deeply $events, [];
+    ok($events, "decoded the result");
+    is_deeply $events, [], "empty result";
+    is_deeply \@Socialtext::Events::GetArgs, [[ 
+        count => 25 
+    ]], "expected parameters passed";
 }
 
 JSON_GET_an_item: {
-    my %event = ( 
-        timestamp => '2008-06-25 11:39:21.509539-07', 
-        action => 'view',
-        actor => 1,
-        object => 'hello_world',
-        context => '',
+    my %args = ( 
+        after => '2008-06-25 11:39:21.509539-07', 
+        before => '2008-06-23T00:00:00Z', 
+        event_class => 'PAGE',
+        action => 'tAg_Add',
+        'actor.id' => 1,
+        'page.id' => 'quick_start',
+        'page.workspace_name' => 'foobar',
+        'tag_name' => 'Some Tag',
+        count => 42,
+        offset => 25,
     );
-    local @Socialtext::SQL::RETURN_VALUES = ( { return => [ \%event ] } );
-    my $params = Socialtext::CGI::Scrubbed->new;
-    my $rest = Socialtext::Rest->new(query => $params);
-    my $e = Socialtext::Rest::Events->new($rest, $params);
+    local @Socialtext::Events::Events = [{item=>'first'}];
+    my ($rest, $result) = do_get(%args);
 
-    my $result = $e->GET_json($rest);
-    is $rest->{header}{-status}, '200 OK';
+    is $rest->header->{-status}, '200 OK', "request succeeded";
     my $events = decode_json($result);
-    $event{action} = lc $event{action};
-    is_deeply $events, [ \%event ];
+    ok($events, "decoded the result");
+    is_deeply $events, [{item=>'first'}], "mock result returned";
+    is_deeply \@Socialtext::Events::GetArgs, [[ 
+        count => 42,
+        offset => 25,
+        before => '2008-06-23T00:00:00Z',
+        after => '2008-06-25 11:39:21.509539-07', 
+        event_class => 'page',
+        action => 'tag_add',
+        actor_id => 1,
+        page_workspace_id => 'mock_workspace_id',
+        page_id => 'quick_start',
+        tag_name => 'Some Tag',
+    ]], "expected parameters passed";
 }
+
 
 GET_without_authorized_user: {
-    my $params = Socialtext::CGI::Scrubbed->new;
-    my $rest = Socialtext::Rest->new(query => $params, user => undef);
-    my $e = Socialtext::Rest::Events->new($rest, $params);
+    local $actor = Socialtext::User->new(is_guest => 1);
+    my ($rest, $result) = do_get();
 
-    my $result = $e->GET_json($rest);
-    is $result, 'not authorized';
-}
-
-JSON_GET_with_parameters: {
-    # In these tests, we'll just validate that CGI params are
-    # making it all the way out to the SQL
-    Count_parameter: {
-        @Socialtext::SQL::SQL = ();
-        my $params = Socialtext::CGI::Scrubbed->new( {
-            count => 50,
-        });
-        my $rest = Socialtext::Rest->new(query => $params);
-        my $e = Socialtext::Rest::Events->new($rest, $params);
-        $e->GET_json($rest);
-        is $rest->{header}{-status}, '200 OK';
-        sql_ok( 
-            sql => qr/\QLIMIT ?\E/,
-            args => [50],
-        );
-    }
-    Limit_parameter: {
-        @Socialtext::SQL::SQL = ();
-        my $params = Socialtext::CGI::Scrubbed->new( {
-            limit => 42,
-        });
-        my $rest = Socialtext::Rest->new(query => $params);
-        my $e = Socialtext::Rest::Events->new($rest, $params);
-        $e->GET_json($rest);
-        is $rest->{header}{-status}, '200 OK';
-        sql_ok( 
-            sql => qr/\QLIMIT ?\E/,
-            args => [42],
-        );
-    }
-    Offset_parameter: {
-        @Socialtext::SQL::SQL = ();
-        my $params = Socialtext::CGI::Scrubbed->new( {
-            offset => 42,
-        });
-        my $rest = Socialtext::Rest->new(query => $params);
-        my $e = Socialtext::Rest::Events->new($rest, $params);
-        $e->GET_json($rest);
-        is $rest->{header}{-status}, '200 OK';
-        sql_ok( 
-            sql => qr/\QLIMIT ? OFFSET ?\E/,
-            args => [25, 42],
-        );
-    }
-    Before_parameter: {
-        @Socialtext::SQL::SQL = ();
-        my $params = Socialtext::CGI::Scrubbed->new( {
-            before => 'then',
-        });
-        my $rest = Socialtext::Rest->new(query => $params);
-        my $e = Socialtext::Rest::Events->new($rest, $params);
-        $e->GET_json($rest);
-        is $rest->{header}{-status}, '200 OK';
-        sql_ok( 
-            sql => qr/\QWHERE timestamp < '?'::timestamptz\E/,
-            args => ['then', 25],
-        );
-    }
-    After_parameter: {
-        @Socialtext::SQL::SQL = ();
-        my $params = Socialtext::CGI::Scrubbed->new( {
-            after => 'then',
-        });
-        my $rest = Socialtext::Rest->new(query => $params);
-        my $e = Socialtext::Rest::Events->new($rest, $params);
-        $e->GET_json($rest);
-        is $rest->{header}{-status}, '200 OK';
-        sql_ok( 
-            sql => qr/\QWHERE timestamp > '?'::timestamptz\E/,
-            args => ['then', 25],
-        );
-    }
-    Action_parameter: {
-        @Socialtext::SQL::SQL = ();
-        my $params = Socialtext::CGI::Scrubbed->new( {
-            action => 'View',
-        });
-        my $rest = Socialtext::Rest->new(query => $params);
-        my $e = Socialtext::Rest::Events->new($rest, $params);
-        $e->GET_json($rest);
-        is $rest->{header}{-status}, '200 OK';
-        sql_ok( 
-            sql => qr/\QWHERE action = ?\E/,
-            args => ['View', 25],
-        );
-    }
-
-    Large_count_parameter: {
-        @Socialtext::SQL::SQL = ();
-        my $params = Socialtext::CGI::Scrubbed->new( {
-            count => 10E6,
-        });
-        my $rest = Socialtext::Rest->new(query => $params);
-        my $e = Socialtext::Rest::Events->new($rest, $params);
-        $e->GET_json($rest);
-        is $rest->{header}{-status}, '200 OK';
-        sql_ok( 
-            sql => qr/\QLIMIT ?\E/,
-            args => [500],
-        );
-    }
+    like $rest->header->{-status}, qr/^40[13]/, "request denied";
 }
 
 POSTing_an_event: {
-    my $params = Socialtext::CGI::Scrubbed->new( {
-        actor => 'user@test.com',
-        action => 'VIew',
-        object => 'hello_world',
-    } );
-    my $rest = Socialtext::Rest->new(query => $params);
-    my $e = Socialtext::Rest::Events->new($rest, $params);
-
-    my $result = $e->POST_text($rest);
-    is_deeply $rest->{header}, {
-        -type => 'application/json',
-        -status => '201 Created',
-    };
-    sql_ok(
-        sql => qr/INSERT INTO/,
-        args => [ 'now', 'VIew', '1', 'hello_world', '' ],
+    my ($rest, $result) = do_post_form(
+        event_class => 'page',
+        action => 'edit_begin',
+        'actor.id' => 1,
+        'page.id' => 'formattingtest',
+        'page.workspace_name' => 'foobar',
+        context => '{"page_rev":"123456789"}',
     );
-}
 
-POSTing_an_event_with_context: {
-    my $params = Socialtext::CGI::Scrubbed->new( {
-        actor => 'user@test.com',
-        action => 'view',
-        object => 'hello_world',
-        context => '{"foo":"bar"}',
-    } );
-    my $rest = Socialtext::Rest->new(query => $params);
-    my $e = Socialtext::Rest::Events->new($rest, $params);
-
-    my $result = $e->POST_text($rest);
-    is_deeply $rest->{header}, {
-        -type => 'application/json',
-        -status => '201 Created',
-    };
-    sql_ok(
-        sql => qr/INSERT INTO/,
-        args => [ 'now', 'view', '1', 'hello_world', '{"foo":"bar"}' ],
-    );
-}
-
-POSTing_an_event_with_invalid_actor: {
-    my $params = Socialtext::CGI::Scrubbed->new( {
-        # In mocked Socialtext::User, users that m/^bad/ don't exist.
-        actor => 'bad@test.com',
-        action => 'View',
-        object => 'hello_world',
-    } );
-    my $rest = Socialtext::Rest->new(query => $params);
-    my $e = Socialtext::Rest::Events->new($rest, $params);
-
-    my $result = $e->POST_text($rest);
-    is $result, 'Invalid actor';
-    is_deeply $rest->{header}, {
+    like $result, qr/success/, "successful operation";
+    is_deeply $rest->header, {
         -type => 'text/plain',
-        -status => '400 Bad Request',
-    };
-    sql_ok( sql => undef, args => undef );
+        -status => '201 Created',
+    }, "expected created event";
+
+    is_event_count(1);
+    event_ok(
+        class => 'page',
+        action => 'edit_begin',
+        page => 'formattingtest',
+        workspace => 'mock_workspace_id',
+        context => {"page_rev"=>"123456789"},
+    );
 }
 
 POSTing_without_authorization: {
-    my $params = Socialtext::CGI::Scrubbed->new( {
-        actor => 'bad@test.com',
-        action => 'View',
-        object => 'hello_world',
-    } );
-    my $rest = Socialtext::Rest->new(undef, $params, user => undef );
-    my $e = Socialtext::Rest::Events->new($rest, $params);
-    my $result = $e->POST_text($rest);
-    is $result, 'not authorized';
+    local $actor = Socialtext::User->new(is_guest => 1);
+    my ($rest, $result) = do_post_form(
+        event_class => 'page',
+        action => 'edit_begin',
+        'actor.id' => 1,
+        'page.id' => 'formattingtest',
+        'page.workspace_name' => 'foobar',
+        context => '{"page_rev":"123456789"}',
+    );
+
+    like $result, qr/not authorized/i, "denied";
+    is_event_count(0);
 }
 
-POSTing_an_event_with_bad_context: {
-    my $params = Socialtext::CGI::Scrubbed->new( {
-        actor => 'user@test.com',
-        action => 'view',
-        object => 'hello_world',
-        context => '{"foo:',
-    } );
-    my $rest = Socialtext::Rest->new(query => $params);
-    my $e = Socialtext::Rest::Events->new($rest, $params);
+exit;
 
-    my $result = $e->POST_text($rest);
-    like $result, qr/Invalid event context/;
-    is_deeply $rest->{header}, {
-        -type => 'text/plain',
-        -status => '400 Bad Request',
-    };
-    sql_ok( sql => undef, args => undef );
+sub do_get {
+    Socialtext::Events::clear_get_args();
+
+    my $cgi = Socialtext::CGI::Scrubbed->new({@_});
+    my $rest = Socialtext::Rest->new(undef, $cgi, user => $actor);
+    my $e = Socialtext::Rest::Events->new($rest, $cgi);
+    $e->{user} = $actor;
+    my $result = $e->GET_json($rest);
+    return ($rest,$result);
+}
+
+sub do_post_form {
+    Socialtext::Events::clear_get_args();
+    my %form = (@_);
+    my $post = '';
+    $post .= "$_=".uri_escape($form{$_}).'&' for keys %form;
+    chop $post;
+
+    my $cgi = Socialtext::CGI::Scrubbed->new();
+    my $rest = Socialtext::Rest->new(undef, $cgi, user => $actor);
+    my $e = Socialtext::Rest::Events->new($rest, $cgi);
+    $e->{_content} = $rest->{_content} = $post;
+    $e->{rest} = $rest;
+    $e->{user} = $actor;
+    my $result = $e->POST_form($rest);
+    return ($rest,$result);
+}
+
+sub do_post_json {
+    Socialtext::Events::clear_get_args();
+    my %struct = @_;
+    my $json = encode_json(\%struct);
+
+    my $cgi = Socialtext::CGI::Scrubbed->new();
+    my $rest = Socialtext::Rest->new(undef, $cgi, user => $actor);
+    my $e = Socialtext::Rest::Events->new($rest, $cgi);
+    $e->{_content} = $rest->{_content} = $json;
+    $e->{rest} = $rest;
+    $e->{user} = $actor;
+    my $result = $e->POST_form($rest);
+    return ($rest,$result);
 }

@@ -7,10 +7,13 @@ use base 'Exporter';
 our @EXPORT_OK = qw/get_contents set_contents catdir/;
 
 our %CONTENT;
+our %SYMLINK;
 
 sub get_contents {
     my $filename = shift;
-    if (my $content = $CONTENT{$filename}) {
+    my $content;
+    $filename = $SYMLINK{$filename} if $SYMLINK{$filename};
+    if ($content = $CONTENT{$filename}) {
         return $content;
     }
     warn "Returning mock content for path: '$filename'";
@@ -26,7 +29,17 @@ sub set_contents {
 sub get_contents_utf8 { get_contents(@_) }
 sub set_contents_utf8 { set_contents(@_) }
 
-sub catdir { join('/', @_) }
-sub catfile { join('/', @_) }
+sub catdir { join('/',@_) }
+sub catfile { join('/',@_) }
+
+sub ensure_directory { 1 }
+
+sub safe_symlink {
+    my $filename = shift;
+    my $symlink = shift;
+    $SYMLINK{$symlink} = $filename;
+}
+
+sub write_lock { 1 }
 
 1;

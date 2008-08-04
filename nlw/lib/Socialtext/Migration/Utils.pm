@@ -1,4 +1,5 @@
 package Socialtext::Migration::Utils;
+# @COPYRIGHT@
 use strict;
 use warnings;
 use Socialtext::Schema;

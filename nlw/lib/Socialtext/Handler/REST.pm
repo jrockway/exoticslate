@@ -8,7 +8,7 @@ use base 'REST::Application::Routes';
 use base 'Socialtext::Handler';
 use Socialtext::HTTP ':codes';
 use Socialtext::Pluggable::Adapter;
-
+use Socialtext::Handler::URIMap;
 use Apache;
 use Apache::Constants qw(OK AUTH_REQUIRED);
 use Encode qw(decode_utf8);
@@ -21,7 +21,6 @@ use Socialtext::Log 'st_timed_log';
 use Socialtext::Timer;
 use Socialtext::CGI::Scrubbed;
 
-Readonly my $URI_MAP => 'uri_map.yaml';
 Readonly my $AUTH_MAP => 'auth_map.yaml';
 Readonly my $AUTH_INFO_DEFAULTS => {
     guest => 1,
@@ -366,7 +365,7 @@ sub _load_resource_hooks {
             Socialtext::AppConfig->file() );
 
     my $authinfo = YAML::LoadFile( File::Spec->catfile( $config_dir, $AUTH_MAP ) );
-    my $hooks = YAML::LoadFile( File::Spec->catfile( $config_dir, $URI_MAP ) );
+    my $hooks = Socialtext::Handler::URIMap->new->uri_hooks;
 
     my @rest = Socialtext::Pluggable::Adapter->rest_hooks;
 

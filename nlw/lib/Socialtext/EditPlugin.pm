@@ -10,6 +10,7 @@ use Class::Field qw( const );
 use Socialtext::Pages;
 use Socialtext::Exceptions qw( data_validation_error );
 use Socialtext::l10n qw(loc);
+use Socialtext::Events;
 
 sub class_id { 'edit' }
 const class_title => 'Editing Page';
@@ -60,6 +61,11 @@ sub edit_content {
     my $append_mode = $self->cgi->append_mode || '';
 
     if ($self->_there_is_an_edit_contention($page, $self->cgi->revision_id)) {
+        Socialtext::Events->Record({
+            class => 'page',
+            action => 'edit_contention',
+            page => $page,
+        });
         if ($append_mode eq '') {
             return $self->_edit_contention_screen($page);
         }
@@ -73,10 +79,10 @@ sub edit_content {
     $metadata->Type($self->cgi->page_type);
 
     $page->name($page_name);
-    if ($self->cgi->append_mode eq 'bottom') {
+    if ($append_mode eq 'bottom') {
         $page->append($content);
     }
-    elsif ($self->cgi->append_mode eq 'top') {
+    elsif ($append_mode eq 'top') {
         $page->prepend($content);
     }
     else {
@@ -86,8 +92,14 @@ sub edit_content {
 
     if (@tags) {
         $page->add_tags(@tags); # add_tags auto saves
-    } else {
+    }
+    else {
         $page->store( user => $self->hub->current_user );
+        Socialtext::Events->Record({
+            class => 'page',
+            action => 'edit_save',
+            page => $page,
+        });
     }
 
     # Move attachments uploaded to 'Untitled Page' to the actual page
@@ -172,6 +184,11 @@ sub save {
         subject          => $subject,
         user             => $self->hub->current_user,
     );
+    Socialtext::Events->Record({
+        class => 'page',
+        action => 'edit_save',
+        page => $page,
+    });
     return $self->to_display($page);
 }
 

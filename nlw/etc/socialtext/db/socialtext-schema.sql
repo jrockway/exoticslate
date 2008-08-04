@@ -217,18 +217,10 @@ CREATE SEQUENCE "Workspace___workspace_id"
     NO MINVALUE
     CACHE 1;
 
-CREATE SEQUENCE event_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
 CREATE TABLE event (
-    id bigint NOT NULL DEFAULT nextval('event_id_seq'),
     at timestamptz NOT NULL,
     action text NOT NULL,
-    actor_id integer,
+    actor_id integer NOT NULL,
     event_class text NOT NULL,
     context text,
     page_id text,
@@ -397,10 +389,6 @@ ALTER TABLE ONLY "WorkspaceRolePermission"
 ALTER TABLE ONLY "Workspace"
     ADD CONSTRAINT "Workspace_pkey"
             PRIMARY KEY (workspace_id);
-
-ALTER TABLE ONLY event
-    ADD CONSTRAINT event_pkey
-            PRIMARY KEY (id);
 
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_pkey

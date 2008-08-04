@@ -2,18 +2,15 @@
     var opts;
 
     $.hideLightbox = function() {
-        console.log(1);
         $(this).hideLightbox();
     };
 
     $.showLightbox = function(options) {
-        console.log(3);
         opts = options;
         $(this).showLightbox();
     };
 
     $.fn.showLightbox = function() {
-        console.log(4);
         if (!$('#lightbox').size()) {
             $('<div id="lightbox">')
                 .css({
@@ -65,7 +62,6 @@
     };
 
     $.fn.hideLightbox = function() {
-        console.log(2);
         $(opts.content).hide().appendTo('body');
         $('#overlay').fadeOut()
         $('#lightbox').hide();

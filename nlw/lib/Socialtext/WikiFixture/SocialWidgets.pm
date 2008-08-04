@@ -213,7 +213,7 @@ This assumes that the currently selected frame is the "parent" container frame.
 
 sub st_widget_title_like {
     my ($self, $logical, $opt1) = @_;
-    $self->{selenium}->text_like("//span[\@class='gadget_title' and \@id='".$self->{_widgets}{$logical}."-title-text']", $opt1);
+    $self->{selenium}->text_like_ok("//span[\@class='gadget_title' and \@id='".$self->{_widgets}{$logical}."-title-text']", $opt1);
 }
 
 =head2 st_widget_body_like ( logical_name, regex )
@@ -249,7 +249,10 @@ parent (default) container frame.
 
 sub st_select_widget_frame {
     my ($self, $logical) = @_;
-    $self->{selenium}->select_frame('xpath=//iframe[@id="'.$self->{_widgets}{$logical}.'-iframe"]');
+    eval {
+        $self->{selenium}->select_frame('xpath=//iframe[@id="'.$self->{_widgets}{$logical}.'-iframe"]');
+    };
+    ok( !$@, "st-select-widget-frame");
 }
 
 =head2 st_wait_for_widget_load (logical_name, timeout )

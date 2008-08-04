@@ -3,7 +3,7 @@
 * Fixture: SocialWidgets
 
 | *Comment* | Test case: WIDGETS |  |
-| open_ok | /?dashboard | 60000 |
+| open_ok | /?container=dashboard | 60000 |
 | st-empty-container |  |  |
 | pause | 2000 |  |
 
@@ -14,6 +14,15 @@
 | st-select-widget-frame | myworkspace |  |
 | select-frame | relative=parent |  |
 | st-widget-title-like | myworkspace | Workspaces |
+
+# This demonstrates use of the %% replacement on a widget logical name
+| *Comment* | Test Case: Widgets - Conversations Widget |  |
+| st-add-widget | gadgets/share/gadgets/my_conversations.xml | myconversations |
+| st-wait-for-widget-load | myconversations | 45000 |
+| st-widget-settings | myconversations | |
+| select | xpath=//select[@class='input_%%myconversations%%'] | value=10 |
+| click | id=st-savebutton | |
+
 
 | *Comment* | Test Case: Widgets - OnePageWiki - Make Fake Page |  |
 | open_ok | /test-data/index.cgi?action=new_page |  |

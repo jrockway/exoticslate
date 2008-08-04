@@ -484,7 +484,6 @@ sub st_catchup_logs {
        my $new_dir =  $ENV{ST_CURRENT} . "/socialtext-reports/";
        chdir($new_dir);
        my $str = $ENV{ST_CURRENT} . "/socialtext-reports/parse-dev-env-logs /var/log/nlw.log 2>&1";
-       print "in dev env $str\n";
        `$str`;
        chdir($current_dir);
    } else {

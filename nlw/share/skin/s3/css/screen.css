@@ -1,5 +1,9 @@
 @import url('styles.css');
 
+#st-email-lightbox .email_input {
+    width: 152px;
+}
+
 #st-commentui-textarea {
     background-color: #FFFFDD;
     border:1px solid black;
@@ -30,6 +34,15 @@
     line-height: 1.5em;
     text-align: left;
     display: none;
+}
+
+.lightbox td, .lightbox th {
+    vertical-align: top;
+    padding: 5px 5px;
+}
+
+.lightbox th {
+    font-weight: bold;
 }
 
 .lightbox input {

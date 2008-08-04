@@ -237,6 +237,9 @@ $(function() {
     var editor_uri = nlw_make_s3_path('/javascript/socialtext-editor.js.gz')
         .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
 
+    var email_uri = nlw_make_s3_path('/javascript/socialtext-email.js.gz')
+        .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
+
     $("#st-comment-button-link").click(function () {
         $.getScript(nlw_make_s3_path('/javascript/comment.js'),
             function () {
@@ -247,7 +250,9 @@ $(function() {
     });
 
     $("#st-pagetools-email").click(function () {
-        alert('not implemented');
+        //$.ajaxSettings.cache = true;
+        $.getScript(email_uri);
+        $.ajaxSettings.cache = false;
     });
 
     //index.cgi?action=duplicate_popup;page_name=[% page.id %]

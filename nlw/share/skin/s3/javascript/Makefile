@@ -26,12 +26,24 @@ JEMPLATE_GENERATOR=bin/generate-widget-jemplate.pl
 JEMPLATE_MODULE=Wikiwyg/Jemplate.js
 JEMPLATE_WIKIWYG_MODULE=jemplate_wikiwyg.js
 
+EMAIL_TEMPLATE=template/email_lightbox.tt2
+EMAIL_JEMPLATE=jemplate/email_lightbox.html
+EMAIL_FILE=socialtext-email.js
+EMAIL_FILE_MINI=socialtext-email-mini.js
+EMAIL_FILE_GZIP=$(EMAIL_FILE).gz
+
 S3_SOURCE_FILES= \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
 		$(S2_JAVASCRIPT)/loc.js \
 		cookie.js \
 		lightbox.js \
 		s3.js \
+
+EMAIL_SOURCE_FILES= \
+		Jemplate.js \
+		$(ALL_JEMPLATE_PLUGINS) \
+		$(EMAIL_JEMPLATE) \
+		email.js \
 
 EDITOR_SOURCE_FILES= \
 		$(S2_JAVASCRIPT)/main.js \
@@ -59,7 +71,12 @@ EDITOR_SOURCE_FILES= \
 		wikiwyg.js \
 
 
-all: $(S3_FILE_GZIP) $(EDITOR_FILE_GZIP) timestamp.js Selection.htc
+all: \
+    $(S3_FILE_GZIP) \
+    $(EDITOR_FILE_GZIP) \
+    $(EMAIL_FILE_GZIP) \
+    timestamp.js \
+    Selection.htc \
 
 clean:
 	rm -f \
@@ -75,6 +92,9 @@ clean:
 	    $(EDITOR_FILE) \
 	    $(EDITOR_FILE_MINI) \
 	    $(EDITOR_FILE_GZIP) \
+	    $(EMAIL_FILE) \
+	    $(EMAIL_FILE_MINI) \
+	    $(EMAIL_FILE_GZIP) \
 
 .SUFFIXES: .js -mini.js .js.gz
 
@@ -92,6 +112,9 @@ $(JEMPLATE_MODULE): jemplate $(ALL_JEMPLATES)
 
 $(JEMPLATE_WIKIWYG_MODULE): jemplate_wikiwyg $(ALL_WIKIWYG_JEMPLATES)
 	jemplate --compile $< > $@
+
+$(EMAIL_JEMPLATE): jemplate $(EMAIL_TEMPLATE)
+	jemplate --compile $(EMAIL_TEMPLATE) > $(EMAIL_JEMPLATE)
 
 $(ALL_EDIT_JEMPLATES): $(WIDGETS_YAML) $(JEMPLATE_GENERATOR) template/widget_edit.tt2 jemplate/save-cancel.html
 	$(JEMPLATE_GENERATOR) --yaml=$< --output=$@ \
@@ -117,6 +140,12 @@ $(S3_FILE): $(S3_SOURCE_FILES) timestamp.js Makefile
 $(EDITOR_FILE): $(EDITOR_SOURCE_FILES) timestamp.js Makefile
 	rm -f $@;
 	for js in $(EDITOR_SOURCE_FILES); do \
+	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
+	done
+
+$(EMAIL_FILE): $(EMAIL_SOURCE_FILES) timestamp.js Makefile
+	rm -f $@;
+	for js in $(EMAIL_SOURCE_FILES); do \
 	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
 	done
 

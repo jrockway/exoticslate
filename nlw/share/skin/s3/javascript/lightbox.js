@@ -19,17 +19,11 @@
                     zIndex: 2001,
                     padding: 0,
                     background: '#fff',
-                    width: '520px',
-                    margin: '100px auto',
+                    width: opts.width || '520px',
+                    margin: 'auto',
                     border: "1px outset #555",
                 })
-                .appendTo('body')
-                .css({
-                    left: (($(window).width() -
-                            $('#lightbox').width()) / 2) + 'px',
-                    top:  (($(window).height() -
-                            $('#lightbox').height()) /5) + 'px'
-                });
+                .appendTo('body');
         }
         if (!$('#overlay').size()) {
             $('<div id="overlay">')
@@ -51,13 +45,22 @@
                 .appendTo('body');
         }
 
+        $('#lightbox')
+            .append($(opts.content).show())
+            .css({
+                left: (($(window).width() -
+                        $('#lightbox').width()) / 2) + 'px',
+                top:  (($(window).height() -
+                        $('#lightbox').height()) / 2) + 'px'
+            });
+
         $('body').css('overflow', 'hidden');
 
         if (opts.close)
             $(opts.close).click(function () { $.hideLightbox() })
 
         $('#overlay').fadeIn(function () {
-            $('#lightbox').append($(opts.content).show()).fadeIn();
+            $('#lightbox').fadeIn();
         });
     };
 

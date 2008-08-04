@@ -3,9 +3,11 @@ package Socialtext::WikiFixture::Socialtext;
 use strict;
 use warnings;
 use base 'Socialtext::WikiFixture::Selenese';
+use Socialtext::System qw/shell_run/;
 use Sys::Hostname;
 use Test::More;
 use Cwd;
+use Socialtext::AppConfig;
 
 =head1 NAME
 
@@ -479,16 +481,18 @@ sub st_click_reset_password {
 =cut
 
 sub st_catchup_logs {
-   if (_is_dev_env()) {
+   if (Socialtext::AppConfig::_startup_user_is_human_user()) {
+       #In Dev Env
        my $current_dir = cwd;
        my $new_dir =  $ENV{ST_CURRENT} . "/socialtext-reports/";
        chdir($new_dir);
        my $str = $ENV{ST_CURRENT} . "/socialtext-reports/parse-dev-env-logs /var/log/nlw.log 2>&1";
-       `$str`;
+       shell_run($str);
        chdir($current_dir);
    } else {
-      `sudo /usr/bin/st-reports-consume-access-log /var/log/apache-perl/access.log >> /var/log/st-reports.log 2>&1`;
-      `sudo /usr/bin/st-reports-consume-nlw-log /var/log/nlw.log >> /var/log/st-reports.log 2>&1`;
+      #On An Appliance
+      shell_run("sudo /usr/bin/st-reports-consume-access-log /var/log/apache-perl/access.log >> /var/log/st-reports.log 2>&1");
+      shell_run("sudo /usr/bin/st-reports-consume-nlw-log /var/log/nlw.log >> /var/log/st-reports.log 2>&1");
    }
 }
 
@@ -529,14 +533,6 @@ sub _run_command {
     }
 }
 
-sub _is_dev_env {
-    my $host = hostname;
-    if ($host=~/talc/ || $host=~/topaz/) {
-        return 1;
-    } else {
-         return 0;
-    }
-}
 =head1 AUTHOR
 
 Luke Closs, C<< <luke.closs at socialtext.com> >>

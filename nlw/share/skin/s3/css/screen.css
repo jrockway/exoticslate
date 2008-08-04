@@ -1,5 +1,12 @@
 @import url('styles.css');
 
+#st-commentui-textarea {
+    background-color: #FFFFDD;
+    border:1px solid black;
+    width: 100%;
+    height: 100px;
+}
+
 #wikiwyg_wikitext_textarea {
     background-color: #FFFFDD !important;
 }

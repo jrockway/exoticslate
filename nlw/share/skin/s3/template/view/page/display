@@ -1,3 +1,4 @@
+[% USE html_encode %]
 [% WRAPPER layout/html id="contentPage" %]
 <div id="controls">
     <div id="st-editing-tools-edit">
@@ -43,21 +44,15 @@
             [% END %]
             <li class="last submenu"><a class="tools" id="st-pagetools-tools" href="#">[% loc('Tools') %]</a>
                 <ul class="level2">
-                    [% IF checker.check_permission('email_out') &&
-                          page.page_type != 'spreadsheet' %]
-                    <li>
-                        <a title="[% loc('Email this page') %]" id="st-pagetools-email" href="?action=email_page_popup;page_name=[% page.id %]" onclick="query_popup('index.cgi?action=email_page_popup;page_name=[% page.id %]',750,580); return false;">[% loc('Email') %]</a>
-                    </li>
-                    [% END %]
                     [% IF checker.check_permission('edit') %]
-                    <li class="first"><a onclick="query_popup('index.cgi?action=duplicate_popup;page_name=[% page.id %]',410,300); return false;" href="index.cgi?action=duplicate_popup;page_name=[% page.id %]">[% loc('Duplicate Page') %]</a></li>
-                    <li><a onclick="query_popup('index.cgi?action=rename_popup;page_name=[% page.id %]',410,300); return false;" href="index.cgi?action=rename_popup;page_name=[% page.id %]">[% loc('Rename Page') %]</a></li>
+                    <li class="first"><a id="st-pagetools-duplicate" href="#">[% loc('Duplicate Page') %]</a></li>
+                    <li><a id="st-pagetools-rename" href="#">[% loc('Rename Page') %]</a></li>
                     [% END %]
                     [% IF checker.check_permission('delete') %]
-                    <li [% current_user_workspace_count == 1 ? "class=\"separator\"":"" %]><a href="index.cgi?[% page.id %]" onclick="confirm_delete('[% page.id %]'); return false">[% loc('Delete Page') %]</a></li>
+                    <li [% current_user_workspace_count == 1 ? "class=\"separator\"":"" %]><a href="index.cgi?[% page.id %]" id="st-pagetools-delete">[% loc('Delete Page') %]</a></li>
                     [% END %]
                     [% IF current_user_workspace_count > 1 %]
-                    <li class="separator"><a href="index.cgi?action=copy_to_workspace_popup;page_name=[% page.id %]" onclick="query_popup('index.cgi?action=copy_to_workspace_popup;page_name=[% page.id %]'); return false;">[% loc('Copy Page to Workspace') %]</a></li>
+                    <li class="separator"><a href="#" id="st-pagetools-copy">[% loc('Copy Page to Workspace') %]</a></li>
                     [% END %]
                     [% USE encode_mailto %]
                     [% IF checker.check_permission('email_in') &&
@@ -245,12 +240,42 @@
     <div id="st-commentui-notetop">[% hub.current_workspace.comment_form_note_top %]</div>
   [% END %]
   <form id="comment-form" name="comment_form" method="post" action="[% script_name %]" enctype="application/x-www-form-urlencoded">
-  <textarea style="width: 100%; height: 100px" id="st-commentui-textarea" name="comment" wrap="virtual"></textarea>
+  <textarea id="st-commentui-textarea" name="comment" wrap="virtual"></textarea>
   <div class="buttons">
     <input id="st-commentui-savelink" type="submit" value="[% loc('save') %]"/>
     <input id="st-commentui-cancellink" type="button" value="[% loc('Cancel') %]"/>
   </div>
   </form>
+</div>
+
+<div class="lightbox" id="st-rename-lightbox">
+    <form id="st-rename-form">
+        <input type="hidden" name="action" value="rename_page" />
+        <input type="hidden" name="json" value="1" />
+        <input type="hidden" name="page_name" value="[% page.title | html_encode %]" />
+        <div class="title">
+            Rename <span id="st-rename-pagetitle">"[% page.title %]"</span>
+        </div>
+        <div class="error" id="st-rename-error">&nbsp;</div>
+        [% loc('New page name') %]
+        <input type="text" id="st-rename-newname" name="new_title" size="34" />
+        <br/>
+
+        [% loc('Keep categories') %]:
+        <input type="checkbox" id="keep_categories"
+               value="1" checked="true" />
+        <br />
+
+        [% loc('Keep attachments') %]:
+        <input type="checkbox" id="keep_attachments"
+               value="1" checked="true" />
+        <br />
+
+        <div class="buttons">
+            <input id="st-rename-savelink" type="submit" value="[% loc('Rename') %]"/>
+            <input id="st-rename-cancellink" type="button" value="[% loc('Cancel') %]"/>
+        </div>
+    </form>
 </div>
 
 [% END %]

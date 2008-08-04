@@ -1,0 +1,28 @@
+[% WRAPPER layout/html id="contentPage" %]
+    <div id="controls">
+        <div id="st-editing-tools-edit">
+            
+        </div><!-- controlsLeft END -->
+        <div id="controlsRight">
+            
+        </div><!-- controlsRight END -->
+    </div><!-- controls END -->
+    <div id="contentContainer">
+        <div id="contentTitle">
+            <h2 id="st-page-titletext" class="tableTitle">[% display_title %]</h2>
+        </div>
+        <div id="contentColumns">
+            <br />
+            [% loc('Did you delete this page in error? If so, you can restore the page.') %]
+            <br />
+            <br />
+            <form method="post" action="[% script_name %]">
+                <input type="hidden" name="action" value="undelete_page" />
+                <input type="hidden" name="page_id" value="[% page_id %]" />
+                <input type="submit" value="[% loc('Restore Page') %]" />
+            </form>
+            <br />
+            [% backlinks_description %]
+        </div>
+    </div>
+[% END %]

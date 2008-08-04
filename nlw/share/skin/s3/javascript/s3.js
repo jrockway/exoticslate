@@ -7,6 +7,10 @@ Page = {
                '/pages/' + page_name;
     },
 
+    cgiUrl: function () {
+        return '/' + Socialtext.wiki_id + '/index.cgi';
+    },
+
     refreshPageContent: function (force_update) {
         $.getJSON(this.pageUrl(), function (data) {
             var newRev = data.revision_id;
@@ -160,7 +164,7 @@ $(function() {
             $('#st-tags-field')
                 .val('')
                 .show()
-                .trigger('focus');
+                .focus();
         })
 
     $('#st-tags-field')
@@ -245,6 +249,77 @@ $(function() {
         alert('not implemented');
     });
 
+    //index.cgi?action=duplicate_popup;page_name=[% page.id %]
+    $("#st-pagetools-duplicate").click(function () {
+        alert('not implemented');
+    });
+    
+    $("#st-pagetools-rename").lightbox({
+        content:'#st-rename-lightbox',
+        close:'#st-rename-cancellink'
+    });
+
+    $('#st-rename-form').submit(function () {
+        var new_title = $('#st-rename-newname').val();
+        var error = $('#st-rename-error');
+        $.getJSON(
+            Page.cgiUrl(),
+            $(this).serialize(),
+            function (data) {
+                $('<input name="clobber" type="hidden">')
+                    .attr('value', new_title)
+                    .appendTo('#st-rename-form');
+                if (data.page_exists) {
+                    error.show().html(loc(
+                        'The new page name you selected, "' + new_title + 
+                        '", is already in use.  Please choose a different ' +
+                        'name. If you are sure you wish to overwrite the ' +
+                        'existing "' + new_title + '" page, please press ' +
+                        '"Rename" again.'
+                    ));
+                }
+                else if (data.page_title_bad) {
+                    error.show().html(loc(
+                        'The page name you selected, "' + new_title +'", ' +
+                        'is not allowed.  Please enter or change the page ' +
+                        'name.'
+                    ));
+                }
+                else if (data.page_title_too_long) {
+                    error.show().html(loc(
+                        'The page name you selected, "' +
+                        new_title + '", is too long after URL encoding'
+                    ));
+                }
+                else if (data.same_title) {
+                    error.show().html(loc(
+                        'The page name you selected, "' + new_title + '", ' +
+                        "is the same as the page's current title.  " +
+                        'Please enter a new page name.'
+                    ));
+                }
+                else {
+                    $.hideLightbox();
+                    document.location = Page.cgiUrl() + '?' + new_title;
+                }
+            }
+        );
+        return false;
+    });
+
+    $("#st-pagetools-delete").click(function () {
+        if (confirm(loc("Are you sure you want to delete this page?"))) {
+            var page = Socialtext.page_id;
+            document.location = "index.cgi?action=delete_page;page_name=" + page;
+        }
+        return false;
+    });
+
+    //index.cgi?action=copy_to_workspace_popup;page_name=[% page.id %]')
+    $("#st-pagetools-copy").click(function () {
+        alert('not implemented');
+    });
+
     $("#st-edit-button-link,#st-edit-actions-below-fold-edit")
         .one("click", function () {
             $('#bootstrap-loader').show();
@@ -266,7 +341,7 @@ $(function() {
         else {
             $('#st-listview-action').val('pdf_export')
             $('#st-listview-filename').val(Socialtext.wiki_id + '.pdf');
-            $('#st-listview-form').trigger('submit');
+            $('#st-listview-form').submit();
         }
     });
 
@@ -277,7 +352,7 @@ $(function() {
         else {
             $('#st-listview-action').val('rtf_export')
             $('#st-listview-filename').val(Socialtext.wiki_id + '.rtf');
-            $('#st-listview-form').trigger('submit');
+            $('#st-listview-form').submit();
         }
     });
 
@@ -315,7 +390,7 @@ $(function() {
         Socialtext.start_in_edit_mode ||
         location.hash.toLowerCase() == '#edit' ) {
         setTimeout(function() {
-            $("#st-edit-button-link").trigger("click");
+            $("#st-edit-button-link").click();
         }, 500);
     }
 });

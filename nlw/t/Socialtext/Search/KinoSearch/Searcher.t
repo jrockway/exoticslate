@@ -55,6 +55,8 @@ search_ok( $NEGATIVE_TERM, 0, 'at first' );
 }
 
 attachments_ok();
+exit;
+
 
 # Tests the whole search/index/delete setup for attachments.
 sub attachments_ok {
@@ -69,8 +71,7 @@ sub attachments_ok {
         # get the right one
         next unless $candidate_attachment->filename eq $ATTACHMENT_NAME;
         $attachment = $candidate_attachment;
-        $indexer
-            ->index_attachment( $ATTACHMENT_PAGE_URI, $attachment->id );
+        $indexer->index_attachment( $ATTACHMENT_PAGE_URI, $attachment->id );
     }
 
     my ($hit) = search_ok( $ATTACHMENT_TERM, 1, 'after indexing attachment');

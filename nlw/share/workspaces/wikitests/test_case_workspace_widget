@@ -1,0 +1,21 @@
+| *Comment* | STARTING Test case: Workspace Widget |  |
+
+* Fixture: SocialWidgets
+
+| set | workspace | test-data |
+
+| open_ok | /?dashboard | 60000 |
+| st-empty-container |  |  |
+| pause | 2000 |  |
+| *Comment* | Test Case: Widgets - Workspaces Widget |  |
+| st-add-widget | gadgets/share/gadgets/my_workspaces.xml | myworkspace |
+| st_wait_for_widget_load | myworkspace | 45000 |
+| pause | 10000 |  |
+| st-select-widget-frame | myworkspace |  |
+| text_like | //body | Canonical Test Data Set |
+| text_like | //body | contributions |
+| text_like | //body | views |
+| text_unlike | //body | Admin |
+| select-frame | relative=parent |  |
+| st-widget-title-like | myworkspace | Workspaces |
+| st-empty-container |  |  |

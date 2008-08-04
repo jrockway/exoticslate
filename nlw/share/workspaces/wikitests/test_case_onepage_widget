@@ -1,0 +1,44 @@
+| *Comment* | STARTING Test case: OnePage Widget |  |
+
+* Fixture: SocialWidgets
+
+| set | workspace | test-data |
+
+| *Comment* | Test Case: OnePage Widget |  |
+| open_ok | /test-data/index.cgi?action=new_page |  |
+| wait_for_element_present_ok | st-newpage-pagename-edit |  |
+| wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
+| type_ok | st-newpage-pagename-edit | one page %%start_time%% |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | I have created a page called one_page_%%start_time%%. woot. |
+| click_ok | st-save-button-link |  |
+| wait_for_element_present_ok | st-edit-button-link | 25000 |
+
+| *Comment* | Test Case: OnePage Widget |  |
+| open_ok | /?dashboard | 60000 |
+| st-empty-container |  |  |
+| pause | 2000 |  |
+| st-add-widget | gadgets/share/gadgets/one_page.xml | onepage |
+| st_wait_for_widget_load | onepage | 25000 |
+| st-widget-settings | onepage |  |
+| wait_for_element_present_ok | name=up_workspace_name |  |
+| type_ok | up_workspace_name | test-data |
+| type_ok | up_page_title | one_page_%%start_time%% |
+| click_ok | st-savebutton |  |
+| st-select-widget-frame | onepage |  |
+| wait_for_element_present_ok | link=Edit this page |  |
+| wait_for_text_present_ok | I have created a page called one_page_%%start_time%%. woot. |  |
+| click_ok | link=Edit this page |  |
+| type_ok | editarea_%%onepage%% | mean mr mustard |
+| wait_for_element_present_ok | link=Save |  |
+| wait_for_element_present_ok | link=Cancel |  |
+| click_ok | link=Save |  |
+| wait_for_text_present_ok | mean mr mustard |  |
+| st-empty-container |  |  |
+
+| *Comment* | Test Case: OnePage Widget Teardown |  |
+| st-admin | purge-page --workspace test-data --page created_page_%%start_time%% |  |
+
+| *Comment* | Test Case: OnePage Widget COMPLETED |  |

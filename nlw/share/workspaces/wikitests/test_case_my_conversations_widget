@@ -1,0 +1,24 @@
+| *Comment* | Test Case: My Conversations Widget |  |
+
+* Fixture: SocialWidgets
+
+| set | workspace | test-data |
+
+| open_ok | /test-data/index.cgi | 2000 |
+| include | [test case: create conversations] |  |
+| st-catchup-logs |  |  |
+| open_ok | /?dashboard | 60000 |
+| st-empty-container |  |  |
+| st-add-widget | gadgets/share/gadgets/recent_conversations.xml | my_conversations |
+| st_wait_for_widget_load | my_conversations | 45000 |
+| st-widget-title-like | my_conversations | Recent C |
+| pause | 15000 |  |  |
+| st-select-widget-frame | my_conversations |  |
+| wait_for_element_present_ok | link=My Conversations |  |
+| wait_for_element_present_ok | link=My Colleagues |  |
+| wait_for_element_present_ok | link=All Changes |  |
+| text_like | tl_0 | devnull2\@socialtext.com edited created_page |
+| text_like | t1_0 | devnull2\@socialtext.com commented on Jabberwocky in Canonical Test Data Set |
+| text_like | t1_0 | devnull2\@socialtext.com commented on Slithy in Canonical Test Data Set |
+
+| *Comment* | Test Case: My Conversations Widget COMPLETED |  |

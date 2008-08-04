@@ -10,6 +10,7 @@ use Socialtext::AppConfig;
 use Socialtext::Page;
 use Socialtext::Pages;
 use Socialtext::Permission 'ST_EDIT_PERM';
+use Socialtext::JSON;
 
 # XXX funkity duplication throughout, trying to remove some
 # but still plenty left
@@ -26,7 +27,8 @@ sub register {
 sub rename_popup {
     my $self = shift;
     my %p = @_;
-    $self->template_process(
+    return encode_json(\%p) if $self->cgi->json;
+    return $self->template_process(
         'popup/rename',
         %p,
         $self->hub->helpers->global_template_vars,
@@ -53,6 +55,7 @@ sub rename_page {
         return $self->rename_popup( same_title => 1 );
     }
     elsif ( $self->_rename() ) {
+        return encode_json({done=>1}) if $self->cgi->json;
         return $self->template_process('close_window.html',
             before_window_close => q{window.opener.location='} .
                 Socialtext::AppConfig->script_name . '?' .
@@ -98,5 +101,6 @@ cgi 'keep_attachments';
 cgi 'keep_categories';
 cgi 'new_title';
 cgi 'clobber';
+cgi 'json';
 
 1;

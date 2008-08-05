@@ -8,6 +8,7 @@ use Socialtext::Events;
 use Socialtext::JSON qw/encode_json decode_json/;
 use Class::Field 'field';
 use Socialtext::User;
+use Socialtext::Exceptions;
 
 our $VERSION = '1.0';
 
@@ -66,6 +67,10 @@ sub get_resource {
         my $workspace_name = $self->rest->query->param('page.workspace_name');
         if ($workspace_name) {
             my $ws = Socialtext::Workspace->new(name => $workspace_name);
+            unless ($ws) {
+                Socialtext::Exception::NoSuchWorkspace->throw(
+                    name => $workspace_name );
+            }
             $workspace_id = $ws->workspace_id if $ws;
         }
     }
@@ -84,7 +89,7 @@ sub get_resource {
 }
 
 sub POST_text {
-    warn "POST text?!";
+    die "POST text?!";
 }
 
 sub POST_json {
@@ -124,10 +129,8 @@ sub _post_json {
 
 sub _post_form {
     my $self = shift;
-
-    my $form_data = $self->rest->getContent();
-    my $cgi = Socialtext::CGI::Scrubbed->new($form_data);
-
+    my $cgi = Socialtext::CGI::Scrubbed->new;
+ 
     my %params;
     foreach my $key (qw(event_class action actor.id person.id page.id page.workspace_name tag_name)) {
         my $value = $cgi->param($key);

@@ -370,11 +370,12 @@ function setup_wikiwyg() {
         return false;
     });
 
-    jQuery('#st-edit-mode-uploadbutton')
-        .lightbox({
+    jQuery('#st-edit-mode-uploadbutton').click(function () {
+        jQuery.showLightbox({
             content:'#st-attachments-attachinterface',
             close:'#st-attachments-attach-closebutton'
         });
+    });
 
     ww.modeButtonMap = bmap = {};
     bmap[WW_SIMPLE_MODE] = jQuery('#st-mode-wysiwyg-button').get(0);

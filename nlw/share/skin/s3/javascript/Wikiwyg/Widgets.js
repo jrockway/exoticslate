@@ -1202,73 +1202,73 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
 
     jQuery('<div>')
         .attr('id', 'widget-' + widget)
-        .attr('class', 'lightbox')
-        .html(html)
-        .appendTo('body');
+            .attr('class', 'lightbox')
+            .html(html)
+            .appendTo('body');
 
-    jQuery.showLightbox({
-        content: '#widget-' + widget
-    });
-
-    var self = this;
-    var form = jQuery('#widget-' + widget + ' form').get(0);
-
-    var intervalId = setInterval(function () {
-        jQuery('#'+widget+'_wafl_text')
-            .html(
-                ' <span>' +
-                self.create_wafl_string(widget, form).
-                    replace(/</g, '&lt;') +
-                '</span> '
-            );
-    }, 500);
-
-    jQuery('#st-widgets-moreoptions').toggle(
-        function () {
-            jQuery('#st-widgets-moreoptions')
-                .html(loc('Fewer options'))
-            jQuery('#st-widgets-optionsicon')
-                .attr('src', nlw_make_s2_path('/images/st/hide_more.gif'));
-            jQuery('#st-widgets-moreoptionspanel').show();
-        },
-        function () {
-            jQuery('#st-widgets-moreoptions')
-                .html(loc('More options'))
-            jQuery('#st-widgets-optionsicon')
-                .attr('src', nlw_make_s2_path('/images/st/show_more.gif'));
-            jQuery('#st-widgets-moreoptionspanel').hide();
-        }
-    );
-
-    jQuery('#st-widget-savebutton')
-        .click(function() {
-            var error = null;
-            try {
-                var widget_string = self['handle_widget_' + widget](form);
-                clearInterval(intervalId);
-                self.insert_widget(widget_string, widget_element, function () {
-                    jQuery.hideLightbox();
-                });
-            }
-            catch(e) {
-                error = String(e);
-                jQuery('#'+widget+'_widget_edit_error_msg')
-                    .show()
-                    .html('<span>'+error+'</span>');
-                Wikiwyg.Widgets.widget_editing--;
-                return false;
-            }
-            Wikiwyg.Widgets.widget_editing--;
-            return false;
+        jQuery.showLightbox({
+            content: '#widget-' + widget
         });
 
-    jQuery('#st-widget-cancelbutton')
-        .click(function () {
-            clearInterval(intervalId);
-            jQuery.hideLightbox();
-        })
+        var self = this;
+        var form = jQuery('#widget-' + widget + ' form').get(0);
 
-    // Grab the current selection and set it in the lightbox. uck
+        var intervalId = setInterval(function () {
+            jQuery('#'+widget+'_wafl_text')
+                .html(
+                    ' <span>' +
+                    self.create_wafl_string(widget, form).
+                        replace(/</g, '&lt;') +
+                    '</span> '
+                );
+        }, 500);
+
+        jQuery('#st-widgets-moreoptions').toggle(
+            function () {
+                jQuery('#st-widgets-moreoptions')
+                    .html(loc('Fewer options'))
+                jQuery('#st-widgets-optionsicon')
+                    .attr('src', nlw_make_s2_path('/images/st/hide_more.gif'));
+                jQuery('#st-widgets-moreoptionspanel').show();
+            },
+            function () {
+                jQuery('#st-widgets-moreoptions')
+                    .html(loc('More options'))
+                jQuery('#st-widgets-optionsicon')
+                    .attr('src', nlw_make_s2_path('/images/st/show_more.gif'));
+                jQuery('#st-widgets-moreoptionspanel').hide();
+            }
+        );
+
+        jQuery('#st-widget-savebutton')
+            .click(function() {
+                var error = null;
+                try {
+                    var widget_string = self['handle_widget_' + widget](form);
+                    clearInterval(intervalId);
+                    self.insert_widget(widget_string, widget_element, function () {
+                        jQuery.hideLightbox();
+                    });
+                }
+                catch(e) {
+                    error = String(e);
+                    jQuery('#'+widget+'_widget_edit_error_msg')
+                        .show()
+                        .html('<span>'+error+'</span>');
+                    Wikiwyg.Widgets.widget_editing--;
+                    return false;
+                }
+                Wikiwyg.Widgets.widget_editing--;
+                return false;
+            });
+
+        jQuery('#st-widget-cancelbutton')
+            .click(function () {
+                clearInterval(intervalId);
+                jQuery.hideLightbox();
+            })
+
+        // Grab the current selection and set it in the lightbox. uck
     var data = widget_data[widget];
     var primary_field =
         data.primary_field ||

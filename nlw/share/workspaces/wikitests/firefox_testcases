@@ -10,6 +10,7 @@ Socialcalc enabled is required because we run Calc Testcases
 * [Core Testcases]
 * [Test Case: Miki Authentication]
 * [Test Case: RSS Icons]
+* [Test Case: Redirect Logout URI]
 * [Calc Testcases]
 * [File Testcases]
 * [Localization Testcases]

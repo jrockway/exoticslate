@@ -11,7 +11,7 @@ use Socialtext::CGI::Scrubbed;
 use mocked 'Socialtext::Events', 'event_ok', 'is_event_count';
 use mocked 'Socialtext::SQL', 'sql_ok';
 use mocked 'Socialtext::Workspace';
-use mocked 'Socialtext::Rest';
+use mocked 'Socialtext::Rest', 'is_status';
 
 BEGIN {
     use_ok 'Socialtext::Rest::Events';
@@ -29,7 +29,7 @@ our $actor = Socialtext::User->new(
 Empty_JSON_GET: {
     my ($rest, $result) = do_get();
 
-    is $rest->header->{-status}, '200 OK', "request succeeded";
+    is_status $rest, '200 OK', "request succeeded";
     my $events = decode_json($result);
     ok($events, "decoded the result");
     is_deeply $events, [], "empty result";
@@ -54,7 +54,7 @@ JSON_GET_an_item: {
     local @Socialtext::Events::Events = [{item=>'first'}];
     my ($rest, $result) = do_get(%args);
 
-    is $rest->header->{-status}, '200 OK', "request succeeded";
+    is_status $rest, '200 OK', "request succeeded";
     my $events = decode_json($result);
     ok($events, "decoded the result");
     is_deeply $events, [{item=>'first'}], "mock result returned";

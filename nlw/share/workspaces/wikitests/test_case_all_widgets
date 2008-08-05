@@ -1,0 +1,4 @@
+| include | [Test Case: Workspace Widget] |
+| include | [Test Case: OnePage Widget] |
+| include | [Test Case: Recent Changes Widget] |
+| include | [Test Case: My Conversations Widget] |

@@ -52,10 +52,6 @@
                         [% END %]
                         -
                         <a href="[% script_name %]?[%entry.page_uri%]">[% loc('permalink') %]</a>
-                        [% IF checker.check_permission('attachments') %]
-                          -
-                          <a href="[% script_name %]?action=display;page_name=[%entry.page_uri%];caller_action=[% caller_action %];js=toggle_attachments_div">[% loc('attachments') %] [% IF entry.attachment_count > 0 %]([% entry.attachment_count %])[% END %]</a>
-                        [% END %]
                     </em>
                     <div id="content_[% entry.page_uri %]">
                         [% entry.post %]

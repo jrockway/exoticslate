@@ -61,6 +61,10 @@ sub init {
         die "$_ is mandatory!" unless $self->{$_};
     }
 
+    my $ws = Socialtext::Workspace->new( name => $self->{workspace} );
+    my $skin = $ws->skin_name();
+
+    $self->{'skin'} = $skin;
     $self->SUPER::init;
 
     { # Talc/Topaz are configured to allow emailing into specific dev-envs
@@ -139,19 +143,13 @@ Performs a search, and then validates the result page has the correct title.
 
 =cut
 
-my $skin = undef;
 
 sub st_search {
     my ($self, $opt1, $opt2) = @_;
     my $sel = $self->{selenium};
  
-    if (!defined($skin)) { 
-        my $ws = Socialtext::Workspace->new( name => $self->{workspace} );
-        $skin = $ws->skin_name();
-    } 
-
     $sel->type_ok('st-search-term', $opt1);
-    if ($skin eq 's3') {
+    if ($self->{'skin'} eq 's3') {
        $sel->click_ok('st-search-submit');
     } else {
        $sel->click_ok('link=Search');
@@ -523,8 +521,13 @@ sub _click_user_row {
         next unless $email and $row_email =~ /\Q$email\E/;
         $chk_xpath = "//tbody/tr[$row]$click_col";
         $sel->$method_name($chk_xpath);
-        $self->click_and_wait('Button');
-        $sel->text_like('st-settings-section', qr/\QChanges Saved\E/);
+             if ($self->{'skin'} eq 's3') {
+                $self->click_and_wait('link=Save');
+                $sel->text_like('contentContainer', qr/\QChanges Saved\E/);
+             } else {  
+                $self->click_and_wait('Button');
+                $sel->text_like('st-settings-section', qr/\QChanges Saved\E/);
+             }
         return $chk_xpath;
     }
     ok 0, "Could not find '$email' in the table";

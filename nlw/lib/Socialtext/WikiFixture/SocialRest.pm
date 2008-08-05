@@ -6,6 +6,7 @@ use base 'Socialtext::WikiFixture';
 use Test::HTTP;
 use Test::More;
 use Socialtext::WikiFixture::Socialtext;
+use Socialtext::SQL qw/sql_execute/;
 
 =head1 NAME
 
@@ -58,9 +59,23 @@ sub init {
 
     $self->SUPER::init;
 
+    $self->http_user_pass($self->{username}, $self->{password});
+}
+
+=head2 http_user_pass ( $username, $password )
+
+Set the HTTP username and password.
+
+=cut
+
+sub http_user_pass {
+    my $self = shift;
+    my $user = shift;
+    my $pass = shift;
+
     $self->{http} = Test::HTTP->new('SocialRest fixture');
-    $self->{http}->username($self->{username});
-    $self->{http}->password($self->{password});
+    $self->{http}->username($user) if $user;
+    $self->{http}->password($pass) if $pass;
 }
 
 =head2 handle_command( @row )
@@ -71,7 +86,7 @@ Run the command.  Subclasses can override this.
 
 sub handle_command {
     my $self = shift;
-    my $command = shift;
+    my $command = lc(shift);
     $command =~ s/-/_/g;
     my @opts = $self->_munge_options(@_);
 
@@ -173,6 +188,42 @@ Put to the specified URI
 =cut
 
 sub put { shift->_call_method('put', @_) }
+
+=head2 set_from_content ( name, regex )
+
+Set a variable from content in the last response.
+
+=cut
+
+sub set_from_content {
+    my $self = shift;
+    my $name = shift || die "name is mandatory for set-from-content";
+    my $regex = $self->quote_as_regex(shift || '');
+    my $content = $self->{http}->response->content;
+    if ($content =~ $regex) {
+        if (defined $1) {
+            $self->{$name} = $1;
+            warn "# Set $name to '$1' from response content\n";
+        }
+        else {
+            die "Could not set $name - regex didn't capture!";
+        }
+    }
+    else {
+        die "Could not set $name - regex ($regex) did not match $content";
+    }
+}
+
+=head2 st-clear-events
+
+Delete all events
+
+=cut
+
+sub st_clear_events {
+    sql_execute('DELETE FROM event');
+}
+
 
 sub body_unlike {
     my ($self, $expected) = @_;

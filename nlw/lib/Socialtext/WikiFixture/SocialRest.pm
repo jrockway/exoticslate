@@ -88,6 +88,7 @@ sub handle_command {
     my $self = shift;
     my $command = lc(shift);
     $command =~ s/-/_/g;
+    $command =~ s/^\*(.+)\*$/$1/;
     my @opts = $self->_munge_options(@_);
 
     if ($command eq 'body_like') {

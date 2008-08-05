@@ -2,10 +2,15 @@ package Socialtext::Rest;
 # @COPYRIGHT@
 use strict;
 use warnings;
-use base 'Socialtext::MockBase';
+use Test::More;
+use base 'Socialtext::MockBase', 'Exporter';
 use mocked 'Socialtext::User';
 use mocked 'Socialtext::Hub';
 use unmocked 'Socialtext::HTTP', ':codes';
+
+our $VERSION = 0.01;
+our @EXPORT = ();
+our @EXPORT_OK = qw(&is_status);
 
 # This class is mocking both Socialtext::Rest, and the Rest::Application
 # object.  So $self->rest == $self.
@@ -37,7 +42,7 @@ my $_header;
 sub header { 
     my $self = shift;
     if (@_) { $_header = { @_ }; }
-    return $_header;
+    return %$_header;
 }
 
 sub user {
@@ -92,6 +97,15 @@ sub AUTOLOAD {
         return $self->params->{$AUTOLOAD};
     }
     croak("No such method '$AUTOLOAD' for type '$type'.");
+}
+
+sub is_status($$$) {
+    my $rest = shift;
+    my $expected = shift;
+    my $name = shift;
+    my %headers = $rest->header;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    is $headers{-status}, $expected, $name;
 }
 
 1;

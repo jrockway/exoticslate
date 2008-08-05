@@ -1,0 +1,82 @@
+Test case for `/data/people/:pname/tags` (GET, POST, DELETE).
+
+* Fixture: SocialRest
+
+To test:
+* Get tags for a person
+* Add a tag for a person
+** should be able to add tags to another person
+** un-authed users can't add tags
+* Delete a tag for a person
+** should be able to delete tags from another person
+** un-authed users can't delete tags
+
+
+| Comment | Set up a person |
+| st-clear-events | |
+| set | person | person_%%start_time%% |
+| st-admin | create-user --username %%person%% --email %%person%%@ken.socialtext.net --password d3vnu11l |
+| set | person2 | person_%%start_time%%2 |
+| st-admin | create-user --username %%person2%% --email %%person2%%@ken.socialtext.net --password d3vnu11l |
+
+| Comment | Get empty set |
+| get | /data/people/%%person%%/tags |
+| code-is | 200 |
+| body-like | [] |
+
+| Comment | Add one tag collapsing whitespace |
+| post | /data/people/%%person%%/tags | Content-Type=application/json | {"tag_name":"funny guy   "} |
+| code-is | 204 |
+| post | /data/people/%%person%%/tags | Content-Type=application/json | {"tag_name":"    funny guy"} |
+| code-is | 400 |
+| body-like | funny guy |
+| body-like | already |
+| post | /data/people/%%person%%/tags | Content-Type=application/json | {"tag_name":"funny    guy"} |
+| code-is | 400 |
+| body-like | funny guy |
+| body-like | already |
+
+This should probably be a form post at some point. 
+.pre
+Content-Type=application/x-www-form-urlencoded
+
+tag_name=a%20real%20drag
+.pre
+
+| Comment | Add another tag via form |
+| post | /data/people/%%person%%/tags | Content-Type=application/json | {"tag_name":"a real drag"} |
+| code-is | 204 |
+
+| Comment | Get tags for a person |
+| get | /data/people/%%person%%/tags |
+| code-is | 200 |
+| body-like | ["a real drag","funny guy"] |
+
+| Comment | Check tag_add events |
+| get | /data/events?event_class=person&action=tag_add |
+| code-is | 200 |
+| body-like | "tag_name":"funny guy" |
+| body-like | "tag_name":"a real drag" |
+
+| Comment | Delete a tag from a person |
+| delete | /data/people/%%person%%/tags/doesnotexist |  |
+| code-is | 400 |
+| delete | /data/people/%%person%%/tags/funny%20guy |  |
+| code-is | 204 |
+| get | /data/people/%%person%%/tags |
+| code-is | 200 |
+| body-like | ["a real drag"] |
+| delete | /data/people/%%person%%/tags/a%20real%20drag |  |
+| code-is | 204 |
+| get | /data/people/%%person%%/tags |
+| code-is | 200 |
+| body-like | [] |
+
+| Comment | GET/POST/DELETE tag by un-auth user |
+| http-user-pass | | |
+| get | /data/people/%%person%%/tags |
+| code-is | 401 |
+| post | /data/people/%%person%%/tags | Content-Type=application/json | {"tag_name":"uh-uh"} |
+| code-is | 401 |
+| delete | /data/people/%%person%%/tags/uh-uh | | |
+| code-is | 401 |

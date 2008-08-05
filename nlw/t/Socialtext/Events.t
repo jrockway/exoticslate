@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use warnings;
 use strict;
-use Test::More tests => 79;
+use Test::More tests => 67;
 use Test::Exception;
 use XXX;
 use mocked 'Socialtext::Headers';
@@ -15,14 +15,6 @@ use mocked 'Socialtext::Hub';
 
 BEGIN {
     use_ok('Socialtext::Events');
-}
-{ 
-    no warnings 'once';
-    ok *Socialtext::Events::CGI::event, "got cgi function";
-    my $cgi = Socialtext::Events::CGI->new;
-    $cgi->{event} = 1;
-    ok $cgi->event;
-    isa_ok($cgi, 'Socialtext::Events::CGI', "correct class");
 }
 
 my $insert_re = qr/^INSERT INTO event \( at, event_class, action, actor_id, person_id, page_id, page_workspace_id, tag_name, context \) VALUES/;
@@ -372,46 +364,5 @@ Creating_events: {
     }
 }
 
-page_plugin: {
-
-    not_a_page_evt: {
-        $hub->{cgi} = Socialtext::Events::CGI->new();
-        my $ep = Socialtext::Events->new(
-            hub => $hub,
-        );
-        ok $ep, "created a plugin";
-        ok $ep->cgi, "got the cgi object";
-        $ep->cgi->{page_id} = '';
-        $ep->cgi->{event} = 'view';
-        $ep->cgi->{class} = 'people';
-
-        my $result = $ep->log_event();
-        like $result, qr/page events/, "some sort of error message";
-        ok @Socialtext::SQL::SQL == 0, "no events recorded";
-    }
-
-    page_evt_w_object: {
-        $hub->{cgi} = Socialtext::Events::CGI->new();
-        my $ep = Socialtext::Events->new(
-            hub => $hub,
-        );
-
-        ok $ep, "created a plugin";
-        $ep->cgi->{page_id} = 'example_page';
-        $ep->cgi->{event} = 'edit_cancel';
-
-        my $result = $ep->log_event();
-        is $result, "Event Logged.", "success message";
-
-        ok @Socialtext::SQL::SQL == 1;
-        sql_ok(
-            sql => $insert_re,
-            args => ['now', 'page', 'edit_cancel', 2345, 
-                     undef, 'example_page',  348798, undef,
-                     '{"revision_id":"abcd","revision_count":56}'],
-            name => "Correct event logged to the DB",
-        );
-    }
-}
 
 exit;

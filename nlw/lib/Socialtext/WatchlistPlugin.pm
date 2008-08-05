@@ -176,7 +176,7 @@ sub _record_watch_delete {
         action => 'watch_delete',
         actor => $self->hub->current_user,
         workspace => $self->hub->current_workspace,
-        object => $page->id,
+        page => $page,
         revision_count => $page->revision_count,
         revision_id => $page->revision_id,
     });

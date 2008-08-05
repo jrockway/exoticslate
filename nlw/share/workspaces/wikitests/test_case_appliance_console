@@ -232,6 +232,8 @@
 | click_ok | link=Shutdown |  |
 | wait_for_page_to_load_ok | 30000 |  |
 
+| *Comment* | Test Case: Appliance Console COMPLETED |  |
+
 ^ Test Description
 
 These tests should be refactored into executable tests:
@@ -247,11 +249,6 @@ These tests should be refactored into executable tests:
 ** Should save the values to `/etc/socialtext/appliance.conf`
 * Automatic Backup Schedule
 ** Should write a new crontab (it overwrites the current crontab)
-* Perform Backup
-** Should save a backup file to the configured Samba share
-* Restore Backup
-** Should list the available backups on the Samba share
-** Should restore a backup from the Samba share
 
 ^^ Setup tab
 

@@ -1,0 +1,21 @@
+* HighPermissions
+
+Test case to verify that the configurable "logout redirect URI" works as intended.
+
+| *Comment* | Test Case: Redirect Logout URI |  |
+
+| *Comment* | Redirect Logout URI Setup: Set the logout_redirect_uri |  |
+| set | test_logout_uri | http://www.google.com |
+| st-config | set logout_redirect_uri %%test_logout_uri%% | Wrote updated config |
+
+| *Comment* | Redirect Logout URI Logout, and make sure we got sent to the right URI |
+| st-logout |
+| location_like | %%test_logout_uri%% |
+
+| *Comment* | Redirect Logout URI Teardown: set the logout_redirect_uri back to default |  |
+| st-config | set logout_redirect_uri /nlw/login.html | Wrote updated config |
+| st-login |  |  |
+| st-logout |  |  |
+| location_like | /nlw/login.html |  |
+
+| *Comment* | Test Case: Redirect Logout URI COMPLETED |  |

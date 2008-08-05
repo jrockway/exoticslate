@@ -242,6 +242,7 @@ $(function() {
         .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
 
     $("#st-comment-button-link").click(function () {
+        $.ajaxSettings.cache = true;
         $.getScript(comment_uri,
             function () {
                 var ge = new GuiEdit({
@@ -252,10 +253,12 @@ $(function() {
                 ge.show();
             }
         );
+        $.ajaxSettings.cache = false;
     });
 
     $(".weblog_comment").click(function () {
         var page_id = this.id.replace(/^comment_/,'');
+        $.ajaxSettings.cache = true;
         $.getScript(comment_uri, function () {
             var ge = new GuiEdit({
                 page_id: page_id,
@@ -267,10 +270,11 @@ $(function() {
             });
             ge.show();
         });
+        $.ajaxSettings.cache = false;
     });
 
     $("#st-pagetools-email").click(function () {
-        //$.ajaxSettings.cache = true;
+        $.ajaxSettings.cache = true;
         $.getScript(email_uri);
         $.ajaxSettings.cache = false;
     });

@@ -3,10 +3,11 @@
 use warnings FATAL => 'all';
 use strict;
 use XXX;
-use Test::More tests => 20;
+use Test::More tests => 30;
 use URI::Escape qw/uri_escape/;
 use Socialtext::JSON qw/encode_json decode_json/;
 use Socialtext::CGI::Scrubbed;
+use Socialtext::HTTP qw/:codes/;
 
 use mocked 'Socialtext::Events', 'event_ok', 'is_event_count';
 use mocked 'Socialtext::SQL', 'sql_ok';
@@ -18,7 +19,7 @@ BEGIN {
 }
 
 our $actor = Socialtext::User->new(
-    id => 27,
+    user_id => 27,
     name => 'username',
     email => 'username@example.com',
     first_name => 'User',
@@ -44,7 +45,7 @@ JSON_GET_an_item: {
         before => '2008-06-23T00:00:00Z', 
         event_class => 'PAGE',
         action => 'tAg_Add',
-        'actor.id' => 1,
+        'actor.id' => 156,
         'page.id' => 'quick_start',
         'page.workspace_name' => 'foobar',
         'tag_name' => 'Some Tag',
@@ -65,7 +66,7 @@ JSON_GET_an_item: {
         after => '2008-06-25 11:39:21.509539-07', 
         event_class => 'page',
         action => 'tag_add',
-        actor_id => 1,
+        actor_id => 156,
         page_workspace_id => 'mock_workspace_id',
         page_id => 'quick_start',
         tag_name => 'Some Tag',
@@ -77,7 +78,7 @@ GET_without_authorized_user: {
     local $actor = Socialtext::User->new(is_guest => 1);
     my ($rest, $result) = do_get();
 
-    like $rest->header->{-status}, qr/^40[13]/, "request denied";
+    is_status $rest, HTTP_401_Unauthorized, "request denied";
 }
 
 POSTing_an_event: {
@@ -91,18 +92,46 @@ POSTing_an_event: {
     );
 
     like $result, qr/success/, "successful operation";
-    is_deeply $rest->header, {
-        -type => 'text/plain',
-        -status => '201 Created',
-    }, "expected created event";
+    is_status $rest, HTTP_201_Created, "created";
 
     is_event_count(1);
     event_ok(
-        class => 'page',
+        event_class => 'page',
         action => 'edit_begin',
         page => 'formattingtest',
         workspace => 'mock_workspace_id',
         context => {"page_rev"=>"123456789"},
+    );
+}
+
+POSTing_without_actor: {
+    local $actor = Socialtext::User->new(
+        user_id => 98,
+        username => 'auto-actor@devnull',
+        email => 'auto-actor@example.com',
+        first_name => 'Auto',
+        last_name => 'Actor',
+        is_guest => 0
+    );
+
+    my ($rest, $result) = do_post_json({
+        event_class => 'page',
+        action => 'edit_cancel',
+        'page' => {id => 'qvick_stvrt', workspace_name => 'foobar'},
+        context => {page_rev => "187654321"},
+    });
+
+    like $result, qr/success/, "successful operation";
+    is_status $rest, HTTP_201_Created, "created";
+
+    is_event_count(1);
+    event_ok(
+        actor => 98,
+        event_class => 'page',
+        action => 'edit_cancel',
+        page => 'qvick_stvrt',
+        workspace => 'mock_workspace_id',
+        context => {"page_rev"=>"187654321"},
     );
 }
 
@@ -118,6 +147,7 @@ POSTing_without_authorization: {
     );
 
     like $result, qr/not authorized/i, "denied";
+    is_status $rest, HTTP_401_Unauthorized, "request denied";
     is_event_count(0);
 }
 
@@ -141,27 +171,23 @@ sub do_post_form {
     $post .= "$_=".uri_escape($form{$_}).'&' for keys %form;
     chop $post;
 
-    my $cgi = Socialtext::CGI::Scrubbed->new();
-    my $rest = Socialtext::Rest->new(undef, $cgi, user => $actor);
-    my $e = Socialtext::Rest::Events->new($rest, $cgi);
-    $e->{_content} = $rest->{_content} = $post;
+    my $cgi = Socialtext::CGI::Scrubbed->new($post);
+    my $rest = Socialtext::Rest->new(undef, undef, user => $actor);
+    my $e = Socialtext::Rest::Events->new($rest, undef, user => $actor);
+    $e->{_test_cgi} = $cgi;
     $e->{rest} = $rest;
-    $e->{user} = $actor;
     my $result = $e->POST_form($rest);
     return ($rest,$result);
 }
 
 sub do_post_json {
     Socialtext::Events::clear_get_args();
-    my %struct = @_;
-    my $json = encode_json(\%struct);
+    my $json = encode_json(shift);
 
-    my $cgi = Socialtext::CGI::Scrubbed->new();
-    my $rest = Socialtext::Rest->new(undef, $cgi, user => $actor);
-    my $e = Socialtext::Rest::Events->new($rest, $cgi);
+    my $rest = Socialtext::Rest->new(undef, undef, user => $actor);
+    my $e = Socialtext::Rest::Events->new($rest, undef, user => $actor);
     $e->{_content} = $rest->{_content} = $json;
     $e->{rest} = $rest;
-    $e->{user} = $actor;
-    my $result = $e->POST_form($rest);
+    my $result = $e->POST_json($rest);
     return ($rest,$result);
 }

@@ -129,7 +129,7 @@ sub _post_json {
 
 sub _post_form {
     my $self = shift;
-    my $cgi = Socialtext::CGI::Scrubbed->new;
+    my $cgi = $self->{_test_cgi} || Socialtext::CGI::Scrubbed->new;
  
     my %params;
     foreach my $key (qw(event_class action actor.id person.id page.id page.workspace_name tag_name)) {
@@ -167,11 +167,16 @@ sub _post_an_event {
         unless $action;
 
     my $actor_id = $params->{'actor.id'};
+    if (!$actor_id && $self->rest->user && !$self->rest->user->is_guest) {
+        $actor_id = $self->rest->user->user_id;
+        my $uname = $self->rest->user->username;
+        warn "NOTICE: event actor has been set to '$uname' (id:$actor_id)";
+    }
     return $self->_missing_param('actor.id')
         unless $actor_id;
 
     my %event = (
-        class  => $event_class,
+        event_class  => $event_class,
         action => $action,
         actor  => $actor_id,
     );

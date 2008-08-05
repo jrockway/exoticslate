@@ -1,0 +1,26 @@
+<div class="lightbox" id="st-commentui-container">
+  <form id="comment-form" name="comment_form" method="post" action="[% script_name %]" enctype="application/x-www-form-urlencoded">
+  <div id="st-commentui-toolbar">
+    <img class="comment_button" src="[% s2_path('/images/bold.gif') %]" name="bold"/>
+    <img class="comment_button" src="[% s2_path('/images/italic.gif') %]" name="italic"/>
+    <img class="comment_button" src="[% s2_path('/images/strike.gif') %]" name="strike"/>
+    <img class="comment_button" src="[% s2_path('/images/h1.gif') %]" name="h1"/>
+    <img class="comment_button" src="[% s2_path('/images/h2.gif') %]" name="h2"/>
+    <img class="comment_button" src="[% s2_path('/images/h3.gif') %]" name="h3"/>
+    <img class="comment_button" src="[% s2_path('/images/ul.gif') %]" name="ul"/>
+    <img class="comment_button" src="[% s2_path('/images/ol.gif') %]" name="ol"/>
+    <img class="comment_button" src="[% s2_path('/images/indent.gif') %]" name="indent"/>
+    <img class="comment_button" src="[% s2_path('/images/outdent.gif') %]" name="outdent"/>
+    <img class="comment_button" src="[% s2_path('/images/filew.gif') %]" name="filew"/>
+    <img class="comment_button" src="[% s2_path('/images/image.gif') %]" name="image"/>
+    <img class="comment_button" src="[% s2_path('/images/wikilink.gif') %]" name="wikilink"/>
+    <img class="comment_button" src="[% s2_path('/images/createlink.gif') %]" name="createlink"/>
+    <img class="comment_button" src="[% s2_path('/images/createtable.gif') %]" name="createtable"/>
+  </div>
+  <textarea id="st-commentui-textarea" name="comment" wrap="virtual"></textarea>
+  <div class="buttons">
+    <input id="st-commentui-savelink" type="submit" value="[% loc('save') %]"/>
+    <input id="st-commentui-cancellink" type="button" value="[% loc('Cancel') %]"/>
+  </div>
+  </form>
+</div>

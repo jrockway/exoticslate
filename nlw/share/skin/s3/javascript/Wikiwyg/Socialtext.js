@@ -390,10 +390,6 @@ Wikiwyg.setup_newpage = function() {
             return wikiwyg.saveNewPage();
         });
 
-        jQuery('#st-cancel-button-link').click(function () {
-            jQuery.hideLightbox();
-        });
-
         jQuery('#st-newpage-duplicate-okbutton').click(function () {
             wikiwyg.newpage_duplicate_ok();
             return false;
@@ -588,7 +584,7 @@ proto.newpage_display_duplicate_dialog = function(page_name) {
 
     jQuery('#st-newpage-duplicate-link')
         .html(page_name)
-        .attr('href', Page.ContentUri() + "?" + page_name)
+        .attr('href', Page.cgiUrl() + "?" + page_name)
         .attr('target', page_name);
     
     jQuery('#st-newpage-duplicate-pagename').val(page_name);

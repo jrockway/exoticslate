@@ -32,6 +32,12 @@ EMAIL_FILE=socialtext-email.js
 EMAIL_FILE_MINI=socialtext-email-mini.js
 EMAIL_FILE_GZIP=$(EMAIL_FILE).gz
 
+COMMENT_TEMPLATE=template/comment_lightbox.tt2
+COMMENT_JEMPLATE=jemplate/comment_lightbox.html
+COMMENT_FILE=socialtext-comment.js
+COMMENT_FILE_MINI=socialtext-comment-mini.js
+COMMENT_FILE_GZIP=$(COMMENT_FILE).gz
+
 S3_SOURCE_FILES= \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
 		$(S2_JAVASCRIPT)/loc.js \
@@ -44,6 +50,12 @@ EMAIL_SOURCE_FILES= \
 		$(ALL_JEMPLATE_PLUGINS) \
 		$(EMAIL_JEMPLATE) \
 		email.js \
+
+COMMENT_SOURCE_FILES= \
+		Jemplate.js \
+		$(ALL_JEMPLATE_PLUGINS) \
+		$(COMMENT_JEMPLATE) \
+		comment.js \
 
 EDITOR_SOURCE_FILES= \
 		$(S2_JAVASCRIPT)/main.js \
@@ -75,6 +87,7 @@ all: \
     $(S3_FILE_GZIP) \
     $(EDITOR_FILE_GZIP) \
     $(EMAIL_FILE_GZIP) \
+    $(COMMENT_FILE_GZIP) \
     timestamp.js \
     Selection.htc \
 
@@ -95,6 +108,9 @@ clean:
 	    $(EMAIL_FILE) \
 	    $(EMAIL_FILE_MINI) \
 	    $(EMAIL_FILE_GZIP) \
+	    $(COMMENT_FILE) \
+	    $(COMMENT_FILE_MINI) \
+	    $(COMMENT_FILE_GZIP) \
 
 .SUFFIXES: .js -mini.js .js.gz
 
@@ -115,6 +131,9 @@ $(JEMPLATE_WIKIWYG_MODULE): jemplate_wikiwyg $(ALL_WIKIWYG_JEMPLATES)
 
 $(EMAIL_JEMPLATE): jemplate $(EMAIL_TEMPLATE)
 	jemplate --compile $(EMAIL_TEMPLATE) > $(EMAIL_JEMPLATE)
+
+$(COMMENT_JEMPLATE): jemplate $(COMMENT_TEMPLATE)
+	jemplate --compile $(COMMENT_TEMPLATE) > $(COMMENT_JEMPLATE)
 
 $(ALL_EDIT_JEMPLATES): $(WIDGETS_YAML) $(JEMPLATE_GENERATOR) template/widget_edit.tt2 jemplate/save-cancel.html
 	$(JEMPLATE_GENERATOR) --yaml=$< --output=$@ \
@@ -146,6 +165,12 @@ $(EDITOR_FILE): $(EDITOR_SOURCE_FILES) timestamp.js Makefile
 $(EMAIL_FILE): $(EMAIL_SOURCE_FILES) timestamp.js Makefile
 	rm -f $@;
 	for js in $(EMAIL_SOURCE_FILES); do \
+	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
+	done
+
+$(COMMENT_FILE): $(COMMENT_SOURCE_FILES) timestamp.js Makefile
+	rm -f $@;
+	for js in $(COMMENT_SOURCE_FILES); do \
 	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
 	done
 

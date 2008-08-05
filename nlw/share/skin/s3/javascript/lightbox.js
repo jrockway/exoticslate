@@ -60,7 +60,9 @@
             $(opts.close).click(function () { $.hideLightbox() })
 
         $('#overlay').fadeIn(function () {
-            $('#lightbox').fadeIn();
+            $('#lightbox').fadeIn(function() {
+                $(opts.focus).focus();
+            })
         });
     };
 

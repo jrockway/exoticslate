@@ -235,19 +235,6 @@
     </form>
 </div>
 
-<div class="lightbox" id="st-commentui-container">
-  [% IF hub.current_workspace.comment_form_note_top %]
-    <div id="st-commentui-notetop">[% hub.current_workspace.comment_form_note_top %]</div>
-  [% END %]
-  <form id="comment-form" name="comment_form" method="post" action="[% script_name %]" enctype="application/x-www-form-urlencoded">
-  <textarea id="st-commentui-textarea" name="comment" wrap="virtual"></textarea>
-  <div class="buttons">
-    <input id="st-commentui-savelink" type="submit" value="[% loc('save') %]"/>
-    <input id="st-commentui-cancellink" type="button" value="[% loc('Cancel') %]"/>
-  </div>
-  </form>
-</div>
-
 <div class="lightbox" id="st-rename-lightbox">
     <form id="st-rename-form">
         <input type="hidden" name="action" value="rename_page" />

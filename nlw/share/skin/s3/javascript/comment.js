@@ -18,75 +18,68 @@ COPYRIGHT NOTICE:
 var table_markup = '* | *col b* | *col c* |\n| cell a1 | cell b1 | cell c1 |\n|         |         |         |\n'
 var phrase_end_re = /[\s\.\:\;\,\!\?\(\)]/
 
-var GuiEdit = function() { }
-GuiEdit.prototype = new GuiEdit();
+var GuiEdit = function(args) {
+    args = args || {};
+    this.workspace = args.workspace || Socialtext.wiki_id;
+    this.page_id = args.page_id || Socialtext.page_id;
+    this.oncomplete = args.oncomplete;
+}
 
-GuiEdit.prototype.makeButton = function (name) {
-    var self = this;
-    jQuery('<img>')
-        .attr('src', nlw_make_s2_path('/images/'+name+'.gif'))
-        .css({
-            'cursor': 'pointer',
-            'border': 'thin solid white'
-        })
-        .bind('mouseover', function () {
-            jQuery(this).css({
-                borderTop: "thin solid white",
-                borderRight: "thin solid gray",
-                borderBottom: "thin solid gray",
-                borderLeft: "thin solid white"
-            });
-        })
-        .bind('mouseout', function () {
-            jQuery(this).css('border', 'thin solid white');
-        })
-        .click(function () { self['do_'+name].call(self) })
-        .appendTo('#st-commentui-toolbar');
-};
+GuiEdit.prototype = {};
 
 GuiEdit.prototype.show = function () {
+    var self = this;
+    if (!jQuery('#st-commentui-container').size()) {
+        Socialtext.loc = loc;
+        Socialtext.s2_path = nlw_make_s2_path;
+        jQuery('body').append(
+            Jemplate.process('comment_lightbox.tt2', Socialtext)
+        );
+        jQuery('.comment_button')
+            .css({
+                'cursor': 'pointer',
+                'border': 'thin solid white'
+            })
+            .mouseover(function () {
+                jQuery(this).css({
+                    borderTop: "thin solid white",
+                    borderRight: "thin solid gray",
+                    borderBottom: "thin solid gray",
+                    borderLeft: "thin solid white"
+                });
+            })
+            .mouseout(function () {
+                jQuery(this).css('border', 'thin solid white');
+            })
+            .click(function () { self['do_'+this.name].call(self) })
+
+        jQuery('#comment-form').submit(function () {
+            jQuery.post('/' + self.workspace + '/index.cgi',
+                {
+                    action: 'submit_comment',
+                    page_name: self.page_id,
+                    comment: jQuery('#st-commentui-textarea').val()
+                },
+                function () {
+                    jQuery.hideLightbox();
+
+                    if (self.oncomplete) {
+                        self.oncomplete.call(self);
+                    }
+                }
+            );
+            return false;
+        });
+    }
+
+    jQuery('#st-commentui-textarea').val('');
+    this.area = jQuery('#st-commentui-textarea').get(0);
+
     jQuery.showLightbox({
         content: '#st-commentui-container',
-        close: '#st-commentui-cancellink'
+        close: '#st-commentui-cancellink',
+        focus: '#st-commentui-textarea'
     });
-    this.area = jQuery('#st-commentui-textarea').get(0);
-    jQuery('#st-commentui-textarea').trigger('focus').val('');
-    jQuery('#comment-form').unbind('submit');
-    jQuery('#comment-form').bind('submit', function () {
-        jQuery.post(
-            '/' + Socialtext.wiki_id + '/index.cgi',
-            {
-                action: 'submit_comment',
-                page_name: Socialtext.page_id,
-                comment: jQuery('#st-commentui-textarea').val()
-            },
-            function () {
-                jQuery.hideLightbox();
-                Page.refreshPageContent();
-            }
-        );
-        return false;
-    });
-
-    if (!jQuery('#st-commentui-toolbar').size()) {
-        jQuery('<div id="st-commentui-toolbar">')
-            .insertBefore('#st-commentui-textarea');
-        this.makeButton("bold")
-        this.makeButton("italic")
-        this.makeButton("strike")
-        this.makeButton("h1")
-        this.makeButton("h2")
-        this.makeButton("h3")
-        this.makeButton("ul")
-        this.makeButton("ol")
-        this.makeButton("indent")
-        this.makeButton("outdent")
-        this.makeButton("filew")
-        this.makeButton("image")
-        this.makeButton("wikilink")
-        this.makeButton("createlink")
-        this.makeButton("createtable")
-    }
 }
 
 GuiEdit.prototype.alarm_on = function() {

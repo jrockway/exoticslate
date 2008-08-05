@@ -26,10 +26,6 @@ Page = {
         });
     },
 
-    ContentUri: function () {
-        return '/'+Socialtext.wiki_id;
-    },
-
     tagUrl: function (tag) {
         return this.pageUrl() + '/tags/' + encodeURIComponent(tag);
     },
@@ -149,6 +145,8 @@ var load_ui = function(cb) {
     setTimeout(loader, 500);
 };
 
+var push_onload_function = function (fcn) { $(fcn) }
+
 $(function() {
     $('#st-page-boxes-toggle-link')
         .bind('click', function() {
@@ -240,13 +238,35 @@ $(function() {
     var email_uri = nlw_make_s3_path('/javascript/socialtext-email.js.gz')
         .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
 
+    var comment_uri = nlw_make_s3_path('/javascript/socialtext-comment.js.gz')
+        .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
+
     $("#st-comment-button-link").click(function () {
-        $.getScript(nlw_make_s3_path('/javascript/comment.js'),
+        $.getScript(comment_uri,
             function () {
-                var ge = new GuiEdit;
+                var ge = new GuiEdit({
+                    oncomplete: function () {
+                        Page.refreshPageContent()
+                    }
+                });
                 ge.show();
             }
         );
+    });
+
+    $(".weblog_comment").click(function () {
+        var page_id = this.id.replace(/^comment_/,'');
+        $.getScript(comment_uri, function () {
+            var ge = new GuiEdit({
+                page_id: page_id,
+                oncomplete: function () {
+                    $.get(Page.pageUrl(page_id), function (html) {
+                        $('#content_'+page_id).html(html);
+                    });
+                }
+            });
+            ge.show();
+        });
     });
 
     $("#st-pagetools-email").click(function () {

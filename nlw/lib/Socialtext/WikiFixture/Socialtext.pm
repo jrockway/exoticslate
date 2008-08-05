@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use base 'Socialtext::WikiFixture::Selenese';
 use Socialtext::System qw/shell_run/;
+use Socialtext::Workspace;
 use Sys::Hostname;
 use Test::More;
 use Cwd;
@@ -138,12 +139,23 @@ Performs a search, and then validates the result page has the correct title.
 
 =cut
 
+my $skin = undef;
+
 sub st_search {
     my ($self, $opt1, $opt2) = @_;
     my $sel = $self->{selenium};
+ 
+    if (!defined($skin)) { 
+        my $ws = Socialtext::Workspace->new( name => $self->{workspace} );
+        $skin = $ws->skin_name();
+    } 
 
     $sel->type_ok('st-search-term', $opt1);
-    $sel->click_ok('link=Search');
+    if ($skin eq 's3') {
+       $sel->click_ok('st-search-submit');
+    } else {
+       $sel->click_ok('link=Search');
+    }
     $sel->wait_for_page_to_load_ok($self->{selenium_timeout});
     $sel->text_like('id=st-list-title', qr/\Q$opt2\E/);
 }

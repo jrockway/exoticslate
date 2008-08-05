@@ -239,26 +239,27 @@ $(function() {
     var lightbox_uri = nlw_make_s3_path('/javascript/socialtext-lightbox.js.gz')
         .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
 
-    $("#st-comment-button-link").click(function () {
+    function get_lightbox (cb) {
         $.ajaxSettings.cache = true;
-        $.getScript(lightbox_uri,
-            function () {
-                var ge = new GuiEdit({
-                    oncomplete: function () {
-                        Page.refreshPageContent()
-                    }
-                });
-                ge.show();
-            }
-        );
+        $.getScript(lightbox_uri, cb);
         $.ajaxSettings.cache = false;
+    }
+
+    $("#st-comment-button-link").click(function () {
+        get_lightbox(function () {
+            var ge = new GuiEdit({
+                oncomplete: function () {
+                    Page.refreshPageContent()
+                }
+            });
+            ge.show();
+        });
         return false;
     });
 
     $(".weblog_comment").click(function () {
         var page_id = this.id.replace(/^comment_/,'');
-        $.ajaxSettings.cache = true;
-        $.getScript(lightbox_uri, function () {
+        get_lightbox(function () {
             var ge = new GuiEdit({
                 page_id: page_id,
                 oncomplete: function () {
@@ -269,80 +270,32 @@ $(function() {
             });
             ge.show();
         });
-        $.ajaxSettings.cache = false;
         return false;
     });
 
     $("#st-pagetools-email").click(function () {
-        $.ajaxSettings.cache = true;
-        $.getScript(lightbox_uri, function () {
+        get_lightbox(function () {
             var Email = new ST.Email;
             Email.show();
         });
-        $.ajaxSettings.cache = false;
         return false;
     });
 
     //index.cgi?action=duplicate_popup;page_name=[% page.id %]
     $("#st-pagetools-duplicate").click(function () {
-        alert('not implemented');
+        get_lightbox(function () {
+            show_lightbox('duplicate');
+        });
+        return false;
     });
     
     $("#st-pagetools-rename").click(function () {
-        $.showLightbox({
-            content:'#st-rename-lightbox',
-            close:'#st-rename-cancellink'
+        get_lightbox(function () {
+            show_lightbox('rename');
         });
         return false;
     });
 
-    $('#st-rename-form').submit(function () {
-        var new_title = $('#st-rename-newname').val();
-        var error = $('#st-rename-error');
-        $.getJSON(
-            Page.cgiUrl(),
-            $(this).serialize(),
-            function (data) {
-                $('<input name="clobber" type="hidden">')
-                    .attr('value', new_title)
-                    .appendTo('#st-rename-form');
-                if (data.page_exists) {
-                    error.show().html(loc(
-                        'The new page name you selected, "' + new_title + 
-                        '", is already in use.  Please choose a different ' +
-                        'name. If you are sure you wish to overwrite the ' +
-                        'existing "' + new_title + '" page, please press ' +
-                        '"Rename" again.'
-                    ));
-                }
-                else if (data.page_title_bad) {
-                    error.show().html(loc(
-                        'The page name you selected, "' + new_title +'", ' +
-                        'is not allowed.  Please enter or change the page ' +
-                        'name.'
-                    ));
-                }
-                else if (data.page_title_too_long) {
-                    error.show().html(loc(
-                        'The page name you selected, "' +
-                        new_title + '", is too long after URL encoding'
-                    ));
-                }
-                else if (data.same_title) {
-                    error.show().html(loc(
-                        'The page name you selected, "' + new_title + '", ' +
-                        "is the same as the page's current title.  " +
-                        'Please enter a new page name.'
-                    ));
-                }
-                else {
-                    $.hideLightbox();
-                    document.location = Page.cgiUrl() + '?' + new_title;
-                }
-            }
-        );
-        return false;
-    });
 
     $("#st-pagetools-delete").click(function () {
         if (confirm(loc("Are you sure you want to delete this page?"))) {

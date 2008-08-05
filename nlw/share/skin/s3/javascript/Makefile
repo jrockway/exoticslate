@@ -33,6 +33,8 @@ LIGHTBOX_JEMPLATE=jemplate/lightboxes.js
 LIGHTBOX_TEMPLATES= \
 		     template/comment_lightbox.tt2 \
 		     template/email_lightbox.tt2 \
+		     template/duplicate_lightbox.tt2 \
+		     template/rename_lightbox.tt2 \
 
 S3_SOURCE_FILES= \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
@@ -47,6 +49,7 @@ LIGHTBOX_SOURCE_FILES= \
 		$(LIGHTBOX_JEMPLATE) \
 		comment.js \
 		email.js \
+		rename.js \
 
 EDITOR_SOURCE_FILES= \
 		$(S2_JAVASCRIPT)/main.js \
@@ -153,6 +156,6 @@ $(LIGHTBOX_FILE): $(LIGHTBOX_SOURCE_FILES) timestamp.js Makefile
 	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
 	done
 
-timestamp.js: $(EDITOR_SOURCE_FILES) $(S3_SOURCE_FILES)
+timestamp.js: $(EDITOR_SOURCE_FILES) $(S3_SOURCE_FILES) $(LIGHTBOX_SOURCE_FILES)
 	echo 'var Socialtext = Socialtext || {};' > $@
 	perl -le 'print "Socialtext.make_time = \"" . time . "\";"' >> $@

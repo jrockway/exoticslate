@@ -104,34 +104,34 @@ PROPORTIONS: {
         },
 
         # Check for /0 errors
-        "never devide by zero" => {
+        "never divide by zero" => {
             new_width => 0, new_height => 0,
             img_width => 5, img_height => 5,
             exp_width => 5, exp_height => 5,
         },
-        "never devide by zero" => {
+        "never divide by zero" => {
             new_width => 3, new_height => 0,
             img_width => 5, img_height => 5,
             exp_width => 3, exp_height => 3,
         },
-        "never devide by zero" => {
+        "never divide by zero" => {
             new_width => 0, new_height => 3,
             img_width => 5, img_height => 5,
             exp_width => 3, exp_height => 3,
         },
-        "never devide by zero" => {
+        "never divide by zero" => {
             new_width => 0, new_height => 0,
             img_width => 5, img_height => 5,
             max_width => 0,
             exp_width => 5, exp_height => 5,
         },
-        "never devide by zero" => {
+        "never divide by zero" => {
             max_height => 0,
             new_width => 3, new_height => 0,
             img_width => 5, img_height => 5,
             exp_width => 3, exp_height => 3,
         },
-        "never devide by zero" => {
+        "never divide by zero" => {
             new_width => 0, new_height => 3,
             img_width => 0, img_height => 5,
             exp_width => 0, exp_height => 3,

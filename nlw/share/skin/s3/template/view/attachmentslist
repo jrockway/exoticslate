@@ -27,9 +27,12 @@
     </div><!-- controls END -->
     <div id="contentContainer">
         <h2 class="tableTitle">[% display_title | html %]</h2>
+        [% IF checker.check_permission('delete') %]
+            <form action="[% script_name %]" method="post">
+        [% END %]
         <table class="dataTable">
             <tr>
-                <th width="1%"><input type="checkbox" /></th>
+                <th width="1%"><input id="st-listview-selectall" type="checkbox" /></th>
                 <th class="toggle"><div class="toggle">
                 </div></th>
                 <th class="sort">[% loc('Sort by:') %]
@@ -53,7 +56,7 @@
             </tr>
             [% FOREACH row = rows %]
                 [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
-                <td><input value="[% row.page_uri %],[% row.id %]" type="checkbox" /></td>
+                <td><input name="selected" value="[% row.page_uri %],[% row.id %]" type="checkbox" /></td>
                 <td colspan="2">
                     [% row.link %] ([% row.human_readable_size %]), [% loc('attached to') %] <span class="[% row.style %]-row-title-attached-to query-results-row-title-attached-to">[% row.page_link %]</span>
                 [% loc('Uploaded by') %]
@@ -64,6 +67,12 @@
                 </tr>
             [% END %]
         </table><!-- dataTable END -->
+        [% IF checker.check_permission('delete') %]
+                <input type="submit" value="[% loc('Delete Selected Attachments') %]" name="button"/>
+                <input type="hidden" name="action" value="attachments_delete" />
+                <input type="hidden" name="caller_action" value="[% hub.action %]" />
+            </form>
+        [% END %]
     </div><!-- contentContainer -->    
 [% END %]
 

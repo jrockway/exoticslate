@@ -106,10 +106,7 @@ sub _make_putter {
             return $content;
         };
         if ($@) {
-            $rest->header(
-                -status => HTTP_400_Bad_Request
-                -type   => 'text/plain' );
-            return $@;
+            return $self->_put_or_post_error($rest, $@);
         }
         return $content;
     }
@@ -131,13 +128,26 @@ sub _make_poster {
             return $content;
         };
         if ($@) {
-            $rest->header(
-                -status => HTTP_400_Bad_Request
-                -type   => 'text/plain' );
-            return $@;
+            return $self->_put_or_post_error($rest, $@);
         }
         return $content;
     }
+}
+
+sub _put_or_post_error {
+    my $self = shift;
+    my $rest = shift;
+    my $error = shift;
+    my %headers = $rest->header;
+    if (!%headers || !$headers{-status} || 
+        $headers{-status} =~ /^2../) 
+    {
+        $rest->header(
+            -status => HTTP_400_Bad_Request
+            -type   => 'text/plain' 
+        );
+    }
+    return $error;
 }
 
 sub resource_to_text {

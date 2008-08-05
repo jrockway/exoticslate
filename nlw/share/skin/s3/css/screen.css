@@ -1,5 +1,22 @@
 @import url('styles.css');
 
+ul.normal {
+    list-style: disc;
+    list-style-position: inside;
+}
+
+ul.normal ul {
+    list-style: circle;
+    list-style-position: inside;
+    padding-left: 10px;
+}
+
+ul.normal ul ul {
+    list-style: square;
+    list-style-position: inside;
+    padding-left: 20px;
+}
+
 #st-email-lightbox .email_input {
     width: 152px;
 }

@@ -54,7 +54,6 @@ sub _extract_person {
     }
 
     my $full_name = _best_full_name(\%p);
-    warn "BFN: $full_name";
 
     $row->{$prefix} = {
         id => $p{id},
@@ -164,7 +163,8 @@ EOSQL
         $row->{page} = $page if ($row->{event_class} eq 'page');
 
         eval {
-            $row->{context} = decode_json($row->{context});
+            $row->{context} = $row->{context} ? decode_json($row->{context})
+                                              : {};
         };
         warn $@ if $@;
 

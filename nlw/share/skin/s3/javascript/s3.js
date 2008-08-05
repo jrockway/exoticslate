@@ -183,6 +183,7 @@ $(function() {
             content:'#st-attachments-attachinterface',
             close:'#st-attachments-attach-closebutton'
         });
+        return false;
     });
 
     $('#st-attachments-attach-filename')
@@ -254,6 +255,7 @@ $(function() {
             }
         );
         $.ajaxSettings.cache = false;
+        return false;
     });
 
     $(".weblog_comment").click(function () {
@@ -271,12 +273,14 @@ $(function() {
             ge.show();
         });
         $.ajaxSettings.cache = false;
+        return false;
     });
 
     $("#st-pagetools-email").click(function () {
         $.ajaxSettings.cache = true;
         $.getScript(email_uri);
         $.ajaxSettings.cache = false;
+        return false;
     });
 
     //index.cgi?action=duplicate_popup;page_name=[% page.id %]
@@ -289,6 +293,7 @@ $(function() {
             content:'#st-rename-lightbox',
             close:'#st-rename-cancellink'
         });
+        return false;
     });
 
     $('#st-rename-form').submit(function () {

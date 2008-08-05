@@ -19,12 +19,12 @@
                     zIndex: 2001,
                     padding: 0,
                     background: '#fff',
-                    width: opts.width || '520px',
                     margin: 'auto',
                     border: "1px outset #555",
                 })
                 .appendTo('body');
         }
+
         if (!$('#overlay').size()) {
             $('<div id="overlay">')
                 .click(function () { $.hideLightbox() })
@@ -46,6 +46,7 @@
         }
 
         $('#lightbox')
+            .css('width', opts.width || '520px')
             .append($(opts.content).show())
             .css({
                 left: (($(window).width() -

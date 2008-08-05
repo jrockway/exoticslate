@@ -67,6 +67,3 @@ proto.show = function () {
         width: '600px'
     });
 }
-
-var Email = new ST.Email;
-Email.show();

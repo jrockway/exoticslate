@@ -236,15 +236,12 @@ $(function() {
     var editor_uri = nlw_make_s3_path('/javascript/socialtext-editor.js.gz')
         .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
 
-    var email_uri = nlw_make_s3_path('/javascript/socialtext-email.js.gz')
-        .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
-
-    var comment_uri = nlw_make_s3_path('/javascript/socialtext-comment.js.gz')
+    var lightbox_uri = nlw_make_s3_path('/javascript/socialtext-lightbox.js.gz')
         .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
 
     $("#st-comment-button-link").click(function () {
         $.ajaxSettings.cache = true;
-        $.getScript(comment_uri,
+        $.getScript(lightbox_uri,
             function () {
                 var ge = new GuiEdit({
                     oncomplete: function () {
@@ -261,7 +258,7 @@ $(function() {
     $(".weblog_comment").click(function () {
         var page_id = this.id.replace(/^comment_/,'');
         $.ajaxSettings.cache = true;
-        $.getScript(comment_uri, function () {
+        $.getScript(lightbox_uri, function () {
             var ge = new GuiEdit({
                 page_id: page_id,
                 oncomplete: function () {
@@ -278,7 +275,10 @@ $(function() {
 
     $("#st-pagetools-email").click(function () {
         $.ajaxSettings.cache = true;
-        $.getScript(email_uri);
+        $.getScript(lightbox_uri, function () {
+            var Email = new ST.Email;
+            Email.show();
+        });
         $.ajaxSettings.cache = false;
         return false;
     });

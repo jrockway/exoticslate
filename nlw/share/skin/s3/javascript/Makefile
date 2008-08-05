@@ -26,17 +26,13 @@ JEMPLATE_GENERATOR=bin/generate-widget-jemplate.pl
 JEMPLATE_MODULE=Wikiwyg/Jemplate.js
 JEMPLATE_WIKIWYG_MODULE=jemplate_wikiwyg.js
 
-EMAIL_TEMPLATE=template/email_lightbox.tt2
-EMAIL_JEMPLATE=jemplate/email_lightbox.html
-EMAIL_FILE=socialtext-email.js
-EMAIL_FILE_MINI=socialtext-email-mini.js
-EMAIL_FILE_GZIP=$(EMAIL_FILE).gz
-
-COMMENT_TEMPLATE=template/comment_lightbox.tt2
-COMMENT_JEMPLATE=jemplate/comment_lightbox.html
-COMMENT_FILE=socialtext-comment.js
-COMMENT_FILE_MINI=socialtext-comment-mini.js
-COMMENT_FILE_GZIP=$(COMMENT_FILE).gz
+LIGHTBOX_FILE=socialtext-lightbox.js
+LIGHTBOX_FILE_MINI=socialtext-lightbox-mini.js
+LIGHTBOX_FILE_GZIP=$(LIGHTBOX_FILE).gz
+LIGHTBOX_JEMPLATE=jemplate/lightboxes.js
+LIGHTBOX_TEMPLATES= \
+		     template/comment_lightbox.tt2 \
+		     template/email_lightbox.tt2 \
 
 S3_SOURCE_FILES= \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
@@ -45,17 +41,12 @@ S3_SOURCE_FILES= \
 		lightbox.js \
 		s3.js \
 
-EMAIL_SOURCE_FILES= \
+LIGHTBOX_SOURCE_FILES= \
 		Jemplate.js \
 		$(ALL_JEMPLATE_PLUGINS) \
-		$(EMAIL_JEMPLATE) \
-		email.js \
-
-COMMENT_SOURCE_FILES= \
-		Jemplate.js \
-		$(ALL_JEMPLATE_PLUGINS) \
-		$(COMMENT_JEMPLATE) \
+		$(LIGHTBOX_JEMPLATE) \
 		comment.js \
+		email.js \
 
 EDITOR_SOURCE_FILES= \
 		$(S2_JAVASCRIPT)/main.js \
@@ -86,8 +77,7 @@ EDITOR_SOURCE_FILES= \
 all: \
     $(S3_FILE_GZIP) \
     $(EDITOR_FILE_GZIP) \
-    $(EMAIL_FILE_GZIP) \
-    $(COMMENT_FILE_GZIP) \
+    $(LIGHTBOX_FILE_GZIP) \
     timestamp.js \
     Selection.htc \
 
@@ -98,6 +88,7 @@ clean:
 	    Widgets.js \
 	    $(JEMPLATE_MODULE) \
 	    $(JEMPLATE_WIKIWYG_MODULE) \
+	    $(LIGHTBOX_JEMPLATE) \
 	    $(ALL_JEMPLATES) \
 	    $(S3_FILE) \
 	    $(S3_FILE_MINI) \
@@ -105,12 +96,9 @@ clean:
 	    $(EDITOR_FILE) \
 	    $(EDITOR_FILE_MINI) \
 	    $(EDITOR_FILE_GZIP) \
-	    $(EMAIL_FILE) \
-	    $(EMAIL_FILE_MINI) \
-	    $(EMAIL_FILE_GZIP) \
-	    $(COMMENT_FILE) \
-	    $(COMMENT_FILE_MINI) \
-	    $(COMMENT_FILE_GZIP) \
+	    $(LIGHTBOX_FILE) \
+	    $(LIGHTBOX_FILE_MINI) \
+	    $(LIGHTBOX_FILE_GZIP) \
 
 .SUFFIXES: .js -mini.js .js.gz
 
@@ -129,11 +117,8 @@ $(JEMPLATE_MODULE): jemplate $(ALL_JEMPLATES)
 $(JEMPLATE_WIKIWYG_MODULE): jemplate_wikiwyg $(ALL_WIKIWYG_JEMPLATES)
 	jemplate --compile $< > $@
 
-$(EMAIL_JEMPLATE): jemplate $(EMAIL_TEMPLATE)
-	jemplate --compile $(EMAIL_TEMPLATE) > $(EMAIL_JEMPLATE)
-
-$(COMMENT_JEMPLATE): jemplate $(COMMENT_TEMPLATE)
-	jemplate --compile $(COMMENT_TEMPLATE) > $(COMMENT_JEMPLATE)
+$(LIGHTBOX_JEMPLATE): $(LIGHTBOX_TEMPLATES)
+	jemplate --compile $(LIGHTBOX_TEMPLATES) > $(LIGHTBOX_JEMPLATE)
 
 $(ALL_EDIT_JEMPLATES): $(WIDGETS_YAML) $(JEMPLATE_GENERATOR) template/widget_edit.tt2 jemplate/save-cancel.html
 	$(JEMPLATE_GENERATOR) --yaml=$< --output=$@ \
@@ -162,15 +147,9 @@ $(EDITOR_FILE): $(EDITOR_SOURCE_FILES) timestamp.js Makefile
 	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
 	done
 
-$(EMAIL_FILE): $(EMAIL_SOURCE_FILES) timestamp.js Makefile
+$(LIGHTBOX_FILE): $(LIGHTBOX_SOURCE_FILES) timestamp.js Makefile
 	rm -f $@;
-	for js in $(EMAIL_SOURCE_FILES); do \
-	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
-	done
-
-$(COMMENT_FILE): $(COMMENT_SOURCE_FILES) timestamp.js Makefile
-	rm -f $@;
-	for js in $(COMMENT_SOURCE_FILES); do \
+	for js in $(LIGHTBOX_SOURCE_FILES); do \
 	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
 	done
 

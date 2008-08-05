@@ -1,0 +1,94 @@
+Test case for `/data/people/:pname` (GET and POST).
+
+* Fixture: SocialRest
+
+* Update their profile
+** unauth user
+
+| comment   | Get profile by email   |
+| get       | /data/people/%%email%% |
+| code-is   | 200                    |
+| body-like | "name":"%%email%%"     |
+| body-like | "email":null           |
+| body-like | qr/"id":"\d+"/         |
+
+| comment   | Get profile by username   | |
+| get       | /data/people/%%username%% | |
+| code-is   | 200                    | |
+| body-like | "name":"%%email%%"     | |
+| body-like | "email":null           | |
+| body-like | qr/"id":"\d+"/         | |
+| set-from-content | user_id | qr/"id":"(\d+)"/ |
+
+| comment   | Get profile by system_unique_id   |
+| get       | /data/people/%%user_id%% |
+| code-is   | 200                    |
+| body-like | "name":"%%email%%"     |
+| body-like | "email":null           |
+| body-like | qr/"id":"%%user_id%%"/         |
+
+| Comment | Update a profile field by email |
+| post | /data/people/%%email%% | Content-Type=application/json | {"middle_name":"quick fingers"} |
+| code-is   | 204                    |
+| get       | /data/people/%%email%% |
+| body-like | "name":"%%email%%"     |
+| body-like | "middle_name":"quick fingers"     |
+
+| Comment | Update a profile field by username |
+| post | /data/people/%%username%% | Content-Type=application/json | {"middle_name":"fast fingers"} |
+| code-is   | 204                    |
+| get       | /data/people/%%username%% |
+| body-like | "name":"%%email%%"     |
+| body-like | "middle_name":"fast fingers"     |
+
+| Comment | Update a profile field by system_unique_id |
+| post | /data/people/%%user_id%% | Content-Type=application/json | {"middle_name":"slow fingers"} |
+| code-is   | 204                    |
+| get       | /data/people/%%user_id%% |
+| body-like | "name":"%%email%%"     |
+| body-like | "middle_name":"slow fingers"     |
+
+| Comment | Updating a non-existent field |
+| post | /data/people/%%user_id%% | Content-Type=application/json | {"middle_name":"slow fingers"} |
+| code-is   | 204                    |
+| get       | /data/people/%%user_id%% |
+| body-like | "name":"%%email%%"     |
+| body-like | "middle_name":"slow fingers"     |
+
+| Comment | Read someone else's profile |
+| set | other_user | %%start_time%%@ken.socialtext.net |
+| st-admin | create-user --email %%other_user%% --password d3vnu11l |
+| get | /data/people/%%other_user%% |
+| code-is | 200 |
+| body-like | "name":"%%other_user%%" |
+| body-like | "middle_name":null |
+
+| Comment | Set someone else's profile |
+| post | /data/people/%%other_user%% | Content-Type=application/json | {"middle_name":"no worky"} |
+| code-is | 403 | Cannot edit someone else's profile |
+
+| Comment | Get all people |
+| get | /data/people |
+| code-is | 200 |
+| body-like | "best_full_name":"%%start_time%%" |
+| Comment | Get all people with limit |
+| get | /data/people?limit=1 |
+| code-is | 200 |
+| Comment | Get all people with offset |
+| get | /data/people?offset=1 |
+| code-is | 200 |
+
+| Comment | GET profile photo |
+| get | /data/people/%%username%%/photo |
+| code-is | 301 |
+| header-like | Location | common/images/bigAvatar.png |
+| Comment | GET profile small photo |
+| get | /data/people/%%username%%/small_photo |
+| header-like | Location | common/images/avatar.png |
+
+| Comment | GET/POST profile by un-auth user |
+| http-user-pass | | |
+| get | /data/people/%%other_user%% |
+| code-is | 401 |
+| post | /data/people/%%other_user%% | Content-Type=application/json | {"middle_name":"no access"} |
+| code-is | 401 |

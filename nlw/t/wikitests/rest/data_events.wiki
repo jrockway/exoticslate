@@ -1,0 +1,163 @@
+Test case for `/data/events`(GET and POST).
+
+* Fixture: SocialRest
+
+| *Comment* | Clear all events |
+| st-clear-events | |
+| get | /data/events |
+| code-is | 200 |
+| body-like | [] |
+
+
+^ Foo
+| Comment | POST a few events |
+| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
+| code-is | 201 |
+| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"tag_name":"taggy","page":{"workspace_name":"%%workspace%%","id":"meeting_agendas"},"event_class":"page","action":"tag_add"} |
+| code-is | 201 |
+| post | /data/events | Content-Type=application/json | {"actor":{"id":2},"tag_name":"saggy","page":{"workspace_name":"%%workspace%%","id":"announcements_and_links"},"event_class":"page","action":"tag_add"} |
+| code-is | 201 |
+| post | /data/events | Content-Type=application/json | {"actor":{"id":2},"tag_name":"taggy","page":{"workspace_name":"%%workspace%%","id":"quick_start"},"event_class":"page","action":"tag_add"} |
+| code-is | 201 |
+
+| Comment | GET all events |
+| get | /data/events |
+| code-is | 200 |
+| body-like | "id":"quick_start" |
+| body-like | "id":"meeting_agendas" |
+| body-like | "id":"announcements_and_links" |
+
+| Comment | GET one event (limit) |
+| get | /data/events?limit=1 |
+| code-is | 200 |
+| body-like | "event_class":"page" |
+| body-like | "action":"tag_add" |
+| body-like | "tag_name":"taggy" |
+| body-like | "id":"quick_start" |
+| body-unlike | "id":"meeting_agendas" |
+| body-unlike | "id":"announcements_and_links" |
+
+| Comment | GET one event (count) |
+| get | /data/events?count=1 |
+| code-is | 200 |
+| body-like | "event_class":"page" |
+| body-like | "action":"tag_add" |
+| body-like | "tag_name":"taggy" |
+| body-like | "id":"quick_start" |
+| body-unlike | "id":"meeting_agendas" |
+| body-unlike | "id":"announcements_and_links" |
+
+| Comment | GET one event (offset) |
+| get | /data/events?count=1&offset=1 |
+| code-is | 200 |
+| body-like | "event_class":"page" |
+| body-like | "action":"tag_add" |
+| body-like | "tag_name":"saggy" |
+| body-unlike | "id":"quick_start" |
+| body-unlike | "id":"meeting_agendas" |
+| body-like | "id":"announcements_and_links" |
+
+| Comment | Filter by event_class |
+| get | /data/events?event_class=page |
+| code-is | 200 |
+| body-like | "id":"quick_start" |
+| body-like | "id":"meeting_agendas" |
+| body-like | "id":"announcements_and_links" |
+| get | /data/events?event_class=monkey |
+| code-is | 200 |
+| body-unlike | "id":"quick_start" |
+| body-unlike | "id":"meeting_agendas" |
+| body-unlike | "id":"announcements_and_links" |
+
+| Comment | Filter by action |
+| get | /data/events?action=tag_add |
+| code-is | 200 |
+| body-like | "id":"quick_start" |
+| body-like | "id":"meeting_agendas" |
+| body-like | "id":"announcements_and_links" |
+| get | /data/events?action=edit_save |
+| code-is | 200 |
+| body-unlike | "id":"quick_start" |
+| body-unlike | "id":"meeting_agendas" |
+| body-unlike | "id":"announcements_and_links" |
+
+| Comment | Filter by actor.id |
+| get | /data/events?actor.id=1 |
+| code-is | 200 |
+| body-like | "tag_name":"downer" |
+| body-like | "id":"meeting_agendas" |
+| get | /data/events?actor.id=999999 |
+| code-is | 200 |
+| body-unlike | "tag_name":"downer" |
+| body-unlike | "id":"quick_start" |
+| body-unlike | "id":"meeting_agendas" |
+| body-unlike | "id":"announcements_and_links" |
+
+| Comment | Filter by person.id |
+| get | /data/events?person.id=2 |
+| code-is | 200 |
+| body-like | "tag_name":"downer" |
+| get | /data/events?person.id=999999 |
+| code-is | 200 |
+| body-unlike | "tag_name":"downer" |
+
+| Comment | Filter by workspace_id |
+| get | /data/workspaces/%%workspace%% | application/json |
+| set-from-content | workspace_id | qr/"workspace_id":"(\d+)"/ |
+| get | /data/events?page.workspace_id=%%workspace_id%% |
+| code-is | 200 |
+| body-like | "id":"quick_start" |
+| body-like | "id":"meeting_agendas" |
+| body-like | "id":"announcements_and_links" |
+| get | /data/events?page.workspace_id=999999 |
+| code-is | 200 |
+| body-unlike | "id":"quick_start" |
+| body-unlike | "id":"meeting_agendas" |
+| body-unlike | "id":"announcements_and_links" |
+
+| Comment | Filter by workspace_name |
+| get | /data/events?page.workspace_name=%%workspace%% |
+| code-is | 200 |
+| body-like | "id":"quick_start" |
+| body-like | "id":"meeting_agendas" |
+| body-like | "id":"announcements_and_links" |
+| get | /data/events?page.workspace_name=bad-workspace-name |
+| code-is | 404 |
+| body-like | not found |
+| body-unlike | "id":"quick_start" |
+| body-unlike | "id":"meeting_agendas" |
+| body-unlike | "id":"announcements_and_links" |
+
+| *Comment* | Posting with missing parameters |
+| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"action":"tag_add","person":{"id":2},"tag_name":"downer"} |
+| code-is | 400 |
+| body-like | Missing required parameter 'event_class' |
+| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"event_class":"person","person":{"id":2},"tag_name":"downer"} |
+| code-is | 400 |
+| body-like | Missing required parameter 'action' |
+| post | /data/events | Content-Type=application/json | {"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
+| code-is | 400 |
+| body-like | Missing required parameter 'actor.id' |
+| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"event_class":"person","action":"tag_add","tag_name":"downer"} |
+| code-is | 400 |
+| body-like | Missing required parameter 'person.id' |
+| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"tag_name":"taggy","page":{"workspace_name":"%%workspace%%"},"event_class":"page","action":"tag_add"} |
+| code-is | 400 |
+| body-like | Missing required parameter 'page.id' |
+| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"tag_name":"taggy","page":{"id":"meeting_agendas"},"event_class":"page","action":"tag_add"} |
+| code-is | 400 |
+| body-like | Missing required parameter 'page.workspace_name' |
+
+| Comment | GET/POST event by un-auth user |
+| http-user-pass | | |
+| get | /data/events |
+| code-is | 401 |
+| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
+| code-is | 401 |
+
+^^ TODO Test
+
+The following additional tests should be created:
+
+* POST an event using form data
+

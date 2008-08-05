@@ -44,9 +44,7 @@
                     </div>
                 </th>
                 <script language="javascript">
-                    var query_start = "?[% predicate %];scope=[% scope %];"
-                                    + "orig_search_term=[% search_term %];"
-                                    + "summaries=[% summaries %]";
+                    var query_start = "?action=attachments_listall";
                     function sort_by() {
                         var selected = jQuery('select#sort-picker').val();
                         window.location = query_start + ';' + selected;

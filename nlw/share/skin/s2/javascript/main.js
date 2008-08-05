@@ -164,3 +164,27 @@ Socialtext.clear_untitled = function(input) {
         input.value = '';
     }
 }
+
+Socialtext.logEvent = function(action) {
+    var event_json = JSON.stringify({
+        'action': action,
+        'event_class': 'page',
+        'page' : {
+            'id': Socialtext.page_id,
+            'workspace_name': Socialtext.wiki_id
+        },
+        'context': {
+            'revision_count': Socialtext.revision_count,
+            'revision_id': Socialtext.revision_id
+        }
+    });
+
+    jQuery.ajax({
+        type: 'POST',
+        url: '/data/events',
+        contentType: 'application/json',
+        processData: false,
+        data: event_json,
+        async: true
+    });
+}

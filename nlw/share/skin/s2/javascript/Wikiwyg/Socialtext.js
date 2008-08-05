@@ -243,14 +243,8 @@ function setup_wikiwyg() {
                     body: loc("<a target=\"_blank\" href=\"http://www.mozilla.com/firefox/\">Download Firefox</a> for richer Socialtext editing functionality.")
                 });
             }
-            jQuery.get("", {
-                action: 'log_event',
-                event: 'edit_begin',
-                class: 'page',
-                page_id: Socialtext.page_id,
-                revision_count: Socialtext.revision_count,
-                revision_id: Socialtext.revision_id
-            }, function() {});
+
+            Socialtext.logEvent('edit_begin');
 
         } catch(e) {
             throw(e);
@@ -281,21 +275,14 @@ function setup_wikiwyg() {
                     ww.confirmed = true;
             }
 
-            jQuery.get("", {
-                action: 'log_event',
-                event: 'edit_cancel',
-                class: 'page',
-                page_id: Socialtext.page_id,
-                revision_count: Socialtext.revision_count,
-                revision_id: Socialtext.revision_id
-            }, function() {});
-
             Attachments.delete_new_attachments();
             if (Socialtext.new_page) {
                 window.location = '?action=homepage';
             }
             jQuery("#st-edit-mode-container").hide();
             jQuery("#st-display-mode-container, #st-all-footers").show();
+
+            Socialtext.logEvent('edit_cancel');
 
             ww.cancelEdit();
             ww.preview_link_reset();

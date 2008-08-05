@@ -68,7 +68,7 @@ DISPLAY_UI_SOURCE_FILES= \
 		Cookie.js \
 		stlibrary.js \
 		ArrayUtils.js \
-		JSON-parse.js \
+		JSON.js \
 		pagetags.js \
 		pageattachments.js \
 		pageview.js \

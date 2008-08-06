@@ -16,6 +16,7 @@ use Socialtext::UserMetadata;
 use Socialtext::UserId;
 use Socialtext::User::Deleted;
 use Socialtext::User::EmailConfirmation;
+use Socialtext::User::Default::Factory qw($SystemUsername $GuestUsername);
 use Socialtext::Workspace;
 use Email::Address;
 use Class::Field 'field';
@@ -36,9 +37,6 @@ my @user_metadata_interface =
         is_system_created );
 my @minimal_interface
     = ( 'user_id', @user_store_interface, @user_metadata_interface );
-my $SystemUsername = 'system-user';
-my $GuestUsername  = 'guest';
-my %SystemGeneratedUsernames = map { lc($_)=>1 } ($SystemUsername, $GuestUsername);
 
 sub minimal_interface {
     my $class = shift;
@@ -118,7 +116,7 @@ sub new_homunculus {
     # this prevents possible conflict with other stores having their own
     # notion of what the "guest" or "system-user" is (e.g. Active Directory
     # and its "Guest" user)
-    elsif (($_[0] eq 'username') && (exists $SystemGeneratedUsernames{lc($_[1])})) {
+    elsif (Socialtext::User::Default::Factory->IsDefaultUser(@_)) {
         my $factory = $class->_realize('Default', 'GetUser');
         $homunculus = $factory->GetUser(@_);
     }

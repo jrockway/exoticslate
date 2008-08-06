@@ -19,8 +19,19 @@ use Socialtext::User::Default;
 use Socialtext::MultiCursor;
 use Socialtext::l10n qw(loc);
 
-my $SystemUsername = 'system-user';
-my $GuestUsername  = 'guest';
+# allow for the system level account usernames to be exported; ST::User will
+# use them to short-circuit user lookups into here where applicable.
+use base qw(Exporter);
+our @EXPORT_OK = qw(
+    $SystemUsername
+    $GuestUsername
+);
+
+our $SystemUsername = 'system-user';
+our $SystemEmailAddress = 'system-user@socialtext.net';
+
+our $GuestUsername  = 'guest';
+our $GuestEmailAddress = 'guest@socialtext.net';
 
 sub table_name { 'User' }
 sub driver_name { 'Default' }
@@ -37,7 +48,7 @@ sub EnsureRequiredDataIsPresent {
     unless ( $factory->GetUser( username => $SystemUsername ) ) {
         my $system_user = $factory->create(
             username      => $SystemUsername,
-            email_address => 'system-user@socialtext.net',
+            email_address => $SystemEmailAddress,
             first_name    => 'System',
             last_name     => 'User',
             password      => '*no-password*',
@@ -59,7 +70,7 @@ sub EnsureRequiredDataIsPresent {
         my $system_user = Socialtext::User->new( username => $SystemUsername );
         my $guest_user = $factory->create(
             username      => $GuestUsername,
-            email_address => 'guest@socialtext.net',
+            email_address => $GuestEmailAddress,
             first_name    => 'Guest',
             last_name     => 'User',
             password      => '*no-password*',
@@ -83,6 +94,26 @@ sub new {
     my $class = ref($proto) || $proto;
     my $self  = { };
     bless $self, $class;
+}
+
+{
+    # optimized for hash-lookup; it'll be done on every user instantiation, so
+    # make it fast.
+    my %RequiredDefaultUsers = (
+        username => {
+            $SystemUsername => 1,
+            $GuestUsername  => 1,
+        },
+        email_address => {
+            $SystemEmailAddress => 1,
+            $GuestEmailAddress  => 1,
+        },
+    );
+
+    sub IsDefaultUser {
+        my ( $class, $key, $val ) = @_;
+        return $RequiredDefaultUsers{$key}{lc($val)};
+    }
 }
 
 sub Count {
@@ -398,6 +429,23 @@ L</driver_name()>.
 
 Inserts required users into the DBMS if they are not present.  See
 L<Socialtext::Data> fo rmore details on required data.
+
+=item B<Socialtext::User::Default::Factory-E<gt>IsDefaultUser($key, $val)>
+
+Checks to see if the user defined by the given C<%args> is one of the users
+that B<must> reside in the Default data store (the system-level user records).
+This method returns true if the user must reside in the Default store,
+returning false otherwise.
+
+Lookups can be performed by I<one> of:
+
+=over
+
+=item * username => $username
+
+=item * email_address => $email_address
+
+=back
 
 =item B<Socialtext::User::Default::Factory->E<gt>Count()>
 

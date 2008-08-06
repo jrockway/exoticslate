@@ -30,7 +30,7 @@ use Socialtext::WikiText::Parser;
 use Socialtext::WikiText::Emitter::SearchSnippets;
 use Socialtext::String;
 use Socialtext::Events;
-use Socialtext::SQL qw/sql_execute sql_begin_work sql_commit/;
+use Socialtext::SQL qw/sql_execute sql_begin_work sql_commit sql_singlevalue/;
 
 use Carp ();
 use Class::Field qw( field const );
@@ -214,7 +214,7 @@ sub update_from_remote {
 
     if ( $self->revision_id ne $revision_id ) {
         Socialtext::Events->Record({
-            class => 'page',
+            event_class => 'page',
             action => 'edit_contention',
             page => $self,
         });
@@ -235,7 +235,7 @@ sub update_from_remote {
     );
 
     Socialtext::Events->Record({
-        class => 'page',
+        event_class => 'page',
         action => 'edit_save',
         page => $self,
     });
@@ -613,7 +613,7 @@ sub add_tags {
         $self->store( user => $self->hub->current_user );
         foreach my $tag (@tags) {
             Socialtext::Events->Record({
-                class => 'page',
+                event_class => 'page',
                 action => 'tag',
                 page => $self,
                 tag_name => $tag,
@@ -679,7 +679,7 @@ sub add_comment {
 
     my $summary = $self->preview_text($wikitext);
     Socialtext::Events->Record({
-        class => 'page',
+        event_class => 'page',
         action => 'comment',
         page => $self,
         summary => $summary,
@@ -760,12 +760,13 @@ sub update_db_metadata {
 
     my $hash = $self->hash_representation;
     my $wksp_id = $self->hub->current_workspace->workspace_id;
+    my $pg_id = $hash->{page_id};
     sql_begin_work();
 
     my $sth = sql_execute(
         'SELECT creator_id, create_time FROM page
             WHERE workspace_id = ? AND page_id = ?',
-        $wksp_id, $hash->{page_id},
+        $wksp_id, $pg_id,
     );
     my $rows = $sth->fetchall_arrayref();
     my ($creator_id, $create_time);
@@ -779,24 +780,67 @@ sub update_db_metadata {
         $create_time = $orig_page->metadata->Date;
     }
 
-    sql_execute(
-        'DELETE FROM page WHERE workspace_id = ? AND page_id = ?',
-        $wksp_id, $hash->{page_id},
-    );
-    sql_execute(
-        'INSERT INTO page VALUES (?,?,?,?,?::timestamptz,?,?::timestamptz,?,?,?,?,?::bool,?)',
-        $wksp_id, $hash->{page_id}, $hash->{name},
+    my $exists = sql_singlevalue('SELECT page_id FROM page 
+                                  WHERE workspace_id = ? 
+                                  AND page_id = ? FOR UPDATE', 
+                                 $wksp_id, $pg_id);
+
+    my @args = (
+        $hash->{name},
         $self->last_edited_by->user_id, $hash->{last_edit_time},
         $creator_id, $create_time,
         $hash->{revision_id}, $self->metadata->Revision,
-        $hash->{revision_count}, $hash->{type},
-        $self->deleted ? '1' : '0',
-        $self->metadata->Summary,
+        $hash->{revision_count},
+        $hash->{type}, $self->deleted ? '1' : '0', $self->metadata->Summary,
+        $wksp_id, $pg_id
     );
+    my $insert_or_update;
+    if ($exists) {
+        $insert_or_update = <<'UPDSQL';
+            UPDATE page SET
+                name = ?,
+                last_editor_id = ?, last_edit_time = ?,
+                creator_id = ?, create_time = ?,
+                current_revision_id = ?, current_revision_num = ?,
+                revision_count = ?,
+                page_type = ?, deleted = ?, summary = ?
+            WHERE
+                workspace_id = ? AND page_id = ?
+UPDSQL
+
+        # we don't reference the page_tag table, so it's safe to nuke 'em
+        sql_execute('DELETE FROM page_tag 
+                     WHERE workspace_id = ? AND page_id = ?',
+                    $wksp_id, $pg_id);
+    }
+    else {
+        $insert_or_update = <<'INSSQL';
+            INSERT INTO page (
+                name, 
+                last_editor_id, last_edit_time, 
+                creator_id, create_time,
+                current_revision_id, current_revision_num, 
+                revision_count,
+                page_type, deleted, summary,
+                workspace_id, page_id
+            )
+            VALUES (
+                ?,
+                ?, ?::timestamptz,
+                ?, ?::timestamptz,
+                ?, ?, 
+                ?, 
+                ?, ?, ?,
+                ?, ?
+            )
+INSSQL
+    }
+    sql_execute($insert_or_update, @args);
+
     for my $tag (@{ $self->metadata->Category }) {
         sql_execute(
             'INSERT INTO page_tag VALUES (?,?,?)',
-            $wksp_id, $hash->{page_id}, $tag,
+            $wksp_id, $pg_id, $tag,
         );
     }
     sql_commit();
@@ -1107,7 +1151,7 @@ sub delete {
     $self->store( user => $p{user} );
 
     Socialtext::Events->Record({
-        class => 'page',
+        event_class => 'page',
         action => 'delete',
         page => $self,
     });
@@ -1358,15 +1402,15 @@ sub duplicate {
     $target_page->store( user => $dest_hub->current_user );
 
     Socialtext::Events->Record({
-        class => 'page',
-        action => ($is_rename) ? 'rename' : 'duplicate',
+        event_class => 'page',
+        action => ($is_rename ? 'rename' : 'duplicate'),
         page => $self,
         target_workspace => $dest_hub->current_workspace,
         target_page => $target_page,
     });
 
     Socialtext::Events->Record({
-        class => 'page',
+        event_class => 'page',
         action => 'edit_save',
         page => $target_page,
     });

@@ -226,6 +226,17 @@ sub st_clear_events {
 }
 
 
+=head2 st-delete-people-tags
+
+Delete all people tags.
+
+=cut
+
+sub st_delete_people_tags {
+    sql_execute('DELETE FROM tag');
+}
+
+
 sub body_unlike {
     my ($self, $expected) = @_;
     my $body = $self->{http}->response->content;

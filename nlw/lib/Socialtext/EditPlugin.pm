@@ -62,7 +62,7 @@ sub edit_content {
 
     if ($self->_there_is_an_edit_contention($page, $self->cgi->revision_id)) {
         Socialtext::Events->Record({
-            class => 'page',
+            event_class => 'page',
             action => 'edit_contention',
             page => $page,
         });
@@ -96,7 +96,7 @@ sub edit_content {
     else {
         $page->store( user => $self->hub->current_user );
         Socialtext::Events->Record({
-            class => 'page',
+            event_class => 'page',
             action => 'edit_save',
             page => $page,
         });
@@ -185,7 +185,7 @@ sub save {
         user             => $self->hub->current_user,
     );
     Socialtext::Events->Record({
-        class => 'page',
+        event_class => 'page',
         action => 'edit_save',
         page => $page,
     });

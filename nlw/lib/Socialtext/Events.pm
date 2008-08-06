@@ -17,7 +17,7 @@ sub Record {
     my $class = shift;
     my $ev = shift;
 
-    if ($ev->{class} && $ev->{class} eq 'page' &&
+    if ($ev->{event_class} && $ev->{event_class} eq 'page' &&
         $ev->{page} && ref($ev->{page}))
     {
         my $page = $ev->{page};
@@ -27,12 +27,12 @@ sub Record {
         $ev->{context}{revision_count} ||= $page->revision_count;
         $ev->{context}{revision_id} ||= $page->revision_id;
 
-        my $target_page_id = delete $ev->{target_page_id};
-        my $target_page_workspace_id = delete $ev->{target_workspace_id};
-        $ev->{context}{target_page_id} = $target_page_id 
-            if $target_page_id;
-        $ev->{context}{target_page_workspace_id} = $target_page_workspace_id
-            if $target_page_workspace_id;
+        my $t_page = delete $ev->{target_page};
+        my $t_page_workspace = delete $ev->{target_workspace};
+        my $t_page_id = $t_page->id if $t_page;
+        my $t_ws_name = $t_page_workspace->name if $t_page_workspace;
+        $ev->{context}{target_page}{id} = $t_page_id if $t_page_id;
+        $ev->{context}{target_page}{workspace_name} = $t_ws_name if $t_ws_name;
 
         $ev->{context}{summary} = delete $ev->{summary}
             if $ev->{summary};

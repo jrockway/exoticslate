@@ -151,7 +151,7 @@ sub _record_view {
     my ($self, $page) = @_;
     if ($page->id ne 'untitled_page') {
         Socialtext::Events->Record({
-            class => 'page',
+            event_class => 'page',
             action => 'view',
             page => $page,
         });

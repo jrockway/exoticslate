@@ -136,7 +136,7 @@ sub add_to_watchlist {
     }
 
     Socialtext::Events->Record({
-        class => 'page',
+        event_class => 'page',
         action => 'watch_add',
         page => $page,
     });
@@ -172,7 +172,7 @@ sub _record_watch_delete {
     my ($self, $page) = @_;
 
     Socialtext::Events->Record({
-        class => 'page',
+        event_class => 'page',
         action => 'watch_delete',
         actor => $self->hub->current_user,
         workspace => $self->hub->current_workspace,

@@ -79,9 +79,9 @@ sub record_event {
     my $self = shift;
     my $p = shift || die 'Requires Event parameters';
 
-    # compatibility aliases:
-    $p->{event_class} ||= $p->{class};
-    $p->{at} ||= $p->{timestamp};
+    #warn "EVENT: $p->{event_class}:$p->{action}\n";
+
+    $p->{at} ||= $p->{timestamp}; # compatibility alias
     $p->{at} ||= "now";
 
     $self->_unbox_objects($p);
@@ -118,6 +118,8 @@ sub record_event {
 
     my $sql = "INSERT INTO event ( $fields ) VALUES ( $placeholders )";
     sql_execute($sql, @values);
+
+    return; # don't leak the $sth returned from sql_execute
 }
 
 sub _translate_ref_to_id {

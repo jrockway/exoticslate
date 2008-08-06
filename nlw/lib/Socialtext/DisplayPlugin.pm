@@ -181,7 +181,7 @@ sub display {
     {
         eval {
             Socialtext::Events->Record({
-                class => 'page',
+                event_class => 'page',
                 action => 'view',
                 page => $page,
             });

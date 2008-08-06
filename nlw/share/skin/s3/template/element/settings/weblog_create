@@ -1,16 +1,17 @@
+[%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% PROCESS element/settings/start %]
 <dl class="form">
-    <dt><label>[% loc('Create A Weblog') %]</label></dt>
-    <dd>
-        [% loc('Please give your weblog a name. If the name you provide does not end with "Blog" or "Weblog", the system will add "Blog" to the name you provide. After you click "Create", you\'ll be taken right to the new weblog.') %]
-    </dd>
-    <dd>
-        <input type="text" name="weblog_title" value="[% loc("Sample Weblog") %]" size="50" />
-        ([% loc('required') %])
-        <br/>
-        <i> [% loc('Example: Sales Team Weblog') %]</i>
-    </dd>
+  <dt><label>[% loc('Create A Weblog') %]</label></dt>
+  <dd>
+    [% loc('Please give your weblog a name. If the name you provide does not end with "Blog" or "Weblog", the system will add "Blog" to the name you provide. After you click "Create", you\'ll be taken right to the new weblog.') %]
+  </dd>
+  <dd>
+    <input type="text" name="weblog_title" value="[% loc("Sample Weblog") %]" size="50" />
+    ([% loc('required') %])
+    <br/>
+    <i> [% loc('Example: Sales Team Weblog') %]</i>
+  </dd>
 </dl>
 
 [% PROCESS  element/settings/stop %]

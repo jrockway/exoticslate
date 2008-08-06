@@ -1,110 +1,111 @@
+[%# vim: set et sts=2 sw=2: %]
 [% USE html_encode %]
 [% USE decorate %]
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-      [% FILTER decorate "head" %]
-        <title>[% title || display_title %] / [% wiki.title %]</title>
-        [% PROCESS element/css_links %]
-        [% IF feeds %]
-            [% IF feeds.rss %]
-                [% FOREACH feed IN feeds.rss %]
-        <link rel="alternate" type="application/rss+xml" title="[% feed.value.title | html_encode %]" href="[% feed.value.url %]" />
-                [% END %]
+  <head>
+    [% FILTER decorate "head" %]
+    <title>[% title || display_title %] / [% wiki.title %]</title>
+    [% PROCESS element/css_links %]
+    [% IF feeds %]
+      [% IF feeds.rss %]
+        [% FOREACH feed IN feeds.rss %]
+    <link rel="alternate" type="application/rss+xml" title="[% feed.value.title | html_encode %]" href="[% feed.value.url %]" />
+        [% END %]
+      [% END %]
+
+      [% IF feeds.atom %]
+        [% FOREACH feed IN feeds.atom %]
+    <link rel="alternate" type="application/atom+xml" title="[% feed.value.title | html_encode %]" href="[% feed.value.url %]" />
+        [% END %]
+      [% END %]
+    [% END %]
+
+    [% IF loc_lang != 'en' %]
+    <script type="text/javascript" charset="utf-8"
+      src="[% wiki.skin_uri('s2') %]/javascript/l10ns.js.gz">
+    </script>
+    [% END %]
+
+    <script type="text/javascript" charset="utf-8"
+      src="[% wiki.skin_uri('s3') %]/javascript/socialtext-s3.js">
+    </script>
+
+    [% INCLUDE "element/wiki/js-bootstrap" %]
+
+    <meta name="keywords" content="[% loc('Confluence wiki, Enterprise 2.0 wiki, Mediawiki, Microsoft wiki, Sharepoint wiki, Twiki, Web 2.0 wiki, business wiki, document management, enterprise wiki, intranet wiki, knowledge management, online collaboration, open source wiki, portal wiki, hosted wiki, project collaboration, team collaboration, wiki appliance, wiki software') %]"/>
+    [% END %]
+  </head>
+  <body id="[% id || 'socialtext-wiki' %]">
+    <div id="mainWrap">
+      <div id="header" class="st-wiki-nav">
+        <div id="logo"><a href="[% home_href | decorate('home_href') %]">[% loc('Socialtext') %]</a></div><!-- logo END -->
+        <div id="globalNav" class="st-wiki-nav-content">
+          <ul class="st-wiki-nav-actions">
+            <li id="st-wikinav-mobile"><a href="[% miki_url %]">[% loc('Mobile') %]</a></li>
+            <li id="st-wikinav-setting"><a href="?action=users_settings">[% loc('Settings') %]</a></li>
+            <li id="st-wikinav-help"><a href="/help/index.cgi" target="_blank">[% loc('Help') %]</a></li>
+            [% IF user.is_guest %]
+            <li id="st-wikinav-login"><a href="/challenge?[% wiki.uri | html %]">[% loc('Log in') %]</a></li>
+            <li id="st-wikinav-register" class="last"><a href="/nlw/register.html?redirect_to=[% hub.current_workspace.uri %]">[% loc('Register') %]</a></li>
+            [% ELSE %]
+            <li id="st-wikinav-logout" class="last"><a id="logout_btn" href="/nlw/submit/logout[% IF wiki.is_public %]?redirect_to=[% wiki.uri | html %][% END %]">[% loc('Log out') %]</a></li>
             [% END %]
-
-            [% IF feeds.atom %]
-                [% FOREACH feed IN feeds.atom %]
-        <link rel="alternate" type="application/atom+xml" title="[% feed.value.title | html_encode %]" href="[% feed.value.url %]" />
-                [% END %]
-            [% END %]
-        [% END %]
-
-        [% IF loc_lang != 'en' %]
-        <script type="text/javascript" charset="utf-8"
-            src="[% wiki.skin_uri('s2') %]/javascript/l10ns.js.gz">
-        </script>
-        [% END %]
-
-        <script type="text/javascript" charset="utf-8"
-            src="[% wiki.skin_uri('s3') %]/javascript/socialtext-s3.js">
-        </script>
-
-        [% INCLUDE "element/wiki/js-bootstrap" %]
-
-        <meta name="keywords" content="[% loc('Confluence wiki, Enterprise 2.0 wiki, Mediawiki, Microsoft wiki, Sharepoint wiki, Twiki, Web 2.0 wiki, business wiki, document management, enterprise wiki, intranet wiki, knowledge management, online collaboration, open source wiki, portal wiki, hosted wiki, project collaboration, team collaboration, wiki appliance, wiki software') %]"/>
-        [% END %]
-    </head>
-    <body id="[% id || 'socialtext-wiki' %]">
-        <div id="mainWrap">
-            <div id="header" class="st-wiki-nav">
-                <div id="logo"><a href="[% home_href | decorate('home_href') %]">[% loc('Socialtext') %]</a></div><!-- logo END -->
-                <div id="globalNav" class="st-wiki-nav-content">
-                    <ul class="st-wiki-nav-actions">
-                        <li id="st-wikinav-mobile"><a href="[% miki_url %]">[% loc('Mobile') %]</a></li>
-                        <li id="st-wikinav-setting"><a href="?action=users_settings">[% loc('Settings') %]</a></li>
-                        <li id="st-wikinav-help"><a href="/help/index.cgi" target="_blank">[% loc('Help') %]</a></li>
-                        [% IF user.is_guest %]
-                        <li id="st-wikinav-login"><a href="/challenge?[% wiki.uri | html %]">[% loc('Log in') %]</a></li>
-                        <li id="st-wikinav-register" class="last"><a href="/nlw/register.html?redirect_to=[% hub.current_workspace.uri %]">[% loc('Register') %]</a></li>
-                        [% ELSE %]
-                        <li id="st-wikinav-logout" class="last"><a id="logout_btn" href="/nlw/submit/logout[% IF wiki.is_public %]?redirect_to=[% wiki.uri | html %][% END %]">[% loc('Log out') %]</a></li>
-                        [% END %]
-                    </ul>
-                    <div>
-                        <form id="st-search-form" action="index.cgi" method="get" name="SearchForm">
-                            <label>[% loc("Search:") %]</label>
-                            <input type="hidden" value="search" name="action"/>
-                            <input type="hidden" value="_" name="scope"/>
-                            <input id="st-search-term" name="search_term" class="searchText" type="text" />
-                            <input id="st-search-submit" class="searchButton"  type="button" />
-                        </form>
-                    </div>
-                </div><!-- globalNav END -->
-            </div><!-- header END -->
-            <div id="mainNav" class="st-wiki-subnav-dashboard">
-                <div id="homeLink"><a id="st-home-link" href="[% home_href | decorate('home_href') %]">[% loc("Home") %]</a></div>
-                <ul id="st-wiki-subnav-left">
-                    <li><a id="st-wiki-subnav-link-whats-new" href="?action=recent_changes">[% loc("What's New") %]</a></li>
-                    <li><a id="st-wiki-subnav-link-weblogs" href="?action=weblog_display">[% loc("Weblogs") %]</a></li>
-                </ul>
-                <div id="workSpaceLink">
-                    <a href="#">[% loc('Your Workspaces') %]</a>
-                </div><!-- workSpaceLink END -->
-            </div><!-- mainNav END -->
-            <div id="st-display-mode-container" class="st-content">  	
-                [% content %]
-                <div id="footer">
-                    <div id="footerLinks">
-                        <ul>
-                            <li class="first">
-                                <a target="_blank" href="http://www.socialtext.com/">
-                                    [% loc('Socialtext, the Enterprise Wiki') %]
-                                    v[% app_version %]
-                                </a>
-                            </li>
-                            <li>
-                                <a target="_blank" href="http://www.socialtext.net/exchange/">
-                                    [% loc('Community') %]
-                                </a>
-                            </li>
-                        </ul>
-                    </div><!-- footerLinks END -->
-                    <div id="footerGlobal">
-                        <ul>
-                            <li><a href="[% miki_url %]">[% loc('Mobile') %]</a></li>
-                            <li><a href="?action=users_settings">[% loc('Settings') %]</a></li>
-                            <li><a href="/help/index.cgi" target="_blank">[% loc('Help') %]</a></li>
-                            [% IF user.is_guest %]
-                            <li><a href="/challenge?[% wiki.uri | html %]">[% loc('Log in') %]</a></li>
-                            <li class="last"><a href="/nlw/register.html?redirect_to=[% hub.current_workspace.uri %]">[% loc('Register') %]</a></li>
-                            [% ELSE %]
-                            <li class="last"><a href="/nlw/submit/logout[% IF wiki.is_public %]?redirect_to=[% wiki.uri | html %][% END %]">[% loc('Log out') %]</a></li>
-                            [% END %]
-                        </ul>
-                    </div><!-- footerGlobal END -->
-                </div><!-- footer END -->
-            </div><!-- contentWrap END -->
-        </div><!-- mainWrap END -->
-    </body>
+          </ul>
+          <div>
+            <form id="st-search-form" action="index.cgi" method="get" name="SearchForm">
+              <label>[% loc("Search:") %]</label>
+              <input type="hidden" value="search" name="action"/>
+              <input type="hidden" value="_" name="scope"/>
+              <input id="st-search-term" name="search_term" class="searchText" type="text" />
+              <input id="st-search-submit" class="searchButton"  type="button" />
+            </form>
+          </div>
+        </div><!-- globalNav END -->
+      </div><!-- header END -->
+      <div id="mainNav" class="st-wiki-subnav-dashboard">
+        <div id="homeLink"><a id="st-home-link" href="[% home_href | decorate('home_href') %]">[% loc("Home") %]</a></div>
+        <ul id="st-wiki-subnav-left">
+          <li><a id="st-wiki-subnav-link-whats-new" href="?action=recent_changes">[% loc("What's New") %]</a></li>
+          <li><a id="st-wiki-subnav-link-weblogs" href="?action=weblog_display">[% loc("Weblogs") %]</a></li>
+        </ul>
+        <div id="workSpaceLink">
+          <a href="#">[% loc('Your Workspaces') %]</a>
+        </div><!-- workSpaceLink END -->
+      </div><!-- mainNav END -->
+      <div id="st-display-mode-container" class="st-content">  	
+        [% content %]
+        <div id="footer">
+          <div id="footerLinks">
+            <ul>
+              <li class="first">
+                <a target="_blank" href="http://www.socialtext.com/">
+                  [% loc('Socialtext, the Enterprise Wiki') %]
+                  v[% app_version %]
+                </a>
+              </li>
+              <li>
+                <a target="_blank" href="http://www.socialtext.net/exchange/">
+                  [% loc('Community') %]
+                </a>
+              </li>
+            </ul>
+          </div><!-- footerLinks END -->
+          <div id="footerGlobal">
+            <ul>
+              <li><a href="[% miki_url %]">[% loc('Mobile') %]</a></li>
+              <li><a href="?action=users_settings">[% loc('Settings') %]</a></li>
+              <li><a href="/help/index.cgi" target="_blank">[% loc('Help') %]</a></li>
+              [% IF user.is_guest %]
+              <li><a href="/challenge?[% wiki.uri | html %]">[% loc('Log in') %]</a></li>
+              <li class="last"><a href="/nlw/register.html?redirect_to=[% hub.current_workspace.uri %]">[% loc('Register') %]</a></li>
+              [% ELSE %]
+              <li class="last"><a href="/nlw/submit/logout[% IF wiki.is_public %]?redirect_to=[% wiki.uri | html %][% END %]">[% loc('Log out') %]</a></li>
+              [% END %]
+            </ul>
+          </div><!-- footerGlobal END -->
+        </div><!-- footer END -->
+      </div><!-- contentWrap END -->
+    </div><!-- mainWrap END -->
+  </body>
 </html>

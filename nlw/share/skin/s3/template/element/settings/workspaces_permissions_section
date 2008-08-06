@@ -1,59 +1,61 @@
+[%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% PROCESS element/settings/start %]
 
 <dl class="form">
-    <dt><label>[% loc('Workspace Permissions') %]</label></dt>
-    <dd>
-        [% loc('You can choose the level of privacy for your workspace. For more information on choosing the level of privacy for your workspace, see') %] 
-        <a href="/help/index.cgi?[% loc('roles_and_permission_sets#standard_workspace_types') %]">[% loc('Roles and Permission Sets (standard workspace types)') %]</a>.
-    </dd>
-    <dt><label>[% loc('Do you want to set up this workspace as:') %]</label></dt>
-    <dd>
-       <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "member-only" %]checked="1"[% END %] value="member-only" />
-       <strong>[% loc('Private') %]</strong> - [% loc('only invited users can access the workspace') %]
-    </dd>
-       <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "public-authenticate-to-edit" %]checked="1"[% END %] value="public-authenticate-to-edit" />
-       <strong>[% loc('Public login-to-edit') %]</strong> - [% loc('anybody can see the workspace, users can register to be able to edit') %]
-    </dd>
-    <dd>
-       <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "public-read-only" %]checked="1"[% END %] value="public-read-only" />
-       <strong>[% loc('Public read-only') %]</strong> - [% loc('anybody can see the workspace, only privately invited members can edit') %]
-    </dd>
-    <dd>
-       <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "public-comment-only" %]checked="1"[% END %] value="public-comment-only">
-       <strong>[% loc('Public read-and-comment-only') %]</strong> - [% loc('anybody can see the workspace and make comments, only privately invited members can edit') %]
-    </dd>
-    <dd>
-       <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "public" %]checked="1"[% END %] value="public" />
-       <strong>[% loc('Fully public') %]</strong> - [% loc('anybody can see and edit pages') %] [% UNLESS is_appliance %]
-       (<b>[% loc('Warning') %]</b>: [% loc('if you use this setting, the workspace is likely to be spammed') %])
-       [% END %]
-    </dd>
-
-    [% IF is_appliance %]
-    <dd>
-       <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "intranet" %]checked="1"[% END %] value="intranet" />
-       <strong>[% loc('Intranet') %]</strong> - [% loc('anybody can see and edit pages, upload files and send email') %]
-    </dd>
+  <dt><label>[% loc('Workspace Permissions') %]</label></dt>
+  <dd>
+    [% loc('You can choose the level of privacy for your workspace. For more information on choosing the level of privacy for your workspace, see') %] 
+    <a href="/help/index.cgi?[% loc('roles_and_permission_sets#standard_workspace_types') %]">[% loc('Roles and Permission Sets (standard workspace types)') %]</a>.
+  </dd>
+  <dt><label>[% loc('Do you want to set up this workspace as:') %]</label></dt>
+  <dd>
+    <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "member-only" %]checked="1"[% END %] value="member-only" />
+    <strong>[% loc('Private') %]</strong> - [% loc('only invited users can access the workspace') %]
+  </dd>
+    <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "public-authenticate-to-edit" %]checked="1"[% END %] value="public-authenticate-to-edit" />
+    <strong>[% loc('Public login-to-edit') %]</strong> - [% loc('anybody can see the workspace, users can register to be able to edit') %]
+  </dd>
+  <dd>
+    <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "public-read-only" %]checked="1"[% END %] value="public-read-only" />
+    <strong>[% loc('Public read-only') %]</strong> - [% loc('anybody can see the workspace, only privately invited members can edit') %]
+  </dd>
+  <dd>
+    <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "public-comment-only" %]checked="1"[% END %] value="public-comment-only">
+    <strong>[% loc('Public read-and-comment-only') %]</strong> - [% loc('anybody can see the workspace and make comments, only privately invited members can edit') %]
+  </dd>
+  <dd>
+    <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "public" %]checked="1"[% END %] value="public" />
+    <strong>[% loc('Fully public') %]</strong> - [% loc('anybody can see and edit pages') %]
+    [% UNLESS is_appliance %]
+      (<b>[% loc('Warning') %]</b>: [% loc('if you use this setting, the workspace is likely to be spammed') %])
     [% END %]
+  </dd>
 
-    [% IF current_permission_set_name == "custom" %]
-    <dd>
-        <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "custom" %]checked="1"[% END %] value="custom" />
-        <strong>[% loc('Custom privacy setting') %]</strong>
-    </dd>
-    [% END %]
+  [% IF is_appliance %]
+  <dd>
+    <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "intranet" %]checked="1"[% END %] value="intranet" />
+    <strong>[% loc('Intranet') %]</strong> - [% loc('anybody can see and edit pages, upload files and send email') %]
+  </dd>
+  [% END %]
 
-    <dt><label>[% loc('Who can send email to this workspace?') %]</label></dt>
-    <dd>
-        <input type="radio" name="guest_has_email_in" [% IF fill_in_data.guest_has_email_in %]checked="1"[% END %] value="1" />
-        [% loc('Anyone can send email to this workspace.') %]
-    </dd>
-    <dd>
-        <input type="radio" name="guest_has_email_in" [% UNLESS fill_in_data.guest_has_email_in %]checked="1"[% END %] value="0" />
-        [% SET people_role = permission_set_name.match('public-(?:read|comment)-only') ? loc('workspace members') : loc('registered users') %]
-        [% loc('Only [_1] can send email to this workspace.', people_role ) %] 
-    </dd>
+  [% IF current_permission_set_name == "custom" %]
+  <dd>
+    <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "custom" %]checked="1"[% END %] value="custom" />
+    <strong>[% loc('Custom privacy setting') %]</strong>
+  </dd>
+  [% END %]
+
+  <dt><label>[% loc('Who can send email to this workspace?') %]</label></dt>
+  <dd>
+    <input type="radio" name="guest_has_email_in" [% IF fill_in_data.guest_has_email_in %]checked="1"[% END %] value="1" />
+    [% loc('Anyone can send email to this workspace.') %]
+  </dd>
+  <dd>
+    <input type="radio" name="guest_has_email_in" [% UNLESS fill_in_data.guest_has_email_in %]checked="1"[% END %] value="0" />
+    [% SET people_role = permission_set_name.match('public-(?:read|comment)-only') ? loc('workspace members') : loc('registered users') %]
+    [% loc('Only [_1] can send email to this workspace.', people_role ) %] 
+  </dd>
 </dl>
 
 [% PROCESS element/settings/stop %]

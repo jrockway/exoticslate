@@ -1,3 +1,4 @@
+[%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% USE JSON %]
 <script charset="utf-8" type="text/javascript" language="JavaScript">
@@ -24,7 +25,7 @@ Socialtext.stax.entries = [% stax_info.entries.json || '[]' %];
 
 
 Socialtext.perms = {
-    edit: [% IF checker.check_permission('edit') %] true [% ELSE %] false [% END %]
+  edit: [% IF checker.check_permission('edit') %] true [% ELSE %] false [% END %]
 };
 
 [% IF box_javascript == 1 %]
@@ -42,20 +43,20 @@ Socialtext.double_click_to_edit = true;
 [% END %]
 
 function nlw_make_s2_path(rest) {
-    return "[% wiki.skin_uri('s2') %]" + rest;
+  return "[% wiki.skin_uri('s2') %]" + rest;
 }
 function nlw_make_s3_path(rest) {
-    return "[% wiki.skin_uri('s3') %]" + rest;
+  return "[% wiki.skin_uri('s3') %]" + rest;
 }
 function nlw_make_skin_path(rest) {
-    return "[% wiki.skin_uri() %]" + rest;
+  return "[% wiki.skin_uri() %]" + rest;
 }
 function nlw_make_static_path(rest) {
-    return "[% wiki.static_path %]" + rest;
+  return "[% wiki.static_path %]" + rest;
 }
 
 function nlw_make_plugin_path(rest) {
-    return "[% wiki.static_path %]".replace(/static/, 'nlw/plugin') + rest;
+  return "[% wiki.static_path %]".replace(/static/, 'nlw/plugin') + rest;
 }
 
 [% USE JSON %]
@@ -71,15 +72,15 @@ Socialtext.page_id = '[% page.id %]';
 var Page;
 
 function createPageObject() {
-    Page = new ST.Page ({
-        page_id: '[% page.id %]',
-        page_type: '[% page.page_type %]',
-        page_title: '[% page.title.replace('\'', '\\\'') %]',
-        wiki_id: '[% wiki.name %]',
-        wiki_title: '[% wiki.title.replace('\'', '\\\'') %]',
-        revision_id: '[% page.revision_id %]',
-        comment_form_window_height: '[% wiki.comment_form_window_height %]'
-    });
+  Page = new ST.Page ({
+    page_id: '[% page.id %]',
+    page_type: '[% page.page_type %]',
+    page_title: '[% page.title.replace('\'', '\\\'') %]',
+    wiki_id: '[% wiki.name %]',
+    wiki_title: '[% wiki.title.replace('\'', '\\\'') %]',
+    revision_id: '[% page.revision_id %]',
+    comment_form_window_height: '[% wiki.comment_form_window_height %]'
+  });
 }
 [% END %]
 
@@ -100,7 +101,7 @@ v.wiki = {};
 v.wiki.static_path = "[% wiki.static_path %]";
 v.wiki.is_public = "[% wiki_is_public %]";
 v.wiki.skin_uri = function(skin) {
-    return "[% wiki.skin_uri('s2') %]";
+  return "[% wiki.skin_uri('s2') %]";
 };
 
 v.new_tags = [];

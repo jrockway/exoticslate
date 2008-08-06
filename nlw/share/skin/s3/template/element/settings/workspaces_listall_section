@@ -1,29 +1,30 @@
+[%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% INCLUDE element/settings/start %]
 <dl class="form">
-    <dt><label>[% loc('Workspaces') %]</label></dt>
-    <dd>[% loc('The ten most recently visited of these workspaces are displayed in the Dashboard.') %]</dd>
+  <dt><label>[% loc('Workspaces') %]</label></dt>
+  <dd>[% loc('The ten most recently visited of these workspaces are displayed in the Dashboard.') %]</dd>
 </dl>
 
 <table>
-    <tr>
-        <th>
-            <label>[% loc('Workspace Title') %]</label>
-        </th>
-        <th>
-            <label>[% loc('Workspace Name') %]</label>
-        </th>
-    </tr>
+  <tr>
+    <th>
+      <label>[% loc('Workspace Title') %]</label>
+    </th>
+    <th>
+      <label>[% loc('Workspace Name') %]</label>
+    </th>
+  </tr>
 [% WHILE (wws = workspaces_with_selected.next) %]
   [% SET workspace = wws.0;
-     SET uwr = wws.1 %]
-    <tr>
-        <td>
-            <input type="hidden" name="selected_workspace_id" value="[% workspace.workspace_id %]"[% IF uwr.is_selected %] checked="checked"[% END %] />
-            <a href="/[% workspace.name %]/">[% workspace.title %]</a>
-        </td>
-        <td>[% workspace.name %]</td>
-    </tr>
+   SET uwr = wws.1 %]
+  <tr>
+    <td>
+      <input type="hidden" name="selected_workspace_id" value="[% workspace.workspace_id %]"[% IF uwr.is_selected %] checked="checked"[% END %] />
+      <a href="/[% workspace.name %]/">[% workspace.title %]</a>
+    </td>
+    <td>[% workspace.name %]</td>
+  </tr>
 [% END %]
 </table>
 [% INCLUDE element/settings/stop %]

@@ -1,108 +1,109 @@
+[%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% USE decorate %]
 [% WRAPPER layout/html id="listPage" %]
-    <div id="tabs">
-        <div class="tableTabs">
-            <ul>
-                <li class="recentchanges[% IF action == 'recent_changes' %] selected[% END %]"><a class="first" href="index.cgi?action=recent_changes">[% loc("What's New") %]</a></li>
-                <li class="recentlyviewed[% IF action == 'breadcrumbs_list' %] selected[% END %]"><a href="index.cgi?action=breadcrumbs_list">[% loc("Recently Viewed") %]</a></li>
-                [% UNLESS user.is_guest %]
-                <li class="yourwatchlist[% IF action == 'watchlist' %] selected[% END %]"><a href="index.cgi?action=watchlist">[% loc("Your Watchlist") %]</a></li>
-                [% END %]
-                <li class="orphanpages[% IF action == 'orphans_list' %] selected[% END %]"><a href="index.cgi?action=orphans_list">[% loc("Orphaned Pages") %]</a></li>
-            </ul>                
-        </div><!-- tableTabs END -->
-        <div class="tableFilter">
-            <label>View:</label>
-            <ul>
-              <li class="allpages [% IF action == 'changes' %] selected[% END %]"><a href="index.cgi?action=changes&changes=all">[% loc("All Pages") %]</a></li>
-              <li class="alltags[% IF action == 'category_list' %] selected[% END %]"><a href="index.cgi?action=category_list">[% loc("All Tags") %]</a></li>
-              <li class="allfiles[% IF action == 'attachments_listall' %] selected[% END %]"><a href="index.cgi?action=attachments_listall">[% loc("All Files") %]</a></li>
-            </ul>
-        </div><!-- tableFilter END -->
-    </div><!-- tabs END -->      
-    <div id="controls">
-        <div id="st-editing-tools-edit">
-                            
-        </div><!-- controlsLeft END -->
-        <div id="controlsRight">
-            <ul class="level1">
-                <li class="submenu">
-                    <a class="export" href="#" id="st-listtools-export">[% loc('Export') %]</a>
-                    <ul class="level2">
-                        [% IF loc_system_lang != 'ja' %]
-                        <li class="first"><a title="[% loc('Create PDF document from checked pages') %]" id="st-listview-submit-pdfexport" href="#">[% loc('Export to PDF') %]</a></li>
-                        [% END %]
-                        <li class="separator"><a title="[% loc('Create Word document from checked pages') %]" id="st-listview-submit-rtfexport" href="#">[% loc('Export to Word') %]</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div><!-- controlsRight END -->
-    </div><!-- controls END -->
-    <div id="contentContainer">
-        <h2 class="tableTitle">[% display_title | html %]</h2>
-        <form id="st-listview-form" method="get" action="index.cgi">
-        <input id="st-listview-action" name="action" value="" type="hidden">
-        <input id="st-listview-filename" name="filename" value="" type="hidden">
-        <table class="dataTable">
-            <tr>
-                <th width="1%"><input type="checkbox" id="st-listview-selectall"/></th>
-                <th class="toggle"><div class="toggle">
-                   [% loc('Show:') %]
-                   [% IF summaries %]
-                       <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=0" [% IF ! summaries %] class="selected" [% END %]>[% loc('Titles') %]</a> | 
-                       [% loc('Summaries') %]
-                   [% ELSE %]
-                       [% loc('Titles') %] |
-                       <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
-                    [% END %]
-                </div></th>
-                <th class="sort">[% loc('Sort by:') %]
-                    <select id="sort-picker" onchange="sort_by();">
-                        [% IF allow_relevance %]
-                            [% PROCESS sort_by_option name = loc('Relevance') field = 'Relevance' %]
-                        [% END %]
-                            [% PROCESS sort_by_option name = loc('Title') field = 'Subject' %]
-                        [% IF show_workspace %]
-                            [% PROCESS sort_by_option name = loc('Workspace') field = 'Workspace' %]
-                        [% END %]
-                        [% PROCESS sort_by_option name = loc('Last Edited By') field = 'From' %]
-                        [% PROCESS sort_by_option name = loc('Date') field = 'Date' %]
-                        [% PROCESS sort_by_option name = loc('Revisions') field = 'revision_count' %]
-                </select>
-                            </select>
-                    </div>
-                </th>
-                <script language="javascript">
-                    var query_start = "?[% predicate %];scope=[% scope %];"
-                                    + "orig_search_term=[% search_term %];"
-                                    + "summaries=[% summaries %]";
-                    function sort_by() {
-                        var selected = jQuery('select#sort-picker').val();
-                        window.location = query_start + ';' + selected;
-                    }
-                </script>
-            </tr>
-            [% FOREACH row = rows %]
-                [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
-                <td><input type="checkbox" name="page_selected" class="st-listview-selectpage-checkbox" value="[% row.page_uri %]"/></td>
-                <td colspan="2"><a class="titleLink" href="/[% row.workspace_name || current_workspace.name %]/index.cgi?[% row.page_uri %]">[% row.Subject %]</a>
-                [% IF row.workspace_title %][% loc('in') %] <a href="/[% row.workspace_name %]">[% row.workspace_title %]</a>[% END %]
-                [% IF summaries %]
-                    <span class="summary">[% row.Summary %]</span>
-                [% END %]
-                <em>(<a href="#">[% row.revision_count %]</a> [% loc('Revisions') %])
-                [% loc('Last updated by') %] [% row.username | decorate('user_link') %] [% loc('on') %] [% row.DateLocal %]</em></td>                    
-                </tr>
+  <div id="tabs">
+    <div class="tableTabs">
+      <ul>
+        <li class="recentchanges[% IF action == 'recent_changes' %] selected[% END %]"><a class="first" href="index.cgi?action=recent_changes">[% loc("What's New") %]</a></li>
+        <li class="recentlyviewed[% IF action == 'breadcrumbs_list' %] selected[% END %]"><a href="index.cgi?action=breadcrumbs_list">[% loc("Recently Viewed") %]</a></li>
+        [% UNLESS user.is_guest %]
+        <li class="yourwatchlist[% IF action == 'watchlist' %] selected[% END %]"><a href="index.cgi?action=watchlist">[% loc("Your Watchlist") %]</a></li>
+        [% END %]
+        <li class="orphanpages[% IF action == 'orphans_list' %] selected[% END %]"><a href="index.cgi?action=orphans_list">[% loc("Orphaned Pages") %]</a></li>
+      </ul>
+    </div><!-- tableTabs END -->
+    <div class="tableFilter">
+      <label>View:</label>
+      <ul>
+        <li class="allpages [% IF action == 'changes' %] selected[% END %]"><a href="index.cgi?action=changes&changes=all">[% loc("All Pages") %]</a></li>
+        <li class="alltags[% IF action == 'category_list' %] selected[% END %]"><a href="index.cgi?action=category_list">[% loc("All Tags") %]</a></li>
+        <li class="allfiles[% IF action == 'attachments_listall' %] selected[% END %]"><a href="index.cgi?action=attachments_listall">[% loc("All Files") %]</a></li>
+      </ul>
+    </div><!-- tableFilter END -->
+  </div><!-- tabs END -->
+  <div id="controls">
+    <div id="st-editing-tools-edit">
+
+    </div><!-- controlsLeft END -->
+    <div id="controlsRight">
+      <ul class="level1">
+        <li class="submenu">
+          <a class="export" href="#" id="st-listtools-export">[% loc('Export') %]</a>
+          <ul class="level2">
+            [% IF loc_system_lang != 'ja' %]
+            <li class="first"><a title="[% loc('Create PDF document from checked pages') %]" id="st-listview-submit-pdfexport" href="#">[% loc('Export to PDF') %]</a></li>
             [% END %]
-        </table><!-- dataTable END -->
-        </form>
-    </div><!-- contentContainer -->    
+            <li class="separator"><a title="[% loc('Create Word document from checked pages') %]" id="st-listview-submit-rtfexport" href="#">[% loc('Export to Word') %]</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- controlsRight END -->
+  </div><!-- controls END -->
+  <div id="contentContainer">
+    <h2 class="tableTitle">[% display_title | html %]</h2>
+    <form id="st-listview-form" method="get" action="index.cgi">
+    <input id="st-listview-action" name="action" value="" type="hidden">
+    <input id="st-listview-filename" name="filename" value="" type="hidden">
+    <table class="dataTable">
+      <tr>
+        <th width="1%"><input type="checkbox" id="st-listview-selectall"/></th>
+        <th class="toggle"><div class="toggle">
+          [% loc('Show:') %]
+          [% IF summaries %]
+             <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=0" [% IF ! summaries %] class="selected" [% END %]>[% loc('Titles') %]</a> | 
+             [% loc('Summaries') %]
+          [% ELSE %]
+             [% loc('Titles') %] |
+             <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
+          [% END %]
+        </div></th>
+        <th class="sort">[% loc('Sort by:') %]
+          <select id="sort-picker" onchange="sort_by();">
+            [% IF allow_relevance %]
+              [% PROCESS sort_by_option name = loc('Relevance') field = 'Relevance' %]
+            [% END %]
+              [% PROCESS sort_by_option name = loc('Title') field = 'Subject' %]
+            [% IF show_workspace %]
+              [% PROCESS sort_by_option name = loc('Workspace') field = 'Workspace' %]
+            [% END %]
+            [% PROCESS sort_by_option name = loc('Last Edited By') field = 'From' %]
+            [% PROCESS sort_by_option name = loc('Date') field = 'Date' %]
+            [% PROCESS sort_by_option name = loc('Revisions') field = 'revision_count' %]
+        </select>
+              </select>
+          </div>
+        </th>
+        <script language="javascript">
+          var query_start = "?[% predicate %];scope=[% scope %];"
+                          + "orig_search_term=[% search_term %];"
+                          + "summaries=[% summaries %]";
+          function sort_by() {
+            var selected = jQuery('select#sort-picker').val();
+            window.location = query_start + ';' + selected;
+          }
+        </script>
+      </tr>
+      [% FOREACH row = rows %]
+        [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
+        <td><input type="checkbox" name="page_selected" class="st-listview-selectpage-checkbox" value="[% row.page_uri %]"/></td>
+        <td colspan="2"><a class="titleLink" href="/[% row.workspace_name || current_workspace.name %]/index.cgi?[% row.page_uri %]">[% row.Subject %]</a>
+        [% IF row.workspace_title %][% loc('in') %] <a href="/[% row.workspace_name %]">[% row.workspace_title %]</a>[% END %]
+        [% IF summaries %]
+          <span class="summary">[% row.Summary %]</span>
+        [% END %]
+        <em>(<a href="#">[% row.revision_count %]</a> [% loc('Revisions') %])
+        [% loc('Last updated by') %] [% row.username | decorate('user_link') %] [% loc('on') %] [% row.DateLocal %]</em></td>
+        </tr>
+      [% END %]
+    </table><!-- dataTable END -->
+    </form>
+  </div><!-- contentContainer -->
 [% END %]
 
 [% BLOCK sort_by_option %]
-          <option [% IF sortby == field %]selected="selected"[% END %] value="sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</option>
-          [% IF sortby == field %]
-          <option value="sortby=[% field %];direction=[% direction == 'asc' ? 'desc' : 'asc' %]">[% name %] [% direction == 'asc' ? '(&darr;)' : '(&uarr;)' %]</option>
-          [% END %]
+  <option [% IF sortby == field %]selected="selected"[% END %] value="sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</option>
+  [% IF sortby == field %]
+    <option value="sortby=[% field %];direction=[% direction == 'asc' ? 'desc' : 'asc' %]">[% name %] [% direction == 'asc' ? '(&darr;)' : '(&uarr;)' %]</option>
+  [% END %]
 [% END %]

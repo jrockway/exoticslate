@@ -1,238 +1,239 @@
+[%# vim: set et sts=2 sw=2: %]
 [% USE html_encode %]
 [% WRAPPER layout/html id="contentPage" %]
 <div id="controls">
-    <div id="st-editing-tools-edit">
-        <ul>
-            [% IF checker.check_permission('edit') %]
-            <li><a title="[% loc('Click this button to edit the page') %]" id="st-edit-button-link" class="editButton" href="#">[% loc('Edit') %]</a></li>
-            [% ELSIF checker.check_permission('edit_controls') %]
-            <li><a title="[% loc('Click this button to edit the page') %]" id="st-login-to-edit-button-link" class="editButton" href="[% login_and_edit_path %]">[% loc('Edit') %]</a></li>
-            [% END %]
-            [% IF checker.check_permission('comment') %]
-            <li><a id="st-comment-button-link" class="commentButton" href="#" title="[% loc('Click this button to add a comment to the page') %]">[% loc('Comment') %]</a></li>
-            [% END %]
-        </ul>
-        <ul class="buttonRight">
-        [% IF checker.check_permission('edit') %]
-            <li><a class="newPageButton" title="[% loc('Create New Wiki Page') %]" id="st-pagetools-newpage" href="?action=new_page">[% loc('New Page') %]</a></li>
-            [% IF current_workspace.enable_spreadsheet %]
-            <li><a class="newPageButton" title="[% loc('Create New Spreadsheet') %]" id="st-pagetools-newspreadsheet" href="?action=new_page;page_type=spreadsheet">[% loc('Create New Spreadsheet') %]</a></li>
-            [% END %]
-            [% UNLESS user.is_guest %]
-                [% IF watching %]
-                <li><a id="st-watchlist-indicator" class="on watchButton" href="#" title="[% loc('Stop watching this Page') %]">[% loc('Stop watching this Page') %]</a></li>
-                [% ELSE %]
-                <li><a id="st-watchlist-indicator" class="watchButton" href="#" title="[% loc('Watch this Page') %]">[% loc('Watch this Page') %]</a></li>
-                [% END %]
-            [% END %]
+  <div id="st-editing-tools-edit">
+    <ul>
+      [% IF checker.check_permission('edit') %]
+      <li><a title="[% loc('Click this button to edit the page') %]" id="st-edit-button-link" class="editButton" href="#">[% loc('Edit') %]</a></li>
+      [% ELSIF checker.check_permission('edit_controls') %]
+      <li><a title="[% loc('Click this button to edit the page') %]" id="st-login-to-edit-button-link" class="editButton" href="[% login_and_edit_path %]">[% loc('Edit') %]</a></li>
+      [% END %]
+      [% IF checker.check_permission('comment') %]
+      <li><a id="st-comment-button-link" class="commentButton" href="#" title="[% loc('Click this button to add a comment to the page') %]">[% loc('Comment') %]</a></li>
+      [% END %]
+    </ul>
+    <ul class="buttonRight">
+    [% IF checker.check_permission('edit') %]
+      <li><a class="newPageButton" title="[% loc('Create New Wiki Page') %]" id="st-pagetools-newpage" href="?action=new_page">[% loc('New Page') %]</a></li>
+      [% IF current_workspace.enable_spreadsheet %]
+      <li><a class="newPageButton" title="[% loc('Create New Spreadsheet') %]" id="st-pagetools-newspreadsheet" href="?action=new_page;page_type=spreadsheet">[% loc('Create New Spreadsheet') %]</a></li>
+      [% END %]
+      [% UNLESS user.is_guest %]
+        [% IF watching %]
+        <li><a id="st-watchlist-indicator" class="on watchButton" href="#" title="[% loc('Stop watching this Page') %]">[% loc('Stop watching this Page') %]</a></li>
+        [% ELSE %]
+        <li><a id="st-watchlist-indicator" class="watchButton" href="#" title="[% loc('Watch this Page') %]">[% loc('Watch this Page') %]</a></li>
         [% END %]
-        </ul>                                   
-    </div><!-- st-editing-tools-edit END -->
+      [% END %]
+    [% END %]
+    </ul>
+  </div><!-- st-editing-tools-edit END -->
 
-    <!-- XXX: move this somewhere or style it in screen.css -->
-    <div style="float:left;position:relative;padding:11px;display:none" id="bootstrap-loader">
-        [% loc("Loading...") %]
-        <img src="[% wiki.skin_uri("s2") %]/images/ajax-loader.gif">
-    </div>
+  <!-- XXX: move this somewhere or style it in screen.css -->
+  <div style="float:left;position:relative;padding:11px;display:none" id="bootstrap-loader">
+    [% loc("Loading...") %]
+    <img src="[% wiki.skin_uri("s2") %]/images/ajax-loader.gif">
+  </div>
 
-    <div id="controlsRight">
-        <ul class="level1">
-            <li><a class="print" title="[% loc('Print this page') %]" id="st-pagetools-print" href="JavaScript:window.print()">[% loc('Print') %]</a></li>
-            [% IF checker.check_permission('email_out') &&
-                  page.page_type != 'spreadsheet' %]
-            <li><a class="email" title="[% loc('Email this page') %]" id="st-pagetools-email" href="#">[% loc('Email') %]</a></li>
+  <div id="controlsRight">
+    <ul class="level1">
+      <li><a class="print" title="[% loc('Print this page') %]" id="st-pagetools-print" href="JavaScript:window.print()">[% loc('Print') %]</a></li>
+      [% IF checker.check_permission('email_out') &&
+            page.page_type != 'spreadsheet' %]
+      <li><a class="email" title="[% loc('Email this page') %]" id="st-pagetools-email" href="#">[% loc('Email') %]</a></li>
+      [% END %]
+      <li class="last submenu"><a class="tools" id="st-pagetools-tools" href="#">[% loc('Tools') %]</a>
+        <ul class="level2">
+          [% IF checker.check_permission('edit') %]
+          <li class="first"><a id="st-pagetools-duplicate" href="#">[% loc('Duplicate Page') %]</a></li>
+          <li><a id="st-pagetools-rename" href="#">[% loc('Rename Page') %]</a></li>
+          [% END %]
+          [% IF checker.check_permission('delete') %]
+          <li [% current_user_workspace_count == 1 ? "class=\"separator\"":"" %]><a href="index.cgi?[% page.id %]" id="st-pagetools-delete">[% loc('Delete Page') %]</a></li>
+          [% END %]
+          [% IF current_user_workspace_count > 1 %]
+          <li class="separator"><a href="#" id="st-pagetools-copy">[% loc('Copy Page to Workspace') %]</a></li>
+          [% END %]
+          [% USE encode_mailto %]
+          [% IF checker.check_permission('email_in') &&
+                page.page_type != 'spreadsheet' %]
+          <li><a href="mailto:[% wiki.email_address %]" title="[% wiki.email_address %]">[% loc('Email To This Workspace') %]</a></li>
+            [% IF page.page_type == 'spreadsheet' %]
+          <li class="separator"><a href="mailto:[% wiki.email_address %]?subject=[% page.title | html_encode  %]" title="To: [% wiki.email_address %] / subject: [% page.title | html_encode %]" onclick="alert(loc('Sorry, this feature is not available for spreadsheets')); return false;" >[% loc('Email To This Page') %]</a></li>
+            [% ELSE %]
+          <li class="separator"><a href="mailto:[% wiki.email_address %]?subject=[% page.title | html_encode  %]" title="To: [% wiki.email_address %] / subject: [% page.title | html_encode %]">[% loc('Email To This Page') %]</a></li>
             [% END %]
-            <li class="last submenu"><a class="tools" id="st-pagetools-tools" href="#">[% loc('Tools') %]</a>
-                <ul class="level2">
-                    [% IF checker.check_permission('edit') %]
-                    <li class="first"><a id="st-pagetools-duplicate" href="#">[% loc('Duplicate Page') %]</a></li>
-                    <li><a id="st-pagetools-rename" href="#">[% loc('Rename Page') %]</a></li>
-                    [% END %]
-                    [% IF checker.check_permission('delete') %]
-                    <li [% current_user_workspace_count == 1 ? "class=\"separator\"":"" %]><a href="index.cgi?[% page.id %]" id="st-pagetools-delete">[% loc('Delete Page') %]</a></li>
-                    [% END %]
-                    [% IF current_user_workspace_count > 1 %]
-                    <li class="separator"><a href="#" id="st-pagetools-copy">[% loc('Copy Page to Workspace') %]</a></li>
-                    [% END %]
-                    [% USE encode_mailto %]
-                    [% IF checker.check_permission('email_in') &&
-                          page.page_type != 'spreadsheet' %]
-                    <li><a href="mailto:[% wiki.email_address %]" title="[% wiki.email_address %]">[% loc('Email To This Workspace') %]</a></li>
-                        [% IF page.page_type == 'spreadsheet' %]
-                    <li class="separator"><a href="mailto:[% wiki.email_address %]?subject=[% page.title | html_encode  %]" title="To: [% wiki.email_address %] / subject: [% page.title | html_encode %]" onclick="alert(loc('Sorry, this feature is not available for spreadsheets')); return false;" >[% loc('Email To This Page') %]</a></li>
-                        [% ELSE %]
-                    <li class="separator"><a href="mailto:[% wiki.email_address %]?subject=[% page.title | html_encode  %]" title="To: [% wiki.email_address %] / subject: [% page.title | html_encode %]">[% loc('Email To This Page') %]</a></li>
-                        [% END %]
-                    [% END %]
-                    <li><a href="index.cgi?action=display_html;page_name=[% page.id %]" target="_new">[% loc('Export as HTML') %]</a></li>
+          [% END %]
+          <li><a href="index.cgi?action=display_html;page_name=[% page.id %]" target="_new">[% loc('Export as HTML') %]</a></li>
 
-                    [% IF loc_lang != 'ja' %]
-                    <li><a href="index.cgi?action=pdf_export;page_selected=[% page.id %]" target="_new">[% loc('Export to PDF') %]</a></li>
-                    [% END %]
-                    <li class="separator"><a href="index.cgi?action=rtf_export;page_selected=[% page.id %]" target="_new">[% loc('Export to Word') %]</a></li>
-                    [% FOREACH tool = tools.keys %]
-                    <li class="separator"><a href="index.cgi?action=[% tools.$tool.0 %];page_name=[% page.id %]">[% tool %]</a></li>
-                    [% END %]
-                </ul>
-            </li>
+          [% IF loc_lang != 'ja' %]
+          <li><a href="index.cgi?action=pdf_export;page_selected=[% page.id %]" target="_new">[% loc('Export to PDF') %]</a></li>
+          [% END %]
+          <li class="separator"><a href="index.cgi?action=rtf_export;page_selected=[% page.id %]" target="_new">[% loc('Export to Word') %]</a></li>
+          [% FOREACH tool = tools.keys %]
+          <li class="separator"><a href="index.cgi?action=[% tools.$tool.0 %];page_name=[% page.id %]">[% tool %]</a></li>
+          [% END %]
         </ul>
-    </div><!-- controlsRight END -->
+      </li>
+    </ul>
+  </div><!-- controlsRight END -->
 </div><!-- controls END -->
 
 <div id="contentContainer">
-    <div id="contentTitle">
-        <h2 id="st-page-titletext" class="tableTitle">[% page.display_title %]</h2>
-        <a id="st-page-boxes-toggle-link" class="hideTab" href="#">[% IF st_page_accessories == 'show' %][% loc('hide') %][% ELSE %][% loc('show') %][% END %]</a>
+  <div id="contentTitle">
+    <h2 id="st-page-titletext" class="tableTitle">[% page.display_title %]</h2>
+    <a id="st-page-boxes-toggle-link" class="hideTab" href="#">[% IF st_page_accessories == 'show' %][% loc('hide') %][% ELSE %][% loc('show') %][% END %]</a>
+  </div>
+
+  <div id="contentColumns">
+    <div id="st-page-maincontent">
+      <div id="st-page-content">[% page.content %]</div>
     </div>
+    <div id="st-page-boxes" style="display:[% IF st_page_accessories == 'show'%]block[% ELSE %]none[% END %]">
+      <div class="widget">
+        <div class="widgetHeader">
+        <h4>Tags</h4>
+        </div><!-- widgetHeader END -->
+        <div class="widgetContent">
+          <ul id="st-tags-listing">
+          [% FOR tag = tags.tags %]
+            <li>
+              <a href="?action=category_display;category=[% tag.name %]">[% tag.name %]</a>
+              <a onclick="Page.delTag('[% tag.name %]')" href="#">[x]</a>
+            </li>
+          [% END %]
+          </ul>
+          [% IF checker.check_permission('edit') %]
+          <ul id="st-tags-addlink" class="widgetButton">
+            <li><a class="addTagButton" href="#">[% loc('Tag') %]</a></li>
+          </ul>
+          <form id="st-tags-form" onsubmit="return false;">
+            <input style="margin:10px;display:none" id="st-tags-field" name="tagfield" type="text" />
+          </form>
+          <div id="st-tags-message"></div>
+          <div style="display:none" id="st-tags-suggestion">
+            <span class="st-tags-hint">
+              [% loc("Suggestions:") %]
+            </span>
+            <span id="st-tags-suggestionlist"></span>
+          </div>
+          [% END %]
+          <div class="clear"></div>
+        </div><!-- widgetContent -->
+        <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->
+      </div><!-- widget END -->
+      <div class="widget">
+        <div class="widgetHeader">
+        <h4>Incoming Links</h4>
+        </div><!-- widgetHeader END -->
+        <div class="widgetContent">
+          <ul>
+          [% FOR in = page.incoming %]
+            <li><a href="?[% in.page_id %]">[% in.page_title %]</a></li>
+          [% END %]
+          </ul>
+          <div class="clear"></div>
+        </div><!-- widgetContent -->
+        <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->
+      </div><!-- widget END -->
 
-    <div id="contentColumns">
-        <div id="st-page-maincontent">
-            <div id="st-page-content">[% page.content %]</div>
-        </div>
-        <div id="st-page-boxes" style="display:[% IF st_page_accessories == 'show'%]block[% ELSE %]none[% END %]">
-            <div class="widget">
-                <div class="widgetHeader">
-                <h4>Tags</h4>
-                </div><!-- widgetHeader END -->
-                <div class="widgetContent">
-                    <ul id="st-tags-listing">
-                    [% FOR tag = tags.tags %]
-                        <li>
-                            <a href="?action=category_display;category=[% tag.name %]">[% tag.name %]</a>
-                            <a onclick="Page.delTag('[% tag.name %]')" href="#">[x]</a>
-                        </li>
-                    [% END %]
-                    </ul>
-                    [% IF checker.check_permission('edit') %]
-                    <ul id="st-tags-addlink" class="widgetButton">
-                        <li><a class="addTagButton" href="#">[% loc('Tag') %]</a></li>
-                    </ul>
-                    <form id="st-tags-form" onsubmit="return false;">
-                        <input style="margin:10px;display:none" id="st-tags-field" name="tagfield" type="text" />
-                    </form>
-                    <div id="st-tags-message"></div>
-                    <div style="display:none" id="st-tags-suggestion">
-                        <span class="st-tags-hint">
-                            [% loc("Suggestions:") %]
-                        </span>
-                        <span id="st-tags-suggestionlist"></span>
-                    </div>
-                    [% END %]
-                    <div class="clear"></div>
-                </div><!-- widgetContent -->
-                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
-            </div><!-- widget END -->
-            <div class="widget">
-                <div class="widgetHeader">
-                <h4>Incoming Links</h4>
-                </div><!-- widgetHeader END -->
-                <div class="widgetContent">
-                    <ul>
-                    [% FOR in = page.incoming %]
-                        <li><a href="?[% in.page_id %]">[% in.page_title %]</a></li>
-                    [% END %]
-                    </ul>
-                    <div class="clear"></div>
-                </div><!-- widgetContent -->    
-                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                        
-            </div><!-- widget END -->
+      <div class="widget">
+        <div class="widgetHeader">
+        <h4>[% loc('Attachments') %]</h4>
+        </div><!-- widgetHeader END -->
+        <div class="widgetContent">
+          <ul id="st-attachment-listing">
+          [% FOR file = attachments %]
+            <li><a title="[% loc("Uploaded by [_1]", file.uploader) %]" href="[% file.uri %]">[% file.name %]</a> <a href="#" onclick="Page.delAttachment('[% file.uri %]')">[x]</a></li>
+          [% END %]
+          </ul>
+          [% IF checker.check_permission('attachments') %]
+          <ul class="widgetButton">
+            <li><a id="st-attachments-uploadbutton" class="uploadButton" href="#">[% loc('Upload Files') %]</a></li>
+            <!--<li><a id="st-attachments-managebutton" class="manageButton" href="#">[% loc('Manage Files') %]</a></li>-->
+          </ul>
+          [% END %]
+          <div class="clear"></div>
+        </div><!-- widgetContent -->
+        <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->
+      </div><!-- widget END -->
 
-            <div class="widget">
-                <div class="widgetHeader">
-                <h4>[% loc('Attachments') %]</h4>
-                </div><!-- widgetHeader END -->
-                <div class="widgetContent">
-                    <ul id="st-attachment-listing">
-                    [% FOR file = attachments %]
-                        <li><a title="[% loc("Uploaded by [_1]", file.uploader) %]" href="[% file.uri %]">[% file.name %]</a> <a href="#" onclick="Page.delAttachment('[% file.uri %]')">[x]</a></li>
-                    [% END %]
-                    </ul>
-                    [% IF checker.check_permission('attachments') %]
-                    <ul class="widgetButton">
-                        <li><a id="st-attachments-uploadbutton" class="uploadButton" href="#">[% loc('Upload Files') %]</a></li>
-                        <!--<li><a id="st-attachments-managebutton" class="manageButton" href="#">[% loc('Manage Files') %]</a></li>-->
-                    </ul>
-                    [% END %]
-                    <div class="clear"></div>
-                </div><!-- widgetContent -->
-                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
-            </div><!-- widget END -->
-            
-            [% IF include_recent_changes %]
-            <div class="widget">
-                <div class="widgetHeader">
-                <h4>[% loc("What's New") %]</h4>
-                </div><!-- widgetHeader END -->
-                <div class="widgetContent">
-                    <ul>
-                    [% FOR rc = recent_changes %]
-                        <li><a href="[% rc.link %]">[% rc.title %]</a></li>
-                    [% END %]
-                    </ul>
-                    <div class="clear"></div>
-                </div><!-- widgetContent -->
-                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
-            </div><!-- widget END -->
-            [% END %]
+      [% IF include_recent_changes %]
+      <div class="widget">
+        <div class="widgetHeader">
+        <h4>[% loc("What's New") %]</h4>
+        </div><!-- widgetHeader END -->
+        <div class="widgetContent">
+          <ul>
+          [% FOR rc = recent_changes %]
+            <li><a href="[% rc.link %]">[% rc.title %]</a></li>
+          [% END %]
+          </ul>
+          <div class="clear"></div>
+        </div><!-- widgetContent -->
+        <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->
+      </div><!-- widget END -->
+      [% END %]
 
-            [% IF include_breadcrumbs %]
-            <div class="widget">
-                <div class="widgetHeader">
-                <h4>[% loc('Recently Viewed') %]</h4>
-                </div><!-- widgetHeader END -->
-                <div class="widgetContent">
-                    <ul>
-                    [% FOREACH bc IN breadcrumbs %]
-                        <li><a href="[% bc.link %]">[% bc.title %]</a></li>
-                    [% END %]
-                    </ul>
-                    <div class="clear"></div>
-                </div><!-- widgetContent -->
-                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
-            </div><!-- widget END -->
-            [% END %]
-        </div><!-- contentRight -->
-    </div>
+      [% IF include_breadcrumbs %]
+      <div class="widget">
+        <div class="widgetHeader">
+        <h4>[% loc('Recently Viewed') %]</h4>
+        </div><!-- widgetHeader END -->
+        <div class="widgetContent">
+          <ul>
+          [% FOREACH bc IN breadcrumbs %]
+            <li><a href="[% bc.link %]">[% bc.title %]</a></li>
+          [% END %]
+          </ul>
+          <div class="clear"></div>
+        </div><!-- widgetContent -->
+        <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->
+      </div><!-- widget END -->
+      [% END %]
+    </div><!-- contentRight -->
+  </div>
 
-    <div class="clear"></div>
-    <div id="bottomButtons">
-        <ul>
-            <li><a class="editButton" href="#">Edit</a></li>
-            <li><a class="commentButton" href="#">Comment</a></li>
-        </ul>
-        <ul class="buttonRight">    
-            <li><a class="newPageButton" href="#">New Page</a></li>
-            <li><a class="watchButton" href="#">Watch this Page</a></li>
-        </ul>   
-    </div><!-- bottomButtons -->
+  <div class="clear"></div>
+  <div id="bottomButtons">
+    <ul>
+      <li><a class="editButton" href="#">Edit</a></li>
+      <li><a class="commentButton" href="#">Comment</a></li>
+    </ul>
+    <ul class="buttonRight">
+      <li><a class="newPageButton" href="#">New Page</a></li>
+      <li><a class="watchButton" href="#">Watch this Page</a></li>
+    </ul>
+  </div><!-- bottomButtons -->
 </div><!-- contentContainer -->
 
 <div class="lightbox" id="st-attachments-attachinterface">
-    <iframe style="display:none" id="st-attachments-attach-formtarget" class="st-action-formtarget" name="st-attachments-attach-formtarget" src="[% wiki.static_path %]/html/blank.html"></iframe>
-    <form id="st-attachments-attach-form" name="attachForm" method="post" action="index.cgi" enctype="multipart/form-data" target="st-attachments-attach-formtarget">
-        <input type="hidden" name="page_name" value="[% page.id %]"/>
-        <input type="hidden" name="action" value="attachments_upload"/>
-        <div class="title" id="st-attachments-attach-title">[% loc('Upload Files') %]</div>
+  <iframe style="display:none" id="st-attachments-attach-formtarget" class="st-action-formtarget" name="st-attachments-attach-formtarget" src="[% wiki.static_path %]/html/blank.html"></iframe>
+  <form id="st-attachments-attach-form" name="attachForm" method="post" action="index.cgi" enctype="multipart/form-data" target="st-attachments-attach-formtarget">
+    <input type="hidden" name="page_name" value="[% page.id %]"/>
+    <input type="hidden" name="action" value="attachments_upload"/>
+    <div class="title" id="st-attachments-attach-title">[% loc('Upload Files') %]</div>
 
-        <p id="st-attachments-attach-message">
-        [% loc('Click "Browse" and select an image or file to upload.') %]
-        <br />
-        [% loc('Click "Done" to close this window.') %]
-        </p>
-        <p class="hint" id="st-attachments-attach-limit">[% loc('Maximum file size: 50MB') %]</p>
-        <p class="fileprompt" id="st-attachments-attach-fileprompt">
-            <input id="st-attachments-attach-filename" size="45" type="file" name="file"/>
-        </p>
-        <input type="hidden" id="st-attachments-attach-editmode" name="editmode" value="0"/>
-        <input type="hidden" id="st-attachments-attach-embed" name="embed" value="1"/>
-        <div class="error" id="st-attachments-attach-error">&nbsp;</div>
-        <div class="message" id="st-attachments-attach-uploadmessage">&nbsp;</div>
-        <div class="list" id="st-attachments-attach-list"></div>
-        <div class="buttons" id="st-attachments-attach-buttons">
-            <input id="st-attachments-attach-closebutton" type="button" value="[% loc('Done') %]"/>
-        </div>
-        <div style="clear:both;">&nbsp;</div>
-    </form>
+    <p id="st-attachments-attach-message">
+    [% loc('Click "Browse" and select an image or file to upload.') %]
+    <br />
+    [% loc('Click "Done" to close this window.') %]
+    </p>
+    <p class="hint" id="st-attachments-attach-limit">[% loc('Maximum file size: 50MB') %]</p>
+    <p class="fileprompt" id="st-attachments-attach-fileprompt">
+      <input id="st-attachments-attach-filename" size="45" type="file" name="file"/>
+    </p>
+    <input type="hidden" id="st-attachments-attach-editmode" name="editmode" value="0"/>
+    <input type="hidden" id="st-attachments-attach-embed" name="embed" value="1"/>
+    <div class="error" id="st-attachments-attach-error">&nbsp;</div>
+    <div class="message" id="st-attachments-attach-uploadmessage">&nbsp;</div>
+    <div class="list" id="st-attachments-attach-list"></div>
+    <div class="buttons" id="st-attachments-attach-buttons">
+      <input id="st-attachments-attach-closebutton" type="button" value="[% loc('Done') %]"/>
+    </div>
+    <div style="clear:both;">&nbsp;</div>
+  </form>
 </div>
 
 [% END %]

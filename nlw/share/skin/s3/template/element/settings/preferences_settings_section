@@ -1,14 +1,15 @@
+[%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% PROCESS element/settings/start %]
 <dl class="form">
-    <dt><label>[% loc('Preferences') %]</label></dt>
+  <dt><label>[% loc('Preferences') %]</label></dt>
 </dl>
 [% FOREACH preference = preference_list %]
-    <div style="padding-bottom:5px">
-        [% IF preference.query %]
-            [% loc(preference.query) %]
-        [% END %]
-        [% preference.form_element %]
-    </div>
+  <div style="padding-bottom:5px">
+    [% IF preference.query %]
+      [% loc(preference.query) %]
+    [% END %]
+    [% preference.form_element %]
+  </div>
 [% END %]
 [% PROCESS element/settings/stop %]

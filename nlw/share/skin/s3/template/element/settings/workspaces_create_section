@@ -1,34 +1,35 @@
+[%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% PROCESS element/settings/start %]
 <dl class="form">
-    <dt><label>[% loc('Workspace Title') %]</label></dt>
-    <dd>
-        [% loc('This is the title of your workspace. It may be changed later if you want.') %]
-    </dd>
-    <dd>
-        <input type="text" name="title" value="[% title %]" size="50" />
-        ([% loc('required') %])
-    </dd>
-    <dd>
-        <i>[% loc('Example: Acme Widgets Product Development') %]</i>
-    </dd>
+  <dt><label>[% loc('Workspace Title') %]</label></dt>
+  <dd>
+    [% loc('This is the title of your workspace. It may be changed later if you want.') %]
+  </dd>
+  <dd>
+    <input type="text" name="title" value="[% title %]" size="50" />
+    ([% loc('required') %])
+  </dd>
+  <dd>
+    <i>[% loc('Example: Acme Widgets Product Development') %]</i>
+  </dd>
 </dl>
 
 <dl class="form">
-    <dt><label>[% loc('Workspace Name') %]</label></dt>
-    <dd>
-        [% loc("This is a short unique identifier used as part of your workspace's web address and email address.") %] 
-        [% loc('It must consist of 3-30 lowercase letters, numbers, underscores or dashes.') %]
-    </dd>
-    <dd>
-        <input type="text" name="name" value="[% name %]" size="30" />
-        ([% loc('required') %])
-    </dd>
-    <dd>
-        [% loc('Example: acme-product-dev creates this workspace address:') %]
-        http://[% appconfig.web_hostname %]/acme-product-dev
-        [% loc('and this email address:') %]
-        acme-product-dev@[% appconfig.email_hostname %]
-    </dd>
+  <dt><label>[% loc('Workspace Name') %]</label></dt>
+  <dd>
+    [% loc("This is a short unique identifier used as part of your workspace's web address and email address.") %] 
+    [% loc('It must consist of 3-30 lowercase letters, numbers, underscores or dashes.') %]
+  </dd>
+  <dd>
+    <input type="text" name="name" value="[% name %]" size="30" />
+    ([% loc('required') %])
+  </dd>
+  <dd>
+    [% loc('Example: acme-product-dev creates this workspace address:') %]
+    http://[% appconfig.web_hostname %]/acme-product-dev
+    [% loc('and this email address:') %]
+    acme-product-dev@[% appconfig.email_hostname %]
+  </dd>
 </dl>
 [% PROCESS element/settings/stop %]

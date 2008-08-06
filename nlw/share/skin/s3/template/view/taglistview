@@ -1,56 +1,57 @@
+[%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% USE decorate %]
 [% WRAPPER layout/html id="listPage" %]
-    <div id="tabs">
-        <div class="tableTabs">
-            <ul>
-                <li class="recentchanges[% IF action == 'recent_changes' %] selected[% END %]"><a class="first" href="index.cgi?action=recent_changes">[% loc("What's New") %]</a></li>
-                <li class="recentlyviewed[% IF action == 'breadcrumbs_list' %] selected[% END %]"><a href="index.cgi?action=breadcrumbs_list">[% loc("Recently Viewed") %]</a></li>
-                <li class="orphanpages[% IF action == 'orphans_list' %] selected[% END %]"><a href="index.cgi?action=orphans_list">[% loc("Orphaned Pages") %]</a></li>
-            </ul>                
-        </div><!-- tableTabs END -->
-        <div class="tableFilter">
-            <label>View All:</label>
-            <ul>
-              <li class="spacer allpages [% IF action == 'changes' %] selected[% END %]"><a href="index.cgi?action=changes&changes=all">[% loc("All Pages") %]</a></li>
-              <li class="alltags[% IF action == 'category_list' %] selected[% END %]"><a href="index.cgi?action=category_list">[% loc("All Tags") %]</a></li>
-              <li class="allfiles[% IF action == 'attachments_listall' %] selected[% END %]"><a href="index.cgi?action=attachments_listall">[% loc("All Files") %]</a></li>
-            </ul>
-        </div><!-- tableFilter END -->
-    </div><!-- tabs END -->      
-    <div id="controls">
-        <div id="st-editing-tools-edit">
-                            
-        </div><!-- controlsLeft END -->
-        <div id="controlsRight">
-        </div><!-- controlsRight END -->
-    </div><!-- controls END -->
-    <div id="contentContainer">
-        <h2 class="tableTitle">[% display_title | html %]</h2>
-        <table class="dataTable">
-            <tr>
-                <th width="1%"><input type="checkbox" /></th>
-                <th class="toggle"><div class="toggle">
-                </div></th>
-                <th class="sort">
-                </th>
-            </tr>
-            [% FOREACH row = rows %]
-                [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
-                <td><input name="category" value="[% row.display | html %]" type="checkbox" /></td>
-                <td colspan="2">
-                    <a href="[% row.script_name %]?action=category_display;category=[% row.escaped %]">[% row.display | html %]</a>
-                    [% row.page_count %]
-                </td>                    
-                </tr>
-            [% END %]
-        </table><!-- dataTable END -->
-    </div><!-- contentContainer -->    
+  <div id="tabs">
+    <div class="tableTabs">
+      <ul>
+        <li class="recentchanges[% IF action == 'recent_changes' %] selected[% END %]"><a class="first" href="index.cgi?action=recent_changes">[% loc("What's New") %]</a></li>
+        <li class="recentlyviewed[% IF action == 'breadcrumbs_list' %] selected[% END %]"><a href="index.cgi?action=breadcrumbs_list">[% loc("Recently Viewed") %]</a></li>
+        <li class="orphanpages[% IF action == 'orphans_list' %] selected[% END %]"><a href="index.cgi?action=orphans_list">[% loc("Orphaned Pages") %]</a></li>
+      </ul>
+    </div><!-- tableTabs END -->
+    <div class="tableFilter">
+      <label>View All:</label>
+      <ul>
+        <li class="spacer allpages [% IF action == 'changes' %] selected[% END %]"><a href="index.cgi?action=changes&changes=all">[% loc("All Pages") %]</a></li>
+        <li class="alltags[% IF action == 'category_list' %] selected[% END %]"><a href="index.cgi?action=category_list">[% loc("All Tags") %]</a></li>
+        <li class="allfiles[% IF action == 'attachments_listall' %] selected[% END %]"><a href="index.cgi?action=attachments_listall">[% loc("All Files") %]</a></li>
+      </ul>
+    </div><!-- tableFilter END -->
+  </div><!-- tabs END -->
+  <div id="controls">
+    <div id="st-editing-tools-edit">
+
+    </div><!-- controlsLeft END -->
+    <div id="controlsRight">
+    </div><!-- controlsRight END -->
+  </div><!-- controls END -->
+  <div id="contentContainer">
+    <h2 class="tableTitle">[% display_title | html %]</h2>
+    <table class="dataTable">
+      <tr>
+        <th width="1%"><input type="checkbox" /></th>
+        <th class="toggle"><div class="toggle">
+        </div></th>
+        <th class="sort">
+        </th>
+      </tr>
+      [% FOREACH row = rows %]
+        [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
+        <td><input name="category" value="[% row.display | html %]" type="checkbox" /></td>
+        <td colspan="2">
+          <a href="[% row.script_name %]?action=category_display;category=[% row.escaped %]">[% row.display | html %]</a>
+          [% row.page_count %]
+        </td>
+        </tr>
+      [% END %]
+    </table><!-- dataTable END -->
+  </div><!-- contentContainer -->
 [% END %]
 
 [% BLOCK sort_by_option %]
-          <option [% IF sortby == field %]selected="selected"[% END %] value="sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</option>
-          [% IF sortby == field %]
-          <option value="sortby=[% field %];direction=[% direction == 'asc' ? 'desc' : 'asc' %]">[% name %] [% direction == 'asc' ? '(&darr;)' : '(&uarr;)' %]</option>
-          [% END %]
+      <option [% IF sortby == field %]selected="selected"[% END %] value="sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</option>
+      [% IF sortby == field %]
+      <option value="sortby=[% field %];direction=[% direction == 'asc' ? 'desc' : 'asc' %]">[% name %] [% direction == 'asc' ? '(&darr;)' : '(&uarr;)' %]</option>
+      [% END %]
 [% END %]

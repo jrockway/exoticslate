@@ -1,84 +1,82 @@
+[%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% USE decorate %]
 [% WRAPPER layout/html id="listPage" %]
-    <div id="tabs">
-        <div class="tableTabs">
-            <ul>
-                <li class="recentchanges[% IF action == 'recent_changes' %] selected[% END %]"><a class="first" href="index.cgi?action=recent_changes">[% loc("What's New") %]</a></li>
-                <li class="recentlyviewed[% IF action == 'breadcrumbs_list' %] selected[% END %]"><a href="index.cgi?action=breadcrumbs_list">[% loc("Recently Viewed") %]</a></li>
-                <li class="orphanpages[% IF action == 'orphans_list' %] selected[% END %]"><a href="index.cgi?action=orphans_list">[% loc("Orphaned Pages") %]</a></li>
-            </ul>                
-        </div><!-- tableTabs END -->
-        <div class="tableFilter">
-            <label>View All:</label>
-            <ul>
-              <li class="spacer allpages [% IF action == 'changes' %] selected[% END %]"><a href="index.cgi?action=changes&changes=all">[% loc("All Pages") %]</a></li>
-              <li class="alltags[% IF action == 'category_list' %] selected[% END %]"><a href="index.cgi?action=category_list">[% loc("All Tags") %]</a></li>
-              <li class="allfiles[% IF action == 'attachments_listall' %] selected[% END %]"><a href="index.cgi?action=attachments_listall">[% loc("All Files") %]</a></li>
-            </ul>
-        </div><!-- tableFilter END -->
-    </div><!-- tabs END -->      
-    <div id="controls">
-        <div id="st-editing-tools-edit">
-                            
-        </div><!-- controlsLeft END -->
-        <div id="controlsRight">
-        </div><!-- controlsRight END -->
-    </div><!-- controls END -->
-    <div id="contentContainer">
-        <h2 class="tableTitle">[% display_title | html %]</h2>
-        [% IF checker.check_permission('delete') %]
-            <form action="[% script_name %]" method="post">
-        [% END %]
-        <table class="dataTable">
-            <tr>
-                <th width="1%"><input id="st-listview-selectall" type="checkbox" /></th>
-                <th class="toggle"><div class="toggle">
-                </div></th>
-                <th class="sort">[% loc('Sort by:') %]
-                    <select id="sort-picker" onchange="sort_by();">
-                        [% PROCESS sort_by_option name = loc('Filename') field = 'filename' %]
-                        [% PROCESS sort_by_option name = loc('Page Title') field = 'subject' %]
-                        [% PROCESS sort_by_option name = loc('Uploaded By') field = 'user' %]
-                        [% PROCESS sort_by_option name = loc('Date Uploaded') field = 'date' %]
-                        [% PROCESS sort_by_option name = loc('Size') field = 'size' %]
-                </select>
-                            </select>
-                    </div>
-                </th>
-                <script language="javascript">
-                    var query_start = "?action=attachments_listall";
-                    function sort_by() {
-                        var selected = jQuery('select#sort-picker').val();
-                        window.location = query_start + ';' + selected;
-                    }
-                </script>
-            </tr>
-            [% FOREACH row = rows %]
-                [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
-                <td><input name="selected" value="[% row.page_uri %],[% row.id %]" type="checkbox" /></td>
-                <td colspan="2">
-                    [% row.link %] ([% row.human_readable_size %]), [% loc('attached to') %] <span class="[% row.style %]-row-title-attached-to query-results-row-title-attached-to">[% row.page_link %]</span>
-                [% loc('Uploaded by') %]
-                [% row.user | decorate('user_link') %]
-                [% loc('on') %]
-                [% row.date %]
-                </td>                    
-                </tr>
-            [% END %]
-        </table><!-- dataTable END -->
-        [% IF checker.check_permission('delete') %]
-                <input type="submit" value="[% loc('Delete Selected Attachments') %]" name="button"/>
-                <input type="hidden" name="action" value="attachments_delete" />
-                <input type="hidden" name="caller_action" value="[% hub.action %]" />
-            </form>
-        [% END %]
-    </div><!-- contentContainer -->    
+  <div id="tabs">
+    <div class="tableTabs">
+      <ul>
+        <li class="recentchanges[% IF action == 'recent_changes' %] selected[% END %]"><a class="first" href="index.cgi?action=recent_changes">[% loc("What's New") %]</a></li>
+        <li class="recentlyviewed[% IF action == 'breadcrumbs_list' %] selected[% END %]"><a href="index.cgi?action=breadcrumbs_list">[% loc("Recently Viewed") %]</a></li>
+        <li class="orphanpages[% IF action == 'orphans_list' %] selected[% END %]"><a href="index.cgi?action=orphans_list">[% loc("Orphaned Pages") %]</a></li>
+      </ul>
+    </div><!-- tableTabs END -->
+    <div class="tableFilter">
+      <label>View All:</label>
+      <ul>
+        <li class="spacer allpages [% IF action == 'changes' %] selected[% END %]"><a href="index.cgi?action=changes&changes=all">[% loc("All Pages") %]</a></li>
+        <li class="alltags[% IF action == 'category_list' %] selected[% END %]"><a href="index.cgi?action=category_list">[% loc("All Tags") %]</a></li>
+        <li class="allfiles[% IF action == 'attachments_listall' %] selected[% END %]"><a href="index.cgi?action=attachments_listall">[% loc("All Files") %]</a></li>
+      </ul>
+    </div><!-- tableFilter END -->
+  </div><!-- tabs END -->
+  <div id="controls">
+    <div id="st-editing-tools-edit">
+    </div><!-- controlsLeft END -->
+    <div id="controlsRight">
+    </div><!-- controlsRight END -->
+  </div><!-- controls END -->
+  <div id="contentContainer">
+    <h2 class="tableTitle">[% display_title | html %]</h2>
+    [% IF checker.check_permission('delete') %]
+      <form action="[% script_name %]" method="post">
+    [% END %]
+    <table class="dataTable">
+      <tr>
+        <th width="1%"><input id="st-listview-selectall" type="checkbox" /></th>
+        <th class="toggle"><div class="toggle">
+        </div></th>
+        <th class="sort">[% loc('Sort by:') %]
+          <select id="sort-picker" onchange="sort_by();">
+            [% PROCESS sort_by_option name = loc('Filename') field = 'filename' %]
+            [% PROCESS sort_by_option name = loc('Page Title') field = 'subject' %]
+            [% PROCESS sort_by_option name = loc('Uploaded By') field = 'user' %]
+            [% PROCESS sort_by_option name = loc('Date Uploaded') field = 'date' %]
+            [% PROCESS sort_by_option name = loc('Size') field = 'size' %]
+          </select>
+        </th>
+        <script language="javascript">
+          var query_start = "?action=attachments_listall";
+          function sort_by() {
+            var selected = jQuery('select#sort-picker').val();
+            window.location = query_start + ';' + selected;
+          }
+        </script>
+      </tr>
+      [% FOREACH row = rows %]
+        [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
+        <td><input name="selected" value="[% row.page_uri %],[% row.id %]" type="checkbox" /></td>
+        <td colspan="2">
+          [% row.link %] ([% row.human_readable_size %]), [% loc('attached to') %] <span class="[% row.style %]-row-title-attached-to query-results-row-title-attached-to">[% row.page_link %]</span>
+        [% loc('Uploaded by') %]
+        [% row.user | decorate('user_link') %]
+        [% loc('on') %]
+        [% row.date %]
+        </td>
+        </tr>
+      [% END %]
+    </table><!-- dataTable END -->
+    [% IF checker.check_permission('delete') %]
+        <input type="submit" value="[% loc('Delete Selected Attachments') %]" name="button"/>
+        <input type="hidden" name="action" value="attachments_delete" />
+        <input type="hidden" name="caller_action" value="[% hub.action %]" />
+      </form>
+    [% END %]
+  </div><!-- contentContainer -->
 [% END %]
 
 [% BLOCK sort_by_option %]
-          <option [% IF sortby == field %]selected="selected"[% END %] value="sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</option>
-          [% IF sortby == field %]
-          <option value="sortby=[% field %];direction=[% direction == 'asc' ? 'desc' : 'asc' %]">[% name %] [% direction == 'asc' ? '(&darr;)' : '(&uarr;)' %]</option>
-          [% END %]
+  <option [% IF sortby == field %]selected="selected"[% END %] value="sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</option>
+  [% IF sortby == field %]
+    <option value="sortby=[% field %];direction=[% direction == 'asc' ? 'desc' : 'asc' %]">[% name %] [% direction == 'asc' ? '(&darr;)' : '(&uarr;)' %]</option>
+  [% END %]
 [% END %]

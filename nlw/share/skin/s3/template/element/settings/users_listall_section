@@ -1,3 +1,4 @@
+[%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% perm_admin = hub.checker.check_permission('admin_workspace') %]
 [% INCLUDE element/settings/start %]

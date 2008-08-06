@@ -1,104 +1,105 @@
+[%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% USE decorate %]
 [% WRAPPER layout/html id="blog" %]
 <div id="controls">
-    <div id="st-editing-tools-edit">
-        <h1>[% loc('Weblog') %]: [% display_title | html %]</h1>
-        <ul id="quickLinks">
-            <li><img src="[% wiki.skin_uri('s3/images/rss.png') %]" /><a href="[% feeds.rss.page.url %]">[% loc('Subscribe to Feed') %]</a></li>
-            [% IF hub.current_workspace.enable_unplugged %]
-            <li class="noBorder"><img src="[% wiki.skin_uri('s3/images/plug.png') %]" /><a href="?action=unplug;tag=[% category_escaped %]">[% loc('Save the 50 most recent pages') %]</a></li>
-            [% END %]
-        </ul>            
-    </div><!-- controlsLeft END -->
-    <div id="controlsRight">
-        <form action="[% script_name %]">
-            <div class="goTo">
-                [% IF checker.check_permission('edit') %]
-                <a id="st-weblog-newpost-button" class="newPostButton" href="[% script_name %]?action=new_page;add_tag=[% category_escaped %];caller_action=weblog_display" title="[% loc('Click this button to create a new blog post') %]">[% loc('New Post') %]</a>
-                [% END %]
-                <span>[% loc('Go to:') %]<select name="category" onchange="this.form.submit()" id="page-control-category-selector">
-                    [% FOREACH blog = blogs %]
-                        [% display_string = blog.display | html %]
-                        <option[% IF blog.display == category %] selected="true"[% END %] value="[% blog.escape_html %]">[% IF display_string == 'Recent Changes' %] [% loc('Recent Changes') %] [% ELSE %] [% display_string %] [% END %]</option>
-                    [% END %]
-                    </select>
-                </span>        
-            </div>
-        </form>
-        [% IF is_real_category AND checker.check_permission('edit') %]
-        <div class="goTo">[% loc('or post by email') %]: <a href="mailto:[% email_category_address %]">[% email_category_address %]</a></div>
+  <div id="st-editing-tools-edit">
+    <h1>[% loc('Weblog') %]: [% display_title | html %]</h1>
+    <ul id="quickLinks">
+      <li><img src="[% wiki.skin_uri('s3/images/rss.png') %]" /><a href="[% feeds.rss.page.url %]">[% loc('Subscribe to Feed') %]</a></li>
+      [% IF hub.current_workspace.enable_unplugged %]
+      <li class="noBorder"><img src="[% wiki.skin_uri('s3/images/plug.png') %]" /><a href="?action=unplug;tag=[% category_escaped %]">[% loc('Save the 50 most recent pages') %]</a></li>
+      [% END %]
+    </ul>
+  </div><!-- controlsLeft END -->
+  <div id="controlsRight">
+    <form action="[% script_name %]">
+      <div class="goTo">
+        [% IF checker.check_permission('edit') %]
+        <a id="st-weblog-newpost-button" class="newPostButton" href="[% script_name %]?action=new_page;add_tag=[% category_escaped %];caller_action=weblog_display" title="[% loc('Click this button to create a new blog post') %]">[% loc('New Post') %]</a>
         [% END %]
-    </div><!-- controlsRight END -->
+        <span>[% loc('Go to:') %]<select name="category" onchange="this.form.submit()" id="page-control-category-selector">
+          [% FOREACH blog = blogs %]
+            [% display_string = blog.display | html %]
+            <option[% IF blog.display == category %] selected="true"[% END %] value="[% blog.escape_html %]">[% IF display_string == 'Recent Changes' %] [% loc('Recent Changes') %] [% ELSE %] [% display_string %] [% END %]</option>
+          [% END %]
+          </select>
+        </span>
+      </div>
+    </form>
+    [% IF is_real_category AND checker.check_permission('edit') %]
+    <div class="goTo">[% loc('or post by email') %]: <a href="mailto:[% email_category_address %]">[% email_category_address %]</a></div>
+    [% END %]
+  </div><!-- controlsRight END -->
 </div><!-- controls END -->
 <div id="contentContainer">
-    <div id="contentColumns">
-        <div id="st-page-maincontent">
-            [% USE section_iterator = iterator(sections) %]
-            [% FOREACH section IN section_iterator %]
-                [% FOREACH entry = section.entries %]
-                    <h3>[% entry.title | html %]</h3>
-                    <em>
-                        [% loc('Posted by') %] [% entry.username | decorate('user_link') %] on [% entry.date_local %]
-                        [% IF checker.check_permission('comment') %]
-                            -
-                            <a href="#" id="comment_[% entry.page_uri %]" class="weblog_comment">
-                                [% loc('comment') %]
-                            </a>
-                        [% END %]
-                        [% IF checker.check_permission('edit') %]
-                            -
-                            <a href="[% script_name %]?action=display;page_name=[% entry.page_uri %];caller_action=[% caller_action %];category=[% category | uri %];js=show_edit_div#edit">[% loc('edit this post') %]</a>
-                        [% END %]
-                        -
-                        <a href="[% script_name %]?[%entry.page_uri%]">[% loc('permalink') %]</a>
-                    </em>
-                    <div id="content_[% entry.page_uri %]">
-                        [% entry.post %]
-                    </div>
-                [% END %]
+  <div id="contentColumns">
+    <div id="st-page-maincontent">
+      [% USE section_iterator = iterator(sections) %]
+      [% FOREACH section IN section_iterator %]
+        [% FOREACH entry = section.entries %]
+          <h3>[% entry.title | html %]</h3>
+          <em>
+            [% loc('Posted by') %] [% entry.username | decorate('user_link') %] on [% entry.date_local %]
+            [% IF checker.check_permission('comment') %]
+              -
+              <a href="#" id="comment_[% entry.page_uri %]" class="weblog_comment">
+                [% loc('comment') %]
+              </a>
             [% END %]
-        </div><!-- contentLeft -->
-        <div id="st-page-boxes">
-            <div class="widget">
-                <div class="widgetHeader">
-                    <h4>Weblog Navigation</h4>
-                </div><!-- widgetHeader END -->
-                <div class="widgetContent">
-                    [% box_content_filled %]
-                    [% IF hub.checker.check_permission('edit') %]
-                    <ul class="widgetButton">
-                        <li><a class="smallEditButton" href="[% hub.weblog.page_edit_path %]#edit">[% loc('edit') %]</a></li>
-                    </ul>
-                    [% END %]
-                    <div class="clear"></div>
-                </div><!-- widgetContent -->
-                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
-            </div><!-- widget END -->
-            <div class="widget">
-                <div class="widgetHeader">
-                    <h4>Weblog Archives</h4>
-                </div><!-- widgetHeader END -->
-                <div class="widgetContent">
-                    <ul>
-                    [% FOREACH year = archive.keys.nsort.reverse %]
-                        [% FOREACH month = archive.$year.keys.nsort.reverse %]
-                            [% NEXT IF !archive.$year.$month %]
-                            <li>
-                                <a href="[% script_name %]?action=weblog_display;category=[% category %];start=[% archive.$year.$month.start %];limit=[% archive.$year.$month.limit %]">
-                                    [% hub.helpers.format_date(year,month) %]
-                                </a>
-                            </li>
-                        [% END %]
-                    [% END %]
-                    </ul>
-                    <div class="clear"></div>
-                </div><!-- widgetContent -->    
-                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                        
-            </div><!-- widget END -->
+            [% IF checker.check_permission('edit') %]
+              -
+              <a href="[% script_name %]?action=display;page_name=[% entry.page_uri %];caller_action=[% caller_action %];category=[% category | uri %];js=show_edit_div#edit">[% loc('edit this post') %]</a>
+            [% END %]
+            -
+            <a href="[% script_name %]?[%entry.page_uri%]">[% loc('permalink') %]</a>
+          </em>
+          <div id="content_[% entry.page_uri %]">
+            [% entry.post %]
+          </div>
+        [% END %]
+      [% END %]
+    </div><!-- contentLeft -->
+    <div id="st-page-boxes">
+      <div class="widget">
+        <div class="widgetHeader">
+          <h4>Weblog Navigation</h4>
+        </div><!-- widgetHeader END -->
+        <div class="widgetContent">
+          [% box_content_filled %]
+          [% IF hub.checker.check_permission('edit') %]
+          <ul class="widgetButton">
+            <li><a class="smallEditButton" href="[% hub.weblog.page_edit_path %]#edit">[% loc('edit') %]</a></li>
+          </ul>
+          [% END %]
+          <div class="clear"></div>
+        </div><!-- widgetContent -->
+        <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->
+      </div><!-- widget END -->
+      <div class="widget">
+        <div class="widgetHeader">
+          <h4>Weblog Archives</h4>
+        </div><!-- widgetHeader END -->
+        <div class="widgetContent">
+          <ul>
+          [% FOREACH year = archive.keys.nsort.reverse %]
+            [% FOREACH month = archive.$year.keys.nsort.reverse %]
+              [% NEXT IF !archive.$year.$month %]
+              <li>
+                <a href="[% script_name %]?action=weblog_display;category=[% category %];start=[% archive.$year.$month.start %];limit=[% archive.$year.$month.limit %]">
+                  [% hub.helpers.format_date(year,month) %]
+                </a>
+              </li>
+            [% END %]
+          [% END %]
+          </ul>
+          <div class="clear"></div>
+        </div><!-- widgetContent -->
+        <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->
+      </div><!-- widget END -->
 
-        </div><!-- contentRight -->
-    </div><!-- contentColumns END -->
-    <div class="clear"></div><!-- clear END -->
-</div><!-- contentContainer -->    
+    </div><!-- contentRight -->
+  </div><!-- contentColumns END -->
+  <div class="clear"></div><!-- clear END -->
+</div><!-- contentContainer -->
 [% END %]

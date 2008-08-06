@@ -134,7 +134,7 @@ sub get_page {
                     ),
                 );
 
-                if ($page->id ne 'untitled_page') {
+                if ($page->exists) {
                     Socialtext::Events->Record({
                         event_class => 'page',
                         action => 'view',

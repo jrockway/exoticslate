@@ -996,6 +996,13 @@ proto.prompt_for_table_dimensions = function() {
 proto._do_link = function(widget_element) {
     var self = this;
 
+    if (!jQuery('#st-widget-link-dialog').size()) {
+        Socialtext.wikiwyg_variables.loc = loc;
+        jQuery('body').append(
+            Jemplate.process("add-a-link.html", Socialtext.wikiwyg_variables)
+        );
+    }
+
     var selection = this.get_selection_text();
     if (!widget_element || !widget_element.nodeName ) {
         widget_element = false;
@@ -1039,40 +1046,36 @@ proto._do_link = function(widget_element) {
     }
 
     var tmp = jQuery("#st-widget-workspace_id").val();
-    // XXX
-    alert("setup_add_a_link_lookahead hasn't been implemented");
-    //this.setup_add_a_link_lookahead(jQuery('#st-widget-link-dialog').get(0), dummy_widget);
+    this.setup_add_a_link_lookahead(jQuery('#st-widget-link-dialog').get(0), dummy_widget);
     jQuery('#st-widget-workspace_id').val(tmp);
 
-    if (!jQuery('#st-widget-link-dialog').size()) {
-        Socialtext.wikiwyg_variables.loc = loc;
-        jQuery('body').append(Jemplate.process("add-a-link.html", Socialtext.wikiwyg_variables));
 
-        jQuery('#add-a-link-form')
-            .bind('reset', function() {
-                jQuery.hideLightbox();
-                Wikiwyg.Widgets.widget_editing = 0;
-                return false;
-            })
-            .submit(function() {
-                if (jQuery.browser.msie)
-                    jQuery("<input type='text'>").appendTo('body').focus().remove();
+    jQuery('#add-a-link-form')
+        .unbind('reset')
+        .unbind('submit')
+        .bind('reset', function() {
+            jQuery.hideLightbox();
+            Wikiwyg.Widgets.widget_editing = 0;
+            return false;
+        })
+        .submit(function() {
+            if (jQuery.browser.msie)
+                jQuery("<input type='text'>").appendTo('body').focus().remove();
 
-                if (jQuery('#add-wiki-link').is(':checked')) {
-                    if (!self.add_wiki_link(widget_element, dummy_widget)) return false;
-                }
-                else if (jQuery('#add-section-link').is(':checked')) {
-                    if (!self.add_section_link(widget_element)) return false;
-                }
-                else {
-                    if (!self.add_web_link()) return false;
-                }
+            if (jQuery('#add-wiki-link').is(':checked')) {
+                if (!self.add_wiki_link(widget_element, dummy_widget)) return false;
+            }
+            else if (jQuery('#add-section-link').is(':checked')) {
+                if (!self.add_section_link(widget_element)) return false;
+            }
+            else {
+                if (!self.add_web_link()) return false;
+            }
 
-                jQuery.hideLightbox();
-                Wikiwyg.Widgets.widget_editing = 0;
-                return false;
-            });
-    }
+            jQuery.hideLightbox();
+            Wikiwyg.Widgets.widget_editing = 0;
+            return false;
+        });
     jQuery.showLightbox({
         content: '#st-widget-link-dialog',
         close: '#st-widget-link-cancelbutton'
@@ -1125,22 +1128,13 @@ proto.setup_add_a_link_lookahead = function(dialog, widget) {
 }
 
 proto.load_add_a_link_focus_handlers = function(radio_id) {
-    alert('load_add_a_link_focus_handlers has not been implemented in jQuery'); return;
-    var radio  = $(radio_id);
-    var inputs = $(radio_id + "-section").getElementsByTagName('input');
-    var self   = this;
-    var i;
-
-    for (i = 0; i < inputs.length; i++) {
-        if (inputs[i] != radio) {
-            inputs[i].onfocus = function() {
-                radio.checked = true;
-                if (this.id == 'st-widget-page_title') {
-                    self.update_page_lookahead_workspace();
-                }
-            }
+    var self = this;
+    jQuery('#' + radio_id + '-section input[type=text]').focus(function () {
+        jQuery('#' + radio_id).attr('checked', true);
+        if (this.id == 'st-widget-page_title') {
+            self.update_page_lookahead_workspace();
         }
-    }
+    });
 }
 
 proto.set_add_a_link_error = function(msg) {

@@ -55,6 +55,9 @@ LIGHTBOX_SOURCE_FILES= \
 EDITOR_SOURCE_FILES= \
 		$(S2_JAVASCRIPT)/main.js \
 		$(S2_JAVASCRIPT)/md5.js \
+		LookaheadWidget.js \
+		WorkspaceLookahead.js \
+		PageNameLookahead.js \
 		Jemplate.js \
 		$(JEMPLATE_WIKIWYG_MODULE) \
 		$(ALL_JEMPLATE_PLUGINS) \

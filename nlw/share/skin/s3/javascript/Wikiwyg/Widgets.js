@@ -157,7 +157,8 @@ proto.fromHtml = function(html) {
 
     Wikiwyg.Wysiwyg.prototype.fromHtml.call(this, html);
     try {
-        setTimeout(this.setWidgetHandlers.bind(this), 200);
+        var self = this;
+        setTimeout(function () { self.setWidgetHandlers() }, 200);
     } catch(e) { alert('bleh: ' + e) }
 }
 
@@ -394,42 +395,42 @@ proto.attachWidgetHandlers = function(elem) {
     }
 
     var self = this;
-    DOM.Events.addListener(elem, 'mouseover', function(e) {
-        e.target.setAttribute("mouseover", 1);
-        e.target.setAttribute("mouseout", 0);
-    });
-    DOM.Events.addListener(elem, 'mouseout', function(e) {
-        e.target.setAttribute("mouseover", 0);
-        e.target.setAttribute("mouseout", 1);
-    });
-
-    DOM.Events.addListener(elem, 'mousedown', function(e) {
-        e.target.setAttribute("mousedown", 1);
-        e.target.setAttribute("mouseup", 0);
-    });
+    jQuery(elem)
+        .mouseover(function () {
+            this.attr('mouseover', 1);
+            this.attr('mouseout', 0);
+        })
+        .mouseout(function () {
+            this.attr('mouseover', 0);
+            this.attr('mouseout', 1);
+        })
+        .mousedown(function () {
+            this.attr('mousedown', 1);
+            this.attr('mouseup', 0);
+        });
 
     if (! this.currentWidget) return;
     var id = this.currentWidget.id;
     if (widget_data[id] && widget_data[id].uneditable) {
-        DOM.Events.addListener(elem, 'mouseup', function(e) {
-            e.target.setAttribute("mousedown", 0);
-            if ( e.target.getAttribute("mouseup") == 0 ) {
+        jQuery(elem).mouseup(function() {
+            jQuery(this).attr('mousedown', 0);
+            if (jQuery(this).attr('mouseup') == 0) {
                 if ( Wikiwyg.Widgets.widget_editing > 0 )
                     return;
                 alert(loc("This is not an editable widget. Please edit it in advanced mode."))
             }
-            e.target.setAttribute("mouseup", 1);
+            jQuery(this).attr('mouseup', 1);
         });
     }
     else {
-        DOM.Events.addListener(elem, 'mouseup', function(e) {
-            e.target.setAttribute("mousedown", 0);
-            if ( e.target.getAttribute("mouseup") == 0 ) {
+        jQuery(elem).mouseup(function () {
+            jQuery(this).(mousedown, 0);
+            if ( jQuery(this).attr("mouseup") == 0 ) {
                 if ( Wikiwyg.Widgets.widget_editing > 0 )
                     return;
-                self.getWidgetInput(e.target, false, false);
+                self.getWidgetInput(this, false, false);
             }
-            e.target.setAttribute("mouseup", 1);
+            jQuery(this).attr('mouseup', 1);
         });
     }
 }
@@ -451,13 +452,16 @@ proto.reclaim_element_registry_space = function() {
             delete wikiwyg_widgets_element_registry[i]
         }
     }
-    wikiwyg_widgets_element_registry = wikiwyg_widgets_element_registry.compact();
+    wikiwyg_widgets_element_registry = 
+        jQuery.grep(wikiwyg_widgets_element_registry, function (i) {
+            return i != undefined ? true : false
+        });
 }
 
 proto.element_registry_push = function(elem) {
     var flag = 0;
-    wikiwyg_widgets_element_registry.each(function(i) {
-        if (i == elem) {
+    jQuery.each(wikiwyg_widgets_element_registry, function() {
+        if (this == elem) {
             flag++;
         }
     });
@@ -894,9 +898,7 @@ proto.create_wafl_string = function(widget, form) {
         data.fields ? data.fields :
         [];
     if (data.other_fields) {
-        data.other_fields.each(
-            function (field){ fields.push(field) }
-        );
+        jQuery.each(data.other_fields, function (){ fields.push(this) });
     }
     for (var j = 0; j < fields.length; j++) {
         var token = new RegExp('%' + fields[j]);
@@ -1058,7 +1060,7 @@ proto.hookLookaheads = function(dialog, widget) {
 
     widget = widget || this.currentWidget;
 
-    if ($('st-widget-workspace_id')) {
+    if (jQuery('#st-widget-workspace_id').size()) {
         window.workspaceLookahead = new WorkspaceLookahead(
             dialog,
             'st-widget-workspace_id',
@@ -1070,7 +1072,7 @@ proto.hookLookaheads = function(dialog, widget) {
         );
     }
 
-    if ($('st-widget-page_title')) {
+    if (jQuery('#st-widget-page_title').size()) {
         window.pageLookahead = new PageNameLookahead(
             dialog,
             'st-widget-page_title',
@@ -1098,7 +1100,7 @@ proto.hookLookaheads = function(dialog, widget) {
         window.pageLookahead.defaultWorkspace = Socialtext.wiki_id;
     });
 
-    if ($('st-widget-tag_name')) {
+    if (jQuery('#st-widget-tag_name').size()) {
         window.tagLookahead = new TagLookahead(
             dialog,
             'st-widget-tag_name',
@@ -1111,7 +1113,7 @@ proto.hookLookaheads = function(dialog, widget) {
         window.tagLookahead.defaultWorkspace = Socialtext.wiki_id;
     }
 
-    if ($('st-widget-weblog_name')) {
+    if (jQuery('#st-widget-weblog_name').size()) {
         window.weblogLookahead = new WeblogLookahead(
             dialog,
             'st-widget-weblog_name',
@@ -1124,7 +1126,7 @@ proto.hookLookaheads = function(dialog, widget) {
         window.weblogLookahead.defaultWorkspace = Socialtext.wiki_id;
     }
 
-    if ($('st-widget-section_name')) {
+    if (jQuery('#st-widget-section_name').size()) {
         window.sectionNameLookahead = new PageSectionLookahead(
             dialog,
             'st-widget-section_name',
@@ -1136,10 +1138,10 @@ proto.hookLookaheads = function(dialog, widget) {
             'st-widget-page_title'
         );
         window.sectionNameLookahead.defaultWorkspace = Socialtext.wiki_id;
-        window.sectionNameLookahead.defaultPagename = $('st-page-editing-pagename').value;
+        window.sectionNameLookahead.defaultPagename = jQuery('#st-page-editing-pagename').val();
     }
 
-    if ($('st-widget-image_name')) {
+    if (jQuery('#st-widget-image_name').size()) {
         window.imageNameLookahead = new PageAttachmentLookahead(
             dialog,
             'st-widget-image_name',
@@ -1151,10 +1153,10 @@ proto.hookLookaheads = function(dialog, widget) {
             'st-widget-page_title'
         );
         window.imageNameLookahead.defaultWorkspace = Socialtext.wiki_id;
-        window.imageNameLookahead.defaultPagename = $('st-page-editing-pagename').value;
+        window.imageNameLookahead.defaultPagename = jQuery('#st-page-editing-pagename').val();
     }
 
-    if ($('st-widget-file_name')) {
+    if (jQuery('#st-widget-file_name').size()) {
         window.fileNameLookahead = new PageAttachmentLookahead(
             dialog,
             'st-widget-file_name',
@@ -1166,7 +1168,7 @@ proto.hookLookaheads = function(dialog, widget) {
             'st-widget-page_title'
         );
         window.fileNameLookahead.defaultWorkspace = Socialtext.wiki_id;
-        window.fileNameLookahead.defaultPagename = $('st-page-editing-pagename').value;
+        window.fileNameLookahead.defaultPagename = jQuery('#st-page-editing-pagename').val();
     }
 }
 

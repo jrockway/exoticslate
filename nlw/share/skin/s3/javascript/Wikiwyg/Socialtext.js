@@ -986,15 +986,7 @@ proto.prompt_for_table_dimensions = function() {
 }
 
 proto._do_link = function(widget_element) {
-    var html = Jemplate.process("add-a-link.html", {});
-
-    var box  = new Widget.Lightbox.Socialtext({contentClassName: 'jsan-widget-lightbox-content-wrapper', wrapperClassName: 'st-lightbox-dialog'});
-    box.content( html );
-    box.create();
-
-    this.load_add_a_link_focus_handlers("add-wiki-link");
-    this.load_add_a_link_focus_handlers("add-web-link");
-    this.load_add_a_link_focus_handlers("add-section-link");
+    var self = this;
 
     var selection = this.get_selection_text();
     if (!widget_element || !widget_element.nodeName ) {
@@ -1008,7 +1000,8 @@ proto._do_link = function(widget_element) {
             // pre-populate the section link section
             jQuery("#section-link-text").val(widget.section_name);
             jQuery("#add-section-link").attr('checked', true);
-        } else { 
+        }
+        else { 
             // Pre-populate the wiki link section
             jQuery("#wiki-link-text").val(widget.label || "");
 
@@ -1021,7 +1014,8 @@ proto._do_link = function(widget_element) {
             jQuery("#st-widget-page_title").val(widget.page_title || "");
             jQuery("#wiki-link-section").val(widget.section_name || "");
         }
-    } else if (selection) {
+    }
+    else if (selection) {
         // IE returns the actual selection element as a string, rather than
         // just the selection element's HTML. Eew.
         if ( Wikiwyg.is_ie ) {
@@ -1037,41 +1031,51 @@ proto._do_link = function(widget_element) {
     }
 
     var tmp = jQuery("#st-widget-workspace_id").val();
-    this.setup_add_a_link_lookahead(box.divs.contentWrapper, dummy_widget);
+    this.setup_add_a_link_lookahead(jQuery('#st-widget-link-dialog').get(0), dummy_widget);
     jQuery('#st-widget-workspace_id').val(tmp);
+
+    if (!jQuery('#st-widget-link-dialog').size()) {
+        Socialtext.wikiwyg_variables.loc = loc;
+        jQuery('body').append(Jemplate.process("add-a-link.html", Socialtext.wikiwyg_variables));
+
+        jQuery('#add-a-link-form')
+            .bind('reset', function() {
+                jQuery.hideLightbox();
+                Wikiwyg.Widgets.widget_editing = 0;
+                return false;
+            })
+            .submit(function() {
+                if (jQuery.browser.msie)
+                    jQuery("<input type='text'>").appendTo('body').focus().remove();
+
+                if (jQuery('#add-wiki-link').is(':checked')) {
+                    if (!self.add_wiki_link(widget_element, dummy_widget)) return false;
+                }
+                else if (jQuery('#add-section-link').is(':checked')) {
+                    if (!self.add_section_link(widget_element)) return false;
+                }
+                else {
+                    if (!self.add_web_link()) return false;
+                }
+
+                jQuery.hideLightbox();
+                Wikiwyg.Widgets.widget_editing = 0;
+                return false;
+            });
+    }
+    jQuery.showLightbox({
+        content: '#st-widget-link-dialog',
+        close: '#st-widget-link-cancelbutton'
+    })
+
+    this.load_add_a_link_focus_handlers("add-wiki-link");
+    this.load_add_a_link_focus_handlers("add-web-link");
+    this.load_add_a_link_focus_handlers("add-section-link");
 
     var self = this;
     var callback = function(element) {
         var form    = jQuery("#add-a-link-form").get(0);
-        var onreset = function() {
-            box.releaseFocus();
-            box.release();
-
-            Wikiwyg.Widgets.widget_editing = 0;
-            return false;
-        }
-        var onsubmit = function() {
-            if ( jQuery.browser.msie )
-                jQuery("<input type='text'>").appendTo(document.body).focus().remove();
-
-            if (jQuery('#add-wiki-link').is(':checked')) {
-                if (!self.add_wiki_link(widget_element, dummy_widget)) { return false; }
-            } else if (jQuery('#add-section-link').is(':checked')) {
-                if (!self.add_section_link(widget_element)) { return false; }
-            } else {
-                if (!self.add_web_link()) { return false; }
-            }
-
-            box.release();
-
-            Wikiwyg.Widgets.widget_editing = 0;
-
-            return false;
-        }
-        form.onsubmit = onsubmit;
-        form.onreset  = onreset;
     }
-    box.show(callback);
 }
 
 proto.setup_add_a_link_lookahead = function(dialog, widget) {
@@ -1111,6 +1115,7 @@ proto.setup_add_a_link_lookahead = function(dialog, widget) {
 }
 
 proto.load_add_a_link_focus_handlers = function(radio_id) {
+    alert('load_add_a_link_focus_handlers has not been implemented in jQuery'); return;
     var radio  = $(radio_id);
     var inputs = $(radio_id + "-section").getElementsByTagName('input');
     var self   = this;
@@ -1322,10 +1327,10 @@ proto.do_link = function(widget_element) {
 }
 
 proto.add_wiki_link = function(widget_element, dummy_widget) {
-    var label     = $("wiki-link-text").value; 
-    var workspace = $("st-widget-workspace_id").value || "";
-    var page_name = $("st-widget-page_title").value;
-    var section   = $("wiki-link-section").value;
+    var label     = jQuery("#wiki-link-text").val(); 
+    var workspace = jQuery("#st-widget-workspace_id").val() || "";
+    var page_name = jQuery("#st-widget-page_title").val();
+    var section   = jQuery("#wiki-link-section").val();
     var workspace_id = dummy_widget.title_and_id.workspace_id.id || workspace.replace(/\s+/g, '');
 
     if (!page_name) {
@@ -1349,7 +1354,7 @@ proto.add_wiki_link = function(widget_element, dummy_widget) {
 }
 
 proto.add_section_link = function(widget_element) {
-    var section = $("section-link-text").value;
+    var section = jQuery('#section-link-text').val();
 
     if (!section) {
         this.set_add_a_link_error( "Please fill in the section field for section links." );
@@ -1363,8 +1368,8 @@ proto.add_section_link = function(widget_element) {
 }
 
 proto.add_web_link = function() {
-    var url       = $("web-link-destination").value;
-    var url_text  = $("web-link-text").value;
+    var url       = jQuery('#web-link-destination').val();
+    var url_text  = jQuery('#web-link-text').val();
 
     if (!url || !url.match(/^(http|https|ftp|irc|mailto|file):/)) {
         this.set_add_a_link_error("Please fill in the Link destination field for web links.");
@@ -1562,8 +1567,7 @@ klass.run_formatting_test = function(div) {
         div.style.backgroundColor = '#f00';
         div.innerHTML = div.innerHTML + '<br/>Bad: <pre>\n' +
             result + '</pre>';
-        var list = $('wikiwyg_test_results');
-        list.innerHTML += '<a href="#'+div.id+'">Failed '+div.id+'</a>; ';
+        jQuery('#wikiwyg_test_results').append('<a href="#'+div.id+'">Failed '+div.id+'</a>; ');
     }
 }
 

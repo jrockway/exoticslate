@@ -64,7 +64,10 @@
 </div>
 </div>
 </div>
-[% PROCESS 'save-cancel.html' %]
+<div class="buttons">
+    <input id="st-widget-savebutton" type="submit" value=[% loc('Save') %] />
+    <input id="st-widget-cancelbutton" type="reset" value=[% loc('Cancel') %] />
+</div>
 </form>
 
 <! BLOCK CONTROL_ROW -!>

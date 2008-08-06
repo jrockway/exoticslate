@@ -54,10 +54,6 @@ LIGHTBOX_SOURCE_FILES= \
 
 EDITOR_SOURCE_FILES= \
 		$(S2_JAVASCRIPT)/main.js \
-		$(COMMON_JAVASCRIPT)/prototype-1.4.0/dist/prototype.js \
-		$(COMMON_JAVASCRIPT)/TrimPath-template-1.0.38.js \
-		$(COMMON_JAVASCRIPT)/DOM.Ready-0.14/lib/DOM/Ready.js \
-		$(COMMON_JAVASCRIPT)/DOM.Events-0.02/lib/DOM/Events.js \
 		$(S2_JAVASCRIPT)/md5.js \
 		Jemplate.js \
 		$(JEMPLATE_WIKIWYG_MODULE) \
@@ -72,8 +68,8 @@ EDITOR_SOURCE_FILES= \
 		Wikiwyg/Socialtext.js \
 		Widgets.js \
 		Wikiwyg/Widgets.js \
-		$(S2_JAVASCRIPT)/Wikiwyg/MessageCenter.js \
-		$(S2_JAVASCRIPT)/Wikiwyg/Wikitext/Socialtext.js \
+		Wikiwyg/MessageCenter.js \
+		Wikiwyg/Wikitext/Socialtext.js \
 		$(S2_JAVASCRIPT)/Wikiwyg/DataValidator.js \
 		wikiwyg.js \
 
@@ -124,7 +120,7 @@ $(JEMPLATE_WIKIWYG_MODULE): jemplate_wikiwyg $(ALL_WIKIWYG_JEMPLATES)
 $(LIGHTBOX_JEMPLATE): $(LIGHTBOX_TEMPLATES)
 	jemplate --compile $(LIGHTBOX_TEMPLATES) > $(LIGHTBOX_JEMPLATE)
 
-$(ALL_EDIT_JEMPLATES): $(WIDGETS_YAML) $(JEMPLATE_GENERATOR) template/widget_edit.tt2 jemplate/save-cancel.html
+$(ALL_EDIT_JEMPLATES): $(WIDGETS_YAML) $(JEMPLATE_GENERATOR) template/widget_edit.tt2
 	$(JEMPLATE_GENERATOR) --yaml=$< --output=$@ \
 	    --template=widget_edit.tt2
 

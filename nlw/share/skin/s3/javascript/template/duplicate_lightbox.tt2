@@ -1,10 +1,11 @@
+[%# vim: set et sts=2 sw=2: %]
 <div class="lightbox" id="st-duplicate-lightbox">
   <form id='st-duplicate-form'>
     <input type="hidden" name="action" value="duplicate_page" />
     <input type="hidden" name="page_name" value="[% page_title | html_encode %]" />
     <input type="hidden" name="json" value="1"/>
-        [% loc('Duplicate') %]
-        <span id="duplicate-page-page-title">"[% page_title %]"</span>
+      [% loc('Duplicate') %]
+      <span id="duplicate-page-page-title">"[% page_title %]"</span>
     </p>
     <p id="st-duplicate-error" class="error"></p>
 

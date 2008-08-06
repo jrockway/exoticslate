@@ -1,30 +1,29 @@
+[%# vim: set et sts=2 sw=2: %]
 <div class="lightbox" id="st-rename-lightbox">
-    <form id="st-rename-form">
-        <input type="hidden" name="action" value="rename_page" />
-        <input type="hidden" name="json" value="1" />
-        <input type="hidden" name="page_name" value="[% page_title | html_encode %]" />
-        <div class="title">
-            Rename <span id="st-rename-pagetitle">"[% page_title %]"</span>
-        </div>
-        <div class="error" id="st-rename-error">&nbsp;</div>
-        [% loc('New page name') %]
-        <input type="text" id="st-rename-newname" name="new_title" size="34" />
-        <br/>
+  <form id="st-rename-form">
+    <input type="hidden" name="action" value="rename_page" />
+    <input type="hidden" name="json" value="1" />
+    <input type="hidden" name="page_name" value="[% page_title | html_encode %]" />
+    <div class="title">
+      Rename <span id="st-rename-pagetitle">"[% page_title %]"</span>
+    </div>
+    <div class="error" id="st-rename-error">&nbsp;</div>
+    [% loc('New page name') %]
+    <input type="text" id="st-rename-newname" name="new_title" size="34" />
+    <br/>
 
-        [% loc('Keep categories') %]:
-        <input type="checkbox" id="keep_categories"
-               value="1" checked="true" />
-        <br />
+    [% loc('Keep categories') %]:
+    <input type="checkbox" id="keep_categories" value="1" checked="true" />
+    <br />
 
-        [% loc('Keep attachments') %]:
-        <input type="checkbox" id="keep_attachments"
-               value="1" checked="true" />
-        <br />
+    [% loc('Keep attachments') %]:
+    <input type="checkbox" id="keep_attachments" value="1" checked="true" />
+    <br />
 
-        <div class="buttons">
-            <input id="st-rename-savelink" type="submit" value="[% loc('Rename') %]"/>
-            <input id="st-rename-cancellink" type="button" value="[% loc('Cancel') %]"/>
-        </div>
-    </form>
+    <div class="buttons">
+      <input id="st-rename-savelink" type="submit" value="[% loc('Rename') %]"/>
+      <input id="st-rename-cancellink" type="button" value="[% loc('Cancel') %]"/>
+    </div>
+  </form>
 </div>
 

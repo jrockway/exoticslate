@@ -29,6 +29,46 @@ sub _unbox_objects {
 
 }
 
+sub _validate_insert_params {
+    my $self = shift;
+    my $p = shift;
+
+    my $class = $p->{event_class};
+    
+    for (qw/at event_class action actor/) {
+        die "$_ parameter is missing" 
+            unless defined $p->{$_};
+    }
+
+    die "event_class must be lower-case alpha-with-underscoes"
+        unless $class =~ /^[a-z_]+$/;
+
+    unless ($self->{_checked_context}) {
+        $@ = undef;
+        eval { decode_json($p->{context}) } if $p->{context};
+        die "context isn't legal json: $p->{context}" if ($@);
+    }
+
+    if ($class eq 'page') {
+        die "page parameter is missing for a page event" 
+            unless $p->{page};
+        die "workspace parameter is missing for a page event" 
+            unless $p->{workspace};
+    }
+    elsif ($class eq 'person') {
+        die "person parameter is missing for a person event"
+            unless $p->{person};
+    }
+    else {
+        die "must specify a both a page and a workspace OR leave both blank"
+            if ($p->{page} xor $p->{workspace});
+    }
+
+    die "can't save events for untitled_page"
+        if ($p->{page} && $p->{page} eq 'untitled_page');
+
+}
+
 =head2 record_event()
 
 This method logs an event to the event storage system.  Parameters:
@@ -42,35 +82,21 @@ sub record_event {
     # compatibility aliases:
     $p->{event_class} ||= $p->{class};
     $p->{at} ||= $p->{timestamp};
-
-    my $class = $p->{event_class};
     $p->{at} ||= "now";
-
-    my @fields = qw/at action actor event_class/;
-    for (@fields) {
-        die "$_ parameter is missing" 
-            unless defined $p->{$_};
-    }
-
-    die "event_class must be lower-case alpha-with-underscoes"
-        unless $class =~ /^[a-z_]+$/;
-
-    die "page parameter is missing for a page event"
-        if ($class eq 'page' && !$p->{page});
-    die "workspace parameter is missing for a page event"
-        if ($class eq 'page' && !$p->{workspace});
-    die "person parameter is missing for a person event"
-        if ($class eq 'person' && !$p->{person});
 
     $self->_unbox_objects($p);
 
+    delete $p->{_checked_context};
     if (ref $p->{context}) {
-        $p->{context} = encode_json($p->{context}) 
+        $p->{context} = encode_json($p->{context});
+        $p->{_checked_context} = 1;
     }
-    else {
-        $@ = undef;
-        eval { decode_json($p->{context}) } if $p->{context};
-        die "context isn't legal json: $p->{context}" if ($@);
+
+    eval {
+        $self->_validate_insert_params($p);
+    };
+    if ($@) {
+        die "Event validation failure: $@";
     }
 
     # order: column, parameter, placeholder

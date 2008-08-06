@@ -59,6 +59,7 @@ sub _entity_hash {
         title => $workspace->title,
         # not really modified time, but it is the time we have
         modified_time => $workspace->creation_datetime,
+        id => $workspace->workspace_id,
 
         # REVIEW: more?
     };

@@ -35,6 +35,7 @@ LIGHTBOX_TEMPLATES= \
 		     template/email_lightbox.tt2 \
 		     template/duplicate_lightbox.tt2 \
 		     template/rename_lightbox.tt2 \
+		     template/copy_lightbox.tt2 \
 
 S3_SOURCE_FILES= \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \

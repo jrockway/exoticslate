@@ -4,9 +4,10 @@
     <input type="hidden" name="action" value="duplicate_page" />
     <input type="hidden" name="page_name" value="[% page_title | html_encode %]" />
     <input type="hidden" name="json" value="1"/>
+    <div class="title">
       [% loc('Duplicate') %]
       <span id="duplicate-page-page-title">"[% page_title %]"</span>
-    </p>
+    </div>
     <p id="st-duplicate-error" class="error"></p>
 
     <label for="new_title" class="duplicate-page-form-element">New page name:
@@ -23,11 +24,11 @@
       <input type="checkbox" name="keep_attachments" value="1" checked="true" />
     </label>
 
-    <p>([% loc('The main window will navigate to the new page name after you click "Duplicate".') %])</p>
+    <div class="hint">([% loc('The main window will navigate to the new page name after you click "Duplicate".') %])</div>
 
     <div class="buttons">
-      <input id="st-duplicate-submit" type="submit" value="[% loc('duplicate') %]" />
-      <input id="st-duplicate-cancel" type="button" value="[% loc('cancel') %]" />
+      <input id="st-duplicate-submit" type="submit" value="[% loc('Duplicate') %]" />
+      <input class="close" id="st-duplicate-cancel" type="button" value="[% loc('Cancel') %]" />
     </div>
 
   </form>

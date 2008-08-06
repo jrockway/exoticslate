@@ -15,6 +15,8 @@ use Socialtext::JSON;
 # XXX funkity duplication throughout, trying to remove some
 # but still plenty left
 
+# XXX: We can remove the necessity of this plugin by implementing this in REST and JS
+
 sub class_id { 'rename_page' }
 const cgi_class => 'Socialtext::RenamePage::CGI';
 

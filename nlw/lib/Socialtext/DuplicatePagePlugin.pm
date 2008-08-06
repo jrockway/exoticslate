@@ -15,6 +15,8 @@ use Socialtext::JSON;
 # XXX funkity duplication throughout, trying to remove some
 # but still plenty left
 
+# XXX: We can remove the necessity of this plugin by implementing this in REST and JS
+
 sub class_id { 'duplicate_page' }
 const cgi_class => 'Socialtext::DuplicatePage::CGI';
 
@@ -40,6 +42,12 @@ sub duplicate_popup {
 sub copy_to_workspace_popup {
     my $self = shift;
     my %p = @_;
+
+    if ($self->cgi->json) {
+        delete $p{target_workspace};
+        return encode_json(\%p);
+    }
+
     my $current_workspace = $self->hub->current_workspace;
     my $workspaces = $self->hub->current_user->workspaces(
         selected_only => 1,
@@ -103,6 +111,7 @@ sub copy_to_workspace {
         );
     }
     elsif ( $self->_duplicate($target_ws) ) {
+        return encode_json({done=>1}) if $self->cgi->json;
         return $self->template_process('close_window.html');
     }
 

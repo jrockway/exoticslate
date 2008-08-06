@@ -1,0 +1,38 @@
+[%# vim: set et sts=2 sw=2: %]
+<div class="lightbox" id="st-copy-lightbox">
+  <form id="st-copy-form">
+    <input type="hidden" name="action" value="copy_to_workspace" />
+    <input type="hidden" name="page_name" value="[% page_title | html %]" />
+    <input type="hidden" name="json" value="1" />
+    <div class="title">
+      [% loc('Copy the page [_1] to another workspace?', page_title) %]
+    </div>
+    <div class="error" id="st-copy-error">&nbsp;</div>
+
+    <p>
+      [% loc('New workspace') %]:
+      <select id="st-copy-workspace" name="target_workspace_id">
+      </select>
+    </p>
+
+    [% loc('New page name') %]
+    <input value="[% page_title | html %]" type="text" id="st-copy-newname" name="new_title" size="34" />
+    <br/>
+
+    [% loc('Keep categories') %]:
+    <input type="checkbox" id="keep_categories" value="1" checked="true" />
+    <br />
+
+    [% loc('Keep attachments') %]:
+    <input type="checkbox" id="keep_attachments" value="1" checked="true" />
+    <br />
+
+    <div class="hint">([% loc('The main window will navigate to the new page name after you click "Copy".') %])</div>
+
+    <div class="buttons">
+      <input id="st-copy-savelink" type="submit" value="[% loc('Copy') %]"/>
+      <input class="close" id="st-copy-cancellink" type="button" value="[% loc('Cancel') %]"/>
+    </div>
+  </form>
+</div>
+

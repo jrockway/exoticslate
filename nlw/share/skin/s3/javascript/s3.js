@@ -284,16 +284,26 @@ $(function() {
     //index.cgi?action=duplicate_popup;page_name=[% page.id %]
     $("#st-pagetools-duplicate").click(function () {
         get_lightbox(function () {
-            show_lightbox('duplicate');
+            var move = new ST.Move;
+            move.duplicateLightbox();
         });
         return false;
     });
     
     $("#st-pagetools-rename").click(function () {
         get_lightbox(function () {
-            show_lightbox('rename');
+            var move = new ST.Move;
+            move.renameLightbox();
         });
         return false;
+    });
+
+    //index.cgi?action=copy_to_workspace_popup;page_name=[% page.id %]')
+    $("#st-pagetools-copy").click(function () {
+        get_lightbox(function () {
+            var move = new ST.Move;
+            move.copyLightbox();
+        });
     });
 
 
@@ -303,11 +313,6 @@ $(function() {
             document.location = "index.cgi?action=delete_page;page_name=" + page;
         }
         return false;
-    });
-
-    //index.cgi?action=copy_to_workspace_popup;page_name=[% page.id %]')
-    $("#st-pagetools-copy").click(function () {
-        alert('not implemented');
     });
 
     $("#st-edit-button-link,#st-edit-actions-below-fold-edit")

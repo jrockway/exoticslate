@@ -1,13 +1,84 @@
-var error = jQuery('#st-rename-error');
+var ST = ST || {};
+ST.Move = function () { }
+var proto = ST.Move.prototype = {};
 
-function error_string (data, new_title) {
+proto.copyLightbox = function () {
+    var self = this;
+    this.process('copy_lightbox.tt2');
+    this.sel = '#st-copy-lightbox';
+    jQuery.getJSON('/data/workspaces', function (list) {
+        jQuery.each(list, function () {
+            jQuery('<option>')
+                .val(this.id)
+                .html(this.title)
+                .attr('name', this.name)
+                .appendTo('#st-copy-workspace');
+        })
+        self.show();
+    });
+}
+
+proto.renameLightbox = function () {
+    this.process('rename_lightbox.tt2');
+    this.sel = '#st-rename-lightbox';
+    this.show();
+}
+
+proto.duplicateLightbox = function () {
+    this.process('duplicate_lightbox.tt2');
+    this.sel = '#st-duplicate-lightbox';
+    this.show();
+}
+
+proto.newUrl = function (page) {
+    var ws = jQuery(this.sel + ' #st-copy-workspace option:selected')
+        .attr('name') || Socialtext.wiki_id;
+    return '/' + ws + '/index.cgi?' + page;
+}
+
+proto.process = function (template) {
+    Socialtext.loc = loc;
+    jQuery('body').append(
+        Jemplate.process(template, Socialtext)
+    );
+}
+
+proto.show = function () {
+    var self = this;
+    jQuery.showLightbox({
+        content: this.sel,
+        close: this.sel + ' .close'
+    });
+    jQuery(this.sel + ' form').submit(function () {
+        var formdata = jQuery(this).serializeArray();
+        var new_title = this.new_title.value;
+
+        jQuery.getJSON(Page.cgiUrl(), formdata, function (data) {
+            var error = self.errorString(data, new_title);
+            if (error) {
+                jQuery('<input name="clobber" type="hidden">')
+                    .attr('value', new_title)
+                    .appendTo(self.sel + ' form');
+                jQuery(self.sel + ' .error').html(error).show();
+            }
+            else {
+                jQuery.hideLightbox();
+                document.location = self.newUrl(new_title);
+            }
+        });
+        return false;
+    });
+}
+
+proto.errorString = function (data, new_title, workspace) {
     if (data.page_exists) {
+        var button = jQuery(this.sel + ' input[type=submit]').val();
         return loc(
             'The new page name you selected, "' + new_title + 
             '", is already in use.  Please choose a different ' +
             'name. If you are sure you wish to overwrite the ' +
             'existing "' + new_title + '" page, please press ' +
-            '"Rename" again.'
+            '"' + button + '" again.'
         );
     }
     else if (data.page_title_bad) {
@@ -32,31 +103,3 @@ function error_string (data, new_title) {
     }
 }
 
-function show_lightbox (name) {
-    Socialtext.loc = loc;
-    jQuery('body').append(
-        Jemplate.process(name + '_lightbox.tt2', Socialtext)
-    );
-    jQuery.showLightbox({
-        content: '#st-' + name + '-lightbox',
-        close: '#st-' + name + '-cancel'
-    });
-    jQuery('#st-' + name + '-form').submit(function () {
-        var new_title = jQuery('#st-' + name + '-newname').val();
-        var data = jQuery(this).serialize();
-        jQuery.getJSON(Page.cgiUrl(), data, function (data) {
-            var error = error_string(data, new_title);
-            if (error) {
-                jQuery('<input name="clobber" type="hidden">')
-                    .attr('value', new_title)
-                    .appendTo('#st-' + name + '-form');
-                jQuery('#st-' + name + '-error').html(error).show();
-            }
-            else {
-                jQuery.hideLightbox();
-                document.location = Page.cgiUrl() + '?' + new_title;
-            }
-        });
-        return false;
-    });
-}

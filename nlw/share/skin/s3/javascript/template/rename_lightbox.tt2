@@ -22,7 +22,7 @@
 
     <div class="buttons">
       <input id="st-rename-savelink" type="submit" value="[% loc('Rename') %]"/>
-      <input id="st-rename-cancellink" type="button" value="[% loc('Cancel') %]"/>
+      <input class="close" id="st-rename-cancellink" type="button" value="[% loc('Cancel') %]"/>
     </div>
   </form>
 </div>

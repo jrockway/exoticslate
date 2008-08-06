@@ -50,7 +50,7 @@ LIGHTBOX_SOURCE_FILES= \
 		$(LIGHTBOX_JEMPLATE) \
 		comment.js \
 		email.js \
-		rename.js \
+		move.js \
 
 EDITOR_SOURCE_FILES= \
 		$(S2_JAVASCRIPT)/main.js \

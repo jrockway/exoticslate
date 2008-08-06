@@ -58,7 +58,7 @@
               <input type="hidden" value="search" name="action"/>
               <input type="hidden" value="_" name="scope"/>
               <input id="st-search-term" name="search_term" class="searchText" type="text" />
-              <input id="st-search-submit" class="searchButton"  type="button" />
+              <input id="st-search-submit" class="searchButton"  type="submit" value="" />
             </form>
           </div>
         </div><!-- globalNav END -->

@@ -166,6 +166,10 @@ Socialtext.clear_untitled = function(input) {
 }
 
 Socialtext.logEvent = function(action) {
+    // untitled_page events are an error or ignored, so don't send them
+    if (Socialtext.page_id == 'untitled_page')
+        return;
+
     var event_json = JSON.stringify({
         'action': action,
         'event_class': 'page',

@@ -11,18 +11,31 @@ use Socialtext::AppConfig;
 use Socialtext::File;
 use Socialtext::Skin;
 use Socialtext::Pluggable::Adapter;
+use Socialtext::Workspace;
 use Fcntl ':flock';
 
 sub handler {
     # This env var is set in the apache-perl config file (nlw.conf)
     if ($ENV{NLW_DEV_MODE} && ! Socialtext::AppConfig->benchmark_mode) {
-        _regen_combined_js();
+        my $r = shift;
+        _regen_combined_js($r);
         Socialtext::Pluggable::Adapter->make;
     }
 }
 
 sub _regen_combined_js {
-    for my $dir (Socialtext::Skin->make_dirs) {
+    my $r = shift;
+
+    my ($ws_name) = $r->uri =~ m{^/([^/]+)/index\.cgi$};
+    return unless $ws_name;
+
+    my $ws = Socialtext::Workspace->new(name=>$ws_name);
+    return unless $ws;
+
+    my $skin_name = $ws->skin_name;
+    my $skin = Socialtext::Skin->new;
+
+    for my $dir ($skin->make_dirs($skin_name)) {
         local $CWD = $dir;
 
         my $semaphore = "$dir/build-semaphore";

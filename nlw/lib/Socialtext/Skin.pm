@@ -236,10 +236,12 @@ sub header_logo_image_uri {
 }
 
 sub make_dirs {
-    my $self = shift;
-    return
+    my ($self, $skin) = @_;
+    return 
         map { dirname($_) }
-        glob( $self->_path('skin/*/javascript/Makefile') );
+        grep { -f $_ }
+        map { $self->_path("skin/$_/javascript/Makefile") }
+        $self->inheritence($skin);
 }
 
 sub _path {

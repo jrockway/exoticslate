@@ -878,7 +878,15 @@ proto.get_wikitext_from_html = function(html) {
 }
 
 proto.set_edit_tips_span_display = function(display) {
-    jQuery('#st-edit-tips').show();
+    jQuery('#st-edit-tips')
+        .show()
+        .unbind('click')
+        .click(function () {
+            jQuery.showLightbox({
+                content: '#st-ref-card',
+                close: '#st-ref-card-close'
+            });
+        });
 }
 
 proto.editMode = function() {
@@ -1031,7 +1039,9 @@ proto._do_link = function(widget_element) {
     }
 
     var tmp = jQuery("#st-widget-workspace_id").val();
-    this.setup_add_a_link_lookahead(jQuery('#st-widget-link-dialog').get(0), dummy_widget);
+    // XXX
+    alert("setup_add_a_link_lookahead hasn't been implemented");
+    //this.setup_add_a_link_lookahead(jQuery('#st-widget-link-dialog').get(0), dummy_widget);
     jQuery('#st-widget-workspace_id').val(tmp);
 
     if (!jQuery('#st-widget-link-dialog').size()) {

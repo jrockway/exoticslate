@@ -9,8 +9,10 @@
             <ul class="buttonRight">        
                 <li><a href="#" id="st-mode-wysiwyg-button" onclick="return false;">[% loc('Simple') %]</a></li>
                 <li><a href="#" id="st-mode-wikitext-button" onclick="return false;">[% loc('Advanced') %]</a></li>
-                <li><a href="#" style="display:none" id="st-edit-tips"
-                       onclick="help_popup('index.cgi?action=refcard', 680);return false;">[% loc('Edit Tips') %]</a>
+                <li>
+                    <a href="#" style="display:none" id="st-edit-tips">
+                       [% loc('Edit Tips') %]
+                    </a>
                 </li>
             </ul>                                   
         </div><!-- st-editing-tools-edit END -->
@@ -146,3 +148,181 @@
     </form>
 </div>
 
+<div style="overflow-y:scroll;height:400px" id="st-ref-card" class="lightbox">
+    <table class="st-refcard-table">
+        <tr class="st-refcard-table-row">
+            <th>[% loc('To Get This...') %] </th>
+            <th>[% loc('Type This') %]</th>
+        </tr>
+        <tr class="st-refcard-table-row">
+            <td><b>[% loc('bold words') %]</b></td>
+            <td>*[% loc('bold words*') %]</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><i>[% loc('italic words') %]</i></td>
+            <td>[% loc('_italic words_') %]</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><del>[% loc('strikeout') %]</del></td>
+            <td>-[% loc('strikeout-') %]</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><tt>[% loc('monospace') %]</tt></td>
+            <td>`[% loc('monospace`') %]</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td>
+                <table class="formatter_table"><tbody>
+                    <tr>
+                        <td>[% loc('table') %]</td>
+                        <td>[% loc('value') %]</td>
+                    </tr>
+                    <tr>
+                        <td>[% loc('dinette') %]</td>
+                        <td>$[% loc('75') %]</td>
+                    </tr>
+                </table>
+            </td>
+            <td>[% loc('|table|value|<br>|dinette|$75|<br>') %]</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><blockquote>[% loc('indented') %]<br>[% loc('lines') %]</blockquote></td>
+            <td>&gt;indented<br>&gt;lines</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><a href="./index.cgi?Page%20Link" title="\[Page link\]" target="_blank">Page Link</a></td>
+            <td>[[% loc('Page Link') %]]</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><a href="./index.cgi?Page%20Link" title="\[% loc('Page Link') %]\]" target="_blank">Link text</a></td>
+            <td>"[% loc('Link text') %]" [[% loc('Page Link') %]]</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><u>[% loc('Page Link') %]</u> [% loc('to different-workspace') %]</td>
+            <td>{link: different-workspace [Page Title]} to different-workspace</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td>[% loc('Page section name') %]</td>
+            <td>{[% loc('section:Name}') %]</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><u>[% loc('Link to section') %]</u> [% loc('in the same page') %]</td>
+            <td>{[% loc('link: Section} (note: headings are sections too)') %]</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><u>Link to section</u> of a different page</td>
+            <td>{link: [Page Title] Section}</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><u>Link to section</u> of a page in another workspace</td>
+            <td>{link: another workspace [Page Title] Section}</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><a href="http://www.socialtext.com/" title="[external link]" target="_blank">http://www.socialtext.com/</a></td>
+            <td>http://www.socialtext.com/</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><a href="mailto:info@socialtext.com/" title="[email link]">info@socialtext.com</a></td>
+            <td>info@socialtext.com</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><a href="http://www.socialtext.com/" title="[external link]" target="_blank">Socialtext Home Page</a></td>
+            <td>"Socialtext Home Page"&lt;http://www.socialtext.com&gt;</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><a href="mailto:info@socialtext.com/" title="[email link]">Socialtext Email</a></td>
+            <td>"Socialtext Email"&lt;mailto:info@socialtext.com&gt;</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><img src="/static/skin/s2/images/logo-bar-12.gif" alt="[external image]" border="0"></td>
+            <td>&lt;http://www.socialtext.com/images/socialtext-140.gif&gt;</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><hr></td>
+            <td>----</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><ul><li> item 1 <ul><li> subitem 1 </li></ul></li><li> item 2 </li></ul></td>
+            <td>* item 1<br>** subitem 1<br>* item 2</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><ol><li> item 1 <ol><li> subitem 1 </li></ol></li><li> item 2 </li></ol></td>
+            <td># item 1<br>## subitem 1<br># item 2</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><h1>heading 1</h1></td>
+            <td>^ heading 1</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><h2>heading 2</h2></td>
+            <td>^^ heading 2</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><h3>heading 3</h3></td>
+            <td>^^^ heading 3</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><h4>heading 4</h4></td>
+            <td>^^^^ heading 4</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><h5>heading 5</h5></td>
+            <td>^^^^^ heading 5</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><h6>heading 6</h6></td>
+            <td>^^^^^^ heading 6</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><img src="/static/skin/s2/images/logo-bar-12.gif" alt=" [image attachment]" border="0"></td>
+            <td>{image: logo-bar-12.gif} (image attached to page)</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><img src="/static/skin/s2/images/logo-bar-12.gif" alt="[image attachment]" border="0"></td>
+            <td>{image: workspace [page name] logo-bar-12.gif} (image attached to a page in another workspace)</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><a href="./proposal.pdf">proposal.pdf</a> on this page</td>
+            <td>{file: proposal.pdf} on this page</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><a href="./proposal.pdf">proposal.pdf</a> on <u>page name</u></td>
+            <td>{file: [page name] proposal.pdf} - [page name]</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td>My Weblog weblog</td>
+            <td>{weblog: My Weblog}</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td>Meeting notes category</td>
+            <td>{category: Meeting Notes}</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td>Yahoo user yahoouser presence</td>
+            <td>Yahoo user ymsgr:yahoouser presence</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td>AOL user aimuser presence</td>
+            <td>AOL user aim:aimuser presence</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td>Block of HTML</td>
+            <td>.html<br>&lt;img src="http://mysite.com/offsite.jpg"&gt;<br>.html</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td>Block of text with no *special* punctuation</td>
+            <td>.pre<br>Block of text with no *special* punctuation<br>.pre</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td><sup>™</sup></td>
+            <td>{tm}</td>
+        </tr> 
+        <tr class="st-refcard-table-row">
+            <td>*this text is not bold*</td>
+            <td>{{*this text is not bold*}}</td>
+        </tr> 
+    </table>
+    <div class="buttons">
+        <input id="st-ref-card-close" type="button" value="[% loc('Close') %]"/>
+    </div>
+</div>

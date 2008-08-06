@@ -1,0 +1,36 @@
+| *Comment* | STARTING Test case: Tag Cloud Widget |  |
+
+* Fixture: SocialWidgets
+
+| set | workspace | test-data |
+
+| open_ok | /?dashboard | 60000 |
+| st-empty-container |  |  |
+| pause | 2000 |  |
+| *Comment* | Test Case: Tag Cloud Widget |  |
+| st-add-widget | gadgets/share/gadgets/tag_cloud.xml | tag_cloud |
+| st_wait_for_widget_load | tag_cloud | 45000 |
+| pause | 10000 |  |
+| st-select-widget-frame | tag_cloud |  |
+| text_like | //body | Socialtext |
+| text_like | //body | weblog |
+| text_like | %%tag_cloud%%-content | Style |
+| text_like | %%tag_cloud%% | Guide |
+| text_like | %%tag_cloud%% | Top Page |
+| text_like | %%tag_cloud%% | Project |
+| text_like | %%tag_cloud%% | Dakota |
+| text_like | %%tag_cloud%% | Help |
+| st-widget-settings | tag_cloud |  |
+| select_ok | input_%%tag_cloud%% | test-data |
+| click_ok | st-savebutton |  |
+| st-select-widget-frame | one_page |  |
+| wait_for_elment_present_ok | link=Calculator | 30000 |
+| wait_for_element_present_ok | link=Jabber | 1000 |
+| wait_for_element_present_ok | link=mortgage | 500 |
+| wait_for_element_present_ok | link=carroll | 200 |
+| wait_for_element_present_ok | link=carroll's poem | 100 |
+| wait_for_element_present_ok | link=my next thirty years | 50 |
+| select-frame | relative=parent |  |
+| st-empty-container |  |  |
+
+| *Comment* | Test Case: Tag Cloud Widget COMPLETED |

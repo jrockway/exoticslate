@@ -74,6 +74,7 @@ sub _maybe_fetch {
     sub render {
         my $self = shift;
         my %p = validate( @_, $spec );
+        warn "TEMPLATE=$p{template}\n";
         Socialtext::Timer->Continue('tt2_render');
 
         if (! defined $p{vars}{loc} ) {$p{vars}{loc} = \&loc;}

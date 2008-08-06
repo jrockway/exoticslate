@@ -1,0 +1,141 @@
+Test case for `/data/people/:pname/watchlist` (GET and POST).
+
+* Fixture: SocialRest
+
+| *Comment* | set up the test users |
+| set | username1 | %%start_time%%-1 |
+| set | username2 | %%start_time%%-2 |
+| set | email1 | %%username1%%@ken.socialtext.com |
+| set | email2 | %%username2%%@ken.socialtext.com |
+| st-admin | create-user --username %%username1%% --email %%email1%% --password d3vnu11l |
+| st-admin | create-user --username %%username2%% --email %%email2%% --password d3vnu11l |
+| get     | /data/people/%%username1%% | |
+| code-is   | 200                    | |
+| set-from-content | user_id1 | qr/"id":"(\d+)"/ |
+| get     | /data/people/%%username2%% | |
+| code-is   | 200                    | |
+| set-from-content | user_id2 | qr/"id":"(\d+)"/ |
+
+| Comment | Set us up as user 1 |
+| http-user-pass | %%username1%% | d3vnu11l |
+
+Sunny day:
+
+| Comment | Fresh user watches nobody (username) |
+| get | /data/people/%%username1%%/watchlist |
+| code-is | 200 |
+| body-is | [] |
+| Comment | Fresh user watches nobody (system_unique_id) |
+| get | /data/people/%%user_id1%%/watchlist |
+| code-is | 200 |
+| body-is | [] |
+
+
+| Comment | Watch a person (username) |
+| post | /data/people/%%username1%%/watchlist | Content-Type=application/json | {"person":{"id":%%user_id2%%}} |
+| code-is | 204 |
+| get | /data/people/%%username1%%/watchlist |
+| code-is | 200 |
+| body-is | [{"best_full_name":"%%username2%%","id":"%%user_id2%%"}] |
+| Comment | Unwatch a person (username) |
+| delete  | /data/people/%%username1%%/watchlist/%%username2%% |
+| code-is | 204 |
+| get | /data/people/%%username1%%/watchlist |
+| code-is | 200 |
+| body-is | [] |
+
+| Comment | Watch a person (user_id) |
+| post | /data/people/%%user_id1%%/watchlist | Content-Type=application/json | {"person":{"id":%%user_id2%%}} |
+| code-is | 204 |
+| get | /data/people/%%user_id1%%/watchlist |
+| code-is | 200 |
+| body-is | [{"best_full_name":"%%username2%%","id":"%%user_id2%%"}] |
+| Comment | Unwatch a person (user_id) |
+| delete  | /data/people/%%user_id1%%/watchlist/%%user_id2%% |
+| code-is | 204 |
+| get | /data/people/%%user_id1%%/watchlist |
+| code-is | 200 |
+| body-is | [] |
+
+| Comment | Watch a person (email) |
+| post | /data/people/%%email1%%/watchlist | Content-Type=application/json | {"person":{"id":%%user_id2%%}} |
+| code-is | 204 |
+| get | /data/people/%%email1%%/watchlist |
+| code-is | 200 |
+| body-is | [{"best_full_name":"%%username2%%","id":"%%user_id2%%"}] |
+| Comment | Unwatch a person (email) |
+| delete  | /data/people/%%email1%%/watchlist/%%email2%% |
+| code-is | 204 |
+| get | /data/people/%%email1%%/watchlist |
+| code-is | 200 |
+| body-is | [] |
+
+| Comment | Get someone else's watchlist |
+| get     | /data/people/%%user_id2%%/watchlist    |
+| code-is | 200                          |
+| body-is | []                           |
+
+Rainy day tests
+
+| Comment | Person watches themself |
+| post | /data/people/%%username1%%/watchlist | Content-Type=application/json | {"person":{"id":%%user_id1%%}} |
+| code-is | 409 |
+| body-like | You cannot add yourself to your watchlist |
+| get | /data/people/%%username1%%/watchlist |
+| code-is | 200 |
+| body-is | [] |
+
+| Comment | Watch a person twice |
+| post | /data/people/%%username1%%/watchlist | Content-Type=application/json | {"person":{"id":%%user_id2%%}} |
+| code-is | 204 |
+| post | /data/people/%%username1%%/watchlist | Content-Type=application/json | {"person":{"id":%%user_id2%%}} |
+| code-is | 409 |
+| body-like | This watchlist already has person '%%user_id2%%' |
+| get | /data/people/%%username1%%/watchlist |
+| code-is | 200 |
+| body-is | [{"best_full_name":"%%username2%%","id":"%%user_id2%%"}] |
+
+| Comment | un-watch a person twice |
+| delete  | /data/people/%%username1%%/watchlist/%%username2%% |
+| code-is | 204 |
+| delete  | /data/people/%%username1%%/watchlist/%%username2%% |
+| code-is | 409 |
+| body-like | This profile does not have tag '%%user_id2%%' |
+| get | /data/people/%%username1%%/watchlist |
+| code-is | 200 |
+| body-is | [] |
+
+| Comment | Modify someone else's watchlist |
+| post | /data/people/%%username2%%/watchlist | Content-Type=application/json | {"person":{"id":%%user_id1%%}} |
+| code-is | 403 |
+| body-like | User not authorized |
+| get | /data/people/%%username2%%/watchlist |
+| code-is | 200 |
+| body-is | [] |
+
+| Comment | get an invalid person's watchlist |
+| get | /data/people/99999/watchlist |
+| code-is | 400 |
+| body-like | Profile not found: 99999 |
+
+| Comment | Modify an invalid person's watchlist |
+| set | invalid_user | invalid-user-%%start_time%% |
+| post | /data/people/%%invalid_user%%/watchlist | Content-Type=application/json | {"person":{"id":%%user_id1%%}} |
+| code-is | 400 |
+| body-like | Profile not found: %%invalid_user%% |
+| post | /data/people/99999/watchlist | Content-Type=application/json | {"person":{"id":%%user_id1%%}} |
+| code-is | 400 |
+| body-like | Profile not found: 99999 |
+
+| Comment | PUT and DELETE a watchlist |
+| put | /data/people/%%username1%%/watchlist |
+| code-is | 405 |
+| delete | /data/people/%%username%%/watchlist |
+| code-is | 405 |
+
+| Comment | Un-authenticated user tests |
+| http-user-pass | | |
+| get | /data/people/%%username1%% |
+| code-is | 401 |
+| post | /data/people/%%username1%%/watchlist | Content-Type=application/json | {"person":{"id":%%user_id2%%}} |
+| code-is | 401 |

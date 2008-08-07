@@ -85,8 +85,10 @@ Test set up:
 | comment | get list of all workspaces |  |
 | get | /data/workspaces | application/json |
 | code-is | 200 |
-| body-like | {"name":"test-data","title":"%%title%%" |  |
-| body-like | {"name":"%%wksp%%","title":"W%%start_time%%" |  |
+| body-like | {"name":"test-data" |  |
+| body-like | "title":"%%title%%" |  |
+| body-like | {"name":"%%wksp%%" |  |
+| body-like | "title":"W%%start_time%%" |  |
 
 These tests are from "Story: Add Backlink to IBM Lotus Connections via REST"<https://www2.socialtext.net/dev-tasks/index.cgi?story_add_backlink_to_ibm_lotus_connections_via_rest>.
 

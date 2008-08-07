@@ -11,12 +11,13 @@ use Test::Socialtext::Bootstrap::OpenLDAP;
 use Test::Socialtext tests => 19;
 
 ###############################################################################
-# FIXTURE: foobar_no_pages
+# FIXTURE: foobar
 #
-# Need to have the "foobar" workspace available, but don't need any pages in
-# it.
+# Need a test workspace available, and we'll choose "foobar" for no real
+# reason.
 ###############################################################################
-fixtures( 'foobar_no_pages' );
+our $TEST_WORKSPACE = 'foobar';
+fixtures( $TEST_WORKSPACE );
 
 ###############################################################################
 # What happens if we have a user in an LDAP store and then take away that data
@@ -46,8 +47,8 @@ disappearing_ldap_user_store: {
     $appconfig->write();
     is $appconfig->user_factories(), $user_factories, 'user_factories set to LDAP first, then Default';
 
-    # instantiate the user, and add them to the "foobar" workspace.
-    my $ws = Socialtext::Workspace->new( name => 'foobar' );
+    # instantiate the user, and add them to the test workspace.
+    my $ws = Socialtext::Workspace->new( name => $TEST_WORKSPACE );
     isa_ok $ws, 'Socialtext::Workspace', 'found workspace to test with';
 
     my $user = Socialtext::User->new( username => 'John Doe' );
@@ -57,7 +58,7 @@ disappearing_ldap_user_store: {
     $ws->add_user( user => $user );
     pass 'added the user to the workspace';
 
-    # enumerate the users in the "foobar" workspace; one of them should be an
+    # enumerate the users in the test workspace; one of them should be an
     # "LDAP" user.
     my $cursor  = $ws->users_with_roles();
     my @entries = map { $_->[0] } $cursor->all();
@@ -80,8 +81,8 @@ disappearing_ldap_user_store: {
     $appconfig->write();
     ok $appconfig->is_default('user_factories'), 'user_factories returned to default value';
 
-    # enumerate the users in the "foobar" workspace again; we should still be
-    # able to do so, but now the user from the LDAP store is a "Deleted" user.
+    # enumerate the users in the test workspace again; we should still be able
+    # to do so, but now the user from the LDAP store is a "Deleted" user.
     $cursor  = $ws->users_with_roles();
     @entries = map { $_->[0] } $cursor->all();
     ok @entries, 'got list of users in the workspace';

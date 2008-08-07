@@ -143,10 +143,12 @@ $(function() {
             }, 500);
         })
         .lookahead({
-            submitOnClick: true,
             url: '/data/workspaces/' + Socialtext.wiki_id + '/tags',
             linkText: function (i) {
                 return [i.name, i.name];
+            },
+            onAccept: function (val) {
+                Page.addTag(val);
             }
         });
             
@@ -155,6 +157,7 @@ $(function() {
         .bind('submit', function () {
             var tag = $('#st-tags-field').val();
             Page.addTag(tag);
+            return false;
         });
 
     $('#st-attachments-uploadbutton').click(function () {

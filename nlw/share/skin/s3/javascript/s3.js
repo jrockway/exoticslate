@@ -136,7 +136,7 @@ $(function() {
         })
 
     $('#st-tags-field')
-        .bind('blur', function () {
+        .blur(function () {
             setTimeout(function () {
                 $('#st-tags-field').hide();
                 $('#st-tags-addlink').show()

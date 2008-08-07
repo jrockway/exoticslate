@@ -44,7 +44,6 @@
             $(this)
                 .attr('autocomplete', 'off')
                 .unbind('keyup')
-                .unbind('blur')
                 .keyup(function() {
                     $.fn.lookahead.onchange(this, opts);
                     return false;

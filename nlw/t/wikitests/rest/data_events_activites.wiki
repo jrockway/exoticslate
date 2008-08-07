@@ -1,29 +1,142 @@
 Test case to test `/data/events/activities/:user`
 
+* clean out the events
+* create a pre-canned set of events to test against
+** some that we know are goign to be in the results
+*** user has contributed to a page recently
+*** user has changed their profile recently
+** some that we know *aren't* going to be in the results
+* get the activities list for the user
+* check: got the right number of events
+* check: contains the events we knew we wanted
+* check: doesn't contain the events we know we don't want
+
 * Fixture: SocialRest
 
 This test case assumes a logged in user.
 
 | comment | STARTING Test case: REST event activites | |
 
-| st-clear-events | | |
-| get | /data/events/activities/3 | |
-| code-is | 200 | |
-| body-like | [] | |
-| post | /data/events | Content-Type=application/json | { "event_class":"person", "action":"edit_save", "person": { "id":"3"}, "actor": {"id":"3"}, "context":{ "change_set":""}} |
-| code-is | 201 | |
-| get | /data/events/activities/3 | |
-| code-is | 200 | |
-| body-like | "action":"edit_save" | |
-- clean out the events
-- create a pre-canned set of events to test against
-    - some that we know are goign to be in the results
-        - user has contributed to a page recently
-        - user has changed their profile recently
-    - some that we know *aren't* going to be in the results
-- get the activities list for the user
-- check: got the right number of events
-- check: contains the events we knew we wanted
-- check: doesn't contain the events we know we don't want
+| comment | set up fixture |
+| st-clear-events | |
 
-- cleanup
+| comment   | check that we're starting clean                 |
+| get       | /data/events                                    |
+| code-is   | 200                                             |
+| body-like | []                                              |
+
+| comment   | no activities yet                               |
+| get       | /data/events/activities/devnull1@socialtext.com |
+| code-is   | 200                                             |
+| body-like | []                                              |
+
+| comment | post a person event | . | .. |
+| post-json | /data/events | {"event_class":"person", "action":"edit_save", "person":{"id":"3"}, "context":{"testkey":"1"}} |
+| code-is | 201 |  |  |
+
+| comment | check that we get the one event | . | .. |
+| get | /data/events/activities/3 | |
+| code-is | 200 | |
+| json-parse | |
+| json-array-size | == | 1 |
+| body-like | "event_class":"person" | |
+| body-like | "action":"edit_save" | |
+| body-like | qr/"person":[^}]+"id":"3"/ | |
+| body-like | qr/"actor":[^}]+"id":"3"/ | |
+| body-like | "testkey":"1" | |
+
+| comment | post an event by another user | . | .. |
+| post-json | /data/events | {"event_class":"person", "action":"edit_save", "actor":{"id":"3"}, "person":{"id":"1"}, "context":{"testkey":"2"}} |
+| code-is | 201 |  |  |
+| get | /data/events |  |  |
+| code-is | 200 |  |  |
+| json-parse |  |  |  |
+| json-array-size | == | 2 | |
+
+| comment | check that we still get the one event | . | .. |
+| get | /data/events/activities/3 | |
+| code-is | 200 | |
+| json-parse | |
+| json-array-size | == | 1 |
+| body-unlike | qr/"person":[^}]+"id":"1"/ | |
+| body-unlike | "testkey":"2" | |
+
+
+| comment | reset events |
+| st-clear-events | |
+
+| comment | post a person:tag_add event |  |  |
+| post-json | /data/events | {"event_class":"person", "action":"tag_add", "actor":{"id":"1"}, "person":{"id":"3"}, "tag_name":"foo", "context":{"testkey":"3"}} |
+| code-is | 201 |  |  |
+
+| comment | post a person:tag_delete event |  |  |
+| post-json | /data/events | {"event_class":"person", "action":"tag_delete", "actor":{"id":"1"}, "person":{"id":"3"}, "tag_name":"foo", "context":{"testkey":"4"}} |
+| code-is | 201 |  |  |
+
+| comment | post a person:watch_add event |  |  |
+| post-json | /data/events | {"event_class":"person", "action":"watch_add", "actor":{"id":"1"}, "person":{"id":"3"}, "context":{"testkey":"5"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"6"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event for another actor (filtered) |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"1"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"7"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:comment event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"comment", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"8"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:tag_add event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"comment", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"9"}, "tag_name":"sometag"} |
+| code-is | 201 |  |  |
+
+| comment | post a page:rename event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"comment", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"10", "target_page":{"id":"blah","workspace_name":"foobar"}}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:duplicate event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"comment", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"11", "target_page":{"id":"blah","workspace_name":"foobar"}}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:delete event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"comment", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"12"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_begin event (filtered) |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"comment", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"13"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_contention event (filtered) |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"comment", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"14"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:unknown event (filtered) |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"unknown", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"15"}} |
+| code-is | 201 |  |  |
+
+| comment | post a fake:fake event (filtered) |  |  |
+| post-json | /data/events | {"event_class":"fake", "action":"comment", "actor":{"id":"3"}, "context":{"testkey":"16"}} |
+| code-is | 201 |  |  |
+
+| comment         | check filtering of events                       | . | .. |
+| get             | /data/events/activities/devnull1@socialtext.com |   |    |
+| code-is         | 200                                             |   |    |
+| json-parse      |                                                 |   |    |
+| json-array-size | 9                                               |   |    |
+| body-like       | "testkey":"3"                                   |   |    |
+| body-like       | "testkey":"4"                                   |   |    |
+| body-like       | "testkey":"5"                                   |   |    |
+| body-like       | "testkey":"6"                                   |   |    |
+| body-unlike     | "testkey":"7"                                   |   |    |
+| body-like       | "testkey":"8"                                   |   |    |
+| body-like       | "testkey":"9"                                   |   |    |
+| body-like       | "testkey":"10"                                  |   |    |
+| body-like       | "testkey":"11"                                  |   |    |
+| body-like       | "testkey":"12"                                  |   |    |
+| body-unlike     | "testkey":"13"                                  |   |    |
+| body-unlike     | "testkey":"14"                                  |   |    |
+| body-unlike     | "testkey":"15"                                  |   |    |
+| body-unlike     | "testkey":"16"                                  |   |    |

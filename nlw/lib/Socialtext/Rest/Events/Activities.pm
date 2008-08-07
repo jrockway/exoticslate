@@ -22,7 +22,7 @@ sub get_resource {
     my @args;
     my $requester = $self->rest->user;
     my $where = <<ENDWHERE;
-(event_class = 'person' AND action = 'edit_save' AND person_id = ?) OR
+(event_class = 'person' AND action IN ('tag_add', 'edit_save') AND person_id = ?) OR
 (event_class = 'page' AND action IN ('edit_save', 'tag_add', 'comment', 'rename', 'duplicate', 'delete') AND actor_id = ?)
 ENDWHERE
     my $whereargs = [$userid, $userid];

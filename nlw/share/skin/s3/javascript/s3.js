@@ -165,7 +165,8 @@ $(function() {
             return false;
         });
 
-    $('#st-attachments-uploadbutton').click(function () {
+    $('#st-attachments-uploadbutton').unbind('click').click(function () {
+        $('#st-attachments-attach-list').html('').hide();
         $.showLightbox({
             content:'#st-attachments-attachinterface',
             close:'#st-attachments-attach-closebutton'
@@ -198,6 +199,7 @@ $(function() {
             );
 
             $('#st-attachments-attach-formtarget')
+                .unbind('load')
                 .bind('load', function () {
                     $('#st-attachments-attach-uploadmessage').html(
                         loc('Upload Complete')
@@ -211,6 +213,7 @@ $(function() {
                     Page.refreshAttachments(function () {
                         $('#st-attachments-attach-list')
                             .show()
+                            .html('')
                             .append(
                                 $('<span>')
                                     .attr(

@@ -14,13 +14,58 @@ BEGIN {
         plan 'skip_all';
     }
     else {
-        plan  tests => 26;
+        plan  tests => 42;
     }
 }
 
 BEGIN {
     use_ok( 'Socialtext::File' );
     use_ok( 'Socialtext::Image' );
+}
+
+CROP_EXTRA: {
+    my %test = (
+        "width > max_width" => {
+            width => 30, max_width => 20,
+            height => 15, max_height => 20,
+            exp_geometry => {
+                width => 20, height => 15,
+                x => 5, y => 0,
+            }
+        },
+        "height > max_height" => {
+            width => 15, max_width => 20,
+            height => 26, max_height => 20,
+            exp_geometry => {
+                width => 15, height => 20,
+                x => 0, y => 3
+            }
+        },
+        "width = max_width" => {
+            width => 20, max_width => 20,
+            height => 15, max_height => 20,
+            exp_geometry => {
+                width => 20, height => 15,
+                x => 0, y => 0
+            }
+        },
+        "height = max_height" => {
+            width => 15, max_width => 20,
+            height => 20, max_height => 20,
+            exp_geometry => {
+                width => 15, height => 20,
+                x => 0, y => 0
+            }
+        }
+    );
+    while (my ($name,$test) = each %test) {
+        my $exp_geometry = delete $test->{exp_geometry};
+        my %geometry = Socialtext::Image::crop_geometry(%$test);
+        is($exp_geometry->{x}, $geometry{x}, "x: $name");
+        is($exp_geometry->{y}, $geometry{y}, "y: $name");
+        is($exp_geometry->{width}, $geometry{width}, "width: $name");
+        is($exp_geometry->{height}, $geometry{height}, "height: $name");
+    }
 }
 
 PROPORTIONS: {

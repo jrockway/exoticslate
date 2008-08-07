@@ -302,9 +302,11 @@ function setup_wikiwyg() {
         return false;
     });
 
-    jQuery('#st-preview-button-link').click(function () {
-        return ww.preview_link_action();
-    });
+    jQuery('#st-preview-button-link')
+        .unbind('click')
+        .click(function () {
+            return ww.preview_link_action();
+        });
 
     if (window.wikiwyg_nlw_debug) {
         jQuery('#edit-wikiwyg-html-link').click( function() {
@@ -473,6 +475,7 @@ proto.preview_link_text = loc('Preview');
 proto.preview_link_more = loc('Edit More');
 
 proto.preview_link_action = function() {
+    console.log('preview_link_action');
     var preview = this.modeButtonMap[WW_PREVIEW_MODE];
     var current = this.current_mode;
 
@@ -480,24 +483,27 @@ proto.preview_link_action = function() {
     jQuery("#st-edit-mode-toolbar").hide();
 
     var self = this;
-    preview.onclick = this.button_disabled_func();
+    jQuery(preview)
+        .unbind('click')
+        .click(this.button_disabled_func());
     this.enable_edit_more = function() {
-        preview.onclick = function () {
-            if (jQuery("#st-page-boxes").is(":visible")) 
-                jQuery('#st-page-maincontent').css({ 'margin-right': '240px'});
-            self.switchMode(current.classname);
-            self.preview_link_reset();
-            return false;
-        }
+        jQuery(preview)
+            .unbind('click')
+            .click( function () {
+                console.log(arguments);
+                if (jQuery("#st-page-boxes").is(":visible")) 
+                    jQuery('#st-page-maincontent')
+                        .css({ 'margin-right': '240px'});
+                self.switchMode(current.classname);
+                self.preview_link_reset();
+                return false;
+            });
     }
     this.modeByName(WW_PREVIEW_MODE).div.innerHTML = "";
     this.switchMode(WW_PREVIEW_MODE)
     this.disable_button(current.classname);
 
-    if (window.wikiwyg_nlw_double_click_to_edit)
-        this.mode_objects[WW_PREVIEW_MODE].div.ondblclick = preview.onclick;
-
-    Element.setStyle('st-page-maincontent', {marginRight: '0px'});
+    jQuery('#st-page-maincontent').attr('marginRight', '0px');
     return false;
 }
 
@@ -508,9 +514,11 @@ proto.preview_link_reset = function() {
     jQuery("#st-edit-mode-toolbar").show();
 
     var self = this;
-    preview.onclick = function() {
-        return self.preview_link_action();
-    }
+    jQuery(preview)
+        .unbind('click')
+        .click( function() {
+            return self.preview_link_action();
+        });
 }
 
 proto.enable_button = function(mode_name) {
@@ -836,6 +844,8 @@ proto.enableLinkConfirmations = function() {
     for (var i = 0; i < links.length; i++) {
         if (links[i].id == 'st-cancel-button-link') continue;
         if (links[i].onclick) continue;
+        if (links[i].id == 'st-preview-button-link') continue;
+        if (links[i].id == 'st-edit-tips') continue;
         if (links[i].id == 'st-save-button-link') continue;
         if (links[i].id == 'st-edit-mode-uploadbutton') continue;
         if (links[i].id == 'st-edit-mode-tagbutton') continue;
@@ -1508,6 +1518,7 @@ proto.fromHtml = function(html) {
                 wikitext_mode.convertWikitextToHtml(
                     wikitext,
                     function(new_html) {
+                        console.log('from here');
                         self.wikiwyg.enable_edit_more();
                         self.div.innerHTML = new_html;
                         self.div.style.display = 'block';
@@ -1518,6 +1529,7 @@ proto.fromHtml = function(html) {
         );
     }
     else {
+        console.log('from there');
         this.wikiwyg.enable_edit_more();
         this.div.innerHTML = html;
         this.div.style.display = 'block';

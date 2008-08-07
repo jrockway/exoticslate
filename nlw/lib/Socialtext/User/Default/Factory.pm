@@ -1,8 +1,18 @@
 # @COPYRIGHT@
 package Socialtext::User::Default::Factory;
-
 use strict;
 use warnings;
+
+# allow for the system level account usernames to be exported; ST::User will
+# use them to short-circuit user lookups into here where applicable.
+use base qw(Exporter);
+our @EXPORT_OK;
+BEGIN {
+    @EXPORT_OK = qw(
+        $SystemUsername
+        $GuestUsername
+    );
+}
 
 use Socialtext::Exceptions qw( data_validation_error );
 
@@ -18,14 +28,6 @@ use Socialtext::UserMetadata;
 use Socialtext::User::Default;
 use Socialtext::MultiCursor;
 use Socialtext::l10n qw(loc);
-
-# allow for the system level account usernames to be exported; ST::User will
-# use them to short-circuit user lookups into here where applicable.
-use base qw(Exporter);
-our @EXPORT_OK = qw(
-    $SystemUsername
-    $GuestUsername
-);
 
 our $SystemUsername = 'system-user';
 our $SystemEmailAddress = 'system-user@socialtext.net';

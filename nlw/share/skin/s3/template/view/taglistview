@@ -30,19 +30,17 @@
     <h2 class="tableTitle">[% display_title | html %]</h2>
     <table class="dataTable">
       <tr>
-        <th width="1%"><input type="checkbox" /></th>
-        <th class="toggle"><div class="toggle">
-        </div></th>
-        <th class="sort">
-        </th>
+        <th>[% loc('Tag') %]</th>
+        <th>[% loc('Page Count') %]</th>
       </tr>
       [% FOREACH row = rows %]
         [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
-        <td><input name="category" value="[% row.display | html %]" type="checkbox" /></td>
-        <td colspan="2">
-          <a href="[% row.script_name %]?action=category_display;category=[% row.escaped %]">[% row.display | html %]</a>
-          [% row.page_count %]
-        </td>
+          <td>
+            <a href="[% row.script_name %]?action=category_display;category=[% row.escaped %]">[% row.display | html %]</a>
+          </td>
+          <td>
+            [% row.page_count %]
+          </td>
         </tr>
       [% END %]
     </table><!-- dataTable END -->

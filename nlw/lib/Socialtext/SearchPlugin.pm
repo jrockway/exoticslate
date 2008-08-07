@@ -237,12 +237,16 @@ sub _load_pages_for_hits {
         my ($workspace, $hit_hub)
             = $self->_load_hit_workspace_and_hub($workspace_name);
         my $wksp_pages = $pages{$workspace_name};
-        my $pages = Socialtext::Model::Pages->By_id(
-            hub              => $hit_hub,
-            workspace_id     => $workspace->workspace_id,
-            page_id          => [ keys %$wksp_pages ],
-            do_not_need_tags => 1,
-        );
+        my $pages = [];
+        eval {
+            $pages = Socialtext::Model::Pages->By_id(
+                hub              => $hit_hub,
+                workspace_id     => $workspace->workspace_id,
+                page_id          => [ keys %$wksp_pages ],
+                do_not_need_tags => 1,
+            );
+        };
+        warn $@ if $@;
 
         for my $page (@$pages) {
             my $page_hits = $wksp_pages->{$page->id};
@@ -290,13 +294,15 @@ sub _make_row {
         = $self->_load_hit_workspace_and_hub($hit->workspace_name);
 
     my $page_uri = $hit->page_uri;
-    my $page = $hit->{page} || Socialtext::Model::Pages->By_id(
-        hub          => $hit_hub,
-        workspace_id => $workspace->workspace_id,
-        page_id      => $page_uri,
-    );
-
-    return {} if $page->deleted;
+    my $page;
+    eval {
+        $page = $hit->{page} || Socialtext::Model::Pages->By_id(
+            hub          => $hit_hub,
+            workspace_id => $workspace->workspace_id,
+            page_id      => $page_uri,
+        );
+    };
+    return {} if !$page or $page->deleted;
 
     my $author = $page->last_edited_by;
     my $document_title = $page->title;

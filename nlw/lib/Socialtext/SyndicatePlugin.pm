@@ -292,6 +292,7 @@ sub _category_get_items {
         hub => $self->hub,
         tag => $tag,
         count => $count,
+        workspace_id => $self->hub->current_workspace->workspace_id,
     );
     return $pages;
 }
@@ -305,6 +306,7 @@ sub _changes_get_items {
         hub => $self->hub,
         count => $count,
         seconds => $days * 1440 * 60,
+        workspace_id => $self->hub->current_workspace->workspace_id,
     );
     return $pages;
 }

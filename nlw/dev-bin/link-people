@@ -35,6 +35,10 @@ my $people_mock = "$FindBin::Bin/../t/lib/Socialtext/People";
 unlink $people_mock;
 symlink "$people_dir/t/lib/Socialtext/People" => $people_mock;
 
+my $people_wikitests = "$FindBin::Bin/../t/wikitests/people";
+unlink $people_wikitests;
+symlink "$people_dir/t/wikitests/people" => $people_wikitests;
+
 chdir $people_dir;
 $Socialtext::System::SILENT_RUN = 1;
 shell_run("make");

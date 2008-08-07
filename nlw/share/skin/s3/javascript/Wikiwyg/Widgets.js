@@ -1132,11 +1132,9 @@ proto.hookLookaheads = function() {
     jQuery('#st-widget-section_name')
         .lookahead({
             url: function () {
-                var ws = jQuery('#st-widget-workspace_id').val() ||
-                         Socialtext.wiki_id;
-                var pg = jQuery('#st-widget-page_name') ||
-                         jQuery('#st-page-editing-pagename').val();
-                pg = nlw_name_to_id(pg);
+                var ws = jQuery('#st-widget-workspace_id').val() || Socialtext.wiki_id;
+                var pg = jQuery('#st-widget-page_name').val() || Socialtext.page_id;
+                pg = nlw_name_to_id(pg || '');
                 return '/data/workspaces/' + ws + '/pages/' + pg + '/sections';
             },
             linkText: function (i) { return i.name }
@@ -1145,11 +1143,9 @@ proto.hookLookaheads = function() {
     jQuery('#st-widget-image_name, #st-widget-file_name')
         .lookahead({
             url: function () {
-                var ws = jQuery('#st-widget-workspace_id').val() ||
-                         Socialtext.wiki_id;
-                var pg = jQuery('#st-widget-page_name') ||
-                         jQuery('#st-page-editing-pagename').val();
-                pg = nlw_name_to_id(pg);
+                var ws = jQuery('#st-widget-workspace_id').val() || Socialtext.wiki_id;
+                var pg = jQuery('#st-widget-page_name').val() || Socialtext.page_id;
+                pg = nlw_name_to_id(pg || '');
                 return '/data/workspaces/' + ws + '/pages/' + pg +
                        '/attachments';
             },

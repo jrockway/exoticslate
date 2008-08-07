@@ -8,8 +8,6 @@ Test case for `/data/events`(GET and POST).
 | code-is | 200 |
 | body-like | [] |
 
-
-^ Foo
 | Comment | POST a few events |
 | post | /data/events | Content-Type=application/json | {"actor":{"id":1},"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
 | code-is | 201 |
@@ -128,6 +126,17 @@ Test case for `/data/events`(GET and POST).
 | body-unlike | "id":"meeting_agendas" |
 | body-unlike | "id":"announcements_and_links" |
 
+| *Comment* | Actor defaults to logged-in user |
+| st-clear-events | |
+| post | /data/events | Content-Type=application/json | {"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
+| code-is | 201 |
+| get | /data/people/%%username%% |
+| code-is | 200 |
+| set-from-content | actor_id | qr/"id":"(\d+)"/ |
+| get | /data/events?limit=1 |
+| code-is | 200 |
+| body-like | qr/"actor":{[^}]+"id":"%%actor_id%%"/ |
+
 | *Comment* | Posting with missing parameters |
 | post | /data/events | Content-Type=application/json | {"actor":{"id":1},"action":"tag_add","person":{"id":2},"tag_name":"downer"} |
 | code-is | 400 |
@@ -135,9 +144,6 @@ Test case for `/data/events`(GET and POST).
 | post | /data/events | Content-Type=application/json | {"actor":{"id":1},"event_class":"person","person":{"id":2},"tag_name":"downer"} |
 | code-is | 400 |
 | body-like | Missing required parameter 'action' |
-| post | /data/events | Content-Type=application/json | {"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
-| code-is | 400 |
-| body-like | Missing required parameter 'actor.id' |
 | post | /data/events | Content-Type=application/json | {"actor":{"id":1},"event_class":"person","action":"tag_add","tag_name":"downer"} |
 | code-is | 400 |
 | body-like | Missing required parameter 'person.id' |
@@ -160,4 +166,3 @@ Test case for `/data/events`(GET and POST).
 The following additional tests should be created:
 
 * POST an event using form data
-

@@ -168,6 +168,10 @@ Check that the return code is correct.
 sub code_is {
     my ($self, $code, $msg) = @_;
     $self->{http}->status_code_is($code);
+    if ($self->{http}->response->code != $code) {
+        warn "Response message: "
+            . ($self->{http}->response->message || 'None');
+    }
     if ($msg) {
         like $self->{http}->response->content(), $self->quote_as_regex($msg),
              "Status content matches";

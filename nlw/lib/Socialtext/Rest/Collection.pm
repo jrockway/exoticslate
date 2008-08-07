@@ -99,7 +99,7 @@ sub _make_getter {
             if ($except->isa('Socialtext::Exception::Auth')) {
                 return $self->not_authorized;
             } elsif ($except->isa('Socialtext::Exception::NoSuchWorkspace')) {
-                return $self->no_workspace;
+                return $self->no_workspace($except->{name});
             }
             else {
                 warn "Error in ST::Rest::Collection: $except";

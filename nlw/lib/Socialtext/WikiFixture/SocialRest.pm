@@ -7,6 +7,7 @@ use Test::HTTP;
 use Test::More;
 use Socialtext::WikiFixture::Socialtext;
 use Socialtext::SQL qw/sql_execute/;
+use Socialtext::JSON qw/decode_json/;
 
 =head1 NAME
 
@@ -170,7 +171,8 @@ sub code_is {
     $self->{http}->status_code_is($code);
     if ($self->{http}->response->code != $code) {
         warn "Response message: "
-            . ($self->{http}->response->message || 'None');
+            . ($self->{http}->response->message || 'None')
+            . " url(" . $self->{http}->request->url . ")";
     }
     if ($msg) {
         like $self->{http}->response->content(), $self->quote_as_regex($msg),
@@ -185,6 +187,18 @@ Post to the specified URI
 =cut
 
 sub post { shift->_call_method('post', @_) }
+
+=head2 post_json( uri, body )
+
+Post to the specified URI with header 'Content-Type=application/json'
+
+=cut
+
+sub post_json { 
+    my $self = shift;
+    my $uri = shift;
+    $self->post($uri, 'Content-Type=application/json', @_);
+}
 
 =head2 put( uri, headers, body )
 
@@ -239,6 +253,49 @@ Delete all people tags.
 sub st_delete_people_tags {
     sql_execute('DELETE FROM tag_people__person_tags');
     sql_execute('DELETE FROM person_tag');
+}
+
+=head2 json-parse
+
+Try to parse the body as JSON, remembering the result for additional tests.
+
+=cut
+
+sub json_parse {
+    my $self = shift;
+    $self->{json} = undef;
+    $self->{json} = eval { decode_json($self->{http}->response->content) };
+    ok !$@ && defined $self->{json} && ref($self->{json}) =~ /^ARRAY|HASH$/,
+        $self->{http}->name . " parsed content" . ($@ ? " \$\@=$@" : "");
+}
+
+=head2 json-array-size
+
+Confirm that the resulting body is a JSON array of length X.
+
+=cut
+
+sub json_array_size {
+    my $self = shift;
+    my $comparator = shift;
+    my $size = shift;
+
+    if ($size eq '') {
+        $size = $comparator;
+        $comparator = '==';
+    }
+
+    my $json = $self->{json};
+    if (not defined $json ) {
+        fail $self->{http}->name . " no json result";
+    }
+    elsif (ref($json) ne 'ARRAY') {
+        fail $self->{http}->name . " json result is not an array";
+    }
+    else {
+        cmp_ok scalar(@$json), $comparator, $size, 
+            $self->{http}->name . " array is expected size" ;
+    }
 }
 
 

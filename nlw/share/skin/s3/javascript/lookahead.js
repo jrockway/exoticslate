@@ -29,9 +29,6 @@
  *       onAccept: function (val) {
  *       }
  *
- *       // OPTIONAL: submit the input element form on click
- *       submitOnClick: true,
- *
  *    });
  */
 

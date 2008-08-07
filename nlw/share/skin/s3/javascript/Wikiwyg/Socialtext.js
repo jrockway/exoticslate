@@ -341,6 +341,15 @@ function setup_wikiwyg() {
         });
     });
 
+    jQuery('#st-tagqueue-field')
+        .lookahead({
+            submitOnClick: true,
+            url: '/data/workspaces/' + Socialtext.wiki_id + '/tags',
+            linkText: function (i) {
+                return [i.name, i.name];
+            }
+        });
+
     jQuery('#st-tagqueue').bind('submit', function () {
         var tag = jQuery('#st-tagqueue-field').val();
         jQuery('<input type="hidden" name="add_tag">')

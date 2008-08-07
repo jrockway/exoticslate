@@ -173,12 +173,10 @@ $(function() {
             }, 500);
         })
         .lookahead({
+            submitOnClick: true,
             url: '/data/workspaces/' + Socialtext.wiki_id + '/tags',
             linkText: function (i) {
                 return [i.name, i.name];
-            },
-            onClick: function () {
-                $('#st-tags-field').parent('form').submit();
             }
         });
             

@@ -1,3 +1,24 @@
+/*
+ * Lookahead implementation in jQuery
+ *
+ * Usage:
+ *
+ * jQuery('#my-input')
+ *    .lookahead({
+ *       // submit the input element form on click
+ *       submitOnClick: true,
+ *
+ *       // REST url to fetch the suggestion list from
+ *       url: '/data/workspaces',
+ *
+ *       // Function called on each list item which turns the item hash
+ *       // into an array containing the link title and value
+ *       linkText: function (item) {
+ *           return [ item.title, item.value ];
+ *       }
+ *    });
+ */
+
 (function($){
     var opts;
 
@@ -62,8 +83,8 @@
                                 .html(lt[0])
                                 .click(function () {
                                     jQuery(input).val(lt[1]);
-                                    if (opts.onClick) {
-                                        opts.onClick(lt[1]);
+                                    if (opts.submitOnClick) {
+                                        jQuery(input).parent('form').submit();
                                     }
                                     return false;
                                 })

@@ -106,11 +106,11 @@ This test case assumes a logged in user.
 | code-is | 201 |  |  |
 
 | comment | post a page:edit_begin event (filtered) |  |  |
-| post-json | /data/events | {"event_class":"page", "action":"comment", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"13"}} |
+| post-json | /data/events | {"event_class":"page", "action":"edit_begin", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"13"}} |
 | code-is | 201 |  |  |
 
 | comment | post a page:edit_contention event (filtered) |  |  |
-| post-json | /data/events | {"event_class":"page", "action":"comment", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"14"}} |
+| post-json | /data/events | {"event_class":"page", "action":"edit_contention", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"14"}} |
 | code-is | 201 |  |  |
 
 | comment | post a page:unknown event (filtered) |  |  |
@@ -125,10 +125,10 @@ This test case assumes a logged in user.
 | get             | /data/events/activities/devnull1@socialtext.com |   |    |
 | code-is         | 200                                             |   |    |
 | json-parse      |                                                 |   |    |
-| json-array-size | 9                                               |   |    |
+| json-array-size | 7                                               |   |    |
 | body-like       | "testkey":"3"                                   |   |    |
-| body-like       | "testkey":"4"                                   |   |    |
-| body-like       | "testkey":"5"                                   |   |    |
+| body-unlike       | "testkey":"4"                                   |   |    |
+| body-unlike       | "testkey":"5"                                   |   |    |
 | body-like       | "testkey":"6"                                   |   |    |
 | body-unlike     | "testkey":"7"                                   |   |    |
 | body-like       | "testkey":"8"                                   |   |    |

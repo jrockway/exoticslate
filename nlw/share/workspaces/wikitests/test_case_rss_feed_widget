@@ -1,0 +1,38 @@
+| *Comment* | STARTING Test case: RSS Feed Widget |  |
+
+* Fixture: SocialWidgets
+
+| set | workspace | test-data |
+
+| open_ok | /?dashboard | 60000 |
+| st-empty-container |  |  |
+| st-add-widget | gadgets/share/gadgets/rss.xml | rss_feed |
+| st_wait_for_widget_load | rss_feed | 45000 |
+| pause | 10000 |  |
+| st-widget-settings | rss_feed |  |
+| type_ok | up_rss_feed | http://use.perl.org/~heusserm/journal/rss |
+| click_ok | st-savebutton |  |
+| st-select-widget-frame | rss_feed |  |
+| wait_for_element_present_ok | link=Agile Project Management | 30000 |
+| wait_for_element_present_ok | link=Emerson | 3000 |
+| wait_for_element_present_ok | link=... | 3000 |
+| text_like | //body | the new Highsmith book |
+| text_unlike | //body | the book is best framed as an introduction to agile methods for people only familiar with |
+| select-frame | relative=parent |  |
+
+--{bz 873} makes these tests fail. Commented out.
+--| st-widget-settings | rss_feed | |
+--| select_ok | up_max_desc | Unlimited |
+--| click_ok | st-savebutton | |
+--| pause | 20000 |
+--| st-select-widget-frame | rss_feed | |
+--| wait_for_element_present_ok | link=Agile Project Management | 30000 |
+--| wait_for_element_present_ok | link=Emerson | 3000 |
+--| wait_for_element_present_ok | link=... | 3000 |
+--| text_like | //body | the new Highsmith book |
+--| text_like | //body | the book is best framed as an introduction to agile methods for people only familiar with |
+--| select-frame | relative=parent | |
+
+| st-empty-container |  |  |
+
+| *Comment* | Test Case: RSS Feed Widget |

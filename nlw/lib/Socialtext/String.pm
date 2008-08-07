@@ -17,7 +17,7 @@ Returns an HTML-escaped version of the I<$str>, replacing '<', '>',
 =cut
 
 sub html_escape {
-    return HTML::Entities::encode_entities(shift, '<>&"');
+    return HTML::Entities::encode_entities(shift, q/<>&"'/);
 }
 
 =head2 html_unescape( $str )

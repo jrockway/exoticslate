@@ -8,7 +8,7 @@ use Socialtext::LDAP;
 use Socialtext::LDAP::Config;
 use Socialtext::Workspace;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 20;
+use Test::Socialtext tests => 19;
 
 ###############################################################################
 # FIXTURE: foobar_no_pages
@@ -94,5 +94,5 @@ disappearing_ldap_user_store: {
     is $deleted_users[0]->user_id, $user->user_id, '... ... our test user';
 
     # cleanup; purge the test user from the system.
-    ok $user->delete(force=>1), '... removed test user from DB';
+    $user->delete(force=>1);
 }

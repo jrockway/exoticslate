@@ -317,7 +317,7 @@ CREATE TABLE "storage" (
     datatype varchar(10)
 );
 
-CREATE TABLE tag (
+CREATE TABLE person_tag (
     id integer NOT NULL,
     name text
 );
@@ -418,9 +418,12 @@ ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT tag_people__person_tags_pkey
             PRIMARY KEY (person_id, tag_id);
 
-ALTER TABLE ONLY tag
+ALTER TABLE ONLY person_tag
     ADD CONSTRAINT tag_pkey
             PRIMARY KEY (id);
+
+CREATE UNIQUE INDEX "person_tag__name"
+            ON person_tag (name);
 
 CREATE UNIQUE INDEX "Account___name"
 	    ON "Account" (name);
@@ -623,7 +626,7 @@ ALTER TABLE ONLY person_watched_people__person
 ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT tag_people_fk
             FOREIGN KEY (tag_id)
-            REFERENCES tag(id);
+            REFERENCES person_tag(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY "UserWorkspaceRole"
     ADD CONSTRAINT userworkspacerole___role___role_id___role_id___n___1___1___0

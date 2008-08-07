@@ -69,6 +69,16 @@ CREATE INDEX ix_event_tag
 	    ON event (tag_name, at)
             WHERE (event_class = 'page' OR event_class = 'person');
 
+ALTER TABLE tag_people__person_tags 
+    DROP CONSTRAINT tag_people_fk;
+
+RENAME TABLE tag RENAME TO person_tag;
+
+ALTER TABLE ONLY tag_people__person_tags
+    ADD CONSTRAINT tag_people_fk
+            FOREIGN KEY (tag_id)
+            REFERENCES person_tag(id) ON DELETE CASCADE;
+
 DROP TABLE event_old;
 
 UPDATE "System"

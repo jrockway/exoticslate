@@ -12,14 +12,14 @@
 | st_wait_for_widget_load | tag_cloud | 45000 |
 | pause | 10000 |  |
 | st-select-widget-frame | tag_cloud |  |
-| text_like | //body | Socialtext |
+| text_like | //body | socialtext |
 | text_like | //body | weblog |
-| text_like | %%tag_cloud%%-content | Style |
-| text_like | %%tag_cloud%% | Guide |
-| text_like | %%tag_cloud%% | Top Page |
-| text_like | %%tag_cloud%% | Project |
-| text_like | %%tag_cloud%% | Dakota |
-| text_like | %%tag_cloud%% | Help |
+| text_like | %%tag_cloud%%-content | style |
+| text_like | %%tag_cloud%% | guide |
+| text_like | %%tag_cloud%% | top Page |
+| text_like | %%tag_cloud%% | project |
+| text_like | %%tag_cloud%% | dakota |
+| text_like | %%tag_cloud%% | help |
 | st-widget-settings | tag_cloud |  |
 | select_ok | input_%%tag_cloud%% | test-data |
 | click_ok | st-savebutton |  |

@@ -233,7 +233,8 @@ Delete all people tags.
 =cut
 
 sub st_delete_people_tags {
-    sql_execute('DELETE FROM tag');
+    sql_execute('DELETE FROM tag_people__person_tags');
+    sql_execute('DELETE FROM person_tag');
 }
 
 

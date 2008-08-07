@@ -769,23 +769,22 @@ proto.insert_generated_image = function (widget_string, elem, cb) {
 
 proto.insert_real_image = function(widget, elem, cb) {
     var self = this;
-    Jemplate.Ajax.post(
-         location.pathname,
+    jQuery.get(
+        location.pathname,
         'action=preview' +
         ';wiki_text=' + encodeURIComponent(widget) +
-        ';page_name=' + encodeURIComponent(Page.page_id),
-        function(widget_html) {
-            var div = document.createElement("div");
-            div.innerHTML = widget_html;
-            var img = div.getElementsByTagName("img")[0];
-            if (img && img.src) {
-                self.insert_image(img.src, widget, elem, cb);
+        ';page_name=' + encodeURIComponent(Socialtext.page_id),
+        function(dom) {
+            var src = jQuery(dom.firstChild).children('img').attr('src');
+            if (src) {
+                self.insert_image(src, widget, elem, cb);
             }
             else {
                 self.insert_generated_image(widget,elem, cb);
             }
-        }
-    )
+        },
+        'xml'
+    );
 }
 
 proto.insert_image = function (src, widget, widget_element, cb) {
@@ -1224,6 +1223,7 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
     );
 
     jQuery('#st-widget-savebutton')
+        .unbind('click')
         .click(function() {
             var error = null;
             try {
@@ -1246,6 +1246,7 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
         });
 
     jQuery('#st-widget-cancelbutton')
+        .unbind('click')
         .click(function () {
             clearInterval(intervalId);
             jQuery.hideLightbox();

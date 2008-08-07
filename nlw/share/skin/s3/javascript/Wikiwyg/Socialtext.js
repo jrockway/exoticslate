@@ -1054,10 +1054,24 @@ proto._do_link = function(widget_element) {
         jQuery('#st-widget-page_title').val(Socialtext.page_title || "");
     }
 
-    var tmp = jQuery("#st-widget-workspace_id").val();
-    this.setup_add_a_link_lookahead(jQuery('#st-widget-link-dialog').get(0), dummy_widget);
-    jQuery('#st-widget-workspace_id').val(tmp);
+    var ws = jQuery('#st-widget-workspace_id').val() || Socialtext.wiki_id;
+    jQuery('#st-widget-page_title')
+        .lookahead({
+            url: function () {
+                var ws = jQuery('#st-widget-workspace_id').val() ||
+                         Socialtext.wiki_id;
+                return '/data/workspaces/' + ws + '/pages';
+            },
+            linkText: function (i) { return i.name }
+        });
 
+    jQuery('#st-widget-workspace_id')
+        .lookahead({
+            url: '/data/workspaces',
+            linkText: function (i) {
+                return [ i.title + ' (' + i.name + ')', i.name ];
+            }
+        });
 
     jQuery('#add-a-link-form')
         .unbind('reset')
@@ -1100,49 +1114,10 @@ proto._do_link = function(widget_element) {
     }
 }
 
-proto.setup_add_a_link_lookahead = function(dialog, widget) {
-    var cssSugestionWindow = 'st-widget-lookaheadsuggestionwindow';
-    var cssSuggestionBlock = 'st-widget-lookaheadsuggestionblock';
-    var cssSuggestionText  = 'st-widget-lookaheadsuggestion';
-
-    window.workspaceLookahead = new WorkspaceLookahead(
-        dialog,
-        'st-widget-workspace_id',
-        cssSugestionWindow,
-        cssSuggestionBlock,
-        cssSuggestionText,
-        'workspaceLookahead',
-        widget
-    );
-
-    window.pageLookahead = new PageNameLookahead(
-        dialog,
-        'st-widget-page_title',
-        cssSugestionWindow,
-        cssSuggestionBlock,
-        cssSuggestionText,
-        'pageLookahead',
-        widget
-    );
-
-    this.update_page_lookahead_workspace = function() {
-        var new_ws = jQuery('#st-widget-workspace_id').val() ||
-                     Socialtext.wiki_id;
-        if (new_ws != window.pageLookahead.defaultWorkspace) {
-            window.pageLookahead.defaultWorkspace = new_ws;
-        }
-    }
-
-    this.update_page_lookahead_workspace();
-}
-
 proto.load_add_a_link_focus_handlers = function(radio_id) {
     var self = this;
     jQuery('#' + radio_id + '-section input[type=text]').focus(function () {
         jQuery('#' + radio_id).attr('checked', true);
-        if (this.id == 'st-widget-page_title') {
-            self.update_page_lookahead_workspace();
-        }
     });
 }
 

@@ -115,35 +115,19 @@ Page = {
     }
 };
 
-var load_script = function(script_url) {
-    var script = $("<script>").attr({
-        type: 'text/javascript',
-        src: script_url
-    }).get(0);
-
-    if ($.browser.msie)
-        $(script).appendTo('head');
-    else
-        document.getElementsByTagName('head')[0].appendChild(script);
-};
-
-var load_ui = function(cb) {
-    var script_url =
-        nlw_make_s3_path("/javascript/socialtext-editor.js.gz")
-        .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time) ;
-
-    load_script( script_url ); 
-    var self = this;
-    var loader = function() {
-        // Test if it's fully loaded.
-        if (Socialtext.boostrap_ui_finished != true)  {
-            setTimeout(arguments.callee, 500);
-            return;
-        }
-        cb.call(self);
-    }
-    setTimeout(loader, 500);
-};
+function nlw_name_to_id(name) {
+    if (name == '')
+        return '';
+    return encodeURI(
+        name.replace(/[^A-Za-z0-9_+]/g, '_') /* For Safari, the similar regex below doesn't work in Safari */
+            .replace(/[^A-Za-z0-9_+\u00C0-\u00FF]/g, '_')
+            .replace(/_+/g, '_')
+            .replace(/^_*(.*?)_*$/g, '$1')
+            .replace(/^0$/, '_')
+            .replace(/^$/, '_')
+            .toLocaleLowerCase()
+    );
+}
 
 var push_onload_function = function (fcn) { $(fcn) }
 

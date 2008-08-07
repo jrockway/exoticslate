@@ -397,40 +397,40 @@ proto.attachWidgetHandlers = function(elem) {
     var self = this;
     jQuery(elem)
         .mouseover(function () {
-            this.attr('mouseover', 1);
-            this.attr('mouseout', 0);
+            this.setAttribute('mouseover', 1);
+            this.setAttribute('mouseout', 0);
         })
         .mouseout(function () {
-            this.attr('mouseover', 0);
-            this.attr('mouseout', 1);
+            this.setAttribute('mouseover', 0);
+            this.setAttribute('mouseout', 1);
         })
         .mousedown(function () {
-            this.attr('mousedown', 1);
-            this.attr('mouseup', 0);
+            this.setAttribute('mousedown', 1);
+            this.setAttribute('mouseup', 0);
         });
 
     if (! this.currentWidget) return;
     var id = this.currentWidget.id;
     if (widget_data[id] && widget_data[id].uneditable) {
         jQuery(elem).mouseup(function() {
-            jQuery(this).attr('mousedown', 0);
-            if (jQuery(this).attr('mouseup') == 0) {
+            this.setAttribute('mousedown', 0);
+            if (this.getAttribute('mouseup') == 0) {
                 if ( Wikiwyg.Widgets.widget_editing > 0 )
                     return;
                 alert(loc("This is not an editable widget. Please edit it in advanced mode."))
             }
-            jQuery(this).attr('mouseup', 1);
+            this.setAttribute('mouseup', 1);
         });
     }
     else {
         jQuery(elem).mouseup(function () {
-            jQuery(this).(mousedown, 0);
-            if ( jQuery(this).attr("mouseup") == 0 ) {
+            this.setAttribute('mousedown', 0);
+            if (this.getAttribute("mouseup") == 0 ) {
                 if ( Wikiwyg.Widgets.widget_editing > 0 )
                     return;
                 self.getWidgetInput(this, false, false);
             }
-            jQuery(this).attr('mouseup', 1);
+            this.setAttribute('mouseup', 1);
         });
     }
 }
@@ -492,7 +492,15 @@ proto.pullTitleFromServer = function (field, id, data) {
     var uri = Wikiwyg.Widgets.api_for_title[field];
     uri = uri.replace(new RegExp(":" + field), id);
 
-    var details = jQuery.getJSON(uri);
+    var details;
+    jQuery.ajax({
+        url: uri,
+        async: false,
+        dataType: 'json',
+        success: function (data) {
+            details = data;
+        }
+    });
     if (!(field in wikiwyg_widgets_title_lookup))
         wikiwyg_widgets_title_lookup[field] = {};
     wikiwyg_widgets_title_lookup[field][id] = details.title;
@@ -1053,123 +1061,100 @@ proto.require_spreadsheet_if_workspace = function(values) {
 }
 
 
-proto.hookLookaheads = function(dialog, widget) {
-    var cssSugestionWindow = 'st-widget-lookaheadsuggestionwindow';
-    var cssSuggestionBlock = 'st-widget-lookaheadsuggestionblock';
-    var cssSuggestionText = 'st-widget-lookaheadsuggestion';
+proto.hookLookaheads = function() {
+    var currentWidget = this.currentWidget;
+    jQuery('#st-widget-workspace_id')
+        .lookahead({
+            url: '/data/workspaces',
+            linkText: function (i) {
+                return [ i.title + ' (' + i.name + ')', i.name ];
+            },
+            onAccept: function () {
+                currentWidget.title_and_id.workspace_id.id = this.value;
+            }
+        })
+        .keyup( function () {
+            var which = this.value ? 'other' : 'current';
+            jQuery('*[name='+this.id+'-rb][value='+which+']')
+                .attr('checked', true);
+            currentWidget.title_and_id.workspace_id.id = this.value;
+        });
 
-    widget = widget || this.currentWidget;
+    jQuery('#st-widget-page_title')
+        .lookahead({
+            url: function () {
+                var ws = jQuery('#st-widget-workspace_id').val() ||
+                         Socialtext.wiki_id;
+                return '/data/workspaces/' + ws + '/pages';
+            },
+            args: {
+                pageType: 'wiki'
+            },
+            linkText: function (i) { return i.name }
+        });
 
-    if (jQuery('#st-widget-workspace_id').size()) {
-        window.workspaceLookahead = new WorkspaceLookahead(
-            dialog,
-            'st-widget-workspace_id',
-            cssSugestionWindow,
-            cssSuggestionBlock,
-            cssSuggestionText,
-            'workspaceLookahead',
-            widget
-        );
-    }
+    jQuery("#st-widget-spreadsheet_title")
+        .lookahead({
+            url: function () {
+                var ws = jQuery('#st-widget-workspace_id').val() ||
+                         Socialtext.wiki_id;
+                return '/data/workspaces/' + ws + '/pages';
+            },
+            args: {
+                pageType: 'spreadsheet'
+            },
+            linkText: function (i) { return i.name }
+        });
 
-    if (jQuery('#st-widget-page_title').size()) {
-        window.pageLookahead = new PageNameLookahead(
-            dialog,
-            'st-widget-page_title',
-            cssSugestionWindow,
-            cssSuggestionBlock,
-            cssSuggestionText,
-            'pageLookahead',
-            widget
-        );
-        window.pageLookahead.pageType = "wiki";
-        window.pageLookahead.defaultWorkspace = Socialtext.wiki_id;
-    }
+    jQuery('#st-widget-tag_name')
+        .lookahead({
+            url: function () {
+                var ws = jQuery('#st-widget-workspace_id').val() ||
+                         Socialtext.wiki_id;
+                return '/data/workspaces/' + ws + '/tags';
+            },
+            linkText: function (i) { return i.name }
+        });
 
-    jQuery("#st-widget-spreadsheet_title").each(function() {
-        window.pageLookahead = new PageNameLookahead(
-            dialog,
-            'st-widget-spreadsheet_title',
-            cssSugestionWindow,
-            cssSuggestionBlock,
-            cssSuggestionText,
-            'pageLookahead',
-            widget
-        );
-        window.pageLookahead.pageType = "spreadsheet";
-        window.pageLookahead.defaultWorkspace = Socialtext.wiki_id;
-    });
+    jQuery('#st-widget-weblog_name')
+        .lookahead({
+            url: function () {
+                var ws = jQuery('#st-widget-workspace_id').val() ||
+                         Socialtext.wiki_id;
+                return '/data/workspaces/' + ws + '/tags';
+            },
+            filter: function (val) {
+                return val + '.*(We)?blog$';
+            },
+            linkText: function (i) { return i.name }
+        });
 
-    if (jQuery('#st-widget-tag_name').size()) {
-        window.tagLookahead = new TagLookahead(
-            dialog,
-            'st-widget-tag_name',
-            cssSugestionWindow,
-            cssSuggestionBlock,
-            cssSuggestionText,
-            'tagLookahead',
-            widget
-        );
-        window.tagLookahead.defaultWorkspace = Socialtext.wiki_id;
-    }
+    jQuery('#st-widget-section_name')
+        .lookahead({
+            url: function () {
+                var ws = jQuery('#st-widget-workspace_id').val() ||
+                         Socialtext.wiki_id;
+                var pg = jQuery('#st-widget-page_name') ||
+                         jQuery('#st-page-editing-pagename').val();
+                pg = nlw_name_to_id(pg);
+                return '/data/workspaces/' + ws + '/pages/' + pg + '/sections';
+            },
+            linkText: function (i) { return i.name }
+        });
 
-    if (jQuery('#st-widget-weblog_name').size()) {
-        window.weblogLookahead = new WeblogLookahead(
-            dialog,
-            'st-widget-weblog_name',
-            cssSugestionWindow,
-            cssSuggestionBlock,
-            cssSuggestionText,
-            'weblogLookahead',
-            widget
-        );
-        window.weblogLookahead.defaultWorkspace = Socialtext.wiki_id;
-    }
-
-    if (jQuery('#st-widget-section_name').size()) {
-        window.sectionNameLookahead = new PageSectionLookahead(
-            dialog,
-            'st-widget-section_name',
-            cssSugestionWindow,
-            cssSuggestionBlock,
-            cssSuggestionText,
-            'sectionNameLookahead',
-            widget,
-            'st-widget-page_title'
-        );
-        window.sectionNameLookahead.defaultWorkspace = Socialtext.wiki_id;
-        window.sectionNameLookahead.defaultPagename = jQuery('#st-page-editing-pagename').val();
-    }
-
-    if (jQuery('#st-widget-image_name').size()) {
-        window.imageNameLookahead = new PageAttachmentLookahead(
-            dialog,
-            'st-widget-image_name',
-            cssSugestionWindow,
-            cssSuggestionBlock,
-            cssSuggestionText,
-            'imageNameLookahead',
-            widget,
-            'st-widget-page_title'
-        );
-        window.imageNameLookahead.defaultWorkspace = Socialtext.wiki_id;
-        window.imageNameLookahead.defaultPagename = jQuery('#st-page-editing-pagename').val();
-    }
-
-    if (jQuery('#st-widget-file_name').size()) {
-        window.fileNameLookahead = new PageAttachmentLookahead(
-            dialog,
-            'st-widget-file_name',
-            cssSugestionWindow,
-            cssSuggestionBlock,
-            cssSuggestionText,
-            'fileNameLookahead',
-            widget,
-            'st-widget-page_title'
-        );
-        window.fileNameLookahead.defaultWorkspace = Socialtext.wiki_id;
-        window.fileNameLookahead.defaultPagename = jQuery('#st-page-editing-pagename').val();
-    }
+    jQuery('#st-widget-image_name, #st-widget-file_name')
+        .lookahead({
+            url: function () {
+                var ws = jQuery('#st-widget-workspace_id').val() ||
+                         Socialtext.wiki_id;
+                var pg = jQuery('#st-widget-page_name') ||
+                         jQuery('#st-page-editing-pagename').val();
+                pg = nlw_name_to_id(pg);
+                return '/data/workspaces/' + ws + '/pages/' + pg +
+                       '/attachments';
+            },
+            linkText: function (i) { return i.name }
+        });
 }
 
 Wikiwyg.Widgets.widget_editing = 0;
@@ -1212,63 +1197,65 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
             content: '#widget-' + widget
         });
 
-        var self = this;
-        var form = jQuery('#widget-' + widget + ' form').get(0);
+    var self = this;
+    var form = jQuery('#widget-' + widget + ' form').get(0);
 
-        var intervalId = setInterval(function () {
-            jQuery('#'+widget+'_wafl_text')
-                .html(
-                    ' <span>' +
-                    self.create_wafl_string(widget, form).
-                        replace(/</g, '&lt;') +
-                    '</span> '
-                );
-        }, 500);
+    var intervalId = setInterval(function () {
+        jQuery('#'+widget+'_wafl_text')
+            .html(
+                ' <span>' +
+                self.create_wafl_string(widget, form).
+                    replace(/</g, '&lt;') +
+                '</span> '
+            );
+    }, 500);
 
-        jQuery('#st-widgets-moreoptions').toggle(
-            function () {
-                jQuery('#st-widgets-moreoptions')
-                    .html(loc('Fewer options'))
-                jQuery('#st-widgets-optionsicon')
-                    .attr('src', nlw_make_s2_path('/images/st/hide_more.gif'));
-                jQuery('#st-widgets-moreoptionspanel').show();
-            },
-            function () {
-                jQuery('#st-widgets-moreoptions')
-                    .html(loc('More options'))
-                jQuery('#st-widgets-optionsicon')
-                    .attr('src', nlw_make_s2_path('/images/st/show_more.gif'));
-                jQuery('#st-widgets-moreoptionspanel').hide();
+    jQuery('#st-widgets-moreoptions').toggle(
+        function () {
+            jQuery('#st-widgets-moreoptions')
+                .html(loc('Fewer options'))
+            jQuery('#st-widgets-optionsicon')
+                .attr('src', nlw_make_s2_path('/images/st/hide_more.gif'));
+            jQuery('#st-widgets-moreoptionspanel').show();
+        },
+        function () {
+            jQuery('#st-widgets-moreoptions')
+                .html(loc('More options'))
+            jQuery('#st-widgets-optionsicon')
+                .attr('src', nlw_make_s2_path('/images/st/show_more.gif'));
+            jQuery('#st-widgets-moreoptionspanel').hide();
+        }
+    );
+
+    jQuery('#st-widget-savebutton')
+        .click(function() {
+            var error = null;
+            try {
+                var widget_string = self['handle_widget_' + widget](form);
+                clearInterval(intervalId);
+                self.insert_widget(widget_string, widget_element, function () {
+                    jQuery.hideLightbox();
+                });
             }
-        );
-
-        jQuery('#st-widget-savebutton')
-            .click(function() {
-                var error = null;
-                try {
-                    var widget_string = self['handle_widget_' + widget](form);
-                    clearInterval(intervalId);
-                    self.insert_widget(widget_string, widget_element, function () {
-                        jQuery.hideLightbox();
-                    });
-                }
-                catch(e) {
-                    error = String(e);
-                    jQuery('#'+widget+'_widget_edit_error_msg')
-                        .show()
-                        .html('<span>'+error+'</span>');
-                    Wikiwyg.Widgets.widget_editing--;
-                    return false;
-                }
+            catch(e) {
+                error = String(e);
+                jQuery('#'+widget+'_widget_edit_error_msg')
+                    .show()
+                    .html('<span>'+error+'</span>');
                 Wikiwyg.Widgets.widget_editing--;
                 return false;
-            });
+            }
+            Wikiwyg.Widgets.widget_editing--;
+            return false;
+        });
 
-        jQuery('#st-widget-cancelbutton')
-            .click(function () {
-                clearInterval(intervalId);
-                jQuery.hideLightbox();
-            })
+    jQuery('#st-widget-cancelbutton')
+        .click(function () {
+            clearInterval(intervalId);
+            jQuery.hideLightbox();
+        });
+
+    this.hookLookaheads();
 
         // Grab the current selection and set it in the lightbox. uck
     var data = widget_data[widget];

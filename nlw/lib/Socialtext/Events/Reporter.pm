@@ -81,13 +81,31 @@ sub get_events {
     foreach my $eq_key (@QueryOrder) {
         next unless exists $opts{$eq_key};
         my $a = $opts{$eq_key};
-        if (defined $a) {
+        if ((defined $a) && (ref($a) eq "ARRAY")) {
+            my $placeholders = "(".join(",", map( "?", @$a)).")";
+            push @conditions, "e.$eq_key IN $placeholders";
+            push @args, @$a;
+        }
+        elsif (defined $a) {
             push @conditions, "e.$eq_key = ?";
             push @args, $a;
         }
         else {
             push @conditions, "e.$eq_key IS NULL";
         }
+    }
+
+    my $where = 'WHERE ';
+    if (my $w = $opts{where}) {
+        $where .= $w;
+        my $args=$opts{where_args};
+        push @args, @$args;
+    }
+    elsif (@conditions) {
+        $where .= join("\n  AND ", @conditions);
+    }
+    else {
+        $where = '';
     }
 
     my $limit = '';
@@ -99,14 +117,6 @@ sub get_events {
     if (my $o = $opts{offset}) {
         $offset = 'OFFSET ?';
         push @args, $o;
-    }
-
-    my $where = 'WHERE ';
-    if (@conditions) {
-        $where .= join("\n  AND ", @conditions);
-    }
-    else {
-        $where = '';
     }
 
     my $sql = <<EOSQL;
@@ -140,7 +150,6 @@ $where
 ORDER BY at DESC
 $limit $offset
 EOSQL
-
     my $sth = sql_execute($sql, @args);
     my $result = [];
     while (my $row = $sth->fetchrow_hashref) {

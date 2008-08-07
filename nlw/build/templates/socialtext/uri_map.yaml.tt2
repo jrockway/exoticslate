@@ -8,6 +8,12 @@
             '*/*':              [Socialtext::Rest::Events, POST_form]
             'application/json': [Socialtext::Rest::Events, POST_json]
         '*':                    [Socialtext::Rest::Events, bad_method]
+-
+    '/data/events/activities/:user':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::Events::Activities, GET_json]
+            'application/json': [Socialtext::Rest::Events::Activities, GET_json]
+        '*':                    [Socialtext::Rest::Events::Activities, bad_method]
 - 
     '/data/echo/:text':
         'GET':

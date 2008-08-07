@@ -106,7 +106,9 @@
                                 .html(title)
                                 .click(function () {
                                     jQuery(input).val(value);
-                                    opts.onAccept.call(input, value);
+                                    if (opts.onAccept) {
+                                        opts.onAccept.call(input, value);
+                                    }
                                     if (opts.submitOnClick) {
                                         jQuery(input).parent('form').submit();
                                         self.clearLookahead();

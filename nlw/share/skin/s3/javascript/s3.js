@@ -167,8 +167,19 @@ $(function() {
 
     $('#st-tags-field')
         .bind('blur', function () {
-            $(this).hide();
-            $('#st-tags-addlink').show()
+            setTimeout(function () {
+                $('#st-tags-field').hide();
+                $('#st-tags-addlink').show()
+            }, 500);
+        })
+        .lookahead({
+            url: '/data/workspaces/' + Socialtext.wiki_id + '/tags',
+            linkText: function (i) {
+                return [i.name, i.name];
+            },
+            onClick: function () {
+                $('#st-tags-field').parent('form').submit();
+            }
         });
             
 

@@ -41,6 +41,7 @@ S3_SOURCE_FILES= \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
 		$(S2_JAVASCRIPT)/loc.js \
 		cookie.js \
+		lookahead.js \
 		lightbox.js \
 		s3.js \
 
@@ -55,9 +56,6 @@ LIGHTBOX_SOURCE_FILES= \
 EDITOR_SOURCE_FILES= \
 		$(S2_JAVASCRIPT)/main.js \
 		$(S2_JAVASCRIPT)/md5.js \
-		LookaheadWidget.js \
-		WorkspaceLookahead.js \
-		PageNameLookahead.js \
 		Jemplate.js \
 		$(JEMPLATE_WIKIWYG_MODULE) \
 		$(ALL_JEMPLATE_PLUGINS) \

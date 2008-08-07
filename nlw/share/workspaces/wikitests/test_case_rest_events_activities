@@ -1,0 +1,29 @@
+Test case to test `/data/events/activities/:user`
+
+* Fixture: SocialRest
+
+This test case assumes a logged in user.
+
+| comment | STARTING Test case: REST event activites | |
+
+| st-clear-events | | |
+| get | /data/events/activities/3 | |
+| code-is | 200 | |
+| body-like | [] | |
+| post | /data/events | Content-Type=application/json | { "event_class":"person", "action":"edit_save", "person": { "id":"3"}, "actor": {"id":"3"}, "context":{ "change_set":""}} |
+| code-is | 201 | |
+| get | /data/events/activities/3 | |
+| code-is | 200 | |
+| body-like | "action":"edit_save" | |
+- clean out the events
+- create a pre-canned set of events to test against
+    - some that we know are goign to be in the results
+        - user has contributed to a page recently
+        - user has changed their profile recently
+    - some that we know *aren't* going to be in the results
+- get the activities list for the user
+- check: got the right number of events
+- check: contains the events we knew we wanted
+- check: doesn't contain the events we know we don't want
+
+- cleanup

@@ -1,6 +1,8 @@
 (function ($) {
 
 Page = {
+    attachmentList: [],
+
     pageUrl: function (page_name) {
         if (!page_name) page_name = Socialtext.page_id;
         return '/data/workspaces/' + Socialtext.wiki_id +
@@ -59,11 +61,13 @@ Page = {
         });
     },
 
-    refreshAttachments: function () {
+    refreshAttachments: function (cb) {
+        Page.attachmentList = [];
         $.getJSON( this.pageUrl() + '/attachments', function (list) {
             $('#st-attachment-listing').html('');
             for (var i=0; i< list.length; i++) {
                 var item = list[i];
+                Page.attachmentList.push(item.name);
                 $('#st-attachment-listing').append(
                     $('<li>').append(
                         $('<a>')
@@ -79,6 +83,7 @@ Page = {
                     )
                 )
             }
+            if (cb) cb();
         });
     },
 
@@ -203,7 +208,21 @@ $(function() {
                     $('#st-attachments-attach-closebutton').attr(
                         'disabled', false
                     );
-                    Page.refreshAttachments();
+                    Page.refreshAttachments(function () {
+                        $('#st-attachments-attach-list')
+                            .show()
+                            .append(
+                                $('<span>')
+                                    .attr(
+                                        'class',
+                                        'st-attachments-attach-listlabel'
+                                    )
+                                    .html(
+                                        loc('Uploaded files:') + 
+                                        Page.attachmentList.join(', ')
+                                    )
+                            );
+                    });
                     Page.refreshPageContent();
                 });
 

@@ -70,7 +70,7 @@
           <li><a id="st-wiki-subnav-link-weblogs" href="?action=weblog_display">[% loc("Weblogs") %]</a></li>
         </ul>
         <div id="workSpaceLink">
-          <a href="#">[% loc('Your Workspaces') %]</a>
+          <a href="?action=workspaces_listall">[% loc('Your Workspaces') %]</a>
         </div><!-- workSpaceLink END -->
       </div><!-- mainNav END -->
       <div id="st-display-mode-container" class="st-content">  	

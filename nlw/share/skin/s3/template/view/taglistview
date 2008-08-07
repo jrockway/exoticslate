@@ -31,7 +31,7 @@
     <table class="dataTable">
       <tr>
         <th>[% loc('Tag') %]</th>
-        <th>[% loc('Page Count') %]</th>
+        <th>[% loc('Pages') %]</th>
       </tr>
       [% FOREACH row = rows %]
         [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]

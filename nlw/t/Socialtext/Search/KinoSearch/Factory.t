@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Test::Socialtext tests => 5;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 BEGIN {
     use_ok( "Socialtext::Search::KinoSearch::Factory" );

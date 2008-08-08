@@ -8,7 +8,7 @@ BEGIN {
 }
 
 use Test::Socialtext;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 use Test::Socialtext::Search;
 use Socialtext::File;
 

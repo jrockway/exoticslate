@@ -1,0 +1,5 @@
+This migration will update data in the 'person' table to store people photos
+in the database.
+
+We will need to pull out the old data, update the table, insert the new
+data, then pull in all the various photos from around the web.

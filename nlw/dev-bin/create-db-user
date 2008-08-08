@@ -38,4 +38,4 @@ my $matches = $dbh->selectrow_array(
 
 # REVIEW: Can't bind here, AFAICT, because we don't really want a quoted
 # string.
-$dbh->do("CREATE USER $user WITH CREATEDB NOCREATEUSER") unless $matches;
+$dbh->do("CREATE USER $user WITH SUPERUSER") unless $matches;

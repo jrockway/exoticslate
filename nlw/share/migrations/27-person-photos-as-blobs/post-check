@@ -1,0 +1,24 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use Socialtext::SQL qw/sql_singlevalue/;
+
+# Basically stated, this query reads: what's the datatype of the person.photo
+# field?
+my $result = sql_singlevalue( <<EOSQL);
+SELECT count( a.attname )
+  FROM pg_attribute a 
+  JOIN pg_stat_user_tables ut ON ut.relid = a.attrelid
+ WHERE a.attname = 'photo_image'
+   AND ut.relname = 'person';
+EOSQL
+
+if ( $result == 1  ) {
+    print "It looks like your 'person' table is up to date.\n";
+    exit 0;
+}
+
+print "Migration failed!\n";
+exit 1;

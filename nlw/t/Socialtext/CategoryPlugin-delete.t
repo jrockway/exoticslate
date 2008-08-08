@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 use Test::Socialtext tests => 6;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 # The point of this test is to test page duplication without ever
 # loading the workspaces class

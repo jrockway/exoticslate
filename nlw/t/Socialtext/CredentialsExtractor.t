@@ -14,7 +14,7 @@ use Test::Socialtext;
 use Socialtext::AppConfig;
 use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
 
-fixtures('admin_no_pages'); # we need some users
+fixtures('admin'); # we need some users
 
 BEGIN {
     plan tests => 8;

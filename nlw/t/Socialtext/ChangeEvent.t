@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 use Test::Socialtext tests => 20;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 BEGIN {
     use_ok( 'Socialtext::ChangeEvent' );

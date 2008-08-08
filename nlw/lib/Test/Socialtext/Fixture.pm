@@ -20,6 +20,7 @@ use Socialtext::Schema;
 use Socialtext::Hub;
 use Socialtext::Pages;
 use Socialtext::User;
+use Socialtext::AppConfig;
 
 my $DefaultUsername = 'devnull1@socialtext.com';
 
@@ -100,7 +101,9 @@ sub _generate_base_config {
     local $ENV{ST_TEST_SKIP_DB_DUMP} = 1;
     my $s = Socialtext::Schema->new( verbose => 1);
     $s->recreate(no_dump => 1);
-    _system_or_die("psql -f " . $env->nlw_dir . "/etc/socialtext/db/dev.sql");
+
+    my $db_name = Socialtext::AppConfig->db_name();
+    _system_or_die("psql -f " . $env->nlw_dir . "/etc/socialtext/db/dev.sql $db_name");
 
     $BaseConfigGenerated = 1;
 }

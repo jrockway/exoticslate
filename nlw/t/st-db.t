@@ -6,7 +6,7 @@ use warnings;
 use Test::Socialtext tests => 5;
 use Socialtext::Paths;
 use File::Path qw/mkpath/;
-fixtures("admin_no_pages");
+fixtures("db");
 
 # This is normally created by fdefs, but doesn't exist in the unit-test
 # environment

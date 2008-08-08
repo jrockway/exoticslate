@@ -50,6 +50,13 @@ is(
 is( $user_id2->driver_username, 'fakir@faker.com',
     "Opportunistically grabbed the new username" );
 
+# cleanup 
+$user_id1->delete();
+$user_id2->delete();
+
+exit;
+
+
 package FakeHomunculus;
 
 use Class::Field 'field';

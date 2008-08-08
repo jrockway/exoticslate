@@ -13,6 +13,7 @@ use File::chdir;
 use File::Slurp qw(slurp write_file);
 use File::Spec;
 use Socialtext::ApacheDaemon;
+use Socialtext::Build qw( get_build_setting );
 use File::Path qw/mkpath rmtree/;
 use FindBin;
 use Socialtext::Schema;
@@ -43,6 +44,8 @@ sub _init {
 
     my $dir = $self->dir;
 
+    $self->_generate_base_config();
+
     require Socialtext::Account;
     require Socialtext::Paths;
     require Socialtext::User;
@@ -61,6 +64,48 @@ sub _init {
     else {
         $self->set_config({});
     }
+}
+
+# XXX - this is a bit gross and unlike the other fixture bits, but
+# it's a prereq for all other fixtures, though not necessarily for all
+# tests.
+my $BaseConfigGenerated;
+sub _generate_base_config {
+    return if $BaseConfigGenerated;
+    my $self = shift;
+
+    my $env               = $self->env;
+
+    my $testing = $ENV{HARNESS_ACTIVE} ? '--testing' : '';
+    my $gen_config = $env->nlw_dir . '/dev-bin/gen-config';
+    my $apache_proxy    = get_build_setting('apache-proxy');
+    my $socialtext_open = get_build_setting('socialtext-open');
+
+    _system_or_die(
+        $gen_config,
+        '--quiet',
+        '--root',           $env->root_dir,
+        '--ports-start-at', $env->ports_start_at,
+        '--apache-proxy=' . $apache_proxy,
+        '--socialtext-open=' . $socialtext_open,
+        '--dev=0',    # Don't create the files in ~/.nlw
+        $testing,
+    );
+
+    # Put the schemas in place
+    my $schema_dir = $env->root_dir . '/etc/socialtext/db';
+    rmtree $schema_dir;
+    mkpath $schema_dir;
+    _system_or_die("cp " . $env->nlw_dir . "/etc/socialtext/db/* $schema_dir");
+
+    local $ENV{ST_TEST_SKIP_DB_DUMP} = 1;
+    my $s = Socialtext::Schema->new( verbose => 1);
+    $s->recreate(no_dump => 1);
+
+    my $db_name = Socialtext::AppConfig->db_name();
+    _system_or_die("psql -f " . $env->nlw_dir . "/etc/socialtext/db/dev.sql $db_name");
+
+    $BaseConfigGenerated = 1;
 }
 
 sub make_cache_current {

@@ -1,6 +1,2 @@
-fixtures:
-    - clean
-    - db
-
 clear_alzabo_cache: 1
 

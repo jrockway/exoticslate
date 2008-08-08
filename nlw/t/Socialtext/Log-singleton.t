@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 use Test::Socialtext tests => 1;
-fixtures( 'db' );
+fixtures( 'admin_no_pages' ); # need appconfig
 
 use Socialtext::Log;
 

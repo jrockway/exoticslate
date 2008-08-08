@@ -7,7 +7,7 @@ use warnings;
 use utf8;
 
 use Test::Socialtext tests => 2;
-fixtures( 'db' );
+fixtures( 'admin_no_pages' );
 use Socialtext::WebApp;
 use Socialtext::AppConfig;
 

@@ -2,11 +2,12 @@ Test case for `/data/events`(GET and POST).
 
 * Fixture: SocialRest
 
-| *Comment* | Clear all events |
-| st-clear-events | |
-| get | /data/events |
-| code-is | 200 |
-| body-like | [] |
+| *Comment*       | Clear all events | .     |
+| set             | workspace        | admin |
+| st-clear-events |                  |       |
+| get             | /data/events     |       |
+| code-is         | 200              |       |
+| body-like       | []               |       |
 
 | Comment | POST a few events |
 | post | /data/events | Content-Type=application/json | {"actor":{"id":1},"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |

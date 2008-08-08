@@ -13,6 +13,11 @@ sub Get {
     return Socialtext::Events::Reporter->new->get_events(@_);
 }
 
+sub GetActivities {
+    my ($class, $user) = @_;
+    return Socialtext::Events::Reporter->new->get_events_activities($user);
+}
+
 sub Record {
     my $class = shift;
     my $ev = shift;

@@ -62,6 +62,43 @@ sub _extract_person {
     };
 }
 
+sub get_events_activities
+{
+    my ($self, $user) = @_; 
+    # First we need to get the user id in case this was email or username used
+    my $userid=$self->_fetch_id($user);
+    my @args;
+    my $where = <<ENDWHERE;
+(event_class = 'person' AND action IN ('tag_add', 'edit_save') AND person_id = ?) OR
+(event_class = 'page' AND action IN ('edit_save', 'tag_add', 'comment', 'rename', 'duplicate', 'delete') AND actor_id = ?)
+ENDWHERE
+    my $whereargs = [$userid, $userid];
+    push @args, where=>$where;
+    push @args, where_args => $whereargs;
+    push @args, limit => 20;
+    return $self->get_events(@args)
+}
+
+sub _fetch_id {                                                                                  
+    my $self   = shift;                                                                              
+    my $user_id = shift;                                                                              
+                                                                                                      
+    my $sql = 'SELECT * FROM "User" WHERE user_id = ?';                                                    
+    my $proto;                                                                                        
+    if ($user_id =~ /^\d+$/) {                                                                        
+        my $sth = sql_execute($sql, $user_id);                                                        
+        $proto = $sth->fetchrow_hashref();                                                            
+    }                                                                                                 
+    return $user_id if $proto;                                                                          
+                                                                                                      
+    my $user = Socialtext::User->new(username => $user_id);                                           
+    $user ||= Socialtext::User->new(email_address => $user_id);                                       
+                                                                                                      
+    die "no such user for id '$user_id'" unless $user;                                                
+                                                                                                      
+    return $user->user_id;
+}
+
 sub get_events {
     my $self = shift;
     my %opts = @_;

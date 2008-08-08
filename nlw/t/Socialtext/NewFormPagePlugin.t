@@ -6,7 +6,7 @@ use warnings;
 
 use mocked 'Apache';
 use Test::Socialtext;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 use Socialtext::Build qw( get_build_setting );
 

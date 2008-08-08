@@ -1077,6 +1077,7 @@ proto._do_link = function(widget_element) {
 
     jQuery('#st-widget-workspace_id')
         .lookahead({
+            filterName: 'title_filter',
             url: '/data/workspaces',
             linkText: function (i) {
                 return [ i.title + ' (' + i.name + ')', i.name ];

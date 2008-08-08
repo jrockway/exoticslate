@@ -1064,6 +1064,7 @@ proto.hookLookaheads = function() {
     var currentWidget = this.currentWidget;
     jQuery('#st-widget-workspace_id')
         .lookahead({
+            filterName: 'title_filter',
             url: '/data/workspaces',
             linkText: function (i) {
                 return [ i.title + ' (' + i.name + ')', i.name ];
@@ -1122,7 +1123,7 @@ proto.hookLookaheads = function() {
                          Socialtext.wiki_id;
                 return '/data/workspaces/' + ws + '/tags';
             },
-            filter: function (val) {
+            filterValue: function (val) {
                 return val + '.*(We)?blog$';
             },
             linkText: function (i) { return i.name }

@@ -21,13 +21,19 @@
  *       }
  *
  *       // OPTIONAL: modify the value before searching
- *       filter: function (val) {
+ *       filterValue: function (val) {
  *           return val + '.*(We)?blog$'
- *       }
+ *       },
+ *
+ *       // OPTIONAL: use a different filter argument than 'filter'
+ *       filterName: 'title_filter',
  *
  *       // OPTIONAL: handler run when a value is accepted
  *       onAccept: function (val) {
- *       }
+ *       },
+ *
+ *       // NOT IMPLEMENTED: additional args to pass to the server
+ *       args: { pageType: 'spreadsheet' }
  *
  *    });
  */
@@ -86,9 +92,10 @@
         if (this.ajax && this.ajax.abort)
             this.ajax.abort();
         var url = typeof(opts.url) == 'function' ? opts.url() : opts.url;
-        if (opts.filter) val = opts.filter(val);
+        if (opts.filterValue) val = opts.filterValue(val);
+        var filterName = opts.filterName || 'filter';
         this.ajax = jQuery.getJSON(
-            url + '?order=alpha;filter=\\b' + val,
+            url + '?order=alpha;' + filterName + '=\\b' + val,
             function (data) {
                 if (data.length) {
                     lookahead.html('');
@@ -110,7 +117,7 @@
                                 })
                         );
                         if (i+1 < data.length)
-                            lookahead.append(', ')
+                            lookahead.append(',<br/>')
                     })
                     lookahead.fadeIn();
                 }

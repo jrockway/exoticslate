@@ -80,6 +80,13 @@ ul.normal ul ul {
     font-weight: 600;
 }
 
+.lightbox .editlabel {
+    width: 10em;
+    float: left;
+    padding-right: 0.5em;
+    padding-top: 3px;
+}
+
 .lightbox .buttons {
     float: right;
     margin-top: 20px;
@@ -495,47 +502,6 @@ body#contentPage #controlsRight ul.level2 {
 
 #st-listview-submit-rtfexport {
     background: url("../images/page_word.png") left center no-repeat;
-}
-
-/* Add a link lightbox */
-
-#add-wiki-link-section,
-#add-web-link-section,
-#add-section-link-section {
-    padding: 3px 10px;
-}
-
-.add-a-link-subheader {
-    font-size: 95%;
-    font-weight: bold;
-}
-
-.add-a-link-set {
-    margin: 3px 10px;
-    font-size: 70%;
-}
-
-.add-a-link-set div {
-    padding: 3px 0px;
-}
-
-.add-a-link-set label {
-    padding-top: 3px;
-    padding-right: 0.5em;
-    width: 10em;
-    display: block;
-    float: left;
-}
-
-#add-a-link-form .heads-up {
-    margin: 0px;
-    padding: 0px;
-    font-size: 75%;
-}
-
-#add-a-link-form .heads-up-indicator {
-    font-size: 100%;
-    font-weight: bold;
 }
 
 .additional-info {

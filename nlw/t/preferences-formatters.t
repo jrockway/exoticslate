@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 delimiters('===', '+++');
 plan tests => 1 * blocks;

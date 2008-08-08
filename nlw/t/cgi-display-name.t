@@ -6,7 +6,7 @@ use warnings;
 
 use mocked 'Apache::Cookie';
 use Test::Socialtext tests => 2;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 use Test::Socialtext::CGIOutput;
 
 {

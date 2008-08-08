@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 12;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 use DateTime;
 use Socialtext::Pages;

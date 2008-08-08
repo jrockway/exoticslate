@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 4;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 use Socialtext::Pages;
 
 # XXX sigh, cgi->changes is checked to see if we should get the data

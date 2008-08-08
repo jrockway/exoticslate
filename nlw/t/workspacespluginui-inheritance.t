@@ -9,7 +9,7 @@ use warnings;
 
 use Test::More tests => 20;
 use Test::Socialtext;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 
 BEGIN {

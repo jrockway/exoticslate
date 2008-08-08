@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 my @tests = (
   [ qr{\Q<input id="st-standard-submitbutton" type="submit" name="Button" value="Save"},

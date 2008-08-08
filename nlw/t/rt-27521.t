@@ -29,7 +29,7 @@ use mocked 'Apache::Cookie';
 use Test::Socialtext 'no_plan';
 
 BEGIN { use_ok("Socialtext::Search::KinoSearch::Factory") }
-fixtures( 'admin_no_pages', 'foobar' );
+fixtures( 'admin', 'foobar' );
 
 our $term_hub = new_hub('admin');
 our $wafl_hub = new_hub('foobar');

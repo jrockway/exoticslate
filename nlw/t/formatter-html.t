@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 1;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 use Socialtext::Encode;
 
 my $hub = new_hub('admin');

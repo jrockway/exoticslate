@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 use Test::Socialtext;
-fixtures('admin_no_pages');
+fixtures('admin');
 
 my $renamed_hint = '<!-- wiki-renamed-link SomePage -->';
 my @tests =

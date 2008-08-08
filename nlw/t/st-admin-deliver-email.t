@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 32;
-fixtures( 'admin_no_pages', 'foobar_no_pages' );
+fixtures( 'admin', 'foobar' );
 
 use IPC::Run;
 

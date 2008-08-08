@@ -43,7 +43,7 @@ Singleton_pause: {
     my $timings = Socialtext::Timer->Report();
     is $timings->{overall}, '7.000',
         "overall time correct - $timings->{overall}";
-    is $timings->{pausable}, '1.000',
+    is $timings->{pausable}, '3.000',
         "pausable time equals 1 - $timings->{pausable}";
 }
 
@@ -66,7 +66,7 @@ Singleton_continue_twice: {
     Socialtext::Timer->Continue('pausable');
     Socialtext::Timer->Continue('pausable');
     my $timings = Socialtext::Timer->Report();
-    is $timings->{pausable}, '1.000',
+    is $timings->{pausable}, '2.000',
         "double continue did not blow up - $timings->{pausable}";
 }
 
@@ -81,8 +81,7 @@ Singleton_pause_twice: {
     my $timings = Socialtext::Timer->Report();
     is $timings->{overall}, '5.000',
         "overall time equals 5 - $timings->{overall}";
-    is $timings->{pausable}, '1.000',
+    is $timings->{pausable}, '2.000',
         "pausable time equals 1 - $timings->{pausable}";
 }
 exit;
-

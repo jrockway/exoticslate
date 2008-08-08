@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+use lib "$ENV{NLW_DIR}/lib";
+
+use Socialtext::Build qw(get_build_setting);
+use Test::Socialtext::Environment;
+
+my $env = Test::Socialtext::Environment->new();
+my $testing = $ENV{HARNESS_ACTIVE} ? '--testing' : '';
+my $gen_config = $env->nlw_dir . '/dev-bin/gen-config';
+my $apache_proxy    = get_build_setting('apache-proxy');
+my $socialtext_open = get_build_setting('socialtext-open');
+
+_system_or_die(
+    $gen_config,
+    '--quiet',
+    '--root',           $env->root_dir,
+    '--ports-start-at', $env->ports_start_at,
+    '--apache-proxy=' . $apache_proxy,
+    '--socialtext-open=' . $socialtext_open,
+    '--dev=0',    # Don't create the files in ~/.nlw
+    $testing,
+);
+
+sub _system_or_die {
+    (system @_) == 0 or confess("Cannot execute @_: $!");
+}

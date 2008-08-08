@@ -79,37 +79,6 @@ Wikiwyg.is_safari_unknown = (
     Wikiwyg.ua.indexOf("version/") == -1
 );
 
-function nlw_name_to_id(name) {
-    if (name == '')
-        return '';
-    return encodeURI(
-        name.replace(/[^A-Za-z0-9_+]/g, '_') /* For Safari, the similar regex below doesn't work in Safari */
-            .replace(/[^A-Za-z0-9_+\u00C0-\u00FF]/g, '_')
-            .replace(/_+/g, '_')
-            .replace(/^_*(.*?)_*$/g, '$1')
-            .replace(/^0$/, '_')
-            .replace(/^$/, '_')
-            .toLocaleLowerCase()
-    );
-}
-
-function trim(value) {
-    var ltrim = /\s*((\s*\S+)*)/;
-    var rtrim = /((\s*\S+)*)\s*/;
-    return value.replace(rtrim, "$1").replace(ltrim, "$1");
-};
-
-function is_reserved_pagename(pagename) {
-    if (pagename && pagename.length > 0) {
-        var name = nlw_name_to_id(trim(pagename));
-        var untitled = nlw_name_to_id(loc('Untitled Page'))
-        return name == untitled;
-    }
-    else {
-        return false;
-    }
-}
-
 function setup_wikiwyg() {
     if (! Wikiwyg.browserIsSupported) return;
 
@@ -563,12 +532,7 @@ proto.button_disabled_func = function(mode_name) {
 }
 
 proto.active_page_exists = function (page_name) {
-    page_name = trim(page_name);
-    var data = jQuery.ajax({
-        url: Page.pageUrl(page_name),
-        async: false
-    });
-    return data.status == '200';
+    return Page.active_page_exists(page_name);
 }
 
 proto.newpage_duplicate_pagename_keyupHandler = function(event) {

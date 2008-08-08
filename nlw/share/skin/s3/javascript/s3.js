@@ -1,7 +1,51 @@
-(function ($) {
 
+function trim(value) {
+    var ltrim = /\s*((\s*\S+)*)/;
+    var rtrim = /((\s*\S+)*)\s*/;
+    return value.replace(rtrim, "$1").replace(ltrim, "$1");
+};
+
+function is_reserved_pagename(pagename) {
+    if (pagename && pagename.length > 0) {
+        var name = nlw_name_to_id(trim(pagename));
+        var untitled = nlw_name_to_id(loc('Untitled Page'))
+        return name == untitled;
+    }
+    else {
+        return false;
+    }
+}
+
+function nlw_name_to_id(name) {
+    if (name == '')
+        return '';
+    return encodeURI(
+        name.replace(/[^A-Za-z0-9_+]/g, '_') /* For Safari, the similar regex below doesn't work in Safari */
+            .replace(/[^A-Za-z0-9_+\u00C0-\u00FF]/g, '_')
+            .replace(/_+/g, '_')
+            .replace(/^_*(.*?)_*$/g, '$1')
+            .replace(/^0$/, '_')
+            .replace(/^$/, '_')
+            .toLocaleLowerCase()
+    );
+}
+
+(function ($) {
 Page = {
     attachmentList: [],
+
+    active_page_exists: function (page_name) {
+        page_name = trim(page_name);
+        var data = jQuery.ajax({
+            url: Page.pageUrl(page_name),
+            async: false
+        });
+        return data.status == '200';
+    },
+
+    restApiUri: function (page_name) {
+        return Page.pageUrl(page_name);
+    },
 
     pageUrl: function (page_name) {
         if (!page_name) page_name = Socialtext.page_id;
@@ -243,6 +287,9 @@ $(function() {
     var lightbox_uri = nlw_make_s3_path('/javascript/socialtext-lightbox.js.gz')
         .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
 
+    var socialcalc_uri = nlw_make_plugin_path("/socialcalc/javascript/socialtext-socialcalc.js.gz")
+            .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time);
+
     function get_lightbox (cb) {
         $.ajaxSettings.cache = true;
         $.getScript(lightbox_uri, cb);
@@ -323,14 +370,36 @@ $(function() {
         .one("click", function () {
             $('#bootstrap-loader').show();
             $.ajaxSettings.cache = true;
-            $.getScript(editor_uri);
+            if (Socialtext.page_type == 'spreadsheet' && Socialtext.wikiwyg_variables.hub.current_workspace.enable_spreadsheet) {
+                $.getScript(socialcalc_uri, function () {
+                    jQuery("#st-all-footers, #st-display-mode-container").hide();
+                    jQuery("#st-edit-mode-container, #st-editing-tools-edit").show();
+                    Socialtext.render_spreadsheet_editor();
+                });
+            }
+            else {
+                $.getScript(editor_uri);
+                $('<link>')
+                    .attr('href', nlw_make_s3_path('/css/wikiwyg.css'))
+                    .attr('rel', 'stylesheet')
+                    .attr('media', 'wikiwyg')
+                    .attr('type', 'text/css')
+                    .appendTo('head');
+            }
             $.ajaxSettings.cache = false;
-            $('<link>')
-                .attr('href', nlw_make_s3_path('/css/wikiwyg.css'))
-                .attr('rel', 'stylesheet')
-                .attr('media', 'wikiwyg')
-                .attr('type', 'text/css')
-                .appendTo('head');
+            return false;
+        });
+
+    $('#st-pagetools-newspreadsheet')
+        .one("click", function () {
+            $('#bootstrap-loader').show();
+            $.ajaxSettings.cache = true;
+            $.getScript(socialcalc_uri, function () {
+                jQuery("#st-all-footers, #st-display-mode-container").hide();
+                jQuery("#st-edit-mode-container, #st-editing-tools-edit").show();
+                Socialtext.render_spreadsheet_editor();
+            });
+            $.ajaxSettings.cache = false;
         });
 
     $('#st-listview-submit-pdfexport').click(function() {

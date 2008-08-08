@@ -39,6 +39,8 @@ LIGHTBOX_TEMPLATES= \
 
 S3_SOURCE_FILES= \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
+		Jemplate.js \
+		$(ALL_JEMPLATE_PLUGINS) \
 		$(S2_JAVASCRIPT)/loc.js \
 		cookie.js \
 		lookahead.js \
@@ -46,7 +48,6 @@ S3_SOURCE_FILES= \
 		s3.js \
 
 LIGHTBOX_SOURCE_FILES= \
-		Jemplate.js \
 		$(ALL_JEMPLATE_PLUGINS) \
 		$(LIGHTBOX_JEMPLATE) \
 		comment.js \
@@ -56,9 +57,7 @@ LIGHTBOX_SOURCE_FILES= \
 EDITOR_SOURCE_FILES= \
 		$(S2_JAVASCRIPT)/main.js \
 		$(S2_JAVASCRIPT)/md5.js \
-		Jemplate.js \
 		$(JEMPLATE_WIKIWYG_MODULE) \
-		$(ALL_JEMPLATE_PLUGINS) \
 		$(JEMPLATE_MODULE) \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Debug.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg.js \

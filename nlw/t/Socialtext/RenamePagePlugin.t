@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 8;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 my $admin = new_hub('admin');
 

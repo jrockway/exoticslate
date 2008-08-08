@@ -5,7 +5,7 @@ use warnings;
 
 use mocked 'Apache';
 use Test::Socialtext tests => 17;
-fixtures('admin_no_pages');
+fixtures('admin');
 
 BEGIN {
     use_ok('Socialtext::TiddlyPlugin');

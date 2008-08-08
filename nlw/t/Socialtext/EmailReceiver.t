@@ -4,6 +4,10 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 178;
+
+# Fixtures: admin_no_pages
+#
+# The tests below require that the workspace be empty when we start.
 fixtures( 'admin_no_pages' );
 
 use_ok('Socialtext::EmailReceiver::Factory');

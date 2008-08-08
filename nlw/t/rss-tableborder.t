@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::Socialtext;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin_no_pages' );   # we really require *NO* pages when we test
 use Socialtext::Pages;
 
 my $hub = new_hub('admin');

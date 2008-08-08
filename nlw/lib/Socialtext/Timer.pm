@@ -69,12 +69,12 @@ sub new {
 sub start_timing {
     my $self = shift;
     my $offset = shift;
-    $self->{_start_time} = time - $offset;
+    $self->{_start_time} = time() - $offset;
 }
 
 sub elapsed {
     my $self = shift;
-    return time - $self->{_start_time};
+    return time() - $self->{_start_time};
 }
 
 1;

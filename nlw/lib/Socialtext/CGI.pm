@@ -262,6 +262,15 @@ sub _get_cgi_param {
     my $param = shift;
     my $rest = $self->hub->rest;
     return unless $rest; # XXX seems a bit off
+
+    # This is subtle.  For our use case, the "keyword" field should not
+    # be split at the '+' boundary, because "?tagged_people/Love + Rockets"
+    # should mean the tags "Love + Rockets" instead of "Love Rockets".
+    if ($param eq 'keywords') {
+        my @kv = split(/\s+/, $self->uri_unescape($ENV{QUERY_STRING}));
+        return(wantarray ? @kv : $kv[0]);
+    }
+
     $self->hub->rest->query->param($param);
 }
 

@@ -53,7 +53,7 @@ This test case assumes a logged in user.
 | json-parse |  |  |  |
 | json-array-size | == | 2 | |
 
-| comment | check that we still get the one event | . | .. |
+| comment | check that we still get the two events | . | .. |
 | get | /data/events/activities/3 | |
 | code-is | 200 | |
 | json-parse | |
@@ -121,14 +121,69 @@ This test case assumes a logged in user.
 | post-json | /data/events | {"event_class":"fake", "action":"comment", "actor":{"id":"3"}, "context":{"testkey":"16"}} |
 | code-is | 201 |  |  |
 
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"17"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"18"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"19"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"20"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"21"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"22"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"23"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"24"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"25"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"26"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"27"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"28"}} |
+| code-is | 201 |  |  |
+
+| comment | post a page:edit_save event |  |  |
+| post-json | /data/events | {"event_class":"page", "action":"edit_save", "actor":{"id":"3"}, "page":{"id":"quick_start","workspace_name":"foobar"}, "context":{"testkey":"29"}} |
+| code-is | 201 |  |  |
+
+
 | comment         | check filtering of events                       | . | .. |
 | get             | /data/events/activities/devnull1@socialtext.com |   |    |
 | code-is         | 200                                             |   |    |
 | json-parse      |                                                 |   |    |
-| json-array-size | 7                                               |   |    |
+| json-array-size | 20                                              |   |    |
+| body-unlike       | "testkey":"1"                                   |   |    |
+| body-unlike       | "testkey":"2"                                   |   |    |
 | body-like       | "testkey":"3"                                   |   |    |
-| body-unlike       | "testkey":"4"                                   |   |    |
-| body-unlike       | "testkey":"5"                                   |   |    |
+| body-unlike     | "testkey":"4"                                   |   |    |
+| body-unlike     | "testkey":"5"                                   |   |    |
 | body-like       | "testkey":"6"                                   |   |    |
 | body-unlike     | "testkey":"7"                                   |   |    |
 | body-like       | "testkey":"8"                                   |   |    |
@@ -140,3 +195,16 @@ This test case assumes a logged in user.
 | body-unlike     | "testkey":"14"                                  |   |    |
 | body-unlike     | "testkey":"15"                                  |   |    |
 | body-unlike     | "testkey":"16"                                  |   |    |
+| body-like       | "testkey":"17"                                  |   |    |
+| body-like       | "testkey":"18"                                  |   |    |
+| body-like       | "testkey":"19"                                  |   |    |
+| body-like       | "testkey":"20"                                  |   |    |
+| body-like       | "testkey":"22"                                  |   |    |
+| body-like       | "testkey":"23"                                  |   |    |
+| body-like       | "testkey":"24"                                  |   |    |
+| body-like       | "testkey":"25"                                  |   |    |
+| body-like       | "testkey":"26"                                  |   |    |
+| body-like       | "testkey":"27"                                  |   |    |
+| body-like       | "testkey":"28"                                  |   |    |
+| body-like       | "testkey":"29"                                  |   |    |
+

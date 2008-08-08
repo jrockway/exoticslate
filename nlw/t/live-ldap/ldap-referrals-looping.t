@@ -11,11 +11,10 @@ use Test::Socialtext::Bootstrap::OpenLDAP;
 use Test::Socialtext tests => 10;
 
 ###############################################################################
-# FIXTURE: rdbms_clean
+# FIXTURE: db
 #
-# Need the most minimal of fixtures set up, so that we've got config files
-# and test directories created.
-fixtures( 'rdbms_clean' );
+# Pg needs to be running.
+fixtures( 'db' );
 
 ###############################################################################
 # bootstrap a pair of OpenLDAP servers

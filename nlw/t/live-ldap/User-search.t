@@ -8,10 +8,11 @@ use Socialtext::User;
 use Test::Socialtext::Bootstrap::OpenLDAP;
 use Test::Socialtext tests => 33;
 
-# FIXTURE: rdbms_clean
+###############################################################################
+# FIXTURE: db
 #
-# Need to have Pg running, but it doesn't have to contain any data.
-fixtures( 'rdbms_clean' );
+# Pg needs to be running.
+fixtures( 'db' );
 
 ###############################################################################
 ### TEST DATA

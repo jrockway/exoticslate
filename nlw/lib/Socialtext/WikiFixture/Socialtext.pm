@@ -134,7 +134,13 @@ Verifies that the page title (NOT HTML title) is correct.
 
 sub st_page_title {
     my ($self, $expected_title) = @_;
-    $self->{selenium}->text_like('id=st-list-title', qr/\Q$expected_title\E/);
+    if ($self->{'skin'} eq 's2') {
+        $self->{selenium}->text_like('id=st-list-title', qr/\Q$expected_title\E/);
+    } elsif ($self->{'skin'} eq 's3') {
+        $self->{selenium}->text_like('//div[@id=\'contentContainer\']', qr/\Q$expected_title\E/);
+    } else {
+        ok 0, "Unknown skin type: $self->{'skin'}";
+    }
 }
 
 =head2 st_search( $search_term, $expected_result_title )
@@ -149,13 +155,24 @@ sub st_search {
     my $sel = $self->{selenium};
  
     $sel->type_ok('st-search-term', $opt1);
-    if ($self->{'skin'} eq 's3') {
-       $sel->click_ok('st-search-submit');
+    
+    if ($self->{'skin'} eq 's2') {
+        $sel->click_ok('link=Search');
+    } elsif ($self->{'skin'} eq 's3') {
+        $sel->click_ok('st-search-submit');
     } else {
-       $sel->click_ok('link=Search');
+        ok 0, "Unknown skin type: $self->{'skin'}";
     }
+    
     $sel->wait_for_page_to_load_ok($self->{selenium_timeout});
-    $sel->text_like('id=st-list-title', qr/\Q$opt2\E/);
+    
+    if ($self->{'skin'} eq 's2') {
+        $self->{selenium}->text_like('id=st-list-title', qr/\Q$opt2\E/);
+    } elsif ($self->{'skin'} eq 's3') {
+        $self->{selenium}->text_like('//div[@id=\'contentContainer\']', qr/\Q$opt2\E/);
+    } else {
+        ok 0, "Unknown skin type: $self->{'skin'}";
+    }
 }
 
 =head2 st_result( $expected_result )
@@ -167,8 +184,15 @@ Validates that the search result content contains a correct result.
 sub st_result {
     my ($self, $opt1, $opt2) = @_;
 
-    $self->{selenium}->text_like('id=st-search-content', 
+    if ($self->{'skin'} eq 's2') {
+        $self->{selenium}->text_like('id=st-search-content', 
                                  $self->quote_as_regex($opt1));
+    } elsif ($self->{'skin'} eq 's3') {
+        $self->{selenium}->text_like('//div[@id=\'contentContainer\']', $self->quote_as_regex($opt1));
+    } else {
+        ok 0, "Unknown skin type: $self->{'skin'}";
+    }
+
 }
 
 =head2 st_submit()
@@ -520,14 +544,17 @@ sub _click_user_row {
         last unless $row_email;
         next unless $email and $row_email =~ /\Q$email\E/;
         $chk_xpath = "//tbody/tr[$row]$click_col";
+        
         $sel->$method_name($chk_xpath);
-             if ($self->{'skin'} eq 's3') {
-                $self->click_and_wait('link=Save');
-                $sel->text_like('contentContainer', qr/\QChanges Saved\E/);
-             } else {  
-                $self->click_and_wait('Button');
-                $sel->text_like('st-settings-section', qr/\QChanges Saved\E/);
-             }
+        if ($self->{'skin'} eq 's3') {
+            $self->click_and_wait('link=Save');
+            $sel->text_like('contentContainer', qr/\QChanges Saved\E/);
+         } elsif ($self->{'skin'} eq 's2') {
+            $self->click_and_wait('Button');
+            $sel->text_like('st-settings-section', qr/\QChanges Saved\E/);
+         } else {
+            ok 0, "Unknown skin type: $self->{'skin'}";
+        }
         return $chk_xpath;
     }
     ok 0, "Could not find '$email' in the table";

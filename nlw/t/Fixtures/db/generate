@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+use File::Path qw(rmtree mkpath);
+use lib "$ENV{NLW_DIR}/lib";
+
+use Socialtext::AppConfig;
+use Socialtext::Schema;
+use Test::Socialtext::Environment;
+
+my $env = Test::Socialtext::Environment->new();
+my $schema_dir = $env->root_dir . '/etc/socialtext/db';
+rmtree $schema_dir;
+mkpath $schema_dir;
+Test::Socialtext::Fixture::_system_or_die("cp " . $env->nlw_dir . "/etc/socialtext/db/* $schema_dir");
+
+# recreate the db schema
+local $ENV{ST_TEST_SKIP_DB_DUMP} = 1;
+my $schema = Socialtext::Schema->new( verbose => 1 );
+$schema->recreate(no_dump => 1);
+
+# add in the dev-extensions to the SQL
+my $db_name = Socialtext::AppConfig->db_name();
+Test::Socialtext::Fixture::_system_or_die("psql $db_name -f " . $env->nlw_dir . "/etc/socialtext/db/dev.sql");

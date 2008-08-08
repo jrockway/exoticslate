@@ -91,20 +91,6 @@ sub _generate_base_config {
         '--dev=0',    # Don't create the files in ~/.nlw
         $testing,
     );
-
-    # Put the schemas in place
-    my $schema_dir = $env->root_dir . '/etc/socialtext/db';
-    rmtree $schema_dir;
-    mkpath $schema_dir;
-    _system_or_die("cp " . $env->nlw_dir . "/etc/socialtext/db/* $schema_dir");
-
-    local $ENV{ST_TEST_SKIP_DB_DUMP} = 1;
-    my $s = Socialtext::Schema->new( verbose => 1);
-    $s->recreate(no_dump => 1);
-
-    my $db_name = Socialtext::AppConfig->db_name();
-    _system_or_die("psql -f " . $env->nlw_dir . "/etc/socialtext/db/dev.sql $db_name");
-
     $BaseConfigGenerated = 1;
 }
 

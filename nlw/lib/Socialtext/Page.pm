@@ -614,7 +614,7 @@ sub add_tags {
         foreach my $tag (@tags) {
             Socialtext::Events->Record({
                 event_class => 'page',
-                action => 'tag',
+                action => 'tag_add',
                 page => $self,
                 tag_name => $tag,
             });

@@ -21,7 +21,7 @@ BEGIN {
     use_ok( 'Socialtext::WorkspaceInvitation' );
 }
 
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 $Socialtext::EmailSender::Base::SendClass = 'Test';
 

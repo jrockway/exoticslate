@@ -14,7 +14,7 @@ BEGIN {
 use Digest::MD5 ();
 
 plan tests => 2;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 my $hub = new_hub('admin');
 

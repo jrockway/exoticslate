@@ -6,7 +6,7 @@ use warnings;
 use utf8;
 
 use Test::Socialtext tests => 21;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 BEGIN {
     use_ok( 'Socialtext::WeblogPlugin' );

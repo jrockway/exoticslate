@@ -6,7 +6,7 @@ use warnings;
 use YAML;
 use Test::Socialtext tests => 110;
 
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 BEGIN {
     use_ok( 'Socialtext::WikiwygPlugin' );

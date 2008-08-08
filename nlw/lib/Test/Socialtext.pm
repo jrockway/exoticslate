@@ -50,6 +50,11 @@ sub fixtures () {
     $ENV{NLW_CONFIG} = Cwd::cwd . '/t/tmp/etc/socialtext/socialtext.conf';
 
     Test::Socialtext::Environment->CreateEnvironment( fixtures => [ @_ ] );
+
+    # store the state of the universe "after fixtures have been created", so
+    # that we can reset back to this state (as best we can) at the end of the
+    # test run.
+    _store_initial_state();
 }
 
 sub run_smarter_like() {
@@ -168,6 +173,70 @@ sub setup_test_appconfig_dir {
         _singleton => 1,
     );
     return $config_file;
+}
+
+# store initial state, so we can revert back to this (as best we can) at the
+# end of each test run.
+sub _store_initial_state {
+    _store_initial_appconfig();
+    _store_initial_userids();
+}
+
+# revert back to the initial state (as best we can) when the test run is over.
+END { _teardown_cleanup() }
+sub _teardown_cleanup {
+    _reset_initial_appconfig();
+    _remove_all_but_initial_userids();
+}
+
+{
+    my %InitialAppConfig;
+    sub _store_initial_appconfig {
+        my $appconfig = Socialtext::AppConfig->new();
+        foreach my $opt ($appconfig->Options) {
+            $InitialAppConfig{$opt} = $appconfig->$opt();
+        }
+    }
+    sub _reset_initial_appconfig {
+        my $appconfig = Socialtext::AppConfig->new();
+        foreach my $opt (keys %InitialAppConfig) {
+            no warnings;
+            if ($appconfig->$opt() ne $InitialAppConfig{$opt}) {
+                Test::More::diag( "CLEANUP: resetting '$opt' AppConfig value; your test changed it" );
+                $appconfig->set( $opt, $InitialAppConfig{$opt} );
+                $appconfig->write();
+            }
+        }
+    }
+}
+
+{
+    my %InitialUserIds;
+    sub _store_initial_userids {
+        my $iterator = Socialtext::User->All();
+        while (my $user = $iterator->next()) {
+            my $userid = $user->user_id();
+            $InitialUserIds{$userid} ++;
+        }
+    }
+    sub _remove_all_but_initial_userids {
+        # if we didn't store an initial set of users, don't do any cleanup
+        return unless %InitialUserIds;
+
+        # remove all but the initial set of users that were created and
+        # available at startup.
+        my $iterator = Socialtext::User->All();
+        while (my $user = $iterator->next()) {
+            my $userid = $user->user_id();
+            unless ($InitialUserIds{$userid}) {
+                my $driver   = $user->driver_name();
+                my $user_id  = $user->user_id();
+                my $username = $user->username();
+                Test::More::diag( "CLEANUP: removing user '$driver:$user_id ($username)'; your test left it behind" );
+                $user->delete(force=>1);
+            }
+        }
+    }
 }
 
 sub test_more_fail() {

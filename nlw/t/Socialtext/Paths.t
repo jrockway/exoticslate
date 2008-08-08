@@ -6,7 +6,7 @@ use warnings;
 use Test::Socialtext tests => 6;
 
 BEGIN { use_ok("Socialtext::Paths") }
-fixtures("admin_no_pages");
+fixtures('admin');
 
 STORAGE_DIRECTORY_PATH: {
     my $dir = Socialtext::Paths::storage_directory();

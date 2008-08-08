@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 2;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 # Confirm that we can create tables of contents of 
 # the current page, of another page in the same workspace,

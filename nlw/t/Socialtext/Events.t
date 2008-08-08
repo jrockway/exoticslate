@@ -313,9 +313,9 @@ Creating_events: {
 
     Record_page_object: {
         Socialtext::Events->Record( {
-            action => 'view',
-            class => 'page',
-            page => $page
+            action      => 'view',
+            event_class => 'page',
+            page        => $page
         } );
         sql_ok(
             name => "Record event with page object",

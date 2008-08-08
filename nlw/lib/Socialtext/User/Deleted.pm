@@ -28,6 +28,11 @@ sub password_is_correct {
     return 0;
 }
 
+sub delete {
+    # no-op; can't delete a missing/incomplete user record, but we do want to
+    # let the local data caches/stores get deleted.  Thus, no-op it.
+}
+
 1;
 
 __END__

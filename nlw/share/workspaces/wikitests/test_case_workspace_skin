@@ -36,10 +36,7 @@ Need skin.tgz and badskin.tgz to be in wikitest_files directory.
 | *Comment* | Test Case: Workspace Skin upload good skin.tgz |  |
 | wait_for_element_visible_ok | st-workspaceskin-file | 30000 |
 | type_ok | st-workspaceskin-file | %%wikitest_files%%skin.tgz |
-| click_ok | st-workspaceskin-submit | click_and_wait times out so just click and then wait for element visible |
-| wait_for_element_visible_ok | st-errorbox | 120000 |
-| text_like | st-errorbox | Files are imported only from ZIP/TGZ javascript/, css/ and images/ paths. Files with other paths are not imported. |
-| text_like | st-workspaceskin-filelist | screen_beforefixIEexport.css |
+| click_and_wait | st-workspaceskin-submit |  |
 | text_like | st-workspaceskin-filelist | button-green/left-top.gif |
 
 | *Comment* | Test Case: Workspace Skin cancel button |  |
@@ -70,7 +67,6 @@ Need skin.tgz and badskin.tgz to be in wikitest_files directory.
 
 | *Comment* | Test Case: Workspace Skin remove existing files |  |
 | click_ok | st-workspaceskin-removesubmit |  |
-| wait_for_text_not_present_ok | screen_beforefixIEexport.css | 120000 |
 | wait_for_text_not_present_ok | button-green/left-top.gif | 30000 |
 | wait_for_element_visible_ok | st-socialtext-attribution-image | 30000 |
 | is_checked_ok | st-workspaceskin-default |  |

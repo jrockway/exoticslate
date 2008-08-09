@@ -31,10 +31,10 @@ echo COPYING FILES FOR PACKAGING
 mkdir -p $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/bin
 RWT=`which run-wiki-tests`
 STB=`which st-bootstrap-openldap`
-cp $STB $RWT st-ldap  st-socialcalc prep-wikitests  $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/bin/
+cp $STB $RWT  st-socialcalc prep-wikitests  $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/bin/
 
 mkdir -p $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/share/nlw/wikitests
-cp ldap.yaml.st do-tests do-calc-tests do-wiki-tests  one-wiki-test aliases README  set-time  setup-selenium  test-data.tar.gz wikitestfiles.zip  wikitests.1.tar.gz $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/share/nlw/wikitests/
+cp  do-tests do-calc-tests do-wiki-tests  one-wiki-test aliases README  set-time  setup-selenium  test-data.tar.gz wikitestfiles.zip  wikitests.1.tar.gz $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/usr/share/nlw/wikitests/
 
 echo PACKAGING wikitests using dir2deb
 rm -f $ST_CURRENT/nlw/share/workspaces/wikitests/appliance/wikitests*.deb

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 10;
+use Test::Socialtext tests => 7;
 fixtures( 'admin' );
 
 my $hub = new_hub('admin');
@@ -58,7 +58,6 @@ sub _formatted_pattern {
     $message ||= $wikitext;
 
     my $page = make_page("Page to test $message", $wikitext);
-    isa_ok( $page, 'Socialtext::Page' );
     if ($similar_p) {
         like $page->to_html, $pattern, $message;
     } else {

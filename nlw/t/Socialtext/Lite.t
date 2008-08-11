@@ -47,7 +47,7 @@ like(
 );
 like(
     $html,
-    qr{<div class="wiki".*we are the children.*except that we're not}sm,
+    qr{<div class="wiki".*we are the children.*except that we&#39;re not}sm,
     'page display includes correct content'
 );
 like(

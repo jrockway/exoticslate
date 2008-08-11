@@ -17,7 +17,7 @@ Edit_save_event: {
     ok($ep, "Created an EditPlugin");
     $ep->edit_content();
     event_ok(
-        class => 'page',
+        event_class => 'page',
         action => 'edit_save',
     );
 }
@@ -30,7 +30,7 @@ Edit_contention: {
     ok($ep, "Created an EditPlugin");
     $ep->edit_content();
     event_ok(
-        class => 'page',
+        event_class => 'page',
         action => 'edit_contention',
     );
 }
@@ -43,7 +43,7 @@ Edit_save: {
     ok($ep, "Created an EditPlugin");
     $ep->edit_save();
     event_ok(
-        class => 'page',
+        event_class => 'page',
         action => 'edit_save',
     );
 }

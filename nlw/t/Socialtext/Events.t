@@ -4,7 +4,6 @@ use warnings;
 use strict;
 use Test::More tests => 67;
 use Test::Exception;
-use XXX;
 use mocked 'Socialtext::Headers';
 use mocked 'Socialtext::CGI';
 use mocked 'Socialtext::SQL', 'sql_ok';

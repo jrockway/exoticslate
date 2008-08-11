@@ -19,7 +19,7 @@ ALL_JEMPLATE_PLUGINS:=$(shell find $(S2_JAVASCRIPT)/JemplatePlugin -name \*.js)
 # Use Wikiwyg-dev when developing Wikiwyg
 WIKIWYG_PATH=$(COMMON_JAVASCRIPT)/Wikiwyg-2007-07-17
 
-WIDGETS_YAML=Widgets.yaml
+WIDGETS_YAML=$(S2_JAVASCRIPT)/Widgets.yaml
 ALL_EDIT_JEMPLATES:=$(shell perl -MYAML -e 'my $$y = YAML::LoadFile("$(WIDGETS_YAML)"); my $$w = $$y->{widgets}; print join " ", map "jemplate/widget_$${_}_edit.html", @$$w')
 ALL_JEMPLATES=$(ALL_EDIT_JEMPLATES) jemplate/insert_widget_menu
 JEMPLATE_GENERATOR=bin/generate-widget-jemplate.pl

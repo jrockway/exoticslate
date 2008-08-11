@@ -123,8 +123,15 @@ ST.Page.prototype = {
                     $('st-page-content').innerHTML = page_info.html;
                     Socialtext.wikiwyg_variables.page.revision_id =
                         page_info.revision_id;
-                    // $('st-page-editing-revisionid').value = page_info.revision_id;
+
                     Page.revision_id = page_info.revision_id;
+
+                    // By this time, the "edit_wikiwyg" Jemplate had already
+                    // finished rendering, so we need to reach into the
+                    // bootstrapped input form and update the revision ID
+                    // there, otherwise we'll get a bogus editing contention.
+                    jQuery('#st-page-editing-revisionid').val(page_info.revision_id);
+
                     if ($('st-raw-wikitext-textarea')) {
                         $('st-raw-wikitext-textarea').value = Wikiwyg.is_safari
                             ? Wikiwyg.htmlUnescape(page_info.wikitext)

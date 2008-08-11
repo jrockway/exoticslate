@@ -4,7 +4,9 @@
 use strict;
 use warnings;
 use Test::Socialtext tests => 7;
-fixtures('admin');
+# This test suite *needs* to have no pages in the admin workspace when its
+# run.
+fixtures('admin_no_pages');
 
 BEGIN {
     use_ok( "Socialtext::Page" );

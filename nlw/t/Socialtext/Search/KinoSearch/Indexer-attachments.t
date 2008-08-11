@@ -8,7 +8,9 @@ BEGIN {
 }
 
 use Test::Socialtext;
-fixtures( 'admin' );
+# This unit test *requires* that there be *no* pages in the workspace that
+# we're testing.
+fixtures( 'admin_no_pages' );
 use Test::Socialtext::Search;
 use Socialtext::File;
 

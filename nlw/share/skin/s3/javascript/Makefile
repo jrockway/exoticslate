@@ -99,6 +99,8 @@ clean:
 	    $(LIGHTBOX_FILE) \
 	    $(LIGHTBOX_FILE_MINI) \
 	    $(LIGHTBOX_FILE_GZIP) \
+	    Selection.htc \
+	    build-semaphore \
 
 .SUFFIXES: .js -mini.js .js.gz
 

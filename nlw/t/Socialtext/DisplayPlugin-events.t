@@ -16,7 +16,7 @@ use mocked 'Socialtext::Hub';
 BEGIN { use_ok 'Socialtext::DisplayPlugin' }
 
 my $hub = Socialtext::Hub->new;
-my $page = Socialtext::Page->new(title => 'special_sauce');
+my $page = Socialtext::Page->new(name => 'special_sauce');
 $hub->pages->current($page);
 
 no warnings 'redefine';
@@ -27,7 +27,15 @@ View_existing_page: {
     $dp->display();
 
     is_event_count(1);
-    event_ok(class => 'page', action => 'view', page_id => 'special_sauce');
+    event_ok(
+        event_class => 'page', 
+        action => 'view', 
+        page => {
+            id => 'special_sauce',
+            name => 'special_sauce',
+            tags => [],
+        }
+    );
 }
 
 Preview_no_event: {
@@ -44,7 +52,8 @@ New_page: {
 }
 
 View_untitled_page: { 
-    local $page->{title} = 'untitled_page';
+    my $untitled = Socialtext::Page->new(name => 'untitled_page');
+    $hub->pages->current($untitled);
     my $dp = setup_plugin();
     $dp->display();
     is_event_count(0);

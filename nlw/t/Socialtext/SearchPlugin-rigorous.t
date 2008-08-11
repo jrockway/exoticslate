@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 95;
+# this test actually requires no pages in the workspace when we start testing.
 fixtures( 'admin_no_pages' );
 
 use Test::Socialtext::Search;

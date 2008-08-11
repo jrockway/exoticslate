@@ -383,6 +383,7 @@ use base 'Socialtext::Formatter::WaflPhraseDivP';
 use Class::Field qw( const );
 use Socialtext::Permission qw(ST_READ_PERM ST_EDIT_PERM);
 use Socialtext::l10n qw( loc );
+use vars '@PageInclusionStack';
 
 const wafl_id => 'include';
 
@@ -414,6 +415,12 @@ sub html {
     # REVIEW: hack to keep our state of in_paragraph lined up properly
     # when we format an included page
     local $Socialtext::Formatter::Viewer::in_paragraph;
+
+    # REVIEW: hack to keep the inclusion chain.
+    # This is maintained so the Toc sections in the included pages
+    # can refer to the toplevel workspace to avoid interwiki links.
+    local @PageInclusionStack = (@PageInclusionStack, $self);
+
     my $viewer_page_id = $self->hub->viewer->page_id;
     my $html = $self->hub->pages->html_for_page_in_workspace(
         $page_id,
@@ -870,7 +877,15 @@ sub _parse_page_for_headers {
     elsif ($cur_page_id ne $page_id || !$page->exists) {
         $remote_page_title ||= $self->hub->wikiwyg->cgi->page_name;
         $title .= ": [$remote_page_title]";
-        $linkref = "[$remote_page_title]";
+
+        # If we are included in some page being rendered, add that page.
+        # REVIEW: Is the use of @PageInclusionStack kosher here?
+        if (my ($toplevel) = @Socialtext::Formatter::PageInclusion::PageInclusionStack) {
+            $linkref = $toplevel->current_workspace_name . " [$remote_page_title]";
+        }
+        else {
+            $linkref = "[$remote_page_title]";
+        }
     }
 
     my $headers = $page->get_headers();

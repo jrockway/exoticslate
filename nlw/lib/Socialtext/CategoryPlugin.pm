@@ -202,7 +202,7 @@ sub _sort_closure {
 
         $direction =
             length $self->cgi->direction
-            ? $self->cgi->direction ? 1 : 0
+            ? ($self->cgi->direction and $self->cgi->direction ne 'asc') ? 1 : 0
             : $sort_map->{$sort_col};
     } else {
         $sort_col = 'Date';

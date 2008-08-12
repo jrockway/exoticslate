@@ -4,16 +4,21 @@
 use strict;
 use warnings;
 use Test::Socialtext;
+use LWP::UserAgent;
 
-# XXX with database outages at technorati, these tests
-# fail. Need some way to test for good techno before
-# running these tests (could do an LWP get of some kind
-# perhaps.
-plan skip_all => "technorati's database is sometimes flaky"
-  unless $ENV{NLW_TEST_TECHNORATI}
-  or $ENV{NLW_TEST_NETWORK};
+###############################################################################
+# Check and see if Technorati is available; if its down or times out, we'll
+# just skip all of the tests, rather than letting them fail.
+BEGIN {
+    my $ua = LWP::UserAgent->new();
+    $ua->timeout( 60 );
+    my $response = $ua->get( 'http://api.technorati.com/cosmos' );
+    unless ($response->is_success) {
+        plan skip_all => "looks like technorati is offline; HTTP request failed/timed-out";
+    }
 
-plan tests => 7;
+    plan tests => 7;
+};
 
 ###############################################################################
 # Fixture:  admin_no_pages
@@ -37,7 +42,6 @@ bad_technorati_key: {
     # should contain an error
     like $html, qr/Bad technorati key/, 'error if bad technorati key';
 }
-
 
 ###############################################################################
 # TEST: ourselves, to make sure that we get a response with items

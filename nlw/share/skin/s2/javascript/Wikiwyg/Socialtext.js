@@ -244,7 +244,7 @@ function setup_wikiwyg() {
                 });
             }
 
-            Socialtext.logEvent('edit_begin');
+            //Socialtext.logEvent('edit_begin');
 
         } catch(e) {
             throw(e);
@@ -282,7 +282,7 @@ function setup_wikiwyg() {
             jQuery("#st-edit-mode-container").hide();
             jQuery("#st-display-mode-container, #st-all-footers").show();
 
-            Socialtext.logEvent('edit_cancel');
+            //Socialtext.logEvent('edit_cancel');
 
             ww.cancelEdit();
             ww.preview_link_reset();

@@ -692,7 +692,7 @@ proto.strip_msword_gunk = function(html) {
                 return m.match(/ugly-ie-css-hack/) ? m : '';
             }
         ).
-        replace(/<\/?(font|xml|st\d+:\w+|[ovwxp]:\w+)[^>]*>/gi, '');
+        replace(/<\/?(xml|st\d+:\w+|[ovwxp]:\w+)[^>]*>/gi, '');
 }
 
 proto.normalizeDomStructure = function(dom) {

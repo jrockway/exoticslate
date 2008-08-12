@@ -1,5 +1,9 @@
 [%# @COPYRIGHT@ -%]
 [% USE decorate %]
+[% UNLESS sortby %]
+    [% direction = 'desc' %]
+    [% sortby = 'Date' %]
+[% END %]
 <div id="[% style %]-content" class="query-results-content">
     <div id="[% style %]-header-row" class="query-results-header-row">
       <div id="select-all"><input title=[% loc("Select all pages") %] type="checkbox" id="st-listview-allpagescb"/></div>

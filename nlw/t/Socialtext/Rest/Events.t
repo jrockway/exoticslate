@@ -2,7 +2,6 @@
 # @COPYRIGHT@
 use warnings FATAL => 'all';
 use strict;
-use XXX;
 use Test::More tests => 30;
 use URI::Escape qw/uri_escape/;
 use Socialtext::JSON qw/encode_json decode_json/;

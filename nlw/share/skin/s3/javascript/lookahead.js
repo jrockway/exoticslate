@@ -75,7 +75,7 @@
                 display: 'none',
                 padding: '5px',
                 width: jQuery(input).width() + 'px',
-                left: input.offsetLeft + 'px',
+                left: input.offsetLeft + 'px'
             })
             .insertAfter(input);
         return input.lh = lh;

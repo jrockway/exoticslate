@@ -20,7 +20,7 @@
                     padding: 0,
                     background: '#fff',
                     margin: 'auto',
-                    border: "1px outset #555",
+                    border: "1px outset #555"
                 })
                 .appendTo('body');
         }

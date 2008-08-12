@@ -4,7 +4,6 @@
 | *Comment* | wikitest files should be in %%wikitest_files%% on the browser server |  |
 | *Comment* | *This test only works if selenium_browser has higher powers, i.e. *chrome for firefox* |  |
 
-| setSpeed | 100 |  |
 | set | user_1 | user1_%%start_time%%@ken.socialtext.net |
 | set | user_1_regex | user1_%%start_time%%\@ken\.socialtext\.net |
 | set | user_2 | user2_%%start_time%%@ken.socialtext.net |

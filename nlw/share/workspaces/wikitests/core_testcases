@@ -69,6 +69,7 @@ test env properly and are not testing the test-workspace
 * [Test Case: REST Workspace Permissions]
 * [Test Case: Insert Menu]
 * [Test Case: Include Page]
+* [Test Case: Tagged Pages Sorting]
 
 These tests use popup windows and fail in IE 6 because they need single window mode and New Page is failing in IE 6 using single window mode.
 Moved them to the end to isolate failures.

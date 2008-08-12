@@ -197,6 +197,7 @@ IS THE DEFAULT SORT TITLE ASCENDING?
 
 | *Comment* | Test Case: Tagged Page Sorting. Teardown |  |
 
- st-admin | delete-workspace --workspace %%sorting_workspace%% --no-export | |
+| st-admin | delete-workspace --workspace %%sorting_workspace%% --no-export |  |
 
-| *Comment* | Test Case: Tagged Page Sorting COMPLETED |
+| *Comment* | Test Case: Tagged Page Sorting COMPLETED |  |
+| *Comment* | Test Case: Tagged Page Sorting FAILS NINE TESTS until {bz: 904} is fixed |  |

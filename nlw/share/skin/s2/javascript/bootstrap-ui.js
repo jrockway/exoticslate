@@ -122,11 +122,11 @@ jQuery(function () {
     var start_editor = function() {
         // This setTimeout is required to get around of some simple mode bug in IE and FF.
         setTimeout(function() {
-            if (Socialtext.page_type == 'spreadsheet' && Socialtext.wikiwyg_variables.hub.current_workspace.enable_spreadsheet) {
-                jQuery("#st-all-footers, #st-display-mode-container").hide();
-                jQuery("#st-edit-mode-container, #st-editing-tools-edit").show();
-                Socialtext.render_spreadsheet_editor();
-
+            if (Socialtext.page_type == 'spreadsheet' &&
+                Socialtext.wikiwyg_variables.hub.current_workspace
+                    .enable_spreadsheet
+            ) {
+                Socialtext.start_spreadsheet_editor();
                 return false;
             }
 
@@ -144,8 +144,8 @@ jQuery(function () {
     };
 
     jQuery("#st-edit-button-link,#st-edit-actions-below-fold-edit")
-    .addClass("bootstrapper")
-    .one("click", bootstrap(start_editor));
+        .addClass("bootstrapper")
+        .one("click", bootstrap(start_editor));
 
     jQuery(window).bind("boostrapping", function() {
         jQuery("#bootstrap-loader").show();

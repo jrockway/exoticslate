@@ -2,7 +2,9 @@ package Socialtext::Rest;
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More;
+use unmocked 'Exporter';
+use unmocked 'Exporter::Heavy';
+use unmocked 'Test::More';
 use base 'Socialtext::MockBase', 'Exporter';
 use mocked 'Socialtext::User';
 use mocked 'Socialtext::Hub';

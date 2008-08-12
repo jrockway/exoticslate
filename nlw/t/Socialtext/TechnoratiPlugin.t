@@ -3,73 +3,107 @@
 
 use strict;
 use warnings;
-
 use Test::Socialtext;
-fixtures( 'admin_no_pages' );
 
 # XXX with database outages at technorati, these tests
 # fail. Need some way to test for good techno before
 # running these tests (could do an LWP get of some kind
 # perhaps.
-
 plan skip_all => "technorati's database is sometimes flaky"
   unless $ENV{NLW_TEST_TECHNORATI}
   or $ENV{NLW_TEST_NETWORK};
 
-plan tests => scalar blocks;
+plan tests => 7;
 
-my $hub = new_hub('admin');
-my $viewer = $hub->viewer;
+###############################################################################
+# Fixture:  admin_no_pages
+fixtures( 'admin_no_pages' );
 
-run {
-    my $block = shift;
-    my $wafl = $block->wafl;
-    my $match = $block->match;
-    local *Socialtext::TechnoratiPlugin::key = \&Socialtext::TechnoratiPlugin::key;
-    if ($block->use_key) {
-        no warnings 'redefine';
-        *Socialtext::TechnoratiPlugin::key = sub { $block->use_key };
-    }
-    my $actual = $viewer->text_to_html($wafl);
-    like $actual, $match, $block->name;
-};
+###############################################################################
+# TEST: error if we use a bad Technorati key
+bad_technorati_key: {
+    my $hub  = new_hub('admin');
+    my $view = $hub->viewer();
 
-__DATA__
-=== should error on bad key
---- use_key chomp
-foo
---- wafl
-{technorati http://www.socialtext.com}
---- match regexp
-Bad technorati key
+    # over-ride the key
+    no warnings 'redefine';
+    local *Socialtext::TechnoratiPlugin::key = sub { 'foo' };
 
-=== www.socialtext.com
---- wafl
-{technorati http://www.socialtext.com}
---- match literal_lines_regexp
-Technorati links to http://www.socialtext.com
-fetchrss_item
-fetchrss_item
-fetchrss_item
+    # process the wafl
+    my $url  = 'http://www.socialtext.com';
+    my $wafl = "{technorati $url}\n";
+    my $html = $view->text_to_html($wafl);
 
-=== www.socialtext.com, again, to test caching
---- wafl
-{technorati http://www.socialtext.com}
---- match literal_lines_regexp
-Technorati links to http://www.socialtext.com
-fetchrss_item
-fetchrss_item
-fetchrss_item
+    # should contain an error
+    like $html, qr/Bad technorati key/, 'error if bad technorati key';
+}
 
-=== url with pound char in it
---- wafl
-{technorati: http://alevin.com/weblog/archives/001567.html#001567}
---- match regexp
-BookBlog
 
-=== should error on 404
---- wafl
-{technorati http://www.example.com/wontwork}
---- match regexp
-Zero items
+###############################################################################
+# TEST: ourselves, to make sure that we get a response with items
+test_ourselves: {
+    my $hub  = new_hub('admin');
+    my $view = $hub->viewer();
 
+    my $url  = 'http://www.socialtext.com';
+    my $wafl = "{technorati $url}\n";
+    my $html = $view->text_to_html($wafl);
+
+    # should contain a few things in it...
+    like $html, qr/Blog reactions to $url/, 'contains Technorati title';
+    like $html, qr/"fetchrss_item"/, '... and at least one item';
+}
+
+###############################################################################
+# TEST: ourselves (again), to test caching
+test_ourselves_cached: {
+    my $hub  = new_hub('admin');
+    my $view = $hub->viewer();
+
+    # over-ride FetchRSSPlugin, so it dies if we actually try to go out and
+    # re-fetch the feed.  If we're using the cache, this should never get
+    # called.
+    no warnings 'redefine';
+    local *Socialtext::FetchRSSPlugin::_get_content = sub { die "blech!" };
+
+    # render the wafl
+    my $url  = 'http://www.socialtext.com';
+    my $wafl = "{technorati $url}\n";
+    my $html = eval { $view->text_to_html($wafl) };
+
+    # if we have _any_ results, we used the cache instead of re-fetching
+    ok defined $html, 'used cached copy of RSS';
+}
+
+###############################################################################
+# TEST: URL with a pound char in it
+#
+# NOTE: This test is sensitive to the URL used for the test; if the URL becomes
+#       old/stale, the test may fail because Technorati returns no results for
+#       it any longer.
+url_with_pound_char: {
+    my $hub = new_hub('admin');
+    my $view = $hub->viewer();
+
+    my $url  = 'http://alevin.com/weblog/archives/001567.html#001567';
+    my $wafl = "{technorati $url}\n";
+    my $html = $view->text_to_html($wafl);
+
+    # should contain results
+    like $html, qr/Blog reactions to $url/, 'title ok, when URL contains pound char';
+    like $html, qr/Zero items/, "... but doesn't have any linked items right now";
+}
+
+###############################################################################
+# TEST: should note an error if Technorati 404s on requesting the URL.
+no_results_on_404: {
+    my $hub = new_hub('admin');
+    my $view = $hub->viewer();
+
+    my $url  = 'http://www.example.com/wontwork';
+    my $wafl = "{technorati $url}\n";
+    my $html = $view->text_to_html($wafl);
+
+    # empty results
+    like $html, qr/Zero items/, 'no results, when technorati 404s the URL';
+}

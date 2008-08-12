@@ -137,16 +137,10 @@ $Socialtext::EmailSender::Base::SendClass = 'Test';
           'check charset in Content-Type header' );
 }
 
-TODO:
 {
-    # Now this is passing for me locally, but I have no clue why! The
-    # encoded version still appears to be incorrect.
-    local $TODO = 'This will not pass until Encode::MIME::Header is fixed';
-
     Email::Send::Test->clear();
     binmode STDOUT, ':utf8';
     my $email_sender = Socialtext::EmailSender::Factory->create('ja');
-
 
     my $subject = "utf-8 \x80 @! \x{5000}";
     $subject .= 'x x' x 30;

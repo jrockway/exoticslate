@@ -1,5 +1,3 @@
-* HighPermissions
-
 | *Comment* | Test Case: Tagged Page Sorting |  |
 | *Comment* | wikitest files should be in %%wikitest_files%% on the browser server |  |
 
@@ -11,9 +9,9 @@
 | set | user_3_regex | user3_%%start_time%%\@ken\.socialtext\.net |
 | set | user_4 | user4_%%start_time%%@ken.socialtext.net |
 | set | user_4_regex | user4_%%start_time%%\@ken\.socialtext\.net |
+| set | sorting_workspace | tagged-%%start_time%% |
 
 | *Comment* | Test Case: Tagged Page Sorting Create new ws %%sorting_workspace%% |  |
-| set | sorting_workspace | tagged-%%start_time%% |
 | st-admin | create-workspace --name %%sorting_workspace%% --title %%sorting_workspace%% --empty | A new workspace named "%%sorting_workspace%%" was created. |
 | *Comment* | Test Case: Tagged Page Sorting. Adding %%email%% so you can login to this workspace |  |
 | st-admin | add-workspace-admin --e %%email%% --w %%sorting_workspace%% |  |
@@ -115,7 +113,7 @@ Create unique sort order for each sort:
 | check_ok | timezone__time_display_seconds |  |
 | click_and_wait | Button |  |
 
-| *Comment* | Test Case: Tagged Page Sorting. Sorting |  |
+| *Comment* | Test Case: Tagged Page Sorting. Sorting tagged page list view |  |
 | open_ok | /%%sorting_workspace%%/index.cgi?action=category_display;category=Tagged%20Page%20%%start_time%% |  |
 | text_like | qr/Tag:\s+Tagged Page %%start_time%%/i |  |
 
@@ -147,6 +145,55 @@ IS THE DEFAULT SORT TITLE ASCENDING?
 | text_like | st-category-content | qr/Search Sort 2.+Search Sort 1.+Search Sort 4.+Search Sort 3/ |
 | select_and_wait | sort-picker | index=4 |
 | text_like | st-category-content | qr/Search Sort 3.+Search Sort 4.+Search Sort 1.+Search Sort 2/ |
+
+| *Comment* | Test Case: Tagged Page Sorting. Sorting search results. SEARCH. |  |
+| open_ok | /%%sorting_workspace%%/index.cgi |  |
+| st-search | simple | Pages containing 'simple' (4) |
+| click_and_wait | link=Titles |  |
+
+| *Comment* | Test Case: Tagged Page Sorting. Sorting Revisions desc, then asc |  |
+| select_and_wait | sort-picker | label=Revisions |
+| text_like | st-search-content | qr/Search Sort 2.+Search Sort 1.+Search Sort 4.+Search Sort 3/ |
+| select_and_wait | sort-picker | index=5 |
+| text_like | st-search-content | qr/Search Sort 3.+Search Sort 4.+Search Sort 1.+Search Sort 2/ |
+
+| *Comment* | Test Case: Tagged Page Sorting. Sorting Title desc, then asc |  |
+| select_and_wait | sort-picker | label=Title |
+| text_like | st-search-content | qr/Search Sort 4.+Search Sort 3.+Search Sort 2.+Search Sort 1/ |
+| select_and_wait | sort-picker | index=2 |
+| text_like | st-search-content | qr/Search Sort 1.+Search Sort 2.+Search Sort 3.+Search Sort 4/ |
+
+| *Comment* | Test Case: Tagged Page Sorting. Sorting Last Edited By asc, then desc |  |
+| select_and_wait | sort-picker | label=Last Edited By |
+| text_like | st-search-content | qr/Search Sort 4.+Search Sort 1.+Search Sort 2.+Search Sort 3/ |
+| select_and_wait | sort-picker | index=3 |
+| text_like | st-search-content | qr/Search Sort 3.+Search Sort 2.+Search Sort 1.+Search Sort 4/ |
+
+| *Comment* | Test Case: Tagged Page Sorting. Sorting Date desc, then asc |  |
+| select_and_wait | sort-picker | label=Date |
+| text_like | st-search-content | qr/Search Sort 1.+Search Sort 4.+Search Sort 3.+Search Sort 2/ |
+| select_and_wait | sort-picker | index=4 |
+| text_like | st-search-content | qr/Search Sort 2.+Search Sort 3.+Search Sort 4.+Search Sort 1/ |
+
+| *Comment* | Test Case: Tagged Page Sorting. Make a more relevant page |  |
+| open_ok | /%%sorting_workspace%%/index.cgi?action=new_page |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| type_ok | st-newpage-pagename-edit | Search Sort 5 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | simple simple more simple most simple |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| click_ok | st-save-button-link |  |
+| st-admin | index-page --w %%sorting_workspace%% --p search_sort_5 | The Search Sort 5 page in the %%sorting_workspace%% workspace has been indexed. |
+
+| *Comment* | Test Case: Tagged Page Sorting. Sorting search results. Do the SEARCH again. |  |
+| st-search | simple | Pages containing 'simple' (5) |
+
+| *Comment* | Test Case: Tagged Page Sorting. Sorting search results. Verify Relevance sort |
+| text_like | st-search-content | qr/simple simple more simple most simple.+This is a simple text file/ |
+| click_and_wait | link=Titles |  |
+| text_like | st-search-content | qr/Search Sort 5.+Search Sort 1.+Search Sort 2.+Search Sort 3.+Search Sort 4/ |
 
 | *Comment* | Test Case: Tagged Page Sorting. Teardown |  |
 

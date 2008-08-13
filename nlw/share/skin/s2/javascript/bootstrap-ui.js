@@ -32,34 +32,19 @@ jQuery(function () {
         ST.hookCssUpload();
     }
 
-    var load_script = function(script_url) {
-        var script = jQuery("<script>").attr({
-            type: 'text/javascript',
-            src: script_url
-        }).get(0);
-
-        if (jQuery.browser.msie)
-            jQuery(script).appendTo('head');
-        else
-            document.getElementsByTagName('head')[0].appendChild(script);
-    };
-
     var load_ui = function(cb) {
         var script_url =
             nlw_make_s2_path("/javascript/socialtext-display-ui.js.gz")
             .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time) ;
 
-        load_script( script_url ); 
         var self = this;
-        var loader = function() {
-            // Test if it's fully loaded.
-            if (Socialtext.boostrap_ui_finished != true)  {
-                setTimeout(arguments.callee, 500);
-                return;
-            }
-            cb.call(self);
-        }
-        setTimeout(loader, 500);
+        jQuery.ajax({
+            type: 'GET',
+            dataType: 'script',
+            url: script_url,
+            success: function() { cb.call(self); },
+            cache: true
+        });
     };
 
     var load_socialcalc = function(cb) {
@@ -71,18 +56,15 @@ jQuery(function () {
         var script_url =
             nlw_make_plugin_path("/socialcalc/javascript/socialtext-socialcalc.js.gz")
                 .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time) ;
-        // console.log(script_url); // Parag
-        load_script( script_url ); 
+
         var self = this;
-        var loader = function() {
-            // Test if it's fully loaded.
-            if (! (window.SocialCalc && SocialCalc.bootstrap_finished == true))  {
-                setTimeout(arguments.callee, 500);
-                return;
-            }
-            cb.call(self);
-        }
-        setTimeout(loader, 500);
+        jQuery.ajax({
+            type: 'GET',
+            dataType: 'script',
+            url: script_url,
+            success: function() { cb.call(self); },
+            cache: true
+        });
     };
 
     var bootstrap2 = function(cb) {

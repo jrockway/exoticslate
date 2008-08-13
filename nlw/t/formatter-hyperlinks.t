@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Test::Socialtext;
 
+
 fixtures( 'admin' );
 
 filters { regexps => [qw'lines chomp make_regexps'] };

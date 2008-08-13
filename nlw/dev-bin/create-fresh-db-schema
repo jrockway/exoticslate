@@ -14,7 +14,7 @@ scm revert $DB_FILE
 nlwctl stop
 dropdb $DB_SCHEMA
 $STDB sync --schema socialtext
-pglist public > $DB_FILE
+pglist public | grep -v 'COMMENT ON ' > $DB_FILE
 
 NEW_VERSION=`$STDB version --schema socialtext | sed 's/.*version: //'`
 

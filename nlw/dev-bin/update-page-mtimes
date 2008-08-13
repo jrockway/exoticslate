@@ -1,0 +1,58 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use Socialtext::Workspace;
+use Socialtext::Hub;
+use Socialtext::CLI;
+use Fatal qw/opendir closedir chdir open/;
+use Cwd qw/abs_path/;
+
+$| = 1; # turn on autoflush
+
+die "Must be run as root!\n" if $< and !$ENV{ST_DEV};
+Socialtext::CLI->_drop_privs();
+
+if ( @ARGV ) {
+    for my $ws_name ( @ARGV ) {
+        my $dir = Socialtext::Paths::page_data_directory($ws_name);
+        next unless ( -d $dir );
+        my $wksp = Socialtext::Workspace->new(name => $ws_name);
+        process_workspace($wksp);
+    }
+}
+else {
+    my $workspaces = Socialtext::Workspace->All;
+    while ( my $wksp = $workspaces->next ) {
+	process_workspace($wksp);
+    }
+}
+exit;
+
+sub process_workspace {
+    my $wksp = shift;
+    print "Fixing mtimes for " . $wksp->name . ": ";
+    my $workspace_dir = Socialtext::Paths::page_data_directory($wksp->name);
+    chdir $workspace_dir;
+    opendir(my $dfh, $workspace_dir);
+    while (my $dir = readdir($dfh)) {
+        next unless -d $dir;
+        next if $dir =~ m/^\./;
+        my $page_link = "$dir/index.txt";
+        next unless -l $page_link;
+
+        my $dir_mtime  = (stat($dir))[9];
+        my $link_mtime = (stat($page_link))[9];
+        next if $link_mtime == $dir_mtime;
+        print "$dir ";
+        utime $link_mtime, $link_mtime, $dir 
+            or warn "utime $link_mtime, $dir failed: $!";
+    }
+    closedir($dfh);
+    print "\n";
+}
+
+
+

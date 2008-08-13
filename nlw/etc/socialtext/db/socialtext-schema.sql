@@ -3,7 +3,6 @@ SET client_encoding = 'UTF8';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 
-COMMENT ON SCHEMA public IS 'Standard public schema';
 
 SET search_path = public, pg_catalog;
 
@@ -280,6 +279,11 @@ CREATE TABLE person (
     small_photo_image bytea
 );
 
+CREATE TABLE person_tag (
+    id integer NOT NULL,
+    name text
+);
+
 CREATE TABLE person_watched_people__person (
     person_id1 integer NOT NULL,
     person_id2 integer NOT NULL
@@ -315,11 +319,6 @@ CREATE TABLE "storage" (
     "key" varchar(128),
     value text,
     datatype varchar(10)
-);
-
-CREATE TABLE tag (
-    id integer NOT NULL,
-    name text
 );
 
 CREATE SEQUENCE tag_id_seq
@@ -478,6 +477,9 @@ CREATE INDEX ix_person_assistant_id
 
 CREATE INDEX ix_person_supervisor_id
 	    ON person (supervisor_id);
+
+CREATE UNIQUE INDEX person_tag__name
+	    ON person_tag (name);
 
 CREATE UNIQUE INDEX search_set_workspaces___search_set_id___search_set_id___workspa
 	    ON search_set_workspaces (search_set_id, workspace_id);
@@ -639,7 +641,6 @@ ALTER TABLE ONLY "Workspace"
     ADD CONSTRAINT workspace___account___account_id___account_id___n___1___1___0
             FOREIGN KEY (account_id)
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
-
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
 INSERT INTO "System" VALUES ('socialtext-schema-version', '8');

@@ -318,7 +318,12 @@ sub run_sql_file {
     my $file = shift;
 
     my %c = $self->connect_params();
-    $self->_db_shell_run("$c{psql} -e -f $file");
+    eval {
+        $self->_db_shell_run("$c{psql} --set ON_ERROR_STOP=1 -e -f $file");
+    };
+    if ($@) {
+        die "Schema update failed on file '$file'\n";
+    }
 }
 
 =head2 set_schema_version 
@@ -361,12 +366,12 @@ sub createdb {
     my $self = shift;
     my %c = $self->connect_params();
     disconnect_dbh();
-    my $owner = $c{user} || 'nlw';
     eval {
-        $self->_db_shell_run("createdb -E UTF8 -O $owner $c{db_name}");
+        my $sudo = $> ? '' : 'sudo -u postgres';
+        $self->_db_shell_run("$sudo createdb -E UTF8 -O $c{user} $c{db_name}");
     };
     my $createdb_err = $@;
-    eval { $self->_createlang };
+    $self->_createlang;
     die $createdb_err if $createdb_err;
 }
 
@@ -382,7 +387,10 @@ sub _createlang {
                   . " > /dev/null");
     };
     if ($@) {
-        $self->_db_shell_run("createlang -U $c{user} plpgsql $c{db_name}");
+        # If we're running as root, we need to run createlang as postgres
+        # If we're not root, then we're likely in a dev-env.
+        my $sudo = $> ? '' : 'sudo -u postgres';
+        $self->_db_shell_run("$sudo createlang plpgsql $c{db_name}");
     }
 }
 

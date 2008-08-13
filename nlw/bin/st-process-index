@@ -1,0 +1,159 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+
+use Fcntl ':flock';
+use FindBin;
+use File::Spec;
+use Getopt::Long;
+use lib "$FindBin::Bin/../lib";
+use Socialtext::Search::Config;
+use Socialtext::AppConfig;
+use Socialtext::File;
+use Socialtext::Paths;
+use Socialtext::Log 'st_log';
+use Socialtext::Workspace;
+
+my $TYPE = 'rampup';
+GetOptions( 'type=s' => \$TYPE );
+
+my $MAX_QUEUED_EVENTS = 125;
+my $LOCKFILE = '/tmp/st-process-index.lock';
+my $INDEXING_COLLATERAL_DIR = Socialtext::Paths::storage_directory( 'indexing' );
+my $WORKSPACES_LIST_FILE = Socialtext::File::catfile( $INDEXING_COLLATERAL_DIR, 
+        'workspaces-to-be-indexed' );
+
+if ( ! -f $WORKSPACES_LIST_FILE ) {
+    print "Workspace list file does not exist, ensuring cron job "
+        . " is deleted, then exiting.\n";
+    delete_cron();
+
+    exit 1;
+} 
+
+die "'type' arg must either be 'live' or 'rampup', exiting.\n"
+    unless ( $TYPE eq 'live' || $TYPE eq 'rampup' );
+
+unless (self_lock()) {
+    print "Can't get lock.  Exiting.\n";
+    exit 0;
+}
+
+if ( few_enough_events() ) {
+    if ( -s $WORKSPACES_LIST_FILE ) {
+        # for i in range(5):
+        my @workspaces_batch = split /\n/, `head -5 $WORKSPACES_LIST_FILE`;
+        for my $ws_name (@workspaces_batch) {
+            my $ws = Socialtext::Workspace->new( name => $ws_name );
+            next unless $ws;
+            print "Indexing $ws_name\n";
+            index_workspace($ws_name);
+            (system "tail -n+2 $WORKSPACES_LIST_FILE "
+                . "> $WORKSPACES_LIST_FILE.tmp") == 0
+                or die "tail exited nonzero: $?";
+            rename "$WORKSPACES_LIST_FILE.tmp", $WORKSPACES_LIST_FILE
+                or die "rename $WORKSPACES_LIST_FILE.tmp ",
+                    "-> $WORKSPACES_LIST_FILE: $!";
+        }
+    }
+    else {
+        # Convert rampup to live if we're ramping up.
+        convert_rampup_to_live()
+            if ( $TYPE eq 'rampup' );
+
+        # Let's be sure to clean up after ourselves and delete the
+        # workspace list file and the cron job.
+        unlink $WORKSPACES_LIST_FILE;
+        delete_cron();
+    } 
+}
+else {
+    print "Still processing a workspace.  Not adding anything.\n";
+    exit 1;
+}
+
+sub convert_rampup_to_live {
+    my $rampup_config = Socialtext::Search::Config->new( mode => 'rampup' );
+    my $live_config   = Socialtext::Search::Config->new( mode => 'live' );
+
+    my $r_conf_file = $rampup_config->config_file_name;
+    my $l_conf_file = $live_config->config_file_name;
+    my $live_backup = "$l_conf_file.bak";
+
+    # Keep the previous live.yaml as live.yaml.bak
+    print "Backing up $l_conf_file to $live_backup...";
+    link $l_conf_file, $live_backup
+        or die "link $l_conf_file -> $live_backup: $!";
+    # Promote rampup.yaml to live.yaml
+    print "done.\n", "Moving rampup configuration to live...";
+    rename $r_conf_file, $l_conf_file
+        or die "rename $r_conf_file -> $l_conf_file: $!";
+}
+
+sub delete_cron {
+    print "done.\n", "Removing our cron entry from /etc/cron.d...";
+    unlink "/etc/cron.d/st-process-index"
+        or die "unlink cron file: $!";
+    print "done.\n";
+}
+
+sub few_enough_events {
+    my $ceq_dir = Socialtext::AppConfig->change_event_queue_dir;
+    my $regex = ( $TYPE eq 'rampup' ) ? qr/Rampup/ : qr/.*/ ;
+
+    opendir DH, $ceq_dir;
+    my $found_no_rampup = $MAX_QUEUED_EVENTS;
+    while ( my $file = readdir DH ) {
+        if ( $file =~ $regex ) {
+            $found_no_rampup--;
+            last if $found_no_rampup == 0;
+        }
+    }
+    closedir DH;
+
+    return $found_no_rampup;
+}
+
+sub index_workspace {
+    my $workspace = shift;
+    my $sync = '';
+    my $thing_count;
+
+    my $page_dir = Socialtext::AppConfig->data_root_dir . "/data/$workspace";
+    if ( -d $page_dir ) {
+        opendir DH, $page_dir;
+        $thing_count = grep !/^\./, readdir DH;
+	closedir DH;
+    }
+
+    my $attachment_dir = Socialtext::AppConfig->data_root_dir . "/plugin/$workspace/attachments";
+    foreach my $page_dir (glob "$attachment_dir/*") {
+	if ( -d $page_dir ) {
+	    opendir DH, $page_dir;
+	    $thing_count += grep !/^\./, readdir DH;
+            closedir DH;
+	}
+    }
+
+    st_log->debug("Thing count for $workspace is $thing_count.");
+
+    if ( $thing_count < 50) {
+        $sync = '--sync';
+    }
+
+    my $type = ( $TYPE eq 'rampup' ) ? '--search-config=rampup ' : '';
+    (system
+        "st-admin index-workspace "
+        . "--workspace=$workspace "
+        . $type
+        . "$sync") == 0
+    or die "st-admin exited nonzero: $?";
+}
+
+sub self_lock {
+    Socialtext::File::ensure_empty_file($LOCKFILE);
+    open LOCK, $LOCKFILE or die "$LOCKFILE: $!";
+    return flock LOCK, LOCK_EX | LOCK_NB;
+}

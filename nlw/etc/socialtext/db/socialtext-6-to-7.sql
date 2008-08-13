@@ -72,7 +72,7 @@ CREATE INDEX ix_event_tag
 ALTER TABLE tag_people__person_tags 
     DROP CONSTRAINT tag_people_fk;
 
-RENAME TABLE tag RENAME TO person_tag;
+ALTER TABLE tag RENAME TO person_tag;
 
 ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT tag_people_fk

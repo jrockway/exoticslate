@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 4;
-fixtures( 'admin' );
+fixtures( 'admin_no_pages' );
 
 my $bogus_email = 'humpty@dance.org';
 my $legit_email = 'devnull1@socialtext.com';

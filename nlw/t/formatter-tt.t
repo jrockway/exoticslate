@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 1;
-fixtures( 'admin' );
+fixtures( 'admin_no_pages' );
 
 format_tt_wafl: {
     my $content = "`++\$bar`\n";

@@ -48,6 +48,7 @@ my $inc = 'build';
 foreach my $maybe (
         $ENV{ST_CURRENT} ? "$ENV{ST_CURRENT}/nlw/build" : (), 
         $ENV{ST_SRC_BASE} ? "$ENV{ST_SRC_BASE}/current/nlw/build" : (),
+        File::Spec->catdir( File::Basename::dirname($0), File::Spec->updir, 'build' ),
         ) {
     if (-d $maybe) {
         $inc = File::Spec->abs2rel($maybe);
@@ -469,10 +470,7 @@ sub _existing_or_new_secret {
 sub _get_template_root {
     my $template_root =
         Cwd::abs_path(
-            File::Spec->catdir(
-                File::Basename::dirname($0),
-                File::Spec->updir, $inc, 'templates'
-            )
+            File::Spec->catdir($inc, 'templates')
         );
 
     return $template_root;

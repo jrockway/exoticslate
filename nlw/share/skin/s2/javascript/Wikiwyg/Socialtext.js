@@ -889,7 +889,9 @@ proto.enableLinkConfirmations = function() {
     var links = document.getElementsByTagName('a');
     for (var i = 0; i < links.length; i++) {
         if (links[i].id == 'st-cancel-button-link') continue;
-        if (links[i].onclick) continue;
+        try {
+            if (links[i].onclick) continue;
+        } catch(e) {}
         if (links[i].id == 'st-save-button-link') continue;
         if (links[i].id == 'st-edit-mode-uploadbutton') continue;
         if (links[i].id == 'st-edit-mode-tagbutton') continue;

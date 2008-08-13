@@ -417,8 +417,8 @@ ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT tag_people__person_tags_pkey
             PRIMARY KEY (person_id, tag_id);
 
-ALTER TABLE ONLY tag
-    ADD CONSTRAINT tag_pkey
+ALTER TABLE ONLY person_tag
+    ADD CONSTRAINT person_tag_pkey
             PRIMARY KEY (id);
 
 CREATE UNIQUE INDEX "Account___name"
@@ -625,7 +625,7 @@ ALTER TABLE ONLY person_watched_people__person
 ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT tag_people_fk
             FOREIGN KEY (tag_id)
-            REFERENCES tag(id);
+            REFERENCES person_tag(id);
 
 ALTER TABLE ONLY "UserWorkspaceRole"
     ADD CONSTRAINT userworkspacerole___role___role_id___role_id___n___1___1___0

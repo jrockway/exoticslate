@@ -111,6 +111,22 @@
 [% IF config.is_appliance || config.is_dev %]
     RewriteRule    !^/console               -           [C]
 [% END %]
+
+    # Transform ? in REST strings into doubly-encoded %3F, and rely on
+    # Socialtext::Handler::REST to turn them back.
+    # REVIEW: Maybe use a PUA character here instead?
+[% FOREACH i = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1] %]
+    RewriteRule    /data/(.*)
+    [%- FOREACH j = [1..i] -%]
+\?(.*)
+    [%- END -%]
+   http://localhost:[% apache_perl_port %]/data/$1
+    [%- FOREACH j = [1..i] -%]
+\%3F$[% j+1 %]
+    [%- END -%]
+  [P,L]
+[%- END %]
+
     RewriteRule    (.*)   http://localhost:[% apache_perl_port %]$1  [P,L]
 [% END %]
 

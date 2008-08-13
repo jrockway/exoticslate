@@ -83,16 +83,6 @@ sub real_handler {
     my $r       = shift;
     my $user    = shift;
 
-    # Here we fix mod_rewrite's buggy double-escaping from "?" into "%3F"
-    # in URI strings.  See build/templates/shared/rewrite.tt2 about where
-    # this is coming from.
-    # REVIEW: Maybe use a PUA character here instead?
-    if ($r->uri =~ /%3F/) {
-        my $uri = $r->uri;
-        $uri =~ s/%3F/?/g;
-        $r->uri($uri);
-    }
-
     my $handler = __PACKAGE__->new( request => $r, user => $user );
     Socialtext::Timer->Start('handler_run');
     $handler->run();

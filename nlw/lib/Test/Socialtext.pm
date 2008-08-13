@@ -133,7 +133,11 @@ sub smarter_unlike() {
 sub formatted_like() {
     my $wikitext = shift;
     my $re       = shift;
-    my $name     = shift || $wikitext;
+    my $name     = shift;
+    unless ($name) {
+        $name = $wikitext;
+        $name =~ s/\n/\\n/g;
+    }
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     my $formatted = main_hub()->viewer->text_to_html("$wikitext\n");
     like $formatted, $re, $name;
@@ -142,7 +146,11 @@ sub formatted_like() {
 sub formatted_unlike() {
     my $wikitext = shift;
     my $re       = shift;
-    my $name     = shift || $wikitext;
+    my $name     = shift;
+    unless ($name) {
+        $name = $wikitext;
+        $name =~ s/\n/\\n/g;
+    }
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     my $formatted = main_hub()->viewer->text_to_html("$wikitext\n");
     unlike $formatted, $re, $name;

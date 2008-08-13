@@ -27,6 +27,8 @@ our @EXPORT = qw(
     smarter_unlike
     ceqlotron_run_synchronously
     setup_test_appconfig_dir
+    formatted_like
+    formatted_unlike
 );
 
 our @EXPORT_OK = qw(
@@ -126,6 +128,24 @@ sub smarter_unlike() {
         }
     }
     pass( "$name - success" );
+}
+
+sub formatted_like() {
+    my $wikitext = shift;
+    my $re       = shift;
+    my $name     = shift || $wikitext;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    my $formatted = main_hub()->viewer->text_to_html("$wikitext\n");
+    like $formatted, $re, $name;
+}
+
+sub formatted_unlike() {
+    my $wikitext = shift;
+    my $re       = shift;
+    my $name     = shift || $wikitext;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    my $formatted = main_hub()->viewer->text_to_html("$wikitext\n");
+    unlike $formatted, $re, $name;
 }
 
 sub ceqlotron_run_synchronously() {

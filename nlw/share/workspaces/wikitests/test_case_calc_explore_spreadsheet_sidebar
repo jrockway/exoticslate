@@ -1,5 +1,3 @@
-* HighPermissions
-
 | *Comment* | STARTING Test Case: Calc Explore Spreadsheet Sidebar |  |
 
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=TC%20Hide%20Sidebar%20Spreadsheet1%20%%start_time%%#edit |  |

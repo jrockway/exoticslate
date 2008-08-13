@@ -256,7 +256,6 @@ CREATE TABLE person (
     photo text,
     small_photo text,
     first_name text,
-    middle_name text,
     last_name text,
     "position" text,
     "location" text,

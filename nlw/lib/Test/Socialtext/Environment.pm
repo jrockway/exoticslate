@@ -18,9 +18,6 @@ use Test::Socialtext::Fixture;
 field 'root_dir';
 field 'base_dir';
 field 'ports_start_at' => 30000;
-# skip_cache implies three things: don't create the cache, don't extract from
-# the cache, and always create the environment from scratch
-field 'skip_cache' => 0;
 field 'verbose' => 1;
 field 'wiki_url_base';
 field 'fixtures' => [];
@@ -114,20 +111,7 @@ sub _clean_filesystem {
 sub _make_fixtures_current {
     my $self = shift;
     foreach my $fixture (@{$self->fixture_objects}) {
-        if ($self->skip_cache) {
-            $fixture->generate;
-        } else {
-            $fixture->make_cache_current;
-        }
-    }
-}
-
-sub _maybe_decache {
-    my $self = shift;
-    unless ($self->skip_cache) {
-        foreach my $fixture (@{$self->fixture_objects}) {
-            $fixture->decache;
-        }
+        $fixture->generate;
     }
 }
 
@@ -143,7 +127,6 @@ sub _create_test_environment {
     }
 
     $self->_make_fixtures_current;
-    $self->_maybe_decache;
 }
 
 sub hub_for_workspace {

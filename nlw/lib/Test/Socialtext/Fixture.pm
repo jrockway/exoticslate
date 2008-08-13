@@ -108,24 +108,9 @@ sub _generate_base_config {
     $BaseConfigGenerated = 1;
 }
 
-sub make_cache_current {
-    my $self = shift;
-
-    unless ($self->is_current) {
-        $self->generate;
-        $self->encache;
-    }
-}
-
 sub is_current {
     my $self = shift;
     my $dir = $self->dir;
-
-    if (-f $self->fs_cache_file) {
-        if (-M $dir < -M $self->fs_cache_file) {
-            return 0;
-        }
-    }
 
     if (-x "$dir/is-current") {
         return ! (system "$dir/is-current");
@@ -134,47 +119,14 @@ sub is_current {
     return 0;
 }
 
-sub encache {
-    my $self = shift;
-
-    $self->_encache_filesystem;
-}
-
-sub _encache_filesystem {
-    my $self = shift;
-
-    my @contents = $self->_cache_contents
-        or return;
-
-    local $CWD = $self->env->root_dir or die;
-    _system_or_die( 'tar czf '
-          . $self->fs_cache_file . ' '
-          . join ' ', @contents );
-}
-
-sub decache {
-    my $self = shift;
-
-    # Note that order is important here.  We'll need AppConfig to be able to
-    # decache the database.
-    $self->_decache_filesystem;
-}
-
-sub _decache_filesystem {
-    my $self = shift;
-
-    return unless $self->_cache_contents;
-
-    local $CWD = $self->env->root_dir or die;
-    _system_or_die('tar xzf ' . $self->fs_cache_file);
-}
-
 sub generate {
     my $self = shift;
 
-    $self->_generate_subfixtures;
-    $self->_generate_workspaces;
-    $self->_run_custom_generator;
+    unless ( $self->is_current() ) {
+        $self->_generate_subfixtures;
+        $self->_generate_workspaces;
+        $self->_run_custom_generator;
+    }
 }
 
 sub _run_custom_generator {
@@ -473,45 +425,6 @@ sub _create_extra_attachments {
             );
         }
     }
-}
-
-sub fs_cache_file {
-    my $self = shift;
-
-    return $self->env->root_dir . '-' . $self->name . '.tgz';
-}
-
-sub db_cache_file {
-    my $self = shift;
-
-    return $self->env->root_dir . '-' . $self->name . '.sql';
-}
-
-sub _cache_contents {
-    my $self = shift;
-    my %file;
-
-    # XXX: these keyword explosions probably belong somewhere else
-    foreach my $cache_item (@{$self->config->{cache}}) {
-        if ($cache_item =~ /^WORKSPACES/) {
-            $file{$_} = 1 foreach qw(
-                root/aliases.deliver
-                root/data
-                root/user
-                root/plugin
-            );
-        } elsif ($cache_item eq 'USERS') {
-            # ignore
-        } else {
-            $file{$cache_item} = 1;
-        }
-    }
-    foreach my $fixture (@{$self->fixtures}) {
-        $file{$_} = 1 foreach $fixture->_cache_contents;
-    }
-
-    my @contents = keys %file;
-    return @contents;
 }
 
 sub _system_or_die {

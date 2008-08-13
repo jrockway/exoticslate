@@ -31,7 +31,6 @@ Test::Socialtext::Environment->CreateEnvironment(
     root_dir       => $root_dir,
     base_dir       => $base_dir,
     fixtures       => ['ALL'],
-    skip_cache     => 1,
     ports_start_at => 20000,
     verbose        => 1,
 );

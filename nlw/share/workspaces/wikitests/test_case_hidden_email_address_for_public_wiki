@@ -1,5 +1,7 @@
 * HighPermissions
 
+| *Comment* | NOTE NOTE NOTE NOTE NOTE. This test is included in Default User Testcases in IE 6 and IE 7 Testcases, but it needs High Permissions which DON'T WORK in IE. This needs to be refactored. |  |
+
 | *Comment* | Test Case: Hidden Email Address |  |
 | *Comment* | Upload File so that you can verify hidden address in All Files, similarly add comments, create blog etc |  |
 | *Comment* | wikitest files should be in %%wikitest_files%% on the browser server |  |

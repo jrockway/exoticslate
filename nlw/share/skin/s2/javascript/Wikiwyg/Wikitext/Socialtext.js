@@ -1983,7 +1983,45 @@ proto.has_parent = function(elem, name) {
             var markup = this.config.markupRules[style];
             var markup_open = markup[1];
             var markup_close = markup[2] || markup_open;
-            return markup_open + elem.wikitext + markup_close;
+
+            var wikitext = elem.wikitext;
+
+            var prev_node = elem.previousSibling;
+            if (prev_node && prev_node.nodeType == 3) { // Same as .getPreviousTextNode
+                if (prev_node.nodeValue.match(/\w$/) && wikitext.match(/^\S/)) {
+                    // If there is no room for markup at the front, discard the markup.
+                    // Example: "x<b>y</b> z" should become "xy z", not "x*y* z".
+                    return wikitext;
+                }
+                else if (prev_node.nodeValue.match(/\s$/)) {
+                    // Strip whitespace at the front if there's already
+                    // trailing whitespace from the previous node.
+                    // Example: "x <b> y</b>" becomes "x <b>y</b>".
+                    wikitext = wikitext.replace(/^\s+/, '');
+                }
+            }
+
+            var next_node = elem.nextSibling;
+            if (next_node && next_node.nodeType == 3) { // Same as .getNextTextNode
+                if (next_node.nodeValue.match(/^\w/) && wikitext.match(/\S$/)) {
+                    // If there is no room for markup at the end, discard the markup.
+                    // Example: "x <b>y</b>z" should become "x yz", not "x *y*z".
+                    return wikitext;
+                }
+                else if (next_node.nodeValue.match(/^\s/)) {
+                    // Strip whitespace at the end if there's already
+                    // leading whitespace from the next node.
+                    // Example: "x <b> y</b>" becomes "x <b>y</b>".
+                    wikitext = wikitext.replace(/\s+$/, '');
+                }
+            }
+
+            // Finally, move whitespace outward so only non-whitespace
+            // characters are put into markup.
+            // Example: "x<b> y </b>z" becomes "x *y* z".
+            return wikitext
+                .replace(/^(\s*)/, "$1" + markup_open)
+                .replace(/(\s*)$/, markup_close + "$1");
         }
     }
 

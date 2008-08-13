@@ -30,6 +30,7 @@
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 10000 |
 | type_ok | st-newpage-pagename-edit | np %%start_time%% |
 | click_ok | st-save-button-link |  |
+| wait_for_element_visible_ok | st-newpage-duplicate-title | 10000 |
 | text_like | st-newpage-duplicate-title | Page Already Exists |
 | click_ok | st-newpage-duplicate-option-suggest |  |
 | click_ok | st-newpage-duplicate-option-different |  |
@@ -51,7 +52,7 @@
 | click_ok | link=Create New Wiki Page |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | type_ok | st-newpage-pagename-edit | np %%start_time%% 3 |
-| click_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 | wait_for_text_present_ok | Incoming Links | 30000 |
 | wait_for_element_visible_ok | st-page-title | 20000 |
 | text_like | st-page-title | np %%start_time%% 3 |

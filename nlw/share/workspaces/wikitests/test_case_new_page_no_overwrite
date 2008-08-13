@@ -63,6 +63,7 @@ occasionally but this test does not fail
 
 | *Comment* | Test Case: New Page No Overwrite: test Page Already Exists cancel |  |
 | click_ok | st-save-button-link |  |
+| wait_for_element_visible_ok | st-newpage-save-pagename | 10000 |
 | type_ok | st-newpage-save-pagename | %%start_time%% npno 1 |
 | wait_for_element_visible_ok | st-newpage-save-savebutton | 5000 |
 | click_ok | st-newpage-save-savebutton |  |

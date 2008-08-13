@@ -185,7 +185,8 @@ clean:
 		$(JEMPLATE_MODULE) \
 		$(JEMPLATE_WIKIWYG_MODULE) \
 		Widgets.js \
-
+		Selection.htc \
+		build-semaphore \
 
 .SUFFIXES: .js -mini.js .js.gz
 

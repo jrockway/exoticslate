@@ -5,20 +5,10 @@ use strict;
 use warnings;
 
 use File::Temp qw/tmpnam/;
-use Image::Magick;
 use LWP::UserAgent;
-use Socialtext::Image;
-use Socialtext::Encode;
 use Socialtext::Migration::Utils qw/ensure_socialtext_schema/;
+use Socialtext::People::Profile;
 use Socialtext::SQL qw/sql_begin_work sql_execute sql_commit/;
-use Socialtext::System qw/shell_run/;
-use Socialtext::AppConfig;
-
-
-# In order to store files in the DB, the db_user will need
-# superuser access.
-my $db_user = Socialtext::AppConfig->db_user;
-shell_run("sudo -u postgres psql -c 'ALTER ROLE $db_user WITH SUPERUSER'");
 
 ensure_socialtext_schema(8);
 
@@ -38,97 +28,33 @@ sql_begin_work();
 for my $row ( @{ $result->fetchall_arrayref } ) {
     my ( $id, $photo_url, $small_photo_url ) = @$row;
 
-    # make sure that both of these are populated,
-    # we'll optimize for identical results below.
-    if ( ! defined $small_photo_url ) {
-        $small_photo_url = $photo_url;
-    }
-    elsif ( ! defined $photo_url ) {
-        $photo_url = $small_photo_url;
-    }
+      $photo_url = $small_photo_url
+          unless ( defined $photo_url );
 
-    my ( $blob, $small_blob ) 
-        = fetch_blobs( $photo_url, $small_photo_url );
+    my $blob = fetch_blob( $photo_url );
+    my $profile = Socialtext::People::Profile->GetProfile( $id );
 
-    # if any of this blows up, let's skip it.
-    eval {
-        my $photo = large_blob_to_file( $blob );
-        my $small_photo = small_blob_to_file( $small_blob );
-        update_profile( $id, $photo, $small_photo );
-        unlink( $photo );
-        unlink( $small_photo );
-    };
-    if ( $@ ) {
-        warn "WARNING: $@\n";
-    }
+    # if this blows up, let's skip it.
+    eval { $profile->save_profile_image( $blob ) };
+    warn "WARNING: $@\n" if ( $@ );
 }
 sql_commit();
 
 exit;
 
-sub fetch_blobs {
-    my $photo_url = shift;
-    my $small_photo_url = shift;
-
-    my $img_blob = fetch_blob( $photo_url );
-    my $small_img_blob = ( $photo_url eq $small_photo_url )
-        ? $img_blob
-        : fetch_blob( $small_photo_url );
-
-    return ( $img_blob, $small_img_blob );
-}
-
-sub large_blob_to_file {
-    my $image_blob = shift;
-    return generic_blob_to_file( $image_blob, 'large' );
-}
-
-sub small_blob_to_file {
-    my $image_blob = shift;
-    return generic_blob_to_file( $image_blob, 'small' ); 
-}
-
 sub fetch_blob {
+    my $photo_url = shift;
+    my $img_blob = fetch_from_web( $photo_url );
+    return $img_blob;
+}
+
+sub fetch_from_web {
     my $url = shift;
 
     my $response = $ua->get( $url );
 
     return ( $response->is_success )
         ? $response->content 
-        : 0;
+        : '';
 }
 
-sub generic_blob_to_file {
-    my $blob = shift;
-    my $size = shift;
-
-    my $img = Image::Magick->new( magick => 'png' );
-    $img->BlobToImage( $blob );
-    $img = Socialtext::Image::process_profile_image(
-        image => $img,
-        size  => $size
-    );
-
-    return image_to_filename( $img );
-}
-
-sub image_to_filename {
-    my $img = shift;
-
-    my $filename = tmpnam();
-    $img->Write( $filename );
-
-    return $filename;
-}
-
-sub update_profile {
-    my ( $id, $photo, $small_photo ) = @_;
-
-    my $sql = 'UPDATE person SET photo_image = ';
-    $sql .= ( $photo ) ? "lo_import('$photo')" : 'NULL';
-    $sql .= ', small_photo_image = ';
-    $sql .= ( $small_photo ) ? "lo_import('$small_photo')" : 'NULL';
-    $sql .= ' WHERE id = ?';
-    
-    sql_execute( $sql, $id );
-}

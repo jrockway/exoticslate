@@ -4,10 +4,10 @@ BEGIN;
 -- are populated, we'll delete the old fields and move these over.
 
 ALTER TABLE person
-    ADD COLUMN photo_image oid;
+    ADD COLUMN photo_image bytea;
 
 ALTER TABLE person
-    ADD COLUMN small_photo_image oid;
+    ADD COLUMN small_photo_image bytea;
 
 UPDATE "System"
    SET value = 8

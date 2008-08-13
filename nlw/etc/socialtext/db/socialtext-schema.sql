@@ -277,8 +277,8 @@ CREATE TABLE person (
     company text,
     supervisor_id integer,
     assistant_id integer,
-    photo_image oid,
-    small_photo_image oid
+    photo_image bytea,
+    small_photo_image bytea
 );
 
 CREATE TABLE person_watched_people__person (

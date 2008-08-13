@@ -6,7 +6,7 @@
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 60000 |
 | wait_for_element_visible_ok | st-save-button-link | 60000 |
 | type_ok | st-newpage-pagename-edit | set user %%start_time%% |
-| click_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-edit-button-link | 60000 |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | st-save-button-link | 60000 |
@@ -31,7 +31,7 @@ Dashboard: observe Welcome message | go to Settings->My settings and change user
 | type_ok | last_name | Lastly |
 | clickAndWait | Button |  |
 | open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| text_like | st-user-welcome | Welcome, Firstly - %%start_time%% Lastly |
+| text_like | st-user-welcome | qr/Welcome,\s+Firstly - %%start_time%% Lastly/i |
 
 | *Comment* | Test Case: Set User Names Teardown (just in case) |  |
 | st-admin | set-permissions --w %%workspace%% --p member-only | The permissions for the %%workspace%% workspace have been changed to member-only |

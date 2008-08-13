@@ -15,10 +15,9 @@ my $viewer = new_hub('admin')->viewer;
 run {
     my $block = shift;
     my $text = $block->text;
-    my $result = $viewer->text_to_html("$text\n");
 
     for my $re ($block->regexps) {
-        like( $result, $re, $text );
+        formatted_like $text, $re;
     }
 };
 

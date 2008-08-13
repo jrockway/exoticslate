@@ -3,36 +3,40 @@
 
 use strict;
 use warnings;
-
 use Test::Socialtext;
+
 fixtures( 'admin' );
 
 filters { regexps => [qw'lines chomp make_regexps'] };
 plan tests => 1 * (map { ($_->regexps) } blocks);
 
-my $hub = new_hub('admin');
-my $viewer = $hub->viewer;
+###############################################################################
+# Test once, with external links opening in a new window
+external_links_open_in_new_window: {
+    Test::Socialtext::main_hub()->current_workspace->update( external_links_open_new_window => 1 );
+    run {
+        my $test = shift;
+        return if $test->target;
+        perform_test($test);
+    };
+}
 
-run {
-    my $test = shift;
-    return if $test->target;
-    perform_test($test);
-};
-
-$hub->current_workspace->update( external_links_open_new_window => 0 );
-run {
-    my $test = shift;
-    return unless $test->target;
-    perform_test($test);
-};
+###############################################################################
+# Test again, with external links *NOT* opening in a new window
+external_links_open_in_same_window: {
+    Test::Socialtext::main_hub()->current_workspace->update( external_links_open_new_window => 0 );
+    run {
+        my $test = shift;
+        return unless $test->target;
+        perform_test($test);
+    };
+}
 
 sub perform_test {
     my $test = shift;
     my $text = $test->text;
-    my $result = $viewer->text_to_html("$text\n");
-
     for my $re ($test->regexps) {
-        like( $result, $re, "$text =~ $re");
+        formatted_like $text, $re, "$text =~ $re";
     }
 }
 

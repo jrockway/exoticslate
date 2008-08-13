@@ -20,11 +20,6 @@ my @tests =
 
 plan tests => scalar @tests;
 
-my $hub = new_hub('admin');
-my $viewer = $hub->viewer;
-
 for my $test (@tests) {
-    my $result = $viewer->text_to_html( $test->[0] );
-    chomp(my $name = $test->[0]);
-    like( $result, $test->[1], $name );
+    formatted_like $test->[0], $test->[1];
 }

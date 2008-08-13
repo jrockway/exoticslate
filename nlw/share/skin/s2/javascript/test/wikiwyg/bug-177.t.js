@@ -20,7 +20,7 @@ x<b>y</b>z<br />
 --- text
 x *y* z
 x *y* z
-x  *y*  z
+x *y* z
 x *y* z
 xy z
 x yz

@@ -1,6 +1,6 @@
 var t = new Test.Visual();
 t.plan(1);
-if (jQuery.browser.gecko) {
+if (jQuery.browser.mozilla) {
     t.open(
         "/admin/index.cgi?action=recent_changes",
         function(t) {

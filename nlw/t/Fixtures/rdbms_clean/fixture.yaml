@@ -1,2 +1,4 @@
-clear_alzabo_cache: 1
+fixtures:
+    - db
 
+clear_alzabo_cache: 1

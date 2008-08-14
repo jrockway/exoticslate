@@ -44,8 +44,6 @@ sub _init {
 
     my $dir = $self->dir;
 
-    $self->_generate_base_config();
-
     require Socialtext::Account;
     require Socialtext::Paths;
     require Socialtext::User;
@@ -66,12 +64,7 @@ sub _init {
     }
 }
 
-# XXX - this is a bit gross and unlike the other fixture bits, but
-# it's a prereq for all other fixtures, though not necessarily for all
-# tests.
-my $BaseConfigGenerated;
-sub _generate_base_config {
-    return if $BaseConfigGenerated;
+sub _built_in_base_config {
     my $self = shift;
 
     my $env               = $self->env;
@@ -91,6 +84,12 @@ sub _generate_base_config {
         '--dev=0',    # Don't create the files in ~/.nlw
         $testing,
     );
+}
+
+sub _built_in_db {
+    my $self = shift;
+
+    my $env               = $self->env;
 
     # Put the schemas in place
     my $schema_dir = $env->root_dir . '/etc/socialtext/db';
@@ -104,8 +103,6 @@ sub _generate_base_config {
 
     my $db_name = Socialtext::AppConfig->db_name();
     _system_or_die("psql -f " . $env->nlw_dir . "/etc/socialtext/db/dev.sql $db_name");
-
-    $BaseConfigGenerated = 1;
 }
 
 sub is_current {
@@ -124,8 +121,27 @@ sub generate {
 
     unless ( $self->is_current() ) {
         $self->_generate_subfixtures;
+        $self->_generate_builtins;
         $self->_generate_workspaces;
         $self->_run_custom_generator;
+    }
+}
+
+{
+    my %BUILT;
+    my %builtins = (
+        base_config => \&_built_in_base_config,
+        db          => \&_built_in_db,
+    );
+    sub _generate_builtins {
+        my $self = shift;
+        my $name = $self->name;
+        my $func = $builtins{$name};
+        if ($func) {
+            unless ($BUILT{$name}++) {
+                $self->$func();
+            }
+        }
     }
 }
 

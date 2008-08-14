@@ -303,10 +303,6 @@ div.tableFilter {
 	height: 41px;
 	background: url(../images/tabsRight.png) no-repeat top right;
 	float: right;
-
-/* Using a width here causes bad overlap in narrow Firefox window.
-        width: 30%;
-*/
 }
 
 div.tableFilter label {

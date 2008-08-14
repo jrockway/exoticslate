@@ -28,13 +28,19 @@ proto.elements_do_not_overlap = function(selector1, selector2, name) {
     var $e1 = $(this._get_selector_element(selector1));
     var $e2 = $(this._get_selector_element(selector2));
 
-    var off1 = $e1.offset();
-    var off2 = $e2.offset();
+    var r1 = $e1.offset();
+    r1['bottom'] = r1.top + $e1.height();
+    r1['right'] = r1.left + $e1.width();
 
-    if (
-        (off1.top + $e1.height() > off2.top) &&
-        (off1.left + $e1.width() > off2.left)
-        ) {
+    var r2 = $e2.offset();
+    r2['bottom'] = r2.top + $e2.height();
+    r2['right'] = r2.left + $e2.width();
+
+    if ((r1.bottom >= r2.top) &&
+        (r1.top <= r2.bottom) &&
+        (r1.right >= r2.left) &&
+        (r1.left <= r2.right))
+    {
         this.fail(name);
         return;
     }

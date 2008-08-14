@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 23;
+use Test::More tests => 27;
 use mocked 'Socialtext::File';
 use mocked 'Socialtext::Page';
 use mocked 'Socialtext::User';
@@ -20,6 +20,7 @@ Create_from_row: {
         name => 'name',
         last_editor_id => 'last_editor_id',
         last_editor_username => 'last_editor_username',
+        last_editor_email_address => 'last_editor_email_address',
         last_edit_time => '2008-01-01 23:12:01',
         creator_id => 'creator_id',
         creator_username => 'creator_username',
@@ -45,7 +46,7 @@ Create_from_row: {
         Summary => 'summary',
         Date => '2008-01-01 23:12:01',
         DateLocal => '2008-01-01 23:12:01',
-        From => 'last_editor_username',
+        From => 'last_editor_email_address',
         username => 'last_editor_username',
         page_uri => 'page_id',
         page_id => 'page_id',
@@ -118,6 +119,7 @@ Lazy_load_tags: {
         name => 'name',
         last_editor_id => 'last_editor_id',
         last_editor_username => 'last_editor_username',
+        last_editor_email_address => 'last_editor_email_address',
         last_edit_time => '2008-01-01 23:12:01',
         creator_id => 'creator_id',
         creator_username => 'creator_username',
@@ -135,6 +137,38 @@ Lazy_load_tags: {
 
     eval { $page->tags };
     like $@, qr/tags not loaded, and lazy loading is not yet supported/;
+}
+
+Resolve_non_default_usernames: {
+    my $data = {
+        workspace_id => 3,
+        workspace_name => 'workspace_name',
+        page_id => 'page_id',
+        name => 'name',
+        last_editor_id => 'last_editor_id',
+        last_editor_username => undef,
+        last_editor_email_address => 'should be replaced',
+        last_edit_time => '2008-01-01 23:12:01',
+        creator_id => 'creator_id',
+        creator_username => undef,
+        create_time => '2007-01-01 23:12:01',
+        current_revision_id => 'current_revision_id',
+        current_revision_num => 'current_revision_num',
+        revision_count => 'revision_count',
+        page_type => 'page_type',
+        deleted => 'deleted',
+        summary => 'summary',
+        hub => Socialtext::Hub->new,
+    };
+
+    my $page = Socialtext::Model::Page->new_from_row($data);
+    isa_ok $page, 'Socialtext::Model::Page';
+
+    my $result = $page->to_result();
+    ok $result, "converted to a result";
+
+    is $result->{From}, 'one@foo.bar', "looked up the user address";
+    is $result->{username}, 'oneusername', "looked up the username";
 }
 
 ok 'TODO: bad new_from_row';

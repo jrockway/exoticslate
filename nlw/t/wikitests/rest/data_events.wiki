@@ -10,13 +10,13 @@ Test case for `/data/events`(GET and POST).
 | body-like       | []               |       |
 
 | Comment | POST a few events |
-| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
+| post-json | /data/events | {"actor":{"id":1},"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
 | code-is | 201 |
-| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"tag_name":"taggy","page":{"workspace_name":"%%workspace%%","id":"meeting_agendas"},"event_class":"page","action":"tag_add"} |
+| post-json | /data/events | {"actor":{"id":1},"tag_name":"taggy","page":{"workspace_name":"%%workspace%%","id":"meeting_agendas"},"event_class":"page","action":"tag_add"} |
 | code-is | 201 |
-| post | /data/events | Content-Type=application/json | {"actor":{"id":2},"tag_name":"saggy","page":{"workspace_name":"%%workspace%%","id":"announcements_and_links"},"event_class":"page","action":"tag_add"} |
+| post-json | /data/events | {"actor":{"id":2},"tag_name":"saggy","page":{"workspace_name":"%%workspace%%","id":"announcements_and_links"},"event_class":"page","action":"tag_add"} |
 | code-is | 201 |
-| post | /data/events | Content-Type=application/json | {"actor":{"id":2},"tag_name":"taggy","page":{"workspace_name":"%%workspace%%","id":"quick_start"},"event_class":"page","action":"tag_add"} |
+| post-json | /data/events | {"actor":{"id":2},"tag_name":"taggy","page":{"workspace_name":"%%workspace%%","id":"quick_start"},"event_class":"page","action":"tag_add"} |
 | code-is | 201 |
 
 | Comment | GET all events |
@@ -129,29 +129,29 @@ Test case for `/data/events`(GET and POST).
 
 | *Comment* | Actor defaults to logged-in user |
 | st-clear-events | |
-| post | /data/events | Content-Type=application/json | {"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
+| post-json | /data/events | {"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
 | code-is | 201 |
 | get | /data/people/%%username%% |
 | code-is | 200 |
 | set-from-content | actor_id | qr/"id":"(\d+)"/ |
 | get | /data/events?limit=1 |
 | code-is | 200 |
-| body-like | qr/"actor":{[^}]+"id":"%%actor_id%%"/ |
+| body-like | qr/"actor":{[^}]*"id":"%%actor_id%%"/ |
 
 | *Comment* | Posting with missing parameters |
-| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"action":"tag_add","person":{"id":2},"tag_name":"downer"} |
+| post-json | /data/events | {"actor":{"id":1},"action":"tag_add","person":{"id":2},"tag_name":"downer"} |
 | code-is | 400 |
 | body-like | Missing required parameter 'event_class' |
-| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"event_class":"person","person":{"id":2},"tag_name":"downer"} |
+| post-json | /data/events | {"actor":{"id":1},"event_class":"person","person":{"id":2},"tag_name":"downer"} |
 | code-is | 400 |
 | body-like | Missing required parameter 'action' |
-| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"event_class":"person","action":"tag_add","tag_name":"downer"} |
+| post-json | /data/events | {"actor":{"id":1},"event_class":"person","action":"tag_add","tag_name":"downer"} |
 | code-is | 400 |
 | body-like | Missing required parameter 'person.id' |
-| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"tag_name":"taggy","page":{"workspace_name":"%%workspace%%"},"event_class":"page","action":"tag_add"} |
+| post-json | /data/events | {"actor":{"id":1},"tag_name":"taggy","page":{"workspace_name":"%%workspace%%"},"event_class":"page","action":"tag_add"} |
 | code-is | 400 |
 | body-like | Missing required parameter 'page.id' |
-| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"tag_name":"taggy","page":{"id":"meeting_agendas"},"event_class":"page","action":"tag_add"} |
+| post-json | /data/events | {"actor":{"id":1},"tag_name":"taggy","page":{"id":"meeting_agendas"},"event_class":"page","action":"tag_add"} |
 | code-is | 400 |
 | body-like | Missing required parameter 'page.workspace_name' |
 
@@ -159,8 +159,23 @@ Test case for `/data/events`(GET and POST).
 | http-user-pass | | |
 | get | /data/events |
 | code-is | 401 |
-| post | /data/events | Content-Type=application/json | {"actor":{"id":1},"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
+| post-json | /data/events | {"actor":{"id":1},"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
 | code-is | 401 |
+
+| Comment         | Set-up LDAP user                                   | .       |
+| st-clear-events |                                                    |         |
+| st_ldap         | start                                              |         |
+| st_admin        | add-workspace-admin --w %%workspace%% --u devnull3 |         |
+| http-user-pass  | devnull3                                           | ldapd3v |
+
+| Comment | post an event as the ldap user | . |
+| post-json | /data/events | {"tag_name":"ldaptaggy","page":{"workspace_name":"%%workspace%%","id":"quick_start"},"event_class":"page","action":"tag_add"} |
+| code-is | 201 |
+| get | /data/events |
+| json-parse |  |
+| body-like | "id":"quick_start" |
+| body-like | "tag_name":"ldaptaggy" |
+| body-like | qr/"actor":{[^}]*"best_full_name":"devnull3"/ |
 
 ^^ TODO Test
 

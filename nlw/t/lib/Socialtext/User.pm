@@ -34,7 +34,7 @@ sub is_guest { $_[0]->{is_guest} }
 
 sub user_id { $_[0]->{user_id} || 1 }
 
-sub username { $_[0]->{username} || 'one@foo.bar' }
+sub username { $_[0]->{username} || 'oneusername' }
 
 sub default_role { 
     return Socialtext::Role->AuthenticatedUser();

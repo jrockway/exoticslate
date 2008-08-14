@@ -113,6 +113,9 @@ sub handle_command {
     elsif ($command eq 'st_config') {
         return Socialtext::WikiFixture::Socialtext::st_config($self, @opts);
     }
+    elsif ($command eq 'st_ldap') {
+        return Socialtext::WikiFixture::Socialtext::st_ldap($self, @opts);
+    }
 
     die "Unknown command for the fixture: ($command)\n";
 
@@ -280,7 +283,7 @@ sub json_array_size {
     my $comparator = shift;
     my $size = shift;
 
-    if ($size eq '') {
+    if (!defined($size) or $size eq '') {
         $size = $comparator;
         $comparator = '==';
     }

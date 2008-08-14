@@ -658,6 +658,25 @@ sub Search {
     return $class->_aggregate('Search', $search_term);
 }
 
+sub Resolve {
+    my $class = shift;
+    my $maybe_user = shift;
+    my $user;
+
+    if (ref($maybe_user) && $maybe_user->can('user_id')) {
+        return $maybe_user;
+    }
+    elsif ($maybe_user =~ /^\d+$/) {
+        $user = Socialtext::User->new(user_id => $maybe_user) 
+    }
+
+    $user ||= Socialtext::User->new(username => $maybe_user);
+    $user ||= Socialtext::User->new(email_address => $maybe_user);
+
+    die "no such user '$maybe_user'" unless defined $user;
+    return $user;
+}
+
 my $standard_apply = sub {
     my $row = shift;
     return Socialtext::User->new( user_id => $row->[0] );
@@ -1636,6 +1655,14 @@ specified string anywhere in their username.
 Returns an aggregated cursor of Socialtext::User objects which match
 $search_string on any of username, email_address, first_name, or
 last_name.
+
+=head2 Socialtext::User->Resolve( $thingy )
+
+Given something that might be a Socialtext::User or an identifier for a user
+(system-unique-id, username, or e-mail address), try to resolve it to a
+Socialtext::User object.
+
+Throws an exception if C<$thingy> can't be resolved to a User.
 
 =head2 $user->set_confirmation_info()
 

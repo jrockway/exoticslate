@@ -179,9 +179,11 @@ SELECT page.workspace_id,
        page.name, 
        page.last_editor_id AS last_editor_id,
        editor.username AS last_editor_username, 
+       editor.email_address AS last_editor_email_address, 
        page.last_edit_time AT TIME ZONE 'GMT' AS last_edit_time, 
        page.creator_id,
        creator.username AS creator_username, 
+       creator.email_address AS creator_email_address, 
        page.create_time AT TIME ZONE 'GMT' AS create_time, 
        page.current_revision_id, 
        page.current_revision_num, 
@@ -192,9 +194,9 @@ SELECT page.workspace_id,
     FROM page 
         JOIN "Workspace" USING (workspace_id)
         JOIN "UserId" editor_id  ON (page.last_editor_id = editor_id.system_unique_id)
-        JOIN "User"   editor     ON (editor_id.driver_unique_id = editor.user_id)
         JOIN "UserId" creator_id ON (page.creator_id     = creator_id.system_unique_id)
-        JOIN "User"   creator    ON (creator_id.driver_unique_id = creator.user_id)
+        LEFT JOIN "User" editor  ON (editor_id.driver_unique_id = editor.user_id)
+        LEFT JOIN "User" creator ON (creator_id.driver_unique_id = creator.user_id)
         $more_join
     WHERE page.deleted = ?::bool
       $page_workspace_filter

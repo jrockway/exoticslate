@@ -2046,6 +2046,11 @@ sub _clean_msg {
     # Indent every non-empty line by one space
     $msg =~ s/^(.*\S.*)/ $1/gm unless $no_indent;
 
+    # Now make sure it's a proper Unicode string before we print it out.
+    unless (Encode::is_utf8($msg)) {
+        $msg = Encode::decode_utf8($msg);
+    }
+
     return $msg;
 }
 

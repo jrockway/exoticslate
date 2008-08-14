@@ -9,6 +9,7 @@ use FindBin;
 use lib "$FindBin::Bin/../lib";
         
 binmode STDOUT, ':utf8';
+binmode STDERR, ':utf8';
 
 use Socialtext::CLI;
 

@@ -599,8 +599,7 @@ Test.Builder.prototype._setupOutput = function () {
 
         this.output(writer);
         this.failureOutput(function (msg) {
-            writer('<span style="color: red; font-weight: bold">'
-                   + msg + '</span>')
+            writer(msg);
         });
         this.todoOutput(writer);
         this.endOutput(writer);

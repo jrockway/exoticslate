@@ -8,6 +8,7 @@ use base 'Socialtext::Handler';
 use Apache::Constants qw( NOT_FOUND );
 use Socialtext;
 
+use Encode ();
 use Email::Valid;
 use Exception::Class;
 use Socialtext::AppConfig;
@@ -118,7 +119,7 @@ sub login {
 
     my $user_check = ( username_is_email()
         ? Email::Valid->address($username)
-        : ( $username =~ /\w/ )
+        : ( (Encode::is_utf8($username) ? $username : Encode::decode_utf8($username)) =~ /\w/ )
     );
 
     unless ( $user_check ) {

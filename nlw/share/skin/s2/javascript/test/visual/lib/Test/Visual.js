@@ -1,6 +1,10 @@
 (function($) {
 
-proto = new Subclass('Test.Visual', 'Test.Base');
+// proto = new Subclass('Test.Visual', 'Test.Base');
+Test.Visual = function() {
+    this.init.apply(this, arguments);
+}
+var proto = Test.Visual.prototype = new Test.Base();
 
 proto.init = function() {
     Test.Base.prototype.init.call(this);
@@ -60,14 +64,20 @@ proto._get_selector_element = function(selector) {
     return $result.get(0);
 }
 
-proto = Subclass('Test.Visual.Block', 'Test.Base.Block');
+Test.Visual.Block = function() {
+    this.init.apply(this, arguments);
+}
+proto = Test.Visual.Block.prototype = new Test.Base.Block();
 
 proto.init = function() {
     Test.Base.Block.prototype.init.call(this);
     this.filter_object = new Test.Visual.Filter();
 }
 
-proto = new Subclass('Test.Visual.Filter', 'Test.Base.Filter');
+Test.Visual.Filter = function() {
+    this.init.apply(this, arguments);
+}
+proto = Test.Visual.Filter.prototype = new Test.Base.Filter();
 
 // Filter functions go here...
 

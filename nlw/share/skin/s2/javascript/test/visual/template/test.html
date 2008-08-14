@@ -3,7 +3,8 @@
 <html>
 <head>
     <script type="text/javascript">
-    function nlw_make_static_path(rest) { return "../../" + rest;}
+        var testBaseCurrentScript = '[% test_file %]';
+        function nlw_make_static_path(rest) { return "../../" + rest;}
     </script>
     <script type="text/javascript" src="lib/Subclass.js?[% date.format(format = '%s') %]"></script>
     <script type="text/javascript" src="lib/Test/Builder.js?[% date.format(format = '%s') %]"></script>
@@ -11,18 +12,6 @@
 [% FOR lib = import_libs -%]
     <script type="text/javascript" src="[% lib %]?[% date.format(format = '%s') %]"></script>
 [% END -%]
-    <script type="text/javascript">
-        ST.Testing = true
-        var Page = new ST.Page ({
-            page_id: 'dummy',
-            page_title: 'Dummy',
-            wiki_id: 'admin',
-            wiki_title: 'Admin Wiki',
-            revision_id: '20070531134609',
-            comment_form_window_height: '200'
-        });
-        var testBaseCurrentScript = '[% test_file %]';
-    </script>
 </head>
 <body>
     <div id='display_page_content'></div>

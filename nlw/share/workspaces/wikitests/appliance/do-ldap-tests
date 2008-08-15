@@ -1,0 +1,19 @@
+# source this file to run All Appliance testcases as LDAP user devnull3
+
+OUTFILE=testcases.ldapuser.out
+PLANPAGE="All Appliance Testcases"
+PLANWS=wikitests
+USERNAME="devnull3"
+EMAIL="devnull3@socialtext.com"
+PWD="ldapd3v"
+
+export WIKIEMAIL=$HOSTNAME
+alias tail='tail'
+
+echo PLAN WORKSPACE is $PLANWS
+sudo -u www-data run-wiki-tests --no-maximize --test-username $USERNAME --test-email $EMAIL --test-password $PWD  --plan-server http://$HOSTNAME  --plan-workspace $PLANWS --test-server http://$HOSTNAME  --timeout 60000 --plan-page \""$PLANPAGE"\" >& $OUTFILE  & 
+echo ""
+echo RUNNING "$PLANPAGE" with output to $OUTFILE on host $HOSTNAME for user $USERNAME
+echo use tail -f $OUTFILE  to obseve the test run
+echo ""
+

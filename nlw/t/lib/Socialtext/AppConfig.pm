@@ -30,4 +30,6 @@ sub web_hostname { 'mock_web_hostname' }
 sub custom_http_port { 'custom_http_port' }
 sub instance { Socialtext::AppConfig->new }
 
+sub _startup_user_is_human_user { 0 }
+
 1;

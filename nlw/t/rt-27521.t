@@ -26,7 +26,7 @@ use warnings;
 #    check value of current_workspace on hub is foo
 
 use mocked 'Apache::Cookie';
-use Test::Socialtext 'no_plan';
+use Test::Socialtext tests => 7;
 
 BEGIN { use_ok("Socialtext::Search::KinoSearch::Factory") }
 fixtures( 'admin', 'foobar' );

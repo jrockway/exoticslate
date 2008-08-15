@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 use mocked 'Socialtext::Log', qw( :tests );
-use Test::Socialtext qw( no_plan );
+use Test::Socialtext tests => 10;
 use Socialtext::Page;
 use Socialtext::User;
 use Socialtext::Workspace;

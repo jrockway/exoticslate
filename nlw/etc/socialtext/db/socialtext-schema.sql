@@ -9,8 +9,8 @@ SET search_path = public, pg_catalog;
 CREATE FUNCTION auto_vivify_person() RETURNS "trigger"
     AS $$
 BEGIN
-    INSERT INTO person (id, name) 
-        VALUES (NEW.system_unique_id, NEW.driver_username);
+    INSERT INTO person (id) 
+        VALUES (NEW.system_unique_id);
     RETURN NEW;
 END
 $$
@@ -251,14 +251,10 @@ CREATE TABLE page_tag (
 
 CREATE TABLE person (
     id integer NOT NULL,
-    name text,
     photo text,
     small_photo text,
-    first_name text,
-    last_name text,
     "position" text,
     "location" text,
-    email text,
     work_phone text,
     mobile_phone text,
     home_phone text,

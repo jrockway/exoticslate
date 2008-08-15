@@ -77,14 +77,26 @@ sub _cache {
 
 sub _new_from_system_unique_id {
     my ( $class, %p ) = @_;
+
+    # 'system_unique_id' should *only* ever be numeric; if its anything else,
+    # fail quietly.
+    #
+    # Need this check as other User Factories may have non-numeric user
+    # ids, and a lookup by "system_unique_id" may get passed through to this
+    # factory with a non-numeric value.
+    if (exists $p{system_unique_id} && ($p{system_unique_id} =~ /\D/)) {
+        return undef;
+    }
+
+    # cache-get/instantiate the UserId object
     my $cache = $class->_cache();
     my $key   = "system_unique_id=$p{system_unique_id}";
 
     my $user_id = $cache->get($key);
     unless ($user_id) {
         $user_id = $class->_new_from_where(
-            'system_unique_id=?' => $p{system_unique_id} );
-        $cache->set( $key, $user_id );
+            'system_unique_id=?' => $p{system_unique_id});
+        $cache->set($key, $user_id);
     }
     return $user_id;
 }

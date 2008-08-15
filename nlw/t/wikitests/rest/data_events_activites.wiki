@@ -18,6 +18,7 @@ This test case assumes a logged in user.
 | comment | STARTING Test case: REST event activites | |
 
 | comment | set up fixture |
+| set | workspace | admin |
 | st-clear-events | |
 | set | workspace | foobar |
 | http-user-pass  | devnull1@socialtext.com | d3vnu11l |

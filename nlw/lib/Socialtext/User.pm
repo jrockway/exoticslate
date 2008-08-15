@@ -366,9 +366,12 @@ sub _get_full_name {
 
         return $name if length $name;
 
-        return $self->email_address unless $p{workspace};
+        return $self->email_address 
+            unless ($p{workspace} && $p{workspace}->workspace_id != 0);
 
-        return $self->_masked_email_address( $p{workspace} );
+        my $masked = $self->_masked_email_address($p{workspace});
+        $masked =~ s/\@.*$//;
+        return $masked;
     }
 }
 
@@ -421,15 +424,30 @@ sub FormattedEmail {
 
 sub guess_real_name {
     my $self = shift;
+    my $name;
 
-    my $name = _get_full_name($self->first_name, $self->last_name);
+    my $fn = $self->first_name;
+    if ($self->email_address eq $fn) {
+        $fn =~ s/\@.+$//;
+    }
 
+    $name = _get_full_name($fn, $self->last_name);
+    $name =~ s/^\s+//;
+    $name =~ s/\s+$//;
+    return $name if length $name;
+
+    $name = $self->username || '';
+    $name =~ s/\@.+$//;
+    $name =~ s/[[:punct:]]+/ /g;
+    $name =~ s/^\s+//;
+    $name =~ s/\s+$//;
     return $name if length $name;
 
     $name = $self->email_address;
     $name =~ s/\@.+$//;
-    $name =~ s/[\.-_]/ /g;
-
+    $name =~ s/[[:punct:]]+/ /g;
+    $name =~ s/^\s+//;
+    $name =~ s/\s+$//;
     return $name;
 }
 
@@ -749,6 +767,12 @@ SELECT "UserId".system_unique_id,
     GROUP BY "UserId".system_unique_id, "UserId".driver_username
     ORDER BY workspace_count $p{sort_order},
              "UserId".driver_username ASC
+    LIMIT ? OFFSET ?
+EOSQL
+            system_unique_id => <<EOSQL,
+SELECT system_unique_id
+    FROM "UserId"
+    ORDER BY system_unique_id $p{sort_order}
     LIMIT ? OFFSET ?
 EOSQL
         );

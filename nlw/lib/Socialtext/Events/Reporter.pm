@@ -40,26 +40,20 @@ sub _best_full_name {
 
 sub _extract_person {
     my ($self, $row, $prefix) = @_;
+    my $id = delete $row->{"${prefix}_id"};
+    return unless $id;
 
-    my %p = (
-        id         => (delete $row->{$prefix.'_id'}         || undef),
-        name       => (delete $row->{$prefix.'_name'}       || undef),
-        first_name => (delete $row->{$prefix.'_first_name'} || ''),
-        last_name  => (delete $row->{$prefix.'_last_name'}  || ''),
-        email      => (delete $row->{$prefix.'_email'}      || undef),
-    );
-
-    if (!defined $p{id}) {
-        $row->{$prefix} = undef;
-        return;
+    # this real-name calculation may benefit from caching at some point
+    my $real_name;
+    my $user = Socialtext::User->new(user_id => $id);
+    if ($user) {
+        $real_name = $user->guess_real_name();
     }
 
-    my $full_name = _best_full_name(\%p);
-
     $row->{$prefix} = {
-        id => $p{id},
-        best_full_name => $full_name,
-        uri => "/data/people/$p{id}",
+        id => $id,
+        best_full_name => $real_name,
+        uri => "/data/people/$id",
     };
 }
 
@@ -71,8 +65,13 @@ sub get_events_activities {
 
     my @args;
     my $where = <<ENDWHERE;
-(event_class = 'person' AND action IN ('tag_add', 'edit_save') AND person_id = ?) OR
-(event_class = 'page' AND action IN ('edit_save', 'tag_add', 'comment', 'rename', 'duplicate', 'delete') AND actor_id = ?)
+(event_class = 'person' AND 
+ action IN ('tag_add', 'edit_save') AND 
+ person_id = ?) 
+OR
+(event_class = 'page' AND 
+ action IN ('edit_save','tag_add','comment','rename','duplicate','delete') AND
+ actor_id = ?)
 ENDWHERE
     my $whereargs = [$user_id, $user_id];
     push @args, where=>$where;
@@ -144,16 +143,8 @@ SELECT
     e.at AT TIME ZONE 'UTC' || 'Z' AS at,
     e.event_class AS event_class,
     e.action AS action,
-    actor.id AS actor_id, 
-        actor.name AS actor_name,
-        actor.first_name AS actor_first_name, 
-        actor.last_name AS actor_last_name, 
-        actor.email AS actor_email,
-    person.id AS person_id, 
-        person.name AS person_name,
-        person.first_name AS person_first_name, 
-        person.last_name AS person_last_name, 
-        person.email AS person_email,
+    e.actor_id AS actor_id, 
+    e.person_id AS person_id, 
     page.page_id as page_id, 
         page.name AS page_name, 
         page.page_type AS page_type,
@@ -162,9 +153,8 @@ SELECT
     e.tag_name AS tag_name,
     e.context AS context
 FROM event e 
-    LEFT JOIN "person" actor ON e.actor_id = actor.id
-    LEFT JOIN "person" person ON e.person_id = person.id
-    LEFT JOIN page ON (e.page_workspace_id = page.workspace_id AND e.page_id = page.page_id)
+    LEFT JOIN page ON (e.page_workspace_id = page.workspace_id AND 
+                       e.page_id = page.page_id)
     LEFT JOIN "Workspace" w ON (e.page_workspace_id = w.workspace_id)
 $where
 ORDER BY at DESC
@@ -184,10 +174,12 @@ EOSQL
             workspace_title => delete $row->{page_workspace_title} || undef,
         };
         if ($page->{workspace_name} && $page->{id}) {
-            $page->{uri} = "/data/workspaces/$page->{workspace_name}/pages/$page->{id}";
+            $page->{uri} = 
+                "/data/workspaces/$page->{workspace_name}/pages/$page->{id}";
         }
 
-        delete $row->{person} if ($row->{event_class} ne 'person');
+        delete $row->{person} 
+            if (!defined($row->{person}) and $row->{event_class} ne 'person');
 
         $row->{page} = $page if ($row->{event_class} eq 'page');
 

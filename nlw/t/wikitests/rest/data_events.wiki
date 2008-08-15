@@ -175,7 +175,7 @@ Test case for `/data/events`(GET and POST).
 | json-parse |  |
 | body-like | "id":"quick_start" |
 | body-like | "tag_name":"ldaptaggy" |
-| body-like | qr/"actor":{[^}]*"best_full_name":"devnull3"/ |
+| body-like | qr/"actor":{[^}]*"best_full_name":"Dev Null Three"/ |
 
 ^^ TODO Test
 

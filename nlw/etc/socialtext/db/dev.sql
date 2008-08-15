@@ -39,19 +39,19 @@ CREATE OR REPLACE VIEW xevent AS
     SELECT e.at AS at, 
            e.action AS action, 
            e.event_class AS event_class, 
-           actor.first_name||' '||actor.lASt_name||' ('||actor.id||')' AS actor,
+           actor.first_name||' '||actor.last_name||' ('||actor.user_id||')' AS actor,
            w.title::text||' ('||w.name::text||')' AS workspace, 
            p.name||' ('||p.page_id||')' AS page, 
-           person.first_name||' '||person.lASt_name||' ('||person.id||')' AS person,
+           person.first_name||' '||person.last_name||' ('||person.user_id||')' AS person,
            e.tag_name AS tag_name, 
            e.context AS context
     FROM event e 
-         LEFT JOIN person actor 
-            ON (e.actor_id = actor.id) 
+         LEFT JOIN "User" actor 
+            ON (e.actor_id = actor.user_id) 
+         LEFT JOIN "User" person 
+            ON (e.person_id = person.user_id)
          LEFT JOIN page p 
-            ON (e.page_workspace_id = p.workspace_id and e.page_id = p.page_id) 
+            ON (e.page_workspace_id = p.workspace_id AND e.page_id = p.page_id) 
          LEFT JOIN "Workspace" w 
-            ON (e.page_workspace_id = w.workspace_id) 
-         LEFT JOIN person person 
-            ON (e.person_id = person.id);
+            ON (e.page_workspace_id = w.workspace_id);
 

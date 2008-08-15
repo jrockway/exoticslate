@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More qw/no_plan/;
+use Test::More tests => 5;
 use mocked 'Socialtext::Schema';
 
 BEGIN {

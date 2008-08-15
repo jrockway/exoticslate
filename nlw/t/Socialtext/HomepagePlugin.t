@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More qw/no_plan/;
+use Test::More tests => 6;
 use mocked 'Socialtext::Search::Set';
 use mocked 'Socialtext::Search::Config';
 use mocked 'Socialtext::Hub';

@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More qw/no_plan/;
+use Test::More tests => 2;
 use Socialtext::File qw/set_contents/;
 
 # Test Setup - create a test plugin so we find at least one thing.
@@ -22,6 +22,3 @@ Load_plugins: {
                         glob("lib/Socialtext/Plugin/*.pm");
     is_deeply \%plugins, \%found_plugins;
 }
-
-exit;
-

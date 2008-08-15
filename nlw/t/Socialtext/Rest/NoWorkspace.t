@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More qw/no_plan/;
+use Test::More tests => 13;
 use mocked 'Socialtext::Authz';
 use mocked 'Socialtext::Permission';
 use mocked 'Socialtext::AppConfig';

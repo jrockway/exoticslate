@@ -1,6 +1,5 @@
 (function($) {
 
-// proto = new Subclass('Test.Visual', 'Test.Base');
 Test.Visual = function() {
     this.init.apply(this, arguments);
 }

@@ -42,6 +42,6 @@ t.runTests = function() {
     );
 };
 
-t.open_iframe("blank.html");
+t.open_iframe("../common/html/blank.html");
 
 })(jQuery);

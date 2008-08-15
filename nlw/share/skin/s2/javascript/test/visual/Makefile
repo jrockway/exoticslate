@@ -19,10 +19,10 @@ all: $(ALL_TARGETS) $(ALL_LIBS)
 	@echo $(ALL_T_HTML)
 
 $(ALL_T_HTML): config.yaml $(INCLUDE_PATH)/*
-	perl bin/render-template test.html $@ $(INCLUDE_PATH) > $@
+	perl ../common/bin/render-template test.html $@ $(INCLUDE_PATH) > $@
 
 index.html: t/*.t.js
-	perl bin/render-template index.html $@ $(INCLUDE_PATH) > $@
+	perl ../common/bin/render-template index.html $@ $(INCLUDE_PATH) > $@
 
 lib/Test/Base.js:
 	cp $(COMMON_SRC)/$@ $@

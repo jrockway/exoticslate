@@ -241,6 +241,7 @@ sub current_version {
     my $version = 0;
     my $schema_field = $self->schema_name . '-schema-version';
     eval {
+        local $SIG{__WARN__} = sub {}; # ignore warnings
         $version = sql_singlevalue(<<EOT, $schema_field);
 SELECT value FROM "System"
     WHERE field = ?
@@ -265,6 +266,7 @@ sub _is_fresh_database {
 
     if ($name eq 'socialtext') {
         eval {
+            local $SIG{__WARN__} = sub {}; # ignore warnings
             sql_execute(q{SELECT account_id FROM "Account" LIMIT 1});
         };
         return 0 if !$@;

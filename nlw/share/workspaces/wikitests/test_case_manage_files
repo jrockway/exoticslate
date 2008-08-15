@@ -10,11 +10,8 @@
 | set | user_1_regex | `manage_files_%%start_time%%_1\@ken\.socialtext\.net` |
 | set | manage_files_user_2 | `manage_files_%%start_time%%_2@ken.socialtext.net` |
 | set | user_2_regex | `manage_files_%%start_time%%_2\@ken\.socialtext\.net` |
+
 | *Comment* | Test Case: manage Files setup user_1 and user_2 |  |
-| click_and_wait | link=Settings |  |
-| click_and_wait | link=Time |  |
-| check_ok | timezone__time_display_seconds |  |
-| click_and_wait | Button |  |
 | st-admin | create-user --email %%manage_files_user_1%% --password 123456 |  |
 | st-admin | add-member --email %%manage_files_user_1%% --workspace %%workspace%% |  |
 | st-admin | create-user --email %%manage_files_user_2%% --password 123456 |  |
@@ -26,11 +23,10 @@
 | *Comment* | Test Case: Manage Files user_1 uploads wikitest.doc and wikitest.pdf |  |
 | st-logout |  |  |
 | st-login | %%manage_files_user_1%% | 123456 |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | type_ok | st-newpage-pagename-edit | Manage Files %%start_time%% |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | Some Content For Manage Files %%start_time%% |
@@ -60,20 +56,11 @@
 | *Comment* | Test Case: Manage Files wikitestzip.zip upload waits for the Done button |  |
 | wait_for_element_visible_ok | st-attachments-attach-closebutton | 30000 |
 | pause | 10000 | You have to wait for the page to repaint |
-
 | click_ok | st-attachments-attach-closebutton |  |
 
-| *Comment* | Test Case: Manage Files delete the links from the page |  |
-| wait_for_element_visible_ok | st-edit-button-link | 30000 |
-| click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| type_ok | wikiwyg_wikitext_textarea | DELETE THE CONTENT OF Manage Files %%start_time%% |
-| click_and_wait | st-save-button-link |  |
-
-| wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 30000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitest.pdf')] | 30000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitest.doc')] | 30000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitestzip.zip')] | 30000 |
 | text_like | //a[contains(@href,'original/wikitest.pdf')] | wikitest.pdf |
 | text_like | //a[contains(@href,'original/wikitest.doc')] | wikitest.doc |
 | text_like | //a[contains(@href,'original/wikitestzip.zip')] | wikitestzip.zip |
@@ -91,61 +78,22 @@
 | *Comment* | Test Case: Manage Files wikitest.txt upload waits for the Done button |  |
 | wait_for_element_visible_ok | st-attachments-attach-closebutton | 30000 |
 | pause | 10000 | You have to wait for the page to repaint |
-
 | click_ok | st-attachments-attach-closebutton |  |
-
-| *Comment* | Test Case: Manage Files delete the links from the page again |  |
-| wait_for_element_visible_ok | st-edit-button-link | 30000 |
-| click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| type_ok | wikiwyg_wikitext_textarea | DELETE THE CONTENT OF Manage Files %%start_time%% AGAIN |
-| click_and_wait | st-save-button-link |  |
-
-| wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitest.txt')] | 30000 |
 | text_like | //a[contains(@href,'original/wikitest.txt')] | wikitest.txt |
 
-| *Comment* | Test Case: Manage Files reload the page or selenium barfs on Manage Files |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | link=Manage Files %%start_time%% |  |
+| *Comment* | Test Case: Manage Files - Sorting MOVED TO TC: Manage files sorting |  |
 
-| *Comment* | Test Case: Manage Files Sorting |  |
+| *Comment* | Test Case: Manage Files reload the page or selenium barfs on Manage Files |  |
+| open_ok | /%%workspace%%/?Manage Files %%start_time%% |  |
 | wait_for_element_visible_ok | st-attachments-managebutton |  |
 | click_ok | st-attachments-managebutton |  |
-| wait_for_element_visible_ok | link=File Name |  |
+
+| *Comment* | Test Case: Manage Files Deleting Files. Select wikitest.doc for deletion |  |
+| wait_for_element_visible_ok | st-attachments-manage-deletebutton | 30000 |
+| wait_for_element_visible_ok | st-attachments-manage-closebutton | 30000 |
+| wait_for_element_visible_ok | link=File Name | 30000 |
 | click_ok | link=File Name |  |
-| pause | 3000 |  |
-| text_like | st-attachments-manage-filetable | qr/wikitestzip.+wikitest\.pdf/ |
-| click_ok | link=File Name |  |
-| pause | 3000 |  |
-| text_like | st-attachments-manage-filetable | qr/wikitest\.pdf.+wikitestzip/ |
-| click_ok | link=Author |  |
-| pause | 3000 |  |
-| text_like | st-attachments-manage-filetable | qr/%%user_1_regex%%.+%%user_2_regex%%/ |
-| click_ok | link=Author |  |
-| pause | 3000 |  |
-| text_like | st-attachments-manage-filetable | qr/%%user_2_regex%%.+%%user_1_regex%%/ |
-| click_ok | link=Date Uploaded |  |
-| pause | 3000 |  |
-| text_like | st-attachments-manage-filetable | qr/wikitest\.doc.+wikitest\.pdf/ |
-
-| *Comment* | This test found a BUG! Date Uploaded sort is just plain broken |  |
-| *Comment* | When the bug gets FIXED, take out this extra click of Date Upload and rewrite the test to test for actual sort order |
-
-| click_ok | link=Date Uploaded |  |
-| click_ok | link=Date Uploaded |  |
-| pause | 3000 |  |
-| text_like | st-attachments-manage-filetable | qr/wikitest\.pdf.+wikitestzip/ |
-| click_ok | link=Size |  |
-| pause | 3000 |  |
-| text_like | st-attachments-manage-filetable | qr/wikitestzip.+wikitest\.doc/ |
-| click_ok | link=Size |  |
-| pause | 3000 |  |
-| text_like | st-attachments-manage-filetable | qr/wikitest\.doc.+wikitestzip/ |
-
-| *Comment* | Test Case: Manage Files Deleting Files |  |
 | click_ok | link=File Name |  |
 | pause | 3000 |  |
 | check_ok | select-file |  |
@@ -153,15 +101,20 @@
 | *Comment* | Test Case: Manage Files Deleting wikitest.doc |  |
 | click_ok | st-attachments-manage-deletebutton |  |
 | click_ok | st-attachments-manage-closebutton |  |
-| wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitest.pdf')] | 30000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitestzip.zip')] | 30000 |
+| text_like | //a[contains(@href,'original/wikitest.pdf')] | wikitest.pdf |
+| text_like | //a[contains(@href,'original/wikitestzip.zip')] | wikitestzip.zip |
 | text_unlike | st-attachments | wikitest.doc |
 
 | *Comment* | Test Case: Manage Files Deleting remaining files |  |
 
 | wait_for_element_visible_ok | st-attachments-managebutton |  |
 | click_ok | st-attachments-managebutton |  |
-| wait_for_element_visible_ok | link=File Name |  |
+| wait_for_element_visible_ok | st-attachments-manage-deletebutton | 30000 |
+| wait_for_element_visible_ok | st-attachments-manage-closebutton | 30000 |
+| wait_for_element_visible_ok | link=File Name | 30000 |
 | wait_for_element_visible_ok | select-file |  |
 | check_ok | select-file |  |
 | click_ok | st-attachments-manage-deletebutton |  |
@@ -169,7 +122,9 @@
 
 | wait_for_element_visible_ok | st-attachments-managebutton |  |
 | click_ok | st-attachments-managebutton |  |
-| wait_for_element_visible_ok | link=File Name |  |
+| wait_for_element_visible_ok | st-attachments-manage-deletebutton | 30000 |
+| wait_for_element_visible_ok | st-attachments-manage-closebutton | 30000 |
+| wait_for_element_visible_ok | link=File Name | 30000 |
 | wait_for_element_visible_ok | select-file |  |
 | check_ok | select-file |  |
 | click_ok | st-attachments-manage-deletebutton |  |
@@ -177,7 +132,9 @@
 
 | wait_for_element_visible_ok | st-attachments-managebutton |  |
 | click_ok | st-attachments-managebutton |  |
-| wait_for_element_visible_ok | link=File Name |  |
+| wait_for_element_visible_ok | st-attachments-manage-deletebutton | 30000 |
+| wait_for_element_visible_ok | st-attachments-manage-closebutton | 30000 |
+| wait_for_element_visible_ok | link=File Name | 30000 |
 | wait_for_element_visible_ok | select-file |  |
 | check_ok | select-file |  |
 | click_ok | st-attachments-manage-deletebutton |  |
@@ -191,15 +148,8 @@
 | text_unlike | st-attachments | wikitest.txt |
 
 | *Comment* | Test Case: Manage Files Teardown |  |
-
-| st-logoutin |  |  |
 | st-admin | purge-page --workspace %%workspace%% --page manage_files_%%start_time%% | page was purged |
-| click_and_wait | link=Settings |  |
-| click_and_wait | link=Time |  |
-| uncheck_ok | timezone__time_display_seconds |  |
-| click_and_wait | Button |  |
 | st-admin | remove-member --email %%manage_files_user_1%% --workspace %%workspace%% |  |
 | st-admin | remove-member --email %%manage_files_user_2%% --workspace %%workspace%% |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 
 | *Comment* | Test Case: Manage Files COMPLETED |

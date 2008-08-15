@@ -22,6 +22,8 @@
 
 | *Comment* | Test Case: Sorting Files. Adding %%email%% so you can login to this workspace |  |
 | st-admin | add-workspace-admin --e %%email%% --w %%sorting_workspace%% |  |
+| *Comment* | make it easier to debug these workspaces by adding devnull1 |  |
+| st-admin | add-workspace-admin --e devnull1@socialtext.com --w %%sorting_workspace%% |  |
 | st-logout |  |  |
 
 | *Comment* | Test Case: Sorting Files setup user1 ... user5 |  |
@@ -56,9 +58,7 @@
 | wait_for_text_present_ok | Uploaded files: | 10000 |
 | wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
 | click_ok | st-attachments-attach-closebutton |  |
-| wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 10000 |
-| wait_for_text_present_ok | wikitest.jpg | 10000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitest.jpg')] | 30000 |
 | text_like | //a[contains(@href,'original/wikitest.jpg')] | wikitest.jpg |
 
 | *Comment* | Test Case: Sorting Files user_2 uploads wikitest.doc |  |
@@ -77,9 +77,7 @@
 | wait_for_text_present_ok | Uploaded files: | 10000 |
 | wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
 | click_ok | st-attachments-attach-closebutton |  |
-| wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 10000 |
-| wait_for_text_present_ok | wikitest.doc | 10000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitest.doc')] | 30000 |
 | text_like | //a[contains(@href,'original/wikitest.doc')] | wikitest.doc |
 
 | *Comment* | Test Case: Sorting Files user_3 uploads wikitestzip.zip |  |
@@ -97,9 +95,7 @@
 | wait_for_text_present_ok | Uploaded files: | 10000 |
 | wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
 | click_ok | st-attachments-attach-closebutton |  |
-| wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 10000 |
-| wait_for_text_present_ok | wikitestzip.zip | 10000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitestzip.zip')] | 30000 |
 | text_like | //a[contains(@href,'original/wikitestzip.zip')] | wikitestzip.zip |
 
 | *Comment* | Test Case: Sorting Files user_4 uploads wikitest.pdf |  |
@@ -117,9 +113,7 @@
 | wait_for_text_present_ok | Uploaded files: | 10000 |
 | wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
 | click_ok | st-attachments-attach-closebutton |  |
-| wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 10000 |
-| wait_for_text_present_ok | wikitest.pdf | 10000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitest.pdf')] | 30000 |
 | text_like | //a[contains(@href,'original/wikitest.pdf')] | wikitest.pdf |
 
 | *Comment* | Test Case: Sorting Files user_5 uploads wikitest.txt |  |
@@ -137,9 +131,7 @@
 | wait_for_text_present_ok | Uploaded files: | 10000 |
 | wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
 | click_ok | st-attachments-attach-closebutton |  |
-| wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 10000 |
-| wait_for_text_present_ok | wikitest.txt | 10000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitest.txt')] | 30000 |
 | text_like | //a[contains(@href,'original/wikitest.txt')] | wikitest.txt |
 
 | click_and_wait | link=Settings |  |
@@ -176,11 +168,11 @@
 
 | *Comment* | Test Case: Sorting Files sort by size, descending, then ascending |  |
 | select_and_wait | sort-picker | label=Size |
-| text_like | st-attachments_ui-content | qr/30kb.+27kb.+24kb.+20kb.+42bytes/ |
+| text_like | st-attachments_ui-content | qr/30kb.+27kb.+24kb.+42bytes/ |
 | select_and_wait | sort-picker | index=5 |
-| text_like | st-attachments_ui-content | qr/42bytes.+20kb.+24kb.+27kb.+30kb/ |
+| text_like | st-attachments_ui-content | qr/42bytes.+24kb.+27kb.+30kb/ |
 | select_and_wait | sort-picker | index=5 |
-| text_like | st-attachments_ui-content | qr/30kb.+27kb.+24kb.+20kb.+42bytes/ |
+| text_like | st-attachments_ui-content | qr/30kb.+27kb.+24kb.+42bytes/ |
 
 We do not have much control on data under "Date Uploaded" column to verify expected and actual sort result. So instead of verifying sort results directly to "Date Uploaded" column, we tried to verify it through the data of other columns. Means that if we do a sort asc or desc on Date Uploaded, we verified the corresponding expected changes of data in other columns to make sure that Date Uploaded sort is working. We have done it twice, one for asc and other one for desc sort by "Date Uploaded".
 

@@ -21,6 +21,8 @@
 
 | *Comment* | Test Case: Manage Files Sorting. Adding %%email%% so you can login to this workspace |  |
 | st-admin | add-workspace-admin --e %%email%% --w %%sorting_workspace%% |  |
+| *Comment* | make it easier to debug these workspaces by adding devnull1 |  |
+| st-admin | add-workspace-admin --e devnull1@socialtext.com --w %%sorting_workspace%% |  |
 | st-logout |  |  |
 
 | *Comment* | Test Case: Sorting Files setup user1 ... user5 |  |
@@ -47,12 +49,13 @@
 | click_ok | st-attachments-uploadbutton |  |
 | wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
 | type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.jpg |
-| wait_for_text_present_ok | Uploaded files: | 10000 |
+| wait_for_text_present_ok | Uploaded files: | 30000 |
 | wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
 | click_ok | st-attachments-attach-closebutton |  |
 | pause | 10000 | You have to wait for the page to repaint |
 | wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| wait_for_element_visible_ok | st-attachments-listing | 30000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitest.jpg')] | 30000 |
 | text_like | //a[contains(@href,'original/wikitest.jpg')] | wikitest.jpg |
 
 | *Comment* | Test Case: Manage Files Sorting user_2 uploads wikitest.doc |  |
@@ -65,12 +68,13 @@
 | click_ok | st-attachments-uploadbutton |  |
 | wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
 | type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.doc |
-| wait_for_text_present_ok | Uploaded files: | 10000 |
+| wait_for_text_present_ok | Uploaded files: | 30000 |
 | wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
 | click_ok | st-attachments-attach-closebutton |  |
 | pause | 10000 | You have to wait for the page to repaint |
 | wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| wait_for_element_visible_ok | st-attachments-listing | 30000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitest.doc')] | 30000 |
 | text_like | //a[contains(@href,'original/wikitest.doc')] | wikitest.doc |
 
 | *Comment* | Test Case: Manage Files Sorting user_3 uploads wikitestzip.zip |  |
@@ -83,12 +87,13 @@
 | click_ok | st-attachments-uploadbutton |  |
 | wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
 | type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitestzip.zip |
-| wait_for_text_present_ok | Uploaded files: | 10000 |
+| wait_for_text_present_ok | Uploaded files: | 30000 |
 | wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
 | click_ok | st-attachments-attach-closebutton |  |
 | pause | 10000 | You have to wait for the page to repaint |
 | wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| wait_for_element_visible_ok | st-attachments-listing | 30000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitestzip.zip')] | 30000 |
 | text_like | //a[contains(@href,'original/wikitestzip.zip')] | wikitestzip.zip |
 
 | *Comment* | Test Case: Manage Files Sorting user_4 uploads wikitest.pdf |  |
@@ -101,12 +106,13 @@
 | click_ok | st-attachments-uploadbutton |  |
 | wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
 | type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.pdf |
-| wait_for_text_present_ok | Uploaded files: | 10000 |
+| wait_for_text_present_ok | Uploaded files: | 30000 |
 | wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
 | click_ok | st-attachments-attach-closebutton |  |
 | pause | 10000 | You have to wait for the page to repaint |
 | wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| wait_for_element_visible_ok | st-attachments-listing | 30000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitest.pdf')] | 30000 |
 | text_like | //a[contains(@href,'original/wikitest.pdf')] | wikitest.pdf |
 
 | *Comment* | Test Case: Manage Files Sorting user_5 uploads wikitest.txt |  |
@@ -124,12 +130,13 @@
 | click_ok | st-attachments-uploadbutton |  |
 | wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
 | type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.txt |
-| wait_for_text_present_ok | Uploaded files: | 10000 |
+| wait_for_text_present_ok | Uploaded files: | 30000 |
 | wait_for_element_visible_ok | st-attachments-attach-closebutton | 120000 |
 | click_ok | st-attachments-attach-closebutton |  |
 | pause | 10000 | You have to wait for the page to repaint |
 | wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| wait_for_element_visible_ok | st-attachments-listing | 30000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitest.txt')] |  |
 | text_like | //a[contains(@href,'original/wikitest.txt')] | wikitest.txt |
 
 | *Comment* | Test Case: Manage Files Sorting |  |
@@ -150,10 +157,10 @@
 | text_like | st-attachments-manage-filetable | qr/%%user_5_regex%%.+%%user_4_regex%%.+%%user_3_regex%%.+%%user_2_regex%%.+%%user_1_regex%%/ |
 | click_ok | link=Size |  |
 | pause | 3000 |  |
-| text_like | st-attachments-manage-filetable | qr/42B.+20\.2K.+24\.5K.+27\.0K.+30\.5K/ |
+| text_like | st-attachments-manage-filetable | qr/42B.+24\.5K.+27\.0K.+30\.5K/ |
 | click_ok | link=Size |  |
 | pause | 3000 |  |
-| text_like | st-attachments-manage-filetable | qr/30\.5K.+27\.0K.+24\.5K.+20\.2K.+42B/ |
+| text_like | st-attachments-manage-filetable | qr/30\.5K.+27\.0K.+24\.5K.+42B/ |
 
 We do not have much control on data under "Date Uploaded" column to verify expected and actual sort result. So instead of verifying sort results directly to "Date Uploaded" column, we tried to verify it through the data of other columns. Means that if we do a sort asc or desc on Date Uploaded, we verified the corresponding expected changes of data in other columns to make sure that Date Uploaded sort is working. We have done it twice, one for asc and other one for desc sort by "Date Uploaded".
 

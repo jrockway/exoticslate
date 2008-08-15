@@ -390,6 +390,13 @@ $(function() {
             return false;
         });
 
+    if (Socialtext.double_click_to_edit) {
+        var double_clicker = function() {
+            jQuery("#st-edit-button-link").click();
+        };
+        jQuery("#st-page-content").one("dblclick", double_clicker);
+    }
+
     $('#st-pagetools-newspreadsheet')
         .one("click", function () {
             $('#bootstrap-loader').show();

@@ -51,6 +51,10 @@ proto.elements_do_not_overlap = function(selector1, selector2, name) {
     this.pass(name);
 }
 
+proto.$ = function(selector) {
+    return this.iframe.contentWindow.jQuery( selector );
+}
+
 proto._get_selector_element = function(selector) {
     var $result = $(selector, this.doc);
     if ($result.length <= 0)

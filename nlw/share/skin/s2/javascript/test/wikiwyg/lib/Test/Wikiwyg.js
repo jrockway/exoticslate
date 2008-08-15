@@ -1,4 +1,7 @@
-proto = new Subclass('Test.Wikiwyg', 'Test.Base');
+Test.Wikiwyg = function() {
+    this.init.apply(this, arguments);
+}
+var proto = Test.Wikiwyg.prototype = new Test.Base();
 
 proto.init = function() {
     Test.Base.prototype.init.call(this);
@@ -87,14 +90,21 @@ proto.create_wysiwyg_object = function(html) {
     return wysiwyg;
 }
 
-proto = Subclass('Test.Wikiwyg.Block', 'Test.Base.Block');
+Test.Wikiwyg.Block = function() {
+    this.init.apply(this, arguments);
+}
+proto = Test.Wikiwyg.Block.prototype = new Test.Base.Block();
+
 
 proto.init = function() {
     Test.Base.Block.prototype.init.call(this);
     this.filter_object = new Test.Wikiwyg.Filter();
 }
 
-proto = new Subclass('Test.Wikiwyg.Filter', 'Test.Base.Filter');
+Test.Wikiwyg.Filter = function() {
+    this.init.apply(this, arguments);
+}
+proto = Test.Wikiwyg.Filter.prototype = new Test.Base.Filter();
 
 proto.html_to_wikitext = function(content) {
     var object = new Wikiwyg.Wikitext.Socialtext();

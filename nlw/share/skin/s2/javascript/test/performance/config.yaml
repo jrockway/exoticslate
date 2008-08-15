@@ -5,5 +5,5 @@ import_libs:
   - ../../../../common/javascript/jquery-1.2.6.js
   - ../../../../common/javascript/Ajax-0.11/lib/Ajax.js
   - ../../../../common/javascript/Subclass-0.10/lib/Subclass.js
-  - Test/Performance.js
+  - lib/Test/Performance.js
   - ../../Debug.js

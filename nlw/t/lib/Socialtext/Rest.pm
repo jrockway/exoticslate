@@ -15,7 +15,7 @@ our @EXPORT = ();
 our @EXPORT_OK = qw(&is_status);
 
 # This class is mocking both Socialtext::Rest, and the Rest::Application
-# object.  So $self->rest == $self.
+# object.
 
 sub new {
     my $class = shift;
@@ -33,7 +33,7 @@ sub new {
 
 sub _initialize {}
 
-sub rest { $_[0] }
+sub rest { $_[0]->{rest} }
 
 our @HUB_ARGS;
 sub hub { Socialtext::Hub->new(@HUB_ARGS) }

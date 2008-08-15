@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use mocked 'Socialtext::Rest';
-use Test::More qw/no_plan/;
+use Test::More tests => 7;
 use Socialtext::CGI::Scrubbed;
 
 BEGIN {

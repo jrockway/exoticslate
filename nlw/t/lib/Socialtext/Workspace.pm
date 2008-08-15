@@ -16,7 +16,7 @@ sub new {
 
 sub title { $_[0]->{title} || 'mock_workspace_title' }
 sub name { $_[0]->{name} || $_[0]->{title} || 'mock_workspace_name' }
-sub workspace_id { $_[0]->{id} || 'mock_workspace_id' }
+sub workspace_id { $_[0]->{workspace_id} || 'mock_workspace_id' }
 
 sub homepage_is_dashboard { $_[0]->{homepage_is_dashboard} }
 

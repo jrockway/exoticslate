@@ -9,6 +9,8 @@ use Socialtext::Page;
 use Socialtext::User;
 use Socialtext::Workspace;
 
+fixtures('admin');
+
 my $workspace  = 'admin';
 my $user       = Socialtext::User->SystemUser;
 

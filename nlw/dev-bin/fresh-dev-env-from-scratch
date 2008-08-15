@@ -1,6 +1,11 @@
 #!/bin/bash -e
 # @COPYRIGHT@
 
+if [ "$ST_CURRENT" != "" ]; then
+    echo "Changing to $ST_CURRENT/nlw"
+    cd $ST_CURRENT/nlw
+fi
+
 perl -MCwd -le'print "Running ", Cwd::abs_path(shift)' $0
 
 START_PORT=21000 # for SSL

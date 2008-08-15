@@ -40,11 +40,12 @@ sub hub { Socialtext::Hub->new(@HUB_ARGS) }
 
 sub make_http_date { 'fake_date' }
 
-my $_header;
-sub header { 
+sub header {
     my $self = shift;
-    if (@_) { $_header = { @_ }; }
-    return %$_header;
+    if (@_) {
+        $self->{header} = { @_ };
+    }
+    return %{$self->{header}};
 }
 
 sub user {

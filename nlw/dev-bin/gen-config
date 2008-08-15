@@ -258,18 +258,20 @@ sub main {
         # if we're re-indexing a  we need to create a list of all
         # workspaces at the same time. The cronjob that processes
         # events will use this list to know when it's finished.
+        #
+        # don't, however, bother doing any indexing on a dev-env.
+        unless ($is_dev_install) {
+            if ( $fresh_install or ! $dest_is_live ) {
+                my $indexing_collateral_dir
+                    = Socialtext::Paths::storage_directory('indexing');
+                Socialtext::File::ensure_directory($indexing_collateral_dir);
+                my $list_of_workspaces = Socialtext::File::catfile(
+                    $indexing_collateral_dir,
+                    'workspaces-to-be-indexed'
+                );
+                shell_run( "st-admin list-workspaces > $list_of_workspaces" )
+                    and warn "Something's messed up, man.\n";
 
-        if ( $fresh_install or ! $dest_is_live ) {
-            my $indexing_collateral_dir
-                = Socialtext::Paths::storage_directory('indexing');
-            Socialtext::File::ensure_directory($indexing_collateral_dir);
-            my $list_of_workspaces = Socialtext::File::catfile(
-                $indexing_collateral_dir,
-                'workspaces-to-be-indexed'
-            );
-            shell_run( "st-admin list-workspaces > $list_of_workspaces" )
-                and warn "Something's messed up, man.\n";
-            unless ($is_dev_install) {
                 my $type = ( $fresh_install ) ? 'live' : 'rampup';
                 # write out the following block to /etc/cron.d/st-process-rampup-index
                 open CRON, '>/etc/cron.d/st-process-index';

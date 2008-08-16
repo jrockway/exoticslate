@@ -76,10 +76,9 @@ sub username {
 
 sub best_full_name {
     my ($self,$username) = @_;
-    my $workspace = $self->hub->current_workspace;
-    my $person = Socialtext::User->new(username => $username);
+    my $person = eval { Socialtext::User->Resolve($username) };
     return $person
-        ? $person->best_full_name( workspace => $workspace )
+        ? $person->guess_real_name()
         : $username;
 }
 

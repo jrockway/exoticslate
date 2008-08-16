@@ -11,20 +11,27 @@ proto.init = function() {
     this.doc = window.document;
 }
 
-proto.open_iframe = function(url) {
+proto.open_iframe = function(url, options) {
+    if (! options)
+        options = {};
+
     var asyncId = this.builder.beginAsync(60000);
 
     this.iframe = $("<iframe />").prependTo("body").get(0);
     this.iframe.contentWindow.location = url;
+    var $iframe = $(this.iframe);
 
     var self = this;
-    $(this.iframe).bind("load", function() {
+    $iframe.bind("load", function() {
         self.doc = self.iframe.contentDocument;
         if (self.runTests)
             self.runTests.apply(self, [self]);
 
         self.builder.endAsync(asyncId);
     });
+
+    $iframe.height(options.h || 200);
+    $iframe.width(options.w || 900);
 }
 
 proto.elements_do_not_overlap = function(selector1, selector2, name) {

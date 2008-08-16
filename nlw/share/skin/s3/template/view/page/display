@@ -134,6 +134,9 @@
             <li><a href="?[% in.page_id %]">[% in.page_title %]</a></li>
           [% END %]
           </ul>
+          [% IF page.incoming.size == 0 %]
+            <p>There are no pages that link to this page yet.</p>
+          [% END %]
           <div class="clear"></div>
         </div><!-- widgetContent -->
         <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->

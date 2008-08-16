@@ -1323,6 +1323,10 @@ table.dataTable td img {
 	border: #afafaf 2px solid;
 }
 
+table.dataTable td img.pageType {
+	border: none;
+	margin: 5px;
+}
 
 table.dataTable td.person a {
 	position: relative;

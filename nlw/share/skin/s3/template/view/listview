@@ -87,7 +87,15 @@
       [% FOREACH row = rows %]
         [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
         <td><input type="checkbox" name="page_selected" class="st-listview-selectpage-checkbox" value="[% row.page_uri %]"/></td>
-        <td colspan="2"><a class="titleLink" href="/[% row.workspace_name || current_workspace.name %]/index.cgi?[% row.page_uri %]">[% row.Subject %]</a>
+        <td colspan="2">
+        [% IF page_type == 'spreadsheet' %]
+           <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/ss16.png" />
+        [% ELSIF is_attachment %]
+           <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/attachment.png" />
+        [% ELSE %]
+           <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/doc16.png" />
+        [% END %]
+        <a class="titleLink" href="/[% row.workspace_name || current_workspace.name %]/index.cgi?[% row.page_uri %]">[% row.Subject %]</a>
         [% IF row.workspace_title %][% loc('in') %] <a href="/[% row.workspace_name %]">[% row.workspace_title %]</a>[% END %]
         [% IF summaries %]
           <span class="summary">[% row.Summary %]</span>

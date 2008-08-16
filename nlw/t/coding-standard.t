@@ -10,11 +10,7 @@ Tests_without_plan: {
     chomp @without_plans;
     my @without_plan_ok = (
         # These tests are "grandfathered" in, but we should fix them
-        't/live/creds.t',
-        't/live/email-confirmation.t',
-        't/live/rest/accounts.t',
         't/live/rest/recent-changes.t',
-        't/live/rest/users.t',
         't/live/rest/workspace-pages.t',
     );
     is_deeply [ sort @without_plans ], [ sort @without_plan_ok ],

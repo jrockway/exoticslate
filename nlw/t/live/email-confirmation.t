@@ -7,7 +7,7 @@ use Test::Live fixtures => ['admin'];
 # Importing Test::Socialtext will cause it to create fixtures now, which we
 # want to happen want to happen _after_ Test::Live stops any running
 # Apache instances, and all we really need here is Test::More.
-use Test::More qw( no_plan );
+use Test::More tests => 12;
 use Socialtext::User;
 
 # plan tests => 1;

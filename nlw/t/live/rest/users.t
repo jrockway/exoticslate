@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use warnings;
 use strict;
-use Test::HTTP::Socialtext '-syntax', 'no_plan';
+use Test::HTTP::Socialtext '-syntax', tests => 18;
 use Readonly;
 use Socialtext::JSON;
 use Test::Live fixtures => ['admin', 'foobar'];

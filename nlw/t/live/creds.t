@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::HTTP::Socialtext 'no_plan';
+use Test::HTTP::Socialtext tests => 40;
 
 # This test verifies the expected behaviour presented at
 #

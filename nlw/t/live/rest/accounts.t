@@ -4,7 +4,7 @@
 use warnings;
 use strict;
 
-use Test::HTTP::Socialtext '-syntax', 'no_plan';
+use Test::HTTP::Socialtext '-syntax', tests => 8;
 
 use Readonly;
 use Socialtext::JSON;

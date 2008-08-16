@@ -64,6 +64,29 @@ sub _init {
     }
 }
 
+sub _built_in_clean {
+    my $self     = shift;
+    my $env      = $self->env;
+    my @to_clean = (
+        $env->base_dir,
+        File::Spec->catdir( $env->root_dir, 'ceq' ),
+    );
+    rmtree( \@to_clean );
+}
+
+sub _built_in_base_layout {
+    my $self = shift;
+    my $env  = $self->env;
+    my @layout;
+    foreach my $based (qw(docroot storage data plugin user)) {
+        push @layout, File::Spec->catdir( $env->base_dir, $based );
+    }
+    foreach my $rooted (qw(ceq etc/socialtext lock log run)) {
+        push @layout, File::Spec->catdir( $env->root_dir, $rooted );
+    }
+    mkpath( \@layout, 0, 0755 );
+}
+
 sub _built_in_base_config {
     my $self = shift;
 
@@ -130,6 +153,8 @@ sub generate {
 {
     my %BUILT;
     my %builtins = (
+        clean       => \&_built_in_clean,
+        base_layout => \&_built_in_base_layout,
         base_config => \&_built_in_base_config,
         db          => \&_built_in_db,
     );

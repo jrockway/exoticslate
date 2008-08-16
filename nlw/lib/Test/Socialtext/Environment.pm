@@ -68,10 +68,12 @@ sub new {
         @_,
     );
 
+    # XXX: clean everything out, preserving the old behaviour.
+    unshift @{$self->{fixtures}}, 'clean';
+
     $self->_init_fixtures;
     $self->_set_url;
-    $self->_clean_filesystem;
-    $self->_create_test_environment;
+    $self->_make_fixtures_current;
 
     return $self;
 }
@@ -93,40 +95,11 @@ sub _set_url {
     $self->wiki_url_base( "http://$hostname:" . $main_port );
 }
 
-sub _clean_filesystem {
-    my $self = shift;
-    # Using File::Path::rmtree seems to generate warnings along the
-    # lines of "Can't remove directory
-    # /home/testrunner/livetests-trunk-nlw/t/tmp/root/plugin
-    # (Directory not empty) at Test/Socialtext/Environment.pm line XX"
-    #
-    # We should be sure to not remove things like Apache config or pid
-    # files here, or else things like NLW_LIVE_DANGEROUSLY cannot work
-    #
-    system( 'rm', '-rf', $self->base_dir );
-    # clear out the ceqlotron's queue
-    File::Path::rmtree($self->root_dir . '/ceq');
-}
-
 sub _make_fixtures_current {
     my $self = shift;
     foreach my $fixture (@{$self->fixture_objects}) {
         $fixture->generate;
     }
-}
-
-sub _create_test_environment {
-    my $self = shift;
-    -d $self->root_dir or mkdir $self->root_dir or die $self->root_dir . ": $!";
-
-    # Ensure these directories are created in a dev-env / test environment.
-    for my $subdir (qw(docroot storage)) {
-        unless ( -d ( $self->base_dir . "/" . $subdir ) ) {
-            File::Path::mkpath( $self->base_dir . "/" . $subdir, 0, 0775 );
-        }
-    }
-
-    $self->_make_fixtures_current;
 }
 
 sub hub_for_workspace {

@@ -61,6 +61,11 @@ sub new {
     return $self;
 }
 
+sub DESTROY {
+    my $self = shift;
+    $self->stop_all unless $ENV{NLW_LIVE_DANGEROUSLY};
+}
+
 sub prepare_apache_and_possibly_stop {
     my $self = shift;
 

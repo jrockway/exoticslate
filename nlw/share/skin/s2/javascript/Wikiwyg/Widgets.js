@@ -1206,7 +1206,15 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
     var widget = this.currentWidget.id;
 
     if (widget == 'link2') {
-        return this.do_link(widget_element);
+        this.do_link(widget_element);
+        jQuery('#wiki-link-text').focus();
+        return;
+    }
+    else if (widget == 'link2_section') {
+        this.do_link(widget_element);
+        jQuery('#add-section-link').select();
+        jQuery('#section-link-text').focus();
+        return;
     }
     else if (widget == 'link2_hyperlink') {
         this.do_link(widget_element);
@@ -1214,7 +1222,6 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
         jQuery('#web-link-text').focus();
         return;
     }
-    alert(widget);
 
     var template = 'widget_' + widget + '_edit.html';
     var html = Jemplate.process(template, this.currentWidget);

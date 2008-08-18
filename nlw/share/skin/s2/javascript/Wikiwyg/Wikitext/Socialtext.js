@@ -1104,10 +1104,15 @@ proto.markup_bound_phrase = function(markup_array) {
     var markup_finish = markup_array[2];
     var scroll_top = this.area.scrollTop;
 
-    // Hack: This line exists to turn "{link2_hyperlink: }" into "<http://...>"
+    // Hack: Here we handle "{link2_*}" variants...
     if (markup_start == '{link2_hyperlink: ') {
+        // Turns "{link2_hyperlink: }" into "<http://...>"
         markup_start = '<http://';
         markup_finish = '>';
+    }
+    else if (markup_start == '{link2_section: ') {
+        // Turns "{link2_section: }" into "{link: }"
+        markup_start = '{link: ';
     }
 
     if (markup_finish == 'undefined')

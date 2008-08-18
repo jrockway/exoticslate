@@ -3,7 +3,7 @@ fixtures:
   - admin
   - foobar
   - auth-to-edit
+  - help
 
 workspaces:
   public: { }
-  "help-en": { }

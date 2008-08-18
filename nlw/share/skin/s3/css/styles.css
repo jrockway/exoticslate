@@ -1424,11 +1424,21 @@ div#bottomButtons ul li {
 	float: left;
 }
 
-div#bottomButtons ul li a {
+div#bottomButtons ul li a,
+div#bottomButtons ul li span.attribution {
 	float: left;
 	margin-right: 10px;
 	position: relative;
 	top: 10px;
+}
+
+div#bottomButtons ul li span.attribution a {
+        float: none;
+        top: 0;
+        margin: 0;
+}
+div#bottomButtons ul li span.attribution img.avatar {
+	vertical-align: middle;
 }
 
 div#bottomButtons ul.buttonRight {

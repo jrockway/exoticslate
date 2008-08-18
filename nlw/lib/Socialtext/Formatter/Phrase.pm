@@ -296,7 +296,7 @@ sub html {
     my $self = shift;
     my $match = $self->matched;
     (my $escaped_match = $match) =~ s/-/=-/g;
-    $match =~ s/<(.*)>$/$1/;
+    $match =~ s/<([^>]*)>$/$1/;
 
     my ($text, $hint) = ($match, '');
     

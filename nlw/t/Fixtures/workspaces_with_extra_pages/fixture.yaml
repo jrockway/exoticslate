@@ -3,10 +3,9 @@ fixtures:
   - sale
   - admin_with_extra_pages
   - foobar_with_extra_pages
+  - auth-to-edit_with_extra_pages
 
 workspaces:
   public:
-    extra_pages: 1
-  auth-to-edit:
     extra_pages: 1
   "help-en": { }

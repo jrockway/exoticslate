@@ -2,8 +2,8 @@ fixtures:
   - db
   - admin
   - foobar
+  - auth-to-edit
 
 workspaces:
   public: { }
-  auth-to-edit: { }
   "help-en": { }

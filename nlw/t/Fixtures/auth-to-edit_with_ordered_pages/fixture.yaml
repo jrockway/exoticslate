@@ -1,0 +1,6 @@
+fixtures:
+  - db
+
+workspaces:
+  auth-to-edit:
+    ordered_pages: 1

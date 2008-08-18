@@ -1,0 +1,6 @@
+fixtures:
+  - db
+
+workspaces:
+  auth-to-edit:
+    extra_pages: 1

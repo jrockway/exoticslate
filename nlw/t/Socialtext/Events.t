@@ -23,7 +23,7 @@ my $user = Socialtext::User->new(
     name => 'tiffany'
 );
 my $ws = Socialtext::Workspace->new(
-    id => 348798,
+    workspace_id => 348798,
     name => 'forbao',
     title => 'O HAI',
 );
@@ -49,16 +49,8 @@ SELECT
     e.at AT TIME ZONE 'UTC' || 'Z' AS at,
     e.event_class AS event_class,
     e.action AS action,
-    actor.id AS actor_id, 
-        actor.name AS actor_name,
-        actor.first_name AS actor_first_name, 
-        actor.last_name AS actor_last_name, 
-        actor.email AS actor_email,
-    person.id AS person_id, 
-        person.name AS person_name,
-        person.first_name AS person_first_name, 
-        person.last_name AS person_last_name, 
-        person.email AS person_email,
+    e.actor_id AS actor_id, 
+    e.person_id AS person_id, 
     page.page_id as page_id, 
         page.name AS page_name, 
         page.page_type AS page_type,
@@ -67,8 +59,6 @@ SELECT
     e.tag_name AS tag_name,
     e.context AS context
 FROM event e 
-    LEFT JOIN "person" actor ON e.actor_id = actor.id
-    LEFT JOIN "person" person ON e.person_id = person.id
     LEFT JOIN page ON (e.page_workspace_id = page.workspace_id AND e.page_id = page.page_id)
     LEFT JOIN "Workspace" w ON (e.page_workspace_id = w.workspace_id)
 EOSQL
@@ -84,20 +74,17 @@ EOSQL
     }
 
     test_mocking: {
+        local $Socialtext::User::Users{1234} = Socialtext::User->new(
+            user_id => 1234,
+            first_name => 'Steve',
+            last_name => 'Foo',
+        );
         my %event = ( 
             at => '2008-06-25 11:39:21.509539Z', 
             event_class => 'page',
             action => 'view',
             actor_id => 1234,
-                actor_name => 'steve@foo',
-                actor_email => 'steve@example.org',
-                actor_first_name => 'Steve',
-                actor_last_name => 'Foo',
             person_id => undef,
-                person_name => undef, 
-                person_email => undef,
-                person_first_name => undef,
-                person_last_name => undef,
             page_id => 'hello_world',
                 page_name => 'Hello World',
                 page_workspace_name => 'foobar',

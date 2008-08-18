@@ -19,6 +19,7 @@ sub new {
         }
         elsif ($type eq 'user_id') {
             if (my $user = $Users{$value}) {
+                # warn "RETURNING cached user for $value";
                 return $user;
             }
         }
@@ -34,7 +35,10 @@ sub confirmation_uri { 'blah/nlw/submit/confirm/foo' }
 
 sub FormattedEmail { 'One Loser <one@foo.bar>' }
 
-sub guess_real_name { 'One Loser' }
+sub guess_real_name { 
+    my $self = shift;
+    return $self->first_name . ' ' . $self->last_name;
+}
 sub best_full_name { 'Best FullName' }
 sub first_name { $_[0]->{first_name} ||= 'Mocked First' }
 sub last_name { $_[0]->{last_name} ||= 'Mocked Last' }

@@ -29,10 +29,14 @@ sub Search {
     my $all_selects = join "\n", @selects;
     my $sql = "SELECT class, $all_keys FROM $all_selects";
 
-    my $sth = sql_execute($sql, map { $_ => $terms{$_} } @keys);
+    my @binding = map { $_ => $terms{$_} } @keys;
+    my $sth = sql_execute($sql, @binding);
     my $res = $sth->fetchall_arrayref;
-    die "Search returned more than one result" if @$res > 1;
     return unless @$res;
+    if (@$res > 1) {
+        warn "$class: returned more than one result for query ($sql), ("
+            . join(', ', @binding) . ")";
+    }
     return $class->new($res->[0][0]);
 }
 

@@ -123,6 +123,7 @@ MKDIR        = mkdir -p
 RM_DIR       = $(RM) -R
 CP_DIR       = $(CP) -pr
 CHOWN_DIR_ST = $(CHOWN) -R $(ST_USER):$(ST_GROUP)
+NOOP         = true
 
 ##############################################################################
 
@@ -241,17 +242,17 @@ $(INSTALL_FILE_TARGETS): install-ok
 	$(MKDIR) $(PREFIX)@PIDDIR@
 	$(CHOWN_DIR_ST) $(PREFIX)@PIDDIR@
 	$(FIND) $(ST_INSTALL_DIR)/$(DIR) -name '.svn' -type d \
-	   -exec $(RM_DIR) {} \; 2>/dev/null || /bin/true
+	   -exec $(RM_DIR) {} \; 2>/dev/null || $(NOOP)
 	$(FIND) $(ST_INSTALL_DIR)/$(DIR) -name '*.in' -type f \
-	   -exec $(RM) {} \; 2>/dev/null || /bin/true
+	   -exec $(RM) {} \; 2>/dev/null || $(NOOP)
 	$(FIND) $(ST_INSTALL_DIR)/$(DIR) -name '*.test' -type f \
-	   -exec $(RM) {} \; 2>/dev/null || /bin/true
+	   -exec $(RM) {} \; 2>/dev/null || $(NOOP)
 
 install-base: install-ok $(INSTALL_BASE)
 	ln -f -s $(ST_INSTALL_DIR) $(ST_INSTALL_DIR)/base
 
 mecab: 
-	build/bin/convert-mecab-juman-dict-to-utf8 || /bin/true
+	build/bin/convert-mecab-juman-dict-to-utf8 || $(NOOP)
 
 favicon: install-ok $(DATA_ROOT_DIR)
 	$(INSTALL_ST) share/favicon.ico $(DATA_ROOT_DIR)/favicon.ico

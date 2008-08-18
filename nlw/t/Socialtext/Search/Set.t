@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use Socialtext::User;
 
-fixtures('workspaces');
+fixtures('clean', 'workspaces');
 
 BEGIN { use_ok('Socialtext::Search::Set') }
 

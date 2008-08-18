@@ -5,7 +5,7 @@ use warnings;
 
 use DateTime;
 use Test::Socialtext tests => 41;
-fixtures( 'admin' );
+fixtures( 'clean', 'admin' );
 
 BEGIN {
     use_ok( 'Socialtext::Page' );

@@ -5,7 +5,11 @@ use Test::Socialtext tests => 111;
 use strict;
 use warnings;
 
-fixtures( 'rdbms_clean', 'help' );
+# Fixtures: clean, help
+#
+# Need to know that the "help" workspace is the only one present when we start
+# our tests.
+fixtures( 'clean', 'help' );
 
 use Socialtext::EmailAlias;
 use Socialtext::File;

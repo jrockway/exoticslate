@@ -5,13 +5,17 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 12;
-fixtures( 'rdbms_clean', 'help' );
-
 use Socialtext::EmailAlias;
 use Socialtext::File;
 use Socialtext::Paths;
 use Socialtext::Account;
 use Socialtext::Workspace;
+
+# Fixtures: clean, help
+#
+# Need a clean environment to test against, so that we know that the workspace
+# we're renaming to isn't here yet.
+fixtures( 'clean', 'help' );
 
 {
     my $ws = Socialtext::Workspace->create(

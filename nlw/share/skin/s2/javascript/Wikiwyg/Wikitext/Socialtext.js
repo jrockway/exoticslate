@@ -1858,6 +1858,22 @@ proto.format_a = function(elem) {
     if (! href) href = ''; // Necessary for <a name="xyz"></a>'s
     var link = this.make_wikitext_link(label, href, elem);
 
+    // For [...] links, we need to ensure there are surrounding spaces
+    // because it won't take effect when put adjacent to word characters.
+    if (link.match(/^\[/)) {
+        // Turns "foo[bar]" into "foo [bar]"
+        var prev_node = this.getPreviousTextNode(elem);
+        if (prev_node && prev_node.nodeValue.match(/\w$/)) {
+            link = ' ' + link;
+        }
+
+        // Turns "[bar]baz" into "[bar] baz"
+        var next_node = this.getNextTextNode(elem);
+        if (next_node && next_node.nodeValue.match(/^\w/)) {
+            link = link + ' ';
+        }
+    }
+
     elem.fixup = 'strip_ears';
 
     return link;

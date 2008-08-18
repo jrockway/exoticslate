@@ -99,6 +99,7 @@ Log::Dispatch: 2.10
 Log::Dispatch::Screen: 1.17
 Log::Dispatch::Syslog: 1.18
 LWP::UserAgent: 2.033
+Number::Format: 1.40
 Mail::Address: 1.67
 MIME::Parser: 5.417
 MIME::Types: 1.15
@@ -120,6 +121,7 @@ Sys::Hostname: 1.11
 Template: 2.19
 Template::Plugin::FillInForm: 0.04
 Template::Plugin::JSON: 0
+Template::Plugin::Number::Format: 0
 Text::Autoformat: 1.14.0
 Text::Flowed: 0.14
 Text::MeCab: 0.17

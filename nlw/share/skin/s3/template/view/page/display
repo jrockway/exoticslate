@@ -1,5 +1,7 @@
 [%# vim: set et sts=2 sw=2: %]
 [% USE html_encode %]
+[% USE Number.Format %]
+
 [% WRAPPER layout/html id="contentPage" %]
 <div id="controls">
   <div id="st-editing-tools-edit">
@@ -149,7 +151,15 @@
         <div class="widgetContent">
           <ul id="st-attachment-listing">
           [% FOR file = attachments %]
-            <li><a title="[% loc("Uploaded by [_1]", file.uploader) %]" href="[% file.uri %]">[% file.name %]</a> <a href="#" onclick="Page.delAttachment('[% file.uri %]')">[x]</a></li>
+            [% SET length = "content-length" %]
+            [%
+              IF file.$length < 1024;
+                SET displaylength = file.$length _ " bytes";
+              ELSE;
+                SET displaylength = Number.Format.format_bytes(file.$length);
+              END;
+            %]
+            <li><a title="[% loc("Uploaded by [_1] on [_2]. [_3]", file.uploader, file.date, displaylength) | html_entity %]" href="[% file.uri %]">[% file.name %]</a> <a href="#" onclick="Page.delAttachment('[% file.uri %]')">[x]</a></li>
           [% END %]
           </ul>
           [% IF checker.check_permission('attachments') %]

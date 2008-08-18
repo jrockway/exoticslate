@@ -285,8 +285,8 @@ sub users_invite {
 
     my @emails;
     my @invalid;
-    if ( $self->cgi->users_new_ids ) {
-        my @lines = $self->_split_email_addresses( $self->cgi->users_new_ids );
+    if ( my $ids = $self->cgi->users_new_ids ) {
+        my @lines = $self->_split_email_addresses( $ids );
 
         unless (@lines) {
             $self->add_error(loc("No email addresses specified"));
@@ -301,7 +301,11 @@ sub users_invite {
                 next;
             }
 
-            push @emails, $email;
+            push @emails, {
+                email_address => $email,
+                first_name => $first_name,
+                last_name => $last_name,
+            }
         }
     }
     else
@@ -325,7 +329,7 @@ sub users_search {
 
     if ( $self->cgi->Button ) {
         if ( $self->cgi->Button eq 'Invite' && $self->cgi->email_addresses ) {
-            my @emails = $self->cgi->email_addresses;
+            my @emails = map {+{email_address=>$_}} $self->cgi->email_addresses;
             my @invalid;
             my $html = $self->_invite_users(\@emails, \@invalid);
             return $html if $html;
@@ -366,7 +370,8 @@ sub _invite_users {
 
     my %users;
     my @present;
-    for my $email (@{ $emails }) {
+    for my $e (@{ $emails }) {
+        my $email = $e->{email_address};
         if ($filter) {
             unless ( $email =~ qr/$filter/ ) {
                 push @{ $invalid }, $email;
@@ -386,6 +391,8 @@ sub _invite_users {
         $users{$email} = {
             username      => $email,
             email_address => $email,
+            first_name => $e->{first_name},
+            last_name => $e->{last_name},
         };
     }
 
@@ -422,10 +429,7 @@ sub _invite_users {
 
 sub _split_email_addresses {
     my $self = shift;
-    return grep /\S/, map {
-        s/^\s*(.*?)\s*$/$1/;
-        $_;
-    } split /[,\r\n]+/, $_[0];
+    return grep /\S/, split(/[,\r\n]+/, $_[0]);
 }
 
 sub _parse_email_address {
@@ -434,13 +438,7 @@ sub _parse_email_address {
 
     return unless defined $email;
 
-    $email =~ s/^mailto://;
-    $email =~ s/^<(.+)>$/$1/;
-
-    return unless Email::Valid->address($email);
-
     my ($address) = Email::Address->parse($email);
-
     return unless $address;
 
     my ( $first, $last );
@@ -508,11 +506,15 @@ sub invite_one_user {
     my $extra_text = shift;
 
     my $invitation =
-      Socialtext::WorkspaceInvitation->new( workspace => $self->hub->current_workspace,
-                                            from_user => $self->hub->current_user,
-                                            invitee   => $user_data->{email_address},
-                                            extra_text => $extra_text,
-                                            viewer => $self->hub->viewer );
+    Socialtext::WorkspaceInvitation->new(
+        workspace          => $self->hub->current_workspace,
+        from_user          => $self->hub->current_user,
+        invitee            => $user_data->{email_address},
+        invitee_first_name => $user_data->{first_name},
+        invitee_last_name  => $user_data->{last_name},
+        extra_text         => $extra_text,
+        viewer             => $self->hub->viewer
+    );
     $invitation->send();
 }
 

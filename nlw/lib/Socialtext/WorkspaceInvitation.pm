@@ -60,6 +60,8 @@ sub _invite_one_user {
     $user ||= Socialtext::User->create(
         username => $self->{invitee},
         email_address => $self->{invitee},
+        first_name => $self->{invitee_first_name},
+        last_name => $self->{invitee_last_name},
         created_by_user_id => $self->{from_user}->user_id,
     );
 

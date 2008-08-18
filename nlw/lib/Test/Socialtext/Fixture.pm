@@ -70,6 +70,7 @@ sub _built_in_clean {
     my @to_clean = (
         $env->base_dir,
         File::Spec->catdir( $env->root_dir, 'ceq' ),
+        $self->buildstamp_dir(),
     );
     rmtree( \@to_clean );
 }
@@ -128,6 +129,37 @@ sub _built_in_db {
     _system_or_die("psql -f " . $env->nlw_dir . "/etc/socialtext/db/dev.sql $db_name");
 }
 
+sub buildstamp_dir {
+    my $stampdir = File::Spec->catdir(
+        Socialtext::AppConfig->_cache_root_dir(),
+        'fixtures',
+    );
+    return $stampdir;
+}
+
+sub buildstamp_file {
+    my $self = shift;
+    my $buildstamp = File::Spec->catfile(
+        buildstamp_dir(),
+        $self->{name}
+    );
+    return $buildstamp;
+}
+
+sub _touch_buildstamp {
+    my $self = shift;
+
+    my $dir = $self->buildstamp_dir;
+    unless (-d $dir) {
+        mkpath( $dir, 0, 0755 ) || die "can't create buildstamp dir '$dir'; $!";
+    }
+
+    # write an (empty) buildstamp file, to make note that we've built this
+    # fixture already.
+    my $file = $self->buildstamp_file;
+    write_file( $file, '' );
+}
+
 sub is_current {
     my $self = shift;
     my $dir = $self->dir;
@@ -136,6 +168,7 @@ sub is_current {
         return ! (system "$dir/is-current");
     }
 
+    return 1 if (-e $self->buildstamp_file);
     return 0;
 }
 
@@ -147,6 +180,7 @@ sub generate {
         $self->_generate_builtins;
         $self->_generate_workspaces;
         $self->_run_custom_generator;
+        $self->_touch_buildstamp;
     }
 }
 

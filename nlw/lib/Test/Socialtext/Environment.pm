@@ -71,11 +71,21 @@ sub new {
     # XXX: clean everything out, preserving the old behaviour.
     unshift @{$self->{fixtures}}, 'clean';
 
+    $self->_clean_if_last_test_was_destructive;
     $self->_init_fixtures;
     $self->_set_url;
     $self->_make_fixtures_current;
 
     return $self;
+}
+
+sub _clean_if_last_test_was_destructive {
+    my $self = shift;
+    my $fixture = Test::Socialtext::Fixture->new( name => 'destructive', env => $self );
+    if ($fixture->is_current) {
+        Test::More::diag( "last test was destructive; cleaning everything out and starting fresh" );
+        unshift @{$self->{fixtures}}, 'clean';
+    }
 }
 
 sub _init_fixtures {

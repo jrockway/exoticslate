@@ -1304,6 +1304,8 @@ proto.process_command = function(command) {
                 .focus_link_menu('do_widget_link2', 'Wiki');
         }, 100);
     }
+
+    this.get_edit_window().focus();
 }
 
 proto.enableThis = function() {

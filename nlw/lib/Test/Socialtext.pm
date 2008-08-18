@@ -208,6 +208,7 @@ sub setup_test_appconfig_dir {
 sub _store_initial_state {
     _store_initial_appconfig();
     _store_initial_userids();
+    _store_initial_workspaceids();
 }
 
 # revert back to the initial state (as best we can) when the test run is over.
@@ -215,6 +216,7 @@ END { _teardown_cleanup() }
 sub _teardown_cleanup {
     _reset_initial_appconfig();
     _remove_all_but_initial_userids();
+    _remove_all_but_initial_workspaceids();
 }
 
 {
@@ -262,6 +264,33 @@ sub _teardown_cleanup {
                 my $username = $user->username();
                 Test::More::diag( "CLEANUP: removing user '$driver:$user_id ($username)'; your test left it behind" );
                 $user->delete(force=>1);
+            }
+        }
+    }
+}
+
+{
+    my %InitialWorkspaceIds;
+    sub _store_initial_workspaceids {
+        my $iterator = Socialtext::Workspace->All();
+        while (my $ws = $iterator->next()) {
+            my $ws_id = $ws->workspace_id();
+            $InitialWorkspaceIds{$ws_id} ++;
+        }
+    }
+    sub _remove_all_but_initial_workspaceids {
+        # if we didn't store an initial set of workspaces, don't do any cleanup
+        return unless %InitialWorkspaceIds;
+
+        # remove all but the initial set of workspaces that were created and
+        # available at startup.
+        my $iterator = Socialtext::Workspace->All();
+        while (my $ws = $iterator->next()) {
+            my $ws_id = $ws->workspace_id();
+            unless ($InitialWorkspaceIds{$ws_id}) {
+                my $ws_name = $ws->name();
+                Test::More::diag( "CLEANUP: removing workspace '$ws_id ($ws_name)'; your test left it behind" );
+                $ws->delete();
             }
         }
     }

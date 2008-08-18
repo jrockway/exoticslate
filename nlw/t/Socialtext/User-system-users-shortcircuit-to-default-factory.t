@@ -25,11 +25,11 @@ use Test::Socialtext tests => 16;
 ###############################################################################
 
 ###############################################################################
-# FIXTURE:  rdbms_clean
+# FIXTURE:  db
 #
 # Need the lowest-weight fixture we can get, just so that our configuration
-# files and directories are set up for testing.
-fixtures( 'rdbms_clean' );
+# files and directories are set up for testing and that Pg is running.
+fixtures( 'db' );
 
 ###############################################################################
 # Set up a fake LDAP store

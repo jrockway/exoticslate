@@ -5,7 +5,7 @@ use Test::Socialtext;
 use strict;
 use warnings;
 
-fixtures( 'rdbms_clean' );
+fixtures( 'db' );
 
 BEGIN {
     eval 'use Test::MockObject';

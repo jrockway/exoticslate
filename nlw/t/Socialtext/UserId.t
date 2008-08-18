@@ -10,7 +10,7 @@ BEGIN {
     use_ok( 'Socialtext::UserId' );
 }
 
-fixtures( 'rdbms_clean' );
+fixtures( 'db' );
 
 my $homunculus = FakeHomunculus->new(
     driver_key  => 'Fake',

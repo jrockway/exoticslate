@@ -4,7 +4,11 @@
 use strict;
 use warnings;
 use Test::Socialtext tests => 11;
-fixtures 'rdbms_clean';
+
+# Fixtures: db
+#
+# Want Pg running, but don't care what's in it.
+fixtures( 'db' );
 
 BEGIN {
     use_ok 'Socialtext::Schema';

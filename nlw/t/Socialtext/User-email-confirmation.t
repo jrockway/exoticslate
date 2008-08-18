@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext;
-fixtures( 'rdbms_clean' );
+fixtures( 'db' );
 
 BEGIN {
     unless ( eval { require Email::Send::Test; 1 } ) {

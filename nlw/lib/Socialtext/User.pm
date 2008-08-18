@@ -369,9 +369,7 @@ sub _get_full_name {
         return $self->email_address 
             unless ($p{workspace} && $p{workspace}->workspace_id != 0);
 
-        my $masked = $self->_masked_email_address($p{workspace});
-        $masked =~ s/\@.*$//;
-        return $masked;
+        return $self->_masked_email_address($p{workspace});
     }
 }
 

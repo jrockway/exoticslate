@@ -4,7 +4,4 @@ fixtures:
   - foobar_with_ordered_pages
   - auth-to-edit_with_ordered_pages
   - help
-
-workspaces:
-  public:
-    ordered_pages: 1
+  - public_with_ordered_pages

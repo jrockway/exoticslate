@@ -1,0 +1,6 @@
+fixtures:
+  - db
+
+workspaces:
+  public:
+    ordered_pages: 1

@@ -5,7 +5,4 @@ fixtures:
   - foobar_with_extra_pages
   - auth-to-edit_with_extra_pages
   - help
-
-workspaces:
-  public:
-    extra_pages: 1
+  - public_with_extra_pages

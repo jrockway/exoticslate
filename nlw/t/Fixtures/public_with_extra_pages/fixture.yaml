@@ -1,0 +1,6 @@
+fixtures:
+  - db
+
+workspaces:
+  public:
+    extra_pages: 1

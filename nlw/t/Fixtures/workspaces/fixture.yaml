@@ -4,6 +4,4 @@ fixtures:
   - foobar
   - auth-to-edit
   - help
-
-workspaces:
-  public: { }
+  - public

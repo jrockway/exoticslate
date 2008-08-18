@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 use Test::Socialtext;
-fixtures( 'workspaces_with_extra_pages' );
+fixtures( 'workspaces_with_extra_pages', 'destructive' );
 
 BEGIN {
     unless (

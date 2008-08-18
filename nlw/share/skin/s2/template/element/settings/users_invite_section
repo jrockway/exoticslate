@@ -19,6 +19,7 @@
     [% loc('Example:') %]
     <pre>[% loc('your.friend@example.com') %]
 [% loc('another.friend@example.com') %]
+[% loc('Firstname Lastname &lt;u01234@example.com&gt;') %]
     </pre>
    </div>
   </div>

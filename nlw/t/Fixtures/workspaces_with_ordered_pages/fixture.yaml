@@ -1,9 +1,8 @@
 fixtures:
   - db
+  - admin_with_ordered_pages
 
 workspaces:
-  admin:
-    ordered_pages: 1
   foobar:
     ordered_pages: 1
     extra_users:

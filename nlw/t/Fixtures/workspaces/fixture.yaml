@@ -1,8 +1,8 @@
 fixtures:
   - db
+  - admin
 
 workspaces:
-  admin: { }
   foobar:
     extra_users:
       member: [devnull@urth.org]

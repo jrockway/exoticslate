@@ -1,11 +1,9 @@
 fixtures:
   - db
   - sale
+  - admin_with_extra_pages
 
 workspaces:
-  admin:
-    extra_pages: 1
-    admin_can_impersonate: 1
   foobar:
     extra_pages: 1
     extra_users:

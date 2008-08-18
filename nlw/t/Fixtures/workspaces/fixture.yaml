@@ -1,12 +1,9 @@
 fixtures:
   - db
   - admin
+  - foobar
 
 workspaces:
-  foobar:
-    extra_users:
-      member: [devnull@urth.org]
-      impersonator: [devnull2@socialtext.com]
   public: { }
   auth-to-edit: { }
   "help-en": { }

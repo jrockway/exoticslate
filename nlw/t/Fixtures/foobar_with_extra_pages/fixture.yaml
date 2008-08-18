@@ -3,7 +3,7 @@ fixtures:
 
 workspaces:
   foobar:
-    ordered_pages: 1
+    extra_pages: 1
     extra_users:
       member: [devnull@urth.org]
       impersonator: [devnull2@socialtext.com]

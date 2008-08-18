@@ -1,13 +1,9 @@
 fixtures:
   - db
   - admin_with_ordered_pages
+  - foobar_with_ordered_pages
 
 workspaces:
-  foobar:
-    ordered_pages: 1
-    extra_users:
-      - devnull2@socialtext.com
-      - devnull@urth.org
   public:
     ordered_pages: 1
   auth-to-edit:

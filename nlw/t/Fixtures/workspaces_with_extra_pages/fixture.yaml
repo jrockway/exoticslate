@@ -2,13 +2,9 @@ fixtures:
   - db
   - sale
   - admin_with_extra_pages
+  - foobar_with_extra_pages
 
 workspaces:
-  foobar:
-    extra_pages: 1
-    extra_users:
-      member: [devnull@urth.org]
-      impersonator: [devnull2@socialtext.com]
   public:
     extra_pages: 1
   auth-to-edit:

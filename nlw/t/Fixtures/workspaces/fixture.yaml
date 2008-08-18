@@ -10,7 +10,3 @@ workspaces:
   public: { }
   auth-to-edit: { }
   "help-en": { }
-
-cache:
-  - WORKSPACES
-  - USERS

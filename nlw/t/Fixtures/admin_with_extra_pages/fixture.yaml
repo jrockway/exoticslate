@@ -5,7 +5,3 @@ workspaces:
   admin:
     extra_pages: 1
     admin_can_impersonate: 1
-
-cache:
-  - WORKSPACES
-  - USERS

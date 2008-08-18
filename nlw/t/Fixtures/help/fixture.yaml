@@ -3,7 +3,3 @@ fixtures:
 
 workspaces:
     "help-en": { }
-
-cache:
-  - WORKSPACES
-  - USERS

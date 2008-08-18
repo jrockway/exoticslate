@@ -13,7 +13,3 @@ workspaces:
     title: Exchange
     extra_pages: 1
     permission_set_name: public-authenticate-to-edit
-
-cache:
-  - WORKSPACES
-  - USERS

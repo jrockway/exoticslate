@@ -14,7 +14,3 @@ workspaces:
   auth-to-edit:
     ordered_pages: 1
   "help-en": { }
-
-cache:
-  - WORKSPACES
-  - USERS

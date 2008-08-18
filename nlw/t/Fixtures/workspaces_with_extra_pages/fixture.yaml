@@ -16,7 +16,3 @@ workspaces:
   auth-to-edit:
     extra_pages: 1
   "help-en": { }
-
-cache:
-  - WORKSPACES
-  - USERS

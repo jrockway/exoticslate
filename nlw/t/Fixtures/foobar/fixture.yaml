@@ -6,7 +6,3 @@ workspaces:
     extra_users:
       member: [devnull@urth.org]
       impersonator: [devnull2@socialtext.com]
-
-cache:
-  - WORKSPACES
-  - USERS

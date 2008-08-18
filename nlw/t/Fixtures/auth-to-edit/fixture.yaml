@@ -3,7 +3,3 @@ fixtures:
 
 workspaces:
   auth-to-edit: { }
-
-cache:
-  - WORKSPACES
-  - USERS

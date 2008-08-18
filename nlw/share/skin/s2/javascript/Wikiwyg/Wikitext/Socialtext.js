@@ -410,9 +410,12 @@ proto.add_markup_lines = function(markup_start) {
     var end = this.selection_start + this.sel.length;
     this.set_text_and_selection(text, start, end);
 
-    // Here we cancel the selection and allow the user to keep typing
-    // (instead of replacing the freshly-inserted-markup by typing.)
-    this.area.selectionStart = this.area.selectionEnd;
+    // If there were no selection before the user clicked this button, then
+    // cancel selection and allow the user to keep typing, instead of
+    // replacing the freshly-inserted-markup when typing the next key.
+    if (this.sel == markup_start + ' ') {
+        this.area.selectionStart = this.area.selectionEnd;
+    }
 
     this.area.focus();
 }

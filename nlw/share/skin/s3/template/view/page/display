@@ -135,7 +135,7 @@
           [% END %]
           </ul>
           [% IF page.incoming.size == 0 %]
-            <p>There are no pages that link to this page yet.</p>
+            <p>[% loc('There are no pages that link to this page yet.') %]</p>
           [% END %]
           <div class="clear"></div>
         </div><!-- widgetContent -->

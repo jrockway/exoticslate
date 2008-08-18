@@ -10,11 +10,10 @@ use Test::Socialtext::Bootstrap::OpenLDAP;
 use Test::Socialtext tests => 18;
 
 ###############################################################################
-# FIXTURE: rdbms_clean
+# FIXTURE: db
 #
 # Need to have Pg running, but it doesn't have to contain any data.
-###############################################################################
-fixtures( 'rdbms_clean' );
+fixtures( 'db' );
 
 ###############################################################################
 # Attempt to authenticate a user in an OpenLDAP store, by "common name".

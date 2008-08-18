@@ -1,5 +1,6 @@
 widgets:
   - link2
+  - link2_hyperlink
   - image
   - file
   - toc
@@ -54,6 +55,23 @@ widget:
     image_text:
         - { field: page_title, text: "toc: %page_title" }
         - { field: default, text: "toc" }
+
+  link2_hyperlink:
+    id: link2_hyperlink
+    label: Link to a Web Page
+    hide_in_menu: true
+    color: blue
+    pattern: '"%label"{link: %workspace_id [%page_title] %section_name}'
+    fields: [label, url]
+    pdfields: [label, url]
+    primary_field: url
+    labels:
+      url: Link destination
+      label: Linked text
+    title: Link to '$url'. Click to edit.
+    desc: Use this form to edit the properties of the link to a web page.
+    more_desc: Optional properties include the text to display for the link.
+    required: [url]
 
   link2:
     id: link2
@@ -657,7 +675,7 @@ menu_hierarchy:
       - label: Pages related to a tag
         widget: tag
       - label: A page on the web
-        widget: link2
+        widget: link2_hyperlink
   - label: From workspaces...   
     sub_menu:
       - label: A page include

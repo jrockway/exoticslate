@@ -1,0 +1,40 @@
+| *Comment* | STARTING Test case: Socialtext People Edit Profile |  |
+
+* Fixture: SocialWidgets
+
+| set | workspace | test-data |
+
+| open_ok | /?dashboard | 60000 |
+| click_and_wait | link=Profile | 20000 |
+| st-name-widget | 1 | profile |
+| st-select-widget-frame | profile |  |
+| pause | 20000 |  |
+| click_ok | link=(Edit) | 20000 |
+| wait_for_element_visible_ok | link=Profile | 20000 |
+| type_ok | photo-url | http://www.xndev.com/matt_im_avatar.jpg |
+| pause | 2000 |  |
+| click_and_wait | photo-from-web-button | 20000 |
+| type_ok | position | Test Automation Robot |
+| type_ok | company | Socialtext Company |
+| type_ok | location | In the EtherSphere |
+| type_ok | work_phone | 111 111-1111 |
+| type_ok | mobile_phone | 222 222-2222 |
+| type_ok | home_phone | 333 333-3333 |
+| select_ok | supervisor | devnull1 |
+| select_ok | assistant | devnull1 |
+| type_ok | aol_sn | devnull_aol |
+| type_ok | yahoo_sn | devnull_yahoo |
+| type_ok | gtalk_sn | devnull_gtalk |
+| type_ok | skype_sn | devnull_skype |
+| type_ok | sametime_sn | devnull_sametime |
+| type_ok | twitter_sn | devnull_twitter |
+| type_ok | blog | devnull_blog |
+| type_ok | personal_url | devnull_personal |
+| type_ok | linkedin_url | devnull_linkedin |
+| type_ok | facebook_url | devnull_facebook |
+| click_and_wait | Update Profile | 20000 |
+| pause | 20000 |  |
+| select-frame | relative=parent |  |
+| st-empty-container |  |  |
+
+| *Comment* | Test Case: Socialtext People Edit Profile |

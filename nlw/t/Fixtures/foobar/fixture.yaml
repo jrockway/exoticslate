@@ -6,3 +6,8 @@ workspaces:
     extra_users:
       member: [devnull@urth.org]
       impersonator: [devnull2@socialtext.com]
+
+conflicts:
+  - foobar_no_pages
+  - foobar_with_extra_pages
+  - foobar_with_ordered_pages

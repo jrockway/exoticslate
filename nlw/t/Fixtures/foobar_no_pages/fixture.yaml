@@ -4,3 +4,8 @@ fixtures:
 workspaces:
   foobar:
     no_pages: 1
+
+conflicts:
+  - foobar
+  - foobar_with_extra_pages
+  - foobar_with_ordered_pages

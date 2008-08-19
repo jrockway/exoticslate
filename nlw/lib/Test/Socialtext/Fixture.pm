@@ -172,6 +172,33 @@ sub is_current {
     return 0;
 }
 
+sub has_conflicts {
+    my $self = shift;
+    return 1 if ($self->_i_have_conflicts);
+    return 1 if ($self->_dependencies_have_conflicts);
+    return 0;
+}
+
+sub _i_have_conflicts {
+    my $self = shift;
+    my $conflicts = $self->config->{conflicts};
+    if ($conflicts) {
+        foreach my $fixture_name (@{$conflicts}) {
+            my $fixture = Test::Socialtext::Fixture->new( name=>$fixture_name, env=>$self->env );
+            return 1 if (-e $fixture->buildstamp_file);
+        }
+    }
+    return 0;
+}
+
+sub _dependencies_have_conflicts {
+    my $self = shift;
+    foreach my $fixture (@{$self->fixtures}) {
+        return 1 if ($fixture->has_conflicts);
+    }
+    return 0;
+}
+
 sub generate {
     my $self = shift;
 

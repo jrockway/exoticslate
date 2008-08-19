@@ -4,3 +4,7 @@ fixtures:
 workspaces:
   public:
     extra_pages: 1
+
+conflicts:
+  - public
+  - public_with_ordered_pages

@@ -17,7 +17,7 @@ sub users {
     my %opts    = @_;
     my $csv     = delete $opts{csv}     or die "csv is mandatory!";
     my $pass_cb = delete $opts{pass_cb} or die "pass_cb is mandatory!";
-    my $fail_cb = delete $opts{fail_cb} or die "fail_c is mandatory!";
+    my $fail_cb = delete $opts{fail_cb} or die "fail_cb is mandatory!";
 
     my @lines = split "\n", $csv;
     my @profile_fields

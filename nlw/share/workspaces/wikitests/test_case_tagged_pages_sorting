@@ -2,13 +2,13 @@
 | *Comment* | wikitest files should be in %%wikitest_files%% on the browser server |  |
 
 | set | user_1 | user1_%%start_time%%@ken.socialtext.net |
-| set | user_1_regex | user1_%%start_time%%\@ken\.socialtext\.net |
+| set | user_1_regex | user1 %%start_time%% |
 | set | user_2 | user2_%%start_time%%@ken.socialtext.net |
-| set | user_2_regex | user2_%%start_time%%\@ken\.socialtext\.net |
+| set | user_2_regex | user2 %%start_time%% |
 | set | user_3 | user3_%%start_time%%@ken.socialtext.net |
-| set | user_3_regex | user3_%%start_time%%\@ken\.socialtext\.net |
+| set | user_3_regex | user3 %%start_time%% |
 | set | user_4 | user4_%%start_time%%@ken.socialtext.net |
-| set | user_4_regex | user4_%%start_time%%\@ken\.socialtext\.net |
+| set | user_4_regex | user4 %%start_time%% |
 | set | sorting_workspace | tagged-%%start_time%% |
 
 | *Comment* | Test Case: Tagged Page Sorting Create new ws %%sorting_workspace%% |  |
@@ -117,9 +117,9 @@ Create unique sort order for each sort:
 | open_ok | /%%sorting_workspace%%/index.cgi?action=category_display;category=Tagged%20Page%20%%start_time%% |  |
 | text_like | qr/Tag:\s+Tagged Page %%start_time%%/i |  |
 
-IS THE DEFAULT SORT TITLE ASCENDING?
+ *Comment* | Test Case: Tagged Page Sorting. default sorted Title asc | |
 
-| *Comment* | Test Case: Tagged Page Sorting. default sorted Title asc |  |
+| select_and_wait | sort-picker | index=0 |
 | text_like | st-category-content | qr/Search Sort 1.+Search Sort 2.+Search Sort 3.+Search Sort 4/ |
 
 | *Comment* | Test Case: Tagged Page Sorting. Sorting Title desc, then asc |  |
@@ -157,17 +157,17 @@ IS THE DEFAULT SORT TITLE ASCENDING?
 | select_and_wait | sort-picker | index=5 |
 | text_like | st-search-content | qr/Search Sort 3.+Search Sort 4.+Search Sort 1.+Search Sort 2/ |
 
-| *Comment* | Test Case: Tagged Page Sorting. Sorting Title desc, then asc |  |
+| *Comment* | Test Case: Tagged Page Sorting. Sorting Title asc, then desc |  |
 | select_and_wait | sort-picker | label=Title |
-| text_like | st-search-content | qr/Search Sort 4.+Search Sort 3.+Search Sort 2.+Search Sort 1/ |
-| select_and_wait | sort-picker | index=2 |
 | text_like | st-search-content | qr/Search Sort 1.+Search Sort 2.+Search Sort 3.+Search Sort 4/ |
+| select_and_wait | sort-picker | index=2 |
+| text_like | st-search-content | qr/Search Sort 4.+Search Sort 3.+Search Sort 2.+Search Sort 1/ |
 
 | *Comment* | Test Case: Tagged Page Sorting. Sorting Last Edited By asc, then desc |  |
 | select_and_wait | sort-picker | label=Last Edited By |
-| text_like | st-search-content | qr/Search Sort 4.+Search Sort 1.+Search Sort 2.+Search Sort 3/ |
+| text_like | st-search-content | qr/Search Sort 1.+Search Sort 2.+Search Sort 3.+Search Sort 4/ |
 | select_and_wait | sort-picker | index=3 |
-| text_like | st-search-content | qr/Search Sort 3.+Search Sort 2.+Search Sort 1.+Search Sort 4/ |
+| text_like | st-search-content | qr/Search Sort 1.+Search Sort 2.+Search Sort 3.+Search Sort 4/ |
 
 | *Comment* | Test Case: Tagged Page Sorting. Sorting Date desc, then asc |  |
 | select_and_wait | sort-picker | label=Date |

@@ -12,8 +12,9 @@ BEGIN {
 }
 
 my $hub       = new_hub('admin');
-my $page_name = 'update page';
+my $page_name = 'update page ' . time();
 my $content1  = 'one content';
+my $page_id   = Socialtext::Page->name_to_id($page_name);
 
 {
     my $page = Socialtext::Page->new( hub => $hub )->create(
@@ -27,9 +28,9 @@ my $content1  = 'one content';
     my $page = $hub->pages->new_from_name($page_name);
     my $hash = $page->hash_representation();
 
-    is $hash->{name},    'update page', 'hash name element is update page';
-    is $hash->{uri},     'update_page', 'hash uri element is update_page';
-    is $hash->{page_id}, 'update_page', 'hash page_id element is update_page';
+    is $hash->{name},    $page_name, "hash name element is $page_name";
+    is $hash->{uri},     $page_id,   "hash uri element is $page_id";
+    is $hash->{page_id}, $page_id,   "hash page_id element is $page_id";
     is $hash->{revision_count}, 1, 'revision count is 1';
     is $hash->{last_editor}, 'devnull1@socialtext.com',
         'hash last_editor is devnull1';
@@ -41,7 +42,7 @@ my $content1  = 'one content';
         'modified time looks like an epoch time';
     like $hash->{revision_id}, qr{^\d{14}$},
         'revision_id is correctly formatted';
-    like $hash->{page_uri}, qr{/admin/index.cgi\?update_page},
+    like $hash->{page_uri}, qr{/admin/index.cgi\?$page_id},
         'page_uri contains index.cgi';
 
     # update the page

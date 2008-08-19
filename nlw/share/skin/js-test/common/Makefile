@@ -25,10 +25,10 @@ all: $(ALL_DIRS) $(ALL_TARGETS) $(ALL_LIBS)
 
 clean:
 	rm -fr $(ALL_TARGETS) $(ALL_LIBS)
-	if [ "$(TEST_TEMPLATE_MD5)" = "$(TEST_LOCAL_MD5)" ]; \
-	    then rm -f template/test.html; fi
-	if [ "$(INDEX_TEMPLATE_MD5)" = "$(INDEX_LOCAL_MD5)" ]; \
-	    then rm -f template/index.html; fi
+	if [ "$(TEST_TEMPLATE_MD5)" = \
+     "$(TEST_LOCAL_MD5)" ]; then rm -f template/test.html; fi
+	if [ "$(INDEX_TEMPLATE_MD5)" = \
+     "$(INDEX_LOCAL_MD5)" ]; then rm -f template/index.html; fi
 	-find $(ALL_DIRS) -depth -type d | xargs rmdir 2> /dev/null
 
 

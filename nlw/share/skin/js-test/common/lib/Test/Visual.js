@@ -1,9 +1,9 @@
-(function($) {
-
-Test.Visual = function() {
+// Class Test.Visual
+(function(className, $) {
+var proto = (Test.Visual = function() {
     this.init.apply(this, arguments);
-}
-var proto = Test.Visual.prototype = new Test.Base();
+    this.className = className;
+}).prototype = new Test.Base();
 
 proto.init = function() {
     Test.Base.prototype.init.call(this);
@@ -74,21 +74,31 @@ proto._get_selector_element = function(selector) {
     return $result.get(0);
 }
 
-Test.Visual.Block = function() {
+})('Test.Visual', jQuery);
+
+
+// Class Test.Visual.Block
+(function(className) {
+var proto = (Test.Visual.Block = function() {
     this.init.apply(this, arguments);
-}
-proto = Test.Visual.Block.prototype = new Test.Base.Block();
+    this.className = className;
+}).prototype = new Test.Base.Block();
 
 proto.init = function() {
     Test.Base.Block.prototype.init.call(this);
     this.filter_object = new Test.Visual.Filter();
 }
 
-Test.Visual.Filter = function() {
+})('Test.Visual.Block');
+
+
+// Class Test.Visual.Filter
+(function(className) {
+var proto = (Test.Visual.Filter = function() {
     this.init.apply(this, arguments);
-}
-proto = Test.Visual.Filter.prototype = new Test.Base.Filter();
+    this.className = className;
+}).prototype = new Test.Base.Filter();
 
 // Filter functions go here...
 
-})(jQuery);
+})('Test.Visual.Filter');

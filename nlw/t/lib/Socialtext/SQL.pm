@@ -74,12 +74,18 @@ sub fetchall_arrayref {
 
 sub fetchrow_arrayref {
     my $self = shift;
-    return shift @{ $self->{return} };
+    return shift @{$self->{return}};
+}
+
+sub fetchrow_array {
+    my $self = shift;
+    my $row = shift @{$self->{return}} || [];
+    return @$row;
 }
 
 sub fetchrow_hashref {
     my $self = shift;
-    return shift @{ $self->{return} };
+    return shift @{$self->{return}};
 }
 
 1;

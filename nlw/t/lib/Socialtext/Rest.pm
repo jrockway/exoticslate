@@ -45,6 +45,7 @@ sub header {
     if (@_) {
         $self->{header} = { @_ };
     }
+    $self->{header} ||= {};
     return %{$self->{header}};
 }
 
@@ -96,10 +97,10 @@ sub AUTOLOAD {
     return if $AUTOLOAD eq 'DESTROY';
 
     if (exists $self->params->{$AUTOLOAD}) {
-        croak("Cannot set the value of '$AUTOLOAD'") if @_;
+        die("Cannot set the value of '$AUTOLOAD'") if @_;
         return $self->params->{$AUTOLOAD};
     }
-    croak("No such method '$AUTOLOAD' for type '$type'.");
+    die("No such method '$AUTOLOAD' for type '$type'.");
 }
 
 sub is_status($$$) {

@@ -59,6 +59,10 @@ sub user_id { $_[0]->{user_id} || 1 }
 
 sub username { $_[0]->{username} || 'oneusername' }
 sub password { $_[0]->{password} || 'default-pass' }
+sub password_is_correct {
+    my $self = shift;
+    return $self->{password} eq shift;
+}
 
 sub can_update_store { 1 }
 sub update_store {

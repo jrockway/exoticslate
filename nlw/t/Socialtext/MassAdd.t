@@ -77,7 +77,8 @@ Add_user_already_added: {
             pass_cb => sub { push @successes, shift },
             fail_cb => sub { push @failures,  shift },
         );
-        is_deeply \@successes, [], 'success message ok';
+        is_deeply \@successes, ['No changes for user guybrush'],
+            'success message ok';
         is_deeply \@failures, [], 'no failure messages';
     }
 
@@ -166,7 +167,8 @@ Add_user_already_added: {
             pass_cb => sub { push @successes, shift },
             fail_cb => sub { push @failures,  shift },
         );
-        is_deeply \@successes, [], 'success message ok';
+        is_deeply \@successes, ['No changes for user guybrush'],
+            'success message ok';
         is_deeply \@failures, [], 'no failure messages';
     }
 }

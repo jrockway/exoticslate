@@ -598,7 +598,7 @@ sub default_role {
         shift;
         my %p = validate( @_, $spec );
 
-        return ( "Passwords must be at least 6 characters long." )
+        return ( loc("Passwords must be at least 6 characters long.") )
             unless length $p{password} >= 6;
 
         return;

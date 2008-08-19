@@ -1,2 +1,5 @@
 fixtures:
-  - rdbms_clean
+  - db
+
+conflicts:
+  - ldap_authenticated

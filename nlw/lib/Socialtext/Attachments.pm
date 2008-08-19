@@ -252,17 +252,25 @@ sub new {
     $self->page_id($self->hub->pages->current->id)
       unless $self->page_id;
     if (my $filename = $self->filename) {
-        $filename = Socialtext::Encode::ensure_is_utf8(
-            $self->filename
-        );
-        $filename =~ s#^.*/##;
-        $filename =~ s#^.*\\##;
-        # why would we do  ... => ~~.  ?
-        $filename =~ s/(\.+)\./'~' x length($1) . '.'/ge;
+        $filename = $self->clean_filename($filename);
         $self->filename($filename);
         $self->db_filename($self->uri_escape($filename));
     }
     return $self;
+}
+
+sub clean_filename {
+    my $self = shift;
+    my $filename = shift;
+
+    $filename = Socialtext::Encode::ensure_is_utf8(
+        $filename
+    );
+    $filename =~ s/[\/\\]+$//;
+    $filename =~ s/^.*[\/\\]//;
+    # why would we do  ... => ~~.  ?
+    $filename =~ s/(\.+)\./'~' x length($1) . '.'/ge;
+    return $filename;
 }
 
 my $x = 0;

@@ -4,7 +4,7 @@
 use warnings;
 use strict;
 
-use Test::Socialtext tests => 15;
+use Test::Socialtext tests => 20;
 fixtures( 'admin' );
 use Socialtext::Attachments;
 use Socialtext::User;
@@ -17,6 +17,20 @@ sub booleanize { $_[0] ? 1 : '' } # could be a filter
 
 my $hub = new_hub('admin');
 my $creator = Socialtext::User->new( username => 'devnull1@socialtext.com' );
+
+FILENAME_TEST: {
+    my $a = new_attachment;
+    my $filename = $a->clean_filename('a.txt');
+    is 'a.txt', $filename, 'regular filename set ok';
+    $filename = $a->clean_filename('bab\\a.txt');
+    is 'a.txt', $filename, 'pre-backslash trimmed';
+    $filename = $a->clean_filename('bab\\a.txt\\');
+    is 'a.txt', $filename, 'trailing backslash trimmed';
+    $filename = $a->clean_filename('bab/a.txt');
+    is 'a.txt', $filename, 'pre-slash trimmed';
+    $filename = $a->clean_filename('bab/a.txt/');
+    is 'a.txt', $filename, 'trailing slash trimmed';
+}
 
 run {
     my $case = shift;

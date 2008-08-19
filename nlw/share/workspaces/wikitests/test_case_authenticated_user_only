@@ -9,7 +9,8 @@
 | st-login | newuser_%%start_time%%@ken.socialtext.net | 123456 |
 
 | open-ok | /%%workspace%%/index.cgi?action=dashboard |  |
-| text_like | st-homepage | qr/Welcome,\s+newuser_%%start_time%%\@hidden/ |
+| *Comment* | Test Case: Authenticated-User-Only modified to accomodate PD always installed. Anticipate changing this test when an st-admin command to turn PD on/off exists |  |
+| text_like | st-homepage | qr/Welcome,\s+newuser %%start_time%%/ |
 | click_and_wait | link=Announcements and Links |  |
 
 | text_like | st-editing-tools | Edit |

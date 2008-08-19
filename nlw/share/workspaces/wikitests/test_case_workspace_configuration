@@ -76,7 +76,8 @@ TODO: Figure out a way to test the other config functions
 | click_ok | link=Advanced |  |
 | type_ok | st-newpage-pagename-edit | email %%start_time%% |
 | click_and_wait | st-save-button-link |  |
-| text_like | st-created | gmail.com |
+| *Comment* | Test Case: Workspace Configuration with PD installed, email addresses are not shown. Anticipate changing this test when an st-admin command to turn PD on/off exists |  |
+| text_like | st-created | %%start_time%% |
 
 | *Comment* | Test Case: Workspace Configuration Comment Custom Fields |  |
 | st-admin | set-comment-form-custom-fields --workspace %%workspace%% "Field A" "Bee Field" "Red Field" |  |

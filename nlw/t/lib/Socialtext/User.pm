@@ -18,15 +18,23 @@ sub new {
             return undef;
         }
         elsif ($type eq 'user_id') {
-            if (my $user = $Users{$value}) {
+            if (exists $Users{$value}) {
                 # warn "RETURNING cached user for $value";
-                return $user;
+                return $Users{$value};
             }
         }
     }
     my $self = { $type ? ($type => $value) : (), @_ };
     bless $self, $class;
     return $self;
+}
+
+sub create { 
+    my $class = shift;
+    my %opts = @_;
+    die 'is not a valid email address' unless $opts{email_address} =~ m/@/;
+    my $user = Socialtext::MockBase::new($class, %opts);
+
 }
 
 sub confirm_email_address {}

@@ -92,6 +92,7 @@ sub users {
                 $p->$field($value);
                 $changed_user++;
             }
+            $p->save() if ($changed_user);
         }
         if ($added_user) {
             $pass_cb->("Added user $username");

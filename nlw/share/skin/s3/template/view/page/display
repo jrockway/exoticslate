@@ -226,13 +226,14 @@
     [% SET update_author = '<span class="st-username">' _ username(name=page.updated.user_id) _ '</span>' %]
     [% SET update_date = '<span class="st-updatedate">' _ (page.updated.date) _ '</span>' %]
     [% IF page.revisions && page.revisions > 0 %]
-    <ul class="buttonRight">
-      <li><span class="attribution">[% loc('Created by [_1] on [_2].', create_author, create_date) %]</span></li>
-      <li><span class="attribution">[% loc('Updated by [_1] on [_2].', update_author, update_date) %]</span></li>
-      <li><a href="?action=revision_list;page_name=[% page.id %]">([% loc('[quant,_1,revision]', page.revisions) %])</a></li>
-    </ul>
+    <div id="pageAttribution">
+        [% loc('Created by [_1] on [_2].', create_author, create_date) %]
+        [% loc('Updated by [_1] on [_2].', update_author, update_date) %]
+        <a class="revision" href="?action=revision_list;page_name=[% page.id %]">([% loc('[quant,_1,revision]', page.revisions) %])</a>
+    </div>
     [% END %]
   </div><!-- bottomButtons -->
+  <div class="clear">&nbsp;</div>
 </div><!-- contentContainer -->
 
 <div class="lightbox" id="st-attachments-attachinterface">

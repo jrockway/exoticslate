@@ -14,3 +14,9 @@ div.widget div.widgetBottom {
 div#controls div#st-editing-tools-edit ul li a {
 	margin-left: 12px;
 }
+
+div#buttomButtons div#pageAttribution {
+    margin: 5px 5px 0 190px;
+    padding: 5px;
+}
+

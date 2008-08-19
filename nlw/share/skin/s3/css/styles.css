@@ -769,7 +769,7 @@ div#contentContainer {
 	border-left: #759fb1 1px solid; 
 	border-right: #759fb1 1px solid; 
 	background:#fff url(../images/contentContainerTile.png) repeat-x top left;
-	padding: 0 0 40px 20px;
+	padding: 0 0 0 20px;
 	clear: both;
 }
 
@@ -1418,41 +1418,34 @@ dl.form dd label {
 
 div#bottomButtons {
 	border-top: #dedede 2px solid;
-	width: 98%;
+	width: 100%;
 	margin-top: 10px;
 }
 
 div#bottomButtons ul {
-	float: left;
+	float: left; 
 }
 
 div#bottomButtons ul li {
 	float: left;
 }
 
-div#bottomButtons ul li a,
-div#bottomButtons ul li span.attribution {
+div#bottomButtons ul li a {
 	float: left;
 	margin-right: 10px;
 	position: relative;
 	top: 10px;
 }
 
-div#bottomButtons ul li span.attribution a {
-        float: none;
-        top: 0;
-        margin: 0;
-}
-div#bottomButtons ul li span.attribution img.avatar {
-	vertical-align: middle;
+div#bottomButtons img.avatar {
+	vertical-align: top;
 }
 
-div#bottomButtons ul.buttonRight {
-	background: url(../images/controlsRightDivider.png) no-repeat center left;
-	height: 37px;
-	padding-left: 10px;
+div#bottomButtons div#pageAttribution {
+    background: url(../images/controlsRightDivider.png) no-repeat center left;
+    margin: 5px 5px 0 180px;
+    padding: 5px;
 }
-
 
 /* bottomButtons End */
 

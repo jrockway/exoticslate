@@ -1,11 +1,16 @@
-proto = new Subclass('Test.Wikiwyg', 'Test.Base');
+// Class Test.Wikiwyg
+(function(className) {
+var __ = (Test.Wikiwyg = function() {
+    this.init.apply(this, arguments);
+    this.className = className;
+}).prototype = new Test.Base();
 
-proto.init = function() {
+__.init = function() {
     Test.Base.prototype.init.call(this);
     this.block_class = 'Test.Wikiwyg.Block';
 }
 
-proto.run_roundtrip = function(section_name, section_name2) {
+__.run_roundtrip = function(section_name, section_name2) {
     if ( Wikiwyg.is_safari ) {
         this.skip("Skip roundtrip tests on Safari");
         return;
@@ -25,7 +30,7 @@ proto.run_roundtrip = function(section_name, section_name2) {
     }, 300);
 }
 
-proto.run_roundtrip_sync = function(section_name, section_name2) {
+__.run_roundtrip_sync = function(section_name, section_name2) {
     try {
         this.compile();
         var blocks =  this.state.blocks;
@@ -52,7 +57,7 @@ proto.run_roundtrip_sync = function(section_name, section_name2) {
     }
 }
 
-proto.do_roundtrip = function(wikitext) {
+__.do_roundtrip = function(wikitext) {
     var url = '/admin/index.cgi';
     var postdata = 'action=wikiwyg_wikitext_to_html;content=' +
         encodeURIComponent(wikitext);
@@ -76,7 +81,7 @@ proto.do_roundtrip = function(wikitext) {
     return wikitextObject.convert_html_to_wikitext(html2);
 }
 
-proto.create_wysiwyg_object = function(html) {
+__.create_wysiwyg_object = function(html) {
     var wikiwyg = new Wikiwyg.Socialtext();
     wikiwyg.set_config();
     var wysiwyg = new Wikiwyg.Wysiwyg.Socialtext();
@@ -87,21 +92,37 @@ proto.create_wysiwyg_object = function(html) {
     return wysiwyg;
 }
 
-proto = Subclass('Test.Wikiwyg.Block', 'Test.Base.Block');
+})('Test.Wikiwyg');
 
-proto.init = function() {
+
+// Class Test.Wikiwyg.Block
+(function(className) {
+var __ = (Test.Wikiwyg.Block = function() {
+    this.init.apply(this, arguments);
+    this.className = className;
+}).prototype = new Test.Base.Block();
+
+__.init = function() {
     Test.Base.Block.prototype.init.call(this);
     this.filter_object = new Test.Wikiwyg.Filter();
 }
 
-proto = new Subclass('Test.Wikiwyg.Filter', 'Test.Base.Filter');
+})('Test.Wikiwyg.Block');
 
-proto.html_to_wikitext = function(content) {
+
+// Class Test.Wikiwyg.Filter
+(function(className) {
+var __ = (Test.Wikiwyg.Filter = function() {
+    this.init.apply(this, arguments);
+    this.className = className;
+}).prototype = new Test.Base.Filter();
+
+__.html_to_wikitext = function(content) {
     var object = new Wikiwyg.Wikitext.Socialtext();
     return object.convert_html_to_wikitext(content);
 }
 
-proto.template_vars = function(content) {
+__.template_vars = function(content) {
     return content.replace(
         /\[\%BASE_URL\%\]/g,
         'http://talc.socialtext.net:21002/static/1.1.1.1/js-test/run'
@@ -111,7 +132,7 @@ proto.template_vars = function(content) {
     );
 }
 
-proto.dom_sanitize  = function(content) {
+__.dom_sanitize  = function(content) {
     var html = content;
     var dom = document.createElement('div');
     dom.innerHTML = html;
@@ -121,4 +142,5 @@ proto.dom_sanitize  = function(content) {
         html2 += '\n';
     return html2;
 }
- 
+
+})('Test.Wikiwyg.Filter');

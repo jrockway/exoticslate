@@ -153,8 +153,7 @@ sub create {
 
     # username email_address password first_name last_name
     my %p = @_;
-    my %user_p = map { $_ => $p{$_} } @user_store_interface;
-    my $homunculus = $class->_first( 'create', %p ); #%user_p );
+    my $homunculus = $class->_first( 'create', %p );
 
     my $system_unique_id = Socialtext::UserId->create(
         driver_key       => $homunculus->driver_key,

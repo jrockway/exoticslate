@@ -12,7 +12,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 42;
+    plan tests => 44;
 }
 
 use mocked 'Socialtext::People::Profile';
@@ -244,8 +244,25 @@ Create_user_with_no_people_installed: {
         'confirmation email not sent';
 }
 
+Missing_username: {
+    my $bad_csv = $PIRATE_CSV . <<'EOT';
+,ghost@lechuck.com,Ghost Pirate,LeChuck,password,Ghost,Ghost Pirates Inc,Netherworld,,,
+EOT
+    my @successes;
+    my @failures;
+    Socialtext::MassAdd->users(
+        csv => $bad_csv,
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+
+    is_deeply \@successes, ['Added user guybrush'], 'success message ok';
+    is_deeply \@failures,
+        ['Line 2: username is a required field, but it is not present.'],
+        'correct failure message';
+}
+
 Missing_email: {
-    local $Socialtext::User::Users{lechuck} = undef;
     my $bad_csv = $PIRATE_CSV . <<'EOT';
 lechuck,,Ghost Pirate,LeChuck,password,Ghost,Ghost Pirates Inc,Netherworld,,,
 EOT
@@ -259,7 +276,7 @@ EOT
 
     is_deeply \@successes, ['Added user guybrush'], 'success message ok';
     is_deeply \@failures,
-        ['Line 2: email is a required field, but could not be parsed.'],
+        ['Line 2: email is a required field, but it is not present.'],
         'correct failure message';
 }
 

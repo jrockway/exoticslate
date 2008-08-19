@@ -2,6 +2,7 @@ package Socialtext::MassAdd;
 # @COPYRIGHT@
 use strict;
 use warnings;
+use Text::CSV_XS;
 use Socialtext::Log qw(st_log);
 use Socialtext::User;
 use Socialtext::l10n qw/loc/;
@@ -24,13 +25,40 @@ sub users {
     my @profile_fields
         = qw/position company location work_phone mobile_phone home_phone/;
     my @user_fields = qw/first_name last_name password/;
+    my $parser = Text::CSV_XS->new();
     my $line = 0;
+  LINE:
     for my $user_record (@lines) {
         $line++;
+
+        # parse the next line, choking if its not valid.
+        my $parsed_ok = $parser->parse($user_record);
+        unless ($parsed_ok) {
+            my $msg = loc("Line [_1]: could not be parsed.  Skipping this user.", $line);
+            st_log->error($msg);
+            $fail_cb->($msg);
+            next LINE;
+        }
+
+        # extract field data from the parsed line
         my ($username, $email, $first_name, $last_name, $password, @profile)
-            = map { defined $_ ? $_ : '' } split qr/,\s*/, $user_record, 11;
+            = map { defined $_ ? $_ : '' } $parser->fields();
         my @userdata = ($first_name, $last_name, $password);
 
+        # sanity check the parsed data, to make sure that fields we *know* are
+        # required are really present
+        unless ($username) {
+            my $msg = loc("Line [_1]: [_2] is a required field, but it is not present.", $line, 'username');
+            st_log->error($msg);
+            $fail_cb->($msg);
+            next LINE;
+        }
+        unless ($email) {
+            my $msg = loc("Line [_1]: [_2] is a required field, but it is not present.", $line, 'email');
+            st_log->error($msg);
+            $fail_cb->($msg);
+            next LINE;
+        }
         if (length($password)) {
             my $result
                 = Socialtext::User->ValidatePassword(password => $password);
@@ -42,6 +70,8 @@ sub users {
             }
         }
 
+        # see if we've got an existing record for this user, and add/update as
+        # necessary.
         my $user;
         my $changed_user = 0;
         my $added_user = 0;

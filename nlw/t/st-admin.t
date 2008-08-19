@@ -3,10 +3,10 @@
 
 use strict;
 use warnings;
-
-use Test::More tests => 3;
-
 use IPC::Run;
+
+use Test::Socialtext tests => 3;
+fixtures( 'db' );
 
 # The purpose of this test is to make sure that st-admin interfaces to
 # Socialtext::CLI properly, and that passing it a command does what we

@@ -3,4 +3,4 @@ import_libs:
   - ../../../../common/javascript/jquery-1.2.6.js
   - ../../../../common/javascript/YAML-0.11/lib/YAML.js
   - ../../Debug.js
-  - lib/Test/Visual.js
+  - ../common/lib/Test/Visual.js

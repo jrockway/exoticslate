@@ -5,3 +5,4 @@ all clean:
 	make -C visual $@
 	make -C performance $@
 	make -C socialcalc $@
+	make -C sample $@

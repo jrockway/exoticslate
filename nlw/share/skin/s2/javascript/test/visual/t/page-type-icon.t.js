@@ -7,7 +7,7 @@ t.plan(1);
 t.runTests = function() {
     t.like(
         t.$("#st-listview-form tr.oddRow td:eq(1) img.pageType").attr('src'),
-        /doc16.png$/,
+        /(ss|doc)16.png$/,
         "There is a page type icon in the list"
     );
 

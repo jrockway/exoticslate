@@ -88,7 +88,7 @@
         [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
         <td><input type="checkbox" name="page_selected" class="st-listview-selectpage-checkbox" value="[% row.page_uri %]"/></td>
         <td colspan="2">
-        [% IF page_type == 'spreadsheet' %]
+        [% IF row.Type == 'spreadsheet' %]
            <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/ss16.png" />
         [% ELSIF is_attachment %]
            <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/attachment.png" />

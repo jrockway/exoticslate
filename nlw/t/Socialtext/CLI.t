@@ -3,6 +3,7 @@
 
 use warnings;
 use strict;
+use File::Slurp qw(write_file);
 
 use Test::Socialtext;
 fixtures( 'workspaces_with_extra_pages', 'destructive' );
@@ -24,7 +25,7 @@ use Socialtext::CLI;
 
 use Cwd;
 
-plan tests => 271;
+plan tests => 300;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -228,6 +229,142 @@ CREATE_USER: {
     is( $user->first_name(), 'John', 'new user first name' );
     is( $user->last_name(),  'Doe',  'new user last name' );
 
+}
+
+MASS_ADD_USERS: {
+    # success; add some users from CSV
+    #   - run CLI tool, success
+    #   - find users in DB, verify contents
+    add_users_from_csv: {
+        # create CSV file
+        my $csvfile = Cwd::abs_path(
+            (File::Temp::tempfile(SUFFIX=>'.csv', OPEN=>0))[1]
+        );
+        write_file $csvfile,
+            join(',', qw{csvtest1 csvtest1@example.com John Doe passw0rd position company location work_phone mobile_phone home_phone}) . "\n",
+            join(',', qw{csvtest2 csvtest2@example.com Jane Smith password2 position2 company2 location2 work_phone2 mobile_phone2 home_phone2}) . "\n";
+
+        # do mass-add
+        expect_success(
+            sub {
+                Socialtext::CLI->new(
+                    argv => ['--csv', $csvfile]
+                )->mass_add_users();
+            },
+            qr/\QAdded user csvtest1\E.*\QAdded user csvtest2\E/s,
+            'mass-add-users successfully added users',
+        );
+        unlink $csvfile;
+
+        # verify first user was added, including all fields
+        my $user = Socialtext::User->new( username => 'csvtest1' );
+        ok $user, 'csvtest1 user was created via mass_add_users';
+        is $user->email_address, 'csvtest1@example.com', '... email_address was set';
+        is $user->first_name, 'John', '... first_name was set';
+        is $user->last_name, 'Doe', '... last_name was set';
+        ok $user->password_is_correct('passw0rd'), '... password was set';
+
+        SKIP: {
+            skip 'Socialtext People is not installed', 7 unless $Socialtext::MassAdd::Has_People_Installed;
+            my $profile = Socialtext::People::Profile->GetProfile($user, 1);
+            ok $profile, '... ST People profile was created';
+            is $profile->position, 'position', '... ... position was set';
+            is $profile->company, 'company', '... ... company was set';
+            is $profile->location, 'location', '... ... location was set';
+            is $profile->work_phone, 'work_phone', '... ... work_phone was set';
+            is $profile->mobile_phone, 'mobile_phone', '... ... mobile_phone was set';
+            is $profile->home_phone, 'home_phone', '... ... home_phone was set';
+        }
+
+        # verify second user was added, but presume fields were added ok
+        $user = Socialtext::User->new( username => 'csvtest2' );
+        ok $user, 'csvtest2 user was created via mass_add_users';
+    }
+
+    # success; update users from CSV
+    #   - run CLI tool, success
+    #   - find users in DB, verify update
+    update_users_from_csv: {
+        # create CSV file, using user from above test
+        my $csvfile = Cwd::abs_path(
+            (File::Temp::tempfile(SUFFIX=>'.csv', OPEN=>0))[1]
+        );
+        write_file $csvfile,
+            join(',', qw(csvtest1 email@example.com u_John u_Doe u_passw0rd u_position));
+
+        # make sure that the user really does exist
+        my $user = Socialtext::User->new( username => 'csvtest1' );
+        ok $user, 'csvtest1 user exists prior to update';
+
+        # do mass-update
+        expect_success(
+            sub {
+                Socialtext::CLI->new(
+                    argv => ['--csv', $csvfile],
+                )->mass_add_users();
+            },
+            qr/\QUpdated user csvtest1\E/,
+            'mass-add-users successfully updated users',
+        );
+        unlink $csvfile;
+
+        # verify user was updated, including the People fields
+        $user = Socialtext::User->new( username => 'csvtest1' );
+        ok $user, 'csvtest1 user still around after update';
+        is $user->email_address, 'csvtest1@example.com', '... email was *NOT* updated (by design)';
+        is $user->first_name, 'u_John', '... first_name was updated';
+        is $user->last_name, 'u_Doe', '... last_name was updated';
+        ok $user->password_is_correct('u_passw0rd'), '... password was updated';
+
+        SKIP: {
+            skip 'Socialtext People is not installed', 2 unless $Socialtext::MassAdd::Has_People_Installed;
+            my $profile = Socialtext::People::Profile->GetProfile($user, 1);
+            ok $profile, '... ST People profile was found';
+            is $profile->position, 'u_position', '... ... position was updated';
+        }
+    }
+
+    # TODO: success; skip updating non-LDAP users from CSV
+    #   - rig up LDAP
+    #   - run CLI tool, success
+    #   - find users in DB, verify that User info has *NOT* changed
+    #   - allow for Profile data to be updated, though
+
+    # failure; no CSV file provided
+    no_csv_file_provided: {
+        expect_failure(
+            sub { 
+                Socialtext::CLI->new( argv=>[] )->mass_add_users();
+            },
+            qr/\QThe file you provided could not be read\E/,
+            'mass-add-users failed with no args'
+        );
+    }
+
+    # failure; file is not CSV
+    file_is_not_csv: {
+        # create bogus file
+        my $csvfile = Cwd::abs_path(
+            (File::Temp::tempfile(SUFFIX=>'.csv', OPEN=>0))[1]
+        );
+        write_file $csvfile,
+            join(' ', qw{csvtest1 csvtest1@example.com John Doe passw0rd position company location work_phone mobile_phone home_phone}) . "\n";
+
+        # do mass-add
+    TODO: {
+        local $TODO = "doesn't (yet) sanity check CSV before parsing";
+        expect_failure(
+            sub {
+                Socialtext::CLI->new(
+                    argv => ['--csv', $csvfile]
+                )->mass_add_users();
+            },
+            qr/\QThe file you provided could not be parsed\E/,
+            'mass-add-users failed with invalid file'
+        );
+        unlink $csvfile;
+      }
+    }
 }
 
 CONFIRM_USER: {

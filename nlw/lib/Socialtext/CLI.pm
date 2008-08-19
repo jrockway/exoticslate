@@ -10,6 +10,7 @@ use Encode;
 use File::Basename ();
 use File::Spec;
 use File::Temp;
+use File::Slurp qw(slurp);
 use Getopt::Long qw( :config pass_through );
 use Socialtext::AppConfig;
 use Pod::Usage;
@@ -350,6 +351,41 @@ sub _require_create_user_params {
     $opts{last_name}     = delete $opts{'last-name'};
 
     return %opts;
+}
+
+sub mass_add_users {
+    my $self = shift;
+    my %opts = $self->_require_mass_add_users_params();
+
+    my $csv = eval { slurp($opts{csv}) };
+    if ($@) {
+        $self->_error( loc("The file you provided could not be read. No users were added.") );
+    }
+
+    require Socialtext::MassAdd;
+    my @messages;
+    my $has_errors;
+    eval {
+        Socialtext::MassAdd->users(
+            csv     => $csv,
+            pass_cb => sub { push @messages, $_[0] },
+            fail_cb => sub { push @messages, $_[0]; $has_errors++ },
+        );
+    };
+    if ($@) {
+        $self->_error($@);
+    }
+
+    my $all_messages = join "\n", @messages;
+    $has_errors ? $self->_error($all_messages) : $self->_success($all_messages);
+}
+
+sub _require_mass_add_users_params {
+    my $self = shift;
+
+    return $self->_get_options(
+        'csv:s',
+    );
 }
 
 sub confirm_user {
@@ -2084,6 +2120,7 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   disable-email-notify [--username or --email] --workspace
   set-locale [--username or --email] --workspace --locale
   set-user-names [--username or --email] --first-name --last-name
+  mass-add-users --csv
 
   WORKSPACES
 
@@ -2235,6 +2272,19 @@ codes.  Eg: en, fr, ja, de
 =head2 set-user-names [--email or --username] --first-name --last-name
 
 Set the first and last names for an existing user.
+
+=head2 mass-add-users --csv
+
+Bulk adds/updates users from the given CSV file.
+
+Each row within the CSV file represents a single user.  A username and email
+address are required for each user, all other fields are optional.
+
+If a user with a matching username exists already, the information for that
+user is updated to match the information provided in the CSV file.  Otherwise,
+a new user record is created.  If no password is provided for newly created
+users, they are sent an e-mail message which includes a link that they may use
+to set their password.
 
 =head2 set-permissions --workspace --permissions
 

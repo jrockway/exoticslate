@@ -5,15 +5,15 @@
 | *Comment* | *This test only works if selenium_browser has higher powers, i.e. *chrome for firefox* |  |
 
 | set | user_1 | user1_%%start_time%%@ken.socialtext.net |
-| set | user_1_regex | user1_%%start_time%%\@ken\.socialtext\.net |
+| set | user_1_regex | user1 %%start_time%% |
 | set | user_2 | user2_%%start_time%%@ken.socialtext.net |
-| set | user_2_regex | user2_%%start_time%%\@ken\.socialtext\.net |
+| set | user_2_regex | user2 %%start_time%% |
 | set | user_3 | user3_%%start_time%%@ken.socialtext.net |
-| set | user_3_regex | user3_%%start_time%%\@ken\.socialtext\.net |
+| set | user_3_regex | user3 %%start_time%% |
 | set | user_4 | user4_%%start_time%%@ken.socialtext.net |
-| set | user_4_regex | user4_%%start_time%%\@ken\.socialtext\.net |
+| set | user_4_regex | user4 %%start_time%% |
 | set | user_5 | user5_%%start_time%%@ken.socialtext.net |
-| set | user_5_regex | user5_%%start_time%%\@ken\.socialtext\.net |
+| set | user_5_regex | user5 %%start_time%% |
 
 | set | sorting_workspace | sorting-data-%%start_time%% |
 

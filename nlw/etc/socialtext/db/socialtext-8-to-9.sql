@@ -16,6 +16,25 @@ WHERE "User".last_name ~ '^\\s*'
   AND "User".user_id = person.id
   AND person.last_name IS NOT NULL;
 
+-- Auto-vivify shouldn't set the username anymore; just a blank profile
+
+DROP FUNCTION auto_vivify_person() CASCADE;
+
+CREATE FUNCTION auto_vivify_person() RETURNS "trigger"
+    AS $$
+BEGIN
+    INSERT INTO person (id) 
+        VALUES (NEW.system_unique_id);
+    RETURN NEW;
+END
+$$
+    LANGUAGE plpgsql;
+
+CREATE TRIGGER person_ins
+    AFTER INSERT ON "UserId"
+    FOR EACH ROW
+    EXECUTE PROCEDURE auto_vivify_person();
+
 -- Remove the name, first_name, middle_name, last_name and email fields from the person table
 
 ALTER TABLE person

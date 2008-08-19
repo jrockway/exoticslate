@@ -324,12 +324,6 @@ MASS_ADD_USERS: {
         }
     }
 
-    # TODO: success; skip updating non-LDAP users from CSV
-    #   - rig up LDAP
-    #   - run CLI tool, success
-    #   - find users in DB, verify that User info has *NOT* changed
-    #   - allow for Profile data to be updated, though
-
     # failure; no CSV file provided
     no_csv_file_provided: {
         expect_failure(

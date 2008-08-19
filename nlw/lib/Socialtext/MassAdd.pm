@@ -109,7 +109,11 @@ sub users {
             for (my $i = 0; $i < @user_fields; $i++) {
                 my $field = $user_fields[$i];
                 my $value = $userdata[$i];
-                if (length($userdata[$i]) and $user->$field ne $value) {
+                my $uptodate = sub { $user->$field() eq $value };
+                if ($field eq 'password') {
+                    $uptodate = sub { $user->password_is_correct($value) };
+                }
+                if (length($userdata[$i]) and not $uptodate->()) {
                     $user->update_store( $field => $value );
                     $changed_user++;
                 }
@@ -135,6 +139,11 @@ sub users {
         }
         elsif ($changed_user) {
             my $msg = loc("Updated user [_1]", $username);
+            st_log->info($msg);
+            $pass_cb->($msg);
+        }
+        else {
+            my $msg = loc("No changes for user [_1]", $username);
             st_log->info($msg);
             $pass_cb->($msg);
         }

@@ -61,8 +61,8 @@ sub password_is_correct {
     my $pw   = shift;
 
     my $db_pw = $self->password;
-
-    return $self->_crypt( Socialtext::String::trim($pw), $db_pw ) eq $db_pw;
+    my $crypt_pw = $self->_crypt( Socialtext::String::trim($pw), $db_pw );
+    return $crypt_pw eq $db_pw;
 }
 
 # Helper methods

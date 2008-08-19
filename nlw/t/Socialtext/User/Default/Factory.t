@@ -6,7 +6,7 @@ use warnings;
 use Test::Socialtext tests => 90;
 use Socialtext::User;
 
-fixtures( 'rdbms_clean' );
+fixtures( 'rdbms_clean', 'destructive' );
 use_ok 'Socialtext::User::Default::Factory';
 
 ###############################################################################

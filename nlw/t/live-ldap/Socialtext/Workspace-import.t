@@ -19,7 +19,7 @@ use Test::Exception;
 #
 # Need to have _some_ workspace available with pages in it that we can export.
 ###############################################################################
-fixtures( 'foobar' );
+fixtures( 'foobar', 'destructive' );
 
 ###############################################################################
 # Bug #761; Deleted LDAP user prevents workspace import

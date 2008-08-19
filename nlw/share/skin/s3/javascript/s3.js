@@ -33,6 +33,7 @@ function nlw_name_to_id(name) {
 (function ($) {
 Page = {
     attachmentList: [],
+    newAttachmentList: [],
 
     active_page_exists: function (page_name) {
         page_name = trim(page_name);
@@ -58,17 +59,28 @@ Page = {
     },
 
     refreshPageContent: function (force_update) {
-        $.getJSON(this.pageUrl(), function (data) {
-            var newRev = data.revision_id;
-            var oldRev = Socialtext.revision_id;
-            if ((oldRev < newRev) || force_update) {
-                $.get(Page.pageUrl(), function (html) {
-                    $('#st-page-content').html(html);
-                    Socialtext.wikiwyg_variables.page.revision_id =
-                        Socialtext.revision_id = newRev
-                    $('#st-rewind-revision-count').html(newRev);
-                });
-            }
+        $.ajax({
+            url: this.pageUrl(),
+            cache: false,
+            dataType: 'json',
+            success: function (data) {
+                var newRev = data.revision_id;
+                var oldRev = Socialtext.revision_id;
+                if ((oldRev < newRev) || force_update) {
+                    $.get(Page.pageUrl(), function (html) {
+                        $('#st-page-content').html(html);
+                        Socialtext.wikiwyg_variables.page.revision_id =
+                            Socialtext.revision_id = newRev;
+
+                        // By this time, the "edit_wikiwyg" Jemplate had already
+                        // finished rendering, so we need to reach into the
+                        // bootstrapped input form and update the revision ID
+                        // there, otherwise we'll get a bogus editing contention.
+                        $('#st-page-editing-revisionid').val(newRev);
+                        $('#st-rewind-revision-count').html(newRev);
+                    });
+                }
+            } 
         });
     },
 
@@ -83,51 +95,61 @@ Page = {
 
     refreshTags: function () {
         var tag_url = '?action=category_display;category=';
-        $.getJSON( this.pageUrl() + '/tags', function (tags) {
-            $('#st-tags-listing').html('');
-            for (var i=0; i< tags.length; i++) {
-                var tag = tags[i];
-                $('#st-tags-listing').append(
-                    $('<li>').append(
-                        $('<a>')
-                            .html(tag.name)
-                            .attr('href', tag_url + tag.name),
-                        ' ',
-                        $('<a href="#">')
-                            .html('[x]')
-                            .attr('name', tag.name)
-                            .bind('click', function () {
-                                Page.delTag(this.name);
-                            })
+        $.ajax({
+            url: this.pageUrl() + '/tags',
+            cache: false,
+            dataType: 'json',
+            success: function (tags) {
+                $('#st-tags-listing').html('');
+                for (var i=0; i< tags.length; i++) {
+                    var tag = tags[i];
+                    $('#st-tags-listing').append(
+                        $('<li>').append(
+                            $('<a>')
+                                .html(tag.name)
+                                .attr('href', tag_url + tag.name),
+                            ' ',
+                            $('<a href="#">')
+                                .html('[x]')
+                                .attr('name', tag.name)
+                                .bind('click', function () {
+                                    Page.delTag(this.name);
+                                })
+                        )
                     )
-                )
+                }
             }
         });
     },
 
     refreshAttachments: function (cb) {
         Page.attachmentList = [];
-        $.getJSON( this.pageUrl() + '/attachments', function (list) {
-            $('#st-attachment-listing').html('');
-            for (var i=0; i< list.length; i++) {
-                var item = list[i];
-                Page.attachmentList.push(item.name);
-                $('#st-attachment-listing').append(
-                    $('<li>').append(
-                        $('<a>')
-                            .html(item.name)
-                            .attr('href', item.uri),
-                        ' ',
-                        $('<a href="#">')
-                            .html('[x]')
-                            .attr('name', item.uri)
-                            .bind('click', function () {
-                                Page.delAttachment(this.name)
-                            })
+        $.ajax({
+            url: this.pageUrl() + '/attachments',
+            cache: false,
+            dataType: 'json',
+            success: function (list) {
+                $('#st-attachment-listing').html('');
+                for (var i=0; i< list.length; i++) {
+                    var item = list[i];
+                    Page.attachmentList.push(item.name);
+                    $('#st-attachment-listing').append(
+                        $('<li>').append(
+                            $('<a>')
+                                .html(item.name)
+                                .attr('href', item.uri),
+                            ' ',
+                            $('<a href="#">')
+                                .html('[x]')
+                                .attr('name', item.uri)
+                                .bind('click', function () {
+                                    Page.delAttachment(this.name)
+                                })
+                        )
                     )
-                )
+                }
+                if (cb) cb();
             }
-            if (cb) cb();
         });
     },
 
@@ -254,6 +276,7 @@ $(function() {
                     $('#st-attachments-attach-closebutton').attr(
                         'disabled', false
                     );
+                    Page.newAttachmentList.push(filename);
                     Page.refreshAttachments(function () {
                         $('#st-attachments-attach-list')
                             .show()

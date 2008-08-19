@@ -164,7 +164,6 @@ function setup_wikiwyg() {
     // wants it there.
     ww.start_nlw_wikiwyg = function() {
         try {
-            //Attachments.reset_new_attachments();
             if (Wikiwyg.is_safari) {
                 delete ww.current_wikitext;
             }
@@ -176,6 +175,9 @@ function setup_wikiwyg() {
  
             if (!Socialtext.new_page)
                 Page.refreshPageContent();
+
+            //Attachments.reset_new_attachments();
+            Page.newAttachmentList = [];
 
 // We used to use this line:
 //          myDiv.innerHTML = $('st-page-content').innerHTML;
@@ -246,6 +248,8 @@ function setup_wikiwyg() {
                     ww.confirmed = true;
             }
             //Attachments.delete_new_attachments();
+            // alert(Page.newAttachmentList.join(','));
+
             if (Socialtext.new_page) {
                 window.location = '?action=homepage';
             }

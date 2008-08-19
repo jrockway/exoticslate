@@ -183,7 +183,8 @@ CREATE TABLE "Workspace" (
     customjs_name text DEFAULT '' NOT NULL,
     no_max_image_size boolean DEFAULT false NOT NULL,
     cascade_css boolean DEFAULT true NOT NULL,
-    uploaded_skin boolean DEFAULT false NOT NULL
+    uploaded_skin boolean DEFAULT false NOT NULL,
+    allows_skin_upload boolean DEFAULT false NOT NULL
 );
 
 CREATE TABLE "WorkspaceBreadcrumb" (
@@ -210,6 +211,7 @@ CREATE TABLE "WorkspaceRolePermission" (
 );
 
 CREATE SEQUENCE "Workspace___workspace_id"
+    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -393,6 +395,10 @@ ALTER TABLE ONLY person
     ADD CONSTRAINT person_pkey
             PRIMARY KEY (id);
 
+ALTER TABLE ONLY person_tag
+    ADD CONSTRAINT person_tag_pkey
+            PRIMARY KEY (id);
+
 ALTER TABLE ONLY person_watched_people__person
     ADD CONSTRAINT person_watched_people__person_pkey
             PRIMARY KEY (person_id1, person_id2);
@@ -412,10 +418,6 @@ ALTER TABLE ONLY "System"
 ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT tag_people__person_tags_pkey
             PRIMARY KEY (person_id, tag_id);
-
-ALTER TABLE ONLY person_tag
-    ADD CONSTRAINT person_tag_pkey
-            PRIMARY KEY (id);
 
 CREATE UNIQUE INDEX "Account___name"
 	    ON "Account" (name);

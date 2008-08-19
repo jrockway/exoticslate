@@ -46,6 +46,12 @@ ALTER TABLE person
 ALTER TABLE person
     DROP COLUMN email;
 
+-- add a workspace config value for allowing skin upload
+
+ALTER TABLE "Workspace"
+    ADD COLUMN
+        allows_skin_upload boolean DEFAULT false NOT NULL;
+
 UPDATE "System"
    SET value = 9
  WHERE field = 'socialtext-schema-version';

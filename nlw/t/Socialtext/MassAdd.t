@@ -11,7 +11,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 30;
+    plan tests => 36;
 }
 
 use mocked 'Socialtext::People::Profile';
@@ -126,6 +126,30 @@ Add_user_already_added: {
             'first_name was updated';
         is $Socialtext::User::Users{guybrush}->last_name, 'Threepwood',
             'last_name was updated';
+    }
+
+    Profile_update: {
+        local $Socialtext::People::Profile::Profiles{1}
+            = Socialtext::People::Profile->new(
+                position     => 'Chef',          company    => 'Scumm Bar',
+                location     => 'Monkey Island', work_phone => '123-456-YUCK',
+                mobile_phone => '',              home_phone => '123-HIGH-SEA',
+            );
+        my @successes;
+        my @failures;
+        Socialtext::MassAdd->users(
+            csv => $PIRATE_CSV,
+            pass_cb => sub { push @successes, shift },
+            fail_cb => sub { push @failures,  shift },
+        );
+        is_deeply \@successes, ['Updated user guybrush'], 'success message ok';
+        is_deeply \@failures, [], 'no failure messages';
+
+        my $profile = $Socialtext::People::Profile::Profiles{1};
+        is $profile->position, 'Captain', 'People position was updated';
+        is $profile->company, 'Pirates R. Us', 'People company was updated';
+        is $profile->location, 'High Seas', 'People location was updated';
+        is $profile->work_phone, '123-456-YARR', 'People work_phone was updated';
     }
 
     Update_with_no_people_installed: {

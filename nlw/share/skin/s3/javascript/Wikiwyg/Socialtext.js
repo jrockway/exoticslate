@@ -248,7 +248,9 @@ function setup_wikiwyg() {
                     ww.confirmed = true;
             }
             //Attachments.delete_new_attachments();
-            // alert(Page.newAttachmentList.join(','));
+            foreach(Page.newAttachmentList, function (uri) {
+                Page.delAttachment(uri);
+            });
 
             if (Socialtext.new_page) {
                 window.location = '?action=homepage';

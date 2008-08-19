@@ -67,17 +67,41 @@ Page = {
                 var newRev = data.revision_id;
                 var oldRev = Socialtext.revision_id;
                 if ((oldRev < newRev) || force_update) {
-                    $.get(Page.pageUrl(), function (html) {
-                        $('#st-page-content').html(html);
-                        Socialtext.wikiwyg_variables.page.revision_id =
-                            Socialtext.revision_id = newRev;
+                    Socialtext.wikiwyg_variables.page.revision_id =
+                        Socialtext.revision_id = newRev;
 
-                        // By this time, the "edit_wikiwyg" Jemplate had already
-                        // finished rendering, so we need to reach into the
-                        // bootstrapped input form and update the revision ID
-                        // there, otherwise we'll get a bogus editing contention.
-                        $('#st-page-editing-revisionid').val(newRev);
-                        $('#st-rewind-revision-count').html(newRev);
+                    // By this time, the "edit_wikiwyg" Jemplate had already
+                    // finished rendering, so we need to reach into the
+                    // bootstrapped input form and update the revision ID
+                    // there, otherwise we'll get a bogus editing contention.
+                    $('#st-page-editing-revisionid').val(newRev);
+                    $('#st-rewind-revision-count').html(newRev);
+
+                    // After upload, refresh the wysiwyg and page contents.
+                    $.ajax({
+                        url: Page.pageUrl(),
+                        cache: false,
+                        dataType: 'html',
+                        success: function (html) {
+                            $('#st-page-content').html(html);
+                            var iframe = $('iframe#st-page-editing-wysiwyg').get(0);
+                            if (iframe && iframe.contentWindow) {
+                                iframe.contentWindow.document.body.innerHTML = html;
+                            }
+                        }
+                    });
+
+                    // After upload, refresh the wikitext contents.
+                    $.ajax({
+                        url: Page.pageUrl(),
+                        cache: false,
+                        dataType: 'text',
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader('Accept', 'text/x.socialtext-wiki');
+                        },
+                        success: function (text) {
+                            $('#wikiwyg_wikitext_textarea').val(text);
+                        }
                     });
                 }
             } 
@@ -148,7 +172,7 @@ Page = {
                         )
                     )
                 }
-                if (cb) cb();
+                if (cb) cb(list);
             }
         });
     },
@@ -276,8 +300,16 @@ $(function() {
                     $('#st-attachments-attach-closebutton').attr(
                         'disabled', false
                     );
-                    Page.newAttachmentList.push(filename);
-                    Page.refreshAttachments(function () {
+                    Page.refreshAttachments(function (list) {
+                        // Add the freshly-uploaded file to the
+                        // newAttachmentList queue.
+                        for (var i=0; i< list.length; i++) {
+                            var item = list[i];
+                            if (filename == item.name) {
+                                Page.newAttachmentList.push(item.uri);
+                            }
+                        }
+
                         $('#st-attachments-attach-list')
                             .show()
                             .html('')

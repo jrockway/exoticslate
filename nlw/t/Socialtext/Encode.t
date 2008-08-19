@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 17;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 use Socialtext::Encode;
 
 binmode STDERR, 'utf8'; # So diagnostics don't complain

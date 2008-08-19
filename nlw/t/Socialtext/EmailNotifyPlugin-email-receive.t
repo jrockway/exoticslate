@@ -6,7 +6,7 @@ use warnings;
 
 use Test::Socialtext;
 use Socialtext::EmailReceiver::Factory;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 BEGIN {
     unless ( eval { require Email::Send::Test; 1 } ) {

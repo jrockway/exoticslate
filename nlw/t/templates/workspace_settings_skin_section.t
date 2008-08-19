@@ -10,7 +10,7 @@ use Cwd qw(getcwd);
 
 use Test::More tests => 7;
 use Test::Socialtext;
-fixtures( 'admin_no_pages' );
+fixtures( 'db' );
 use Socialtext::TT2::Renderer;
 use Socialtext::Skin;
 

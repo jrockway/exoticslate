@@ -21,8 +21,8 @@ BEGIN {
 };
 
 ###############################################################################
-# Fixture:  admin_no_pages
-fixtures( 'admin_no_pages' );
+# Fixture:  admin
+fixtures( 'admin' );
 
 ###############################################################################
 # TEST: error if we use a bad Technorati key

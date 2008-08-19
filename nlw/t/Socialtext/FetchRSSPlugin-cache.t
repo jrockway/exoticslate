@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 use Test::Socialtext;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 my $url = 'http://www.burningchrome.com/~cdent/mt/index2.xml';
 my $bogus_url = 'http://www.burningchrome/~cdent/mt/index3.xml';

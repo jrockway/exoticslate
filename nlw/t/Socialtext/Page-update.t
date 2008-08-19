@@ -6,14 +6,14 @@ use strict;
 use DateTime;
 
 use Test::Socialtext tests => 19;
-fixtures( 'admin_no_pages' );
+fixtures( 'admin' );
 
 BEGIN {
     use_ok( 'Socialtext::Page' );
 }
 
 my $hub       = new_hub('admin');
-my $page_name = 'update page';
+my $page_name = 'update page ' . time();
 my $content1  = 'one content';
 my $content2  = 'two content';
 my $content3  = 'thr content';

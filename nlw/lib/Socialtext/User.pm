@@ -419,6 +419,25 @@ sub FormattedEmail {
     }
 }
 
+sub guess_sortable_name {
+    my $self = shift;
+    my $name;
+
+    my $fn = $self->first_name || '';
+    my $ln = $self->last_name || '';
+    if ($self->email_address eq $fn) {
+        $fn =~ s/\@.+$//;
+    }
+
+    $name = "$ln $fn";
+    $name =~ s/^\s+//;
+    $name =~ s/\s+$//;
+    # TODO: unicode casefolding?
+    return $name if length $name;
+
+    return $self->_guess_nonreal_name;
+}
+
 sub guess_real_name {
     my $self = shift;
     my $name;
@@ -432,8 +451,12 @@ sub guess_real_name {
     $name =~ s/^\s+//;
     $name =~ s/\s+$//;
     return $name if length $name;
+    return $self->_guess_nonreal_name;
+}
 
-    $name = $self->username || '';
+sub _guess_nonreal_name {
+    my $self = shift;
+    my $name = $self->username || '';
     $name =~ s/\@.+$//;
     $name =~ s/[[:punct:]]+/ /g;
     $name =~ s/^\s+//;

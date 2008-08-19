@@ -101,7 +101,7 @@
           <span class="summary">[% row.Summary %]</span>
         [% END %]
         <em>(<a href="#">[% row.revision_count %]</a> [% loc('Revisions') %])
-        [% loc('Last updated by') %] [% row.username | decorate('user_link') %] [% loc('on') %] [% row.DateLocal %]</em></td>
+        [% loc('Last updated by') %] [% row.username | decorate('user_avatar') %] [% loc('on') %] [% row.DateLocal %]</em></td>
         </tr>
       [% END %]
     </table><!-- dataTable END -->

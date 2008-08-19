@@ -1328,6 +1328,12 @@ table.dataTable td img.pageType {
 	margin: 5px;
 }
 
+table.dataTable td img.avatar {
+	float: none;
+	margin: 5px;
+	vertical-align: middle;
+}
+
 table.dataTable td.person a {
 	position: relative;
 	top: 21px;	

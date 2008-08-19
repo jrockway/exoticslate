@@ -1,23 +1,9 @@
-(function () {
-    
-/* TODO We tried to create a subclass by hand, but failed :( */
-// if (!Test) Test = {};
-// 
-// if (!Test.Performance) {
-//     Test.Performance = function() {
-//         try {
-//             this.init();
-//         }
-//         catch(e) {
-//             console.log(e);
-//         }
-//     };
-// }
-// 
-// Test.Performance.prototype = Test.Base;
-// var proto = Test.Performance.prototype;
-
-var proto = Subclass("Test.Performance", "Test.Base");
+// Class Test.Performance
+(function(className) {
+var proto = (Test.Performance = function() {
+    this.init.apply(this, arguments);
+    this.className = className;
+}).prototype = new Test.Base();
 
 proto.init = function() {
     Test.Base.prototype.init.call(this);
@@ -68,4 +54,4 @@ proto.ok = function(result, desc) {
     this.builder.ok(result, desc);
 }
 
-})();
+})('Test.Performance');

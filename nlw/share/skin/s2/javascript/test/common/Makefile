@@ -4,7 +4,14 @@ RENDERER:=$(shell echo `js-cpan Test/Base/bin/render-template`)
 TEST_TEMPLATE:=$(shell echo `js-cpan Test/Base/template/test.html`)
 INDEX_TEMPLATE:=$(shell echo `js-cpan Test/Base/template/index.html`)
 
+TEST_TEMPLATE_MD5=$(word 1,$(shell md5sum $(TEST_TEMPLATE)))
+TEST_LOCAL_MD5=$(word 1,$(shell md5sum template/test.html))
+INDEX_TEMPLATE_MD5=$(word 1,$(shell md5sum $(INDEX_TEMPLATE)))
+INDEX_LOCAL_MD5=$(word 1,$(shell md5sum template/index.html))
+
 ALL_T_HTML:=$(shell ls -1 t/*.t.js | perl -pe 's/js$$/html/;s/^t\///')
+
+ALL_DIRS:=lib template
 
 ALL_TARGETS:=$(ALL_T_HTML) index.html
 
@@ -14,11 +21,16 @@ ALL_LIBS= \
 	lib/Test/Harness.js \
 	lib/Test/Harness/Browser.js \
 
-all: $(ALL_TARGETS) $(ALL_LIBS)
+all: $(ALL_DIRS) $(ALL_TARGETS) $(ALL_LIBS)
 
 clean:
 	rm -fr $(ALL_TARGETS) $(ALL_LIBS)
-	find lib -depth -type d | xargs rmdir 2> /dev/null
+	if [ "$(TEST_TEMPLATE_MD5)" = "$(TEST_LOCAL_MD5)" ]; \
+	    then rm -f template/test.html; fi
+	if [ "$(INDEX_TEMPLATE_MD5)" = "$(INDEX_LOCAL_MD5)" ]; \
+	    then rm -f template/index.html; fi
+	-find $(ALL_DIRS) -depth -type d | xargs rmdir 2> /dev/null
+
 
 purge: clean
 	rm Makefile config.yaml
@@ -41,13 +53,13 @@ lib/Test/Harness.js: lib/Test
 lib/Test/Harness/Browser.js: lib/Test/Harness
 	cp `js-cpan Test.Harness.Browser` $@
 
-lib/Test lib/Test/Harness:
+lib lib/Test lib/Test/Harness:
 	mkdir -p $@
 
-template/test.html: template
+template/test.html:
 	cp $(TEST_TEMPLATE) $@
 
-template/index.html: template
+template/index.html:
 	cp $(INDEX_TEMPLATE) $@
 
 template:

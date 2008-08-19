@@ -11,13 +11,14 @@ ALL_TARGETS:=$(ALL_T_HTML) index.html
 ALL_LIBS= \
 	lib/Test/Base.js \
 	lib/Test/Builder.js \
-	lib/Test/Harness/Browser.js \
 	lib/Test/Harness.js \
+	lib/Test/Harness/Browser.js \
 
 all: $(ALL_TARGETS) $(ALL_LIBS)
 
 clean:
-	rm -fr $(ALL_TARGETS) $(ALL_LIBS) lib/Test/Harness template
+	rm -fr $(ALL_TARGETS) $(ALL_LIBS)
+	find lib -depth -type d | xargs rmdir 2> /dev/null
 
 purge: clean
 	rm Makefile config.yaml

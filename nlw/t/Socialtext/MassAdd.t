@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Test::More;
 use mocked 'Socialtext::User';
+use mocked 'Socialtext::Log', qw(:tests);
 
 BEGIN {
     if (!-e 't/lib/Socialtext/People/Profile.pm') {
@@ -11,7 +12,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 36;
+    plan tests => 40;
 }
 
 use mocked 'Socialtext::People::Profile';
@@ -26,6 +27,7 @@ guybrush,guybrush@monkeyisland.com,Guybrush,Threepwood,password,Captain,Pirates 
 EOT
 
 Add_one_user_csv: {
+    clear_log();
     my @successes;
     my @failures;
     Socialtext::MassAdd->users(
@@ -34,6 +36,7 @@ Add_one_user_csv: {
         fail_cb => sub { push @failures,  shift },
     );
     is_deeply \@successes, ['Added user guybrush'], 'success message ok';
+    logged_like 'info', qr/Added user guybrush/, '... message also logged';
     is_deeply \@failures, [], 'no failure messages';
     is delete $Socialtext::User::Confirmation_info{guybrush}, undef,
         'confirmation is not set';
@@ -47,6 +50,7 @@ Add_user_already_added: {
     );
 
     Profile_data_needs_update: {
+        clear_log();
         my @successes;
         my @failures;
         Socialtext::MassAdd->users(
@@ -55,6 +59,7 @@ Add_user_already_added: {
             fail_cb => sub { push @failures,  shift },
         );
         is_deeply \@successes, ['Updated user guybrush'], 'success message ok';
+        logged_like 'info', qr/Updated user guybrush/, '... message also logged';
         is_deeply \@failures, [], 'no failure messages';
     }
 
@@ -171,6 +176,7 @@ Bad_email_address: {
     my $bad_csv = $PIRATE_CSV . <<'EOT';
 lechuck,ghostlechuck.com,Ghost Pirate,LeChuck,password,Ghost,Ghost Pirates Inc,Netherworld,,,
 EOT
+    clear_log();
     my @successes;
     my @failures;
     Socialtext::MassAdd->users(
@@ -182,6 +188,7 @@ EOT
     is_deeply \@failures,
         ['Line 2: email is a required field, but could not be parsed.'],
         'correct failure message';
+    logged_like 'error', qr/email is a required field, but could not be parsed/, '... message also logged';
 }
 
 No_password: {
@@ -205,6 +212,7 @@ No_password: {
 Bad_password: {
     # Change the password to something too small
     (my $csv = $PIRATE_CSV) =~ s/password/pw/;
+    clear_log();
     my @successes;
     my @failures;
     Socialtext::MassAdd->users(
@@ -216,6 +224,7 @@ Bad_password: {
     is_deeply \@failures,
         ['Line 1: Passwords must be at least 6 characters long.'],
         'correct failure message';
+    logged_like 'error', qr/Passwords must be at least 6 characters long/, '... message also logged';
 }
 
 Create_user_with_no_people_installed: {

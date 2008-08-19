@@ -2,6 +2,7 @@ package Socialtext::MassAdd;
 # @COPYRIGHT@
 use strict;
 use warnings;
+use Socialtext::Log qw(st_log);
 use Socialtext::User;
 use Socialtext::l10n qw/loc/;
 
@@ -34,7 +35,9 @@ sub users {
             my $result
                 = Socialtext::User->ValidatePassword(password => $password);
             if ($result) {
-                $fail_cb->(loc("Line [_1]: [_2]", $line, $result));
+                my $msg = loc("Line [_1]: [_2]", $line, $result);
+                st_log->error($msg);
+                $fail_cb->($msg);
                 next;
             }
         }
@@ -56,8 +59,9 @@ sub users {
             };
             my $err = $@;
             if ($err and $err =~ m/is not a valid email address/) {
-                $fail_cb->(loc("Line [_1]: [_2]", $line, 
-                   loc("email is a required field, but could not be parsed.")));
+                my $msg = loc("Line [_1]: [_2]", $line, loc("email is a required field, but could not be parsed."));
+                st_log->error($msg);
+                $fail_cb->($msg);
                 next;
             }
             elsif ($err) {
@@ -95,10 +99,14 @@ sub users {
             $p->save() if ($changed_user);
         }
         if ($added_user) {
-            $pass_cb->("Added user $username");
+            my $msg = loc("Added user [_1]", $username);
+            st_log->info($msg);
+            $pass_cb->($msg);
         }
         elsif ($changed_user) {
-            $pass_cb->("Updated user $username");
+            my $msg = loc("Updated user [_1]", $username);
+            st_log->info($msg);
+            $pass_cb->($msg);
         }
     }
 }

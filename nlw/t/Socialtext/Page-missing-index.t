@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 1;
-fixtures( 'admin' );
+fixtures( 'admin', 'destructive' );
 
 use Socialtext::File;
 

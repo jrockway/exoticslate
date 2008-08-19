@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 use Test::Socialtext tests => 5;
-fixtures( 'admin' );
+fixtures( 'admin', 'destructive' );
 
 use Socialtext::Ceqlotron;
 use Socialtext::ChangeEvent;

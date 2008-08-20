@@ -167,6 +167,7 @@ sub new_changes {
     my $self = shift;
     my %p = @_;
     my $type = $p{type} || '';
+    my $count = $p{count};
     my $category = $p{category};
 
     $self->result_set($self->new_result_set($type));
@@ -191,7 +192,7 @@ sub new_changes {
             hub => $self->hub,
             $category ? ( tag => $category ) : (),
             seconds => $minutes * 60,
-            count => $p{count},
+            count => $count,
             workspace_id => $self->hub->current_workspace->workspace_id,
         );
     }

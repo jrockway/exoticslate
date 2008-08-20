@@ -9,29 +9,57 @@ proto.init = function() {
     Test.Base.prototype.init.call(this);
     this.block_class = 'Test.Visual.Block';
     this.doc = window.document;
+    this.manualAsync = false;
+}
+
+proto.login = function(cb) {
+    this.asyncId = this.builder.beginAsync(15000);
+    $.ajax({
+        url: "/nlw/submit/login",
+        type: 'POST',
+        data: {
+            'username': 'devnull1@socialtext.com',
+            'password': 'd3vnu11l'
+        },
+        success: cb
+    });
 }
 
 proto.open_iframe = function(url, options) {
     if (! options)
         options = {};
 
-    var asyncId = this.builder.beginAsync(60000);
+    this.asyncId = this.builder.beginAsync(15000);
 
     this.iframe = $("<iframe />").prependTo("body").get(0);
     this.iframe.contentWindow.location = url;
     var $iframe = $(this.iframe);
 
     var self = this;
-    $iframe.bind("load", function() {
+    $iframe.one("load", function() {
         self.doc = self.iframe.contentDocument;
         if (self.runTests)
             self.runTests.apply(self, [self]);
-
-        self.builder.endAsync(asyncId);
+        
+        if (! self.manualAsync)
+            self.endAsync();
     });
 
     $iframe.height(options.h || 200);
     $iframe.width(options.w || 900);
+}
+
+proto.endAsync = function() {
+    this.builder.endAsync(this.asyncId);
+}
+
+proto.bindLoad = function(cb) {
+    var self = this;
+    $(this.iframe).bind("load", function() {
+        $(this.contentDocument).ready(function() {
+            cb.apply(self);
+        });
+    });
 }
 
 proto.elements_do_not_overlap = function(selector1, selector2, name) {

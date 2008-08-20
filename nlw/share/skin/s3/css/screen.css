@@ -1,5 +1,46 @@
 @import url('styles.css');
 
+/* overloads */
+
+div#contentContainer {
+    padding: 0 0 0px 20px;
+}
+
+table.dataTable td img.pageType {
+    border: none;
+    margin: 5px;
+}
+ 
+table.dataTable td img.avatar {
+    float: none;
+    margin: 5px;
+    vertical-align: middle;
+}
+div#bottomButtons {
+    width: 100%;
+}
+
+div#bottomButtons ul.buttonRight {
+    background: auto;
+    height: auto;
+    padding-left: auto;
+}
+div#bottomButtons img.avatar {
+    vertical-align: top;
+}
+ 
+div#bottomButtons div#pageAttribution {
+    background: url(../images/controlsRightDivider.png) no-repeat center left;
+    margin: 5px 5px 0 180px;
+    padding: 5px;
+}
+
+div.widget ul.widgetButton li a.addTagButton {
+    width: 87px;
+}
+
+/* Done overloads */
+
 #globalNav form {
     width: 400px;
     text-align: right;

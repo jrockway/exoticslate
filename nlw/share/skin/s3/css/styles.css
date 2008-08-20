@@ -303,6 +303,7 @@ div.tableFilter {
 	height: 41px;
 	background: url(../images/tabsRight.png) no-repeat top right;
 	float: right;
+	width: 30%;
 }
 
 div.tableFilter label {
@@ -769,7 +770,7 @@ div#contentContainer {
 	border-left: #759fb1 1px solid; 
 	border-right: #759fb1 1px solid; 
 	background:#fff url(../images/contentContainerTile.png) repeat-x top left;
-	padding: 0 0 0 20px;
+	padding: 0 0 40px 20px;
 	clear: both;
 }
 
@@ -1323,16 +1324,6 @@ table.dataTable td img {
 	border: #afafaf 2px solid;
 }
 
-table.dataTable td img.pageType {
-	border: none;
-	margin: 5px;
-}
-
-table.dataTable td img.avatar {
-	float: none;
-	margin: 5px;
-	vertical-align: middle;
-}
 
 table.dataTable td.person a {
 	position: relative;
@@ -1418,12 +1409,12 @@ dl.form dd label {
 
 div#bottomButtons {
 	border-top: #dedede 2px solid;
-	width: 100%;
+	width: 98%;
 	margin-top: 10px;
 }
 
 div#bottomButtons ul {
-	float: left; 
+	float: left;
 }
 
 div#bottomButtons ul li {
@@ -1437,15 +1428,12 @@ div#bottomButtons ul li a {
 	top: 10px;
 }
 
-div#bottomButtons img.avatar {
-	vertical-align: top;
+div#bottomButtons ul.buttonRight {
+	background: url(../images/controlsRightDivider.png) no-repeat center left;
+	height: 37px;
+	padding-left: 10px;
 }
 
-div#bottomButtons div#pageAttribution {
-    background: url(../images/controlsRightDivider.png) no-repeat center left;
-    margin: 5px 5px 0 180px;
-    padding: 5px;
-}
 
 /* bottomButtons End */
 

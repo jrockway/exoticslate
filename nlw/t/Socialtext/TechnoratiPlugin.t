@@ -3,22 +3,15 @@
 
 use strict;
 use warnings;
-use Test::Socialtext;
-use LWP::UserAgent;
+use Test::Socialtext tests => 7;
 
 ###############################################################################
-# Check and see if Technorati is available; if its down or times out, we'll
-# just skip all of the tests, rather than letting them fail.
-BEGIN {
-    my $ua = LWP::UserAgent->new();
-    $ua->timeout( 60 );
-    my $response = $ua->get( 'http://api.technorati.com/cosmos' );
-    unless ($response->is_success) {
-        plan skip_all => "looks like technorati is offline; HTTP request failed/timed-out";
-    }
-
-    plan tests => 7;
-};
+###############################################################################
+### Due to Technorati being somewhat flaky, all of these tests have SKIP
+### blocks in case the test runs at a point that Technorati gives bogus/wonky
+### responses.
+###############################################################################
+###############################################################################
 
 ###############################################################################
 # Fixture:  admin
@@ -54,8 +47,11 @@ test_ourselves: {
     my $html = $view->text_to_html($wafl);
 
     # should contain a few things in it...
-    like $html, qr/Blog reactions to $url/, 'contains Technorati title';
-    like $html, qr/"fetchrss_item"/, '... and at least one item';
+    SKIP: {
+        skip 'Technorati is flaky', 2, if ($html =~ /invalid response/);
+        like $html, qr/Blog reactions to $url/, 'contains Technorati title';
+        like $html, qr/"fetchrss_item"/, '... and at least one item';
+    }
 }
 
 ###############################################################################
@@ -94,8 +90,11 @@ url_with_pound_char: {
     my $html = $view->text_to_html($wafl);
 
     # should contain results
-    like $html, qr/Blog reactions to $url/, 'title ok, when URL contains pound char';
-    like $html, qr/Zero items/, "... but doesn't have any linked items right now";
+    SKIP: {
+        skip 'Technorati is flaky', 2, if ($html =~ /invalid response/);
+        like $html, qr/Blog reactions to $url/, 'title ok, when URL contains pound char';
+        like $html, qr/Zero items/, "... but doesn't have any linked items right now";
+    }
 }
 
 ###############################################################################
@@ -109,5 +108,8 @@ no_results_on_404: {
     my $html = $view->text_to_html($wafl);
 
     # empty results
-    like $html, qr/Zero items/, 'no results, when technorati 404s the URL';
+    SKIP: {
+        skip 'Technorati is flaky', 1, if ($html =~ /invalid response/);
+        like $html, qr/Zero items/, 'no results, when technorati 404s the URL';
+    }
 }

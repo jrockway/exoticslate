@@ -12,7 +12,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 48;
+    plan tests => 50;
 }
 
 use mocked 'Socialtext::People::Profile';
@@ -171,6 +171,23 @@ Add_user_already_added: {
             'success message ok';
         is_deeply \@failures, [], 'no failure messages';
     }
+}
+
+Quoted_csv: {
+    local $Socialtext::User::Users{lechuck} = undef;
+    my $quoted_csv = <<"EOT";
+"lechuck","ghost\@lechuck.com","Ghost Pirate","LeChuck","password","Ghost","Ghost Pirates Inc","Netherworld","","",""
+$PIRATE_CSV
+EOT
+    my @successes;
+    my @failures;
+    Socialtext::MassAdd->users(
+        csv => $quoted_csv,
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+    is_deeply \@successes, ['Added user lechuck', 'Added user guybrush'], 'success message ok';
+    is_deeply \@failures, [], 'no failure messages';
 }
 
 Bad_email_address: {

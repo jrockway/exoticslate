@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use base 'Socialtext::MockBase';
 use unmocked 'Socialtext::MultiCursor';
+use unmocked 'Socialtext::Exceptions', qw/data_validation_error/;
 
 our $WORKSPACES = [ [ 1 ] ];
 
@@ -32,9 +33,19 @@ sub new {
 sub create { 
     my $class = shift;
     my %opts = @_;
-    die 'is not a valid email address' unless $opts{email_address} =~ m/@/;
-    die "e-mail address already in use\n" if $opts{email_address} =~ m/^duplicate/;
-    my $user = Socialtext::MockBase::new($class, %opts);
+
+    unless ($opts{email_address} =~ m/@/) {
+        data_validation_error(
+            error => ["$opts{email_address} is not a valid email address"]);
+    }
+    if ($opts{email_address} =~ m/^duplicate/) {
+        data_validation_error(
+            error => ["The email address you provided ($opts{email_address}) "
+                      . "is already in use."],
+        );
+    }
+
+    return Socialtext::MockBase::new($class, %opts);
 }
 
 sub confirm_email_address {}
@@ -61,7 +72,7 @@ sub username { $_[0]->{username} || 'oneusername' }
 sub password { $_[0]->{password} || 'default-pass' }
 sub password_is_correct {
     my $self = shift;
-    return $self->{password} eq shift;
+    return ($self->{password} || '') eq shift;
 }
 
 sub can_update_store { 1 }

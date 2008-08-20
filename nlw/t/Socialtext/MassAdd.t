@@ -205,9 +205,11 @@ EOT
     );
     is_deeply \@successes, ['Added user guybrush'], 'success message ok';
     is_deeply \@failures,
-        ['Line 2: email is a required field, but could not be parsed.'],
+        ['Line 2: ghostlechuck.com is not a valid email address'],
         'correct failure message';
-    logged_like 'error', qr/email is a required field, but could not be parsed/, '... message also logged';
+    logged_like 'error',
+        qr/\QLine 2: ghostlechuck.com is not a valid email address/,
+        '... message also logged';
 }
 
 Duplicate_email_address: {
@@ -221,7 +223,7 @@ Duplicate_email_address: {
         fail_cb => sub { push @failures,  shift },
     );
     is_deeply \@successes, [], 'user was not added';
-    is_deeply \@failures, ["e-mail address already in use\n"], 'correct failure message';
+    is_deeply \@failures, ['Line 1: The email address you provided (duplicate@monkeyisland.com) is already in use.'], 'correct failure message';
 }
 
 No_password: {

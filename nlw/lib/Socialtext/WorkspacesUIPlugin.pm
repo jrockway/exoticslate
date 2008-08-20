@@ -145,8 +145,6 @@ sub workspaces_settings_skin {
     my $self = shift;
 
     $self->hub->assert_current_user_is_admin;
-    die "allows_skin_upload is not set on this workspace"
-        unless $self->hub->current_workspace->allows_skin_upload;
 
     my $error_message = '';
     my @skipped_files = ();
@@ -167,8 +165,6 @@ sub skin_upload {
     my $self = shift;
 
     $self->hub->assert_current_user_is_admin;
-    die "allows_skin_upload is not set on this workspace"
-        unless $self->hub->current_workspace->allows_skin_upload;
 
     my $error_message = '';
     my @skipped_files = ();

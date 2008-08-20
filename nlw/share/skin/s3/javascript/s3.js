@@ -132,10 +132,13 @@ Page = {
                             $('<a>')
                                 .html(tag.name)
                                 .attr('href', tag_url + tag.name),
+
                             ' ',
                             $('<a href="#">')
-                                .html('[x]')
+                                .html('<img src="/static/skin/common/images/delete.png" width="16" height="16" border="0" />')
                                 .attr('name', tag.name)
+                                .attr('alt', loc('Delete this tag'))
+                                .attr('title', loc('Delete this tag'))
                                 .bind('click', function () {
                                     Page.delTag(this.name);
                                 })
@@ -157,15 +160,30 @@ Page = {
                 for (var i=0; i< list.length; i++) {
                     var item = list[i];
                     Page.attachmentList.push(item.name);
+                    var extractLink = '';
+                    if (item.name.match(/\.(zip|tar|tar.gz|tgz)$/)) {
+                        extractLink = $('<a href="#">')
+                            .html('<img src="/static/skin/common/images/extract.png" width="16" height="16" border="0" />')
+                            .attr('name', item.uri)
+                            .attr('alt', loc('Extract this attachment'))
+                            .attr('title', loc('Extract this attachment'))
+                            .bind('click', function () {
+                                Page.extractAttachment(item.id)
+                            });
+                    }
                     $('#st-attachment-listing').append(
                         $('<li>').append(
                             $('<a>')
                                 .html(item.name)
                                 .attr('href', item.uri),
                             ' ',
+                            extractLink,
+                            ' ',
                             $('<a href="#">')
-                                .html('[x]')
+                                .html('<img src="/static/skin/common/images/delete.png" width="16" height="16" border="0" />')
                                 .attr('name', item.uri)
+                                .attr('alt', loc('Delete this attachment'))
+                                .attr('title', loc('Delete this attachment'))
                                 .bind('click', function () {
                                     Page.delAttachment(this.name)
                                 })
@@ -183,6 +201,21 @@ Page = {
             url: this.tagUrl(tag),
             complete: function () {
                 Page.refreshTags();
+            }
+        });
+    },
+
+    extractAttachment: function (attach_id) {
+        $.ajax({
+            type: "POST",
+            url: location.pathname,
+            data: {
+                action: 'attachments_extract',
+                page_id: Socialtext.page_id,
+                attachment_id: attach_id
+            },
+            complete: function () {
+                Page.refreshAttachments();
             }
         });
     },

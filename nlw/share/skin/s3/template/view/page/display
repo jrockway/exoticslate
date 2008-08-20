@@ -101,8 +101,11 @@
           <ul id="st-tags-listing">
           [% FOR tag = tags.tags %]
             <li>
-              <a href="?action=category_display;category=[% tag.name %]">[% tag.name %]</a>
-              <a onclick="Page.delTag('[% tag.name %]')" href="#">[x]</a>
+            <a href="?action=category_display;category=[% tag.name %]">[% tag.name %]</a>
+            <a href="#" onclick="Page.delTag('[% tag.name %]')"><img
+                src="/static/skin/common/images/delete.png"
+                width="16" height="16" border="0" alt="[% loc('Delete this attachment') %]"
+            /></a>
             </li>
           [% END %]
           </ul>
@@ -159,7 +162,19 @@
                 SET displaylength = Number.Format.format_bytes(file.$length);
               END;
             %]
-            <li><a title="[% loc("Uploaded by [_1] on [_2]. [_3]", file.uploader, file.date, displaylength) | html_entity %]" href="[% file.uri %]">[% file.name %]</a> <a href="#" onclick="Page.delAttachment('[% file.uri %]')">[x]</a></li>
+            <li>
+            <a title="[% loc("Uploaded by [_1] on [_2]. [_3]", file.uploader, file.date, displaylength) | html_entity %]" href="[% file.uri %]">[% file.name %]</a>
+            [% IF file.name.match('\.(zip|tar|tar.gz|tgz)$') %]
+            <a href="#" onclick="Page.extractAttachment('[% file.id %]')"><img
+                src="/static/skin/common/images/extract.png"
+                width="16" height="16" border="0" alt="[% loc('Extract this attachment') %]" title="[% loc('Extract this attachment') %]"
+            /></a>
+            [% END %]
+            <a href="#" onclick="Page.delAttachment('[% file.uri %]')"><img
+                src="/static/skin/common/images/delete.png"
+                width="16" height="16" border="0" alt="[% loc('Delete this attachment') %]" title="[% loc('Delete this attachment') %]"
+            /></a>
+            </li>
           [% END %]
           </ul>
           [% IF checker.check_permission('attachments') %]

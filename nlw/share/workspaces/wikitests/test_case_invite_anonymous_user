@@ -8,10 +8,10 @@ The error conditions for this case are covered in {link: [Test case: self regist
 | click_and_wait | link=Invite New Users |  |
 | st-admin | remove-member --email %%start_time%%.one@ken.socialtext.net --workspace %%workspace%% |  |
 | st-admin | remove-member --email %%start_time%%.two@ken.socialtext.net --workspace %%workspace%% |  |
-| type_ok | users_new_ids | %%start_time%%.one@ken.socialtext.net\n%%start_time%%.two@ken.socialtext.net\n%%start_time%%.malformed@ken.socialtext. |
+| type_ok | users_new_ids | %%start_time%%.one@ken.socialtext.net\n%%start_time%%.two@ken.socialtext.net\n%%start_time%%foo.com |
 | click_ok | append_invitation |  |
 | click_and_wait | //input[@value='Invite'] |  |
-| text_like | st-settings-section | qr/The following email addresses were invalid.+%%start_time%%\.malformed\@ken\.socialtext\./ |
+| text_like | st-settings-section | qr/The following email addresses were invalid.+%%start_time%%foo\.com/ |
 | text_like | st-settings-section | qr/Your request to invite the following users has been sent.+%%start_time%%\.one\@ken\.socialtext\.net.+%%start_time%%\.two\@ken\.socialtext\.net/ |
 
 | *Comment* | Test Case: Invite Anonymous User Make user an admin |  |

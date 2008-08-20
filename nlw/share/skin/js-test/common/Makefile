@@ -42,25 +42,25 @@ index.html: template/index.html t/*.t.js
 	perl $(RENDERER) $(notdir $<) $(@:%.t.html=t/%.t.js) > $@
 
 lib/Test/Base.js: lib/Test
-	cp `js-cpan Test.Base` $@
+	cp -f `js-cpan Test.Base` $@
 
 lib/Test/Builder.js: lib/Test
-	cp `js-cpan Test.Builder` $@
+	cp -f `js-cpan Test.Builder` $@
 
 lib/Test/Harness.js: lib/Test
-	cp `js-cpan Test.Harness` $@
+	cp -f `js-cpan Test.Harness` $@
 
 lib/Test/Harness/Browser.js: lib/Test/Harness
-	cp `js-cpan Test.Harness.Browser` $@
+	cp -f `js-cpan Test.Harness.Browser` $@
 
 lib lib/Test lib/Test/Harness:
 	mkdir -p $@
 
 template/test.html:
-	cp $(TEST_TEMPLATE) $@
+	cp -f $(TEST_TEMPLATE) $@
 
 template/index.html:
-	cp $(INDEX_TEMPLATE) $@
+	cp -f $(INDEX_TEMPLATE) $@
 
 template:
 	mkdir -p $@

@@ -15,7 +15,7 @@
 
 <div id="contentContainer">
   <h2 class="tableTitle">[% display_title %]: <a href="[% "${script_name}?${page_uri}" %]">[% loc("Back to Current Revision") %]</a></h2>
-  <form id="compare_revisions" onsubmit="return check_revisions(this);">
+  <form name='revisions' id="compare_revisions" onsubmit="return check_revisions(this);">
     <input type="hidden" name="action" value="revision_compare" />
     <input type="hidden" name="page_name" value="[% page_name %]" />
     <input type="hidden" name="mode" value="source" />

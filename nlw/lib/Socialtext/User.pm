@@ -1518,6 +1518,12 @@ workspace.
 Returns the user's name and email, in a format suitable for use in
 email headers.
 
+=head2 $user->guess_sortable_name()
+
+Returns a guess at the user's sortable name, using the first name and/or last
+name from the DBMS if possible.  Goal is to end up with a name for the user
+that can be sorted alphabetically by last name, then first name.
+
 =head2 $user->guess_real_name()
 
 Returns the a guess at the user's real name, using the first name

@@ -6,17 +6,17 @@ t.plan(3);
 
 t.runTests = function() {
     t.like(
-        t.$("#bottomButtons ul.buttonRight").text(),
+        t.$("#pageAttribution").text(),
         /Created by/,
         "There is page creator info at the bottom of the page"
     );
     t.like(
-        t.$("#bottomButtons ul.buttonRight").text(),
+        t.$("#pageAttribution").text(),
         /Updated by/,
         "There is page updator info at the bottom of the page"
     );
     t.like(
-        t.$("#bottomButtons ul.buttonRight").text(),
+        t.$("#pageAttribution a.revision").text(),
         /\(\d+ revisions?\)/,
         "There is a page revision info inside of a pair of parens at the bottom of the page."
     );

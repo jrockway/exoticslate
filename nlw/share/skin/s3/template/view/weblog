@@ -39,25 +39,39 @@
       [% USE section_iterator = iterator(sections) %]
       [% FOREACH section IN section_iterator %]
         [% FOREACH entry = section.entries %]
-          <h3>[% entry.title | html %]</h3>
+          <h3><a href="[% script_name %]?[%entry.page_uri%]">[% entry.title | html %]</a></h3>
           <em>
-            [% loc('Posted by') %] [% entry.username | decorate('user_link') %] on [% entry.date_local %]
-            [% IF checker.check_permission('comment') %]
-              -
-              <a href="#" id="comment_[% entry.page_uri %]" class="weblog_comment">
-                [% loc('comment') %]
-              </a>
-            [% END %]
-            [% IF checker.check_permission('edit') %]
-              -
-              <a href="[% script_name %]?action=display;page_name=[% entry.page_uri %];caller_action=[% caller_action %];category=[% category | uri %];js=show_edit_div#edit">[% loc('edit this post') %]</a>
-            [% END %]
-            -
-            <a href="[% script_name %]?[%entry.page_uri%]">[% loc('permalink') %]</a>
+          [% IF entry.is_updated %]
+            [% loc('Posted by') %] [% entry.original.username | decorate('user_link') %] [% loc('on') %] [% entry.original.date_local %]
+          [% ELSE %]
+            [% loc('Posted by') %] [% entry.username | decorate('user_link') %] [% loc('on') %] [% entry.date_local %]
+          [% END %]
           </em>
           <div id="content_[% entry.page_uri %]">
             [% entry.post %]
           </div>
+          <hr size="1"/>
+          <em>
+            [% IF entry.is_updated %]
+                  [% loc('Created by') %] [% entry.original.username | decorate('user_link') %] [% loc('on') %] [% entry.original.date_local %].
+                  [% loc('Updated by') %] [% entry.username | decorate('user_link') %] [% loc('on') %] [% entry.date_local %].
+            [% ELSE %]
+                  [% loc('Created by') %] [% entry.username | decorate('user_link') %] [% loc('on') %] [% entry.date_local %].
+            [% END %]
+
+
+            [% IF checker.check_permission('comment') %]
+              <a href="#" id="comment_[% entry.page_uri %]" class="weblog_comment">
+                [% loc('Comment') %]
+              </a>
+              -
+            [% END %]
+            [% IF checker.check_permission('edit') %]
+              <a href="[% script_name %]?action=display;page_name=[% entry.page_uri %];caller_action=[% caller_action %];category=[% category | uri %];js=show_edit_div#edit">[% loc('Edit this post') %]</a>
+              -
+            [% END %]
+            <a href="[% script_name %]?[%entry.page_uri%]">[% loc('Permalink') %]</a>
+          </em>
         [% END %]
       [% END %]
     </div><!-- contentLeft -->

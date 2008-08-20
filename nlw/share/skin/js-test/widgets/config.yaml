@@ -1,0 +1,4 @@
+index_title: Socialtext Widgets JavaScript Testing
+import_libs:
+  - ../../common/javascript/jquery-1.2.6.js
+  - ../common/lib/Test/Visual.js

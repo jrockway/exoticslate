@@ -18,6 +18,15 @@ Socialtext::Ceqlotron::clean_queue_directory();
 
 my $Singapore = join '', map { chr($_) } 26032, 21152, 22369;
 
+# Sleep a bit, after setting up our test fixtures
+#
+# Some of our tests below require that edits that we do trigger the page to go
+# to the top of the "recent changes" list.  Granularity for "last edit time"
+# in the DB is "to the second", so we need to sleep a bit to make sure that
+# our edits are going to be recorded at a different moment in time than the
+# initial fixture creation.
+sleep 1;
+
 # create an object and check its health
 my $hub = new_hub('admin');
 isa_ok( $hub, 'Socialtext::Hub' );

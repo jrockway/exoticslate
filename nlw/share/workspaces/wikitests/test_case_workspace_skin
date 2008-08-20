@@ -6,6 +6,7 @@ Need skin.tgz and badskin.tgz to be in wikitest_files directory.
 | *Comment* | Test Case: Workspace Skin |  |
 | *Comment* | Need skin.tgz and badskin.tgz to be in %%wikitest_files%% |  |
 | setTimeout | 120000 |  |
+| st-admin | set-workspace-config --workspace %%workspace%% allows_skin_upload 1 | has been updated |
 
 | *Comment* | Test Case: Workspace Skin Need skin.tgz and badskin.tgz in %%wikitest_files%% |  |
 | click_and_wait | link=Settings |  |

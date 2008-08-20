@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     [% FILTER decorate "head" %]
-    <title>[% title || display_title %] / [% wiki.title %]</title>
+    <title>[% title || display_title %][% IF wiki.title %] / [% wiki.title %][% END %]</title>
     [% PROCESS element/css_links %]
     [% IF feeds %]
       [% IF feeds.rss %]
@@ -30,6 +30,10 @@
     <script type="text/javascript" charset="utf-8"
       src="[% wiki.skin_uri('s3') %]/javascript/socialtext-s3.js">
     </script>
+
+    [% IF head_template %]
+      [% INCLUDE $head_template %]
+    [% END %]
 
     [% INCLUDE "element/wiki/js-bootstrap" %]
 

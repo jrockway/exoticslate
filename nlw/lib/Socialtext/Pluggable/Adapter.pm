@@ -78,7 +78,7 @@ sub make {
             or die "Could not open $semaphore: $!\n";
         flock( $lock, LOCK_EX )
             or die "Could not get lock on $semaphore: $!\n";
-        system( 'make', 'all' ) and die "Error calling make in $dir: $!";
+        system( 'make', 'all' ) and die "Error calling make in $dir/$name: $!";
         close($lock);
     }
 }

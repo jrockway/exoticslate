@@ -12,7 +12,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 46;
+    plan tests => 48;
 }
 
 use mocked 'Socialtext::People::Profile';
@@ -191,6 +191,20 @@ EOT
         ['Line 2: email is a required field, but could not be parsed.'],
         'correct failure message';
     logged_like 'error', qr/email is a required field, but could not be parsed/, '... message also logged';
+}
+
+Duplicate_email_address: {
+    # use a duplicate e-mail address (one already in use)
+    (my $csv = $PIRATE_CSV) =~ s/guybrush@/duplicate@/;
+    my @successes;
+    my @failures;
+    Socialtext::MassAdd->users(
+        csv => $csv,
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+    is_deeply \@successes, [], 'user was not added';
+    is_deeply \@failures, ["e-mail address already in use\n"], 'correct failure message';
 }
 
 No_password: {

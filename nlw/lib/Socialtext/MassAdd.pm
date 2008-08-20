@@ -69,7 +69,7 @@ sub users {
                 my $msg = loc("Line [_1]: [_2]", $line, $result);
                 st_log->error($msg);
                 $fail_cb->($msg);
-                next;
+                next LINE;
             }
         }
 
@@ -95,10 +95,12 @@ sub users {
                 my $msg = loc("Line [_1]: [_2]", $line, loc("email is a required field, but could not be parsed."));
                 st_log->error($msg);
                 $fail_cb->($msg);
-                next;
+                next LINE;
             }
             elsif ($err) {
-                die $err;
+                st_log->error($err);
+                $fail_cb->($err);
+                next LINE;
             }
 
             # Send the user a confirmation email, if they don't have a pw

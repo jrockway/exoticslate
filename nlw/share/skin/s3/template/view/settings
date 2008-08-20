@@ -41,7 +41,9 @@
             <ul class="leftNavList">
               <li><a href="?action=workspaces_settings_appearance">[% loc('Workspace Appearance') %]</a></li>
               <li><a href="?action=workspaces_settings_features">[% loc('Workspace Features') %]</a></li>
-              <li><a href="?action=workspaces_settings_skin">[% loc('Workspace Skin') %]</a></li>
+              [% IF current_workspace.allows_skin_upload %]
+                <li><a href="?action=workspaces_settings_skin">[% loc('Workspace Skin') %]</a></li>
+              [% END %]
               <li><a href="?action=workspaces_permissions">[% loc('Workspace Privacy') %]</a></li>
             </ul>
             [% END %]

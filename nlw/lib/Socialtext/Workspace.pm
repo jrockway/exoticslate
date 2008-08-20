@@ -104,6 +104,7 @@ Readonly our @COLUMNS => (
     'no_max_image_size',
     'cascade_css',
     'uploaded_skin',
+    'allows_skin_upload',
 );
 
 # Hash for quick lookup of columns

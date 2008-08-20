@@ -145,6 +145,12 @@ Page = {
                         )
                     )
                 }
+                if (tags.length == 0) {
+                    $('#st-tags-listing').append( 
+                        $('<div id="st-no-tags-placeholder" />')
+                            .html(loc('There are no tags for this page.'))
+                    );
+                }
             }
         });
     },

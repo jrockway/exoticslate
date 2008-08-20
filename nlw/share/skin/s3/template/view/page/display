@@ -108,6 +108,9 @@
             /></a>
             </li>
           [% END %]
+          [% IF tags.tags.size == 0 %]
+            <div id="st-no-tags-placeholder">[% loc('There are no tags for this page.') %]</div>
+          [% END %]
           </ul>
           [% IF checker.check_permission('edit') %]
           <ul id="st-tags-addlink" class="widgetButton">

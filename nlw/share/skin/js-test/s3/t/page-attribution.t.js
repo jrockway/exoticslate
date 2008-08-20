@@ -3,8 +3,13 @@
 var t = new Test.Visual();
 
 t.plan(3);
+t.beginAsync();
 
-t.runTests = function() {
+var begin = function() {
+    t.open_iframe("/admin/index.cgi?admin_wiki", step1);
+}
+
+var step1 = function() {
     t.like(
         t.$("#pageAttribution").text(),
         /Created by/,
@@ -22,9 +27,11 @@ t.runTests = function() {
     );
 
     // Scroll all the way to the bottom.
-    t.iframe.contentWindow.scrollTo(0, 20000);
+    t.scrollTo(20000);
+
+    t.endAsync();
 };
 
-t.open_iframe("/admin/index.cgi?admin_wiki", {w: 950});
+begin();
 
 })(jQuery);

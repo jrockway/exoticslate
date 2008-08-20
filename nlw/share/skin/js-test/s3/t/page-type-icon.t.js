@@ -3,17 +3,24 @@
 var t = new Test.Visual();
 
 t.plan(1);
+t.beginAsync();
 
-t.runTests = function() {
+var begin = function() {
+    t.open_iframe("/admin/index.cgi?action=recent_changes", step1);
+}
+
+var step1 = function() {
     t.like(
         t.$("#st-listview-form tr.oddRow td:eq(1) img.pageType").attr('src'),
         /(ss|doc)16.png$/,
         "There is a page type icon in the list"
     );
 
-    t.iframe.contentWindow.scrollTo(0, 200);
+    t.scrollTo(200);
+
+    t.endAsync();
 };
 
-t.open_iframe("/admin/index.cgi?action=recent_changes");
+begin();
 
 })(jQuery);

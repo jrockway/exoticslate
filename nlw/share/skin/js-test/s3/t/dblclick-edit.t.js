@@ -3,8 +3,13 @@
 var t = new Test.Visual();
 
 t.plan(5);
+t.beginAsync();
 
-t.runTests = function() {
+var begin = function() {
+    t.open_iframe("/admin/index.cgi?admin_wiki", step1);
+}
+
+var step1 = function() {
     $(t.iframe).height(200);
     $(t.iframe).width(900);
     t.builder.ok(
@@ -19,7 +24,6 @@ t.runTests = function() {
 
     t.$("div#st-page-content").trigger("dblclick");
 
-    var id = t.builder.beginAsync();
     setTimeout(function() {
         t.builder.ok(
             t.iframe.contentWindow.Wikiwyg,
@@ -35,10 +39,10 @@ t.runTests = function() {
             'Editor is now visible'
         );
 
-        t.builder.endAsync(id);
+        t.endAsync();
     }, 1000);
 };
 
-t.open_iframe("/admin/index.cgi?admin_wiki");
+begin();
 
 })(jQuery);

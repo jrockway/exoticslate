@@ -23,6 +23,8 @@ Create a new user and optionally add to a workspace.
   - callback: required function of what to do afterwards
 */
 proto.create_user = function(params) {
+    var self = this;
+
     var add_to_workspace = function() {
         $.ajax({
             url: "/data/workspaces/" + params.workspace + '/users',
@@ -33,7 +35,9 @@ proto.create_user = function(params) {
                 rolename: "member",
                 send_confirmation_invitation: 0
             }),
-            success: params.callback
+            success: function() {
+                self.call_callback(params.callback);
+            }
         });
     }
 
@@ -50,7 +54,9 @@ proto.create_user = function(params) {
             password: params.password,
             email_address: params.email_address
         }),
-        success: callback
+        success: function() {
+            self.call_callback(callback);
+        }
     });
 }
 
@@ -60,8 +66,7 @@ proto.login = function(params) {
     var username = (params.username || 'devnull1@socialtext.com');
     var password = (params.password || 'd3vnu11l');
 
-    this.beginAsync({internal: true});
-
+    var self = this;
     $.ajax({
         url: "/nlw/submit/logout",
         complete: function() {
@@ -72,19 +77,19 @@ proto.login = function(params) {
                     'username': username,
                     'password': password
                 },
-                success: params.callback
+                success: function() {
+                    self.call_callback(params.callback);
+                }
             });
         }
     });
 }
 
-proto.open_iframe = function(url, options) {
+proto.open_iframe = function(url, callback, options) {
+    if (! (url && callback))
+        throw("usage: open_iframe(url, callback, [options])");
     if (! options)
         options = {};
-
-    var callback = options.callback || this.runTests;
-
-    this.beginAsync({internal: true});
 
     this.iframe = $("<iframe />").prependTo("body").get(0);
     this.iframe.contentWindow.location = url;
@@ -97,15 +102,14 @@ proto.open_iframe = function(url, options) {
     $iframe.one("load", function() {
         self.doc = self.iframe.contentDocument;
         self.$ = self.iframe.contentWindow.jQuery;
-
-        if (callback)
-            callback.apply(self, [self]);
         
-        self.endAsync({internal: true});
+        self.call_callback(callback);
     });
 }
 
 proto.setup_one_widget = function(url, callback) {
+    if (! (url && callback))
+        throw("usage: setup_one_widget(url, callback)");
     var self = this;
     var setup_widget = function() {
         self.iframe.contentWindow.location = url;
@@ -115,28 +119,43 @@ proto.setup_one_widget = function(url, callback) {
                 'iframe': iframe,
                 '$': iframe.contentWindow.jQuery
             };
-            if (callback)
-                callback.apply(self, [widget]);
+            self.call_callback(callback, [widget]);
         });
     }
-    this.open_iframe("/?action=clear_widgets", {callback: setup_widget});
+    this.open_iframe("/?action=clear_widgets", setup_widget);
 }
 
-proto.beginAsync = function(params) {
-    if (!params) params = {};
-    if (!params.timeout) params.timeout = 30000;
-    if (this.asyncId) return;
-
-    if (! params.internal)
-        this.userAsync = true;
-
-    this.asyncId = this.builder.beginAsync(params.timeout);
+proto.call_callback = function(callback, args) {
+    if (! this.asyncId)
+        throw("You forgot to call beginAsync()");
+    callback.apply(this, args);
 }
 
-proto.endAsync = function(params) {
-    if (!params) params = {};
-    if (params.internal && this.userAsync) return;
+proto.beginAsync = function(timeout) {
+    if (!timeout) timeout = 60000;
+    if (this.asyncId)
+        throw("beginAsync already called");
+    this.asyncId = this.builder.beginAsync(timeout);
+    var self = this;
+    setTimeout(
+        function() {
+            if (self.asyncId)
+                throw("Test timed out. Did you forget to call endAsync?");
+        },
+        timeout
+    );
+}
+
+proto.endAsync = function() {
+    if (! this.asyncId)
+        throw("endAsync called out of order");
     this.builder.endAsync(this.asyncId);
+    this.asyncId = 0;
+}
+
+proto.scrollTo = function(vertical, horizontal) {
+    if (!horizontal) horizontal = 0;
+    this.iframe.contentWindow.scrollTo(horizontal, vertical);
 }
 
 proto.bindLoad = function(cb) {

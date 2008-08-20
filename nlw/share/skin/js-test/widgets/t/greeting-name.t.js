@@ -6,7 +6,11 @@ t.plan(1);
 
 t.beginAsync();
 
-part1 = function() {
+var begin = function() {
+    t.login({callback: step1});
+}
+
+var step1 = function() {
     t.ts = (new Date()).getTime();
     t.username = 'user' + t.ts + '@example.com',
     t.email_address = 'email' + t.ts + '@example.com',
@@ -16,23 +20,23 @@ part1 = function() {
         email_address: t.email_address,
         password: 'd3vnu11l',
         workspace: 'admin',
-        callback: part2
+        callback: step2
     });
 }
 
-part2 = function() {
+var step2 = function() {
     t.login({
         'username': t.username,
         'password': 'd3vnu11l',
-        'callback': part3
+        'callback': step3
     });
 }
 
-part3 = function() {
-    t.open_iframe("/");
+var step3 = function() {
+    t.open_iframe("/", step4);
 };
 
-t.runTests = function() {
+var step4 = function() {
     var username = t.$("div.welcome span").text()
         .replace(/^\s*Hello,\s*(.*)\s*$/, '$1');
     t.is(username, 'user' + t.ts,
@@ -41,7 +45,6 @@ t.runTests = function() {
     t.endAsync();
 };
 
-t.login({callback: part1});
-
+begin();
 
 })(jQuery);

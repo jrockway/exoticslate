@@ -3,12 +3,17 @@
 var t = new Test.Visual();
 
 t.plan(1);
+t.beginAsync();
 
 // Play with these two numbers:
 var box2_vertical = 0;
 var box2_horizontal = 75;
 
-t.runTests = function() {
+var begin = function() {
+    t.open_iframe("../common/html/blank.html", step1);
+}
+
+var step1 = function() {
     $(t.iframe).height(300).width(300);
     var $body = $(t.iframe.contentDocument.body);
     var $box1 = window.$box1 = $('<div id="box1"></div>')
@@ -40,8 +45,10 @@ t.runTests = function() {
         $box2,
         'elements_do_not_overlap() function works'
     );
+
+    t.endAsync();
 };
 
-t.open_iframe("../common/html/blank.html");
+begin();
 
 })(jQuery);

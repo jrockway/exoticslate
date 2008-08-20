@@ -7,7 +7,13 @@ t.plan(2);
 if (jQuery.browser.msie)
     t.skipAll("{bz: 855} isa bug on Mozilla browsers. On IE, those two elements are not overlapping but still look bad in other ways.");
 
-t.runTests = function() {
+t.beginAsync(10000);
+
+var begin = function() {
+    t.open_iframe("/admin/index.cgi?action=recent_changes", step1);
+}
+
+var step1 = function() {
     $(t.iframe).height(200);
     var widths = [1100, 800];
     for (var i = 0, l = widths.length; i < l; i++) {
@@ -20,10 +26,12 @@ t.runTests = function() {
             'Export and Tools do not overlap when window width is ' + width
         );
 
-        t.iframe.contentWindow.scrollTo(width, 50);
+        t.scrollTo(50, width);
     }
+
+    t.endAsync();
 };
 
-t.open_iframe("/admin/index.cgi?action=recent_changes");
+begin();
 
 })(jQuery);

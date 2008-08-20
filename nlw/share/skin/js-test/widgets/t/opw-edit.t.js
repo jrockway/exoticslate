@@ -20,7 +20,7 @@ t.login({callback: begin});
 // Most fragile test evar.
 var step1 = function(widget) {
     var counter = 0, counter2 = 0, failed = false;
-    t.iframe.contentWindow.scrollTo(0, 150);
+    t.scrollTo(150);
     widget.$("body").ajaxComplete(function(e, xhr, options) {
         if (options.url.match(/^\/data\/workspaces\/admin\/pages\/workspace_tour_table_of_contents/)) {
             counter++;

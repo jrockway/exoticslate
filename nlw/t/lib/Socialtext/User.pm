@@ -130,4 +130,11 @@ sub ValidatePassword {
     return;
 }
 
+our $MASK_EMAILS = 0;
+sub MaskEmailAddress {
+    my ($class, $addr, $ws) = @_;
+    $addr =~ s/@.+$/\@masked/ if $MASK_EMAILS;
+    return $addr;
+}
+
 1;

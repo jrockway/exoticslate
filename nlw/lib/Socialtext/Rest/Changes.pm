@@ -35,14 +35,18 @@ sub _entities_for_query {
     my %bfn;
     for my $page (@$pages_ref) {
         my $row = $page->to_result();
-        $row->{user_id} = $page->{last_editor_id};
-        $row->{workspace} = $page->{workspace_name};
-        $row->{name} = $row->{page_id};
-        $row->{uri} = "/data/changes/$row->{workspace}/$row->{page_id}";
-        my $ws = Socialtext::Workspace->new(
-            workspace_id => $page->{workspace_id} );
-        my $user = Socialtext::User->new( user_id => $row->{user_id} );
-        $row->{best_full_name} = $user->best_full_name(workspace => $ws);
+        my $ws = new Socialtext::Workspace(name => $page->{workspace_name});
+        my $user = Socialtext::User->new(user_id => $page->{last_editor_id});
+
+        $row->{workspace} = $ws->name;
+        $row->{uri} = "/data/workspaces/$row->{workspace}/pages/$row->{page_id}";
+        $row->{user_id} = $user->user_id;
+        $row->{best_full_name} = $user->guess_real_name();
+        $row->{From} = Socialtext::User->MaskEmailAddress(
+            $row->{From},
+            $ws
+        );
+
         push @changes, $row;
     }
 

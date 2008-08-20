@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="css/ieStyles.css" type="text/css" media="screen" />
         <![endif]-->
     </head>
-    <body id="dashboard">
+    <body id="dashBoard">
         <div id="mainWrap">
             <div id="header" class="st-wiki-nav">
                 <div id="logo"><a href="index.html">Socialtext</a></div><!-- logo END -->
@@ -23,176 +23,210 @@
                 </div><!-- globalNav END -->
             </div><!-- header END -->
             <div id="mainNav" class="st-wiki-subnav-dashboard">
-                <div id="homeLink"><a class="selected" id="st-home-link" href="#">Home</a></div>
+                
+                <div id="homeLink"><a id="st-home-link" href="#">Home</a></div>
                 <ul id="st-wiki-subnav-left">
                     <li><a id="st-wiki-subnav-link-whats-new" href="#">What's New</a></li>
                     <li><a id="st-wiki-subnav-link-weblogs" href="#">Weblogs</a></li>
                 </ul>
                 <div id="workSpaceLink">
-                <a href="#">You Workspaces</a>
+                <a href="#">Your Workspaces</a>
                 </div><!-- workSpaceLink END -->
             </div><!-- mainNav END -->
             <div id="st-display-mode-container">      
                 <div id="controls">
                     <div id="st-editing-tools-edit">
-                        <h1 id="st-wiki-title">Workspace Title Goes Here</h1>
-                        <ul id="quickLinks">
-                            <li class="noBorder">Central Page:</li>
-                            <li><a href="#">Lorem ipsum Dolor</a></li>
-                            <li><img src="images/rss.png" /><a href="#">Subscribe to Feed</a></li>
-                            <li class="noBorder"><img src="images/plug.png" /><a href="#">Save the 50 most recent pages</a></li>
-                        </ul>            
+                        <ul>
+                            <li><a class="addContentButton" href="#">New Page</a></li>
+                        </ul>
+                                    
                     </div><!-- controlsLeft END -->
                     <div id="controlsRight">
-                        <div id="frame"><img src="images/mugshot.jpg" /></div>
-                        <span class="welcome">Welcome <div class="clear">Joe Smith</div></span>
+                        
                     </div><!-- controlsRight END -->
                 </div><!-- controls END -->
                 <div id="contentContainer">
                     <div id="contentColumns">
-                        <div id="st-page-maincontent">
-                            <div class="widget">
-                                <div class="widgetHeader">
-                                <h4><img src="images/paperIcon.png" />Anouncements & Links</h4>
-                                </div><!-- widgetHeader END -->
-                                <div class="widgetContent">
-                                    <div class="subHeader">
-                                    <h5>Lorem ipsum dolor</h5>
-                                    <a class="editButton" href="#">Edit</a>
-                                    </div>
-                                    <p>Duis vestibulum. Morbi blandit aliquam augue. Nunc nec purus at felis porttitor vulputate. Vivamus vel nunc. Nam luctus, ante eget faucibus tincidunt, est diam dictum enim, ac tincidunt nisl dolor nec nibh.</p>
-                                    <ul class="dots">
-                                        <li>Duis ligula neque, aliquam sed</li>
-                                        <li>Duis ligula neque, aliquam sed</li>
-                                        <li>Duis ligula neque, aliquam sed</li>
-                                        <li>Duis ligula neque, aliquam sed</li>
-                                    </ul>
-                                    <ul>
-                                        <li><a href="#">Nunc congue</a></li>
-                                        <li><a href="#">Nunc congue</a></li>
-                                    </ul>
-                                    <p>Nunc nec purus at felis porttitor vulputate. Vivamus vel nunc. Nam luctus, ante eget faucibus tincidunt, est diam dictum enim, ac tincidunt nisl dolor nec nibh.</p>
+                        <div id="columnCombined"> 
+                            <div id="st-page-maincontent">
+                                <div class="widget">
+                                    <div class="widgetHeader">
+                                    <h4><img src="images/paperIcon.png" />My Content</h4>
+                                    <a class="close" href="#">Close</a><a class="minimize" href="#">Minimize</a><a class="settings" href="#">Settings</a>
+                                    </div><!-- widgetHeader END -->
+                                    <div class="widgetContent">
+                                        <div id="myContent">
+                                        <h4>Socialtext Ipsum Lorem</h4>
+                                        <p>...Lorem ipsum dolor <a href="#">sit amet</a>, consectetuer adipiscing elit. Integer <a href="#">iaculis</a> erat quis magna...</p>
+                                        <div class="commentInfo">
+                                            <img src="images/avatar.png" class="avatar" alt="avatar" />
+                                            <ul>
+                                                <li><a href="#">John Jones</a></li>
+                                                <li class="time">3:00PM Today</li>
+                                            </ul>
+                                        </div><!-- commentInfo END -->
+                                    </div><!-- myContent END -->
+                                    <div class="border"></div><!-- border END -->
+                                    <div id="myContent">
+                                        <h4>Socialtext Ipsum Lorem</h4>
+                                        <p>...Lorem ipsum dolor <a href="#">sit amet</a>, consectetuer adipiscing elit. Integer <a href="#">iaculis</a> erat quis magna...</p>
+                                        <div class="commentInfo">
+                                            <img src="images/avatar.png" class="avatar" alt="avatar" />
+                                            <ul>
+                                                <li><a href="#">John Jones</a></li>
+                                                <li class="time">3:00PM Today</li>
+                                            </ul>
+                                        </div><!-- commentIfno END -->
+                                    </div><!-- myContent END -->
+                                    <div class="border"></div><!-- border END -->
+                                    <div id="myContent">
+                                        <h4>Socialtext Ipsum Lorem</h4>
+                                        <p>...Lorem ipsum dolor <a href="#">sit amet</a>, consectetuer adipiscing elit. Integer <a href="#">iaculis</a> erat quis magna...</p>
+                                        <div class="commentInfo">
+                                            <img src="images/avatar.png" class="avatar" alt="avatar" />
+                                            <ul>
+                                                <li><a href="#">John Jones</a></li>
+                                                <li class="time">3:00PM Today</li>
+                                            </ul>
+                                        </div><!-- commentIfno END -->
+                                    </div><!-- myContent END -->
 
-                                    <div class="clear"></div>
-                                </div><!-- widgetContent -->
-                                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
-                            </div><!-- widget END -->
-                            <div class="widget">
-                                <div class="widgetHeader">
-                                <h4><img src="images/notepadIcon.png" />Your Notepad</h4>
-                                </div><!-- widgetHeader END -->
-                                <div class="widgetContent">
-                                    <div class="subHeader">
-                                    <h5>Lorem ipsum dolor</h5>
-                                    <a class="editButton" href="#">Edit</a>
-                                    </div>
-                                    <ul class="dots">
-                                        <li>Duis ligula neque, aliquam sed</li>
-                                        <li>Duis ligula neque, aliquam sed</li>
-                                        <li>Duis ligula neque, aliquam sed</li>
-                                        <li>Duis ligula neque, aliquam sed</li>
-                                    </ul>
-                                    <div class="clear"></div>
-                                </div><!-- widgetContent -->
-                                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
-                            </div><!-- widget END -->
-                            <div class="widgetTan">
-                                <div class="widgetHeader">
-                                <h4>Did you know?</h4>
-                                </div><!-- widgetHeader END -->
-                                <div class="widgetContent">
-                                    <div class="subHeader">
-                                    <h5>Access a Community of Peers</h5>
-                                    </div>
-                                    <p>As a Socialtext customer, you have access to the <a href="">Socialtext Customer Exchange</a>. It's where you can share tips and best practices with other Socialtext customers.</p>
-                                    <div class="clear"></div>
-                                </div><!-- widgetContent -->
-                                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
-                            </div><!-- widgetTan END -->
-                        </div><!-- contentLeft -->
+                                        <div class="clear"></div>
+                                    </div><!-- widgetContent -->
+                                    <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
+                                </div><!-- widget END -->
+                                                            </div><!-- contentLeft END -->
+                            <div id="columnMiddle">
+                                <div class="widget">
+                                    <div class="widgetHeader">
+                                    <h4><img src="images/peopleIcon.png" />Watched People</h4>
+                                    <a class="close" href="#">Close</a><a class="minimize" href="#">Minimize</a><a class="settings" href="#">Settings</a>
+                                    </div><!-- widgetHeader END -->
+                                    <div class="widgetContent">
+                                        <div id="myContent">
+                                        <h4>Socialtext Ipsum Lorem</h4>
+                                        <p>...Lorem ipsum dolor <a href="#">sit amet</a>, consectetuer adipiscing elit. Integer <a href="#">iaculis</a> erat quis magna...</p>
+                                        <div class="commentInfo">
+                                            <img src="images/avatar.png" class="avatar" alt="avatar" />
+                                            <ul>
+                                                <li><a href="#">John Jones</a></li>
+                                                <li class="time">3:00PM Today</li>
+                                            </ul>
+                                        </div><!-- commentInfo END -->
+                                    </div><!-- myContent END -->                                        <div class="clear"></div>
+                                    </div><!-- widgetContent -->
+                                    <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
+                                </div><!-- widget END -->
+                                <div class="widget">
+                                    <div class="widgetHeader">
+                                    <h4><img src="images/tagIcon.png" />My Tags</h4>
+                                    <a class="close" href="#">Close</a><a class="minimize" href="#">Minimize</a><a class="settings" href="#">Settings</a>
+                                    </div><!-- widgetHeader END -->
+                                    <div class="widgetContent">
+                                        <div id="myContent">
+                                        <h4>Socialtext Ipsum Lorem</h4>
+                                        <p>...Lorem ipsum dolor <a href="#">sit amet</a>, consectetuer adipiscing elit. Integer <a href="#">iaculis</a> erat quis magna...</p>
+                                        <div class="commentInfo">
+                                            <img src="images/avatar.png" class="avatar" alt="avatar" />
+                                            <ul>
+                                                <li><a href="#">John Jones</a></li>
+                                                <li class="time">3:00PM Today</li>
+                                            </ul>
+                                        </div><!-- commentInfo END -->
+                                    </div><!-- myContent END -->
+                                    <div class="border"></div><!-- border END -->
+                                    <div id="myContent">
+                                        <h4>Socialtext Ipsum Lorem</h4>
+                                        <p>...Lorem ipsum dolor <a href="#">sit amet</a>, consectetuer adipiscing elit. Integer <a href="#">iaculis</a> erat quis magna...</p>
+                                        <div class="commentInfo">
+                                            <img src="images/avatar.png" class="avatar" alt="avatar" />
+                                            <ul>
+                                                <li><a href="#">John Jones</a></li>
+                                                <li class="time">3:00PM Today</li>
+                                            </ul>
+                                        </div><!-- commentIfno END -->
+                                    </div><!-- myContent END -->
+                                        <div class="clear"></div>
+                                    </div><!-- widgetContent -->
+                                    <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
+                                </div><!-- widget END -->
+                            </div><!-- columnMiddle END -->
+                        </div><!-- columnCombined END -->    
                         <div id="st-page-boxes">
                             <div class="widget">
                                 <div class="widgetHeader">
-                                <h4><img src="images/stampIcon.png" />What's New</h4><div class="dashNewPage"><a id="st-wiki-subnav-link-whats-new" href="#">New Page</a></div>
+                                <h4><img src="images/calendarIcon.png" />My Calendar</h4>
+                                <a class="close" href="#">Close</a><a class="minimize" href="#">Minimize</a><a class="settings" href="#">Settings</a>
                                 </div><!-- widgetHeader END -->
                                 <div class="widgetContent">
+                                    <div id="calendarControl">
+                                        <ul>
+                                            <li class="previous"><a href="#">Previous</a></li>
+                                            <li class="next"><a href="#">Next</a></li>
+                                        </ul>
+                                    </div><!-- calendarControl END -->
+                                    <div class="border"></div><!-- border END -->
                                     <table class="widgetTable">
                                         <tr class="rowOff">
-                                            <td>
-                                                <a href="">Anouncements & Links</a>
-                                                <span>Last edited by <strong>marta@araucariadesign.com</strong> on <strong>April 8 8:57am</strong></span>
-                                            </td>
+                                            <td>Socialtext Ipsum Lorem... </td>
+                                            <td class="right">08.12.2008</td>
                                         </tr>
                                         <tr>
-                                            <td>
-                                                <a href="">Anouncements & Links</a>
-                                                <span>Last edited by <strong>marta@araucariadesign.com</strong> on <strong>April 8 8:57am</strong></span>
-                                            </td>
+                                            <td>Socialtext Ipsum Lorem... </td>
+                                            <td class="right">08.12.2008</td>
                                         </tr>
                                         <tr class="rowOff">
-                                            <td>
-                                                <a href="">Anouncements & Links</a>
-                                                <span>Last edited by <strong>marta@araucariadesign.com</strong> on <strong>April 8 8:57am</strong></span>
-                                            </td>
+                                            <td>Socialtext Ipsum Lorem... </td>
+                                            <td class="right">08.12.2008</td>
                                         </tr>
                                         <tr>
-                                            <td>
-                                                <a href="">Anouncements & Links</a>
-                                                <span>Last edited by <strong>marta@araucariadesign.com</strong> on <strong>April 8 8:57am</strong></span>
-                                            </td>
+                                            <td>Socialtext Ipsum Lorem... </td>
+                                            <td class="right">08.12.2008</td>
+                                        </tr>
+                                        <tr class="rowOff">
+                                            <td>Socialtext Ipsum Lorem... </td>
+                                            <td class="right">08.12.2008</td>
                                         </tr>
                                     </table>
                                     <div class="clear"></div>
                                 </div><!-- widgetContent -->
                                 <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
                             </div><!-- widget END -->
+
                             <div class="widget">
-                                <div class="widgetHeader">
-                                <h4><img src="images/heartIcon.png" />Your Watch List</h4>
-                                </div><!-- widgetHeader END -->
-                                <div class="widgetContent">
-                                    <table class="widgetTable">
-                                        <tr class="rowOff">
-                                            <td>
-                                                <a href="">Anouncements & Links</a>
-                                                <span>Last edited by <strong>marta@araucariadesign.com</strong> on <strong>April 8 8:57am</strong></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a href="">Anouncements & Links</a>
-                                                <span>Last edited by <strong>marta@araucariadesign.com</strong> on <strong>April 8 8:57am</strong></span>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <div class="clear"></div>
-                                </div><!-- widgetContent -->    
-                                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                        
-                            </div><!-- widget END -->
-                            <div class="widget">
-                                <div class="widgetHeader">
-                                <h4><img src="images/peopleIcon.png" />Your Workspaces</h4>
-                                </div><!-- widgetHeader END -->
-                                <div class="widgetContent">
-                                    <table class="widgetTable">
-                                        <tr class="rowOff">
-                                            <td><a href="">Anouncements & Links</a></td>
-                                            <td class="right"><a href="#">2 Changes</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="">Lorem Ipsum</a></td>
-                                            <td class="right"><a href="#">0 Changes</a></td>
-                                        </tr>
-                                        <tr class="rowOff">
-                                            <td><a href="">Anouncements & Links</a></td>
-                                            <td class="right"><a href="#">2 Changes</a></td>
-                                        </tr>
-                                    </table>
-                                    <div class="clear"></div>
-                                </div><!-- widgetContent -->
-                                <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
-                            </div><!-- widget END -->
-                        </div><!-- contentRight -->
+                                    <div class="widgetHeader">
+                                    <h4><img src="images/folderIcon.png" />My Workspaces</h4>
+                                    <a class="close" href="#">Close</a><a class="minimize" href="#">Minimize</a><a class="settings" href="#">Settings</a>
+                                    </div><!-- widgetHeader END -->
+                                    <div class="widgetContent">
+                                        <div id="myContent">
+                                        <h4>Socialtext Ipsum Lorem</h4>
+                                        <p>...Lorem ipsum dolor <a href="#">sit amet</a>, consectetuer adipiscing elit. Integer <a href="#">iaculis</a> erat quis magna...</p>
+                                        <div class="commentInfo">
+                                            <img src="images/avatar.png" class="avatar" alt="avatar" />
+                                            <ul>
+                                                <li><a href="#">John Jones</a></li>
+                                                <li class="time">3:00PM Today</li>
+                                            </ul>
+                                        </div><!-- commentInfo END -->
+                                    </div><!-- myContent END -->
+                                    <div class="border"></div><!-- border END -->
+                                    <div id="myContent">
+                                        <h4>Socialtext Ipsum Lorem</h4>
+                                        <p>...Lorem ipsum dolor <a href="#">sit amet</a>, consectetuer adipiscing elit. Integer <a href="#">iaculis</a> erat quis magna...</p>
+                                        <div class="commentInfo">
+                                            <img src="images/avatar.png" class="avatar" alt="avatar" />
+                                            <ul>
+                                                <li><a href="#">John Jones</a></li>
+                                                <li class="time">3:00PM Today</li>
+                                            </ul>
+                                        </div><!-- commentIfno END -->
+                                    </div><!-- myContent END -->
+                                        <div class="clear"></div>
+                                    </div><!-- widgetContent -->
+                                    <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
+                                </div><!-- widget END -->
+                            </div><!-- contentRight -->
                     </div><!-- contentColumns END -->
                     <div class="clear"></div><!-- clear END -->
                     </div><!-- contentContainer -->    

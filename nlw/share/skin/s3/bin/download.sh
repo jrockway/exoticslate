@@ -2,6 +2,8 @@
 
 files="
     dashboard.html
+    profile.html
+    workSpaces.html
     contentPage.html
     listPage.html
     settings.html

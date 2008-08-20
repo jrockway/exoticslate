@@ -85,7 +85,7 @@ div#mainWrap {
 }
 
 
-body#dashboard div#mainWrap,body#blog div#mainWrap {
+body#workSpace div#mainWrap,body#blog div#mainWrap,body#dashBoard div#mainWrap {
        min-width: 795px;
 }
 
@@ -303,7 +303,6 @@ div.tableFilter {
 	height: 41px;
 	background: url(../images/tabsRight.png) no-repeat top right;
 	float: right;
-	width: 30%;
 }
 
 div.tableFilter label {
@@ -358,12 +357,12 @@ div#controls {
 	background: url(../images/controlsTile.png) repeat-x top left;
 }
 
-body#contentPage div#controls,body#settingsPage div#controls {
+body#contentPage div#controls,body#settingsPage div#controls,body#dashBoard div#controls {
 	height: 44px;
 	background: url(../images/contentControlsTile.png) repeat-x top left;
 }
 
-body#dashboard div#controls,body#blog div#controls {
+body#workSpace div#controls,body#blog div#controls {
 	height: 83px;
 	background: url(../images/dashControlsTile.png) repeat-x top left;
 }
@@ -380,7 +379,7 @@ div#controls div#st-editing-tools-edit {
        width: auto !important;
 }
 
-body#contentPage div#controls div#st-editing-tools-edit,body#settingsPage div#controls div#st-editing-tools-edit {
+body#contentPage div#controls div#st-editing-tools-edit,body#dashBoard div#controls div#st-editing-tools-edit,body#settingsPage div#controls div#st-editing-tools-edit {
 	background: url(../images/contentControlsLeft.png) no-repeat top left;
 	height: 44px;
 	padding-left: 8px;
@@ -397,7 +396,7 @@ body#listPage div#controls div#st-editing-tools-edit {
 	padding-left: 8px;
 }
 
-body#dashboard div#controls div#st-editing-tools-edit {
+body#workSpace div#controls div#st-editing-tools-edit {
 	background: url(../images/dashControlsLeft.png) no-repeat top left;
 	height: 83px;
 	width: 80%;
@@ -425,31 +424,31 @@ div#controls div#st-editing-tools-edit ul li {
 	line-height: 41px;
 }
 
-body#dashboard div#controls div#st-editing-tools-edit h1,body#blog div#controls div#st-editing-tools-edit h1 {
+body#workSpace div#controls div#st-editing-tools-edit h1,body#blog div#controls div#st-editing-tools-edit h1 {
 	font-size: 20px;
 	margin:21px 0 0 21px;}
 	
-body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks,body#blog div#controls div#st-editing-tools-edit ul#quickLinks {
+body#workSpace div#controls div#st-editing-tools-edit ul#quickLinks,body#blog div#controls div#st-editing-tools-edit ul#quickLinks {
 	margin: 15px 0 0 12px;
 }	
 
 
-body#dashboard div#mainWrap div#st-display-mode-container div#controls div#st-editing-tools-edit ul#quickLinks,body#blog div#mainWrap div#st-display-mode-container div#controls div#st-editing-tools-edit ul#quickLinks {
+body#workSpace div#mainWrap div#st-display-mode-container div#controls div#st-editing-tools-edit ul#quickLinks,body#blog div#mainWrap div#st-display-mode-container div#controls div#st-editing-tools-edit ul#quickLinks {
        height: auto;
 }
 
-body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks li,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li {
+body#workSpace div#controls div#st-editing-tools-edit ul#quickLinks li,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li {
 	line-height: normal;
 	padding: 0 10px 0 10px;
 	border-right: #8b8b8b 1px dotted;
 }	
 
 
-body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks li.noBorder,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li.noBorder {
+body#workSpace div#controls div#st-editing-tools-edit ul#quickLinks li.noBorder,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li.noBorder {
 	border-right: none;
 }
 
-body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks li a,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li a {
+body#workSpace div#controls div#st-editing-tools-edit ul#quickLinks li a,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li a {
 	display: inline;
 	line-height: normal;
 	position: static;
@@ -457,17 +456,17 @@ body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks li a,body#bl
 }	
 
 
-body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks li.quickTitle,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li.quickTitle {
+body#workSpace div#controls div#st-editing-tools-edit ul#quickLinks li.quickTitle,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li.quickTitle {
 	border: none;
 	padding: 0 0 0 10px;
 }
 
-body#dashboard div#controls div#st-editing-tools-edit ul#quickLinks li img,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li img {
+body#workSpace div#controls div#st-editing-tools-edit ul#quickLinks li img,body#blog div#controls div#st-editing-tools-edit ul#quickLinks li img {
 	float: left;
 	margin-right: 5px;
 }
 
-body#contentPage div#controls div#st-editing-tools-edit ul li,body#settingsPage div#controls div#st-editing-tools-edit ul li {
+body#contentPage div#controls div#st-editing-tools-edit ul li,body#dashBoard div#controls div#st-editing-tools-edit ul li,body#settingsPage div#controls div#st-editing-tools-edit ul li {
 	line-height: 44px;
 }
 
@@ -478,7 +477,7 @@ div#controls div#st-editing-tools-edit ul li a {
 	margin-left: 10px;
 }
 
-body#contentPage div#st-editing-tools-edit ul li a,body#settingsPage div#st-editing-tools-edit ul li a {
+body#contentPage div#st-editing-tools-edit ul li a,body#dashBoard div#st-editing-tools-edit ul li a,body#settingsPage div#st-editing-tools-edit ul li a {
 	top: 13px;
 }
 
@@ -487,6 +486,15 @@ ul li a.newPageButton {
 	width: 96px;
 	height: 22px;
 	background: url(../images/newPageButton.png) no-repeat;
+	background-position: top left;
+	text-indent: -9999px;
+}
+
+ul li a.addContentButton {
+	display: block;
+	width: 117px;
+	height: 22px;
+	background: url(../images/addContentButton.png) no-repeat;
 	background-position: top left;
 	text-indent: -9999px;
 }
@@ -501,6 +509,10 @@ ul li a.compareButton {
 }
 
 ul li a.newPageButton:hover {
+	background-position: top right;
+}
+
+ul li a.addContentButton:hover {
 	background-position: top right;
 }
 
@@ -580,7 +592,7 @@ a.cancelButton:hover {
 	background-position: top left;
 }
 
-body#dashboard div.widget a.editButton {
+body#workSpace div.widget a.editButton,body#dashBoard div.widget a.editButton {
 	float: right;
 	margin-right: 15px;
 }
@@ -615,6 +627,49 @@ ul li a.watchButton:hover {
 	background-position: top right;
 }
 
+
+ul li a.watchPersonButton {
+	display: block;
+	width: 159px;
+	height: 22px;
+	background: url(../images/watchPersonButton.png) no-repeat;
+	background-position: top left;
+	text-indent: -9999px;
+}
+
+ul li a.watchPersonButton:hover {
+	background-position: top right;
+}
+
+
+
+ul li a.addTagButton {
+	display: block;
+	width: 87px;
+	height: 22px;
+	background: url(../images/addTagButton.png) no-repeat;
+	background-position: top left;
+	text-indent: -9999px;
+}
+
+ul li a.addTagButton:hover {
+	background-position: top right;
+}
+
+
+ul li a.stopWatchButton {
+	display: block;
+	width: 138px;
+	height: 22px;
+	background: url(../images/stopWatchButton.png) no-repeat;
+	background-position: top left;
+	text-indent: -9999px;
+}
+
+ul li a.stopWatchButton:hover {
+	background-position: top right;
+}
+
 div#controls div#controlsRight {
 	background: url(../images/controlsRight.png) no-repeat top right;
 	float: right;
@@ -626,13 +681,13 @@ div#controls div#controlsRight {
        height: 100%;
 }
 
-body#contentPage div#controls div#controlsRight,body#settingsPage div#controls div#controlsRight {
+body#contentPage div#controls div#controlsRight,body#dashBoard div#controls div#controlsRight,body#settingsPage div#controls div#controlsRight {
 	background: url(../images/contentControlsRight.png) no-repeat top right;
 	height: 44px;
 	width: 250px !important;
 }
 
-body#dashboard div#controls div#controlsRight {
+body#workSpace div#controls div#controlsRight {
 	background: url(../images/dashControlsRight.png) no-repeat top right;
 	height: 83px;
 	width: 20%;
@@ -690,7 +745,7 @@ div#controls div#controlsRight ul li {
 	padding-left: 14px;
 	}
 	
-body#contentPage div#controls div#controlsRight ul li,body#settingsPage div#controls div#controlsRight ul li {
+body#contentPage div#controls div#controlsRight ul li,body#dashBoard div#controls div#controlsRight ul li,body#settingsPage div#controls div#controlsRight ul li {
 	line-height: 44px;
 	} 	
 	
@@ -791,7 +846,9 @@ div#contentContainer div#contentTitle h2.tableTitle {
 	float: left;
 }
 
-
+div.tableClear {
+	height: 20px;
+}
 
 a.hideTab {
 	float: right;
@@ -820,9 +877,24 @@ div#contentColumns div#st-page-maincontent	{
 	float: left;
 }
 
-body#dashboard div#contentColumns div#st-page-maincontent	{
+body#workSpace div#contentColumns div#st-page-maincontent	{
 	width: 48%;
 	float: left;
+}
+
+body#dashBoard div#contentColumns div#columnCombined	{
+	width: 66%;
+	float: left;
+}
+
+body#dashBoard div#contentColumns div#columnCombined div#st-page-maincontent {
+	width: 50%;
+	float: left;
+}
+
+body#dashBoard div#contentColumns div#columnCombined div#columnMiddle {
+	width: 50%;
+	float: right;
 }
 
 body#settingsPage div#contentColumns div#st-page-maincontent	{
@@ -847,6 +919,11 @@ div#contentColumns div#st-page-maincontent p {
 	color: #000000;
 	line-height: 18px;
 	margin-top: 20px;
+}
+
+body#dashBoard div#contentColumns div#st-page-maincontent p {
+	line-height: 15px;
+
 }
 
 div#contentColumns div#st-page-maincontent em {
@@ -900,13 +977,24 @@ div#contentColumns div#st-page-boxes	{
 	float: right;
 }
 
-body#dashboard div#contentColumns div#st-page-boxes	{
+body#workSpace div#contentColumns div#st-page-boxes	{
 	width: 48%;
 	float: right;
 	margin-right: 15px;
 }
 
-* html body#dashboard div#contentColumns div#st-page-boxes {
+
+body#dashBoard div#contentColumns div#st-page-boxes	{
+	width: 30%;
+	float: right;
+	margin-right: 13px;
+}
+
+* html body#workSpace div#contentColumns div#st-page-boxes {
+       margin-right: 8px;
+}
+
+* html body#dashBoard div#contentColumns div#st-page-boxes {
        margin-right: 8px;
 }
 
@@ -951,19 +1039,19 @@ div.widgetTan {
 	float: right;
 }
 
-body#dashboard div.widget,body#settingsPage div.widget {
+body#workSpace div.widget,body#settingsPage div.widget,body#dashBoard div.widget {
 	background: url(../images/dashWidgetTop.png) no-repeat top left;
 	margin-right: 0px;
 }
 
 
-body#dashboard div#contentColumns div#st-page-maincontent div.widget,body#settingsPage div#contentColumns div#st-page-maincontent div.widget {
+body#workSpace div#contentColumns div#st-page-maincontent div.widget,body#dashBoard div#contentColumns div#st-page-maincontent div.widget,body#settingsPage div#contentColumns div#st-page-maincontent div.widget {
 	float: left;
 	margin: 10px 0 0 0;
 	width: 100%; 
 }
 
-body#dashboard div#contentColumns div#st-page-boxes div.widget,body#settingsPage div#contentColumns div#st-page-boxes div.widget {
+body#workSpace div#contentColumns div#st-page-boxes div.widget,body#dashBoard div#contentColumns div#st-page-boxes div.widget,body#settingsPage div#contentColumns div#st-page-boxes div.widget {
 	width: 100%;
 }
 
@@ -978,7 +1066,7 @@ div.widgetTan div.widgetHeader {
 	background: url(../images/widgetTanHeader.png) no-repeat top right;
 }
 
-body#dashboard div.widget div.widgetHeader,body#settingsPage div.widget div.widgetHeader {
+body#workSpace div.widget div.widgetHeader,body#dashBoard div.widget div.widgetHeader,body#settingsPage div.widget div.widgetHeader {
 	height: 35px;
 	background: url(../images/dashWidgetHeader.png) no-repeat top right;
 }
@@ -991,7 +1079,7 @@ div.widget div.widgetHeader h4 {
 }
 
 
-body#dashboard div.widget div.widgetHeader h4,div.widgetTan div.widgetHeader h4,body#settingsPage  div.widget div.widgetHeader h4 {
+body#workSpace div.widget div.widgetHeader h4,body#dashBoard div.widget div.widgetHeader h4,div.widgetTan div.widgetHeader h4,body#settingsPage  div.widget div.widgetHeader h4 {
 	line-height: 35px;
 	color: #505156;
 	font-weight: normal;
@@ -1004,7 +1092,7 @@ body#settingsPage  div.widget div.widgetHeader h4 {
 	}
 
 
-* html body#dashboard div.widget div.widgetHeader h4,body#settingsPage div.widget div.widgetHeader h4 {
+* html body#workSpace div.widget div.widgetHeader h4,body#settingsPage div.widget div.widgetHeader h4 {
        margin-top: 6px;
 }
 
@@ -1016,7 +1104,7 @@ div.widgetTan div.widgetHeader h4 {
 } 
 
 
-body#dashboard div.widget div.widgetHeader h4 img,body#settingsPage div.widget div.widgetHeader h4 img {
+body#workSpace div.widget div.widgetHeader h4 img,body#dashBoard div.widget div.widgetHeader h4 img,body#settingsPage div.widget div.widgetHeader h4 img {
 	vertical-align: middle;
 	margin-right: 10px;
 }
@@ -1039,6 +1127,10 @@ div.widgetContent p {
 
 
 
+body#dashBoard div.widgetContent p {
+	line-height: 15px;
+}
+
 div.widgetTan div.widgetContent {
 	padding-bottom: 10px;
 }
@@ -1053,7 +1145,7 @@ div.widgetContent ul.dots li {
 	margin-left: 18px;
 }
 
-body#dashboard div.widget div.widgetContent,div.widgetTan div.widgetContent,body#settingsPage div.widget div.widgetContent  {
+body#workSpace div.widget div.widgetContent,body#dashBoard div.widget div.widgetContent,div.widgetTan div.widgetContent,body#settingsPage div.widget div.widgetContent  {
 	border-left: #c3c3c5 1px solid;
 	background: url(../images/dashWidgetRight.png) repeat-y top right;
 }
@@ -1104,7 +1196,7 @@ div.widgetTan div.widgetBottom {
 	height: 10px;
 }
 
-body#dashboard div.widget div.widgetBottom,body#settingsPage div.widget div.widgetBottom {
+body#workSpace div.widget div.widgetBottom,body#dashBoard div.widget div.widgetBottom,body#settingsPage div.widget div.widgetBottom {
 	background: url(../images/dashWidgetBottom.png) no-repeat left bottom;
 }
 
@@ -1118,11 +1210,11 @@ div.widgetTan div.widgetBottomRight {
 	background: url(../images/widgetTanBottomRight.png) no-repeat bottom right;
 }
 
-body#dashboard div.widget div.widgetBottomRight,body#settingsPage div.widget div.widgetBottomRight {	
+body#workSpace div.widget div.widgetBottomRight,body#dashBoard div.widget div.widgetBottomRight,body#settingsPage div.widget div.widgetBottomRight {	
 	background: url(../images/dashWidgetBottomRight.png) no-repeat bottom right;
 }
 
-* html body#dashboard div.widget div.widgetBottomRight,body#settingsPage div.widget div.widgetBottomRight {
+* html body#workSpace div.widget div.widgetBottomRight,body#dashBoard div.widget div.widgetBottomRight,body#settingsPage div.widget div.widgetBottomRight {
        margin-top: -3px;
 }
 
@@ -1249,7 +1341,255 @@ div.dashNewPage a {
 	
 }
 
+
+
+div.widgetContent div#profile {
+	width: 99%;
+	margin-left: 14px;
+	text-align: left;
+	line-height: 16px;
+	color: #666;
+	padding-top: 10px;
+}
+
+
+div.widgetContent div#profile dl.mainInfo {
+	float: left;
+	margin-left: 15px;
+	
+}
+
+div.widgetContent div#profile dl dt {
+	font-weight: bold;
+	font-size: 11px;
+	text-transform: uppercase;
+}
+
+
+div.widgetContent div#profile dl.mainInfo dt {
+	font-size: 13px;
+	text-transform: capitalize;
+	}
+	
+img.bigAvatar {
+	width: 62px;
+	height: 62px;
+	border: #c5c5c5 1px solid;
+	float: left;
+} 
+
+
+div.widget div.widgetContent div.peopleList {
+	width: 99%;
+	text-align: left;
+	margin-left: 0;
+	
+}
+
+div.widget div.widgetContent div.peopleList ul {
+	width: 100%;
+	margin-left:0px;
+}
+
+
+div.peopleList ul li {
+	width: 100%;
+	line-height: 43px;
+	color: #005295;
+}
+
+
+div.peopleList ul li.oddRow {
+	background: #F3F3F3;
+}
+
+
+div.peopleList ul li img {
+	margin-left: 14px;
+	position: relative;
+	top: 9px;
+	}
+
+div.peopleList ul li a {
+	margin-left: 14px;
+	line-height: 43px;
+}
+
+div.peopleList ul input {
+	margin-left: 17px;
+	vertical-align: middle;
+}
+
+
+div.widgetContent div.tagWidget {
+	width: 100%;
+	text-align: left;
+	margin-left: 14px;
+	width: 92%;
+}
+
+
+div.widgetContent div.tagWidget a { 
+	text-decoration: none;
+}
+
+div.widgetContent div.tagWidget a.cloudOne { 
+	font-size: 10px;
+}
+
+div.widgetContent div.tagWidget a.cloudTwo { 
+	font-size: 14px;
+}
+
+div.widgetContent div.tagWidget a.cloudThree { 
+	font-size: 20px;
+}
+div.widgetContent div.tagWidget a.cloudFour { 
+	font-size: 26px;
+}
+
+div.widgetContent div.workList {
+	width: 100%;
+	text-align: left;
+	margin: 0 auto;
+}
+
+
+div.widget div.widgetContent div.workList ul {
+	width: 99%;
+	margin-left: 0;
+}
+
+
+div.widgetContent div.workList ul li {
+	width: 100%;
+	line-height: 20px;
+	text-indent: 14px;
+}
+
+
+div.widgetContent div.workList ul li.oddRow {
+	background: #f3f3f3;
+}
+
+
+
+
 /* widget End*/
+
+/* my content widget Start */
+
+div.widgetContent div#myContent h4 {
+	
+	
+	float:left;
+font-size:16px;
+line-height: 24px;
+margin-left:16px;
+}
+
+div#myContent div.commentInfo {
+	margin-top: 10px;
+}
+
+
+div#myContent div.commentInfo img {
+	float: left;
+	clear: none;
+	margin: 5px 0 0 17px;
+
+}
+
+div#myContent div.commentInfo ul {
+	float: left;
+	clear: none;
+	margin: 0 0 0 5px;
+} 
+
+div.widgetContent div.border {
+	width: 97%;
+	border-bottom: #cacaca 1px dotted;
+	clear: both; 
+	margin: 0 auto 10px;
+	height: 10px;
+	
+}
+
+div.widgetContent div#calendarControl {
+	text-align: center;
+}
+
+div.widgetContent div#calendarControl ul {
+	margin-top: 10px;
+	width: 100%;
+	float: left;
+	margin-left: 14px;
+}
+
+div.widgetContent div#calendarControl ul li.previous {
+	float: left;
+}
+
+div.widgetContent div#calendarControl ul li.previous a {
+	background: url(../images/previousArrow.png) no-repeat center left;
+	padding-left: 15px;
+}
+
+div.widgetContent div#calendarControl ul li.next {
+	float: right;
+	margin-right: 34px;
+}
+
+div.widgetContent div#calendarControl ul li.next a {
+	background: url(../images/nextArrow.png) no-repeat center right;
+	padding-right: 15px;
+}
+
+
+
+
+
+	
+	div.widgetHeader a.settings {
+		background: url(../images/settingsIcon.png) no-repeat top left;
+		width: 15px;
+		height: 15px;
+		display: block;
+		margin-right: 4px;
+		position: relative;
+		top: 12px;
+		float: right;
+		text-indent: -9999px;
+	}
+	
+	div.widgetHeader a.minimize {
+		background: url(../images/minIcon.png) no-repeat top left;
+		width: 15px;
+		height: 15px;
+		display: block;
+		margin-right: 4px;
+		position: relative;
+		top: 12px;
+		float: right;
+		text-indent: -9999px;
+	}
+	
+	div.widgetHeader a.close {
+		background: url(../images/closeIcon.png) no-repeat top left;
+		width: 15px;
+		height: 15px;
+		display: block;
+		margin-right: 4px;
+		position: relative;
+		top: 12px;
+		float: right;
+		text-indent: -9999px;
+		margin-right: 17px;
+	}
+
+
+
+/* my content widget End */
 
 /* dataTable Start */
 

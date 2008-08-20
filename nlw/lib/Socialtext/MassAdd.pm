@@ -91,10 +91,12 @@ sub users {
                 $added_user++;
             };
             my $err = $@;
-            if ($err and $err =~ m/is not a valid email address/) {
-                my $msg = loc("Line [_1]: [_2]", $line, loc("email is a required field, but could not be parsed."));
-                st_log->error($msg);
-                $fail_cb->($msg);
+            if (my $e = Exception::Class->caught('Socialtext::Exception::DataValidation')) {
+                foreach my $m ($e->messages) {
+                    my $msg = loc("Line [_1]: [_2]", $line, $m);
+                    st_log->error($msg);
+                    $fail_cb->($msg);
+                }
                 next LINE;
             }
             elsif ($err) {

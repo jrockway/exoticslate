@@ -63,7 +63,7 @@ sub init {
 
     my $ws = Socialtext::Workspace->new( name => $self->{workspace} );
     unless ($ws) {
-        die "The $self->{workspace} doesn't exist!\n";
+        die "The $self->{workspace} workspace isn't installed\n";
     }
     my $skin = $ws->skin_name();
 

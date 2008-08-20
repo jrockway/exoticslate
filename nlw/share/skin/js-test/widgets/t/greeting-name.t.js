@@ -15,6 +15,7 @@ part1 = function() {
         username: t.username,
         email_address: t.email_address,
         password: 'd3vnu11l',
+        workspace: 'admin',
         callback: part2
     });
 }

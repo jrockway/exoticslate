@@ -12,7 +12,35 @@ proto.init = function() {
     this.asyncId = 0;
 }
 
+/*
+Create a new user and optionally add to a workspace.
+
+- params:
+  - username
+  - password
+  - email_address
+  - workspace (optional)
+  - callback: required function of what to do afterwards
+*/
 proto.create_user = function(params) {
+    var add_to_workspace = function() {
+        $.ajax({
+            url: "/data/workspaces/" + params.workspace + '/users',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                username: params.username,
+                rolename: "member",
+                send_confirmation_invitation: 0
+            }),
+            success: params.callback
+        });
+    }
+
+    var callback = params.workspace
+        ? add_to_workspace
+        : params.callback;
+
     $.ajax({
         url: "/data/users",
         type: 'POST',
@@ -22,7 +50,7 @@ proto.create_user = function(params) {
             password: params.password,
             email_address: params.email_address
         }),
-        success: params.callback
+        success: callback
     });
 }
 

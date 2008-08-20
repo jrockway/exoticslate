@@ -255,6 +255,17 @@ sub postHandler {
         delete $headers{$k} unless defined $v;
     }
 
+    # Force apache 1.x to not send an empty "Transfer-Encoding: chunked" response.
+    # 204 and 205 responses *must not* have a message-body, according to RFC 2616.
+    if ($headers{'-status'} =~ /^20[45]/ ||
+        !defined($$resultref) ||
+        (!ref($$resultref) && length($$resultref) == 0)) 
+    {
+        $$resultref = undef;
+        delete $headers{$_} for (grep /^-?content[-_]length$/i, keys %headers);
+        $headers{'-content-length'} = 0; # forces a non-T-E response
+    }
+
     # Reset headers to our cleaned set.
     $self->header(%headers);
 

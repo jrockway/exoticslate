@@ -36,11 +36,11 @@ sub create {
 
     unless ($opts{email_address} =~ m/@/) {
         data_validation_error(
-            error => ["$opts{email_address} is not a valid email address"]);
+            errors => ["$opts{email_address} is not a valid email address"]);
     }
     if ($opts{email_address} =~ m/^duplicate/) {
         data_validation_error(
-            error => ["The email address you provided ($opts{email_address}) "
+            errors => ["The email address you provided ($opts{email_address}) "
                       . "is already in use."],
         );
     }

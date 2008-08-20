@@ -33,8 +33,8 @@ sub create {
     my $class = shift;
     my %opts = @_;
     die 'is not a valid email address' unless $opts{email_address} =~ m/@/;
+    die "e-mail address already in use\n" if $opts{email_address} =~ m/^duplicate/;
     my $user = Socialtext::MockBase::new($class, %opts);
-
 }
 
 sub confirm_email_address {}

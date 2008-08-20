@@ -25,7 +25,7 @@ use Socialtext::CLI;
 
 use Cwd;
 
-plan tests => 300;
+plan tests => 303;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -322,6 +322,32 @@ MASS_ADD_USERS: {
             ok $profile, '... ST People profile was found';
             is $profile->position, 'u_position', '... ... position was updated';
         }
+    }
+
+    # failure; email in use by another user
+    email_in_use_by_another_user: {
+        # create CSV file, using e-mail from a known existing user
+        my $csvfile = Cwd::abs_path(
+            (File::Temp::tempfile(SUFFIX=>'.csv', OPEN=>0))[1]
+        );
+        write_file $csvfile,
+            join(',', qw(csv_email_clash devnull1@socialtext.com John Doe passw0rd));
+
+        # make sure that the user really does exist
+        my $user = Socialtext::User->new( email_address => 'devnull1@socialtext.com' );
+        ok $user, 'user does exist with clashing e-mail address';
+
+        # do mass-add
+        expect_failure(
+            sub {
+                Socialtext::CLI->new(
+                    argv => ['--csv', $csvfile],
+                )->mass_add_users();
+            },
+            qr/Line 1: The email address you provided \(devnull1\@socialtext.com\) is already in use./,
+            'mass-add-users does not add user if email in use'
+        );
+        unlink $csvfile;
     }
 
     # failure; no CSV file provided

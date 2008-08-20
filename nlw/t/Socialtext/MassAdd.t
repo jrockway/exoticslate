@@ -12,7 +12,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 44;
+    plan tests => 46;
 }
 
 use mocked 'Socialtext::People::Profile';
@@ -282,6 +282,24 @@ EOT
         'correct failure message';
 }
 
-# Remaining to test
-# * file is misformatted - tab sep, junk values
-# * username is missing
+Bogus_csv: {
+    my $bad_csv = <<"EOT";
+This line isn't CSV but we're going to try to parse/process it anyways
+lechuck\tghost\@lechuck.com\tGhost Pirate\tLeChuck\tpassword\tGhost\tGhost Pirates Inc\tNetherworld\t\t\t
+$PIRATE_CSV
+EOT
+    my @successes;
+    my @failures;
+    Socialtext::MassAdd->users(
+        csv => $bad_csv,
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+
+    is_deeply \@failures,
+        ['Line 1: could not be parsed.  Skipping this user.',
+         'Line 2: could not be parsed.  Skipping this user.',
+        ],
+        'correct failure message';
+    is_deeply \@successes, ['Added user guybrush'], 'continued on to add next user';
+}

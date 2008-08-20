@@ -21,11 +21,13 @@ sub users {
     my $pass_cb = delete $opts{pass_cb} or die "pass_cb is mandatory!";
     my $fail_cb = delete $opts{fail_cb} or die "fail_cb is mandatory!";
 
-    my @lines = split "\n", $csv;
+    my @required_fields = qw/username email_address/;
+    my @user_fields = qw/first_name last_name password/;
     my @profile_fields
         = qw/position company location work_phone mobile_phone home_phone/;
-    my @user_fields = qw/first_name last_name password/;
+
     my $parser = Text::CSV_XS->new();
+    my @lines = split "\n", $csv;
     my $line = 0;
   LINE:
     for my $user_record (@lines) {
@@ -33,7 +35,8 @@ sub users {
 
         # parse the next line, choking if its not valid.
         my $parsed_ok = $parser->parse($user_record);
-        unless ($parsed_ok) {
+        my @fields    = $parser->fields();
+        unless ($parsed_ok and (scalar @fields >= scalar @required_fields)) {
             my $msg = loc("Line [_1]: could not be parsed.  Skipping this user.", $line);
             st_log->error($msg);
             $fail_cb->($msg);
@@ -42,7 +45,7 @@ sub users {
 
         # extract field data from the parsed line
         my ($username, $email, $first_name, $last_name, $password, @profile)
-            = map { defined $_ ? $_ : '' } $parser->fields();
+            = map { defined $_ ? $_ : '' } @fields;
         my @userdata = ($first_name, $last_name, $password);
 
         # sanity check the parsed data, to make sure that fields we *know* are

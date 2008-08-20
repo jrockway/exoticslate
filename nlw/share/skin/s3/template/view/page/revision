@@ -11,6 +11,22 @@
       <li><a href="[% script_name %]?action=revision_list;page_id=[% page_uri %]">
         [% loc('All Revisions') %]</a>
       </li>
+      <li><a href="[% script_name %]?action=revision_view;page_name=[% page_uri %];revision_id=[% revision_id %];mode=[% IF mode != 'source' %]source[% END %]">
+        [% IF mode == 'source' %]
+          [% loc('Normal View') %]
+        [% ELSE %]
+          [% loc('Source View') %]
+        [% END %]
+      </a></li>
+      [% IF checker.check_permission('edit') %]
+      <li><form action="[% script_name %]" method="post">
+        <input type="hidden" name="action" value="revision_restore" />
+        <input type="hidden" name="page_name" value="[% page_uri %]" />
+        <input type="hidden" name="revision_id" value="[% revision_id %]" />
+        &nbsp;
+        <input id="st-revision-restorebutton" type="submit" value="[% loc("Restore Revision [_1]", human_readable_revision) %]" />
+      </form></li>
+      [% END %]
     </ul>
   </div><!-- controlsLeft END -->
   <div id="controlsRight">

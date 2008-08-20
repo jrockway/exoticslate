@@ -46,6 +46,8 @@
       PROCESS compare_revisions; 
     END %]
     </ul>
+    <!-- Filler here to get the neccessary height padding for the compare button. -->
+    <div id="pageAttribution"><br/><br/></div>
   </div><!-- bottomButtons -->
 </div><!-- contentContainer -->  
 [% END %]

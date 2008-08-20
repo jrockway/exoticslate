@@ -82,23 +82,44 @@ proto.open_iframe = function(url, options) {
     if (! options)
         options = {};
 
+    var callback = options.callback || this.runTests;
+
     this.beginAsync({internal: true});
 
     this.iframe = $("<iframe />").prependTo("body").get(0);
     this.iframe.contentWindow.location = url;
     var $iframe = $(this.iframe);
 
+    $iframe.height(options.h || 200);
+    $iframe.width(options.w || 900);
+
     var self = this;
     $iframe.one("load", function() {
         self.doc = self.iframe.contentDocument;
-        if (self.runTests)
-            self.runTests.apply(self, [self]);
+        self.$ = self.iframe.contentWindow.jQuery;
+
+        if (callback)
+            callback.apply(self, [self]);
         
         self.endAsync({internal: true});
     });
+}
 
-    $iframe.height(options.h || 200);
-    $iframe.width(options.w || 900);
+proto.setup_one_widget = function(url, callback) {
+    var self = this;
+    var setup_widget = function() {
+        self.iframe.contentWindow.location = url;
+        $(self.iframe).one("load", function() {
+            var iframe = self.$('iframe').get(0);
+            var widget = {
+                'iframe': iframe,
+                '$': iframe.contentWindow.jQuery
+            };
+            if (callback)
+                callback.apply(self, [widget]);
+        });
+    }
+    this.open_iframe("/?action=clear_widgets", {callback: setup_widget});
 }
 
 proto.beginAsync = function(params) {
@@ -149,10 +170,6 @@ proto.elements_do_not_overlap = function(selector1, selector2, name) {
     }
 
     this.pass(name);
-}
-
-proto.$ = function(selector) {
-    return this.iframe.contentWindow.jQuery( selector );
 }
 
 proto._get_selector_element = function(selector) {

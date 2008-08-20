@@ -429,7 +429,7 @@ sub _invite_users {
 
 sub _split_email_addresses {
     my $self = shift;
-    return grep /\S/, split(/[,\r\n]+/, $_[0]);
+    return grep /\S/, split(/[,\r\n]+\s*/, $_[0]);
 }
 
 sub _parse_email_address {

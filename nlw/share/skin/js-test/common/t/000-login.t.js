@@ -4,11 +4,13 @@ var t = new Test.Visual();
 
 t.plan(1);
 
-t.manualAsync = true;
+t.beginAsync();
 
-t.login(function() {
-    t.pass('Logged in...');
-    t.endAsync();
+t.login({
+    callback: function() {
+        t.pass('Logged in...');
+        t.endAsync();
+    }
 });
 
 })();

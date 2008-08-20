@@ -9,19 +9,44 @@ proto.init = function() {
     Test.Base.prototype.init.call(this);
     this.block_class = 'Test.Visual.Block';
     this.doc = window.document;
-    this.manualAsync = false;
+    this.asyncId = 0;
 }
 
-proto.login = function(cb) {
-    this.asyncId = this.builder.beginAsync(15000);
+proto.create_user = function(params) {
     $.ajax({
-        url: "/nlw/submit/login",
+        url: "/data/users",
         type: 'POST',
-        data: {
-            'username': 'devnull1@socialtext.com',
-            'password': 'd3vnu11l'
-        },
-        success: cb
+        contentType: 'application/json',
+        data: JSON.stringify({
+            username: params.username,
+            password: params.password,
+            email_address: params.email_address
+        }),
+        success: params.callback
+    });
+}
+
+proto.login = function(params) {
+    if (!params) params = {};
+
+    var username = (params.username || 'devnull1@socialtext.com');
+    var password = (params.password || 'd3vnu11l');
+
+    this.beginAsync({internal: true});
+
+    $.ajax({
+        url: "/nlw/submit/logout",
+        complete: function() {
+            $.ajax({
+                url: "/nlw/submit/login",
+                type: 'POST',
+                data: {
+                    'username': username,
+                    'password': password
+                },
+                success: params.callback
+            });
+        }
     });
 }
 
@@ -29,7 +54,7 @@ proto.open_iframe = function(url, options) {
     if (! options)
         options = {};
 
-    this.asyncId = this.builder.beginAsync(15000);
+    this.beginAsync({internal: true});
 
     this.iframe = $("<iframe />").prependTo("body").get(0);
     this.iframe.contentWindow.location = url;
@@ -41,15 +66,27 @@ proto.open_iframe = function(url, options) {
         if (self.runTests)
             self.runTests.apply(self, [self]);
         
-        if (! self.manualAsync)
-            self.endAsync();
+        self.endAsync({internal: true});
     });
 
     $iframe.height(options.h || 200);
     $iframe.width(options.w || 900);
 }
 
-proto.endAsync = function() {
+proto.beginAsync = function(params) {
+    if (!params) params = {};
+    if (!params.timeout) params.timeout = 30000;
+    if (this.asyncId) return;
+
+    if (! params.internal)
+        this.userAsync = true;
+
+    this.asyncId = this.builder.beginAsync(params.timeout);
+}
+
+proto.endAsync = function(params) {
+    if (!params) params = {};
+    if (params.internal && this.userAsync) return;
     this.builder.endAsync(this.asyncId);
 }
 

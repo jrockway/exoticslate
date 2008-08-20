@@ -345,19 +345,16 @@ MASS_ADD_USERS: {
             join(' ', qw{csvtest1 csvtest1@example.com John Doe passw0rd position company location work_phone mobile_phone home_phone}) . "\n";
 
         # do mass-add
-    TODO: {
-        local $TODO = "doesn't (yet) sanity check CSV before parsing";
         expect_failure(
             sub {
                 Socialtext::CLI->new(
                     argv => ['--csv', $csvfile]
                 )->mass_add_users();
             },
-            qr/\QThe file you provided could not be parsed\E/,
+            qr/\QLine 1: could not be parsed.  Skipping this user.\E/,
             'mass-add-users failed with invalid file'
         );
         unlink $csvfile;
-      }
     }
 }
 

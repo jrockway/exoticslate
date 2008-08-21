@@ -1,15 +1,23 @@
-// Class Test.Visual
-(function(className, $) {
-var proto = (Test.Visual = function() {
-    this.init.apply(this, arguments);
-    this.className = className;
-}).prototype = new Test.Base();
+(function($) { 
+
+var proto = Test.Base.newSubclass('Test.Visual');
 
 proto.init = function() {
     Test.Base.prototype.init.call(this);
     this.block_class = 'Test.Visual.Block';
     this.doc = window.document;
     this.asyncId = 0;
+}
+
+proto.is_no_harness = function() {
+    if (window.top.Test.Harness) {
+        this.builder.diag(
+            "Can't run test " + (this.builder.CurrTest + 1) + " in the harness"
+        );
+        this.builder.skip(arguments[2]);
+    }
+    else
+        this.is.apply(this, arguments);
 }
 
 /*
@@ -112,6 +120,7 @@ proto.login = function(params) {
                 success: function() {
                     self.call_callback(params.callback);
                 }
+
             });
         }
     });
@@ -250,31 +259,4 @@ proto._get_selector_element = function(selector) {
     return $result.get(0);
 }
 
-})('Test.Visual', jQuery);
-
-
-// Class Test.Visual.Block
-(function(className) {
-var proto = (Test.Visual.Block = function() {
-    this.init.apply(this, arguments);
-    this.className = className;
-}).prototype = new Test.Base.Block();
-
-proto.init = function() {
-    Test.Base.Block.prototype.init.call(this);
-    this.filter_object = new Test.Visual.Filter();
-}
-
-})('Test.Visual.Block');
-
-
-// Class Test.Visual.Filter
-(function(className) {
-var proto = (Test.Visual.Filter = function() {
-    this.init.apply(this, arguments);
-    this.className = className;
-}).prototype = new Test.Base.Filter();
-
-// Filter functions go here...
-
-})('Test.Visual.Filter');
+})(jQuery);

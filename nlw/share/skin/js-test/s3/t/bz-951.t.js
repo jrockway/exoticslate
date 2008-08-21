@@ -16,19 +16,19 @@ function step1() {
 }
 
 function step2() {
-    t.open_iframe("/admin/index.cgi?action=weblog_display&category=Recent+Changes", step3);
+    t.open_iframe("/admin/index.cgi?action=weblog_display&limit=1&category=Recent+Changes", step3);
 }
 
 function step3() {
     t.scrollTo(200);
-    t.is(
-        t.$("#st-page-boxes div.wiki strong").css("font-weight"),
+    t.is_no_harness(
+        t.$(".widget div.wiki strong").css("font-weight"),
         "bold",
         "*strong* is strong"
     );
 
-    t.is(
-        t.$("#st-page-boxes div.wiki em").css("font-style"),
+    t.is_no_harness(
+        t.$(".widget div.wiki em").css("font-style"),
         "italic",
         "_italic_ is italic"
     );

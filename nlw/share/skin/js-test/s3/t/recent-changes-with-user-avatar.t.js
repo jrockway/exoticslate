@@ -2,8 +2,8 @@
 
 var t = new Test.Visual();
 
-t.plan(1);
-// t.plan(2);
+// t.plan(1);
+t.plan(2);
 
 t.beginAsync(step1);
 
@@ -23,11 +23,11 @@ function step2() {
 
 // TODO Need to get this one to pass in the Harness:
 //
-//     t.is(
-//         t.$.curCSS( $avatar.get(0), "float")
-//         "none",
-//         "Make sure it's not floated to left or right."
-//     );
+    t.is_no_harness(
+        t.$.curCSS( $avatar.get(0), "float"),
+        "none",
+        "Make sure it's not floated to left or right."
+    );
 
     t.endAsync();
 };

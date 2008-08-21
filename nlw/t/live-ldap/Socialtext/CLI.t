@@ -6,7 +6,14 @@ use warnings;
 use File::Slurp qw(write_file);
 use Test::Output;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 36;
+use Test::Socialtext;
+
+BEGIN {
+    require Socialtext::People::Profile;
+    plan skip_all => 'People is not linked in' if ($@);
+    plan tests => 36;
+}
+
 fixtures( 'db', 'destructive' );
 
 use_ok 'Socialtext::CLI';

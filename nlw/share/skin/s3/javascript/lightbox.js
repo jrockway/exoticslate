@@ -90,9 +90,11 @@
     };
 
     $.fn.hideLightbox = function() {
-        $(opts.content).hide().appendTo('body');
-        $('#overlay').fadeOut()
-        $('#lightbox').hide();
-        $('body').css('overflow', 'visible');
+        if (opts) {
+            $(opts.content).hide().appendTo('body');
+            $('#overlay').fadeOut();
+            $('#lightbox').hide();
+            $('body').css('overflow', 'visible');
+        }
     };
 })(jQuery);

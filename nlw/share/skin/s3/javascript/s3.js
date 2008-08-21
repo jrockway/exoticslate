@@ -252,6 +252,7 @@ Page = {
             },
             complete: function () {
                 Page.refreshAttachments();
+                Page.refreshPageContent();
             }
         });
     },

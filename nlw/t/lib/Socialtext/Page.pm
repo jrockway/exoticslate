@@ -8,6 +8,7 @@ use unmocked 'Class::Field', 'field', 'const';
 
 field 'name';
 field 'id', -init => '$self->name';
+field 'uri', -init => '$self->id';
 
 const _MAX_PAGE_ID_LENGTH => 255;
 

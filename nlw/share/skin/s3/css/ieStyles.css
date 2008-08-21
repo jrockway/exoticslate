@@ -14,20 +14,3 @@ div.widget div.widgetBottom {
 div#controls div#st-editing-tools-edit ul li a {
 	margin-left: 12px;
 }
-
-html div#st-page-boxes {
-        position: absolute;
-}
-
-html div#mainWrap {
-        width: expression( (document.body.clientWidth * 0.9 > 805) ? '90%' : '805px' );
-}
-
-html body#workSpace div#mainWrap, html body#blog div#mainWrap, html body#dashBoard div#mainWrap {
-        width: expression( (document.body.clientWidth * 0.9 > 880) ? '90%' : '880px' );
-}
-
-html body#listPage div#mainWrap {
-        width: expression( (document.body.clientWidth * 0.9 > 885) ? '90%' : '885px' );
-}
-

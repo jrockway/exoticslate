@@ -4,7 +4,8 @@ use strict;
 use warnings;
 use Getopt::Long;
 use Fatal qw/open close/;
-use lib 'lib';
+use FindBin;
+use lib "$FindBin::Bin/../lib";
 use Socialtext::System qw/shell_run/;
 
 my $num = 100;

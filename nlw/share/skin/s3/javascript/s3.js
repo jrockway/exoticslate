@@ -128,13 +128,13 @@ Page = {
                 for (var i=0; i< tags.length; i++) {
                     var tag = tags[i];
                     $('#st-tags-listing').append(
-                        $('<li>').append(
-                            $('<a>')
+                        $('<li />').append(
+                            $('<a />')
                                 .html(tag.name)
                                 .attr('href', tag_url + tag.name),
 
                             ' ',
-                            $('<a href="#">')
+                            $('<a href="#" />')
                                 .html('<img src="/static/skin/common/images/delete.png" width="16" height="16" border="0" />')
                                 .attr('name', tag.name)
                                 .attr('alt', loc('Delete this tag'))
@@ -196,7 +196,7 @@ Page = {
                     var extractLink = '';
                     if (item.name.match(/\.(zip|tar|tar.gz|tgz)$/)) {
                         var attach_id = item.id;
-                        extractLink = $('<a href="#">')
+                        extractLink = $('<a href="#" />')
                             .html('<img src="/static/skin/common/images/extract.png" width="16" height="16" border="0" />')
                             .attr('name', item.uri)
                             .attr('alt', loc('Extract this attachment'))
@@ -206,15 +206,15 @@ Page = {
                             });
                     }
                     $('#st-attachment-listing').append(
-                        $('<li>').append(
-                            $('<a>')
+                        $('<li />').append(
+                            $('<a />')
                                 .html(item.name)
                                 .attr('title', loc("Uploaded by [_1] on [_2]. ([_3] bytes)", item.uploader, item.date, Page._format_bytes(item['content-length'])))
                                 .attr('href', item.uri),
                             ' ',
                             extractLink,
                             ' ',
-                            $('<a href="#">')
+                            $('<a href="#" />')
                                 .html('<img src="/static/skin/common/images/delete.png" width="16" height="16" border="0" />')
                                 .attr('name', item.uri)
                                 .attr('alt', loc('Delete this attachment'))
@@ -384,7 +384,7 @@ $(function() {
                             .show()
                             .html('')
                             .append(
-                                $('<span>')
+                                $('<span />')
                                     .attr(
                                         'class',
                                         'st-attachments-attach-listlabel'
@@ -504,7 +504,7 @@ $(function() {
             }
             else {
                 $.getScript(editor_uri);
-                $('<link>')
+                $('<link />')
                     .attr('href', nlw_make_s3_path('/css/wikiwyg.css'))
                     .attr('rel', 'stylesheet')
                     .attr('media', 'wikiwyg')

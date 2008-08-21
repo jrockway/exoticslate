@@ -195,13 +195,14 @@ Page = {
                     Page.attachmentList.push(item.name);
                     var extractLink = '';
                     if (item.name.match(/\.(zip|tar|tar.gz|tgz)$/)) {
+                        var attach_id = item.id;
                         extractLink = $('<a href="#">')
                             .html('<img src="/static/skin/common/images/extract.png" width="16" height="16" border="0" />')
                             .attr('name', item.uri)
                             .attr('alt', loc('Extract this attachment'))
                             .attr('title', loc('Extract this attachment'))
                             .bind('click', function () {
-                                Page.extractAttachment(item.id)
+                                Page.extractAttachment(attach_id);
                             });
                     }
                     $('#st-attachment-listing').append(
@@ -243,6 +244,7 @@ Page = {
         $.ajax({
             type: "POST",
             url: location.pathname,
+            cache: false,
             data: {
                 action: 'attachments_extract',
                 page_id: Socialtext.page_id,

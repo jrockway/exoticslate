@@ -1,6 +1,26 @@
 (function($){
     var opts;
 
+    var _getPageScroll = function() { 
+        var xScroll, yScroll;
+        
+        if (self.pageYOffset) {
+          yScroll = self.pageYOffset;
+          xScroll = self.pageXOffset;
+        }
+        else if (document.documentElement && document.documentElement.scrollTop) {  // Explorer 6 Strict.
+          yScroll = document.documentElement.scrollTop;
+          xScroll = document.documentElement.scrollLeft;
+        }
+        else if (document.body) {// All other Explorers.
+          yScroll = document.body.scrollTop;
+          xScroll = document.body.scrollLeft;
+        }
+
+        arrayPageScroll = [xScroll,yScroll];
+        return arrayPageScroll;
+    };
+
     $.hideLightbox = function() {
         $(this).hideLightbox();
     };
@@ -15,7 +35,7 @@
             $('<div id="lightbox">')
                 .css({
                     display: 'none',
-                    position: $.browser.msie ? 'absolute': 'fixed',
+                    position: 'absolute',
                     zIndex: 2001,
                     padding: 0,
                     background: '#fff',
@@ -45,14 +65,16 @@
                 .appendTo('body');
         }
 
+        var arrayPageScroll = _getPageScroll();
+
         $('#lightbox')
             .css('width', opts.width || '520px')
             .append($(opts.content).show())
             .css({
-                left: (($(window).width() -
-                        $('#lightbox').width()) / 2) + 'px',
-                top:  (($(window).height() -
-                        $('#lightbox').height()) / 2) + 'px'
+                left: (arrayPageScroll[0] + (($(window).width() -
+                        $('#lightbox').width()) / 2)) + 'px',
+                top:  (arrayPageScroll[1] + (($(window).height() -
+                        $('#lightbox').height()) / 2)) + 'px'
             });
 
         $('body').css('overflow', 'hidden');

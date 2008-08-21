@@ -5,11 +5,17 @@ Need skin.tgz and badskin.tgz to be in wikitest_files directory.
 
 | *Comment* | Test Case: Workspace Skin |  |
 | *Comment* | Need skin.tgz and badskin.tgz to be in %%wikitest_files%% |  |
+| *Comment* | Test Case: Workspace Skin - First check that no allow skin upload show no link |  |
 | setTimeout | 120000 |  |
+| st-admin | set-workspace-config --workspace %%workspace%% allows_skin_upload 0 | has been updated |
+| click_and_wait | link=Settings |  |
+| text_unlike | //body | Workspace Skin |
 | st-admin | set-workspace-config --workspace %%workspace%% allows_skin_upload 1 | has been updated |
 
 | *Comment* | Test Case: Workspace Skin Need skin.tgz and badskin.tgz in %%wikitest_files%% |  |
+| open_ok | /%%workspace%%/ |  |
 | click_and_wait | link=Settings |  |
+| text_like | Workspace Skin |  |
 | click_and_wait | link=Workspace Skin |  |
 | wait_for_element_visible_ok | link=Skin Customization Kit | 5000 |
 | wait_for_element_visible_ok | link=Socialtext Style Customization Guide | 5000 |

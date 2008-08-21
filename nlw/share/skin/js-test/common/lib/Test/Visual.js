@@ -60,6 +60,38 @@ proto.create_user = function(params) {
     });
 }
 
+/*
+Put a (new) page to a workspace.
+
+- params:
+  - email_address
+  - workspace
+  - page_name
+  - content
+  - callback: required function of what to do afterwards
+*/
+proto.put_page = function(params) {
+    var self = this;
+
+    var workspace = params.workspace;
+    var page_name = encodeURIComponent(params.page_name);
+
+    $.ajax({
+        url: "/data/workspaces/" + workspace + "/pages/" + page_name,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: params.content, 
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Content-Type", "text/x.socialtext-wiki");
+        },
+        success: function() {
+            if( $.isFunction(params.callback) )
+                self.call_callback(params.callback);
+        }
+    });
+}
+
+
 proto.login = function(params) {
     if (!params) params = {};
 

@@ -487,7 +487,7 @@ sub box_content_filled {
     }
 
     my $page = $self->hub->pages->new_from_name($title);
-    return $page->to_html;
+    return $page->to_html(($page->content||""), $page);
 }
 
 sub page_title {

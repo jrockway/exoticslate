@@ -931,6 +931,7 @@ body#dashBoard div#contentColumns div#st-page-maincontent p {
 
 }
 
+div#st-page-boxes div.widgetContent div.wiki em,
 div#contentColumns div#st-page-maincontent em {
 	font-size: 10px;
 	color: #000000;
@@ -940,6 +941,7 @@ div#contentColumns div#st-page-maincontent em {
 }
 
 
+div#st-page-boxes div.widgetContent div.wiki p strong,
 div#contentColumns div#st-page-maincontent p strong {
 	font-weight: bold;
 }

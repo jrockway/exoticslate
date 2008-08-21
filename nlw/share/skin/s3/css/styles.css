@@ -80,17 +80,22 @@ div.clear {
 	clear: both;
 }
 
-div#mainWrap {
+html div#mainWrap {
 	min-width: 720px;
+        /* IE6-specific hack */
+        _width: expression( (document.body.clientWidth * 0.9 > 805) ? '90%' : '805px' );
 }
 
-
-body#workSpace div#mainWrap,body#blog div#mainWrap,body#dashBoard div#mainWrap {
-       min-width: 795px;
+html body#workSpace div#mainWrap, html body#blog div#mainWrap, html body#dashBoard div#mainWrap {
+        min-width: 795px;
+        /* IE6-specific hack */
+        _width: expression( (document.body.clientWidth * 0.9 > 880) ? '90%' : '880px' );
 }
 
-body#listPage div#mainWrap {
+html body#listPage div#mainWrap {
 	min-width: 800px;
+        /* IE6-specific hack */
+        _width: expression( (document.body.clientWidth * 0.9 > 885) ? '90%' : '885px' );
 }
 
 div#mainWrap {
@@ -684,7 +689,7 @@ div#controls div#controlsRight {
 body#contentPage div#controls div#controlsRight,body#dashBoard div#controls div#controlsRight,body#settingsPage div#controls div#controlsRight {
 	background: url(../images/contentControlsRight.png) no-repeat top right;
 	height: 44px;
-	width: 250px !important;
+	width: 260px !important;
 }
 
 body#workSpace div#controls div#controlsRight {

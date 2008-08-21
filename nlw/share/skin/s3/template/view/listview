@@ -100,7 +100,7 @@
         [% IF summaries %]
           <span class="summary">[% row.Summary %]</span>
         [% END %]
-        <em>(<a href="#">[% row.revision_count %]</a> [% loc('Revisions') %])
+        <em>(<a href="/[% row.workspace_name || current_workspace.name %]/index.cgi?action=revision_list;page_name=[% row.page_uri %]">[% row.revision_count %]</a> [% loc('Revisions') %])
         [% loc('Last updated by') %] [% row.username | decorate('user_avatar') %] [% loc('on') %] [% row.DateLocal %]</em></td>
         </tr>
       [% END %]

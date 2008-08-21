@@ -28,15 +28,19 @@
 | type_ok | up_page_title | one_page_%%start_time%% |
 | click_ok | st-savebutton |  |
 | st-select-widget-frame | onepage |  |
+| pause | 2000 |  |
 | wait_for_element_present_ok | link=Edit this page |  |
+| pause | 2000 |  |
 | wait_for_text_present_ok | I have created a page called one_page_%%start_time%%. woot. |  |
+| pause | 2000 |  |
 | click_ok | link=Edit this page |  |
-| type_ok | editarea_%%onepage%% | mean mr mustard |
+| pause | 2000 |  |
+| type_ok | editarea%%onepage%% | mean mr mustard |
+| pause | 2000 |  |
 | wait_for_element_present_ok | link=Save |  |
 | wait_for_element_present_ok | link=Cancel |  |
 | click_ok | link=Save |  |
 | wait_for_text_present_ok | mean mr mustard |  |
-| st-empty-container |  |  |
 
 | *Comment* | Test Case: OnePage Widget Teardown |  |
 | st-admin | purge-page --workspace test-data --page created_page_%%start_time%% |  |

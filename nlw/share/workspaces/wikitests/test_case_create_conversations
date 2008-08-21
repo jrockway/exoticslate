@@ -2,6 +2,7 @@
 
 | *Comment* | test-workspace is %%workspace%% |
 | location_like | /%%workspace%%/index.cgi |
+| st-admin | create-user --email devnull2@socialtext.com --password %%password |
 | st-admin | add-member --email devnull2@socialtext.com --workspace test-data |
 
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |

@@ -1,11 +1,8 @@
-These work as-is
+* Fixture: SocialWidgets
 
 | include | [Test Case: Workspace Widget] |  |
 | include | [Test Case: RSS Feed Widget] | All not-commented-out tests pass |
 | include | [Test Case: Recent Changes Widget] |  |
 | include | [Test Case: Tag Cloud Widget] |  |
-
-These have a bug
-
 | include | [Test Case: My Conversations Widget] | This widget is currently broken in prod |
 | include | [Test Case: OnePage Widget] | The OnePageWiki Object is very broken in Prod |

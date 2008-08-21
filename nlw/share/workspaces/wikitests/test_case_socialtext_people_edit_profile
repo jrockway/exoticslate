@@ -8,9 +8,12 @@
 | click_and_wait | link=Profile | 20000 |
 | st-name-widget | 1 | profile |
 | st-select-widget-frame | profile |  |
-| pause | 20000 |  |
-| click_ok | link=(Edit) | 20000 |
-| wait_for_element_visible_ok | link=Profile | 20000 |
+| pause | 3000 |  |
+| click_ok | link=(Edit) |  |
+| pause | 1000 |  |
+| select-frame | relative=top |  |
+| st-name-widget | 1 | editme |
+| st-select-widget-frame | editme |  |
 | type_ok | photo-url | http://www.xndev.com/matt_im_avatar.jpg |
 | pause | 2000 |  |
 | click_and_wait | photo-from-web-button | 20000 |

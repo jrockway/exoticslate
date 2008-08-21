@@ -14,11 +14,11 @@
 | st-widget-title-like | my_conversations | Recent C |
 | pause | 15000 |  |  |
 | st-select-widget-frame | my_conversations |  |
-| wait_for_element_present_ok | link=My Conversations |  |
-| wait_for_element_present_ok | link=My Colleagues |  |
-| wait_for_element_present_ok | link=All Changes |  |
-| text_like | tl_0 | devnull2\@socialtext.com edited created_page |
-| text_like | t1_0 | devnull2\@socialtext.com commented on Jabberwocky in Canonical Test Data Set |
-| text_like | t1_0 | devnull2\@socialtext.com commented on Slithy in Canonical Test Data Set |
+| text_like | //body | My Conversations |
+| text_like | //body | My Colleagues |  |
+| text_like | //body | All Changes |
+| text_like | //body | devnull2 edited created_page |
+| text_like | //body | devnull2 commented on Jabberwocky in Canonical Test Data Set |
+| text_like | //body | devnull2 commented on Slithy in Canonical Test Data Set |
 
 | *Comment* | Test Case: My Conversations Widget COMPLETED |  |

@@ -80,15 +80,16 @@ div.clear {
 	clear: both;
 }
 
-html div#mainWrap {
+div#mainWrap {
 	min-width: 720px;
 }
 
-html body#workSpace div#mainWrap, html body#blog div#mainWrap, html body#dashBoard div#mainWrap {
-        min-width: 795px;
+
+body#workSpace div#mainWrap,body#blog div#mainWrap,body#dashBoard div#mainWrap {
+       min-width: 795px;
 }
 
-html body#listPage div#mainWrap {
+body#listPage div#mainWrap {
 	min-width: 800px;
 }
 
@@ -683,7 +684,7 @@ div#controls div#controlsRight {
 body#contentPage div#controls div#controlsRight,body#dashBoard div#controls div#controlsRight,body#settingsPage div#controls div#controlsRight {
 	background: url(../images/contentControlsRight.png) no-repeat top right;
 	height: 44px;
-	width: 260px !important;
+	width: 250px !important;
 }
 
 body#workSpace div#controls div#controlsRight {
@@ -925,7 +926,6 @@ body#dashBoard div#contentColumns div#st-page-maincontent p {
 
 }
 
-div#st-page-boxes div.widgetContent div.wiki em,
 div#contentColumns div#st-page-maincontent em {
 	font-size: 10px;
 	color: #000000;
@@ -935,7 +935,6 @@ div#contentColumns div#st-page-maincontent em {
 }
 
 
-div#st-page-boxes div.widgetContent div.wiki p strong,
 div#contentColumns div#st-page-maincontent p strong {
 	font-weight: bold;
 }

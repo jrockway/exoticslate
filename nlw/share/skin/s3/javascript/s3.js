@@ -504,11 +504,10 @@ $(function() {
             }
             else {
                 $.getScript(editor_uri);
-                $('<link />')
+                var lnk = $('link[rel=stylesheet][media=screen]');
+                lnk.clone()
                     .attr('href', nlw_make_s3_path('/css/wikiwyg.css'))
-                    .attr('rel', 'stylesheet')
                     .attr('media', 'wikiwyg')
-                    .attr('type', 'text/css')
                     .appendTo('head');
             }
             $.ajaxSettings.cache = false;

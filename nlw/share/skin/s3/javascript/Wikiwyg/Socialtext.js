@@ -510,6 +510,10 @@ proto.enable_button = function(mode_name) {
 proto.button_enabled_func = function(mode_name) {
     var self = this;
     return function() {
+        if (mode_name == self.current_mode.classname) {
+            /* Already in the correct mode -- No need to switch */
+            return false;
+        }
         self.message.clear();
         self.switchMode(mode_name);
         for (var mode in self.modeButtonMap) {

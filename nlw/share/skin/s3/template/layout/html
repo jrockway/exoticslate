@@ -74,11 +74,9 @@
       <div id="mainNav" class="st-wiki-subnav-dashboard">
         <div id="homeLink"><a id="st-home-link" href="[% home_href | decorate('home_href') %]">[% loc("Home") %]</a></div>
         <ul id="st-wiki-subnav-left">
-          [% IF wiki.current_workspace %]
           <li><a id="st-wiki-subnav-link-whats-new" href="?action=recent_changes">[% loc("What's New") %]</a></li>
           <li><a id="st-wiki-subnav-link-weblogs" href="?action=weblog_display">[% loc("Weblogs") %]</a></li>
-          [% END %]
-          <li><a id="st-wiki-subnav-link-profile" href="/?profile">[% user.userid | decorate('user_name') %]</a></li>
+          <li><a id="st-wiki-subnav-link-profile" href="/?profile">[% loc("Profile") %]</a></li>
           <li><a id="st-wiki-subnav-link-people" href="/?all_people">[% loc("People") %]</a></li>
           <li><a id="st-wiki-subnav-link-people" href="/?all_tags">[% loc("Tags") %]</a></li>
         </ul>

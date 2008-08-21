@@ -96,7 +96,19 @@ proto.open_iframe = function(url, callback, options) {
     var $iframe = $(this.iframe);
 
     $iframe.height(options.h || 200);
-    $iframe.width(options.w || 900);
+    $iframe.width(options.w || "100%");
+
+    var height = $iframe.height();
+    var width = $iframe.width();
+
+    $(
+        '<div style="padding-bottom: 5px">' +
+        '<b>Size: ' + height + 'x' + width + ' &nbsp;&nbsp;&nbsp;' + 
+        'URL: ' +
+        '<input style="width:400px" class="iframe_location" value="' +
+        url +'" />' +
+        '</b></div>'
+    ).prependTo("body");
 
     var self = this;
     $iframe.one("load", function() {
@@ -126,6 +138,7 @@ proto.setup_one_widget = function(url, callback) {
 }
 
 proto.call_callback = function(callback, args) {
+    if (!args) args = [];
     if (! this.asyncId)
         throw("You forgot to call beginAsync()");
     callback.apply(this, args);

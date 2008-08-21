@@ -7,7 +7,7 @@ t.plan(2);
 if (jQuery.browser.msie)
     t.skipAll("{bz: 855} isa bug on Mozilla browsers. On IE, those two elements are not overlapping but still look bad in other ways.");
 
-t.beginAsync(10000);
+t.beginAsync();
 
 var begin = function() {
     t.open_iframe("/admin/index.cgi?action=recent_changes", step1);

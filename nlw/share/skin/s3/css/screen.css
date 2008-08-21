@@ -2,6 +2,15 @@
 
 /* overloads */
 
+/* Hacks to get around there not being an avatar on the araucaria version */
+body#dashBoard #controlsRight div#frame {
+    margin-top: 7px;
+    background:none;
+}
+body#dashBoard #controlsRight .welcome {
+    margin-top: 7px;
+}
+
 div#contentContainer {
     padding: 0 0 0px 20px;
 }
@@ -37,6 +46,33 @@ div#bottomButtons div#pageAttribution {
 
 div.widget ul.widgetButton li a.addTagButton {
     width: 87px;
+}
+
+div.widgetWrapper {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+}
+
+div.placeholder {
+    margin-top: 10px;
+}
+
+#columnMiddle div.widgetWrapper {
+    padding-left: 40px;
+    width: 90%;
+}
+
+#columnMiddle div.placeholder {
+    margin-left: 40px;
+}
+
+div.widgetWrapper div.widget {
+    background-color: white !important;
+    float: none !important;
+    margin: 0 !important;
+    width: 100% !important;
 }
 
 /* Done overloads */

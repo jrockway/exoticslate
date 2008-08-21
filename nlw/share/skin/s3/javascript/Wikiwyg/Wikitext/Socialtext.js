@@ -1152,7 +1152,7 @@ proto.detab_table = function(text) {
 proto.enableThis = function() {
     this.wikiwyg.set_edit_tips_span_display('inline');
     Wikiwyg.Wikitext.prototype.enableThis.call(this);
-    if (jQuery('#st-page-boxes').is(':visible')) {
+    if (jQuery('#contentRight').is(':visible')) {
         jQuery('#st-page-maincontent').css('marginRight', '240px');
     }
 }

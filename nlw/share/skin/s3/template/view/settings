@@ -14,7 +14,7 @@
   </div><!-- controls END -->
   <div id="contentContainer">
     <div id="contentColumns">
-      <div id="st-page-maincontent">
+      <div id="contentLeft">
         <div class="widget">
           <div class="widgetHeader">
           <h4>[% loc('Settings') %]</h4>
@@ -66,7 +66,7 @@
         </div><!-- widget END -->
 
       </div><!-- contentLeft -->
-      <div id="st-page-boxes">
+      <div id="contentRight">
         [% settings_section %]
       </div><!-- contentRight -->
     </div><!-- contentColumns END -->

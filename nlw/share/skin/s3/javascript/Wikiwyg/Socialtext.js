@@ -199,7 +199,7 @@ function setup_wikiwyg() {
             jQuery("#st-editing-tools-display").hide();
             jQuery("#st-editing-tools-edit, #wikiwyg_toolbar").show();
 
-            if (jQuery("#st-page-boxes").is(":visible"))
+            if (jQuery("#contentRight").is(":visible"))
                 jQuery("#st-page-maincontent").css("margin-right", "240px");
 
             nlw_edit_controls_visible = true;
@@ -466,7 +466,7 @@ proto.preview_link_action = function() {
             .unbind('click')
             .click( function () {
                 console.log(arguments);
-                if (jQuery("#st-page-boxes").is(":visible")) 
+                if (jQuery("#contentRight").is(":visible")) 
                     jQuery('#st-page-maincontent')
                         .css({ 'margin-right': '240px'});
                 self.switchMode(current.classname);

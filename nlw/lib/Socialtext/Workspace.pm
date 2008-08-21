@@ -1571,14 +1571,43 @@ use warnings;
 
 use base 'Socialtext::Workspace';
 use Class::Field 'const';
-
-sub new { return bless {}, $_[0] }
+use Socialtext::SQL 'sql_execute';
+use Socialtext::User;
 
 const name => '';
 const title => '';
+const account_id => 1;
 const workspace_id => 0;
 const email_addresses_are_hidden => 0;
-const skin_name => '';
+const skin_name => 's3';
+
+sub created_by_user_id {
+    Socialtext::User->SystemUser->user_id;
+}
+
+my @COLS = qw(
+    workspace_id name title account_id skin_name created_by_user_id
+);
+
+sub new {
+    my $class = shift;
+
+    my $self = {};
+    bless $self, $class;
+
+    my $sth = sql_execute(qq{SELECT * FROM "Workspace" WHERE workspace_id = 0});
+    my $row = $sth->fetchrow_arrayref;
+    unless ($row) {
+        my $keys = join ', ', @COLS;
+        my $vals = join ', ', map { '?' } @COLS;
+        my $sql = qq{
+            INSERT INTO "Workspace" ( $keys )
+            VALUES ( $vals )
+        };
+        sql_execute($sql, map { $self->$_ } @COLS );
+    }
+    return $self;
+}
 
 sub _set_workspace_option { return 1; }
 

@@ -89,10 +89,10 @@
   </div>
 
   <div id="contentColumns">
-    <div id="st-page-maincontent">
+    <div id="contentLeft">
       <div id="st-page-content">[% page.content %]</div>
     </div>
-    <div id="st-page-boxes" style="display:[% IF st_page_accessories == 'show'%]block[% ELSE %]none[% END %]">
+    <div id="contentRight" style="display:[% IF st_page_accessories == 'show'%]block[% ELSE %]none[% END %]">
       <div class="widget">
         <div class="widgetHeader">
         <h4>[% loc('Tags') %]</h4>

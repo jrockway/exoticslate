@@ -285,8 +285,8 @@ var push_onload_function = function (fcn) { jQuery(fcn) }
 $(function() {
     $('#st-page-boxes-toggle-link')
         .bind('click', function() {
-            $('#st-page-boxes').toggle();
-            var hidden = $('#st-page-boxes').is(':hidden');
+            $('#contentRight').toggle();
+            var hidden = $('#contentRight').is(':hidden');
             this.innerHTML = hidden ? 'show' : 'hide';
             Cookie.set('st-page-accessories', hidden ? 'hide' : 'show');
         });

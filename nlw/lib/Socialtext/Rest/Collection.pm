@@ -266,6 +266,7 @@ sub create_filter {
 sub _limit_collectable {
     my $self = shift;
     my $count = $self->rest->query->param('count');
+    my $offset = $self->rest->query->param('offset') || 0;
     #my $filter = $self->rest->query->param('filter');
     #my $filter_sub = $filter
     #    ? sub {grep {$_->{name} =~ /$filter/i} @_}
@@ -285,11 +286,12 @@ sub _limit_collectable {
     }
 
 
-    my $count_sub = $count
+    my $count_sub = $count || $offset
         ? sub {
-        my $limit = $count - 1;
+        $count ||= @_;
+        my $limit = ($offset + $count) - 1;
         $limit = ( $#_ < $limit ) ? $#_ : $limit;
-        @_[ 0 .. $limit ];
+        @_[ $offset .. $limit ];
         }
         : sub {@_};
     return &$count_sub( &$filter_sub(@_) );

@@ -39,7 +39,7 @@
   </div>
   <div id="st-revision-display">
   <div id="contentColumns">
-  <div id="st-page-maincontent">
+  <div id="contentLeft">
     [% print %]
   </div> <!-- END st-page-maincontent -->
   </div> <!-- END contentColumns -->

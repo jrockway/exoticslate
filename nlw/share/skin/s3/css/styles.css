@@ -303,6 +303,7 @@ div.tableFilter {
 	height: 41px;
 	background: url(../images/tabsRight.png) no-repeat top right;
 	float: right;
+	width: auto;
 }
 
 div.tableFilter label {
@@ -872,12 +873,12 @@ div#contentColumns	{
 	clear: both;
 }
 
-div#contentColumns div#st-page-maincontent	{
+div#contentColumns div#contentLeft	{
 	width: 73%;
 	float: left;
 }
 
-body#workSpace div#contentColumns div#st-page-maincontent	{
+body#workSpace div#contentColumns div#contentLeft	{
 	width: 48%;
 	float: left;
 }
@@ -887,7 +888,7 @@ body#dashBoard div#contentColumns div#columnCombined	{
 	float: left;
 }
 
-body#dashBoard div#contentColumns div#columnCombined div#st-page-maincontent {
+body#dashBoard div#contentColumns div#columnCombined div#contentLeft {
 	width: 50%;
 	float: left;
 }
@@ -897,31 +898,31 @@ body#dashBoard div#contentColumns div#columnCombined div#columnMiddle {
 	float: right;
 }
 
-body#settingsPage div#contentColumns div#st-page-maincontent	{
+body#settingsPage div#contentColumns div#contentLeft	{
 	width: 20%;
 	float: left;
 }
 
 
-div#contentColumns div#st-page-maincontent h3 {
+div#contentColumns div#contentLeft h3 {
 	font-size: 20px;
 	color: #0a94df;
 	line-height: 38px;
 	font-weight: normal;
 }
 
-body#blog div#contentColumns div#st-page-maincontent h3 {
+body#blog div#contentColumns div#contentLeft h3 {
 	margin-top: 20px;
 }
 
-div#contentColumns div#st-page-maincontent p {
+div#contentColumns div#contentLeft p {
 	font-size: 11px;
 	color: #000000;
 	line-height: 18px;
 	margin-top: 20px;
 }
 
-body#dashBoard div#contentColumns div#st-page-maincontent p {
+body#dashBoard div#contentColumns div#contentLeft p {
 	line-height: 15px;
 
 }
@@ -939,7 +940,7 @@ div#contentColumns div#st-page-maincontent p strong {
 	font-weight: bold;
 }
 
-body#blog div#contentColumns div#st-page-maincontent img {
+body#blog div#contentColumns div#contentLeft img {
 	margin-top: 20px;
 	border: #cfcfcf 6px solid;
 }
@@ -972,52 +973,52 @@ div.messageBox div.messageBoxBottomLeft em a {
 	color: #2068a2;
 }
 
-div#contentColumns div#st-page-boxes	{
+div#contentColumns div#contentRight	{
 	width: 25%;
 	float: right;
 }
 
-body#workSpace div#contentColumns div#st-page-boxes	{
+body#workSpace div#contentColumns div#contentRight	{
 	width: 48%;
 	float: right;
 	margin-right: 15px;
 }
 
 
-body#dashBoard div#contentColumns div#st-page-boxes	{
+body#dashBoard div#contentColumns div#contentRight	{
 	width: 30%;
 	float: right;
 	margin-right: 13px;
 }
 
-* html body#workSpace div#contentColumns div#st-page-boxes {
+* html body#workSpace div#contentColumns div#contentRight {
        margin-right: 8px;
 }
 
-* html body#dashBoard div#contentColumns div#st-page-boxes {
+* html body#dashBoard div#contentColumns div#contentRight {
        margin-right: 8px;
 }
 
-body#settingsPage div#contentColumns div#st-page-boxes	{
+body#settingsPage div#contentColumns div#contentRight	{
 	width: 78%;
 	}
 
 
-body#settingsPage div#contentColumns div#st-page-boxes form {
+body#settingsPage div#contentColumns div#contentRight form {
 	width: 97%;
 }
 
-div#st-page-boxes form ul.formButtons {
+div#contentRight form ul.formButtons {
 	float: left;
 	margin-top: 13px
 }
 
-div#st-page-boxes form ul.formButtons li {
+div#contentRight form ul.formButtons li {
 	float: left;
 	margin-right: 10px;
 }
 
-div#st-page-boxes form ul.formButtons li a {
+div#contentRight form ul.formButtons li a {
 	float: left;
 }
 
@@ -1045,13 +1046,13 @@ body#workSpace div.widget,body#settingsPage div.widget,body#dashBoard div.widget
 }
 
 
-body#workSpace div#contentColumns div#st-page-maincontent div.widget,body#dashBoard div#contentColumns div#st-page-maincontent div.widget,body#settingsPage div#contentColumns div#st-page-maincontent div.widget {
+body#workSpace div#contentColumns div#contentLeft div.widget,body#dashBoard div#contentColumns div#contentLeft div.widget,body#settingsPage div#contentColumns div#contentLeft div.widget {
 	float: left;
 	margin: 10px 0 0 0;
 	width: 100%; 
 }
 
-body#workSpace div#contentColumns div#st-page-boxes div.widget,body#dashBoard div#contentColumns div#st-page-boxes div.widget,body#settingsPage div#contentColumns div#st-page-boxes div.widget {
+body#workSpace div#contentColumns div#contentRight div.widget,body#dashBoard div#contentColumns div#contentRight div.widget,body#settingsPage div#contentColumns div#contentRight div.widget {
 	width: 100%;
 }
 

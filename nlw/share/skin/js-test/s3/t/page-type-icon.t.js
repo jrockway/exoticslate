@@ -3,13 +3,14 @@
 var t = new Test.Visual();
 
 t.plan(1);
-t.beginAsync();
 
-var begin = function() {
-    t.open_iframe("/admin/index.cgi?action=recent_changes", step1);
+t.beginAsync(step1);
+
+function step1() {
+    t.open_iframe("/admin/index.cgi?action=recent_changes", step2);
 }
 
-var step1 = function() {
+function step2() {
     t.like(
         t.$("#st-listview-form tr.oddRow td:eq(1) img.pageType").attr('src'),
         /(ss|doc)16.png$/,
@@ -20,7 +21,5 @@ var step1 = function() {
 
     t.endAsync();
 };
-
-begin();
 
 })(jQuery);

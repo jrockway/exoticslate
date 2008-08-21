@@ -5,13 +5,15 @@ var t = new Test.Visual();
 t.plan(1);
 // t.plan(2);
 
-t.beginAsync();
+t.beginAsync(step1);
 
-var begin = function() {
-    t.open_iframe("/admin/index.cgi?action=recent_changes", step1);
+function step1() {
+    t.open_iframe("/admin/index.cgi?action=recent_changes", step2);
 }
 
-var step1 = function() {
+function step2() {
+    t.scrollTo(200);
+
     var $avatar = t.$("#st-listview-form tr.oddRow td:eq(1) img.avatar");
     t.is(
         $avatar.size(),
@@ -27,11 +29,7 @@ var step1 = function() {
 //         "Make sure it's not floated to left or right."
 //     );
 
-    t.scrollTo(200);
-
     t.endAsync();
 };
-
-begin();
 
 })(jQuery);

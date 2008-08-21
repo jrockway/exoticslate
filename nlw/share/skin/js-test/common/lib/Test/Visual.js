@@ -144,7 +144,7 @@ proto.call_callback = function(callback, args) {
     callback.apply(this, args);
 }
 
-proto.beginAsync = function(timeout) {
+proto.beginAsync = function(callback, timeout) {
     if (!timeout) timeout = 60000;
     if (this.asyncId)
         throw("beginAsync already called");
@@ -157,6 +157,8 @@ proto.beginAsync = function(timeout) {
         },
         timeout
     );
+    if (callback)
+        this.call_callback(callback);
 }
 
 proto.endAsync = function() {

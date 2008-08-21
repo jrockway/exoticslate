@@ -4,13 +4,13 @@ var t = new Test.Visual();
 
 t.plan(1);
 
-t.beginAsync();
+t.beginAsync(step1);
 
-var begin = function() {
-    t.login({callback: step1});
+function step1() {
+    t.login({callback: step2});
 }
 
-var step1 = function() {
+function step2() {
     t.ts = (new Date()).getTime();
     t.username = 'user' + t.ts + '@example.com',
     t.email_address = 'email' + t.ts + '@example.com',
@@ -20,23 +20,23 @@ var step1 = function() {
         email_address: t.email_address,
         password: 'd3vnu11l',
         workspace: 'admin',
-        callback: step2
+        callback: step3
     });
 }
 
-var step2 = function() {
+function step3() {
     t.login({
         'username': t.username,
         'password': 'd3vnu11l',
-        'callback': step3
+        'callback': step4
     });
 }
 
-var step3 = function() {
-    t.open_iframe("/", step4);
+function step4() {
+    t.open_iframe("/", step5);
 };
 
-var step4 = function() {
+function step5() {
     var username = t.$("div.welcome span").text()
         .replace(/^\s*Hello,\s*(.*)\s*$/, '$1');
     t.is(username, 'user' + t.ts,
@@ -44,7 +44,5 @@ var step4 = function() {
     );
     t.endAsync();
 };
-
-begin();
 
 })(jQuery);

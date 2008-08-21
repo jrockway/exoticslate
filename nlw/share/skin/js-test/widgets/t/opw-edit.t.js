@@ -7,24 +7,23 @@ t.plan(2);
 if (jQuery.browser.msie) 
     t.skipAll("Skipping this insanity on IE for now...");
 
-t.beginAsync();
-
-
 t.pass("This test might take up to 30 seconds to run. Be patient.");
 
-var begin = function() {
-    t.login({callback: step1});
+t.beginAsync(step1);
+
+function step1() {
+    t.login({callback: step2});
 }
 
-var step1 = function() {
+function step2() {
     t.setup_one_widget(
         "/?action=add_widget;file=gadgets/share/gadgets/one_page.xml",
-        step2
+        step3
     );
 }
 
 // Most fragile test evar.
-var step2 = function(widget) {
+function step3(widget) {
     var counter = 0, counter2 = 0, failed = false;
     t.scrollTo(150);
     widget.$("body").ajaxComplete(function(e, xhr, options) {
@@ -57,7 +56,5 @@ var step2 = function(widget) {
         }
     });
 };
-
-begin();
 
 })(jQuery);

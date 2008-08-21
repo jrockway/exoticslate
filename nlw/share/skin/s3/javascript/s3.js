@@ -155,6 +155,33 @@ Page = {
         });
     },
 
+    _format_bytes: function(filesize) {
+        var n = 0;
+        var unit = '';
+        if (filesize < 1024) {
+            unit = '';
+            n = filesize;
+        } else if (filesize < 1024*1024) {
+            unit = 'K';
+            n = filesize/1024;
+            if (n < 10)
+                n = n.toPrecision(2);
+            else
+                n = n.toPrecision(3);
+        } else {
+            unit = 'M';
+            n = filesize/(1024*1024);
+            if (n < 10) {
+                n = n.toPrecision(2);
+            } else if ( n < 1000) {
+                n = n.toPrecision(3);
+            } else {
+                n = n.toFixed(0);
+            }
+        }
+        return n + unit;
+    },
+
     refreshAttachments: function (cb) {
         Page.attachmentList = [];
         $.ajax({
@@ -177,12 +204,11 @@ Page = {
                                 Page.extractAttachment(item.id)
                             });
                     }
-                    // var nf = new Number.Format();
                     $('#st-attachment-listing').append(
                         $('<li>').append(
                             $('<a>')
                                 .html(item.name)
-                                .attr('title', loc("Uploaded by [_1] on [_2]. ([_3] bytes)", item.uploader, item.date, item['content-length']))
+                                .attr('title', loc("Uploaded by [_1] on [_2]. ([_3] bytes)", item.uploader, item.date, Page._format_bytes(item['content-length'])))
                                 .attr('href', item.uri),
                             ' ',
                             extractLink,

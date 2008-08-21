@@ -31,4 +31,13 @@ html body#workSpace div#mainWrap, html body#blog div#mainWrap, html body#dashBoa
 html body#listPage div#mainWrap {
     width: expression( (document.body.clientWidth * 0.9 > 885) ? '90%' : '885px' );
 }
+
+html div#bottomButtons ul li a {
+    /* This is needed to delay rendering until #st-page-maincontent is rendered. */
+    border: expression( '0px' );
+}
 /* End fix {bz: 957} */
+
+html body div#st-page-editing-toolbar-container {
+    height: 50px;
+}

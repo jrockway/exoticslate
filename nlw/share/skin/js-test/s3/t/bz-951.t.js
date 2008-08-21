@@ -4,22 +4,22 @@ var t = new Test.Visual();
 
 t.plan(2);
 
-t.beginAsync();
+t.beginAsync(step1);
 
-var begin = function() {
+function step1() {
     t.put_page({
         workspace: "admin",
         page_name: "Navigation for: Recent Changes",
         content: "*strong*\n_italic_\n",
-        callback: step1
+        callback: step2
     });
 }
 
-var step1 = function() {
-    t.open_iframe("/admin/index.cgi?action=weblog_display&category=Recent+Changes", step2);
+function step2() {
+    t.open_iframe("/admin/index.cgi?action=weblog_display&category=Recent+Changes", step3);
 }
 
-var step2 = function() {
+function step3() {
     t.scrollTo(200);
     t.is(
         t.$("#st-page-boxes div.wiki strong").css("font-weight"),
@@ -34,7 +34,5 @@ var step2 = function() {
     );
     t.endAsync();
 }
-
-begin();
 
 })(jQuery);

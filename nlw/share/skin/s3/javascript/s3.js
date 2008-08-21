@@ -177,10 +177,12 @@ Page = {
                                 Page.extractAttachment(item.id)
                             });
                     }
+                    // var nf = new Number.Format();
                     $('#st-attachment-listing').append(
                         $('<li>').append(
                             $('<a>')
                                 .html(item.name)
+                                .attr('title', loc("Uploaded by [_1] on [_2]. ([_3] bytes)", item.uploader, item.date, item['content-length']))
                                 .attr('href', item.uri),
                             ' ',
                             extractLink,

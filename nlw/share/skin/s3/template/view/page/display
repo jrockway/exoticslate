@@ -166,7 +166,7 @@
               END;
             %]
             <li>
-            <a title="[% loc("Uploaded by [_1] on [_2]. [_3]", file.uploader, file.date, displaylength) | html_entity %]" href="[% file.uri %]">[% file.name %]</a>
+            <a title="[% loc("Uploaded by [_1] on [_2]. ([_3] bytes)", file.uploader, file.date, displaylength) | html_entity %]" href="[% file.uri %]">[% file.name %]</a>
             [% IF file.name.match('\.(zip|tar|tar.gz|tgz)$') %]
             <a href="#" onclick="Page.extractAttachment('[% file.id %]')"><img
                 src="/static/skin/common/images/extract.png"

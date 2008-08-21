@@ -20,8 +20,6 @@
 | text_unlike | //body | the book is best framed as an introduction to agile methods for people only familiar with |
 | select-frame | relative=parent |  |
 
---{bz 873} makes these tests fail. Commented out.
-
 | st-widget-settings | rss_feed |  |
 | select_ok | up_max_desc | Unlimited |
 | click_ok | st-savebutton |  |
@@ -29,7 +27,7 @@
 | st-select-widget-frame | rss_feed |  |
 | wait_for_element_present_ok | link=Agile Project Management | 30000 |
 | wait_for_element_present_ok | link=Emerson | 3000 |
-| wait_for_element_present_ok | link=... | 3000 |
+| text_unlike | //body | 3000 |
 | text_like | //body | the new Highsmith book |
 | text_like | //body | the book is best framed as an introduction to agile methods for people only familiar with |
 | select-frame | relative=parent |  |

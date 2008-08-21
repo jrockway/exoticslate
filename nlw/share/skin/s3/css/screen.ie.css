@@ -16,6 +16,10 @@ html div#st-page-boxes {
     position: absolute;
 }
 
+html div#st-page-maincontent {
+    height: expression( document.getElementById('st-page-boxes').clientHeight );
+}
+
 html div#mainWrap {
     width: expression( (document.body.clientWidth * 0.9 > 805) ? '90%' : '805px' );
 }

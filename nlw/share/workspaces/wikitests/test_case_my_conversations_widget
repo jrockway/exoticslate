@@ -4,8 +4,60 @@
 
 | set | workspace | test-data |
 
-| open_ok | /test-data/index.cgi | 2000 |
-| include | [test case: create conversations] |  |
+| *Comment* | Test Case: My Conversations Widget Create Conversations |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
+| wait_for_element_present_ok | st-newpage-pagename-edit |  |
+| wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
+| type_ok | st-newpage-pagename-edit | created_page_%%start_time%% |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | I have created a page called created_page. woot. |
+| click_ok | st-save-button-link |  |
+| wait_for_element_present_ok | st-edit-button-link | 25000 |
+
+| open_ok | /%%workspace%%/index.cgi?jabberwocky |  |
+| wait_for_element_present_ok | st-edit-button-link |  |
+| wait_for_element_present_ok | st-watchlist-indicator |  |
+| st-watch-page | 1 |  |
+| st-is-watched | 1 |  |
+| pause | 5000 |  |
+
+| *Comment* | Test Case: My Conversations Widget Comment on a page |  |
+| open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=slithy;caller_action=display |  |
+| wait_for_element_visible_ok | st-commentui-textarea | 30000 |
+| type_ok | st-commentui-textarea | see, I commented |
+| click_and_wait | st-commentui-savelink |  |
+
+| *Comment* | Test Case: My Conversations Widget Login as devnull2 |  |
+| open_ok | /%%workspace%%/index.cgi?jabberwocky |  |
+| st-logout |  |  |
+| open_ok | /%%workspace%%/index.cgi |  |
+| type_ok | username | devnull2@socialtext.com |
+| type_ok | password | %%password%% |
+| click_and_wait | //input[@value='Log in'] |  |
+
+| open_ok | /%%workspace%%/index.cgi?created_page_%%start_time%% |  |
+| wait_for_element_present_ok | st-edit-button-link |  |
+| click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | link=Advanced | 10000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | Don't forget to foo the bar |
+| clickAndWait | st-save-button-link |  |
+
+| open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=slithy;caller_action=display |  |
+| wait_for_element_visible_ok | st-commentui-textarea | 30000 |
+| type_ok | st-commentui-textarea | denull2 can also comment |
+| click_and_wait | st-commentui-savelink |  |
+
+| open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=jabberwocky;caller_action=display |  |
+| wait_for_element_visible_ok | st-commentui-textarea | 30000 |
+| type_ok | st-commentui-textarea | denull2 can also comment ... again |
+| click_and_wait | st-commentui-savelink |  |
+| st-login |  |  |
+
 | st-catchup-logs |  |  |
 | open_ok | /?dashboard | 60000 |
 | st-empty-container |  |  |

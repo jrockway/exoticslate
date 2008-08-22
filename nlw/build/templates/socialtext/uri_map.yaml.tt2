@@ -322,6 +322,9 @@
 -
     '/':
         '*':                    [Socialtext::Pluggable::Adapter, handler]
+-
+    '/index.cgi':
+        '*':                    [Socialtext::Pluggable::Adapter, handler]
 # -
 #     '/hydra':
 #         'GET':                  [Socialtext::Rest::Hydra, GET]

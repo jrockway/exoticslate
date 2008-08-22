@@ -81,8 +81,6 @@
 
     RewriteRule    ^/lite/page/([^/]+)$ /lite/page/$1/ [R,L,NE]
 
-    RewriteRule    ^/index.cgi$ / [R,L,NE]
-
     RewriteRule    !^/data(/.*)?$   -  [C]
     RewriteRule    !^/nlw    -  [C]
     RewriteRule    !^/challenge - [C]

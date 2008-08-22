@@ -53,7 +53,7 @@ sub handler {
         return $res;
     }
     elsif (exists $hooks{root}) {
-        return $self->hook('root');
+        return $self->hook('root', $rest);
     }
     else {
         my $nowork = Socialtext::Rest::NoWorkspace->new($rest);

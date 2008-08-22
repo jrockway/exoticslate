@@ -927,7 +927,7 @@ body#dashBoard div#contentColumns div#contentLeft p {
 
 }
 
-div#contentColumns div#st-page-maincontent em {
+div#contentColumns div#contentLeft em {
 	font-size: 10px;
 	color: #000000;
 	line-height: 18px;
@@ -936,7 +936,7 @@ div#contentColumns div#st-page-maincontent em {
 }
 
 
-div#contentColumns div#st-page-maincontent p strong {
+div#contentColumns div#contentLeft p strong {
 	font-weight: bold;
 }
 

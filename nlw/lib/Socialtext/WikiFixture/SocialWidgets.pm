@@ -48,7 +48,7 @@ Initializes the object, and logs into the Socialtext server.
 sub init {
     my ($self) = @_;
     $self->{mandatory_args} = [qw(username password)];
-    $self->{workspace}="";
+    $self->{workspace}="test-data";
     $self->{_widgets}={};
     $self->SUPER::init;
 }

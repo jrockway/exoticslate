@@ -321,7 +321,7 @@
         '*':                    [Socialtext::Rest::App, handler]
 -
     '/':
-        '*':                    [Socialtext::Rest::NoWorkspace, handler]
+        '*':                    [Socialtext::Pluggable::Adapter, handler]
 # -
 #     '/hydra':
 #         'GET':                  [Socialtext::Rest::Hydra, GET]

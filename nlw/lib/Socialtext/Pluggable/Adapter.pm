@@ -41,6 +41,26 @@ sub AUTOLOAD {
     return $self->hook($hook_name, $args);
 }
 
+sub handler {
+    my ($self, $rest) = @_;
+    my $t = time;
+
+    $self->make_hub($rest->user);
+
+    if ($rest->query->param('action')) {
+        my $res = $self->hub->process;
+        $rest->header($self->hub->rest->header);
+        return $res;
+    }
+    elsif (exists $hooks{root}) {
+        return $self->hook('root');
+    }
+    else {
+        my $nowork = Socialtext::Rest::NoWorkspace->new($rest);
+        return $nowork->handler($rest);
+    }
+}
+
 sub make_hub {
     my ($self,$user,$ws) = @_;
     my $main = Socialtext->new;
@@ -50,7 +70,7 @@ sub make_hub {
     );
     $main->hub->registry->load;
     $main->debug;
-    $self->{made_hub} = $main->hub;
+    $self->hub( $self->{made_hub} = $main->hub );
 }
 
 sub class_id { 'pluggable' };

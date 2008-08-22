@@ -26,12 +26,13 @@ STAX_FILE_GZIP=$(STAX_FILE).gz
 
 # Use Wikiwyg-dev when developing Wikiwyg
 WIKIWYG_PATH=$(COMMON_JAVASCRIPT)/Wikiwyg-2007-07-17
+WIKIWYG_ST=../../wikiwyg/javascript
 
 JEMPLATE_GENERATOR=bin/generate-widget-jemplate.pl
 JEMPLATE_MODULE=Wikiwyg/Jemplate.js
 JEMPLATE_WIKIWYG_MODULE=jemplate_wikiwyg.js
 
-WIDGETS_YAML=Widgets.yaml
+WIDGETS_YAML=$(WIKIWYG_ST)/Widgets.yaml
 
 ALL_EDIT_JEMPLATES:=$(shell perl -MYAML -e 'my $$y = YAML::LoadFile("$(WIDGETS_YAML)"); my $$w = $$y->{widgets}; print join " ", map "jemplate/widget_$${_}_edit.html", @$$w')
 

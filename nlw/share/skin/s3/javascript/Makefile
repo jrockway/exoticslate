@@ -18,12 +18,13 @@ ALL_JEMPLATE_PLUGINS:=$(shell find $(S2_JAVASCRIPT)/JemplatePlugin -name \*.js)
 
 # Use Wikiwyg-dev when developing Wikiwyg
 WIKIWYG_PATH=$(COMMON_JAVASCRIPT)/Wikiwyg-2007-07-17
+WIKIWYG_ST=../../wikiwyg/javascript/
 
-WIDGETS_YAML=$(S2_JAVASCRIPT)/Widgets.yaml
+WIDGETS_YAML=$(WIKIWYG_ST)/Widgets.yaml
 ALL_EDIT_JEMPLATES:=$(shell perl -MYAML -e 'my $$y = YAML::LoadFile("$(WIDGETS_YAML)"); my $$w = $$y->{widgets}; print join " ", map "jemplate/widget_$${_}_edit.html", @$$w')
 ALL_JEMPLATES=$(ALL_EDIT_JEMPLATES) jemplate/insert_widget_menu
 JEMPLATE_GENERATOR=bin/generate-widget-jemplate.pl
-JEMPLATE_MODULE=Wikiwyg/Jemplate.js
+JEMPLATE_MODULE=WikiwygJemplate.js
 JEMPLATE_WIKIWYG_MODULE=jemplate_wikiwyg.js
 
 LIGHTBOX_FILE=socialtext-lightbox.js
@@ -65,11 +66,11 @@ EDITOR_SOURCE_FILES= \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Preview.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Wysiwyg.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/HTML.js \
-		Wikiwyg/Socialtext.js \
+		$(WIKIWYG_ST)/Wikiwyg/Socialtext.js \
 		Widgets.js \
-		Wikiwyg/Widgets.js \
-		Wikiwyg/MessageCenter.js \
-		Wikiwyg/Wikitext/Socialtext.js \
+		$(WIKIWYG_ST)/Wikiwyg/Widgets.js \
+		$(WIKIWYG_ST)/Wikiwyg/MessageCenter.js \
+		$(WIKIWYG_ST)/Wikiwyg/Wikitext/Socialtext.js \
 		$(S2_JAVASCRIPT)/Wikiwyg/DataValidator.js \
 		wikiwyg.js \
 

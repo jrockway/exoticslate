@@ -911,7 +911,7 @@ body#contentPage div#st-editing-tools-edit ul#revision-tools li a {
 }
 
 /* Same as: div#contentColumns div#st-page-maincontent em */
-div#st-page-boxes div.widgetContent div.wiki em{
+div.widget div.widgetContent div.wiki em{
 	font-size: 10px;
 	color: #000000;
 	line-height: 18px;
@@ -920,6 +920,6 @@ div#st-page-boxes div.widgetContent div.wiki em{
 }
 
 /* Same as: div#contentColumns div#st-page-maincontent p strong */
-div#st-page-boxes div.widgetContent div.wiki p strong {
+div.widget div.widgetContent div.wiki p strong {
 	font-weight: bold;
 }

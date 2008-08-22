@@ -25,7 +25,7 @@
   <dd>
     <label>[% loc('Current password:') %]</label>
     <div>
-      <input name="old_password" type="password" maxlength="30" />
+      <input autocomplete="off" name="old_password" type="password" maxlength="30" />
     </div>
   </dd>
   <dd>

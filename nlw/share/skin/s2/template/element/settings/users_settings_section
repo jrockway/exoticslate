@@ -50,7 +50,7 @@
     <td width="30%" class="none" align="right">[% label %]:</td>
     <td width="64%" class="none">
       [% IF field %]
-        <input type="[% type || "text" %]" name="[% field %]" size="30" value="[% value %]"[% GET "maxlength=\"${max}\"" IF max %] />
+        <input autocomplete="off" type="[% type || "text" %]" name="[% field %]" size="30" value="[% value %]"[% GET "maxlength=\"${max}\"" IF max %] />
       [% ELSE %]
         <strong>[% value %]</strong>
       [% END %]

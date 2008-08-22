@@ -37,8 +37,10 @@ function step4() {
 };
 
 function step5() {
-    var username = t.$("div.welcome span").text()
-        .replace(/^\s*Hello,\s*(.*)\s*$/, '$1');
+    $(t.iframe).width(1000);
+    t.scrollTo(50);
+    var username = t.$("span.welcome div").text()
+        .replace(/^\s*(.*)\s*$/, '$1');
     t.is(username, 'user' + t.ts,
         'User name is correct (user' + t.ts + ') when user has no name'
     );

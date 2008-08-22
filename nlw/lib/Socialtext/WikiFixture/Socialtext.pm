@@ -60,13 +60,15 @@ sub init {
     for (@{ $self->{mandatory_args} }) {
         die "$_ is mandatory!" unless $self->{$_};
     }
-
+   
+    #Get the workspace skin if the workspace attribute is set
+    #Otherwise, default to s2
     my $ws = Socialtext::Workspace->new( name => $self->{workspace} );
-    unless ($ws) {
-        die "The $self->{workspace} workspace isn't installed\n";
+    my $skin = 's2';
+    if (defined($ws)) {
+        $skin = $ws->skin_name();
     }
-    my $skin = $ws->skin_name();
-
+    
     $self->{'skin'} = $skin;
     $self->SUPER::init;
 

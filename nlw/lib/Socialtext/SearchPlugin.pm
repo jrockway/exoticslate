@@ -22,10 +22,10 @@ const sortdir => {
     Relevance      => 'desc',
     Summary        => 'asc',
     Subject        => 'asc',
-    From           => 'asc',
     Workspace      => 'asc',
     Date           => 'desc',
     revision_count => 'desc',
+    username       => 'asc',
 };
 
 field 'category_search';

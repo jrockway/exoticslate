@@ -15,9 +15,9 @@ use Storable ();
 const sortdir => {
     Summary        => 'asc',
     Subject        => 'asc',
-    From           => 'asc',
     Date           => 'desc',
     revision_count => 'desc',
+    username       => 'asc',
 };
 
 const listview_extra_columns => {};

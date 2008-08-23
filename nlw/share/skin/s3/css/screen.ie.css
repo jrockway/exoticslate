@@ -6,18 +6,14 @@ div#buttomButtons div#pageAttribution {
 }
 
 /* Begin fix {bz: 957} */
+html div#contentLeft {
+    overflow: hidden;
+}
+
 html body#contentPage div#controls div#controlsRight,
 html body#dashBoard div#controls div#controlsRight,
 html body#settingsPage div#controls div#controlsRight {
     width: 260px !important;
-}
-
-html div#st-page-boxes {
-    position: absolute;
-}
-
-html div#st-page-maincontent {
-    height: expression( document.getElementById('st-page-boxes').clientHeight );
 }
 
 html div#mainWrap {
@@ -32,10 +28,6 @@ html body#listPage div#mainWrap {
     width: expression( (document.body.clientWidth * 0.9 > 885) ? '90%' : '885px' );
 }
 
-html div#bottomButtons ul li a {
-    /* This is needed to delay rendering until #st-page-maincontent is rendered. */
-    border: expression( '0px' );
-}
 /* End fix {bz: 957} */
 
 html body div#st-page-editing-toolbar-container {

@@ -3,5 +3,5 @@ import_libs:
   - ../../common/javascript/prototype-1.4.0/dist/prototype.js
   - ../../s2/javascript/pageview.js
   - ../../common/javascript/jquery-1.2.6.js
-  - ../common/lib/Test/Socialcalc.js
+  - ../common/lib/Test/Visual.js
 

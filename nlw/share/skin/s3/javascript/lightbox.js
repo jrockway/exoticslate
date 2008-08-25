@@ -17,8 +17,8 @@
           xScroll = document.body.scrollLeft;
         }
 
-        arrayPageScroll = [xScroll,yScroll];
-        return arrayPageScroll;
+        pageScroll = { left: xScroll, top: yScroll };
+        return pageScroll;
     };
 
     $.hideLightbox = function() {
@@ -45,6 +45,8 @@
                 .appendTo('body');
         }
 
+        var pageScroll = _getPageScroll();
+
         if (!$('#overlay').size()) {
             $('<div id="overlay">')
                 .click(function () { $.hideLightbox() })
@@ -54,10 +56,6 @@
                     background: "#000",
                     opacity: "0.5",
                     filter: "alpha(opacity=50)",
-                    top: 0,
-                    left: 0,
-                    width: $(window).width(),
-                    height: $(window).height(),
                     zIndex: 2000,
                     padding: 0,
                     margin: 0
@@ -65,15 +63,13 @@
                 .appendTo('body');
         }
 
-        var arrayPageScroll = _getPageScroll();
-
         $('#lightbox')
             .css('width', opts.width || '520px')
             .append($(opts.content).show())
             .css({
-                left: (arrayPageScroll[0] + (($(window).width() -
+                left: (pageScroll.left + (($(window).width() -
                         $('#lightbox').width()) / 2)) + 'px',
-                top:  (arrayPageScroll[1] + (($(window).height() -
+                top:  (pageScroll.top + (($(window).height() -
                         $('#lightbox').height()) / 2)) + 'px'
             });
 
@@ -82,11 +78,18 @@
         if (opts.close)
             $(opts.close).click(function () { $.hideLightbox() })
 
-        $('#overlay').fadeIn(function () {
-            $('#lightbox').fadeIn(function() {
-                $(opts.focus).focus();
+        $('#overlay')
+            .css({
+                top: pageScroll.top,
+                left: pageScroll.left,
+                width: $(window).width(),
+                height: $(window).height()
             })
-        });
+            .fadeIn(function () {
+                $('#lightbox').fadeIn(function() {
+                    $(opts.focus).focus();
+                })
+            });
     };
 
     $.fn.hideLightbox = function() {

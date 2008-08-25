@@ -50,14 +50,14 @@
                 .click(function () { $.hideLightbox() })
                 .css({
                     display: 'none',
-                    position: $.browser.msie ? 'absolute': 'fixed',
+                    position: 'absolute',
                     background: "#000",
                     opacity: "0.5",
-                    filter :  "alpha(opacity=50)",
+                    filter: "alpha(opacity=50)",
                     top: 0,
                     left: 0,
-                    width: "100%",
-                    height: "100%",
+                    width: $(window).width(),
+                    height: $(window).height(),
                     zIndex: 2000,
                     padding: 0,
                     margin: 0

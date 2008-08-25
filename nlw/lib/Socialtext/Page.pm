@@ -1283,8 +1283,19 @@ sub _get_contents_decoded_as_utf8 {
         return Encode::decode($encoding, $data);
     }
     else {
-        # Force conversion from legacy pages as ISO-8859-1.
-        return "Encoding: utf8\n" . Encode::decode('iso-8859-1', $data);
+        # Force conversion from legacy pages; first try UTF-8, then ISO-8859-1.
+        local $@;
+        my $data_from_utf8 = eval {
+            Encode::decode_utf8($data, Encode::FB_CROAK());
+        };
+        if ($@) {
+            # It was not UTF-8 -- fallback to ISO-8859-1.
+            return "Encoding: utf8\n" . Encode::decode('iso-8859-1', $data);
+        }
+        else {
+            # It was UTF-8, so simply prepend the correct header.
+            return "Encoding: utf8\n" . $data_from_utf8;
+        }
     }
 }
 

@@ -63,6 +63,8 @@
                 .appendTo('body');
         }
 
+        var arrayPageScroll = _getPageScroll();
+
         $('#lightbox')
             .css('width', opts.width || '520px')
             .append($(opts.content).show())

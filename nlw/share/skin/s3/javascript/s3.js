@@ -141,6 +141,7 @@ Page = {
                                 .attr('title', loc('Delete this tag'))
                                 .bind('click', function () {
                                     Page.delTag(this.name);
+                                    return false;
                                 })
                         )
                     )
@@ -203,6 +204,7 @@ Page = {
                             .attr('title', loc('Extract this attachment'))
                             .bind('click', function () {
                                 Page.extractAttachment(attach_id);
+                                return false;
                             });
                     }
                     $('#st-attachment-listing').append(
@@ -221,6 +223,7 @@ Page = {
                                 .attr('title', loc('Delete this attachment'))
                                 .bind('click', function () {
                                     Page.delAttachment(this.name)
+                                    return false;
                                 })
                         )
                     )
@@ -289,6 +292,7 @@ $(function() {
             var hidden = $('#contentRight').is(':hidden');
             this.innerHTML = hidden ? 'show' : 'hide';
             Cookie.set('st-page-accessories', hidden ? 'hide' : 'show');
+            return false;
         });
 
     $('#st-tags-addlink')
@@ -298,6 +302,7 @@ $(function() {
                 .val('')
                 .show()
                 .focus();
+            return false;
         })
 
     $('#st-tags-field')

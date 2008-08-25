@@ -77,7 +77,7 @@
           <li><a id="st-wiki-subnav-link-whats-new" href="?action=recent_changes">[% loc("What's New") %]</a></li>
           <li><a id="st-wiki-subnav-link-weblogs" href="?action=weblog_display">[% loc("Weblogs") %]</a></li>
           <li><a id="st-wiki-subnav-link-profile" href="/?profile">[% loc("Profile") %]</a></li>
-          <li><a id="st-wiki-subnav-link-people" href="/?action=all_people">[% loc("People") %]</a></li>
+          <li><a id="st-wiki-subnav-link-people" href="/?action=people">[% loc("People") %]</a></li>
           <li><a id="st-wiki-subnav-link-people" href="/?all_tags">[% loc("Tags") %]</a></li>
         </ul>
         <div id="workSpaceLink">

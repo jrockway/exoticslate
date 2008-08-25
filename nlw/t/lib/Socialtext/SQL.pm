@@ -54,7 +54,7 @@ sub sql_ok {
 }
 
 sub _normalize_sql {
-    my $sql = shift;
+    my $sql = shift || '';
     $sql =~ s/\s+/ /sg;
     $sql =~ s/\s*$//;
     return $sql;

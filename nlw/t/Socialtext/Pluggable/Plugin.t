@@ -15,12 +15,17 @@ use_ok 'Socialtext::Pluggable::Adapter';
 my $system_user = Socialtext::User->SystemUser;
 my $adapter = Socialtext::Pluggable::Adapter->new;
 my $plug = Socialtext::Pluggable::Plugin->new;
-my $ws = Socialtext::Workspace->new( name => 'admin' );
+my $ws = Socialtext::Workspace->new(name => 'magic') ||
+    Socialtext::Workspace->create(
+        name       => 'magic',
+        title      => 'Magical Title',
+        account_id => Socialtext::Account->Socialtext()->account_id,
+    );
 $plug->hub($adapter->make_hub($system_user, $ws));
 $plug->hub->rest(Rest->new);
 
 # Config
-is $plug->uri, 'http://topaz.socialtext.net:22018/admin/index.cgi', 'uri';
+is $plug->uri, 'http://topaz.socialtext.net/magic/index.cgi', 'uri';
 is $plug->code_base, Socialtext::AppConfig->code_base, 'code_base';
 
 # CGI

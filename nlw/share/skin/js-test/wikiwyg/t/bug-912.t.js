@@ -5,15 +5,16 @@ t.filters({
 });
 
 t.plan(2);
+
 t.run_is('html', 'text');
 
 /* Test
 === Spaces around links when surrounded by word characters
 --- html
-x<a href="index.cgi?y">y</a>z
-x<a href="index.cgi?y">y</a> z
-x <a href="index.cgi?y">y</a>z
-x <a href="index.cgi?y">y</a> z
+x<a href="index.cgi?y">y</a>z<br/>
+x<a href="index.cgi?y">y</a> z<br/>
+x <a href="index.cgi?y">y</a>z<br/>
+x <a href="index.cgi?y">y</a> z<br class="p"/>
 --- text
 x [y] z
 x [y] z

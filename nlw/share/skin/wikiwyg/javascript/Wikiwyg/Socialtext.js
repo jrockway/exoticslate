@@ -450,7 +450,6 @@ proto.preview_link_text = loc('Preview');
 proto.preview_link_more = loc('Edit More');
 
 proto.preview_link_action = function() {
-    console.log('preview_link_action');
     var preview = this.modeButtonMap[WW_PREVIEW_MODE];
     var current = this.current_mode;
 
@@ -465,7 +464,6 @@ proto.preview_link_action = function() {
         jQuery(preview)
             .unbind('click')
             .click( function () {
-                console.log(arguments);
                 if (jQuery("#contentRight").is(":visible")) 
                     jQuery('#st-page-maincontent')
                         .css({ 'margin-right': '240px'});
@@ -1493,7 +1491,6 @@ proto.fromHtml = function(html) {
                 wikitext_mode.convertWikitextToHtml(
                     wikitext,
                     function(new_html) {
-                        console.log('from here');
                         self.wikiwyg.enable_edit_more();
                         self.div.innerHTML = new_html;
                         self.div.style.display = 'block';
@@ -1504,7 +1501,6 @@ proto.fromHtml = function(html) {
         );
     }
     else {
-        console.log('from there');
         this.wikiwyg.enable_edit_more();
         this.div.innerHTML = html;
         this.div.style.display = 'block';

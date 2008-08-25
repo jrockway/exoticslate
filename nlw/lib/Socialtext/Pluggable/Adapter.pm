@@ -45,7 +45,7 @@ sub handler {
     my ($self, $rest) = @_;
     my $t = time;
 
-    $self->make_hub($rest->user);
+    $self->make_hub($rest->user) unless $self->hub;
 
     if ($rest->query->param('action')) {
         my $res = $self->hub->process;
@@ -53,7 +53,9 @@ sub handler {
         return $res;
     }
     elsif (exists $hooks{root}) {
-        return $self->hook('root', $rest);
+        my $res = $self->hook('root', $rest);
+        $rest->header($self->hub->rest->header);
+        return $res;
     }
     else {
         my $nowork = Socialtext::Rest::NoWorkspace->new($rest);

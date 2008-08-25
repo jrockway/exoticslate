@@ -1249,7 +1249,7 @@ sub _store_preview_text {
     }
 
     my $mtime = $self->modified_time;
-    my $data = Socialtext::File::get_contents_utf8($filename);
+    my $data = $self->_get_contents_decoded_as_utf8($filename);
     my $headers = substr($data, 0, index($data, "\n\n"));
     my $old_length = length($headers);
     return if $headers =~ /^Summary:\ +\S/m;
@@ -1266,6 +1266,26 @@ sub _store_preview_text {
         or warn "rename $tmp_file => $filename failed: $!";
 
     $self->set_mtime($mtime, $filename);
+}
+
+
+sub _get_contents_decoded_as_utf8 {
+    my $self = shift;
+    my $file = shift;
+
+    my $data = Socialtext::File::get_contents($file);
+    my $headers = substr($data, 0, index($data, "\n\n"));
+
+    # If the page has an encoding, decode it as such.
+    if ($headers =~ s/^Encoding:\ +(\S+)/Encoding: utf8/m) {
+        # Decode the page according to its declared encoding.
+        my $encoding = $1;
+        return Encode::decode($encoding, $data);
+    }
+    else {
+        # Force conversion from legacy pages as ISO-8859-1.
+        return "Encoding: utf8\n" . Encode::decode('iso-8859-1', $data);
+    }
 }
 
 sub _to_plain_text {

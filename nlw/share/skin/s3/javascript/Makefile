@@ -18,6 +18,7 @@ EDITOR_FILE_GZIP=socialtext-editor.js.gz
 LIGHTBOX_FILE=socialtext-lightbox.js
 LIGHTBOX_FILE_MINI=socialtext-lightbox-mini.js
 LIGHTBOX_FILE_GZIP=$(LIGHTBOX_FILE).gz
+
 LIGHTBOX_JEMPLATE=jemplateLightboxes.js
 LIGHTBOX_TEMPLATES= \
 		     template/comment_lightbox.tt2 \
@@ -93,7 +94,7 @@ $(S3_FILE): $(S3_SOURCE_FILES) timestamp.js Makefile
 	done
 
 $(EDITOR_FILE):
-	make -C ../../wikiwyg/javascript/ all
+	make -C $(WIKIWYG_ST) all
 
 $(LIGHTBOX_FILE): $(LIGHTBOX_SOURCE_FILES) timestamp.js Makefile
 	rm -f $@;

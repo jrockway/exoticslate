@@ -20,7 +20,7 @@ EDITOR_SOURCE_FILES= \
 		$(WIKIWYG_ST)/Wikiwyg/Widgets.js \
 		$(WIKIWYG_ST)/Wikiwyg/MessageCenter.js \
 		$(WIKIWYG_ST)/Wikiwyg/Wikitext/Socialtext.js \
-		$(S2_JAVASCRIPT)/Wikiwyg/DataValidator.js \
+		$(WIKIWYG_ST)/Wikiwyg/DataValidator.js \
 		wikiwyg.js \
 
 JEMPLATE_WIKIWYG_MODULE=jemplate_wikiwyg.js

@@ -27,7 +27,7 @@ function step2() {
         if (!always_even) break;
     }
 
-    t.ok(always_even, always_even ? 'Columns are alway even' : 'Columns not even at ' + width);
+    t.ok(always_even, "Column top is always aligned");
 
     t.endAsync();
 };

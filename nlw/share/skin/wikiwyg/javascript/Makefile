@@ -46,6 +46,7 @@ clean:
 	    Widgets.js \
 	    $(JEMPLATE_MODULE) \
 	    $(JEMPLATE_WIKIWYG_MODULE) \
+	    $(ALL_JEMPLATES) \
 
 $(EDITOR_FILE): $(EDITOR_SOURCE_FILES) Makefile
 	rm -f $@;

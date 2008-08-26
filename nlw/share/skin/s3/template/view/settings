@@ -34,9 +34,11 @@
               [% IF perm_admin %]
               <li><a href="?action=workspaces_create">[% loc('Create New Workspace') %]</a></li>
               [% END %]
+              [% IF current_workspace.workspace_id %]
               <li><a href="?action=workspaces_unsubscribe">[% loc('Unsubscribe') %]</a></li>
+              [% END %]
             </ul>
-            [% IF perm_admin %]
+            [% IF current_workspace.workspace_id AND perm_admin %]
             <h4>[% loc('This Workpace') %]</h4>
             <ul class="leftNavList">
               <li><a href="?action=workspaces_settings_appearance">[% loc('Workspace Appearance') %]</a></li>

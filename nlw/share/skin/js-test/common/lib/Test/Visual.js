@@ -223,6 +223,26 @@ proto.bindLoad = function(cb) {
     });
 }
 
+// Maybe extend jQuery with this.
+// Uses hairy jQuery internals cargo culting.
+proto.callEventHandler = function(query, event) {
+    var elem = this.$(query)[0];
+    var handle = this.$.data(elem, "handle");
+    var data = this.$.makeArray();
+    data.unshift({
+        type: event,
+        target: elem,
+        preventDefault: function(){},
+        stopPropagation: function(){},
+        timeStamp: null
+    });
+
+    if (handle)
+        var val = handle.apply( elem, data );
+
+    return val;
+}
+
 proto.elements_do_not_overlap = function(selector1, selector2, name) {
     var $e1 = $(this._get_selector_element(selector1));
     var $e2 = $(this._get_selector_element(selector2));

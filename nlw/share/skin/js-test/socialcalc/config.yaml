@@ -4,4 +4,5 @@ import_libs:
   - ../../s2/javascript/pageview.js
   - ../../common/javascript/jquery-1.2.6.js
   - ../common/lib/Test/Visual.js
+  - ../common/lib/Test/SocialCalc.js
 

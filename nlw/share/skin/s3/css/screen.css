@@ -60,12 +60,32 @@ div.placeholder {
 }
 
 #columnMiddle div.widgetWrapper {
-    padding-left: 40px;
-    width: 90%;
+    width: 100%;
 }
 
 #columnMiddle div.placeholder {
-    margin-left: 40px;
+}
+
+body#dashBoard div#contentColumns div#columnCombined {
+    width: 67% !important;
+}
+
+body#dashBoard div#contentColumns div#columnCombined div.widgetCol {
+    width: 49% !important;
+}
+
+body#dashBoard div#contentColumns div#contentRight {
+    margin: 0;
+    width: 33% !important;
+}
+
+body#dashBoard div.widgetWrapper {
+    padding: 10px;
+    width: 95%;
+}
+
+body#dashBoard div#contentContainer {
+    padding: 0px;
 }
 
 div.widgetWrapper div.widget {

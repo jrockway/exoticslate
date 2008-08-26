@@ -5,6 +5,7 @@ use warnings;
 
 use Test::More tests => 16;
 use Socialtext::User;
+use Socialtext::URI;
 use Socialtext::Account;
 use Socialtext::Workspace;
 use Socialtext::AppConfig;
@@ -25,7 +26,7 @@ $plug->hub($adapter->make_hub($system_user, $ws));
 $plug->hub->rest(Rest->new);
 
 # Config
-is $plug->uri, 'http://topaz.socialtext.net/magic/index.cgi', 'uri';
+is $plug->uri, Socialtext::URI::uri(path => 'magic/index.cgi'), 'uri';
 is $plug->code_base, Socialtext::AppConfig->code_base, 'code_base';
 
 # CGI

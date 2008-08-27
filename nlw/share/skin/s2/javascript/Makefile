@@ -105,7 +105,7 @@ DISPLAY_UI_SOURCE_FILES= \
 		Widgets.js \
 		Wikiwyg/Widgets.js \
 		Wikiwyg/Wikitext/Socialtext.js \
-		Wikiwyg/DataValidator.js \
+		$(WIKIWYG_ST)/Wikiwyg/DataValidator.js \
 		$(COMMON_JAVASCRIPT)/YAML-0.11/lib/YAML.js \
 		Debug.js \
 		ui-last-source.js

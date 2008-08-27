@@ -521,7 +521,7 @@ $(function() {
         return false;
     });
 
-    $("#st-edit-button-link,#st-edit-actions-below-fold-edit")
+    $("#st-edit-button-link,#st-edit-actions-below-fold-edit, #bottomButtons .editButton")
         .one("click", function () {
             $('#bootstrap-loader').show();
             $.ajaxSettings.cache = true;

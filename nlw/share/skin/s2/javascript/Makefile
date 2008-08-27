@@ -41,6 +41,7 @@ JQUERY=$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
 DISPLAY_SOURCE_FILES= \
 		timestamp.js \
 		$(JQUERY) \
+		$(S3_JAVASCRIPT)/jquery-patch.js \
 		loc.js \
 		bootstrap-ui.js \
 		comment.js \

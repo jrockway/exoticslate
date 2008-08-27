@@ -38,12 +38,8 @@ jQuery(function () {
             .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time) ;
 
         var self = this;
-        jQuery.ajax({
-            type: 'GET',
-            dataType: 'script',
-            url: script_url,
-            success: function() { cb.call(self); },
-            cache: true
+        jQuery.getScript(script_url, function() {
+            cb.call(self);
         });
     };
 
@@ -58,12 +54,8 @@ jQuery(function () {
                 .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time) ;
 
         var self = this;
-        jQuery.ajax({
-            type: 'GET',
-            dataType: 'script',
-            url: script_url,
-            success: function() { cb.call(self); },
-            cache: true
+        jQuery.getScript(script_url, function() {
+            cb.call(self);
         });
     };
 

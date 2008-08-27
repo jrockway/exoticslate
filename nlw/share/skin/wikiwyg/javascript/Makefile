@@ -9,7 +9,6 @@ EDITOR_SOURCE_FILES= \
 		$(S2_JAVASCRIPT)/md5.js \
 		$(JEMPLATE_WIKIWYG_MODULE) \
 		$(JEMPLATE_MODULE) \
-		$(WIKIWYG_PATH)/lib/Wikiwyg/Debug.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Toolbar.js \
 		$(WIKIWYG_PATH)/lib/Wikiwyg/Preview.js \

@@ -298,7 +298,8 @@ sub dump {
     push( @parms, '--host'     => $c{host} )      if $c{host};
     push( @parms, $c{db_name} );
 
-    $self->_db_shell_run( join ' ', @parms );
+    my $sudo = $> ? '' : 'sudo -u www-data';
+    $self->_db_shell_run( "$sudo @parms" );
     $self->_display("Dumped data to $file\n");
 }
 

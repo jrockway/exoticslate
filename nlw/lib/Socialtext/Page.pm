@@ -1009,10 +1009,15 @@ sub last_edited_by {
 
 sub size {
     my $self = shift;
+    my $filename = $self->_index_path or return 0;
+    return scalar((stat($filename))[7]);
+}
+
+sub _index_path {
+    my $self = shift;
     my $filename = readlink($self->file_path . '/index.txt');
-    return -f $filename
-        ? scalar((stat($filename))[7])
-        : 0;
+    -f $filename or return;
+    return $filename;
 }
 
 sub modified_time {
@@ -1236,8 +1241,7 @@ sub preview_text_spreadsheet {
 
 sub _store_preview_text {
     my $self = shift;
-    my $preview_text = shift;
-    $preview_text = '...' if $preview_text =~ /^\s*$/;
+    my $preview_text; # Optional; defaults to $self->preview_text -- see below
 
     my $dirpath = $self->directory_path;
     return unless -e $dirpath;
@@ -1250,16 +1254,26 @@ sub _store_preview_text {
 
     my $mtime = $self->modified_time;
     my $data = $self->_get_contents_decoded_as_utf8($filename);
-    my $headers = substr($data, 0, index($data, "\n\n"));
+    my $headers = substr($data, 0, index($data, "\n\n") + 1);
     my $old_length = length($headers);
     return if $headers =~ /^Summary:\ +\S/m;
-    $headers =~ s/^Summary:.*\n?//mg;
+    $headers =~ s/^Summary:.*\n//mg;
+
+    if (@_) {
+        # If explicitly specified, use the specified text
+        $preview_text = shift;
+    }
+    else {
+        # Otherwise, generate preview based on the newly decoded data
+        $preview_text = $self->preview_text(substr($data, $old_length + 1));
+    }
+
+    $preview_text = '...' if $preview_text =~ /^\s*$/;
     $preview_text =~ s/\s*\z//;
     return if $preview_text =~ /\n/;
-    $headers =~ s/\s+\z//;
-    $headers .= "\nSummary: $preview_text";
-    my $body = substr($data, $old_length);
+    $headers .= "Summary: $preview_text\n";
 
+    my $body = substr($data, $old_length);
     my $tmp_file = "$filename.tmp";
     Socialtext::File::set_contents_utf8($tmp_file, $headers . $body);
     rename $tmp_file => $filename 
@@ -1274,13 +1288,19 @@ sub _get_contents_decoded_as_utf8 {
     my $file = shift;
 
     my $data = Socialtext::File::get_contents($file);
-    my $headers = substr($data, 0, index($data, "\n\n"));
+    my $headers = substr($data, 0, index($data, "\n\n") + 1);
+    my $old_length = length($headers);
 
     # If the page has an encoding, decode it as such.
-    if ($headers =~ s/^Encoding:\ +(\S+)/Encoding: utf8/m) {
+    if ($headers =~ /^Encoding:\ +utf8\n/m) {
+        # The common case is UTF-8, so just decode it.
+        return Encode::decode_utf8($data);
+    }
+    elsif ($headers =~ s/^Encoding:\ +(\S+)\n/Encoding: utf8\n/m) {
         # Decode the page according to its declared encoding.
         my $encoding = $1;
-        return Encode::decode($encoding, $data);
+        my $body = substr($data, $old_length);
+        return Encode::decode($encoding, $headers . $body);
     }
     else {
         # Force conversion from legacy pages; first try UTF-8, then ISO-8859-1.

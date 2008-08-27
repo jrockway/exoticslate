@@ -1,0 +1,199 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use Socialtext::Workspace;
+use Socialtext::Hub;
+use Socialtext::CLI;
+use Socialtext::Encode;
+use Socialtext::Page::TablePopulator;
+use Socialtext::File;
+use Fatal qw/opendir closedir chdir open/;
+use Cwd qw/abs_path/;
+use Getopt::Long;
+
+$| = 1; # turn on autoflush
+
+die "Must be run as root!\n" if $< and !$ENV{ST_DEV};
+Socialtext::CLI->_drop_privs();
+
+my $FORCE = 0;
+my $FIX_MOJIBAKE = 0;
+GetOptions(
+    'f|force' => \$FORCE,
+    'h|help'  => \&usage,
+    'fix-mojibake' => \$FIX_MOJIBAKE,
+) or usage();
+
+die "--fix-mojibake must be used with --force!\n"
+    if $FIX_MOJIBAKE and not $FORCE;
+
+if ( @ARGV ) {
+    for my $ws_name ( @ARGV ) {
+        my $dir = Socialtext::Paths::page_data_directory($ws_name);
+        next unless ( -d $dir );
+        my $wksp = Socialtext::Workspace->new(name => $ws_name);
+        process_workspace($wksp);
+    }
+}
+else {
+    my $workspaces = Socialtext::Workspace->All;
+    while ( my $wksp = $workspaces->next ) {
+	process_workspace($wksp);
+    }
+}
+exit;
+
+sub usage {
+    warn <<EOT;
+Usage: $0 [--force] <workspaces>
+
+Generate preview text for the specified workspaces.
+
+The preview text is stored in the page 'Summary' header.
+EOT
+    exit -1;
+}
+
+sub process_workspace {
+    my $wksp = shift;
+    print "Storing preview text for workspace " . $wksp->name . ": ";
+    my $hub = Socialtext::Hub->new(current_workspace => $wksp);
+    my $workspace_dir = Socialtext::Paths::page_data_directory($wksp->name);
+    chdir $workspace_dir;
+    opendir(my $dfh, $workspace_dir);
+    while (my $dir = readdir($dfh)) {
+        next unless -d $dir;
+        next if $dir =~ m/^\./;
+
+        # Ignore really old pages that have invalid page_ids
+        next unless Socialtext::Encode::is_valid_utf8($dir);
+
+        Socialtext::Page::TablePopulator::fix_relative_page_link($dir);
+
+	my $char = '?';
+        eval {
+	    my $page = $hub->pages->new_page($dir);
+	    if (!$FORCE and $page->metadata->{Summary}) {
+		$char = '.';
+	    }
+	    else {
+		$char = '+';
+
+                # Force means deleting the Summary line from the header.
+                if ($FORCE) {
+                    my $filename = $page->_index_path;
+                    my $is_success = remove_summary_line_in_file($filename);
+
+                    # Fix mojibake means repairing doubly-encoded UTF-8 text.
+                    if ($FIX_MOJIBAKE and $is_success) {
+                        my $is_fixed = fix_mojibake_in_file($filename);
+                        $char = 'M' if $is_fixed;
+                    }
+                }
+
+		$page->_store_preview_text;
+	    }
+        };
+        print $char;
+        warn "Error storing preview text: $@" if $@;
+    }
+    closedir($dfh);
+    print "\n";
+}
+
+sub remove_summary_line_in_file {
+    my $filename   = shift;
+    my $data       = Socialtext::File::get_contents($filename);
+    my $headers    = substr($data, 0, index($data, "\n\n") + 1);
+    my $old_length = length($headers);
+
+    $headers =~ s/^Summary:.*\n//mg or return;
+
+    my $body     = substr($data, $old_length);
+    return _set_contents($filename, $headers . $body);
+}
+
+sub _set_contents {
+    my $filename = shift;
+    my $tmp_file = "$filename.tmp";
+    Socialtext::File::set_contents($tmp_file, $_[0]);
+
+    if (rename $tmp_file => $filename) {
+        return 1;
+    }
+    else {
+        warn "rename $tmp_file => $filename failed: $!";
+        return;
+    }
+}
+
+### Mojibake Fix Begins Here ###
+#
+my ($Latin1AsUTF8, $ValidUTF8Regexp);
+BEGIN {
+    $Latin1AsUTF8 = "[\xC2\xC3][\x80-\xBF]";
+    $ValidUTF8Regexp = << '.';
+        [\x{00}-\x{7f}]
+      | [\x{c2}-\x{df}][\x{80}-\x{bf}]
+      |         \x{e0} [\x{a0}-\x{bf}][\x{80}-\x{bf}]
+      | [\x{e1}-\x{ec}][\x{80}-\x{bf}][\x{80}-\x{bf}]
+      |         \x{ed} [\x{80}-\x{9f}][\x{80}-\x{bf}]
+      | [\x{ee}-\x{ef}][\x{80}-\x{bf}][\x{80}-\x{bf}]
+      |         \x{f0} [\x{90}-\x{bf}][\x{80}-\x{bf}]
+      | [\x{f1}-\x{f3}][\x{80}-\x{bf}][\x{80}-\x{bf}][\x{80}-\x{bf}]
+      |         \x{f4} [\x{80}-\x{8f}][\x{80}-\x{bf}][\x{80}-\x{bf}]
+.
+};
+
+sub fix_mojibake_in_file {
+    my $filename   = shift;
+    my $data       = Socialtext::File::get_contents($filename);
+    my $headers    = substr($data, 0, index($data, "\n\n"));
+
+    $headers =~ /^Encoding:\s+utf8$/m or return;
+
+    # Now comes the tricky part.
+    my $buf = $data;
+    my $is_mojibake = 0;
+
+    FIX: {
+        no warnings 'exiting';
+        $buf =~ s{((?:$Latin1AsUTF8)+)}{
+            my $bytes = _check_utf8_bytes($1);
+            if (defined $bytes) {
+                $is_mojibake = 1;
+                $bytes;
+            }
+            else {
+                # If we've seen one valid non-mojibake UTF8 sequence,
+                # then get out of here.
+                $is_mojibake = 0;
+                last FIX;
+            }
+        }ego;
+    }
+
+    if ($is_mojibake) {
+        return _set_contents($filename, $buf);
+    }
+
+    return;
+}
+
+sub _check_utf8_bytes {
+    my $bytes = shift;
+
+    my $possible_utf8 = '';
+    while ($bytes =~ s/^(.)(.)//) {
+        $possible_utf8 .= chr( (ord($1) << 6 & 0xff) | ord($2) )
+    }
+
+    if ($possible_utf8 =~ /^(?:$ValidUTF8Regexp)+\z/ox) {
+        return $possible_utf8;
+    }
+
+    return;
+}

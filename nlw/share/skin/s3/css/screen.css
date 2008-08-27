@@ -48,53 +48,6 @@ div.widget ul.widgetButton li a.addTagButton {
     width: 87px;
 }
 
-div.widgetWrapper {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    padding-top: 10px;
-}
-
-div.placeholder {
-    margin-top: 10px;
-}
-
-#columnMiddle div.widgetWrapper {
-    width: 100%;
-}
-
-#columnMiddle div.placeholder {
-}
-
-body#dashBoard div#contentColumns div#columnCombined {
-    width: 67% !important;
-}
-
-body#dashBoard div#contentColumns div#columnCombined div.widgetCol {
-    width: 49% !important;
-}
-
-body#dashBoard div#contentColumns div#contentRight {
-    margin: 0;
-    width: 32% !important;
-}
-
-body#dashBoard div.widgetWrapper {
-    padding: 10px;
-    width: 95%;
-}
-
-body#dashBoard div#contentContainer {
-    padding: 0px;
-}
-
-div.widgetWrapper div.widget {
-    background-color: white !important;
-    float: none !important;
-    margin: 0 !important;
-    width: 100% !important;
-}
-
 /* Done overloads */
 
 #globalNav form {

@@ -18,12 +18,12 @@ function step2() {
     var always_even = true;
     for (var width = WIDTH_MIN; width <= WIDTH_MAX; width += WIDTH_INT) {
         $(t.iframe).width(width);
-        t.scrollTo(t.$('#contentLeft').offset().top, width);
+        t.scrollTo(t.$('#leftList').offset().top, width);
 
-        always_even = ( t.$('#contentLeft').offset().top ==
-                        t.$('#columnMiddle').offset().top ) &&
-                      ( t.$('#columnMiddle').offset().top ==
-                        t.$('#contentRight').offset().top );
+        always_even = ( t.$('#leftList').offset().top ==
+                        t.$('#middleList').offset().top ) &&
+                      ( t.$('#middleList').offset().top ==
+                        t.$('#rightList').offset().top );
         if (!always_even) break;
     }
 

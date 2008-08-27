@@ -64,7 +64,6 @@ DISPLAY_UI_SOURCE_FILES= \
 		pageattachments.js \
 		pageview.js \
 		StTemplateField.js \
-		tagqueue.js \
 		Watchlist.js \
 		comment.js \
 		revisions.js \

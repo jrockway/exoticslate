@@ -332,7 +332,7 @@ function setup_wikiwyg() {
             }
         });
 
-    jQuery('#st-tagqueue').bind('submit', function () {
+    var add_tag = function() {
         var tag = jQuery('#st-tagqueue-field').val();
         jQuery('<input type="hidden" name="add_tag">')
             .attr('id', 'st-tagqueue-'+tag)
@@ -359,7 +359,14 @@ function setup_wikiwyg() {
             )
             .appendTo('#st-tagqueue-list');
         return false;
-    });
+    };
+
+    if (Socialtext.S3) {
+        jQuery('#st-tagqueue').submit(add_tag);
+    }
+    else {
+        jQuery('#st-tagqueue-submitbutton').click(add_tag);
+    }
 
     jQuery('#st-edit-mode-uploadbutton').click(function () {
         jQuery.showLightbox({

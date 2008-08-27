@@ -118,10 +118,6 @@ jQuery(function () {
                 window.Attachments._display_attach_interface();
                 return false;
             });
-            jQuery( "#st-edit-mode-tagbutton" ).unbind().click(function() {
-                window.TagQueue._display_interface();
-                return false;
-            });
         }, 0);
     };
 

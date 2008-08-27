@@ -30,6 +30,7 @@ LIGHTBOX_TEMPLATES= \
 ALL_JEMPLATE_PLUGINS:=$(shell find $(S2_JAVASCRIPT)/JemplatePlugin -name \*.js)
 
 S3_SOURCE_FILES= \
+		isS3.js \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
 		Jemplate.js \
 		$(ALL_JEMPLATE_PLUGINS) \

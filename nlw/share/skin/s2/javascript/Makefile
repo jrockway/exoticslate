@@ -84,6 +84,8 @@ DISPLAY_UI_SOURCE_FILES= \
 		$(JEMPLATE_WIKIWYG_MODULE) \
 		$(ALL_JEMPLATE_PLUGINS) \
 		$(EDITOR_FILE) \
+		$(S3_JAVASCRIPT)/lightbox.js \
+		$(S3_JAVASCRIPT)/lookahead.js \
 		$(COMMON_JAVASCRIPT)/YAML-0.11/lib/YAML.js \
 		Debug.js \
 		ui-last-source.js \

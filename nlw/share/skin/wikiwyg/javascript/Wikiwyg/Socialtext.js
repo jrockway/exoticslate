@@ -323,7 +323,6 @@ function setup_wikiwyg() {
         });
     });
 
-    if (Socialtext.S3) {
     jQuery('#st-tagqueue-field')
         .lookahead({
             submitOnClick: true,
@@ -368,7 +367,6 @@ function setup_wikiwyg() {
             close:'#st-attachments-attach-closebutton'
         });
     });
-    }
 
     ww.modeButtonMap = bmap = {};
     bmap[WW_SIMPLE_MODE] = jQuery('#st-mode-wysiwyg-button').get(0);

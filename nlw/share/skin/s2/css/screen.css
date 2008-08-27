@@ -3038,3 +3038,85 @@ div.footerEndBottom div
     color: red;
 }
 
+/* Lightbox */
+
+.lightbox {
+    padding: 10px;
+    line-height: 1.5em;
+    text-align: left;
+    display: none;
+}
+
+.lightbox td, .lightbox th {
+    vertical-align: top;
+    padding: 5px 5px;
+}
+
+.lightbox th {
+    font-weight: bold;
+}
+
+.lightbox input {
+    margin: 4px;
+}
+
+.lightbox .title {
+    font-weight: bold;
+    font-size: 120%;
+}
+
+.lightbox .label {
+    font-weight: 600;
+}
+
+.lightbox .editlabel {
+    width: 10em;
+    float: left;
+    padding-right: 0.5em;
+    padding-top: 3px;
+}
+
+.lightbox .buttons {
+    float: right;
+    margin-top: 20px;
+}
+
+.lightbox .fileprompt {
+    margin: 0.2em 0 0.4em 0;
+    padding-bottom: 0px;
+}
+
+.lightbox .message {
+    font-weight: bold;
+    margin-bottom: 1em;
+    display: none;
+}
+
+.lightbox .error {
+    font-weight: bold;
+    color: #f00;
+    margin-bottom: 1em;
+    display: none;
+}
+
+.lightbox .list {
+    display: none;
+    font-size: 90%;
+    color: #666;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border-top: 1px solid #4949BA;
+    border-bottom: 1px solid #4949BA;
+    background-color: #F5F5F5;
+    padding: 3px;
+}
+
+.lightbox .listlabel {
+    color: #4949BA;
+}
+
+.lightbox .hint {
+    font-size: 90%;
+    font-style: italic;
+}
+

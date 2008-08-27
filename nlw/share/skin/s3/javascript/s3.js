@@ -37,7 +37,6 @@ function nlw_name_to_id(name) {
  * than evaling them
  */
 $.getScript = function (url, callback) {
-    console.log('hi');
     var head = document.getElementsByTagName("head")[0];
     var script = document.createElement("script");
     script.src = url;

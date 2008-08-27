@@ -48,7 +48,8 @@ $.getScript = function (url, callback) {
         if ( !done && (!this.readyState ||
              this.readyState == "loaded" || this.readyState == "complete") ) {
             done = true;
-            callback();
+            if ($.isFunction(callback)) 
+                callback();
            /* head.removeChild( script );*/
         }
     };

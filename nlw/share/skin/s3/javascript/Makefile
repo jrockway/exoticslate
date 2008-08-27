@@ -27,10 +27,10 @@ LIGHTBOX_TEMPLATES= \
 		     template/rename_lightbox.tt2 \
 		     template/copy_lightbox.tt2 \
 
+ALL_EDITOR_FILES:=$(shell find $(WIKIWYG_ST)/ -type f | grep -v editor.js)
 ALL_JEMPLATE_PLUGINS:=$(shell find $(S2_JAVASCRIPT)/JemplatePlugin -name \*.js)
 
 S3_SOURCE_FILES= \
-		isS3.js \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
 		Jemplate.js \
 		$(ALL_JEMPLATE_PLUGINS) \
@@ -94,7 +94,7 @@ $(S3_FILE): $(S3_SOURCE_FILES) timestamp.js Makefile
 	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
 	done
 
-$(EDITOR_FILE):
+$(EDITOR_FILE): $(ALL_EDITOR_FILES)
 	make -C $(WIKIWYG_ST) all
 
 $(LIGHTBOX_FILE): $(LIGHTBOX_SOURCE_FILES) timestamp.js Makefile

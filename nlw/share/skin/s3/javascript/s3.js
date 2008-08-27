@@ -1,3 +1,4 @@
+Socialtext.S3 = true;
 
 function trim(value) {
     var ltrim = /\s*((\s*\S+)*)/;

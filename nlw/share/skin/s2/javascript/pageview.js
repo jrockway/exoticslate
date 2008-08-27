@@ -190,6 +190,9 @@ ST.Page.prototype = {
     }
 };
 
+// Make this work with kjo's S3 refactorings:
+ST.Page.prototype.refreshPageContent = ST.Page.prototype.refresh_page_content;
+
 // ST.Page calls
 ST.NavBar = function (args) {
     $H(args).each(this._applyArgument.bind(this));

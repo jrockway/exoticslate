@@ -1,3 +1,14 @@
+function XXX(val) {
+    if (console && console.log) {
+        console.log.apply(this, arguments);
+    }
+    else {
+        if (!confirm(arguments.join('\n')))
+            throw("Execution cancelled");
+    }
+    return val;
+}
+
 function jjj(obj) {
     return JSON.stringify(obj).replace(/[:,][\{\[]/g, ':\n{');
 }

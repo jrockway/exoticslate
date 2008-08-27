@@ -85,7 +85,8 @@ function setup_wikiwyg() {
     if ( jQuery("#st-edit-mode-container").size() != 1 ||
          jQuery("iframe#st-page-editing-wysiwyg").size() != 1 ) {
         Socialtext.wikiwyg_variables.loc = loc;
-        var html = Jemplate.process('edit_wikiwyg', Socialtext.wikiwyg_variables);
+        var template = Socialtext.S3 ? 'edit_wikiwyg' : 'layout/edit_wikiwyg';
+        var html = Jemplate.process(template, Socialtext.wikiwyg_variables);
 
         jQuery(html).insertBefore('#st-display-mode-container');
 
@@ -170,6 +171,10 @@ function setup_wikiwyg() {
             if (Wikiwyg.is_safari || Wikiwyg.is_old_firefox) {
                 jQuery("#st-page-editing-uploadbutton").hide();
             }
+            
+            if (!Socialtext.S3)
+                jQuery("#st-all-footers").hide();
+
             jQuery("#st-display-mode-container").hide();
             jQuery("#st-edit-mode-container").show();
  
@@ -318,6 +323,7 @@ function setup_wikiwyg() {
         });
     });
 
+    if (Socialtext.S3) {
     jQuery('#st-tagqueue-field')
         .lookahead({
             submitOnClick: true,
@@ -362,6 +368,7 @@ function setup_wikiwyg() {
             close:'#st-attachments-attach-closebutton'
         });
     });
+    }
 
     ww.modeButtonMap = bmap = {};
     bmap[WW_SIMPLE_MODE] = jQuery('#st-mode-wysiwyg-button').get(0);

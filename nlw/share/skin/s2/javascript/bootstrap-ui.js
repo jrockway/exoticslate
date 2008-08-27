@@ -68,12 +68,12 @@ jQuery(function () {
     };
 
     var bootstrap2 = function(cb) {
-        if (Socialtext.boostrap_ui_finished == true)  {
+        if (Socialtext.bootstrap_ui_finished == true)  {
             cb.call(this);
             return;
         }
 
-        jQuery(window).trigger("boostrapping");
+        jQuery(window).trigger("bootstrapping");
 
         load_ui.call(this, function() {
             startup();
@@ -129,7 +129,7 @@ jQuery(function () {
         .addClass("bootstrapper")
         .one("click", bootstrap(start_editor));
 
-    jQuery(window).bind("boostrapping", function() {
+    jQuery(window).bind("bootstrapping", function() {
         jQuery("#bootstrap-loader").show();
     });
 

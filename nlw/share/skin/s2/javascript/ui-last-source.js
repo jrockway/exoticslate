@@ -1,2 +1,2 @@
-Socialtext.boostrap_ui_finished = true;
+Socialtext.bootstrap_ui_finished = true;
 

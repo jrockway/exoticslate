@@ -165,9 +165,9 @@ Create unique sort order for each sort:
 
 | *Comment* | Test Case: Tagged Page Sorting. Sorting Last Edited By asc, then desc |  |
 | select_and_wait | sort-picker | label=Last Edited By |
-| text_like | st-search-content | qr/Search Sort 1.+Search Sort 2.+Search Sort 3.+Search Sort 4/ |
+| text_like | st-search-content | qr/Search Sort 4.+Search Sort 1.+Search Sort 2.+Search Sort 3/ |
 | select_and_wait | sort-picker | index=3 |
-| text_like | st-search-content | qr/Search Sort 1.+Search Sort 2.+Search Sort 3.+Search Sort 4/ |
+| text_like | st-search-content | qr/Search Sort 3.+Search Sort 2.+Search Sort 1.+Search Sort 4/ |
 
 | *Comment* | Test Case: Tagged Page Sorting. Sorting Date desc, then asc |  |
 | select_and_wait | sort-picker | label=Date |

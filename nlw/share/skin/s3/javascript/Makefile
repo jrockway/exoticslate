@@ -33,6 +33,7 @@ ALL_JEMPLATE_PLUGINS:=$(shell find $(S2_JAVASCRIPT)/JemplatePlugin -name \*.js)
 S3_SOURCE_FILES= \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
 		jquery-patch.js \
+		jquery-plugin.js \
 		Jemplate.js \
 		$(ALL_JEMPLATE_PLUGINS) \
 		$(S2_JAVASCRIPT)/loc.js \

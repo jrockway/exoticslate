@@ -7,10 +7,12 @@ use warnings;
 use Template::Plugin::Filter;
 use base qw( Template::Plugin::Filter );
 
+my $ellipsis = '...';
+
 sub init {
     my $self = shift;
 
-    $self->{ _DYNAMIC } = 0;
+    $self->{ _DYNAMIC } = 1;
 
     # first arg can specify filter name
     $self->install_filter($self->{ _ARGS }->[0] || 'label_ellipsis');
@@ -20,9 +22,11 @@ sub init {
 
 sub _label_ellipsis {
     my ($string, $length) = @_;
+    
     my $new_string = '';
 
     return $string if (length($string) <= $length);
+    return $ellipsis if (0 == $length);
 
     my @parts = split / /, $string;
 
@@ -34,15 +38,18 @@ sub _label_ellipsis {
             last if ((length($new_string) + length($part)) > $length);
             $new_string .= $part . ' ';
         }
+        $new_string = substr($parts[0], 0, $length) if (length($new_string) == 0);
+
     }
 
     $new_string =~ s/\s+$//;
-    $new_string .= '...';
+    $new_string .= $ellipsis;
     return $new_string;
 }
 
 sub filter {
-    return _label_ellipsis( $_[1], $_[2] );
+    my ($self, $text, $args, $config) = @_;
+    return _label_ellipsis( $text, $args->[0] );
 }
 
 1;

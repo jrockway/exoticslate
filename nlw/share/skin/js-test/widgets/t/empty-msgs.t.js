@@ -4,11 +4,6 @@ var t = new Test.Visual();
 
 t.plan(2);
 
-if (jQuery.browser.msie) 
-    t.skipAll("Skipping this insanity on IE for now...");
-
-t.pass("This test might take up to 30 seconds to run. Be patient.");
-
 t.beginAsync(step1);
 
 function step1() {
@@ -28,7 +23,24 @@ function step3() {
 
 function step4(widget) {
     t.scrollTo(150);
-    t.fail('under construction...');
+    
+    t.$.poll(
+        function() { return Boolean(widget.$(".st-widget-empty-msg").length) },
+        function() { step5(widget) }
+    );
+}
+
+function step5(widget) {
+    var $empty = widget.$(".st-widget-empty-msg");
+    t.is($empty.length, 1, "We have an empty message");
+    t.is($empty.text(), "You do not belong to any workspaces yet.",
+        "Empty message is correct"
+    );
+
+    t.login({}, step6);
+}
+
+function step6() {
     t.endAsync();
 };
 

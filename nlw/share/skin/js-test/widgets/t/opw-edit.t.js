@@ -2,12 +2,10 @@
 
 var t = new Test.Visual();
 
-t.plan(2);
+t.plan(1);
 
 if (jQuery.browser.msie) 
     t.skipAll("Skipping this insanity on IE for now...");
-
-t.pass("This test might take up to 30 seconds to run. Be patient.");
 
 t.beginAsync(step1);
 

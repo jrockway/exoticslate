@@ -1,15 +1,8 @@
 [%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
-[% INCLUDE element/settings/start %]
 <dl class="form">
   <dt><label>[% loc('Workspaces') %]</label></dt>
   <dd>[% loc('The ten most recently visited of these workspaces are displayed in the Dashboard.') %]</dd>
-  <dd>
-    perm = [% checker.check_permission('admin_workspace') %]
-    [% IF admin %]
-      <input onclick="document.location = /?action=workspaces_create'" value="[% loc('Create Workspace') %]"/>
-    [% END %]
-  </dd>
 </dl>
 
 <table>
@@ -33,4 +26,3 @@
   </tr>
 [% END %]
 </table>
-[% INCLUDE element/settings/stop %]

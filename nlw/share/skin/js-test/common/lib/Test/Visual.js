@@ -9,6 +9,12 @@ proto.init = function() {
     this.asyncId = 0;
 }
 
+// Move to Test.Base
+proto.diag = function() {
+    return;
+    this.builder.diag.apply(this.builder, arguments);
+}
+
 proto.is_no_harness = function() {
     if (window.top.Test.Harness) {
         this.builder.diag(
@@ -152,6 +158,7 @@ proto.open_iframe = function(url, callback, options) {
     var self = this;
     $iframe.one("load", function() {
         self.doc = self.iframe.contentDocument;
+        self.win = self.iframe.contentWindow;
         self.$ = self.iframe.contentWindow.jQuery;
         
         self.call_callback(callback);

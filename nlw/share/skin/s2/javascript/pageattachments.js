@@ -303,35 +303,19 @@ ST.Attachments.prototype = {
             field.value = '';
         });
 
-        $(this.element.attachmentInterface).style.display = 'block';
-
-        this._disable_scrollbar();
-
-        var overlayElement = $('st-attachments-attach-attachinterface-overlay');
-        var element = $('st-attachments-attach-interface');
-        this._center_lightbox(overlayElement, element, this.element.attachmentInterface);
-        field.focus();
+        jQuery.showLightbox({
+            content: '#st-attachments-attach-interface',
+            focus: '#this.element.attachFilename'
+        });
         return false;
-    },
-
-    _center_lightbox: function (overlayElement, element, parentElement) {
-        var divs = {
-            wrapper: $(parentElement),
-            background: overlayElement,
-            content: element,
-            contentWrapper: element.parentNode
-        };
-        Widget.Lightbox.show({'divs':divs});
     },
 
     _display_manage_interface: function () {
         $(this.element.manageSelectAll).checked = false;
         this._refresh_manage_table();
-        $(this.element.manageInterface).style.display = 'block';
-        this._disable_scrollbar();
-        var overlayElement = $('st-attachments-manage-manageinterface-overlay');
-        var element = $('st-attachments-manage-interface');
-        this._center_lightbox(overlayElement, element, this.element.manageInterface);
+        jQuery.showLightbox({
+            content: '#st-attachments-manage-interface'
+        });
 
         this._table_sorter = new Widget.SortableTable( {
             "tableId": this.element.manageTable,
@@ -345,30 +329,6 @@ ST.Attachments.prototype = {
             ]
           } );
         return false;
-    },
-
-    _enable_scrollbar: function(){
-        if (window.wikiwyg && wikiwyg.is_editing) return;
-
-        this._disable_scrollbar('auto','auto');
-    },
-
-    // This method has parameters because it could
-    // be used to both enable and disable scrollbar. Caller
-    // shouldn't give any arguments when calling it.
-    _disable_scrollbar: function(height, overflow){
-        if (window.wikiwyg && wikiwyg.is_editing) return;
-
-        if ( !height ) height = '100%';
-        if ( !overflow ) overflow = 'hidden';
-
-        var bod = document.getElementsByTagName('body')[0];
-        bod.style.height = height;
-        bod.style.overflow = overflow;
-
-        var htm = document.getElementsByTagName('html')[0];
-        htm.style.height = height;
-        htm.style.overflow = overflow;
     },
 
     _hide_attach_error: function () {
@@ -387,8 +347,7 @@ ST.Attachments.prototype = {
 
     _hide_attach_file_interface: function () {
         if (!this._is_uploading_file) {
-            $(this.element.attachmentInterface).style.display = 'none';
-            this._enable_scrollbar();
+            jQuery.hideLightbox();
             this._clear_uploaded_list();
             this._check_reload();
         }
@@ -396,8 +355,7 @@ ST.Attachments.prototype = {
     },
 
     _hide_manage_file_interface: function () {
-        $(this.element.manageInterface).style.display = 'none';
-        this._enable_scrollbar();
+        jQuery.hideLightbox();
         this._check_reload();
         return false;
     },

@@ -90,6 +90,8 @@
             .fadeIn(function () {
                 $('#lightbox').fadeIn(function() {
                     $(opts.focus).focus();
+                    if ($.isFunction(opts.callback))
+                        opts.callback();
                 })
             });
     };

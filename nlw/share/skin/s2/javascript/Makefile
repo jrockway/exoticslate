@@ -42,6 +42,8 @@ DISPLAY_SOURCE_FILES= \
 		timestamp.js \
 		$(JQUERY) \
 		$(S3_JAVASCRIPT)/jquery-patch.js \
+		$(S3_JAVASCRIPT)/jquery-plugin.js \
+ 		$(S3_JAVASCRIPT)/lightbox.js \
 		loc.js \
 		bootstrap-ui.js \
 		comment.js \
@@ -53,8 +55,6 @@ DISPLAY_UI_SOURCE_FILES= \
 		$(COMMON_JAVASCRIPT)/TrimPath-template-1.0.38.js \
 		$(COMMON_JAVASCRIPT)/DOM.Ready-0.14/lib/DOM/Ready.js \
 		$(COMMON_JAVASCRIPT)/DOM.Events-0.02/lib/DOM/Events.js \
-		$(COMMON_JAVASCRIPT)/Widget.Lightbox-0.06/lib/Widget/Lightbox.js \
-		$(COMMON_JAVASCRIPT)/Widget.Lightbox-0.06/tests/lib/Effect/RoundedCorners.js \
 		$(COMMON_JAVASCRIPT)/Widget.SortableTable-0.21/lib/Widget/SortableTable.js \
 		hacks.js \
 		Cookie.js \
@@ -84,7 +84,6 @@ DISPLAY_UI_SOURCE_FILES= \
 		$(JEMPLATE_WIKIWYG_MODULE) \
 		$(ALL_JEMPLATE_PLUGINS) \
 		$(EDITOR_FILE) \
-		$(S3_JAVASCRIPT)/lightbox.js \
 		$(S3_JAVASCRIPT)/lookahead.js \
 		$(COMMON_JAVASCRIPT)/YAML-0.11/lib/YAML.js \
 		Debug.js \

@@ -67,7 +67,7 @@
 
         $('#lightbox')
             .css('width', opts.width || '520px')
-            .append($(opts.content).show())
+            .append(opts.html || $(opts.content).show())
             .css({
                 left: (pageScroll.left + (($(window).width() -
                         $('#lightbox').width()) / 2)) + 'px',
@@ -96,9 +96,10 @@
 
     $.fn.hideLightbox = function() {
         if (opts) {
-            $(opts.content).hide().appendTo('body');
+            if (opts.content)
+                $(opts.content).hide().appendTo('body');
             $('#overlay').fadeOut();
-            $('#lightbox').hide();
+            $('#lightbox').html('').hide();
             $('body').css('overflow', 'visible');
         }
     };

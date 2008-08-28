@@ -21,10 +21,12 @@ Socialtext::CLI->_drop_privs();
 
 my $FORCE = 0;
 my $FIX_MOJIBAKE = 0;
+my $REBUILD_INDEX = 0;
 GetOptions(
     'f|force' => \$FORCE,
     'h|help'  => \&usage,
     'fix-mojibake' => \$FIX_MOJIBAKE,
+    'rebuild-index' => \$REBUILD_INDEX,
 ) or usage();
 
 die "--fix-mojibake must be used with --force!\n"
@@ -48,7 +50,7 @@ exit;
 
 sub usage {
     warn <<EOT;
-Usage: $0 [--force] <workspaces>
+Usage: $0 [--force [--fix-mojibake]] [--rebuild-index] <workspaces>
 
 Generate preview text for the specified workspaces.
 
@@ -95,6 +97,21 @@ sub process_workspace {
                 }
 
 		$page->_store_preview_text;
+
+                {
+                    # Suppress _exit and output from the reindex
+                    no warnings 'redefine';
+                    sub Socialtext::CLI::_exit { return };
+                    sub Socialtext::CLI::_success { return };
+                }
+
+                if ($REBUILD_INDEX) {
+                    Socialtext::CLI->new(argv => [
+                        'index-page',
+                        '--workspace' => $wksp->name, 
+                        '--page'      => $page->id,
+                    ])->run;
+                }
 	    }
         };
         print $char;

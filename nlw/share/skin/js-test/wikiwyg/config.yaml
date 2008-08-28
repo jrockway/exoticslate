@@ -11,13 +11,13 @@ import_libs:
   - ../../s2/javascript/md5.js
   - ../../s2/javascript/Cookie.js
   - ../../s2/javascript/pageview.js
-  - ../../common/javascript/DOM.Events-0.02/lib/DOM/Events.js
-  - ../../common/javascript/YAML-0.11/lib/YAML.js
-  - ../../common/javascript/Widget.Lightbox-0.06/lib/Widget/Lightbox.js
+#   - ../../common/javascript/DOM.Events-0.02/lib/DOM/Events.js
+#   - ../../common/javascript/YAML-0.11/lib/YAML.js
+#   - ../../common/javascript/Widget.Lightbox-0.06/lib/Widget/Lightbox.js
   - ../../common/javascript/Wikiwyg-2007-07-17/lib/Wikiwyg.js
   - ../../common/javascript/Wikiwyg-2007-07-17/lib/Wikiwyg/Wysiwyg.js
-  - ../../s2/javascript/Wikiwyg/Socialtext.js
-  - ../../s2/javascript/Widgets.js 
-  - ../../s2/javascript/Wikiwyg/Widgets.js
-  - ../../s2/javascript/Wikiwyg/Wikitext/Socialtext.js
+  - ../../wikiwyg/javascript/Wikiwyg/Socialtext.js
+  - ../../wikiwyg/javascript/Widgets.js 
+  - ../../wikiwyg/javascript/Wikiwyg/Widgets.js
+  - ../../wikiwyg/javascript/Wikiwyg/Wikitext/Socialtext.js
   - ../../s2/javascript/Debug.js

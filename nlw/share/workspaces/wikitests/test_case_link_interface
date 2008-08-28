@@ -43,7 +43,7 @@
 | *Comment* | Test Case: Link Interface moved this here so if the cancel fails, the test will fail |  |
 | click_ok | link=Simple |  |
 | click_ok | wikiwyg_button_link |  |
-| click_ok | add-web-link |  |
+| click_ok | add-wiki-link |  |
 | type_ok | wiki-link-text | TC: Link Interface |
 | type_ok | st-widget-workspace_id | DoesNotExist |
 | click_ok | st-widget-page_title |  |
@@ -56,7 +56,7 @@
 | *Comment* | Test Case: Link Interface make a Web link |  |
 | click_ok | wikiwyg_button_link |  |
 | text_like | Linked text: |  |
-| click_ok | add-wiki-link |  |
+| click_ok | add-web-link |  |
 | type_ok | web-link-text | Socialtext |
 | type_ok | web-link-destination | `http://www.socialtext.com` |
 | click_ok | st-widget-savebutton |  |

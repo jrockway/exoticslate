@@ -6,30 +6,28 @@ from Recent Changes list view page: click a revisions link for a page with at le
 
 | *Comment* | Test Case: Revisions: Setting up test data |  |
 
-| setSpeed | 100 |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| click_ok | st-newpage-pagename-edit |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | type_ok | st-newpage-pagename-edit | test case revisions %%start_time%% |
 | type_ok | wikiwyg_wikitext_textarea | original revision number one %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | revision number two %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | revision number three %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | `[revision number four] %%start_time%%` |
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | `[revision number five] %%start_time%%` |
 | clickAndWait | st-save-button-link |  |
 
@@ -130,26 +128,26 @@ NOTE: validated when creating data for this test
 | clickAndWait | st-page-stats-revisions |  |
 | clickAndWait | Button |  |
 
-| text_like | //td[1]/span | four |
-| text_like | //td[2]/span | five |
+| wait_for_element_visible_ok | st-revision-compare-table | 30000 |
 | text_like | st-page-title | Compare Revisions 4 and 5 |
 | text_like | `[revision number five] %%start_time%%` |  |
+| text_like | st-revision-compare-table | qr/four.+five/ |
 
 | clickAndWait | st-view-formatted-link |  |
+| wait_for_element_visible_ok | st-revision-compare-table | 30000 |
 | text_like | st-page-title | Compare Revisions 4 and 5 |
 | text_unlike | st-revision-compare-table | `[revision number five] %%start_time%%` |
 
 | clickAndWait | st-view-unformatted-link |  |
-| text_like | //td[1]/span | four |
-| text_like | //td[2]/span | five |
+| text_like | st-revision-compare-table | qr/four.+five/ |
 
 | clickAndWait | //strong |  |
 | text_like | qr/Revision 4.+four/ |  |
 
 | clickAndWait | st-all-revisions-link |  |
 | clickAndWait | Button |  |
-| clickAndWait | //td[2]/h3/a/strong |  |
-| text_like | qr/Revision 5.+five/ |  |
+| clickAndWait | link=Revision 5 |  |
+| text_like | qr/Revision 5.+revision number five/ |  |
 
  Click All Revisions | all revisions page appears with correct content
 
@@ -173,17 +171,17 @@ NOTE: these steps already tested above.
 | type_ok | st-search-term | revision |
 
 | clickAndWait | st-search-submit |  |
-| wait_for_element_visible_ok | link=test case revisions %%start_time%% | 15000 |
+| wait_for_element_visible_ok | link=test case revisions %%start_time%% | 30000 |
 | clickAndWait | link=test case revisions %%start_time%% |  |
 | text_like | st-page-stats-revisions | 5 revisions |
 
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
-| wait_for_element_visible_ok | link=test case revisions %%start_time%% | 15000 |
+| wait_for_element_visible_ok | link=test case revisions %%start_time%% | 30000 |
 | clickAndWait | link=test case revisions %%start_time%% |  |
 | text_like | st-page-stats-revisions | 5 revisions |
 
 | clickAndWait | st-wiki-subnav-link-whats-new |  |
-| wait_for_element_visible_ok | link=5 | 15000 |
+| wait_for_element_visible_ok | link=5 | 30000 |
 | clickAndWait | link=5 |  |
 | clickAndWait | st-back-to-current-revision-link |  |
 | text_like | st-page-stats-revisions | 5 revisions |
@@ -196,7 +194,7 @@ NOTE: these steps already tested above.
  All Revisions | All Revisions page appears
 
 | clickAndWait | st-page-stats-revisions |  |
-| wait_for_element_visible_ok | link=revision 2 | 15000 |
+| wait_for_element_visible_ok | link=revision 2 | 30000 |
 | clickAndWait | link=revision 2 |  |
 | text_like | revision number two %%start_time%% |  |
 | clickAndWait | st-all-revisions-link |  |
@@ -223,24 +221,20 @@ NOTE: these steps already tested above.
  Back to Current Revision | restored revision appears
 
 | *Comment* | Test Case: Revisions: Restoring revision |  |
-| wait_for_element_visible_ok | link=revision 2 | 15000 |
+| wait_for_element_visible_ok | link=revision 2 | 30000 |
 | clickAndWait | link=revision 2 |  |
 | text_like | page-control-revision-view-source-link | Source View |
 | clickAndWait | page-control-revision-view-source-link |  |
 | text_like | page-control-revision-view-normal-link | Normal View |
 | clickAndWait | document.forms[1].elements['Restore Revision'] |  |
 | text_like | revision number two |  |
-| wait_for_element_visible_ok | link=6 | 15000 |
+| wait_for_element_visible_ok | link=6 | 30000 |
 | clickAndWait | link=6 |  |
 | text_like | qr/revision 2.+revision 5.+revision 4.+revision 3.+revision 2.+revision 1/ |  |
 | clickAndWait | st-back-to-current-revision-link |  |
 | text_like | revision number two |  |
 
-| *Comment* | Test Case: Revisions: Removing test page |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | link=test case revisions %%start_time%% |  |
-| clickAndWait | link=Delete Page |  |
-| confirmation_like | Are you sure you want to delete this page? |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| *Comment* | Test Case: Revisions: Teardown |  |
+| st-admin | purge-page --w %%workspace%% --p test_case_revisions_%%start_time%% | was purged |
 
 | *Comment* | Test Case: Revisions COMPLETED |  |

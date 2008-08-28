@@ -3,9 +3,10 @@
 | *Comment* | Test Case: Untitled Page |  |
 
 | *Comment* | Test Case: Untitled Page new page |  |
-| click_and_wait | st-newpage-link |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | click_ok | st-newpage-pagename-edit |  |
 
 | *Comment* | Test Case: Untitled Page title field is empty after focus |  |
@@ -15,8 +16,7 @@
 
 | *Comment* | Test Case: Untitled Page try bad title |  |
 | type_ok | st-newpage-pagename-edit | `Untitled ---------- &&&&& ---- PaGe` |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| click_ok | wikiwyg_wikitext_textarea |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | untitled page %%start_time%% content |
 | click_ok | st-newpage-pagename-edit |  |
 
@@ -26,7 +26,7 @@
 | *Comment* | Test Case: Untitled Page save attempt using bad title |  |
 | type_ok | st-newpage-pagename-edit | `Untitled ---------- &&&&& ---- PaGe` |
 | click_ok | st-save-button-link |  |
-| wait_for_element_visible_ok | st-newpage-save-pagename | 5000 |
+| wait_for_element_visible_ok | st-newpage-save-pagename | 30000 |
 
 | *Comment* | Test Case: Untitled Page save attempt using "Untitled Page" |  |
 | type_ok | st-newpage-save-pagename | untitled page |
@@ -35,8 +35,8 @@
 
 | *Comment* | Test Case: Untitled Page save attempt using legal title |  |
 | type_ok | st-newpage-save-pagename | untitled page %%start_time%% |
-| click_ok | st-newpage-save-savebutton |  |
-| wait_for_element_visible_ok | st-created | 10000 |
+| click_and_wait | st-newpage-save-savebutton |  |
+| wait_for_element_visible_ok | st-created | 30000 |
 | text_like | st-page-maincontent | untitled page %%start_time%% content |
 
 | *Comment* | Test Case: Untitled Page Teardown |  |

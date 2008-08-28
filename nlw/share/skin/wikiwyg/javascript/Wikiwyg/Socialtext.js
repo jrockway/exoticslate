@@ -881,15 +881,18 @@ proto.get_wikitext_from_html = function(html) {
 }
 
 proto.set_edit_tips_span_display = function(display) {
-    jQuery('#st-edit-tips')
-        .show()
-        .unbind('click')
-        .click(function () {
-            jQuery.showLightbox({
-                content: '#st-ref-card',
-                close: '#st-ref-card-close'
+    jQuery('#st-edit-tips').show();
+
+    if (Socialtext.S3) {
+        jQuery('#st-edit-tips')
+            .unbind('click')
+            .click(function () {
+                jQuery.showLightbox({
+                    content: '#st-ref-card',
+                    close: '#st-ref-card-close'
+                });
             });
-        });
+    }
 }
 
 proto.editMode = function() {

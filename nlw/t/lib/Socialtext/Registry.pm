@@ -1,4 +1,5 @@
 package Socialtext::Registry;
+# @COPYRIGHT@
 use strict;
 use warnings;
 

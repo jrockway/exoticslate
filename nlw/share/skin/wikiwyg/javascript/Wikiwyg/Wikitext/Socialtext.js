@@ -1020,7 +1020,7 @@ proto.href_is_wiki_link = function(href) {
         return true;
     if (! href.match(/\?/))
         return false;
-    if (href.match(/\/static\//) && href.match(/\/javascript\/test\//))
+    if (href.match(/\/static\//) && href.match(/\/skin\/js-test\//))
         href = location.href;
     var no_arg_input   = href.split('?')[0];
     var no_arg_current = location.href.split('?')[0];

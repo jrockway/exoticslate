@@ -170,8 +170,19 @@ sub name {
 
     (my $class = ref $self || $self) =~ s{::}{/}g;
 
-    my $name = $INC{"$class.pm"} or die "$class.pm is not in your INC";
-    $name =~ s{^$code_base/plugin/([^/]+).*$}{$1};
+    # Here we attempt to find the lower-cased plugin name based on the
+    # last part(s) of the class name.
+    my $name = $class;
+    if ($name =~ s{^.*?/Plugin/}{}) {
+        # Turn Socialtext::Pluggable::Plugin::Foo into "foo".
+        # Turn Socialtext::Pluggable::Plugin::Foo::Bar into "foo/bar".
+        $name = lc($name);
+    }
+    else {
+        # Otherwise simply take the last component from module name.
+        $name =~ s{^.*/}{};
+    }
+
     $self->{_name} = $name if ref $self;
     return $name;
 }

@@ -7,14 +7,27 @@ use lib "$FindBin::Bin/../lib";
 use Socialtext::Schema;
 use Socialtext::System qw/shell_run/;
 
+my $nlw_base = "$FindBin::Bin/..";
 my $schema = Socialtext::Schema->new;
 my $schema_file = $schema->_schema_filename;
 $schema_file =~ s#.+/(etc/socialtext.+)#$1#;
 my $schema_name = $schema->schema_name;
 
-shell_run("pglist > $schema_file");
+# Get a virgin base schema
+shell_run("svk revert $nlw_base/$schema_file");
+copy_schema_files_to_dev_env();
 
-print "Appendding the updated schema version to the schema file.\n";
+# Set up the fresh schema from socialtext-schema.sql
+shell_run("st-db recreate --force --schema socialtext");
+
+# Sync to the latest version (what you just wrote - X-to-Y.sql)
+shell_run("st-db sync --schema socialtext ");
+
+# Re-create the base schema
+shell_run("pglist public "
+    . " | grep -v 'COMMENT ON ' > $schema_file");
+
+print "Appending the updated schema version to the schema file.\n";
 my $version = $schema->current_version;
 open(my $fh, ">>$schema_file") or die;
 print $fh <<EOT;
@@ -24,4 +37,9 @@ INSERT INTO "System" VALUES ('$schema_name-schema-version', '$version');
 EOT
 close $fh or die "Can't write $schema_file: $!";
 
-shell_run("cp $FindBin::Bin/../etc/socialtext/db/* ~/.nlw/etc/socialtext/db");
+copy_schema_files_to_dev_env();
+exit;
+
+sub copy_schema_files_to_dev_env {
+    shell_run("cp $nlw_base/etc/socialtext/db/* ~/.nlw/etc/socialtext/db");
+}

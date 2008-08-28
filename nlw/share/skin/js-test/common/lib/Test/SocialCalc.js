@@ -11,15 +11,18 @@ proto.open_iframe_with_socialcalc = function(url, callback) {
 
 proto.wait_for_socialcalc = function(callback) {
     var self = this;
-    var id = setInterval(function() {
-        if (
-            self.iframe.contentWindow.SocialCalc &&
-            self.iframe.contentWindow.SocialCalc.editor_setup_finished
-        ) {
-            clearInterval(id);
+    this.$.poll(
+        function() {
+            return Boolean(
+                self.iframe.contentWindow.SocialCalc &&
+                self.iframe.contentWindow.SocialCalc.editor_setup_finished
+            );
+        },
+        function() {
             callback.apply(self);
-        }
-    }, 250);
+        },
+        250, 15000
+    );
 }
 
 })();

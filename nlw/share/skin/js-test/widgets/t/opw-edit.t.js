@@ -12,7 +12,7 @@ t.pass("This test might take up to 30 seconds to run. Be patient.");
 t.beginAsync(step1);
 
 function step1() {
-    t.login({callback: step2});
+    t.login({}, step2);
 }
 
 function step2() {

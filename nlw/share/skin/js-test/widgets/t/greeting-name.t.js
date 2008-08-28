@@ -7,42 +7,25 @@ t.plan(1);
 t.beginAsync(step1);
 
 function step1() {
-    t.login({callback: step2});
+    t.login({}, step2);
 }
 
 function step2() {
-    t.ts = (new Date()).getTime();
-    t.username = 'user' + t.ts + '@example.com',
-    t.email_address = 'email' + t.ts + '@example.com',
-
-    t.create_user({
-        username: t.username,
-        email_address: t.email_address,
-        password: 'd3vnu11l',
-        workspace: 'admin',
-        callback: step3
-    });
+    t.create_anonymous_user_and_login({workspace: 'admin'}, step3);
 }
 
 function step3() {
-    t.login({
-        'username': t.username,
-        'password': 'd3vnu11l',
-        'callback': step4
-    });
-}
-
-function step4() {
-    t.open_iframe("/", step5);
+    t.open_iframe("/", step4);
 };
 
-function step5() {
+function step4() {
     $(t.iframe).width(1000);
     t.scrollTo(50);
     var username = t.$("span.welcome div").text()
         .replace(/^\s*(.*)\s*$/, '$1');
-    t.is(username, 'user' + t.ts,
-        'User name is correct (user' + t.ts + ') when user has no name'
+    var expected = t.anonymous_username.replace(/@.*/, '');
+    t.is(username, expected,
+        'User name is correct (' + expected + ') when user has no name'
     );
     t.endAsync();
 };

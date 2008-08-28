@@ -7,7 +7,7 @@ t.plan(1);
 t.beginAsync(login);
 
 function login() {
-    t.login({callback: complete});
+    t.login({}, complete);
 }
 
 function complete() {

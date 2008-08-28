@@ -30,7 +30,7 @@ Create a new user and optionally add to a workspace.
   - workspace (optional)
   - callback: required function of what to do afterwards
 */
-proto.create_user = function(params) {
+proto.create_user = function(params, callback) {
     var self = this;
 
     var add_to_workspace = function() {
@@ -44,14 +44,14 @@ proto.create_user = function(params) {
                 send_confirmation_invitation: 0
             }),
             success: function() {
-                self.call_callback(params.callback);
+                self.call_callback(callback);
             }
         });
     }
 
-    var callback = params.workspace
+    var callback2 = params.workspace
         ? add_to_workspace
-        : params.callback;
+        : callback;
 
     $.ajax({
         url: "/data/users",
@@ -63,7 +63,7 @@ proto.create_user = function(params) {
             email_address: params.email_address
         }),
         success: function() {
-            self.call_callback(callback);
+            self.call_callback(callback2);
         }
     });
 }
@@ -100,9 +100,7 @@ proto.put_page = function(params) {
 }
 
 
-proto.login = function(params) {
-    if (!params) params = {};
-
+proto.login = function(params, callback) {
     var username = (params.username || 'devnull1@socialtext.com');
     var password = (params.password || 'd3vnu11l');
 
@@ -118,7 +116,7 @@ proto.login = function(params) {
                     'password': password
                 },
                 success: function() {
-                    self.call_callback(params.callback);
+                    self.call_callback(callback);
                 }
 
             });
@@ -176,6 +174,25 @@ proto.setup_one_widget = function(url, callback) {
         });
     }
     this.open_iframe("/?action=clear_widgets", setup_widget);
+}
+
+proto.create_anonymous_user_and_login = function(params, callback) {
+    if (!params.password) params.password = 'd3vnu11l';
+
+    var ts = (new Date()).getTime();
+    this.anonymous_username = 'user' + ts + '@example.com';
+    var email_address = 'email' + ts + '@example.com';
+
+    if (!params.username) params.username = this.anonymous_username;
+    if (!params.email_address) params.email_address = email_address;
+
+    var self = this;
+    this.create_user(
+        params,
+        function() {
+            self.login(params, callback);
+        }
+    );
 }
 
 proto.call_callback = function(callback, args) {

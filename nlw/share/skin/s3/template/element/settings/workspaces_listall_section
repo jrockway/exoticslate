@@ -4,6 +4,12 @@
 <dl class="form">
   <dt><label>[% loc('Workspaces') %]</label></dt>
   <dd>[% loc('The ten most recently visited of these workspaces are displayed in the Dashboard.') %]</dd>
+  <dd>
+    perm = [% checker.check_permission('admin_workspace') %]
+    [% IF admin %]
+      <input onclick="document.location = /?action=workspaces_create'" value="[% loc('Create Workspace') %]"/>
+    [% END %]
+  </dd>
 </dl>
 
 <table>

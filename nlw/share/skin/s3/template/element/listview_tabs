@@ -1,0 +1,25 @@
+[%# vim: set et sts=2 sw=2: %]
+<div id="tabs">
+  <div class="tableTabs">
+    <ul>
+      <li class="recentchanges[% IF action == 'recent_changes' %] selected[% END %]"><a class="first" href="index.cgi?action=recent_changes">[% loc("What's New") %]</a></li>
+      [% IF workspace_present %]
+        <li class="recentlyviewed[% IF action == 'breadcrumbs_list' %] selected[% END %]"><a href="index.cgi?action=breadcrumbs_list">[% loc("Recently Viewed") %]</a></li>
+        [% UNLESS user.is_guest %]
+          <li class="yourwatchlist[% IF action == 'watchlist' %] selected[% END %]"><a href="index.cgi?action=watchlist">[% loc("Your Watchlist") %]</a></li>
+        [% END %]
+          <li class="orphanpages[% IF action == 'orphans_list' %] selected[% END %]"><a href="index.cgi?action=orphans_list">[% loc("Orphaned Pages") %]</a></li>
+      [% END %]
+    </ul>
+  </div><!-- tableTabs END -->
+  <div class="tableFilter">
+    <label>View:</label>
+    <ul>
+      <li class="allpages [% IF action == 'changes' %] selected[% END %]"><a href="index.cgi?action=changes&changes=all">[% loc("All Pages") %]</a></li>
+      [% IF workspace_present %]
+        <li class="alltags[% IF action == 'category_list' %] selected[% END %]"><a href="index.cgi?action=category_list">[% loc("All Tags") %]</a></li>
+      [% END %]
+      <li class="allfiles[% IF action == 'attachments_listall' %] selected[% END %]"><a href="index.cgi?action=attachments_listall">[% loc("All Files") %]</a></li>
+    </ul>
+  </div><!-- tableFilter END -->
+</div><!-- tabs END -->

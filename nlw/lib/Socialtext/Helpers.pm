@@ -179,6 +179,7 @@ sub global_template_vars {
         checker            => $self->hub->checker,
         current_workspace  => $self->hub->current_workspace,
         home_is_dashboard  => $self->hub->current_workspace->homepage_is_dashboard,
+        workspace_present  => $self->hub->current_workspace->workspace_id ? 1 : 0,
         customjs           => $self->hub->skin->customjs,
         app_version        => Socialtext->product_version,
         skin_name          => $self->hub->skin->skin_name,

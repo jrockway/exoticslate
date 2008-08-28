@@ -16,30 +16,6 @@ END
 $$
     LANGUAGE plpgsql;
 
-CREATE FUNCTION execute_if_table_exists(table_name text, sql text) RETURNS boolean
-    AS $$
-BEGIN
-    IF (SELECT relname FROM pg_class WHERE relname = table_name GROUP BY relname) IS NOT NULL THEN
-        EXECUTE sql;
-        RETURN(TRUE);
-    END IF;
-    RETURN(FALSE);
-END
-$$
-    LANGUAGE plpgsql;
-
-CREATE FUNCTION execute_unless_table_exists(table_name text, sql text) RETURNS boolean
-    AS $$
-BEGIN
-    IF (SELECT relname FROM pg_class WHERE relname = table_name GROUP BY relname) IS NULL THEN
-        EXECUTE sql;
-        RETURN(TRUE);
-    END IF;
-    RETURN(FALSE);
-END
-$$
-    LANGUAGE plpgsql;
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -253,8 +229,6 @@ CREATE TABLE page_tag (
 
 CREATE TABLE person (
     id integer NOT NULL,
-    photo text,
-    small_photo text,
     "position" text,
     "location" text,
     work_phone text,
@@ -640,5 +614,6 @@ ALTER TABLE ONLY "Workspace"
             FOREIGN KEY (account_id)
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
+
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '9');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '10');

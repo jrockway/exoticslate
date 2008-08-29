@@ -200,4 +200,3 @@ Create unique sort order for each sort:
 | st-admin | delete-workspace --workspace %%sorting_workspace%% --no-export |  |
 
 | *Comment* | Test Case: Tagged Page Sorting COMPLETED |  |
-| *Comment* | Test Case: Tagged Page Sorting FAILS NINE TESTS until {bz: 904} is fixed |  |

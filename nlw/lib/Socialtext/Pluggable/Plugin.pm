@@ -13,7 +13,10 @@ use Socialtext::Storage;
 use Socialtext::AppConfig;
 use Socialtext::JSON qw(encode_json);
 use Socialtext::User;
-
+use URI::Escape ();
+use Socialtext::Formatter::Parser;
+use Socialtext::Cache;
+use Socialtext::Authz::SimpleChecker;
 my $prod_ver = Socialtext->product_version;
 my $code_base = Socialtext::AppConfig->code_base;
 
@@ -147,7 +150,7 @@ sub rests {
 
 # Object Methods
 
-sub new { 
+sub new {
     my ($class, %args) = @_;
     # TODO: XXX: DPL, not sure what args are required but because the object
     # is actually instantiated deep inside nlw we can't just use that data
@@ -155,6 +158,7 @@ sub new {
 #        %args,
     };
     bless $self, $class;
+    $self->{Cache} = Socialtext::Cache->cache('pagevalue_plugin');
     return $self;
 }
 
@@ -238,7 +242,7 @@ sub template_render {
     my $plugin_dir = $self->plugin_dir;
     my $paths = $self->hub->skin->template_paths;
     push @$paths, glob("$code_base/plugin/*/template");
-    
+
     my $renderer = Socialtext::TT2::Renderer->instance;
     return $renderer->render(
         template => $template,
@@ -251,6 +255,124 @@ sub template_render {
             %args,
         },
     );
+}
+
+sub get_page {
+    my $self = shift;
+    my %p = (
+        workspace_name => undef,
+        page_name => undef,
+        @_
+    );
+
+    return undef if (!$p{workspace_name} || !$p{page_name});
+
+    my $page_id = $self->name_to_id($p{page_name});
+    my $cache_key = "page $p{workspace_name} $page_id";
+    my $page = $self->value_from_cache($cache_key);
+    return $page if ($page);
+
+
+    my $workspace = Socialtext::Workspace->new( name => $p{workspace_name} );
+    return undef if (!defined($workspace));
+    my $auth_check = Socialtext::Authz::SimpleChecker->new(
+        user => $self->hub->current_user,
+        workspace => $workspace,
+    );
+    my $hub = $self->_hub_for_workspace($workspace);
+    return undef unless defined($hub);
+    if ($auth_check->check_permission('read')) {
+        $page = $hub->pages->new_page($page_id);
+        $self->cache_value(
+            key => $cache_key,
+            value => $page,
+        );
+    }
+    else {
+        return undef;
+    }
+    return $page;
+}
+
+sub name_to_id {
+    my $self = shift;
+    my $id = shift;
+
+    $id = '' if not defined $id;
+    $id =~ s/[^\p{Letter}\p{Number}\p{ConnectorPunctuation}\pM]+/_/g;
+    $id =~ s/_+/_/g;
+    $id =~ s/^_(?=.)//;
+    $id =~ s/(?<=.)_$//;
+    $id =~ s/^0$/_/;
+    $id = lc($id);
+    return URI::Escape::uri_escape_utf8($id);
+}
+
+sub _hub_for_workspace {
+    my ( $self, $workspace ) = @_;
+
+    my $hub = $self->hub;
+    if ( $workspace->name ne $self->hub->current_workspace->name ) {
+        $hub = $self->value_from_cache('hub ' . $workspace->name);
+        if (!$hub) {
+            my $main = Socialtext->new();
+            $main->load_hub(
+                current_user      => $self->hub->current_user,
+                current_workspace => $workspace
+            );
+            $main->hub->registry->load;
+
+            $hub = $main->hub;
+            $self->cache_value(
+                key => 'hub ' . $workspace->name,
+                value => $hub,
+            );
+        }
+    }
+
+    return $hub;
+}
+
+sub cache_value {
+    my $self = shift;
+    my %p = (
+        key => undef,
+        value => undef,
+        @_
+    );
+
+    $self->{Cache}->set($p{key}, $p{value});
+}
+
+sub value_from_cache {
+    my $self = shift;
+    my $key = shift;
+
+    return $self->{Cache}->get($key);
+}
+
+sub tags_for_page {
+    my $self = shift;
+    my %p = (
+        page_name => undef,
+        workspace_name => undef,
+        @_
+    );
+
+    my @tags = ();
+    my $page = $self->get_page(%p);
+    if (defined($page)) {
+        push @tags, @{$page->metadata->Category};
+    }
+    return ( grep { lc($_) ne 'recent changes' } @tags );
+}
+
+sub search {
+    my $self = shift;
+    my $term = shift;
+
+    $self->hub->search->search_for_term(search_term => $term);
+    return $self->hub->search->result_set;
 }
 
 1;

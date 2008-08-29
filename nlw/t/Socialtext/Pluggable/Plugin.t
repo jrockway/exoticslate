@@ -3,16 +3,18 @@
 use strict;
 use warnings;
 
-use Test::More tests => 16;
+use Test::Socialtext tests => 24;
 use Socialtext::User;
 use Socialtext::URI;
 use Socialtext::Account;
 use Socialtext::Workspace;
 use Socialtext::AppConfig;
+fixtures( 'admin' );
 
 use_ok 'Socialtext::Pluggable::Plugin';
 use_ok 'Socialtext::Pluggable::Adapter';
 
+my $hub = new_hub('admin');
 my $system_user = Socialtext::User->SystemUser;
 my $adapter = Socialtext::Pluggable::Adapter->new;
 my $plug = Socialtext::Pluggable::Plugin->new;
@@ -53,8 +55,39 @@ is $plug->header_in('Accept'), 'text/html', 'header_in';
 my %in = $plug->header_in;
 is_deeply \%in, {Accept=>'text/html'}, 'header_in';
 
+# Cache stuff
+$plug->cache_value(key => 'a', value => 1);
+is $plug->value_from_cache('a'), 1, 'can retrieve cache value';
+
 # Workspace
 is $plug->current_workspace, $ws->name, 'current_workspace';
+
+# Page stuff
+$plug->{hub} = $hub;
+my $page = $plug->get_page(workspace_name => 'admin', page_name => 'Start Here');
+ok defined $page, 'Page object found';
+is $page->title, 'Start here', 'Fetched page from workspace';
+$page = $plug->get_page(workspace_name => '12df', page_name => 'Start Here');
+ok ! defined $page, 'No page object on invalid workspace';
+
+# Tags
+my @tags = $plug->tags_for_page(workspace_name => 'admin', page_name => 'Start Here');
+is scalar(@tags), 1, 'Tag count is right';
+is $tags[0], 'Welcome', 'first tag is right';
+@tags = $plug->tags_for_page(workspace_name => '12hjs', page_name => 'Start Here');
+is scalar(@tags), 0, 'Non-existant page has an empty tag list';
+
+# Page Caching
+# This one is kind of funky. When we fetch a page we cache it. So we add
+# tags to the page we fetched but do not save the page. Then we ask for
+# the tags for the page. If the page caching works, the call to get tags
+# should use the cached page which will have our new tags 
+$page = $plug->get_page(workspace_name => 'admin', page_name => 'Start Here');
+@tags = $plug->tags_for_page(workspace_name => 'admin', page_name => 'Start Here');
+my $before_count = scalar(@tags);
+$page->add_tags('t1', 't2');
+@tags = $plug->tags_for_page(workspace_name => 'admin', page_name => 'Start Here');
+ok scalar(@tags) > $before_count, 'Plugin used cached page';
 
 package Rest;
 use strict;

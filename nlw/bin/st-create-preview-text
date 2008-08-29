@@ -13,6 +13,7 @@ use Socialtext::File;
 use Fatal qw/opendir closedir chdir open/;
 use Cwd qw/abs_path/;
 use Getopt::Long;
+use Date::Parse;
 
 $| = 1; # turn on autoflush
 
@@ -96,6 +97,9 @@ sub process_workspace {
                         my $is_fixed = fix_mojibake_in_file($filename);
                         $char = 'M' if $is_fixed;
                     }
+
+                    my $date = $page->metadata->Date;
+                    $page->set_mtime(str2time($date), $filename);
                 }
 
 		$page->_store_preview_text;

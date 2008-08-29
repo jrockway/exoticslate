@@ -1,5 +1,13 @@
 * HighPermissions
 
+| *Comment* | Test Case: Hidden Email Address |  |
+| *Comment* | When P/D are enabled for an account, the @hidden syntax is no longer used. Revisit this test when the story that takes account email address hiding is implemented. |  |
+| *Comment* | Test Case: Hidden Email Address COMPLETED |  |
+
+TODO: Revisit this test when the story that takes account email address hiding is implemented.
+
+^ END
+
 | *Comment* | NOTE NOTE NOTE NOTE NOTE. This test is included in Default User Testcases in IE 6 and IE 7 Testcases, but it needs High Permissions which DON'T WORK in IE. This needs to be refactored. |  |
 
 | *Comment* | Test Case: Hidden Email Address |  |

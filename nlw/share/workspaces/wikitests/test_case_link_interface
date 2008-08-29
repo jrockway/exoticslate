@@ -25,7 +25,7 @@
 | type_ok | st-widget-workspace_id | %%workspace%% |
 | type_ok | st-widget-page_title | Link Interface LinkMe %%start_time%% |
 | type_ok | wiki-link-section | section two |
-| click_ok | st-widget-savebutton |  |
+| click_ok | st-widget-link-savebutton |  |
 
 | *Comment* | Test Case: Link Interface. There is no choice but to pause until the link widget image is calculated and put in the page |  |
 | pause | 10000 |  |
@@ -51,7 +51,7 @@
 | *Comment* | Test Case: Link Interface pause is necessary for the little blue dropdown to appear |  |
 | pause | 5000 |  |
 | text_like | Workspace "DoesNotExist" does not exist on wiki |  |
-| click_ok | st-widget-cancelbutton |  |
+| click_ok | st-widget-link-cancelbutton |  |
 
 | *Comment* | Test Case: Link Interface make a Web link |  |
 | click_ok | wikiwyg_button_link |  |
@@ -59,7 +59,7 @@
 | click_ok | add-web-link |  |
 | type_ok | web-link-text | Socialtext |
 | type_ok | web-link-destination | `http://www.socialtext.com` |
-| click_ok | st-widget-savebutton |  |
+| click_ok | st-widget-link-savebutton |  |
 | pause | 10000 |  |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
@@ -78,7 +78,7 @@
 | text_like | Linked text: |  |
 | click_ok | add-section-link |  |
 | type_ok | section-link-text | a section link |
-| click_ok | st-widget-savebutton |  |
+| click_ok | st-widget-link-savebutton |  |
 | pause | 10000 |  |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |

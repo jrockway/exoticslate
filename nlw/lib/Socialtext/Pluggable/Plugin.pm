@@ -158,7 +158,7 @@ sub new {
 #        %args,
     };
     bless $self, $class;
-    $self->{Cache} = Socialtext::Cache->cache('pagevalue_plugin');
+    $self->{Cache} = Socialtext::Cache->cache('ST::Pluggable::Plugin');
     return $self;
 }
 

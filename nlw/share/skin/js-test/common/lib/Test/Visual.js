@@ -180,6 +180,7 @@ proto.setup_one_widget = function(url, callback) {
         self.iframe.contentWindow.location = url;
         $(self.iframe).one("load", function() {
             var iframe = self.$('iframe').get(0);
+            if (! iframe) throw("setup_one_widget failed");
             var widget = {
                 'iframe': iframe,
                 '$': iframe.contentWindow.jQuery

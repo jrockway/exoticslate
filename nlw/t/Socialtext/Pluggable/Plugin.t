@@ -3,7 +3,9 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 24;
+BEGIN { push @INC, 't/plugin/mocked/lib' };
+
+use Test::Socialtext tests => 26;
 use Socialtext::User;
 use Socialtext::URI;
 use Socialtext::Account;
@@ -14,6 +16,7 @@ fixtures( 'admin' );
 use_ok 'Socialtext::Pluggable::Plugin';
 use_ok 'Socialtext::Pluggable::Adapter';
 
+my $code_base = Socialtext::AppConfig->code_base;
 my $hub = new_hub('admin');
 my $system_user = Socialtext::User->SystemUser;
 my $adapter = Socialtext::Pluggable::Adapter->new;
@@ -29,7 +32,7 @@ $plug->hub->rest(Rest->new);
 
 # Config
 is $plug->uri, Socialtext::URI::uri(path => 'magic/index.cgi'), 'uri';
-is $plug->code_base, Socialtext::AppConfig->code_base, 'code_base';
+is $plug->code_base, $code_base, 'code_base';
 
 # CGI
 %Query::p = (a => 1, b => 2);
@@ -61,6 +64,12 @@ is $plug->value_from_cache('a'), 1, 'can retrieve cache value';
 
 # Workspace
 is $plug->current_workspace, $ws->name, 'current_workspace';
+
+# Plugin functions
+my %plugins = map { $_ => 1 } $plug->plugins;
+ok $plugins{mocked}, 'Mocked plugin exists';
+is $plug->plugin_dir('mocked'), "$code_base/plugin/mocked",
+   'Mocked directory is correct';
 
 # Page stuff
 $plug->{hub} = $hub;

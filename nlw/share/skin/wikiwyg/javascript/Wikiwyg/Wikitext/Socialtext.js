@@ -509,15 +509,7 @@ proto.do_ordered = klass.make_do('ordered');
 proto.do_unordered = klass.make_do('unordered');
 proto.do_hr = klass.make_do('hr');
 proto.do_table = klass.make_do('table');
-
-proto.do_link = function() {
-    if (Wikiwyg.is_ie) {
-        var scroll_top = this.area.scrollTop;
-        this.get_words();
-        this.area.scrollTop = scroll_top;
-    }
-    return this._do_link();
-}
+proto.do_link = klass.make_do('link');
 
 proto.add_section_link = function() {
     var section = jQuery('#section-link-text').val();

@@ -136,7 +136,8 @@ proto.open_iframe = function(url, callback, options) {
     if (! options)
         options = {};
 
-    this.iframe = $("<iframe />").prependTo("body").get(0);
+    if (!this.iframe)
+        this.iframe = $("<iframe />").prependTo("body").get(0);
     this.iframe.contentWindow.location = url;
     var $iframe = $(this.iframe);
 
@@ -146,14 +147,20 @@ proto.open_iframe = function(url, callback, options) {
     var height = $iframe.height();
     var width = $iframe.width();
 
-    $(
-        '<div style="padding-bottom: 5px">' +
-        '<b>Size: ' + height + 'x' + width + ' &nbsp;&nbsp;&nbsp;' + 
-        'URL: ' +
-        '<input style="width:400px" class="iframe_location" value="' +
-        url +'" />' +
-        '</b></div>'
-    ).prependTo("body");
+    if ($("div.iframe_info").length == 0) {
+        $(
+            '<div class="iframe_info" style="padding-bottom: 5px">' +
+            '<b>Size: <span>' + height + 'x' + width + '</span> &nbsp;&nbsp;&nbsp;' + 
+            'URL: ' +
+            '<input style="width:400px" class="iframe_location" value="' +
+            url +'" />' +
+            '</b></div>'
+        ).prependTo("body");
+    }
+    else {
+        $("div.iframe_info span").html(height + "x" + width);
+        $("input.iframe_location").val(url);
+    }
 
     var self = this;
     $iframe.one("load", function() {

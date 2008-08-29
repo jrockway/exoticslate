@@ -11,7 +11,6 @@ proto.init = function() {
 
 // Move to Test.Base
 proto.diag = function() {
-    return;
     this.builder.diag.apply(this.builder, arguments);
 }
 
@@ -312,3 +311,85 @@ proto._get_selector_element = function(selector) {
 }
 
 })(jQuery);
+
+/// XXX Insanity
+
+Test.Builder.prototype._setupOutput = function () {
+    if (Test.PLATFORM == 'browser') {
+        var top = Test.Builder.globalScope;
+        var doc = top.document;
+        var writer = function (msg) {
+            // I'm sure that there must be a more efficient way to do this,
+            // but if I store the node in a variable outside of this function
+            // and refer to it via the closure, then things don't work right
+            // --the order of output can become all screwed up (see
+            // buffer.html).  I have no idea why this is.
+            var body = doc.body || doc.getElementsByTagName("body")[0];
+            var node = doc.getElementById('test_output')
+                || doc.getElementById('test');
+            if (!node) {
+                node = document.createElement('pre');
+                node.id = 'test_output';
+                body.appendChild(node);
+            }
+
+            // This approach is neater, but causes buffering problems when
+            // mixed with document.write. See tests/buffer.html.
+
+            if (node.childNodes.length) {
+                var span = document.createElement('span');
+                span.innerHTML = msg;
+                node.appendChild(span);
+                return;
+            }
+
+            // If there was no text node, add one.
+            node.appendChild(doc.createTextNode(msg));
+            top.scrollTo(0, body.offsetHeight || body.scrollHeight);
+            return;
+        };
+
+        this.output(writer);
+        this.failureOutput(function (msg) {
+            writer('<span style="color: red; font-weight: bold">'
+                   + msg + '</span>')
+        });
+        this.todoOutput(writer);
+        this.endOutput(writer);
+
+        if (top.alert.apply) {
+            this.warnOutput(top.alert, top);
+        } else {
+            this.warnOutput(function (msg) { top.alert(msg); });
+        }
+
+    } else if (Test.PLATFORM == 'director') {
+        // Macromedia-Adobe:Director MX 2004 Support
+        // XXX Is _player a definitive enough object?
+        // There may be an even more explicitly Director object.
+        /*global trace */
+        this.output(trace);       
+        this.failureOutput(trace);
+        this.todoOutput(trace);
+        this.warnOutput(trace);
+
+    } else if (Test.PLATFORM == 'wsh') {
+        // Windows Scripting Host Support
+        var printer = function (msg) {
+			WScript.StdOut.writeline(msg);
+		}
+		this.output(printer);
+		this.failureOutput(printer);
+		this.todoOutput(printer);
+		this.warnOutput(printer);
+
+    } else if (Test.PLATFORM == 'interp') {
+        // Command-line interpeter.
+        var out = function (toOut) { print( toOut.replace(/\n$/, '') ); };
+        this.output(out);
+        this.failureOutput(out);
+        this.todoOutput(out);
+        this.warnOutput(out);
+	}
+    return this;
+};

@@ -398,6 +398,7 @@ $(function() {
                                     )
                                     .html(
                                         loc('Uploaded files:') + 
+                                        '&nbsp;' +
                                         Page.attachmentList.join(', ')
                                     )
                             );

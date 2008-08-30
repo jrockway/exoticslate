@@ -2,7 +2,7 @@
 
 var t = new Test.Visual();
 
-t.plan(5);
+t.plan(6);
 
 t.beginAsync(step1);
 
@@ -11,7 +11,7 @@ function step1() {
 }
 
 function step2() {
-//     t.create_anonymous_user_and_login({}, step8); // XXX
+//     t.create_anonymous_user_and_login({}, step13); // XXX
     t.create_anonymous_user_and_login({}, step3);
 }
 
@@ -86,6 +86,25 @@ function step12(widget) {
         html,
         /This person doesn't have any tags yet. Click <b>Add tag<\/b> to add one now./,
         "Empty message for another user's profile tags is present and correct"
+    );
+
+    step13();
+}
+
+// people i'm following
+function step13() {
+    t.setup_one_widget(
+        "/?action=add_widget;file=people/share/profile_following.xml",
+        step14
+    );
+}
+
+function step14(widget) {
+    var html = widget.$('body div').html();
+    t.like(
+        html,
+        /You are not following anyone yet. When viewing someone else's profile, you can click on the "Follow this person" button at the top of the page./,
+        "Empty message for my \"Persons I'm Following\" list."
     );
 
     step_last();

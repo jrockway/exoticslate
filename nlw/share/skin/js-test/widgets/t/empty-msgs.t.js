@@ -2,7 +2,7 @@
 
 var t = new Test.Visual();
 
-t.plan(3);
+t.plan(5);
 
 t.beginAsync(step1);
 
@@ -11,7 +11,7 @@ function step1() {
 }
 
 function step2() {
-//     t.create_anonymous_user_and_login({}, step6); // XXX
+//     t.create_anonymous_user_and_login({}, step8); // XXX
     t.create_anonymous_user_and_login({}, step3);
 }
 
@@ -24,14 +24,7 @@ function step3() {
 
 function step4(widget) {
     t.scrollTo(150);
-    
-    t.$.poll(
-        function() { return Boolean(widget.$(".st-widget-empty-msg").length) },
-        function() { step5(widget) }
-    );
-}
 
-function step5(widget) {
     var $empty = widget.$(".st-widget-empty-msg");
     t.is($empty.length, 1, "We have an empty message");
     t.is($empty.text(), "You do not belong to any workspaces yet.",
@@ -56,8 +49,46 @@ function step7(widget) {
         "Empty message for one page wiki is present and correct"
     );
 
-    step_last();
+    step8();
+}
 
+function step8() {
+    t.setup_one_widget(
+        "/?action=add_widget;file=people/share/profile_tags.xml",
+        step9
+    );
+}
+
+function step9(widget) {
+    t.scrollTo(150);
+
+    var html = widget.$('body div').html();
+    t.like(
+        html,
+        /You don't have any tags yet. Click <b>Add tag<\/b> to add one now./,
+        "Empty message for profile tags is present and correct"
+    );
+    
+    step10();
+}
+
+// Profile tags for another user's profile
+function step10() {
+    t.open_iframe("/?profile/7", function() {
+        t.scrollTo(150);
+        t.getWidget('tags', step12);
+    });
+}
+
+function step12(widget) {
+    var html = widget.$('body div').html();
+    t.like(
+        html,
+        /This person doesn't have any tags yet. Click <b>Add tag<\/b> to add one now./,
+        "Empty message for another user's profile tags is present and correct"
+    );
+
+    step_last();
 }
 
 function step_last() {

@@ -129,37 +129,30 @@ proto.login = function(params, callback) {
     });
 }
 
+proto.test_iframe_html = 
+    '<div class="iframe_info" style="padding-bottom: 5px">' +
+    '<b>Size: <span>100 x 100</span> &nbsp;&nbsp;&nbsp;' + 
+    'URL: <input style="width:400px" class="iframe_location" value="/" />' +
+    '</b></div>'
+
 proto.open_iframe = function(url, callback, options) {
     if (! (url && callback))
         throw("usage: open_iframe(url, callback, [options])");
     if (! options)
         options = {};
 
-    if (!this.iframe)
+    if (!this.iframe) {
         this.iframe = $("<iframe />").prependTo("body").get(0);
+        $(this.test_iframe_html).prependTo("body");
+    }
     this.iframe.contentWindow.location = url;
     var $iframe = $(this.iframe);
 
     $iframe.height(options.h || 200);
     $iframe.width(options.w || "100%");
 
-    var height = $iframe.height();
-    var width = $iframe.width();
-
-    if ($("div.iframe_info").length == 0) {
-        $(
-            '<div class="iframe_info" style="padding-bottom: 5px">' +
-            '<b>Size: <span>' + height + 'x' + width + '</span> &nbsp;&nbsp;&nbsp;' + 
-            'URL: ' +
-            '<input style="width:400px" class="iframe_location" value="' +
-            url +'" />' +
-            '</b></div>'
-        ).prependTo("body");
-    }
-    else {
-        $("div.iframe_info span").html(height + "x" + width);
-        $("input.iframe_location").val(url);
-    }
+    $("div.iframe_info span").html($iframe.height() + "x" + $iframe.width());
+    $("input.iframe_location").val(url);
 
     var self = this;
     $iframe.one("load", function() {
@@ -171,23 +164,47 @@ proto.open_iframe = function(url, callback, options) {
     });
 }
 
-proto.setup_one_widget = function(url, callback) {
-    if (! (url && callback))
-        throw("usage: setup_one_widget(url, callback)");
+proto.setup_one_widget = function(params, callback) {
+    var url = typeof(params) == 'string' ? params : params.url;
+    if (typeof(params) == 'string') params = {};
     var self = this;
     var setup_widget = function() {
         self.iframe.contentWindow.location = url;
+        $("input.iframe_location").val(url);
         $(self.iframe).one("load", function() {
-            var iframe = self.$('iframe').get(0);
-            if (! iframe) throw("setup_one_widget failed");
-            var widget = {
-                'iframe': iframe,
-                '$': iframe.contentWindow.jQuery
-            };
-            self.call_callback(callback, [widget]);
+            var widget = self._get_widget();
+            if (params.noPoll) {
+                self.call_callback(callback, [widget]);
+                return;
+            }
+            self.$.poll(
+                function() { return Boolean(widget.win.gadgets.loaded) },
+                function() { self.call_callback(callback, [widget])}
+            );
         });
     }
     this.open_iframe("/?action=clear_widgets", setup_widget);
+}
+
+proto.getWidget = function(widget_name, callback) {
+    var widget = this._get_widget(widget_name);
+    var self = this;
+    this.$.poll(
+        function() { return Boolean(widget.win.gadgets.loaded) },
+        function() { self.call_callback(callback, [widget])}
+    );
+}
+
+proto._get_widget = function(widget_name) {
+    var query = widget_name ? 'iframe.' + widget_name : 'iframe';
+    var iframe = this.$(query).get(0);
+    if (! iframe) throw("getWidget failed");
+    var widget = {
+        'iframe': iframe,
+        'win': iframe.contentWindow,
+        '$': iframe.contentWindow.jQuery
+    };
+    return widget;
 }
 
 proto.create_anonymous_user_and_login = function(params, callback) {
@@ -312,7 +329,8 @@ proto._get_selector_element = function(selector) {
 
 })(jQuery);
 
-/// XXX Insanity
+// XXX Local patch to make diagnostic output render correctly
+// Eventually move this back up into Test.Builder
 
 Test.Builder.prototype._setupOutput = function () {
     if (Test.PLATFORM == 'browser') {
@@ -351,6 +369,10 @@ Test.Builder.prototype._setupOutput = function () {
 
         this.output(writer);
         this.failureOutput(function (msg) {
+            msg = msg
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
             writer('<span style="color: red; font-weight: bold">'
                    + msg + '</span>')
         });

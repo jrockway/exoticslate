@@ -14,13 +14,15 @@ function step1() {
 }
 
 function step2() {
-    t.setup_one_widget(
-        "/?action=add_widget;file=gadgets/share/gadgets/one_page.xml",
+    var widget = WID = t.setup_one_widget(
+        {
+            url: "/?action=add_widget;file=gadgets/share/gadgets/one_page.xml",
+            noPoll: true
+        },
         step3
     );
 }
 
-// Most fragile test evar.
 function step3(widget) {
     var counter = 0, counter2 = 0, failed = false;
     t.scrollTo(150);

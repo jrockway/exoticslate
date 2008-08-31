@@ -394,6 +394,7 @@ sub _require_create_user_params {
 
 sub mass_add_users {
     my $self = shift;
+    my $account = $self->_require_account('optional');
     my %opts = $self->_require_mass_add_users_params();
 
     my $csv = eval { slurp($opts{csv}) };
@@ -406,6 +407,7 @@ sub mass_add_users {
     my $has_errors;
     eval {
         Socialtext::MassAdd->users(
+            account => $account,
             csv     => $csv,
             pass_cb => sub { 
                 print $_[0], "\n";

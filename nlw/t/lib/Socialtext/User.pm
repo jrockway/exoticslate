@@ -5,6 +5,7 @@ use warnings;
 use base 'Socialtext::MockBase';
 use unmocked 'Socialtext::MultiCursor';
 use unmocked 'Socialtext::Exceptions', qw/data_validation_error/;
+use unmocked 'Socialtext::Account';
 
 our $WORKSPACES = [ [ 1 ] ];
 
@@ -138,6 +139,10 @@ sub MaskEmailAddress {
     my ($class, $addr, $ws) = @_;
     $addr =~ s/@.+$/\@masked/ if $MASK_EMAILS;
     return $addr;
+}
+
+sub primary_account {
+    return $self->{primary_account} || Socialtext::Account->Default;
 }
 
 1;

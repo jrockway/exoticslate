@@ -20,6 +20,7 @@ sub users {
     my $csv     = delete $opts{csv}     or die "csv is mandatory!";
     my $pass_cb = delete $opts{pass_cb} or die "pass_cb is mandatory!";
     my $fail_cb = delete $opts{fail_cb} or die "fail_cb is mandatory!";
+    my $account = delete $opts{account};
 
     my @required_fields = qw/username email_address/;
     my @user_fields = qw/first_name last_name password/;
@@ -79,7 +80,11 @@ sub users {
         my $changed_user = 0;
         my $added_user = 0;
         eval { $user = Socialtext::User->Resolve($username) };
-        unless ($user) {
+        if ($user) {
+            # Update the user's primary account if one is specified
+            $user->primary_account($account) if $account;
+        }
+        else {
             eval {
                 $user = Socialtext::User->create(
                     username      => $username,
@@ -87,6 +92,7 @@ sub users {
                     ($password ? (password => $password) : ()),
                     first_name    => $first_name,
                     last_name     => $last_name,
+                    ($account ? (primary_account_id => $account->account_id) : ()),
                 );
                 $added_user++;
             };

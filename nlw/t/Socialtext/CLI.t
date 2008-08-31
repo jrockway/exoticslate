@@ -26,7 +26,7 @@ use Socialtext::SQL qw/sql_execute/;
 
 use Cwd;
 
-plan tests => 327;
+plan tests => 333;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -263,6 +263,9 @@ MASS_ADD_USERS: {
             join(',', qw{csvtest1 csvtest1@example.com John Doe passw0rd position company location work_phone mobile_phone home_phone}) . "\n",
             join(',', qw{csvtest2 csvtest2@example.com Jane Smith password2 position2 company2 location2 work_phone2 mobile_phone2 home_phone2}) . "\n";
 
+        # Get rid of any existing default account
+        sql_execute(q{DELETE FROM "System" WHERE field = 'default-account'});
+
         # do mass-add
         expect_success(
             sub {
@@ -282,6 +285,8 @@ MASS_ADD_USERS: {
         is $user->first_name, 'John', '... first_name was set';
         is $user->last_name, 'Doe', '... last_name was set';
         ok $user->password_is_correct('passw0rd'), '... password was set';
+        is $user->primary_account->account_id, Socialtext::Account->Default->account_id,
+            'user has default primary_account';
 
         SKIP: {
             skip 'Socialtext People is not installed', 7 unless $Socialtext::MassAdd::Has_People_Installed;
@@ -298,6 +303,37 @@ MASS_ADD_USERS: {
         # verify second user was added, but presume fields were added ok
         $user = Socialtext::User->new( username => 'csvtest2' );
         ok $user, 'csvtest2 user was created via mass_add_users';
+    }
+
+    add_users_from_csv_with_account: {
+        # create CSV file
+        my $csvfile = Cwd::abs_path(
+            (File::Temp::tempfile(SUFFIX=>'.csv', OPEN=>0))[1]
+        );
+        write_file $csvfile,
+            join(',', qw{csvtest3 csvtest3@example.com John Doe passw0rd position company location work_phone mobile_phone home_phone}) . "\n";
+
+        # Get rid of any existing default account
+        sql_execute(q{DELETE FROM "System" WHERE field = 'default-account'});
+
+        # do mass-add
+        expect_success(
+            sub {
+                Socialtext::CLI->new(
+                    argv => ['--csv', $csvfile, '--account', 'Socialtext']
+                )->mass_add_users();
+            },
+            qr/\QAdded user csvtest3\E/,
+            'mass-add-users successfully added users',
+        );
+        unlink $csvfile;
+
+        # verify first user was added, including all fields
+        my $user = Socialtext::User->new( username => 'csvtest3' );
+        ok $user, 'csvtest1 user was created via mass_add_users';
+        is $user->primary_account->account_id,
+            Socialtext::Account->Socialtext->account_id,
+            'user has specific primary_account';
     }
 
     # success; update users from CSV
@@ -319,7 +355,7 @@ MASS_ADD_USERS: {
         expect_success(
             sub {
                 Socialtext::CLI->new(
-                    argv => ['--csv', $csvfile],
+                    argv => ['--csv', $csvfile, '--account', 'Socialtext'],
                 )->mass_add_users();
             },
             qr/\QUpdated user csvtest1\E/,
@@ -334,6 +370,9 @@ MASS_ADD_USERS: {
         is $user->first_name, 'u_John', '... first_name was updated';
         is $user->last_name, 'u_Doe', '... last_name was updated';
         ok $user->password_is_correct('u_passw0rd'), '... password was updated';
+        is $user->primary_account->account_id,
+            Socialtext::Account->Socialtext->account_id,
+            'mass updated user changed account';
 
         SKIP: {
             skip 'Socialtext People is not installed', 2 unless $Socialtext::MassAdd::Has_People_Installed;

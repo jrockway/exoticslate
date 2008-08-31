@@ -213,8 +213,11 @@ sub set_default_account {
 }
 
 sub _require_account {
-    my $self = shift;
-    my %opts = $self->_get_options( 'account:s' );
+    my $self     = shift;
+    my $optional = shift;
+    my %opts     = $self->_get_options('account:s');
+    return if $optional and !$opts{account};
+
     $self->_help_as_error(
         loc("The command you called ([_1]) requires an account to be "
             . "specified by name.", $self->{command}),
@@ -335,6 +338,9 @@ sub create_user {
     }
 
     $user{username} ||= $user{email_address};
+    if (my $account = $self->_require_account('optional')) {
+        $user{primary_account_id} = $account->account_id;
+    }
 
     my $user
         = eval { Socialtext::User->create( %user, require_password => 1 ) };
@@ -366,7 +372,7 @@ sub _require_create_user_params {
         'email:s',
         'password:s',
         'first-name:s',
-        'last-name:s'
+        'last-name:s',
     );
 
     for my $key ( grep { defined $opts{$_} } 'first-name', 'last-name' ) {

@@ -26,7 +26,7 @@ use Socialtext::SQL qw/sql_execute/;
 
 use Cwd;
 
-plan tests => 323;
+plan tests => 327;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -194,6 +194,24 @@ CREATE_USER: {
         $user->email_address(), 'test@example.com',
         'email and username are the same'
     );
+    is $user->primary_account->name, Socialtext::Account->Default->name,
+        'default primary account set';
+
+
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [qw( --email account-test@example.com --password foobar 
+                             --account Socialtext
+                           )] )
+                ->create_user();
+        },
+        qr/\QA new user with the username "account-test\E\@\Qexample.com" was created.\E/,
+        'create-user success message'
+    );
+    my $user2 = Socialtext::User->new( username => 'account-test@example.com' );
+    is $user2->primary_account->name, Socialtext::Account->Socialtext->name,
+        'primary account set';
 
     expect_failure(
         sub {

@@ -307,6 +307,10 @@ sub primary_account {
     $_[0]->metadata->primary_account( @_[ 1 .. $#_ ] );
 }
 
+sub primary_account_id {
+    $_[0]->metadata->primary_account->account_id;
+}
+
 {
     # REVIEW - maybe this is overkill and can be handled through good
     # documentation saying "you probably don't want to delete users,

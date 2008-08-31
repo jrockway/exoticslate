@@ -22,10 +22,11 @@ BEGIN {
 
 use Socialtext::Account;
 use Socialtext::CLI;
+use Socialtext::SQL qw/sql_execute/;
 
 use Cwd;
 
-plan tests => 303;
+plan tests => 309;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -488,6 +489,37 @@ GIVE_REMOVE_ADMIN: {
         !Socialtext::User->new( username => 'test@example.com' )
             ->is_business_admin,
         'user no longer has accounts admin priv'
+    );
+}
+
+DEFAULT_ACCOUNT: {
+    sql_execute(q{DELETE FROM "System" WHERE field = 'default-account'});
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [] )
+                ->get_default_account();
+        },
+        qr/The default account is Unknown\./,
+        'output from get-default-account',
+    );
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [qw( --account Socialtext )] )
+                ->set_default_account();
+        },
+        qr/The default account is now Socialtext\./,
+        'output from set-default-account',
+    );
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [] )
+                ->get_default_account();
+        },
+        qr/The default account is Socialtext\./,
+        'output from get-default-account',
     );
 }
 

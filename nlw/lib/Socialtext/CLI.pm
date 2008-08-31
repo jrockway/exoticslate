@@ -23,6 +23,7 @@ use Socialtext::Log qw( st_log st_timed_log );
 use Socialtext::Workspace;
 use Socialtext::User;
 use Socialtext::Timer;
+use Socialtext::SystemSettings qw/get_system_setting set_system_setting/;
 
 my %CommandAliases = (
     '--help' => 'help',
@@ -71,6 +72,7 @@ sub run {
 
     $command = $CommandAliases{$command}
         if $CommandAliases{$command};
+    $self->{command} = $command;
     $command =~ s/-/_/g;
 
     unless ( $self->can($command) ) {
@@ -83,7 +85,6 @@ sub run {
         Check_and_drop_privs();
     }
 
-    $self->{command} = $command;
     Socialtext::Timer->Start("CLI_$command");
     $self->$command();
 }
@@ -202,6 +203,26 @@ sub remove_accounts_admin {
 
     my $username = $user->username();
     $self->_success("$username no longer has accounts admin access.");
+}
+
+sub set_default_account {
+    my $self = shift;
+    my %opts = $self->_get_options( 'account:s' );
+    $self->_help_as_error(
+        loc("The command you called ([_1]) requires an account to be "
+            . "specified by name.", $self->{command}),
+    ) unless $opts{account};
+
+    my $account = $self->_load_account($opts{account});
+    set_system_setting('default-account', $account->account_id);
+    $self->_success(loc("The default account is now [_1].", $opts{account}));
+}
+
+sub get_default_account {
+    my $self = shift;
+
+    my $account = get_system_setting('default-account');
+    $self->_success(loc("The default account is [_1].", $account->name));
 }
 
 sub list_workspaces {
@@ -684,11 +705,7 @@ sub create_workspace {
     # Special case hack for ST production systems
     $account_name = 'Socialtext' if $account_name =~ /socialtext/;
 
-    my $account = Socialtext::Account->new( name => $account_name );
-    unless ($account) {
-        $self->_error(qq|There is no account named "$account_name".|);
-    }
-
+    my $account = $self->_load_account($account_name);
     $ws{account_id} = $account->account_id();
 
     my $ws = eval {
@@ -724,6 +741,17 @@ sub _require_create_workspace_params {
         'account:s',
         'empty',
     );
+}
+
+sub _load_account {
+    my $self = shift;
+    my $account_name = shift;
+
+    my $account = Socialtext::Account->new( name => $account_name );
+    unless ($account) {
+        $self->_error(qq|There is no account named "$account_name".|);
+    }
+    return $account;
 }
 
 sub create_account {
@@ -2173,6 +2201,8 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   remove-accounts-admin [--username or --email]
   give-system-admin [--username or --email]
   remove-system-admin [--username or --email]
+  set-default-account [--account]
+  get-default-account
 
   EMAIL
 
@@ -2565,6 +2595,14 @@ Gives the specified user system admin privileges.
 =head2 remove-system-admin [--username or --email]
 
 Remove the specified user's system admin privileges.
+
+=head2 set-default-account [--account]
+
+Set the default account new users should belong to.
+
+=head2 get-default-account
+
+Prints out the current default account.
 
 =head2 from-input < <list of commands>
 

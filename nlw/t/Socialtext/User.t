@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 15;
+use Test::Socialtext tests => 17;
 fixtures( 'rdbms_clean' );
 
 use Socialtext::User;
@@ -15,6 +15,8 @@ my $user;
 is( Socialtext::User->Count(), 2, 'base users are registered' );
 ok( Socialtext::User->SystemUser, 'a system user exists' );
 ok( Socialtext::User->Guest, 'a guest user exists' );
+is( Socialtext::User->Guest->primary_account->name, 'Socialtext',
+    'Guest user has correct account' );
 
 $user = Socialtext::User->new( username => 'devnull9@socialtext.net', );
 is( $user, undef, 'no non-special users exist yet' );
@@ -27,6 +29,9 @@ is( $user->driver_name, 'Default',
 
 is( $user->creator->username, 'system-user',
     'System User sprang from suigenesis.'
+);
+is( $user->primary_account->name, 'Socialtext',
+    'System user has correct account',
 );
 
 my $new_user = Socialtext::User->create(

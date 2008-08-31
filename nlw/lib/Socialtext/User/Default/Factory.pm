@@ -65,6 +65,7 @@ sub EnsureRequiredDataIsPresent {
             user_id            => $system_unique_id,
             created_by_user_id => undef,
             is_system_created  => 1,
+            primary_account_id => Socialtext::Account->Socialtext->account_id(),
         );
     }
 
@@ -87,6 +88,7 @@ sub EnsureRequiredDataIsPresent {
             user_id            => $system_unique_id,
             created_by_user_id => $system_user->user_id,
             is_system_created  => 1,
+            primary_account_id => Socialtext::Account->Socialtext->account_id(),
         );
     }
 }

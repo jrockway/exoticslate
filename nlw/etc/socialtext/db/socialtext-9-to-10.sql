@@ -8,6 +8,13 @@ ALTER TABLE person
 ALTER TABLE person
     DROP COLUMN small_photo;
 
+-- Add a primary_account_id column to UserMetadata which is permitted
+-- to be NULL now, but will be NOT NULL in the future.
+
+ALTER TABLE "UserMetadata"
+    ADD COLUMN
+        primary_account_id bigint;
+
 UPDATE "System"
    SET value = 10
  WHERE field = 'socialtext-schema-version';

@@ -98,7 +98,8 @@ CREATE TABLE "UserMetadata" (
     created_by_user_id bigint,
     is_business_admin boolean DEFAULT false NOT NULL,
     is_technical_admin boolean DEFAULT false NOT NULL,
-    is_system_created boolean DEFAULT false NOT NULL
+    is_system_created boolean DEFAULT false NOT NULL,
+    primary_account_id bigint
 );
 
 CREATE TABLE "UserWorkspaceRole" (

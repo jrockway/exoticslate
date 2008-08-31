@@ -36,7 +36,7 @@ S3_SOURCE_FILES= \
 		jquery-plugin.js \
 		Jemplate.js \
 		$(ALL_JEMPLATE_PLUGINS) \
-		$(S2_JAVASCRIPT)/loc.js \
+		loc.js \
 		cookie.js \
 		lookahead.js \
 		lightbox.js \

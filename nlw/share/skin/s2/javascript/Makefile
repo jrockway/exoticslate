@@ -44,7 +44,7 @@ DISPLAY_SOURCE_FILES= \
 		$(S3_JAVASCRIPT)/jquery-patch.js \
 		$(S3_JAVASCRIPT)/jquery-plugin.js \
  		$(S3_JAVASCRIPT)/lightbox.js \
-		loc.js \
+		$(S3_JAVASCRIPT)/loc.js \
 		bootstrap-ui.js \
 		comment.js \
 		Watchlist.js \
@@ -91,7 +91,7 @@ DISPLAY_UI_SOURCE_FILES= \
 
 COMMENT_SOURCE_FILES= \
 		$(JQUERY) \
-		loc.js \
+		$(S3_JAVASCRIPT)/loc.js \
 		bootstrap-ui.js \
 		$(COMMON_JAVASCRIPT)/prototype-1.4.0/dist/prototype.js \
 		Browser.js \
@@ -106,7 +106,7 @@ STAX_SOURCE_FILES= \
 
 OTHER_SOURCE_FILES= \
 		$(JQUERY) \
-		loc.js \
+		$(S3_JAVASCRIPT)/loc.js \
 		bootstrap-ui.js \
 		main.js \
 		stlibrary.js \

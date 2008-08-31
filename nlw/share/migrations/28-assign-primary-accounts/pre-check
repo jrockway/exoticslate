@@ -1,0 +1,22 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use Socialtext::Migration::Utils qw/ensure_socialtext_schema/;
+use Socialtext::SQL qw/sql_singlevalue/;
+
+# Schema migration 10 introduces the primary_account_id field for users.
+ensure_socialtext_schema(10);
+
+# We can skip this migration if all users already have primary accounts
+my $unassigned = sql_singlevalue(
+    'select count(*) from "UserMetadata" where primary_account_id = NULL',
+);
+
+if ($unassigned == 0) {
+    print "It looks like all users have a primary account.  Skipping migration.\n";
+    exit 1;
+}
+
+print "Assigning primary accounts to users.\n";
+exit 0;

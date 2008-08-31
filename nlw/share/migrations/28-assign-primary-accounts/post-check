@@ -1,0 +1,17 @@
+#!/usr/bin/env perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use Socialtext::Account;
+use Socialtext::User;
+
+my $st_account = Socialtext::Account->Socialtext;
+unless ( Socialtext::User->SystemUser->primary_account->account_id == 
+         Socialtext::User->Guest->primary_account->account_id ==
+         $st_account->account_id ) {
+    print "System user and guest user not assigned to the correct account.\n";
+    exit 1;
+}
+
+print "It looks like users were assigned to accounts correctly.\n";
+exit 0;

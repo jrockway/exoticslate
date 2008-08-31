@@ -8,6 +8,7 @@ use Socialtext::AppConfig;
 use Socialtext::System qw/shell_run/;
 use Socialtext::SQL qw/sql_singlevalue sql_execute sql_begin_work 
                        sql_commit sql_rollback disconnect_dbh/;
+use Socialtext::SystemSettings qw/get_system_setting set_system_setting/;
 
 =head1 NAME
 
@@ -239,13 +240,9 @@ sub current_version {
     my %c = $self->connect_params();
 
     my $version = 0;
-    my $schema_field = $self->schema_name . '-schema-version';
     eval {
         local $SIG{__WARN__} = sub {}; # ignore warnings
-        $version = sql_singlevalue(<<EOT, $schema_field);
-SELECT value FROM "System"
-    WHERE field = ?
-EOT
+        $version = get_system_setting($self->_schema_field);
     };
     eval { sql_rollback() };
     return $version if $version;
@@ -346,14 +343,10 @@ sub set_schema_version {
     my $self = shift;
     my $new_version = shift;
 
-    my $schema_field = $self->schema_name . '-schema-version';
-    sql_begin_work();
-    sql_execute('DELETE FROM "System" WHERE field = ?', $schema_field);
-    sql_execute('INSERT INTO "System" VALUES (?,?)', 
-        $schema_field, $new_version);
-    sql_commit();
+    set_system_setting($self->_schema_field, $new_version);
 }
 
+sub _schema_field { shift->schema_name . '-schema-version' }
 
 sub _schema_filename {
     my $self = shift;

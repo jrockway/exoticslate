@@ -33,7 +33,7 @@ JEMPLATE_WIKIWYG_MODULE=jemplate_wikiwyg.js
 ALL_WIKIWYG_JEMPLATES:=$(shell find jemplate_wikiwyg)
 
 ALL_EDITOR_FILES:=$(shell find $(WIKIWYG_ST)/ -type f | grep -v editor.js)
-ALL_JEMPLATE_PLUGINS:=$(shell find JemplatePlugin -name \*.js)
+ALL_JEMPLATE_PLUGINS:=$(shell find $(S3_JAVASCRIPT)/JemplatePlugin -name \*.js)
 
 JQUERY=$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
        $(COMMON_JAVASCRIPT)/jquery-noConflict.js

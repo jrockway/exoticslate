@@ -32,7 +32,6 @@ print "Appending the updated schema version to the schema file.\n";
 my $version = $schema->current_version;
 open(my $fh, ">>$schema_file") or die;
 print $fh <<EOT;
-
 DELETE FROM "System" WHERE field = '$schema_name-schema-version';
 INSERT INTO "System" VALUES ('$schema_name-schema-version', '$version');
 EOT

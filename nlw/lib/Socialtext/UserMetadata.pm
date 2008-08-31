@@ -10,7 +10,9 @@ use Class::Field 'field';
 use Socialtext::Cache;
 use Socialtext::Exceptions qw( data_validation_error param_error );
 use Socialtext::SQL 'sql_execute';
-use Socialtext::Validate qw( validate SCALAR_TYPE BOOLEAN_TYPE ARRAYREF_TYPE WORKSPACE_TYPE );
+use Socialtext::Validate qw( validate SCALAR_TYPE BOOLEAN_TYPE ARRAYREF_TYPE 
+                             WORKSPACE_TYPE );
+use Socialtext::Account;
 
 use DateTime;
 use DateTime::Format::Pg;
@@ -87,7 +89,7 @@ sub create {
     my ( $class, %p ) = @_;
 
     $class->_validate_and_clean_data(%p);
-
+    $p{primary_account_id} ||= Socialtext::Account->Default->account_id;
     $p{is_business_admin}  ||= 'f';
     $p{is_technical_admin} ||= 'f';
     $p{is_system_created}  ||= 'f';
@@ -96,10 +98,12 @@ sub create {
         'INSERT INTO "UserMetadata"'
         . ' (user_id, email_address_at_import,'
         . ' created_by_user_id, is_business_admin,'
-        . ' is_technical_admin, is_system_created)'
-        . ' VALUES (?,?,?,?,?,?)',
+        . ' is_technical_admin, is_system_created, primary_account_id)'
+        . ' VALUES (?,?,?,?,?,?,?)',
         $p{user_id}, $p{email_address_at_import}, $p{created_by_user_id},
-        $p{is_business_admin}, $p{is_technical_admin}, $p{is_system_created} );
+        $p{is_business_admin}, $p{is_technical_admin}, $p{is_system_created},
+        $p{primary_account_id},
+    );
 
     return $class->new( user_id => $p{user_id} );
 }
@@ -122,36 +126,27 @@ sub delete {
 sub set_technical_admin {
     my ( $self, $value ) = @_;
 
-    sql_execute(
-        'UPDATE "UserMetadata" SET is_technical_admin=?'
-        . ' WHERE user_id=?',
-        $value, $self->user_id );
-
+    $self->_update_field('is_technical_admin=?', $value);
     $self->is_technical_admin( $value );
-
     return $self;
 }
 
 sub set_business_admin {
     my ( $self, $value ) = @_;
 
-    sql_execute(
-        'UPDATE "UserMetadata" SET is_business_admin=?'
-        . ' WHERE user_id=?',
-        $value, $self->user_id );
-
+    $self->_update_field('is_business_admin=?', $value);
     $self->is_business_admin( $value );
-
     return $self;
 }
 
-sub record_login {
-    my $self = shift;
+sub record_login { shift->_update_field('last_login_datetime=CURRENT_TIMESTAMP') }
 
+sub _update_field {
+    my $self = shift;
+    my $field = shift;
     sql_execute(
-        'UPDATE "UserMetadata" SET last_login_datetime=CURRENT_TIMESTAMP'
-        . ' WHERE user_id=?',
-        $self->user_id );
+        qq{UPDATE "UserMetadata" SET $field WHERE user_id=?},
+        @_, $self->user_id );
 }
 
 sub creation_datetime_object {
@@ -176,6 +171,20 @@ sub creator {
     }
 
     return Socialtext::User->new( user_id => $created_by_user_id );
+}
+
+sub primary_account {
+    my $self = shift;
+    my $new_account = shift;
+
+    if ($new_account) {
+        my $account_id = ref($new_account) ? $new_account->account_id : $new_account;
+        $self->_update_field('primary_account_id=?', $account_id);
+        $self->{primary_account_id} = $account_id;
+    }
+
+    return Socialtext::Account->new(account_id => $self->{primary_account_id})
+            || Socialtext::Account->Unknown;
 }
 
 sub _validate_and_clean_data {

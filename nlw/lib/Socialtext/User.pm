@@ -34,7 +34,7 @@ my @user_store_interface =
 my @user_metadata_interface =
     qw( creation_datetime last_login_datetime email_address_at_import
         created_by_user_id is_business_admin is_technical_admin
-        is_system_created );
+        is_system_created primary_account_id );
 my @minimal_interface
     = ( 'user_id', @user_store_interface, @user_metadata_interface );
 
@@ -301,6 +301,10 @@ sub last_login_datetime_object {
 
 sub creator {
     $_[0]->metadata->creator( @_[ 1 .. $#_ ] );
+}
+
+sub primary_account {
+    $_[0]->metadata->primary_account( @_[ 1 .. $#_ ] );
 }
 
 {

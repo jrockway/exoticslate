@@ -26,7 +26,7 @@ use Socialtext::SQL qw/sql_execute/;
 
 use Cwd;
 
-plan tests => 309;
+plan tests => 323;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -1695,6 +1695,7 @@ SET_USER_NAMES: {
                 ]
             )->set_user_names();
         };
+        warn $@ if $@;
     }
 
     my $user = Socialtext::User->new( username => 'setnames@example.com' );
@@ -1712,7 +1713,7 @@ SET_USER_NAMES_no_user: {
                 ]
             )->set_user_names();
         },
-        qr/\QThe user you specified does not exist.\E/,
+        qr/No user with the email address "noususj\@example\.com" could be found\./,
         'Admin warned about missing user'
     );
 }
@@ -1778,6 +1779,87 @@ SET_USER_NAMES_lastnameonly: {
     is( $user->first_name(), 'John', 'First name still the same' );
     is( $user->last_name(),  'Smith',  'Last name changed' );
 }
+
+GET_SET_USER_ACCOUNT: {
+    my $output = '';
+    sql_execute(q{DELETE FROM "System" WHERE field = 'default-account'});
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [qw( --email account@example.com --password foobar )] )
+                ->create_user();
+        },
+        qr/\QA new user with the username "account\E\@\Qexample.com" was created.\E/,
+        'create-user success message'
+    );
+    expect_success(
+        sub {
+            $output = Socialtext::CLI->new(
+                argv => [
+                    qw( --username account@example.com )
+                ]
+            )->get_user_account();
+        },
+        qr/Primary account for "account\@example\.com" is Unknown/,
+        'get primary account by username',
+    );
+    expect_success(
+        sub {
+            $output = Socialtext::CLI->new(
+                argv => [
+                    qw( --username account@example.com --account Socialtext )
+                ]
+            )->set_user_account();
+        },
+        qr/User "account\@example\.com" was updated\./,
+        'set primary account by username',
+    );
+    expect_success(
+        sub {
+            $output = Socialtext::CLI->new(
+                argv => [
+                    qw( --email account@example.com )
+                ]
+            )->get_user_account();
+        },
+        qr/Primary account for "account\@example\.com" is Socialtext/,
+        'get primary account by email',
+    );
+    expect_success(
+        sub {
+            $output = Socialtext::CLI->new(
+                argv => [
+                    qw( --email account@example.com --account Socialtext )
+                ]
+            )->set_user_account();
+        },
+        qr/User "account\@example\.com" was updated\./,
+        'set primary account by email',
+    );
+    expect_failure(
+        sub {
+            $output = Socialtext::CLI->new(
+                argv => [
+                    qw( --email bad_account@example.com --account Socialtext )
+                ]
+            )->set_user_account();
+        },
+        qr/No user with the email address "bad_account\@example\.com" could be found/,
+        'setting primary account by invalid email',
+    );
+    expect_failure(
+        sub {
+            $output = Socialtext::CLI->new(
+                argv => [
+                    qw( --email account@example.com --account NoAccount )
+                ]
+            )->set_user_account();
+        },
+        qr/There is no account named "NoAccount"\./,
+        'setting invalid primary account',
+    );
+}
+
 
 SHOW_MEMBERS: {
     my $output = '';

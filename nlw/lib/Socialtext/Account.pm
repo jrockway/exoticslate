@@ -14,6 +14,7 @@ use Socialtext::SQL qw( sql_execute sql_singlevalue);
 use Socialtext::String;
 use Socialtext::Validate qw( validate SCALAR_TYPE );
 use Socialtext::l10n qw(loc);
+use Socialtext::SystemSettings qw( get_system_setting );
 
 field 'account_id';
 field 'name';
@@ -73,6 +74,11 @@ EOT
 
 sub Unknown    { $_[0]->new( name => 'Unknown' ) }
 sub Socialtext { $_[0]->new( name => 'Socialtext' ) }
+
+sub Default {
+    my $class = shift;
+    return get_system_setting('default-account');
+}
 
 sub new {
     my ( $class, %p ) = @_;

@@ -207,16 +207,22 @@ sub remove_accounts_admin {
 
 sub set_default_account {
     my $self = shift;
+    my $account = $self->_require_account;
+    set_system_setting('default-account', $account->account_id);
+    $self->_success(loc("The default account is now [_1].", $account->name));
+}
+
+sub _require_account {
+    my $self = shift;
     my %opts = $self->_get_options( 'account:s' );
     $self->_help_as_error(
         loc("The command you called ([_1]) requires an account to be "
             . "specified by name.", $self->{command}),
     ) unless $opts{account};
 
-    my $account = $self->_load_account($opts{account});
-    set_system_setting('default-account', $account->account_id);
-    $self->_success(loc("The default account is now [_1].", $opts{account}));
+    return $self->{account} = $self->_load_account($opts{account});
 }
+
 
 sub get_default_account {
     my $self = shift;
@@ -256,35 +262,41 @@ sub _determine_workspace_output {
 
 sub set_user_names {
     my $self = shift;
+    my $user = $self->_require_user;
     my %opts = $self->_require_set_user_names_params(shift);
-
-    my $user;
-    if ( $opts{username}) {
-        $user = Socialtext::User->new( username => $opts{username});
-        delete $opts{username};
-    } elsif ($opts{email_address}) {
-        $user = Socialtext::User->new( email_address => $opts{email_address} );
-        delete $opts{email_address};
-    }
-
-    if (!$user) {
-        $self->_error('The user you specified does not exist.');
-    }
-
+    
     my $result = $user->update_store(%opts);
     if ($result == 0) {
         $self->_error('First name and last name match the current names for the user; no change to "' . $user->username() . '".');
     }
 
-    $self->_success( 'User "' . $user->username() . '" was updated.' );
+    $self->_success( loc('User "[_1]" was updated.', $user->username) );
+}
+
+sub set_user_account {
+    my $self = shift;
+    my $user = $self->_require_user;
+    my $account = $self->_require_account;
+
+    $user->primary_account($account->account_id);
+
+    $self->_success( loc('User "[_1]" was updated.', $user->username) );
+}
+
+sub get_user_account {
+    my $self = shift;
+    my $user = $self->_require_user;
+
+    my $account = $user->primary_account;
+    $self->_success(
+        loc('Primary account for "[_1]" is [_2].', $user->username, $account->name)
+    );
 }
 
 sub _require_set_user_names_params {
     my $self = shift;
 
     my %opts = $self->_get_options(
-        'username:s',
-        'email:s',
         'first-name:s',
         'last-name:s'
     );
@@ -297,7 +309,7 @@ sub _require_set_user_names_params {
         }
     }
 
-    $opts{email_address} = delete $opts{email};
+    $opts{email_address} = $self->{user}->email_address;
     $opts{first_name}    = delete $opts{'first-name'} if (defined($opts{'first-name'}));
     $opts{last_name}     = delete $opts{'last-name'} if (defined($opts{'last-name'}));
 
@@ -2153,6 +2165,8 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   disable-email-notify [--username or --email] --workspace
   set-locale [--username or --email] --workspace --locale
   set-user-names [--username or --email] --first-name --last-name
+  set-user-account [--username or --email] --account
+  get-user-account [--username or --email]
   mass-add-users --csv
 
   WORKSPACES
@@ -2307,6 +2321,14 @@ codes.  Eg: en, fr, ja, de
 =head2 set-user-names [--email or --username] --first-name --last-name
 
 Set the first and last names for an existing user.
+
+=head2 set-user-account [--email or --username] --account
+
+Set the primary account of the specified user.
+
+=head2 get-user-account [--email or --username]
+
+Print the primary account of the specified user.
 
 =head2 mass-add-users --csv
 

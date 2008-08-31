@@ -614,6 +614,5 @@ ALTER TABLE ONLY "Workspace"
             FOREIGN KEY (account_id)
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
-
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
 INSERT INTO "System" VALUES ('socialtext-schema-version', '10');

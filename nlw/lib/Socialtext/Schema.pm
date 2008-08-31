@@ -298,10 +298,14 @@ sub dump {
     push( @parms, '--host'     => $c{host} )      if $c{host};
     push( @parms, $c{db_name} );
 
-    my $sudo = $> ? '' : 'sudo -u www-data';
+    my $sudo = _sudo('www-data');
     $self->_db_shell_run( "$sudo @parms" );
     $self->_display("Dumped data to $file\n");
 }
+
+# If we're root, sudo to a different user, otherwise
+# don't sudo, assume we're already the right user.
+sub _sudo { $> ? '' : 'sudo -u ' . shift }
 
 sub _display {
     my $self = shift;
@@ -370,7 +374,7 @@ sub createdb {
     my %c = $self->connect_params();
     disconnect_dbh();
     eval {
-        my $sudo = $> ? '' : 'sudo -u postgres';
+        my $sudo = _sudo('postgres');
         $self->_db_shell_run("$sudo createdb -E UTF8 -O $c{user} $c{db_name}");
     };
     my $createdb_err = $@;
@@ -409,7 +413,8 @@ sub dropdb {
     disconnect_dbh();
     sleep 2;
     eval {
-        $self->_db_shell_run("dropdb $c{db_name}");
+        my $sudo = _sudo('postgres');
+        $self->_db_shell_run("$sudo dropdb $c{db_name}");
     };
     warn "Error dropping: $@" if $@;
 }

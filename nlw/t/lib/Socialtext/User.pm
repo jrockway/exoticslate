@@ -44,6 +44,9 @@ sub create {
                       . "is already in use."],
         );
     }
+    if (exists $opts{password} and length($opts{password}) < 6) {
+        die "Passwords must be at least 6 characters long.\n";
+    }
 
     return Socialtext::MockBase::new($class, %opts);
 }

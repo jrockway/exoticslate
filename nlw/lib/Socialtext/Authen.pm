@@ -22,8 +22,7 @@ sub check_password {
                           password => SCALAR_TYPE,
                         };
 
-    my $user = Socialtext::User->new( username => $p{username} );
-
+    my $user = Socialtext::User->Resolve( $p{username} );
     return unless $user;
 
     return $user->password_is_correct( $p{password} );

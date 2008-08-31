@@ -5,6 +5,9 @@ use warnings;
 use Socialtext::Account;
 use Socialtext::User;
 
+# Make sure the Socialtext and Unknown accounts exist.
+Socialtext::Account->EnsureRequiredDataIsPresent();
+
 # The 2 system users should always be assigned to the Socialtext account
 my $st_account = Socialtext::Account->Socialtext;
 

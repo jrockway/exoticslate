@@ -22,7 +22,6 @@ field 'is_system_created';
 
 sub table_name { 'Account' }
 
-# FIXME: This belongs elsewhere, in fixture code or something.
 Readonly my @RequiredAccounts => qw( Unknown Socialtext );
 sub EnsureRequiredDataIsPresent {
     my $class = shift;

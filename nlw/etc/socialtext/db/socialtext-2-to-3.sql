@@ -14,6 +14,7 @@ $$ LANGUAGE 'plpgsql' VOLATILE;
 
 -- Remove a storage table created by old versions of ST::Storage::PSQL
 SELECT execute_if_table_exists('storage', 'drop table storage');
+DROP FUNCTION execute_if_table_exists(text,text);
 
 CREATE TABLE "storage" (
     user_id bigint NOT NULL,

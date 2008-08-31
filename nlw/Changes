@@ -1,3 +1,10 @@
+2.22.1.X
+
+  * Search performance improvements
+  * Search snippets in search results
+  * events data model is added
+  * many minor bug fixes
+
 2.22.0.0
 
   * Bumped REST API version to 1.00

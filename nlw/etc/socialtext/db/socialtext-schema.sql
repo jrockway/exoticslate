@@ -597,7 +597,7 @@ ALTER TABLE ONLY person_watched_people__person
 ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT tag_people_fk
             FOREIGN KEY (tag_id)
-            REFERENCES person_tag(id);
+            REFERENCES person_tag(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY "UserWorkspaceRole"
     ADD CONSTRAINT userworkspacerole___role___role_id___role_id___n___1___1___0

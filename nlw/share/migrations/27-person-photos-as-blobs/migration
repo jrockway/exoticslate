@@ -1,11 +1,10 @@
 #!/usr/bin/env perl
 # @COPYRIGHT@
-
 use strict;
 use warnings;
-
 use File::Temp qw/tmpnam/;
 use LWP::UserAgent;
+use Socialtext::User; # loaded here to avoid a circular dependency
 use Socialtext::Migration::Utils qw/ensure_socialtext_schema/;
 use Socialtext::People::Profile;
 use Socialtext::SQL qw/sql_begin_work sql_execute sql_commit/;
@@ -36,7 +35,7 @@ for my $row ( @{ $result->fetchall_arrayref } ) {
 
     # if this blows up, let's skip it.
     eval { $profile->save_profile_image( $blob ) };
-    warn "WARNING: $@\n" if ( $@ );
+    warn "Error saving profile image: $@\n" if $@;
 }
 sql_commit();
 

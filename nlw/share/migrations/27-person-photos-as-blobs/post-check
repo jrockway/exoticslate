@@ -1,9 +1,7 @@
 #!/usr/bin/env perl
 # @COPYRIGHT@
-
 use strict;
 use warnings;
-
 use Socialtext::SQL qw/sql_singlevalue/;
 
 # Basically stated, this query reads: what's the datatype of the person.photo

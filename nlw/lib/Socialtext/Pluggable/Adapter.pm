@@ -16,6 +16,7 @@ use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
 use Socialtext::Pluggable::WaflPhrase;
 
 BEGIN {
+    # This is still needed for dev-env -- Do Not Delete!
     our $code_base = Socialtext::AppConfig->code_base;
     push @INC, glob("$code_base/plugin/*/lib");
 }

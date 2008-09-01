@@ -10,7 +10,7 @@ BEGIN {
         plan skip_all => 'These tests require Email::Send::Test to run.';
     }
     else {
-        plan tests => 19;
+        plan tests => 23;
     }
 }
 
@@ -96,6 +96,10 @@ for my $c (@cases) {
     } else {
         $expected = 1;
     }
+
+    my $user = Socialtext::User->Resolve( $c->{username} );
+    is $user->primary_account_id, $admin_workspace->account_id,
+       'invited user primary_account_id matches workspace';
 
     my @emails = Email::Send::Test->emails;
     is scalar @emails, $expected, "$expected email(s) were sent: $c->{label}";

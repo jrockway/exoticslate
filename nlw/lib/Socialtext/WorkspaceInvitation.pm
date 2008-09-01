@@ -33,13 +33,8 @@ use Socialtext::EmailSender::Factory;
 
 sub new {
     my $class = shift;
-
-    my $self = {
-                 @_
-               };
-
+    my $self = { @_ };
     bless $self, $class;
-
     return $self;
 }
 
@@ -57,18 +52,20 @@ sub _invite_one_user {
     my $user = Socialtext::User->new(
         email_address => $self->{invitee}
     );
+    my $wksp = $self->{workspace};
     $user ||= Socialtext::User->create(
         username => $self->{invitee},
         email_address => $self->{invitee},
         first_name => $self->{invitee_first_name},
         last_name => $self->{invitee_last_name},
         created_by_user_id => $self->{from_user}->user_id,
+        primary_account_id => $wksp->account_id,
     );
 
     $user->set_confirmation_info()
         unless $user->has_valid_password();
 
-    $self->{workspace}->add_user(
+    $wksp->add_user(
         user => $user,
         role => Socialtext::Role->Member(),
     );

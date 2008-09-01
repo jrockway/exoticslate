@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 27;
+use Test::Socialtext tests => 29;
 fixtures('populated_rdbms');
 
 use Socialtext::User;
@@ -18,6 +18,13 @@ use Socialtext::User;
              'guest', 'system-user'
         ],
         'All() returns users sorted by name by default',
+    );
+    is( join(',', map { $_->primary_account->name } $users->all()),
+        join(',', 
+            map({ "Unknown" } ( 1 .. 7 )), 
+            map({ "Socialtext" } ( 1 .. 2 )), 
+        ),
+        'Primary accounts are set as expected',
     );
 
     $users = Socialtext::User->All( limit => 2 );
@@ -76,13 +83,17 @@ use Socialtext::User;
 }
 
 {
+    # ByAccountId should return users watching either of these criteria:
+    # 1) User's primary account is the specified account
+    # 2) User is a member of a workspace tied to the specified account
+
     my $account_id = Socialtext::Account->Socialtext()->account_id();
 
     my $users = Socialtext::User->ByAccountId(
         account_id => $account_id );
     is_deeply(
         [ map { $_->username } $users->all() ],
-        [ map { ("devnull$_\@urth.org") } 1 .. 7 ],
+        [ map({ ("devnull$_\@urth.org") } 1 .. 7), 'guest', 'system-user' ],
         'ByAccountId() returns users sorted by name by default',
     );
 
@@ -113,7 +124,8 @@ use Socialtext::User;
     );
     is_deeply(
         [ map         { $_->username } $users->all() ],
-        [ reverse map { ("devnull$_\@urth.org") } 1 .. 7 ],
+        [ reverse 
+            map({ ("devnull$_\@urth.org") } 1 .. 7), 'guest', 'system-user'],
         'ByAccountId() in DESC order',
     );
 
@@ -123,7 +135,8 @@ use Socialtext::User;
     );
     is_deeply(
         [ map { $_->username } $users->all() ],
-        [ map { ("devnull$_\@urth.org") } 7, 6, 5, 4, 3, 2, 1 ],
+        [ map({ ("devnull$_\@urth.org") } 7, 6, 5, 4, 3, 2, 1),
+          'guest', 'system-user' ],
         'ByAccountId() sorted by creation_datetime',
     );
 
@@ -133,9 +146,24 @@ use Socialtext::User;
     );
     is_deeply(
         [ map { $_->username } $users->all() ],
-        [ map { ("devnull$_\@urth.org") } 3, 4, 5, 6, 7, 1, 2 ],
+        [ map({ ("devnull$_\@urth.org") } 3, 4, 5, 6, 7, 1, 2),
+          'guest', 'system-user' ],
         'ByAccountId() sorted by creator',
     );
+}
+
+{
+    # These tests are the same as the previous block, but test the Unknown
+    # account, which doesn't have any workspaces.
+    my $account_id = Socialtext::Account->Unknown()->account_id();
+    my $users = Socialtext::User->ByAccountId(
+        account_id => $account_id );
+    is_deeply(
+        [ map { $_->username } $users->all() ],
+        [ map({ ("devnull$_\@urth.org") } 1 .. 7) ],
+        'ByAccountId() returns users sorted by name by default',
+    );
+
 }
 
 {

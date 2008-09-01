@@ -841,10 +841,15 @@ SELECT DISTINCT "UserId".system_unique_id AS system_unique_id,
          "UserWorkspaceRole" AS "UserWorkspaceRole",
          "Workspace" AS "Workspace",
          "UserMetadata" AS "UserMetadata"
-    WHERE ("UserId".system_unique_id = "UserWorkspaceRole".user_id
-           AND "UserWorkspaceRole".workspace_id = "Workspace".workspace_id
-           AND "UserId".system_unique_id = "UserMetadata".user_id )
-        AND  ("Workspace".account_id = ? )
+    WHERE (
+        ("UserId".system_unique_id = "UserWorkspaceRole".user_id
+               AND "UserWorkspaceRole".workspace_id = "Workspace".workspace_id
+               AND "UserId".system_unique_id = "UserMetadata".user_id )
+            AND  ("Workspace".account_id = ?)
+        ) OR (
+            ("UserId".system_unique_id = "UserMetadata".user_id)
+                AND ("UserMetadata".primary_account_id = ? )
+        )
     ORDER BY "UserMetadata".creation_datetime $p{sort_order},
         "UserId".driver_username ASC
     LIMIT ? OFFSET ?
@@ -860,10 +865,15 @@ SELECT DISTINCT ("UserId".system_unique_id) AS aaaaa10000,
             "UserId" AS "UserId",
             "UserWorkspaceRole" AS "UserWorkspaceRole",
             "Workspace" AS "Workspace"
-    WHERE ("UserId".system_unique_id = "UserWorkspaceRole".user_id
-            AND "UserWorkspaceRole".workspace_id = "Workspace".workspace_id
-            AND "UserId".system_unique_id = "UserMetadata".user_id )
-        AND  ("Workspace".account_id = ? )
+    WHERE (
+        ("UserId".system_unique_id = "UserWorkspaceRole".user_id
+                AND "UserWorkspaceRole".workspace_id = "Workspace".workspace_id
+                AND "UserId".system_unique_id = "UserMetadata".user_id )
+            AND  ("Workspace".account_id = ?)
+        ) OR (
+            ("UserId".system_unique_id = "UserMetadata".user_id)
+                AND ("UserMetadata".primary_account_id = ? )
+        )
     ORDER BY "UserId000000002".driver_username $p{sort_order},
         "UserId".driver_username ASC
     LIMIT ? OFFSET ?
@@ -875,10 +885,17 @@ SELECT DISTINCT "UserId".system_unique_id AS system_unique_id,
                 "UserId".driver_username AS driver_username
     FROM "UserId" AS "UserId",
          "UserWorkspaceRole" AS "UserWorkspaceRole",
+         "UserMetadata" AS "UserMetadata",
          "Workspace" AS "Workspace"
-    WHERE ("UserId".system_unique_id = "UserWorkspaceRole".user_id
-           AND "UserWorkspaceRole".workspace_id = "Workspace".workspace_id )
-        AND  ("Workspace".account_id = ? )
+    WHERE (
+        ("UserId".system_unique_id = "UserWorkspaceRole".user_id
+               AND "UserWorkspaceRole".workspace_id = "Workspace".workspace_id
+               AND "UserId".system_unique_id = "UserMetadata".user_id )
+            AND  ("Workspace".account_id = ?)
+        ) OR (
+            ("UserId".system_unique_id = "UserMetadata".user_id)
+                AND ("UserMetadata".primary_account_id = ? )
+        )
     ORDER BY "UserId".driver_username $p{sort_order}
     LIMIT ? OFFSET ?
 EOSQL
@@ -886,7 +903,7 @@ EOSQL
 
         return $class->_UserCursor(
             $SQL{ $p{order_by} },
-            [qw( account_id limit offset )], %p
+            [qw( account_id account_id limit offset )], %p
         );
     }
 }

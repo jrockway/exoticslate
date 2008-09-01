@@ -5,10 +5,11 @@ use warnings;
 use Socialtext::Account;
 use Socialtext::User;
 
-my $st_account = Socialtext::Account->Socialtext;
-unless ( Socialtext::User->SystemUser->primary_account->account_id == 
-         Socialtext::User->Guest->primary_account->account_id ==
-         $st_account->account_id ) {
+my $st_account_id = Socialtext::Account->Socialtext->account_id();
+my $sys_user = Socialtext::User->SystemUser();
+my $guest_user = Socialtext::User->Guest();
+unless ( ($sys_user->primary_account->account_id() == $st_account_id)
+        and ($guest_user->primary_account->account_id() == $st_account_id) ) {
     print "System user and guest user not assigned to the correct account.\n";
     exit 1;
 }

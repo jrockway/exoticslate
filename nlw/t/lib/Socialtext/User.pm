@@ -106,7 +106,11 @@ sub workspaces {
 sub Resolve {
     my $class = shift;
     my $user_id = shift;
-    return Socialtext::User->new(user_id => $user_id);
+    my $user = Socialtext::User->new(user_id => $user_id);
+    unless ($user) {
+        die "Couldn't find user $user_id";
+    }
+    return $user;
 }
 
 our %Confirmation_info;

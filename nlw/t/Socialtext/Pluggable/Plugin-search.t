@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 1;
+use Test::Socialtext tests => 3;
 use Socialtext::User;
 use Socialtext::URI;
 use Socialtext::Account;
@@ -33,6 +33,8 @@ $plug->{hub} = $hub;
 #search
 my $pages = $plug->search('tag:welcome');
 is scalar(@{$pages->{rows}}), 18, 'Tag search returned the right number of pages';
+exit;
+
 
 package Rest;
 use strict;

@@ -15,7 +15,9 @@ ALTER TABLE "UserMetadata"
     ADD COLUMN
         primary_account_id bigint;
 
--- Create a view to represent 
+-- Create a view to represent the user to account relationship.
+-- This should make it possible to change this relationship in the future
+-- without any significant querying code changes
 CREATE VIEW user_account AS
 SELECT DISTINCT u.system_unique_id AS system_unique_id,
                 u.driver_key AS driver_key,
@@ -29,7 +31,6 @@ SELECT DISTINCT u.system_unique_id AS system_unique_id,
          JOIN "UserMetadata" um ON (u.system_unique_id = um.user_id)
          LEFT JOIN "UserWorkspaceRole" uwr ON (um.user_id = uwr.user_id)
          LEFT JOIN "Workspace" w ON (uwr.workspace_id = w.workspace_id);
-         
 
 UPDATE "System"
    SET value = 10

@@ -60,7 +60,7 @@ sub to_result {
         page_id  => $self->{page_id},
         page_uri => $self->uri,
         revision_count => $self->{revision_count},
-        !$self->hub->current_workspace->workspace_id ? (
+        $self->{hub} && !$self->hub->current_workspace->workspace_id ? (
             workspace_title => $self->workspace->title,
             workspace_name => $self->workspace->name,
         ) : (),

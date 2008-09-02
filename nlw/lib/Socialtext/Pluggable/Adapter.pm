@@ -15,6 +15,14 @@ use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
                       search_dirs => \@libs;
 use Socialtext::Pluggable::WaflPhrase;
 
+# These hook types are executed only once, all other types are called as many
+# times as they are registered
+my %ONCE_TYPES = (
+    action => 1,
+    wafl => 1,
+    template => 1,
+);
+
 BEGIN {
     # This is still needed for dev-env -- Do Not Delete!
     our $code_base = Socialtext::AppConfig->code_base;
@@ -32,8 +40,6 @@ sub AUTOLOAD {
     
     my ($hook_name) = $name =~ /_rest_hook_(.*)/;
     die "Not a REST hook call '$name'\n" unless $hook_name;
-
-    $self->register_rest;
 
     $self->make_hub($rest_handler->user);
 
@@ -83,6 +89,10 @@ for my $plugin (__PACKAGE__->plugins) {
     eval "require $plugin";
     die $@ if $@;
     $plugin->register;
+
+    for my $hook ($plugin->rest_hooks) {
+        push @{$hooks{$hook->{name}}}, $hook;
+    }
 }
 
 sub make {
@@ -140,19 +150,13 @@ sub register {
                 $registry->add(action => $action);
             }
 
-            push @{$hooks{$hook->{name}}}, $hook;
-        }
-    }
-}
+            $hook->{once} = 1 if $ONCE_TYPES{$type};
 
-sub register_rest {
-    my $self = shift;
-    return if $self->{_registered_rest}++;
-    for my $plugin ($self->plugins) {
-        for my $hook ($plugin->rest_hooks) {
             push @{$hooks{$hook->{name}}}, $hook;
         }
     }
+
+    $self->hook('nlw.start');
 }
 
 sub registered {
@@ -162,15 +166,19 @@ sub registered {
 
 sub hook {
     my ( $self, $name, @args ) = @_;
+    my @output;
     if ( my $hooks = $hooks{$name} ) {
-        my $hook = $hooks->[0];
-        return unless $hook;
-        my $method = $hook->{method};
-        $hook->{obj} ||= $hook->{class}->new();
-        $hook->{obj}->hub( $self->hub || $self->{made_hub});
-        $hook->{obj}->rest( delete $self->{_rest_handler} );
-        return $hook->{obj}->$method(@args);    # do some magic here
+        return unless ref $hooks eq 'ARRAY';
+        for my $hook (@$hooks) {
+            my $method = $hook->{method};
+            $hook->{obj} ||= $hook->{class}->new();
+            $hook->{obj}->hub( $self->hub || $self->{made_hub});
+            $hook->{obj}->rest( delete $self->{_rest_handler} );
+            push @output, $hook->{obj}->$method(@args);    # do some magic here
+            last if $hook->{once};
+        }
     }
+    return join("\n", @output);
 }
 
 return 1;

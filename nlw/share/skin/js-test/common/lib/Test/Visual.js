@@ -14,6 +14,24 @@ proto.diag = function() {
     this.builder.diag.apply(this.builder, arguments);
 }
 
+proto.runAsync = function(args) {
+    if (args.plan)
+        this.plan(args.plan);
+
+    this.asyncSteps = args.steps;
+    this.asyncStep = 0;
+
+    this.beginAsync(this.nextStep()); 
+}
+
+proto.nextStep = function() {
+    return this.asyncSteps[this.asyncStep++];
+}
+
+proto.callNextStep = function() {
+    this.call_callback(this.nextStep());
+}
+
 proto.is_no_harness = function() {
     if (window.top.Test.Harness) {
         this.builder.diag(
@@ -25,16 +43,6 @@ proto.is_no_harness = function() {
         this.is.apply(this, arguments);
 }
 
-/*
-Create a new user and optionally add to a workspace.
-
-- params:
-  - username
-  - password
-  - email_address
-  - workspace (optional)
-  - callback: required function of what to do afterwards
-*/
 proto.create_user = function(params, callback) {
     var self = this;
 
@@ -73,16 +81,6 @@ proto.create_user = function(params, callback) {
     });
 }
 
-/*
-Put a (new) page to a workspace.
-
-- params:
-  - email_address
-  - workspace
-  - page_name
-  - content
-  - callback: required function of what to do afterwards
-*/
 proto.put_page = function(params) {
     var self = this;
 
@@ -104,7 +102,6 @@ proto.put_page = function(params) {
     });
 }
 
-
 proto.login = function(params, callback) {
     var username = (params.username || 'devnull1@socialtext.com');
     var password = (params.password || 'd3vnu11l');
@@ -121,7 +118,8 @@ proto.login = function(params, callback) {
                     'password': password
                 },
                 success: function() {
-                    self.call_callback(callback);
+                    if (callback)
+                        self.call_callback(callback);
                 }
 
             });

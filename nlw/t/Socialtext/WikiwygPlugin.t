@@ -14,7 +14,7 @@ BEGIN {
 
 my $admin  = new_hub('admin');
 my $yaml_path = Socialtext::AppConfig->code_base .
-                '/skin/s2/javascript/Widgets.yaml';
+                '/skin/wikiwyg/javascript/Widgets.yaml';
 
 SET_FIELDS_with_search: {
     my $widget = {id => 'search'};

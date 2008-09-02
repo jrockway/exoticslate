@@ -142,6 +142,7 @@ sub MaskEmailAddress {
 }
 
 sub primary_account {
+    my $self = shift;
     return $self->{primary_account} || Socialtext::Account->Default;
 }
 

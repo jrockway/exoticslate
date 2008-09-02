@@ -2,7 +2,7 @@
 
 var t = new Test.Visual();
 
-t.plan(6);
+t.plan(7);
 
 t.beginAsync(step1);
 
@@ -11,7 +11,6 @@ function step1() {
 }
 
 function step2() {
-//     t.create_anonymous_user_and_login({}, step13); // XXX
     t.create_anonymous_user_and_login({}, step3);
 }
 
@@ -105,6 +104,25 @@ function step14(widget) {
         html,
         /You are not following anyone yet. When viewing someone else's profile, you can click on the "Follow this person" button at the top of the page./,
         "Empty message for my \"Persons I'm Following\" list."
+    );
+
+    step15();
+}
+
+// people someone else is following
+function step15() {
+    t.open_iframe("/?profile/7", function() {
+        t.scrollTo(150);
+        t.getWidget('people_i_am_following', step16);
+    });
+}
+
+function step16(widget) {
+    var html = widget.$('body div').html();
+    t.like(
+        html,
+        /This person isn't following anyone yet./,
+        "Empty message for someone else's \"Persons I'm Following\" list."
     );
 
     step_last();

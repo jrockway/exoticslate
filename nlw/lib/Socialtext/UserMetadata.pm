@@ -314,6 +314,11 @@ has never logged in.
 Returns a C<Socialtext::User> object for the user which created this
 user.
 
+=head2 $md->primary_account()
+
+Returns a C<Socialtext::Account> object for the primary account this 
+user is assigned to.
+
 =head1 AUTHOR
 
 Socialtext, Inc., <code@socialtext.com>

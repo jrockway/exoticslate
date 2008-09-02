@@ -456,6 +456,8 @@ Returns a cursor of the users for this account, ordered by username.
 
 =item Socialtext::Account->Socialtext()
 
+=item Socialtext::Account->Default()
+
 Returns an account object for specified account.
 
 =item Socialtext::Account->All()

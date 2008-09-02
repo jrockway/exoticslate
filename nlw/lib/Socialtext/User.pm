@@ -1628,6 +1628,15 @@ system, but cannot be looked up for some reason.
 Returns the default role for the user absent an explicit role
 assignment. This will be either "guest" or "authenticated_user".
 
+=head2 $user->primary_account( $account )
+
+Sets the primary account this user is assigned to if $account is 
+supplied, otherwise it returns the primary account for this user.
+
+=head2 $user->primary_account_id()
+
+Returns the primary account ID for this user.
+
 =head2 Socialtext::User->minimal_interface()
 
 Returns the minimal keys necessary for User Factory plugins to implement.

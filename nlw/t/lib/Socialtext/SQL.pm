@@ -7,7 +7,8 @@ use base 'Exporter';
 use unmocked 'Data::Dumper';
 
 our @EXPORT_OK = qw/sql_execute sql_ok sql_selectrow sql_singlevalue get_dbh
-                    sql_in_transaction sql_begin_work sql_commit sql_rollback/;
+                    sql_in_transaction sql_begin_work sql_commit sql_rollback
+                    disconnect_dbh/;
 our @SQL;
 our @RETURN_VALUES;
 
@@ -19,6 +20,7 @@ sub sql_execute {
 }
 
 sub get_dbh { }
+sub disconnect_dbh { }
 sub sql_in_transaction { 0 }
 sub sql_begin_work { }
 sub sql_commit { }

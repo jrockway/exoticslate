@@ -2,6 +2,11 @@
 
 var t = new Test.Visual();
 
+var asyncSteps = [
+    function() { t.login({}, t.nextStep()) }, 
+    function() { t.create_anonymous_user_and_login({}, t.nextStep()) }, 
+];
+
 var testData = [
     {
         type: "one_widget",
@@ -40,23 +45,32 @@ var testData = [
         url: "/?profile/7",
         regex: /This person isn't following anyone yet./,
         desc: "Empty message for someone else's \"Persons I'm Following\" list."
+    },
+    { // Create a new user in the admin workspace...
+        type: 'user_with_workspace'
+    },
+    {
+        type: "one_widget",
+        url: "/?action=add_widget;file=gadgets/share/gadgets/recent_conversations.xml",
+        regex: /My Conversations shows updates to pages you are involved with. To see entries in my conversation, edit, comment on, or watch a page. When someone else modifies that page, you will see those updates here./,
+        desc: "Empty message for my \"Recent Conversations\" list."
     }
-];
-
-var asyncSteps = [
-    function() {
-        t.login({}, t.nextStep());
-    },
-
-    function() {
-        t.create_anonymous_user_and_login({}, t.nextStep());
-    },
-
 ];
 
 // Generate the test step functions for each test.
 for (var i = 0, l = testData.length; i < l; i++) {
     (function(d) {
+        if (d.type == 'user_with_workspace') {
+            asyncSteps.push(function() {
+                t.login({}, function() {
+                    t.create_anonymous_user_and_login(
+                        {workspace: 'admin'},
+                        t.nextStep()
+                    );
+                });
+            });
+            return;
+        }
         var step1 = (d.type == 'one_widget')
         ? function() {
             t.setup_one_widget(
@@ -70,25 +84,21 @@ for (var i = 0, l = testData.length; i < l; i++) {
                 t.getWidget(d.widget, t.nextStep());
             });
         };
+        asyncSteps.push(step1);
+
         var step2 = function(widget) {
             t.scrollTo(150);
             t.like(widget.$("body").html(), d.regex, d.desc);
             t.callNextStep();
         };
-        asyncSteps.push(step1);
         asyncSteps.push(step2);
     })(testData[i]);
 }
 
-asyncSteps.push(
-    function() {
-        t.login({});
-        t.endAsync();
-    }
-);
+asyncSteps.push(function() { t.login({}); t.endAsync() });
 
 t.runAsync({
-    plan: 6,
+    plan: 7,
     steps: asyncSteps
 });
 

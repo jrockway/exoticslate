@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 29;
+use Test::Socialtext tests => 31;
 fixtures('populated_rdbms');
 
 use Socialtext::User;
@@ -156,6 +156,7 @@ use Socialtext::User;
     # These tests are the same as the previous block, but test the Unknown
     # account, which doesn't have any workspaces.
     my $account_id = Socialtext::Account->Unknown()->account_id();
+
     my $users = Socialtext::User->ByAccountId(
         account_id => $account_id );
     is_deeply(
@@ -164,6 +165,23 @@ use Socialtext::User;
         'ByAccountId() returns users sorted by name by default',
     );
 
+    $users = Socialtext::User->ByAccountId(
+        order_by   => 'creation_datetime',
+        account_id => $account_id );
+    is_deeply(
+        [ map { $_->username } $users->all() ],
+        [ map({ ("devnull$_\@urth.org") } 7, 6, 5, 4, 3, 2, 1) ],
+        'ByAccountId() returns users sorted by creation_datetime',
+    );
+
+    $users = Socialtext::User->ByAccountId(
+        order_by   => 'creator',
+        account_id => $account_id );
+    is_deeply(
+        [ map { $_->username } $users->all() ],
+        [ map({ ("devnull$_\@urth.org") } 3, 4, 5, 6, 7, 1, 2) ],
+        'ByAccountId() returns users sorted by creator',
+    );
 }
 
 {

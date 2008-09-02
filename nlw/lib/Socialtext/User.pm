@@ -831,49 +831,38 @@ EOSQL
 
         Readonly my %SQL => (
             creation_datetime => <<EOSQL,
-SELECT DISTINCT u.system_unique_id AS system_unique_id,
-                u.driver_key AS driver_key,
-                u.driver_unique_id AS driver_unique_id,
-                u.driver_username AS driver_username,
-                um.creation_datetime AS creation_datetime
-    FROM "UserId" u 
-         JOIN "UserMetadata" um ON (u.system_unique_id = um.user_id)
-         LEFT JOIN "UserWorkspaceRole" uwr ON (um.user_id = uwr.user_id)
-         LEFT JOIN "Workspace" w ON (uwr.workspace_id = w.workspace_id)
-    WHERE 
-        um.primary_account_id = ? OR w.account_id = ?
-    ORDER BY um.creation_datetime $p{sort_order}, u.driver_username ASC
+SELECT DISTINCT system_unique_id,
+                driver_key,
+                driver_unique_id,
+                driver_username,
+                creation_datetime
+    FROM user_account
+    WHERE primary_account_id = ? OR secondary_account_id = ?
+    ORDER BY creation_datetime $p{sort_order}, driver_username ASC
     LIMIT ? OFFSET ?
 EOSQL
             creator => <<EOSQL,
-SELECT DISTINCT u.system_unique_id AS system_unique_id,
-                u.driver_key AS driver_key,
-                u.driver_unique_id AS driver_unique_id,
-                u.driver_username AS driver_username,
+SELECT DISTINCT ua.system_unique_id AS system_unique_id,
+                ua.driver_key AS driver_key,
+                ua.driver_unique_id AS driver_unique_id,
+                ua.driver_username AS driver_username,
                 u2.driver_username AS creator
-    FROM "UserId" u 
-         JOIN "UserMetadata" um ON (u.system_unique_id = um.user_id)
-         LEFT JOIN "UserMetadata" um2 ON (um.created_by_user_id = um2.user_id)
+    FROM user_account ua
+         LEFT JOIN "UserMetadata" um2 ON (ua.creator_id = um2.user_id)
          LEFT JOIN "UserId" u2 ON (um2.user_id = u2.system_unique_id)
-         LEFT JOIN "UserWorkspaceRole" uwr ON (um.user_id = uwr.user_id)
-         LEFT JOIN "Workspace" w ON (uwr.workspace_id = w.workspace_id)
     WHERE 
-        um.primary_account_id = ? OR w.account_id = ?
-    ORDER BY u2.driver_username $p{sort_order}, u.driver_username ASC
+        ua.primary_account_id = ? OR ua.secondary_account_id = ?
+    ORDER BY u2.driver_username $p{sort_order}, ua.driver_username ASC
     LIMIT ? OFFSET ?
 EOSQL
             username => <<EOSQL,
-SELECT DISTINCT u.system_unique_id AS system_unique_id,
-                u.driver_key AS driver_key,
-                u.driver_unique_id AS driver_unique_id,
-                u.driver_username AS driver_username
-    FROM "UserId" u 
-         JOIN "UserMetadata" um ON (u.system_unique_id = um.user_id)
-         LEFT JOIN "UserWorkspaceRole" uwr ON (um.user_id = uwr.user_id)
-         LEFT JOIN "Workspace" w ON (uwr.workspace_id = w.workspace_id)
-    WHERE 
-        um.primary_account_id = ? OR w.account_id = ?
-    ORDER BY u.driver_username $p{sort_order}
+SELECT DISTINCT system_unique_id,
+                driver_key,
+                driver_unique_id,
+                driver_username
+    FROM user_account
+    WHERE primary_account_id = ? OR secondary_account_id = ?
+    ORDER BY driver_username $p{sort_order}
     LIMIT ? OFFSET ?
 EOSQL
         );

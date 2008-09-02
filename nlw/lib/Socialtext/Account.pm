@@ -62,13 +62,9 @@ sub user_count {
     my $self = shift;
 
     my $sth = sql_execute(<<EOT, $self->account_id, $self->account_id);
-SELECT COUNT(DISTINCT(u.system_unique_id))
-    FROM "UserId" u 
-         JOIN "UserMetadata" um ON (u.system_unique_id = um.user_id)
-         LEFT JOIN "UserWorkspaceRole" uwr ON (um.user_id = uwr.user_id)
-         LEFT JOIN "Workspace" w ON (uwr.workspace_id = w.workspace_id)
-    WHERE 
-        um.primary_account_id = ? OR w.account_id = ?
+SELECT COUNT(DISTINCT(system_unique_id))
+    FROM user_account
+    WHERE primary_account_id = ? OR secondary_account_id = ?
 EOT
 
     return $sth->fetchall_arrayref->[0][0];

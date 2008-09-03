@@ -6,14 +6,8 @@
 <div id="controls">
   <div id="st-editing-tools-edit">
     <ul>
-      [% IF checker.check_permission('edit') %]
-      <li><a title="[% loc('Click this button to edit the page') %]" id="st-edit-button-link" class="editButton" href="#">[% loc('Edit') %]</a></li>
-      [% ELSIF checker.check_permission('edit_controls') %]
-      <li><a title="[% loc('Click this button to edit the page') %]" id="st-login-to-edit-button-link" class="editButton" href="[% login_and_edit_path %]">[% loc('Edit') %]</a></li>
-      [% END %]
-      [% IF checker.check_permission('comment') %]
-      <li><a id="st-comment-button-link" class="commentButton" href="#" title="[% loc('Click this button to add a comment to the page') %]">[% loc('Comment') %]</a></li>
-      [% END %]
+      [% PROCESS 'element/page/display/edit-button' %]
+      [% PROCESS 'element/page/display/comment-button' %]
     </ul>
     <ul class="buttonRight">
     [% IF checker.check_permission('edit') %]
@@ -234,8 +228,8 @@
   <div class="clear"></div>
   <div id="bottomButtons">
     <ul>
-      <li><a class="editButton" href="#">Edit</a></li>
-      <li><a class="commentButton" href="#">Comment</a></li>
+      [% PROCESS 'element/page/display/edit-button' id_suffix='-bottom' %]
+      [% PROCESS 'element/page/display/comment-button' id_suffix='-bottom' %]
     </ul>
 
     [% USE decorate %]

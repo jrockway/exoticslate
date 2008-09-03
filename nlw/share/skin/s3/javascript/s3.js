@@ -452,17 +452,18 @@ $(function() {
         $.ajaxSettings.cache = false;
     }
 
-    $("#st-comment-button-link").click(function () {
-        get_lightbox(function () {
-            var ge = new GuiEdit({
-                oncomplete: function () {
-                    Page.refreshPageContent()
-                }
+    $("#st-comment-button-link, #bottomButtons .commentButton")
+        .one("click", function () {
+            get_lightbox(function () {
+                var ge = new GuiEdit({
+                    oncomplete: function () {
+                        Page.refreshPageContent()
+                    }
+                });
+                ge.show();
             });
-            ge.show();
+            return false;
         });
-        return false;
-    });
 
     $(".weblog_comment").click(function () {
         var page_id = this.id.replace(/^comment_/,'');

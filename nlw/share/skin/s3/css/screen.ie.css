@@ -13,7 +13,7 @@ html div#contentLeft {
 html body#contentPage div#controls div#controlsRight,
 html body#dashBoard div#controls div#controlsRight,
 html body#settingsPage div#controls div#controlsRight {
-    width: 440px !important;
+    width: 500px !important;
 }
 
 html div#mainWrap {

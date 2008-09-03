@@ -464,6 +464,14 @@ html>body #st-page-details {
     text-align: right;
 }
 
+#controlsRight li {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding-right: 5px;
+    float: left;
+}
+
 body#listView #controlsRight ul li {
     font-size: 14px;
 }
@@ -892,9 +900,5 @@ div#contentColumns div#st-page-maincontent em {
 /* Same as: div.widget div.widgetContent div.wiki p strong */
 div#contentColumns div#st-page-maincontent p strong {
 	font-weight: bold;
-}
-
-body div#controls div#controlsRight {
-   min-width: 440px !important;
 }
 

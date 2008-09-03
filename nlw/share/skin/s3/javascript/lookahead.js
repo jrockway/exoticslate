@@ -101,7 +101,7 @@
         if (lh = input.lh) return lh;
         var lh = $('<div>')
             .css({
-                position: 'absolute',
+                position: $.browser.msie ? 'relative' : 'absolute',
                 background: '#B4DCEC',
                 border: '1px solid black',
                 display: 'none',
@@ -131,8 +131,10 @@
             return;
         }
         var lookahead = this.getLookahead(input);
-        if (this.ajax && this.ajax.abort)
-            this.ajax.abort();
+        try {
+            this.ajax.abort()
+        }
+        catch (e) {}
         var url = typeof(opts.url) == 'function' ? opts.url() : opts.url;
         if (opts.filterValue) val = opts.filterValue(val);
         var filterName = opts.filterName || 'filter';
@@ -155,19 +157,16 @@
                 if (data.length) {
                     $.each(data, function (i) {
                         var item = this;
-                        lookahead.append(
-                            $('<a>')
-                                .attr('href', '#')
-                                .html(item.title)
-                                .click(function () {
-                                    $(input).val(item.value);
-                                    self.clearLookahead(input);
-                                    if (opts.onAccept) {
-                                        opts.onAccept.call(input, item.value);
-                                    }
-                                    return false;
-                                })
-                        );
+                        $('<a href="#">' + item.title + '</a>')
+                            .click(function () {
+                                $(input).val(item.value);
+                                self.clearLookahead(input);
+                                if (opts.onAccept) {
+                                    opts.onAccept.call(input, item.value);
+                                }
+                                return false;
+                            })
+                            .appendTo(lookahead);
                         if (i+1 < data.length)
                             lookahead.append(',<br/>')
                     })

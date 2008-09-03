@@ -1,6 +1,6 @@
 [%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
-[% PROCESS element/settings/start %]
+[% PROCESS element/settings/start form_action="workspaces_settings_skin" %]
 
 <dl class="form">
   <dt><label>[% loc('Workspace Skin') %]</label></dt>

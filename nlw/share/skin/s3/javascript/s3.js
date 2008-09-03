@@ -290,7 +290,7 @@ Page = {
             url: url,
             complete: function () {
                 Page.refreshAttachments();
-                Page.refreshPageContent();
+                Page.refreshPageContent(true);
             }
         });
     },

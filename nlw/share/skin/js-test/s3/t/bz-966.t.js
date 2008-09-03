@@ -2,7 +2,7 @@
 
 var t = new Test.Visual();
 
-t.plan(1);
+t.plan(2);
 
 if (!$.browser.msie) {
     t.skipAll('This reflow bug only presents in IE');
@@ -17,14 +17,34 @@ t.beginAsync(function(){
     // Scroll to wherever the bottom Edit button is
     t.scrollTo(topOffset - 50);
 
+    var imgs = '';
+    for (var i = 0 ; i < 40; i++) {
+        imgs += '<img src="/static/skin/s3/images/logo.png?_=' + Math.random() + ' />'
+        + '<br /><br /><br /><br /><br />';
+    }
+
     // Now reset the HTML content with the setPageContent method
-    t.win.Page.setPageContent('<div />');
+    t.win.Page.setPageContent(
+        '<div>' + imgs + '</div>'
+    );
+
+    var newOffset = t.$("#bottomButtons .editButton").offset().top;
 
     // Ensure that it moved after the page content moved
     t.isnt(
         topOffset,
-        t.$("#bottomButtons .editButton").offset().top,
+        newOffset,
         'The bottom Edit button moved after the page content moved'
+    );
+
+    // Scroll to wherever the bottom Edit button is again
+    t.scrollTo(newOffset - 50);
+
+    var pageAttributionOffset = t.$("#pageAttribution").offset().top;
+
+    t.ok(
+        (newOffset > pageAttributionOffset),
+        'The bottom Edit button stayed after image expansion'
     );
 
     t.endAsync();

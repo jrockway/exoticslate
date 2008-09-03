@@ -30,10 +30,6 @@ html body#listPage div#mainWrap {
 
 /* End fix {bz: 957} */
 
-html body div#st-page-editing-toolbar-container {
-    height: 50px;
-}
-
 body {
     behavior: url(/static/skin/s3/javascript/csshover.htc);
 }

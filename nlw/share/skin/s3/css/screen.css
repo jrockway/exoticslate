@@ -1078,3 +1078,8 @@ div#mainNav .emptynotice {
     font-weight:bold;
 }
 
+
+html body div#st-page-editing-toolbar-container {
+        height: 50px;
+}
+

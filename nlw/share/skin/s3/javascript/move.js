@@ -49,6 +49,10 @@ proto.show = function () {
         content: this.sel,
         close: this.sel + ' .close'
     });
+
+    // Clear errors from the previous time around: {bz: 1039}
+    jQuery(self.sel + ' .error').html('');
+
     jQuery(this.sel + ' form').submit(function () {
         var formdata = jQuery(this).serializeArray();
         var new_title = this.new_title.value;

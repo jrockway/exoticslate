@@ -1499,7 +1499,8 @@ proto.get_link_selection_text = function() {
  */
 proto.get_editable_div = function () {
     if (!this._editable_div) {
-        this._editable_div = this.get_edit_document().createElement('div');
+        var doc = this.get_edit_document();
+        this._editable_div = doc.createElement('div');
         this._editable_div.contentEditable = true;
         this._editable_div.style.overflow = 'auto';
         this._editable_div.style.border = 'none'
@@ -1510,12 +1511,12 @@ proto.get_editable_div = function () {
 
         var self = this;
         this._editable_div.onbeforedeactivate = function () {
-            self.__range = self.get_edit_document().selection.createRange();
+            self.__range = doc.selection.createRange();
         };
         this._editable_div.onactivate = function () {
             self.__range = undefined;
         };
-        this.get_edit_document().body.appendChild(this._editable_div);
+        doc.body.appendChild(this._editable_div);
         setTimeout(function () { self._editable_div.focus() }, 500);
     }
     return this._editable_div;

@@ -144,6 +144,8 @@ sub _fetch_pages {
     my $workspace_filter = '';
     my @workspace_ids;
     if ( $p{workspace_ids} ) {
+        return [] unless @{$p{workspace_ids}};
+
         $workspace_filter = '.workspace_id IN ('
             . join( ',', map {'?'} @{ $p{workspace_ids} } ) . ')';
         push @workspace_ids, @{ $p{workspace_ids} };

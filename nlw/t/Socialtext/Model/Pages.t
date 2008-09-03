@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 46;
+use Test::More tests => 47;
 use mocked 'Socialtext::SQL', qw/sql_ok/;
 use mocked 'Socialtext::Page';
 use mocked 'Socialtext::User';
@@ -416,4 +416,17 @@ EOT
         );
         is scalar(@Socialtext::SQL::SQL), 0, 'no other SQL calls were made';
     }
+}
+
+Not_in_any_workspaces: {
+    # We should only be going to the database if we're in some workspaces.
+    local @Socialtext::SQL::RETURN_VALUES = ( sub { die "bad sql" } );
+    my $pages = Socialtext::Model::Pages->By_seconds_limit(
+        seconds => 88,
+        where => 'cows fly',
+        count => 20,
+        tag => 'foo',
+        workspace_ids => [],
+    );
+    is_deeply $pages, [], 'no pages in no workspaces';
 }

@@ -16,6 +16,10 @@ sub sql_execute {
     push @SQL, { sql => shift, args => [@_] };
     
     my $sth_args = shift @RETURN_VALUES;
+    if (ref($sth_args) and ref($sth_args) eq 'CODE') {
+        return $sth_args->();
+    }
+
     return mock_sth->new(%{ $sth_args || {} });
 }
 

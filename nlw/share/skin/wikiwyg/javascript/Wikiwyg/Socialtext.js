@@ -585,7 +585,7 @@ proto.newpage_display_duplicate_dialog = function(page_name) {
 
     jQuery('#st-newpage-duplicate-link')
         .html(page_name)
-        .attr('href', Page.cgiUrl() + "?" + page_name)
+        .attr('href', '/' + Socialtext.wiki_id + '/index.cgi?' + page_name)
         .attr('target', page_name);
     
     jQuery('#st-newpage-duplicate-pagename').val(page_name);

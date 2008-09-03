@@ -128,7 +128,7 @@ sub login {
         return $self->_redirect('/nlw/login.html');
     }
     my $auth = Socialtext::Authen->new;
-    my $user = Socialtext::User->Resolve( $username );
+    my $user = Socialtext::User->new( username => $username );
 
     if ($user && !$user->email_address) {
         $self->session->add_error(loc("This username has no associated email address." ));

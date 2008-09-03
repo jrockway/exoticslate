@@ -1493,6 +1493,34 @@ proto.get_link_selection_text = function() {
     return selection;
 }
 
+/* This function is the same as the baseclass one, except it doesn't use
+ * Function.prototype.bind(), and hence is free of the dependency on
+ * Prototype.js, as required by S3.
+ */
+proto.get_editable_div = function () {
+    if (!this._editable_div) {
+        this._editable_div = this.get_edit_document().createElement('div');
+        this._editable_div.contentEditable = true;
+        this._editable_div.style.overflow = 'auto';
+        this._editable_div.style.border = 'none'
+        this._editable_div.style.position = 'absolute';
+        this._editable_div.style.width = '100%';
+        this._editable_div.style.height = '100%';
+        this._editable_div.id = 'wysiwyg-editable-div';
+
+        var self = this;
+        this._editable_div.onbeforedeactivate = function () {
+            self.__range = self.get_edit_document().selection.createRange();
+        };
+        this._editable_div.onactivate = function () {
+            self.__range = undefined;
+        };
+        this.get_edit_document().body.appendChild(this._editable_div);
+        setTimeout(function () { self._editable_div.focus() }, 500);
+    }
+    return this._editable_div;
+}
+
 /*==============================================================================
 Socialtext Preview subclass.
  =============================================================================*/

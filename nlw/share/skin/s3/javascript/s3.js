@@ -72,7 +72,14 @@ Page = {
 
         // For MSIE, force browser reflow of the bottom buttons to avoid {bz: 966}.
         if ($.browser.msie) {
-            $('#bottomButtons').html($('#bottomButtons').html());
+            var repaintBottomButtons = function () {
+                $('#bottomButtons').html($('#bottomButtons').html());
+            };
+            repaintBottomButtons();
+
+            // Repaint after each image finishes loading since the height
+            // would've been changed.
+            $('#st-page-content img').load(repaintBottomButtons);
         }
     },
 
@@ -234,7 +241,7 @@ Page = {
                                 .attr('alt', loc('Delete this attachment'))
                                 .attr('title', loc('Delete this attachment'))
                                 .bind('click', function () {
-                                    Page.delAttachment(this.name)
+                                    Page.delAttachment(this.name);
                                     return false;
                                 })
                         )

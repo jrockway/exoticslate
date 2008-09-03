@@ -21,13 +21,6 @@
       [% IF current_workspace.enable_spreadsheet %]
       <li><a class="newPageButton" title="[% loc('Create New Spreadsheet') %]" id="st-pagetools-newspreadsheet" href="?action=new_page;page_type=spreadsheet">[% loc('Create New Spreadsheet') %]</a></li>
       [% END %]
-      [% UNLESS user.is_guest %]
-        [% IF watching %]
-        <li><a id="st-watchlist-indicator" class="on watchButton" href="#" title="[% loc('Stop watching this Page') %]">[% loc('Stop watching this Page') %]</a></li>
-        [% ELSE %]
-        <li><a id="st-watchlist-indicator" class="watchButton" href="#" title="[% loc('Watch this Page') %]">[% loc('Watch this Page') %]</a></li>
-        [% END %]
-      [% END %]
     [% END %]
     </ul>
   </div><!-- st-editing-tools-edit END -->
@@ -40,6 +33,17 @@
 
   <div id="controlsRight">
     <ul class="level1">
+      [% IF page.revisions && page.revisions > 0 %]
+        <li><a class="revision" href="?action=revision_list;page_name=[% page.id %]">[% loc('Revision History ([_1])', page.revisions) %]</a></li>
+      [% END %]
+
+      [% UNLESS user.is_guest %]
+        [% IF watching %]
+        <li><a id="st-watchlist-indicator" class="on watch" href="#" title="[% loc('Stop watching') %]">[% loc('Stop watching') %]</a></li>
+        [% ELSE %]
+        <li><a id="st-watchlist-indicator" class="watch" href="#" title="[% loc('Watch') %]">[% loc('Watch') %]</a></li>
+        [% END %]
+      [% END %]
       <li><a class="print" title="[% loc('Print this page') %]" id="st-pagetools-print" href="JavaScript:window.print()">[% loc('Print') %]</a></li>
       [% IF checker.check_permission('email_out') &&
             page.page_type != 'spreadsheet' %]

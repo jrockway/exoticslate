@@ -585,8 +585,9 @@ $(function() {
                 ';page=' + Socialtext.page_id +
                 ';_=' + (new Date()).getTime(),
                 function () {
-                    $(self).attr('title', loc('Watch this page'));
-                    $(this).removeClass('on');
+                    var text = loc("Watch");
+                    $(self).attr('title', text).text(text);
+                    $(self).removeClass('on');
                 }
             );
         }
@@ -596,8 +597,9 @@ $(function() {
                 ';page=' + Socialtext.page_id +
                 ';_=' + (new Date()).getTime(),
                 function () {
-                    $(self).attr('title', loc('Stop watching this page'));
-                    $(this).addClass('on');
+                    var text = loc('Stop Watching');
+                    $(self).attr('title', text).text(text);
+                    $(self).addClass('on');
                 }
             );
         }

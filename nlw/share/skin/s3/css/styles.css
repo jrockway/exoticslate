@@ -685,7 +685,7 @@ div#controls div#controlsRight {
 body#contentPage div#controls div#controlsRight,body#dashBoard div#controls div#controlsRight,body#settingsPage div#controls div#controlsRight {
 	background: url(../images/contentControlsRight.png) no-repeat top right;
 	height: 44px;
-	width: 250px !important;
+	width: auto !important;
 }
 
 body#workSpace div#controls div#controlsRight {
@@ -798,6 +798,17 @@ div#controls div#controlsRight ul li a.print {
 	background: url(../images/printIcon.png) no-repeat center left;
 	padding:0 10px 0 26px;
 }
+
+div#controls div#controlsRight ul li a.revision {
+       background: url(../images/revisionIcon.png) no-repeat center left;
+       padding:0 10px 0 26px;
+}
+
+div#controls div#controlsRight ul li a.watch {
+       background: url(../images/watchIcon.png) no-repeat center left;
+       padding:0 10px 0 28px;
+}
+
 
 div#controls div#controlsRight ul li a.email {
 	background: url(../images/emailIcon.png) no-repeat center left;

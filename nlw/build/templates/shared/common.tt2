@@ -3,6 +3,7 @@ LockFile        [% config.lock_dir %]/[% config.app_prefix %][% config.apache_sh
 PidFile         [% config.pid_dir %]/[% config.app_prefix %][% config.apache_short_name %].pid
 ScoreBoardFile  [% config.pid_dir %]/[% config.app_prefix %][% config.apache_short_name %].scoreboard
 Timeout 90
+TraceEnable off
 
 # XXX Consider turning this to off if doing so on prod helps lockups
 KeepAlive               On

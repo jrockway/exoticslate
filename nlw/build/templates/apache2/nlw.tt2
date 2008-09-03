@@ -114,6 +114,8 @@ Listen [% config.custom_http_port %]
 <VirtualHost *:[% config.ports.http %]>
 [% IF config.custom_http_port AND !config.is_dev %]
     RewriteEngine On
+    RewriteCond %{REQUEST_METHOD} ^TRACE
+    RewriteRule .* - [F,L]
     RewriteRule ^(.*) http://%{SERVER_NAME}:[% config.custom_http_port %]$1 [R,L,NE]
 </VirtualHost>
 
@@ -121,6 +123,8 @@ Listen [% config.custom_http_port %]
 [% END %]
 [% IF config.ssl_only %]
     RewriteEngine On
+    RewriteCond %{REQUEST_METHOD} ^TRACE
+    RewriteRule .* - [F,L]
     RewriteRule ^(.*) https://%{SERVER_NAME}:[% config.ports.https %]$1 [R,L,NE]
 </VirtualHost>
 

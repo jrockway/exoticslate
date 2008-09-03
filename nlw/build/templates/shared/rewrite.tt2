@@ -1,4 +1,9 @@
     RewriteEngine On
+
+    # Deny all TRACE requests
+    RewriteCond %{REQUEST_METHOD} ^TRACE
+    RewriteRule .* - [F,L]
+
     # We need to be smart about re-escaping characters on the way to the
     # backend server.  
     RewriteMap escape int:escape

@@ -5,7 +5,7 @@ use warnings;
 use Socialtext::SQL qw/sql_singlevalue/;
 
 # check that ST People is installed
-eval "require Socialtext::Plugin::People";
+eval "require Socialtext::Pluggable::Plugin::People";
 if ($@) {
     print "Socialtext People is not installed, skipping.\n";
     exit 1;

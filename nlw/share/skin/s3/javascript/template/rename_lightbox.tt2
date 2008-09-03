@@ -13,11 +13,11 @@
     <br/>
 
     [% loc('Keep categories') %]:
-    <input type="checkbox" id="keep_categories" value="1" checked="true" />
+    <input type="checkbox" name="keep_categories" value="1" checked="true" />
     <br />
 
     [% loc('Keep attachments') %]:
-    <input type="checkbox" id="keep_attachments" value="1" checked="true" />
+    <input type="checkbox" name="keep_attachments" value="1" checked="true" />
     <br />
 
     <div class="buttons">

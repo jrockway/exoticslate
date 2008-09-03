@@ -5,7 +5,7 @@ use warnings;
 
 BEGIN { push @INC, 't/plugin/mocked/lib' };
 
-use Test::More tests => 4;
+use Test::More tests => 7;
 use mocked 'Socialtext::Registry';
 use mocked 'Socialtext::Hub';
 use Socialtext::Pluggable::Adapter;
@@ -29,6 +29,12 @@ $adapt->register($registry);
 
 ok scalar(grep { /Pluggable::Plugin::Mocked/ } $adapt->plugins),
    'Mocked plugin is loaded';
+
+ok scalar(grep { $_ eq 'mocked' } $adapt->plugin_list),
+   'Mocked plugin shows up in plugin_list';
+
+ok $adapt->plugin_exists('mocked'), 'plugin_exists returns true when the plugin exists';
+ok !$adapt->plugin_exists('something'), 'plugin_exists returns false when the plugin does not exist';
 
 # Test that name is properly based off the class name
 is $adapt->hook('test.name'), 'mocked', 'Mocked name is "mocked"';

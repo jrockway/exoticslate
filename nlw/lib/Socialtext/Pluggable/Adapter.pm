@@ -159,6 +159,17 @@ sub register {
     $self->hook('nlw.start');
 }
 
+sub plugin_list {
+    my ($self, $name) = @_;
+    return map { $_->name } $self->plugins;
+}
+
+sub plugin_exists {
+    my ($self, $name) = @_;
+    my %list = map { $_ => 1 } $self->plugin_list;
+    return $list{$name};
+}
+
 sub registered {
     my ($self, $name) = @_;
     return exists $hooks{$name};

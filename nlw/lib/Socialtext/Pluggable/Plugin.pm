@@ -193,7 +193,7 @@ sub name {
 
 sub plugins {
     my $self = shift;
-    return map { $_->name } $self->hub->pluggable->plugins;
+    return $self->hub->pluggable->plugin_list;
 }
 
 sub plugin_dir {

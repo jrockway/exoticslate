@@ -3,6 +3,7 @@ package Socialtext::MassAdd;
 use strict;
 use warnings;
 use Text::CSV_XS;
+use Socialtext::Encode;
 use Socialtext::Log qw(st_log);
 use Socialtext::User;
 use Socialtext::l10n qw/loc/;
@@ -27,6 +28,9 @@ sub users {
     my @profile_fields
         = qw/position company location work_phone mobile_phone home_phone/;
 
+    # make sure that we're working with UTF8; if we don't set this then
+    # Text::CSV_XS isn't going to parse UTF8 properly
+    $csv = Socialtext::Encode::ensure_is_utf8($csv);
     my $parser = Text::CSV_XS->new();
     my @lines = split "\n", $csv;
     my $line = 0;

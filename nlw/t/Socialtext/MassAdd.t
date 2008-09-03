@@ -12,7 +12,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 50;
+    plan tests => 52;
 }
 
 use mocked 'Socialtext::People::Profile';
@@ -188,6 +188,22 @@ EOT
     );
     is_deeply \@successes, ['Added user lechuck', 'Added user guybrush'], 'success message ok';
     is_deeply \@failures, [], 'no failure messages';
+}
+
+Contains_utf8: {
+    local $Socialtext::User::Users{yamadat} = undef;
+    my $utf8_csv = <<'EOT';
+yamadat,yamadat@example.com,太郎,山田,パスワード太,社長,日本電気株式会社,location,+81 3 3333 4444,+81 70 1234 5678,
+EOT
+    my @successes;
+    my @failures;
+    Socialtext::MassAdd->users(
+        csv => $utf8_csv,
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+    is_deeply \@successes, ['Added user yamadat'], 'success message ok, with utf8';
+    is_deeply \@failures, [], 'no failure messages, with utf8';
 }
 
 Bad_email_address: {

@@ -46,14 +46,18 @@ Page = {
         return data.status == '200';
     },
 
-    restApiUri: function (page_name) {
-        return Page.pageUrl(page_name);
+    restApiUri: function () {
+        return Page.pageUrl.apply(this, arguments);
     },
 
-    pageUrl: function (page_name) {
-        if (!page_name) page_name = Socialtext.page_id;
-        return '/data/workspaces/' + Socialtext.wiki_id +
-               '/pages/' + page_name;
+    workspaceUrl: function (wiki_id) {
+        return '/data/workspaces/' + (wiki_id || Socialtext.wiki_id);
+    },
+
+    pageUrl: function () {
+        var page_name = Array.pop.call(arguments) || Socialtext.page_id;
+        var wiki_id = Array.pop.call(arguments) || Socialtext.wiki_id;
+        return Page.workspaceUrl(wiki_id) + '/pages/' + page_name;
     },
 
     cgiUrl: function () {
@@ -332,9 +336,10 @@ $(function() {
             }, 500);
         })
         .lookahead({
-            url: '/data/workspaces/' + Socialtext.wiki_id + '/tags',
+            url: Page.workspaceUrl() + '/tags',
+            exceptUrl: Page.pageUrl() + '/tags',
             linkText: function (i) {
-                return [i.name, i.name];
+                return i.name
             },
             onAccept: function (val) {
                 Page.addTag(val);

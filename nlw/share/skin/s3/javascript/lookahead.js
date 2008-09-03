@@ -47,11 +47,25 @@
             $(this)
                 .attr('autocomplete', 'off')
                 .unbind('keyup')
-                .keyup(function() {
-                    $.fn.lookahead.onchange(this, opts);
+                .keyup(function(e) {
+                    if (e.keyCode == 13) {
+                        $.fn.lookahead.clearLookahead(this);
+                    }
+                    else {
+                        var input = this;
+                        var lookahead = $.fn.lookahead.getLookahead(input);
+                        if (lookahead.is(':visible')) {
+                            $.fn.lookahead.onchange(input, opts);
+                        }
+                        else {
+                            $.fn.lookahead.loadExceptions(opts, function () {
+                                $.fn.lookahead.onchange(input, opts);
+                            });
+                        }
+                    }
                     return false;
                 })
-                .blur(function () {
+                .blur(function() {
                     $.fn.lookahead.clearLookahead(this);
                 });
         });
@@ -59,31 +73,59 @@
         return this;
     };
 
+    $.fn.lookahead.loadExceptions = function (opts, callback) {
+        opts.exceptValues = {};
+        if (opts.exceptUrl) {
+            $.getJSON(opts.exceptUrl, function (items) {
+                $.each(items, function (i) {
+                    var value = $.fn.lookahead.linkTitle(this,opts);
+                    opts.exceptValues[this.value.toLowerCase()] = 1;
+                });
+                if ($.isFunction(callback)) {
+                    callback();
+                } 
+            });
+        }
+        else {
+            callback();
+        }
+    }
+
     $.fn.lookahead.clearLookahead = function (input) {
         if (input.lh)
-            jQuery(input.lh).fadeOut();
+            $(input.lh).fadeOut();
     };
 
     $.fn.lookahead.getLookahead = function (input) {
         var lh;
         if (lh = input.lh) return lh;
-        var lh = jQuery('<div>')
+        var lh = $('<div>')
             .css({
                 position: 'absolute',
                 background: '#B4DCEC',
                 border: '1px solid black',
                 display: 'none',
                 padding: '5px',
-                width: jQuery(input).width() + 'px',
+                width: $(input).width() + 'px',
                 left: input.offsetLeft + 'px'
             })
             .insertAfter(input);
         return input.lh = lh;
     }
 
+    $.fn.lookahead.linkTitle = function (item, opts) {
+        var lt = opts.linkText(item);
+        return typeof (lt) == 'string' ? lt : lt[0];
+    }
+
+    $.fn.lookahead.linkValue = function (item, opts) {
+        var lt = opts.linkText(item);
+        return typeof (lt) == 'string' ? lt : lt[1];
+    }
+
     $.fn.lookahead.onchange = function (input, opts) {
         var self = this;
-        var val = jQuery(input).val();
+        var val = $(input).val();
         if (!val) {
             this.clearLookahead(input)
             return;
@@ -94,24 +136,34 @@
         var url = typeof(opts.url) == 'function' ? opts.url() : opts.url;
         if (opts.filterValue) val = opts.filterValue(val);
         var filterName = opts.filterName || 'filter';
-        this.ajax = jQuery.getJSON(
+        this.ajax = $.getJSON(
             url + '?order=alpha;' + filterName + '=\\b' + val,
             function (data) {
+                lookahead.html('');
+
+                // Grep out all exceptions
+                data = $.map(data, function(item) {
+                    return {
+                        title: self.linkTitle(item, opts),
+                        value: self.linkValue(item, opts)
+                    };
+                });
+                data = $.grep(data, function(item) {
+                    return !opts.exceptValues[item.value.toLowerCase()];
+                });
+
                 if (data.length) {
-                    lookahead.html('');
-                    jQuery.each(data, function (i) {
-                        var lt = opts.linkText(this);
-                        var title = typeof(lt) == 'string' ? lt : lt[0];
-                        var value = typeof(lt) == 'string' ? lt : lt[1];
+                    $.each(data, function (i) {
+                        var item = this;
                         lookahead.append(
-                            jQuery('<a>')
+                            $('<a>')
                                 .attr('href', '#')
-                                .html(title)
+                                .html(item.title)
                                 .click(function () {
-                                    jQuery(input).val(value);
+                                    $(input).val(item.value);
                                     self.clearLookahead(input);
                                     if (opts.onAccept) {
-                                        opts.onAccept.call(input, value);
+                                        opts.onAccept.call(input, item.value);
                                     }
                                     return false;
                                 })
@@ -120,6 +172,9 @@
                             lookahead.append(',<br/>')
                     })
                     lookahead.fadeIn();
+                }
+                else {
+                    lookahead.fadeOut();
                 }
             }
         );

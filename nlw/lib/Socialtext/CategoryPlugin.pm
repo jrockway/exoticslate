@@ -109,13 +109,13 @@ sub category_delete_from_page {
 
 sub all_visible_categories {
     my $self = shift;
-    grep { $_ ne 'recent changes' } $self->all_categories();
+    grep { $_ ne 'Recent Changes' } $self->all_categories();
 }
 
 sub all_categories {
     my $self = shift;
     $self->load;
-    keys %{ $self->all };
+    values %{ $self->all };
 }
 
 sub exists {

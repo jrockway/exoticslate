@@ -55,6 +55,7 @@ sub _entity_hash {
     my $tag  = shift;
 
     return +{
+        value => lc($tag),
         name => $tag,
         uri  => $self->_uri_for_tag($tag),
         page_count => $self->hub->category->page_count($tag),

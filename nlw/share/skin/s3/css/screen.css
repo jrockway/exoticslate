@@ -902,7 +902,6 @@ div#contentColumns div#st-page-maincontent p strong {
 	font-weight: bold;
 }
 
-
 div#st-ref-card .buttons {
     margin-top: 0px;
     position: absolute;
@@ -922,5 +921,152 @@ div#st-ref-card .buttons {
         margin: 0;
         border-width: 1px;
         background-color: #EEE;
+}
+
+/* mainNav Dropdown menus styles */
+
+div#mainNav ul.level2 li img {
+    float: left;
+    margin: 1px;
+}
+div#mainNav ul.level2 li a:hover {
+    color: #33A8FF;
+}
+
+div#mainNav ul.level2 li.dropaction {
+    font-weight: bold;
+}
+
+/* Order matters with the two following styles. Second one overrides the first
+ * for ul elems with BOTH level2 and withimage classes
+ */
+div#mainNav ul.level2 li {
+    color: #0C5A9A;
+    display: block; 
+    text-decoration: none; 
+    font-size: 10px;
+    line-height: 20px;
+    clear:left;
+    text-align: left;
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+
+div#mainNav ul.level2.withimage li {
+    line-height: 30px; /* 27 pt image with 1px margin top/bottom + 1 px border-bottom*/
+}
+
+
+div#mainNav ul.level2 li a {
+    color: #0C5A9A;
+    font-size: 10px;
+    line-height: 20px;
+    padding: 0px 0px 0px 3px;
+}
+
+div#mainNav li {
+    position: relative;
+    list-style: none; 
+    margin: 0;
+    float: left;
+    line-height: 1em;
+}
+
+div#mainNav>ul a {
+    width: auto; 
+}
+
+/* Order matters with the two following styles. Second one overrides the first
+ * for ul elems with BOTH level2 and withimage classes
+ */
+div#mainNav ul ul.level2 {
+    position: absolute;
+    width: 18em;
+    display: none;
+    border: 1px solid #313a3d;
+    max-height: 168px; /* 8 lines where each line is 20px plus 1 px border- 8*21. see above */
+    overflow: auto;
+}
+
+div#mainNav ul ul.level2.withimage {
+    max-height: 261px; /* 8 lines of 29 pixels(+1 for border each line) + 1 row of 20px (+1 for border) for ul.level2 that contain images in each line.  */
+}
+
+div#mainNav ul.level1 li.submenu:hover ul.level2 {
+    display:block; 
+}
+div#mainNav ul.level1 li.submenu:hover {
+    display: block; z-index: 2000;
+}
+
+div#mainNav ul.level2 {
+    top: 3.0em; 
+    left: -1px;
+    background: white;
+}
+
+/* Overrides a style from styles.css line 206 */
+div#mainNav ul.level2 li a {
+    background: none;
+}
+
+/* WTF is the dropdownTick doing on the li element in styles.css? */
+div#mainNav ul.level1>li>a { 
+    background: url(../images/dropdownTick.png) no-repeat center right;
+}
+
+div#mainNav ul.level1>li { 
+    padding-right: 15px;
+    background: url(../images/mainNavDivider.png) no-repeat center right;
+}
+
+div#mainNav .emptynotice {
+    line-height: 13px !important;
+    padding-left: 10px;
+    border-bottom: none !important;
+    width: 18em !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+/* Workspace submenu */
+#workspaceContainer {
+    margin:0 1em 0 1em;
+    padding:0;
+    background:#ccc url(../images/wsTile.png) repeat-x scroll left bottom;
+}
+#workspaceNav {
+    margin:0 0 0.8em 0;
+    padding:6px 1em 7px 1em;
+    border-top:none;
+    background:transparent url(../images/wsLeft.png) no-repeat scroll left bottom;
+    position:relative;
+}
+#workspaceNav ul {
+    list-style-type:none;
+    margin:0;
+    padding:0;
+}
+#workspaceNav ul li {
+    display:inline;
+    padding:0;
+}
+#workspaceNav .here {
+    font-weight:bold;
+}
+#workspaceNav ul li a, #workspaceNav ul li span {
+    background: transparent url(../images/wsDivider.png) no-repeat scroll right center;
+    padding:0 14px 0 7px;
+}
+#workspaceNav ul li a:hover {
+    color:#333;
+}
+#newPageButton {
+    position:absolute;
+    right:0;
+    top:0;
+    padding:6px 12px 7px 12px;
+    background:transparent url(../images/wsRight.png) no-repeat scroll right bottom;
+    font-weight:bold;
 }
 

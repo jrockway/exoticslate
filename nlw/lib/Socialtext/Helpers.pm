@@ -143,6 +143,49 @@ sub preference_path {
         . $self->query_string_from_hash(@_)
 }
 
+sub _get_workspace_list_for_template
+{
+    my $self = shift;
+
+    my @workspaces = $self->hub->current_user->workspaces->all;
+    
+    my @workspacelist
+        =  map { +{ label => $_->title, link => "/" . $_->name } }
+            @workspaces ;
+    return [ sort { $a->{label} cmp $b->{label}} @workspacelist ];
+}
+
+sub _get_history_list_for_template
+{
+    my $self = shift;
+
+    my $history = $self->hub->breadcrumbs->get_crumbs;
+   
+    my @historylist =
+        map { +{ label => $_->{page_title}, link => $_->{page_full_uri} }; }
+        @$history;
+    if ($#historylist > 19) { $#historylist = 19;}
+    return  \@historylist;
+}
+
+sub _get_people_watchlist_for_people
+{
+    my $self = shift;
+
+    my $watchlist = Socialtext::People::Profile->GetWatchlistMinimal($self->hub->current_user->user_id);
+
+    my $result = [
+        map {
+            +{
+                pic_url => "/data/people/" . $_->{id} . "/small_photo",
+                label   => $_->{best_full_name},
+                link    => "/?profile/" . $_->{id}
+                }
+            } @$watchlist
+    ];
+    return $result;
+}
+
 sub global_template_vars {
     my $self = shift;
 
@@ -169,16 +212,18 @@ sub global_template_vars {
         }
     );
 
-    return (
-        pluggable          => $self->hub->pluggable,
-        loc                => \&loc,
-        loc_lang           => $self->hub->display->preferences->locale->value,
-        css                => $self->hub->skin->css_info,
-        user               => $self->_get_user_info,
-        wiki               => $self->_get_wiki_info,
-        checker            => $self->hub->checker,
-        current_workspace  => $self->hub->current_workspace,
-        home_is_dashboard  => $self->hub->current_workspace->homepage_is_dashboard,
+    my %result = (
+        pluggable         => $self->hub->pluggable,
+        loc               => \&loc,
+        loc_lang          => $self->hub->display->preferences->locale->value,
+        css               => $self->hub->skin->css_info,
+        user              => $self->_get_user_info,
+        wiki              => $self->_get_wiki_info,
+        checker           => $self->hub->checker,
+        current_workspace => $self->hub->current_workspace,
+        current_page      => $self->hub->pages->current,
+        home_is_dashboard =>
+            $self->hub->current_workspace->homepage_is_dashboard,
         workspace_present  => $self->hub->current_workspace->workspace_id ? 1 : 0,
         customjs           => $self->hub->skin->customjs,
         app_version        => Socialtext->product_version,
@@ -187,7 +232,22 @@ sub global_template_vars {
         miki_url           => $self->miki_path,
         stax_info          => $self->hub->stax->hacks_info,
         home_href          => '?',
+        workspaces         => $self->_get_workspace_list_for_template
     );
+
+    if (  $self->hub->pluggable->plugin_exists('people') ) {
+        require Socialtext::People::Profile;
+        $result{people} = $self->_get_people_watchlist_for_people;
+    };
+
+    unless ($self->hub->current_workspace->isa("Socialtext::NoWorkspace")) {
+        $result{history} = $self->_get_history_list_for_template; 
+        $result{in_workspace} = 1;
+    }
+
+    $result{is_workspace_admin}=1 if ($self->hub->checker->check_permission('admin_workspace'));
+
+    return %result;
 }
 
 sub miki_path {

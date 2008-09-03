@@ -152,10 +152,11 @@ sub get_crumbs {
     my @crumbs;
     foreach my $page_name (@$trail_parts) {
         my $page = $self->hub->pages->new_from_name($page_name);
-        next unless $page->active;
+        my $pagehash=$page->hash_representation;
         push @crumbs, {
             page_title => $page->title,
             page_uri   => $page->uri,
+            page_full_uri => $pagehash->{page_uri}
         };
     }
 

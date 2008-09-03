@@ -1,6 +1,7 @@
 [%# vim: set et sts=2 sw=2: %]
 [% USE html_encode %]
 [% USE decorate %]
+[% USE label_ellipsis %]
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
@@ -75,19 +76,74 @@
       </div><!-- header END -->
       <div id="mainNav" class="st-wiki-subnav-dashboard">
         <div id="homeLink"><a id="st-home-link" href="[% home_href | decorate('home_href') %]">[% loc("Home") %]</a></div>
-        <ul id="st-wiki-subnav-left">
-        [% IF workspace_present %]
-          <li><a id="st-wiki-subnav-link-whats-new" href="?action=recent_changes">[% loc("What's New") %]</a></li>
-          <li><a id="st-wiki-subnav-link-weblogs" href="?action=weblog_display">[% loc("Weblogs") %]</a></li>
-        [% END %]
-          <li><a id="st-wiki-subnav-link-profile" href="/?profile">[% loc("Profile") %]</a></li>
-          <li><a id="st-wiki-subnav-link-people" href="/?action=people">[% loc("People") %]</a></li>
-          <li><a id="st-wiki-subnav-link-people" href="/?all_tags">[% loc("Tags") %]</a></li>
+        <ul id="st-wiki-subnav-left" class="level1">
+          [% IF people %]
+          <li class="submenu"><a id="st-wiki-subnav-link-people" href="/?all_people">[% loc("People") %]</a>
+              <ul class="level2 withimage" id="global-people-directory">
+              [% IF people.size %]
+                  <li class="dropaction"><a href="/?all_people">[% loc("People Directory") %]...</a></li>
+                  [% FOREACH people %]
+                  <li><img src="[% pic_url %]"/><a href="[% link %]">[% label | label_ellipsis(30) %]</a></li>
+                  [% END %]
+              [% ELSE %]
+                  <li class="emptynotice">[% loc("You are currently not following anyone.") %]</li>
+              [% END %]
+              </ul>
+          </li>
+          [% END %]
+          <li class="submenu"><a id="st-wiki-subnav-link-workspaces" href="?action=workspaces_listall">[% loc("Workspaces") %]</a>
+              <ul class="level2" id="global-workspace-list">
+              [% IF workspaces.size %]
+                <li class="dropaction"><a href="?action=workspaces_listall">[% loc("All My Workspaces") %]...</a></li>
+                [% FOREACH workspaces %]
+                <li><a href="[% link %]">[% label | label_ellipsis(30) %]</a></li>
+                [% END %]
+              [% ELSE %]
+                <li class="emptynotice">[% loc("Currently, you are not a member of any workspaces.") %]</li>
+              [% END %]
+              </ul>
+          </li>
+          [% IF history %]
+          <li class="submenu"><a id="st-wiki-subnav-link-my-history" href="?action=breadcrumbs_list">[% loc("My History") %]</a>
+              <ul class="level2" id="global-recently-viewed">
+               <li class="dropaction"><a href="?action=breadcrumbs_list">[% loc("All My Recently Viewed") %]...</a></li>
+              [% FOREACH history %]
+              <li><a href="[% link %]">[% label | label_ellipsis(30) %]</a></li>
+              [% END %]
+              </ul>
+          </li>
+          [% END %]
         </ul>
         <div id="workSpaceLink">
-          <a href="?action=workspaces_listall">[% loc('Your Workspaces') %]</a>
+         &nbsp; 
         </div><!-- workSpaceLink END -->
       </div><!-- mainNav END -->
+
+      [% IF in_workspace %] 
+      <!-- workspaceNav BEGIN -->
+      <div id="workspaceContainer">
+        <div id="workspaceNav">
+          <ul>
+            <li>[% loc("Workspace:") %]
+              [% IF current_workspace.title != current_page.title || action %]
+              <a href="/[% current_workspace.name %]" id="workspaceName" class="here">[% current_workspace.title %]</a>
+              [% ELSE %]
+              <span class="here">[% current_workspace.title %]</span>
+              [% END %]
+              </li>
+            <li><a href="/[% current_workspace.name %]?action=recent_changes">[% loc("What's New") %]</a></li>
+            <li><a href="/[% current_workspace.name %]?action=display_watchlist">[% loc("My Watchlist") %]</a></li>
+            [% IF is_workspace_admin %]
+            <li><a href="/[% current_workspace.name %]?action=users_invitation">[% loc("Invite Others") %]</a></li>
+            [% END %]
+          </ul>
+          <div id="newPageButton">
+            <a href="/[% current_workspace.name %]?action=new_page">+ [% loc("New Page") %]</a>
+          </div>
+        </div>
+      </div>
+      <!-- workspaceNav END -->
+      [% END %]
       <div id="st-display-mode-container" class="st-content">  	
         [% content %]
         <div id="footer">

@@ -33,3 +33,93 @@ html body#listPage div#mainWrap {
 html body div#st-page-editing-toolbar-container {
     height: 50px;
 }
+
+body {
+    behavior: url(/static/skin/s3/javascript/csshover.htc);
+}
+
+* html #st-attachments-attach-attachinterface-overlay {
+    filter: alpha(opacity=70);
+}
+
+* html .popup-overlay {
+    filter: alpha(opacity=70);
+}
+
+
+body.st-popup {
+    behavior: url(/static/skin/s3/javascript/csshover.htc);
+}
+
+#st-refcard {
+    behavior: url(/static/skin/s3/javascript/csshover.htc);
+}
+
+#wikiwyg_wikitext_textarea,
+#wysiwyg-editable-div {
+    padding: 5px;
+}
+
+div#st-pagetools ul.level2 {
+    left: -6.0em !important;
+    width: 14em !important;
+    top: 17px !important;
+}
+
+div#st-pagetools ul li {
+    padding-top: 4px !important;
+}
+
+div#st-pagetools ul ul li {
+    width: 14em !important;
+}
+
+/* Remove most of the whitespace between the toolbar and the editing area */
+
+#st-page-editing-toolbar {
+    margin-top: 5px !important;
+}
+ 
+#st-editing-prefix-container {
+    margin-bottom: -35px !important;
+}
+
+/* This selector makes for about 2px of blank space on the right side of the
+ * popup because IE sucks, we should look in to fixing this. Adding an
+ * expression that checks for a scrollbar may fix this.
+ */
+div#mainNav ul.level2 li {
+    width: 18em; 
+}
+
+/* These two are not perfect in IE6 because it does not have a max-selector. */
+div#mainNav ul ul.level2 {
+    max-height: 168px;
+    height: auto !important;
+    height: 168px;
+}
+
+div#mainNav ul ul.level2.withimage {
+    max-height: 261px;
+    height: auto !important;
+    height: 261px;
+}
+
+/* Stupid IE6 that doesn't understand '>' */
+* html div#mainNav ul.level1 li a {
+    background: url(../images/dropdownTick.png) no-repeat center right;
+}
+
+* html div#mainNav ul.level2 li a {
+    background-image: none;
+}
+
+* html div#mainNav ul.level1 li {
+    padding-right: 15px;
+    background: url(../images/mainNavDivider.png) no-repeat center right;
+}
+
+* html div#mainNav ul.level2 li {
+    padding-right: 0px;
+    background: none;
+}

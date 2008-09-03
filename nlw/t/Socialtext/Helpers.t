@@ -4,13 +4,52 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 8;
+use Test::Socialtext tests => 12;
+
 fixtures( 'admin' );
 
 my $hub = new_hub('admin');
 
 my $singapore = join '', map { chr($_) } 26032, 21152, 22369;
 my $script_path = 'index.cgi';
+
+_get_workspace_list_for_template: {
+    my $workspacelist=$hub->helpers->_get_workspace_list_for_template;
+     
+    is scalar(@$workspacelist), 2, 'length of workspace list';
+    is_deeply $workspacelist,
+        [
+        { label => "Admin Wiki",               link => "/admin" },
+        { label => "Socialtext Documentation", link => "/help-en" }
+        ],
+        "expected workspace list returned";
+}
+
+_get_history_list_for_template: {
+    my $page_a = Socialtext::Page->new(hub => $hub, id => "quick_start",
+        title => "Quick Start");
+    my $page_b = Socialtext::Page->new(hub => $hub, id => "start_here",
+        title => "Start Here");
+    my $page_c = Socialtext::Page->new(hub => $hub, id => "people",
+        title => "People");
+
+    $hub->breadcrumbs->drop_crumb($page_a);
+    $hub->breadcrumbs->drop_crumb($page_b);
+    $hub->breadcrumbs->drop_crumb($page_c);
+    my $historylist=$hub->helpers->_get_history_list_for_template;
+    
+    is scalar(@$historylist), 3, 'length of history list';
+    my $page_base_uri = $hub->current_workspace->uri
+        . Socialtext::AppConfig->script_name . "?";
+    is_deeply $historylist,
+        [
+        { label => "People",      link => $page_base_uri . "people" },
+        { label => "Start Here",  link => $page_base_uri . "start_here" },
+        { label => "Quick Start", link => $page_base_uri . "quick_start" }
+        ],
+        "expected history list returned";
+}
+
 
 # Display page
 {

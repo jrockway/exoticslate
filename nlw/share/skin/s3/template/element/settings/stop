@@ -1,8 +1,8 @@
 [%# vim: set et sts=2 sw=2: %]
   <ul class="formButtons">
     [% IF hub.action != 'users_listall' OR perm_admin %]
-      <li><a class="saveButton" onclick="document.forms['settings'].submit()" href="#">[% loc('Save') %]</a></li>
+      <li><a class="saveButton" onclick="document.forms['settings'].submit(); return false" href="#">[% loc('Save') %]</a></li>
     [% END %]
-    <li><a class="cancelButton" onclick="document.forms['settings'].reset()" href="#">[% loc('Cancel') %]</a></li>
+    <li><a class="cancelButton" onclick="document.forms['settings'].reset(); return false" href="#">[% loc('Cancel') %]</a></li>
   </ul>
 </form>

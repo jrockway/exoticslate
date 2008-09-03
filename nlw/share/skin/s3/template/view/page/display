@@ -106,7 +106,7 @@
           [% FOR tag = tags.tags %]
             <li>
             <a href="?action=category_display;category=[% tag.name %]">[% tag.name %]</a>
-            <a href="#" onclick="Page.delTag('[% tag.name %]')"><img
+            <a href="#" onclick="Page.delTag('[% tag.name %]'); return false"><img
                 src="/static/skin/common/images/delete.png"
                 width="16" height="16" border="0" alt="[% loc('Delete this attachment') %]"
             /></a>
@@ -172,12 +172,12 @@
             <li>
             <a title="[% loc("Uploaded by [_1] on [_2]. ([_3] bytes)", file.uploader, file.date, displaylength) | html_entity %]" href="[% file.uri %]">[% file.name %]</a>
             [% IF file.name.match('\.(zip|tar|tar.gz|tgz)$') %]
-            <a href="#" onclick="Page.extractAttachment('[% file.id %]')"><img
+            <a href="#" onclick="Page.extractAttachment('[% file.id %]'); return false"><img
                 src="/static/skin/common/images/extract.png"
                 width="16" height="16" border="0" alt="[% loc('Extract this attachment') %]" title="[% loc('Extract this attachment') %]"
             /></a>
             [% END %]
-            <a href="#" onclick="Page.delAttachment('[% file.uri %]')"><img
+            <a href="#" onclick="Page.delAttachment('[% file.uri %]'); return false"><img
                 src="/static/skin/common/images/delete.png"
                 width="16" height="16" border="0" alt="[% loc('Delete this attachment') %]" title="[% loc('Delete this attachment') %]"
             /></a>

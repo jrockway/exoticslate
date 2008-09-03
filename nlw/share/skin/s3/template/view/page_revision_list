@@ -55,7 +55,7 @@
 [% BLOCK compare_revisions %]
     <li>
       <a class="compareButton" href="#" 
-         onclick="document.getElementById('compare_revisions').submit()">
+         onclick="document.getElementById('compare_revisions').submit(); return false">
         [% loc("Compare Revisions") %]
       </a>
     </li>

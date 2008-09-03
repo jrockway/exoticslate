@@ -4,6 +4,10 @@ var t = new Test.Visual();
 
 t.plan(1);
 
+if (!$.browser.msie) {
+    t.skipAll('This reflow bug only presents in IE');
+}
+
 t.beginAsync(function(){
     t.open_iframe("/admin/index.cgi?how_do_i_make_a_new_page", function(){
 

@@ -149,6 +149,9 @@
 </div>
 
 <div style="overflow-y:scroll;height:400px" id="st-ref-card" class="lightbox">
+    <div class="buttons">
+        <input id="st-ref-card-close" class="close" type="button" value="[% loc('Close') %]"/>
+    </div>
     <table class="st-refcard-table">
         <tr class="st-refcard-table-row">
             <th>[% loc('To Get This...') %] </th>
@@ -322,7 +325,4 @@
             <td>{{*this text is not bold*}}</td>
         </tr> 
     </table>
-    <div class="buttons">
-        <input id="st-ref-card-close" type="button" value="[% loc('Close') %]"/>
-    </div>
 </div>

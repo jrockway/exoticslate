@@ -60,6 +60,22 @@ Page = {
         return '/' + Socialtext.wiki_id + '/index.cgi';
     },
 
+    setPageContent: function(html) {
+        $('#st-page-content').html(html);
+
+        var iframe = $('iframe#st-page-editing-wysiwyg').get(0);
+        if (iframe && iframe.contentWindow) {
+            iframe.contentWindow.document.body.innerHTML = html;
+        }
+
+        $('#st-page-content').html(html);
+
+        // For MSIE, force browser reflow of the bottom buttons to avoid {bz: 966}.
+        if ($.browser.msie) {
+            $('#bottomButtons').html($('#bottomButtons').html());
+        }
+    },
+
     refreshPageContent: function (force_update) {
         $.ajax({
             url: this.pageUrl(),
@@ -84,13 +100,7 @@ Page = {
                         url: Page.pageUrl(),
                         cache: false,
                         dataType: 'html',
-                        success: function (html) {
-                            $('#st-page-content').html(html);
-                            var iframe = $('iframe#st-page-editing-wysiwyg').get(0);
-                            if (iframe && iframe.contentWindow) {
-                                iframe.contentWindow.document.body.innerHTML = html;
-                            }
-                        }
+                        success: Page.setPageContent
                     });
 
                     // After upload, refresh the wikitext contents.

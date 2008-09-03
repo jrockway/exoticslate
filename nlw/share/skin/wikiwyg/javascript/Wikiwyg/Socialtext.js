@@ -580,7 +580,7 @@ proto.newpage_duplicate_keyupHandler = function(event) {
 
 proto.newpage_display_duplicate_dialog = function(page_name) {
     jQuery('#st-newpage-duplicate-suggest')
-        .html(Socialtext.fullname + ': ' + page_name);
+        .html(Socialtext.username + ': ' + page_name);
     jQuery('#st-newpage-duplicate-appendname').html(page_name);
 
     jQuery('#st-newpage-duplicate-link')

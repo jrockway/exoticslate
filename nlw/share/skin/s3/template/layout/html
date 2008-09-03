@@ -118,6 +118,12 @@
          &nbsp; 
         </div><!-- workSpaceLink END -->
       </div><!-- mainNav END -->
+[% IF content_id == 'st-homepage' OR content_id == 'st-editcontention' %]
+      <div id="st-display-mode-container" class="st-content st-content-no-controls">  	
+        <div id="contentContainer">
+           [% content %]
+        </div>
+[% ELSE %]
 
       [% IF in_workspace %] 
       <!-- workspaceNav BEGIN -->
@@ -146,6 +152,7 @@
       [% END %]
       <div id="st-display-mode-container" class="st-content">  	
         [% content %]
+[% END %]
         <div id="footer">
           <div id="footerLinks">
             <ul>

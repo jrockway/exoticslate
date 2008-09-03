@@ -923,6 +923,14 @@ div#st-ref-card .buttons {
         background-color: #EEE;
 }
 
+div#st-display-mode-container.st-content-no-controls {
+        margin-top: 0px;
+}
+
+div#st-display-mode-container.st-content-no-controls div#contentContainer {
+        padding-top: 15px;
+        padding-bottom: 15px;
+}
 /* mainNav Dropdown menus styles */
 
 div#mainNav ul.level2 li img {

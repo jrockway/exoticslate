@@ -55,8 +55,9 @@ Page = {
     },
 
     pageUrl: function () {
-        var page_name = Array.pop.call(arguments) || Socialtext.page_id;
-        var wiki_id = Array.pop.call(arguments) || Socialtext.wiki_id;
+        var args = $.makeArray(arguments);
+        var page_name = args.pop() || Socialtext.page_id;
+        var wiki_id = args.pop() || Socialtext.wiki_id;
         return Page.workspaceUrl(wiki_id) + '/pages/' + page_name;
     },
 

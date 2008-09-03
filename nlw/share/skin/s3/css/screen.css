@@ -902,3 +902,25 @@ div#contentColumns div#st-page-maincontent p strong {
 	font-weight: bold;
 }
 
+
+div#st-ref-card .buttons {
+    margin-top: 0px;
+    position: absolute;
+    right: 25px;
+}
+
+.st-refcard-table, .st-refcard-table table, .st-refcard-table th, .st-refcard-table td {
+        border-color: #999;
+        border-style: solid;
+}
+
+.st-refcard-table.st-refcard-table table,  {
+        border-width: 1px;
+}
+
+.st-refcard-table, .st-refcard-table table, .st-refcard-table th, .st-refcard-table td {
+        margin: 0;
+        border-width: 1px;
+        background-color: #EEE;
+}
+

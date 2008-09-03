@@ -893,3 +893,8 @@ div#contentColumns div#st-page-maincontent em {
 div#contentColumns div#st-page-maincontent p strong {
 	font-weight: bold;
 }
+
+body div#controls div#controlsRight {
+   min-width: 440px !important;
+}
+

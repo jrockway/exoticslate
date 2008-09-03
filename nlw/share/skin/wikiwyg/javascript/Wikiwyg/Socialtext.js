@@ -881,7 +881,7 @@ proto.get_wikitext_from_html = function(html) {
 }
 
 proto.set_edit_tips_span_display = function(display) {
-    jQuery('#st-edit-tips').show();
+    jQuery('#st-edit-tips').css('display', display);
 
     if (Socialtext.S3) {
         jQuery('#st-edit-tips')

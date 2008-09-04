@@ -118,7 +118,7 @@
          &nbsp; 
         </div><!-- workSpaceLink END -->
       </div><!-- mainNav END -->
-[% IF content_id == 'st-homepage' OR content_id == 'st-editcontention' %]
+[% IF content_id.match('^st-(homepage|editcontention|listview)$') %]
       <div id="st-display-mode-container" class="st-content st-content-no-controls">  	
         <div id="contentContainer">
            [% content %]

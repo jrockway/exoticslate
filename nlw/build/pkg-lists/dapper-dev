@@ -74,10 +74,12 @@ libplucene-perl
 libpng3
 libpng3-dev
 libreturn-value-perl
+libnumber-format-perl
 libspiffy-perl
 libssl-dev
 libsub-uplevel-perl
 libtemplate-perl
+libtemplate-plugin-number-format-perl
 libtest-class-perl
 libtest-deep-perl
 libtest-differences-perl

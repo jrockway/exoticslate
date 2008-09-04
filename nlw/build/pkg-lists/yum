@@ -65,6 +65,7 @@ perl-Log-Dispatch
 perl-MIME-Types
 perl-MLDBM
 perl-Module-Pluggable
+perl-Number-Format
 perl-Params-Validate
 perl-Readonly
 perl-Readonly-XS
@@ -72,6 +73,7 @@ perl-SOAP-Lite
 perl-Spiffy
 perl-Sub-Uplevel
 perl-Template-Toolkit
+perl-Template-Plugin-Number-Format
 perl-Test-Base
 perl-Test-Exception
 perl-Text-Autoformat

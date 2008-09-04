@@ -64,10 +64,12 @@ libmodule-pluggable-perl
 libparams-validate-perl
 libplucene-perl
 libreturn-value-perl
+libnumber-format-perl
 libspiffy-perl
 libspiffy-perl
 libsub-uplevel-perl
 libtemplate-perl
+libtemplate-plugin-number-format-perl
 libtest-differences-perl
 libtest-class-perl
 libtest-deep-perl

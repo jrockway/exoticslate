@@ -1114,3 +1114,10 @@ body#simple-html h3 {
     margin-right: 10px;
 }
 
+td.st-homepage-simplelist-left {
+    padding-right: 10px;
+}
+
+td.st-homepage-simplelist-right {
+    text-align: right;
+}

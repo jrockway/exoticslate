@@ -215,26 +215,50 @@ sub set_default_account {
 
 sub enable_plugin {
     my $self = shift;
-    my $account = $self->_require_account;
     my $plugin  = $self->_require_plugin;
 
-    $account->enable_plugin($plugin);
-    $self->_success(loc("Plugin [_1] is now enabled for account [_2].",
-        $plugin,
-        $account->name
-    ));
+    my $enabler = sub {
+        my $account = shift;
+        $account->enable_plugin($plugin);
+        return loc("Plugin [_1] is now enabled for account [_2].",
+            $plugin,
+            $account->name,
+        );
+    };
+    $self->_account_plugin_action($enabler);
 }
 
 sub disable_plugin {
     my $self = shift;
-    my $account = $self->_require_account;
     my $plugin  = $self->_require_plugin;
 
-    $account->disable_plugin($plugin);
-    $self->_success(loc("Plugin [_1] is now disabled for account [_2].",
-        $plugin,
-        $account->name
-    ));
+    my $disabler = sub {
+        my $account = shift;
+        $account->disable_plugin($plugin);
+        return loc("Plugin [_1] is now disabled for account [_2].",
+            $plugin,
+            $account->name,
+        );
+    };
+    $self->_account_plugin_action($disabler);
+}
+
+sub _account_plugin_action {
+    my $self = shift;
+    my $callback = shift;
+
+    my %opts = $self->_get_options('all-accounts');
+    my @messages;
+    if ($opts{'all-accounts'}) {
+        my $all = Socialtext::Account->All();
+        while (my $account = $all->next) {
+            push @messages, $callback->( $account );
+        }
+    }
+    else {
+        push @messages, $callback->( $self->_require_account );
+    }
+    $self->_success(join "\n", @messages);
 }
 
 sub _require_plugin {
@@ -2265,8 +2289,8 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
 
   PLUGINS
 
-  enable-plugin [--account] --plugin
-  disable-plugin [--account] --plugin
+  enable-plugin  [--account | --all-accounts] --plugin
+  disable-plugin [--account | --all-accounts] --plugin
 
   EMAIL
 

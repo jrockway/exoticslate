@@ -26,7 +26,7 @@ use Socialtext::SQL qw/sql_execute/;
 
 use Cwd;
 
-plan tests => 343;
+plan tests => 355;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -2073,6 +2073,34 @@ PLUGINS: {
         qr/Plugin test is now disabled for account pluggy/,
         'disable plugin for account',
     );
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --all-accounts --plugin test )
+                ]
+            )->disable_plugin();
+        },
+        [ qr/Plugin test is now disabled for account pluggy\./,
+          qr/Plugin test is now disabled for account Socialtext\./,
+          qr/Plugin test is now disabled for account Unknown\./,
+        ],
+        'disable plugin for all account',
+    );
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --all-accounts --plugin test )
+                ]
+            )->enable_plugin();
+        },
+        [ qr/Plugin test is now enabled for account pluggy\./,
+          qr/Plugin test is now enabled for account Socialtext\./,
+          qr/Plugin test is now enabled for account Unknown\./,
+        ],
+        'enable plugin for all account',
+    );
 }
 
 sub expect_success {
@@ -2084,15 +2112,12 @@ sub expect_success {
     my $test = ref $expect ? \&stdout_like : \&stdout_is;
 
     local $LastExitVal;
-    $test->(
-        sub {
-            eval { $sub->() };
-        },
-        $expect,
-        $desc
-    );
-    warn $@ if $@ and $@ !~ /exited/;
-    is( $LastExitVal, 0, 'exited with exit code 0' );
+    $expect = [$expect] unless ref($expect) and ref($expect) eq 'ARRAY';
+    for my $e (@$expect) {
+        $test->( sub { eval { $sub->() } }, $e, $desc );
+        warn $@ if $@ and $@ !~ /exited/;
+        is( $LastExitVal, 0, 'exited with exit code 0' );
+    }
 }
 
 sub expect_failure {

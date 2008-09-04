@@ -35,6 +35,7 @@ S3_SOURCE_FILES= \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
 		jquery-patch.js \
 		jquery-plugin.js \
+		jquery.tablesorter.js \
 		Jemplate.js \
 		$(ALL_JEMPLATE_PLUGINS) \
 		loc.js \

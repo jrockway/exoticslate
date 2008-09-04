@@ -12,11 +12,20 @@
   </div><!-- controls END -->
   <div id="contentContainer">
     <h2 class="tableTitle">[% display_title | html %]</h2>
+
+    <script language="javascript"><!--
+      // Make the table sortable: [0,0] means the default is first column ascending.
+      jQuery(function(){jQuery("table.dataTable").tablesorter({ sortList: [[0, 0]] });});
+    --></script>
+
     <table class="dataTable">
+      <thead>
       <tr>
         <th>[% loc('Tag') %]</th>
         <th>[% loc('Pages') %]</th>
       </tr>
+      </thead>
+      <tbody>
       [% FOREACH row = rows %]
         [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
           <td>
@@ -27,6 +36,7 @@
           </td>
         </tr>
       [% END %]
+      </tbody>
     </table><!-- dataTable END -->
   </div><!-- contentContainer -->
 [% END %]

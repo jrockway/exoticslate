@@ -284,7 +284,12 @@ sub _generate_workspaces {
         is_business_admin  => 1,
         is_technical_admin => 1,
     );
+
+    my $adapter = Socialtext::Pluggable::Adapter->new;
     my $account_id = Socialtext::Account->Socialtext()->account_id();
+    $creator->primary_account(Socialtext::Account->Socialtext());
+    Socialtext::Account->Socialtext->enable_plugin($_)
+        for grep {!/^default$/} $adapter->plugin_list;
 
     # Why do we _always_ generate the help workspace?
     $self->_generate_help_workspace( $creator, "help-en" );

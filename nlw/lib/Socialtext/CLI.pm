@@ -228,8 +228,8 @@ sub enable_plugin {
     my $msg = $self->_account_plugin_action($enabler);
     
     # Plugin business logic - maybe this should live somewhere else
-    if ($plugin eq 'people') {
-        $plugin = $self->_require_plugin('dashboard');
+    if ($plugin eq 'people' or $plugin eq 'dashboard') {
+        $plugin = $self->_require_plugin('widgets');
         $msg .= $self->_account_plugin_action($enabler);
     }
     $self->_success( $msg );
@@ -248,12 +248,6 @@ sub disable_plugin {
         );
     };
     my $msg = $self->_account_plugin_action($disabler);
-    
-    # Plugin business logic - maybe this should live somewhere else
-    if ($plugin eq 'dashboard' or $plugin eq 'widgets') {
-        $plugin = $self->_require_plugin('people');
-        $msg .= $self->_account_plugin_action($disabler);
-    }
     $self->_success( $msg );
 }
 
@@ -279,9 +273,6 @@ sub _require_plugin {
     my $self = shift;
     my %opts = $self->_get_options('plugin:s');
     my $plugin = shift || $opts{plugin};
-
-    # Friendly rename
-    $plugin = 'widgets' if $plugin eq 'dashboard';
 
     my $adapter = Socialtext::Pluggable::Adapter->new;
     if (!$adapter->plugin_exists($plugin)) {

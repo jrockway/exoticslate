@@ -187,8 +187,8 @@ $html = $lite->category();
 like( $html, qr{\Q<title>Admin Wiki : Categories</title>},
     'category display has correct title' );
 # XXX case here?
-like( $html, qr{<li>\s*<a.*href="/lite/category/admin/welcome".*>\s*welcome\s*</a>},
-    'category welcome is listed with correct url and name' );
+like( $html, qr{<li>\s*<a.*href="/lite/category/admin/Welcome".*>\s*Welcome\s*</a>},
+    'category Welcome is listed with correct url and name' );
 
 # get a specific category
 my $html_from_lc_category = $lite->category('welcome');

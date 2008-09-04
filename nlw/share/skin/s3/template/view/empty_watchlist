@@ -35,10 +35,8 @@
       <dd>[% empty_message %]</dt>
       <dd>
       <div style="float:left">[% loc('Look for') %]</div>
-      <div style="float:left;padding:5px">
-        <ul><li><a class="watchButton" this Page" href="#">
-          Watch this Page
-        </a></li></ul>
+      <div style="float:left;padding:0 5px" class="controlsInline">
+        <ul><li><a href="#" class="watch">[% loc('Watch') %]</a></li></ul>
       </div>
       <div style="float:left">
         [% loc('on a page you want to watch and then click on it to add the page to your Watchlist.') %]

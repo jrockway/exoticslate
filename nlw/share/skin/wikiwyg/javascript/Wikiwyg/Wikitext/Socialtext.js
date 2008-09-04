@@ -1099,9 +1099,24 @@ proto.contain_widget_image = function(element) {
 
 proto.markup_bound_phrase = function(markup_array) {
     var markup_start = markup_array[1];
+
+    // Hack: This line exists to turn "{link2: }" into "{link: }"
     markup_start = markup_start.replace(/\d+: $/, ': ');
+
     var markup_finish = markup_array[2];
     var scroll_top = this.area.scrollTop;
+
+    // Hack: Here we handle "{link2_*}" variants...
+    if (markup_start == '{link2_hyperlink: ') {
+        // Turns "{link2_hyperlink: }" into "<http://...>"
+        markup_start = '<http://';
+        markup_finish = '>';
+    }
+    else if (markup_start == '{link2_section: ') {
+        // Turns "{link2_section: }" into "{link: }"
+        markup_start = '{link: ';
+    }
+
     if (markup_finish == 'undefined')
         markup_finish = markup_start;
     if (this.get_words())

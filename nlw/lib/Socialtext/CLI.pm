@@ -250,7 +250,7 @@ sub disable_plugin {
     my $msg = $self->_account_plugin_action($disabler);
     
     # Plugin business logic - maybe this should live somewhere else
-    if ($plugin eq 'dashboard' or $plugin eq 'gadgets') {
+    if ($plugin eq 'dashboard' or $plugin eq 'widgets') {
         $plugin = $self->_require_plugin('people');
         $msg .= $self->_account_plugin_action($disabler);
     }
@@ -281,7 +281,7 @@ sub _require_plugin {
     my $plugin = shift || $opts{plugin};
 
     # Friendly rename
-    $plugin = 'gadgets' if $plugin eq 'dashboard';
+    $plugin = 'widgets' if $plugin eq 'dashboard';
 
     my $adapter = Socialtext::Pluggable::Adapter->new;
     if (!$adapter->plugin_exists($plugin)) {

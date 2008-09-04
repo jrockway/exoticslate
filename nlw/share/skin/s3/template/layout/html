@@ -86,10 +86,10 @@
         <div id="homeLink"><a id="st-home-link" href="[% home_href | decorate('home_href') %]">[% loc("Home") %]</a></div>
         <ul id="st-wiki-subnav-left" class="level1">
           [% IF people %]
-          <li class="submenu"><a id="st-wiki-subnav-link-people" href="/?action=all_people">[% loc("People") %]</a>
+          <li class="submenu"><a id="st-wiki-subnav-link-people" href="/?action=people">[% loc("People") %]</a>
               <ul class="level2 withimage" id="global-people-directory">
               [% IF people.size %]
-                  <li class="dropaction"><a href="/?action=all_people">[% loc("People Directory") %]...</a></li>
+                  <li class="dropaction"><a href="/?action=people">[% loc("People Directory") %]...</a></li>
                   [% FOREACH people %]
                   <li><img src="[% pic_url %]"/><a href="[% link %]">[% label | label_ellipsis(30) %]</a></li>
                   [% END %]

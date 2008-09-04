@@ -47,6 +47,12 @@ ALTER TABLE account_plugins
         FOREIGN KEY (account_id)
         REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
+-- Update widgets to point to the widgets plugin rather than the gadgets
+-- plugin
+UPDATE storage
+    SET value = REPLACE(value, 'gadgets', 'widgets')
+    WHERE key IN ('file', 'url_parts', 'url');
+
 UPDATE "System"
    SET value = 10
  WHERE field = 'socialtext-schema-version';

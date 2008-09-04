@@ -147,6 +147,7 @@
               </li>
             <li><a href="/[% current_workspace.name %]?action=recent_changes">[% loc("What's New") %]</a></li>
             <li><a href="/[% current_workspace.name %]?action=display_watchlist">[% loc("My Watchlist") %]</a></li>
+            <li><a href="/[% current_workspace.name %]?action=weblog_display">[% loc("Weblogs") %]</a></li>
             [% IF is_workspace_admin %]
             <li><a href="/[% current_workspace.name %]?action=users_invitation">[% loc("Invite Others") %]</a></li>
             [% END %]

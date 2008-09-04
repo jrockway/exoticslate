@@ -37,6 +37,16 @@ SELECT DISTINCT u.system_unique_id AS system_unique_id,
          LEFT JOIN "UserWorkspaceRole" uwr ON (um.user_id = uwr.user_id)
          LEFT JOIN "Workspace" w ON (uwr.workspace_id = w.workspace_id);
 
+CREATE TABLE account_plugins (
+    account_id bigint NOT NULL,
+    plugin VARCHAR(128) NOT NULL
+);
+
+ALTER TABLE account_plugins
+    ADD CONSTRAINT account_plugins_account_fk
+        FOREIGN KEY (account_id)
+        REFERENCES "Account"(account_id) ON DELETE CASCADE;
+
 UPDATE "System"
    SET value = 10
  WHERE field = 'socialtext-schema-version';

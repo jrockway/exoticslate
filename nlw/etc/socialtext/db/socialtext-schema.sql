@@ -194,6 +194,11 @@ CREATE SEQUENCE "Workspace___workspace_id"
     NO MINVALUE
     CACHE 1;
 
+CREATE TABLE account_plugins (
+    account_id bigint NOT NULL,
+    plugin varchar(128) NOT NULL
+);
+
 CREATE TABLE event (
     "at" timestamptz NOT NULL,
     "action" text NOT NULL,
@@ -472,6 +477,11 @@ CREATE TRIGGER person_ins
     AFTER INSERT ON "UserId"
     FOR EACH ROW
     EXECUTE PROCEDURE auto_vivify_person();
+
+ALTER TABLE ONLY account_plugins
+    ADD CONSTRAINT account_plugins_account_fk
+            FOREIGN KEY (account_id)
+            REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY event
     ADD CONSTRAINT event_actor_id_fk

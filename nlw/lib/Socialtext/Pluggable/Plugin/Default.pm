@@ -12,7 +12,16 @@ sub register {
     $class->add_hook('template.user_avatar.content', 'user_name');
     $class->add_hook('template.user_name.content', 'user_name');
     $class->add_hook('template.user_image.content', 'user_image');
+    $class->add_hook('root', 'root');
 }
+
+sub root {
+    my ($self, $rest) = @_;
+    my $nowork = Socialtext::Rest::NoWorkspace->new($rest);
+    return $nowork->handler($rest);
+}
+
+sub always_enabled { 1 }
 
 sub user_image { '' }
 

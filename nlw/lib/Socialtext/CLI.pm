@@ -24,6 +24,7 @@ use Socialtext::Workspace;
 use Socialtext::User;
 use Socialtext::Timer;
 use Socialtext::SystemSettings qw/get_system_setting set_system_setting/;
+use Socialtext::Pluggable::Adapter;
 
 my %CommandAliases = (
     '--help' => 'help',
@@ -210,6 +211,42 @@ sub set_default_account {
     my $account = $self->_require_account;
     set_system_setting('default-account', $account->account_id);
     $self->_success(loc("The default account is now [_1].", $account->name));
+}
+
+sub enable_plugin {
+    my $self = shift;
+    my $account = $self->_require_account;
+    my %opts = $self->_get_options('plugin:s');
+    my $plugin = $opts{plugin};
+
+    my $adapter = Socialtext::Pluggable::Adapter->new;
+    if (!$adapter->plugin_exists($plugin)) {
+        $self->_error(loc("Plugin [_1] does not exist!", $plugin));
+    }
+
+    $account->enable_plugin($plugin);
+    $self->_success(loc("Plugin [_1] is now enabled for account [_2].",
+        $plugin,
+        $account->name
+    ));
+}
+
+sub disable_plugin {
+    my $self = shift;
+    my $account = $self->_require_account;
+    my %opts = $self->_get_options('plugin:s');
+    my $plugin = $opts{plugin};
+
+    my $adapter = Socialtext::Pluggable::Adapter->new;
+    if (!$adapter->plugin_exists($plugin)) {
+        $self->_error(loc("Plugin [_1] does not exist!", $plugin));
+    }
+
+    $account->disable_plugin($plugin);
+    $self->_success(loc("Plugin [_1] is now disabled for account [_2].",
+        $plugin,
+        $account->name
+    ));
 }
 
 sub _require_account {
@@ -2226,6 +2263,11 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   set-default-account [--account]
   get-default-account
 
+  PLUGINS
+
+  enable-plugin [--account] --plugin
+  disable-plugin [--account] --plugin
+
   EMAIL
 
   send-email-notifications --workspace --page
@@ -2633,6 +2675,14 @@ Set the default account new users should belong to.
 =head2 get-default-account
 
 Prints out the current default account.
+
+=head2 enable-plugin [--account] --plugin
+
+Enables plugin for all users in an account
+
+=head2 disable-plugin [--account] --plugin
+
+Disables plugin for all users in an account
 
 =head2 from-input < <list of commands>
 

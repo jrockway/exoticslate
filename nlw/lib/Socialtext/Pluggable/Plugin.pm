@@ -33,6 +33,8 @@ field 'rest';
 # perldoc Socialtext::URI for arguments
 #    path = '' & query => {}
 
+sub always_enabled { 0 }
+
 sub uri {
     my $self = shift;
     return $self->hub->current_workspace->uri . Socialtext::AppConfig->script_name;

@@ -59,14 +59,10 @@ sub handler {
         $rest->header($self->hub->rest->header);
         return $res;
     }
-    elsif (exists $hooks{root}) {
+    else {
         my $res = $self->hook('root', $rest);
         $rest->header($self->hub->rest->header);
         return $res;
-    }
-    else {
-        my $nowork = Socialtext::Rest::NoWorkspace->new($rest);
-        return $nowork->handler($rest);
     }
 }
 
@@ -135,6 +131,7 @@ sub register {
         for my $hook ($plugin->hooks) {
             my ($type, @parts) = split /\./, $hook->{name};
 
+
             if ($type eq 'wafl') {
                 $registry->add(
                     'wafl', $parts[0], 'Socialtext::Pluggable::WaflPhrase',
@@ -182,11 +179,19 @@ sub hook {
         return unless ref $hooks eq 'ARRAY';
         for my $hook (@$hooks) {
             my $method = $hook->{method};
-            $hook->{obj} ||= $hook->{class}->new();
-            $hook->{obj}->hub( $self->hub || $self->{made_hub});
-            $hook->{obj}->rest( delete $self->{_rest_handler} );
-            push @output, $hook->{obj}->$method(@args);    # do some magic here
-            last if $hook->{once};
+            my $plugin = $hook->{obj} ||= $hook->{class}->new();
+            my $hub = $self->hub || $self->{made_hub};
+
+            my $accnt = $hub->current_user->primary_account;
+            my $enabled = $plugin->always_enabled || 
+                          $accnt->is_plugin_enabled($plugin->name);
+                         
+            if ($enabled) {
+                $hook->{obj}->hub($hub);
+                $hook->{obj}->rest( delete $self->{_rest_handler} );
+                push @output, $hook->{obj}->$method(@args);
+                last if $hook->{once};
+            }
         }
     }
     return join("\n", @output);

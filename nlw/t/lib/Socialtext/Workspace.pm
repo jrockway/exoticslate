@@ -55,6 +55,7 @@ sub user_can { $_[0]->{user_can} || 1 }
 
 sub enable_spreadsheet { $_[0]->{enabled_spreadsheet}++ }
 
+sub real { 1 }
 
 package Socialtext::NoWorkspace;
 use base 'Socialtext::Workspace';
@@ -62,5 +63,6 @@ use base 'Socialtext::Workspace';
 sub workspace_id { 0 }
 sub name { '' }
 sub title { '' }
+sub real { 0 }
 
 1;

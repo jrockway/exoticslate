@@ -33,8 +33,6 @@
   [% END %]
   </div> <!-- END st-revision-tags -->
   <div id="st-revision-display">
-  <div id="contentColumns">
-  <div id="contentLeft">
   <table id="revision-compare-table">
     <tr>
     [% FOR col IN header %]
@@ -56,8 +54,6 @@
     </tr>
   [% END %]
   </table>
-  </div> <!-- END st-page-maincontent -->
-  </div> <!-- END contentColumns -->
   </div> <!-- END st-revision-display -->
 </div><!-- contentContainer END -->
 

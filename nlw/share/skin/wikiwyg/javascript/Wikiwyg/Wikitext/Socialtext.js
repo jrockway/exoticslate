@@ -157,6 +157,9 @@ proto.find_left = function(t, selection_start, matcher) {
 }
 
 proto.find_right = function(t, selection_end, matcher) {
+    // Guard against IE's strange behaviour of returning -1 as selection_start.
+    if (selection_end < 0) return 0;
+
     var substring = t.substr(selection_end, 1);
     var nextstring = t.substr(selection_end + 1, 1);
     if (selection_end >= t.length)

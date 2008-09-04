@@ -224,7 +224,7 @@ sub global_template_vars {
         current_page      => $self->hub->pages->current,
         home_is_dashboard =>
             $self->hub->current_workspace->homepage_is_dashboard,
-        workspace_present  => $self->hub->current_workspace->workspace_id ? 1 : 0,
+        workspace_present  => $self->hub->current_workspace->real,
         customjs           => $self->hub->skin->customjs,
         app_version        => Socialtext->product_version,
         skin_name          => $self->hub->skin->skin_name,
@@ -240,9 +240,8 @@ sub global_template_vars {
         $result{people} = $self->_get_people_watchlist_for_people;
     };
 
-    unless ($self->hub->current_workspace->isa("Socialtext::NoWorkspace")) {
+    if ($self->hub->current_workspace->real) {
         $result{history} = $self->_get_history_list_for_template; 
-        $result{in_workspace} = 1;
     }
 
     $result{is_workspace_admin}=1 if ($self->hub->checker->check_permission('admin_workspace'));

@@ -660,6 +660,8 @@ sub NameIsValid {
     }
 }
 
+sub real { 1 }
+
 sub uri {
     my $self = shift;
 
@@ -1580,6 +1582,7 @@ const account_id => 1;
 const workspace_id => 0;
 const email_addresses_are_hidden => 0;
 const skin_name => 's3';
+const real => 0;
 
 sub created_by_user_id {
     Socialtext::User->SystemUser->user_id;

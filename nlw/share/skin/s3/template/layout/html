@@ -133,7 +133,7 @@
         </div>
 [% ELSE %]
 
-      [% IF in_workspace %] 
+      [% IF workspace_present %] 
       <!-- workspaceNav BEGIN -->
       <div id="workspaceContainer">
         <div id="workspaceNav">

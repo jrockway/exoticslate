@@ -404,7 +404,7 @@ sub st_ldap {
     }
 
     diag "st-ldap $options";
-    _run_command("st-bootstrap-openldap $options", $verify);
+    _run_command("./dev-bin/st-bootstrap-openldap $options", $verify);
 }
 
 =head2 st_config( $command_options )

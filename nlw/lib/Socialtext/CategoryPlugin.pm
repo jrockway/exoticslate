@@ -64,7 +64,7 @@ sub category_list {
     $self->load;
     my $categories = $self->all;
 
-    my @rows = map {
+    my @rows = grep { $_->{page_count} > 0 } map {
         {
             display    => $categories->{$_},
             escaped    => $self->uri_escape( $categories->{$_} ),

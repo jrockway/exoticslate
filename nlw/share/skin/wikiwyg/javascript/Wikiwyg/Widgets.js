@@ -122,7 +122,9 @@ proto.setup_widgets_menu = function(title) {
 }
 
 proto.focus_link_menu = function(action, label) {
-    if (! (action == 'do_widget_link2' &&
+    if (! (
+        action.match(/^do_widget_link2/)
+        &&
         label.match(/^(Wiki|Web|Section)/)
     )) return;
 
@@ -1177,7 +1179,21 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
     var widget = this.currentWidget.id;
 
     if (widget == 'link2') {
-        return this.do_link(widget_element);
+        this.do_link(widget_element);
+        jQuery('#wiki-link-text').focus();
+        return;
+    }
+    else if (widget == 'link2_section') {
+        this.do_link(widget_element);
+        jQuery('#add-section-link').select();
+        jQuery('#section-link-text').focus();
+        return;
+    }
+    else if (widget == 'link2_hyperlink') {
+        this.do_link(widget_element);
+        jQuery('#add-web-link').select();
+        jQuery('#web-link-text').focus();
+        return;
     }
 
     var template = 'widget_' + widget + '_edit.html';

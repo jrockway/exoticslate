@@ -70,11 +70,11 @@
         <td><input type="checkbox" name="page_selected" class="st-listview-selectpage-checkbox" value="[% row.page_uri %]"/></td>
         <td colspan="2">
         [% IF row.Type == 'spreadsheet' %]
-           <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/ss16.png" />
+           <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/sheetIcon.png" />
         [% ELSIF row.is_attachment %]
            <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/attachment.png" />
         [% ELSE %]
-           <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/doc16.png" />
+           <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/docIcon.png" />
         [% END %]
         [% IF row.is_attachment %]
           <a class="titleLink" href="/data/workspaces/[% row.workspace_name || current_workspace.name %]/attachments/[% row.page_uri %]:[% row.id %]/original/[% row.document_title %]">[% row.document_title %],</a>

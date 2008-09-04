@@ -1154,3 +1154,10 @@ td.st-homepage-simplelist-left {
 td.st-homepage-simplelist-right {
     text-align: right;
 }
+
+span.person img.avatar {
+    width: 20px !important;
+    height: 20px !important;
+    border: 1px solid #AFAFAF !important;
+    margin-top: 2px !important;
+}

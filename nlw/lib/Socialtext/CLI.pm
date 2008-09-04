@@ -2297,8 +2297,8 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
 
   PLUGINS
 
-  enable-plugin  [--account] --plugin
-  disable-plugin [--account] --plugin
+  enable-plugin  [--account] --plugin [ people | dashboard | socialcalc ]
+  disable-plugin [--account] --plugin [ people | dashboard | socialcalc ]
 
   EMAIL
 
@@ -2708,11 +2708,11 @@ Set the default account new users should belong to.
 
 Prints out the current default account.
 
-=head2 enable-plugin [--account] --plugin
+=head2 enable-plugin [--account] --plugin  [ people | dashboard | socialcalc ]
 
 Enables plugin for all users in an account
 
-=head2 disable-plugin [--account] --plugin
+=head2 disable-plugin [--account] --plugin [ people | dashboard | socialcalc ]
 
 Disables plugin for all users in an account
 

@@ -71,7 +71,7 @@
         <td colspan="2">
         [% IF row.Type == 'spreadsheet' %]
            <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/ss16.png" />
-        [% ELSIF is_attachment %]
+        [% ELSIF row.is_attachment %]
            <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/attachment.png" />
         [% ELSE %]
            <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/doc16.png" />

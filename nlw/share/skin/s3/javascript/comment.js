@@ -23,63 +23,87 @@ var GuiEdit = function(args) {
     this.workspace = args.workspace || Socialtext.wiki_id;
     this.page_id = args.page_id || Socialtext.page_id;
     this.oncomplete = args.oncomplete;
+    this.id = args.id;
+    if (!this.id)
+        throw new Error ('GuiEdit requires an id!');
+    this.container = jQuery('#'+this.id);
+    if (!this.container.size())
+        throw new Error ('No elements found with id='+this.id);
 }
 
 GuiEdit.prototype = {};
 
 GuiEdit.prototype.show = function () {
     var self = this;
-    if (!jQuery('#st-commentui-container').size()) {
-        Socialtext.loc = loc;
-        Socialtext.s2_path = nlw_make_s2_path;
-        jQuery('body').append(
-            Jemplate.process('comment_lightbox.tt2', Socialtext)
-        );
-        jQuery('.comment_button')
-            .css({
-                'cursor': 'pointer',
-                'border': 'thin solid white'
-            })
-            .mouseover(function () {
-                jQuery(this).css({
-                    borderTop: "thin solid white",
-                    borderRight: "thin solid gray",
-                    borderBottom: "thin solid gray",
-                    borderLeft: "thin solid white"
-                });
-            })
-            .mouseout(function () {
-                jQuery(this).css('border', 'thin solid white');
-            })
-            .click(function () { self['do_'+this.name].call(self) })
 
-        jQuery('#comment-form').submit(function () {
-            jQuery.post('/' + self.workspace + '/index.cgi',
-                {
-                    action: 'submit_comment',
-                    page_name: self.page_id,
-                    comment: jQuery('#st-commentui-textarea').val()
-                },
-                function () {
-                    jQuery.hideLightbox();
+    Socialtext.loc = loc;
+    Socialtext.s2_path = nlw_make_s2_path;
 
-                    if (self.oncomplete) {
-                        self.oncomplete.call(self);
-                    }
+    this.container.append(
+        Jemplate.process('comment_lightbox.tt2', Socialtext)
+    );
+
+    jQuery('.comment_button')
+        .css({
+            'cursor': 'pointer',
+            'border': 'thin solid white'
+        })
+        .mouseover(function () {
+            jQuery(this).css({
+                borderTop: "thin solid white",
+                borderRight: "thin solid gray",
+                borderBottom: "thin solid gray",
+                borderLeft: "thin solid white"
+            });
+        })
+        .mouseout(function () {
+            jQuery(this).css('border', 'thin solid white');
+        })
+        .click(function () { self['do_'+this.name].call(self) })
+
+    jQuery('.saveButton', this.container).click(function () {
+        jQuery.post('/' + self.workspace + '/index.cgi',
+            {
+                action: 'submit_comment',
+                page_name: self.page_id,
+                comment: jQuery('textarea', self.container).val()
+            },
+            function () {
+                if (self.oncomplete) {
+                    self.oncomplete.call(self);
                 }
-            );
-            return false;
-        });
-    }
-
-    jQuery('#st-commentui-textarea').val('');
-    this.area = jQuery('#st-commentui-textarea').get(0);
-
-    jQuery.showLightbox({
-        content: '#st-commentui-container',
-        close: '#st-commentui-cancellink',
-        focus: '#st-commentui-textarea'
+                self.close();
+            }
+        );
+        return false;
     });
+
+    jQuery('.cancelButton', this.container).click(function () {
+        self.close();
+        return false;
+    });
+
+    jQuery('textarea', this.container).val('');
+    this.area = jQuery('textarea', this.container).get(0);
+
+    this.scrollTo(function () {
+        jQuery('.comment', this.container).fadeIn();
+    });
+}
+
+GuiEdit.prototype.close = function () {
+    jQuery('.comment', this.container).fadeOut(function () {
+        jQuery('.commentWrapper', this.container).remove();
+    });
+}
+
+GuiEdit.prototype.scrollTo = function (callback) {
+    // Scroll the window so that the middle of .commentWrapper is in the
+    // middle of the screen
+    var wrapper = jQuery('.commentWrapper', this.container);
+    var offset =
+        wrapper.offset().top + wrapper.height() - jQuery(window).height();
+    $('html,body').animate({scrollTop: offset}, 'slow', 'linear', callback);
 }
 
 GuiEdit.prototype.alarm_on = function() {

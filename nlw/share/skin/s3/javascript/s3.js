@@ -456,6 +456,7 @@ $(function() {
         .one("click", function () {
             get_lightbox(function () {
                 var ge = new GuiEdit({
+                    id: 'st-page-content',
                     oncomplete: function () {
                         Page.refreshPageContent()
                     }
@@ -470,6 +471,7 @@ $(function() {
         get_lightbox(function () {
             var ge = new GuiEdit({
                 page_id: page_id,
+                id: 'content_'+page_id,
                 oncomplete: function () {
                     $.get(Page.pageUrl(page_id), function (html) {
                         $('#content_'+page_id).html(html);

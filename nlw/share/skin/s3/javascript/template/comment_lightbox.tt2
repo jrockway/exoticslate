@@ -1,7 +1,7 @@
 [%# vim: set et sts=2 sw=2: %]
-<div class="lightbox" id="st-commentui-container">
-  <form id="comment-form" name="comment_form" method="post" action="[% script_name %]" enctype="application/x-www-form-urlencoded">
-  <div id="st-commentui-toolbar">
+<div class="commentWrapper">
+<div class="comment">
+  <div class="toolbar">
     <img class="comment_button" src="[% s2_path('/images/bold.gif') %]" name="bold"/>
     <img class="comment_button" src="[% s2_path('/images/italic.gif') %]" name="italic"/>
     <img class="comment_button" src="[% s2_path('/images/strike.gif') %]" name="strike"/>
@@ -18,10 +18,10 @@
     <img class="comment_button" src="[% s2_path('/images/createlink.gif') %]" name="createlink"/>
     <img class="comment_button" src="[% s2_path('/images/createtable.gif') %]" name="createtable"/>
   </div>
-  <textarea id="st-commentui-textarea" name="comment" wrap="virtual"></textarea>
-  <div class="buttons">
-    <input id="st-commentui-savelink" type="submit" value="[% loc('save') %]"/>
-    <input id="st-commentui-cancellink" type="button" value="[% loc('Cancel') %]"/>
-  </div>
-  </form>
+  <textarea name="comment" wrap="virtual"></textarea>
+  <ul class="formButtons">
+    <li><a class="saveButton" href="#">[% loc('Save') %]</a></li>
+    <li><a class="cancelButton" href="#">[% loc('Save') %]</a></li>
+  </ul>
+</div>
 </div>

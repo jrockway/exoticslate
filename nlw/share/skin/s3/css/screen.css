@@ -80,13 +80,6 @@ ul.normal ul ul {
     width: 152px;
 }
 
-#st-commentui-textarea {
-    background-color: #FFFFDD;
-    border:1px solid black;
-    width: 100%;
-    height: 100px;
-}
-
 #wikiwyg_wikitext_textarea {
     background-color: #FFFFDD !important;
 }
@@ -1081,5 +1074,23 @@ div#mainNav .emptynotice {
 
 html body div#st-page-editing-toolbar-container {
         height: 50px;
+}
+
+/* Comment insertion */
+.commentWrapper {
+    height: 200px;
+}
+.comment {
+    display: none;
+}
+.comment textarea {
+    background-color: #FFFFDD;
+    border:1px solid black;
+    width: 100%;
+    height: 100px;
+}
+.comment .formButtons li {
+    float: left;
+    margin-right: 10px;
 }
 

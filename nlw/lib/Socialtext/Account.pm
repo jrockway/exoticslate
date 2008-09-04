@@ -482,6 +482,18 @@ Returns a count of users for this account.
 
 Returns a cursor of the users for this account, ordered by username.
 
+=item $account->is_plugin_enabled($plugin)
+
+Returns true if the specified plugin is enabled.
+
+=item $account->enable_plugin($plugin)
+
+Enables the plugin for the specified account.
+
+=item $account->disable_plugin($plugin)
+
+Disables the plugin for the specified account.
+
 =item Socialtext::Account->Unknown()
 
 =item Socialtext::Account->Socialtext()

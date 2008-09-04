@@ -2278,6 +2278,10 @@ The exported data includes the workspace data, pages, user data for
 all users who are members of the workspace, and the roles for those
 users.
 
+=head2 $workspace->real()
+
+Real workspaces return true, NoWorkspaces return false.
+
 =head2 Socialtext::Workspace->Any()
 
 Returns one workspace at random. This was needed for interfacing with

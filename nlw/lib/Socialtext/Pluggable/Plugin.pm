@@ -195,7 +195,8 @@ sub name {
 
 sub plugins {
     my $self = shift;
-    return $self->hub->pluggable->plugin_list;
+    return grep { $self->user->primary_account->is_plugin_enabled($_) }
+           $self->hub->pluggable->plugin_list;
 }
 
 sub plugin_dir {

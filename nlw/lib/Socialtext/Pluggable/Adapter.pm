@@ -167,6 +167,11 @@ sub plugin_exists {
     return $list{$name};
 }
 
+sub plugin_enabled {
+    my ($self, $name) = @_;
+    return $self->hub->current_user->primary_account->is_plugin_enabled($name);
+}
+
 sub registered {
     my ($self, $name) = @_;
     return exists $hooks{$name};

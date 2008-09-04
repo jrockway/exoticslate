@@ -235,7 +235,7 @@ sub global_template_vars {
         workspaces         => $self->_get_workspace_list_for_template
     );
 
-    if (  $self->hub->pluggable->plugin_exists('people') ) {
+    if (  $self->hub->pluggable->plugin_enabled('people') ) {
         require Socialtext::People::Profile;
         $result{people} = $self->_get_people_watchlist_for_people;
     };

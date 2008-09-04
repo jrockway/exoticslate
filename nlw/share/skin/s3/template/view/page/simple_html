@@ -6,9 +6,13 @@
     <meta content="Socialtext Workspace(tm)" name="GENERATOR" />
     [% PROCESS element/css_links %]
   </head>
-  <body>
-   <h3>[% page_title %]</h3>
-   <hr />
-   [% html %]
+  <body id="simple-html">
+     <div id="contentContainer">
+       <div class="wiki">
+           <h3>[% page_title %]</h3>
+           <hr />
+           [% html %]
+       </div>
+     </div>
   </body>
 </html>

@@ -1084,6 +1084,18 @@ html body div#st-page-editing-toolbar-container {
         height: 50px;
 }
 
+body#simple-html {
+    background: none;
+    background-color: auto;
+    text-align: left;
+}
+
+body#simple-html h3 {
+    font-weight: bold;
+    font-size: large;
+    padding-top: 20px;
+}
+
 /* Comment insertion */
 .commentWrapper {
     height: 200px;

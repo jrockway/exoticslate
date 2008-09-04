@@ -322,6 +322,7 @@ $(function() {
     $('#st-tags-addlink')
         .bind('click', function () {
             $(this).hide();
+            $('#st-tags-addbutton-link').show();
             $('#st-tags-field')
                 .val('')
                 .show()
@@ -333,6 +334,7 @@ $(function() {
         .blur(function () {
             setTimeout(function () {
                 $('#st-tags-field').hide();
+                $('#st-tags-addbutton-link').hide();
                 $('#st-tags-addlink').show()
             }, 500);
         })

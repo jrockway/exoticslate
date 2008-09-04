@@ -51,6 +51,14 @@
         <div id="logo"><a href="[% home_href | decorate('home_href') %]">[% loc('Socialtext') %]</a></div><!-- logo END -->
         <div id="globalNav" class="st-wiki-nav-content">
           <ul class="st-wiki-nav-actions">
+            [% UNLESS user.is_guest %]
+              <li>
+                [% loc('Logged in as [_1]:', '<b>' _ user.username _ '</b>') %]
+                [% IF people %]
+                  <a id="st-wikinav-profile" href="/?profile">[% loc('Profile') %]</a>
+                [% END %]
+              </li>
+            [% END %]
             [% IF workspace_present %]
             <li id="st-wikinav-mobile"><a href="[% miki_url %]">[% loc('Mobile') %]</a></li>
             [% END %]

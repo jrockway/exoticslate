@@ -2,6 +2,14 @@
 
 /* overloads */
 
+#st-wikinav-profile {
+    float: none !important;
+}
+
+div#header div#globalNav {
+    width: auto;
+}
+
 div#controls div#controlsRight ul li a.watch.on {
        background: url(../images/watchingIcon.png) no-repeat center left;
 }

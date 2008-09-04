@@ -7,7 +7,8 @@
 }
 
 div#header div#globalNav {
-    width: auto;
+    padding: 8px 0px;
+    margin: 0px;
 }
 
 div#controls div#controlsRight ul li a.watch.on {

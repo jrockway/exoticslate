@@ -3,6 +3,7 @@ package Socialtext::Pluggable::Plugin::Default;
 use strict;
 use warnings;
 
+use Socialtext::Rest::NoWorkspace;
 use base 'Socialtext::Pluggable::Plugin';
 use Class::Field 'const';
 const priority => 0;

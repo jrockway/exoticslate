@@ -240,9 +240,11 @@ sub global_template_vars {
         $result{people} = $self->_get_people_watchlist_for_people;
     };
 
-    if ($self->hub->current_workspace->real) {
-        $result{history} = $self->_get_history_list_for_template; 
-    }
+    # We're disabling the history global nav functionality for now, until its
+    # truly global (cross workspace)
+#     if ($self->hub->current_workspace->real) {
+#         $result{history} = $self->_get_history_list_for_template; 
+#     }
 
     $result{is_workspace_admin}=1 if ($self->hub->checker->check_permission('admin_workspace'));
 

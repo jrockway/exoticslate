@@ -550,6 +550,10 @@ ul.buttonRight li.submenu ul.level2 {
     margin-left: 10px;
 }
 
+ul.buttonRight a.newPageButtonMenu {
+    background-position: top left !important;
+}
+
 ul.buttonRight li.submenu:hover ul.level2, #controlsRight ul.level1 li.submenu:hover ul.level2 {
     display: block;
 }

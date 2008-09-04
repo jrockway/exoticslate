@@ -13,7 +13,7 @@
     [% IF checker.check_permission('edit') %]
       [% IF current_workspace.enable_spreadsheet %]
         <li class="submenu">
-          <a class="newPageButton" title="[% loc('Create New Wiki Page') %]" id="st-pagetools-newpage" href="?action=new_page">[% loc('New Page') %]</a><span>&nbsp;</span>
+          <a class="newPageButton newPageButtonMenu" title="[% loc('Create New Wiki Page') %]" id="st-pagetools-newpage" href="#" onclick="return false">[% loc('New Page') %]</a><span>&nbsp;</span>
           <ul class="level2">
             <li>
               <a title="[% loc('Create New Wiki Page') %]" href="?action=new_page">[% loc('Create New Wiki Page') %]</a>

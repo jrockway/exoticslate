@@ -93,6 +93,8 @@
                   [% FOREACH people %]
                   <li><img src="[% pic_url %]"/><a href="[% link %]">[% label | label_ellipsis(30) %]</a></li>
                   [% END %]
+              [% ELSIF user.is_guest %]
+                  <li class="emptynotice">[% loc("...lists the people you are following. You must register or be logged in to use this feature.") %]</li>
               [% ELSE %]
                   <li class="emptynotice">[% loc("You are currently not following anyone.") %]</li>
               [% END %]
@@ -106,6 +108,8 @@
                 [% FOREACH workspaces %]
                 <li><a href="[% link %]">[% label | label_ellipsis(30) %]</a></li>
                 [% END %]
+              [% ELSIF user.is_guest %]
+                <li class="emptynotice">[% loc("...lists the workspaces you belong to. You must be logged in to see your list.") %]</li>
               [% ELSE %]
                 <li class="emptynotice">[% loc("Currently, you are not a member of any workspaces.") %]</li>
               [% END %]
@@ -146,7 +150,9 @@
               [% END %]
               </li>
             <li><a href="/[% current_workspace.name %]?action=recent_changes">[% loc("What's New") %]</a></li>
+            [% IF !user.is_guest %]
             <li><a href="/[% current_workspace.name %]?action=display_watchlist">[% loc("My Watchlist") %]</a></li>
+            [% END %]
             <li><a href="/[% current_workspace.name %]?action=weblog_display">[% loc("Weblogs") %]</a></li>
             [% IF is_workspace_admin %]
             <li><a href="/[% current_workspace.name %]?action=users_invitation">[% loc("Invite Others") %]</a></li>

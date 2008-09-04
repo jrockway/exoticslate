@@ -61,6 +61,30 @@ div.widget ul.widgetButton li a.addTagButton {
     width: 87px;
 }
 
+div.wiki ol, div.wiki ul {
+    padding-left: 25px;
+}
+
+div.wiki ol {
+    list-style: decimal outside none;
+}
+
+div.wiki ul {
+    list-style: disc outside none;
+}
+
+div.wiki ul ul, div.wiki ol ul {
+    list-style-type: circle;
+}
+
+div.wiki ol ol ul, div.wiki ol ul ul, div.wiki ul ol ul, div.wiki ul ul ul {
+    list-style-type: square;
+}
+
+div.wiki li {
+    padding: 3px 0px;
+}
+
 /* Done overloads */
 
 #globalNav form {

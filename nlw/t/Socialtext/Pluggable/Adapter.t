@@ -16,7 +16,13 @@ my $registry = Socialtext::Registry->new;
 # use a Mocked hub so that hooks can find their way back to the Adapter
 my $hub = Socialtext::Hub->new;
 $hub->{pluggable} = $adapt;
+$adapt->{hub} = $hub;
 $registry->hub($hub);
+
+{ # force plugins to always be enabled
+    no warnings 'redefine';
+    *Socialtext::Account::is_plugin_enabled = sub {1};
+}
 
 # Setup hooks before register
 Socialtext::Pluggable::Plugin::Mocked->test_hooks(

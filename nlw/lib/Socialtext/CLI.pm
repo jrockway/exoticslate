@@ -216,13 +216,7 @@ sub set_default_account {
 sub enable_plugin {
     my $self = shift;
     my $account = $self->_require_account;
-    my %opts = $self->_get_options('plugin:s');
-    my $plugin = $opts{plugin};
-
-    my $adapter = Socialtext::Pluggable::Adapter->new;
-    if (!$adapter->plugin_exists($plugin)) {
-        $self->_error(loc("Plugin [_1] does not exist!", $plugin));
-    }
+    my $plugin  = $self->_require_plugin;
 
     $account->enable_plugin($plugin);
     $self->_success(loc("Plugin [_1] is now enabled for account [_2].",
@@ -234,6 +228,17 @@ sub enable_plugin {
 sub disable_plugin {
     my $self = shift;
     my $account = $self->_require_account;
+    my $plugin  = $self->_require_plugin;
+
+    $account->disable_plugin($plugin);
+    $self->_success(loc("Plugin [_1] is now disabled for account [_2].",
+        $plugin,
+        $account->name
+    ));
+}
+
+sub _require_plugin {
+    my $self = shift;
     my %opts = $self->_get_options('plugin:s');
     my $plugin = $opts{plugin};
 
@@ -241,12 +246,7 @@ sub disable_plugin {
     if (!$adapter->plugin_exists($plugin)) {
         $self->_error(loc("Plugin [_1] does not exist!", $plugin));
     }
-
-    $account->disable_plugin($plugin);
-    $self->_success(loc("Plugin [_1] is now disabled for account [_2].",
-        $plugin,
-        $account->name
-    ));
+    return $plugin;
 }
 
 sub _require_account {

@@ -26,7 +26,7 @@ use Socialtext::SQL qw/sql_execute/;
 
 use Cwd;
 
-plan tests => 333;
+plan tests => 343;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -2017,6 +2017,61 @@ SHOW_IMPERSONATORS: {
         },
         qr/Last \|\n\| devnull2\@socialtext.com/s,
         'show-impersonators has correct list'
+    );
+}
+
+PLUGINS: {
+    expect_success(
+        sub {
+            Socialtext::CLI->new( argv => [qw( --name pluggy )] )
+                ->create_account();
+        },
+        qr/\QA new account named "pluggy" was created.\E/,
+        'create-account success message'
+    );
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --account pluggy --plugin foo )
+                ]
+            )->enable_plugin();
+        },
+        qr/Plugin foo does not exist!/,
+        'enable invalid plugin',
+    );
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --account no-existy --plugin test )
+                ]
+            )->enable_plugin();
+        },
+        qr/There is no account named "no-existy"/,
+        'enable plugin for invalid account',
+    );
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --account pluggy --plugin test )
+                ]
+            )->enable_plugin();
+        },
+        qr/Plugin test is now enabled for account pluggy/,
+        'enable plugin for account',
+    );
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --account pluggy --plugin test )
+                ]
+            )->disable_plugin();
+        },
+        qr/Plugin test is now disabled for account pluggy/,
+        'disable plugin for account',
     );
 }
 

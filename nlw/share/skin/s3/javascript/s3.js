@@ -453,7 +453,7 @@ $(function() {
     }
 
     $("#st-comment-button-link, #bottomButtons .commentButton")
-        .one("click", function () {
+        .click(function () {
             get_lightbox(function () {
                 var ge = new GuiEdit({
                     id: 'st-page-content',

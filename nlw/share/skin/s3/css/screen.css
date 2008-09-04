@@ -481,7 +481,7 @@ body#listView #controlsRight ul li {
     background: #BFE2FF;
 }
 
-#controlsRight li a {
+ul.buttonRight li a, #controlsRight li a {
     display: block;
     text-decoration: none;
 }
@@ -490,19 +490,28 @@ body#listView #controlsRight ul li {
     width: auto;
 }
 
-#controlsRight ul ul {
+ul.buttonRight ul, #controlsRight ul ul {
     position: absolute;
     width: auto;
     display: none;
 }
 
-#controlsRight ul.level2 {
+ul.buttonRight ul.level2, #controlsRight ul.level2 {
     z-index: 300;
     margin: 0;
     padding: 0;
     background: white;
     border: 1px solid #CCC;
     border-width: 0 1px;
+}
+
+ul.buttonRight ul li {
+    line-height: 1.5em !important;
+    width: auto;
+    clear: both;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 5px;
 }
 
 #controlsRight ul ul li {
@@ -520,7 +529,7 @@ body#listView #controlsRight ul li {
     border-bottom: 1px solid #CCC;
 }
 
-#controlsRight ul ul li a {
+ul.buttonRight ul li a, #controlsRight ul ul li a {
     border-bottom: 1px solid #CCC;
     padding-left: 19px;
     padding-right: 3px;
@@ -528,13 +537,32 @@ body#listView #controlsRight ul li {
     border: 0px;
 }
 
-#controlsRight li.submenu li.submenu:hover {
+ul.buttonRight li.submenu li.submenu:hover, #controlsRight li.submenu li.submenu:hover {
     z-index: 300;
     background-color: #BFE2FF;
 }
 
-#controlsRight ul.level1 li.submenu:hover ul.level2 {
+ul.buttonRight li.submenu ul.level2 {
+    position: absolute;
+    height: 65px !important;
+    border-width: 1px;
+    margin-top: -10px;
+    margin-left: 10px;
+}
+
+ul.buttonRight li.submenu:hover ul.level2, #controlsRight ul.level1 li.submenu:hover ul.level2 {
     display: block;
+}
+
+ul.buttonRight li.submenu a:hover {
+    color:#33A8FF;
+}
+
+ul.buttonRight li.submenu a {
+    color:#333333;
+    float:left;
+    font-size:9px;
+    font-weight:bold;
 }
 
 #controlsRight ul.level2 {

@@ -11,9 +11,20 @@
     </ul>
     <ul class="buttonRight">
     [% IF checker.check_permission('edit') %]
-      <li><a class="newPageButton" title="[% loc('Create New Wiki Page') %]" id="st-pagetools-newpage" href="?action=new_page">[% loc('New Page') %]</a></li>
       [% IF current_workspace.enable_spreadsheet %]
-      <li><a class="newPageButton" title="[% loc('Create New Spreadsheet') %]" id="st-pagetools-newspreadsheet" href="?action=new_page;page_type=spreadsheet">[% loc('Create New Spreadsheet') %]</a></li>
+        <li class="submenu">
+          <a class="newPageButton" title="[% loc('Create New Wiki Page') %]" id="st-pagetools-newpage" href="?action=new_page">[% loc('New Page') %]</a><span>&nbsp;</span>
+          <ul class="level2">
+            <li>
+              <a title="[% loc('Create New Wiki Page') %]" href="?action=new_page">[% loc('Create New Wiki Page') %]</a>
+            </li>
+            <li>
+              <a title="[% loc('Create New Spreadsheet') %]" id="st-pagetools-newspreadsheet" href="?action=new_page;page_type=spreadsheet">[% loc('Create New Spreadsheet') %]</a>
+            </li>
+          </ul>
+        </li>
+      [% ELSE %]
+        <li><a class="newPageButton" title="[% loc('Create New Wiki Page') %]" id="st-pagetools-newpage" href="?action=new_page">[% loc('New Page') %]</a></li>
       [% END %]
     [% END %]
     </ul>

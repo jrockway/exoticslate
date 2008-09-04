@@ -62,6 +62,33 @@
 [% END %]
 
 [% BLOCK revision_row %]
+  <script language="javascript"><!--
+    (function($){$(function(){
+        var preventSameRevisionCompare = function() {
+           var newVal = $('input[name=new_revision_id]:checked').val();
+           var oldVal = $('input[name=old_revision_id]:checked').val();
+           $('input[name=old_revision_id]').each(function(){
+               if ($(this).val() >= newVal) {
+                  $(this).hide();
+               }
+               else {
+                  $(this).show();
+               }
+           });
+           $('input[name=new_revision_id]').each(function(){
+               if ($(this).val() <= oldVal) {
+                  $(this).hide();
+               }
+               else {
+                  $(this).show();
+               }
+           });
+        };
+        preventSameRevisionCompare();
+       $('input[name=old_revision_id], input[name=new_revision_id]').click(preventSameRevisionCompare);
+    })})(jQuery);
+  --></script>
+
   <tr class="[% IF even %]even[% ELSE %]odd[% END %]Row">
     <td><input name="old_revision_id" value="[% id %]" type="radio"
       [% IF check_old %] checked="checked"[% END %] 

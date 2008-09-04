@@ -265,7 +265,7 @@ sub _create_user {
     $user ||= Socialtext::User->create(
         username        => $p{username},
         email_address   => $p{username},
-        password        => 'd3vnu11l',
+        password        => $p{passwd},
         is_business_admin  => $p{is_business_admin},
         is_technical_admin => $p{is_technical_admin},
     );
@@ -292,6 +292,15 @@ sub _generate_workspaces {
 
     my $creator = $self->_create_user(
         username           => $DefaultUsername,
+        passwd             => 'd3vnu11l',
+        is_business_admin  => 1,
+        is_technical_admin => 1,
+    );
+
+    # Create a user that is easy for ingy to type
+    my $user_q = $self->_create_user(
+        username           => 'q@q.q',
+        passwd             => 'qwerty',
         is_business_admin  => 1,
         is_technical_admin => 1,
     );
@@ -319,6 +328,10 @@ sub _generate_workspaces {
             created_by_user_id => $creator->user_id(),
             account_id         => Socialtext::Account->Socialtext()->account_id,
             ($spec->{no_pages} ? (skip_default_pages => 1) : ())
+        );
+        $ws->add_user(
+            user => $user_q,
+            role => Socialtext::Role->WorkspaceAdmin(),
         );
 
         my $perms = $PermsForName{ $ws->name } || 'member-only';

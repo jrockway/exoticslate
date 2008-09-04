@@ -23,6 +23,7 @@
   </div><!-- controls END -->
   <div id="contentContainer">
     <h2 class="tableTitle">[% display_title | html %]</h2>
+    [% IF listview_content_actions %][% PROCESS $listview_content_actions %][% END %]
     <form id="st-listview-form" method="get" action="index.cgi">
     <input id="st-listview-action" name="action" value="" type="hidden">
     <input id="st-listview-filename" name="filename" value="" type="hidden">

@@ -1,0 +1,4 @@
+<div id="category-display-weblog-view">
+  [% loc("View") %]
+  <a href="[% script_name %]?action=weblog_display;category=[% uri_escaped_category %]">[% loc("[_1] as a weblog", html_escaped_category) %]</a>
+</div>

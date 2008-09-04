@@ -15,6 +15,11 @@ ALTER TABLE "UserMetadata"
     ADD COLUMN
         primary_account_id bigint;
 
+ALTER TABLE "UserMetadata"
+    ADD CONSTRAINT usermeta_account_fk
+        FOREIGN KEY (primary_account_id)
+        REFERENCES "Account"(account_id) ON DELETE CASCADE;
+
 -- Create a view to represent the user to account relationship.
 -- This should make it possible to change this relationship in the future
 -- without any significant querying code changes

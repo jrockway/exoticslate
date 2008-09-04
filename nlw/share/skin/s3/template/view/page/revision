@@ -42,6 +42,7 @@
   <div id="contentLeft">
     [% print %]
   </div> <!-- END st-page-maincontent -->
+  <div class="clear">&nbsp;</div>
   </div> <!-- END contentColumns -->
   </div> <!-- END st-revision-display -->
 </div><!-- contentContainer END -->

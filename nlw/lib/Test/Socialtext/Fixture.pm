@@ -16,6 +16,7 @@ use Socialtext::ApacheDaemon;
 use Socialtext::Build qw( get_build_setting );
 use File::Path qw/mkpath rmtree/;
 use FindBin;
+use Socialtext::SystemSettings qw/get_system_setting set_system_setting/;
 use Socialtext::Schema;
 use Socialtext::Hub;
 use Socialtext::Pages;
@@ -250,6 +251,16 @@ sub _create_user {
     my $self = shift;
     my %p = @_;
 
+    # Set the default account to be Socialtext and enable all plugins for that
+    # account
+    my $account_id = Socialtext::Account->Socialtext()->account_id();
+    if (get_system_setting('default-account') != $account_id) {
+        set_system_setting('default-account', $account_id);
+        my $adapter = Socialtext::Pluggable::Adapter->new;
+        Socialtext::Account->Socialtext->enable_plugin($_)
+            for grep {!/^default$/} $adapter->plugin_list;
+    }
+
     my $user = Socialtext::User->new( username => $p{username} );
     $user ||= Socialtext::User->create(
         username        => $p{username},
@@ -285,12 +296,6 @@ sub _generate_workspaces {
         is_technical_admin => 1,
     );
 
-    my $adapter = Socialtext::Pluggable::Adapter->new;
-    my $account_id = Socialtext::Account->Socialtext()->account_id();
-    $creator->primary_account(Socialtext::Account->Socialtext());
-    Socialtext::Account->Socialtext->enable_plugin($_)
-        for grep {!/^default$/} $adapter->plugin_list;
-
     # Why do we _always_ generate the help workspace?
     $self->_generate_help_workspace( $creator, "help-en" );
 
@@ -311,7 +316,6 @@ sub _generate_workspaces {
         my $ws = Socialtext::Workspace->create(
             name               => $name,
             title              => $title,
-            account_id         => $account_id,
             created_by_user_id => $creator->user_id(),
             account_id         => Socialtext::Account->Socialtext()->account_id,
             ($spec->{no_pages} ? (skip_default_pages => 1) : ())

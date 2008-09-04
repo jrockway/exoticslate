@@ -21,6 +21,8 @@ sub value {
     my $values = { 
         sidebox_changes_depth => 5,
         changes_depth => 5,
+        locale => 'en',
+        which_page => '',
     };
     warn "no such preference '$pref' in mocked preferences"
         unless exists $values->{$pref};

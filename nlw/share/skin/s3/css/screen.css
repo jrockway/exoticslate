@@ -1161,3 +1161,9 @@ span.person img.avatar {
     border: 1px solid #AFAFAF !important;
     margin-top: 2px !important;
 }
+
+a.incipient {
+    text-decoration: none;
+    border-bottom: 1px dashed;
+}
+

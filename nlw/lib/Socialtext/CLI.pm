@@ -225,7 +225,14 @@ sub enable_plugin {
             $account->name,
         );
     };
-    $self->_account_plugin_action($enabler);
+    my $msg = $self->_account_plugin_action($enabler);
+    
+    # Plugin business logic - maybe this should live somewhere else
+    if ($plugin eq 'people') {
+        $plugin = $self->_require_plugin('dashboard');
+        $msg .= $self->_account_plugin_action($enabler);
+    }
+    $self->_success( $msg );
 }
 
 sub disable_plugin {
@@ -240,31 +247,41 @@ sub disable_plugin {
             $account->name,
         );
     };
-    $self->_account_plugin_action($disabler);
+    my $msg = $self->_account_plugin_action($disabler);
+    
+    # Plugin business logic - maybe this should live somewhere else
+    if ($plugin eq 'dashboard' or $plugin eq 'gadgets') {
+        $plugin = $self->_require_plugin('people');
+        $msg .= $self->_account_plugin_action($disabler);
+    }
+    $self->_success( $msg );
 }
 
 sub _account_plugin_action {
     my $self = shift;
     my $callback = shift;
 
-    my %opts = $self->_get_options('all-accounts');
     my @messages;
-    if ($opts{'all-accounts'}) {
+    $self->{account} ||= $self->_require_account('optional');
+    if ($self->{account}) {
+        push @messages, $callback->( $self->{account} );
+    }
+    else {
         my $all = Socialtext::Account->All();
         while (my $account = $all->next) {
             push @messages, $callback->( $account );
         }
     }
-    else {
-        push @messages, $callback->( $self->_require_account );
-    }
-    $self->_success(join "\n", @messages);
+    return join("\n", @messages) . "\n";
 }
 
 sub _require_plugin {
     my $self = shift;
     my %opts = $self->_get_options('plugin:s');
-    my $plugin = $opts{plugin};
+    my $plugin = shift || $opts{plugin};
+
+    # Friendly rename
+    $plugin = 'gadgets' if $plugin eq 'dashboard';
 
     my $adapter = Socialtext::Pluggable::Adapter->new;
     if (!$adapter->plugin_exists($plugin)) {
@@ -2289,8 +2306,8 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
 
   PLUGINS
 
-  enable-plugin  [--account | --all-accounts] --plugin
-  disable-plugin [--account | --all-accounts] --plugin
+  enable-plugin  [--account] --plugin
+  disable-plugin [--account] --plugin
 
   EMAIL
 

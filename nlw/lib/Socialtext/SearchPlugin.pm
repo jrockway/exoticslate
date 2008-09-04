@@ -247,6 +247,7 @@ sub _load_pages_for_hits {
             );
         };
         warn $@ if $@;
+        $pages = [$pages] unless (ref($pages) || '') eq 'ARRAY';
 
         for my $page (@$pages) {
             my $page_hits = $wksp_pages->{$page->id};

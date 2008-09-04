@@ -119,3 +119,13 @@ div#mainNav ul ul.level2.withimage {
     padding-right: 0px;
     background: none;
 }
+
+/* IE6-specific hacks to readjust widget header margins */
+* html div.widgetHeader a.close {
+    -margin-right: 8px;
+}
+
+* html div.widgetHeader div.widgetHeaderTitle {
+    -margin-top: 7px;
+    -margin-left: -20px;
+}

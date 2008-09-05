@@ -618,6 +618,11 @@ ALTER TABLE ONLY tag_people__person_tags
             FOREIGN KEY (tag_id)
             REFERENCES person_tag(id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY "UserMetadata"
+    ADD CONSTRAINT usermeta_account_fk
+            FOREIGN KEY (primary_account_id)
+            REFERENCES "Account"(account_id) ON DELETE CASCADE;
+
 ALTER TABLE ONLY "UserWorkspaceRole"
     ADD CONSTRAINT userworkspacerole___role___role_id___role_id___n___1___1___0
             FOREIGN KEY (role_id)

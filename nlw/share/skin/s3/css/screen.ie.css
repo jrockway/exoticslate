@@ -17,7 +17,7 @@ html body#settingsPage div#controls div#controlsRight {
 }
 
 html div#mainWrap {
-    width: expression( (document.body.clientWidth * 0.9 > 860) ? '90%' : '860px' );
+    width: expression( (document.body.clientWidth * 0.9 > 870) ? '90%' : '870px' );
 }
 
 html body#workSpace div#mainWrap, html body#blog div#mainWrap, html body#dashBoard div#mainWrap {
@@ -129,3 +129,10 @@ div#mainNav ul ul.level2.withimage {
     -margin-top: 7px;
     -margin-left: -20px;
 }
+/* End IE6-specific hack */
+
+html ul.buttonRight ul.level2 {
+    left: expression( jQuery('#st-pagetools-newpage').offset().left - 10 );
+    top: expression( jQuery('#st-pagetools-newpage').offset().top + 30 );
+}
+

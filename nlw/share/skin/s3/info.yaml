@@ -6,3 +6,6 @@ no_common: 1
 author:
   name: Mark Schuber (Araucaria Design)
 license: CPAL
+depends:
+  - common
+  - wikiwyg

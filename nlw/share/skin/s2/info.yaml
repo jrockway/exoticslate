@@ -11,3 +11,4 @@ author:
 license: CPAL
 depends:
   - common
+  - wikiwyg

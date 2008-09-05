@@ -16,6 +16,13 @@ END
 $$
     LANGUAGE plpgsql;
 
+CREATE AGGREGATE array_accum (
+    BASETYPE = anyelement,
+    SFUNC = array_append,
+    STYPE = anyarray,
+    INITCOND = '{}'
+);
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -640,4 +647,3 @@ ALTER TABLE ONLY "Workspace"
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
 INSERT INTO "System" VALUES ('socialtext-schema-version', '10');
-

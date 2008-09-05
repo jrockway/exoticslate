@@ -55,6 +55,14 @@ UPDATE storage
     SET value = REPLACE(value, 'gadgets', 'widgets')
     WHERE key IN ('file', 'url_parts', 'url');
 
+-- Helpful utility function for gathering results into an ARRAY
+CREATE AGGREGATE array_accum (
+    sfunc = array_append,
+    basetype = anyelement,
+    stype = anyarray,
+    initcond = '{}'
+);
+
 UPDATE "System"
    SET value = 10
  WHERE field = 'socialtext-schema-version';

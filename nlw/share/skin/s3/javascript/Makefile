@@ -41,6 +41,8 @@ S3_SOURCE_FILES= \
 		cookie.js \
 		lookahead.js \
 		lightbox.js \
+		pageview.js \
+		pageattachments.js \
 		s3.js \
 
 LIGHTBOX_SOURCE_FILES= \

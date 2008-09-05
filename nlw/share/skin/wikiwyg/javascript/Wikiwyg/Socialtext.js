@@ -181,8 +181,7 @@ function setup_wikiwyg() {
             if (!Socialtext.new_page)
                 Page.refreshPageContent();
 
-            //Attachments.reset_new_attachments();
-            Page.newAttachmentList = [];
+            Attachments.reset_new_attachments();
 
 // We used to use this line:
 //          myDiv.innerHTML = $('st-page-content').innerHTML;
@@ -252,11 +251,7 @@ function setup_wikiwyg() {
                 else
                     ww.confirmed = true;
             }
-            //Attachments.delete_new_attachments();
-            foreach(Page.newAttachmentList, function (uri) {
-                Page.delAttachment(uri);
-            });
-
+            Attachments.delete_new_attachments();
             if (Socialtext.new_page) {
                 window.location = '?action=homepage';
             }
@@ -373,6 +368,7 @@ function setup_wikiwyg() {
             content:'#st-attachments-attachinterface',
             close:'#st-attachments-attach-closebutton'
         });
+        $('#st-attachments-attach-editmode').val(1);
     });
 
     ww.modeButtonMap = bmap = {};
@@ -754,6 +750,17 @@ proto.saveChanges = function() {
         */
 
         var saver = function() {
+            // Move Images from "Current Page" to the new page
+            if (Socialtext.new_page) {
+                var files = Attachments.get_new_attachments();
+
+                jQuery.each(files, function () {
+                    jQuery('<input type="hidden" name="attachment">')
+                        .val(this['id'] + ':' + this['page-id'])
+                        .appendTo('#st-page-editing-files');
+                });
+            }
+
             jQuery('#st-page-editing-pagebody').val(wikitext);
             jQuery('#st-page-editing-form').trigger('submit');
             return true;
@@ -821,7 +828,7 @@ proto.enableLinkConfirmations = function() {
     }
 
     window.onunload = function(ev) {
-        //Attachments.delete_new_attachments();
+        Attachments.delete_new_attachments();
     }
  
     var links = document.getElementsByTagName('a');

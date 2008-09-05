@@ -273,6 +273,7 @@ sub _require_plugin {
     my $self = shift;
     my %opts = $self->_get_options('plugin:s');
     my $plugin = shift || $opts{plugin};
+    $self->_error(loc("You must specify a plugin.")) unless $plugin;
 
     my $adapter = Socialtext::Pluggable::Adapter->new;
     if (!$adapter->plugin_exists($plugin)) {

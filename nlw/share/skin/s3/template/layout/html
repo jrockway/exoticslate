@@ -103,9 +103,9 @@
           [% END %]
           <li class="submenu"><a id="st-wiki-subnav-link-workspaces" href="?action=workspaces_listall">[% loc("Workspaces") %]</a>
               <ul class="level2" id="global-workspace-list">
-              [% IF workspaces.size %]
+              [% IF workspaceslist.size %]
                 <li class="dropaction"><a href="?action=workspaces_listall">[% loc("All My Workspaces") %]...</a></li>
-                [% FOREACH workspaces %]
+                [% FOREACH workspaceslist %]
                 <li><a href="[% link %]">[% label | label_ellipsis(30) %]</a></li>
                 [% END %]
               [% ELSIF user.is_guest %]

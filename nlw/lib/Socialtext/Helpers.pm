@@ -232,7 +232,7 @@ sub global_template_vars {
         miki_url           => $self->miki_path,
         stax_info          => $self->hub->stax->hacks_info,
         home_href          => '?',
-        workspaces         => $self->_get_workspace_list_for_template
+        workspaceslist     => $self->_get_workspace_list_for_template
     );
 
     if (  $self->hub->pluggable->plugin_enabled('people') ) {

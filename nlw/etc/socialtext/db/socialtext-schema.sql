@@ -194,9 +194,9 @@ CREATE SEQUENCE "Workspace___workspace_id"
     NO MINVALUE
     CACHE 1;
 
-CREATE TABLE account_plugins (
+CREATE TABLE account_plugin (
     account_id bigint NOT NULL,
-    plugin varchar(128) NOT NULL
+    plugin text NOT NULL
 );
 
 CREATE TABLE event (
@@ -478,8 +478,8 @@ CREATE TRIGGER person_ins
     FOR EACH ROW
     EXECUTE PROCEDURE auto_vivify_person();
 
-ALTER TABLE ONLY account_plugins
-    ADD CONSTRAINT account_plugins_account_fk
+ALTER TABLE ONLY account_plugin
+    ADD CONSTRAINT account_plugin_account_fk
             FOREIGN KEY (account_id)
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
@@ -640,3 +640,4 @@ ALTER TABLE ONLY "Workspace"
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
 INSERT INTO "System" VALUES ('socialtext-schema-version', '10');
+

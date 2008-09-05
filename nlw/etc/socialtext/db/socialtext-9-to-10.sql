@@ -37,13 +37,15 @@ SELECT DISTINCT u.system_unique_id AS system_unique_id,
          LEFT JOIN "UserWorkspaceRole" uwr ON (um.user_id = uwr.user_id)
          LEFT JOIN "Workspace" w ON (uwr.workspace_id = w.workspace_id);
 
-CREATE TABLE account_plugins (
+-- Make a table to store account-plugin associations.
+-- Presence of a plugin in this table indicates it's enabled.
+CREATE TABLE account_plugin (
     account_id bigint NOT NULL,
-    plugin VARCHAR(128) NOT NULL
+    plugin text NOT NULL
 );
 
-ALTER TABLE account_plugins
-    ADD CONSTRAINT account_plugins_account_fk
+ALTER TABLE account_plugin
+    ADD CONSTRAINT account_plugin_account_fk
         FOREIGN KEY (account_id)
         REFERENCES "Account"(account_id) ON DELETE CASCADE;
 

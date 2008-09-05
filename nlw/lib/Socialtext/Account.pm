@@ -53,33 +53,29 @@ sub workspace_count {
 
 sub is_plugin_enabled {
     my ($self, $plugin) = @_;
-    my $sql = '
-        SELECT COUNT(*) FROM account_plugins
+    my $sql = q{
+        SELECT COUNT(*) FROM account_plugin
         WHERE account_id = ? AND plugin = ?
-    ';
+    };
     return sql_singlevalue($sql, $self->account_id, $plugin);
 }
 
 sub enable_plugin {
     my ($self, $plugin) = @_;
 
-    my $sql = '
-        SELECT COUNT(*) FROM account_plugins
-        WHERE account_id = ? AND plugin = ?
-    ';
     if (!$self->is_plugin_enabled($plugin)) {
-        sql_execute('
-            INSERT INTO account_plugins VALUES (?,?)
-        ', $self->account_id, $plugin);
+        sql_execute(q{
+            INSERT INTO account_plugin VALUES (?,?)
+        }, $self->account_id, $plugin);
     }
 }
 
 sub disable_plugin {
     my ($self, $plugin) = @_;
-    sql_execute('
-        DELETE FROM account_plugins
+    sql_execute(q{
+        DELETE FROM account_plugin
         WHERE account_id = ? AND plugin = ?
-    ', $self->account_id, $plugin);
+    }, $self->account_id, $plugin);
 }
 
 sub users {

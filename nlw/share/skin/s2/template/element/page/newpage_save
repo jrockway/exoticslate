@@ -1,11 +1,8 @@
 [% ns = 'st-newpage-save' %]
-<div id="[% ns %]">
-    <form onsubmit="return false;">
-    <div id="[% ns %]-overlay" class="popup-overlay"></div>
-    <div>
-    <div id="[% ns %]-interface">
+<div class="lightbox" id="[% ns %]">
+    <form id="st-newpage-save-form" onsubmit="return false;">
 
-        <div id="[% ns %]-title">[% loc('Save Page As') %]</div>
+        <div class="title" id="[% ns %]-title">[% loc('Save Page As') %]</div>
 
         <p id="[% ns %]-prompt">[% loc('Enter a meaningful and distinctive title for your page.') %]</p>
         <p id="[% ns %]-field-pagename">
@@ -20,8 +17,6 @@
             </tr>
             </table>
         </div>
-    </div>
-    </div>
     </form>
 </div>
 

@@ -1,9 +1,6 @@
 [% ns = 'st-attachments-manage' %]
-<div id="st-attachments-manageinterface">
+<div style="padding:0" class="lightbox" id="[% ns %]-interface">
     <form onsubmit="return false;">
-    <div id="[% ns %]-manageinterface-overlay" class="popup-overlay"></div>
-    <div>
-    <div id="[% ns %]-interface">
         <div id="[% ns %]-filetable">
             <table id="[% ns %]-filelisting">
                 <thead>
@@ -27,7 +24,5 @@
             <span id="[% ns %]-deletemessage"></span>
         </div>
         <br />
-    </div>
-    </div>
     </form>
 </div>

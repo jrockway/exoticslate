@@ -695,12 +695,15 @@ proto.displayNewPageDialog = function() {
         content: '#st-newpage-save',
         close: '#st-newpage-save-cancelbutton'
     });
-    jQuery('#st-newpage-save-form').bind('submit', function () {
+    jQuery('#st-newpage-save-form').submit( function () {
         jQuery('#st-page-editing-pagename').val(
             jQuery('#st-newpage-save-pagename').val()
         );
         wikiwyg.newpage_saveClicked();
         return false;
+    });
+    jQuery('#st-newpage-save-savebutton').click(function () {
+        jQuery('#st-newpage-save-form').submit();
     });
     return false;
 }

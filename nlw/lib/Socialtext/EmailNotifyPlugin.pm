@@ -107,8 +107,8 @@ sub maybe_send_notifications {
                   $self->get_notification_vars;
 
     for my $user (@$ready_users) {
-    my $prefs = $self->hub->preferences->new_for_user(
-            $user->email_address);
+        my $prefs = $self->hub->preferences->new_for_user(
+                $user->email_address);
         my $pages = $notifier->_sort_pages_for_user( $user, $all_pages, $prefs );
 
         next unless @$pages;

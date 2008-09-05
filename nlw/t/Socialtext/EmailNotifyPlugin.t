@@ -59,7 +59,7 @@ sub test_dont_notify_on_system_page {
     is( $result, 1, 'notifications attempted when non system page' );
 
     my @emails = Email::Send::Test->emails;
-    is( scalar @emails, 3, 'three emails were sent' );
+    is( scalar @emails, 4, 'three emails were sent' );
 }
 
 sub test_ignore_system_pages {

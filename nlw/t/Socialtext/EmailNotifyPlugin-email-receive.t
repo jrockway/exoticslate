@@ -44,8 +44,7 @@ my $user = Socialtext::User->new( username => 'devnull1@socialtext.com' );
 
     my @emails = Email::Send::Test->emails;
 
-    is( scalar @emails, 1,
-        'One email was sent' );
+    is( scalar @emails, 2, 'One email was sent' );
     is( $emails[0]->header('To'), 'devnull1@socialtext.com',
         'Email is addressed to proper recipient' );
     like( $emails[0]->header('Subject'),

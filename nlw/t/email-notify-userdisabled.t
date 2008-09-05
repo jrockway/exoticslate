@@ -18,6 +18,7 @@ my $user = Socialtext::User->new( username => 'devnull1@socialtext.com' );
 
 $hub->current_workspace->update( email_notify_is_enabled => 1 );
 $hub->preferences->store( 'devnull1@socialtext.com', email_notify => { notify_frequency => 0 } );
+$hub->preferences->store( 'q@q.q', email_notify => { notify_frequency => 0 } );
 
 my $notify = $hub->email_notify;
 my $notifier = Socialtext::EmailNotifier->new(

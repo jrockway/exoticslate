@@ -16,6 +16,7 @@ my $hub = new_hub('admin');
 # used when setting mtime on varous files to force notify runs
 my $user = Socialtext::User->new( username => 'devnull1@socialtext.com' );
 $hub->preferences->store( 'devnull1@socialtext.com', email_notify => { notify_frequency => 0 } );
+$hub->preferences->store( 'q@q.q', email_notify => { notify_frequency => 0 } );
 
 $hub->current_workspace->update( email_notify_is_enabled => 1 );
 

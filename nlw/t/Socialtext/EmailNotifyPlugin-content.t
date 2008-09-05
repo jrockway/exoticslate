@@ -58,10 +58,7 @@ my $hub = new_hub('admin');
 
     my @emails = Email::Send::Test->emails;
 
-    is(
-        scalar @emails, 1,
-        'One email was sent'
-    );
+    is(scalar @emails, 2, 'One email was sent');
     is(
         $emails[0]->header('To'), 'devnull1@socialtext.com',
         'Email is addressed to proper recipient'

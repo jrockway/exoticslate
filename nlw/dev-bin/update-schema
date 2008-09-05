@@ -24,18 +24,7 @@ shell_run("st-db recreate --force --schema socialtext");
 # Sync to the latest version (what you just wrote - X-to-Y.sql)
 shell_run("st-db sync --schema socialtext ");
 
-# Re-create the base schema
-shell_run("pglist public "
-    . " | grep -v 'COMMENT ON ' > $schema_file");
-
-print "Appending the updated schema version to the schema file.\n";
-my $version = $schema->current_version;
-open(my $fh, ">>$schema_file") or die;
-print $fh <<EOT;
-DELETE FROM "System" WHERE field = '$schema_name-schema-version';
-INSERT INTO "System" VALUES ('$schema_name-schema-version', '$version');
-EOT
-close $fh or die "Can't write $schema_file: $!";
+shell_run("$FindBin::Bin/dump-schema");
 
 copy_schema_files_to_dev_env();
 exit;

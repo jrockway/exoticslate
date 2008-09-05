@@ -74,23 +74,28 @@ Page = {
                     // After upload, refresh the wysiwyg and page contents.
                     $.ajax({
                         url: Page.pageUrl(),
+                        data: {link_dictionary:'ST'}, 
                         cache: false,
                         dataType: 'html',
                         success: Page.setPageContent
                     });
 
                     // After upload, refresh the wikitext contents.
-                    $.ajax({
-                        url: Page.pageUrl(),
-                        cache: false,
-                        dataType: 'text',
-                        beforeSend: function (xhr) {
-                            xhr.setRequestHeader('Accept', 'text/x.socialtext-wiki');
-                        },
-                        success: function (text) {
-                            $('#wikiwyg_wikitext_textarea').val(text);
-                        }
-                    });
+                    if ($('#wikiwyg_wikitext_textarea').size()) {
+                        $.ajax({
+                            url: Page.pageUrl(),
+                            cache: false,
+                            dataType: 'text',
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader(
+                                    'Accept', 'text/x.socialtext-wiki'
+                                );
+                            },
+                            success: function (text) {
+                                $('#wikiwyg_wikitext_textarea').val(text);
+                            }
+                        });
+                    }
                 }
             } 
         });

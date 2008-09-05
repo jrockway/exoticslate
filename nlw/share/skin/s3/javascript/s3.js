@@ -184,7 +184,7 @@ $(function() {
         .click(function () {
             get_lightbox(function () {
                 var ge = new GuiEdit({
-                    id: 'st-page-content',
+                    id: 'contentLeft',
                     oncomplete: function () {
                         Page.refreshPageContent()
                     }

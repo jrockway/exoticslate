@@ -65,7 +65,7 @@ GuiEdit.prototype.show = function () {
         })
         .click(function () { self['do_'+this.name].call(self) })
 
-    jQuery('.saveButton', this.container).click(function () {
+    jQuery('.saveButton', this.container).one('click', function () {
         jQuery.post('/' + self.workspace + '/index.cgi',
             {
                 action: 'submit_comment',

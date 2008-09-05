@@ -348,7 +348,7 @@ function setup_wikiwyg() {
                         jQuery('#st-tagqueue-'+tag).remove();
                         if (!jQuery('.st-tagqueue-taglist-name').size())
                             jQuery('#st-tagqueue-list').hide();
-
+                        return false;
                     })
                     .html('[x]')
             )
@@ -369,6 +369,7 @@ function setup_wikiwyg() {
             close:'#st-attachments-attach-closebutton'
         });
         $('#st-attachments-attach-editmode').val(1);
+        return false;
     });
 
     ww.modeButtonMap = bmap = {};

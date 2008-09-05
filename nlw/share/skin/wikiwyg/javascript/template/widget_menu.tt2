@@ -1,9 +1,9 @@
 <ul id="st-editing-insert-menu">
-  <li><a href="#">Insert</a>
+  <li><a href="#" onclick="return false">Insert</a>
     <ul>
 <! FOR entry = menu_hierarchy -!>
 <! IF entry.sub_menu -!>
-      <li><a href="#"><! entry.label | replace(' ', '&nbsp;') !></a>
+      <li><a href="#" onclick="return false"><! entry.label | replace(' ', '&nbsp;') !></a>
         <ul>
 <! FOR entry2 = entry.sub_menu -!>
 <! PROCESS menu_entry entry=entry2 padding="    " -!>

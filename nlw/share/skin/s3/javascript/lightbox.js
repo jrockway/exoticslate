@@ -37,6 +37,8 @@
                     display: 'none',
                     position: 'absolute',
                     zIndex: 2001,
+                    fontSize: '11px',
+                    fontFamily: 'Verdana, Arial, sans-serif',
                     padding: 0,
                     background: '#fff',
                     margin: 'auto',

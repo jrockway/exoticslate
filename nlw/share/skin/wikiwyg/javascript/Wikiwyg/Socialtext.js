@@ -1069,7 +1069,18 @@ proto._do_link = function(widget_element) {
                          Socialtext.wiki_id;
                 return '/data/workspaces/' + ws + '/pages';
             },
-            linkText: function (i) { return i.name }
+            linkText: function (i) { return i.name },
+            onError: {
+                404: function () {
+                    var ws = jQuery('#st-widget-workspace_id').val() ||
+                             Socialtext.wiki_id;
+                    return(
+                        '<span class="st-suggestion-warning">'
+                        + loc('Workspace "[_1]" does not exist on wiki', ws)
+                        + '</span>'
+                    );
+                }
+            }
         });
 
     jQuery('#st-widget-workspace_id')

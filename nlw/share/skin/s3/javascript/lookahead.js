@@ -76,14 +76,18 @@
     $.fn.lookahead.loadExceptions = function (opts, callback) {
         opts.exceptValues = {};
         if (opts.exceptUrl) {
-            $.getJSON(opts.exceptUrl, function (items) {
-                $.each(items, function (i) {
-                    var value = $.fn.lookahead.linkTitle(this,opts);
-                    opts.exceptValues[this.value.toLowerCase()] = 1;
-                });
-                if ($.isFunction(callback)) {
-                    callback();
-                } 
+            $.ajax({
+                url: opts.exceptUrl,
+                dataType: 'json',
+                success: function (items) {
+                    $.each(items, function (i) {
+                        var value = $.fn.lookahead.linkTitle(this,opts);
+                        opts.exceptValues[this.value.toLowerCase()] = 1;
+                    });
+                    if ($.isFunction(callback)) {
+                        callback();
+                    } 
+                }
             });
         }
         else {
@@ -138,9 +142,11 @@
         var url = typeof(opts.url) == 'function' ? opts.url() : opts.url;
         if (opts.filterValue) val = opts.filterValue(val);
         var filterName = opts.filterName || 'filter';
-        this.ajax = $.getJSON(
-            url + '?order=alpha;' + filterName + '=\\b' + val,
-            function (data) {
+        this.ajax = $.ajax({
+            url: url + '?order=alpha;' + filterName + '=\\b' + val,
+            cache: false,
+            dataType: 'json',
+            success: function (data) {
                 lookahead.html('');
 
                 // Grep out all exceptions
@@ -175,8 +181,22 @@
                 else {
                     lookahead.fadeOut();
                 }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                if (opts.onError) {
+                    var errorHandler = opts.onError[xhr.status] || opts.onError['default'];
+                    if (errorHandler) {
+                        if ($.isFunction(errorHandler)) {
+                            lookahead.html( errorHandler( xhr, textStatus, errorThrown ) );
+                        }
+                        else {
+                            lookahead.html( errorHandler );
+                        }
+                        lookahead.fadeIn();
+                    }
+                }
             }
-        );
+        });
     };
 
 })(jQuery);

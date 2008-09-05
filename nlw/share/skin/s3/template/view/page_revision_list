@@ -67,22 +67,12 @@
         var preventSameRevisionCompare = function() {
            var newVal = $('input[name=new_revision_id]:checked').val();
            var oldVal = $('input[name=old_revision_id]:checked').val();
-           $('input[name=old_revision_id]').each(function(){
-               if ($(this).val() >= newVal) {
-                  $(this).hide();
-               }
-               else {
-                  $(this).show();
-               }
-           });
-           $('input[name=new_revision_id]').each(function(){
-               if ($(this).val() <= oldVal) {
-                  $(this).hide();
-               }
-               else {
-                  $(this).show();
-               }
-           });
+           if (newVal == oldVal) {
+             $('a.compareButton').hide();
+           }
+           else {
+             $('a.compareButton').show();
+           }
         };
         preventSameRevisionCompare();
        $('input[name=old_revision_id], input[name=new_revision_id]').click(preventSameRevisionCompare);

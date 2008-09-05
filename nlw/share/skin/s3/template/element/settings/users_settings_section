@@ -8,14 +8,25 @@
       <label>[% loc('Email') %]</label>
       <a href="mailto:[% user.email_address %]">[% user.email_address %]</a>
     </dt>
-    <dd>
-      <label>[% loc('Last name:') %]</label>
-      <div><input name="last_name" value="[% user.last_name %]"/></div>
-    </dd>
-    <dd>
-      <label>[% loc('First name:') %]</label>
-      <div><input name="first_name" value="[% user.first_name %]"/></div>
-    </dd>
+    [% IF loc_lang == 'ja' %]
+      <dd>
+        <label>[% loc('Last name:') %]</label>
+        <div><input name="last_name" value="[% user.last_name %]"/></div>
+      </dd>
+      <dd>
+        <label>[% loc('First name:') %]</label>
+        <div><input name="first_name" value="[% user.first_name %]"/></div>
+      </dd>
+    [% ELSE %]
+      <dd>
+        <label>[% loc('First name:') %]</label>
+        <div><input name="first_name" value="[% user.first_name %]"/></div>
+      </dd>
+      <dd>
+        <label>[% loc('Last name:') %]</label>
+        <div><input name="last_name" value="[% user.last_name %]"/></div>
+      </dd>
+    [% END %]
   </dl>
   <dl class="form">
     <dt><label>[% loc('Change Password') %]</label></dt>

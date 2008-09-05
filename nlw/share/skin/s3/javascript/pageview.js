@@ -74,7 +74,7 @@ Page = {
                     // After upload, refresh the wysiwyg and page contents.
                     $.ajax({
                         url: Page.pageUrl(),
-                        data: {link_dictionary:'ST'}, 
+                        data: {link_dictionary:'S2'}, 
                         cache: false,
                         dataType: 'html',
                         success: Page.setPageContent

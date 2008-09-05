@@ -96,7 +96,8 @@
               [% ELSIF user.is_guest %]
                   <li class="emptynotice">[% loc("...lists the people you are following. You must register or be logged in to use this feature.") %]</li>
               [% ELSE %]
-                  <li class="emptynotice">[% loc("You are currently not following anyone.") %]</li>
+                  <li class="dropaction"><a href="/?action=people">[% loc("People Directory") %]...</a></li>
+                  <li class="emptynotice">[% loc("You are not following anyone yet. To follow someone, go to a person's profile and click the \"Follow\" button.") %]</li>
               [% END %]
               </ul>
           </li>

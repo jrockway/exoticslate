@@ -999,10 +999,6 @@ div#mainNav ul.level2 li a:hover {
     color: #33A8FF;
 }
 
-div#mainNav ul.level2 li.dropaction {
-    font-weight: bold;
-}
-
 /* Order matters with the two following styles. Second one overrides the first
  * for ul elems with BOTH level2 and withimage classes
  */
@@ -1028,6 +1024,11 @@ div#mainNav ul.level2 li a {
     font-size: 10px;
     line-height: 20px;
     padding: 0px 0px 0px 3px;
+}
+
+div#mainNav ul.level2 li.dropaction a {
+    font-weight: bold;
+    font-size: 9px;
 }
 
 div#mainNav li {

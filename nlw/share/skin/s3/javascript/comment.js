@@ -43,6 +43,10 @@ GuiEdit.prototype.show = function () {
         Jemplate.process('comment_lightbox.tt2', Socialtext)
     );
 
+    jQuery('.commentWrapper', this.container).bind('dblclick', function () {
+        return false;
+    });
+
     jQuery('.comment_button')
         .css({
             'cursor': 'pointer',

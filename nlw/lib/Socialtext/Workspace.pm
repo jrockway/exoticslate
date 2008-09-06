@@ -1230,9 +1230,7 @@ sub _dump_users_to_yaml_file {
 
     my $file = Socialtext::File::catfile( $dir, $name . '-users.yaml' );
 
-    # FIXME: this is not returning data in the expected structure.
     my $users_with_roles = $self->users_with_roles;
-
     my @dump;
     while ( 1 ) {
         my $elem = $users_with_roles->next;
@@ -1240,14 +1238,10 @@ sub _dump_users_to_yaml_file {
         my $role = $elem->[1];
         last unless defined $user;
 
-        my %dump = %{$user->to_hash};
-        delete $dump{'user_id'};
-        $dump{creator_username} = $user->creator->username;
-        $dump{role_name} = $role->name;
-
-        my $file = Socialtext::File::catfile( $dir, $user->username . '-info.yaml' );
-
-        push @dump, \%dump;
+        my $dump = $user->to_hash;
+        delete $dump->{user_id};
+        $dump->{role_name} = $role->name;
+        push @dump, $dump;
     }
 
     _dump_yaml( $file, \@dump );

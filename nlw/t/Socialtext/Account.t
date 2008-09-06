@@ -3,8 +3,8 @@
 
 use strict;
 use warnings;
-
 use Test::Socialtext tests => 24;
+use YAML qw/LoadFile/;
 
 BEGIN {
     use_ok( 'Socialtext::Account' );
@@ -34,6 +34,8 @@ like( $@, qr/already in use/, 'cannot create two accounts with the same name' );
 eval { $unknown->update( name => 'new name' ) };
 like( $@, qr/cannot change/, 'cannot change the name of a system-created account' );
 
+# Create some test data for the test account
+# 3 users, 2 in a workspace, 1 outside the workspace.
 {
     my $ws = Socialtext::Workspace->create(
         name       => 'testingspace',
@@ -42,22 +44,50 @@ like( $@, qr/cannot change/, 'cannot change the name of a system-created account
     );
     isa_ok( $ws, 'Socialtext::Workspace' );
 
-    for my $n ( 1..2 ) {
+    for my $n ( 1..3 ) {
         my $user = Socialtext::User->create(
             username      => "dummy$n",
             email_address => "devnull$n\@example.com",
             password      => 'password',
-            primary_account_id => $socialtext->account_id(),
+            primary_account_id => 
+               ($n == 3 ? $test->account_id : $socialtext->account_id),
         );
         isa_ok( $user, 'Socialtext::User' );
-        $ws->add_user( user => $user );
+        $ws->add_user( user => $user ) unless $n == 3;;
     }
 }
 
 is( $test->workspace_count, 1, 'test account has one workspace' );
 is( $test->workspaces->next->name, 'testingspace',
     'testingspace workspace belong to testing account' );
-users_are($test, [qw/dummy1 dummy2/]);
+users_are($test, [qw/dummy1 dummy2 dummy3/]);
+
+my $export_file;
+Exporting_account_people: {
+    $export_file = $test->export( dir => 't' );
+    ok -e $export_file, "exported file $export_file exists";
+    my $data = LoadFile($export_file);
+    is $data->{name}, 'Test Account', 'name is in export';
+    is $data->{is_system_created}, 0, 'is_system_created is in export';
+    is scalar(@{ $data->{users} }), 1, 'users exported in test account';
+    is $data->{users}[0]{username}, 'dummy3', 'user 2 username';
+    is $data->{users}[0]{email_address}, 'devnull3@example.com', 'user 2 email';
+}
+
+# Now blow the account and users away for the re-import
+Socialtext::User->Resolve('dummy1')->delete( force => 1 );
+Socialtext::User->Resolve('dummy2')->delete( force => 1 );
+Socialtext::User->Resolve('dummy3')->delete( force => 1 );
+
+Import_account: {
+    my $account = Socialtext::Account->import_file( 
+        file => $export_file,
+        name => 'Imported account',
+    );
+    is $account->name, 'Imported account', 'new name was set';
+    is $account->workspace_count, 0, "import doesn't import workspace data";
+    users_are($account, [qw/dummy3/]);
+}
 
 exit;
 
@@ -70,7 +100,7 @@ sub users_are {
     # check user list
 
     is( $account->user_count, scalar(@$users), 
-        $account->name . ' account has two users' );
+        $account->name . ' account has right number of users' );
 
     is( join(',', sort map { $_->username } $account->users->all), 
         join(',', sort @$users),

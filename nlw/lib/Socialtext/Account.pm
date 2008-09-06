@@ -15,6 +15,7 @@ use Socialtext::String;
 use Socialtext::Validate qw( validate SCALAR_TYPE );
 use Socialtext::l10n qw(loc);
 use Socialtext::SystemSettings qw( get_system_setting );
+use YAML qw/DumpFile LoadFile/;
 
 field 'account_id';
 field 'name';
@@ -78,6 +79,59 @@ sub disable_plugin {
     }, $self->account_id, $plugin);
 }
 
+sub export {
+    my $self = shift;
+    my %opts = @_;
+    my $dir = $opts{dir};
+
+    my $export_file = "$dir/account.yaml";
+    DumpFile($export_file, {
+            name => $self->name,
+            is_system_created => $self->is_system_created,
+            users => $self->_users_as_hash,
+        }
+    );
+    return $export_file;
+}
+
+sub _users_as_hash {
+    my $self = shift;
+    my $user_iter = $self->users( primary_only => 1 );
+    my @users;
+    while ( my $u = $user_iter->next ) {
+        my $user_hash = $u->to_hash;
+        delete $user_hash->{user_id};
+        delete $user_hash->{primary_account_id};
+        push @users, $user_hash;
+    }
+    return \@users;
+}
+
+sub import_file {
+    my $class = shift;
+    my %opts = @_;
+    my $import_file = $opts{file};
+    my $import_name = $opts{name};
+
+    my $hash = LoadFile($import_file);
+    my $name = $import_name || $hash->{name};
+    my $account = $class->new(name => $name);
+    die loc("Account [_1] already exists!", $name) . "\n" if $account;
+
+    $account = $class->create(
+        name => $name,
+        is_system_created => $hash->{is_system_created},
+    );
+    
+    for my $user_hash (@{ $hash->{users} }) {
+        my $user = Socialtext::User->new( username => $user_hash->{username} );
+        $user ||= Socialtext::User->Create_user_from_hash( $user_hash );
+        $user->primary_account($account);
+    }
+
+    return $account;
+}
+
 sub users {
     my $self = shift;
 
@@ -87,11 +141,18 @@ sub users {
 
 sub user_count {
     my $self = shift;
+    my $primary_only = shift;
 
-    my $sth = sql_execute(<<EOT, $self->account_id, $self->account_id);
+    my $where = '';
+    my @bind = ($self->account_id);
+    unless ($primary_only) {
+        $where = 'OR secondary_account_id = ?';
+        push @bind, $self->account_id;
+    }
+    my $sth = sql_execute(<<EOT, @bind);
 SELECT COUNT(DISTINCT(system_unique_id))
     FROM user_account
-    WHERE primary_account_id = ? OR secondary_account_id = ?
+    WHERE primary_account_id = ? $where
 EOT
 
     return $sth->fetchall_arrayref->[0][0];
@@ -470,9 +531,10 @@ Returns a count of workspaces for this account.
 Returns a cursor of the workspaces for this account, ordered by
 workspace name.
 
-=item $account->user_count()
+=item $account->user_count([ $primary_only ])
 
-Returns a count of users for this account.
+Returns a count of users for this account.  If the first parameter is TRUE,
+then only users for which this is their primary account will be included.
 
 =item $account->users()
 
@@ -489,6 +551,15 @@ Enables the plugin for the specified account.
 =item $account->disable_plugin($plugin)
 
 Disables the plugin for the specified account.
+
+=item $account->export(dir => $dir)
+
+Export the account data to a file in the specified directory.
+
+=item $account->import_file(file => $file, [ name => $name ])
+
+Imports an account from data in the specified file.  If a name
+is supplied, that name will be used instead of the original account name.
 
 =item Socialtext::Account->Unknown()
 

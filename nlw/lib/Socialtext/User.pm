@@ -342,8 +342,38 @@ sub to_hash {
       $value = "" unless defined $value;
       $hash->{$attr} = "$value";
   }
+  $hash->{creator_username} = $self->creator->username;
 
   return $hash;
+}
+
+sub Create_user_from_hash {
+    my $class = shift;
+    my $info = shift;
+
+    my $creator
+        = Socialtext::User->new( username => $info->{creator_username} );
+    $creator ||= Socialtext::User->SystemUser();
+
+    my %create;
+    for my $c (@minimal_interface) {
+        $create{$c} = $info->{$c}
+            if exists $info->{$c};
+    }
+
+    # Bug 342 - some backups have been created with users
+    # that don't have usernames.  We shouldn't let this
+    # break the import
+    if ($create{first_name} eq 'Deleted') {
+        $create{username} ||= 'deleted-user';
+    }
+
+    my $user = Socialtext::User->create(
+        %create,
+        created_by_user_id => $creator->user_id,
+        no_crypt           => 1,
+    );
+    return $user;
 }
 
 sub _get_full_name {
@@ -820,6 +850,7 @@ EOSQL
             default => 'username',
         ),
         account_id => SCALAR_TYPE,
+        primary_only => BOOLEAN_TYPE( default => 0 ),
     };
     sub ByAccountId {
         # Returns an iterator of Socialtext::User objects
@@ -829,6 +860,13 @@ EOSQL
         # We're supposed to default to DESCending if we're creation_datetime.
         $p{sort_order} ||= $p{order_by} eq 'creation_datetime' ? 'DESC' : 'ASC';
 
+        my @bind = qw( account_id limit offset );
+        my $account_where = 'primary_account_id = ?';
+        unless ($p{primary_only}) {
+            $account_where .= ' OR secondary_account_id = ?';
+            unshift @bind, 'account_id';
+        }
+        (my $creator_account_where = $account_where) =~ s/ (\w+?ary_)/ ua.$1/g;
         Readonly my %SQL => (
             creation_datetime => <<EOSQL,
 SELECT DISTINCT system_unique_id,
@@ -837,7 +875,7 @@ SELECT DISTINCT system_unique_id,
                 driver_username,
                 creation_datetime
     FROM user_account
-    WHERE primary_account_id = ? OR secondary_account_id = ?
+    WHERE $account_where
     ORDER BY creation_datetime $p{sort_order}, driver_username ASC
     LIMIT ? OFFSET ?
 EOSQL
@@ -850,7 +888,7 @@ SELECT DISTINCT ua.system_unique_id AS system_unique_id,
     FROM user_account ua
          LEFT JOIN "UserMetadata" um2 ON (ua.creator_id = um2.user_id)
          LEFT JOIN "UserId" u2 ON (um2.user_id = u2.system_unique_id)
-    WHERE 
+    WHERE $creator_account_where
         ua.primary_account_id = ? OR ua.secondary_account_id = ?
     ORDER BY u2.driver_username $p{sort_order}, ua.driver_username ASC
     LIMIT ? OFFSET ?
@@ -861,16 +899,13 @@ SELECT DISTINCT system_unique_id,
                 driver_unique_id,
                 driver_username
     FROM user_account
-    WHERE primary_account_id = ? OR secondary_account_id = ?
+    WHERE $account_where
     ORDER BY driver_username $p{sort_order}
     LIMIT ? OFFSET ?
 EOSQL
         );
 
-        return $class->_UserCursor(
-            $SQL{ $p{order_by} },
-            [qw( account_id account_id limit offset )], %p
-        );
+        return $class->_UserCursor( $SQL{ $p{order_by} }, \@bind, %p );
     }
 }
 

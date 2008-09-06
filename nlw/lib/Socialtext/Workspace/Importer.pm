@@ -275,12 +275,11 @@ sub _import_users {
 
     my $users = $self->_load_yaml( $self->_users_file() );
 
-    my @cols = Socialtext::User->minimal_interface;
     my @users;
     for my $info (@$users) {
         my $user = Socialtext::User->new(
             username => $info->{username} );
-        $user ||= $self->_create_user( $info, \@cols );
+        $user ||= Socialtext::User->Create_user_from_hash( $info );
 
         push @users, [ $user, $info->{role_name} ];
     }
@@ -289,36 +288,6 @@ sub _import_users {
 }
 
 sub _users_file { $_[0]->{old_name} . '-users.yaml' }
-
-sub _create_user {
-    my $self = shift;
-    my $info = shift;
-    my $cols = shift;
-
-    my $creator
-        = Socialtext::User->new( username => $info->{creator_username} );
-    $creator ||= Socialtext::User->SystemUser();
-
-    my %create;
-    for my $c (@$cols) {
-        $create{$c} = $info->{$c}
-            if exists $info->{$c};
-    }
-
-    # Bug 342 - some backups have been created with users
-    # that don't have usernames.  We shouldn't let this
-    # break the import
-    if ($create{first_name} eq 'Deleted') {
-        $create{username} ||= 'deleted-user';
-    }
-
-    return Socialtext::User->create(
-        %create,
-        created_by_user_id => $creator->user_id,
-        no_crypt           => 1,
-    );
-}
-
 
 1;
 

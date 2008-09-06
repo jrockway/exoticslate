@@ -261,7 +261,8 @@ CREATE TABLE person (
     supervisor_id integer,
     assistant_id integer,
     photo_image bytea,
-    small_photo_image bytea
+    small_photo_image bytea,
+    last_update timestamptz DEFAULT now()
 );
 
 CREATE TABLE person_tag (
@@ -646,4 +647,4 @@ ALTER TABLE ONLY "Workspace"
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '10');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '11');

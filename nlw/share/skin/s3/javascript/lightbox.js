@@ -78,6 +78,7 @@
             });
 
         $('body').css('overflow', 'hidden');
+        $('html,body').attr('scrollTop', pageScroll.top);
 
         if (opts.close)
             $(opts.close).click(function () { $.hideLightbox() })

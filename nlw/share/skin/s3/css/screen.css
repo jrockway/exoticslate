@@ -16,12 +16,21 @@ div#controls div#controlsRight ul li a.watch.on {
 }
 
 /* Hacks to get around there not being an avatar on the araucaria version */
-body#dashBoard #controlsRight div#frame {
-    margin-top: 7px;
+body#dashBoard div#controls div#frame {
+    float: left;
+    margin: 7px 0 0 20px;
     background:none;
 }
-body#dashBoard #controlsRight .welcome {
-    margin-top: 7px;
+body#dashBoard div#controls div#frame img {
+    margin: 3px 3px 0 0;
+}
+body#dashBoard div#controls span.welcome {
+    margin-top: 14px;
+    font-size: 12px;
+    display: block;
+    line-height: 16px;
+    float: left;
+    padding-left: 10px;
 }
 
 div#contentContainer {
@@ -1213,9 +1222,8 @@ body#contentPage div#controls div#controlsRight,
 body#dashBoard div#controls div#controlsRight,
 body#settingsPage div#controls div#controlsRight {
     max-width: 500px;
-    overflow: hidden;
 }
 
 body div#mainWrap {
-    min-width: 780px;
+    min-width: 865px;
 }

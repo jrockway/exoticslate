@@ -17,7 +17,7 @@ html body#settingsPage div#controls div#controlsRight {
 }
 
 html div#mainWrap {
-    width: expression( (document.body.clientWidth * 0.9 > 870) ? '90%' : '870px' );
+    width: expression( (document.body.clientWidth * 0.9 > 950) ? '90%' : '950px' );
 }
 
 html body#workSpace div#mainWrap, html body#blog div#mainWrap, html body#dashBoard div#mainWrap {

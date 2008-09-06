@@ -1,9 +1,16 @@
 function XXX(val) {
-    if (console && console.log) {
+    if (
+        typeof(console) != 'undefined' &&
+        typeof(console.log) != 'undefined'
+    ) {
         console.log.apply(this, arguments);
     }
     else {
-        if (!confirm(arguments.join('\n')))
+        var msg = '';
+        for (var i = 0, l = arguments.length; i < l; i++) {
+            msg += arguments[0] + '\n';
+        }
+        if (confirm(msg) == false)
             throw("Execution cancelled");
     }
     return val;
@@ -76,4 +83,4 @@ copyDom = function(element) {
     }
     return node;
 }
-
+;

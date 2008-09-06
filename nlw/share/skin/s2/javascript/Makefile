@@ -38,8 +38,10 @@ ALL_JEMPLATE_PLUGINS:=$(shell find $(S3_JAVASCRIPT)/JemplatePlugin -name \*.js)
 JQUERY=$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
        $(COMMON_JAVASCRIPT)/jquery-noConflict.js
 
+
 DISPLAY_SOURCE_FILES= \
 		timestamp.js \
+		$(S3_JAVASCRIPT)/Debug.js \
 		$(JQUERY) \
 		$(S3_JAVASCRIPT)/jquery-patch.js \
 		$(S3_JAVASCRIPT)/jquery-plugin.js \
@@ -86,7 +88,6 @@ DISPLAY_UI_SOURCE_FILES= \
 		$(EDITOR_FILE) \
 		$(S3_JAVASCRIPT)/lookahead.js \
 		$(COMMON_JAVASCRIPT)/YAML-0.11/lib/YAML.js \
-		Debug.js \
 		ui-last-source.js \
 
 COMMENT_SOURCE_FILES= \
@@ -141,6 +142,9 @@ all: \
 
 Cyberbit.ttf:
 	cp /var/$@ $@
+
+realclean: clean
+	make -C ../../wikiwyg/javascript clean
 
 clean:
 	rm -f \

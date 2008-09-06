@@ -31,6 +31,8 @@ ALL_EDITOR_FILES:=$(shell find $(WIKIWYG_ST)/ -type f | grep -v editor.js)
 ALL_JEMPLATE_PLUGINS:=$(shell find JemplatePlugin -name \*.js)
 
 S3_SOURCE_FILES= \
+		timestamp.js \
+		Debug.js \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
 		jquery-patch.js \
 		jquery-plugin.js \
@@ -46,16 +48,17 @@ S3_SOURCE_FILES= \
 		s3.js \
 
 LIGHTBOX_SOURCE_FILES= \
+		timestamp.js \
 		$(LIGHTBOX_JEMPLATE) \
 		comment.js \
 		email.js \
 		move.js \
 
 all: \
+    timestamp.js \
     $(S3_FILE_GZIP) \
     $(EDITOR_FILE_GZIP) \
     $(LIGHTBOX_FILE_GZIP) \
-    timestamp.js \
     Selection.htc \
 
 clean:
@@ -93,22 +96,22 @@ Jemplate.js:
 $(LIGHTBOX_JEMPLATE): $(LIGHTBOX_TEMPLATES)
 	jemplate --compile $(LIGHTBOX_TEMPLATES) > $(LIGHTBOX_JEMPLATE)
 
-$(S3_FILE): $(S3_SOURCE_FILES) timestamp.js Makefile
+$(S3_FILE): $(S3_SOURCE_FILES) Makefile
 	rm -f $@;
-	for js in timestamp.js $(S3_SOURCE_FILES); do \
+	for js in $(S3_SOURCE_FILES); do \
 	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
 	done
 
 $(EDITOR_FILE): $(ALL_EDITOR_FILES)
 	make -C $(WIKIWYG_ST) all
 
-$(LIGHTBOX_FILE): $(LIGHTBOX_SOURCE_FILES) timestamp.js Makefile
+$(LIGHTBOX_FILE): $(LIGHTBOX_SOURCE_FILES) Makefile
 	rm -f $@;
 	for js in $(LIGHTBOX_SOURCE_FILES); do \
 	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
 	done
 
-timestamp.js: $(EDITOR_FILE) $(S3_SOURCE_FILES) $(LIGHTBOX_SOURCE_FILES)
+timestamp.js: $(EDITOR_FILE) $(S3_SOURCE_FILES:timestamp.js%=%) $(LIGHTBOX_SOURCE_FILES:timestamp.js%=%)
 	echo 'var Socialtext = Socialtext || {};' > $@
 	perl -le 'print "Socialtext.make_time = \"" . time . "\";"' >> $@
 

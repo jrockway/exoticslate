@@ -84,13 +84,8 @@ Page = {
                     if ($('#wikiwyg_wikitext_textarea').size()) {
                         $.ajax({
                             url: Page.pageUrl(),
+                            data: { accept: 'text/x.socialtext-wiki' },
                             cache: false,
-                            dataType: 'text',
-                            beforeSend: function (xhr) {
-                                xhr.setRequestHeader(
-                                    'Accept', 'text/x.socialtext-wiki'
-                                );
-                            },
                             success: function (text) {
                                 $('#wikiwyg_wikitext_textarea').val(text);
                             }

@@ -55,8 +55,12 @@
 [% BLOCK compare_revisions %]
     <li>
       <a class="compareButton" href="#" 
-         onclick="document.getElementById('compare_revisions').submit(); return false">
-        [% loc("Compare Revisions") %]
+         [% IF rows.size > 1 %]
+             onclick="document.getElementById('compare_revisions').submit(); return false"
+         [% ELSE %]
+             onclick="alert('You cannot compare a revision to itelf.'); return false;"
+         [% END %]
+        ><span>[% loc("Compare Revisions") %]</span>
       </a>
     </li>
 [% END %]

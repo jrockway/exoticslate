@@ -3,6 +3,8 @@
 * Fixture: SocialWidgets
 
 | set | workspace | test-data |
+| st-admin | create-user --email devnull2@socialtext.com --password %%password%% |
+| st-admin | add-member --email devnull2@socialtext.com --workspace test-data |
 
 | *Comment* | Test Case: My Conversations Widget Create Conversations |  |
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |

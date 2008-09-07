@@ -50,7 +50,7 @@ like( $@, qr/cannot change/, 'cannot change the name of a system-created account
             email_address => "devnull$n\@example.com",
             password      => 'password',
             primary_account_id => 
-               ($n == 3 ? $test->account_id : $socialtext->account_id),
+               ($n != 1 ? $test->account_id : $socialtext->account_id),
         );
         isa_ok( $user, 'Socialtext::User' );
         $ws->add_user( user => $user ) unless $n == 3;;
@@ -69,15 +69,16 @@ Exporting_account_people: {
     my $data = LoadFile($export_file);
     is $data->{name}, 'Test Account', 'name is in export';
     is $data->{is_system_created}, 0, 'is_system_created is in export';
-    is scalar(@{ $data->{users} }), 1, 'users exported in test account';
-    is $data->{users}[0]{username}, 'dummy3', 'user 2 username';
-    is $data->{users}[0]{email_address}, 'devnull3@example.com', 'user 2 email';
+    is scalar(@{ $data->{users} }), 2, 'users exported in test account';
+    is $data->{users}[0]{username}, 'dummy2', 'user 1 username';
+    is $data->{users}[0]{email_address}, 'devnull2@example.com', 'user 1 email';
+    is $data->{users}[1]{username}, 'dummy3', 'user 2 username';
+    is $data->{users}[1]{email_address}, 'devnull3@example.com', 'user 2 email';
 }
 
 # Now blow the account and users away for the re-import
 Socialtext::User->Resolve('dummy1')->delete( force => 1 );
 Socialtext::User->Resolve('dummy2')->delete( force => 1 );
-Socialtext::User->Resolve('dummy3')->delete( force => 1 );
 
 Import_account: {
     my $account = Socialtext::Account->import_file( 

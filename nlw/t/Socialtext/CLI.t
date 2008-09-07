@@ -4,7 +4,7 @@
 use warnings;
 use strict;
 use File::Slurp qw(write_file);
-
+use File::Path qw(rmtree);
 use Test::Socialtext;
 fixtures( 'workspaces_with_extra_pages', 'destructive' );
 
@@ -26,7 +26,7 @@ use Socialtext::SQL qw/sql_execute/;
 
 use Cwd;
 
-plan tests => 355;
+plan tests => 365;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -2102,6 +2102,64 @@ PLUGINS: {
         'enable plugin for all account',
     );
 }
+
+EXPORT_ACCOUNTS: {
+    local $ENV{ST_EXPORT_DIR} = "t/tmp";
+    mkdir "t/tmp";
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [ qw( --account no-existy ) ]
+            )->export_account();
+        },
+        qr/There is no account named "no-existy"/,
+        'exporting an invalid account',
+    );
+    expect_success(
+        sub {
+            Socialtext::CLI->new( argv => [qw( --name jebus )] )
+                ->create_account();
+        },
+        qr/\QA new account named "jebus" was created.\E/,
+        'create-account success message'
+    );
+
+    # Now set up some export/import test data
+    my $jebus = Socialtext::Account->new(name => 'jebus');
+    my $export_user = Socialtext::User->create(
+        username      => "export",
+        email_address => "export\@example.com",
+        password      => 'password',
+        primary_account_id => $jebus->account_id,
+    );
+    my $export_dir = "t/tmp/jebus.id-" . $jebus->account_id . ".export";
+    rmtree $export_dir;
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [ qw( --account jebus ) ]
+            )->export_account();
+        },
+        qr/jebus account exported to /,
+        'exporting a valid account',
+    );
+
+    ok -d $export_dir, "$export_dir exists";
+    ok -e "$export_dir/account.yaml", "accounts yaml exists";
+
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [ '--dir', $export_dir, qw(--name Fred --overwrite --noindex), ]
+            )->import_account();
+        },
+        qr/Fred account imported\./,
+        'importing a valid account',
+    );
+}
+
+exit;
+
 
 sub expect_success {
     local $Test::Builder::Level = $Test::Builder::Level + 1;

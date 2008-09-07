@@ -10,6 +10,7 @@ use Encode;
 use File::Basename ();
 use File::Spec;
 use File::Temp;
+use File::Path qw/rmtree/;
 use File::Slurp qw(slurp);
 use Getopt::Long qw( :config pass_through );
 use Socialtext::AppConfig;
@@ -25,6 +26,7 @@ use Socialtext::User;
 use Socialtext::Timer;
 use Socialtext::SystemSettings qw/get_system_setting set_system_setting/;
 use Socialtext::Pluggable::Adapter;
+use Fatal qw/mkdir rmtree/;
 
 my %CommandAliases = (
     '--help' => 'help',
@@ -302,6 +304,69 @@ sub get_default_account {
 
     my $account = get_system_setting('default-account');
     $self->_success(loc("The default account is [_1].", $account->name));
+}
+
+sub export_account {
+    my $self = shift;
+    my $account = $self->_require_account;
+    my %opts     = $self->_get_options('force');
+    (my $short_name = lc($account->name)) =~ s#\W#_#g;
+    my $dir = $self->_export_dir_base
+        . "/$short_name.id-"
+        . $account->account_id
+        . ".export";
+
+    if (-d $dir) {
+        if ($opts{force}) {
+            print loc("Deleting existing account export at [_1].", $dir) . "\n";
+            rmtree $dir;
+        }
+        else {
+            die loc("Error - export directory [_1] already exists!", $dir) . "\n";
+        }
+    }
+    mkdir $dir;
+
+    print loc("Exporting account [_1] ...", $account->name) . "\n";
+    $account->export( dir => $dir );
+
+    my $workspaces = $account->workspaces;
+    while (my $wksp = $workspaces->next) {
+        print loc("Exporting workspace [_1] ...", $wksp->name) . "\n";
+        eval { $wksp->export_to_tarball( dir => $dir ); };
+        $self->_error($@) if $@;
+    }
+
+    $self->_success(
+        "\n" . loc("[_1] account exported to [_2]", $account->name, $dir));
+}
+
+sub import_account {
+    my $self = shift;
+    my %opts = $self->_get_options("directory:s", "overwrite", "name:s", "noindex");
+    my $dir = $opts{directory};
+    $dir =~ s#/$##;
+
+    $self->_error(loc("No import directory specified.") . "\n") unless $dir;
+    $self->_error(loc("Directory [_1] does not exist.", $dir) . "\n") unless -d $dir;
+
+    print loc("Importing users ..."), "\n";
+    my $account = Socialtext::Account->import_file(
+        file => "$dir/account.yaml",
+        name => $opts{name},
+    );
+
+    for my $tarball (glob "$dir/*.1.tar.gz") {
+        print loc("Importing workspace from $tarball ..."), "\n";
+        Socialtext::Workspace->ImportFromTarball(
+            tarball   => $tarball,
+            overwrite => $opts{overwrite},
+            noindex   => $opts{noindex},
+        );
+    }
+
+    $self->_success(
+        "\n" . loc("[_1] account imported.", $account->name));
 }
 
 sub list_workspaces {
@@ -1320,31 +1385,34 @@ sub export_workspace {
     my $self = shift;
 
     my $ws = $self->_require_workspace();
-
     my $file = $self->_export_workspace($ws);
-
-    $self->_success(
-        'The ' . $ws->name() . " workspace has been exported to $file." );
+    $self->_success(loc("The [_1] workspace has been exported to [_2].",
+            $ws->name, $file));
 }
 
 sub _export_workspace {
     my $self = shift;
     my $ws   = shift;
 
-    my $dir = $self->_optional_string('dir');
     my $name = lc( $self->_optional_string('name') || $ws->name );
-    $dir ||= $ENV{ST_EXPORT_DIR};
-    $dir ||= File::Spec->tmpdir();
+    my $dir = $self->_export_dir_base;
 
     my $msg = '';
-
     eval { $msg = $ws->export_to_tarball( dir => $dir, name => $name ); };
-
     if ( my $e = $@ ) {
 	$self->_error($e);
     }
 
     return $msg;
+}
+
+sub _export_dir_base {
+    my $self = shift;
+    my $dir = $self->{export_dir};
+    $dir ||= $self->_optional_string('dir');
+    $dir ||= $ENV{ST_EXPORT_DIR};
+    $dir ||= File::Spec->tmpdir();
+    return $dir;
 }
 
 sub import_workspace {
@@ -2295,6 +2363,8 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   remove-system-admin [--username or --email]
   set-default-account [--account]
   get-default-account
+  export-account [--account]
+  import-account [--directory]
 
   PLUGINS
 
@@ -2708,6 +2778,18 @@ Set the default account new users should belong to.
 =head2 get-default-account
 
 Prints out the current default account.
+
+=head2 get-default-account
+
+Prints out the current default account.
+
+=head2 export-account
+
+Exports the specified account to a directory in the temp workspace.
+
+=head2 import-account
+
+Imports an account from the specified directory.
 
 =head2 enable-plugin [--account] --plugin  [ people | dashboard | socialcalc ]
 

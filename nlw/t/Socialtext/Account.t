@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 24;
+use Test::Socialtext tests => 37;
 use YAML qw/LoadFile/;
 
 BEGIN {
@@ -87,7 +87,7 @@ Import_account: {
     );
     is $account->name, 'Imported account', 'new name was set';
     is $account->workspace_count, 0, "import doesn't import workspace data";
-    users_are($account, [qw/dummy3/]);
+    users_are($account, [qw/dummy2 dummy3/]);
 }
 
 exit;

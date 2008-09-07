@@ -811,7 +811,7 @@ proto.confirmLinkFromEdit = function() {
         }
         return response;
     }
-    return false;
+    return true;
 }
 
 proto.enableLinkConfirmations = function() {

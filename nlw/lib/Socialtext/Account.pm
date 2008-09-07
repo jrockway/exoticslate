@@ -102,9 +102,21 @@ sub _users_as_hash {
         my $user_hash = $u->to_hash;
         delete $user_hash->{user_id};
         delete $user_hash->{primary_account_id};
+        $user_hash->{profile} = $self->_dump_profile($u);
         push @users, $user_hash;
     }
     return \@users;
+}
+
+sub _dump_profile {
+    my $self = shift;
+    my $user = shift;
+
+    eval "require Socialtext::People::Profile";
+    return {} if $@;
+
+    my $profile = Socialtext::People::Profile->GetProfile($user);
+    return $profile->to_hash;
 }
 
 sub import_file {
@@ -123,11 +135,19 @@ sub import_file {
         is_system_created => $hash->{is_system_created},
     );
     
+    my @profiles;
     for my $user_hash (@{ $hash->{users} }) {
+        my $profile = delete $user_hash->{profile};
         my $user = Socialtext::User->new( username => $user_hash->{username} );
         $user ||= Socialtext::User->Create_user_from_hash( $user_hash );
         $user->primary_account($account);
+
+        $profile->{user} = $user;
+        push @profiles, $profile;
     }
+
+    # Create all the profiles after so that user references resolve.
+    Socialtext::People::Profile->create_from_hash( $_ ) for @profiles;
 
     return $account;
 }

@@ -137,13 +137,14 @@ sub import_file {
     
     my @profiles;
     for my $user_hash (@{ $hash->{users} }) {
-        my $profile = delete $user_hash->{profile};
         my $user = Socialtext::User->new( username => $user_hash->{username} );
         $user ||= Socialtext::User->Create_user_from_hash( $user_hash );
         $user->primary_account($account);
 
-        $profile->{user} = $user;
-        push @profiles, $profile;
+        if (my $profile = delete $user_hash->{profile}) {
+            $profile->{user} = $user;
+            push @profiles, $profile;
+        }
     }
 
     # Create all the profiles after so that user references resolve.

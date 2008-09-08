@@ -1749,6 +1749,11 @@ Socialtext::User object.
 
 Throws an exception if C<$thingy> can't be resolved to a User.
 
+=head2 Socialtext::User->Create_user_from_hash( $hashref )
+
+Create a user from the data in the specified hash.  This routine is used
+by import/export scripts.
+
 =head2 $user->set_confirmation_info()
 
 Creates a confirmation hash and an expiration date for this user.

@@ -18,7 +18,11 @@ Schema_is_okay: {
     ok -d $schema_dir;
     ok -e $schema_file;
 
-    my @patches = sort {$b cmp $a} @sql_patches;
+    my @patches = sort {
+        (my $aver = $a) =~ s/.+-to-(\d+)\.sql/$1/;
+        (my $bver = $b) =~ s/.+-to-(\d+)\.sql/$1/;
+        return $bver <=> $aver
+    } @sql_patches;
     my $highest = shift @patches;
     (my $to_version = $highest) =~ s/.+-to-(\d+)\.sql/$1/;
     my $schema = get_contents($schema_file);

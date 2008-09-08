@@ -866,7 +866,7 @@ EOSQL
             $account_where .= ' OR secondary_account_id = ?';
             unshift @bind, 'account_id';
         }
-        (my $creator_account_where = $account_where) =~ s/ (\w+?ary_)/ ua.$1/g;
+        (my $creator_account_where = $account_where) =~ s/(\w+?ary_)/ ua.$1/g;
         Readonly my %SQL => (
             creation_datetime => <<EOSQL,
 SELECT DISTINCT system_unique_id,
@@ -889,7 +889,6 @@ SELECT DISTINCT ua.system_unique_id AS system_unique_id,
          LEFT JOIN "UserMetadata" um2 ON (ua.creator_id = um2.user_id)
          LEFT JOIN "UserId" u2 ON (um2.user_id = u2.system_unique_id)
     WHERE $creator_account_where
-        ua.primary_account_id = ? OR ua.secondary_account_id = ?
     ORDER BY u2.driver_username $p{sort_order}, ua.driver_username ASC
     LIMIT ? OFFSET ?
 EOSQL

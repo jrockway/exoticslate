@@ -29,6 +29,20 @@ Page = {
         return '/' + Socialtext.wiki_id + '/index.cgi';
     },
 
+    _repaintBottomButtons: function() {
+        if ($.browser.msie) {
+            $('#bottomButtons').html($('#bottomButtons').html());
+            $('#st-edit-button-link-bottom').click(function(){
+                $('#st-edit-button-link').click();
+                return false;
+            });
+            $('#st-comment-button-link-bottom').click(function(){
+                $('#st-comment-button-link').click();
+                return false;
+            });
+        }
+    },
+
     setPageContent: function(html) {
         $('#st-page-content').html(html);
 
@@ -40,16 +54,13 @@ Page = {
         $('#st-page-content').html(html);
 
         // For MSIE, force browser reflow of the bottom buttons to avoid {bz: 966}.
-        if ($.browser.msie) {
-            var repaintBottomButtons = function () {
-                $('#bottomButtons').html($('#bottomButtons').html());
-            };
-            repaintBottomButtons();
+        Page._repaintBottomButtons();
 
-            // Repaint after each image finishes loading since the height
-            // would've been changed.
-            $('#st-page-content img').load(repaintBottomButtons);
-        }
+        // Repaint after each image finishes loading since the height
+        // would've been changed.
+        $('#st-page-content img').load(function(){
+            Page._repaintBottomButtons();
+        });
     },
 
     refreshPageContent: function (force_update) {
@@ -128,6 +139,7 @@ Page = {
                                 .attr('alt', loc('Delete this tag'))
                                 .attr('title', loc('Delete this tag'))
                                 .bind('click', function () {
+                                    $(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif');
                                     Page.delTag(this.name);
                                     return false;
                                 })

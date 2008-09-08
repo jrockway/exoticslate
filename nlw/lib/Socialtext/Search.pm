@@ -75,7 +75,9 @@ sub _enumerate_workspaces {
     my @workspaces;
 
     # We reserve two set names: _ and *. _ represents the current workspace,
-    # while * represents all workspaces where the current user is a member
+    # while * represents all workspaces where the current user is a member.
+    # However, when the user is at the global dashboard and not inside any
+    # particular workspace, _ becomes a synonym to *.
     if ($$query_ref =~ s/\bworkspaces:(\S+)//) {
         if ($1 eq '*') {
             @workspaces = _all_workspaces($user, $current_workspace);
@@ -88,7 +90,12 @@ sub _enumerate_workspaces {
         @workspaces = _all_workspaces($user, $current_workspace);
     }
     elsif ($scope eq '_') {
-        @workspaces = ($current_workspace);
+        if (length $current_workspace) {
+            @workspaces = ($current_workspace);
+        }
+        else {
+            @workspaces = _all_workspaces($user);
+        }
     }
     else {
         @workspaces
@@ -113,7 +120,9 @@ sub _all_workspaces {
 
     # always include the current workspace, in case the user isn't
     # a member
-    push @workspaces, $current_workspace;
+    if (defined $current_workspace and length $current_workspace) {
+        push @workspaces, $current_workspace;
+    }
 
     my %uniq = ();
     foreach my $w ( @workspaces ) {

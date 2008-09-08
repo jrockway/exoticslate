@@ -11,7 +11,7 @@
     <p id="st-duplicate-error" class="error"></p>
 
     <label for="new_title" class="duplicate-page-form-element">New page name:
-      <input id="st-duplicate-newname" type="text" name="new_title" value="[% loc('Duplicate of [_1]', page_title) %]" size="34" />
+      <input id="st-duplicate-newname" type="text" name="new_title" value="" size="34" />
     </label>
     </p>
     <p class="input">

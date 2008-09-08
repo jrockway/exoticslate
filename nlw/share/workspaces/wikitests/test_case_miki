@@ -20,16 +20,13 @@
 
 | click_ok | link=Recent Changes |  |
 
-| *Comment* | What's with all the pauses? |  |
-
-| pause | 5000 |  |
+| wait_for_element_visible_ok | link=Filter by category | 30000 |
 | click_ok | link=Filter by category |  |
-| pause | 5000 |  |
-| click_ok | link=caps test weblog %%start_time%% weblog |  |
-| pause | 5000 |  |
+| wait_for_element_visible_ok | link=Caps Test Weblog %%start_time%% Weblog | 30000 |
+| click_ok | link=Caps Test Weblog %%start_time%% Weblog |  |
+| wait_for_element_visible_ok | link=First Post in Caps Test Weblog %%start_time%% Weblog | 30000 |
 | click_ok | link=First Post in Caps Test Weblog %%start_time%% Weblog |  |
-| pause | 5000 |  |
-| text_like | qr/This is the first post in Caps Test Weblog %%start_time%% Weblog/ |  |
+| wait_for_text_present_ok | This is the first post in Caps Test Weblog %%start_time%% Weblog | 30000 |
 
 | *Comment* | Test Case: Miki Teardown |  |
 | st-admin | purge-page --workspace %%workspace%% --page first_post_in_caps_test_weblog_%%start_time%%_weblog | page was purged |

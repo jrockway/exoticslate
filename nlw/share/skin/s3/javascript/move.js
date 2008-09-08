@@ -27,6 +27,9 @@ proto.renameLightbox = function () {
 proto.duplicateLightbox = function () {
     this.process('duplicate_lightbox.tt2');
     this.sel = '#st-duplicate-lightbox';
+    jQuery("#st-duplicate-newname").val(
+        loc('Duplicate of [_1]', Socialtext.page_title)
+    );
     this.show();
 }
 

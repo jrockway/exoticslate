@@ -5,9 +5,13 @@
   [% INCLUDE element/listview_tabs %]
   <div id="controls">
     <div id="st-editing-tools-edit">
-
     </div><!-- controlsLeft END -->
     <div id="controlsRight">
+        [% IF hub.current_workspace.enable_unplugged %]
+            [% IF unplug_uri %]
+                <a style="float: left; margin-top: 12px" title="[% unplug_phrase %]" href="[% unplug_uri %]"><img border="0" src="[% wiki.skin_uri('s2') %]/images/unplug-icon.png"/></a>
+            [% END %]
+        [% END %]
       <ul class="level1">
         <li class="submenu">
           <a class="export" href="#" id="st-listtools-export">[% loc('Export') %]</a>
@@ -27,7 +31,7 @@
     <form id="st-listview-form" method="get" action="index.cgi">
     <input id="st-listview-action" name="action" value="" type="hidden">
     <input id="st-listview-filename" name="filename" value="" type="hidden">
-    <table class="dataTable">
+    <table class="dataTable pagelist">
       <tr>
         <th width="1%"><input type="checkbox" id="st-listview-selectall"/></th>
         <th class="toggle"><div class="toggle">
@@ -70,7 +74,7 @@
         [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
         <td><input type="checkbox" name="page_selected" class="st-listview-selectpage-checkbox" value="[% row.page_uri %]"/></td>
         <td colspan="2">
-        [% IF row.Type == 'spreadsheet' %]
+        [% IF row.is_spreadsheet %]
            <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/sheetIcon.png" />
         [% ELSIF row.is_attachment %]
            <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/attachment.png" />

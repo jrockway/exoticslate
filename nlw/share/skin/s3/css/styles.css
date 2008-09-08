@@ -750,7 +750,7 @@ body#contentPage div#controls div#controlsRight ul li,body#dashBoard div#control
 	line-height: 44px;
 	} 	
 	
-div#controls div#controlsRight ul li a, div.controlsInline ul li a {
+div#controls div#controlsRight ul li a {
 	float: left;
 	color: #333;
 	font-weight: bold;
@@ -804,7 +804,7 @@ div#controls div#controlsRight ul li a.revision {
        padding:0 10px 0 26px;
 }
 
-div#controls div#controlsRight ul li a.watch, div.controlsInline ul li a.watch {
+div#controls div#controlsRight ul li a.watch {
        background: url(../images/watchIcon.png) no-repeat center left;
        padding:0 10px 0 28px;
 }

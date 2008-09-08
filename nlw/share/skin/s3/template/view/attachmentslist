@@ -14,7 +14,7 @@
     [% IF checker.check_permission('delete') %]
       <form action="[% script_name %]" method="post">
     [% END %]
-    <table class="dataTable">
+    <table class="dataTable attachmentlist">
       <tr>
         <th width="1%"><input id="st-listview-selectall" type="checkbox" /></th>
         <th class="toggle"><div class="toggle">

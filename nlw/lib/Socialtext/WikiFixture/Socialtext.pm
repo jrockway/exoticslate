@@ -81,6 +81,29 @@ sub init {
     $self->st_login;
 }
 
+=head2 todo()
+
+Same as a comment, but acts as a failing TODO test.
+
+Useful for leaving a trail of breadcrumbs for yourself for things that you
+haven't gotten to yet, but that you plan on implementing.
+
+Outputs standard TAP for a failed TODO test.
+
+=cut
+
+{
+    no warnings 'redefine';
+    sub todo {
+        my $self = shift;
+        my $msg  = shift;
+        TODO: {
+            local $TODO = 'not yet implemented';
+            ok 0, $msg;
+        }
+    }
+}
+
 =head2 st_login()
 
 Logs into the Socialtext wiki using supplied username and password.

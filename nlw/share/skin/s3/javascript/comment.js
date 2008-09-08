@@ -309,6 +309,8 @@ GuiEdit.prototype.startline = function(markup_start) {
 
 
 GuiEdit.prototype.find_right = function(t, selection_end, matcher) {
+    if (selection_end < 0 || !selection_end) return 0;
+
     var substring = t.substr(selection_end, 1)
     var nextstring = t.substr(selection_end + 1, 1)
     if (selection_end >= t.length)

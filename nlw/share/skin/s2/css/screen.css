@@ -1,3 +1,5 @@
+@import url('../../wikiwyg/css/lightbox.css');
+
 body {
     font-family: Helvetica, Arial, sans-serif;
     color: #000;
@@ -800,7 +802,6 @@ body {
 }
 
 #st-tags-deletemessage {
-    font-size: 90%;
     color: #555;
     display: none;
     margin-top: 0.5em;
@@ -1150,12 +1151,10 @@ body {
 /* Attach File Interface */
 
 #st-attachments-attachinterface {
-    font-size: 90%;
     display: none;
 }
 
 #st-attachments-manageinterface {
-    font-size: 90%;
     display: none;
     position: absolute;
     left: 0px;
@@ -1189,7 +1188,6 @@ body {
 /* Queue File Dialog */
 
 #st-attachmentsqueue-interface {
-    font-size: 90%;
     display: none;
 }
 
@@ -1216,18 +1214,6 @@ body {
     padding-bottom: 0;
 }
 
-#st-attachmentsqueue-submit {
-    font-size: 90%;
-}
-
-#st-attachmentsqueue-filename {
-    font-size: 90%;
-}
-
-#st-attachmentsqueue-message {
-    font-size: 90%;
-}
-
 #st-attachmentsqueue-uploadmessage {
     font-weight: bold;
     margin-bottom: 1em;
@@ -1244,7 +1230,6 @@ body {
 #st-attachmentsqueue-list {
     display: none;
     color: #666;
-    font-size: 90%;
     margin-top: 1em;
     margin-bottom: 1em;
     border-top: 1px solid #4949BA;
@@ -1254,7 +1239,6 @@ body {
 }
 
 .st-attachmentsqueue-listlabel {
-    font-size: 90%;
     color: #4949BA;
 }
 
@@ -1287,18 +1271,6 @@ body {
     padding-bottom: 0;
 }
 
-#st-tagqueue-filename {
-    font-size: 90%;
-}
-
-#st-tagqueue-message {
-    font-size: 90%;
-}
-
-#st-tagqueue-tagprompt {
-    font-size: 90%;
-}
-
 #st-tagqueue-uploadmessage {
     font-weight: bold;
     margin-bottom: 1em;
@@ -1315,7 +1287,6 @@ body {
 #st-tagqueue-list {
     display: none;
     color: #666;
-    font-size: 90%;
     margin-top: 1em;
     margin-bottom: 1em;
     border-top: 1px solid #4949BA;
@@ -1325,7 +1296,6 @@ body {
 }
 
 .st-tagqueue-listlabel {
-    font-size: 90%;
     color: #4949BA;
 }
 
@@ -1418,10 +1388,6 @@ table.page-stats-content tfoot {
     width: 100%;
     overflow: auto;
     border: 1px solid #ccc;
-}
-
-#st-attachments-manage-filelisting tbody td {
-    font-size: 90%;
 }
 
 #st-attachments-manage-filelisting {
@@ -2099,7 +2065,6 @@ span.st-weblog-previousentries, span.st-weblog-nextentries {
 }
 
 #st-newpage-save-prompt, #st-newpage-duplicate-prompt {
-    font-size: 90%;
     margin-bottom: 0.4em;
 }
 
@@ -2109,13 +2074,11 @@ span.st-weblog-previousentries, span.st-weblog-nextentries {
 }
 
 .st-newpage-duplicate-option {
-    font-size: 90%;
     margin: 0;
     padding: 0;
 }
 
 #st-newpage-duplicate-pagename {
-    font-size: 90%;
 }
 
 .st-newpage-duplicate-emphasis {
@@ -2127,14 +2090,12 @@ span.st-weblog-previousentries, span.st-weblog-nextentries {
     margin-bottom: 0;
     margin-top: 0.2em;
     padding-bottom: 0;
-    font-size: 90%;
 }
 
 #st-newpage-save-tip {
     margin-bottom: 0;
     margin-top: 1.2em;
     padding-bottom: 0;
-    font-size: 75%;
     color: #888;
 }
 
@@ -2390,17 +2351,6 @@ menu on the page bar.
     z-index: 32767;
 }
 
-.st-lightbox-content {
-    background-color: #fff;
-    color: #000;
-    border: 4px solid #ccc;
-    padding: 0.5em;
-    width: 450px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10%;
-}
-
 /* System Status, Red with icon */
 
 #st-system-status-alert {
@@ -2478,28 +2428,6 @@ div.wiki-include-content {
 
 /* WAFL Widget styles */
 
-div.st-widget-dialog {
-    margin: 4px;
-    border: thin solid #000055;
-    padding: 4px;
-    background-color: #FFFFFF;
-}
-
-div.st-lightbox-dialog {
-    background-color: #CCD8FF;
-    z-index: 2001;
-    padding: 0;
-    width: 520px;
-    margin: 100px auto;
-    border: 1px outset #555;
-}
-
-div.jsan-widget-lightbox-content-wrapper {
-    background-color: #CCD8FF;
-    padding: 5px;
-    margin: 0px;
-}
-
 .st-widget-buttons {
     padding: 0.2em 0.2em 0.1em 0.2em;
     text-align: right;
@@ -2507,27 +2435,6 @@ div.jsan-widget-lightbox-content-wrapper {
 
 span.st-widget-cancelbutton {
     padding: 0 0 0 7px;
-}
-
-#st-widgets-standardoptionspanel {
-    padding: 4px;
-    margin: 0;
-}
-
-#st-widgets-standardoptionspanel input {
-    font-size: 90%;
-}
-
-#st-widgets-moreoptionspanel {
-    display: none;
-    background-color: #F0F0F0;
-    padding: 2px 4px 4px 4px;
-    margin: 6px 0 4px 0;
-    border: 1px solid #B0CCFF;
-}
-
-#st-widgets-moreoptionspanel input {
-    font-size: 90%;
 }
 
 td.st-widget-dialog-widgetlabel {
@@ -2564,11 +2471,6 @@ p.st-widget-dialog-choiceradio {
     padding: 0;
 }
 
-#st-widgets-moreoptions {
-    padding-left: 8px;
-    font-size: 0.8em;
-}
-
 span.st-widget-dialog-title {
     padding-left: 0;
     font-weight: bold;
@@ -2579,22 +2481,10 @@ span.st-widget-dialog-title {
 p.st-widget-description {
     padding: 0;
     margin: 0.2em 0 0.8em 0;
-    font-size: 0.9em;
 }
 
 .widget_edit_advanced {
-    font-size: 0.9em;
     font-family: monospace;
-}
-
-table.st-widgets-optionstable {
-    border-collapse: separate;
-    border-spacing: 0px 6px;
-}
-
-table.st-widgets-moreoptionstable {
-    border-collapse: separate;
-    border-spacing: 0px 6px;
 }
 
 td.st-widget-dialog-editlabel {
@@ -2607,7 +2497,6 @@ td.st-widget-dialog-editlabel {
 
 td.st-widget-dialog-editfield {
     padding: 0;
-    font-size: 0.8em;
 }
 
 .widget_edit_error_msg {
@@ -2636,7 +2525,6 @@ div.st-widget-lookaheadsuggestionblock {
 }
 
 span.st-widget-lookaheadsuggestion {
-    font-size: 0.9em;
     padding-right: 0.1em;
 }
 
@@ -3038,3 +2926,12 @@ div.footerEndBottom div
     color: red;
 }
 
+body .lightbox {
+    border: thin solid #000055;
+    background: white;
+}
+
+body #lightbox {
+    background: #CCD8FF;
+    border: 1px outset #555;
+}

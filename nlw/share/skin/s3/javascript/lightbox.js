@@ -32,25 +32,13 @@
 
     $.fn.showLightbox = function() {
         if (!$('#lightbox').size()) {
-            $('<div id="lightbox">')
-                .css({
-                    display: 'none',
-                    position: 'absolute',
-                    zIndex: 2001,
-                    fontSize: '11px',
-                    fontFamily: 'Verdana, Arial, sans-serif',
-                    padding: 0,
-                    background: '#fff',
-                    margin: 'auto',
-                    border: "1px outset #555"
-                })
-                .appendTo('body');
+            $('<div id="lightbox" />').appendTo('body');
         }
 
         var pageScroll = _getPageScroll();
 
         if (!$('#overlay').size()) {
-            $('<div id="overlay">')
+            $('<div id="overlay" />')
                 .click(function () { $.hideLightbox() })
                 .css({
                     display: 'none',
@@ -74,10 +62,12 @@
                 left: (pageScroll.left + (($(window).width() -
                         $('#lightbox').width()) / 2)) + 'px',
                 top:  (pageScroll.top + (($(window).height() -
-                        $('#lightbox').height()) / 2)) + 'px'
+                        $('#lightbox').height()) / 4)) + 'px'
             });
 
-        $('body').css('overflow', 'hidden');
+        opts._originalHTMLOverflow = $('html').css('overflow') || 'visible';
+        opts._originalBodyOverflow = $('body').css('overflow') || 'visible';
+        $('html,body').css('overflow', 'hidden');
         $('html,body').attr('scrollTop', pageScroll.top);
 
         if (opts.close)
@@ -106,7 +96,8 @@
                 $(opts.content).hide().appendTo('body');
             $('#overlay').fadeOut();
             $('#lightbox').html('').hide();
-            $('body').css('overflow', 'visible');
+            $('html').css('overflow', opts._originalHTMLOverflow);
+            $('body').css('overflow', opts._originalBodyOverflow);
         }
     };
 })(jQuery);

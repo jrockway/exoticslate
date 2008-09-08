@@ -168,6 +168,10 @@ sub default_page_name {
 # Follows the request header set by prototype.js
 sub is_xhr {
     my $self = shift;
+
+    # Our rest object may not have a request object.
+    return unless $self->hub->rest->can('request');
+
     my $xrw = $self->hub->rest->request->header_in( 'X-Requested-With' );
 
     return $xrw && ( $xrw eq 'XMLHttpRequest' );

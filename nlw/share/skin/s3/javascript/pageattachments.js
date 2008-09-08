@@ -66,7 +66,8 @@ Attachments = {
                             .attr('alt', loc('Extract this attachment'))
                             .attr('title', loc('Extract this attachment'))
                             .bind('click', function () {
-                                this.extractAttachment(attach_id);
+                                $(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif');
+                                Attachments.extractAttachment(attach_id);
                                 return false;
                             });
                     }
@@ -85,7 +86,8 @@ Attachments = {
                                 .attr('alt', loc('Delete this attachment'))
                                 .attr('title', loc('Delete this attachment'))
                                 .bind('click', function () {
-                                    this.delAttachment(this.name, true);
+                                    $(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif');
+                                    Attachments.delAttachment(this.name, true);
                                     return false;
                                 })
                         )
@@ -120,7 +122,6 @@ Attachments = {
             async: false
         });
         if (refresh) {
-            this.delAttachment(url);
             this.refreshAttachments();
         }
     }

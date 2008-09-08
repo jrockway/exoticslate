@@ -214,6 +214,8 @@ function setup_wikiwyg() {
             }).trigger("resize");
  
             ww.is_editing = true;
+            ww._originalHTMLOverflow = jQuery('html').css('overflow') || 'visible';
+            ww._originalBodyOverflow = jQuery('body').css('overflow') || 'visible';
 
             if (Wikiwyg.is_safari) {
                 ww.message.display({
@@ -237,7 +239,10 @@ function setup_wikiwyg() {
     if (!Socialtext.new_page) {
         jQuery('#st-save-button-link').click(function() {
             ww.is_editing = false;
-            return ww.saveButtonHandler();
+            jQuery('html').css('overflow', ww._originalHTMLOverflow);
+            jQuery('body').css('overflow', ww._originalBodyOverflow);
+            ww.saveButtonHandler();
+            return false;
         });
     }
 
@@ -273,6 +278,8 @@ function setup_wikiwyg() {
                     encodeURIComponent(location.href);
 
             ww.is_editing = false;
+            jQuery('html').css('overflow', ww._originalHTMLOverflow);
+            jQuery('body').css('overflow', ww._originalBodyOverflow);
         } catch(e) {}
         return false;
     });
@@ -280,7 +287,8 @@ function setup_wikiwyg() {
     jQuery('#st-preview-button-link')
         .unbind('click')
         .click(function () {
-            return ww.preview_link_action();
+            ww.preview_link_action();
+            return false;
         });
 
     if (window.wikiwyg_nlw_debug) {
@@ -316,6 +324,7 @@ function setup_wikiwyg() {
             content:'#st-tagqueue-interface',
             close:'#st-tagqueue-close'
         });
+        return false;
     });
 
     jQuery('#st-tagqueue-field')
@@ -329,18 +338,18 @@ function setup_wikiwyg() {
 
     var add_tag = function() {
         var tag = jQuery('#st-tagqueue-field').val();
-        jQuery('<input type="hidden" name="add_tag">')
+        jQuery('<input type="hidden" name="add_tag" />')
             .attr('id', 'st-tagqueue-'+tag)
             .attr('value', tag)
             .appendTo('#st-page-editing-files');
 
         jQuery('#st-tagqueue-list').show()
-        jQuery('<span class="st-tagqueue-taglist-name">')
+        jQuery('<span class="st-tagqueue-taglist-name" />')
             .attr('id', 'st-taglist-' + tag)
             .append(
                 jQuery('.st-tagqueue-taglist-name').size() ? ', ' : '',
                 tag,
-                jQuery('<a class="st-tagqueue-taglist-delete">')
+                jQuery('<a class="st-tagqueue-taglist-delete" />')
                     .attr('title', loc("Remove _[0] from the queue", tag))
                     .attr('href', '#')
                     .click(function () {
@@ -382,7 +391,8 @@ function setup_wikiwyg() {
 Wikiwyg.setup_newpage = function() {
     if (Socialtext.new_page) {
         jQuery('#st-save-button-link').click(function () {
-            return wikiwyg.saveNewPage();
+            wikiwyg.saveNewPage();
+            return false;
         });
 
         jQuery('#st-newpage-duplicate-okbutton').click(function () {
@@ -471,6 +481,8 @@ proto.preview_link_action = function() {
         .click(this.button_disabled_func());
     this.enable_edit_more = function() {
         jQuery(preview)
+            .removeClass('previewButton')
+            .addClass('editButton')
             .unbind('click')
             .click( function () {
                 if (jQuery("#contentRight").is(":visible")) 
@@ -497,9 +509,12 @@ proto.preview_link_reset = function() {
 
     var self = this;
     jQuery(preview)
+        .removeClass('editButton')
+        .addClass('previewButton')
         .unbind('click')
         .click( function() {
-            return self.preview_link_action();
+            self.preview_link_action();
+            return false;
         });
 }
 
@@ -639,7 +654,7 @@ proto.newpage_save = function(page_name, pagename_editfield) {
 
 proto.saveContent = function() {
     jQuery('#st-editing-tools-edit ul').hide()
-    jQuery('<div id="saving-message">')
+    jQuery('<div id="saving-message" />')
         .html(loc('Saving...'))
         .css('color', 'red')
         .appendTo('#st-editing-tools-edit');
@@ -760,7 +775,7 @@ proto.saveChanges = function() {
                 var files = Attachments.get_new_attachments();
 
                 jQuery.each(files, function () {
-                    jQuery('<input type="hidden" name="attachment">')
+                    jQuery('<input type="hidden" name="attachment" />')
                         .val(this['id'] + ':' + this['page-id'])
                         .appendTo('#st-page-editing-files');
                 });
@@ -836,23 +851,6 @@ proto.enableLinkConfirmations = function() {
         Attachments.delete_new_attachments();
     }
  
-    var links = document.getElementsByTagName('a');
-    for (var i = 0; i < links.length; i++) {
-        if (links[i].id == 'st-cancel-button-link') continue;
-        if (links[i].onclick) continue;
-        if (links[i].id == 'st-preview-button-link') continue;
-        if (links[i].id == 'st-edit-tips') continue;
-        if (links[i].id == 'st-save-button-link') continue;
-        if (links[i].id == 'st-edit-mode-uploadbutton') continue;
-        if (links[i].id == 'st-edit-mode-tagbutton') continue;
-        if (links[i].id == 'st-attachmentsqueue-submitbutton') continue;
-        if (links[i].id == 'st-attachmentsqueue-closebutton') continue;
-        if (links[i].id == 'st-attachments-attach-closebutton') continue;
-        if (links[i].id == 'st-tagqueue-closebutton') continue;
-        if (links[i].id == 'st-tagqueue-submitbutton') continue;
-
-        links[i].onclick = this.confirmLinkFromEdit;
-    }
     return false;
 }
 
@@ -911,6 +909,7 @@ proto.set_edit_tips_span_display = function(display) {
 proto.editMode = function() {
     if (Socialtext.page_type == 'spreadsheet') return;
 
+    jQuery('html,body').css('overflow', 'hidden');
     this.current_mode = this.first_mode;
     this.current_mode.fromHtml(this.div.innerHTML);
     this.toolbarObject.resetModeSelector();
@@ -944,7 +943,7 @@ proto.get_edit_height = function() {
 
 proto.enableStarted = function() {
     jQuery('#st-editing-tools-edit ul').hide()
-    jQuery('<div id="loading-message">')
+    jQuery('<div id="loading-message" />')
         .html(loc('Loading...'))
         .appendTo('#st-editing-tools-edit');
     this.wikiwyg.disable_button(this.classname);
@@ -1105,7 +1104,7 @@ proto._do_link = function(widget_element) {
         })
         .submit(function() {
             if (jQuery.browser.msie)
-                jQuery("<input type='text'>").appendTo('body').focus().remove();
+                jQuery("<input type='text' />").appendTo('body').focus().remove();
 
             if (jQuery('#add-wiki-link').is(':checked')) {
                 if (!self.add_wiki_link(widget_element, dummy_widget)) return false;
@@ -1129,10 +1128,19 @@ proto._do_link = function(widget_element) {
 
             return false;
         });
+
+    jQuery('#add-a-link-error').hide();
+
     jQuery.showLightbox({
         content: '#st-widget-link-dialog',
         close: '#st-widget-link-cancelbutton'
     })
+
+    // Set the unload handle explicitly so when user clicks the overlay gray
+    // area to close lightbox, widget_editing will still be set to false.
+    jQuery('#lightbox').unload(function(){
+        Wikiwyg.Widgets.widget_editing = 0;
+    });
 
     this.load_add_a_link_focus_handlers("add-wiki-link");
     this.load_add_a_link_focus_handlers("add-web-link");
@@ -1153,8 +1161,8 @@ proto.load_add_a_link_focus_handlers = function(radio_id) {
 
 proto.set_add_a_link_error = function(msg) {
     jQuery("#add-a-link-error")
-        .show()
         .html('<span>' + msg + '</span>')
+        .show()
 }
 
 proto.create_link_wafl = function(label, workspace, pagename, section) {
@@ -1548,10 +1556,19 @@ proto.get_editable_div = function () {
         this._editable_div.onactivate = function () {
             self.__range = undefined;
         };
-        setTimeout(function() {
-            doc.body.appendChild(self._editable_div);
-            setTimeout(function () { self._editable_div.focus() }, 500);
-        }, 500);
+        var tryAppendDiv = function(tries) {
+            setTimeout(function() {
+                if (doc.body) {
+                    doc.body.appendChild(self._editable_div);
+                    setTimeout(function () { self._editable_div.focus() }, 500);
+                }
+                else if (tries > 0) {
+                    // Retry for up to 10 times
+                    tryAppendDiv(tries - 1);
+                }
+            }, 500);
+        };
+        tryAppendDiv(10);
     }
     return this._editable_div;
 }

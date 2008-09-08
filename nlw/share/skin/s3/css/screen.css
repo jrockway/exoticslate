@@ -1,6 +1,15 @@
 @import url('styles.css');
+@import url('../../wikiwyg/css/lightbox.css');
 
 /* overloads */
+
+.hidebox {
+    display: none;
+}
+
+.showbox {
+    display: block;
+}
 
 #st-wikinav-profile {
     float: none !important;
@@ -126,100 +135,6 @@ ul.normal ul ul {
     background-color: #FFFFDD !important;
 }
 
-#st-widgets-moreoptionspanel {
-    display: none;
-    background-color: #F0F0F0;
-    padding: 2px 4px 4px 4px;
-    margin: 6px 0 4px 0;
-    border: 1px solid #B0CCFF;
-}
-
-#st-widgets-moreoptions {
-    padding-left: 8px;
-}
-
-/* Lightbox */
-
-.lightbox {
-    padding: 10px;
-    line-height: 1.5em;
-    text-align: left;
-    display: none;
-}
-
-.lightbox td, .lightbox th {
-    vertical-align: top;
-    padding: 5px 5px;
-}
-
-.lightbox th {
-    font-weight: bold;
-}
-
-.lightbox input {
-    margin: 4px;
-}
-
-.lightbox .title {
-    font-weight: bold;
-    font-size: 120%;
-}
-
-.lightbox .label {
-    font-weight: 600;
-}
-
-.lightbox .editlabel {
-    width: 10em;
-    float: left;
-    padding-right: 0.5em;
-    padding-top: 3px;
-}
-
-.lightbox .buttons {
-    float: right;
-    margin-top: 20px;
-}
-
-.lightbox .fileprompt {
-    margin: 0.2em 0 0.4em 0;
-    padding-bottom: 0px;
-}
-
-.lightbox .message {
-    font-weight: bold;
-    margin-bottom: 1em;
-    display: none;
-}
-
-.lightbox .error {
-    font-weight: bold;
-    color: #f00;
-    margin-bottom: 1em;
-    display: none;
-}
-
-.lightbox .list {
-    display: none;
-    font-size: 90%;
-    color: #666;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    border-top: 1px solid #4949BA;
-    border-bottom: 1px solid #4949BA;
-    background-color: #F5F5F5;
-    padding: 3px;
-}
-
-.lightbox .listlabel {
-    color: #4949BA;
-}
-
-.lightbox .hint {
-    font-size: 90%;
-    font-style: italic;
-}
-
 /* Additional Settings styles */
 #settingsPage td {
     padding: 4px;
@@ -233,6 +148,14 @@ ul.normal ul ul {
 #settingsPage dd {
     line-height: 1.2em;
     margin-bottom: 4px;
+}
+
+/* Additional People Profiles styles */
+ul li a.followPersonButton {
+    line-height: 16px;
+    height: 22px;
+    background: url(../images/followIcon.png) no-repeat top left;
+    padding-left: 25px;
 }
 
 /* Wafl Boxes */
@@ -515,7 +438,19 @@ body#listView #controlsRight ul li {
     background: #BFE2FF;
 }
 
-ul.buttonRight li a, #controlsRight li a {
+div.controlsInline ul li a {
+    float: left;
+    color: #333;
+    font-weight: bold;
+    font-size: 9px;
+}
+
+div.controlsInline ul li a.watch {
+    background: url(../images/watchIcon.png) no-repeat center left;
+    padding: 0 10px 0 28px;
+}
+
+ul.buttonRight li a, #controlsRight li a, .controlsInline li a {
     display: block;
     text-decoration: none;
 }
@@ -637,7 +572,6 @@ body#contentPage #controlsRight ul.level2 {
  * XXX: Hack around the fact that we don't have buttons for these elements yet
  */
 a#st-mode-wysiwyg-button,
-a#st-preview-button-link,
 a#st-mode-wikitext-button,
 a#st-edit-tips {
     top: 0 !important;
@@ -1226,4 +1160,385 @@ body#settingsPage div#controls div#controlsRight {
 
 body div#mainWrap {
     min-width: 865px;
+}
+
+
+ul li a.previewButton {
+        display: block;
+        width: 89px;
+        height: 22px;
+        background: url(../images/previewButton.png) no-repeat;
+        background-position: top right;
+        text-indent: -9999px;
+}
+
+ul li a.previewButton:hover {
+        background-position: top left;
+}
+
+body div#controls div#st-editing-tools-edit ul li a {
+    margin-left: 0px;
+}
+
+body div#controls div#st-editing-tools-edit ul li {
+    padding-left: 10px;
+}
+
+
+div#contentColumns div#contentLeft div.wiki h1,
+div#contentColumns div#contentLeft div.wiki h2,
+div#contentColumns div#contentLeft div.wiki h3,
+div#contentColumns div#contentLeft div.wiki h4,
+div#contentColumns div#contentLeft div.wiki h5,
+div#contentColumns div#contentLeft div.wiki h6 {
+    font-style:normal;
+    font-weight:bold;
+    margin-bottom:8px;
+    margin-top:0.1em;
+    color: black;
+}
+
+div#contentColumns div#contentLeft div.wiki h1 {
+    font-size: 175%;
+}
+
+div#contentColumns div#contentLeft div.wiki h2 {
+    font-size: 145%;
+}
+
+div#contentColumns div#contentLeft div.wiki h3 {
+    font-size: 125%;
+}
+
+div#contentColumns div#contentLeft div.wiki h4 {
+    font-size: 110%;
+}
+
+div#contentColumns div#contentLeft div.wiki h5 {
+    font-size: 100%;
+}
+
+div#contentColumns div#contentLeft div.wiki h6 {
+    font-size: 100%;
+    font-style: italic;
+    font-weight: normal;
+}
+
+td.peoplelist-picture-td {
+    width: 70px;
+}
+
+td.peoplelist-desc-td {
+    width: 100%;
+}
+
+/* --------------------------------------------------------------
+
+typography.css
+* Sets up some sensible default typography.
+
+-------------------------------------------------------------- */
+
+/* Default font settings.
+The font-size percentage is of 16px. (0.75 * 16px = 12px) */
+.wiki {
+    font-size: 100%;
+    color: #222;
+    line-height:1.25;
+}
+
+/* Headings
+-------------------------------------------------------------- */
+
+.wiki h1,
+.wiki h2,
+.wiki h3,
+.wiki h4,
+.wiki h5,
+.wiki h6 {
+    font-weight: normal;
+    color: #0A94DF;
+}
+
+.wiki h1 {
+    font-size: 3em;
+    line-height: 1;
+    margin-bottom: 0.5em;
+}
+.wiki h2 {
+    font-size: 2em;
+    margin-bottom: 0.75em;
+}
+.wiki h3 {
+    font-size: 1.5em;
+    line-height: 1;
+    margin-bottom: 1em;
+}
+.wiki h4 {
+    font-size: 1.2em;
+    line-height: 1.25;
+    margin-bottom: 1.25em;
+    height: 1.25em;
+}
+.wiki h5 {
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 1.5em;
+}
+.wiki h6 {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.wiki h1 img,
+.wiki h2 img,
+.wiki h3 img,
+.wiki h4 img,
+.wiki h5 img,
+.wiki h6 img {
+    margin: 0;
+}
+
+
+/* Text elements
+-------------------------------------------------------------- */
+
+.wiki p {
+    margin: 0 0 1.5em;
+    font-size: 100%;
+}
+.wiki p img {
+    float: left;
+    margin: 1.5em 1.5em 1.5em 0;
+    padding: 0;
+    border:1px #999 solid;
+}
+.wiki p img.right {
+    float: right;
+    margin: 1.5em 0 1.5em 1.5em;
+}
+
+.wiki blockquote {
+    margin: 1.5em;
+    color: #666;
+    font-style: italic;
+}
+.wiki strong {
+    font-weight: bold;
+}
+.wiki em,
+.wiki dfn {
+    font-style: italic;
+}
+.wiki dfn {
+    font-weight: bold;
+}
+.wiki sup,
+.wiki sub {
+    line-height: 0;
+}
+
+.wiki abbr,
+.wiki acronym {
+    border-bottom: 1px dotted #666;
+}
+.wiki address {
+    margin: 0 0 1.5em;
+    font-style: italic;
+}
+.wiki del {
+    color: #666;
+}
+
+.wiki pre,
+.wiki code {
+    margin: 1.5em 0;
+    white-space: pre;
+}
+.wiki pre,
+.wiki code,
+.wiki tt {
+    font: 1em 'andale mono', 'lucida console', monospace;
+    line-height: 1.5;
+}
+
+
+/* Lists
+-------------------------------------------------------------- */
+
+.wiki li ul,
+.wiki li ol {
+    margin: 0 1.5em;
+}
+.wiki ul,
+.wiki ol {
+    margin: 0 1.5em 1.5em 1.5em;
+    line-height: 1.2em;
+}
+
+.wiki ul {
+    list-style-type: disc;
+}
+.wiki ol {
+    list-style-type: decimal;
+}
+
+.wiki dl {
+    margin: 0 0 1.5em 0;
+}
+.wiki dl dt {
+    font-weight: bold;
+}
+.wiki dd {
+    margin-left: 1.5em;
+}
+
+
+/* Tables
+-------------------------------------------------------------- */
+
+.wiki table {
+    margin-bottom: 1.4em;
+    width: 100%;
+}
+.wiki th {
+    font-weight: bold;
+    background: #C3D9FF;
+}
+.wiki th,
+.wiki td {
+    padding: 4px 10px 4px 5px;
+}
+.wiki tr.even td {
+    background: #E5ECF9;
+}
+.wiki tfoot {
+    font-style: italic;
+}
+.wiki caption {
+    background: #eee;
+}
+
+
+/* Misc classes
+-------------------------------------------------------------- */
+
+.wiki .small {
+    font-size: .8em;
+    margin-bottom: 1.875em;
+    line-height: 1.875em;
+}
+.wiki .large {
+    font-size: 1.2em;
+    line-height: 2.5em;
+    margin-bottom: 1.25em;
+}
+.wiki .hide {
+    display: none;
+}
+
+.wiki .quiet {
+    color: #666;
+}
+.wiki .loud {
+    color: #000;
+}
+.wiki .highlight {
+    background: #ff0;
+}
+.wiki .added {
+    background: #060;
+    color: #fff;
+}
+.wiki .removed {
+    background: #900;
+    color: #fff;
+}
+
+.wiki .first {
+    margin-left: 0;
+    padding-left: 0;
+}
+.wiki .last {
+    margin-right: 0;
+    padding-right: 0;
+}
+.wiki .top {
+    margin-top: 0;
+    padding-top: 0;
+}
+.wiki .bottom {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* Socialtext classes
+-------------------------------------------------------------- */
+
+.wiki a.incipient {
+    border-bottom:1px #fc6500 dotted;
+    color:#fc6500;
+}
+.wiki a.incipient:hover {
+    color:#fc6500;
+    text-decoration:none;
+    border-bottom:1px #fc6500 solid;
+}
+.wiki .wafl_box,
+.wiki .fetchrss_box {
+    background:#fcf2e3;
+    color:inherit;
+    padding:0;
+    margin-bottom:1em;
+    border:none;
+}
+.wiki .wafl_titlebox,
+.wiki .fetchrss_titlebox {
+    background:#fae8ce;
+    font-size:120%;
+    padding:.5em 0 .5em 1em;
+    margin-bottom:1em;
+    border-bottom:1px #e7cdaa solid;
+}
+.wiki .wafl_titlebox a,
+.wiki .fetchrss_titlebox a {
+    font-weight:normal;
+}
+.wiki .wafl_items,
+.wiki .fetchrss_items {
+    padding:0 1em 1em 1em;
+}
+.wiki ul.item_list,
+.wiki ul.fetchrss_items {
+    list-style-type:none;
+    margin-left:0;
+}
+.wiki ul.item_list li.item a,
+.wiki ul.fetchrss_items li.fetchrss_item a {
+    font-weight:inherit;
+}
+.wiki ul.item_list li.item p.snippet,
+.wiki ul.fetchrss_items li.fetchrss_item p.fetchrss_description {
+    margin-top:.25em ! important;
+}
+.wiki .wiki-include-page {
+    margin-left: 0;
+    margin-bottom:1em;
+    padding:1em 0 1em 0;
+    border-left: 5px #C3D9FF solid;
+}
+.wiki .wiki-include-title {
+    font-size:150%;
+    margin-left:1.33em;
+    margin-bottom:0.5em;
+}
+.wiki .wiki-include-title a {
+    color:#33A8FF;
+    font-weight:normal;
+}
+.wiki .wiki-include-title a.incipient {
+    color:#fc6500;
+}
+.wiki .wiki-include-content {
+    margin-left:2em;
 }

@@ -36,10 +36,19 @@ push_onload_function = function (fcn) { jQuery(fcn) }
 $(function() {
     $('#st-page-boxes-toggle-link')
         .bind('click', function() {
-            $('#contentRight').toggle();
-            var hidden = $('#contentRight').is(':hidden');
+            var hidden = $('#contentRight').hasClass('hidebox');
+            if (hidden)
+                $('#contentRight').removeClass("hidebox").addClass("showbox");
+            else
+                $('#contentRight').removeClass("showbox").addClass("hidebox");
+            hidden = !hidden;
             this.innerHTML = hidden ? 'show' : 'hide';
             Cookie.set('st-page-accessories', hidden ? 'hide' : 'show');
+
+            // Because the content area's height might have changed, repaint
+            // the Edit/Comment buttons at the bottom for IE.
+            Page._repaintBottomButtons();
+
             return false;
         });
 
@@ -110,8 +119,10 @@ $(function() {
                 return false;
             }
 
+            var basename = filename.match(/[^\\\/]+$/);
+
             $('#st-attachments-attach-uploadmessage').html(
-                loc('Uploading [_1]...', filename.match(/[^\\\/]+$/))
+                loc('Uploading [_1]...', basename)
             );
 
             $('#st-attachments-attach-formtarget')
@@ -129,14 +140,16 @@ $(function() {
                     Attachments.refreshAttachments(function (list) {
                         // Add the freshly-uploaded file to the
                         // newAttachmentList queue.
-                        var file;
+
                         for (var i=0; i< list.length; i++) {
                             var item = list[i];
-                            if (filename == item.name) {
-                                file = item; 
+
+                            // Compare basename, because FF2 would use the
+                            // full pathname but item.name is basename-only.
+                            if (basename == item.name) {
+                                Attachments.addNewAttachment(item);
                             }
                         }
-                        Attachments.addNewAttachment(file);
 
                         $('#st-attachments-attach-list')
                             .show()
@@ -182,15 +195,23 @@ $(function() {
 
     $("#st-comment-button-link, #bottomButtons .commentButton")
         .click(function () {
+            if ($('div.commentWrapper').length) {
+                Page._currentGuiEdit.scrollTo();
+                return;
+            }
+
             get_lightbox(function () {
                 var ge = new GuiEdit({
                     id: 'contentLeft',
                     oncomplete: function () {
-                        Page.refreshPageContent()
+                        Page.refreshPageContent();
+                        Page._repaintBottomButtons();
                     }
                 });
+                Page._currentGuiEdit = ge;
                 ge.show();
             });
+            Page._repaintBottomButtons();
             return false;
         });
 

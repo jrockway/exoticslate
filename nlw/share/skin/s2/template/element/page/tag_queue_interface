@@ -1,5 +1,5 @@
 [% ns = 'st-tagqueue' %]
-<div id="[% ns %]-interface">
+<div id="[% ns %]-interface" class="lightbox">
     <form onsubmit="return false;">
     <div id="[% ns %]-overlay"></div>
     <div>

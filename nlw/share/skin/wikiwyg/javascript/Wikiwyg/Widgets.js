@@ -505,9 +505,14 @@ proto.pullTitleFromServer = function (field, id, data) {
     });
     if (!(field in wikiwyg_widgets_title_lookup))
         wikiwyg_widgets_title_lookup[field] = {};
-    wikiwyg_widgets_title_lookup[field][id] = details.title;
 
-    return details.title;
+    if (details) {
+        wikiwyg_widgets_title_lookup[field][id] = details.title;
+        return details.title;
+    }
+    else {
+        return null;
+    }
 }
 
 proto.setTitleAndId = function (widget) {
@@ -1199,7 +1204,7 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
     var template = 'widget_' + widget + '_edit.html';
     var html = Jemplate.process(template, this.currentWidget);
 
-    jQuery('<div>')
+    jQuery('<div />')
         .attr('id', 'widget-' + widget)
             .attr('class', 'lightbox')
             .html(html)
@@ -1228,7 +1233,7 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
             );
     }, 500);
 
-    jQuery('#st-widgets-moreoptions').toggle(
+    jQuery('#st-widgets-moreoptions').unbind('click').toggle(
         function () {
             jQuery('#st-widgets-moreoptions')
                 .html(loc('Fewer options'))

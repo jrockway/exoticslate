@@ -103,7 +103,7 @@
     $.fn.lookahead.getLookahead = function (input) {
         var lh;
         if (lh = input.lh) return lh;
-        var lh = $('<div>')
+        var lh = $('<div />')
             .css({
                 position: $.browser.msie ? 'relative' : 'absolute',
                 background: '#B4DCEC',

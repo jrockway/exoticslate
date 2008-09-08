@@ -10,19 +10,19 @@ var asyncSteps = [
 var testData = [
     {
         type: "one_widget",
-        url: "/?action=add_widget;file=gadgets/share/gadgets/my_workspaces.xml",
+        url: "/?action=add_widget;location=widgets/share/widgets/my_workspaces.xml",
         regex: /You do not belong to any workspaces yet\./,
         desc: "Empty My Workspaces message is correct"
     },
     {
         type: "one_widget",
-        url: "/?action=add_widget;file=gadgets/share/gadgets/one_page.xml",
+        url: "/?action=add_widget;location=widgets/share/widgets/one_page.xml",
         regex: /This widget shows a single wiki page\. To show a page, click on the tool icon and add the name of the workspace and page\./,
         desc: "Empty message for one page wiki is present and correct"
     },
     {
         type: "one_widget",
-        url: "/?action=add_widget;file=people/share/profile_tags.xml",
+        url: "/?action=add_widget;location=people/share/profile_tags.xml",
         regex: /You don't have any tags yet. Click <b>Add tag<\/b> to add one now./,
         desc: "Empty message for profile tags is present and correct"
     },
@@ -35,7 +35,7 @@ var testData = [
     },
     {
         type: "one_widget",
-        url: "/?action=add_widget;file=people/share/profile_following.xml",
+        url: "/?action=add_widget;location=people/share/profile_following.xml",
         regex: /You are not following anyone yet. When viewing someone else's profile, you can click on the "Follow this person" button at the top of the page./,
         desc: "Empty message for my \"Persons I'm Following\" list."
     },
@@ -51,7 +51,7 @@ var testData = [
     },
     {
         type: "one_widget",
-        url: "/?action=add_widget;file=gadgets/share/gadgets/recent_conversations.xml",
+        url: "/?action=add_widget;location=widgets/share/widgets/recent_conversations.xml",
         regex: /My Conversations shows updates to pages you are involved with. To see entries in my conversation, edit, comment on, or watch a page. When someone else modifies that page, you will see those updates here./,
         desc: "Empty message for my \"Recent Conversations\" list."
     }

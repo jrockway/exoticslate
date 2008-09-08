@@ -13,7 +13,7 @@ function step1() {
 function step2() {
     t.like(
         t.$("#st-listview-form tr.oddRow td:eq(1) img.pageType").attr('src'),
-        /(ss|doc)16.png$/,
+        /(sheet|doc)Icon.png$/,
         "There is a page type icon in the list"
     );
 

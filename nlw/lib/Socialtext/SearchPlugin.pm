@@ -345,6 +345,7 @@ sub _make_row {
         workspace_name      => $workspace->name,
         workspace_title     => $workspace->title,
         is_attachment       => $hit->isa('Socialtext::Search::AttachmentHit'),
+        is_spreadsheet      => $page->is_spreadsheet,
     };
 }
 

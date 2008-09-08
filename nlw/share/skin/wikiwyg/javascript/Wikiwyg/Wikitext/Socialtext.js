@@ -64,7 +64,7 @@ proto.clear_inner_text = function() {
 
 proto.enableThis = function() {
     Wikiwyg.Mode.prototype.enableThis.call(this);
-    this.textarea.style.width = '99%';
+    this.textarea.style.width = Wikiwyg.is_ie ? '98%' : '99%';
     this.setHeightOfEditor();
     this.enable_keybindings();
     this.textarea.focus();

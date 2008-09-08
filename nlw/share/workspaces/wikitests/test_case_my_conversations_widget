@@ -3,8 +3,8 @@
 * Fixture: SocialWidgets
 
 | set | workspace | test-data |
-| st-admin | create-user --email devnull2@socialtext.com --password %%password%% |
-| st-admin | add-member --email devnull2@socialtext.com --workspace test-data |
+| st-admin | create-user --email devnull3@socialtext.com --password %%password%% |
+| st-admin | add-member --email devnull3@socialtext.com --workspace test-data |
 
 | *Comment* | Test Case: My Conversations Widget Create Conversations |  |
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |
@@ -31,11 +31,11 @@
 | type_ok | st-commentui-textarea | see, I commented |
 | click_and_wait | st-commentui-savelink |  |
 
-| *Comment* | Test Case: My Conversations Widget Login as devnull2 |  |
+| *Comment* | Test Case: My Conversations Widget Login as devnull3 |  |
 | open_ok | /%%workspace%%/index.cgi?jabberwocky |  |
 | st-logout |  |  |
 | open_ok | /%%workspace%%/index.cgi |  |
-| type_ok | username | devnull2@socialtext.com |
+| type_ok | username | devnull3@socialtext.com |
 | type_ok | password | %%password%% |
 | click_and_wait | //input[@value='Log in'] |  |
 
@@ -71,8 +71,8 @@
 | text_like | //body | My Conversations |
 | text_like | //body | My Colleagues |  |
 | text_like | //body | All Changes |
-| text_like | //body | devnull2 edited created_page |
-| text_like | //body | devnull2 commented on Jabberwocky in Canonical Test Data Set |
-| text_like | //body | devnull2 commented on Slithy in Canonical Test Data Set |
+| text_like | //body | devnull3 edited created_page |
+| text_like | //body | devnull3 commented on Jabberwocky in Canonical Test Data Set |
+| text_like | //body | devnull3 commented on Slithy in Canonical Test Data Set |
 
 | *Comment* | Test Case: My Conversations Widget COMPLETED |  |

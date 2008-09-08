@@ -18,7 +18,7 @@
       jQuery(function(){jQuery("table.dataTable").tablesorter({ sortList: [[0, 0]] });});
     --></script>
 
-    <table class="dataTable">
+    <table class="dataTable tablist">
       <thead>
       <tr>
         <th>[% loc('Tag') %]</th>

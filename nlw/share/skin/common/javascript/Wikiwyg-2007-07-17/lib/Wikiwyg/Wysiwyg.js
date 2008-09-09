@@ -80,14 +80,9 @@ proto.enableThis = function() {
 
     var self = this;
     var ready = function() {
-// XXX I(ngy) have no idea why this function failed for ie7.
-// Gugod should review. 
-        if (Wikiwyg.is_ie7) return;
-
         if (!self.is_ready)
             self.fromHtml( self.wikiwyg.div.innerHTML );
         self.get_edit_document().designMode = 'on';
-        self.apply_stylesheets();
         self.enable_keybindings();
         self.set_clear_handler();
 

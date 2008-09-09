@@ -101,7 +101,7 @@ v.wiki = {};
 v.wiki.static_path = "[% wiki.static_path %]";
 v.wiki.is_public = "[% wiki_is_public %]";
 v.wiki.skin_uri = function(skin) {
-  return "[% wiki.skin_uri('s2') %]";
+  return "[% wiki.skin_uri('s3') %]";
 };
 
 v.new_tags = [];

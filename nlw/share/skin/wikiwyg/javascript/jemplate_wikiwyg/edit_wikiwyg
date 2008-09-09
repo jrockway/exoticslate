@@ -72,7 +72,7 @@
                         <textarea id="st-page-editing-pagebody-decoy" wrap="virtual" name="page_body_decoy"></textarea>
                         <div style="display: none" id="st-page-editing-files"></div>
                     </form>
-                    <iframe frameborder="0" id="st-page-editing-wysiwyg" src="[% wiki.static_path %]/html/blank.html"></iframe>
+                    <iframe frameborder="0" id="st-page-editing-wysiwyg" src="[% wiki.skin_uri() %]/html/wikiwyg.html"></iframe>
                     <div id="st-page-preview"></div>
                 </div>
             </div>

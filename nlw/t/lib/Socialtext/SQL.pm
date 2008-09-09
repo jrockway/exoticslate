@@ -8,9 +8,13 @@ use unmocked 'Data::Dumper';
 
 our @EXPORT_OK = qw/sql_execute sql_ok sql_selectrow sql_singlevalue get_dbh
                     sql_in_transaction sql_begin_work sql_commit sql_rollback
-                    disconnect_dbh/;
+                    disconnect_dbh sql_mock_result/;
 our @SQL;
 our @RETURN_VALUES;
+
+sub sql_mock_result {
+    push @RETURN_VALUES, {'return'=>[@_]};
+}
 
 sub sql_execute {
     push @SQL, { sql => shift, args => [@_] };
@@ -20,7 +24,8 @@ sub sql_execute {
         return $sth_args->();
     }
 
-    return mock_sth->new(%{ $sth_args || {} });
+    my $mock = mock_sth->new(%{ $sth_args || {} });
+    return $mock;
 }
 
 sub get_dbh { }

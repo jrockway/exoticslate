@@ -62,6 +62,12 @@ sub guess_real_name {
     my $self = shift;
     return $self->first_name . ' ' . $self->last_name;
 }
+
+sub guess_sortable_name { 
+    my $self = shift;
+    return $self->last_name . ' ' . $self->first_name;
+}
+
 sub best_full_name { 'Best FullName' }
 sub first_name { $_[0]->{first_name} ||= 'Mocked First' }
 sub last_name { $_[0]->{last_name} ||= 'Mocked Last' }

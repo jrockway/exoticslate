@@ -25,8 +25,9 @@
         $(this).hideLightbox();
     };
 
-    $.showLightbox = function(options) {
-        opts = options;
+    $.showLightbox = function(args) {
+        // Allow $.showLightbox(string) and $.showLightbox(options)
+        opts = typeof(args) == 'string' ? { html: args } : args;
         $(this).showLightbox();
     };
 
@@ -54,6 +55,12 @@
         }
 
         var arrayPageScroll = _getPageScroll();
+
+        if (opts.html) {
+            opts.html = '<div style="display:block" class="lightbox">'
+                      + opts.html
+                      + '</div>';
+        }
 
         $('#lightbox')
             .css('width', opts.width || '520px')

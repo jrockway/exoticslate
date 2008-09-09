@@ -1,4 +1,4 @@
-.PHONY: all clean
+.PHONY: all clean split-js
 
 COMMON_JAVASCRIPT=../../common/javascript
 S2_JAVASCRIPT=../../s2/javascript
@@ -69,4 +69,15 @@ jemplate/insert_widget_menu: $(WIDGETS_YAML) $(JEMPLATE_GENERATOR) template/widg
 Widgets.js: $(WIDGETS_YAML)
 	perl -MYAML -I../../../../lib -I../../../lib -MSocialtext::JSON -e 'print "Wikiwyg.Widgets =\n"; print encode_json(YAML::LoadFile(shift(@ARGV))); print ";\n"' \
 		$< > $@
+
+split-js:
+	perl \
+	-e 'my $$text = `cat $(EDITOR_FILE)`;' \
+	-e 'while($$text) {' \
+	-e '    $$text =~ s/\/\/ BEGIN (.*?)\n(.*?)(?=\/\/ BEGIN |\z)//s' \
+	-e '      or die "fubarred";' \
+	-e '    open(OUT, "> $$1") or do {warn "Cannot open $$1 for output\n"; next};' \
+	-e '    print OUT $$2;' \
+	-e '    close OUT;' \
+	-e '}'
 

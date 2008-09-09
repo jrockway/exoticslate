@@ -214,8 +214,6 @@ function setup_wikiwyg() {
             }).trigger("resize");
  
             ww.is_editing = true;
-            ww._originalHTMLOverflow = jQuery('html').css('overflow') || 'visible';
-            ww._originalBodyOverflow = jQuery('body').css('overflow') || 'visible';
 
             if (Wikiwyg.is_safari) {
                 ww.message.display({
@@ -239,8 +237,7 @@ function setup_wikiwyg() {
     if (!Socialtext.new_page) {
         jQuery('#st-save-button-link').click(function() {
             ww.is_editing = false;
-            jQuery('html').css('overflow', ww._originalHTMLOverflow);
-            jQuery('body').css('overflow', ww._originalBodyOverflow);
+            ww.showScrollbars();
             ww.saveButtonHandler();
             return false;
         });
@@ -278,8 +275,7 @@ function setup_wikiwyg() {
                     encodeURIComponent(location.href);
 
             ww.is_editing = false;
-            jQuery('html').css('overflow', ww._originalHTMLOverflow);
-            jQuery('body').css('overflow', ww._originalBodyOverflow);
+            ww.showScrollbars();
         } catch(e) {}
         return false;
     });
@@ -450,6 +446,16 @@ proto.placeToolbar = function(toolbar_div) {
         .append(toolbar_div);
 }
 
+proto.hideScrollbars = function () {
+    this._originalHTMLOverflow = jQuery('html').css('overflow') || 'visible';
+    this._originalBodyOverflow = jQuery('body').css('overflow') || 'visible';
+}
+
+proto.showScrollbars = function () {
+    jQuery('html').css('overflow', this._originalHTMLOverflow);
+    jQuery('body').css('overflow', this._originalBodyOverflow);
+}
+
 proto.resizeEditor = function () {
     if (this.__resizing) return;
     this.__resizing = true;
@@ -477,6 +483,7 @@ proto.preview_link_action = function() {
 
     preview.innerHTML = this.preview_link_more;
     jQuery("#st-edit-mode-toolbar").hide();
+    this.showScrollbars();
 
     var self = this;
     jQuery(preview)
@@ -493,6 +500,8 @@ proto.preview_link_action = function() {
                         .css({ 'margin-right': '240px'});
                 self.switchMode(current.classname);
                 self.preview_link_reset();
+                self.resizeEditor();
+                self.hideScrollbars();
                 return false;
             });
     }
@@ -880,6 +889,34 @@ proto.contentIsModified = function() {
     return (current_wikitext != this.originalWikitext);
 }
 
+proto.diffContent = function () {
+    if (this.originalWikitext == null) {
+        jQuery.showLightbox('There is no originalWikitext');
+    }
+    else if (this.contentIsModified()) {
+        var current_wikitext = this.get_current_wikitext().replace(/\r/g, '');
+        jQuery.ajax({
+            type: 'POST',
+            url: location.pathname,
+            data: {
+                action: 'wikiwyg_diff',
+                text1: this.originalWikitext,
+                text2: current_wikitext
+            },
+            success: function (data) {
+                jQuery.showLightbox({
+                    html: '<pre style="font-family:Courier">'+data+'</pre>',
+                    width: '95%'
+                });
+            }
+        });
+    }
+    else {
+        jQuery.showLightbox("Content is not modified");
+    }
+    return void(0);
+}
+
 proto.get_current_wikitext = function() {
     if (this.current_mode.classname.match(/Wikitext/))
         return this.current_mode.toWikitext();
@@ -912,7 +949,7 @@ proto.set_edit_tips_span_display = function(display) {
 proto.editMode = function() {
     if (Socialtext.page_type == 'spreadsheet') return;
 
-    jQuery('html,body').css('overflow', 'hidden');
+    this.hideScrollbars();
     this.current_mode = this.first_mode;
     this.current_mode.fromHtml(this.div.innerHTML);
     this.toolbarObject.resetModeSelector();

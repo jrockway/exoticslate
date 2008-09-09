@@ -711,7 +711,7 @@ proto.normalizeDomStructure = function(dom) {
 
 proto.normalize_empty_link_tags = function(dom) {
     // Remove <a ...><!-- wiki-rename-link ... --></a>
-    jQuery('a').each(function () {
+    jQuery('a', dom).each(function () {
         if( this.childNodes.length == 1 &&
             this.childNodes[0].nodeType == 8 // comment node
             ) {

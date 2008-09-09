@@ -8,6 +8,7 @@ our $VERSION = '0.10';
 
 use base 'Socialtext::Plugin';
 
+use File::Temp qw( tempfile );
 use Class::Field qw( const field);
 use Socialtext::Formatter;
 use Socialtext::System;
@@ -55,6 +56,7 @@ sub register {
     $registry->add(action => 'wikiwyg_dff_rest_test_pages');
     $registry->add(action => 'wikiwyg_dff_get_page');
     $registry->add(action => 'wikiwyg_dff_diff');
+    $registry->add(action => 'wikiwyg_diff');
     $registry->add(preference => $self->wikiwyg_double);
     $registry->add(wafl => wikiwyg_formatting_test =>
                    'Socialtext::Wikiwyg::FormattingTest');
@@ -64,6 +66,20 @@ sub register {
                    'Socialtext::Wikiwyg::DataValidator');
 }
 
+sub wikiwyg_diff {
+    my $self = shift;
+    my ($fh1, $file1) = tempfile('/tmp/original.XXXX');
+    my ($fh2, $file2) = tempfile('/tmp/current.XXXX');
+    print $fh1 $self->cgi->text1;
+    print $fh2 $self->cgi->text2;
+    close $fh1 or die "Couldn't write to $file1";
+    close $fh2 or die "Couldn't write to $file2";
+    my $diff = qx{/usr/bin/diff -u $file1 $file2};
+    unlink($file1, $file2);
+    return $diff;
+}
+
+# XXX: Are these wikiwyg_dff functions still used??
 sub wikiwyg_dff_diff {
     my $self = shift;
     my $file1 =

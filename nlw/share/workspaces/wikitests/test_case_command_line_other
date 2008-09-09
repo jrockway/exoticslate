@@ -6,47 +6,6 @@
 | st-admin | create-user --email %%cli_user%% --password d3vnu1ll |  |
 
 | set | cmdline_workspace | clw_%%start_time%% |
-| set | cmdline_account | cla_%%start_time%% |
-| set | cmdline_acnt_ws | clw_act_%%start_time%% |
-
-| *Comment* | Test Case: Command Line Tests OTHER test plugin enable/disable |
-| st-admin | create_account --name %%cmdline_account%% | qr/A new account named "%%cmdline_account%%" was created\./ |
-| st-admin | create-workspace --name %%cmdline_acnt_ws%% --title %%cmdline_acnt_ws%% --account %%cmdline_account%% |  |
-| st-admin | add-member --email %%username%% --password %%password%% --workspace %%cmdline_acnt_ws%% |  |
-
-| st-admin | disable-plugin --plugin people | qr/Plugin people is now disabled for account Socialtext/ |
-| st-admin | disable-plugin --plugin people | qr/Plugin people is now disabled for account ALOHA/ |
-| st-admin | disable-plugin --plugin people | qr/Plugin people is now disabled for account %%cmdline_account%%/ |
-
-| st-admin | disable-plugin --plugin widgets | qr/Plugin widgets is now disabled for account Socialtext/ |
-| st-admin | disable-plugin --plugin widgets | qr/Plugin widgets is now disabled for account ALOHA/ |
-| st-admin | disable-plugin --plugin widgets | qr/Plugin widgets is now disabled for account %%cmdline_account%%/ |
-
-| st-admin | enable-plugin --account %%cmdline_account%% --plugin people | qr/Plugin people is now enabled for account %%cmdline_account%%/ |
-| st-admin | enable-plugin --account %%cmdline_account%% --plugin people | qr/Plugin widgets is now enabled for account %%cmdline_account%%/ |
-| st-admin | disable-plugin --account %%cmdline_account%% --plugin people | qr/Plugin people is now disabled for account %%cmdline_account%%/ |
-| st-admin | enable-plugin --account %%cmdline_account%% --plugin dashboard | qr/Plugin dashboard is now enabled for account %%cmdline_account%%/ |
-| st-admin | enable-plugin --account %%cmdline_account%% --plugin dashboard | qr/Plugin widgets is now enabled for account %%cmdline_account%%/ |
-
-| st-admin | disable-plugin --account %%cmdline_account%% --plugin dashboard | qr/Plugin dashboard is now disabled for account %%cmdline_account%%/ |
-| st-admin | disable-plugin --account %%cmdline_account%% --plugin dashboard | qr/Plugin dashboard is now disabled for account %%cmdline_account%%/ |
-
-| st-admin | enable-plugin --account %%cmdline_account%% --plugin socialcalc | qr/Plugin socialcalc is now enabled for account %%cmdline_account%%/ |
-| st-admin | disable-plugin --account %%cmdline_account%% --plugin socialcalc | qr/Plugin socialcalc is now disabled for account %%cmdline_account%%/ |
-
-| st-admin | enable-plugin --plugin people | qr/Plugin people is now enabled for account Socialtext/ |
-| st-admin | enable-plugin --plugin people | qr/Plugin people is now enabled for account ALOHA/ |
-| st-admin | enable-plugin --plugin people | qr/Plugin people is now enabled for account %%cmdline_account%%/ |
-| st-admin | enable-plugin --plugin people | qr/Plugin widgets is now enabled for account Socialtext/ |
-| st-admin | enable-plugin --plugin people | qr/Plugin widgets is now enabled for account ALOHA/ |
-| st-admin | enable-plugin --plugin people | qr/Plugin widgets is now enabled for account %%cmdline_account%%/ |
-
-| st-admin | enable-plugin --plugin dashboard | qr/Plugin widgets is now enabled for account Socialtext/ |
-| st-admin | enable-plugin --plugin dashboard | qr/Plugin widgets is now enabled for account ALOHA/ |
-| st-admin | enable-plugin --plugin dashboard | qr/Plugin widgets is now enabled for account %%cmdline_account%%/ |
-
-| st-admin | --help | qr/plugin/ |
-
 | st-admin | create-workspace --name %%cmdline_workspace%% --title %%cmdline_workspace%% | A new workspace named "%%cmdline_workspace%%" was created |
 
 | *Comment* | Test Case: Command Line Tests OTHER set-logo-from-file |  |

@@ -80,6 +80,10 @@ proto.enableThis = function() {
 
     var self = this;
     var ready = function() {
+// XXX I(ngy) have no idea why this function failed for ie7.
+// Gugod should review. 
+        if (Wikiwyg.is_ie7) return;
+
         if (!self.is_ready)
             self.fromHtml( self.wikiwyg.div.innerHTML );
         self.get_edit_document().designMode = 'on';
@@ -357,6 +361,8 @@ proto.toHtml = function(func) {
 
 proto.remove_padding_material = function(html) {
     var dom = document.createElement("div");
+    if (Wikiwyg.is_ie)
+        html = html.replace(/<P>\s*<HR>\s*<\/P>\s*/g, '<HR>\n\n');
     dom.innerHTML = html;
 
     // <BR>&nbsp; at t last. This is likely

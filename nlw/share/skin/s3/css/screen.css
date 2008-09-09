@@ -24,6 +24,24 @@ div#controls div#controlsRight ul li a.watch.on {
        background: url(../images/watchingIcon.png) no-repeat center left;
 }
 
+td.listview-watchlist a.watch.on {
+       background: url(../images/watchingIcon.png) no-repeat center left;
+}
+
+td.listview-watchlist a.watch:hover {
+    color: #33A8FF;
+}
+
+td.listview-watchlist a.watch {
+    background: url(../images/watchIcon.png) no-repeat center left;
+    color: #333333;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 0 10px 0 28px;
+    margin: 5px;
+}
+
+
 /* Hacks to get around there not being an avatar on the araucaria version */
 body#dashBoard div#controls div#frame {
     float: left;
@@ -870,6 +888,15 @@ td.person a {
 .revision-chunk-before {
     padding-bottom: 10px;
     padding-right: 10px;
+    overflow: hidden;
+    width: 50%;
+}
+
+.revision-chunk-after {
+    padding-bottom: 10px;
+    padding-right: 10px;
+    overflow: hidden;
+    width: 50%;
 }
 
 #st-revision-tags {
@@ -1124,8 +1151,6 @@ td.st-homepage-simplelist-right {
 }
 
 span.person img.avatar {
-    width: 20px !important;
-    height: 20px !important;
     border: 1px solid #AFAFAF !important;
     margin-top: 2px !important;
 }
@@ -1185,66 +1210,16 @@ body div#controls div#st-editing-tools-edit ul li {
 }
 
 
-div#contentColumns div#contentLeft div.wiki h1,
-div#contentColumns div#contentLeft div.wiki h2,
-div#contentColumns div#contentLeft div.wiki h3,
-div#contentColumns div#contentLeft div.wiki h4,
-div#contentColumns div#contentLeft div.wiki h5,
-div#contentColumns div#contentLeft div.wiki h6 {
-    font-style:normal;
-    font-weight:bold;
-    margin-bottom:8px;
-    margin-top:0.1em;
-    color: black;
-}
 
-div#contentColumns div#contentLeft div.wiki h1 {
-    font-size: 175%;
-}
-
-div#contentColumns div#contentLeft div.wiki h2 {
-    font-size: 145%;
-}
-
-div#contentColumns div#contentLeft div.wiki h3 {
-    font-size: 125%;
-}
-
-div#contentColumns div#contentLeft div.wiki h4 {
-    font-size: 110%;
-}
-
-div#contentColumns div#contentLeft div.wiki h5 {
-    font-size: 100%;
-}
-
-div#contentColumns div#contentLeft div.wiki h6 {
-    font-size: 100%;
-    font-style: italic;
-    font-weight: normal;
-}
-
-td.peoplelist-picture-td {
-    width: 70px;
-}
-
-td.peoplelist-desc-td {
-    width: 100%;
-}
-
-/* --------------------------------------------------------------
-
-typography.css
-* Sets up some sensible default typography.
-
--------------------------------------------------------------- */
+/* Wiki Content Styles
+--------------------------------------------------------------
 
 /* Default font settings.
 The font-size percentage is of 16px. (0.75 * 16px = 12px) */
 .wiki {
     font-size: 100%;
     color: #222;
-    line-height:1.25;
+    line-height:1 ! important;
 }
 
 /* Headings
@@ -1272,18 +1247,18 @@ The font-size percentage is of 16px. (0.75 * 16px = 12px) */
 .wiki h3 {
     font-size: 1.5em;
     line-height: 1;
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
 }
 .wiki h4 {
     font-size: 1.2em;
     line-height: 1.25;
-    margin-bottom: 1.25em;
+    margin-bottom: 0.5em;
     height: 1.25em;
 }
 .wiki h5 {
     font-size: 1em;
     font-weight: bold;
-    margin-bottom: 1.5em;
+    margin-bottom: 0.5em;
 }
 .wiki h6 {
     font-size: 1em;
@@ -1304,7 +1279,8 @@ The font-size percentage is of 16px. (0.75 * 16px = 12px) */
 -------------------------------------------------------------- */
 
 .wiki p {
-    margin: 0 0 1.5em;
+    margin-bottom: 1.5em ! important;
+    margin-top: 0 ! important;
     font-size: 100%;
 }
 .wiki p img {
@@ -1475,6 +1451,12 @@ The font-size percentage is of 16px. (0.75 * 16px = 12px) */
 /* Socialtext classes
 -------------------------------------------------------------- */
 
+.wiki {
+    padding-top:1em;
+}
+#st-page-titletext {
+    font-weight:bold;
+}
 .wiki a.incipient {
     border-bottom:1px #fc6500 dotted;
     color:#fc6500;
@@ -1541,4 +1523,34 @@ The font-size percentage is of 16px. (0.75 * 16px = 12px) */
 }
 .wiki .wiki-include-content {
     margin-left:2em;
+}
+.widget .widgetContent ul {
+    margin:10px 9px 0 9px ! important;
+}
+.widget .widgetContent ul li {
+    border-bottom:1px #e8e8e8 solid;
+}
+
+/* People list classes
+-------------------------------------------------------------- */
+
+td.peoplelist-picture-td {       
+        width: 70px;     
+}    
+     
+td.peoplelist-desc-td {      
+        width: 100%;
+}
+
+.form-users_invite a.saveButton {
+	display: block;
+	width: 59px;
+	height: 22px;
+	background: url(../images/inviteButton.png) no-repeat;
+	background-position: top right;
+	text-indent: -9999px;
+}
+
+.form-users_invite a.saveButton:hover {
+	background-position: top left;
 }

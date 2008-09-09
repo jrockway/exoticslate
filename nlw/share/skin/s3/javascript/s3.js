@@ -205,6 +205,8 @@ $(function() {
                     id: 'contentLeft',
                     oncomplete: function () {
                         Page.refreshPageContent();
+                    },
+                    onclose: function () {
                         Page._repaintBottomButtons();
                     }
                 });
@@ -342,12 +344,12 @@ $(function() {
         $('input[type=checkbox]').attr('checked', this.checked);
     });
 
-    $('#st-watchlist-indicator').click(function () {
+    function makeWatchHandler (pageId) { return function(){
         var self = this;
         if ($(this).hasClass('on')) {
             $.get(
                 location.pathname + '?action=remove_from_watchlist'+
-                ';page=' + Socialtext.page_id +
+                ';page=' + pageId +
                 ';_=' + (new Date()).getTime(),
                 function () {
                     var text = loc("Watch");
@@ -359,7 +361,7 @@ $(function() {
         else {
             $.get(
                 location.pathname + '?action=add_to_watchlist'+
-                ';page=' + Socialtext.page_id +
+                ';page=' + pageId +
                 ';_=' + (new Date()).getTime(),
                 function () {
                     var text = loc('Stop Watching');
@@ -368,6 +370,18 @@ $(function() {
                 }
             );
         }
+    }; }
+
+    // Watch handler for single-page view
+    $('#st-watchlist-indicator').click(makeWatchHandler(Socialtext.page_id));
+
+    // Watch handler for watchlist view
+    $('td.listview-watchlist a[id^=st-watchlist-indicator-]').each(function(){
+        $(this).click(
+            makeWatchHandler(
+                $(this).attr('id').replace(/^st-watchlist-indicator-/, '')
+            )
+        );
     });
 
     if (Socialtext.new_page ||

@@ -258,7 +258,7 @@ sub _account_plugin_action {
     my $callback = shift;
 
     my @messages;
-    $self->{account} ||= $self->_require_account('optional');
+    $self->{account} ||= $self->_require_account;
     if ($self->{account}) {
         push @messages, $callback->( $self->{account} );
     }
@@ -287,12 +287,14 @@ sub _require_plugin {
 sub _require_account {
     my $self     = shift;
     my $optional = shift;
-    my %opts     = $self->_get_options('account:s');
+    my %opts     = $self->_get_options('account:s', 'all-accounts');
+    
+    return if $opts{'all-accounts'};
     return if $optional and !$opts{account};
 
-    $self->_help_as_error(
+    $self->_error(
         loc("The command you called ([_1]) requires an account to be "
-            . "specified by name.", $self->{command}),
+            . "specified.", $self->{command}),
     ) unless $opts{account};
 
     return $self->{account} = $self->_load_account($opts{account});
@@ -2369,8 +2371,10 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
 
   PLUGINS
 
-  enable-plugin  [--account] --plugin [ people | dashboard | socialcalc ]
-  disable-plugin [--account] --plugin [ people | dashboard | socialcalc ]
+  enable-plugin  (--account | --all-accounts) 
+                 --plugin [ people | dashboard | socialcalc ]
+  disable-plugin (--account | --all-accounts)
+                 --plugin [ people | dashboard | socialcalc ]
 
   EMAIL
 

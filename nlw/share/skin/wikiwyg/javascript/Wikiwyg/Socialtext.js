@@ -359,7 +359,10 @@ function setup_wikiwyg() {
                             jQuery('#st-tagqueue-list').hide();
                         return false;
                     })
-                    .html('[x]')
+                    .html(Socialtext.S3
+                        ? '<img src="/static/skin/common/images/delete.png" width="16" height="16" border="0" />'
+                        : '[x]'
+                    )
             )
             .appendTo('#st-tagqueue-list');
         return false;

@@ -24,7 +24,6 @@ EDITOR_SOURCE_FILES= \
 
 JEMPLATE_WIKIWYG_MODULE=jemplate_wikiwyg.js
 ALL_WIKIWYG_JEMPLATES:=$(shell find jemplate_wikiwyg)
-ALL_JEMPLATE_PLUGINS:=$(shell find $(S2_JAVASCRIPT)/JemplatePlugin -name \*.js)
 
 # Use Wikiwyg-dev when developing Wikiwyg
 WIKIWYG_PATH=$(COMMON_JAVASCRIPT)/Wikiwyg-2007-07-17

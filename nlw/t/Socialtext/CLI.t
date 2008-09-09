@@ -26,7 +26,7 @@ use Socialtext::SQL qw/sql_execute/;
 
 use Cwd;
 
-plan tests => 365;
+plan tests => 367;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -2101,7 +2101,19 @@ PLUGINS: {
         ],
         'enable plugin for all account',
     );
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --plugin test )
+                ]
+            )->enable_plugin();
+        },
+        qr/requires an account/,
+        'enable plugin for all account without --all-accounts',
+    );
 }
+exit;
 
 EXPORT_ACCOUNTS: {
     local $ENV{ST_EXPORT_DIR} = "t/tmp";
@@ -2195,6 +2207,6 @@ sub expect_failure {
         $expect,
         $desc
     );
-    warn $@ if $@ and $@ !~ /exited/;
+    warn "expect_failed: $@" if $@ and $@ !~ /exited/;
     is( $LastExitVal, $error_code, "exited with exit code $error_code" );
 }

@@ -26,13 +26,12 @@ sub handler {
 sub _regen_combined_js {
     my $r = shift;
 
+    # Figure out what skin to build
     my ($ws_name) = $r->uri =~ m{^/([^/]+)/index\.cgi$};
-    return unless $ws_name;
+    my $workspace = $ws_name ? Socialtext::Workspace->new(name=>$ws_name)
+                             : Socialtext::NoWorkspace->new;
+    my $skin_name = $workspace->skin_name;
 
-    my $ws = Socialtext::Workspace->new(name=>$ws_name);
-    return unless $ws;
-
-    my $skin_name = $ws->skin_name;
     my $skin = Socialtext::Skin->new;
 
     for my $dir ($skin->make_dirs($skin_name)) {

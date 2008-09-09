@@ -51,6 +51,7 @@ sub print {
     $content_type .= '; charset=' . $self->charset
       if $content_type =~ /^text/;
     my %headers = (
+        $self->hub->rest->header,   # preserve any existing headers
         -type => $content_type,
     );
     for my $header qw(Content-Length Content-disposition Expires Pragma 
@@ -65,7 +66,6 @@ sub print {
         $headers{'-' . $header} = $self->{$field}
             if exists $self->{$field};
     }
-    # XXX rest->header can only be assigned once
     $self->hub->rest->header(%headers);
 }
 

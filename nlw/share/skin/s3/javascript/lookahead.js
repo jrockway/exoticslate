@@ -103,15 +103,31 @@
     $.fn.lookahead.getLookahead = function (input) {
         var lh;
         if (lh = input.lh) return lh;
+
+        /* Subract the offsets of all absolutely positioned parents
+         * so that we can position the lookahead directly below the
+         * input element. I think jQuery's offset function should do
+         * this for you, but maybe they'll fix it eventually...
+         */
+        var left = $(input).offset().left;
+        var top = $(input).offset().top + $(input).height() + 10;
+        $.each( $(input).parents(), function (i) {
+            if ($(this).css('position') == 'absolute') {
+                left -= $(this).offset().left;
+                top -= $(this).offset().top;
+            }
+        });
+
         var lh = $('<div />')
             .css({
-                position: $.browser.msie ? 'relative' : 'absolute',
+                position: 'absolute',
                 background: '#B4DCEC',
                 border: '1px solid black',
                 display: 'none',
                 padding: '5px',
                 width: $(input).width() + 'px',
-                left: input.offsetLeft + 'px'
+                left: left + 'px',
+                top: top + 'px'
             })
             .insertAfter(input);
         return input.lh = lh;

@@ -187,7 +187,9 @@
           </div><!-- footerLinks END -->
           <div id="footerGlobal">
             <ul>
+              [% IF workspace_present %]
               <li><a href="[% miki_url %]">[% loc('Mobile') %]</a></li>
+              [% END %]
               <li><a href="?action=users_settings">[% loc('Settings') %]</a></li>
               <li><a href="/help/index.cgi" target="_blank">[% loc('Help') %]</a></li>
               [% IF user.is_guest %]

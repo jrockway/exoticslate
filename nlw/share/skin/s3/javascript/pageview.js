@@ -54,18 +54,26 @@ Page = {
         $('#st-page-content').html(html);
 
         // For MSIE, force browser reflow of the bottom buttons to avoid {bz: 966}.
-        Page._repaintBottomButtons();
+        if ($.browser.msie) {
+            var repaintBottomButtons = function () {
+                $('#bottomButtons').html($('#bottomButtons').html());
+            };
+            repaintBottomButtons();
 
-        // Repaint after each image finishes loading since the height
-        // would've been changed.
-        $('#st-page-content img').load(function(){
-            Page._repaintBottomButtons();
-        });
+            // Repaint after each image finishes loading since the height
+            // would've been changed.
+            $('#st-page-content img').load(repaintBottomButtons);
+        }
     },
 
     refreshPageContent: function (force_update) {
         $.ajax({
             url: this.pageUrl(),
+            data: {
+                link_dictionary: 's2',
+                verbose: 1,
+                iecacheworkaround: (new Date).getTime()
+            },
             cache: false,
             dataType: 'json',
             success: function (data) {
@@ -82,14 +90,19 @@ Page = {
                     $('#st-page-editing-revisionid').val(newRev);
                     $('#st-rewind-revision-count').html(newRev);
 
-                    // After upload, refresh the wysiwyg and page contents.
-                    $.ajax({
-                        url: Page.pageUrl(),
-                        data: {link_dictionary:'S2'}, 
-                        cache: false,
-                        dataType: 'html',
-                        success: Page.setPageContent
-                    });
+                    rev_string = loc('[_1] Revisions', data.revision_count);
+                    $('#controls-right-revisions').html(rev_string);
+                    $('#bottom-buttons-revisions').html('(' + rev_string + ')');
+
+                    $('#update-attribution .st-username').html(
+                        data.last_editor_html.firstChild
+                    );
+
+                    $('#update-attribution .st-updatedate').html(
+                        data.last_edit_time_html.firstChild
+                    );
+
+                    Page.setPageContent(data.html);
 
                     // After upload, refresh the wikitext contents.
                     if ($('#wikiwyg_wikitext_textarea').size()) {
@@ -128,9 +141,9 @@ Page = {
                     var tag = tags[i];
                     $('#st-tags-listing').append(
                         $('<li />').append(
-                            $('<a />')
-                                .html(tag.name)
-                                .attr('href', tag_url + tag.name),
+                            $('<a></a>')
+                                .text(tag.name)
+                                .attr('href', tag_url + encodeURIComponent(tag.name)),
 
                             ' ',
                             $('<a href="#" />')

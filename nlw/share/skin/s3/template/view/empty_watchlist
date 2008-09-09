@@ -43,6 +43,7 @@
       </div>
       </dd>
     </dl>
+    <div class="clear">&nbsp;</div>
   </div><!-- contentContainer -->  
 [% END %]
 

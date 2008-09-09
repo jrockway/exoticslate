@@ -476,14 +476,14 @@ var wikiwyg_widgets_title_lookup = {
 };
 
 proto.lookupTitle = function(field, id) {
-    var title = this.titleInLoopup(field, id);
+    var title = this.titleInLookup(field, id);
     if (!title) {
         title = this.pullTitleFromServer(field, id);
     }
     return title;
 }
 
-proto.titleInLoopup = function (field, id) {
+proto.titleInLookup = function (field, id) {
     if (field in wikiwyg_widgets_title_lookup)
         if (id in wikiwyg_widgets_title_lookup[field])
             return wikiwyg_widgets_title_lookup[field][id];
@@ -1254,10 +1254,12 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
         .unbind('click')
         .click(function() {
             var error = null;
+            jQuery('#lightbox .buttons input').attr('disabled', 'disabled');
             try {
                 var widget_string = self['handle_widget_' + widget](form);
                 clearInterval(intervalId);
                 self.insert_widget(widget_string, widget_element, function () {
+                    jQuery('#lightbox .buttons input').attr('disabled', '');
                     jQuery.hideLightbox();
                 });
             }
@@ -1267,6 +1269,7 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
                     .show()
                     .html('<span>'+error+'</span>');
                 Wikiwyg.Widgets.widget_editing--;
+                jQuery('#lightbox .buttons input').attr('disabled', '');
                 return false;
             }
             Wikiwyg.Widgets.widget_editing--;

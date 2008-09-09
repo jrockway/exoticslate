@@ -1,3 +1,5 @@
+// See {bz: 199} for context.
+
 var t = new Test.Wikiwyg();
 
 Test.Wikiwyg.Filter.prototype.strip_trailing_slash = function(str) {

@@ -56,7 +56,8 @@ sub handler {
 
     if ($rest->query->param('action')) {
         my $res = $self->hub->process;
-        $rest->header($self->hub->rest->header);
+        $rest->header(-type => 'text/html; charset=UTF-8', # default
+                      $self->hub->rest->header);
         return $res;
     }
     else {

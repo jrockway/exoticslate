@@ -23,6 +23,7 @@ var GuiEdit = function(args) {
     this.workspace = args.workspace || Socialtext.wiki_id;
     this.page_id = args.page_id || Socialtext.page_id;
     this.oncomplete = args.oncomplete;
+    this.onclose = args.onclose;
     this.id = args.id;
     if (!this.id)
         throw new Error ('GuiEdit requires an id!');
@@ -90,6 +91,10 @@ GuiEdit.prototype.show = function () {
     jQuery('textarea', this.container).val('');
     this.area = jQuery('textarea', this.container).get(0);
 
+    if (this.area.addBehavior) {
+        this.area.addBehavior(nlw_make_s3_path('/javascript/Selection.htc'));
+    }
+
     this.scrollTo(function () {
         jQuery('.comment', this.container).fadeIn();
     });
@@ -99,6 +104,10 @@ GuiEdit.prototype.close = function () {
     jQuery('.comment', this.container).fadeOut(function () {
         jQuery('.commentWrapper', this.container).remove();
     });
+
+    if (this.onclose) {
+        this.onclose.call(this);
+    }
 }
 
 GuiEdit.prototype.scrollTo = function (callback) {

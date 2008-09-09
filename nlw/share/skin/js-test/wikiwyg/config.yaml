@@ -1,7 +1,8 @@
 index_title: Socialtext Javascript Testing
 import_libs:
+  - ../../s3/javascript/Debug.js
   - ../../common/javascript/jquery-1.2.6.js
-  - ../../s2/javascript/loc.js 
+  - ../../s3/javascript/loc.js 
   - ../../s2/javascript/Cookie.js
   - ../../common/javascript/prototype-1.4.0/dist/prototype.js
   - ../../common/javascript/WebToolkit-base64-2007-09-25.js
@@ -20,4 +21,3 @@ import_libs:
   - ../../wikiwyg/javascript/Widgets.js 
   - ../../wikiwyg/javascript/Wikiwyg/Widgets.js
   - ../../wikiwyg/javascript/Wikiwyg/Wikitext/Socialtext.js
-  - ../../s2/javascript/Debug.js

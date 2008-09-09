@@ -89,16 +89,11 @@ if (window.parent != window &&
         node = document.createElement("iframe");
         node.setAttribute("id", "buffer");
         node.setAttribute("name", "buffer");
-        // Safari makes it impossible to do anything with the iframe if it's
-        // set to display:none. See:
-        // http://www.quirksmode.org/bugreports/archives/2005/02/hidden_iframes.html
-        //alert(navigator.userAgent);
-        if (/Safari|Konqueror/.test(navigator.userAgent)) {
-            node.style.visibility = "hidden";
-            node.style.height = "0"; 
-            node.style.width = "0";
-        } else
-            node.style.display = "none";
+
+        node.style.visibility = "hidden";
+        node.style.height = "0"; 
+        node.style.width = "0";
+
         document.body.appendChild(node);
         return node.contentWindow || frames.buffer;
     };

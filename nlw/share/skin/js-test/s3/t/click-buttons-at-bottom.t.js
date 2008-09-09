@@ -24,7 +24,7 @@ function step2() {
         'Editor is not visible'
     );
 
-    t.$("#bottomButtons a.editButton").trigger("click");
+    t.$("#bottomButtons a.editButton").click();
 
     setTimeout(function() {
         t.builder.ok(
@@ -41,8 +41,12 @@ function step2() {
             'Editor is now visible'
         );
 
-        t.endAsync();
-    }, 1500);
+        t.$("#st-editing-tools-edit a.saveButton").click();
+
+        setTimeout(function() {
+            t.endAsync();
+        }, 1500);
+    }, 3000);
 };
 
 })(jQuery);

@@ -9,9 +9,9 @@
   <input type="hidden" name="action" value="[% form_action || hub.action %]" />
   <input type="hidden" name="preferences_class_id" value="[% preferences_class_id %]" />
   [%- IF settings_error %]<div class="st-errorbox">[% settings_error %]</div>[% END -%]
-  <ul class="formButtons">
+  <ul class="formButtons form-[% form_action || hub.action %]">
     [% IF hub.action != 'users_listall' OR perm_admin %]
-      <li><a class="saveButton" onclick="document.forms['settings'].submit(); return false" href="#">[% loc('Save') %]</a></li>
+      <li><a class="saveButton" onclick="document.forms['settings'].submit(); return false" href="#">[% save_button_value || loc('Save') %]</a></li>
     [% END %]
     <li><a class="cancelButton" onclick="document.forms['settings'].reset(); return false" href="#">[% loc('Cancel') %]</a></li>
   </ul>

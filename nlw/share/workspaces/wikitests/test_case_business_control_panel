@@ -53,7 +53,6 @@
 | select_ok | account_id | label=Socialtext |
 | st-submit |  |  |
 | text_like | The %%new_workspace%% workspace is now part of the Socialtext account. |  |
-| text_like | URI: |  |
 
 | *Comment* | Test case: Business Control Panel Search for a non-existant workspace |  |
 | clickAndWait | link=Workspaces |  |

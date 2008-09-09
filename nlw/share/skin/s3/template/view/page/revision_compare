@@ -33,7 +33,7 @@
   [% END %]
   </div> <!-- END st-revision-tags -->
   <div id="st-revision-display">
-  <table id="revision-compare-table">
+  <table id="revision-compare-table" style="table-layout: fixed; width: 100%">
     <tr>
     [% FOR col IN header %]
       <td class="revision-compare-table-header">

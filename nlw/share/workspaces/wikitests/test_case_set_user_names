@@ -1,5 +1,11 @@
 *Requires a Default user, not an LDAP user*
 
+| *Comment* | Test Case: Set User Names IS OBSOLETED BY USER PROFILES |  |
+
+| *Comment* | Test Case: Set User Names COMPLETED |  |
+
+^ END
+
 | *Comment* | Test Case: Set User Names Email Addresses are hidden in Public workspace |  |
 | st-admin | set-permissions --w %%workspace%% --p member-only | The permissions for the %%workspace%% workspace have been changed to member-only |
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |

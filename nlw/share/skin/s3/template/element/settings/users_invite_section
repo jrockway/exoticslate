@@ -1,7 +1,7 @@
 [%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
-[% INCLUDE element/settings/start %]
 [% save_button_value = loc('Invite') %]
+[% INCLUDE element/settings/start %]
 <dl class="form">
   <dt><label>[% loc('Invite Other Users') %]</label></dt>
   <dd>[% loc('Enter a list of email addresses (one address per line) of people you would like to invite to this Workspace.') %]</dd>

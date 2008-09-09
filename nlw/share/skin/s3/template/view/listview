@@ -44,7 +44,7 @@
              <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
           [% END %]
         </div></th>
-        <th class="sort">[% loc('Sort by:') %]
+        <th colspan="[% 1 + listview_extra_columns.size %]" class="sort">[% loc('Sort by:') %]
           <select id="sort-picker" onchange="sort_by();">
             [% IF allow_relevance %]
               [% PROCESS sort_by_option name = loc('Relevance') field = 'Relevance' %]
@@ -94,6 +94,11 @@
         [% END %]
         <em>(<a href="/[% row.workspace_name || current_workspace.name %]/index.cgi?action=revision_list;page_name=[% row.page_uri %]">[% row.revision_count %]</a> [% loc('Revisions') %])
         [% loc('Last updated by') %] [% row.username | decorate('user_avatar') %] [% loc('on') %] [% row.DateLocal %]</em></td>
+    [% IF listview_extra_columns.watchlist %]
+        <td class="listview-watchlist">
+        <a id="st-watchlist-indicator-[% row.page_uri %]" class="on watch" href="#" title="[% loc('Stop watching') %]">[% loc('Stop watching') %]</a>
+        </td>
+    [% END %]
         </tr>
       [% END %]
     </table><!-- dataTable END -->

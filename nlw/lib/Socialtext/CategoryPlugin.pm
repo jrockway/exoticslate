@@ -131,22 +131,27 @@ sub category_display {
     my $self = shift;
     my $category = shift || $self->cgi->category;
 
-    my %sort_map = %{ Socialtext::Query::Plugin->sortdir };
+    my $sortdir = Socialtext::Query::Plugin->sortdir;
+    my $sortby = $self->cgi->sortby || 'Date';
+    my $direction = $self->cgi->direction || $sortdir->{ $sortby };
 
-    my $rows = $self->get_page_info_for_category( $category, \%sort_map );
+    my $rows = $self->get_page_info_for_category( $category, $sortdir );
 
     my $uri_escaped_category = $self->uri_escape($category);
     my $html_escaped_category = $self->html_escape($category);
 
     $self->screen_template('view/category_display');
     return $self->render_screen(
+        summaries              => $self->show_summaries,
         display_title          => loc("Tag: [_1]", $category),
         predicate              => 'action=category_display;category=' . $uri_escaped_category,
         rows                   => $rows,
         html_escaped_category  => $html_escaped_category,
         uri_escaped_category   => $uri_escaped_category,
         email_category_address => $self->email_address($category),
-        sortdir                => \%sort_map,
+        sortdir                => $sortdir,
+        sortby                 => $sortby,
+        direction              => $direction,
         unplug_uri    => "?action=unplug;tag=$uri_escaped_category",
         unplug_phrase => loc('Click this button to save the pages with the tag [_1] to your computer for offline use.', $html_escaped_category),
     );
@@ -586,6 +591,7 @@ cgi 'category';
 cgi 'page_id' => '-clean_path';
 cgi 'sortby';
 cgi 'direction';
+cgi 'summaries';
 
 ######################################################################
 package Socialtext::Category::Wafl;

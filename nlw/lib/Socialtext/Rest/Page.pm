@@ -116,25 +116,30 @@ sub GET_json {
                     -status => HTTP_200_OK,
                     -type   => 'application/json; charset=UTF-8',
                 );
-                my $default_view      = sub { $page->hash_representation() };
+                my $page_hash      = $page->hash_representation();
+
                 my $addtional_content = sub {
                     $page->content_as_type( type => $_[0],
                         link_dictionary => $_[1] );
                 };
 
-                my $json = encode_json(
-                    $verbose
-                    ? {
-                        %{ $default_view->() },
-                        wikitext => 
-                            $addtional_content->('text/x.socialtext-wiki'),
-                        html => 
-                            $addtional_content->('text/html', $link_dictionary)
-                        }
-                    : $default_view->()
-                );
+                if ($verbose) {
+                    $page_hash->{wikitext} = 
+                        $addtional_content->('text/x.socialtext-wiki');
+                    $page_hash->{html} = 
+                        $addtional_content->('text/html', $link_dictionary);
+                    $page_hash->{last_editor_html} = 
+                        $self->hub->viewer->text_to_html(
+                            "\n{user: $page_hash->{last_editor}}\n"
+                        );
+                    $page_hash->{last_edit_time_html} = 
+                        $self->hub->viewer->text_to_html(
+                            "\n{date: $page_hash->{last_edit_time}}\n"
+                        );
+                }
+
                 $self->_record_view($page);
-                return $json;
+                return encode_json($page_hash);
             }
             else {
                 $rest->header(

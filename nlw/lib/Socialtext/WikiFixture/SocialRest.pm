@@ -183,6 +183,21 @@ sub code_is {
     }
 }
 
+=head2 has_header( header [, expected_value])
+
+Check that the specified header is in the response, with an optional second check for the header's value.
+
+=cut
+
+sub has_header {
+    my ($self, $header, $value) = @_;
+    my $hval = $self->{http}->response->header($header);
+    ok $hval, "header $header is defined";
+    if ($value) {
+        like $hval, $self->quote_as_regex($value), "header content matches";
+    }
+}
+
 =head2 post( uri, headers, body )
 
 Post to the specified URI

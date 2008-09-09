@@ -9,6 +9,26 @@ proto.init = function() {
     this.asyncId = 0;
 }
 
+// This vicious hack replaces the guts of the Test.Harness. For some reason
+// this fixture gets the Harness iframe to have its location messed up.
+// We don't know why yet, but this is a workaround for now.
+if (window.top.Test.Harness && ! window.top.Test.Harness.viciously_hacked) {
+    window.top.Test.Harness.viciously_hacked = true;
+    var runTest = window.top.Test.Harness.Browser.prototype.runTest;
+    var path = '';
+    window.top.Test.Harness.Browser.prototype.runTest =
+        function (file, buffer) {
+            if (! path)
+                path = buffer.location.pathname.replace(/(.*)\/.*/, '$1');
+            file = path + '/' + file;
+            if (/\.html$/.test(file)) {
+                buffer.location.replace(file);
+            } else {
+                runTest.apply([this, arguments]);
+            }
+        }
+}
+
 // Move to Test.Base
 proto.diag = function() {
     this.builder.diag.apply(this.builder, arguments);

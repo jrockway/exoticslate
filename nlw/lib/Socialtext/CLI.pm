@@ -354,6 +354,7 @@ sub import_account {
     my $account = Socialtext::Account->import_file(
         file => "$dir/account.yaml",
         name => $opts{name},
+        force => $opts{overwrite},
     );
 
     for my $tarball (glob "$dir/*.1.tar.gz") {

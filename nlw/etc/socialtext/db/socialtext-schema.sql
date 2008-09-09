@@ -9,8 +9,8 @@ SET search_path = public, pg_catalog;
 CREATE FUNCTION auto_vivify_person() RETURNS "trigger"
     AS $$
 BEGIN
-    INSERT INTO person (id) 
-        VALUES (NEW.system_unique_id);
+    INSERT INTO person (id, last_update) 
+        VALUES (NEW.system_unique_id, '-Infinity'::timestamptz);
     RETURN NEW;
 END
 $$

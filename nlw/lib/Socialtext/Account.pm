@@ -128,7 +128,11 @@ sub import_file {
     my $hash = LoadFile($import_file);
     my $name = $import_name || $hash->{name};
     my $account = $class->new(name => $name);
-    die loc("Account [_1] already exists!", $name) . "\n" if $account;
+    if ($account) {
+        die loc("Account [_1] already exists!", $name) . "\n" 
+            unless $opts{force};
+        $account->delete;
+    }
 
     $account = $class->create(
         name => $name,
@@ -148,7 +152,11 @@ sub import_file {
     }
 
     # Create all the profiles after so that user references resolve.
-    Socialtext::People::Profile->create_from_hash( $_ ) for @profiles;
+    eval "require Socialtext::People::Profile";
+    unless ($@) {
+        print loc("Importing people profiles ...") . "\n";
+        Socialtext::People::Profile->create_from_hash( $_ ) for @profiles;
+    }
 
     return $account;
 }

@@ -6,6 +6,10 @@
 | st-admin | give-accounts-admin --email %%email%% | %%username%% now has accounts admin access |
 
 | set | new_acct | acct %%start_time%% |
+| set | diff_acct | diff_acct_%%start_time%% |
+| set | diff_user_shared_ws | `diff_user_shared_ws_%%start_time%%@mheusser.socialtext.net` |
+| set | diff_user_no_shared_ws | `diff_user_no_share_%%start_time%%@mheusser.socialtext.net` |
+| set | diff_workspace | diff-work-%%start_time%% |
 | set | new_workspace | wksp-%%start_time%% |
 | set | cli_user | cli_%%start_time%%@ken.socialtext.net |
 
@@ -32,6 +36,13 @@
 | clickAndWait | link=%%new_acct%% |  |
 | clickAndWait | link=%%new_workspace%% |  |
 | text_like | %%new_workspace%% workspace |  |
+
+| *Comment* | Test case: Business Control Panel Create new users and such |  |
+| st-admin | create-workspace --name %%diff_workspace%% --title %%diff_workspace%% |  |
+| st-admin | create-user --email %%diff_user_shared_ws%% --username %%diff_user_shared_ws%% --password %%password%% |  |
+| st-admin | create-user --email %%diff_user_no_shared_ws%% --username %%diff_user_no_shared_ws%% --password %%password%% |  |
+| st-admin | add-member --username %%diff_user_shared_ws%% --workspace %%new_workspace%% |  |
+| st-admin | add-member --username %%diff_user_no_shared_ws%% --workspace %%diff_workspace%% |  |
 
 | *Comment* | Test case: Business Control Panel Socialtext Search Accounts |  |
 | open_ok | /nlw/control/account |  |
@@ -76,6 +87,7 @@
 | st-submit |  |  |
 | clickAndWait | link=%%new_workspace%% |  |
 | text_like | workspace admin |  |
+| text_like | Primary Account |  |
 
 | *Comment* | Test case: Business Control Panel give and remove account and console permissions |  |
 | st-admin | give-system-admin --email %%email%% | now has system admin access |
@@ -91,7 +103,12 @@
 
 | *Comment* | Test case: Business Control Panel search for new user |  |
 | clickAndWait | link=Users |  |
+
 | wait_for_element_visible_ok | username | 30000 |
+| wait_for_element_visible_ok | link=Socialtext | 30000 |
+| text_like | //body | Primary Account | 3000 |
+| text_unlike | //body | %%diff_user_shared_ws%% |
+| text_like | //body | %%diff_user_no_shared_ws%% |
 | type_ok | username | %%cli_user%% |
 | st-submit |  |  |
 | text_like | Showing 1 - 1 of 1 total. |  |
@@ -178,7 +195,8 @@ TODO: RESTORE THE FOLLOWING TWO TESTS AFTER {bz: 472} IS FIXED
 
 | *Comment* | Test case: Business Control Panel sorting Users display |  |
 | clickAndWait | link=Users |  |
-
+| wait_for_element_present_ok | link=Socialtext |  |
+| text_like | qr/Primary Account/ |  |
 | clickAndWait | link=Name |  |
 | text_like | qr/two.+one/ |  |
 | clickAndWait | link=Name |  |
@@ -206,5 +224,4 @@ TODO: RESTORE THE FOLLOWING TWO TESTS AFTER {bz: 472} IS FIXED
 | st-admin | delete-workspace --workspace 0-sort-3-workspace2-%%start_time%% --no-export |  |
 | st-admin | delete-workspace --workspace 0-sort-3-workspace3-%%start_time%% --no-export |  |
 | st-admin | delete-workspace --workspace %%new_workspace%% --no-export |  |
-
-| *Comment* | Test case: Business Control Panel COMPLETED |  |
+| st-admin | delete-workspace --workspace %%diff_workspace%% --no-export |  |  | *Comment* | Test case: Business Control Panel COMPLETED |  |

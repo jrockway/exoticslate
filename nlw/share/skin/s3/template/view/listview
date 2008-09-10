@@ -7,9 +7,12 @@
     <div id="st-editing-tools-edit">
     </div><!-- controlsLeft END -->
     <div id="controlsRight">
+        [% IF feeds.rss.page %]
+            <a style="float: left; margin-top: 12px" href="[% feeds.rss.page.url %]"><img border="0" src="[% wiki.skin_uri('s3/images/rss.png') %]"/></a>
+        [% END %]
         [% IF hub.current_workspace.enable_unplugged %]
             [% IF unplug_uri %]
-                <a style="float: left; margin-top: 12px" title="[% unplug_phrase %]" href="[% unplug_uri %]"><img border="0" src="[% wiki.skin_uri('s2') %]/images/unplug-icon.png"/></a>
+                <a style="float: left; margin-top: 12px; margin-left: 5px;" title="[% unplug_phrase %]" href="[% unplug_uri %]"><img border="0" src="[% wiki.skin_uri('s3/images/plug.png') %]"/></a>
             [% END %]
         [% END %]
       <ul class="level1">

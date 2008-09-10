@@ -333,24 +333,26 @@ function setup_wikiwyg() {
         });
 
     var add_tag = function() {
+        var rand = (''+Math.random()).replace(/\./, '');
         var tag = jQuery('#st-tagqueue-field').val();
+
         jQuery('<input type="hidden" name="add_tag" />')
-            .attr('id', 'st-tagqueue-'+tag)
+            .attr('id', 'st-tagqueue-'+rand)
             .attr('value', tag)
             .appendTo('#st-page-editing-files');
 
         jQuery('#st-tagqueue-list').show()
         jQuery('<span class="st-tagqueue-taglist-name" />')
-            .attr('id', 'st-taglist-' + tag)
+            .attr('id', 'st-taglist-'+rand)
             .append(
                 jQuery('.st-tagqueue-taglist-name').size() ? ', ' : '',
                 tag,
                 jQuery('<a class="st-tagqueue-taglist-delete" />')
-                    .attr('title', loc("Remove _[0] from the queue", tag))
+                    .attr('title', loc("Remove [_1] from the queue", tag))
                     .attr('href', '#')
                     .click(function () {
-                        jQuery('#st-taglist-'+tag).remove();
-                        jQuery('#st-tagqueue-'+tag).remove();
+                        jQuery('#st-taglist-'+rand).remove();
+                        jQuery('#st-tagqueue-'+rand).remove();
                         if (!jQuery('.st-tagqueue-taglist-name').size())
                             jQuery('#st-tagqueue-list').hide();
                         return false;

@@ -97,11 +97,11 @@
     <a id="st-page-boxes-toggle-link" class="hideTab" href="#">[% IF st_page_accessories == 'show' %][% loc('hide') %][% ELSE %][% loc('show') %][% END %]</a>
   </div>
 
-  <div id="contentColumns">
+  <div id="contentColumns" class="[% IF st_page_accessories == 'show'%]showbox[% ELSE %]hidebox[% END %]">
     <div id="contentLeft">
       <div id="st-page-content">[% page.content %]</div>
     </div>
-    <div id="contentRight" class="[% IF st_page_accessories == 'show'%]showbox[% ELSE %]hidebox[% END %]">
+    <div id="contentRight">
       <div class="widget">
         <div class="widgetHeader">
         <h4>[% loc('Tags') %]</h4>

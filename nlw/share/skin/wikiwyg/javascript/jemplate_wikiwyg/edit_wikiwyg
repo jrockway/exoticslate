@@ -7,8 +7,8 @@
                 <li><a class="cancelButton" id="st-cancel-button-link" href="#">[% loc('Cancel') %]</a></li>
             </ul>
             <ul class="buttonRight">        
-                <li><a href="#" id="st-mode-wysiwyg-button" onclick="return false;">[% loc('Simple') %]</a></li>
-                <li><a href="#" id="st-mode-wikitext-button" onclick="return false;">[% loc('Advanced') %]</a></li>
+                <li><a href="#" id="st-mode-wysiwyg-button" onclick="return false;">[% loc('Rich Text') %]</a></li>
+                <li><a href="#" id="st-mode-wikitext-button" onclick="return false;">[% loc('Wiki Text') %]</a></li>
                 <li>
                     <a href="#" style="display:none" id="st-edit-tips">
                        [% loc('Edit Tips') %]

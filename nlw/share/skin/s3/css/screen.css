@@ -3,11 +3,15 @@
 
 /* overloads */
 
-.hidebox {
+div#contentColumns.hidebox #contentLeft {
+    width: 100%;
+}
+
+div#contentColumns.hidebox #contentRight {
     display: none;
 }
 
-.showbox {
+div#contentColumns.showbox #contentRight {
     display: block;
 }
 
@@ -145,8 +149,21 @@ ul.normal ul ul {
     padding-left: 20px;
 }
 
+#st-email-lightbox th {
+    padding-right: 10px;
+    vertical-align: middle;
+}
+
+#st-email-lightbox input {
+    margin-left: 0px;
+}
+
 #st-email-lightbox .email_input {
-    width: 152px;
+    width: 170px;
+}
+
+#st-email-lightbox .email_input_button {
+    width: 120px;
 }
 
 #wikiwyg_wikitext_textarea {
@@ -1554,3 +1571,4 @@ td.peoplelist-desc-td {
 .form-users_invite a.saveButton:hover {
 	background-position: top left;
 }
+

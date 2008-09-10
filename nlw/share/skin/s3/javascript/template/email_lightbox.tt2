@@ -1,61 +1,66 @@
 [%# vim: set et sts=2 sw=2: %]
-<form id="st-email-lightbox">
+<form id="st-email-lightbox-form">
   <input type="hidden" name="email_page_from" value="[% user_id %]" />
   <input type="hidden" name="action" value="email_page" />
   <input type="hidden" name="json" value="1" />
   <input type="hidden" name="page_name" value="[% page_title | html_encode %]" />
   <table>
     <tr>
-      <th>[% loc('From') %]:</th>
+      <th width="15%">[% loc('From') %]</th>
       <td colspan="3">
         [% username %] &lt;[% userid %]&gt;
       </td>
     </tr>
     <tr>
-      <th>[% loc('Subject') %]:</th>
+      <th>[% loc('Subject') %]</th>
       <td colspan="3">
         <input class="email_input" name="email_page_subject" type="text" size="50" value="[% page_title | html_encode %]" />
       </td>
     </tr>
     <tr>
-      <th>[% loc('Select Recipients') %]:</th>
-      <td>
+      <th style="vertical-align: top" rowspan="2">[% loc('Recipients') %]</th>
+      <td><label>
         [% loc('Workspace Address Book') %] <br />
         <select class="email_input" id="email_source" multiple="1" name="email_page_user_source" size="9">
         </select>
-
-        [% loc('Additional Recipient') %]
-        <input id="email_page_add_one" class="email_input" type="text" name="email_page_add_one" value="[% loc('type email address here') %]" />
+      </label></td>
+      <td width="140" valign="middle" style="vertical-align: middle">
+        <input class="email_input_button" type="button" id="email_add" value="[% loc('Add') %] &gt;&gt;" /><br />
+        <input class="email_input_button" type="button" id="email_remove" value="&lt;&lt; [% loc('Remove') %]" /><br />
+        <input class="email_input_button" type="button" id="email_all" value="Add All &gt;&gt;" /><br />
+        <input class="email_input_button" type="button" id="email_none" value="&lt;&lt; Remove All" /><br />
       </td>
-
-      <td>
-        <input class="email_input" type="button" id="email_add" value="[% loc('Add') %] &gt;&gt;" /><br />
-        <input class="email_input" type="button" id="email_remove" value="&lt;&lt; [% loc('Remove') %]" /><br />
-        <input class="email_input" type="button" id="email_all" value="Add All &gt;&gt;" /><br />
-        <input class="email_input" type="button" id="email_none" value="&lt;&lt; Remove All" /><br />
-        <input class="email_input" type="button" id="email_addone" value="Add &gt;&gt;" />
-      </td>
-
-      <td>
+      <td rowspan="2">
         [% loc('Recipient(s)') %]
+        <br />
         <select id="email_dest" class="email_input" multiple name="email_page_user_choices" size="14">
         </select>
       </td>
+    </tr>
+    <tr>
+      <td><label>
+        [% loc('Additional Recipient') %]<input id="email_page_add_one" class="email_input" type="text" name="email_page_add_one" value="[% loc('type email address here') %]" />
+      </label></td>
+
+      <td style="vertical-align: middle">
+        <input class="email_input_button" type="button" id="email_addone" value="Add &gt;&gt;" />
+      </td>
+
     </tr>
 
     <tr>
       <th>[% loc('Message') %]</th>
       <td colspan="3">
-        <input class="email_input" name="email_page_add_note_check" type="checkbox"  value="1" checked="checked" />
-        [% loc('Add this note at the front of the email?') %]
-        <i>[% loc('(You can customize the note below.)') %]</i>
-        <textarea name="email_page_add_note" rows="7" cols="60">[% loc("Hello, this is a page from the workspace that I wanted you to see. This page is also available for viewing or editing on the web at:\n\n[_1]", page.full_uri) %]</textarea>
+        <label><input class="email_input" name="email_page_add_note_check" type="checkbox"  value="1" checked="checked" />[% loc('Add this note at the front of the email?') %] <i>[% loc('(You can customize the note below.)') %]</i></label>
+        <textarea style="width: 480px" name="email_page_add_note" rows="7" cols="60">[% loc("Hello, this is a page from the workspace that I wanted you to see. This page is also available for viewing or editing on the web at:\n\n[_1]", page.full_uri) %]</textarea>
+        <br />
+        <label><input name="email_page_keep_attachments" type="checkbox" value="1" />[% loc('Keep attachments?') %]</label>
       </td>
     </tr>
   </table>
 
   <div class="buttons">
-    <input type="submit" value="[% loc('send') %]" />
-    <input id="email_cancel" type="button" value="[% loc('cancel') %]" />
+    <input id="email_send" type="submit" value="[% loc('Send') %]" />
+    <input id="email_cancel" type="button" value="[% loc('Cancel') %]" />
   </div>
 </form>

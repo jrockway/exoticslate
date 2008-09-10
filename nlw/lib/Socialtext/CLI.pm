@@ -2373,8 +2373,8 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   remove-system-admin [--username or --email]
   set-default-account [--account]
   get-default-account
-  export-account [--account]
-  import-account [--directory]
+  export-account --account [--force] 
+  import-account --directory [--overwrite] [--name] [--noindex]
 
   PLUGINS
 

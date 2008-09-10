@@ -26,7 +26,7 @@ use Socialtext::SQL qw/sql_execute/;
 
 use Cwd;
 
-plan tests => 367;
+plan tests => 357;
 
 our $LastExitVal;
 no warnings 'redefine';

@@ -149,7 +149,8 @@ EOT
 
 print "Assigning people in more than one paying account to the 'Ambiguous' account.\n";
 my $ambiguous = _load_account('Ambiguous', 'create it!');
-sql_execute(<<EOT, $ambiguous->account_id, @bind);
+if ( @bind ) {
+    sql_execute(<<EOT, $ambiguous->account_id, @bind);
 UPDATE "UserMetadata"
 SET primary_account_id = ?
 FROM (
@@ -167,6 +168,7 @@ FROM (
 ) u
 WHERE u.system_unique_id = "UserMetadata".user_id;
 EOT
+}
 
 print "Assigning people still in multiple accounts to the 'General' account.\n";
 my $general = _load_account('General', 'create it!');

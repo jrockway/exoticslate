@@ -74,9 +74,12 @@ sub http_user_pass {
     my $user = shift;
     my $pass = shift;
 
+    my $name = ($self->{http}) ? $self->{http}->name : 'SocialRest fixture';
+
     $self->{http} = Test::HTTP->new('SocialRest fixture');
     $self->{http}->username($user) if $user;
     $self->{http}->password($pass) if $pass;
+    $self->{http}->name($name);
 }
 
 =head2 handle_command( @row )

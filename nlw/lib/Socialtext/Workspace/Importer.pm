@@ -51,7 +51,7 @@ Readonly my $MAX_VERSION => 1;
 
         my $ws = Socialtext::Workspace->new( name => $new_name );
         if ( $ws && ! $p{overwrite} ) {
-            die "Cannot restore $new_name workspace, it already exists.";
+            die "Cannot restore $new_name workspace, it already exists.\n";
         }
 
         my $tarball = Cwd::abs_path( $p{tarball} );
@@ -118,6 +118,7 @@ sub import_workspace {
         }
         die "Error importing workspace $self->{new_name}: $err";
     }
+    return $self->{workspace};
 }
 
 sub _create_workspace {

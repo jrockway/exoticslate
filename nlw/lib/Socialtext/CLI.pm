@@ -364,11 +364,15 @@ sub import_account {
 
     for my $tarball (glob "$dir/*.1.tar.gz") {
         print loc("Importing workspace from $tarball ..."), "\n";
-        Socialtext::Workspace->ImportFromTarball(
-            tarball   => $tarball,
-            overwrite => $opts{overwrite},
-            noindex   => $opts{noindex},
-        );
+        eval {
+            my $wksp = Socialtext::Workspace->ImportFromTarball(
+                tarball   => $tarball,
+                overwrite => $opts{overwrite},
+                noindex   => $opts{noindex},
+            );
+            $wksp->update( account_id => $account->account_id );
+        };
+        warn $@ if $@;
     }
 
     $self->_success(

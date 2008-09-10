@@ -4,6 +4,11 @@ use strict;
 use warnings;
 use Socialtext::Account;
 use Socialtext::User;
+use Socialtext::AppConfig;
+use Socialtext::SQL qw/sql_execute/;
+use YAML qw/LoadFile/;
+use Data::Dumper;
+use Carp qw/croak/;
 
 # Make sure the Socialtext and Unknown accounts exist.
 Socialtext::Account->EnsureRequiredDataIsPresent();
@@ -14,4 +19,194 @@ my $st_account = Socialtext::Account->Socialtext;
 Socialtext::User->SystemUser->primary_account($st_account);
 Socialtext::User->Guest->primary_account($st_account);
 
+print "Assigning primary accounts to users\n";
+my $MigrationConfig = _load_migration_config();
+print "Using migration config: " . Dumper $MigrationConfig;
+
+# Assign people to accounts based on their e-mail domains
+if (my $accts = $MigrationConfig->{email_to_account_mapping}) {
+    for my $account_name (keys %$accts) {
+        my $account = Socialtext::Account->new(name => $account_name);
+        for my $email ( @{ $accts->{$account_name} } ) {
+            print "  Mapping $email users to $account_name\n";
+
+            # XXX REview with stash - should we use a subselect?
+            sql_execute(<<EOT, $account->account_id, $email);
+UPDATE "UserMetadata" SET primary_account_id = ?
+  FROM "User"
+ WHERE "UserMetadata".user_id = "User".user_id
+   AND primary_account_id IS NULL
+   AND email_address LIKE ?
+EOT
+        }
+    }
+}
+
+# Assign particular workspaces to accounts
+my $unknown_wksps = Socialtext::Account->Unknown->workspaces;
+
+my $public_account = _load_account('Public', 'create it');
+print "Assigning workspaces in the Unknown account ...\n";
+while (my $wksp = $unknown_wksps->next) {
+    unless ($wksp->name) {
+        warn "Workspace " . $wksp->workspace_id . " doesn't have a name!\n";
+        next;
+    }
+
+    if ($wksp->permissions->is_public) {
+        print "  Assigning " . $wksp->name . " to the Public account\n";
+        $wksp->update( account_id => $public_account->account_id );
+    }
+    else {
+        my $account_name = _find_non_existent_account($wksp);
+        my $account = _load_account($account_name, 'create it');
+
+        print "  Assigning " . $wksp->name . " to a new $account_name\n";
+        $wksp->update( account_id => $account->account_id );
+    }
+}
+
+
+# Assign people in JUST ONE account to that account
+print "Assigning people in *just one* account to that account\n";
+sql_execute(<<EOT);
+UPDATE "UserMetadata"
+SET primary_account_id = calc_account_id
+FROM (
+    SELECT ua.system_unique_id AS calc_user_id, 
+           ua.secondary_account_id AS calc_account_id
+        FROM (  
+            SELECT system_unique_id, 
+                   COUNT(secondary_account_id) AS accounts
+            FROM user_account
+            WHERE primary_account_id IS NULL 
+            GROUP BY system_unique_id
+        ) s1 
+        JOIN user_account ua ON (s1.system_unique_id = ua.system_unique_id)
+        WHERE s1.accounts = 1 
+          AND ua.primary_account_id IS NULL
+) s2
+WHERE user_id = calc_user_id;
+EOT
+
+
+# Assign people in JUST ONE non-system account to that account
+print "Assigning people in *just one non-system* account to that account\n";
+my ($accounts_to_skip, @bind) = _load_accounts(
+    'system_accounts',
+    Socialtext::Account->Unknown,
+    Socialtext::Account->Socialtext,
+);
+sql_execute(<<EOT, @bind, @bind);
+UPDATE "UserMetadata"
+SET primary_account_id = calc_account_id
+FROM (
+    SELECT ua.system_unique_id AS calc_user_id, 
+           ua.secondary_account_id AS calc_account_id
+        FROM (  
+            SELECT system_unique_id, 
+                   COUNT(secondary_account_id) AS accounts
+            FROM user_account
+            WHERE primary_account_id IS NULL 
+              AND secondary_account_id NOT IN ($accounts_to_skip)
+            GROUP BY system_unique_id
+        ) s1 
+        JOIN user_account ua ON (s1.system_unique_id = ua.system_unique_id)
+        WHERE s1.accounts = 1 
+          AND ua.secondary_account_id NOT IN ($accounts_to_skip) 
+          AND ua.primary_account_id IS NULL
+) s2
+WHERE user_id = calc_user_id;
+EOT
+
+
+# Assign people in JUST ONE paying account to that account
+print "Assigning people in *just one paying* account to that account\n";
+my ($priority_accounts, @bind) = _load_accounts('paying_accounts');
+if (@bind) {
+    sql_execute(<<EOT, @bind, @bind);
+UPDATE "UserMetadata"
+SET primary_account_id = calc_account_id
+FROM (
+    SELECT ua.system_unique_id AS calc_user_id, 
+           ua.secondary_account_id AS calc_account_id
+        FROM (  
+            SELECT system_unique_id, 
+                   COUNT(secondary_account_id) AS accounts
+            FROM user_account
+            WHERE primary_account_id IS NULL 
+              AND secondary_account_id IN ($priority_accounts)
+            GROUP BY system_unique_id
+        ) s1 
+        JOIN user_account ua ON (s1.system_unique_id = ua.system_unique_id)
+        WHERE s1.accounts = 1 
+          AND ua.secondary_account_id IN ($priority_accounts) 
+          AND ua.primary_account_id IS NULL
+) s2
+WHERE user_id = calc_user_id;
+EOT
+}
+
+
+print "Assigning people still in multiple accounts to the 'General' account.\n";
+my $general = _load_account('General', 'create it!');
+my $sth = sql_execute(<<EOT, $general->account_id);
+UPDATE "UserMetadata"
+    SET primary_account_id = ?
+    WHERE primary_account_id IS NULL
+EOT
+
 exit 0;
+
+
+sub _load_migration_config {
+    my $config_dir = Socialtext::AppConfig->config_dir();
+    my $config_file = "$config_dir/account-migration.yaml";
+    return {} unless -e $config_file;
+    return LoadFile($config_file);
+}
+
+sub _load_account {
+    my $name      = shift;
+    my $create_it = shift;
+    croak "_load_account() requires a name!" unless $name;
+    my $account = Socialtext::Account->new(name => $name);
+    if (!$account and $create_it) {
+        $account = Socialtext::Account->create(name => $name);
+    }
+    return $account;
+}
+
+sub _find_non_existent_account {
+    my $wksp = shift;
+    my @possible_names = (
+        $wksp->name,
+        $wksp->name . " Account",
+        $wksp->name . " Auto-generated account",
+    );
+    for my $name (@possible_names) {
+        my $account = _load_account($name);
+        next if $account;
+        return $name;
+    }
+    return $wksp->name . " - " . time();
+}
+
+sub _load_accounts {
+    my $key = shift;
+    my @to_skip = @_;
+
+    my $extra_to_skip = $MigrationConfig->{$key} || [];
+    for my $name (@$extra_to_skip) {
+        my $acct = _load_account($name);
+        push @to_skip, $acct if $acct;
+    }
+
+    print "  Loaded $key workspaces: "
+        . join(", ", map { $_->name } @to_skip) . "\n";
+
+    return (
+        join(',', map { '?' } @to_skip),
+        map { $_->account_id } @to_skip
+    );
+}

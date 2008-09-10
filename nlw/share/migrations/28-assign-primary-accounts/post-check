@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Socialtext::Account;
 use Socialtext::User;
+use Socialtext::SQL qw/sql_singlevalue/;
 
 my $st_account_id = Socialtext::Account->Socialtext->account_id();
 my $sys_user = Socialtext::User->SystemUser();
@@ -14,5 +15,14 @@ unless ( ($sys_user->primary_account->account_id() == $st_account_id)
     exit 1;
 }
 
-print "It looks like users were assigned to accounts correctly.\n";
-exit 0;
+# Check all users have a primary account
+my $count = sql_singlevalue(<<EOT);
+SELECT COUNT(*) FROM "UserMetadata" WHERE primary_account_id IS NULL
+EOT
+if ($count == 0) {
+    print "All users now have primary accounts.\n";
+    exit 0;
+}
+
+print "Error - not all users have primary accounts!\n";
+exit 1;

@@ -214,8 +214,9 @@ sub recently_viewed_workspaces {
             SELECT distinct page_workspace_id,
                    MAX(at) AS last_edit
               FROM event
-             WHERE action = 'view'
-               AND actor_id = ?
+             WHERE actor_id = ?
+               AND event_class = 'page'
+               AND action = 'view'
              GROUP BY page_workspace_id
              ORDER BY last_edit DESC
              LIMIT ?

@@ -29,8 +29,6 @@ if (my $accts = $MigrationConfig->{email_to_account_mapping}) {
         my $account = Socialtext::Account->new(name => $account_name);
         for my $email ( @{ $accts->{$account_name} } ) {
             print "  Mapping $email users to $account_name\n";
-
-            # XXX REview with stash - should we use a subselect?
             sql_execute(<<EOT, $account->account_id, $email);
 UPDATE "UserMetadata" SET primary_account_id = ?
   FROM "User"

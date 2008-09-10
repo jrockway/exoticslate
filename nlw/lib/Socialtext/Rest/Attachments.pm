@@ -9,6 +9,7 @@ use base 'Socialtext::Rest::Collection';
 use Fcntl ':seek';
 use File::Temp 'tempfile';
 use Socialtext::HTTP ':codes';
+use Socialtext::Base ();
 
 sub SORTS {
     return +{
@@ -51,11 +52,11 @@ sub _entity_hash {
     return +{
         id   => $attachment->id,
         name => $attachment->filename,
-        uri  => '/data/workspaces/' . $self->ws . '/attachments/'
-            . $attachment->page_id . ':'
-            . $attachment->id
+        uri  => '/data/workspaces/' . Socialtext::Base->uri_escape($self->ws) . '/attachments/'
+            . Socialtext::Base->uri_escape($attachment->page_id) . ':'
+            . Socialtext::Base->uri_escape($attachment->id)
             . '/original/'
-            . $attachment->db_filename,
+            . Socialtext::Base->uri_escape($attachment->db_filename),
         'content-type'   => '' . $attachment->mime_type,    # Stringify!
         'content-length' => $attachment->Content_Length,
         date             => $attachment->Date,

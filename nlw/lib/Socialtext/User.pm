@@ -204,6 +204,36 @@ sub update_store {
     return $self->homunculus->update( %p );
 }
 
+sub recently_viewed_workspaces {
+    my $self = shift;
+    my $limit = shift || 10;
+    my $sth = sql_execute(q{
+        SELECT distinct name as workspace_name,
+               MAX(at) AS last_edit,
+               title AS workspace_title
+        FROM (
+            SELECT page_workspace_id, at FROM event
+             WHERE action = 'view' 
+               AND at > 'now'::timestamptz - interval '2 weeks'
+               AND actor_id = ?
+             ORDER BY at DESC
+             LIMIT 300
+        ) AS X
+        JOIN "Workspace"
+          ON workspace_id = page_workspace_id
+        GROUP BY workspace_name, workspace_title
+        ORDER BY last_edit
+        LIMIT ?;
+    }, $self->user_id, $limit);
+
+    my @viewed;
+    while (my $row = $sth->fetchrow_hashref) {
+        push @viewed, [$row->{workspace_name}, $row->{workspace_title}];
+    }
+    return @viewed;
+}
+
+
 sub user_id {
     my $self = shift;
 

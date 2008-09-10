@@ -73,6 +73,17 @@ if [ "$1" != "quick" ]; then
     st-admin add-member --email social@example.com -w hippy 2> /dev/null 
     st-admin add-member --email social@example.com -w balls 2> /dev/null 
 
+    # other is a member of 2 paying accounts
+    # other should end up in the 'Ambiguous' account
+    st-admin create-account --name 'Othercrats'
+    st-admin create-user -e other@example.com -p password 2> /dev/null
+
+    st-admin delete-workspace --no-export -w other 2> /dev/null
+    st-admin create-workspace -n other -t other -a 'Othercrats'
+
+    st-admin add-member -e other@example.com -w other 2> /dev/null
+    st-admin add-member -e other@example.com -w money 2> /dev/null
+
     # Set up the migration config file
     cat <<EOT > ~/.nlw/etc/socialtext/account-migration.yaml
 ---
@@ -83,6 +94,7 @@ system_accounts:
   - Dirty Hippies
 paying_accounts:
   - Republicans
+  - Othercrats
 EOT
 fi
 

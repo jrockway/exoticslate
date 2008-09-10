@@ -349,10 +349,10 @@ sub export_account {
 sub import_account {
     my $self = shift;
     my %opts = $self->_get_options("directory:s", "overwrite", "name:s", "noindex");
-    my $dir = $opts{directory};
+    my $dir = $opts{directory} || '';
     $dir =~ s#/$##;
 
-    $self->_error(loc("No import directory specified.") . "\n") unless $dir;
+    $self->_help_as_error(loc("No import directory specified.") . "\n") unless $dir;
     $self->_error(loc("Directory [_1] does not exist.", $dir) . "\n") unless -d $dir;
 
     print loc("Importing users ..."), "\n";

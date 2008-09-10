@@ -1349,6 +1349,14 @@ sub email_confirmation {
     return Socialtext::User::EmailConfirmation->new( $self->user_id );
 }
 
+sub can_use_plugin {
+    my ($self, $plugin_name) = @_;
+
+    return Socialtext::Pluggable::Adapter->PluginEnabledForUser(
+        $plugin_name => $self
+    );
+}
+
 1;
 
 __END__
@@ -1666,6 +1674,11 @@ supplied, otherwise it returns the primary account for this user.
 =head2 $user->primary_account_id()
 
 Returns the primary account ID for this user.
+
+=head2 $user->can_use_plugin( $name )
+
+Returns a boolean indicating whether the user can use the given plugin.
+See also C<Socialtext::Account::is_plugin_enabled>
 
 =head2 Socialtext::User->minimal_interface()
 

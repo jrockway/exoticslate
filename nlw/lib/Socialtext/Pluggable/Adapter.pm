@@ -14,6 +14,8 @@ use File::chdir;
 use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
                       search_dirs => \@libs;
 use Socialtext::Pluggable::WaflPhrase;
+use Socialtext::SQL qw/sql_singlevalue/;
+use Socialtext::User::Default::Factory qw($SystemUsername $GuestUsername);
 
 # These hook types are executed only once, all other types are called as many
 # times as they are registered
@@ -158,19 +160,14 @@ sub register {
 }
 
 sub plugin_list {
-    my ($self, $name) = @_;
-    return map { $_->name } $self->plugins;
+    my ($class_or_self, $name) = @_;
+    return map { $_->name } $class_or_self->plugins;
 }
 
 sub plugin_exists {
-    my ($self, $name) = @_;
-    my %list = map { $_ => 1 } $self->plugin_list;
+    my ($class_or_self, $name) = @_;
+    my %list = map { $_ => 1 } $class_or_self->plugin_list;
     return $list{$name};
-}
-
-sub plugin_enabled {
-    my ($self, $name) = @_;
-    return $self->hub->current_user->primary_account->is_plugin_enabled($name);
 }
 
 sub registered {
@@ -188,9 +185,7 @@ sub hook {
             my $plugin = $hook->{obj} ||= $hook->{class}->new();
             my $hub = $self->hub || $self->{made_hub};
 
-            my $accnt = $hub->current_user->primary_account;
-            my $enabled = $plugin->always_enabled || 
-                          $accnt->is_plugin_enabled($plugin->name);
+            my $enabled = $hub->current_user->can_use_plugin($plugin->name);
                          
             if ($enabled) {
                 $hook->{obj}->hub($hub);
@@ -201,6 +196,29 @@ sub hook {
         }
     }
     return join("\n", @output);
+}
+
+sub PluginEnabledForUser {
+    my ($class, $plugin_name, $user) = @_;
+
+    return 0 unless $class->plugin_exists($plugin_name);
+
+    return 1 if ($user->username eq $SystemUsername);
+
+    my $enabled = sql_singlevalue(<<SQL, $user->user_id, $plugin_name);
+        SELECT 1 FROM user_account
+        WHERE system_unique_id = ?
+          AND EXISTS (
+            SELECT 1 
+            FROM account_plugin 
+            WHERE plugin = ? AND (
+                account_id = primary_account_id OR
+                account_id = secondary_account_id
+            )
+          )
+        LIMIT 1
+SQL
+    return $enabled;
 }
 
 return 1;

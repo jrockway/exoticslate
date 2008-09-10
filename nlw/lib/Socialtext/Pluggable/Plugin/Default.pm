@@ -22,8 +22,6 @@ sub root {
     return $nowork->handler($rest);
 }
 
-sub always_enabled { 1 }
-
 sub user_image { '' }
 
 sub user_name {

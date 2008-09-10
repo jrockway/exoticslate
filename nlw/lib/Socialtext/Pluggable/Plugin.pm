@@ -33,8 +33,6 @@ field 'rest';
 # perldoc Socialtext::URI for arguments
 #    path = '' & query => {}
 
-sub always_enabled { 0 }
-
 sub uri {
     my $self = shift;
     return $self->hub->current_workspace->uri . Socialtext::AppConfig->script_name;
@@ -195,7 +193,7 @@ sub name {
 
 sub plugins {
     my $self = shift;
-    return grep { $self->user->primary_account->is_plugin_enabled($_) }
+    return grep { $self->user->can_use_plugin($_) }
            $self->hub->pluggable->plugin_list;
 }
 

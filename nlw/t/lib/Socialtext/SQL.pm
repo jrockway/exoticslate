@@ -34,8 +34,17 @@ sub sql_in_transaction { 0 }
 sub sql_begin_work { }
 sub sql_commit { }
 sub sql_rollback { }
-sub sql_selectrow { sql_execute(@_) };
-sub sql_singlevalue { sql_execute(@_) };
+
+sub sql_selectrow { 
+    my $sth = sql_execute(@_);
+    return $sth->fetchrow_array();
+};
+
+sub sql_singlevalue { 
+    my $sth = sql_execute(@_);
+    my ($val) = $sth->fetchrow_array();
+    return $val;
+};
 
 sub sql_ok {
     my %p = @_;

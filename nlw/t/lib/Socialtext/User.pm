@@ -156,4 +156,6 @@ sub primary_account {
     return $self->{primary_account} || Socialtext::Account->Default;
 }
 
+sub can_use_plugin { 1 } 
+
 1;

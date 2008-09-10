@@ -571,7 +571,9 @@ Returns a cursor of the users for this account, ordered by username.
 
 =item $account->is_plugin_enabled($plugin)
 
-Returns true if the specified plugin is enabled.
+Returns true if the specified plugin is enabled for this account.  
+
+Note that the plugin still may be disabled for particular users; use C<Socialtext::User>'s can_use_plugin method to check for this.
 
 =item $account->enable_plugin($plugin)
 

@@ -215,7 +215,6 @@ sub recently_viewed_workspaces {
                    MAX(at) AS last_edit
               FROM event
              WHERE action = 'view'
-               AND at > 'now'::timestamptz - interval '2 weeks'
                AND actor_id = ?
              GROUP BY page_workspace_id
              ORDER BY last_edit DESC

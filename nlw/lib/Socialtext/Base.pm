@@ -108,10 +108,7 @@ sub utf8_encode {
 
 sub uri_escape {
     my $self = shift;
-
-    # Here we explicitly escape the single-quote ' character,
-    # overriding URI::Escape's default.
-    return URI::Escape::uri_escape_utf8(shift, q[^A-Za-z0-9\-_.!~*()]);
+    return URI::Escape::uri_escape_utf8(shift);
 }
 
 sub uri_unescape {

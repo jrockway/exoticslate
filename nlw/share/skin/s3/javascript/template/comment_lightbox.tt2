@@ -21,7 +21,7 @@
   <textarea name="comment" wrap="virtual"></textarea>
   <ul class="formButtons">
     <li><a class="saveButton" href="#">[% loc('Save') %]</a></li>
-    <li><a class="cancelButton" href="#">[% loc('Save') %]</a></li>
+    <li><a class="cancelButton" href="#">[% loc('Cancel') %]</a></li>
   </ul>
 </div>
 </div>

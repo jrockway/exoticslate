@@ -25,9 +25,12 @@ sub handler {
 
 sub _regen_combined_js {
     my $r = shift;
+    my $uri = $r->uri;
+
+    return if $uri =~ m{^/data};
 
     # Figure out what skin to build
-    my ($ws_name) = $r->uri =~ m{^/([^/]+)/index\.cgi$};
+    my ($ws_name) = $uri =~ m{^/([^/]+)/index\.cgi$};
     my $workspace = $ws_name ? Socialtext::Workspace->new(name=>$ws_name)
                              : Socialtext::NoWorkspace->new;
     my $skin_name = $workspace->skin_name;

@@ -208,22 +208,22 @@ sub recently_viewed_workspaces {
     my $self = shift;
     my $limit = shift || 10;
     my $sth = sql_execute(q{
-        SELECT distinct name as workspace_name,
-               MAX(at) AS last_edit,
-               title AS workspace_title
+        SELECT name as workspace_name,
+               last_edit
         FROM (
-            SELECT page_workspace_id, at FROM event
-             WHERE action = 'view' 
+            SELECT distinct page_workspace_id,
+                   MAX(at) AS last_edit
+              FROM event
+             WHERE action = 'view'
                AND at > 'now'::timestamptz - interval '2 weeks'
                AND actor_id = ?
-             ORDER BY at DESC
-             LIMIT 300
+             GROUP BY page_workspace_id
+             ORDER BY last_edit DESC
+             LIMIT ?
         ) AS X
         JOIN "Workspace"
           ON workspace_id = page_workspace_id
-        GROUP BY workspace_name, workspace_title
-        ORDER BY last_edit
-        LIMIT ?;
+        ORDER BY last_edit DESC
     }, $self->user_id, $limit);
 
     my @viewed;

@@ -1,0 +1,10 @@
+name: reds3
+version: 1.0.0
+abstract: RED
+cascade_css: 1
+no_common: 1
+no_workspace_dashboard: 1
+license: CPAL
+parent: s3
+depends:
+  - s3

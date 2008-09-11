@@ -6,9 +6,9 @@
   <div id="st-editing-tools-edit">
     <h1>[% loc('Weblog') %]: [% display_title | html %]</h1>
     <ul id="quickLinks">
-      <li><img src="[% wiki.skin_uri('s3/images/rss.png') %]" /><a href="[% feeds.rss.page.url %]">[% loc('Subscribe to Feed') %]</a></li>
+      <li><img src="[% wiki.skin_uri('s3') %]/images/rss.png" /><a href="[% feeds.rss.page.url %]">[% loc('Subscribe to Feed') %]</a></li>
       [% IF hub.current_workspace.enable_unplugged %]
-      <li class="noBorder"><img src="[% wiki.skin_uri('s3/images/plug.png') %]" /><a href="?action=unplug;tag=[% category_escaped %]">[% loc('Save the 50 most recent pages') %]</a></li>
+      <li class="noBorder"><img src="[% wiki.skin_uri('s3') %]/images/plug.png" /><a href="?action=unplug;tag=[% category_escaped %]">[% loc('Save the 50 most recent pages') %]</a></li>
       [% END %]
     </ul>
   </div><!-- controlsLeft END -->

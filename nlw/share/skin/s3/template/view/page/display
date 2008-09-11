@@ -258,12 +258,12 @@
 
 [% IF enable_unplugged %]
     <a title="[% loc('Click this button to save this page to your computer for offline use.') %]" href="?action=unplug;page_name=[% page.id %]" style="float: right; margin-left: 5px">
-      <img class="st-page-details-feed-icon" alt="[% loc('Click this button to save this page to your computer for offline use.') %]" src="[% wiki.skin_uri('s3/images/plug.png') %]" />
+      <img class="st-page-details-feed-icon" alt="[% loc('Click this button to save this page to your computer for offline use.') %]" src="[% wiki.skin_uri('s3') %]/images/plug.png" />
      </a>
 [% END %]
 [% IF feeds.rss %]
     <a href="[% feeds.rss.page.url %]" style="float: right">
-        <img class="st-page-details-feed-icon" src="[% wiki.skin_uri('s3/images/rss.png') %]" />
+        <img class="st-page-details-feed-icon" src="[% wiki.skin_uri('s3') %]/images/rss.png" />
     </a>
 [% END %]
 

@@ -6,10 +6,9 @@ use File::Path qw/mkpath/;
 use Socialtext::File qw/set_contents/;
 use File::chdir;
 use Socialtext::File;
-fixtures('admin');
 
 BEGIN {
-    use Test::Socialtext tests => 15;
+    use Test::Socialtext tests => 22;
     use_ok( 'Socialtext::Skin' );
     $Socialtext::Skin::CODE_BASE = 't/share';
     $Socialtext::Skin::PROD_VER = '1.0';
@@ -124,4 +123,35 @@ BEGIN {
         "t/share/skin/s2/template",
         "t/share/uploaded-skin/admin/template",
     ], 'Uploaded templates are included in template_paths');
+}
+
+# Socialtext::Skin works outside the hub
+{
+    my $cascades = Socialtext::Skin->new(name => 'cascades');
+    is $cascades->skin_info->{parent}, 's2', 'cascades inherits from s2';
+    is $cascades->parent->skin_info->{skin_name}, 's2', 'parent is s2';
+    is $cascades->skin_info->{cascade_css}, 1, 'cascades cascades';
+    is_deeply($cascades->template_paths, [
+        "t/share/skin/s2/template",
+        "t/share/skin/cascades/template",
+    ], 'Cascading skin has both template dirs');
+}
+
+# Non existent skins return undef
+{
+    my $skin = Socialtext::Skin->new(name => 'absent');
+    is $skin, undef, "Absent skin is undef";
+}
+
+# make_dirs
+{
+    my @s2 = Socialtext::Skin->new(name => 's2')->make_dirs;
+    my @s3 = Socialtext::Skin->new(name => 's3')->make_dirs;
+    is_deeply \@s2, [qw(
+        t/share/skin/s2/javascript
+    )], "s2 make_dirs";
+    is_deeply \@s3, [qw(
+        t/share/skin/s2/javascript
+        t/share/skin/s3/javascript
+    )], "s3 make_dirs";
 }

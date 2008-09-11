@@ -25,8 +25,9 @@ sub register {
 
 sub template_path {
     my $self = shift;
+    my $skin = Socialtext::Skin(name => 's2');
     return join '/',
-        $self->hub->skin->skin_path('s2'),
+        $skin->skin_path,
         'template/new_form_page',
         @_;
 }

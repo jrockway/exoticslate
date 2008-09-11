@@ -200,9 +200,7 @@ sub global_template_vars {
 
     my $search_box = $renderer->render(
         template => \$snippet,
-        paths => [
-            $self->hub->skin->skin_path('s2') . '/template'
-        ],
+        paths => $self->hub->skin->template_paths,
         vars => {
             current_workspace => $self->hub->current_workspace,
             show_search_set   => $show_search_set,
@@ -292,7 +290,9 @@ sub _get_wiki_info {
         email_address => $wiki->email_in_address,
         static_path   => $self->static_path,
         skin_uri      => sub { 
-            $self->hub->skin->skin_uri( shift || $skin )
+            my $skin_name  = shift;
+            my $skin = Socialtext::Skin->new(name => $skin_name);
+            return $skin->skin_uri();
         },
         comment_form_window_height => $wiki->comment_form_window_height,
         system_status              => $self->hub->main ?
@@ -300,12 +300,6 @@ sub _get_wiki_info {
         comment_by_email           => $wiki->comment_by_email,
         email_in_address           => $wiki->email_in_address,
     };
-}
-
-sub skin_uri {
-    my $skin = Socialtext::Skin->new();
-    my $skin_name  = shift;
-    return $skin->skin_uri($skin_name);
 }
 
 1;

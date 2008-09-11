@@ -8,6 +8,7 @@ use base 'Socialtext::Plugin';
 use Class::Field qw( const );
 use Socialtext::AppConfig;
 use Socialtext::BrowserDetect ();
+use Socialtext::Skin;
 use Socialtext::l10n qw(loc);
 
 sub class_id { 'new_form_page' }
@@ -25,7 +26,7 @@ sub register {
 
 sub template_path {
     my $self = shift;
-    my $skin = Socialtext::Skin(name => 's2');
+    my $skin = Socialtext::Skin->new(name => 's2');
     return join '/',
         $skin->skin_path,
         'template/new_form_page',

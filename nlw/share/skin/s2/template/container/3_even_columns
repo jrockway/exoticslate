@@ -1,0 +1,3 @@
+[% WRAPPER layout/html content_id = 'st-homepage' box_javascript = 0 subnav = 'element/wiki/subnav-dashboard' dropshadow = 1 title = "Error" %]
+[% loc('This feature is not available for this skin') %]
+[% END %]

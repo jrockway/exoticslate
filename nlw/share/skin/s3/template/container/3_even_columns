@@ -1,0 +1,45 @@
+[% WRAPPER layout/html 
+    id="dashBoard"
+    head_template="element/container_head"
+    title=loc('Socialtext')
+%]
+<input id="containerID" type="hidden" value="[% container.id %]"/>
+<input id="widgetList" type="hidden" value="[% container.gadgetlist %]"/>
+
+<div id="controls">
+    <div id="st-editing-tools-edit">
+        [% IF container.templates.hello %] 
+            [% INCLUDE $container.templates.hello %]
+        [% ELSE %]
+            <ul></ul>
+        [% END %]
+    </div><!-- controlsLeft END -->
+    <div id="controlsRight">
+        [% IF container.templates.links %] 
+            [% INCLUDE $container.templates.links %]
+        [% END %]
+    </div><!-- controlsRight END -->
+</div><!-- controls END -->
+
+<div id="contentContainer">
+    <div id="contentColumns">
+        <ul class="widgetColumn" id="leftList">
+        [% FOR gadget = container.gadgets.0 %]
+            [% INCLUDE $gadget.templates.container gadget=gadget %]
+        [% END %]
+        </ul>
+        <ul class="widgetColumn" id="middleList">
+        [% FOR gadget = container.gadgets.1 %]
+            [% INCLUDE $gadget.templates.container gadget=gadget %]
+        [% END %]
+        </ul>
+        <ul class="widgetColumn" id="rightList">
+        [% FOR gadget = container.gadgets.2 %]
+            [% INCLUDE $gadget.templates.container gadget=gadget %]
+        [% END %]
+        </ul>
+    </div><!-- columnColumns END -->
+    <div class="clear"></div><!-- clear END -->
+</div><!-- contentContainer END -->
+<script>gadgets.util.runOnLoadHandlers()</script>
+[% END %]

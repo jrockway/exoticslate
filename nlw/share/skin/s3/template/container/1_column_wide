@@ -1,0 +1,15 @@
+[% WRAPPER layout/html 
+    id="dashBoard"
+    head_template="element/container_head"
+    title=loc('Socialtext')
+%]
+<div id="widgetContainer">
+    <div class="widgetCol" name="0" id="columnRight" style="width:97.5%; position: relative; left:2.5%; max-width:1120px; _width: expression( (document.body.clientWidth > (1120 * 0.975)) ? '1120px' : '97.5%' ); ">
+        &nbsp;
+        [% FOR gadget = container.gadgets.0 %]
+            [% INCLUDE $gadget.templates.container gadget=gadget %]
+        [% END %]
+    </div>
+</div><!-- widgetContainer END -->
+<script>gadgets.util.runOnLoadHandlers()</script>
+[% END %]

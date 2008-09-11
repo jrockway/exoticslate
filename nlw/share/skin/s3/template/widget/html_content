@@ -1,0 +1,16 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <base target="_blank"/>
+        <link rel="stylesheet" href="[% share %]/css/gadget.css" type="text/css" media="screen" />
+        <script src="[% javascript_uri %]"></script>
+        <script src="[% share %]/javascript/syndicator.js"></script>
+        <script>
+            var msgs = [% as_json(messages) %];
+        </script>
+    </head>
+    <body onLoad="document.loaded=true;">
+        [% content %]
+        <script>gadgets.util.runOnLoadHandlers()</script>
+    </body>
+</html>

@@ -1,0 +1,10 @@
+<link rel="stylesheet" href="[% share %]/css/container.css" type="text/css" media="screen" />
+[% IF container %]
+    [% IF container.javascript_uri %]
+        <script src="[% container.javascript_uri %]"></script>
+        <script src="[% share %]/javascript/syndicator.js"></script>
+    [% END %]
+    <script>
+        var containerID = "[% container.id %]";
+    </script>
+[% END %]

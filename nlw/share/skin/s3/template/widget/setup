@@ -1,0 +1,57 @@
+[% id = gadget.id %]
+<form onsubmit="gadgets.container.save('[% id %]'); return false">
+    [% FOR pref = gadget.user_prefs %]
+        [% IF pref.datatype == 'hidden' %]
+            <input name="up_[% pref.name %]" class="input_[% id %]" type="hidden" value="[% pref.val %]"/>
+        [% END %]
+    [% END %]
+
+    <table>
+        [% FOR pref = gadget.user_prefs %]
+            [% IF pref.datatype == 'hidden' %]
+                [% NEXT %]
+            [% END %]
+
+            <tr>
+                <th>[% pref.display_name %]:</th>
+                <td>
+                [% IF pref.datatype == 'enum' %]
+                    <select name="up_[% pref.name %]" class="input_[% id %]">
+                        [% FOR item = pref.options %]
+                            [% selected = '' %]
+                            [% IF pref.val == item.value %]
+                                [% selected = 'selected="1"' %]
+                            [% END %]
+                            <option value=[% item.value %] [% selected %]>
+                                [% item.display_value || item.value %]
+                            </option>
+                        [% END %]
+                    </select>
+                [% ELSIF pref.datatype == 'workspace' %]
+                    <select name="up_[% pref.name %]" class="input_[% id %]">
+                        [% FOR item = workspaces %]
+                            [% selected = '' %]
+                            [% IF pref.val == item.name %]
+                                [% selected = 'selected="1"' %]
+                            [% END %]
+                            <option value="[% item.name %]" [% selected %]>
+                                [% item.title %]
+                            </option>
+                        [% END %]
+                    </select>
+                [% ELSIF pref.datatype == 'bool' %]
+                    <input name="up_[% pref.name %]" class="input_[% id %]" type="checkbox" value="[% pref.val %]"/>
+                [% ELSE %]
+                    <input name="up_[% pref.name %]" class="input_[% id %]" type="text" value="[% pref.val %]"/>
+                [% END %]
+                </td>
+            [% END %]
+        </tr>
+        <tr>
+            <th></th>
+            <td>
+                <input type='submit' value='save' class="searchButton" id="st-savebutton"/>
+            </td>
+        </tr>
+    </table>
+</form>

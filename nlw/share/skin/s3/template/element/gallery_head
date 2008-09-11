@@ -1,0 +1,13 @@
+<style>
+    table.gallery_section {
+        margin: 10px;
+    }
+
+    table.gallery_section th {
+        font-weight: bold;
+    }
+
+    table.gallery_section td {
+        padding-top: 5px;
+    }
+</style>

@@ -332,8 +332,9 @@ sub _call_method {
     if ($headers) {
         $headers = [
             map {
-                s/-/_/g;
-                split m/\s*=\s*/, $_
+                my ($k,$v) = split m/\s*=\s*/, $_;
+                $k =~ s/-/_/g;
+                ($k,$v);
             } split m/\s*,\s*/, $headers
         ];
     }

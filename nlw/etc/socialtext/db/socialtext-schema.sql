@@ -30,7 +30,8 @@ SET default_with_oids = false;
 CREATE TABLE "Account" (
     account_id bigint NOT NULL,
     name varchar(250) NOT NULL,
-    is_system_created boolean DEFAULT false NOT NULL
+    is_system_created boolean DEFAULT false NOT NULL,
+    skin_name varchar(30) DEFAULT 's2'::varchar NOT NULL
 );
 
 CREATE SEQUENCE "Account___account_id"
@@ -144,7 +145,7 @@ CREATE TABLE "Workspace" (
     external_links_open_new_window boolean DEFAULT true NOT NULL,
     basic_search_only boolean DEFAULT false NOT NULL,
     enable_unplugged boolean DEFAULT false NOT NULL,
-    skin_name varchar(30) DEFAULT 's2'::varchar NOT NULL,
+    skin_name varchar(30) DEFAULT ''::varchar NOT NULL,
     custom_title_label varchar(100) DEFAULT ''::varchar NOT NULL,
     header_logo_link_uri varchar(100) DEFAULT 'http://www.socialtext.com/'::varchar NOT NULL,
     show_welcome_message_below_logo boolean DEFAULT false NOT NULL,

@@ -25,6 +25,12 @@ CREATE TRIGGER person_ins
     FOR EACH ROW
     EXECUTE PROCEDURE auto_vivify_person();
 
+-- Add a skin_name field to an Account
+ALTER TABLE "Account" ADD COLUMN
+    skin_name varchar(30) DEFAULT 's2'::varchar NOT NULL;
+
+-- Change the default workspace skin so it inherits from Account
+ALTER TABLE "Workspace" ALTER COLUMN skin_name SET DEFAULT ''::varchar;
 
 UPDATE "System"
    SET value = 11

@@ -4,6 +4,8 @@
   <input type="hidden" name="action" value="email_page" />
   <input type="hidden" name="json" value="1" />
   <input type="hidden" name="page_name" value="[% page_title | html_encode %]" />
+  <div class="title">[% loc('Email this page') %]</div>
+  <br />
   <table>
     <tr>
       <th width="15%">[% loc('From') %]</th>
@@ -39,7 +41,9 @@
     </tr>
     <tr>
       <td><label>
-        [% loc('Additional Recipient') %]<input id="email_page_add_one" class="email_input" type="text" name="email_page_add_one" value="[% loc('type email address here') %]" />
+        [% loc('Additional Recipient') %]
+        <br />
+        <input id="email_page_add_one" class="email_input" type="text" name="email_page_add_one" value="[% loc('type email address here') %]" />
       </label></td>
 
       <td style="vertical-align: middle">
@@ -51,10 +55,10 @@
     <tr>
       <th>[% loc('Message') %]</th>
       <td colspan="3">
-        <label><input class="email_input" name="email_page_add_note_check" type="checkbox"  value="1" checked="checked" />[% loc('Add this note at the front of the email?') %] <i>[% loc('(You can customize the note below.)') %]</i></label>
-        <textarea style="width: 480px" name="email_page_add_note" rows="7" cols="60">[% loc("Hello, this is a page from the workspace that I wanted you to see. This page is also available for viewing or editing on the web at:\n\n[_1]", page.full_uri) %]</textarea>
+        <label><input class="email_input_checkbox" name="email_page_add_note_check" type="checkbox"  value="1" checked="checked" />[% loc('Add this note at the front of the email?') %] <i>[% loc('(You can customize the note below.)') %]</i></label>
+        <textarea class="email_input_textarea" name="email_page_add_note" rows="5" cols="60">[% loc("Hello, this is a page from the workspace that I wanted you to see. This page is also available for viewing or editing on the web at:\n\n[_1]", full_uri) %]</textarea>
         <br />
-        <label><input name="email_page_keep_attachments" type="checkbox" value="1" />[% loc('Keep attachments?') %]</label>
+        <label><input name="email_page_keep_attachments" class="email_input_checkbox" type="checkbox" value="1" />[% loc('Keep attachments?') %]</label>
       </td>
     </tr>
   </table>

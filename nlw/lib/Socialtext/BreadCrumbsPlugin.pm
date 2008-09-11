@@ -62,15 +62,7 @@ sub breadcrumbs_list {
 
     my %sortdir = %{ $self->sortdir };
 
-    if ( $self->cgi->sortby ) {
-        $self->result_set( $self->sorted_result_set( \%sortdir ) );
-    }
-    else {
-        $self->result_set( $self->new_result_set );
-
-        $self->_incorporate_trail_pages;
-        $self->write_result_set;
-    }
+    $self->result_set( $self->sorted_result_set( \%sortdir ) );
 
     $self->display_results(
         \%sortdir,

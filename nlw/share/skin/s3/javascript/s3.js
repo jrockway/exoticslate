@@ -307,19 +307,6 @@ $(function() {
         jQuery("#st-page-content").one("dblclick", double_clicker);
     }
 
-    $('#st-pagetools-newspreadsheet')
-        .one("click", function () {
-            $('#bootstrap-loader').show();
-            $.ajaxSettings.cache = true;
-            $.getScript(socialcalc_uri, function () {
-                jQuery("#st-all-footers, #st-display-mode-container").hide();
-                jQuery("#st-edit-mode-container, #st-editing-tools-edit").show();
-                Socialtext.render_spreadsheet_editor();
-            });
-            $.ajaxSettings.cache = false;
-            return false;
-        });
-
     $('#st-listview-submit-pdfexport').click(function() {
         if (!$('.st-listview-selectpage-checkbox:checked').size()) {
             alert(loc("You must check at least one page in order to create a PDF."));

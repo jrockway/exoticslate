@@ -3,3 +3,14 @@ body {
     background: none;
     background-color: #FFFFDD;
 }
+
+table {
+    border: 1px solid black;
+}
+
+td {
+    border: 1px solid black;
+    padding: 1px;
+    font-size: 80%;
+}
+

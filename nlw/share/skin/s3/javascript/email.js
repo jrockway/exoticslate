@@ -32,6 +32,8 @@ proto.show = function () {
     var self = this;
     if (!jQuery('#st-email-lightbox').size()) {
         Socialtext.loc = loc;
+        Socialtext.full_uri = location.href.replace(/#.*$/, '').replace(/index\.cgi\?/, '?');
+
         jQuery('<div class="lightbox" id="st-email-lightbox" />')
             .appendTo('body')
             .html( Jemplate.process('email_lightbox.tt2', Socialtext) );
@@ -110,6 +112,6 @@ proto.show = function () {
     jQuery.showLightbox({
         content: '#st-email-lightbox',
         close: '#email_cancel',
-        width: '600px'
+        width: '760px'
     });
 }

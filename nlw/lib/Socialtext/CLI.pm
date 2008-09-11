@@ -67,7 +67,7 @@ sub run {
 
     my $script_name = File::Basename::basename($0);
 
-    $self->_help_as_error(
+    $self->_error(
         "You must provide a command as the first argument to this script.\n"
             . "Please run '$script_name help' for more details." )
         unless defined $command
@@ -79,7 +79,7 @@ sub run {
     $command =~ s/-/_/g;
 
     unless ( $self->can($command) ) {
-        $self->_help_as_error(
+        $self->_error(
                   "The command you specified, $command, was not valid.\n"
                 . "Please run '$script_name help' for more details." );
     }
@@ -1499,7 +1499,7 @@ sub import_workspace {
     my $self = shift;
     my %opts
         = $self->_get_options("tarball:s", "overwrite", "name:s", "noindex");
-    $self->_help_as_error("--tarball required.")
+    $self->_error("--tarball required.")
         unless defined $opts{tarball};
 
     Socialtext::Workspace->ImportFromTarball(
@@ -1518,7 +1518,7 @@ sub clone_workspace {
     my $ws        = $self->_require_workspace();
     my %opts      = $self->_get_options( "target:s", "overwrite" );
 
-    $self->_help_as_error("--target required.") unless defined $opts{target};
+    $self->_error("--target required.") unless defined $opts{target};
     $opts{target} = lc $opts{target};
 
     my $dir = File::Temp::tempdir( CLEANUP => 1 );
@@ -2045,7 +2045,7 @@ sub _require_user {
     my %opts = $self->_get_options( 'username:s', 'email:s' );
 
     unless ( grep { defined and length } @opts{ 'username', 'email' } ) {
-        $self->_help_as_error(
+        $self->_error(
             "The command you called ($self->{command}) requires a user to be specified.\n"
                 . "A user can be identified by username (--username) or email address (--email).\n"
         );
@@ -2074,7 +2074,7 @@ sub _require_workspace {
     my %opts = $self->_get_options("$key:s");
 
     unless ( $opts{$key} ) {
-        $self->_help_as_error(
+        $self->_error(
             "The command you called ($self->{command}) requires a workspace to be specified.\n"
                 . "A workspace is identified by name with the --$key option.\n"
         );
@@ -2121,7 +2121,7 @@ sub _require_categories {
     my %opts = $self->_get_options( 'category:s', 'search:s' );
 
     unless ( grep { defined and length } @opts{ 'category', 'search' } ) {
-        $self->_help_as_error(
+        $self->_error(
             "The command you called ($self->{command}) requires one or more categories to be specified.\n"
                 . "You can specify a category by name (--category) or by a search string (--search)."
         );
@@ -2157,7 +2157,7 @@ sub _require_page {
     my %opts = $self->_get_options('page:s');
 
     unless ( $opts{page} ) {
-        $self->_help_as_error(
+        $self->_error(
             "The command you called ($self->{command}) requires a page to be specified.\n"
                 . "You can specify a page by id with the --page option." );
     }
@@ -2179,7 +2179,7 @@ sub _require_attachment {
     my %opts = $self->_get_options('attachment:s');
 
     unless ( $opts{attachment} ) {
-        $self->_help_as_error(
+        $self->_error(
             "The command you called ($self->{command}) requires an attachment to be specified.\n"
                 . "You can specify an attachment by id with the --attachment option."
         );
@@ -2210,7 +2210,7 @@ sub _require_permission {
     my %opts = $self->_get_options('permission:s');
 
     unless ( $opts{permission} ) {
-        $self->_help_as_error(
+        $self->_error(
             "The command you called ($self->{command}) requires a permission to be specified.\n"
                 . "A permission is identified by name with the --permission option.\n"
         );
@@ -2234,7 +2234,7 @@ sub _require_role {
     my %opts = $self->_get_options('role:s');
 
     unless ( $opts{role} ) {
-        $self->_help_as_error(
+        $self->_error(
             "The command you called ($self->{command}) requires a role to be specified.\n"
                 . "A role is identified by name with the --role option.\n" );
         return;
@@ -2257,7 +2257,7 @@ sub _require_string {
     my %opts = $self->_get_options("$name:s");
 
     unless ( defined $opts{$name} and length $opts{$name} ) {
-        $self->_help_as_error(
+        $self->_error(
             "The command you called ($self->{command}) requires a $desc to be specified with the --$name option.\n");
     }
 

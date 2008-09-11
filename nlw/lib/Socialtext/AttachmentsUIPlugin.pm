@@ -314,7 +314,35 @@ sub _gen_sort_closure {
                 }
         }
     }
-    else { # We're sorting on anything else - most likely a string
+    elsif ( $sortby eq 'user' ) { 
+        # we want to sort by whatever the system knows these users as, which
+        # may not be the same as the from header.
+        if ( $direction eq 'asc' ) {
+            return sub {
+                Socialtext::User->new( 
+                    username => $a->{user} 
+                )->best_full_name 
+                <=> 
+                Socialtext::User->new(
+                    username => $b->{user}
+                )->best_full_name
+                or lc( $a->{subject} ) cmp lc( $b->{subject} );
+            }
+        }
+        else {
+            return sub {
+                Socialtext::User->new( 
+                    username => $b->{user} 
+                )->best_full_name 
+                <=> 
+                Socialtext::User->new(
+                    username => $a->{user}
+                )->best_full_name
+                or lc( $b->{subject} ) cmp lc( $a->{subject} );
+            }
+        }
+    }
+    else { # anythinge else, most likely a string
         if ( $direction eq 'asc' ) {
             return sub {
                 lc( $a->{$sortby} ) cmp lc( $b->{$sortby} )

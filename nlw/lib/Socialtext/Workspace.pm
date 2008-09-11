@@ -386,6 +386,17 @@ sub _update {
     return $self;
 }
 
+sub skin_name {
+    my $self = shift;
+    my $value = shift;
+
+    if (defined $value) {
+        $self->{skin_name} = $value;
+        return $value;
+    }
+    my $skin = $self->{skin_name} || $self->account->skin_name;
+    return $skin;
+}
 
 # turn a workspace into a hash suitable for JSON and such things.
 sub to_hash {
@@ -512,9 +523,9 @@ sub _validate_and_clean_data {
         push @errors, loc('Incoming email placement must be one of top, bottom, or replace.');
     }
 
-    if ( $p->{skin_name} && ! 1) {
+    if ( $p->{skin_name} && ! Socialtext::Skin->new(name => $p->{skin_name})) {
         push @errors, loc(
-            "The skin you specified,[_1], does not exist.", $p->{skin_name}
+            "The skin you specified, [_1], does not exist.", $p->{skin_name}
         );
     }
 
@@ -1566,16 +1577,16 @@ use strict;
 use warnings;
 
 use base 'Socialtext::Workspace';
-use Class::Field 'const';
+use Class::Field qw(const);
 use Socialtext::SQL 'sql_execute';
 use Socialtext::User;
+use Socialtext::SystemSettings qw(get_system_setting);
 
 const name => '';
 const title => '';
 const account_id => 1;
 const workspace_id => 0;
 const email_addresses_are_hidden => 0;
-const skin_name => 's3';
 const real => 0;
 
 sub created_by_user_id {
@@ -1604,6 +1615,13 @@ sub new {
         sql_execute($sql, map { $self->$_ } @COLS );
     }
     return $self;
+}
+
+sub skin_name {
+    my $self = shift;
+    my ( $main, $hub ) = $self->_main_and_hub();
+    return $hub ? $hub->current_user->primary_account->skin_name
+                : get_system_setting('default-skin');
 }
 
 sub _set_workspace_option { return 1; }

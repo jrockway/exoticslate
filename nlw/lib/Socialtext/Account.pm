@@ -19,6 +19,7 @@ use YAML qw/DumpFile LoadFile/;
 
 field 'account_id';
 field 'name';
+field 'skin_name';
 field 'is_system_created';
 
 sub table_name { 'Account' }
@@ -35,6 +36,27 @@ sub EnsureRequiredDataIsPresent {
             is_system_created => 1,
         );
     }
+}
+
+sub skin_name {
+    my ($self, $skin) = @_;
+
+    if (defined $skin) {
+        $self->{skin_name} = $skin;
+    }
+    return $self->{skin_name} || get_system_setting('default-skin');
+}
+
+sub reset_skin {
+    my ($self, $skin) = @_;
+    
+    $self->update(skin_name => $skin);
+    my $workspaces = $self->workspaces;
+
+    while (my $workspace = $workspaces->next) {
+        $workspace->update(skin_name => '');
+    }
+    return $self->{skin_name};
 }
 
 sub workspaces {
@@ -88,6 +110,7 @@ sub export {
     DumpFile($export_file, {
             name => $self->name,
             is_system_created => $self->is_system_created,
+            skin_name => $self->skin_name,
             users => $self->_users_as_hash,
         }
     );
@@ -137,6 +160,7 @@ sub import_file {
     $account = $class->create(
         name => $name,
         is_system_created => $hash->{is_system_created},
+        skin_name => $hash->{skin_name},
     );
     
     my @profiles;
@@ -218,7 +242,7 @@ sub _new_from_where {
     my ( $class, $where_clause, @bindings ) = @_;
 
     my $sth = sql_execute(
-        'SELECT name, account_id, is_system_created'
+        'SELECT name, account_id, is_system_created, skin_name'
         . ' FROM "Account"'
         . " WHERE $where_clause",
         @bindings );
@@ -227,6 +251,7 @@ sub _new_from_where {
                             name              => $rows[0][0],
                             account_id        => $rows[0][1],
                             is_system_created => $rows[0][2],
+                            skin_name         => $rows[0][3],
                         }, $class
                     :   undef;
 }
@@ -244,10 +269,19 @@ sub create {
 sub _create_full {
     my ( $class, %p ) = @_;
 
+    my $fields = 'account_id, name, is_system_created';
+    my $values = '?,?';
+    my @bind = ($p{name}, $p{is_system_created});
+    if ($p{skin_name}) {
+        $fields .= ', skin_name';
+        $values .= ',?';
+        push @bind, $p{skin_name};
+    }
     sql_execute(
-        'INSERT INTO "Account" (account_id, name, is_system_created)'
-        . ' VALUES (nextval(\'"Account___account_id"\'),?,?)',
-        $p{name}, $p{is_system_created} );
+        qq{INSERT INTO "Account" ($fields)}
+        . qq{ VALUES (nextval(\'"Account___account_id"\'),$values)},
+        @bind,
+    );
 }
 
 sub _create_from_name {
@@ -266,18 +300,33 @@ sub delete {
         $self->account_id );
 }
 
-# "update" methods: set_account_name
 sub update {
     my ( $self, %p ) = @_;
 
     $self->_validate_and_clean_data(\%p);
-    sql_execute( 'UPDATE "Account" SET name=? WHERE account_id=?',
-        $p{name}, $self->account_id );
 
-    $self->name($p{name});
+    my ( @updates, @bindings );
+    while (my ($column, $value) = each %p) {
+        push @updates, "$column=?";
+        push @bindings, $value;
+    }
+
+    if (@updates) {
+        my $set_clause = join ', ', @updates;
+        sql_execute(
+            'UPDATE "Account"'
+            . " SET $set_clause WHERE account_id=?",
+            @bindings, $self->account_id);
+
+        while (my ($column, $value) = each %p) {
+            $self->$column($value);
+            $self->{$column} = $value;
+        }
+    }
 
     return $self;
 }
+
 
 sub Count {
     my ( $class, %p ) = @_;
@@ -445,13 +494,20 @@ sub _validate_and_clean_data {
 
     my $is_create = ref $self ? 0 : 1;
 
-    $p->{name} = Socialtext::String::trim( $p->{name} );
+    $p->{name} = Socialtext::String::trim( $p->{name} )
+        if $p->{name};
 
     my @errors;
     if ( ( exists $p->{name} or $is_create )
          and not
          ( defined $p->{name} and length $p->{name} ) ) {
         push @errors, loc('Account name is a required field.');
+    }
+
+    if ( $p->{skin_name} && ! Socialtext::Skin->new(name => $p->{skin_name})) {
+        push @errors, loc(
+            "The skin you specified, [_1], does not exist.", $p->{skin_name}
+        );
     }
 
     if ( defined $p->{name} && Socialtext::Account->new( name => $p->{name} ) ) {
@@ -547,6 +603,8 @@ it has any workspaces.
 
 =item $account->name()
 
+=item $account->skin_name()
+
 =item $account->is_system_created()
 
 Returns the given attribute for the account.
@@ -554,6 +612,10 @@ Returns the given attribute for the account.
 =item $account->workspace_count()
 
 Returns a count of workspaces for this account.
+
+=item $account->reset_skin($skin)
+
+Change the skin for the account and its workspaces.
 
 =item $account->workspaces()
 

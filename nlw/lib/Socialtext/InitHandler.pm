@@ -33,6 +33,7 @@ sub _regen_combined_js {
     my ($ws_name) = $uri =~ m{^/([^/]+)/index\.cgi$};
     my $workspace = $ws_name ? Socialtext::Workspace->new(name=>$ws_name)
                              : Socialtext::NoWorkspace->new;
+    return unless $workspace;
 
     my $skin = Socialtext::Skin->new(name => $workspace->skin_name);
 

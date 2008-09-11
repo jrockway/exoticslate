@@ -1035,6 +1035,75 @@ sub show_workspace_config {
     $self->_success($msg);
 }
 
+sub set_account_config {
+    my $self = shift;
+
+    my $account = $self->_require_account;
+
+    my %update;
+    while ( my ($key, $value) = splice @{ $self->{argv} }, 0, 2 ) {
+        next if $key =~ /_id$/;
+        
+        $self->_error("$key is not a valid account config key")
+            unless ($account->can($key));
+
+        $value = undef if $value eq '-null-';
+
+        $update{$key} = $value;
+    }
+    eval { $account->update(%update) };
+    if ( my $e
+        = Exception::Class->caught('Socialtext::Exception::DataValidation') )
+    {
+        my $msg
+            = "The following errors occurred when setting the account config:\n\n";
+        for my $m ( $e->messages ) {
+            $msg .= "  * $m\n";
+        }
+
+        $self->_error($msg);
+    }
+    elsif ( $e = $@ ) {
+        die $e;
+    }
+
+    $self->_success(
+        'The account config for ' . $account->name() . ' has been updated.' );
+}
+
+sub reset_account_skin {
+    my $self = shift;
+    my $account = $self->_require_account;
+    my %opts    = $self->_get_options('skin:s');
+
+
+    $self->_error("reset-account-skin requires --skin parameter")
+        unless defined $opts{skin};
+
+    $self->_error("--skin requires a skin name to be specified")
+        unless $opts{skin};
+
+    eval { $account->reset_skin($opts{skin}) };
+    if ( my $e
+        = Exception::Class->caught('Socialtext::Exception::DataValidation') )
+    {
+        my $msg
+            = "The following errors occurred when setting the account skin\n\n";
+        for my $m ( $e->messages ) {
+            $msg .= "  * $m\n";
+        }
+
+        $self->_error($msg);
+    }
+    elsif ( $e = $@ ) {
+        die $e;
+    }
+
+    $self->_success(
+        'The skin for account ' . $account->name() . ' and its workspaces has been updated.' );
+
+}
+
 sub set_workspace_config {
     my $self = shift;
 
@@ -1079,6 +1148,7 @@ sub set_workspace_config {
     $self->_success(
         'The workspace config for ' . $ws->name() . ' has been updated.' );
 }
+
 
 sub create_search_set {
     require Socialtext::Search::Set;
@@ -2375,6 +2445,8 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   get-default-account
   export-account --account [--force] 
   import-account --directory [--overwrite] [--name] [--noindex]
+  set-account-config --account <key> <value>
+  reset-account-skin --account <account> <skin>
 
   PLUGINS
 
@@ -2816,6 +2888,17 @@ Disables plugin for all users in an account
 Reads a list of commands from STDIN and executes them. Each line must
 contain a list of arguments separated by a null character (\0). The
 first argument should be the command to be run.
+
+=head2 set-account-config --account <key> <value>
+
+Given a valid account configuration key, this sets the value of the
+key for the specified account. Use "-null-" as the value to set the
+value to NULL in the DBMS. You can pass multiple key value pairs on
+the command line.
+
+=head2 reset-config-skin --account <skin>
+
+Set the skin for the specified account and its workspaces.
 
 =head2 version
 

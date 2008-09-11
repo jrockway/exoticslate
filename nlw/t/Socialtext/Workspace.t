@@ -79,7 +79,19 @@ ALL_WORKSPACE_IDS_AND_NAMES: {
         Socialtext::File::catdir( Socialtext::Paths::page_data_directory('short-name'), 'quick_start' );
     ok( -d $page_dir, "$page_dir exists after workspace is created" );
 
-    is $ws->skin_name, 's2', 'default skin is s2';
+    Workspace_skin_should_override_account_skin: {
+        $ws->update(skin_name => 'reds3');
+        $ws = Socialtext::Workspace->new(name => $ws->name);
+        is( $ws->skin_name, 'reds3', 'workspace skin is reds3' );
+
+        $ws->account->update(skin_name => 's3');
+        $ws = Socialtext::Workspace->new(name => $ws->name);
+        is $ws->skin_name, 'reds3', 'workspace skin is still reds3';
+        $ws->update(skin_name => '');
+        $ws = Socialtext::Workspace->new(name => $ws->name);
+        is $ws->skin_name, 's3', 'workspace uses account skin';
+        exit;
+    }
 }
 
 {

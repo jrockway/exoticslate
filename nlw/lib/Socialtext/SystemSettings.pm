@@ -11,6 +11,7 @@ our @EXPORT_OK = qw/get_system_setting set_system_setting/;
 # from the database.
 our %Get_setting_hooks = (
     'default-account' => \&default_account,
+    'default-skin' => \&default_skin,
 );
 
 # The field may not exist, so we'll need to be careful.
@@ -44,6 +45,12 @@ sub default_account {
     require Socialtext::Account;
     return Socialtext::Account->new(account_id => $value)
         || Socialtext::Account->Unknown;
+}
+
+sub default_skin {
+    my $value = shift;
+    my $default_default_skin = 's2';
+    return $value || $default_default_skin;
 }
 
 1;

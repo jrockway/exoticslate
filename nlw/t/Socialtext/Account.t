@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 37;
+use Test::Socialtext tests => 43;
 use YAML qw/LoadFile/;
 
 BEGIN {
@@ -62,6 +62,41 @@ is( $test->workspaces->next->name, 'testingspace',
     'testingspace workspace belong to testing account' );
 users_are($test, [qw/dummy1 dummy2 dummy3/]);
 
+Account_skins: {
+    # set skins
+    my $ws      = $test->workspaces->next;
+    my $ws_name = $ws->name;
+    $ws->update(skin_name => 'reds3');
+    my $ws_skin = $ws->skin_name;
+
+    $test = Socialtext::Account->new(name => 'Test Account');
+    is($test->skin_name, 's2', 'set the default account skin');
+
+    $test->update(skin_name => 's2');
+    is($test->skin_name, 's2', 'set the account skin');
+    is(
+        Socialtext::Workspace->new(name => $ws_name)->skin_name,
+        $ws_skin,
+        'updating account skin does not change workspace skins'
+    );
+    my $new_test = Socialtext::Account->new(name => 'Test Account');
+    is($new_test->skin_name, 's2', 'set the account skin');
+
+    # reset account and workspace skins
+    $new_test->reset_skin('reds3');
+
+    $test = Socialtext::Account->new(name => 'Test Account');
+    is(
+        $test->skin_name,
+        'reds3',
+        'reset_skin sets the skins of account workspaces'
+    );
+    is(
+        Socialtext::Workspace->new(name => $ws_name)->skin_name,
+        'reds3',
+        'reset_skin sets the skins of account workspaces'
+    );
+}
 my $export_file;
 Exporting_account_people: {
     $export_file = $test->export( dir => 't' );

@@ -31,10 +31,10 @@ if (my $accts = $MigrationConfig->{email_to_account_mapping}) {
             print "  Mapping $email users to $account_name\n";
             sql_execute(<<EOT, $account->account_id, $email);
 UPDATE "UserMetadata" SET primary_account_id = ?
-  FROM "User"
- WHERE "UserMetadata".user_id = "User".user_id
-   AND primary_account_id IS NULL
-   AND email_address LIKE ?
+     FROM "UserId" JOIN "User" ON "UserId".driver_unique_id = "User".user_id
+    WHERE "UserMetadata".user_id = "UserId".system_unique_id
+      AND "UserMetadata".primary_account_id IS NULL
+      AND "User".email_address LIKE ?
 EOT
         }
     }

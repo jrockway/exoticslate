@@ -44,19 +44,26 @@
     [% loc('Dashboard is best if most users have a number of other workspaces. Central page is best for a close-knit community in which most users only have one workspace.') %]
   </dd>
   <dd>
-    <input type="radio" name="homepage_is_dashboard"
-      [%- IF workspace.homepage_is_dashboard %]
-        checked="checked"
-      [%- END %]
-        value="1" />
-      [% loc('Dashboard') %]<br/>
-
-      <input type="radio" name="homepage_is_dashboard"
-      [%- UNLESS workspace.homepage_is_dashboard %]
+    <input type="radio" name="homepage_is_weblog"
+      [%- UNLESS workspace.homepage_weblog %]
         checked="checked"
       [%- END %]
         value="0" />
-      [% loc('Central page') %]<br/>
+    [% loc('Central page') %]<br/>
+
+    <input type="radio" name="homepage_is_weblog"
+      [%- IF workspace.homepage_weblog %]
+        checked="checked"
+      [%- END %]
+        value="1" />
+    [% loc('This weblog:') %]
+    <input name="homepage_weblog" value="[% workspace.homepage_weblog %]"
+      [%- UNLESS workspace.homepage_weblog %]
+        disabled="true"
+      [%- END %]
+      />
+      <br/>
+
    </dd>
 </dl>
 [% PROCESS element/settings/stop %]

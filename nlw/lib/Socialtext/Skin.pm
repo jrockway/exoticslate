@@ -61,13 +61,6 @@ sub template_paths {
     return $dirs;
 }
 
-sub base_skin {
-    my ($self, $skin) = @_;
-    my $base = $self;
-    1 while $base = $base->parent;
-    return $base;
-}
-
 sub skin_info {
     my $self = shift;
     my $skin = $self->skin_name;
@@ -90,10 +83,15 @@ sub skin_info {
     return $self->{_skin_info} = $info;
 }
 
-sub no_common {
-    my $self = shift;
-    return $self->skin_info->{no_common} ||
-           ($self->parent && $self->parent->no_common);
+sub info_param {
+    my ($self, $name) = @_;
+    my $info = $self->skin_info;
+    if ($info->{$name}) {
+        return $info->{$name};
+    }
+    elsif ($self->parent) {
+        return $self->parent->info_param($name);
+    }
 }
 
 sub css_info {
@@ -111,7 +109,7 @@ sub css_info {
     }
 
     # Common CSS
-    unless ($self->no_common) {
+    unless ($self->info_param('no_common')) {
         $css_info->{common} ||= [
              $self->_uri('skin/common/css/common.css')
         ];

@@ -222,6 +222,8 @@ sub global_template_vars {
         current_page      => $self->hub->pages->current,
         home_is_dashboard =>
             $self->hub->current_workspace->homepage_is_dashboard,
+        homepage_weblog =>
+            $self->hub->current_workspace->homepage_weblog,
         workspace_present  => $self->hub->current_workspace->real,
         customjs           => $self->hub->skin->customjs,
         app_version        => Socialtext->product_version,

@@ -371,6 +371,11 @@ sub _update_workspace_settings {
             if $self->cgi->defined($f);
     }
 
+    if ($self->cgi->defined('homepage_is_weblog')) {
+        $update{homepage_weblog} = $self->cgi->homepage_is_weblog ?
+            $self->cgi->homepage_weblog : '';
+    }
+
     eval {
         my $icon = $self->cgi->logo_file;
 
@@ -625,6 +630,8 @@ cgi 'selected_workspace_id';
 cgi 'incoming_email_placement';
 cgi 'email_notify_is_enabled';
 cgi 'homepage_is_dashboard';
+cgi 'homepage_is_weblog';
+cgi 'homepage_weblog';
 cgi 'workspace_id';
 cgi 'user_email';
 cgi 'user_first_name';

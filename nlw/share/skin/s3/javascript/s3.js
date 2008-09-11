@@ -349,6 +349,19 @@ $(function() {
         return false;
     });
 
+    $('input[name=homepage_is_weblog]').click(function () {
+        $('input[name=homepage_weblog]')
+            .attr('disabled', Number($(this).val()) ? false : true)
+    });
+
+    $('input[name=homepage_weblog]').lookahead({
+        url: function () { return Page.workspaceUrl() + '/tags' },
+        filterValue: function (val) {
+            return val + '.*(We)?blog$';
+        },
+        linkText: function (i) { return i.name }
+    });
+
     function makeWatchHandler (pageId) { return function(){
         var self = this;
         if ($(this).hasClass('on')) {

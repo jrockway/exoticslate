@@ -27,25 +27,32 @@ sub register {
 sub homepage {
     my $self = shift;
 
-    if ( $self->hub->current_workspace->homepage_is_dashboard ) {
-        return $self->dashboard;
-    }
-
     if ( my $weblog = $self->hub->current_workspace->homepage_weblog ) {
         return $self->redirect( '?'
                 . 'action=weblog_display;category='
                 . URI::Escape::uri_escape_utf8($weblog) );
     }
+    elsif ($self->hub->current_workspace->homepage_is_dashboard) {
+        return $self->dashboard
+    }
+    else {
+        return $self->central_page;
+    }
+}
 
+sub central_page {
+    my $self = shift;
     my $title = $self->hub->current_workspace->title;
     my $uri = $self->hub->pages->new_from_name($title)->uri;
-
     return $self->redirect($uri);
 }
 
-
 sub dashboard {
     my $self = shift;
+
+    if ($self->hub->skin->info_param('no_workspace_dashboard')) {
+        return $self->central_page;
+    }
 
     # Grab the did_you_know text now, so that we don't read the config file on
     # every page hit.

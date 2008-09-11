@@ -1487,6 +1487,14 @@ Returns true if the user factory supports updates.
 
 Updates the user's information with the new key/val pairs passed in.
 
+=head2 $user->recently_viewed_workspaces($limit)
+
+Returns a list of the workspaces that this user has most recently viewed.
+Restricted to the most recent C<$limit> (default 10) workspaces.
+
+Returned as a list of list-refs that contain the "name" and "title" of the
+workspace.
+
 =head2 $user->user_id()
 
 =head2 $user->username()

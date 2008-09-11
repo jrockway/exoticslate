@@ -648,4 +648,4 @@ ALTER TABLE ONLY "Workspace"
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '11');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '12');

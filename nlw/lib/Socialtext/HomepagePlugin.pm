@@ -33,7 +33,12 @@ sub homepage {
                 . URI::Escape::uri_escape_utf8($weblog) );
     }
     elsif ($self->hub->current_workspace->homepage_is_dashboard) {
-        return $self->dashboard
+        if ($self->hub->skin->info_param('no_workspace_dashboard')) {
+            return $self->central_page;
+        }
+        else {
+            return $self->dashboard;
+        }
     }
     else {
         return $self->central_page;
@@ -51,7 +56,7 @@ sub dashboard {
     my $self = shift;
 
     if ($self->hub->skin->info_param('no_workspace_dashboard')) {
-        return $self->central_page;
+        return $self->redirect('/');
     }
 
     # Grab the did_you_know text now, so that we don't read the config file on

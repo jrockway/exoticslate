@@ -96,6 +96,21 @@ sub get_events {
         push @conditions, 'at > ?::timestamptz';
         push @args, $a;
     }
+    if (my $maybe_f_id = $opts{follower_id}) {
+        # can only follow "people" right now
+        if ($opts{event_class} eq 'person') {
+            my $user  = Socialtext::User->Resolve($maybe_f_id);
+            my $f_id  = $user->user_id;
+            my $where = <<SQL;
+(  (actor_id  IN (SELECT person_id2 FROM person_watched_people__person WHERE person_id1=?))
+   OR
+   (person_id IN (SELECT person_id2 FROM person_watched_people__person WHERE person_id1=?))
+)
+SQL
+            push @conditions, $where;
+            push @args, $f_id, $f_id;
+        }
+    }
 
     foreach my $eq_key (@QueryOrder) {
         next unless exists $opts{$eq_key};

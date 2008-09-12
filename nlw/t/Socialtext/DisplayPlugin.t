@@ -30,7 +30,7 @@ DISPLAY: {
     like( $output, qr/<div id="st-page-content">/,
         'checking for screen layout' );
     like(
-        $output, qr/<span id="st-page-titletext">.*Zac's First Page/s,
+        $output, qr/id="st-page-titletext"[^>]*>\s*Zac&#39;s First Page/s,
         'checking for title'
     );
 

@@ -36,6 +36,6 @@ sub perform_query {
         $hub, 'display', 'display');
 
     is($error, '', 'page load succeeds');
-    like($html, qr/page-title">.+$title.+<\/div>/sm,
+    like($html, qr/page-titletext"[^>]*>\s*$title\s*<\//sm,
         'proper title for page');
 }

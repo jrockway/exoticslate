@@ -253,12 +253,13 @@ sub _create_user {
 
     # Set the default account to be Socialtext and enable all plugins for that
     # account
-    my $account_id = Socialtext::Account->Socialtext()->account_id();
+    my $account_id = Socialtext::Account->Socialtext()->account_id;
     if (get_system_setting('default-account') != $account_id) {
         set_system_setting('default-account', $account_id);
         my $adapter = Socialtext::Pluggable::Adapter->new;
         Socialtext::Account->Socialtext->enable_plugin($_)
             for grep {!/^default$/} $adapter->plugin_list;
+        Socialtext::Account->Socialtext->update(skin_name => 's3');
     }
 
     my $user = Socialtext::User->new( username => $p{username} );

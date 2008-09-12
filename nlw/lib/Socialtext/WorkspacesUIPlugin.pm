@@ -372,6 +372,9 @@ sub _update_workspace_settings {
     }
 
     if ($self->cgi->defined('homepage_is_weblog')) {
+        if ($self->cgi->homepage_is_weblog and not $self->cgi->homepage_weblog) {
+            $self->add_error(loc('A weblog tag name is missing'))
+        }
         $update{homepage_weblog} = $self->cgi->homepage_is_weblog ?
             $self->cgi->homepage_weblog : '';
     }

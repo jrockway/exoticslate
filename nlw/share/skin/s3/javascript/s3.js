@@ -178,13 +178,19 @@ $(function() {
         });
 
 
-    var editor_uri = nlw_make_s3_path('/javascript/socialtext-editor.js.gz')
+    var _gz = '.gz';
+
+    if (jQuery.browser.safari) {
+        _gz = '';
+    }
+
+    var editor_uri = nlw_make_s3_path('/javascript/socialtext-editor.js' + _gz)
         .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
 
-    var lightbox_uri = nlw_make_s3_path('/javascript/socialtext-lightbox.js.gz')
+    var lightbox_uri = nlw_make_s3_path('/javascript/socialtext-lightbox.js' + _gz)
         .replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
 
-    var socialcalc_uri = nlw_make_plugin_path("/socialcalc/javascript/socialtext-socialcalc.js.gz")
+    var socialcalc_uri = nlw_make_plugin_path("/socialcalc/javascript/socialtext-socialcalc.js" + _gz)
             .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time);
 
     function get_lightbox (cb) {

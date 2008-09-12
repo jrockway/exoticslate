@@ -12,6 +12,11 @@ use Socialtext::Workspace;
 # Version "0" export tarballs did not export in utf8 all the time. See
 # RT 20744 for details on what this is testing.
 
+# symlink in the skin used by this tarball, for the duration of the test, and
+# remove it when we're done
+symlink 's3', 'share/skin/nlw';
+END { unlink 'share/skin/nlw' }
+
 Socialtext::Workspace->ImportFromTarball( tarball => 't/test-data/export-tarballs/import-latin1.tar.gz' );
 
 {

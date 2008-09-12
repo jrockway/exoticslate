@@ -22,7 +22,7 @@ sub homepage_is_dashboard { $_[0]->{homepage_is_dashboard} }
 
 sub homepage_weblog { $_[0]->{homepage_weblog} }
 
-sub skin_name { $_[0]->{skin_name} || 'default_skin' }
+sub skin_name { $_[0]->{skin_name} || 's2' }
 
 sub logo_uri_or_default { 'logo_uri_or_default' }
 

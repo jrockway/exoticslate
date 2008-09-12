@@ -68,7 +68,7 @@ sub status_message { 'mock_hub_status_message' }
 sub helpers { 
     return $_[0]->{helpers} ||= Socialtext::Helpers->new(hub => $_[0]);
 }
-sub skin { $_[0]->{skin} || Socialtext::Skin->new(hub => $_[0]) }
+sub skin { $_[0]->{skin} || Socialtext::Skin->new(hub => $_[0], name => 's2') }
 
 sub display { 
     return $_[0]->{display} ||= Socialtext::DisplayPlugin->new(hub => $_[0]);

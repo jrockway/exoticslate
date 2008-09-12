@@ -14,6 +14,7 @@ use YAML;
 use Socialtext::Hub;
 use Socialtext::Workspace;
 use Socialtext::Page;
+use Socialtext::Attachment;
 use Socialtext::Attachments;
 use Socialtext::Log qw(st_log);
 use Socialtext::Search::ContentTypes;

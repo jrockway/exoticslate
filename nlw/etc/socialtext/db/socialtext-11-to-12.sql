@@ -32,6 +32,23 @@ ALTER TABLE "Account" ADD COLUMN
 -- Change the default workspace skin so it inherits from Account
 ALTER TABLE "Workspace" ALTER COLUMN skin_name SET DEFAULT ''::varchar;
 
+-- Add indexes to the account_plugin table
+ALTER TABLE account_plugin ADD PRIMARY KEY(account_id,plugin);
+ALTER TABLE account_plugin ADD CONSTRAINT account_plugin_ukey UNIQUE (plugin, account_id);
+
+-- Make another view relating accounts to users.
+
+-- This new view overlaps with the "user_account" view. This view
+-- erases the distinction between primary and secondary accounts
+-- making queries that don't need that distinction more
+-- straightforward.
+CREATE VIEW account_user (account_id, user_id) AS
+    SELECT account_id, user_id
+    FROM "UserWorkspaceRole" JOIN "Workspace" USING (workspace_id)
+    UNION ALL
+    SELECT primary_account_id AS account_id, user_id 
+    FROM "UserMetadata";
+
 UPDATE "System"
    SET value = 12
  WHERE field = 'socialtext-schema-version';

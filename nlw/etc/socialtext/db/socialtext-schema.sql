@@ -196,7 +196,6 @@ CREATE TABLE "WorkspaceRolePermission" (
 );
 
 CREATE SEQUENCE "Workspace___workspace_id"
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -206,6 +205,14 @@ CREATE TABLE account_plugin (
     account_id bigint NOT NULL,
     plugin text NOT NULL
 );
+
+CREATE VIEW account_user AS
+  SELECT "Workspace".account_id, "UserWorkspaceRole".user_id
+   FROM "UserWorkspaceRole"
+   JOIN "Workspace" USING (workspace_id)
+UNION ALL 
+ SELECT "UserMetadata".primary_account_id AS account_id, "UserMetadata".user_id
+   FROM "UserMetadata";
 
 CREATE TABLE event (
     "at" timestamptz NOT NULL,
@@ -383,6 +390,14 @@ ALTER TABLE ONLY "WorkspaceRolePermission"
 ALTER TABLE ONLY "Workspace"
     ADD CONSTRAINT "Workspace_pkey"
             PRIMARY KEY (workspace_id);
+
+ALTER TABLE ONLY account_plugin
+    ADD CONSTRAINT acccount_plugin_ukey
+            UNIQUE (plugin, account_id);
+
+ALTER TABLE ONLY account_plugin
+    ADD CONSTRAINT account_plugin_pkey
+            PRIMARY KEY (account_id, plugin);
 
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_pkey

@@ -4,17 +4,17 @@ package Socialtext::Authz;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Readonly;
 use Socialtext::Validate qw( validate USER_TYPE PERMISSION_TYPE WORKSPACE_TYPE );
-
+use Socialtext::Timer;
+use Socialtext::SQL qw/sql_singlevalue/;
 
 # In the future this might be a factory but for now we'll just make it
 # nice and simple
 sub new {
     my $class = shift;
-
     return bless {}, $class;
 }
 
@@ -59,6 +59,100 @@ sub new {
 
         return $p{user}->is_technical_admin;
     }
+}
+
+sub plugin_enabled_for_user {
+    my $self = shift;
+    my %p = @_;
+    my $user = delete $p{user};
+    my $plugin_name = delete $p{plugin_name};
+
+    # circular ref:
+    require Socialtext::User::Default::Factory;
+    return 1 if ($user->username eq 
+                 $Socialtext::User::Default::Factory::SystemUsername);
+
+    my $sql = <<SQL;
+        SELECT 1 
+        FROM account_user JOIN account_plugin USING (account_id)
+        WHERE user_id = ? AND plugin = ? 
+        LIMIT 1
+SQL
+
+    Socialtext::Timer->Start('can_use_plugin');
+    my $enabled = sql_singlevalue($sql, $user->user_id, $plugin_name);
+    Socialtext::Timer->Stop('can_use_plugin');
+    #warn "PLUGIN $plugin_name ENABLED FOR ".$user->username."? $enabled\n";
+    return ($enabled ? 1 : 0);
+}
+
+# is a plugin available in some common account between two users
+sub plugin_enabled_for_users {
+    my $self = shift;
+    my %p = @_;
+
+    my $user_a = delete $p{user_a};
+    my $user_b = delete $p{user_b};
+    my $plugin_name = delete $p{plugin_name};
+    return 0 unless ($user_a && $user_b && $plugin_name);
+
+    if ($user_a->user_id eq $user_b->user_id) {
+        return $self->plugin_enabled_for_user(
+            user => $user_a,
+            plugin_name => $plugin_name
+        );
+    }
+
+    # This reads "find all accounts with plugin X that are related to user A,
+    # then check each account to see if user B is in it".
+    # This should be faster on average than just joining r1 and r2 when using
+    # LIMIT 1"
+    my $sql = <<SQL;
+        SELECT account_id
+        FROM account_user r1
+        JOIN account_plugin p1 USING (account_id)
+        WHERE p1.plugin = ? AND r1.user_id = ?
+          AND EXISTS (
+                SELECT 1
+                FROM account_user r2
+                WHERE r1.account_id = r2.account_id 
+                  AND r2.user_id = ?
+          )
+        LIMIT 1
+SQL
+
+    Socialtext::Timer->Start('can_use_plugin');
+    my $enabled = sql_singlevalue($sql, $plugin_name, 
+                                  $user_a->user_id, $user_b->user_id);
+    Socialtext::Timer->Stop('can_use_plugin');
+    #warn "PLUGIN $plugin_name ENABLED FOR ".$user_a->username." and ". $user_b->username ."? $enabled\n";
+    return ($enabled ? 1 : 0);
+}
+
+sub plugin_enabled_for_user_in_account {
+    my $self = shift;
+    my %p = @_;
+    my $user = delete $p{user};
+    my $account = delete $p{account};
+    my $plugin_name = delete $p{plugin_name};
+
+    # circular ref:
+    require Socialtext::User::Default::Factory;
+    return 1 if ($user->username eq 
+                 $Socialtext::User::Default::Factory::SystemUsername);
+
+    my $sql = <<SQL;
+        SELECT 1 
+        FROM account_user JOIN account_plugin USING (account_id)
+        WHERE user_id = ? AND account_id = ? AND plugin = ? 
+        LIMIT 1
+SQL
+
+    Socialtext::Timer->Start('can_use_plugin');
+    my $enabled = sql_singlevalue($sql, $user->user_id, 
+                                  $account->account_id, $plugin_name);
+    Socialtext::Timer->Stop('can_use_plugin');
+    return ($enabled ? 1 : 0);
 }
 
 

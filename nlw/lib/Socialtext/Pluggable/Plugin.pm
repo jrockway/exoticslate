@@ -381,4 +381,12 @@ sub search {
     return $self->hub->search->result_set;
 }
 
+sub is_hook_enabled {
+    my $self = shift;
+    my $hook_name = shift;
+
+    return 1 unless $self->hub;
+    return $self->hub->current_user->can_use_plugin($self->name);
+}
+
 1;

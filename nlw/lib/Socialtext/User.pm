@@ -769,10 +769,9 @@ sub Resolve {
     my $maybe_user = shift;
     my $user;
 
-    if (ref($maybe_user) && $maybe_user->can('user_id')) {
-        return $maybe_user;
-    }
-    elsif ($maybe_user =~ /^\d+$/) {
+    die "no user identifier specified" unless $maybe_user;
+
+    if ($maybe_user =~ /^\d+$/) {
         $user = Socialtext::User->new(user_id => $maybe_user) 
     }
 
@@ -1352,8 +1351,29 @@ sub email_confirmation {
 sub can_use_plugin {
     my ($self, $plugin_name) = @_;
 
-    return Socialtext::Pluggable::Adapter->PluginEnabledForUser(
-        $plugin_name => $self
+    my $authz = ($self->hub && $self->hub->authz)
+        ? $self->hub->authz 
+        : Socialtext::Authz->new();
+    return $authz->plugin_enabled_for_user(
+        plugin_name => $plugin_name,
+        user => $self
+    );
+}
+
+sub can_use_plugin_with {
+    my ($self, $plugin_name, $buddy) = @_;
+
+    if ($buddy && $self->user_id == $buddy->user_id) {
+        return $self->can_use_plugin($plugin_name);
+    }
+
+    my $authz = ($self->hub && $self->hub->authz)
+        ? $self->hub->authz 
+        : Socialtext::Authz->new();
+    return $authz->plugin_enabled_for_users(
+        plugin_name => $plugin_name,
+        user_a => $self,
+        user_b => $buddy
     );
 }
 

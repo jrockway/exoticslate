@@ -96,7 +96,17 @@ sub _make_result_set {
     my $sortdir = shift;
     my $pages = shift;
 
-    $self->result_set( $self->sorted_result_set($sortdir) );
+    if ($self->cgi->sortby) {
+        $self->result_set($self->sorted_result_set($sortdir));
+    }
+    else {
+        $self->result_set($self->new_result_set());
+        $self->result_set->{predicate} = 'action=orphans_list';
+
+        $self->push_result($_)
+            for sort { $b->metadata->{Date} cmp $a->metadata->{Date} } @{$pages};
+    }
+
     $self->result_set->{title} = loc('Orphaned Pages');
     $self->write_result_set;
 }

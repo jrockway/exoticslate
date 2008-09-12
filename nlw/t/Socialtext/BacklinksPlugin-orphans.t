@@ -4,7 +4,9 @@
 use warnings;
 use strict;
 
-use Test::Socialtext tests => 5;
+use Socialtext::User;
+use Socialtext::Page;
+use Test::Socialtext tests => 6;
 fixtures( 'admin' );
 
 =head1 DESCRIPTION
@@ -52,4 +54,20 @@ my $page_one = Socialtext::Page->new( hub => $hub )->create(
     my $orphan_pages = $backlinks->get_orphaned_pages;
     ok(! grep(/^backlink_sampler$/, map {$_->id} @$orphan_pages),
         "The orphan pages does not contain backlink sampler");
+}
+
+{
+    my $page_one = Socialtext::Page->new( hub => $hub )->create(
+        title   => 'Orphan Page',
+        content => 'Orphan',
+        creator => Socialtext::User->SystemUser,
+    );
+
+    my $sortdir = $backlinks->sortdir;
+    my $pages = $backlinks->get_orphaned_pages();
+    $backlinks->_make_result_set( $sortdir, $pages );
+    my $results = $backlinks->result_set;
+    
+    is($results->{rows}[0]->{Subject}, 'Orphan Page',
+        'orphan pages are sorted by Date.');
 }

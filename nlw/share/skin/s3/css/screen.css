@@ -1066,7 +1066,7 @@ div#mainNav ul ul.level2.withimage {
 }
 
 div#mainNav ul.level1 li.submenu:hover ul.level2 {
-    display:block; 
+    display: block; 
 }
 div#mainNav ul.level1 li.submenu:hover {
     display: block; z-index: 2000;
@@ -1158,20 +1158,27 @@ div#workspaceNav ul.level2 {
 }
 
 div#workspaceNav li.submenu:hover ul.level2 {
-    display:block; 
+    display: block; 
 }
 div#workspaceNav li.submenu:hover {
-    display: block; z-index: 4000;
+    z-index: 4000;
 }
 
 div#workspaceNav ul.level2 li {
     display: block;
     z-index: 4000;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
 
 div#workspaceNav ul.level2 li a {
     background: none;
-    line-height: 1;
+    color: #333333;
+}
+
+div#workspaceNav ul.level2 li a:hover {
+    text-decoration: none;
+    color: #33A8FF;
 }
 
 html body div#st-page-editing-toolbar-container {

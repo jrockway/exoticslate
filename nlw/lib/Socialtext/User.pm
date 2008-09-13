@@ -771,7 +771,10 @@ sub Resolve {
 
     die "no user identifier specified" unless $maybe_user;
 
-    if ($maybe_user =~ /^\d+$/) {
+    if (ref($maybe_user) && $maybe_user->can('user_id')) {
+        return $maybe_user;
+    }
+    elsif ($maybe_user =~ /^\d+$/) {
         $user = Socialtext::User->new(user_id => $maybe_user) 
     }
 

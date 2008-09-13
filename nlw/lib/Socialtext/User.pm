@@ -1708,6 +1708,10 @@ Returns the primary account ID for this user.
 Returns a boolean indicating whether the user can use the given plugin.
 See also C<Socialtext::Account::is_plugin_enabled>
 
+=head2 $user->can_use_plugin_with( $name => $buddy )
+
+Returns a boolean indicating whether the user can use the given plugin to interact with another user, C<$buddy>.
+
 =head2 Socialtext::User->minimal_interface()
 
 Returns the minimal keys necessary for User Factory plugins to implement.

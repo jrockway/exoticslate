@@ -249,7 +249,7 @@ Requires the following PARAMS:
 
 Typical usage might be that actor is the current logged-in user where the actor wishes to interact with a user the context of a plugin.  To use Socialtext People as an example, actor wishes to view a user's profile: this method would return true if actor is allowed to interact with that user's profile.
 
-=head2 $authz->plugin_enabled_for_user_in_acount(PARAMS)
+=head2 $authz->plugin_enabled_for_user_in_account(PARAMS)
 
 Returns a boolean indicating whether a user is permitted to use a plugin within the context of an account.  To use Socialtext People as an example, say the user wants to view a directory listing for an account: this method would return true if the user was able to view listings for this account.
 

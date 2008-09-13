@@ -91,14 +91,14 @@ sub plugin_enabled_for_users {
     my $self = shift;
     my %p = @_;
 
-    my $user_a = delete $p{user_a};
-    my $user_b = delete $p{user_b};
+    my $actor = delete $p{actor};
+    my $user = delete $p{user};
     my $plugin_name = delete $p{plugin_name};
-    return 0 unless ($user_a && $user_b && $plugin_name);
+    return 0 unless ($actor && $user && $plugin_name);
 
-    if ($user_a->user_id eq $user_b->user_id) {
+    if ($actor->user_id eq $user->user_id) {
         return $self->plugin_enabled_for_user(
-            user => $user_a,
+            user => $actor,
             plugin_name => $plugin_name
         );
     }
@@ -123,9 +123,9 @@ SQL
 
     Socialtext::Timer->Start('can_use_plugin');
     my $enabled = sql_singlevalue($sql, $plugin_name, 
-                                  $user_a->user_id, $user_b->user_id);
+                                  $actor->user_id, $user->user_id);
     Socialtext::Timer->Stop('can_use_plugin');
-    #warn "PLUGIN $plugin_name ENABLED FOR ".$user_a->username." and ". $user_b->username ."? $enabled\n";
+    #warn "PLUGIN $plugin_name ENABLED FOR ".$actor->username." and ". $user->username ."? $enabled\n";
     return ($enabled ? 1 : 0);
 }
 
@@ -214,6 +214,56 @@ Requires the following PARAMS:
 
 Returns a boolean indicating whether the user has the named
 system-wide privilege.
+
+=head2 $authz->plugin_enabled_for_user(PARAMS)
+
+Returns a boolean indicating whether the user has the ability to use a plugin through one of his/her account memberships.
+
+When checking if two users can both use a plugin, see C<< $authz->plugin_enabled_for_users(PARAMS) >>.
+
+Requires the following PARAMS:
+
+=over 8
+
+=item * user - a user object
+
+=item * plugin_name - the name of the plugin to check
+
+=back
+
+=head2 $authz->plugin_enabled_for_users(PARAMS)
+
+Returns a boolean indicating if a plugin can be used for some interaction between two users.  Currently, this is implemented as a check to see if both users share any accounts where the plugin is enabled.  In the future, this may be expanded out to use an access-control mechanism that may or may not use user-specified access assertions.
+
+Requires the following PARAMS:
+
+=over 8
+
+=item * actor - a user object, the "subject" in an interaction.
+
+=item * user - another user object, the "object" in an interaction.
+
+=item * plugin_name - the name of the plugin to check
+
+=back
+
+Typical usage might be that actor is the current logged-in user where the actor wishes to interact with a user the context of a plugin.  To use Socialtext People as an example, actor wishes to view a user's profile: this method would return true if actor is allowed to interact with that user's profile.
+
+=head2 $authz->plugin_enabled_for_user_in_acount(PARAMS)
+
+Returns a boolean indicating whether a user is permitted to use a plugin within the context of an account.  To use Socialtext People as an example, say the user wants to view a directory listing for an account: this method would return true if the user was able to view listings for this account.
+
+Requires the following PARAMS:
+
+=over 8
+
+=item * user - a user object
+
+=item * account - a C<Socialtext::Account> object
+
+=item * plugin_name - the name of the plugin to check
+
+=back
 
 =head1 AUTHOR
 

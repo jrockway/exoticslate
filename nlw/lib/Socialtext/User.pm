@@ -1372,8 +1372,8 @@ sub can_use_plugin_with {
         : Socialtext::Authz->new();
     return $authz->plugin_enabled_for_users(
         plugin_name => $plugin_name,
-        user_a => $self,
-        user_b => $buddy
+        actor => $self,
+        user => $buddy
     );
 }
 

@@ -43,11 +43,22 @@ sub valid_code {
 sub available_locales {
     # hardcoded for now, can be dynamic in the future
 
+    use utf8;
     return {
-        'en' => loc('English'),
-        'ja' => loc('Japanese'),
-        'it' => loc('Italian'),
+        'en' => _display_locale(loc('English'), 'English'),
+        'ja' => _display_locale(loc('Japanese'), '日本語'),
+        'it' => _display_locale(loc('Italian'), 'Italiano'),
     };
+}
+
+sub _display_locale {
+    my ($localized, $native) = @_;
+    if ($localized eq $native) {
+        return $localized;
+    }
+    else {
+        return "$localized ($native)";
+    }
 }
 
 sub loc {

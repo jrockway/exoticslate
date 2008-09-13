@@ -1355,11 +1355,16 @@ The font-size percentage is of 16px. (0.75 * 16px = 12px) */
     margin-bottom: 1em ! important;
     margin-top: 0 ! important;
 }
-.wiki p img {
-    float: left;
-    margin: 1.5em 1.5em 1.5em 0;
+
+.wiki p img.left {
     padding: 0;
     border:1px #999 solid;
+    margin: 1.5em;
+}
+
+.wiki p img.left {
+    float: left;
+    margin: 1.5em 1.5em 1.5em 0;
 }
 .wiki p img.right {
     float: right;

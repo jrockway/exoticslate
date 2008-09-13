@@ -178,7 +178,6 @@ sub hook {
     my @output;
     if ( my $hooks = $hooks{$name} ) {
         return unless ref $hooks eq 'ARRAY';
-        warn "start running hook $name...\n";
         for my $hook (@$hooks) {
             my $method = $hook->{method};
             my $plugin = $hook->{obj} ||= $hook->{class}->new();
@@ -187,7 +186,6 @@ sub hook {
             $hook->{obj}->rest( delete $self->{_rest_handler} );
 
             my $enabled = $plugin->is_hook_enabled($name);
-            warn "... plugin ". $plugin->name ." hook is ". ($enabled ? "enabled\n" : "disabled\n");
             next unless $enabled;
                          
             push @output, $hook->{obj}->$method(@args);

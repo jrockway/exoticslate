@@ -25,7 +25,6 @@ sub root {
 
 sub user_name {
     my ($self, $username) = @_;
-    warn "DEFAULT USER NAME for $username\n";
     return $self->best_full_name($username);
 }
 

@@ -218,7 +218,9 @@ $(function() {
                 });
                 Page._currentGuiEdit = ge;
                 ge.show();
+                Page._repaintBottomButtons();
             });
+
             Page._repaintBottomButtons();
             return false;
         });

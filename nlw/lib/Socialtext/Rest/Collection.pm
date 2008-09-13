@@ -8,6 +8,7 @@ use base 'Socialtext::Rest';
 use Socialtext::JSON;
 use Socialtext::HTTP ':codes';
 use Socialtext::Timer;
+use Socialtext::Base;
 
 =head1 NAME
 
@@ -276,7 +277,8 @@ sub _limit_collectable {
     my %filter_field = %{ $self->filter_spec };
     while (my( $param, $field ) = each %filter_field) {
         my $param_value = $self->rest->query->param($param);
-        if ($param_value) {
+        if (defined $param_value and length $param_value) {
+            $param_value = Socialtext::Base->utf8_decode($param_value);
             my $old_filter_sub = $filter_sub;
             $filter_sub = sub {
                 grep {$_->{$field} =~ /$param_value/i}

@@ -1876,6 +1876,7 @@ sub to_result {
     $result->{revision_count} = $self->revision_count;
     $result->{page_uri} = $self->uri;
     $result->{page_id} = $self->id;
+    $result->{is_spreadsheet} = $self->is_spreadsheet;
     my $user = $self->last_edited_by;
     $result->{username} = $user ? $user->username : '';
     if (not $result->{Summary}) {

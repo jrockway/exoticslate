@@ -14,7 +14,8 @@ my $schema_name = $schema->schema_name;
 
 # Re-create the base schema
 shell_run("pglist public "
-    . " | grep -v 'COMMENT ON ' > $schema_file");
+    . " | grep -v 'COMMENT ON ' "
+    . " | grep -v 'STARTS WITH 1' > $schema_file");
 
 print "Appending the updated schema version to the schema file.\n";
 my $version = $schema->current_version;

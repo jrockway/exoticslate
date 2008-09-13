@@ -19,7 +19,7 @@
             <tr>
                 [% NEXT IF widget.error %]
                 <td class="description">
-                    <a href="?action=add_widget;location=[% widget.location %]">
+                    <a href="?action=add_widget;location=[% widget.location | uri %]">
                         [% widget.module_prefs.title %]
                     </a>
                     <br/>

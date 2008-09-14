@@ -71,7 +71,9 @@ sub _crypt {
     my $pw   = shift;
     my $salt = shift;
 
-    $pw = Encode::encode( 'utf8', $pw );
+    # Avoid double-encoding -- only encode_utf8 if $pw is not octets already.
+    $pw = Encode::encode_utf8($pw) if Encode::is_utf8($pw);
+
     return crypt( $pw, $salt );
 }
 

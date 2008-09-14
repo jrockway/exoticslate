@@ -101,13 +101,14 @@ GuiEdit.prototype.show = function () {
 }
 
 GuiEdit.prototype.close = function () {
+    var self = this;
     jQuery('.comment', this.container).fadeOut(function () {
-        jQuery('.commentWrapper', this.container).remove();
-    });
+        jQuery('.commentWrapper', self.container).remove();
 
-    if (this.onclose) {
-        this.onclose.call(this);
-    }
+        if (self.onclose) {
+            self.onclose.call(self);
+        }
+    });
 }
 
 GuiEdit.prototype.scrollTo = function (callback) {

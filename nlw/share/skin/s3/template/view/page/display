@@ -7,7 +7,9 @@
   <div id="st-editing-tools-edit">
     <ul>
       [% PROCESS 'element/page/display/edit-button' %]
-      [% PROCESS 'element/page/display/comment-button' %]
+      [% IF page.page_type != 'spreadsheet' %]
+        [% PROCESS 'element/page/display/comment-button' %]
+      [% END %]
     </ul>
     <ul class="buttonRight">
     </ul>
@@ -224,7 +226,9 @@
   <div id="bottomButtons">
     <ul>
       [% PROCESS 'element/page/display/edit-button' id_suffix='-bottom' %]
-      [% PROCESS 'element/page/display/comment-button' id_suffix='-bottom' %]
+      [% IF page.page_type != 'spreadsheet' %]
+        [% PROCESS 'element/page/display/comment-button' id_suffix='-bottom' %]
+      [% END %]
     </ul>
 
     [% USE decorate %]

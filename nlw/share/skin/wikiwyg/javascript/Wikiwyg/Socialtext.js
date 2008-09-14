@@ -257,6 +257,12 @@ function setup_wikiwyg() {
             if (Socialtext.new_page) {
                 window.location = '?action=homepage';
             }
+            else if (Socialtext.S3 && jQuery.browser.msie) {
+                // Cheap-and-cheerful-but-not-fun workaround for {bz: 1261}.
+                // XXX TODO XXX - Implement a proper fix!
+                window.location.reload();
+            }
+
             jQuery("#st-edit-mode-container").hide();
             jQuery("#st-display-mode-container, #st-all-footers").show();
 
@@ -265,7 +271,10 @@ function setup_wikiwyg() {
             jQuery("#st-pagetools, #st-editing-tools-display").show();
             jQuery("#st-editing-tools-edit").hide();
             jQuery("#st-page-maincontent").css('margin-right', '0px');
-            jQuery(Page.element.content).css("height", "100%");
+
+            if (Page.element && Page.element.content) {
+                jQuery(Page.element.content).css("height", "100%");
+            }
 
             // XXX WTF? ENOFUNCTION
             //do_post_cancel_tidying();
@@ -1598,6 +1607,30 @@ proto.get_editable_div = function () {
         this._editable_div.onactivate = function () {
             self.__range = undefined;
         };
+
+        if ( jQuery.browser.msie ) {
+            var win = self.get_edit_window();
+            self._ieSelectionBookmark = null;
+
+            doc.attachEvent("onbeforedeactivate", function() {
+                var range = doc.selection.createRange();
+                self._ieSelectionBookmark = range.getBookmark();
+            });
+
+            doc.attachEvent("onactivate", function() {
+                 if (! self._ieSelectionBookmark) {
+                     return;
+                 }
+
+                 try {
+                     var range = doc.body.createTextRange();
+                     range.moveToBookmark(self._ieSelectionBookmark);
+                     range.collapse();
+                     range.select();
+                 } catch (e) {};
+            });
+        } 
+
         var tryAppendDiv = function(tries) {
             setTimeout(function() {
                 if (doc.body) {

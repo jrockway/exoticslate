@@ -104,9 +104,8 @@ sub _make_result_set {
         $self->result_set->{predicate} = 'action=orphans_list';
 
         $self->push_result($_)
-            for sort { $b->metadata->{Date} cmp $a->metadata->{Date} } @{$pages};
+            for sort { lc $a->title cmp lc $b->title } @{$pages};
     }
-
     $self->result_set->{title} = loc('Orphaned Pages');
     $self->write_result_set;
 }

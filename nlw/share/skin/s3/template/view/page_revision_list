@@ -5,7 +5,7 @@
 <div id="controls">
   <div id="st-editing-tools-edit">
     <ul>
-  [% IF page.metatdata.Type != 'spreadsheet';
+  [% IF page.metadata.Type != 'spreadsheet';
     PROCESS compare_revisions;
   END %]
     </ul>
@@ -42,7 +42,7 @@
   <div class="clear"></div><!-- clear END -->
   <div id="bottomButtons">
     <ul>
-    [% IF page.metatdata.Type != 'spreadsheet'; 
+    [% IF page.metadata.Type != 'spreadsheet'; 
       PROCESS compare_revisions; 
     END %]
     </ul>

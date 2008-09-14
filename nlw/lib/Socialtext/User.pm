@@ -497,7 +497,8 @@ sub guess_sortable_name {
         $fn =~ s/\@.+$//;
     }
 
-    $name = "$ln $fn";
+    # Desired result: sort is caseless and alphabetical by first name -- {bz: 1246}
+    $name = "$fn $ln";
     $name =~ s/^\s+//;
     $name =~ s/\s+$//;
     # TODO: unicode casefolding?

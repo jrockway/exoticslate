@@ -51,8 +51,6 @@ Page = {
             iframe.contentWindow.document.body.innerHTML = html;
         }
 
-        $('#st-page-content').html(html);
-
         // For MSIE, force browser reflow of the bottom buttons to avoid {bz: 966}.
         if ($.browser.msie) {
             var repaintBottomButtons = function () {
@@ -74,9 +72,11 @@ Page = {
                 verbose: 1,
                 iecacheworkaround: (new Date).getTime()
             },
+            async: false,
             cache: false,
             dataType: 'json',
             success: function (data) {
+                Page.html = data.html;
                 var newRev = data.revision_id;
                 var oldRev = Socialtext.revision_id;
                 if ((oldRev < newRev) || force_update) {

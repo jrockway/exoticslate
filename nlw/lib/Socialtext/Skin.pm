@@ -247,12 +247,12 @@ sub make_dirs {
 
 sub _path {
     my $self = shift;
-    return File::Spec->catdir( $CODE_BASE, @_ );
+    return File::Spec->catdir( $CODE_BASE, grep { defined $_ } @_ );
 }
 
 sub _uri {
     my $self = shift;
-    return join('/', '', 'static', $PROD_VER, @_);
+    return join('/', '', 'static', $PROD_VER, grep { defined $_ } @_);
 }
 
 1;

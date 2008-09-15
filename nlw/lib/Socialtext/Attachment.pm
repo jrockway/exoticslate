@@ -1,7 +1,6 @@
 package Socialtext::Attachment;
-
+# @COPYRIGHT@
 use base 'Socialtext::Base';
-
 use Class::Field qw( field );
 use Email::Valid;
 use MIME::Types;

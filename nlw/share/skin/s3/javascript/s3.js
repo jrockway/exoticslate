@@ -285,33 +285,34 @@ $(function() {
         return false;
     });
 
-    $("#st-edit-button-link,#st-edit-actions-below-fold-edit, #bottomButtons .editButton")
-        .one("click", function () {
-            $('#bootstrap-loader')
-                .css('position', 'absolute')
-                .css('float', 'none')
-                .css('left', $('#st-editing-tools-edit li:last').offset().left + 120 + 'px')
-                .show();
+    Socialtext._setup_editor = function () {
+        $('#bootstrap-loader')
+            .css('position', 'absolute')
+            .css('float', 'none')
+            .css('left', $('#st-editing-tools-edit li:last').offset().left + 120 + 'px')
+            .show();
 
-            $.ajaxSettings.cache = true;
-            if (Socialtext.page_type == 'spreadsheet' && Socialtext.wikiwyg_variables.hub.current_workspace.enable_spreadsheet) {
-                $.getScript(socialcalc_uri, function () {
-                    jQuery("#st-all-footers, #st-display-mode-container").hide();
-                    jQuery("#st-edit-mode-container, #st-editing-tools-edit").show();
-                    Socialtext.render_spreadsheet_editor();
-                });
-            }
-            else {
-                $.getScript(editor_uri);
-                var lnk = $('link[rel=stylesheet][media=screen]');
-                lnk.clone()
-                    .attr('href', nlw_make_s3_path('/css/wikiwyg.css'))
-                    .attr('media', 'wikiwyg')
-                    .appendTo('head');
-            }
-            $.ajaxSettings.cache = false;
-            return false;
-        });
+        $.ajaxSettings.cache = true;
+        if (Socialtext.page_type == 'spreadsheet' && Socialtext.wikiwyg_variables.hub.current_workspace.enable_spreadsheet) {
+            $.getScript(socialcalc_uri, function () {
+                Socialtext.start_spreadsheet_editor();
+                $('#bootstrap-loader').hide();
+            });
+        }
+        else {
+            $.getScript(editor_uri);
+            var lnk = $('link[rel=stylesheet][media=screen]');
+            lnk.clone()
+                .attr('href', nlw_make_s3_path('/css/wikiwyg.css'))
+                .attr('media', 'wikiwyg')
+                .appendTo('head');
+        }
+        $.ajaxSettings.cache = false;
+        return false;
+    }
+
+    $("#st-edit-button-link,#st-edit-actions-below-fold-edit, #bottomButtons .editButton")
+        .one("click", Socialtext._setup_editor);
 
     if (Socialtext.double_click_to_edit) {
         var double_clicker = function() {

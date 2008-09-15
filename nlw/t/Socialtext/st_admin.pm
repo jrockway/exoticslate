@@ -1,4 +1,4 @@
-#!perl
+package Socialtext::st_admin;
 # @COPYRIGHT@
 use warnings;
 use strict;

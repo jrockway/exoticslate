@@ -341,6 +341,20 @@ sub primary_account_id {
     $_[0]->metadata->primary_account->account_id;
 }
 
+sub accounts {
+    my $self = shift;
+    require Socialtext::Account;
+
+    my $sql = q{SELECT DISTINCT account_id FROM account_user WHERE user_id = ?};
+    my $sth = sql_execute($sql, $self->user_id);
+    my @accounts;
+    while (my ($account_id) = $sth->fetchrow_array()) {
+        push @accounts, Socialtext::Account->new(account_id => $account_id);
+    }
+    @accounts = sort {$a->name cmp $b->name} @accounts;
+    return (wantarray ? @accounts : \@accounts);
+}
+
 {
     # REVIEW - maybe this is overkill and can be handled through good
     # documentation saying "you probably don't want to delete users,

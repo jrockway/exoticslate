@@ -20,7 +20,7 @@
                         <a target="_blank" href="/help/index.cgi">[% loc('Help') %]</a> - 
                         <a target="_blank" href="http://www.socialtext.net/exchange/">[% loc('Community') %]</a><br />
                         <a target="_blank" href="http://www.socialtext.com/">
-                            [% loc('Socialtext, the Enterprise Wiki') %]
+                            [% loc('Socialtext: Enterprise Social Software') %]
                         </a>
                         v[% app_version %]
                     </div>

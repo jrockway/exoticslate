@@ -26,7 +26,7 @@ use Socialtext::SQL qw/sql_execute/;
 
 use Cwd;
 
-plan tests => 319;
+plan tests => 379;
 
 our $LastExitVal;
 no warnings 'redefine';
@@ -749,13 +749,13 @@ ADD_REMOVE_WS_ADMIN: {
 LIST_WORKSPACES: {
     expect_success(
         sub { Socialtext::CLI->new()->list_workspaces(); },
-        "admin\nauth-to-edit\nexchange\nfoobar\nhelp-en\npublic\nsale\n",
+        "\nadmin\nauth-to-edit\nexchange\nfoobar\nhelp-en\npublic\nsale\n",
         'list-workspaces by name'
     );
 
     expect_success(
         sub { Socialtext::CLI->new( argv => ['--ids'] )->list_workspaces(); },
-        qr/\A\d+\n\d+\n\d+\n\d+\n\d+\n\d+\n\d+\n\z/,
+        qr/\A\d\n\d+\n\d+\n\d+\n\d+\n\d+\n\d+\n\d+\n\z/,
         'list-workspaces by id'
     );
 }
@@ -2186,7 +2186,6 @@ PLUGINS: {
         'enable plugin for all account without --all-accounts',
     );
 }
-exit;
 
 EXPORT_ACCOUNTS: {
     local $ENV{ST_EXPORT_DIR} = "t/tmp";

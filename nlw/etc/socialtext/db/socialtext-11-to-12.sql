@@ -7,6 +7,12 @@ ALTER TABLE person
     ADD COLUMN
         last_update timestamptz DEFAULT now();
 
+-- Add a flag to persons to hide them from the UI
+
+ALTER TABLE person
+    ADD COLUMN
+        is_hidden boolean DEFAULT false NOT NULL;
+
 -- Auto-vivify should set last_update to way in the past
 
 DROP FUNCTION auto_vivify_person() CASCADE;

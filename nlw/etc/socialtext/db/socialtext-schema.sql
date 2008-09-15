@@ -270,7 +270,8 @@ CREATE TABLE person (
     assistant_id integer,
     photo_image bytea,
     small_photo_image bytea,
-    last_update timestamptz DEFAULT now()
+    last_update timestamptz DEFAULT now(),
+    is_hidden boolean DEFAULT false NOT NULL
 );
 
 CREATE TABLE person_tag (

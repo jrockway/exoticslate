@@ -70,3 +70,7 @@ else
     echo "Starting in dual-Apache mode";
     dev-bin/nlwctl start;
 fi
+
+st-admin set-workspace-config --workspace admin skin_name s3
+
+st-socialcalc enable

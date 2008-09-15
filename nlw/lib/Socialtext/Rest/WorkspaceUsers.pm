@@ -42,6 +42,16 @@ sub get_resource {
             permission =>
                 Socialtext::Permission->new( name => 'admin_workspace' ),
         )
+        # REVIEW: {bz: 1265} requires everybody with "Email this Page"
+        # permission to see the workspace user list.  Is this desired?
+            or 
+        $self->workspace->permissions->user_can(
+            user       => $acting_user,
+            permission =>
+                Socialtext::Permission->new( name => 'email_out' ),
+        )
+
+
         ) {
 
         return [

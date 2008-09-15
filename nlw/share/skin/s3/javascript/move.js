@@ -6,22 +6,31 @@ proto.copyLightbox = function () {
     var self = this;
     this.process('copy_lightbox.tt2');
     this.sel = '#st-copy-lightbox';
-    jQuery.getJSON('/data/workspaces', function (list) {
-        jQuery.each(list, function () {
-            jQuery('<option>')
-                .val(this.id)
-                .html(this.title)
-                .attr('name', this.name)
-                .appendTo('#st-copy-workspace');
-        })
-        self.show();
+    jQuery.ajax({
+        url: '/data/workspaces',
+        type: 'get',
+        cache: false,
+        async: false,
+        dataType: 'json',
+        success: function (list) {
+            jQuery('#st-copy-workspaces option').remove();
+            jQuery.each(list, function () {
+                jQuery('<option />')
+                    .val(this.id)
+                    .html(this.title)
+                    .attr('name', this.name)
+                    .appendTo('#st-copy-workspace');
+            })
+
+            self.show(false); // No redirection
+        }
     });
 }
 
 proto.renameLightbox = function () {
     this.process('rename_lightbox.tt2');
     this.sel = '#st-rename-lightbox';
-    this.show();
+    this.show(true); // Do redirection
 }
 
 proto.duplicateLightbox = function () {
@@ -30,7 +39,7 @@ proto.duplicateLightbox = function () {
     jQuery("#st-duplicate-newname").val(
         loc('Duplicate of [_1]', Socialtext.page_title)
     );
-    this.show();
+    this.show(true); // Do redirection
 }
 
 proto.newUrl = function (page) {
@@ -46,7 +55,7 @@ proto.process = function (template) {
     );
 }
 
-proto.show = function () {
+proto.show = function (do_redirect) {
     var self = this;
     jQuery.showLightbox({
         content: this.sel,
@@ -56,23 +65,42 @@ proto.show = function () {
     // Clear errors from the previous time around: {bz: 1039}
     jQuery(self.sel + ' .error').html('');
 
-    jQuery(this.sel + ' form').submit(function () {
+    jQuery(self.sel + ' form').submit(function () {
+        jQuery(self.sel + ' input[type=submit]').attr('disabled', true);
+
         var formdata = jQuery(this).serializeArray();
         var new_title = this.new_title.value;
 
-        jQuery.getJSON(Page.cgiUrl(), formdata, function (data) {
-            var error = self.errorString(data, new_title);
-            if (error) {
-                jQuery('<input name="clobber" type="hidden">')
-                    .attr('value', new_title)
-                    .appendTo(self.sel + ' form');
-                jQuery(self.sel + ' .error').html(error).show();
-            }
-            else {
-                jQuery.hideLightbox();
-                document.location = self.newUrl(new_title);
+        jQuery.ajax({
+            url: Page.cgiUrl(),
+            data: formdata,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                jQuery(self.sel + ' input[type=submit]').attr('disabled', false);
+
+                var error = self.errorString(data, new_title);
+                if (error) {
+                    jQuery('<input name="clobber" type="hidden">')
+                        .attr('value', new_title)
+                        .appendTo(self.sel + ' form');
+                    jQuery(self.sel + ' .error').html(error).show();
+                }
+                else {
+                    jQuery.hideLightbox();
+
+                    if (do_redirect) {
+                        document.location = self.newUrl(new_title);
+                    }
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                jQuery(self.sel + ' .error').html(textStatus).show();
+                jQuery(self.sel + ' input[type=submit]').attr('disabled', false);
             }
         });
+
         return false;
     });
 }

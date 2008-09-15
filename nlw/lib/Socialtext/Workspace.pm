@@ -1314,7 +1314,7 @@ sub ImportFromTarball {
 }
 
 sub AllWorkspaceIdsAndNames {
-    my $sth = sql_execute('SELECT workspace_id, name FROM "Workspace" ORDER BY name');
+    my $sth = sql_execute('SELECT workspace_id, name FROM "Workspace" where workspace_id <> 0 ORDER BY name');
     return $sth->fetchall_arrayref() || [];
 }
 
@@ -1515,7 +1515,7 @@ EOSQL
 
 sub Count {
     my $class = shift;
-    my $sth = sql_execute('SELECT COUNT(*) FROM "Workspace"');
+    my $sth = sql_execute('SELECT COUNT(*) FROM "Workspace" where workspace_id <> 0');
     return $sth->fetchrow_arrayref->[0];
 }
 

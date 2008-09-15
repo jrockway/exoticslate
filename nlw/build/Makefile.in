@@ -66,7 +66,8 @@ INSTALL_PKGS_TARGETS = install-pkgs-dapper \
                        install-pkgs-dapper-dev
 
 # Configuration targets for $(GENCONFIG)
-CONF_TARGETS = apache-config      \
+CONF_TARGETS = html \
+	       apache-config      \
                apache-perl-config \
                apache2-config     \
                app-config         \

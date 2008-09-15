@@ -275,6 +275,13 @@ sub _get_user_info {
     };
 }
 
+# This function is called in the ControlPanel
+sub skin_uri { 
+    my $skin_name  = shift;
+    my $skin = Socialtext::Skin->new(name => $skin_name);
+    return $skin->skin_uri();
+}
+
 sub _get_wiki_info {
     my ($self) = @_;
     my $wiki = $self->hub->current_workspace;
@@ -291,11 +298,7 @@ sub _get_wiki_info {
         skin          => $skin,
         email_address => $wiki->email_in_address,
         static_path   => $self->static_path,
-        skin_uri      => sub { 
-            my $skin_name  = shift;
-            my $skin = Socialtext::Skin->new(name => $skin_name);
-            return $skin->skin_uri();
-        },
+        skin_uri      => \&skin_uri,
         comment_form_window_height => $wiki->comment_form_window_height,
         system_status              => $self->hub->main ?
             $self->hub->main->status_message() : undef,

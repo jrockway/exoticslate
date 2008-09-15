@@ -182,13 +182,19 @@ sub hook {
             my $method = $hook->{method};
             my $plugin = $hook->{obj} ||= $hook->{class}->new();
             my $hub = $self->hub || $self->{made_hub};
-            $hook->{obj}->hub($hub);
-            $hook->{obj}->rest( delete $self->{_rest_handler} );
+            $plugin->hub($hub);
+            $plugin->rest( delete $self->{_rest_handler} );
 
             my $enabled = $plugin->is_hook_enabled($name);
             next unless $enabled;
                          
-            push @output, $hook->{obj}->$method(@args);
+            eval {
+                push @output, $plugin->$method(@args);
+            };
+            if ($@) {
+                (my $err = $@) =~ s/\n.+//sm;
+                return $err;
+            }
             last if $hook->{once};
         }
     }

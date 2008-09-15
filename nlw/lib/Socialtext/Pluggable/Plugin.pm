@@ -193,6 +193,7 @@ sub name {
 
 sub plugins {
     my $self = shift;
+    # XXX: should the list be limited like this?
     return grep { $self->user->can_use_plugin($_) }
            $self->hub->pluggable->plugin_list;
 }

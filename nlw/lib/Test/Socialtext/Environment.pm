@@ -68,8 +68,11 @@ sub new {
         @_,
     );
 
-    # XXX: clean everything out, preserving the old behaviour.
-    unshift @{$self->{fixtures}}, 'clean';
+    # unless we're testing dangerously (and quickly), make sure that we clean
+    # everything out before starting a new test.
+    unless ($ENV{NLW_LIVE_DANGEROUSLY}) {
+        unshift @{$self->{fixtures}}, 'clean';
+    }
 
     $self->_clean_if_last_test_was_destructive;
     $self->_init_fixtures;
@@ -92,8 +95,14 @@ sub _init_fixtures {
     my $self = shift;
     foreach my $name (@{$self->fixtures}) {
         Test::More::diag("Using fixture '$name'.") if $self->verbose;
-        push @{ $self->fixture_objects },
-          Test::Socialtext::Fixture->new( name => $name, env => $self );
+        my $fixture = Test::Socialtext::Fixture->new( name => $name, env => $self );
+        push @{$self->fixture_objects}, $fixture;
+
+        if ($fixture->has_conflicts) {
+            Test::More::diag("... fixture conflict detected; cleaning first") if $self->verbose;
+            unshift @{$self->fixture_objects},
+              Test::Socialtext::Fixture->new( name => 'clean', env => $self );
+        }
     }
 }
 

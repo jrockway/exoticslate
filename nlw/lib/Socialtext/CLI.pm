@@ -441,6 +441,48 @@ sub get_user_account {
     );
 }
 
+sub show_profile {
+    my $self = shift;
+    my $user = $self->_require_user;
+
+    my $profile = $self->_get_profile($user);
+    $profile->is_hidden(0);
+    $profile->save;
+    $self->_success(
+        loc('The profile for "[_1]" is no longer hidden.', 
+            $user->username)
+    );
+}
+
+sub hide_profile {
+    my $self = shift;
+    my $user = $self->_require_user;
+
+    my $profile = $self->_get_profile($user);
+    $profile->is_hidden(1);
+    $profile->save;
+    $self->_success(
+        loc('The profile for "[_1]" is now hidden.', $user->username)
+    );
+}
+
+sub _get_profile {
+    my $self = shift;
+    my $user = shift;
+
+    unless ($user->can_use_plugin( 'people' )) {
+        $self->_error("The People plugin is not available.");
+    }
+
+    my $adapter = Socialtext::Pluggable::Adapter->new;
+    unless ($adapter->plugin_exists('people')) {
+        return $self->_error("The People plugin is not installed.");
+    }
+
+    require Socialtext::People::Profile;
+    return Socialtext::People::Profile->GetProfile($user->user_id);
+}
+
 sub _require_set_user_names_params {
     my $self = shift;
 
@@ -2393,6 +2435,8 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   set-user-names [--username or --email] --first-name --last-name
   set-user-account [--username or --email] --account
   get-user-account [--username or --email]
+  show-profile [--username or --email]
+  hide-profile [--username or --email]
   mass-add-users --csv
 
   WORKSPACES
@@ -2566,6 +2610,12 @@ Set the primary account of the specified user.
 =head2 get-user-account [--email or --username]
 
 Print the primary account of the specified user.
+
+=head2 show-profile [--email or --username]
+
+=head2 hide-profile [--email or --username]
+
+Show or hide the user's profile in the people system.
 
 =head2 mass-add-users --csv
 

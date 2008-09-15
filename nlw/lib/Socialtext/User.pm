@@ -343,10 +343,29 @@ sub primary_account_id {
 
 sub accounts {
     my $self = shift;
-    require Socialtext::Account;
+    my %p = @_;
+    my $plugin = delete $p{plugin};
 
-    my $sql = q{SELECT DISTINCT account_id FROM account_user WHERE user_id = ?};
-    my $sth = sql_execute($sql, $self->user_id);
+    require Socialtext::Account;
+    my @args = ($self->user_id);
+    my $sql;
+
+    if ($plugin) {
+        $sql = q{
+            SELECT DISTINCT account_id 
+            FROM account_user JOIN account_plugin USING (account_id)
+            WHERE user_id = ? AND plugin = ?
+        };
+        push @args, $plugin;
+    }
+    else {
+        $sql = q{
+            SELECT DISTINCT account_id 
+            FROM account_user WHERE user_id = ?
+        };
+    }
+
+    my $sth = sql_execute($sql, @args);
     my @accounts;
     while (my ($account_id) = $sth->fetchrow_array()) {
         push @accounts, Socialtext::Account->new(account_id => $account_id);

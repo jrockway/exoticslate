@@ -159,6 +159,7 @@ FROM (
            FROM user_account
           WHERE secondary_account_id IN ( $priority_accounts )
             AND driver_username NOT LIKE '\%socialtext.com'
+            AND primary_account_id IS NULL
           GROUP BY system_unique_id
           ORDER BY c DESC
      ) s

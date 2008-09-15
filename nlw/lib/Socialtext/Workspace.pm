@@ -1583,7 +1583,7 @@ use Socialtext::User;
 use Socialtext::SystemSettings qw(get_system_setting);
 
 const name => '';
-const title => '';
+const title => 'The NoWorkspace Workspace';
 const account_id => 1;
 const workspace_id => 0;
 const email_addresses_are_hidden => 0;

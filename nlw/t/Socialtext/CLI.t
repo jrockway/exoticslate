@@ -7,30 +7,14 @@ use File::Slurp qw(write_file);
 use File::Path qw(rmtree);
 use Test::Socialtext;
 fixtures( 'workspaces_with_extra_pages', 'destructive' );
-
-BEGIN {
-    unless (
-        eval {
-            require Test::Output;
-            Test::Output->import();
-            1;
-        }
-        ) {
-        plan skip_all => 'These tests require Test::Output to run.';
-    }
-}
-
 use Socialtext::Account;
 use Socialtext::CLI;
 use Socialtext::SQL qw/sql_execute/;
+use t::Socialtext::CLITestUtils qw/expect_failure expect_success/;
 
 use Cwd;
 
 plan tests => 379;
-
-our $LastExitVal;
-no warnings 'redefine';
-local *Socialtext::CLI::_exit = sub { $LastExitVal = shift; die 'exited'; };
 
 our $NEW_WORKSPACE = 'new-ws-' . $<;
 our $NEW_WORKSPACE2 = 'new-ws2-'. $<;
@@ -749,13 +733,13 @@ ADD_REMOVE_WS_ADMIN: {
 LIST_WORKSPACES: {
     expect_success(
         sub { Socialtext::CLI->new()->list_workspaces(); },
-        "\nadmin\nauth-to-edit\nexchange\nfoobar\nhelp-en\npublic\nsale\n",
+        "admin\nauth-to-edit\nexchange\nfoobar\nhelp-en\npublic\nsale\n",
         'list-workspaces by name'
     );
 
     expect_success(
         sub { Socialtext::CLI->new( argv => ['--ids'] )->list_workspaces(); },
-        qr/\A\d\n\d+\n\d+\n\d+\n\d+\n\d+\n\d+\n\d+\n\z/,
+        qr/\A\d+\n\d+\n\d+\n\d+\n\d+\n\d+\n\d+\n\z/,
         'list-workspaces by id'
     );
 }
@@ -2244,41 +2228,3 @@ EXPORT_ACCOUNTS: {
 
 exit;
 
-
-sub expect_success {
-    local $Test::Builder::Level = $Test::Builder::Level + 1;
-    my $sub    = shift;
-    my $expect = shift;
-    my $desc   = shift;
-
-    my $test = ref $expect ? \&stdout_like : \&stdout_is;
-
-    local $LastExitVal;
-    $expect = [$expect] unless ref($expect) and ref($expect) eq 'ARRAY';
-    for my $e (@$expect) {
-        $test->( sub { eval { $sub->() } }, $e, $desc );
-        warn $@ if $@ and $@ !~ /exited/;
-        is( $LastExitVal, 0, 'exited with exit code 0' );
-    }
-}
-
-sub expect_failure {
-    local $Test::Builder::Level = $Test::Builder::Level + 1;
-    my $sub    = shift;
-    my $expect = shift;
-    my $desc   = shift;
-    my $error_code = shift || 1;
-
-    my $test = ref $expect ? \&stderr_like : \&stderr_is;
-
-    local $LastExitVal;
-    $test->(
-        sub {
-            eval { $sub->() };
-        },
-        $expect,
-        $desc
-    );
-    warn "expect_failed: $@" if $@ and $@ !~ /exited/;
-    is( $LastExitVal, $error_code, "exited with exit code $error_code" );
-}

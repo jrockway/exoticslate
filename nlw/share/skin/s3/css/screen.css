@@ -1069,7 +1069,7 @@ div#mainNav ul.level1 li.submenu:hover ul.level2 {
     display: block; 
 }
 div#mainNav ul.level1 li.submenu:hover {
-    display: block; z-index: 2000;
+    z-index: 2000;
 }
 
 div#mainNav ul.level2 {

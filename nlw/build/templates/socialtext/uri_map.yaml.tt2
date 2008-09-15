@@ -263,6 +263,12 @@
             'application/json': [Socialtext::Rest::Accounts, POST]
         '*':                    [Socialtext::Rest::Accounts, bad_method]
 -
+    '/data/accounts/:acct/users':
+        'POST':
+            '*/*':              [Socialtext::Rest::AccountUsers, bad_type]
+            'application/json': [Socialtext::Rest::AccountUsers, POST_json]
+        '*':                    [Socialtext::Rest::AccountUsers, bad_method]
+-
     '/data':
         '*':                    [Socialtext::Rest, redirect_workspaces]
 -

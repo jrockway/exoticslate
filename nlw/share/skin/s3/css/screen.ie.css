@@ -136,3 +136,7 @@ html ul.buttonRight ul.level2 {
     top: expression( jQuery('#st-pagetools-newpage').offset().top + 30 );
 }
 
+div#mainNav ul.level1 li.submenu:hover {
+    display: block;
+}
+

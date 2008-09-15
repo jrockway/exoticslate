@@ -1,7 +1,7 @@
 #!perl
 # @COPYRIGHT@
 use mocked qw(Socialtext::l10n system_locale); # Has to come firstest.
-use Test::Socialtext tests => 111;
+use Test::Socialtext tests => 113;
 use strict;
 use warnings;
 
@@ -90,7 +90,6 @@ ALL_WORKSPACE_IDS_AND_NAMES: {
         $ws->update(skin_name => '');
         $ws = Socialtext::Workspace->new(name => $ws->name);
         is $ws->skin_name, 's3', 'workspace uses account skin';
-        exit;
     }
 }
 

@@ -1527,6 +1527,43 @@ sub CountByName {
     return $sth->fetchrow_arrayref->[0];
 }
 
+sub MostOftenAccessedLastWeek {
+    my $self = shift;
+    my $limit = shift || 10;
+    my $sth = sql_execute(q{
+        SELECT "Workspace".title AS workspace_title,
+               "Workspace".name AS workspace_name
+        FROM (
+            SELECT distinct page_workspace_id,
+                   COUNT(*) AS views
+              FROM event
+             WHERE event_class = 'page'
+               AND action = 'view'
+               AND at > 'now'::timestamptz - '1 week'::interval
+             GROUP BY page_workspace_id
+             ORDER BY views DESC
+             LIMIT ?
+        ) AS X
+        JOIN "Workspace"
+          ON workspace_id = page_workspace_id
+        JOIN "WorkspaceRolePermission"
+          USING(workspace_id)
+        JOIN "Permission"
+          USING(permission_id)
+        JOIN "Role"
+          USING(role_id)
+        WHERE "Permission".name = 'read'
+          AND "Role".name = 'guest'
+        ORDER BY views DESC;
+    }, $limit);
+
+    my @viewed;
+    while (my $row = $sth->fetchrow_hashref) {
+        push @viewed, [$row->{workspace_name}, $row->{workspace_title}];
+    }
+    return @viewed;
+}
+
 use constant RECENT_WORKSPACES => 10;
 sub read_breadcrumbs {
     my ( $self, $user ) = @_;
@@ -2364,6 +2401,15 @@ Returns the number of workspaces in the system.
 
 Returns the number of workspaces in the system containing the
 specified string anywhere in their name.
+
+=head2 Socialtext::Workspace->MostOftenAccessedLastWeek($limit)
+
+Returns a list of the most often accessed I<public> workspaces.  Restricted to
+the C<$limit> (default 10) most often accessed public workspaces, accessed
+over the last week.
+
+Returned as a list of list-refs that contain the "name" and "title" of the
+workspace.
 
 =head2 Socialtext::Workspace->read_breadcrumbs( USER )
 

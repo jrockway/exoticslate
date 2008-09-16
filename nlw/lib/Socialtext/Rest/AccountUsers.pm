@@ -10,8 +10,10 @@ use Socialtext::HTTP ':codes';
 use Socialtext::String;
 use Socialtext::User;
 
-sub allowed_methods { 'POST' }
-sub collection_name { 'Account Users' }
+sub allowed_methods { 'POST', 'GET' }
+sub collection_name { 'Users in Account ' .  $_[0]->acct }
+sub workspace { return Socialtext::NoWorkspace->new() }
+sub ws { '' }
 
 sub POST_json {
     my $self = shift;
@@ -67,6 +69,43 @@ sub POST_json {
         -status => HTTP_200_OK,
     );
     return '';
+}
+
+sub permission {
+    +{ GET => 'is_business_admin' };
+}
+
+sub element_list_item {
+   return "<li><a href=\"$_[1]->{uri}\">$_[1]->{name}<a/></li>\n";
+}
+
+sub get_resource {
+    my $self = shift;
+    my $rest = shift;
+
+    my $account = Socialtext::Account->new( name => $self->acct );
+    
+    unless ( defined $account ) {
+       $rest->header(
+           -status => HTTP_404_Not_Found,
+        );
+        die 'No Such Account';
+    };
+
+    return [
+        map { $self->_user_representation( $_ ) }
+            @{ $account->users_as_hash }
+    ];
+}
+
+sub _user_representation {
+    my $self      = shift;
+    my $user_info = shift;
+
+    return +{
+        name => $user_info->{email_address},
+        uri  => "/data/users/" . $user_info->{email_address},
+    }
 }
 
 1;

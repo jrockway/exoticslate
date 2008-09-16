@@ -2,34 +2,42 @@ Test case for `/data/account/:acct/users` ( GET and POST )
 
 * Fixture: SocialRest
 
-| Comment | set up fixture |
+| *Comment* | set up fixture |
 | st-admin | change-password --email devnull2@socialtext.com --password password |
-
-
-| Comment | GET requests return a 404 | 
-| get | /data/account/Socialtext/users |
-| code-is | 404 |
-
-| Comment | Returns a 401 when the user is not a business admin |
 | http-user-pass | devnull2@socialtext.com | password |
+
+| *Comment* | GET requests return a 403 when user is not a business admin. | 
+| get | /data/accounts/Socialtext/users |
+| code-is | 403 |
+
+| *Comment* | Returns a 401 when the user is not a business admin |
 | post-json | /data/accounts/Socialtext/users | {"email_address":"user@example.com"} |
 | code-is | 401 |
 
-| Comment | Log in as devnull1, a business admin. |
+| *Comment* | Log in as devnull1, a business admin. |
 | http-user-pass | devnull1@socialtext.com | d3vnu11l |
 
-| Comment | Return a 400 if the Account does not exist. |
-| post-json | /data/accounts/ENOSUCHACCOUNT/users | {"email_address":"user@example.com"} |
-| code-is | 400 |
+| *Comment* | GET returns a 200 for a business admin |
+| get | /data/accounts/Socialtext/users |
+| code-is | 200 |
+| body-like | devnull1@socialtext.com |
 
-| Comment | Returns a 400 if the post json is bad. |
+| *Comment* | GET returns 404 when no account exists. |
+| get | /data/accounts/ENOSUCHACCOUNT/users |
+| code-is | 404 |
+
+| *Comment* | Return a 404 if the Account does not exist. |
+| post-json | /data/accounts/ENOSUCHACCOUNT/users | {"email_address":"user@example.com"} |
+| code-is | 404 |
+
+| *Comment* | Returns a 400 if the post json is bad. |
 | post-json | /data/accounts/Socialtext/users | {} |
 | code-is | 400 |
 
-| Comment | Return a 400 if the user does not exist. |
+| *Comment* | Return a 400 if the user does not exist. |
 | post-json | /data/accounts/Socialtext/users | {"email_address":"enosuchuser@example.com"} |
 | code-is | 400 |
 
-| Comment | Returns a 200 when all is good. |
+| *Comment* | Returns a 200 when all is good. |
 | post-json | /data/accounts/Socialtext/users | {"email_address":"devnull2@socialtext.com"} |
 | code-is | 200 |

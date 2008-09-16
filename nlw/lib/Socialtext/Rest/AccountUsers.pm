@@ -11,7 +11,13 @@ use Socialtext::String;
 use Socialtext::User;
 
 sub allowed_methods { 'POST', 'GET' }
-sub collection_name { 'Users in Account ' .  $_[0]->acct }
+sub collection_name { 
+    my $acct =  ( $_[0]->acct =~ /^\d+$/ ) 
+            ? 'with ID ' . $_[0]->acct
+            : $_[0]->acct; 
+    return 'Users in Account ' . $acct;
+}
+
 sub workspace { return Socialtext::NoWorkspace->new() }
 sub ws { '' }
 
@@ -83,7 +89,7 @@ sub get_resource {
     my $self = shift;
     my $rest = shift;
 
-    my $account = Socialtext::Account->new( name => $self->acct );
+    my $account = Socialtext::Account->Resolve( $self->acct );
     
     unless ( defined $account ) {
        $rest->header(

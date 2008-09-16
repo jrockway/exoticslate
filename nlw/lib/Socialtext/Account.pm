@@ -38,6 +38,19 @@ sub EnsureRequiredDataIsPresent {
     }
 }
 
+sub Resolve {
+    my $class = shift;
+    my $maybe_account = shift;
+    my $account;
+
+    if ( $maybe_account =~ /^\d+$/ ) {
+        $account = Socialtext::Account->new( account_id => $maybe_account );
+    }
+
+    $account ||= Socialtext::Account->new( name => $maybe_account );
+    return $account;
+}
+
 sub skin_name {
     my ($self, $skin) = @_;
 

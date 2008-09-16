@@ -176,8 +176,17 @@ function setup_wikiwyg() {
                 jQuery("#st-all-footers").hide();
 
             jQuery("#st-display-mode-container").hide();
-            jQuery("#st-editing-tools-edit a, #wikiwyg_toolbar a").hide();
+
+            // See the comment about "two seconds" below
+            if (Socialtext.S3 && (firstMode == WW_SIMPLE_MODE)) {
+                jQuery("#st-editing-tools-edit .buttonRight a").hide();
+            }
+
+            jQuery("#st-editing-tools-edit, #wikiwyg_toolbar").show();
             jQuery("#st-edit-mode-container").show();
+
+            if (jQuery("#contentRight").is(":visible"))
+                jQuery("#st-page-maincontent").css("margin-right", "240px");
  
             if (!Socialtext.new_page)
                 Page.refreshPageContent();
@@ -219,24 +228,15 @@ function setup_wikiwyg() {
                 });
             }
 
-            if (jQuery("#contentRight").is(":visible"))
-                jQuery("#st-page-maincontent").css("margin-right", "240px");
-
-            var show_editor_links = function () {
-                jQuery("#st-editing-tools-edit a, #wikiwyg_toolbar a").show();
-            };
-
-            if (firstMode == WW_SIMPLE_MODE) {
+            if (Socialtext.S3 && (firstMode == WW_SIMPLE_MODE)) {
                 // Give the browser two seconds to render the initial iframe.
                 // If we don't do this, click on "Wiki text" prematurely will
                 // hang the editor up.  Humans usually take more than 1000ms
                 // to find the link anyway, but Selenium can trigger this bug
                 // quite regularly given a high enough latency to the server.
-                setTimeout( show_editor_links, 2000 );
-            }
-            else {
-                // If not in simple mode, don't bother waiting.
-                show_editor_links();
+                setTimeout( function() {
+                    jQuery("#st-editing-tools-edit .buttonRight a").show();
+                }, 2000 );
             }
 
         } catch(e) {

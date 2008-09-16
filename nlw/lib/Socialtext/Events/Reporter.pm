@@ -5,6 +5,7 @@ use strict;
 use Socialtext::SQL qw/sql_execute/;
 use Socialtext::JSON qw/decode_json/;
 use Socialtext::User;
+use Socialtext::Pluggable::Adapter;
 
 sub new {
     my $class = shift;
@@ -50,10 +51,19 @@ sub _extract_person {
         $real_name = $user->guess_real_name();
     }
 
+    my $hidden = 1;
+    my $adapter = Socialtext::Pluggable::Adapter->new;
+    if ($adapter->plugin_exists('people')) {
+        require Socialtext::People::Profile;
+        my $profile = Socialtext::People::Profile->GetProfile($user);
+        $hidden = $profile->is_hidden if $profile;
+    }
+
     $row->{$prefix} = {
         id => $id,
         best_full_name => $real_name,
         uri => "/data/people/$id",
+        hidden => $hidden,
     };
 }
 

@@ -13,7 +13,7 @@ proto.copyLightbox = function () {
         async: false,
         dataType: 'json',
         success: function (list) {
-            jQuery('#st-copy-workspaces option').remove();
+            jQuery('#st-copy-workspace option').remove();
             jQuery.each(list, function () {
                 jQuery('<option />')
                     .val(this.id)

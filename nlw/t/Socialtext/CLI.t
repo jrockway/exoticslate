@@ -274,7 +274,7 @@ MASS_ADD_USERS: {
 
         SKIP: {
             skip 'Socialtext People is not installed', 7 unless $Socialtext::MassAdd::Has_People_Installed;
-            my $profile = Socialtext::People::Profile->GetProfile($user, 1);
+            my $profile = Socialtext::People::Profile->GetProfile($user, no_recurse => 1);
             ok $profile, '... ST People profile was created';
             is $profile->position, 'position', '... ... position was set';
             is $profile->company, 'company', '... ... company was set';
@@ -360,7 +360,7 @@ MASS_ADD_USERS: {
 
         SKIP: {
             skip 'Socialtext People is not installed', 2 unless $Socialtext::MassAdd::Has_People_Installed;
-            my $profile = Socialtext::People::Profile->GetProfile($user, 1);
+            my $profile = Socialtext::People::Profile->GetProfile($user, no_recurse => 1);
             ok $profile, '... ST People profile was found';
             is $profile->position, 'u_position', '... ... position was updated';
         }

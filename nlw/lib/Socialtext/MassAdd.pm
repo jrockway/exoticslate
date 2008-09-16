@@ -138,7 +138,8 @@ sub users {
         }
 
         if ($Has_People_Installed) {
-            my $p = Socialtext::People::Profile->GetProfile($user, 1);
+            my $p = Socialtext::People::Profile->GetProfile($user,
+                no_recurse => 1);
             for (my $i = 0; $i < @profile_fields; $i++) {
                 my $value = $profile[$i];
                 next unless $value;

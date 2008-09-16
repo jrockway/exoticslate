@@ -86,7 +86,7 @@ MASS_ADD_USERS: {
         # verify that a People profile was created with the data from CSV
       SKIP: {
           skip 'Socialtext People is not installed', 7 unless $Socialtext::MassAdd::Has_People_Installed;
-            my $profile = Socialtext::People::Profile->GetProfile($user, 1);
+            my $profile = Socialtext::People::Profile->GetProfile($user, no_recurse => 1);
             ok $profile, '... ST People profile was found';
             is $profile->position, 'position', '... ... using position from CSV';
             is $profile->company, 'company', '... ... using company from CSV';
@@ -133,7 +133,7 @@ MASS_ADD_USERS: {
         # verify that our People profile updates were applied
       SKIP: {
           skip 'Socialtext People is not installed', 7 unless $Socialtext::MassAdd::Has_People_Installed;
-            my $profile = Socialtext::People::Profile->GetProfile($user, 1);
+            my $profile = Socialtext::People::Profile->GetProfile($user, no_recurse => 1);
             ok $profile, '... ST People profile was found';
             is $profile->position, 'updated_position', '... ... using position from CSV';
             is $profile->company, 'updated_company', '... ... using company from CSV';

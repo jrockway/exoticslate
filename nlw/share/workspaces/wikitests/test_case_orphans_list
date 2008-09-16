@@ -44,12 +44,6 @@
 | select_and_wait | sort-picker | index=1 |
 | text_like | st-backlinks-content | qr/orphan_page_3_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_1_%%start_time%%/ |
 
-| *Comment* | Test Case: Orphans List Sorting Last Edited By |
-| select_and_wait | sort-picker | label=Last Edited By |
-| text_like | st-backlinks-content | qr/orphan_page_1_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_3_%%start_time%%/ |
-| select_and_wait | sort-picker | index=2 |
-| text_like | st-backlinks-content | qr/orphan_page_1_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_3_%%start_time%%/ |
-
 | *Comment* | Test Case: Orphans List Sorting Date |
 | select_and_wait | sort-picker | label=Date |
 | text_like | st-backlinks-content | qr/orphan_page_3_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_1_%%start_time%%/ |

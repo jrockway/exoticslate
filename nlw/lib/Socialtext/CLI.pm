@@ -480,7 +480,10 @@ sub _get_profile {
     }
 
     require Socialtext::People::Profile;
-    return Socialtext::People::Profile->GetProfile($user->user_id);
+    return Socialtext::People::Profile->GetProfile(
+        $user->user_id,
+        allow_hidden => 1,
+    );
 }
 
 sub _require_set_user_names_params {

@@ -42,7 +42,7 @@
     <script type="text/javascript" charset="utf-8" src="[% customjs %]"></script>
     [% END %]
 
-    <meta name="keywords" content="[% loc('Confluence wiki, Enterprise 2.0 wiki, Mediawiki, Microsoft wiki, Sharepoint wiki, Twiki, Web 2.0 wiki, business wiki, document management, enterprise wiki, intranet wiki, knowledge management, online collaboration, open source wiki, portal wiki, hosted wiki, project collaboration, team collaboration, wiki appliance, wiki software, social software') %]"/>
+    <meta name="keywords" content="[% loc('wiki, business wiki, document management, enterprise wiki, intranet wiki, knowledge management, online collaboration, open source wiki, portal wiki, hosted wiki, collaboration, social software, social networking, dashboard, project collaboration, team collaboration, wiki appliance, wiki software, community') %]"/>
     [% END %]
   </head>
   <body id="[% id || 'socialtext-wiki' %]">

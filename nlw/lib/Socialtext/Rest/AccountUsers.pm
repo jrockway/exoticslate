@@ -38,7 +38,7 @@ sub POST_json {
 
     unless ( defined $account ) {
         $rest->header(
-            -status => HTTP_400_Bad_Request,
+            -status => HTTP_404_Not_Found,
         );
         return '';
     }

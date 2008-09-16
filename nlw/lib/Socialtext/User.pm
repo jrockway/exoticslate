@@ -1592,6 +1592,11 @@ As an alternative to deletion, you can block a user from logging in by
 setting their password to some string and passing C<< no_crypt => 1 >>
 to C<update()>
 
+=head2 $user->accounts()
+
+Returns a list of the accounts associated with the user.  Returns a
+list reference in scalar context.
+
 =head2 $user->to_hash()
 
 Returns a hash reference representation of the user, suitable for using with

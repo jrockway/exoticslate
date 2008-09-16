@@ -214,6 +214,17 @@ contains %%email%% as a substring and that messes up other tests like Test Case:
 | click_and_wait | st-wiki-subnav-link-whats-new |  |
 | click_and_wait | link=Your Watchlist |  |
 
+Last Edited By sort
+
+| *Comment* | Test case: Watchlist sort by Last Edited By |  |
+| select_and_wait | sort-picker | label=Last Edited By |
+
+| *Comment* | label=Last Edited By (desc) |  |
+| select_and_wait | sort-picker | index=2 |
+
+| *Comment* | label=Last Edited By (asc) |  |
+| select_and_wait | sort-picker | index=2 |
+
 | *Comment* | Test case: Watchlist Teardown |  |
 | st_admin | purge-page --w %%workspace%% --page aaa_%%start_time%% | purged |
 | st_admin | purge-page --w %%workspace%% --page bbb_%%start_time%% | purged |

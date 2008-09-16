@@ -47,11 +47,11 @@ sub _entities_for_query {
             $row->{From},
             $ws
         );
-        $row->{hidden} = 1;
+        $row->{user_hidden} = 1;
         if (Socialtext::Pluggable::Adapter->plugin_exists('people')) {
             require Socialtext::People::Profile;
             my $profile = Socialtext::People::Profile->GetProfile($user);
-            $row->{hidden} = $profile->is_hidden if $profile;
+            $row->{user_hidden} = $profile->is_hidden if $profile;
         }
 
         push @changes, $row;

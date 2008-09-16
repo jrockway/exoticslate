@@ -176,6 +176,7 @@ function setup_wikiwyg() {
                 jQuery("#st-all-footers").hide();
 
             jQuery("#st-display-mode-container").hide();
+            jQuery("#st-editing-tools-edit a, #wikiwyg_toolbar a").hide();
             jQuery("#st-edit-mode-container").show();
  
             if (!Socialtext.new_page)
@@ -201,10 +202,6 @@ function setup_wikiwyg() {
             ww.preview_link_reset();
             jQuery("#st-pagetools").hide();
             jQuery("#st-editing-tools-display").hide();
-            jQuery("#st-editing-tools-edit, #wikiwyg_toolbar").show();
-
-            if (jQuery("#contentRight").is(":visible"))
-                jQuery("#st-page-maincontent").css("margin-right", "240px");
 
             nlw_edit_controls_visible = true;
             ww.enableLinkConfirmations();
@@ -221,6 +218,27 @@ function setup_wikiwyg() {
                     body: loc("<a target=\"_blank\" href=\"http://www.mozilla.com/firefox/\">Download Firefox</a> for richer Socialtext editing functionality.")
                 });
             }
+
+            if (jQuery("#contentRight").is(":visible"))
+                jQuery("#st-page-maincontent").css("margin-right", "240px");
+
+            var show_editor_links = function () {
+                jQuery("#st-editing-tools-edit a, #wikiwyg_toolbar a").show();
+            };
+
+            if (firstMode == WW_SIMPLE_MODE) {
+                // Give the browser two seconds to render the initial iframe.
+                // If we don't do this, click on "Wiki text" prematurely will
+                // hang the editor up.  Humans usually take more than 1000ms
+                // to find the link anyway, but Selenium can trigger this bug
+                // quite regularly given a high enough latency to the server.
+                setTimeout( show_editor_links, 2000 );
+            }
+            else {
+                // If not in simple mode, don't bother waiting.
+                show_editor_links();
+            }
+
         } catch(e) {
             throw(e);
         }

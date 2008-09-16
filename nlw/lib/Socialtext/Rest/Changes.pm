@@ -6,6 +6,7 @@ use strict;
 
 use base 'Socialtext::Rest::Collection';
 
+use Socialtext::Pluggable::Adapter;
 use Socialtext::HTTP ':codes';
 use Socialtext::Workspace;
 use Class::Field 'field';
@@ -46,6 +47,12 @@ sub _entities_for_query {
             $row->{From},
             $ws
         );
+        $row->{hidden} = 1;
+        if (Socialtext::Pluggable::Adapter->plugin_exists('people')) {
+            require Socialtext::People::Profile;
+            my $profile = Socialtext::People::Profile->GetProfile($user);
+            $row->{hidden} = $profile->is_hidden if $profile;
+        }
 
         push @changes, $row;
     }

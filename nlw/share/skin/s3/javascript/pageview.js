@@ -148,6 +148,7 @@ Page = {
                             ' ',
                             $('<a href="#" />')
                                 .html('<img src="/static/skin/common/images/delete.png" width="16" height="16" border="0" />')
+                                .addClass('delete_tag')
                                 .attr('name', tag.name)
                                 .attr('alt', loc('Delete this tag'))
                                 .attr('title', loc('Delete this tag'))

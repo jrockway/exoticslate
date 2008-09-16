@@ -111,13 +111,13 @@ sub export {
             name => $self->name,
             is_system_created => $self->is_system_created,
             skin_name => $self->skin_name,
-            users => $self->_users_as_hash,
+            users => $self->users_as_hash,
         }
     );
     return $export_file;
 }
 
-sub _users_as_hash {
+sub users_as_hash {
     my $self = shift;
     my $user_iter = $self->users( primary_only => 1 );
     my @users;

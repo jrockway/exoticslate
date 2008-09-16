@@ -102,6 +102,12 @@ sub header_in {
     }
 }
 
+sub current_page {
+  my $self = shift;
+
+  return $self->hub->pages->current;
+}
+
 sub current_workspace {
   my $self = shift;
   return $self->hub->current_workspace->name;

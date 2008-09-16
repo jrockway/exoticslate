@@ -70,8 +70,7 @@ CONF_TARGETS = apache-config      \
                apache-perl-config \
                apache2-config     \
                app-config         \
-               ssl-config	  \
-               html-config	  \
+               ssl-config
 
 # Directories to be installed
 DATA_ROOT_DIR    = $(PREFIX)@WEBROOT@
@@ -151,8 +150,6 @@ debian: install-dirs      \
 	install-bin       \
         install-appliance-bin \
         install-debian
-
-install-html: html-config
 
 install-debian:
 	$(MKDIR) $(ST_INSTALL_DIR)/debian/bin/

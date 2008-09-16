@@ -4,30 +4,30 @@ var t = new Test.Visual();
 
 t.plan(1);
 
-t.beginAsync(step1);
+t.runAsync([
+    function() {
+        t.login({}, t.nextStep());
+    },
 
-function step1() {
-    t.login({}, step2);
-}
+    function() {
+        t.create_anonymous_user_and_login({workspace: 'admin'}, t.nextStep());
+    },
 
-function step2() {
-    t.create_anonymous_user_and_login({workspace: 'admin'}, step3);
-}
+    function() {
+        t.open_iframe("/", t.nextStep());
+    },
 
-function step3() {
-    t.open_iframe("/", step4);
-};
-
-function step4() {
-    $(t.iframe).width(1000);
-    t.scrollTo(50);
-    var username = t.$("span.welcome div").text()
-        .replace(/^\s*(.*)\s*$/, '$1');
-    var expected = t.anonymous_username.replace(/@.*/, '');
-    t.is(username, expected,
-        'User name is correct (' + expected + ') when user has no name'
-    );
-    t.endAsync();
-};
+    function step4() {
+        $(t.iframe).width(1000);
+        t.scrollTo(50);
+        var username = t.$("span.welcome div").text()
+            .replace(/^\s*(.*)\s*$/, '$1');
+        var expected = t.anonymous_username.replace(/@.*/, '');
+        t.is(username, expected,
+            'User name is correct (' + expected + ') when user has no name'
+        );
+        t.endAsync();
+    }
+]);
 
 })(jQuery);

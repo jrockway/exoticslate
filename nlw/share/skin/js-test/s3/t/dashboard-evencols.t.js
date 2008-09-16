@@ -8,28 +8,28 @@ var t = new Test.Visual();
 
 t.plan(1);
 
-t.beginAsync(step1);
+t.runAsync([
+    function() {
+        t.open_iframe("/", t.nextStep());
+    },
 
-function step1() {
-    t.open_iframe("/", step2);
-}
+    function() {
+        var always_even = true;
+        for (var width = WIDTH_MIN; width <= WIDTH_MAX; width += WIDTH_INT) {
+            $(t.iframe).width(width);
+            t.scrollTo(t.$('#leftList').offset().top, width);
 
-function step2() {
-    var always_even = true;
-    for (var width = WIDTH_MIN; width <= WIDTH_MAX; width += WIDTH_INT) {
-        $(t.iframe).width(width);
-        t.scrollTo(t.$('#leftList').offset().top, width);
+            always_even = ( t.$('#leftList').offset().top ==
+                            t.$('#middleList').offset().top ) &&
+                          ( t.$('#middleList').offset().top ==
+                            t.$('#rightList').offset().top );
+            if (!always_even) break;
+        }
 
-        always_even = ( t.$('#leftList').offset().top ==
-                        t.$('#middleList').offset().top ) &&
-                      ( t.$('#middleList').offset().top ==
-                        t.$('#rightList').offset().top );
-        if (!always_even) break;
+        t.ok(always_even, "Column top is always aligned");
+
+        t.endAsync();
     }
-
-    t.ok(always_even, "Column top is always aligned");
-
-    t.endAsync();
-};
+]);
 
 })(jQuery);

@@ -9,26 +9,26 @@ var t = new Test.Visual();
 
 t.plan(2);
 
-t.beginAsync(step1);
+t.runAsync([
+    function() {
+        t.open_iframe("/admin/index.cgi?admin_wiki", t.nextStep());
+    },
 
-function step1() {
-    t.open_iframe("/admin/index.cgi?admin_wiki", step2);
-}
+    function() {
+        t.is(
+            t.$("#controlsRight ul li a.watch").size(),
+            1,
+            "There is a watch link under #controlsRight"
+        );
 
-function step2() {
-    t.is(
-        t.$("#controlsRight ul li a.watch").size(),
-        1,
-        "There is a watch link under #controlsRight"
-    );
+        t.is(
+            t.$("#controlsRight ul li a.revision").size(),
+            1,
+            "There is a revision link under #controlsRight"
+        );
 
-    t.is(
-        t.$("#controlsRight ul li a.revision").size(),
-        1,
-        "There is a revision link under #controlsRight"
-    );
-
-    t.endAsync();
-};
+        t.endAsync();
+    }
+]);
 
 })(jQuery);

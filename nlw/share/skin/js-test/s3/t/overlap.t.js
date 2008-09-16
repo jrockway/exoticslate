@@ -8,47 +8,47 @@ t.plan(1);
 var box2_vertical = 0;
 var box2_horizontal = 75;
 
-t.beginAsync(step1);
+t.runAsync([
+    function() {
+        t.open_iframe("../common/html/blank.html", t.nextStep());
+    },
 
-function step1() {
-    t.open_iframe("../common/html/blank.html", step2);
-}
+    function() {
+        $(t.iframe).height(300).width(300);
 
-function step2() {
-    $(t.iframe).height(300).width(300);
+        var $body = $(t.iframe.contentDocument.body);
+        var $box1 = window.$box1 = $('<div id="box1"></div>')
+            .width(100)
+            .height(100)
+            .css({
+                backgroundColor: 'blue',
+                position: 'absolute',
+                opacity: '0.5',
+                top: '100px',
+                left:'100px'
+            })
+            .appendTo($body);
 
-    var $body = $(t.iframe.contentDocument.body);
-    var $box1 = window.$box1 = $('<div id="box1"></div>')
-        .width(100)
-        .height(100)
-        .css({
-            backgroundColor: 'blue',
-            position: 'absolute',
-            opacity: '0.5',
-            top: '100px',
-            left:'100px'
-        })
-        .appendTo($body);
+        var $box2 = window.$box2 = $('<div id="box2"></div>')
+            .width(50)
+            .height(50)
+            .css({
+                backgroundColor: 'red',
+                opacity: '0.5',
+                position: 'absolute',
+                top: String((300 - 50) / 2 + box2_vertical) + 'px',
+                left: String((300 - 50) / 2 + box2_horizontal) + 'px',
+            })
+            .appendTo($body);
 
-    var $box2 = window.$box2 = $('<div id="box2"></div>')
-        .width(50)
-        .height(50)
-        .css({
-            backgroundColor: 'red',
-            opacity: '0.5',
-            position: 'absolute',
-            top: String((300 - 50) / 2 + box2_vertical) + 'px',
-            left: String((300 - 50) / 2 + box2_horizontal) + 'px',
-        })
-        .appendTo($body);
+        t.elements_do_not_overlap(
+            $box1,
+            $box2,
+            'elements_do_not_overlap() function works'
+        );
 
-    t.elements_do_not_overlap(
-        $box1,
-        $box2,
-        'elements_do_not_overlap() function works'
-    );
-
-    t.endAsync();
-};
+        t.endAsync();
+    }
+]);
 
 })(jQuery);

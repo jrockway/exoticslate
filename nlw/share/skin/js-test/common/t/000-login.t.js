@@ -4,15 +4,15 @@ var t = new Test.Visual();
 
 t.plan(1);
 
-t.beginAsync(login);
+t.runAsync([
+    function() {
+        t.login({}, t.nextStep());
+    },
 
-function login() {
-    t.login({}, complete);
-}
-
-function complete() {
-    t.pass('Logged in...');
-    t.endAsync();
-}
+    function() {
+        t.pass('Logged in...');
+        t.endAsync();
+    }
+]);
 
 })();

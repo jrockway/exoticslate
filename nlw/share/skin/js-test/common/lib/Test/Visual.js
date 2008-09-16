@@ -34,11 +34,8 @@ proto.diag = function() {
     this.builder.diag.apply(this.builder, arguments);
 }
 
-proto.runAsync = function(args) {
-    if (args.plan)
-        this.plan(args.plan);
-
-    this.asyncSteps = args.steps;
+proto.runAsync = function(steps) {
+    this.asyncSteps = steps;
     this.asyncStep = 0;
 
     this.beginAsync(this.nextStep()); 

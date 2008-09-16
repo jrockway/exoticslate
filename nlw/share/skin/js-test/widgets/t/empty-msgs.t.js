@@ -2,6 +2,8 @@
 
 var t = new Test.Visual();
 
+t.plan(7);
+
 var asyncSteps = [
     function() { t.login({}, t.nextStep()) }, 
     function() { t.create_anonymous_user_and_login({}, t.nextStep()) }, 
@@ -97,9 +99,6 @@ for (var i = 0, l = testData.length; i < l; i++) {
 
 asyncSteps.push(function() { t.login({}); t.endAsync() });
 
-t.runAsync({
-    plan: 7,
-    steps: asyncSteps
-});
+t.runAsync(asyncSteps);
 
 })(jQuery);

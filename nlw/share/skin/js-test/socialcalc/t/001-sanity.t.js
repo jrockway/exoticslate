@@ -1,22 +1,22 @@
 (function() {
 
-var t = tt = new Test.Visual();
+var t = new Test.Visual();
 
 t.plan(1);
 
-t.beginAsync(step1);
+t.runAsync([
+    function() {
+        t.open_iframe("/admin/index.cgi?admin_wiki", t.nextStep());
+    },
 
-function step1() {
-    t.open_iframe("/admin/index.cgi?admin_wiki", step2);
-}
+    function() {
+        t.ok(
+            t.$("#st-pagetools-newspreadsheet").length,
+            "SocialCalc is enabled for the admin workspace"
+        );
 
-function step2() {
-    t.ok(
-        t.$("#st-pagetools-newspreadsheet").length,
-        "SocialCalc is enabled for the admin workspace"
-    );
-
-    t.endAsync();
-}
+        t.endAsync();
+    }
+]);
 
 })();

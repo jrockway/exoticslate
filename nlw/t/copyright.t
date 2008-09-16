@@ -1,11 +1,8 @@
 #!perl
 # @COPYRIGHT@
-
 # Tests that all source code has copyright, or the @COPYRIGHT@ macro, in it
-
 use warnings;
 use strict;
-
 use Test::More;
 use File::Slurp qw( read_file );
 

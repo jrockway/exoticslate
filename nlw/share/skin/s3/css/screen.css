@@ -1632,6 +1632,9 @@ div#contentContainer h2.tableTitle {
 .widget .widgetContent ul li {
     border-bottom:1px #e8e8e8 solid;
 }
+.widget .widgetContent td input.text {
+    width: 140px;
+}
 
 /* People list classes
 -------------------------------------------------------------- */

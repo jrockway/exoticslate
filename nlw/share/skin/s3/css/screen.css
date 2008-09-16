@@ -1034,7 +1034,7 @@ div#mainNav ul.level2 li a {
 
 div#mainNav ul.level2 li.dropaction a {
     font-weight: bold;
-    font-size: 9px;
+    font-size: 10px;
 }
 
 div#mainNav li {
@@ -1105,7 +1105,7 @@ div#mainNav .emptynotice {
 /* alterations to main nav bar to account for new workspace nav bar
 ------------------------------------------------------------ */
 div#header {
-    height:auto;
+    height:60px;
     min-height:60px;
 }
 div#header div#globalNav div {

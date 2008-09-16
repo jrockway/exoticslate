@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Test::More;
 use Socialtext::File qw/get_contents/;
+use FindBin;
 
 my $schema_dir  = "$FindBin::Bin/../etc/socialtext/db/";
 my $schema_file = "$schema_dir/socialtext-schema.sql";

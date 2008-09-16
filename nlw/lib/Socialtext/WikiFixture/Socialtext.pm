@@ -74,7 +74,8 @@ sub init {
     my $short_username = $self->{'username'};
     $short_username=~/(^[\W\w\.]*\@)/;
     $short_username = substr($1, 0, length($1)-1);
-    $self->{'short_userame'} = $short_username;
+    $self->{'short_username'} = $short_username;
+    
     
     $self->SUPER::init;
 

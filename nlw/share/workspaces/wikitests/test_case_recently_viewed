@@ -43,6 +43,10 @@
 | select_and_wait | sort-picker | index=1 |
 | text_like | st-breadcrumbs-content | qr/rv_page_3_%%start_time%%.+rv_page_2_%%start_time%%.+rv_page_1_%%start_time%%/ |
 
+| *Comment* | Test Case: Recently Viewed Sorting Last Edited By |
+| select_and_wait | sort-picker | label=Last Edited By |
+| select_and_wait | sort-picker | index=2 |
+
 | *Comment* | Test Case: Recently Viewed Sorting Date |
 | select_and_wait | sort-picker | label=Date |
 | text_like | st-breadcrumbs-content | qr/rv_page_3_%%start_time%%.+rv_page_2_%%start_time%%.+rv_page_1_%%start_time%%/ |

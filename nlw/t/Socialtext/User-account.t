@@ -4,8 +4,7 @@ use warnings;
 use strict;
 
 use Test::More tests => 31;
-use lib 't';
-use Socialtext::st_admin;
+use t::Socialtext::st_admin;
 
 use Socialtext::User;
 use Socialtext::Account;

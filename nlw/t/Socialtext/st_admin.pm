@@ -1,4 +1,4 @@
-package Socialtext::st_admin;
+package t::Socialtext::st_admin;
 # @COPYRIGHT@
 use warnings;
 use strict;

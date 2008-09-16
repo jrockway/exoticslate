@@ -81,7 +81,7 @@ sub _make_getter {
                     # REVIEW: should eval this for errors
                     Socialtext::Timer->Start('get_resource');
                     my $resource = $self->get_resource($rest);
-                    Socialtext::Timer->Start('get_resource');
+                    Socialtext::Timer->Stop('get_resource');
                     $resource = [] unless @$resource; # protect against weird data
                     $rest->header(
                         -status        => HTTP_200_OK,

@@ -11,7 +11,7 @@ my $legit_email = 'devnull1@socialtext.com';
 
 # Email addresses of non-users should still format in to _something_.
 emails_always_format_even_if_nonuser: {
-    formatted_like "{user: $bogus_email}", qr(>\Q$bogus_email\E</a>);
+    formatted_like "{user: $bogus_email}", qr(>\Q$bogus_email\E</span>);
 }
 
 # Make sure we get a suitable full name for a normal user, and don't just

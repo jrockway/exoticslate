@@ -1102,17 +1102,38 @@ div#mainNav .emptynotice {
     padding-bottom: 5px !important;
 }
 
-/* Workspace submenu */
+/* alterations to main nav bar to account for new workspace nav bar
+------------------------------------------------------------ */
+div#header {
+    height:auto;
+    min-height:60px;
+}
+div#header div#globalNav div {
+    margin-top:10px;
+}
+div#header div#logo {
+    top:13px;
+}
+div#st-display-mode-container {
+    margin-top:0;
+}
+div#mainNav {
+    margin-bottom:8px;
+    margin-top:0;
+    clear:both;
+}
+/* Workspace submenu 
+------------------------------------------------------------ */
 #workspaceContainer {
     margin:0 1em 0 1em;
     padding:0;
-    background:#ccc url(../images/wsTile.png) repeat-x scroll left bottom;
+    background:#ccc url(../images/wsTile.png) repeat-x scroll left top;
 }
 #workspaceNav {
-    margin:0 0 0.8em 0;
+    margin:0.8em 0 0 0;
     padding:6px 1em 7px 1em;
-    border-top:none;
-    background:transparent url(../images/wsLeft.png) no-repeat scroll left bottom;
+    border-bottom:none;
+    background:transparent url(../images/wsLeft.png) no-repeat scroll left top;
     position:relative;
 }
 #workspaceNav ul {
@@ -1139,7 +1160,7 @@ div#mainNav .emptynotice {
     right:0;
     top:0;
     padding:6px 12px 7px 12px;
-    background:transparent url(../images/wsRight.png) no-repeat scroll right bottom;
+    background:transparent url(../images/wsRight.png) no-repeat scroll right top;
     font-weight:bold;
 }
 

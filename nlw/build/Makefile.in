@@ -66,12 +66,12 @@ INSTALL_PKGS_TARGETS = install-pkgs-dapper \
                        install-pkgs-dapper-dev
 
 # Configuration targets for $(GENCONFIG)
-CONF_TARGETS = html \
-	       apache-config      \
+CONF_TARGETS = apache-config      \
                apache-perl-config \
                apache2-config     \
                app-config         \
-               ssl-config
+               ssl-config	  \
+               html-config	  \
 
 # Directories to be installed
 DATA_ROOT_DIR    = $(PREFIX)@WEBROOT@
@@ -151,6 +151,8 @@ debian: install-dirs      \
 	install-bin       \
         install-appliance-bin \
         install-debian
+
+install-html: html-config
 
 install-debian:
 	$(MKDIR) $(ST_INSTALL_DIR)/debian/bin/

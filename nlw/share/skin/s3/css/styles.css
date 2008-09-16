@@ -939,10 +939,6 @@ body#dashBoard div#contentColumns div#contentLeft p {
 }
 
 div#contentColumns div#contentLeft em {
-	font-size: 10px;
-	color: #000000;
-	line-height: 18px;
-	margin-top: 20px;
 	font-style: italic;
 }
 

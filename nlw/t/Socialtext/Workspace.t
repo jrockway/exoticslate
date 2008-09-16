@@ -739,11 +739,7 @@ sub check_errors {
             like $errors, $regex, "got error message matching $regex";
     }
 
- TODO:
-    {
-        local $TODO = 'Skins are not yet checked';
-        my $regex = qr/skin you specified/;
-        ok( ( grep {/$regex/} $e->messages ),
-            "got error message matching $regex" );
-    }
+    my $regex = qr/skin you specified/;
+    ok( ( grep {/$regex/} $e->messages ),
+        "got error message matching $regex" );
 }

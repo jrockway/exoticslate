@@ -16,5 +16,5 @@ use Test::Socialtext::CGIOutput;
         new_hub('admin'), 'display', 'display');
 
     is($error, '', 'edit page load succeeds');
-    like($html, qr/title\">.*Edit in Place Phase 0\b/s, "proper title for page");
+    like($html, qr/title>.*Edit in Place Phase 0\b/s, "proper title for page");
 }

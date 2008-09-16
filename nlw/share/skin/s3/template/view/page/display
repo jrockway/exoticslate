@@ -168,7 +168,7 @@
                 width="16" height="16" border="0" alt="[% loc('Extract this attachment') %]" title="[% loc('Extract this attachment') %]"
             /></a>
             [% END %]
-            <a href="#" onclick="$(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif'); Attachments.delAttachment($(this).prevAll('a[href!=#]').attr('href'), true); return false"><img
+            <a href="#" title="[% loc('Delete this attachment') %]" onclick="$(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif'); Attachments.delAttachment($(this).prevAll('a[href!=#]').attr('href'), true); return false"><img
                 src="/static/skin/common/images/delete.png"
                 width="16" height="16" border="0" alt="[% loc('Delete this attachment') %]" title="[% loc('Delete this attachment') %]"
             /></a>

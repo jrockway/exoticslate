@@ -2,8 +2,8 @@
 # @COPYRIGHT@
 use warnings;
 use strict;
-
-use Test::More tests => 31;
+use Test::Socialtext tests => 31;
+fixtures('db');
 use t::Socialtext::st_admin;
 
 use Socialtext::User;

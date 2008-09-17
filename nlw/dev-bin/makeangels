@@ -50,6 +50,11 @@ st_admin('create-account --name Limbo');
 st_admin('enable-plugin --plugin people --account Angel');
 st_admin('enable-plugin --plugin people --account Demon');
 
+# Turn on dashboard to make it possible to click around when doing tests
+st_admin('enable-plugin --plugin dashboard --account Angel');
+st_admin('enable-plugin --plugin dashboard --account Demon');
+st_admin('enable-plugin --plugin dashboard --account Limbo');
+
 # Create workspaces for the various accounts
 st_admin('create-workspace --name wksp1 --title wksp1 --account Angel');
 st_admin('create-workspace --name wksp2 --title wksp2 --account Angel');

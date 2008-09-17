@@ -626,6 +626,11 @@ it has any workspaces.
 
 Returns the given attribute for the account.
 
+=item $account->users_as_hash()
+
+Returns a list of all the users for whom this is their primary account
+as a hash, suitable for serializing.
+
 =item $account->workspace_count()
 
 Returns a count of workspaces for this account.

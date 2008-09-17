@@ -41,5 +41,4 @@
     </div><!-- columnColumns END -->
     <div class="clear"></div><!-- clear END -->
 </div><!-- contentContainer END -->
-<script>gadgets.util.runOnLoadHandlers()</script>
 [% END %]

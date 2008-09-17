@@ -779,7 +779,7 @@ proto.saveButtonHandler = function() {
 
 proto.saveNewPage = function() {
     var new_page_name = jQuery('#st-newpage-pagename-edit').val();
-    if (! is_reserved_pagename(new_page_name)) {
+    if (trim(new_page_name).length > 0 && ! is_reserved_pagename(new_page_name)) {
         if (this.active_page_exists(new_page_name)) {
             jQuery('#st-page-editing-pagename').val(new_page_name);
             return this.newpage_saveClicked();

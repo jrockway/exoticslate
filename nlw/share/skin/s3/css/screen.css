@@ -1688,3 +1688,45 @@ td.peoplelist-desc-td {
 .widgetTan {
     background-color:#fff ! important;
 }
+
+/* Login page */
+body#loginPage div#contentContainer {
+    padding-top: 10px;
+}
+
+/* Workspace List (which also appears on Login page) */
+body#workspaceListPage div#contentColumns, body#loginPage div#contentColumns {
+    padding: 5px 0;
+}
+body#workspaceListPage div#contentColumns div#contentLeft, body#loginPage div#contentColumns div#contentLeft {
+    width: 40%;
+}
+body#workspaceListPage div#contentColumns div#contentRight, body#loginPage div#contentColumns div#contentRight {
+    width: 58%;
+    float: left;
+    padding-left: 10px;
+    border-left: 2px dashed #dedede;
+}
+body#workspaceListPage div#controls, body#loginPage div#controls {
+    height: 44px;
+    background: url(../images/contentControlsTile.png) repeat-x top left;
+}
+body#workspaceListPage div#controls div#st-editing-tools-edit, body#loginPage div#controls div#st-editing-tools-edit {
+    background: url(../images/contentControlsLeft.png) no-repeat top left;
+    height: 44px;
+    padding-left: 8px;
+}
+body#workspaceListPage div#controls div#controlsRight, body#loginPage div#controls div#controlsRight {
+    background: url(../images/contentControlsRight.png) no-repeat top right;
+    height: 44px;
+}
+
+/* Errors and Messages */
+div#contentContainer div#errors-and-messages {
+    margin: 0 20px 5px 0;
+    padding: 10px;
+    background-color: #fbffbe;
+    border: 1px solid #dedede;
+    font-weight: bold;
+    text-align: center;
+}

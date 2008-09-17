@@ -4,8 +4,30 @@
 use warnings;
 use strict;
 
-use Test::Socialtext tests => 16;
+use Test::Socialtext tests => 18;
 use Socialtext::RevisionPlugin;
+
+my @before_tags = qw( aaa bbb ccc );
+my @after_tags = qw( aaa ccc );
+
+my $diff = Socialtext::SideBySideDiff->new();
+
+my $text = $diff->_tag_diff(
+    old_tags => \@before_tags,
+    new_tags => \@after_tags,
+    highlight_class => 'before',
+);
+is $text, 'aaa, ccc', 'missing tag does not show up'; 
+
+$text = $diff->_tag_diff(
+    new_tags => \@before_tags,
+    old_tags => \@after_tags,
+    highlight_class => 'after',
+);
+is 
+    $text, 
+    "aaa, <span class='after'>bbb</span>, ccc", 
+    'deleted tag highlighted properly'; 
 
 run {
     my $case = shift;

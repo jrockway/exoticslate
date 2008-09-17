@@ -137,7 +137,7 @@ field 'before_page';
 field 'after_page';
 field 'hub';
 
-sub tag_diff {
+sub _tag_diff {
     my $self = shift;
     my %p = (
         old_tags => [],
@@ -173,12 +173,12 @@ sub header {
             revision_id => $page->revision_id,
         );
         $col{tags} = ($page == $self->before_page) ? 
-            $self->tag_diff(
+            $self->_tag_diff(
                 old_tags =>$tags{$self->after_page}, 
                 new_tags => $tags{$self->before_page},
                 highlight_class => 'st-revision-compare-old',
             ) :
-            $self->tag_diff(
+            $self->_tag_diff(
                 new_tags =>$tags{$self->after_page}, 
                 old_tags => $tags{$self->before_page},
                 highlight_class => 'st-revision-compare-new',

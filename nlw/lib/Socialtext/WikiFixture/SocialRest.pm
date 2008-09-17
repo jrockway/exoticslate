@@ -3,6 +3,7 @@ package Socialtext::WikiFixture::SocialRest;
 use strict;
 use warnings;
 use base 'Socialtext::WikiFixture';
+use base 'Socialtext::WikiFixture::SocialBase';
 use Test::HTTP;
 use Test::More;
 use Socialtext::WikiFixture::Socialtext;
@@ -350,6 +351,19 @@ sub _delete {
             $self->{http}->delete( $self->{browser_url} . $uri, $opts );
 }
 
+sub edit_page {
+    my $self = shift;
+    my $workspace = shift;
+    my $page_name = shift;
+    my $content = shift;
+    $self->put("/data/workspaces/$workspace/pages/$page_name",
+        'Accept=text/html,Content-Type=text/x.socialtext-wiki',
+        $content,
+    );
+    my $code = $self->{http}->response->code;
+    ok( $code == 201 or $code == 204, "Code is $code");
+    diag "Edited page [$page_name]/$workspace";
+}
 
 =head1 AUTHOR
 

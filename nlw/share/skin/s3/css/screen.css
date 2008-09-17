@@ -970,6 +970,7 @@ div#st-ref-card .buttons {
     margin-top: 0px;
     position: absolute;
     right: 25px;
+    top: 10px;
 }
 
 .st-refcard-table, .st-refcard-table table, .st-refcard-table th, .st-refcard-table td {

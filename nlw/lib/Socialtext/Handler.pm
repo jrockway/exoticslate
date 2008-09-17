@@ -118,6 +118,7 @@ sub render_template {
     my $r        = shift;
     my $template = shift;
     my $vars     = shift || {};
+    my $paths    = $vars->{paths} || [];
 
     my $renderer = Socialtext::TT2::Renderer->instance;
     eval {
@@ -127,6 +128,7 @@ sub render_template {
                   $renderer->render(
                                     template => $template,
                                     vars     => $vars,
+                                    paths    => $paths,
                                    )
                  );
     };

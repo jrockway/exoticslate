@@ -586,7 +586,7 @@ PARAMS can be I<one> of:
 
 =back
 
-=item Socialtext::->create(PARAMS)
+=item Socialtext::Account->create(PARAMS)
 
 Attempts to create a account with the given information and returns a
 new C<Socialtext::Account> object representing the new account.
@@ -600,6 +600,10 @@ PARAMS can include:
 =item * is_system_created
 
 =back
+
+=item Socialtext::Account->Resolve( $id_or_name )
+
+Looks up the account either by the account id or the name.
 
 =item $account->update(PARAMS)
 

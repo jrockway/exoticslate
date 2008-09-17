@@ -1,3 +1,4 @@
+[% USE html_encode %]
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
     <head>
@@ -7,17 +8,17 @@
         <script>
             var msgs = [% as_json(messages) %];
             function load_content () {
-                jQuery.get(
-                    "/data/gadget/instance/[% id %]/html",
-                    function (html) {
-                        jQuery('body').append(html);
-                        gadgets.util.runOnLoadHandlers()
-                    }
-                );
+                jQuery(function () {
+                    jQuery('body').append(
+                        jQuery('#encoded-content').text()
+                    )
+                    gadgets.util.runOnLoadHandlers();
+                });
             }
         </script>
     </head>
     <body onLoad="document.loaded=true;">
+        <div id="encoded-content" style="display:none">[% content | html_encode %]</div>
         [% INCLUDE element/js_loader
             scripts = features
             oncomplete = "load_content()"

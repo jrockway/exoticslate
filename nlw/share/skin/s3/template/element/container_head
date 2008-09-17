@@ -3,7 +3,3 @@
 <script>
     var containerID = "[% container.id %]";
 </script>
-
-[% INCLUDE element/js_loader
-    scripts = container.features
-%]

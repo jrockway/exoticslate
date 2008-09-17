@@ -11,5 +11,9 @@
         [% END %]
     </div>
 </div><!-- widgetContainer END -->
-<script>gadgets.util.runOnLoadHandlers()</script>
+
+[% INCLUDE element/js_loader
+    scripts = container.features
+%]
+
 [% END %]

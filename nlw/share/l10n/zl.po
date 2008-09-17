@@ -22,7 +22,7 @@ msgstr "%1 - ATOM SEARCH FR %2"
 #: lib/Socialtext/SearchPlugin.pm
 #. (
 msgid "%1 - RSS Search for %2"
-msgstr "%1 - RSZ SEARCH 4 %2"
+msgstr "%1 - RSZ SEARCH FOR %2"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -37,7 +37,7 @@ msgstr "%1 ACCOUNT USUJ REPORT"
 #: lib/Socialtext/WeblogPlugin.pm
 #. (
 msgid "%1 Weblog"
-msgstr "%1 WEBLOG.  KTHXBYE!"
+msgstr "%1 WEBLOG"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -62,12 +62,12 @@ msgstr "%1 AZ WEBLOG"
 #: lib/Socialtext/Page.pm
 #. (
 msgid "%1 days"
-msgstr "%1 DAYZ"
+msgstr "%1 DAYZ.  KTHX."
 
 #: lib/Socialtext/Formatter/WaflPhrase.pm
 #. (
 msgid "%1 does not have any headers."
-msgstr "%1 DOEZ NOT HAVE ANY HEADERZ.  KTHX."
+msgstr "%1 DOEZ NOT HAVE ANY HEADERZ."
 
 #: lib/Socialtext/Page.pm
 #. (
@@ -77,12 +77,12 @@ msgstr "%1 HOURZ"
 #: lib/Socialtext/User/Default/Factory.pm
 #. (
 msgid "%1 is a required field."
-msgstr "%1 AR REQUIRED FIELD."
+msgstr "%1 AR TEH REQUIRED FIELD."
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #. (
 msgid "%1 is not a valid archive filename. Skin files must end with .zip, .tar.gz or .tgz."
-msgstr "%1 AR TEH NOT VALID ARCHIVE FILENAME. SKIN FILEZ MUST END WITH .ZIP, .TAR.GZ OR .TGZ."
+msgstr "%1 AR NOT VALID ARCHIVE FILENAME. SKIN FILEZ MUST END WITH .ZIP, .TAR.GZ OR .TGZ."
 
 #: lib/Socialtext/User/Default/Factory.pm
 #. (
@@ -107,12 +107,12 @@ msgstr "%1 MINUTEZ"
 #: lib/Socialtext/Page.pm
 #. (
 msgid "%1 months"
-msgstr "%1 MONTHZ"
+msgstr "%1 MONTHZ.  KTHXBYE!"
 
 #: lib/Socialtext/Page.pm
 #. (
 msgid "%1 seconds"
-msgstr "%1 SECONDZ"
+msgstr "%1 SECONDZ.  KTHXBYE!"
 
 #: lib/Socialtext/Page.pm
 #. (
@@ -137,12 +137,12 @@ msgstr "%1: ALL REVISHUNZ"
 #: lib/Socialtext/SyndicatePlugin.pm
 #. (
 msgid "%1: search for %2"
-msgstr "%1: SEARCH FR %2"
+msgstr "%1: SEARCH FOAR %2"
 
 #: lib/Socialtext/SyndicatePlugin.pm
 #. (
 msgid "%1: watchlist for %2"
-msgstr "%1: WATCHLIST FOAR %2"
+msgstr "%1: WATCHLIST FR %2"
 
 #: share/skin/s2/template/element/page/details share/skin/s2/template/view/page/display
 #. (
@@ -152,12 +152,12 @@ msgstr "%QUANT(%1,REVISHUN)"
 #: share/skin/s2/template/element/page/details share/skin/s2/template/element/page/details
 #. (
 msgid "%quant(%1,view)"
-msgstr "%QUANT(%1,VIEW)"
+msgstr "%QUANT(%1,VIEW).  KTHXBYE!"
 
 #: lib/Socialtext/Workspace.pm
 #. (
 msgid "'%1' is a reserved workspace name and cannot be used."
-msgstr "%1 AR TEH RESERVED WORKSPACE NAME AND CANNOT BE USED."
+msgstr "%1 AR RESERVED WORKSPACE NAME AND CANNOT BE USED."
 
 #: lib/Socialtext/CLI.pm
 #. (
@@ -172,7 +172,7 @@ msgstr "(CONTACT < HREF=\"MAILTO:SUPPORT@SOCIALTEXT.COM\">SOCIALTEXT SUPPORT</> 
 #: share/console-template/template/setup.html
 #.  
 msgid "(leave blank to use appliance's built-in SMTP server)"
-msgstr "(LEAVE BLANK 2 USE APPLIANCEZ BUILT-IN SMTP SERVR)"
+msgstr "(LEAVE BLANK TO USE APPLIANCEZ BUILT-IN SMTP SERVR).  KTHXBYE!"
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
@@ -207,7 +207,7 @@ msgstr "+0400 DELTA/USSR ZONE 3"
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "+0500 Echo/USSR Zone 4"
-msgstr "+0500 ECHO/USSR ZONE 4.  KTHX."
+msgstr "+0500 ECHO/USSR ZONE 4"
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
@@ -217,22 +217,22 @@ msgstr "+0530 INDIAN"
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "+0600 Foxtrot/USSR Zone 5"
-msgstr "+0600 FOXTROT/USSR ZONE 5"
+msgstr "+0600 FOXTROT/USSR ZONE 5.  KTHXBYE!"
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "+0700 Golf/USSR Zone 6"
-msgstr "+0700 GOLF/USSR ZONE 6.  KTHXBYE!"
+msgstr "+0700 GOLF/USSR ZONE 6"
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "+0800 Western Australian, China Coast"
-msgstr "+0800 WESTERN AUSTRALIAN, CHINA COAST.  KTHX."
+msgstr "+0800 WESTERN AUSTRALIAN, CHINA COAST"
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "+0900 Japan, Korean"
-msgstr "+0900 JAPAN, KOREAN.  KTHXBYE!"
+msgstr "+0900 JAPAN, KOREAN.  KTHX."
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
@@ -252,7 +252,7 @@ msgstr "+1100 LIMA"
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "+1200 International Date Line East"
-msgstr "+1200 INTERNASHUNAL DATE LINE EAST.  KTHXBYE!"
+msgstr "+1200 INTERNASHUNAL DATE LINE EAST"
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
@@ -272,7 +272,7 @@ msgstr "-0200 OSCAR"
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "-0300 Greenland"
-msgstr "-0300 GREENLAND.  KTHXBYE!"
+msgstr "-0300 GREENLAND.  KTHX."
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
@@ -302,7 +302,7 @@ msgstr "-0700 MOUNTAIN"
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "-0800 Pacific"
-msgstr "-0800 PACIFIC"
+msgstr "-0800 PACIFIC.  KTHX."
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
@@ -322,7 +322,7 @@ msgstr "-1100 NUM"
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "-1200 International Date Line West"
-msgstr "-1200 INTERNASHUNAL DATE LINE WEST"
+msgstr "-1200 INTERNASHUNAL DATE LINE WEST.  KTHXBYE!"
 
 #: share/template/control/report.html
 #.  
@@ -342,7 +342,7 @@ msgstr "1 WEEK"
 #: share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "<Your personal message goes here.>"
-msgstr "<UR PERSONAL MESSUJ GOEZ HERE.>"
+msgstr "<YOAR PERSONAL MESSUJ GOEZ HERE.>.  KTHX."
 
 #: share/skin/s2/template/view/refcard
 #.  
@@ -357,22 +357,22 @@ msgstr "< HREF=\"./PROPOSAL.PDF\">PROPOSAL.PDF</> ON THIZ PUJ"
 #: share/skin/s2/template/workspaces_created_section.html
 #. (
 msgid "<a href=\"/%1/?action=users_invitation\">Invite</a> other people to %2."
-msgstr "< HREF=\"/%1/?ACSHUN=USERS_INVITASHUN\">INVITE</> UDDR PEOPLE TO %2."
+msgstr "< HREF=\"/%1/?ACSHUN=USERS_INVITASHUN\">INVITE</> UDDR PEOPLE T %2."
 
 #: share/skin/s2/template/workspaces_created_section.html
 #. (
 msgid "<a href=\"/%1/\">Go to</a> the %2 home page."
-msgstr "< HREF=\"/%1/\">GO TO</> TEH %2 HUM PUJ.  KTHX."
+msgstr "< HREF=\"/%1/\">GO TO</> TEH %2 HUM PUJ."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "<a href=\"/help-en/index.cgi?socialtext_style_customization_guide\">Socialtext Style Customization Guide</a>"
-msgstr "< HREF=\"/HELP-EN/INDEX.CGI?SOCIALTEXT_STYLE_CUSTOMIZASHUN_GUIDE\">SOCIALTEXT STYLE CUSTOMIZASHUN GUIDE</>.  KTHX."
+msgstr "< HREF=\"/HELP-EN/INDEX.CGI?SOCIALTEXT_STYLE_CUSTOMIZASHUN_GUIDE\">SOCIALTEXT STYLE CUSTOMIZASHUN GUIDE</>"
 
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "<a href=\"?action=users_invitation\">Invite your colleagues<b></b></a> to this workspace."
-msgstr "< HREF=\"?ACSHUN=USERS_INVITASHUN\">INVITE YUR COLLEAGUEZ<B></B></> T THIZ WORKSPACE."
+msgstr "< HREF=\"?ACSHUN=USERS_INVITASHUN\">INVITE YOAR COLLEAGUEZ<B></B></> TO THIZ WORKSPACE."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -382,7 +382,7 @@ msgstr "< HREF=\"HTTP://WWW.SOCIALTEXT.NET/OPEN/INDEX.CGI?CSS_KIT\">SKIN CUSTOMI
 #: lib/Socialtext/FavoritesPlugin.pm
 #.  
 msgid "<p>This is where you set the title of the page you would like to see in the \"Your Notepad\" panel.</p><p>Some choose to use an existing page, and others make a new page, such as \"Rupert Jee's Notepad\".</p>"
-msgstr "<P>THIZ AR TEH WHERE U SET TEH TITLE OF TEH PUJ U WOULD LIKEZ 2 SEE IN TEH \"YOAR NOTEPAD\" PANEL.</P><P>SUM CHOOSE TO USE AN EXISTIN PUJ, AND UDDERZ MAKE NEW PUJ, SUCH AZ \"RUPERT JEEZ NOTEPAD\".</P>"
+msgstr "<P>THIZ AR WHERE YU SET TEH TITLE OV TEH PUJ YOUZ WOULD LIEK 2 SEE IN TEH \"YUR NOTEPAD\" PANEL.</P><P>SUM CHOOSE TO USE AN EXISTINS PUJ, AND UDDERZ MAKE NEW PUJ, SUCH AZ \"RUPERT JEEZ NOTEPAD\".</P>"
 
 #: share/skin/s2/template/view/refcard
 #.  
@@ -392,12 +392,12 @@ msgstr "<U>LINK TO SECSHUN</U> IN TEH SAME PUJ"
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "<u>Link to section</u> of a different page"
-msgstr "<U>LINK T SECSHUN</U> OF DIFFERENT PUJ"
+msgstr "<U>LINK T SECSHUN</U> OV DIFFERENT PUJ"
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "<u>Link to section</u> of a page in another workspace"
-msgstr "<U>LINK 2 SECSHUN</U> OV PUJ IN ANUDDR WORKSPACE"
+msgstr "<U>LINK TO SECSHUN</U> OF PUJ IN ANUDDR WORKSPACE"
 
 #: share/skin/s2/template/view/refcard
 #.  
@@ -407,7 +407,7 @@ msgstr "<U>PUJ LINK</U> TO DIFFERENT-WORKSPACE"
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
 msgid "A custom skin file was not uploaded."
-msgstr " CUSTOM SKIN FILE WAZ NOT UPLOADED.  KTHX."
+msgstr " CUSTOM SKIN FILE WAZ NOT UPLOADED."
 
 #: share/skin/s2/template/element/settings/users_invite_search_section
 #.  
@@ -422,17 +422,17 @@ msgstr " FILTR HAZ BEEN SET ON THIZ WORKSPACE. ALL CANDIDATE EMAIL ADDRESSEZ MUS
 #: lib/Socialtext/EditPlugin.pm
 #.  
 msgid "A page must have a body to be saved."
-msgstr " PUJ MUST HAVE BODY T BE SAVED."
+msgstr " PUJ MUST HAVE BODY T BE SAVED.  KTHX."
 
 #: lib/Socialtext/EditPlugin.pm
 #.  
 msgid "A page must have a title to be saved."
-msgstr " PUJ MUST HAVE TITLE 2 BE SAVED."
+msgstr " PUJ MUST HAVE TITLE TO BE SAVED.  KTHX."
 
 #: lib/Socialtext/User/Default/Factory.pm
 #.  
 msgid "A password is required to create a new user."
-msgstr " PASSWORD AR TEH REQUIRED 2 CREATE NEW USR."
+msgstr " PASSWORD AR TEH REQUIRED T CREATE NEW USR."
 
 #: lib/Socialtext/Handler/Authen.pm
 #. (
@@ -457,12 +457,12 @@ msgstr "AOL USR AIM:AIMUSR PRESENCE"
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "AOL user aimuser presence"
-msgstr "AOL USR AIMUSR PRESENCE.  KTHX."
+msgstr "AOL USR AIMUSR PRESENCE"
 
 #: lib/Socialtext/AppConfig.pm
 #.  
 msgid "Access a Community of Peers"
-msgstr "ACCESZ COMMUNITY OV PEERZ"
+msgstr "ACCESZ COMMUNITY OF PEERZ.  KTHX."
 
 #: share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
 #.  
@@ -477,12 +477,12 @@ msgstr "ACCOUNT NAME AR TEH REQUIRED FIELD."
 #: lib/Socialtext/Handler/ControlPanel.pm share/template/control/wrapper
 #.  
 msgid "Accounts"
-msgstr "ACCOUNTZ.  KTHX."
+msgstr "ACCOUNTZ"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "Accounts matching \"%1\""
-msgstr "ACCOUNTZ MATCHIN \"%1\""
+msgstr "ACCOUNTZ MATCHINS \"%1\""
 
 #: share/skin/s2/template/popup/email_page
 #.  
@@ -497,7 +497,7 @@ msgstr "ADD ADMINISTRATOR"
 #: share/console-template/template/setup.html
 #.  
 msgid "Add Appliance Administrators"
-msgstr "ADD APPLIANCE ADMINISTRATORZ"
+msgstr "ADD APPLIANCE ADMINISTRATORZ.  KTHX."
 
 #: share/skin/s2/template/element/page/tag_queue_interface
 #.  
@@ -517,7 +517,7 @@ msgstr "ADD&NBSP;TAG"
 #: share/skin/s2/template/layout/edit_wikiwyg
 #.  
 msgid "Add&nbsp;tags..."
-msgstr "ADD&NBSP;TAGZ.."
+msgstr "ADD&NBSP;TAGZ...  KTHX."
 
 #: share/skin/s2/template/element/settings/users_listall_section
 #.  
@@ -532,7 +532,7 @@ msgstr "ADMINISTRATOR NOTIFICASHUN"
 #: share/skin/s2/template/element/page/edit
 #.  
 msgid "Advanced"
-msgstr "ADVANCED"
+msgstr "ADVANCED.  KTHXBYE!"
 
 #: lib/Socialtext/AttachmentsUIPlugin.pm share/skin/s2/template/element/listview/actionbar
 #.  
@@ -557,7 +557,7 @@ msgstr "ALL PUJZ IN %1"
 #: share/skin/s2/template/element/page/revision_compare_actions share/skin/s2/template/view/page_revision_list
 #.  
 msgid "All Revisions"
-msgstr "ALL REVISHUNZ"
+msgstr "ALL REVISHUNZ.  KTHX."
 
 #: share/skin/s2/template/element/listview/actionbar
 #.  
@@ -572,12 +572,12 @@ msgstr "ALL TAGZ IN %1"
 #: lib/Socialtext/CategoryPlugin.pm
 #.  
 msgid "All Tags in Workspace"
-msgstr "ALL TAGZ IN WORKSPACE.  KTHXBYE!  KTHX."
+msgstr "ALL TAGZ IN WORKSPACE"
 
 #: lib/Socialtext/BacklinksPlugin.pm
 #. (
 msgid "All backlinks for \"%1\""
-msgstr "ALL BACKLINKZ FOAR \"%1\""
+msgstr "ALL BACKLINKZ FOR \"%1\""
 
 #: share/skin/s2/template/element/wiki/subnav-dashboard
 #.  
@@ -597,12 +597,12 @@ msgstr "ALL TAGZ"
 #: share/skin/s2/template/element/page/revision_view_actions
 #.  
 msgid "All&nbsp;Revisions"
-msgstr "ALL&NBSP;REVISHUNZ.  KTHX."
+msgstr "ALL&NBSP;REVISHUNZ"
 
 #: lib/Socialtext/Workspace.pm
 #.  
 msgid "An account must be specified for all new workspaces."
-msgstr "AN ACCOUNT MUST BE SPECIFIED FUR ALL NEW WORKSPACEZ."
+msgstr "AN ACCOUNT MUST BE SPECIFIED FOR ALL NEW WORKSPACEZ."
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -612,27 +612,27 @@ msgstr "AN ACCOUNT WITH THIZ NAME (%1) ALREDDY EXISTZ."
 #: lib/Socialtext/Handler/Authen.pm
 #. (
 msgid "An email confirming your registration has been sent to %1."
-msgstr "AN EMAIL CONFIRMIN YORE REGISTRASHUN HAZ BEEN SENT TO %1."
+msgstr "AN EMAIL CONFIRMIN YUR REGISTRASHUN HAZ BEEN SENT TO %1."
 
 #: lib/Socialtext/Handler/Authen.pm
 #. (
 msgid "An email with instructions on changing your password has been sent to %1."
-msgstr "AN EMAIL WITH INSTRUCSHUNZ ON CHANGINS UR PASSWORD HAZ BEEN SENT 2 %1."
+msgstr "AN EMAIL WITH INSTRUCSHUNZ ON CHANGINS YOAR PASSWORD HAZ BEEN SENT T %1.  KTHX."
 
 #: lib/Socialtext/HitCounterPlugin.pm lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
 #. (
 msgid "An invalid page ID was given: %1"
-msgstr "AN INVALID PUJ ID WAZ GIVEN: %1"
+msgstr "AN INVALID PUJ ID WAZ GIVEN: %1.  KTHX."
 
 #: lib/Socialtext/RtfExportPlugin.pm
 #. (
 msgid "An invalid page name was given: %1"
-msgstr "AN INVALID PUJ NAME WAZ GIVEN: %1.  KTHXBYE!"
+msgstr "AN INVALID PUJ NAME WAZ GIVEN: %1"
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "And don't worry about breaking anything - previous versions of the page are saved, so there's always a backup copy of the page you're working on."
-msgstr "AND DONT WORRY ABOUT BREKKIN ANYTHIN - PREVIOUZ VERSHUNZ OF TEH PUJ AR SAVED, SO THEREZ ALWAYZ BACKUP COPY OF TEH PUJ URE WORKINS ON."
+msgstr "AND DONT WORRY ABOUT BREKKINS ANYTHINS - PREVIOUZ VERSHUNZ OF TEH PUJ IS SAVED, SO THEREZ ALWAYZ BACKUP COPY OF TEH PUJ YURE WORKINS ON."
 
 #: lib/Socialtext/HomepagePlugin.pm share/skin/s2/template/view/homepage
 #.  
@@ -642,17 +642,17 @@ msgstr "ANNOUNCEMENTZ AND LINKZ"
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #. (
 msgid "Anyone can send email to %1."
-msgstr "ANYONE CAN SEND EMAIL T %1."
+msgstr "ANYONE CAN SEND EMAIL 2 %1."
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Anyone can send email to this workspace."
-msgstr "ANYONE CAN SEND EMAIL T THIZ WORKSPACE.  KTHX."
+msgstr "ANYONE CAN SEND EMAIL 2 THIZ WORKSPACE."
 
 #: share/console-template/template/setup.html
 #.  
 msgid "Apache Logs"
-msgstr "APACHE LOGZ"
+msgstr "APACHE LOGZ.  KTHX."
 
 #: share/console-template/template/setup.html
 #.  
@@ -662,7 +662,7 @@ msgstr "APACHE ERROR LOG"
 #: share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "Append the extra text below?"
-msgstr "APPEND TEH EXTRA TEXT BELOW?  KTHX."
+msgstr "APPEND TEH EXTRA TEXT BELOW?"
 
 #: share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
 #.  
@@ -672,12 +672,12 @@ msgstr "APPEND TEH PERSONAL MESSUJ BELOW?"
 #: share/skin/s2/template/element/page/newpage_duplicate
 #.  
 msgid "Append your text to the bottom of the existing page named:"
-msgstr "APPEND YOAR TEXT 2 TEH BOTTOM OV TEH EXISTIN PUJ NAMED:"
+msgstr "APPEND YORE TEXT 2 TEH BOTTOM OF TEH EXISTIN PUJ NAMED:"
 
 #: share/console-template/template/console_wrapper.tmpl
 #.  
 msgid "Appliance Console"
-msgstr "APPLIANCE CONSOLE"
+msgstr "APPLIANCE CONSOLE.  KTHX."
 
 #: share/console-template/template/help.html
 #.  
@@ -697,7 +697,7 @@ msgstr "APPLIANCE CLOCK WHEN THIZ SCREEN WAZ GENERATED:"
 #: lib/Socialtext/BugsPlugin.pm
 #. (
 msgid "Application error for %1 on %2: %3"
-msgstr "APPLICASHUN ERROR 4 %1 ON %2: %3.  KTHXBYE!"
+msgstr "APPLICASHUN ERROR FOR %1 ON %2: %3"
 
 #: lib/Socialtext/BugsPlugin.pm
 #. (
@@ -727,27 +727,27 @@ msgstr "ARCHIVE DIRECTORY"
 #: lib/Socialtext/AppConfig.pm
 #.  
 msgid "As a Socialtext customer, you have access to the <a href=\"http://www.socialtext.net/exchange/\">Socialtext Customer Exchange</a>. It is where you can share tips and best practices with other Socialtext customers."
-msgstr "AZ SOCIALTEXT CUSTOMR, YU HAVE ACCESZ 2 TEH < HREF=\"HTTP://WWW.SOCIALTEXT.NET/EXCHANGE/\">SOCIALTEXT CUSTOMR EXCHANGE</>. IT AR WHERE YU CAN SHR TIPZ AND BEST PRACTICEZ WITH UDDR SOCIALTEXT CUSTOMERZ.  KTHXBYE!.  KTHX."
+msgstr "AZ SOCIALTEXT CUSTOMR, YOUZ HAVE ACCESZ 2 TEH < HREF=\"HTTP://WWW.SOCIALTEXT.NET/EXCHANGE/\">SOCIALTEXT CUSTOMR EXCHANGE</>. IT AR TEH WHERE U CAN SHAR TIPZ AND BEST PRACTICEZ WITH UDDR SOCIALTEXT CUSTOMERZ."
 
 #: share/skin/s2/template/search_help_field.html
 #.  
 msgid "As we continue to develop the search system, the options you will have and the interface you have to make use of them will improve."
-msgstr "AZ WE CONTINUE TO DEVELOP TEH SEARCH SYSTEM, TEH OPSHUNZ YOO WILL HAVE AND TEH INTERFACE U HAVE T MAKE USE OF THEM WILL IMPRUUV."
+msgstr "AZ WE CONTINUE T DEVELOP TEH SEARCH SYSTEM, TEH OPSHUNZ YU WILL HAVE AND TEH INTERFACE YOUZ HAVE T MAKE USE OV THEM WILL IMPROVE."
 
 #: share/template/control/workspace.html
 #.  
 msgid "Assign to a new account"
-msgstr "ASSIGN T NEW ACCOUNT"
+msgstr "ASSIGN T NEW ACCOUNT.  KTHXBYE!"
 
 #: lib/Socialtext/AttachmentsUIPlugin.pm
 #.  
 msgid "Attachment not found. The page name, file name or identifer number in the link may be incorrect, or the attachment may have been deleted or is not present in this workspace."
-msgstr "ATTACHMENT NOT FOUND. TEH PUJ NAME, FILE NAME OR IDENTIFR NUMBR IN TEH LINK MAY BE INCORRECT, OR TEH ATTACHMENT MAY HAVE BEEN DELETED OR AR NOT PRESENT IN THIZ WORKSPACE."
+msgstr "ATTACHMENT NOT FOUND. TEH PUJ NAME, FILE NAME OR IDENTIFR NUMBR IN TEH LINK MAY BE INCORRECT, OR TEH ATTACHMENT MAY HAVE BEEN DELETED OR AR NOT PRESENT IN THIZ WORKSPACE.  KTHX."
 
 #: share/skin/s2/javascript/Wikiwyg/Socialtext.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/template/element/page/attachments
 #.  
 msgid "Attachments"
-msgstr "ATTACHMENTZ"
+msgstr "ATTACHMENTZ.  KTHX."
 
 #: share/skin/s2/template/lite/page/display.html
 #.  
@@ -757,12 +757,12 @@ msgstr "ATTACHMENTZ FOR THIZ PUJ:"
 #: share/template/control/report.html
 #.  
 msgid "August"
-msgstr "AUGUST"
+msgstr "AUGUST.  KTHXBYE!"
 
 #: share/skin/s2/template/element/page/attachment_manage_interface
 #.  
 msgid "Author"
-msgstr "AUTHOR.  KTHX."
+msgstr "AUTHOR"
 
 #: share/console-template/template/backup.html
 #.  
@@ -772,22 +772,22 @@ msgstr "AUTOMATIC BACKUP SCHEDULE"
 #: share/skin/s2/template/view/page/stats_index
 #.  
 msgid "Available Reports"
-msgstr "AVAILABLE REPORTZ"
+msgstr "AVAILABLE REPORTZ.  KTHX."
 
 #: share/skin/s2/template/element/page/revision_compare_actions share/skin/s2/template/element/page/revision_list_actions
 #.  
 msgid "Back To Current Revision"
-msgstr "BACK 2 CURRENT REVISHUN.  KTHXBYE!"
+msgstr "BACK 2 CURRENT REVISHUN"
 
 #: share/template/control/growth_report.html share/template/control/report.html
 #.  
 msgid "Back to the account page"
-msgstr "BACK TO TEH ACCOUNT PUJ"
+msgstr "BACK T TEH ACCOUNT PUJ"
 
 #: share/template/control/growth_report.html share/template/control/report.html
 #.  
 msgid "Back to the workspace page"
-msgstr "BACK TO TEH WORKSPACE PUJ"
+msgstr "BACK T TEH WORKSPACE PUJ"
 
 #: share/console-template/template/console_wrapper.tmpl
 #.  
@@ -812,7 +812,7 @@ msgstr "BACKUP SERVR NAME"
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
 msgid "Backup already running"
-msgstr "BACKUP ALREDDY RUNNIN"
+msgstr "BACKUP ALREDDY RUNNINS"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -822,7 +822,7 @@ msgstr "BACKUP DESTINASHUN UPDATED"
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #. (
 msgid "Backup is in progress - started at %1"
-msgstr "BACKUP AR IN PROGRESZ - STARTED AT %1"
+msgstr "BACKUP AR TEH IN PROGRESZ - STARTED AT %1"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -842,7 +842,7 @@ msgstr "BLOCK OF TEXT WITH NO *SPECIAL* PUNCTUASHUN"
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "Bottom of page"
-msgstr "BOTTOM OF PUJ"
+msgstr "BOTTOM OF PUJ.  KTHX."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -852,12 +852,12 @@ msgstr "BROWSE .."
 #: lib/Socialtext/BugsPlugin.pm
 #.  
 msgid "Bug Dump"
-msgstr "BUG DUMP.  KTHX."
+msgstr "BUG DUMP"
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Call '%1' using Convoq. Click to edit."
-msgstr "CALL %1 USINS CONVOQ. CLICK TO EDIT."
+msgstr "CALL %1 USIN CONVOQ. CLICK TO EDIT."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
@@ -867,17 +867,17 @@ msgstr "CALL %1 USIN SKYPE. CLICK T EDIT."
 #: lib/Socialtext/UserSettingsPlugin.pm
 #.  
 msgid "Can't remove privileges of the last admin"
-msgstr "CANT REMOVE PRIVILEGEZ OF TEH LAST ADMIN.  KTHXBYE!"
+msgstr "CANT REMOOVE PRIVILEGEZ OF TEH LAST ADMIN"
 
 #: share/console-template/template/popup.html share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/Wikiwyg/Socialtext.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/template/element/page/edit share/skin/s2/template/element/page/newpage_duplicate share/skin/s2/template/element/page/newpage_save share/skin/s2/template/standard_buttons
 #.  
 msgid "Cancel"
-msgstr "CANCEL.  KTHX."
+msgstr "CANCEL"
 
 #: share/skin/s2/template/lite/header.html
 #.  
 msgid "Cancel Edit"
-msgstr "CANCEL EDIT"
+msgstr "CANCEL EDIT.  KTHX."
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #. (
@@ -887,7 +887,7 @@ msgstr "CANNOT EXTRACT FILEZ FROM %1"
 #: lib/Socialtext/DeletePagePlugin.pm
 #.  
 msgid "Cannot undelete a page with only one revision. Returning to front page."
-msgstr "CANNOT UNDELETE PUJ WITH ONLY ONE REVISHUN. RETURNIN TO FRONT PUJ."
+msgstr "CANNOT UNDELETE PUJ WITH ONLY ONE REVISHUN. RETURNINS 2 FRONT PUJ.  KTHXBYE!"
 
 #: lib/Socialtext/Workspace.pm
 #. (
@@ -927,147 +927,147 @@ msgstr "CHECK WITH YOAR %1 ADMINISTRATOR."
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
 msgid "Chronologically (Oldest First)"
-msgstr "CHRONOLOGICALLY (OLDEST FIRST).  KTHX."
+msgstr "CHRONOLOGICALLY (OLDEST FIRST)"
 
 #: share/skin/s2/template/new_form_page/new_form_page_buttons.html
 #.  
 msgid "Clear"
-msgstr "CLEAR.  KTHX."
+msgstr "CLEAR.  KTHXBYE!"
 
 #: share/skin/s2/template/lite/page/contention.html
 #. (
 msgid "Click <a href=\"%1\">here</a> to go to the latest version of the page."
-msgstr "CLICK < HREF=\"%1\">HERE</> T GO TO TEH LATEST VERSHUN OF TEH PUJ.  KTHXBYE!"
+msgstr "CLICK < HREF=\"%1\">HERE</> T GO 2 TEH LATEST VERSHUN OV TEH PUJ."
 
 #: share/skin/s2/template/element/page/attachment_attach_interface
 #.  
 msgid "Click \"Browse\" and select an image or file to upload."
-msgstr "CLICK \"BROWSE\" AND SELECT AN IMUJ OR FILE TO UPLOAD."
+msgstr "CLICK \"BROWSE\" AND SELECT AN IMUJ OR FILE 2 UPLOAD."
 
 #: share/skin/s2/template/element/page/attachment_attach_interface
 #.  
 msgid "Click \"Done\" to close this window."
-msgstr "CLICK \"DONE\" TO CLOSE THIZ WINDOW."
+msgstr "CLICK \"DONE\" T CLOSE THIZ WINDOW."
 
 #: share/skin/s2/template/view/edit_contention
 #. (
 msgid "Click here to go to the latest version of the %1."
-msgstr "CLICK HERE T GO T TEH LATEST VERSHUN OF TEH %1."
+msgstr "CLICK HERE T GO T TEH LATEST VERSHUN OV TEH %1."
 
 #: share/skin/s2/template/element/page/actions
 #.  
 msgid "Click this button to add a comment to the page"
-msgstr "CLICK THIZ BUTTON 2 ADD COMMENT T TEH PUJ"
+msgstr "CLICK THIZ BUTTON T ADD COMMENT T TEH PUJ.  KTHXBYE!"
 
 #: share/skin/s2/template/element/page/attachments
 #.  
 msgid "Click this button to add a file to the page"
-msgstr "CLICK THIZ BUTTON T ADD FILE T TEH PUJ"
+msgstr "CLICK THIZ BUTTON TO ADD FILE TO TEH PUJ.  KTHX."
 
 #: share/skin/s2/template/element/page/tags share/skin/s2/template/layout/edit_wikiwyg
 #.  
 msgid "Click this button to add a tag to the page"
-msgstr "CLICK THIZ BUTTON T ADD TAG T TEH PUJ"
+msgstr "CLICK THIZ BUTTON TO ADD TAG 2 TEH PUJ.  KTHXBYE!  KTHX."
 
 #: share/skin/s2/template/element/page/tag_queue_interface
 #.  
 msgid "Click this button to add your tag"
-msgstr "CLICK THIZ BUTTON TO ADD YORE TAG"
+msgstr "CLICK THIZ BUTTON T ADD YOAR TAG"
 
 #: share/skin/s2/template/element/page/edit
 #.  
 msgid "Click this button to cancel editing and discard your changes"
-msgstr "CLICK THIZ BUTTON T CANCEL EDITINS AND DISCARD UR CHANGEZ"
+msgstr "CLICK THIZ BUTTON TO CANCEL EDITIN AND DISCARD UR CHANGEZ"
 
 #: share/skin/s2/template/view/weblog
 #.  
 msgid "Click this button to create a new blog post"
-msgstr "CLICK THIZ BUTTON T CREATE NEW BLOG POST.  KTHX."
+msgstr "CLICK THIZ BUTTON TO CREATE NEW BLOG POST.  KTHXBYE!  KTHX."
 
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "Click this button to create a new page"
-msgstr "CLICK THIZ BUTTON T CREATE NEW PUJ"
+msgstr "CLICK THIZ BUTTON 2 CREATE NEW PUJ"
 
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "Click this button to create a new workspace"
-msgstr "CLICK THIZ BUTTON T CREATE NEW WORKSPACE"
+msgstr "CLICK THIZ BUTTON 2 CREATE NEW WORKSPACE"
 
 #: share/skin/s2/template/element/page/actions share/skin/s2/template/element/page/actions
 #.  
 msgid "Click this button to edit the page"
-msgstr "CLICK THIZ BUTTON TO EDIT TEH PUJ.  KTHX."
+msgstr "CLICK THIZ BUTTON TO EDIT TEH PUJ"
 
 #: share/skin/s2/template/element/page/attachments
 #.  
 msgid "Click this button to manage files attached to the page"
-msgstr "CLICK THIZ BUTTON T MANUJ FILEZ ATTACHED TO TEH PUJ"
+msgstr "CLICK THIZ BUTTON 2 MANUJ FILEZ ATTACHED T TEH PUJ.  KTHX."
 
 #: build/templates/socialtext/search/search_config.yaml.tt2
 #.  
 msgid "Click this button to perform your search"
-msgstr "CLICK THIZ BUTTON T PER4M YUR SEARCH"
+msgstr "CLICK THIZ BUTTON TO PERFORM YOAR SEARCH"
 
 #: share/skin/s2/template/element/page/edit
 #.  
 msgid "Click this button to preview your page before saving it"
-msgstr "CLICK THIZ BUTTON TO PREVIEW YUR PUJ BE4E SAVIN IT"
+msgstr "CLICK THIZ BUTTON TO PREVIEW YUR PUJ BEFRE SAVINS IT.  KTHXBYE!"
 
 #: lib/Socialtext/BreadCrumbsPlugin.pm
 #.  
 msgid "Click this button to save recently viewed pages to your computer for offline use."
-msgstr "CLICK THIZ BUTTON TO SAVE RECENTLY VIEWED PUJZ 2 YOAR COMPUTR 4 OFFLINE USE.  KTHX."
+msgstr "CLICK THIZ BUTTON 2 SAVE RECENTLY VIEWED PUJZ T YORE COMPUTR FR OFFLINE USE."
 
 #: lib/Socialtext/HomepagePlugin.pm lib/Socialtext/RecentChangesPlugin.pm
 #. (
 msgid "Click this button to save the %1 most recent pages to your computer for offline use."
-msgstr "CLICK THIZ BUTTON T SAVE TEH %1 MOST RECENT PUJZ T YORE COMPUTR FOR OFFLINE USE.  KTHX."
+msgstr "CLICK THIZ BUTTON TO SAVE TEH %1 MOST RECENT PUJZ 2 YORE COMPUTR 4 OFFLINE USE."
 
 #: lib/Socialtext/SearchPlugin.pm
 #.  
 msgid "Click this button to save the pages from this search to your computer for offline use"
-msgstr "CLICK THIZ BUTTON TO SAVE TEH PUJZ FROM THIZ SEARCH 2 YOAR COMPUTR FR OFFLINE USE"
+msgstr "CLICK THIZ BUTTON 2 SAVE TEH PUJZ FROM THIZ SEARCH TO YUR COMPUTR FOR OFFLINE USE"
 
 #: lib/Socialtext/CategoryPlugin.pm
 #. (
 msgid "Click this button to save the pages with the tag %1 to your computer for offline use."
-msgstr "CLICK THIZ BUTTON 2 SAVE TEH PUJZ WITH TEH TAG %1 2 YOAR COMPUTR FUR OFFLINE USE.  KTHXBYE!"
+msgstr "CLICK THIZ BUTTON 2 SAVE TEH PUJZ WITH TEH TAG %1 T YOAR COMPUTR FOR OFFLINE USE."
 
 #: lib/Socialtext/WatchlistPlugin.pm
 #.  
 msgid "Click this button to save the pages you're watching for offline use."
-msgstr "CLICK THIZ BUTTON TO SAVE TEH PUJZ YOORE WATCHINS 4 OFFLINE USE."
+msgstr "CLICK THIZ BUTTON T SAVE TEH PUJZ YOORE WATCHINS 4 OFFLINE USE."
 
 #: share/skin/s2/template/view/weblog
 #.  
 msgid "Click this button to save the posts in this weblog to your computer for offline use."
-msgstr "CLICK THIZ BUTTON T SAVE TEH POSTZ IN THIZ WEBLOG TO YOAR COMPUTR FOR OFFLINE USE."
+msgstr "CLICK THIZ BUTTON T SAVE TEH POSTZ IN THIZ WEBLOG T UR COMPUTR FUR OFFLINE USE."
 
 #: share/skin/s2/template/element/page/details share/skin/s2/template/element/page/details
 #.  
 msgid "Click this button to save this page to your computer for offline use."
-msgstr "CLICK THIZ BUTTON T SAVE THIZ PUJ T UR COMPUTR FUR OFFLINE USE."
+msgstr "CLICK THIZ BUTTON 2 SAVE THIZ PUJ TO YOAR COMPUTR FOR OFFLINE USE."
 
 #: share/skin/s2/template/element/page/edit
 #.  
 msgid "Click this button to save your page"
-msgstr "CLICK THIZ BUTTON 2 SAVE UR PUJ"
+msgstr "CLICK THIZ BUTTON 2 SAVE YORE PUJ"
 
 #: share/skin/s2/template/element/page/tags
 #.  
 msgid "Click this button to save your tag"
-msgstr "CLICK THIZ BUTTON TO SAVE UR TAG.  KTHX."
+msgstr "CLICK THIZ BUTTON T SAVE YORE TAG.  KTHXBYE!"
 
 #: share/skin/s2/template/layout/edit_wikiwyg
 #.  
 msgid "Click this button to upload a file to the page"
-msgstr "CLICK THIZ BUTTON TO UPLOAD FILE T TEH PUJ"
+msgstr "CLICK THIZ BUTTON T UPLOAD FILE 2 TEH PUJ"
 
 #: share/skin/s2/template/view/page/display share/skin/s2/template/view/page/display
 #.  
 msgid "Click to view previous versions of this page."
-msgstr "CLICK T VIEW PREVIOUZ VERSHUNZ OF THIZ PUJ."
+msgstr "CLICK T VIEW PREVIOUZ VERSHUNZ OV THIZ PUJ."
 
 #: share/console-template/template/popup.html share/skin/s2/template/element/page/attachment_manage_interface
 #.  
@@ -1082,7 +1082,7 @@ msgstr "COLOR VIEW (UNFOARMATTED)"
 #: share/skin/s2/template/element/page/actions
 #.  
 msgid "Comment"
-msgstr "COMMENT"
+msgstr "COMMENT.  KTHXBYE!"
 
 #: share/skin/s2/template/element/page/footer_end
 #.  
@@ -1097,7 +1097,7 @@ msgstr "COMPIS REVISHUNZ"
 #: lib/Socialtext/RevisionPlugin.pm
 #. (
 msgid "Compare Revisions %1 and %2"
-msgstr "COMPIS REVISHUNZ %1 AND %2.  KTHXBYE!  KTHX."
+msgstr "COMPIS REVISHUNZ %1 AND %2"
 
 #: share/template/control/user.html
 #.  
@@ -1107,12 +1107,12 @@ msgstr "CONFIRM USR"
 #: share/skin/s2/template/layout/html
 #.  
 msgid "Confluence wiki, Enterprise 2.0 wiki, Mediawiki, Microsoft wiki, Sharepoint wiki, Twiki, Web 2.0 wiki, business wiki, document management, enterprise wiki, intranet wiki, knowledge management, online collaboration, open source wiki, portal wiki, hosted wiki, project collaboration, team collaboration, wiki appliance, wiki software"
-msgstr "CONFLUENCE WIKI, ENTERPRISE 2.0 WIKI, MEDIAWIKI, MICROSOFT WIKI, SHRPOINT WIKI, TWIKI, WEB 2.0 WIKI, BUSINESZ WIKI, DOCUMENT MANUJMENT, ENTERPRISE WIKI, INTRANET WIKI, KNOWLEDGE MANUJMENT, ONLINE COLLABORASHUN, OPEN SOURCE WIKI, PORTAL WIKI, HOSTED WIKI, PROJECT COLLABORASHUN, TEAM COLLABORASHUN, WIKI APPLIANCE, WIKI SOFTWIS"
+msgstr "CONFLUENCE WIKI, ENTERPRISE 2.0 WIKI, MEDIAWIKI, MICROSOFT WIKI, SHARPOINT WIKI, TWIKI, WEB 2.0 WIKI, BUSINESZ WIKI, DOCUMENT MANUJMENT, ENTERPRISE WIKI, INTRANET WIKI, KNOWLEDGE MANUJMENT, ONLINE COLLABORASHUN, OPEN SOURCE WIKI, PORTAL WIKI, HOSTED WIKI, PROJECT COLLABORASHUN, TEAM COLLABORASHUN, WIKI APPLIANCE, WIKI SOFTWIS"
 
 #: share/skin/s2/template/workspaces_created_section.html
 #. (
 msgid "Congratulations! You have just created \"%1\", a brand new Socialtext Workspace. You are the administrator. The web address of the new workspace is %2."
-msgstr "CONGRATULASHUNZ! YU HAVE JUS CREATED \"%1\", BRAND NEW SOCIALTEXT WORKSPACE. YOO AR TEH ADMINISTRATOR. TEH WEB ADDRESZ OV TEH NEW WORKSPACE AR %2."
+msgstr "CONGRATULASHUNZ! U HAVE JUS CREATED \"%1\", BRAND NEW SOCIALTEXT WORKSPACE. YOO R TEH ADMINISTRATOR. TEH WEB ADDRESZ OF TEH NEW WORKSPACE AR TEH %2."
 
 #: share/console-template/template/help.html
 #.  
@@ -1127,7 +1127,7 @@ msgstr "CONTENTZ"
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Convoq: %1"
-msgstr "CONVOQ: %1.  KTHX."
+msgstr "CONVOQ: %1"
 
 #: share/skin/s2/template/popup/copy_to_workspace
 #.  
@@ -1142,17 +1142,17 @@ msgstr "COPY %1 TO ANUDDR WORKSPACE"
 #: share/skin/s2/template/element/page/actions
 #.  
 msgid "Copy Page to Workspace"
-msgstr "COPY PUJ TO WORKSPACE.  KTHX."
+msgstr "COPY PUJ TO WORKSPACE"
 
 #: share/skin/s2/template/popup/copy_to_workspace
 #. (
 msgid "Copy the page %1 to another workspace?"
-msgstr "COPY TEH PUJ %1 2 ANUDDR WORKSPACE?"
+msgstr "COPY TEH PUJ %1 T ANUDDR WORKSPACE?  KTHXBYE!"
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
 msgid "Could not extract files from the skin archive. This is most likely caused by a corrupt archive file. Please check your file and try the upload again."
-msgstr "COULD NOT EXTRACT FILEZ FROM TEH SKIN ARCHIVE. THIZ AR MOST LIEKLY CAUSED BY CORRUPT ARCHIVE FILE. PLEEZ CHECK YORE FILE AND TRY TEH UPLOAD AGAIN."
+msgstr "COULD NOT EXTRACT FILEZ FROM TEH SKIN ARCHIVE. THIZ AR TEH MOST LIEKLY CAUSED BY CORRUPT ARCHIVE FILE. PLEEZ CHECK YOAR FILE AND TRY TEH UPLOAD AGAIN."
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #. (
@@ -1172,7 +1172,7 @@ msgstr "CREATE WEBLOG"
 #: share/console-template/template/setup.html share/console-template/template/setup.html
 #.  
 msgid "Create Initial Workspace"
-msgstr "CREATE INITIAL WORKSPACE.  KTHXBYE!"
+msgstr "CREATE INITIAL WORKSPACE"
 
 #: share/skin/s2/template/element/page/actions
 #.  
@@ -1187,7 +1187,7 @@ msgstr "CREATE NEW WEBLOG"
 #: share/skin/s2/template/element/page/actions
 #.  
 msgid "Create New Wiki Page"
-msgstr "CREATE NEW WIKI PUJ.  KTHXBYE!  KTHX."
+msgstr "CREATE NEW WIKI PUJ"
 
 #: share/skin/s2/template/element/settings/select
 #.  
@@ -1207,7 +1207,7 @@ msgstr "CREATE WORD DOCUMENT FROM CHECKED PUJZ"
 #: lib/Socialtext/NewFormPagePlugin.pm
 #.  
 msgid "Create Your Profile"
-msgstr "CREATE YUR PROFILE"
+msgstr "CREATE UR PROFILE"
 
 #: share/template/control/accounts.html
 #.  
@@ -1217,7 +1217,7 @@ msgstr "CREATE NEW ACCOUNT"
 #: share/skin/s2/template/element/page/actions
 #.  
 msgid "Create new page"
-msgstr "CREATE NEW PUJ"
+msgstr "CREATE NEW PUJ.  KTHX."
 
 #: share/template/control/user.html share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
 #.  
@@ -1227,7 +1227,7 @@ msgstr "CREATED"
 #: share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Created By"
-msgstr "CREATED BY.  KTHX."
+msgstr "CREATED BY"
 
 #: share/template/control/workspace.html
 #.  
@@ -1242,12 +1242,12 @@ msgstr "CREATED BY %1 ON %2."
 #: lib/Socialtext/Page.pm
 #.  
 msgid "Creating a New Spreadsheet..."
-msgstr "CREATIN NEW SPREADSHEET.."
+msgstr "CREATINS NEW SPREADSHEET...  KTHXBYE!"
 
 #: lib/Socialtext/Appliance/BackupStore.pm
 #. (
 msgid "Creating backup tarball (%1) ..."
-msgstr "CREATINS BACKUP TARBALL (%1) ...  KTHX."
+msgstr "CREATIN BACKUP TARBALL (%1) .."
 
 #: share/skin/s2/template/view/page/stats_index
 #.  
@@ -1257,7 +1257,7 @@ msgstr "CURRENT REPORT"
 #: share/skin/s2/template/element/settings/users_settings_section
 #.  
 msgid "Current password"
-msgstr "CURRENT PASSWORD"
+msgstr "CURRENT PASSWORD.  KTHXBYE!"
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
@@ -1267,22 +1267,22 @@ msgstr "CUSTOM PRIVACY SETTINS"
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "Customized Skin Files"
-msgstr "CUSTOMIZED SKIN FILEZ.  KTHXBYE!"
+msgstr "CUSTOMIZED SKIN FILEZ"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "Customized Skin."
-msgstr "CUSTOMIZED SKIN.  KTHX."
+msgstr "CUSTOMIZED SKIN."
 
 #: lib/Socialtext/HomepagePlugin.pm share/skin/s2/template/element/settings/workspaces_settings_appearance_section share/skin/s2/template/element/wiki/subnav-default share/skin/s2/template/element/wiki/subnav-listview share/skin/s2/template/element/wiki/subnav-weblog
 #.  
 msgid "Dashboard"
-msgstr "DASHBOARD"
+msgstr "DASHBOARD.  KTHXBYE!  KTHX."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "Dashboard is best if most users have a number of other workspaces. Central page is best for a close-knit community in which most users only have one workspace."
-msgstr "DASHBOARD AR TEH BEST IF MOST USERZ HAVE NUMBR OF UDDR WORKSPACEZ. CENTRAL PUJ AR BEST FOAR CLOSE-KNIT COMMUNITY IN WHICH MOST USERZ ONLY HAVE ONE WORKSPACE.  KTHX."
+msgstr "DASHBOARD AR TEH BEST IF MOST USERZ HAVE NUMBR OF UDDR WORKSPACEZ. CENTRAL PUJ AR BEST FOR CLOSE-KNIT COMMUNITY IN WHICH MOST USERZ ONLY HAVE ONE WORKSPACE."
 
 #: share/skin/s2/template/view/homepage
 #. (
@@ -1312,17 +1312,17 @@ msgstr "DECEMBR"
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "Default Skin."
-msgstr "DEFAULT SKIN.  KTHX."
+msgstr "DEFAULT SKIN."
 
 #: share/skin/s2/template/element/page/actions
 #.  
 msgid "Delete Page"
-msgstr "DELETE PUJ"
+msgstr "DELETE PUJ.  KTHXBYE!"
 
 #: share/skin/s2/template/view/attachmentslist
 #.  
 msgid "Delete Selected Attachments"
-msgstr "DELETE SELECTED ATTACHMENTZ"
+msgstr "DELETE SELECTED ATTACHMENTZ.  KTHX."
 
 #: share/skin/s2/template/element/page/attachment_manage_interface
 #.  
@@ -1342,7 +1342,7 @@ msgstr "DID YOO DELETE THIZ PUJ IN ERROR? IF SO, YU CAN RESTORE TEH PUJ."
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "Did you know?"
-msgstr "DID U KNOW?"
+msgstr "DID U KNOW?  KTHX."
 
 #: share/console-template/template/overview.html
 #.  
@@ -1352,7 +1352,7 @@ msgstr "DISK USUJ"
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Display '%1' in reader's time zone. Click to edit."
-msgstr "DISPLAY %1 IN READRZ TIME ZONE. CLICK 2 EDIT."
+msgstr "DISPLAY %1 IN READRZ TIME ZONE. CLICK TO EDIT."
 
 #: lib/Socialtext/BreadCrumbsPlugin.pm
 #. (
@@ -1367,7 +1367,7 @@ msgstr "DISPLAY AZ SIDE BOX IN PUJ VIEW?"
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Display image '%1'. Click to edit."
-msgstr "DISPLAY IMUJ %1. CLICK T EDIT."
+msgstr "DISPLAY IMUJ %1. CLICK TO EDIT."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
@@ -1377,37 +1377,37 @@ msgstr "DISPLAY PUJZ WITH TEH %1 TAG. CLICK T EDIT."
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Display result for searching '%1'. Click to edit."
-msgstr "DISPLAY RESULT 4 SEARCHIN %1. CLICK 2 EDIT."
+msgstr "DISPLAY RESULT FOR SEARCHINS %1. CLICK TO EDIT."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Display the weblog '%1'. Click to edit."
-msgstr "DISPLAY TEH WEBLOG %1. CLICK TO EDIT."
+msgstr "DISPLAY TEH WEBLOG %1. CLICK T EDIT."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Display what's new in the '%1' workspace. Click to edit."
-msgstr "DISPLAY WUTZ NEW IN TEH %1 WORKSPACE. CLICK T EDIT."
+msgstr "DISPLAY WHUTZ NEW IN TEH %1 WORKSPACE. CLICK 2 EDIT."
 
 #: lib/Socialtext/Appliance/ConsoleController.pm
 #.  
 msgid "Do you really want to delete all workspaces and create a new initial workspace? (This action cannot be undone.)"
-msgstr "DO YOO RILY WANTZ 2 DELETE ALL WORKSPACEZ AND CREATE NEW INITIAL WORKSPACE? (THIZ ACSHUN CANNOT BE UNDONE.)"
+msgstr "DO YOUZ RILY WANTZ TO DELETE ALL WORKSPACEZ AND CREATE NEW INITIAL WORKSPACE? (THIZ ACSHUN CANNOT BE UNDONE.).  KTHX."
 
 #: lib/Socialtext/Appliance/ConsoleController.pm
 #.  
 msgid "Do you really want to reboot the appliance?"
-msgstr "DO YOO RILLY WANTZ TO REBOOT TEH APPLIANCE?"
+msgstr "DO YOUZ RILLEY WANTZ TO REBOOT TEH APPLIANCE?"
 
 #: lib/Socialtext/Appliance/ConsoleController.pm
 #.  
 msgid "Do you really want to shutdown the appliance?"
-msgstr "DO U RILLY WANTZ TO SHUTDOWN TEH APPLIANCE?"
+msgstr "DO YOO RILLY WANTZ T SHUTDOWN TEH APPLIANCE?"
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Do you want to set up this workspace as:"
-msgstr "DO YOO WANTZ TO SET UP THIZ WORKSPACE AZ:"
+msgstr "DO YU WANTZ T SET UP THIZ WORKSPACE AZ:"
 
 #: share/skin/s2/template/element/page/attachment_attach_interface share/skin/s2/template/element/page/tag_queue_interface
 #.  
@@ -1417,7 +1417,7 @@ msgstr "DONE"
 #: lib/Socialtext/WikiwygPlugin.pm
 #.  
 msgid "Double-click to edit a page?"
-msgstr "DOUBLE-CLICK TO EDIT PUJ?"
+msgstr "DOUBLE-CLICK T EDIT PUJ?"
 
 #: share/skin/s2/template/view/page/stats
 #.  
@@ -1452,7 +1452,7 @@ msgstr "EDIT TIPZ"
 #: share/skin/s2/template/view/page_revision_list
 #.  
 msgid "Edited By"
-msgstr "EDITED BY.  KTHXBYE!"
+msgstr "EDITED BY"
 
 #: share/skin/s2/template/view/page/stats
 #.  
@@ -1467,12 +1467,12 @@ msgstr "EMAIL"
 #: lib/Socialtext/WebApp.pm share/skin/s2/template/element/settings/users_listall_section
 #.  
 msgid "Email Address"
-msgstr "EMAIL ADDRESZ.  KTHXBYE!"
+msgstr "EMAIL ADDRESZ"
 
 #: share/skin/s2/template/element/settings/users_invite_openid_invite
 #.  
 msgid "Email Address for this user:"
-msgstr "EMAIL ADDRESZ FOR THIZ USR:"
+msgstr "EMAIL ADDRESZ 4 THIZ USR:"
 
 #: lib/Socialtext/Handler/Authen.pm
 #.  
@@ -1487,7 +1487,7 @@ msgstr "EMAIL NOTIFICASHUN"
 #: share/skin/s2/template/element/page/actions share/skin/s2/template/element/page/actions
 #.  
 msgid "Email To This Page"
-msgstr "EMAIL TO THIZ PUJ"
+msgstr "EMAIL T THIZ PUJ"
 
 #: share/skin/s2/template/element/page/actions
 #.  
@@ -1497,12 +1497,12 @@ msgstr "EMAIL TO THIZ WORKSPACE"
 #: share/console-template/template/setup.html
 #.  
 msgid "Email address for testing:"
-msgstr "EMAIL ADDRESZ FR TESTIN:"
+msgstr "EMAIL ADDRESZ FOR TESTINS:"
 
 #: share/skin/s2/template/element/page/actions
 #.  
 msgid "Email this page"
-msgstr "EMAIL THIZ PUJ"
+msgstr "EMAIL THIZ PUJ.  KTHX."
 
 #: share/skin/s2/template/element/settings/users_invite_openid_invite share/skin/s2/template/new_form_page/generic/new_form_page_query.html share/skin/s2/template/new_form_page/new_form_page_query.html
 #.  
@@ -1512,7 +1512,7 @@ msgstr "EMAIL:"
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "Enable email notifications for this workspace?"
-msgstr "ENABLE EMAIL NOTIFICASHUNZ 4 THIZ WORKSPACE?  KTHXBYE!"
+msgstr "ENABLE EMAIL NOTIFICASHUNZ FOR THIZ WORKSPACE?"
 
 #: lib/Socialtext/Locales.pm
 #.  
@@ -1522,42 +1522,42 @@ msgstr "ENGLISH"
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "Enter a list of email addresses (one address per line) of people you would like to invite to this Workspace."
-msgstr "ENTR LIST OF EMAIL ADDRESSEZ (ONE ADDRESZ PR LINE) OF PEOPLE YOUZ WOULD LIKEZ 2 INVITE 2 THIZ WORKSPACE."
+msgstr "ENTR LIST OV EMAIL ADDRESSEZ (ONE ADDRESZ PR LINE) OF PEOPLE YOO WOULD LIEK TO INVITE TO THIZ WORKSPACE."
 
 #: share/skin/s2/template/element/page/newpage_save
 #.  
 msgid "Enter a meaningful and distinctive title for your page."
-msgstr "ENTR MEANINGFUL AND DISTINCTIVE TITLE FOAR YORE PUJ."
+msgstr "ENTR MEANINGFUL AND DISTINCTIVE TITLE 4 YUR PUJ."
 
 #: share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/tagqueue.js share/skin/s2/template/element/page/tag_queue_interface
 #.  
 msgid "Enter a tag and click \"Add tag\". The tag will be saved when you save the page."
-msgstr "ENTR TAG AND CLICK \"ADD TAG\". TEH TAG WILL BE SAVED WHEN U SAVE TEH PUJ."
+msgstr "ENTR TAG AND CLICK \"ADD TAG\". TEH TAG WILL BE SAVED WHEN YOO SAVE TEH PUJ."
 
 #: share/skin/s2/template/element/settings/users_invite_search_section
 #.  
 msgid "Enter part of a user's first or last name, or email address."
-msgstr "ENTR PART OV USRZ FIRST OR LAST NAME, OR EMAIL ADDRESZ."
+msgstr "ENTR PART OV USRZ FIRST OR LAST NAME, OR EMAIL ADDRESZ.  KTHXBYE!"
 
 #: share/skin/s2/template/element/settings/users_invite_openid_invite
 #.  
 msgid "Enter the information for the user you would like to invite to this workspace."
-msgstr "ENTR TEH IN4MASHUN FR TEH USR U WOULD LIKEZ TO INVITE 2 THIZ WORKSPACE.  KTHX."
+msgstr "ENTR TEH INFORMASHUN FR TEH USR U WOULD LIEK T INVITE T THIZ WORKSPACE."
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
 msgid "Error updating from timeserver %1"
-msgstr "ERROR UPDATIN FROM TIMESERVR %1.  KTHX."
+msgstr "ERROR UPDATINS FROM TIMESERVR %1"
 
 #: share/skin/s2/template/lite/search/search.html
 #.  
 msgid "Error:"
-msgstr "ERROR:"
+msgstr "ERROR:.  KTHXBYE!"
 
 #: lib/Socialtext/PdfExportPlugin.pm
 #.  
 msgid "Error:<pre>No pages selected for export</pre>\n"
-msgstr "ERROR:<PRE>NO PUJZ SELECTED FOAR EXPORT</PRE>\N"
+msgstr "ERROR:<PRE>NO PUJZ SELECTED FR EXPORT</PRE>\N"
 
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
@@ -1597,7 +1597,7 @@ msgstr "EVERY MINUTE"
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
 msgid "Every Week"
-msgstr "EVERY WEEK.  KTHX."
+msgstr "EVERY WEEK"
 
 #: share/skin/s2/template/element/settings/users_invite_openid_invite share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
 #.  
@@ -1607,7 +1607,7 @@ msgstr "EXAMPLE:"
 #: share/skin/s2/template/element/settings/workspaces_create_section share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "Example: Acme Widgets Product Development"
-msgstr "EXAMPLE: ACME WIDGETZ PRODUCT DEVELOPMENT.  KTHX."
+msgstr "EXAMPLE: ACME WIDGETZ PRODUCT DEVELOPMENT"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #.  
@@ -1617,7 +1617,7 @@ msgstr "EXAMPLE: C:\\MAH PIKSHURZ\\SOCIALTEXT-LOGO-30.GIF"
 #: share/skin/s2/template/element/settings/weblog_create
 #.  
 msgid "Example: Sales Team Weblog"
-msgstr "EXAMPLE: SALEZ TEAM WEBLOG"
+msgstr "EXAMPLE: SALEZ TEAM WEBLOG.  KTHX."
 
 #: share/skin/s2/template/element/settings/workspaces_create_section
 #.  
@@ -1632,12 +1632,12 @@ msgstr "EXAMPLE: HTTP://WWW.SOCIALTEXT.COM/IMUJZ/SOCIALTEXT-LOGO-30.GIF"
 #: share/skin/s2/template/new_form_page/generic/new_form_page_instructions.html share/skin/s2/template/new_form_page/new_form_page_instructions.html
 #.  
 msgid "Except for your name, all fields are optional."
-msgstr "EXCEPT FOR YOAR NAME, ALL FIELDZ AR OPSHUNAL."
+msgstr "EXCEPT FR YUR NAME, ALL FIELDZ IS OPSHUNAL.  KTHX."
 
 #: share/skin/s2/template/element/listview/actions
 #.  
 msgid "Export"
-msgstr "EXPORT"
+msgstr "EXPORT.  KTHX."
 
 #: share/skin/s2/template/element/page/actions
 #.  
@@ -1672,7 +1672,7 @@ msgstr "EXPORT T PDF"
 #: share/skin/s2/template/element/listview/actions share/skin/s2/template/element/page/actions
 #.  
 msgid "Export to Word"
-msgstr "EXPORT T WORD"
+msgstr "EXPORT TO WORD"
 
 #: share/template/control/report.html
 #.  
@@ -1687,7 +1687,7 @@ msgstr "EXPORTIN %1"
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
 msgid "Exporting workspaces ..."
-msgstr "EXPORTIN WORKSPACEZ .."
+msgstr "EXPORTINS WORKSPACEZ .."
 
 #: share/template/control/report.html
 #.  
@@ -1697,17 +1697,17 @@ msgstr "FEBRUARY"
 #: lib/Socialtext/Appliance/BackupStore.pm
 #.  
 msgid "Fetching backup file from SMB share ..."
-msgstr "FETCHINS BACKUP FILE FROM SMB SHIS ...  KTHX."
+msgstr "FETCHINS BACKUP FILE FROM SMB SHAR .."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "File"
-msgstr "FILE"
+msgstr "FILE.  KTHX."
 
 #: share/skin/s2/template/element/page/attachment_manage_interface
 #.  
 msgid "File Name"
-msgstr "FILE NAME.  KTHX."
+msgstr "FILE NAME"
 
 #: share/skin/s2/template/view/attachmentslist
 #.  
@@ -1722,7 +1722,7 @@ msgstr "FILEZ TO UPLOAD:"
 #: share/skin/s2/template/element/settings/list_skipped_files
 #.  
 msgid "Files are imported only from ZIP/TGZ javascript/, css/ and images/ paths. Files with other paths are not imported."
-msgstr "FILEZ IS IMPORTED ONLY FROM ZIP/TGZ JAVASCRIPT/, CSZ/ AND IMUJZ/ PATHZ. FILEZ WITH UDDR PATHZ R NOT IMPORTED."
+msgstr "FILEZ AR IMPORTED ONLY FROM ZIP/TGZ JAVASCRIPT/, CSZ/ AND IMUJZ/ PATHZ. FILEZ WITH UDDR PATHZ R NOT IMPORTED."
 
 #: share/skin/s2/template/lite/changes/changes.html
 #.  
@@ -1762,27 +1762,27 @@ msgstr "FULLY PUBLIC"
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "Gave Socialtext Accounts access to %1"
-msgstr "GAVE SOCIALTEXT ACCOUNTZ ACCESZ TO %1"
+msgstr "GAVE SOCIALTEXT ACCOUNTZ ACCESZ T %1"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "Gave Socialtext System Management access to %1"
-msgstr "GAVE SOCIALTEXT SYSTEM MANUJMENT ACCESZ T %1.  KTHXBYE!"
+msgstr "GAVE SOCIALTEXT SYSTEM MANUJMENT ACCESZ 2 %1"
 
 #: share/template/control/user.html
 #.  
 msgid "Give Access to Socialtext Accounts"
-msgstr "GIVE ACCESZ TO SOCIALTEXT ACCOUNTZ.  KTHX."
+msgstr "GIVE ACCESZ 2 SOCIALTEXT ACCOUNTZ.  KTHXBYE!"
 
 #: share/template/control/user.html
 #.  
 msgid "Give Access to Socialtext System Management"
-msgstr "GIVE ACCESZ 2 SOCIALTEXT SYSTEM MANUJMENT"
+msgstr "GIVE ACCESZ T SOCIALTEXT SYSTEM MANUJMENT"
 
 #: share/template/control/workspace.html
 #. (
 msgid "Go to the %1 workspace"
-msgstr "GO TO TEH %1 WORKSPACE"
+msgstr "GO TO TEH %1 WORKSPACE.  KTHXBYE!  KTHX."
 
 #: share/skin/s2/template/element/weblog/actions
 #.  
@@ -1802,7 +1802,7 @@ msgstr "GROWTH REPORTZ"
 #: share/skin/s2/template/popup/email_page
 #. (
 msgid "Hello, this is a page from the workspace that I wanted you to see. This page is also available for viewing or editing on the web at:\n\n%1"
-msgstr "OH HAI, THIZ AR PUJ FROM TEH WORKSPACE THAT I WANTSED YOO T SEE. THIZ PUJ AR ALSO AVAILABLE 4 VIEWIN OR EDITINS ON TEH WEB AT:\N\N%1"
+msgstr "OH HAI, THIZ AR PUJ FROM TEH WORKSPACE THAT I WANTSED YU T SEE. THIZ PUJ AR TEH ALSO AVAILABLE 4 VIEWIN OR EDITINS ON TEH WEB AT:\N\N%1"
 
 #: share/console-template/template/console_wrapper.tmpl share/skin/s2/template/element/page/footer_end share/skin/s2/template/element/wiki/nav
 #.  
@@ -1817,22 +1817,22 @@ msgstr "HUM"
 #: lib/Socialtext/WatchlistPlugin.pm
 #.  
 msgid "How frequently would you like to receive watchlist emails?"
-msgstr "HOW FREQUENTLY WOULD YOO LIKEZ TO RECEIVE WATCHLIST EMAILZ?  KTHXBYE!.  KTHX."
+msgstr "HOW FREQUENTLY WOULD YU LIKEZ 2 RECEIVE WATCHLIST EMAILZ?"
 
 #: lib/Socialtext/RecentChangesPlugin.pm
 #.  
 msgid "How many items from that time period should be displayed as a side box on pages?"
-msgstr "HOW MANY ITEMZ FROM THAT TIME PERIOD SHOULD BE DISPLAYED AZ SIDE BOX ON PUJZ?"
+msgstr "HOW MANY ITEMZ FROM THAT TIME PERIOD SHOULD BE DISPLAYED AZ SIDE BOX ON PUJZ?  KTHXBYE!"
 
 #: lib/Socialtext/WatchlistPlugin.pm
 #.  
 msgid "How many items from your watchlist should be shown on the dashboard?"
-msgstr "HOW MANY ITEMZ FROM YOAR WATCHLIST SHOULD BE SHOWN ON TEH DASHBOARD?"
+msgstr "HOW MANY ITEMZ FROM YORE WATCHLIST SHOULD BE SHOWN ON TEH DASHBOARD?"
 
 #: lib/Socialtext/BreadCrumbsPlugin.pm
 #.  
 msgid "How many pages to show in side pane box?"
-msgstr "HOW MANY PUJZ T SHOW IN SIDE PANE BOX?  KTHX."
+msgstr "HOW MANY PUJZ TO SHOW IN SIDE PANE BOX?"
 
 #: lib/Socialtext/SyndicatePlugin.pm
 #.  
@@ -1847,62 +1847,62 @@ msgstr "HOW MANY POSTZ SHOULD BE DISPLAYED IN WEBLOG VIEW?"
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
 msgid "How often would you like to receive email updates?"
-msgstr "HOW OFTEN WOULD U LIEK TO RECEIVE EMAIL UPDATEZ?"
+msgstr "HOW OFTEN WOULD U LIEK 2 RECEIVE EMAIL UPDATEZ?"
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "How should Daylight Savings/Summer Time be handled?"
-msgstr "HOW SHOULD DAYLITE SAVINGZ/SUMMR TIME BE HANDLED?  KTHX."
+msgstr "HOW SHOULD DAYLITE SAVINGZ/SUMMR TIME BE HANDLED?"
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "How should displayed dates be formatted?"
-msgstr "HOW SHOULD DISPLAYED DATEZ BE FOARMATTED?"
+msgstr "HOW SHOULD DISPLAYED DATEZ BE FRMATTED?"
 
 #: lib/Socialtext/WorkspaceInvitation.pm
 #. (
 msgid "I'm inviting you into the %1 workspace"
-msgstr "IM INVITINS U INTO TEH %1 WORKSPACE.  KTHX."
+msgstr "IM INVITIN YOO INTO TEH %1 WORKSPACE"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "If there is already an existing page with that title, where should the body of the email be added?"
-msgstr "IF THERE AR ALREDDY AN EXISTINS PUJ WITH THAT TITLE, WHERE SHOULD TEH BODY OF TEH EMAIL BE ADDED?  KTHXBYE!"
+msgstr "IF THERE AR TEH ALREDDY AN EXISTINS PUJ WITH THAT TITLE, WHERE SHOULD TEH BODY OF TEH EMAIL BE ADDED?  KTHXBYE!"
 
 #: share/skin/s2/template/popup/copy_to_workspace
 #. (
 msgid "If you are sure you wish to overwrite the \"%1\" page on \"%2\", please press \"Copy\" again."
-msgstr "IF YOO R SHUR YU WISH T OVERWRITE TEH \"%1\" PUJ ON \"%2\", PLEEZ PRESZ \"COPY\" AGAIN."
+msgstr "IF YU AR SHUR YOUZ WISH 2 OVERWRITE TEH \"%1\" PUJ ON \"%2\", PLEEZ PRESZ \"COPY\" AGAIN."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "If you don't select an image, a Socialtext logo will be used instead."
-msgstr "IF U DONT SELECT AN IMUJ, SOCIALTEXT LOGO WILL BE USED INSTEDD."
+msgstr "IF YU DONT SELECT AN IMUJ, SOCIALTEXT LOGO WILL BE USED INSTEDD."
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "If you see something you'd like to add to or change, click the \"Edit\" link at the top of each page."
-msgstr "IF YOUZ SEE SOMETHIN YOUZD LIEK TO ADD T OR CHANGE, CLICK TEH \"EDIT\" LINK AT TEH TOP OV EACH PUJ."
+msgstr "IF YOO SEE SOMETHIN YOOD LIKEZ TO ADD T OR CHANGE, CLICK TEH \"EDIT\" LINK AT TEH TOP OF EACH PUJ."
 
 #: share/skin/s2/template/element/settings/users_invite_search_section
 #.  
 msgid "If you see something you'd like to add to or change, click the \"Edit\" link at the top of each page. Make your contributions in the text box, then click \"Save\"."
-msgstr "IF YU SEE SOMETHIN YOUZD LIKEZ T ADD 2 OR CHANGE, CLICK TEH \"EDIT\" LINK AT TEH TOP OF EACH PUJ. MAKE YOAR CONTRIBUSHUNZ IN TEH TEXT BOX, THEN CLICK \"SAVE\"."
+msgstr "IF YOUZ SEE SOMETHINS YOUZD LIKEZ T ADD 2 OR CHANGE, CLICK TEH \"EDIT\" LINK AT TEH TOP OF EACH PUJ. MAKE YOAR CONTRIBUSHUNZ IN TEH TEXT BOX, THEN CLICK \"SAVE\"."
 
 #: share/skin/s2/template/search_help_field.html
 #.  
 msgid "If you try to search on a field that does not exist (<tt>link:hello</tt>) or without a query (<tt>link:</tt>) you will see this message."
-msgstr "IF YOUZ TRY 2 SEARCH ON FIELD THAT DOEZ NOT EXIST (<TT>LINK:OH HAI,</TT>) OR WITHOUT QUERY (<TT>LINK:</TT>) YOUZ WILL SEE THIZ MESSUJ."
+msgstr "IF YOUZ TRY TO SEARCH ON FIELD THAT DOEZ NOT EXIST (<TT>LINK:OH HAI,</TT>) OR WITHOUT QUERY (<TT>LINK:</TT>) YOUZ WILL SEE THIZ MESSUJ."
 
 #: share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "If you wish, you can include a personal message in the invitation email. You can edit the message to say anything you want."
-msgstr "IF YOO WISH, YU CAN INCLUDE PERSONAL MESSUJ IN TEH INVITASHUN EMAIL. YU CAN EDIT TEH MESSUJ T SAY ANYTHINS YU WANTZ."
+msgstr "IF YU WISH, U CAN INCLUDE PERSONAL MESSUJ IN TEH INVITASHUN EMAIL. YOO CAN EDIT TEH MESSUJ 2 SAY ANYTHINS YU WANTZ."
 
 #: lib/Socialtext/BugsPlugin.pm
 #.  
 msgid "Ignore Bug"
-msgstr "IGNORE BUG.  KTHX."
+msgstr "IGNORE BUG.  KTHXBYE!"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #.  
@@ -1927,27 +1927,27 @@ msgstr "INCLUDE RECENTLY VIEWED ITEMZ AZ SIDE BOX WHEN VIEWINS PUJZ?"
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Include the '%1' Atom feed. Click to edit."
-msgstr "INCLUDE TEH %1 ATOM FEED. CLICK T EDIT."
+msgstr "INCLUDE TEH %1 ATOM FEED. CLICK T EDIT.  KTHX."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Include the '%1' RSS feed. Click to edit."
-msgstr "INCLUDE TEH %1 RSZ FEED. CLICK TO EDIT."
+msgstr "INCLUDE TEH %1 RSZ FEED. CLICK T EDIT.  KTHX."
 
 #: lib/Socialtext/Widget_resource.pm lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Include the page '%1'. Click to edit."
-msgstr "INCLUDE TEH PUJ %1. CLICK TO EDIT.  KTHXBYE!"
+msgstr "INCLUDE TEH PUJ %1. CLICK T EDIT."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Include the weblog '%1'. Click to edit."
-msgstr "INCLUDE TEH WEBLOG %1. CLICK T EDIT."
+msgstr "INCLUDE TEH WEBLOG %1. CLICK 2 EDIT."
 
 #: share/skin/s2/template/view/page/display
 #.  
 msgid "Incoming Links"
-msgstr "INCOMIN LINKZ.  KTHXBYE!"
+msgstr "INCOMINS LINKZ"
 
 #: lib/Socialtext/Workspace.pm
 #.  
@@ -1967,22 +1967,22 @@ msgstr "INITIALIZE WORKSPACEZ"
 #: lib/Socialtext/Appliance/ConsoleController.pm
 #.  
 msgid "Initialize Workspaces?"
-msgstr "INITIALIZE WORKSPACEZ?  KTHX."
+msgstr "INITIALIZE WORKSPACEZ?  KTHXBYE!"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
 msgid "Initializing workspaces ..."
-msgstr "INITIALIZIN WORKSPACEZ .."
+msgstr "INITIALIZINS WORKSPACEZ .."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Instant message to '%1' using AIM. Click to edit."
-msgstr "INSTANT MESSUJ 2 %1 USIN AIM. CLICK TO EDIT."
+msgstr "INSTANT MESSUJ 2 %1 USINS AIM. CLICK T EDIT."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Instant message to '%1' using Yahoo! Click to edit."
-msgstr "INSTANT MESSUJ T %1 USIN YAHOO! CLICK T EDIT."
+msgstr "INSTANT MESSUJ TO %1 USINS YAHOO! CLICK 2 EDIT."
 
 #: share/console-template/template/setup.html
 #.  
@@ -2007,12 +2007,12 @@ msgstr "INVALID HOST: %1"
 #: lib/Socialtext/OpenIdPlugin.pm
 #. (
 msgid "Invitation to join %1"
-msgstr "INVITASHUN TO JOIN %1"
+msgstr "INVITASHUN TO JOIN %1.  KTHXBYE!  KTHX."
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "Invite"
-msgstr "INVITE.  KTHX."
+msgstr "INVITE"
 
 #: share/skin/s2/template/element/settings/select
 #.  
@@ -2032,12 +2032,12 @@ msgstr "INVITED"
 #: share/template/control/workspace.html
 #.  
 msgid "Invited (to system)"
-msgstr "INVITED (TO SYSTEM)"
+msgstr "INVITED (2 SYSTEM)"
 
 #: share/template/control/user_table
 #.  
 msgid "Invited By"
-msgstr "INVITED BY.  KTHX."
+msgstr "INVITED BY"
 
 #: share/template/control/user.html
 #.  
@@ -2047,12 +2047,12 @@ msgstr "INVITED BY"
 #: share/skin/s2/template/search_help_field.html
 #.  
 msgid "It looks like you are trying to search on a field in the search index. At this time the fields available are:"
-msgstr "IT LOOKZ LIKEZ YU IS TRYINS 2 SEARCH ON FIELD IN TEH SEARCH INDEX. AT THIZ TIME TEH FIELDZ AVAILABLE IS:"
+msgstr "IT LOOKZ LIKEZ U AR TRYIN TO SEARCH ON FIELD IN TEH SEARCH INDEX. AT THIZ TIME TEH FIELDZ AVAILABLE IS:.  KTHX."
 
 #: share/skin/s2/template/element/settings/workspaces_create_section
 #.  
 msgid "It must consist of 3-30 lowercase letters, numbers, underscores or dashes."
-msgstr "IT MUST CONSIST OV 3-30 LOWERCASE LETTERZ, NUMBERZ, UNDERSCOREZ OR DASHEZ."
+msgstr "IT MUST CONSIST OF 3-30 LOWERCASE LETTERZ, NUMBERZ, UNDERSCOREZ OR DASHEZ."
 
 #: lib/Socialtext/Locales.pm
 #.  
@@ -2062,7 +2062,7 @@ msgstr "ITALIAN"
 #: share/template/control/report.html
 #.  
 msgid "January"
-msgstr "JANUARY"
+msgstr "JANUARY.  KTHX."
 
 #: lib/Socialtext/Locales.pm
 #.  
@@ -2082,7 +2082,7 @@ msgstr "JUNE"
 #: share/skin/s2/template/popup/copy_to_workspace
 #.  
 msgid "Keep attachments"
-msgstr "KEEP ATTACHMENTZ"
+msgstr "KEEP ATTACHMENTZ.  KTHXBYE!"
 
 #: share/skin/s2/template/popup/copy_to_workspace
 #.  
@@ -2102,7 +2102,7 @@ msgstr "LAST 2 WEEKZ"
 #: lib/Socialtext/RecentChangesPlugin.pm
 #.  
 msgid "Last 24 hours"
-msgstr "LAST 24 HOURZ.  KTHXBYE!"
+msgstr "LAST 24 HOURZ"
 
 #: lib/Socialtext/RecentChangesPlugin.pm
 #.  
@@ -2132,12 +2132,12 @@ msgstr "LAST WEEK"
 #: share/skin/s2/template/view/homepage
 #. (
 msgid "Last edited by %1"
-msgstr "LAST EDITED BY %1.  KTHXBYE!"
+msgstr "LAST EDITED BY %1"
 
 #: share/skin/s2/template/view/homepage share/skin/s2/template/view/homepage
 #. (
 msgid "Last edited by <span class=\"st-homepage-whatsnew-author\">%1</span> on <span class=\"st-homepage-whatsnew-date\">%2</span>"
-msgstr "LAST EDITED BY <SPAN CLASZ=\"ST-HOMEPUJ-WUTSNEW-AUTHOR\">%1</SPAN> ON <SPAN CLASZ=\"ST-HOMEPUJ-WHUTSNEW-DATE\">%2</SPAN>"
+msgstr "LAST EDITED BY <SPAN CLASZ=\"ST-HOMEPUJ-WUTSNEW-AUTHOR\">%1</SPAN> ON <SPAN CLASZ=\"ST-HOMEPUJ-WUTSNEW-DATE\">%2</SPAN>"
 
 #: share/template/control/user.html
 #.  
@@ -2152,7 +2152,7 @@ msgstr "LAST MANUAL BACKUP WAZ %1"
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
 msgid "Last manual backup was never"
-msgstr "LAST MANUAL BACKUP WAZ NEVR"
+msgstr "LAST MANUAL BACKUP WAZ NEVR.  KTHX."
 
 #: share/skin/s2/template/new_form_page/generic/new_form_page_query.html share/skin/s2/template/new_form_page/new_form_page_query.html
 #.  
@@ -2172,22 +2172,22 @@ msgstr "LINK TEXT"
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Link to '%1' in '%2'. Click to edit."
-msgstr "LINK 2 %1 IN %2. CLICK T EDIT."
+msgstr "LINK T %1 IN %2. CLICK T EDIT.  KTHXBYE!"
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Link to file '%1'. Click to edit."
-msgstr "LINK TO FILE %1. CLICK TO EDIT."
+msgstr "LINK T FILE %1. CLICK T EDIT."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Link to tag '%1'. Click to edit."
-msgstr "LINK TO TAG %1. CLICK TO EDIT."
+msgstr "LINK T TAG %1. CLICK 2 EDIT."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Link to weblog '%1'. Click to edit."
-msgstr "LINK T WEBLOG %1. CLICK T EDIT.  KTHX."
+msgstr "LINK T WEBLOG %1. CLICK T EDIT."
 
 #: share/skin/s2/template/element/settings/select
 #.  
@@ -2197,12 +2197,12 @@ msgstr "LIST ALL USERZ"
 #: share/skin/s2/javascript/Wikiwyg/Socialtext.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/template/element/page/actions share/skin/s2/template/element/settings/actions share/skin/s2/template/view/listview share/skin/s2/template/view/weblog share/skin/s2/template/view/weblog
 #.  
 msgid "Loading..."
-msgstr "LOADINS.."
+msgstr "LOADIN.."
 
 #: lib/Socialtext/CLI.pm
 #. (
 msgid "Locale for %1 is now %2"
-msgstr "LOCALE FUR %1 AR TEH NOW %2"
+msgstr "LOCALE FOR %1 AR TEH NOW %2"
 
 #: share/skin/s2/template/element/wiki/nav
 #.  
@@ -2227,12 +2227,12 @@ msgstr "LOGIN"
 #: lib/Socialtext/Workspace.pm
 #.  
 msgid "Logo file must be a gif, jpeg, or png file."
-msgstr "LOGO FILE MUST BE GIF, JPEG, OR PNG FILE."
+msgstr "LOGO FILE MUST BE GIF, JPEG, OR PNG FILE.  KTHXBYE!"
 
 #: share/skin/s2/template/view/empty_watchlist
 #. (
 msgid "Look for <img border=\"0\" src=\"%1/images/st/pagetools/watch-hover.gif\"/> on a page you want to watch and then click on it to add the page to your Watchlist."
-msgstr "LOKAY FOAR <IMG BORDR=\"0\" SRC=\"%1/IMUJZ/ST/PUJTOOLZ/WATCH-HOVR.GIF\"/> ON PUJ YOO WANTZ T WATCH AND THEN CLICK ON IT 2 ADD TEH PUJ TO YORE WATCHLIST."
+msgstr "LOKAY FOAR <IMG BORDR=\"0\" SRC=\"%1/IMUJZ/ST/PUJTOOLZ/WATCH-HOVR.GIF\"/> ON PUJ YOUZ WANTZ T WATCH AND THEN CLICK ON IT T ADD TEH PUJ 2 YUR WATCHLIST."
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
@@ -2252,7 +2252,7 @@ msgstr "MANUJ ALL USERZ"
 #: share/skin/s2/template/element/page/attachments
 #.  
 msgid "Manage files"
-msgstr "MANUJ FILEZ"
+msgstr "MANUJ FILEZ.  KTHXBYE!"
 
 #: share/template/control/report.html
 #.  
@@ -2272,17 +2272,17 @@ msgstr "MAY"
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "Meeting Notes"
-msgstr "MEETIN NOTEZ"
+msgstr "MEETINS NOTEZ"
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "Meeting notes category"
-msgstr "MEETINS NOTEZ CATEGORY"
+msgstr "MEETIN NOTEZ CATEGORY"
 
 #: share/skin/s2/template/element/wiki/nav
 #.  
 msgid "Mobile"
-msgstr "MOBILE.  KTHX."
+msgstr "MOBILE"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -2292,22 +2292,22 @@ msgstr "MON"
 #: share/skin/s2/template/element/settings/select
 #.  
 msgid "My Settings"
-msgstr "MAH SETTINGZ.  KTHXBYE!"
+msgstr "MUH SETTINGZ"
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "My Weblog"
-msgstr "MAH WEBLOG.  KTHX."
+msgstr "MUH WEBLOG"
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "My Weblog weblog"
-msgstr "MUH WEBLOG WEBLOG"
+msgstr "MAH WEBLOG WEBLOG"
 
 #: share/skin/s2/template/element/settings/select
 #.  
 msgid "My Workspaces"
-msgstr "MUH WORKSPACEZ"
+msgstr "MAH WORKSPACEZ.  KTHX."
 
 #: share/skin/s2/template/element/settings/users_settings_section share/skin/s2/template/view/refcard share/template/control/account_table share/template/control/user_table share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
 #.  
@@ -2322,12 +2322,12 @@ msgstr "NAME:"
 #: lib/Socialtext/WeblogPlugin.pm
 #. (
 msgid "Navigation for: %1"
-msgstr "NAVIGASHUN FOR: %1"
+msgstr "NAVIGASHUN FUR: %1"
 
 #: share/console-template/template/console_wrapper.tmpl
 #.  
 msgid "Navigation tabs to select different sections of the control panel."
-msgstr "NAVIGASHUN TABZ T SELECT DIFFERENT SECSHUNZ OV TEH CONTROL PANEL."
+msgstr "NAVIGASHUN TABZ TO SELECT DIFFERENT SECSHUNZ OF TEH CONTROL PANEL."
 
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
@@ -2362,12 +2362,12 @@ msgstr "NEW PUJ"
 #: share/skin/s2/template/popup/copy_to_workspace
 #.  
 msgid "New page name"
-msgstr "NEW PUJ NAME"
+msgstr "NEW PUJ NAME.  KTHXBYE!"
 
 #: share/skin/s2/template/element/settings/users_settings_section
 #.  
 msgid "New password"
-msgstr "NEW PASSWORD.  KTHX."
+msgstr "NEW PASSWORD.  KTHXBYE!"
 
 #: lib/Socialtext/UserSettingsPlugin.pm
 #.  
@@ -2377,7 +2377,7 @@ msgstr "NEW PASSWORDZ DO NOT MATCH"
 #: share/skin/s2/template/element/settings/users_settings_section
 #.  
 msgid "New passwords must be at least 6 characters long."
-msgstr "NEW PASSWORDZ MUST BE AT LEAST 6 CHARACTERZ LONG.  KTHX."
+msgstr "NEW PASSWORDZ MUST BE AT LEAST 6 CHARACTERZ LONG."
 
 #: build/templates/socialtext/search/search_config.yaml.tt2 share/skin/s2/javascript/pageview.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-other-mini.js share/skin/s2/javascript/socialtext-other.js
 #.  
@@ -2387,12 +2387,12 @@ msgstr "NEW SEARCH"
 #: share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "New users will be sent the following invitation email:"
-msgstr "NEW USERZ WILL BE SENT TEH FOLLOWIN INVITASHUN EMAIL:"
+msgstr "NEW USERZ WILL BE SENT TEH FOLLOWINS INVITASHUN EMAIL:"
 
 #: share/skin/s2/template/popup/copy_to_workspace
 #.  
 msgid "New workspace"
-msgstr "NEW WORKSPACE"
+msgstr "NEW WORKSPACE.  KTHXBYE!"
 
 #: share/skin/s2/template/view/weblog
 #.  
@@ -2407,7 +2407,7 @@ msgstr "NEWR ENTRIEZ"
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "No"
-msgstr "NO.  KTHXBYE!"
+msgstr "NO"
 
 #: share/skin/s2/template/view/page/stats
 #.  
@@ -2417,12 +2417,12 @@ msgstr "NO DOWNLOADZ."
 #: lib/Socialtext/UserSettingsPlugin.pm lib/Socialtext/UserSettingsPlugin.pm
 #.  
 msgid "No email addresses specified"
-msgstr "NO EMAIL ADDRESSEZ SPECIFIED"
+msgstr "NO EMAIL ADDRESSEZ SPECIFIED.  KTHXBYE!"
 
 #: share/console-template/template/backup.html
 #.  
 msgid "No files available to restore."
-msgstr "NO FILEZ AVAILABLE T RESTORE."
+msgstr "NO FILEZ AVAILABLE TO RESTORE."
 
 #: lib/Socialtext/HitCounterPlugin.pm lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
 #.  
@@ -2437,37 +2437,37 @@ msgstr "NO PUJ NAME GIVEN"
 #: lib/Socialtext/RtfExportPlugin.pm
 #.  
 msgid "No pages selected for export"
-msgstr "NO PUJZ SELECTED FR EXPORT"
+msgstr "NO PUJZ SELECTED FOR EXPORT.  KTHXBYE!"
 
 #: share/skin/s2/template/view/page/display
 #.  
 msgid "No revisions"
-msgstr "NO REVISHUNZ.  KTHX."
+msgstr "NO REVISHUNZ"
 
 #: lib/Socialtext/HitCounterPlugin.pm
 #. (
 msgid "No statistics yet available for %1"
-msgstr "NO STATISTICZ YET AVAILABLE FOR %1"
+msgstr "NO STATISTICZ YET AVAILABLE FR %1"
 
 #: lib/Socialtext/HitCounterPlugin.pm
 #.  
 msgid "No stats dir for this page"
-msgstr "NO STATZ DIR 4 THIZ PUJ.  KTHXBYE!"
+msgstr "NO STATZ DIR FOR THIZ PUJ.  KTHX."
 
 #: lib/Socialtext/HitCounterPlugin.pm
 #.  
 msgid "No stats for this page"
-msgstr "NO STATZ 4 THIZ PUJ"
+msgstr "NO STATZ 4 THIZ PUJ.  KTHX."
 
 #: lib/Socialtext/HitCounterPlugin.pm
 #.  
 msgid "No stats for this page yet"
-msgstr "NO STATZ FOAR THIZ PUJ YET"
+msgstr "NO STATZ FUR THIZ PUJ YET.  KTHXBYE!"
 
 #: share/skin/s2/template/view/page/stats
 #.  
 msgid "No uploads."
-msgstr "NO UPLOADZ.  KTHX."
+msgstr "NO UPLOADZ."
 
 #: lib/Socialtext/OpenIdPlugin.pm
 #.  
@@ -2492,7 +2492,7 @@ msgstr "NOVEMEBR"
 #: share/template/control/account_table share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Number of Users"
-msgstr "NUMBR OV USERZ"
+msgstr "NUMBR OF USERZ.  KTHX."
 
 #: share/template/control/account_table share/template/control/user_table share/template/control/user_table share/template/control/workspace.html
 #.  
@@ -2512,32 +2512,32 @@ msgstr "KAY"
 #: lib/Socialtext/UserSettingsPlugin.pm
 #.  
 msgid "Old password is incorrect"
-msgstr "OLD PASSWORD AR TEH INCORRECT"
+msgstr "OLD PASSWORD AR INCORRECT"
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #. (
 msgid "Only %1 can send email to this workspace."
-msgstr "ONLY %1 CAN SEND EMAIL 2 THIZ WORKSPACE."
+msgstr "ONLY %1 CAN SEND EMAIL TO THIZ WORKSPACE."
 
 #: share/skin/s2/template/element/settings/workspaces_unsubscribe_section
 #.  
 msgid "Only Click the button below if you wish to be unsubscribed from this workspace. After clicking you will no longer have access to this workspace unless you are resubscribed by a Workspace administrator at a later time."
-msgstr "ONLY CLICK TEH BUTTON BELOW IF YU WISH TO BE UNSUBSCRIBED FROM THIZ WORKSPACE. AFTR CLICKINS YOO WILL NO LONGR HAVE ACCESZ TO THIZ WORKSPACE UNLESZ YOUZ AR RESUBSCRIBED BY WORKSPACE ADMINISTRATOR AT LATR TIME."
+msgstr "ONLY CLICK TEH BUTTON BELOW IF U WISH T BE UNSUBSCRIBED FROM THIZ WORKSPACE. AFTR CLICKIN YOO WILL NO LONGR HAVE ACCESZ T THIZ WORKSPACE UNLESZ YU AR RESUBSCRIBED BY WORKSPACE ADMINISTRATOR AT LATR TIME."
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #. (
 msgid "Only registered users can send email to %1."
-msgstr "ONLY REGISTERED USERZ CAN SEND EMAIL TO %1.  KTHXBYE!"
+msgstr "ONLY REGISTERED USERZ CAN SEND EMAIL T %1."
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #. (
 msgid "Only workspace members can send email to %1."
-msgstr "ONLY WORKSPACE MEMBERZ CAN SEND EMAIL T %1."
+msgstr "ONLY WORKSPACE MEMBERZ CAN SEND EMAIL TO %1."
 
 #: share/skin/s2/template/element/settings/users_invite_openid_invite
 #.  
 msgid "OpenID for this user:"
-msgstr "OPENID FUR THIZ USR:"
+msgstr "OPENID FOR THIZ USR:"
 
 #: share/skin/s2/template/element/settings/users_invite_openid_invite
 #.  
@@ -2547,27 +2547,27 @@ msgstr "OPENID:"
 #: share/skin/s2/template/workspaces_created_section.html
 #. (
 msgid "Or you may continue to work in this workspace, and visit \"%1\" later."
-msgstr "OR YOO MAY CONTINUE TO WORK IN THIZ WORKSPACE, AND VISIT \"%1\" LATR."
+msgstr "OR U MAY CONTINUE T WORK IN THIZ WORKSPACE, AND VISIT \"%1\" LATR."
 
 #: lib/Socialtext/BacklinksPlugin.pm lib/Socialtext/BacklinksPlugin.pm share/skin/s2/template/element/listview/actionbar
 #.  
 msgid "Orphaned Pages"
-msgstr "ORFANED PUJZ.  KTHX."
+msgstr "ORFANED PUJZ"
 
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "Other participants can see it, too, and can edit it to leave notes for you."
-msgstr "UDDR PARTICIPANTZ CAN SEE IT, T, AND CAN EDIT IT T LEAVE NOTEZ FOAR YOO."
+msgstr "UDDR PARTICIPANTZ CAN SEE IT, TO, AND CAN EDIT IT TO LEAVE NOTEZ FOR YOUZ.  KTHX."
 
 #: share/console-template/template/setup.html
 #.  
 msgid "Outgoing mail server"
-msgstr "OUTGOINS MAIL SERVR"
+msgstr "OUTGOIN MAIL SERVR"
 
 #: share/console-template/template/console_wrapper.tmpl
 #.  
 msgid "Overview"
-msgstr "OVERVIEW.  KTHX."
+msgstr "OVERVIEW"
 
 #: share/skin/s2/template/element/page/newpage_duplicate
 #.  
@@ -2582,12 +2582,12 @@ msgstr "PUJ EDITINS"
 #: share/skin/s2/template/lite/page/display.html
 #.  
 msgid "Page Last Updated:"
-msgstr "PUJ LAST UPDATED:.  KTHX."
+msgstr "PUJ LAST UPDATED:"
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "Page Link"
-msgstr "PUJ LINK.  KTHX."
+msgstr "PUJ LINK"
 
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
@@ -2602,12 +2602,12 @@ msgstr "PUJ TITLE"
 #: share/skin/s2/template/element/page/newpage_save
 #.  
 msgid "Page Title:"
-msgstr "PUJ TITLE:"
+msgstr "PUJ TITLE:.  KTHX."
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "Page link"
-msgstr "PUJ LINK.  KTHXBYE!"
+msgstr "PUJ LINK"
 
 #: lib/Socialtext/EmailNotifyPlugin.pm lib/Socialtext/WatchlistPlugin.pm
 #.  
@@ -2627,27 +2627,27 @@ msgstr "PUJ NAME AR TO LONG"
 #: lib/Socialtext/Page.pm
 #. (
 msgid "Page renamed to %1"
-msgstr "PUJ RENAMED TO %1"
+msgstr "PUJ RENAMED TO %1.  KTHXBYE!"
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "Page section name"
-msgstr "PUJ SECSHUN NAME"
+msgstr "PUJ SECSHUN NAME.  KTHX."
 
 #: lib/Socialtext/EditPlugin.pm lib/Socialtext/EmailReceiver/Base.pm lib/Socialtext/EmailReceiver/Base.pm lib/Socialtext/Page.pm lib/Socialtext/UserPreferencesPlugin.pm share/skin/s2/javascript/Wikiwyg/Socialtext.js share/skin/s2/javascript/Wikiwyg/Socialtext.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-display-ui.js
 #.  
 msgid "Page title is too long after URL encoding"
-msgstr "PUJ TITLE AR T LONG AFTR URL ENCODIN"
+msgstr "PUJ TITLE AR TEH TO LONG AFTR URL ENCODIN"
 
 #: lib/Socialtext/WeblogPlugin.pm
 #. (
 msgid "Page title is too long; maximum length is %1"
-msgstr "PUJ TITLE AR TEH 2 LONG; MAXIMUM LENGTH AR TEH %1"
+msgstr "PUJ TITLE AR T LONG; MAXIMUM LENGTH AR %1"
 
 #: lib/Socialtext/EditPlugin.pm
 #.  
 msgid "Page title missing"
-msgstr "PUJ TITLE MISSINS.  KTHXBYE!"
+msgstr "PUJ TITLE MISSINS"
 
 #: share/skin/s2/template/view/taglistview
 #.  
@@ -2657,17 +2657,17 @@ msgstr "PUJZ"
 #: lib/Socialtext/WatchlistPlugin.pm share/skin/s2/template/view/empty_watchlist
 #.  
 msgid "Pages You're Watching"
-msgstr "PUJZ URE WATCHIN"
+msgstr "PUJZ YOORE WATCHINS"
 
 #: lib/Socialtext/SearchPlugin.pm
 #. (
 msgid "Pages containing '%1' (%2)"
-msgstr "PUJZ CONTAININS %1 (%2).  KTHX."
+msgstr "PUJZ CONTAININS %1 (%2)"
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Pages with the '%1' tag. Click to edit."
-msgstr "PUJZ WITH TEH %1 TAG. CLICK TO EDIT.  KTHXBYE!.  KTHX."
+msgstr "PUJZ WITH TEH %1 TAG. CLICK 2 EDIT."
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -2682,12 +2682,12 @@ msgstr "PASSWORDZ MUST BE AT LEAST 6 CHARACTERZ LONG."
 #: share/console-template/template/backup.html
 #.  
 msgid "Perform Backup Now"
-msgstr "PERFORM BACKUP NOW"
+msgstr "PER4M BACKUP NOW.  KTHX."
 
 #: share/console-template/template/backup.html
 #.  
 msgid "Perform Restore"
-msgstr "PERFOARM RESTORE"
+msgstr "PER4M RESTORE"
 
 #: share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
 #.  
@@ -2702,7 +2702,7 @@ msgstr "PLEEZ CHOOSE DIFFERENT NAME."
 #: lib/Socialtext/User.pm
 #.  
 msgid "Please confirm your email address to register with Socialtext"
-msgstr "PLEEZ CONFIRM YUR EMAIL ADDRESZ 2 REGISTR WITH SOCIALTEXT.  KTHXBYE!"
+msgstr "PLEEZ CONFIRM YUR EMAIL ADDRESZ T REGISTR WITH SOCIALTEXT"
 
 #: lib/Socialtext/Appliance/Model/Setup.pm lib/Socialtext/Appliance/Model/Setup.pm
 #.  
@@ -2722,12 +2722,12 @@ msgstr "PLEEZ ENTR AN EMAIL ADDRESZ."
 #: lib/Socialtext/User.pm
 #.  
 msgid "Please follow these instructions to change your Socialtext password"
-msgstr "PLEEZ FOLLOW THEEZ INSTRUCSHUNZ T CHANGE YORE SOCIALTEXT PASSWORD"
+msgstr "PLEEZ FOLLOW THEEZ INSTRUCSHUNZ 2 CHANGE YOAR SOCIALTEXT PASSWORD.  KTHXBYE!"
 
 #: share/skin/s2/template/element/settings/weblog_create
 #.  
 msgid "Please give your weblog a name. If the name you provide does not end with \"Blog\" or \"Weblog\", the system will add \"Blog\" to the name you provide. After you click \"Create\", you'll be taken right to the new weblog."
-msgstr "PLEEZ GIVE UR WEBLOG NAME. IF TEH NAME YOUZ PROVIDE DOEZ NOT END WITH \"BLOG\" OR \"WEBLOG\", TEH SYSTEM WILL ADD \"BLOG\" T TEH NAME U PROVIDE. AFTR U CLICK \"CREATE\", ULL BE TAKEN RITE TO TEH NEW WEBLOG."
+msgstr "PLEEZ GIVE YUR WEBLOG NAME. IF TEH NAME U PROVIDE DOEZ NOT END WITH \"BLOG\" OR \"WEBLOG\", TEH SYSTEM WILL ADD \"BLOG\" TO TEH NAME YOO PROVIDE. AFTR YOO CLICK \"CREATE\", ULL BE TAKEN RITE TO TEH NEW WEBLOG."
 
 #: share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
 #. (
@@ -2737,12 +2737,12 @@ msgstr "PLEEZ INVITE THEEZ PEOPLE INTO TEH %1 WORKSPACE."
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
 msgid "Please select a file to restore"
-msgstr "PLEEZ SELECT FILE 2 RESTORE"
+msgstr "PLEEZ SELECT FILE TO RESTORE"
 
 #: lib/Socialtext/Hub.pm
 #. (
 msgid "Please send email to <a href=\"mailto:%1\">%1</a> if you think it should have worked."
-msgstr "PLEEZ SEND EMAIL TO < HREF=\"MAILTO:%1\">%1</> IF YOO THINK IT SHOULD HAVE WORKED.  KTHXBYE!"
+msgstr "PLEEZ SEND EMAIL TO < HREF=\"MAILTO:%1\">%1</> IF YOUZ THINK IT SHOULD HAVE WORKED."
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -2752,7 +2752,7 @@ msgstr "PLEEZ WAIT UNTIL TEH BACKUP FINISHEZ, THEN RETRY."
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
 msgid "Please wait until the restore finishes, then retry."
-msgstr "PLEEZ WAIT UNTIL TEH RESTORE FINISHEZ, THEN RETRY."
+msgstr "PLEEZ WAIT UNTIL TEH RESTORE FINISHEZ, THEN RETRY.  KTHX."
 
 #: share/skin/s2/template/view/category_display
 #.  
@@ -2762,17 +2762,17 @@ msgstr "POST TO THIZ TAG BY EMAIL:"
 #: share/skin/s2/template/view/weblog share/skin/s2/template/view/weblog
 #. (
 msgid "Posted by %1 on %2"
-msgstr "POSTED BY %1 ON %2"
+msgstr "POSTED BY %1 ON %2.  KTHX."
 
 #: share/skin/s2/template/element/settings/select
 #.  
 msgid "Preferences"
-msgstr "PREFERENCEZ"
+msgstr "PREFERENCEZ.  KTHX."
 
 #: lib/Socialtext/UserPreferencesPlugin.pm
 #.  
 msgid "Preferences Class ID is missing"
-msgstr "PREFERENCEZ CLASZ ID AR MISSIN"
+msgstr "PREFERENCEZ CLASZ ID AR TEH MISSIN"
 
 #: lib/Socialtext/UserPreferencesPlugin.pm
 #.  
@@ -2782,17 +2782,17 @@ msgstr "PREFERENCEZ SAVED"
 #: lib/Socialtext/UserPreferencesPlugin.pm
 #. (
 msgid "Preferences: %1"
-msgstr "PREFERENCEZ: %1.  KTHX."
+msgstr "PREFERENCEZ: %1"
 
 #: share/skin/s2/javascript/Wikiwyg/Socialtext.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/template/element/page/edit
 #.  
 msgid "Preview"
-msgstr "PREVIEW"
+msgstr "PREVIEW.  KTHX."
 
 #: share/skin/s2/template/element/page/actions
 #.  
 msgid "Print"
-msgstr "PRINT"
+msgstr "PRINT.  KTHX."
 
 #: share/skin/s2/template/view/refcard
 #.  
@@ -2807,7 +2807,7 @@ msgstr "PRINT THIZ PUJ"
 #: share/skin/s2/template/view/weblog
 #.  
 msgid "Print this weblog"
-msgstr "PRINT THIZ WEBLOG"
+msgstr "PRINT THIZ WEBLOG.  KTHXBYE!"
 
 #: share/template/control/growth_report.html share/template/control/report.html
 #.  
@@ -2817,17 +2817,17 @@ msgstr "PRINTR FRIENDLY REPORT"
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Private"
-msgstr "PRIVATE.  KTHXBYE!"
+msgstr "PRIVATE"
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Public login-to-edit"
-msgstr "PUBLIC LOGIN-T-EDIT"
+msgstr "PUBLIC LOGIN-TO-EDIT"
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Public read-and-comment-only"
-msgstr "PUBLIC REDD-AND-COMMENT-ONLY"
+msgstr "PUBLIC REDD-AND-COMMENT-ONLY.  KTHXBYE!  KTHX."
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
@@ -2842,7 +2842,7 @@ msgstr "QUICK JUMP"
 #: share/console-template/template/setup.html
 #.  
 msgid "RFC 868 Time Server"
-msgstr "RFC 868 TIME SERVR.  KTHXBYE!"
+msgstr "RFC 868 TIME SERVR"
 
 #: lib/Socialtext/Appliance/ConsoleController.pm
 #.  
@@ -2852,17 +2852,17 @@ msgstr "REBOOT"
 #: share/console-template/template/shutdown.html
 #.  
 msgid "Reboot Appliance"
-msgstr "REBOOT APPLIANCE.  KTHX."
+msgstr "REBOOT APPLIANCE"
 
 #: lib/Socialtext/Appliance/ConsoleController.pm
 #.  
 msgid "Reboot Appliance?"
-msgstr "REBOOT APPLIANCE?"
+msgstr "REBOOT APPLIANCE?  KTHX."
 
 #: share/console-template/template/shutdown.html
 #.  
 msgid "Reboot Now"
-msgstr "REBOOT NOW.  KTHX."
+msgstr "REBOOT NOW"
 
 #: lib/Socialtext/Lite.pm lib/Socialtext/SyndicatePlugin.pm lib/Socialtext/WeblogPlugin.pm share/skin/s2/template/element/weblog/actions
 #.  
@@ -2882,12 +2882,12 @@ msgstr "RECENT CHANGEZ IN TAG %1"
 #: lib/Socialtext/CategoryPlugin.pm
 #. (
 msgid "Recent Changes in Tag %1 in workspace %2"
-msgstr "RECENT CHANGEZ IN TAG %1 IN WORKSPACE %2"
+msgstr "RECENT CHANGEZ IN TAG %1 IN WORKSPACE %2.  KTHXBYE!"
 
 #: lib/Socialtext/CategoryPlugin.pm
 #. (
 msgid "Recent Posts from %1"
-msgstr "RECENT POSTZ FROM %1.  KTHXBYE!"
+msgstr "RECENT POSTZ FROM %1"
 
 #: lib/Socialtext/CategoryPlugin.pm
 #. (
@@ -2912,7 +2912,7 @@ msgstr "RECENTLY VIEWED PUJZ"
 #: lib/Socialtext/Appliance/ConsoleController.pm
 #. (
 msgid "Redirecting to %1"
-msgstr "REDIRECTIN TO %1"
+msgstr "REDIRECTINS TO %1"
 
 #: share/console-template/template/backup.html
 #.  
@@ -2932,32 +2932,32 @@ msgstr "RELEVANCE"
 #: share/skin/s2/template/element/settings/users_listall_section share/skin/s2/template/popup/email_page
 #.  
 msgid "Remove"
-msgstr "REMOVE"
+msgstr "REMUUV"
 
 #: share/skin/s2/template/element/jst/attachment/queue share/skin/s2/template/element/jst/tag/queue
 #. (
 msgid "Remove %1 from the queue"
-msgstr "REMOOV %1 FROM TEH QUEUE"
+msgstr "REMUV %1 FROM TEH QUEUE"
 
 #: share/skin/s2/template/element/jst/tag/name share/skin/s2/template/element/page/tags
 #. (
 msgid "Remove %1 tag from page"
-msgstr "REMOVE %1 TAG FROM PUJ.  KTHX."
+msgstr "REMOOV %1 TAG FROM PUJ"
 
 #: share/template/control/user.html
 #.  
 msgid "Remove Access to Socialtext Accounts"
-msgstr "REMUUV ACCESZ TO SOCIALTEXT ACCOUNTZ"
+msgstr "REMOOVE ACCESZ TO SOCIALTEXT ACCOUNTZ"
 
 #: share/template/control/user.html
 #.  
 msgid "Remove Access to Socialtext System Management"
-msgstr "REMUV ACCESZ 2 SOCIALTEXT SYSTEM MANUJMENT.  KTHX."
+msgstr "REMUV ACCESZ TO SOCIALTEXT SYSTEM MANUJMENT"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "Remove&nbsp;Existing&nbsp;Files"
-msgstr "REMOVE&NBSP;EXISTIN&NBSP;FILEZ"
+msgstr "REMUV&NBSP;EXISTIN&NBSP;FILEZ"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -2977,17 +2977,17 @@ msgstr "RENAME PUJ"
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "Replace existing page"
-msgstr "REPLACE EXISTINS PUJ"
+msgstr "REPLACE EXISTIN PUJ"
 
 #: lib/Socialtext/Page.pm share/skin/s2/javascript/Wikiwyg/Socialtext.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js
 #.  
 msgid "Replace this text with your own."
-msgstr "REPLACE THIZ TEXT WITH UR OWN."
+msgstr "REPLACE THIZ TEXT WITH YOAR OWN."
 
 #: lib/Socialtext/BugsPlugin.pm
 #.  
 msgid "Report Bug"
-msgstr "REPORT BUG.  KTHXBYE!"
+msgstr "REPORT BUG"
 
 #: share/template/control/report.html
 #.  
@@ -2997,12 +2997,12 @@ msgstr "REPORT PERIOD:"
 #: lib/Socialtext/UserSettingsPlugin.pm
 #. (
 msgid "Request to invite new users to the %1 workspace"
-msgstr "REQUEST TO INVITE NEW USERZ TO TEH %1 WORKSPACE"
+msgstr "REQUEST 2 INVITE NEW USERZ TO TEH %1 WORKSPACE"
 
 #: share/skin/s2/template/element/settings/users_listall_section
 #.  
 msgid "Reset Password"
-msgstr "RESET PASSWORD.  KTHX."
+msgstr "RESET PASSWORD"
 
 #: share/console-template/template/backup.html
 #.  
@@ -3017,7 +3017,7 @@ msgstr "RESTORE PUJ"
 #: share/skin/s2/template/element/page/revision_view_actions
 #. (
 msgid "Restore Revision %1"
-msgstr "RESTORE REVISHUN %1"
+msgstr "RESTORE REVISHUN %1.  KTHX."
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #. (
@@ -3037,27 +3037,27 @@ msgstr "RESTORE IN PROGRESZ - STARTED AT NEVR"
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
 msgid "Restore is already running"
-msgstr "RESTORE AR TEH ALREDDY RUNNINS.  KTHX."
+msgstr "RESTORE AR TEH ALREDDY RUNNIN"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
 msgid "Restore latest is already running"
-msgstr "RESTORE LATEST AR TEH ALREDDY RUNNINS.  KTHXBYE!  KTHX."
+msgstr "RESTORE LATEST AR TEH ALREDDY RUNNIN"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #. (
 msgid "Restore of %1 finished."
-msgstr "RESTORE OF %1 FINISHED."
+msgstr "RESTORE OF %1 FINISHED.  KTHX."
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #. (
 msgid "Restoring backup from (%1) ..."
-msgstr "RESTORIN BACKUP FROM (%1) ...  KTHXBYE!"
+msgstr "RESTORINS BACKUP FROM (%1) .."
 
 #: share/skin/s2/template/view/page/stats_index
 #.  
 msgid "Return to page"
-msgstr "RETURN 2 PUJ"
+msgstr "RETURN T PUJ"
 
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
@@ -3067,7 +3067,7 @@ msgstr "REVERSE CHRONOLOGICALLY"
 #: share/skin/s2/template/workspaces_created_section.html
 #. (
 msgid "Review or change the settings for %1:"
-msgstr "REVIEW OR CHANGE TEH SETTINGZ FOR %1:"
+msgstr "REVIEW OR CHANGE TEH SETTINGZ FUR %1:"
 
 #: lib/Socialtext/RevisionPlugin.pm lib/Socialtext/RevisionPlugin.pm
 #. (
@@ -3077,7 +3077,7 @@ msgstr "REVISHUN %1"
 #: share/skin/s2/template/element/listview/pages
 #.  
 msgid "Revisions"
-msgstr "REVISHUNZ.  KTHX."
+msgstr "REVISHUNZ"
 
 #: share/skin/s2/template/view/page_revision_list
 #.  
@@ -3087,7 +3087,7 @@ msgstr "REVISHUNZ TO TEH CURRENT DOCUMENT"
 #: share/template/control/workspace.html
 #.  
 msgid "Role"
-msgstr "ROLE.  KTHXBYE!"
+msgstr "ROLE"
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
@@ -3112,7 +3112,7 @@ msgstr "SAVE"
 #: share/console-template/template/backup.html
 #.  
 msgid "Save Backup Schedule"
-msgstr "SAVE BACKUP SCHEDULE.  KTHXBYE!"
+msgstr "SAVE BACKUP SCHEDULE"
 
 #: share/skin/s2/template/element/page/newpage_save
 #.  
@@ -3132,7 +3132,7 @@ msgstr "SAVE TEH PUJ WITH TEH NAME \"<SPAN ID=\"%1-SUGGEST\">XXX</SPAN>\""
 #: share/skin/s2/template/element/page/newpage_duplicate
 #.  
 msgid "Save with a different name:"
-msgstr "SAVE WITH DIFFERENT NAME:.  KTHX."
+msgstr "SAVE WITH DIFFERENT NAME:"
 
 #: lib/Socialtext/DisplayPlugin.pm
 #.  
@@ -3142,22 +3142,22 @@ msgstr "SCREEN LAYOUT"
 #: build/templates/socialtext/search/search_config.yaml.tt2 lib/Socialtext/Lite.pm
 #.  
 msgid "Search"
-msgstr "SEARCH.  KTHX."
+msgstr "SEARCH"
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Search Google for '%1'. Click to edit."
-msgstr "SEARCH GOOGLE FOAR %1. CLICK T EDIT."
+msgstr "SEARCH GOOGLE FOR %1. CLICK TO EDIT.  KTHX."
 
 #: lib/Socialtext/SearchPlugin.pm
 #.  
 msgid "Search Results"
-msgstr "SEARCH RESULTZ"
+msgstr "SEARCH RESULTZ.  KTHX."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Search Technorati for '%1'. Click to edit."
-msgstr "SEARCH TECHNORATI FOR %1. CLICK T EDIT."
+msgstr "SEARCH TECHNORATI FUR %1. CLICK TO EDIT."
 
 #: share/template/control/accounts.html share/template/control/workspaces.html
 #.  
@@ -3167,27 +3167,27 @@ msgstr "SEARCH BY NAME"
 #: share/template/control/users.html
 #.  
 msgid "Search by username"
-msgstr "SEARCH BY USERNAME.  KTHX."
+msgstr "SEARCH BY USERNAME"
 
 #: lib/Socialtext/SearchPlugin.pm
 #. (
 msgid "Search for %1"
-msgstr "SEARCH FOR %1.  KTHXBYE!  KTHX."
+msgstr "SEARCH FR %1"
 
 #: lib/Socialtext/SearchPlugin.pm
 #. (
 msgid "Search for %1 in workspace %2"
-msgstr "SEARCH FOR %1 IN WORKSPACE %2"
+msgstr "SEARCH FUR %1 IN WORKSPACE %2"
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Search for '%1'. Click to edit."
-msgstr "SEARCH FUR %1. CLICK 2 EDIT."
+msgstr "SEARCH FOAR %1. CLICK TO EDIT."
 
 #: share/skin/s2/template/element/settings/users_invite_search_section
 #.  
 msgid "Search for Users to Invite"
-msgstr "SEARCH FOR USERZ T INVITE"
+msgstr "SEARCH FOR USERZ TO INVITE"
 
 #: lib/Socialtext/SOAPGoogle.pm
 #. (
@@ -3197,7 +3197,7 @@ msgstr "SEARCH FR \"%1\""
 #: share/skin/s2/template/lite/search/search.html
 #.  
 msgid "Search for the following terms:"
-msgstr "SEARCH FOR TEH FOLLOWIN TERMZ:"
+msgstr "SEARCH 4 TEH FOLLOWIN TERMZ:.  KTHXBYE!"
 
 #: share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/template/view/refcard
 #.  
@@ -3207,12 +3207,12 @@ msgstr "SECSHUN"
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Section marker '%1'. Click to edit."
-msgstr "SECSHUN MARKR %1. CLICK TO EDIT."
+msgstr "SECSHUN MARKR %1. CLICK T EDIT."
 
 #: share/skin/s2/template/element/wiki/subnav-dashboard
 #.  
 msgid "See more"
-msgstr "SEE MOAR.  KTHXBYE!"
+msgstr "SEE MOAR.  KTHX."
 
 #: share/skin/s2/template/view/page_revision_list
 #.  
@@ -3222,27 +3222,27 @@ msgstr "SELECT"
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "Select a workspace skin:"
-msgstr "SELECT WORKSPACE SKIN:.  KTHX."
+msgstr "SELECT WORKSPACE SKIN:"
 
 #: share/skin/s2/javascript/listview.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-other-mini.js share/skin/s2/javascript/socialtext-other.js share/skin/s2/template/element/listview/pages share/skin/s2/template/view/attachmentslist
 #.  
 msgid "Select all pages"
-msgstr "SELECT ALL PUJZ.  KTHXBYE!"
+msgstr "SELECT ALL PUJZ"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "Select the ZIP or TGZ file that contains the customized skin files:"
-msgstr "SELECT TEH ZIP OR TGZ FILE THAT CONTAINZ TEH CUSTOMIZED SKIN FILEZ:"
+msgstr "SELECT TEH ZIP OR TGZ FILE THAT CONTAINZ TEH CUSTOMIZED SKIN FILEZ:.  KTHXBYE!"
 
 #: share/console-template/template/setup.html share/console-template/template/setup.html
 #.  
 msgid "Send Test Email"
-msgstr "SEND TEST EMAIL"
+msgstr "SEND TEST EMAIL.  KTHX."
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
 msgid "Sent test email to %1"
-msgstr "SENT TEST EMAIL TO %1"
+msgstr "SENT TEST EMAIL T %1"
 
 #: share/template/control/report.html
 #.  
@@ -3277,12 +3277,12 @@ msgstr "SETUP"
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
 msgid "Shared Directory Name"
-msgstr "SHARD DIRECTORY NAME"
+msgstr "SHARD DIRECTORY NAME.  KTHXBYE!"
 
 #: lib/Socialtext/DisplayPlugin.pm
 #.  
 msgid "Should hovering your mouse over a link display the first part of the page?"
-msgstr "SHOULD HOVERIN YORE MOUSE OVR LINK DISPLAY TEH FIRST PART OF TEH PUJ?"
+msgstr "SHOULD HOVERIN YOAR MOUSE OVR LINK DISPLAY TEH FIRST PART OF TEH PUJ?"
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
@@ -3292,17 +3292,17 @@ msgstr "SHOULD SECONDZ BE INCLUDED ON DISPLAYED TIMEZ?"
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "Should times be displayed in 12-hour or 24-hour format?"
-msgstr "SHOULD TIMEZ BE DISPLAYED IN 12-HOUR OR 24-HOUR FORMAT?  KTHX."
+msgstr "SHOULD TIMEZ BE DISPLAYED IN 12-HOUR OR 24-HOUR 4MAT?"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "Should users of this workspace receive email notifications of changes to this workspace?"
-msgstr "SHOULD USERZ OF THIZ WORKSPACE RECEIVE EMAIL NOTIFICASHUNZ OV CHANGEZ TO THIZ WORKSPACE?  KTHXBYE!"
+msgstr "SHOULD USERZ OV THIZ WORKSPACE RECEIVE EMAIL NOTIFICASHUNZ OV CHANGEZ T THIZ WORKSPACE?"
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Show full name for '%1'. Click to edit."
-msgstr "SHOW FULL NAME FOR %1. CLICK TO EDIT.  KTHX."
+msgstr "SHOW FULL NAME FOAR %1. CLICK TO EDIT.  KTHXBYE!"
 
 #: share/skin/s2/template/element/listview/pages
 #.  
@@ -3327,7 +3327,7 @@ msgstr "SHUT DOWN NOW.  KTHX."
 #: lib/Socialtext/Appliance/ConsoleController.pm share/console-template/template/console_wrapper.tmpl
 #.  
 msgid "Shutdown"
-msgstr "SHUTDOWN.  KTHX."
+msgstr "SHUTDOWN.  KTHXBYE!"
 
 #: lib/Socialtext/Appliance/ConsoleController.pm
 #.  
@@ -3382,7 +3382,7 @@ msgstr "SOCIALTEXT HUM PUJ"
 #: share/template/control/user.html
 #.  
 msgid "Socialtext System Management Access?"
-msgstr "SOCIALTEXT SYSTEM MANUJMENT ACCESZ?"
+msgstr "SOCIALTEXT SYSTEM MANUJMENT ACCESZ?  KTHX."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
@@ -3392,12 +3392,12 @@ msgstr "SOCIALTEXT UNPLUGGED"
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "Socialtext Unplugged allows users to read and edit workspace pages while offline. Users can \"unplug\" one or more pages to read and edit. Changes can be synchronized with the workspace."
-msgstr "SOCIALTEXT UNPLUGGED ALLOWZ USERZ TO REDD AND EDIT WORKSPACE PUJZ WHILE OFFLINE. USERZ CAN \"UNPLUG\" ONE OR MOAR PUJZ TO REDD AND EDIT. CHANGEZ CAN BE SYNCHRONIZED WITH TEH WORKSPACE.  KTHXBYE!"
+msgstr "SOCIALTEXT UNPLUGGED ALLOWZ USERZ T REDD AND EDIT WORKSPACE PUJZ WHILE OFFLINE. USERZ CAN \"UNPLUG\" ONE OR MOAR PUJZ TO REDD AND EDIT. CHANGEZ CAN BE SYNCHRONIZED WITH TEH WORKSPACE."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "Socialtext Unplugged disabled"
-msgstr "SOCIALTEXT UNPLUGGED DISABLED.  KTHXBYE!"
+msgstr "SOCIALTEXT UNPLUGGED DISABLED"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
@@ -3417,7 +3417,7 @@ msgstr "SOCIALTEXT WORKSPACE<SUP>&TRADE;</SUP> %1"
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "Socialtext enables you to customize the look and feel of your workspace. You can use the default skin supplied by Socialtext or customize your own skin."
-msgstr "SOCIALTEXT ENABLEZ YOUZ 2 CUSTOMIZE TEH LOKAY AND FEEL OF YORE WORKSPACE. YU CAN USE TEH DEFAULT SKIN SUPPLIED BY SOCIALTEXT OR CUSTOMIZE UR OWN SKIN."
+msgstr "SOCIALTEXT ENABLEZ U 2 CUSTOMIZE TEH LOKAY AND FEEL OF YUR WORKSPACE. YOO CAN USE TEH DEFAULT SKIN SUPPLIED BY SOCIALTEXT OR CUSTOMIZE YOAR OWN SKIN."
 
 #: share/skin/s2/template/element/page/footer_end
 #.  
@@ -3427,22 +3427,22 @@ msgstr "SOCIALTEXT, TEH ENTERPRISE WIKI"
 #: share/skin/s2/template/view/edit_contention
 #. (
 msgid "Somebody else made changes to the %1 while you were editing it."
-msgstr "SOMEBODY ELSE MADE CHANGEZ TO TEH %1 WHILE YU WERE EDITINS IT."
+msgstr "SOMEBODY ELSE MADE CHANGEZ T TEH %1 WHILE U WERE EDITINS IT."
 
 #: share/skin/s2/template/lite/page/contention.html
 #.  
 msgid "Somebody else made changes to the page while you were editing it."
-msgstr "SOMEBODY ELSE MADE CHANGEZ 2 TEH PUJ WHILE YU WERE EDITINS IT."
+msgstr "SOMEBODY ELSE MADE CHANGEZ T TEH PUJ WHILE YU WERE EDITIN IT."
 
 #: share/skin/s2/template/element/page/actions
 #.  
 msgid "Sorry, this feature is not available for spreadsheets"
-msgstr "SORRY, THIZ FEACHUR AR NOT AVAILABLE 4 SPREADSHEETZ"
+msgstr "SORRY, THIZ FEACHUR AR NOT AVAILABLE FR SPREADSHEETZ"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
 msgid "Sort by account in ascending order"
-msgstr "SORT BY ACCOUNT IN ASCENDIN ORDR"
+msgstr "SORT BY ACCOUNT IN ASCENDINS ORDR"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
@@ -3452,22 +3452,22 @@ msgstr "SORT BY ACCOUNT IN DESCENDINS ORDR"
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
 msgid "Sort by creator in ascending order"
-msgstr "SORT BY CREATOR IN ASCENDIN ORDR"
+msgstr "SORT BY CREATOR IN ASCENDINS ORDR.  KTHXBYE!"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
 msgid "Sort by creator in descending order"
-msgstr "SORT BY CREATOR IN DESCENDINS ORDR"
+msgstr "SORT BY CREATOR IN DESCENDIN ORDR"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
 msgid "Sort by date created in ascending order"
-msgstr "SORT BY DATE CREATED IN ASCENDIN ORDR"
+msgstr "SORT BY DATE CREATED IN ASCENDINS ORDR"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
 msgid "Sort by date created in descending order"
-msgstr "SORT BY DATE CREATED IN DESCENDIN ORDR"
+msgstr "SORT BY DATE CREATED IN DESCENDINS ORDR"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
@@ -3482,12 +3482,12 @@ msgstr "SORT BY NAME IN DESCENDIN ORDR"
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
 msgid "Sort by number of users in ascending order"
-msgstr "SORT BY NUMBR OF USERZ IN ASCENDIN ORDR"
+msgstr "SORT BY NUMBR OV USERZ IN ASCENDIN ORDR"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
 msgid "Sort by number of users in descending order"
-msgstr "SORT BY NUMBR OF USERZ IN DESCENDIN ORDR"
+msgstr "SORT BY NUMBR OV USERZ IN DESCENDIN ORDR"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
@@ -3522,12 +3522,12 @@ msgstr "SOURCE VIEW"
 #: share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "Standard Welcome Message"
-msgstr "STANDARD WELCUM MESSUJ.  KTHXBYE!"
+msgstr "STANDARD WELCUM MESSUJ"
 
 #: share/skin/s2/template/view/page/stats_index
 #.  
 msgid "Statistics Reports"
-msgstr "STATISTICZ REPORTZ.  KTHX."
+msgstr "STATISTICZ REPORTZ"
 
 #: share/skin/s2/template/new_form_page/new_form_page_buttons.html share/template/control/accounts.html share/template/control/accounts.html share/template/control/users.html share/template/control/workspace.html share/template/control/workspaces.html
 #.  
@@ -3537,7 +3537,7 @@ msgstr "SUBMIT"
 #: share/skin/s2/template/element/pagestats/attachments_table
 #.  
 msgid "Subtotal for this attachment"
-msgstr "SUBTOTAL FOAR THIZ ATTACHMENT"
+msgstr "SUBTOTAL FOR THIZ ATTACHMENT"
 
 #: share/skin/s2/template/element/page/tag_queue_interface share/skin/s2/template/element/page/tags
 #.  
@@ -3567,7 +3567,7 @@ msgstr "SYNCHRONIZE WITH TIME SERVR NOW"
 #: lib/Socialtext/SyndicatePlugin.pm
 #.  
 msgid "Syndicate"
-msgstr "SYNDICATE"
+msgstr "SYNDICATE.  KTHXBYE!"
 
 #: lib/Socialtext/Appliance/Model/System.pm
 #.  
@@ -3577,17 +3577,17 @@ msgstr "SYSTEM REBOOTINS .."
 #: lib/Socialtext/Appliance/Model/System.pm
 #.  
 msgid "System shutting down ..."
-msgstr "SYSTEM SHUTTINS DOWN .."
+msgstr "SYSTEM SHUTTIN DOWN .."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Table of contents for '%1'. Click to edit."
-msgstr "TABLE OF CONTENTZ FR %1. CLICK TO EDIT."
+msgstr "TABLE OV CONTENTZ FUR %1. CLICK TO EDIT."
 
 #: share/skin/s2/template/view/taglistview
 #.  
 msgid "Tag"
-msgstr "TAG.  KTHX."
+msgstr "TAG"
 
 #: share/skin/s2/template/element/page/tag_queue_interface
 #.  
@@ -3617,7 +3617,7 @@ msgstr "TAGZ:"
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Technorati: %1"
-msgstr "TECHNORATI: %1"
+msgstr "TECHNORATI: %1.  KTHXBYE!"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -3632,72 +3632,72 @@ msgstr "TEH %1 USR WAZ CONFIRMED."
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "The %1 workspace is now part of the %2 account."
-msgstr "TEH %1 WORKSPACE AR NOW PART OF TEH %2 ACCOUNT."
+msgstr "TEH %1 WORKSPACE AR TEH NOW PART OF TEH %2 ACCOUNT."
 
 #: share/skin/s2/template/view/edit_contention
 #. (
 msgid "The %1 you just edited is shown below. You can copy and paste your changes from here:"
-msgstr "TEH %1 U JUS EDITED AR SHOWN BELOW. YU CAN COPY AND PASTE YOAR CHANGEZ FROM HERE:"
+msgstr "TEH %1 YOO JUS EDITED AR SHOWN BELOW. YOUZ CAN COPY AND PASTE UR CHANGEZ FROM HERE:"
 
 #: lib/Socialtext/User/Default/Factory.pm
 #. (
 msgid "The %1 you provided (%2) is already in use."
-msgstr "TEH %1 YU PROVIDED (%2) AR ALREDDY IN USE."
+msgstr "TEH %1 YOUZ PROVIDED (%2) AR ALREDDY IN USE."
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "The Workspace is easy to use. Click links to browse through the pages."
-msgstr "TEH WORKSPACE AR TEH EASY 2 USE. CLICK LINKZ T BROWSE THROUGH TEH PUJZ."
+msgstr "TEH WORKSPACE AR EASY 2 USE. CLICK LINKZ T BROWSE THROUGH TEH PUJZ.  KTHX."
 
 #: share/skin/s2/template/element/settings/users_invite_search_section
 #.  
 msgid "The Workspace is easy to use. Click links to browse through the\n>pages."
-msgstr "TEH WORKSPACE AR EASY TO USE. CLICK LINKZ TO BROWSE THROUGH TEH\N>PUJZ.  KTHXBYE!"
+msgstr "TEH WORKSPACE AR EASY T USE. CLICK LINKZ T BROWSE THROUGH TEH\N>PUJZ.  KTHXBYE!"
 
 #: lib/Socialtext/Account.pm
 #. (
 msgid "The account name you chose, %1, is already in use."
-msgstr "TEH ACCOUNT NAME YOO CHOSE, %1, AR ALREDDY IN USE.  KTHXBYE!.  KTHX."
+msgstr "TEH ACCOUNT NAME YOO CHOSE, %1, AR TEH ALREDDY IN USE."
 
 #: share/console-template/template/backup.html
 #.  
 msgid "The appliance can store backup files on a Windows- or SMB-compatible shared directory/folder on another computer. Set the backup server, directory and username here."
-msgstr "TEH APPLIANCE CAN STORE BACKUP FILEZ ON WINDOWZ- OR SMB-COMPATIBLE SHARD DIRECTORY/FOLDR ON ANUDDR COMPUTR. SET TEH BACKUP SERVR, DIRECTORY AND USERNAME HERE.  KTHX."
+msgstr "TEH APPLIANCE CAN STORE BACKUP FILEZ ON WINDOWZ- OR SMB-COMPATIBLE SHARD DIRECTORY/FOLDR ON ANUDDR COMPUTR. SET TEH BACKUP SERVR, DIRECTORY AND USERNAME HERE."
 
 #: lib/Socialtext/Handler/Authen.pm
 #.  
 msgid "The confirmation URL you used has expired. A new one will be sent."
-msgstr "TEH CONFIRMASHUN URL YOO USED HAZ EXPIRED. NEW ONE WILL BE SENT."
+msgstr "TEH CONFIRMASHUN URL YOUZ USED HAZ EXPIRED. NEW ONE WILL BE SENT."
 
 #: lib/Socialtext/Handler/Authen.pm
 #.  
 msgid "The confirmation email has been resent. Please follow the link in this email to activate your account."
-msgstr "TEH CONFIRMASHUN EMAIL HAZ BEEN RESENT. PLEEZ FOLLOW TEH LINK IN THIZ EMAIL TO ACTIVATE YORE ACCOUNT.  KTHXBYE!"
+msgstr "TEH CONFIRMASHUN EMAIL HAZ BEEN RESENT. PLEEZ FOLLOW TEH LINK IN THIZ EMAIL TO ACTIVATE YOAR ACCOUNT."
 
 #: lib/Socialtext/Handler/Authen.pm
 #. (
 msgid "The email address for %1 has already been confirmed."
-msgstr "TEH EMAIL ADDRESZ FOAR %1 HAZ ALREDDY BEEN CONFIRMED."
+msgstr "TEH EMAIL ADDRESZ FOR %1 HAZ ALREDDY BEEN CONFIRMED."
 
 #: lib/Socialtext/AttachmentsUIPlugin.pm
 #.  
 msgid "The file you are trying to upload does not exist"
-msgstr "TEH FILE YOUZ IS TRYIN TO UPLOAD DOEZ NOT EXIST"
+msgstr "TEH FILE YOUZ R TRYINS TO UPLOAD DOEZ NOT EXIST"
 
 #: share/skin/s2/template/element/settings/users_invited_section
 #.  
 msgid "The following email addresses were invalid"
-msgstr "TEH FOLLOWINS EMAIL ADDRESSEZ WERE INVALID"
+msgstr "TEH FOLLOWIN EMAIL ADDRESSEZ WERE INVALID"
 
 #: share/skin/s2/template/element/settings/users_invited_section
 #.  
 msgid "The following users were already members of this Workspace"
-msgstr "TEH FOLLOWIN USERZ WERE ALREDDY MEMBERZ OV THIZ WORKSPACE"
+msgstr "TEH FOLLOWINS USERZ WERE ALREDDY MEMBERZ OF THIZ WORKSPACE"
 
 #: share/skin/s2/template/element/settings/users_invited_section
 #.  
 msgid "The following users were invited into this Workspace"
-msgstr "TEH FOLLOWIN USERZ WERE INVITED INTO THIZ WORKSPACE"
+msgstr "TEH FOLLOWINS USERZ WERE INVITED INTO THIZ WORKSPACE"
 
 #: lib/Socialtext/Handler/Authen.pm
 #.  
@@ -3707,12 +3707,12 @@ msgstr "TEH GIVEN CONFIRMASHUN URL DOEZ NOT MATCH ANY PENDINS CONFIRMASHUNZ."
 #: share/skin/s2/template/popup/copy_to_workspace
 #. (
 msgid "The new page name you selected, \"%1\", is already in use in workspace \"%2\""
-msgstr "TEH NEW PUJ NAME YU SELECTED, \"%1\", AR ALREDDY IN USE IN WORKSPACE \"%2\""
+msgstr "TEH NEW PUJ NAME U SELECTED, \"%1\", AR TEH ALREDDY IN USE IN WORKSPACE \"%2\".  KTHXBYE!"
 
 #: lib/Socialtext/BacklinksPlugin.pm
 #.  
 msgid "The page had no Backlinks."
-msgstr "TEH PUJ HAD NO BACKLINKZ."
+msgstr "TEH PUJ HAD NO BACKLINKZ.  KTHXBYE!"
 
 #: lib/Socialtext/BacklinksPlugin.pm
 #.  
@@ -3722,27 +3722,27 @@ msgstr "TEH PUJ HAD THEEZ BACKLINKZ:"
 #: lib/Socialtext/HitCounterPlugin.pm
 #. (
 msgid "The page id you specified (%1) was invalid."
-msgstr "TEH PUJ ID YOO SPECIFIED (%1) WAZ INVALID.  KTHXBYE!"
+msgstr "TEH PUJ ID YOUZ SPECIFIED (%1) WAZ INVALID."
 
 #: share/skin/s2/template/popup/copy_to_workspace
 #. (
 msgid "The page name you selected, \"%1\", is not allowed. Please enter or change the page name."
-msgstr "TEH PUJ NAME YOO SELECTED, \"%1\", AR NOT ALLOWED. PLEEZ ENTR OR CHANGE TEH PUJ NAME."
+msgstr "TEH PUJ NAME YU SELECTED, \"%1\", AR TEH NOT ALLOWED. PLEEZ ENTR OR CHANGE TEH PUJ NAME."
 
 #: share/skin/s2/template/popup/copy_to_workspace
 #. (
 msgid "The page name you selected, \"%1\", is too long after URL encoding."
-msgstr "TEH PUJ NAME YOUZ SELECTED, \"%1\", AR TEH TO LONG AFTR URL ENCODIN."
+msgstr "TEH PUJ NAME YOUZ SELECTED, \"%1\", AR 2 LONG AFTR URL ENCODINS."
 
 #: lib/Socialtext/Handler/Authen.pm lib/Socialtext/Handler/Authen.pm
 #.  
 msgid "The passwords you provided did not match."
-msgstr "TEH PASSWORDZ YU PROVIDED DID NOT MATCH."
+msgstr "TEH PASSWORDZ YOO PROVIDED DID NOT MATCH."
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #. (
 msgid "The permissions for %1 have been set to %2."
-msgstr "TEH PERMISSHUNZ 4 %1 HAVE BEEN SET T %2."
+msgstr "TEH PERMISSHUNZ FOR %1 HAVE BEEN SET TO %2.  KTHXBYE!"
 
 #: lib/Socialtext/Workspace.pm
 #. (
@@ -3752,47 +3752,47 @@ msgstr "TEH SKIN YU SPECIFIED,%1, DOEZ NOT EXIST."
 #: share/skin/s2/template/element/settings/workspaces_listall_section
 #.  
 msgid "The ten most recently visited of these workspaces are displayed in the Dashboard."
-msgstr "TEH TEN MOST RECENTLY VISITED OF THEEZ WORKSPACEZ AR DISPLAYED IN TEH DASHBOARD."
+msgstr "TEH TEN MOST RECENTLY VISITED OF THEEZ WORKSPACEZ R DISPLAYED IN TEH DASHBOARD."
 
 #: share/skin/s2/template/lite/page/contention.html
 #.  
 msgid "The text you just edited is shown below. You can copy and paste your changes from there:"
-msgstr "TEH TEXT YOO JUS EDITED AR SHOWN BELOW. U CAN COPY AND PASTE YORE CHANGEZ FROM THERE:"
+msgstr "TEH TEXT U JUS EDITED AR SHOWN BELOW. YU CAN COPY AND PASTE UR CHANGEZ FROM THERE:"
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
 msgid "The uploaded skin does not contain css/screen.css"
-msgstr "TEH UPLOADED SKIN DOEZ NOT CONTAIN CSZ/SCREEN.CSZ.  KTHXBYE!"
+msgstr "TEH UPLOADED SKIN DOEZ NOT CONTAIN CSZ/SCREEN.CSZ"
 
 #: share/skin/s2/template/element/settings/users_invite_search_section share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "The workspace administrators for this space will receive a notification of your request so that the users can be invited."
-msgstr "TEH WORKSPACE ADMINISTRATORZ FR THIZ SPACE WILL RECEIVE NOTIFICASHUN OF YOAR REQUEST SO THAT TEH USERZ CAN BE INVITED."
+msgstr "TEH WORKSPACE ADMINISTRATORZ FUR THIZ SPACE WILL RECEIVE NOTIFICASHUN OV YORE REQUEST SO THAT TEH USERZ CAN BE INVITED."
 
 #: lib/Socialtext/Workspace.pm
 #. (
 msgid "The workspace name you chose, %1, is already in use as an email alias."
-msgstr "TEH WORKSPACE NAME YU CHOSE, %1, AR ALREDDY IN USE AZ AN EMAIL ALIAZ."
+msgstr "TEH WORKSPACE NAME YOO CHOSE, %1, AR TEH ALREDDY IN USE AZ AN EMAIL ALIAZ."
 
 #: lib/Socialtext/Workspace.pm
 #. (
 msgid "The workspace name you chose, %1, is already in use by another workspace."
-msgstr "TEH WORKSPACE NAME YOUZ CHOSE, %1, AR ALREDDY IN USE BY ANUDDR WORKSPACE.  KTHXBYE!"
+msgstr "TEH WORKSPACE NAME U CHOSE, %1, AR ALREDDY IN USE BY ANUDDR WORKSPACE."
 
 #: share/skin/s2/template/view/page/display
 #.  
 msgid "There are no pages that link to this page yet."
-msgstr "THERE IS NO PUJZ THAT LINK 2 THIZ PUJ YET."
+msgstr "THERE IS NO PUJZ THAT LINK TO THIZ PUJ YET."
 
 #: share/skin/s2/template/element/page/tags
 #.  
 msgid "There are no tags for this page."
-msgstr "THERE AR NO TAGZ FOR THIZ PUJ."
+msgstr "THERE IS NO TAGZ FUR THIZ PUJ.  KTHXBYE!"
 
 #: share/skin/s2/template/element/page/newpage_duplicate
 #. (
 msgid "There is <span id=\"st-newpage-duplicate-emphasis\">already a page</span> named <a id=\"%1-link\" href=\"#\" target=\"\">XXX</a>. Would you like to:"
-msgstr "THERE AR TEH <SPAN ID=\"ST-NEWPUJ-DUPLICATE-EMFASIZ\">ALREDDY PUJ</SPAN> NAMED < ID=\"%1-LINK\" HREF=\"#\" TARGET=\"\">XXX</>. WOULD YOUZ LIEK TO:"
+msgstr "THERE AR <SPAN ID=\"ST-NEWPUJ-DUPLICATE-EMFASIZ\">ALREDDY PUJ</SPAN> NAMED < ID=\"%1-LINK\" HREF=\"#\" TARGET=\"\">XXX</>. WOULD YOUZ LIKEZ 2:"
 
 #: lib/Socialtext/WeblogPlugin.pm
 #. (
@@ -3802,12 +3802,12 @@ msgstr "THERE AR ALREDDY %1 WEBLOG. PLEEZ CHOOSE DIFFERENT NAME."
 #: lib/Socialtext/Hub.pm
 #.  
 msgid "There was an error with your request"
-msgstr "THERE WAZ AN ERROR WITH YUR REQUEST"
+msgstr "THERE WAZ AN ERROR WITH YORE REQUEST.  KTHX."
 
 #: share/skin/s2/template/fetchrss.html
 #.  
 msgid "There was an error:"
-msgstr "THERE WAZ AN ERROR:"
+msgstr "THERE WAZ AN ERROR:.  KTHX."
 
 #: share/skin/s2/template/element/settings/list_skipped_files
 #.  
@@ -3817,37 +3817,37 @@ msgstr "THEEZ FILEZ WERE NOT IMPORTED:"
 #: share/skin/s2/template/element/settings/select
 #.  
 msgid "This Workspace"
-msgstr "THIZ WORKSPACE"
+msgstr "THIZ WORKSPACE.  KTHXBYE!"
 
 #: lib/Socialtext/HitCounterPlugin.pm
 #.  
 msgid "This action requires a page to be specified."
-msgstr "THIZ ACSHUN REQUIREZ PUJ 2 BE SPECIFIED."
+msgstr "THIZ ACSHUN REQUIREZ PUJ TO BE SPECIFIED."
 
 #: share/console-template/template/setup.html
 #.  
 msgid "This action will delete all existing workspaces and users on this appliance, and create the Admin workspace."
-msgstr "THIZ ACSHUN WILL DELETE ALL EXISTINS WORKSPACEZ AND USERZ ON THIZ APPLIANCE, AND CREATE TEH ADMIN WORKSPACE."
+msgstr "THIZ ACSHUN WILL DELETE ALL EXISTIN WORKSPACEZ AND USERZ ON THIZ APPLIANCE, AND CREATE TEH ADMIN WORKSPACE."
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #.  
 msgid "This email was sent from the Socialtext Appliance."
-msgstr "THIZ EMAIL WAZ SENT FROM TEH SOCIALTEXT APPLIANCE."
+msgstr "THIZ EMAIL WAZ SENT FROM TEH SOCIALTEXT APPLIANCE.  KTHX."
 
 #: share/skin/s2/template/new_form_page/new_form_page_instructions.html
 #.  
 msgid "This form will create your profile page for Inbox."
-msgstr "THIZ FORM WILL CREATE UR PROFILE PUJ FOR INBOX."
+msgstr "THIZ FORM WILL CREATE YORE PROFILE PUJ FOR INBOX."
 
 #: share/skin/s2/template/new_form_page/generic/new_form_page_instructions.html
 #.  
 msgid "This form will create your profile page."
-msgstr "THIZ FOARM WILL CREATE YUR PROFILE PUJ."
+msgstr "THIZ FURM WILL CREATE YOAR PROFILE PUJ."
 
 #: share/skin/s2/template/element/settings/workspaces_create_section
 #.  
 msgid "This is a short unique identifier used as part of your workspace's web address and email address."
-msgstr "THIZ AR TEH SHORT UNIQUE IDENTIFIR USED AZ PART OV YOAR WORKSPACEZ WEB ADDRESZ AND EMAIL ADDRESZ."
+msgstr "THIZ AR TEH SHORT UNIQUE IDENTIFIR USED AZ PART OF YOAR WORKSPACEZ WEB ADDRESZ AND EMAIL ADDRESZ."
 
 #: lib/Socialtext/WeblogPlugin.pm
 #. (
@@ -3862,17 +3862,17 @@ msgstr "THIZ AR TEH TITLE OV YORE WORKSPACE. IT MAY BE CHANGED AT ANY TIME."
 #: share/skin/s2/template/element/settings/workspaces_create_section
 #.  
 msgid "This is the title of your workspace. It may be changed later if you want."
-msgstr "THIZ AR TEH TITLE OV UR WORKSPACE. IT MAY BE CHANGED LATR IF U WANTZ."
+msgstr "THIZ AR TEH TITLE OV UR WORKSPACE. IT MAY BE CHANGED LATR IF YU WANTZ."
 
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "This is your personal notepad page. Edit it to your liking."
-msgstr "THIZ AR YORE PERSONAL NOTEPAD PUJ. EDIT IT TO YUR LIKINS."
+msgstr "THIZ AR UR PERSONAL NOTEPAD PUJ. EDIT IT T YORE LIKIN."
 
 #: lib/Socialtext/BacklinksPlugin.pm
 #.  
 msgid "This page is linked to from:"
-msgstr "THIZ PUJ AR TEH LINKED TO FROM:.  KTHX."
+msgstr "THIZ PUJ AR LINKED TO FROM:"
 
 #: lib/Socialtext/Handler/Authen.pm
 #.  
@@ -3897,7 +3897,7 @@ msgstr "TIME EACH DAY:"
 #: share/skin/s2/template/element/page/newpage_save
 #.  
 msgid "Tip: You'll be able to find this page later by using the title you choose."
-msgstr "TIP: YULL BE ABLE 2 FIND THIZ PUJ LATR BY USIN TEH TITLE YU CHOOSE."
+msgstr "TIP: YULL BE ABLE TO FIND THIZ PUJ LATR BY USIN TEH TITLE YOUZ CHOOSE."
 
 #: share/skin/s2/template/element/listview/pages
 #.  
@@ -3907,42 +3907,42 @@ msgstr "TITLE"
 #: share/skin/s2/template/element/listview/pages
 #.  
 msgid "Titles"
-msgstr "TITLEZ.  KTHX."
+msgstr "TITLEZ"
 
 #: lib/Socialtext/SearchPlugin.pm
 #. (
 msgid "Titles containing '%1' (%2)"
-msgstr "TITLEZ CONTAININS %1 (%2)"
+msgstr "TITLEZ CONTAININ %1 (%2)"
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "To Get This..."
-msgstr "2 GET THIZ.."
+msgstr "T GET THIZ.."
 
 #: share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #. (
 msgid "To customize your own skin, download the %1, modify the skin files to your liking, and upload them here. Complete documentation on skin customization is available in the %2.<h4>Skin support is not included in basic support. Users who upload skins are responsible for keeping copies of their skin files and for keeping their skins current as the Socialtext application changes.</h4>"
-msgstr "T CUSTOMIZE UR OWN SKIN, DOWNLOAD TEH %1, MODIFY TEH SKIN FILEZ 2 UR LIKIN, AND UPLOAD THEM HERE. COMPLETE DOCUMENTASHUN ON SKIN CUSTOMIZASHUN AR AVAILABLE IN TEH %2.<H4>SKIN SUPPORT AR TEH NOT INCLUDED IN BASIC SUPPORT. USERZ HOO UPLOAD SKINZ AR RESPONSIBLE FUR KEEPINS COPIEZ OF THEIR SKIN FILEZ AND FOR KEEPIN THEIR SKINZ CURRENT AZ TEH SOCIALTEXT APPLICASHUN CHANGEZ.</H4>.  KTHX."
+msgstr "T CUSTOMIZE YOAR OWN SKIN, DOWNLOAD TEH %1, MODIFY TEH SKIN FILEZ TO YOAR LIKINS, AND UPLOAD THEM HERE. COMPLETE DOCUMENTASHUN ON SKIN CUSTOMIZASHUN AR TEH AVAILABLE IN TEH %2.<H4>SKIN SUPPORT AR NOT INCLUDED IN BASIC SUPPORT. USERZ HOO UPLOAD SKINZ R RESPONSIBLE FUR KEEPINS COPIEZ OF THEIR SKIN FILEZ AND FOR KEEPINS THEIR SKINZ CURRENT AZ TEH SOCIALTEXT APPLICASHUN CHANGEZ.</H4>"
 
 #: share/skin/s2/template/element/settings/users_invite_search_section
 #.  
 msgid "To make a link to another page (even if it doesn't exist yet), put [square brackets around a word or phrase]."
-msgstr "T MAKE LINK TO ANUDDR PUJ (EVEN IF IT DOESNT EXIST YET), PUT [SQUAR BRACKETZ AROUND WORD OR FRASE]."
+msgstr "TO MAKE LINK 2 ANUDDR PUJ (EVEN IF IT DOESNT EXIST YET), PUT [SQUAR BRACKETZ AROUND WORD OR FRASE]."
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "To make a link to another page (even if it doesn't exist yet), put square brackets around a word or phrase."
-msgstr "TO MAKE LINK T ANUDDR PUJ (EVEN IF IT DOESNT EXIST YET), PUT SQUAR BRACKETZ AROUND WORD OR FRASE."
+msgstr "T MAKE LINK 2 ANUDDR PUJ (EVEN IF IT DOESNT EXIST YET), PUT SQUAR BRACKETZ AROUND WORD OR FRASE."
 
 #: share/console-template/template/overview.html
 #.  
 msgid "To see a list of all the workspaces and users on the system, go to the <a href=\"/nlw/control/\">Socialtext Accounts Admin</a> tool."
-msgstr "2 SEE LIST OV ALL TEH WORKSPACEZ AND USERZ ON TEH SYSTEM, GO TO TEH < HREF=\"/NLW/CONTROL/\">SOCIALTEXT ACCOUNTZ ADMIN</> TOOL."
+msgstr "TO SEE LIST OV ALL TEH WORKSPACEZ AND USERZ ON TEH SYSTEM, GO T TEH < HREF=\"/NLW/CONTROL/\">SOCIALTEXT ACCOUNTZ ADMIN</> TOOL."
 
 #: share/skin/s2/template/element/page/actions
 #.  
 msgid "Tools"
-msgstr "TOOLZ"
+msgstr "TOOLZ.  KTHXBYE!"
 
 #: lib/Socialtext/Workspace.pm
 #.  
@@ -3952,7 +3952,7 @@ msgstr "TOP PUJ"
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "Top of page"
-msgstr "TOP OF PUJ"
+msgstr "TOP OF PUJ.  KTHXBYE!"
 
 #: share/skin/s2/template/view/page/stats
 #.  
@@ -3962,7 +3962,7 @@ msgstr "TOTAL"
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
 msgid "Tue"
-msgstr "TUE"
+msgstr "TUE.  KTHX."
 
 #: share/skin/s2/template/view/page/stats
 #.  
@@ -3972,7 +3972,7 @@ msgstr "TYPE"
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "Type This"
-msgstr "TYPE THIZ.  KTHX."
+msgstr "TYPE THIZ.  KTHXBYE!"
 
 #: share/skin/s2/template/element/settings/users_settings_section
 #.  
@@ -3982,27 +3982,27 @@ msgstr "TYPE NEW PASSWORD AGAIN"
 #: share/template/control/workspace.html
 #.  
 msgid "URI"
-msgstr "URI"
+msgstr "URI.  KTHX."
 
 #: lib/Socialtext/Workspace.pm
 #.  
 msgid "Unable to process logo file. Is it an image?"
-msgstr "UNABLE T PROCESZ LOGO FILE. AR IT AN IMUJ?"
+msgstr "UNABLE T PROCESZ LOGO FILE. AR TEH IT AN IMUJ?"
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #.  
 msgid "Unformatted Content"
-msgstr "UNFRMATTED CONTENT"
+msgstr "UNFOARMATTED CONTENT"
 
 #: share/skin/s2/template/element/settings/select
 #.  
 msgid "Unsubscribe"
-msgstr "UNSUBSCRIBE.  KTHX."
+msgstr "UNSUBSCRIBE"
 
 #: share/skin/s2/template/element/settings/workspaces_unsubscribe_section
 #. (
 msgid "Unsubscribe from the %1 workspace"
-msgstr "UNSUBSCRIBE FROM TEH %1 WORKSPACE"
+msgstr "UNSUBSCRIBE FROM TEH %1 WORKSPACE.  KTHX."
 
 #: lib/Socialtext/DisplayPlugin.pm lib/Socialtext/Page.pm share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-other-mini.js share/skin/s2/javascript/socialtext-other.js share/skin/s2/javascript/stlibrary.js
 #.  
@@ -4017,17 +4017,17 @@ msgstr "UPDATED BY %1 ON %2"
 #: share/skin/s2/template/element/page/details
 #. (
 msgid "Updated by %1 on %2."
-msgstr "UPDATED BY %1 ON %2."
+msgstr "UPDATED BY %1 ON %2.  KTHX."
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
 msgid "Updated mail server to %1"
-msgstr "UPDATED MAIL SERVR TO %1"
+msgstr "UPDATED MAIL SERVR T %1.  KTHX."
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #.  
 msgid "Updated mail server to use built-in server"
-msgstr "UPDATED MAIL SERVR T USE BUILT-IN SERVR.  KTHX."
+msgstr "UPDATED MAIL SERVR T USE BUILT-IN SERVR"
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
@@ -4047,7 +4047,7 @@ msgstr "UPLOAD AN IMUJ"
 #: share/skin/s2/template/element/page/attachment_attach_interface
 #.  
 msgid "Upload Files"
-msgstr "UPLOAD FILEZ"
+msgstr "UPLOAD FILEZ.  KTHX."
 
 #: share/skin/s2/template/element/page/attachments
 #.  
@@ -4077,7 +4077,7 @@ msgstr "UPLOADED BY"
 #: share/skin/s2/template/element/page/attachments
 #.  
 msgid "Uploaded by $uploader"
-msgstr "UPLOADED BY $UPLOADR"
+msgstr "UPLOADED BY $UPLOADR.  KTHX."
 
 #: share/skin/s2/template/element/jst/attachment/name
 #. (
@@ -4092,32 +4092,32 @@ msgstr "UPLOADZ"
 #: share/template/control/account.html share/template/control/workspace.html
 #.  
 msgid "Usage Reports"
-msgstr "USUJ REPORTZ.  KTHXBYE!"
+msgstr "USUJ REPORTZ"
 
 #: share/template/control/report.html
 #.  
 msgid "Usage ending midnight of:"
-msgstr "USUJ ENDINS MIDNITE OV:.  KTHX."
+msgstr "USUJ ENDINS MIDNITE OF:"
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Use %1 to generate a form. Click to edit."
-msgstr "USE %1 2 GENERATE FURM. CLICK 2 EDIT.  KTHXBYE!.  KTHX."
+msgstr "USE %1 TO GENERATE 4M. CLICK T EDIT."
 
 #: share/console-template/template/popup.html
 #.  
 msgid "Use the email address you entered above as the username, and <strong>password</strong> as the password. You can change your password later."
-msgstr "USE TEH EMAIL ADDRESZ YOUZ ENTERED ABOOV AZ TEH USERNAME, AND <STRONG>PASSWORD</STRONG> AZ TEH PASSWORD. YOUZ CAN CHANGE UR PASSWORD LATR."
+msgstr "USE TEH EMAIL ADDRESZ U ENTERED ABOVE AZ TEH USERNAME, AND <STRONG>PASSWORD</STRONG> AZ TEH PASSWORD. U CAN CHANGE YUR PASSWORD LATR."
 
 #: share/skin/s2/template/element/settings/users_settings_section
 #.  
 msgid "Use your email address and new password to log in again."
-msgstr "USE YOAR EMAIL ADDRESZ AND NEW PASSWORD TO LOG IN AGAIN."
+msgstr "USE UR EMAIL ADDRESZ AND NEW PASSWORD 2 LOG IN AGAIN."
 
 #: share/template/control/user.html
 #.  
 msgid "User is confirmed"
-msgstr "USR AR TEH CONFIRMED.  KTHXBYE!"
+msgstr "USR AR TEH CONFIRMED"
 
 #: share/template/control/user.html
 #.  
@@ -4137,7 +4137,7 @@ msgstr "USERNAME:"
 #: lib/Socialtext/Handler/ControlPanel.pm share/skin/s2/template/element/settings/select share/template/control/wrapper
 #.  
 msgid "Users"
-msgstr "USERZ.  KTHX."
+msgstr "USERZ"
 
 #: share/template/control/account.html share/template/control/workspace.html
 #. (
@@ -4147,7 +4147,7 @@ msgstr "USERZ (%1)"
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "Users matching \"%1\""
-msgstr "USERZ MATCHIN \"%1\""
+msgstr "USERZ MATCHIN \"%1\".  KTHXBYE!"
 
 #: lib/Socialtext/OpenIdPlugin.pm lib/Socialtext/UserSettingsPlugin.pm lib/Socialtext/UserSettingsPlugin.pm lib/Socialtext/UserSettingsPlugin.pm
 #.  
@@ -4157,7 +4157,7 @@ msgstr "USERZ: INVITE NEW USERZ.  KTHXBYE!"
 #: lib/Socialtext/UserSettingsPlugin.pm
 #.  
 msgid "Users: List All Users"
-msgstr "USERZ: LIST ALL USERZ.  KTHX."
+msgstr "USERZ: LIST ALL USERZ"
 
 #: lib/Socialtext/UserSettingsPlugin.pm
 #.  
@@ -4167,7 +4167,7 @@ msgstr "USERZ: MANUJ ALL USERZ"
 #: lib/Socialtext/UserSettingsPlugin.pm
 #.  
 msgid "Users: My Settings"
-msgstr "USERZ: MAH SETTINGZ"
+msgstr "USERZ: MUH SETTINGZ"
 
 #: lib/Socialtext/WikiwygPlugin.pm
 #.  
@@ -4182,7 +4182,7 @@ msgstr "VIEW"
 #: share/skin/s2/template/element/page/revision_compare_actions
 #.  
 msgid "View Formatted"
-msgstr "VIEW FORMATTED"
+msgstr "VIEW FURMATTED"
 
 #: share/skin/s2/template/view/page_revision_list
 #.  
@@ -4212,7 +4212,7 @@ msgstr "WATCH THIZ PUJ"
 #: share/skin/s2/javascript/Watchlist.js share/skin/s2/javascript/socialtext-display-mini.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/socialtext-display.js share/skin/s2/javascript/socialtext-other-mini.js share/skin/s2/javascript/socialtext-other.js share/skin/s2/template/view/page/display
 #.  
 msgid "Watching this page"
-msgstr "WATCHIN THIZ PUJ"
+msgstr "WATCHINS THIZ PUJ"
 
 #: lib/Socialtext/WatchlistPlugin.pm lib/Socialtext/WatchlistPlugin.pm
 #.  
@@ -4222,12 +4222,12 @@ msgstr "WATCHLIST"
 #: lib/Socialtext/WatchlistPlugin.pm
 #. (
 msgid "Watchlist update for %1 Workspace"
-msgstr "WATCHLIST UPDATE FOR %1 WORKSPACE"
+msgstr "WATCHLIST UPDATE FUR %1 WORKSPACE"
 
 #: share/skin/s2/template/view/weblog
 #.  
 msgid "Weblog"
-msgstr "WEBLOG.  KTHXBYE!"
+msgstr "WEBLOG.  KTHX."
 
 #: share/skin/s2/template/view/weblog
 #.  
@@ -4237,7 +4237,7 @@ msgstr "WEBLOG ARCHIVEZ"
 #: lib/Socialtext/WeblogPlugin.pm share/skin/s2/template/view/weblog
 #.  
 msgid "Weblog Navigation"
-msgstr "WEBLOG NAVIGASHUN.  KTHXBYE!"
+msgstr "WEBLOG NAVIGASHUN"
 
 #: lib/Socialtext/WeblogPlugin.pm
 #.  
@@ -4247,7 +4247,7 @@ msgstr "WEBLOG NAME AR TEH T LONG AFTR URL ENCODINS"
 #: lib/Socialtext/WeblogPlugin.pm
 #. (
 msgid "Weblog: %1 Atom"
-msgstr "WEBLOG: %1 ATOM.  KTHXBYE!"
+msgstr "WEBLOG: %1 ATOM"
 
 #: lib/Socialtext/WeblogPlugin.pm
 #. (
@@ -4277,42 +4277,42 @@ msgstr "WELCUM, %1."
 #: lib/Socialtext/EmailNotifyPlugin.pm lib/Socialtext/WatchlistPlugin.pm
 #.  
 msgid "What information about changed pages do you want in email digests?"
-msgstr "WHUT INFORMASHUN ABOUT CHANGED PUJZ DO YOO WANTZ IN EMAIL DIGESTZ?  KTHXBYE!"
+msgstr "WUT IN4MASHUN ABOUT CHANGED PUJZ DO U WANTZ IN EMAIL DIGESTZ?"
 
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
 msgid "What order would you like the updates to be sorted?"
-msgstr "WUT ORDR WOULD YOUZ LIEK TEH UPDATEZ T BE SORTED?"
+msgstr "WUT ORDR WOULD U LIKEZ TEH UPDATEZ TO BE SORTED?  KTHX."
 
 #: lib/Socialtext/RecentChangesPlugin.pm
 #.  
 msgid "What time interval should \"What's New\" display?"
-msgstr "WUT TIME INTERVAL SHOULD \"WUTZ NEW\" DISPLAY?"
+msgstr "WUT TIME INTERVAL SHOULD \"WUTZ NEW\" DISPLAY?  KTHXBYE!"
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "What time zone should times be displayed in?"
-msgstr "WUT TIME ZONE SHOULD TIMEZ BE DISPLAYED IN?"
+msgstr "WHUT TIME ZONE SHOULD TIMEZ BE DISPLAYED IN?"
 
 #: lib/Socialtext/RecentChangesPlugin.pm lib/Socialtext/RecentChangesPlugin.pm share/skin/s2/template/element/listview/actionbar share/skin/s2/template/element/page/recent_changes
 #.  
 msgid "What's New"
-msgstr "WUTZ NEW"
+msgstr "WHUTZ NEW"
 
 #: lib/Socialtext/RecentChangesPlugin.pm
 #. (
 msgid "What's New in workspace %1"
-msgstr "WHUTZ NEW IN WORKSPACE %1.  KTHX."
+msgstr "WUTZ NEW IN WORKSPACE %1"
 
 #: share/skin/s2/template/element/wiki/subnav-dashboard share/skin/s2/template/element/wiki/subnav-default share/skin/s2/template/element/wiki/subnav-default share/skin/s2/template/element/wiki/subnav-weblog share/skin/s2/template/element/wiki/subnav-weblog
 #.  
 msgid "What's new"
-msgstr "WHUTZ NEW"
+msgstr "WUTZ NEW.  KTHX."
 
 #: share/skin/s2/template/view/homepage
 #. (
 msgid "What's new in %1"
-msgstr "WUTZ NEW IN %1.  KTHX."
+msgstr "WHUTZ NEW IN %1"
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
@@ -4327,27 +4327,27 @@ msgstr "WHEN TEH WORKSPACE RECEIVEZ AN EMAIL, TEH SUBJECT OV TEH EMAIL BECOMEZ T
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #. (
 msgid "When users click \"Home\" in this workspace, should they see a personal dashboard, or the central page of the workspace? The central page of the workspace has the same title as the workspace (\"%1\")."
-msgstr "WHEN USERZ CLICK \"HUM\" IN THIZ WORKSPACE, SHOULD THEY SEE PERSONAL DASHBOARD, OR TEH CENTRAL PUJ OV TEH WORKSPACE? TEH CENTRAL PUJ OF TEH WORKSPACE HAZ TEH SAME TITLE AZ TEH WORKSPACE (\"%1\")."
+msgstr "WHEN USERZ CLICK \"HUM\" IN THIZ WORKSPACE, SHOULD THEY SEE PERSONAL DASHBOARD, OR TEH CENTRAL PUJ OF TEH WORKSPACE? TEH CENTRAL PUJ OV TEH WORKSPACE HAZ TEH SAME TITLE AZ TEH WORKSPACE (\"%1\")."
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
 msgid "When you're entering text, just type in paragraphs."
-msgstr "WHEN YURE ENTERIN TEXT, JUS TYPE IN PARAGRAFZ."
+msgstr "WHEN YOUZRE ENTERIN TEXT, JUS TYPE IN PARAGRAFZ."
 
 #: share/skin/s2/template/element/settings/users_invite_search_section
 #.  
 msgid "When you're entering text, just type in paragraphs. And don't worry about breaking anything - previous versions of the page are saved, so there's always a backup copy of the page you're working on."
-msgstr "WHEN YOUZRE ENTERINS TEXT, JUS TYPE IN PARAGRAFZ. AND DONT WORRY ABOUT BREKKIN ANYTHINS - PREVIOUZ VERSHUNZ OF TEH PUJ AR SAVED, SO THEREZ ALWAYZ BACKUP COPY OF TEH PUJ YURE WORKINS ON."
+msgstr "WHEN YURE ENTERINS TEXT, JUS TYPE IN PARAGRAFZ. AND DONT WORRY ABOUT BREKKIN ANYTHIN - PREVIOUZ VERSHUNZ OF TEH PUJ AR SAVED, SO THEREZ ALWAYZ BACKUP COPY OF TEH PUJ YOORE WORKIN ON."
 
 #: lib/Socialtext/DisplayPlugin.pm
 #.  
 msgid "Which language do you use?"
-msgstr "WHICH LANGUUJ DO U USE?  KTHXBYE!.  KTHX."
+msgstr "WHICH LANGUUJ DO YOUZ USE?"
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Who can send email to this workspace?"
-msgstr "HOO CAN SEND EMAIL T THIZ WORKSPACE?"
+msgstr "HOO CAN SEND EMAIL TO THIZ WORKSPACE?  KTHX."
 
 #: share/skin/s2/javascript/Wikiwyg/Jemplate.js share/skin/s2/javascript/socialtext-display-ui-mini.js share/skin/s2/javascript/socialtext-display-ui.js share/skin/s2/javascript/widget_resource.js share/skin/s2/template/element/listview/pages
 #.  
@@ -4377,7 +4377,7 @@ msgstr "WORKSPACE FEACHURZ"
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "Workspace Home Link"
-msgstr "WORKSPACE HUM LINK"
+msgstr "WORKSPACE HUM LINK.  KTHXBYE!"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #.  
@@ -4387,7 +4387,7 @@ msgstr "WORKSPACE LOGO IMUJ"
 #: share/skin/s2/template/element/settings/workspaces_create_section share/skin/s2/template/element/settings/workspaces_listall_section
 #.  
 msgid "Workspace Name"
-msgstr "WORKSPACE NAME.  KTHX."
+msgstr "WORKSPACE NAME"
 
 #: share/skin/s2/template/element/settings/select share/skin/s2/template/workspaces_created_section.html
 #.  
@@ -4397,7 +4397,7 @@ msgstr "WORKSPACE PRIVACY"
 #: share/skin/s2/template/element/settings/select share/skin/s2/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "Workspace Skin"
-msgstr "WORKSPACE SKIN.  KTHX."
+msgstr "WORKSPACE SKIN"
 
 #: share/skin/s2/template/element/settings/workspaces_create_section share/skin/s2/template/element/settings/workspaces_listall_section share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #.  
@@ -4407,12 +4407,12 @@ msgstr "WORKSPACE TITLE"
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "Workspace Weblog Sort Order"
-msgstr "WORKSPACE WEBLOG SORT ORDR.  KTHXBYE!"
+msgstr "WORKSPACE WEBLOG SORT ORDR"
 
 #: lib/Socialtext/Workspace.pm
 #.  
 msgid "Workspace name is a required field."
-msgstr "WORKSPACE NAME AR TEH REQUIRED FIELD."
+msgstr "WORKSPACE NAME AR REQUIRED FIELD."
 
 #: lib/Socialtext/Workspace.pm
 #.  
@@ -4427,17 +4427,17 @@ msgstr "WORKSPACE NAME MUST BE BETWEEN 3 AND 30 CHARACTERZ LONG, AND MUST CONTAI
 #: lib/Socialtext/Workspace.pm
 #.  
 msgid "Workspace title is a required field."
-msgstr "WORKSPACE TITLE AR TEH REQUIRED FIELD."
+msgstr "WORKSPACE TITLE AR REQUIRED FIELD."
 
 #: lib/Socialtext/Workspace.pm
 #.  
 msgid "Workspace title is too long after URL encoding"
-msgstr "WORKSPACE TITLE AR TO LONG AFTR URL ENCODIN.  KTHXBYE!"
+msgstr "WORKSPACE TITLE AR TEH TO LONG AFTR URL ENCODIN"
 
 #: lib/Socialtext/Workspace.pm
 #.  
 msgid "Workspace title must be between 2 and 64 characters long and may not begin with a -."
-msgstr "WORKSPACE TITLE MUST BE BETWEEN 2 AND 64 CHARACTERZ LONG AND MAY NOT BEGIN WITH -."
+msgstr "WORKSPACE TITLE MUST BE BETWEEN 2 AND 64 CHARACTERZ LONG AND MAY NOT BEGIN WITH -.  KTHX."
 
 #: lib/Socialtext/Handler/ControlPanel.pm share/console-template/template/overview.html share/skin/s2/template/element/settings/select share/template/control/wrapper
 #.  
@@ -4447,7 +4447,7 @@ msgstr "WORKSPACEZ"
 #: share/template/control/account.html share/template/control/user.html
 #. (
 msgid "Workspaces (%1)"
-msgstr "WORKSPACEZ (%1).  KTHXBYE!"
+msgstr "WORKSPACEZ (%1)"
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
@@ -4457,22 +4457,22 @@ msgstr "WORKSPACEZ INITIALIZED.<BR>LOG: %1"
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "Workspaces matching \"%1\""
-msgstr "WORKSPACEZ MATCHIN \"%1\""
+msgstr "WORKSPACEZ MATCHINS \"%1\""
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
 msgid "Workspaces: Create New Workspace"
-msgstr "WORKSPACEZ: CREATE NEW WORKSPACE"
+msgstr "WORKSPACEZ: CREATE NEW WORKSPACE.  KTHXBYE!"
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
 msgid "Workspaces: Created New Workspace"
-msgstr "WORKSPACEZ: CREATED NEW WORKSPACE.  KTHX."
+msgstr "WORKSPACEZ: CREATED NEW WORKSPACE"
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
 msgid "Workspaces: My Workspaces"
-msgstr "WORKSPACEZ: MAH WORKSPACEZ.  KTHXBYE!"
+msgstr "WORKSPACEZ: MAH WORKSPACEZ"
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
@@ -4482,7 +4482,7 @@ msgstr "WORKSPACEZ: PERMISSHUNZ"
 #: lib/Socialtext/WorkspacesUIPlugin.pm lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
 msgid "Workspaces: This Workspace"
-msgstr "WORKSPACEZ: THIZ WORKSPACE.  KTHX."
+msgstr "WORKSPACEZ: THIZ WORKSPACE"
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
@@ -4507,97 +4507,97 @@ msgstr "YAHOO USR YMSGR:YAHOOUSR PRESENCE"
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "Yahoo! IM: %1"
-msgstr "YAHOO! IM: %1.  KTHXBYE!"
+msgstr "YAHOO! IM: %1"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "Yes"
-msgstr "YEZ.  KTHX."
+msgstr "YEZ"
 
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "You can also put links here to pages you want to remember."
-msgstr "YOO CAN ALSO PUT LINKZ HERE TO PUJZ U WANTZ TO REMEMBR."
+msgstr "YU CAN ALSO PUT LINKZ HERE TO PUJZ YOO WANTZ T REMEMBR.  KTHXBYE!"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "You can choose an image to use as the workspace logo. You may enter the web address of an image already on the web, or you may upload an image from your computer."
-msgstr "YU CAN CHOOSE AN IMUJ T USE AZ TEH WORKSPACE LOGO. YU MAY ENTR TEH WEB ADDRESZ OF AN IMUJ ALREDDY ON TEH WEB, OR YOUZ MAY UPLOAD AN IMUJ FROM YORE COMPUTR."
+msgstr "U CAN CHOOSE AN IMUJ T USE AZ TEH WORKSPACE LOGO. YOO MAY ENTR TEH WEB ADDRESZ OV AN IMUJ ALREDDY ON TEH WEB, OR YOO MAY UPLOAD AN IMUJ FROM YUR COMPUTR."
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "You can choose the level of privacy for your workspace. For more information on choosing the level of privacy for your workspace, see"
-msgstr "YOUZ CAN CHOOSE TEH LEVEL OF PRIVACY 4 UR WORKSPACE. 4 MOAR INFORMASHUN ON CHOOSINS TEH LEVEL OF PRIVACY FR YUR WORKSPACE, SEE.  KTHX."
+msgstr "U CAN CHOOSE TEH LEVEL OF PRIVACY 4 YUR WORKSPACE. FOR MOAR INFORMASHUN ON CHOOSINS TEH LEVEL OV PRIVACY FOR UR WORKSPACE, SEE"
 
 #: share/skin/s2/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "You can choose to sort weblog entries by the date an entry is updated, or by the date an entry was first posted."
-msgstr "YOUZ CAN CHOOSE T SORT WEBLOG ENTRIEZ BY TEH DATE AN ENTRY AR TEH UPDATED, OR BY TEH DATE AN ENTRY WAZ FIRST POSTED."
+msgstr "U CAN CHOOSE T SORT WEBLOG ENTRIEZ BY TEH DATE AN ENTRY AR TEH UPDATED, OR BY TEH DATE AN ENTRY WAZ FIRST POSTED."
 
 #: share/skin/s2/template/new_form_page/generic/new_form_page_instructions.html share/skin/s2/template/new_form_page/new_form_page_instructions.html
 #.  
 msgid "You can edit your profile in the workspace afterwards if you'd like, but you don't have to."
-msgstr "YOO CAN EDIT YOAR PROFILE IN TEH WORKSPACE AFTERWARDZ IF YUD LIKEZ, BUT YOUZ DONT HAVE T.  KTHXBYE!"
+msgstr "YOUZ CAN EDIT UR PROFILE IN TEH WORKSPACE AFTERWARDZ IF YOOD LIKEZ, BUT YOO DONT HAVE TO.  KTHXBYE!"
 
 #: lib/Socialtext/User.pm
 #. (
 msgid "You can now login to the %1 application"
-msgstr "U CAN NOW LOGIN TO TEH %1 APPLICASHUN"
+msgstr "YU CAN NOW LOGIN T TEH %1 APPLICASHUN"
 
 #: lib/Socialtext/User.pm
 #. (
 msgid "You can now login to the %1 workspace"
-msgstr "YOO CAN NOW LOGIN TO TEH %1 WORKSPACE.  KTHX."
+msgstr "U CAN NOW LOGIN T TEH %1 WORKSPACE.  KTHXBYE!"
 
 #: share/console-template/template/form.tmpl
 #.  
 msgid "You can synchronize the appliance clock with another computer using the Internet Time protocol. The appliance must be able to contact that server via port 37."
-msgstr "U CAN SYNCHRONIZE TEH APPLIANCE CLOCK WITH ANUDDR COMPUTR USINS TEH INTERNET TIME PROTOCOL. TEH APPLIANCE MUST BE ABLE T CONTACT THAT SERVR VIA PORT 37."
+msgstr "U CAN SYNCHRONIZE TEH APPLIANCE CLOCK WITH ANUDDR COMPUTR USINS TEH INTERNET TIME PROTOCOL. TEH APPLIANCE MUST BE ABLE TO CONTACT THAT SERVR VIA PORT 37.  KTHX."
 
 #: lib/Socialtext/Account.pm
 #.  
 msgid "You cannot change is_system_created for an account after it has been created."
-msgstr "YU CANNOT CHANGE IS_SYSTEM_CREATED FOR AN ACCOUNT AFTR IT HAZ BEEN CREATED."
+msgstr "U CANNOT CHANGE IS_SYSTEM_CREATED FR AN ACCOUNT AFTR IT HAZ BEEN CREATED.  KTHXBYE!"
 
 #: lib/Socialtext/User/Default/Factory.pm
 #.  
 msgid "You cannot change the email address of a system-created user."
-msgstr "YOUZ CANNOT CHANGE TEH EMAIL ADDRESZ OF SYSTEM-CREATED USR."
+msgstr "YOO CANNOT CHANGE TEH EMAIL ADDRESZ OF SYSTEM-CREATED USR."
 
 #: lib/Socialtext/Account.pm
 #.  
 msgid "You cannot change the name of a system-created account."
-msgstr "YOUZ CANNOT CHANGE TEH NAME OF SYSTEM-CREATED ACCOUNT."
+msgstr "U CANNOT CHANGE TEH NAME OF SYSTEM-CREATED ACCOUNT."
 
 #: lib/Socialtext/User/Default/Factory.pm
 #.  
 msgid "You cannot change the name of a system-created user."
-msgstr "U CANNOT CHANGE TEH NAME OV SYSTEM-CREATED USR."
+msgstr "YOO CANNOT CHANGE TEH NAME OF SYSTEM-CREATED USR."
 
 #: lib/Socialtext/AttachmentsUIPlugin.pm
 #.  
 msgid "You dont have permission to upload attachments"
-msgstr "YU DONT HAVE PERMISSHUN TO UPLOAD ATTACHMENTZ"
+msgstr "U DONT HAVE PERMISSHUN T UPLOAD ATTACHMENTZ.  KTHXBYE!"
 
 #: share/skin/s2/template/search_help_field.html
 #.  
 msgid "You may search on a field by separating the field name from the query with a colon, like this:"
-msgstr "YU MAY SEARCH ON FIELD BY SEPARATIN TEH FIELD NAME FROM TEH QUERY WITH COLON, LIEK THIZ:"
+msgstr "U MAY SEARCH ON FIELD BY SEPARATINS TEH FIELD NAME FROM TEH QUERY WITH COLON, LIKEZ THIZ:"
 
 #: lib/Socialtext/OpenIdPlugin.pm
 #.  
 msgid "You must input both an OpenID and an email."
-msgstr "U MUST INPUT BUDD AN OPENID AND AN EMAIL."
+msgstr "YOUZ MUST INPUT BUDD AN OPENID AND AN EMAIL."
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "You must provide a account_id to this URI (%1)."
-msgstr "U MUST PROVIDE ACCOUNT_ID T THIZ URI (%1).  KTHXBYE!"
+msgstr "U MUST PROVIDE ACCOUNT_ID TO THIZ URI (%1)."
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
 msgid "You must provide a name to create a new account."
-msgstr "YOO MUST PROVIDE NAME TO CREATE NEW ACCOUNT.  KTHXBYE!"
+msgstr "YU MUST PROVIDE NAME TO CREATE NEW ACCOUNT."
 
 #: lib/Socialtext/Handler/ControlPanel.pm lib/Socialtext/Handler/ControlPanel.pm lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -4607,12 +4607,12 @@ msgstr "U MUST PROVIDE USER_ID TO THIZ URI (%1)."
 #: lib/Socialtext/Handler/Authen.pm
 #.  
 msgid "You must provide a valid email address."
-msgstr "U MUST PROVIDE VALID EMAIL ADDRESZ."
+msgstr "YOO MUST PROVIDE VALID EMAIL ADDRESZ."
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "You must provide a workspace and account to this URI (%1)"
-msgstr "YU MUST PROVIDE WORKSPACE AND ACCOUNT 2 THIZ URI (%1)"
+msgstr "YOO MUST PROVIDE WORKSPACE AND ACCOUNT T THIZ URI (%1)"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -4622,82 +4622,82 @@ msgstr "YOUZ MUST PROVIDE WORKSPACE_ID T THIZ URI (%1)."
 #: share/skin/s2/template/popup/email_page
 #.  
 msgid "You must select at least one recipient"
-msgstr "YOO MUST SELECT AT LEAST ONE RECIPIENT"
+msgstr "U MUST SELECT AT LEAST ONE RECIPIENT"
 
 #: share/console-template/template/popup.html
 #.  
 msgid "You will be asked to log into the Console after you click \"Initialize Workspaces\"."
-msgstr "YOO WILL BE ASKED T LOG INTO TEH CONSOLE AFTR YOO CLICK \"INITIALIZE WORKSPACEZ\"."
+msgstr "YOO WILL BE ASKED TO LOG INTO TEH CONSOLE AFTR U CLICK \"INITIALIZE WORKSPACEZ\"."
 
 #: share/skin/s2/template/workspaces_created_section.html
 #.  
 msgid "You're ready to jump to your new workspace, if you want to. Choose your next step:"
-msgstr "YOUZRE REDDY T JUMP TO YUR NEW WORKSPACE, IF YU WANTZ TO. CHOOSE UR NEXT STEP:"
+msgstr "YOORE REDDY TO JUMP TO YOAR NEW WORKSPACE, IF U WANTZ T. CHOOSE YUR NEXT STEP:"
 
 #: lib/Socialtext/FavoritesPlugin.pm share/skin/s2/template/view/homepage
 #.  
 msgid "Your Notepad"
-msgstr "YORE NOTEPAD"
+msgstr "UR NOTEPAD.  KTHXBYE!"
 
 #: share/skin/s2/template/element/listview/actionbar
 #.  
 msgid "Your Watchlist"
-msgstr "YORE WATCHLIST"
+msgstr "YOAR WATCHLIST"
 
 #: lib/Socialtext/WatchlistPlugin.pm
 #. (
 msgid "Your Watchlist in %1 is empty."
-msgstr "YOAR WATCHLIST IN %1 AR EMPTY."
+msgstr "UR WATCHLIST IN %1 AR EMPTY."
 
 #: lib/Socialtext/Handler/Authen.pm
 #. (
 msgid "Your email address, %1, has been confirmed. Please login."
-msgstr "YOAR EMAIL ADDRESZ, %1, HAZ BEEN CONFIRMED. PLEEZ LOGIN."
+msgstr "YUR EMAIL ADDRESZ, %1, HAZ BEEN CONFIRMED. PLEEZ LOGIN."
 
 #: lib/Socialtext/Handler/Authen.pm
 #.  
 msgid "Your password has been set and you can now login."
-msgstr "YOAR PASSWORD HAZ BEEN SET AND U CAN NOW LOGIN."
+msgstr "UR PASSWORD HAZ BEEN SET AND YOUZ CAN NOW LOGIN."
 
 #: share/skin/s2/template/search_help_field.html
 #. (
 msgid "Your query was \"%1\""
-msgstr "YORE QUERY WAZ \"%1\""
+msgstr "YUR QUERY WAZ \"%1\""
 
 #: share/skin/s2/template/element/settings/users_invited_section
 #.  
 msgid "Your request to invite the following users has been sent"
-msgstr "YOAR REQUEST T INVITE TEH FOLLOWINS USERZ HAZ BEEN SENT"
+msgstr "UR REQUEST TO INVITE TEH FOLLOWINS USERZ HAZ BEEN SENT.  KTHX."
 
 #: share/skin/s2/template/element/settings/users_settings_section
 #.  
 msgid "Your settings cannot be changed via the Socialtext settings UI."
-msgstr "YORE SETTINGZ CANNOT BE CHANGED VIA TEH SOCIALTEXT SETTINGZ UI."
+msgstr "YUR SETTINGZ CANNOT BE CHANGED VIA TEH SOCIALTEXT SETTINGZ UI."
 
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "Your watchlist"
-msgstr "YORE WATCHLIST"
+msgstr "YOAR WATCHLIST"
 
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "Your workspaces"
-msgstr "YORE WORKSPACEZ"
+msgstr "YOAR WORKSPACEZ"
 
 #: lib/Socialtext/Handler/Authen.pm
 #. (
 msgid "\"%1\" is not a valid email address. Please use your email address to log in."
-msgstr "\"%1\" AR NOT VALID EMAIL ADDRESZ. PLEEZ USE YORE EMAIL ADDRESZ T LOG IN.  KTHX."
+msgstr "\"%1\" AR NOT VALID EMAIL ADDRESZ. PLEEZ USE YORE EMAIL ADDRESZ 2 LOG IN."
 
 #: share/skin/s2/template/element/settings/workspaces_create_section
 #.  
 msgid "and this email address:"
-msgstr "AND THIZ EMAIL ADDRESZ:"
+msgstr "AND THIZ EMAIL ADDRESZ:.  KTHX."
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "another workspace"
-msgstr "ANUDDR WORKSPACE.  KTHX."
+msgstr "ANUDDR WORKSPACE"
 
 #: share/skin/s2/template/element/settings/users_invite_section
 #.  
@@ -4722,12 +4722,12 @@ msgstr "ANYBODY CAN SEE TEH WORKSPACE AND MAKE COMMENTZ, ONLY PRIVATELY INVITED 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "anybody can see the workspace, only privately invited members can edit"
-msgstr "ANYBODY CAN SEE TEH WORKSPACE, ONLY PRIVATELY INVITED MEMBERZ CAN EDIT"
+msgstr "ANYBODY CAN SEE TEH WORKSPACE, ONLY PRIVATELY INVITED MEMBERZ CAN EDIT.  KTHX."
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "anybody can see the workspace, users can register to be able to edit"
-msgstr "ANYBODY CAN SEE TEH WORKSPACE, USERZ CAN REGISTR TO BE ABLE T EDIT"
+msgstr "ANYBODY CAN SEE TEH WORKSPACE, USERZ CAN REGISTR T BE ABLE TO EDIT"
 
 #: share/skin/s2/template/view/weblog
 #.  
@@ -4737,7 +4737,7 @@ msgstr "ATTACHMENTZ"
 #: lib/Socialtext/Workspace/Permissions.pm
 #.  
 msgid "authenticated-user-only"
-msgstr "AUTHENTICATED-USR-ONLY"
+msgstr "AUTHENTICATED-USR-ONLY.  KTHX."
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
@@ -4767,7 +4767,7 @@ msgstr "CHANGE"
 #: share/skin/s2/template/view/homepage
 #.  
 msgid "changes"
-msgstr "CHANGEZ"
+msgstr "CHANGEZ.  KTHX."
 
 #: lib/Socialtext/Pages.pm
 #.  
@@ -4807,17 +4807,17 @@ msgstr "DIFFERENT-WORKSPACE"
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "dinette"
-msgstr "DINETTE"
+msgstr "DINETTE.  KTHXBYE!"
 
 #: lib/Socialtext/Formatter/WaflPhrase.pm share/skin/s2/template/element/page/details share/skin/s2/template/element/weblog/edit_link share/skin/s2/template/view/homepage share/skin/s2/template/view/homepage share/skin/s2/template/view/homepage share/skin/s2/template/view/homepage
 #.  
 msgid "edit"
-msgstr "EDIT.  KTHXBYE!"
+msgstr "EDIT"
 
 #: share/skin/s2/template/view/weblog
 #.  
 msgid "edit this post"
-msgstr "EDIT THIZ POST.  KTHX."
+msgstr "EDIT THIZ POST"
 
 #: share/skin/s2/template/view/refcard
 #.  
@@ -4827,7 +4827,7 @@ msgstr "EMAIL LINK"
 #: share/skin/s2/template/element/settings/save
 #.  
 msgid "error:"
-msgstr "ERROR:"
+msgstr "ERROR:.  KTHX."
 
 #: share/skin/s2/template/view/refcard
 #.  
@@ -4837,7 +4837,7 @@ msgstr "EXTERNAL IMUJ"
 #: lib/Socialtext/Formatter/Phrase.pm lib/Socialtext/Formatter/Phrase.pm share/skin/s2/template/view/refcard
 #.  
 msgid "external link"
-msgstr "EXTERNAL LINK.  KTHXBYE!"
+msgstr "EXTERNAL LINK"
 
 #: lib/Socialtext/Widget_resource.pm lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js share/skin/s2/javascript/widget_resource.js
 #. (
@@ -4852,7 +4852,7 @@ msgstr "FILE: %1"
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "form: %1"
-msgstr "FORM: %1"
+msgstr "FORM: %1.  KTHX."
 
 #: share/console-template/template/overview.html
 #.  
@@ -4862,7 +4862,7 @@ msgstr "FREE"
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "heading 1"
-msgstr "HEADINS 1"
+msgstr "HEADIN 1"
 
 #: share/skin/s2/template/view/refcard
 #.  
@@ -4872,12 +4872,12 @@ msgstr "HEADIN 2.  KTHX."
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "heading 3"
-msgstr "HEADINS 3"
+msgstr "HEADIN 3"
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "heading 4"
-msgstr "HEADIN 4"
+msgstr "HEADINS 4.  KTHXBYE!"
 
 #: share/skin/s2/template/view/refcard
 #.  
@@ -4887,27 +4887,27 @@ msgstr "HEADINS 5"
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "heading 6"
-msgstr "HEADIN 6"
+msgstr "HEADINS 6.  KTHX."
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "headings are sections too"
-msgstr "HEADINGZ R SECSHUNZ TO.  KTHX."
+msgstr "HEADINGZ AR SECSHUNZ TO"
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "if you use this setting, the workspace is likely to be spammed"
-msgstr "IF U USE THIZ SETTINS, TEH WORKSPACE AR LIKESLY T BE SPAMMED"
+msgstr "IF U USE THIZ SETTIN, TEH WORKSPACE AR TEH LIEKLY T BE SPAMMED"
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "image attached to a page in another workspace"
-msgstr "IMUJ ATTACHED TO PUJ IN ANUDDR WORKSPACE.  KTHX."
+msgstr "IMUJ ATTACHED T PUJ IN ANUDDR WORKSPACE"
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "image attached to page"
-msgstr "IMUJ ATTACHED T PUJ.  KTHXBYE!"
+msgstr "IMUJ ATTACHED TO PUJ.  KTHX."
 
 #: share/skin/s2/template/view/refcard share/skin/s2/template/view/refcard
 #.  
@@ -4967,17 +4967,17 @@ msgstr "LINEZ"
 #: lib/Socialtext/Widget_resource.pm lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "link: %1"
-msgstr "LINK: %1"
+msgstr "LINK: %1.  KTHX."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "link: %1 (%2 )"
-msgstr "LINK: %1 (%2 )"
+msgstr "LINK: %1 (%2 ).  KTHX."
 
 #: lib/Socialtext/Workspace/Permissions.pm
 #.  
 msgid "member-only"
-msgstr "MEMBR-ONLY"
+msgstr "MEMBR-ONLY.  KTHX."
 
 #: share/skin/s2/template/view/refcard
 #.  
@@ -4992,7 +4992,7 @@ msgstr "NEVR"
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
 msgid "never in DST"
-msgstr "NEVR IN DST.  KTHX."
+msgstr "NEVR IN DST"
 
 #: share/template/control/user.html share/template/control/user.html
 #.  
@@ -5002,12 +5002,12 @@ msgstr "NO"
 #: lib/Socialtext/Query/Wafl.pm
 #.  
 msgid "no access to workspace"
-msgstr "NO ACCESZ TO WORKSPACE"
+msgstr "NO ACCESZ T WORKSPACE"
 
 #: share/skin/s2/template/element/listview/pages share/skin/s2/template/element/listview/pages share/skin/s2/template/view/attachmentslist
 #.  
 msgid "on"
-msgstr "ON.  KTHX."
+msgstr "ON"
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
@@ -5022,12 +5022,12 @@ msgstr "OPSHUNAL"
 #: share/skin/s2/template/view/weblog
 #.  
 msgid "or post by email:"
-msgstr "OR POST BY EMAIL:.  KTHXBYE!"
+msgstr "OR POST BY EMAIL:"
 
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "page name"
-msgstr "PUJ NAME.  KTHX."
+msgstr "PUJ NAME.  KTHXBYE!"
 
 #: share/console-template/template/overview.html
 #.  
@@ -5037,27 +5037,27 @@ msgstr "PERCENT FREE"
 #: share/skin/s2/template/view/weblog
 #.  
 msgid "permalink"
-msgstr "PERMALINK.  KTHX."
+msgstr "PERMALINK"
 
 #: lib/Socialtext/Workspace/Permissions.pm
 #.  
 msgid "public"
-msgstr "PUBLIC.  KTHXBYE!"
+msgstr "PUBLIC"
 
 #: lib/Socialtext/Workspace/Permissions.pm
 #.  
 msgid "public-authenticate-to-edit"
-msgstr "PUBLIC-AUTHENTICATE-T-EDIT"
+msgstr "PUBLIC-AUTHENTICATE-TO-EDIT"
 
 #: lib/Socialtext/Workspace/Permissions.pm
 #.  
 msgid "public-comment-only"
-msgstr "PUBLIC-COMMENT-ONLY"
+msgstr "PUBLIC-COMMENT-ONLY.  KTHX."
 
 #: lib/Socialtext/Workspace/Permissions.pm
 #.  
 msgid "public-read-only"
-msgstr "PUBLIC-REDD-ONLY"
+msgstr "PUBLIC-REDD-ONLY.  KTHXBYE!"
 
 #: lib/Socialtext/WeblogPlugin.pm lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #.  
@@ -5067,7 +5067,7 @@ msgstr "RECENT CHANGEZ"
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "recent changes: %1"
-msgstr "RECENT CHANGEZ: %1"
+msgstr "RECENT CHANGEZ: %1.  KTHXBYE!"
 
 #: share/console-template/template/form.tmpl
 #.  
@@ -5087,12 +5087,12 @@ msgstr "REQUIRED"
 #: share/skin/s2/template/view/page_revision_list
 #.  
 msgid "revision"
-msgstr "REVISHUN"
+msgstr "REVISHUN.  KTHX."
 
 #: share/skin/s2/template/element/listview/pages share/skin/s2/template/element/listview/pages
 #.  
 msgid "revisions"
-msgstr "REVISHUNZ.  KTHXBYE!"
+msgstr "REVISHUNZ"
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
@@ -5132,7 +5132,7 @@ msgstr "STRIKEOUT"
 #: lib/Socialtext/l10n.pm
 #. (
 msgid "string %1"
-msgstr "STRIN %1"
+msgstr "STRINS %1"
 
 #: share/skin/s2/template/view/refcard
 #.  
@@ -5162,17 +5162,17 @@ msgstr "TAG: %1"
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "this text is not bold"
-msgstr "THIZ TEXT AR TEH NOT BOLD"
+msgstr "THIZ TEXT AR NOT BOLD.  KTHX."
 
 #: share/skin/s2/template/search_help_field.html
 #.  
 msgid "title"
-msgstr "TITLE.  KTHXBYE!"
+msgstr "TITLE"
 
 #: share/skin/s2/template/search_help_field.html
 #.  
 msgid "title:hello"
-msgstr "TITLE:OH HAI,  KTHXBYE!"
+msgstr "TITLE:OH HAI,"
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #.  
@@ -5187,12 +5187,12 @@ msgstr "TOC: %1"
 #: share/console-template/template/overview.html
 #.  
 msgid "total"
-msgstr "TOTAL"
+msgstr "TOTAL.  KTHX."
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "unformatted: %1"
-msgstr "UNFRMATTED: %1"
+msgstr "UNFORMATTED: %1"
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
@@ -5202,27 +5202,27 @@ msgstr "USR: %1"
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "value"
-msgstr "VALUE.  KTHXBYE!  KTHX."
+msgstr "VALUE"
 
 #: share/template/control/account_link share/template/control/user_link share/template/control/workspace_link
 #. (
 msgid "view %1"
-msgstr "VIEW %1"
+msgstr "VIEW %1.  KTHXBYE!"
 
 #: share/skin/s2/template/element/settings/save
 #.  
 msgid "warning:"
-msgstr "WARNINS:.  KTHXBYE!"
+msgstr "WARNINS:"
 
 #: lib/Socialtext/Formatter/WaflPhrase.pm
 #.  
 msgid "weblog"
-msgstr "WEBLOG.  KTHXBYE!"
+msgstr "WEBLOG"
 
 #: lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js
 #. (
 msgid "weblog list: %1"
-msgstr "WEBLOG LIST: %1"
+msgstr "WEBLOG LIST: %1.  KTHXBYE!"
 
 #: lib/Socialtext/Widget_resource.pm lib/Socialtext/Widget_resource.pm share/skin/s2/javascript/widget_resource.js share/skin/s2/javascript/widget_resource.js
 #. (
@@ -5232,12 +5232,12 @@ msgstr "WEBLOG: %1"
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "workspace"
-msgstr "WORKSPACE.  KTHXBYE!"
+msgstr "WORKSPACE"
 
 #: share/skin/s2/template/element/settings/workspaces_permissions_section
 #.  
 msgid "workspace members"
-msgstr "WORKSPACE MEMBERZ"
+msgstr "WORKSPACE MEMBERZ.  KTHX."
 
 #: share/template/control/user.html share/template/control/user.html
 #.  
@@ -5252,5 +5252,5 @@ msgstr "YORE.FRIEND@EXAMPLE.COM"
 #: share/skin/s2/template/view/refcard
 #.  
 msgid "{file: proposal.pdf} on this page"
-msgstr "{FILE: PROPOSAL.PDF} ON THIZ PUJ.  KTHXBYE!"
+msgstr "{FILE: PROPOSAL.PDF} ON THIZ PUJ"
 

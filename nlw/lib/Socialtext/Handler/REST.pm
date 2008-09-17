@@ -237,6 +237,7 @@ sub postHandler {
     # We check on existence rather than definedness, because someone might
     # have set a header to undef on purpose, so at to indicate not printing it
     # at all.
+    
     unless (exists $headers{'-cache_control'} ||
             exists $headers{'-Cache-control'} ||
             exists $headers{'-pragma'} ||
@@ -244,7 +245,7 @@ sub postHandler {
             exists $headers{'-Etag'} ) {
         %headers = (
             %headers,
-            -cache_control => 'no-cache',
+            -cache_control => 'no-cache,private',
             -pragma => 'no-cache',
         );
     }

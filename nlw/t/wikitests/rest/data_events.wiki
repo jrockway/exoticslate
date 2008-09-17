@@ -7,6 +7,7 @@ Test case for `/data/events`(GET and POST).
 | st-clear-events |                  |       |
 | get             | /data/events     |       |
 | code-is         | 200              |       |
+| has-header | Cache-Control | qr/private/ |
 | body-like       | []               |       |
 
 | Comment | POST a few events |
@@ -22,6 +23,7 @@ Test case for `/data/events`(GET and POST).
 | Comment | GET all events |
 | get | /data/events |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-like | "id":"quick_start" |
 | body-like | "id":"meeting_agendas" |
 | body-like | "id":"announcements_and_links" |
@@ -29,6 +31,7 @@ Test case for `/data/events`(GET and POST).
 | Comment | GET one event (limit) |
 | get | /data/events?limit=1 |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-like | "event_class":"page" |
 | body-like | "action":"tag_add" |
 | body-like | "tag_name":"taggy" |
@@ -39,6 +42,7 @@ Test case for `/data/events`(GET and POST).
 | Comment | GET one event (count) |
 | get | /data/events?count=1 |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-like | "event_class":"page" |
 | body-like | "action":"tag_add" |
 | body-like | "tag_name":"taggy" |
@@ -49,6 +53,7 @@ Test case for `/data/events`(GET and POST).
 | Comment | GET one event (offset) |
 | get | /data/events?count=1&offset=1 |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-like | "event_class":"page" |
 | body-like | "action":"tag_add" |
 | body-like | "tag_name":"saggy" |
@@ -59,11 +64,13 @@ Test case for `/data/events`(GET and POST).
 | Comment | Filter by event_class |
 | get | /data/events?event_class=page |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-like | "id":"quick_start" |
 | body-like | "id":"meeting_agendas" |
 | body-like | "id":"announcements_and_links" |
 | get | /data/events?event_class=monkey |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-unlike | "id":"quick_start" |
 | body-unlike | "id":"meeting_agendas" |
 | body-unlike | "id":"announcements_and_links" |
@@ -81,11 +88,13 @@ Test case for `/data/events`(GET and POST).
 | Comment | Filter by action |
 | get | /data/events?action=tag_add |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-like | "id":"quick_start" |
 | body-like | "id":"meeting_agendas" |
 | body-like | "id":"announcements_and_links" |
 | get | /data/events?action=edit_save |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-unlike | "id":"quick_start" |
 | body-unlike | "id":"meeting_agendas" |
 | body-unlike | "id":"announcements_and_links" |
@@ -93,10 +102,12 @@ Test case for `/data/events`(GET and POST).
 | Comment | Filter by actor.id |
 | get | /data/events?actor.id=1 |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-like | "tag_name":"downer" |
 | body-like | "id":"meeting_agendas" |
 | get | /data/events?actor.id=999999 |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-unlike | "tag_name":"downer" |
 | body-unlike | "id":"quick_start" |
 | body-unlike | "id":"meeting_agendas" |
@@ -105,9 +116,11 @@ Test case for `/data/events`(GET and POST).
 | Comment | Filter by person.id |
 | get | /data/events?person.id=2 |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-like | "tag_name":"downer" |
 | get | /data/events?person.id=999999 |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-unlike | "tag_name":"downer" |
 
 | Comment | Filter by workspace_id |
@@ -115,11 +128,13 @@ Test case for `/data/events`(GET and POST).
 | set-from-content | workspace_id | qr/"workspace_id":"(\d+)"/ |
 | get | /data/events?page.workspace_id=%%workspace_id%% |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-like | "id":"quick_start" |
 | body-like | "id":"meeting_agendas" |
 | body-like | "id":"announcements_and_links" |
 | get | /data/events?page.workspace_id=999999 |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-unlike | "id":"quick_start" |
 | body-unlike | "id":"meeting_agendas" |
 | body-unlike | "id":"announcements_and_links" |
@@ -127,6 +142,7 @@ Test case for `/data/events`(GET and POST).
 | Comment | Filter by workspace_name |
 | get | /data/events?page.workspace_name=%%workspace%% |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-like | "id":"quick_start" |
 | body-like | "id":"meeting_agendas" |
 | body-like | "id":"announcements_and_links" |
@@ -143,9 +159,11 @@ Test case for `/data/events`(GET and POST).
 | code-is | 201 |
 | get | /data/people/%%username%% |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | set-from-content | actor_id | qr/"id":"(\d+)"/ |
 | get | /data/events?limit=1 |
 | code-is | 200 |
+| has-header | Cache-Control | qr/private/ |
 | body-like | qr/"actor":{[^}]*"id":"%%actor_id%%"/ |
 
 | *Comment* | Posting with missing parameters |

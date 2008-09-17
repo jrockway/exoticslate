@@ -101,27 +101,22 @@ proto.create_user = function(params, callback) {
 proto.put_page = function(params) {
     var self = this;
 
-    if (jQuery.browser.msie)
-        this.skipAll('put_page() not working in IE yet');
-
     var workspace = params.workspace;
     var page_name = encodeURIComponent(params.page_name);
 
     $.ajax({
-        url: "/data/workspaces/" + workspace + "/pages/" + page_name,
+        url: "/data/workspaces/" + workspace + "/pages/" + page_name +
+            '?http_method=PUT',
         type: 'POST',
-        contentType: 'application/json',
+        contentType: 'text/x.socialtext-wiki',
+        dataType: 'text',
         data: params.content, 
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader("X-Http-Method", "PUT");
-            xhr.setRequestHeader("Content-Type", "text/x.socialtext-wiki");
-        },
         success: function() {
             if( $.isFunction(params.callback) )
                 self.call_callback(params.callback);
         },
         error: function(x) {
-            XXX(x.statusText + ' ' + x.status);
+            XXX(x.statusText + '\nstatus: ' + x.status);
         }
     });
 }

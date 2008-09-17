@@ -1323,7 +1323,9 @@ The font-size percentage is of 16px. (0.75 * 16px = 12px) */
     font-size:12px ! important;
     line-height:15px;
 }
-
+.wiki em {
+    font-size:inherity ! important;
+}
 .wiki a:visited {
     color: #551A8B;
 }

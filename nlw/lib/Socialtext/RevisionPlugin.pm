@@ -137,9 +137,31 @@ field 'before_page';
 field 'after_page';
 field 'hub';
 
+sub tag_diff {
+    my $self = shift;
+    my %p = (
+        old_tags => [],
+        new_tags => [],
+        highlight_class => '',
+        @_
+    );
+
+    my %in_old;
+    foreach (@{$p{old_tags}}) { $in_old{$_} = 1; }
+
+    my $text = join ', ',
+        map {exists $in_old{$_} ? $_ : "<span class='$p{highlight_class}'>$_</span>" } @{$p{new_tags}};
+
+    return $text;
+}
+
 sub header {
     my $self = shift;
     my @header;
+
+    my %tags = ();
+    $tags{$self->before_page} = [ grep $_ ne 'Recent Changes', $self->before_page->html_escaped_categories ];
+    $tags{$self->after_page} = [ grep $_ ne 'Recent Changes', $self->after_page->html_escaped_categories ];
     for my $page ($self->before_page, $self->after_page) {
         my %col;
         my $pretty_revision = $page->metadata->Revision;
@@ -150,9 +172,17 @@ sub header {
             page_id     => $page->id,
             revision_id => $page->revision_id,
         );
-        $col{tags} = join ', ', 
-                     grep $_ ne 'Recent Changes',
-                     $page->html_escaped_categories;
+        $col{tags} = ($page == $self->before_page) ? 
+            $self->tag_diff(
+                old_tags =>$tags{$self->after_page}, 
+                new_tags => $tags{$self->before_page},
+                highlight_class => 'st-revision-compare-old',
+            ) :
+            $self->tag_diff(
+                new_tags =>$tags{$self->after_page}, 
+                old_tags => $tags{$self->before_page},
+                highlight_class => 'st-revision-compare-new',
+            );
         $col{editor} = $page->last_edited_by->username;
         push @header, \%col;
     }

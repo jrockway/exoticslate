@@ -314,7 +314,7 @@ sub match {
     my $self = shift;
     my $text = shift;
 
-    return unless $text =~ /(\|(\s*.*?\s*)\| *)(.*)/sm;
+    return unless $text =~ /(\|(\s*(?:\{\{.*?\}\}|.)*?\s*)\| *)(.*)/sm;
 
     $self->start_offset( $-[1] );
     $self->end_offset( $3 eq "\n" ? $+[3] : $+[2] );

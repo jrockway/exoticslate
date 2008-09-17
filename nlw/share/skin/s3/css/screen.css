@@ -83,6 +83,9 @@ table.dataTable td img.avatar {
     margin: 5px;
     vertical-align: middle;
 }
+table.dataTable {
+    width:98%;
+}
 div#bottomButtons {
     width: 100%;
 }

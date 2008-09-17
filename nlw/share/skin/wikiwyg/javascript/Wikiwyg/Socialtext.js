@@ -206,7 +206,6 @@ function setup_wikiwyg() {
                 // what we fallback to.
                 || jQuery('#st-page-content').html());
 
-            ww.set_edit_tips_span_display('none');
             ww.editMode();
             ww.preview_link_reset();
             jQuery("#st-pagetools").hide();
@@ -236,6 +235,7 @@ function setup_wikiwyg() {
                 // quite regularly given a high enough latency to the server.
                 setTimeout( function() {
                     jQuery("#st-editing-tools-edit .buttonRight a").show();
+                    ww.set_edit_tips_span_display('none');
                 }, 2000 );
             }
 

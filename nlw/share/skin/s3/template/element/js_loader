@@ -14,9 +14,7 @@
                 done = true;
                 count--;
                 if (!count) {
-                    jQuery(function () {
-                        [% oncomplete %]
-                    });
+                    [% oncomplete %]
                 }
             }
         };

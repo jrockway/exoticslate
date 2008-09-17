@@ -263,7 +263,15 @@ sub template_render {
         vars     => {
             share => $self->share,
             workspaces => [$self->hub->current_user->workspaces->all],
-            as_json => sub { encode_json(@_) },
+            as_json => sub {
+                my $json = encode_json(@_);
+
+                # hack so that json can be included in other <script> 
+                # sections without breaking stuff
+                $json =~ s!</script>!</scr" + "ipt>!g;
+
+                return $json;
+            },
             %template_vars,
             %args,
         },

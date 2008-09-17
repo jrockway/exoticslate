@@ -7,18 +7,17 @@
 
         <script>
             var msgs = [% as_json(messages) %];
+            var data = [% as_json([content]) %];
             function load_content () {
-                jQuery(function () {
-                    jQuery('body').append(
-                        jQuery('#encoded-content').text()
-                    )
+                var html = data[0];
+                jQuery("body").append(html);
+                setTimeout(function () {
                     gadgets.util.runOnLoadHandlers();
-                });
+                }, 1);
             }
         </script>
     </head>
     <body onLoad="document.loaded=true;">
-        <div id="encoded-content" style="display:none">[% content | html_encode %]</div>
         [% INCLUDE element/js_loader
             scripts = features
             oncomplete = "load_content()"

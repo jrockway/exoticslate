@@ -1735,3 +1735,44 @@ div#contentContainer div#errors-and-messages {
     font-weight: bold;
     text-align: center;
 }
+
+/* Extraneous settings pages with odd markup
+------------------------------------------------------------ */
+form div.message {
+    clear:both;
+    margin:1em 0;
+    background:#ffe;
+}
+div.workspace-entry-header {
+    font-size:150%;
+    font-weight:bold;
+    margin:1em 0;
+}
+div.workspace-entry {
+    margin:1em 0;
+}
+div.workspace-entry-p {
+    margin:1em 0;
+    line-height:1.2;
+}
+div.workspace-entry textarea {
+    width:90%;
+}
+div.workspace-subentry {
+    font-weight:bold;
+    margin:1em 0;
+}
+div.settings-comment {
+    margin:1em 0 1em 1em;
+    color:#666;
+}
+div.users-invite-message {
+    margin:1em 0;
+    padding:1em;
+    border:1px #ccc solid;
+    background:#f8f8f8;
+}
+div.users-invite-message p {
+    margin:1em 0;
+    line-height:1.2;
+}

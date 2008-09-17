@@ -62,8 +62,8 @@ sub get_resource {
     push @args, 'person_id' => $person_id if $person_id;
     # TODO: resolve person.name to a user
 
-    my $follower_id = $self->rest->query->param('follower_id');
-    push @args, 'follower_id' => $follower_id if $follower_id;
+    my $followed = $self->rest->query->param('followed');
+    push @args, 'followed' => 1 if $followed;
 
     my $workspace_id = $self->rest->query->param('page.workspace_id');
     if (!$workspace_id || $workspace_id !~ /^\d+$/) {

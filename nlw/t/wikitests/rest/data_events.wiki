@@ -69,11 +69,11 @@ Test case for `/data/events`(GET and POST).
 | body-unlike | "id":"announcements_and_links" |
 
 | Comment     | Filter by follower_id                         |                       |
-| get         | /data/events?event_class=person&follower_id=3 |                       |
+| get         | /data/events?event_class=person&followed=1 |                       |
 | code-is     | 200                                           |                       |
 | body-like   | []                                            |                       |
 | post-json   | /data/people/3/watchlist                      | {"person":{"id":"1"}} |
-| get         | /data/events?event_class=person&follower_id=3 |                       |
+| get         | /data/events?event_class=person&followed=1 |                       |
 | code-is     | 200                                           |                       |
 | body-like   | "tag_name":"downer"                           |                       |
 | delete      | /data/people/3/watchlist/1                    |                       |

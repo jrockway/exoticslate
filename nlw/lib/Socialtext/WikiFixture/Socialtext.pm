@@ -3,6 +3,7 @@ package Socialtext::WikiFixture::Socialtext;
 use strict;
 use warnings;
 use base 'Socialtext::WikiFixture::Selenese';
+use base 'Socialtext::WikiFixture::SocialBase';
 use Socialtext::System qw/shell_run/;
 use Socialtext::Workspace;
 use Sys::Hostname;

@@ -62,13 +62,12 @@ sub breadcrumbs_list {
 
     my %sortdir = %{ $self->sortdir };
 
-    $self->result_set( $self->sorted_result_set( \%sortdir ) );
-
     $self->display_results(
         \%sortdir,
         display_title => loc('Recently Viewed Pages'),
         unplug_uri    => "?action=unplug;breadcrumbs=1",
         unplug_phrase => loc('Click this button to save recently viewed pages to your computer for offline use.'),
+        hide_sort_widget => 1,
     );
 }
 

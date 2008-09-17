@@ -47,7 +47,9 @@
              <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
           [% END %]
         </div></th>
-        <th colspan="[% 1 + listview_extra_columns.size %]" class="sort">[% loc('Sort by:') %]
+        <th colspan="[% 1 + listview_extra_columns.size %]" class="sort">
+        [% IF !hide_sort_widget %]
+        [% loc('Sort by:') %]
           <select id="sort-picker" onchange="sort_by();">
             [% IF allow_relevance %]
               [% PROCESS sort_by_option name = loc('Relevance') field = 'Relevance' %]
@@ -60,6 +62,8 @@
             [% PROCESS sort_by_option name = loc('Date') field = 'Date' %]
             [% PROCESS sort_by_option name = loc('Revisions') field = 'revision_count' %]
         </select>
+
+        [% END %]
               </select>
           </div>
         </th>

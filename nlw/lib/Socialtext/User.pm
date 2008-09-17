@@ -398,16 +398,21 @@ sub accounts {
 }
 
 sub to_hash {
-  my $self = shift;
-  my $hash = {};
-  foreach my $attr ( @minimal_interface ) {
-      my $value = $self->$attr;
-      $value = "" unless defined $value;
-      $hash->{$attr} = "$value";
-  }
-  $hash->{creator_username} = $self->creator->username;
+    my $self = shift;
+    my $hash = {};
+    foreach my $attr ( @minimal_interface ) {
+        my $value = $self->$attr;
+        $value = "" unless defined $value;
+        $hash->{$attr} = "$value";
+    }
+    $hash->{creator_username} = $self->creator->username;
 
-  return $hash;
+    # There is a _tiny_ possiblilty that there will not be a primary account.
+    $hash->{primary_account_name} = ( $self->primary_account_id ) 
+        ? $self->primary_account->name
+        : undef;
+
+    return $hash;
 }
 
 sub Create_user_from_hash {

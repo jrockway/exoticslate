@@ -22,6 +22,8 @@ my $user = Socialtext::User->new(
     user_id => 2345, 
     name => 'tiffany'
 );
+my $viewer = $user;
+my @viewer_args = ($viewer->user_id) x 3;
 my $ws = Socialtext::Workspace->new(
     workspace_id => 348798,
     name => 'forbao',
@@ -44,7 +46,7 @@ Socialtext::Pages->StoreMocked($page);
 test_get_events: {
 # test storing a string for context instead of a hash
 
-    my $base_select = <<EOSQL;
+    my $base_select = <<'EOSQL';
 SELECT
     e.at AT TIME ZONE 'UTC' || 'Z' AS at,
     e.event_class AS event_class,
@@ -61,15 +63,38 @@ SELECT
 FROM event e 
     LEFT JOIN page ON (e.page_workspace_id = page.workspace_id AND e.page_id = page.page_id)
     LEFT JOIN "Workspace" w ON (e.page_workspace_id = w.workspace_id)
+WHERE (w.workspace_id IS NULL OR w.workspace_id IN (
+        SELECT workspace_id FROM "UserWorkspaceRole" WHERE user_id = ?
+        UNION
+        SELECT workspace_id
+        FROM "WorkspaceRolePermission" wrp
+        JOIN "Role" r USING (role_id)
+        JOIN "Permission" p USING (permission_id)
+        WHERE r.name = 'guest' AND p.name = 'read'
+    ))
+    AND (e.event_class <> 'person' OR e.person_id IN (
+        SELECT prsn.user_id
+          FROM account_user viewer1
+            JOIN account_plugin USING (account_id)
+            JOIN account_user prsn USING (account_id)
+          WHERE plugin = 'people' AND viewer1.user_id = ?
+    ))
+    AND (e.event_class <> 'person' OR e.actor_id IN (
+        SELECT actr.user_id
+          FROM account_user viewer2
+            JOIN account_plugin USING (account_id)
+            JOIN account_user actr USING (account_id)
+          WHERE plugin = 'people' AND viewer2.user_id = ?
+    ))
 EOSQL
 
     Get_no_events: {
-        my $events = Socialtext::Events->Get();
+        my $events = Socialtext::Events->Get($viewer);
         isa_ok $events, 'ARRAY';
         is @$events, 0, 'no events found';
         sql_ok( 
             sql => "$base_select ORDER BY at DESC",
-            args => [],
+            args => [@viewer_args],
         );
     }
 
@@ -95,7 +120,7 @@ EOSQL
         );
         @Socialtext::SQL::RETURN_VALUES = ( { return => [{%event}] } );
 
-        my $events = Socialtext::Events->Get();
+        my $events = Socialtext::Events->Get($viewer);
         is_deeply $events, [
             {
                 at => $event{at},
@@ -123,7 +148,7 @@ EOSQL
         is scalar(@Socialtext::SQL::SQL), 2, 'correct # of sql left';
         sql_ok( 
             sql => "$base_select ORDER BY at DESC",
-            args => [],
+            args => [@viewer_args],
         );
         sql_ok( 
             sql => "SELECT * FROM person WHERE id = ?",
@@ -132,113 +157,113 @@ EOSQL
     }
 
     Get_limited_events: {
-        my $events = Socialtext::Events->Get(limit => 32);
+        my $events = Socialtext::Events->Get($viewer, limit => 32);
         is_deeply $events, [], "no spurious events";
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select ORDER BY at DESC LIMIT ?",
-            args => [32],
+            args => [@viewer_args, 32],
         );
     }
 
     Get_offset_events: {
-        Socialtext::Events->Get(offset => 5);
+        Socialtext::Events->Get($viewer, offset => 5);
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select ORDER BY at DESC OFFSET ?",
-            args => [5],
+            args => [@viewer_args, 5],
         );
     }
 
     Get_limit_and_offset_events: {
-        Socialtext::Events->Get(limit => 5, offset => 10);
+        Socialtext::Events->Get($viewer, limit => 5, offset => 10);
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select ORDER BY at DESC LIMIT ? OFFSET ?",
-            args => [5, 10],
+            args => [@viewer_args, 5, 10],
         );
     }
 
     Get_before_events: {
-        Socialtext::Events->Get(before => 'now');
+        Socialtext::Events->Get($viewer, before => 'now');
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select WHERE at < ?::timestamptz ORDER BY at DESC",
-            args => ['now'],
+            sql => "$base_select AND (at < ?::timestamptz) ORDER BY at DESC",
+            args => [@viewer_args, 'now'],
         );
     }
 
     Get_after_events: {
-        Socialtext::Events->Get(after => 'now');
+        Socialtext::Events->Get($viewer, after => 'now');
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select WHERE at > ?::timestamptz ORDER BY at DESC",
-            args => ['now'],
+            sql => "$base_select AND (at > ?::timestamptz) ORDER BY at DESC",
+            args => [@viewer_args, 'now'],
         );
     }
 
     Get_before_and_after: {
         # If both before and after, before wins
-        Socialtext::Events->Get(before => 'then', after => 'now');
+        Socialtext::Events->Get($viewer, before => 'then', after => 'now');
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select WHERE at < ?::timestamptz 
-                    AND at > ?::timestamptz ORDER BY at DESC",
-            args => ['then', 'now'],
+            sql => "$base_select AND (at < ?::timestamptz) 
+                    AND (at > ?::timestamptz) ORDER BY at DESC",
+            args => [@viewer_args, 'then', 'now'],
         );
     }
 
     Get_action_events: {
-        Socialtext::Events->Get( action => 'View' );
+        Socialtext::Events->Get($viewer,  action => 'View' );
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select WHERE e.action = ? ORDER BY at DESC",
-            args => ['View'],
+            sql => "$base_select AND (e.action = ?) ORDER BY at DESC",
+            args => [@viewer_args, 'View'],
         );
     }
 
     Get_action_events_for_class: {
-        Socialtext::Events->Get( action => 'View', event_class => 'thingers' );
+        Socialtext::Events->Get($viewer,  action => 'View', event_class => 'thingers' );
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select WHERE e.event_class = ? AND e.action = ?
+            sql => "$base_select AND (e.event_class = ?) AND (e.action = ?)
                     ORDER BY at DESC",
-            args => ['thingers', 'View'],
+            args => [@viewer_args, 'thingers', 'View'],
         );
     }
 
     Get_action_and_before_events: {
-        Socialtext::Events->Get( action => 'View', before => 'then' );
+        Socialtext::Events->Get($viewer,  action => 'View', before => 'then' );
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select WHERE at < ?::timestamptz
-                   AND e.action = ? ORDER BY at DESC",
-            args => ['then', 'View'],
+            sql => "$base_select AND (at < ?::timestamptz) 
+                   AND (e.action = ?) ORDER BY at DESC",
+            args => [@viewer_args, 'then', 'View'],
         );
     }
 
     Get_action_and_before_events_with_count: {
         # count and limit are synonyms
-        Socialtext::Events->Get(action => 'view', before => 'then', count => 5);
+        Socialtext::Events->Get($viewer, action => 'view', before => 'then', count => 5);
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             name => 'Get_action_and_before_events_with_count',
-            sql => "$base_select WHERE at < ?::timestamptz
-                   AND e.action = ? ORDER BY at DESC LIMIT ?",
-            args => ['then', 'view', 5],
+            sql => "$base_select AND (at < ?::timestamptz)
+                   AND (e.action = ?) ORDER BY at DESC LIMIT ?",
+            args => [@viewer_args, 'then', 'view', 5],
         );
     }
 
     Get_action_and_before_events_with_count_and_class: {
-        Socialtext::Events->Get(action => 'view', before => 'then', count => 5,
+        Socialtext::Events->Get($viewer, action => 'view', before => 'then', count => 5,
                                 event_class => 'page');
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             name => 'Get_action_and_before_events_with_count_and_class',
-            sql => "$base_select WHERE at < ?::timestamptz
-                   AND e.event_class = ? AND e.action = ? 
+            sql => "$base_select AND (at < ?::timestamptz)
+                   AND (e.event_class = ?) AND (e.action = ?) 
                    ORDER BY at DESC LIMIT ?",
-            args => ['then', 'page', 'view', 5],
+            args => [@viewer_args, 'then', 'page', 'view', 5],
         );
     }
 }

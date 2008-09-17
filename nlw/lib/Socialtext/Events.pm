@@ -7,15 +7,20 @@ use Class::Field qw(const);
 use Socialtext::HTTP ':codes';
 use Socialtext::Events::Recorder;
 use Socialtext::Events::Reporter;
+use Carp qw/croak/;
 
 sub Get {
     my $class = shift;
-    return Socialtext::Events::Reporter->new->get_events(@_);
+    my $viewer = shift || croak 'must supply viewer';
+    return Socialtext::Events::Reporter->new->get_events($viewer, @_);
 }
 
 sub GetActivities {
-    my ($class, $user) = @_;
-    return Socialtext::Events::Reporter->new->get_events_activities($user);
+    my $class = shift;
+    my $viewer = shift || croak 'must supply viewer';
+    my $user = shift || croak 'must supply user to view (or maybe you just passed in one user to this function)';
+    return Socialtext::Events::Reporter->new->get_events_activities($viewer,
+        $user);
 }
 
 sub Record {

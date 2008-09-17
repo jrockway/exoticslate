@@ -14,7 +14,10 @@ sub collection_name { "Activity Events" }
 
 sub get_resource {
     my ($self, $rest) = @_;
-    my $events = Socialtext::Events->GetActivities($self->user);
+    # TODO: add limit, offset
+    my $viewer = $self->rest->user;
+    my $user = $self->user;
+    my $events = Socialtext::Events->GetActivities($viewer, $user);
     $events ||= [];
     return $events;
 }

@@ -85,7 +85,7 @@ sub get_resource {
     my $tag_name = $self->rest->query->param('tag_name');
     push @args, tag_name => $tag_name if $tag_name;
 
-    my $events = Socialtext::Events->Get(@args);
+    my $events = Socialtext::Events->Get($self->rest->user, @args);
     $events ||= [];
 
     return $events;

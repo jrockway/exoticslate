@@ -68,7 +68,7 @@ sub _extract_person {
 }
 
 sub get_events_activities {
-    my ($self, $maybe_user) = @_; 
+    my ($self, $viewer, $maybe_user) = @_; 
     # First we need to get the user id in case this was email or username used
     my $user = Socialtext::User->Resolve($maybe_user);
     my $user_id = $user->user_id;
@@ -84,16 +84,21 @@ OR
  actor_id = ?)
 ENDWHERE
     my $whereargs = [$user_id, $user_id];
-    push @args, where=>$where;
+    push @args, where => $where;
     push @args, where_args => $whereargs;
     push @args, limit => 20;
-    return $self->get_events(@args)
+    return $self->get_events($viewer, @args)
 }
 
 
 sub get_events {
-    my $self = shift;
-    my %opts = @_;
+    my $self   = shift;
+    my $viewer = shift;
+    my %opts   = @_;
+
+    unless ($viewer->can('user_id')) {
+        die "Expected a viewer user as the first arg";
+    }
 
     my @args;
     my @conditions;
@@ -139,18 +144,17 @@ SQL
         }
     }
 
-    my $where = 'WHERE ';
+    my $where = '';
     if (my $w = $opts{where}) {
-        $where .= $w;
-        my $args=$opts{where_args};
+        $where .= "($w)";
+        my $args = $opts{where_args};
         push @args, @$args;
     }
-    elsif (@conditions) {
-        $where .= join("\n  AND ", @conditions);
+    if (@conditions) {
+        $where .= "\n  AND " if $where;
+        $where .= join("\n  AND ", map {"($_)"} @conditions);
     }
-    else {
-        $where = '';
-    }
+    $where = " AND $where" if $where;
 
     my $limit = '';
     if (my $l = $opts{limit} || $opts{count}) {
@@ -181,11 +185,35 @@ FROM event e
     LEFT JOIN page ON (e.page_workspace_id = page.workspace_id AND 
                        e.page_id = page.page_id)
     LEFT JOIN "Workspace" w ON (e.page_workspace_id = w.workspace_id)
-$where
+WHERE (w.workspace_id IS NULL OR w.workspace_id IN (
+        SELECT workspace_id FROM "UserWorkspaceRole" WHERE user_id = ? 
+        UNION
+        SELECT workspace_id
+        FROM "WorkspaceRolePermission" wrp
+        JOIN "Role" r USING (role_id)
+        JOIN "Permission" p USING (permission_id)
+        WHERE r.name = 'guest' AND p.name = 'read'
+    ))
+    AND (e.event_class <> 'person' OR e.person_id IN (
+        SELECT prsn.user_id
+          FROM account_user viewer1
+            JOIN account_plugin USING (account_id)
+            JOIN account_user prsn USING (account_id)
+          WHERE plugin = 'people' AND viewer1.user_id = ?
+    ))
+    AND (e.event_class <> 'person' OR e.actor_id IN (
+        SELECT actr.user_id
+          FROM account_user viewer2
+            JOIN account_plugin USING (account_id)
+            JOIN account_user actr USING (account_id)
+          WHERE plugin = 'people' AND viewer2.user_id = ?
+    ))
+  $where
 ORDER BY at DESC
 $limit $offset
 EOSQL
-    my $sth = sql_execute($sql, @args);
+    my @user_id = ($viewer->user_id) x 3;
+    my $sth = sql_execute($sql, @user_id, @args);
     my $result = [];
     while (my $row = $sth->fetchrow_hashref) {
         $self->_extract_person($row, 'actor');

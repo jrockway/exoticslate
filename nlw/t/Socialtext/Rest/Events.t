@@ -34,6 +34,7 @@ Empty_JSON_GET: {
     ok($events, "decoded the result");
     is_deeply $events, [], "empty result";
     is_deeply \@Socialtext::Events::GetArgs, [[ 
+        $actor,
         count => 25 
     ]], "expected parameters passed";
 }
@@ -59,6 +60,7 @@ JSON_GET_an_item: {
     ok($events, "decoded the result");
     is_deeply $events, [{item=>'first'}], "mock result returned";
     is_deeply \@Socialtext::Events::GetArgs, [[ 
+        $actor,
         count => 42,
         offset => 25,
         before => '2008-06-23T00:00:00Z',

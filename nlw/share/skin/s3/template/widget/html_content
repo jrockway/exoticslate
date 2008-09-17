@@ -6,16 +6,21 @@
 
         <script>
             var msgs = [% as_json(messages) %];
+            function load_content () {
+                jQuery.get(
+                    "/data/gadget/instance/[% id %]/html",
+                    function (html) {
+                        jQuery('body').append(html);
+                        gadgets.util.runOnLoadHandlers()
+                    }
+                );
+            }
         </script>
-
-        [% INCLUDE element/js_loader
-            scripts=features
-        %]
     </head>
     <body onLoad="document.loaded=true;">
-        [% content %]
-        <script>
-            gadgets.util.runOnLoadHandlers()
-        </script>
+        [% INCLUDE element/js_loader
+            scripts = features
+            oncomplete = "load_content()"
+        %]
     </body>
 </html>

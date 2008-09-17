@@ -89,13 +89,14 @@ EOT
 
 
 # Assign people in JUST ONE non-system account to that account
-print "Assigning people in *just one non-system* account to that account\n";
-my ($accounts_to_skip, @bind) = _load_accounts(
-    'system_accounts',
-    Socialtext::Account->Unknown,
-    Socialtext::Account->Socialtext,
-);
-sql_execute(<<EOT, @bind, @bind);
+{
+    print "Assigning people in *just one non-system* account to that account\n";
+    my ($accounts_to_skip, @bind) = _load_accounts(
+        'system_accounts',
+        Socialtext::Account->Unknown,
+        Socialtext::Account->Socialtext,
+    );
+    sql_execute(<<EOT, @bind, @bind);
 UPDATE "UserMetadata"
 SET primary_account_id = calc_account_id
 FROM (
@@ -116,6 +117,7 @@ FROM (
 ) s2
 WHERE user_id = calc_user_id;
 EOT
+}
 
 
 # Assign people in JUST ONE paying account to that account

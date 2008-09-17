@@ -1693,6 +1693,9 @@ td.peoplelist-desc-td {
 body#loginPage div#contentContainer {
     padding-top: 10px;
 }
+body#loginPage form#st-login-form {
+    line-height: 30px;
+}
 
 /* Workspace List (which also appears on Login page) */
 body#workspaceListPage div#contentColumns, body#loginPage div#contentColumns {

@@ -1,12 +1,30 @@
 [%# @COPYRIGHT@ -%]
 [%# vim: set et sts=2 sw=2: %]
-[% WRAPPER authen/wrapper title=loc("Login") %]
-  <h3>[% loc('Log in to Socialtext') %]</h3>
+[% WRAPPER layout/html id="loginPage" title=loc("Login") %]
+<div id="st-display-mode-container">
+  <div id="controls">
+    <div id="st-editing-tools-edit">
+        <h2 id="st-page-titletext" class="tableTitle">[% loc('Log in to Socialtext' ) %]</h2>
+    </div>
+    <div id="controlsRight">&nbsp;</div>
+  </div>
 
-  [% INCLUDE 'authen/element/login_form' %]
-  [% INCLUDE 'authen/element/forgot_password_link' %]
+  <div id="contentContainer">
+    [% INCLUDE errors_and_messages %]
 
-  [% IF login_message %]
-    <div id="login-message">[% login_message %]</div>
-  [% END %]
+    <div id="contentColumns">
+      <div id="contentLeft">
+        [% INCLUDE 'authen/element/login_form' %]
+        [% INCLUDE 'authen/element/forgot_password_link' %]
+      </div>
+      <div id="contentRight" class="wiki">
+        [% IF login_message %]
+          <div id="login-message">[% login_message %]</div>
+        [% END %]
+        [% INCLUDE 'element/workspace_list/public_workspaces' %]
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
 [% END %]

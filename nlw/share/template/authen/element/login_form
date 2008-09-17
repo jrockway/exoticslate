@@ -1,17 +1,15 @@
 [%# @COPYRIGHT@ -%]
 [%# vim: set et sts=2 sw=2: %]
-<form name="login" method="post" action="/nlw/submit/login">
+<form id="st-login-form" name="login" method="post" action="/nlw/submit/login">
   <input type="hidden" name="redirect_to" value="[% redirect_to | html %]" />
 
-  <div class="label-value">
-    <label for="username">[% username_label %]</label>
-    <input id="username" name="username" type="text" size="30" value="[% username %]" />
-  </div>
+  <dl class="form">
+    <dt> <label for="username">[% username_label %]</label> </dt>
+    <dd> <input id="username" name="username" type="text" size="30" value="[% username %]" /> </dd>
 
-  <div class="label-value">
-    <label for="password">[% loc('Password:') %]</label>
-    <input id="password" name="password" type="password" size="30" value="" />
-  </div>
+    <dt> <label for="password">[% loc('Password:') %]</label> </dt>
+    <dd> <input id="password" name="password" type="password" size="30" value="" /> </dd>
+  </dl>
 
   <div class="form-element">
     <input class="checkbox" name="remember" type="checkbox" id="remember" value="1" />
@@ -24,3 +22,22 @@
     <input class="button" type="submit" value="[% loc('Log in') %]" id="login_btn" />
   </div>
 </form>
+
+<script type="text/javascript">
+  function authen_focus() {
+    var username = $('#username');
+    var password = $('#password');
+    if (username && password) {
+      if (username.val().length) {
+        password.focus();
+      }
+      else {
+        username.focus();
+      }
+    }
+    else if (password) {
+      password.focus();
+    }
+  }
+  $(document).ready( authen_focus );
+</script>

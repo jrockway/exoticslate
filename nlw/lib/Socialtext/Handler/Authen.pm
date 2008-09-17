@@ -13,11 +13,13 @@ use Email::Valid;
 use Exception::Class;
 use Socialtext::AppConfig;
 use Socialtext::Authen;
+use Socialtext::Hub;
 use Socialtext::Log 'st_log';
 use Socialtext::Apache::User;
 use Socialtext::User;
 use Socialtext::Session;
 use Socialtext::Helpers;
+use Socialtext::Workspace;
 use Socialtext::l10n qw( loc loc_lang system_locale );
 use URI::Escape qw(uri_escape_utf8);
 
@@ -43,8 +45,20 @@ sub handler ($$) {
         (my $query_string = $r->args || '') =~ s/;$//;
         $r->args($query_string);
 
+        # sucks, but we need a Hub to get the global template vars and to
+        # get the list of available public workspaces
+        my $user = $self->authenticate($r) || Socialtext::User->Guest();
+        my $ws   = Socialtext::NoWorkspace->new();
+        my $main = Socialtext->new();
+        $main->load_hub(
+            current_user      => $user,
+            current_workspace => $ws,
+        );
+        $main->hub->registry->load();
+
         my $saved_args = $self->{saved_args} = $self->session->saved_args;
         my $vars     = {
+            $main->hub->helpers->global_template_vars,
             loc            => \&loc,
             errors         => [ $self->session->errors ],
             messages       => [ $self->session->messages ],
@@ -54,6 +68,7 @@ sub handler ($$) {
             skin_uri       => sub {
                 Socialtext::Skin->new(name => shift)->skin_uri
             },
+            paths          => $main->hub->skin->template_paths,
             st_version     => $Socialtext::VERSION,
             support_address => Socialtext::AppConfig->support_address,
             %$saved_args,
@@ -75,6 +90,10 @@ sub handler ($$) {
         # Include login_message_file content in vars sent to template
         # if login_message_file is set in AppConfig.
         if ( $uri eq 'login.html' ) {
+            # list of public workspaces (for Workspace List)
+            $vars->{public_workspaces} = [$main->hub->workspace_list->public_workspaces];
+
+            # login message
             my $file = Socialtext::AppConfig->login_message_file();
             if ( $file and -r $file ) {
                 # trap any errors and ignore them to the error log

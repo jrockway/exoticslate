@@ -390,6 +390,7 @@ BEGIN {
             Socialtext::Wikiwyg::AnalyzerPlugin
             Socialtext::RtfExportPlugin
             Socialtext::WorkspacesUIPlugin
+            Socialtext::WorkspaceListPlugin
             Socialtext::ProvisionPlugin
             Socialtext::PageActivityPlugin
             ),

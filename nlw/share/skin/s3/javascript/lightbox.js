@@ -74,8 +74,11 @@
 
         opts._originalHTMLOverflow = $('html').css('overflow') || 'visible';
         opts._originalBodyOverflow = $('body').css('overflow') || 'visible';
-        $('html,body').css('overflow', 'hidden');
-        $('html,body').attr('scrollTop', pageScroll.top);
+
+        if ($("body").height() > $(window).height()) {
+            $('html,body').css('overflow', 'hidden');
+            $('html,body').attr('scrollTop', pageScroll.top);
+        }
 
         if (opts.close)
             $(opts.close).click(function () { $.hideLightbox() })

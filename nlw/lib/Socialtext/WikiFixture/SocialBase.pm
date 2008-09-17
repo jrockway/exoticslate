@@ -91,4 +91,15 @@ sub set_user_id {
     diag "Set variable $var_name to $self->{$var_name}";
 }
 
+sub set_account_id {
+    my $self = shift;
+    my $var_name = shift;
+    my $acct_name = shift;
+
+    my $acct = Socialtext::Account->new(name => $acct_name);
+    die "No such user $acct_name" unless $acct;
+    $self->{$var_name} = $acct->account_id;
+    diag "Set variable $var_name to $self->{$var_name}";
+}
+
 1;

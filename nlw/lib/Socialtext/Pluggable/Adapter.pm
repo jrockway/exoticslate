@@ -18,9 +18,10 @@ use Socialtext::Pluggable::WaflPhrase;
 # These hook types are executed only once, all other types are called as many
 # times as they are registered
 my %ONCE_TYPES = (
-    action => 1,
-    wafl => 1,
+    action   => 1,
+    wafl     => 1,
     template => 1,
+    root     => 1,  # "root" is special, its not a regular action
 );
 
 BEGIN {

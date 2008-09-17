@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use warnings;
 use strict;
-use Test::More tests => 67;
+use Test::More tests => 69;
 use Test::Exception;
 use mocked 'Socialtext::Headers';
 use mocked 'Socialtext::CGI';
@@ -96,7 +96,6 @@ EOSQL
         @Socialtext::SQL::RETURN_VALUES = ( { return => [{%event}] } );
 
         my $events = Socialtext::Events->Get();
-
         is_deeply $events, [
             {
                 at => $event{at},
@@ -106,6 +105,7 @@ EOSQL
                     id => 1234,
                     best_full_name => "Steve Foo",
                     uri => '/data/people/1234',
+                    hidden => 1,
                 },
                 page => {
                     id => $event{page_id},
@@ -120,10 +120,14 @@ EOSQL
             }
         ], 'found event';
 
-        ok @Socialtext::SQL::SQL == 1;
+        is scalar(@Socialtext::SQL::SQL), 2, 'correct # of sql left';
         sql_ok( 
             sql => "$base_select ORDER BY at DESC",
             args => [],
+        );
+        sql_ok( 
+            sql => "SELECT * FROM person WHERE id = ?",
+            args => [1234],
         );
     }
 

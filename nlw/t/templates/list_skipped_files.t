@@ -10,7 +10,6 @@ use Cwd qw(getcwd);
 
 use Test::More tests => 1;
 use Test::Socialtext;
-fixtures( 'db' );
 use Socialtext::TT2::Renderer;
 use Socialtext::Skin;
 
@@ -18,6 +17,7 @@ my $renderer;
 my $skin;
 
 BEGIN {
+    fixtures( 'db' );
     $renderer = Socialtext::TT2::Renderer->instance;
     $skin = Socialtext::Skin->new;
 }

@@ -61,30 +61,30 @@ st_admin('create-workspace --name wksp7 --title wksp7 --account Limbo');
 
 # Create and set-up users
 # Gabriel
-st_admin('create-user --username Gabriel --email gabriel@not.real --password nopassword');
+st_admin('create-user --email gabriel@not.real --password nopassword');
 st_admin('set-user-account --email gabriel@not.real --account Angel');
 st_admin('add-member --workspace wksp1 --email gabriel@not.real');
 st_admin('add-member --workspace wksp2 --email gabriel@not.real');
 st_admin('add-member --workspace wksp6 --email gabriel@not.real');
 
 # Malachiel
-st_admin('create-user --username Malachiel --email malachiel@not.real --password nopassword');
+st_admin('create-user --email malachiel@not.real --password nopassword');
 st_admin('set-user-account --email malachiel@not.real --account Angel');
 
 # Asmodeus
-st_admin('create-user --username Asmodeus --email asmodeus@not.real --password nopassword');
+st_admin('create-user --email asmodeus@not.real --password nopassword');
 st_admin('set-user-account --email asmodeus@not.real --account Demon');
 st_admin('add-member --workspace wksp3 --email asmodeus@not.real');
 st_admin('add-member --workspace wksp4 --email asmodeus@not.real');
 st_admin('add-member --workspace wksp5 --email asmodeus@not.real');
 
 # Beelzebub
-st_admin('create-user --username Beelzebub --email beelzebub@not.real --password nopassword');
+st_admin('create-user --email beelzebub@not.real --password nopassword');
 st_admin('set-user-account --email beelzebub@not.real --account Demon');
 st_admin('add-member --workspace wksp6 --email beelzebub@not.real');
 st_admin('add-member --workspace wksp7 --email beelzebub@not.real');
  
 # Virgil
-st_admin('create-user --username Virgil --email virgil@not.real --password nopassword');
+st_admin('create-user --email virgil@not.real --password nopassword');
 st_admin('set-user-account --email virgil@not.real --account Limbo');
 st_admin('add-member --workspace wksp7 --email virgil@not.real');

@@ -132,7 +132,7 @@ sub create_js_l10ns {
         delete $js_hash->{$locale} unless %{ $js_hash->{$locale} };
     }
 
-    my $js_out = "var LocalizedStrings = " . encode_json($js_hash) . ";\n";
+    my $js_out = "var LocalizedStrings = " . Encode::decode_utf8(encode_json($js_hash)) . ";\n";
     $js_out .= <<'EOT';
 
 function loc() {

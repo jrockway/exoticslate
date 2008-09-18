@@ -252,17 +252,21 @@ sub global_template_vars {
 }
 
 sub miki_path {
-    my ($self,$link) = @_;
+    my ($self, $link) = @_;
     require Socialtext::Formatter::LiteLinkDictionary;
 
-    my $page_name = $self->hub->pages->current->name;
+    my $miki_path      = '/lite/workspace_list';
+    my $page_name      = $self->hub->pages->current->name;
     my $workspace_name = $self->hub->current_workspace->name;
 
-    return Socialtext::Formatter::LiteLinkDictionary->new->format_link(
-        link       => $link || 'interwiki',
-        workspace  => $workspace_name,
-        page_uri   => $page_name,
-    );
+    if ($workspace_name) {
+        $miki_path = Socialtext::Formatter::LiteLinkDictionary->new->format_link(
+            link => $link || 'interwiki',
+            workspace => $workspace_name,
+            page_uri  => $page_name,
+            );
+    }
+    return $miki_path;
 }
 
 sub _get_user_info {

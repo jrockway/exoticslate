@@ -59,7 +59,7 @@
                 [% END %]
               </li>
             [% END %]
-            [% IF workspace_present %]
+            [% IF miki_url %]
             <li id="st-wikinav-mobile"><a href="[% miki_url %]">[% loc('Mobile') %]</a></li>
             [% END %]
             <li id="st-wikinav-setting"><a href="?action=users_settings">[% loc('Settings') %]</a></li>

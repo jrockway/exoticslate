@@ -352,7 +352,7 @@ sub import_account {
     my $dir = $opts{directory} || '';
     $dir =~ s#/$##;
 
-    $self->_help_as_error(loc("No import directory specified.") . "\n") unless $dir;
+    $self->_error(loc("No import directory specified.") . "\n") unless $dir;
     $self->_error(loc("Directory [_1] does not exist.", $dir) . "\n") unless -d $dir;
 
     print loc("Importing users ..."), "\n";

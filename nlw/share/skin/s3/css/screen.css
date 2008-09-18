@@ -1779,3 +1779,30 @@ div.users-invite-message p {
     margin:1em 0;
     line-height:1.2;
 }
+
+/* Widget styles */
+.widgetHeaderButtons {
+    text-align: right;
+    float: right;
+    width: 70px;
+}
+
+.widgetHeaderTitle {
+    height: 28px;
+    overflow: hidden;
+}
+
+.widgetHeaderTitle img {
+    height: 23px;
+}
+
+.widgetContent {
+    text-align: left;
+}
+
+.widgetContent iframe {
+    border: 0;
+    margin: 0 2% !important;
+    padding: 0 !important;
+    width: 95%;
+}

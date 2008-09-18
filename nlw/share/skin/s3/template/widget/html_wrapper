@@ -1,7 +1,7 @@
 <li[% IF !gadget.fixed %] class="draggable"[% END %]>
 <div class="[% IF gadget.fixed %]widgetTan[% ELSE %]widget[% END %]" id="[% gadget.id %]">
     <div class="widgetHeader">
-        <div class="widgetHeaderButtons" style="text-align: right; float: right; width: 70px;">
+        <div class="widgetHeaderButtons">
         [% IF !gadget.fixed %]
             <a class="close" href="#" onclick="gadgets.container.remove('[% gadget.id %]'); return false"></a>
         <a class="minimize" href="#" onclick="gadgets.container.minimize('[% gadget.id %]'); return false"></a>
@@ -10,10 +10,10 @@
             <a class="settings" href="#" onclick="gadgets.container.toggleSetup('[% gadget.id %]'); return false"></a>
         [% END %]
         </div>
-        <div class="widgetHeaderTitle" style="height: 40px; overflow:hidden">
+        <div class="widgetHeaderTitle">
             <h4 id="[% gadget.id %]-title">
                 [% IF !gadget.fixed %]
-                <img style="height:23px" src="[% gadget.module_prefs.thumbnail || "$share/images/iconContent.png" %]" />
+                <img  src="[% gadget.module_prefs.thumbnail || "$share/images/iconContent.png" %]" />
                 [% END %]
                 <span id="[% gadget.id %]-title-text">
                     [% gadget.module_prefs.title %]
@@ -22,11 +22,11 @@
         </div>
     </div><!-- widgetHeader END -->
 
-    <div class='widgetContent' id="[% gadget.id %]"  style="padding:10px">
-        <div style="text-align:left" id="[% gadget.id %]-setup" class="hidden">
+    <div class="widgetContent" id="[% gadget.id %]">
+        <div id="[% gadget.id %]-setup" class="hidden">
             [% INCLUDE widget/setup %]
         </div>
-        <div id="[% gadget.id %]-content" class="visible" style="padding: 0px 5px">
+        <div id="[% gadget.id %]-content" class="visible">
             [% content %]
         </div>
     </div><!-- widgetContent END -->

@@ -173,7 +173,7 @@ sub do_post_form {
     chop $post;
 
     my $cgi = Socialtext::CGI::Scrubbed->new($post);
-    my $rest = Socialtext::Rest->new(undef, undef, user => $actor);
+    my $rest = Socialtext::Rest->new(undef, $cgi, user => $actor);
     my $e = Socialtext::Rest::Events->new($rest, undef, user => $actor);
     $e->{_test_cgi} = $cgi;
     $e->{rest} = $rest;
@@ -185,7 +185,8 @@ sub do_post_json {
     Socialtext::Events::clear_get_args();
     my $json = encode_json(shift);
 
-    my $rest = Socialtext::Rest->new(undef, undef, user => $actor);
+    my $cgi = Socialtext::CGI::Scrubbed->new;
+    my $rest = Socialtext::Rest->new(undef, $cgi, user => $actor);
     my $e = Socialtext::Rest::Events->new($rest, undef, user => $actor);
     $e->{_content} = $rest->{_content} = $json;
     $e->{rest} = $rest;

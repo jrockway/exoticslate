@@ -562,9 +562,13 @@ tr.w-st-even-row, tr.w-st-even-row td {
 }
 
 /*   Weblogs  */
-div.st-weblog-entry {
+div.st-weblog-entry,
+body#blog #contentLeft h3 {
     page-break-before: always;
     margin-bottom: 1.2em;
+}
+body#blog #contentLeft h3:first-child {
+    page-break-before: auto;
 }
 
 div.st-weblog-entryspacer {

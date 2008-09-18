@@ -280,28 +280,20 @@ sub create {
 sub _create_full {
     my ( $class, %p ) = @_;
 
-    my $fields = 'account_id, name, is_system_created';
-    my $values = '?,?';
-    my @bind = ($p{name}, $p{is_system_created});
-    if ($p{skin_name}) {
-        $fields .= ', skin_name';
-        $values .= ',?';
-        push @bind, $p{skin_name};
-    }
-    sql_execute(
-        qq{INSERT INTO "Account" ($fields)}
-        . qq{ VALUES (nextval(\'"Account___account_id"\'),$values)},
-        @bind,
-    );
+    my @keys = keys %p;
+    my $fields = join ',', @keys;
+    my $values = join ',', map { '?' } @keys;
+    my @bind = map { $p{$_} } @keys;
+
+    sql_execute(qq{
+        INSERT INTO "Account" (account_id, $fields)
+            VALUES (nextval(\'"Account___account_id"\'),$values)
+    },@bind);
 }
 
 sub _create_from_name {
     my ( $class, %p ) = @_;
-
-    sql_execute(
-        'INSERT INTO "Account" (account_id, name)'
-        . ' VALUES (nextval(\'"Account___account_id"\'),?)',
-        $p{name} );
+    return $class->_create_full(name => $p{name});
 }
 
 sub delete {

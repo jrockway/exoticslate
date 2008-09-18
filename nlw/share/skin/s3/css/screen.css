@@ -8,7 +8,7 @@ div#contentColumns.hidebox #contentLeft {
 }
 
 div#contentColumns #contentRight {
-    background-color: #FFFFFF;
+    background-color: inherit;
 }
 
 div#contentColumns.hidebox #contentRight {
@@ -1827,4 +1827,8 @@ span.st-weblog-nextentries:before {
     margin: 0 2% !important;
     padding: 0 !important;
     width: 95%;
+}
+
+div.widget {
+    background-color:#fff ! important;
 }

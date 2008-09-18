@@ -12,25 +12,31 @@ use Socialtext::File;
 use Socialtext::Skin;
 use Socialtext::Pluggable::Adapter;
 use Socialtext::Workspace;
+use Socialtext::Paths;
 use Fcntl ':flock';
 
 sub handler {
     # This env var is set in the apache-perl config file (nlw.conf)
     if ($ENV{NLW_DEV_MODE} && ! Socialtext::AppConfig->benchmark_mode) {
         my $r = shift;
-        _regen_combined_js($r);
-        Socialtext::Pluggable::Adapter->make;
+        return if $r->uri =~ m{^/data};
+        my $stamp_file = Socialtext::Paths->storage_directory('make_ran');
+        my $mod = (stat $stamp_file)[9] || 0;
+        if ($mod < time - 5) {
+            open M, "> $stamp_file";
+            print M time();
+            close M;
+            _regen_combined_js($r);
+            Socialtext::Pluggable::Adapter->make;
+        }
     }
 }
 
 sub _regen_combined_js {
     my $r = shift;
-    my $uri = $r->uri;
-
-    return if $uri =~ m{^/data};
 
     # Figure out what skin to build
-    my ($ws_name) = $uri =~ m{^/([^/]+)/index\.cgi$};
+    my ($ws_name) = $r->uri =~ m{^/([^/]+)/index\.cgi$};
     my $workspace = $ws_name ? Socialtext::Workspace->new(name=>$ws_name)
                              : Socialtext::NoWorkspace->new;
     return unless $workspace;

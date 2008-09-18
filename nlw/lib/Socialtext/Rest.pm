@@ -87,7 +87,7 @@ sub _new_workspace {
 
     return $self->ws
         ? Socialtext::Workspace->new( name => $self->ws )
-        : undef;
+        : Socialtext::NoWorkspace->new();
 }
 
 sub _new_main {
@@ -160,7 +160,7 @@ sub if_authorized {
 
     return !$perm_name
         ? $self->$perl_method(@args)
-        : $perm_name !~ /^is/ && !defined $self->workspace
+        : $perm_name !~ /^is/ && !(defined $self->workspace and $self->workspace->real)
             ? $self->no_workspace
             : ( !$perm_name ) || $self->user_can($perm_name)
                 ? $self->$perl_method(@args)

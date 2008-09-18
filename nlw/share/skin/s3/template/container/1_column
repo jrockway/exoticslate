@@ -23,9 +23,11 @@
     <div id="contentColumns">
         <div id="columnCombined" style="width:90%"> 
             <div id="columnMiddle" style="width:90%" class="widgetCol" name="1">
+                <ul>
                 [% FOR gadget = container.gadgets.0 %]
                     [% INCLUDE $gadget.templates.container gadget=gadget %]
                 [% END %]
+                </ul>
             </div><!-- columnMiddle END -->
         </div><!-- contentCombined END -->
     </div><!-- columnColumns END -->

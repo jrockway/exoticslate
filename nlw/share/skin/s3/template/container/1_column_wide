@@ -6,9 +6,11 @@
 <div id="widgetContainer">
     <div class="widgetCol" name="0" id="columnRight" style="width:97.5%; position: relative; left:2.5%; max-width:1120px; _width: expression( (document.body.clientWidth > (1120 * 0.975)) ? '1120px' : '97.5%' ); ">
         &nbsp;
+        <ul>
         [% FOR gadget = container.gadgets.0 %]
             [% INCLUDE $gadget.templates.container gadget=gadget %]
         [% END %]
+        </ul>
     </div>
 </div><!-- widgetContainer END -->
 

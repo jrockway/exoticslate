@@ -31,7 +31,8 @@ CREATE TABLE "Account" (
     account_id bigint NOT NULL,
     name varchar(250) NOT NULL,
     is_system_created boolean DEFAULT false NOT NULL,
-    skin_name varchar(30) DEFAULT 's2'::varchar NOT NULL
+    skin_name varchar(30) DEFAULT 's2'::varchar NOT NULL,
+    email_addresses_are_hidden boolean
 );
 
 CREATE SEQUENCE "Account___account_id"
@@ -196,6 +197,7 @@ CREATE TABLE "WorkspaceRolePermission" (
 );
 
 CREATE SEQUENCE "Workspace___workspace_id"
+    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -664,4 +666,4 @@ ALTER TABLE ONLY "Workspace"
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '12');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '13');

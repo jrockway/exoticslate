@@ -29,6 +29,12 @@ sub if_authorized {
     return $self->not_authorized 
         unless ($user && $user->is_authenticated());
 
+    my $event_class = $self->rest->query->param('event_class');
+    if (defined $event_class && $event_class eq 'person') {
+        return $self->not_authorized 
+            unless $user->can_use_plugin('people');
+    }
+
     return $self->$perl_method(@_);
 }
 

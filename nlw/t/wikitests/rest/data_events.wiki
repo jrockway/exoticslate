@@ -2,13 +2,13 @@ Test case for `/data/events`(GET and POST).
 
 * Fixture: SocialRest
 
-| *Comment*       | Clear all events | .     |
-| set             | workspace        | admin |
-| st-clear-events |                  |       |
-| get             | /data/events     |       |
-| code-is         | 200              |       |
-| has-header | Cache-Control | qr/private/ |
-| body-like       | []               |       |
+| *Comment*       | Clear all events                                   | .           |
+| set             | workspace                                          | admin       |
+| st-clear-events |                                                    |             |
+| get             | /data/events                                       |             |
+| code-is         | 200                                                |             |
+| has-header      | Cache-Control                                      | qr/private/ |
+| body-like       | []                                                 |             |
 
 | Comment | POST a few events |
 | post-json | /data/events | {"actor":{"id":1},"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
@@ -204,6 +204,12 @@ Test case for `/data/events`(GET and POST).
 | body-like | "id":"quick_start" |
 | body-like | "tag_name":"ldaptaggy" |
 | body-like | qr/"actor":{[^}]*"best_full_name":"Dev Null Three"/ |
+
+| *Comment* | ensure /data/events?event_class=person respects plugin enabledness  | . |
+| st-admin  | disable-plugin --plugin people --account Socialtext                 |   |
+| get       | /data/events?event_class=person                                     |   |
+| code-is   | 403                                                                 |   |
+| st-admin  | enable-plugin --plugin people --account Socialtext                  |   |
 
 ^^ TODO Test
 

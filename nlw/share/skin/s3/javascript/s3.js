@@ -132,7 +132,7 @@ $(function() {
                     );
                     $('#st-attachments-attach-filename').attr(
                         'disabled', false
-                    );
+                    ).val('');
                     $('#st-attachments-attach-closebutton').attr(
                         'disabled', false
                     );

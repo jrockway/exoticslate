@@ -300,23 +300,33 @@ sub st_watch_page {
     my $row = 2; # starts at 1, which is the table header
     my $found_page = 0;
     (my $short_name = lc($page_name)) =~ s/\s/_/g;
-    while (1) {
-        my $xpath = qq{//div[\@id='st-watchlist-content']/div[$row]/div[2]/img}; 
-        my $alt;
-        eval { $alt = $sel->get_attribute("$xpath/\@alt") };
-        last unless $alt;
-        if ($alt eq $short_name) {
-            $self->_watch_page_xpath($xpath, $watch_re);
-            $found_page++;
-            last;
+    
+    if ($is_s3) {
+        my $xpath = '//a[@id=' . "'st-watchlist-indicator-$short_name" . "']" . '/@title';
+        $xpath = qq{$xpath};
+        my $expected_list = $watch_on ? 'Stop watching' : 'Watch';
+        my $title= '';
+        eval { $title = $sel->get_attribute("$xpath") };
+        is $title, $expected_list, "st-watch-page $title - $expected_list - $page_name";
+    } else {
+        while (1) {
+            my $xpath = qq{//div[\@id='st-watchlist-content']/div[$row]/div[2]/img}; 
+            my $alt;
+            eval { $alt = $sel->get_attribute("$xpath/\@alt") };
+            last unless $alt;
+            if ($alt eq $short_name) {
+                $self->_watch_page_xpath($xpath, $watch_re);
+                $found_page++;
+                last;
+            }
+            else {
+                warn "# Looking at watchlist for ($short_name), found ($alt)\n";
+            }
+            $row++;
         }
-        else {
-            warn "# Looking at watchlist for ($short_name), found ($alt)\n";
-        }
-        $row++;
+        ok $found_page, "st-watch-page $watch_on - $page_name"
+            unless $ENV{ST_WF_TEST};
     }
-    ok $found_page, "st-watch-page $watch_on - $page_name"
-        unless $ENV{ST_WF_TEST};
 }
 
 sub _watch_page_xpath {

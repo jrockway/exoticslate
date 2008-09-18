@@ -6,7 +6,7 @@ use warnings;
 our $VERSION = '0.01';
 
 use Socialtext::Exceptions qw( data_validation_error param_error );
-use Socialtext::Validate qw( validate SCALAR_TYPE BOOLEAN_TYPE ARRAYREF_TYPE WORKSPACE_TYPE );
+use Socialtext::Validate qw( validate SCALAR_TYPE BOOLEAN_TYPE ARRAYREF_TYPE WORKSPACE_TYPE USER_TYPE);
 use Socialtext::AppConfig;
 use Socialtext::MultiCursor;
 use Socialtext::SQL 'sql_execute';
@@ -251,8 +251,15 @@ sub password {
     $_[0]->homunculus->password( @_[ 1 .. $#_ ] );
 }
 
+sub email_address_viewable_by_user {
+}
+
 sub email_address {
     $_[0]->homunculus->email_address( @_[ 1 .. $#_ ] );
+}
+
+sub email_address_for_user {
+
 }
 
 sub first_name {
@@ -374,6 +381,12 @@ sub accounts {
     return (wantarray ? @accounts : \@accounts);
 }
 
+sub shared_accounts {
+    my ($self, $user) = @_;
+    my %mine = map { $_->account_id => 1 } $self->accounts;
+    return grep { $mine{$_->account_id} } $user->accounts;
+}
+
 {
     # REVIEW - maybe this is overkill and can be handled through good
     # documentation saying "you probably don't want to delete users,
@@ -475,6 +488,48 @@ sub _get_full_name {
             unless ($p{workspace} && $p{workspace}->workspace_id != 0);
 
         return $self->_masked_email_address($p{workspace});
+    }
+}
+
+{
+    Readonly my $spec => {
+        #support this : workspace => WORKSPACE_TYPE( default => undef ),
+        user => USER_TYPE( default => undef ),
+    };
+    sub masked_email_address {
+        my $self = shift;
+        my %p = validate( @_, $spec );
+        my $workspace = $p{workspace};
+        my $user = $p{user};
+
+        die "Either workspace or user is required"
+            unless $user or $workspace && $workspace->real;
+
+        my $email = $self->email_address;
+        my $hidden = 1;
+
+        if ($user) {
+            if ($user->user_id == $self->user_id) {
+                $hidden = 0;
+            }
+            else {
+                my @accounts = $self->shared_accounts($user);
+                for my $account (@accounts) {
+                    $hidden = 0 unless $account->email_addresses_are_hidden;
+                }
+            }
+        }
+        
+        if ($workspace) {
+            $hidden = 1 if $workspace->email_addresses_are_hidden;
+
+            if (my $unmasked_domain = $workspace->unmasked_email_domain) {
+                $hidden = 0 if $email =~ /\@\Q$unmasked_domain\E/;
+            }
+        }
+
+        $email =~ s/\@.+$/\@hidden/ if $hidden;
+        return $email;
     }
 }
 
@@ -1650,6 +1705,15 @@ is set, then this returns the user's email address.
 The "workspace" argument is optional, but if it is given, then the
 email address will be masked according to the settings of the given
 workspace.
+
+=head2 $user->masked_email_address( workspace => $workspace )
+
+Not implemented
+
+=head2 $user->masked_email_address( user => $other_user )
+
+Returns the masked email address if $user and $other_user are not 
+members of any common accounts where email_addresses_are_masked is 0
 
 =head2 $user->name_for_email()
 

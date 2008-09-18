@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 17;
+use Test::Socialtext tests => 25;
 fixtures( 'rdbms_clean' );
 
 use Socialtext::User;
@@ -89,3 +89,92 @@ my $user3 = Socialtext::User->create(
 $user3->set_confirmation_info(is_password_change => 0);
 
 is( $user3->requires_confirmation, 1, 'user requires confirmation' );
+
+email_hiding_by_account :
+{
+    my $visible_account = Socialtext::Account->create(
+        name => 'visible_account',
+    );
+    my $hidden_account = Socialtext::Account->create(
+        name => 'hidden_account',
+    );
+
+    my $hidden_workspace = Socialtext::Workspace->create(
+        name       => 'hidden_workspace',
+        title      => 'Hidden Workspace',
+        account_id => $hidden_account->account_id,
+    );
+    my $visible_workspace = Socialtext::Workspace->create(
+        name       => 'visible_workspace',
+        title      => 'visible Workspace',
+        account_id => $visible_account->account_id,
+    );
+
+    $hidden_account->update(email_addresses_are_hidden => 1);
+    $hidden_workspace->update(email_addresses_are_hidden => 1);
+
+    my $personA = Socialtext::User->create(
+        username           => 'person.a@socialtext.com',
+        first_name         => 'Person',
+        last_name          => 'A',
+        email_address      => 'person.a@socialtext.com',
+        password           => 'password',
+        created_by_user_id => Socialtext::User->SystemUser->user_id,
+    );
+
+    my $personB = Socialtext::User->create(
+        username           => 'person.b@socialtext.com',
+        first_name         => 'Person',
+        last_name          => 'B',
+        email_address      => 'person.b@socialtext.com',
+        created_by_user_id => Socialtext::User->SystemUser->user_id,
+    );
+
+    # primary = hidden == hidden
+
+    $personA->primary_account($hidden_account->account_id);
+    $personB->primary_account($hidden_account->account_id);
+
+    is $personA->masked_email_address(user => $personB),
+       'person.a@hidden',
+       'primary = hidden == hidden';
+    is $personB->masked_email_address(user => $personA),
+       'person.b@hidden',
+       'primary = hidden == hidden';
+
+    # primary = hidden + secondary = visible == visible
+
+    $visible_workspace->add_user(user => $personA);
+    $visible_workspace->add_user(user => $personB);
+
+    is $personA->masked_email_address(user => $personB),
+       'person.a@socialtext.com',
+       'primary = hidden + secondary = visible == visible';
+    is $personB->masked_email_address(user => $personA),
+       'person.b@socialtext.com',
+       'primary = hidden + secondary = visible == visible';
+
+    # primary = visible + secondary = visible == visible
+
+    $personA->primary_account($visible_account->account_id);
+    $personB->primary_account($visible_account->account_id);
+
+    is $personA->masked_email_address(user => $personB),
+       'person.a@socialtext.com',
+       'primary = visible == visible';
+    is $personB->masked_email_address(user => $personA),
+       'person.b@socialtext.com',
+       'primary = visible == visible';
+
+    # primary = visible + secondary = visible == visible
+
+    $visible_workspace->remove_user(user => $personA);
+    $visible_workspace->remove_user(user => $personB);
+
+    is $personA->masked_email_address(user => $personB),
+       'person.a@socialtext.com',
+       'primary = visible + secondary = visible == visible';
+    is $personB->masked_email_address(user => $personA),
+       'person.b@socialtext.com',
+       'primary = visible + secondary = visible == visible';
+}

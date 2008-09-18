@@ -21,6 +21,7 @@ field 'account_id';
 field 'name';
 field 'skin_name';
 field 'is_system_created';
+field 'email_addresses_are_hidden';
 
 sub table_name { 'Account' }
 
@@ -124,6 +125,7 @@ sub export {
             name => $self->name,
             is_system_created => $self->is_system_created,
             skin_name => $self->skin_name,
+            email_addresses_are_hidden => $self->email_addresses_are_hidden,
             users => $self->users_as_hash,
         }
     );
@@ -174,6 +176,7 @@ sub import_file {
         name => $name,
         is_system_created => $hash->{is_system_created},
         skin_name => $hash->{skin_name},
+        email_addresses_are_hidden => $hash->{email_addresses_are_hidden},
     );
     
     my @profiles;
@@ -255,18 +258,13 @@ sub _new_from_where {
     my ( $class, $where_clause, @bindings ) = @_;
 
     my $sth = sql_execute(
-        'SELECT name, account_id, is_system_created, skin_name'
+        'SELECT *'
         . ' FROM "Account"'
         . " WHERE $where_clause",
         @bindings );
-    my @rows = @{ $sth->fetchall_arrayref };
-    return @rows    ?   bless {
-                            name              => $rows[0][0],
-                            account_id        => $rows[0][1],
-                            is_system_created => $rows[0][2],
-                            skin_name         => $rows[0][3],
-                        }, $class
-                    :   undef;
+    my $row = $sth->fetchrow_hashref;
+    return unless $row;
+    return bless $row, $class;
 }
 
 sub create {

@@ -12,7 +12,7 @@
   [% END %]
 </tr>
 
-[% WHILE (user_with_role = users_with_roles.next) %]
+[% FOREACH user_with_role IN users_with_roles.all %]
   [% SET user = user_with_role.0 %]
   [% SET role = user_with_role.1 %]
   <tr>

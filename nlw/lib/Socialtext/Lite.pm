@@ -57,12 +57,13 @@ the _frame_page method.
 =cut
 
 # The templates we display with
-Readonly my $DISPLAY_TEMPLATE    => 'lite/page/display.html';
-Readonly my $EDIT_TEMPLATE       => 'lite/page/edit.html';
-Readonly my $CONTENTION_TEMPLATE => 'lite/page/contention.html';
-Readonly my $CHANGES_TEMPLATE    => 'lite/changes/changes.html';
-Readonly my $SEARCH_TEMPLATE     => 'lite/search/search.html';
-Readonly my $CATEGORY_TEMPLATE   => 'lite/category/category.html';
+Readonly my $DISPLAY_TEMPLATE        => 'lite/page/display.html';
+Readonly my $EDIT_TEMPLATE           => 'lite/page/edit.html';
+Readonly my $CONTENTION_TEMPLATE     => 'lite/page/contention.html';
+Readonly my $CHANGES_TEMPLATE        => 'lite/changes/changes.html';
+Readonly my $SEARCH_TEMPLATE         => 'lite/search/search.html';
+Readonly my $CATEGORY_TEMPLATE       => 'lite/category/category.html';
+Readonly my $WORKSPACE_LIST_TEMPLATE => 'lite/workspace_list/workspace_list.html';
 
 =head1 METHODS
 
@@ -178,6 +179,24 @@ sub recent_changes {
         title          => $title,
         category       => $category,
         %$changes,
+    );
+}
+
+=head2 workspace_list()
+
+Returns a list of the workspaces that the user has access to, including any
+public workspaces.
+
+=cut
+
+sub workspace_list {
+    my $self  = shift;
+    my $title = 'Workspace List';
+    return $self->_process_template(
+        $WORKSPACE_LIST_TEMPLATE,
+        workspace_title   => $title,
+        my_workspaces     => [ $self->hub->workspace_list->my_workspaces ],
+        public_workspaces => [ $self->hub->workspace_list->public_workspaces ],
     );
 }
 

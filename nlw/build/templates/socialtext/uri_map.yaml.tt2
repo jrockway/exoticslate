@@ -307,6 +307,10 @@
         'GET':                  [Socialtext::Rest::Lite, get_page]
         '*':                    [Socialtext::Rest::Lite, bad_method]
 -
+    '/lite/workspace_list':
+        'GET':                  [Socialtext::Rest::Lite, workspace_list]
+        '*':                    [Socialtext::Rest::Lite, bad_method]
+-
     '/wsdl/:wsdl':
         'GET':                  [Socialtext::Rest::WSDL, GET]
         '*':                    [Socialtext::Rest::WSDL, bad_method]

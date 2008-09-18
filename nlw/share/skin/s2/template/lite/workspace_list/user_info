@@ -1,0 +1,10 @@
+[%# @COPYRIGHT@ -%]
+[%# vim: set et sts=2 sw=2: %]
+[% IF user AND NOT user.is_guest %]
+  <p>
+    [% loc('You are logged in as [_1]', '<b>' _ user.username _ '</b>') %]
+  </p>
+  <p>
+    <a href="/nlw/submit/logout">[% loc('Log out') %]</a>
+  </p>
+[% END %]

@@ -37,6 +37,7 @@
 <div id="contentContainer">
   <div id="contentColumns">
     <div id="contentLeft">
+      [% PROCESS entry_nav %]
       [% USE section_iterator = iterator(sections) %]
       [% FOREACH section IN section_iterator %]
         [% FOREACH entry = section.entries %]
@@ -75,6 +76,7 @@
           </em>
         [% END %]
       [% END %]
+      [% PROCESS entry_nav %]
     </div><!-- contentLeft -->
     <div id="contentRight">
       <div class="widget">
@@ -118,4 +120,17 @@
   </div><!-- contentColumns END -->
   <div class="clear"></div><!-- clear END -->
 </div><!-- contentContainer -->
+[% END %]
+
+[% BLOCK entry_nav %]
+    [% IF weblog_previous.defined OR weblog_next.defined %]
+    <div class="st-weblog-entrynav">
+        [% IF weblog_previous.defined %]
+            <span class="st-weblog-previousentries">[% INCLUDE element/ws_link href="${script_name}?action=weblog_display;start=${weblog_previous}", name=loc("Newer entries") %]</span>
+        [% END %]
+        [% IF weblog_next.defined %]
+            <span class="st-weblog-nextentries">[% INCLUDE element/ws_link href="${script_name}?action=weblog_display;start=${weblog_next}", name=loc("Earlier entries") %]</span>
+        [% END %]
+    </div>
+    [% END %]
 [% END %]

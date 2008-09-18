@@ -24,20 +24,22 @@
 </form>
 
 <script type="text/javascript">
-  function authen_focus() {
-    var username = $('#username');
-    var password = $('#password');
-    if (username && password) {
-      if (username.val().length) {
+  if (typeof(jQuery) != 'undefined') {
+    function authen_focus() {
+      var username = $('#username');
+      var password = $('#password');
+      if (username && password) {
+        if (username.val().length) {
+          password.focus();
+        }
+        else {
+          username.focus();
+        }
+      }
+      else if (password) {
         password.focus();
       }
-      else {
-        username.focus();
-      }
     }
-    else if (password) {
-      password.focus();
-    }
+    $(document).ready( authen_focus );
   }
-  $(document).ready( authen_focus );
 </script>

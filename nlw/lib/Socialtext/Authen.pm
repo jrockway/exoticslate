@@ -6,6 +6,8 @@ use warnings;
 our $VERSION = 0.01;
 
 use Socialtext::User;
+use Socialtext::AppConfig;
+use Socialtext::l10n qw(loc);
 
 use Socialtext::Validate qw( validate SCALAR_TYPE );
 
@@ -27,6 +29,16 @@ sub check_password {
     return unless $user;
 
     return $user->password_is_correct( $p{password} );
+}
+
+sub username_label {
+    return username_is_email()
+        ? loc('Email Address:')
+        : loc('Username:');
+}
+
+sub username_is_email {
+    return Socialtext::AppConfig->is_default('user_factories');
 }
 
 1;

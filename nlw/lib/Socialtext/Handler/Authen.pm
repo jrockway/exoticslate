@@ -62,7 +62,7 @@ sub handler ($$) {
             loc            => \&loc,
             errors         => [ $self->session->errors ],
             messages       => [ $self->session->messages ],
-            username_label => $self->username_label,
+            username_label => Socialtext::Authen->username_label,
             redirect_to    => $self->{args}{redirect_to},
             static_path    => Socialtext::Helpers::static_path(),
             skin_uri       => sub {
@@ -120,14 +120,6 @@ sub handler ($$) {
     return NOT_FOUND;
 }
 
-sub username_label {
-    return username_is_email() ? loc('Email Address:') : loc('Username:');
-}
-
-sub username_is_email {
-    return Socialtext::AppConfig->is_default('user_factories');
-}
-
 sub login {
     my ($self) = @_;
     my $r = $self->r;
@@ -138,7 +130,7 @@ sub login {
         return $self->_redirect('/nlw/login.html');
     }
 
-    my $user_check = ( username_is_email()
+    my $user_check = ( Socialtext::Authen->username_is_email()
         ? Email::Valid->address($username)
         : ( (Encode::is_utf8($username) ? $username : Encode::decode_utf8($username)) =~ /\w/ )
     );

@@ -204,10 +204,4 @@ sub javascript {
 
 sub static_path { Socialtext::Helpers->static_path }
 
-sub username_label {
-    return Socialtext::AppConfig->is_default('user_factories')
-        ? loc('Email Address')
-        : loc('Username');
-}
-
 1;

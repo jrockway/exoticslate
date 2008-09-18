@@ -140,3 +140,22 @@ div#mainNav ul.level1 li.submenu:hover {
     display: block;
 }
 
+
+/* This fixes the widget bottoms in IE7 */
+div.widget { margin-left: 1px; }
+html>body#dashBoard div.widget div.widgetBottomRight,
+html>body#contentPage div.widget div.widgetBottomRight,
+html>body#settingsPage div.widget div.widgetBottomRight {
+        margin-top: 0;
+        margin-left: 0;
+}
+/* This fixes a gap in the widget bottoms in IE6 */
+* html body#dashBoard div.widget div.widgetBottom {
+        margin-left: 2px;
+}
+* html body#settingsPage div.widget div.widgetBottom {
+        margin-left: 1px;
+}
+html>body#contentPage div.widget div.widgetBottom {
+        margin-left: -1px;
+}

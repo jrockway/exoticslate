@@ -365,12 +365,23 @@ function setup_wikiwyg() {
         var tag = input_field.val();
         input_field.val('');
 
+        var skip = false;
+        jQuery('.st-tagqueue-taglist-name').each(function (index, element) {
+            var text = jQuery(element).text();
+            text = text.replace(/^, /, '');
+            if ( tag == text ) {
+                skip = true;
+            }
+        });
+
+        if ( skip ) { return false; }
+
         jQuery('<input type="hidden" name="add_tag" />')
             .attr('id', 'st-tagqueue-'+rand)
             .attr('value', tag)
             .appendTo('#st-page-editing-files');
 
-        jQuery('#st-tagqueue-list').show()
+        jQuery('#st-tagqueue-list').show();
         jQuery('<span class="st-tagqueue-taglist-name" />')
             .attr('id', 'st-taglist-'+rand)
             .append(

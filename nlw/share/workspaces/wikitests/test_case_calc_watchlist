@@ -190,7 +190,7 @@ Last Edited By sort
 
 | *Comment* | label=Last Edited By (desc) |  |
 | select_and_wait | sort-picker | index=2 |
-| text_like | st-listview | qr/watchlist aaa spreadsheet %%start_time%%.+watchlist bbb spreadsheet %%start_time%%.+watchlist ccc spreadsheet %%start_time%%.+watchlist newpage spreadsheet %%start_time%%/ |
+| text_like | st-listview | qr/watchlist newpage spreadsheet %%start_time%%.+watchlist ccc spreadsheet %%start_time%%.+watchlist bbb spreadsheet %%start_time%%.+watchlist aaa spreadsheet %%start_time%%/ |
 
 | *Comment* | label=Last Edited By (asc) |  |
 | select_and_wait | sort-picker | index=2 |

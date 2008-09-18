@@ -83,9 +83,17 @@ table.dataTable td img.avatar {
     margin: 5px;
     vertical-align: middle;
 }
+
 table.dataTable {
     width:98%;
 }
+
+table.dataTable span.summary strong {
+    font-weight:bold;
+    background:#ffc;
+    padding:1px 2px;
+}
+
 div#bottomButtons {
     width: 100%;
 }

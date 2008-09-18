@@ -361,7 +361,9 @@ function setup_wikiwyg() {
 
     var add_tag = function() {
         var rand = (''+Math.random()).replace(/\./, '');
-        var tag = jQuery('#st-tagqueue-field').val();
+        var input_field = jQuery('#st-tagqueue-field');
+        var tag = input_field.val();
+        input_field.val('');
 
         jQuery('<input type="hidden" name="add_tag" />')
             .attr('id', 'st-tagqueue-'+rand)

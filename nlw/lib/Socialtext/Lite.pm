@@ -349,6 +349,7 @@ sub _process_template {
         workspace_title => $self->hub->current_workspace->title,
         static_path     => Socialtext::Helpers::static_path,
         skin_uri        => sub { $self->hub->skin->skin_uri($_[0]) },
+        user            => $self->hub->current_user,
         %vars,
     );
 }

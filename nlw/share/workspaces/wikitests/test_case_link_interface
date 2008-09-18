@@ -54,7 +54,9 @@
 | click_ok | st-widget-page_title |  |
 
 | *Comment* | Test Case: Link Interface pause is necessary for the little blue dropdown to appear |  |
-| pause | 10000 |  |
+| click_ok | st-widget-link-savebutton |  |
+| wait_for_element_visible_ok | add-a-link-error |  |
+| text_like | add-a-link-error | That workspace does not exist. |
 | wait_for_element_visible_ok | st-widget-link-cancelbutton | 30000 |
 | click_ok | st-widget-link-cancelbutton |  |
 

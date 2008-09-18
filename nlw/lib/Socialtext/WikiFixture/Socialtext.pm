@@ -278,12 +278,20 @@ sub st_watch_page {
     my ($self, $watch_on, $page_name, $verify_only) = @_;
     my $expected_watch = $watch_on ? 'on' : 'off';
     my $watch_re = qr/watch-$expected_watch(?:-list)?\.gif$/;
+ 
+    my $s3_expected = $watch_on ? 'watch on' : 'watch';
+    my $is_s3 = 0;
+    if ($self->{'skin'} eq 's3') { 
+        $is_s3 = 1; 
+    } 
     $page_name = '' if $page_name and $page_name =~ /^#/; # ignore comments
     $verify_only = '' if $verify_only and $verify_only =~ /^#/; # ignore comments
 
     unless ($page_name) {
-        return $self->_watch_page_xpath("//img[\@id='st-watchlist-indicator']", 
-                                        $watch_re, $verify_only);
+        my $html_type = $is_s3 ? "a" : "img"; 
+            
+        return $self->_watch_page_xpath("//$html_type" . "[\@id='st-watchlist-indicator']", 
+                                        $watch_re, $verify_only, $s3_expected, $is_s3);
     }
 
     # A page is specified, so assume we're on the watchlist page
@@ -312,21 +320,38 @@ sub st_watch_page {
 }
 
 sub _watch_page_xpath {
-    my ($self, $xpath, $watch_re, $verify_only) = @_;
+    my ($self, $xpath, $watch_re, $verify_only, $s3_expected, $is_s3) = @_;
     my $sel = $self->{selenium};
-
-    my $xpath_src = "$xpath/\@src";
+    
+    my $xpath_src = $is_s3 ? "$xpath/\@class" : "$xpath/\@src";
+    
     my $src = $sel->get_attribute($xpath_src);
-    if ($verify_only or $src =~ $watch_re) {
-        like $src, $watch_re, "$xpath - $watch_re";
-        return;
+    
+    if ($is_s3) {
+       if ($verify_only or $src eq $s3_expected) {
+           is $src, $s3_expected, "$src - $s3_expected (Searching with $xpath)";
+           return;
+       }
+    } else {
+      if ($verify_only or $src=~ $watch_re) {
+          like $src, $watch_re, "$xpath - $watch_re";
+          return;
+      }
     }
+    
 
     $sel->click_ok($xpath, "clicking watch button");
     my $timeout = time + $self->{selenium_timeout} / 1000;
     while(1) {
         my $new_src = $sel->get_attribute($xpath_src);
-        last if $new_src =~ $watch_re;
+        my $compare = 0;
+        if ($is_s3) {
+            $compare = ($new_src eq $s3_expected);
+        } else {
+            $compare = ($new_src =~ $watch_re);
+       }        
+        
+        last if $compare;
         select undef, undef, undef, 0.25; # sleep
         if ($timeout < time) {
             ok 0, 'Timeout waiting for watchlist icon to change';

@@ -14,6 +14,7 @@ use Socialtext::Pluggable::Adapter;
 use Socialtext::Workspace;
 use Socialtext::Paths;
 use Fcntl ':flock';
+use Socialtext::User::Cache;
 
 sub handler {
     # This env var is set in the apache-perl config file (nlw.conf)
@@ -29,6 +30,12 @@ sub handler {
             _regen_combined_js($r);
             Socialtext::Pluggable::Adapter->make;
         }
+    }
+
+    {
+        # make all users use the in-memory cache (per process) in Apache
+        no warnings 'once';
+        $Socialtext::User::Cache::Enabled = 1;
     }
 }
 

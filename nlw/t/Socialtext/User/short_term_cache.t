@@ -1,0 +1,123 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings FATAL => 'all';
+use Test::More tests => 19;
+use mocked 'Socialtext::Log', qw(:tests);
+use mocked 'Net::LDAP';
+use Test::Socialtext;
+
+fixtures( 'ldap_anonymous' );
+use_ok 'Socialtext::User::LDAP::Factory';
+use_ok 'Socialtext::User::Default::Factory';
+
+my @TEST_LDAP_USERS = (
+    { dn            => 'cn=user,dc=example,dc=com',
+      cn            => 'FirstLDAP Last',
+      authPassword  => 'abc123',
+      gn            => 'FirstLDAP',
+      sn            => 'Last',
+      mail          => 'ldapuser@example.com',
+    },
+    { dn            => 'cn=user,dc=example,dc=com',
+      cn            => 'Another User',
+      authPassword  => 'def987',
+      gn            => 'Another',
+      sn            => 'User',
+      mail          => 'ldapuser@example.com',
+    },
+);
+
+
+my $appconfig = Socialtext::AppConfig->new();
+$appconfig->set('user_factories', 'LDAP;Default');
+$appconfig->write();
+is (Socialtext::AppConfig->user_factories(), 'LDAP;Default');
+
+Socialtext::User->create(
+    email_address => 'dbuser@example.com',
+    username => 'dbuser@example.com',
+    first_name => 'DB',
+    last_name => 'User',
+    password => 'password',
+);
+
+
+verify_not_caching_is_the_default_behaviour: {
+    Net::LDAP->set_mock_behaviour(
+        search_results => [ $TEST_LDAP_USERS[0] ],
+    );
+
+    my $user = Socialtext::User->new(email_address => 'ldapuser@example.com');
+    ok $user;
+    is $user->best_full_name, "FirstLDAP Last", "original ldap user bfn";
+    $user = undef;
+
+    Net::LDAP->set_mock_behaviour(
+        search_results => [ $TEST_LDAP_USERS[1] ],
+    );
+
+    my $user2 = Socialtext::User->new(email_address => 'ldapuser@example.com');
+    ok $user2;
+    is $user2->best_full_name, "Another User", "non-cached ldap user bfn";
+    $user2 = undef;
+
+    Net::LDAP->set_mock_behaviour(search_results => []);
+
+    # in another process:
+    system('st-admin set-user-names --username dbuser@example.com --first-name DB --last-name User');
+
+    my $user3 = Socialtext::User->new(username => 'dbuser@example.com');
+    ok $user3;
+    is $user3->best_full_name, "DB User", "original db user bfn";
+    $user3 = undef;
+
+    # in another process:
+    system('st-admin set-user-names --username dbuser@example.com --first-name AnotherDB --last-name User');
+
+
+    my $user4 = Socialtext::User->new(username => 'dbuser@example.com');
+    ok $user4;
+    is $user4->best_full_name, "AnotherDB User", "non-cached db user bfn";
+    $user4 = undef;
+}
+
+verify_caching_behaviour: {
+    no warnings 'once';
+    local $Socialtext::User::Cache::Enabled = 1;
+
+    Net::LDAP->set_mock_behaviour(
+        search_results => [ $TEST_LDAP_USERS[0] ],
+    );
+    my $user = Socialtext::User->new(email_address => 'ldapuser@example.com');
+    ok $user;
+    is $user->best_full_name, "FirstLDAP Last", "original ldap user bfn";
+    $user = undef;
+
+    Net::LDAP->set_mock_behaviour(
+        search_results => [ $TEST_LDAP_USERS[1] ],
+    );
+    my $user2 = Socialtext::User->new(email_address => 'ldapuser@example.com');
+    ok $user2;
+    is $user2->best_full_name, "FirstLDAP Last", "cached ldap user bfn";
+    $user2 = undef;
+
+    Net::LDAP->set_mock_behaviour(search_results => []);
+
+    # in another process:
+    system('st-admin set-user-names --username dbuser@example.com --first-name DB --last-name User');
+
+    my $user3 = Socialtext::User->new(username => 'dbuser@example.com');
+    ok $user3;
+    is $user3->best_full_name, "DB User", "original db user bfn";
+    $user3 = undef;
+
+    # in another process:
+    system('st-admin set-user-names --username dbuser@example.com --first-name AwesomeDB --last-name User');
+
+    my $user4 = Socialtext::User->new(username => 'dbuser@example.com');
+    ok $user4;
+    is $user4->best_full_name, "DB User", "cached db user bfn";
+    $user4 = undef;
+}
+

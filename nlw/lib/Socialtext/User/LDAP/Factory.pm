@@ -7,6 +7,7 @@ use Class::Field qw(field);
 use Socialtext::LDAP;
 use Socialtext::User::LDAP;
 use Socialtext::Log qw(st_log);
+use Socialtext::User::Cache;
 use Readonly;
 
 field 'ldap';
@@ -57,6 +58,10 @@ sub GetUser {
     # SANITY CHECK: search term is acceptable
     return undef unless ($valid_search_terms{$key});
 
+    my $cache_key = "${key}:${val}";
+    my $ldap_user = Socialtext::User::Cache->Fetch(__PACKAGE__, $cache_key);
+    return $ldap_user if $ldap_user;
+
     # search LDAP directory for our record
     my $mesg = $self->_find_user( $key, $val );
     unless ($mesg) {
@@ -93,7 +98,10 @@ sub GetUser {
             $user->{$user_attr} = $result->get_value( $ldap_attr );
         }
     }
-    return Socialtext::User::LDAP->new($user);
+
+    $ldap_user = Socialtext::User::LDAP->new($user);
+    Socialtext::User::Cache->Store(__PACKAGE__, $cache_key => $ldap_user);
+    return $ldap_user;
 }
 
 sub Search {

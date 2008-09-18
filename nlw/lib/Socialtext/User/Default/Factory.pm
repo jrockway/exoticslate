@@ -18,7 +18,7 @@ use Socialtext::Exceptions qw( data_validation_error );
 
 use Digest::SHA1 ();
 use Email::Valid;
-use Socialtext::Cache;
+use Socialtext::User::Cache;
 use Socialtext::Data;
 use Socialtext::String;
 use Socialtext::SQL 'sql_execute';
@@ -127,10 +127,6 @@ sub Count {
     return $sth->fetchall_arrayref->[0][0];
 }
 
-sub _cache {
-    return Socialtext::Cache->cache('user_default_factory');
-}
-
 sub GetUser {
     my ( $self, %p ) = @_;
 
@@ -159,11 +155,10 @@ sub GetUser {
         $where = 'LOWER(email_address)';
     }
 
-    my $cache = $self->_cache();
-    my $user  = $cache->get($key);
+    my $user = Socialtext::User::Cache->Fetch(__PACKAGE__,$key);
     unless ($user) {
         $user = $self->_new_from_where( $where, $key );
-        $cache->set( $key, $user );
+        Socialtext::User::Cache->Store(__PACKAGE__, $key => $user);
     }
     return $user;
 }
@@ -215,7 +210,7 @@ sub delete {
     my $sth = sql_execute( 'DELETE FROM "User" WHERE user_id=?', $user->user_id );
 
     # flush cache; removed a User from the DB
-    $self->_cache->clear();
+    Socialtext::User::Cache->Clear(__PACKAGE__);
 
     return $sth;
 }
@@ -244,7 +239,7 @@ sub update {
     }
 
     # flush cache; updated User in DB
-    $self->_cache->clear();
+    Socialtext::User::Cache->Clear(__PACKAGE__);
 
     return $user;
 }

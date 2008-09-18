@@ -55,10 +55,8 @@
 
 | *Comment* | Test Case: Link Interface pause is necessary for the little blue dropdown to appear |  |
 | pause | 10000 |  |
-| text_like | Workspace "DoesNotExist" does not exist on wiki |  |
 | wait_for_element_visible_ok | st-widget-link-cancelbutton | 30000 |
 | click_ok | st-widget-link-cancelbutton |  |
-| wait_for_text_not_present_ok | Add a link | 10000 |
 
 | *Comment* | Test Case: Link Interface make a Web link |  |
 | wait_for_element_visible_ok | wikiwyg_button_link | 30000 |

@@ -374,6 +374,17 @@ sub hash_representation {
             . $self->id;
     }
 
+    my $from = $self->metadata->From;
+    my $user =
+        $from =~ /^\d+$/
+        ? Socialtext::User->new(user_id  => $from)
+        : Socialtext::User->new(email_address => $from);
+    my $masked_email = $user
+        ? $user->masked_email_address(
+            user => $self->hub->current_user,
+            workspace => $self->hub->current_workspace,
+        ) : $from;
+
     return +{
         name     => $name,
         uri      => $uri,
@@ -382,7 +393,7 @@ sub hash_representation {
         # REVIEW: This URI may eventually prove to be the wrong one
         page_uri       => $page_uri,
         tags           => $self->metadata->Category,
-        last_editor    => $self->metadata->From,
+        last_editor    => $masked_email,
         last_edit_time => $self->metadata->Date,
         modified_time  => $self->modified_time,
         revision_id    => $self->revision_id,

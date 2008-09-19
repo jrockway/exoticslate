@@ -502,7 +502,7 @@ sub _get_full_name {
 
 {
     Readonly my $spec => {
-        #support this : workspace => WORKSPACE_TYPE( default => undef ),
+        workspace => WORKSPACE_TYPE( default => undef ),
         user => USER_TYPE( default => undef ),
     };
     sub masked_email_address {
@@ -529,11 +529,12 @@ sub _get_full_name {
             }
         }
         
+        # Reset hidden based on workspace permissions if the domain doesn't
+        # match the unmasked domain param
         if ($workspace) {
-            $hidden = 1 if $workspace->email_addresses_are_hidden;
-
-            if (my $unmasked_domain = $workspace->unmasked_email_domain) {
-                $hidden = 0 if $email =~ /\@\Q$unmasked_domain\E/;
+            my $unmasked_domain = $workspace->unmasked_email_domain;
+            unless ($unmasked_domain and $email =~ /\@\Q$unmasked_domain\E/) {
+                $hidden = 1 if $workspace->email_addresses_are_hidden;
             }
         }
 

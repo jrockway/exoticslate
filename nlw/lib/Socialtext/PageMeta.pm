@@ -136,7 +136,7 @@ sub update {
     my $revision = $self->Revision || 0;
     # FIXME: Wrong! should be max of all revisions +1
     $self->Revision($revision + 1);
-    $self->From( $p{user}->email_address );
+    $self->From( $p{user}->user_id );
     $self->Date($self->get_date);
     $self->Received($self->get_received)
       unless $self->Received;

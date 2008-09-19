@@ -6,25 +6,46 @@ use Socialtext::Cache;
 
 our $Enabled = 0;
 
+my %ValidKeys = (
+    user_id => 1,
+    email_address => 1,
+    username => 1,
+);
+
 sub Fetch {
-    my ($class, $factory, $key) = @_;
+    my ($class, $key, $val) = @_;
     return unless $Enabled;
-    my $cache = Socialtext::Cache->cache("$factory users");
-    return $cache->get($key);
+    return unless $ValidKeys{$key};
+    my $key_cache = Socialtext::Cache->cache("homunculus:$key");
+    return $key_cache->get($val);
 }
 
 sub Store {
-    my ($class, $factory, $key, $user) = @_;
+    my ($class, $key, $val, $user) = @_;
     return unless $Enabled;
-    my $cache = Socialtext::Cache->cache("$factory users");
-    return $cache->set($key, $user);
+    return unless $ValidKeys{$key};
+    my $key_cache = Socialtext::Cache->cache("homunculus:$key");
+    return $key_cache->set($val, $user);
+}
+
+sub MaybeStore {
+    my ($class, $key, $val, $user) = @_;
+    return unless $Enabled;
+    return unless $ValidKeys{$key};
+    my $key_cache = Socialtext::Cache->cache("homunculus:$key");
+    if (!$key_cache->get($val)) {
+        $key_cache->set($val, $user);
+        return 1;
+    }
+    return;
 }
 
 sub Clear {
-    my ($class, $factory) = @_;
-    return unless $Enabled;
-    my $cache = Socialtext::Cache->cache("$factory users");
-    return $cache->clear();
+    my $cache;
+    foreach my $key (keys %ValidKeys) {
+        $cache = Socialtext::Cache->cache("homunculus:$key");
+        $cache->clear();
+    }
 }
 
 1;

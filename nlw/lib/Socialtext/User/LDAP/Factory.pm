@@ -58,10 +58,6 @@ sub GetUser {
     # SANITY CHECK: search term is acceptable
     return undef unless ($valid_search_terms{$key});
 
-    my $cache_key = "${key}:${val}";
-    my $ldap_user = Socialtext::User::Cache->Fetch(__PACKAGE__, $cache_key);
-    return $ldap_user if $ldap_user;
-
     # search LDAP directory for our record
     my $mesg = $self->_find_user( $key, $val );
     unless ($mesg) {
@@ -99,9 +95,7 @@ sub GetUser {
         }
     }
 
-    $ldap_user = Socialtext::User::LDAP->new($user);
-    Socialtext::User::Cache->Store(__PACKAGE__, $cache_key => $ldap_user);
-    return $ldap_user;
+    return Socialtext::User::LDAP->new($user);
 }
 
 sub Search {

@@ -155,11 +155,7 @@ sub GetUser {
         $where = 'LOWER(email_address)';
     }
 
-    my $user = Socialtext::User::Cache->Fetch(__PACKAGE__,$key);
-    unless ($user) {
-        $user = $self->_new_from_where( $where, $key );
-        Socialtext::User::Cache->Store(__PACKAGE__, $key => $user);
-    }
+    my $user = $self->_new_from_where( $where, $key );
     return $user;
 }
 
@@ -210,7 +206,7 @@ sub delete {
     my $sth = sql_execute( 'DELETE FROM "User" WHERE user_id=?', $user->user_id );
 
     # flush cache; removed a User from the DB
-    Socialtext::User::Cache->Clear(__PACKAGE__);
+    Socialtext::User::Cache->Clear();
 
     return $sth;
 }
@@ -239,7 +235,7 @@ sub update {
     }
 
     # flush cache; updated User in DB
-    Socialtext::User::Cache->Clear(__PACKAGE__);
+    Socialtext::User::Cache->Clear();
 
     return $user;
 }

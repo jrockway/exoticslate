@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings FATAL => 'all';
-use Test::More tests => 19;
+use Test::More tests => 23;
 use mocked 'Socialtext::Log', qw(:tests);
 use mocked 'Net::LDAP';
 use Test::Socialtext;
@@ -100,6 +100,7 @@ verify_caching_behaviour: {
     my $user2 = Socialtext::User->new(email_address => 'ldapuser@example.com');
     ok $user2;
     is $user2->best_full_name, "FirstLDAP Last", "cached ldap user bfn";
+    my $ldap_user_id = $user2->user_id;
     $user2 = undef;
 
     Net::LDAP->set_mock_behaviour(search_results => []);
@@ -118,6 +119,18 @@ verify_caching_behaviour: {
     my $user4 = Socialtext::User->new(username => 'dbuser@example.com');
     ok $user4;
     is $user4->best_full_name, "DB User", "cached db user bfn";
+    my $db_user_id = $user4->user_id;
     $user4 = undef;
+
+
+    proactive_user_id_caching: {
+        my $user5 = Socialtext::User->new(user_id => $ldap_user_id);
+        ok $user5;
+        is $user5->best_full_name, "FirstLDAP Last", "proactive cache of the LDAP user";
+
+        my $user6 = Socialtext::User->new(user_id => $db_user_id);
+        ok $user6;
+        is $user6->best_full_name, "DB User", "proactive cache of the db user";
+    }
 }
 

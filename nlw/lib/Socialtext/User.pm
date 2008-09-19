@@ -22,12 +22,14 @@ use Email::Address;
 use Class::Field 'field';
 use Socialtext::l10n qw(system_locale loc);
 use Socialtext::EmailSender::Factory;
+use Socialtext::User::Cache;
 use base qw( Socialtext::MultiPlugin );
 
 use Readonly;
 
 field 'homunculus';
 field 'metadata';
+field 'user_id', -init => '$self->_system_unique_id()';
 
 my @user_store_interface =
     qw( username email_address password first_name last_name );
@@ -73,25 +75,28 @@ sub _realize {
 
 sub new_homunculus {
     my $class = shift;
+    my $key = shift;
+    my $val = shift;
     my $homunculus;
 
     # if we are passed in an email confirmation hash, we look up the user_id
     # associated with that hash
-    if ($_[0] eq 'email_confirmation_hash') {
-        my $user_id = Socialtext::User::EmailConfirmation->id_from_hash($_[1]);
+    if ($key eq 'email_confirmation_hash') {
+        my $user_id = Socialtext::User::EmailConfirmation->id_from_hash($val);
         return undef unless defined $user_id;
-
-        return $class->new_homunculus( user_id => $user_id );
+        $key = 'user_id'; $val = $user_id;
     }
+
+    $homunculus = Socialtext::User::Cache->Fetch($key, $val);
+    return $homunculus if $homunculus;
 
     # if we pass in user_id, it will be one of the new system-wide
     # ids, we must short-circuit and immediately go to the driver
     # associated with that system id
-    if ($_[0] eq 'user_id') {
-        my $system_id = Socialtext::UserId->new( system_unique_id => $_[1] );
+    if ($key eq 'user_id') {
+        my $system_id = Socialtext::UserId->new(system_unique_id => $val);
         return undef unless $system_id;
         my $driver_key = $system_id->driver_key;
-        my $driver_unique_id = $system_id->driver_unique_id;
         my $driver_username = $system_id->driver_username;
         my $driver = $class->_realize($driver_key, 'GetUser');
         if ($driver) {
@@ -100,15 +105,15 @@ sub new_homunculus {
             $homunculus = $driver->GetUser( username => $driver_username );
         }
         $homunculus ||= Socialtext::User::Deleted->new(
-            user_id    => $driver_unique_id,
-            username   => $system_id->driver_username,
+            user_id    => $system_id->driver_unique_id,
+            username   => $driver_username,
             driver_key => $driver_key,
         );
     }
     # searches by "driver_unique_id" get handled as searches for "user_id", but
     # mapped accordingly for each user factory driver.
-    elsif ($_[0] eq 'driver_unique_id') {
-        $homunculus = $class->_first('GetUser', 'user_id' => $_[1] );
+    elsif ($key eq 'driver_unique_id') {
+        $homunculus = $class->_first('GetUser', 'user_id' => $val );
     }
     # system generated users MUST come from the Default user store; we don't
     # allow for them to live anywhere else.
@@ -116,14 +121,15 @@ sub new_homunculus {
     # this prevents possible conflict with other stores having their own
     # notion of what the "guest" or "system-user" is (e.g. Active Directory
     # and its "Guest" user)
-    elsif (Socialtext::User::Default::Factory->IsDefaultUser(@_)) {
+    elsif (Socialtext::User::Default::Factory->IsDefaultUser($key => $val)) {
         my $factory = $class->_realize('Default', 'GetUser');
-        $homunculus = $factory->GetUser(@_);
+        $homunculus = $factory->GetUser($key => $val, @_);
     }
     else {
-        $homunculus = $class->_first('GetUser', @_);
+        $homunculus = $class->_first('GetUser', $key => $val, @_);
     }
 
+    Socialtext::User::Cache->Store($key, $val, $homunculus);
     return $homunculus;
 }
 
@@ -132,20 +138,25 @@ sub new {
     my $user = bless {}, $class;
 
     my $homunculus = $class->new_homunculus(@_);
+    return undef unless $homunculus;
 
-    if ($homunculus) {
-        # ensure this user is present in our UserId table
-        Socialtext::UserId->create_if_necessary( $homunculus );
+    # ensure this user is present in our UserId table
+    my $userid = Socialtext::UserId->create_if_necessary($homunculus);
 
-        # fetch the UserMetadata for this user
-        $user->homunculus( $homunculus );
-        $user->metadata(
-            Socialtext::UserMetadata->create_if_necessary( $user ) );
+    $user->homunculus($homunculus);
+    $user->metadata(Socialtext::UserMetadata->create_if_necessary($user));
 
-        return $user;
-    }
+    # proactively cache the homunculus, but only if it's not already
+    # cached
+    Socialtext::User::Cache->MaybeStore(
+        'user_id', $userid->system_unique_id => $homunculus
+    );
 
-    return undef;
+    # store the user_id since we've got it at hand (preventing frequent
+    # expensive lookups later)
+    $user->user_id($userid->system_unique_id);
+
+    return $user;
 }
 
 sub create {
@@ -233,14 +244,12 @@ sub recently_viewed_workspaces {
     return @viewed;
 }
 
-
-sub user_id {
+sub _system_unique_id {
     my $self = shift;
-
     return Socialtext::UserId->new(
         driver_key       => $self->homunculus->driver_key,
         driver_unique_id => $self->homunculus->user_id
-        )->system_unique_id();
+    )->system_unique_id();
 }
 
 sub username {

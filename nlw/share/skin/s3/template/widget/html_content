@@ -13,7 +13,7 @@
             var msgs = [% as_json(messages) %];
         </script>
     </head>
-    <body onLoad="document.loaded=true;">
+    <body>
         [% content %]
         <script>gadgets.util.runOnLoadHandlers();</script>
     </body>

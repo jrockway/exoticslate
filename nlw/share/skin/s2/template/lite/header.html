@@ -7,10 +7,12 @@
         <link rel="stylesheet" href="[% skin_uri('s2') %]/css/miki.css" type="text/css" />
     </head>
     <body>
-        [%- home_link %] | [%- rc_link %] | [%- search_link %]
-        [% IF edit_link %]
-            | [%- edit_link %]
-        [% END %]
+        [%- SET header_links = [] %]
+        [%- header_links.push(home_link)     IF home_link %]
+        [%- header_links.push(rc_link)       IF rc_link %]
+        [%- header_links.push(search_link)   IF search_link %]
+        [%- header_links.push(edit_link)     IF edit_link %]
+        [%- header_links.join( ' | ' ) %]
         [% IF cancel_edit %]
             | <a href="/lite/page/[% workspace_name %]/[% cancel_edit %]">[% loc('Cancel Edit') %]</a>
         [% END %]

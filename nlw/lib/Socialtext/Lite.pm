@@ -383,16 +383,23 @@ sub _process_template {
     my $template = shift;
     my %vars     = @_;
 
+    my %ws_vars;
+    if ($self->hub->current_workspace->real) {
+        %ws_vars = (
+            home_link       => $self->_home_link,
+            rc_link         => $self->_recent_changes_link,
+            search_link     => $self->_search_link,
+            workspace_title => $self->hub->current_workspace->title,
+        );
+    }
+
     return $self->hub->template->process(
         $template,
-        home_link       => $self->_home_link,
-        rc_link         => $self->_recent_changes_link,
-        search_link     => $self->_search_link,
         brand_stamp     => $self->hub->main->version_tag,
-        workspace_title => $self->hub->current_workspace->title,
         static_path     => Socialtext::Helpers::static_path,
         skin_uri        => sub { $self->hub->skin->skin_uri($_[0]) },
         user            => $self->hub->current_user,
+        %ws_vars,
         %vars,
     );
 }

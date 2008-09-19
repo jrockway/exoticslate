@@ -98,6 +98,10 @@ sub default_role {
 }
 
 sub email_address { $_[0]->{email_address} ||= 'one@foo.bar' }
+sub masked_email_address {
+    my $self = shift;
+    return $self->MaskEmailAddress($self->email_address);
+}
 
 sub workspaces {
     return Socialtext::MultiCursor->new(

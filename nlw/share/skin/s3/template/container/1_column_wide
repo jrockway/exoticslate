@@ -14,8 +14,4 @@
     </div>
 </div><!-- widgetContainer END -->
 
-[% INCLUDE element/js_loader
-    scripts = container.features
-%]
-
 [% END %]

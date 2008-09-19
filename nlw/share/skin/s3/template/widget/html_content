@@ -4,23 +4,17 @@
     <head>
         <base target="_blank"/>
         <link rel="stylesheet" href="[% share %]/css/gadget.css" type="text/css" media="screen" />
+        
+        [% FOR script = features %]
+            <script src="[% script %]"></script>
+        [% END %]
 
         <script>
             var msgs = [% as_json(messages) %];
-            var data = [% as_json([content]) %];
-            function load_content () {
-                var html = data[0];
-                jQuery("body").append(html);
-                setTimeout(function () {
-                    gadgets.util.runOnLoadHandlers();
-                }, 1);
-            }
         </script>
     </head>
     <body onLoad="document.loaded=true;">
-        [% INCLUDE element/js_loader
-            scripts = features
-            oncomplete = "load_content()"
-        %]
+        [% content %]
+        <script>gadgets.util.runOnLoadHandlers();</script>
     </body>
 </html>

@@ -42,8 +42,4 @@
     <div class="clear"></div><!-- clear END -->
 </div><!-- contentContainer END -->
 
-[% INCLUDE element/js_loader
-    scripts = container.features
-%]
-
 [% END %]

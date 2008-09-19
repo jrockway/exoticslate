@@ -5,11 +5,13 @@ use warnings;
 
 use Readonly;
 use Socialtext::Formatter::LiteLinkDictionary;
+use Socialtext::Authen;
 use Socialtext::String;
 use Socialtext::Permission 'ST_EDIT_PERM';
 use Socialtext::Helpers;
 use Socialtext::l10n qw(loc);
 use Socialtext::Timer;
+use Socialtext::Session;
 
 =head1 NAME
 
@@ -57,6 +59,7 @@ the _frame_page method.
 =cut
 
 # The templates we display with
+Readonly my $LOGIN_TEMPLATE          => 'lite/login/login.html';
 Readonly my $DISPLAY_TEMPLATE        => 'lite/page/display.html';
 Readonly my $EDIT_TEMPLATE           => 'lite/page/edit.html';
 Readonly my $CONTENTION_TEMPLATE     => 'lite/page/contention.html';
@@ -95,6 +98,26 @@ only an accessor.
 sub hub {
     my $self = shift;
     return $self->{hub};
+}
+
+=head2 login()
+
+Shows a mobile version of the login page.
+
+=cut
+sub login {
+    my $self        = shift;
+    my $redirect_to = shift || '/lite/login';
+    my $session     = Socialtext::Session->new();
+    return $self->_process_template(
+        $LOGIN_TEMPLATE,
+        redirect_to       => $redirect_to,
+        errors            => [ $session->errors ],
+        messages          => [ $session->messages ],
+        username_label    => Socialtext::Authen->username_label,
+        public_workspaces =>
+            [ $self->hub->workspace_list->public_workspaces ],
+    );
 }
 
 =head2 display($page)
@@ -350,7 +373,7 @@ sub _login_logout {
         $uri =~ s#^(.*://[^/]+)/([^/]+)#$1/lite/page/$2/$page_uri#g;
         return '<a href="/challenge?' . $uri . '">' . loc('Log&nbsp;in') . '</a>';
     } else {
-        return '<a href="/nlw/submit/logout">' . loc('Log&nbsp;out') . '</a>';
+        return '<a href="/nlw/submit/logout?redirect_to=/lite/login">' . loc('Log&nbsp;out') . '</a>';
     }
 }
 

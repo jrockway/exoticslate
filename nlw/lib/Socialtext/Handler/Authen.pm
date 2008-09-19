@@ -56,23 +56,8 @@ sub handler ($$) {
         );
         $main->hub->registry->load();
 
-        my $saved_args = $self->{saved_args} = $self->session->saved_args;
-        my $vars     = {
-            $main->hub->helpers->global_template_vars,
-            loc            => \&loc,
-            errors         => [ $self->session->errors ],
-            messages       => [ $self->session->messages ],
-            username_label => Socialtext::Authen->username_label,
-            redirect_to    => $self->{args}{redirect_to},
-            static_path    => Socialtext::Helpers::static_path(),
-            skin_uri       => sub {
-                Socialtext::Skin->new(name => shift)->skin_uri
-            },
-            paths          => $main->hub->skin->template_paths,
-            st_version     => $Socialtext::VERSION,
-            support_address => Socialtext::AppConfig->support_address,
-            %$saved_args,
-        };
+        # vars that we're setting up to use in our template later on
+        my $vars = {};
 
         if ($uri eq 'choose_password.html') {
             my $saved_args = $self->session->saved_args;
@@ -90,6 +75,15 @@ sub handler ($$) {
         # Include login_message_file content in vars sent to template
         # if login_message_file is set in AppConfig.
         if ( $uri eq 'login.html' ) {
+            # if we're redirecting to a miki page, use the miki login page
+            # instead
+            if ($self->{args}{redirect_to} =~ m#^(?:https?://[^/]+)?/lite/#) {
+                return $self->_redirect('/lite/login');
+            }
+
+            # URL to the miki login page
+            $vars->{miki_url} = '/lite/login';
+
             # list of public workspaces (for Workspace List)
             $vars->{public_workspaces} = [$main->hub->workspace_list->public_workspaces];
 
@@ -113,7 +107,25 @@ sub handler ($$) {
             return $class->handle_error( $r, \@errors);
         }
 
-        return $class->render_template($r, "authen/$uri", $vars);
+        my $saved_args = $self->{saved_args} = $self->session->saved_args;
+        my $repl_vars  = {
+            $main->hub->helpers->global_template_vars,
+            loc            => \&loc,
+            errors         => [ $self->session->errors ],
+            messages       => [ $self->session->messages ],
+            username_label => Socialtext::Authen->username_label,
+            redirect_to    => $self->{args}{redirect_to},
+            static_path    => Socialtext::Helpers::static_path(),
+            skin_uri       => sub {
+                Socialtext::Skin->new(name => shift)->skin_uri
+            },
+            paths          => $main->hub->skin->template_paths,
+            st_version     => $Socialtext::VERSION,
+            support_address => Socialtext::AppConfig->support_address,
+            %$saved_args,
+            %$vars,
+        };
+        return $class->render_template($r, "authen/$uri", $repl_vars);
     }
 
     warn "Unknown URI: $uri";
@@ -124,10 +136,14 @@ sub login {
     my ($self) = @_;
     my $r = $self->r;
 
+    # depending on whether this is the "real" or "lite" version of the login,
+    # we'll want to redirect them to an appropriate login page.
+    my $login_uri = $self->{args}{lite} ? '/lite/login' : '/nlw/login.html';
+
     my $username = $self->{args}{username} || '';
     unless ($username) {
         $self->session->add_error(loc("You must provide a valid email address."));
-        return $self->_redirect('/nlw/login.html');
+        return $self->_redirect($login_uri);
     }
 
     my $user_check = ( Socialtext::Authen->username_is_email()
@@ -138,7 +154,7 @@ sub login {
     unless ( $user_check ) {
         $self->session->add_error( loc('"[_1]" is not a valid email address. Please use your email address to log in.', $username) );
         $r->log_error ($username . ' is not a valid email address');
-        return $self->_redirect('/nlw/login.html');
+        return $self->_redirect($login_uri);
     }
     my $auth = Socialtext::Authen->new;
     my $user = Socialtext::User->new( username => $username );
@@ -146,7 +162,7 @@ sub login {
     if ($user && !$user->email_address) {
         $self->session->add_error(loc("This username has no associated email address." ));
         $r->log_error ($username . ' has no associated email address');
-        return $self->_redirect('/nlw/login.html');
+        return $self->_redirect($login_uri);
     }
 
     if ($user and $user->requires_confirmation) {
@@ -157,7 +173,7 @@ sub login {
     unless ($self->{args}{password}) {
         $self->session->add_error(loc("Wrong email address or password - please try again."));
         $r->log_error('Wrong email address or password for ' . $username);
-        return $self->_redirect('/nlw/login.html');
+        return $self->_redirect($login_uri);
     }
 
     my $check_password = $auth->check_password(
@@ -168,7 +184,7 @@ sub login {
     unless ($check_password) {
         $self->session->add_error(loc("Wrong email address or password - please try again."));
         $r->log_error('Wrong email address or password for ' . $username);
-        return $self->_redirect('/nlw/login.html');
+        return $self->_redirect($login_uri);
     }
 
     my $expire = $self->{args}{remember} ? '+12M' : '';

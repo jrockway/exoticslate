@@ -311,6 +311,10 @@
         'GET':                  [Socialtext::Rest::Lite, workspace_list]
         '*':                    [Socialtext::Rest::Lite, bad_method]
 -
+    '/lite/login':
+        'GET':                  [Socialtext::Rest::Lite, login]
+        '*':                    [Socialtext::Rest::Lite, bad_method]
+-
     '/wsdl/:wsdl':
         'GET':                  [Socialtext::Rest::WSDL, GET]
         '*':                    [Socialtext::Rest::WSDL, bad_method]

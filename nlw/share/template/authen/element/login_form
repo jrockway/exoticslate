@@ -2,6 +2,7 @@
 [%# vim: set et sts=2 sw=2: %]
 <form id="st-login-form" name="login" method="post" action="/nlw/submit/login">
   <input type="hidden" name="redirect_to" value="[% redirect_to | html %]" />
+  <input type="hidden" name="lite" value="[% lite | html %]" />
 
   <dl class="form">
     <dt> <label for="username">[% username_label %]</label> </dt>

@@ -61,6 +61,29 @@ sub changes {
     );
 }
 
+sub login {
+    my ($self, $rest) = @_;
+
+    # force a "ws" parameter, even if its empty; otherwise our base class
+    # chokes when it tries to access the "ws" param in order to try to create
+    # a workspace for us to work with.
+    #
+    # we don't necessarily have a workspace in use, so its ok for this to be
+    # 'undef'.
+    $self->params->{ws} ||= undef;
+
+    # doesn't matter if the user is authorized or not; this page *has* a
+    # visible display either way.
+    my $redirect_to = $rest->query->param('redirect_to');
+    my $content = Socialtext::Lite->new( hub => $self->hub )
+            ->login($redirect_to);
+    $rest->header(
+        -status => HTTP_200_OK,
+        -type   => 'text/html' . '; charset=UTF-8'
+    );
+    return $content;
+}
+
 sub workspace_list {
     my ($self, $rest) = @_;
 

@@ -38,10 +38,10 @@
 </dl>
 
 <dl class="form">
-  <dt><label>[% loc('Workspace Home Link') %]</label></dt>
+  <dt><label>[% loc('Workspace Link') %]</label></dt>
   <dd>
-    [% loc('When users click "Home" in this workspace, should they see a personal dashboard, or the central page of the workspace? The central page of the workspace has the same title as the workspace ("[_1]").', workspace.title) | html %]<br/><br/>
-    [% loc('Dashboard is best if most users have a number of other workspaces. Central page is best for a close-knit community in which most users only have one workspace.') %]
+    [% loc('When users click on the title of a workspace, they go to the central page of the workspace. This page has the same title as the workspace ("[_1]").', workspace.title) %]<br />
+    [% loc('You can also configure the workspace link to display as a weblog') %]
   </dd>
   <dd>
     <input type="radio" name="homepage_is_weblog"

@@ -218,6 +218,7 @@ sub workspace_list {
     return $self->_process_template(
         $WORKSPACE_LIST_TEMPLATE,
         workspace_title   => $title,
+        login_logout      => $self->_login_logout,
         my_workspaces     => [ $self->hub->workspace_list->my_workspaces ],
         public_workspaces => [ $self->hub->workspace_list->public_workspaces ],
     );

@@ -4,7 +4,5 @@
   <p>
     [% loc('You are logged in as [_1]', '<b>' _ user.username _ '</b>') %]
   </p>
-  <p>
-    <a href="/nlw/submit/logout">[% loc('Log out') %]</a>
-  </p>
+  [% login_logout %]
 [% END %]

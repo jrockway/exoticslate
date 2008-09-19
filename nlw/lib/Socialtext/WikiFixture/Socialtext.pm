@@ -279,6 +279,15 @@ sub st_watch_page {
     my $expected_watch = $watch_on ? 'on' : 'off';
     my $watch_re = qr/watch-$expected_watch(?:-list)?\.gif$/;
  
+    #which aspect of the HTML id we will look at to determine
+    #If the correct value is set
+    my $s3_id_type;
+    if (defined($page_name) and length($page_name)>0) {
+        $s3_id_type = 'title';
+    } else {
+        $s3_id_type = 'class';
+    }
+    
     my $s3_expected = $watch_on ? 'watch on' : 'watch';
     my $is_s3 = 0;
     if ($self->{'skin'} eq 's3') { 
@@ -291,7 +300,7 @@ sub st_watch_page {
         my $html_type = $is_s3 ? "a" : "img"; 
             
         return $self->_watch_page_xpath("//$html_type" . "[\@id='st-watchlist-indicator']", 
-                                        $watch_re, $verify_only, $s3_expected, $is_s3);
+                                        $watch_re, $verify_only, $s3_expected, $is_s3, $s3_id_type);
     }
 
     # A page is specified, so assume we're on the watchlist page
@@ -302,12 +311,23 @@ sub st_watch_page {
     (my $short_name = lc($page_name)) =~ s/\s/_/g;
     
     if ($is_s3) {
-        my $xpath = '//a[@id=' . "'st-watchlist-indicator-$short_name" . "']" . '/@title';
+        my $xpath = '//a[@id=' . "'st-watchlist-indicator-$short_name" . "']";
         $xpath = qq{$xpath};
         my $expected_list = $watch_on ? 'Stop watching' : 'Watch';
         my $title= '';
-        eval { $title = $sel->get_attribute("$xpath") };
-        is $title, $expected_list, "st-watch-page $title - $expected_list - $page_name";
+        eval { $title = $sel->get_attribute("$xpath/\@title") };
+        if (length($title)>0) {
+            my $expected;
+            if (defined($page_name) and length($page_name)>0) {
+               $expected = $expected_list; # Expected title of the watch page for listview  
+            } else { 
+               $expected = $expected_watch; #Expected title of the watch page for 
+            }
+            $self->_watch_page_xpath($xpath, $watch_re, $verify_only, $expected, $is_s3, $s3_id_type);
+            ok 1, "st-watch-page $expected_list - $page_name"
+        } else {
+            ok 0, "Failed to find watch icon\n";
+        }
     } else {
         while (1) {
             my $xpath = qq{//div[\@id='st-watchlist-content']/div[$row]/div[2]/img}; 
@@ -330,16 +350,17 @@ sub st_watch_page {
 }
 
 sub _watch_page_xpath {
-    my ($self, $xpath, $watch_re, $verify_only, $s3_expected, $is_s3) = @_;
+    my ($self, $xpath, $watch_re, $verify_only, $s3_expected, $is_s3, $id_type) = @_;
     my $sel = $self->{selenium};
     
-    my $xpath_src = $is_s3 ? "$xpath/\@class" : "$xpath/\@src";
-    
+    my $xpath_src = $is_s3 ? "$xpath/\@$id_type" : "$xpath/\@src";
     my $src = $sel->get_attribute($xpath_src);
     
     if ($is_s3) {
-       if ($verify_only or $src eq $s3_expected) {
-           is $src, $s3_expected, "$src - $s3_expected (Searching with $xpath)";
+       #Capitalization is inconsisent for "stop watching" between list view
+       #and page view.  Yes, really.
+       if ($verify_only or lc($src) eq lc($s3_expected)) {
+           is lc($src), lc($s3_expected), "$src - $s3_expected (Searching with $xpath)";
            return;
        }
     } else {
@@ -356,7 +377,7 @@ sub _watch_page_xpath {
         my $new_src = $sel->get_attribute($xpath_src);
         my $compare = 0;
         if ($is_s3) {
-            $compare = ($new_src eq $s3_expected);
+            $compare = (lc($new_src) eq lc($s3_expected));
         } else {
             $compare = ($new_src =~ $watch_re);
        }        

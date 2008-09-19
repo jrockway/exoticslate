@@ -1004,7 +1004,7 @@ Mode class generic overrides.
 proto = Wikiwyg.Mode.prototype;
 
 // magic constant to make sure edit window does not scroll off page
-proto.footer_offset = Wikiwyg.is_ie? 30 : 48;
+proto.footer_offset = Wikiwyg.is_ie? 15 : 10;
 
 proto.get_offset_top = function (e) {
     var offset = jQuery(e).offset();

@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings FATAL => 'all';
-use Test::More tests => 23;
+use Test::More tests => 26;
 use mocked 'Socialtext::Log', qw(:tests);
 use mocked 'Net::LDAP';
 use Test::Socialtext;
@@ -131,6 +131,17 @@ verify_caching_behaviour: {
         my $user6 = Socialtext::User->new(user_id => $db_user_id);
         ok $user6;
         is $user6->best_full_name, "DB User", "proactive cache of the db user";
+    }
+
+    lookup_of_non_existant_user: {
+        my $user7 = Socialtext::User->new(email_address => 'notyet@example.com');
+        ok !$user7, "this user doesn't exist yet";
+
+        # in another process:
+        system('st-admin create-user --email notyet@example.com --username notyet@example.com --first-name Iam --last-name Here --password password');
+        my $user8 = Socialtext::User->new(email_address => 'notyet@example.com');
+        ok $user8;
+        is $user8->best_full_name, "Iam Here", "previous cache miss didn't poison the cache";
     }
 }
 

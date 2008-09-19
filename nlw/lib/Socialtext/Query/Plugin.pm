@@ -156,11 +156,11 @@ sub _gen_sort_closure {
         if ( $direction eq 'asc' ) {
             return sub {
                 Socialtext::User->new( 
-                    email_address => $a->{From} 
+                    username => $a->{username} 
                 )->best_full_name 
-                <=> 
+                cmp 
                 Socialtext::User->new(
-                    email_address => $b->{From}
+                    username => $b->{username}
                 )->best_full_name
                 or lc( $a->{Subject} ) cmp lc( $b->{Subject} );
             }
@@ -168,11 +168,11 @@ sub _gen_sort_closure {
         else {
             return sub {
                 Socialtext::User->new( 
-                    email_address => $b->{From} 
+                    username => $b->{username} 
                 )->best_full_name 
-                <=> 
+                cmp 
                 Socialtext::User->new(
-                    email_address => $a->{From}
+                    username => $a->{username}
                 )->best_full_name
                 or lc( $b->{Subject} ) cmp lc( $a->{Subject} );
             }

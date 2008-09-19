@@ -1837,6 +1837,10 @@ span.st-weblog-nextentries:before {
     width: 95%;
 }
 
+.widgetContent form table {
+    margin: 0 5px;
+}
+
 div.widget {
     background-color:#fff ! important;
 }

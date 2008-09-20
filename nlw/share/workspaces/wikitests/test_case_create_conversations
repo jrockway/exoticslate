@@ -2,8 +2,9 @@
 
 | *Comment* | test-workspace is %%workspace%% |
 | location_like | /%%workspace%%/index.cgi |
-| st-admin | create-user --email devnull2@socialtext.com --password %%password |
-| st-admin | add-member --email devnull2@socialtext.com --workspace test-data |
+| st-admin | create-user --e conversation@ken.socialtext.net --p 123456 |
+| st-admin | change-password --e conversation@ken.socialtext.net --p 123456 |
+| st-admin | add-member --e conversation@ken.socialtext.net --workspace %%workspace%% |
 
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_present_ok | st-newpage-pagename-edit |  |
@@ -29,12 +30,12 @@
 | type_ok | st-commentui-textarea | see, I commented |
 | click_and_wait | st-commentui-savelink |  |
 
-| *comment* | Test Case: Create Conversations Login as devnull2 |  |
+| *comment* | Test Case: Create Conversations Login as conversation@ken.socialtext.net |  |
 | open_ok | /%%workspace%%/index.cgi?jabberwocky |  |
 | st-logout |  |  |
 | open_ok | /%%workspace%%/index.cgi |  |
-| type_ok | username | devnull2@socialtext.com |
-| type_ok | password | %%password%% |
+| type_ok | username | conversation@ken.socialtext.net |
+| type_ok | password | 123456 |
 | click_and_wait | //input[@value='Log in'] |  |
 
 | open_ok | /%%workspace%%/index.cgi?created_page_%%start_time%% |  |

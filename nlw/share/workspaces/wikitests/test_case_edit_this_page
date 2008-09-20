@@ -4,13 +4,11 @@
 | st-admin | update-page --workspace %%workspace%% --email %%email%% --page "Edit This Page %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "Edit This Page %%start_time%%" page has been created. |
 
 | *Comment* | Test Case: Edit This Page content |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | link=Edit This Page %%start_time%% |  |
+| open_ok | /%%workspace%%/index.cgi?Edit This Page %%start_time%% |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | Edit This Page content %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 
@@ -23,6 +21,8 @@
 
 | *Comment* | Test Case: Edit This Page verify editing buttons |  |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
 | wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
 | text_like | st-save-button-link | Save |
 | text_like | st-preview-button-link | Preview |

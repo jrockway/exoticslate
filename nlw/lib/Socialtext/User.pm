@@ -260,15 +260,8 @@ sub password {
     $_[0]->homunculus->password( @_[ 1 .. $#_ ] );
 }
 
-sub email_address_viewable_by_user {
-}
-
 sub email_address {
     $_[0]->homunculus->email_address( @_[ 1 .. $#_ ] );
-}
-
-sub email_address_for_user {
-
 }
 
 sub first_name {
@@ -1666,6 +1659,11 @@ to C<update()>
 
 Returns a list of the accounts associated with the user.  Returns a
 list reference in scalar context.
+
+=head2 $user->shared_accounts( $user2 )
+
+Returns a list of the accounts where both $user and $user2 are members.
+Returns a list reference in scalar context.
 
 =head2 $user->to_hash()
 

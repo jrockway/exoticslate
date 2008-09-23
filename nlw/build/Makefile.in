@@ -364,6 +364,113 @@ testlive:
 
 testall: test testlive
 
+QUICK_TESTS = t/Socialtext/People/Directories.t \
+	t/coding-standard.t \
+	t/Socialtext/Locales.t \
+	t/Socialtext/Hostname.t \
+	t/Socialtext/File_guess_en.t \
+	t/Socialtext/WikiFixture/Socialtext.t \
+	t/Socialtext/Schema.t \
+	t/Socialtext/WikiText/Emitter/SearchSnippets.t \
+	t/Socialtext/Search/SimpleAttachmentHit.t \
+	t/Socialtext/Model/Pages.t \
+	t/Socialtext/Cache.t \
+	t/Socialtext/Migration/Utils.t \
+	t/Socialtext/ChangeEvent/Attachment.t \
+	t/Socialtext/ChangeEvent/Page.t \
+	t/Socialtext/Search/SimplePageHit.t \
+	t/Socialtext/Base.t \
+	t/Socialtext/MassAdd.t \
+	t/Socialtext/File.t \
+	t/Socialtext/ChangeEvent/Workspace.t \
+	t/Socialtext/File_guess_ja.t \
+	t/Socialtext/Storage.t \
+	t/migrations.t \
+	t/Socialtext/Handler/URIMap.t \
+	t/Socialtext/Template/Plugin/label_ellipsis.t \
+	t/Socialtext/ArchiveExtractor.t \
+	t/schema-migrations.t \
+	t/Socialtext/People/Profile.t \
+	t/Socialtext/Template/Plugin/html_encode.t \
+	t/Socialtext/Validate.t \
+	t/Socialtext/Exceptions.t \
+	t/Socialtext/Functional.t \
+	t/Socialtext/String.t \
+	t/Socialtext/PageMeta.t \
+	t/Socialtext/Timer.t \
+	t/pod-coverage.t \
+	t/Socialtext/UserPreferencesPlugin.t \
+	t/Socialtext/Events.t \
+	t/case-conflict.t \
+	t/Socialtext/EmailReceiver-subject.t \
+	t/Socialtext/EditPlugin-events.t \
+	t/Socialtext/EmailSender/ja.t \
+	t/Socialtext/Pluggable/Adapter.t \
+	t/tests.t \
+	t/Socialtext/Model/Page.t \
+	t/Socialtext/People/Rest/Profile.t \
+	t/Socialtext/Migration.t \
+	t/Socialtext/EmailReceiver/subject-ja.t \
+	t/Socialtext/EmailReceiver/local-address-ja.t \
+	t/Socialtext/DisplayPlugin-events.t \
+	t/Socialtext/HomepagePlugin.t \
+	t/Socialtext/Rest/Events.t \
+	t/Socialtext/WebApp.t \
+	t/st-migrate.t \
+	t/Socialtext/EmailSender.t \
+	t/Socialtext/WikiText/Parser.t \
+	t/Socialtext/FetchRSSPlugin.t \
+	t/Socialtext/EmailReceiver-local-address.t \
+	t/Socialtext/Rest/Changes.t \
+	t/Socialtext/CategoryPlugin-email-address-encoding.t \
+	t/Socialtext/Date/l10n.t \
+	t/formatter-escape-comments.t \
+	t/Socialtext/LDAP/Config.t \
+	t/Socialtext/RevisionPlugin-side-by-side-diff.t \
+	t/Socialtext/Date/l10n_ja.t \
+	t/Socialtext/LDAP/ActiveDirectory.t \
+	t/Socialtext/Log-syslog-not-running.t \
+	t/Socialtext/Timer-no-reset.t \
+	t/Socialtext/mecabif.t \
+	t/Socialtext/URI.t \
+	t/Socialtext/User/Default.t \
+	t/Socialtext/System.t \
+	t/Socialtext/MultiCursor.t \
+	t/Socialtext/Log.t \
+	t/Socialtext/LDAP/Base-loads-net-ldap.t \
+	t/Socialtext/EmailSender/ja_real.t \
+	t/Socialtext/CategoryPlugin-html-escape.t \
+	t/Socialtext/Plugin.t \
+	t/Socialtext/Headers.t \
+	t/Socialtext/LDAP/OpenLDAP.t \
+	t/Socialtext/Log-shortcut.t \
+	t/Socialtext/Image.t \
+	t/gen-config.t \
+	t/Socialtext/LDAP.t \
+	t/Socialtext/DisplayPlugin-qualify-links.t \
+	t/Socialtext/CLI-fs-perm-check.t \
+	t/Socialtext/Formatter/Viewer.t \
+	t/Socialtext/Search/KinoSearch/Analyzer.t \
+	t/Socialtext/Search/AbstractFactory.t \
+	t/Socialtext/LogParser.t \
+	t/chunks.t \
+	t/copyright.t \
+	t/Socialtext/RtfExportPlugin-gif-to-png.t \
+	t/Socialtext/Skin.t \
+	t/Socialtext/Session.t \
+	t/Socialtext/UserSettingsPlugin-email-address-parse.t \
+	t/Socialtext/User/LDAP.t \
+	t/Socialtext/LDAP/Base.t \
+	t/live-ldap/OpenLDAP-User.t \
+	t/Socialtext/File/Stringify.t \
+	t/pod.t \
+	t/Socialtext/AppConfig.t \
+	t/Socialtext/TT2/Renderer.t
+
+quicktest:
+	$<
+	$(PROVE) -l $(QUICK_TESTS)
+
 # cd into custom-workspace-config and make all
 custom-workspaces:
 	@$(MAKE) -C build/custom-ws-config all

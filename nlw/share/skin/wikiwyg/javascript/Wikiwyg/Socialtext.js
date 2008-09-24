@@ -275,6 +275,11 @@ function setup_wikiwyg() {
             if (Socialtext.new_page) {
                 window.location = '?action=homepage';
             }
+            else if (location.href.match(/caller_action=weblog_display;?/)) {
+                location.href = 'index.cgi?action=weblog_redirect;start=' +
+                    encodeURIComponent(location.href);
+                return false;
+            }
             else if (Socialtext.S3 && jQuery.browser.msie) {
                 // Cheap-and-cheerful-but-not-fun workaround for {bz: 1261}.
                 // XXX TODO XXX - Implement a proper fix!
@@ -297,9 +302,6 @@ function setup_wikiwyg() {
             // XXX WTF? ENOFUNCTION
             //do_post_cancel_tidying();
             ww.disableLinkConfirmations();
-            if (location.href.match(/caller_action=weblog_display;?/))
-                location.href = 'index.cgi?action=weblog_redirect;start=' +
-                    encodeURIComponent(location.href);
 
             ww.is_editing = false;
             ww.showScrollbars();

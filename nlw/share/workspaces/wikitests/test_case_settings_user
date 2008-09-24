@@ -12,7 +12,7 @@
 | open_ok | /test-data |  |
 | text_like | rt 25472%%start_time%% |  |
 | st-admin | remove-member --email %%email%% --workspace rt-25472%%start_time%% |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| open_ok | /%%workspace%%/index.cgi?action=workspaces_listall |  |
 | wait_for_text_not_present_ok | rt 25472%%start_time%% | 30000 |
 | st-admin | delete-workspace --workspace rt-25472%%start_time%% --no-export |  |
 | *Comment* | Test Case: Settings: User END RT 25472 |  |
@@ -50,8 +50,6 @@
 | type_ok | new_password | 654321 |
 | type_ok | new_password_retype | 654321 |
 | click_and_wait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| text_like | st-user-welcome | qr/Welcome,\s+First %%start_time%% Last %%start_time%%/ |
 
 | *Comment* | Test Case: Settings: User test list all users functionality |  |
 | click_and_wait | link=Settings |  |
@@ -89,8 +87,7 @@
 | text_like | st-settings-section | Include Recently |
 | click_ok | display__include_breadcrumbs |  |
 | click_and_wait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | link=Announcements and Links |  |
+| open_ok | /%%workspace%%/index.cgi?Announcements and Links |  |
 | text_like | st-breadcrumbs | Recently Viewed |
 
 | *Comment* | Test Case: Settings: User test email notification functionality |  |
@@ -100,23 +97,11 @@
 | text_like | st-settings-section | What order |
 | text_like | st-settings-section | What information |
 
-| *Comment* | Test Case: Settings: User test your notepad functionality |  |
-| click_and_wait | link=Your Notepad |  |
-| type_ok | favorites__which_page | %%new_name%% |
-| click_and_wait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | link=Your Notepad |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| type_ok | wikiwyg_wikitext_textarea | TC: Notepad %%start_time%% |
-| clickAndWait | st-save-button-link |  |
-
 | *Comment* | Test Case: Settings: User test what's new functionality |  |
-| click_and_wait | link=Settings |  |
-| click_and_wait | link=What's New |  |
+| open_ok | /%%workspace%%/index.cgi?action=preferences_settings;preferences_class_id=recent_changes |  |
 | click_ok | recent_changes__include_in_pages |  |
 | click_and_wait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| open_ok | /%%workspace%%/index.cgi?Announcements and Links |  |
 | click_and_wait | link=Announcements and Links |  |
 | wait_for_text_present_ok | First Post | 1000 |
 | text_like | st-recent-changes | First Post in No Brackets %%start_time%% Weblog |

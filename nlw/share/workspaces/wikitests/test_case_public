@@ -22,6 +22,14 @@
 | text_like | st-update | qr/by\s+Guest user/i |
 
 | *Comment* | Test Case: Public. Verify central page is home page |  |
+| open_ok | /%%pubspace%%/index.cgi |  |
+| text_like | st-page-maincontent | This is the home page for |
+| click_and_wait | link=Settings |  |
+| text_like | errors-and-messages | To set your preferences for a workspace, you must be logged in. |
+
+^ END
+
+| *Comment* | Test Case: Public. Verify central page is home page |  |
 | open_ok | /%%pubspace%%/index.cgi?action=homepage |  |
 | text_like | st-page-maincontent | This is the home page for |
 | text_like | st-editing-tools | Edit |

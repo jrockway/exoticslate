@@ -132,8 +132,7 @@
 | st-admin | delete-workspace --workspace from-scratch --no-export |  |
 | st-admin | create-workspace --name from-scratch --title From-Scratch --empty | A new workspace named "from-scratch" was created. |
 | st-admin | add-member --workspace from-scratch --email %%email%% | qr/%%username%% .+ a member of the from-scratch workspace\./ |
-| open_ok | /from-scratch/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
+| open_ok | /from-scratch/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |

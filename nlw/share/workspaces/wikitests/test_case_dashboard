@@ -1,5 +1,11 @@
 | *Comment* | Test Case: Dashboard |
 
+| *Comment* | Test Case: Dashboard OBSOLETE |  |
+
+| *Comment* | Test Case: Dashboard COMPLETED |  |
+
+^ END
+
 *Test each link at the top of the Dashboard to see that it navigates to the correct place.*
 
 | *Comment* | Test Case: Dashboard links |  |
@@ -7,27 +13,24 @@
 | text_like | st-wiki-title | Dashboard: |
 | clickAndWait | link=Settings |  |
 | text_like | st-settings-select | Settings |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-wiki-subnav-link-whats-new |  |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
 | text_like | st-list-title | Changes in Last |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-wiki-subnav-link-weblogs |  |
-| text_like | st-weblog-titletext | Weblog: |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-wiki-subnav-link-all-files |  |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
+| click_and_wait | link=All Files |  |
 | text_like | st-list-title | All Files in |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-wiki-subnav-link-all-tags |  |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
+| click_and_wait | link=All Tags |  |
 | text_like | st-list-title | All Tags in |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-wiki-subnav-link-all-pages |  |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
+| click_and_wait | link=All Pages |  |
 | text_like | st-list-title | All Pages |
+| open_ok | /%%workspace%%/index.cgi?action=weblog_display |  |
+| text_like | st-weblog-titletext | Weblog: |
 
 *Create some new pages for this series of tests*
 
 | *Comment* | Test Case: Dashboard Create new pages |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
@@ -36,8 +39,7 @@
 | clickAndWait | st-save-button-link |  |
 | st-watch-page | 1 |  |
 | st-is-watched | 1 |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | tc_dashboard2_%%start_time%% |
 | type_ok | wikiwyg_wikitext_textarea | tc_dashboard2_%%start_time%% |
@@ -48,8 +50,7 @@
 *Observe "What's New" breadcrumb*
 
 | *Comment* | Test Case: Dashboard What's New |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-wiki-subnav-link-whats-new |  |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
 | text_like | st-list-title | Changes in Last |
 | text_like | st-recent_changes-header-row | Title |
 | text_like | st-recent_changes-header-row | Last Edited By |

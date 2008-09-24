@@ -24,19 +24,16 @@ This test case assumes the following:
 
 | *Comment* | Test case: LDAP user can login |  |
 | st-login | %%test_username%% | %%test_password%% |
-| text_like | st-homepage | Welcome, %%test_username%% |
 
 | *Comment* | Test case: user is treated as being logged in; "Edit" button is present, and so is "Logout" link |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | link=eraseme %%start_time%% |  |
-| text_like | st-editing-tools | Edit |
-| wait_for_element_visible_ok | st-edit-button-link | 30000 |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
+| text_like | Changes in Last |  |
 | wait_for_element_visible_ok | st-wikinav-logout | 30000 |
 
 | *Comment* | DELETE user from LDAP directory |  |
 | remove-ldif-data | t/test-data/ldap/people.ldif |  |
 
-| *Comment* | Test case: now deleted user should be treated as *not* logged in | |
+| *Comment* | Test case: now deleted user should be treated as *not* logged in |  |
 | refresh |  |  |
 | wait_for_page_to_load_ok | 30000 |  |
 | st-message | You must login to view this page |  |

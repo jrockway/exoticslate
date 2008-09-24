@@ -24,11 +24,13 @@ TODO: Figure out a way to test the other config functions
 | click_and_wait | Button |  |
 | text_like | st-weblog-postbyemail-link | %%workspace%%.%%start_time%% |
 
-| *Comment* | Test Case: Workspace Configuration Homepage Setting |  |
-| st-admin | set_workspace_config --workspace %%workspace%% homepage_is_dashboard 0 |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| text_like | st-page-maincontent | This is the home page for |
-| st-admin | set_workspace_config --workspace %%workspace%% homepage_is_dashboard 1 |  |
+TODO: change to new central page scheme
+
+ *Comment* | Test Case: Workspace Configuration Central Page Setting | |
+ st-admin | set_workspace_config --workspace %%workspace%% homepage_is_dashboard 0 | |
+ open_ok | /%%workspace%%/ | |
+ text_like | st-page-maincontent | This is the home page for |
+ st-admin | set_workspace_config --workspace %%workspace%% homepage_is_dashboard 1 | |
 
 | *Comment* | Test Case: Workspace Configuration Invitation Settings |  |
 | st-admin | set_workspace_config --workspace %%workspace%% invitation_filter %%username%% |  |
@@ -79,17 +81,19 @@ TODO: Figure out a way to test the other config functions
 | *Comment* | Test Case: Workspace Configuration with PD installed, email addresses are not shown. Anticipate changing this test when an st-admin command to turn PD on/off exists |  |
 | text_like | st-created | %%start_time%% |
 
+TODO: restore this test when comment form fields is reimplemented
+
 | *Comment* | Test Case: Workspace Configuration Comment Custom Fields |  |
 | st-admin | set-comment-form-custom-fields --workspace %%workspace%% "Field A" "Bee Field" "Red Field" |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | link=Announcements and Links |  |
-| click_ok | st-comment-button-link |  |
-| open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=announcements_and_links;caller_action=display |  |
-| text_like | comment_form | Field A |
-| text_like | comment_form | Bee Field |
-| text_like | comment_form | Red Field |
 
-| *Comment* | Test Case: Workspace Configuration Teardown |  |
+ open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=announcements_and_links;caller_action=display | |
+ click_ok | st-comment-button-link | |
+ text_like | comment_form | Field A |
+ text_like | comment_form | Bee Field |
+ text_like | comment_form | Red Field |
+
+| st-admin | set-comment-form-custom-fields --workspace %%workspace%% |
+|  | *Comment* | Test Case: Workspace Configuration Teardown |  |
 | st-admin | purge-page --w %%workspace%% --page first_post_in_%%start_time%%_weblog | The First Post in %%start_time%% Weblog page was purged from the %%workspace%% workspace. |
 | st-admin | purge-page --w %%workspace%% --page post2_%%start_time%% | The post2 %%start_time%% page was purged from the %%workspace%% workspace. |
 | st-admin | purge-page --w %%workspace%% --page email_%%start_time%% | The email %%start_time%% page was purged from the %%workspace%% workspace. |

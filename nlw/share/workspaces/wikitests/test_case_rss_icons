@@ -21,8 +21,7 @@ DONE {bz: 310} test deleting pages with Chinese chars in the title
 | st-admin | purge-page --workspace %%workspace%% --page %E7%89%9B%E6%84%9B%E6%88%91 |  |
 
 | *Comment* | Test Case: RSS Icons page with Chinese chars in title can't do from command line |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |

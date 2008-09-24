@@ -1,8 +1,6 @@
 | *Comment* | Starting Test Case: Tagging in the Editor |  |
 
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
-
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |

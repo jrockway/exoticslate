@@ -4,8 +4,7 @@ Note: Cannot automate attachments, test is slightly reduced
 
 | setSpeed | 150 |  |
 | *Comment* | Test Case: Tools: Duplicate Page Create test page |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
@@ -45,7 +44,6 @@ Note: Cannot automate attachments, test is slightly reduced
 | text_like | st-page-maincontent | 2nd edit |
 
 | *Comment* | Test Case: Tools: Duplicate Page Teardown |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage | move away from the page you are about to delete |
 | st-admin | purge-page --w %%workspace%% --page duplicate_of_dupe_test_page_%%start_time%% | was purged |
 | st-admin | purge-page --w %%workspace%% --page dupe_test_page_%%start_time%% | was purged |
 

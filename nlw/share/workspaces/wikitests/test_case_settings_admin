@@ -66,7 +66,6 @@
 | click_and_wait | Button |  |
 | text_like | st-settings-section | You have just created "newspace %%start_time%%" |
 | click_and_wait | link=Go to |  |
-| text_like | st-homepage | Dashboard: newspace %%start_time%% |
 
 | *Comment* | Test Case: Settings: Admin test Workspace Appearance functionality using newspace-%%start_time%% |  |
 | click_and_wait | link=Settings |  |
@@ -75,8 +74,6 @@
 | text_like | st-settings-section | choose an image |
 | text_like | st-settings-section | When users click |
 | click_and_wait | Button |  |
-| open_ok | /newspace-%%start_time%%/index.cgi?action=homepage |  |
-| text_like | st-homepage | Dashboard: newtitle %%start_time%% |
 
 | *Comment* | Test Case: Settings: Admin test Workspace Features using newspace-%%start_time%% |  |
 | *Comment* | Test Case: Settings: Admin set up testing weblog |  |

@@ -3,8 +3,7 @@
 
 | setSpeed | 100 |  |
 | *Comment* | Test Case: New Page. Page Already Exists |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 10000 |
 | type_ok | st-newpage-pagename-edit | np %%start_time%% |
 | click_ok | st-save-button-link |  |
@@ -19,14 +18,13 @@
 | wait_for_text_present_ok | Incoming Links | 30000 |
 
 | *Comment* | Test Case: New Page. What's New on dashboard |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
 | click_and_wait | link=np %%start_time%% |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
 | click_and_wait | link=np %%start_time%% 2 |  |
 
 | *Comment* | Test Case: New Page. Click on Save options, then cancel |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 10000 |
 | type_ok | st-newpage-pagename-edit | np %%start_time%% |
 | click_ok | st-save-button-link |  |
@@ -62,6 +60,5 @@
 | st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%%_2 | page was purged |
 | st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%% | page was purged |
 | st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%%_3 | page was purged |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 
 | *Comment* | Test Case: New Page COMPLETED |  |

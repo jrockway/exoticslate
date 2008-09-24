@@ -10,8 +10,7 @@
 | st-admin | set-permissions --workspace %%workspace%% --permission member-only |  |
 
 | *Comment* | Test Case: Unzip File upload wikitest.txt and wikitestzip.zip |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
 | type_ok | st-newpage-pagename-edit | Unzip File %%start_time%% |
@@ -50,7 +49,7 @@
 | text_like | //a[contains(@href,'original/wikitestzip.zip')] | wikitestzip.zip |
 
 | *Comment* | Test Case: Unzip File reload the page to unzip file |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
 | click_and_wait | link=Unzip File %%start_time%% |  |
 | wait_for_element_visible_ok | st-attachments-managebutton | 30000 |
 | click_ok | st-attachments-managebutton |  |

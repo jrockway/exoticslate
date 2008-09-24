@@ -59,7 +59,7 @@
 | *Comment* | Test Case: Tools: Copy Page to Workspace. Verify overwrite by opening target
 wiki Dashboard and clicking What's New link to allow time for copy to
 complete |  |
-| open_ok | /%%newspace%%?action=homepage |  |
+| open_ok | /%%newspace%%?action=recent_changes |  |
 | click_and_wait | link=New Copy Page %%start_time%% |  |
 | text_like | st-page-maincontent | New Content %%start_time%% |
 | text_like | st-tags | Copy Tag %%start_time%% |

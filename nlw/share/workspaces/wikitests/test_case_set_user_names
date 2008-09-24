@@ -31,12 +31,12 @@ Dashboard: observe Welcome message | go to Settings->My settings and change user
 | st-admin | set-permissions --w %%workspace%% --p member-only | The permissions for the %%workspace%% workspace have been changed to member-only |
 | st-admin | set-user-names --e %%email%% --first "" --last "" | User "%%username%%" was updated |
 
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| open_ok | /%%workspace%%/index.cgi?action=users_settings |  |
 | clickAndWait | link=Settings |  |
 | type_ok | first_name | Firstly - %%start_time%% |
 | type_ok | last_name | Lastly |
 | clickAndWait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
 | text_like | st-user-welcome | qr/Welcome,\s+Firstly - %%start_time%% Lastly/i |
 
 | *Comment* | Test Case: Set User Names Teardown (just in case) |  |

@@ -23,8 +23,7 @@ Set default values if they are not defined by the caller
 | set | test_id | %%test_id%%_%%start_time%% |
 
 | *Comment* | Test Case: String Use: new page |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
@@ -133,8 +132,7 @@ Set default values if they are not defined by the caller
 
 | *Comment* | Test Case: String Use: Your Notepad |  |
 | *Comment* | Your Notepad wants an existing page |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| click_and_wait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
@@ -143,16 +141,14 @@ Set default values if they are not defined by the caller
 | click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: String Use: set Your Notepad |  |
-| click_and_wait | link=Settings |  |
+| open_ok | /%%workspace%%/?action=users_settings |  |
 | click_and_wait | link=Your Notepad |  |
 | wait_for_element_visible_ok | favorites__which_page | 30000 |
 | type_ok | favorites__which_page | %%test_string%% pad |
 | click_and_wait | Button |  |
 
 | *Comment* | Test Case: String Use: verify Your Notepad |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| text_like | st-personal-notes-content | %%test_string%% pad content |
-| click_and_wait | link=Your Notepad |  |
+| open_ok | /%%workspace%%/?%%test_string%% pad |  |
 | wait_for_element_visible_ok | st-page-titletext | 30000 |
 | text_like | st-page-titletext | %%test_string%% pad |
 | text_like | st-page-maincontent | %%test_string%% pad content |

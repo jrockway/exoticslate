@@ -1,7 +1,6 @@
 | *Comment* | STARTING Test Case : Hide sidebar |  |
 | setSpeed | 100 |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
@@ -9,8 +8,7 @@
 | type_ok | wikiwyg_wikitext_textarea | TC Hide Sidebar 1 %%start_time%% Content |
 | clickAndWait | st-save-button-link |  |
 
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | TC Hide Sidebar 2 %%start_time%% |

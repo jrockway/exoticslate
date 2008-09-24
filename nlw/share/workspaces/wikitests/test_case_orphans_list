@@ -4,8 +4,7 @@
 
 | *Comment* | Test Case: Orphans List. Create an orphan page. |  |
 | setSpeed | 100 |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
@@ -14,16 +13,14 @@
 | click_and_wait | link=Save |  |
 
 | *Comment* | Test Case: Orphans List. Create another orphan page. |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | orphan_page_2_%%start_time%% |
 | type_ok | wikiwyg_wikitext_textarea | orphan_page_2_%%start_time%% |
 | click_and_wait | link=Save |  |
 
 | *Comment* | Test Case: Orphans List. Create a third orphan page. |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | orphan_page_3_%%start_time%% |
 | type_ok | wikiwyg_wikitext_textarea | orphan_page_3_%%start_time%% |
@@ -97,17 +94,20 @@ edit a page to include a link to an orphan page | link appears in page
 
 | *Comment* | Test Case: Orphans List. Tearing down orphans list data |  |
 
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
+| text_like | Changes in Last |  |
 | clickAndWait | link=orphan_page_1_%%start_time%% |  |
 | clickAndWait | link=Delete Page |  |
 | confirmation_like | Are you sure you want to delete this page? |  |
 
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
+| text_like | Changes in Last |  |
 | clickAndWait | link=orphan_page_2_%%start_time%% |  |
 | clickAndWait | link=Delete Page |  |
 | confirmation_like | Are you sure you want to delete this page? |  |
 
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
+| text_like | Changes in Last |  |
 | clickAndWait | link=orphan_page_3_%%start_time%% |  |
 | clickAndWait | link=Delete Page |  |
 | confirmation_like | Are you sure you want to delete this page? |  |

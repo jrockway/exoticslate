@@ -11,31 +11,21 @@
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page side-%%start_time%%-7 < %%wikitest_client_files%%wikitest.txt | The "side-%%start_time%%-7" page has been created |
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page side-%%start_time%%-8 < %%wikitest_client_files%%wikitest.txt | The "side-%%start_time%%-8" page has been created |
 
- "Settings -> What's New"<http://> | What's New UI appears 
+ "Settings -> What's New"<http://talc.socialtext.net:22212/wikitests/%3Chttp:%3E/http/> | What's New UI appears 
  Choose a time interval, check the sidebar display box, choose number of items to display. Save | Settings take effect
 
 | *Comment* | Test Case: SRC: 2 entries within 24 hours |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | link=Settings |  |
+| open_ok | /%%workspace%%/index.cgi?action=users_settings |  |
 | clickAndWait | link=What's New |  |
 | select_ok | recent_changes__changes_depth | label=Last 24 hours |
 | check_ok | recent_changes__include_in_pages |  |
 | select_ok | recent_changes__sidebox_changes_depth | label=2 |
 | clickAndWait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 
- Observe What's New in Dashboard | verify only the number of items chosen
-
-| *Comment* | Test Case: SRC: What's New in Dashboard 2 entries |  |
-| text_like | link=side-%%start_time%%-8 | side-%%start_time%%-8 |
-| text_like | link=side-%%start_time%%-7 | side-%%start_time%%-7 |
-| text_unlike | st-whats-new-content | side-%%start_time%%-6 |
-| text_unlike | st-whats-new-content | Start Here |
-
-"What's New"<http://> in Dashboard - list view | same changes seen in Dashboard. Time interval selected is correctly displayed.
+"What's New"<http://talc.socialtext.net:22212/wikitests/%3Chttp:%3E/http/> in Dashboard - list view | same changes seen in Dashboard. Time interval selected is correctly displayed.
 
 | *Comment* | Test Case: SRC: What's New list view 2 new |  |
-| clickAndWait | st-whats-new-title-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
 | text_like | link=side-%%start_time%%-8 | side-%%start_time%%-8 |
 | text_like | link=side-%%start_time%%-7 | side-%%start_time%%-7 |
 | text_like | link=side-%%start_time%%-2 | side-%%start_time%%-2 |
@@ -53,7 +43,7 @@
 | text_like | link=side-%%start_time%%-7 | side-%%start_time%%-7 |
 | text_unlike | st-recent-changes | side-%%start_time%%-6 |
 
- "Settings -> What's New"<http://> | What's New UI appears
+ "Settings -> What's New"<http://talc.socialtext.net:22212/wikitests/%3Chttp:%3E/http/> | What's New UI appears
  Select and save a different time interval and a different number of sidebox entries | Settings take effect
 
 | *Comment* | Test Case: SRC: 4 entries within Last Month |  |
@@ -63,22 +53,11 @@
 | check_ok | recent_changes__include_in_pages |  |
 | select_ok | recent_changes__sidebox_changes_depth | label=4 |
 | clickAndWait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 
- Observe What's New in Dashboard | verify only the number of items chosen
-
-| *Comment* | Test Case: SRC: What's New in Dashboard 4 entries |  |
-| text_like | link=side-%%start_time%%-8 | side-%%start_time%%-8 |
-| text_like | link=side-%%start_time%%-7 | side-%%start_time%%-7 |
-| text_like | link=side-%%start_time%%-6 | side-%%start_time%%-6 |
-| text_like | link=side-%%start_time%%-5 | side-%%start_time%%-5 |
-| text_unlike | st-whats-new-content | side-%%start_time%%-4 |
-| text_unlike | st-whats-new-content | Start Here |
-
-"What's New"<http://> in Dashboard - list view | same changes seen in Dashboard. Time interval selected is correctly displayed.
+"What's New"<http://talc.socialtext.net:22212/wikitests/%3Chttp:%3E/http/> in Dashboard - list view | same changes seen in Dashboard. Time interval selected is correctly displayed.
 
 | *Comment* | Test Case: SRC: What's New list view 4 new Last Month |  |
-| clickAndWait | st-whats-new-title-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
 | text_like | link=side-%%start_time%%-8 | side-%%start_time%%-8 |
 | text_like | link=side-%%start_time%%-7 | side-%%start_time%%-7 |
 | text_like | link=side-%%start_time%%-6 | side-%%start_time%%-6 |
@@ -94,7 +73,7 @@
  Verify content of What's New section | Correct number of Recent Changes displayed
 
 | *Comment* | Test Case: SRC: What's New sidebar |  |
-| clickAndWait | link=side-%%start_time%%-1 |  |
+| open_ok | /%%workspace%%/index.cgi?side-%%start_time%%-1 |  |
 | text_like | st-recent-changes-title | What's New |
 | text_like | link=side-%%start_time%%-8 | side-%%start_time%%-8 |
 | text_like | link=side-%%start_time%%-7 | side-%%start_time%%-7 |
@@ -107,15 +86,13 @@
 | clickAndWait | link=What's New |  |
 | uncheck_ok | recent_changes__include_in_pages |  |
 | clickAndWait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 
 | *Comment* | Test Case: SRC: What's New sidebar gone |  |
-| clickAndWait | link=side-%%start_time%%-8 |  |
+| open_ok | /%%workspace%%/index.cgi?side-%%start_time%%-8 |  |
 | *Comment* | sidebar element should be completely gone, not present |  |
 | wait_for_element_not_present_ok | st-recent-changes-title | 5000 |
 
 | *Comment* | Test Case: SRC: Teardown |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | st-admin | purge-page --workspace %%workspace%% --page side_%%start_time%%_1 | qr/The side-%%start_time%%-1 page was purged/ |
 | st-admin | purge-page --workspace %%workspace%% --page side_%%start_time%%_2 | qr/The side-%%start_time%%-2 page was purged/ |
 | st-admin | purge-page --workspace %%workspace%% --page side_%%start_time%%_3 | qr/The side-%%start_time%%-3 page was purged/ |

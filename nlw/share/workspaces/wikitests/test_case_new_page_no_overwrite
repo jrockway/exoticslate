@@ -7,8 +7,7 @@ Well, folks, we missed one test case. The simplest test case. And I am seeing it
 occasionally but this test does not fail
 
 | *Comment* | Test Case: New Page No Overwrite: title already in use |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | type_ok | st-newpage-pagename-edit | %%start_time%% npno 1 |
@@ -24,8 +23,7 @@ occasionally but this test does not fail
 | text_like | st-page-titletext | %%start_time%% npno 1 |
 
 | *Comment* | Test Case: New Page No Overwrite: save Untitled Page |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
@@ -52,8 +50,7 @@ occasionally but this test does not fail
 | text_like | st-page-titletext | %%start_time%% npno 2 |
 
 | *Comment* | Test Case: New Page No Overwrite: test Save Page As cancel |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
@@ -86,8 +83,7 @@ occasionally but this test does not fail
 | text_like | st-page-titletext | %%start_time%% npno 1 |
 
 | *Comment* | Test Case: New Page No Overwrite: Overwrite should fail - take suggested name instead |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_present_ok | st-newpage-pagename-edit | 10000 |
 | type_ok | st-newpage-pagename-edit | %%start_time%% npno 1 |
 | click_ok | st-save-button-link |  |

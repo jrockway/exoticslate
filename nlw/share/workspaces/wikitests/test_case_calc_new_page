@@ -6,7 +6,6 @@
 
 | *Comment* | Test Case: Calc New Page. Page Already Exists |  |
 | *Comment* | With out current page new technology, the 2nd new page command looks like an edit, and works just fine. ugh! |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 
 | open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=ns%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link |  |

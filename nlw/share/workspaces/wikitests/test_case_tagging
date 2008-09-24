@@ -7,9 +7,7 @@ Look ahead: start to type "fo" | sidebar autosuggests "foo", "foo bar", "foster 
 | *Comment* | Starting Test Case: Tagging |  |
 
 | setSpeed | 100 |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |  |
-
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Advanced | 10000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
@@ -104,8 +102,7 @@ Add any other tag to three different pages | tag is added
 | *Comment* | Test Case: Tagging add the same tag to three new pages |  |
 
 | *Comment* | Tag Page 1 |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | tag page 1 %%start_time%% content |
 | type_ok | st-newpage-pagename-edit | tag page 1 %%start_time%% |
@@ -121,8 +118,7 @@ Add any other tag to three different pages | tag is added
 | text_like | link=tagtest %%start_time%% | tagtest %%start_time%% |
 
 | *Comment* | Tag Page 2 |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | tag page 2 %%start_time%% content |
 | type_ok | st-newpage-pagename-edit | tag page 2 %%start_time%% |
@@ -138,8 +134,7 @@ Add any other tag to three different pages | tag is added
 | text_like | link=tagtest %%start_time%% | tagtest %%start_time%% |
 
 | *Comment* | Tag Page 3 |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| clickAndWait | st-newpage-link |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | tag page 3 %%start_time%% content |
 | type_ok | st-newpage-pagename-edit | tag page 3 %%start_time%% |
@@ -206,7 +201,6 @@ Click that tag | Tag list page appears with two remaining tagged pages
 | text_like | st-listview | tag page 2 %%start_time%% |
 
 | *Comment* | Test Case: Tagging Teardown |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_%%start_time%% | page was purged |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_1_%%start_time%% | page was purged |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_2_%%start_time%% | page was purged |

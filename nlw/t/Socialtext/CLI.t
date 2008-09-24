@@ -1410,8 +1410,8 @@ RESET_ACCOUNT_CONFIG: {
     is( Socialtext::Account->new( name => 'Socialtext' )->skin_name, 's3', 
         'skin for Socialtext account has changed'
     );
-    is ( Socialtext::Workspace->new( name => $ws_name )->skin_name, 's3', 
-        'skin for workspace has been updated'
+    is ( Socialtext::Workspace->new( name => $ws_name )->skin_name, '', 
+        'skin for workspace has been cleared'
     );
 
     expect_failure(

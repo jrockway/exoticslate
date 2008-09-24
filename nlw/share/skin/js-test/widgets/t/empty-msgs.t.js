@@ -4,7 +4,7 @@ var t = new Test.Visual();
 
 t.plan(7);
 
-var asyncSteps = [
+var steps = [
     function() { t.login({}, t.nextStep()) }, 
     function() { t.create_anonymous_user_and_login({}, t.nextStep()) }, 
 ];
@@ -63,7 +63,7 @@ var testData = [
 for (var i = 0, l = testData.length; i < l; i++) {
     (function(d) {
         if (d.type == 'user_with_workspace') {
-            asyncSteps.push(function() {
+            steps.push(function() {
                 t.login({}, function() {
                     t.create_anonymous_user_and_login(
                         {workspace: 'admin'},
@@ -86,19 +86,19 @@ for (var i = 0, l = testData.length; i < l; i++) {
                 t.getWidget(d.widget, t.nextStep());
             });
         };
-        asyncSteps.push(step1);
+        steps.push(step1);
 
         var step2 = function(widget) {
             t.scrollTo(150);
             t.like(widget.$("body").html(), d.regex, d.desc);
             t.callNextStep();
         };
-        asyncSteps.push(step2);
+        steps.push(step2);
     })(testData[i]);
 }
 
-asyncSteps.push(function() { t.login({}); t.endAsync() });
+steps.push(function() { t.login({}); t.endAsync() });
 
-t.runAsync(asyncSteps);
+t.runAsync(steps);
 
 })(jQuery);

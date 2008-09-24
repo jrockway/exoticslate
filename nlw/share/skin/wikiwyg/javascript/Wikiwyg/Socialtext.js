@@ -110,8 +110,18 @@ function setup_wikiwyg() {
 
     if ( Wikiwyg.is_safari ) firstMode = WW_ADVANCED_MODE;
 
-    var clearRx = 
-        new RegExp("^" + loc("Replace this text with your own.") + "\\s*$");
+    var clearRichText = new RegExp(
+        ( "^"
+        + "\\s*(</?(span|br|div)\\b[^>]*>)*\\s*"
+        + loc("Replace this text with your own.")
+        + "\\s*(</?(span|br|div)\\b[^>]*>)*\\s*"
+        + "$"
+        ), "i"
+    );
+
+    var clearWikiText = new RegExp(
+        "^" + loc("Replace this text with your own.") + "\\s*$"
+    );
 
     // Wikiwyg configuration
     var myConfig = {
@@ -122,17 +132,13 @@ function setup_wikiwyg() {
             imagesLocation: nlw_make_s2_path('/images/wikiwyg_icons/')
         },
         wysiwyg: {
-            clearRegex: (
-                Wikiwyg.is_ie ?
-                    /^\s*Replace this text with your own.\s*<BR>\s*$/i :
-                    /^<div class="?wiki"?>\s*Replace this text with your own.\s*<br><\/div>\s*$/i
-            ),
+            clearRegex: clearRichText,
             iframeId: 'st-page-editing-wysiwyg',
             editHeightMinimum: 200,
             editHeightAdjustment: 1.3
         },
         wikitext: {
-            clearRegex: clearRx,
+            clearRegex: clearWikiText,
             textareaId: 'st-page-editing-pagebody-decoy'
         },
         preview: {
@@ -544,8 +550,13 @@ proto.preview_link_action = function() {
                         .css({ 'margin-right': '240px'});
                 self.switchMode(current.classname);
                 self.preview_link_reset();
-                self.resizeEditor();
-                self.hideScrollbars();
+
+                // This timeout is for IE so the iframe is ready - {bz: 1358}.
+                setTimeout(function() {
+                    self.resizeEditor();
+                    self.hideScrollbars();
+                }, 50);
+
                 return false;
             });
     }
@@ -1367,7 +1378,22 @@ proto.enableThis = function() {
         try {
             if (Wikiwyg.is_gecko) self.get_edit_window().focus();
             if (Wikiwyg.is_ie) { 
-                jQuery(self.get_editable_div()).focus().css({ overflow: 'visible' });
+                jQuery(self.get_editable_div()).focus();
+                if (jQuery.browser.version <= 6) {
+                    /* We take advantage of IE6's overflow:visible bug
+                     * to make the DIV always agree with the dimensions
+                     * of the inner content.  More details here:
+                     *     http://www.quirksmode.org/css/overflow.html
+                     * Note that this must not be applied to IE7+, because
+                     * overflow:visible is implemented correctly there, and
+                     * setting it could trigger a White Screen of Death
+                     * as described in {bz: 1366}.
+                     */
+                    jQuery(self.get_editable_div()).css(
+                        'overflow', 'visible'
+                    );
+                }
+                self.set_clear_handler();
             }
         }
         catch(e) { }
@@ -1376,7 +1402,7 @@ proto.enableThis = function() {
 
 proto.set_clear_handler = function () {
     var self = this;
-    var editor = Wikiwyg.is_ie ? self.get_editable_div() : self.get_edit_iframe();
+    var editor = Wikiwyg.is_ie ? self.get_editable_div() : self.get_edit_window();
 
     var clean = function() {
         self.clear_inner_html();
@@ -1543,6 +1569,8 @@ if (Wikiwyg.is_ie) {
             attr = " wiki_page=\"" + page_name + "\"";
         }
         var html = "<a href=\"" + href + "\"" + attr + ">" + text + "</a>";
+
+        this.get_editable_div().focus(); // Need this before .insert_html
         this.insert_html(html);
     }
 }
@@ -1596,6 +1624,8 @@ proto.make_table_html = function(rows, columns) {
 proto.do_table = function() {
     var result = this.prompt_for_table_dimensions();
     if (! result) return false;
+
+    this.get_editable_div().focus(); // Need this before .insert_html
     this.insert_html(this.make_table_html(result[0], result[1]));
 }
 
@@ -1628,10 +1658,10 @@ proto.get_editable_div = function () {
         this._editable_div.contentEditable = true;
         this._editable_div.style.overflow = 'auto';
         this._editable_div.style.border = 'none'
-        this._editable_div.style.position = 'absolute';
         this._editable_div.style.width = '100%';
         this._editable_div.style.height = '100%';
         this._editable_div.id = 'wysiwyg-editable-div';
+        this._editable_div.className = 'wiki';
 
         var self = this;
         this._editable_div.onbeforedeactivate = function () {
@@ -1646,8 +1676,11 @@ proto.get_editable_div = function () {
             self._ieSelectionBookmark = null;
 
             doc.attachEvent("onbeforedeactivate", function() {
-                var range = doc.selection.createRange();
-                self._ieSelectionBookmark = range.getBookmark();
+                self._ieSelectionBookmark = null;
+                try {
+                    var range = doc.selection.createRange();
+                    self._ieSelectionBookmark = range.getBookmark();
+                } catch (e) {};
             });
 
             doc.attachEvent("onactivate", function() {

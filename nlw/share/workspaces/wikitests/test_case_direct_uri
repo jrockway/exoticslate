@@ -19,6 +19,7 @@
 
 | *Comment* | Test Case: Direct URI: users listall because a member of the workspace |  |
 | open_ok | /duri-%%start_time%%/index.cgi?action=users_listall |  |
+| pause | 10000 |  |
 | text_like | st-settings-section | %%start_time%%@ken.socialtext.net |
 
 | *Comment* | Test Case: Direct URI Teardown |  |

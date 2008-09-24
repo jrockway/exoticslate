@@ -46,7 +46,6 @@ __DATA__
 Socialtext::Handler::Cleanup
 Socialtext::MasonHandler
 Socialtext::SOAPServer
-Socialtext::User::LDAP
 Socialtext::WebApp::Authen
 Socialtext::Challenger::OpenId
 Socialtext::Handler::REST

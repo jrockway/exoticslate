@@ -20,4 +20,5 @@
     alias noplugins='sudo /etc/init.d/apache-perl stop; sudo apt-get remove --purge  socialtext-plugin-people socialtext-plugin-gadgets; sudo /etc/init.d/apache-perl start'
     alias xwt='export WIKIEMAIL=$HOSTNAME; sudo -u www-data run-wiki-tests --no-maximize --test-username wikitester@ken.socialtext.net  --test-email wikitester@ken.socialtext.net --timeout 60000 --plan-server http://$HOSTNAME --test-server http://$HOSTNAME --plan-page  '
     alias xlwt='export WIKIEMAIL=$HOSTNAME; sudo -u www-data run-wiki-tests --no-maximize --test-username devnull3 --test-password ldapd3v  --test-email devnull3@socialtext.com  --timeout 60000 --plan-server http://$HOSTNAME --test-server http://$HOSTNAME  0 --plan-page  '
+alias 3wt='export ST_SKIN_NAME='\''s3'\''; export WIKIEMAIL=$HOSTNAME; sudo -u www-data run-wiki-tests --no-maximize --plan-server http://www2.socialtext.net --plan-workspace s3wt --test-server http://$HOSTNAME --test-username wikitester@ken.socialtext.net  --test-email wikitester@ken.socialtext.net --timeout 60000 --plan-page  '
 

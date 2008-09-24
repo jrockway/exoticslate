@@ -3,6 +3,10 @@
 
 /* overloads */
 
+body#blog div#controls div#controlsRight, div#st-editing-tools-edit {
+    width: auto !important;
+}
+
 div#contentColumns.hidebox #contentLeft {
     width: 97%;
 }
@@ -112,6 +116,38 @@ div#bottomButtons div#pageAttribution {
     margin: 5px 5px 0 180px;
     padding: 5px;
 }
+
+body#workSpace div#controls div#st-editing-tools-edit h1,
+body#blog div#controls div#st-editing-tools-edit h1,
+div#contentContainer h2.tableTitle {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-bottom: 2px;
+}
+
+div#contentContainer h2.tableTitle {
+    width: 90%;
+}
+
+div#controls div#st-editing-tools-edit {
+    max-width: 80%;
+    display: block;
+}
+
+body#blog div#controls div#controlsRight {
+    max-width: 20%;
+}
+
+div#controls div#st-editing-tools-edit {
+    max-width: 80%;
+}
+
+
+div.goTo {
+    white-space: nowrap;
+}
+
 
 div.widget ul.widgetButton li a.addTagButton {
     width: 87px;
@@ -1296,7 +1332,7 @@ body div#mainWrap {
 
 ul li a.previewButton {
         display: block;
-        width: 89px;
+        width: 98px;
         height: 22px;
         background: url(../images/previewButton.png) no-repeat;
         background-position: top right;
@@ -1592,13 +1628,15 @@ div#contentContainer h2.tableTitle {
     font-weight:normal;
     letter-spacing:1px;
 }
-.wiki a.incipient {
+.wiki a.incipient,
+.wiki .wafl_existence_error {
     border-bottom:1px #d82500 dashed;
     border-bottom:1px #25a800 dashed;
     color:#d82500;
     color:#25a800;
 }
-.wiki a.incipient:hover {
+.wiki a.incipient:hover,
+.wiki .wafl_existence_error:hover {
     color:#d82500;
     text-decoration:none;
     border-bottom:1px #d82500 solid;
@@ -1641,10 +1679,10 @@ div#contentContainer h2.tableTitle {
     margin-top:.25em ! important;
 }
 .wiki .wiki-include-page {
-    margin-left: 0;
-    margin-bottom:1em;
+    margin:0 0 1em 0;
     padding:1em 0 1em 0;
-    border-left: 5px #C3D9FF solid;
+    background: #fff url(../images/includeTile.png) repeat-y scroll top left;
+    border:none;
 }
 .wiki .wiki-include-title {
     font-size:150%;
@@ -1684,7 +1722,7 @@ td.peoplelist-desc-td {
 
 .form-users_invite a.saveButton {
 	display: block;
-	width: 59px;
+	width: 56px;
 	height: 22px;
 	background: url(../images/inviteButton.png) no-repeat;
 	background-position: top right;

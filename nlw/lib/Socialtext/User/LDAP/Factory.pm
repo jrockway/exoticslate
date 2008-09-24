@@ -8,6 +8,7 @@ use Socialtext::LDAP;
 use Socialtext::User::LDAP;
 use Socialtext::Log qw(st_log);
 use Socialtext::User::Cache;
+use Net::LDAP::Util qw(escape_filter_value);
 use Readonly;
 
 field 'ldap';
@@ -104,6 +105,7 @@ sub Search {
 
     # SANITY CHECK: have inbound parameters
     return unless $term;
+    $term = escape_filter_value($term);
 
     # build up the search options
     my $attr_map = $ldap->config->attr_map();
@@ -178,6 +180,7 @@ sub _find_user {
     }
     else {
         # all other searches are done as sub-tree under Base DN
+        $val = escape_filter_value($val);
         $options{'filter'}  = "($search_attr=$val)";
     }
 

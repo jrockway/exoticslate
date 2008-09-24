@@ -159,6 +159,11 @@ sub main {
             'overwrite',
             ],
             [
+            'apache2/rewrite-lite-useragent' => "$dirs{apache2_etc}/socialtext-conf.d/rewrite-lite-useragent",
+            $params,
+            'overwrite',
+            ],
+            [
             'apache2/empty.conf' => "$dirs{apache2_etc}/conf.d/socialtext-empty.conf",
             $params,
             0,

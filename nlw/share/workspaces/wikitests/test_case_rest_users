@@ -64,9 +64,20 @@ Test set up:
 | comment | get user json |  |
 | get | /data/users/%%test_user%% | application/json |
 | code-is | 200 |  |
-| body-like | {"email_address":"%%test_user%%","is_business_admin":"0","is_system_created":"0","username":"%%test_user%%","last_name":"", | body_like | "is_technical_admin":"0" |  |
+| body-like | "email_address":"%%test_user%%" |  |
+| body-like | "is_system_created":"0" |  |
+| body-like | "is_business_admin":"0" |  |
+| body-like | "creator_username":"system-user" |  |
+| body-like | "created_by_user_id":"1" |  |
+| body-like | "username":"%%test_user%%" |  |
+| body-like | "last_name":"" |  |
+| body-like | "is_technical_admin":"0" |  |
+| body-like | "primary_account_name":"Socialtext" |  |
+| body_like | "is_technical_admin":"0" |  |
 | body_like | "email_address_at_import":"%%test_user%%" |  |
 | body_like | "last_login_datetime":"-infinity" |  |
+| body_like | "primary_account_id":"2" |  |
+| body_like | "first_name":"" |  |
 
 | st-admin | remove-accounts-admin --email %%email%% | no longer |
 

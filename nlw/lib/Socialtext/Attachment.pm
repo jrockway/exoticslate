@@ -1,11 +1,24 @@
-package Socialtext::Attachment;
 # @COPYRIGHT@
+package Socialtext::Attachment;
+use strict;
 use base 'Socialtext::Base';
 use Class::Field qw( field );
 use Email::Valid;
 use MIME::Types;
 use Socialtext::Encode;
 use Socialtext::File::Stringify;
+
+my $MAX_WIDTH  = 600;
+my $MAX_HEIGHT = 600;
+
+my $encoding_charset_map = {
+    'euc-jp' => 'EUC-JP',
+    'shiftjis' => 'Shift_JIS',
+    'iso-2022-jp' => 'ISO-2022-JP',
+    'utf8' => 'UTF-8',
+    'cp932' => 'CP932',
+    'iso-8859-1' => 'ISO-8859-1',
+};
 
 sub class_id { 'attachment' }
 field 'id';

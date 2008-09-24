@@ -1,0 +1,24 @@
+# Redirect mobile browsers off to the miki/lite version of the page
+
+# rewrite: /:ws/?args => /lite/pages/:ws/?args
+RewriteCond     %{HTTP_USER_AGENT}  BlackBerry.*        [OR]
+RewriteCond     %{HTTP_USER_AGENT}  .*iPhone.*          [OR]
+RewriteCond     %{HTTP_USER_AGENT}  Nokia.*             [OR]
+RewriteCond     %{HTTP_USER_AGENT}  .*Palm.*            [OR]
+RewriteCond     %{HTTP_USER_AGENT}  .*SymbianOS.*       [OR]
+RewriteCond     %{HTTP_USER_AGENT}  .*Windows\sCE.*     [OR]
+RewriteCond     %{HTTP_USER_AGENT}  hiptop.* 
+RewriteCond     %{REQUEST_URI}      !^/(lite|data)
+RewriteCond     %{REQUEST_URI}      !^/(index.cgi|challenge)
+RewriteRule     ^/([^/]+)/?$        /lite/page/$1/%{QUERY_STRING}       [R,L]                        
+
+# rewrite: /:ws/index.cgi?:page => /lite/pages/:ws/:page
+RewriteCond     %{HTTP_USER_AGENT}  BlackBerry.*        [OR]
+RewriteCond     %{HTTP_USER_AGENT}  .*iPhone.*          [OR]
+RewriteCond     %{HTTP_USER_AGENT}  Nokia.*             [OR]
+RewriteCond     %{HTTP_USER_AGENT}  .*Palm.*            [OR]
+RewriteCond     %{HTTP_USER_AGENT}  .*SymbianOS.*       [OR]
+RewriteCond     %{HTTP_USER_AGENT}  .*Windows\sCE.*     [OR]
+RewriteCond     %{HTTP_USER_AGENT}  hiptop.* 
+RewriteCond     %{QUERY_STRING}     !action=
+RewriteRule     ^/([^/]+)/index.cgi$  /lite/page/$1/%{QUERY_STRING}?    [R,L]                            

@@ -182,7 +182,7 @@ search_with_results: {
         filter  => '(mail=*)',
         );
     ok !$mesg->code(), 'search executed successfully';
-    is $mesg->count(), 3, 'search returned three results';
+    is $mesg->count(), 5, 'search returned three results';
 
     $mesg = $ldap->search(
         base    => $openldap->base_dn(),

@@ -375,10 +375,7 @@ sub hash_representation {
     }
 
     my $from = $self->metadata->From;
-    my $user =
-        $from =~ /^\d+$/
-        ? Socialtext::User->new(user_id  => $from)
-        : Socialtext::User->new(email_address => $from);
+    my $user = Socialtext::User->new(email_address => $from);
     my $masked_email = $user
         ? $user->masked_email_address(
             user => $self->hub->current_user,
@@ -994,32 +991,26 @@ sub last_edited_by {
     my $self = shift;
     return unless $self->id && $self->metadata->From;
 
-    my $user;
-    my $from = $self->metadata->From;
-    if ($from =~ /^\d+$/) {
-        $user = Socialtext::User->new( user_id => $from );
+    my $email_address = $self->metadata->From;
+    # We have some very bogus data on our system, so this is a really
+    # horrible hack to fix it.
+    unless ( Email::Valid->address($email_address) ) {
+        my ($name) = $email_address =~ /([\w-]+)/;
+        $name = 'unknown' unless defined $name;
+        $email_address = $name . '@example.com';
     }
-    else {
-        # We have some very bogus data on our system, so this is a really
-        # horrible hack to fix it.
-        unless ( Email::Valid->address($from) ) {
-            my ($name) = $from =~ /([\w-]+)/;
-            $name = 'unknown' unless defined $name;
-            $from = $name . '@example.com';
-        }
 
-        $user = Socialtext::User->new( email_address => $from );
+    my $user = Socialtext::User->new( email_address => $email_address );
 
-        # There are many usernames in pages that were never in the users
-        # table.  We need to have all users in the DBMS, so
-        # we assume that if they don't exist, they should be created. When
-        # we import pages into the DBMS, we'll need to create any
-        # non-existent users at the same time, for referential integrity.
-        $user ||= Socialtext::User->create(
-            username         => $from,
-            email_address    => $from,
-        );
-    }
+    # There are many usernames in pages that were never in the users
+    # table.  We need to have all users in the DBMS, so
+    # we assume that if they don't exist, they should be created. When
+    # we import pages into the DBMS, we'll need to create any
+    # non-existent users at the same time, for referential integrity.
+    $user ||= Socialtext::User->create(
+        username         => $email_address,
+        email_address    => $email_address,
+    );
 
     return $user;
 }

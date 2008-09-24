@@ -23,18 +23,6 @@ sub class_id { 'attachments' }
 field 'attachment_set';
 field 'attachment_set_page_id';
 
-my $encoding_charset_map = {
-    'euc-jp' => 'EUC-JP',
-    'shiftjis' => 'Shift_JIS',
-    'iso-2022-jp' => 'ISO-2022-JP',
-    'utf8' => 'UTF-8',
-    'cp932' => 'CP932',
-    'iso-8859-1' => 'ISO-8859-1',
-};
-
-my $MAX_WIDTH  = 600;
-my $MAX_HEIGHT = 600;
-
 sub all {
     my $self = shift;
     my %p = @_;

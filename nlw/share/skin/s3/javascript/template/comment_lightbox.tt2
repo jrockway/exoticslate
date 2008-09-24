@@ -2,21 +2,21 @@
 <div class="commentWrapper">
 <div class="comment">
   <div class="toolbar">
-    <img class="comment_button" src="[% s2_path('/images/bold.gif') %]" name="bold"/>
-    <img class="comment_button" src="[% s2_path('/images/italic.gif') %]" name="italic"/>
-    <img class="comment_button" src="[% s2_path('/images/strike.gif') %]" name="strike"/>
-    <img class="comment_button" src="[% s2_path('/images/h1.gif') %]" name="h1"/>
-    <img class="comment_button" src="[% s2_path('/images/h2.gif') %]" name="h2"/>
-    <img class="comment_button" src="[% s2_path('/images/h3.gif') %]" name="h3"/>
-    <img class="comment_button" src="[% s2_path('/images/ul.gif') %]" name="ul"/>
-    <img class="comment_button" src="[% s2_path('/images/ol.gif') %]" name="ol"/>
-    <img class="comment_button" src="[% s2_path('/images/indent.gif') %]" name="indent"/>
-    <img class="comment_button" src="[% s2_path('/images/outdent.gif') %]" name="outdent"/>
-    <img class="comment_button" src="[% s2_path('/images/filew.gif') %]" name="filew"/>
-    <img class="comment_button" src="[% s2_path('/images/image.gif') %]" name="image"/>
-    <img class="comment_button" src="[% s2_path('/images/wikilink.gif') %]" name="wikilink"/>
-    <img class="comment_button" src="[% s2_path('/images/createlink.gif') %]" name="createlink"/>
-    <img class="comment_button" src="[% s2_path('/images/createtable.gif') %]" name="createtable"/>
+    <img class="comment_button" src="[% s2_path('/images/bold.gif') %]" name="bold" title="[% loc('Bold') %]" />
+    <img class="comment_button" src="[% s2_path('/images/italic.gif') %]" name="italic" title="[% loc('Italic') %]" />
+    <img class="comment_button" src="[% s2_path('/images/strike.gif') %]" name="strike" title="[% loc('Strike Through') %]" />
+    <img class="comment_button" src="[% s2_path('/images/h1.gif') %]" name="h1" title="[% loc('Heading 1') %]" />
+    <img class="comment_button" src="[% s2_path('/images/h2.gif') %]" name="h2" title="[% loc('Heading 2') %]" />
+    <img class="comment_button" src="[% s2_path('/images/h3.gif') %]" name="h3" title="[% loc('Heading 3') %]" />
+    <img class="comment_button" src="[% s2_path('/images/ul.gif') %]" name="ul" title="[% loc('Bulleted List') %]" />
+    <img class="comment_button" src="[% s2_path('/images/ol.gif') %]" name="ol" title="[% loc('Numbered List') %]" />
+    <img class="comment_button" src="[% s2_path('/images/outdent.gif') %]" name="outdent" title="[% loc('Less Indented') %]" />
+    <img class="comment_button" src="[% s2_path('/images/indent.gif') %]" name="indent" title="[% loc('More Indented') %]" />
+    <img class="comment_button" src="[% s2_path('/images/filew.gif') %]" name="filew" title="[% loc('Attachment Link') %]" />
+    <img class="comment_button" src="[% s2_path('/images/image.gif') %]" name="image" title="[% loc('Image') %]" />
+    <img class="comment_button" src="[% s2_path('/images/wikilink.gif') %]" name="wikilink" title="[% loc('Wiki Link') %]" />
+    <img class="comment_button" src="[% s2_path('/images/createlink.gif') %]" name="createlink" title="[% loc('Web Link') %]" />
+    <img class="comment_button" src="[% s2_path('/images/createtable.gif') %]" name="createtable" title="[% loc('Create Table') %]" />
   </div>
   <textarea name="comment" wrap="virtual"></textarea>
   <ul class="formButtons">

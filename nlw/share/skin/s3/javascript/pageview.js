@@ -147,13 +147,13 @@ Page = {
 
                             ' ',
                             $('<a href="#" />')
-                                .html('<img src="/static/skin/common/images/delete.png" width="16" height="16" border="0" />')
+                                .html('<img src="'+nlw_make_s3_path('/images/delete.png')+'" width="16" height="16" border="0" />')
                                 .addClass('delete_tag')
                                 .attr('name', tag.name)
                                 .attr('alt', loc('Delete this tag'))
                                 .attr('title', loc('Delete this tag'))
                                 .bind('click', function () {
-                                    $(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif');
+                                    $(this).children('img').attr('src', nlw_make_static_path('/skin/common/images/ajax-loader.gif'));
                                     Page.delTag(this.name);
                                     return false;
                                 })

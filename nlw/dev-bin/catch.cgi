@@ -1,4 +1,5 @@
 #!/usr/bin/env perl
+use strict;
 # @COPYRIGHT@
 
 # the catching side of poster.pl

@@ -134,7 +134,6 @@ sub category_display {
     my $sortdir = Socialtext::Query::Plugin->sortdir;
     my $sortby = $self->cgi->sortby || 'Date';
     my $direction = $self->cgi->direction || $sortdir->{ $sortby };
-
     my $rows = $self->get_page_info_for_category( $category, $sortdir );
 
     my $uri_escaped_category = $self->uri_escape($category);
@@ -207,11 +206,11 @@ sub _sort_closure {
 
         $direction =
             length $self->cgi->direction
-            ? ($self->cgi->direction and $self->cgi->direction ne 'asc') ? 1 : 0
+            ? ($self->cgi->direction and $self->cgi->direction ne 'asc') ? 'desc' : 'asc'
             : $sort_map->{$sort_col};
     } else {
         $sort_col = 'Date';
-        $direction = 1;
+        $direction = $sort_map->{Date};
     }
 
     return $self->_gen_sort_closure(
@@ -236,22 +235,66 @@ sub _sort_closure {
 # }
 sub _gen_sort_closure {
     my $self        = shift;
-    my $sortdir_map = shift;
-    my $sortby      = shift;
-    my $direction   = shift || 0;
+    my $sortdir_map = shift; # the default mapping of sortby to a direction
+    my $sortby      = shift; # the attribute being sorted on
+    my $direction   = shift; # the direction ('asc' or 'desc')
 
-    $sortdir_map->{$sortby} = 1 - $direction;
-    return $sortby eq 'revision_count'
-      ? $direction
-        ? sub { $b->{$sortby} <=> $a->{$sortby} or
-                lc($a->{Subject}) cmp lc($b->{Subject}) }
-        : sub { $a->{$sortby} <=> $b->{$sortby} or
-                lc($a->{Subject}) cmp lc($b->{Subject}) }
-      : $direction
-        ? sub { lc($b->{$sortby}) cmp lc($a->{$sortby}) or
-                lc($a->{Subject}) cmp lc($b->{Subject}) }
-        : sub { lc($a->{$sortby}) cmp lc($b->{$sortby}) or
-                lc($a->{Subject}) cmp lc($b->{Subject}) }
+    if ( $sortby eq 'revision_count' ) { # The only integral attribute, so use numeric sort
+        if ( $direction eq 'asc' ) {
+            return sub {
+                $a->{revision_count} <=> $b->{revision_count}
+                    or lc( $a->{Subject} ) cmp lc( $b->{Subject} );
+                }
+        }
+        else {
+            return sub {
+                $b->{revision_count} <=> $a->{revision_count}
+                    or lc( $a->{Subject} ) cmp lc( $b->{Subject} );
+                }
+        }
+    }
+    elsif ( $sortby eq 'username' ) { 
+        # we want to sort by whatever the system knows these users as, which
+        # may not be the same as the From header.
+        if ( $direction eq 'asc' ) {
+            return sub {
+                Socialtext::User->new( 
+                    username => $a->{username} 
+                )->best_full_name 
+                cmp 
+                Socialtext::User->new(
+                    username => $b->{username}
+                )->best_full_name
+                or lc( $a->{Subject} ) cmp lc( $b->{Subject} );
+            }
+        }
+        else {
+            return sub {
+                Socialtext::User->new( 
+                    username => $b->{username} 
+                )->best_full_name 
+                cmp 
+                Socialtext::User->new(
+                    username => $a->{username}
+                )->best_full_name
+                or lc( $b->{Subject} ) cmp lc( $a->{Subject} );
+            }
+        }
+    }
+    else { # anything else, most likely a string
+        if ( $direction eq 'asc' ) {
+            return sub {
+                lc( $a->{$sortby} ) cmp lc( $b->{$sortby} )
+                    or lc( $a->{Subject} ) cmp lc( $b->{Subject} );
+            };
+        }
+        else {
+            return sub {
+                lc( $b->{$sortby} ) cmp lc( $a->{$sortby} )
+                    or lc( $a->{Subject} ) cmp lc( $b->{Subject} );
+            };
+        }
+    }
 }
 
 sub index {

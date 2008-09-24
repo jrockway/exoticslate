@@ -126,9 +126,10 @@ sub users_listall {
     $self->_update_users_in_workspace()
         if $self->cgi->Button;
 
+    my @uwr = $self->hub->current_workspace->users_with_roles->all;
     my $settings_section = $self->template_process(
         'element/settings/users_listall_section',
-        users_with_roles => $self->hub->current_workspace->users_with_roles,
+        users_with_roles => \@uwr,
         $self->status_messages_for_template,
     );
 

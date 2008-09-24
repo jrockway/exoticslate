@@ -4,8 +4,8 @@ use strict;
 use warnings;
 use YAML;
 
-my $in_file = "share/skin/s2/javascript/Widgets.yaml";
-my $out_js_file = "share/skin/s2/javascript/widget_resource.js";
+my $in_file = "share/skin/wikiwyg/javascript/Widgets.yaml";
+my $out_js_file = "share/skin/wikiwyg/javascript/widget_resource.js";
 my $out_pm_file = "lib/Socialtext/Widget_resource.pm";
 
 my $marklist = {

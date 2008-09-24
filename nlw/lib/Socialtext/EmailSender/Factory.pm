@@ -1,5 +1,6 @@
 # @COPYRIGHT@
 package Socialtext::EmailSender::Factory;
+use strict;
 use Socialtext::l10n qw(system_locale);
 use Socialtext::EmailSender::en;
 

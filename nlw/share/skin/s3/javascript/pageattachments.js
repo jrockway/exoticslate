@@ -81,7 +81,7 @@ Attachments = {
                             extractLink,
                             ' ',
                             $('<a href="#" />')
-                                .html('<img src="/static/skin/common/images/delete.png" width="16" height="16" border="0" />')
+                                .html('<img src="'+nlw_make_s3_path('/images/delete.png')+'"width="16" height="16" border="0" />')
                                 .attr('name', item.uri)
                                 .attr('alt', loc('Delete this attachment'))
                                 .attr('title', loc('Delete this attachment'))

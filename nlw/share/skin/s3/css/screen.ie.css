@@ -16,9 +16,15 @@ html body#settingsPage div#controls div#controlsRight {
     width: 550px !important;
 }
 
+/* The right-hand controls are always empty during wiki edit. */
+html body div#st-edit-mode-container div#controls div#controlsRight {
+    width: 10px !important;
+}
+
 html div#mainWrap {
     width: expression( (document.body.clientWidth * 0.9 > 950) ? '90%' : '950px' );
 }
+
 
 html body#workSpace div#mainWrap, html body#blog div#mainWrap, html body#dashBoard div#mainWrap {
     width: expression( (document.body.clientWidth * 0.9 > 880) ? '90%' : '880px' );

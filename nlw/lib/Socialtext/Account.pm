@@ -17,11 +17,19 @@ use Socialtext::l10n qw(loc);
 use Socialtext::SystemSettings qw( get_system_setting );
 use YAML qw/DumpFile LoadFile/;
 
-field 'account_id';
-field 'name';
-field 'skin_name';
-field 'is_system_created';
-field 'email_addresses_are_hidden';
+Readonly our @ACCT_COLS => (
+    'account_id',
+    'name',
+    'skin_name',
+    'is_system_created',
+    'email_addresses_are_hidden'
+);
+
+my %ACCT_COLS = map { $_ => 1 } @ACCT_COLS;
+
+foreach my $column ( @ACCT_COLS ) {
+    field $column;
+}
 
 sub table_name { 'Account' }
 
@@ -76,8 +84,10 @@ sub reset_skin {
 sub workspaces {
     my $self = shift;
 
-    return
-        Socialtext::Workspace->ByAccountId( account_id => $self->account_id, @_ );
+    return Socialtext::Workspace->ByAccountId( 
+        account_id => $self->account_id, 
+        @_ 
+    );
 }
 
 sub workspace_count {
@@ -86,6 +96,14 @@ sub workspace_count {
     my $sql = 'select count(*) from "Workspace" where account_id = ?';
     my $count = sql_singlevalue($sql, $self->account_id);
     return $count;
+}
+
+sub to_hash {
+    my $self = shift;
+    my $hash = {
+        map { $_ => $self->$_ } @ACCT_COLS
+    };
+    return $hash;
 }
 
 sub is_plugin_enabled {
@@ -624,6 +642,11 @@ as a hash, suitable for serializing.
 =item $account->workspace_count()
 
 Returns a count of workspaces for this account.
+
+=item $account->to_hash()
+
+Returns a hashref containing all the fields of this account.  Useful
+for serialization.
 
 =item $account->reset_skin($skin)
 

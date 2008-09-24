@@ -394,8 +394,7 @@ sub skin_name {
         $self->{skin_name} = $value;
         return $value;
     }
-    my $skin = $self->{skin_name} || $self->account->skin_name;
-    return $skin;
+    return $self->{skin_name} || '';
 }
 
 # turn a workspace into a hash suitable for JSON and such things.
@@ -1626,6 +1625,8 @@ const workspace_id => 0;
 const email_addresses_are_hidden => 0;
 const real => 0;
 
+sub skin_name { '' }
+
 sub created_by_user_id {
     Socialtext::User->SystemUser->user_id;
 }
@@ -1652,13 +1653,6 @@ sub new {
         sql_execute($sql, map { $self->$_ } @COLS );
     }
     return $self;
-}
-
-sub skin_name {
-    my $self = shift;
-    my ( $main, $hub ) = $self->_main_and_hub();
-    return $hub ? $hub->current_user->primary_account->skin_name
-                : get_system_setting('default-skin');
 }
 
 sub _set_workspace_option { return 1; }

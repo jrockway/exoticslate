@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 17;
+use Test::Socialtext tests => 21;
 
 BEGIN {
     use_ok( 'Socialtext::MultiCursor' );
@@ -55,3 +55,23 @@ is_deeply(
     [ 'RED_LEICESTER', 'TILSIT', 'LAMBS', 'SLOTHS', 'CARPS', 'ANCHOVIES', 'ORANGUTANS', 'BREAKFAST_CEREALS', 'FRUIT_BATS' ],
     'All elements have been applied properly.'
 );
+
+mc_all_in_context: {
+    my $single_mc = Socialtext::MultiCursor->new(
+        iterables => [['aaaa']],
+        apply     => sub { uc $_[0] }
+    );
+    my $scalar_ctx = $single_mc->all;
+    my @list_ctx = $single_mc->all;
+    is $scalar_ctx, 1, "scalar is element count";
+    is_deeply \@list_ctx, ['AAAA'], "list context is the transformed element list";
+
+    my $dual_mc = Socialtext::MultiCursor->new(
+        iterables => [['cccc','bbbb']],
+        apply     => sub { uc $_[0] }
+    );
+    $scalar_ctx = $dual_mc->all;
+    @list_ctx = $dual_mc->all;
+    is $scalar_ctx, 2, "scalar is element count";
+    is_deeply \@list_ctx, ['CCCC','BBBB'], "list context is the transformed element list";
+}

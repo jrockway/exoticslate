@@ -97,7 +97,6 @@ search_no_results: {
 # Search; single result
 search_single_result: {
     my @results = $factory->Search('BUBBA');
-    is scalar(@results), 1, 'search; single result';
 
     my @expect = (
         { driver_name       => $factory->driver_key(),
@@ -111,7 +110,6 @@ search_single_result: {
 # Search; multiple results
 search_multiple_results: {
     my @results = $factory->Search('example.com');
-    is scalar(@results), 3, 'search; multiple results';
 
     my @expect = (
         { driver_name       => $factory->driver_key(),
@@ -125,6 +123,30 @@ search_multiple_results: {
         { driver_name       => $factory->driver_key(),
           email_address     => 'bubba.brain@example.com',
           name_and_email    => 'Bubba Brain <bubba.brain@example.com>',
-        } );
+        },
+        { driver_name       => $factory->driver_key(),
+          email_address     => 'jim.smith@example.com',
+          name_and_email    => 'Jim Smith <jim.smith@example.com>',
+        },
+        { driver_name       => $factory->driver_key(),
+          email_address     => 'jim.q.smith@example.com',
+          name_and_email    => 'Jim Smith <jim.q.smith@example.com>',
+        },
+    );
+    cmp_deeply \@results, \@expect, '... results match expectations';
+}
+
+###############################################################################
+# Search; parens in the key
+search_single_result: {
+    my @results = $factory->Search('(IT)');
+    is scalar(@results), 1, 'search; single result';
+
+    my @expect = (
+        { driver_name       => $factory->driver_key(),
+          email_address     => 'jim.smith@example.com',
+          name_and_email    => 'Jim Smith <jim.smith@example.com>',
+        },
+    );
     cmp_deeply \@results, \@expect, '... results match expectations';
 }

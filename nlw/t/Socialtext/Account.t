@@ -93,9 +93,11 @@ Account_skins: {
     );
     is(
         Socialtext::Workspace->new(name => $ws_name)->skin_name,
-        'reds3',
+        '',
         'reset_skin sets the skins of account workspaces'
     );
+
+    
 }
 my $export_file;
 Exporting_account_people: {

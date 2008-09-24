@@ -41,7 +41,7 @@ sub POST_json {
     }
 
     my $account = Socialtext::Account->new( 
-        name => Socialtext::String::uri_escape( $self->acct ),
+        name => Socialtext::String::uri_unescape( $self->acct ),
     );
 
     unless ( defined $account ) {

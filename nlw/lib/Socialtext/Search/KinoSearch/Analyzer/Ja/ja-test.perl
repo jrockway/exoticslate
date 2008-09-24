@@ -2,6 +2,7 @@
 # @COPYRIGHT@
 
 use lib '../../../../..';
+use strict;
 use Socialtext::Search::KinoSearch::Analyzer::Ja::mecabif;
 
 # This is not "use bytes"!!!

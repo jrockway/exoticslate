@@ -1,5 +1,6 @@
 # @COPYRIGHT@
 package Socialtext::SQL;
+use strict;
 use Socialtext::AppConfig;
 use Socialtext::Timer;
 use DBI;

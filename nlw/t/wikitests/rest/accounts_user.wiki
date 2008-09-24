@@ -4,6 +4,8 @@ Test case for `/data/account/:acct/users` ( GET and POST )
 
 | *Comment* | set up fixture |
 | st-admin | change-password --email devnull2@socialtext.com --password password |
+| st-admin | create-account --name 'Socialtext Two' |
+| st-admin | create-user --email tester@example.com --password password |
 | http-user-pass | devnull2@socialtext.com | password |
 
 | *Comment* | GET requests return a 403 when user is not a business admin. | 
@@ -40,4 +42,8 @@ Test case for `/data/account/:acct/users` ( GET and POST )
 
 | *Comment* | Returns a 200 when all is good. |
 | post-json | /data/accounts/Socialtext/users | {"email_address":"devnull2@socialtext.com"} |
+| code-is | 200 |
+
+| *Comment* | Returns a 200 when we post to an account with a space in the name. |
+| post-json | /data/accounts/Socialtext Two/users | {"email_address":"tester@example.com"} |
 | code-is | 200 |

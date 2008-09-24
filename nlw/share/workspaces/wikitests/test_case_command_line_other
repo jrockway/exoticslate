@@ -39,7 +39,7 @@
 
 | st-admin | update-page | qr/The command you called \(update-page\) requires a workspace to be specified/ |
 | st-admin | update-page --workspace %%cmdline_workspace%% | qr/The command you called \(update-page\) requires a user to be specified/ |
-| st-admin | update-page --workspace %%cmdline_workspace%% --page %%cmdline_wiki%%_wiki | qr/The command you called \(update-page\) requires a user to be specified/ |
+| st-admin | update-page --workspace %%cmdline_workspace%% --page %%cmdline_workspace%%_wiki | qr/The command you called \(update-page\) requires a user to be specified/ |
 | st-admin | update-page --workspace %%cmdline_workspace%% --user %%cli_user%% | qr/The command you called \(update-page\) requires a page to be specified/ |
 
  from-input < <list of commands>

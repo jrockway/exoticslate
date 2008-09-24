@@ -15,9 +15,9 @@ my $live = shift;
 my $r    = make_rester($live);
 my $l10n = load_localizations();
 
-my $js_output = 'share/skin/s2/javascript/l10ns.js';
-my $is_js     = qr#share/skin/s2/javascript|share/skin/s2/template/element/jst#;
-my $is_po     = qr#lib/\S+\.pm|share/skin/s2/template#;
+my $js_output = 'share/skin/s3/javascript/l10ns.js';
+my $is_js     = qr#share/skin/s3/javascript|share/skin/s3/template/element/jst#;
+my $is_po     = qr#lib/\S+\.pm|share/skin/s3/template#;
 create_js_check_l10ns( 'tmp', $l10n );
 check_translation_status();
 exit;

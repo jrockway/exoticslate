@@ -347,7 +347,7 @@ $(function() {
 
     $('#st-listview-selectall').click(function () {
         $('input[type=checkbox]').attr('checked', this.checked);
-        return false;
+        return true;
     });
 
     $('input[name=homepage_is_weblog]').click(function () {

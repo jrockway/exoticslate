@@ -97,7 +97,7 @@
             <li>
             <a href="?action=category_display;category=[% tag.name | uri %]">[% tag.name | html %]</a>
             <a href="#" class="delete_tag" title="[% loc('Delete this tag') %]" onclick="$(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif'); Page.delTag($(this).prev().text()); return false"><img
-                src="/static/skin/common/images/delete.png"
+                src="[% wiki.skin_uri('s3') %]/images/delete.png"
                 width="16" height="16" border="0" alt="[% loc('Delete this tag') %]"
             /></a>
             </li>
@@ -169,7 +169,7 @@
             /></a>
             [% END %]
             <a href="#" title="[% loc('Delete this attachment') %]" onclick="$(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif'); Attachments.delAttachment($(this).prevAll('a[href!=#]').attr('href'), true); return false"><img
-                src="/static/skin/common/images/delete.png"
+                src="[% wiki.skin_uri('s3') %]/images/delete.png"
                 width="16" height="16" border="0" alt="[% loc('Delete this attachment') %]" title="[% loc('Delete this attachment') %]"
             /></a>
             </li>

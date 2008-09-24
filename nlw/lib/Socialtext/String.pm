@@ -54,6 +54,16 @@ sub uri_escape {
     return URI::Escape::uri_escape_utf8(shift);
 }
 
+=head2 uri_unescape( $uri )
+
+Returns an unescaped version of I<$uri>
+
+=cut
+
+sub uri_unescape {
+    return URI::Escape::uri_unescape(shift)
+}
+
 =head2 double_space_harden( $str )
 
 Adds hard spaces in I<$str> where there's two space characters.

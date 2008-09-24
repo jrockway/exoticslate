@@ -87,7 +87,8 @@ Repeat test using Miki/Lite access.
 
 | *Comment* | Test Case: Include Page. PUBLIC MIKI. LOGOUT from Miki |  |
 | click_and_wait | link=Log out |  |
-| text_like | Log in to Socialtext |  |
+| wait_for_element_visible_ok | st-login-form |  |
+| text_like | You have free access to view and contribute to any of these public wikis: |  |
 
 | *Comment* | Test Case: Include Page. PUBLIC LOGGED OUT. Open page in page view while logged out |  |
 | open_ok | /%%tcipw%%/?TC Include Page %%start_time%% |  |
@@ -151,7 +152,8 @@ Repeat test using Miki/Lite access.
 
 | *Comment* | Test Case: Include Page. AUTH MIKI. LOGOUT from Miki |  |
 | click_and_wait | link=Log out |  |
-| text_like | Log in to Socialtext |  |
+| wait_for_element_visible_ok | st-login-form |  |
+| text_like | You have free access to view and contribute to any of these public wikis: |  |
 
 | *Comment* | Test Case: Include Page. AUTH LOGGED OUT. Open page in page view while logged out |  |
 | open_ok | /%%tcipw%%/?TC Include Page %%start_time%% |  |

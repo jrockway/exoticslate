@@ -1,4 +1,5 @@
 #!/usr/bin/env perl -p
+use strict;
 # @COPYRIGHT@
 
 # Filter to replace occurences of $ENV_VARI_ABLE with the value

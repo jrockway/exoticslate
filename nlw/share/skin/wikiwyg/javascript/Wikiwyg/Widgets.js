@@ -158,10 +158,7 @@ proto.fromHtml = function(html) {
     }
 
     Wikiwyg.Wysiwyg.prototype.fromHtml.call(this, html);
-    try {
-        var self = this;
-        setTimeout(function () { self.setWidgetHandlers() }, 200);
-    } catch(e) { alert('bleh: ' + e) }
+    this.setWidgetHandlers();
 }
 
 proto.assert_padding_between_block_elements = function(html) {
@@ -263,6 +260,14 @@ proto.toHtml = function(func) {
 }
 
 proto.setWidgetHandlers = function() {
+    var self = this;
+    var doc = this.get_edit_document();
+    if (Wikiwyg.is_ie) {
+        if (! (doc && doc.body && doc.body.innerHTML) ){
+            setTimeout(function() { self.setWidgetHandlers() }, 500);
+            return;
+        }
+    }
     var imgs = this.get_edit_document().getElementsByTagName('img');
     for (var ii = 0; ii < imgs.length; ii++) {
         this.setWidgetHandler(imgs[ii]);

@@ -14,11 +14,11 @@ use utf8;
 my $r    = make_rester();
 my $l10n = load_localizations();
 
-my $js_output = 'share/skin/s2/javascript/l10ns.js';
-my $is_js     = qr#share/skin/s2/javascript|share/skin/s2/template/element/jst#;
-my $is_po     = qr#lib/\S+\.pm|share/skin/s2/template|share/console-template/template|share/template/control|search_config\.yaml\.tt2#;
+my $js_output = 'share/skin/s3/javascript/l10ns.js';
+my $is_js     = qr#share/skin/s3/javascript|share/skin/s3/template/element/jst#;
+my $is_po     = qr#lib/\S+\.pm|share/skin/s3/template|share/console-template/template|share/template/(control|email)|search_config\.yaml\.tt2#;
 create_perl_l10ns( 'share/l10n', $l10n );
-create_js_l10ns( 'share/skin/s2/javascript/l10ns.js', $l10n );
+create_js_l10ns( 'share/skin/s3/javascript/l10ns.js', $l10n );
 exit;
 
 sub create_perl_l10ns {
@@ -55,6 +55,8 @@ msgstr ""
 
 EOT
     for my $id ( sort keys %$dict ) {
+        next if $id eq '';
+
         my $l = $dict->{$id};
         unless ($l->{reference} =~ $is_po) {
             unless ($l->{reference} =~ $is_js) {
@@ -114,7 +116,12 @@ sub _haxorify_jp {
 }
 
 sub _haxorify_lolcat {
-    return Acme::LOLCAT::translate(shift);
+    my $translation =  Acme::LOLCAT::translate(shift);
+
+    # LOLCAT wants to make escape sequences invalid.
+    # $translation =~ s/\/N/\n/g;
+
+    return $translation;
 }
 
 sub create_js_l10ns {
@@ -170,7 +177,7 @@ EOT
 
     print "Wrote $filename\n";
     set_contents( $filename, $js_out, 1);
-    shell_run("cd share/skin/s2/javascript && make");
+    shell_run("cd share/skin/s3/javascript && make");
 }
 
 sub _create_js_hash {

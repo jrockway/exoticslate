@@ -1055,15 +1055,24 @@ sub remove_permission {
 sub show_workspace_config {
     my $self = shift;
 
-    my $ws = $self->_require_workspace();
+    $self->_show_config( $self->_require_workspace );
+}
 
-    my $msg = 'Config for ' . $ws->name . " workspace\n\n";
+sub show_account_config {
+    my $self = shift;
+    $self->_show_config( $self->_require_account );
+}
 
-    my $fmt = '%-32s:  %s';
-    my $wshash = $ws->to_hash;
-    delete $wshash->{name};
-    for my $c ( sort keys %$wshash ) {
-        my $val = $wshash->{$c};
+sub _show_config {
+    my $self = shift;
+    my $obj  = shift;
+
+    my $msg = 'Config for ' . $obj->name . " " . $obj->table_name . "\n\n";
+    my $fmt = '%-32s: %s';
+    my $hash = $obj->to_hash;
+    delete $hash->{name};
+    for my $c ( sort keys %$hash ) {
+        my $val = $hash->{$c};
         $val = 'NULL' unless defined $val;
         $val = q{''} if $val eq '';
 
@@ -1071,11 +1080,13 @@ sub show_workspace_config {
         $msg .= "\n";
     }
 
-    $msg .= sprintf( $fmt, 'ping URIs', join ' - ', $ws->ping_uris );
-    $msg .= "\n";
-    $msg .= sprintf( $fmt, 'custom comment form fields', join ' - ',
-        $ws->comment_form_custom_fields );
-    $msg .= "\n";
+    if ( $obj->table_name eq 'Workspace' ) {
+        $msg .= sprintf( $fmt, 'ping URIs', join ' - ', $obj->ping_uris );
+        $msg .= "\n";
+        $msg .= sprintf( $fmt, 'custom comment form fields', join ' - ',
+            $obj->comment_form_custom_fields );
+        $msg .= "\n";
+    }
 
     $self->_success($msg);
 }
@@ -2493,6 +2504,7 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   export-account --account [--force] 
   import-account --directory [--overwrite] [--name] [--noindex]
   set-account-config --account <key> <value>
+  show-account-config --account
   reset-account-skin --account <account> <skin>
 
   PLUGINS
@@ -2948,6 +2960,11 @@ Given a valid account configuration key, this sets the value of the
 key for the specified account. Use "-null-" as the value to set the
 value to NULL in the DBMS. You can pass multiple key value pairs on
 the command line.
+
+=head2 show-account-config --account
+
+Given a valid account, this shows all key/value pair combinations for
+that account.
 
 =head2 reset-config-skin --account <skin>
 

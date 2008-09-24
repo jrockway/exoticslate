@@ -1,7 +1,7 @@
 #!perl
 # @COPYRIGHT@
 use mocked qw(Socialtext::l10n system_locale); # Has to come firstest.
-use Test::Socialtext tests => 113;
+use Test::Socialtext tests => 112;
 use strict;
 use warnings;
 
@@ -82,14 +82,11 @@ ALL_WORKSPACE_IDS_AND_NAMES: {
     Workspace_skin_should_override_account_skin: {
         $ws->update(skin_name => 'reds3');
         $ws = Socialtext::Workspace->new(name => $ws->name);
-        is( $ws->skin_name, 'reds3', 'workspace skin is reds3' );
+        is( $ws->skin_name, 'reds3', 'workspace skin is settable' );
 
         $ws->account->update(skin_name => 's3');
         $ws = Socialtext::Workspace->new(name => $ws->name);
-        is $ws->skin_name, 'reds3', 'workspace skin is still reds3';
-        $ws->update(skin_name => '');
-        $ws = Socialtext::Workspace->new(name => $ws->name);
-        is $ws->skin_name, 's3', 'workspace uses account skin';
+        is $ws->skin_name, 'reds3', 'workspace skin is not reset when account is updated';
     }
 }
 

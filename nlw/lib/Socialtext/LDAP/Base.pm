@@ -9,6 +9,7 @@ use warnings;
 use Class::Field qw(field);
 use Net::LDAP;
 use Net::LDAP::Constant qw(LDAP_REFERRAL);
+use Net::LDAP::Util qw(escape_filter_value);
 use URI::ldap;
 use Socialtext::Log qw(st_log);
 
@@ -104,6 +105,7 @@ sub authenticate {
     # might need to follow some referrals to do that.
     if ($user_id && $self->config->follow_referrals()) {
         my $user_id_field = $self->config->attr_map->{user_id};
+        my $esc_user_id = escape_filter_value($user_id);
         my $mesg = $self->_do_following_referrals(
             action => sub {
                 my $ldap = shift;
@@ -111,7 +113,7 @@ sub authenticate {
                     base    => $self->config->base(),
                     attrs   => [$user_id_field],
                     scope   => 'sub',
-                    filter  => "(${user_id_field}=$user_id)",
+                    filter  => "(${user_id_field}=$esc_user_id)",
                 );
             },
         );

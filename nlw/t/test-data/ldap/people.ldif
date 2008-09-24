@@ -29,3 +29,21 @@ sn: Brain
 mail: bubba.brain@example.com
 userPassword: abc123
 ou: people
+
+dn: cn=Jim Smith (IT),dc=example,dc=com
+objectClass: inetOrgperson
+cn: Jim Smith (IT)
+gn: Jim
+sn: Smith
+mail: jim.smith@example.com
+userPassword: 123abc
+ou: people
+
+dn: cn=Smith\, Jim (Marketing),dc=example,dc=com
+objectClass: inetOrgperson
+cn: Smith, Jim (Marketing)
+gn: Jim
+sn: Smith
+mail: jim.q.smith@example.com
+userPassword: 987qwe
+ou: people

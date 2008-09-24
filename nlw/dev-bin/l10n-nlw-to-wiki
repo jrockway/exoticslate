@@ -20,18 +20,20 @@ update_enterprise_features();
 my @files = get_files( 
     dirs => [
         "lib/", 
-        "share/skin/s2/template", 
-        "share/skin/s2/javascript", 
+        "share/skin/s3/template", 
+        "share/skin/s3/javascript", 
         "share/console-template", 
         "build/templates/socialtext",
     ],
     extra_dirs => [ # glob() files in these symlinks
         "share/template/control",
+        "share/template/email",
     ],
     includes => [
         qr#\.(?:pm|js|tt2)$#, 
-        qr#share/skin/s2/template#,
+        qr#share/skin/s3/template#,
         qr#share/template/control#,
+        qr#share/template/email#,
         qr#share/console-template/template#,
     ],
     excludes => [

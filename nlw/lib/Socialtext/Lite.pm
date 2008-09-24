@@ -107,7 +107,7 @@ Shows a mobile version of the login page.
 =cut
 sub login {
     my $self        = shift;
-    my $redirect_to = shift || '/lite/login';
+    my $redirect_to = shift || '/lite/workspace_list';
     my $session     = Socialtext::Session->new();
     return $self->_process_template(
         $LOGIN_TEMPLATE,
@@ -372,7 +372,7 @@ sub _login_logout {
     if ($self->hub->current_user->is_guest) {
         my $uri = $self->hub->current_workspace->uri;
         $uri =~ s#^(.*://[^/]+)/([^/]+)#$1/lite/page/$2/$page_uri#g;
-        return '<a href="/challenge?' . $uri . '">' . loc('Log&nbsp;in') . '</a>';
+        return '<a href="/lite/login?' . $uri . '">' . loc('Log&nbsp;in') . '</a>';
     } else {
         return '<a href="/nlw/submit/logout?redirect_to=/lite/login">' . loc('Log&nbsp;out') . '</a>';
     }

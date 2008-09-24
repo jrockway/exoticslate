@@ -1477,6 +1477,52 @@ sub can_use_plugin_with {
     );
 }
 
+# This addresses some basic concerns about whether or not the user's avatar is
+# visible to other users.
+#
+# * Does the user have people enabled? 
+# * If so, do they have a picture that is not hidden?
+#
+# If this is the case, return 1
+sub avatar_is_visible {
+    my $self = shift;
+
+    if ( $self->can_use_plugin('people') ) {
+        my $profile;
+        eval {
+            require Socialtext::People::Profile;
+            $profile = Socialtext::People::Profile->GetProfile($self);
+        };
+
+        return ( $profile && ! $profile->is_hidden );
+    }
+
+    return 0;
+}
+
+# Address whether or not the user's profile should be visible to another user.
+#
+# * Do the users share a common account where people is enabled?
+# * Does the user have an account that is not hidden?
+#
+# If these are the case, return 1
+sub profile_is_visible_to {
+    my $self   = shift;
+    my $viewer = shift;
+
+    if ( $self->can_use_plugin_with( 'people', $viewer ) ) {
+        my $profile;
+        eval {
+            require Socialtext::People::Profile;
+            $profile = Socialtext::People::Profile->GetProfile($self);
+        };
+
+        return ( $profile && ! $profile->is_hidden );
+    }
+
+    return 0;
+}
+
 1;
 
 __END__

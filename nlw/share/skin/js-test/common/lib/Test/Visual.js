@@ -41,12 +41,30 @@ proto.runAsync = function(steps) {
     this.beginAsync(this.nextStep()); 
 }
 
-proto.nextStep = function() {
-    return this.asyncSteps[this.asyncStep++];
+proto.nextStep = function(delay) {
+    var step = this.asyncSteps[this.asyncStep++];
+
+    if (delay) {
+        var self = this;
+        return function() {
+            setTimeout(step, delay);
+        }
+    }
+    else {
+        return step;
+    }
 }
 
-proto.callNextStep = function() {
-    this.call_callback(this.nextStep());
+proto.callNextStep = function(delay) {
+    if (delay) {
+        var self = this;
+        setTimeout(function(){
+            self.callNextStep();
+        }, delay);
+    }
+    else {
+        this.call_callback(this.nextStep());
+    }
 }
 
 proto.is_no_harness = function() {
@@ -181,6 +199,31 @@ proto.open_iframe = function(url, callback, options) {
     });
 }
 
+proto.poll = function(test, callback, interval, maximum) {
+    if (! (test && callback)) {
+        throw("usage: jQuery.poll(test_func, callback [, interval_ms, maximum_ms])");
+    }
+    if (! interval) interval = 250;
+    if (! maximum) maximum = 30000;
+
+    setTimeout(
+        function() {
+            if (id) {
+                clearInterval(id);
+                throw("jQuery.poll failed");
+            }
+        }, maximum
+    );
+
+    var id = setInterval(function() {
+        if (test()) {
+            clearInterval(id);
+            id = 0;
+            callback();
+        }
+    }, interval);
+};
+
 proto.setup_one_widget = function(params, callback) {
     var url = typeof(params) == 'string' ? params : params.url;
     if (typeof(params) == 'string') params = {};
@@ -194,10 +237,12 @@ proto.setup_one_widget = function(params, callback) {
                 self.call_callback(callback, [widget]);
                 return;
             }
-            self.$.poll(
+
+            self.poll(
                 function() { return Boolean(widget.win.gadgets.loaded) },
                 function() { self.call_callback(callback, [widget])}
             );
+
         });
     }
     this.open_iframe("/?action=clear_widgets", setup_widget);
@@ -342,6 +387,12 @@ proto._get_selector_element = function(selector) {
         );
     }
     return $result.get(0);
+}
+
+proto.checkRichTextSupport = function () {
+    if (jQuery.browser.safari) {
+        this.skipAll("This test requires Rich Text editing, which is not supported for your browser.");
+    }
 }
 
 })(jQuery);

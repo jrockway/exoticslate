@@ -141,7 +141,7 @@ search_multiple_results: {
 
     # search for users across both the DB and LDAP stores
     my @users = Socialtext::User->Search('example.com');
-    is scalar(@users), 4, 'search returned multiple users';
+    is scalar(@users), 6, 'search returned multiple users';
 
     my @db_users   = grep { $_->{driver_name} eq 'Default' } @users;
     ok @db_users, '... some of which were from Default store';

@@ -21,6 +21,7 @@ sub permission { +{} }
 sub _entities_for_query {
     my ($self, $rest) = @_;
 
+    my $viewer = $self->hub->current_user;
     my $count = $self->rest->query->param('count') || 20;
     my $since = $self->rest->query->param('since');
     my $pages_ref = Socialtext::Model::Pages->By_seconds_limit(
@@ -47,17 +48,18 @@ sub _entities_for_query {
             $row->{From},
             $ws
         );
-        $row->{user_hidden} = 1;
-        if (Socialtext::Pluggable::Adapter->plugin_exists('people')) {
-            require Socialtext::People::Profile;
-            my $profile = Socialtext::People::Profile->GetProfile($user);
-            $row->{user_hidden} = $profile->is_hidden if $profile;
-        }
+
+        $row->{profile_is_visible} = $user->profile_is_visible_to( $viewer );
+        $row->{avatar_is_visible}  = $user->avatar_is_visible;
 
         push @changes, $row;
     }
 
     return @changes;
+}
+
+sub element_list_item {
+   return "<li><a href='$_[1]->{uri}'>$_[1]->{Subject}</a></li>\n";
 }
 
 sub _entity_hash { $_[1] }

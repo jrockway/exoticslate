@@ -80,8 +80,12 @@
             $('html,body').attr('scrollTop', pageScroll.top);
         }
 
-        if (opts.close)
-            $(opts.close).click(function () { $.hideLightbox() })
+        if (opts.close) {
+            $(opts.close).click(function () {
+                $.hideLightbox();
+                return false;
+            });
+        }
 
         $('#overlay')
             .css({

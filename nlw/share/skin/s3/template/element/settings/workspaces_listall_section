@@ -2,7 +2,6 @@
 [%# @COPYRIGHT@ -%]
 <dl class="form">
   <dt><label>[% loc('Workspaces') %]</label></dt>
-  <dd>[% loc('The ten most recently visited of these workspaces are displayed in the Dashboard.') %]</dd>
 </dl>
 
 <table>

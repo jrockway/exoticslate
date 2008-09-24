@@ -17,7 +17,7 @@
   [% END %]
 </tr>
 
-[% FOREACH user_with_role IN users_with_roles.all %]
+[% FOREACH user_with_role IN users_with_roles %]
   [% SET user = user_with_role.0 %]
   [% SET role = user_with_role.1 %]
   <tr>

@@ -5,6 +5,7 @@ package Socialtext::Skin;
 use strict;
 use warnings;
 use base 'Socialtext::Plugin';
+use Socialtext::SystemSettings qw(get_system_setting);
 use File::Basename qw(dirname);
 use Socialtext::URI;
 use Socialtext::AppConfig;
@@ -44,6 +45,19 @@ sub workspace {
     return $self->hub
         ? $self->hub->current_workspace
         : $self->{_no_workspace};
+}
+
+sub user_account_skin {
+    my ($self) = @_;
+    return $self->hub
+        ? $self->hub->current_user->primary_account->skin_name
+        : undef;
+}
+sub workspace_account_skin {
+    my ($self) = @_;
+    return $self->hub
+        ? $self->hub->current_workspace->account->skin_name
+        : undef;
 }
 
 sub parent {
@@ -199,9 +213,24 @@ sub skin_name {
             }
         }
     }
-    return $skin_name || $self->workspace->uploaded_skin
-            ? "uploaded-skin/$workspace_name"
-            : $self->workspace->skin_name;
+
+    return $skin_name if $skin_name;
+    if ($self->workspace->uploaded_skin) {
+        return "uploaded-skin/$workspace_name"
+    }
+    else {
+        # if the workspace has a skin, just return it
+        return $self->workspace->skin_name
+            if $self->workspace->skin_name;
+
+        # If workspace_name is set use the workspace's skin.
+        # If it isn't (ie it's a NoWorkspace environment), use the user's
+        # account's skin.
+        $skin_name = $workspace_name
+            ? $self->workspace_account_skin
+            : $self->user_account_skin;
+        return $skin_name || get_system_setting('default-skin');
+    }
 }
 
 sub cascade_css {

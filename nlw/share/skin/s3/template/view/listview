@@ -69,7 +69,7 @@
         </th>
         <script language="javascript">
           var query_start = "?[% predicate %];scope=[% scope %];"
-                          + "orig_search_term=[% search_term %];"
+                          + "orig_search_term=[% search_term.replace('"', '\"') %];"
                           + "summaries=[% summaries %]";
           function sort_by() {
             var selected = jQuery('select#sort-picker').val();
@@ -112,10 +112,12 @@
     </form>
   </div><!-- contentContainer -->
 [% END %]
-
 [% BLOCK sort_by_option %]
-  <option [% IF sortby == field %]selected="selected"[% END %] value="sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</option>
-  [% IF sortby == field %]
-    <option value="sortby=[% field %];direction=[% direction == 'asc' ? 'desc' : 'asc' %]">[% name %] [% direction == 'asc' ? '(&darr;)' : '(&uarr;)' %]</option>
+  [% IF (sortby == field ) %]
+    <option [% IF direction == "asc" %]selected="selected"[% END %] value="sortby=[% field %];direction=asc">[% name %] [% IF direction != "asc" %](&uarr;)[% END %]</option>
+    <option [% IF direction == "desc" %]selected="selected"[% END %] value="sortby=[% field %];direction=desc">[% name %] [% IF direction != "desc" %](&darr;)[% END %]</option>
+  [% ELSE %]
+    <option value="sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</option>
   [% END %]
+
 [% END %]

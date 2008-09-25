@@ -424,10 +424,10 @@ GuiEdit.prototype.do_createtable = function() {
     var t = this.area
     var scroll_top = t.scrollTop
     var selection_start = t.selectionStart || t.selectionEnd;
-
     var text = t.value
     this.selection_start = this.find_right(text, selection_start, /\r?\n/)
     this.selection_end = this.selection_start
+
     t.setSelectionRange(this.selection_start, this.selection_start)
     t.focus()
     this.sel = 'col a'
@@ -440,6 +440,14 @@ GuiEdit.prototype.do_createtable = function() {
         this.finish
     var start = this.selection_start + markup_start.length
     var end = this.selection_end + markup_start.length + this.sel.length
+
+    if (jQuery.browser.msie) {
+        var offset = this.start.match(/\r/g);
+        offset = offset ? offset.length : 0;
+        start -= offset;
+        end -= offset;
+    }
+
     this.setTextandSelection(text, start, end)
     t.scrollTop = scroll_top
 }

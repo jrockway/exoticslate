@@ -162,4 +162,8 @@ sub primary_account {
 
 sub can_use_plugin { 1 } 
 
+sub profile_is_visible_to { 1 }
+
+sub avatar_is_visible { 1 }
+
 1;

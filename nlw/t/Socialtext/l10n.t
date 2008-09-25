@@ -21,7 +21,7 @@ Default_to_english: {
 Test_locale: {
     my $result = loc_lang('zz');
     isa_ok($result, 'Socialtext::l10n::I18N::zz', 'found locale.');
-    is loc('Welcome, [_1].', 'user'), 'w3lC0M3, user.';
+    is loc('Welcome'), 'w3lC0M3';
 }
 
 System_locale: {

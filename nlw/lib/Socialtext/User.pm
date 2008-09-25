@@ -1877,6 +1877,15 @@ See also C<Socialtext::Account::is_plugin_enabled>
 
 Returns a boolean indicating whether the user can use the given plugin to interact with another user, C<$buddy>.
 
+=head2 $user->avatar_is_visible()
+
+Returns a boolean indicating whether the user's avatar should be hidden or visible.
+
+=head2 $user->profile_is_visible_to( $viewer )
+
+Returns a boolean indicating whether the user's profile should be visible to
+the specified viewer.
+
 =head2 Socialtext::User->minimal_interface()
 
 Returns the minimal keys necessary for User Factory plugins to implement.

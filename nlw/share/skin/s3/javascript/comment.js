@@ -423,7 +423,8 @@ GuiEdit.prototype.do_outdent = function() {
 GuiEdit.prototype.do_createtable = function() {
     var t = this.area
     var scroll_top = t.scrollTop
-    var selection_start = t.selectionStart
+    var selection_start = t.selectionStart || t.selectionEnd;
+
     var text = t.value
     this.selection_start = this.find_right(text, selection_start, /\r?\n/)
     this.selection_end = this.selection_start
@@ -442,3 +443,4 @@ GuiEdit.prototype.do_createtable = function() {
     this.setTextandSelection(text, start, end)
     t.scrollTop = scroll_top
 }
+

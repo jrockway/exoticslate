@@ -63,6 +63,7 @@ print "Assigning primary accounts to users\n";
 if (my $accts = $MigrationConfig->{email_to_account_mapping}) {
     for my $account_name (keys %$accts) {
         my $account = Socialtext::Account->new(name => $account_name);
+        next unless $account;
         for my $email ( @{ $accts->{$account_name} } ) {
             print "  Mapping $email users to $account_name\n";
             sql_execute(<<EOT, $account->account_id, $email);

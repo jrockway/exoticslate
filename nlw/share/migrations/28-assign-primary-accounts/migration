@@ -39,6 +39,7 @@ print "Set default account: " . $default_account->name . "\n";
 print "Moving all workspaces in the Unknown account to the default account.\n";
 my $unknown_workspaces = Socialtext::Account->Unknown->workspaces;
 while (my $w = $unknown_workspaces->next) {
+    next unless $w->real;
     $w->update( account_id => $default_account->account_id );
 }
 

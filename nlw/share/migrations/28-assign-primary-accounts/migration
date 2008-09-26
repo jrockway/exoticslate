@@ -9,6 +9,8 @@ use Socialtext::SQL qw/sql_execute/;
 use YAML qw/LoadFile/;
 use Data::Dumper;
 use Carp qw/croak/;
+use Sys::Hostname qw/hostname/;
+use Socialtext::SystemSettings qw/set_system_setting/;
 
 # Make sure the Socialtext and Unknown accounts exist.
 Socialtext::Account->EnsureRequiredDataIsPresent();
@@ -19,10 +21,43 @@ my $st_account = Socialtext::Account->Socialtext;
 Socialtext::User->SystemUser->primary_account($st_account);
 Socialtext::User->Guest->primary_account($st_account);
 
-print "Assigning primary accounts to users\n";
 my $MigrationConfig = _load_migration_config();
 print "Using migration config: " . Dumper $MigrationConfig;
 
+# Correct workspace accounts
+# First, determine the default account.
+my $default_account;
+if (my $name = $MigrationConfig->{default_account}) {
+    $default_account = Socialtext::Account->new( name => $name );
+}
+$default_account ||= Socialtext::Account->create(
+    name => hostname(),
+);
+set_system_setting('default-account', $default_account->account_id);
+print "Set default account: " . $default_account->name . "\n";
+
+print "Moving all workspaces in the Unknown account to the default account.\n";
+my $unknown_workspaces = Socialtext::Account->Unknown->workspaces;
+while (my $w = $unknown_workspaces->next) {
+    $w->update( account_id => $default_account->account_id );
+}
+
+print "Moving all non-system workspaces in the Socialtext account to the "
+    . "default account.\n";
+my $socialtext_workspaces = Socialtext::Account->Socialtext->workspaces;
+while (my $w = $socialtext_workspaces->next) {
+    next if $w->name eq 'admin';
+    next if $w->name =~ m/^help-??$/;
+    $w->update( account_id => $default_account->account_id );
+}
+
+print "Forcing admin and help-? workspaces to the Socialtext account\n";
+for my $ws_name (qw/admin help-en help-ja help-it/) {
+    my $ws = Socialtext::Workspace->new( name => $ws_name );
+    $ws->update( account_id => Socialtext::Account->Socialtext->account_id );
+}
+
+print "Assigning primary accounts to users\n";
 # Assign people to accounts based on their e-mail domains
 if (my $accts = $MigrationConfig->{email_to_account_mapping}) {
     for my $account_name (keys %$accts) {

@@ -6,7 +6,7 @@ t.plan(1);
 
 var iframeHeight;
 
-var pageName = 'bz_1335_' + Math.random()
+var pageName = 'bz_1335_' + Math.random();
 
 t.runAsync([
     function() {
@@ -21,12 +21,13 @@ t.runAsync([
     function() { 
         t.$('#st-duplicate-newname').val(pageName);
         t.$('#st-duplicate-form').submit();
-        t.callNextStep(3000);
+
+        t.open_iframe( "/admin/index.cgi?" + pageName, t.nextStep(3000) );
     },
 
-    function() { 
+    function() {
         t.scrollTo(200);
-        t.$('#st-page-content').html('Replace me');
+        t.win.Page.setPageContent('Replace me');
         t.$('#st-attachment-listing li:first a').click();
         t.callNextStep(3000);
     },

@@ -12,6 +12,8 @@ use Socialtext::Exceptions qw( data_validation_error );
 use Socialtext::Schema;
 use Socialtext::SQL qw( sql_execute sql_singlevalue);
 use Socialtext::String;
+use Socialtext::User;
+use Socialtext::MultiCursor;
 use Socialtext::Validate qw( validate SCALAR_TYPE );
 use Socialtext::l10n qw(loc);
 use Socialtext::SystemSettings qw( get_system_setting );
@@ -139,7 +141,7 @@ sub export {
     my %opts = @_;
     my $dir = $opts{dir};
 
-    my $export_file = "$dir/account.yaml";
+    my $export_file = $opts{file} || "$dir/account.yaml";
     DumpFile($export_file, {
             name => $self->name,
             is_system_created => $self->is_system_created,

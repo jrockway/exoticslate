@@ -123,6 +123,7 @@ Attachments = {
         });
         if (refresh) {
             this.refreshAttachments();
+            Page.refreshPageContent(true);
         }
     }
 };

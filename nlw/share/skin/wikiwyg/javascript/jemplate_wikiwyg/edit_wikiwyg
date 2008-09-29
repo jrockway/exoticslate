@@ -30,14 +30,17 @@
     <div id="st-edit-mode-view">
         <div id="contentContainer">
             <div id="contentTitle">
-                <h2 id="st-editing-title" class="tableTitle">
-                    Editing:
-                    [% IF is_new %]
+                [% IF is_new %]
+                    <h2 id="st-editing-title" class="tableTitle">
+                        Editing:
                         <input type="text" size="65" id="st-newpage-pagename-edit" value="[% page.title | html_encode %]" onclick="Socialtext.clear_untitled(this)"/>
-                    [% ELSE %]
+                    </h2>
+                [% ELSE %]
+                    <h2 id="st-editing-title" class="tableTitle" title="Editing: [% page.display_title %]">
+                        Editing:
                         [% page.display_title %]
-                    [% END %]
-                </h2>
+                    </h2>
+                [% END %]
             </div>
             <div class="st-content" id="st-content-page-edit">
             <div id="st-edit-mode-toolbar"

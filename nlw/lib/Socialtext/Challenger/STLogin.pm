@@ -3,6 +3,7 @@ package Socialtext::Challenger::STLogin;
 
 use strict;
 use warnings;
+use Socialtext::Log qw(st_log);
 
 =head1 NAME
 
@@ -46,9 +47,9 @@ sub challenge {
         $ws = $hub->current_workspace;
         if ( !$hub->current_user->is_guest ) {
             $type = 'unauthorized_workspace';
-            $request->log_error('User ' . $hub->current_user->email_address .
-                                ' is not authorized to view workspace ' .
-                                $hub->current_workspace->title);
+            st_log->error('User ' . $hub->current_user->email_address .
+                          ' is not authorized to view workspace ' .
+                          $hub->current_workspace->title);
         }
     }
     $type = $p{type} ? $p{type} : $type;

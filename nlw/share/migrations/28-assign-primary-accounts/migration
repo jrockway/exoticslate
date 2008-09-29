@@ -208,7 +208,7 @@ WHERE u.system_unique_id = "UserMetadata".user_id;
 EOT
 }
 
-print "Assigning people still in multiple accounts to the 'General' account.\n";
+print "Assigning people that are still un-assigned to the 'General' account.\n";
 my $general = _load_account('General', 'create it!');
 my $sth = sql_execute(<<EOT, $general->account_id);
 UPDATE "UserMetadata"

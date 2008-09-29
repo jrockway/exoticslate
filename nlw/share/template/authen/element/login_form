@@ -27,8 +27,8 @@
 <script type="text/javascript">
   if (typeof(jQuery) != 'undefined') {
     function authen_focus() {
-      var username = $('#username');
-      var password = $('#password');
+      var username = jQuery('#username');
+      var password = jQuery('#password');
       if (username && password) {
         if (username.val().length) {
           password.focus();
@@ -41,6 +41,7 @@
         password.focus();
       }
     }
-    $(document).ready( authen_focus );
+
+    jQuery(document).ready(authen_focus);
   }
 </script>

@@ -79,9 +79,9 @@ sub plugin_enabled_for_user {
         LIMIT 1
 SQL
 
-    Socialtext::Timer->Start('can_use_plugin');
+    Socialtext::Timer->Continue('plugin_enabled_for_user');
     my $enabled = sql_singlevalue($sql, $user->user_id, $plugin_name);
-    Socialtext::Timer->Stop('can_use_plugin');
+    Socialtext::Timer->Pause('plugin_enabled_for_user');
     #warn "PLUGIN $plugin_name ENABLED FOR ".$user->username."? $enabled\n";
     return ($enabled ? 1 : 0);
 }
@@ -121,10 +121,10 @@ sub plugin_enabled_for_users {
         LIMIT 1
 SQL
 
-    Socialtext::Timer->Start('can_use_plugin');
+    Socialtext::Timer->Continue('plugin_enabled_for_users');
     my $enabled = sql_singlevalue($sql, $plugin_name, 
                                   $actor->user_id, $user->user_id);
-    Socialtext::Timer->Stop('can_use_plugin');
+    Socialtext::Timer->Pause('plugin_enabled_for_users');
     #warn "PLUGIN $plugin_name ENABLED FOR ".$actor->username." and ". $user->username ."? $enabled\n";
     return ($enabled ? 1 : 0);
 }
@@ -148,10 +148,10 @@ sub plugin_enabled_for_user_in_account {
         LIMIT 1
 SQL
 
-    Socialtext::Timer->Start('can_use_plugin');
+    Socialtext::Timer->Continue('plugin_enabled_for_user_in_account');
     my $enabled = sql_singlevalue($sql, $user->user_id, 
                                   $account->account_id, $plugin_name);
-    Socialtext::Timer->Stop('can_use_plugin');
+    Socialtext::Timer->Pause('plugin_enabled_for_user_in_account');
     return ($enabled ? 1 : 0);
 }
 

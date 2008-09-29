@@ -47,45 +47,60 @@ test_get_events: {
 # test storing a string for context instead of a hash
 
     my $base_select = <<'EOSQL';
-SELECT
-    e.at AT TIME ZONE 'UTC' || 'Z' AS at,
-    e.event_class AS event_class,
-    e.action AS action,
-    e.actor_id AS actor_id, 
-    e.person_id AS person_id, 
-    page.page_id as page_id, 
-        page.name AS page_name, 
-        page.page_type AS page_type,
-    w.name AS page_workspace_name, 
-        w.title AS page_workspace_title,
-    e.tag_name AS tag_name,
-    e.context AS context
-FROM event e 
-    LEFT JOIN page ON (e.page_workspace_id = page.workspace_id AND e.page_id = page.page_id)
-    LEFT JOIN "Workspace" w ON (e.page_workspace_id = w.workspace_id)
-WHERE (w.workspace_id IS NULL OR w.workspace_id IN (
-        SELECT workspace_id FROM "UserWorkspaceRole" WHERE user_id = ?
-        UNION
-        SELECT workspace_id
-        FROM "WorkspaceRolePermission" wrp
-        JOIN "Role" r USING (role_id)
-        JOIN "Permission" p USING (permission_id)
-        WHERE r.name = 'guest' AND p.name = 'read'
-    ))
-    AND (e.event_class <> 'person' OR e.person_id IN (
-        SELECT prsn.user_id
-          FROM account_user viewer1
-            JOIN account_plugin USING (account_id)
-            JOIN account_user prsn USING (account_id)
-          WHERE plugin = 'people' AND viewer1.user_id = ?
-    ))
-    AND (e.event_class <> 'person' OR e.actor_id IN (
-        SELECT actr.user_id
-          FROM account_user viewer2
-            JOIN account_plugin USING (account_id)
-            JOIN account_user actr USING (account_id)
-          WHERE plugin = 'people' AND viewer2.user_id = ?
-    ))
+SELECT * FROM (
+    SELECT
+        e.at AT TIME ZONE 'UTC' || 'Z' AS at,
+        e.event_class AS event_class,
+        e.action AS action,
+        e.actor_id AS actor_id, 
+        e.person_id AS person_id, 
+        page.page_id as page_id, 
+            page.name AS page_name, 
+            page.page_type AS page_type,
+        w.name AS page_workspace_name, 
+            w.title AS page_workspace_title,
+        e.tag_name AS tag_name,
+        e.context AS context
+    FROM event e 
+        LEFT JOIN page ON (e.page_workspace_id = page.workspace_id AND 
+                           e.page_id = page.page_id)
+        LEFT JOIN "Workspace" w ON (e.page_workspace_id = w.workspace_id)
+    WHERE (w.workspace_id IS NULL OR w.workspace_id IN (
+            SELECT workspace_id FROM "UserWorkspaceRole" WHERE user_id = ? 
+            UNION
+            SELECT workspace_id
+            FROM "WorkspaceRolePermission" wrp
+            JOIN "Role" r USING (role_id)
+            JOIN "Permission" p USING (permission_id)
+            WHERE r.name = 'guest' AND p.name = 'read'
+        ))
+EOSQL
+
+    my $tail_select = <<'EOSQL';
+    ORDER BY at DESC
+) evt
+WHERE
+evt.event_class <> 'person' OR (
+    -- does the user share an account with the actor for person events
+    EXISTS (
+        SELECT 1
+        FROM account_user viewer_a
+        JOIN account_plugin USING (account_id)
+        JOIN account_user actr USING (account_id)
+        WHERE plugin = 'people' AND viewer_a.user_id = ?
+          AND actr.user_id = evt.actor_id
+    )
+    AND 
+    -- does the user share an account with the person for person events
+    EXISTS (
+        SELECT 1
+        FROM account_user viewer_b
+        JOIN account_plugin USING (account_id)
+        JOIN account_user prsn USING (account_id)
+        WHERE plugin = 'people' AND viewer_b.user_id = ?
+          AND prsn.user_id = evt.person_id
+    )
+)
 EOSQL
 
     Get_no_events: {
@@ -93,7 +108,7 @@ EOSQL
         isa_ok $events, 'ARRAY';
         is @$events, 0, 'no events found';
         sql_ok( 
-            sql => "$base_select ORDER BY at DESC",
+            sql => "$base_select $tail_select",
             args => [@viewer_args],
         );
     }
@@ -131,6 +146,8 @@ EOSQL
                     best_full_name => "Steve Foo",
                     uri => '/data/people/1234',
                     hidden => 1,
+                    avatar_is_visible => 1,
+                    profile_is_visible => 1
                 },
                 page => {
                     id => $event{page_id},
@@ -147,7 +164,7 @@ EOSQL
 
         is scalar(@Socialtext::SQL::SQL), 2, 'correct # of sql left';
         sql_ok( 
-            sql => "$base_select ORDER BY at DESC",
+            sql => "$base_select $tail_select",
             args => [@viewer_args],
         );
         sql_ok( 
@@ -161,7 +178,7 @@ EOSQL
         is_deeply $events, [], "no spurious events";
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select ORDER BY at DESC LIMIT ?",
+            sql => "$base_select $tail_select LIMIT ?",
             args => [@viewer_args, 32],
         );
     }
@@ -170,7 +187,7 @@ EOSQL
         Socialtext::Events->Get($viewer, offset => 5);
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select ORDER BY at DESC OFFSET ?",
+            sql => "$base_select $tail_select OFFSET ?",
             args => [@viewer_args, 5],
         );
     }
@@ -179,7 +196,7 @@ EOSQL
         Socialtext::Events->Get($viewer, limit => 5, offset => 10);
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select ORDER BY at DESC LIMIT ? OFFSET ?",
+            sql => "$base_select $tail_select LIMIT ? OFFSET ?",
             args => [@viewer_args, 5, 10],
         );
     }
@@ -188,8 +205,8 @@ EOSQL
         Socialtext::Events->Get($viewer, before => 'now');
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select AND (at < ?::timestamptz) ORDER BY at DESC",
-            args => [@viewer_args, 'now'],
+            sql => "$base_select AND (at < ?::timestamptz) $tail_select",
+            args => [@viewer_args[0], 'now', @viewer_args[1,2]],
         );
     }
 
@@ -197,8 +214,8 @@ EOSQL
         Socialtext::Events->Get($viewer, after => 'now');
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select AND (at > ?::timestamptz) ORDER BY at DESC",
-            args => [@viewer_args, 'now'],
+            sql => "$base_select AND (at > ?::timestamptz) $tail_select",
+            args => [@viewer_args[0], 'now', @viewer_args[1,2]],
         );
     }
 
@@ -207,9 +224,9 @@ EOSQL
         Socialtext::Events->Get($viewer, before => 'then', after => 'now');
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select AND (at < ?::timestamptz) 
-                    AND (at > ?::timestamptz) ORDER BY at DESC",
-            args => [@viewer_args, 'then', 'now'],
+            sql => "$base_select AND (at < ?::timestamptz)
+                                 AND (at > ?::timestamptz) $tail_select",
+            args => [@viewer_args[0], 'then', 'now', @viewer_args[1,2]],
         );
     }
 
@@ -217,8 +234,8 @@ EOSQL
         Socialtext::Events->Get($viewer,  action => 'View' );
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select AND (e.action = ?) ORDER BY at DESC",
-            args => [@viewer_args, 'View'],
+            sql => "$base_select AND (e.action = ?) $tail_select",
+            args => [@viewer_args[0], 'View', @viewer_args[1,2]],
         );
     }
 
@@ -227,8 +244,8 @@ EOSQL
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select AND (e.event_class = ?) AND (e.action = ?)
-                    ORDER BY at DESC",
-            args => [@viewer_args, 'thingers', 'View'],
+                    $tail_select",
+            args => [@viewer_args[0], 'thingers', 'View', @viewer_args[1,2]],
         );
     }
 
@@ -236,9 +253,9 @@ EOSQL
         Socialtext::Events->Get($viewer,  action => 'View', before => 'then' );
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
-            sql => "$base_select AND (at < ?::timestamptz) 
-                   AND (e.action = ?) ORDER BY at DESC",
-            args => [@viewer_args, 'then', 'View'],
+            sql => "$base_select AND (at < ?::timestamptz) AND (e.action = ?)
+                    $tail_select",
+            args => [@viewer_args[0], 'then', 'View', @viewer_args[1,2]],
         );
     }
 
@@ -248,9 +265,9 @@ EOSQL
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             name => 'Get_action_and_before_events_with_count',
-            sql => "$base_select AND (at < ?::timestamptz)
-                   AND (e.action = ?) ORDER BY at DESC LIMIT ?",
-            args => [@viewer_args, 'then', 'view', 5],
+            sql => "$base_select AND (at < ?::timestamptz) AND (e.action = ?)
+                    $tail_select LIMIT ?",
+            args => [@viewer_args[0], 'then', 'view', @viewer_args[1,2], 5],
         );
     }
 
@@ -258,12 +275,15 @@ EOSQL
         Socialtext::Events->Get($viewer, action => 'view', before => 'then', count => 5,
                                 event_class => 'page');
         ok @Socialtext::SQL::SQL == 1;
-        sql_ok( 
+        sql_ok(
             name => 'Get_action_and_before_events_with_count_and_class',
-            sql => "$base_select AND (at < ?::timestamptz)
-                   AND (e.event_class = ?) AND (e.action = ?) 
-                   ORDER BY at DESC LIMIT ?",
-            args => [@viewer_args, 'then', 'page', 'view', 5],
+            sql  => "$base_select AND (at < ?::timestamptz) 
+                     AND (e.event_class = ?) AND (e.action = ?)
+                     $tail_select LIMIT ?",
+            args => [
+                @viewer_args[0], 'then', 'page', 'view',
+                @viewer_args[1,2], 5
+            ],
         );
     }
 }

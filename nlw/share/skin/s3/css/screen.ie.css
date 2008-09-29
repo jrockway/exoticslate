@@ -135,6 +135,41 @@ div#mainNav ul ul.level2.withimage {
     -margin-top: 7px;
     -margin-left: -20px;
 }
+
+* html div.widget div.widgetHeader h4 span {
+    /* Make the spaces above widget titles draggable for IE6: {bz: 1323} */
+    -padding-top: 9px !important;
+    -padding-bottom: 9px !important;
+}
+
+
+/* IE6-specific parts of {bz: 1338} */
+
+body#workSpace div#controls div#st-editing-tools-edit h1,
+body#blog div#controls div#st-editing-tools-edit h1,
+div#contentContainer h2.tableTitle {
+        -width: 100% !important;
+}
+
+body#workSpace div#controls div#st-editing-tools-edit,
+body#blog div#controls div#st-editing-tools-edit {
+        -width: 80% !important;
+}
+
+body#blog div#controls div#controlsRight {
+        -width: 10% !important;
+}
+
+div#contentContainer h2.tableTitle {
+        -width: 85% !important;
+}
+
+div.postByEmail {
+        -display: block;
+        -text-align: right !important;
+        -width: 100% !important.
+}
+
 /* End IE6-specific hack */
 
 html ul.buttonRight ul.level2 {

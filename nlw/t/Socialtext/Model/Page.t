@@ -12,18 +12,29 @@ BEGIN {
     use_ok 'Socialtext::Model::Page';
 }
 
+my $ed = Socialtext::User->new(
+    username => 'editor',
+    email_address => 'editor@example.com',
+    user_id => 310,
+);
+$Socialtext::User::Users{310} = $ed;
+
+my $crtr = Socialtext::User->new(
+    username => 'creator',
+    email_address => 'creator@example.com',
+    user_id => 311,
+);
+$Socialtext::User::Users{311} = $crtr;
+
 Create_from_row: {
     my $data = {
         workspace_id => 3,
         workspace_name => 'workspace_name',
         page_id => 'page_id',
         name => 'name',
-        last_editor_id => 'last_editor_id',
-        last_editor_username => 'last_editor_username',
-        last_editor_email_address => 'last_editor_email_address',
+        last_editor_id => 310,
         last_edit_time => '2008-01-01 23:12:01',
-        creator_id => 'creator_id',
-        creator_username => 'creator_username',
+        creator_id => 311,
         create_time => '2007-01-01 23:12:01',
         current_revision_id => 'current_revision_id',
         current_revision_num => 'current_revision_num',
@@ -46,8 +57,8 @@ Create_from_row: {
         Summary => 'summary',
         Date => '2008-01-01 23:12:01',
         DateLocal => '2008-01-01 23:12:01',
-        From => 'last_editor_email_address',
-        username => 'last_editor_username',
+        From => 'editor@example.com',
+        username => 'editor',
         page_uri => 'page_id',
         page_id => 'page_id',
         revision_count => 'revision_count',
@@ -66,7 +77,7 @@ Create_from_row: {
         name           => 'name',
         uri            => 'page_id',
         page_id        => 'page_id',
-        last_editor    => 'last_editor_username',
+        last_editor    => 'editor',
         last_edit_time => '2008-01-01 23:12:01',
         revision_id    => 'current_revision_id',
         revision_count => 'revision_count',
@@ -98,8 +109,8 @@ foo content</p>
 EOT
     is $page->content, "foo content\n";
 
-    is $page->last_edited_by->user_id, 'last_editor_id';
-    is $page->creator->user_id, 'creator_id';
+    is $page->last_edited_by->user_id, 310;
+    is $page->creator->user_id, 311;
 
     # destructive tests
     delete $page->{hub};
@@ -110,19 +121,15 @@ EOT
     ok $page->is_spreadsheet;
 }
 
-
 Lazy_load_tags: {
     my $data = {
         workspace_id => 3,
         workspace_name => 'workspace_name',
         page_id => 'page_id',
         name => 'name',
-        last_editor_id => 'last_editor_id',
-        last_editor_username => 'last_editor_username',
-        last_editor_email_address => 'last_editor_email_address',
+        last_editor_id => 310,
         last_edit_time => '2008-01-01 23:12:01',
-        creator_id => 'creator_id',
-        creator_username => 'creator_username',
+        creator_id => 311,
         create_time => '2007-01-01 23:12:01',
         current_revision_id => 'current_revision_id',
         current_revision_num => 'current_revision_num',
@@ -145,12 +152,9 @@ Resolve_non_default_usernames: {
         workspace_name => 'workspace_name',
         page_id => 'page_id',
         name => 'name',
-        last_editor_id => 'last_editor_id',
-        last_editor_username => undef,
-        last_editor_email_address => 'should be replaced',
+        last_editor_id => 310,
         last_edit_time => '2008-01-01 23:12:01',
-        creator_id => 'creator_id',
-        creator_username => undef,
+        creator_id => 311,
         create_time => '2007-01-01 23:12:01',
         current_revision_id => 'current_revision_id',
         current_revision_num => 'current_revision_num',
@@ -167,8 +171,8 @@ Resolve_non_default_usernames: {
     my $result = $page->to_result();
     ok $result, "converted to a result";
 
-    is $result->{From}, 'one@foo.bar', "looked up the user address";
-    is $result->{username}, 'oneusername', "looked up the username";
+    is $result->{From}, 'editor@example.com', "looked up the user address";
+    is $result->{username}, 'editor', "looked up the username";
 }
 
 ok 'TODO: bad new_from_row';

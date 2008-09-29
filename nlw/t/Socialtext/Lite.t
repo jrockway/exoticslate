@@ -60,7 +60,7 @@ like(
     'page display includes correct content'
 );
 like(
-    $html, qr{<a href="/nlw/submit/logout\?redirect_to=[^"]+">Log&nbsp;out</a>},
+    $html, qr{<a href="/nlw/submit/logout\?redirect_to=[^"]+">Log out</a>},
     'page display includes log out button'
 );
 

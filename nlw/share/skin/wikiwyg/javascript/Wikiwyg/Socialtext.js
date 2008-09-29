@@ -220,10 +220,6 @@ function setup_wikiwyg() {
             nlw_edit_controls_visible = true;
             ww.enableLinkConfirmations();
 
-            jQuery(window).bind("resize", function () {
-                ww.resizeEditor();
-            }).trigger("resize");
- 
             ww.is_editing = true;
 
             if (Wikiwyg.is_safari) {
@@ -245,12 +241,17 @@ function setup_wikiwyg() {
                 }, 2000 );
             }
 
+            jQuery(window).trigger("resize");
         } catch(e) {
             throw(e);
         }
         return false;
     }
 
+    jQuery(window).bind("resize", function () {
+        ww.resizeEditor();
+    });
+ 
     jQuery('#st-edit-button-link').click(ww.start_nlw_wikiwyg);
     jQuery("#st-edit-actions-below-fold-edit").click(ww.start_nlw_wikiwyg);
 
@@ -507,6 +508,7 @@ proto.showScrollbars = function () {
 }
 
 proto.resizeEditor = function () {
+    if (!this.is_editing) return;
     if (this.__resizing) return;
     this.__resizing = true;
 
@@ -516,12 +518,23 @@ proto.resizeEditor = function () {
     var $iframe = jQuery('#st-page-editing-wysiwyg');
     var $textarea = jQuery('#wikiwyg_wikitext_textarea');
 
+    var self = this;
+    if (
+        jQuery(window).width() > $iframe.width() * 3  ||
+        jQuery(window).width() > $textarea.width() * 3 
+    ) {
+        // console.log("iframe/textarea is too small to make sense, wait a little bit");
+        self.__resizing = false;
+        setTimeout( function() { self.resizeEditor() }, 100 );
+        return;
+    }
+
     if ($iframe.is(":visible"))
         jQuery("#st-editing-prefix-container").width($iframe.width()+2);
     else if ($textarea.is(":visible"))
         jQuery("#st-editing-prefix-container").width($textarea.width());
 
-    this.__resizing = false;
+    self.__resizing = false;
 }
 
 proto.preview_link_text = loc('Preview');

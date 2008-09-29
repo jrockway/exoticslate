@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
       [% FILTER decorate "head" %]
-        <title>[% title || display_title %] / [% wiki.title %]</title>
+        <title>[% title || display_title %][% IF wiki.name != '' %] / [% wiki.title %][% END %]</title>
         [% PROCESS element/css_links %]
         [% IF feeds %]
             [% IF feeds.rss %]

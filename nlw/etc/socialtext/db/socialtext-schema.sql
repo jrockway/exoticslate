@@ -197,7 +197,6 @@ CREATE TABLE "WorkspaceRolePermission" (
 );
 
 CREATE SEQUENCE "Workspace___workspace_id"
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -452,6 +451,12 @@ CREATE UNIQUE INDEX "UserId___driver_key___driver_key___driver_unique_id"
 CREATE UNIQUE INDEX "UserMetadata___user_id"
 	    ON "UserMetadata" (user_id);
 
+CREATE INDEX "UserMetadata_primary_account_id"
+	    ON "UserMetadata" (primary_account_id);
+
+CREATE INDEX "UserWorkspaceRole_workspace_id"
+	    ON "UserWorkspaceRole" (workspace_id);
+
 CREATE UNIQUE INDEX "User___lower___email_address"
 	    ON "User" (lower((email_address)::text));
 
@@ -460,6 +465,9 @@ CREATE UNIQUE INDEX "User___lower___username"
 
 CREATE UNIQUE INDEX "Workspace___lower___name"
 	    ON "Workspace" (lower((name)::text));
+
+CREATE INDEX "Workspace_account_id"
+	    ON "Workspace" (account_id);
 
 CREATE INDEX ix_event_actor_time
 	    ON event (actor_id, "at");
@@ -491,6 +499,18 @@ CREATE INDEX ix_person_assistant_id
 CREATE INDEX ix_person_supervisor_id
 	    ON person (supervisor_id);
 
+CREATE INDEX page_tag__page_ix
+	    ON page_tag (workspace_id, page_id);
+
+CREATE INDEX page_tag__tag_ix
+	    ON page_tag (tag);
+
+CREATE INDEX page_tag__workspace_ix
+	    ON page_tag (workspace_id);
+
+CREATE INDEX page_tag__workspace_tag_ix
+	    ON page_tag (workspace_id, tag);
+
 CREATE UNIQUE INDEX person_tag__name
 	    ON person_tag (name);
 
@@ -499,6 +519,20 @@ CREATE UNIQUE INDEX search_set_workspaces___search_set_id___search_set_id___work
 
 CREATE UNIQUE INDEX search_sets___owner_user_id___owner_user_id___name
 	    ON search_sets (owner_user_id, lower((name)::text));
+
+CREATE INDEX storage_class_key_ix
+	    ON "storage" ("class", "key");
+
+CREATE INDEX storage_key_ix
+	    ON "storage" ("key");
+
+CREATE INDEX storage_key_value_type_ix
+	    ON "storage" ("key", value)
+	    WHERE (("key")::text = 'type');
+
+CREATE INDEX storage_key_value_viewer_ix
+	    ON "storage" ("key", value)
+	    WHERE (("key")::text = 'viewer');
 
 CREATE TRIGGER person_ins
     AFTER INSERT ON "UserId"
@@ -666,4 +700,4 @@ ALTER TABLE ONLY "Workspace"
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '13');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '15');

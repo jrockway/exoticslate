@@ -14,6 +14,7 @@ use File::chdir;
 use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
                       search_dirs => \@libs;
 use Socialtext::Pluggable::WaflPhrase;
+use Socialtext::Log 'st_timed_log';
 
 # These hook types are executed only once, all other types are called as many
 # times as they are registered
@@ -21,7 +22,6 @@ my %ONCE_TYPES = (
     action   => 1,
     wafl     => 1,
     template => 1,
-    root     => 1,  # "root" is special, its not a regular action
 );
 
 BEGIN {
@@ -55,17 +55,24 @@ sub handler {
 
     $self->make_hub($rest->user) unless $self->hub;
 
-    if ($rest->query->param('action')) {
-        my $res = $self->hub->process;
+    my $res;
+    my $action;
+    if (($action = $rest->query->param('action'))) {
+        $res = $self->hub->process;
         $rest->header(-type => 'text/html; charset=UTF-8', # default
                       $self->hub->rest->header);
-        return $res;
     }
     else {
-        my $res = $self->hook('root', $rest);
+        $action = 'root';
+        $res = $self->hook('root', $rest);
         $rest->header($self->hub->rest->header);
-        return $res;
     }
+
+#     st_timed_log(
+#         'info', 'ADAPTER', $action, {},
+#         Socialtext::Timer->Report()
+#     );
+    return $res;
 }
 
 sub make_hub {
@@ -190,12 +197,23 @@ sub hook {
             next unless $enabled;
                          
             eval {
-                push @output, $plugin->$method(@args);
+                $plugin->declined(undef);
+                my $results = $plugin->$method(@args);
+                unless ($plugin->declined) {
+                    push @output, $results;
+                }
             };
             if ($@) {
                 (my $err = $@) =~ s/\n.+//sm;
                 return $err;
             }
+
+            # XXX: special handling for "root" plugins; run them all until one
+            # of them does some processing.
+            if ($name eq 'root') {
+                last unless $plugin->declined;
+            }
+
             last if $hook->{once};
         }
     }

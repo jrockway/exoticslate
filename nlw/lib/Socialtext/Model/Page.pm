@@ -34,23 +34,11 @@ sub new_from_row {
 sub to_result {
     my $self = shift;
 
-    my $from;
-    my $username;
-    unless (defined $self->{last_editor_username} &&
-            defined $self->{last_editor_email_address}) 
-    {
-        my $user = Socialtext::User->new(user_id => $self->{last_editor_id});
-        $from = $user->email_address;
-        $username = $user->username;
-    }
-    else {
-        $from = $self->{last_editor_email_address};
-        $username = $self->{last_editor_username};
-    }
+    my $user = $self->last_edited_by;
 
     my $result = {
-        From     => $from,
-        username => $username,
+        From     => $user->email_address,
+        username => $user->username,
         Date     => $self->{last_edit_time},
         DateLocal => $self->datetime_for_user,
         Subject  => $self->{name},
@@ -101,11 +89,13 @@ sub tags {
 sub hash_representation {
     my $self = shift;
 
+    my $editor = $self->last_edited_by;
+
     my $hash = {
         name           => $self->{name},
         uri            => $self->{page_id},
         page_id        => $self->{page_id},
-        last_editor    => $self->{last_editor_username},
+        last_editor    => $editor->username,
         last_edit_time => $self->{last_edit_time},
         revision_id    => $self->{current_revision_id},
         revision_count => $self->{revision_count},

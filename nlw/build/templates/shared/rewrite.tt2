@@ -84,7 +84,7 @@
     # backwards compat for old-style /foo/member/index.cgi links
     RewriteRule    ^(/\w+)/member/(.*)  $1/$2          [R,L]
 
-    RewriteRule    ^/lite/?$ /lite/login [R,L]
+    RewriteRule    ^/lite/?$ / [R,L]
     RewriteRule    ^/lite/page/([^/]+)$ /lite/page/$1/ [R,L,NE]
 
     RewriteRule    !^/data(/.*)?$   -  [C]

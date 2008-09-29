@@ -23,6 +23,7 @@ use Class::Field 'field';
 use Socialtext::l10n qw(system_locale loc);
 use Socialtext::EmailSender::Factory;
 use Socialtext::User::Cache;
+use Socialtext::Timer;
 use base qw( Socialtext::MultiPlugin );
 
 use Readonly;
@@ -137,8 +138,13 @@ sub new {
     my $class = shift;
     my $user = bless {}, $class;
 
+    Socialtext::Timer->Continue('user_new');
+
     my $homunculus = $class->new_homunculus(@_);
+    Socialtext::Timer->Pause('user_new');
     return undef unless $homunculus;
+
+    Socialtext::Timer->Continue('user_new');
 
     # ensure this user is present in our UserId table
     my $userid = Socialtext::UserId->create_if_necessary($homunculus);
@@ -155,6 +161,8 @@ sub new {
     # store the user_id since we've got it at hand (preventing frequent
     # expensive lookups later)
     $user->user_id($userid->system_unique_id);
+
+    Socialtext::Timer->Pause('user_new');
 
     return $user;
 }
@@ -218,6 +226,7 @@ sub update_store {
 sub recently_viewed_workspaces {
     my $self = shift;
     my $limit = shift || 10;
+    Socialtext::Timer->Continue('user_ws_recent');
     my $sth = sql_execute(q{
         SELECT name as workspace_name,
                last_edit
@@ -241,6 +250,7 @@ sub recently_viewed_workspaces {
     while (my $row = $sth->fetchrow_hashref) {
         push @viewed, [$row->{workspace_name}, $row->{workspace_title}];
     }
+    Socialtext::Timer->Pause('user_ws_recent');
     return @viewed;
 }
 
@@ -359,6 +369,8 @@ sub accounts {
     my @args = ($self->user_id);
     my $sql;
 
+    Socialtext::Timer->Continue('user_accts');
+
     if ($plugin) {
         $sql = q{
             SELECT DISTINCT account_id 
@@ -380,6 +392,9 @@ sub accounts {
         push @accounts, Socialtext::Account->new(account_id => $account_id);
     }
     @accounts = sort {$a->name cmp $b->name} @accounts;
+
+    Socialtext::Timer->Pause('user_accts');
+
     return (wantarray ? @accounts : \@accounts);
 }
 
@@ -890,15 +905,20 @@ my $standard_apply = sub {
 sub _UserCursor {
     my ( $class, $sql, $interpolations, %p ) = @_;
 
-    my $sth = sql_execute( $sql, @p{@$interpolations} );
+    Socialtext::Timer->Continue('user_cursor');
 
-    return Socialtext::MultiCursor->new(
+    my $sth = sql_execute( $sql, @p{@$interpolations} );
+    my $mc = Socialtext::MultiCursor->new(
         iterables => [ $sth->fetchall_arrayref ],
         apply => $p{apply} || sub {
             my $row = shift;
             return $class->new( user_id => $row->[0] );
         }
     );
+
+    Socialtext::Timer->Pause('user_cursor');
+
+    return $mc;
 }
 
 my %LimitAndSortSpec = (
@@ -2066,6 +2086,16 @@ the user in UserConfirmationEmail.
 =head2 $user->email_confirmation()
 
 Create and return an Socialtext::User::EmailConfirmation object for the user.
+
+=head2 $user->avatar_is_visible()
+
+Return whether the user's avatar should be displayed when viewing information
+about this user. 
+
+=head2 $user->profile_is_visible_to()
+
+Return whether a link to the user's profile should be displayed when viewing
+information about this user. 
 
 =head1 AUTHOR
 

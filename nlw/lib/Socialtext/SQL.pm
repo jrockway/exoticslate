@@ -44,7 +44,8 @@ our @EXPORT_OK = qw(
 );
 
 
-our $DEBUG;
+our $DEBUG = 0;
+our $TRACE_SQL = 0;
 our %DBH;
 
 =head2 get_dbh()
@@ -108,10 +109,9 @@ sub sql_execute {
     my ($sth, $rv);
     eval {
         warn "Preparing ($statement) - Bindings:(" . join(',', @bindings) . ")" 
-            if $DEBUG;
+            if ($DEBUG or $TRACE_SQL);
         Socialtext::Timer->Continue('sql_prepare');
         $sth = $dbh->prepare($statement);
-        Socialtext::Timer->Pause('sql_prepare');
         Socialtext::Timer->Pause('sql_prepare');
         $sth->execute(@bindings) ||
             die "Error during execute - bindings=("

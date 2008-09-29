@@ -59,9 +59,13 @@ sub handler {
          # is not set because the URI does not have a valid workspace
          # in it.
          if (Exception::Class->caught('Socialtext::WebApp::Exception::NotFound') or $e =~ /current_workspace/ ) {
+            # XXX authenticated users get redirected to the workspace list,
+            # while everyone else just goes to "/" (which may redirect
+            # elsewhere as needed).
+            my $redirect_to = $rest->user->is_authenticated ? '/?action=workspace_list' : '/';
             $rest->header(
                 -status   => HTTP_302_Found,
-                -Location => '/',
+                -Location => $redirect_to,
             );
              return ''; # XXX real content here!
          }

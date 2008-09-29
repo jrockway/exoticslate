@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 43;
+use Test::Socialtext tests => 45;
 use YAML qw/LoadFile/;
 
 BEGIN {
@@ -60,7 +60,8 @@ like( $@, qr/cannot change/, 'cannot change the name of a system-created account
 is( $test->workspace_count, 1, 'test account has one workspace' );
 is( $test->workspaces->next->name, 'testingspace',
     'testingspace workspace belong to testing account' );
-users_are($test, [qw/dummy1 dummy2 dummy3/]);
+users_are($test, [qw/dummy1 dummy2 dummy3/], 0);
+users_are($test, [qw/dummy2 dummy3/], 1);
 
 Account_skins: {
     # set skins
@@ -132,15 +133,17 @@ exit;
 sub users_are {
     my $account = shift;
     my $users = shift;
+    my $primary_only = shift;
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     # check user count
     # check user list
 
-    is( $account->user_count, scalar(@$users), 
+    is( $account->user_count($primary_only), scalar(@$users), 
         $account->name . ' account has right number of users' );
 
-    is( join(',', sort map { $_->username } $account->users->all), 
+    my $mc = $account->users(primary_only => $primary_only);
+    is( join(',', sort map { $_->username } $mc->all), 
         join(',', sort @$users),
         $account->name . ' account users are correct' );
 }

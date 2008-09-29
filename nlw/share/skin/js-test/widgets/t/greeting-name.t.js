@@ -21,7 +21,7 @@ t.runAsync([
         $(t.iframe).width(1000);
         t.scrollTo(50);
         var username = t.$("span.welcome div").text()
-            .replace(/^\s*(.*)\s*$/, '$1');
+            .replace(/^\s*(.*?)\s*$/, '$1');
         var expected = t.anonymous_username.replace(/@.*/, '');
         t.is(username, expected,
             'User name is correct (' + expected + ') when user has no name'

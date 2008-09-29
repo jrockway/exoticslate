@@ -64,7 +64,24 @@
 
         $('#lightbox')
             .css('width', opts.width || '520px')
-            .append(opts.html || $(opts.content).show())
+            .css('height', '') // Reset height set by scrollable code below
+            .append(opts.html || $(opts.content).show());
+        
+        if ($(window).height() < $('#lightbox').height()) {
+            // Window is too short for our lightbox; make it scrollable.
+            $('#lightbox').css({
+                width:    30 + $('#lightbox').width() + 'px',
+                height:   $(window).height(),
+                overflow: 'auto'
+            });
+        }
+        else {
+            // Window's height is sufficient for lightbox; hide overflows.
+            $('#lightbox')
+                .css('overflow', 'hidden');
+        }
+        
+        $('#lightbox')
             .css({
                 left: (pageScroll.left + (($(window).width() -
                         $('#lightbox').width()) / 2)) + 'px',

@@ -86,29 +86,22 @@ sub st_timed_log {
     my $method = shift;
     my $command = shift;
     my $name = shift;
-    my $data = shift;
-    my $times = shift;
+    my $data = shift || {};
+    my $times = shift || {};
 
-    my $message = uc($command) . ',' . uc($name);
+    my $message = uc($command) . ',' . uc($name) . ',';
     my $key;
     my $value;
 
-    while (($key, $value) = each(%$data)) {
-        $message .= ",$key:$value";
-    }
-    my $time = '';
-    while (($key, $value) = each(%$times)) {
-        $time .= "$key:$value,";
-    }
-    chop $time;
+    $message .= join(',', map { $_.':'.$data->{$_} } sort keys %$data);
+
+    # list timers descending by time
+    my $time = join(',', map { $_.':'.$times->{$_} } 
+                         sort { $times->{$b} <=> $times->{$a} } 
+                         keys %$times);
     $message .= ",[$time]" if ($time);
 
-    __PACKAGE__->new;
-    return $method
-        ? $Instance->$method($message)
-        : $Instance;
-
-
+    return st_log($method, $message);
 }
 
 =head1 IMPORTABLE SUBROUTINE

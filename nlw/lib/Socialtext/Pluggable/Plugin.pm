@@ -29,6 +29,7 @@ my %rests;
 const priority => 100;
 field hub => -weak;
 field 'rest';
+field 'declined';
 
 # perldoc Socialtext::URI for arguments
 #    path = '' & query => {}

@@ -133,6 +133,13 @@
          &nbsp; 
         </div><!-- workSpaceLink END -->
       </div><!-- mainNav END -->
+
+      <div id="st-actions-bar">
+          [% IF wiki.system_status %]
+              <div id="st-system-status">[% wiki.system_status %]</div>
+          [% END %]
+      </div>
+
 [% IF content_id.match('^st-(homepage|editcontention|listview)$') %]
       <div id="st-display-mode-container" class="st-content st-content-no-controls">  	
         <div id="contentContainer">

@@ -19,6 +19,7 @@ sub not_authorized {
     my $self = shift;
     eval {
         Socialtext::Challenger->Challenge(
+            hub      => $self->hub,
             request  => $self->rest->query,
             redirect => $self->rest->query->url(
                 -absolute => 1, -path => 1, -query => 1
@@ -75,24 +76,13 @@ sub login {
     # doesn't matter if the user is authorized or not; this page *has* a
     # visible display either way.
     my $redirect_to = $rest->query->param('redirect_to');
-
-    if ($self->hub->current_user->is_guest()) {
-        my $content = Socialtext::Lite->new( hub => $self->hub )
-                ->login($redirect_to);
-        $rest->header(
-            -status => HTTP_200_OK,
-            -type   => 'text/html' . '; charset=UTF-8'
-        );
-        return $content;
-    }
-    else {
-        $redirect_to ||= '/lite/workspace_list';
-        $rest->header(
-            -status => HTTP_302_Found,
-            -Location => $redirect_to,
-        );
-        return;
-    }
+    my $content = Socialtext::Lite->new( hub => $self->hub )
+            ->login($redirect_to);
+    $rest->header(
+        -status => HTTP_200_OK,
+        -type   => 'text/html' . '; charset=UTF-8'
+    );
+    return $content;
 }
 
 sub workspace_list {

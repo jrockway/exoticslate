@@ -372,9 +372,9 @@ sub _login_logout {
     if ($self->hub->current_user->is_guest) {
         my $uri = $self->hub->current_workspace->uri;
         $uri =~ s#^(.*://[^/]+)/([^/]+)#$1/lite/page/$2/$page_uri#g;
-        return '<a href="/lite/login?' . $uri . '">' . loc('Log&nbsp;in') . '</a>';
+        return '<a href="/challenge?' . $uri . '">' . loc('Log in') . '</a>';
     } else {
-        return '<a href="/nlw/submit/logout?redirect_to=/lite/login">' . loc('Log&nbsp;out') . '</a>';
+        return '<a href="/nlw/submit/logout?redirect_to=/lite/login">' . loc('Log out') . '</a>';
     }
 }
 

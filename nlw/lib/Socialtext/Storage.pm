@@ -3,6 +3,7 @@ package Socialtext::Storage;
 use strict;
 use YAML;
 use Socialtext::SQL qw( sql_execute sql_singlevalue);
+use Socialtext::Timer;
 use Carp qw(croak);
 
 sub Search {
@@ -30,8 +31,10 @@ sub Search {
     my $sql = "SELECT DISTINCT class, $all_keys FROM $all_selects";
 
     my @binding = map { $_ => $terms{$_} } @keys;
+    Socialtext::Timer->Continue('storage_search');
     my $sth = sql_execute($sql, @binding);
     my $res = $sth->fetchall_arrayref;
+    Socialtext::Timer->Pause('storage_search');
     return unless @$res;
     if (@$res > 1) {
         warn "$class: returned more than one result for query ($sql), ("
@@ -66,6 +69,7 @@ sub get {
     my ($self,$key) = @_;
     croak 'key is required' unless $key;
     return $self->{_cache}{$key} if exists $self->{_cache}{$key};
+    Socialtext::Timer->Continue('storage_get');
     my $sth = sql_execute('
         SELECT value, datatype
           FROM storage
@@ -73,6 +77,7 @@ sub get {
     ', $self->{id}, $key);
 
     my $res = $sth->fetchall_arrayref;
+    Socialtext::Timer->Pause('storage_get');
     return $self->{_cache}{$key} = undef unless @$res;
     my ($val, $type) = @{$res->[0]};
     $val = YAML::Load($val) if $type ne 'STRING';
@@ -83,6 +88,7 @@ sub preload {
     my ($self,@keys) = @_;
     croak 'key is required' unless @keys;
 
+    Socialtext::Timer->Continue('storage_preload');
     my $key_query = join ',', map { "?" } @keys;
     my $sth = sql_execute("
         SELECT key, value, datatype
@@ -96,6 +102,7 @@ sub preload {
             ? $row->{value}
             : YAML::Load( $row->{value} );
     }
+    Socialtext::Timer->Pause('storage_preload');
     $self->{_cache}{$_} ||= undef for @keys;
 }
 

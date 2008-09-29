@@ -13,6 +13,7 @@ use Email::Valid;
 use Exception::Class;
 use Socialtext::AppConfig;
 use Socialtext::Authen;
+use Socialtext::BrowserDetect;
 use Socialtext::Hub;
 use Socialtext::Log 'st_log';
 use Socialtext::Apache::User;
@@ -75,14 +76,19 @@ sub handler ($$) {
         # Include login_message_file content in vars sent to template
         # if login_message_file is set in AppConfig.
         if ( $uri eq 'login.html' ) {
+            # URL to the miki login page
+            $vars->{miki_url} = '/lite/login';
+
             # if we're redirecting to a miki page, use the miki login page
             # instead
             if ($self->{args}{redirect_to} =~ m#^(?:https?://[^/]+)?/lite/#) {
-                return $self->_redirect('/lite/login');
+                return $self->_redirect( $vars->{miki_url} );
             }
 
-            # URL to the miki login page
-            $vars->{miki_url} = '/lite/login';
+            # mobile browsers should see the miki login page instead
+            if (Socialtext::BrowserDetect::is_mobile()) {
+                return $self->_redirect( $vars->{miki_url} );
+            }
 
             # list of public workspaces (for Workspace List)
             $vars->{public_workspaces} = [$main->hub->workspace_list->public_workspaces];

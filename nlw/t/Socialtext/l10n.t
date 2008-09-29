@@ -15,7 +15,7 @@ set_system_locale('en');
 my $hub = new_hub('admin');
 
 Default_to_english: {
-    is loc('Welcome, [_1].', 'user'), 'Welcome, user.';
+    is loc('Welcome'), 'Welcome';
 }
 
 Test_locale: {

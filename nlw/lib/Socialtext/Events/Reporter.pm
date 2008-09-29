@@ -6,6 +6,7 @@ use Socialtext::SQL qw/sql_execute/;
 use Socialtext::JSON qw/decode_json/;
 use Socialtext::User;
 use Socialtext::Pluggable::Adapter;
+use Socialtext::Timer;
 
 sub new {
     my $class = shift;
@@ -40,17 +41,19 @@ sub _best_full_name {
 }
 
 sub _extract_person {
-    my ($self, $row, $prefix) = @_;
+    my ($self, $row, $prefix, $viewer) = @_;
     my $id = delete $row->{"${prefix}_id"};
     return unless $id;
 
     # this real-name calculation may benefit from caching at some point
     my $real_name;
     my $user = Socialtext::User->new(user_id => $id);
+    my $avatar_is_visible = $user->avatar_is_visible || 0;
     if ($user) {
         $real_name = $user->guess_real_name();
     }
 
+    my $profile_is_visible = $user->profile_is_visible_to($viewer) || 0;
     my $hidden = 1;
     my $adapter = Socialtext::Pluggable::Adapter->new;
     if ($adapter->plugin_exists('people')) {
@@ -59,11 +62,14 @@ sub _extract_person {
         $hidden = $profile->is_hidden if $profile;
     }
 
+
     $row->{$prefix} = {
         id => $id,
         best_full_name => $real_name,
         uri => "/data/people/$id",
         hidden => $hidden,
+        avatar_is_visible => $avatar_is_visible,
+        profile_is_visible => $profile_is_visible,
     };
 }
 
@@ -153,68 +159,82 @@ SQL
     }
     $where = " AND $where" if $where;
 
+    my @limit_and_offset;
     my $limit = '';
     if (my $l = $opts{limit} || $opts{count}) {
         $limit = 'LIMIT ?';
-        push @args, $l;
+        push @limit_and_offset, $l;
     }
     my $offset = '';
     if (my $o = $opts{offset}) {
         $offset = 'OFFSET ?';
-        push @args, $o;
+        push @limit_and_offset, $o;
     }
 
     my $sql = <<EOSQL;
-SELECT
-    e.at AT TIME ZONE 'UTC' || 'Z' AS at,
-    e.event_class AS event_class,
-    e.action AS action,
-    e.actor_id AS actor_id, 
-    e.person_id AS person_id, 
-    page.page_id as page_id, 
-        page.name AS page_name, 
-        page.page_type AS page_type,
-    w.name AS page_workspace_name, 
-        w.title AS page_workspace_title,
-    e.tag_name AS tag_name,
-    e.context AS context
-FROM event e 
-    LEFT JOIN page ON (e.page_workspace_id = page.workspace_id AND 
-                       e.page_id = page.page_id)
-    LEFT JOIN "Workspace" w ON (e.page_workspace_id = w.workspace_id)
-WHERE (w.workspace_id IS NULL OR w.workspace_id IN (
-        SELECT workspace_id FROM "UserWorkspaceRole" WHERE user_id = ? 
-        UNION
-        SELECT workspace_id
-        FROM "WorkspaceRolePermission" wrp
-        JOIN "Role" r USING (role_id)
-        JOIN "Permission" p USING (permission_id)
-        WHERE r.name = 'guest' AND p.name = 'read'
-    ))
-    AND (e.event_class <> 'person' OR e.person_id IN (
-        SELECT prsn.user_id
-          FROM account_user viewer1
-            JOIN account_plugin USING (account_id)
-            JOIN account_user prsn USING (account_id)
-          WHERE plugin = 'people' AND viewer1.user_id = ?
-    ))
-    AND (e.event_class <> 'person' OR e.actor_id IN (
-        SELECT actr.user_id
-          FROM account_user viewer2
-            JOIN account_plugin USING (account_id)
-            JOIN account_user actr USING (account_id)
-          WHERE plugin = 'people' AND viewer2.user_id = ?
-    ))
-  $where
-ORDER BY at DESC
+SELECT * FROM (
+    SELECT
+        e.at AT TIME ZONE 'UTC' || 'Z' AS at,
+        e.event_class AS event_class,
+        e.action AS action,
+        e.actor_id AS actor_id, 
+        e.person_id AS person_id, 
+        page.page_id as page_id, 
+            page.name AS page_name, 
+            page.page_type AS page_type,
+        w.name AS page_workspace_name, 
+            w.title AS page_workspace_title,
+        e.tag_name AS tag_name,
+        e.context AS context
+    FROM event e 
+        LEFT JOIN page ON (e.page_workspace_id = page.workspace_id AND 
+                           e.page_id = page.page_id)
+        LEFT JOIN "Workspace" w ON (e.page_workspace_id = w.workspace_id)
+    WHERE (w.workspace_id IS NULL OR w.workspace_id IN (
+            SELECT workspace_id FROM "UserWorkspaceRole" WHERE user_id = ? 
+            UNION
+            SELECT workspace_id
+            FROM "WorkspaceRolePermission" wrp
+            JOIN "Role" r USING (role_id)
+            JOIN "Permission" p USING (permission_id)
+            WHERE r.name = 'guest' AND p.name = 'read'
+        ))
+      $where
+    ORDER BY at DESC
+) evt
+WHERE
+evt.event_class <> 'person' OR (
+    -- does the user share an account with the actor for person events
+    EXISTS (
+        SELECT 1
+        FROM account_user viewer_a
+        JOIN account_plugin USING (account_id)
+        JOIN account_user actr USING (account_id)
+        WHERE plugin = 'people' AND viewer_a.user_id = ?
+          AND actr.user_id = evt.actor_id
+    )
+    AND 
+    -- does the user share an account with the person for person events
+    EXISTS (
+        SELECT 1
+        FROM account_user viewer_b
+        JOIN account_plugin USING (account_id)
+        JOIN account_user prsn USING (account_id)
+        WHERE plugin = 'people' AND viewer_b.user_id = ?
+          AND prsn.user_id = evt.person_id
+    )
+)
 $limit $offset
 EOSQL
-    my @user_id = ($viewer->user_id) x 3;
-    my $sth = sql_execute($sql, @user_id, @args);
+    my @user_id = ($viewer->user_id) x 1;
+    my @more_user_id = ($viewer->user_id) x 2;
+    Socialtext::Timer->Continue('get_events');
+    my $sth = sql_execute($sql, @user_id, @args, @more_user_id,
+        @limit_and_offset);
     my $result = [];
     while (my $row = $sth->fetchrow_hashref) {
-        $self->_extract_person($row, 'actor');
-        $self->_extract_person($row, 'person');
+        $self->_extract_person($row, 'actor', $viewer);
+        $self->_extract_person($row, 'person', $viewer);
 
         my $page = {
             id => delete $row->{page_id} || undef,
@@ -241,6 +261,7 @@ EOSQL
 
         push @$result, $row;
     }
+    Socialtext::Timer->Pause('get_events');
 
     return @$result if wantarray;
     return $result;

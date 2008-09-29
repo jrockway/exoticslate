@@ -1392,11 +1392,11 @@ html .wiki a:hover {
 .wiki h6 {
     font-weight: normal;
     color: #0A94DF;
+    line-height: 1.2 ! important;
 }
 
 .wiki h1 {
     font-size: 2em;
-    line-height: 1;
     margin-bottom: 0.5em;
 }
 .wiki h2 {
@@ -1405,14 +1405,11 @@ html .wiki a:hover {
 }
 .wiki h3 {
     font-size: 1.4em;
-    line-height: 1;
     margin-bottom: 0.5em;
 }
 .wiki h4 {
     font-size: 1.2em;
-    line-height: 1.25;
     margin-bottom: 0.5em;
-    height: 1.25em;
 }
 .wiki h5 {
     font-size: 1em;
@@ -1776,7 +1773,8 @@ body#workspaceListPage div#controls div#controlsRight, body#loginPage div#contro
 }
 
 /* Errors and Messages */
-div#contentContainer div#errors-and-messages {
+div#contentContainer div#errors-and-messages,
+div#st-system-status {
     margin: 0 20px 5px 0;
     padding: 10px;
     background-color: #fbffbe;

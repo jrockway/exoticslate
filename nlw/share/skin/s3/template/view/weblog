@@ -4,7 +4,7 @@
 [% WRAPPER layout/html id="blog" %]
 <div id="controls">
   <div id="st-editing-tools-edit">
-    <h1>[% loc('Weblog') %]: [% display_title | html %]</h1>
+    <h1 title="[% loc('Weblog') %]: [% display_title | html %]">[% loc('Weblog') %]: [% display_title | html %]</h1>
     <ul id="quickLinks">
       <li><a href="[% feeds.rss.page.url %]"><img src="[% wiki.skin_uri('s3') %]/images/rss.png" />[% loc('Subscribe to Feed') %]</a></li>
       <li><a href="JavaScript:window.print()"><img src="[% wiki.skin_uri('s3') %]/images/printIcon.png" />[% loc('Print') %]</a></li>
@@ -32,7 +32,7 @@
         [% END %]
       </div>
     [% IF is_real_category AND checker.check_permission('edit') %]
-    <div class="goTo"> <a href="mailto:[% email_category_address %]">[% loc('or post by email') %]</a></div>
+    <div class="goTo postByEmail"> <a href="mailto:[% email_category_address %]">[% loc('or post by email') %]</a></div>
     [% END %]
   </div><!-- controlsRight END -->
 </div><!-- controls END -->

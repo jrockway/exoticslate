@@ -2505,13 +2505,13 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   import-account --directory [--overwrite] [--name] [--noindex]
   set-account-config --account <key> <value>
   show-account-config --account
-  reset-account-skin --account <account> <skin>
+  reset-account-skin --account <account> --skin <skin>
 
   PLUGINS
 
-  enable-plugin  (--account | --all-accounts) 
+  enable-plugin  [--account | --all-accounts] 
                  --plugin [ people | dashboard | socialcalc ]
-  disable-plugin (--account | --all-accounts)
+  disable-plugin [--account | --all-accounts]
                  --plugin [ people | dashboard | socialcalc ]
 
   EMAIL
@@ -2920,13 +2920,9 @@ Gives the specified user system admin privileges.
 
 Remove the specified user's system admin privileges.
 
-=head2 set-default-account [--account]
+=head2 set-default-account --account
 
 Set the default account new users should belong to.
-
-=head2 get-default-account
-
-Prints out the current default account.
 
 =head2 get-default-account
 
@@ -2936,15 +2932,15 @@ Prints out the current default account.
 
 Exports the specified account to a directory in the temp workspace.
 
-=head2 import-account
+=head2 import-account --directory [--overwrite] [--name] [--noindex]
 
 Imports an account from the specified directory.
 
-=head2 enable-plugin [--account] --plugin  [ people | dashboard | socialcalc ]
+=head2 enable-plugin [--account | --all-accounts] --plugin  [ people | dashboard | socialcalc ]
 
 Enables plugin for all users in an account
 
-=head2 disable-plugin [--account] --plugin [ people | dashboard | socialcalc ]
+=head2 disable-plugin [--account | --all-accounts] --plugin [ people | dashboard | socialcalc ]
 
 Disables plugin for all users in an account
 
@@ -2966,7 +2962,7 @@ the command line.
 Given a valid account, this shows all key/value pair combinations for
 that account.
 
-=head2 reset-config-skin --account <skin>
+=head2 reset-account-skin --account --skin <skin>
 
 Set the skin for the specified account and its workspaces.
 

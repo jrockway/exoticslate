@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use Test::More tests => 6;
+use mocked 'Time::HiRes';
 
 BEGIN {
     use_ok 'Socialtext::Timer';
@@ -11,9 +12,7 @@ BEGIN {
 Singleton_no_reset: {
     Socialtext::Timer->Start('funky');
     Socialtext::Timer->Start('unstopped');
-    sleep 1;
     Socialtext::Timer->Stop('funky');
-    sleep 1;
     my $timings = Socialtext::Timer->Report();
     ok $timings->{funky} >= 1, 'singleton times funky over 1';
     ok $timings->{funky} <= 2, 'singleton times funky under 2';

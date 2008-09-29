@@ -15,6 +15,7 @@ use Socialtext::String;
 use Socialtext::Validate qw( validate SCALAR_TYPE );
 use Socialtext::l10n qw(loc);
 use Socialtext::SystemSettings qw( get_system_setting );
+use Socialtext::Timer;
 use YAML qw/DumpFile LoadFile/;
 
 Readonly our @ACCT_COLS => (
@@ -236,13 +237,28 @@ sub user_count {
         $where = 'OR secondary_account_id = ?';
         push @bind, $self->account_id;
     }
-    my $sth = sql_execute(<<EOT, @bind);
-SELECT COUNT(DISTINCT(system_unique_id))
-    FROM user_account
-    WHERE primary_account_id = ? $where
-EOT
 
-    return $sth->fetchall_arrayref->[0][0];
+    Socialtext::Timer->Continue('acct_user_count');
+
+    my $sth;
+    if ($primary_only) {
+        $sth = sql_execute(<<EOT, $self->account_id);
+            SELECT COUNT(DISTINCT(user_id))
+                FROM "UserMetadata"
+                WHERE primary_account_id = ?
+EOT
+    }
+    else {
+        $sth = sql_execute(<<EOT, $self->account_id);
+            SELECT COUNT(DISTINCT(user_id))
+                FROM account_user
+                WHERE account_id = ?
+EOT
+    }
+
+    my $count = $sth->fetchall_arrayref->[0][0];
+    Socialtext::Timer->Pause('acct_user_count');
+    return $count;
 }
 
 sub Unknown    { $_[0]->new( name => 'Unknown' ) }
@@ -388,15 +404,21 @@ sub CountByName {
         my $class = shift;
         my %p = validate( @_, $spec );
 
+        Socialtext::Timer->Continue('acct_all');
+
+        my $mc;
         if ( $p{order_by} eq 'name' ) {
-            return $class->_All( %p );
+            $mc = $class->_All( %p );
         }
         elsif ( $p{order_by} eq 'workspace_count' ) {
-            return $class->_AllByWorkspaceCount( %p );
+            $mc = $class->_AllByWorkspaceCount( %p );
         }
         elsif ( $p{order_by} eq 'user_count' ) {
-            return $class->_AllByUserCount( %p );
+            $mc = $class->_AllByUserCount( %p );
         }
+
+        Socialtext::Timer->Pause('acct_all');
+        return $mc;
     }
 }
 

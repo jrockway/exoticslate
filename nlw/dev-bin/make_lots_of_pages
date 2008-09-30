@@ -1,0 +1,19 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib 'lib';
+use Test::Socialtext;
+use Socialtext::User;
+
+my $hub = new_hub('admin');
+my $page;
+my $max_pages = shift || 5000;
+
+for ( 1 .. $max_pages ) {
+    warn "Creating page $_\n";
+    $page = Socialtext::Page->new( hub => $hub )->create(
+        title   => "Page $_",
+        content => 'First Paragraph',
+        creator => Socialtext::User->SystemUser,
+    );
+}

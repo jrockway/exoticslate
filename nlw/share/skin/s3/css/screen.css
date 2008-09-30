@@ -3,6 +3,10 @@
 
 /* overloads */
 
+html body {
+    line-height: normal;
+}
+
 body#blog div#controls div#controlsRight, div#st-editing-tools-edit {
     width: auto !important;
 }

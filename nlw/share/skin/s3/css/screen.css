@@ -30,7 +30,8 @@ div#contentColumns.showbox #contentRight {
 div#header div#globalNav {
     padding: 8px 0px;
     margin: 0px;
-    width: 450px !important;
+    width: auto !important;
+    white-space: nowrap;
 }
 
 div#controls div#controlsRight ul li a.watch.on {

@@ -81,7 +81,7 @@ EOSQL
     my $tail_select = <<'EOSQL';
     ORDER BY at DESC
 ) evt
-WHERE
+WHERE ( 
 evt.event_class <> 'person' OR (
     -- does the user share an account with the actor for person events
     EXISTS (
@@ -102,6 +102,7 @@ evt.event_class <> 'person' OR (
         WHERE plugin = 'people' AND viewer_b.user_id = ?
           AND prsn.user_id = evt.person_id
     )
+)
 )
 EOSQL
 

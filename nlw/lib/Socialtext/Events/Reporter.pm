@@ -18,7 +18,37 @@ sub new {
         @_,
         _conditions => [],
         _condition_args => [],
+        _outer_conditions => [],
+        _outer_condition_args => [],
     }, $class;
+}
+
+sub add_condition {
+    my $self = shift;
+    my $cond = shift;
+    push @{$self->{_conditions}}, $cond;
+    push @{$self->{_condition_args}}, @_;
+}
+
+sub prepend_condition {
+    my $self = shift;
+    my $cond = shift;
+    unshift @{$self->{_conditions}}, $cond;
+    unshift @{$self->{_condition_args}}, @_;
+}
+
+sub add_outer_condition {
+    my $self = shift;
+    my $cond = shift;
+    push @{$self->{_outer_conditions}}, $cond;
+    push @{$self->{_outer_condition_args}}, @_;
+}
+
+sub prepend_outer_condition {
+    my $self = shift;
+    my $cond = shift;
+    unshift @{$self->{_outer_conditions}}, $cond;
+    unshift @{$self->{_outer_condition_args}}, @_;
 }
 
 our @QueryOrder = qw(
@@ -208,62 +238,86 @@ sub get_events_activities {
     return $self->get_events(@args)
 }
 
+sub _process_before_after {
+    my $self = shift;
+    my $opts = shift;
+    if (my $b = $opts->{before}) {
+        $self->add_condition('at < ?::timestamptz', $b);
+    }
+    if (my $a = $opts->{after}) {
+        $self->add_condition('at > ?::timestamptz', $a);
+    }
+}
+
+sub _process_field_conditions {
+    my $self = shift;
+    my $opts = shift;
+
+    foreach my $eq_key (@QueryOrder) {
+        next unless exists $opts->{$eq_key};
+
+        my $arg = $opts->{$eq_key};
+        if ((defined $arg) && (ref($arg) eq "ARRAY")) {
+            my $placeholders = "(".join(",", map( "?", @$arg)).")";
+            $self->add_condition("e.$eq_key IN $placeholders", @$arg);
+        }
+        elsif (defined $arg) {
+            $self->add_condition("e.$eq_key = ?", $arg);
+        }
+        else {
+            $self->add_condition("e.$eq_key IS NULL");
+        }
+    }
+}
+
+sub _limit_and_offset {
+    my $self = shift;
+    my $opts = shift;
+
+    my @args;
+
+    my $limit = '';
+    if (my $l = $opts->{limit} || $opts->{count}) {
+        $limit = 'LIMIT ?';
+        push @args, $l;
+    }
+    my $offset = '';
+    if (my $o = $opts->{offset}) {
+        $offset = 'OFFSET ?';
+        push @args, $o;
+    }
+
+    my $statement = join(' ',$limit,$offset);
+    return ($statement, @args);
+}
+
 sub get_events {
     my $self   = shift;
     my %opts   = @_;
 
-    my @args;
-    my @conditions;
+    $self->_process_before_after(\%opts);
 
-    if (my $b = $opts{before}) {
-        push @conditions, 'at < ?::timestamptz';
-        push @args, $b;
-    }
-    if (my $a = $opts{after}) {
-        push @conditions, 'at > ?::timestamptz';
-        push @args, $a;
-    }
-    if ($opts{followed}) {
-        if ($opts{event_class} eq 'person') {
-            push @conditions, $FOLLOWED_PEOPLE_ONLY;
-            push @args, ($self->viewer->user_id) x 2;
-        }
+    $self->prepend_condition(
+        $I_CAN_USE_THIS_WORKSPACE => $self->viewer->user_id
+    );
+    $self->add_outer_condition(
+        $HAS_PEOPLE_I_CAN_SEE => ($self->viewer->user_id) x 2
+    );
+
+    if ($opts{followed} && $opts{event_class} eq 'person') {
+        $self->add_condition(
+            $FOLLOWED_PEOPLE_ONLY => ($self->viewer->user_id) x 2
+        );
     }
 
-    foreach my $eq_key (@QueryOrder) {
-        next unless exists $opts{$eq_key};
-        my $a = $opts{$eq_key};
-        if ((defined $a) && (ref($a) eq "ARRAY")) {
-            my $placeholders = "(".join(",", map( "?", @$a)).")";
-            push @conditions, "e.$eq_key IN $placeholders";
-            push @args, @$a;
-        }
-        elsif (defined $a) {
-            push @conditions, "e.$eq_key = ?";
-            push @args, $a;
-        }
-        else {
-            push @conditions, "e.$eq_key IS NULL";
-        }
-    }
-    
-    push @conditions, @{$self->{_conditions}};
-    push @args, @{$self->{_condition_args}};
+    $self->_process_field_conditions(\%opts);
 
-    my $where = join("\n  AND ", map {"($_)"} @conditions);
-    $where = " AND $where" if $where;
+    my ($limit_stmt, @limit_args) = $self->_limit_and_offset(\%opts);
 
-    my @limit_and_offset;
-    my $limit = '';
-    if (my $l = $opts{limit} || $opts{count}) {
-        $limit = 'LIMIT ?';
-        push @limit_and_offset, $l;
-    }
-    my $offset = '';
-    if (my $o = $opts{offset}) {
-        $offset = 'OFFSET ?';
-        push @limit_and_offset, $o;
-    }
+    my $where = join("\n  AND ", 
+                     map {"($_)"} @{$self->{_conditions}});
+    my $outer_where = join("\n  AND ", 
+                           map {"($_)"} @{$self->{_outer_conditions}});
 
     my $sql = <<EOSQL;
 SELECT * FROM (
@@ -284,21 +338,17 @@ SELECT * FROM (
         LEFT JOIN page ON (e.page_workspace_id = page.workspace_id AND 
                            e.page_id = page.page_id)
         LEFT JOIN "Workspace" w ON (e.page_workspace_id = w.workspace_id)
-    WHERE ($I_CAN_USE_THIS_WORKSPACE)
-      $where
+    WHERE $where
     ORDER BY at DESC
 ) evt
 WHERE
-$HAS_PEOPLE_I_CAN_SEE
-$limit $offset
+$outer_where
+$limit_stmt
 EOSQL
 
-    my @user_id = ($self->viewer->user_id) x 1;
-    my @more_user_id = ($self->viewer->user_id) x 2;
-
     Socialtext::Timer->Continue('get_events');
-    my $sth = sql_execute($sql, @user_id, @args, @more_user_id,
-        @limit_and_offset);
+    my $sth = sql_execute($sql, @{$self->{_condition_args}}, 
+        @{$self->{_outer_condition_args}}, @limit_args);
     my $result = $self->decorate_event_set($sth);
     Socialtext::Timer->Pause('get_events');
 

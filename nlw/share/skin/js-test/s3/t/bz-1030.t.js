@@ -25,15 +25,18 @@ t.runAsync([
             
     function() { 
         /* Find the "People I'm following" panel */
-        var $$ = t.$('ul#middleList li:first div.widgetContent iframe')
-                  .get(0).contentWindow.jQuery;
+        var src = t.$('ul#middleList li:first div.widgetContent iframe')
+                   .attr('src');
+        t.open_iframe(src, t.nextStep(3000));
+    },
 
-        $$('img:first').css('border', '1px solid black');
-        $$('li.oddRow:first').css('border', '1px solid black');
+    function() { 
+        t.$('img:first').css('border', '1px solid black');
+        t.$('li.oddRow:first').css('border', '1px solid black');
 
         t.elements_do_not_overlap(
-            $$('img:first'),
-            $$('li.oddRow:first'),
+            t.$('img:first'),
+            t.$('li.oddRow:first'),
             "Rows should not overlap each other in [People I'm following]."
         );
         t.endAsync();

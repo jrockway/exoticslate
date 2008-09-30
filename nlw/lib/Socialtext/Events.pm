@@ -12,15 +12,16 @@ use Carp qw/croak/;
 sub Get {
     my $class = shift;
     my $viewer = shift || croak 'must supply viewer';
-    return Socialtext::Events::Reporter->new->get_events($viewer, @_);
+    my $reporter = Socialtext::Events::Reporter->new(viewer => $viewer);
+    return $reporter->get_events(@_);
 }
 
 sub GetActivities {
     my $class = shift;
     my $viewer = shift || croak 'must supply viewer';
     my $user = shift || croak 'must supply user to view (or maybe you just passed in one user to this function)';
-    return Socialtext::Events::Reporter->new->get_events_activities($viewer,
-        $user);
+    my $reporter = Socialtext::Events::Reporter->new(viewer => $viewer);
+    return $reporter->get_events_activities($user);
 }
 
 sub Record {

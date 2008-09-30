@@ -191,7 +191,7 @@ sub hook {
             my $plugin = $hook->{obj} ||= $hook->{class}->new();
             my $hub = $self->hub || $self->{made_hub};
             $plugin->hub($hub);
-            $plugin->rest( delete $self->{_rest_handler} );
+            $plugin->rest( $self->{_rest_handler} );
 
             my $enabled = $plugin->is_hook_enabled($name);
             next unless $enabled;

@@ -40,8 +40,8 @@ sub uri {
 }
 
 sub make_uri {
-    my ( $self, %args ) = @_;
-    return Socialtext::URI::uri(%args);
+    my $self = shift;
+    return Socialtext::URI::uri(@_);
 }
 
 sub code_base {

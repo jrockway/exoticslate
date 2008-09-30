@@ -140,7 +140,7 @@ sub GetUser {
         return undef;
     }
 
-    # look up the user in the DB, caching where possible
+    # look up the user in the DB.
     my ( $key, $where );
     if ( exists $p{user_id} ) {
         $key   = $p{user_id};

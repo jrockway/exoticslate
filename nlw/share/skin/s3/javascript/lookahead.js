@@ -39,10 +39,12 @@
  */
 
 (function($){
+    var lookaheads = [];
+
     Lookahead = function (input, opts) {
+        if (!input) throw new Error("Missing input element");
         if (!opts.url) throw new Error("url missing");
         if (!opts.linkText) throw new Error("linkText missing");
-        if (!input) throw new Error("Missing input element");
 
         this.input = input;
         this.opts = opts;
@@ -74,7 +76,7 @@
 
     $.fn.lookahead = function(opts) {
         this.each(function(){
-            return new Lookahead(this, opts);
+            lookaheads.push(new Lookahead(this, opts));
         });
 
         return this;
@@ -107,6 +109,7 @@
             });
         }
         else {
+            this._loaded_exceptions = true;
             callback();
         }
     };

@@ -11,9 +11,23 @@ html div#contentLeft {
 }
 
 html body#contentPage div#controls div#controlsRight,
-html body#dashBoard div#controls div#controlsRight,
 html body#settingsPage div#controls div#controlsRight {
     width: 550px !important;
+}
+
+/* IE6-only fix for {bz: 1393} - Force alignment to the right */
+html body#dashBoard div#controls div#controlsRight {
+    -width: 10px !important;
+    white-space: nowrap;
+}
+
+/* Fix IE7 top offset shift for controlsRight dashboard buttons */
+html body#dashBoard div#controls div#controlsRight ul.level1 li {
+    margin-top: -11px;
+    -margin-top: 0px;
+}
+html body#dashBoard div#controls div#controlsRight ul li a {
+    vertical-align: top;
 }
 
 /* The right-hand controls are always empty during wiki edit. */

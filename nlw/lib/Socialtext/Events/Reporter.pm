@@ -14,7 +14,11 @@ field 'viewer';
 sub new {
     my $class = shift;
     $class = ref($class) || $class;
-    return bless {@_}, $class;
+    return bless {
+        @_,
+        _conditions => [],
+        _condition_args => [],
+    }, $class;
 }
 
 our @QueryOrder = qw(
@@ -198,8 +202,8 @@ sub get_events_activities {
     my $user_id = $user->user_id;
 
     my @args;
-    push @args, where => $ACTIVITIES_FOR_A_USER;
-    push @args, where_args => [($user_id) x 2];
+    push @{$self->{_conditions}}, $ACTIVITIES_FOR_A_USER;
+    push @{$self->{_condition_args}}, ($user_id) x 2;
     push @args, limit => 20;
     return $self->get_events(@args)
 }
@@ -242,17 +246,11 @@ sub get_events {
             push @conditions, "e.$eq_key IS NULL";
         }
     }
+    
+    push @conditions, @{$self->{_conditions}};
+    push @args, @{$self->{_condition_args}};
 
-    my $where = '';
-    if (my $w = $opts{where}) {
-        $where .= "($w)";
-        my $args = $opts{where_args};
-        push @args, @$args;
-    }
-    if (@conditions) {
-        $where .= "\n  AND " if $where;
-        $where .= join("\n  AND ", map {"($_)"} @conditions);
-    }
+    my $where = join("\n  AND ", map {"($_)"} @conditions);
     $where = " AND $where" if $where;
 
     my @limit_and_offset;

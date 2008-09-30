@@ -8,7 +8,7 @@ use unmocked 'Data::Dumper';
 
 our @EXPORT_OK = qw/sql_execute sql_ok sql_selectrow sql_singlevalue get_dbh
                     sql_in_transaction sql_begin_work sql_commit sql_rollback
-                    disconnect_dbh sql_mock_result/;
+                    disconnect_dbh sql_mock_result sql_convert_to_boolean/;
 our @SQL;
 our @RETURN_VALUES;
 
@@ -34,6 +34,16 @@ sub sql_in_transaction { 0 }
 sub sql_begin_work { }
 sub sql_commit { }
 sub sql_rollback { }
+
+# copied the real implementation
+sub sql_convert_to_boolean {
+    my $value= shift;
+    my $default = shift;
+
+    return $default if (!defined($value));
+    return $value ? 't' : 'f';
+}
+
 
 sub sql_selectrow { 
     my $sth = sql_execute(@_);

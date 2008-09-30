@@ -3,8 +3,6 @@
 use strict;
 use warnings;
 use Test::More;
-use mocked 'Socialtext::User';
-use mocked 'Socialtext::Log', qw(:tests);
 
 BEGIN {
     if (!-e 't/lib/Socialtext/People/Profile.pm') {
@@ -16,6 +14,8 @@ BEGIN {
 }
 
 use mocked 'Socialtext::People::Profile';
+use mocked 'Socialtext::Log', qw(:tests);
+use mocked 'Socialtext::User';
 $Socialtext::MassAdd::Has_People_Installed = 1;
 use_ok 'Socialtext::MassAdd';
 

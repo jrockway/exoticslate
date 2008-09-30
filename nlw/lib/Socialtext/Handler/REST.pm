@@ -154,7 +154,13 @@ sub run {
     if (ref($repr) and blessed($repr) and $repr->isa('IO::Handle')) {
         my $headers = $self->getHeaders();
         print $headers;
-        print while <$repr>;
+        if ($self->request->can('send_fd')) {
+            $self->request->send_fd($repr);
+        }
+        else {
+            local $/ = \65536;
+            print while <$repr>;
+        }
         return;
     }
 

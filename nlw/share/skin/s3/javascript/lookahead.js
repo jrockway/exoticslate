@@ -39,50 +39,66 @@
  */
 
 (function($){
-    $.fn.lookahead = function(opts) {
+    Lookahead = function (input, opts) {
         if (!opts.url) throw new Error("url missing");
         if (!opts.linkText) throw new Error("linkText missing");
+        if (!input) throw new Error("Missing input element");
 
-        this.each(function(){
-            $(this)
-                .attr('autocomplete', 'off')
-                .unbind('keyup')
-                .keyup(function(e) {
-                    if (e.keyCode == 13) {
-                        $.fn.lookahead.clearLookahead(this);
+        this.input = input;
+        this.opts = opts;
+        var self = this;
+
+        $(this.input)
+            .attr('autocomplete', 'off')
+            .unbind('keyup')
+            .keyup(function(e) {
+                if (e.keyCode == 13) {
+                    self.clearLookahead();
+                }
+                else {
+                    if (self._loaded_exceptions) {
+                        self.onchange();
                     }
                     else {
-                        var input = this;
-                        var lookahead = $.fn.lookahead.getLookahead(input);
-                        if (lookahead.is(':visible')) {
-                            $.fn.lookahead.onchange(input, opts);
-                        }
-                        else {
-                            $.fn.lookahead.loadExceptions(opts, function () {
-                                $.fn.lookahead.onchange(input, opts);
-                            });
-                        }
+                        self.loadExceptions(function () {
+                            self.onchange();
+                        });
                     }
-                    return false;
-                })
-                .blur(function() {
-                    $.fn.lookahead.clearLookahead(this);
-                });
+                }
+                return false;
+            })
+            .blur(function() {
+                self.clearLookahead();
+            });
+    }
+
+    $.fn.lookahead = function(opts) {
+        this.each(function(){
+            return new Lookahead(this, opts);
         });
 
         return this;
     };
 
-    $.fn.lookahead.loadExceptions = function (opts, callback) {
-        opts.exceptValues = {};
-        if (opts.exceptUrl) {
+    Lookahead.prototype = {};
+
+    Lookahead.prototype.loadExceptions = function (callback) {
+        if (this._loading_exceptions) return;
+        this._loading_exceptions = true;
+        this.exceptValues = {};
+
+        var self = this;
+
+        if (this.opts.exceptUrl) {
             $.ajax({
-                url: opts.exceptUrl,
+                url: this.opts.exceptUrl,
                 dataType: 'json',
                 success: function (items) {
+                    self._loading_exceptions = false;
+                    self._loaded_exceptions = true;
                     $.each(items, function (i) {
-                        var value = $.fn.lookahead.linkTitle(this,opts);
-                        opts.exceptValues[this.value.toLowerCase()] = 1;
+                        var value = self.linkTitle(this);
+                        self.exceptValues[this.value.toLowerCase()] = 1;
                     });
                     if ($.isFunction(callback)) {
                         callback();
@@ -93,112 +109,132 @@
         else {
             callback();
         }
-    }
-
-    $.fn.lookahead.clearLookahead = function (input) {
-        if (input.lh)
-            $(input.lh).fadeOut();
     };
 
-    $.fn.lookahead.getLookahead = function (input) {
-        var lh;
-        if (lh = input.lh) return lh;
+    Lookahead.prototype.clearLookahead = function () {
+        if (this.lookahead)
+            $(this.lookahead).fadeOut();
+    };
 
+    Lookahead.prototype.getLookahead = function () {
         /* Subract the offsets of all absolutely positioned parents
          * so that we can position the lookahead directly below the
          * input element. I think jQuery's offset function should do
          * this for you, but maybe they'll fix it eventually...
          */
-        var left = $(input).offset().left;
-        var top = $(input).offset().top + $(input).height() + 10;
-        $.each( $(input).parents(), function (i) {
+        var left = $(this.input).offset().left;
+        var top = $(this.input).offset().top + $(this.input).height() + 10;
+        $.each( $(this.input).parents(), function (i) {
             if ($(this).css('position') == 'absolute') {
                 left -= $(this).offset().left;
                 top -= $(this).offset().top;
             }
         });
 
-        var lh = $('<div />')
-            .css({
-                position: 'absolute',
-                background: '#B4DCEC',
-                border: '1px solid black',
-                display: 'none',
-                padding: '5px',
-                width: $(input).width() + 'px',
-                left: left + 'px',
-                top: top + 'px'
-            })
-            .insertAfter(input);
-        return input.lh = lh;
-    }
+        if (!this.lookahead) {
+            this.lookahead = $('<div />').insertAfter(this.input);
+        }
 
-    $.fn.lookahead.linkTitle = function (item, opts) {
-        var lt = opts.linkText(item);
+        this.lookahead.css({
+            position: 'absolute',
+            background: '#B4DCEC',
+            border: '1px solid black',
+            display: 'none',
+            padding: '5px',
+            width: $(this.input).width() + 'px',
+            left: left + 'px',
+            top: top + 'px'
+        });
+        return this.lookahead;
+    };
+
+    Lookahead.prototype.linkTitle = function (item) {
+        var lt = this.opts.linkText(item);
         return typeof (lt) == 'string' ? lt : lt[0];
-    }
+    };
 
-    $.fn.lookahead.linkValue = function (item, opts) {
-        var lt = opts.linkText(item);
+    Lookahead.prototype.linkValue = function (item) {
+        var lt = this.opts.linkText(item);
         return typeof (lt) == 'string' ? lt : lt[1];
-    }
-
-    $.fn.lookahead.onchange = function (input, opts) {
+    };
+    
+    Lookahead.prototype.ajaxSuccess = function (data) {
         var self = this;
-        var val = $(input).val();
+        var opts = this.opts;
+        var lookahead = this.getLookahead();
+
+        lookahead.html('');
+
+        // Grep out all exceptions
+        data = $.map(data, function(item) {
+            return {
+                title: self.linkTitle(item),
+                value: self.linkValue(item)
+            };
+        });
+        data = $.grep(data, function(item) {
+            return !self.exceptValues[item.value.toLowerCase()];
+        });
+
+        if (data.length) {
+            $.each(data, function (i) {
+                var item = this;
+                $('<a href="#">' + item.title + '</a>')
+                    .click(function () {
+                        $(self.input).val(item.value);
+                        self.clearLookahead();
+                        if (opts.onAccept) {
+                            opts.onAccept.call(self.input, item.value);
+                        }
+                        return false;
+                    })
+                    .appendTo(lookahead);
+                if (i+1 < data.length)
+                    lookahead.append(',<br/>')
+            })
+            lookahead.fadeIn();
+        }
+        else {
+            lookahead.fadeOut();
+        }
+    };
+
+
+    Lookahead.prototype.onchange = function () {
+        var self = this;
+        var opts = this.opts;
+        if (this._loading_lookahead) return;
+
+        var val = $(this.input).val();
         if (!val) {
-            this.clearLookahead(input)
+            this.clearLookahead()
             return;
         }
-        var lookahead = this.getLookahead(input);
-        try {
-            this.ajax.abort()
+
+        // Use cached data if it exists
+        this.cache = this.cache || {};
+        if (this.cache[val]) {
+            return this.ajaxSuccess(this.cache[val]);
         }
-        catch (e) {}
+
         var url = typeof(opts.url) == 'function' ? opts.url() : opts.url;
         if (opts.filterValue) val = opts.filterValue(val);
         var filterName = opts.filterName || 'filter';
-        this.ajax = $.ajax({
+
+        this._loading_lookahead = true;
+
+        $.ajax({
             url: url + '?order=alpha;' + filterName + '=\\b' + val,
             cache: false,
             dataType: 'json',
             success: function (data) {
-                lookahead.html('');
-
-                // Grep out all exceptions
-                data = $.map(data, function(item) {
-                    return {
-                        title: self.linkTitle(item, opts),
-                        value: self.linkValue(item, opts)
-                    };
-                });
-                data = $.grep(data, function(item) {
-                    return !opts.exceptValues[item.value.toLowerCase()];
-                });
-
-                if (data.length) {
-                    $.each(data, function (i) {
-                        var item = this;
-                        $('<a href="#">' + item.title + '</a>')
-                            .click(function () {
-                                $(input).val(item.value);
-                                self.clearLookahead(input);
-                                if (opts.onAccept) {
-                                    opts.onAccept.call(input, item.value);
-                                }
-                                return false;
-                            })
-                            .appendTo(lookahead);
-                        if (i+1 < data.length)
-                            lookahead.append(',<br/>')
-                    })
-                    lookahead.fadeIn();
-                }
-                else {
-                    lookahead.fadeOut();
-                }
+                self.cache[val] = data;
+                self._loading_lookahead = false;
+                return self.ajaxSuccess(data);
             },
             error: function (xhr, textStatus, errorThrown) {
+                var lookahead = self.getLookahead();
+                self._loading_lookahead = false;
                 if (opts.onError) {
                     var errorHandler = opts.onError[xhr.status] || opts.onError['default'];
                     if (errorHandler) {

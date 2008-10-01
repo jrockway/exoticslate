@@ -237,4 +237,37 @@ EOT
     return \@pages;
 }
 
+sub Minimal_by_name {
+    my $class        = shift;
+    my %p            = @_;
+    my $workspace_id = $p{workspace_id};
+    my $limit        = $p{limit} || '';
+    my $page_filter  = $p{page_filter} or die "page_filter is mandatory!";
+    $page_filter = '\\m' . $page_filter;
+
+    my @bind = ($workspace_id, $page_filter);
+    if ($limit) {
+        push @bind, $limit;
+        $limit = "LIMIT ?";
+    }
+
+    my $sth = sql_execute(<<EOT, @bind);
+SELECT * FROM (
+    SELECT page_id, 
+           name, 
+           last_edit_time AT TIME ZONE 'GMT' AS last_edit_time, 
+           page_type 
+      FROM page
+     WHERE deleted = 'false'::bool 
+       AND workspace_id = ? 
+       AND name ~* ?
+     ORDER BY last_edit_time
+      $limit
+) AS X ORDER BY name
+EOT
+
+    my $pages = $sth->fetchall_arrayref( {} );
+    return $pages;
+}
+
 1;

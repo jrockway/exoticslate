@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 47;
+use Test::More tests => 53;
 use mocked 'Socialtext::SQL', qw/sql_ok/;
 use mocked 'Socialtext::Page';
 use mocked 'Socialtext::User';
@@ -421,4 +421,58 @@ Not_in_any_workspaces: {
         workspace_ids => [],
     );
     is_deeply $pages, [], 'no pages in no workspaces';
+}
+
+Minimal_by_filtered_name: {
+    Regular: {
+        Socialtext::Model::Pages->Minimal_by_name(
+            workspace_id     => 9,
+            page_filter   => 'monk',
+        );
+        sql_ok(
+            name => 'minimal_by_name',
+            sql => <<EOT,
+SELECT * FROM (
+    SELECT page_id, 
+           name, 
+           last_edit_time AT TIME ZONE 'GMT' AS last_edit_time, 
+           page_type
+        FROM page
+        WHERE deleted = 'false'::bool 
+          AND workspace_id = ? 
+          AND name ~* ?
+        ORDER BY last_edit_time
+) AS X ORDER BY name
+EOT
+            args => [9,'\\mmonk'],
+        );
+        is scalar(@Socialtext::SQL::SQL), 0, 'no other SQL calls were made';
+    }
+
+    Limited: {
+        Socialtext::Model::Pages->Minimal_by_name(
+            workspace_id => 9,
+            page_filter  => 'monk',
+            limit        => 100,
+        );
+        sql_ok(
+            name => 'minimal_by_name',
+            sql => <<EOT,
+SELECT * FROM (
+    SELECT page_id, 
+           name, 
+           last_edit_time AT TIME ZONE 'GMT' AS last_edit_time, 
+           page_type
+        FROM page
+        WHERE deleted = 'false'::bool 
+          AND workspace_id = ? 
+          AND name ~* ?
+        ORDER BY last_edit_time
+        LIMIT ?
+) AS X ORDER BY name
+EOT
+            args => [9,'\\mmonk', 100],
+        );
+        is scalar(@Socialtext::SQL::SQL), 0, 'no other SQL calls were made';
+    }
 }

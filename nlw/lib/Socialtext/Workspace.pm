@@ -1016,6 +1016,8 @@ sub permissions {
             );
         }
 
+        Socialtext::Cache->clear('authz_plugin');
+
         st_log()->info($msg_action .  ','
              . 'role:' . $p{role}->name . ','
              . 'user:' . $p{user}->homunculus->username
@@ -1068,6 +1070,8 @@ sub has_user {
         return unless $uwr;
 
         $uwr->delete;
+
+        Socialtext::Cache->clear('authz_plugin');
 
         st_log()->info('REMOVE,USER_ROLE,'
              . 'user:' . $p{user}->homunculus->username

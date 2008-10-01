@@ -181,6 +181,7 @@ sub primary_account {
         my $account_id = ref($new_account) ? $new_account->account_id : $new_account;
         $self->_update_field('primary_account_id=?', $account_id);
         $self->{primary_account_id} = $account_id;
+        Socialtext::Cache->clear('authz_plugin');
     }
 
     return Socialtext::Account->new(account_id => $self->{primary_account_id})

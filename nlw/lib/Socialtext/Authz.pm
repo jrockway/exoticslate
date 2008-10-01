@@ -10,6 +10,7 @@ use Readonly;
 use Socialtext::Validate qw( validate USER_TYPE PERMISSION_TYPE WORKSPACE_TYPE );
 use Socialtext::Timer;
 use Socialtext::SQL qw/sql_singlevalue/;
+use Socialtext::Cache;
 
 # In the future this might be a factory but for now we'll just make it
 # nice and simple
@@ -67,6 +68,13 @@ sub plugin_enabled_for_user {
     my $user = delete $p{user};
     my $plugin_name = delete $p{plugin_name};
 
+    my $user_id = $user->user_id;
+    my $cache = Socialtext::Cache->cache('authz_plugin');
+    my $cache_key = "user:$user_id\0$plugin_name";
+    
+    my $enabled = $cache->get($cache_key);
+    return $enabled if defined $enabled;
+
     # circular ref:
     require Socialtext::User::Default::Factory;
     return 1 if ($user->username eq 
@@ -80,10 +88,12 @@ sub plugin_enabled_for_user {
 SQL
 
     Socialtext::Timer->Continue('plugin_enabled_for_user');
-    my $enabled = sql_singlevalue($sql, $user->user_id, $plugin_name);
+    $enabled = sql_singlevalue($sql, $user_id, $plugin_name) ? 1 : 0;
     Socialtext::Timer->Pause('plugin_enabled_for_user');
+
     #warn "PLUGIN $plugin_name ENABLED FOR ".$user->username."? $enabled\n";
-    return ($enabled ? 1 : 0);
+    $cache->set($cache_key, $enabled);
+    return $enabled;
 }
 
 # is a plugin available in some common account between two users
@@ -96,12 +106,20 @@ sub plugin_enabled_for_users {
     my $plugin_name = delete $p{plugin_name};
     return 0 unless ($actor && $user && $plugin_name);
 
-    if ($actor->user_id eq $user->user_id) {
+    my $user_id = $user->user_id;
+    my $actor_id = $actor->user_id;
+
+    if ($actor_id eq $user_id) {
         return $self->plugin_enabled_for_user(
             user => $actor,
             plugin_name => $plugin_name
         );
     }
+
+    my $cache = Socialtext::Cache->cache('authz_plugin');
+    my $cache_key = "users:$user_id\0$actor_id\0$plugin_name";
+    my $enabled = $cache->get($cache_key);
+    return $enabled if defined $enabled;
 
     # This reads "find all accounts with plugin X that are related to user A,
     # then check each account to see if user B is in it".
@@ -122,11 +140,13 @@ sub plugin_enabled_for_users {
 SQL
 
     Socialtext::Timer->Continue('plugin_enabled_for_users');
-    my $enabled = sql_singlevalue($sql, $plugin_name, 
-                                  $actor->user_id, $user->user_id);
+    $enabled = sql_singlevalue($sql, $plugin_name,
+                               $actor_id, $user_id) ? 1 : 0;
     Socialtext::Timer->Pause('plugin_enabled_for_users');
+
+    $cache->set($cache_key, $enabled);
     #warn "PLUGIN $plugin_name ENABLED FOR ".$actor->username." and ". $user->username ."? $enabled\n";
-    return ($enabled ? 1 : 0);
+    return $enabled;
 }
 
 sub plugin_enabled_for_user_in_account {
@@ -141,6 +161,14 @@ sub plugin_enabled_for_user_in_account {
     return 1 if ($user->username eq 
                  $Socialtext::User::Default::Factory::SystemUsername);
 
+    my $user_id = $user->user_id;
+    my $account_id = $account->account_id;
+
+    my $cache = Socialtext::Cache->cache('authz_plugin');
+    my $cache_key = "user_acct:$user_id\0$account_id\0$plugin_name";
+    my $enabled = $cache->get($cache_key);
+    return $enabled if defined $enabled;
+
     my $sql = <<SQL;
         SELECT 1 
         FROM account_user JOIN account_plugin USING (account_id)
@@ -149,9 +177,11 @@ sub plugin_enabled_for_user_in_account {
 SQL
 
     Socialtext::Timer->Continue('plugin_enabled_for_user_in_account');
-    my $enabled = sql_singlevalue($sql, $user->user_id, 
-                                  $account->account_id, $plugin_name);
+    $enabled = sql_singlevalue($sql, $user_id, 
+                               $account_id, $plugin_name) ? 1 : 0;
     Socialtext::Timer->Pause('plugin_enabled_for_user_in_account');
+
+    $cache->set($cache_key, $enabled);
     return ($enabled ? 1 : 0);
 }
 

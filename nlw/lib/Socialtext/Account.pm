@@ -126,15 +126,20 @@ sub enable_plugin {
         sql_execute(q{
             INSERT INTO account_plugin VALUES (?,?)
         }, $self->account_id, $plugin);
+
+        Socialtext::Cache->clear('authz_plugin');
     }
 }
 
 sub disable_plugin {
     my ($self, $plugin) = @_;
+
     sql_execute(q{
         DELETE FROM account_plugin
         WHERE account_id = ? AND plugin = ?
     }, $self->account_id, $plugin);
+
+    Socialtext::Cache->clear('authz_plugin');
 }
 
 sub export {

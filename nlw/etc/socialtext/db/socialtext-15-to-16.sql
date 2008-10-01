@@ -28,11 +28,6 @@ CREATE INDEX watchlist_user_workspace
 CREATE INDEX page_creator_time 
     ON page (creator_id, create_time);
 
--- For completeness, add an index on the page editor as well
-
-CREATE INDEX page_editor_time 
-    ON page (last_editor_id, last_edit_time);
-
 UPDATE "System"
    SET value = 16
  WHERE field = 'socialtext-schema-version';

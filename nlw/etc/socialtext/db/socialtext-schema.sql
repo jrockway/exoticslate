@@ -518,9 +518,6 @@ CREATE INDEX ix_person_supervisor_id
 CREATE INDEX page_creator_time
 	    ON page (creator_id, create_time);
 
-CREATE INDEX page_editor_time
-	    ON page (last_editor_id, last_edit_time);
-
 CREATE INDEX page_tag__page_ix
 	    ON page_tag (workspace_id, page_id);
 

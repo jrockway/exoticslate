@@ -67,10 +67,10 @@ JSON_GET_an_item: {
         after => '2008-06-25 11:39:21.509539-07', 
         event_class => 'page',
         action => 'tag_add',
+        tag_name => 'Some Tag',
         actor_id => 156,
         page_workspace_id => 'mock_workspace_id',
         page_id => 'quick_start',
-        tag_name => 'Some Tag',
     ]], "expected parameters passed";
 }
 

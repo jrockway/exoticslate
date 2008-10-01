@@ -327,3 +327,7 @@ They are also demonstrating that the events are sorted in reverse by time.
 | json-parse      |                                                          |
 | json-array-size | 18                                                       |
 | body-unlike     | qr/"tk":"4/                                              |
+
+| comment | check that we can't access another user's conversations |
+| get             | /data/events/conversations/%%user_b%% |
+| code-is         | 403                                   |

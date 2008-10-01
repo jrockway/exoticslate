@@ -10,7 +10,7 @@ my $schema_dir  = "$FindBin::Bin/../etc/socialtext/db/";
 my $schema_file = "$schema_dir/socialtext-schema.sql";
 my @sql_patches = glob("$schema_dir/*-to-*.sql");
 
-plan tests => @sql_patches * 3 + 3;
+plan tests => @sql_patches * 3 + 5;
 
 Schema_is_okay: {
     ok -d $schema_dir;
@@ -27,6 +27,14 @@ Schema_is_okay: {
     like $schema,
         qr/\QINSERT INTO "System" VALUES ('socialtext-schema-version', '$to_version')\E/,
         'schema includes setting the version';
+
+    like $schema,
+        qr/\QCREATE FUNCTION is_page_contribution/,
+        'schema has the is_page_contribution function';
+
+    like $schema,
+        qr/CREATE INDEX ix_page_events_contribs_actor_time\b/,
+        "index on the is_page_contribution function didn't get accidentally dropped";
 }
 
 for my $s (@sql_patches) {

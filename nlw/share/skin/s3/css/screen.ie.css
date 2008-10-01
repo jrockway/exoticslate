@@ -214,3 +214,8 @@ html>body#settingsPage div.widget div.widgetBottomRight {
 html>body#contentPage div.widget div.widgetBottom {
         margin-left: -1px;
 }
+
+/* Give IE6 a reasonable size for widget title that won't cause wrapping */
+.widgetHeaderTitleBox {
+    -width: 170px;
+}

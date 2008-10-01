@@ -1861,10 +1861,21 @@ span.st-weblog-nextentries:before {
 .widgetHeaderTitle {
     height: 28px;
     overflow: hidden;
+    float: none;
 }
 
 .widgetHeaderTitle img {
     height: 23px;
+}
+
+.widgetHeaderTitleBox {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.widgetHeader {
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .widgetContent {

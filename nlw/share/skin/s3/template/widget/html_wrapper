@@ -11,7 +11,7 @@
         [% END %]
         </div>
         <div class="widgetHeaderTitle">
-            <h4 id="[% gadget.id %]-title">
+            <h4 id="[% gadget.id %]-title" class="widgetHeaderTitleBox">
                 [% IF !gadget.fixed %]
                 <img  src="[% gadget.module_prefs.thumbnail || "$share/images/iconContent.png" %]" />
                 [% END %]

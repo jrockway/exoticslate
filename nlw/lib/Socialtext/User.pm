@@ -214,7 +214,7 @@ sub Guest {
 sub can_update_store {
     my $self = shift;
     my $homunculus_class = $self->base_package() . "::" . $self->driver_name;
-    return $homunculus_class->can('update');
+    return $homunculus_class->can('update') ? 1 : undef;
 }
 
 sub update_store {

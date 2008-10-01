@@ -158,9 +158,9 @@ Note that page x20 should show up as the 'created' special case and not because 
 | code-is | 201 |  |
 | post-json | /data/events | {"context":{"tk":"213"},"page":{"id":"x13", "workspace_name":"%%ws%%"},"action":"comment","event_class":"page"} |
 | code-is | 201 |  |
-| post-json | /data/events | {"context":{"tk":"220"},"page":{"id":"x20", "workspace_name":"%%ws%%"},"action":"comment","event_class":"page"} |
+| post-json | /data/events | {"context":{"tk":"220"},"page":{"id":"x20", "workspace_name":"%%ws%%"},"action":"rename","event_class":"page"} |
 | code-is | 201 |  |
-| post-json | /data/events | {"context":{"tk":"221"},"page":{"id":"x21", "workspace_name":"%%ws%%"},"action":"comment","event_class":"page"} |
+| post-json | /data/events | {"context":{"tk":"221"},"page":{"id":"x21", "workspace_name":"%%ws%%"},"action":"delete","event_class":"page"} |
 | code-is | 201 |  |
 | post-json | /data/events | {"context":{"tk":"230"},"page":{"id":"x01", "workspace_name":"%%ws%%"},"action":"view","event_class":"page"} |
 | code-is | 201 |  |

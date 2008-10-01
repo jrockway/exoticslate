@@ -216,21 +216,25 @@ sub skin_name {
 
     return $skin_name if $skin_name;
     if ($self->workspace->uploaded_skin) {
-        return "uploaded-skin/$workspace_name"
-    }
-    else {
-        # if the workspace has a skin, just return it
-        return $self->workspace->skin_name
-            if $self->workspace->skin_name;
+        $skin_name = "uploaded-skin/$workspace_name";
+        my $full_path = $self->_path($skin_name);
+        return $skin_name if -d $full_path;
 
-        # If workspace_name is set use the workspace's skin.
-        # If it isn't (ie it's a NoWorkspace environment), use the user's
-        # account's skin.
-        $skin_name = $workspace_name
-            ? $self->workspace_account_skin
-            : $self->user_account_skin;
-        return $skin_name || get_system_setting('default-skin');
+        # uploaded_skin must have been set incorrectly!
+        $self->workspace->update(uploaded_skin => 0);
     }
+
+    # if the workspace has a skin, just return it
+    return $self->workspace->skin_name
+        if $self->workspace->skin_name;
+
+    # If workspace_name is set use the workspace's skin.
+    # If it isn't (ie it's a NoWorkspace environment), use the user's
+    # account's skin.
+    $skin_name = $workspace_name
+        ? $self->workspace_account_skin
+        : $self->user_account_skin;
+    return $skin_name || get_system_setting('default-skin');
 }
 
 sub cascade_css {

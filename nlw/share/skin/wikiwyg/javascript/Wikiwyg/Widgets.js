@@ -1286,6 +1286,9 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
         .click(function () {
             clearInterval(intervalId);
             jQuery.hideLightbox();
+            if (wikiwyg.current_mode.classname.match(/Wysiwyg/)) {
+                wikiwyg.current_mode.get_edit_window().focus();
+            }
         });
 
     this.hookLookaheads();

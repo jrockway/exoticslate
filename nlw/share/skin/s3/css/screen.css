@@ -1871,6 +1871,7 @@ span.st-weblog-nextentries:before {
 .widgetHeaderTitleBox {
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .widgetHeader {

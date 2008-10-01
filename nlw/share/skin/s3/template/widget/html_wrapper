@@ -15,7 +15,7 @@
                 [% IF !gadget.fixed %]
                 <img  src="[% gadget.module_prefs.thumbnail || "$share/images/iconContent.png" %]" />
                 [% END %]
-                <span id="[% gadget.id %]-title-text">
+                <span id="[% gadget.id %]-title-text" class="widgetHeaderTitleText">
                     [% gadget.module_prefs.title %]
                 </span>
             </h4>

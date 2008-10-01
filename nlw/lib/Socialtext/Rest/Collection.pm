@@ -80,7 +80,7 @@ sub _make_getter {
                 sub {
                     # REVIEW: should eval this for errors
                     Socialtext::Timer->Start('get_resource');
-                    my $resource = $self->get_resource($rest);
+                    my $resource = $self->get_resource($rest, $content_type);
                     Socialtext::Timer->Stop('get_resource');
                     $resource = [] unless @$resource; # protect against weird data
                     $rest->header(

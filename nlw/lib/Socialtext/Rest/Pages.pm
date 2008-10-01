@@ -8,13 +8,37 @@ use base 'Socialtext::Rest::Collection';
 use Socialtext;
 use Socialtext::Workspace;
 use Socialtext::HTTP ':codes';
-
 use Socialtext::Page;
+use Socialtext::Model::Pages;
 use Socialtext::Search 'search_on_behalf';
 use Socialtext::String;
 use Socialtext::Timer;
 
 $JSON::UTF8 = 1;
+
+# We provide our own get_resource, so we can do crazy optimizations here
+# for certain conditions, but otherwise use ST::Rest::Collection's handler
+sub get_resource {
+    my $self = shift;
+    my $rest = shift;
+    my $content_type = shift || '';
+
+    # If we're filtering, get that from the DB directly
+    my $minimal = $self->rest->query->param('minimal_pages');
+    my $filter  = $self->rest->query->param('filter');
+    if ($minimal and $content_type eq 'application/json' 
+            and $filter and $filter =~ m#^\\b(.+)#) {
+        my $page_filter = $1;
+        $self->{_last_modified} = time;
+        return Socialtext::Model::Pages->Minimal_by_name(
+            workspace_id => $self->hub->current_workspace->workspace_id,
+            page_filter => $page_filter,
+            limit => 100
+        );
+    }
+
+    return $self->SUPER::get_resource();
+}
 
 # REVIEW: Why are we picking the first element in the results?
 # In the earlier versions of this code, pages lists were generated
@@ -27,6 +51,7 @@ $JSON::UTF8 = 1;
 # but we likely already did that somewhere else, so why do it again?
 sub last_modified { 
     my $self = shift;
+    return $self->{_last_modified} if $self->{_last_modified};
     my $r = shift;
     if (ref($r) eq 'ARRAY' and @$r) {
         return $r->[0]{modified_time};

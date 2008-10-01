@@ -221,13 +221,16 @@
         }
 
         var url = typeof(opts.url) == 'function' ? opts.url() : opts.url;
+
+        var params = { order: 'alpha' };
         if (opts.filterValue) val = opts.filterValue(val);
         var filterName = opts.filterName || 'filter';
-
+        params[filterName] = '\\b' + val;
+        
         this._loading_lookahead = true;
-
         $.ajax({
-            url: url + '?order=alpha;' + filterName + '=\\b' + val,
+            url: url,
+            data: $.extend(params, opts.params),
             cache: false,
             dataType: 'json',
             success: function (data) {

@@ -1179,6 +1179,7 @@ proto._do_link = function(widget_element) {
                          Socialtext.wiki_id;
                 return '/data/workspaces/' + ws + '/pages';
             },
+            params: { minimal_pages: 1 },
             linkText: function (i) { return i.name },
             onError: {
                 404: function () {

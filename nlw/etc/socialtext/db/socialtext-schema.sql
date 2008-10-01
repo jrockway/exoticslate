@@ -16,6 +16,18 @@ END
 $$
     LANGUAGE plpgsql;
 
+CREATE FUNCTION is_page_contribution("action" text) RETURNS boolean
+    AS $$
+BEGIN
+    IF action IN ('edit_save', 'tag_add', 'tag_delete', 'comment', 'rename', 'duplicate', 'delete')
+    THEN
+        RETURN true;
+    END IF;
+    RETURN false;
+END;
+$$
+    LANGUAGE plpgsql IMMUTABLE;
+
 CREATE AGGREGATE array_accum (
     BASETYPE = anyelement,
     SFUNC = array_append,
@@ -493,11 +505,21 @@ CREATE INDEX ix_event_tag
 	    ON event (tag_name, "at")
 	    WHERE ((event_class = 'page') OR (event_class = 'person'));
 
+CREATE INDEX ix_page_events_contribs_actor_time
+	    ON event (actor_id, "at")
+	    WHERE ((event_class = 'page') AND is_page_contribution("action"));
+
 CREATE INDEX ix_person_assistant_id
 	    ON person (assistant_id);
 
 CREATE INDEX ix_person_supervisor_id
 	    ON person (supervisor_id);
+
+CREATE INDEX page_creator_time
+	    ON page (creator_id, create_time);
+
+CREATE INDEX page_editor_time
+	    ON page (last_editor_id, last_edit_time);
 
 CREATE INDEX page_tag__page_ix
 	    ON page_tag (workspace_id, page_id);
@@ -533,6 +555,9 @@ CREATE INDEX storage_key_value_type_ix
 CREATE INDEX storage_key_value_viewer_ix
 	    ON "storage" ("key", value)
 	    WHERE (("key")::text = 'viewer');
+
+CREATE INDEX watchlist_user_workspace
+	    ON "Watchlist" (user_id, workspace_id);
 
 CREATE TRIGGER person_ins
     AFTER INSERT ON "UserId"
@@ -700,4 +725,4 @@ ALTER TABLE ONLY "Workspace"
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '15');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '16');

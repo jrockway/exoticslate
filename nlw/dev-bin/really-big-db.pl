@@ -15,8 +15,8 @@ my $ACCOUNTS = 1000;
 my $USERS = 2000; # _Must_ be bigger than $ACCOUNTS
 my $PAGES = 1000;
 my $MAX_WS_ASSIGN = 50; # must be much smaller than accounts (at least 20x smaller)
-my $PAGE_VIEW_EVENTS = 90_000;
-my $OTHER_EVENTS = 10_000;
+my $PAGE_VIEW_EVENTS = 450_000;
+my $OTHER_EVENTS = 50_000;
 my $WRITES_PER_COMMIT = 2500;
 
 my $create_ts = '2007-01-01 00:00:00+0000';
@@ -346,12 +346,12 @@ print "\n";
     print " done!\n";
 }
 
-print "CHECK >>> system-wide page events: ";
-print $dbh->selectrow_array(q{select count(*) from event where event_class = 'page'});
+print "CHECK >>> system-wide page view events: ";
+print $dbh->selectrow_array(q{select count(*) from event where event_class = 'page' and action = 'view'});
 print "\n";
 
-print "CHECK >>> system-wide person events: ";
-print $dbh->selectrow_array(q{select count(*) from event where event_class = 'person'});
+print "CHECK >>> system-wide non-page view events: ";
+print $dbh->selectrow_array(q{select count(*) from event where not (event_class = 'page' and action = 'view')});
 print "\n";
 
 # page tags?

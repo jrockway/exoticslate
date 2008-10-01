@@ -400,6 +400,7 @@ my $CONVERSATIONS = <<"EOSQL";
     JOIN event their_contribs USING (page_id, page_workspace_id)
     WHERE their_contribs.at > my_pages.at
       AND their_contribs.event_class = 'page'
+      AND is_page_contribution(their_contribs.action)
       AND their_contribs.actor_id <> ?
     ORDER BY their_contribs.at DESC 
     [% limit_and_offset %]

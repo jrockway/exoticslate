@@ -131,6 +131,8 @@ Note that page x20 should show up as the 'created' special case and not because 
 | code-is | 201 |  |
 | post-json | /data/events | {"context":{"tk":"121"},"page":{"id":"x21", "workspace_name":"%%ws%%"},"action":"edit_save","event_class":"page"} |
 | code-is | 201 |  |
+| post-json | /data/events | {"context":{"tk":"130"},"page":{"id":"x01", "workspace_name":"%%ws%%"},"action":"view","event_class":"page"} |
+| code-is | 201 |  |
 
 | comment | make some edits as another different user |
 | http-user-pass | %%user_b%% | qwerty |
@@ -159,6 +161,8 @@ Note that page x20 should show up as the 'created' special case and not because 
 | post-json | /data/events | {"context":{"tk":"220"},"page":{"id":"x20", "workspace_name":"%%ws%%"},"action":"comment","event_class":"page"} |
 | code-is | 201 |  |
 | post-json | /data/events | {"context":{"tk":"221"},"page":{"id":"x21", "workspace_name":"%%ws%%"},"action":"comment","event_class":"page"} |
+| code-is | 201 |  |
+| post-json | /data/events | {"context":{"tk":"230"},"page":{"id":"x01", "workspace_name":"%%ws%%"},"action":"view","event_class":"page"} |
 | code-is | 201 |  |
 
 
@@ -197,6 +201,7 @@ When another person makes a contribution *after* your contribution, it should sh
 | body-unlike | "tk":"113" |
 | body-like   | "tk":"120" |
 | body-like   | "tk":"121" |
+| body-unlike   | "tk":"130" |
 
 | comment     | check that the second user's events show up |
 | body-unlike | "tk":"200" |
@@ -212,6 +217,7 @@ When another person makes a contribution *after* your contribution, it should sh
 | body-unlike | "tk":"213" |
 | body-like   | "tk":"220" |
 | body-like   | "tk":"221" |
+| body-unlike   | "tk":"230" |
 
 These tests look to see if limit/count and offset work correctly.  
 They are also demonstrating that the events are sorted in reverse by time.

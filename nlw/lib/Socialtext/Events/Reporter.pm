@@ -162,6 +162,21 @@ sub decorate_event_set {
     return $result;
 }
 
+my $FIELDS = <<'EOSQL';
+    e.at AT TIME ZONE 'UTC' || 'Z' AS at,
+    e.event_class AS event_class,
+    e.action AS action,
+    e.actor_id AS actor_id, 
+    e.person_id AS person_id, 
+    page.page_id as page_id, 
+        page.name AS page_name, 
+        page.page_type AS page_type,
+    w.name AS page_workspace_name, 
+        w.title AS page_workspace_title,
+    e.tag_name AS tag_name,
+    e.context AS context
+EOSQL
+
 my $HAS_PEOPLE_I_CAN_SEE = <<'EOSQL';
     evt.event_class <> 'person' 
     OR (
@@ -187,17 +202,19 @@ my $HAS_PEOPLE_I_CAN_SEE = <<'EOSQL';
     )
 EOSQL
 
-my $I_CAN_USE_THIS_WORKSPACE = <<'EOSQL';
+my $VISIBLE_WORKSPACES = <<'EOSQL';
+    SELECT workspace_id FROM "UserWorkspaceRole" WHERE user_id = ? 
+    UNION
+    SELECT workspace_id
+    FROM "WorkspaceRolePermission" wrp
+    JOIN "Role" r USING (role_id)
+    JOIN "Permission" p USING (permission_id)
+    WHERE r.name = 'guest' AND p.name = 'read'
+EOSQL
+
+my $I_CAN_USE_THIS_WORKSPACE = <<"EOSQL";
     w.workspace_id IS NULL OR 
-    w.workspace_id IN (
-        SELECT workspace_id FROM "UserWorkspaceRole" WHERE user_id = ? 
-        UNION
-        SELECT workspace_id
-        FROM "WorkspaceRolePermission" wrp
-        JOIN "Role" r USING (role_id)
-        JOIN "Permission" p USING (permission_id)
-        WHERE r.name = 'guest' AND p.name = 'read'
-    )
+    w.workspace_id IN ( $VISIBLE_WORKSPACES )
 EOSQL
 
 my $FOLLOWED_PEOPLE_ONLY = <<'EOSQL';
@@ -225,18 +242,6 @@ my $ACTIVITIES_FOR_A_USER = <<'EOSQL';
      actor_id = ?)
 EOSQL
 
-sub get_events_activities {
-    my ($self, $maybe_user) = @_; 
-    # First we need to get the user id in case this was email or username used
-    my $user = Socialtext::User->Resolve($maybe_user);
-    my $user_id = $user->user_id;
-
-    my @args;
-    push @{$self->{_conditions}}, $ACTIVITIES_FOR_A_USER;
-    push @{$self->{_condition_args}}, ($user_id) x 2;
-    push @args, limit => 20;
-    return $self->get_events(@args)
-}
 
 sub _process_before_after {
     my $self = shift;
@@ -321,19 +326,7 @@ sub get_events {
 
     my $sql = <<EOSQL;
 SELECT * FROM (
-    SELECT
-        e.at AT TIME ZONE 'UTC' || 'Z' AS at,
-        e.event_class AS event_class,
-        e.action AS action,
-        e.actor_id AS actor_id, 
-        e.person_id AS person_id, 
-        page.page_id as page_id, 
-            page.name AS page_name, 
-            page.page_type AS page_type,
-        w.name AS page_workspace_name, 
-            w.title AS page_workspace_title,
-        e.tag_name AS tag_name,
-        e.context AS context
+    SELECT $FIELDS
     FROM event e 
         LEFT JOIN page ON (e.page_workspace_id = page.workspace_id AND 
                            e.page_id = page.page_id)
@@ -356,5 +349,110 @@ EOSQL
     return $result;
 }
 
+sub get_events_activities {
+    my ($self, $maybe_user) = @_; 
+    # First we need to get the user id in case this was email or username used
+    my $user = Socialtext::User->Resolve($maybe_user);
+    my $user_id = $user->user_id;
+
+    my @args;
+    $self->add_condition($ACTIVITIES_FOR_A_USER, ($user_id) x 2);
+    push @args, limit => 20;
+    return $self->get_events(@args)
+}
+
+my $PAGES_I_CARE_ABOUT = <<'EOSQL';
+    SELECT page_id, page_workspace_id, MIN(at) as at
+    FROM (
+        -- pages i've contributed to:
+        SELECT my_contribs.page_id, my_contribs.page_workspace_id, 
+               MIN(my_contribs.at) as at
+        FROM event my_contribs
+        WHERE my_contribs.event_class = 'page' 
+          AND is_page_contribution(my_contribs.action)
+          AND my_contribs.actor_id = ?
+        GROUP BY my_contribs.page_id, my_contribs.page_workspace_id
+
+        UNION ALL
+
+        -- pages i created:
+        SELECT page_id, workspace_id as page_workspace_id, create_time as at
+        FROM page
+        WHERE creator_id = ?
+
+        UNION ALL
+
+        -- pages i'm watching:
+        SELECT page_text_id::text as page_id, 
+               workspace_id as page_workspace_id,
+               '-infinity'::timestamptz as at
+        FROM "Watchlist"
+        WHERE user_id = ?
+    ) all_my_pages
+    WHERE all_my_pages.page_workspace_id IN ([% workspaces %])
+    GROUP BY all_my_pages.page_id, all_my_pages.page_workspace_id
+    ORDER BY at DESC
+EOSQL
+
+my $CONVERSATIONS = <<"EOSQL";
+    SELECT their_contribs.*
+    FROM ($PAGES_I_CARE_ABOUT) my_pages
+    JOIN event their_contribs USING (page_id, page_workspace_id)
+    WHERE their_contribs.at > my_pages.at
+      AND their_contribs.event_class = 'page'
+      AND their_contribs.actor_id <> ?
+    ORDER BY their_contribs.at DESC 
+    [% limit_and_offset %]
+EOSQL
+
+sub get_events_conversations {
+    my ($self, $maybe_user, %opts) = @_; 
+    # First we need to get the user id in case this was email or username used
+    my $user = Socialtext::User->Resolve($maybe_user);
+    my $user_id = $user->user_id;
+
+    warn "get_events_conversations";
+
+    my $workspaces_sql = <<"EOSQL";
+        SELECT DISTINCT workspace_id 
+        FROM ($VISIBLE_WORKSPACES) vw
+EOSQL
+
+    my $sql = <<"EOSQL";
+        SELECT $FIELDS
+        FROM ($CONVERSATIONS) e
+        LEFT JOIN page ON (e.page_workspace_id = page.workspace_id AND 
+                           e.page_id = page.page_id)
+        LEFT JOIN "Workspace" w ON (e.page_workspace_id = w.workspace_id)
+EOSQL
+
+    my ($limit_stmt, @limit_args) = $self->_limit_and_offset(\%opts);
+    $sql =~ s/\[\% limit_and_offset \%\]/$limit_stmt/;
+
+    Socialtext::Timer->Continue('get_convos');
+
+    # TODO: want to get conversations limited to a particular workspace?
+    # set @ws to just that workspace_id here:
+    my $ws_sth = sql_execute($workspaces_sql, $user_id);
+    my @ws = map {$_->[0]} @{$ws_sth->fetchall_arrayref};
+
+    my $result = [];
+    if (@ws) {
+        my $ws_plc = join(',', ('?') x scalar @ws);
+        $sql =~ s/\[\% workspaces \%\]/$ws_plc/;
+
+        my $sth = sql_execute($sql, ($user_id) x 3, @ws, $user_id, @limit_args);
+        $result = $self->decorate_event_set($sth);
+        foreach my $row (@$result) {
+            my $tk = $row->{context}{tk} || '?';
+            warn "  ev page: $row->{page}{id}, act: $row->{action}, tk: $tk\n";
+        }
+    }
+
+    Socialtext::Timer->Pause('get_convos');
+
+    return @$result if wantarray;
+    return $result;
+}
 
 1;

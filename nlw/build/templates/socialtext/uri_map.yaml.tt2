@@ -14,6 +14,12 @@
             '*/*':     &default [Socialtext::Rest::Events::Activities, GET_json]
             'application/json': [Socialtext::Rest::Events::Activities, GET_json]
         '*':                    [Socialtext::Rest::Events::Activities, bad_method]
+-
+    '/data/events/conversations/:user':
+        'GET':
+            '*/*':     &default [Socialtext::Rest::Events::Conversations, GET_json]
+            'application/json': [Socialtext::Rest::Events::Conversations, GET_json]
+        '*':                    [Socialtext::Rest::Events::Conversations, bad_method]
 - 
     '/data/echo/:text':
         'GET':

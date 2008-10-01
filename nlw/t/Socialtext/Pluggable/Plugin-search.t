@@ -32,7 +32,7 @@ $plug->{hub} = $hub;
 
 #search
 my $pages = $plug->search('tag:welcome');
-is scalar(@{$pages->{rows}}), 18, 'Tag search returned the right number of pages';
+is scalar(@{$pages->{rows}}), 27, 'Tag search returned the right number of pages';
 exit;
 
 

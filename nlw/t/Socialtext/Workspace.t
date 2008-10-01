@@ -496,14 +496,14 @@ CHANGE_WORKSPACE_TITLE: {
 
     my $new_front_page = $hub->pages()->new_from_name( $ws->title() );
     ok( $new_front_page->exists(), 'Page named after new workspace title exists' );
-    like( $new_front_page->content(), qr/home page/,
+    like( $new_front_page->content(), qr/Welcome to your Socialtext Workspace/,
           'new front page has expected content' );
 
     $ws->update( title => 'Original Title' );
 
     $old_front_page = $hub->pages()->new_from_name( $ws->title() );
     ok( $old_front_page->exists(), 'Page named after original workspace title exists' );
-    like( $old_front_page->content(), qr/home page/,
+    like( $old_front_page->content(), qr/Welcome to your Socialtext Workspace/,
           'original front page has expected content after rename to original title' );
 }
 

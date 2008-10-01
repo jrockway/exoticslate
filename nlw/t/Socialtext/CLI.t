@@ -798,7 +798,7 @@ DELETE_CATEGORY: {
                 argv => [qw( --workspace foobar --search e )] )
                 ->delete_category();
         },
-        qr/The following categories were deleted from the foobar workspace:\s+\* Recent Changes\s+\* Welcome\s*\z/s,
+        qr/The following categories were deleted from the foobar workspace:\s+(\s+\* [\w\s]+[eE][\w\s]+\s+)+\z/s,
         'delete multiple categories successfully',
     );
 }
@@ -810,7 +810,7 @@ SEARCH_CATEGORIES: {
                 argv => [qw( --workspace public --search e )] )
                 ->search_categories();
         },
-        qr/\Q* Recent Changes\E\s+\Q* Welcome\E/,
+        qr/(\s+\* [\w\s]+[eE][\w\s]+\s+)+/,
         'search category found matches',
     );
 }

@@ -3,6 +3,7 @@ package Socialtext::User;
 use strict;
 use warnings;
 use base 'Socialtext::MockBase';
+use Socialtext::Workspace;
 use unmocked 'Socialtext::MultiCursor';
 use unmocked 'Socialtext::Exceptions', qw/data_validation_error/;
 use unmocked 'Socialtext::Account';

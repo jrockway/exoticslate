@@ -63,9 +63,8 @@ ADD_UTF8_TAG_SCOPE: {
 
 ALL_CATEGORIES_UTF8: {
     my @categories = new_hub('admin')->category->all_visible_categories();
-    is_deeply \@categories,
-        ['snarky', $UTF8_TAG, 'Welcome'],
-        "all categories have $UTF8_TAG after save";
+    ok( grep ( { $_ eq $UTF8_TAG } @categories ),
+        "all categories have $UTF8_TAG after save" );
 }
 
 

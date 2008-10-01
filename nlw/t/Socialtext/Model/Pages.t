@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 53;
+use Test::More tests => 55;
 use mocked 'Socialtext::SQL', qw/sql_ok/;
 use mocked 'Socialtext::Page';
 use mocked 'Socialtext::User';
@@ -283,6 +283,29 @@ SELECT workspace_id, page_id, tag
     FROM page_tag 
 EOT
             args => [],
+        );
+    }
+    NoWorkspace: {
+        # Workspace 0 exists, but it should never have pages.
+        local @Socialtext::SQL::RETURN_VALUES = (
+            {
+                return => [],
+            },
+        );
+        Socialtext::Model::Pages->All_active(
+            hub => 'hub',
+            count => 20,
+            workspace_id => 0,
+        );
+        sql_ok(
+            name => 'all_active',
+            sql => <<EOT,
+$COMMON_SELECT
+    WHERE page.deleted = ?::bool 
+      AND page.workspace_id = ? 
+    LIMIT ?
+EOT
+            args => [0,0,20],
         );
     }
 }

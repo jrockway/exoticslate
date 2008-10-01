@@ -150,9 +150,9 @@ sub _fetch_pages {
             . join( ',', map {'?'} @{ $p{workspace_ids} } ) . ')';
         push @workspace_ids, @{ $p{workspace_ids} };
     }
-    elsif ($p{workspace_id}) {
+    elsif (defined $p{workspace_id}) {
         $workspace_filter = '.workspace_id = ?';
-        push @workspace_ids, $p{workspace_id} 
+        push @workspace_ids, defined $p{workspace_id} 
                 ? $p{workspace_id}
                 : $p{hub} ? $p{hub}->current_workspace->workspace_id
                           : die "No workspace filter supplied";
@@ -206,6 +206,7 @@ EOT
     my @pages = map { Socialtext::Model::Page->new_from_row($_) }
         map { $_->{hub} = $p{hub}; $_ } @{ $sth->fetchall_arrayref( {} ) };
     return \@pages if $p{do_not_need_tags};
+    return \@pages if @pages == 0;
 
     # Fetch all the tags for these pages
     # We will fetch all the page_tag, and then filter out which pages

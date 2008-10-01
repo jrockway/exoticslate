@@ -24,13 +24,6 @@ sub GetActivities {
     return $reporter->get_events_activities($user);
 }
 
-sub GetConversations {
-    my $class = shift;
-    my $user = shift || croak 'must supply viewer';
-    my $reporter = Socialtext::Events::Reporter->new(viewer => $user);
-    return $reporter->get_events_conversations($user);
-}
-
 sub Record {
     my $class = shift;
     my $ev = shift;

@@ -38,18 +38,20 @@ sub if_authorized {
     return $self->$perl_method(@_);
 }
 
-sub get_resource {
+sub extract_common_args {
     my $self = shift;
 
     my @args;
 
     my $count = $self->rest->query->param('count') || 
                 $self->rest->query->param('limit') || DEFAULT_EVENT_COUNT;
-    $count = MAX_EVENT_COUNT if $count > MAX_EVENT_COUNT;
-    push @args, count => $count;
+    $count = DEFAULT_EVENT_COUNT unless $count =~ /^\d+$/;
+    $count = MAX_EVENT_COUNT if ($count > MAX_EVENT_COUNT);
+    push @args, count => $count if ($count > 0);
 
     my $offset = $self->rest->query->param('offset') || 0;
-    push @args, offset => $offset if $offset;
+    $offset = 0 unless $offset =~ /^\d+$/;
+    push @args, offset => $offset if ($offset > 0);
 
     my $before = $self->rest->query->param('before') || ''; # datetime
     push @args, before => $before if $before;
@@ -61,16 +63,19 @@ sub get_resource {
     my $action = $self->rest->query->param('action');
     push @args, action => lc $action if $action;
 
+    my $tag_name = $self->rest->query->param('tag_name');
+    push @args, tag_name => $tag_name if $tag_name;
+
     my $actor_id = $self->rest->query->param('actor.id');
-    push @args, 'actor_id' => $actor_id if $actor_id;
-    # TODO: resolve actor.name to a user
-    my $person_id = $self->rest->query->param('person.id');
-    push @args, 'person_id' => $person_id if $person_id;
-    # TODO: resolve person.name to a user
+    push @args, actor_id => $actor_id if $actor_id;
 
-    my $followed = $self->rest->query->param('followed');
-    push @args, 'followed' => 1 if $followed;
+    return @args
+}
 
+sub extract_page_args {
+    my $self = shift;
+
+    my @args;
     my $workspace_id = $self->rest->query->param('page.workspace_id');
     if (!$workspace_id || $workspace_id !~ /^\d+$/) {
         my $workspace_name = $self->rest->query->param('page.workspace_name');
@@ -88,8 +93,28 @@ sub get_resource {
     my $page_id = $self->rest->query->param('page.id');
     push @args, page_id => $page_id if $page_id;
 
-    my $tag_name = $self->rest->query->param('tag_name');
-    push @args, tag_name => $tag_name if $tag_name;
+    return @args;
+}
+
+sub extract_people_args {
+    my $self = shift;
+    my @args;
+
+    my $followed = $self->rest->query->param('followed');
+    push @args, followed => 1 if $followed;
+
+    my $person_id = $self->rest->query->param('person.id');
+    push @args, person_id => $person_id if $person_id;
+
+    return @args;
+}
+
+sub get_resource {
+    my $self = shift;
+
+    my @args = ($self->extract_common_args(), 
+                $self->extract_page_args(),
+                $self->extract_people_args());
 
     my $events = Socialtext::Events->Get($self->rest->user, @args);
     $events ||= [];

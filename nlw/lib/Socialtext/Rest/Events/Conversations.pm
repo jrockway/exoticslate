@@ -12,7 +12,6 @@ sub collection_name { "Conversation Events" }
 
 sub get_resource {
     my ($self, $rest) = @_;
-    # TODO: add limit, offset
     my $viewer = $self->rest->user;
     my $user = eval { Socialtext::User->Resolve($self->user) };
 
@@ -20,9 +19,13 @@ sub get_resource {
         die Socialtext::Exception::Auth->new(
             "A user can only view their own conversations");
     }
-    # TODO: pass down limit and offset.
-    my $events = Socialtext::Events->GetConversations($user);
-    $events ||= [];
-    return $events;
+
+    my %args = $self->extract_common_args();
+    my @filtered_args = map {$_ => $args{$_}} 
+        qw(count offset before after actor_id);
+
+    my $reporter = Socialtext::Events::Reporter->new(viewer => $user);
+    return $reporter->get_events_conversations($user, @filtered_args);
 }
+
 1;

@@ -242,6 +242,13 @@ my $ACTIVITIES_FOR_A_USER = <<'EOSQL';
      actor_id = ?)
 EOSQL
 
+my $CONTRIBUTIONS = <<'EOSQL';
+    (event_class = 'person') 
+    OR
+    (event_class = 'page' AND 
+     action IN ('edit_save','tag_add','comment',
+                'rename','duplicate','delete'))
+EOSQL
 
 sub _process_before_after {
     my $self = shift;
@@ -309,11 +316,17 @@ sub get_events {
         $HAS_PEOPLE_I_CAN_SEE => ($self->viewer->user_id) x 2
     );
 
-    if ($opts{followed} && $opts{event_class} eq 'person') {
+    if ($opts{followed}) {
         $self->add_condition(
             $FOLLOWED_PEOPLE_ONLY => ($self->viewer->user_id) x 2
         );
+        # limiting to these event types will give a bit of a perf boost:
+        $opts{event_class} = ['person','page'];
     }
+
+    # filter for contributions-type events
+    $self->add_condition($CONTRIBUTIONS)
+        if $opts{contributions};
 
     $self->_process_field_conditions(\%opts);
 

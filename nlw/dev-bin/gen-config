@@ -169,7 +169,7 @@ sub main {
             0,
             ],
             [
-            'apache2/empty.conf' => "$dirs{apache2_etc}/socialtext-conf.d/socialtext-empty.conf",
+            'apache2/empty.conf' => "$dirs{apache2_etc}/socialtext-conf.d/include-empty.conf",
             $params,
             0,
             ];

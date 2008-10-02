@@ -127,18 +127,14 @@
          */
         var left = $(this.input).offset().left;
         var top = $(this.input).offset().top + $(this.input).height() + 10;
-        $.each( $(this.input).parents(), function (i) {
-            if ($(this).css('position') == 'absolute') {
-                left -= $(this).offset().left;
-                top -= $(this).offset().top;
-            }
-        });
 
         if (!this.lookahead) {
-            this.lookahead = $('<div />').insertAfter(this.input);
+            this.lookahead = $('<div />').prependTo('body');
         }
 
         this.lookahead.css({
+            textAlign: 'left',
+            zIndex: 2500,
             position: 'absolute',
             background: '#B4DCEC',
             border: '1px solid black',

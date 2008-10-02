@@ -151,18 +151,8 @@ sub _fetch_pages {
         push @workspace_ids, @{ $p{workspace_ids} };
     }
     elsif (defined $p{workspace_id}) {
-        my $workspace_id;
-        if (!$p{workspace_id}) {
-            die "No workspace filter supplied" unless $p{hub};
-            $workspace_id = eval { $p{hub}->current_workspace->workspace_id };
-            $workspace_id ||= 0;
-        }
-        else {
-            $workspace_id = $p{workspace_id};
-        }
-
         $workspace_filter = '.workspace_id = ?';
-        push @workspace_ids, $workspace_id;
+        push @workspace_ids, $p{workspace_id};
     }
 
     my $order_by = '';

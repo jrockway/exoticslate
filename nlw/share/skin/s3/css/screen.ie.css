@@ -219,3 +219,7 @@ html>body#contentPage div.widget div.widgetBottom {
 .widgetHeaderTitleBox {
     -width: 170px;
 }
+
+#page-control-category-selector {
+    margin-top:0px;
+}

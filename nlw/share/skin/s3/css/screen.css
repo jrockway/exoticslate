@@ -1897,3 +1897,9 @@ span.st-weblog-nextentries:before {
 div.widget {
     background-color:#fff ! important;
 }
+
+#page-control-category-selector {
+    margin-top:-5px;
+}
+
+

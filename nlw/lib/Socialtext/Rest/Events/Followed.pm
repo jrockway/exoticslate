@@ -15,6 +15,21 @@ sub collection_name { "Followed People Events" }
 use constant MAX_EVENT_COUNT => 500;
 use constant DEFAULT_EVENT_COUNT => 25;
 
+sub if_authorized {
+    my $self = shift;
+    my $method = shift;
+    my $perl_method = shift;
+
+    my $user = $self->rest->user;
+    return $self->not_authorized 
+        unless ($user && $user->is_authenticated());
+
+    return $self->not_authorized
+        unless $user->can_use_plugin('people');
+
+    return $self->$perl_method(@_);
+}
+
 sub get_resource {
     my ($self, $rest) = @_;
 

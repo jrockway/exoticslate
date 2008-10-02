@@ -410,4 +410,20 @@ $(function() {
             $("#st-edit-button-link").click();
         }, 500);
     }
+
+    var cl = $('body#contentPage div#contentLeft');
+    if (cl.length) {
+        var adjustContentLeftOverflow = function () {
+            var cl = $('body#contentPage div#contentLeft');
+            if (cl.get(0).offsetHeight > cl.get(0).clientHeight) {
+                cl.addClass('contentLeftOverflow');
+
+                var crWidth = $('#contentRight').width();
+                $('#mainWrap').width( cl.width() + crWidth + 50 );
+                $('#contentRight').width( crWidth );
+            }
+        };
+        adjustContentLeftOverflow();
+        $(window).resize(adjustContentLeftOverflow);
+    }
 });

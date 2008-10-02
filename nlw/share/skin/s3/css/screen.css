@@ -11,6 +11,15 @@ body#blog div#controls div#controlsRight, div#st-editing-tools-edit {
     width: auto !important;
 }
 
+body#contentPage div#contentColumns div#contentLeft {
+    overflow: auto !important;
+}
+
+body#contentPage div#contentColumns div#contentLeft.contentLeftOverflow {
+    width: auto !important;
+    overflow: visible !important;
+}
+
 div#contentColumns.hidebox #contentLeft {
     width: 97%;
 }

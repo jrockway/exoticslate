@@ -98,11 +98,14 @@ sub _make_getter {
        Socialtext::Timer->Stop("GET_$content_type");
        if (my $except = $@) {
             if ($except->isa('Socialtext::Exception::Auth')) {
+                $rest->header(-status => HTTP_401_Unauthorized);
                 return $self->not_authorized;
             } elsif ($except->isa('Socialtext::Exception::NoSuchWorkspace')) {
+                $rest->header(-status => HTTP_404_Not_Found);
                 return $self->no_workspace($except->{name});
             }
             else {
+                $rest->header(-status => HTTP_500_Internal_Server_Error);
                 warn "Error in ST::Rest::Collection: $except";
             }
         }

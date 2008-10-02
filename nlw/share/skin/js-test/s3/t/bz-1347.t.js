@@ -19,21 +19,21 @@ t.runAsync([
     },
             
     function() { 
-        t.ok(
-            (t.$('div.wiki').width() > t.$('#controls').width()),
+        t.is(
+            t.$('#contentLeft').css('overflow'),
+            'visible',
             "Long content lines overflows rightward as needed" 
         );
 
-        t.like(
-            t.$('#contentLeft').css('background-color'),
-            '^#[fF]+$|^(rgb|RGB)\\\(255\\s*,\\s*255\\s*,\\s*255\\\)$',
-            "Left content column has its own white background"
+        t.ok(
+            (t.$('#mainWrap').width() > t.$('#contentLeft').width()),
+            "Main wrapper gets resized along with overlong content"
         );
 
-        t.isnt(
+        t.is(
             t.$('#contentLeft').offset().top,
             t.$('#contentRight').offset().top,
-            "Long content lines pushes contentRight controls downward"
+            "Long content lines does not cause contentRight to move downward"
         );
 
         t.endAsync();

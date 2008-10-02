@@ -189,6 +189,10 @@
               <a href="/[% current_workspace.name %]?action=new_page">+ [% loc("New Page") %]</a>
             </div>
             [% END %]
+          [% ELSE %]
+            <div id="newPageButton" class="disabled">
+            &nbsp;
+            </div>
           [% END %]
         </div>
       </div>

@@ -1225,6 +1225,10 @@ div#mainNav {
     background:transparent url(../images/wsRight.png) no-repeat scroll right top;
     font-weight:bold;
 }
+#newPageButton.disabled {
+    background-image: url(../images/wsRightDisabled.png);
+}
+
 
 
 div#workspaceNav ul.level2 {

@@ -22,8 +22,12 @@ sub element_list_item {
 sub _entities_for_query {
     my $self = shift;
 
-    return
-        $self->hub->category->get_pages_for_category($self->tag);
+    my $pagesref = Socialtext::Model::Pages->By_tag(
+        hub => $self->hub,
+        tag => $self->tag,
+        workspace_id => $self->hub->current_workspace->workspace_id,
+    );
+    return @$pagesref;
 }
 
 sub allowed_methods {

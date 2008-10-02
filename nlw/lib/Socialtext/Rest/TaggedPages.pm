@@ -22,10 +22,13 @@ sub element_list_item {
 sub _entities_for_query {
     my $self = shift;
 
+    my $limit = $self->rest->query->param('limit')
+                || $self->rest->query->param('count');
     my $pagesref = Socialtext::Model::Pages->By_tag(
         hub => $self->hub,
         tag => $self->tag,
         workspace_id => $self->hub->current_workspace->workspace_id,
+        limit => $limit,
     );
     return @$pagesref;
 }

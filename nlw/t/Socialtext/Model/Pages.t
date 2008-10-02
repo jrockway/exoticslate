@@ -293,7 +293,7 @@ EOT
             },
         );
         Socialtext::Model::Pages->All_active(
-            hub => 'hub',
+            hub => 'not_actually_a_hub',
             count => 20,
             workspace_id => 0,
         );

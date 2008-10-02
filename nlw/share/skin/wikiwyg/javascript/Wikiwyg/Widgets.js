@@ -282,23 +282,23 @@ proto.setWidgetHandlers = function() {
 
     var mousemove = false;
     jQuery(doc, win).bind("mousedown", function(e) {
-        if (! jQuery(e.target).is("img[widget]") ) return true;
+        if (! jQuery(e.target).is("img") ) return true;
 
         jQuery(this).one("mousemove", function() {
             mousemove = true;
         });
     })
     .bind("mouseup", function(e) {
-        if (! jQuery(e.target).is("img[widget]") ) { 
+        if (! jQuery(e.target).is("img") ) { 
             mousemove = false;
             return true;
         }
-        if (mousemove == false);
+        if (mousemove == false && jQuery(e.target).is("img[widget]"))
             self.getWidgetInput(e.target, false, false);
         mousemove = false;
     })
     .bind("controlselect", function(e) {
-        if (! jQuery(e.target).is("img[widget]") ) return true;
+        if (! jQuery(e.target).is("img")) return true;
         if (mousemove) return true;
         return false;
     })

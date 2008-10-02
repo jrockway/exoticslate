@@ -11,6 +11,10 @@
 
         <script>
             var msgs = [% as_json(messages) %];
+            gadgets.io.preloaded_ = {};
+            [% FOR preload = preloads %]
+                gadgets.io.preloaded_["[% preload.href %]"] = [% preload.data %];
+            [% END %]
         </script>
     </head>
     <body>

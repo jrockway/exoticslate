@@ -293,8 +293,16 @@ proto.setWidgetHandlers = function() {
             mousemove = false;
             return true;
         }
-        if (mousemove == false && jQuery(e.target).is("img[widget]"))
-            self.getWidgetInput(e.target, false, false);
+        if (mousemove == false && jQuery(e.target).is("img[widget]")) {
+            self.currentWidget = self.parseWidgetElement(e.target);
+            var id = self.currentWidget.id;  
+            if (widget_data[id] && widget_data[id].uneditable) {
+                alert(loc("This is not an editable widget. Please edit it in advanced mode."))  
+            }
+            else {
+                self.getWidgetInput(e.target, false, false);
+            }
+        }
         mousemove = false;
     })
     .bind("controlselect", function(e) {

@@ -38,6 +38,7 @@
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "all pages %%start_time%% 0005" < %%wikitest_client_files%%wikitest.txt | The "all pages %%start_time%% 0005" page has been created. |
 
 | open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
+| clickAndWait | link=All Pages |  |
 
 | *Comment* | label=Date (↑) |  |
 
@@ -54,6 +55,7 @@
 | *Comment* | Test Case: All Pages create Rev 2 |  |
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "all pages %%start_time%% 0005" < %%wikitest_client_files%%wikitest.txt | The "all pages %%start_time%% 0005" page has been updated. |
 | open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
+| clickAndWait | link=All Pages |  |
 
 | *Comment* | Test Case: All Pages sort Revisions desc |  |
 | select_and_wait | sort-picker | label=Revisions |
@@ -75,6 +77,7 @@
 | st-admin | purge-page --w %%workspace%% --p all_pages_%%start_time%%_0004 | purged |
 
 | open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
+| clickAndWait | link=All Pages |  |
 | text_unlike | st-listview | all pages %%start_time%% 0004 |
 
 | open_ok | /%%workspace%%/index.cgi?all_pages_%%start_time%%_0003 |  |

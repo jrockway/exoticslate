@@ -6,6 +6,7 @@ use warnings;
 our @libs;
 our $AUTOLOAD;
 my %hooks;
+my %hook_types;
 
 use base 'Socialtext::Plugin';
 use Socialtext::Workspace;
@@ -19,9 +20,10 @@ use Socialtext::Log 'st_timed_log';
 # These hook types are executed only once, all other types are called as many
 # times as they are registered
 my %ONCE_TYPES = (
-    action   => 1,
-    wafl     => 1,
-    template => 1,
+    action       => 1,
+    wafl         => 1,
+    template     => 1,
+    template_var => 1,
 );
 
 BEGIN {
@@ -140,7 +142,6 @@ sub register {
         for my $hook ($plugin->hooks) {
             my ($type, @parts) = split /\./, $hook->{name};
 
-
             if ($type eq 'wafl') {
                 $registry->add(
                     'wafl', $parts[0], 'Socialtext::Pluggable::WaflPhrase',
@@ -158,6 +159,7 @@ sub register {
 
             $hook->{once} = 1 if $ONCE_TYPES{$type};
 
+            push @{$hook_types{$type}}, $hook;
             push @{$hooks{$hook->{name}}}, $hook;
         }
     }
@@ -179,6 +181,17 @@ sub plugin_exists {
 sub registered {
     my ($self, $name) = @_;
     return exists $hooks{$name};
+}
+
+sub hooked_template_vars {
+    my $self = shift;
+    my %vars;
+    my $hooks = $hook_types{template_var} || [];
+    for my $hook (@$hooks) {
+        my ($key) = $hook->{name} =~ m{template_var\.(.*)};
+        $vars{$key} = $self->hook($hook->{name});
+    }
+    return %vars;
 }
 
 sub hook {
@@ -217,7 +230,7 @@ sub hook {
             last if $hook->{once};
         }
     }
-    return join("\n", @output);
+    return @output == 1 ? $output[0] : join("\n", @output);
 }
 
 return 1;

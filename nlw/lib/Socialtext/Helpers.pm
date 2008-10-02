@@ -233,7 +233,8 @@ sub global_template_vars {
         stax_info          => $self->hub->stax->hacks_info,
 #        home_href          => ($self->hub->skin->skin_name eq 's3') ? '?' : '?action=homepage',
         home_href          => '?action=homepage',
-        workspaceslist     => $self->_get_workspace_list_for_template
+        workspaceslist     => $self->_get_workspace_list_for_template,
+        $self->hub->pluggable->hooked_template_vars,
     );
 
     if ($self->hub->current_user->can_use_plugin('people')) {

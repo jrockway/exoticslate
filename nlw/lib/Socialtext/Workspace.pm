@@ -698,9 +698,10 @@ sub logo_uri_or_default {
     my ( $main, $hub ) = $self->_main_and_hub();
 
     return $self->logo_uri if $self->logo_uri;
-    return join '/', 
-        $hub->skin->skin_uri('s2'), 
-        qw(images st logo socialtext-logo-152x26.gif);
+
+    return Socialtext::Skin->new(name => 's2')->skin_uri(
+        qw(images st logo socialtext-logo-152x26.gif)
+    );
 }
 
 sub logo_filename {

@@ -272,7 +272,39 @@ proto.setWidgetHandlers = function() {
     for (var ii = 0; ii < imgs.length; ii++) {
         this.setWidgetHandler(imgs[ii]);
     }
-    this.revert_widget_images();
+
+    if (jQuery.browser.msie)
+        this.revert_widget_images();
+
+    var self = this;
+    var win = this.get_edit_window();
+    var doc = this.get_edit_document();
+
+    var mousemove = false;
+    jQuery(doc, win).bind("mousedown", function(e) {
+        if (! jQuery(e.target).is("img[widget]") ) return true;
+
+        jQuery(this).one("mousemove", function() {
+            mousemove = true;
+        });
+    })
+    .bind("mouseup", function(e) {
+        if (! jQuery(e.target).is("img[widget]") ) { 
+            mousemove = false;
+            return true;
+        }
+        if (mousemove == false);
+            self.getWidgetInput(e.target, false, false);
+        mousemove = false;
+    })
+    .bind("controlselect", function(e) {
+        if (! jQuery(e.target).is("img[widget]") ) return true;
+        if (mousemove) return true;
+        return false;
+    })
+    .bind("click", function() {
+        return false;
+    });
 }
 
 proto.setWidgetHandler = function(img) {
@@ -285,15 +317,17 @@ proto.setWidgetHandler = function(img) {
 
 proto.need_to_revert_widet = function(img) {
     var style = img.getAttribute("style");
-    var has_style_attr = (typeof style == 'string')
+    var width = img.getAttribute("width");
+    var height = img.getAttribute("height");
+    var has_style_attr = (typeof style == 'string');
+    var has_width_attr = (typeof width != 'undefined' );
+    var has_height_attr = (typeof height != 'undefined');
 
-    if (   has_style_attr
-        || (img.getAttribute("mousedown") == 1)
-        || (img.getAttribute("mouseup") == 0)
-        || (img.getAttribute("mouseout") == 1)
-        || (img.getAttribute("mouseover") == 0)
-        || (img.getAttribute("src").match(/^\.\./))
-        ) {
+    if (
+        has_style_attr ||
+        img.getAttribute("src").match(/^\.\./) ||
+        ( has_width_attr && has_height_attr )
+    ) {
         return true;
     }
     return false;
@@ -304,40 +338,28 @@ proto.revert_widget_images = function() {
         return;
     }
     var self = this;
+    var fixing = false;
+
     var fixer = function() {
+        if (fixing) return;
+        fixing = true;
+
         var imgs = self.get_edit_document().getElementsByTagName('img');
-        for (var i=0; i < imgs.length; i++) {
+        for (var i=0, l = imgs.length; i < l; i++) {
             var img = imgs[i];
+
             if (!img.getAttribute("widget")) { continue; }
-            if (self.need_to_revert_widet(img)) {
-                /*
-                  This two height and width conditions is majorly for IE to revert
-                  the image size correctly.
-                */
-                if ( img.getAttribute("height") ) { img.style.height = img.getAttribute("height") }
-                if ( img.getAttribute("width") ) { img.removeAttribute("width"); }
+            if (!self.need_to_revert_widet(img)) { continue; }
 
-                img.removeAttribute("style");
-                img.removeAttribute("mouseup");
-                img.removeAttribute("mousedown");
-                img.removeAttribute("mouseover");
-                img.removeAttribute("mouseout");
-
-                self.attachWidgetHandlers(img);
-            }
+            img.removeAttribute("style");
+            img.removeAttribute("width");
+            img.removeAttribute("height");
         }
         self.reclaim_element_registry_space();
+
+        fixing = false;
     };
     this._fixer_interval_id = setInterval(fixer, 500);
-
-    /*
-    if (Wikiwyg.is_ie7) {
-        this._white_page_fixer_interval_id = setInterval( function() {
-            self.get_edit_document().body.style.display="";
-            self.get_edit_document().body.style.display="block";
-        }, 10);
-    }
-    */
 }
 
 proto.sanitize_dom = function(dom) {
@@ -392,54 +414,6 @@ proto.attachTooltip = function(elem) {
         }
     }
     elem.setAttribute("title", newtitle);
-
-    this.attachWidgetHandlers(elem);
-}
-
-proto.attachWidgetHandlers = function(elem) {
-    if ( !this.element_registry_push(elem) ) {
-        return;
-    }
-
-    var self = this;
-    jQuery(elem)
-        .mouseover(function () {
-            this.setAttribute('mouseover', 1);
-            this.setAttribute('mouseout', 0);
-        })
-        .mouseout(function () {
-            this.setAttribute('mouseover', 0);
-            this.setAttribute('mouseout', 1);
-        })
-        .mousedown(function () {
-            this.setAttribute('mousedown', 1);
-            this.setAttribute('mouseup', 0);
-        });
-
-    if (! this.currentWidget) return;
-    var id = this.currentWidget.id;
-    if (widget_data[id] && widget_data[id].uneditable) {
-        jQuery(elem).mouseup(function() {
-            this.setAttribute('mousedown', 0);
-            if (this.getAttribute('mouseup') == 0) {
-                if ( Wikiwyg.Widgets.widget_editing > 0 )
-                    return;
-                alert(loc("This is not an editable widget. Please edit it in advanced mode."))
-            }
-            this.setAttribute('mouseup', 1);
-        });
-    }
-    else {
-        jQuery(elem).mouseup(function () {
-            this.setAttribute('mousedown', 0);
-            if (this.getAttribute("mouseup") == 0 ) {
-                if ( Wikiwyg.Widgets.widget_editing > 0 )
-                    return;
-                self.getWidgetInput(this, false, false);
-            }
-            this.setAttribute('mouseup', 1);
-        });
-    }
 }
 
 var wikiwyg_widgets_element_registry = new Array();

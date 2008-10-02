@@ -9,7 +9,9 @@ use unmocked 'Class::Field', 'field';
 our @EXPORT_OK = qw/cgi/;
 
 field 'class';
+field 'action';
 
+sub class_id { 'cgi' }
 sub full_uri { 'full_uri' }
 
 sub cgi {
@@ -35,6 +37,8 @@ sub cgi {
 
 sub page_name { $_[0]->{page_name} }
 
-sub all { }
+sub all {}
+
+sub init {}
 
 1;

@@ -1084,10 +1084,10 @@ sub age_in_english {
     return $english;
 }
 
-=head2 hard_set_date( $date )
+=head2 hard_set_date( $date, $user )
 
-Forces the date for the revision to I<$date>, and sets the file's
-timestamp in the filestamp.
+Forces the date for the revision to I<$date> for user I<$user>, and sets the
+file's timestamp in the filestamp.
 
 =cut
 

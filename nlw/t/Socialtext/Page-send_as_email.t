@@ -49,6 +49,49 @@ EOF
 
     my $page = $pages->new_from_name($utf8_subject);
 
+    my $attachment =
+        $hub->attachments->new_attachment( page_id => $page->id,
+                                           filename => 'socialtext-logo.gif',
+                                         );
+    $attachment->save('t/attachments/socialtext-logo-30.gif');
+    $attachment->store( user => $hub->current_user );
+
+    $page->send_as_email
+        ( from => 'devnull1@socialtext.com',
+          to   => 'devnull2@socialtext.com',
+          include_attachments => 1,
+        );
+
+    my @emails = Email::Send::Test->emails;
+
+    is( scalar @emails, 1,
+        'one email was sent' );
+
+    my @parts = $emails[0]->parts;
+    is( scalar @parts, 2,
+        'email has two parts' );
+
+    my @html_parts = $parts[1]->parts;
+    is( scalar @html_parts, 2, 'mp/related has two parts' );
+
+    like( $html_parts[0]->body, qr/src="cid:socialtext-logo.gif"/,
+        'check HTML body (img tag) - 1' );
+
+    # XXX - Email::MIME::Creator for some reason appends the charset,
+    # but this doesn't seem to be harmful
+    is( $html_parts[1]->header('Content-Type'), 'image/gif',
+        q{third part content type is 'image/gif'} );
+    is( $html_parts[1]->header('Content-Transfer-Encoding'), 'base64',
+        'third part content transfer encoding is base64' );
+    is( $html_parts[1]->header('Content-Disposition'),
+        'attachment; filename="socialtext-logo.gif"',
+        q{third part content disposition is 'attachment; filename="socialtext-logo.gif"'} );
+}
+{
+    Email::Send::Test->clear;
+
+    my $page = $pages->new_from_name($utf8_subject);
+
     my $buncha_recipients = join ', ', map { "frog$_\@sharpsaw.org" } (0..10);
     $page->send_as_email(
         from => 'devnull1@socialtext.com',
@@ -160,50 +203,6 @@ EOF
     like( $parts[1]->body,
           qr{Some extra text up front, can have <strong>wiki formatting</strong>},
           'check html body intro' );
-}
-
-{
-    Email::Send::Test->clear;
-
-    my $page = $pages->new_from_name($utf8_subject);
-
-    my $attachment =
-        $hub->attachments->new_attachment( page_id => $page->id,
-                                           filename => 'socialtext-logo.gif',
-                                         );
-    $attachment->save('t/attachments/socialtext-logo-30.gif');
-    $attachment->store( user => $hub->current_user );
-
-    $page->send_as_email
-        ( from => 'devnull1@socialtext.com',
-          to   => 'devnull2@socialtext.com',
-          include_attachments => 1,
-        );
-
-    my @emails = Email::Send::Test->emails;
-
-    is( scalar @emails, 1,
-        'one email was sent' );
-
-    my @parts = $emails[0]->parts;
-    is( scalar @parts, 2,
-        'email has two parts' );
-
-    my @html_parts = $parts[1]->parts;
-    is( scalar @html_parts, 2, 'mp/related has two parts' );
-
-    like( $html_parts[0]->body, qr/src="cid:socialtext-logo.gif"/,
-        'check HTML body (img tag) - 1' );
-
-    # XXX - Email::MIME::Creator for some reason appends the charset,
-    # but this doesn't seem to be harmful
-    is( $html_parts[1]->header('Content-Type'), 'image/gif',
-        q{third part content type is 'image/gif'} );
-    is( $html_parts[1]->header('Content-Transfer-Encoding'), 'base64',
-        'third part content transfer encoding is base64' );
-    is( $html_parts[1]->header('Content-Disposition'),
-        'attachment; filename="socialtext-logo.gif"',
-        q{third part content disposition is 'attachment; filename="socialtext-logo.gif"'} );
 }
 
 {

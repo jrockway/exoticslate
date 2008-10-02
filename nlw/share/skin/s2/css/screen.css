@@ -237,7 +237,7 @@ body {
     border-left: 1px dotted #80a9f3;
     border-right: 1px dotted #80a9f3;
     border: 1px solid #80a9f3;
-    padding: 6px 12px 12px 12px;
+    padding: 6px 12px 0px 12px;
 }
 
 * html .st-content {

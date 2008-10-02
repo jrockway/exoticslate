@@ -411,10 +411,10 @@ $(function() {
         }, 500);
     }
 
-    var cl = $('body#contentPage div#contentLeft');
+    var cl = $('div#contentLeft');
     if (cl.length) {
         var adjustContentLeftOverflow = function () {
-            var cl = $('body#contentPage div#contentLeft');
+            var cl = $('div#contentLeft');
             if (cl.get(0).offsetHeight > cl.get(0).clientHeight) {
                 cl.addClass('contentLeftOverflow');
 

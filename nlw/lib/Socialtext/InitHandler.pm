@@ -21,7 +21,7 @@ sub handler {
     if ($ENV{NLW_DEV_MODE} && ! Socialtext::AppConfig->benchmark_mode) {
         my $r = shift;
         return if $r->uri =~ m{^/data};
-        my $stamp_file = Socialtext::Paths->storage_directory('make_ran');
+        my $stamp_file = Socialtext::Paths::storage_directory('make_ran');
         my $mod = (stat $stamp_file)[9] || 0;
         if ($mod < time - 5) {
             open M, "> $stamp_file";

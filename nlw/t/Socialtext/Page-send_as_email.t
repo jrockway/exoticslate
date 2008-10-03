@@ -15,7 +15,7 @@ BEGIN {
 
 use Socialtext::Page;
 
-plan tests => 36;
+plan tests => 37;
 
 $Socialtext::EmailSender::Base::SendClass = 'Test';
 
@@ -40,6 +40,7 @@ In Socialtext, categories help you identify information so it can be found later
 {link: foobar [InterWikiLink]}
 
 {image: socialtext-logo.gif}
+{file: socialtext-logo.gif}
 EOF
     creator => $hub->current_user,
 );
@@ -74,6 +75,8 @@ EOF
     my @html_parts = $parts[1]->parts;
     is( scalar @html_parts, 2, 'mp/related has two parts' );
 
+    like( $html_parts[0]->body, qr/href="cid:socialtext-logo.gif"/,
+        'check HTML body (a tag)' );
     like( $html_parts[0]->body, qr/src="cid:socialtext-logo.gif"/,
         'check HTML body (img tag) - 1' );
 

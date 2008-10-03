@@ -32,21 +32,19 @@ that follow it. So we do this test in a scratch workspace instead
 test latest login scheme:
 
 * Look at your dev-env at /lite/page/auth-to-edit
-* Pick a link on that page (start here?)
-* Click on the Log In link, make sure you get redirected appropriately back to 'Start Here'
+* Click on the Log In link, make sure you get redirected appropriately back to central page
 * Check that the links now say "Log Out" (at the bottom) and "Edit" at the top
 * Log out and in a few times to make sure everything behaves right
 
 | *Comment* | Test Case: Miki Authentication test auth-to-edit |  |
 | st-admin | set-permissions --workspace %%miki_space%% --permissions public-authenticate-to-edit |  |
 | open_ok | /lite/page/%%miki_space%%/ |  |
-| click_and_wait | link=start here |  |
 | click_and_wait | link=Log in |  |
 | *Comment* | Test Case: Miki Authentication test login and redirect |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
 | click_and_wait | //input[@value='Log in'] |  |
-| location_like | /lite/page/%%miki_space%%/start_here |  |
+| location_like | /lite/page/%%miki_space%%/ |  |
 | *Comment* | Test Case: Miki Authentication test logged in after redirect |  |
 | text_like | link=Edit | Edit |
 | text_like | link=Log out | Log out |
@@ -66,7 +64,7 @@ test latest login scheme:
 | text_like | link=Edit | Edit |
 | text_like | link=Log out | Log out |
 | click_and_wait | link=Log out |  |
-| location_like | /nlw/login.html |  |
+| location_like | /lite/login |  |
 
 | *Comment* | Test Case: Miki Authentication Teardown |  |
 | st-admin | delete-workspace --workspace %%miki_space%% --no-export |  |

@@ -1052,6 +1052,25 @@ sub remove_permission {
             . " workspace.\n" );
 }
 
+sub set_workspace_account {
+    my $self = shift;
+    my $workspace = $self->_require_workspace();
+    my $account = $self->_require_account();
+    my $account_id = $account->account_id;
+    $workspace->update(account_id=>$account_id);
+    $self->_success('The account for ' . $workspace->name() . ' has been updated.' );
+}
+    
+    
+sub get_workspace_account { 
+    my $self = shift;
+    my $workspace = $self->_require_workspace;
+    my $account = $workspace->account();
+    my $name = $account->name;
+    my $ws_name = $workspace->name;
+    $self->_success("The account for $ws_name is $name");
+}
+
 sub show_workspace_config {
     my $self = shift;
 
@@ -2467,6 +2486,8 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   show-impersonators --workspace
   set-workspace-config --workspace <key> <value>
   show-workspace-config --workspace
+  get-workspace-account --workspace
+  set-workspace-account --workspace --account
   create-workspace --name --title --account [--empty]
   delete-workspace --workspace [--dir] [no-export]
   export-workspace --workspace [--dir] [--name]
@@ -2709,6 +2730,14 @@ the command line.
 
 Prints all of the specified workspace's configuration values to
 standard output.
+
+=head2 get-workspace-account --workspace
+
+Prints the name of the account to which a given workspace is assigned
+
+==head2 set-workspace-account --workspace --account
+
+Changes the given workspace to the given acccount name
 
 =head2 search-categories --workspace --search
 

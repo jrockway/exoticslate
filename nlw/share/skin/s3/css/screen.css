@@ -1637,6 +1637,9 @@ html .wiki a:hover {
 
 .wiki {
     padding-top:1em;
+
+    /* {bz: 1445}: Gecko needs this to show left border of collapsed tables. */
+    padding-left:1px;
 }
 div#contentContainer h2.tableTitle {
     font-size:2em;

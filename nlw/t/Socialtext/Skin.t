@@ -12,6 +12,7 @@ BEGIN {
     use_ok( 'Socialtext::Skin' );
     $Socialtext::Skin::CODE_BASE = 't/share';
     $Socialtext::Skin::PROD_VER = '1.0';
+    fixtures( 'admin' );
 }
 
 # Cascading skin

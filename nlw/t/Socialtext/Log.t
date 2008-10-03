@@ -12,6 +12,8 @@ BEGIN {
     use_ok( "Socialtext::Log" );
 }
 
+fixtures( 'base_layout' );
+
 # These tests are meant to validate that if we log utf8 strings we don't 
 # get warnings or errors logging the strings.
 # It appears that Sys::Syslog (called by Log::Dispatch::Syslog) dies if 

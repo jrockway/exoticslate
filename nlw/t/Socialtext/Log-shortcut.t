@@ -12,6 +12,8 @@ BEGIN {
 
 use Readonly;
 
+fixtures( 'base_layout' );
+
 Readonly my $LEVEL         => 'emergency';
 Readonly my $MESSAGE       => 'fnord';
 Readonly my @EXPECTED_ARGS => ( 'EMERG', '%s', "[$>] $MESSAGE" );

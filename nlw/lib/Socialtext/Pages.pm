@@ -373,5 +373,20 @@ sub html {
     return qq{<img src="cid:$image_name" />};
 }
 
+################################################################################
+package Socialtext::Pages::Formatter::File;
+
+use Socialtext::Formatter::WaflPhrase;
+use base 'Socialtext::Formatter::File';
+
+sub html {
+    my $self = shift;
+    my (undef, undef, $file_name) = $self->parse_wafl_reference;
+    my $link = $self->SUPER::html(@_);
+    $link =~ s/ target="_blank"//;
+    $link =~ s/ href="[^"]+"/ href="cid:$file_name"/i;
+    return $link;
+}
+
 1;
 

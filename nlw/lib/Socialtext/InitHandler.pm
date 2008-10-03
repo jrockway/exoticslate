@@ -8,11 +8,9 @@ our $VERSION = '0.01';
 
 use File::chdir;
 use Socialtext::AppConfig;
-use Socialtext::File;
 use Socialtext::Skin;
 use Socialtext::Pluggable::Adapter;
 use Socialtext::Workspace;
-use Socialtext::Paths;
 use Fcntl ':flock';
 use Socialtext::User::Cache;
 

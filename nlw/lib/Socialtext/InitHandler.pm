@@ -44,11 +44,9 @@ sub _regen_combined_js {
 
     # Figure out what skin to build
     my ($ws_name) = $r->uri =~ m{^/([^/]+)/index\.cgi$};
-    my $workspace = $ws_name ? Socialtext::Workspace->new(name=>$ws_name)
-                             : Socialtext::NoWorkspace->new;
-    return unless $workspace;
-
-    my $skin = Socialtext::Skin->new(name => $workspace->skin_name);
+    my $workspace = $ws_name ? Socialtext::Workspace->new(name=>$ws_name) : undef;
+    my $skin_name = $workspace ? $workspace->skin_name : 's3';
+    my $skin      = Socialtext::Skin->new(name => $skin_name);
 
     for my $dir ($skin->make_dirs) {
         local $CWD = $dir;

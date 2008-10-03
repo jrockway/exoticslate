@@ -1541,14 +1541,24 @@ sub send_as_email {
         delete $p{cc},
     }
 
-    my $formatter = Socialtext::Pages::Formatter->new(hub => $self->hub);
-    $self->hub->formatter($formatter);
+    my $body_content;
+
+    if ($p{include_attachments}) {
+        my $prev_formatter = $self->hub->formatter;
+        my $formatter = Socialtext::Pages::Formatter->new(hub => $self->hub);
+        $self->hub->formatter($formatter);
+        $body_content = $self->to_absolute_html( $p{body_intro} . $self->content );
+        $self->hub->formatter($prev_formatter);
+    }
+    else {
+        # If we don't have attachments, don't link to nonexistent "cid:" hrefs. {bz: 1418}
+        $body_content = $self->to_absolute_html( $p{body_intro} . $self->content );
+    }
 
     my $html_body = $self->hub->template->render(
         'page_as_email.html',
         title        => $p{subject},
-        body_content =>
-            $self->to_absolute_html( $p{body_intro} . $self->content ),
+        body_content => $body_content,
     );
 
     my $text_body = Text::Autoformat::autoformat(

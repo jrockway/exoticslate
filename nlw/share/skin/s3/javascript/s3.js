@@ -426,4 +426,12 @@ $(function() {
         adjustContentLeftOverflow();
         $(window).resize(adjustContentLeftOverflow);
     }
+
+    // Find the field to focus
+    var focus_field = Socialtext.info.focus_field[ Socialtext.action ];
+    if (! focus_field && typeof(focus_field) == 'undefined') {
+        focus_field = Socialtext.info.focus_field.default_field;
+    }
+    if (focus_field)
+        jQuery(focus_field).select().focus();
 });

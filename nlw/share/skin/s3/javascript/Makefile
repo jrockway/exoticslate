@@ -32,6 +32,7 @@ ALL_JEMPLATE_PLUGINS:=$(shell find JemplatePlugin -name \*.js)
 
 S3_SOURCE_FILES= \
 		timestamp.js \
+		info.js \
 		Debug.js \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
 		jquery-patch.js \
@@ -110,6 +111,9 @@ $(LIGHTBOX_FILE): $(LIGHTBOX_SOURCE_FILES) Makefile
 	for js in $(LIGHTBOX_SOURCE_FILES); do \
 	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
 	done
+
+info.js: ../info.yaml
+	tt-render --path=template --data=$< $@ > $@
 
 timestamp.js: $(EDITOR_FILE) $(S3_SOURCE_FILES:timestamp.js%=%) $(LIGHTBOX_SOURCE_FILES:timestamp.js%=%)
 	echo 'var Socialtext = Socialtext || {};' > $@

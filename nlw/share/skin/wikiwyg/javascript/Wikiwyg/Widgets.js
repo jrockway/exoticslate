@@ -280,38 +280,17 @@ proto.setWidgetHandlers = function() {
     var win = this.get_edit_window();
     var doc = this.get_edit_document();
 
-    var mousemove = false;
-    jQuery(doc, win).bind("mousedown", function(e) {
-        if (! jQuery(e.target).is("img") ) return true;
-
-        jQuery(this).one("mousemove", function() {
-            mousemove = true;
-        });
-    })
+    jQuery(doc, win)
     .bind("mouseup", function(e) {
-        if (! jQuery(e.target).is("img") ) { 
-            mousemove = false;
-            return true;
+        if (!jQuery(e.target).is("img[widget]")) return true;
+        self.currentWidget = self.parseWidgetElement(e.target);
+        var id = self.currentWidget.id;  
+        if (widget_data[id] && widget_data[id].uneditable) {
+            alert(loc("This is not an editable widget. Please edit it in advanced mode."))  
         }
-        if (mousemove == false && jQuery(e.target).is("img[widget]")) {
-            self.currentWidget = self.parseWidgetElement(e.target);
-            var id = self.currentWidget.id;  
-            if (widget_data[id] && widget_data[id].uneditable) {
-                alert(loc("This is not an editable widget. Please edit it in advanced mode."))  
-            }
-            else {
-                self.getWidgetInput(e.target, false, false);
-            }
+        else {
+            self.getWidgetInput(e.target, false, false);
         }
-        mousemove = false;
-    })
-    .bind("controlselect", function(e) {
-        if (! jQuery(e.target).is("img")) return true;
-        if (mousemove) return true;
-        return false;
-    })
-    .bind("click", function() {
-        return false;
     });
 }
 

@@ -211,6 +211,7 @@ sub global_template_vars {
     );
 
     my %result = (
+        action            => $self->hub->cgi->action,
         pluggable         => $self->hub->pluggable,
         loc               => \&loc,
         loc_lang          => $self->hub->display->preferences->locale->value,

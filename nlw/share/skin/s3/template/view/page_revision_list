@@ -58,7 +58,7 @@
          [% IF rows.size > 1 %]
              onclick="document.getElementById('compare_revisions').submit(); return false"
          [% ELSE %]
-             onclick="alert('You cannot compare a revision to itelf.'); return false;"
+             onclick="alert('You cannot compare a revision to itself.'); return false;"
          [% END %]
         ><span>[% loc("Compare Revisions") %]</span>
       </a>

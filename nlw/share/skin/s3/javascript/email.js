@@ -112,6 +112,9 @@ proto.show = function () {
     jQuery.showLightbox({
         content: '#st-email-lightbox',
         close: '#email_cancel',
-        width: '760px'
+        width: '760px',
+        callback: function() {
+            jQuery('input[name="email_page_subject"]').select().focus();
+        }
     });
 }

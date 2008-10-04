@@ -22,7 +22,12 @@ proto.copyLightbox = function () {
                     .appendTo('#st-copy-workspace');
             })
 
-            self.show(false); // No redirection
+            self.show(
+                false, // No redirection
+                function() {
+                    jQuery("#st-copy-workspace").select().focus();
+                }
+            );
         }
     });
 }
@@ -30,7 +35,15 @@ proto.copyLightbox = function () {
 proto.renameLightbox = function () {
     this.process('rename_lightbox.tt2');
     this.sel = '#st-rename-lightbox';
-    this.show(true); // Do redirection
+    jQuery("#st-rename-newname").val(
+        loc('[_1]', Socialtext.page_title)
+    );
+    this.show(
+        true, // Do redirection
+        function() {
+            jQuery("#st-rename-newname").select().focus();
+        }
+    );
 }
 
 proto.duplicateLightbox = function () {
@@ -39,7 +52,12 @@ proto.duplicateLightbox = function () {
     jQuery("#st-duplicate-newname").val(
         loc('Duplicate of [_1]', Socialtext.page_title)
     );
-    this.show(true); // Do redirection
+    this.show(
+        true, // Do redirection
+        function() {
+            jQuery("#st-duplicate-newname").select().focus();
+        }
+    );
 }
 
 proto.newUrl = function (page) {
@@ -55,11 +73,12 @@ proto.process = function (template) {
     );
 }
 
-proto.show = function (do_redirect) {
+proto.show = function (do_redirect, callback) {
     var self = this;
     jQuery.showLightbox({
         content: this.sel,
-        close: this.sel + ' .close'
+        close: this.sel + ' .close',
+        callback: callback 
     });
 
     // Clear errors from the previous time around: {bz: 1039}

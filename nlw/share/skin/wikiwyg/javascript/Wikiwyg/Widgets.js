@@ -1193,14 +1193,31 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
 
     jQuery('<div />')
         .attr('id', 'widget-' + widget)
-            .attr('class', 'lightbox')
-            .html(html)
-            .appendTo('body');
+        .attr('class', 'lightbox')
+        .html(html)
+        .appendTo('body');
 
-        jQuery.showLightbox({
-            content: '#widget-' + widget
-        });
+    var self = this;
+    jQuery.showLightbox({
+        content: '#widget-' + widget,
+        callback: function() {
+            var config = Wikiwyg.Widgets.widget[ widget ];
+            var fields =
+                (config.focus && [ config.focus ]) ||
+                config.required ||
+                config.fields ||
+                [ config.field ];
 
+            var field = fields[0];
+            if (field) {
+                var selector =
+                    field.match(/^[\#\.]/)
+                    ? field
+                    : '#st-widget-' + field;
+                jQuery(selector).select().focus();
+            }
+        }
+    });
 
     // When the lightbox is closed, decrement widget_editing so lightbox can pop up again. 
     jQuery('#lightbox').unload(function(){

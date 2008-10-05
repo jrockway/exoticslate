@@ -15,6 +15,12 @@ div#contentColumns div#contentLeft {
     overflow: auto !important;
 }
 
+/* {bz: 1459}: Safari needs overflow-y:hidden to hide the vertical scrollbar */
+body div#contentColumns div#contentLeft {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
 div#contentColumns div#contentLeft.contentLeftOverflow {
     width: auto !important;
     overflow: visible !important;

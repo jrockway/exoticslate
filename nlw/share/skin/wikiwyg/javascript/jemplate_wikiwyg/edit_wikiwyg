@@ -61,8 +61,7 @@
                     </div>
                     </div>
                     </div>
-                    <br style="clear: both; height: 1px;" />
-                    <form id="st-page-editing-form" name="st-page-editing-form" method="post" enctype="multipart/form-data" action="index.cgi">
+                    <form style="clear: both; margin-top: 15px" id="st-page-editing-form" name="st-page-editing-form" method="post" enctype="multipart/form-data" action="index.cgi">
                         <input id="st-page-editing-pagename"  type="hidden" name="page_name" value="[% page.title | html_encode %]"/>
                         <input id="st-page-editing-revisionid"  type="hidden" name="revision_id" value="[% page.revision_id %]" />
                         <input id="st-page-editing-pagetype"  type="hidden" name="page_type" value="[% page.page_type %]" />

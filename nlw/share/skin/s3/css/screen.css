@@ -57,6 +57,10 @@ div#controls div#controlsRight ul li a.watch.on {
        background: url(../images/watchingIcon.png) no-repeat center left;
 }
 
+td.listview-watchlist {
+    width: 200px;
+}
+
 td.listview-watchlist a.watch.on {
        background: url(../images/watchingIcon.png) no-repeat center left;
 }
@@ -68,6 +72,8 @@ td.listview-watchlist a.watch:hover {
 td.listview-watchlist a.watch {
     background: url(../images/watchIcon.png) no-repeat center left;
     color: #333333;
+    float: right;
+    display: block;
     font-weight: bold;
     text-decoration: none;
     padding: 0 10px 0 28px;
@@ -1924,4 +1930,30 @@ div.widget {
     margin-top:-5px;
 }
 
+/* Micro-tweakage for {bz: 1443} */
+table.pagelist {
+    table-layout: fixed;
+}
 
+table.pagelist td {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+table.pagelist.dataTable th div.selectall{
+    float: left;
+    padding-right: 10px;
+    vertical-align: middle;
+}
+
+table.pagelist.dataTable th div.sort {
+    float: right;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+table.pagelist.dataTable th {
+    padding-right: 0px;
+    padding-left: 8px;
+    vertical-align: middle;
+}

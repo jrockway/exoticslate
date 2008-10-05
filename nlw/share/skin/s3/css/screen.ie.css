@@ -223,3 +223,9 @@ html>body#contentPage div.widget div.widgetBottom {
 #page-control-category-selector {
     margin-top:0px;
 }
+
+/* Micro-tweakage for {bz: 1443} */
+table.pagelist.dataTable th div.sort,
+table.pagelist.dataTable th div.selectall {
+        -margin-top: 5px;
+}

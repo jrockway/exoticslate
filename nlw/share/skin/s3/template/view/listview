@@ -34,21 +34,14 @@
     <form id="st-listview-form" method="get" action="index.cgi">
     <input id="st-listview-action" name="action" value="" type="hidden">
     <input id="st-listview-filename" name="filename" value="" type="hidden">
-    <table class="dataTable pagelist">
+    <table class="dataTable pagelist" cellspacing="0">
       <tr>
-        <th width="1%"><input type="checkbox" id="st-listview-selectall"/></th>
-        <th class="toggle"><div class="toggle">
-          [% loc('Show:') %]
-          [% IF summaries %]
-             <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=0" [% IF ! summaries %] class="selected" [% END %]>[% loc('Titles') %]</a> | 
-             [% loc('Summaries') %]
-          [% ELSE %]
-             [% loc('Titles') %] |
-             <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
-          [% END %]
-        </div></th>
-        <th colspan="[% 1 + listview_extra_columns.size %]" class="sort">
+        <th class="toggle" width="100%">
+        <div class="selectall">
+        <input type="checkbox" id="st-listview-selectall"/>
+        </div>
         [% IF !hide_sort_widget %]
+        <div class="sort">
         [% loc('Sort by:') %]
           <select id="sort-picker" onchange="sort_by();">
             [% IF allow_relevance %]
@@ -62,10 +55,18 @@
             [% PROCESS sort_by_option name = loc('Date') field = 'Date' %]
             [% PROCESS sort_by_option name = loc('Revisions') field = 'revision_count' %]
         </select>
-
+        </div>
         [% END %]
-              </select>
-          </div>
+        <div class="toggle">
+          [% loc('Show:') %]
+          [% IF summaries %]
+             <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=0" [% IF ! summaries %] class="selected" [% END %]>[% loc('Titles') %]</a> | 
+             [% loc('Summaries') %]
+          [% ELSE %]
+             [% loc('Titles') %] |
+             <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
+          [% END %]
+        </div>
         </th>
         <script language="javascript">
           var query_start = "?[% predicate %];scope=[% scope %];"
@@ -77,10 +78,12 @@
           }
         </script>
       </tr>
+      </table>
+    <table class="dataTable pagelist" cellspacing="0">
       [% FOREACH row = rows %]
         [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
-        <td><input type="checkbox" name="page_selected" class="st-listview-selectpage-checkbox" value="[% row.page_uri %]"/></td>
-        <td colspan="2">
+        <td width="30"><input type="checkbox" name="page_selected" class="st-listview-selectpage-checkbox" value="[% row.page_uri %]"/></td>
+        <td>
         [% IF row.is_spreadsheet %]
            <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/sheetIcon.png" />
         [% ELSIF row.is_attachment %]

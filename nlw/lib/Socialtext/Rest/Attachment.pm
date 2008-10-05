@@ -24,14 +24,15 @@ sub GET {
     return $self->not_authorized() unless $self->user_can('read');
 
     my $fh;
+    my $attachment = eval { $self->_get_attachment() };
+    my $file = $attachment->full_path( $self->params->{version} )
+        if $attachment;
+
+    unless ( -e $file ) {
+        return $self->_invalid_attachment( $rest, $self->params->{filename}.': not found' );
+    }
+
     eval {
-        my $attachment = $self->_get_attachment();
-        my $file = $attachment->full_path( $self->params->{version} );
-
-        unless ( -e $file ) {
-            $self->_invalid_attachment( $rest, 'not found' );
-        }
-
         my $mime_type = $attachment->mime_type;
 
         if ( $mime_type =~ /^text/ ) {

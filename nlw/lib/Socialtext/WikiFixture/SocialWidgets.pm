@@ -273,10 +273,11 @@ sub st_wait_for_widget_load {
         my $js = <<ENDJS;
         var curwin=selenium.browserbot.getCurrentWindow();
         var myframe=curwin.document.getElementById("$widget-iframe");
-        myframe.contentDocument.loaded;
+        myframe.contentWindow.gadgets.loaded;
 ENDJS
         $self->{selenium}->wait_for_condition($js, $timeout);
     };
+    warn $@ if $@;
     ok( !$@, "st-wait-for-widget-load");
 }
 

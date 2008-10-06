@@ -1962,11 +1962,11 @@ table.widgetUserPrefs {
     width: 95%;
 }
 
-table.widgetUserPrefs th {
+table.widgetUserPrefs tr.widgetUserPref_workspace th {
     width: 10%;
 }
 
-table.widgetUserPrefs select {
+table.widgetUserPrefs tr.widgetUserPref_workspace select {
     width: 100%;
 }
 

@@ -12,7 +12,7 @@
                 [% NEXT %]
             [% END %]
 
-            <tr>
+            <tr class="widgetUserPref_[% pref.name %]">
                 <th>[% pref.display_name %]:</th>
                 <td>
                 [% IF pref.datatype == 'enum' %]

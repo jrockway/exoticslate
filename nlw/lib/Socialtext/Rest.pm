@@ -12,8 +12,10 @@ use DateTime;
 use DateTime::Format::HTTP;
 use Carp 'croak';
 
+use Socialtext::Exceptions;
 use Socialtext::Workspace;
 use Socialtext::HTTP ':codes';
+use Socialtext::Log 'st_log';
 use Socialtext::URI;
 
 our $AUTOLOAD;
@@ -21,9 +23,9 @@ our $AUTOLOAD;
 field 'hub',  -init => '$self->main->hub';
 field 'main', -init => '$self->_new_main';
 field 'page', -init => '$self->hub->pages->new_from_uri($self->pname)';
+field 'workspace';
 field 'params';
 field 'rest';
-field 'workspace', -init => '$self->_new_workspace';
 
 sub new {
     my $class = shift;
@@ -80,14 +82,87 @@ sub _initialize {
 
     $self->rest($rest);
     $self->params($params);
+    $self->workspace($self->_new_workspace);
 }
 
 sub _new_workspace {
     my $self = shift;
 
-    return $self->ws
-        ? Socialtext::Workspace->new( name => $self->ws )
-        : Socialtext::NoWorkspace->new();
+    my $workspace;
+    if ($self->params->{ws}) {
+        $workspace = Socialtext::Workspace->new(name => $self->ws);
+    }
+    else {
+        $workspace = Socialtext::NoWorkspace->new();
+    }
+
+    $self->_check_on_behalf_of($workspace);
+
+    return $workspace;
+}
+
+sub _check_on_behalf_of {
+    my $self      = shift;
+    my $workspace = shift;
+
+    # in some cases our rest object is going to be bogus
+    # because we are being called internally, or by tests
+    return unless $self->rest->can('request');
+
+    my $behalf_header    = $self->rest->request->header_in('X-On-Behalf-Of');
+    my $behalf_parameter = $self->rest->query->param('on-behalf-of');
+    my $behalf_user = $behalf_parameter
+        || $behalf_header
+        || undef;
+    return unless $behalf_user;
+
+    # if we are in a non-real workspace, error out
+    unless ($workspace->real()) {
+        st_log->info(
+            $self->rest->user->username, 'tried to impersonate',
+            $behalf_user,                'without workspace'
+        );
+        Socialtext::Exception::Auth->throw(
+            'on behalf not valid without workspace');
+    }
+
+    my $current_user = $self->rest->user;
+    my $checker      = Socialtext::Authz::SimpleChecker->new(
+        user      => $current_user,
+        workspace => $workspace,
+    );
+
+    if ($checker->check_permission('impersonate')) {
+        my $new_user = Socialtext::User->new(username => $behalf_user);
+        if ($new_user) {
+            $self->rest->{_user} = $new_user;
+            $self->rest->request->connection->user($new_user->username);
+
+            # clear the paramters in case there is a subrequest
+            $self->rest->query->param('on-behalf-of', '');
+            $self->rest->request->header_in('X-On-Behalf-Of', '');
+            st_log->info(
+                $current_user->username, 'impersonated as',
+                $behalf_user
+            );
+        }
+        else {
+            st_log->info(
+                $current_user->username,
+                'failed to impersonate invalid user', $behalf_user
+            );
+            Socialtext::Exception::Auth->throw($behalf_user . ' invalid');
+
+        }
+    }
+    else {
+        st_log->info(
+            $current_user->username, 'attempted to impersonate',
+            $behalf_user,            'without impersonate permission'
+        );
+        Socialtext::Exception::Auth->throw(
+            $current_user->username . 'may not impersonate');
+    }
 }
 
 sub _new_main {

@@ -217,13 +217,23 @@ sub callHandler {
         $result = $handler->(@args);
         $self->postHandler(\$result, \@args); # no-op by default.
     };
-    if ($@) {
-        $self->header(
-            -status => HTTP_500_Internal_Server_Error,
-            -type   => 'text/plain',
-        );
-        $result = "$@";
-        $self->request->log_error($result);
+    if (my $except = $@) {
+        if (   $except->can('isa')
+            && $except->isa('Socialtext::Exception::Auth')) {
+            $self->header(
+                -status => HTTP_403_Forbidden,
+                -type   => 'text/plain',
+            );
+            $result = $except->message;
+        }
+        else {
+            $self->header(
+                -status => HTTP_500_Internal_Server_Error,
+                -type   => 'text/plain',
+            );
+            $result = "$@";
+            $self->request->log_error($result);
+        }
     }
 
     # Convert the result to a ref if it isn't already

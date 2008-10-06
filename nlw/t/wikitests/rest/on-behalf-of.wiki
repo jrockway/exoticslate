@@ -1,0 +1,31 @@
+Test case for on-behalf-of functionality
+
+* Fixture: SocialRest
+
+| *Comment*       | Clear all events                                   | .           |
+| set             | workspace                                          | admin       |
+| st-clear-events |                                                    |             |
+| get             | /data/events                                       |             |
+| code-is         | 200                                                |             |
+| has-header      | Cache-Control                                      | qr/private/ |
+| body-like       | []                                                 |             |
+
+| Comment | Set up impersonation |
+| st-admin | add-impersonator --email devnull1@socialtext.com --workspace admin |
+
+| Comment | Pull a page on behalf of another user |
+| get | /data/workspaces/admin/pages/conversations?on-behalf-of=q@q.q |
+| code-is | 200 |
+
+| Comment | Make sure event recorded as on-behalf-of user |
+| get | /data/events?limit=1 |
+| code-is | 200 |
+| body-like | "best_full_name":"q" |
+
+| Comment | See that the right user is shown for a comment |
+| post | /data/workspaces/admin/pages/conversations/comments | Content-Type=text/x.socialtext-wiki,X-on-behalf-of=q@q.q  | this is my comment |
+| code-is | 204 |
+| get | /data/workspaces/admin/pages/conversations|
+| code-is | 200 |
+| body-like | this is my comment |
+| body-like | <em>contributed by <span class="nlw_phrase">q<!-- wiki: {user: q@q.q} --></span> |

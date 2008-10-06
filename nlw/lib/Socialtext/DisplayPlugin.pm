@@ -235,8 +235,8 @@ sub _render_display {
     # Fake out a call to the REST API to get attachments.
     # XXX - This should probably be more standard.
     use Socialtext::Rest::Attachments;
-    my $rest_object = Socialtext::Rest::Attachments->new();
-    $rest_object->{params}->{ws} = $self->hub->current_workspace->name;
+    my $rest_object = Socialtext::Rest::Attachments->new($self->hub->rest,
+        { ws => $self->hub->current_workspace->name });
     my $all_attachments = [
         map {
             $rest_object->_entity_hash($_);

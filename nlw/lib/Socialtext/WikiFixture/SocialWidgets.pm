@@ -197,7 +197,8 @@ sub st_widget_settings {
     my ($self, $logical) = @_;
     eval {
         my $widget = $self->{_widgets}{$logical};
-        $self->{selenium}->click("xpath=//div[\@id='$widget']//img[\@id='st-dashboard-settings']");
+        my $xpath = "xpath=//a\[\@id='st-widget-settings" . $widget . "'\]";
+        $self->{selenium}->click("$xpath");
     };
     ok( !$@, "st-widget-settings" );
 }

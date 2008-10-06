@@ -925,7 +925,7 @@ my %LimitAndSortSpec = (
     limit      => SCALAR_TYPE( default => undef ),
     offset     => SCALAR_TYPE( default => 0 ),
     order_by   => SCALAR_TYPE(
-        regex   => qr/^(?:username|workspace_count|creation_datetime|creator)$/,
+        regex   => qr/^(?:username|workspace_count|creation_datetime|creator|primary_account)$/,
         default => 'username',
     ),
     sort_order => SCALAR_TYPE(
@@ -981,6 +981,14 @@ SELECT system_unique_id
     FROM "UserId"
     ORDER BY system_unique_id $p{sort_order}
     LIMIT ? OFFSET ?
+EOSQL
+            primary_account => <<EOSQL,
+SELECT user_id
+  FROM "UserMetadata"
+  JOIN "Account" ON "Account".account_id = "UserMetadata".primary_account_id
+ ORDER BY "Account".name $p{sort_order}
+ LIMIT ?
+OFFSET ?
 EOSQL
         );
 

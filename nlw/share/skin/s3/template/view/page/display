@@ -77,8 +77,7 @@
 </div><!-- controls END -->
 
 <div id="contentContainer">
-  <div id="contentTitle">
-    <h2 id="st-page-titletext" class="tableTitle" title="[% page.display_title %]">[% page.display_title %]</h2>
+  <div id="contentTitle"><h2 id="st-page-titletext" class="tableTitle" title="[% page.display_title %]">[% page.display_title %]</h2>
     <a id="st-page-boxes-toggle-link" class="hideTab" href="#">[% IF st_page_accessories == 'show' %][% loc('hide') %][% ELSE %][% loc('show') %][% END %]</a>
   </div>
 

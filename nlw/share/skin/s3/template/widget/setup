@@ -6,7 +6,7 @@
         [% END %]
     [% END %]
 
-    <table>
+    <table class="widgetUserPrefs">
         [% FOR pref = gadget.user_prefs %]
             [% IF pref.datatype == 'hidden' %]
                 [% NEXT %]
@@ -28,7 +28,7 @@
                         [% END %]
                     </select>
                 [% ELSIF pref.datatype == 'workspace' %]
-                    <select name="up_[% pref.name %]" class="input_[% id %]">
+                    <select style="width: 100%" name="up_[% pref.name %]" class="input_[% id %]">
                         [% FOR item = workspaces %]
                             [% selected = '' %]
                             [% IF pref.val == item.name %]
@@ -48,8 +48,7 @@
             [% END %]
         </tr>
         <tr>
-            <th></th>
-            <td>
+            <td colspan="2" class="widgetUserPrefsButtons">
                 <input type='submit' value='save' class="searchButton" id="st-savebutton"/>
             </td>
         </tr>

@@ -1,10 +1,14 @@
 <style>
+    div#contentContainer {
+        padding: 15px;
+    }
     table.gallery_section {
-        margin: 10px;
+        border-bottom: 15px solid white;
     }
 
     table.gallery_section th {
         font-weight: bold;
+        font-size: 120%;
     }
 
     table.gallery_section td {

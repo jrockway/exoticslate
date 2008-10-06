@@ -7,7 +7,7 @@
         <a class="minimize" href="#" onclick="gadgets.container.minimize('[% gadget.id %]'); return false"></a>
         [% END %]
         [% IF gadget.has_prefs %]
-            <a class="settings" href="#" onclick="gadgets.container.toggleSetup('[% gadget.id %]'); return false"></a>
+            <a class="settings" href="#" id="st-widget-settings[% gadget.id %]" onclick="gadgets.container.toggleSetup('[% gadget.id %]'); return false"></a>
         [% END %]
         </div>
         <div class="widgetHeaderTitle">

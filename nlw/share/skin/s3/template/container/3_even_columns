@@ -17,6 +17,8 @@
     <div id="controlsRight">
         [% IF container.templates.links %] 
             [% INCLUDE $container.templates.links %]
+        [% ELSE %]
+            <ul></ul>
         [% END %]
     </div><!-- controlsRight END -->
 </div><!-- controls END -->

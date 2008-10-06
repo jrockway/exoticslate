@@ -532,6 +532,13 @@ sub _validate_and_clean_data {
         push @errors, loc("An account must be specified for all new workspaces.");
     }
 
+    if ($p->{account_id}) {
+        my $account = Socialtext::Account->new(account_id => $p->{account_id});
+        push @errors,
+            loc("The account_id you specified, [_1], does not exist.",
+                $p->{account_id}) unless $account;
+    }
+
     data_validation_error errors => \@errors if @errors;
 
     if ( $p->{logo_uri} ) {

@@ -1171,6 +1171,15 @@ sub set_workspace_config {
     while ( my ( $key, $value ) = splice @{ $self->{argv} }, 0, 2 ) {
         next if $key =~ /_id$/ and $key ne 'account_id';
 
+        if ($key =~ m/account[-_]name/) {
+            my $account = Socialtext::Account->new(name => $value);
+            $self->_error(
+                loc("The account name you specified, [_1], does not exist.",
+                    $value)) unless $account;
+            $key = 'account_id';
+            $value = $account->account_id;
+        }
+
         if ( $unsettable{$key} ) {
             $self->_error("Cannot change $key after workspace creation.");
         }

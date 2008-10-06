@@ -214,7 +214,7 @@ This assumes that the currently selected frame is the "parent" container frame.
 
 sub st_widget_title_like {
     my ($self, $logical, $opt1) = @_;
-    $self->{selenium}->text_like_ok("//span[\@class='gadget_title' and \@id='".$self->{_widgets}{$logical}."-title-text']", $opt1);
+    $self->{selenium}->text_like_ok("//span[\@class='widgetHeaderTitleText' and \@id='".$self->{_widgets}{$logical}."-title-text']", $opt1);
 }
 
 =head2 st_widget_body_like ( logical_name, regex )
@@ -334,7 +334,7 @@ sub _getWidgetList {
 sub _listDiff {
     my ($self, $a, $b) = @_;
     my @result=();
-    print join(",", @$a). "\n";
+    #print join(",", @$a). "\n";
     foreach my $val (@$a) {
         push(@result, $val) unless (grep { $_ eq $val } @$b);
     }

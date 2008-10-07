@@ -93,6 +93,7 @@ v.home_href = "[% home_href | decorate('home_href') %]";
 v.dropshadow = "[% dropshadow %]";
 v.dropshadow.defined = "[% dropshadow.defined %]";
 v.is_new = ("[% is_new %]" != "0");
+v.is_incipient = ("[% is_incipient %]" != "0");
 v.page = {};
 v.page.title = "[% page.title.replace('"', '\\"') %]";
 v.page.page_type = "[% page.page_type %]";

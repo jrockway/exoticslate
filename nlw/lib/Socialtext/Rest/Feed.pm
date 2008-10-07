@@ -13,12 +13,12 @@ use base 'Socialtext::Rest';
 sub GET {
     my ($self, $rest) = @_;
 
-    Socialtext::Timer->Start('GET_feed');
+    Socialtext::Timer->Continue('GET_feed');
     if (! $self->workspace) {
         $rest->header(
             -status => HTTP_404_Not_Found,
         );
-        Socialtext::Timer->Stop('GET_feed');
+        Socialtext::Timer->Pause('GET_feed');
         return 'Invalid Workspace';
     }
 
@@ -36,7 +36,7 @@ sub GET {
             -status             => HTTP_401_Unauthorized,
             '-WWW-Authenticate' => 'Basic realm="Socialtext"'
         );
-        Socialtext::Timer->Stop('GET_feed');
+        Socialtext::Timer->Pause('GET_feed');
         return 'Invalid Workspace';
     }
 
@@ -50,16 +50,16 @@ sub GET {
     my $xml;
     eval { 
         $feed = $self->hub->syndicate->syndicate;
-        Socialtext::Timer->Start('GET_feed_as_xml');
+        Socialtext::Timer->Continue('GET_feed_as_xml');
         $xml = $feed->as_xml;
-        Socialtext::Timer->Stop('GET_feed_as_xml');
+        Socialtext::Timer->Pause('GET_feed_as_xml');
     };
 
     if (Exception::Class->caught('Socialtext::Exception::NoSuchPage')) {
         $rest->header(
             -status => HTTP_404_Not_Found,
         );
-        Socialtext::Timer->Stop('GET_feed');
+        Socialtext::Timer->Pause('GET_feed');
         return 'Page Not Found';
     }
 
@@ -68,7 +68,7 @@ sub GET {
         $rest->header(
             -status => HTTP_500_Internal_Server_Error,
         );
-        Socialtext::Timer->Stop('GET_feed');
+        Socialtext::Timer->Pause('GET_feed');
         return $@;
     }
 
@@ -76,7 +76,7 @@ sub GET {
         -status => HTTP_200_OK,
         -type => $feed->content_type,
     );
-    Socialtext::Timer->Stop('GET_feed');
+    Socialtext::Timer->Pause('GET_feed');
     return $xml;
 }
 

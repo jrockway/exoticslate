@@ -18,7 +18,7 @@ sub By_seconds_limit {
     my $tag           = $p{tag} || $p{category};
     my $hub           = $p{hub};
 
-    Socialtext::Timer->Start('By_seconds_limit');
+    Socialtext::Timer->Continue('By_seconds_limit');
     my $where;
     my @bind;
     if ( $since ) {
@@ -43,7 +43,7 @@ sub By_seconds_limit {
         order_by     => 'page.last_edit_time',
         workspace_id => $workspace_id,
     );
-    Socialtext::Timer->Stop('By_seconds_limit');
+    Socialtext::Timer->Pause('By_seconds_limit');
     return $pages;
 }
 
@@ -54,13 +54,13 @@ sub All_active {
     my $limit        = $p{count} || $p{limit};
     my $workspace_id = $p{workspace_id};
 
-    Socialtext::Timer->Start('All_active');
+    Socialtext::Timer->Continue('All_active');
     my $pages = $class->_fetch_pages(
         hub          => $hub,
         limit        => $limit,
         workspace_id => $workspace_id,
     );
-    Socialtext::Timer->Stop('All_active');
+    Socialtext::Timer->Pause('All_active');
     return $pages;
 }
 
@@ -72,7 +72,7 @@ sub By_tag {
     my $limit        = $p{count} || $p{limit};
     my $tag          = $p{tag};
 
-    Socialtext::Timer->Start('By_category');
+    Socialtext::Timer->Continue('By_category');
     my $pages = $class->_fetch_pages(
         hub          => $hub,
         workspace_id => $workspace_id,
@@ -80,7 +80,7 @@ sub By_tag {
         tag          => $tag,
         order_by     => 'page.last_edit_time',
     );
-    Socialtext::Timer->Stop('By_category');
+    Socialtext::Timer->Pause('By_category');
     return $pages;
 }
 

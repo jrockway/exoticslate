@@ -88,8 +88,9 @@ sub run {
         Check_and_drop_privs();
     }
 
-    Socialtext::Timer->Start("CLI_$command");
+    Socialtext::Timer->Continue("CLI_$command");
     $self->$command();
+    Socialtext::Timer->Pause("CLI_$command");
 }
 
 sub Check_and_drop_privs {

@@ -326,9 +326,9 @@ sub _get_page_info {
     my $updated_author = $page->last_edited_by || $self->hub->current_user;
     my $created_author = $original_revision->last_edited_by;
 
-    Socialtext::Timer->Start('s2_page_html');
+    Socialtext::Timer->Continue('s2_page_html');
     my $page_html = $page->to_html_or_default;
-    Socialtext::Timer->Stop('s2_page_html');
+    Socialtext::Timer->Pause('s2_page_html');
 
     return {
         title           => $page->title,

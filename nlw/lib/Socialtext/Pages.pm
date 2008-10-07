@@ -33,9 +33,9 @@ This includes deleted pages.
 =cut
 sub all {
     my $self = shift;
-    Socialtext::Timer->Start('all_pages');
+    Socialtext::Timer->Continue('all_pages');
     my @pages = map {$self->new_page($_)} $self->all_ids;
-    Socialtext::Timer->Stop('all_pages');
+    Socialtext::Timer->Pause('all_pages');
     return @pages;
 }
 
@@ -47,21 +47,21 @@ workspace and are active (not deleted).
 =cut
 sub all_active {
     my $self = shift;
-    Socialtext::Timer->Start('all_active');
+    Socialtext::Timer->Continue('all_active');
     my @pages = grep {$_->active} $self->all();
-    Socialtext::Timer->Stop('all_active');
+    Socialtext::Timer->Pause('all_active');
     return @pages;
 }
 
 sub all_ids {
     my $self = shift;
-    Socialtext::Timer->Start('all_ids');
+    Socialtext::Timer->Continue('all_ids');
     my @pages = grep { not /^\./ } Socialtext::File::all_directory_directories(
         Socialtext::Paths::page_data_directory(
             $self->hub->current_workspace->name
         )
     );
-    Socialtext::Timer->Stop('all_ids');
+    Socialtext::Timer->Pause('all_ids');
     return @pages;
 }
 
@@ -74,7 +74,7 @@ sorted in reverse date order. Skips symlinks.
 
 sub all_ids_newest_first {
     my $self = shift;
-    Socialtext::Timer->Start('all_ids_newest_first');
+    Socialtext::Timer->Continue('all_ids_newest_first');
     my $path = Socialtext::Paths::page_data_directory(
         $self->hub->current_workspace->name );
 
@@ -86,23 +86,23 @@ sub all_ids_newest_first {
     }
 
     my @pages = map { $_->[0] } sort { $b->[1] <=> $a->[1] } @files;
-    Socialtext::Timer->Stop('all_ids_newest_first');
+    Socialtext::Timer->Pause('all_ids_newest_first');
     return @pages;
 }
 
 sub all_newest_first {
     my $self = shift;
-    Socialtext::Timer->Start('all_newest_first');
+    Socialtext::Timer->Continue('all_newest_first');
     my @pages = map {$self->new_page($_)} 
       $self->all_ids_newest_first;
-    Socialtext::Timer->Stop('all_newest_first');
+    Socialtext::Timer->Pause('all_newest_first');
     return @pages;
 
 }
 
 sub all_since {
     my $self = shift;
-    Socialtext::Timer->Start('all_since');
+    Socialtext::Timer->Continue('all_since');
     my ($minutes, $active_only) = @_;
     my @pages_since;
     for my $page_id ($self->all_ids_newest_first) {
@@ -111,13 +111,13 @@ sub all_since {
         last if $page->age_in_minutes > $minutes;
         push @pages_since, $page;
     }
-    Socialtext::Timer->Stop('all_since');
+    Socialtext::Timer->Pause('all_since');
     return @pages_since;
 }
 
 sub random_page {
     my $self = shift;
-    Socialtext::Timer->Start('random_page');
+    Socialtext::Timer->Continue('random_page');
     my @page_ids = $self->all_ids;
     my $random_page;
 
@@ -133,7 +133,7 @@ sub random_page {
         }
         splice @page_ids, $index, 1;
     }
-    Socialtext::Timer->Stop('random_page');
+    Socialtext::Timer->Pause('random_page');
     return $random_page;
 }
 

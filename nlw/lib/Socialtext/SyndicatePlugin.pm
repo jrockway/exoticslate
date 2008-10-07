@@ -162,14 +162,14 @@ sub _syndicate_search {
     my $type  = shift;
     my $query = shift;
 
-    Socialtext::Timer->Start('_syndicate_search');
+    Socialtext::Timer->Continue('_syndicate_search');
     my $feed = $self->_syndicate(
         title => $self->_search_feed_title($query),
         link  => $self->_search_html_link($query),
         pages => $self->_search_get_items($query),
         type  => $type,
     );
-    Socialtext::Timer->Stop('_syndicate_search');
+    Socialtext::Timer->Pause('_syndicate_search');
     return $feed;
 }
 
@@ -179,7 +179,7 @@ sub _syndicate_watchlist {
     my $watchlist  = shift;
     my $user;
 
-    Socialtext::Timer->Start('_syndicate_watchlist');
+    Socialtext::Timer->Continue('_syndicate_watchlist');
     if ($watchlist =~ /default/) {
         $user = $self->hub->current_user;
     } else {
@@ -192,7 +192,7 @@ sub _syndicate_watchlist {
         pages => $self->_watchlist_get_items($user),
         type  => $type,
     );
-    Socialtext::Timer->Stop('_syndicate_watchlist');
+    Socialtext::Timer->Pause('_syndicate_watchlist');
     return $feed;
 }
 
@@ -206,14 +206,14 @@ sub _syndicate_page_named {
     no_such_page_error name => $name, error => "$name does not exist"
         unless $page->active;
 
-    Socialtext::Timer->Start('_syndicate_page_named');
+    Socialtext::Timer->Continue('_syndicate_page_named');
     my $feed = $self->_syndicate(
         title => $self->_page_feed_title($page),
         link  => $page->full_uri,
         pages => [$page],
         type  => $type,
     );
-    Socialtext::Timer->Stop('_syndicate_page_named');
+    Socialtext::Timer->Pause('_syndicate_page_named');
     return $feed;
 }
 
@@ -223,14 +223,14 @@ sub _syndicate_category {
     my $category = shift;
     my $count = shift;
 
-    Socialtext::Timer->Start('_syndicate_category');
+    Socialtext::Timer->Continue('_syndicate_category');
     my $feed = $self->_syndicate(
         title => $self->_category_feed_title($category),
         link  => $self->_category_html_link($category),
         pages => $self->_category_get_items($category, $count),
         type  => $type,
     );
-    Socialtext::Timer->Stop('_syndicate_category');
+    Socialtext::Timer->Pause('_syndicate_category');
     return $feed;
 }
 
@@ -239,14 +239,14 @@ sub _syndicate_changes {
     my $type = shift;
     my $count = shift;
 
-    Socialtext::Timer->Start('_syndicate_changes');
+    Socialtext::Timer->Continue('_syndicate_changes');
     my $feed = $self->_syndicate(
         title => $self->_changes_feed_title,
         link  => $self->_changes_html_link,
         pages => $self->_changes_get_items($count),
         type  => $type,
     );
-    Socialtext::Timer->Stop('_syndicate_changes');
+    Socialtext::Timer->Pause('_syndicate_changes');
     return $feed;
 }
 
@@ -314,13 +314,13 @@ sub _changes_get_items {
 sub _watchlist_get_items {
     my $self = shift;
     my $user = shift;
-    Socialtext::Timer->Start('_watchlist_get_items');
+    Socialtext::Timer->Continue('_watchlist_get_items');
     my $watchlist = Socialtext::Watchlist->new(
         user      => $user,
         workspace => $self->hub->current_workspace
     );
     my @pages = map { $self->hub->pages->new_page( $_ ) } $watchlist->pages;
-    Socialtext::Timer->Stop('_watchlist_get_items');
+    Socialtext::Timer->Pause('_watchlist_get_items');
     return \@pages;
 }
 
@@ -328,7 +328,7 @@ sub _search_get_items {
     my $self = shift;
     my $query = shift;
 
-    Socialtext::Timer->Start('_search_get_items');
+    Socialtext::Timer->Continue('_search_get_items');
     my @pages = map { $self->hub->pages->new_page( $_->page_uri ) }
         grep { $_->isa('Socialtext::Search::PageHit') }
         search_on_behalf(
@@ -338,7 +338,7 @@ sub _search_get_items {
             $self->hub->current_user,
             sub { },   # FIXME: swallowing this error for now
             sub { } ); # FIXME: swallowing this error for now
-    Socialtext::Timer->Stop('_search_get_items');
+    Socialtext::Timer->Pause('_search_get_items');
 
     return \@pages;
 }

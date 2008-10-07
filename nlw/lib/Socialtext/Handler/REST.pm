@@ -36,11 +36,11 @@ sub handler ($$) {
     my $r     = shift;
 
     Socialtext::Timer->Reset();
-    Socialtext::Timer->Start('web_auth');
+    Socialtext::Timer->Continue('web_auth');
     my $auth_info = $class->getAuthForURI($r->uri);
 
     my $user = $class->authenticate($r) || $class->guest($r, $auth_info);
-    Socialtext::Timer->Stop('web_auth');
+    Socialtext::Timer->Pause('web_auth');
 
     return $class->challenge(request => $r, auth_info => $auth_info) unless $user;
 
@@ -94,9 +94,9 @@ sub real_handler {
     }
 
     my $handler = __PACKAGE__->new( request => $r, user => $user );
-    Socialtext::Timer->Start('handler_run');
+    Socialtext::Timer->Continue('handler_run');
     $handler->run();
-    Socialtext::Timer->Stop('handler_run');
+    Socialtext::Timer->Pause('handler_run');
 
     $class->log_timings($handler);
     return OK;

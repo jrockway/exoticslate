@@ -262,11 +262,11 @@ sub _set_permissions {
 sub _populate_db_metadata {
     my $self = shift;
 
-    Socialtext::Timer->Start('populate_db');
+    Socialtext::Timer->Continue('populate_db');
     my $populator = Socialtext::Page::TablePopulator->new(
         workspace_name => $self->{new_name} );
     $populator->populate;
-    Socialtext::Timer->Stop('populate_db');
+    Socialtext::Timer->Pause('populate_db');
 }
 
 sub _permissions_file { $_[0]->{old_name} . '-permissions.yaml' }

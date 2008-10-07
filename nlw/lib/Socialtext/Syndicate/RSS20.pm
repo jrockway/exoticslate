@@ -22,7 +22,7 @@ sub _create_feed {
 
     my $rss = new XML::RSS( version => '2.0' );
 
-    Socialtext::Timer->Start('_create_feed_items');
+    Socialtext::Timer->Continue('_create_feed_items');
     my $feed_modified = 0;
     foreach my $page (@$pages) {
         my $pub_date = $page->modified_time;
@@ -38,9 +38,9 @@ sub _create_feed {
             category    => join( ", ", @tags)
         );
     }
-    Socialtext::Timer->Stop('_create_feed_items');
+    Socialtext::Timer->Pause('_create_feed_items');
 
-    Socialtext::Timer->Start('_create_feed_channel');
+    Socialtext::Timer->Continue('_create_feed_channel');
     $rss->channel(
         title     => $self->_feed_title,
         link      => $self->_html_link,
@@ -48,11 +48,11 @@ sub _create_feed {
         generator => $self->_generator,
         pubDate   => $self->_format_date($feed_modified),
     );
-    Socialtext::Timer->Stop('_create_feed_channel');
+    Socialtext::Timer->Pause('_create_feed_channel');
 
-    Socialtext::Timer->Start('_create_feed_as_string');
+    Socialtext::Timer->Continue('_create_feed_as_string');
     my $xml = $rss->as_string;
-    Socialtext::Timer->Stop('_create_feed_as_string');
+    Socialtext::Timer->Pause('_create_feed_as_string');
     return $xml;
 }
 

@@ -328,7 +328,7 @@ sub get_pages_by_seconds_limit {
     my $seconds     = shift;
     my $max_returns = shift;
     my $limit       = time - $seconds;
-    Socialtext::Timer->Start('get_pages_by_seconds_limit');
+    Socialtext::Timer->Continue('get_pages_by_seconds_limit');
     # XXX If we use some other module for this, we don't have to load
     # the massive POSIX library in Apache.
     my $date_limit_string = POSIX::strftime( '%Y%m%d%H%M%S', gmtime($limit) );
@@ -359,7 +359,7 @@ PAGE:
         }
         push @pages, $page;
     }
-    Socialtext::Timer->Stop('get_pages_by_seconds_limit');
+    Socialtext::Timer->Pause('get_pages_by_seconds_limit');
     return \@pages;
 }
 

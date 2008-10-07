@@ -72,16 +72,16 @@ sub _make_getter {
     return sub {
         my ( $self, $rest ) = @_;
 
-        Socialtext::Timer->Start("GET_$content_type");
+        Socialtext::Timer->Continue("GET_$content_type");
         my $rv;
         eval {
             $rv = $self->if_authorized(
                 'GET',
                 sub {
                     # REVIEW: should eval this for errors
-                    Socialtext::Timer->Start('get_resource');
+                    Socialtext::Timer->Continue('get_resource');
                     my $resource = $self->get_resource($rest, $content_type);
-                    Socialtext::Timer->Stop('get_resource');
+                    Socialtext::Timer->Pause('get_resource');
                     $resource = [] unless @$resource; # protect against weird data
                     $rest->header(
                         -status        => HTTP_200_OK,
@@ -95,7 +95,7 @@ sub _make_getter {
                 }
             );
         };
-       Socialtext::Timer->Stop("GET_$content_type");
+       Socialtext::Timer->Pause("GET_$content_type");
        if (my $except = $@) {
             if ($except->isa('Socialtext::Exception::Auth')) {
                 return $self->not_authorized;
@@ -177,12 +177,12 @@ but subclasses can override this.
 sub _hashes_for_query {
     my $self = shift;
 
-    Socialtext::Timer->Start('_entities_for_query');
+    Socialtext::Timer->Continue('_entities_for_query');
     my @results =  $self->_entities_for_query;
-    Socialtext::Timer->Stop('_entities_for_query');
-    Socialtext::Timer->Start('_entity_hash_map');
+    Socialtext::Timer->Pause('_entities_for_query');
+    Socialtext::Timer->Continue('_entity_hash_map');
     @results = map { $self->_entity_hash($_) } @results;
-    Socialtext::Timer->Stop('_entity_hash_map');
+    Socialtext::Timer->Pause('_entity_hash_map');
     return @results;
 }
 

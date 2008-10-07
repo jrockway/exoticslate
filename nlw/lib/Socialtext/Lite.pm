@@ -347,9 +347,9 @@ sub _frame_page {
     $self->hub->viewer->link_dictionary(
         Socialtext::Formatter::LiteLinkDictionary->new() );
     
-    Socialtext::Timer->Start('lite_page_html');
+    Socialtext::Timer->Continue('lite_page_html');
     my $html = $page->to_html_or_default;
-    Socialtext::Timer->Stop('lite_page_html');
+    Socialtext::Timer->Pause('lite_page_html');
 
     return $self->_process_template(
         $DISPLAY_TEMPLATE,

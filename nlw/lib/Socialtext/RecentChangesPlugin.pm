@@ -90,7 +90,7 @@ sub recent_changes {
     my $type = $self->cgi->changes;
     my $sortdir = $self->sortdir;
 
-    Socialtext::Timer->Start('get_result_set');
+    Socialtext::Timer->Continue('get_result_set');
 
     $self->dont_use_cached_result_set();
     #$self->default_result_set();
@@ -99,7 +99,7 @@ sub recent_changes {
         $self->result_set->{predicate} = "action=changes;changes=all";
     }
 
-    Socialtext::Timer->Stop('get_result_set');
+    Socialtext::Timer->Pause('get_result_set');
 
     $self->display_results(
         $sortdir,
@@ -131,9 +131,9 @@ sub _feeds {
 sub recent_changes_html {
     my $self = shift;
     my $count = $self->preferences->sidebox_changes_depth->value;
-    Socialtext::Timer->Start('get_recent_changes');
+    Socialtext::Timer->Continue('get_recent_changes');
     my $changes = $self->get_recent_changes($count);
-    Socialtext::Timer->Stop('get_recent_changes');
+    Socialtext::Timer->Pause('get_recent_changes');
     $self->template_process('recent_changes_box_filled.html',
         %$changes,
     );
@@ -188,11 +188,11 @@ sub new_changes {
         );
     }
 
-    Socialtext::Timer->Start('new_changes_push_result');
+    Socialtext::Timer->Continue('new_changes_push_result');
     for my $page (@$pages_ref) {
         $self->push_result($page);
     }
-    Socialtext::Timer->Stop('new_changes_push_result');
+    Socialtext::Timer->Pause('new_changes_push_result');
 
     my $hits = $self->result_set->{hits} = @{$self->result_set->{rows}};
     $self->result_set->{display_title} = "$display_title ($hits)";

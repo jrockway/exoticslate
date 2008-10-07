@@ -92,16 +92,16 @@ sub with_alternate_workspace {
 sub _process {
     my $self = shift;
 
-    Socialtext::Timer->Start('hub_process');
+    Socialtext::Timer->Continue('hub_process');
     $self->preload;
     $self->no_plugin_action
       unless defined $self->registry->lookup->action->{$self->action};
     my ($class_id, $method) =
       @{$self->registry->lookup->action->{$self->action}};
     $method ||= $self->action;
-    Socialtext::Timer->Start('drop_workspace_breadcrumb');
+    Socialtext::Timer->Continue('drop_workspace_breadcrumb');
     $self->drop_workspace_breadcrumb($method);
-    Socialtext::Timer->Stop('drop_workspace_breadcrumb');
+    Socialtext::Timer->Pause('drop_workspace_breadcrumb');
     my $html = eval { $self->$class_id->$method };
     my $e = $@;
     if ( Exception::Class->caught('Socialtext::Exception::DataValidation') ) {
@@ -117,7 +117,7 @@ sub _process {
         $html =~ s/([^\x00-\xa0])/sprintf('&#x%x;', unpack('U', $1))/egs;
     }
 
-    Socialtext::Timer->Stop('hub_process');
+    Socialtext::Timer->Pause('hub_process');
     return $html;
 }
 

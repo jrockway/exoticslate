@@ -144,7 +144,7 @@ sub search_for_term {
     my $search_term = $query{search_term};
     $self->hub->log->debug("searchquery '" . $search_term . "'");
 
-    Socialtext::Timer->Start('search_for_term');
+    Socialtext::Timer->Continue('search_for_term');
     $self->result_set( $self->new_result_set );
     eval {
         @{ $self->result_set->{rows} } = $self->_new_search(%query);
@@ -184,13 +184,13 @@ sub search_for_term {
             $self->hub->log->warning("searchdie '$@'");
         }
     }
-    Socialtext::Timer->Stop('search_for_term');
+    Socialtext::Timer->Pause('search_for_term');
 }
 
 sub _new_search {
     my ( $self, %query ) = @_;
 
-    Socialtext::Timer->Start('search_on_behalf');
+    Socialtext::Timer->Continue('search_on_behalf');
     my @hits = search_on_behalf(
         $self->hub->current_workspace->name,
         $query{search_term},
@@ -199,14 +199,14 @@ sub _new_search {
         sub { },    # FIXME: We'd rather message the user than ignore these.
         sub { }     # FIXME: We'd rather message the user than ignore these.
     );
-    Socialtext::Timer->Stop('search_on_behalf');
+    Socialtext::Timer->Pause('search_on_behalf');
 
     eval { $self->_load_pages_for_hits(\@hits) };
     warn $@ if $@;
 
     my %cache;
     my @results;
-    Socialtext::Timer->Start('hitrows');
+    Socialtext::Timer->Continue('hitrows');
     for my $hit (@hits) {
         my $key = $hit->composed_key;
         next if $cache{$key};
@@ -218,7 +218,7 @@ sub _new_search {
             push @results, $row;
         }
     }
-    Socialtext::Timer->Stop('hitrows');
+    Socialtext::Timer->Pause('hitrows');
 
     return @results;
 }

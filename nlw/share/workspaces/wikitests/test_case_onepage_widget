@@ -20,14 +20,7 @@
 | open_ok | /?dashboard | 60000 |
 | st-empty-container |  |  |
 | pause | 2000 |  |
-
-open_ok | /?action=add_widget;location=widgets%2Fshare%2Fwidgets%2Fone_page.xml |
-
 | st-add-widget | widgets/share/widgets/one_page.xml | onepage |
-
-pause | 30000 | |
-st-name-widget | 1 | onepage |
-
 | st_wait_for_widget_load | onepage | 25000 |
 | st-widget-settings | onepage |  |
 | wait_for_element_present_ok | name=up_workspace_name |  |

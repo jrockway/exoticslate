@@ -114,7 +114,8 @@ $(LIGHTBOX_FILE): $(LIGHTBOX_SOURCE_FILES) Makefile
 	done
 
 info.js: ../info.yaml
-	perl -MTemplate::Toolkit::Simple -e 'Template::Toolkit::Simple->_run_command(qw{--path=template --data=$< $@})' > $@
+	perl -MYAML -MTemplate -e \
+	    'Template->new->process("template/$@", YAML::LoadFile("$<"))' > $@
 
 timestamp.js: $(EDITOR_FILE) $(S3_SOURCE_FILES:timestamp.js%=%) $(LIGHTBOX_SOURCE_FILES:timestamp.js%=%)
 	echo 'var Socialtext = Socialtext || {};' > $@

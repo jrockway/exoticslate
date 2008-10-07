@@ -43,7 +43,7 @@ $homunculus->username( 'fakir@faker.com' );
 
 my $user_id2 = Socialtext::UserId->create_if_necessary( $homunculus );
 is(
-    $user_id1->system_unique_id, $user_id2->system_unique_id,
+    $user_id1->user_id, $user_id2->user_id,
     "Two user records representing the same user"
 );
 

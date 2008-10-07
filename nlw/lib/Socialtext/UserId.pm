@@ -10,7 +10,7 @@ use Class::Field 'field';
 use Socialtext::Cache;
 use Socialtext::SQL qw(sql_execute sql_singlevalue);
 
-field 'system_unique_id';
+field 'user_id';
 field 'driver_key';
 field 'driver_unique_id';
 field 'driver_username';
@@ -45,11 +45,11 @@ sub create_if_necessary {
         return $user_id;
     }
     
-    my $new_id = $class->SystemUniqueId();
+    my $new_id = $class->NewUserId();
     return $class->create( 
         @primary_params,
         driver_username => $homunculus->username,
-        system_unique_id => $new_id
+        user_id => $new_id
     );
 }
 
@@ -68,8 +68,8 @@ sub new {
     my ( $class, %p ) = @_;
 
     return
-        exists $p{system_unique_id}
-        ? $class->_new_from_system_unique_id(%p)
+        exists $p{user_id}
+        ? $class->_new_from_user_id(%p)
         : $class->_new_from_homunculus(%p);
 }
 
@@ -77,27 +77,27 @@ sub _cache {
     return Socialtext::Cache->cache('user_id');
 }
 
-sub _new_from_system_unique_id {
+sub _new_from_user_id {
     my ( $class, %p ) = @_;
 
-    # 'system_unique_id' should *only* ever be numeric; if its anything else,
+    # 'user_id' should *only* ever be numeric; if its anything else,
     # fail quietly.
     #
     # Need this check as other User Factories may have non-numeric user
-    # ids, and a lookup by "system_unique_id" may get passed through to this
+    # ids, and a lookup by "user_id" may get passed through to this
     # factory with a non-numeric value.
-    if (exists $p{system_unique_id} && ($p{system_unique_id} =~ /\D/)) {
+    if (exists $p{user_id} && ($p{user_id} =~ /\D/)) {
         return undef;
     }
 
     # cache-get/instantiate the UserId object
     my $cache = $class->_cache();
-    my $key   = "system_unique_id=$p{system_unique_id}";
+    my $key   = "user_id=$p{user_id}";
 
     my $user_id = $cache->get($key);
     unless ($user_id) {
         $user_id = $class->_new_from_where(
-            'system_unique_id=?' => $p{system_unique_id});
+            'user_id=?' => $p{user_id});
         $cache->set($key, $user_id);
     }
     return $user_id;
@@ -136,14 +136,14 @@ sub _new_from_where {
     my ( $class, $where_clause, @bindings ) = @_;
 
     my $sth = sql_execute(
-        'SELECT system_unique_id, driver_key, driver_unique_id, driver_username'
+        'SELECT user_id, driver_key, driver_unique_id, driver_username'
         . ' FROM "UserId"'
         . " WHERE $where_clause",
         @bindings );
 
     my @rows = @{ $sth->fetchall_arrayref };
     return @rows ? bless {
-                    system_unique_id => $rows[0][0],
+                    user_id => $rows[0][0],
                     driver_key       => $rows[0][1],
                    driver_unique_id => $rows[0][2],
                     driver_username  => $rows[0][3],
@@ -151,22 +151,22 @@ sub _new_from_where {
                  : undef;
 }
 
-sub SystemUniqueId {
-    my $id = sql_singlevalue(q{SELECT nextval('"UserId___system_unique_id"')});
+sub NewUserId {
+    my $id = sql_singlevalue(q{SELECT nextval('"UserId___user_id"')});
     return $id;
 }
 
 sub create {
     my ( $class, %p ) = @_;
 
-    die "need to supply a system_unique_id; use GetUniqueId"
-        unless $p{system_unique_id};
+    die "need to supply a user_id; use GetUniqueId"
+        unless $p{user_id};
 
     sql_execute(
         'INSERT INTO "UserId"'
-        . ' (system_unique_id, driver_key, driver_unique_id, driver_username)'
+        . ' (user_id, driver_key, driver_unique_id, driver_username)'
         . ' VALUES (?,?,?,?)',
-        $p{system_unique_id}, $p{driver_key}, $p{driver_unique_id}, $p{driver_username} );
+        $p{user_id}, $p{driver_key}, $p{driver_unique_id}, $p{driver_username} );
 
     return $class->new(%p);
 }
@@ -175,8 +175,8 @@ sub delete {
     my $self = shift;
 
     my $sth = sql_execute(
-        'DELETE FROM "UserId" WHERE system_unique_id=?',
-        $self->system_unique_id
+        'DELETE FROM "UserId" WHERE user_id=?',
+        $self->user_id
     );
 
     # flush cache; removed a UserId from the DB
@@ -197,8 +197,8 @@ sub update {
     my $set_clause = join ', ', @updates;
 
     sql_execute(
-        qq{UPDATE "UserId" SET $set_clause WHERE system_unique_id=?},
-        @bindings, $self->system_unique_id
+        qq{UPDATE "UserId" SET $set_clause WHERE user_id=?},
+        @bindings, $self->user_id
     );
 
     while (my ($column, $value) = each %p) {
@@ -257,21 +257,21 @@ PARAMS can include:
 
 =back
 
-=head2 Socialtext::UserId->SystemUniqueId()
+=head2 Socialtext::UserId->NewUserId()
 
 Returns a new unique identifier for use in creating new users.
 
 =head2 Socialtext::UserId->create(PARAMS)
 
 Attempts to create a user metadata record with the given information and
-returns a new C<Socialtext>::UserId object.  Be sure to call SystemUniqueId to
-get a new system_unique_id to pass in.
+returns a new C<Socialtext>::UserId object.  Be sure to call NewUserId to
+get a new user_id to pass in.
 
 PARAMS can include:
 
 =over 4
 
-=item * system_unique_id - required
+=item * user_id - required
 
 =item * driver_key - required
 
@@ -296,7 +296,7 @@ lookup on the UserId table.
 
 Delete the record from the database.
 
-=head2 $uid->system_unique_id()
+=head2 $uid->user_id()
 
 =head2 $uid->driver_key()
 

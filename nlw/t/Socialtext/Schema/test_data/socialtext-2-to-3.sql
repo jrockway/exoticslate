@@ -43,7 +43,7 @@ SELECT execute_unless_table_exists('event', $$
         context TEXT, 
         PRIMARY KEY (id),
         CONSTRAINT event_actor_id_fk 
-            FOREIGN KEY(actor_id) REFERENCES "UserId" (system_unique_id)
+            FOREIGN KEY(actor_id) REFERENCES "UserId" (user_id)
     );
     CREATE INDEX ix_event_actor_id ON event (actor_id);
     CREATE SEQUENCE event_id_seq;
@@ -77,11 +77,11 @@ SELECT execute_unless_table_exists('event', $$
         assistant_id INTEGER, 
         PRIMARY KEY (id), 
         CONSTRAINT person_id_fk FOREIGN KEY(id) 
-            REFERENCES "UserId" (system_unique_id), 
+            REFERENCES "UserId" (user_id), 
         CONSTRAINT person_supervisor_id_fk FOREIGN KEY(supervisor_id) 
-            REFERENCES "UserId" (system_unique_id), 
+            REFERENCES "UserId" (user_id), 
         CONSTRAINT person_assistant_id_fk FOREIGN KEY(assistant_id) 
-            REFERENCES "UserId" (system_unique_id)
+            REFERENCES "UserId" (user_id)
     );
     CREATE INDEX ix_person_assistant_id ON person (assistant_id);
     CREATE INDEX ix_person_supervisor_id ON person (supervisor_id);
@@ -98,9 +98,9 @@ SELECT execute_unless_table_exists('event', $$
         person_id2 INTEGER NOT NULL, 
         PRIMARY KEY (person_id1, person_id2), 
         CONSTRAINT person_watched_people_fk FOREIGN KEY(person_id1) 
-            REFERENCES "UserId" (system_unique_id), 
+            REFERENCES "UserId" (user_id), 
         CONSTRAINT person_watched_people_inverse_fk FOREIGN KEY(person_id2) 
-            REFERENCES "UserId" (system_unique_id)
+            REFERENCES "UserId" (user_id)
     );
 
     CREATE TABLE tag_people__person_tags (
@@ -108,18 +108,18 @@ SELECT execute_unless_table_exists('event', $$
         tag_id INTEGER NOT NULL, 
         PRIMARY KEY (person_id, tag_id), 
         CONSTRAINT person_tags_fk FOREIGN KEY(person_id) 
-            REFERENCES "UserId" (system_unique_id), 
+            REFERENCES "UserId" (user_id), 
         CONSTRAINT tag_people_fk FOREIGN KEY(tag_id) 
             REFERENCES tag (id)
     );
 
     INSERT INTO person(id, name) 
-        SELECT system_unique_id, driver_username FROM "UserId";
+        SELECT user_id, driver_username FROM "UserId";
 
     CREATE FUNCTION auto_vivify_person () RETURNS TRIGGER AS '
     BEGIN
         INSERT INTO person (id, name) 
-            VALUES (NEW.system_unique_id, NEW.driver_username);
+            VALUES (NEW.user_id, NEW.driver_username);
         RETURN NEW;
     END
     ' LANGUAGE plpgsql;

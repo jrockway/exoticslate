@@ -30,12 +30,12 @@ ALTER TABLE ONLY page
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_last_editor_id_fk
     FOREIGN KEY (last_editor_id)
-    REFERENCES "UserId" (system_unique_id) ON DELETE CASCADE;
+    REFERENCES "UserId" (user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_creator_id_fk
     FOREIGN KEY (creator_id)
-    REFERENCES "UserId" (system_unique_id) ON DELETE CASCADE;
+    REFERENCES "UserId" (user_id) ON DELETE CASCADE;
 
 -- Definition of the page_tag table
 

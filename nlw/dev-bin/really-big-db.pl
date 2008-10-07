@@ -151,10 +151,10 @@ sub maybe_commit {
 
     my $user_id_sth = $dbh->prepare_cached(qq{
        INSERT INTO "UserId" (
-           system_unique_id, driver_key, driver_unique_id, driver_username
+           user_id, driver_key, driver_unique_id, driver_username
        ) VALUES (
-           nextval('"UserId___system_unique_id"'), ?,
-           nextval('"User___user_id"'), ?
+           nextval('"UserId___user_id"'), ?,
+           currval('"UserId___user_id"'), ?
        )
     });
     my $user_sth = $dbh->prepare_cached(qq{
@@ -169,7 +169,7 @@ sub maybe_commit {
            user_id, email_address_at_import, 
            created_by_user_id, primary_account_id
         ) VALUES (
-           currval('"UserId___system_unique_id"'), ?, NULL, 1
+           currval('"UserId___user_id"'), ?, NULL, 1
         )
     });
 
@@ -178,8 +178,8 @@ sub maybe_commit {
         $user_id_sth->execute('Default', $uname);
         $user_sth->execute($uname, $uname, 'password', "First$user", "Last$user" );
         $user_meta_sth->execute( $uname );
-        my ($system_unique_id) = $dbh->selectrow_array(q{SELECT currval('"UserId___system_unique_id"')});
-        push @users, $system_unique_id;
+        my ($user_id) = $dbh->selectrow_array(q{SELECT currval('"UserId___user_id"')});
+        push @users, $user_id;
         $writes += 3;
         maybe_commit();
     }

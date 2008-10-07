@@ -43,22 +43,22 @@ sub _create_default_user {
     my $self = shift;
     my ($username, $email, $created_by) = @_;
 
-    my $id = Socialtext::UserId->SystemUniqueId();
+    my $id = Socialtext::UserId->NewUserId();
 
-    my $system_unique_id = Socialtext::UserId->create(
-        system_unique_id => $id,
+    my $user_id = Socialtext::UserId->create(
+        user_id          => $id,
         driver_key       => $self->driver_key,
         driver_unique_id => $id,
         driver_username  => $username,
     );
     my $system_user = $self->create(
-        system_unique_id => $id,
-        username         => $username,
-        email_address    => $email,
-        first_name       => 'System',
-        last_name        => 'User',
-        password         => '*no-password*',
-        no_crypt         => 1,
+        user_id       => $id,
+        username      => $username,
+        email_address => $email,
+        first_name    => 'System',
+        last_name     => 'User',
+        password      => '*no-password*',
+        no_crypt      => 1,
     );
     Socialtext::UserMetadata->create(
         user_id            => $id,
@@ -194,7 +194,7 @@ sub create {
             INSERT INTO user_detail
             (user_id, username, email_address, first_name, last_name, password)
             VALUES (?,?,?,?,?,?)
-        }, $p{system_unique_id}, $p{username},  $p{email_address},
+        }, $p{user_id}, $p{username},  $p{email_address},
         $p{first_name}, $p{last_name}, $p{password}
     );
 
@@ -294,8 +294,8 @@ sub _validate_and_clean_data {
     my $is_create = defined $user ? 0 : 1;
 
     if ($is_create) {
-        die "must have pre-specified a system_unique_id to use"
-            unless $p->{system_unique_id};
+        die "must have pre-specified a user_id to use"
+            unless ($p->{user_id} && $p->{user_id} =~ /^\d+$/);
     }
     else {
         $metadata = Socialtext::UserMetadata->new(

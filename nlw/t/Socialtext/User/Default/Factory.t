@@ -29,8 +29,8 @@ sub create_a_user {
     my $expected_username = delete $opts{expected_username};
     $expected_username ||= lc $opts{username};
 
-    my $id = Socialtext::UserId->SystemUniqueId();
-    $opts{system_unique_id} = $id;
+    my $id = Socialtext::UserId->NewUserId();
+    $opts{user_id} = $id;
     my $user = $factory->create(%opts);
 
     isa_ok $user, 'Socialtext::User::Default', 'created new user';

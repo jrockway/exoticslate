@@ -25,9 +25,9 @@ use Socialtext::User::Default::Factory;
 
 # populate a user that doesn't currently exist, even though it uses a
 # known driver.
-my $unique_id = Socialtext::UserId->SystemUniqueId();
+my $unique_id = Socialtext::UserId->NewUserId();
 my $user_id = Socialtext::UserId->create(
-    system_unique_id => $unique_id,
+    user_id => $unique_id,
     driver_key       => 'Default',
     driver_unique_id => 999999,
     driver_username  => "Nemo",
@@ -35,7 +35,7 @@ my $user_id = Socialtext::UserId->create(
 
 {
     is (Socialtext::User->Count, 10, "New user added only to UserId, simulating adding and deleting from the store.");
-    my $nemo = Socialtext::User->new( user_id => $user_id->system_unique_id );
+    my $nemo = Socialtext::User->new( user_id => $user_id->user_id );
     ok ($nemo->to_hash, "Nemo can be hashified" );
     is ($nemo->username, 'Nemo', "Nemo was found, no error.");
     is ($nemo->first_name, 'Deleted', "But he's still deleted.");
@@ -49,7 +49,7 @@ my $user_id = Socialtext::UserId->create(
 
 # Move the back-end record, so that user_id is out of sync with the UserId
 # table. We should still be able to find this user and treat him the same (he
-# should still have the same system_unique_id)
+# should still have the same user_id)
 {
     my $existing = Socialtext::User::Default::Factory->new->GetUser(
         username => 'devnull1@urth.org',
@@ -74,9 +74,9 @@ my $user_id = Socialtext::UserId->create(
 Default_username: {
     # Create a UserId, but no User, to trick the system into thinking
     # this is a deleted user.
-    my $id = Socialtext::UserId->SystemUniqueId();
+    my $id = Socialtext::UserId->NewUserId();
     Socialtext::UserId->create(
-        system_unique_id => $id,
+        user_id => $id,
         driver_key       => 'Default',
         driver_unique_id => "Rubber Bands",
         driver_username  => '',

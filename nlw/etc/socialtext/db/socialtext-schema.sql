@@ -10,7 +10,7 @@ CREATE FUNCTION auto_vivify_person() RETURNS "trigger"
     AS $$
 BEGIN
     INSERT INTO person (id, last_update) 
-        VALUES (NEW.system_unique_id, '-Infinity'::timestamptz);
+        VALUES (NEW.user_id, '-Infinity'::timestamptz);
     RETURN NEW;
 END
 $$
@@ -90,13 +90,13 @@ CREATE TABLE "UserEmailConfirmation" (
 );
 
 CREATE TABLE "UserId" (
-    system_unique_id bigint NOT NULL,
+    user_id bigint NOT NULL,
     driver_key varchar(250) NOT NULL,
     driver_unique_id varchar(250) NOT NULL,
     driver_username varchar(250)
 );
 
-CREATE SEQUENCE "UserId___system_unique_id"
+CREATE SEQUENCE "UserId___user_id"
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -300,7 +300,6 @@ CREATE TABLE search_sets (
 );
 
 CREATE SEQUENCE search_sets___search_set_id
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -321,7 +320,6 @@ CREATE TABLE "storage" (
 );
 
 CREATE SEQUENCE tag_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -333,12 +331,12 @@ CREATE TABLE tag_people__person_tags (
 );
 
 CREATE VIEW user_account AS
-  SELECT DISTINCT u.system_unique_id, u.driver_key, u.driver_unique_id, u.driver_username, um.created_by_user_id AS creator_id, um.creation_datetime, um.primary_account_id, w.account_id AS secondary_account_id
+  SELECT DISTINCT u.user_id, u.driver_key, u.driver_unique_id, u.driver_username, um.created_by_user_id AS creator_id, um.creation_datetime, um.primary_account_id, w.account_id AS secondary_account_id
    FROM "UserId" u
-   JOIN "UserMetadata" um ON u.system_unique_id = um.user_id
+   JOIN "UserMetadata" um ON u.user_id = um.user_id
    LEFT JOIN "UserWorkspaceRole" uwr ON um.user_id = uwr.user_id
    LEFT JOIN "Workspace" w ON uwr.workspace_id = w.workspace_id
-  ORDER BY u.system_unique_id, u.driver_key, u.driver_unique_id, u.driver_username, um.created_by_user_id, um.creation_datetime, um.primary_account_id, w.account_id;
+  ORDER BY u.user_id, u.driver_key, u.driver_unique_id, u.driver_username, um.created_by_user_id, um.creation_datetime, um.primary_account_id, w.account_id;
 
 CREATE TABLE user_detail (
     user_id bigint NOT NULL,
@@ -368,7 +366,7 @@ ALTER TABLE ONLY "UserEmailConfirmation"
 
 ALTER TABLE ONLY "UserId"
     ADD CONSTRAINT "UserId_pkey"
-            PRIMARY KEY (system_unique_id);
+            PRIMARY KEY (user_id);
 
 ALTER TABLE ONLY "UserMetadata"
     ADD CONSTRAINT "UserMetadata_pkey"
@@ -570,7 +568,7 @@ ALTER TABLE ONLY account_plugin
 ALTER TABLE ONLY event
     ADD CONSTRAINT event_actor_id_fk
             FOREIGN KEY (actor_id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY event
     ADD CONSTRAINT event_page_fk
@@ -580,7 +578,7 @@ ALTER TABLE ONLY event
 ALTER TABLE ONLY event
     ADD CONSTRAINT event_person_id_fk
             FOREIGN KEY (person_id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY "WorkspacePingURI"
     ADD CONSTRAINT fk_040b7e8582f72e5921dc071311fc4a5f
@@ -595,17 +593,17 @@ ALTER TABLE ONLY "WorkspaceRolePermission"
 ALTER TABLE ONLY "Workspace"
     ADD CONSTRAINT fk_251eb1be4c68e78c9e4b7799c9eed357
             FOREIGN KEY (created_by_user_id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY "UserWorkspaceRole"
     ADD CONSTRAINT fk_2d35adae0767c6ef9bd03ed923bd2380
             FOREIGN KEY (user_id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY "UserMetadata"
     ADD CONSTRAINT fk_51604686f50dc445f1d697a101a6a5cb
             FOREIGN KEY (user_id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY "WorkspaceBreadcrumb"
     ADD CONSTRAINT fk_537b27b50b95eea3e12ec792db0553f5
@@ -615,12 +613,12 @@ ALTER TABLE ONLY "WorkspaceBreadcrumb"
 ALTER TABLE ONLY "WorkspaceBreadcrumb"
     ADD CONSTRAINT fk_55d1290a6baacca3b4fec189a739ab5b
             FOREIGN KEY (user_id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY "UserEmailConfirmation"
     ADD CONSTRAINT fk_777ad60e2bff785f8ff5ece0f3fc95c8
             FOREIGN KEY (user_id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY "WorkspaceRolePermission"
     ADD CONSTRAINT fk_82421c1ae80e2402c554a4bdec97ef4d
@@ -650,12 +648,12 @@ ALTER TABLE ONLY "WorkspaceRolePermission"
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_creator_id_fk
             FOREIGN KEY (creator_id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_last_editor_id_fk
             FOREIGN KEY (last_editor_id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY page_tag
     ADD CONSTRAINT page_tag_workspace_id_page_id_fkey
@@ -670,32 +668,32 @@ ALTER TABLE ONLY page
 ALTER TABLE ONLY person
     ADD CONSTRAINT person_assistant_id_fk
             FOREIGN KEY (assistant_id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY person
     ADD CONSTRAINT person_id_fk
             FOREIGN KEY (id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY person
     ADD CONSTRAINT person_supervisor_id_fk
             FOREIGN KEY (supervisor_id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT person_tags_fk
             FOREIGN KEY (person_id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY person_watched_people__person
     ADD CONSTRAINT person_watched_people_fk
             FOREIGN KEY (person_id1)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY person_watched_people__person
     ADD CONSTRAINT person_watched_people_inverse_fk
             FOREIGN KEY (person_id2)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT tag_people_fk
@@ -713,9 +711,9 @@ ALTER TABLE ONLY "UserWorkspaceRole"
             REFERENCES "Role"(role_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY "Watchlist"
-    ADD CONSTRAINT watchlist___userid___user_id___system_unique_id___n___1___1___0
+    ADD CONSTRAINT watchlist_user_fk
             FOREIGN KEY (user_id)
-            REFERENCES "UserId"(system_unique_id) ON DELETE CASCADE;
+            REFERENCES "UserId"(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY "Workspace"
     ADD CONSTRAINT workspace___account___account_id___account_id___n___1___1___0

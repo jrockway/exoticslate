@@ -20,12 +20,5 @@ Test case for on-behalf-of functionality
 | Comment | Make sure event recorded as on-behalf-of user |
 | get | /data/events?limit=1 |
 | code-is | 200 |
-| body-like | "best_full_name":"q" |
+| body-like | "uri":"/data/people/4" |
 
-| Comment | See that the right user is shown for a comment |
-| post | /data/workspaces/admin/pages/conversations/comments | Content-Type=text/x.socialtext-wiki,X-on-behalf-of=q@q.q  | this is my comment |
-| code-is | 204 |
-| get | /data/workspaces/admin/pages/conversations|
-| code-is | 200 |
-| body-like | this is my comment |
-| body-like | <em>contributed by <span class="nlw_phrase">q<!-- wiki: {user: q@q.q} --></span> |

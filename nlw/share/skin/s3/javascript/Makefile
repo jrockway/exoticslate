@@ -64,6 +64,7 @@ all: \
 
 clean:
 	rm -f \
+	    info.js \
 	    timestamp.js \
 	    Jemplate.js \
 	    $(JEMPLATE_MODULE) \
@@ -113,7 +114,7 @@ $(LIGHTBOX_FILE): $(LIGHTBOX_SOURCE_FILES) Makefile
 	done
 
 info.js: ../info.yaml
-	tt-render --path=template --data=$< $@ > $@
+	perl -MTemplate::Toolkit::Simple -e 'Template::Toolkit::Simple->_run_command(qw{--path=template --data=$< $@})' > $@
 
 timestamp.js: $(EDITOR_FILE) $(S3_SOURCE_FILES:timestamp.js%=%) $(LIGHTBOX_SOURCE_FILES:timestamp.js%=%)
 	echo 'var Socialtext = Socialtext || {};' > $@

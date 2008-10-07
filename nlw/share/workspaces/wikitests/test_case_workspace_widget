@@ -3,8 +3,8 @@
 * Fixture: SocialWidgets
 
 | set | workspace | test-data |
-| st-admin | create-workspace --name workspacewidget-%%start_time%% --title "workspacewidget %%start_time%%" |
-| st-admin | add-member --workspace workspacewidget-%%start_time%% --username %%username%% |
+| st-admin | create-workspace --name workspacewidget-%%start_time%% --title "workspacewidget %%start_time%%" |  |
+| st-admin | add-member --workspace workspacewidget-%%start_time%% --username %%username%% |  |
 
 | open_ok | /?dashboard | 60000 |
 | st-empty-container |  |  |

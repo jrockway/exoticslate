@@ -244,9 +244,9 @@ sub _install_skin_files {
 
     my $skin_path = $self->custom_skin_path();
 
-    my ($basedir) = map { m{^(.*/)css/screen\.css$} } @$files;
+    my ($basedir) = map { m{^(.*/)info\.yaml$} } @$files;
     unless ($basedir) {
-        $$error = loc("The uploaded skin does not contain css/screen.css");
+        $$error = loc("The uploaded skin does not contain info.yaml!");
         return;
     }
 

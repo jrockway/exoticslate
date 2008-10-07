@@ -8,25 +8,23 @@
 | st-empty-container |  |  |
 | pause | 500 |  |
 | *Comment* | Test Case: Tag Cloud Widget |  |
-| st-add-widget | gadgets/share/gadgets/tag_cloud.xml | tag_cloud |
+| st-add-widget | widgets/share/widgets/tag_cloud.xml | tag_cloud |
 | st_wait_for_widget_load | tag_cloud | 45000 |
 | pause | 500 |  |
 | st-select-widget-frame | tag_cloud |  |
 | text_like | //body | socialtext |
 | text_like | //body | weblog |
-| text_like | my%%tag_cloud%%-content | style |
-| text_like | my%%tag_cloud%%-content | guide |
-| text_like | my%%tag_cloud%%-content | top page |
-| text_like | my%%tag_cloud%%-content | project |
-| text_like | my%%tag_cloud%%-content | dakota |
-| text_like | my%%tag_cloud%%-content | help |
+| text_like | //body | Top Page |
+| text_like | //body | Project |
+| text_like | //body | Dakota |
+| text_like | //body | help |
 | select-frame | relative=parent |  |
 | st-widget-settings | tag_cloud |  |
 | wait_for_element_visible_ok | st-savebutton | 30000 |
 | pause | 2000 |  |
 | select_ok | up_workspace | Canonical Test Data Set |
 | click_ok | st-savebutton |  |
-| wait_for_element_visible_ok | link=welcome | 30000 |
+| wait_for_element_visible_ok | link=Welcome | 30000 |
 | wait_for_element_visible_ok | link=jabber | 1000 |
 | wait_for_element_visible_ok | link=mortgage | 500 |
 | wait_for_element_visible_ok | link=carroll | 200 |

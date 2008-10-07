@@ -118,4 +118,9 @@ sub fetchrow_hashref {
     return shift @{$self->{return}};
 }
 
+sub rows {
+    my $self = shift;
+    return scalar(@{$self->{return}});
+}
+
 1;

@@ -455,7 +455,7 @@ sub Create_user_from_hash {
 
     my %create;
     for my $c (@minimal_interface) {
-        $create{$c} = $info->{$c}
+        $create{$c} = Encode::encode_utf8( $info->{$c} )
             if exists $info->{$c};
     }
 

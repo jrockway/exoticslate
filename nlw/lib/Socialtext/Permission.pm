@@ -16,8 +16,6 @@ use Socialtext::Validate qw( validate SCALAR_TYPE );
 field 'permission_id';
 field 'name';
 
-sub table_name { 'Permission' }
-
 # FIXME: This belongs elsewhere, in fixture creation code, perhaps
 Readonly my @RequiredPermissions => qw(
     read edit attachments comment delete email_in email_out edit_controls
@@ -267,10 +265,6 @@ PARAMS can include:
 =item * name - required
 
 =back
-
-=item Socialtext::Permission->table_name()
-
-Return the name of the table where Permission data lives.
 
 =item Socialtext::Permission->All()
 

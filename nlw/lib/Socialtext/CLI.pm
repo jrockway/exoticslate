@@ -1067,7 +1067,15 @@ sub _show_config {
     my $self = shift;
     my $obj  = shift;
 
-    my $msg = 'Config for ' . $obj->name . " " . $obj->table_name . "\n\n";
+    my $thing_name = '';
+    if ($obj->isa('Socialtext::Workspace')) {
+        $thing_name = "Workspace";
+    }
+    elsif ($obj->isa('Socialtext::Account')) {
+        $thing_name = "Account";
+    }
+
+    my $msg = 'Config for ' . $obj->name . " $thing_name\n\n";
     my $fmt = '%-32s: %s';
     my $hash = $obj->to_hash;
     delete $hash->{name};
@@ -1080,7 +1088,7 @@ sub _show_config {
         $msg .= "\n";
     }
 
-    if ( $obj->table_name eq 'Workspace' ) {
+    if ($thing_name eq 'Workspace') {
         $msg .= sprintf( $fmt, 'ping URIs', join ' - ', $obj->ping_uris );
         $msg .= "\n";
         $msg .= sprintf( $fmt, 'custom comment form fields', join ' - ',

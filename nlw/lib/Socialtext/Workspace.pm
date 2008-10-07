@@ -127,8 +127,6 @@ sub _set_workspace_option {
     );
 }
 
-sub table_name { 'Workspace' }
-
 # Special case the "help" workspace.  Since existing Wikitext (and rarely used
 # code) still refer to the "help" workspace, we need to capture that here and
 # call help_workspace(), which should automagically load up the right
@@ -1847,10 +1845,6 @@ The user_id of the user who created this workspace.
 =head2
 
 =head1 METHODS
-
-=head2 Socialtext::Workspace->table_name()
-
-Returns the name of the table where Workspace data lives.
 
 =head2 Socialtext::Workspace->new(PARAMS)
 

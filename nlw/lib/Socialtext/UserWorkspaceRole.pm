@@ -14,14 +14,11 @@ field 'workspace_id';
 field 'role_id';
 field 'is_selected';
 
-# XXX Still need for fixture set up (until that's alzabno'd as well)
-sub table_name { 'UserWorkspaceRole' }
-
 sub new {
     my ( $class, %args ) = @_;
 
     my $sth;
-    my $sql = 'select * from "' . table_name() . '" where';
+    my $sql = 'select * from "UserWorkspaceRole" where';
     my $connector = '';
     my @params = ();
     if ($args{workspace_id}) {
@@ -55,7 +52,7 @@ sub create {
     my $self;
 
     my @params = ();
-    my $sql = 'insert into "' . table_name() . '" (';
+    my $sql = 'insert into "UserWorkspaceRole" (';
     my $connector = '';
     foreach ('workspace_id', 'user_id', 'role_id', 'is_selected') {
         $sql .= "$connector $_";
@@ -77,9 +74,8 @@ sub delete {
     my $self = shift;
 
     my $sql =
-        'delete from "' .
-        table_name() .
-        '" where workspace_id = ? and user_id = ?';
+        'delete from "UserWorkspaceRole"'.
+        ' where workspace_id = ? and user_id = ?';
     sql_execute($sql, $self->workspace_id, $self->user_id);
 }
 
@@ -87,9 +83,8 @@ sub update {
     my $self = shift;
 
     my $sql =
-        'update "' .
-        table_name() .
-        '" set role_id = ?, is_selected = ? where workspace_id = ? and user_id = ?';
+        'update "UserWorkspaceRole" '.
+        ' set role_id = ?, is_selected = ? where workspace_id = ? and user_id = ?';
     sql_execute($sql, $self->role_id, sql_convert_to_boolean($self->is_selected), $self->workspace_id, $self->user_id);
 }
 
@@ -115,14 +110,6 @@ UserWorkspaceRole table. Each object represents a single row from the
 table.
 
 =head1 METHODS
-
-=over 4
-
-=item Socialtext::UserWorkspaceRole->table_name()
-
-Returns the name of the table where UserWorkspaceRole data lives.
-
-=back
 
 =over 4
 

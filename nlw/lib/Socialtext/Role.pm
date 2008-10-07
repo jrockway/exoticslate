@@ -17,8 +17,6 @@ field 'role_id';
 field 'name';
 field 'used_as_default';
 
-sub table_name { 'Role' }
-
 # FIXME: This belongs elsewhere, in fixture creation code, perhaps
 Readonly my @RequiredRoles => (
     [ guest => 1 ],
@@ -202,10 +200,6 @@ table. Each object represents a single row from the table.
 =head1 METHODS
 
 =over 4
-
-=item Socialtext::Role->table_name()
-
-Return the name of the table where Role data lives.
 
 =item Socialtext::Role->new(PARAMS)
 

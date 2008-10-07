@@ -26,8 +26,6 @@ field 'is_business_admin';
 field 'is_technical_admin';
 field 'is_system_created';
 
-sub table_name { 'UserMetadata' }
-
 sub create_if_necessary {
     my $class = shift;
     my $user = shift;
@@ -228,10 +226,6 @@ This class provides methods for dealing with data from the UserMetadata
 table. Each object represents a single row from the table.
 
 =head1 METHODS
-
-=head2 Socialtext::UserMetadata->table_name()
-
-Returns the name of the table where UserMetadata data lives.
 
 =head2 Socialtext::UserMetadata->new(PARAMS)
 

@@ -15,8 +15,6 @@ field 'driver_key';
 field 'driver_unique_id';
 field 'driver_username';
 
-sub table_name { 'UserId' }
-
 sub create_if_necessary {
     my $class = shift;
     my $homunculus = shift;
@@ -231,10 +229,6 @@ matter where they are stored. Each object represents a single row from the
 table.
 
 =head1 METHODS
-
-=head2 Socialtext::UserId->table_name()
-
-Returns the name of the table where UserId data lives.
 
 =head2 Socialtext::UserId->new(PARAMS)
 

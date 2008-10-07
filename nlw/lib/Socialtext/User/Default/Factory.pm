@@ -35,7 +35,6 @@ our $SystemEmailAddress = 'system-user@socialtext.net';
 our $GuestUsername  = 'guest';
 our $GuestEmailAddress = 'guest@socialtext.net';
 
-sub table_name { 'User' }
 sub driver_name { 'Default' }
 sub driver_key { shift->driver_name }
 
@@ -405,10 +404,6 @@ live in our User table.  Each object represents a single row from the table.
 =item B<Socialtext::User::Default::Factory-E<gt>new()>
 
 Creates a new RDBMS user factory.
-
-=item B<Socialtext::User::Default::Factory->E<gt>table_name()>
-
-Returns the name of the table where User data lives.
 
 =item B<driver_name()>
 

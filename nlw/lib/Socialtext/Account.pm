@@ -35,8 +35,6 @@ foreach my $column ( @ACCT_COLS ) {
     field $column;
 }
 
-sub table_name { 'Account' }
-
 Readonly my @RequiredAccounts => qw( Unknown Socialtext );
 sub EnsureRequiredDataIsPresent {
     my $class = shift;
@@ -598,14 +596,6 @@ This class provides methods for dealing with data from the Account
 table. Each object represents a single row from the table.
 
 =head1 METHODS
-
-=over 4
-
-=item Socialtext::Account->table_name()
-
-Returns the name of the table where Account data lives.
-
-=back
 
 =over 4
 

@@ -3,11 +3,55 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 90;
+use Test::Socialtext tests => 114;
 use Socialtext::User;
 
-fixtures( 'rdbms_clean', 'destructive' );
+fixtures( 'rdbms' );
 use_ok 'Socialtext::User::Default::Factory';
+
+my $start_time = time;
+my $user_counter = 0;
+
+sub next_username {
+    $user_counter++;
+    print "# username $user_counter\n";
+    return "${start_time}u$user_counter\@ken.socialtext.net";
+}
+
+sub create_a_user {
+    my %opts = @_;
+
+    my $factory = delete $opts{factory};
+    $factory ||= Socialtext::User::Default::Factory->new();
+
+    my $expected_email = delete $opts{expected_email};
+    $expected_email ||= lc $opts{email_address};
+    my $expected_username = delete $opts{expected_username};
+    $expected_username ||= lc $opts{username};
+
+    my $id = Socialtext::UserId->SystemUniqueId();
+    $opts{system_unique_id} = $id;
+    my $user = $factory->create(%opts);
+
+    isa_ok $user, 'Socialtext::User::Default', 'created new user';
+
+    is $user->email_address, $expected_email, '... email_address is correct'
+        if defined $opts{email_address};
+
+    is $user->username, $expected_username, '... username is correct'
+        if defined $opts{username};
+
+    if (defined $opts{password} && !$opts{no_crypt}) {
+        isnt $user->password, $opts{password}, '... password appears encrypted';
+        ok $user->password_is_correct($opts{password}), 
+            '... password was encrypted correctly';
+    }
+
+    is $user->user_id, $id, '... correct user_id';
+
+    return $user unless wantarray;
+    return ($factory, $user);
+}
 
 ###############################################################################
 # Factory instantiation with no parameters.
@@ -58,20 +102,20 @@ create_new_user: {
     my $orig_count = $factory->Count();
 
     # create the new user record and verify the results
-    my %opts = (
-        username        => 'devnull9@socialtext.net',
-        email_address   => 'devnull9@socialtext.net',
-        password        => 'password',
+    my $username = next_username();
+    my $user = create_a_user(
+        factory       => $factory,
+        username      => $username,
+        email_address => $username,
+        password      => 'password',
     );
-    my $user = $factory->create( %opts );
-    isa_ok $user, 'Socialtext::User::Default', 'created new user';
-    is $user->username, $opts{username}, '... username matches';
-    is $user->email_address, $opts{email_address}, '... email_address matches';
-    isnt $user->password, $opts{password}, '... password appears encrypted';
-    ok $user->password_is_correct('password'), '... encrypted password is correct';
 
     # make sure user got added to DB correctly
     is $factory->Count(), $orig_count+1, '... user count incremented';
+
+    # Delete a user record via factory
+    $factory->delete($user);
+    is $factory->Count(), $orig_count, '... user count decremented';
 }
 
 ###############################################################################
@@ -85,21 +129,26 @@ create_new_user_unencrypted_password: {
     my $orig_count = $factory->Count();
 
     # create the new user record and verify the results
-    my %opts = (
-        username        => 'devnull8@socialtext.net',
-        email_address   => 'devnull8@socialtext.net',
-        password        => Socialtext::User::Default->_crypt('password', 'random-salt'),
+    my $password = 
+        Socialtext::User::Default->_crypt('password', 'random-salt');
+    my $username = next_username();
+    my $user = create_a_user(
+        factory => $factory,
+        username        => $username,
+        email_address   => $username,
+        password        => $password,
         no_crypt        => 1,
     );
-    my $user = $factory->create( %opts );
-    isa_ok $user, 'Socialtext::User::Default', 'created new user';
-    is $user->username, $opts{username}, '... username matches';
-    is $user->email_address, $opts{email_address}, '... email_address matches';
-    is $user->password, $opts{password}, '... password NOT encrypted';
+
+    is $user->password, $password, '... password NOT encrypted';
     ok $user->password_is_correct('password'), '... UN-encrypted password is correct';
 
     # make sure user got added to DB correctly
     is $factory->Count(), $orig_count+1, '... user count incremented';
+
+    # Delete a user record (using helper method in ST::User::Default)
+    $user->delete();
+    is $factory->Count(), $orig_count, '... user count decremented';
 }
 
 ###############################################################################
@@ -108,81 +157,31 @@ creating_new_user_does_data_cleanup: {
     my $factory = Socialtext::User::Default::Factory->new();
     isa_ok $factory, 'Socialtext::User::Default::Factory';
 
-    my %opts = (
-        username        => 'DEVNULL7@SOCIALTEXT.NET',
-        email_address   => '   DEVNULL7@socialtext.net   ',
-        password        => 'password',
+    my $username = next_username();
+    my $user = create_a_user(
+        username          => uc($username),
+        expected_username => $username,
+        email_address     => '   '.uc($username).'   ',
+        expected_email    => $username,
+        password          => 'password',
     );
-    my $user = $factory->create( %opts );
-    isa_ok $user, 'Socialtext::User::Default', 'created new user';
 
-    is $user->username(), 'devnull7@socialtext.net', '... username is lower-case';
-    is $user->email_address(), 'devnull7@socialtext.net', '... email_address is lower_case and cleaned up';
-}
-
-###############################################################################
-# Delete a user record (directly against factory)
-delete_user_record_via_factory: {
-    my $factory = Socialtext::User::Default::Factory->new();
-    isa_ok $factory, 'Socialtext::User::Default::Factory';
-
-    # hold onto the current user count; we'll check it later.
-    my $orig_count = $factory->Count();
-
-    # create a new user record
-    my %opts = (
-        username        => 'devnull6@socialtext.net',
-        email_address   => 'devnull6@socialtext.net',
-        password        => 'password',
-    );
-    my $user = $factory->create( %opts );
-    isa_ok $user, 'Socialtext::User::Default', 'created new user';
-    is $factory->Count(), $orig_count+1, 'user count incremented';
-
-    # delete the user record
-    ok $factory->delete($user), '... deleted user record (via factory)';
-    is $factory->Count(), $orig_count, '... user count decremented';
-}
-
-###############################################################################
-# Delete a user record (using helper method in ST::User::Default)
-delete_user_record_via_user: {
-    my $factory = Socialtext::User::Default::Factory->new();
-    isa_ok $factory, 'Socialtext::User::Default::Factory';
-
-    # hold onto the current user count; we'll check it later.
-    my $orig_count = $factory->Count();
-
-    # create a new user record
-    my %opts = (
-        username        => 'devnull6@socialtext.net',
-        email_address   => 'devnull6@socialtext.net',
-        password        => 'password',
-    );
-    my $user = $factory->create( %opts );
-    isa_ok $user, 'Socialtext::User::Default', 'created new user';
-    is $factory->Count(), $orig_count+1, 'user count incremented';
-
-    # delete the user record
-    ok $user->delete(), '... deleted user record (via user record)';
-    is $factory->Count(), $orig_count, '... user count decremented';
+    $user->delete();
 }
 
 ###############################################################################
 # Verify list of valid search terms when retrieving a user record
 get_user_valid_search_terms: {
-    my $factory = Socialtext::User::Default::Factory->new();
-    isa_ok $factory, 'Socialtext::User::Default::Factory';
-
     # create user record to search for
+    my $username = next_username();
     my %opts = (
-        username        => 'devnull5@socialtext.net',
-        email_address   => 'devnull5@socialtext.net',
-        password        => Socialtext::User::Default->_crypt('password', 'random-salt'),
-        no_crypt        => 1,
+        username      => $username,
+        email_address => $username,
+        password      =>
+            Socialtext::User::Default->_crypt('password', 'random-salt'),
+        no_crypt => 1,
     );
-    my $user = $factory->create( %opts );
-    isa_ok $user, 'Socialtext::User::Default', 'created new user';
+    my ($factory, $user) = create_a_user(%opts);
 
     # "username" is a valid search term
     my $found = $factory->GetUser(username => $opts{username});
@@ -228,97 +227,69 @@ get_user_unknown_user: {
 ###############################################################################
 # User retrieval via "username"
 get_user_via_username: {
-    my $factory = Socialtext::User::Default::Factory->new();
-    isa_ok $factory, 'Socialtext::User::Default::Factory';
-
-    # create a user to go searching for
+    my $username = next_username();
     my %opts = (
-        username        => 'devnull5@socialtext.net',
-        email_address   => 'devnull5@socialtext.net',
-        password        => 'password',
+        username      => $username,
+        email_address => $username,
+        password      => 'password',
     );
-    my $user = $factory->create( %opts );
-    isa_ok $user, 'Socialtext::User::Default', 'created new user';
+    my ($factory, $user) = create_a_user(%opts);
 
     # dig the user out, via "username"
     my $found = $factory->GetUser(username => $opts{username});
     isa_ok $found, 'Socialtext::User::Default', '... found user via "username"';
     is $found->email_address(), $opts{email_address}, '... and its the right user';
+    is $found->user_id, $user->user_id, '... it\'s the same user';
 
-    # cleanup
-    ok $factory->delete($user), '... cleanup';
-}
+    # User retrieval via "username" is case IN-sensitive
+    my $found2 = $factory->GetUser(username => uc($opts{username}));
+    isa_ok $found2, 'Socialtext::User::Default', '... found user via "username" (case IN-sensitively)';
+    is $found2->email_address(), $opts{email_address}, '... and its the right user';
+    is $found2->user_id, $user->user_id, '... it\'s the same user';
 
-###############################################################################
-# User retrieval via "username" is case IN-sensitive
-get_user_via_username_is_case_insensitive: {
-    my $factory = Socialtext::User::Default::Factory->new();
-    isa_ok $factory, 'Socialtext::User::Default::Factory';
-
-    # create a user to go searching for
-    my %opts = (
-        username        => 'devnull5@socialtext.net',
-        email_address   => 'devnull5@socialtext.net',
-        password        => 'password',
-    );
-    my $user = $factory->create( %opts );
-    isa_ok $user, 'Socialtext::User::Default', 'created new user';
-
-    # dig the user out, via "username"
-    my $found = $factory->GetUser(username => uc($opts{username}));
-    isa_ok $found, 'Socialtext::User::Default', '... found user via "username" (case IN-sensitively)';
-    is $found->email_address(), $opts{email_address}, '... and its the right user';
-
-    # cleanup
-    ok $factory->delete($user), '... cleanup';
+    ok $user->delete(), '... cleanup';
 }
 
 ###############################################################################
 # User retrieval via "email_address"
 get_user_via_email_address: {
-    my $factory = Socialtext::User::Default::Factory->new();
-    isa_ok $factory, 'Socialtext::User::Default::Factory';
-
-    # create a user to go searching for
+    my $username = next_username();
     my %opts = (
-        username        => 'devnull5@socialtext.net',
-        email_address   => 'devnull5@socialtext.net',
+        username        => $username,
+        email_address   => $username,
         password        => 'password',
     );
-    my $user = $factory->create( %opts );
-    isa_ok $user, 'Socialtext::User::Default', 'created new user';
+    my ($factory, $user) = create_a_user(%opts);
 
     # dig the user out, via "email_address"
     my $found = $factory->GetUser(email_address => $opts{email_address});
     isa_ok $found, 'Socialtext::User::Default', '... found user via "email_address"';
     is $found->username(), $opts{username}, '... and its the right user';
+    is $found->user_id, $user->user_id, '... is the same user';
 
     # cleanup
-    ok $factory->delete($user), '... cleanup';
+    ok $user->delete(), '... cleanup';
 }
 
 ###############################################################################
 # User retrieval via "user_id"
 get_user_via_user_id: {
-    my $factory = Socialtext::User::Default::Factory->new();
-    isa_ok $factory, 'Socialtext::User::Default::Factory';
-
-    # create a user to go searching for
+    my $username = next_username();
     my %opts = (
-        username        => 'devnull5@socialtext.net',
-        email_address   => 'devnull5@socialtext.net',
+        username        => $username,
+        email_address   => $username,
         password        => 'password',
     );
-    my $user = $factory->create( %opts );
-    isa_ok $user, 'Socialtext::User::Default', 'created new user';
+    my ($factory, $user) = create_a_user(%opts);
 
     # dig the user out, via "user_id"
-    my $found = $factory->GetUser(user_id => $user->user_id());
+    my $found = $factory->GetUser(user_id => $user->user_id);
     isa_ok $found, 'Socialtext::User::Default', '... found user via "user_id"';
     is $found->email_address(), $user->email_address(), '... and its the right user';
+    is $found->user_id, $user->user_id, '... and has the right user_id';
 
     # cleanup
-    ok $factory->delete($user), '... cleanup';
+    ok $user->delete(), '... cleanup';
 }
 
 ###############################################################################
@@ -335,21 +306,24 @@ get_user_non_numeric_user_id: {
 ###############################################################################
 # Update user record (directly against factory)
 update_user_via_factory: {
+    my $factory = Socialtext::User::Default::Factory->new();
+    isa_ok $factory, 'Socialtext::User::Default::Factory';
+    my $orig_count = $factory->Count();
+
     # create a user to update
+    my $username = next_username();
     my %opts = (
-        username        => 'devnull5@socialtext.net',
-        email_address   => 'devnull5@socialtext.net',
-        password        => 'password',
+        username      => $username,
+        email_address => $username,
+        password      => 'password',
     );
     my $user = Socialtext::User->create( %opts );
-    isa_ok $user, 'Socialtext::User', 'created new user';
+    isa_ok $user, 'Socialtext::User', 'created new user _indirectly_';
+    ok $user->user_id, '... user has a user_id';
+    is $factory->Count, $orig_count+1, '... user is actually new';
 
     my $homunculus = $user->homunculus;
     isa_ok $homunculus, 'Socialtext::User::Default', '... is a Default homunculus';
-
-    # get a "Default" user factory
-    my $factory = Socialtext::User::Default::Factory->new();
-    isa_ok $factory, 'Socialtext::User::Default::Factory';
 
     # update the user record (via the factory)
     my $rc = $factory->update( $homunculus, username => 'bleargh' );
@@ -359,29 +333,34 @@ update_user_via_factory: {
     my $found = $factory->GetUser( username => 'bleargh' );
     isa_ok $found, 'Socialtext::User::Default', '... found updated user';
     is_deeply $found, $homunculus, '... homunculus matches';
+    is $found->user_id, $user->user_id, '... same user_id';
 
     # cleanup
     ok $factory->delete($homunculus), '... cleanup';
+    is $factory->Count(), $orig_count, "... user got deleted";
 }
 
 ###############################################################################
 # Update user record (using helper method in ST::User::Default)
 update_user_via_user: {
+    my $factory = Socialtext::User::Default::Factory->new();
+    isa_ok $factory, 'Socialtext::User::Default::Factory';
+    my $orig_count = $factory->Count();
+
     # create a user to update
+    my $username = next_username();
     my %opts = (
-        username        => 'devnull5@socialtext.net',
-        email_address   => 'devnull5@socialtext.net',
-        password        => 'password',
+        username      => $username,
+        email_address => $username,
+        password      => 'password',
     );
     my $user = Socialtext::User->create( %opts );
-    isa_ok $user, 'Socialtext::User', 'created new user';
+    isa_ok $user, 'Socialtext::User', 'created new user _indirectly_';
+    ok $user->user_id, '... user has a user_id';
+    is $factory->Count, $orig_count+1, '... user is actually new';
 
     my $homunculus = $user->homunculus();
     isa_ok $homunculus, 'Socialtext::User::Default', '... is a Default homunculus';
-
-    # get a "Default" user factory
-    my $factory = Socialtext::User::Default::Factory->new();
-    isa_ok $factory, 'Socialtext::User::Default::Factory';
 
     # update the user record
     my $rc = $homunculus->update( email_address => 'foo@example.com' );
@@ -391,22 +370,31 @@ update_user_via_user: {
     my $found = $factory->GetUser( email_address => 'foo@example.com' );
     isa_ok $found, 'Socialtext::User::Default', '... found updated user';
     is_deeply $found, $homunculus, '... homunculus matches';
+    is $found->user_id, $user->user_id, '... same user_id';
 
     # cleanup
     ok $factory->delete($homunculus), '... cleanup';
+    is $factory->Count(), $orig_count, "... user got deleted";
 }
 
 ###############################################################################
 # Updating a user does perform data cleanup/validation.
 updating_user_does_data_cleanup: {
+    my $factory = Socialtext::User::Default::Factory->new();
+    isa_ok $factory, 'Socialtext::User::Default::Factory';
+    my $orig_count = $factory->Count();
+
     # create a user to update
+    my $username = next_username();
     my %opts = (
-        username        => 'devnull5@socialtext.net',
-        email_address   => 'devnull5@socialtext.net',
-        password        => 'password',
+        username      => $username,
+        email_address => $username,
+        password      => 'password',
     );
     my $user = Socialtext::User->create( %opts );
     isa_ok $user, 'Socialtext::User', 'created new user';
+    ok $user->user_id, '... user has a user_id';
+    is $factory->Count, $orig_count+1, '... user is actually new';
 
     my $homunculus = $user->homunculus();
     isa_ok $homunculus, 'Socialtext::User::Default', '... is a Default homunculus';
@@ -417,5 +405,6 @@ updating_user_does_data_cleanup: {
     is $homunculus->email_address(), 'foo@bar.com', '... and cleanup was performed';
 
     # cleanup
-    ok $homunculus->delete(), '... cleanup';
+    ok $factory->delete($homunculus), '... cleanup';
+    is $factory->Count(), $orig_count, "... user got deleted";
 }

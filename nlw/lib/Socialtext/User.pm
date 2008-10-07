@@ -167,38 +167,41 @@ sub new {
     return $user;
 }
 
+
+
 sub create {
     my $class = shift;
 
     # username email_address password first_name last_name
     my %p = @_;
+    my $id = Socialtext::UserId->SystemUniqueId();
+    $p{system_unique_id} = $id;
+
     my $homunculus = $class->_first( 'create', %p );
 
     my $system_unique_id = Socialtext::UserId->create(
+        system_unique_id => $id,
         driver_key       => $homunculus->driver_key,
-        driver_unique_id => $homunculus->user_id,
+        driver_unique_id => $id,
         driver_username  => $homunculus->username,
-    )->system_unique_id();
+    );
 
-    if ( !exists $p{created_by_user_id} ) {
-        if ( $homunculus->username ne $SystemUsername ) {
-            my $s_u_homunculus = $class->new_homunculus( username => $SystemUsername );
-            my $driver_key = $s_u_homunculus->driver_key;
-            my $driver_unique_id = $s_u_homunculus->user_id;
-            $p{created_by_user_id} = Socialtext::UserId->new(
-                driver_key       => $driver_key,
-                driver_unique_id => $driver_unique_id
-            )->system_unique_id;
+    if (!exists $p{created_by_user_id}) {
+        if ($homunculus->username ne $SystemUsername) {
+            $p{created_by_user_id} = Socialtext::User->SystemUser()->user_id;
         }
     }
+
+
     my $user = bless {}, $class;
-    $user->homunculus( $homunculus );
+    $user->homunculus($homunculus);
+
     # scribble UserMetadata
-    my %metadata_p = map { $_ => $p{$_} } keys %p; #@user_metadata_interface;;
-    $metadata_p{user_id}                 = $system_unique_id;
+    my %metadata_p = %p; # copy
+    $metadata_p{user_id} = $id;
     $metadata_p{email_address_at_import} = $user->email_address;
     my $metadata = Socialtext::UserMetadata->create(%metadata_p);
-    $user->metadata( $metadata );
+    $user->metadata($metadata);
 
     return $user;
 }

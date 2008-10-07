@@ -21,7 +21,7 @@ use Email::Valid;
 use Socialtext::User::Cache;
 use Socialtext::Data;
 use Socialtext::String;
-use Socialtext::SQL 'sql_execute';
+use Socialtext::SQL qw(sql_execute);
 use Socialtext::User;
 use Socialtext::UserId;
 use Socialtext::UserMetadata;
@@ -39,6 +39,37 @@ sub driver_name { 'Default' }
 sub driver_key { shift->driver_name }
 
 # FIXME: This belongs elsewhere, in fixture generation code, perhaps
+sub _create_default_user {
+    my $self = shift;
+    my ($username, $email, $created_by) = @_;
+
+    my $id = Socialtext::UserId->SystemUniqueId();
+
+    my $system_unique_id = Socialtext::UserId->create(
+        system_unique_id => $id,
+        driver_key       => $self->driver_key,
+        driver_unique_id => $id,
+        driver_username  => $username,
+    );
+    my $system_user = $self->create(
+        system_unique_id => $id,
+        username         => $username,
+        email_address    => $email,
+        first_name       => 'System',
+        last_name        => 'User',
+        password         => '*no-password*',
+        no_crypt         => 1,
+    );
+    Socialtext::UserMetadata->create(
+        user_id            => $id,
+        created_by_user_id => $created_by,
+        is_system_created  => 1,
+        primary_account_id => Socialtext::Account->Socialtext->account_id(),
+    );
+
+    return $id;
+}
+
 sub EnsureRequiredDataIsPresent {
     my $class = shift;
 
@@ -46,48 +77,18 @@ sub EnsureRequiredDataIsPresent {
     my $factory = $class->new();
 
     # set up the required data
-    unless ( $factory->GetUser( username => $SystemUsername ) ) {
-        my $system_user = $factory->create(
-            username      => $SystemUsername,
-            email_address => $SystemEmailAddress,
-            first_name    => 'System',
-            last_name     => 'User',
-            password      => '*no-password*',
-            no_crypt      => 1,
-        );
-        my $system_unique_id = Socialtext::UserId->create(
-            driver_key       => $class->driver_key,
-            driver_unique_id => $system_user->user_id,
-            driver_username  => $SystemUsername,
-            )->system_unique_id;
-        Socialtext::UserMetadata->create(
-            user_id            => $system_unique_id,
-            created_by_user_id => undef,
-            is_system_created  => 1,
-            primary_account_id => Socialtext::Account->Socialtext->account_id(),
+    unless ($factory->GetUser(username => $SystemUsername)) {
+        $factory->_create_default_user(
+            $SystemUsername, $SystemEmailAddress,
+            undef
         );
     }
 
-    unless ( $factory->GetUser( username => $GuestUsername ) ) {
-        my $system_user = Socialtext::User->new( username => $SystemUsername );
-        my $guest_user = $factory->create(
-            username      => $GuestUsername,
-            email_address => $GuestEmailAddress,
-            first_name    => 'Guest',
-            last_name     => 'User',
-            password      => '*no-password*',
-            no_crypt      => 1,
-        );
-        my $system_unique_id = Socialtext::UserId->create(
-            driver_key       => $class->driver_key,
-            driver_unique_id => $guest_user->user_id,
-            driver_username  => $GuestUsername,
-            )->system_unique_id;
-        Socialtext::UserMetadata->create(
-            user_id            => $system_unique_id,
-            created_by_user_id => $system_user->user_id,
-            is_system_created  => 1,
-            primary_account_id => Socialtext::Account->Socialtext->account_id(),
+    unless ($factory->GetUser(username => $GuestUsername)) {
+        my $system_user = Socialtext::User->new(username => $SystemUsername);
+        $factory->_create_default_user(
+            $GuestUsername, $GuestEmailAddress,
+            $system_user->user_id
         );
     }
 }
@@ -122,7 +123,7 @@ sub new {
 sub Count {
     my ( $self, %p ) = @_;
 
-    my $sth = sql_execute('SELECT COUNT(*) FROM "User"');
+    my $sth = sql_execute('SELECT COUNT(*) FROM user_detail');
     return $sth->fetchall_arrayref->[0][0];
 }
 
@@ -164,7 +165,7 @@ sub _new_from_where {
     my $sth = sql_execute(
         'SELECT user_id, username, email_address,'
         . ' first_name, last_name, password'
-        . ' FROM "User"'
+        . ' FROM user_detail'
         . " WHERE $where_clause=?",
         @bindings
     );
@@ -189,20 +190,24 @@ sub create {
     $p{first_name} ||= '';
     $p{last_name} ||= '';
 
-    sql_execute(
-        'INSERT INTO "User"'
-        . ' (user_id, username, email_address, first_name, last_name, password)'
-        . ' VALUES (nextval(\'"User___user_id"\'),?,?,?,?,?)',
-        $p{username}, $p{email_address}, $p{first_name}, $p{last_name},
-        $p{password}
+    sql_execute( q{
+            INSERT INTO user_detail
+            (user_id, username, email_address, first_name, last_name, password)
+            VALUES (?,?,?,?,?,?)
+        }, $p{system_unique_id}, $p{username},  $p{email_address},
+        $p{first_name}, $p{last_name}, $p{password}
     );
 
-    return $self->GetUser( username => $p{username} );
+    # flush cache; added a User to the DB
+    Socialtext::User::Cache->Clear();
+
+    return $self->GetUser(username => $p{username});
 }
 
 sub delete {
     my ( $self, $user ) = @_;
-    my $sth = sql_execute( 'DELETE FROM "User" WHERE user_id=?', $user->user_id );
+    my $sth = sql_execute('DELETE FROM user_detail WHERE user_id=?', 
+                          $user->user_id);
 
     # flush cache; removed a User from the DB
     Socialtext::User::Cache->Clear();
@@ -225,7 +230,7 @@ sub update {
     my $set_clause = join ', ', @updates;
 
     sql_execute(
-        'UPDATE "User"'
+        'UPDATE user_detail'
         . " SET $set_clause WHERE user_id=?",
         @bindings, $user->user_id);
 
@@ -254,7 +259,7 @@ sub Search {
 
     my $sth = sql_execute(
         'SELECT first_name, last_name, email_address'
-        . ' FROM "User" WHERE'
+        . ' FROM user_detail WHERE'
         . ' ( LOWER( username ) LIKE ? OR'
         . ' LOWER( email_address ) LIKE ? OR'
         . ' LOWER( first_name ) LIKE ? OR'
@@ -288,66 +293,77 @@ sub _validate_and_clean_data {
 
     my $is_create = defined $user ? 0 : 1;
 
-    if (not $is_create) {
-        my $system_unique_id = Socialtext::UserId->new(
-            driver_key       => $self->driver_key,
-            driver_unique_id => $user->user_id
-        )->system_unique_id;
+    if ($is_create) {
+        die "must have pre-specified a system_unique_id to use"
+            unless $p->{system_unique_id};
+    }
+    else {
         $metadata = Socialtext::UserMetadata->new(
-            user_id => $system_unique_id
+            user_id => $user->user_id
         );
     }
 
     my @errors;
-    for my $k ( qw( username email_address ) ) {
+    for my $k (qw(username email_address)) {
         $p->{$k} = Socialtext::String::trim( lc $p->{$k} )
             if defined $p->{$k};
 
-        if ( defined $p->{$k}
-             and ( $is_create
-                   or $p->{$k} ne $user->$k() )
-             and Socialtext::User->new_homunculus( $k => $p->{$k} ) ) {
+        if (defined $p->{$k}
+            and (  $is_create
+                or $p->{$k} ne $user->$k())
+            and Socialtext::User->new_homunculus($k => $p->{$k}))
+        {
             push @errors, loc("The [_1] you provided ([_2]) is already in use.", Socialtext::Data::humanize_column_name($k), $p->{$k});
         }
 
-        if ( ( exists $p->{$k} or $is_create )
-             and not
-             ( defined $p->{$k} and length $p->{$k} ) ) {
+        if ((exists $p->{$k} or $is_create)
+            and not(defined $p->{$k} and length $p->{$k}))
+        {
             push @errors,
-                    loc('[_1] is a required field.', ucfirst Socialtext::Data::humanize_column_name($k));
+                    loc('[_1] is a required field.', 
+                        ucfirst Socialtext::Data::humanize_column_name($k));
 
         }
     }
 
-    if ( defined $p->{email_address} && length $p->{email_address}
-         && ! Email::Valid->address( $p->{email_address} ) ) {
-        push @errors, loc("[_1] is not a valid email address.",$p->{email_address});
+    if (defined $p->{email_address}
+        and length $p->{email_address}
+        and !Email::Valid->address($p->{email_address}))
+    {
+        push @errors,
+            loc(
+            "[_1] is not a valid email address.",
+            $p->{email_address}
+            );
     }
 
-    if ( defined $p->{password} && length $p->{password} < 6 ) {
-        push @errors, Socialtext::User::Default->ValidatePassword( password => $p->{password} );
+    if (defined $p->{password} && length $p->{password} < 6) {
+        push @errors, Socialtext::User::Default->ValidatePassword(
+            password => $p->{password});
     }
 
-    if ( delete $p->{require_password}
-         and $is_create and not defined $p->{password} ) {
+    if (delete $p->{require_password}
+        and $is_create
+        and not defined $p->{password})
+    {
         push @errors, loc('A password is required to create a new user.');
     }
 
-    if ( not $is_create and $metadata ) {
-        if ( $metadata->is_system_created ) {
-            push @errors,
-                loc("You cannot change the name of a system-created user.")
-                if $p->{username};
+    if (!$is_create and $metadata and $metadata->is_system_created) {
+        push @errors,
+            loc("You cannot change the name of a system-created user.")
+            if $p->{username};
 
-            push @errors,
-                loc("You cannot change the email address of a system-created user.")
-                if $p->{email_address};
-        }
+        push @errors,
+            loc("You cannot change the email address of a system-created user.")
+            if $p->{email_address};
     }
 
     data_validation_error errors => \@errors if @errors;
 
-    if ( $is_create and not ( defined $p->{password} and length $p->{password} ) ) {
+    if ($is_create
+        and not(defined $p->{password} and length $p->{password}))
+    {
         $p->{password} = '*none*';
         $p->{no_crypt} = 1;
     }

@@ -25,7 +25,9 @@ use Socialtext::User::Default::Factory;
 
 # populate a user that doesn't currently exist, even though it uses a
 # known driver.
+my $unique_id = Socialtext::UserId->SystemUniqueId();
 my $user_id = Socialtext::UserId->create(
+    system_unique_id => $unique_id,
     driver_key       => 'Default',
     driver_unique_id => 999999,
     driver_username  => "Nemo",
@@ -72,11 +74,13 @@ my $user_id = Socialtext::UserId->create(
 Default_username: {
     # Create a UserId, but no User, to trick the system into thinking
     # this is a deleted user.
-    my $id = Socialtext::UserId->create(
+    my $id = Socialtext::UserId->SystemUniqueId();
+    Socialtext::UserId->create(
+        system_unique_id => $id,
         driver_key       => 'Default',
         driver_unique_id => "Rubber Bands",
         driver_username  => '',
-    )->system_unique_id;
+    );
 
     my $nemo = Socialtext::User->new( user_id => $id );
     ok ($nemo->to_hash, "deleted user can be hashified" );

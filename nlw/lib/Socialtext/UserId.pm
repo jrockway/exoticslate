@@ -8,7 +8,7 @@ our $VERSION = '0.01';
 
 use Class::Field 'field';
 use Socialtext::Cache;
-use Socialtext::SQL qw( sql_execute );
+use Socialtext::SQL qw(sql_execute sql_singlevalue);
 
 field 'system_unique_id';
 field 'driver_key';
@@ -29,24 +29,28 @@ sub create_if_necessary {
         driver_username => $homunculus->username,
     );
 
-    my $user_id = $class->new( @primary_params );
+    my $user_id = $class->_new_from_homunculus(@primary_params);
 
-    if (! defined $user_id) {
-        $user_id = $class->new( @fallback_params );
+    if (!defined $user_id) {
+        $user_id = $class->_new_from_homunculus(@fallback_params);
     }
 
     if ($user_id) {
-        if( $user_id->_homunculus_is_different( $homunculus ) ) {
+        if ($user_id->_homunculus_is_different($homunculus)) {
             $user_id->update(
-                             driver_unique_id => $homunculus->user_id,
-                             driver_username  => $homunculus->username
-                            );
+                driver_unique_id => $homunculus->user_id,
+                driver_username  => $homunculus->username
+            );
         }
         return $user_id;
     }
     
-    return $class->create( @primary_params,
-        driver_username => $homunculus->username );
+    my $new_id = $class->SystemUniqueId();
+    return $class->create( 
+        @primary_params,
+        driver_username => $homunculus->username,
+        system_unique_id => $new_id
+    );
 }
 
 sub _homunculus_is_different {
@@ -141,20 +145,28 @@ sub _new_from_where {
     return @rows ? bless {
                     system_unique_id => $rows[0][0],
                     driver_key       => $rows[0][1],
-                    driver_unique_id => $rows[0][2],
+                   driver_unique_id => $rows[0][2],
                     driver_username  => $rows[0][3],
                     }, $class
                  : undef;
 }
 
+sub SystemUniqueId {
+    my $id = sql_singlevalue(q{SELECT nextval('"UserId___system_unique_id"')});
+    return $id;
+}
+
 sub create {
     my ( $class, %p ) = @_;
+
+    die "need to supply a system_unique_id; use GetUniqueId"
+        unless $p{system_unique_id};
 
     sql_execute(
         'INSERT INTO "UserId"'
         . ' (system_unique_id, driver_key, driver_unique_id, driver_username)'
-        . ' VALUES (nextval(\'"UserId___system_unique_id"\'),?,?,?)',
-        $p{driver_key}, $p{driver_unique_id}, $p{driver_username} );
+        . ' VALUES (?,?,?,?)',
+        $p{system_unique_id}, $p{driver_key}, $p{driver_unique_id}, $p{driver_username} );
 
     return $class->new(%p);
 }
@@ -245,14 +257,21 @@ PARAMS can include:
 
 =back
 
+=head2 Socialtext::UserId->SystemUniqueId()
+
+Returns a new unique identifier for use in creating new users.
+
 =head2 Socialtext::UserId->create(PARAMS)
 
 Attempts to create a user metadata record with the given information and
-returns a new C<Socialtext>::UserId object.
+returns a new C<Socialtext>::UserId object.  Be sure to call SystemUniqueId to
+get a new system_unique_id to pass in.
 
 PARAMS can include:
 
 =over 4
+
+=item * system_unique_id - required
 
 =item * driver_key - required
 

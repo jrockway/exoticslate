@@ -82,15 +82,6 @@ CREATE TABLE "System" (
     last_update timestamptz DEFAULT now()
 );
 
-CREATE TABLE "User" (
-    user_id bigint NOT NULL,
-    username varchar(250) NOT NULL,
-    email_address varchar(250) NOT NULL,
-    "password" varchar(40) NOT NULL,
-    first_name varchar(200) DEFAULT ''::varchar NOT NULL,
-    last_name varchar(200) DEFAULT ''::varchar NOT NULL
-);
-
 CREATE TABLE "UserEmailConfirmation" (
     user_id bigint NOT NULL,
     sha1_hash varchar(27) NOT NULL,
@@ -349,6 +340,16 @@ CREATE VIEW user_account AS
    LEFT JOIN "Workspace" w ON uwr.workspace_id = w.workspace_id
   ORDER BY u.system_unique_id, u.driver_key, u.driver_unique_id, u.driver_username, um.created_by_user_id, um.creation_datetime, um.primary_account_id, w.account_id;
 
+CREATE TABLE user_detail (
+    user_id bigint NOT NULL,
+    username text NOT NULL,
+    email_address text NOT NULL,
+    "password" text NOT NULL,
+    first_name text DEFAULT '' NOT NULL,
+    last_name text DEFAULT '' NOT NULL,
+    cached_at timestamptz
+);
+
 ALTER TABLE ONLY "Account"
     ADD CONSTRAINT "Account_pkey"
             PRIMARY KEY (account_id);
@@ -376,10 +377,6 @@ ALTER TABLE ONLY "UserMetadata"
 ALTER TABLE ONLY "UserWorkspaceRole"
     ADD CONSTRAINT "UserWorkspaceRole_pkey"
             PRIMARY KEY (user_id, workspace_id);
-
-ALTER TABLE ONLY "User"
-    ADD CONSTRAINT "User_pkey"
-            PRIMARY KEY (user_id);
 
 ALTER TABLE ONLY "Watchlist"
     ADD CONSTRAINT "Watchlist_pkey"
@@ -445,6 +442,10 @@ ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT tag_people__person_tags_pkey
             PRIMARY KEY (person_id, tag_id);
 
+ALTER TABLE ONLY user_detail
+    ADD CONSTRAINT user_detail_pkey
+            PRIMARY KEY (user_id);
+
 CREATE UNIQUE INDEX "Account___name"
 	    ON "Account" (name);
 
@@ -468,12 +469,6 @@ CREATE INDEX "UserMetadata_primary_account_id"
 
 CREATE INDEX "UserWorkspaceRole_workspace_id"
 	    ON "UserWorkspaceRole" (workspace_id);
-
-CREATE UNIQUE INDEX "User___lower___email_address"
-	    ON "User" (lower((email_address)::text));
-
-CREATE UNIQUE INDEX "User___lower___username"
-	    ON "User" (lower((username)::text));
 
 CREATE UNIQUE INDEX "Workspace___lower___name"
 	    ON "Workspace" (lower((name)::text));
@@ -552,6 +547,12 @@ CREATE INDEX storage_key_value_type_ix
 CREATE INDEX storage_key_value_viewer_ix
 	    ON "storage" ("key", value)
 	    WHERE (("key")::text = 'viewer');
+
+CREATE UNIQUE INDEX user_detail_lower_email_address
+	    ON user_detail (lower(email_address));
+
+CREATE UNIQUE INDEX user_detail_lower_username
+	    ON user_detail (lower(username));
 
 CREATE INDEX watchlist_user_workspace
 	    ON "Watchlist" (user_id, workspace_id);
@@ -722,4 +723,4 @@ ALTER TABLE ONLY "Workspace"
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '16');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '17');

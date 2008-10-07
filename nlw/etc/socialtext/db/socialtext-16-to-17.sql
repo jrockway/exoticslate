@@ -38,7 +38,7 @@ SELECT uid.user_id::bigint,
     u.password::text,
     first_name::text,
     last_name::text,
-    NULL::timestamptz
+    '+infinity'::timestamptz
 FROM "UserId" uid 
 JOIN "User" u ON (uid.driver_unique_id = u.user_id)
 WHERE uid.driver_key = 'Default';

@@ -21,7 +21,7 @@ Repeat test using Miki/Lite access.
 | click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | link=%%title%% | 30000 |
 | text_like | //div[@class='wiki-include-title'] | %%title%% |
-| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+| text_like | //div[@class='wiki-include-content'] | Welcome to your Socialtext |
 
 | *Comment* | Test Case: Include Page. Open the included page for editing |  |
 | click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
@@ -29,7 +29,7 @@ Repeat test using Miki/Lite access.
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | click_ok | link=Advanced |  |
 | text_like | st-editing-title | `Editing: %%title%%` |
-| verifyValue | wikiwyg_wikitext_textarea | qr/.+This is the home page for %%title%%.+/ |
+| verifyValue | wikiwyg_wikitext_textarea | qr/.+Welcome to your Socialtext.+/ |
 
 | *Comment* | Test Case: Include Page. Verify backlink to including page |  |
 | click_and_wait | st-save-button-link | Save is easier than Cancel |
@@ -41,13 +41,13 @@ Repeat test using Miki/Lite access.
 
 | wait_for_element_visible_ok | link=%%title%% | 30000 |
 | text_like | //div[@class='wiki-include-title'] | %%title%% |
-| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+| text_like | //div[@class='wiki-include-content'] | Welcome to your Socialtext |
 
 | *Comment* | Test Case: Include Page. Open the included page for editing |  |
 | click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
 | wait_for_element_visible_ok | edit_textarea | 30000 |
 | wait_for_element_visible_ok | link=Cancel Edit | 30000 |
-| verifyValue | edit_textarea | qr/.+This is the home page for %%title%%.+/ |
+| verifyValue | edit_textarea | qr/.+Welcome to your Socialtext.+/ |
 
 Include a page in a public wiki page when logged in. Test for content and edit button.
 Repeat test using Miki/Lite access.
@@ -58,7 +58,7 @@ Repeat test using Miki/Lite access.
 | open_ok | /%%tcipw%%/?TC Include Page %%start_time%% |  |
 | wait_for_element_visible_ok | link=%%title%% | 30000 |
 | text_like | //div[@class='wiki-include-title'] | %%title%% |
-| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+| text_like | //div[@class='wiki-include-content'] | Welcome to your Socialtext |
 
 | *Comment* | Test Case: Include Page. PUBLIC Open the included page for editing |  |
 | click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
@@ -66,20 +66,20 @@ Repeat test using Miki/Lite access.
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | click_ok | link=Advanced |  |
 | text_like | st-editing-title | `Editing: %%title%%` |
-| verifyValue | wikiwyg_wikitext_textarea | qr/.+This is the home page for %%title%%.+/ |
+| verifyValue | wikiwyg_wikitext_textarea | qr/.+Welcome to your Socialtext.+/ |
 
 | *Comment* | Test Case: Include Page. PUBLIC MIKI Run the same test in Miki |  |
 | open_ok | /lite/page/%%tcipw%%/tc_include_page_%%start_time%% |  |
 
 | wait_for_element_visible_ok | link=%%title%% | 30000 |
 | text_like | //div[@class='wiki-include-title'] | %%title%% |
-| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+| text_like | //div[@class='wiki-include-content'] | Welcome to your Socialtext |
 
 | *Comment* | Test Case: Include Page. PUBLIC MIKI Open the included page for editing |  |
 | click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
 | wait_for_element_visible_ok | edit_textarea | 30000 |
 | wait_for_element_visible_ok | link=Cancel Edit | 30000 |
-| verifyValue | edit_textarea | qr/.+This is the home page for %%title%%.+/ |
+| verifyValue | edit_textarea | qr/.+Welcome to your Socialtext.+/ |
 | click_and_wait | link=Cancel Edit |  |
 
 Logout from Miki. Test for content and edit button in page view.
@@ -94,7 +94,7 @@ Repeat test using Miki/Lite access.
 | open_ok | /%%tcipw%%/?TC Include Page %%start_time%% |  |
 | wait_for_element_visible_ok | link=%%title%% | 30000 |
 | text_like | //div[@class='wiki-include-title'] | %%title%% |
-| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+| text_like | //div[@class='wiki-include-content'] | Welcome to your Socialtext |
 
 | *Comment* | Test Case: Include Page. PUBLIC LOGGED OUT. Open the included page for editing |  |
 | click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
@@ -102,20 +102,20 @@ Repeat test using Miki/Lite access.
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | click_ok | link=Advanced |  |
 | text_like | st-editing-title | `Editing: %%title%%` |
-| verifyValue | wikiwyg_wikitext_textarea | qr/.+This is the home page for %%title%%.+/ |
+| verifyValue | wikiwyg_wikitext_textarea | qr/.+Welcome to your Socialtext.+/ |
 
 | *Comment* | Test Case: Include Page. PUBLIC MIKI LOGGED OUT. Run the same test in Miki |  |
 | open_ok | /lite/page/%%tcipw%%/tc_include_page_%%start_time%% |  |
 
 | wait_for_element_visible_ok | link=%%title%% | 30000 |
 | text_like | //div[@class='wiki-include-title'] | %%title%% |
-| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+| text_like | //div[@class='wiki-include-content'] | Welcome to your Socialtext |
 
 | *Comment* | Test Case: Include Page. PUBLIC MIKI LOGGED OUT. Open the included page for editing |  |
 | click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
 | wait_for_element_visible_ok | edit_textarea | 30000 |
 | wait_for_element_visible_ok | link=Cancel Edit | 30000 |
-| verifyValue | edit_textarea | qr/.+This is the home page for %%title%%.+/ |
+| verifyValue | edit_textarea | qr/.+Welcome to your Socialtext.+/ |
 
 | *Comment* | Test Case: Include Page. AUTH. Login. Open the included page for editing |  |
 | st-admin | set-permissions --w %%tcipw%% --p public-authenticate-to-edit | The permissions for the %%tcipw%% workspace have been changed to public-authenticate-to-edit. |
@@ -124,7 +124,7 @@ Repeat test using Miki/Lite access.
 | open_ok | /%%tcipw%%/?TC Include Page %%start_time%% |  |
 | wait_for_element_visible_ok | link=%%title%% | 30000 |
 | text_like | //div[@class='wiki-include-title'] | %%title%% |
-| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+| text_like | //div[@class='wiki-include-content'] | Welcome to your Socialtext |
 
 | *Comment* | Test Case: Include Page. AUTH Open the included page for editing |  |
 | click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
@@ -132,19 +132,19 @@ Repeat test using Miki/Lite access.
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | click_ok | link=Advanced |  |
 | text_like | st-editing-title | `Editing: %%title%%` |
-| verifyValue | wikiwyg_wikitext_textarea | qr/.+This is the home page for %%title%%.+/ |
+| verifyValue | wikiwyg_wikitext_textarea | qr/.+Welcome to your Socialtext.+/ |
 
 | *Comment* | Test Case: Include Page. AUTH MIKI Run the same test in Miki |  |
 | open_ok | /lite/page/%%tcipw%%/tc_include_page_%%start_time%% |  |
 | wait_for_element_visible_ok | link=%%title%% | 30000 |
 | text_like | //div[@class='wiki-include-title'] | %%title%% |
-| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+| text_like | //div[@class='wiki-include-content'] | Welcome to your Socialtext |
 
 | *Comment* | Test Case: Include Page. AUTH MIKI Open the included page for editing |  |
 | click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
 | wait_for_element_visible_ok | edit_textarea | 30000 |
 | wait_for_element_visible_ok | link=Cancel Edit | 30000 |
-| verifyValue | edit_textarea | qr/.+This is the home page for %%title%%.+/ |
+| verifyValue | edit_textarea | qr/.+Welcome to your Socialtext.+/ |
 | click_and_wait | link=Cancel Edit |  |
 
 Logout from Miki. Test for content and edit button in page view.
@@ -159,7 +159,7 @@ Repeat test using Miki/Lite access.
 | open_ok | /%%tcipw%%/?TC Include Page %%start_time%% |  |
 | wait_for_element_visible_ok | link=%%title%% | 30000 |
 | text_like | //div[@class='wiki-include-title'] | %%title%% |
-| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+| text_like | //div[@class='wiki-include-content'] | Welcome to your Socialtext |
 
 | *Comment* | Test Case: Include Page. AUTH LOGGED OUT. CANNOT Open the included page for editing |  |
 | wait_for_element_not_present_ok | //img[contains(@src,'edit-icon.gif')] | 10000 |
@@ -169,7 +169,7 @@ Repeat test using Miki/Lite access.
 
 | wait_for_element_visible_ok | link=%%title%% | 30000 |
 | text_like | //div[@class='wiki-include-title'] | %%title%% |
-| text_like | //div[@class='wiki-include-content'] | This is the home page for %%title%% |
+| text_like | //div[@class='wiki-include-content'] | Welcome to your Socialtext |
 
 | *Comment* | Test Case: Include Page. AUTH MIKI LOGGED OUT. CANNOT Open the included page for editing |  |
 | wait_for_element_not_present_ok | //img[contains(@src,'edit-icon.gif')] | 10000 |

@@ -8,6 +8,7 @@
 | st-admin | set-workspace-config --workspace test-data2 title test-data2 | The workspace config for test-data2 has been updated. |
 | st-admin | clone-workspace --workspace test-data --target test-data3 --overwrite | The test-data workspace has been cloned to test-data3 |
 | st-admin | set-workspace-config --workspace test-data3 title test-data3 | The workspace config for test-data3 has been updated. |
+| st-admin | set-workspace-config --workspace help-en skin_name s2 | The workspace config for help-en has been updated. |
 
 | *Comment* | Test Case: Inter Workspace Search Search all the workspaces where %%username%% is a member |  |
 | st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' (3) |

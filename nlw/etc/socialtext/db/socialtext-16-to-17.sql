@@ -40,6 +40,11 @@ CREATE UNIQUE INDEX "user_detail_lower_username"
 
 DROP TABLE "User" CASCADE;
 
+-- make the driver_unique_id the system_unique_id for Default users
+UPDATE "UserId"
+   SET driver_unique_id = system_unique_id
+ WHERE driver_key = 'Default';
+
 UPDATE "System"
    SET value = 17
  WHERE field = 'socialtext-schema-version';

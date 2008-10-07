@@ -29,7 +29,7 @@ TODO: change to new central page scheme
  *Comment* | Test Case: Workspace Configuration Central Page Setting | |
  st-admin | set_workspace_config --workspace %%workspace%% homepage_is_dashboard 0 | |
  open_ok | /%%workspace%%/ | |
- text_like | st-page-maincontent | This is the home page for |
+ text_like | st-page-maincontent | Welcome to your Socialtext |
  st-admin | set_workspace_config --workspace %%workspace%% homepage_is_dashboard 1 | |
 
 | *Comment* | Test Case: Workspace Configuration Invitation Settings |  |

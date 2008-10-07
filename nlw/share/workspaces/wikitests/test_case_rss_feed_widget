@@ -22,7 +22,7 @@
 | st-widget-settings | rss_feed |  |
 | select_ok | up_max_desc | Unlimited |
 | click_ok | st-savebutton |  |
-| pause | 20000 |
+| pause | 20000 |  |
 | st-select-widget-frame | rss_feed |  |
 | wait_for_element_present_ok | link=Agile Project Management | 30000 |
 | wait_for_element_present_ok | link=Emerson | 3000 |

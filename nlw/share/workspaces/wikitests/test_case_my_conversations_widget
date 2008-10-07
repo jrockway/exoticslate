@@ -3,8 +3,8 @@
 * Fixture: SocialWidgets
 
 | set | workspace | test-data |
-| st-admin | create-user --email devnull3@socialtext.com --password %%password%% |
-| st-admin | add-member --email devnull3@socialtext.com --workspace test-data |
+| st-admin | create-user --email convwidget@matt.socialtext.com --password %%password%% |  |
+| st-admin | add-member --email convwidget@matt.socialtext.com --workspace test-data |  |
 
 | *Comment* | Test Case: My Conversations Widget Create Conversations |  |
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |
@@ -31,11 +31,11 @@
 | type_ok | st-commentui-textarea | see, I commented |
 | click_and_wait | st-commentui-savelink |  |
 
-| *Comment* | Test Case: My Conversations Widget Login as devnull3 |  |
+| *Comment* | Test Case: My Conversations Widget Login as convwidget |  |
 | open_ok | /%%workspace%%/index.cgi?jabberwocky |  |
 | st-logout |  |  |
 | open_ok | /%%workspace%%/index.cgi |  |
-| type_ok | username | devnull3@socialtext.com |
+| type_ok | username | convwidget@matt.socialtext.com |
 | type_ok | password | %%password%% |
 | click_and_wait | //input[@value='Log in'] |  |
 
@@ -51,28 +51,28 @@
 
 | open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=slithy;caller_action=display |  |
 | wait_for_element_visible_ok | st-commentui-textarea | 30000 |
-| type_ok | st-commentui-textarea | denull2 can also comment |
+| type_ok | st-commentui-textarea | convwidget can also comment |
 | click_and_wait | st-commentui-savelink |  |
 
 | open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=jabberwocky;caller_action=display |  |
 | wait_for_element_visible_ok | st-commentui-textarea | 30000 |
-| type_ok | st-commentui-textarea | denull2 can also comment ... again |
+| type_ok | st-commentui-textarea | convwidget can also comment ... again |
 | click_and_wait | st-commentui-savelink |  |
 | st-login |  |  |
 
 | st-catchup-logs |  |  |
 | open_ok | /?dashboard | 60000 |
 | st-empty-container |  |  |
-| st-add-widget | gadgets/share/gadgets/recent_conversations.xml | my_conversations |
+| st-add-widget | widgets/share/widgets/recent_conversations.xml | my_conversations |
 | st_wait_for_widget_load | my_conversations | 45000 |
 | st-widget-title-like | my_conversations | Recent C |
-| pause | 15000 |  |  |
+| pause | 15000 |  |
 | st-select-widget-frame | my_conversations |  |
 | text_like | //body | My Conversations |
-| text_like | //body | My Colleagues |  |
+| text_like | //body | My Colleagues |
 | text_like | //body | All Changes |
-| text_like | //body | devnull3 edited created_page |
-| text_like | //body | devnull3 commented on Jabberwocky in Canonical Test Data Set |
-| text_like | //body | devnull3 commented on Slithy in Canonical Test Data Set |
+| text_like | //body | convwidget edited created_page |
+| text_like | //body | convwidget commented on Jabberwocky in Canonical Test Data Set |
+| text_like | //body | convwidget commented on Slithy in Canonical Test Data Set |
 
 | *Comment* | Test Case: My Conversations Widget COMPLETED |  |

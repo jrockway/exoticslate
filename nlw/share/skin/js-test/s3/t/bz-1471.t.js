@@ -2,7 +2,7 @@
 
 var t = new Test.Visual();
 
-t.plan(1);
+t.plan(2);
 
 t.runAsync([
     function() {
@@ -30,6 +30,12 @@ t.runAsync([
             t.$('#contentLeft').offset().top,
             t.$('#contentRight').offset().top,
             "Mixed .pre and non-.pre long lines should not drop contentRight"
+        );
+
+        t.isnt(
+            t.$('.wiki p:first').height(),
+            t.$('.wiki pre:first').height(),
+            "Reflow did not cause all paragraphs to abort linebreaking"
         );
 
         t.endAsync();

@@ -416,10 +416,10 @@ $(function() {
         var adjustContentLeftOverflow = function () {
             var cl = $('div#contentLeft');
             if (cl.get(0).offsetHeight > cl.get(0).clientHeight) {
-                cl.addClass('contentLeftOverflow');
-
+                var clWidth = $('#contentLeft').get(0).scrollWidth;
                 var crWidth = $('#contentRight').width();
-                var clWidth = cl.width();
+
+                cl.addClass('contentLeftOverflow');
 
                 $('#mainWrap').width( clWidth + crWidth + 50 );
 

@@ -419,8 +419,18 @@ $(function() {
                 cl.addClass('contentLeftOverflow');
 
                 var crWidth = $('#contentRight').width();
-                $('#mainWrap').width( cl.width() + crWidth + 50 );
+                var clWidth = cl.width();
+
+                /* Keep re-flowing contentLeft till it stablizes: {bz: 1471} */
+                for (var i = 0; i < 10; i++) {
+                    $('#mainWrap').width( cl.width() + crWidth + 50 );
+                    if (clWidth == cl.width()) {
+                        break;
+                    }
+                    clWidth = cl.width();
+                }
                 $('#contentRight').width( crWidth );
+                Page._repaintBottomButtons();
             }
         };
         adjustContentLeftOverflow();

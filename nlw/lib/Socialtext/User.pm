@@ -953,13 +953,13 @@ SELECT user_id
     LIMIT ? OFFSET ?
 EOSQL
             creator => <<EOSQL,
-SELECT user_id
-    FROM "UserId" LEFT OUTER JOIN (
-        SELECT user_id, driver_username AS "creator_username"
-            FROM "UserMetadata" LEFT OUTER JOIN "UserId"
-                ON "UserMetadata".created_by_user_id = "UserId".user_id
-    ) AS "X" ON "X".user_id = "UserId".user_id
-    ORDER BY creator_username, driver_username
+SELECT my.user_id
+    FROM "UserId" my 
+    JOIN "UserMetadata" my_meta ON (my.user_id = my_meta.user_id)
+    LEFT JOIN "UserId" creator 
+        ON (my_meta.created_by_user_id = creator.user_id)
+    ORDER BY creator.driver_username $p{sort_order}, 
+             my.driver_username $p{sort_order}
     LIMIT ? OFFSET ?
 EOSQL
             username => <<EOSQL,
@@ -989,8 +989,7 @@ SELECT user_id
   FROM "UserMetadata"
   JOIN "Account" ON "Account".account_id = "UserMetadata".primary_account_id
  ORDER BY "Account".name $p{sort_order}
- LIMIT ?
-OFFSET ?
+ LIMIT ? OFFSET ?
 EOSQL
         );
 

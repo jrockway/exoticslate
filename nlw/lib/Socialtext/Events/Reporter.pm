@@ -303,11 +303,11 @@ sub _limit_and_offset {
     return ($statement, @args);
 }
 
-sub get_events {
-    my $self   = shift;
-    my %opts   = @_;
+sub _build_standard_sql {
+    my $self = shift;
+    my $opts = shift;
 
-    $self->_process_before_after(\%opts);
+    $self->_process_before_after($opts);
 
     $self->prepend_condition(
         $I_CAN_USE_THIS_WORKSPACE => $self->viewer->user_id
@@ -316,21 +316,21 @@ sub get_events {
         $HAS_PEOPLE_I_CAN_SEE => ($self->viewer->user_id) x 2
     );
 
-    if ($opts{followed}) {
+    if ($opts->{followed}) {
         $self->add_condition(
             $FOLLOWED_PEOPLE_ONLY => ($self->viewer->user_id) x 2
         );
         # limiting to these event types will give a bit of a perf boost:
-        $opts{event_class} = ['person','page'];
+        $opts->{event_class} = ['person','page'];
     }
 
     # filter for contributions-type events
     $self->add_condition($CONTRIBUTIONS)
-        if $opts{contributions};
+        if $opts->{contributions};
 
-    $self->_process_field_conditions(\%opts);
+    $self->_process_field_conditions($opts);
 
-    my ($limit_stmt, @limit_args) = $self->_limit_and_offset(\%opts);
+    my ($limit_stmt, @limit_args) = $self->_limit_and_offset($opts);
 
     my $where = join("\n  AND ", 
                      map {"($_)"} @{$self->{_conditions}});
@@ -352,9 +352,17 @@ $outer_where
 $limit_stmt
 EOSQL
 
+    return $sql, [@{$self->{_condition_args}}, @{$self->{_outer_condition_args}}, @limit_args];
+}
+
+sub get_events {
+    my $self   = shift;
+    my $opts   = {@_};
+
+    my ($sql, $args) = $self->_build_standard_sql($opts);
+
     Socialtext::Timer->Continue('get_events');
-    my $sth = sql_execute($sql, @{$self->{_condition_args}}, 
-        @{$self->{_outer_condition_args}}, @limit_args);
+    my $sth = sql_execute($sql, @$args);
     my $result = $self->decorate_event_set($sth);
     Socialtext::Timer->Pause('get_events');
 
@@ -419,13 +427,9 @@ my $CONVERSATIONS = <<"EOSQL";
     [% limit_and_offset %]
 EOSQL
 
-sub get_events_conversations {
-    my ($self, $maybe_user, %opts) = @_; 
-    # First we need to get the user id in case this was email or username used
-    my $user = Socialtext::User->Resolve($maybe_user);
-    my $user_id = $user->user_id;
-
-    warn "get_events_conversations";
+sub _build_convos_sql {
+    my $self = shift;
+    my $opts = shift;
 
     my $workspaces_sql = <<"EOSQL";
         SELECT DISTINCT workspace_id 
@@ -440,27 +444,44 @@ EOSQL
         LEFT JOIN "Workspace" w ON (e.page_workspace_id = w.workspace_id)
 EOSQL
 
-    my ($limit_stmt, @limit_args) = $self->_limit_and_offset(\%opts);
+    my ($limit_stmt, @limit_args) = $self->_limit_and_offset($opts);
     $sql =~ s/\[\% limit_and_offset \%\]/$limit_stmt/;
 
     Socialtext::Timer->Continue('get_convos');
-
-    # TODO: want to get conversations limited to a particular workspace?
-    # set @ws to just that workspace_id here:
-    my $ws_sth = sql_execute($workspaces_sql, $user_id);
+    my $ws_sth = sql_execute($workspaces_sql, $opts->{user_id});
     my @ws = map {$_->[0]} @{$ws_sth->fetchall_arrayref};
+    Socialtext::Timer->Pause('get_convos');
+    
+    return unless @ws;
 
-    my $result = [];
-    if (@ws) {
-        my $ws_plc = join(',', ('?') x scalar @ws);
-        $sql =~ s/\[\% workspaces \%\]/$ws_plc/;
+    my $ws_plc = join(',', ('?') x scalar @ws);
+    $sql =~ s/\[\% workspaces \%\]/$ws_plc/;
 
-        my $sth = sql_execute($sql, ($user_id) x 3, @ws, $user_id, @limit_args);
-        $result = $self->decorate_event_set($sth);
-        foreach my $row (@$result) {
-            my $tk = $row->{context}{tk} || '?';
-            warn "  ev page: $row->{page}{id}, act: $row->{action}, tk: $tk\n";
-        }
+    return $sql, [($opts->{user_id}) x 3, @ws, $opts->{user_id}, @limit_args];
+}
+
+sub get_events_conversations {
+    my $self = shift;
+    my $maybe_user = shift;
+    my $opts = {@_};
+
+    # First we need to get the user id in case this was email or username used
+    my $user = Socialtext::User->Resolve($maybe_user);
+    my $user_id = $user->user_id;
+    $opts->{user_id} = $user_id;
+
+    my ($sql, $args) = $self->_build_convos_sql($opts);
+
+    return [] unless $sql;
+
+    Socialtext::Timer->Continue('get_convos');
+
+    my $sth = sql_execute($sql, @$args);
+    my $result = $self->decorate_event_set($sth);
+
+    foreach my $row (@$result) {
+        my $tk = $row->{context}{tk} || '?';
+        warn "  ev page: $row->{page}{id}, act: $row->{action}, tk: $tk\n";
     }
 
     Socialtext::Timer->Pause('get_convos');

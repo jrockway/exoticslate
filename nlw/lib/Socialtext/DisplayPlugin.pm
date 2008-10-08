@@ -258,6 +258,7 @@ sub _render_display {
                     and $page->title eq
                     $self->hub->current_workspace->title ),
             is_new                  => $is_new_page,
+            is_incipient            => ($self->cgi->is_incipient ? 1 : 0),
             start_in_edit_mode      => $start_in_edit_mode,
             new_tags                => $new_tags,
             attachments             => $all_attachments,
@@ -503,5 +504,6 @@ cgi 'js';
 cgi 'attachment_error';
 cgi 'new_blog_entry';
 cgi 'add_tag';
+cgi 'is_incipient';
 
 1;

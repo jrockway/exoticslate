@@ -32,19 +32,22 @@ t.runAsync([
     function(widget) {
         t.scrollTo(150);
 
-        var found = false;
-        widget.$('a').each(function(){
-            if ($(this).text().match(/測/)) {
-                found = true;
-            }
-        });
+        setTimeout(function(){
+            var found = false;
+            widget.$('a').each(function(){
+                console.log($(this).text());
+                if ($(this).text().match(/測/)) {
+                    found = true;
+                }
+            });
 
-        t.ok(
-            found,
-            "Unicode tag names are handled properly"
-        );
+            t.ok(
+                found,
+                "Unicode tag names are handled properly"
+            );
 
-        t.endAsync();
+            t.endAsync();
+        }, 2500);
     }
 ]);
 

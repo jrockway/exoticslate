@@ -1306,7 +1306,7 @@ body#simple-html h3 {
 .comment textarea {
     background-color: #FFFFDD;
     border:1px solid black;
-    width: 100%;
+    width: 95%;
     height: 100px;
 }
 .comment .formButtons li {

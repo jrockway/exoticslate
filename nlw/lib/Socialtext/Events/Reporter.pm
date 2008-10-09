@@ -443,12 +443,13 @@ EOSQL
                            e.page_id = page.page_id)
         LEFT JOIN "Workspace" w ON (e.page_workspace_id = w.workspace_id)
 EOSQL
+    my $user_id = $opts->{user_id};
 
     my ($limit_stmt, @limit_args) = $self->_limit_and_offset($opts);
     $sql =~ s/\[\% limit_and_offset \%\]/$limit_stmt/;
 
     Socialtext::Timer->Continue('get_convos');
-    my $ws_sth = sql_execute($workspaces_sql, $opts->{user_id});
+    my $ws_sth = sql_execute($workspaces_sql, $user_id);
     my @ws = map {$_->[0]} @{$ws_sth->fetchall_arrayref};
     Socialtext::Timer->Pause('get_convos');
     
@@ -457,7 +458,7 @@ EOSQL
     my $ws_plc = join(',', ('?') x scalar @ws);
     $sql =~ s/\[\% workspaces \%\]/$ws_plc/;
 
-    return $sql, [($opts->{user_id}) x 3, @ws, $opts->{user_id}, @limit_args];
+    return $sql, [($user_id) x 3, @ws, $user_id, @limit_args];
 }
 
 sub get_events_conversations {
@@ -479,14 +480,50 @@ sub get_events_conversations {
     my $sth = sql_execute($sql, @$args);
     my $result = $self->decorate_event_set($sth);
 
-    foreach my $row (@$result) {
-        my $tk = $row->{context}{tk} || '?';
-        warn "  ev page: $row->{page}{id}, act: $row->{action}, tk: $tk\n";
-    }
-
     Socialtext::Timer->Pause('get_convos');
 
     return @$result if wantarray;
+    return $result;
+}
+
+sub get_awesome_events {
+    my $self = shift;
+    my $opts = {@_};
+
+    $opts->{followed} = 1;
+    $opts->{contributions} = 1;
+    my ($followed_sql, $followed_args) = $self->_build_standard_sql($opts);
+
+    delete $opts->{followed};
+    delete $opts->{contributions};
+    $opts->{user_id} = $self->viewer->user_id;
+    my ($convos_sql, $convos_args) = $self->_build_convos_sql($opts);
+    if (!$convos_sql) {
+        return $self->get_events(%$opts);
+    }
+
+    my ($limit_stmt, @limit_args) = $self->_limit_and_offset($opts);
+
+    my $sql = <<EOSQL;
+        SELECT * FROM (
+            ($followed_sql)
+            UNION
+            ($convos_sql)
+        ) awesome
+        ORDER BY at DESC
+        $limit_stmt
+EOSQL
+
+    Socialtext::Timer->Continue('get_awesome');
+
+    local $Socialtext::SQL::TRACE_SQL = 1;
+
+    my $sth = sql_execute($sql, @$followed_args, @$convos_args, @limit_args);
+    $Socialtext::SQL::TRACE_SQL = 0;
+    my $result = $self->decorate_event_set($sth);
+
+    Socialtext::Timer->Pause('get_awesome');
+
     return $result;
 }
 

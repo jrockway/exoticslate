@@ -22,9 +22,9 @@ t.runAsync([
             'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
         );
 
-        t.ok(
-            t.$('#st-tags-listing li:first a:first').width()
-                < t.$('#st-tags-listing').width(),
+        t.is(
+            t.$('#st-tags-listing li:first a:first').css('overflow'),
+            'hidden',
             "Overlong tag names should not overflow visibly"
         );
 

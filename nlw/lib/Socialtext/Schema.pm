@@ -282,7 +282,8 @@ sub dump {
     my %c = $self->connect_params();
     my $time    = time;
     my $dir     = Socialtext::Paths::storage_directory("db-backups");
-    my $file    = Socialtext::File::catfile($dir, "$c{db_name}-dump.$time.sql");
+    my $file = $self->{output}
+        || Socialtext::File::catfile($dir, "$c{db_name}-dump.$time.sql");
 
     my @parms = (
         'pg_dump',

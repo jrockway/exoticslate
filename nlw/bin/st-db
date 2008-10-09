@@ -16,6 +16,7 @@ GetOptions( \%opts,
     'verbose',
     'force',
     'schema|s=s',
+    'output=s',
 ) or usage();
 my $command = shift @ARGV;
 usage("No command supplied!") unless $command;
@@ -41,6 +42,7 @@ for my $schema_config_file (@schemas) {
     my $schema = $class->new(
         %$schema_config,
         verbose => delete $opts{verbose},
+        output  => delete $opts{output},
     );
     $schema->$command();
 }

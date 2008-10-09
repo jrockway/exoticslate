@@ -143,6 +143,8 @@ Page = {
                         $('<li />').append(
                             $('<a></a>')
                                 .text(tag.name)
+                                .addClass('tag_name')
+                                .attr('title', tag.name)
                                 .attr('href', tag_url + encodeURIComponent(tag.name)),
 
                             ' ',

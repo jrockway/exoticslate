@@ -1984,3 +1984,24 @@ table.widgetUserPrefs td.widgetUserPrefsButtons {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+div.pagination-container {
+    margin: 0 auto;
+    width: 43em;
+}
+
+div.pagination-container .paging-back {
+    min-width: 15em;
+    text-align: right;
+    float: left;
+}
+div.pagination-container .paging-numbers {
+    min-width: 13em;
+    text-align: center;
+    float: left;
+}
+div.pagination-container .paging-forward {
+    min-width: 15em;
+    text-align: left;
+    float: left;
+}

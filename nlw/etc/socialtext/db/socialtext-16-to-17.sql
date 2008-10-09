@@ -32,12 +32,12 @@ SELECT * FROM "UserId";
 INSERT INTO user_detail 
 (user_id, username, email_address, password,
  first_name, last_name, cached_at)
-SELECT uid.user_id::bigint,
+SELECT uid.system_unique_id::bigint,
     u.username::text,
     u.email_address::text,
     u.password::text,
-    first_name::text,
-    last_name::text,
+    u.first_name::text,
+    u.last_name::text,
     '+infinity'::timestamptz
 FROM "UserId" uid 
 JOIN "User" u ON (uid.driver_unique_id = u.user_id)

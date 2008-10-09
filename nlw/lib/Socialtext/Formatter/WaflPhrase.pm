@@ -906,6 +906,23 @@ sub _parse_page_for_headers {
             # can fix it. - Bug 598
             $header->{text} =~ s/{(toc:?\s*.*?)}/{{{$1}}}/g;
 
+
+            # Bracketed hyperlinks inside toc like "Foo"<http://foo.com>
+            # should be rendered simply as Foo, instead of "Foo" or as
+            # "Foo"<http://foo.com>. -- {bz: 1200}
+            my $bracket_hyperlink = Socialtext::Formatter::BracketHyperLink
+                                        ->pattern_start;
+            $header->{text} =~ s{($bracket_hyperlink)}{
+                my $full_link = $1;
+                my $link_text = $2;
+                if ($link_text and $link_text =~ /"(.*)"/) {
+                    $1;
+                }
+                else {
+                    $full_link;
+                }
+            }eg;
+
             my $stars = '*' x ($header->{level} - ($min-1));
             $wikitext .= "$stars {link: $linkref $header->{text}}\n";
         }

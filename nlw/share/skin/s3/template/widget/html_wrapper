@@ -23,10 +23,10 @@
     </div><!-- widgetHeader END -->
 
     <div class="widgetContent" id="[% gadget.id %]">
-        <div id="[% gadget.id %]-setup" class="hidden">
+        <div id="[% gadget.id %]-setup" class="[% IF gadget.incomplete %]visible[% ELSE %]hidden[% END %]">
             [% INCLUDE widget/setup %]
         </div>
-        <div id="[% gadget.id %]-content" class="visible">
+        <div id="[% gadget.id %]-content" class="[% IF gadget.incomplete %]hidden[% ELSE %]visible[% END %]">
             [% content %]
         </div>
     </div><!-- widgetContent END -->

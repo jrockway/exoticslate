@@ -229,3 +229,11 @@ table.pagelist.dataTable th div.sort,
 table.pagelist.dataTable th div.selectall {
         -margin-top: 5px;
 }
+
+/* Micro-tweakage for {bz: 1473} */
+#st-tags-listing a.tag_name {
+    -width: expression(
+        ((this.clientWidth > 190) || this.style.width == '90%')
+            ? '90%' : 'auto' 
+    )
+}

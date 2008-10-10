@@ -1,5 +1,5 @@
 [% id = gadget.id %]
-<form onsubmit="gadgets.container.save('[% id %]'); return false">
+<form id="settings_[% id %]">
     [% FOR pref = gadget.user_prefs %]
         [% IF pref.datatype == 'hidden' %]
             <input name="up_[% pref.name %]" class="input_[% id %]" type="hidden" value="[% pref.val %]"/>
@@ -76,5 +76,13 @@
             linkText: function (i) {
                 return [ i.title + ' (' + i.name + ')', i.name ];
             }
+        });
+    jQuery('#settings_[% id %]')
+        .submit(function() {
+            jQuery('.page_setting').each(function() {
+                this.value = nlw_name_to_id(this.value);
+            });
+            gadgets.container.save('[% id %]');
+            return false;
         });
 </script>

@@ -123,6 +123,9 @@ sub GET_json {
                         link_dictionary => $_[1] );
                 };
 
+                $page_hash->{editable} =
+                    $self->hub->checker->check_permission('edit');
+
                 if ($verbose) {
                     $page_hash->{wikitext} = 
                         $addtional_content->('text/x.socialtext-wiki');
@@ -136,6 +139,8 @@ sub GET_json {
                         $self->hub->viewer->text_to_html(
                             "\n{date: $page_hash->{last_edit_time}}\n"
                         );
+                    $page_hash->{workspace} =
+                        $self->hub->current_workspace->to_hash;
                 }
 
                 $self->_record_view($page);

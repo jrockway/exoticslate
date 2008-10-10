@@ -72,7 +72,7 @@ ALTER TABLE "UserId"
     RENAME COLUMN system_unique_id TO user_id;
 
 -- functions don't get auto-updated
-DROP FUNCTION auto_vivify_person();
+DROP FUNCTION auto_vivify_person() CASCADE;
 CREATE FUNCTION auto_vivify_person() RETURNS "trigger"
     AS $$
 BEGIN
@@ -82,6 +82,11 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+CREATE TRIGGER person_ins
+    AFTER INSERT ON "UserId"
+    FOR EACH ROW
+    EXECUTE PROCEDURE auto_vivify_person();
 
 -- rename this ugly constraint (an fk constraint b/w Watchlist and UserId)
 UPDATE pg_constraint 

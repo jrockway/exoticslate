@@ -1,0 +1,15 @@
+<html>
+    <body>
+        <table width="100%">
+            <tbody>
+                [% FOR event = events %]
+                <tr>
+                    [% IF event == events.last() %]<td>[% ELSE %]<td class="row-border">[% END %]
+                        [% INCLUDE events/event.html e=event %]
+                    </td>
+                </tr>
+                [% END %]
+            </tbody>
+        </table>
+    </body>
+</html>

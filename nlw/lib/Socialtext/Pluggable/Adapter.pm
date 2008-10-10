@@ -185,6 +185,7 @@ sub registered {
 
 sub hooked_template_vars {
     my $self = shift;
+    return if $self->hub->current_user->is_guest();
     my %vars;
     my $hooks = $hook_types{template_var} || [];
     for my $hook (@$hooks) {

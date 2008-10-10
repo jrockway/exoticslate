@@ -122,6 +122,26 @@ sub get_resource {
     return $events;
 }
 
+sub resource_to_text {
+    my ($self, $events) = @_;
+    return join "\n", 
+           map { $self->hub->template->render('events/event.txt', %$_) }
+               @$events;
+}
+
+sub resource_to_html {
+    my ( $self, $resource ) = @_;
+    return $self->hub->template->render('events/list.html',
+        events => $resource,
+    );
+}
+
+{
+    no warnings 'once';
+    *GET_html = Socialtext::Rest::Collection::_make_getter(\&resource_to_html, 'text/html');
+    *GET_text = Socialtext::Rest::Collection::_make_getter(\&resource_to_text, 'text/plain');
+}
+
 sub POST_text {
     die "POST text?!";
 }

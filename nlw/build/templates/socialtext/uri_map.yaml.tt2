@@ -2,8 +2,10 @@
 -
     '/data/events':
         'GET':
-            '*/*':     &default [Socialtext::Rest::Events, GET_json]
-            'application/json': [Socialtext::Rest::Events, GET_json]
+            '*/*':           &default [Socialtext::Rest::Events, GET_html]
+            'text/html':              *default
+            'application/json':       [Socialtext::Rest::Events, GET_json]
+            'text/plain':             [Socialtext::Rest::Events, GET_text]
         'POST':
             '*/*':              [Socialtext::Rest::Events, POST_form]
             'application/json': [Socialtext::Rest::Events, POST_json]
@@ -11,26 +13,34 @@
 -
     '/data/events/activities/:user':
         'GET':
-            '*/*':     &default [Socialtext::Rest::Events::Activities, GET_json]
-            'application/json': [Socialtext::Rest::Events::Activities, GET_json]
+            '*/*':           &default [Socialtext::Rest::Events::Activities, GET_html]
+            'text/html':              *default
+            'application/json':       [Socialtext::Rest::Events::Activities, GET_json]
+            'text/plain':             [Socialtext::Rest::Events::Activities, GET_text]
         '*':                    [Socialtext::Rest::Events::Activities, bad_method]
 -
     '/data/events/conversations/:user':
         'GET':
-            '*/*':     &default [Socialtext::Rest::Events::Conversations, GET_json]
-            'application/json': [Socialtext::Rest::Events::Conversations, GET_json]
+            '*/*':           &default [Socialtext::Rest::Events::Conversations, GET_html]
+            'text/html':              *default
+            'application/json':       [Socialtext::Rest::Events::Conversations, GET_json]
+            'text/plain':             [Socialtext::Rest::Events::Conversations, GET_text]
         '*':                    [Socialtext::Rest::Events::Conversations, bad_method]
 -
     '/data/events/followed/:user':
         'GET':
-            '*/*':     &default [Socialtext::Rest::Events::Followed, GET_json]
-            'application/json': [Socialtext::Rest::Events::Followed, GET_json]
+            '*/*':           &default [Socialtext::Rest::Events::Followed, GET_html]
+            'text/html':              *default
+            'application/json':       [Socialtext::Rest::Events::Followed, GET_json]
+            'text/plain':             [Socialtext::Rest::Events::Followed, GET_text]
         '*':                    [Socialtext::Rest::Events::Followed, bad_method]
 -
     '/data/events/awesome/:user':
         'GET':
-            '*/*':     &default [Socialtext::Rest::Events::Awesome, GET_json]
-            'application/json': [Socialtext::Rest::Events::Awesome, GET_json]
+            '*/*':           &default [Socialtext::Rest::Events::Awesome, GET_html]
+            'text/html':              *default
+            'application/json':       [Socialtext::Rest::Events::Awesome, GET_json]
+            'text/plain':             [Socialtext::Rest::Events::Awesome, GET_text]
         '*':                    [Socialtext::Rest::Events::Awesome, bad_method]
 - 
     '/data/echo/:text':

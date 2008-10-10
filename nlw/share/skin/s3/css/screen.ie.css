@@ -98,10 +98,6 @@ div#st-pagetools ul ul li {
     margin-top: 5px !important;
 }
  
-#st-editing-prefix-container {
-    margin-bottom: -35px !important;
-}
-
 /* This selector makes for about 2px of blank space on the right side of the
  * popup because IE sucks, we should look in to fixing this. Adding an
  * expression that checks for a scrollbar may fix this.
@@ -238,4 +234,9 @@ table.pagelist.dataTable th div.selectall {
         ((this.clientWidth > 190) || this.style.width == '90%')
             ? '90%' : 'auto' 
     )
+}
+
+/* Micro-tweakge for {bz: 1450} */
+html #st-editing-prefix-container {
+    -margin-bottom: 0px !important;
 }

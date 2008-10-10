@@ -239,4 +239,6 @@ table.pagelist.dataTable th div.selectall {
 /* Micro-tweakge for {bz: 1450} */
 html #st-editing-prefix-container {
     -margin-bottom: 0px !important;
+    -height: 22px;
+    -overflow: hidden;
 }

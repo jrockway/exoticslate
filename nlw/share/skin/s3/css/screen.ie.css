@@ -15,6 +15,8 @@ html body#settingsPage div#controls div#controlsRight {
     width: 550px !important;
 }
 
+/* IE6-only fix for {bz: 1424} - Force alignment to the right */
+html body#workSpace div#controls div#controlsRight,
 /* IE6-only fix for {bz: 1393} - Force alignment to the right */
 html body#dashBoard div#controls div#controlsRight {
     -width: 10px !important;

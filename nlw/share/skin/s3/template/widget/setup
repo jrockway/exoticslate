@@ -1,8 +1,8 @@
-[% id = gadget.id %]
-<form id="settings_[% id %]">
+<form onsubmit="gadgets.container.save('[% gadget.id %]', this);return false">
+
     [% FOR pref = gadget.user_prefs %]
         [% IF pref.datatype == 'hidden' %]
-            <input name="up_[% pref.name %]" class="input_[% id %]" type="hidden" value="[% pref.val %]"/>
+            <input name="up_[% pref.name %]" type="hidden" value="[% pref.val %]"/>
         [% END %]
     [% END %]
 
@@ -16,7 +16,7 @@
                 <th>[% pref.display_name %]:</th>
                 <td>
                 [% IF pref.datatype == 'enum' %]
-                    <select name="up_[% pref.name %]" class="input_[% id %]">
+                    <select name="up_[% pref.name %]">
                         [% FOR item = pref.options %]
                             [% selected = '' %]
                             [% IF pref.val == item.value %]
@@ -28,61 +28,21 @@
                         [% END %]
                     </select>
                 [% ELSIF pref.datatype == 'workspace' %]
-                    <input value="[% pref.val %]" name="up_[% pref.name %]" class="input_[% id %] workspace_setting"/>
+                    <input value="[% pref.val %]" name="up_[% pref.name %]" class="workspace_setting"/>
                 [% ELSIF pref.datatype == 'page' %]
-                    <input value="[% pref.val %]" name="up_[% pref.name %]" class="input_[% id %] page_setting"/>
+                    <input value="[% pref.val %]" name="up_[% pref.name %]" class="page_setting"/>
                 [% ELSIF pref.datatype == 'bool' %]
-                    <input name="up_[% pref.name %]" class="input_[% id %]" type="checkbox" value="[% pref.val %]"/>
+                    <input name="up_[% pref.name %]" type="checkbox" value="[% pref.val %]"/>
                 [% ELSE %]
-                    <input name="up_[% pref.name %]" class="input_[% id %]" type="text" value="[% pref.val %]"/>
+                    <input name="up_[% pref.name %]" type="text" value="[% pref.val %]"/>
                 [% END %]
                 </td>
             [% END %]
         </tr>
         <tr>
             <td colspan="2" class="widgetUserPrefsButtons">
-                <input type='submit' value='save' class="searchButton" id="st-savebutton"/>
+                <input type='submit' value='save' class="searchButton st-savebutton"/>
             </td>
         </tr>
     </table>
 </form>
-
-<script>
-    jQuery('.page_setting')
-        .lookahead({
-            url: function () {
-                var ws = jQuery('.workspace_setting').val() ||
-                         Socialtext.wiki_id;
-                return '/data/workspaces/' + ws + '/pages';
-            },
-            params: { minimal_pages: 1 },
-            linkText: function (i) { return i.name },
-            onError: {
-                404: function () {
-                    var ws = jQuery('#st-widget-workspace_id').val() ||
-                             Socialtext.wiki_id;
-                    return(
-                        '<span class="st-suggestion-warning">'
-                        + loc('Workspace "[_1]" does not exist on wiki', ws)
-                        + '</span>'
-                    );
-                }
-            }
-        });
-    jQuery('.workspace_setting')
-        .lookahead({
-            filterName: 'title_filter',
-            url: '/data/workspaces',
-            linkText: function (i) {
-                return [ i.title + ' (' + i.name + ')', i.name ];
-            }
-        });
-    jQuery('#settings_[% id %]')
-        .submit(function() {
-            jQuery('.page_setting').each(function() {
-                this.value = nlw_name_to_id(this.value);
-            });
-            gadgets.container.save('[% id %]');
-            return false;
-        });
-</script>

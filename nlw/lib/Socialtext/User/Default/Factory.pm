@@ -41,7 +41,7 @@ sub driver_key { shift->driver_name }
 # FIXME: This belongs elsewhere, in fixture generation code, perhaps
 sub _create_default_user {
     my $self = shift;
-    my ($username, $email, $created_by) = @_;
+    my ($username, $email, $first_name, $created_by) = @_;
 
     my $id = Socialtext::UserId->NewUserId();
 
@@ -55,7 +55,7 @@ sub _create_default_user {
         user_id       => $id,
         username      => $username,
         email_address => $email,
-        first_name    => 'System',
+        first_name    => $first_name,
         last_name     => 'User',
         password      => '*no-password*',
         no_crypt      => 1,
@@ -80,7 +80,7 @@ sub EnsureRequiredDataIsPresent {
     unless ($factory->GetUser(username => $SystemUsername)) {
         $factory->_create_default_user(
             $SystemUsername, $SystemEmailAddress,
-            undef
+            'System', undef
         );
     }
 
@@ -88,7 +88,7 @@ sub EnsureRequiredDataIsPresent {
         my $system_user = Socialtext::User->new(username => $SystemUsername);
         $factory->_create_default_user(
             $GuestUsername, $GuestEmailAddress,
-            $system_user->user_id
+            'Guest', $system_user->user_id
         );
     }
 }

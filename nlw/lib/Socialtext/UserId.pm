@@ -16,7 +16,7 @@ field 'driver_unique_id';
 field 'driver_username';
 
 sub create_if_necessary {
-    my $class = shift;
+    my $class      = shift;
     my $homunculus = shift;
 
     my @primary_params = (
@@ -29,27 +29,28 @@ sub create_if_necessary {
         driver_username => $homunculus->username,
     );
 
-    my $user_id = $class->_new_from_homunculus(@primary_params);
+    my $user_id_obj = $class->_new_from_homunculus(@primary_params);
 
-    if (!defined $user_id) {
-        $user_id = $class->_new_from_homunculus(@fallback_params);
+    if (!defined $user_id_obj) {
+        $user_id_obj = $class->_new_from_homunculus(@fallback_params);
     }
 
-    if ($user_id) {
-        if ($user_id->_homunculus_is_different($homunculus)) {
-            $user_id->update(
+    if ($user_id_obj) {
+        if ($user_id_obj->_homunculus_is_different($homunculus)) {
+            $user_id_obj->update(
                 driver_unique_id => $homunculus->user_id,
                 driver_username  => $homunculus->username
             );
         }
-        return $user_id;
+        return $user_id_obj;
     }
-    
+
     my $new_id = $class->NewUserId();
-    return $class->create( 
-        @primary_params,
-        driver_username => $homunculus->username,
-        user_id => $new_id
+    return $class->create(
+        user_id          => $new_id,
+        driver_key       => $homunculus->driver_key,
+        driver_unique_id => $homunculus->user_id,
+        driver_username  => $homunculus->username,
     );
 }
 
@@ -78,7 +79,7 @@ sub _cache {
 }
 
 sub _new_from_user_id {
-    my ( $class, %p ) = @_;
+    my ($class, %p) = @_;
 
     # 'user_id' should *only* ever be numeric; if its anything else,
     # fail quietly.
@@ -94,61 +95,62 @@ sub _new_from_user_id {
     my $cache = $class->_cache();
     my $key   = "user_id=$p{user_id}";
 
-    my $user_id = $cache->get($key);
-    unless ($user_id) {
-        $user_id = $class->_new_from_where(
-            'user_id=?' => $p{user_id});
-        $cache->set($key, $user_id);
+    my $user_id_obj = $cache->get($key);
+    unless ($user_id_obj) {
+        $user_id_obj = $class->_new_from_where('user_id=?' => $p{user_id});
+        $cache->set($key, $user_id_obj);
     }
-    return $user_id;
+    return $user_id_obj;
 }
 
 sub _new_from_homunculus {
-    my ( $class, %p ) = @_;
+    my ($class, %p) = @_;
 
     my $where_clause;
     my @args;
 
     my $key;
     if (exists $p{driver_unique_id}) {
-        $key = "$p{driver_key}-id=$p{driver_unique_id}";
+        $key          = "$p{driver_key}-id=$p{driver_unique_id}";
         $where_clause = 'driver_key=? AND driver_unique_id=?';
-        @args = ($p{driver_key}, $p{driver_unique_id});
+        @args         = ($p{driver_key}, $p{driver_unique_id});
     }
     else {
-        $key = "$p{driver_key}-user=$p{driver_username}";
+        $key          = "$p{driver_key}-user=$p{driver_username}";
         $where_clause = 'driver_key=? AND driver_username=?';
-        @args = ($p{driver_key}, $p{driver_username});
+        @args         = ($p{driver_key}, $p{driver_username});
     }
 
-    my $cache   = $class->_cache();
-    my $user_id = $cache->get($key);
-    unless ($user_id) {
-        $user_id = $class->_new_from_where(
+    my $cache       = $class->_cache();
+    my $user_id_obj = $cache->get($key);
+    unless ($user_id_obj) {
+        $user_id_obj = $class->_new_from_where(
             $where_clause => @args,
         );
-        $cache->set( $key, $user_id );
+        $cache->set($key, $user_id_obj);
     }
-    return $user_id;
+    return $user_id_obj;
 }
 
 sub _new_from_where {
-    my ( $class, $where_clause, @bindings ) = @_;
+    my ($class, $where_clause, @bindings) = @_;
 
     my $sth = sql_execute(
         'SELECT user_id, driver_key, driver_unique_id, driver_username'
-        . ' FROM "UserId"'
-        . " WHERE $where_clause",
-        @bindings );
+            . ' FROM "UserId"'
+            . " WHERE $where_clause",
+        @bindings
+    );
 
     my @rows = @{ $sth->fetchall_arrayref };
-    return @rows ? bless {
-                    user_id => $rows[0][0],
-                    driver_key       => $rows[0][1],
-                   driver_unique_id => $rows[0][2],
-                    driver_username  => $rows[0][3],
-                    }, $class
-                 : undef;
+    return @rows
+        ? bless {
+            user_id          => $rows[0][0],
+            driver_key       => $rows[0][1],
+            driver_unique_id => $rows[0][2],
+            driver_username  => $rows[0][3],
+            }, $class
+        : undef;
 }
 
 sub NewUserId {

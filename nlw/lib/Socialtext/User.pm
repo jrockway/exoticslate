@@ -147,7 +147,8 @@ sub new {
     Socialtext::Timer->Continue('user_new');
 
     # ensure this user is present in our UserId table
-    my $userid = Socialtext::UserId->create_if_necessary($homunculus);
+    my $userid_obj = Socialtext::UserId->create_if_necessary($homunculus);
+    $user->user_id($userid_obj->user_id);
 
     $user->homunculus($homunculus);
     $user->metadata(Socialtext::UserMetadata->create_if_necessary($user));
@@ -155,12 +156,8 @@ sub new {
     # proactively cache the homunculus, but only if it's not already
     # cached
     Socialtext::User::Cache->MaybeStore(
-        'user_id', $userid->user_id => $homunculus
+        'user_id', $user->user_id => $homunculus
     );
-
-    # store the user_id since we've got it at hand (preventing frequent
-    # expensive lookups later)
-    $user->user_id($userid->user_id);
 
     Socialtext::Timer->Pause('user_new');
 

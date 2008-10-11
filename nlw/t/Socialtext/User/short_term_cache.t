@@ -44,6 +44,7 @@ Socialtext::User->create(
 
 sub set_names {
     my ($username, $first, $last) = @_;
+    # done in an external process, so that its *not* using any in-memory cache
     my $rc = system("st-admin set-user-names --username $username --first-name $first --last-name $last > /dev/null");
     ok !$rc;
 }
@@ -69,7 +70,6 @@ verify_not_caching_is_the_default_behaviour: {
 
     Net::LDAP->set_mock_behaviour(search_results => []);
 
-    # in another process:
     set_names('dbuser@example.com', qw(DB User));
 
     my $user3 = Socialtext::User->new(username => 'dbuser@example.com');
@@ -77,7 +77,6 @@ verify_not_caching_is_the_default_behaviour: {
     is $user3->best_full_name, "DB User", "original db user bfn";
     $user3 = undef;
 
-    # in another process:
     set_names('dbuser@example.com', qw(AnotherDB User));
 
     my $user4 = Socialtext::User->new(username => 'dbuser@example.com');
@@ -109,7 +108,6 @@ verify_caching_behaviour: {
 
     Net::LDAP->set_mock_behaviour(search_results => []);
 
-    # in another process:
     set_names('dbuser@example.com', qw(DB User));
 
     my $user3 = Socialtext::User->new(username => 'dbuser@example.com');
@@ -117,7 +115,6 @@ verify_caching_behaviour: {
     is $user3->best_full_name, "DB User", "original db user bfn";
     $user3 = undef;
 
-    # in another process:
     set_names('dbuser@example.com', qw(AwesomeDB User));
 
     my $user4 = Socialtext::User->new(username => 'dbuser@example.com');

@@ -42,6 +42,11 @@ Socialtext::User->create(
     password => 'password',
 );
 
+sub set_names {
+    my ($username, $first, $last) = @_;
+    my $rc = system("st-admin set-user-names --username $username --first-name $first --last-name $last > /dev/null");
+    ok !$rc;
+}
 
 verify_not_caching_is_the_default_behaviour: {
     Net::LDAP->set_mock_behaviour(
@@ -65,7 +70,7 @@ verify_not_caching_is_the_default_behaviour: {
     Net::LDAP->set_mock_behaviour(search_results => []);
 
     # in another process:
-    system('st-admin set-user-names --username dbuser@example.com --first-name DB --last-name User');
+    set_names('dbuser@example.com', qw(DB User));
 
     my $user3 = Socialtext::User->new(username => 'dbuser@example.com');
     ok $user3;
@@ -73,8 +78,7 @@ verify_not_caching_is_the_default_behaviour: {
     $user3 = undef;
 
     # in another process:
-    system('st-admin set-user-names --username dbuser@example.com --first-name AnotherDB --last-name User');
-
+    set_names('dbuser@example.com', qw(AnotherDB User));
 
     my $user4 = Socialtext::User->new(username => 'dbuser@example.com');
     ok $user4;
@@ -106,7 +110,7 @@ verify_caching_behaviour: {
     Net::LDAP->set_mock_behaviour(search_results => []);
 
     # in another process:
-    system('st-admin set-user-names --username dbuser@example.com --first-name DB --last-name User');
+    set_names('dbuser@example.com', qw(DB User));
 
     my $user3 = Socialtext::User->new(username => 'dbuser@example.com');
     ok $user3;
@@ -114,7 +118,7 @@ verify_caching_behaviour: {
     $user3 = undef;
 
     # in another process:
-    system('st-admin set-user-names --username dbuser@example.com --first-name AwesomeDB --last-name User');
+    set_names('dbuser@example.com', qw(AwesomeDB User));
 
     my $user4 = Socialtext::User->new(username => 'dbuser@example.com');
     ok $user4;

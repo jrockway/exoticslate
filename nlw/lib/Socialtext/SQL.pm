@@ -193,11 +193,11 @@ Returns true if we currently in a transaction
 
 Starts a transaction, so sql_execute will not auto-commit.
 
-=head2 sql_commit()()
+=head2 sql_commit()
 
 Commit a transaction started by the calling code.
 
-=head2 sql_rollback()()
+=head2 sql_rollback()
 
 Rollback a transaction started by the calling code.
 

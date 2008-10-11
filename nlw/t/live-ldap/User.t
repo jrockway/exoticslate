@@ -10,7 +10,7 @@ use Socialtext::User::Default::Factory;
 use Test::Socialtext::Bootstrap::OpenLDAP;
 use Test::Socialtext tests => 38;
 
-fixtures( 'rdbms' );
+fixtures( 'db' );
 
 ###############################################################################
 ### TEST DATA

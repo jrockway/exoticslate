@@ -44,13 +44,6 @@ sub _create_default_user {
     my ($username, $email, $first_name, $created_by) = @_;
 
     my $id = Socialtext::UserId->NewUserId();
-
-    my $user_id = Socialtext::UserId->create(
-        user_id          => $id,
-        driver_key       => $self->driver_key,
-        driver_unique_id => $id,
-        driver_username  => $username,
-    );
     my $system_user = $self->create(
         user_id       => $id,
         username      => $username,
@@ -187,9 +180,20 @@ sub create {
 
     $self->_validate_and_clean_data(undef, \%p);
 
-    $p{first_name} ||= '';
-    $p{last_name} ||= '';
+    $p{first_name}       ||= '';
+    $p{last_name}        ||= '';
+    $p{driver_key}       ||= $self->driver_key;
+    $p{driver_unique_id} ||= $p{user_id};
 
+    # create a UserId object first, so we know we've got one for this new user
+    my $user_id_obj = Socialtext::UserId->create(
+        user_id          => $p{user_id},
+        driver_key       => $p{driver_key},
+        driver_unique_id => $p{driver_unique_id},
+        driver_username  => $p{username},
+    );
+
+    # then go add the user to the user_detail table
     sql_execute( q{
             INSERT INTO user_detail
             (user_id, username, email_address, first_name, last_name, password)

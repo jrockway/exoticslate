@@ -179,12 +179,7 @@ sub create {
 
     my $homunculus = $class->_first( 'create', %p );
 
-    my $user_id = Socialtext::UserId->create(
-        user_id          => $id,
-        driver_key       => $homunculus->driver_key,
-        driver_unique_id => $id,
-        driver_username  => $homunculus->username,
-    );
+    my $user_id = Socialtext::UserId->create_if_necessary($homunculus);
 
     if (!exists $p{created_by_user_id}) {
         if ($homunculus->username ne $SystemUsername) {

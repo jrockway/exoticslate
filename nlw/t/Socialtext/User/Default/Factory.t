@@ -6,7 +6,7 @@ use warnings;
 use Test::Socialtext tests => 114;
 use Socialtext::User;
 
-fixtures( 'rdbms' );
+fixtures( 'db' );
 use_ok 'Socialtext::User::Default::Factory';
 
 my $start_time = time;

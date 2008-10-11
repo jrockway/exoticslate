@@ -13,17 +13,17 @@ use_ok 'Socialtext::User::Default::Factory';
 
 my @TEST_LDAP_USERS = (
     { dn            => 'cn=user,dc=example,dc=com',
-      cn            => 'FirstLDAP Last',
+      cn            => 'FirstLDAP LastLDAP',
       authPassword  => 'abc123',
       gn            => 'FirstLDAP',
-      sn            => 'Last',
+      sn            => 'LastLDAP',
       mail          => 'ldapuser@example.com',
     },
     { dn            => 'cn=user,dc=example,dc=com',
-      cn            => 'Another User',
+      cn            => 'Another LDAPUser',
       authPassword  => 'def987',
       gn            => 'Another',
-      sn            => 'User',
+      sn            => 'LDAPUser',
       mail          => 'ldapuser@example.com',
     },
 );
@@ -50,7 +50,7 @@ verify_not_caching_is_the_default_behaviour: {
 
     my $user = Socialtext::User->new(email_address => 'ldapuser@example.com');
     ok $user;
-    is $user->best_full_name, "FirstLDAP Last", "original ldap user bfn";
+    is $user->best_full_name, "FirstLDAP LastLDAP", "original ldap user bfn";
     $user = undef;
 
     Net::LDAP->set_mock_behaviour(
@@ -59,7 +59,7 @@ verify_not_caching_is_the_default_behaviour: {
 
     my $user2 = Socialtext::User->new(email_address => 'ldapuser@example.com');
     ok $user2;
-    is $user2->best_full_name, "Another User", "non-cached ldap user bfn";
+    is $user2->best_full_name, "Another LDAPUser", "non-cached ldap user bfn";
     $user2 = undef;
 
     Net::LDAP->set_mock_behaviour(search_results => []);
@@ -91,7 +91,7 @@ verify_caching_behaviour: {
     );
     my $user = Socialtext::User->new(email_address => 'ldapuser@example.com');
     ok $user;
-    is $user->best_full_name, "FirstLDAP Last", "original ldap user bfn";
+    is $user->best_full_name, "FirstLDAP LastLDAP", "original ldap user bfn";
     $user = undef;
 
     Net::LDAP->set_mock_behaviour(
@@ -99,7 +99,7 @@ verify_caching_behaviour: {
     );
     my $user2 = Socialtext::User->new(email_address => 'ldapuser@example.com');
     ok $user2;
-    is $user2->best_full_name, "FirstLDAP Last", "cached ldap user bfn";
+    is $user2->best_full_name, "FirstLDAP LastLDAP", "cached ldap user bfn";
     my $ldap_user_id = $user2->user_id;
     $user2 = undef;
 
@@ -126,7 +126,7 @@ verify_caching_behaviour: {
     proactive_user_id_caching: {
         my $user5 = Socialtext::User->new(user_id => $ldap_user_id);
         ok $user5;
-        is $user5->best_full_name, "FirstLDAP Last", "proactive cache of the LDAP user";
+        is $user5->best_full_name, "FirstLDAP LastLDAP", "proactive cache of the LDAP user";
 
         my $user6 = Socialtext::User->new(user_id => $db_user_id);
         ok $user6;

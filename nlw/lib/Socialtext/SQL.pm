@@ -107,20 +107,21 @@ sub sql_execute {
         if $in_tx and $DEBUG;
 
     my ($sth, $rv);
+    if ($DEBUG or $TRACE_SQL) {
+        my (undef, $file, $line) = caller;
+        warn "Preparing ($statement) "
+            . _list_bindings(\@bindings)
+            . " from $file line $line\n";
+    }
     eval {
-        warn "Preparing ($statement) - Bindings:(" . join(',', @bindings) . ")" 
-            if ($DEBUG or $TRACE_SQL);
         Socialtext::Timer->Continue('sql_prepare');
         $sth = $dbh->prepare($statement);
         Socialtext::Timer->Pause('sql_prepare');
         $sth->execute(@bindings) ||
-            die "Error during execute - bindings=("
-                . join(', ', @bindings) . ') - '
-                . $sth->errstr;
-
+            die "execute failed: " . $sth->errstr;
     };
     if (my $err = $@) {
-        my $msg = "Error during sql_execute:\n$statement\n";
+        my $msg = "Error during sql_execute():\n$statement\n";
         if (@bindings) {
             local $" = ',';
             $msg .= "Bindings: ("
@@ -145,6 +146,13 @@ sub sql_execute {
 
     Socialtext::Timer->Pause('sql_execute');
     return $sth;
+}
+
+sub _list_bindings {
+    my $bindings = shift;
+    return 'bindings=('
+         . join(',', map { defined $_ ? $_ : 'NULL' } @{$bindings})
+         . ')';
 }
 
 =head2 sql_selectrow( $SQL, @BIND )

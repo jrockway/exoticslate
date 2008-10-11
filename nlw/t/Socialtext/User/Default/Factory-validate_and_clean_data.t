@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 40;
+use Test::Socialtext tests => 29;
 use Socialtext::User;
 
 fixtures( 'db' );
@@ -27,7 +27,7 @@ create_user_all_fields_present: {
     isa_ok $user, 'Socialtext::User';
 
     # Cleanup
-    ok $user->delete(force=>1), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -60,7 +60,7 @@ optional_field_password: {
     isa_ok $user, 'Socialtext::User';
 
     # Cleanup
-    ok $user->delete(force=>1), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -85,7 +85,7 @@ cleanup_username_trim: {
     is $user->username, $TEST_DATA{username}, 'cleanup: "username" is trimmed';
 
     # Cleanup
-    ok $user->delete(force=>1), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -99,7 +99,7 @@ cleanup_username_lc: {
     is $user->username, $TEST_DATA{username}, 'cleanup: "username" is lower-cased';
 
     # Cleanup
-    ok $user->delete(force=>1), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -113,7 +113,7 @@ cleanup_email_address_trim: {
     is $user->email_address, $TEST_DATA{email_address}, 'cleanup: "email_address" is trimmed';
 
     # Cleanup
-    ok $user->delete(force=>1), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -127,7 +127,7 @@ cleanup_email_address_lc: {
     is $user->email_address, $TEST_DATA{email_address}, 'cleanup: "email_address" is lower-cased';
 
     # Cleanup
-    ok $user->delete(force=>1), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -140,7 +140,7 @@ cleanup_password_encrypted: {
     isnt $user->password, $TEST_DATA{password}, 'cleanup: "password" is encrypted';
 
     # Cleanup
-    ok $user->delete(force=>1), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -154,7 +154,7 @@ cleanup_password_disable_encryption: {
     is $user->password, $TEST_DATA{password}, 'cleanup: "password" encryption can be disabled';
 
     # Cleanup
-    ok $user->delete(force=>1), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -181,7 +181,7 @@ constraint_password_length: {
     isa_ok $user, 'Socialtext::User';
 
     # Cleanup
-    ok $user->delete(force=>1), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -197,7 +197,7 @@ constraint_username_unique: {
     like $@, qr/username.*already in use/, 'constraint: "username" must be unique';
 
     # Cleanup
-    ok $user->delete(force=>1), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -213,7 +213,7 @@ constraint_email_address_unique: {
     like $@, qr/email.*already in use/, 'constraint: "email_address" must be unique';
 
     # Cleanup
-    ok $user->delete(force=>1), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################

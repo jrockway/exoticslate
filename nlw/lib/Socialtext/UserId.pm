@@ -161,7 +161,7 @@ sub NewUserId {
 sub create {
     my ( $class, %p ) = @_;
 
-    die "need to supply a user_id; use GetUniqueId"
+    die "need to supply a user_id; use NewUserId"
         unless $p{user_id};
 
     sql_execute(

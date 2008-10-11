@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 114;
+use Test::Socialtext tests => 107;
 use Socialtext::User;
 
 fixtures( 'db' );
@@ -112,9 +112,7 @@ create_new_user: {
 
     # make sure user got added to DB correctly
     is $factory->Count(), $orig_count+1, '... user count incremented';
-
-    # Delete a user record via factory
-    $factory->delete($user);
+    $user->delete(force=>1);
     is $factory->Count(), $orig_count, '... user count decremented';
 }
 
@@ -145,9 +143,7 @@ create_new_user_unencrypted_password: {
 
     # make sure user got added to DB correctly
     is $factory->Count(), $orig_count+1, '... user count incremented';
-
-    # Delete a user record (using helper method in ST::User::Default)
-    $user->delete();
+    $user->delete(force=>1);
     is $factory->Count(), $orig_count, '... user count decremented';
 }
 
@@ -166,7 +162,7 @@ creating_new_user_does_data_cleanup: {
         password          => 'password',
     );
 
-    $user->delete();
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -200,7 +196,7 @@ get_user_valid_search_terms: {
     ok !defined $found, '... password: INVALID search term';
 
     # cleanup
-    ok $factory->delete($user), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -247,7 +243,7 @@ get_user_via_username: {
     is $found2->email_address(), $opts{email_address}, '... and its the right user';
     is $found2->user_id, $user->user_id, '... it\'s the same user';
 
-    ok $user->delete(), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -267,8 +263,7 @@ get_user_via_email_address: {
     is $found->username(), $opts{username}, '... and its the right user';
     is $found->user_id, $user->user_id, '... is the same user';
 
-    # cleanup
-    ok $user->delete(), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -288,8 +283,7 @@ get_user_via_user_id: {
     is $found->email_address(), $user->email_address(), '... and its the right user';
     is $found->user_id, $user->user_id, '... and has the right user_id';
 
-    # cleanup
-    ok $user->delete(), '... cleanup';
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -335,8 +329,7 @@ update_user_via_factory: {
     is_deeply $found, $homunculus, '... homunculus matches';
     is $found->user_id, $user->user_id, '... same user_id';
 
-    # cleanup
-    ok $factory->delete($homunculus), '... cleanup';
+    $homunculus->delete(force=>1);
     is $factory->Count(), $orig_count, "... user got deleted";
 }
 
@@ -372,8 +365,7 @@ update_user_via_user: {
     is_deeply $found, $homunculus, '... homunculus matches';
     is $found->user_id, $user->user_id, '... same user_id';
 
-    # cleanup
-    ok $factory->delete($homunculus), '... cleanup';
+    $homunculus->delete(force=>1);
     is $factory->Count(), $orig_count, "... user got deleted";
 }
 
@@ -404,7 +396,6 @@ updating_user_does_data_cleanup: {
     ok $rc, '... user record updated';
     is $homunculus->email_address(), 'foo@bar.com', '... and cleanup was performed';
 
-    # cleanup
-    ok $factory->delete($homunculus), '... cleanup';
+    $homunculus->delete(force=>1);
     is $factory->Count(), $orig_count, "... user got deleted";
 }

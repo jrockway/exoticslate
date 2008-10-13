@@ -132,6 +132,7 @@ sub sql_execute {
             warn "Rolling back in sql_execute()" if $DEBUG;
             sql_rollback();
         }
+        Socialtext::Timer->Pause('sql_execute');
         croak "${msg}Error: $err";
     }
 
@@ -164,7 +165,10 @@ Wrapper around $sth->selectrow_array
 sub sql_selectrow {
     my ( $statement, @bindings ) = @_;
 
-    return get_dbh->selectrow_array($statement, undef, @bindings);
+    Socialtext::Timer->Continue('sql_selectrow');
+    my @result = get_dbh->selectrow_array($statement, undef, @bindings);
+    Socialtext::Timer->Pause('sql_selectrow');
+    return @result;
 }
 
 =head2 sql_singlevalue( $SQL, @BIND )

@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings FATAL => 'all';
-use Test::More tests => 26;
+use Test::More tests => 30;
 use mocked 'Socialtext::Log', qw(:tests);
 use mocked 'Net::LDAP';
 use Test::Socialtext;

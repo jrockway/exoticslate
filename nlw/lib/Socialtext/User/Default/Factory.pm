@@ -161,17 +161,12 @@ sub _new_from_where {
         . " WHERE $where_clause=?",
         @bindings
     );
-    my @rows = @{ $sth->fetchall_arrayref };
-    return @rows ? Socialtext::User::Default->new( {
-                    user_id       => $rows[0][0],
-                    username      => $rows[0][1],
-                    email_address => $rows[0][2],
-                    first_name    => $rows[0][3],
-                    last_name     => $rows[0][4],
-                    password      => $rows[0][5],
-                    driver_key    => $self->driver_key,
-                    } )
-                 : undef;
+
+    my $row = $sth->fetchrow_hashref();
+    return undef unless $row;
+
+    $row->{driver_key} = $self->driver_key;
+    return Socialtext::User::Default->new_from_hash($row);
 }
 
 sub create {

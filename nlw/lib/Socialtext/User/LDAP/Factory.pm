@@ -96,7 +96,7 @@ sub GetUser {
         }
     }
 
-    return Socialtext::User::LDAP->new($user);
+    return Socialtext::User::LDAP->new_from_hash($user);
 }
 
 sub Search {

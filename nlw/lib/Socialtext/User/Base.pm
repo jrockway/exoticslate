@@ -55,6 +55,35 @@ sub to_hash {
     return $hash;
 }
 
+sub new_from_hash {
+    my $self = shift;
+    my $p = shift;
+
+    # create a copy of the parameters for our new User homunculus object
+    my %user = map { $_ => $p->{$_} } @fields, 'driver_key';
+
+    # bless the user object to the right class
+    my ($driver_name, $driver_id) = split( /:/, $p->{driver_key} );
+    my $driver_class = join '::', Socialtext::User->base_package, $driver_name;
+    eval "require $driver_class";
+    die "Couldn't load $driver_class: $@" if $@;
+
+    my $homunculus = $driver_class->new(\%user);
+
+    # Remove password fields for users, where the password is over-ridden by
+    # the User driver (Default, LDAP, etc) and where the resulting password is
+    # *NOT* of any use.  No point keeping a bunk/bogus/useless password
+    # around.
+    if ($homunculus->password eq '*no-password*') {
+        if ($p->{password} && ($p->{password} ne $homunculus->password)) {
+            delete $homunculus->{password};
+        }
+    }
+
+    # return the new homunculus; we're done.
+    return $homunculus;
+}
+
 # Removes traces of the user from the "user_detail" table.
 sub delete {
     my $self = shift;

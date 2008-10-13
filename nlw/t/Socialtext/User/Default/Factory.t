@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 104;
+use Test::Socialtext tests => 106;
 use Socialtext::User;
 
 fixtures( 'db' );
@@ -163,6 +163,9 @@ creating_new_user_does_data_cleanup: {
         expected_email    => $username,
         password          => 'password',
     );
+
+    is $user->username, $username, '... username was lower-cased';
+    is $user->email_address(), $username, '... email_address was lower-cased and cleaned up';
 }
 
 ###############################################################################

@@ -58,7 +58,14 @@ sub to_hash {
 # Removes traces of the user from the "user_detail" table.
 sub delete {
     my $self = shift;
-    sql_execute('DELETE FROM user_detail WHERE user_id=?', $self->user_id);
+    my $user_id_obj = Socialtext::UserId->new(
+        driver_key          => $self->driver_key,
+        driver_unique_id    => $self->user_id,
+    );
+    unless ($user_id_obj) {
+        die "can't find UserId for user; did you delete the UserId first?";
+    }
+    sql_execute('DELETE FROM user_detail WHERE user_id=?', $user_id_obj->user_id);
 }
 
 1;

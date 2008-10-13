@@ -57,7 +57,8 @@ INSTALL_BASE = install-html       \
                install-migrations \
                install-l10n \
                install-post-install \
-               install-wsdl
+               install-wsdl \
+	       install-workspaces
 
 INSTALL_FILE_TARGETS = $(INSTALL_BASE)
 

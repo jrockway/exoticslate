@@ -1251,11 +1251,9 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
                 jQuery('#'+widget+'_widget_edit_error_msg')
                     .show()
                     .html('<span>'+error+'</span>');
-                Wikiwyg.Widgets.widget_editing--;
                 jQuery('#lightbox .buttons input').attr('disabled', '');
                 return false;
             }
-            Wikiwyg.Widgets.widget_editing--;
             return false;
         });
 

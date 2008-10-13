@@ -410,14 +410,18 @@ sub shared_accounts {
         Socialtext::Exception->throw( error => 'You cannot delete a user.' )
             unless $p{force};
 
-        # We have three things to delete: Our store, our metadata, and our id.
+        # There are three parts of the user that need to be deleted and
+        # cleaned up: the "details", the "metadata", and then the "user
+        # identifier".
         #
-        # User stores should implement a delete method, even if it is a noop.
-        #
-        Socialtext::UserId->new( user_id => $self->user_id )
-            ->delete();
+        # We purposely clean up the "UserId" *last* in case either of the
+        # other deletions need to use it to do lookups into their own tables.
         $self->homunculus->delete();
         $self->metadata->delete();
+        Socialtext::UserId->new(user_id => $self->user_id)->delete();
+
+        # flush the user cache; we've removed a user
+        Socialtext::User::Cache->Clear();
     }
 }
 
@@ -1710,11 +1714,10 @@ Returns the corresponding attribute for the user.
 
 =head2 $user->delete()
 
-By default, this method simply throws an exception. In almost all
-cases, users should not be deleted, as they are foreign keys for too
-many other tables, and even if a user is no longer active, they are
-still likely to be needed when looking up page authors and other
-information.
+B<DANGER:> In almost all cases, users should B<not> be deleted as there are
+foreign keys for far too many other tables, and even if a user is no longer
+active they are still likely needed when looking up page authors, history, or
+other information.
 
 If you pass C<< force => 1 >> this will force the deletion through.
 

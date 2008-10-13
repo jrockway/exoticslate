@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 107;
+use Test::Socialtext tests => 104;
 use Socialtext::User;
 
 fixtures( 'db' );
@@ -112,8 +112,12 @@ create_new_user: {
 
     # make sure user got added to DB correctly
     is $factory->Count(), $orig_count+1, '... user count incremented';
-    $user->delete(force=>1);
-    is $factory->Count(), $orig_count, '... user count decremented';
+
+    # delete the user, make sure count goes down correctly.
+    my $st_user = Socialtext::User->new( user_id => $user->user_id );
+    isa_ok $st_user, 'Socialtext::User', '... main user object';
+    $st_user->delete(force=>1);
+    is $factory->Count(), $orig_count, '... ... user count decremented when user deleted';
 }
 
 ###############################################################################
@@ -143,8 +147,6 @@ create_new_user_unencrypted_password: {
 
     # make sure user got added to DB correctly
     is $factory->Count(), $orig_count+1, '... user count incremented';
-    $user->delete(force=>1);
-    is $factory->Count(), $orig_count, '... user count decremented';
 }
 
 ###############################################################################
@@ -161,8 +163,6 @@ creating_new_user_does_data_cleanup: {
         expected_email    => $username,
         password          => 'password',
     );
-
-    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -194,9 +194,6 @@ get_user_valid_search_terms: {
     # "password" isn't a valid search term
     $found = $factory->GetUser(password => $opts{password});
     ok !defined $found, '... password: INVALID search term';
-
-    # cleanup
-    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -242,8 +239,6 @@ get_user_via_username: {
     isa_ok $found2, 'Socialtext::User::Default', '... found user via "username" (case IN-sensitively)';
     is $found2->email_address(), $opts{email_address}, '... and its the right user';
     is $found2->user_id, $user->user_id, '... it\'s the same user';
-
-    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -262,8 +257,6 @@ get_user_via_email_address: {
     isa_ok $found, 'Socialtext::User::Default', '... found user via "email_address"';
     is $found->username(), $opts{username}, '... and its the right user';
     is $found->user_id, $user->user_id, '... is the same user';
-
-    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -282,8 +275,6 @@ get_user_via_user_id: {
     isa_ok $found, 'Socialtext::User::Default', '... found user via "user_id"';
     is $found->email_address(), $user->email_address(), '... and its the right user';
     is $found->user_id, $user->user_id, '... and has the right user_id';
-
-    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -329,8 +320,10 @@ update_user_via_factory: {
     is_deeply $found, $homunculus, '... homunculus matches';
     is $found->user_id, $user->user_id, '... same user_id';
 
-    $homunculus->delete(force=>1);
-    is $factory->Count(), $orig_count, "... user got deleted";
+    # put the username back to what it was; so the record gets properly
+    # cleaned up and isn't a dangling user with mismatched username across the
+    # "UserId" and "user_detail" tables.
+    $factory->update( $homunculus, username => $username );
 }
 
 ###############################################################################
@@ -364,9 +357,6 @@ update_user_via_user: {
     isa_ok $found, 'Socialtext::User::Default', '... found updated user';
     is_deeply $found, $homunculus, '... homunculus matches';
     is $found->user_id, $user->user_id, '... same user_id';
-
-    $homunculus->delete(force=>1);
-    is $factory->Count(), $orig_count, "... user got deleted";
 }
 
 ###############################################################################
@@ -395,7 +385,4 @@ updating_user_does_data_cleanup: {
     my $rc = $homunculus->update( email_address => '  FOO@BAR.COM   ' );
     ok $rc, '... user record updated';
     is $homunculus->email_address(), 'foo@bar.com', '... and cleanup was performed';
-
-    $homunculus->delete(force=>1);
-    is $factory->Count(), $orig_count, "... user got deleted";
 }

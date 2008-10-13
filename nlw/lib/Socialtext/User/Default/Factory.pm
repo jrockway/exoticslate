@@ -115,8 +115,7 @@ sub new {
 
 sub Count {
     my ( $self, %p ) = @_;
-
-    my $sth = sql_execute('SELECT COUNT(*) FROM user_detail');
+    my $sth = sql_execute('SELECT COUNT(*) FROM "UserId" WHERE driver_key=?', $self->driver_key);
     return $sth->fetchall_arrayref->[0][0];
 }
 

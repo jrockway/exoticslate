@@ -136,7 +136,7 @@ EOF
         'check html body - 2' );
 
     my $server_root = qr{https?://[-\w\.:]+\w+};
-    like( $parts[1]->body, qr{href="$server_root/\Qadmin/index.cgi?WikiLink"},
+    like( $parts[1]->body, qr{href="$server_root/admin/index.cgi\?[^"]+page_name=WikiLink"},
         'check wiki link in html body' );
     like( $parts[1]->body, qr{href="$server_root/\Qfoobar/index.cgi?InterWikiLink"},
         'check inter-wiki link in html body' );

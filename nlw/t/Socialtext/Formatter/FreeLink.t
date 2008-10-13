@@ -20,8 +20,8 @@ FREELINK_SINGLE_LATIN1:{
     my $html = $hub->viewer->text_to_html("\n[x]\n[$a_acute_u]\n");
     is($html, qq{<div class="wiki">
 <br /><p>
-<a href="index.cgi?x" title="[click to create page]" class="incipient">x</a><br />
-<a href="index.cgi?%C3%A1" title="[click to create page]" class="incipient">$a_acute_u</a></p>
+<a href="index.cgi?action=display;is_incipient=1;page_name=x" title="[click to create page]" class="incipient">x</a><br />
+<a href="index.cgi?action=display;is_incipient=1;page_name=%C3%A1" title="[click to create page]" class="incipient">$a_acute_u</a></p>
 </div>
 }, 'Fix bug {rt 19458} using Latin-1 (this passing may not be Right)');
 }
@@ -34,8 +34,8 @@ FREELINK_SINGLE_UTF8:{
     my $html = $hub->viewer->text_to_html("\n[x]\n[$a_acute_u]\n");
     is($html, qq{<div class="wiki">
 <br /><p>
-<a href="index.cgi?x" title="[click to create page]" class="incipient">x</a><br />
-<a href="index.cgi?%C3%A1" title="[click to create page]" class="incipient">$a_acute_u</a></p>
+<a href="index.cgi?action=display;is_incipient=1;page_name=x" title="[click to create page]" class="incipient">x</a><br />
+<a href="index.cgi?action=display;is_incipient=1;page_name=%C3%A1" title="[click to create page]" class="incipient">$a_acute_u</a></p>
 </div>
 }, 'Fix bug {rt 19458} using utf-8');
 }

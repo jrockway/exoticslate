@@ -43,14 +43,14 @@ __DATA__
 ^^^ Hello [There] Wilbur
 
 --- match
-<h3 id="hello_there_wilbur">Hello <a href="index.cgi\?There" title="\[click to create page\]" class="incipient">There</a> Wilbur</h3>
+<h3 id="hello_there_wilbur">Hello <a href="index.cgi\?[^"]+page_name=There" title="\[click to create page\]" class="incipient">There</a> Wilbur</h3>
 
 === header as link
 --- text
 ^^ [Hello There Wilbur]
 
 --- match
-<h2 id="hello_there_wilbur"><a href="index.cgi\?Hello%20There%20Wilbur" title="\[click to create page\]" class="incipient">Hello There Wilbur</a></h2>
+<h2 id="hello_there_wilbur"><a href="index.cgi\?[^"]+page_name=Hello%20There%20Wilbur" title="\[click to create page\]" class="incipient">Hello There Wilbur</a></h2>
 
 === header with asis phrase
 --- text

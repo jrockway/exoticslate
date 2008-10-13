@@ -49,7 +49,7 @@ CONTENT_WIKITEXT: {
 CONTENT_HTML: {
     my $page = $hub->pages->new_from_name($page_name);
     my $html_content = $page->content_as_type( type => 'text/html' );
-    like( $html_content, qr{href="index.cgi\?your%20time".*>your time</a>},
+    like( $html_content, qr{href="index.cgi\?[^"]+page_name=your%20time".*>your time</a>},
         "html content has expected link" );
 }
 
@@ -59,7 +59,7 @@ CONTENT_LINK_DICTIONARY: {
         type            => 'text/html',
         link_dictionary => 'Lite'
     );
-    like( $html_content, qr{href="your%20time".*>your time</a>},
+    like( $html_content, qr{href="[^"]+page_name=your%20time".*>your time</a>},
         "html content has expected link" );
 }
 

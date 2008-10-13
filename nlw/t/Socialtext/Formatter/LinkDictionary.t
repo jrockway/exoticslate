@@ -72,7 +72,7 @@ my $hub = new_hub('admin');
 
     my $html = $hub->viewer->text_to_html($text);
 
-    like( $html, qr{"index.cgi\?hello%20moto"},
+    like( $html, qr{"index.cgi\?[^"]+page_name=hello%20moto"},
         'free link formats as expected' );
     like( $html, qr{"/admin/index.cgi\?junkie#farter"},
         'interwiki link formats as expected' );
@@ -87,7 +87,7 @@ my $hub = new_hub('admin');
 
     my $html = $viewer->text_to_html($text);
 
-    like( $html, qr{"hello%20moto"},
+    like( $html, qr{page_name=hello%20moto},
         'free link formats as expected' );
     like( $html, qr{"/lite/page/admin/junkie#farter"},
         'interwiki link formats as expected' );

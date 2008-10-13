@@ -438,7 +438,7 @@ sub html {
     my $page_exists
         = $self->_included_page_exists( $workspace_name, $page_uri );
     my $page_uri_for_url
-        = $self->uri_escape( $page_exists ? $page_uri : $page_title );
+        = $page_exists ? $page_uri : $self->uri_escape( $page_title );
 
     my $view_url = $self->hub->viewer->link_dictionary->format_link(
         link       => 'interwiki',

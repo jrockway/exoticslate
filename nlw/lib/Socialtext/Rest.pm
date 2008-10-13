@@ -24,7 +24,7 @@ field 'hub',  -init => '$self->main->hub';
 field 'main', -init => '$self->_new_main';
 field 'page', -init => '$self->hub->pages->new_from_uri($self->pname)';
 field 'workspace';
-field 'params';
+field 'params' => {};
 field 'rest';
 
 sub new {
@@ -81,7 +81,7 @@ sub _initialize {
     my ( $self, $rest, $params ) = @_;
 
     $self->rest($rest);
-    $self->params($params);
+    $self->params($params) if ($params);
     $self->workspace($self->_new_workspace);
 }
 

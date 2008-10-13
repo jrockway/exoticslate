@@ -30,11 +30,6 @@ sub password_is_correct {
     );
 }
 
-sub delete {
-    # no-op; we *WON'T* go to the LDAP store and try to delete the user, but
-    # we do want to let local data caches/stores get deleted.  Thus, no-op it.
-}
-
 1;
 
 =head1 NAME
@@ -107,12 +102,6 @@ the given password is correct, false otherwise.
 
 This check is performed by attempting to re-bind to the LDAP connection as the
 user.
-
-=item B<delete()>
-
-B<DOES NOTHING.>  No-op/stub function; we do B<NOT> go delete the user from
-the LDAP store.  We may, however, want to purge our local data stores of all
-record of this user (thus, a no-op).
 
 =back
 

@@ -24,12 +24,6 @@ sub _factory {
     return Socialtext::User::Default::Factory->new();
 }
 
-sub delete {
-    my $self = shift;
-    my $factory = $self->_factory();
-    return $factory->delete($self);
-}
-
 sub update {
     my ($self, %p) = @_;
     my $factory = $self->_factory();
@@ -108,12 +102,6 @@ happens to exist in our DBMS data store, derived from C<Socialtext::User::Base>.
 =head1 METHODS
 
 =over
-
-=item B<delete()>
-
-Deletes the user from the data store.
-
-This is simply a shortcut method to C<$factory-E<gt>delete($self)>.
 
 =item B<update(%params)>
 

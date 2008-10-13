@@ -208,17 +208,6 @@ sub create {
     return $self->GetUser(username => $p{username});
 }
 
-sub delete {
-    my ( $self, $user ) = @_;
-    my $sth = sql_execute('DELETE FROM user_detail WHERE user_id=?', 
-                          $user->user_id);
-
-    # flush cache; removed a User from the DB
-    Socialtext::User::Cache->Clear();
-
-    return $sth;
-}
-
 # "update" methods: generic update?
 sub update {
     my ( $self, $user, %p ) = @_;
@@ -514,10 +503,6 @@ considered an error.
 =item * last_name
 
 =back
-
-=item B<delete($user)>
-
-Deletes the user record from the store.
 
 =item B<update($user, %params)>
 

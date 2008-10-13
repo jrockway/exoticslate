@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Class::Field qw(field);
 use Readonly;
+use Socialtext::SQL qw(sql_execute);
 
 # all fields/attributes that a "User" has.
 Readonly my @fields => qw(
@@ -52,6 +53,12 @@ sub to_hash {
         $hash->{$name} = "$value";  # to_string on some objects
     }
     return $hash;
+}
+
+# Removes traces of the user from the "user_detail" table.
+sub delete {
+    my $self = shift;
+    sql_execute('DELETE FROM user_detail WHERE user_id=?', $self->user_id);
 }
 
 1;

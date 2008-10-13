@@ -114,7 +114,6 @@ sub workspaces {
     );
 }
 
-sub profile_is_visible_to { 1 }
 sub avatar_is_visible { 1 }
 
 sub Resolve {

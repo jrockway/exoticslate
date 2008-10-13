@@ -5,18 +5,13 @@
 <dl class="form">
   <dt><label>[% loc('Workspace Skin') %]</label></dt>
   <dd>
-    [% loc('Socialtext enables you to customize the look and feel of your workspace. You can use the default skin supplied by Socialtext or customize your own skin.') %]
-  </dd>
-  <dd>
-    [% kit_link = loc('<a href="http://www.socialtext.net/open/index.cgi?css_kit">Skin Customization Kit</a>') %]
-    [% style_guide_link = loc('<a href="/help-en/index.cgi?socialtext_style_customization_guide">Socialtext Style Customization Guide</a>') %]
-    [% loc('To customize your own skin, download the [_1], modify the skin files to your liking, and upload them here. Complete documentation on skin customization is available in the [_2].', kit_link, style_guide_link) %]
+    [% loc('Socialtext can create a skin to customize the look and feel of your workspace. You can use the default skin supplied by Socialtext or a customized skin.') %]
   </dd>
 </dl>
 <dl class="form">
   <dt><label>[% loc('Custom Skin Support') %]</label></dt>
   <dd>    
-    [% loc('Skin support is not included in basic support. Users who upload skins are responsible for keeping copies of their skin files and for keeping their skins current as the Socialtext application changes.') %]
+    [% loc('Uploaded skins are not supported. Skin upload is only for development and testing of custom skins. Contact sales@socialtext.com for information on supported custom skins.') %]
   </dd>
 </dl>
 <dl class="form">

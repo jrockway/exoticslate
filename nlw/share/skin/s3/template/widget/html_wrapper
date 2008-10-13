@@ -5,6 +5,13 @@
         [% IF !gadget.fixed %]
             <a class="close" href="#" onclick="gadgets.container.remove('[% gadget.id %]'); return false"></a>
         <a class="minimize" href="#" onclick="gadgets.container.minimize('[% gadget.id %]'); return false"></a>
+            [% IF gadget.minimized %]
+                <script><!--
+                    jQuery(function(){
+                        gadgets.container.minimize('[% gadget.id %]');
+                    });
+                --></script>
+            [% END %]
         [% END %]
         [% IF gadget.has_prefs %]
             <a class="settings" href="#" id="st-widget-settings[% gadget.id %]" onclick="gadgets.container.toggleSetup('[% gadget.id %]'); return false"></a>

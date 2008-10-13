@@ -48,7 +48,7 @@ Page = {
 
     setPageContent: function(html) {
         $('#st-page-content').html(html);
-
+    
         var iframe = $('iframe#st-page-editing-wysiwyg').get(0);
         if (iframe && iframe.contentWindow) {
             iframe.contentWindow.document.body.innerHTML = html;
@@ -96,14 +96,13 @@ Page = {
                     rev_string = loc('[_1] Revisions', data.revision_count);
                     $('#controls-right-revisions').html(rev_string);
                     $('#bottom-buttons-revisions').html('(' + rev_string + ')');
-
-                    $('#update-attribution .st-username').html(
-                        data.last_editor_html.firstChild
-                    );
-
-                    $('#update-attribution .st-updatedate').html(
-                        data.last_edit_time_html.firstChild
-                    );
+                    $('#update-attribution .st-username').empty().append(
+                            jQuery(".nlw_phrase", jQuery(data.last_editor_html))
+                            );
+   
+                     $('#update-attribution .st-updatedate').empty().append(
+                         jQuery(".nlw_phrase", jQuery(data.last_edit_time_html))
+                     );
 
                     Page.setPageContent(data.html);
 

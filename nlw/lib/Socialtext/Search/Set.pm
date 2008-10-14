@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use Class::Field 'field';
 use Socialtext::MultiCursor;
-use Socialtext::SQL qw( sql_execute sql_selectrow );
+use Socialtext::SQL qw( sql_execute sql_singlevalue );
 
 field 'search_set_id';
 field 'name';
@@ -32,7 +32,7 @@ sub new {
     my ( $class, %p ) = @_;
     my $user_id = $p{user}->user_id;
 
-    my $search_set_id = sql_selectrow(
+    my $search_set_id = sql_singlevalue(
         'SELECT search_set_id FROM search_sets '
         . 'WHERE name = ? AND owner_user_id = ?',
         $p{name}, $user_id );

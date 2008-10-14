@@ -47,7 +47,7 @@ test env properly and are not testing the test-workspace
 * [Test Case: Weblog Archive and Navigation]
 * [Test Case: Connections]
 * [Test Case: Settings: User]
-* [Test Case: User Settings: First/Last locale order]
+* [Test Case: User Settings: First Last locale order]
 * [Test Case: Settings: Admin]
 * [Test Case: Workspace Configuration]
 * [Test Case: Workspace Privacy]

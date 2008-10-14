@@ -1,23 +1,15 @@
 | *Comment* | Starting Test Case: Edit This Page |  |
 
-| setSpeed | 100 |  |
 | st-admin | update-page --workspace %%workspace%% --email %%email%% --page "Edit This Page %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "Edit This Page %%start_time%%" page has been created. |
 
 | *Comment* | Test Case: Edit This Page content |  |
-| open_ok | /%%workspace%%/index.cgi?Edit This Page %%start_time%% |  |
+| open_ok | /%%workspace%%/?Edit This Page %%start_time%% |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | Edit This Page content %%start_time%% |
 | clickAndWait | st-save-button-link |  |
-
- "Edit This Page"<http://...> | editing toolbar and edit textarea with page content appears
-
- switch "Simple/Advanced"<http://...> modes | editing mode and content presentation changes
-
- "Advanced"<http://...> | "Edit Tips"<http://...> appears in toolbar
- "Edit Tips"<http://...> | Advanced edit tips window pops up with content
 
 | *Comment* | Test Case: Edit This Page verify editing buttons |  |
 | click_ok | st-edit-button-link |  |
@@ -61,18 +53,18 @@
 | wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
 | text_like | st-preview-button-link | Preview |
 
- edit the page in Advanced mode; then "Cancel Edit"<http://...> | warning pops up
- click Cancel in popup | return to editing or close edit (browser dependent) | Edits are NOT LOST 
- edit the page in Advanced mode; then "Cancel Edit"<http://...></http> ; click OK in popup | edits lost; return to original page
-
 | *Comment* | Test Case: Edit This Page cancel edit Advanced mode |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
 | click_ok | link=Advanced |  |
 | click_ok | st-cancel-button-link |  |
-| wait_for_text_present_ok | Edit | 30000 |
+| wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | abcdefg |
 | chooseCancelOnNextConfirmation |  |  |
-| click | st-cancel-button-link |  |
+| click_ok | st-cancel-button-link |  |
 
 | *Comment* | Cancel and keep unsaved edits |  |
 | *Comment* | NOTE: in order cancel a Confirmation popup, acknowledge it with "confirmation_is" |  |
@@ -94,6 +86,9 @@
 
 | *Comment* | Test Case: Edit This Page navigate away Advanced mode |  |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Advanced | 30000 |
+| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | hijklmno |
 | chooseCancelOnNextConfirmation |  |  |
 | click_ok | st-home-link |  |
@@ -123,7 +118,7 @@
 | type_ok | wikiwyg_wikitext_textarea | Edit This Page Simple mode |
 | click_ok | link=Simple |  |
 | chooseCancelOnNextConfirmation |  |  |
-| click | st-cancel-button-link |  |
+| click_ok | st-cancel-button-link |  |
 
 | *Comment* | Cancel and keep unsaved edits |  |
 | *Comment* | NOTE: in order click Cancel on a Confirmation popup, acknowledge it with "confirmation_is" |  |
@@ -177,8 +172,10 @@ test Edit Tips
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | link=Simple | 30000 |
 | click_ok | link=Simple |  |
-| wait_for_element_not_visible_ok | link=Edit Tips | 5000 |
+| wait_for_element_not_visible_ok | link=Edit Tips | 30000 |
 | click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | link=Edit Tips | 30000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | Force an edit cancel dialog to come up |
 
 for some reason, the test for edit tips element visible fails in IE even though it is visible

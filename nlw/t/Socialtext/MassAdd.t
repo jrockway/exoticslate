@@ -10,7 +10,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 52;
+    plan tests => 57;
 }
 
 use mocked 'Socialtext::People::Profile';
@@ -19,22 +19,53 @@ use mocked 'Socialtext::User';
 $Socialtext::MassAdd::Has_People_Installed = 1;
 use_ok 'Socialtext::MassAdd';
 
-# Explicitly set this user to undef, so we don't return a default mocked user
-$Socialtext::User::Users{guybrush} = undef;
+Add_from_arrayref: {
+    clear_log();
+    $Socialtext::User::Users{ronnie} = undef;
+    my @successes;
+    my @failures;
+    my %userinfo = (
+        username      => 'ronnie',
+        email_address => 'ronnie@mrshow.com',
+        first_name    => 'Ronnie',
+        last_name     => 'Dobbs',
+        password      => 'brut4liz3',
+        position      => 'Criminal',
+        company       => 'FUZZ',
+        location      => '',
+        work_phone    => '',
+        mobile_phone  => '',
+        home_phone    => ''
+    );
+    my $mass_add = Socialtext::MassAdd->new(
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+    $mass_add->add_user(%userinfo);
+    is_deeply \@successes, ['Added user ronnie'], 'success message ok';
+    logged_like 'info', qr/Added user ronnie/, '... message also logged';
+    is_deeply \@failures, [], 'no failure messages';
+    is delete $Socialtext::User::Confirmation_info{ronnie}, undef,
+        'confirmation is not set';
+    is delete $Socialtext::User::Sent_email{ronnie}, undef,
+        'confirmation email not sent';
+}
 
 my $PIRATE_CSV = <<'EOT';
 guybrush,guybrush@monkeyisland.com,Guybrush,Threepwood,password,Captain,Pirates R. Us,High Seas,123-456-YARR,,123-HIGH-SEA
 EOT
 
 Add_one_user_csv: {
+    # Explicitly set this user to undef, so we don't return a default mocked user
+    $Socialtext::User::Users{guybrush} = undef;
     clear_log();
     my @successes;
     my @failures;
-    Socialtext::MassAdd->users(
-        csv => $PIRATE_CSV,
+    my $mass_add = Socialtext::MassAdd->new(
         pass_cb => sub { push @successes, shift },
         fail_cb => sub { push @failures,  shift },
     );
+    $mass_add->from_csv($PIRATE_CSV);
     is_deeply \@successes, ['Added user guybrush'], 'success message ok';
     logged_like 'info', qr/Added user guybrush/, '... message also logged';
     is_deeply \@failures, [], 'no failure messages';
@@ -43,6 +74,7 @@ Add_one_user_csv: {
     is delete $Socialtext::User::Sent_email{guybrush}, undef,
         'confirmation email not sent';
 }
+
 
 Add_user_already_added: {
     local $Socialtext::User::Users{guybrush} = Socialtext::User->new(
@@ -53,11 +85,11 @@ Add_user_already_added: {
         clear_log();
         my @successes;
         my @failures;
-        Socialtext::MassAdd->users(
-            csv => $PIRATE_CSV,
+        my $mass_add = Socialtext::MassAdd->new(
             pass_cb => sub { push @successes, shift },
             fail_cb => sub { push @failures,  shift },
         );
+        $mass_add->from_csv($PIRATE_CSV);
         is_deeply \@successes, ['Updated user guybrush'], 'success message ok';
         logged_like 'info', qr/Updated user guybrush/, '... message also logged';
         is_deeply \@failures, [], 'no failure messages';
@@ -72,11 +104,11 @@ Add_user_already_added: {
             );
         my @successes;
         my @failures;
-        Socialtext::MassAdd->users(
-            csv => $PIRATE_CSV,
+        my $mass_add = Socialtext::MassAdd->new(
             pass_cb => sub { push @successes, shift },
             fail_cb => sub { push @failures,  shift },
         );
+        $mass_add->from_csv($PIRATE_CSV);
         is_deeply \@successes, ['No changes for user guybrush'],
             'success message ok';
         is_deeply \@failures, [], 'no failure messages';
@@ -95,11 +127,11 @@ Add_user_already_added: {
             );
         my @successes;
         my @failures;
-        Socialtext::MassAdd->users(
-            csv => $PIRATE_CSV,
+        my $mass_add = Socialtext::MassAdd->new(
             pass_cb => sub { push @successes, shift },
             fail_cb => sub { push @failures,  shift },
         );
+        $mass_add->from_csv($PIRATE_CSV);
         is_deeply \@successes, ['Updated user guybrush'], 'success message ok';
         is_deeply \@failures, [], 'no failure messages';
         is $Socialtext::User::Users{guybrush}->password, 'password',
@@ -121,11 +153,11 @@ Add_user_already_added: {
             );
         my @successes;
         my @failures;
-        Socialtext::MassAdd->users(
-            csv => $PIRATE_CSV,
+        my $mass_add = Socialtext::MassAdd->new(
             pass_cb => sub { push @successes, shift },
             fail_cb => sub { push @failures,  shift },
         );
+        $mass_add->from_csv($PIRATE_CSV);
         is_deeply \@successes, ['Updated user guybrush'], 'success message ok';
         is_deeply \@failures, [], 'no failure messages';
         is $Socialtext::User::Users{guybrush}->first_name, 'Guybrush',
@@ -143,11 +175,11 @@ Add_user_already_added: {
             );
         my @successes;
         my @failures;
-        Socialtext::MassAdd->users(
-            csv => $PIRATE_CSV,
+        my $mass_add = Socialtext::MassAdd->new(
             pass_cb => sub { push @successes, shift },
             fail_cb => sub { push @failures,  shift },
         );
+        $mass_add->from_csv($PIRATE_CSV);
         is_deeply \@successes, ['Updated user guybrush'], 'success message ok';
         is_deeply \@failures, [], 'no failure messages';
 
@@ -162,11 +194,11 @@ Add_user_already_added: {
         local $Socialtext::MassAdd::Has_People_Installed = 0;
         my @successes;
         my @failures;
-        Socialtext::MassAdd->users(
-            csv => $PIRATE_CSV,
+        my $mass_add = Socialtext::MassAdd->new(
             pass_cb => sub { push @successes, shift },
             fail_cb => sub { push @failures,  shift },
         );
+        $mass_add->from_csv($PIRATE_CSV);
         is_deeply \@successes, ['No changes for user guybrush'],
             'success message ok';
         is_deeply \@failures, [], 'no failure messages';
@@ -181,11 +213,11 @@ $PIRATE_CSV
 EOT
     my @successes;
     my @failures;
-    Socialtext::MassAdd->users(
-        csv => $quoted_csv,
+    my $mass_add = Socialtext::MassAdd->new(
         pass_cb => sub { push @successes, shift },
         fail_cb => sub { push @failures,  shift },
     );
+    $mass_add->from_csv($quoted_csv);
     is_deeply \@successes, ['Added user lechuck', 'Added user guybrush'], 'success message ok';
     is_deeply \@failures, [], 'no failure messages';
 }
@@ -197,11 +229,11 @@ yamadat,yamadat@example.com,太郎,山田,パスワード太,社長,日本電気
 EOT
     my @successes;
     my @failures;
-    Socialtext::MassAdd->users(
-        csv => $utf8_csv,
+    my $mass_add = Socialtext::MassAdd->new(
         pass_cb => sub { push @successes, shift },
         fail_cb => sub { push @failures,  shift },
     );
+    $mass_add->from_csv($utf8_csv);
     is_deeply \@successes, ['Added user yamadat'], 'success message ok, with utf8';
     is_deeply \@failures, [], 'no failure messages, with utf8';
 }
@@ -214,11 +246,11 @@ EOT
     clear_log();
     my @successes;
     my @failures;
-    Socialtext::MassAdd->users(
-        csv => $bad_csv,
+    my $mass_add = Socialtext::MassAdd->new(
         pass_cb => sub { push @successes, shift },
         fail_cb => sub { push @failures,  shift },
     );
+    $mass_add->from_csv($bad_csv);
     is_deeply \@successes, ['Added user guybrush'], 'success message ok';
     is_deeply \@failures,
         ['Line 2: ghostlechuck.com is not a valid email address'],
@@ -233,11 +265,11 @@ Duplicate_email_address: {
     (my $csv = $PIRATE_CSV) =~ s/guybrush@/duplicate@/;
     my @successes;
     my @failures;
-    Socialtext::MassAdd->users(
-        csv => $csv,
+    my $mass_add = Socialtext::MassAdd->new(
         pass_cb => sub { push @successes, shift },
         fail_cb => sub { push @failures,  shift },
     );
+    $mass_add->from_csv($csv);
     is_deeply \@successes, [], 'user was not added';
     is_deeply \@failures, ['Line 1: The email address you provided (duplicate@monkeyisland.com) is already in use.'], 'correct failure message';
 }
@@ -247,11 +279,11 @@ No_password: {
     (my $csv = $PIRATE_CSV) =~ s/password//;
     my @successes;
     my @failures;
-    Socialtext::MassAdd->users(
-        csv => $csv,
+    my $mass_add = Socialtext::MassAdd->new(
         pass_cb => sub { push @successes, shift },
         fail_cb => sub { push @failures,  shift },
     );
+    $mass_add->from_csv($csv);
     is_deeply \@successes, ['Added user guybrush'], 'success message ok';
     is_deeply \@failures, [], 'no failure messages';
     is delete $Socialtext::User::Confirmation_info{guybrush}, 0,
@@ -266,11 +298,11 @@ Bad_password: {
     clear_log();
     my @successes;
     my @failures;
-    Socialtext::MassAdd->users(
-        csv => $csv,
+    my $mass_add = Socialtext::MassAdd->new(
         pass_cb => sub { push @successes, shift },
         fail_cb => sub { push @failures,  shift },
     );
+    $mass_add->from_csv($csv);
     is_deeply \@successes, [], 'user was not added';
     is_deeply \@failures,
         ['Line 1: Passwords must be at least 6 characters long.'],
@@ -282,11 +314,11 @@ Create_user_with_no_people_installed: {
     local $Socialtext::MassAdd::Has_People_Installed = 0;
     my @successes;
     my @failures;
-    Socialtext::MassAdd->users(
-        csv => $PIRATE_CSV,
+    my $mass_add = Socialtext::MassAdd->new(
         pass_cb => sub { push @successes, shift },
         fail_cb => sub { push @failures,  shift },
     );
+    $mass_add->from_csv($PIRATE_CSV);
     is_deeply \@successes, ['Added user guybrush'], 'success message ok';
     is_deeply \@failures, [], 'no failure messages';
     is delete $Socialtext::User::Confirmation_info{guybrush}, undef,
@@ -301,12 +333,11 @@ Missing_username: {
 EOT
     my @successes;
     my @failures;
-    Socialtext::MassAdd->users(
-        csv => $bad_csv,
+    my $mass_add = Socialtext::MassAdd->new(
         pass_cb => sub { push @successes, shift },
         fail_cb => sub { push @failures,  shift },
     );
-
+    $mass_add->from_csv($bad_csv);
     is_deeply \@successes, ['Added user guybrush'], 'success message ok';
     is_deeply \@failures,
         ['Line 2: username is a required field, but it is not present.'],
@@ -319,12 +350,11 @@ lechuck,,Ghost Pirate,LeChuck,password,Ghost,Ghost Pirates Inc,Netherworld,,,
 EOT
     my @successes;
     my @failures;
-    Socialtext::MassAdd->users(
-        csv => $bad_csv,
+    my $mass_add = Socialtext::MassAdd->new(
         pass_cb => sub { push @successes, shift },
         fail_cb => sub { push @failures,  shift },
     );
-
+    $mass_add->from_csv($bad_csv);
     is_deeply \@successes, ['Added user guybrush'], 'success message ok';
     is_deeply \@failures,
         ['Line 2: email is a required field, but it is not present.'],
@@ -339,12 +369,11 @@ $PIRATE_CSV
 EOT
     my @successes;
     my @failures;
-    Socialtext::MassAdd->users(
-        csv => $bad_csv,
+    my $mass_add = Socialtext::MassAdd->new(
         pass_cb => sub { push @successes, shift },
         fail_cb => sub { push @failures,  shift },
     );
-
+    $mass_add->from_csv($bad_csv);
     is_deeply \@failures,
         ['Line 1: could not be parsed.  Skipping this user.',
          'Line 2: could not be parsed.  Skipping this user.',

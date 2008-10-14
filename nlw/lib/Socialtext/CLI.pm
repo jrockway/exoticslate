@@ -597,9 +597,8 @@ sub mass_add_users {
     my @messages;
     my $has_errors;
     eval {
-        Socialtext::MassAdd->users(
+        my $mass_add = Socialtext::MassAdd->new(
             account => $account,
-            csv     => $csv,
             pass_cb => sub { 
                 print $_[0], "\n";
             },
@@ -608,6 +607,7 @@ sub mass_add_users {
                 $has_errors++;
             },
         );
+        $mass_add->from_csv($csv);
     };
     if ($@) {
         $self->_error($@);

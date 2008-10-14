@@ -96,11 +96,6 @@ sub _parse_pod_for_options {
             die "The POD for $name is missing a type\n";
         }
 
-        # print "$name - $type -";
-        # REVIEW: This doesn't make sense: $opts{$name} gets stomped on
-        # two lines down from here.
-        $opts{$name}{type} = eval $type;
-
         $opts{$name} = { description => $desc };
         if ( defined $default_string ) {
             # print " $default_string -";

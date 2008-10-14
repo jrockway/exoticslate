@@ -48,7 +48,7 @@ EOF
             qr{src="$server_root/data/workspaces/admin/attachments/formatter_test_for_html_page_wafl:[\d-]+\Q/scaled/socialtext-logo-30.gif},
         ],
         [ "[help]" =>
-            qr{href="$server_root\Q/admin/index.cgi?help},
+            qr{href="$server_root/admin/index.cgi\?[^"]+page_name=help},
         ],
         [ "{link public [welcome]}" =>
             qr{href="$server_root\Q/public/index.cgi?welcome},

@@ -89,8 +89,7 @@ sub _make_getter {
                         -Last_Modified => $self->make_http_date(
                             $self->last_modified($resource)
                         )
-                    );
-                    
+                    ) unless defined $rest->header;
                     $self->$sub($resource);
                 }
             );

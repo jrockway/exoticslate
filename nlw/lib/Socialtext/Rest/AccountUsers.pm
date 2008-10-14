@@ -95,7 +95,7 @@ sub get_resource {
        $rest->header(
            -status => HTTP_404_Not_Found,
         );
-        die 'No Such Account';
+        return [];
     };
 
     return [

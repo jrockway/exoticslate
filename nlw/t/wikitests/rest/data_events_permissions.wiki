@@ -58,12 +58,12 @@ _Lawyer updates a page in superprivate wiki._
 
 | Comment | Legal Client should be able to get the update |
 | http-user-pass | %%client%% | password |
-| get | /data/events|
+| get | /data/events| application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 1 |
 | body-like | qr/"actor":{[^}]+"id":"?\Q%%lawyer_id%%\E/ |
-| get | /data/events/activities/%%lawyer%% |
+| get | /data/events/activities/%%lawyer%% | application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 1 |
@@ -71,11 +71,11 @@ _Lawyer updates a page in superprivate wiki._
 
 | Comment | Secretary can't see the event, b/c they aren't in superprivate |
 | http-user-pass | %%secretary%% | password |
-| get | /data/events|
+| get | /data/events| application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 0 |
-| get | /data/events/activities/%%lawyer%% |
+| get | /data/events/activities/%%lawyer%% | application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 0 |
@@ -89,12 +89,12 @@ _Lawyer updates a page in public wiki._
 
 | Comment | Legal Client can see the public event |
 | http-user-pass | %%client%% | password |
-| get | /data/events|
+| get | /data/events| application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 1 |
 | body-like | qr/"actor":{[^}]+"id":"?\Q%%lawyer_id%%\E/ |
-| get | /data/events/activities/%%lawyer%% |
+| get | /data/events/activities/%%lawyer%% | application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 1 |
@@ -102,12 +102,12 @@ _Lawyer updates a page in public wiki._
 
 | Comment | Secretary can see the public event |
 | http-user-pass | %%secretary%% | password |
-| get | /data/events|
+| get | /data/events| application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 1 |
 | body-like | qr/"actor":{[^}]+"id":"?\Q%%lawyer_id%%\E/ |
-| get | /data/events/activities/%%lawyer%% |
+| get | /data/events/activities/%%lawyer%% | application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 1 |
@@ -124,13 +124,13 @@ _Legal Client update's his profile_
 
 | Comment | Lawyer should see the profile update, b/c they share legalclient account |
 | http-user-pass | %%lawyer%% | password |
-| get | /data/events|
+| get | /data/events| application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 1 |
 | body-like | qr/"actor":{[^\}]+"id":"?\Q%%client_id%%\E/ |
 | body-like | qr/"person":{[^\}]+"id":"?\Q%%client_id%%\E/ |
-| get | /data/events/activities/%%client%% |
+| get | /data/events/activities/%%client%% | application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 1 |
@@ -139,11 +139,11 @@ _Legal Client update's his profile_
 
 | Comment | Secretary does not see the profile update, b/c they don't share an account |
 | http-user-pass | %%secretary%% | password |
-| get | /data/events|
+| get | /data/events| application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 0 |
-| get | /data/events/activities/%%client%% |
+| get | /data/events/activities/%%client%% | application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 0 |
@@ -157,14 +157,14 @@ _Lawyer tags the client_
 
 | Comment | client should see the event b/c he shares an acct with lawyer |
 | http-user-pass | %%client%% | password |
-| get | /data/events|
+| get | /data/events| application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 2 |
 | body-like | qr/"actor":{[^\}]+"id":"?\Q%%lawyer_id%%\E/ |
 | body-like | qr/"person":{[^\}]+"id":"?\Q%%client_id%%\E/ |
 | body-like | qr/"tag_name":"good client"/ |
-| get | /data/events/activities/%%client%% |
+| get | /data/events/activities/%%client%% | application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 2 |
@@ -174,11 +174,11 @@ _Lawyer tags the client_
 
 | Comment | Secretary does not see the tagging, b/c they don't share an account with the client |
 | http-user-pass | %%secretary%% | password |
-| get | /data/events|
+| get | /data/events| application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 0 |
-| get | /data/events/activities/%%client%% |
+| get | /data/events/activities/%%client%% | application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 0 |
@@ -195,11 +195,11 @@ _secretary and client can see each other now, b/c they are in the same workspace
 
 | Comment | Secretary now sees the profile update, b/c they share an account |
 | http-user-pass | %%secretary%% | password |
-| get | /data/events|
+| get | /data/events| application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 2 |
-| get | /data/events/activities/%%client%% |
+| get | /data/events/activities/%%client%% | application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 2 |
@@ -209,11 +209,11 @@ _Remove people from the billing account, secretary shouldn't see client events a
 | Comment | Secretary does not see the tagging, b/c they don't share an account with the client where people is enabled |
 | st-admin | disable-plugin --account %%billing%% --plugin people |
 | http-user-pass | %%secretary%% | password |
-| get | /data/events|
+| get | /data/events| application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 0 |
-| get | /data/events/activities/%%client%% |
+| get | /data/events/activities/%%client%% | application/json |
 | code-is | 200 |
 | json-parse | |
 | json-array-size | 0 |

@@ -63,17 +63,17 @@ This test case assumes a logged in user.
 | code-is   | 201                             |
 
 | comment | watch a page, but get rid of the `watch_add` event it generates |
-| get     | /%%ws%%/index.cgi?action=add_to_watchlist;page=x21       |
+| get      | /%%ws%%/index.cgi?action=add_to_watchlist;page=x21       | application/json |
 | code-is | 200                                                             |
 
 | comment         | ensure that we're starting clean |
 | st-clear-events |                                  |
-| get             | /data/events                     |
+| get              | /data/events                     | application/json |
 | code-is         | 200                              |
 | body-like       | []                               |
 
 | comment   | no conversations yet                  |
-| get       | /data/events/conversations/%%user_c%% |
+| get        | /data/events/conversations/%%user_c%% | application/json |
 | code-is   | 200                                   |
 | body-like | []                                    |
 
@@ -182,7 +182,7 @@ When another person makes a contribution *after* your contribution, it should sh
 
 | comment         | get the conversations and check       | .      |
 | http-user-pass  | %%user_c%%                            | qwerty |
-| get             | /data/events/conversations/%%user_c%% |        |
+| get              | /data/events/conversations/%%user_c%% | application/json |        |
 | code-is         | 200                                   |        |
 | json-parse      |                                       |        |
 | json-array-size | 18                                    |        |
@@ -223,28 +223,28 @@ These tests look to see if limit/count and offset work correctly.
 They are also demonstrating that the events are sorted in reverse by time.
 
 | comment         | check limit 1                                 |
-| get             | /data/events/conversations/%%user_c%%?limit=1 |
+| get              | /data/events/conversations/%%user_c%%?limit=1 | application/json |
 | code-is         | 200                                           |
 | json-parse      |                                               |
 | json-array-size | 1                                             |
 | body-like       | "tk":"221"                                    |
 
 | comment         | check limit 1 offset 1                                 |
-| get             | /data/events/conversations/%%user_c%%?limit=1&offset=1 |
+| get              | /data/events/conversations/%%user_c%%?limit=1&offset=1 | application/json |
 | code-is         | 200                                                    |
 | json-parse      |                                                        |
 | json-array-size | 1                                                      |
 | body-like       | "tk":"220"                                             |
 
 | comment         | check count 1 offset 2 (count is alias for limit)      |
-| get             | /data/events/conversations/%%user_c%%?count=1;offset=2 |
+| get              | /data/events/conversations/%%user_c%%?count=1;offset=2 | application/json |
 | code-is         | 200                                                    |
 | json-parse      |                                                        |
 | json-array-size | 1                                                      |
 | body-like       | "tk":"212"                                             |
 
 | comment         | check limit 2 offset 3                                 |
-| get             | /data/events/conversations/%%user_c%%?limit=2&offset=3 |
+| get              | /data/events/conversations/%%user_c%%?limit=2&offset=3 | application/json |
 | json-parse      |                                                        |
 | json-array-size | 2                                                      |
 | code-is         | 200                                                    |
@@ -309,31 +309,31 @@ They are also demonstrating that the events are sorted in reverse by time.
 | http-user-pass | %%user_c%% | qwerty |
 
 | comment         | check that the default limit is 25    |
-| get             | /data/events/conversations/%%user_c%% |
+| get              | /data/events/conversations/%%user_c%% | application/json |
 | code-is         | 200                                   |
 | json-parse      |                                       |
 | json-array-size | 25                                    |
 
 | comment         | nonsense arguments are the default                         |
-| get             | /data/events/conversations/%%user_c%%?limit=-9;offset=carl |
+| get              | /data/events/conversations/%%user_c%%?limit=-9;offset=carl | application/json |
 | code-is         | 200                                                        |
 | json-parse      |                                                            |
 | json-array-size | 25                                                         |
 
 | comment         | check that we can go up to at least 50         |
-| get             | /data/events/conversations/%%user_c%%?limit=50 |
+| get              | /data/events/conversations/%%user_c%%?limit=50 | application/json |
 | code-is         | 200                                            |
 | json-parse      |                                                |
 | json-array-size | 50                                             |
 | body-unlike     | qr/"tk":"[12]/                                 |
 
 | comment         | check that we can "page" the rest                        |
-| get             | /data/events/conversations/%%user_c%%?offset=50;limit=50 |
+| get              | /data/events/conversations/%%user_c%%?offset=50;limit=50 | application/json |
 | code-is         | 200                                                      |
 | json-parse      |                                                          |
 | json-array-size | 18                                                       |
 | body-unlike     | qr/"tk":"4/                                              |
 
 | comment | check that we can't access another user's conversations |
-| get             | /data/events/conversations/%%user_b%% |
+| get              | /data/events/conversations/%%user_b%% | application/json |
 | code-is         | 403                                   |

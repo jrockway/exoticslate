@@ -24,12 +24,12 @@ This test case assumes a logged in user.
 | http-user-pass  | devnull1@socialtext.com | d3vnu11l |
 
 | comment   | check that we're starting clean                 |
-| get       | /data/events                                    |
+| get       | /data/events                                    | application/json |
 | code-is   | 200                                             |
 | body-like | []                                              |
 
 | comment   | no activities yet                               |
-| get       | /data/events/activities/devnull1@socialtext.com |
+| get       | /data/events/activities/devnull1@socialtext.com | application/json |
 | code-is   | 200                                             |
 | body-like | []                                              |
 
@@ -38,7 +38,7 @@ This test case assumes a logged in user.
 | code-is | 201 |  |  |
 
 | comment | check that we get the one event | . | .. |
-| get | /data/events/activities/devnull1@socialtext.com | |
+| get | /data/events/activities/devnull1@socialtext.com | application/json |
 | code-is | 200 | |
 | json-parse | |
 | json-array-size | == | 1 |
@@ -52,24 +52,24 @@ This test case assumes a logged in user.
 
 | Comment   | Make sure profile_is_visible is disabled if the user has been hidden |
 | st-admin  | hide-profile --u devnull1@socialtext.com |
-| get       | /data/events/activities/devnull1@socialtext.com |
+| get       | /data/events/activities/devnull1@socialtext.com | application/json |
 | code-is   | 200                                             |
 | body-like | qr/"actor":[^}]*"profile_is_visible":0/ | |
 | st-admin  | show-profile --u devnull1@socialtext.com |
-| get       | /data/events/activities/devnull1@socialtext.com |
+| get       | /data/events/activities/devnull1@socialtext.com | application/json |
 | code-is   | 200                                             |
 | body-like | qr/"actor":[^}]*"profile_is_visible":"1"/ | |
 
 | comment | post an event by another user | . | .. |
 | post-json | /data/events | {"event_class":"person", "action":"edit_save", "actor":{"id":"3"}, "person":{"id":"1"}, "context":{"testkey":"2"}} |
 | code-is | 201 |  |  |
-| get | /data/events |  |  |
+| get  | /data/events | application/json   |  |
 | code-is | 200 |  |  |
 | json-parse |  |  |  |
 | json-array-size | == | 2 | |
 
 | comment | check that we still get the two events | . | .. |
-| get | /data/events/activities/devnull1@socialtext.com | |
+| get  | /data/events/activities/devnull1@socialtext.com | application/json  |
 | code-is | 200 | |
 | json-parse | |
 | json-array-size | == | 1 |
@@ -190,7 +190,7 @@ This test case assumes a logged in user.
 
 
 | comment         | check filtering of events                       | . | .. |
-| get             | /data/events/activities/devnull1@socialtext.com |   |    |
+| get              | /data/events/activities/devnull1@socialtext.com | application/json    |    |
 | code-is         | 200                                             |   |    |
 | json-parse      |                                                 |   |    |
 | json-array-size | 20                                              |   |    |
@@ -230,7 +230,7 @@ This test case assumes a logged in user.
 | http-user-pass  | devnull3                                           | ldapd3v |
 
 | Comment | Get the LDAP user's ID number | |
-| get | /data/users/devnull3?accept=application/json | |
+| get  | /data/users/devnull3 | application/json  |
 | set-from-content | ldap_user_id | qr/"user_id":"(\d+)"/ |
 
 | Comment | POST some events for the LDAP user | . |
@@ -242,7 +242,7 @@ This test case assumes a logged in user.
 | code-is | 201 |  |  |
 
 | Comment         | Check that the LDAP user got recorded properly  |
-| get             | /data/events/activities/%%ldap_user_id%% |
+| get             | /data/events/activities/%%ldap_user_id%% | application/json |
 | code-is         | 200                                             |
 | json-parse      |                                                 |
 | json-array-size | 3                                               |

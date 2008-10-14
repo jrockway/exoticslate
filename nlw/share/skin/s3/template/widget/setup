@@ -41,7 +41,7 @@
         </tr>
         <tr>
             <td colspan="2" class="widgetUserPrefsButtons">
-                <input type='submit' value='save' class="searchButton st-savebutton"/>
+                <input id="st-savebutton-[% gadget.id %]" type='submit' value='save' class="searchButton st-savebutton"/>
             </td>
         </tr>
     </table>

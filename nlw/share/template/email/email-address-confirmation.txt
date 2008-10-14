@@ -1,12 +1,9 @@
-[% PROCESS system_name %]
-Welcome to [% system_name %].
+Welcome to [% PROCESS system_name %].
 
-[% loc('You signed up for a new account with our system and we need to confirm your email address.') %]
-[% loc('Please follow this link to confirm your address:') %]
+[% loc('Your profile has been added to the people directory.') %]
+[% loc('Please follow this link to confirm your address and update your information:') %]
 
   [% confirmation_uri %]
-
-[% loc('We hope you enjoy using the Socialtext wiki.') %]
 
 [% BLOCK system_name -%]
 [% IF appconfig.is_appliance %]Socialtext Appliance[% ELSE %]Socialtext[% END %]

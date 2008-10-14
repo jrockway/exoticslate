@@ -1304,6 +1304,7 @@ sub send_confirmation_email {
     my %vars = (
         confirmation_uri => $uri,
         appconfig        => Socialtext::AppConfig->instance(),
+        account_name     => $self->primary_account->name
     );
 
     my $text_body = $renderer->render(
@@ -1321,7 +1322,7 @@ sub send_confirmation_email {
     my $email_sender = Socialtext::EmailSender::Factory->create($locale);
     $email_sender->send(
         to        => $self->name_and_email(),
-        subject   => loc('Please confirm your email address to register with Socialtext'),
+        subject   => loc('Welcome to the [_1] community - please confirm your email to join', $self->primary_account->name),
         text_body => $text_body,
         html_body => $html_body,
     );

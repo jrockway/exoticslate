@@ -917,6 +917,14 @@ proto.enableLinkConfirmations = function() {
     wikiwyg.confirmed = false;
 
     window.onbeforeunload = function(ev) {
+        if (Selenium) {
+            /* Selenium cannot handle .onbeforeunload, so simply let the
+             * browser unload the window because there's no way to force
+             * "Cancel" from within Javascript.
+             */
+            return undefined;
+        }
+
         var msg = loc("You have unsaved changes.");
         if (!ev) ev = window.event;
         if ( wikiwyg.confirmed != true && wikiwyg.contentIsModified() ) {

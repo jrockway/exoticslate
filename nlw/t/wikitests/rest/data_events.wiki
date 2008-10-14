@@ -5,7 +5,7 @@ Test case for `/data/events`(GET and POST).
 | *Comment*       | Clear all events                                   | .           |
 | set             | workspace                                          | admin       |
 | st-clear-events |                                                    |             |
-| get             | /data/events                                       |             |
+| get             | /data/events                                       | application/json |
 | code-is         | 200                                                |             |
 | has-header      | Cache-Control                                      | qr/private/ |
 | body-like       | []                                                 |             |
@@ -21,7 +21,7 @@ Test case for `/data/events`(GET and POST).
 | code-is | 201 |
 
 | Comment | GET all events |
-| get | /data/events |
+| get | /data/events | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-like | "id":"quick_start" |
@@ -29,7 +29,7 @@ Test case for `/data/events`(GET and POST).
 | body-like | "id":"announcements_and_links" |
 
 | Comment | GET one event (limit) |
-| get | /data/events?limit=1 |
+| get | /data/events?limit=1 | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-like | "event_class":"page" |
@@ -40,7 +40,7 @@ Test case for `/data/events`(GET and POST).
 | body-unlike | "id":"announcements_and_links" |
 
 | Comment | GET one event (count) |
-| get | /data/events?count=1 |
+| get | /data/events?count=1 | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-like | "event_class":"page" |
@@ -51,7 +51,7 @@ Test case for `/data/events`(GET and POST).
 | body-unlike | "id":"announcements_and_links" |
 
 | Comment | GET one event (offset) |
-| get | /data/events?count=1&offset=1 |
+| get | /data/events?count=1&offset=1 | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-like | "event_class":"page" |
@@ -62,13 +62,13 @@ Test case for `/data/events`(GET and POST).
 | body-like | "id":"announcements_and_links" |
 
 | Comment | Filter by event_class |
-| get | /data/events?event_class=page |
+| get | /data/events?event_class=page | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-like | "id":"quick_start" |
 | body-like | "id":"meeting_agendas" |
 | body-like | "id":"announcements_and_links" |
-| get | /data/events?event_class=monkey |
+| get | /data/events?event_class=monkey | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-unlike | "id":"quick_start" |
@@ -76,23 +76,23 @@ Test case for `/data/events`(GET and POST).
 | body-unlike | "id":"announcements_and_links" |
 
 | Comment     | Filter by follower_id                         |                       |
-| get         | /data/events?event_class=person&followed=1 |                       |
+| get         | /data/events?event_class=person&followed=1 | application/json |
 | code-is     | 200                                           |                       |
 | body-like   | []                                            |                       |
 | post-json   | /data/people/3/watchlist                      | {"person":{"id":"1"}} |
-| get         | /data/events?event_class=person&followed=1 |                       |
+| get         | /data/events?event_class=person&followed=1 | application/json |
 | code-is     | 200                                           |                       |
 | body-like   | "tag_name":"downer"                           |                       |
 | delete      | /data/people/3/watchlist/1                    |                       |
 
 | Comment | Filter by action |
-| get | /data/events?action=tag_add |
+| get | /data/events?action=tag_add | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-like | "id":"quick_start" |
 | body-like | "id":"meeting_agendas" |
 | body-like | "id":"announcements_and_links" |
-| get | /data/events?action=edit_save |
+| get | /data/events?action=edit_save | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-unlike | "id":"quick_start" |
@@ -100,12 +100,12 @@ Test case for `/data/events`(GET and POST).
 | body-unlike | "id":"announcements_and_links" |
 
 | Comment | Filter by actor.id |
-| get | /data/events?actor.id=1 |
+| get | /data/events?actor.id=1 | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-like | "tag_name":"downer" |
 | body-like | "id":"meeting_agendas" |
-| get | /data/events?actor.id=999999 |
+| get | /data/events?actor.id=999999 | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-unlike | "tag_name":"downer" |
@@ -114,11 +114,11 @@ Test case for `/data/events`(GET and POST).
 | body-unlike | "id":"announcements_and_links" |
 
 | Comment | Filter by person.id |
-| get | /data/events?person.id=2 |
+| get | /data/events?person.id=2 | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-like | "tag_name":"downer" |
-| get | /data/events?person.id=999999 |
+| get | /data/events?person.id=999999 | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-unlike | "tag_name":"downer" |
@@ -126,13 +126,13 @@ Test case for `/data/events`(GET and POST).
 | Comment | Filter by workspace_id |
 | get | /data/workspaces/%%workspace%% | application/json |
 | set-from-content | workspace_id | qr/"workspace_id":"(\d+)"/ |
-| get | /data/events?page.workspace_id=%%workspace_id%% |
+| get | /data/events?page.workspace_id=%%workspace_id%% | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-like | "id":"quick_start" |
 | body-like | "id":"meeting_agendas" |
 | body-like | "id":"announcements_and_links" |
-| get | /data/events?page.workspace_id=999999 |
+| get | /data/events?page.workspace_id=999999 | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-unlike | "id":"quick_start" |
@@ -140,13 +140,13 @@ Test case for `/data/events`(GET and POST).
 | body-unlike | "id":"announcements_and_links" |
 
 | Comment | Filter by workspace_name |
-| get | /data/events?page.workspace_name=%%workspace%% |
+| get | /data/events?page.workspace_name=%%workspace%% | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-like | "id":"quick_start" |
 | body-like | "id":"meeting_agendas" |
 | body-like | "id":"announcements_and_links" |
-| get | /data/events?page.workspace_name=bad-workspace-name |
+| get | /data/events?page.workspace_name=bad-workspace-name | application/json |
 | code-is | 404 |
 | body-like | not found |
 | body-unlike | "id":"quick_start" |
@@ -157,11 +157,11 @@ Test case for `/data/events`(GET and POST).
 | st-clear-events | |
 | post-json | /data/events | {"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
 | code-is | 201 |
-| get | /data/people/%%username%% |
+| get | /data/people/%%username%% | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | set-from-content | actor_id | qr/"id":"(\d+)"/ |
-| get | /data/events?limit=1 |
+| get | /data/events?limit=1 | application/json |
 | code-is | 200 |
 | has-header | Cache-Control | qr/private/ |
 | body-like | qr/"actor":{[^}]*"id":"%%actor_id%%"/ |
@@ -185,7 +185,7 @@ Test case for `/data/events`(GET and POST).
 
 | Comment | GET/POST event by un-auth user |
 | http-user-pass | | |
-| get | /data/events |
+| get | /data/events | application/json |
 | code-is | 401 |
 | post-json | /data/events | {"actor":{"id":1},"event_class":"person","action":"tag_add","person":{"id":2},"tag_name":"downer"} |
 | code-is | 401 |
@@ -199,7 +199,7 @@ Test case for `/data/events`(GET and POST).
 | Comment | post an event as the ldap user | . |
 | post-json | /data/events | {"tag_name":"ldaptaggy","page":{"workspace_name":"%%workspace%%","id":"quick_start"},"event_class":"page","action":"tag_add"} |
 | code-is | 201 |
-| get | /data/events |
+| get | /data/events | application/json |
 | json-parse |  |
 | body-like | "id":"quick_start" |
 | body-like | "tag_name":"ldaptaggy" |
@@ -207,7 +207,7 @@ Test case for `/data/events`(GET and POST).
 
 | *Comment* | ensure /data/events?event_class=person respects plugin enabledness  | . |
 | st-admin  | disable-plugin --plugin people --account Socialtext                 |   |
-| get       | /data/events?event_class=person                                     |   |
+| get       | /data/events?event_class=person                                     | application/json |
 | code-is   | 403                                                                 |   |
 | st-admin  | enable-plugin --plugin people --account Socialtext                  |   |
 

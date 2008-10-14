@@ -938,6 +938,11 @@ proto.enableLinkConfirmations = function() {
     window.onunload = function(ev) {
         Attachments.delete_new_attachments();
     }
+
+    /* Handle the Home link explicitly instead of relying on
+     * window.onbeforeunload, so Selenium can test it.
+     */
+    jQuery('#st-home-link').click(this.confirmLinkFromEdit);
  
     return false;
 }

@@ -5,14 +5,12 @@
 CREATE OR REPLACE VIEW xpage AS 
     SELECT "Workspace".name AS workspace_name, 
            page.*,
-           creator.username AS creator_username,
-           editor.username AS editor_username 
+           creator.driver_username AS creator_username,
+           editor.driver_username AS editor_username 
         FROM page 
             JOIN "Workspace" ON (page.workspace_id = "Workspace".workspace_id) 
-            JOIN "UserId" editorid  ON (page.last_editor_id = editorid.user_id) 
-            JOIN "UserId" creatorid  ON (page.creator_id = creatorid.user_id) 
-            LEFT JOIN user_detail editor  ON (editorid.driver_unique_id = editor.user_id) 
-            LEFT JOIN user_detail creator ON (creatorid.driver_unique_id = creator.user_id);
+            JOIN users editor  ON (page.last_editor_id = editor.user_id)
+            JOIN users creator ON (page.creator_id = creator.user_id);
 
 CREATE OR REPLACE VIEW xpage_tag AS 
     SELECT "Workspace".name AS workspace_name, page_tag.*
@@ -25,14 +23,13 @@ CREATE OR REPLACE VIEW xworkspace AS
             JOIN "Account" ON ("Workspace".account_id = "Account".account_id);
 
 CREATE OR REPLACE VIEW xuwr AS 
-    SELECT user_detail.username, 
+    SELECT users.driver_username, 
            "Workspace".name AS workspace_name,
            "Role".name AS role_name
         FROM "UserWorkspaceRole" uwr
             JOIN "Workspace" ON (uwr.workspace_id = "Workspace".workspace_id)
             JOIN "Role" ON (uwr.role_id = "Role".role_id)
-            JOIN "UserId" ON (uwr.user_id = "UserId".user_id)
-            LEFT JOIN user_detail ON ("UserId".driver_unique_id = user_detail.user_id);
+            JOIN users USING (user_id);
 
 CREATE OR REPLACE VIEW xevent AS
     SELECT e.at AS at, 
@@ -45,10 +42,8 @@ CREATE OR REPLACE VIEW xevent AS
            e.tag_name AS tag_name, 
            e.context AS context
     FROM event e 
-         LEFT JOIN "UserId" actorid ON (e.actor_id = actorid.user_id)
-         LEFT JOIN user_detail actor ON (actorid.driver_unique_id = actor.user_id) 
-         LEFT JOIN "UserId" personid ON (e.person_id = personid.user_id)
-         LEFT JOIN user_detail person ON (personid.driver_unique_id = person.user_id) 
+         LEFT JOIN users actor ON (e.actor_id = actor.user_id) 
+         LEFT JOIN users person ON (e.person_id = person.user_id) 
          LEFT JOIN page p 
             ON (e.page_workspace_id = p.workspace_id AND e.page_id = p.page_id) 
          LEFT JOIN "Workspace" w 

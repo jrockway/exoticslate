@@ -21,9 +21,8 @@ use Email::Valid;
 use Socialtext::User::Cache;
 use Socialtext::Data;
 use Socialtext::String;
-use Socialtext::SQL qw(sql_execute);
+use Socialtext::SQL qw(sql_execute sql_singlevalue);
 use Socialtext::User;
-use Socialtext::UserId;
 use Socialtext::UserMetadata;
 use Socialtext::User::Default;
 use Socialtext::MultiCursor;
@@ -43,15 +42,16 @@ sub _create_default_user {
     my $self = shift;
     my ($username, $email, $first_name, $created_by) = @_;
 
-    my $id = Socialtext::UserId->NewUserId();
+    my $id = Socialtext::User::Base->NewUserId();
     my $system_user = $self->create(
-        user_id       => $id,
-        username      => $username,
-        email_address => $email,
-        first_name    => $first_name,
-        last_name     => 'User',
-        password      => '*no-password*',
-        no_crypt      => 1,
+        driver_unique_id => $id,
+        user_id          => $id,
+        username         => $username,
+        email_address    => $email,
+        first_name       => $first_name,
+        last_name        => 'User',
+        password         => '*no-password*',
+        no_crypt         => 1,
     );
     Socialtext::UserMetadata->create(
         user_id            => $id,
@@ -114,33 +114,37 @@ sub new {
 }
 
 sub Count {
-    my ( $self, %p ) = @_;
-    my $sth = sql_execute('SELECT COUNT(*) FROM "UserId" WHERE driver_key=?', $self->driver_key);
-    return $sth->fetchall_arrayref->[0][0];
+    my $self = shift;
+    return sql_singlevalue(
+        'SELECT COUNT(*) FROM users WHERE driver_key=?',
+        $self->driver_key
+    );
 }
 
 sub GetUser {
     my ( $self, %p ) = @_;
 
-    # 'user_id' should *only* ever be numeric; if its anything else, fail
-    # quietly.
-    #
-    # Need this check as other User Factories may have non-numeric user
-    # ids, and a lookup by "user_id" may get passed through to this
-    # factory with a non-numeric value.
-    if ( exists $p{user_id} && ( $p{user_id} =~ /\D/ ) ) {
-        return undef;
-    }
-
     # look up the user in the DB.
+    #
+    # Make sure, though, that "user_id" and "driver_unique_id" are *only* ever
+    # numeric; if they are anything else then fail quietly.  We need this
+    # check as other User Factories may have non-numeric user ids and a lookup
+    # by "user_id" may get passed through to this factory with a non-numeric
+    # value.
     my ( $key, $where );
     if ( exists $p{user_id} ) {
         $key   = $p{user_id};
+        return undef if $key =~ /\D/;
         $where = 'user_id';
+    }
+    elsif ( exists $p{driver_unique_id} ) {
+        $key   = $p{driver_unique_id};
+        return undef if $key =~ /\D/;
+        $where = 'user_id'; # user_id is the same for Default users
     }
     elsif ( exists $p{username} ) {
         $key   = _clean_username_or_email( lc $p{username} );
-        $where = 'LOWER(username)';
+        $where = 'LOWER(driver_username)';
     }
     else {
         $key   = _clean_username_or_email( lc $p{email_address} );
@@ -154,18 +158,23 @@ sub GetUser {
 sub _new_from_where {
     my ( $self, $where_clause, @bindings ) = @_;
 
-    my $sth = sql_execute(
-        'SELECT user_id, username, email_address,'
-        . ' first_name, last_name, password'
-        . ' FROM user_detail'
-        . " WHERE $where_clause=?",
-        @bindings
+    my $sth = sql_execute(qq{
+            SELECT user_id, driver_key, driver_username AS username, 
+                   driver_unique_id, email_address, first_name, last_name,
+                   password, cached_at
+            FROM users
+            WHERE driver_key = ? AND ($where_clause = ?)
+        },
+        $self->driver_key, @bindings
     );
 
+#     # check for duplicate users
+#     return undef if $sth->rows == 0;
+#     die "duplicate user $where_clause = @bindings"
+#         unless $sth->rows == 1;
     my $row = $sth->fetchrow_hashref();
     return undef unless $row;
 
-    $row->{driver_key} = $self->driver_key;
     return Socialtext::User::Default->new_from_hash($row);
 }
 
@@ -178,28 +187,25 @@ sub create {
     $p{last_name}        ||= '';
     $p{driver_key}       ||= $self->driver_key;
     $p{driver_unique_id} ||= $p{user_id};
-
-    # create a UserId object first, so we know we've got one for this new user
-    my $user_id_obj = Socialtext::UserId->create(
-        user_id          => $p{user_id},
-        driver_key       => $p{driver_key},
-        driver_unique_id => $p{driver_unique_id},
-        driver_username  => $p{username},
-    );
+    $p{driver_username}  ||= $p{username};
 
     # then go add the user to the user_detail table
     sql_execute( q{
-            INSERT INTO user_detail
-            (user_id, username, email_address, first_name, last_name, password)
-            VALUES (?,?,?,?,?,?)
-        }, $p{user_id}, $p{username},  $p{email_address},
-        $p{first_name}, $p{last_name}, $p{password}
+            INSERT INTO users
+            (user_id, driver_username, driver_key, driver_unique_id,
+             email_address, first_name, last_name, password)
+            VALUES 
+            (?,?,?,?,
+             ?,?,?,?)
+        }, 
+        $p{user_id}, $p{driver_username}, $p{driver_key}, $p{driver_unique_id},
+        $p{email_address}, $p{first_name}, $p{last_name}, $p{password}
     );
 
     # flush cache; added a User to the DB
     Socialtext::User::Cache->Clear();
 
-    return $self->GetUser(username => $p{username});
+    return $self->GetUser(username => $p{driver_username});
 }
 
 # "update" methods: generic update?
@@ -210,6 +216,7 @@ sub update {
 
     my ( @updates, @bindings );
     while (my ($column, $value) = each %p) {
+        $column = 'driver_username' if $column eq 'username';
         push @updates, "$column=?";
         push @bindings, $value;
     }
@@ -217,7 +224,7 @@ sub update {
     my $set_clause = join ', ', @updates;
 
     sql_execute(
-        'UPDATE user_detail'
+        'UPDATE users '
         . " SET $set_clause WHERE user_id=?",
         @bindings, $user->user_id);
 
@@ -244,15 +251,20 @@ sub Search {
     # build/execute the search
     my $splat_term = lc "\%$search_term\%";
 
-    my $sth = sql_execute(
-        'SELECT first_name, last_name, email_address'
-        . ' FROM user_detail WHERE'
-        . ' ( LOWER( username ) LIKE ? OR'
-        . ' LOWER( email_address ) LIKE ? OR'
-        . ' LOWER( first_name ) LIKE ? OR'
-        . ' LOWER( last_name ) LIKE ? ) AND'
-        . ' ( username NOT IN (?, ?) )',
+    my $sth = sql_execute(q{
+            SELECT first_name, last_name, email_address
+              FROM users 
+             WHERE ( 
+                     LOWER( driver_username ) LIKE ? OR
+                     LOWER( email_address ) LIKE ? OR
+                     LOWER( first_name ) LIKE ? OR
+                     LOWER( last_name ) LIKE ? 
+                   ) 
+                   AND ( driver_key = ? )
+                   AND ( driver_username NOT IN (?, ?) )
+        },
         $splat_term, $splat_term, $splat_term, $splat_term,
+        $self->driver_key,
         $SystemUsername, $GuestUsername
     );
 
@@ -281,8 +293,7 @@ sub _validate_and_clean_data {
     my $is_create = defined $user ? 0 : 1;
 
     if ($is_create) {
-        die "must have pre-specified a user_id to use"
-            unless ($p->{user_id} && $p->{user_id} =~ /^\d+$/);
+        $p->{user_id} ||= Socialtext::User::Base->NewUserId();
     }
     else {
         $metadata = Socialtext::UserMetadata->new(

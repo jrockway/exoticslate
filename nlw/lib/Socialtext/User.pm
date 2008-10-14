@@ -9,11 +9,11 @@ use Socialtext::Exceptions qw( data_validation_error param_error );
 use Socialtext::Validate qw( validate SCALAR_TYPE BOOLEAN_TYPE ARRAYREF_TYPE WORKSPACE_TYPE USER_TYPE);
 use Socialtext::AppConfig;
 use Socialtext::MultiCursor;
-use Socialtext::SQL 'sql_execute';
+use Socialtext::SQL qw(sql_execute sql_selectrow);
 use Socialtext::TT2::Renderer;
 use Socialtext::URI;
 use Socialtext::UserMetadata;
-use Socialtext::UserId;
+use Socialtext::User::Base;
 use Socialtext::User::Deleted;
 use Socialtext::User::EmailConfirmation;
 use Socialtext::User::Default::Factory qw($SystemUsername $GuestUsername);
@@ -30,7 +30,6 @@ use Readonly;
 
 field 'homunculus';
 field 'metadata';
-field 'user_id', -init => '$self->_user_id()';
 
 my @user_store_interface =
     qw( username email_address password first_name last_name );
@@ -95,10 +94,13 @@ sub new_homunculus {
     # ids, we must short-circuit and immediately go to the driver
     # associated with that system id
     if ($key eq 'user_id') {
-        my $system_id = Socialtext::UserId->new(user_id => $val);
-        return undef unless $system_id;
-        my $driver_key = $system_id->driver_key;
-        my $driver_username = $system_id->driver_username;
+        my ($driver_key, $driver_username, $driver_unique_id) = 
+            sql_selectrow(
+                q{SELECT driver_key, driver_username, driver_unique_id
+                  FROM users WHERE user_id=?},
+                $val
+            );
+        return undef unless $driver_key;
         my $driver = $class->_realize($driver_key, 'GetUser');
         if ($driver) {
             # if driver doesn't exist any more, we don't have an instance of
@@ -106,9 +108,10 @@ sub new_homunculus {
             $homunculus = $driver->GetUser( username => $driver_username );
         }
         $homunculus ||= Socialtext::User::Deleted->new(
-            user_id    => $system_id->driver_unique_id,
-            username   => $driver_username,
-            driver_key => $driver_key,
+            user_id          => $val,
+            driver_unique_id => $driver_unique_id,
+            username         => $driver_username,
+            driver_key       => $driver_key,
         );
     }
     # searches by "driver_unique_id" get handled as searches for "user_id", but
@@ -139,16 +142,11 @@ sub new {
     my $user = bless {}, $class;
 
     Socialtext::Timer->Continue('user_new');
-
     my $homunculus = $class->new_homunculus(@_);
     Socialtext::Timer->Pause('user_new');
     return undef unless $homunculus;
 
     Socialtext::Timer->Continue('user_new');
-
-    # ensure this user is present in our UserId table
-    my $userid_obj = Socialtext::UserId->create_if_necessary($homunculus);
-    $user->user_id($userid_obj->user_id);
 
     $user->homunculus($homunculus);
     $user->metadata(Socialtext::UserMetadata->create_if_necessary($user));
@@ -171,12 +169,10 @@ sub create {
 
     # username email_address password first_name last_name
     my %p = @_;
-    my $id = Socialtext::UserId->NewUserId();
+    my $id = Socialtext::User::Base->NewUserId();
     $p{user_id} = $id;
 
     my $homunculus = $class->_first( 'create', %p );
-
-    my $user_id = Socialtext::UserId->create_if_necessary($homunculus);
 
     if (!exists $p{created_by_user_id}) {
         if ($homunculus->username ne $SystemUsername) {
@@ -248,12 +244,8 @@ sub recently_viewed_workspaces {
     return @viewed;
 }
 
-sub _user_id {
-    my $self = shift;
-    return Socialtext::UserId->new(
-        driver_key       => $self->homunculus->driver_key,
-        driver_unique_id => $self->homunculus->user_id
-    )->user_id();
+sub user_id {
+    $_[0]->homunculus->user_id( @_[ 1 .. $#_ ] );
 }
 
 sub username {
@@ -410,15 +402,11 @@ sub shared_accounts {
         Socialtext::Exception->throw( error => 'You cannot delete a user.' )
             unless $p{force};
 
-        # There are three parts of the user that need to be deleted and
-        # cleaned up: the "details", the "metadata", and then the "user
-        # identifier".
-        #
-        # We purposely clean up the "UserId" *last* in case either of the
-        # other deletions need to use it to do lookups into their own tables.
-        $self->homunculus->delete();
+        # There are two parts of the user that need to be deleted and cleaned
+        # up: the "details" and the "metadata".  Order is important, to ensure
+        # that referential integrity is preserved.
         $self->metadata->delete();
-        Socialtext::UserId->new(user_id => $self->user_id)->delete();
+        $self->homunculus->delete();
 
         # flush the user cache; we've removed a user
         Socialtext::User::Cache->Clear();
@@ -950,9 +938,9 @@ SELECT user_id
 EOSQL
             creator => <<EOSQL,
 SELECT my.user_id
-    FROM "UserId" my 
+    FROM users my 
     JOIN "UserMetadata" my_meta ON (my.user_id = my_meta.user_id)
-    LEFT JOIN "UserId" creator 
+    LEFT JOIN users creator 
         ON (my_meta.created_by_user_id = creator.user_id)
     ORDER BY creator.driver_username $p{sort_order}, 
              my.driver_username $p{sort_order}
@@ -960,23 +948,23 @@ SELECT my.user_id
 EOSQL
             username => <<EOSQL,
 SELECT user_id
-    FROM "UserId"
+    FROM users
     ORDER BY driver_username $p{sort_order}
     LIMIT ? OFFSET ?
 EOSQL
             workspace_count => <<EOSQL,
-SELECT "UserId".user_id,
+SELECT users.user_id,
         COUNT(DISTINCT("UserWorkspaceRole".workspace_id)) AS workspace_count
-    FROM "UserId" LEFT OUTER JOIN "UserWorkspaceRole"
-        ON "UserId".user_id = "UserWorkspaceRole".user_id
-    GROUP BY "UserId".user_id, "UserId".driver_username
+    FROM users LEFT OUTER JOIN "UserWorkspaceRole"
+        ON users.user_id = "UserWorkspaceRole".user_id
+    GROUP BY users.user_id, users.driver_username
     ORDER BY workspace_count $p{sort_order},
-             "UserId".driver_username ASC
+             users.driver_username ASC
     LIMIT ? OFFSET ?
 EOSQL
             user_id => <<EOSQL,
 SELECT user_id
-    FROM "UserId"
+    FROM users
     ORDER BY user_id $p{sort_order}
     LIMIT ? OFFSET ?
 EOSQL
@@ -1041,7 +1029,7 @@ SELECT DISTINCT ua.user_id AS user_id,
                 u2.driver_username AS creator
     FROM user_account ua
          LEFT JOIN "UserMetadata" um2 ON (ua.creator_id = um2.user_id)
-         LEFT JOIN "UserId" u2 ON (um2.user_id = u2.user_id)
+         LEFT JOIN users u2 ON (um2.user_id = u2.user_id)
     WHERE $creator_account_where
     ORDER BY u2.driver_username $p{sort_order}, ua.driver_username ASC
     LIMIT ? OFFSET ?
@@ -1082,83 +1070,79 @@ EOSQL
 
         Readonly my %SQL => (
             username => <<EOSQL,
-SELECT DISTINCT "UserId".user_id AS user_id,
+SELECT DISTINCT users.user_id AS user_id,
                 "Role".role_id AS role_id,
-                "UserId".driver_key AS driver_key,
-                "UserId".driver_unique_id AS driver_unique_id,
-                "UserId".driver_username AS driver_username,
+                users.driver_key AS driver_key,
+                users.driver_unique_id AS driver_unique_id,
+                users.driver_username AS driver_username,
                 "Role".name AS name,
                 "Role".used_as_default AS used_as_default,
-                "UserId".driver_username AS driver_username
-    FROM "UserId" AS "UserId",
+                users.driver_username AS driver_username
+    FROM users AS users,
          "UserWorkspaceRole" AS "UserWorkspaceRole",
          "Role" AS "Role"
-    WHERE ("UserId".user_id = "UserWorkspaceRole".user_id
+    WHERE (users.user_id = "UserWorkspaceRole".user_id
             AND "UserWorkspaceRole".role_id = "Role".role_id)
         AND ("UserWorkspaceRole".workspace_id = ? )
-    ORDER BY "UserId".driver_username $p{sort_order}
+    ORDER BY users.driver_username $p{sort_order}
     LIMIT ? OFFSET ?
 EOSQL
             creation_datetime => <<EOSQL,
-SELECT DISTINCT "UserId".user_id AS user_id,
+SELECT DISTINCT users.user_id AS user_id,
                 "Role".role_id AS role_id,
-                "UserId".driver_key AS driver_key,
-                "UserId".driver_unique_id AS driver_unique_id,
-                "UserId".driver_username AS driver_username,
+                users.driver_key AS driver_key,
+                users.driver_unique_id AS driver_unique_id,
+                users.driver_username AS driver_username,
                 "Role".name AS name,
                 "Role".used_as_default AS used_as_default,
                 "UserMetadata".creation_datetime AS creation_datetime,
-                "UserId".driver_username AS driver_username
-    FROM "UserId" AS "UserId",
+                users.driver_username AS driver_username
+    FROM users AS users,
          "UserWorkspaceRole" AS "UserWorkspaceRole",
          "Role" AS "Role",
          "UserMetadata" AS "UserMetadata"
-    WHERE ("UserId".user_id = "UserWorkspaceRole".user_id
+    WHERE (users.user_id = "UserWorkspaceRole".user_id
             AND "UserWorkspaceRole".role_id = "Role".role_id
-            AND "UserId".user_id = "UserMetadata".user_id)
+            AND users.user_id = "UserMetadata".user_id)
         AND ("UserWorkspaceRole".workspace_id = ? )
     ORDER BY "UserMetadata".creation_datetime $p{sort_order},
-        "UserId".driver_username ASC
+        users.driver_username ASC
     LIMIT ? OFFSET ?
 EOSQL
             creator => <<EOSQL,
-SELECT DISTINCT ("UserId".user_id) AS aaaaa10000,
+SELECT DISTINCT (u.user_id) AS user_id,
                 "Role".role_id AS role_id,
-                "UserId".driver_username AS driver_username,
-                "UserId000000003".driver_username AS driver_username
-    FROM "UserMetadata" AS "UserMetadata"
-        LEFT OUTER JOIN "UserId" AS "UserId000000003"
-            ON "UserMetadata".created_by_user_id
-                    = "UserId000000003".user_id,
-                "UserId" AS "UserId",
-                "UserWorkspaceRole" AS "UserWorkspaceRole",
-                "Role" AS "Role"
-    WHERE ("UserId".user_id = "UserWorkspaceRole".user_id
-            AND "UserWorkspaceRole".role_id = "Role".role_id
-            AND "UserId".user_id = "UserMetadata".user_id )
-        AND  ("UserWorkspaceRole".workspace_id = ? )
-    ORDER BY "UserId000000003".driver_username $p{sort_order},
-       "UserId".driver_username ASC
+                u.driver_username AS driver_username,
+                creator.driver_username AS driver_username
+    FROM users u
+    JOIN "UserMetadata" ON (u.user_id = "UserMetadata".user_id)
+    LEFT JOIN users creator 
+        ON ("UserMetadata".created_by_user_id = creator.user_id)
+    JOIN "UserWorkspaceRole" uwr ON (u.user_id = uwr.user_id)
+    JOIN "Role" ON (uwr.role_id = "Role".role_id)
+    WHERE uwr.workspace_id = ?
+    ORDER BY creator.driver_username $p{sort_order},
+       u.driver_username ASC
     LIMIT ? OFFSET ?
 EOSQL
             role_name => <<EOSQL,
-SELECT DISTINCT "UserId".user_id AS user_id,
+SELECT DISTINCT users.user_id AS user_id,
                 "Role".role_id AS role_id,
-                "UserId".driver_key AS driver_key,
-                "UserId".driver_unique_id AS driver_unique_id,
-                "UserId".driver_username AS driver_username,
+                users.driver_key AS driver_key,
+                users.driver_unique_id AS driver_unique_id,
+                users.driver_username AS driver_username,
                 "Role".name AS name,
                 "Role".used_as_default AS used_as_default,
                 "Role".name AS name,
-                "UserId".driver_username AS driver_username
-    FROM "UserId" AS "UserId",
+                users.driver_username AS driver_username
+    FROM users AS users,
         "UserWorkspaceRole" AS "UserWorkspaceRole",
         "Role" AS "Role"
-    WHERE ("UserId".user_id = "UserWorkspaceRole".user_id
+    WHERE (users.user_id = "UserWorkspaceRole".user_id
             AND "UserWorkspaceRole".role_id = "Role".role_id )
         AND  ("UserWorkspaceRole".workspace_id = ? )
     ORDER BY "Role".name $p{sort_order},
-        "UserId".driver_username ASC
+        users.driver_username ASC
     LIMIT ? OFFSET ?
 EOSQL
         );
@@ -1198,54 +1182,54 @@ EOSQL
 
         Readonly my %SQL => (
             username => <<EOSQL,
-SELECT DISTINCT "UserId".user_id AS user_id,
-                "UserId".driver_key AS driver_key,
-                "UserId".driver_unique_id AS driver_unique_id,
-                "UserId".driver_username AS driver_username,
-                "UserId".driver_username AS driver_username
-    FROM "UserId" AS "UserId"
-    WHERE "UserId".driver_username LIKE ?
-    ORDER BY "UserId".driver_username $p{sort_order}
+SELECT DISTINCT users.user_id AS user_id,
+                users.driver_key AS driver_key,
+                users.driver_unique_id AS driver_unique_id,
+                users.driver_username AS driver_username,
+                users.driver_username AS driver_username
+    FROM users AS users
+    WHERE users.driver_username LIKE ?
+    ORDER BY users.driver_username $p{sort_order}
     LIMIT ? OFFSET ?
 EOSQL
             workspace_count => <<EOSQL,
-SELECT "UserId".user_id AS user_id,
+SELECT users.user_id AS user_id,
         COUNT(DISTINCT("UserWorkspaceRole".workspace_id)) AS aaaaa10000
-    FROM "UserId" AS "UserId"
+    FROM users AS users
         LEFT OUTER JOIN "UserWorkspaceRole" AS "UserWorkspaceRole"
-            ON "UserId".user_id = "UserWorkspaceRole".user_id
-    WHERE "UserId".driver_username LIKE ?
-    GROUP BY "UserId".user_id, "UserId".driver_username
-    ORDER BY aaaaa10000 ASC, "UserId".driver_username $p{sort_order}
+            ON users.user_id = "UserWorkspaceRole".user_id
+    WHERE users.driver_username LIKE ?
+    GROUP BY users.user_id, users.driver_username
+    ORDER BY aaaaa10000 ASC, users.driver_username $p{sort_order}
     LIMIT ? OFFSET ?
 EOSQL
             creation_datetime => <<EOSQL,
-SELECT DISTINCT "UserId".user_id AS user_id,
-                "UserId".driver_key AS driver_key,
-                "UserId".driver_unique_id AS driver_unique_id,
-                "UserId".driver_username AS driver_username,
+SELECT DISTINCT users.user_id AS user_id,
+                users.driver_key AS driver_key,
+                users.driver_unique_id AS driver_unique_id,
+                users.driver_username AS driver_username,
                 "UserMetadata".creation_datetime AS creation_datetime,
-                "UserId".driver_username AS driver_username
-    FROM "UserId" AS "UserId", "UserMetadata" AS "UserMetadata"
-    WHERE ("UserId".user_id = "UserMetadata".user_id )
-        AND  ("UserId".driver_username LIKE ? )
+                users.driver_username AS driver_username
+    FROM users AS users, "UserMetadata" AS "UserMetadata"
+    WHERE (users.user_id = "UserMetadata".user_id )
+        AND  (users.driver_username LIKE ? )
     ORDER BY "UserMetadata".creation_datetime $p{sort_order},
-        "UserId".driver_username ASC
+        users.driver_username ASC
     LIMIT ? OFFSET ?
 EOSQL
             creator => <<EOSQL,
-SELECT DISTINCT("UserId".user_id) AS aaaaa10000,
-        "UserId".driver_username AS driver_username,
-        "UserId000000004".driver_username AS driver_username
+SELECT DISTINCT(users.user_id) AS aaaaa10000,
+        users.driver_username AS driver_username,
+        creator.driver_username AS driver_username
     FROM "UserMetadata" AS "UserMetadata"
-        LEFT OUTER JOIN "UserId" AS "UserId000000004"
+        LEFT OUTER JOIN users AS creator
             ON "UserMetadata".created_by_user_id
-                    = "UserId000000004".user_id,
-               "UserId" AS "UserId"
-    WHERE ("UserId".user_id = "UserMetadata".user_id )
-        AND ("UserId".driver_username LIKE ? )
-    ORDER BY "UserId000000004".driver_username $p{sort_order},
-        "UserId".driver_username ASC
+                    = creator.user_id,
+               users AS users
+    WHERE (users.user_id = "UserMetadata".user_id )
+        AND (users.driver_username LIKE ? )
+    ORDER BY creator.driver_username $p{sort_order},
+        users.driver_username ASC
     LIMIT ? OFFSET ?
 EOSQL
         );
@@ -1267,8 +1251,7 @@ EOSQL
         my %p = validate( @_, $spec );
 
         my $sth = sql_execute(
-            'SELECT COUNT(*) FROM "UserId"'
-            . ' WHERE driver_username LIKE ?',
+            'SELECT COUNT(*) FROM users WHERE driver_username LIKE ?',
             '%' . lc $p{username} . '%' );
         return $sth->fetchall_arrayref->[0][0];
     }
@@ -1277,7 +1260,7 @@ EOSQL
 sub Count {
     my ( $class, %p ) = @_;
 
-    my $sth = sql_execute('SELECT COUNT(*) FROM "UserId"');
+    my $sth = sql_execute('SELECT COUNT(*) FROM users');
     return $sth->fetchall_arrayref->[0][0];
 }
 

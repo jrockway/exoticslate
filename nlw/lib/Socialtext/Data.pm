@@ -10,7 +10,6 @@ sub Classes {
                Permission
                Role
                User::Default::Factory
-               UserId
                UserMetadata
                UserWorkspaceRole
                Workspace
@@ -68,13 +67,13 @@ The schema currently contains the following tables:
 
 =over 4
 
-=item * User
+=item * user
 
-This table contains information about the user. The username, and
-email_address columns are both candidate keys (besides user_id). In
-most cases, the username and the email_address will be the same, but
-they need to be separate to allow for cases like DRKW, where the
-username and email_address differ.
+This table contains information about the user.  In many cases, the
+username and email_address are the same, but it is quite common
+for this to I<not> be the case (e.g. when doing LDAP or SSO
+integration, where the customer may have configured the "username" to
+be their "sAMAccountName" [or equivalent]).
 
 All users should have a creator user, except for the "System User".
 
@@ -84,7 +83,7 @@ current user cannot be determined, for example when creating a
 workspace from the command line. The latter is used as the default
 user when a client who is not logged in visits a workspace.
 
-For these special users, the User.is_system_created column is true,
+For these special users, the users.is_system_created column is true,
 and for all others it is false.
 
 These two users cannot be made a member of any workspaces.

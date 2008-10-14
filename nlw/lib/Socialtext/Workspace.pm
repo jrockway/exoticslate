@@ -1117,10 +1117,10 @@ sub users {
     my $self = shift;
 
     my $sth = sql_execute(<<EOSQL, $self->workspace_id);
-SELECT "UserId".user_id, "UserId".driver_username
-    FROM "UserId", "UserWorkspaceRole"
-    WHERE "UserId".user_id = "UserWorkspaceRole".user_id
-        AND "UserWorkspaceRole".workspace_id = ?
+SELECT user_id, driver_username
+    FROM users 
+    JOIN "UserWorkspaceRole" uwr USING (user_id)
+    WHERE uwr.workspace_id = ?
     ORDER BY driver_username
 EOSQL
 
@@ -1365,7 +1365,7 @@ my %LimitAndSortSpec = (
                 . ' "Workspace".name ASC'
                 . ' LIMIT ? OFFSET ?',
             creator => 'SELECT *'
-                . ' FROM "Workspace", "UserId"'
+                . ' FROM "Workspace", users'
                 . ' WHERE created_by_user_id=user_id'
                 . " ORDER BY driver_username $p{sort_order}, name ASC"
                 . ' LIMIT ? OFFSET ?',
@@ -1436,7 +1436,7 @@ sub _WorkspaceCursor {
                 . ' "Workspace".name ASC'
                 . ' LIMIT ? OFFSET ?',
             creator => 'SELECT *'
-                . ' FROM "Workspace", "UserId"'
+                . ' FROM "Workspace", users'
                 . ' WHERE created_by_user_id=user_id'
                 . ' AND "Workspace".account_id=?'
                 . " ORDER BY driver_username $p{sort_order}, name ASC"
@@ -1493,7 +1493,7 @@ sub _WorkspaceCursor {
                 . ' "Workspace".name ASC'
                 . ' LIMIT ? OFFSET ?',
             creator => 'SELECT *'
-                . ' FROM "Workspace", "UserId"'
+                . ' FROM "Workspace", users'
                 . ' WHERE created_by_user_id=user_id'
                 . " AND \"Workspace\".name $op ?"
                 . " ORDER BY driver_username $p{sort_order}, name ASC"

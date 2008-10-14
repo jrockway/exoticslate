@@ -86,7 +86,7 @@ ldap_auth_password_wrong: {
 
     $mock->called_pos_ok( 3, 'bind' );
     ($self, $dn, %opts) = $mock->call_args(3);
-    is $dn, $user->user_id(), 'LDAP auth; password mismatch used correct DN';
+    is $dn, $user->driver_unique_id, 'LDAP auth; password mismatch used correct DN';
     is $opts{'password'}, 'bad', 'LDAP auth; password mismatch used correct password';
 
     # VERIFY logs; make sure we failed for the right reason
@@ -132,7 +132,7 @@ ldap_auth_password_ok: {
 
     $mock->called_pos_ok( 3, 'bind' );
     ($self, $dn, %opts) = $mock->call_args(3);
-    is $dn, $user->user_id(), 'LDAP Auth; password match used correct DN';
+    is $dn, $user->driver_unique_id, 'LDAP Auth; password match used correct DN';
     is $opts{'password'}, $good_pass, 'LDAP auth; password match used correct password';
 
     # VERIFY logs; should be empty

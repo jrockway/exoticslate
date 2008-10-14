@@ -7,7 +7,7 @@ use mocked 'Socialtext::Log', qw(:tests);
 use Socialtext::LDAP;
 use Socialtext::User::LDAP::Factory;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 30;
+use Test::Socialtext tests => 33;
 use Test::Deep;
 
 ###############################################################################
@@ -33,11 +33,12 @@ instantiate_known_user_by_user_id: {
     isa_ok $user, 'Socialtext::User::LDAP', 'instantiated via user_id';
 
     # verify that all fields were extracted properly
-    is $user->user_id,          'cn=John Doe,dc=example,dc=com',    '... user_id';
+    is $user->driver_unique_id, 'cn=John Doe,dc=example,dc=com',    '... driver_unique_id';
     is $user->username,         'John Doe',                         '... username';
     is $user->first_name,       'John',                             '... first_name';
     is $user->last_name,        'Doe',                              '... last_name';
     is $user->email_address,    'john.doe@example.com',             '... mail';
+    like $user->user_id, qr/^\d+$/, '... has a numeric user_id';
 }
 
 ###############################################################################
@@ -48,11 +49,12 @@ instantiate_known_user_by_username: {
     isa_ok $user, 'Socialtext::User::LDAP', 'instantiated via username';
 
     # verify that all fields were extracted properly
-    is $user->user_id,          'cn=Jane Smith,dc=example,dc=com',  '... user_id';
+    is $user->driver_unique_id, 'cn=Jane Smith,dc=example,dc=com',  '... driver_unique_id';
     is $user->username,         'Jane Smith',                       '... username';
     is $user->first_name,       'Jane',                             '... first_name';
     is $user->last_name,        'Smith',                            '... last_name';
     is $user->email_address,    'jane.smith@example.com',           '... email_address';
+    like $user->user_id, qr/^\d+$/, '... has a numeric user_id';
 }
 
 ###############################################################################
@@ -63,11 +65,12 @@ instantiate_known_user_by_email_address: {
     isa_ok $user, 'Socialtext::User::LDAP', 'instantiated via email_address';
 
     # verify that all fields were extracted properly
-    is $user->user_id,          'cn=John Doe,dc=example,dc=com',    '... user_id';
+    is $user->driver_unique_id, 'cn=John Doe,dc=example,dc=com',    '... driver_unique_id';
     is $user->username,         'John Doe',                         '... username';
     is $user->first_name,       'John',                             '... first_name';
     is $user->last_name,        'Doe',                              '... last_name';
     is $user->email_address,    'john.doe@example.com',             '... email_address';
+    like $user->user_id, qr/^\d+$/, '... has a numeric user_id';
 }
 
 ###############################################################################

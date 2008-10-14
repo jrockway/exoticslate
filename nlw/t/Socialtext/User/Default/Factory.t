@@ -29,8 +29,6 @@ sub create_a_user {
     my $expected_username = delete $opts{expected_username};
     $expected_username ||= lc $opts{username};
 
-    my $id = Socialtext::UserId->NewUserId();
-    $opts{user_id} = $id;
     my $user = $factory->create(%opts);
 
     isa_ok $user, 'Socialtext::User::Default', 'created new user';
@@ -47,7 +45,7 @@ sub create_a_user {
             '... password was encrypted correctly';
     }
 
-    is $user->user_id, $id, '... correct user_id';
+    ok $user->user_id, '... got assigned a user_id';
 
     return $user unless wantarray;
     return ($factory, $user);

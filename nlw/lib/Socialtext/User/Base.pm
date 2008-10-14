@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Class::Field qw(field);
 use Readonly;
-use Socialtext::SQL qw(sql_execute);
+use Socialtext::SQL qw(sql_execute sql_singlevalue);
 
 # all fields/attributes that a "User" has.
 Readonly my @fields => qw(
@@ -19,7 +19,11 @@ Readonly my @fields => qw(
 map { field $_ } @fields;
 
 # additional fields.
-field 'driver_key';
+Readonly my @other_fields => qw(
+    driver_key
+    driver_unique_id
+);
+map { field $_ } @other_fields;
 
 sub new {
     my $class = shift;
@@ -56,11 +60,14 @@ sub to_hash {
 }
 
 sub new_from_hash {
-    my $self = shift;
+    my $class = shift;
     my $p = shift;
 
     # create a copy of the parameters for our new User homunculus object
-    my %user = map { $_ => $p->{$_} } @fields, 'driver_key';
+    my %user = map { $_ => $p->{$_} } @fields, @other_fields;
+
+    die "must have user_id and driver_unique_id"
+        unless ($user{user_id} && $user{driver_unique_id});
 
     # bless the user object to the right class
     my ($driver_name, $driver_id) = split( /:/, $p->{driver_key} );
@@ -84,17 +91,15 @@ sub new_from_hash {
     return $homunculus;
 }
 
-# Removes traces of the user from the "user_detail" table.
+# Removes traces of the user from the users table
 sub delete {
     my $self = shift;
-    my $user_id_obj = Socialtext::UserId->new(
-        driver_key          => $self->driver_key,
-        driver_unique_id    => $self->user_id,
-    );
-    unless ($user_id_obj) {
-        die "can't find UserId for user; did you delete the UserId first?";
-    }
-    sql_execute('DELETE FROM user_detail WHERE user_id=?', $user_id_obj->user_id);
+    sql_execute('DELETE FROM users WHERE user_id = ?', $self->user_id);
+}
+
+sub NewUserId {
+    my $id = sql_singlevalue(q{SELECT nextval('users___user_id')});
+    return $id;
 }
 
 1;
@@ -158,11 +163,35 @@ Returns the fully qualified driver key ("name:id") of the driver instance for
 the data store this user was found in.  This key is internal and likely has no
 meaning to a user.  e.g. "LDAP:0deadbeef0".
 
+=item B<driver_unique_id()>
+
+Returns the driver-specific unique identifier for this user.  This field is
+internal and likely has no meaning to a user.
+e.g. "cn=Bob,ou=Staff,dc=socialtext,dc=net"
+
 =item B<to_hash()>
 
 Returns a hash reference representation of the user, suitable for using with
 JSON, YAML, etc.  B<WARNING:> The encrypted password is included in this hash,
 and should usually be removed before passing the hash over the threshold.
+
+=item B<new_from_hash()>
+
+Create a new homunculus from a hash-ref of parameters.  Uses the C<driver_key>
+to determine the class of the homunculus.
+
+=item B<delete()>
+
+B<DANGER:> In almost all cases, users should B<not> be deleted as there are
+foreign keys for far too many other tables, and even if a user is no longer
+active they are still likely needed when looking up page authors, history, or
+other information.
+
+If you pass C<< force => 1 >> this will force the deletion though.
+
+=item B<NewUserId()>
+
+Returns a new unique identifier for use in creating new users.
 
 =back
 

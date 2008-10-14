@@ -18,9 +18,7 @@ fixtures( 'db' );
 ### Create a test user in the Default user store (Pg) that conflicts with one
 ### of the users in our LDAP test data.
 ###############################################################################
-my $default_user_id = Socialtext::UserId->NewUserId();
 my $default_user = Socialtext::User::Default::Factory->new->create(
-    user_id => $default_user_id,
     username         => 'John Doe',
     email_address    => 'john.doe@example.com',
     password         => 'pg-password',
@@ -113,7 +111,7 @@ ldap_users_have_no_password: {
 auto_vivify_an_ldap_user: {
     my $refs = bootstrap_tests();
 
-    my $id_before = Socialtext::UserId->NewUserId();
+    my $id_before = Socialtext::User::Base->NewUserId();
 
     # instantiate LDAP user.
     my $user = Socialtext::User->new(
@@ -121,7 +119,7 @@ auto_vivify_an_ldap_user: {
     );
     isa_ok $user, 'Socialtext::User', 'instantiated user';
     is $user->driver_name(), 'LDAP', '... with LDAP driver';
-    my $id_after = Socialtext::UserId->NewUserId();
+    my $id_after = Socialtext::User::Base->NewUserId();
 
     ok $user->user_id > $id_before, '... has a user_id';
     ok $user->user_id < $id_after, '... not a spontaneous id';

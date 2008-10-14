@@ -7,8 +7,8 @@ use Class::Field qw(field);
 use Socialtext::LDAP;
 use Socialtext::User::LDAP;
 use Socialtext::Log qw(st_log);
-use Socialtext::User::Cache;
 use Net::LDAP::Util qw(escape_filter_value);
+use Socialtext::SQL qw(sql_execute sql_singlevalue);
 use Readonly;
 
 field 'ldap';
@@ -49,6 +49,13 @@ sub driver_key {
     return join ':', @components;
 }
 
+sub attr_map {
+    my $self = shift;
+    my %attr_map = %{$self->ldap->config->attr_map()};
+    $attr_map{driver_unique_id} = delete $attr_map{user_id};
+    return \%attr_map;
+}
+
 sub GetUser {
     my ($self, $key, $val) = @_;
 
@@ -82,7 +89,7 @@ sub GetUser {
     }
 
     # instantiate from search results
-    my $attr_map = $self->ldap->config->attr_map();
+    my $attr_map = $self->attr_map;
     my $user = {
         driver_key  => $self->driver_key(),
     };
@@ -96,7 +103,38 @@ sub GetUser {
         }
     }
 
+    $self->_vivify($user);
     return Socialtext::User::LDAP->new_from_hash($user);
+}
+
+sub _vivify {
+    my ($self, $p) = @_;
+
+    $p->{driver_key} ||= $self->driver_key;
+
+    # NOTE: *always* use the driver_unique_id to update LDAP user records
+
+    my $user_id = sql_singlevalue(
+        q{SELECT user_id FROM users 
+          WHERE driver_key = ? AND driver_unique_id = ?},
+        $p->{driver_key},
+        $p->{driver_unique_id}
+    );
+    unless ($user_id) {
+        $user_id = Socialtext::User::Base->NewUserId();
+        sql_execute(q{
+                INSERT INTO users
+                (user_id, driver_key, driver_username, driver_unique_id, email_address)
+                VALUES
+                (?, ?, ?, ?, ?)
+            },
+            $user_id, $p->{driver_key}, $p->{username},
+            $p->{driver_unique_id}, $p->{email_address}
+        );
+        # just created a new user in the DB; flush the cache
+        Socialtext::User::Cache->Clear();
+    }
+    $p->{user_id} = $user_id;
 }
 
 sub Search {
@@ -242,6 +280,16 @@ e.g. "0deadbeef0".
 
 Returns the full driver key ("name:id") of the LDAP instance used by this
 Factory.  e.g. "LDAP:0deadbeef0".
+
+=item B<attr_map()>
+
+Returns the mapping of Socialtext user attributes (as they appear in the DB)
+to their respective LDAP representations.
+
+This B<is> different than the mapping returned by
+C<Socialtext::LDAP::Config-E<gt>attr_map()> in that this mapping is
+specifically targetted towards the underlying database representation of the
+user attributes.
 
 =item B<GetUser($key, $val)>
 

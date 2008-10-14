@@ -24,7 +24,7 @@ sub password_is_correct {
 
     # authenticate against LDAP server
     return Socialtext::LDAP->authenticate(
-        user_id  => $self->user_id(),
+        user_id  => $self->driver_unique_id,
         password => $pass,
         ($self->driver_id() ? (driver_id=>$self->driver_id()) : ()),
     );

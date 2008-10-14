@@ -121,7 +121,7 @@ $html = $lite->display($new_page);
 # FIXME this test is bogus, the provided data is not encoded
 # as it would be if coming from apache, I think...
 like( $html,
-    qr{Singapore link <a href="%E6%96%B0%E5%8A%A0%E5%9D%A1".*>$Singapore</a>},
+    qr{Singapore link <a href="[^"]*page_name=%E6%96%B0%E5%8A%A0%E5%9D%A1".*>$Singapore</a>},
     'funkity characters remain sane through input' );
 
 like( $html, qr{\Qtitle="category link" href="/lite/category/admin/help">help</a>},

@@ -83,13 +83,13 @@ sub _make_getter {
                     my $resource = $self->get_resource($rest, $content_type);
                     Socialtext::Timer->Pause('get_resource');
                     $resource = [] unless @$resource; # protect against weird data
-                    $rest->header(
-                        -status        => HTTP_200_OK,
-                        -type          => $content_type . '; charset=UTF-8',
-                        -Last_Modified => $self->make_http_date(
-                            $self->last_modified($resource)
-                        )
-                    ) unless defined $rest->header;
+                    my %overrideoptions= defined $rest->header ? $rest->header : ();
+                    my %defaultoptions = (
+                        -status => HTTP_200_OK,
+                        -type => $content_type . '; charset=UTF-8',
+                        -Last_Modified => $self->make_http_date($self->last_modified($resource))
+                    );
+                    $rest->header(%defaultoptions, %overrideoptions);
                     $self->$sub($resource);
                 }
             );

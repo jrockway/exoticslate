@@ -101,18 +101,28 @@ sub new_homunculus {
                 $val
             );
         return undef unless $driver_key;
-        my $driver = $class->_realize($driver_key, 'GetUser');
+
+        my $driver = eval {$class->_realize($driver_key, 'GetUser')};
+        my $not_found = 0;
         if ($driver) {
             # if driver doesn't exist any more, we don't have an instance of
             # it to query.  e.g. customer removed an LDAP data store.
             $homunculus = $driver->GetUser( username => $driver_username );
         }
+        elsif ($@ =~ /^Couldn't load/) {
+            $not_found = 1;
+        }
+        elsif ($@) {
+            # Treat "Couldn't load <drivername>" as if we can't find the user
+            die $@;
+        }
+
         $homunculus ||= Socialtext::User::Deleted->new(
             user_id          => $val,
             driver_unique_id => $driver_unique_id,
             username         => $driver_username,
             driver_key       => $driver_key,
-        );
+        ) unless $not_found;
     }
     # searches by "driver_unique_id" get handled as searches for "user_id", but
     # mapped accordingly for each user factory driver.

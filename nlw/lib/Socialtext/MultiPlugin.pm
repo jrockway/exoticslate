@@ -12,6 +12,7 @@ sub _realize {
     my $method = shift;
     my $real_class = $class->base_package() . "::" . $driver;
     eval "require $real_class";
+    # don't change this message without checking what uses it first:
     die "Couldn't load $real_class: $@" if $@;
 
     if ( $real_class->can($method) ) {

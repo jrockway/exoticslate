@@ -73,7 +73,7 @@ sub new_from_hash {
     my ($driver_name, $driver_id) = split( /:/, $p->{driver_key} );
     my $driver_class = join '::', Socialtext::User->base_package, $driver_name;
     eval "require $driver_class";
-    die "Couldn't load $driver_class: $@" if $@;
+    die "Couldn't load ${driver_class}: $@" if $@;
 
     my $homunculus = $driver_class->new(\%user);
 

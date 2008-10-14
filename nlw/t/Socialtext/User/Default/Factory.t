@@ -3,8 +3,9 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 106;
+use Test::Socialtext tests => 118;
 use Socialtext::User;
+use Socialtext::SQL qw(sql_execute);
 
 fixtures( 'db' );
 use_ok 'Socialtext::User::Default::Factory';
@@ -386,4 +387,38 @@ updating_user_does_data_cleanup: {
     my $rc = $homunculus->update( email_address => '  FOO@BAR.COM   ' );
     ok $rc, '... user record updated';
     is $homunculus->email_address(), 'foo@bar.com', '... and cleanup was performed';
+}
+
+never_fetch_other_driver_users: {
+    my $username = next_username();
+    my %opts = (
+        username        => $username,
+        email_address   => $username,
+        password        => 'password',
+    ); 
+    my ($factory, $user) = create_a_user(%opts);
+
+    sql_execute(q{
+        UPDATE users
+        SET driver_key = 'Fubar'
+        WHERE user_id = ?
+    }, $user->user_id);
+
+    my $found = Socialtext::User->new(user_id => $user->user_id);
+    ok !$found, "can't find by user_id";
+    my $found2 = Socialtext::User->new(username => $user->username);
+    ok !$found2, "can't find by username";
+    my $found3 = Socialtext::User->new(email_address => $user->email_address);
+    ok !$found3, "can't find by email";
+
+    sql_execute(q{
+        UPDATE users
+        SET driver_key = ?
+        WHERE user_id = ?
+    }, $factory->driver_key, $user->user_id);
+
+    my $found4 = Socialtext::User->new(user_id => $user->user_id);
+    ok $found4, "can find by user_id";
+    isa_ok $found4, 'Socialtext::User';
+    isa_ok $found4->homunculus, 'Socialtext::User::Default';
 }

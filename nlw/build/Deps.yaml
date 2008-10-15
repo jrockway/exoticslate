@@ -29,6 +29,7 @@ Class::Field: 0.12
 Class::Singleton: 1.03
 Cwd: 3.07
 Data::Dumper: 2.121
+Data::Page: 2.00
 Data::Pageset: 1.05
 Data::UUID: 0.14
 Date::Format: 0

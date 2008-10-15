@@ -1200,7 +1200,7 @@ div#mainNav {
 }
 #workspaceNav {
     margin:0.8em 0 0 0;
-    padding:6px 1em 7px 1em;
+    padding:6px 1em 3px 1em;
     border-bottom:none;
     background:transparent url(../images/wsLeft.png) no-repeat scroll left top;
     position:relative;

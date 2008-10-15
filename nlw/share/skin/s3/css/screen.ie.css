@@ -52,6 +52,12 @@ html body#listPage div#mainWrap {
 
 /* End fix {bz: 957} */
 
+/* Fix {bz: 1498 } */
+#workspaceNav {
+    padding:6px 1em 5px 1em;
+}
+/* End fix {bz: 1498 } */
+
 body {
     behavior: url(/static/skin/s3/javascript/csshover.htc);
 }

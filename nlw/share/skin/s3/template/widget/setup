@@ -22,7 +22,7 @@
                             [% IF pref.val == item.value %]
                                 [% selected = 'selected="1"' %]
                             [% END %]
-                            <option value=[% item.value %] [% selected %]>
+                            <option value="[% item.value %]" [% selected %]>
                                 [% item.display_value || item.value %]
                             </option>
                         [% END %]

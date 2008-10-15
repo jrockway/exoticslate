@@ -65,8 +65,8 @@ RT20767_REUSE_HASH: {
 
     my @emails = Email::Send::Test->emails();
     is( scalar @emails, 1, 'one email was sent' );
-    is( $emails[0]->header('Subject'),
-        'Please confirm your email address to register with Socialtext',
+    like( $emails[0]->header('Subject'),
+        qr/Welcome to the (.*?) community - please confirm your email to join/,
         'check email subject' );
     is( $emails[0]->header('To'), $user->name_and_email(),
         'email is addressed to user' );

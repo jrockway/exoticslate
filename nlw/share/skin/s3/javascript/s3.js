@@ -419,12 +419,11 @@ $(function() {
                 var clWidth = $('#contentLeft').get(0).scrollWidth;
                 var crWidth = $('#contentRight').width();
 
-                cl.addClass('contentLeftOverflow');
-
                 $('#mainWrap').width( clWidth + crWidth + 50 );
 
                 cl.css('width', clWidth + 'px');
                 cl.css('max-width', clWidth + 'px');
+                cl.css('overflow', 'visible');
 
                 $('#contentRight').css('width', crWidth + 'px');
                 $('#contentRight').css('max-width', crWidth + 'px');

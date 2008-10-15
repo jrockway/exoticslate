@@ -19,7 +19,7 @@ use mocked 'Socialtext::User';
 $Socialtext::MassAdd::Has_People_Installed = 1;
 use_ok 'Socialtext::MassAdd';
 
-Add_from_arrayref: {
+Add_from_hash: {
     clear_log();
     $Socialtext::User::Users{ronnie} = undef;
     my @successes;

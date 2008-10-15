@@ -3,77 +3,112 @@
 
 use strict;
 use warnings;
-
-use Test::Socialtext;
-fixtures( 'db' );
+use Test::Socialtext tests => 16;
+use Socialtext::User;
 
 BEGIN {
+    # if we don't have Email::Send::Test installed, skip *ALL* of the tests;
+    # otherwise we generate _real_ test messages.
     unless ( eval { require Email::Send::Test; 1 } ) {
         plan skip_all => 'These tests require Email::Send::Test to run.';
     }
+    $Socialtext::EmailSender::Base::SendClass = 'Test';
 }
 
-plan tests => 11;
+###############################################################################
+# Fixtures: db
+#
+# Need to have the DB bootstrapped, but don't care whats in it.
+fixtures( 'db' );
 
-use Socialtext::User;
-$Socialtext::EmailSender::Base::SendClass = 'Test';
-
-my $user = Socialtext::User->create(
-    username      => 'devnull9@socialtext.net',
-    email_address => 'devnull9@socialtext.net',
-    password      => 'password'
-);
-
-{
-    $user->set_confirmation_info();
-
-    is( length $user->confirmation_hash(), 27,
-        'user has a base64 encoded email confirmation hash' );
-    ok( $user->requires_confirmation(),
-        'requires_confirmation() returns true' );
-    ok( ! $user->confirmation_has_expired(),
-        'confirmation has not yet expired' );
-    ok( ! $user->confirmation_is_for_password_change(),
-        'confirmation_is_for_password_change() returns false' );
-
-    $user->confirm_email_address();
-    ok( ! $user->requires_confirmation(),
-        'requires_confirmation() returns false after calling confirm_email_address()' );
-
-}
-
-RT20767_REUSE_HASH: {
-    $user->set_confirmation_info();
-    my $hash1 = $user->confirmation_hash();
-
-    sleep 2; # Hash contains time(), which we want to make sure has changed.
-
-    $user->set_confirmation_info();
-    my $hash2 = $user->confirmation_hash();
-
-    is(
-        $hash1, $hash2,
-        'Confirmation hash for a user gets reusued if it exists'
+###############################################################################
+# Subroutine to create a new dummy/test user record.
+my $start_time = time();
+my $counter    = 1;
+sub create_test_user {
+    my $email = "test-$start_time-$counter\@socialtext.net";
+    $counter++;
+    my $user = Socialtext::User->create(
+        username      => $email,
+        email_address => $email,
+        password      => 'password',
     );
 }
 
-{
-    Email::Send::Test->clear();
+###############################################################################
+# Test: confirmation e-mail qualities
+confirmation_email_qualities: {
+    my $user = create_test_user();
+    isa_ok $user, 'Socialtext::User', 'new test user';
 
+    # set the confirmation info for this user.
+    $user->set_confirmation_info();
+
+    # verify the qualities that the confirmation email has.
+    is length $user->confirmation_hash, 27, '... has base64 encoded email confirmation hash';
+    ok $user->requires_confirmation, '... user requires confirmation';
+    ok !$user->confirmation_has_expired, '... confirmation has not yet expired';
+    ok !$user->confirmation_is_for_password_change, '... confirmation is *not* for password change';
+
+    # confirm the email, and make sure it sticks
+    $user->confirm_email_address();
+    ok !$user->requires_confirmation, '... user no longer requires confirmation';
+}
+
+###############################################################################
+# Test: make sure that the confirmation hash gets re-used if it already exists
+#
+# Fixes RT #20767
+confirmation_hash_reused: {
+    my $user = create_test_user();
+    isa_ok $user, 'Socialtext::User', 'new test user';
+
+    # set the confirmation info for this user, and get the hash it generated.
+    $user->set_confirmation_info();
+    my $hash_orig = $user->confirmation_hash();
+
+    # sleep a bit; the hash is time() based, and we want to make sure that
+    # changes
+    diag "sleeping a few secs" if ($ENV{TEST_VERBOSE});
+    sleep 2;
+
+    # set the confirmation info again, and get the generated hash again
+    $user->set_confirmation_info();
+    my $hash_reused = $user->confirmation_hash();
+
+    # the confirmation hash *should* have been reused
+    is $hash_reused, $hash_orig, 'confirmation hash reused if it already exists';
+}
+
+###############################################################################
+# Test: verify the contents of the confirmation e-mail.
+confirmation_email_contents: {
+    my $user = create_test_user();
+    isa_ok $user, 'Socialtext::User', 'new test user';
+
+    # set the confirmation info the this user, and get the generated e-mail
+    Email::Send::Test->clear();
     $user->set_confirmation_info();
     $user->send_confirmation_email();
 
     my @emails = Email::Send::Test->emails();
-    is( scalar @emails, 1, 'one email was sent' );
-    like( $emails[0]->header('Subject'),
-        qr/Welcome to the (.*?) community - please confirm your email to join/,
-        'check email subject' );
-    is( $emails[0]->header('To'), $user->name_and_email(),
-        'email is addressed to user' );
+    is scalar @emails, 1, 'one confirmation e-mail was sent';
 
-    my @parts = $emails[0]->parts;
-    like( $parts[0]->body, qr[/submit/confirm_email\?hash=.{27}],
-          'text email body has confirmation link' );
-    like( $parts[1]->body, qr[/submit/confirm_email\?hash=.{27}],
-          'html email body has confirmation link' );
+    my $email = shift @emails;
+
+    # verify the e-mail headers
+    like $email->header('Subject'), qr/Welcome to the .*? community - please confirm your email to join/, '... e-mail subject correct';
+    is $email->header('To'), $user->name_and_email(), '... e-mail is addressed to the test user';
+
+    # verify the contents of the message parts
+    my @parts = $email->parts();
+    my $part;
+
+    $part = shift @parts;
+    is $part->header('Content-Type'), 'text/plain; charset="UTF-8"', '... first message part is text/plain';
+    like $part->body(), qr|/submit/confirm_email\?hash=\S{27}|, '... ... text part contains confirmation link';
+
+    $part = shift @parts;
+    is $part->header('Content-Type'), 'text/html; charset="UTF-8"', '... second message part is text/html';
+    like $part->body(), qr|/submit/confirm_email\?hash=\S{27}|, '... ... html part contains confirmation link';
 }

@@ -3,7 +3,6 @@
 <html>
     <head>
         <base target="_blank"/>
-        <link rel="stylesheet" href="[% share %]/css/gadget.css" type="text/css" media="screen" />
         
         [% FOR script = features %]
             <script src="[% script %]"></script>

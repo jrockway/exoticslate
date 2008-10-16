@@ -7,10 +7,20 @@ use Socialtext::User;
 use Socialtext::SQL qw/sql_singlevalue/;
 
 my $st_account_id = Socialtext::Account->Socialtext->account_id();
-my $sys_user = Socialtext::User->SystemUser();
-my $guest_user = Socialtext::User->Guest();
-unless ( ($sys_user->primary_account->account_id() == $st_account_id)
-        and ($guest_user->primary_account->account_id() == $st_account_id) ) {
+
+my $sql = q{
+    SELECT primary_account_id
+      FROM "UserMetadata"
+      JOIN "UserId" ON "UserMetadata".user_id = "UserId".system_unique_id
+      JOIN "User" ON "User".user_id = "UserId".driver_unique_id
+     WHERE "User".username = ?
+};
+
+my $system_user_acct_id = sql_singlevalue($sql, 'system-user');
+my $guest_user_acct_id  = sql_singlevalue($sql, 'guest');
+
+unless ( ($system_user_acct_id == $st_account_id)
+    and ($guest_user_acct_id == $st_account_id) ) {
     print "System user and guest user not assigned to the correct account.\n";
     exit 1;
 }

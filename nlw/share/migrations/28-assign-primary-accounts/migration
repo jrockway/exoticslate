@@ -3,7 +3,6 @@
 use strict;
 use warnings;
 use Socialtext::Account;
-use Socialtext::User;
 use Socialtext::AppConfig;
 use Socialtext::SQL qw/sql_execute/;
 use YAML qw/LoadFile/;
@@ -18,8 +17,15 @@ Socialtext::Account->EnsureRequiredDataIsPresent();
 # The 2 system users should always be assigned to the Socialtext account
 my $st_account = Socialtext::Account->Socialtext;
 
-Socialtext::User->SystemUser->primary_account($st_account);
-Socialtext::User->Guest->primary_account($st_account);
+my $sql_system_users = qq{
+UPDATE "UserMetadata" SET primary_account_id = ?
+     FROM "UserId" JOIN "User" ON "UserId".driver_unique_id = "User".user_id
+    WHERE "UserMetadata".user_id = "UserId".system_unique_id
+      AND "UserMetadata".primary_account_id IS NULL
+      AND "User".username = ?
+};
+sql_execute($sql_system_users, $st_account->account_id, 'system-user');
+sql_execute($sql_system_users, $st_account->account_id, 'guest');
 
 my $MigrationConfig = _load_migration_config();
 print "Using migration config: " . Dumper $MigrationConfig;

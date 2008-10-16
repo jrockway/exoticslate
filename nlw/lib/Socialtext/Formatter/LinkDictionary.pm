@@ -55,6 +55,13 @@ page on another workspace.
 =cut
 field interwiki_edit => '/%{workspace}/index.cgi?%{page_uri}%{section}#edit';
 
+=head2 interwiki_edit_incipient
+
+An interwiki_edit link links directly to the edit section of another 
+page on another workspace with the incipient flag set.
+
+=cut
+field interwiki_edit_incipient => '/%{workspace}/index.cgi?is_incipient=1;page_name=%{page_uri}%{section}#edit';
 =head2 search_query, category_query, recent_chages_query
 
 Some forms of wikitext create a link to a set of search, category

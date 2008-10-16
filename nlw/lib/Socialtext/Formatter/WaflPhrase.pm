@@ -451,7 +451,7 @@ sub html {
     if ($edit_perm) {
         eval {
             $edit_url = $self->hub->viewer->link_dictionary->format_link(
-                link       => 'interwiki_edit',
+                link       => $page_exists ? 'interwiki_edit' : 'interwiki_edit_incipient',
                 workspace  => $workspace_name,
                 page_uri   => $page_uri_for_url,
                 url_prefix => $self->url_prefix,

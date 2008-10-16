@@ -324,3 +324,20 @@ gn: Dev Null
 sn: Three
 mail: devnull3@socialtext.com
 userPassword: ldapd3v
+
+# Taro Yamada (Note how gn and sn are reversed in the cn)
+dn: cn=山田太郎,dc=socialtext,dc=com
+objectClass: inetOrgPerson
+cn: 山田太郎
+gn: 太郎
+sn: 山田
+mail: taro.yamada@ken.socialtext.net
+userPassword: ld@pu53r
+
+dn: cn=Bjørn Sjörœnsén,dc=socialtext,dc=com
+objectClass: inetOrgPerson
+cn: Bjørn Sjörœnsén
+gn: Bjørn
+sn: Sjörœnsén
+mail: bjorn@ken.socialtext.net
+userPassword: ld@pu53r

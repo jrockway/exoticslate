@@ -6,7 +6,7 @@ use Socialtext::Timer;
 use DateTime::Format::Pg;
 use DBI;
 use base 'Exporter';
-use Carp qw/croak cluck confess/;
+use Carp qw/croak cluck/;
 
 =head1 NAME
 
@@ -78,7 +78,7 @@ sub get_dbh {
     $DBH{handle} = DBI->connect($dsn, $params{user}, "",  {
             AutoCommit => 0,
             pg_enable_utf8 => 1,
-        }) or die "Could not connect to database with dsn: $dsn: $!";
+        }) or croak "Could not connect to database with dsn: $dsn: $!";
     $DBH{st_in_transaction} = 0;
     Socialtext::Timer->Pause('get_dbh');
     return $DBH{handle};
@@ -140,7 +140,7 @@ sub sql_execute {
             sql_rollback();
         }
         Socialtext::Timer->Pause('sql_execute');
-        confess "${msg}Error: $err";
+        croak "${msg}Error: $err";
     }
 
     # Unless the caller has explicitly specified a transaction via

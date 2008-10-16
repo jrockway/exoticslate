@@ -149,36 +149,30 @@ sub maybe_commit {
 {
     print "Adding $USERS users";
 
-    my $user_id_sth = $dbh->prepare_cached(qq{
-       INSERT INTO "UserId" (
-           user_id, driver_key, driver_unique_id, driver_username
-       ) VALUES (
-           nextval('"UserId___user_id"'), ?,
-           currval('"UserId___user_id"'), ?
-       )
-    });
     my $user_sth = $dbh->prepare_cached(qq{
-        INSERT INTO "User" (
-            user_id, username, email_address, password, first_name, last_name
+        INSERT INTO users (
+            user_id, driver_unique_id, driver_key, driver_username,
+            email_address, password, first_name, last_name
         ) VALUES (
-            currval('"User___user_id"'), ?, ?, ?, ?, ?
+            nextval('users___user_id'), currval('users___user_id'), ?, ?,
+            ?, ?, ?, ?
         )
     });
+
     my $user_meta_sth = $dbh->prepare_cached(qq{
         INSERT INTO "UserMetadata" (
            user_id, email_address_at_import, 
            created_by_user_id, primary_account_id
         ) VALUES (
-           currval('"UserId___user_id"'), ?, NULL, 1
+           currval('users___user_id'), ?, NULL, 1
         )
     });
 
     for (my $user=1; $user<=$USERS; $user++) {
         my $uname = "user-$user-$nowish\@ken.socialtext.net";
-        $user_id_sth->execute('Default', $uname);
-        $user_sth->execute($uname, $uname, 'password', "First$user", "Last$user" );
+        $user_sth->execute('Default', $uname, $uname, "password", "First$user", "Last$user");
         $user_meta_sth->execute( $uname );
-        my ($user_id) = $dbh->selectrow_array(q{SELECT currval('"UserId___user_id"')});
+        my ($user_id) = $dbh->selectrow_array(q{SELECT currval('users___user_id')});
         push @users, $user_id;
         $writes += 3;
         maybe_commit();

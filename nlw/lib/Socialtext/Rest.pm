@@ -109,6 +109,8 @@ sub _check_on_behalf_of {
     # because we are being called internally, or by tests
     return unless $self->rest->can('request');
 
+    my $current_user = $self->rest->user;
+
     my $behalf_header    = $self->rest->request->header_in('X-On-Behalf-Of');
     my $behalf_parameter = $self->rest->query->param('on-behalf-of');
     my $behalf_user = $behalf_parameter
@@ -119,14 +121,13 @@ sub _check_on_behalf_of {
     # if we are in a non-real workspace, error out
     unless ($workspace->real()) {
         st_log->info(
-            $self->rest->user->username, 'tried to impersonate',
+            $current_user->username, 'tried to impersonate',
             $behalf_user,                'without workspace'
         );
         Socialtext::Exception::Auth->throw(
             'on behalf not valid without workspace');
     }
 
-    my $current_user = $self->rest->user;
     my $checker      = Socialtext::Authz::SimpleChecker->new(
         user      => $current_user,
         workspace => $workspace,
@@ -161,7 +162,7 @@ sub _check_on_behalf_of {
             $behalf_user,            'without impersonate permission'
         );
         Socialtext::Exception::Auth->throw(
-            $current_user->username . 'may not impersonate');
+            $current_user->username . ' may not impersonate');
     }
 }
 

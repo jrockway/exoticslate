@@ -220,10 +220,19 @@ sub callHandler {
     if (my $except = $@) {
         if (   $except->can('isa')
             && $except->isa('Socialtext::Exception::Auth')) {
-            $self->header(
-                -status => HTTP_403_Forbidden,
-                -type   => 'text/plain',
-            );
+            if ($self->user->is_guest()) {
+                $self->header(
+                    -status => HTTP_401_Unauthorized,
+                    -WWW_Authenticate => 'Basic realm="Socialtext"',
+                    -type   => 'text/plain',
+                );
+            }
+            else {
+                $self->header(
+                    -status => HTTP_403_Forbidden,
+                    -type   => 'text/plain',
+                );
+            }
             $result = $except->message;
         }
         else {

@@ -31,3 +31,12 @@ Test case for on-behalf-of functionality
 | body-like | <em>contributed by <span class="nlw_phrase">        |                                                          |                    |
 | body-like | <!-- wiki: {user: q@q.q} --></span>                 |                                                          |                    |
 
+| Comment        | When user is guest challenge when on-behalf-user used public | .          |
+| http-user-pass | | |
+| get            | /data/workspaces/public/pages?on-behalf-of=devnull2@socialtext.com | application/json |
+| code-is        | 401 | |
+
+| Comment        | When user is guest challenge when on-behalf-user used admin | .          |
+| http-user-pass | | |
+| get            | /data/workspaces/admin/pages?on-behalf-of=devnull2@socialtext.com | application/json |
+| code-is        | 401 | |

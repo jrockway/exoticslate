@@ -8,7 +8,10 @@
             [% IF gadget.minimized %]
                 <script><!--
                     jQuery(function(){
-                        gadgets.container.minimize('[% gadget.id %]');
+                        /* Set the second arg isInitialCall to true to
+                         * suppress the call to update_layout -- {bz: 1491}
+                         */
+                        gadgets.container.minimize('[% gadget.id %]', true);
                     });
                 --></script>
             [% END %]

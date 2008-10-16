@@ -3,9 +3,10 @@ package Socialtext::SQL;
 use strict;
 use Socialtext::AppConfig;
 use Socialtext::Timer;
+use DateTime::Format::Pg;
 use DBI;
 use base 'Exporter';
-use Carp qw/croak cluck/;
+use Carp qw/croak cluck confess/;
 
 =head1 NAME
 
@@ -37,16 +38,25 @@ Provides methods with extra error checking and connections to the database.
 =cut
 
 our @EXPORT_OK = qw(
-    sql_execute sql_selectrow sql_commit sql_begin_work
-    sql_singlevalue sql_rollback sql_in_transaction
-    sql_convert_to_boolean sql_convert_from_boolean
     get_dbh disconnect_dbh
+    sql_execute sql_selectrow sql_singlevalue 
+    sql_commit sql_begin_work sql_rollback sql_in_transaction
+    sql_convert_to_boolean sql_convert_from_boolean
+    sql_parse_timestamptz sql_format_timestamptz
+);
+our %EXPORT_TAGS = (
+    'exec' => [qw(sql_execute sql_selectrow sql_singlevalue)],
+    'time' => [qw(sql_parse_timestamptz sql_format_timestamptz)],
+    'bool' => [qw(sql_convert_to_boolean sql_convert_from_boolean)],
+    'txn'  => [qw(sql_commit sql_begin_work
+                  sql_rollback sql_in_transaction)],
 );
 
 
 our $DEBUG = 0;
 our $TRACE_SQL = 0;
 our %DBH;
+our $Level = 0;
 
 =head2 get_dbh()
 
@@ -98,7 +108,9 @@ Returns a statement handle.
 =cut
 
 sub sql_execute {
-    my ( $statement, @bindings ) = @_;
+    my $statement = shift;
+    # rest of @_ are bindings, prevent making copies
+
     my $dbh = get_dbh();
     Socialtext::Timer->Continue('sql_execute');
 
@@ -108,32 +120,27 @@ sub sql_execute {
 
     my ($sth, $rv);
     if ($DEBUG or $TRACE_SQL) {
-        my (undef, $file, $line) = caller;
+        my (undef, $file, $line) = caller($Level);
         warn "Preparing ($statement) "
-            . _list_bindings(\@bindings)
+            . _list_bindings(\@_)
             . " from $file line $line\n";
     }
     eval {
         Socialtext::Timer->Continue('sql_prepare');
         $sth = $dbh->prepare($statement);
         Socialtext::Timer->Pause('sql_prepare');
-        $sth->execute(@bindings) ||
+        $sth->execute(@_) ||
             die "execute failed: " . $sth->errstr;
     };
     if (my $err = $@) {
         my $msg = "Error during sql_execute():\n$statement\n";
-        if (@bindings) {
-            local $" = ',';
-            $msg .= "Bindings: ("
-                  . join(', ', map { defined $_ ? $_ : 'undef' } @bindings)
-                  . ")\n";
-        }
+        $msg .= _list_bindings(\@_);
         unless ($in_tx) {
             warn "Rolling back in sql_execute()" if $DEBUG;
             sql_rollback();
         }
         Socialtext::Timer->Pause('sql_execute');
-        croak "${msg}Error: $err";
+        confess "${msg}Error: $err";
     }
 
     # Unless the caller has explicitly specified a transaction via
@@ -152,7 +159,7 @@ sub sql_execute {
 sub _list_bindings {
     my $bindings = shift;
     return 'bindings=('
-         . join(',', map { defined $_ ? $_ : 'NULL' } @{$bindings})
+         . join(',', map { defined $_ ? "'$_'" : 'NULL' } @$bindings)
          . ')';
 }
 
@@ -180,6 +187,7 @@ Wrapper around returning a single value from a query.
 sub sql_singlevalue {
     my ( $statement, @bindings ) = @_;
 
+    local $Level = $Level + 1;
     my $sth = sql_execute($statement, @bindings);
     my $value;
     $sth->bind_columns(undef, \$value);
@@ -259,6 +267,34 @@ sub sql_convert_from_boolean {
     my $value= shift;
 
     return $value eq 't' ? 1 : 0;
+}
+
+=head2 sql_parse_timestamptz()
+
+Parses a timestamptz column into a DateTime object (technically it's a
+DateTime::Format::Pg)
+
+=cut
+
+sub sql_parse_timestamptz {
+    my $value = shift;
+    return DateTime::Format::Pg->parse_timestamptz($value);
+}
+
+=head2 sql_format_timestamptz()
+
+Converts a DateTime object into a timestamptz column format.
+
+=cut
+
+sub sql_format_timestamptz {
+    my $dt = shift;
+    my $fmt = DateTime::Format::Pg->format_timestamptz($dt);
+    if (!$dt->is_finite) {
+        # work around a DateTime::Format::Pg bug
+        $fmt =~ s/infinite$/infinity/g;
+    }
+    return $fmt;
 }
 
 1;

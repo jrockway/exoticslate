@@ -12,7 +12,17 @@ use Socialtext::String;
 use Readonly;
 use Socialtext::User;
 use Socialtext::l10n qw(loc);
+use DateTime::Infinite;
 use base qw(Socialtext::User::Base);
+
+sub new {
+    my $class = shift;
+    return unless @_;
+
+    my $args = (@_ > 1) ? {@_} : $_[0];
+    $args->{cached_at} ||= DateTime::Infinite::Future->new;
+    return $class->SUPER::new($args);
+}
 
 sub _factory {
     # Get an instance of a Factory object for our data store
@@ -71,6 +81,11 @@ sub _crypt {
     return crypt( $pw, $salt );
 }
 
+sub expire { 
+    # cannot expire Default users
+    return;
+}
+
 1;
 
 __END__
@@ -103,6 +118,12 @@ happens to exist in our DBMS data store, derived from C<Socialtext::User::Base>.
 
 =over
 
+=item B<new()>
+
+Creates a new Default homunculus.  This method probably shouldn't be called directly; use a factory or C<Socialtext::User>'s new method.
+
+Forces the 'cached_at' param to be infinitely far in the future, then calls C<SUPER::new>.
+
 =item B<update(%params)>
 
 Updates the user's information with the new key/val pairs passed in.  You
@@ -126,6 +147,10 @@ For now, this is defined as any password not matching "*none*".
 
 Checks to see if the given password is correct for this user.  Returns true if
 the given password is correct, false otherwise.
+
+=item B<expire()>
+
+Does nothing; Default users cannot be expired.
 
 =back
 

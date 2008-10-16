@@ -107,7 +107,7 @@ sub new_homunculus {
         if ($driver) {
             # if driver doesn't exist any more, we don't have an instance of
             # it to query.  e.g. customer removed an LDAP data store.
-            $homunculus = $driver->GetUser( username => $driver_username );
+            $homunculus = $driver->GetUser(username => $driver_username);
         }
         elsif ($@ =~ /^Couldn't load/) {
             $not_found = 1;
@@ -124,11 +124,6 @@ sub new_homunculus {
             driver_key       => $driver_key,
         ) unless $not_found;
     }
-    # searches by "driver_unique_id" get handled as searches for "user_id", but
-    # mapped accordingly for each user factory driver.
-    elsif ($key eq 'driver_unique_id') {
-        $homunculus = $class->_first('GetUser', 'user_id' => $val );
-    }
     # system generated users MUST come from the Default user store; we don't
     # allow for them to live anywhere else.
     #
@@ -137,10 +132,10 @@ sub new_homunculus {
     # and its "Guest" user)
     elsif (Socialtext::User::Default::Factory->IsDefaultUser($key => $val)) {
         my $factory = $class->_realize('Default', 'GetUser');
-        $homunculus = $factory->GetUser($key => $val, @_);
+        $homunculus = $factory->GetUser($key => $val);
     }
     else {
-        $homunculus = $class->_first('GetUser', $key => $val, @_);
+        $homunculus = $class->_first('GetUser', $key => $val);
     }
 
     Socialtext::User::Cache->Store($key, $val, $homunculus);

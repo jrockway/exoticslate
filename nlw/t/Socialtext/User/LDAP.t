@@ -2,6 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings FATAL => 'all';
+use DateTime::Infinite;
 use mocked 'Net::LDAP';
 use mocked 'Socialtext::Log', qw(:tests);
 use Test::Socialtext tests => 8;
@@ -18,6 +19,7 @@ my %TEST_USER = (
     first_name      => 'First',
     last_name       => 'Last',
     driver_name     => 'LDAP:Test LDAP Configuration',
+    cached_at       => DateTime::Infinite::Past->new,
 );
 
 ###############################################################################

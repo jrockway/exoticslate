@@ -3,15 +3,20 @@ package Socialtext::User::Deleted;
 use strict;
 use warnings;
 use base qw(Socialtext::User::Base);
+use DateTime::Infinite;
 
 sub new {
     my $class = shift;
-    my $self  = $class->SUPER::new(@_);
-    $self->{email_address} = 'deleted.user@socialtext.com';
-    $self->{first_name}    = 'Deleted';
-    $self->{last_name}     = 'User';
-    $self->{username}    ||= 'deleted-user';
-    return $self;
+    return unless @_;
+
+    return $class->SUPER::new({
+        username => 'deleted-user',
+        @_, 
+        cached_at     => DateTime::Infinite::Past->new,
+        email_address => 'deleted.user@socialtext.com',
+        first_name    => 'Deleted',
+        last_name     => 'User',
+    });
 }
 
 sub password {

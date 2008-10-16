@@ -122,60 +122,12 @@ sub Count {
 }
 
 sub GetUser {
-    my ( $self, %p ) = @_;
+    my ( $self, $id_key, $id_val ) = @_;
 
-    # look up the user in the DB.
-    #
-    # Make sure, though, that "user_id" and "driver_unique_id" are *only* ever
-    # numeric; if they are anything else then fail quietly.  We need this
-    # check as other User Factories may have non-numeric user ids and a lookup
-    # by "user_id" may get passed through to this factory with a non-numeric
-    # value.
-    my ( $key, $where );
-    if ( exists $p{user_id} ) {
-        $key   = $p{user_id};
-        return undef if $key =~ /\D/;
-        $where = 'user_id';
-    }
-    elsif ( exists $p{driver_unique_id} ) {
-        $key   = $p{driver_unique_id};
-        return undef if $key =~ /\D/;
-        $where = 'user_id'; # user_id is the same for Default users
-    }
-    elsif ( exists $p{username} ) {
-        $key   = _clean_username_or_email( lc $p{username} );
-        $where = 'LOWER(driver_username)';
-    }
-    else {
-        $key   = _clean_username_or_email( lc $p{email_address} );
-        $where = 'LOWER(email_address)';
-    }
-
-    my $user = $self->_new_from_where( $where, $key );
-    return $user;
-}
-
-sub _new_from_where {
-    my ( $self, $where_clause, @bindings ) = @_;
-
-    my $sth = sql_execute(qq{
-            SELECT user_id, driver_key, driver_username AS username, 
-                   driver_unique_id, email_address, first_name, last_name,
-                   password, cached_at
-            FROM users
-            WHERE driver_key = ? AND ($where_clause = ?)
-        },
-        $self->driver_key, @bindings
+    my $homunculus = Socialtext::User::Default->GetUserRecord(
+        $id_key, $id_val, $self->driver_key
     );
-
-#     # check for duplicate users
-#     return undef if $sth->rows == 0;
-#     die "duplicate user $where_clause = @bindings"
-#         unless $sth->rows == 1;
-    my $row = $sth->fetchrow_hashref();
-    return undef unless $row;
-
-    return Socialtext::User::Default->new_from_hash($row);
+    return $homunculus;
 }
 
 sub create {
@@ -185,27 +137,15 @@ sub create {
 
     $p{first_name}       ||= '';
     $p{last_name}        ||= '';
-    $p{driver_key}       ||= $self->driver_key;
-    $p{driver_unique_id} ||= $p{user_id};
-    $p{driver_username}  ||= $p{username};
 
-    # then go add the user to the user_detail table
-    sql_execute( q{
-            INSERT INTO users
-            (user_id, driver_username, driver_key, driver_unique_id,
-             email_address, first_name, last_name, password)
-            VALUES 
-            (?,?,?,?,
-             ?,?,?,?)
-        }, 
-        $p{user_id}, $p{driver_username}, $p{driver_key}, $p{driver_unique_id},
-        $p{email_address}, $p{first_name}, $p{last_name}, $p{password}
-    );
+    $p{driver_key}       = $self->driver_key;
+    $p{driver_unique_id} = $p{user_id};
 
-    # flush cache; added a User to the DB
-    Socialtext::User::Cache->Clear();
+    $p{driver_username} = delete $p{username};
+    Socialtext::User::Base->NewUserRecord(\%p);
+    $p{username} = delete $p{driver_username};
 
-    return $self->GetUser(username => $p{driver_username});
+    return Socialtext::User::Default->new_from_hash(\%p);
 }
 
 # "update" methods: generic update?
@@ -214,19 +154,14 @@ sub update {
 
     $self->_validate_and_clean_data($user, \%p);
 
-    my ( @updates, @bindings );
-    while (my ($column, $value) = each %p) {
-        $column = 'driver_username' if $column eq 'username';
-        push @updates, "$column=?";
-        push @bindings, $value;
-    }
+    $p{cached_at} = DateTime::Infinite::Future->new();
+    delete $p{driver_key}; # can't update, sorry
 
-    my $set_clause = join ', ', @updates;
-
-    sql_execute(
-        'UPDATE users '
-        . " SET $set_clause WHERE user_id=?",
-        @bindings, $user->user_id);
+    Socialtext::User::Base->UpdateUserRecord( {
+        %p,
+        driver_username => $p{username},
+        user_id => $user->user_id,
+    } );
 
     while (my ($column, $value) = each %p) {
         $user->$column($value);
@@ -376,11 +311,6 @@ sub _validate_and_clean_data {
         # this will not exist when we are making the system user!
         $p->{created_by_user_id} ||= Socialtext::User->SystemUser()->user_id;
     }
-}
-
-sub _clean_username_or_email {
-    my $str = shift;
-    return Socialtext::String::trim(lc $str);
 }
 
 1;

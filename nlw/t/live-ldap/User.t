@@ -8,7 +8,7 @@ use Socialtext::LDAP;
 use Socialtext::User;
 use Socialtext::User::Default::Factory;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 38;
+use Test::Socialtext tests => 39;
 
 fixtures( 'db' );
 
@@ -90,6 +90,11 @@ instantiate_user_from_postgresql_when_only_contact_in_ldap: {
 ###############################################################################
 # LDAP users *NEVER* have a password field in the homunculus; we *DON'T* grab
 # that info from the LDAP store.
+#
+# This test was designed to deal with a bug where if a customer misconfigured
+# their `ldap.yaml` file to list a password attribute *and* they had a poorly
+# configured LDAP directory, we _could_ be pulling the (encrypted) password
+# attribute for users from the directory.
 ldap_users_have_no_password: {
     my $refs = bootstrap_tests();
 
@@ -100,10 +105,11 @@ ldap_users_have_no_password: {
     isa_ok $user, 'Socialtext::User', 'instantiated user';
     is $user->driver_name(), 'LDAP', '... with LDAP driver';
 
-    # make sure the LDAP homunculus has *NO* password attribute
+    # make sure the LDAP homunculus has "*no-password*"
     my $homunculus = $user->homunculus();
     isa_ok $homunculus, 'Socialtext::User::LDAP', '... and LDAP homunculus';
-    ok !defined $homunculus->{password}, '... and *NO* password attribute';
+    is $homunculus->{password}, '*no-password*', '... and *no-password* (data)';
+    is $homunculus->password, '*no-password*', '... and *no-password* (accessor)';
 }
 
 ###############################################################################
@@ -124,8 +130,8 @@ auto_vivify_an_ldap_user: {
     ok $user->user_id > $id_before, '... has a user_id';
     ok $user->user_id < $id_after, '... not a spontaneous id';
 
-    # make sure the LDAP homunculus has *NO* password attribute
+    # make sure the LDAP homunculus has "*no-password*"
     my $homunculus = $user->homunculus();
     isa_ok $homunculus, 'Socialtext::User::LDAP', '... and LDAP homunculus';
-    ok !defined $homunculus->{password}, '... and *NO* password attribute';
+    is $homunculus->{password}, '*no-password*', '... and *no-password*';
 }

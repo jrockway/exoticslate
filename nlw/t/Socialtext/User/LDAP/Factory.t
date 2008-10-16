@@ -105,12 +105,15 @@ get_user_valid_search_terms: {
     isa_ok $user, 'Socialtext::User::LDAP', 'email_address; valid search term';
 
     # "first_name" is mapped, but is -NOT- a valid search term
-    $user = $factory->GetUser(first_name=>'First');
-    ok !defined $user, 'first_name; INVALID search term';
+    my $missing_user = $factory->GetUser(first_name=>'First');
+    ok !defined $missing_user, 'first_name; INVALID search term';
 
     # "cn" isn't a valid search term
-    $user = $factory->GetUser(cn=>'First Last');
-    ok !defined $user, 'cn; INVALID search term';
+    $missing_user = $factory->GetUser(cn=>'First Last');
+    ok !defined $missing_user, 'cn; INVALID search term';
+
+    # cleanup; *can't* leave users lying around at the end of a test
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -187,6 +190,9 @@ get_user_via_username_is_subtree: {
     $mock->called_pos_ok( 2, 'search' );
     my ($self, %opts) = $mock->call_args(2);
     is $opts{'scope'}, 'sub', 'username search is sub-tree';
+
+    # cleanup; *can't* leave users lying around at the end of a test
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -208,6 +214,9 @@ get_user_via_email_address_is_subtree: {
     $mock->called_pos_ok( 2, 'search' );
     my ($self, %opts) = $mock->call_args(2);
     is $opts{'scope'}, 'sub', 'email_address search is sub-tree';
+
+    # cleanup; *can't* leave users lying around at the end of a test
+    $user->delete(force=>1);
 }
 
 ###############################################################################
@@ -231,4 +240,8 @@ get_user_via_user_id_is_exact: {
     my ($self, %opts) = $mock->call_args(2);
     is $opts{'scope'}, 'base', 'user_id search is exact';
     is $opts{'base'}, $dn, 'user_id search base is DN';
+
+    # cleanup; *can't* leave users lying around at the end of a test
+    $user->delete(force=>1);
 }
+

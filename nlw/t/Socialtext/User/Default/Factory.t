@@ -321,11 +321,6 @@ update_user_via_factory: {
     isa_ok $found, 'Socialtext::User::Default', '... found updated user';
     is_deeply $found, $homunculus, '... homunculus matches';
     is $found->user_id, $user->user_id, '... same user_id';
-
-    # put the username back to what it was; so the record gets properly
-    # cleaned up and isn't a dangling user with mismatched username across the
-    # "UserId" and "user_detail" tables.
-    $factory->update( $homunculus, username => $username );
 }
 
 ###############################################################################
@@ -343,7 +338,8 @@ update_user_via_user: {
         password      => 'password',
     );
     my $user = Socialtext::User->create( %opts );
-    isa_ok $user, 'Socialtext::User', 'created new user _indirectly_';
+    isa_ok $user, 'Socialtext::User',
+        'created new user _indirectly_ (for update via user)';
     ok $user->user_id, '... user has a user_id';
     is $factory->Count, $orig_count+1, '... user is actually new';
 

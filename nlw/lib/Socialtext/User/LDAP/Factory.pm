@@ -13,11 +13,11 @@ use Readonly;
 
 field 'ldap';
 
-Readonly my %valid_search_terms => (
-    user_id         => 1,
-    username        => 1,
-    email_address   => 1,
-    );
+Readonly my %valid_get_user_terms => (
+    user_id       => 1,
+    username      => 1,
+    email_address => 1,
+);
 
 sub new {
     my ($class, $driver_id) = @_;
@@ -63,11 +63,17 @@ sub GetUser {
     return undef unless $key;
     return undef unless $val;
 
-    # SANITY CHECK: search term is acceptable
-    return undef unless ($valid_search_terms{$key});
+    # SANITY CHECK: get user term is acceptable
+    return undef unless ($valid_get_user_terms{$key});
+
+    my $cached = $self->_check_cache($key => $val);
+    return $cached if $cached;
+
+    # TODO: ideally, we would delay connecting to the LDAP server until this
+    # point
 
     # search LDAP directory for our record
-    my $mesg = $self->_find_user( $key, $val );
+    my $mesg = $self->_find_user($key => $val);
     unless ($mesg) {
         st_log->error( "ST::User::LDAP: no suitable LDAP response" );
         return undef;
@@ -107,6 +113,26 @@ sub GetUser {
     return Socialtext::User::LDAP->new_from_hash($user);
 }
 
+sub _check_cache {
+    my ($self, $key, $val) = @_;
+
+    # get cached user data, returning that if the cache is fresh
+    my $cached = Socialtext::User::Base->GetUserRecord(
+        $key, $val, $self->driver_key
+    );
+    return unless $cached;
+    return unless $cached->cached_at;
+
+# XXX: HARDCODED TTL
+    my $ttl = DateTime::Duration->new(seconds => 300);
+    my $cutoff = Socialtext::User::Base::_hires_dt_now() - $ttl;
+
+    return unless ($cached->cached_at > $cutoff);
+
+    #warn "Cached LDAP user is fresh";
+    return $cached;
+}
+
 sub _vivify {
     my ($self, $p) = @_;
 
@@ -114,27 +140,23 @@ sub _vivify {
 
     # NOTE: *always* use the driver_unique_id to update LDAP user records
 
-    my $user_id = sql_singlevalue(
-        q{SELECT user_id FROM users 
-          WHERE driver_key = ? AND driver_unique_id = ?},
-        $p->{driver_key},
-        $p->{driver_unique_id}
-    );
-    unless ($user_id) {
-        $user_id = Socialtext::User::Base->NewUserId();
-        sql_execute(q{
-                INSERT INTO users
-                (user_id, driver_key, driver_username, driver_unique_id, email_address)
-                VALUES
-                (?, ?, ?, ?, ?)
-            },
-            $user_id, $p->{driver_key}, $p->{username},
-            $p->{driver_unique_id}, $p->{email_address}
-        );
-        # just created a new user in the DB; flush the cache
-        Socialtext::User::Cache->Clear();
+    $p->{driver_username} = delete $p->{username};
+    $p->{cached_at} = 'now'; # auto-set to 'now'
+    $p->{password} = '*no-password*';
+
+    my $user_id = Socialtext::User::Base->ResolveId($p);
+
+    if ($user_id) {
+        # update cache
+        $p->{user_id} = $user_id;
+        Socialtext::User::Base->UpdateUserRecord($p);
     }
-    $p->{user_id} = $user_id;
+    else {
+        # will add a user_id to $p:
+        Socialtext::User::Base->NewUserRecord($p);
+    }
+
+    $p->{username} = delete $p->{driver_username};
 }
 
 sub Search {

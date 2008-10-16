@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+
+# Revoke escalated DB privileges
+sudo -u postgres st-db revoke_privs

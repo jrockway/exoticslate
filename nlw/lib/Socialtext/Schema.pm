@@ -213,6 +213,31 @@ sub _update_scripts {
     return @to_run;
 }
 
+=head2 escalate_privs()
+
+Escalates our DB privileges to "superuser" status.
+
+=cut
+
+sub escalate_privs {
+    my $self = shift;
+    my %c = $self->connect_params();
+    $self->_db_shell_run("psql -U postgres -c 'ALTER ROLE $c{user} SUPERUSER'");
+}
+
+=head2 revoke_privs()
+
+Revokes any "superuser" privileges that we may have granted ourselves earlier
+via a call to C<escalate_privs()>.
+
+=cut
+
+sub revoke_privs {
+    my $self = shift;
+    my %c = $self->connect_params();
+    $self->_db_shell_run("psql -U postgres -c 'ALTER ROLE $c{user} NOSUPERUSER'");
+}
+
 =head2 version()
 
 Prints out the current schema version.
@@ -390,8 +415,12 @@ sub _createlang {
     if ($@) {
         # If we're running as root, we need to run createlang as postgres
         # If we're not root, then we're likely in a dev-env.
-        my $sudo = $> ? '' : 'sudo -u postgres';
+        my $sudo = _sudo('postgres');
         $self->_db_shell_run("$sudo createlang plpgsql $c{db_name}");
+
+        # TODO: now that we're escalating privs before, we should be able to
+        # run createlang as the usual db user, removing the need to sudo
+        # above.
     }
 }
 

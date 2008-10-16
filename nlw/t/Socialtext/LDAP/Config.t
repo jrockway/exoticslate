@@ -25,6 +25,7 @@ port: 389
 bind_user: cn=Manager,ou=Development,dc=my-domain,dc=com
 bind_password: abc123
 filter: '(objectClass=inetOrgPerson)'
+ttl: 300
 attr_map:
     user_id: dn
     username: cn

@@ -24,6 +24,7 @@ field 'bind_password';
 field 'filter';
 field 'follow_referrals' => 1;
 field 'max_referral_depth' => 3;
+field 'ttl' => 300;
 field 'attr_map';
 
 # XXX: possible future config options:
@@ -229,6 +230,11 @@ or not.  Defaults to "1" (follow referrals).
 
 Specifies the maximum depth to which LDAP referrals are followed.  Defaults to
 "3".
+
+=item B<ttl>
+
+Specifies the TTL (in seconds) for user data which is queried via this LDAP
+instance.  Defaults to "300" seconds.
 
 =item B<attr_map> (required)
 

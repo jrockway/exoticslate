@@ -123,14 +123,18 @@ sub _check_cache {
     return unless $cached;
     return unless $cached->cached_at;
 
-# XXX: HARDCODED TTL
-    my $ttl = DateTime::Duration->new(seconds => 300);
+    my $ttl    = $self->cache_ttl;
     my $cutoff = Socialtext::User::Base::_hires_dt_now() - $ttl;
 
     return unless ($cached->cached_at > $cutoff);
 
     #warn "Cached LDAP user is fresh";
     return $cached;
+}
+
+sub cache_ttl {
+    my $self = shift;
+    return DateTime::Duration->new( seconds => $self->ldap->config->ttl );
 }
 
 sub _vivify {
@@ -312,6 +316,11 @@ This B<is> different than the mapping returned by
 C<Socialtext::LDAP::Config-E<gt>attr_map()> in that this mapping is
 specifically targetted towards the underlying database representation of the
 user attributes.
+
+=item B<cache_ttl()>
+
+Returns a C<DateTime::Duration> object representing the TTL for this Factory's
+LDAP data.
 
 =item B<GetUser($key, $val)>
 

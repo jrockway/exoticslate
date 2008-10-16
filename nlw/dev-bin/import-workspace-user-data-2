@@ -127,7 +127,7 @@ sub update_user_data {
     # - shocking!
     my $dbh = get_dbh();
     $dbh->do( <<'EOF', {}, Socialtext::User->SystemUser()->user_id() );
-UPDATE "User"
+UPDATE users
    SET created_by_user_id = ?
  WHERE created_by_user_id IS NULL
 EOF

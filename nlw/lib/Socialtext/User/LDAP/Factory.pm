@@ -69,8 +69,19 @@ sub GetUser {
     my $cached = $self->_check_cache($key => $val);
     return $cached if $cached;
 
-    # TODO: ideally, we would delay connecting to the LDAP server until this
-    # point
+    # Lookup the user, vivify them, and turn them into an actual homunculus.
+    my $user = $self->lookup($key => $val);
+    return unless $user;
+
+    $self->_vivify($user);
+    return Socialtext::User::LDAP->new_from_hash($user);
+}
+
+sub lookup {
+    my ($self, $key, $val) = @_;
+
+    # SANITY CHECK: lookup term is acceptable
+    return undef unless ($valid_get_user_terms{$key});
 
     # search LDAP directory for our record
     my $mesg = $self->_find_user($key => $val);
@@ -109,8 +120,7 @@ sub GetUser {
         }
     }
 
-    $self->_vivify($user);
-    return Socialtext::User::LDAP->new_from_hash($user);
+    return $user;
 }
 
 sub _check_cache {
@@ -211,6 +221,10 @@ sub Search {
 
 sub _find_user {
     my ($self, $key, $val) = @_;
+
+    # TODO: ideally, we would delay connecting to the LDAP server until this
+    # point
+
     my $ldap     = $self->ldap();
     my $attr_map = $ldap->config->attr_map();
 
@@ -338,6 +352,14 @@ User lookups can be performed by I<one> of:
 =item * email_address => $email_address
 
 =back
+
+=item B<lookup($key, $val)>
+
+Looks up a user in the LDAP data store and returns a hash-ref of data on that
+user.
+
+Lookups can be performed using the same criteria as listed for C<GetUser()>
+above.
 
 =item B<Search($term)>
 

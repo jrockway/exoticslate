@@ -9,6 +9,7 @@ use Socialtext::JSON qw/encode_json decode_json/;
 use Class::Field 'field';
 use Socialtext::User;
 use Socialtext::Exceptions;
+use Date::Parse;
 
 our $VERSION = '1.0';
 
@@ -122,24 +123,39 @@ sub get_resource {
     return $events;
 }
 
+sub template_render {
+    my ($self, $tmpl, $vars) = @_;
+    my $renderer = Socialtext::TT2::Renderer->instance;
+    return $renderer->render(
+        template => $tmpl,
+        vars => {
+            minutes_ago => sub { int((time - str2time(shift)) / 60) },
+            round => sub { int($_[0] + .5) },
+            $self->hub->helpers->global_template_vars,
+            %$vars,
+        },
+    );
+}
+
 sub resource_to_text {
     my ($self, $events) = @_;
-    return join "\n", 
-           map { $self->hub->template->render('events/event.txt', %$_) }
-               @$events;
+    my $out = $self->template_render('data/events.txt', { events => $events });
+    return $out;
 }
 
 sub resource_to_html {
-    my ( $self, $resource ) = @_;
-    return $self->hub->template->render('events/list.html',
-        events => $resource,
-    );
+    my ($self, $events) = @_;
+    $self->template_render('data/events.html', { events => $events });
 }
 
 {
     no warnings 'once';
-    *GET_html = Socialtext::Rest::Collection::_make_getter(\&resource_to_html, 'text/html');
-    *GET_text = Socialtext::Rest::Collection::_make_getter(\&resource_to_text, 'text/plain');
+    *GET_html = Socialtext::Rest::Collection::_make_getter(
+        \&resource_to_html, 'text/html'
+    );
+    *GET_text = Socialtext::Rest::Collection::_make_getter(
+        \&resource_to_text, 'text/plain'
+    );
 }
 
 sub POST_text {

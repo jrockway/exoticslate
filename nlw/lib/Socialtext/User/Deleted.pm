@@ -11,7 +11,7 @@ sub new {
 
     return $class->SUPER::new({
         username => 'deleted-user',
-        @_, 
+        ((@_ == 1) ? %{$_[0]} : @_),
         cached_at     => DateTime::Infinite::Past->new,
         email_address => 'deleted.user@socialtext.com',
         first_name    => 'Deleted',

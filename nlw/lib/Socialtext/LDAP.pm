@@ -10,17 +10,32 @@ use Socialtext::Log qw(st_log);
 use Socialtext::LDAP::Config;
 
 sub new {
-    my ($class, $driver_id) = @_;
+    my ($class, $driver_or_config) = @_;
 
-    # get configuration object for this LDAP configuration
-    my $config =
-        $driver_id
-        ? Socialtext::LDAP->config($driver_id)
-        : Socialtext::LDAP->default_config();
-    return unless ($config);
+    my $config = $class->ConfigForId($driver_or_config);
+    return unless $config;
 
     # connect to the LDAP server
     return Socialtext::LDAP->connect($config);
+}
+
+sub ConfigForId {
+    my ($class, $driver_or_config) = @_;
+
+    my $config;
+    if (ref($driver_or_config) &&
+        $driver_or_config->isa('Socialtext::LDAP::Config'))
+    {
+        $config = $driver_or_config;
+    }
+    else {
+        # get configuration object for this LDAP configuration
+        $config = $driver_or_config
+            ? Socialtext::LDAP->config($driver_or_config)
+            : Socialtext::LDAP->default_config();
+    }
+
+    return $config;
 }
 
 sub default_config {

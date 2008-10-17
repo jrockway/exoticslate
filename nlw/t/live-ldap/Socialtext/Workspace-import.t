@@ -11,7 +11,7 @@ use Socialtext::LDAP::Config;
 use Socialtext::Workspace;
 use Socialtext::Workspace;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 29;
+use Test::Socialtext tests => 31;
 use Test::Exception;
 
 ###############################################################################
@@ -64,7 +64,8 @@ deleted_ldap_user_shouldnt_prevent_workspace_import: {
 
     my $user = Socialtext::User->new( username => 'John Doe' );
     isa_ok $user, 'Socialtext::User', 'found user to test with';
-    isa_ok $user->homunculus(), 'Socialtext::User::LDAP', '... which came from the LDAP store';
+    isa_ok $user->homunculus(), 'Socialtext::User::LDAP',
+        '... which came from the LDAP store';
 
     $ws->add_user(user => $user);
     ok $ws->has_user($user), 'user added to test workspace';
@@ -72,6 +73,24 @@ deleted_ldap_user_shouldnt_prevent_workspace_import: {
     ###########################################################################
     # simulate loss of connectivity to the LDAP directory
     $openldap = undef;
+
+    # Due to long-term LDAP user caching, we still return the record when we
+    # can't connect to the LDAP server (even if it's expired).
+    # Make the user look like he came from another factory, which should
+    # trigger the old "Deleted" behaviour.
+    use Socialtext::SQL qw(sql_execute);
+    sql_execute(q{
+         UPDATE users 
+         SET driver_key = 'Fubar',
+             cached_at = '-infinity'
+         WHERE user_id = ?
+        }, 
+        $user->user_id
+    );
+    my $deleted = Socialtext::User->new( username => 'John Doe' );
+    isa_ok $deleted, 'Socialtext::User', 'found user to test with';
+    isa_ok $deleted->homunculus(), 'Socialtext::User::Deleted',
+        '... which now appears as Deleted';
 
     ###########################################################################
     # export/delete the workspace+user, and verify that the LDAP user was
@@ -82,6 +101,7 @@ deleted_ldap_user_shouldnt_prevent_workspace_import: {
     ok -e $tarball, 'workspace exported to tarball';
 
     $ws->delete();
+    $user->delete(force => 1); # we're re-importing him later
     $ws = undef;
 
     my $archive = Archive::Tar->new($tarball, 1);

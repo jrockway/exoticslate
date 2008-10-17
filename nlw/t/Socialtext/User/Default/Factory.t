@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 118;
+use Test::Socialtext tests => 121;
 use Socialtext::User;
 use Socialtext::SQL qw(sql_execute);
 
@@ -385,7 +385,7 @@ updating_user_does_data_cleanup: {
     is $homunculus->email_address(), 'foo@bar.com', '... and cleanup was performed';
 }
 
-never_fetch_other_driver_users: {
+bad_driver_key_means_deleted: {
     my $username = next_username();
     my %opts = (
         username        => $username,
@@ -396,16 +396,24 @@ never_fetch_other_driver_users: {
 
     sql_execute(q{
         UPDATE users
-        SET driver_key = 'Fubar'
+        SET driver_key = 'LDAP:doesntexist'
         WHERE user_id = ?
     }, $user->user_id);
 
     my $found = Socialtext::User->new(user_id => $user->user_id);
-    ok !$found, "can't find by user_id";
+    ok $found, "was still able to find the user...";
+    isa_ok $found->homunculus, 'Socialtext::User::Deleted',
+        "... but it's 'Deleted'";
+
     my $found2 = Socialtext::User->new(username => $user->username);
-    ok !$found2, "can't find by username";
+    ok $found2, "was still able to find the user...";
+    isa_ok $found2->homunculus, 'Socialtext::User::Deleted',
+        "... but it's 'Deleted'";
+
     my $found3 = Socialtext::User->new(email_address => $user->email_address);
-    ok !$found3, "can't find by email";
+    ok $found3, "was still able to find the user...";
+    isa_ok $found3->homunculus, 'Socialtext::User::Deleted',
+        "... but it's 'Deleted'";
 
     sql_execute(q{
         UPDATE users

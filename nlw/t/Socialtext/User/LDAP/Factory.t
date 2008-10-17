@@ -4,7 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 use mocked 'Net::LDAP';
 use mocked 'Socialtext::Log', qw(:tests);
-use Test::Socialtext tests => 41;
+use Test::Socialtext tests => 49;
 
 # FIXTURE:  ldap_*
 #
@@ -62,7 +62,8 @@ instantiation_fail_to_ldap_connect: {
     clear_log();
 
     my $factory = Socialtext::User::LDAP::Factory->new();
-    ok !defined $factory, 'failed to LDAP connect';
+    ok $factory, "got the object just fine";
+    ok !$factory->connect, "connection fails";
 
     # VERIFY logs; make sure we failed for the right reason
     logged_like 'error', qr/unable to connect/, '... logged connection failure';
@@ -77,7 +78,8 @@ instantiation_bind_failure: {
     clear_log();
 
     my $factory = Socialtext::User::LDAP::Factory->new();
-    ok !defined $factory, 'failed to LDAP connect';
+    ok $factory, "got the object just fine";
+    ok !$factory->connect, "connection fails";
 
     # VERIFY logs; make sure we failed for the right reason
     logged_like 'error', qr/unable to bind/, '... logged bind failure';
@@ -85,10 +87,27 @@ instantiation_bind_failure: {
 
 ###############################################################################
 # Verify list of valid search terms when retrieving a user record.
+simple_connection_ok: {
+    Net::LDAP->set_mock_behaviour(
+        search_results => [ $TEST_USERS[0] ],
+    );
+    clear_log();
+
+    my $factory = Socialtext::User::LDAP::Factory->new();
+    ok $factory, "got the object just fine";
+    ok $factory->connect, "connection succeeds!";
+
+    is logged_count(), 0, "nothing logged";
+}
+
+###############################################################################
+# Verify list of valid search terms when retrieving a user record.
 get_user_valid_search_terms: {
     Net::LDAP->set_mock_behaviour(
         search_results => [ $TEST_USERS[0] ],
-        );
+    );
+    clear_log();
+
     my $factory = Socialtext::User::LDAP::Factory->new();
     isa_ok $factory, 'Socialtext::User::LDAP::Factory';
 
@@ -96,13 +115,25 @@ get_user_valid_search_terms: {
     my $user = $factory->GetUser(username=>'First Last');
     isa_ok $user, 'Socialtext::User::LDAP', 'username; valid search term';
 
-    # "user_id" is valid search term
-    $user = $factory->GetUser(user_id=>'cn=First Last, dc=example,dc=com');
+    # this query only works if the long-term cache has the entry
+    $user = $factory->GetUser(user_id => $user->user_id);
     isa_ok $user, 'Socialtext::User::LDAP', 'user_id; valid search term';
+
+    $user->delete(force=>1); # clear the long-term cache
+
+    # "driver_unique_id" is valid search term
+    my $dn = 'cn=First Last, dc=example,dc=com';
+    $user = $factory->GetUser(driver_unique_id => $dn);
+    isa_ok $user, 'Socialtext::User::LDAP',
+        'driver_unique_id; valid search term';
+
+    $user->delete(force=>1); # clear the long-term cache
 
     # "email_address" is valid search term
     $user = $factory->GetUser(email_address=>'user@example.com');
     isa_ok $user, 'Socialtext::User::LDAP', 'email_address; valid search term';
+
+    is logged_count(), 0, "nothing logged to this point";
 
     # "first_name" is mapped, but is -NOT- a valid search term
     my $missing_user = $factory->GetUser(first_name=>'First');
@@ -113,7 +144,12 @@ get_user_valid_search_terms: {
     ok !defined $missing_user, 'cn; INVALID search term';
 
     # cleanup; *can't* leave users lying around at the end of a test
+    my $user_id = $user->user_id;
     $user->delete(force=>1);
+
+    $user = $factory->GetUser(user_id => $user->user_id);
+    ok !$user,
+        "sanity check: deleting the user causes lookup by user_id failure";
 }
 
 ###############################################################################
@@ -220,7 +256,8 @@ get_user_via_email_address_is_subtree: {
 }
 
 ###############################################################################
-# User retrieval via "user_id" is optimized to be done as an exact search
+# User retrieval via "driver_unique_id" is optimized to be done as an exact
+# search
 get_user_via_user_id_is_exact: {
     Net::LDAP->set_mock_behaviour(
         search_results => [ $TEST_USERS[0] ],
@@ -230,7 +267,7 @@ get_user_via_user_id_is_exact: {
     my $factory = Socialtext::User::LDAP::Factory->new();
     isa_ok $factory, 'Socialtext::User::LDAP::Factory';
 
-    my $user = $factory->GetUser(user_id=>$dn);
+    my $user = $factory->GetUser(driver_unique_id=>$dn);
     isa_ok $user, 'Socialtext::User::LDAP';
 
     # VERIFY mocks...

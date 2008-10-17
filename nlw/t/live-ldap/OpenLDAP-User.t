@@ -26,11 +26,11 @@ my $factory = Socialtext::User::LDAP::Factory->new();
 isa_ok $factory, 'Socialtext::User::LDAP::Factory';
 
 ###############################################################################
-# Instantiate known user against OpenLDAP directory, by "user_id"
-instantiate_known_user_by_user_id: {
+# Instantiate known user against OpenLDAP directory, by "driver_unique_id"
+instantiate_known_user_by_driver_unique_id: {
     # get the user out of OpenLDAP
-    my $user = $factory->GetUser( user_id => 'cn=John Doe,dc=example,dc=com' );
-    isa_ok $user, 'Socialtext::User::LDAP', 'instantiated via user_id';
+    my $user = $factory->GetUser( driver_unique_id => 'cn=John Doe,dc=example,dc=com' );
+    isa_ok $user, 'Socialtext::User::LDAP', 'instantiated via driver_unique_id';
 
     # verify that all fields were extracted properly
     is $user->driver_unique_id, 'cn=John Doe,dc=example,dc=com',    '... driver_unique_id';

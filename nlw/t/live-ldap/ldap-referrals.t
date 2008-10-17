@@ -29,6 +29,11 @@ authenticate_with_referrals: {
     # authenticate as the user
     ok $user->password_is_correct('foobar'), '... authen w/correct password';
     ok !$user->password_is_correct('BADPASS'), '... authen w/bad password';
+
+    # The long-term cache will make the user appear "Deleted" in the next test
+    # unless we explicitly remove the user here.  It appears Deleted since
+    # setup_ldap_servers_with_referrals() changes the driver_id every time.
+    $user->delete(force => 1);
 }
 
 ###############################################################################

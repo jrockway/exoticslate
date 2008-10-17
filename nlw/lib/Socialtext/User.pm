@@ -103,18 +103,13 @@ sub new_homunculus {
         return undef unless $driver_key;
 
         my $driver = eval {$class->_realize($driver_key, 'GetUser')};
-        my $not_found = 0;
         if ($driver) {
             # if driver doesn't exist any more, we don't have an instance of
             # it to query.  e.g. customer removed an LDAP data store.
-            $homunculus = $driver->GetUser(username => $driver_username);
-        }
-        elsif ($@ =~ /^Couldn't load/) {
-            $not_found = 1;
-        }
-        elsif ($@) {
-            # Treat "Couldn't load <drivername>" as if we can't find the user
-            die $@;
+            #$homunculus = $driver->GetUser(username => $driver_username);
+            $homunculus = $driver->GetUser(
+                driver_unique_id => $driver_unique_id
+            );
         }
 
         $homunculus ||= Socialtext::User::Deleted->new(
@@ -122,7 +117,7 @@ sub new_homunculus {
             driver_unique_id => $driver_unique_id,
             username         => $driver_username,
             driver_key       => $driver_key,
-        ) unless $not_found;
+        );
     }
     # system generated users MUST come from the Default user store; we don't
     # allow for them to live anywhere else.
@@ -136,6 +131,14 @@ sub new_homunculus {
     }
     else {
         $homunculus = $class->_first('GetUser', $key => $val);
+
+        if (!$homunculus && $key ne 'user_id') {
+            # maybe it was deleted?  do a search for users that don't have a
+            # registered driver key.
+            $homunculus = Socialtext::User::Base->GetUserRecord(
+                $key, $val, [$class->_drivers]
+            );
+        }
     }
 
     Socialtext::User::Cache->Store($key, $val, $homunculus);

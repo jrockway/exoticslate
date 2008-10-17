@@ -176,8 +176,19 @@ sub GetUserRecord {
     }
     else {
         die "no driver key?!" unless $driver_key;
-        $where_clause = qq{driver_key = ? AND $where = ?};
-        @bindings = ($driver_key, $id_val);
+        my $search_deleted = (ref($driver_key) eq 'ARRAY');
+        if (!$search_deleted) {
+            $where_clause = qq{driver_key = ? AND $where = ?};
+            @bindings = ($driver_key, $id_val);
+        }
+        else {
+            die "no user factories configured?!" unless @$driver_key;
+            my $placeholders = '?,' x @$driver_key;
+            chop $placeholders;
+            $where_clause = qq{driver_key NOT IN ($placeholders) AND $where=?};
+            @bindings = (@$driver_key, $id_val);
+            $driver_key = 'Deleted'; # if we get any results, make it Deleted
+        }
     }
 
     my $sth = sql_execute(
@@ -187,6 +198,10 @@ sub GetUserRecord {
 
     my $row = $sth->fetchrow_hashref();
     return undef unless $row;
+
+    # Always set this; the query returns the same value *except* when we're
+    # looking for Deleted users.
+    $row->{driver_key} = $driver_key;
 
     $row->{username} = delete $row->{driver_username};
     return $class->new_from_hash($row);

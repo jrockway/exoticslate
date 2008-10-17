@@ -4,7 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 use mocked 'Net::LDAP';
 use mocked 'Socialtext::Log', qw(:tests);
-use Test::Socialtext tests => 8;
+use Test::Socialtext tests => 10;
 
 # FIXTURE:  ldap_anonymous
 #
@@ -42,7 +42,8 @@ ldap_anonymous_bind: {
     clear_log();
 
     my $factory = Socialtext::User::LDAP::Factory->new();
-    isa_ok $factory, 'Socialtext::User::LDAP::Factory', 'anonymous bind; connected';
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory', 'created factory ok';
+    ok $factory->connect(), 'was able to connect to the server';
 
     # VERIFY mocks
     my $mock = Net::LDAP->mocked_object();
@@ -66,7 +67,8 @@ instantiation_bind_requires_additional_auth: {
     clear_log();
 
     my $factory = Socialtext::User::LDAP::Factory->new();
-    ok !defined $factory, 'instantiation w/bind requires additional auth';
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory', 'created factory ok';
+    ok !$factory->connect(),'instantiation w/bind requires additional auth';
 
     # VERIFY logs; make sure we failed for the right reason
     logged_like 'error', qr/unable to bind/, '... logged bind failure';

@@ -8,7 +8,7 @@ use Socialtext::LDAP;
 use Socialtext::LDAP::Config;
 use Socialtext::Workspace;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 19;
+use Test::Socialtext tests => 25;
 
 ###############################################################################
 # FIXTURE: foobar
@@ -54,6 +54,7 @@ disappearing_ldap_user_store: {
     my $user = Socialtext::User->new( username => 'John Doe' );
     isa_ok $user, 'Socialtext::User', 'found user to test with';
     isa_ok $user->homunculus(), 'Socialtext::User::LDAP', '... which came from the LDAP store';
+    my $dn = $user->homunculus->driver_unique_id;
 
     $ws->add_user( user => $user );
     pass 'added the user to the workspace';
@@ -94,6 +95,20 @@ disappearing_ldap_user_store: {
     is scalar @deleted_users, 1, '... one of which is a Deleted user';
     is $deleted_users[0]->user_id, $user->user_id, '... ... our test user';
 
+
+    # lookup the user by other means
+    my $maybe_deleted = Socialtext::User->new(username => $user->username);
+    ok $maybe_deleted, "got the user by username";
+    isa_ok $maybe_deleted->homunculus, 'Socialtext::User::Deleted', "... but it's deleted";
+
+    $maybe_deleted = Socialtext::User->new(email_address => $user->email_address);
+    ok $maybe_deleted, "got the user by email_address";
+    isa_ok $maybe_deleted->homunculus, 'Socialtext::User::Deleted', "... but it's deleted";
+
+    $maybe_deleted = Socialtext::User->new(driver_unique_id => $dn);
+    ok $maybe_deleted, "got the user by driver_unique_id";
+    isa_ok $maybe_deleted->homunculus, 'Socialtext::User::Deleted', "... but it's deleted";
+
     # cleanup; purge the test user from the system.
-    $user->delete(force=>1);
+    #$user->delete(force=>1);
 }

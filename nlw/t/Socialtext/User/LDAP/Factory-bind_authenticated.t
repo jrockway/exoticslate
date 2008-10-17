@@ -4,7 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 use mocked 'Net::LDAP';
 use mocked 'Socialtext::Log', qw(:tests);
-use Test::Socialtext tests => 6;
+use Test::Socialtext tests => 7;
 
 # FIXTURE:  ldap_authenticated
 #
@@ -46,15 +46,16 @@ ldap_authenticated_bind: {
     clear_log();
 
     my $factory = Socialtext::User::LDAP::Factory->new();
-    isa_ok $factory, 'Socialtext::User::LDAP::Factory', 'authenticated bind; connected';
+    isa_ok $factory, 'Socialtext::User::LDAP::Factory', 'authenticated bind...';
+    ok $factory->connect, '... was able to connect';
 
     # VERIFY mocks
     my $mock = Net::LDAP->mocked_object();
     $mock->called_pos_ok( 1, 'bind' );
     my ($self, $dn, %opts) = $mock->call_args(1);
-    ok defined $dn, 'authenticated bind; has username';
-    ok exists $opts{'password'}, 'authenticated bind; has password';
+    ok defined $dn, 'bind has correct username';
+    ok exists $opts{'password'}, 'bind has correct password';
 
     # VERIFY logs; should be empty
-    is logged_count(), 0, '... logged right number of entries';
+    is logged_count(), 0, '... log is empty';
 }

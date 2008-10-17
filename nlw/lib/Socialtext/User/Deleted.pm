@@ -58,11 +58,14 @@ This class provides methods for dealing with users that can no longer
 be instantiated via their canonical drivers, and is derived from
 C<Socialtext::User::Base>.
 
+A typical example is an LDAP user that can no longer be located in his/her
+LDAP directory.
+
 =head1 METHODS
 
 =over
 
-=item B<Socialtext::User::Deleted-E<gt>new($data)>
+=item B<< Socialtext::User::Deleted->new($data) >>
 
 Creates a new user object based on the provided C<$data> (which could be a HASH
 or HASH-REF of data).
@@ -121,6 +124,10 @@ password.
 =item B<password_is_correct()>
 
 Returns 0, no matter what is passed in.
+
+=item B<delete()>
+
+Does nothing.  See perhaps L<Socialtext::User::Factory>'s C<DeleteUserRecord> method.
 
 =back
 

@@ -117,7 +117,7 @@ ldap_users_have_no_password: {
 auto_vivify_an_ldap_user: {
     my $refs = bootstrap_tests();
 
-    my $id_before = Socialtext::User::Base->NewUserId();
+    my $id_before = Socialtext::User::Factory->NewUserId();
 
     # instantiate LDAP user.
     my $user = Socialtext::User->new(
@@ -125,7 +125,7 @@ auto_vivify_an_ldap_user: {
     );
     isa_ok $user, 'Socialtext::User', 'instantiated user';
     is $user->driver_name(), 'LDAP', '... with LDAP driver';
-    my $id_after = Socialtext::User::Base->NewUserId();
+    my $id_after = Socialtext::User::Factory->NewUserId();
 
     ok $user->user_id > $id_before, '... has a user_id';
     ok $user->user_id < $id_after, '... not a spontaneous id';

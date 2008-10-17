@@ -5,7 +5,7 @@ use warnings;
 
 # allow for the system level account usernames to be exported; ST::User will
 # use them to short-circuit user lookups into here where applicable.
-use base qw(Exporter);
+use base qw(Socialtext::User::Factory Exporter);
 our @EXPORT_OK;
 BEGIN {
     @EXPORT_OK = qw(
@@ -14,6 +14,7 @@ BEGIN {
     );
 }
 
+use Class::Field qw(field const);
 use Socialtext::Exceptions qw( data_validation_error );
 
 use Digest::SHA1 ();
@@ -24,6 +25,7 @@ use Socialtext::String;
 use Socialtext::SQL qw(sql_execute sql_singlevalue);
 use Socialtext::User;
 use Socialtext::UserMetadata;
+use Socialtext::User::Factory;
 use Socialtext::User::Default;
 use Socialtext::MultiCursor;
 use Socialtext::l10n qw(loc);
@@ -34,15 +36,16 @@ our $SystemEmailAddress = 'system-user@socialtext.net';
 our $GuestUsername  = 'guest';
 our $GuestEmailAddress = 'guest@socialtext.net';
 
-sub driver_name { 'Default' }
-sub driver_key { shift->driver_name }
+const 'driver_name' => 'Default';
+const 'driver_key'  => 'Default';
+const 'driver_id'   => undef;
 
 # FIXME: This belongs elsewhere, in fixture generation code, perhaps
 sub _create_default_user {
     my $self = shift;
     my ($username, $email, $first_name, $created_by) = @_;
 
-    my $id = Socialtext::User::Base->NewUserId();
+    my $id = $self->NewUserId();
     my $system_user = $self->create(
         driver_unique_id => $id,
         user_id          => $id,
@@ -122,12 +125,8 @@ sub Count {
 }
 
 sub GetUser {
-    my ( $self, $id_key, $id_val ) = @_;
-
-    my $homunculus = Socialtext::User::Default->GetUserRecord(
-        $id_key, $id_val, $self->driver_key
-    );
-    return $homunculus;
+    my ($self, $id_key, $id_val) = @_;
+    return $self->get_homunculus($id_key, $id_val);
 }
 
 sub create {
@@ -142,10 +141,10 @@ sub create {
     $p{driver_unique_id} = $p{user_id};
 
     $p{driver_username} = delete $p{username};
-    Socialtext::User::Base->NewUserRecord(\%p);
+    $self->NewUserRecord(\%p);
     $p{username} = delete $p{driver_username};
 
-    return Socialtext::User::Default->new_from_hash(\%p);
+    return $self->new_homunculus(\%p);
 }
 
 # "update" methods: generic update?
@@ -157,7 +156,7 @@ sub update {
     $p{cached_at} = DateTime::Infinite::Future->new();
     delete $p{driver_key}; # can't update, sorry
 
-    Socialtext::User::Base->UpdateUserRecord( {
+    $self->UpdateUserRecord( {
         %p,
         driver_username => $p{username},
         user_id => $user->user_id,
@@ -228,7 +227,7 @@ sub _validate_and_clean_data {
     my $is_create = defined $user ? 0 : 1;
 
     if ($is_create) {
-        $p->{user_id} ||= Socialtext::User::Base->NewUserId();
+        $p->{user_id} ||= $self->NewUserId();
     }
     else {
         $metadata = Socialtext::UserMetadata->new(
@@ -339,7 +338,7 @@ Socialtext::User::Default::Factory - A Socialtext RDBMS User Factory
 =head1 DESCRIPTION
 
 C<Socialtext::User::Default::Factory> provides a a User factory for users that
-live in our User table.  Each object represents a single row from the table.
+live in our "users" table.  Each object represents a single row from the table.
 
 =head1 METHODS
 
@@ -351,20 +350,23 @@ Creates a new RDBMS user factory.
 
 =item B<driver_name()>
 
-Returns the name of the driver this Factory implements, "Default".
+The name of this factory, always returns 'Default'
 
 =item B<driver_key()>
 
-Returns the unique ID of the driver instance used by this Factory.  The
-Default driver only has B<one> instance, so this is the same as the
-L</driver_name()>.
+The name of this factory, always returns 'Default' since only one Default
+factory can be configured per system.
 
-=item B<Socialtext::User::Default::Factory->E<gt>EnsureRequiredDataIsPresent()>
+=item B<driver_id()>
+
+Returns undef since only one Default factory can be configured per system.
+
+=item B<< Socialtext::User::Default::Factory->EnsureRequiredDataIsPresent() >>
 
 Inserts required users into the DBMS if they are not present.  See
 L<Socialtext::Data> fo rmore details on required data.
 
-=item B<Socialtext::User::Default::Factory-E<gt>IsDefaultUser($key, $val)>
+=item B<< Socialtext::User::Default::Factory->IsDefaultUser($key, $val) >>
 
 Checks to see if the user defined by the given C<%args> is one of the users
 that B<must> reside in the Default data store (the system-level user records).
@@ -381,7 +383,7 @@ Lookups can be performed by I<one> of:
 
 =back
 
-=item B<Socialtext::User::Default::Factory->E<gt>Count()>
+=item B<< Socialtext::User::Default::Factory->Count() >>
 
 Returns the number of User records in the database.
 
@@ -390,11 +392,15 @@ Returns the number of User records in the database.
 Searches for the specified user in the RDBMS data store and returns a new
 C<Socialtext::User::Default> object representing that user if it exists.
 
+For Default users, C<user_id == driver_unique_id>.
+
 User lookups can be performed by I<one> of:
 
 =over
 
 =item * user_id => $user_id
+
+=item * driver_unique_id => $driver_unique_id
 
 =item * username => $username
 
@@ -465,24 +471,6 @@ of the following fields:
 The search will return back to the caller a list of hash-refs containing the
 following key/value pairs:
 
-=over
-
-=item driver_name
-
-The unique driver key for the instance of the data store that the user was
-found in.  e.g. "Default".
-
-=item email_address
-
-The e-mail address for the user.
-
-=item name_and_email
-
-The canonical name and e-mail for this user, as produced by
-C<Socialtext::User-E<gt>FormattedEmail()>.
-
-=back
-
 =back
 
 =head1 AUTHOR
@@ -491,6 +479,6 @@ Socialtext, Inc., <code@socialtext.com>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005 Socialtext, Inc., All Rights Reserved.
+Copyright 2005-2008 Socialtext, Inc., All Rights Reserved.
 
 =cut

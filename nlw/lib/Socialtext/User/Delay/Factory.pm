@@ -3,14 +3,19 @@ package Socialtext::User::Delay::Factory;
 
 use strict;
 use warnings;
+
+use base qw(Socialtext::User::Factory);
+
+use Class::Field qw(const);
 use Time::HiRes qw(sleep);
 use Socialtext::Log qw(st_log);
 
 # time delay to add to all User lookups/requests, in seconds
 our $DELAY = 0.10;
 
-sub driver_name { 'Delay' };
-sub driver_key  { driver_name() };
+const 'driver_name' => 'Delay';
+const 'driver_key'  => 'Delay';
+const 'driver_id'   => undef;
 
 sub new {
     my $proto = shift;

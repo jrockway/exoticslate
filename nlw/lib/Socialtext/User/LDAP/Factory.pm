@@ -3,6 +3,9 @@ package Socialtext::User::LDAP::Factory;
 
 use strict;
 use warnings;
+
+use base qw(Socialtext::User::Factory);
+
 use Class::Field qw(field const);
 use Socialtext::LDAP;
 use Socialtext::User::LDAP;
@@ -10,6 +13,8 @@ use Socialtext::Log qw(st_log);
 use Net::LDAP::Util qw(escape_filter_value);
 use Socialtext::SQL qw(sql_execute sql_singlevalue);
 use Readonly;
+
+# please treat these fields as read-only:
 
 field 'ldap_config'; # A Socialtext::LDAP::Config object
 
@@ -81,7 +86,7 @@ sub GetUser {
 
     if ($proto_user) {
         $self->_vivify($proto_user);
-        return Socialtext::User::LDAP->new_from_hash($proto_user);
+        return $self->new_homunculus($proto_user);
     }
 
     if ($self->{_cache_lookup}) {
@@ -162,7 +167,7 @@ sub _check_cache {
     my ($self, $key, $val) = @_;
 
     # get cached user data, returning that if the cache is fresh
-    my $cached = Socialtext::User::Base->GetUserRecord(
+    my $cached = $self->GetHomunculus(
         $key, $val, $self->driver_key
     );
     return unless $cached;
@@ -172,7 +177,7 @@ sub _check_cache {
     $self->{_cache_lookup} = $cached;
 
     my $ttl    = $self->cache_ttl;
-    my $cutoff = Socialtext::User::Base::_hires_dt_now() - $ttl;
+    my $cutoff = $self->Now() - $ttl;
 
     return unless ($cached->cached_at > $cutoff);
 
@@ -196,16 +201,16 @@ sub _vivify {
     $proto_user->{cached_at} = 'now'; # auto-set to 'now'
     $proto_user->{password} = '*no-password*';
 
-    my $user_id = Socialtext::User::Base->ResolveId($proto_user);
+    my $user_id = $self->ResolveId($proto_user);
 
     if ($user_id) {
         # update cache
         $proto_user->{user_id} = $user_id;
-        Socialtext::User::Base->UpdateUserRecord($proto_user);
+        $self->UpdateUserRecord($proto_user);
     }
     else {
         # will add a user_id to $proto_user:
-        Socialtext::User::Base->NewUserRecord($proto_user);
+        $self->NewUserRecord($proto_user);
     }
 
     $proto_user->{username} = delete $proto_user->{driver_username};
@@ -244,6 +249,7 @@ sub Search {
     }
 
     # extract search results
+    require Socialtext::User;
     my @users;
     foreach my $rec ($mesg->entries()) {
         my $email = $rec->get_value($attr_map->{email_address});
@@ -319,7 +325,7 @@ Socialtext::User::LDAP::Factory - A Socialtext LDAP User Factory
 =head1 DESCRIPTION
 
 C<Socialtext::User::LDAP::Factory> provides a User factory for user records
-that happen to exist in an LDAP data store.
+that happen to exist in an LDAP data store.  Copies of retrieved users are stored in the "users" table, creating a "long-term cache" of LDAP user information (with the exception of passwords and authentication).  See L<GetUser($key, $val)> for details.
 
 =head1 METHODS
 
@@ -346,13 +352,25 @@ e.g. "0deadbeef0".
 Returns the full driver key ("name:id") of the LDAP instance used by this
 Factory.  e.g. "LDAP:0deadbeef0".
 
+=item B<ldap()>
+
+Returns the C<Socialtext::LDAP> for this factory.
+
+=item B<connect()>
+
+The same as C<ldap()>, but ensures that it is connected.
+
+=item B<ldap_config()>
+
+Returns the C<Socialtext::LDAP::Config> for this factory.
+
 =item B<attr_map()>
 
 Returns the mapping of Socialtext user attributes (as they appear in the DB)
 to their respective LDAP representations.
 
-This B<is> different than the mapping returned by
-C<Socialtext::LDAP::Config-E<gt>attr_map()> in that this mapping is
+This B<is> different than the mapping returned by 
+C<< Socialtext::LDAP::Config->attr_map() >> in that this mapping is
 specifically targetted towards the underlying database representation of the
 user attributes.
 
@@ -364,7 +382,20 @@ LDAP data.
 =item B<GetUser($key, $val)>
 
 Searches for the specified user in the LDAP data store and returns a new
-C<Socialtext::User::LDAP> object representing that user if it exists.
+C<Socialtext::User::LDAP> Homunculus object representing that user if it
+exists.  
+
+Long-term caching of LDAP users is implemented by storing user
+records in the "users" database table.
+
+The long-term cache is checked before connecting to the LDAP server..  If a
+user is not found in the cache, or the cached copy has expired, the user is
+retrieved from the LDAP server.  If the retrieval is successful, the details
+of that user are stored in the long-term cache.
+
+If the cached copy has expired, and the LDAP server is unreachable, the cached copy is used.
+
+If a user has been used on this system, but is no longer present in the LDAP directory, a C<Socialtext::User::Deleted> Homunculus is returned.
 
 User lookups can be performed by I<one> of:
 
@@ -372,11 +403,15 @@ User lookups can be performed by I<one> of:
 
 =item * user_id => $user_id
 
+=item * driver_unique_id => $driver_unique_id
+
 =item * username => $username
 
 =item * email_address => $email_address
 
 =back
+
+user_id lookups will only search the long-term cache.
 
 =item B<lookup($key, $val)>
 
@@ -384,7 +419,9 @@ Looks up a user in the LDAP data store and returns a hash-ref of data on that
 user.
 
 Lookups can be performed using the same criteria as listed for C<GetUser()>
-above.
+above with the exception that 'user_id' lookups are not available.
+
+The long-term cache is B<not> consulted when using this method.
 
 =item B<Search($term)>
 
@@ -420,9 +457,11 @@ The e-mail address for the user.
 =item name_and_email
 
 The canonical name and e-mail for this user, as produced by
-C<Socialtext::User-E<gt>FormattedEmail()>.
+C<< Socialtext::User->FormattedEmail() >>.
 
 =back
+
+The long-term cache is B<not> consulted when using this method.
 
 =back
 

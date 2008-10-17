@@ -13,9 +13,9 @@ use Socialtext::SQL qw(sql_execute sql_selectrow);
 use Socialtext::TT2::Renderer;
 use Socialtext::URI;
 use Socialtext::UserMetadata;
-use Socialtext::User::Base;
 use Socialtext::User::Deleted;
 use Socialtext::User::EmailConfirmation;
+use Socialtext::User::Factory;
 use Socialtext::User::Default::Factory qw($SystemUsername $GuestUsername);
 use Socialtext::Workspace;
 use Email::Address;
@@ -106,10 +106,7 @@ sub new_homunculus {
         if ($driver) {
             # if driver doesn't exist any more, we don't have an instance of
             # it to query.  e.g. customer removed an LDAP data store.
-            #$homunculus = $driver->GetUser(username => $driver_username);
-            $homunculus = $driver->GetUser(
-                driver_unique_id => $driver_unique_id
-            );
+            $homunculus = $driver->GetUser(username => $driver_username);
         }
 
         $homunculus ||= Socialtext::User::Deleted->new(
@@ -135,7 +132,7 @@ sub new_homunculus {
         if (!$homunculus && $key ne 'user_id') {
             # maybe it was deleted?  do a search for users that don't have a
             # registered driver key.
-            $homunculus = Socialtext::User::Base->GetUserRecord(
+            $homunculus = Socialtext::User::Factory->GetHomunculus(
                 $key, $val, [$class->_drivers]
             );
         }
@@ -170,14 +167,12 @@ sub new {
     return $user;
 }
 
-
-
 sub create {
     my $class = shift;
 
     # username email_address password first_name last_name
     my %p = @_;
-    my $id = Socialtext::User::Base->NewUserId();
+    my $id = Socialtext::User::Factory->NewUserId();
     $p{user_id} = $id;
 
     my $homunculus = $class->_first( 'create', %p );
@@ -414,7 +409,7 @@ sub shared_accounts {
         # up: the "details" and the "metadata".  Order is important, to ensure
         # that referential integrity is preserved.
         $self->metadata->delete();
-        $self->homunculus->delete();
+        $self->homunculus->delete(force => 1);
 
         # flush the user cache; we've removed a user
         Socialtext::User::Cache->Clear();
@@ -2083,23 +2078,12 @@ the user in UserConfirmationEmail.
 
 Create and return an Socialtext::User::EmailConfirmation object for the user.
 
-=head2 $user->avatar_is_visible()
-
-Return whether the user's avatar should be displayed when viewing information
-about this user. 
-
-=head2 $user->profile_is_visible_to()
-
-Return whether a link to the user's profile should be displayed when viewing
-information about this user. 
-
 =head1 AUTHOR
 
 Socialtext, Inc., <code@socialtext.com>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005 Socialtext, Inc., All Rights Reserved.
-
+Copyright 2005-2008 Socialtext, Inc., All Rights Reserved.
 
 =cut

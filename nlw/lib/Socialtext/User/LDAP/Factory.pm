@@ -20,6 +20,8 @@ field 'driver_id', -init => '$self->ldap_config->id';
 const 'driver_name' => 'LDAP';
 field 'driver_key', -init => '$self->driver_name . ":" . $self->driver_id';
 
+field 'attr_map', -init => '$self->_attr_map()';
+
 Readonly my %valid_get_user_terms => (
     user_id          => 1,
     username         => 1,
@@ -44,7 +46,6 @@ sub new {
 # already happened.
 sub connect { return $_[0]->ldap; }
 
-field 'attr_map', -init => '$self->_attr_map()';
 sub _attr_map {
     my $self = shift;
     my %attr_map = %{$self->ldap_config->attr_map()}; # copy!
@@ -109,6 +110,8 @@ sub lookup {
 
     # SANITY CHECK: lookup term is acceptable
     return unless ($valid_get_user_terms{$key});
+    # We can't check the LDAP server for user_id's, though
+    return if $key eq 'user_id';
 
     # search LDAP directory for our record
     my $mesg = $self->_find_user($key => $val);

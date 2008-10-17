@@ -1571,7 +1571,7 @@ proto.make_link = function(label, page_name, url) {
     var link_node = document.createElement("a");
 
     // Anchor text
-    var text = html_escape( label || page_name || url );
+    var text = label || page_name || url;
     link_node.appendChild( document.createTextNode(text) );
 
     // Anchor HREF
@@ -1580,6 +1580,13 @@ proto.make_link = function(label, page_name, url) {
     // Anchor hint for "label"[page] style links
     if (label && page_name && label != page_name) {
         var comment = document.createComment("wiki-renamed-link " + page_name);
+        link_node.appendChild(comment);
+    }
+
+    if (label && url) {
+        var comment = document.createComment(
+            'wiki-renamed-hyperlink "' + label + '"<' + url + '>'
+        );
         link_node.appendChild(comment);
     }
 
@@ -1595,7 +1602,15 @@ if (Wikiwyg.is_ie) {
         if (page_name) {
             attr = " wiki_page=\"" + page_name + "\"";
         }
-        var html = "<a href=\"" + href + "\"" + attr + ">" + text + "</a>";
+        var html = "<a href=\"" + href + "\"" + attr + ">" + text;
+
+        if (label && url) {
+            html += '<!--' +
+                    'wiki-renamed-hyperlink "' + label + '"<' + url + '>' +
+                    '-->';
+        }
+
+        html += "</a>";
 
         this.get_editable_div().focus(); // Need this before .insert_html
         this.insert_html(html);

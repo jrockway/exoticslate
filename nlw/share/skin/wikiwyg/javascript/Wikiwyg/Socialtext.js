@@ -917,7 +917,7 @@ proto.enableLinkConfirmations = function() {
     wikiwyg.confirmed = false;
 
     window.onbeforeunload = function(ev) {
-        if (Selenium) {
+        if (typeof Selenium != 'undefined') {
             /* Selenium cannot handle .onbeforeunload, so simply let the
              * browser unload the window because there's no way to force
              * "Cancel" from within Javascript.

@@ -4,6 +4,9 @@ var t = new Test.Visual();
 
 t.plan(4);
 
+if (jQuery.browser.msie)
+    t.skipAll("Skipping this insanity on IE for now...");
+
 t.checkRichTextSupport();
 
 t.runAsync([
@@ -45,11 +48,6 @@ t.runAsync([
     function() { 
         t.$('#st-edit-button-link').click();
         t.callNextStep(3000);
-    },
-
-    function() { 
-        t.$('#st-mode-wysiwyg-button').click();
-        t.callNextStep(1000);
     },
 
     function() { 

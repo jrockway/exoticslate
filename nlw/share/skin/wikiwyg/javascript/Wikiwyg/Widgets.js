@@ -796,12 +796,17 @@ proto.insert_widget = function(widget, widget_element, cb) {
             }
         }
         catch(e) {
-            setTimeout(changer, 100);
+            setTimeout(changer, 300);
         }
     }
 
-    this.get_edit_window().focus();
-    this.get_edit_document().body.focus();
+    // These lines caused the IE only bug {bz: 1506}.
+    // Not running them in IE seems to make widget insertion ok in IE.
+    if (! jQuery.browser.msie) {
+        this.get_edit_window().focus();
+        this.get_edit_document().body.focus();
+    }
+
     changer();
 }
 

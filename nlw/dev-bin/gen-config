@@ -315,7 +315,9 @@ EOT
             ],
             [
             'socialtext/uri_map.yaml.tt2' => "$dirs{socialtext_etc}/uri_map.yaml",
-            { },
+            {
+                is_dev_install => $is_dev_install
+            },
             #$is_dev_install ? 'overwrite' : 0
             1,  # See RT 26836.
             ],

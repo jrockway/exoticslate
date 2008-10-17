@@ -5,10 +5,10 @@
             '*/*':           &default [Socialtext::Rest::Events, GET_html]
             'text/html':              *default
             'application/json':       [Socialtext::Rest::Events, GET_json]
-            'text/plain':             [Socialtext::Rest::Events, GET_text]
+            'text/plain':             [Socialtext::Rest::Events, GET_text][% IF config.is_dev_install %]
         'POST':
             '*/*':              [Socialtext::Rest::Events, POST_form]
-            'application/json': [Socialtext::Rest::Events, POST_json]
+            'application/json': [Socialtext::Rest::Events, POST_json][% END %]
         '*':                    [Socialtext::Rest::Events, bad_method]
 -
     '/data/events/activities/:user':

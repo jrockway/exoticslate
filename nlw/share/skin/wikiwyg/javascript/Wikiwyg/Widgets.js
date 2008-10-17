@@ -724,7 +724,7 @@ proto.replace_widget = function(elem) {
 proto.insert_generated_image = function (widget_string, elem, cb) {
     var self = this;
     var widget_text = self.getWidgetImageText(widget_string);
-    Jemplate.Ajax.post(
+    jQuery.post(
         location.pathname,
         'action=wikiwyg_generate_widget_image;' +
         'widget=' + encodeURIComponent(widget_text) +

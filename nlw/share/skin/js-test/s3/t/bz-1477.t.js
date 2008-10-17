@@ -6,9 +6,9 @@ t.plan(2);
 
 t.runAsync([
     function() {
-        var v = "VeryLongLineVeryLongLine"
-              + "VeryLongLineVeryLongLine"
-              + "VeryLongLine ";
+        var v = "Very Long Line Very Long Line"
+              + "Very Long Line Very Long Line"
+              + "Very Long Line ";
 
         t.put_page({
             workspace: 'admin',

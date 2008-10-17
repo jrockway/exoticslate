@@ -45,6 +45,15 @@ $(function() {
             this.innerHTML = hidden ? 'show' : 'hide';
             Cookie.set('st-page-accessories', hidden ? 'hide' : 'show');
 
+            if ($('div#contentLeft').css('overflow') == 'visible') {
+                if (hidden) {
+                    cl.width(parseInt(cl.css('max-width')));
+                }
+                else {
+                    cl.width(parseInt(cl.css('min-width')));
+                }
+            }
+            
             // Because the content area's height might have changed, repaint
             // the Edit/Comment buttons at the bottom for IE.
             Page._repaintBottomButtons();
@@ -421,8 +430,16 @@ $(function() {
 
                 $('#mainWrap').width( clWidth + crWidth + 50 );
 
-                cl.css('width', clWidth + 'px');
-                cl.css('max-width', clWidth + 'px');
+                cl.css('min-width', clWidth + 'px');
+                cl.css('max-width', (clWidth + crWidth) + 'px');
+
+                if ($('div#contentColumns.hidebox').length) {
+                    cl.width(clWidth + crWidth);
+                }
+                else {
+                    cl.width(clWidth);
+                }
+
                 cl.css('overflow', 'visible');
 
                 $('#contentRight').css('width', crWidth + 'px');

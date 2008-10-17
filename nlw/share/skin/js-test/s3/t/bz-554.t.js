@@ -67,7 +67,7 @@ t.runAsync([
 
     function() { 
         t.$('#st-save-button-link').click();
-        t.callNextStep(3000);
+        t.callNextStep(5000);
     },
 
     function() { 

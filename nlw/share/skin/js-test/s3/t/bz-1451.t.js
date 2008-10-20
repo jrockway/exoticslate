@@ -15,7 +15,12 @@ t.runAsync([
     },
 
     function() {
-        t.open_iframe("/admin/index.cgi?bz_1451#edit", t.nextStep(5000));
+        t.open_iframe("/admin/index.cgi?bz_1451", t.nextStep());
+    },
+            
+    function() { 
+        t.$('#st-edit-button-link').click();
+        t.callNextStep(5000);
     },
             
     function() { 
@@ -24,7 +29,7 @@ t.runAsync([
     },
             
     function() { 
-        t.$('#st-save-button-link').click();
+        t.$('#st-preview-button-link').click();
         t.callNextStep(5000);
     },
             

@@ -86,7 +86,7 @@ instantiation_bind_failure: {
 }
 
 ###############################################################################
-# Verify list of valid search terms when retrieving a user record.
+# Verify that we can connect to LDAP.
 simple_connection_ok: {
     Net::LDAP->set_mock_behaviour(
         search_results => [ $TEST_USERS[0] ],

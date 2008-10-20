@@ -1710,7 +1710,10 @@ proto.get_editable_div = function () {
             self.__range = doc.selection.createRange();
         };
         this._editable_div.onactivate = function () {
-            self.__range = undefined;
+            /* We don't undefine self.__range here as exec_command()
+             * will make use of the previous range after onactivate.
+             */
+            return;
         };
 
         if ( jQuery.browser.msie ) {
@@ -1755,6 +1758,41 @@ proto.get_editable_div = function () {
     }
     return this._editable_div;
 }
+
+proto.exec_command = function(command, option) {
+    if ( Wikiwyg.is_ie && command.match(/^insert/)) {
+        /* IE6+7 has a bug that prevents insertion at the beginning of
+         * the edit document if it begins with a non-text element.
+         * So we test if the selection starts at the beginning, and
+         * prepends a temporary space so the insert can work. -- {bz: 1451}
+         */
+
+        this.get_editable_div().focus(); // Need this before .insert_html
+
+        var range = this.__range
+                 || this.get_edit_document().selection.createRange();
+
+        if (range.boundingLeft == 1 && range.boundingTop <= 20) {
+            var doc = this.get_edit_document();
+            var div = doc.getElementsByTagName('div')[0];
+
+            var randomString = Math.random();
+            var stub = doc.createTextNode(' ');
+
+            div.insertBefore(stub, div.firstChild);
+
+            var stubRange = doc.body.createTextRange();
+            stubRange.findText(' ');
+            stubRange.select();
+        }
+        else {
+            range.collapse();
+            range.select();
+        }
+    }
+
+    return(this.get_edit_document().execCommand(command, false, option));
+};
 
 /*==============================================================================
 Socialtext Preview subclass.

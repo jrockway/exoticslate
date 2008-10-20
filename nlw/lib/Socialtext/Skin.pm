@@ -5,6 +5,7 @@ package Socialtext::Skin;
 use strict;
 use warnings;
 use base 'Socialtext::Plugin';
+use Apache::Cookie;
 use Socialtext::SystemSettings qw(get_system_setting);
 use File::Basename qw(dirname);
 use Socialtext::URI;
@@ -37,7 +38,12 @@ sub new {
     my $self = $class->SUPER::new(%args);
     $self->{_no_workspace} = Socialtext::NoWorkspace->new;
     $self->{_skin_name} = $args{name};
-    return -d $self->skin_path ? $self : undef;
+    return $self;
+}
+
+sub exists {
+    my $self = shift;
+    return -d $self->skin_path;
 }
 
 sub workspace {
@@ -197,7 +203,6 @@ sub customjs {
 
 sub skin_name {
     my $self = shift;
-    require Apache::Cookie;
     return $self->{_skin_name} if defined $self->{_skin_name};
 
     my $workspace_name = $self->workspace->name;

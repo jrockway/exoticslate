@@ -53,8 +53,8 @@
   <script language="javascript"><!--
     (function($){$(function(){
         var preventSameRevisionCompare = function() {
-           var newVal = $('input[name=new_revision_id]:checked').val();
-           var oldVal = $('input[name=old_revision_id]:checked').val();
+           var newVal = $('input[name=new_revision_id]:checked:first').val();
+           var oldVal = $('input[name=old_revision_id]:checked:first').val();
            if (newVal == oldVal) {
              $('a.compareButton').hide();
            }

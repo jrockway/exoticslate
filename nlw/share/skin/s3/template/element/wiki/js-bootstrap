@@ -89,7 +89,6 @@ function createPageObject() {
 <script>
 (function() {
 var v = Socialtext.wikiwyg_variables = {};
-v.home_href = "[% home_href | decorate('home_href') %]";
 v.dropshadow = "[% dropshadow %]";
 v.dropshadow.defined = "[% dropshadow.defined %]";
 v.is_new = ("[% is_new %]" != "0");

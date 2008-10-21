@@ -232,16 +232,17 @@ sub global_template_vars {
         search_box_snippet => $search_box,
         miki_url           => $self->miki_path,
         stax_info          => $self->hub->stax->hacks_info,
-#        home_href          => ($self->hub->skin->skin_name eq 's3') ? '?' : '?action=homepage',
-        home_href          => '?action=homepage',
         workspaceslist     => $self->_get_workspace_list_for_template,
         $self->hub->pluggable->hooked_template_vars,
     );
-
     if ($self->hub->current_user->can_use_plugin('people')) {
         require Socialtext::People::Profile;
         $result{people} = $self->_get_people_watchlist_for_people;
     };
+
+    if ($self->hub->current_user->can_use_plugin('dashboard')) {
+        $result{dashboard_available} = 1;
+    }
 
     # We're disabling the history global nav functionality for now, until its
     # truly global (cross workspace)

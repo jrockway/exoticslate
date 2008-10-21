@@ -8,7 +8,7 @@ use File::chdir;
 use Socialtext::File;
 
 BEGIN {
-    use Test::Socialtext tests => 22;
+    use Test::Socialtext tests => 23;
     use_ok( 'Socialtext::Skin' );
     $Socialtext::Skin::CODE_BASE = 't/share';
     $Socialtext::Skin::PROD_VER = '1.0';
@@ -141,7 +141,8 @@ BEGIN {
 # Non existent skins return undef
 {
     my $skin = Socialtext::Skin->new(name => 'absent');
-    is $skin, undef, "Absent skin is undef";
+    isa_ok $skin, 'Socialtext::Skin', 'got the "absent" skin';
+    ok !$skin->exists, "... and it doesn't actually exist";
 }
 
 # make_dirs

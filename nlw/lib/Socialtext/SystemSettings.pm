@@ -49,7 +49,7 @@ sub default_account {
 
 sub default_skin {
     my $value = shift;
-    my $default_default_skin = 's2';
+    my $default_default_skin = 's3';
     return $value || $default_default_skin;
 }
 

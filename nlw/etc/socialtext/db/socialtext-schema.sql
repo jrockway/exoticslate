@@ -43,7 +43,7 @@ CREATE TABLE "Account" (
     account_id bigint NOT NULL,
     name varchar(250) NOT NULL,
     is_system_created boolean DEFAULT false NOT NULL,
-    skin_name varchar(30) DEFAULT 's2'::varchar NOT NULL,
+    skin_name varchar(30) DEFAULT 's3'::varchar NOT NULL,
     email_addresses_are_hidden boolean
 );
 
@@ -706,4 +706,4 @@ ALTER TABLE ONLY "Workspace"
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '17');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '18');

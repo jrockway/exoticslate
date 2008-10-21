@@ -71,7 +71,7 @@ Account_skins: {
     my $ws_skin = $ws->skin_name;
 
     $test = Socialtext::Account->new(name => 'Test Account');
-    is($test->skin_name, 's2', 'set the default account skin');
+    is($test->skin_name, 's3', 'the default skin for accounts');
 
     $test->update(skin_name => 's2');
     is($test->skin_name, 's2', 'set the account skin');

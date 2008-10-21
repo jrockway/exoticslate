@@ -8,7 +8,7 @@ use strict;
 use warnings;
 use Cwd qw(getcwd);
 
-use Test::More tests => 7;
+use Test::More tests => 6;
 use Test::Socialtext;
 fixtures( 'db' );
 use Socialtext::TT2::Renderer;
@@ -54,7 +54,6 @@ NO_FILES: {
         paths => $skin->template_paths('s2'),
     );
 
-    like $html, qr/<div class="workspace-entry-p" style="display: none;">/, 'Files title hidden with no files and custom skin';
     like $html, qr/<table class="standard-table" style="display: none;">/, 'File table hidden with no files and custom skin';
 }
 

@@ -49,7 +49,7 @@
       <input id="st-workspaceskin-removesubmit" name="submit" type="submit" value=[% loc('Remove&nbsp;Existing&nbsp;Files') %] />
     </dd>
   </form>
-  <table>
+  <table class="standard-table" [% UNLESS skin_files.size() %]style="display: none;"[% END %]>
     <tr>
       <th>[% loc('File') %]</th>
       <th>[% loc('Size (bytes)') %]</th>

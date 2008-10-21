@@ -50,22 +50,6 @@
     <div id="pageAttribution"><br/><br/></div>
   </div><!-- bottomButtons -->
 </div><!-- contentContainer -->  
-[% END %]
-
-[% BLOCK compare_revisions %]
-    <li>
-      <a class="compareButton" href="#" 
-         [% IF rows.size > 1 %]
-             onclick="document.getElementById('compare_revisions').submit(); return false"
-         [% ELSE %]
-             onclick="alert('You cannot compare a revision to itself.'); return false;"
-         [% END %]
-        ><span>[% loc("Compare Revisions") %]</span>
-      </a>
-    </li>
-[% END %]
-
-[% BLOCK revision_row %]
   <script language="javascript"><!--
     (function($){$(function(){
         var preventSameRevisionCompare = function() {
@@ -83,6 +67,22 @@
     })})(jQuery);
   --></script>
 
+[% END %]
+
+[% BLOCK compare_revisions %]
+    <li>
+      <a class="compareButton" href="#" 
+         [% IF rows.size > 1 %]
+             onclick="document.getElementById('compare_revisions').submit(); return false"
+         [% ELSE %]
+             onclick="alert('You cannot compare a revision to itself.'); return false;"
+         [% END %]
+        ><span>[% loc("Compare Revisions") %]</span>
+      </a>
+    </li>
+[% END %]
+
+[% BLOCK revision_row %]
   <tr class="[% IF even %]even[% ELSE %]odd[% END %]Row">
     <td><input name="old_revision_id" value="[% id %]" type="radio"
       [% IF check_old %] checked="checked"[% END %] 

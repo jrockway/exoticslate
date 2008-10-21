@@ -743,7 +743,9 @@ proto.saveContent = function() {
 
 
 proto.newpage_saveClicked = function() {
-    var field = jQuery('#st-page-editing-pagename');
+    var field = jQuery(
+        '#st-page-editing-pagename:visible, #st-newpage-save-pagename:visible'
+    );
     var saved = this.newpage_save(field.val() || '', field.get(0));
     if (saved) {
         jQuery.hideLightbox();
@@ -789,7 +791,8 @@ proto.displayNewPageDialog = function() {
     jQuery('#st-newpage-save-pagename').val('');
     jQuery.showLightbox({
         content: '#st-newpage-save',
-        close: '#st-newpage-save-cancelbutton'
+        close: '#st-newpage-save-cancelbutton',
+        focus: '#st-newpage-save-pagename'
     });
     jQuery('#st-newpage-save-form').unbind('submit').submit( function () {
         jQuery('#st-page-editing-pagename').val(
@@ -1063,7 +1066,7 @@ proto.get_edit_height = function() {
 }
 
 proto.enableStarted = function() {
-    jQuery('#st-editing-tools-edit ul').hide()
+    jQuery('#st-editing-tools-edit ul').hide();
     jQuery('<div id="loading-message" />')
         .html(loc('Loading...'))
         .appendTo('#st-editing-tools-edit');

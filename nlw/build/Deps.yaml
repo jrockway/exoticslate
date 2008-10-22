@@ -7,7 +7,7 @@
 # unless one is actually required.  It will be a false dependency, and we
 # will make people upgrade modules that they don't need to.
 ---
-Algorithm::Diff: 1.1901
+Algorithm::Diff::XS: 0
 # The change in 0.8902 to not use UNIVERSAL::isa exposed a bug in the
 # handling of an attempt to load a row which doesn't exist in the DBMS.
 Apache::Constants: 1.09

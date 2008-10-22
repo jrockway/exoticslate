@@ -13,6 +13,7 @@ use Socialtext::Workspace;
 use Socialtext::l10n qw(loc);
 use Socialtext::Log qw( st_log );
 use Socialtext::Timer;
+use Data::Pageset;
 
 sub class_id { 'search' }
 const class_title => 'Search';

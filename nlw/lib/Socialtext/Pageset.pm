@@ -59,7 +59,7 @@ sub template_vars {
         pages_per_set    => $pages_per_set,
         mode             => 'slide',
     });
-    
+
     my $previous_page_offset = $offset - $limit;
     $previous_page_offset = 0
         if $previous_page_offset < 0;
@@ -74,6 +74,7 @@ sub template_vars {
     return (
         pager => $self->{pager},
         offset => $offset,
+        limit => $limit,
         last =>  $last,
         last_page_offset => $last_page_offset,
         previous_page_offset => $previous_page_offset,

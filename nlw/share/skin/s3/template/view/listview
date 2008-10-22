@@ -85,14 +85,13 @@
       </table>
       [% IF ! offset; offset = 0; END %]
       [% IF ! last; last = rows.size; END %]
-      <!-- XXX offset=[% offset %] last=[% last %] -->
     <table class="dataTable pagelist" cellspacing="0">
       [% FOREACH row = rows %]
         [% IF loop.count - 1 < offset %][% NEXT %][% END %]
         [% IF loop.count > last %][% BREAK %][% END %]
         [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
         <td width="30"><input type="checkbox" name="page_selected" class="st-listview-selectpage-checkbox" value="[% row.page_uri %]"/></td>
-        <td><!-- XXX [% loop.count %] -->
+        <td>
         [% IF row.is_spreadsheet %]
            <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/sheetIcon.png" />
         [% ELSIF row.is_attachment %]

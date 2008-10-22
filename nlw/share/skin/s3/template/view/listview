@@ -66,6 +66,10 @@
              [% loc('Titles') %] |
              <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
           [% END %]
+          [% IF pager %]
+          &mdash;
+          [% PROCESS list_pager %] 
+          [% END %]
         </div>
         </th>
         <script language="javascript">
@@ -79,11 +83,16 @@
         </script>
       </tr>
       </table>
+      [% IF ! offset; offset = 0; END %]
+      [% IF ! last; last = rows.size; END %]
+      <!-- XXX offset=[% offset %] last=[% last %] -->
     <table class="dataTable pagelist" cellspacing="0">
       [% FOREACH row = rows %]
+        [% IF loop.count - 1 < offset %][% NEXT %][% END %]
+        [% IF loop.count > last %][% BREAK %][% END %]
         [% IF loop.count % 2 %]<tr class="oddRow">[% ELSE %]<tr>[% END %]
         <td width="30"><input type="checkbox" name="page_selected" class="st-listview-selectpage-checkbox" value="[% row.page_uri %]"/></td>
-        <td>
+        <td><!-- XXX [% loop.count %] -->
         [% IF row.is_spreadsheet %]
            <img class="pageType" src="[% wiki.skin_uri('s3') %]/images/sheetIcon.png" />
         [% ELSIF row.is_attachment %]
@@ -111,6 +120,12 @@
     [% END %]
         </tr>
       [% END %]
+      [% IF pager %]
+      <tr class="pager"><td></td><td>
+          <hr />
+          [% PROCESS list_pager %] 
+          </td></tr>
+      [% END %]
     </table><!-- dataTable END -->
     </form>
   </div><!-- contentContainer -->
@@ -123,4 +138,10 @@
     <option value="sortby=[% field %];direction=[% sortdir.$field %]">[% name %]</option>
   [% END %]
 
+[% END %]
+
+
+[% BLOCK list_pager %]
+    <b>[% loc('Showing [_1] - [_2] of [_3] total.', offset + 1, last, pager.total_entries) %]</b>
+    [% INCLUDE "view/paging" %]
 [% END %]

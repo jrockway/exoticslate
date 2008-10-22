@@ -83,6 +83,36 @@ sub search {
             . $self->result_set->{hits}
             . ',[' . $timer->elapsed . ']');
 
+    use constant PAGE_SIZE => 10;
+    use constant MAX_PAGE_SIZE => 100;
+    my ($offset) = ($self->cgi->offset =~ /^(\d+)$/);
+    $offset ||= 0;
+    my ($limit) = ($self->cgi->limit =~ /^(\d+)$/);
+    $limit ||= PAGE_SIZE;
+    if ($limit > MAX_PAGE_SIZE) {
+        $limit = MAX_PAGE_SIZE;
+    }
+    my $total_entries    = $self->result_set->{hits};
+
+    my $pager        = Data::Pageset->new({
+        total_entries    => $total_entries,
+        current_page     => int($offset / $limit) + 1,
+        entries_per_page => $limit,
+        pages_per_set    => 5,
+        mode             => 'slide',
+    });
+    my $previous_page_offset = $offset - $limit;
+    $previous_page_offset = 0
+        if $previous_page_offset < 0;
+    my $next_page_offset = $offset + $limit;
+    $next_page_offset = ($total_entries - $limit - 1)
+        if $next_page_offset >= $total_entries;
+    my $last_page_offset = int(($total_entries - 1) / $limit) * $limit;
+    my $last = $offset + $limit;
+    $last = $total_entries
+        if $last > $total_entries;
+
+
     $self->display_results(
         \%sortdir,
         sortby => $self->sortby || 'Relevance',
@@ -105,6 +135,12 @@ sub search {
             . $uri_escaped_search_term,
         unplug_phrase =>
             loc('Click this button to save the pages from this search to your computer for offline use'),
+        pager => $pager,
+        offset => $offset,
+        last =>  $last,
+        last_page_offset => $last_page_offset,
+        previous_page_offset => $previous_page_offset,
+        next_page_offset => $next_page_offset,
     );
 }
 
@@ -156,10 +192,11 @@ sub search_for_term {
             $self->hub->log->debug("hitkeys @{ [keys %$row ] }");
         }
         $self->result_set->{hits}          = scalar @{ $self->result_set->{rows} };
+
         if( $self->title_search ) {
-            $self->result_set->{display_title} = loc("Titles containing \'[_1]\' ([_2])", $search_term, $self->result_set->{hits})
+            $self->result_set->{display_title} = loc("Titles containing \'[_1]\'", $search_term);
         } else {
-            $self->result_set->{display_title} = loc("Pages containing \'[_1]\' ([_2])", $search_term, $self->result_set->{hits})
+            $self->result_set->{display_title} = loc("Pages containing \'[_1]\'", $search_term);
         }
         $self->result_set->{predicate} = 'action=search';
         $self->write_result_set;
@@ -382,6 +419,8 @@ use Socialtext::CGI qw( cgi );
 
 cgi search_term => '-html_clean';
 cgi orig_search_term => '-html_clean';
+cgi 'offset';
+cgi 'limit';
 
 ######################################################################
 package Socialtext::Search::Wafl;

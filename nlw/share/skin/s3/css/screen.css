@@ -2000,6 +2000,7 @@ table.widgetUserPrefs td.widgetUserPrefsButtons {
 div.pagination-container {
     margin: 0 auto;
     width: 43em;
+    font-weight: bold;
 }
 
 div.pagination-container .paging-back {

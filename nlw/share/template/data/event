@@ -39,6 +39,18 @@
     [%- loc("[_1] in [_2]", page, workspace) -%]
 [%- END -%]
 
+[%- IF out == 'html' -%]
+    [%- event.actor.id | decorate('user_small_photo') -%]
+    [%- SWITCH event.action -%]
+        [%- CASE "comment" -%]<img class="asset-icon" src="[% wiki.skin_uri('s3') %]/images/asset-icons/comment-16.png"/>
+        [%- CASE "tag_add" -%]<img class="asset-icon" src="[% wiki.skin_uri('s3') %]/images/asset-icons/tag-16.png"/>
+        [%- CASE "tag_delete" -%]<img class="asset-icon" src="[% wiki.skin_uri('s3') %]/images/asset-icons/tag-16.png"/>
+        [%- CASE "watch_add" -%]<img class="asset-icon" src="[% wiki.skin_uri('s3') %]/images/asset-icons/follow-16.png"/>
+        [%- CASE "watch_delete" -%]<img class="asset-icon" src="[% wiki.skin_uri('s3') %]/images/asset-icons/follow-16.png"/>
+        [%- CASE -%]<img class="asset-icon" src="[% wiki.skin_uri('s3') %]/images/asset-icons/edit-16.png"/>
+    [%- END -%]
+[%- END -%]
+
 [%- IF e.event_class == 'person' -%]
     [%- IF e.actor.id == e.person.id -%]
         [%- SWITCH e.action -%]

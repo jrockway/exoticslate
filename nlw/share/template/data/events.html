@@ -6,15 +6,6 @@
                 [% FOR event = events %]
                 <tr class="event_row">
                     <td [% IF event == events.last() %]class="last"[% END %]>
-                        [%- event.actor.id | decorate('user_small_photo') -%]
-                        [%- SWITCH event.action -%]
-                            [%- CASE "comment" -%]<img class="asset-icon" src="[% wiki.skin_uri('s3') %]/images/asset-icons/comment-16.png"/>
-                            [%- CASE "tag_add" -%]<img class="asset-icon" src="[% wiki.skin_uri('s3') %]/images/asset-icons/tag-16.png"/>
-                            [%- CASE "tag_delete" -%]<img class="asset-icon" src="[% wiki.skin_uri('s3') %]/images/asset-icons/tag-16.png"/>
-                            [%- CASE "watch_add" -%]<img class="asset-icon" src="[% wiki.skin_uri('s3') %]/images/asset-icons/follow-16.png"/>
-                            [%- CASE "watch_delete" -%]<img class="asset-icon" src="[% wiki.skin_uri('s3') %]/images/asset-icons/follow-16.png"/>
-                            [%- CASE -%]<img class="asset-icon" src="[% wiki.skin_uri('s3') %]/images/asset-icons/edit-16.png"/>
-                        [%- END -%]
                         [% INCLUDE data/event e=event out='html' %]
                     </td>
                 </tr>

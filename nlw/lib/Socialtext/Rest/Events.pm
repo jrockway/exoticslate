@@ -129,6 +129,8 @@ sub template_render {
     return $renderer->render(
         template => $tmpl,
         vars => {
+            collection_name => $self->collection_name,
+            link => $self->rest->request->uri,
             minutes_ago => sub { int((time - str2time(shift)) / 60) },
             round => sub { int($_[0] + .5) },
             $self->hub->helpers->global_template_vars,
@@ -148,6 +150,11 @@ sub resource_to_html {
     $self->template_render('data/events.html', { events => $events });
 }
 
+sub resource_to_rss {
+    my ($self, $events) = @_;
+    $self->template_render('data/events.rss', { events => $events });
+}
+
 {
     no warnings 'once';
     *GET_html = Socialtext::Rest::Collection::_make_getter(
@@ -155,6 +162,9 @@ sub resource_to_html {
     );
     *GET_text = Socialtext::Rest::Collection::_make_getter(
         \&resource_to_text, 'text/plain'
+    );
+    *GET_rss = Socialtext::Rest::Collection::_make_getter(
+        \&resource_to_rss, 'application/rss+xml'
     );
 }
 

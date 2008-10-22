@@ -205,7 +205,7 @@ sub diff_rows {
 package Socialtext::WikitextSideBySideDiff;
 
 use base 'Socialtext::SideBySideDiff';
-use Algorithm::Diff;
+use Algorithm::Diff::XS;
 
 sub diff_rows {
     my $self = shift;
@@ -234,7 +234,7 @@ sub compare {
 
 sub split_into_diffable_divs {
     my $self = shift;
-    my @sdiffs = Algorithm::Diff::sdiff(
+    my @sdiffs = Algorithm::Diff::XS::sdiff(
         [ $self->split_into_escaped_lines(shift) ],
         [ $self->split_into_escaped_lines(shift) ],
     );
@@ -268,7 +268,7 @@ sub compare_chunk {
     my @before = $self->split_into_words($before);
     my @after = $self->split_into_words($after);
 
-    my @cdiffs = Algorithm::Diff::compact_diff(\@before, \@after);
+    my @cdiffs = Algorithm::Diff::XS::compact_diff(\@before, \@after);
     my $html   = '';
 
     # some roughness to deal with the terse structure returned by compact_diff:

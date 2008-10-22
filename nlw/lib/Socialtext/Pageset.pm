@@ -6,6 +6,10 @@ use warnings;
 use base 'Data::Pageset';
 
 use Class::Field qw( const field );
+field 'limit';
+field 'offset';
+field 'total_entries';
+
 use constant PAGE_SIZE => 10;
 use constant MAX_PAGE_SIZE => 100;
 
@@ -20,17 +24,28 @@ sub new {
     $offset ||= 0;
     $self->{offset} = $offset;
 
+    $self->{page_size} ||= PAGE_SIZE;
+    $self->{max_page_size} ||= MAX_PAGE_SIZE;
+
     my $limit =
         $self->{limit} ||
         $self->{cgi}->{limit} ||
-        10;
+        $self->{page_size};
     ($limit) = ($limit =~ /^(\d+)$/);
-    $limit ||= PAGE_SIZE;
-    if ($limit > MAX_PAGE_SIZE) {
-        $limit = MAX_PAGE_SIZE;
+    $limit ||= $self->{page_size};
+    if ($limit > $self->{max_page_size}) {
+        $limit = $self->{max_page_size};
     }
     $self->{limit} = $limit;
 
+    return $self;
+}
+
+sub template_vars {
+    my $self = shift;
+
+    my $offset = $self->{offset};
+    my $limit = $self->{limit};
     my $total_entries = $self->{total_entries}
         or die "Pageset needs total_entries";
 
@@ -45,16 +60,6 @@ sub new {
         mode             => 'slide',
     });
     
-    return $self;
-}
-
-sub template_vars {
-    my $self = shift;
-
-    my $offset = $self->{offset};
-    my $limit = $self->{limit};
-    my $total_entries = $self->{total_entries};
-
     my $previous_page_offset = $offset - $limit;
     $previous_page_offset = 0
         if $previous_page_offset < 0;

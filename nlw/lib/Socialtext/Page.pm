@@ -1103,11 +1103,12 @@ sub hard_set_date {
 
 sub datetime_for_user {
     my $self = shift;
+    if (my $date = $self->metadata->Date) {
+        return $self->hub->timezone->date_local($date);
+    }
+
     # XXX metadata starts out life as empty string
-    my $datetime = '';
-    $datetime = $self->hub->timezone->date_local($self->metadata->Date)
-        if ($self->metadata->Date);
-    return $datetime;
+    return '';
 }
 
 

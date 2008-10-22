@@ -1241,7 +1241,7 @@ div#mainNav {
     position:absolute;
     right:0;
     top:0;
-    padding:6px 12px 7px 12px;
+    padding:6px 12px 3px 12px;
     background:transparent url(../images/wsRight.png) no-repeat scroll right top;
     font-weight:bold;
 }

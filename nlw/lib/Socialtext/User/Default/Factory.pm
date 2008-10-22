@@ -166,8 +166,8 @@ sub update {
         $user->$column($value);
     }
 
-    # flush cache; updated User in DB
-    Socialtext::User::Cache->Clear();
+    # update cache entry for user
+    Socialtext::User::Cache->Store( user_id => $user->user_id, $user );
 
     return $user;
 }

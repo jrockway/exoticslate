@@ -61,6 +61,7 @@ while (my $w = $socialtext_workspaces->next) {
 print "Forcing admin and help-? workspaces to the Socialtext account\n";
 for my $ws_name (qw/admin help-en help-ja help-it/) {
     my $ws = Socialtext::Workspace->new( name => $ws_name );
+    next unless defined $ws && $ws->real;
     $ws->update( account_id => Socialtext::Account->Socialtext->account_id );
 }
 

@@ -286,7 +286,7 @@ proto.setWidgetHandlers = function() {
         self.currentWidget = self.parseWidgetElement(e.target);
         var id = self.currentWidget.id;  
         if (widget_data[id] && widget_data[id].uneditable) {
-            alert(loc("This is not an editable widget. Please edit it in advanced mode."))  
+            alert(loc("This is not an editable widget. Please edit it in Wiki Text mode."))  
         }
         else {
             self.getWidgetInput(e.target, false, false);

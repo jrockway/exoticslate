@@ -190,8 +190,6 @@ sub NewUserRecord {
         sql_format_timestamptz($proto_user->{cached_at});
 
     sql_insert('users' => \%insert_args);
-
-    Socialtext::User::Cache->Clear();
 }
 
 sub UpdateUserRecord {
@@ -232,7 +230,8 @@ sub UpdateUserRecord {
 
     sql_update('users' => \%update_args, 'user_id');
 
-    Socialtext::User::Cache->Clear();
+    # flush cache; updated User in DB
+    Socialtext::User::Cache->Remove( user_id => $proto_user->{user_id} );
 }
 
 sub DeleteUserRecord {
@@ -241,6 +240,7 @@ sub DeleteUserRecord {
     return unless $p{force};
     return unless $p{user_id};
     sql_execute('DELETE FROM users WHERE user_id = ?', $p{user_id});
+    Socialtext::User::Cache->Remove( user_id => $p{user_id} );
 }
 
 sub ExpireUserRecord {
@@ -252,6 +252,7 @@ sub ExpireUserRecord {
             SET cached_at = '-infinity'
             WHERE user_id = ?
         }, $p{user_id});
+    Socialtext::User::Cache->Remove( user_id => $p{user_id} );
 }
 
 1;

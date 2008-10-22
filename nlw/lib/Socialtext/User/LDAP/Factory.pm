@@ -14,6 +14,14 @@ use Net::LDAP::Util qw(escape_filter_value);
 use Socialtext::SQL qw(sql_execute sql_singlevalue);
 use Readonly;
 
+# Flag to allow for the long-term caching of LDAP user data in the DB to be
+# disabled.
+#
+# FOR TESTING/INSTRUMENTATION PURPOSES ONLY!!!
+#
+# This should *NEVER* be disabled in a production environment!
+our $CacheEnabled = 1;
+
 # please treat these fields as read-only:
 
 field 'ldap_config'; # A Socialtext::LDAP::Config object
@@ -77,9 +85,10 @@ sub GetUser {
     return unless ($valid_get_user_terms{$key});
 
     local $self->{_cache_lookup}; # temporary cache-lookup storage
-    my $cached = $self->_check_cache($key => $val);
-
-    return $cached if $cached;
+    if ($CacheEnabled) {
+        my $cached = $self->_check_cache($key => $val);
+        return $cached if $cached;
+    }
 
     local $self->{_user_not_found};
     my $proto_user = $self->lookup($key => $val);

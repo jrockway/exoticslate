@@ -51,8 +51,8 @@ sub authenticate {
     my $credential
         = Socialtext::CredentialsExtractor->ExtractCredentials($request);
     if ($credential) {
-        my $user = Socialtext::User->new( username => $credential )
-            || Socialtext::User->new( user_id  => $credential );
+        my $user = Socialtext::User->new( user_id  => $credential )
+            || Socialtext::User->new( username => $credential );
         return undef unless $user;
         return undef if $user->is_deleted();
         $request->connection->user($user->username);

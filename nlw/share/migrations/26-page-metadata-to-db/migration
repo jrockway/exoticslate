@@ -2,6 +2,10 @@
 #@COPYRIGHT@
 use strict;
 use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/lib";
+
 use Socialtext::Workspace;
 use Socialtext::Page::TablePopulator;
 use Socialtext::Schema;
@@ -15,6 +19,7 @@ my $failures = 0;
 
 $total_timer->start_timing(0);
 while (my $wksp = $workspaces->next) {
+    next unless $wksp->real;
     $wksp_timer->start_timing(0);
     my $name = $wksp->name;
     print "Populating page table with data from $name workspace.\n";

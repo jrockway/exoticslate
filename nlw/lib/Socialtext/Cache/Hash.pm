@@ -19,6 +19,11 @@ sub set {
     $self->{$key} = $val;
 }
 
+sub remove {
+    my ($self, $key) = @_;
+    delete $self->{$key};
+}
+
 sub get_keys {
     my $self = shift;
     return keys %{$self};
@@ -72,6 +77,10 @@ Retrieves the data item previously stored against the given C<$key>.
 =item B<set($key, $val)>
 
 Stores the data item C<$val> against the given C<$key>.
+
+=item B<remove($key)>
+
+Removes the data item previously stored against the given C<$key>.
 
 =item B<get_keys()>
 

@@ -10,6 +10,10 @@ use Socialtext::SQL qw/sql_singlevalue sql_execute sql_begin_work
                        sql_commit sql_rollback disconnect_dbh/;
 use Socialtext::SystemSettings qw/get_system_setting set_system_setting/;
 
+# Ignore PG environment variables that may be hanging around.
+delete $ENV{PGUSER};
+delete $ENV{PGDATABASE};
+
 =head1 NAME
 
 Socialtext::Schema - management of the database Schema
@@ -222,7 +226,8 @@ Escalates our DB privileges to "superuser" status.
 sub escalate_privs {
     my $self = shift;
     my %c = $self->connect_params();
-    $self->_db_shell_run("psql -U postgres -c 'ALTER ROLE $c{user} SUPERUSER'");
+    my $sudo = _sudo('postgres');
+    $self->_db_shell_run("$sudo psql -U postgres $c{db_name} -c 'ALTER ROLE $c{user} SUPERUSER'");
 }
 
 =head2 revoke_privs()
@@ -235,7 +240,8 @@ via a call to C<escalate_privs()>.
 sub revoke_privs {
     my $self = shift;
     my %c = $self->connect_params();
-    $self->_db_shell_run("psql -U postgres -c 'ALTER ROLE $c{user} NOSUPERUSER'");
+    my $sudo = _sudo('postgres');
+    $self->_db_shell_run("$sudo psql -U postgres $c{db_name} -c 'ALTER ROLE $c{user} NOSUPERUSER'");
 }
 
 =head2 version()
@@ -313,7 +319,6 @@ sub dump {
     my @parms = (
         'pg_dump',
         '-C',
-        '-D',
         '-U' => $c{user},
         '-f' => $file,
     );

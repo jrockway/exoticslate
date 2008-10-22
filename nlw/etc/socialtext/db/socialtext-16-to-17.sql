@@ -30,8 +30,8 @@ BEGIN;
 
     ALTER TABLE "UserId" RENAME TO users;
 
-    ALTER INDEX "UserId___driver_key___driver_key___driver_unique_id" 
-        RENAME TO "users_driver_unique_id";
+    -- will recreate as "users_driver_unique_id" later
+    DROP INDEX "UserId___driver_key___driver_key___driver_unique_id";
 
     -- need to rename both the index and constraint
     ALTER INDEX "UserId_pkey" RENAME TO "users_pkey";
@@ -71,13 +71,17 @@ BEGIN;
      WHERE u.user_id = driver_unique_id
        AND driver_key = 'Default';
 
-    -- rectify the "system_unique_id isn't always equal to driver_unique_id"
+    -- Rectify the "system_unique_id isn't always equal to driver_unique_id"
     -- problem for Default users; the driver_unique_id should only be
     -- different for non-Default users.
+    --
+    -- This is the reason we drop the
+    -- "UserId___driver_key___driver_key___driver_unique_id" index
+    -- temporarily; this statement can fail due to the way postgres
+    -- "constraint" indexes work.
     UPDATE users
        SET driver_unique_id = system_unique_id
      WHERE driver_key = 'Default';
-
 
 --
 -- clean up the users table schema
@@ -218,15 +222,18 @@ BEGIN;
 
     DROP TABLE email_conflict_res;
 
--- recreate former "User" table indexes.
+-- recreate former "User" and "UserId" table indexes.
 -- considering that we'll be putting more than one driver in this table, we
 -- need to make email/username unique *per driver*.
 
     CREATE UNIQUE INDEX "users_lower_email_address_driver_key"
-                ON users (lower(email_address), driver_key);
+        ON users (lower(email_address), driver_key);
 
     CREATE UNIQUE INDEX "users_lower_username_driver_key"
-                ON users (lower(driver_username), driver_key);
+        ON users (lower(driver_username), driver_key);
+
+    CREATE UNIQUE INDEX "users_driver_unique_id"
+        ON users (driver_key, driver_unique_id);
 
 --
 -- The "User" table and its sequence aren't needed anymore

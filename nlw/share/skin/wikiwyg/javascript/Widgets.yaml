@@ -527,7 +527,7 @@ widget:
   http:
     id: http
     color: darkorange
-    title: Relative HTTP link. Edit in Advanced mode.
+    title: Relative HTTP link. Edit in Wiki Text mode.
     uneditable: true
 
   asis:
@@ -563,37 +563,37 @@ widget:
   html:
     id: html
     color: indianred
-    title: Raw HTML section. Edit in advanced mode.
+    title: Raw HTML section. Edit in Wiki Text mode.
     uneditable: true
 
   sharepoint:
     id: sharepoint
     color: red
-    title: Sharepoint link. Edit in advanced mode.
+    title: Sharepoint link. Edit in Wiki Text mode.
     uneditable: true
 
   unknown:
     id: unknown
     color: darkslategrey
-    title: Unknown widget '$unknown_id'. Edit in advanced mode.
+    title: Unknown widget '$unknown_id'. Edit in Wiki Text mode.
     uneditable: true
 
   irc:
     id: irc
     color: darkorange
-    title: IRC link. Edit in Advanced mode.
+    title: IRC link. Edit in Wiki Text mode.
     uneditable: true
 
   https:
     id: https
     color: darkorange
-    title: HTTP relative link. Edit in Advanced mode.
+    title: HTTP relative link. Edit in Wiki Text mode.
     uneditable: true
 
   ftp:
     id: ftp
     color: darkorange
-    title: FTP link. Edit in Advanced mode.
+    title: FTP link. Edit in Wiki Text mode.
     uneditable: true
 
   ss:

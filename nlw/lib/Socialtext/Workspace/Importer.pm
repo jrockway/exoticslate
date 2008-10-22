@@ -278,6 +278,7 @@ sub _import_users {
 
     my @users;
     for my $info (@$users) {
+        delete $info->{primary_account_id};
         my $user = Socialtext::User->new(
             username => $info->{username} );
         $user ||= Socialtext::User->Create_user_from_hash( $info );

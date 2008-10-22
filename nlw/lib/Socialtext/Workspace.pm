@@ -168,6 +168,7 @@ sub _new {
 sub _new_from_hash_ref {
     my ( $class, $row ) = @_;
     return $row unless $row;
+    return Socialtext::NoWorkspace->new if $row->{workspace_id} == 0;
 
     # Make sure that workspaces with UTF-8 titles display properly.
     # Keep an eye out for other places that we may need to do this.

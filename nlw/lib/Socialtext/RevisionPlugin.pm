@@ -34,7 +34,7 @@ sub revision_list {
         $row->{id}     = $revision_id;
         $row->{number} = $revision->metadata->Revision;
         $row->{date}   = $revision->datetime_for_user;
-        $row->{from}   = $revision->last_edited_by->username;
+        $row->{from}   = $revision->metadata->From;
         $row->{class} = @$rows % 2 ? 'trbg-odd' : 'trbg-even';
 
         $rows->[-1]{next} = $row

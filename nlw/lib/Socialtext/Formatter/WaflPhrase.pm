@@ -945,7 +945,7 @@ sub _parse_page_for_headers {
 
     # Since we say which page this toc was generated for in the title, remove
     # all the page_name(...) parts of links
-    $html =~ s/\Q$page_title\E \((.*)\)/$1/g;
+    $html =~ s!>\Q$page_title\E \(([^<]*)\)</a>!>$1</a>!g;
 
     return $self->template->process(
         'wafl_box.html',

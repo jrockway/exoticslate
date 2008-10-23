@@ -130,7 +130,7 @@ sub template_render {
         template => $tmpl,
         vars => {
             collection_name => $self->collection_name,
-            link => $self->rest->request->uri,
+            link => Socialtext::URI::uri(path => $self->rest->request->uri),
             minutes_ago => sub { int((time - str2time(shift)) / 60) },
             round => sub { int($_[0] + .5) },
             $self->hub->helpers->global_template_vars,

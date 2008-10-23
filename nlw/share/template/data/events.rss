@@ -1,3 +1,4 @@
+[%- USE decorate -%]
 <?xml version="1.0" encoding="UTF-8"?>
 
 <rdf:RDF
@@ -11,27 +12,28 @@
 >
 
 <channel rdf:about="[% link %]">
-<title>[% collection_name %]</title>
+<title><![CDATA[[% collection_name %]]]></title>
 <link>[% link %]</link>
 <items>
  <rdf:Seq>
-  [%- FOR event = events -%]
-  [%- IF event.event_class == 'page';
-        event.uri = "/$event.page.workspace_name?$event.page.id";
-      ELSE;
-        event.uri = "/?profile/$event.actor.id";
-      END 
+  [% FOR e = events -%]
+  [%-
+    IF e.event_class == 'person';
+        e.uri = e.actor.id | decorate('user_href');
+    ELSIF e.event_class == 'page';
+        e.uri = "$base_uri/$e.page.workspace_name?$e.page.id";
+    END
   -%]
-  <rdf:li rdf:resource="[% event.uri %]" />
-  [%- END -%]
+  <rdf:li rdf:resource="[% e.uri %]" />
+  [% END -%]
  </rdf:Seq>
 </items>
 </channel>
-[%- FOR event = events -%]
+[% FOR event = events -%]
 <item rdf:about="[% event.uri %]">
 <link>[% event.uri %]</link>
-<title>[% INCLUDE data/event e=event out='text' %]</title>
-<description>[% INCLUDE data/event e=event out='html' %]</description>
+<title><![CDATA[[% INCLUDE data/event e=event out='text' %]]]></title>
+<description><![CDATA[[% INCLUDE data/event e=event out='html' %]]]></description>
 </item>
-[%- END -%]
+[% END -%]
 </rdf:RDF>

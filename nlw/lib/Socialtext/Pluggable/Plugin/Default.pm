@@ -11,11 +11,14 @@ const priority => 0;
 sub register {
     my $class = shift;
     $class->add_hook('root'                              => 'root');
+    $class->add_hook('wafl.user'                         => 'user_name');
+
+    # Socialtext People Hooks
     $class->add_hook('template.user_avatar.content'      => 'user_name');
+    $class->add_hook('template.user_href.content'        => 'user_href');
     $class->add_hook('template.user_name.content'        => 'user_name');
     $class->add_hook('template.user_small_photo.content' => 'user_photo');
     $class->add_hook('template.user_photo.content'       => 'user_photo');
-    $class->add_hook('wafl.user'                         => 'user_name');
 }
 
 sub root {
@@ -40,6 +43,7 @@ sub user_name {
     return $self->best_full_name($username);
 }
 
+sub user_href { '' }
 sub user_photo { '' }
 
 sub is_hook_enabled { 1 }

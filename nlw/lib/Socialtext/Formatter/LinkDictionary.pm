@@ -122,6 +122,16 @@ field file =>
 =cut
 field image    => '/data/workspaces/%{workspace}/attachments/%{page_uri}:%{id}/%{size}/%{filename}';
 
+=head2 people links
+
+{user_link} links to a user's people profile if people is installed an enabled.
+
+=cut
+
+field people_profile => '/?profile/%{user_id}';
+field people_photo => '/data/people/%{user_id}/photo';
+field people_photo_small => '/data/people/%{user_id}/small_photo';
+
 =head1 METHODS
 
 =head2 new

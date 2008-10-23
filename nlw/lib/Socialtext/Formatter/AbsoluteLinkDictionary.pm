@@ -9,9 +9,11 @@ use Class::Field qw'field';
 BEGIN {
     # make some code
 
-    my @methods
-        = qw(interwiki search_query category_query recent_changes_query
-        category weblog file image);
+    my @methods = qw(
+        interwiki search_query category_query recent_changes_query
+        category weblog file image people_profile people_photo
+        people_photo_small
+    );
     no strict 'refs';
     foreach my $method (@methods) {
         my $super = "SUPER::$method";

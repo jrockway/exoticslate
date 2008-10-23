@@ -39,6 +39,13 @@ sub uri {
     return $self->hub->current_workspace->uri . Socialtext::AppConfig->script_name;
 }
 
+sub base_uri {
+    my $self = shift;
+    return $self->{_base_uri} if $self->{_base_uri};
+    ($self->{_base_uri} = $self->make_uri) =~ s{/$}{};
+    return $self->{_base_uri};
+}
+
 sub make_uri {
     my $self = shift;
     return Socialtext::URI::uri(@_);
@@ -403,6 +410,15 @@ sub is_hook_enabled {
 
     return 1 unless $self->hub;
     return $self->hub->current_user->can_use_plugin($self->name);
+}
+
+sub format_link {
+    my ($self, $link, %args) = @_;
+    return $self->hub->viewer->link_dictionary->format_link(
+        link => $link,
+        url_prefix => $self->base_uri,
+        %args,
+    );
 }
 
 1;

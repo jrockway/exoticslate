@@ -1,0 +1,34 @@
+<div class="pagination-container">
+        [% IF summaries %]
+            [% page_url = BLOCK %]?[% predicate %];tag=[% tag | uri %];sortby=[% sortby %];direction=[% sortdir.$sortby %];account_id=[% account_id %];summaries=1[% END %]
+        [% ELSE %]
+            [% page_url = BLOCK %]?[% predicate %];tag=[% tag | uri %];sortby=[% sortby %];direction=[% sortdir.$sortby %];account_id=[% account_id %];summaries=0[% END %]
+        [% END %]
+        <span class="paging-back">
+            [% IF pager.current_page == pager.first_page %]
+                &laquo; [% loc('First') %]
+                &lsaquo; [% loc('Previous') %]
+            [% ELSE %]
+                <a title="[% loc('First Page') %]" href="[% page_url %];offset=0;limit=[% limit %]"> &laquo; [% loc('First') %]</a>
+                <a title="[% loc('Previous Page') %]" href="[% page_url %];offset=[% previous_page_offset %];limit=[% limit %]">&lsaquo; [% loc('Previous') %]</a>
+            [% END %]
+        </span>
+        <span class="paging-numbers">
+            [% FOREACH page IN pager.pages_in_set %]
+                [% IF page == pager.current_page %]
+                    <b>[% page %]</b>
+                [% ELSE %]
+                    <a href="[% page_url %];offset=[% (page - 1) * limit %];limit=[% limit %]" title="[% loc('Page') %] [% page %]">[% page %]</a>
+                [% END %]
+            [% END %]
+        </span>
+        <span class="paging-forward">
+            [% IF pager.current_page == pager.last_page %]
+                [% loc('Next') %] &rsaquo;
+                [% loc('Last') %] &raquo;
+            [% ELSE %]
+                <a title="[% loc('Next Page') %]" href="[% page_url %];offset=[% next_page_offset %];limit=[% limit %]">[% loc('Next') %] &rsaquo;</a>
+                <a title="[% loc('Last Page') %]" href="[% page_url %];offset=[% last_page_offset %];limit=[% limit %]">[% loc('Last') %] &raquo;</a>
+            [% END %]
+        </span>
+</div>

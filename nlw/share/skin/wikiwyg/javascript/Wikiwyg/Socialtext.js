@@ -743,10 +743,11 @@ proto.saveContent = function() {
 
 
 proto.newpage_saveClicked = function() {
-    var field = jQuery(
+    var page_name = jQuery('#st-page-editing-pagename').val() || '';
+    var focus_field = jQuery(
         '#st-page-editing-pagename:visible, #st-newpage-save-pagename:visible'
     );
-    var saved = this.newpage_save(field.val() || '', field.get(0));
+    var saved = this.newpage_save(page_name, focus_field.get(0));
     if (saved) {
         jQuery.hideLightbox();
     }

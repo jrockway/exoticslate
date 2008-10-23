@@ -1,9 +1,5 @@
+[% page_url = BLOCK %][% predicate_with_params %];summaries=[% IF summaries; 1; ELSE; 0; END %][% END %]
 <div class="pagination-container">
-        [% IF summaries %]
-            [% page_url = BLOCK %]?[% predicate %];tag=[% tag | uri %];sortby=[% sortby %];direction=[% sortdir.$sortby %];account_id=[% account_id %];summaries=1[% END %]
-        [% ELSE %]
-            [% page_url = BLOCK %]?[% predicate %];tag=[% tag | uri %];sortby=[% sortby %];direction=[% sortdir.$sortby %];account_id=[% account_id %];summaries=0[% END %]
-        [% END %]
         <span class="paging-back">
             [% IF pager.current_page == pager.first_page %]
                 &laquo; [% loc('First') %]

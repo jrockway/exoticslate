@@ -57,14 +57,15 @@
         </select>
         </div>
         [% END %]
+        [% predicate_with_params = BLOCK %]?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %][%- END %]
         <div class="toggle">
           [% loc('Show:') %]
           [% IF summaries %]
-             <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=0;limit=[% limit %];offset=[% offset %]" [% IF ! summaries %] class="selected" [% END %]>[% loc('Titles') %]</a> | 
+             <a href="[% predicate_with_params %];summaries=0;limit=[% limit %];offset=[% offset %]" [% IF ! summaries %] class="selected" [% END %]>[% loc('Titles') %]</a> | 
              [% loc('Summaries') %]
           [% ELSE %]
              [% loc('Titles') %] |
-             <a href="?[% predicate %];scope=[% scope %];orig_search_term=[% search_term %];sortby=[% sortby %];direction=[% sortdir.$sortby %];summaries=1;limit=[% limit %];offset=[% offset %]" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
+             <a href="[% predicate_with_params %];summaries=1;limit=[% limit %];offset=[% offset %]" [% IF summaries %] class="selected" [% END %]>[% loc('Summaries') %]</a>
           [% END %]
           [% IF pager %]
           &mdash;

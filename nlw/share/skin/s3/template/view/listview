@@ -36,10 +36,12 @@
     <input id="st-listview-filename" name="filename" value="" type="hidden">
     <table class="dataTable pagelist" cellspacing="0">
       <tr>
-        <th class="toggle" width="100%">
+        <th width="30" style="border-right: 0">
         <div class="selectall">
         <input type="checkbox" id="st-listview-selectall"/>
         </div>
+        </th>
+        <th class="toggle">
         [% IF !hide_sort_widget %]
         <div class="sort">
         [% loc('Sort by:') %]
@@ -120,13 +122,19 @@
     [% END %]
         </tr>
       [% END %]
-      [% IF pager %]
-      <tr class="pager"><td></td><td>
-          <hr />
-          [% PROCESS list_pager %] 
-          </td></tr>
-      [% END %]
     </table><!-- dataTable END -->
+      [% IF pager %]
+    <table class="dataTable pagelist" cellspacing="0">
+      <tr>
+        <th width="30" style="border-right: 0">
+        &nbsp;
+        </th>
+        <th class="toggle">
+          [% PROCESS list_pager %] 
+        </th>
+      </tr>
+      </table>
+      [% END %]
     </form>
   </div><!-- contentContainer -->
 [% END %]

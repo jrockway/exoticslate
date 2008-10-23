@@ -123,7 +123,7 @@
         </tr>
       [% END %]
     </table><!-- dataTable END -->
-      [% IF pager %]
+      [% IF pager && pager.total_entries %]
     <table class="dataTable pagelist" cellspacing="0">
       <tr>
         <th width="30" style="border-right: 0">

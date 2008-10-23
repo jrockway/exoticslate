@@ -10,7 +10,7 @@ field 'limit';
 field 'offset';
 field 'total_entries';
 
-use constant PAGE_SIZE => 10;
+use constant PAGE_SIZE => 20;
 use constant MAX_PAGE_SIZE => 100;
 
 sub new {
@@ -46,8 +46,9 @@ sub template_vars {
 
     my $offset = $self->{offset};
     my $limit = $self->{limit};
-    my $total_entries = $self->{total_entries}
-        or die "Pageset needs total_entries";
+    die "Pageset needs total_entries"
+        unless defined $self->{total_entries};
+    my $total_entries = $self->{total_entries};
 
     my $pages_per_set =
         $self->{pages_per_set} || 5;

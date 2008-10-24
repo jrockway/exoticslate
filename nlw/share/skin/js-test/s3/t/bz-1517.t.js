@@ -15,12 +15,16 @@ t.runAsync([
     },
 
     function() { 
-        t.is(
-            t.doc.activeElement.getAttribute('id'),
-            'st-newpage-save-pagename',
-            "st-newpage-save-pagename received focus correctly"
-        );
-
+        if (t.doc.activeElement) {
+            t.is(
+                t.doc.activeElement.getAttribute('id'),
+                'st-newpage-save-pagename',
+                "st-newpage-save-pagename received focus correctly"
+            );
+        }
+        else {
+            t.skip("This browser has no activeElement support");
+        }
         t.endAsync();
     }
 ]);

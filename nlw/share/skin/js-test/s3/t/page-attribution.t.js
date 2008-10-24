@@ -25,7 +25,7 @@ t.runAsync([
         );
         t.like(
             t.$("#pageAttribution a.revision").text(),
-            /\(\d+ revisions?\)/,
+            /\(\d+ revisions?/,
             "There is a page revision info inside of a pair of parens at the bottom of the page."
         );
 

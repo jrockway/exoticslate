@@ -153,9 +153,11 @@ sub resource_to_html {
     $self->template_render('data/events.html', { events => $events });
 }
 
-sub resource_to_rss {
+sub resource_to_atom {
     my ($self, $events) = @_;
-    $self->template_render('data/events.rss', { events => $events });
+    # Format dates for atom
+    $_->{at} =~ s{^(\d+-\d+-\d+) (\d+:\d+:\d+).\d+Z$}{$1T$2+0} for @$events;
+    $self->template_render('data/events.atom.xml', { events => $events });
 }
 
 {
@@ -166,8 +168,8 @@ sub resource_to_rss {
     *GET_text = Socialtext::Rest::Collection::_make_getter(
         \&resource_to_text, 'text/plain'
     );
-    *GET_rss = Socialtext::Rest::Collection::_make_getter(
-        \&resource_to_rss, 'application/rss+xml'
+    *GET_atom = Socialtext::Rest::Collection::_make_getter(
+        \&resource_to_atom, 'application/atom+xml'
     );
 }
 

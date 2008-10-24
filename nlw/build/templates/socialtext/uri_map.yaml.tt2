@@ -5,7 +5,7 @@
             '*/*':           &default [Socialtext::Rest::Events, GET_html]
             'text/html':              *default
             'application/json':       [Socialtext::Rest::Events, GET_json]
-            'application/rss+xml':    [Socialtext::Rest::Events, GET_rss]
+            'application/atom+xml':   [Socialtext::Rest::Events, GET_atom]
             'text/plain':             [Socialtext::Rest::Events, GET_text][% IF config.is_dev_install %]
         'POST':
             '*/*':              [Socialtext::Rest::Events, POST_form]
@@ -17,7 +17,7 @@
             '*/*':           &default [Socialtext::Rest::Events::Activities, GET_html]
             'text/html':              *default
             'application/json':       [Socialtext::Rest::Events::Activities, GET_json]
-            'application/rss+xml':    [Socialtext::Rest::Events::Activities, GET_rss]
+            'application/atom+xml':   [Socialtext::Rest::Events::Activities, GET_atom]
             'text/plain':             [Socialtext::Rest::Events::Activities, GET_text]
         '*':                    [Socialtext::Rest::Events::Activities, bad_method]
 -
@@ -26,7 +26,7 @@
             '*/*':           &default [Socialtext::Rest::Events::Conversations, GET_html]
             'text/html':              *default
             'application/json':       [Socialtext::Rest::Events::Conversations, GET_json]
-            'application/rss+xml':    [Socialtext::Rest::Events::Conversations, GET_rss]
+            'application/atom+xml':   [Socialtext::Rest::Events::Conversations, GET_atom]
             'text/plain':             [Socialtext::Rest::Events::Conversations, GET_text]
         '*':                    [Socialtext::Rest::Events::Conversations, bad_method]
 -
@@ -35,7 +35,7 @@
             '*/*':           &default [Socialtext::Rest::Events::Followed, GET_html]
             'text/html':              *default
             'application/json':       [Socialtext::Rest::Events::Followed, GET_json]
-            'application/rss+xml':    [Socialtext::Rest::Events::Followed, GET_rss]
+            'application/atom+xml':   [Socialtext::Rest::Events::Followed, GET_atom]
             'text/plain':             [Socialtext::Rest::Events::Followed, GET_text]
         '*':                    [Socialtext::Rest::Events::Followed, bad_method]
 -
@@ -44,7 +44,7 @@
             '*/*':           &default [Socialtext::Rest::Events::Awesome, GET_html]
             'text/html':              *default
             'application/json':       [Socialtext::Rest::Events::Awesome, GET_json]
-            'application/rss+xml':    [Socialtext::Rest::Events::Awesome, GET_rss]
+            'application/atom+xml':   [Socialtext::Rest::Events::Awesome, GET_atom]
             'text/plain':             [Socialtext::Rest::Events::Awesome, GET_text]
         '*':                    [Socialtext::Rest::Events::Awesome, bad_method]
 - 

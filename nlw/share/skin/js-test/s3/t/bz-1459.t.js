@@ -19,9 +19,9 @@ t.runAsync([
     },
             
     function() { 
-        t.is(
+        t.like(
             t.$('#contentLeft').css('overflow'),
-            'auto',
+            /^(auto)?$/,
             "Show content lines need not overflow rightward"
         );
 

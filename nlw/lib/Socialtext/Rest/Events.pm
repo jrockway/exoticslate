@@ -94,6 +94,9 @@ sub extract_page_args {
     my $page_id = $self->rest->query->param('page.id');
     push @args, page_id => $page_id if $page_id;
 
+    my $contributions = $self->rest->query->param('contributions');
+    push @args, contributions => $contributions if $contributions;
+
     return @args;
 }
 

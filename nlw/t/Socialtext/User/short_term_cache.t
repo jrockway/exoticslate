@@ -49,28 +49,38 @@ sub set_names {
     ok !$rc;
 }
 
+# Explicitly *DISABLE* the long-term cache used by the LDAP Factory.
+#
+# This is done *solely* for instrumentation purposes; we want to make sure
+# that when we get past the short-term cache that we're able to see that the
+# user lookup got down as far as the actual LDAP directory.
+#
+# With this long-term LDAP cache disabled, we *don't* have to worry about
+# expiring users (which not only marks them as expired but also flushes them
+# from the short-term cache automatically).  Instead, we just turn the
+# long-term cache off; no need to cache-bust then.
+{
+    no warnings 'once';
+    $Socialtext::User::LDAP::Factory::CacheEnabled = 0;
+}
+
 verify_not_caching_is_the_default_behaviour: {
-    # get a user from LDAP, verify who they are, then mark them as expired (to
-    # bypass the long-term cache in the DB).
+    # get a user from LDAP, and verify who they are
     Net::LDAP->set_mock_behaviour(
         search_results => [ $TEST_LDAP_USERS[0] ],
     );
     my $user = Socialtext::User->new(email_address => 'ldapuser@example.com');
     ok $user;
     is $user->best_full_name, "FirstLDAP LastLDAP", "original ldap user bfn";
-    $user->homunculus->expire();
 
     # go get the user again, and make sure that we actually went all the way
-    # back to LDAP to get them.  By expiring the user we bypassed the long
-    # term cache in the DB, and this test shows that we also haven't done any
-    # short-term caching in memory.
+    # back to LDAP to get them, showing that we haven't cached them in memory.
     Net::LDAP->set_mock_behaviour(
         search_results => [ $TEST_LDAP_USERS[1] ],
     );
     my $user2 = Socialtext::User->new(email_address => 'ldapuser@example.com');
     ok $user2;
     is $user2->best_full_name, "Another LDAPUser", "non-cached ldap user bfn";
-    $user2->homunculus->expire();
 
     # turn off LDAP results (so it doesn't give us a fake mocked response
     # first), and go get a Default user.  Update that user, go get them again,
@@ -95,15 +105,13 @@ verify_caching_behaviour: {
     no warnings 'once';
     local $Socialtext::User::Cache::Enabled = 1;
 
-    # get a user from LDAP, verify who they are, then mark them as expired (to
-    # bypass the long-term cache in the DB)
+    # get a user from LDAP, and verify who they are
     Net::LDAP->set_mock_behaviour(
         search_results => [ $TEST_LDAP_USERS[0] ],
     );
     my $user = Socialtext::User->new(email_address => 'ldapuser@example.com');
     ok $user;
     is $user->best_full_name, "FirstLDAP LastLDAP", "original ldap user bfn";
-    $user->homunculus->expire();
 
     # go get the user again, this time expecting that we've used the
     # short-term in memory cache and have *not* gone back to LDAP to get the
@@ -114,7 +122,6 @@ verify_caching_behaviour: {
     my $user2 = Socialtext::User->new(email_address => 'ldapuser@example.com');
     ok $user2;
     is $user2->best_full_name, "FirstLDAP LastLDAP", "cached ldap user bfn";
-    $user2->homunculus->expire();
     my $ldap_user_id = $user2->user_id;
 
     # turn off LDAP results (so it doesn't give us a fake mocked response
@@ -156,4 +163,3 @@ verify_caching_behaviour: {
         is $user8->best_full_name, "Iam Here", "previous cache miss didn't poison the cache";
     }
 }
-

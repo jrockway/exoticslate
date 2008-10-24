@@ -6,11 +6,11 @@ BEGIN;
 -- make an "in case of emergency" copy of the User and UserId tables
 --
 
-    \o /tmp/user_detail_migration.txt
+    \o /var/www/socialtext/storage/db-backups/user_detail_migration.txt
     SELECT * FROM "User";
     \o
 
-    \o /tmp/user_detail_migration2.txt
+    \o /var/www/socialtext/storage/db-backups/user_detail_migration2.txt
     SELECT * FROM "UserId";
     \o
 
@@ -203,7 +203,7 @@ BEGIN;
     );
 
     -- make a record for sysadmin/support to use
-    \o /tmp/user_email_conflicts.txt
+    \o /var/www/socialtext/storage/db-backups/user_email_conflicts.txt
     SELECT driver_key, email_address, user_id FROM email_conflict_res;
     \o
 

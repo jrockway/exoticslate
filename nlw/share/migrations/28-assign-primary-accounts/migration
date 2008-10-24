@@ -4,12 +4,13 @@ use strict;
 use warnings;
 use Socialtext::Account;
 use Socialtext::AppConfig;
-use Socialtext::SQL qw/sql_execute/;
+use Socialtext::SQL qw/get_dbh sql_execute/;
 use YAML qw/LoadFile/;
 use Data::Dumper;
 use Carp qw/croak/;
 use Sys::Hostname qw/hostname/;
 use Socialtext::SystemSettings qw/set_system_setting/;
+use List::Util qw/reduce/;
 
 # Make sure the Socialtext and Unknown accounts exist.
 Socialtext::Account->EnsureRequiredDataIsPresent();
@@ -36,9 +37,15 @@ my $default_account;
 if (my $name = $MigrationConfig->{default_account}) {
     $default_account = Socialtext::Account->new( name => $name );
 }
+
+$default_account ||= Socialtext::Account->new(
+    name => hostname() 
+);
+
 $default_account ||= Socialtext::Account->create(
     name => hostname(),
 );
+
 set_system_setting('default-account', $default_account->account_id);
 print "Set default account: " . $default_account->name . "\n";
 
@@ -131,16 +138,16 @@ FROM (
 WHERE user_id = calc_user_id;
 EOT
 
+my ($accounts_to_skip, @accounts_to_skip_bind) = _load_accounts(
+    'system_accounts',
+    Socialtext::Account->Unknown,
+    Socialtext::Account->Socialtext,
+);
 
 # Assign people in JUST ONE non-system account to that account
 {
     print "Assigning people in *just one non-system* account to that account\n";
-    my ($accounts_to_skip, @bind) = _load_accounts(
-        'system_accounts',
-        Socialtext::Account->Unknown,
-        Socialtext::Account->Socialtext,
-    );
-    sql_execute(<<EOT, @bind, @bind);
+    sql_execute(<<EOT, @accounts_to_skip_bind, @accounts_to_skip_bind);
 UPDATE "UserMetadata"
 SET primary_account_id = calc_account_id
 FROM (
@@ -215,9 +222,59 @@ WHERE u.system_unique_id = "UserMetadata".user_id;
 EOT
 }
 
+print "Assign members ( not assigned to an account already ) of workspaces to the account of their biggest workspace.\n";
+
+{
+    # get all of the people not yet assigned, but are in at least one
+    # secondary account.
+    my $unassigned_sth = sql_execute(<<EOSQL, @accounts_to_skip_bind);
+    SELECT system_unique_id, secondary_account_id
+      FROM user_account 
+     WHERE primary_account_id IS NULL
+       AND secondary_account_id IS NOT NULL
+       AND secondary_account_id NOT IN ( $accounts_to_skip )
+    ORDER BY system_unique_id
+EOSQL
+    my %unassigned;
+    while (my ($user_id, $acct_id) = $unassigned_sth->fetchrow_array) {
+        $unassigned{$user_id} ||= [];
+        push @{$unassigned{$user_id}}, $acct_id;
+    }
+
+    # get the list of accounts from worst to best
+    # worst: low membership, late in the alphabet, high account_id
+    # best: high membership, early in the alphabet, low account_id
+    my $account_order_sth = sql_execute(<<EOSQL);
+    SELECT a.account_id, COUNT(DISTINCT um.user_id) AS users
+      FROM "Account" a
+      LEFT JOIN "UserMetadata" um ON (a.account_id = um.primary_account_id)
+     GROUP BY a.name, a.account_id
+     ORDER BY users ASC, a.name DESC, a.account_id DESC
+EOSQL
+    my %account_order;
+    my $order = 0; # higher number: better choice
+    while (my $row = $account_order_sth->fetchrow_arrayref) {
+        $account_order{$row->[0]} = $order++;
+    }
+
+    my $dbh = get_dbh();
+    my $update_sth = $dbh->prepare(q{
+        UPDATE "UserMetadata" SET primary_account_id = ? WHERE user_id = ?
+    });
+
+    while (my ($user_id, $accounts) = each %unassigned) {
+        # find the higest-order account (most users, best name, etc.)
+        my $best_account = reduce {
+            ($account_order{$a} > $account_order{$b}) ? $a : $b
+        } @$accounts;
+
+        $update_sth->execute($best_account, $user_id);
+    }
+}
+
 print "Assigning people that are still un-assigned to the 'General' account.\n";
 my $general = _load_account('General', 'create it!');
-my $sth = sql_execute(<<EOT, $general->account_id);
+sql_execute(<<EOT, $general->account_id);
 UPDATE "UserMetadata"
     SET primary_account_id = ?
     WHERE primary_account_id IS NULL

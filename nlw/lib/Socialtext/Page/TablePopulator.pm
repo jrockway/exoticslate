@@ -25,7 +25,7 @@ sub new {
     $self->{workspace}
         = Socialtext::Workspace->new( name => $opts{workspace_name} );
     die "No such workspace $opts{workspace_name}\n"
-        unless $self->{workspace_name};
+        unless $self->{workspace};
 
     return $self;
 }
@@ -36,7 +36,8 @@ sub populate {
     my $workspace_name = $self->{workspace_name};
 
     # Start a transaction, and delete everything for this workspace
-    sql_begin_work();
+    eval { sql_begin_work() };
+    my $already_in_txn = $@;
     eval {
         sql_execute(
             'DELETE FROM page WHERE workspace_id = ?',
@@ -93,11 +94,11 @@ sub populate {
         add_to_db('page_tag', \@page_tags);
     };
     if ($@) {
-        sql_rollback();
+        sql_rollback() unless $already_in_txn;
         die "Error during populate of $workspace_name: $@";
     }
     else {
-        sql_commit();
+        sql_commit() unless $already_in_txn;
     }
 }
 

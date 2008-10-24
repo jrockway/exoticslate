@@ -117,8 +117,15 @@ sub _format_results {
 
     my $wikitext = $separator . join("$separator",
         map {
-            my $page_id = Socialtext::Page->name_to_id($_->{Subject});
-            qq("$_->{Subject}"{$wafl $workspace_name [$page_id]})
+            my $subject = $_->{Subject};
+            if ($subject =~ /\]/) {
+                my $page_id = Socialtext::Page->name_to_id($_->{Subject});
+                $subject =~ s/"/''/g; # Hack to avoid misparsed double quotes.
+                qq("$subject"{$wafl $workspace_name [$page_id]})
+            }
+            else {
+                qq({$wafl $workspace_name [$subject]})
+            }
         } @$rows
     );
     return $self->hub->viewer->text_to_html("$wikitext\n");

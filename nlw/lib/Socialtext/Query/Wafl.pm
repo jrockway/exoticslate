@@ -117,7 +117,8 @@ sub _format_results {
 
     my $wikitext = $separator . join("$separator",
         map {
-            "{$wafl $workspace_name [" . $_->{Subject} . ']}'
+            my $page_id = Socialtext::Page->name_to_id($_->{Subject});
+            qq("$_->{Subject}"{$wafl $workspace_name [$page_id]})
         } @$rows
     );
     return $self->hub->viewer->text_to_html("$wikitext\n");

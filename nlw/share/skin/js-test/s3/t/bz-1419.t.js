@@ -20,6 +20,10 @@ t.runAsync([
             "That newPageButton div is properly marked as disabled"
         );
 
+        t.login({}, t.nextStep());
+    },
+            
+    function() { 
         t.endAsync();
     }
 ]);

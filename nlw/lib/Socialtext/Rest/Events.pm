@@ -14,7 +14,10 @@ use Date::Parse;
 our $VERSION = '1.0';
 
 sub allowed_methods {'GET, POST'}
-sub collection_name { "Events" }
+sub collection_name {
+    my $self = shift;
+    $self->rest->query->param('contributions') ? "All Changes" : "All Events";
+}
 
 field 'ws';
 

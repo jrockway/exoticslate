@@ -4,11 +4,12 @@ use strict;
 use warnings;
 use base 'Socialtext::Rest::Events';
 
+use Socialtext::l10n 'loc';
 use Socialtext::Events;
 use Socialtext::User;
 
 sub allowed_methods {'GET'}
-sub collection_name { "Conversation Events" }
+sub collection_name { loc("My Conversations") }
 
 sub get_resource {
     my ($self, $rest) = @_;

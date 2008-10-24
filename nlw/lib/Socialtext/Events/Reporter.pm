@@ -376,10 +376,8 @@ sub get_events_activities {
     my $user = Socialtext::User->Resolve($maybe_user);
     my $user_id = $user->user_id;
 
-    my @args;
     $self->add_condition($ACTIVITIES_FOR_A_USER, ($user_id) x 2);
-    push @args, limit => 20;
-    return $self->get_events(@args)
+    return $self->get_events(@_)
 }
 
 my $PAGES_I_CARE_ABOUT = <<'EOSQL';

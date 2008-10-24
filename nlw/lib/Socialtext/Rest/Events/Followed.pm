@@ -10,7 +10,7 @@ use Socialtext::Events::Reporter;
 our $VERSION = '1.0';
 
 sub allowed_methods { 'GET' }
-sub collection_name { "Followed People Events" }
+sub collection_name { "My Colleagues" }
 
 use constant MAX_EVENT_COUNT => 500;
 use constant DEFAULT_EVENT_COUNT => 25;

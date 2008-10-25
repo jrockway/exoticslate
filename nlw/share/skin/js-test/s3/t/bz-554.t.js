@@ -47,16 +47,21 @@ t.runAsync([
 
     function() { 
         t.$('#st-edit-button-link').click();
+        t.callNextStep(7500);
+    },
+
+    function() {
+        t.$('#wikiwyg_button_link').click();
+        t.callNextStep(3000);
+    },
+
+
+    function() { 
+        t.$('#add-web-link').click();
         t.callNextStep(3000);
     },
 
     function() { 
-        t.$('#wikiwyg_button_link').click();
-        t.callNextStep(1000);
-    },
-
-    function() { 
-        t.$('#add-web-link').click();
         t.$('#web-link-text').val('<&>');
         t.$('#web-link-destination').val('http://example.org/');
         t.$('#add-a-link-form').submit();

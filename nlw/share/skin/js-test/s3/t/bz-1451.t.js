@@ -4,6 +4,8 @@ var t = new Test.Visual();
 
 t.plan(1);
 
+t.checkRichTextSupport();
+
 t.runAsync([
     function() {
         t.put_page({

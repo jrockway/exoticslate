@@ -18,7 +18,9 @@ t.runAsync([
 
     function() { 
         t.$('#wikiwyg_wikitext_textarea').val("{tag_list: "+tag+"}");
-        t.$('#st-mode-wysiwyg-button').click();
+        if (!$.browser.safari) {
+            t.$('#st-mode-wysiwyg-button').click();
+        }
         t.callNextStep(5000);
     },
 

@@ -297,7 +297,7 @@ EOT
                 "$dirs{postgresql_base_dir}/postgresql.conf",
                 { 
                     pg_max_connections      => '40',
-                    pg_shared_buffers       => '10000',
+                    pg_shared_buffers       => '2500', # XXX: adjust this when sysctl.conf is fixed.
                     pg_work_mem             => '8192',
                     pg_maintenance_work_mem => '32768',
                     pg_checkpoint_segments  => '12',

@@ -191,7 +191,8 @@ proto.open_iframe = function(url, callback, options) {
 
     var self = this;
     $iframe.one("load", function() {
-        self.doc = self.iframe.contentDocument;
+        self.doc = self.iframe.contentDocument
+                || self.iframe.contentWindow.document;
         self.win = self.iframe.contentWindow;
         self.$ = self.iframe.contentWindow.jQuery;
         

@@ -10,17 +10,22 @@ t.runAsync([
     },
             
     function() { 
-        t.unlike(
-            t.doc.body.innerHTML,
-            /Carp/,
-            "Invalid attachment URL should not lead to ugly error message"
-        );
+        if (t.doc && t.doc.body) {
+            t.unlike(
+                t.doc.body.innerHTML,
+                /Carp/,
+                "Invalid attachment URL should not lead to ugly error message"
+            );
 
-        t.like(
-            t.doc.body.innerHTML,
-            /VeryBad/,
-            "The error message should contain the attachment file name"
-        );
+            t.like(
+                t.doc.body.innerHTML,
+                /VeryBad/,
+                "The error message should contain the attachment file name"
+            );
+        }
+        else {
+            t.skipAll('The browser has overridden our own 404 message');
+        }
 
         t.endAsync();
     }

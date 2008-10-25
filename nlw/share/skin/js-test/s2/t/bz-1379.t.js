@@ -14,15 +14,16 @@ t.runAsync([
         var p = t.$('#password');
         t.ok(u.length, "There is a #username field");
         t.ok(p.length, "There is a #password field");
-        try {
+        if (t.doc && t.doc.activeElement) {
             t.ok(
                 ((t.doc.activeElement == u.get(0))
                     || (t.doc.activeElement == p.get(0))),
                 "Input is focused on #username or #password"
             );
-        } catch (e) {
+        }
+        else {
             t.skip("t.doc.activeElement() is not exposed by the browser");
-        };
+        }
         t.endAsync();
     }
 ]);

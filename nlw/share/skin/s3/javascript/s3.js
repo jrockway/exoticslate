@@ -440,7 +440,7 @@ $(function() {
                     cl.width(clWidth);
                 }
 
-                cl.css('overflow', 'visible');
+                cl.addClass('overflowVisible');
 
                 $('#contentRight').css('width', crWidth + 'px');
                 $('#contentRight').css('max-width', crWidth + 'px');

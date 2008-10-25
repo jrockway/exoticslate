@@ -21,6 +21,10 @@ body div#contentColumns div#contentLeft {
     overflow-y: hidden !important;
 }
 
+body div#contentColumns div#contentLeft.overflowVisible {
+    overflow: visible !important;
+}
+
 div#contentColumns.hidebox #contentLeft {
     width: 97%;
 }

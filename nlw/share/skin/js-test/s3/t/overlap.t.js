@@ -10,26 +10,26 @@ var box2_horizontal = 75;
 
 t.runAsync([
     function() {
-        t.open_iframe("../common/html/blank.html", t.nextStep());
+        t.open_iframe("../common/html/blank.html", t.nextStep(), {w: 300, h: 300});
     },
 
     function() {
-        $(t.iframe).height(300).width(300);
+        if (!t.$) t.$ = $;
 
-        var $body = $(t.iframe.contentDocument.body);
-        var $box1 = window.$box1 = $('<div id="box1"></div>')
+        var $body = t.$('body');
+        var $box1 = window.$box1 = t.$('<div id="box1"></div>')
             .width(100)
             .height(100)
             .css({
                 backgroundColor: 'blue',
-                position: 'absolute',
                 opacity: '0.5',
+                position: 'absolute',
                 top: '100px',
                 left:'100px'
             })
             .appendTo($body);
 
-        var $box2 = window.$box2 = $('<div id="box2"></div>')
+        var $box2 = window.$box2 = t.$('<div id="box2"></div>')
             .width(50)
             .height(50)
             .css({
@@ -37,7 +37,7 @@ t.runAsync([
                 opacity: '0.5',
                 position: 'absolute',
                 top: String((300 - 50) / 2 + box2_vertical) + 'px',
-                left: String((300 - 50) / 2 + box2_horizontal) + 'px',
+                left: String((300 - 50) / 2 + box2_horizontal) + 'px'
             })
             .appendTo($body);
 

@@ -15,7 +15,7 @@ t.runAsync([
     },
 
     function() { 
-        if (t.doc.activeElement) {
+        if (t.doc && t.doc.activeElement) {
             t.is(
                 t.doc.activeElement.getAttribute('id'),
                 'st-newpage-save-pagename',

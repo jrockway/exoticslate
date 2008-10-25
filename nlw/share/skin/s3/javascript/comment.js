@@ -96,7 +96,12 @@ GuiEdit.prototype.show = function () {
     }
 
     this.scrollTo(function () {
-        jQuery('.comment', this.container).fadeIn();
+        jQuery('.comment', this.container).fadeIn(
+            'normal',
+            function() {
+                jQuery('textarea', this.container).focus();
+            }
+        );
     });
 }
 

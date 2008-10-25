@@ -20,13 +20,6 @@ fixtures( 'foobar_no_pages' );
 
 my $now = time;
 
-=head1 DESCRIPTION
-
-Test that orphans are correctly discovered and correctly not
-displayed when they are deleted.
-
-=cut
-
 my $hub = new_hub('foobar', 'system-user');
 my $pages = $hub->pages;
 

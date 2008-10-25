@@ -2,7 +2,11 @@
 
 var t = new Test.Visual();
 
-t.plan(2);
+t.plan(1);
+
+if (!$.browser.safari) {
+    t.skipAll("This test is Safari-specific");
+}
 
 t.runAsync([
     function() {
@@ -19,22 +23,11 @@ t.runAsync([
     },
             
     function() { 
-        t.like(
-            t.$('#contentLeft').css('overflow'),
-            /^(auto)?$/,
-            "Show content lines need not overflow rightward"
+        t.is(
+            t.$('#contentLeft').css('overflow-y'),
+            'hidden',
+            "Safari needs overflow-y set to 'hidden' to hide the scrollbar"
         );
-
-        if ($.browser.safari) {
-            t.is(
-                t.$('#contentLeft').css('overflow-y'),
-                'hidden',
-                "Safari needs overflow-y set to 'hidden' to hide the scrollbar"
-            );
-        }
-        else {
-            t.skip("This test is Safari-specific");
-        }
 
         t.endAsync();
     }

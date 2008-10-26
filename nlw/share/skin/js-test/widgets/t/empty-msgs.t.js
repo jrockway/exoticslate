@@ -2,7 +2,7 @@
 
 var t = new Test.Visual();
 
-t.plan(7);
+t.plan(6);
 
 var steps = [
     function() { t.login({}, t.nextStep()) }, 
@@ -15,12 +15,6 @@ var testData = [
         url: "/?action=add_widget;location=widgets/share/widgets/my_workspaces.xml",
         regex: /You do not belong to any workspaces yet\./,
         desc: "Empty My Workspaces message is correct"
-    },
-    {
-        type: "one_widget",
-        url: "/?action=add_widget;location=widgets/share/widgets/one_page.xml",
-        regex: /This widget shows a single wiki page\. To show a page, click on the tool icon and add the name of the workspace and page\./,
-        desc: "Empty message for one page wiki is present and correct"
     },
     {
         type: "one_widget",

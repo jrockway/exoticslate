@@ -40,7 +40,7 @@ t.runAsync([
         );
 
         t.iframe.contentWindow.location = '/index.cgi?';
-        t.callNextStep(3000);
+        t.callNextStep(5000);
     },
 
     function() {

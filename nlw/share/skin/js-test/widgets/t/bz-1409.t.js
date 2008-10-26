@@ -35,7 +35,6 @@ t.runAsync([
         setTimeout(function(){
             var found = false;
             widget.$('a').each(function(){
-                console.log($(this).text());
                 if ($(this).text().match(/測/)) {
                     found = true;
                 }

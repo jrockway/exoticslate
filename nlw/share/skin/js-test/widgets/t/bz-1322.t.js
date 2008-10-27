@@ -7,7 +7,7 @@ t.plan(1);
 t.runAsync([
     function() {
         $.ajax({
-            url: "/?action=elar_widgets",
+            url: "/?action=clear_widgets",
             async: false
         });
         $.ajax({

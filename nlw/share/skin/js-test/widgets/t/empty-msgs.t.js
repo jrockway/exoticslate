@@ -55,7 +55,8 @@ var testData = [
 
 t.plan(testData.length);
 
-t.skipAll("Skipping this insanity on IE for now");
+if (jQuery.browser.msie)
+    t.skipAll("Skipping this insanity on IE for now");
 
 // Generate the test step functions for each test.
 for (var i = 0, l = testData.length; i < l; i++) {

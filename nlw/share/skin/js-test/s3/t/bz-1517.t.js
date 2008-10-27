@@ -6,7 +6,7 @@ t.plan(1);
 
 t.runAsync([
     function() {
-        t.open_iframe("/admin/?action=new_page", t.nextStep(5000));
+        t.open_iframe("/admin/?action=new_page", t.nextStep(15000));
     },
             
     function() { 

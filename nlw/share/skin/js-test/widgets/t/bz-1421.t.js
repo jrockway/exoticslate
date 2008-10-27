@@ -39,8 +39,7 @@ t.runAsync([
             "Clicking 'minimize' causes minimization"
         );
 
-        t.iframe.contentWindow.location = '/index.cgi?';
-        t.callNextStep(5000);
+        t.open_iframe('/', t.nextStep());
     },
 
     function() {

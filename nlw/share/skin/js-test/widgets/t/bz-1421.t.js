@@ -39,7 +39,11 @@ t.runAsync([
             "Clicking 'minimize' causes minimization"
         );
 
-        t.open_iframe('/', t.nextStep());
+        t.callNextStep(5000); // Wait for the POST to go through
+    },
+
+    function() {
+        t.open_iframe('/', t.nextStep(3000));
     },
 
     function() {

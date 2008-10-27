@@ -10,13 +10,16 @@ use Class::Field 'field';
 use Socialtext::User;
 use Socialtext::Exceptions;
 use Date::Parse;
+use Socialtext::l10n 'loc';
 
 our $VERSION = '1.0';
 
 sub allowed_methods {'GET, POST'}
 sub collection_name {
     my $self = shift;
-    $self->rest->query->param('contributions') ? "All Changes" : "All Events";
+    $self->rest->query->param('contributions')
+        ? loc("All Changes")
+        : loc("All Events");
 }
 
 field 'ws';

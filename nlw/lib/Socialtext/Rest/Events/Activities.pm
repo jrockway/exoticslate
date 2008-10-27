@@ -3,7 +3,7 @@ package Socialtext::Rest::Events::Activities;
 use strict;
 use warnings;
 use base 'Socialtext::Rest::Events';
-use Socialtext::l10n qw(loc);
+use Socialtext::l10n 'loc';
 use Socialtext::SQL qw/sql_execute/;
 
 use Socialtext::Events;

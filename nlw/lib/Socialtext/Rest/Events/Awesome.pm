@@ -4,10 +4,11 @@ use strict;
 use warnings;
 use base 'Socialtext::Rest::Events';
 
+use Socialtext::l10n 'loc';
 use Socialtext::Events::Reporter;
 
 sub allowed_methods { 'GET' }
-sub collection_name { "Followed People Events" }
+sub collection_name { loc("Followed People Events") }
 
 sub if_authorized {
     my $self = shift;

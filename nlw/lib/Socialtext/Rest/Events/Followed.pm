@@ -5,12 +5,13 @@ use warnings;
 use base 'Socialtext::Rest::Events';
 use Socialtext::SQL qw/sql_execute/;
 
+use Socialtext::l10n 'loc';
 use Socialtext::Events::Reporter;
 
 our $VERSION = '1.0';
 
 sub allowed_methods { 'GET' }
-sub collection_name { "My Colleagues" }
+sub collection_name { loc("My Colleagues") }
 
 use constant MAX_EVENT_COUNT => 500;
 use constant DEFAULT_EVENT_COUNT => 25;

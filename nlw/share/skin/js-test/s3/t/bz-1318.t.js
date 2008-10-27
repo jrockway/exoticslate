@@ -23,29 +23,31 @@ t.runAsync([
     function() { 
         t.$('#st-edit-button-link').click();
 
-        setTimeout(function(){
-            var ww = t.iframe.contentWindow.Wikiwyg.Wysiwyg.Socialtext.prototype;
-            var img = $(
-                t.$('#st-page-editing-wysiwyg').get(0).contentWindow.document.documentElement
-            ).find('img').get(0);
-            ww.getWidgetInput(img, false, false);
+        t.callNextStep(10000);
+    },
+            
+    function() { 
+        var ww = t.iframe.contentWindow.Wikiwyg.Wysiwyg.Socialtext.prototype;
+        var img = $(
+            t.$('#st-page-editing-wysiwyg').get(0).contentWindow.document.documentElement
+        ).find('img').get(0);
+        ww.getWidgetInput(img, false, false);
 
-            t.ok(
-                t.$('#st-widget-cancelbutton').is(':visible'),
-                "Clicking on the TOC image brings out a wikiwyg widget form"
-            );
+        t.ok(
+            t.$('#st-widget-cancelbutton').is(':visible'),
+            "Clicking on the TOC image brings out a wikiwyg widget form"
+        );
 
-            t.$('#st-widget-cancelbutton').click();
+        t.$('#st-widget-cancelbutton').click();
 
-            t.$('#st-save-button-link').click();
+        t.$('#st-save-button-link').click();
 
-            t.ok(
-                true,
-                "Dismissing the TOC image did not raise javascript errors"
-            );
+        t.ok(
+            true,
+            "Dismissing the TOC image did not raise javascript errors"
+        );
 
-            t.endAsync();
-        }, 10000)
+        t.endAsync();
     }
 ]);
 

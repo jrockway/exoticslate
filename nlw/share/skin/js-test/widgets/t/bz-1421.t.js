@@ -5,7 +5,7 @@ var t = new Test.Visual();
 t.plan(4);
 
 if (jQuery.browser.msie)
-    t.skipAll("Skipping this insanity on IE for now...");
+    t.skipAll("Skipping this insanity on IE for now");
 
 t.runAsync([
     function() {

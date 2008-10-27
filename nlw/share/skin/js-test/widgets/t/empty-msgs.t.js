@@ -2,8 +2,6 @@
 
 var t = new Test.Visual();
 
-t.plan(6);
-
 var steps = [
     function() { t.login({}, t.nextStep()) }, 
     function() { t.create_anonymous_user_and_login({}, t.nextStep()) }, 
@@ -28,7 +26,8 @@ var testData = [
         url: "/?profile/7",
         regex: /This person doesn't have any tags yet. Click <b>Add tag<\/b> to add one now./,
         desc: "Empty message for another user's profile tags is present and correct"
-    },
+    }
+    /*,
     {
         type: "one_widget",
         url: "/?action=add_widget;location=people/share/profile_following.xml",
@@ -51,7 +50,10 @@ var testData = [
         regex: /My Conversations shows updates to pages you are involved with. To see entries in my conversation, edit, comment on, or watch a page. When someone else modifies that page, you will see those updates here./,
         desc: "Empty message for my \"Recent Conversations\" list."
     }
+    */
 ];
+
+t.plan(testData.length);
 
 // Generate the test step functions for each test.
 for (var i = 0, l = testData.length; i < l; i++) {
@@ -93,6 +95,6 @@ for (var i = 0, l = testData.length; i < l; i++) {
 
 steps.push(function() { t.login({}); t.endAsync() });
 
-t.runAsync(steps);
+t.runAsync(steps, testData.length * 60000);
 
 })(jQuery);

@@ -140,4 +140,27 @@ Also note that some distributions of Postgresql 8.0 run on port 5433 by
 default, instead of 5432.  Socialtext expects to run on 5432.  You may
 need to modify your postgres.conf.
 
+== Tuning Postgres ==
 
+Once you've got things set up, you may want to take some time to tune
+Postgres for better performance. Here are some example values in the
+/etc/postgresql/8.1/main/postgresql.conf
+
+max_connections = 40
+shared_buffers = 10000
+work_mem = 8192
+maintenance_work_mem = 32768
+checkpoint_segments = 12
+max_fsm_pages = 200000
+effective_cache_size = 10000
+random_page_cost = 3
+stats_row_level = on
+
+When you have made these changes, you will need to run
+'/etc/init.d/postgresql restart' as the root user.
+
+NOTE: the default kernel settings for shared memory may not allow us
+to set the shared_buffers value so high. If that is the case,
+you may need to adjust the 'kernel.shmmax' value in your /etc/sysctl.conf
+file. We needed to set ours to 134217728. Once that is set,
+you will need to run 'sysctl -p' as the root user.

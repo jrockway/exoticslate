@@ -96,7 +96,8 @@ for (var i = 0, l = testData.length; i < l; i++) {
     })(testData[i]);
 }
 
-steps.push(function() { t.login({}); t.endAsync() });
+steps.push(function() { t.login({}, t.nextStep()); });
+steps.push(function() { t.endAsync(); });
 
 t.runAsync(steps, testData.length * 60000);
 

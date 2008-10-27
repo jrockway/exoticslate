@@ -35,6 +35,12 @@ t.runAsync([
             t.$('#st-page-editing-wysiwyg').height(),
             "iframe height stays the same after roundtripping through Preview"
         );
+
+        t.$('#st-save-button-link').click();
+        t.callNextStep(3000);
+    },
+
+    function() { 
         t.endAsync();
     }
 ]);

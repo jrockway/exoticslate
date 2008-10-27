@@ -34,11 +34,11 @@ proto.diag = function() {
     this.builder.diag.apply(this.builder, arguments);
 }
 
-proto.runAsync = function(steps) {
+proto.runAsync = function(steps, timeout) {
     this.asyncSteps = steps;
     this.asyncStep = 0;
 
-    this.beginAsync(this.nextStep()); 
+    this.beginAsync(this.nextStep(), timeout); 
 }
 
 proto.nextStep = function(delay) {

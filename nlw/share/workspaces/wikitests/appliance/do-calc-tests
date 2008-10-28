@@ -1,8 +1,0 @@
-
-export OUTFILE=calctestcases.out
-export PLANPAGE="Calc Testcases"
-export PLANWS=wikitests
-
-source do-tests
-
-echo "Calc Testcases started, output to calctestcases.out"

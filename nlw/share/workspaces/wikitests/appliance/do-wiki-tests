@@ -1,8 +1,0 @@
-
-export OUTFILE=testcases.out
-export PLANPAGE="All Appliance Testcases"
-export PLANWS=wikitests
-
-source do-tests
-
-echo wikitests started

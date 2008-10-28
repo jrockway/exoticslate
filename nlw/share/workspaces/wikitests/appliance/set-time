@@ -1,5 +1,0 @@
-sudo /etc/init.d/ntp-server stop
-sudo ntpdate time.apple.com
-date
-sudo /etc/init.d/ntp-server start
-date

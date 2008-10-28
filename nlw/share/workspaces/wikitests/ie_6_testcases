@@ -23,6 +23,8 @@ It should be the last testset in this run, but it will re-enable LDAP when it fi
 
 * [Default User Testcases]
 
+* [Widgets Testcases]
+
 IE 6 uses the RSS Icons low Permissions test case
 
 But it seems no combination of servers and settings lets the RSS test run now. I think it used to run ??

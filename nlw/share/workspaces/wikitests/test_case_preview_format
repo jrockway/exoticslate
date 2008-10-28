@@ -3,17 +3,14 @@
 | *Comment* | the idea is to add 3 headers with a TOC widget in the middle of the page |  |
 | *Comment* | in Preview mode, the TOC widget should render the headers as links |  |
 
-| setSpeed | 150 |  |
-
 | *Comment* | create a page from file, because we can't type newlines with type_ok |  |
 | st-admin | update-page --workspace %%workspace%% --email %%email%% --page "Edit This Page TOC %%start_time%%" < %%wikitest_client_files%%wikitest_toc.txt | The "Edit This Page TOC %%start_time%%" page has been created. |
 
-| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
-| click_and_wait | link=Edit This Page TOC %%start_time%% |  |
+| open_ok | /%%workspace%%/index.cgi?Edit This Page TOC %%start_time%% |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_text_present_ok | Editing: Edit This Page TOC %%start_time%% | 30000 |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
 
 | *Comment* | Test Case: Preview Format Validate contents of the page before Preview |  |
 | *Comment* | head1, TOC widget , head2, head3 |  |

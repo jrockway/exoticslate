@@ -16,23 +16,19 @@
 | *Comment* | Test Case: All Pages Sorting tests |  |
 
 | *Comment* | Test Case: All Pages default sorted Date desc |  |
-| text_like | st-recent_changes-content | qr/all pages %%start_time%% 0004.+all pages %%start_time%% 0001/ |
+| text_like | contentContainer | qr/all pages %%start_time%% 0004.+all pages %%start_time%% 0001/ |
 
 | *Comment* | Test Case: All Pages sort Title asc |  |
 | select_and_wait | sort-picker | label=Title |
-| text_like | st-recent_changes-content | qr/all pages %%start_time%% 0001.+all pages %%start_time%% 0004/ |
-
-| *Comment* | label=Title (↓ ) |  |
+| text_like | contentContainer | qr/all pages %%start_time%% 0001.+all pages %%start_time%% 0004/ |
 
 | *Comment* | Test Case: All Pages sort Title desc |  |
-| select_and_wait | sort-picker | index=1 |
-| text_like | st-recent_changes-content | qr/all pages %%start_time%% 0004.+all pages %%start_time%% 0001/ |
-
-| *Comment* | label=Title (↑) |  |
+| select_and_wait | sort-picker | label=Title (↓) |
+| text_like | contentContainer | qr/all pages %%start_time%% 0004.+all pages %%start_time%% 0001/ |
 
 | *Comment* | Test Case: All Pages sort Title asc |  |
-| select_and_wait | sort-picker | index=1 |
-| text_like | st-recent_changes-content | qr/all pages %%start_time%% 0001.+all pages %%start_time%% 0004/ |
+| select_and_wait | sort-picker | label=Title (↑) |
+| text_like | contentContainer | qr/all pages %%start_time%% 0001.+all pages %%start_time%% 0004/ |
 
 | *Comment* | Test Case: All Pages add a new page |  |
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "all pages %%start_time%% 0005" < %%wikitest_client_files%%wikitest.txt | The "all pages %%start_time%% 0005" page has been created. |
@@ -40,17 +36,16 @@
 | open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
 | clickAndWait | link=All Pages |  |
 
-| *Comment* | label=Date (↑) |  |
+| *Comment* | Test Case: All Pages default sort Date desc |  |
+| text_like | contentContainer | qr/all pages %%start_time%% 0005.+all pages %%start_time%% 0004/ |
 
 | *Comment* | Test Case: All Pages sort Date asc |  |
-| select_and_wait | sort-picker | index=3 |
-| text_like | st-recent_changes-content | qr/all pages %%start_time%% 0004.+all pages %%start_time%% 0005/ |
-
-| *Comment* | label=Date (↓ ) |  |
+| select_and_wait | sort-picker | label=Date (↑) |
+| text_like | contentContainer | qr/all pages %%start_time%% 0002.+all pages %%start_time%% 0003/ |
 
 | *Comment* | Test Case: All Pages sort Date desc |  |
-| select_and_wait | sort-picker | index=3 |
-| text_like | st-recent_changes-content | qr/all pages %%start_time%% 0003.+all pages %%start_time%% 0002/ |
+| select_and_wait | sort-picker | label=Date (↓) |
+| text_like | contentContainer | qr/all pages %%start_time%% 0002.+all pages %%start_time%% 0001/ |
 
 | *Comment* | Test Case: All Pages create Rev 2 |  |
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "all pages %%start_time%% 0005" < %%wikitest_client_files%%wikitest.txt | The "all pages %%start_time%% 0005" page has been updated. |
@@ -59,32 +54,22 @@
 
 | *Comment* | Test Case: All Pages sort Revisions desc |  |
 | select_and_wait | sort-picker | label=Revisions |
-| text_like | st-recent_changes-content | qr/all pages %%start_time%% 0005.+all pages %%start_time%% 0004/ |
-
-| *Comment* | label=Revisions (↑) |  |
+| text_like | contentContainer | qr/all pages %%start_time%% 0005.+all pages %%start_time%% 0004/ |
 
 | *Comment* | Test Case: All Pages sort Revisions asc |  |
-| select_and_wait | sort-picker | index=4 |
-| text_like | st-recent_changes-content | qr/all pages %%start_time%% 0004.+all pages %%start_time%% 0005/ |
-
-| *Comment* | label=Revisions (↓ ) |  |
+| select_and_wait | sort-picker | label=Revisions (↑) |
+| text_like | contentContainer | qr/all pages %%start_time%% 0004.+all pages %%start_time%% 0005/ |
 
 | *Comment* | Test Case: All Pages sort Revisions desc |  |
-| select_and_wait | sort-picker | index=4 |
-| text_like | st-recent_changes-content | qr/all pages %%start_time%% 0005.+all pages %%start_time%% 0004/ |
+| select_and_wait | sort-picker | label=Revisions (↓) |
+| text_like | contentContainer | qr/all pages %%start_time%% 0005.+all pages %%start_time%% 0004/ |
 
 | *Comment* | Test Case: All Pages delete page |  |
 | st-admin | purge-page --w %%workspace%% --p all_pages_%%start_time%%_0004 | purged |
 
 | open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
 | clickAndWait | link=All Pages |  |
-| text_unlike | st-listview | all pages %%start_time%% 0004 |
-
-| open_ok | /%%workspace%%/index.cgi?all_pages_%%start_time%%_0003 |  |
-| click_and_wait | st-rewind-revision-count |  |
-| text_like | st-page-title | All Revisions |
-| text_unlike | st-revisionlist | revision 2 |
-| VerifyValue | Button | Compare Revisions |
+| text_unlike | contentContainer | all pages %%start_time%% 0004 |
 
 create a user that lexically precedes the logged in user by creating a user that begins with start_time
 However, don't use %%email%% in that username because that permanently creates another user name in the user DB that
@@ -95,41 +80,35 @@ contains %%email%% as a substring and that messes up other tests like Test Case:
 | set | s_user | %%start_time%%@%%start_time%%.socialtext.net |
 | st-admin | create-user --email %%s_user%% --password 123456 |  |
 | st-admin | add-member --email %%s_user%% --workspace %%workspace%% |  |
-| st-logout |  |  |
-| st-login | %%s_user%% | 123456 |
-
 | st-admin | update-page --email %%s_user%% --workspace %%workspace%% --page "all pages %%start_time%% 0003" < %%wikitest_client_files%%wikitest.txt | The "all pages %%start_time%% 0003" page has been updated. |
 
-| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
-| click_and_wait | link=All Pages |  |
-| select_and_wait | sort-picker | label=Last Edited By |
-| text_like | st-listview | qr/all pages %%start_time%% 0003.+all pages %%start_time%% 0001/ |
-
-| *Comment* | label=Last Edited By (desc) |  |
-
-| select_and_wait | sort-picker | index=2 |
-| text_like | st-listview | qr/all pages %%start_time%% 0001.+all pages %%start_time%% 0003/ |
+| open_ok | /%%workspace%%/index.cgi?action=changes&changes=all |  |
+| clickAndWait | link=All Pages |  |
 
 | *Comment* | label=Last Edited By (asc) |  |
+| select_and_wait | sort-picker | label=Last Edited By |
+| text_like | contentContainer | qr/all pages %%start_time%% 0003.+all pages %%start_time%% 0001/ |
 
-| select_and_wait | sort-picker | index=2 |
-| text_like | st-listview | qr/all pages %%start_time%% 0003.+all pages %%start_time%% 0001/ |
+| select_and_wait | sort-picker | label=Last Edited By (↓) |
+| text_like | contentContainer | qr/all pages %%start_time%% 0001.+all pages %%start_time%% 0003/ |
+
+| *Comment* | label=Last Edited By (asc) |  |
+| select_and_wait | sort-picker | label=Last Edited By (↑) |
+| text_like | contentContainer | qr/all pages %%start_time%% 0003.+all pages %%start_time%% 0001/ |
 
 | *Comment* | Test Case: All Pages switch back to Titles view |  |
-| click_and_wait | link=Titles |  |
+| click_and_wait | link=Summaries |  |
 | select_and_wait | sort-picker | label=Date |
 | select_and_wait | sort-picker | label=Last Edited By |
-| text_like | st-listview | qr/all pages %%start_time%% 0003.+all pages %%start_time%% 0001/ |
+| text_like | contentContainer | qr/all pages %%start_time%% 0003.+all pages %%start_time%% 0001/ |
 
 | *Comment* | label=Last Edited By (desc) |  |
-
-| select_and_wait | sort-picker | index=2 |
-| text_like | st-listview | qr/all pages %%start_time%% 0001.+all pages %%start_time%% 0003/ |
+| select_and_wait | sort-picker | label=Last Edited By (↓) |
+| text_like | contentContainer | qr/all pages %%start_time%% 0001.+all pages %%start_time%% 0003/ |
 
 | *Comment* | label=Last Edited By (asc) |  |
-
-| select_and_wait | sort-picker | index=2 |
-| text_like | st-listview | qr/all pages %%start_time%% 0003.+all pages %%start_time%% 0001/ |
+| select_and_wait | sort-picker | label=Last Edited By (↑) |
+| text_like | contentContainer | qr/all pages %%start_time%% 0003.+all pages %%start_time%% 0001/ |
 
 | *Comment* | Test Case: All Pages Teardown. No need to login again. |  |
 

@@ -1,41 +1,37 @@
-| set_default | wiki | %%workspace%% | defaults to the test workspace |
-| set_default | pt | 5000 | defaults to five seconds |
-| set_default | popup | 8000 | cancel popups in 8 seconds |
-| set_default | wikititle | Canonical Test Data Set | defaults to the test workspace |
+| set | wiki | %%workspace%% |  |
+| set | pt | 3000 |  |
 
-| open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |  |
+| open_ok | /%%wiki%%/ |  |
+| *Comment* | SlideShow SEE Global Navigation Home People Workspaces |  |
+| pause | %%pt%% |  |
+| click_and_wait | st-home-link |  |
+| *Comment* | SlideShow SEE Default widgets |  |
+| pause | %%pt%% |  |
+| click_and_wait | st-wiki-subnav-link-workspaces |
+| *Comment* | SlideShow SEE default workspaces |  |
+| pause | %%pt%% |  |  |
+| click_and_wait | st-wiki-subnav-link-people |
+| *Comment* | SlideShow SEE List of People |  |
+| pause | %%pt%% |  |
 
-| click_ok | link=Duplicate Page |  |
-| *Comment* | SlideShow CANCEL Duplicate Page popup |  |
-| pause | %%popup%% |  |
+| click_and_wait | link=Profile |  |
+| *Comment* | SlideShow SEE user profile |  |
+| pause | %%pt%% |  |
 
-| click_ok | link=Rename Page |  |
-| *Comment* | SlideShow CANCEL Rename Page popup |  |
-| pause | %%popup%% |  |
+| open_ok | /%%wiki%%/ |  |
+| *Comment* | SlideShow SEE search box |  |
+| pause | %%pt%% |  |
+| type_ok | st-search-term | link |
+| click_and_wait | st-search-submit |  |
+| *Comment* | SlideShow SEE search result |  |
+| pause | %%pt%% |  |
 
-| *Comment* | Skipping Delete Page - can't seem to get the popup right |
-
-| click_ok | link=Copy Page to Workspace |  |
-| *Comment* | SlideShow CANCEL Copy Page popup |  |
-| pause | %%popup%% |  |
-
-| click_ok | link=Export as HTML |  |
-| *Comment* | SlideShow SEE Exported HTML |  |
-| *Comment* | CTRL-W HTML ON WINDOWS |  |
-| *Comment* | APPLE-W HTML ON MAC |  |
-| pause | %%popup%% |  |
-| pause | %%pt%% | some extra time to close HTML window |
-
-| *Comment* | moved PDF and RTF EXPORT to end because IE has problems with it in SlideShow |  |
-
-| open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |  |
-
-| wait_for_element_visible_ok | st-pagetools-print | 30000 |
-| click_ok | st-pagetools-print |  |
-| *Comment* | SlideShow CANCEL Print popup |  |
-| pause | %%popup%% |  |
-
-| click_ok | st-pagetools-email |  |
-| *Comment* | SlideShow CANCEL Email This Page popup |  |
-| pause | %%popup%% |  |
-| pause | %%pt%% | extra pause for Email This Page popup |
+| open_ok | /%%wiki%%/ |  |
+| *Comment* | SlideShow SEE Workspace Navigation |
+| pause | %%pt%% |  |
+| *Comment* | SlideShow USE Workspace Navigation |
+| click_and_wait | link=What's New |  |
+| click_and_wait | link=My Watchlist |  |
+| click_and_wait | link=Weblogs |  |
+| click_and_wait | link=Invite Others |  |
+| click_and_wait | //a[@id='workspaceName'] |  |

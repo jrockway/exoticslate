@@ -137,59 +137,56 @@
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Time |  |
 | check_ok | timezone__time_display_seconds |  |
-| click_and_wait | Button |  |
+
+| click_and_wait | link=Save |  |
+
+click_and_wait | //div[@id='contentRight']/form/ul[2]/li[1]/a | |
 
 | *Comment* | Test Case: Sorting Files Sorting by filename and page title |  |
-| wait_for_element_visible_ok | st-wiki-subnav-link-whats-new |  |
-| click_and_wait | st-wiki-subnav-link-whats-new |  |
-| click_and_wait | link=All Files |  |
+| open_ok | /%%sorting_workspace%%/?action=attachments_listall |  |
+| wait_for_element_visible_ok | sort-picker |  |
 
 | *Comment* | Test Case: Sorting Files Sorting by filename descending, then ascending |  |
 | select_and_wait | sort-picker | index=1 |
-| text_like | st-attachments_ui-content | qr/wikitestzip\.zip.+wikitest\.txt.+wikitest\.pdf.+wikitest\.jpg.+wikitest\.doc/ |
+| text_like | contentContainer | qr/wikitestzip\.zip.+wikitest\.txt.+wikitest\.pdf.+wikitest\.jpg.+wikitest\.doc/ |
 | select_and_wait | sort-picker | index=1 |
-| text_like | st-attachments_ui-content | qr/wikitest\.doc.+wikitest\.jpg.+wikitest\.pdf.+wikitest\.txt.+wikitestzip\.zip/ |
+| text_like | contentContainer | qr/wikitest\.doc.+wikitest\.jpg.+wikitest\.pdf.+wikitest\.txt.+wikitestzip\.zip/ |
 
 | *Comment* | Test Case: Sorting Files Sorting by page title ascending, then descending |  |
 | select_and_wait | sort-picker | label=Page Title |
-| text_like | st-attachments_ui-content | qr/page1 %%start_time%%.+page2 %%start_time%%.+page3 %%start_time%%.+page4 %%start_time%%.+page5 %%start_time%%/ |
+| text_like | contentContainer | qr/page1 %%start_time%%.+page2 %%start_time%%.+page3 %%start_time%%.+page4 %%start_time%%.+page5 %%start_time%%/ |
 | select_and_wait | sort-picker | index=2 |
-| text_like | st-attachments_ui-content | qr/page5 %%start_time%%.+page4 %%start_time%%.+page3 %%start_time%%.+page2 %%start_time%%.+page1 %%start_time%%/ |
+| text_like | contentContainer | qr/page5 %%start_time%%.+page4 %%start_time%%.+page3 %%start_time%%.+page2 %%start_time%%.+page1 %%start_time%%/ |
 | select_and_wait | sort-picker | index=2 |
-| text_like | st-attachments_ui-content | qr/page1 %%start_time%%.+page2 %%start_time%%.+page3 %%start_time%%.+page4 %%start_time%%.+page5 %%start_time%%/ |
+| text_like | contentContainer | qr/page1 %%start_time%%.+page2 %%start_time%%.+page3 %%start_time%%.+page4 %%start_time%%.+page5 %%start_time%%/ |
 
 | *Comment* | Test Case: Sorting Files sort by uploaded by, ascending, then descending |  |
 | select_and_wait | sort-picker | label=Uploaded By |
-| text_like | st-attachments_ui-content | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_3_regex%%.+%%user_4_regex%%.+%%user_5_regex%%/ |
+| text_like | contentContainer | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_3_regex%%.+%%user_4_regex%%.+%%user_5_regex%%/ |
 | select_and_wait | sort-picker | index=3 |
-| text_like | st-attachments_ui-content | qr/%%user_5_regex%%.+%%user_4_regex%%.+%%user_3_regex%%.+%%user_2_regex%%.+%%user_1_regex%%/ |
+| text_like | contentContainer | qr/%%user_5_regex%%.+%%user_4_regex%%.+%%user_3_regex%%.+%%user_2_regex%%.+%%user_1_regex%%/ |
 | select_and_wait | sort-picker | index=3 |
-| text_like | st-attachments_ui-content | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_3_regex%%.+%%user_4_regex%%.+%%user_5_regex%%/ |
+| text_like | contentContainer | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_3_regex%%.+%%user_4_regex%%.+%%user_5_regex%%/ |
 
 | *Comment* | Test Case: Sorting Files sort by size, descending, then ascending |  |
 | select_and_wait | sort-picker | label=Size |
-| text_like | st-attachments_ui-content | qr/30kb.+27kb.+24kb.+42bytes/ |
+| text_like | contentContainer | qr/30kb.+27kb.+24kb.+42bytes/ |
 | select_and_wait | sort-picker | index=5 |
-| text_like | st-attachments_ui-content | qr/42bytes.+24kb.+27kb.+30kb/ |
+| text_like | contentContainer | qr/42bytes.+24kb.+27kb.+30kb/ |
 | select_and_wait | sort-picker | index=5 |
-| text_like | st-attachments_ui-content | qr/30kb.+27kb.+24kb.+42bytes/ |
+| text_like | contentContainer | qr/30kb.+27kb.+24kb.+42bytes/ |
 
-We do not have much control on data under "Date Uploaded" column to verify expected and actual sort result. So instead of verifying sort results directly to "Date Uploaded" column, we tried to verify it through the data of other columns. Means that if we do a sort asc or desc on Date Uploaded, we verified the corresponding expected changes of data in other columns to make sure that Date Uploaded sort is working. We have done it twice, one for asc and other one for desc sort by "Date Uploaded".
-
-| *Comment* | Date Uploaded sort is just plain broken and bug number is 513 |
-
-TODO:
-*Reinsert the following tests when bug 513 gets fixed*
-click_ok | link=Date Uploaded | |
-text_like | st-allfiles | qr/%%user_5_regex%%.+%%user_4_regex%%.+%%user_3_regex%%.+%%user_2_regex%%.+%%user_1_regex%%/ |
-text_like | st-allfiles | qr/wikitest\.txt.+wikitest\.pdf.+wikitestzip\.zip.+wikitest\.doc.+wikitest\.jpg/ |
-text_like | st-allfiles | qr/page5 %%start_time%%.+page4 %%start_time%%.+page3 %%start_time%%.+page2 %%start_time%%.+page1 %%start_time%%/ |
-text_like | st-allfiles | qr/42.+31250.+25038.+27648.+20721/ |
-click_ok | link=Date Uploaded | |
-text_like | st-allfiles | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_4_regex%%.+%%user_5_regex%%.+%%user_3_regex%%/ |
-text_like | st-allfiles | qr/wikitest\.jpg.+wikitest\.doc.+wikitestzip\.zip.+wikitest\.pdf.+wikitest\.txt/ |
-text_like | st-allfiles | qr/page1 %%start_time%%.+page2 %%start_time%%.+page3 %%start_time%%.+page4 %%start_time%%.+page5 %%start_time%%/ |
-text_like | st-allfiles | qr/20721.+27648.+25038.+31250.+42/ |
+| *Comment* | Test Case: Sorting Files sort by date uploaded, descending, then ascending |  |
+| select_and_wait | sort-picker | label=Date Uploaded |
+| text_like | contentContainer | qr/%%user_5_regex%%.+%%user_4_regex%%.+%%user_3_regex%%.+%%user_2_regex%%.+%%user_1_regex%%/ |
+| text_like | contentContainer | qr/wikitest\.txt.+wikitest\.pdf.+wikitestzip\.zip.+wikitest\.doc.+wikitest\.jpg/ |
+| text_like | contentContainer | qr/page5 %%start_time%%.+page4 %%start_time%%.+page3 %%start_time%%.+page2 %%start_time%%.+page1 %%start_time%%/ |
+| text_like | contentContainer | qr/42bytes.+30kb.+24kb.+27kb/ |
+| select_and_wait | sort-picker | index=4 |
+| text_like | contentContainer | qr/%%user_1_regex%%.+%%user_2_regex%%.+%%user_3_regex%%.+%%user_4_regex%%.+%%user_5_regex%%/ |
+| text_like | contentContainer | qr/wikitest\.jpg.+wikitest\.doc.+wikitestzip\.zip.+wikitest\.pdf.+wikitest\.txt/ |
+| text_like | contentContainer | qr/page1 %%start_time%%.+page2 %%start_time%%.+page3 %%start_time%%.+page4 %%start_time%%.+page5 %%start_time%%/ |
+| text_like | contentContainer | qr/27kb.+24kb.+30kb.+42bytes/ |
 
 | *Comment* | Test Case: Sorting Files Teardown |  |
 | st-admin | delete-workspace --workspace %%sorting_workspace%% --no-export |  |

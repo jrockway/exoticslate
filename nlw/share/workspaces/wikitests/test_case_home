@@ -1,33 +1,28 @@
-This is automation of [Test: Home]
-
 | *Comment* | Test Case: Home |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| text_like | st-wiki-subnav-left | What's new |
-| text_like | st-wiki-subnav-left | Weblogs |
 
-| *Comment* | Homepage is Central Page |  |
+| *Comment* | Test Case: Home home is Weblog |  |
+| open_ok | /%%workspace%%/index.cgi?action=users_settings |  |
+| click_and_wait | link=Workspace Appearance |  |
+
+| *Comment* | click the Weblog radio button |  |
+| check_ok | document.forms[1].homepage_is_weblog[1] |  |
+| type_ok | homepage_weblog | Home %%start_time%% Blog |
+| click_and_wait | link=Save |  |
+
+TODO: when Selenium checks the weblog box, the weblog text area does not enable. ??
+
+ text_like | Changes saved | |
+ click_and_wait | link=%%title%% | |
+ text_like | Weblog: Home %%start_time%% Blog | |
+
+| *Comment* | Test Case: Home is Central Page |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Workspace Appearance |  |
-| *Comment* | click the Central Page radio button |  |
-| click_ok | document.forms[1].homepage_is_dashboard[1] |  |
-| click_and_wait | Button |  |
+| check_ok | document.forms[1].homepage_is_weblog[0] |  |
+| click_and_wait | link=Save |  |
 | text_like | Changes saved |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| text_like | This is the home page for |  |
 
-| *Comment* | Test Case: Home homepage is Dashboard |  |
-| text_like | st-wiki-subnav-left | What's new |
-| text_like | st-wiki-subnav-left | Weblogs |
-| text_like | st-wiki-subnav-left | Dashboard |
-| click_and_wait | link=Settings |  |
-| click_and_wait | link=Workspace Appearance |  |
-| click_ok | homepage_is_dashboard |  |
-| click_and_wait | Button |  |
-| text_like | Changes saved |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| text_like | Dashboard: |  |
-| text_like | st-wiki-subnav-left | What's new |
-| text_like | st-wiki-subnav-left | Weblogs |
-| text_unlike | st-wiki-subnav-left | Dashboard |
+| click_and_wait | link=%%title%% |  |
+| text_like | This is the home page for %%title%% |  |
 
 | *Comment* | Test case: Home COMPLETED |  |

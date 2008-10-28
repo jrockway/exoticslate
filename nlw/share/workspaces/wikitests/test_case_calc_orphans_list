@@ -17,7 +17,7 @@
 "What's New -> Orphans List"<http://...> | list of links to orphan sheets appears
 
 | *Comment* | Test Case: Calc Orphans List. Orphan sheet list |  |
-| click_and_wait | link=What's new |  |
+| open_ok | /%%workspace%%/?action=recent_changes |  |
 | click_and_wait | link=Orphaned Pages |  |
 | text_like | link=orphan sheet 1 %%start_time%% | orphan sheet 1 %%start_time%% |
 | text_like | link=orphan sheet 2 %%start_time%% | orphan sheet 2 %%start_time%% |
@@ -27,7 +27,7 @@
 | *Comment* | Test Case: Calc Orphans List. Orphan sheet links work |  |
 | click_and_wait | link=orphan sheet 1 %%start_time%% |  |
 | text_like | st-page-titletext | orphan sheet 1 %%start_time%% |
-| click_and_wait | link=What's new |  |
+| open_ok | /%%workspace%%/?action=recent_changes |  |
 | click_and_wait | link=Orphaned Pages |  |
 | click_and_wait | link=orphan sheet 2 %%start_time%% |  |
 | text_like | st-page-titletext | orphan sheet 2 %%start_time%% |
@@ -43,8 +43,8 @@ edit a page to include a link to an orphan sheet | link appears in page
 
 | *Comment* | Test Case: Calc Orphans List. Create a link to the second orphan sheet |  |
 | open_ok | /%%workspace%%/index.cgi?orphan page 1 %%start_time%% |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | `[orphan sheet 2 %%start_time%%]` |
 | click_and_wait | link=Save |  |
@@ -52,10 +52,10 @@ edit a page to include a link to an orphan sheet | link appears in page
  "What's New -> Orphaned Pages"<http://.../> | linked sheet no longer in orphans list
 
 | *Comment* | Test Case: Calc Orphans List. second sheet should no longer be orphan |  |
-| click_and_wait | link=What's new |  |
+| open_ok | /%%workspace%%/?action=recent_changes |  |
 | click_and_wait | link=Orphaned Pages |  |
-| text_unlike | st-backlinks-content | orphan sheet 2 %%start_time%% |
-| text_like | st-backlinks-content | orphan sheet 1 %%start_time%% |
+| text_unlike | contentContainer | orphan sheet 2 %%start_time%% |
+| text_like | contentContainer | orphan sheet 1 %%start_time%% |
 
 | *Comment* | Test Case: Calc Orphans List. Teardown |  |
 

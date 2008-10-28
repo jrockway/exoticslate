@@ -1,12 +1,11 @@
 | *Comment* | STARTING Test Case: Miki |  |
-| *Comment* | TODO: more miki |  |
 
 | *Comment* | Test Case: Miki RT 26984 |  |
 | *Comment* | Test Case: Miki create test weblog for capitalization test |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Create New Weblog |  |
 | type_ok | weblog_title | Caps Test Weblog %%start_time%% |
-| click_and_wait | Button |  |
+| click_and_wait | link=Save |  |
 
 | *Comment* | Test Case: Miki Open the weblog with caps |  |
 | open_ok | /lite/category/%%workspace%%/Caps%20Test%20Weblog%20%%start_time%%%20Weblog |  |
@@ -18,15 +17,13 @@
 | text_like | link=First Post in Caps Test Weblog %%start_time%% Weblog | First Post in Caps Test Weblog %%start_time%% Weblog |
 | text_like | link=Recent changes in caps test weblog %%start_time%% Weblog category | Recent changes in caps test weblog %%start_time%% Weblog category |
 
-| click_ok | link=Recent Changes |  |
-
-| wait_for_element_visible_ok | link=Filter by category | 30000 |
-| click_ok | link=Filter by category |  |
-| wait_for_element_visible_ok | link=Caps Test Weblog %%start_time%% Weblog | 30000 |
-| click_ok | link=Caps Test Weblog %%start_time%% Weblog |  |
-| wait_for_element_visible_ok | link=First Post in Caps Test Weblog %%start_time%% Weblog | 30000 |
-| click_ok | link=First Post in Caps Test Weblog %%start_time%% Weblog |  |
-| wait_for_text_present_ok | This is the first post in Caps Test Weblog %%start_time%% Weblog | 30000 |
+| *Comment* | Test Case: Miki |  |
+| click_and_wait | link=Recent Changes |  |
+| wait_for_element_present_ok | link=Filter by category | 5000 |
+| click_and_wait | link=Filter by category |  |
+| click_and_wait | link=Caps Test Weblog %%start_time%% Weblog |  |
+| click_and_wait | link=First Post in Caps Test Weblog %%start_time%% Weblog |  |
+| text_like | qr/This is the first post in Caps Test Weblog %%start_time%% Weblog/ |  |
 
 | *Comment* | Test Case: Miki Teardown |  |
 | st-admin | purge-page --workspace %%workspace%% --page first_post_in_caps_test_weblog_%%start_time%%_weblog | page was purged |

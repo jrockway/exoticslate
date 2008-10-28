@@ -204,8 +204,8 @@
 | *Comment* | Test Case: Calc Slideshow - Save and re-edit |  |
 | pause | 5000 |  |
 | click_and_wait | st-save-button-link |  |
-| wait_for_element_visible_ok | link=edit |  |
-| click_ok | link=edit |  |
+| wait_for_element_visible_ok | st-edit-button-link |  |
+| click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | st-save-button-link |
 | *Comment* | SlideShow Calc Slideshow: SEE error message is gone thanks to save |  |
 | pause | %%pt%% |  |

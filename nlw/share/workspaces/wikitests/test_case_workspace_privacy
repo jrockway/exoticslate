@@ -11,10 +11,10 @@ There should be no attachments at all in a pristine /test-data workspace.
 If you want to write a test for email addresses are hidden, write a separate test.
 
 | *Comment* | Test Case: Workspace Privacy set login to edit |  |
-| clickAndWait | link=Settings |  |
+| open_ok | /%%workspace%%/?action=users_settings |  |
 | clickAndWait | link=Workspace Privacy |  |
 | click_ok | //input[@name='permission_set_name' and @value='public-authenticate-to-edit'] |  |
-| clickAndWait | Button |  |
+| clickAndWait | link=Save |  |
 | clickAndWait | link=Log out |  |
 
 | *Comment* | Test Case: Workspace Privacy verify login to edit button |  |
@@ -38,71 +38,56 @@ If you want to write a test for email addresses are hidden, write a separate tes
 
 | *Comment* | Test Case: Workspace Privacy set public read only |  |
 | click_ok | //input[@name='permission_set_name' and @value='public-read-only'] |  |
-| clickAndWait | Button |  |
+| clickAndWait | link=Save |  |
 | clickAndWait | link=Log out |  |
 
 | *Comment* | Test Case: Workspace Privacy verify public read only |  |
 | wait_for_element_not_present_ok | st-edit-button-link | 5000 |
 | wait_for_element_not_present_ok | st-comment-button-link | 5000 |
-| wait_for_element_not_present_ok | st-edit-actions-below-fold-edit | 5000 |
-| wait_for_element_not_present_ok | st-edit-actions-below-fold-comment | 5000 |
-
-| text_unlike | st-editing-tools | Edit |
-| text_unlike | st-editing-tools | Comment |
-| text_unlike | st-edit-actions-below-fold | edit |
-| text_unlike | st-edit-actions-below-fold | comment |
+| wait_for_element_not_present_ok | st-edit-button-link-bottom | 5000 |
+| wait_for_element_not_present_ok | st-comment-button-link-bottom | 5000 |
 
  log in | login successful
  go to Settings->Workspace Privacy and set Permissions: Public read and comment only. | permission set is saved.
  log out | central page appears. Comment button is present, but no edit button.
 
 | *Comment* | Test Case: Workspace Privacy set public comment only |  |
-| clickAndWait | link=Login |  |
+| clickAndWait | link=Log in |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
 | clickAndWait | //input[@value='Log in'] |  |
 | clickAndWait | link=Settings |  |
 | clickAndWait | link=Workspace Privacy |  |
 | click_ok | //input[@name='permission_set_name' and @value='public-comment-only'] |  |
-| clickAndWait | Button |  |
+| clickAndWait | link=Save |  |
 | clickAndWait | link=Log out |  |
 
 | *Comment* | Test Case: Workspace Privacy verify public comment only |  |
-| wait_for_element_visible_ok | st-edit-actions-below-fold-comment | 5000 |
-| wait_for_element_visible_ok | st-comment-button-link | 5000 |
-| wait_for_element_not_present_ok | st-edit-actions-below-fold-edit | 5000 |
 | wait_for_element_not_present_ok | st-edit-button-link | 5000 |
-
-| text_like | st-edit-actions-below-fold-comment | comment |
-| text_like | st-comment-button-link | Comment |
-| text_unlike | st-editing-tools | Edit |
-| text_unlike | st-edit-actions-below-fold | edit |
+| wait_for_element_present_ok | st-comment-button-link | 5000 |
+| wait_for_element_not_present_ok | st-edit-button-link-bottom | 5000 |
+| wait_for_element_present_ok | st-comment-button-link-bottom | 5000 |
 
 log in | login successful.
 go to Settings-> workspace privacy and set permissions: fully public | permission set is saved.
 logout | browser navigates to central page. Edit and comment buttons are present. | *Comment* | Setting privacy | |
 
 | *Comment* | Test Case: Workspace Privacy set public |  |
-| clickAndWait | link=Login |  |
+| clickAndWait | link=Log in |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
 | clickAndWait | //input[@value='Log in'] |  |
 | clickAndWait | link=Settings |  |
 | clickAndWait | link=Workspace Privacy |  |
 | click | //input[@name='permission_set_name' and @value='public'] |  |
-| clickAndWait | Button |  |
+| clickAndWait | link=Save |  |
 | clickAndWait | link=Log out |  |
 
 | *Comment* | Test Case: Workspace Privacy verify public |  |
-| wait_for_element_visible_ok | st-edit-actions-below-fold-comment | 5000 |
-| wait_for_element_visible_ok | st-comment-button-link | 5000 |
-| wait_for_element_visible_ok | st-edit-button-link | 5000 |
-| wait_for_element_visible_ok | st-edit-actions-below-fold-edit | 5000 |
-
-| text_like | st-edit-actions-below-fold-comment | comment |
-| text_like | st-comment-button-link | Comment |
-| text_like | st-editing-tools | Edit |
-| text_like | st-edit-actions-below-fold | edit |
+| wait_for_element_present_ok | st-edit-button-link | 5000 |
+| wait_for_element_present_ok | st-comment-button-link | 5000 |
+| wait_for_element_present_ok | st-edit-button-link-bottom | 5000 |
+| wait_for_element_present_ok | st-comment-button-link-bottom | 5000 |
 
  login | login successful
  go to Settings-> workspace privacy and set permissions: private | permission set is saved.
@@ -110,14 +95,14 @@ logout | browser navigates to central page. Edit and comment buttons are present
  Observe browser | should be redirected to the login screen
 
 | *Comment* | Test Case: Workspace Privacy set private |  |
-| clickAndWait | link=Login |  |
+| clickAndWait | link=Log in |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
 | clickAndWait | //input[@value='Log in'] |  |
 | clickAndWait | link=Settings |  |
 | clickAndWait | link=Workspace Privacy |  |
 | click_ok | //input[@name='permission_set_name' and @value='member-only'] |  |
-| clickAndWait | Button |  |
+| clickAndWait | link=Save |  |
 | clickAndWait | link=Log out |  |
 
 | *Comment* | Test Case: Workspace Privacy verify private |  |
@@ -132,11 +117,11 @@ logout | browser navigates to central page. Edit and comment buttons are present
 | clickAndWait | link=Workspace Privacy |  |
 | click_ok | //input[@name='permission_set_name' and @value='member-only'] |  |
 | click_ok | //input[@name='guest_has_email_in' and @value='1'] |  |
-| clickAndWait | Button |  |
-| text_like | st-settings-save | The permissions for %%workspace%% have been set to member-only. Anyone can send email to %%workspace%%. |
+| clickAndWait | link=Save |  |
+| text_like | contentContainer | The permissions for %%workspace%% have been set to member-only. Anyone can send email to %%workspace%%. |
 | click_ok | //input[@name='guest_has_email_in' and @value='0'] |  |
-| clickAndWait | Button |  |
-| text_like | st-settings-save | The permissions for %%workspace%% have been set to member-only. Only registered users can send email to %%workspace%%. |
+| clickAndWait | link=Save |  |
+| text_like | contentContainer | The permissions for %%workspace%% have been set to member-only. Only registered users can send email to %%workspace%%. |
 
 | *Comment* | Test Case: Workspace Privacy Teardown |  |
 | st-admin | set-permissions --workspace %%workspace%% --permission member-only |  |

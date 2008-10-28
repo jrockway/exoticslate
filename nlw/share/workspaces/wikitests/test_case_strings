@@ -1,7 +1,5 @@
 | *Comment* | Test Case: Strings |  |
 
-| setSpeed | 100 |  |
-
 | set | test_string | `Double dashes -- are double trouble` |
 | set | test_string_esc | `Double dashes \-\- are double trouble` |
 | set | test_id | `double_dashes_are_double_trouble` |

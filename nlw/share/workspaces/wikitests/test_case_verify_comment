@@ -1,0 +1,42 @@
+| *Comment* | Test Case: Verify Comment |
+| *Comment* | This is a Default User testcase because it uses set-user-names |
+
+| *Comment* | Test Case: Verify Comment Create Test Page |  |
+| st-admin | create-user --email verify.%%start_time%%@ken.socialtext.net --password 123456 |  |
+| st-admin | update-page --email verify.%%start_time%%@ken.socialtext.net --workspace %%workspace%% --page "Verify Comment %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "Verify Comment %%start_time%%" page has been created |
+| st-admin | set-user-names --e %%email%% --first First --last Commenter | User "%%email%%" was updated |
+
+| *Comment* | Test Case: Verify Comment top comment button |  |
+| open_ok | /%%workspace%%/?Verify Comment %%start_time%% |  |
+| click_ok | st-comment-button-link |  |
+| wait_for_element_visible_ok | comment | 30000 |
+| type_ok | comment | Comment 1 %%start_time%% |
+| click_ok | link=Save |  |
+| pause | 10000 |
+| text_like | contentContainer | Comment 1 %%start_time%% |
+| text_like | update-attribution | First Commenter |
+
+| st-admin | set-user-names --e %%email%% --first Second --last Commenter | User "%%email%%" was updated |
+
+| *Comment* | Test Case: Verify Comment bottom Comment button |  |
+| click_ok | st-comment-button-link-bottom |  |
+| wait_for_element_visible_ok | comment | 30000 |
+| type_ok | comment | Comment 2 %%start_time%% |
+| click_ok | link=Save |  |
+| pause | 10000 |
+| text_like | contentContainer | qr/Comment 1.+Comment 2/ |
+| text_like | contentContainer | qr/contributed by/i |
+| text_like | update-attribution | Second Commenter |
+
+| *Comment* | Test Case: Verify Comment Cancel comment |  |
+| click_ok | st-comment-button-link-bottom |  |
+| wait_for_element_visible_ok | comment | 30000 |
+| type_ok | comment | Comment Cancel %%start_time%% |
+| click_ok | link=Cancel |  |
+| pause | 5000 |
+| text_like | contentContainer | qr/Comment 1.+Comment 2/ |
+| text_unlike | contentContainer | Comment Cancel %%start_time%% |
+
+| *Comment* | Test Case: Verify Comment Teardown |  |
+| st-admin | purge-page --w %%workspace%% --p verify_comment_%%start_time%% | was purged |
+| st-admin | set-user-names --e %%email%% --first "" --last "" | User "%%email%%" was updated | *Comment* | Test Case: Verify Comment COMPLETED |

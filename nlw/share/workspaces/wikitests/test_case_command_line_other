@@ -1,20 +1,58 @@
 | *Comment* | STARTED Test Case: Command Line Tests OTHER |  |
 
- set-logo-from-file --workspace --file /path/to/file.jpg
-
-| set | cli_user | `cli-%%start_time%%@ken.socialtext.net` |
-| st-admin | create-user --email %%cli_user%% --password d3vnu1ll |  |
-
 | set | cmdline_workspace | clw_%%start_time%% |
-| st-admin | create-workspace --name %%cmdline_workspace%% --title %%cmdline_workspace%% | A new workspace named "%%cmdline_workspace%%" was created |
+| set | cmdline_account | cla_%%start_time%% |
+| set | cli_user | `cli-%%start_time%%@ken.socialtext.net` |
+
+| *Comment* | Test Case: Command Line Tests OTHER test plugin enable/disable |  |
+| st-admin | create_account --name %%cmdline_account%% | qr/A new account named "%%cmdline_account%%" was created\./ |
+| st-admin | create-workspace --name %%cmdline_workspace%% --title %%cmdline_workspace%% --account %%cmdline_account%% |  |
+| st-admin | create-user --email %%cli_user%% --password d3vnu1ll |  |
+| st-admin | add-member --email %%username%% --password %%password%% --workspace %%cmdline_workspace%% |  |
+
+| *Comment* | Test Case: Command Line Tests OTHER test disable for all accounts |  |
+| st-admin | disable-plugin --plugin people --all-accounts | qr/Plugin people is now disabled for account Socialtext/ |
+| st-admin | disable-plugin --plugin people --all-accounts | qr/Plugin people is now disabled for account %%cmdline_account%%/ |
+| st-admin | disable-plugin --plugin widgets --all-accounts | qr/Plugin widgets is now disabled for account Socialtext/ |
+| st-admin | disable-plugin --plugin widgets --all-accounts | qr/Plugin widgets is now disabled for account %%cmdline_account%%/ |
+
+| st-admin | disable-plugin --plugin dashboard --all-accounts | qr/Plugin dashboard is now disabled for account Socialtext/ |
+| st-admin | disable-plugin --plugin dashboard --all-accounts | qr/Plugin dashboard is now disabled for account %%cmdline_account%%/ |
+| st-admin | disable-plugin --plugin socialcalc --all-accounts | qr/Plugin socialcalc is now disabled for account Socialtext/ |
+| st-admin | disable-plugin --plugin socialcalc --all-accounts | qr/Plugin socialcalc is now disabled for account %%cmdline_account%%/ |
+
+| *Comment* | Test Case: Command Line Tests OTHER test enable/disable for one account |  |
+| st-admin | enable-plugin --account %%cmdline_account%% --plugin people | qr/Plugin people is now enabled for account %%cmdline_account%%/ |
+| st-admin | enable-plugin --account %%cmdline_account%% --plugin widgets | qr/Plugin widgets is now enabled for account %%cmdline_account%%/ |
+| st-admin | enable-plugin --account %%cmdline_account%% --plugin dashboard | qr/Plugin dashboard is now enabled for account %%cmdline_account%%/ |
+| st-admin | enable-plugin --account %%cmdline_account%% --plugin socialcalc | qr/Plugin socialcalc is now enabled for account %%cmdline_account%%/ |
+
+| st-admin | disable-plugin --account %%cmdline_account%% --plugin people | qr/Plugin people is now disabled for account %%cmdline_account%%/ |
+| st-admin | disable-plugin --account %%cmdline_account%% --plugin widgets | qr/Plugin widgets is now disabled for account %%cmdline_account%%/ |
+| st-admin | disable-plugin --account %%cmdline_account%% --plugin dashboard | qr/Plugin dashboard is now disabled for account %%cmdline_account%%/ |
+| st-admin | disable-plugin --account %%cmdline_account%% --plugin socialcalc | qr/Plugin socialcalc is now disabled for account %%cmdline_account%%/ |
+
+| *Comment* | Test Case: Command Line Tests OTHER test enable for all accounts |  |
+| st-admin | enable-plugin --plugin people --all-accounts | qr/Plugin people is now enabled for account Socialtext/ |
+| st-admin | enable-plugin --plugin people --all-accounts | qr/Plugin people is now enabled for account %%cmdline_account%%/ |
+| st-admin | enable-plugin --plugin widgets --all-accounts | qr/Plugin widgets is now enabled for account Socialtext/ |
+| st-admin | enable-plugin --plugin widgets --all-accounts | qr/Plugin widgets is now enabled for account %%cmdline_account%%/ |
+
+| st-admin | enable-plugin --plugin dashboard --all-accounts | qr/Plugin dashboard is now enabled for account Socialtext/ |
+| st-admin | enable-plugin --plugin dashboard --all-accounts | qr/Plugin dashboard is now enabled for account %%cmdline_account%%/ |
+| st-admin | enable-plugin --plugin socialcalc --all-accounts | qr/Plugin socialcalc is now enabled for account Socialtext/ |
+| st-admin | enable-plugin --plugin socialcalc --all-accounts | qr/Plugin socialcalc is now enabled for account %%cmdline_account%%/ |
+
+| st-admin | --help | qr/plugin/ |
+
+ set-logo-from-file --workspace --file /path/to/file.jpg
 
 | *Comment* | Test Case: Command Line Tests OTHER set-logo-from-file |  |
 | *Comment* | Test Case: Command Line Tests OTHER set-logo-from file needs %%wikitest_files%%/wikitest.jpg on the CLIENT, not the server |  |
+
 | st-admin | set-logo-from-file | qr/The command you called \(set-logo-from-file\) requires a workspace to be specified/ |
 | st-admin | set-logo-from-file --workspace %%cmdline_workspace%% | qr/The command you called \(set-logo-from-file\) requires a file to be specified with the --file option/ |
-
- st-admin | set-logo-from-file --workspace %%cmdline_workspace%% --file /foo/bar | Cannot read /foo/bar: No such file or directory
-
+| st-admin | set-logo-from-file --workspace %%cmdline_workspace%% --file /foo/bar/baz.jpg | No such file or directory |
 | st-admin | set-logo-from-file --workspace %%cmdline_workspace%% --file /foo/bar | Logo file must be a gif, jpeg, or png file. |
 | st-admin | set-logo-from-file --workspace %%cmdline_workspace%% --file %%wikitest_client_files%%wikitest.jpg | The logo file was imported as the new logo for the %%cmdline_workspace%% workspace. |
 
@@ -39,7 +77,7 @@
 
 | st-admin | update-page | qr/The command you called \(update-page\) requires a workspace to be specified/ |
 | st-admin | update-page --workspace %%cmdline_workspace%% | qr/The command you called \(update-page\) requires a user to be specified/ |
-| st-admin | update-page --workspace %%cmdline_workspace%% --page %%cmdline_workspace%%_wiki | qr/The command you called \(update-page\) requires a user to be specified/ |
+| st-admin | update-page --workspace %%cmdline_workspace%% --page nosuchpage | qr/The command you called \(update-page\) requires a user to be specified/ |
 | st-admin | update-page --workspace %%cmdline_workspace%% --user %%cli_user%% | qr/The command you called \(update-page\) requires a page to be specified/ |
 
  from-input < <list of commands>

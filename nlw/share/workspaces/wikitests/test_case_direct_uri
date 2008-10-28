@@ -2,15 +2,16 @@
 
 | st-admin | create-user --email %%start_time%%@ken.socialtext.net --password 123456 |  |
 | st-admin | create-workspace --name duri-%%start_time%% --title DURI |  |
+| st-admin | set-workspace-config --workspace duri-%%start_time%% skin_name s3 | The workspace config for duri-%%start_time%% has been updated |
 | st-logoutin | %%start_time%%@ken.socialtext.net | 123456 |
 
 | *Comment* | Test Case: Direct URI: should return to the Help home page silently because you are not a member of the help workspace. |  |
 | open_ok | /help-en/index.cgi?action=users_invitation |  |
-| text_like | st-page-content | This is an index of the help topics available. |
+| text_like | This is an index of the help topics available. |  |
 
 | *Comment* | Test Case: Direct URI: should return to the Help home page because there is no such action |  |
 | open_ok | /help-en/index.cgi?action=no_such_action |  |
-| text_like | st-page-content | This is an index of the help topics available. |
+| text_like | This is an index of the help topics available. |  |
 
 | *Comment* | Test Case: Direct URI: sent to login page because not a member of the workspace |  |
 | open_ok | /duri-%%start_time%%/index.cgi?action=users_listall |  |
@@ -19,7 +20,8 @@
 
 | *Comment* | Test Case: Direct URI: users listall because a member of the workspace |  |
 | open_ok | /duri-%%start_time%%/index.cgi?action=users_listall |  |
-| text_like | %%start_time%%@ken.socialtext.net |
+| wait_for_element_visible_ok | contentRight | 10000 |
+| text_like | contentRight | %%start_time%%@ken.socialtext.net |
 
 | *Comment* | Test Case: Direct URI Teardown |  |
 | st-admin | delete-workspace --workspace duri-%%start_time%% --no-export |  |

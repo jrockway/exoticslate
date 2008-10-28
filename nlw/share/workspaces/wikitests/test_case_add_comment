@@ -1,32 +1,45 @@
 | *Comment* | Test Case: Add Comment |
 
-| setSpeed | 100 |  |
 | *Comment* | Test Case: Add Comment Create Test Page |  |
-| click_and_wait | st-newpage-link |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| open_ok | /%%workspace%%/?action=new_page |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | Comment Test Page %%start_time%% |
 | type_ok | wikiwyg_wikitext_textarea | Comment Test Page Content %%start_time%% |
 | click_and_wait | st-save-button-link |  |
 
-| *Comment* | Test Case: Add Comment Test Comments |  |
+| *Comment* | Test Case: Add Comment top comment button |  |
 | click_ok | st-comment-button-link |  |
-| open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=comment_test_page_%%start_time%%;caller_action=display |  |
-| wait_for_element_visible_ok | st-commentui-textarea | 30000 |
-| type_ok | st-commentui-textarea | Comment 1 %%start_time%% |
-| click_and_wait | st-commentui-savelink |  |
-| open_ok | /%%workspace%%/index.cgi?comment_test_page_%%start_time%% |  |
-| text_like | st-content-page-display | Comment 1 %%start_time%% |
-| click_ok | st-edit-actions-below-fold-comment |  |
-| open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=comment_test_page_%%start_time%%;caller_action=display |  |
-| wait_for_element_visible_ok | st-commentui-textarea | 30000 |
-| type_ok | st-commentui-textarea | Comment 2 %%start_time%% |
-| click_and_wait | st-commentui-savelink |  |
-| open_ok | /%%workspace%%/index.cgi?comment_test_page_%%start_time%% |  |
-| wait_for_element_visible_ok | st-content-page-display | 30000 |
-| text_like | st-content-page-display | qr/Comment 1.+Comment 2/ |
-| text_like | st-content-page-display | qr/contributed by/i |
+| wait_for_element_visible_ok | comment | 30000 |
+| type_ok | comment | Comment 1 %%start_time%% |
+| click_ok | link=Save |  |
+| pause | 10000 |
+| text_like | contentContainer | Comment 1 %%start_time%% |
+
+| *Comment* | Test Case: Add Comment bottom Comment button |  |
+| click_ok | st-comment-button-link-bottom |  |
+| wait_for_element_visible_ok | comment | 30000 |
+| type_ok | comment | Comment 2 %%start_time%% |
+| click_ok | link=Save |  |
+| pause | 10000 |
+
+ open_ok | /%%workspace%%/?Comment Test Page %%start_time%% | |
+
+| text_like | contentContainer | qr/Comment 1.+Comment 2/ |
+| text_like | contentContainer | qr/contributed by/i |
+
+| *Comment* | Test Case: Add Comment Cancel comment |  |
+| click_ok | st-comment-button-link-bottom |  |
+| wait_for_element_visible_ok | comment | 30000 |
+| type_ok | comment | Comment Cancel %%start_time%% |
+| click_ok | link=Cancel |  |
+| pause | 5000 |
+| text_like | contentContainer | qr/Comment 1.+Comment 2/ |
+| text_unlike | contentContainer | Comment Cancel %%start_time%% |
+
+TODO: write an entire new test for Add Comment editing buttons similar to Insert Menu test
 
 | *Comment* | Test Case: Add Comment Teardown |  |
 | st-admin | purge-page --w %%workspace%% --p comment_test_page_%%start_time%% | The Comment Test Page %%start_time%% page was purged from the %%workspace%% workspace. |

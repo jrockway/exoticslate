@@ -1,26 +1,30 @@
 | *Comment* | Starting Test Case: Edit This Page |  |
 
-| st-admin | update-page --workspace %%workspace%% --email %%email%% --page "Edit This Page %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "Edit This Page %%start_time%%" page has been created. |
-
 | *Comment* | Test Case: Edit This Page content |  |
-| open_ok | /%%workspace%%/?Edit This Page %%start_time%% |  |
-| click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| type_ok | st-newpage-pagename-edit | Edit This Page %%start_time%% |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | Edit This Page content %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 
+ "Edit This Page"<http://...> | editing toolbar and edit textarea with page content appears
+
+ switch "Simple/Advanced"<http://...> modes | editing mode and content presentation changes
+
+ "Advanced"<http://...> | "Edit Tips"<http://...> appears in toolbar
+ "Edit Tips"<http://...> | Advanced edit tips window pops up with content
+
 | *Comment* | Test Case: Edit This Page verify editing buttons |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
 | wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
 | text_like | st-save-button-link | Save |
 | text_like | st-preview-button-link | Preview |
 | text_like | st-cancel-button-link | Cancel |
-| text_like | st-mode-wysiwyg-button | Simple |
-| text_like | st-mode-wikitext-button | Advanced |
+| text_like | st-mode-wysiwyg-button | Rich Text |
+| text_like | st-mode-wikitext-button | Wiki Text |
 | text_like | st-edit-tips | Edit Tips |
 
 | *Comment* | Test Case: Edit This Page Edit/Comment buttons are present but invisible when editing pages |  |
@@ -30,39 +34,45 @@
 
 | *Comment* | Edit This Page Checking Preview/Edit More |  |
 | text_like | st-preview-button-link | Preview |
-| click_ok | st-preview-button-link |  |
-| wait_for_text_present_ok | Edit This Page content %%start_time%% | 30000 |
-| text_like | Edit This Page content %%start_time%% |  |
-| text_like | st-preview-button-link | Edit More |
-| click_ok | st-preview-button-link |  |
-| wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
-| text_like | Edit This Page content %%start_time%% |  |
+
+ click_ok | st-preview-button-link | |
+ wait_for_text_present_ok | Edit This Page content %%start_time%% | 30000 |
+ text_like | st-preview-button-link | Edit More |
+ click_ok | st-preview-button-link | |
+ wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
+ text_like | Edit This Page content %%start_time%% | |
 
 | *Comment* | Test Case: Edit This Page from Preview to Simple |  |
 | text_like | st-preview-button-link | Preview |
-| click_ok | st-mode-wysiwyg-button | Simple |
-| wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
+
+ click_ok | st-mode-wysiwyg-button | Simple |
+ wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
 
 | *Comment* | Test Case: Edit This Page from Preview to Advanced |  |
-| text_like | st-preview-button-link | Preview |
-| click_ok | st-preview-button-link |  |
-| wait_for_text_present_ok | Edit This Page content %%start_time%% | 30000 |
-| text_like | Edit This Page content %%start_time%% |  |
-| text_like | st-preview-button-link | Edit More |
-| click_ok | st-mode-wikitext-button | Advanced |
-| wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
-| text_like | st-preview-button-link | Preview |
+
+ text_like | st-preview-button-link | Preview |
+ click_ok | st-preview-button-link | |
+ wait_for_text_present_ok | Edit This Page content %%start_time%% | 30000 |
+ text_like | st-preview-button-link | Edit More |
+ click_ok | st-mode-wikitext-button | Advanced |
+ wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
+ text_like | st-preview-button-link | Preview |
+
+ edit the page in Advanced mode; then "Cancel Edit"<http://...> | warning pops up
+ click Cancel in popup | return to editing or close edit (browser dependent) | Edits are NOT LOST 
+ edit the page in Advanced mode; then "Cancel Edit"<http://...></http> ; click OK in popup | edits lost; return to original page
 
 | *Comment* | Test Case: Edit This Page cancel edit Advanced mode |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
-| click_ok | st-cancel-button-link |  |
-| wait_for_element_visible_ok | st-edit-button-link | 30000 |
-| click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
+| click_ok | link=Wiki Text |  |
+
+ click_ok | st-cancel-button-link | |
+ wait_for_element_visible_ok | st-edit-button-link | 30000 |
+ click_ok | st-edit-button-link | |
+
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | abcdefg |
+| *Comment* | JUST TYPED abcdefg |  |
+| pause | 15000 |  |
 | chooseCancelOnNextConfirmation |  |  |
 | click_ok | st-cancel-button-link |  |
 
@@ -86,11 +96,11 @@
 
 | *Comment* | Test Case: Edit This Page navigate away Advanced mode |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | hijklmno |
 | chooseCancelOnNextConfirmation |  |  |
+
+| *Comment* | ONLY HOME LINK WORKS HERE. AUDREY TANG ADDED A TESTABLE HANDLER TO THE HOME LINK SO THAT SELENIUM WILL RECOGNIZE A CLICK ON HOME WHILE IT IS PARKED IN WIKIWYG |  |
 | click_ok | st-home-link |  |
 
 | *Comment* | Cancel and keep unsaved edits |  |
@@ -100,9 +110,7 @@
 | *Comment* | Navigate away |  |
 | click_ok | st-home-link |  |
 | verifyConfirmation | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| wait_for_text_present_ok | Dashboard | 30000 |
-| text_like | Announcements and Links |  |
+| open_ok | /%%workspace%%/?Edit This Page %%start_time%% |  |
 
  edit the page in Simple mode; then "Cancel Edit"<http://...> | warning pops up
 
@@ -110,13 +118,12 @@
  edit the page in Simple mode; then "Cancel Edit"<http://...></http> ; click OK in popup | edits lost; return to original page
 
 | *Comment* | Test Case: Edit This Page navigate away Simple mode |  |
-| clickAndWait | link=Edit This Page %%start_time%% |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | Edit This Page Simple mode |
-| click_ok | link=Simple |  |
+| click_ok | link=Rich Text |  |
 | chooseCancelOnNextConfirmation |  |  |
 | click_ok | st-cancel-button-link |  |
 
@@ -137,11 +144,11 @@
 
 | *Comment* | Test Case: Edit This Page navigate away Simple mode |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | Edit This Page Simple mode |
-| click_ok | link=Simple |  |
+| click_ok | link=Rich Text |  |
 
 | chooseCancelOnNextConfirmation |  |  |
 | click_ok | st-home-link |  |
@@ -151,17 +158,15 @@
 | *Comment* | Navigate away |  |
 | click_ok | st-home-link |  |
 | verifyConfirmation | Are you sure you want to navigate away from this page?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay on the current page. |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
-| wait_for_text_present_ok | Dashboard | 30000 |
-| text_like | Announcements and Links |  |
+| open_ok | /%%workspace%%/?Edit This Page %%start_time%% |  |
 
  click "edit"<http://> link in lower left corner of page | page opens in editing mode
 
 test Edit Tips
 
 | *Comment* | Test Case: Edit This Page lower left edit link |  |
-| clickAndWait | link=Edit This Page %%start_time%% |  |
-| click_ok | st-edit-actions-below-fold-edit |  |
+| text_like | bottomButtons | Edit |
+| click_ok | link=Edit | index=1 |
 | wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
 | wait_for_element_visible_ok | link=Save | 30000 |
 | clickAndWait | link=Save |  |
@@ -170,11 +175,10 @@ test Edit Tips
 | *Comment* | Test Case: Edit This Page edit tips |  |
 | wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | link=Simple | 30000 |
-| click_ok | link=Simple |  |
+| wait_for_element_visible_ok | link=Rich Text | 30000 |
+| click_ok | link=Rich Text |  |
 | wait_for_element_not_visible_ok | link=Edit Tips | 30000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | link=Edit Tips | 30000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | Force an edit cancel dialog to come up |
 
@@ -182,14 +186,13 @@ for some reason, the test for edit tips element visible fails in IE even though 
 
 | text-like | st-edit-tips | Edit Tips |
 | click_ok | st-edit-tips |  |
-
+| pause | 8000 |  |
+| text_like | qr/To Get This.+Type This/ |  |
 | clickAndWait | link=Save |  |
 
  confirmation_is | Are you sure you want to Cancel?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay in the editor.
 
-| *Comment* | "open" hack instead of actually connecting to the opened popup browser instance |  |
-| open_ok | /%%workspace%%/index.cgi?action=refcard |  |
-| text_like | qr/To Get This.+Type This/ |  |
+| *Comment* | Edit Tips now show up in a lightbox |  |
 
 | *Comment* | Test Case: Edit This Page teardown |  |
 | open_ok | /%%workspace%%/index.cgi |  |

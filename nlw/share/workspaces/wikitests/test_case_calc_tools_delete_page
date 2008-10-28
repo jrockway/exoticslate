@@ -8,28 +8,28 @@
 | click_and_wait | st-save-button-link |  |
 
 | *Comment* | Calc Tools: Delete Page: Create backlinking page by rename |  |
-| open_ok | /%%workspace%%/index.cgi?action=rename_popup;page_name=delete_spreadsheet_%%start_time%% |  |
-| wait_for_text_present_ok | Rename | 30000 |
+| click_ok | link=Rename Page |  |
+| wait_for_element_visible_ok | new_title | 30000 |
 | type_ok | new_title | to_be_deleted_spreadsheet_%%start_time%% |
-| click_and_wait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?to_be_deleted_spreadsheet_%%start_time%% |  |
+| wait_for_element_visible_ok | st-rename-savelink | 30000 |
+| click_and_wait | st-rename-savelink |  |
 
 | *Comment* | Calc Tools: Delete Page: Test functions |  |
 | open_ok | /%%workspace%%/index.cgi?to_be_deleted_spreadsheet_%%start_time%% |  |
 | click_and_wait | link=Delete Page |  |
 | confirmation_like | Are you sure you want to delete this page? |  |
-| text_like | st-deleted | Deleted "to_be_deleted_spreadsheet_%%start_time%%" |
+| text_like | st-page-titletext | Deleted "to_be_deleted_spreadsheet_%%start_time%%" |
 | click_and_wait | //input[@value='Restore Page'] |  |
-| click_and_wait | st-rewind-revision-count |  |
-| text_like | st-revisionlist | qr/revision 1.+revision 1.+revision 1/ |
+| click_and_wait | controls-right-revisions |  |
+| text_like | contentContainer | qr/Revision 1.+Revision 1.+Revision 1/ |
 
-| click_and_wait | st-back-to-current-revision-link |  |
+| click_and_wait | link=Back To Current Revision |  |
 | click_and_wait | link=Delete Page |  |
 | confirmation_like | Are you sure you want to delete this page? |  |
 
 | open_ok | /%%workspace%%/index.cgi?delete_spreadsheet_%%start_time%% |  |
-| click_and_wait | st-rewind-revision-count |  |
-| text_like | st-revisionlist | qr/revision 1.+revision 1/ |
+| click_and_wait | controls-right-revisions |  |
+| text_like | contentContainer | qr/Revision 1.+Revision 1/ |
 
 | *Comment* | Calc Tools: Delete Page: Teardown |  |
 | st-admin | purge-page --workspace %%workspace%% --page "delete_spreadsheet_%%start_time%%" | was purged |

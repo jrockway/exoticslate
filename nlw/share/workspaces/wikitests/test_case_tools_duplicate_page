@@ -1,50 +1,85 @@
-Note: Cannot automate attachments, test is slightly reduced
+| *Comment* | Test Case: Tools: Duplicate Page |
 
-| *Comment* | Test Case: Tools: Duplicate Page |  |
-
-| setSpeed | 150 |  |
 | *Comment* | Test Case: Tools: Duplicate Page Create test page |  |
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | st-newpage-pagename-edit | Dupe Test Page %%start_time%% |
-| type_ok | wikiwyg_wikitext_textarea | Dupe Test Page content %%start_time%% |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| type_ok | st-newpage-pagename-edit | Duplicate This Page %%start_time%% |
+| type_ok | wikiwyg_wikitext_textarea | Duplicate This Page %%start_time%% content |
+
+| *Comment* | Test Case: Tools: Duplicate Page Create test tag |  |
+| wait_for_element_visible_ok | st-edit-mode-tagbutton | 30000 |
 | click_ok | st-edit-mode-tagbutton |  |
-| type_ok | st-tagqueue-field | Dupe Tag %%start_time%% |
-| click_ok | st-tagqueue-submitbutton |  |
-| click_ok | st-tagqueue-closebutton |  |
+| wait_for_element_visible_ok | st-tagqueue-field | 30000 |
+| type_ok | st-tagqueue-field | Duplicate This Tag %%start_time%% |
+| click_ok | st-tagqueue-addbutton |  |
+| click_ok | st-tagqueue-close |  |
 | click_and_wait | st-save-button-link |  |
 
-| *Comment* | Test Case: Tools: Duplicate Page Test Duplicate popup, duplicate the page |  |
+| *Comment* | Test Case: Tools: Duplicate Page. Duplicate the page |  |
 | click_ok | link=Duplicate Page |  |
-| pause | 1000 |  |
-| open_ok | /%%workspace%%/index.cgi?action=duplicate_popup;page_name=dupe_test_page_%%start_time%% |  |
-| wait_for_text_present_ok | Duplicate | 30000 |
-| click_and_wait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?duplicate_of_dupe_test_page_%%start_time%% |  |
-| text_like | st-tags | Dupe Tag %%start_time%% |
-| open_ok | /%%workspace%%/index.cgi?dupe_test_page_%%start_time%% |  |
+| wait_for_element_visible_ok | st-duplicate-form | 30000 |
+| wait_for_element_visible_ok | st-duplicate-newname | 30000 |
 
-| *Comment* | Test Case: Tools: Duplicate Page Edit first page, save over second page |  |
+| *Comment* | Deliberately use non-space containing pagename for location_like_ok test |
+| type_ok | st-duplicate-newname | Page_Duplicated_%%start_time%% |
+| click_and_wait | st-duplicate-submit |  |
+
+| *Comment* | Test Case: Tools: Duplicate Page. verify duplicate |  |
+| location_like | `/%%workspace%%/index.cgi?Page_Duplicated_%%start_time%%` |  |
+| wait_for_element_visible_ok | contentRight | 30000 |
+| text_like | contentRight | Duplicate This Tag %%start_time%% |
+| text_like | st-page-titletext | Page_Duplicated_%%start_time%% |
+
+| *Comment* | Test Case: Tools: Duplicate Page. Edit the original the page |  |
+| open_ok | /%%workspace%%/?Duplicate This Page %%start_time%% |  |
 | click_ok | st-edit-button-link |  |
-
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | wikiwyg_wikitext_textarea | 2nd edit |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | Duplicate This Page %%start_time%% NEW content |
 | click_and_wait | st-save-button-link |  |
-| click_ok | link=Duplicate Page |  |
-| pause | 1000 |  |
 
-| open_ok | /%%workspace%%/index.cgi?action=duplicate_popup;page_name=dupe_test_page_%%start_time%% |  |
-| wait_for_text_present_ok | Duplicate | 30000 |
-| click_and_wait | Button |  |
-| text_like | st-popup-duplicate | The new page name you selected, "Duplicate of Dupe Test Page %%start_time%%", is already in use. Please choose a different name. If you are sure you wish to overwrite the existing "Duplicate of Dupe Test Page %%start_time%%" page, please press "Duplicate" again. |
-| click_and_wait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?duplicate_of_dupe_test_page_%%start_time%% |  |
-| text_like | st-page-maincontent | 2nd edit |
+| *Comment* | Test Case: Tools: Duplicate Page. Duplicate the edited page and Cancel |  |
+| click_ok | link=Duplicate Page |  |
+| wait_for_element_visible_ok | st-duplicate-form | 30000 |
+| wait_for_element_visible_ok | st-duplicate-newname | 30000 |
+| type_ok | st-duplicate-newname | Untitled Page |
+| click_ok | st-duplicate-submit |  |
+| wait_for_element_visible_ok | st-duplicate-error | 30000 |
+| text_like | st-duplicate-error | The page name you selected, "Untitled Page", is not allowed. Please enter or change the page name. |
+| click_ok | st-duplicate-cancel |  |
+| wait_for_element_not_visible_ok | st-duplicate-form | 30000 |
+
+TODO: come back and finish this test when {bz: 1039} is fixed. Can't seem to click st-duplicate-submit multiple times. That could be a problem with Selenium or with the dialog boxes.
+
+| *Comment* | Test Case: Tools: Duplicate Page. Duplicate the edited page |  |
+| click_and_wait | link=Home | navigate away and back |
+| open_ok | /%%workspace%%/?Duplicate This Page %%start_time%% |  |
+| click_ok | link=Duplicate Page |  |
+| wait_for_element_visible_ok | st-duplicate-submit | 30000 |
+| wait_for_element_visible_ok | st-duplicate-newname | 30000 |
+| type_ok | st-duplicate-newname | Page_Duplicated_%%start_time%% |
+| click_ok | st-duplicate-submit |  |
+| wait_for_element_visible_ok | st-duplicate-error | 30000 |
+| text_like | st-duplicate-error | The new page name you selected, "Page_Duplicated_%%start_time%%", is already in use |
+| click_and_wait | st-duplicate-submit |  |
+
+| *Comment* | Test Case: Tools: Duplicate Page. verify 2nd duplicate using space-containing URL |  |
+| location_like | `/%%workspace%%/index.cgi?Page_Duplicated_%%start_time%%` |  |
+
+| *Comment* | Test Case: Tools: Duplicate Page. verify duplicate of edited page |  |
+| open_ok | /%%workspace%%/index.cgi?action=revision_list;page_name=page_duplicated_%%start_time%% |  |
+| text_like | contentContainer | qr/revision 2/i |
+| click_and_wait | link=Compare Revisions |  |
+| text_like | contentContainer | Duplicate This Page %%start_time%% content |
+| text_like | contentContainer | Duplicate This Page %%start_time%% NEW content |
 
 | *Comment* | Test Case: Tools: Duplicate Page Teardown |  |
-| st-admin | purge-page --w %%workspace%% --page duplicate_of_dupe_test_page_%%start_time%% | was purged |
-| st-admin | purge-page --w %%workspace%% --page dupe_test_page_%%start_time%% | was purged |
 
-| *Comment* | Test Case: Tools: Duplicate Page COMPLETED |  |
+| st-admin | purge-page --w %%workspace%% --page duplicate_this_page_%%start_time%% | was purged |
+| st-admin | purge-page --w %%workspace%% --page page_duplicated_%%start_time%% | was purged |
+
+| *Comment* | Test Case: Tools: Duplicate Page COMPLETED |

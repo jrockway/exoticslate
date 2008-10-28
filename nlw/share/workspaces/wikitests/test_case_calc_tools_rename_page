@@ -1,67 +1,60 @@
 | *Comment* | Test Case: Calc Tools: Rename Page |
 
 | *Comment* | Test Case: Calc Tools: Rename Page Create test page |  |
-| open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=rename%20Spreadsheet%20%%start_time%%#edit |  |
+| open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=Rename%20Spreadsheet%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link |  |
 | pause | 5000 | I hate pause; needed for entire page load |
 | click_and_wait | st-save-button-link |  |
-| wait_for_element_visible_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | st-tags-addlink | 30000 |
-| click_ok | st-tags-addlink |  |
+
+| wait_for_element_visible_ok | link=Tag | 30000 |
+| click_ok | link=Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
-| type_ok | st-tags-field | rename_tag_%%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton | 20000 |
-| click_ok | st-tags-addbutton |  |
-| wait_for_element_present_ok | st-tags-field |  |
-| type_ok | st-tags-field | rename_tag_%%start_time%% |
-| click_ok | st-tagqueue-submitbutton |  |
-| click_ok | st-tagqueue-closebutton |  |
+| type_ok | st-tags-field | SC Rename Tag %%start_time%% |
+| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
+| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | link=SC Rename Tag %%start_time%% | 30000 |
 
-| *Comment* | Test Case: Calc Tools: Rename Page Test Rename popup, rename the page |  |
-| MouseOver | st-pagetools-tools |  |
+| *Comment* | Test Case: Calc Tools: Rename Page Test Rename rename the page |  |
 | click_ok | link=Rename Page |  |
-| pause | 1000 |  |
-| open_ok | /%%workspace%%/index.cgi?action=rename_popup;page_name=rename_spreadsheet_%%start_time%% |  |
-| wait_for_text_present_ok | Rename | 30000 |
-| type_ok | new_title | renamed_spreadsheet_%%start_time%% |
-| click_and_wait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?renamed_spreadsheet_%%start_time%% |  |
-| text_like | st-tags | rename_tag_%%start_time%% |
-| text_like | st-incoming-links | rename Spreadsheet %%start_time%% |
-| click_and_wait | link=rename Spreadsheet %%start_time%% |  |
-| text_like | st-page-maincontent | Page renamed to renamed_spreadsheet_%%start_time%% |
-| click_and_wait | st-rewind-revision-count |  |
-| text_like | st-revisionlist | revision 2 |
-| open_ok | /%%workspace%%/index.cgi?renamed_spreadsheet_%%start_time%% |  |
-| MouseOver | st-pagetools-tools |  |
+| wait_for_element_visible_ok | st-rename-form | 30000 |
+| wait_for_element_visible_ok | st-rename-newname | 30000 |
+| type_ok | st-rename-newname | Renamed_Spreadsheet_%%start_time%% |
+| click_and_wait | st-rename-savelink |  |
+
+| *Comment* | Test Case: Calc Tools: Rename Page Test Rename popup, verify rename |  |
+
+| location_like | `/%%workspace%%/index.cgi?Renamed_Spreadsheet_%%start_time%%` |  |
+| wait_for_element_visible_ok | contentRight | 30000 |
+| text_like | contentRight | SC Rename Tag %%start_time%% |
+| text_like | st-page-titletext | Renamed_Spreadsheet_%%start_time%% |
+| click_and_wait | link=Rename Spreadsheet %%start_time%% |  |
+| text_like | st-page-titletext | Rename Spreadsheet %%start_time%% |
+| text_like | contentContainer | Page renamed to Renamed_Spreadsheet_%%start_time%% |
+| click_and_wait | controls-right-revisions |  |
+| text_like | contentContainer | qr/Revision 2/ |
+
+| open_ok | /%%workspace%%/?Renamed_Spreadsheet_%%start_time%% |  |
 | click_ok | link=Rename Page |  |
-| pause | 1000 |  |
-| open_ok | /%%workspace%%/index.cgi?action=rename_popup;page_name=renamed_spreadsheet_%%start_time%% |  |
+| wait_for_element_visible_ok | st-rename-form | 30000 |
+| wait_for_element_visible_ok | st-rename-newname | 30000 |
+| type_ok | st-rename-newname | Untitled Page |
+| click_ok | st-rename-savelink |  |
+| wait_for_element_visible_ok | st-rename-error | 30000 |
+| text_like | st-rename-error | The page name you selected, "Untitled Page", is not allowed. Please enter or change the page name. |
+| type_ok | st-rename-newname | Rename Spreadsheet %%start_time%% |
+| click_ok | st-rename-cancellink |  |
 
-| *Comment* | BZ 325 |  |
-| wait_for_text_present_ok | Rename | 30000 |
-| type_ok | new_title | Untitled Page |
-| click_and_wait | Button |  |
-| text_like | st-popup-rename | The page name you selected, "Untitled Page", is not allowed. Please enter or change the page name. |
-| wait_for_text_present_ok | Rename | 30000 |
-| type_ok | new_title | untitled page |
-| click_and_wait | Button |  |
-| text_like | st-popup-rename | The page name you selected, "untitled page", is not allowed. Please enter or change the page name. |
-| wait_for_text_present_ok | Rename | 30000 |
-| type_ok | new_title | uNtItLeD pAgE |
-| click_and_wait | Button |  |
-| text_like | st-popup-rename | The page name you selected, "uNtItLeD pAgE", is not allowed. Please enter or change the page name. |
-| *Comment* | end BZ 325 |  |
-
-| wait_for_text_present_ok | Rename | 30000 |
-| type_ok | new_title | rename Spreadsheet %%start_time%% |
-| click_and_wait | Button |  |
-| text_like | st-popup-rename | The new page name you selected, "rename Spreadsheet %%start_time%%", is already in use. Please choose a different name. If you are sure you wish to overwrite the existing "rename Spreadsheet %%start_time%%" page, please press "Rename" again. |
-
-| click_and_wait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?rename_spreadsheet_%%start_time%% |  |
-| click_and_wait | st-rewind-revision-count |  |
-| text_like | st-revisionlist | revision 2 |
+| open_ok | /%%workspace%%/?Renamed_Spreadsheet_%%start_time%% |  |
+| click_ok | link=Rename Page |  |
+| wait_for_element_visible_ok | st-rename-form | 30000 |
+| wait_for_element_visible_ok | st-rename-newname | 30000 |
+| type_ok | st-rename-newname | Rename Spreadsheet %%start_time%% |
+| click_ok | st-rename-savelink |  |
+| wait_for_element_visible_ok | st-rename-error | 30000 |
+| text_like | st-rename-error | The new page name you selected, "Rename Spreadsheet %%start_time%%", is already in use. Please choose a different name. |
+| click_and_wait | st-rename-savelink |  |
+| click_and_wait | controls-right-revisions |  |
+| text_like | contentContainer | Revision 2 |
 
 | *Comment* | Test Case: Calc Tools: Rename Page Teardown |  |
 | st-admin | purge-page --w %%workspace%% --page rename_spreadsheet_%%start_time%% | was purged |

@@ -1,8 +1,0 @@
-This is not finished
-Need to figure out how to view the page that opens
-selectWindow is not the answer - it is looking for a popup window, not a new tab.
-Is there an answer? Maybe execute a javascript command to switch to the new tab?
-
-| click_ok | link=Help |  |
-| selectWindow |  |  |
-| verifyTextPresent | Socialtext Documentation |  |

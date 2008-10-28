@@ -2,19 +2,15 @@
 
 * Fixture: SocialWidgets
 
-| set | workspace | test-data |
-
 | *Comment* | Test Case: OnePage Widget |  |
-| open_ok | /test-data/index.cgi?action=new_page |  |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_present_ok | st-newpage-pagename-edit |  |
 | wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
 | type_ok | st-newpage-pagename-edit | one page %%start_time%% |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
 | type_ok | wikiwyg_wikitext_textarea | I have created a page called one_page_%%start_time%%. woot. |
-| click_ok | st-save-button-link |  |
-| wait_for_element_present_ok | st-edit-button-link | 25000 |
+| click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: OnePage Widget |  |
 | open_ok | /?dashboard | 60000 |
@@ -22,27 +18,21 @@
 | pause | 2000 |  |
 | st-add-widget | widgets/share/widgets/one_page.xml | onepage |
 | st_wait_for_widget_load | onepage | 25000 |
-| st-widget-settings | onepage |  |
-| wait_for_element_present_ok | name=up_workspace_name |  |
-| type_ok | up_workspace_name | test-data |
-| type_ok | up_page_title | one_page_%%start_time%% |
-| click_ok | st-savebutton |  |
-| st-select-widget-frame | onepage |  |
+| st-widget-settings | onepage |
+| wait_for_element_present_ok | //input[contains(@name,'up_workspace_name')] | 30000 |
+| type_ok | //input[contains(@name,'up_workspace_name')] | test-data |
+| type_ok | //input[contains(@name,'up_page_title')] | one_page_%%start_time%% |
+| click_ok | st-savebutton-%%onepage%% |  |
 | pause | 2000 |  |
-| wait_for_element_present_ok | link=Edit this page |  |
+| st-select-widget-frame | onepage |  |
+| wait_for_element_present_ok | link=Edit | 30000 |
+| wait_for_element_present_ok | link=View | 30000 |
 | pause | 2000 |  |
 | wait_for_text_present_ok | I have created a page called one_page_%%start_time%%. woot. |  |
 | pause | 2000 |  |
-| click_ok | link=Edit this page |  |
-| pause | 2000 |  |
-| type_ok | editarea%%onepage%% | mean mr mustard |
-| pause | 2000 |  |
-| wait_for_element_present_ok | link=Save |  |
-| wait_for_element_present_ok | link=Cancel |  |
-| click_ok | link=Save |  |
-| wait_for_text_present_ok | mean mr mustard |  |
 
 | *Comment* | Test Case: OnePage Widget Teardown |  |
-| st-admin | purge-page --workspace test-data --page created_page_%%start_time%% |  |
-
+| st-admin | purge-page --workspace test-data --page one_page_%%start_time%% | was purged |
+| select-frame | relative=parent |  |
+| st-empty-container |  |  |
 | *Comment* | Test Case: OnePage Widget COMPLETED |  |

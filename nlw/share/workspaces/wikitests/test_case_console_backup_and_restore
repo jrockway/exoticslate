@@ -1,6 +1,10 @@
 Automated backup and restore testing
 *NOTE: THIS TEST RELIES ON HAVING VERY FEW WORKSPACES ON THE APPLIANCE AND WILL TIMEOUT OTHERWISE AND FAIL*
 
+*THIS TEST IS DECOMISSIONED UNTIL THE NEW BACKUP/RESTORE SYSTEM IS DEPLOYED*
+
+^ END
+
 | *Comment* | Test Case: Console Backup and Restore: Test Case: Console Backup and Restore |  |
 
 | *Comment* | Test Case: Console Backup and Restore: Give system admin rights and add member |  |
@@ -15,8 +19,8 @@ Automated backup and restore testing
 
 | *Comment* | Test Case: Console Backup and Restore: Create a test page in the admin workspace |  |
 | open_ok | /admin/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | type_ok | st-newpage-pagename-edit | Backup Restore %%start_time%% |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
@@ -117,8 +121,8 @@ Automated backup and restore testing
 
 | *Comment* | Test Case: Console Backup and Restore: do some operations in admin to verify a working installation |  |
 | open_ok | /admin/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | type_ok | st-newpage-pagename-edit | Backup Restore 3 %%start_time%% |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |

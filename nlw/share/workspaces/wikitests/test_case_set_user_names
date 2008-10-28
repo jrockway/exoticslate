@@ -1,6 +1,6 @@
 *Requires a Default user, not an LDAP user*
 
-| *Comment* | Test Case: Set User Names IS OBSOLETED BY USER PROFILES |  |
+| *Comment* | Test Case: Set User Names OBSOLETED by profile links |  |
 
 | *Comment* | Test Case: Set User Names COMPLETED |  |
 
@@ -12,7 +12,7 @@
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 60000 |
 | wait_for_element_visible_ok | st-save-button-link | 60000 |
 | type_ok | st-newpage-pagename-edit | set user %%start_time%% |
-| click_and_wait | st-save-button-link |  |
+| click_ok | st-save-button-link |  |
 | wait_for_element_visible_ok | st-edit-button-link | 60000 |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | st-save-button-link | 60000 |
@@ -23,7 +23,7 @@
 | st-admin | set-user-names --e %%email%% --first "" --last "" | User "%%username%%" was updated |
 | click_and_wait | st-wiki-subnav-link-whats-new |  |
 | click_and_wait | link=set user %%start_time%% |  |
-| text_like | st-update | qr/\@hidden/ |
+| text_like | pageAttribution | qr/updated by/i |
 
 Dashboard: observe Welcome message | go to Settings->My settings and change user's name. Go back to dashboard and confirm that welcome message is updated.
 
@@ -32,12 +32,11 @@ Dashboard: observe Welcome message | go to Settings->My settings and change user
 | st-admin | set-user-names --e %%email%% --first "" --last "" | User "%%username%%" was updated |
 
 | open_ok | /%%workspace%%/index.cgi?action=users_settings |  |
-| clickAndWait | link=Settings |  |
 | type_ok | first_name | Firstly - %%start_time%% |
 | type_ok | last_name | Lastly |
-| clickAndWait | Button |  |
+| clickAndWait | link=Save |  |
 | open_ok | /%%workspace%%/index.cgi?action=dashboard |  |
-| text_like | st-user-welcome | qr/Welcome,\s+Firstly - %%start_time%% Lastly/i |
+| text_like | st-user-welcome | qr/Welcome,\s+Firstly - %%start_time%% Lastly/ |
 
 | *Comment* | Test Case: Set User Names Teardown (just in case) |  |
 | st-admin | set-permissions --w %%workspace%% --p member-only | The permissions for the %%workspace%% workspace have been changed to member-only |

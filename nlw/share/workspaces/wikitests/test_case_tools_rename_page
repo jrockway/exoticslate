@@ -2,70 +2,87 @@
 
 | *Comment* | Test Case: Tools: Rename Page Create test page |  |
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | st-newpage-pagename-edit | Rename Page %%start_time%% |
-| type_ok | wikiwyg_wikitext_textarea | Rename Page %%start_time%% content |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| type_ok | st-newpage-pagename-edit | Rename This Page %%start_time%% |
+| type_ok | wikiwyg_wikitext_textarea | Rename This Page %%start_time%% content |
+
+| *Comment* | Test Case: Tools: Rename Page Create test tag |  |
+| wait_for_element_visible_ok | st-edit-mode-tagbutton | 30000 |
 | click_ok | st-edit-mode-tagbutton |  |
-| type_ok | st-tagqueue-field | Rename Tag %%start_time%% |
-| click_ok | st-tagqueue-submitbutton |  |
-| click_ok | st-tagqueue-closebutton |  |
+| wait_for_element_visible_ok | st-tagqueue-field | 30000 |
+| type_ok | st-tagqueue-field | Rename This Tag %%start_time%% |
+| click_ok | st-tagqueue-addbutton |  |
+| click_ok | st-tagqueue-close |  |
 | click_and_wait | st-save-button-link |  |
 
-| *Comment* | Test Case: Tools: Rename Page Test Rename popup, rename the page |  |
+| *Comment* | Test Case: Tools: Rename Page. Rename the page |  |
 | click_ok | link=Rename Page |  |
-| pause | 1000 |  |
-| open_ok | /%%workspace%%/index.cgi?action=rename_popup;page_name=rename_page_%%start_time%% |  |
-| wait_for_text_present_ok | Rename | 30000 |
-| type_ok | new_title | Renamed Page %%start_time%% |
-| click_and_wait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?renamed_page_%%start_time%% |  |
-| wait_for_element_visible_ok | st-tags | 30000 |
-| text_like | st-tags | Rename Tag %%start_time%% |
-| wait_for_element_visible_ok | st-incoming-links | 30000 |
-| text_like | st-incoming-links | Rename Page %%start_time%% |
-| click_and_wait | link=Rename Page %%start_time%% |  |
-| text_like | st-page-maincontent | Page renamed to Renamed Page %%start_time%% |
-| click_and_wait | st-rewind-revision-count |  |
-| text_like | st-revisionlist | revision 2 |
-| open_ok | /%%workspace%%/index.cgi?renamed_page_%%start_time%% |  |
+| wait_for_element_visible_ok | st-rename-form | 30000 |
+| wait_for_element_visible_ok | st-rename-newname | 30000 |
+
+| *Comment* | Deliberately use non-space containing name for location_like compare |
+| type_ok | st-rename-newname | Page_Renamed_%%start_time%% |
+| click_and_wait | st-rename-savelink |  |
+
+| *Comment* | Test Case: Tools: Rename Page. verify rename |  |
+| location_like | `/%%workspace%%/index.cgi?Page_Renamed_%%start_time%%` |  |
+| wait_for_element_visible_ok | contentRight | 30000 |
+| text_like | contentRight | Rename This Tag %%start_time%% |
+| text_like | st-page-titletext | Page_Renamed_%%start_time%% |
+| click_and_wait | link=Rename This Page %%start_time%% |  |
+| text_like | st-page-titletext | Rename This Page %%start_time%% |
+| text_like | contentContainer | Page renamed to Page_Renamed_%%start_time%% |
+
+| *Comment* | Test Case: Tools: Rename Page. Edit the original the page |  |
+| open_ok | /%%workspace%%/?Rename This Page %%start_time%% |  |
+| click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | Rename This Page %%start_time%% NEW content |
+| click_and_wait | st-save-button-link |  |
+
+| *Comment* | Test Case: Tools: Rename Page. Rename the edited page and Cancel |  |
 | click_ok | link=Rename Page |  |
-| pause | 1000 |  |
-| open_ok | /%%workspace%%/index.cgi?action=rename_popup;page_name=renamed_page_%%start_time%% |  |
+| wait_for_element_visible_ok | st-rename-form | 30000 |
+| wait_for_element_visible_ok | st-rename-newname | 30000 |
+| type_ok | st-rename-newname | Untitled Page |
+| click_ok | st-rename-savelink |  |
+| wait_for_element_visible_ok | st-rename-error | 30000 |
+| text_like | st-rename-error | The page name you selected, "Untitled Page", is not allowed. Please enter or change the page name. |
+| click_ok | st-rename-cancellink |  |
+| wait_for_element_not_visible_ok | st-rename-form | 30000 |
 
-| *Comment* | BZ 325 |  |
-| wait_for_text_present_ok | Rename | 30000 |
-| type_ok | new_title | Untitled Page |
-| click_and_wait | Button |  |
-| text_like | st-popup-rename | The page name you selected, "Untitled Page", is not allowed. Please enter or change the page name. |
-| wait_for_text_present_ok | Rename | 30000 |
-| type_ok | new_title | untitled page |
-| click_and_wait | Button |  |
-| text_like | st-popup-rename | The page name you selected, "untitled page", is not allowed. Please enter or change the page name. |
-| wait_for_text_present_ok | Rename | 30000 |
-| type_ok | new_title | uNtItLeD pAgE |
-| click_and_wait | Button |  |
-| text_like | st-popup-rename | The page name you selected, "uNtItLeD pAgE", is not allowed. Please enter or change the page name. |
-| *Comment* | end BZ 325 |  |
+TODO: come back and finish this test when {bz: 1039} is fixed. Can't seem to click st-rename-savelink multiple times. That could be a problem with Selenium or with the dialog boxes.
 
-| wait_for_text_present_ok | Rename | 30000 |
-| type_ok | new_title | Rename Page %%start_time%% |
-| click_and_wait | Button |  |
-| text_like | st-popup-rename | The new page name you selected, "Rename Page %%start_time%%", is already in use. Please choose a different name. If you are sure you wish to overwrite the existing "Rename Page %%start_time%%" page, please press "Rename" again. |
+| *Comment* | Test Case: Tools: Rename Page. Rename the edited page |  |
+| click_and_wait | link=Home | navigate away and back |
+| open_ok | /%%workspace%%/?Rename This Page %%start_time%% |  |
+| click_ok | link=Rename Page |  |
+| wait_for_element_visible_ok | st-rename-savelink | 30000 |
+| wait_for_element_visible_ok | st-rename-newname | 30000 |
+| type_ok | st-rename-newname | Page_Renamed_%%start_time%% |
+| click_ok | st-rename-savelink |  |
+| wait_for_element_visible_ok | st-rename-error | 30000 |
+| text_like | st-rename-error | The new page name you selected, "Page_Renamed_%%start_time%%", is already in use |
+| click_and_wait | st-rename-savelink |  |
 
-| click_and_wait | Button |  |
-| open_ok | /%%workspace%%/index.cgi?rename_page_%%start_time%% |  |
-| text_like | st-page-maincontent | Rename Page %%start_time%% content |
-| click_and_wait | st-rewind-revision-count |  |
-| text_like | st-revisionlist | revision 2 |
-| click_and_wait | Button |  |
-| text_like | st-revision-compare-table | `Page renamed to [Renamed Page %%start_time%%]` |
-| text_like | st-revision-compare-table | Rename Page %%start_time%% content |
+| *Comment* | Test Case: Tools: Rename Page. verify 2nd rename using space-containing URL |  |
+| location_like | `/%%workspace%%/index.cgi?Page_Renamed_%%start_time%%` |  |
+
+| *Comment* | Test Case: Tools: Rename Page. verify rename of edited page |  |
+| open_ok | /%%workspace%%/index.cgi?action=revision_list;page_name=page_renamed_%%start_time%% |  |
+| text_like | contentContainer | qr/revision 2/i |
+| click_and_wait | link=Compare Revisions |  |
+| text_like | contentContainer | Rename This Page %%start_time%% content |
+| text_like | contentContainer | Rename This Page %%start_time%% NEW content |
 
 | *Comment* | Test Case: Tools: Rename Page Teardown |  |
-| st-admin | purge-page --w %%workspace%% --page rename_page_%%start_time%% | was purged |
 
-| st-admin | purge-page --w %%workspace%% --page renamed_page_%%start_time%% | was purged |
+| st-admin | purge-page --w %%workspace%% --page rename_this_page_%%start_time%% | was purged |
+| st-admin | purge-page --w %%workspace%% --page page_renamed_%%start_time%% | was purged |
 
 | *Comment* | Test Case: Tools: Rename Page COMPLETED |

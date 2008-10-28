@@ -2,45 +2,42 @@ from Recent Changes list view page: click a revisions link for a page with at le
 
 | *Comment* | START Test Case: Revisions |  |
 
-*Comment* This test incorporates three manual test cases for Revisions
+| *Comment* | Test Case: Revisions: Create a page with five revisions |  |
 
-| *Comment* | Test Case: Revisions: Setting up test data |  |
-
-| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| open_ok | /%%workspace%%/?action=new_page |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | type_ok | st-newpage-pagename-edit | test case revisions %%start_time%% |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea |  |
 | type_ok | wikiwyg_wikitext_textarea | original revision number one %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | revision number two %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | revision number three %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | `[revision number four] %%start_time%%` |
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | `[revision number five] %%start_time%%` |
 | clickAndWait | st-save-button-link |  |
 
-| clickAndWait | st-page-stats-revisions |  |
-
 | *Comment* | Test Case: Revisions: Check for sorting and the "Compare Revisions" button |  |
-| text_like | qr/revision 5.+revision 4.+revision 3.+revision 2.+revision 1/ |  |
-| verifyValue | Button | Compare Revisions |
-| verifyValue | document.revisions.Button[1] | Compare Revisions |
-
- text_like | Button | Compare Revisions
-
- text_like | Compare Revisions
+| clickAndWait | `//a[contains(@href,'action=revision_list')]` |  |
+| text_like | qr/Revision 5.+Revision 4.+Revision 3.+Revision 2.+Revision 1/ |  |
+| wait_for_element_visible_ok | link=Compare Revisions | 30000 |
+| text_like | bottomButtons | Compare Revisions |
 
 | *Comment* | Test Case: Revisions: Check the correct radio buttons are set |  |
 | verifyValue | new_revision_id | on |
@@ -52,13 +49,12 @@ from Recent Changes list view page: click a revisions link for a page with at le
 
  All Revisions page | check page for correctness | top 2 revisions are selected
 
-| clickAndWait | st-back-to-current-revision-link |  |
+| clickAndWait | link=Back To Current Revision |  |
 | text_like | revision number five |  |
-
-| clickAndWait | st-page-stats-revisions |  |
+| clickAndWait | `//a[contains(@href,'action=revision_list')]` |  |
 
 | *Comment* | Test Case: Revisions: Check again for sorting and the "Compare Revisions" button |  |
-| text_like | qr/revision 5.+revision 4.+revision 3.+revision 2.+revision 1/ |  |
+| text_like | qr/Revision 5.+Revision 4.+Revision 3.+Revision 2.+Revision 1/ |  |
 | *Comment* | Test Case: Revisions: Check again the correct radio buttons are set |  |
 | verifyValue | new_revision_id | on |
 | verifyValue | document.revisions.old_revision_id[1] | on |
@@ -66,19 +62,21 @@ from Recent Changes list view page: click a revisions link for a page with at le
  Compare top 2 revisions | compare page appears & correct | test both "Compare Revisions" buttons
 
 | *Comment* | Test Case: Revisions: Comparing revisions |  |
-| clickAndWait | Button |  |
-| text_like | qr/Revision 4.+Revision 5.+four.+five/ |  |
-| clickAndWait | st-all-revisions-link |  |
-| clickAndWait | document.revisions.Button[1] |  |
-| text_like | qr/Revision 4.+Revision 5.+four.+five/ |  |
+| clickAndWait | link=Compare Revisions |  |
+| text_like | qr/Revision 4.+Revision 5.+four.+five/s |  |
+
+| *Comment* | Test Case: Revisions: test bottom button |  |
+| clickAndWait | link=All Revisions |  |
+| clickAndWait | //a[@class='compareButton'][1] |  |
+| text_like | qr/Revision 4.+Revision 5.+four.+five/s |  |
 
  Compare two other revisions | compare page appears & correct
 
-| clickAndWait | st-all-revisions-link |  |
+| clickAndWait | link=All Revisions |  |
 | click_ok | document.revisions.old_revision_id[4] |  |
 | click_ok | document.revisions.new_revision_id[1] |  |
-| clickAndWait | document.revisions.Button[1] |  |
-| text_like | qr/Revision 1.+Revision 4.+one.+four/ |  |
+| clickAndWait | link=Compare Revisions |  |
+| text_like | qr/Revision 1.+Revision 4.+one.+four/s |  |
 
  edit a page and Save | creates a new revision | revisions count should increment
  click Revisions at top of sidebar | new entry in All Revisions | verify correctness of new entry
@@ -87,29 +85,32 @@ NOTE: validated when creating data for this test
 
  select the same revision in both columns, click Compare Revisions | Popup: you cannot compare a revision to itself
 
-| clickAndWait | st-all-revisions-link |  |
+| *Comment* | Test Case: Revisions: Comparing revision to itself |  |
+| clickAndWait | link=All Revisions |  |
+| wait_for_element_present_ok | //a[@class='compareButton'] | 30000 |
 | click_ok | document.revisions.old_revision_id[2] |  |
 | click_ok | document.revisions.new_revision_id[2] |  |
-| click_ok | Button |  |
-| verifyAlert | You cannot compare a revision to itself. |  |
 
- Back to Current Revision | current page appears
+| *Comment* | Test Case: Revisions. Cheshire Cat button |  |
+| wait_for_element_present_ok | //a[@class='compareButton' and @style='display: none;'] | 30000 |
+| click_ok | document.revisions.new_revision_id[1] |  |
+| wait_for_element_present_ok | //a[@class='compareButton' and @style='display: block;'] | 30000 |
 
- Click Revisions link at the top of the sidebar for a page with at least five revisions | All Revisions page appears with correct number of revisions
+Compare Revisions: older vs. younger | page appears with correct revisions. Diffs are reasonable and correct. | older on left, younger on right
 
- Compare Revisions: older vs. younger | page appears with correct revisions. Diffs are reasonable and correct. | older on left, younger on right
+| *Comment* | Test Case: Revisions: older vs. younger |  |
+| clickAndWait | link=Back To Current Revision |  |
+| text_like | revision number five |  |
+| clickAndWait | `//a[contains(@href,'action=revision_list')]` |  |
+| clickAndWait | link=Compare Revisions |  |
+| text_like | qr/Revision 4.+Revision 5.+four.+five/s |  |
 
- Compare Revisions: younger vs. older | page appears with correct revisions. Diffs are reasonable and correct. | younger on left, older on right
-
-| clickAndWait | st-back-to-current-revision-link |  |
-| clickAndWait | st-page-stats-revisions |  |
-| clickAndWait | document.revisions.Button[1] |  |
-| text_like | qr/Revision 4.+Revision 5.+four.+five/ |  |
-| clickAndWait | st-all-revisions-link |  |
+| *Comment* | Test Case: Revisions: younger vs. older |  |
+| clickAndWait | link=All Revisions |  |
 | click_ok | old_revision_id |  |
 | click_ok | document.revisions.new_revision_id[1] |  |
-| clickAndWait | Button |  |
-| text_like | qr/Revision 5.+Revision 4.+five.+four/ |  |
+| clickAndWait | link=Compare Revisions |  |
+| text_like | qr/Revision 5.+Revision 4.+five.+four/s |  |
 
  Back To Current Revision | current revision appears
 
@@ -124,85 +125,60 @@ NOTE: validated when creating data for this test
  link at top of newer revision | newer revision page appears and correct.
 
 | *Comment* | Test Case: Revisions: Checking revision formatting views |  |
-| clickAndWait | st-back-to-current-revision-link |  |
-| clickAndWait | st-page-stats-revisions |  |
-| clickAndWait | Button |  |
+| clickAndWait | link=Back To Current Revision |  |
+| clickAndWait | `//a[contains(@href,'action=revision_list')]` |  |
+| clickAndWait | link=Compare Revisions |  |
 
-| wait_for_element_visible_ok | st-revision-compare-table | 30000 |
-| text_like | st-page-title | Compare Revisions 4 and 5 |
+| text_like | st-revision-display | four |
+| text_like | st-revision-display | five |
 | text_like | `[revision number five] %%start_time%%` |  |
-| text_like | st-revision-compare-table | qr/four.+five/ |
 
-| clickAndWait | st-view-formatted-link |  |
-| wait_for_element_visible_ok | st-revision-compare-table | 30000 |
-| text_like | st-page-title | Compare Revisions 4 and 5 |
-| text_unlike | st-revision-compare-table | `[revision number five] %%start_time%%` |
+| clickAndWait | link=View Formatted |  |
+| text_unlike | st-revision-display | `[revision number five] %%start_time%%` |
+| text_like | st-revision-display | `revision number five %%start_time%%` |
 
-| clickAndWait | st-view-unformatted-link |  |
-| text_like | st-revision-compare-table | qr/four.+five/ |
+| clickAndWait | link=Color View (Unformatted) |  |
+| text_like | st-revision-display | four |
+| text_like | st-revision-display | five |
 
 | clickAndWait | //strong |  |
-| text_like | qr/Revision 4.+four/ |  |
+| text_like | qr/Revision 4.+revision number four/ |  |
 
-| clickAndWait | st-all-revisions-link |  |
-| clickAndWait | Button |  |
+| clickAndWait | link=All Revisions |  |
+| clickAndWait | link=Compare Revisions |  |
 | clickAndWait | link=Revision 5 |  |
 | text_like | qr/Revision 5.+revision number five/ |  |
 
- Click All Revisions | all revisions page appears with correct content
-
- Back To Current Revision | Current revision appears
-
- Click "N revisions" at bottom of page | All Revisions page appears with N revisions | Note 1.
-
- Select the same revision in both columns | selection successful
-
- click Compare Revisions | popup: You cannot compare a revision to itself
-
- click OK | popup dismissed
-
-NOTE: these steps already tested above.
-
- Find the same page using search, What's New list, and Revisions link. Observe revision count. | Count should be correct and identical in all three results
+Find the same page using search, What's New list, and Revisions link. Observe revision count. | Count should be correct and identical in all three results
 
 | *Comment* | Test Case: Revisions: Checking revisions are correct when arriving at page from different paths |  |
-| *Comment* | This Test Case always fails on teststaging right here when run in OSR Testcases but succeeds stand alone which suggests a ceqlotron related issue so we are going to hit it with a big hammer and see if forcing indexing makes a difference. |  |
 | st-admin | index-workspace --w %%workspace%% --sync |  |
 | type_ok | st-search-term | revision |
-
 | clickAndWait | st-search-submit |  |
 | wait_for_element_visible_ok | link=test case revisions %%start_time%% | 30000 |
 | clickAndWait | link=test case revisions %%start_time%% |  |
-| text_like | st-page-stats-revisions | 5 revisions |
+| text_like | `//a[contains(@href,'action=revision_list')]` | qr/5.+Revisions/ |
 
-| clickAndWait | st-wiki-subnav-link-whats-new |  |
+| open_ok | /%%workspace%%/?action=recent_changes |  |
 | wait_for_element_visible_ok | link=test case revisions %%start_time%% | 30000 |
 | clickAndWait | link=test case revisions %%start_time%% |  |
-| text_like | st-page-stats-revisions | 5 revisions |
+| text_like | `//a[contains(@href,'action=revision_list')]` | qr/5.+Revisions/ |
 
-| clickAndWait | st-wiki-subnav-link-whats-new |  |
-| wait_for_element_visible_ok | link=5 | 30000 |
-| clickAndWait | link=5 |  |
-| clickAndWait | st-back-to-current-revision-link |  |
-| text_like | st-page-stats-revisions | 5 revisions |
-
- *user action* | *correct response* | *comment*
  from All Revisions, click an older version | older version appears
-
  from Compare Revisions, click the link above the older version | older version appears
 
  All Revisions | All Revisions page appears
 
-| clickAndWait | st-page-stats-revisions |  |
-| wait_for_element_visible_ok | link=revision 2 | 30000 |
-| clickAndWait | link=revision 2 |  |
+| clickAndWait | `//a[contains(@href,'action=revision_list')]` |  |
+| wait_for_element_visible_ok | link=Revision 2 | 30000 |
+| clickAndWait | link=Revision 2 |  |
 | text_like | revision number two %%start_time%% |  |
-| clickAndWait | st-all-revisions-link |  |
-| click | document.revisions.old_revision_id[3] |  |
-| clickAndWait | Button |  |
+| clickAndWait | link=All Revisions |  |
+| click_ok | document.revisions.old_revision_id[3] |  |
+| clickAndWait | link=Compare Revisions |  |
 | clickAndWait | //strong |  |
 | text_like | revision number two %%start_time%% |  |
-| clickAndWait | st-all-revisions-link |  |
+| clickAndWait | link=All Revisions |  |
 
  click the older version again
 
@@ -221,20 +197,19 @@ NOTE: these steps already tested above.
  Back to Current Revision | restored revision appears
 
 | *Comment* | Test Case: Revisions: Restoring revision |  |
-| wait_for_element_visible_ok | link=revision 2 | 30000 |
-| clickAndWait | link=revision 2 |  |
-| text_like | page-control-revision-view-source-link | Source View |
-| clickAndWait | page-control-revision-view-source-link |  |
-| text_like | page-control-revision-view-normal-link | Normal View |
-| clickAndWait | document.forms[1].elements['Restore Revision'] |  |
-| text_like | revision number two |  |
-| wait_for_element_visible_ok | link=6 | 30000 |
-| clickAndWait | link=6 |  |
-| text_like | qr/revision 2.+revision 5.+revision 4.+revision 3.+revision 2.+revision 1/ |  |
-| clickAndWait | st-back-to-current-revision-link |  |
+| wait_for_element_visible_ok | link=Revision 2 | 30000 |
+| clickAndWait | link=Revision 2 |  |
+| text_like | link=Source View | Source View |
+| clickAndWait | link=Source View |  |
+| text_like | link=Normal View | Normal View |
+| clickAndWait | st-revision-restorebutton |  |
+| wait_for_element_visible_ok | link=(6 revisions) | 15000 |
+| clickAndWait | link=(6 revisions) |  |
+| text_like | qr/Revision 2.+Revision 5.+Revision 4.+Revision 3.+Revision 2.+Revision 1/ |  |
+| clickAndWait | link=Back To Current Revision |  |
 | text_like | revision number two |  |
 
 | *Comment* | Test Case: Revisions: Teardown |  |
-| st-admin | purge-page --w %%workspace%% --p test_case_revisions_%%start_time%% | was purged |
+| st-admin | purge-page --w %%workspace%% --page test_case_revisions_%%start_time%% | was purged |
 
 | *Comment* | Test Case: Revisions COMPLETED |  |

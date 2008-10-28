@@ -10,7 +10,6 @@ Socialcalc enabled is required because we run Calc Testcases
 * [Core Testcases]
 * [Test Case: Miki Authentication]
 * [Test Case: RSS Icons]
-* [Test Case: Redirect Logout URI]
 * [Calc Testcases]
 * [File Testcases]
 * [Localization Testcases]
@@ -25,6 +24,8 @@ Default User Testcases will Disable LDAP so it can test wiki functions that only
 It should be the last testset in this run, but it will re-enable LDAP when it finishes.
 
 * [Default User Testcases]
+
+* [Widgets Testcases]
 
 ^ All pages tagged 'Testcase' (only a list, visit the pages above for tests)
 

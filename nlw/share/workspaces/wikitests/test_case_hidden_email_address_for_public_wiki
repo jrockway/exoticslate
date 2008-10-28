@@ -8,9 +8,6 @@ TODO: Revisit this test when the story that takes account email address hiding i
 
 ^ END
 
-| *Comment* | NOTE NOTE NOTE NOTE NOTE. This test is included in Default User Testcases in IE 6 and IE 7 Testcases, but it needs High Permissions which DON'T WORK in IE. This needs to be refactored. |  |
-
-| *Comment* | Test Case: Hidden Email Address |  |
 | *Comment* | Upload File so that you can verify hidden address in All Files, similarly add comments, create blog etc |  |
 | *Comment* | wikitest files should be in %%wikitest_files%% on the browser server |  |
 | *Comment* | *This test only works if selenium_browser has higher powers, i.e. *chrome for firefox* |  |
@@ -19,12 +16,12 @@ TODO: Revisit this test when the story that takes account email address hiding i
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Workspace Privacy |  |
 | click_ok | document.forms[1].permission_set_name[2] |  |
-| click_and_wait | Button |  |
+| click_and_wait | link=Save |  |
 
 | *Comment* | Test Case: Hidden Email Address Upload File so that you can verify hidden address in All Files |  |
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | link=Wiki Text | 10000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
 | type_ok | st-newpage-pagename-edit | Hidden email %%start_time%% |
 | click_and_wait | st-save-button-link |  |
@@ -37,15 +34,16 @@ TODO: Revisit this test when the story that takes account email address hiding i
 
 | *Comment* | Test Case: Hidden Email Address verify it in all tabs such as whats new, all pages, all files etc |  |
 | click_and_wait | st-wiki-subnav-link-whats-new |  |
-| text_like | st-listview | qr/\@hidden/ |
+| text_like | Changes in Last |  |
+| text_like | contentContainer | qr/\@hidden/ |
 | click_and_wait | link=All Files |  |
-| text_like | st-allfiles | qr/\@hidden/ |
+| text_like | contentContainer | qr/\@hidden/ |
 | click_and_wait | link=All Pages |  |
-| text_like | st-listview | qr/\@hidden/ |
+| text_like | contentContainer | qr/\@hidden/ |
 | click_and_wait | link=Orphaned Pages |  |
-| text_like | st-listview | qr/\@hidden/ |
+| text_like | contentContainer | qr/\@hidden/ |
 | click_and_wait | link=Recently Viewed |  |
-| text_like | st-listview | qr/\@hidden/ |
+| text_like | contentContainer | qr/\@hidden/ |
 
 | *Comment* | Test Case: Hidden email Add Comments to verify that it shows comments added with hidden email |  |
 | open_ok | /%%workspace%%/index.cgi?Hidden_email_%%start_time%% |  |
@@ -55,30 +53,32 @@ TODO: Revisit this test when the story that takes account email address hiding i
 | type_ok | st-commentui-textarea | Comment 1 %%start_time%% |
 | click_and_wait | st-commentui-savelink |  |
 | open_ok | /%%workspace%%/index.cgi?Hidden_email__%%start_time%% |  |
-| text_like | st-content-page-display | Comment 1 %%start_time%% |
-| text_like | //body | qr/Updated by.+\@hidden/ |
+| text_like | contentContainer | Comment 1 %%start_time%% |
+| text_like | contentContainer | qr/contributed by.+\@hidden/ |
 
 | *Comment* | Test Case: Hidden email at weblog |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Create New Weblog |  |
 | type_ok | weblog_title | test_%%start_time%%_weblog |
-| click_and_wait | Button |  |
+| click_and_wait | link=Save |  |
 | text_like | qr/\@hidden/ |  |
 
 | *Comment* | Test Case: Hidden email at revision pages |  |
-| open_ok | /%%workspace%%/index.cgi?action=revision_list;page_name=Hidden_email__%%start_time%% |  |
-| verifyValue | Button | Compare Revisions |
-| verifyValue | document.revisions.Button[1] | Compare Revisions |
-| text_like | qr/\@hidden/ |  |
+| open_ok | /%%workspace%%/index.cgi?action=revision_list;page_name=Hidden_email_%%start_time%% |  |
+| text_like | contentContainer | Revision 3 |
+| text_like | contentContainer | Revision 2 |
+| text_like | contentContainer | Revision 1 |
+| text_unlike | contentContainer | Revision 4 |
+| text_like | contentContainer | qr/\@hidden/ |
 
 | *Comment* | Test Case: Hidden email address in searched pages |  |
 | st-admin | index-workspace --workspace %%workspace%% --sync |  |
 | type_ok | st-search-term | Comment 1 %%start_time%% |
 | click_and_wait | st-search-submit |  |
-| text_like | st-search-content | qr/\@hidden/ |
+| text_like | contentContainer | qr/\@hidden/ |
 
 | *Comment* | Test Case: Hidden email address in home page |  |
-| open_ok | /%%workspace%%/index.cgi?action=homepage |  |
+| open_ok | /%%workspace%%/ |  |
 | text_like | qr/\@hidden/ |  |
 
 | *Comment* | Test Case: Hidden Email Address Teardown |  |

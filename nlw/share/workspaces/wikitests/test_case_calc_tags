@@ -1,12 +1,5 @@
 | *Comment* | Test Case Calc: Tags |
 
-| *Comment* | Test Case Calc: Tags All Tags |  |
-| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
-| clickAndWait | link=All Tags |  |
-| text_like | link=Welcome | Welcome |
-
-use or create a workspace with several tags and tagged pages
-
 | *Comment* | Test Case Calc: Tags Create tag1 page tagged tag1 |  |
 
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag1%20content%20spreadsheet%20%%start_time%%#edit |  |
@@ -17,14 +10,11 @@ use or create a workspace with several tags and tagged pages
 | click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tag1 %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton | 20000 |
-| click_ok | st-tags-addbutton |  |
+| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
+| click_ok | st-tags-addbutton-link |  |
 
-| *Comment* | Test Case Calc: Tags. Text "Adding tag" should appear where textarea was |  |
-| wait_for_text_present_ok | Adding tag | 30000 |
-
-| *Comment* | Test Case Calc: Tags. Wait for the tag textarea to reappear |  |
-| wait_for_element_visible_ok | st-tags-field | 30000 |
+| *Comment* | Test Case Calc: Tags. Wait for the tag to reappear |  |
+| wait_for_element_visible_ok | link=tag1 %%start_time%% | 30000 |
 | text_like | link=tag1 %%start_time%% | tag1 %%start_time%% |
 
 | *Comment* | Test Case Calc: Tags Create tag12 page tagged tag1 |  |
@@ -37,14 +27,11 @@ use or create a workspace with several tags and tagged pages
 | click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tag1 %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton | 20000 |
-| click_ok | st-tags-addbutton |  |
+| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
+| click_ok | st-tags-addbutton-link |  |
 
-| *Comment* | Test Case Calc: Tags. Text "Adding tag" should appear where textarea was |  |
-| wait_for_text_present_ok | Adding tag | 30000 |
-
-| *Comment* | Test Case Calc: Tags. Wait for the tag textarea to reappear |  |
-| wait_for_element_visible_ok | st-tags-field | 30000 |
+| *Comment* | Test Case Calc: Tags. Wait for the tag to reappear |  |
+| wait_for_element_visible_ok | link=tag1 %%start_time%% | 30000 |
 | text_like | link=tag1 %%start_time%% | tag1 %%start_time%% |
 
 | *Comment* | Test Case Calc: Tags Create tag2 page tagged tag2 |  |
@@ -57,14 +44,11 @@ use or create a workspace with several tags and tagged pages
 | click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tag2 %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton | 20000 |
-| click_ok | st-tags-addbutton |  |
+| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
+| click_ok | st-tags-addbutton-link |  |
 
-| *Comment* | Test Case Calc: Tags. Text "Adding tag" should appear where textarea was |  |
-| wait_for_text_present_ok | Adding tag | 30000 |
-
-| *Comment* | Test Case Calc: Tags. Wait for the tag textarea to reappear |  |
-| wait_for_element_visible_ok | st-tags-field | 30000 |
+| *Comment* | Test Case Calc: Tags. Wait for the tag to reappear |  |
+| wait_for_element_visible_ok | link=tag2 %%start_time%% | 30000 |
 | text_like | link=tag2 %%start_time%% | tag2 %%start_time%% |
 
 click on several tag links | Category (Tag) page with table containing links to tagged pages appears
@@ -72,8 +56,6 @@ click on several page links | Pages appear; each page has its that tag displayed
 
 | *Comment* | Test Case Calc: Tags Checking tag2 links and pages |  |
 
-| open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag1%20content%20spreadsheet%20%%start_time%% |  |
-| wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | open_ok | %%workspace%%/index.cgi?action=category_list |  |
 | wait_for_element_present_ok | link=tag2 %%start_time%% |  |
 | text_like | link=tag2 %%start_time%% | tag2 %%start_time%% |
@@ -95,32 +77,36 @@ click on several page links | Pages appear; each page has its that tag displayed
  Toggle sort link at top of each column | tables sort and reverse sort correctly
 
 | *Comment* | Test Case Calc: Tags Checking tag sorting |  |
-
 | open_ok | %%workspace%%/index.cgi?action=category_list |  |
 | text_like | qr/tag1 %%start_time%%.+tag2 %%start_time%%/ |  |
-| click_ok | link=Tag |  |
-| text_like | qr/tag2 %%start_time%%.+tag1 %%start_time%%/ |  |
-| click_ok | link=Tag |  |
-| text_like | qr/tag1 %%start_time%%.+tag2 %%start_time%%/ |  |
+
+TODO: test fancy table headers that sort
+
+ click_ok | link=Tag | |
+ text_like | qr/tag2 %%start_time%%.+tag1 %%start_time%%/ | |
+ click_ok | link=Tag | |
+ text_like | qr/tag1 %%start_time%%.+tag2 %%start_time%%/ | |
 
 Delete tag from pages until tag is gone from all pages.
 Go to All Tags | The deleted tag should not appear in list
 
 | *Comment* | Test Case Calc: Tags Delete a tag from all pages |  |
 | open_ok | /%%workspace%%/index.cgi?tag1_content_spreadsheet_%%start_time%% |  |
-| wait_for_element_present_ok | link=[x] | 20000 |
-| click_ok | `link=[x]` |  |
+| wait_for_element_visible_ok | //a[@class='delete_tag'] | 30000 |
+| click_ok | //a[@class='delete_tag'] |  |
+
 | *Comment* | Test Case Calc: Tags first wait |  |
-| wait_for_text_present_ok | tags have been removed | 30000 |
+| wait_for_text_not_present_ok | Tag 1 %%start_time%% | 30000 |
 
 | open_ok | /%%workspace%%/index.cgi?tag12_content_spreadsheet_%%start_time%% |  |
-| wait_for_element_present_ok | link=[x] | 20000 |
-| click_ok | `link=[x]` |  |
+| wait_for_element_visible_ok | //a[@class='delete_tag'] | 30000 |
+| click_ok | //a[@class='delete_tag'] |  |
 
 | *Comment* | Test Case Calc: Tags second wait |  |
-| wait_for_text_present_ok | tags have been removed | 30000 |
+| wait_for_text_not_present_ok | Tag 2 %%start_time%% | 30000 |
+
 | open_ok | %%workspace%%/index.cgi?action=category_list |  |
-| text_unlike | st-listview | tag1 %%start_time%% |
+| text_unlike | contentContainer | tag1 %%start_time%% |
 
 Make a new page and add a new tag (a tag not already in use in workspace) | tag is added 
  Delete this page. | Page is deleted. This tag now has zero pages. 
@@ -132,9 +118,10 @@ Make a new page and add a new tag (a tag not already in use in workspace) | tag 
 | click_and_wait | link=Delete Page |  |
 | confirmation_like | Are you sure you want to delete this page? |  |
 | open_ok | %%workspace%%/index.cgi?action=category_list |  |
-| text_unlike | st-listview | tag2 %%start_time%% |
+| text_unlike | contentContainer | tag2 %%start_time%% |
 
 | *Comment* | Test Case Calc: Tags Teardown |  |
+
 | st-admin | purge-page --w %%workspace%% --page tag1_content_spreadsheet_%%start_time%% | was purged |
 | st-admin | purge-page --w %%workspace%% --page tag12_content_spreadsheet_%%start_time%% | was purged |
 

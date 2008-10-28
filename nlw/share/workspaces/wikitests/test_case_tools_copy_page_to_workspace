@@ -7,76 +7,109 @@
 | st-admin | create-workspace --name %%newspace%% --title "%%newtitle%%" | A new workspace named "%%newspace%%" was created. |
 | st-admin | add-member --email %%email%% --workspace %%newspace%% | %%username%% is now a member of the %%newspace%% workspace. |
 
-| *Comment* | Test Case: Tools: Copy Page to Workspace. Create a page and a tag to copy |  |
+| *Comment* | Test Case: Tools: Copy Page to Workspace Create test page |  |
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| type_ok | st-newpage-pagename-edit | Copy Page %%start_time%% |
-| type_ok | wikiwyg_wikitext_textarea | Copy Page Content %%start_time%% |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| type_ok | st-newpage-pagename-edit | Copy This Page %%start_time%% |
+| type_ok | wikiwyg_wikitext_textarea | Copy This Page %%start_time%% content |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace Create test tag |  |
+| wait_for_element_visible_ok | st-edit-mode-tagbutton | 30000 |
 | click_ok | st-edit-mode-tagbutton |  |
-| type_ok | st-tagqueue-field | Copy Tag %%start_time%% |
-| click_ok | st-tagqueue-submitbutton |  |
-| click_ok | st-tagqueue-closebutton |  |
+| wait_for_element_visible_ok | st-tagqueue-field | 30000 |
+| type_ok | st-tagqueue-field | Copy This Tag %%start_time%% |
+| click_ok | st-tagqueue-addbutton |  |
+| click_ok | st-tagqueue-close |  |
 | click_and_wait | st-save-button-link |  |
 
-| *Comment* | Test Case: Tools: Copy Page to Workspace. Test Copy popup, then copy the page |  |
-| MouseOver | st-pagetools-tools |  |
+TODO: upload a file and test for Keep Attachments
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Copy the page |  |
 | click_ok | link=Copy Page to Workspace |  |
-| pause | 1000 |  |
-| open_ok | /%%workspace%%/index.cgi?action=copy_to_workspace_popup;page_name=copy_page_%%start_time%% |  |
-| wait_for_text_present_ok | Copy | 30000 |
-| select_ok | target_workspace_id | label=%%newtitle%% (%%newspace%%) |
-| type_ok | new_title | New Copy Page %%start_time%% |
-| click_ok | Button |  |
+| wait_for_element_visible_ok | st-copy-workspace | 30000 |
+| wait_for_element_visible_ok | st-copy-newname | 30000 |
+| wait_for_element_visible_ok | st-copy-savelink | 30000 |
 
-| *Comment* | Test Case: Tools: Copy Page to Workspace. Verify copy by opening target wiki Dashboard and clicking What's New link to allow time for copy to complete |  |
-| open_ok | /%%newspace%% |  |
-| click_and_wait | link=New Copy Page %%start_time%% |  |
-| *Comment* | /%%newspace%%/index.cgi?new_copy_page_%%start_time%% |  |
-| text_like | st-page-maincontent | Copy Page Content %%start_time%% |
-| text_like | st-tags | Copy Tag %%start_time%% |
+| select_ok | st-copy-workspace | label=%%newtitle%% |
+| type_ok | st-copy-newname | Page Copied %%start_time%% |
+| click_ok | st-copy-savelink |  |
 
-| *Comment* | Test Case: Tools: Copy Page to Workspace. Create new content. |  |
-| open_ok | /%%workspace%%/index.cgi?copy_page_%%start_time%% |  |
-| pause | 2000 |  |
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Should return to the same WS, 
+NOT the target WS |  |
+| location_like | /%%workspace%%/index.cgi?copy_this_page_%%start_time%% |  |
+| wait_for_element_visible_ok | contentRight | 30000 |
+| text_like | contentRight | Copy This Tag %%start_time%% |
+| text_like | st-page-titletext | Copy This Page %%start_time%% |
+| text_like | contentContainer | Copy This Page %%start_time%% content |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Edit the original the page |  |
+| open_ok | /%%workspace%%/?Copy This Page %%start_time%% |  |
 | click_ok | st-edit-button-link |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | wikiwyg_wikitext_textarea | New Content %%start_time%% |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | Copy This Page %%start_time%% NEW content |
 | click_and_wait | st-save-button-link |  |
 
-| *Comment* | Test Case: Tools: Copy Page to Workspace. Overwrite old page with new content. |  |
-| open_ok | /%%workspace%%/index.cgi?action=copy_to_workspace_popup;page_name=copy_page_%%start_time%% |  |
-| wait_for_text_present_ok | Copy | 10000 |
-| select_ok | target_workspace_id | label=%%newtitle%% (%%newspace%%) |
-| type_ok | new_title | New Copy Page %%start_time%% |
-| click_ok | Button |  |
-| pause | 5000 |  |
-| text_like | //body | The new page name you selected, "New Copy Page %%start_time%%", is already in use in workspace "%%newspace%%" |
-| click_ok | Button |  |
-| pause | 20000 |  |
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Copy the edited page and Cancel |  |
+| click_ok | link=Copy Page to Workspace |  |
+| wait_for_element_visible_ok | st-copy-workspace | 30000 |
+| wait_for_element_visible_ok | st-copy-newname | 30000 |
+| wait_for_element_visible_ok | st-copy-savelink | 30000 |
 
-| *Comment* | Test Case: Tools: Copy Page to Workspace. Verify overwrite by opening target
-wiki Dashboard and clicking What's New link to allow time for copy to
-complete |  |
-| open_ok | /%%newspace%%?action=recent_changes |  |
-| click_and_wait | link=New Copy Page %%start_time%% |  |
-| text_like | st-page-maincontent | New Content %%start_time%% |
-| text_like | st-tags | Copy Tag %%start_time%% |
+| type_ok | st-copy-newname | Untitled Page |
+| click_ok | st-copy-savelink |  |
+| wait_for_element_visible_ok | st-copy-error | 30000 |
+| text_like | st-copy-error | The page name you selected, "Untitled Page", is not allowed. Please enter or change the page name. |
+| click_ok | st-copy-cancellink |  |
 
-| *Comment* | Test Case: Tools: Copy Page to Workspace. Single-space user cannot Copy |  |
+TODO: come back and finish this test when {bz: 1039} is fixed. Can't seem to click st-copy-savelink multiple times. That could be a problem with Selenium or with the dialog boxes.
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. Copy the edited page |  |
+| click_and_wait | link=Home | navigate away and back |
+| open_ok | /%%workspace%%/?Copy This Page %%start_time%% |  |
+| click_ok | link=Copy Page to Workspace |  |
+| wait_for_element_visible_ok | st-copy-workspace | 30000 |
+| wait_for_element_visible_ok | st-copy-savelink | 30000 |
+| wait_for_element_visible_ok | st-copy-newname | 30000 |
+
+| select_ok | st-copy-workspace | label=%%newtitle%% |
+| type_ok | st-copy-newname | Page Copied %%start_time%% |
+| click_ok | st-copy-savelink |  |
+| wait_for_element_visible_ok | st-copy-error | 30000 |
+| text_like | st-copy-error | The new page name you selected, "Page Copied %%start_time%%", is already in use |
+| click_ok | st-copy-savelink |  |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. verify copy of edited page |  |
+| open_ok | /%%newspace%%/index.cgi?action=revision_list;page_name=page_copied_%%start_time%% |  |
+| text_like | contentContainer | qr/revision 2/i |
+| click_and_wait | link=Compare Revisions |  |
+| text_like | contentContainer | Copy This Page %%start_time%% content |
+| text_like | contentContainer | Copy This Page %%start_time%% NEW content |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. verify tag copied |  |
+| click_ok | link=Back To Current Revision |  |
+| wait_for_element_visible_ok | link=Copy This Tag %%start_time%% | 30000 |
+| text_like | link=Copy This Tag %%start_time%% | Copy This Tag %%start_time%% |
+
+| *Comment* | Test Case: Tools: Copy Page to Workspace. User with one WS cannot Copy |  |
 | st-admin | create-user --email newuser_%%start_time%%@ken.socialtext.net --password 123456 |  |
 | st-admin | add-member --email newuser_%%start_time%%@ken.socialtext.net --workspace %%newspace%% |  |
 | st-logout |  |  |
-| open_ok | /%%newspace%%/index.cgi?new_copy_page_%%start_time%% |  |
+| open_ok | /%%newspace%%/?Page Copied %%start_time%% |  |
 | type_ok | username | newuser_%%start_time%%@ken.socialtext.net |
 | type_ok | password | 123456 |
 | click_and_wait | //input[@value='Log in'] |  |
+
 | *Comment* | Test Case: Tools: Copy Page to Workspace. User has no copy to workspace menu item. |  |
 | text_unlike | //body | Copy Page to Workspace |
 
 | *Comment* | Test Case: Tools: Copy Page to Workspace Teardown |  |
-| st-admin | purge-page --w %%workspace%% --page copy_page_%%start_time%% | was purged |
+
+| st-admin | purge-page --w %%workspace%% --page copy_this_page_%%start_time%% | was purged |
 | st-admin | delete-workspace --workspace %%newspace%% --no-export | The %%newspace%% workspace has been deleted. |
 
 | *Comment* | Test Case: Tools: Copy Page to Workspace COMPLETED |

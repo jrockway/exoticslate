@@ -25,113 +25,113 @@
 | *Comment* | Test Case: Settings: User verify settings menu |  |
 | st-admin | set-workspace-config --workspace %%workspace%% email_notify_is_enabled 1 |  |
 | click_and_wait | link=Settings |  |
-| text_like | st-settings-select | My Settings |
-| text_like | st-settings-select | List All Users |
-| text_like | st-settings-select | My Workspaces |
-| text_like | st-settings-select | Unsubscribe |
-| text_like | st-settings-select | Create New Weblog |
-| text_like | st-settings-select | Page Editing |
-| text_like | st-settings-select | Screen Layout |
-| text_like | st-settings-select | Email Notification |
-| text_like | st-settings-select | Your Notepad |
-| text_like | st-settings-select | What's New |
-| text_like | st-settings-select | Syndicate |
-| text_like | st-settings-select | Time |
-| text_like | st-settings-select | Watchlist |
-| text_like | st-settings-select | Weblogs |
-| text_unlike | st-settings-select | Manage All Users |
+| text_like | contentContainer | My Settings |
+| text_like | contentContainer | List All Users |
+| text_like | contentContainer | My Workspaces |
+| text_like | contentContainer | Unsubscribe |
+| text_like | contentContainer | Create New Weblog |
+| text_like | contentContainer | Page Editing |
+| text_like | contentContainer | Screen Layout |
+| text_like | contentContainer | Email Notification |
+| text_like | contentContainer | Your Notepad |
+| text_like | contentContainer | What's New |
+| text_like | contentContainer | Syndicate |
+| text_like | contentContainer | Time |
+| text_like | contentContainer | Watchlist |
+| text_like | contentContainer | Weblogs |
+| text_unlike | contentContainer | Manage All Users |
 
 | *Comment* | Test Case: Settings: User test my settings functionality |  |
-| text_like | st-settings-section | First Name: |
-| text_like | st-settings-section | New password: |
+| text_like | contentContainer | qr/First Name:/i |
+| text_like | contentContainer | New password: |
 | type_ok | first_name | First %%start_time%% |
 | type_ok | last_name | Last %%start_time%% |
 | type_ok | old_password | 123456 |
 | type_ok | new_password | 654321 |
 | type_ok | new_password_retype | 654321 |
-| click_and_wait | Button |  |
+| click_and_wait | link=Save |  |
 
 | *Comment* | Test Case: Settings: User test list all users functionality |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=List All Users |  |
-| text_like | st-settings-section | First %%start_time%% Last %%start_time%% |
+| text_like | contentContainer | First %%start_time%% Last %%start_time%% |
 
 | *Comment* | Test Case: Settings: User test my workspaces functionality |  |
 | click_and_wait | link=My Workspaces |  |
-| text_like | st-settings-section | %%workspace%% |
+| text_like | contentContainer | %%workspace%% |
 | wait_for_text_not_present_ok | qr/help-en.+help-en/ | 30000 |
 
 | *Comment* | Test Case: Settings: User test create new weblog functionality |  |
 | click_and_wait | link=Create New Weblog |  |
-| text_like | st-settings-section | Create A Weblog |
+| text_like | contentContainer | Create A Weblog |
 | type_ok | weblog_title | No Brackets %%start_time%% Weblog |
-| click_and_wait | Button |  |
-| text_like | st-weblog-content | First Post in No Brackets %%start_time%% Weblog |
+| click_and_wait | link=Save |  |
+| text_like | contentContainer | First Post in No Brackets %%start_time%% Weblog |
 
 | *Comment* | Test Case: Settings: User new weblog with brackets RT 26696 |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Create New Weblog |  |
-| text_like | st-settings-section | Create A Weblog |
+| text_like | contentContainer | Create A Weblog |
 | type_ok | weblog_title | `[Brackets] %%start_time%%` |
-| click_and_wait | Button |  |
-| text_like | st-weblog-content | `First Post in [Brackets] %%start_time%% Weblog` |
+| click_and_wait | link=Save |  |
+| text_like | contentContainer | `First Post in [Brackets] %%start_time%% Weblog` |
 
 | *Comment* | Test Case: Settings: User test page editing functionality |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Page Editing |  |
-| text_like | st-settings-section | Double-click to edit a page? |
+| text_like | contentContainer | Double-click to edit a page? |
 
 | *Comment* | Test Case: Settings: User test screen layout functionality |  |
 | click_and_wait | link=Screen Layout |  |
-| text_like | st-settings-section | Should hovering |
-| text_like | st-settings-section | Include Recently |
+| text_like | contentContainer | Should hovering |
+| text_like | contentContainer | Include Recently |
 | click_ok | display__include_breadcrumbs |  |
-| click_and_wait | Button |  |
+| click_and_wait | link=Save |  |
 | open_ok | /%%workspace%%/index.cgi?Announcements and Links |  |
-| text_like | st-breadcrumbs | Recently Viewed |
+| text_like | contentContainer | Recently Viewed |
 
 | *Comment* | Test Case: Settings: User test email notification functionality |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Email Notification |  |
-| text_like | st-settings-section | How often |
-| text_like | st-settings-section | What order |
-| text_like | st-settings-section | What information |
+| text_like | contentContainer | How often |
+| text_like | contentContainer | What order |
+| text_like | contentContainer | What information |
 
 | *Comment* | Test Case: Settings: User test what's new functionality |  |
 | open_ok | /%%workspace%%/index.cgi?action=preferences_settings;preferences_class_id=recent_changes |  |
 | click_ok | recent_changes__include_in_pages |  |
-| click_and_wait | Button |  |
+| click_and_wait | link=Save |  |
 | open_ok | /%%workspace%%/index.cgi?Announcements and Links |  |
-| click_and_wait | link=Announcements and Links |  |
-| wait_for_text_present_ok | First Post | 1000 |
-| text_like | st-recent-changes | First Post in No Brackets %%start_time%% Weblog |
+| wait_for_text_present_ok | First Post | 30000 |
+| text_like | contentContainer | First Post in No Brackets %%start_time%% Weblog |
 
 | *Comment* | Test Case: Settings: User test syndicate functionality |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Syndicate |  |
-| text_like | st-settings-section | How many posts |
+| text_like | contentContainer | How many posts |
 
 | *Comment* | Test Case: Settings: User test time functionality |  |
 | click_and_wait | link=Time |  |
-| text_like | st-settings-section | What time zone |
-| text_like | st-settings-section | How should Daylight |
-| text_like | st-settings-section | How should displayed |
-| text_like | st-settings-section | Should times be |
-| text_like | st-settings-section | Should seconds be |
+| text_like | contentContainer | What time zone |
+| text_like | contentContainer | How should Daylight |
+| text_like | contentContainer | How should displayed |
+| text_like | contentContainer | Should times be |
+| text_like | contentContainer | Should seconds be |
 
 | *Comment* | Test Case: Settings: User test watchlist functionality |  |
 | click_and_wait | link=Watchlist |  |
-| text_like | st-settings-section | How frequently would |
-| text_like | st-settings-section | What information about |
-| text_like | st-settings-section | How many items |
+| text_like | contentContainer | How frequently would |
+| text_like | contentContainer | What information about |
+| text_like | contentContainer | How many items |
 
 | *Comment* | Test Case: Settings: User test weblogs functionality |  |
 | open_ok | /%%workspace%%/index.cgi?action=preferences_settings;preferences_class_id=weblog |  |
-| text_like | st-settings-section | How many posts |
+| text_like | contentContainer | How many posts |
 
 | *Comment* | Test Case: Settings: User test unsubscribe functionality |  |
 | click_and_wait | link=Unsubscribe |  |
-| click_and_wait | Button |  |
+| wait_for_element_present_ok | //input[@value='Unsubscribe from the %%workspace%% workspace'] | 30000 |
+| click_and_wait | //input[@value='Unsubscribe from the %%workspace%% workspace'] |  |
 | st-login | %%new_user%% | 654321 |
 | text_like | errors-and-messages | You are not authorized to view this workspace. |
 

@@ -1,0 +1,29 @@
+| *Comment* | Test Case: People Dashboard Gloabal Nav |
+
+This test is designed to test global navigation changes as people/dashboard is enabled and disabled.
+
+1) Enable people and dashboard. See "Home" (is dashboard), "People", "Workspaces"
+
+| st-admin | enable-plugin --plugin people --all-accounts |  |
+| st-admin | enable-plugin --plugin dashboard --all-accounts |  |
+
+2) Disable people. Refresh do not see "People"
+
+| st-admin | disable-plugin --plugin dashboard --all-accounts |  |
+
+3) Disable dashboard. Home is workspace list. Do not see "people"
+
+| st-admin | disable-plugin --plugin people --all-accounts |  |
+
+4) Enable people. Link to people, see directory list. Home is workspace list.
+
+| st-admin | enable-plugin --plugin people --all-accounts |  |
+
+5) Disable people, enable dashboard. Home is dashboard.
+
+| st-admin | disable-plugin --plugin people --all-accounts |  |
+| st-admin | enable-plugin --plugin dasbhaord --all-accounts |  |  | *Comment* | Test Case: People Dashboard Gloabl Nav CLEANUP |
+| st-admin | enable-plugin --plugin people --all-accounts |  |
+| st-admin | enable-plugin --plugin dashboard --all-accounts |  |
+
+| *Comment* | Test Case: People Dashboard Gloabal Nav COMPLETED |

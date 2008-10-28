@@ -26,4 +26,4 @@ deliver-email --workspace
 | *Comment* | Test Case: Command Line Tests Teardown |  |
 | st-admin | purge-page --w %%workspace%% --p cmdline_%%start_time%% | was purged |
 
-| *Comment* | Test Case: Command Line Tests COMPLETED |  |
+| *Comment* | Test Case: Command Line Tests EMAIL COMPLETED |  |

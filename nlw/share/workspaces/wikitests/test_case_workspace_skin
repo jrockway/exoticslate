@@ -17,13 +17,13 @@ Need skin.tgz and badskin.tgz to be in wikitest_files directory.
 | click_and_wait | link=Settings |  |
 | text_like | Workspace Skin |  |
 | click_and_wait | link=Workspace Skin |  |
-| wait_for_element_visible_ok | link=Skin Customization Kit | 5000 |
-| wait_for_element_visible_ok | link=Socialtext Style Customization Guide | 5000 |
+| text_like | Default Skin |  |
+| text_like | Customized Skin |  |
 
 | *Comment* | Test Case: Workspace Skin upload button |  |
-| click_ok | st-workspaceskin-submit |  |
-| wait_for_element_visible_ok | st-errorbox | 30000 |
-| text_like | st-errorbox | A custom skin file was not uploaded. |
+| click_and_wait | st-workspaceskin-submit |  |
+| text_like | contentRight | A custom skin file was not uploaded. |
+| is_checked_ok | st-workspaceskin-default |  |
 
 | *Comment* | Test Case: Workspace Skin navigate away and back to clear error box |  |
 | click_and_wait | link=Workspace Privacy |  |
@@ -32,9 +32,8 @@ Need skin.tgz and badskin.tgz to be in wikitest_files directory.
 | *Comment* | Test Case: Workspace Skin upload badskin.tgz |  |
 | wait_for_element_visible_ok | st-workspaceskin-file | 30000 |
 | type_ok | st-workspaceskin-file | %%wikitest_files%%badskin.tgz |
-| click_ok | st-workspaceskin-submit |  |
-| wait_for_element_visible_ok | st-errorbox | 120000 |
-| text_like | st-errorbox | Could not extract files from the skin archive |
+| click_and_wait | st-workspaceskin-submit |  |
+| text_like | contentRight | Could not extract files from the skin archive |
 
 | *Comment* | Test Case: Workspace Skin navigate away and back to clear error box |  |
 | click_and_wait | link=Workspace Privacy |  |
@@ -44,17 +43,17 @@ Need skin.tgz and badskin.tgz to be in wikitest_files directory.
 | wait_for_element_visible_ok | st-workspaceskin-file | 30000 |
 | type_ok | st-workspaceskin-file | %%wikitest_files%%skin.tgz |
 | click_and_wait | st-workspaceskin-submit |  |
-| text_like | st-workspaceskin-filelist | button-green/left-top.gif |
+| text_like | contentRight | button-green/left-top.gif |
 
 | *Comment* | Test Case: Workspace Skin cancel button |  |
 | check_ok | st-workspaceskin-custom |  |
-| click_ok | st-standard-cancelbutton |  |
+| click_ok | link=Cancel |  |
 | is_checked_ok | st-workspaceskin-default |  |
 
 | *Comment* | Test Case: Workspace Skin swap to custom skin |  |
 | check_ok | st-workspaceskin-custom |  |
 | is_checked_ok | st-workspaceskin-custom |  |
-| click_and_wait | Button | Save |
+| click_and_wait | link=Save |  |
 
 | *Comment* | use text_like to check for uploaded-skin link because wait_for_element has a bug when trying to wait for links or anchors |  |
 | text_like | //link[contains(@href,'uploaded-skin')] | qr/^$/ |
@@ -63,19 +62,22 @@ Need skin.tgz and badskin.tgz to be in wikitest_files directory.
 | *Comment* | Test Case: Workspace Skin swap to default skin |  |
 | check_ok | st-workspaceskin-default |  |
 | is_checked_ok | st-workspaceskin-default |  |
-| click_and_wait | Button | Save |
-| wait_for_element_visible_ok | st-socialtext-attribution-image | 30000 |
+| click_and_wait | st-standard-submitbutton | Save Button in uploaded skin |
+
+| wait_for_element_visible_ok | link=Save | 30000 |
+| wait_for_element_visible_ok | link=Community | 30000 |
 | is_checked_ok | st-workspaceskin-default |  |
 
 | *Comment* | Test Case: Workspace Skin swap back to custom skin |  |
 | check_ok | st-workspaceskin-custom |  |
-| click_and_wait | Button | Save |
+| click_and_wait | link=Save | Save |
 | text_like | //link[contains(@href,'uploaded-skin')] | qr/^$/ |
 
 | *Comment* | Test Case: Workspace Skin remove existing files |  |
-| click_ok | st-workspaceskin-removesubmit |  |
+| click_and_wait | st-workspaceskin-removesubmit |  |
 | wait_for_text_not_present_ok | button-green/left-top.gif | 30000 |
-| wait_for_element_visible_ok | st-socialtext-attribution-image | 30000 |
+| wait_for_element_visible_ok | link=Save | 30000 |
+| wait_for_element_visible_ok | link=Community | 30000 |
 | is_checked_ok | st-workspaceskin-default |  |
 
 | *Comment* | Test Case: Workspace Skin navigate away and back to clear error box |  |
@@ -85,9 +87,8 @@ Need skin.tgz and badskin.tgz to be in wikitest_files directory.
 | *Comment* | Test Case: Workspace Skin upload non-archive |  |
 | wait_for_element_visible_ok | st-workspaceskin-file | 30000 |
 | type_ok | st-workspaceskin-file | %%wikitest_files%%wikitest.txt |
-| click_ok | st-workspaceskin-submit |  |
-| wait_for_text_present_ok | Could not extract files from the skin archive | 120000 |
-| text_like | st-errorbox | Could not extract files from the skin archive |
+| click_and_wait | st-workspaceskin-submit |  |
+| text_like | contentRight | Could not extract files from the skin archive |
 
 | *Comment* | Test Case: Workspace Skin navigate away and back to clear error box |  |
 | click_and_wait | link=Workspace Privacy |  |
@@ -95,9 +96,8 @@ Need skin.tgz and badskin.tgz to be in wikitest_files directory.
 
 | wait_for_element_visible_ok | st-workspaceskin-file | 30000 |
 | type_ok | st-workspaceskin-file | %%wikitest_files%%wikitest.tgz |
-| click_ok | st-workspaceskin-submit |  |
-| wait_for_text_present_ok | Could not extract files from the skin archive | 120000 |
-| text_like | st-errorbox | Could not extract files from the skin archive |
+| click_and_wait | st-workspaceskin-submit |  |
+| text_like | contentRight | Could not extract files from the skin archive |
 
 | *Comment* | Test Case: Workspace Skin navigate away and back to clear error box |  |
 | click_and_wait | link=Workspace Privacy |  |
@@ -105,8 +105,7 @@ Need skin.tgz and badskin.tgz to be in wikitest_files directory.
 
 | wait_for_element_visible_ok | st-workspaceskin-file | 30000 |
 | type_ok | st-workspaceskin-file | xxxx |
-| click_ok | st-workspaceskin-submit |  |
-| wait_for_text_present_ok | A custom skin file was not uploaded | 60000 |
-| text_like | st-errorbox | A custom skin file was not uploaded |
+| click_and_wait | st-workspaceskin-submit |  |
+| text_like | contentRight | A custom skin file was not uploaded |
 
 | *Comment* | Test Case: Workspace Skin COMPLETED |  |

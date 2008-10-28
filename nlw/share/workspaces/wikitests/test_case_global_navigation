@@ -1,0 +1,78 @@
+| *Comment* | Test Case: Global Navigation |  |
+| *Comment* | requires People and Dashboard |  |
+
+| *Comment* | Test Case: Global Navigation Home People Workspaces |  |
+| text_like | mainNav | Home |
+| text_like | mainNav | People |
+| text_like | mainNav | Workspaces |
+| click_and_wait | st-home-link |  |
+| text_like | st-editing-tools-edit | Welcome |
+| click_and_wait | st-wiki-subnav-link-people |  |
+| text_like | contentContainer | All People |
+| click_and_wait | st-wiki-subnav-link-workspaces |  |
+| text_like | contentContainer | qr/Workspace Title\s+Workspace Name/ |
+
+| *Comment* | Test Case: Global Navigation top links |  |
+| open_ok | /%%workspace%%/ |  |
+| text_like | workspaceNav | Workspace: %%title%% |
+| text_like | st-wikinav-profile | Profile |
+| text_like | st-wikinav-mobile | Mobile |
+| text_like | st-wikinav-setting | Settings |
+| text_like | st-wikinav-help | Help |
+| text_like | st-wikinav-logout | Log out |
+
+| *Comment* | Test Case: Global Navigation Profile |  |
+| click_and_wait | link=Profile |  |
+| text_like | contentContainer | Profile |
+| text_like | contentContainer | You follow 0 people |
+| text_like | contentContainer | Updates |
+| open_ok | /%%workspace%%/ |  |
+
+| *Comment* | Test Case: Global Navigation Mobile |  |
+| click_and_wait | link=Mobile |  |
+| location_like | `/lite/page/%%workspace%%` |  |
+
+| *Comment* | Test Case: Global Navigation Settings |  |
+| open_ok | /%%workspace%%/ |  |
+| click_and_wait | link=Settings |  |
+| text_like | contentLeft | Settings |
+| text_like | link=My Settings | My Settings |
+
+| *Comment* | Test Case: Global Navigation Help |  |
+| *Comment* | Can't click Help because it opens another tab |  |
+| wait_for_element_present_ok | //a[contains(@href,'help/index.cgi')] | 30000 |
+
+| *Comment* | Test Case: Global Navigation Log out |  |
+| click_and_wait | link=Log out |  |
+| text_like | Log in to Socialtext |  |
+| st-login |  |  |
+
+TODO: find a way to check the best full name
+
+| *Comment* | Test Case: Global Navigation Logged in user |  |
+| text_like | globalNav | Logged in as |
+
+| *Comment* | Test Case: Global Navigation Search |  |
+| text_like | st-search-form | Search: |
+| type_ok | st-search-term | wiki |
+| click_and_wait | st-search-submit |  |
+| text_like | Pages containing 'wiki' |  |
+
+| *Comment* | Test Case: Global Navigation Footer |  |
+| open_ok | /%%workspace%%/ |  |
+| text_like | footerLinks | Socialtext |
+| text_like | footerLinks | Enterprise Social Software |
+| wait_for_element_visible_ok | `//a[@href='http://www.socialtext.com/']` | 30000 |
+| text_like | footerLinks | Community |
+| wait_for_element_visible_ok | `//a[@href='http://www.socialtext.net/exchange/']` | 30000 |
+
+| *Comment* | Test Case: Global Navigation Footer right |  |
+| text_like | footerGlobal | Mobile |
+| text_like | footerGlobal | Settings |
+| text_like | footerGlobal | Help |
+| text_like | footerGlobal | Log out |
+
+| *Comment* | Test Case: Global Navigation Footer right |  |
+| *Comment* | TODO: find a reliable XPATH that works in IE for the lower links which are identical to the upper links |  |
+
+| *Comment* | Test Case: Global Navigation COMPLETED |  |

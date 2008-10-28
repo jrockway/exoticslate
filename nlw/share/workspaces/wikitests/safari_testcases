@@ -1,39 +1,33 @@
-These testcases are run by the unit tests. Make sure this list only contains finished testcases that should always pass.
+Copied Firefox Testcases to Safari Testcases and edited out all the TCs that use Rich Text
 
-* To fixIE OSR TestcasesTo Fix
-* ATest Case: Verify Location]
+*It is possible to run testcases as the default LDAP user*
+*if you first run `xwt enable_ldap` to get LDAP enabled so the default LDAP user may successfully login.*
 
-(Browser crash after User resets ... to investigate)
+* [Test Case: A Enable LDAP]
+
+If Test Case: Verify Location fails, you have not configured your 
+test env properly and are not testing the test-workspace
+
+* [Test Case: Verify Location]
 
 * [Test Case: Home]
-* [Test case: Login Logout]
-* [Test case: IE Miki Authentication]
-* [Test case: User Resets Password]
-* [Test case: Admin Resets Password]
+* [Test Case: Workspace Navigation]
+* [Test Case: Global Navigation]
+* [Test Case: Miki]
 * [Test case: Invite Anonymous User]
 * [Test case: Self Register]
 * [Test case: Watchlist]
-* [Test Case: Dashboard]
-
-* ATest Case: Edit This PageA
-
-----> Edit this page throws safari errors because of the "simple mode not supported" alert
-
-* [Test Case: Double Click to Edit]
-* [Test Case: New Page]
-* [Test Case: New Page No Overwrite]
-* a Test Case: Command Line: USERS a
-* a Test Case: Command Line: WORKSPACES a
-* a Test Case: Command Line: INDEXING a
-* [Test Case: Command Line: ACCOUNTS]
-* [Test Case: Command Line: EMAIL]
-* a Test Case: Command Line: OTHER a
-* a Test Case: Command Line: INVITE NEW USER a
 * [Test case: functional search tests]
 * [Test Case: Phrase search]
 * [Test Case: stemming]
+
+* [Test Case: Double Click to Edit]
+* [Test Case: Preview Format]
+* [Test Case: New Page]
+* [Test Case: New Page No Overwrite]
 * [Test Case: Tags]
-* a Test Case: Tagging a
+* [Test Case: Tagging]
+* [Test Case: Tagging in the Editor]
 * [Test Case: Hide sidebar]
 * [Test Case: Sidebar: Incoming Links]
 * [Test Case: Orphans List]
@@ -42,50 +36,62 @@ These testcases are run by the unit tests. Make sure this list only contains fin
 * [Test Case: Revisions]
 * [Test Case: What's New]
 * [Test Case: All Pages]
-* [Test Case: Tools: Duplicate Page]
-* [Test Case: Tools: Rename Page]
 * [Test Case: Tools: Delete Page]
-* [Test Case: Tools: Copy Page to Workspace]
 * [Test Case: Tools: Export as HTML]
-* [Test Case: Add Comment]
-* [Test Case: Comment Form Fields]
-* [Test Case: Weblogs]
 * [Test Case: Weblog Archive and Navigation]
 * [Test Case: Connections]
 * [Test Case: Settings: User]
 * [Test Case: Settings: Admin]
+* [Test Case: Workspace Configuration]
+* [Test Case: Workspace Privacy]
 * [Test Case: Authenticated-User-Only]
 * [Test Case: Public Authenticate to Edit]
-* [Test Case: Public]
 * [Test Case: Public-Read-Only]
 * [Test Case: Public-Comment-Only]
+* [Test Case: Public]
 * [Test Case: Intranet]
 * [Test Case: Settings: Email Notification]
-* [Test Case: Workspace Configuration]
 * [Test Case: Direct URI]
-* a Test Case: Strings a
-* a Test Case: Single Dash a
-* [Test Case: Workspace Privacy]
 * [Test Case: Inter Workspace Search]
 * [Test Case: Untitled Page]
 * [Test Case: Weblog Naming]
 * [Test Case: Page Open Errors]
-* [Test Case: Return to last login]
-
-uses default wikiemail or `$ENV{WIKIEMAIL}`
-
+* [Test Case: Insert Menu]
+* [Test Case: Tagged Pages Sorting]
+* [Test Case: Tools: Duplicate Page]
+* [Test Case: Tools: Rename Page]
+* [Test Case: Tools: Copy Page to Workspace]
+* [Test Case: Add Comment]
+* [Test Case: Comment Form Fields]
+* [Test Case: Weblogs]
 * [Test Case: Email]
+* [Test Case: Email Attachment]
+* [Test Case: Miki Authentication]
+* [Test Case: RSS Icons]
 
-RSS Icon Tests are different for IE 6 and IE 7
-
-IE 6 fails RSS Icons with High Permissions. IE 7 passes. Safari fails as well
-
+* [Localization Testcases]
 * [Test case: Business Control Panel]
+* [Report Testcases]
 
-^ All pages tagged 'Testcase' (only a list, visit the pages above for tests)
+LDAP Testcases will Enable LDAP and use a known LDAP user instead of a Default user where required
 
-Tests do not run out of the list since it isn't really here.
+* [LDAP Testcases]
 
-{search: category:testcase}
+Default User Testcases will Disable LDAP so it can test wiki functions that only work for the Default user
+It should be the last testset in this run, but it will re-enable LDAP when it finishes.
 
-[Test Case: No Preference Key Error Message] https://www2.socialtext.net/dev-tasks/index.cgi?no_preference_key_release_contract
+* [Default User Testcases]
+
+Widget tests should run. Make sure you have socialtext dashboard turned on.
+
+* [Widgets Testcases]
+
+Non-Safari cases
+Test Case: Edit This Page
+Test Case: Nasty Double Dashes
+Test Case: Single Dash
+Test Case: Strings
+Test Case: Link Interface
+Calc Testcases
+
+Cannot run File Testcases because Safari does not display a textbox and only allows file browsing

@@ -2,51 +2,48 @@
 
 | *Comment* | Test Case: Settings: Admin make sure user is an admin |  |
 | st-admin | add-workspace-admin --email %%email%% --workspace %%workspace%% |  |
-| st-logoutin |  |  |
+| st-admin | set-workspace-config --w %%workspace%% email_notify_is_enabled 1 | has been updated |
 
 | *Comment* | Test Case: Settings: Admin verify content of settings menu |  |
 | click_and_wait | link=Settings |  |
-| text_like | st-settings-select | My Settings |
-| text_like | st-settings-select | Manage All Users |
-| text_like | st-settings-select | Invite New Users |
-| text_like | st-settings-select | My Workspaces |
-| text_like | st-settings-select | Create New Workspace |
-| text_like | st-settings-select | Unsubscribe |
-| text_like | st-settings-select | Workspace Appearance |
-| text_like | st-settings-select | Workspace Features |
-| text_like | st-settings-select | Workspace Privacy |
-| text_like | st-settings-select | Create New Weblog |
-| text_like | st-settings-select | Page Editing |
-| text_like | st-settings-select | Screen Layout |
-| text_like | st-settings-select | Email Notification |
-| text_like | st-settings-select | Your Notepad |
-| text_like | st-settings-select | What's New |
-| text_like | st-settings-select | Syndicate |
-| text_like | st-settings-select | Time |
-| text_like | st-settings-select | Watchlist |
-| text_like | st-settings-select | Weblogs |
-| text_unlike | st-settings-select | List All Users |
+| text_like | contentLeft | My Settings |
+| text_like | contentLeft | Manage All Users |
+| text_like | contentLeft | Invite New Users |
+| text_like | contentLeft | My Workspaces |
+| text_like | contentLeft | Create New Workspace |
+| text_like | contentLeft | Unsubscribe |
+| text_like | contentLeft | Workspace Appearance |
+| text_like | contentLeft | Workspace Features |
+| text_like | contentLeft | Workspace Privacy |
+| text_like | contentLeft | Create New Weblog |
+| text_like | contentLeft | Page Editing |
+| text_like | contentLeft | Screen Layout |
+| text_like | contentLeft | Email Notification |
+| text_like | contentLeft | Your Notepad |
+| text_like | contentLeft | What's New |
+| text_like | contentLeft | Syndicate |
+| text_like | contentLeft | Time |
+| text_like | contentLeft | Watchlist |
+| text_like | contentLeft | Weblogs |
+| text_unlike | contentLeft | List All Users |
 
 | *Comment* | Test Case: Settings: Admin test Manage All Users functionality |  |
 | st-admin | create-user --email user_%%start_time%%@ken.socialtext.net --password 123456 |  |
 | st-admin | add-member --email user_%%start_time%%@ken.socialtext.net --workspace %%workspace%% |  |
 | click_and_wait | link=Manage All Users |  |
-| text_like | st-settings-section | user_%%start_time%%@ken.socialtext.net |
+| text_like | contentContainer | user_%%start_time%%@ken.socialtext.net |
 | st-should-be-admin | user_%%start_time%%@ken.socialtext.net | 1 |
-| st-logout |  |  |
-| st-login | user_%%start_time%%@ken.socialtext.net | 123456 |
-| text_like | st-wiki-title-invite | Invite your colleagues |
-| st-logout |  |  |
-| st-login |  |  |
+| st-logoutin | user_%%start_time%%@ken.socialtext.net | 123456 |
+| text_like | Invite Others |  |
+| st-logoutin |  |  |
 
 | *Comment* | Test Case: Settings: Admin test Invite New Users functionality |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Invite New Users |  |
 | type_ok | users_new_ids | invite_%%start_time%%@ken.socialtext.net |
-| text_like | st-settings-section | If you wish |
-| click_and_wait | Button |  |
-| st-logout |  |  |
-| st-login | invite_%%start_time%%@ken.socialtext.net |  |
+| text_like | contentContainer | If you wish |
+| click_and_wait | link=Save |  |
+| st-logoutin | invite_%%start_time%%@ken.socialtext.net |  |
 | text_like | errors-and-messages | You need to confirm |
 | st-login |  |  |
 
@@ -55,67 +52,72 @@
 | click_and_wait | link=Create New Workspace |  |
 | type_ok | title | -newspace %%start_time%% |
 | type_ok | name | newspace%%start_time%% |
-| click_and_wait | Button |  |
+| click_and_wait | link=Save |  |
 | text_like | Workspace title must be between 2 and 64 characters long and may not begin with a - |
 
 | *Comment* | Test Case: Settings: Admin test Create New Workspace functionality |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Create New Workspace |  |
-| type_ok | title | newspace %%start_time%% |
+| type_ok | title | Newspace %%start_time%% |
 | type_ok | name | newspace-%%start_time%% |
-| click_and_wait | Button |  |
-| text_like | st-settings-section | You have just created "newspace %%start_time%%" |
+| click_and_wait | link=Save |  |
+| text_like | contentContainer | You have just created "Newspace %%start_time%%" |
 | click_and_wait | link=Go to |  |
+| location_like | /newspace-%%start_time%%/index.cgi?newspace_%%start_time%% |  |
 
-| *Comment* | Test Case: Settings: Admin test Workspace Appearance functionality using newspace-%%start_time%% |  |
+| *Comment* | Test Case: Settings: Admin test Workspace Appearance using newspace-%%start_time%% |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Workspace Appearance |  |
 | type_ok | title | newtitle %%start_time%% |
-| text_like | st-settings-section | choose an image |
-| text_like | st-settings-section | When users click |
-| click_and_wait | Button |  |
+| text_like | contentContainer | choose an image |
+| text_like | contentContainer | When users click |
+| click_and_wait | link=Save |  |
 
 | *Comment* | Test Case: Settings: Admin test Workspace Features using newspace-%%start_time%% |  |
 | *Comment* | Test Case: Settings: Admin set up testing weblog |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Time |  |
 | click_ok | timezone__time_display_seconds |  |
-| click_and_wait | Button |  |
+| click_and_wait | link=Save |  |
+
 | click_and_wait | link=Create New Weblog |  |
 | type_ok | weblog_title | %%start_time%% Weblog |
-| click_and_wait | Button |  |
+| click_and_wait | link=Save |  |
+
 | wait_for_text_present_ok | New Post | 30000 |
 | click_and_wait | st-weblog-newpost-button |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | type_ok | st-newpage-pagename-edit | post2 %%start_time%% |
-
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | post2 %%start_time%% content |
 | click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: Settings: Admin test weblog sort order using newspace-%%start_time%% |  |
-| text_like | st-weblog-content | qr/post2 %%start_time%%.+first post/ |
+| text_like | contentContainer | qr/post2 %%start_time%%.+first post/ |
 | open_ok | /newspace-%%start_time%%/index.cgi?action=display;page_name=first_post_in_%%start_time%%_weblog;caller_action=weblog_display;category=%%start_time%%_weblog;js=show_edit_div#edit |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | edit |
 | click_and_wait | st-save-button-link |  |
-| text_like | st-weblog-content | qr/edit.+post2 %%start_time%%/ |
+
+| text_like | contentContainer | qr/edit.+post2 %%start_time%%/ |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Workspace Features |  |
 | click_ok | document.forms[1].sort_weblogs_by_create[1] |  |
-| click_and_wait | Button |  |
-| click_and_wait | st-wiki-subnav-link-weblogs |  |
-| text_like | st-weblog-content | qr/post2 %%start_time%%.+edit/ |
+| click_and_wait | link=Save |  |
+
+| click_and_wait | link=Weblogs |  |
+| text_like | contentContainer | qr/post2 %%start_time%%.+edit/ |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Workspace Features |  |
 | click_ok | document.forms[1].sort_weblogs_by_create[0] |  |
-| click_and_wait | Button |  |
+| click_and_wait | link=Save |  |
 | click_and_wait | link=Time |  |
 | click_ok | timezone__time_display_seconds |  |
-| click_and_wait | Button |  |
+| click_and_wait | link=Save |  |
 
 *Privacy features are tested in separate test cases.*
 

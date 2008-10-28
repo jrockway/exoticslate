@@ -1,22 +1,23 @@
-{rt: 27491}
-
 | *Comment* | Test Case: Untitled Page |  |
 
 | *Comment* | Test Case: Untitled Page new page |  |
-| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
+| open_ok | /%%workspace%%/?action=new_page |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | click_ok | st-newpage-pagename-edit |  |
 
 | *Comment* | Test Case: Untitled Page title field is empty after focus |  |
 | text_unlike | st-newpage-pagename-edit | Untitled Page |
 | click_ok | st-save-button-link |  |
-| verifyAlert | You must specify a page name |  |
+| wait_for_element_visible_ok | st-newpage-save-pagename | 5000 |
+| click_ok | st-newpage-save-cancelbutton |  |
+| wait_for_element_not_visible_ok | st-newpage-save-pagename | 5000 |
 
 | *Comment* | Test Case: Untitled Page try bad title |  |
 | type_ok | st-newpage-pagename-edit | `Untitled ---------- &&&&& ---- PaGe` |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| click_ok | wikiwyg_wikitext_textarea |  |
 | type_ok | wikiwyg_wikitext_textarea | untitled page %%start_time%% content |
 | click_ok | st-newpage-pagename-edit |  |
 
@@ -26,7 +27,7 @@
 | *Comment* | Test Case: Untitled Page save attempt using bad title |  |
 | type_ok | st-newpage-pagename-edit | `Untitled ---------- &&&&& ---- PaGe` |
 | click_ok | st-save-button-link |  |
-| wait_for_element_visible_ok | st-newpage-save-pagename | 30000 |
+| wait_for_element_visible_ok | st-newpage-save-pagename | 5000 |
 
 | *Comment* | Test Case: Untitled Page save attempt using "Untitled Page" |  |
 | type_ok | st-newpage-save-pagename | untitled page |
@@ -36,8 +37,7 @@
 | *Comment* | Test Case: Untitled Page save attempt using legal title |  |
 | type_ok | st-newpage-save-pagename | untitled page %%start_time%% |
 | click_and_wait | st-newpage-save-savebutton |  |
-| wait_for_element_visible_ok | st-created | 30000 |
-| text_like | st-page-maincontent | untitled page %%start_time%% content |
+| text_like | contentContainer | untitled page %%start_time%% content |
 
 | *Comment* | Test Case: Untitled Page Teardown |  |
 | st-admin | purge-page --w %%workspace%% --p untitled_page_%%start_time%% | was purged |

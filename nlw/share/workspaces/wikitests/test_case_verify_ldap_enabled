@@ -41,8 +41,7 @@ This testcase traverses the UI to all the places that differ from the Default UI
 
 | *Comment* | Test Case: Verify LDAP Enabled: Manage All Users (no pwd reset) |  |
 | click_and_wait | link=Manage All Users |  |
-| wait_for_element_visible_ok | st-settings-pane | 30000 |
-| text_like | st-settings-pane | Admin |
-| text_unlike | st-settings-pane | Reset Password |
+| text_like | contentContainer | Admin |
+| text_unlike | contentContainer | Reset Password |
 
 | *Comment* | Test Case: Verify LDAP Enabled COMPLETED |  |

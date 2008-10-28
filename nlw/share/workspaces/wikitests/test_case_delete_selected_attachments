@@ -8,7 +8,7 @@
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Time |  |
 | check_ok | timezone__time_display_seconds |  |
-| click_and_wait | Button |  |
+| click_and_wait | link=Save |  |
 
 | *Comment* | Test Case: Delete Selected Attachments uploads wikitest.doc and wikitest.jpg |  |
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "Delete Attachments %%start_time%%" < %%wikitest_client_files%%wikitest.txt | has been created |
@@ -18,16 +18,16 @@
 | click_ok | st-attachments-uploadbutton |  |
 | wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
 | type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.jpg |
-| wait_for_text_present_ok | Uploaded files: | 30000 |
+| wait_for_text_present_ok | Uploaded files: wikitest.jpg | 30000 |
 
 | *Comment* | Test Case: Delete Selected Attachments wikitest.jpg upload waits for the Done button |  |
-| wait_for_element_visible_ok | st-attachments-attach-closebutton | 60000 |
+| wait_for_element_visible_ok | st-attachments-attach-closebutton | 30000 |
 | wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
 | type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.doc |
-| wait_for_text_present_ok | Uploaded files: | 30000 |
+| wait_for_text_present_ok | Uploaded files: wikitest.jpg, wikitest.doc | 30000 |
 
 | *Comment* | Test Case: Delete Selected Attachments wikitest.doc upload waits for the Done button |  |
-| wait_for_element_visible_ok | st-attachments-attach-closebutton | 60000 |
+| wait_for_element_visible_ok | st-attachments-attach-closebutton | 30000 |
 | click_ok | st-attachments-attach-closebutton |  |
 
 | *Comment* | Test Case: Delete Selected Attachments Search the attachment and verify that it is present |  |
@@ -36,12 +36,12 @@
 | wait_for_element_visible_ok | st-search-term | 30000 |
 | type_ok | st-search-term | Mudville |
 | click_and_wait | st-search-submit |  |
-| text_like | st-search-content | Delete Attachments %%start_time%% |
-| text_like | st-search-content | qr/wikitest.doc, attached to page Delete Attachments %%start_time%%/ |
+| text_like | contentContainer | Delete Attachments %%start_time%% |
+| text_like | contentContainer | qr/Delete Attachments %%start_time%%.+in %%title%%/ |
 
 | *Comment* | Open All Files |  |
 | open_ok | /%%workspace%%/index.cgi?action=attachments_listall |  |
-| wait_for_element_visible_ok | button | 30000 |
+| wait_for_element_visible_ok | //input[@value='Delete Selected Attachments'] | 30000 |
 
 | *Comment* | Test Case: Delete Selected Attachments delete wikitest.doc |  |
 | *Comment* | Sort by Date Uploaded to get wikitest.doc to the top |  |
@@ -51,22 +51,13 @@
 | wait_for_element_visible_ok | selected | 30000 |
 | check_ok | selected |  |
 | is_checked_ok | selected |  |
-| click_and_wait | button | Delete Selected Attachments |
+| click_and_wait | //input[@value='Delete Selected Attachments'] |  |
 
 | *Comment* | Test Case: Delete Selected Attachments. See if wikitest.doc got deleted |  |
-| open_ok | /%%workspace%%/index.cgi? |  |
-| wait_for_element_visible_ok | link=Delete Attachments %%start_time%% | 30000 |
-| click_and_wait | link=Delete Attachments %%start_time%% |  |
-
-| *Comment* | Test Case: Delete Selected Attachments delete the links from the page |  |
-| st-admin | update-page --email %%email%% --workspace %%workspace%% --page "Delete Attachments
-%%start_time%%" < %%wikitest_client_files%%wikitest.txt | has been updated |
-| open_ok | /%%workspace%%/?Delete Attachments %%start_time%% |  |
-
-| wait_for_element_visible_ok | st-attachments-title | 30000 |
-| wait_for_element_visible_ok | st-attachments-listing | 10000 |
+| open_ok | /%%workspace%%/?Delete Attachments %%start_time%% | 30000 |
+| wait_for_element_visible_ok | //a[contains(@href,'original/wikitest.jpg')] | 30000 |
 | text_like | //a[contains(@href,'original/wikitest.jpg')] | wikitest.jpg |
-| text_unlike | st-attachments | wikitest.doc |
+| text_unlike | contentRight | wikitest.doc |
 
 | *Comment* | Test Case: Delete Selected Attachments Search page and verify that attachment is gone |  |
 | *Comment* | Deleting an attachment requires reindexing, so you are stuck indexing the workspace |  |
@@ -74,8 +65,7 @@
 | wait_for_element_visible_ok | st-search-term | 30000 |
 | type_ok | st-search-term | Mudville |
 | click_and_wait | st-search-submit |  |
-| text_unlike | st-search-content | Delete Attachments %%start_time%% |
-| text_unlike | st-search-content | qr/wikitest.doc, attached to page Delete Attachments %%start_time%%/i |
+| text_unlike | contentContainer | Delete Attachments %%start_time%% |
 
 | *Comment* | Test Case: Delete Selected Attachments teardown |  |
 
@@ -84,6 +74,6 @@
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Time |  |
 | uncheck_ok | timezone__time_display_seconds |  |
-| click_and_wait | Button |  |
+| click_and_wait | link=Save |  |
 
 | *Comment* | Test Case: Delete Selected Attachments COMPLETED |  |

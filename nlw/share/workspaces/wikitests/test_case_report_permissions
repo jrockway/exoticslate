@@ -7,7 +7,7 @@
 | st-admin | create-workspace --name %%workspace_two%% --title %%workspace_two%% | A new workspace named "%%workspace_two%%" was created. |
 | st-admin | remove-accounts-admin --email %%email%% | %%username%% no longer has accounts admin access |
 | st-admin | give-accounts-admin --email %%email%% | %%username%% now has accounts admin access |
-| st-admin | create-user --email newuser_perm_%%start_time%%@matt.socialtext.net --password %%temp_password%% | was created |
+| st-admin | create-user --email newuser_perm_%%start_time%%@matt.socialtext.net --password %%temp_password%% |  |
 
 | st-admin | create-user --email newuser_perm_2_%%start_time%%@matt.socialtext.net --password %%temp_password%% |  |
 | st-admin | add-member --email newuser_perm_2_%%start_time%%@matt.socialtext.net --workspace %%workspace%% |  |
@@ -21,7 +21,7 @@
 | *Comment* | Test Case: Report Permissions - Permissions Exist for devnull1 for growth and usage |  |
 | open_ok | /webplugin/cgi/reports/report.cgi/workspace_growth.html?workspace=%%report_workspace%% |  |
 | text_like | qr/\w\w\w\s*\d\d\d\d\s*\d+\s*\d+\s*\d+\s*\d+\s*\d+/ |  |
-| text_like | qr/Date\s*Unique\s*Members\s*Unique\s*Contributors\s*Pages\s*Page\s*Views\s*Contributions/i |  |
+| text_like | qr/Date Unique Members Unique Contributors Pages Page Views Contributions/i |  |
 | text_like | Workspace Growth - |  |
 | open_ok | /webplugin/cgi/reports/report.cgi/user_workspace_usage/04-28-2008/-3months.json |  |
 | text_like | `qr/\[\"test-data\"\,\"Canonical Test Data Set\"\,\d+,\d+\]/` |  |
@@ -69,14 +69,15 @@
 | text_like | `qr/\,\[\"test-data\"\,\"Canonical Test Data Set\"\,0\,0\]\]/` |  |
 | text_like | `qr/\[\"%%workspace_two%%\"\,\"%%workspace_two%%\"\,0\,0\]/` |  |
 
-| *Comment* | Test Case: Report Permissions Teardown |  |
+| *Comment* | Test Case: Report Permissions Cleanup |  |
 
-| st-admin | remove-member --email newuser_perm_2_%%start_time%%@matt.socialtext.net --workspace %%workspace%% | is no longer a member |
-| st-admin | remove-member --email newuser_perm_2_%%start_time%%@matt.socialtext.net --workspace %%report_workspace%% | is no longer a member |
+| st-admin | remove-member --email newuser_perm_2_%%start_time%%@matt.socialtext.net --workspace %%workspace%% |  |
+| st-admin | remove-member --email newuser_perm_2_%%start_time%%@matt.socialtext.net --workspace %%report_workspace%% |  |
 
-| st-admin | remove-member --email newuser_perm_3_%%start_time%%@matt.socialtext.net --workspace %%workspace%% | is no longer a member |
-| st-admin | remove-member --email newuser_perm_3_%%start_time%%@matt.socialtext.net --workspace %%report_workspace%% | is no longer a member |
+| st-admin | remove-member --email newuser_perm_3_%%start_time%%@matt.socialtext.net --workspace %%workspace%% |  |
+| st-admin | remove-member --email newuser_perm_3_%%start_time%%@matt.socialtext.net --workspace %%report_workspace%% |  |
+| st-admin | remove-member --email newuser_perm_3_%%start_time%%@matt.socialtext.net --workspace %%workspace_two%% |  |
 | st-admin | remove-accounts-admin --email %%email%% | %%username%% no longer has accounts admin access |
-| st-admin | delete-workspace --workspace %%workspace_two%% --no-export | has been deleted |
+| st-admin | delete-workspace --workspace %%workspace_two%% |  |
 
 | *Comment* | Test Case: Report Permissions COMPLETED |  |

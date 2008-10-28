@@ -21,7 +21,7 @@ the original but it is better than failing completely because IE 6 caches Miki p
 | wait_for_element_visible_ok | username | 30000 |
 | wait_for_element_visible_ok | password | 30000 |
 
-Because IE 6 caches the Miki page, if you try to open the homepage again, even though you are logged out
+Because IE 6 caches the Miki page, if you try to open the central page again, even though you are logged out
 you will appear to succeed. The workaround is to open a non-existent page instead
 
 | *Comment* | Test Case: IE Miki Authentication defeat IE 6 caching |  |
@@ -31,7 +31,7 @@ you will appear to succeed. The workaround is to open a non-existent page instea
 | type_ok | password | %%password%% |
 | click_and_wait | //input[@value='Log in'] |  |
 
-| *Comment* | Test Case: IE Miki Authentication now open homepage |  |
+| *Comment* | Test Case: IE Miki Authentication now open central page |  |
 | open_ok | /lite/page/%%miki_space%% |  |
 | text_like | link=Home | Home |
 | text_like | link=Recent Changes | Recent Changes |
@@ -63,7 +63,7 @@ test latest login scheme:
 | text_unlike | //a[contains(@href,'/nlw/submit/logout')] | Log in |
 | click_and_wait | link=Log out |  |
 
-Because IE 6 caches the Miki page, if you try to open the homepage again, even though you are logged out
+Because IE 6 caches the Miki page, if you try to open the central page again, even though you are logged out
 you will appear to succeed. The workaround is to open a non-existent page instead
 
 | *Comment* | Test Case: IE Miki Authentication defeat IE 6 caching auth-to-edit |  |

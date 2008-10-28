@@ -1,9 +1,9 @@
 | *Comment* | Test Case: Create Conversations |
 
-| *Comment* | test-workspace is %%workspace%% |
-| location_like | /%%workspace%%/index.cgi |
-| st-admin | create-user --e conversation@ken.socialtext.net --p 123456 |
-| st-admin | add-member --e conversation@ken.socialtext.net --workspace %%workspace%% |
+| *Comment* | test-workspace is %%workspace%% |  |
+| location_like | /%%workspace%%/index.cgi |  |
+| st-admin | create-user --e conversation@ken.socialtext.net --p 123456 | That's the kind of password an idiot has on his luggage! |
+| st-admin | add-member --e conversation@ken.socialtext.net --workspace %%workspace%% |  |
 
 | open_ok | /%%workspace%%/?action=new_page |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |

@@ -1,115 +1,105 @@
 | *Comment* | START Test Case: Orphans List |  |
 
+ (↑) (↓)
+
  Find or create several pages that have no incoming links. This creates orphan pages. | pages are created
 
-| *Comment* | Test Case: Orphans List. Create an orphan page. |  |
-| setSpeed | 100 |  |
-| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| type_ok | st-newpage-pagename-edit | orphan_page_1_%%start_time%% |
-| type_ok | wikiwyg_wikitext_textarea | orphan_page_1_%%start_time%% |
-| click_and_wait | link=Save |  |
+| st-admin | update-page --email %%email%% --workspace %%workspace%% --page "orphan %%start_time%% 0001" < %%wikitest_client_files%%wikitest.txt | The "orphan %%start_time%% 0001" page has been created. |
+| st-admin | update-page --email %%email%% --workspace %%workspace%% --page "orphan %%start_time%% 0002" < %%wikitest_client_files%%wikitest.txt | The "orphan %%start_time%% 0002" page has been created. |
+| st-admin | update-page --email %%email%% --workspace %%workspace%% --page "orphan %%start_time%% 0003" < %%wikitest_client_files%%wikitest.txt | The "orphan %%start_time%% 0003" page has been created. |
 
-| *Comment* | Test Case: Orphans List. Create another orphan page. |  |
-| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| type_ok | st-newpage-pagename-edit | orphan_page_2_%%start_time%% |
-| type_ok | wikiwyg_wikitext_textarea | orphan_page_2_%%start_time%% |
-| click_and_wait | link=Save |  |
+Create a page by a different user
 
-| *Comment* | Test Case: Orphans List. Create a third orphan page. |  |
-| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| type_ok | st-newpage-pagename-edit | orphan_page_3_%%start_time%% |
-| type_ok | wikiwyg_wikitext_textarea | orphan_page_3_%%start_time%% |
-| click_and_wait | link=Save |  |
+| set | orphan_email | `_orphan.%%start_time%%@ken.socialtext.net` |
+| st-admin | create-user --e %%orphan_email%% --p 123456 |  |
+| st-admin | add-member --w %%workspace%% --e %%orphan_email%% | is now a member |
+| st-admin | update-page --email %%orphan_email%% --workspace %%workspace%% --page "orphan %%start_time%% 0004" < %%wikitest_client_files%%wikitest.txt | The "orphan %%start_time%% 0004" page has been created. |
 
 "What's New -> Orphans List"<http://...> | list of links to orphan pages appears
 
 | *Comment* | Test Case: Orphans List. Orphan page list |  |
-| click_and_wait | link=What's new |  |
-| click_and_wait | link=Orphaned Pages |  |
-| text_like | link=orphan_page_1_%%start_time%% | orphan_page_1_%%start_time%% |
-| text_like | link=orphan_page_2_%%start_time%% | orphan_page_2_%%start_time%% |
-| text_like | link=orphan_page_3_%%start_time%% | orphan_page_3_%%start_time%% |
+| open_ok | /%%workspace%%/index.cgi?action=orphans_list |  |
+| text_like | link=orphan %%start_time%% 0001 | orphan %%start_time%% 0001 |
+| text_like | link=orphan %%start_time%% 0002 | orphan %%start_time%% 0002 |
+| text_like | link=orphan %%start_time%% 0003 | orphan %%start_time%% 0003 |
+| text_like | link=orphan %%start_time%% 0004 | orphan %%start_time%% 0004 |
 
-| *Comment* | Test Case: Orphans List Sorting Title |
+| *Comment* | Test Case: Orphans List Sorting Title asc |  |
 | select_and_wait | sort-picker | label=Title |
-| text_like | st-backlinks-content | qr/orphan_page_1_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_3_%%start_time%%/ |
-| select_and_wait | sort-picker | index=1 |
-| text_like | st-backlinks-content | qr/orphan_page_3_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_1_%%start_time%%/ |
+| text_like | contentContainer | qr/orphan %%start_time%% 0001.+orphan %%start_time%% 0002.+orphan %%start_time%% 0003.+orphan %%start_time%% 0004/ |
+| *Comment* | Test Case: Orphans List Sorting Title desc |  |
+| select_and_wait | sort-picker | label=Title (↓) |
+| text_like | contentContainer | qr/orphan %%start_time%% 0004.+orphan %%start_time%% 0003.+orphan %%start_time%% 0002.+orphan %%start_time%% 0001/ |
 
-| *Comment* | Test Case: Orphans List Sorting Last Edited By |
+| *Comment* | Test Case: Orphans List Sorting Last Edited By asc |  |
 | select_and_wait | sort-picker | label=Last Edited By |
-| select_and_wait | sort-picker | index=2 |
 
-| *Comment* | Test Case: Orphans List Sorting Date |
+| text_like | contentContainer | qr/orphan %%start_time%% 0004.+orphan %%start_time%% 0001.+orphan %%start_time%% 0002.+orphan %%start_time%% 0003/ |
+
+| *Comment* | Test Case: Orphans List Sorting Last Edited By desc |  |
+| select_and_wait | sort-picker | label=Last Edited By (↓) |
+
+| text_like | contentContainer | qr/orphan %%start_time%% 0003.+orphan %%start_time%% 0002.+orphan %%start_time%% 0001.+orphan %%start_time%% 0004/ |
+
+| *Comment* | Test Case: Orphans List Sorting Date desc |  |
 | select_and_wait | sort-picker | label=Date |
-| text_like | st-backlinks-content | qr/orphan_page_3_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_1_%%start_time%%/ |
-| select_and_wait | sort-picker | index=3 |
-| text_like | st-backlinks-content | qr/orphan_page_1_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_3_%%start_time%%/ |
+| text_like | contentContainer | qr/orphan %%start_time%% 0004.+orphan %%start_time%% 0003.+orphan %%start_time%% 0002.+orphan %%start_time%% 0001/ |
+| select_and_wait | sort-picker | label=Date (↑) |
+| text_like | contentContainer | qr/orphan %%start_time%% 0001.+orphan %%start_time%% 0002.+orphan %%start_time%% 0003.+orphan %%start_time%% 0004/ |
 
-| *Comment* | Test Case: Orphans List Sorting Revisions |
+| *Comment* | Test Case: Orphans List Sorting Revisions. Create rev 2 for page 0002 |  |
+| st-admin | update-page --email %%orphan_email%% --workspace %%workspace%% --page "orphan %%start_time%% 0002" < %%wikitest_client_files%%wikitest.txt | The "orphan %%start_time%% 0002" page has been updated. |
+
+| *Comment* | Test Case: Orphans List Sorting reload the Orphans List to see new revisions |  |
+| open_ok | /%%workspace%%/index.cgi?action=orphans_list |  |
+
+| *Comment* | Test Case: Orphans List Sorting revisions desc |  |
 | select_and_wait | sort-picker | label=Revisions |
-| text_like | st-backlinks-content | qr/orphan_page_1_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_3_%%start_time%%/ |
-| select_and_wait | sort-picker | index=4 |
-| text_like | st-backlinks-content | qr/orphan_page_1_%%start_time%%.+orphan_page_2_%%start_time%%.+orphan_page_3_%%start_time%%/ |
+| text_like | contentContainer | qr/orphan %%start_time%% 0002.+orphan %%start_time%% 0001.+orphan %%start_time%% 0003.+orphan %%start_time%% 0004/ |
+| *Comment* | Test Case: Orphans List Sorting revisions asc |  |
+| select_and_wait | sort-picker | label=Revisions (↑) |
+| text_like | contentContainer | qr/orphan %%start_time%% 0001.+orphan %%start_time%% 0003.+orphan %%start_time%% 0004.+orphan %%start_time%% 0002/ |
 
  click on several links | correct page appear
 
 | *Comment* | Test Case: Orphans List. Orphan page links work |  |
-| click_and_wait | link=orphan_page_1_%%start_time%% |  |
-| text_like | st-page-titletext | orphan_page_1_%%start_time%% |
-| click_and_wait | link=What's new |  |
-| click_and_wait | link=Orphaned Pages |  |
-| click_and_wait | link=orphan_page_2_%%start_time%% |  |
-| text_like | st-page-content | orphan_page_2_%%start_time%% |
+| click_and_wait | link=orphan %%start_time%% 0001 |  |
+| text_like | st-page-titletext | orphan %%start_time%% 0001 |
+| open_ok | /%%workspace%%/index.cgi?action=orphans_list |  |
+| click_and_wait | link=orphan %%start_time%% 0002 |  |
+| text_like | st-page-titletext | orphan %%start_time%% 0002 |
 
  observe Incoming Links in sidepanel | there are no Incoming Links for any orphan page
 
 | *Comment* | Test Case: Orphans List. Orphan page has no incoming links |  |
-| text_like | //p | There are no pages that link to this page yet |
-| open | /%%workspace%%/index.cgi?orphan_page_1_%%start_time%% |  |
-| text_like | //p | There are no pages that link to this page yet |
+| text_like | contentRight | qr/There are no pages that link to this page yet/i |
+| open | /%%workspace%%/?orphan %%start_time%% 0001 |  |
+| text_like | contentRight | qr/There are no pages that link to this page yet/i |
 
 edit a page to include a link to an orphan page | link appears in page
 
 | *Comment* | Test Case: Orphans List. Create a link to the second orphan page |  |
-| open_ok | /%%workspace%%/index.cgi?orphan_page_1_%%start_time%% |  |
-| click_ok | link=Edit |  |
-| wait_for_text_present_ok | Editing: | 30000 |
-| click_ok | link=Advanced |  |
-| type_ok | wikiwyg_wikitext_textarea | [orphan_page_2_%%start_time%%]. |
-| click_and_wait | link=Save |  |
-
- "What's New -> Orphaned Pages"<http://.../> | linked page no longer in orphans list
+| click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | `[orphan %%start_time%% 0002]` |
+| click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: Orphans List. second page should no longer be orphan |  |
-| click_and_wait | link=What's new |  |
-| click_and_wait | link=Orphaned Pages |  |
-| text_unlike | st-backlinks-content | orphan_page_2_%%start_time%% |
-| text_like | st-backlinks-content | orphan_page_1_%%start_time%% |
+| open_ok | /%%workspace%%/index.cgi?action=orphans_list |  |
+| text_unlike | contentContainer | orphan %%start_time%% 0002 |
+| text_like | contentContainer | orphan %%start_time%% 0001 |
+
+| *Comment* | Test Case: Orphans list. delete page |  |
+| st-admin | purge-page --w %%workspace%% --p orphan_%%start_time%%_0003 | was purged |
+| open_ok | /%%workspace%%/index.cgi?action=orphans_list |  |
+| text_unlike | contentContainer | orphan %%start_time%% 0003 |
+| text_like | contentContainer | orphan %%start_time%% 0001 |
 
 | *Comment* | Test Case: Orphans List. Tearing down orphans list data |  |
-
-| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
-| text_like | Changes in Last |  |
-| clickAndWait | link=orphan_page_1_%%start_time%% |  |
-| clickAndWait | link=Delete Page |  |
-| confirmation_like | Are you sure you want to delete this page? |  |
-
-| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
-| text_like | Changes in Last |  |
-| clickAndWait | link=orphan_page_2_%%start_time%% |  |
-| clickAndWait | link=Delete Page |  |
-| confirmation_like | Are you sure you want to delete this page? |  |
-
-| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
-| text_like | Changes in Last |  |
-| clickAndWait | link=orphan_page_3_%%start_time%% |  |
-| clickAndWait | link=Delete Page |  |
-| confirmation_like | Are you sure you want to delete this page? |  |
+| st-admin | purge-page --w %%workspace%% --p orphan_%%start_time%%_0001 | was purged |
+| st-admin | purge-page --w %%workspace%% --p orphan_%%start_time%%_0002 | was purged |
+| st-admin | purge-page --w %%workspace%% --p orphan_%%start_time%%_0004 | was purged |
 
 | *Comment* | Test Case Orphans List COMPLETED |  |

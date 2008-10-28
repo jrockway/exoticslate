@@ -2,6 +2,7 @@ These testcases work for a Default user but not for an LDAP user, but it is poss
 Carefully set up the environment so the tests will run.
 
 | *Comment* | Set up required Default user values to override possibly being logged in as an LDAP user |  |
+| *Comment* | This test explicitly uses wikitester@ken.socialtext.net as the Default user |  |
 
 | set | username | wikitester@ken.socialtext.net |
 | set | password | d3vnu11l |
@@ -21,7 +22,8 @@ Carefully set up the environment so the tests will run.
 | include | [Test case: User Resets Password] |  |
 | include | [Test case: Admin Resets Password] |  |
 | include | [Test Case: Set User Names] |  |
+| include | [Test Case: Verify Comment] |  |
 | include | [Test Case: Hidden Email Address for Public Wiki] |  |
 
 | *Comment* | Re-enable LDAP. Bring the LDAP user back to life |  |
-| include | [Test Case: Z Enable LDAP] |  |
+| include | [Enable LDAP] |  |

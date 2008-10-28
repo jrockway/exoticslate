@@ -2,101 +2,151 @@ TODO: Figure out a way to test the other config functions
 
 | *Comment* | Test Case: Workspace Configuration |
 
+TODO: restore this test when comment form notes is reimplemented
+
 | *Comment* | Test Case: Workspace Configuration Comment Form Notes |  |
 | st-admin | set_workspace_config --workspace %%workspace%% comment_form_note_bottom "bottoms up" |  |
 | st-admin | set_workspace_config --workspace %%workspace%% comment_form_note_top "All Hands Topside" |  |
-| click_and_wait | link=Announcements and Links |  |
-| click_ok | st-comment-button-link |  |
-| open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=announcements_and_links;caller_action=display |  |
-| text_like | st-commentui-notebottom | bottoms up |
-| text_like | st-commentui-notetop | All Hands Topside |
-| open_ok | /%%workspace%%/index.cgi |  |
+| open_ok | /%%workspace%%/?Announcements and Links |  |
+
+ click_ok | link=Comment | |
+ text_like | st-commentui-notebottom | bottoms up |
+ text_like | st-commentui-notetop | All Hands Topside |
+
+| st-admin | set_workspace_config --workspace %%workspace%% comment_form_note_bottom "" |  |
+| st-admin | set_workspace_config --workspace %%workspace%% comment_form_note_top "" |  |
+
+| open_ok | /%%workspace%%/ |  |
 
 | *Comment* | Test Case: Workspace Configuration Email Notification |  |
 | st-admin | set_workspace_config --workspace %%workspace%% email_notify_is_enabled 0 |  |
 | click_and_wait | link=Settings |  |
-| text_unlike | st-settings-select | Email Notification |
+| text_unlike | contentLeft | Email Notification |
+| st-admin | set_workspace_config --workspace %%workspace%% email_notify_is_enabled 1 |  |
+| click_and_wait | link=Settings |  |
+| text_like | contentLeft | Email Notification |
 
 | *Comment* | Test Case: Workspace Configuration Weblog Email Format |  |
 | st-admin | set_workspace_config --workspace %%workspace%% email_weblog_dot_address 1 |  |
 | click_and_wait | link=Create New Weblog |  |
-| type_ok | weblog_title | %%start_time%% |
-| click_and_wait | Button |  |
-| text_like | st-weblog-postbyemail-link | %%workspace%%.%%start_time%% |
+| type_ok | weblog_title | Dot Address %%start_time%% |
+| click_and_wait | link=Save |  |
+
+| *Comment* | Check the weblog link for a dot. Don't worry about the destination host |  |
+| text_like | //a[contains(@href,'mailto:%%workspace%%.Dot_Address_%%start_time%%_Weblog')] | or post by email |
+
+| *Comment* | Check the weblog link for a plus. Don't worry about the destination host |  |
+| st-admin | set_workspace_config --workspace %%workspace%% email_weblog_dot_address 0 |  |
+| open_ok | /%%workspace%%/?action=users_settings |  |
+| click_and_wait | link=Create New Weblog |  |
+| type_ok | weblog_title | Plus Address %%start_time%% |
+| click_and_wait | link=Save |  |
+| text_like | //a[contains(@href,'mailto:%%workspace%%+Plus_Address_%%start_time%%_Weblog')] | or post by email |
 
 TODO: change to new central page scheme
 
  *Comment* | Test Case: Workspace Configuration Central Page Setting | |
+
  st-admin | set_workspace_config --workspace %%workspace%% homepage_is_dashboard 0 | |
  open_ok | /%%workspace%%/ | |
- text_like | st-page-maincontent | Welcome to your Socialtext |
+ text_like | contentContainer | This is the home page for |
  st-admin | set_workspace_config --workspace %%workspace%% homepage_is_dashboard 1 | |
-
-| *Comment* | Test Case: Workspace Configuration Invitation Settings |  |
-| st-admin | set_workspace_config --workspace %%workspace%% invitation_filter %%username%% |  |
-| st-admin | set_workspace_config --workspace %%workspace%% restrict_invitation_to_search 1 |  |
-| click_and_wait | link=Settings |  |
-| click_and_wait | link=Invite New Users |  |
-| text_like | st-settings-section | match this pattern: %%username%% |
-| text_like | st-settings-section | Search for Users |
-
-| *Comment* | Test Case: Workspace Configuration Invitation search and invite user {bz: 547} |  |
-| type_ok | user_search | %%username%% |
-| click_and_wait | Button |  |
-| text_like | Select/Deselect All |  |
-| text_like | st-settings-pane | %%username%% |
-| check_ok | all |  |
-| click_and_wait | //input[@value='Invite'] |  |
-| text_like | st-settings-section | %%username%% |
 
 | *Comment* | Test Case: Workspace Configuration Weblog Sort Order |  |
 | st-admin | set_workspace_config --workspace %%workspace%% sort_weblogs_by_create 1 |  |
-| click_and_wait | link=Weblogs |  |
+| open_ok | /%%workspace%%/?action=users_settings |  |
+| click_and_wait | link=Create New Weblog |  |
+| type_ok | weblog_title | Order %%start_time%% |
+| click_and_wait | link=Save |  |
+| wait_for_element_visible_ok | st-weblog-newpost-button | 30000 |
 | click_and_wait | st-weblog-newpost-button |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | st-newpage-pagename-edit | 10000 |
-| type_ok | st-newpage-pagename-edit | post2 %%start_time%% |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | wikiwyg_wikitext_textarea | post2content %%start_time%% |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| type_ok | st-newpage-pagename-edit | Order post 1 %%start_time%% |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | Order post 1 content %%start_time%% |
 | click_and_wait | st-save-button-link |  |
-| open_ok | /%%workspace%%/index.cgi?action=display;page_name=first_post_in_%%start_time%%_weblog;caller_action=weblog_display;category=%%start_time%%_weblog;js=show_edit_div#edit |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | wikiwyg_wikitext_textarea | revision1 |
+| open_ok | /%%workspace%%/index.cgi?action=display;page_name=first_post_in_order_%%start_time%%_weblog;caller_action=weblog_display;category=order_%%start_time%%_weblog;js=show_edit_div#edit |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | Order post 1 revision |
 | click_and_wait | st-save-button-link |  |
-| text_like | st-weblog-content | qr/post2.+revision1/ |
+| text_like | contentContainer | qr/Order post 1 content %%start_time%%.+Order post 1 revision/ |
+| st-admin | set_workspace_config --workspace %%workspace%% sort_weblogs_by_create 0 |  |
 
 | *Comment* | Test Case: Workspace Configuration Selective Email Unmasking |  |
 | st-admin | set_workspace_config --workspace %%workspace%% unmasked_email_domain gmail.com |  |
 | st-admin | create-user --email %%start_time%%@gmail.com --password 123456 |  |
 | st-admin | add-member --email %%start_time%%@gmail.com --workspace %%workspace%% |  |
 | st-logoutin | %%start_time%%@gmail.com | 123456 |
-| click_and_wait | st-newpage-link |  |
-| wait_for_element_visible_ok | link=Advanced | 10000 |
-| click_ok | link=Advanced |  |
+| open_ok | /%%workspace%%/?action=new_page |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | type_ok | st-newpage-pagename-edit | email %%start_time%% |
 | click_and_wait | st-save-button-link |  |
-| *Comment* | Test Case: Workspace Configuration with PD installed, email addresses are not shown. Anticipate changing this test when an st-admin command to turn PD on/off exists |  |
-| text_like | st-created | %%start_time%% |
+
+TODO: we no longer display email addresses unless Profiles are disabled
+
+ text_like | pageAttribution | gmail.com |
+
+| st-admin | set_workspace_config --workspace %%workspace%% unmasked_email_domain "" |  |
+| open_ok | /%%workspace%%/?email %%start_time%% |  |
+
+ text_unlike | pageAttribution | gmail.com |
 
 TODO: restore this test when comment form fields is reimplemented
 
 | *Comment* | Test Case: Workspace Configuration Comment Custom Fields |  |
 | st-admin | set-comment-form-custom-fields --workspace %%workspace%% "Field A" "Bee Field" "Red Field" |  |
 
- open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=announcements_and_links;caller_action=display | |
- click_ok | st-comment-button-link | |
+ open_ok | /%%workspace%%/?Announcements and Links | |
+ click_ok | link=Comment | |
  text_like | comment_form | Field A |
  text_like | comment_form | Bee Field |
  text_like | comment_form | Red Field |
 
-| st-admin | set-comment-form-custom-fields --workspace %%workspace%% |
-|  | *Comment* | Test Case: Workspace Configuration Teardown |  |
-| st-admin | purge-page --w %%workspace%% --page first_post_in_%%start_time%%_weblog | The First Post in %%start_time%% Weblog page was purged from the %%workspace%% workspace. |
-| st-admin | purge-page --w %%workspace%% --page post2_%%start_time%% | The post2 %%start_time%% page was purged from the %%workspace%% workspace. |
-| st-admin | purge-page --w %%workspace%% --page email_%%start_time%% | The email %%start_time%% page was purged from the %%workspace%% workspace. |
+| st-admin | set-comment-form-custom-fields --workspace %%workspace%% |  |
+
+| *Comment* | Test Case: Workspace Configuration Workspace Skin |  |
+| st-logoutin |  |  |
+| st-admin | set_workspace_config --workspace %%workspace%% allows_skin_upload 1 |  |
+| open_ok | /%%workspace%%/?action=users_settings |  |
+| wait_for_element_visible_ok | link=Workspace Skin | 30000 |
+| text_like | contentLeft | Workspace Skin |
+| st-admin | set_workspace_config --workspace %%workspace%% allows_skin_upload 0 |  |
+| open_ok | /%%workspace%%/?action=users_settings |  |
+| text_like | contentLeft | Workspace Appearance |
+| text_unlike | contentLeft | Workspace Skin |
+
+| *Comment* | Test Case: Workspace Configuration Invitation Settings |  |
+| st-admin | set_workspace_config --workspace %%workspace%% invitation_filter %%username%% |  |
+| st-admin | set_workspace_config --workspace %%workspace%% restrict_invitation_to_search 1 |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Invite New Users |  |
+| text_like | contentRight | match this pattern: %%username%% |
+| text_like | contentRight | Search for Users |
+
+| *Comment* | Test Case: Workspace Configuration Invitation search and invite user {bz: 547} |  |
+| type_ok | user_search | %%username%% |
+| click_and_wait | link=Search |  |
+| text_like | Select/Deselect All |  |
+| text_like | contentRight | %%username%% |
+| check_ok | all |  |
+| click_and_wait | //input[@value='Invite'] |  |
+| text_like | contentRight | %%username%% |
+| st-admin | set_workspace_config --workspace %%workspace%% restrict_invitation_to_search 0 |  |
+| st-admin | set_workspace_config --workspace %%workspace%% invitation_filter "" |  |
+
+| *Comment* | Test Case: Workspace Configuration Teardown |  |
+| st-admin | purge-page --w %%workspace%% --page first_post_in_dot_address_%%start_time%%_weblog | was purged |
+| st-admin | purge-page --w %%workspace%% --page first_post_in_plus_address_%%start_time%%_weblog | was purged |
+| st-admin | purge-page --w %%workspace%% --page first_post_in_order_%%start_time%%_weblog | was purged |
+| st-admin | purge-page --w %%workspace%% --page order_post_1_%%start_time%% | was purged |
+| st-admin | purge-page --w %%workspace%% --page email_%%start_time%% | was purged |
+
 | st-admin | remove-member --email %%start_time%%@gmail.com --workspace %%workspace%% |  |
 
 | st-admin | set_workspace_config --workspace %%workspace%% comment_form_note_bottom "" |  |
@@ -109,5 +159,8 @@ TODO: restore this test when comment form fields is reimplemented
 | st-admin | set_workspace_config --workspace %%workspace%% sort_weblogs_by_create 0 |  |
 | st-admin | set_workspace_config --workspace %%workspace%% unmasked_email_domain "" |  |
 | st-admin | set-comment-form-custom-fields --workspace %%workspace%% |  |
+| st-admin | set_workspace_config --workspace %%workspace%% allows_skin_upload 0 |
+
+ st-admin | set_workspace_config --workspace %%workspace%% homepage_is_dashboard 1 | |
 
 | *Comment* | Test Case: Workspace Configuration COMPLETED |

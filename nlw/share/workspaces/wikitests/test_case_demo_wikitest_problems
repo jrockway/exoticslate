@@ -1,0 +1,35 @@
+| *comment* | Test Case: Demo Wikitest problems |
+| *comment* | When you click update or save on profile, Selenium's in-browser driver frame disappears, and then nothing happens. This is the minimal reproduction case. |
+
+* Fixture: SocialWidgets
+
+| open_ok | / |  |
+| wait_for_element_present_ok | //a[contains(@title,'Add Content')] | 30000 |
+| click_ok | link=People |  |
+| wait_for_element_present_ok | //a[contains(@title,'Last Page')] | 30000 |
+| click_ok | //a[contains(@title,'Last Page')] |  |
+| wait_for_element_present_ok | link=%%short_username%% | 60000 |
+| wait_for_element_present_ok | link=%%new_email_find_me%% |  |
+| click_and_wait | link=%%short_username%% |  |
+| *comment* | Test Case: People Dashboard Navigation - Click on Profile |  |
+| st-name-widget | 1 | profile |
+| st-select-widget-frame | profile |  |
+| text_like | //body | %%short_username%% |
+| text_like | //body | %%username%% |
+| wait_for_element_present_ok | link=(Edit) |  |
+| click_and_wait | link=(Edit) |  |
+
+| wait_for_element_present_ok | photo-upload-button | 30000 |
+| st-name-widget | 1 | profile_details |
+| st-select-widget-frame | profile_details |  |
+| type_ok | first_name | Devicus |
+| type_ok | last_name | Nullicus |
+
+| *comment* | Test Case: People Dashboard Navigation - update loses context |  |
+| click_ok | update_profile |  |
+
+| *comment* | Also, unable to get name the widgets on the profile page or click tags |  |
+| wait_for_element_present_ok | link=Log out |
+| click_and_wait | link=Log out |
+
+| *comment* | Test Case: Demo Wikitest problems COMPLETED |

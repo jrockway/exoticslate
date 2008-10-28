@@ -2,23 +2,25 @@
 
 | *Comment* | Test Case: Link Interface create page to be linked to |  |
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | Link Interface LinkMe %%start_time%% |
-| type_ok | wikiwyg_wikitext_textarea |  |
+| type_ok | wikiwyg_wikitext_textarea | Link Interface LinkMe %%start_time%% content |
 | click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: Link Interface create page with the link |  |
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | link=Advanced | 30000 |
-| click_ok | link=Advanced |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | Link Interface %%start_time%% |
 | type_ok | wikiwyg_wikitext_textarea | Link Interface Content %%start_time%% |
 
 | *Comment* | Test Case: Link Interface. switch to Simple, use Link dialog to make a wiki link |  |
-| click_ok | link=Simple |  |
+| click_ok | link=Rich Text |  |
 | pause | 10000 | for Simple editor to appear, dammit. Nothing to wait_for |
 | click_ok | wikiwyg_button_link |  |
 | wait_for_element_visible_ok | add-wiki-link | 30000 |
@@ -31,12 +33,13 @@
 
 | *Comment* | Test Case: Link Interface. There is no choice but to pause until the link widget image is calculated and put in the page |  |
 | pause | 10000 |  |
-| click_ok | link=Advanced |  |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 
 | *Comment* | Test Case: Link Interface NOTE: this action MUST be verifyValue. Neither text_like nor verify_value_ok work correctly here |  |
@@ -44,21 +47,21 @@
 
 | *Comment* | Test Case: Link Interface Bogus Input |  |
 | *Comment* | Test Case: Link Interface moved this here so if the cancel fails, the test will fail |  |
-| click_ok | link=Simple |  |
+| click_ok | link=Rich Text |  |
 | pause | 10000 |  |
 | click_ok | wikiwyg_button_link |  |
 | wait_for_element_visible_ok | add-wiki-link | 30000 |
 | click_ok | add-wiki-link |  |
 | type_ok | wiki-link-text | TC: Link Interface |
 | type_ok | st-widget-workspace_id | DoesNotExist |
-| click_ok | st-widget-page_title |  |
-
-| *Comment* | Test Case: Link Interface pause is necessary for the little blue dropdown to appear |  |
 | click_ok | st-widget-link-savebutton |  |
-| wait_for_element_visible_ok | add-a-link-error |  |
-| text_like | add-a-link-error | That workspace does not exist. |
+
+| *Comment* | Test Case: Link Interface pause is necessary for the error to appear |  |
+| pause | 10000 |  |
+| text_like | That workspace does not exist |  |
 | wait_for_element_visible_ok | st-widget-link-cancelbutton | 30000 |
 | click_ok | st-widget-link-cancelbutton |  |
+| wait_for_element_not_visible_ok | add-wiki-link | 30000 |
 
 | *Comment* | Test Case: Link Interface make a Web link |  |
 | wait_for_element_visible_ok | wikiwyg_button_link | 30000 |
@@ -69,20 +72,22 @@
 | type_ok | web-link-destination | `http://www.socialtext.com` |
 | click_ok | st-widget-link-savebutton |  |
 | pause | 10000 | pause for rendering |
-| click_ok | link=Advanced |  |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
+
 | wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | wait_for_text_present_ok | Editing: | 10000 |
-| verifyValue | wikiwyg_wikitext_textarea | `"Socialtext"<http://www.socialtext.com/>` |
+| verifyValue | wikiwyg_wikitext_textarea | `qr/"Socialtext"<http\:\/\/www\.socialtext\.com\/?>/` |
 
 | *Comment* | Test Case: Link Interface make a section link |  |
 | *Comment* | Insert some required whitespace for the section link |  |
 | type_ok | wikiwyg_wikitext_textarea | ` link goes here ` |
-| click_ok | link=Simple |  |
+| click_ok | link=Rich Text |  |
 | pause | 10000 |  |
 | click_ok | wikiwyg_button_link |  |
 | wait_for_element_visible_ok | add-section-link | 30000 |
@@ -90,12 +95,13 @@
 | type_ok | section-link-text | a section link |
 | click_ok | st-widget-link-savebutton |  |
 | pause | 10000 | pause for rendering |
-| click_ok | link=Advanced |  |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | wait_for_text_present_ok | Editing: | 10000 |
 | verifyValue | wikiwyg_wikitext_textarea | `{link: a section link}` |

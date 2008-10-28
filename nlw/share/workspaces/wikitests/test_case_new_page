@@ -1,64 +1,41 @@
 | *Comment* | Test Case: New Page |  |
 | st-admin | update-page --email %%email%% --workspace %%workspace%% --page "np %%start_time%%" < %%wikitest_client_files%%wikitest.txt | The "np %%start_time%%" page has been created. |
 
-| setSpeed | 100 |  |
 | *Comment* | Test Case: New Page. Page Already Exists |  |
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | st-newpage-pagename-edit | 10000 |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | type_ok | st-newpage-pagename-edit | np %%start_time%% |
 | click_ok | st-save-button-link |  |
-| wait_for_element_visible_ok | st-newpage-duplicate-pagename | 5000 |
+| wait_for_element_visible_ok | st-newpage-duplicate-pagename | 30000 |
 | type_ok | st-newpage-duplicate-pagename | np %%start_time%% 2 |
 
 | *Comment* | Test Case: New Page. About to check duplicate option different |  |
-| wait_for_element_visible_ok | st-newpage-duplicate-option-different | 5000 |
+| wait_for_element_visible_ok | st-newpage-duplicate-option-different | 30000 |
 | check_ok | st-newpage-duplicate-option-different |  |
-| wait_for_element_visible_ok | st-newpage-duplicate-okbutton | 5000 |
+| wait_for_element_visible_ok | st-newpage-duplicate-okbutton | 30000 |
 | click_and_wait | st-newpage-duplicate-okbutton |  |
-| wait_for_text_present_ok | Incoming Links | 30000 |
-
-| *Comment* | Test Case: New Page. What's New on dashboard |  |
-| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
-| click_and_wait | link=np %%start_time%% |  |
-| open_ok | /%%workspace%%/index.cgi?action=recent_changes |  |
-| click_and_wait | link=np %%start_time%% 2 |  |
+| location_like | /%%workspace%%/index.cgi?np_%%start_time%%_2 |  |
 
 | *Comment* | Test Case: New Page. Click on Save options, then cancel |  |
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | st-newpage-pagename-edit | 10000 |
+| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | type_ok | st-newpage-pagename-edit | np %%start_time%% |
 | click_ok | st-save-button-link |  |
-| wait_for_element_visible_ok | st-newpage-duplicate-title | 10000 |
 | text_like | st-newpage-duplicate-title | Page Already Exists |
 | click_ok | st-newpage-duplicate-option-suggest |  |
 | click_ok | st-newpage-duplicate-option-different |  |
 | click_ok | st-newpage-duplicate-option-append |  |
 | click_ok | st-newpage-duplicate-option-different |  |
 | click_ok | st-newpage-duplicate-cancelbutton |  |
-| click_ok | st-cancel-button-link |  |
+| click_and_wait | st-cancel-button-link |  |
 
- verifyConfirmation | Are you sure you want to Cancel?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay in the editor. | |
-
-| wait_for_text_present_ok | Dashboard: | 30000 |
-
-| *Comment* | Test Case: New Page from Page View |  |
-| click_and_wait | link=np %%start_time%% 2 |  |
-| wait_for_element_visible_ok | st-pagetools-newpage | 20000 |
-
- click_ok | st-pagetools-newpage | |
-
-| click_ok | link=Create New Wiki Page |  |
-| wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
-| type_ok | st-newpage-pagename-edit | np %%start_time%% 3 |
-| click_and_wait | st-save-button-link |  |
-| wait_for_text_present_ok | Incoming Links | 30000 |
-| wait_for_element_visible_ok | st-page-title | 20000 |
-| text_like | st-page-title | np %%start_time%% 3 |
+| *Comment* | Test Case: New Page. cancel ends up at home eventually |  |
+| pause | 8000 |  |
+| text_like | This is the home page for %%title%% |  |
 
 | *Comment* | Test Case: New Page. Teardown |  |
 
 | st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%%_2 | page was purged |
 | st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%% | page was purged |
-| st-admin | purge-page --workspace %%workspace%% --page np_%%start_time%%_3 | page was purged |
 
 | *Comment* | Test Case: New Page COMPLETED |  |

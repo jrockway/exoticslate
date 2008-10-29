@@ -12,7 +12,8 @@
 | st-admin | set-workspace-config --workspace test-data3 title test-data3 | The workspace config for test-data3 has been updated. |
 
 | *Comment* | Test Case: Inter Workspace Search Search all the workspaces where %%username%% is a member |  |
-| st-search | jabber workspaces:* | 3 total |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' |
+| st-result | 3 total |  |
 | select_and_wait | sort-picker | label=Workspace |
 | wait_for_element_visible_ok | contentContainer | 20000 |
 | *Comment* | Test Case: Inter Workspace Search unsorted results can appear in any order, so don't check order |  |
@@ -24,7 +25,8 @@
 
 | *Comment* | Test Case: Inter Workspace Search Remove %%username%% from test-data2 and search again |  |
 | st-admin | remove-member --workspace test-data2 --email %%email%% |  |
-| st-search | jabber workspaces:* | 2 total |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' |
+| st-result | 2 total |  |
 | select_and_wait | sort-picker | label=Workspace |
 | *Comment* | Test Case: Inter Workspace Search unsorted results can appear in any order, so don't check order |  |
 | st-result | qr/jabber.+test-data3/ |  |
@@ -34,21 +36,25 @@
 | st-admin | set-permissions --w test-data2 --p public | have been changed to public |
 | st-logout |  |  |
 | open_ok | /test-data2 |  |
-| st-search | jabber workspaces:* | 1 total |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' |
+| st-result | 1 total |  |
 
 | *Comment* | Test Case: Inter Workspace Search PRIVATE TO PUBLIC CONVERSION |  |
 | *Comment* | Test Case: Inter Workspace Search Test user is still in Help but searching test-data3 ws |  |
 
-| st-search | jabber workspaces:test-data3 | 0 total |
+| st-search | jabber workspaces:test-data3 | Pages containing 'jabber workspaces:test-data3' |
+| st-result | 0 total |  |
 
 | st-admin | set-permissions --workspace test-data3 --permissions public-authenticate-to-edit | The permissions for the test-data3 workspace have been changed to public-authenticate-to-edit. |
-| st-search | jabber workspaces:test-data3 | 1 total |
+| st-search | jabber workspaces:test-data3 | Pages containing 'jabber workspaces:test-data3' |
+| st-result | 1 total |  |
 | select_and_wait | sort-picker | label=Workspace |
 | st-result | qr/jabber.+test-data3/ |  |
 
 | *Comment* | Test Case: Inter Workspace Search Login to test-data ws and search again |  |
 | st-login |  |  |
-| st-search | jabber workspaces:* | 2 total |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' |
+| st-result | 2 total |  |
 | select_and_wait | sort-picker | label=Workspace |
 
  st-result | qr/jabber.+test-data3.+jabber.+%%title%%/ | |
@@ -60,7 +66,8 @@
 | *Comment* | add user back to test-data2, delete test-data2 |  |
 
 | st-admin | add-member --workspace test-data2 --email %%email%% | qr/%%username%% .+ a member of the test-data2 workspace\./ |
-| st-search | jabber workspaces:* | 3 total |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' |
+| st-result | 3 total |  |
 | select_and_wait | sort-picker | label=Workspace |
 
  st-result | qr/jabber.+test-data3.+jabber.+test-data2.+jabber.+%%title%%/ | |
@@ -71,7 +78,8 @@
 
 | st-admin | delete-workspace --workspace test-data2 --no-export | The test-data2 workspace has been deleted. |
 
-| st-search | jabber workspaces:* | 2 total |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' |
+| st-result | 2 total |  |
 | select_and_wait | sort-picker | label=Workspace |
 
 st-result | qr/jabber.+test-data3.+jabber.+%%title%% | |
@@ -84,13 +92,15 @@ st-result | qr/jabber.+test-data3.+jabber.+%%title%% | |
 
 | st-logout |  |  |
 | open_ok | /help-en |  |
-| st-search | jabber workspaces:test-data3 | 1 total |
+| st-search | jabber workspaces:test-data3 | Pages containing 'jabber workspaces:test-data3' |
+| st-result | 1 total |  |
 | select_and_wait | sort-picker | label=Workspace |
 | st-result | qr/jabber.+test-data3/ |  |
 
 | st-admin | set-permissions --workspace test-data3 --permissions authenticated-user-only | The permissions for the test-data3 workspace have been changed to authenticated-user-only. |
 
-| st-search | jabber workspaces:test-data3 | 0 total |
+| st-search | jabber workspaces:test-data3 | Pages containing 'jabber workspaces:test-data3' |
+| st-result | 0 total |  |
 
 | *Comment* | Test Case: Inter Workspace Search UNSUBSCRIBE |  |
 | *Comment* | Add back test-data2, unsub from test-data3 via UI |  |
@@ -105,7 +115,8 @@ st-result | qr/jabber.+test-data3.+jabber.+%%title%% | |
 | click_and_wait | Button |  |
 
 | open_ok | /test-data |  |
-| st-search | jabber workspaces:* | 2 total |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' |
+| st-result | 2 total |  |
 | select_and_wait | sort-picker | label=Workspace |
 
  st-result | qr/jabber.+test-data2.+jabber.+%%title%%/ | |
@@ -133,7 +144,8 @@ st-result | qr/jabber.+test-data3.+jabber.+%%title%% | |
 | *Comment* | Test Case: Inter Workspace Search index new page explicitly just in case ceq is tetchy |  |
 | st-admin | index-page -workspace from-scratch --page jabber | The jabber page in the from-scratch workspace has been indexed. |
 
-| st-search | jabber workspaces:* | 3 total |
+| st-search | jabber workspaces:* | Pages containing 'jabber workspaces:*' |
+| st-result | 3 total |  |
 | select_and_wait | sort-picker | label=Workspace |
 
  st-result | qr/jabber.+test-data2.+jabber.+%%title%%.+jabber.+From-Scratch/ | |

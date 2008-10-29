@@ -5,65 +5,86 @@ Note: ticket inspiring this series of tests (amongst others:) {rt: 26849}
 
 | *Comment* | Test Case: Calc Phrase Search: easy searches |  |
 | *Comment* | important to include a few quoted phrase searches with colons |  |
-| st-search | "offered through the biggie" | 1 total |
+| st-search | "offered through the biggie" | Pages containing '"offered through the biggie"' |
+| st-result | 1 total |  |
 | st-result | Car Loan |  |
-| st-search | "% Salary Invested" | 2 total |
+| st-search | "% Salary Invested" | Pages containing '"% Salary Invested"' |
+| st-result | 2 total |  |
 | st-result | Another Salary |  |
 | st-result | Salary |  |
 
 | *Comment* | Test Case: Calc Phrase Search: titles |  |
 | *Comment* | exercise both 'title:foo' and '=foo' |  |
-| st-search | title:"Another Salary" | 1 total |
+| st-search | title:"Another Salary" | Pages containing 'title:"Another Salary"' |
+| st-result | 1 total |  |
 | st-result | Another Salary |  |
 
-| st-search | ="Another Salary" | 1 total |
+| st-search | ="Another Salary" | Titles containing '"Another Salary"' |
+| st-result | 1 total |  |
 | st-result | Another Salary |  |
 
 | *Comment* | Test Case: Calc Phrase Search: tags |  |
 | *Comment* | exercise both 'tag:foo' and 'category:foo' |  |
-| st-search | tag:"Bob the Bellhop" | 1 total |
+| st-search | tag:"Bob the Bellhop" | Pages containing 'tag:"Bob the Bellhop"' |
+| st-result | 1 total |  |
 | st-result | Another Salary |  |
-| st-search | category:"Bob the Bellhop" | 1 total |
+| st-search | category:"Bob the Bellhop" | Pages containing 'category:"Bob the Bellhop"' |
+| st-result | 1 total |  |
 | st-result | Another Salary |  |
 
 | *Comment* | Test Case: Calc Phrase Search: new tag syntax |  |
 | *Comment* | 'tag:(foo bar)' should be equivalent to 'tag:foo tag:bar' |  |
 | *Comment* | exercise both 'tag:(foo bar)' and 'category:(foo bar)' |  |
-| st-search | tag:calculator tag:401 | 2 total |
+| st-search | tag:calculator tag:401 | Pages containing 'tag:calculator tag:401' |
+| st-result | 2 total |  |
 | st-result | Another Salary |  |
-| st-search | tag:(Calculator 401) | 2 total |
+| st-search | tag:(Calculator 401) | Pages containing 'tag:(Calculator 401)' |
+| st-result | 2 total |  |
 | st-result | Another Salary |  |
-| st-search | category:(Calculator 401) | 2 total |
+| st-search | category:(Calculator 401) | Pages containing 'category:(Calculator 401)' |
+| st-result | 2 total |  |
 | st-result | Another Salary |  |
-| st-search | tag:"Bob the Bellhop" tag:"401" | 1 total |
+| st-search | tag:"Bob the Bellhop" tag:"401" | Pages containing 'tag:"Bob the Bellhop" tag:"401"' |
+| st-result | 1 total |  |
 | st-result | Another Salary |  |
-| st-search | tag:("Bob the Bellhop" "Calculator") | 1 total |
+| st-search | tag:("Bob the Bellhop" "Calculator") | Pages containing 'tag:("Bob the Bellhop" "Calculator")' |
+| st-result | 1 total |  |
 | st-result | Another Salary |  |
-| st-search | tag:401 tag:BMAC | 0 total |
-| st-search | tag:(401 BMAC) | 0 total |
-| st-search | category:(401 BMAC) | 0 total |
-| st-search | tag:"401" category:(Calculator "Bob the Bellhop") | 1 total |
+| st-search | tag:401 tag:BMAC | Pages containing 'tag:401 tag:BMAC' |
+| st-result | 0 total |  |
+| st-search | tag:(401 BMAC) | Pages containing 'tag:(401 BMAC)' |
+| st-result | 0 total |  |
+| st-search | category:(401 BMAC) | Pages containing 'category:(401 BMAC)' |
+| st-result | 0 total |  |
+| st-search | tag:"401" category:(Calculator "Bob the Bellhop") | Pages containing 'tag:"401" category:(Calculator "Bob the Bellhop")' |
+| st-result | 1 total |  |
 | st-result | Another Salary |  |
 
 | *Comment* | test AND, OR, (NOT, -) with combinations of different search value types (text, title, tag) |  |
 
 | *Comment* | Test Case: Calc Phrase Search: homogenous AND searches |  |
-| st-search | BMAC AND offered | 1 total |
+| st-search | BMAC AND offered | Pages containing 'BMAC AND offered' |
+| st-result | 1 total |  |
 | st-result | Car Loan |  |
-| st-search | "the Biggie Motors" AND "BMAC" | 1 total |
+| st-search | "the Biggie Motors" AND "BMAC" | Pages containing '"the Biggie Motors" AND "BMAC"' |
+| st-result | 1 total |  |
 | st-result | Car Loan |  |
-| st-search | "the Biggie Motors" AND "Automation Corporation" | 1 total |
+| st-search | "the Biggie Motors" AND "Automation Corporation" | Pages containing '"the Biggie Motors" AND "Automation Corporation"' |
+| st-result | 1 total |  |
 | st-result | Car Loan |  |
 
 | *Comment* | Test Case: Calc Phrase Search: heterogenous AND searches |  |
-| st-search | title:"Another Salary" AND "Savings" | 1 total |
+| st-search | title:"Another Salary" AND "Savings" | Pages containing 'title:"Another Salary" AND "Savings"' |
+| st-result | 1 total |  |
 | st-result | Another Salary |  |
-| st-search | tag:"401" AND "Salary" | 2 total |
+| st-search | tag:"401" AND "Salary" | Pages containing 'tag:"401" AND "Salary"' |
+| st-result | 2 total |  |
 | st-result | Another Salary |  |
 
 | *Comment* | Test Case: Calc Phrase Search: homogenous OR searches |  |
 | *Comment* | The high hit rate is due to {bz: 614} on savings, which is stemmed to 'save' |  |
-| st-search | "Salary" OR "Savings" | 4 total |
+| st-search | "Salary" OR "Savings" | Pages containing '"Salary" OR "Savings"' |
+| st-result | 4 total |  |
 | st-result | Another Salary |  |
 | st-result | Salary |  |
 

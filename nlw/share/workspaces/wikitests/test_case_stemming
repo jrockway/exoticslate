@@ -17,39 +17,48 @@ Comment: The user action is search for the words with stemming enabled in KinoSe
 NOTE: every search should check for every search result
 
 | *Comment* | STARTING Test Case: stemming |  |
-| st-search | wikis | Pages containing 'wikis' (3) |
+| st-search | wikis | Pages containing 'wikis' |
+| st-result | 3 total |  |
 | st-result | Stemming test page 2 |  |
 | st-result | Announcements and Links |  |
 | st-result | Quick Start |  |
 
-| st-search | fish | Pages containing 'fish' (1) |
+| st-search | fish | Pages containing 'fish' |
+| st-result | 1 total |  |
 | st-result | Stemming test page 2 |  |
 
-| st-search | fishing | Pages containing 'fishing' (1) |
+| st-search | fishing | Pages containing 'fishing' |
+| st-result | 1 total |  |
 | st-result | Stemming test page 2 |  |
 
-| st-search | fishes | Pages containing 'fishes' (1) |
+| st-search | fishes | Pages containing 'fishes' |
+| st-result | 1 total |  |
 | st-result | Stemming test page 2 |  |
 
 QUESTION: is this the correct result for "fisher"? The word "fisher" is on test page 1.
 
-| st-search | fisher | Pages containing 'fisher' (1) |
+| st-search | fisher | Pages containing 'fisher' |
+| st-result | 1 total |  |
 | st-result | Stemming test page 1 |  |
 
-| st-search | stem | Pages containing 'stem' (3) |
+| st-search | stem | Pages containing 'stem' |
+| st-result | 3 total |  |
 | st-result | Stemming test page 1 |  |
 | st-result | Stemming test page 2 |  |
 | st-result | jabber |  |
 
-| st-search | stemmer | Pages containing 'stemmer' (0) |
+| st-search | stemmer | Pages containing 'stemmer' |
+| st-result | 0 total |  |
 | st-result |  |  |
 
-| st-search | stemming | Pages containing 'stemming' (3) |
+| st-search | stemming | Pages containing 'stemming' |
+| st-result | 3 total |  |
 | st-result | Stemming test page 1 |  |
 | st-result | Stemming test page 2 |  |
 | st-result | jabber |  |
 
-| st-search | stemmed | Pages containing 'stemmed' (3) |
+| st-search | stemmed | Pages containing 'stemmed' |
+| st-result | 3 total |  |
 | st-result | Stemming test page 1 |  |
 | st-result | Stemming test page 2 |  |
 | st-result | jabber |  |

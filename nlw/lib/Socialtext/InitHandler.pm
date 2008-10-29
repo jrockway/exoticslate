@@ -18,15 +18,16 @@ sub handler {
     # This env var is set in the apache-perl config file (nlw.conf)
     if ($ENV{NLW_DEV_MODE} && ! Socialtext::AppConfig->benchmark_mode) {
         my $r = shift;
-        return if $r->uri =~ m{^/data};
-        my $stamp_file = Socialtext::Paths::storage_directory('make_ran');
-        my $mod = (stat $stamp_file)[9] || 0;
-        if ($mod < time - 5) {
-            open M, "> $stamp_file";
-            print M time();
-            close M;
-            _regen_combined_js($r);
-            Socialtext::Pluggable::Adapter->make;
+        if ($r->uri !~ m{^/data}) {
+            my $stamp_file = Socialtext::Paths::storage_directory('make_ran');
+            my $mod = (stat $stamp_file)[9] || 0;
+            if ($mod < time - 5) {
+                open M, "> $stamp_file";
+                print M time();
+                close M;
+                _regen_combined_js($r);
+                Socialtext::Pluggable::Adapter->make;
+            }
         }
     }
 
@@ -35,6 +36,7 @@ sub handler {
         no warnings 'once';
         $Socialtext::User::Cache::Enabled = 1;
     }
+
 }
 
 sub _regen_combined_js {

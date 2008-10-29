@@ -100,11 +100,11 @@ Title searches
 | st-result | 2 total |  |
 | st-result | Salary |  |
 | st-result | Another Salary |  |
-| st-search | tag:retirement AND tag:calculator | Pages containing 'tag:retirement AND tag:calculator' (2) |
+| st-search | tag:retirement AND tag:calculator | Pages containing 'tag:retirement AND tag:calculator' |
 | st-result | 2 total |  |
 | st-result | Salary |  |
 | st-result | Another Salary |  |
-| st-search | tag:retirement AND tag:foobar | Pages containing 'tag:retirement AND tag:foobar' (0) |
+| st-search | tag:retirement AND tag:foobar | Pages containing 'tag:retirement AND tag:foobar' |
 | st-result | 0 total |  |
 | st-search | tag:retirement AND tag:calculator AND tag:foobar | Pages containing 'tag:retirement AND tag:calculator AND tag:foobar' |
 | st-result | 0 total |  |

@@ -1009,7 +1009,7 @@ EOSQL
 
         my ($join_person_clause, $exclude_hidden_clause) = ('', '');
         if ($p{exclude_hidden_people}) {
-            $join_person_clause = 'LEFT JOIN person ON user_id = person.id';
+            $join_person_clause = 'JOIN person ON user_id = person.id';
             $exclude_hidden_clause = 'AND NOT person.is_hidden';
         }
 

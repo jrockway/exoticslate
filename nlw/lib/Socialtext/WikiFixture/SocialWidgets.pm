@@ -261,8 +261,9 @@ sub st_select_widget_frame {
 Waits for a widget's contents to finish loading, waiting for up to timeout milliseconds. Timeout 
 defaults to 10000 (10 seconds).
 
-Note that this command only waits until a widgets' html and javascript are loaded completely - 
-it does not wait for the widget to complete any behavior it is programmed to perform after loading.
+This function waits until the widget has set the gadgets.loaded var to be true. Thus, it is up to
+each widget to set this js var, or else the st_wait_for_widget_load function cannot be used with
+that widget.
 
 =cut
 

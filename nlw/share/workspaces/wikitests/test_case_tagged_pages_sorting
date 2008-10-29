@@ -168,7 +168,8 @@ SEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSE
 
 | *Comment* | Test Case: Tagged Page Sorting. Sorting search results. SEARCH. |  |
 | open_ok | /%%sorting_workspace%%/index.cgi |  |
-| st-search | simple | Pages containing 'simple' (4) |
+| st-search | simple | Pages containing 'simple' |
+| st-result | 4 total |  |
 | click_and_wait | link=Titles |  |
 
 | *Comment* | Test Case: Tagged Page Sorting. Sorting Revisions desc, then asc |  |
@@ -208,7 +209,8 @@ SEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSE
 | st-admin | index-page --w %%sorting_workspace%% --p search_sort_5 | The Search Sort 5 page in the %%sorting_workspace%% workspace has been indexed. |
 
 | *Comment* | Test Case: Tagged Page Sorting. Sorting search results. Do the SEARCH again. |  |
-| st-search | simple | Pages containing 'simple' (5) |
+| st-search | simple | Pages containing 'simple' |
+| st-result | 5 total |  |
 
 | *Comment* | Test Case: Tagged Page Sorting. Sorting search results. Verify Relevance sort |
 | text_like | contentContainer | qr/simple simple more simple most simple.+This is a simple text file/ |

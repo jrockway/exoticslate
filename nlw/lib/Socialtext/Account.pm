@@ -236,6 +236,7 @@ sub users {
 sub user_count {
     my $self = shift;
     my $primary_only = shift;
+    my $exclude_hidden_people = shift;
 
     my $where = '';
     my @bind = ($self->account_id);
@@ -246,19 +247,29 @@ sub user_count {
 
     Socialtext::Timer->Continue('acct_user_count');
 
+    my ($join_person_clause, $exclude_hidden_clause) = ('', '');
+    if ($exclude_hidden_people) {
+        $join_person_clause = 'LEFT JOIN person ON user_id = person.id';
+        $exclude_hidden_clause = 'AND NOT person.is_hidden';
+    }
+
     my $sth;
     if ($primary_only) {
         $sth = sql_execute(<<EOT, $self->account_id);
             SELECT COUNT(DISTINCT(user_id))
                 FROM "UserMetadata"
+                $join_person_clause
                 WHERE primary_account_id = ?
+                  $exclude_hidden_clause
 EOT
     }
     else {
         $sth = sql_execute(<<EOT, $self->account_id);
             SELECT COUNT(DISTINCT(user_id))
                 FROM account_user
+                $join_person_clause
                 WHERE account_id = ?
+                  $exclude_hidden_clause
 EOT
     }
 
@@ -680,10 +691,12 @@ Change the skin for the account and its workspaces.
 Returns a cursor of the workspaces for this account, ordered by
 workspace name.
 
-=item $account->user_count([ $primary_only ])
+=item $account->user_count([ $primary_only ], [ $exclude_hidden_people ])
 
 Returns a count of users for this account.  If the first parameter is TRUE,
 then only users for which this is their primary account will be included.
+
+If the second parameter is TRUE, users with a hidden profile will not be counted.
 
 =item $account->users()
 

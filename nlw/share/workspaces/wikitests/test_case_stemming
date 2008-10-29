@@ -65,51 +65,63 @@ QUESTION: is this the correct result for "fisher"? The word "fisher" is on test 
 
 QUESTION: is test-data correct for zig and zigging and zigzag?
 
-| st-search | zig | Pages containing 'zig' (0) |
-| st-result |  |  |
+| st-search | zig | Pages containing 'zig' |
+| st-result | 0 total |  |
 
-| st-search | zigging | Pages containing 'zigging' (0) |
-| st-result |  |  |
+| st-search | zigging | Pages containing 'zigging' |
+| st-result | 0 total |  |
 
-| st-search | zigzag | Pages containing 'zigzag' (1) |
+| st-search | zigzag | Pages containing 'zigzag' |
+| st-result | 1 total |  |
 | st-result | Stemming test page 2 |  |
 
-| st-search | zigzagging | Pages containing 'zigzagging' (1) |
+| st-search | zigzagging | Pages containing 'zigzagging' |
+| st-result | 1 total |  |
 | st-result | Stemming test page 2 |  |
 
-| st-search | worship | Pages containing 'worship' (2) |
+| st-search | worship | Pages containing 'worship' |
+| st-result | 2 total |  |
 | st-result | Stemming test page 2 |  |
 | st-result | jabber |  |
 
-| st-search | worshipful | Pages containing 'worshipful' (2) |
+| st-search | worshipful | Pages containing 'worshipful' |
+| st-result | 2 total |  |
 | st-result | Stemming test page 2 |  |
 | st-result | jabber |  |
 
-| st-search | worships | Pages containing 'worships' (2) |
+| st-search | worships | Pages containing 'worships' |
+| st-result | 2 total |  |
 | st-result | Stemming test page 2 |  |
 | st-result | jabber |  |
 
 QUESTION: missing test data for "wolf"?
 
-| st-search | wolf | Pages containing 'wolf' (0) |
+| st-search | wolf | Pages containing 'wolf' |
+| st-result | 0 total |  |
 | st-result |  |  |
 
-| st-search | wolve | Pages containing 'wolve' (0) |
+| st-search | wolve | Pages containing 'wolve' |
+| st-result | 0 total |  |
 | st-result |  |  |
 
-| st-search | wolves | Pages containing 'wolves' (0) |
+| st-search | wolves | Pages containing 'wolves' |
+| st-result | 0 total |  |
 | st-result |  |  |
 
-| st-search | whole | Pages containing 'whole' (1) |
+| st-search | whole | Pages containing 'whole' |
+| st-result | 1 total |  |
 | st-result | Stemming test page 2 |  |
 
-| st-search | wholehearted | Pages containing 'wholehearted' (0) |
+| st-search | wholehearted | Pages containing 'wholehearted' |
+| st-result | 0 total |  |
 | st-result |  |  |
 
-| st-search | wholesale | Pages containing 'wholesale' (1) |
+| st-search | wholesale | Pages containing 'wholesale' |
+| st-result | 0 total |  |
 | st-result | Stemming test page 1 |  |
 
-| st-search | wholesome | Pages containing 'wholesome' (0) |
+| st-search | wholesome | Pages containing 'wholesome' |
+| st-result | 0 total |  |
 | st-result |  |  |
 
 | *Comment* | Test Case: stemming COMPLETED |

@@ -1,29 +1,65 @@
-| *Comment* | Test Case: People Dashboard Gloabal Nav |
+* HighPermissions
+
+| *Comment* | Test Case: People Dashboard Gloabal Nav |  |
 
 This test is designed to test global navigation changes as people/dashboard is enabled and disabled.
 
-1) Enable people and dashboard. See "Home" (is dashboard), "People", "Workspaces"
+| *Comment* | Enable people and dashboard. See "Home" (is dashboard), "People", "Workspaces" |  |
+| st-admin | enable-plugin --plugin people --all-accounts | is now enabled |
+| st-admin | enable-plugin --plugin dashboard --all-accounts | is now enabled |
+| open_ok | / |  |
+| wait_for_element_visible_ok | link=Home | 4000 |
+| wait_for_element_visible_ok | link=People | 4000 |
+| wait_for_element_visible_ok | link=Workspaces | 4000 |
+| click_and_wait | link=Workspaces |  |
+| text_like | contentRight | Workspace Title |
+| text_like | contentRight | Workspace Name |
+| text_like | contentRight | %%title%% |
+| click_and_wait | link=People |  |
+| text_like | All People |  |
+| text_like | System User |  |
+| text_like | Guest User |  |
+| click_and_wait | link=Home |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 10000 |
+| text_like | st-editing-tools-edit | Welcome |
 
-| st-admin | enable-plugin --plugin people --all-accounts |  |
-| st-admin | enable-plugin --plugin dashboard --all-accounts |  |
+| *Comment* | Disable people. Refresh. People links to socialtext.com |  |
+| st-admin | disable-plugin --plugin people --all-accounts | Plugin people is now disabled |
+| open_ok | / |  |
+| click_and_wait | link=People |  |
+| location_like | `http://socialtext.com/products/features/Enable-People.php` |  |
 
-2) Disable people. Refresh do not see "People"
+| *Comment* | Disable dashboard. Home is workspace list. |  |
+| st-admin | disable-plugin --plugin dashboard --all-accounts | Plugin dashboard is now disabled |
+| open_ok | / |  |
+| text_like | contentRight | Workspaces you belong to |
+| text_like | contentRight | You have free access |
+| location_like | /?action=workspace_list |  |
+| click_and_wait | link=Home |  |
+| location_like | /?action=workspace_list |  |
 
-| st-admin | disable-plugin --plugin dashboard --all-accounts |  |
+| *Comment* | Enable people. Illegal configuration. No People link. Home is workspace list. |  |
+| st-admin | enable-plugin --plugin people --all-accounts | Plugin people is now enabled |
+| open_ok | / |  |
+| text_like | contentRight | Workspaces you belong to |
+| wait_for_element_not_present_ok | link=People | 4000 |
+| click_and_wait | link=Home |  |
+| text_like | contentRight | You have free access |
 
-3) Disable dashboard. Home is workspace list. Do not see "people"
+| *Comment* | Disable people, enable dashboard. Home is dashboard. |  |
+| st-admin | disable-plugin --plugin people --all-accounts | Plugin people is now disabled |
+| st-admin | enable-plugin --plugin dashboard --all-accounts | Plugin dashboard is now enabled |
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 10000 |
+| text_like | st-editing-tools-edit | Welcome |
+| click_and_wait | link=Home |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 10000 |
+| text_like | st-editing-tools-edit | Welcome |
+| click_and_wait | link=People |  |
+| location_like | `http://socialtext.com/products/features/Enable-People.php` |  |
 
-| st-admin | disable-plugin --plugin people --all-accounts |  |
-
-4) Enable people. Link to people, see directory list. Home is workspace list.
-
-| st-admin | enable-plugin --plugin people --all-accounts |  |
-
-5) Disable people, enable dashboard. Home is dashboard.
-
-| st-admin | disable-plugin --plugin people --all-accounts |  |
-| st-admin | enable-plugin --plugin dasbhaord --all-accounts |  |  | *Comment* | Test Case: People Dashboard Gloabl Nav CLEANUP |
-| st-admin | enable-plugin --plugin people --all-accounts |  |
-| st-admin | enable-plugin --plugin dashboard --all-accounts |  |
+| *Comment* | Test Case: People Dashboard Gloabl Nav CLEANUP |  |
+| st-admin | enable-plugin --plugin people --all-accounts | Plugin people is now enabled |
+| st-admin | enable-plugin --plugin dashboard --all-accounts | Plugin dashboard is now enabled |
 
 | *Comment* | Test Case: People Dashboard Gloabal Nav COMPLETED |

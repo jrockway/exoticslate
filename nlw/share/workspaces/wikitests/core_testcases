@@ -18,13 +18,10 @@ test env properly and are not testing the test-workspace
 * [Test case: Watchlist]
 * [Test Case: Recently Viewed]
 * [Test Case: Recent Changes]
-
- [Test Case: Edit This Page]
-
+* [Test Case: Edit This Page]
 * [Test case: functional search tests]
 * [Test Case: Phrase search]
 * [Test Case: stemming]
-
 * [Test Case: Double Click to Edit]
 * [Test Case: Preview Format]
 * [Test Case: New Page]
@@ -75,6 +72,11 @@ test env properly and are not testing the test-workspace
 * [Test Case: Email]
 * [Test Case: Email Attachment]
 
+People and Dasboard test cases. Keep these two cases together in alpha order.
+
+* [Test Case: People Dashboard Global Nav]
+* [Test Case: People Dashboard Global Nav Reset]
+
 Put tests that don't use the browser here
 
 * [Test Case: Command Line: USERS]
@@ -94,10 +96,6 @@ we may test in a mode where People and Dashboard are not installed.
 
 * [Test Case: Return to last login]
 
-{search: category:s3}
-
 ----
 
-Ignore this comment
-
-_contributed by {user: ken.pier@socialtext.com} on {date: 2008-10-13 16:53:39 GMT}_
+{search: category:s3}

@@ -23,7 +23,9 @@
 | wait_for_element_visible_ok | comment | 30000 |
 | type_ok | comment | see, I commented |
 | click_ok | link=Save |  |
-| pause | 5000 | need to wait for save to finish |  | *Comment* | Test Case: My Conversations Widget Login as convwidget |  |
+| pause | 5000 | need to wait for save to finish |
+
+| *Comment* | Test Case: My Conversations Widget Login as convwidget |  |
 | st-logoutin | convwidget@matt.socialtext.net | %%password%% |
 
 | open_ok | /%%workspace%%/?My Conversations Edit %%start_time%% |  |
@@ -50,7 +52,6 @@
 | pause | 5000 | need to wait for save to finish |
 | st-login |  |  |
 
-| st-catchup-logs |  |  |
 | open_ok | /?dashboard | 60000 |
 | st-empty-container |  |  |
 | st-add-widget | widgets/share/widgets/recent_conversations.xml | my_conversations |

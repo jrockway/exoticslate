@@ -117,7 +117,7 @@ QUESTION: missing test data for "wolf"?
 | st-result |  |  |
 
 | st-search | wholesale | Pages containing 'wholesale' |
-| st-result | 0 total |  |
+| st-result | 1 total |  |
 | st-result | Stemming test page 1 |  |
 
 | st-search | wholesome | Pages containing 'wholesome' |

@@ -990,6 +990,7 @@ EOSQL
         ),
         account_id => SCALAR_TYPE,
         primary_only => BOOLEAN_TYPE( default => 0 ),
+        exclude_hidden_people => BOOLEAN_TYPE( default => 0 ),
     };
     sub ByAccountId {
         # Returns an iterator of Socialtext::User objects
@@ -1005,7 +1006,15 @@ EOSQL
             $account_where .= ' OR secondary_account_id = ?';
             unshift @bind, 'account_id';
         }
+
+        my ($join_person_clause, $exclude_hidden_clause) = ('', '');
+        if ($p{exclude_hidden_people}) {
+            $join_person_clause = 'LEFT JOIN person ON user_id = person.id';
+            $exclude_hidden_clause = 'AND NOT person.is_hidden';
+        }
+
         (my $creator_account_where = $account_where) =~ s/(\w+?ary_)/ ua.$1/g;
+        (my $creator_join_person_clause = $join_person_clause) =~ s/\buser_id\b/ua.user_id/g;
         Readonly my %SQL => (
             creation_datetime => <<EOSQL,
 SELECT DISTINCT user_id,
@@ -1014,7 +1023,9 @@ SELECT DISTINCT user_id,
                 driver_username,
                 creation_datetime
     FROM user_account
+         $join_person_clause
     WHERE $account_where
+          $exclude_hidden_clause
     ORDER BY creation_datetime $p{sort_order}, driver_username ASC
     LIMIT ? OFFSET ?
 EOSQL
@@ -1027,7 +1038,9 @@ SELECT DISTINCT ua.user_id AS user_id,
     FROM user_account ua
          LEFT JOIN "UserMetadata" um2 ON (ua.creator_id = um2.user_id)
          LEFT JOIN users u2 ON (um2.user_id = u2.user_id)
+         $creator_join_person_clause
     WHERE $creator_account_where
+          $exclude_hidden_clause
     ORDER BY u2.driver_username $p{sort_order}, ua.driver_username ASC
     LIMIT ? OFFSET ?
 EOSQL
@@ -1037,7 +1050,9 @@ SELECT DISTINCT user_id,
                 driver_unique_id,
                 driver_username
     FROM user_account
+         $join_person_clause
     WHERE $account_where
+          $exclude_hidden_clause
     ORDER BY driver_username $p{sort_order}
     LIMIT ? OFFSET ?
 EOSQL
@@ -1960,6 +1975,20 @@ Returns a cursor for all the users in a specified account.
 This method accepts the same parameters as C<< Socialtext::User->All()
 >>, but requires an additional "account_id" parameter. The C<order_by>
 parameter cannot be "workspace_count".
+
+This method also accepts two additional parameters:
+
+=over 4
+
+=item * primary_only - defaults to FALSE
+
+If set to TRUE, only users for which this is their primary account will be included.
+
+=item * exclude_hidden_people - defaults to FALSE
+
+If set to TRUE, users with a hidden profile will not be included.
+
+=back
 
 =head2 Socialtext::User->ByWorkspaceIdWithRoles(PARAMS)
 

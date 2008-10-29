@@ -203,8 +203,8 @@ Find the same page using search, What's New list, and Revisions link. Observe re
 | clickAndWait | link=Source View |  |
 | text_like | link=Normal View | Normal View |
 | clickAndWait | st-revision-restorebutton |  |
-| wait_for_element_visible_ok | link=(6 revisions) | 15000 |
-| clickAndWait | link=(6 revisions) |  |
+| wait_for_element_visible_ok | link=6 revisions | 15000 |
+| clickAndWait | link=6 revisions |  |
 | text_like | qr/Revision 2.+Revision 5.+Revision 4.+Revision 3.+Revision 2.+Revision 1/ |  |
 | clickAndWait | link=Back To Current Revision |  |
 | text_like | revision number two |  |

@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 45;
+use Test::Socialtext tests => 61;
 use YAML qw/LoadFile/;
 
 BEGIN {
@@ -35,7 +35,7 @@ eval { $unknown->update( name => 'new name' ) };
 like( $@, qr/cannot change/, 'cannot change the name of a system-created account' );
 
 # Create some test data for the test account
-# 3 users, 2 in a workspace, 1 outside the workspace.
+# 3 users, 2 in a workspace (1 hidden, 1 visible), 1 outside the workspace.
 {
     my $ws = Socialtext::Workspace->create(
         name       => 'testingspace',
@@ -53,15 +53,32 @@ like( $@, qr/cannot change/, 'cannot change the name of a system-created account
                ($n != 1 ? $test->account_id : $socialtext->account_id),
         );
         isa_ok( $user, 'Socialtext::User' );
-        $ws->add_user( user => $user ) unless $n == 3;;
+        $ws->add_user( user => $user ) unless $n == 3;
     }
 }
+
+
 
 is( $test->workspace_count, 1, 'test account has one workspace' );
 is( $test->workspaces->next->name, 'testingspace',
     'testingspace workspace belong to testing account' );
 users_are($test, [qw/dummy1 dummy2 dummy3/], 0);
 users_are($test, [qw/dummy2 dummy3/], 1);
+
+SKIP: {
+    eval { require Socialtext::People::Profile }
+        or skip("The People plugin is not available!", 2);
+
+    my $dummy3 = Socialtext::User->new( username => 'dummy3' );
+    my $profile = Socialtext::People::Profile->GetProfile( $dummy3->user_id );
+    $profile->is_hidden(1);
+    $profile->save;
+
+    users_are($test, [qw/dummy2/], 1, 1);
+
+    $profile->is_hidden(0);
+    $profile->save;
+}
 
 Account_skins: {
     # set skins
@@ -134,16 +151,23 @@ sub users_are {
     my $account = shift;
     my $users = shift;
     my $primary_only = shift;
+    my $exclude_hidden_people = shift;
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     # check user count
     # check user list
 
-    is( $account->user_count($primary_only), scalar(@$users), 
+    is( $account->user_count($primary_only, $exclude_hidden_people), scalar(@$users), 
         $account->name . ' account has right number of users' );
 
-    my $mc = $account->users(primary_only => $primary_only);
-    is( join(',', sort map { $_->username } $mc->all), 
-        join(',', sort @$users),
-        $account->name . ' account users are correct' );
+    for my $order_by (qw( username creation_datetime creator )) {
+        my $mc = $account->users(
+            primary_only => $primary_only,
+            exclude_hidden_people => $exclude_hidden_people,
+            order_by => $order_by,
+        );
+        is( join(',', sort map { $_->username } $mc->all), 
+            join(',', sort @$users),
+            $account->name . ' account users are correct' );
+    }
 }

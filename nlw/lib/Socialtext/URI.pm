@@ -11,11 +11,20 @@ use URI::FromHash;
 our $default_scheme = 'http';
 
 sub uri {
-    URI::FromHash::uri( _scheme(), _host(), _port(), @_ );
+    URI::FromHash::uri( _scheme_host_port(), @_ );
 }
 
 sub uri_object {
-    URI::FromHash::uri( _scheme(), _host(), _port(), @_ );
+    URI::FromHash::uri( _scheme_host_port(), @_ );
+}
+
+sub _scheme_host_port {
+    my $scheme = _scheme();
+    return (
+        scheme => $scheme,
+        _host(),
+        (($scheme eq 'http') ? _http_port() : _https_port())
+    );
 }
 
 sub _scheme {

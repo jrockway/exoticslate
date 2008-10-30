@@ -259,8 +259,10 @@
         <span id="update-attribution">
             [% loc('Updated by [_1] on [_2].', update_author, update_date) %]
         </span>
-        (<a class="revision" id="bottom-buttons-revisions" href="?action=revision_list;page_name=[% page.id %]">[% loc('[quant,_1,revision]', page.revisions) %]</a>,
-        [% loc('[quant,_1,view]', page.views) %])
+        <span id="statistics-attribution">
+            (<a class="revision" id="bottom-buttons-revisions" href="?action=revision_list;page_name=[% page.id %]">[% loc('[quant,_1,revision]', page.revisions) %]</a>,
+            [% loc('[quant,_1,view]', page.views) %])
+        </span>
     </div>
     [% END %]
   </div><!-- bottomButtons -->

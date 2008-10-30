@@ -9,14 +9,20 @@ use Socialtext::HTTPPorts qw(SSL_PORT_DIFFERENCE);
 use URI::FromHash;
 
 our $default_scheme = 'http';
+our $CachedURI;
 
 sub uri {
-    local $Params::Validate::NO_VALIDATION = 1;
+    # Optimize for the common case: Socialtext::URI::uri(path => ...).
+    if (@_ == 2 and $_[0] eq 'path') {
+        $CachedURI ||= URI::FromHash::uri_object( _scheme_host_port() );
+        $CachedURI->path($_[1]);
+        return $CachedURI->as_string;
+    }
+
     URI::FromHash::uri( _scheme_host_port(), @_ );
 }
 
 sub uri_object {
-    local $Params::Validate::NO_VALIDATION = 1;
     URI::FromHash::uri_object( _scheme_host_port(), @_ );
 }
 

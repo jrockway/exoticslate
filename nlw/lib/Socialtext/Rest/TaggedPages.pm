@@ -12,8 +12,10 @@ sub collection_name {
 }
 
 sub element_list_item {
-    "<li><a href='../../pages/$_[1]->{uri}'>"
-        . Socialtext::String::html_escape( $_[1]->{name} )
+    my ( $self, $page ) = @_;
+
+    return "<li><a href='/data/workspaces/$page->{workspace_name}/pages/$page->{page_id}'>"
+        . Socialtext::String::html_escape( $page->{name} )
         . "</a></li>\n";
 }
 

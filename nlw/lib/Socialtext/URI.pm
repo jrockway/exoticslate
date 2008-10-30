@@ -11,11 +11,13 @@ use URI::FromHash;
 our $default_scheme = 'http';
 
 sub uri {
+    local $Params::Validate::NO_VALIDATION = 1;
     URI::FromHash::uri( _scheme_host_port(), @_ );
 }
 
 sub uri_object {
-    URI::FromHash::uri( _scheme_host_port(), @_ );
+    local $Params::Validate::NO_VALIDATION = 1;
+    URI::FromHash::uri_object( _scheme_host_port(), @_ );
 }
 
 sub _scheme_host_port {

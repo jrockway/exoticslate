@@ -50,12 +50,16 @@ sub get_resource {
 # a change here. One option is to traverse the list in this method,
 # but we likely already did that somewhere else, so why do it again?
 sub last_modified { 
+
+=for later
     my $self = shift;
     return $self->{_last_modified} if $self->{_last_modified};
     my $r = shift;
     if (ref($r) eq 'ARRAY' and @$r) {
         return $r->[0]{modified_time};
     }
+=cut
+
     return time;
 }
 
@@ -64,14 +68,10 @@ sub collection_name {
     'Pages from ' . $_[0]->workspace->title;
 }
 
-# REVIEW: 'pages/' is required here because we are not inside 'pages/'
-# when this class responds. We are at pages, meaning we are inside the
-# workspace. Using / on the end of the map in uri_map does not get
-# the desired results, and are they even desired?
 sub element_list_item {
     my ( $self, $page ) = @_;
 
-    return "<li><a href='../$page->{workspace_name}/pages/$page->{uri}'>"
+    return "<li><a href='/data/workspaces/$page->{workspace_name}/pages/$page->{page_id}'>"
         . Socialtext::String::html_escape( $page->{name} )
         . "</a></li>\n";
 }
@@ -120,15 +120,23 @@ sub _entity_hash {
 sub _entities_for_query {
     my $self = shift;
 
+    Socialtext::Timer->Continue('entities_for_query');
+
     # REVIEW: borrowing the 'q' name from google and others.  It's short.
     my $search_query = $self->rest->query->param('q');
+    my @entities;
 
-    Socialtext::Timer->Continue('entities_for_query');
-    my @entities = defined $search_query
-        ? $self->_searched_pages($search_query)
-        : $self->hub->pages->all_active;
+    if (defined $search_query and length $search_query) {
+        @entities = $self->_searched_pages($search_query);
+    }
+    else {
+        @entities = @{Socialtext::Model::Pages->All_active(
+            workspace_id => $self->hub->current_workspace->workspace_id,
+        ) || []};
+    }
 
     Socialtext::Timer->Pause('entities_for_query');
+
     return @entities;
 }
 
@@ -136,19 +144,24 @@ sub _searched_pages {
     my ( $self, $search_query ) = @_;
 
     Socialtext::Timer->Continue('searched_pages');
-    my @pages = map {
-        Socialtext::Page->new(
-            hub => $self->_hub_for_hit( $self->hub, $_->[0] ), id => $_->[1] )
-        }
-        map { [ $_->workspace_name, $_->page_uri ] }
+
+    my @page_ids = map { $_->page_uri }
         grep { $_->isa('Socialtext::Search::PageHit') } search_on_behalf(
             $self->hub->current_workspace->name,
             $search_query,
             undef,    # undefined scope
             $self->hub->current_user
         );
+
+    my $pages = Socialtext::Model::Pages->By_id(
+        hub              => $self->hub,
+        workspace_id     => $self->hub->current_workspace->workspace_id,
+        page_id          => \@page_ids,
+    );
+
+
     Socialtext::Timer->Pause('searched_pages');
-    return @pages;
+    return @$pages;
 }
 
 sub _hub_for_hit {

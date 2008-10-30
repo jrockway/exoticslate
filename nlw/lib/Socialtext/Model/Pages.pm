@@ -95,6 +95,8 @@ sub By_id {
     my $where;
     my $bind;
     if (ref($page_id) eq 'ARRAY') {
+        return [] unless @$page_id;
+
         $where = 'page_id IN (' 
             . join(',', map { '?' } @$page_id) . ')';
         $bind = $page_id;

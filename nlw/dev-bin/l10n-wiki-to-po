@@ -119,7 +119,7 @@ sub _haxorify_lolcat {
     my $translation =  Acme::LOLCAT::translate(shift);
 
     # LOLCAT wants to make escape sequences invalid.
-    # $translation =~ s/\/N/\n/g;
+    $translation =~ s/\\N(?:\. KTHX.*)?/\\n/g;
 
     return $translation;
 }

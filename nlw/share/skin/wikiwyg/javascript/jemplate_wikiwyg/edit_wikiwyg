@@ -20,7 +20,7 @@
         <!-- XXX: move this somewhere or style it in screen.css -->
         <div style="float:left;position:relative;padding:11px;display:none" id="bootstrap-loader">
             [% loc("Loading...") %]
-            <img src="[% wiki.skin_uri("s2") %]/images/ajax-loader.gif">
+            <img src="/static/skin/common/images/ajax-loader.gif">
         </div>
 
         <div id="controlsRight">

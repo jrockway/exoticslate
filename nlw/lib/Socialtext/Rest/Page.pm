@@ -93,6 +93,12 @@ sub _link_dictionary {
     $link_dictionary = undef
         if lc($link_dictionary) eq lc($S2_LINK_DICTIONARY);
 
+    if ($link_dictionary eq $DEFAULT_LINK_DICTIONARY) {
+        my $url_prefix = $self->hub->current_workspace->uri;
+        $url_prefix =~ s{/[^/]+/?$}{};
+        $self->hub->viewer->url_prefix($url_prefix);
+    }
+
     return $link_dictionary;
 }
 

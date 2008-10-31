@@ -2469,7 +2469,7 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   get-user-account [--username or --email]
   show-profile [--username or --email]
   hide-profile [--username or --email]
-  mass-add-users --csv
+  mass-add-users --csv --account
 
   WORKSPACES
 
@@ -2650,7 +2650,7 @@ Print the primary account of the specified user.
 
 Show or hide the user's profile in the people system.
 
-=head2 mass-add-users --csv
+=head2 mass-add-users --csv --account
 
 Bulk adds/updates users from the given CSV file.
 
@@ -2662,6 +2662,13 @@ user is updated to match the information provided in the CSV file.  Otherwise,
 a new user record is created.  If no password is provided for newly created
 users, they are sent an e-mail message which includes a link that they may use
 to set their password.
+
+When adding users, if no account is specified, the users will be added to the
+default account.
+
+When updating users, if no account is specified, the user will be left in the
+account that they are currently assigned to.  If an account is provided when
+updating users, the users will be (re-)assigned to that account.
 
 =head2 set-permissions --workspace --permissions
 

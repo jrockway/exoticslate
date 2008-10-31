@@ -6,9 +6,16 @@
 | st-admin | add-member --email convwidget@matt.socialtext.net --workspace %%workspace%% |  |
 
 | *Comment* | Test Case: My Conversations Widget Create Conversations |  |
-| st-admin | update-page --w %%workspace%% --e %%email%% --p "My Conversations Watch %%start_time%%" < %%wikitest_client_files%%wikitest.txt | has been created |
-| st-admin | update-page --w %%workspace%% --e %%email%% --p "My Conversations Edit %%start_time%%" < %%wikitest_client_files%%wikitest.txt | has been created |
-| st-admin | update-page --w %%workspace%% --e %%email%% --p "My Conversations Comment %%start_time%%" < %%wikitest_client_files%%wikitest.txt | has been created |
+| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
+| wait_for_element_present_ok | st-newpage-pagename-edit |  |
+| wait_for_element_present_ok | wikiwyg_wikitext_textarea |  |
+| type_ok | st-newpage-pagename-edit | created_page_%%start_time%% |
+| wait_for_element_visible_ok | link=Wiki Text | 10000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
+| type_ok | wikiwyg_wikitext_textarea | I have created a page called created_page. woot. |
+| click_ok | st-save-button-link |  |
+| wait_for_element_present_ok | st-edit-button-link | 25000 |
 
 | open_ok | /%%workspace%%/?My Conversations Watch %%start_time%% |  |
 | wait_for_element_present_ok | st-edit-button-link | 10000 |
@@ -31,6 +38,9 @@
 | open_ok | /%%workspace%%/?My Conversations Edit %%start_time%% |  |
 | wait_for_element_present_ok | st-edit-button-link |  |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Wiki Text | 10000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
 | wait_for_element_visible_ok | link=Wiki Text | 10000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |

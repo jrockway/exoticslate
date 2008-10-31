@@ -243,7 +243,7 @@ sub global_template_vars {
     if ($self->hub->current_user->can_use_plugin('dashboard')) {
         $result{dashboard_available} = 1;
     }
-
+    
     # We're disabling the history global nav functionality for now, until its
     # truly global (cross workspace)
 #     if ($self->hub->current_workspace->real) {

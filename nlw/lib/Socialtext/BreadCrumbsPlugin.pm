@@ -23,8 +23,8 @@ my $HOW_MANY = 25;
 sub register {
     my $self = shift;
     my $registry = shift;
-    $registry->add(action     => 'breadcrumbs_html');
-    $registry->add(action     => 'breadcrumbs_list');
+    $registry->add(action => 'breadcrumbs_html');
+    $registry->add(action => 'breadcrumbs_list');
 }
 
 sub display_as_box {
@@ -71,24 +71,15 @@ sub breadcrumbs_list {
     );
 }
 
-sub default_result_set {
-    # we want to follow our super's behavior of returning a new_result_set as
-    # a true default - this caused infinite loops before {rt 25330}
-    my $self = shift;
-    unless ( -f $self->get_result_set_path ) {
-        $self->result_set($self->new_result_set);
-        $self->_incorporate_trail_pages;
-    }
-    return $self->result_set;
-}
+# Don't use a cached result since the set always quite small.
+sub read_result_set { return $_[0]->default_result_set; }
+sub write_result_set { 1 }
 
-sub _incorporate_trail_pages {
+sub default_result_set {
     my $self = shift;
-    my @pages = $self->breadcrumb_pages;
-    foreach my $page ( @pages ) {
-        $self->push_result($page);
-    }
-    return scalar @pages;
+    $self->result_set($self->new_result_set);
+    $self->push_result($_) for ($self->breadcrumb_pages());
+    return $self->result_set;
 }
 
 sub breadcrumb_pages {
@@ -105,11 +96,9 @@ sub breadcrumb_pages {
 
 sub new_result_set {
     my $self = shift;
-    return +{
-        rows          => [],
-        hits          => 0,
-        display_title => '',
-        predicate     => 'action=breadcrumbs_list' };
+    my $rs = $self->SUPER::new_result_set();
+    $rs->{predicate} = 'action=breadcrumbs_list';
+    return $rs;
 }
 
 sub breadcrumbs_html {
@@ -144,6 +133,7 @@ sub get_crumbs {
     foreach my $page_name (@$trail_parts) {
         my $page = $self->hub->pages->new_from_name($page_name);
         my $pagehash=$page->hash_representation;
+        next unless $page->active;
         push @crumbs, {
             page_title => $page->title,
             page_uri   => $page->uri,
@@ -151,7 +141,7 @@ sub get_crumbs {
         };
     }
 
-    return [@crumbs];
+    return \@crumbs;
 }
 
 sub _load_trail {
@@ -169,24 +159,13 @@ sub _save_trail {
     my $self = shift;
     my $trail_parts = shift;
 
-    splice @$trail_parts, 20 if @$trail_parts > 20;
+    splice @$trail_parts, $HOW_MANY if @$trail_parts > $HOW_MANY;
+    my $trail = join('',map {"$_\n"} @$trail_parts);
 
     my $filename = $self->_trail_filename;
-
     my $dir = File::Basename::dirname($filename);
-    File::Path::mkpath( $dir, 0, 0755 )
-        unless -d $dir;
-
-    open my $fh, '>:utf8', $filename
-        or die "Cannot open $filename for write: $!";
-
-    for my $page (@$trail_parts) {
-        print $fh "$page\n"
-            or die "Cannot write to $filename: $!";
-    }
-
-    close $fh
-        or die "Cannot close $filename: $!";
+    Socialtext::File::ensure_directory($dir);
+    Socialtext::File::set_contents_utf8($filename, $trail);
 }
 
 sub _trail_filename {

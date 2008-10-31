@@ -290,6 +290,27 @@ sub main {
 EOT
                 close CRON;
             }
+
+            # This will set up the config for the postgres DB.
+            # but only for appliance builds.
+            if ( $opts{appliance} ) {
+                push @files,
+                [   'postgresql/postgresql.conf.tt2',
+                    "$dirs{postgresql_base_dir}/postgresql.conf",
+                    { 
+                        pg_max_connections      => '40',
+                        pg_shared_buffers       => '10000',
+                        pg_work_mem             => '8192',
+                        pg_maintenance_work_mem => '32768',
+                        pg_checkpoint_segments  => '12',
+                        pg_max_fsm_pages        => '200000',
+                        pg_effective_cache_size => '10000',
+                        pg_random_page_cost     => '3',
+                        pg_stats_row_level      => 'on'
+                    },
+                    'overwrite'
+                ];
+            }
         }
 
         push @files,
@@ -380,6 +401,7 @@ sub sitewide_dirs {
         apache2_etc          => '/etc/apache2',
         apache2_log          => '/var/log/apache2',
         apache2_base_dir     => '/etc/apache2',
+        postgresql_base_dir  => '/etc/postgresql/8.1/main',
         apache_perl_etc      => get_prefixed_dir('httpd_confdir'),
         apache_perl_log      => get_prefixed_dir('httpd_logdir'),
         apache_perl_base_dir => get_prefixed_dir('httpd_confdir'),

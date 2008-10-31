@@ -19,6 +19,7 @@ sub register {
     $class->add_hook('template.user_name.content'        => 'user_name');
     $class->add_hook('template.user_small_photo.content' => 'user_photo');
     $class->add_hook('template.user_photo.content'       => 'user_photo');
+    $class->add_hook('wafl.user'                         => 'user_name');
 }
 
 sub root {

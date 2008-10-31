@@ -128,7 +128,7 @@
       </div><!-- widget END -->
       <div class="widget">
         <div class="widgetHeader">
-        <h4>Incoming Links</h4>
+        <h4>[% loc('Incoming Links') %]</h4>
         </div><!-- widgetHeader END -->
         <div class="widgetContent">
           <ul>

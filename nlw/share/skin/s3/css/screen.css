@@ -771,6 +771,7 @@ div#bootstrap-loader {
     vertical-align: middle;
     text-align: center;
     text-decoration: none;
+    white-space: nowrap;
 }
 
 #st-editing-prefix-container a.button:hover {

@@ -116,6 +116,7 @@ sub _haxorify_jp {
 }
 
 sub _haxorify_lolcat {
+    srand 1;
     my $translation =  Acme::LOLCAT::translate(shift);
 
     # LOLCAT wants to make escape sequences invalid.

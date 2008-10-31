@@ -24,6 +24,7 @@ my @files = get_files(
         "share/skin/s3/javascript", 
         "share/console-template", 
         "build/templates/socialtext",
+        "share/template/authen",
     ],
     extra_dirs => [ # glob() files in these symlinks
         "share/template/control",
@@ -34,6 +35,7 @@ my @files = get_files(
         qr#share/skin/s3/template#,
         qr#share/template/control#,
         qr#share/template/email#,
+        qr#share/template/authen#,
         qr#share/console-template/template#,
     ],
     excludes => [

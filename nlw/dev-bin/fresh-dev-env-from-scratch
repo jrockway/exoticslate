@@ -58,6 +58,7 @@ dev-bin/link-reports
 dev-bin/link-people
 set -e
 
+export PGUSER=`st-config echo db_user`
 echo "Adding special dev-env SQL hacks"
 psql -f etc/socialtext/db/dev.sql
 

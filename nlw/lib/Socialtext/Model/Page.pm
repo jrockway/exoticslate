@@ -95,7 +95,7 @@ sub hash_representation {
         name           => $self->{name},
         uri            => $self->{page_id},
         page_id        => $self->{page_id},
-        last_editor    => $editor->username,
+        last_editor    => $editor->email_address,
         last_edit_time => "$self->{last_edit_time} GMT",
         revision_id    => $self->{current_revision_id},
         revision_count => $self->{revision_count},

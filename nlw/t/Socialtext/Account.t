@@ -3,7 +3,8 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 61;
+use Test::Socialtext tests => 65;
+use Test::Exception;
 use YAML qw/LoadFile/;
 
 BEGIN {
@@ -64,6 +65,20 @@ is( $test->workspaces->next->name, 'testingspace',
     'testingspace workspace belong to testing account' );
 users_are($test, [qw/dummy1 dummy2 dummy3/], 0);
 users_are($test, [qw/dummy2 dummy3/], 1);
+
+Rename_account: {
+    my $new_name = 'Ronwell Quincy Dobbs';
+    my $account = Socialtext::Account->create(name => 'ronnie dobbs');
+    $account->update(name => $new_name);
+    is $account->name, $new_name, 'account name was changed';
+    $account = Socialtext::Account->new(name => $new_name);
+    is $account->name, $new_name,
+        'account name was changed after db round-trip';
+    dies_ok { $account->update(name => 'Socialtext') }
+        'cannot rename account to an existing name';
+    is $account->name, $new_name,
+        'account name unchanged after attempt to duplicate rename';
+}
 
 SKIP: {
     eval { require Socialtext::People::Profile }

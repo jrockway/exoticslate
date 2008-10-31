@@ -367,10 +367,14 @@ sub update {
 
     if (@updates) {
         my $set_clause = join ', ', @updates;
-        sql_execute(
-            'UPDATE "Account"'
-            . " SET $set_clause WHERE account_id=?",
-            @bindings, $self->account_id);
+        my $sth;
+        eval {
+            $sth = sql_execute(
+                'UPDATE "Account"'
+                . " SET $set_clause WHERE account_id=?",
+                @bindings, $self->account_id);
+        };
+        die $sth->error if ($@);
 
         while (my ($column, $value) = each %p) {
             $self->$column($value);

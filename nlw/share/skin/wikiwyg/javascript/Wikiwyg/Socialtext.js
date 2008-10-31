@@ -1440,7 +1440,9 @@ proto.set_clear_handler = function () {
         jQuery(editor).unbind();
     };
 
-    jQuery(editor).one("click", clean).one("keydown", clean);
+    try {
+        jQuery(editor).one("click", clean).one("keydown", clean);
+    } catch (e) {};
 }
 
 proto.fromHtml = function(html) {

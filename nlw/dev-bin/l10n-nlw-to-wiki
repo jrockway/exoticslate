@@ -37,6 +37,7 @@ my @files = get_files(
         qr#share/console-template/template#,
     ],
     excludes => [
+        qr/\b\.svn\b/,
         qr/tiddlytext/,
         qr/socialtext\.js/,
         qr#javascript/test#,
@@ -54,7 +55,12 @@ exit;
 sub update_enterprise_features {
     for my $dir (qw/appliance control/) {
         my $fulldir = readlink "$ENV{ST_CURRENT}/$dir";
-        shell_run("svk up -s $fulldir");
+        if ($ENV{SVN_COMMAND} eq 'svk') {
+            shell_run("svk up -s $fulldir");
+        }
+        else {
+            shell_run("svn up $fulldir");
+        }
     }
 }
 

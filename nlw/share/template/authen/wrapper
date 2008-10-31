@@ -1,54 +1,24 @@
-<!-- @COPYRIGHT@ -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>[% title %]</title>
-    <link rel="stylesheet" type="text/css" href="[% skin_uri('common') %]/css/xhtml/base.css" />
-    <link rel="stylesheet" type="text/css" href="[% skin_uri('common') %]/css/xhtml/form.css" />
-  </head>
+[% WRAPPER layout/html id=id title=title %]
+<div id="st-display-mode-container" class="authentication">
+  <div id="controls">
+    <div id="st-editing-tools-edit">
+        <h2 id="st-page-titletext" class="tableTitle">[% heading || title %]</h2>
+    </div>
+    <div id="controlsRight">&nbsp;</div>
+  </div>
 
-    <script type="text/javascript">
-// This script will focus the login and choose_password pages
-    function authen_focus () {
-        var form = document.forms["login"];
-        if (form) {
-            var username = form.username;
-            var password = form.password;
-            if (username && password) {
-                if ( username.value.length ) {
-                    password.focus();
-                }
-                else {
-                    username.focus();
-                }
-            }
-            else if (password) {
-                password.focus();
-            }
-        }
-    }
-    </script>
-
-  <body onload="authen_focus()">
-    <a name="page_top"></a>
-
-    <div class="pane">
-    <img id="logo" src="[% skin_uri('s2') %]/images/logo-bar-18.gif" alt="logo"/>
-    <div id="support_link"><a href="mailto:[% support_address | html %]">[% support_address | html %]</a></div>
- 
+  <div id="contentContainer">
     [% INCLUDE errors_and_messages %]
-    [% content %]
-</div>
 
-<!-- @COPYRIGHT@ -->
-<div id="product">
- <span id="product_id"><a target="_blank"
-            href="http://www.socialtext.com/">Socialtext
-            Workspace<sup>&trade;</sup> v[% st_version %]</a>
- </span>
+    <div id="contentColumns">
+      <div id="contentLeft">
+        [% content %]
+      </div>
+      <div id="contentRight" class="wiki">
+        &nbsp;
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
 </div>
-
-</body>
-</html>
+[% END %]

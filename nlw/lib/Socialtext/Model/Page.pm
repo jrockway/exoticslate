@@ -39,7 +39,7 @@ sub to_result {
     my $result = {
         From     => $user->email_address,
         username => $user->username,
-        Date     => $self->{last_edit_time},
+        Date     => "$self->{last_edit_time} GMT",
         DateLocal => $self->datetime_for_user,
         Subject  => $self->{name},
         Revision => $self->{current_revision_num},
@@ -96,7 +96,7 @@ sub hash_representation {
         uri            => $self->{page_id},
         page_id        => $self->{page_id},
         last_editor    => $editor->username,
-        last_edit_time => $self->{last_edit_time},
+        last_edit_time => "$self->{last_edit_time} GMT",
         revision_id    => $self->{current_revision_id},
         revision_count => $self->{revision_count},
         workspace_name => $self->{workspace_name},

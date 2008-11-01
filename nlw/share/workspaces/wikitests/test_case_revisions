@@ -8,27 +8,31 @@ from Recent Changes list view page: click a revisions link for a page with at le
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | test case revisions %%start_time%% |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea |  |
 | type_ok | wikiwyg_wikitext_textarea | original revision number one %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | revision number two %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | revision number three %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | `[revision number four] %%start_time%%` |
 | clickAndWait | st-save-button-link |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | `[revision number five] %%start_time%%` |
 | clickAndWait | st-save-button-link |  |
@@ -203,7 +207,9 @@ Find the same page using search, What's New list, and Revisions link. Observe re
 | clickAndWait | link=Source View |  |
 | text_like | link=Normal View | Normal View |
 | clickAndWait | st-revision-restorebutton |  |
-| wait_for_element_visible_ok | link=6 revisions | 15000 |
+
+| *Comment* | Test Case: Revisions: use the revisions/views link at the bottom of the page |  |
+| wait_for_element_visible_ok | link=6 revisions | 30000 |
 | clickAndWait | link=6 revisions |  |
 | text_like | qr/Revision 2.+Revision 5.+Revision 4.+Revision 3.+Revision 2.+Revision 1/ |  |
 | clickAndWait | link=Back To Current Revision |  |

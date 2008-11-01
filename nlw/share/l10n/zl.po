@@ -162,17 +162,17 @@ msgstr "%1: WATCHLIST FOR %2"
 #: share/skin/s3/template/view/page/display
 #. (
 msgid "%quant(%1,Revision)"
-msgstr "%QUANT(%1,REVISHUN)"
+msgstr "%quant(%1,REVISHUN)"
 
 #: share/skin/s3/template/view/page/display
 #. (
 msgid "%quant(%1,revision)"
-msgstr "%QUANT(%1,REVISHUN)"
+msgstr "%quant(%1,REVISHUN)"
 
 #: share/skin/s3/template/view/page/display
 #. (
 msgid "%quant(%1,view)"
-msgstr "%QUANT(%1,VIEW)"
+msgstr "%quant(%1,VIEW)"
 
 #: lib/Socialtext/Workspace.pm
 #. (

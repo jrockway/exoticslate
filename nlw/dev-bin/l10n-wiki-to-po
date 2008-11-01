@@ -122,6 +122,9 @@ sub _haxorify_lolcat {
     # LOLCAT wants to make escape sequences invalid.
     $translation =~ s/\\N(?:\. KTHX.*)?/\\n/g;
 
+    # LOLCAT translated quant into QUANT
+    $translation =~ s/\%QUANT\(/\%quant\(/g;
+    
     return $translation;
 }
 

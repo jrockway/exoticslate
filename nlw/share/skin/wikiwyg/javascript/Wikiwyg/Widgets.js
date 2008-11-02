@@ -726,9 +726,10 @@ proto.insert_generated_image = function (widget_string, elem, cb) {
     var widget_text = self.getWidgetImageText(widget_string);
     jQuery.post(
         location.pathname,
-        'action=wikiwyg_generate_widget_image;' +
-        'widget=' + encodeURIComponent(widget_text) +
-        ';widget_string=' + encodeURIComponent(widget_string),
+        { action: 'wikiwyg_generate_widget_image'
+        , widget: widget_text
+        , widget_string: widget_string
+        },
         function() {
             self.insert_image(
                 self.getWidgetImageUrl(widget_string),
@@ -762,7 +763,7 @@ proto.insert_real_image = function(widget, elem, cb) {
 
 proto.insert_image = function (src, widget, widget_element, cb) {
     var html = '<img src="' + src +
-        '" widget="' + widget.replace(/"/g,"&quot;") + '" />';
+        '" widget="' + widget.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + '" />';
     if ( widget_element ) {
         if ( widget_element.parentNode ) {
             var div = this.get_edit_document().createElement("div");

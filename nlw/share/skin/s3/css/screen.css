@@ -1780,6 +1780,17 @@ td.peoplelist-desc-td {
 	background-position: top left;
 }
 
+
+.form-users_search a.saveButton {
+        width: 29px;
+        height: 24px;
+        background: url(../images/searchButton.png) no-repeat top left;
+        border: none;
+        margin-left: 5px;
+        vertical-align: top;
+        text-indent: -9999px;
+}
+
 /* Profile overrides
 -------------------------------------------------------------- */
 

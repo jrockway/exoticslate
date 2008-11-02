@@ -8,7 +8,7 @@ use HTML::Scrubber;
 
 field 'scrubber', -init => 'HTML::Scrubber->new';
 
-my %dont_scrub = map { $_ => 1 } qw(page_body content comment users_new_ids POSTDATA tag_name);
+my %dont_scrub = map { $_ => 1 } qw(page_body content comment users_new_ids POSTDATA tag_name widget widget_string);
 
 sub param {
     my $self = shift;

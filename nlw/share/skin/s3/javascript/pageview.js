@@ -49,10 +49,12 @@ Page = {
     setPageContent: function(html) {
         $('#st-page-content').html(html);
     
-        var iframe = $('iframe#st-page-editing-wysiwyg').get(0);
-        if (iframe && iframe.contentWindow) {
+        // We may not yet have an edit window, and it may not have finished
+        // initialization even if we do.  So ignore all errors here.
+        try {
+            var iframe = $('iframe#st-page-editing-wysiwyg').get(0);
             iframe.contentWindow.document.body.innerHTML = html;
-        }
+        } catch (e) {};
 
         // For MSIE, force browser reflow of the bottom buttons to avoid {bz: 966}.
         if ($.browser.msie) {

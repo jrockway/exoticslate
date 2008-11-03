@@ -42,7 +42,7 @@ $(function() {
             else
                 $('#contentColumns').removeClass("showbox").addClass("hidebox");
             hidden = !hidden;
-            this.innerHTML = hidden ? 'show' : 'hide';
+            this.innerHTML = hidden ? loc('show') : loc('hide');
             Cookie.set('st-page-accessories', hidden ? 'hide' : 'show');
 
             if ($('div#contentLeft').css('overflow') == 'visible') {

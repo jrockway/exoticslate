@@ -1,42 +1,37 @@
+[%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
-[% save_button_value = 'Search' %]
-[% PROCESS element/settings/start %]
-<table>
-<tr>
-  <td>
-    <div class="workspace-entry-header">[% loc('Search for Users to Invite') %]</div>
-    <div class="workspace-entry">
-      <div class="workspace-entry-p">
-        [% loc("Enter part of a user's first or last name, or email address.") %]
-      </div>
+[% save_button_value = loc('Search') %]
+[% INCLUDE element/settings/start %]
+<dl class="form">
+  <dt><label>[% loc('Search for Users to Invite') %]</label></dt>
+  <dd>[% loc("Enter part of a user's first or last name, or email address.") %]</dd>
 
-   [% IF invitation_filter %]
-   <div class="workspace-entry-p">
-     [% loc('A filter has been set on this workspace. All candidate email addresses must match this pattern:') %]
-     <span style="color: red">
-       [% invitation_filter %]
-     </span>
-   </div>
-   [% END %]
+  [% IF invitation_filter %]
+    [% loc('A filter has been set on this workspace. All candidate email addresses must match this pattern: <span style="color: red"> [_1] </span>', invitation_filter) %]
+  [% END %]
 
-      <input type="text" size="40" name="user_search" value="[% user_search %]"/>
-      <div class="settings-comment">
-        [% loc('Example:') %]
-        <pre>your
-friend
-your.friend@example.com
-another.friend@example.com
-example
-example.com
-        </pre>
-      </div>
-      <div>
+  <dd><input type="text" size="40" name="user_search" value="[% user_search %]"/></dd>
+  <dd>
+    [% loc('Example:') %]
+    <pre>[% loc('your') %]
+[% loc('friend') %]
+[% loc('your.friend@example.com') %]
+[% loc('another.friend@example.com') %]
+[% loc('example') %]
+[% loc('example.com') %]
+    </pre>
+  </dd>
+</dl>
+
 [% IF search_performed %]
-[% IF users.size %]
-[% IF users.size > 20 %]
-        <input type="submit" name="Button" value="Invite" class="standard-button-submit" onclick="jQuery('input[name=Button]').val('Invite')" />
+<dl class="form">
+  <dt><label>[% loc('Search Results') %]</label></dt>
+  [% IF users.size %]
+  <dd>
+    [% IF users.size > 20 %]
+        <a class="inviteButton" href="#" onclick="jQuery('input[name=Button]').val('Invite'); jQuery('form[name=settings]').submit(); return false">[% loc('Invite') %]</a>
         <br />
-[% END %]
+    [% END %]
 <script language="Javascript">
 function toggle_all() {
     var field = document.settings.email_addresses;
@@ -51,81 +46,64 @@ function toggle_all() {
     return true;
 };
 </script>
-        <input type="checkbox" name="all" onclick="toggle_all()"/> Select/Deselect All<br />
-[% FOREACH user = users %]
+        <input type="checkbox" name="all" onclick="toggle_all()"/>[% loc('(Select/Deselect All)') %]<br />
+    [% FOREACH user = users %]
         <input type="checkbox" name="email_addresses" value="[% user.email_address %]"/> [% user.name_and_email | html %]<br/>
-[% END %]
+    [% END %]
         <br />
-        <input type="submit" name="Button" value="Invite" class="standard-button-submit" onclick="jQuery('input[name=Button]').val('Invite')" />
-      </div>
-[% ELSE %]
-      Your search returned no results.
-[% END %]
+        <a class="inviteButton" href="#" onclick="jQuery('input[name=Button]').val('Invite'); jQuery('form[name=settings]').submit(); return false">[% loc('Invite') %]</a>
+  </dd>
+  [% ELSE %]
+  <dd>
+      [% loc('Your search returned no results.') %]
+  </dd>
+  [% END %]
+</dl>
 [% ELSE %]
       <input type="hidden" name="email_addresses" value="0"/>
 [% END %]
-    </div>
-    <br />
-    <br />
-  </td>
-</tr>
+
+
 [% IF hub.checker.check_permission('admin_workspace') %]
-<tr>
- <td>
-  <div class="workspace-subentry">[% loc('Personal Message') %]</div>
-  <div class="workspace-entry">
-   <div class="workspace-entry-p">[% loc('If you wish, you can include a personal message in the invitation email. You can edit the message to say anything you want.') %]</div>
+<dl class="form">
+  <dt><label>[% loc('Personal Message') %]</label></dt>
+  <dd>[% loc('If you wish, you can include a personal message in the invitation email. You can edit the message to say anything you want.') %]</dd>
+  <dd>
+    <input name="append_invitation" type="checkbox" value="1" />
+    [% loc('Append the personal message below?') %]
+  </dd>
+  <dd>
+    <textarea name="invitation_text" rows="8" cols="50" class="clear-line">[% loc('The Workspace is easy to use. Click links to browse through the pages.') %]
 
-   <div class="workspace-entry-p">
-   <input name="append_invitation" type="checkbox" value="1" /> [% loc('Append the personal message below?') %]<br />
-   <textarea name="invitation_text" rows="8" cols="50" class="clear-line"
->[% loc('The Workspace is easy to use. Click links to browse through the
->pages.') %]
+[% loc("If you see something you'd like to add to or change, click the \"Edit\" link at the top of each page.") %] [% loc('Make your contributions in the text box, then click "Save".') %]
 
-[% loc("If you see something you'd like to add to or change, click the \"Edit\" link at the top of each page. Make your contributions in the text box, then click \"Save\".") %]
+[% loc("When you're entering text, just type in paragraphs.") %] [% loc("And don't worry about breaking anything - previous versions of the page are saved, so there's always a backup copy of the page you're working on.") %]
 
-[% loc("When you're entering text, just type in paragraphs. And don't worry about breaking anything - previous versions of the page are saved, so there's always a backup copy of the page you're working on.") %]
+[% loc("To make a link to another page (even if it doesn't exist yet), put square brackets around a word or phrase.") %]</textarea>
+  </dd>
+</dl> 
 
-[% loc("To make a link to another page (even if it doesn't exist yet), put ~[square brackets around a word or phrase~].") %]
-   </textarea>
-   </div>
-  </div>
- </td>
-</tr>
-<tr>
- <td>
-  <div class="workspace-subentry">[% loc('Standard Welcome Message') %]</div>
-  <div class="workspace-entry">
-   <div class="workspace-entry-p">[% loc("New users will be sent the following invitation email:") %]</div>
-
-   <div class="users-invite-message">
-
-   [% INCLUDE $workspace_invitation_body
-      workspace_title       => hub.current_workspace.title,
-      user                  => 'invitee@example.com',
-      requires_confirmation => 0,
-      inviting_user         => hub.current_user.best_full_name,
-      confirmation_uri      => ''
-      extra_text            => loc('<Your personal message goes here.>'),
-    %]
-
-   </div>
-  </div>
- </td>
- [% ELSE %]
- <tr>
-  <td>
-   <div class="workspace-subentry">[% loc('Administrator Notification') %]</div>
-    <div class="workspace-entry">
-        <div class="workspace-entry-p">[% loc('The workspace administrators for this space will receive a notification of your request so that the users can be invited.') %]<br />
-       <input name="append_invitation" type="checkbox" value="1" /> [% loc('Append the extra text below?') %]<br />
-       <textarea name="invitation_text" rows="8" cols="50" class="clear-line" >[% loc('Please invite these people into the [_1] workspace.', hub.current_workspace.title) %]
-
-       </textarea>
-
-      </div>
-
- [% END %]
-</tr>
-</table>
-[% PROCESS element/settings/end %]
+<dl class="form">
+  <dt><label>[% loc('Standard Welcome Message') %]</label></dt>
+  <dd>[% loc('New users will be sent the following welcome email:') %]</dd>
+  <dd>
+    <div class="messageBox">
+      <div class="messageBoxRight">
+        <div class="messageBoxBottomRight">
+          <div class="messageBoxBottomLeft">
+             [% INCLUDE $workspace_invitation_body
+              workspace_title     => hub.current_workspace.title,
+              user          => 'invitee@example.com',
+              requires_confirmation => 1,
+              inviting_user     => hub.current_user.best_full_name,
+              confirmation_uri    => ''
+              extra_text      => loc('<Your personal message goes here.>'),
+            %]
+          </div><!-- messageBoxBottomLeft -->
+        </div><!-- messageBoxBottomRight -->
+      </div><!-- messageBoxRight END -->
+    </div><!-- messageBox END -->
+  </dd>
+</dl>
+[% END %]
+[% INCLUDE element/settings/stop %]

@@ -1767,7 +1767,7 @@ td.peoplelist-desc-td {
         width: 100%;
 }
 
-.form-users_invite a.saveButton {
+.form-users_invite a.saveButton, a.inviteButton {
 	display: block;
 	width: 59px;
 	height: 22px;
@@ -1776,7 +1776,7 @@ td.peoplelist-desc-td {
 	text-indent: -9999px;
 }
 
-.form-users_invite a.saveButton:hover {
+.form-users_invite a.saveButton:hover, a.inviteButton:hover {
 	background-position: top left;
 }
 

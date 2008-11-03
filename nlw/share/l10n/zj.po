@@ -1319,7 +1319,7 @@ msgstr "えMあいl"
 msgid "Email Address"
 msgstr "えMあいl あDdRえSs"
 
-#: lib/Socialtext/Authen.pm share/template/authen/element/register_form share/template/authen/forgot_password.html
+#: lib/Socialtext/Authen.pm
 #.  
 msgid "Email Address:"
 msgstr "えMあいl あDdRえSs:"
@@ -2049,7 +2049,7 @@ msgstr "lおcあlえ FおR %1 いS NおW %2"
 msgid "Location:"
 msgstr "lおcあ7いおN:"
 
-#: lib/Socialtext/Lite.pm share/skin/s3/template/layout/html share/skin/s3/template/layout/html share/template/authen/element/login_form
+#: lib/Socialtext/Lite.pm share/skin/s3/template/layout/html share/skin/s3/template/layout/html
 #.  
 msgid "Log in"
 msgstr "lおg いN"
@@ -2749,7 +2749,7 @@ msgstr "rえdいrえc7いNg 7お %1"
 msgid "Refresh file list"
 msgstr "rえfRえSh fいlえ LいS7"
 
-#: share/skin/s3/template/layout/html share/skin/s3/template/layout/html share/template/authen/element/register_form share/template/authen/register.html
+#: share/skin/s3/template/layout/html share/skin/s3/template/layout/html
 #.  
 msgid "Register"
 msgstr "rえgいs7えR"
@@ -3309,7 +3309,7 @@ msgstr "s7あNdあrD WえLcおmえ MえSsあgえ"
 msgid "Stop watching"
 msgstr "s7おP Wあ7cHいNg"
 
-#: share/template/authen/element/choose_password_form share/template/authen/element/forgot_password_form share/template/control/accounts.html share/template/control/accounts.html share/template/control/assign_to_account share/template/control/users.html share/template/control/workspaces.html
+#: share/template/control/accounts.html share/template/control/accounts.html share/template/control/assign_to_account share/template/control/users.html share/template/control/workspaces.html
 #.  
 msgid "Submit"
 msgstr "sう8Mい7"
@@ -3879,7 +3879,7 @@ msgstr "うSえR RえQういrえs cおnFいRmあ7いおN"
 msgid "Username"
 msgstr "うSえRnあmえ"
 
-#: lib/Socialtext/Authen.pm share/template/authen/element/choose_password_form
+#: lib/Socialtext/Authen.pm
 #.  
 msgid "Username:"
 msgstr "うSえRnあmえ:"

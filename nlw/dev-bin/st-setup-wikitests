@@ -16,6 +16,7 @@ echo Populating reports DB
 $NLW_DEVBIN/st-populate-reports-db
 # run report populater again because that seems to be necessary for the
 # report tests to pass
+export PGUSER=`st-config echo db_user`
 $NLW_DEVBIN/st-populate-reports-db
 
 echo "Set up wikitests"

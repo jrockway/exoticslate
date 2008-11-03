@@ -34,7 +34,7 @@ example.com
 [% IF search_performed %]
 [% IF users.size %]
 [% IF users.size > 20 %]
-        <input type="submit" name="Button" value="Invite" class="standard-button-submit" />
+        <input type="submit" name="Button" value="Invite" class="standard-button-submit" onclick="jQuery('input[name=Button]').val('Invite')" />
         <br />
 [% END %]
 <script language="Javascript">
@@ -56,7 +56,7 @@ function toggle_all() {
         <input type="checkbox" name="email_addresses" value="[% user.email_address %]"/> [% user.name_and_email | html %]<br/>
 [% END %]
         <br />
-        <input type="submit" name="Button" value="Invite" class="standard-button-submit" />
+        <input type="submit" name="Button" value="Invite" class="standard-button-submit" onclick="jQuery('input[name=Button]').val('Invite')" />
       </div>
 [% ELSE %]
       Your search returned no results.

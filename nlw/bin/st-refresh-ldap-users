@@ -1,0 +1,193 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+
+use strict;
+use warnings;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use Getopt::Long;
+use Pod::Usage;
+use Log::Dispatch;
+use Log::Dispatch::Screen;
+use Socialtext::SQL qw(sql_execute);
+use Socialtext::User::LDAP::Factory;
+
+###############################################################################
+# Read in our command line options.
+my ($help, $man);
+my $verbose = 0;
+my $force   = 0;
+GetOptions(
+    'help|?'    => \$help,
+    'man'       => \$man,
+    'verbose'   => \$verbose,
+    'force'     => \$force,
+) || pod2usage(1);
+pod2usage(1) if ($help);
+pod2usage( -exitstatus=>0, -verbose=>2 ) if ($man);
+
+###############################################################################
+# Create a logger, so we can show status.
+my $log = Log::Dispatch->new();
+$log->add( Log::Dispatch::Screen->new(
+    name        => 'screen',
+    min_level   => $verbose ? 'debug' : 'notice',
+    stderr      => 1,
+) );
+binmode(STDERR, ':utf8');
+
+###############################################################################
+# Get the list of LDAP users *directly* from the DB.
+#
+# Order this by "driver_key" so that we'll group all of the LDAP lookups for a
+# single server together; if we spread them out we risk having the LDAP
+# connection time out in between user lookups.
+$log->debug( "getting list of LDAP users to refresh\n" );
+my $sth = sql_execute( qq{
+    SELECT driver_key, driver_unique_id, driver_username
+      FROM users
+     WHERE driver_key ~* 'LDAP'
+     ORDER BY driver_key, driver_username
+} );
+$log->debug( "... found " . $sth->rows . " LDAP users\n" );
+
+###############################################################################
+# Refresh each of the LDAP users.
+while (my $row = $sth->fetchrow_arrayref()) {
+    my ($driver_key, $driver_unique_id, $driver_username) = @{$row};
+
+    # get the LDAP user factory we need for this user.
+    my $factory = _get_factory($driver_key);
+    next unless $factory;
+
+    # refresh the user data from the Factory, disabling cache freshness checks
+    # if we're forcing the refresh of all users
+    local $Socialtext::User::LDAP::Factory::CacheEnabled = 0 if ($force);
+    $log->debug( "... refreshing: $driver_username\n" );
+    my $homunculus = $factory->GetUser( driver_unique_id => $driver_unique_id );
+}
+$sth->finish();
+
+###############################################################################
+# All done, exit peacefully.
+$log->debug( "done\n" );
+exit;
+
+
+###############################################################################
+# Subroutine:   _get_factory($driver_key)
+###############################################################################
+# Gets the LDAP user Factory to use for the given '$driver_key'.  Caches the
+# Factory for later re-use, so that we're not opening a new LDAP connection
+# for each and every user lookup.
+###############################################################################
+{
+    my %Factories;
+    sub _get_factory {
+        my $driver_key = shift;
+
+        # create a new Factory if we don't have a cached one yet
+        unless ($Factories{$driver_key}) {
+            # instantiate a new LDAP user Factory
+            my ($driver_id) = ($driver_key =~ /LDAP:(.*)/);
+            $log->debug( "creating new LDAP user Factory, '$driver_id'\n" );
+            my $factory = Socialtext::User::LDAP::Factory->new($driver_id);
+            unless ($factory) {
+                $log->error( "unable to find LDAP config '$driver_id'; was it removed from your LDAP config?\n" );
+                return;
+            }
+
+            # make sure we can actually connect to the LDAP server
+            unless ($factory->connect()) {
+                $log->error( "unable to connect to LDAP server\n" );
+                return;
+            }
+
+            # cache the factory for later re-use
+            $Factories{$driver_key} = $factory;
+        }
+        return $Factories{$driver_key};
+    }
+}
+
+
+
+
+=head1 NAME
+
+st-refresh-ldap-users - Utility to refresh DB cache of LDAP user data
+
+=head1 SYNOPSIS
+
+  st-refresh-ldap-users [options]
+
+  Options:
+    --force         Force refresh for all LDAP users
+    --verbose       Enable verbose output
+    --help/-?       Brief help message
+    --man           Full documentation
+
+  Example:
+    st-refresh-ldap-users --verbose
+
+=head1 DESCRIPTION
+
+C<st-refresh-ldap-users> is a command line utility to refresh the local DB
+cache with information on LDAP users.
+
+LDAP user data I<is> refreshed automatically by the system as part of its
+regular operations, but there are times when you may wish to refresh the data
+explicitly:
+
+=over
+
+=item *
+
+Initial population of LDAP user data; cache is empty and you'd like to
+pre-fetch all of the user data so that its available immediately, rather than
+waiting for the user data to get cached naturally through system use.
+
+=item *
+
+You've made (possibly major) changes to the data stored within the LDAP
+directory, and want that data to be reflected immediately within Socialtext.
+
+=back
+
+By default, only those users whose cached data is stale are refreshed.  This
+can be over-ridden by using the C<--force> command line option, which forces a
+refresh of B<all> LDAP users.
+
+=head1 OPTIONS
+
+=over
+
+=item B<--force>
+
+Forces a refresh for B<all> LDAP users, not just those who are known to have
+stale/outdated cached data.
+
+=item B<--verbose>
+
+Runs in verbose mode, displaying additional information as users are refreshed
+via LDAP.
+
+=item B<--help/-?>
+
+Displays a brief help message.
+
+=item B<--man>
+
+Displays the full documentation.
+
+=back
+
+=head1 AUTHOR
+
+Graham TerMarsch C<< <graham.termarsch@socialtext.com> >>
+
+=head1 COPYRIGHT
+
+Copyright 2008 Socialtext, Inc.,  All Rights Reserved.
+
+=cut

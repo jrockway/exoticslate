@@ -161,7 +161,12 @@ sub _searched_pages {
 
 
     Socialtext::Timer->Pause('searched_pages');
-    return @$pages;
+    if (ref $pages eq 'ARRAY') {
+        return @$pages;
+    }
+    else {
+        return $pages;
+    }
 }
 
 sub _hub_for_hit {

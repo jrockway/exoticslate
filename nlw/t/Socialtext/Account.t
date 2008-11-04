@@ -58,7 +58,13 @@ like( $@, qr/cannot change/, 'cannot change the name of a system-created account
     }
 }
 
-
+Rudimentary_Plugin_Test: {
+   $socialtext->enable_plugin( 'dashboard' );
+   is('1', $socialtext->is_plugin_enabled('dashboard'), 'dashboard enabled.');
+   is_deeply( ( qw/dashboard/ ), $socialtext->plugins_enabled, 'enabled.');
+   $socialtext->disable_plugin( 'dashboard' );
+   is('0', $socialtext->is_plugin_enabled('dashboard'), 'dashboard disabled.');
+}
 
 is( $test->workspace_count, 1, 'test account has one workspace' );
 is( $test->workspaces->next->name, 'testingspace',
@@ -132,6 +138,7 @@ Account_skins: {
 
     
 }
+
 my $export_file;
 Exporting_account_people: {
     $export_file = $test->export( dir => 't' );

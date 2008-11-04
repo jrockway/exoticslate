@@ -117,6 +117,17 @@ sub is_plugin_enabled {
     return sql_singlevalue($sql, $self->account_id, $plugin);
 }
 
+sub plugins_enabled {
+    my $self = shift;
+    my $sql  = q{
+        SELECT plugin
+          FROM account_plugin
+         WHERE account_id = ?
+    };
+    my $result = sql_execute( $sql, $self->account_id );
+    return map{ $_->[0] } @{ $result->fetchall_arrayref };
+}
+
 sub enable_plugin {
     my ($self, $plugin) = @_;
 

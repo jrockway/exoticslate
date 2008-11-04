@@ -4,9 +4,10 @@
 use strict;
 use warnings;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 27;
+use Test::Socialtext tests => 32;
 use File::Slurp qw(write_file);
 use Benchmark qw(timeit timestr);
+use Socialtext::SQL qw(sql_execute);
 
 ###############################################################################
 # FIXTURE: db
@@ -86,6 +87,10 @@ test_ldap_users_all_fresh: {
 ###############################################################################
 # TEST: have LDAP users, some of which have never been cached; users that have
 # never been cached are refreshed.
+#
+# We *also* test here to make sure that the first_name/last_name/username are
+# refreshed properly.  This is then skipped in subsequent tests (as we've
+# already tested for that condition here).
 test_refresh_stale_users: {
     my $ldap = set_up_openldap();
 
@@ -96,17 +101,40 @@ test_refresh_stale_users: {
     my $ldap_homey = $ldap_user->homunculus;
     isa_ok $ldap_homey, 'Socialtext::User::LDAP', 'LDAP homunculus';
 
+    # update the DB with new info, so we'll be able to verify that the user
+    # did in fact get his/her data refreshed from LDAP again.
+    sql_execute( qq{
+        UPDATE users
+           SET first_name='bogus_first',
+               last_name='bogus_last',
+               driver_username='bogus_username'
+         WHERE driver_unique_id=?
+        }, $ldap_homey->driver_unique_id );
+    my $bogus_user = Socialtext::User->new( email_address => 'john.doe@example.com' );
+    is $bogus_user->first_name, 'bogus_first', 'set bogus data to first_name';
+    is $bogus_user->last_name, 'bogus_last', 'set bogus data to last_name';
+    is $bogus_user->username, 'bogus_username', 'set bogus data to username';
+
     # expire the user, so that they'll get refreshed
     $ldap_homey->expire();
 
-    # sleep a bit; our granularity on "cached_at" is only to one second, so we
-    # need to make sure that we've slept a bit before refreshing the user data
-    sleep 2;
-
     # refresh LDAP users
-    my $results = `st-refresh-ldap-users --verbose 2>&1`;
-    is $?, 0, 'st-refresh-ldap-users ran successfully';
-    like $results, qr/found 1 LDAP users/, 'one LDAP user present';
+    #
+    # granularity on "cached_at" is only to the second, so we'll sleep a bit
+    # around the refresh so we can check afterwards that (a) the user was
+    # refreshed, and (b) that it was done by st-refresh-ldap-users and not by
+    # our re-instantiating the user record.
+    my $time_before_refresh = time();
+    {
+        sleep 2;
+
+        my $results = `st-refresh-ldap-users --verbose 2>&1`;
+        is $?, 0, 'st-refresh-ldap-users ran successfully';
+        like $results, qr/found 1 LDAP users/, 'one LDAP user present';
+
+        sleep 2;
+    }
+    my $time_after_refresh = time();
 
     # get the refreshed LDAP user record
     my $refreshed_user = Socialtext::User->new( email_address => 'john.doe@example.com' );
@@ -115,10 +143,16 @@ test_refresh_stale_users: {
     my $refreshed_homey = $refreshed_user->homunculus;
     isa_ok $refreshed_homey, 'Socialtext::User::LDAP', 'refreshed LDAP homunculus';
 
-    # make sure that we've got different copies of the User object, *and* that
-    # they have different cached at times.
-    isnt $ldap_homey, $refreshed_homey, 'user objects are different';
-    isnt $ldap_homey->cached_at->epoch, $refreshed_homey->cached_at->epoch, 'user was refreshed';
+    # make sure the user *was* refreshed by st-refresh-ldap-users
+    my $refreshed_at = $refreshed_homey->cached_at->epoch();
+    ok $refreshed_at > $time_before_refresh, 'user was refreshed';
+    ok $refreshed_at < $time_after_refresh, '... by st-refresh-ldap-users';
+
+    # make sure that the bogus data we set into the user was over-written by
+    # the refresh
+    isnt $ldap_homey->first_name, 'bogus_first', '... first_name was refreshed';
+    isnt $ldap_homey->last_name, 'bogus_last', '... last_name was refreshed';
+    isnt $ldap_homey->username, 'bogus_username', '... username was refreshed';
 
     # cleanup; don't want to pollute other tests
     $ldap_user->delete( force => 1 );
@@ -137,14 +171,23 @@ test_force_refresh: {
     my $ldap_homey = $ldap_user->homunculus;
     isa_ok $ldap_homey, 'Socialtext::User::LDAP', 'LDAP homunculus';
 
-    # sleep a bit; our granularity on "cached_at" is only to one second, so we
-    # need to make sure that we've slept a bit before refreshing the user data
-    sleep 2;
-
     # refresh LDAP users
-    my $results = `st-refresh-ldap-users --verbose --force 2>&1`;
-    is $?, 0, 'st-refresh-ldap-users ran successfully';
-    like $results, qr/found 1 LDAP users/, 'one LDAP user present';
+    #
+    # granularity on "cached_at" is only to the second, so we'll sleep a bit
+    # around the refresh so we can check afterwards that (a) the user was
+    # refreshed, and (b) that it was done by st-refresh-ldap-users and not by
+    # our re-instantiating the user record.
+    my $time_before_refresh = time();
+    {
+        sleep 2;
+
+        my $results = `st-refresh-ldap-users --verbose --force 2>&1`;
+        is $?, 0, 'st-refresh-ldap-users ran successfully';
+        like $results, qr/found 1 LDAP users/, 'one LDAP user present';
+
+        sleep 2;
+    }
+    my $time_after_refresh = time();
 
     # get the refreshed LDAP user record
     my $refreshed_user = Socialtext::User->new( email_address => 'john.doe@example.com' );
@@ -153,10 +196,10 @@ test_force_refresh: {
     my $refreshed_homey = $refreshed_user->homunculus;
     isa_ok $refreshed_homey, 'Socialtext::User::LDAP', 'refreshed LDAP homunculus';
 
-    # make sure that we've got different copies of the User object, *and* that
-    # they have different cached at times.
-    isnt $ldap_homey, $refreshed_homey, 'user objects are different';
-    isnt $ldap_homey->cached_at->epoch, $refreshed_homey->cached_at->epoch, 'user was refreshed';
+    # make sure the user *was* refreshed by st-refresh-ldap-users
+    my $refreshed_at = $refreshed_homey->cached_at->epoch();
+    ok $refreshed_at > $time_before_refresh, 'user was refreshed';
+    ok $refreshed_at < $time_after_refresh, '... by st-refresh-ldap-users';
 
     # cleanup; don't want to pollute other tests
     $ldap_user->delete( force => 1 );

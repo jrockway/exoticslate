@@ -1748,12 +1748,27 @@ proto.get_editable_div = function () {
             });
         } 
 
+        var tryFocusDiv = function(tries) {
+            setTimeout(function() {
+                try {
+                    self._editable_div.focus();
+                } catch(e) {
+                    /* If we get here, the doc is partially initializing so we
+                     * may get a "Permission denied" error, so try again.
+                     */
+                    if (tries > 0) {
+                        tryFocusDiv(tries - 1);
+                    }
+                }
+            }, 500);
+        };
+
         var tryAppendDiv = function(tries) {
             setTimeout(function() {
                 try {
                     if (doc.body) {
                         doc.body.appendChild(self._editable_div);
-                        setTimeout(function () { self._editable_div.focus() }, 500);
+                        tryFocusDiv(100);
                     }
                     else if (tries > 0) {
                         tryAppendDiv(tries - 1);

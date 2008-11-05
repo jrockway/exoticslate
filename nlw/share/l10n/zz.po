@@ -189,6 +189,16 @@ msgstr "'%1' Is n07 4 v4lId 4Cc0uN7 n4m3."
 msgid "'%1' is not a valid locale"
 msgstr "'%1' Is n07 4 v4lId l0c4l3"
 
+#: share/template/authen/element/register_form share/template/authen/element/register_form
+#.  
+msgid "(Optional)"
+msgstr "(0p7i0n4l)"
+
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "(Select/Deselect All)"
+msgstr "(S3L3C7/d3s3l3c7 4lL)"
+
 #: share/template/email/recent-changes.html share/template/email/recent-changes.txt share/template/email/watchlist.html share/template/email/watchlist.txt
 #. (
 msgid "(by %1 on %2)"
@@ -379,7 +389,7 @@ msgstr "1 qU4R73r"
 msgid "1 Week"
 msgstr "1 w33K"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "<Your personal message goes here.>"
 msgstr "<Y0Ur p3rS0N4L M3Ss4g3 G03s h3r3.>"
@@ -404,7 +414,7 @@ msgstr "<P>7hIs iS Wh3r3 Y0U S37 7h3 7i7l3 0f 7H3 p4g3 Y0U W0UlD LiK3 70 S33 In 
 msgid "A custom skin file was not uploaded."
 msgstr "4 cUs70M SkIn fIl3 W4S N07 UpL04d3d."
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #. (
 msgid "A filter has been set on this workspace. All candidate email addresses must match this pattern: <span style=\"color: red\"> %1 </span>"
 msgstr "4 fIl73R H4S 833n s37 0N 7hIs w0rKsP4C3. 4lL C4NdId473 3m4iL 4dDr3sS3S MuS7 m47Ch 7HiS P4773rN: <Sp4n s7yL3=\"c0l0r: R3D\"> %1 </Sp4n>"
@@ -453,6 +463,11 @@ msgstr "4Cc0uN7"
 #. (
 msgid "Account %1 already exists!"
 msgstr "4Cc0uN7 %1 4lR34dY 3xIs7s!"
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Account %1 renamed to %2"
+msgstr "4Cc0uN7 %1 R3N4M3D 70 %2"
 
 #: lib/Socialtext/Handler/ControlPanel.pm lib/Socialtext/Handler/ControlPanel.pm
 #.  
@@ -599,7 +614,7 @@ msgstr "4N InV4LiD P4G3 iD W4S GiV3N: %1"
 msgid "An invalid page name was given: %1"
 msgstr "4N InV4LiD P4G3 n4m3 W4S GiV3N: %1"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "And don't worry about breaking anything - previous versions of the page are saved, so there's always a backup copy of the page you're working on."
 msgstr "4Nd d0n'7 w0rRy 480U7 8R34kInG 4nY7HiNg - pR3Vi0uS V3RsI0Ns 0F 7h3 P4G3 4R3 s4v3d, S0 7H3R3's 4Lw4yS 4 84CkUp c0pY 0f 7H3 p4g3 Y0U'R3 w0rKiNg 0N."
@@ -629,7 +644,7 @@ msgstr "4P4Ch3 L0Gs"
 msgid "Apache error log"
 msgstr "4P4Ch3 3rR0R L0G"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Append the personal message below?"
 msgstr "4Pp3nD 7h3 P3Rs0n4l m3sS4G3 83l0w?"
@@ -704,7 +719,7 @@ msgstr "4SsIgN 70 4 n3w pRiM4Ry 4Cc0uN7"
 msgid "Attachment not found. The page name, file name or identifer number in the link may be incorrect, or the attachment may have been deleted or is not present in this workspace."
 msgstr "4774cHm3n7 N07 F0UnD. 7H3 p4g3 N4M3, FiL3 n4m3 0r iD3N7If3r nUm83R In 7H3 lInK M4Y 83 iNc0rR3C7, 0r 7H3 4774cHm3n7 M4Y H4V3 833N D3L373D 0r iS N07 Pr3s3n7 In 7HiS W0RkSp4c3."
 
-#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page/display
 #.  
 msgid "Attachments"
 msgstr "4774cHm3n7s"
@@ -728,6 +743,11 @@ msgstr "84cK"
 #.  
 msgid "Back To Current Revision"
 msgstr "84cK 70 cUrR3N7 r3vIsI0N"
+
+#: share/template/authen/forgot_password.html
+#. (
+msgid "Back to <a href=\"%1\">Log in to Socialtext</a>."
+msgstr "84cK 70 <a href=\"%1\">L0G In 70 S0Ci4l73X7</4>."
 
 #: share/template/control/growth_report.html share/template/control/report.html
 #.  
@@ -819,7 +839,7 @@ msgstr "c4lL '%1' uSiNg sKyP3. ClIcK 70 3Di7."
 msgid "Can't remove privileges of the last admin"
 msgstr "c4n'7 r3m0v3 PrIvIl3g3s 0F 7h3 L4S7 4DmIn"
 
-#: share/console-template/template/popup.html share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
+#: share/console-template/template/popup.html share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
 #.  
 msgid "Cancel"
 msgstr "c4nC3L"
@@ -873,6 +893,16 @@ msgstr "cH4Ng3s s4v3d"
 #. (
 msgid "Check with your %1 administrator."
 msgstr "cH3Ck wI7H Y0Ur %1 4dMiNiS7R470R."
+
+#: share/template/authen/choose_password.html
+#.  
+msgid "Choose Password"
+msgstr "cH00s3 P4SsW0Rd"
+
+#: share/template/authen/element/choose_password_form
+#.  
+msgid "Choose Password:"
+msgstr "cH00s3 P4SsW0Rd:"
 
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
@@ -1319,7 +1349,7 @@ msgstr "3M4Il"
 msgid "Email Address"
 msgstr "3M4Il 4DdR3Ss"
 
-#: lib/Socialtext/Authen.pm
+#: lib/Socialtext/Authen.pm share/template/authen/element/register_form share/template/authen/forgot_password.html
 #.  
 msgid "Email Address:"
 msgstr "3M4Il 4DdR3Ss:"
@@ -1368,6 +1398,16 @@ msgstr "3Nj0y!"
 #.  
 msgid "Enter a list of email addresses (one address per line) of people you would like to invite to this Workspace."
 msgstr "3N73r 4 lIs7 0f 3M4Il 4DdR3Ss3s (0n3 4dDr3sS P3R LiN3) 0f p30Pl3 Y0U W0UlD LiK3 70 InVi73 70 7hIs w0rKsP4C3."
+
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "Enter part of a user's first or last name, or email address."
+msgstr "3N73r p4r7 0f 4 uS3R'S FiRs7 0r l4s7 N4M3, 0r 3M4Il 4DdR3Ss."
+
+#: share/template/authen/forgot_password.html
+#.  
+msgid "Enter your email address below. Enter the email address you normally use for your Socialtext account. If you got here by clicking a link you received in an email message, look at that message, and use the email address it was sent to."
+msgstr "3N73r y0uR 3m4iL 4dDr3sS 83L0W. 3N73r 7H3 3M4Il 4DdR3Ss y0u n0rM4LlY Us3 F0R Y0Ur s0cI4L73x7 4cC0Un7. iF Y0U G07 H3R3 8Y ClIcKiNg 4 lInK Y0U R3C3Iv3d iN 4n 3M4Il m3sS4G3, L00k 47 7h47 m3sS4G3, 4nD Us3 7h3 3m4iL 4dDr3sS I7 w4s s3n7 70."
 
 #: lib/Socialtext/CLI.pm
 #. (
@@ -1424,7 +1464,7 @@ msgstr "3V3Ry mInU73"
 msgid "Every Week"
 msgstr "3V3Ry w33K"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Example:"
 msgstr "3X4MpL3:"
@@ -1534,6 +1574,11 @@ msgstr "fIl3n4m3"
 msgid "First"
 msgstr "fIrS7"
 
+#: share/template/authen/element/register_form
+#.  
+msgid "First Name:"
+msgstr "fIrS7 n4m3:"
+
 #: share/skin/s3/template/view/paging
 #.  
 msgid "First Page"
@@ -1558,6 +1603,11 @@ msgstr "fIrS7N4M3 l4s7n4m3 &l7;U01234@3X4MpL3.c0m&g7;"
 #.  
 msgid "Followed People Events"
 msgstr "f0lL0W3D P30pL3 3V3N7S"
+
+#: share/template/authen/forgot_password.html
+#.  
+msgid "Forgot Password"
+msgstr "f0rG07 P4SsW0Rd"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -1684,6 +1734,11 @@ msgstr "h0w sH0UlD D4YlIgH7 s4vInGs/sUmM3R 7iM3 83 H4NdL3D?"
 msgid "How should displayed dates be formatted?"
 msgstr "h0w sH0UlD DiSpL4Y3D D473S 83 f0rM4773d?"
 
+#: share/template/authen/element/forgot_password_link
+#.  
+msgid "I don't know my password."
+msgstr "i d0n'7 kN0W My p4sSw0rD."
+
 #: lib/Socialtext/WorkspaceInvitation.pm
 #. (
 msgid "I'm inviting you into the %1 workspace"
@@ -1734,12 +1789,12 @@ msgstr "iF Y0U H4V3 qU3S7I0Ns, Pl34S3 c0n74C7 y0uR WiKi sUpP0R7 47"
 msgid "If you have questions, please contact your wiki support at %1."
 msgstr "iF Y0U H4V3 qU3S7I0Ns, Pl34S3 c0n74C7 y0uR WiKi sUpP0R7 47 %1."
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "If you see something you'd like to add to or change, click the \"Edit\" link at the top of each page."
 msgstr "iF Y0U S33 S0M37hInG Y0U'D LiK3 70 4dD 70 0R Ch4nG3, ClIcK 7h3 \"3dI7\" lInK 47 7H3 70p 0F 34Ch p4g3."
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "If you wish, you can include a personal message in the invitation email. You can edit the message to say anything you want."
 msgstr "iF Y0U WiSh, Y0U C4N InClUd3 4 P3Rs0n4l m3sS4G3 iN 7h3 InVi747i0n 3M4Il. Y0U C4N 3dI7 7H3 m3sS4G3 70 S4Y 4nY7HiNg y0u w4n7."
@@ -1854,7 +1909,7 @@ msgstr "iNv4lId h0s7: %1"
 msgid "Invitation to join %1"
 msgstr "iNvI747I0N 70 j0iN %1"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Invite"
 msgstr "iNvI73"
@@ -1959,6 +2014,11 @@ msgstr "l4s7 3dI73d 8Y"
 msgid "Last Month"
 msgstr "l4s7 M0N7H"
 
+#: share/template/authen/element/register_form
+#.  
+msgid "Last Name:"
+msgstr "l4s7 N4M3:"
+
 #: share/skin/s3/template/view/paging
 #.  
 msgid "Last Page"
@@ -2034,7 +2094,7 @@ msgstr "lIs7 4lL Us3rS"
 msgid "Loaded users from %1"
 msgstr "l04D3D Us3rS Fr0m %1"
 
-#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page/display
 #.  
 msgid "Loading..."
 msgstr "l04DiNg..."
@@ -2049,10 +2109,20 @@ msgstr "l0c4l3 F0R %1 iS N0W %2"
 msgid "Location:"
 msgstr "l0c47I0N:"
 
-#: lib/Socialtext/Lite.pm share/skin/s3/template/layout/html share/skin/s3/template/layout/html
+#: lib/Socialtext/Lite.pm share/skin/s3/template/layout/html share/skin/s3/template/layout/html share/template/authen/element/login_form
 #.  
 msgid "Log in"
 msgstr "l0g iN"
+
+#: share/template/authen/choose_password.html share/template/authen/login.html
+#.  
+msgid "Log in to Socialtext"
+msgstr "l0g iN 70 s0cI4L73x7"
+
+#: share/template/authen/choose_password.html share/template/authen/register.html
+#.  
+msgid "Log in with an existing account"
+msgstr "l0g iN Wi7h 4N 3xIs7iNg 4Cc0uN7"
 
 #: share/template/email/email-address-confirmation-completed.html share/template/email/email-address-confirmation-completed.txt
 #.  
@@ -2069,6 +2139,11 @@ msgstr "l0g 0U7"
 msgid "Logged in as %1:"
 msgstr "l0gG3D In 4S %1:"
 
+#: share/template/authen/login.html
+#.  
+msgid "Login"
+msgstr "l0gIn"
+
 #: lib/Socialtext/Workspace.pm
 #.  
 msgid "Logo file must be a gif, jpeg, or png file."
@@ -2079,7 +2154,7 @@ msgstr "l0g0 FiL3 mUs7 83 4 gIf, Jp3g, 0r pNg fIl3."
 msgid "Look for"
 msgstr "l00K F0R"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Make your contributions in the text box, then click \"Save\"."
 msgstr "m4k3 Y0Ur c0n7rI8U7I0Ns iN 7h3 73X7 80x, 7h3n cLiCk \"s4v3\"."
@@ -2224,7 +2299,7 @@ msgstr "n3w p4sSw0rDs mUs7 83 47l34S7 6 cH4R4C73rS L0Ng."
 msgid "New search"
 msgstr "n3w s34RcH"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "New users will be sent the following welcome email:"
 msgstr "n3w uS3Rs wIlL 83 s3n7 7h3 F0Ll0wInG W3Lc0m3 3m4iL:"
@@ -2283,6 +2358,11 @@ msgstr "n0 P4G3 n4m3 GiV3N"
 #.  
 msgid "No pages selected for export"
 msgstr "n0 P4G3S S3L3C73d f0r 3Xp0r7"
+
+#: share/template/authen/forgot_password.html
+#.  
+msgid "No problem, we can send you an email that will help. You will be able to change your password back to something you know."
+msgstr "n0 Pr08L3M, w3 C4N S3Nd y0u 4N 3m4iL 7h47 wIlL H3Lp. Y0U WiLl 83 48L3 70 Ch4nG3 y0uR P4SsW0Rd 84cK 70 s0m37HiNg y0u kN0W."
 
 #: lib/Socialtext/HitCounterPlugin.pm
 #. (
@@ -2384,7 +2464,7 @@ msgstr "0U7G0InG M4Il s3rV3R"
 msgid "Overview"
 msgstr "0V3RvI3W"
 
-#: share/skin/s3/template/view/paging
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/paging
 #.  
 msgid "Page"
 msgstr "p4g3"
@@ -2424,7 +2504,7 @@ msgstr "p4g3 N4M3 iS 700 L0Ng"
 msgid "Page renamed to %1"
 msgstr "p4g3 R3N4M3D 70 %1"
 
-#: lib/Socialtext/EditPlugin.pm lib/Socialtext/EmailReceiver/Base.pm lib/Socialtext/EmailReceiver/Base.pm lib/Socialtext/Page.pm lib/Socialtext/UserPreferencesPlugin.pm share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js
+#: lib/Socialtext/EditPlugin.pm lib/Socialtext/EmailReceiver/Base.pm lib/Socialtext/EmailReceiver/Base.pm lib/Socialtext/Page.pm lib/Socialtext/UserPreferencesPlugin.pm share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js
 #.  
 msgid "Page title is too long after URL encoding"
 msgstr "p4g3 7i7l3 Is 700 l0nG 4f73R UrL 3nC0DiNg"
@@ -2464,6 +2544,11 @@ msgstr "p4g3s wI7H 7h3 '%1' 74g. ClIcK 70 3Di7."
 msgid "Password"
 msgstr "p4sSw0rD"
 
+#: share/template/authen/element/login_form share/template/authen/element/register_form
+#.  
+msgid "Password:"
+msgstr "p4sSw0rD:"
+
 #: lib/Socialtext/User.pm lib/Socialtext/User/Default.pm
 #.  
 msgid "Passwords must be at least 6 characters long."
@@ -2494,7 +2579,7 @@ msgstr "p3rF0Rm r3s70R3"
 msgid "Permalink"
 msgstr "p3rM4LiNk"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Personal Message"
 msgstr "p3rS0N4L M3Ss4g3"
@@ -2674,6 +2759,11 @@ msgstr "pU8LiC R34d-0NlY"
 msgid "RFC 868 Time Server"
 msgstr "rFc 868 7Im3 S3Rv3r"
 
+#: share/template/authen/element/choose_password_form share/template/authen/element/register_form
+#.  
+msgid "Re-type Password:"
+msgstr "r3-7yP3 p4sSw0rD:"
+
 #: lib/Socialtext/Appliance/ConsoleController.pm
 #.  
 msgid "Reboot"
@@ -2749,7 +2839,7 @@ msgstr "r3dIr3c7iNg 70 %1"
 msgid "Refresh file list"
 msgstr "r3fR3Sh fIl3 LiS7"
 
-#: share/skin/s3/template/layout/html share/skin/s3/template/layout/html
+#: share/skin/s3/template/layout/html share/skin/s3/template/layout/html share/template/authen/element/register_form share/template/authen/register.html
 #.  
 msgid "Register"
 msgstr "r3gIs73R"
@@ -2758,6 +2848,11 @@ msgstr "r3gIs73R"
 #.  
 msgid "Relevance"
 msgstr "r3l3v4nC3"
+
+#: share/template/authen/element/login_form
+#.  
+msgid "Remember me on this computer."
+msgstr "r3m3m83R M3 0N 7hIs c0mPu73R."
 
 #: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/element/settings/users_listall_section
 #.  
@@ -2789,6 +2884,11 @@ msgstr "r3m0v3d s0cI4L73x7 4cC0Un7s 4Cc3sS Fr0m %1"
 msgid "Removed Socialtext System Management access from %1"
 msgstr "r3m0v3d s0cI4L73x7 SyS73m m4n4g3m3n7 4cC3Ss fR0M %1"
 
+#: share/template/control/account.html
+#.  
+msgid "Rename Account"
+msgstr "r3n4m3 4cC0Un7"
+
 #: share/skin/s3/template/view/page/display
 #.  
 msgid "Rename Page"
@@ -2799,7 +2899,7 @@ msgstr "r3n4m3 P4G3"
 msgid "Replace existing page"
 msgstr "r3pL4C3 3XiS7InG P4G3"
 
-#: lib/Socialtext/Page.pm share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js
+#: lib/Socialtext/Page.pm share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js
 #.  
 msgid "Replace this text with your own."
 msgstr "r3pL4C3 7HiS 73X7 wI7H Y0Ur 0Wn."
@@ -2919,7 +3019,7 @@ msgstr "s4mPl3 W38l0g"
 msgid "Sat"
 msgstr "s47"
 
-#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
 #.  
 msgid "Save"
 msgstr "s4v3"
@@ -2939,7 +3039,7 @@ msgstr "s4v3 7h3 50 m0s7 R3C3N7 p4g3s"
 msgid "Screen Layout"
 msgstr "sCr33N L4Y0U7"
 
-#: build/templates/socialtext/search/search_config.yaml.tt2 lib/Socialtext/Lite.pm
+#: build/templates/socialtext/search/search_config.yaml.tt2 lib/Socialtext/Lite.pm share/skin/s3/template/element/settings/users_invite_search_section
 #.  
 msgid "Search"
 msgstr "s34RcH"
@@ -2949,7 +3049,7 @@ msgstr "s34RcH"
 msgid "Search Google for '%1'. Click to edit."
 msgstr "s34RcH G00gL3 f0r '%1'. cLiCk 70 3dI7."
 
-#: lib/Socialtext/SearchPlugin.pm
+#: lib/Socialtext/SearchPlugin.pm share/skin/s3/template/element/settings/users_invite_search_section
 #.  
 msgid "Search Results"
 msgstr "s34RcH R3SuL7S"
@@ -2983,6 +3083,11 @@ msgstr "s34RcH F0R %1 iN W0RkSp4c3 %2"
 #. (
 msgid "Search for '%1'. Click to edit."
 msgstr "s34RcH F0R '%1'. ClIcK 70 3Di7."
+
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "Search for Users to Invite"
+msgstr "s34RcH F0R Us3rS 70 iNvI73"
 
 #: lib/Socialtext/SOAPGoogle.pm
 #. (
@@ -3119,6 +3224,11 @@ msgstr "sHu7d0wN"
 msgid "Shutdown Appliance?"
 msgstr "sHu7d0wN 4pPlI4Nc3?"
 
+#: share/template/authen/forgot_password.html
+#.  
+msgid "Since your password is stored in the directory for your organization, there is no way to reset your password within the Socialtext system. Please contact your directory administrator for assistance."
+msgstr "sInC3 y0uR P4SsW0Rd iS S70r3d iN 7h3 DiR3C70rY F0R Y0Ur 0Rg4nIz47I0N, 7H3R3 iS N0 w4y 70 R3S37 Y0Ur p4sSw0rD Wi7hIn 7H3 s0cI4L73x7 SyS73m. Pl34S3 c0n74C7 y0uR DiR3C70rY 4dMiNiS7R470R F0R 4sSiS74nC3."
+
 #: share/skin/s3/template/view/attachmentslist
 #.  
 msgid "Size"
@@ -3196,8 +3306,13 @@ msgstr "s0cI4L73x7 C4N Cr3473 4 sKiN 70 cUs70MiZ3 7H3 l00K 4nD F33l 0F Y0Ur w0rK
 
 #: share/template/control/add_users.html
 #.  
-msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here.  Complete documentation about adding multiple users is available here: <a href=\"/help/?adding_multiple_users_to_socialtext\">Adding Multiple Users to Socialtext</a>"
-msgstr "s0cI4L73x7 3n48L3S Y0U 70 4Dd mUl7iPl3 Us3rS 70 y0uR 4cC0Un7. 70 4dD MuL7IpL3 uS3Rs, D0WnL04d 7H3 s4mPl3 D474 fIl3, 4Nd 4Dd y0uR Us3r d474. 7H3N UpL04d 7H3 fIl3 H3R3.  c0mPl373 D0CuM3N747I0N 480u7 4dDiNg mUl7iPl3 Us3rS Is 4V4Il48L3 h3r3: <a href=\"/H3Lp/?4dDiNg_mUl7iPl3_Us3rS_70_s0cI4L73x7\">4dDiNg mUl7iPl3 Us3rS 70 s0cI4L73x7</4>"
+msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here.  Complete documentation about adding multiple users is available here: <a href=\"http://www.socialtext.net/appliance-manual/index.cgi?adding_multiple_users_to_socialtext\">Adding Multiple Users to Socialtext</a>"
+msgstr "s0cI4L73x7 3n48L3S Y0U 70 4Dd mUl7iPl3 Us3rS 70 y0uR 4cC0Un7. 70 4dD MuL7IpL3 uS3Rs, D0WnL04d 7H3 s4mPl3 D474 fIl3, 4Nd 4Dd y0uR Us3r d474. 7H3N UpL04d 7H3 fIl3 H3R3.  c0mPl373 D0CuM3N747I0N 480u7 4dDiNg mUl7iPl3 Us3rS Is 4V4Il48L3 h3r3: <a href=\"h77P://WwW.S0Ci4l73X7.n37/4PpLi4nC3-m4nU4L/InD3X.CgI?4dDiNg_mUl7iPl3_Us3rS_70_s0cI4L73x7\">4dDiNg mUl7iPl3 Us3rS 70 s0cI4L73x7</4>"
+
+#: share/template/authen/forgot_password.html
+#.  
+msgid "Socialtext password help"
+msgstr "s0cI4L73x7 P4SsW0Rd h3lP"
 
 #: share/skin/s3/template/layout/html
 #.  
@@ -3299,7 +3414,7 @@ msgstr "s0r7 3n7rI3S 8y l4s7 UpD473D 7iM3"
 msgid "Source View"
 msgstr "s0uRc3 Vi3w"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Standard Welcome Message"
 msgstr "s74Nd4rD W3Lc0m3 M3Ss4g3"
@@ -3309,7 +3424,7 @@ msgstr "s74Nd4rD W3Lc0m3 M3Ss4g3"
 msgid "Stop watching"
 msgstr "s70P W47cHiNg"
 
-#: share/template/control/accounts.html share/template/control/accounts.html share/template/control/assign_to_account share/template/control/users.html share/template/control/workspaces.html
+#: share/template/authen/element/choose_password_form share/template/authen/element/forgot_password_form share/template/control/accounts.html share/template/control/accounts.html share/template/control/assign_to_account share/template/control/users.html share/template/control/workspaces.html
 #.  
 msgid "Submit"
 msgstr "sU8Mi7"
@@ -3414,7 +3529,7 @@ msgstr "7H3 %1 W0RkSp4c3 Is n0w p4r7 0f 7H3 %2 4cC0Un7."
 msgid "The %1 you provided (%2) is already in use."
 msgstr "7H3 %1 Y0U Pr0vId3d (%2) Is 4Lr34Dy iN Us3."
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "The Workspace is easy to use. Click links to browse through the pages."
 msgstr "7H3 w0rKsP4C3 iS 34Sy 70 Us3. cLiCk lInKs 70 8r0wS3 7Hr0uGh 7H3 p4g3s."
@@ -3468,6 +3583,11 @@ msgstr "7H3 d3f4uL7 4Cc0uN7 iS N0W %1."
 #. (
 msgid "The email address for %1 has already been confirmed."
 msgstr "7H3 3M4Il 4DdR3Ss f0r %1 H4S 4lR34dY 833n c0nFiRm3d."
+
+#: share/template/authen/forgot_password.html
+#. (
+msgid "The email we will send you will come from <strong>%1</strong>. To ensure you receive it, please add <strong>%1</strong> to your address book or safe list."
+msgstr "7H3 3M4Il w3 WiLl s3nD Y0U WiLl c0m3 Fr0m <S7R0Ng>%1</s7r0nG>. 70 3NsUr3 Y0U R3C3Iv3 I7, Pl34S3 4Dd <S7R0Ng>%1</s7r0nG> 70 Y0Ur 4DdR3Ss 800K 0r s4f3 LiS7."
 
 #: lib/Socialtext/AttachmentsUIPlugin.pm
 #.  
@@ -3669,10 +3789,15 @@ msgstr "70 Ch4nG3 y0uR P4SsW0Rd, Pl34S3 f0lL0W 7hIs lInK:"
 msgid "To do so, go to this web address:"
 msgstr "70 D0 s0, g0 70 7HiS W38 4dDr3sS:"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "To make a link to another page (even if it doesn't exist yet), put square brackets around a word or phrase."
 msgstr "70 M4K3 4 lInK 70 4N07h3r p4g3 (3V3N If i7 D03sN'7 3xIs7 Y37), Pu7 SqU4R3 8R4Ck37S 4r0uNd 4 w0rD 0r pHr4s3."
+
+#: share/template/authen/choose_password.html
+#.  
+msgid "To proceed, please choose a password."
+msgstr "70 Pr0c33D, pL34s3 Ch00S3 4 p4sSw0rD."
 
 #: share/console-template/template/overview.html
 #.  
@@ -3759,7 +3884,7 @@ msgstr "uNsU8ScRi83"
 msgid "Unsubscribe from the %1 workspace"
 msgstr "uNsU8ScRi83 fR0M 7h3 %1 w0rKsP4C3"
 
-#: lib/Socialtext/DisplayPlugin.pm lib/Socialtext/Page.pm share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-s3.js
+#: lib/Socialtext/DisplayPlugin.pm lib/Socialtext/Page.pm share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-s3.js
 #.  
 msgid "Untitled Page"
 msgstr "uN7I7L3D P4G3"
@@ -3879,7 +4004,7 @@ msgstr "uS3R R3QuIr3s c0nFiRm47I0N"
 msgid "Username"
 msgstr "uS3Rn4m3"
 
-#: lib/Socialtext/Authen.pm
+#: lib/Socialtext/Authen.pm share/template/authen/element/choose_password_form
 #.  
 msgid "Username:"
 msgstr "uS3Rn4m3:"
@@ -4069,7 +4194,7 @@ msgstr "wH3N Y0U <a href=\"%1\">cLiCk 0N 7hIs lInK</4>, y0u wIlL 83 74k3n 70 4 P
 msgid "When you click on this link, you will be taken to a page which allows you to choose a new password."
 msgstr "wH3N Y0U ClIcK 0n 7HiS LiNk, Y0U WiLl 83 74K3N 70 4 p4g3 WhIcH 4lL0Ws y0u 70 Ch00S3 4 n3w p4sSw0rD."
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "When you're entering text, just type in paragraphs."
 msgstr "wH3N Y0U'R3 3N73rInG 73X7, JuS7 7Yp3 In p4r4gR4PhS."
@@ -4089,7 +4214,7 @@ msgstr "wH0 c4n s3nD 3m4iL 70 7HiS W0RkSp4c3?"
 msgid "Work phone:"
 msgstr "w0rK Ph0n3:"
 
-#: share/skin/s3/template/view/listview
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/listview
 #.  
 msgid "Workspace"
 msgstr "w0rKsP4C3"
@@ -4444,6 +4569,11 @@ msgstr "y0uR P4SsW0Rd h4s 833N S37 4nD Y0U C4N N0W L0GiN."
 msgid "Your profile has been added to the people directory."
 msgstr "y0uR Pr0fIl3 H4S 833n 4Dd3d 70 7h3 P30pL3 dIr3c70Ry."
 
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "Your search returned no results."
+msgstr "y0uR S34rCh r37UrN3D N0 r3sUl7s."
+
 #: share/skin/s3/template/element/settings/users_settings_section
 #.  
 msgid "Your settings cannot be changed via the Socialtext settings UI."
@@ -4459,7 +4589,7 @@ msgstr "\"%1\" Is n07 4 v4lId 3M4Il 4DdR3Ss. Pl34S3 uS3 y0uR 3m4iL 4dDr3sS 70 l0
 msgid "and this email address:"
 msgstr "4Nd 7HiS 3m4iL 4dDr3sS:"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "another.friend@example.com"
 msgstr "4N07h3r.fRi3nD@3x4mPl3.C0M"
@@ -4559,6 +4689,16 @@ msgstr "3Di7"
 msgid "error:"
 msgstr "3Rr0r:"
 
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "example"
+msgstr "3X4MpL3"
+
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "example.com"
+msgstr "3X4MpL3.c0m"
+
 #: lib/Socialtext/Formatter/Phrase.pm lib/Socialtext/Formatter/Phrase.pm
 #.  
 msgid "external link"
@@ -4583,6 +4723,11 @@ msgstr "f0rM: %1"
 #.  
 msgid "free"
 msgstr "fR33"
+
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "friend"
+msgstr "fRi3nD"
 
 #: share/skin/s3/template/view/page/display
 #.  
@@ -4854,7 +4999,12 @@ msgstr "w0rKsP4C3 m3m83Rs"
 msgid "yes"
 msgstr "y3s"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "your"
+msgstr "y0uR"
+
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "your.friend@example.com"
 msgstr "y0uR.FrI3Nd@3X4MpL3.c0m"

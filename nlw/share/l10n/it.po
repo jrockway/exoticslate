@@ -47,7 +47,7 @@ msgstr "Resoconto utilizzo spazio di lavoro %1"
 #: share/template/control/account.html share/template/control/add_user.html share/template/control/add_users.html
 #. (
 msgid "%1 account"
-msgstr ""
+msgstr "% account"
 
 #: lib/Socialtext/CLI.pm
 #. (
@@ -72,7 +72,7 @@ msgstr "%1 giorni"
 #: lib/Socialtext/Formatter/WaflPhrase.pm
 #. (
 msgid "%1 does not have any headers."
-msgstr "%1 non ha alcun header."
+msgstr "%1 non ha nessuna intestazione."
 
 #: lib/Socialtext/Page.pm
 #. (
@@ -92,7 +92,7 @@ msgstr "%1 è un campo obbligatorio."
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #. (
 msgid "%1 is not a valid archive filename. Skin files must end with .zip, .tar.gz or .tgz."
-msgstr "%1 no è un nome valido per l'archivio. I file contenenti le skin devono finire con .zip, .tar.gz o .tgz"
+msgstr "%1 non è un nome valido per l'archivio. I file contenenti le skin devono finire con .zip, .tar.gz o .tgz"
 
 #: lib/Socialtext/User/Default/Factory.pm
 #. (
@@ -102,7 +102,7 @@ msgstr "%1 non è un indirizzo email valido."
 #: lib/Socialtext/Handler/Authen.pm lib/Socialtext/Handler/Authen.pm
 #. (
 msgid "%1 is not registered as a user. Try a different email address?"
-msgstr "%1 non è un utente registrato. Volete provare con un indirizzo email diverso?"
+msgstr "%1 non è un utente registrato. Vuoi provare con un indirizzo email diverso?"
 
 #: lib/Socialtext/Formatter/WaflPhrase.pm
 #. (
@@ -132,7 +132,7 @@ msgstr "%1 settimane"
 #: share/template/control/workspace.html
 #. (
 msgid "%1 workspace"
-msgstr ""
+msgstr "% spazio di lavoro"
 
 #: lib/Socialtext/Rest/Events/Activities.pm
 #. (
@@ -167,12 +167,12 @@ msgstr ""
 #: share/skin/s3/template/view/page/display
 #. (
 msgid "%quant(%1,revision)"
-msgstr "%quant(%1,revisione)"
+msgstr "%quant(%1,revisione,revisioni)"
 
 #: share/skin/s3/template/view/page/display
 #. (
 msgid "%quant(%1,view)"
-msgstr "%quant(%1,visita)"
+msgstr "%quant(%1,visita,visite)"
 
 #: lib/Socialtext/Workspace.pm
 #. (
@@ -188,6 +188,16 @@ msgstr ""
 #. (
 msgid "'%1' is not a valid locale"
 msgstr "'%1' non è un locale valido"
+
+#: share/template/authen/element/register_form share/template/authen/element/register_form
+#.  
+msgid "(Optional)"
+msgstr ""
+
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "(Select/Deselect All)"
+msgstr ""
 
 #: share/template/email/recent-changes.html share/template/email/recent-changes.txt share/template/email/watchlist.html share/template/email/watchlist.txt
 #. (
@@ -367,22 +377,22 @@ msgstr ""
 #: share/template/control/report.html
 #.  
 msgid "1 Month"
-msgstr ""
+msgstr "1 mese"
 
 #: share/template/control/report.html
 #.  
 msgid "1 Quarter"
-msgstr ""
+msgstr "1 stagione"
 
 #: share/template/control/report.html
 #.  
 msgid "1 Week"
-msgstr ""
+msgstr "1 settimana"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "<Your personal message goes here.>"
-msgstr "<Inserisci qui il tuo messaggio.>"
+msgstr "<Inserisci qui il tuo messaggio personale.>"
 
 #: share/skin/s3/template/workspaces_created_section.html
 #. (
@@ -404,7 +414,7 @@ msgstr "<p>Inserisci qui il titolo della pagina che vuoi venga inserita nel riqu
 msgid "A custom skin file was not uploaded."
 msgstr "Non è stato caricato un file con una skin personalizzata."
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #. (
 msgid "A filter has been set on this workspace. All candidate email addresses must match this pattern: <span style=\"color: red\"> %1 </span>"
 msgstr "E' stato impostato un filtro a questo spazio di lavoro. Tutti gli indirizzi email dei candidati devono seguire questo schema: span style=\"color: red\"> %1 </span>"
@@ -447,11 +457,16 @@ msgstr "Accedi alla Community"
 #: share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Account"
-msgstr ""
+msgstr "Account"
 
 #: lib/Socialtext/Account.pm
 #. (
 msgid "Account %1 already exists!"
+msgstr ""
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Account %1 renamed to %2"
 msgstr ""
 
 #: lib/Socialtext/Handler/ControlPanel.pm lib/Socialtext/Handler/ControlPanel.pm
@@ -599,7 +614,7 @@ msgstr "E' stato fornito un ID di pagina non valido: %1"
 msgid "An invalid page name was given: %1"
 msgstr "E' stato fornito un nome di pagina non valido: %1"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "And don't worry about breaking anything - previous versions of the page are saved, so there's always a backup copy of the page you're working on."
 msgstr "E non preoccupatevi se modificate qualcosa - le versioni precedenti della pagina sono state salvate, quindi c'è sempre una copia di backup della pagina su cui state lavorando."
@@ -629,7 +644,7 @@ msgstr "Log di Apache"
 msgid "Apache error log"
 msgstr "Log degli errori di Apache"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Append the personal message below?"
 msgstr "Includere il messaggio sottostante?"
@@ -687,12 +702,12 @@ msgstr "Directory Archivio"
 #: lib/Socialtext/AppConfig.pm
 #.  
 msgid "As a Socialtext customer, you have access to the <a href=\"http://www.socialtext.net/exchange/\">Socialtext Customer Exchange</a>. It is where you can share tips and best practices with other Socialtext customers."
-msgstr "In qualità di cliente SocialText, hai accesso a <a href=\"http://www.socialtext.net/exchange/\">Socialtext Customer Exchange</a> (in inglese). Lì portai condividere esperienze, suggerimenti e idee con altri clienti SocialText."
+msgstr ""
 
 #: share/template/control/workspace.html
 #.  
 msgid "Assign to a new account"
-msgstr ""
+msgstr "Assegna ad un nuovo account"
 
 #: share/template/control/user.html
 #.  
@@ -704,7 +719,7 @@ msgstr ""
 msgid "Attachment not found. The page name, file name or identifer number in the link may be incorrect, or the attachment may have been deleted or is not present in this workspace."
 msgstr "Allegato non trovato. Il nome della pagina, nome del file o l'identificativo nel link potrebbero essere errati, oppure l'allegato è stato eliminato o non è presente nello spazio di lavoro."
 
-#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page/display
 #.  
 msgid "Attachments"
 msgstr "Allegati"
@@ -712,7 +727,7 @@ msgstr "Allegati"
 #: share/template/control/report.html
 #.  
 msgid "August"
-msgstr ""
+msgstr "Agosto"
 
 #: share/console-template/template/backup.html
 #.  
@@ -729,15 +744,20 @@ msgstr ""
 msgid "Back To Current Revision"
 msgstr "Tona alla versione corrente"
 
-#: share/template/control/growth_report.html share/template/control/report.html
-#.  
-msgid "Back to the account page"
+#: share/template/authen/forgot_password.html
+#. (
+msgid "Back to <a href=\"%1\">Log in to Socialtext</a>."
 msgstr ""
 
 #: share/template/control/growth_report.html share/template/control/report.html
 #.  
+msgid "Back to the account page"
+msgstr "Torna alla pagina del tuo account"
+
+#: share/template/control/growth_report.html share/template/control/report.html
+#.  
 msgid "Back to the workspace page"
-msgstr ""
+msgstr "Torna alla pagina dello spazio di lavoro"
 
 #: share/console-template/template/console_wrapper.tmpl
 #.  
@@ -819,7 +839,7 @@ msgstr "Chiama '%1' via Skype. Clicca per modificare."
 msgid "Can't remove privileges of the last admin"
 msgstr "Non è possibile rimuovere i privilegi all'unica Amministratore"
 
-#: share/console-template/template/popup.html share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
+#: share/console-template/template/popup.html share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
 #.  
 msgid "Cancel"
 msgstr "Annulla"
@@ -873,6 +893,16 @@ msgstr "Modifiche salvate"
 #. (
 msgid "Check with your %1 administrator."
 msgstr "Verifica con il tuo amministratore %1."
+
+#: share/template/authen/choose_password.html
+#.  
+msgid "Choose Password"
+msgstr ""
+
+#: share/template/authen/element/choose_password_form
+#.  
+msgid "Choose Password:"
+msgstr ""
 
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
@@ -982,7 +1012,7 @@ msgstr "Confronta le revisioni %1 e %2"
 #: share/template/control/user.html
 #.  
 msgid "Confirm user"
-msgstr ""
+msgstr "Conferma utente"
 
 #: share/skin/s3/template/workspaces_created_section.html
 #.  
@@ -1072,22 +1102,22 @@ msgstr "Crea il tuo profilo"
 #: share/template/control/accounts.html
 #.  
 msgid "Create a New Account"
-msgstr ""
+msgstr "Crea un nuovo account"
 
 #: share/template/control/user.html share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Created"
-msgstr ""
+msgstr "Creato"
 
 #: share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Created By"
-msgstr ""
+msgstr "Creato da"
 
 #: share/skin/s3/template/view/weblog share/skin/s3/template/view/weblog share/template/control/workspace.html
 #.  
 msgid "Created by"
-msgstr ""
+msgstr "Creato da"
 
 #: share/skin/s3/template/view/page/display
 #. (
@@ -1152,7 +1182,7 @@ msgstr "Data:"
 #: share/template/control/report.html
 #.  
 msgid "December"
-msgstr ""
+msgstr "Dicembre"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -1319,7 +1349,7 @@ msgstr "Email"
 msgid "Email Address"
 msgstr "Indirizzo email"
 
-#: lib/Socialtext/Authen.pm
+#: lib/Socialtext/Authen.pm share/template/authen/element/register_form share/template/authen/forgot_password.html
 #.  
 msgid "Email Address:"
 msgstr "Indirizzo email:"
@@ -1368,6 +1398,16 @@ msgstr ""
 #.  
 msgid "Enter a list of email addresses (one address per line) of people you would like to invite to this Workspace."
 msgstr "Inserisci un elenco di indirizzi email( un indirizzo per linea) di persone che vorresti invitare a questo spazio di lavoro."
+
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "Enter part of a user's first or last name, or email address."
+msgstr "Inserisci parte del nome o cognome, o indirizzo email di un utente."
+
+#: share/template/authen/forgot_password.html
+#.  
+msgid "Enter your email address below. Enter the email address you normally use for your Socialtext account. If you got here by clicking a link you received in an email message, look at that message, and use the email address it was sent to."
+msgstr ""
 
 #: lib/Socialtext/CLI.pm
 #. (
@@ -1424,7 +1464,7 @@ msgstr "Ogni minuto"
 msgid "Every Week"
 msgstr "Ogni settimana"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Example:"
 msgstr "Esempio:"
@@ -1467,7 +1507,7 @@ msgstr "Esporta come HTML"
 #: share/template/control/growth_report.html
 #.  
 msgid "Export data as CSV"
-msgstr ""
+msgstr "Esporta i dati come CSV"
 
 #: lib/Socialtext/Workspace.pm
 #. (
@@ -1477,12 +1517,12 @@ msgstr "La directory di esportazione %1 non esiste.\n"
 #: lib/Socialtext/Workspace.pm
 #. (
 msgid "Export directory %1 is not writeable.\n"
-msgstr ""
+msgstr "La directory di esportazione %1 non è scrivibile.\n"
 
 #: share/template/control/report.html
 #.  
 msgid "Export summary data as CSV"
-msgstr ""
+msgstr "Esporta i dati del sommario come CSV."
 
 #: share/skin/s3/template/view/listview share/skin/s3/template/view/page/display
 #.  
@@ -1497,7 +1537,7 @@ msgstr "Esporta in Word"
 #: share/template/control/report.html
 #.  
 msgid "Export user data as CSV"
-msgstr ""
+msgstr "Esporta dati utente come CSV"
 
 #: lib/Socialtext/CLI.pm
 #. (
@@ -1517,7 +1557,7 @@ msgstr ""
 #: share/template/control/report.html
 #.  
 msgid "February"
-msgstr ""
+msgstr "Febbraio"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -1532,6 +1572,11 @@ msgstr "Nome file"
 #: share/skin/s3/template/view/paging share/skin/s3/template/view/paging
 #.  
 msgid "First"
+msgstr ""
+
+#: share/template/authen/element/register_form
+#.  
+msgid "First Name:"
 msgstr ""
 
 #: share/skin/s3/template/view/paging
@@ -1557,6 +1602,11 @@ msgstr ""
 #: lib/Socialtext/Rest/Events/Awesome.pm
 #.  
 msgid "Followed People Events"
+msgstr ""
+
+#: share/template/authen/forgot_password.html
+#.  
+msgid "Forgot Password"
 msgstr ""
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
@@ -1587,17 +1637,17 @@ msgstr "Gestione di sistema assegnato a %1"
 #: share/template/control/user.html
 #.  
 msgid "Give Access to Socialtext Accounts"
-msgstr ""
+msgstr "Assegna l'accesso agli account Socialtext"
 
 #: share/template/control/user.html
 #.  
 msgid "Give Access to Socialtext System Management"
-msgstr ""
+msgstr "Assegna l'accesso al sistema di gestione Socialtext"
 
 #: share/template/control/workspace.html
 #. (
 msgid "Go to the %1 workspace"
-msgstr ""
+msgstr "Val allo spazio di lavoro %1"
 
 #: share/skin/s3/template/view/weblog
 #.  
@@ -1617,7 +1667,7 @@ msgstr ""
 #: share/template/control/account.html share/template/control/workspace.html
 #.  
 msgid "Growth Reports"
-msgstr ""
+msgstr "Resoconti di crescita"
 
 #: share/template/email/email-address-confirmation-completed.html share/template/email/email-address-confirmation-completed.txt
 #.  
@@ -1684,6 +1734,11 @@ msgstr "Come devono essere gestite l'ora legale e l'ora solare?"
 msgid "How should displayed dates be formatted?"
 msgstr "In che formato vuoi visualizzare la data?"
 
+#: share/template/authen/element/forgot_password_link
+#.  
+msgid "I don't know my password."
+msgstr ""
+
 #: lib/Socialtext/WorkspaceInvitation.pm
 #. (
 msgid "I'm inviting you into the %1 workspace"
@@ -1734,12 +1789,12 @@ msgstr ""
 msgid "If you have questions, please contact your wiki support at %1."
 msgstr ""
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "If you see something you'd like to add to or change, click the \"Edit\" link at the top of each page."
 msgstr "Se c'è qualcosa che vorresti aggiungere o cambiare, fai click sul link \"Modifica\" nella parte alta di ogni pagina."
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "If you wish, you can include a personal message in the invitation email. You can edit the message to say anything you want."
 msgstr "Se vuoi, puoi includere un messaggio personale nella tua email di invito. Puoi modificare il messaggio per dire quello che vuoi."
@@ -1854,7 +1909,7 @@ msgstr "Host no valido: %1"
 msgid "Invitation to join %1"
 msgstr "Invito ad unirti a %1"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Invite"
 msgstr "Invita"
@@ -1877,22 +1932,22 @@ msgstr ""
 #: share/template/control/user_table
 #.  
 msgid "Invited"
-msgstr ""
+msgstr "Invitato"
 
 #: share/template/control/workspace.html
 #.  
 msgid "Invited (to system)"
-msgstr ""
+msgstr "Invitato (al sistema)"
 
 #: share/template/control/user_table
 #.  
 msgid "Invited By"
-msgstr ""
+msgstr "Invitato da"
 
 #: share/template/control/user.html
 #.  
 msgid "Invited by"
-msgstr ""
+msgstr "Invitato da"
 
 #: share/skin/s3/template/element/settings/workspaces_create_section
 #.  
@@ -1907,7 +1962,7 @@ msgstr "Italiano"
 #: share/template/control/report.html
 #.  
 msgid "January"
-msgstr ""
+msgstr "Gennaio"
 
 #: lib/Socialtext/Locales.pm
 #.  
@@ -1917,12 +1972,12 @@ msgstr "Giapponese"
 #: share/template/control/report.html
 #.  
 msgid "July"
-msgstr ""
+msgstr "Luglio"
 
 #: share/template/control/report.html
 #.  
 msgid "June"
-msgstr ""
+msgstr "Giugno"
 
 #: share/skin/s3/template/view/paging share/skin/s3/template/view/paging
 #.  
@@ -1959,6 +2014,11 @@ msgstr "Modificato l'ultima volta da"
 msgid "Last Month"
 msgstr "Ultimo mese"
 
+#: share/template/authen/element/register_form
+#.  
+msgid "Last Name:"
+msgstr ""
+
 #: share/skin/s3/template/view/paging
 #.  
 msgid "Last Page"
@@ -1972,7 +2032,7 @@ msgstr "Ultima settimana"
 #: share/template/control/user.html
 #.  
 msgid "Last login"
-msgstr ""
+msgstr "Ultimo login"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #. (
@@ -1992,7 +2052,7 @@ msgstr "Cognome:"
 #: share/skin/s3/template/view/listview
 #.  
 msgid "Last updated by"
-msgstr ""
+msgstr "Ultimo aggiornamento effettuato da"
 
 #: lib/Socialtext/MassAdd.pm
 #. (
@@ -2034,7 +2094,7 @@ msgstr "Elenca tutti gli utenti"
 msgid "Loaded users from %1"
 msgstr ""
 
-#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page/display
 #.  
 msgid "Loading..."
 msgstr "Caricamento..."
@@ -2049,9 +2109,19 @@ msgstr "\"Locale\" per %1 ora è %2"
 msgid "Location:"
 msgstr ""
 
-#: lib/Socialtext/Lite.pm share/skin/s3/template/layout/html share/skin/s3/template/layout/html
+#: lib/Socialtext/Lite.pm share/skin/s3/template/layout/html share/skin/s3/template/layout/html share/template/authen/element/login_form
 #.  
 msgid "Log in"
+msgstr ""
+
+#: share/template/authen/choose_password.html share/template/authen/login.html
+#.  
+msgid "Log in to Socialtext"
+msgstr ""
+
+#: share/template/authen/choose_password.html share/template/authen/register.html
+#.  
+msgid "Log in with an existing account"
 msgstr ""
 
 #: share/template/email/email-address-confirmation-completed.html share/template/email/email-address-confirmation-completed.txt
@@ -2069,6 +2139,11 @@ msgstr "Esci"
 msgid "Logged in as %1:"
 msgstr ""
 
+#: share/template/authen/login.html
+#.  
+msgid "Login"
+msgstr "Autenticazione"
+
 #: lib/Socialtext/Workspace.pm
 #.  
 msgid "Logo file must be a gif, jpeg, or png file."
@@ -2079,7 +2154,7 @@ msgstr "Il logo deve essere un file in formato gif, jpeg o png"
 msgid "Look for"
 msgstr ""
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Make your contributions in the text box, then click \"Save\"."
 msgstr "Inserisci il tuo contributo nel box di testo e poi premi \"Salva\"."
@@ -2107,7 +2182,7 @@ msgstr ""
 #: share/template/control/report.html
 #.  
 msgid "March"
-msgstr ""
+msgstr "Marzo"
 
 #: share/skin/s3/template/view/page/display
 #.  
@@ -2117,12 +2192,12 @@ msgstr "Dimensione massima del file: 50MB"
 #: share/template/control/report.html
 #.  
 msgid "May"
-msgstr ""
+msgstr "Maggio"
 
 #: share/skin/s3/template/layout/html share/skin/s3/template/layout/html
 #.  
 msgid "Mobile"
-msgstr ""
+msgstr "Mobile"
 
 #: share/template/control/add_user.html
 #.  
@@ -2172,7 +2247,7 @@ msgstr "Nome"
 #: share/template/control/accounts.html
 #.  
 msgid "Name:"
-msgstr ""
+msgstr "Nome:"
 
 #: lib/Socialtext/WeblogPlugin.pm
 #. (
@@ -2224,7 +2299,7 @@ msgstr ""
 msgid "New search"
 msgstr "Nuova ricerca"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "New users will be sent the following welcome email:"
 msgstr ""
@@ -2272,7 +2347,7 @@ msgstr ""
 #: lib/Socialtext/HitCounterPlugin.pm lib/Socialtext/WikiwygPlugin.pm lib/Socialtext/WikiwygPlugin.pm
 #.  
 msgid "No page ID given"
-msgstr "NOn è stato fornito alcun ID di pagina"
+msgstr "Non è stato fornito alcun ID di pagina"
 
 #: lib/Socialtext/RtfExportPlugin.pm
 #.  
@@ -2283,6 +2358,11 @@ msgstr "Non è stato assegnato nessun nome alla pagina"
 #.  
 msgid "No pages selected for export"
 msgstr "Non è stata selezionata alcuna pagina da esportare"
+
+#: share/template/authen/forgot_password.html
+#.  
+msgid "No problem, we can send you an email that will help. You will be able to change your password back to something you know."
+msgstr ""
 
 #: lib/Socialtext/HitCounterPlugin.pm
 #. (
@@ -2322,22 +2402,22 @@ msgstr "Nome pagina non valido"
 #: share/template/control/report.html
 #.  
 msgid "Novemeber"
-msgstr ""
+msgstr "Novembre"
 
 #: share/template/control/account_table share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Number of Users"
-msgstr ""
+msgstr "Numero utenti"
 
 #: share/template/control/account_table share/template/control/user_table share/template/control/user_table share/template/control/workspace.html
 #.  
 msgid "Number of Workspaces"
-msgstr ""
+msgstr "Numero spazi di lavoro"
 
 #: share/template/control/report.html
 #.  
 msgid "October"
-msgstr ""
+msgstr "Ottobre"
 
 #: lib/Socialtext/UserSettingsPlugin.pm
 #.  
@@ -2384,7 +2464,7 @@ msgstr "Mail server in uscita"
 msgid "Overview"
 msgstr "Vista d'insieme"
 
-#: share/skin/s3/template/view/paging
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/paging
 #.  
 msgid "Page"
 msgstr "Pagina"
@@ -2424,7 +2504,7 @@ msgstr "Il nome della pagina è troppo lungo"
 msgid "Page renamed to %1"
 msgstr "La pagina è stata rinominata come %1"
 
-#: lib/Socialtext/EditPlugin.pm lib/Socialtext/EmailReceiver/Base.pm lib/Socialtext/EmailReceiver/Base.pm lib/Socialtext/Page.pm lib/Socialtext/UserPreferencesPlugin.pm share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js
+#: lib/Socialtext/EditPlugin.pm lib/Socialtext/EmailReceiver/Base.pm lib/Socialtext/EmailReceiver/Base.pm lib/Socialtext/Page.pm lib/Socialtext/UserPreferencesPlugin.pm share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js
 #.  
 msgid "Page title is too long after URL encoding"
 msgstr "Il titolo della pagina è troppo lungo, una volta che è stato codificato come URL"
@@ -2464,6 +2544,11 @@ msgstr "Pagine col tag '%1'. Clicca per modificare."
 msgid "Password"
 msgstr "Password"
 
+#: share/template/authen/element/login_form share/template/authen/element/register_form
+#.  
+msgid "Password:"
+msgstr ""
+
 #: lib/Socialtext/User.pm lib/Socialtext/User/Default.pm
 #.  
 msgid "Passwords must be at least 6 characters long."
@@ -2494,7 +2579,7 @@ msgstr "Esegui un ripristino"
 msgid "Permalink"
 msgstr ""
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Personal Message"
 msgstr "Messaggio personale"
@@ -2642,7 +2727,7 @@ msgstr "Stampa questa pagina"
 #: share/template/control/growth_report.html share/template/control/report.html
 #.  
 msgid "Printer Friendly Report"
-msgstr ""
+msgstr "Rapporto di stampa"
 
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
 #.  
@@ -2673,6 +2758,11 @@ msgstr "Accesso solo in lettura"
 #.  
 msgid "RFC 868 Time Server"
 msgstr "RFC 868 Time Server"
+
+#: share/template/authen/element/choose_password_form share/template/authen/element/register_form
+#.  
+msgid "Re-type Password:"
+msgstr ""
 
 #: lib/Socialtext/Appliance/ConsoleController.pm
 #.  
@@ -2749,7 +2839,7 @@ msgstr "Redirezione a %1 in corso"
 msgid "Refresh file list"
 msgstr "Aggiorna l'elenco dei file"
 
-#: share/skin/s3/template/layout/html share/skin/s3/template/layout/html
+#: share/skin/s3/template/layout/html share/skin/s3/template/layout/html share/template/authen/element/register_form share/template/authen/register.html
 #.  
 msgid "Register"
 msgstr "Registra"
@@ -2757,6 +2847,11 @@ msgstr "Registra"
 #: share/skin/s3/template/view/listview
 #.  
 msgid "Relevance"
+msgstr "Rilevanza"
+
+#: share/template/authen/element/login_form
+#.  
+msgid "Remember me on this computer."
 msgstr ""
 
 #: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/element/settings/users_listall_section
@@ -2767,12 +2862,12 @@ msgstr "Rimuovi"
 #: share/template/control/user.html
 #.  
 msgid "Remove Access to Socialtext Accounts"
-msgstr ""
+msgstr "Rimuovi l'accesso agli account Socialtext"
 
 #: share/template/control/user.html
 #.  
 msgid "Remove Access to Socialtext System Management"
-msgstr ""
+msgstr "Rimuovi l'accesso al sistema di gestione Socialtext"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -2789,6 +2884,11 @@ msgstr "L'accesso agli account SocialText è stato rimosso da %1"
 msgid "Removed Socialtext System Management access from %1"
 msgstr "L'accesso alla gestione di sistema è stato rimosso da %1"
 
+#: share/template/control/account.html
+#.  
+msgid "Rename Account"
+msgstr ""
+
 #: share/skin/s3/template/view/page/display
 #.  
 msgid "Rename Page"
@@ -2799,7 +2899,7 @@ msgstr "Rinomina la pagina"
 msgid "Replace existing page"
 msgstr "Sostituisci la pagina esistente"
 
-#: lib/Socialtext/Page.pm share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js
+#: lib/Socialtext/Page.pm share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js
 #.  
 msgid "Replace this text with your own."
 msgstr "Sostituisci questo testo col tuo"
@@ -2812,7 +2912,7 @@ msgstr "Notifica un Bug"
 #: share/template/control/report.html
 #.  
 msgid "Report Period:"
-msgstr ""
+msgstr "Periodo resoconto:"
 
 #: share/template/control/account.html
 #.  
@@ -2902,7 +3002,7 @@ msgstr "Revisioni"
 #: share/template/control/workspace.html
 #.  
 msgid "Role"
-msgstr ""
+msgstr "Ruolo"
 
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
 #.  
@@ -2919,7 +3019,7 @@ msgstr "Esempio di Weblog"
 msgid "Sat"
 msgstr "Sab"
 
-#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
 #.  
 msgid "Save"
 msgstr "Salva"
@@ -2939,7 +3039,7 @@ msgstr ""
 msgid "Screen Layout"
 msgstr "Impostazioni visualizzazione"
 
-#: build/templates/socialtext/search/search_config.yaml.tt2 lib/Socialtext/Lite.pm
+#: build/templates/socialtext/search/search_config.yaml.tt2 lib/Socialtext/Lite.pm share/skin/s3/template/element/settings/users_invite_search_section
 #.  
 msgid "Search"
 msgstr "Cerca"
@@ -2949,7 +3049,7 @@ msgstr "Cerca"
 msgid "Search Google for '%1'. Click to edit."
 msgstr "Cerca in Google '%1'. Fai click per modificare."
 
-#: lib/Socialtext/SearchPlugin.pm
+#: lib/Socialtext/SearchPlugin.pm share/skin/s3/template/element/settings/users_invite_search_section
 #.  
 msgid "Search Results"
 msgstr "Risultati della ricerca"
@@ -2962,12 +3062,12 @@ msgstr "Cerca Technorati di '%1'. Fai click per modificare."
 #: share/template/control/accounts.html share/template/control/workspaces.html
 #.  
 msgid "Search by name"
-msgstr ""
+msgstr "Cerca per nome"
 
 #: share/template/control/users.html
 #.  
 msgid "Search by username"
-msgstr ""
+msgstr "Cerca per nome utente"
 
 #: lib/Socialtext/SearchPlugin.pm
 #. (
@@ -2983,6 +3083,11 @@ msgstr "Cerca '%1' nello spazio di lavoro %2"
 #. (
 msgid "Search for '%1'. Click to edit."
 msgstr "Cerca '%1'. Fai click per modificare."
+
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "Search for Users to Invite"
+msgstr "Cerca utenti da invitare"
 
 #: lib/Socialtext/SOAPGoogle.pm
 #. (
@@ -3032,7 +3137,7 @@ msgstr "Manda email di prova a %1"
 #: share/template/control/report.html
 #.  
 msgid "September"
-msgstr ""
+msgstr "Settembre"
 
 #: share/console-template/template/backup.html
 #.  
@@ -3052,7 +3157,7 @@ msgstr "Imposta l'ora del server"
 #: share/skin/s3/template/layout/html share/skin/s3/template/layout/html share/skin/s3/template/view/settings
 #.  
 msgid "Settings"
-msgstr "- impostazioni"
+msgstr "Impostazioni"
 
 #: share/console-template/template/console_wrapper.tmpl
 #.  
@@ -3092,12 +3197,12 @@ msgstr "Mostra il nome completo di '%1'. Fai click per modificare."
 #: share/skin/s3/template/view/listview
 #.  
 msgid "Show:"
-msgstr ""
+msgstr "Mostra:"
 
 #: share/skin/s3/template/view/listview share/template/control/paging_controls
 #. (
 msgid "Showing %1 - %2 of %3 total."
-msgstr ""
+msgstr "Visualizza %1 - %2 di 3 totali.%"
 
 #: share/console-template/template/shutdown.html
 #.  
@@ -3118,6 +3223,11 @@ msgstr "Spegni"
 #.  
 msgid "Shutdown Appliance?"
 msgstr "Spegnere l'Appliance?"
+
+#: share/template/authen/forgot_password.html
+#.  
+msgid "Since your password is stored in the directory for your organization, there is no way to reset your password within the Socialtext system. Please contact your directory administrator for assistance."
+msgstr ""
 
 #: share/skin/s3/template/view/attachmentslist
 #.  
@@ -3142,7 +3252,7 @@ msgstr ""
 #: share/template/control/user.html
 #.  
 msgid "Socialtext Accounts Access?"
-msgstr ""
+msgstr "Accesso all'account Socialtext?"
 
 #: share/console-template/template/console_wrapper.tmpl share/console-template/template/console_wrapper.tmpl
 #.  
@@ -3162,7 +3272,7 @@ msgstr ""
 #: share/template/control/user.html
 #.  
 msgid "Socialtext System Management Access?"
-msgstr ""
+msgstr "Accesso al sistema di gestione Socaltext?"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
 #.  
@@ -3187,7 +3297,7 @@ msgstr "SocialText Unplugged abilitato"
 #: share/template/control/wrapper
 #. (
 msgid "Socialtext Workspace<sup>&trade;</sup> %1"
-msgstr ""
+msgstr "Spazio di lavoro<sup>&trade;</sup> Socialtext %1"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -3196,7 +3306,12 @@ msgstr ""
 
 #: share/template/control/add_users.html
 #.  
-msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here.  Complete documentation about adding multiple users is available here: <a href=\"/help/?adding_multiple_users_to_socialtext\">Adding Multiple Users to Socialtext</a>"
+msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here.  Complete documentation about adding multiple users is available here: <a href=\"http://www.socialtext.net/appliance-manual/index.cgi?adding_multiple_users_to_socialtext\">Adding Multiple Users to Socialtext</a>"
+msgstr ""
+
+#: share/template/authen/forgot_password.html
+#.  
+msgid "Socialtext password help"
 msgstr ""
 
 #: share/skin/s3/template/layout/html
@@ -3207,7 +3322,7 @@ msgstr ""
 #: share/skin/s3/template/view/page/display
 #.  
 msgid "Sorry, this feature is not available for spreadsheets"
-msgstr ""
+msgstr "Siamo spiacenti, questa funzione non è disponibile per i fogli di calcolo."
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
@@ -3282,7 +3397,7 @@ msgstr ""
 #: share/skin/s3/template/view/attachmentslist share/skin/s3/template/view/listview
 #.  
 msgid "Sort by:"
-msgstr ""
+msgstr "Odina per:"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
 #.  
@@ -3299,7 +3414,7 @@ msgstr "Ordina i contributi in base alla data di aggiornamento"
 msgid "Source View"
 msgstr "Visualizza sorgente"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Standard Welcome Message"
 msgstr "Messaggio di benvenuto standard"
@@ -3309,7 +3424,7 @@ msgstr "Messaggio di benvenuto standard"
 msgid "Stop watching"
 msgstr ""
 
-#: share/template/control/accounts.html share/template/control/accounts.html share/template/control/assign_to_account share/template/control/users.html share/template/control/workspaces.html
+#: share/template/authen/element/choose_password_form share/template/authen/element/forgot_password_form share/template/control/accounts.html share/template/control/accounts.html share/template/control/assign_to_account share/template/control/users.html share/template/control/workspaces.html
 #.  
 msgid "Submit"
 msgstr "Sottoscrivi"
@@ -3327,12 +3442,12 @@ msgstr "Suggerimenti:"
 #: share/skin/s3/template/view/listview share/skin/s3/template/view/listview
 #.  
 msgid "Summaries"
-msgstr ""
+msgstr "Sommari"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
 msgid "Sun"
-msgstr "Sole"
+msgstr "Dom"
 
 #: share/console-template/template/setup.html
 #.  
@@ -3414,7 +3529,7 @@ msgstr "Lo spazio di lavoro %1 ora è parte dell'account %2."
 msgid "The %1 you provided (%2) is already in use."
 msgstr "L'%1 che hai fornito( %2) è già in uso."
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "The Workspace is easy to use. Click links to browse through the pages."
 msgstr "Lo spazio di lavoro è facile da usare. Fai click per sfogliare le pagine."
@@ -3468,6 +3583,11 @@ msgstr ""
 #. (
 msgid "The email address for %1 has already been confirmed."
 msgstr "L'indirizzo email per %1 è già stato confermato."
+
+#: share/template/authen/forgot_password.html
+#. (
+msgid "The email we will send you will come from <strong>%1</strong>. To ensure you receive it, please add <strong>%1</strong> to your address book or safe list."
+msgstr ""
 
 #: lib/Socialtext/AttachmentsUIPlugin.pm
 #.  
@@ -3652,7 +3772,7 @@ msgstr "Titolo"
 #: share/skin/s3/template/view/listview share/skin/s3/template/view/listview
 #.  
 msgid "Titles"
-msgstr ""
+msgstr "Titoli"
 
 #: lib/Socialtext/SearchPlugin.pm
 #. (
@@ -3669,10 +3789,15 @@ msgstr ""
 msgid "To do so, go to this web address:"
 msgstr ""
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "To make a link to another page (even if it doesn't exist yet), put square brackets around a word or phrase."
 msgstr "Per aggiungere un link ad un'altra pagina( anche se non esiste ancora), metti fra parentesi quadre una parola o frase."
+
+#: share/template/authen/choose_password.html
+#.  
+msgid "To proceed, please choose a password."
+msgstr ""
 
 #: share/console-template/template/overview.html
 #.  
@@ -3732,7 +3857,7 @@ msgstr ""
 #: share/template/control/workspace.html
 #.  
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: lib/Socialtext/Appliance/PhoneHome.pm
 #. (
@@ -3759,7 +3884,7 @@ msgstr "Annulla l'iscrizione"
 msgid "Unsubscribe from the %1 workspace"
 msgstr "Annulla l'iscrizione allo spazio di lavoro %1"
 
-#: lib/Socialtext/DisplayPlugin.pm lib/Socialtext/Page.pm share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-s3.js
+#: lib/Socialtext/DisplayPlugin.pm lib/Socialtext/Page.pm share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-s3.js
 #.  
 msgid "Untitled Page"
 msgstr "Pagina senza titolo"
@@ -3822,7 +3947,7 @@ msgstr "Caricato da"
 #: share/skin/s3/template/view/attachmentslist
 #.  
 msgid "Uploaded by"
-msgstr ""
+msgstr "Caricato da"
 
 #: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/page/display
 #. (
@@ -3837,12 +3962,12 @@ msgstr ""
 #: share/template/control/account.html share/template/control/workspace.html
 #.  
 msgid "Usage Reports"
-msgstr ""
+msgstr "Rapporto d'uso"
 
 #: share/template/control/report.html
 #.  
 msgid "Usage ending midnight of:"
-msgstr ""
+msgstr "Termine dell'utilizzo mezzanotte del:"
 
 #: lib/Socialtext/Widget_resource.pm
 #. (
@@ -3867,19 +3992,19 @@ msgstr ""
 #: share/template/control/user.html
 #.  
 msgid "User is confirmed"
-msgstr ""
+msgstr "L'utente è stato confermato"
 
 #: share/template/control/user.html
 #.  
 msgid "User requires confirmation"
-msgstr ""
+msgstr "E' richiesta la conferma da parte dell'utente"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm share/template/control/user.html
 #.  
 msgid "Username"
 msgstr "Nome utente"
 
-#: lib/Socialtext/Authen.pm
+#: lib/Socialtext/Authen.pm share/template/authen/element/choose_password_form
 #.  
 msgid "Username:"
 msgstr "Nomeutente:"
@@ -3892,7 +4017,7 @@ msgstr "Utenti"
 #: share/template/control/account.html share/template/control/workspace.html
 #. (
 msgid "Users (%1)"
-msgstr ""
+msgstr "Utenti (%1)"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -4069,7 +4194,7 @@ msgstr ""
 msgid "When you click on this link, you will be taken to a page which allows you to choose a new password."
 msgstr ""
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "When you're entering text, just type in paragraphs."
 msgstr "Quando stai inserendo del testo, digitalo solamente in paragrafi."
@@ -4089,7 +4214,7 @@ msgstr "Chi può spedire email a questo spazio di lavoro?"
 msgid "Work phone:"
 msgstr ""
 
-#: share/skin/s3/template/view/listview
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/listview
 #.  
 msgid "Workspace"
 msgstr "Spazio di lavoro"
@@ -4202,7 +4327,7 @@ msgstr "Spazi di lavoro"
 #: share/template/control/account.html share/template/control/user.html
 #. (
 msgid "Workspaces (%1)"
-msgstr ""
+msgstr "Spazi di lavoro (%1)"
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
@@ -4382,7 +4507,7 @@ msgstr ""
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "You must provide a workspace_id to this URI (%1)."
-msgstr ""
+msgstr "Devi fornire un ID dello spazio di lavoro a questo URI (%1)."
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -4422,7 +4547,7 @@ msgstr "La tua watchlist"
 #: lib/Socialtext/WatchlistPlugin.pm
 #. (
 msgid "Your Watchlist in %1 is empty."
-msgstr ""
+msgstr "La tua Watchlist di %1 è vuota."
 
 #: share/template/email/email-address-confirmation-completed.html
 #.  
@@ -4444,6 +4569,11 @@ msgstr "La tua password è stata impostata ed ora puoi effettuare il login."
 msgid "Your profile has been added to the people directory."
 msgstr ""
 
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "Your search returned no results."
+msgstr ""
+
 #: share/skin/s3/template/element/settings/users_settings_section
 #.  
 msgid "Your settings cannot be changed via the Socialtext settings UI."
@@ -4459,7 +4589,7 @@ msgstr "\"%1\" non è un indirizzo email valido. Utilizzate il vostro indirizzo 
 msgid "and this email address:"
 msgstr "e questo indirizzo email:"
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "another.friend@example.com"
 msgstr "altro.amico@esempio.com"
@@ -4559,6 +4689,16 @@ msgstr "modifica"
 msgid "error:"
 msgstr "errore:"
 
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "example"
+msgstr ""
+
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "example.com"
+msgstr ""
+
 #: lib/Socialtext/Formatter/Phrase.pm lib/Socialtext/Formatter/Phrase.pm
 #.  
 msgid "external link"
@@ -4583,6 +4723,11 @@ msgstr "modulo: %1"
 #.  
 msgid "free"
 msgstr "gratis"
+
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "friend"
+msgstr ""
 
 #: share/skin/s3/template/view/page/display
 #.  
@@ -4652,7 +4797,7 @@ msgstr "mai in DST"
 #: share/template/control/user.html share/template/control/user.html
 #.  
 msgid "no"
-msgstr ""
+msgstr "no"
 
 #: lib/Socialtext/Query/Wafl.pm
 #.  
@@ -4662,7 +4807,7 @@ msgstr "nessun accesso allo spazio di lavoro"
 #: share/skin/s3/template/view/attachmentslist share/skin/s3/template/view/listview share/skin/s3/template/view/weblog share/skin/s3/template/view/weblog share/skin/s3/template/view/weblog share/skin/s3/template/view/weblog share/skin/s3/template/view/weblog
 #.  
 msgid "on"
-msgstr ""
+msgstr "in"
 
 #: share/skin/s3/template/view/empty_watchlist
 #.  
@@ -4737,7 +4882,7 @@ msgstr "richiesto"
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
 #.  
 msgid "roles_and_permission_sets#standard_workspace_types"
-msgstr ""
+msgstr "impostazione_ruoli_e_permessi#spazio_di_lavoro_standard"
 
 #: lib/Socialtext/Widget_resource.pm
 #. (
@@ -4762,7 +4907,7 @@ msgstr ""
 #: lib/Socialtext/Widget_resource.pm
 #. (
 msgid "ss: %1 (%2)"
-msgstr ""
+msgstr "ss: %1 (%2)"
 
 #: lib/Socialtext/Formatter/Phrase.pm lib/Socialtext/Formatter/Phrase.pm
 #.  
@@ -4817,7 +4962,7 @@ msgstr "utente: %1"
 #: share/template/control/account_link share/template/control/user_link share/template/control/workspace_link
 #. (
 msgid "view %1"
-msgstr ""
+msgstr "vedi %1"
 
 #: share/skin/s3/template/element/settings/start
 #.  
@@ -4852,9 +4997,14 @@ msgstr "utenti dello spazio di lavoro"
 #: share/template/control/user.html share/template/control/user.html
 #.  
 msgid "yes"
+msgstr "sì"
+
+#: share/skin/s3/template/element/settings/users_invite_search_section
+#.  
+msgid "your"
 msgstr ""
 
-#: share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "your.friend@example.com"
 msgstr "tuo.amico@esempio.com"

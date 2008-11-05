@@ -16,7 +16,7 @@ my $l10n = load_localizations();
 
 my $js_output = 'share/skin/s3/javascript/l10ns.js';
 my $is_js     = qr#share/skin/s3/javascript|share/skin/s3/template/element/jst#;
-my $is_po     = qr#lib/\S+\.pm|share/skin/s3/template|share/console-template/template|share/template/(control|email)|search_config\.yaml\.tt2#;
+my $is_po     = qr#lib/\S+\.pm|share/skin/s3/template|share/console-template/template|share/template/(control|email|authen)|search_config\.yaml\.tt2#;
 create_perl_l10ns( 'share/l10n', $l10n );
 create_js_l10ns( 'share/skin/s3/javascript/l10ns.js', $l10n );
 exit;

@@ -2042,3 +2042,9 @@ div.pagination-container .paging-forward {
 #statistics-attribution {
     white-space: nowrap;
 }
+
+
+/* See {bz: 1597}. If we have initial hint text some day, it should be gray. */
+body div#globalNav div input.searchText {
+        color: black;
+}

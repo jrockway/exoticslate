@@ -71,12 +71,16 @@
             <li id="st-wikinav-logout" class="last"><a id="logout_btn" href="/nlw/submit/logout[% IF wiki.is_public %]?redirect_to=[% wiki.uri | html %][% END %]">[% loc('Log out') %]</a></li>
             [% END %]
           </ul>
-          [% IF workspace_present %]
+          [% IF workspace_present || (people && dashboard_available) %]
           <div>
             <form id="st-search-form" action="index.cgi" method="get" name="SearchForm">
               <label>[% loc("Search:") %]</label>
-              <input type="hidden" value="search" name="action"/>
-              <input type="hidden" value="_" name="scope"/>
+              [% IF workspace_present %]
+                <input type="hidden" value="search" name="action"/>
+              [% ELSE %]
+                <input type="hidden" value="search_people" name="action"/>
+              [% END %]
+                <input type="hidden" value="_" name="scope"/>
               <input id="st-search-term" name="search_term" class="searchText" type="text" />
               <input id="st-search-submit" class="searchButton"  type="submit" value="" />
             </form>

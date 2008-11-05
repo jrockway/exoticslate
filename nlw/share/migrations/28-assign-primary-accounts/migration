@@ -33,17 +33,15 @@ print "Using migration config: " . Dumper $MigrationConfig;
 
 # Correct workspace accounts
 # First, determine the default account.
-my $default_account;
-if (my $name = $MigrationConfig->{default_account}) {
-    $default_account = Socialtext::Account->new( name => $name );
-}
 
-$default_account ||= Socialtext::Account->new(
-    name => hostname() 
-);
+my $name = ( defined $MigrationConfig->{default_account} )
+    ? $MigrationConfig->{default_account}
+    : hostname();
+
+my $default_account = Socialtext::Account->new( name => $name );
 
 $default_account ||= Socialtext::Account->create(
-    name => hostname(),
+    name => $name,
 );
 
 set_system_setting('default-account', $default_account->account_id);

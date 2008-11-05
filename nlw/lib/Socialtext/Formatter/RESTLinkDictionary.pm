@@ -25,6 +25,10 @@ field weblog   => Prefix.'/tags/%{category}/pages';
 field file     => Prefix.'/attachments/%{page_uri}:%{id}/files/%{filename}';
 field image    => Prefix.'/attachments/%{page_uri}:%{id}/files/%{filename}';
 
+field people_profile => '%{url_prefix}/?profile/%{user_id}';
+field people_photo => '%{url_prefix}/data/people/%{user_id}/photo';
+field people_photo_small => '%{url_prefix}/data/people/%{user_id}/small_photo';
+
 # REVIEW: this is for http:text which is just weird so we let it ride, with
 # a slight adjustment
 sub special_http {

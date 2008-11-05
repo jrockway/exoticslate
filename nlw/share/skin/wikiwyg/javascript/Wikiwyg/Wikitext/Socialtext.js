@@ -296,7 +296,11 @@ proto.clean_regexp = function(string) {
 }
 
 proto.insert_widget = function (widget_string) {
-    this.insert_text_at_cursor(widget_string + '\n');
+    /* This is currently only used for post-file-upload insertion of {file:}
+     * and {image:} wafls; other widgets call insert_text_at_cursor directly.
+     * Also see {bz: 1116}: For file uploads, Wafl is inserted on its own line.
+     */
+    this.insert_text_at_cursor('\n' + widget_string + '\n');
 }
 
 proto.insert_text_at_cursor = function(text) {

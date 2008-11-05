@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 4;
+use Test::Socialtext tests => 6;
 fixtures( 'admin' );
 
 use Socialtext::Ceqlotron;
@@ -23,6 +23,8 @@ ceqlotron_run_synchronously();
     my $set = $hub->search->result_set;
     ok( $set, 'we have results' );
     ok( $set->{hits} > 0, 'result set found hits' );
+    is $set->{search_term}, 'the', "correct search_term";
+    is $set->{scope}, '_', "correct scope";
     like( $set->{rows}->[0]->{Date}, qr/\d+/, 'date has some numbers in it');
     like( $set->{rows}->[0]->{DateLocal}, qr/\d+/,
         'date local has some numbers in it');

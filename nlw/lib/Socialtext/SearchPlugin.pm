@@ -62,26 +62,33 @@ sub search {
 
     my $search_term;
     my $scope = $self->cgi->scope || '_';
-    if ( $self->cgi->defined('search_term') ) {
-        $search_term = $self->cgi->search_term;
-        $self->hub->log->debug( 'performing search for '
-                . $search_term );
-        $self->search_for_term(
-            search_term => $search_term,
-            scope       => $scope
-        );
-    }
-    my %sortdir = %{$self->sortdir};
-    $self->result_set( $self->sorted_result_set( \%sortdir ) );
 
-    my $uri_escaped_search_term
-        = $self->uri_escape( $search_term );
+    if ($self->cgi->defined('search_term')) {
+        $search_term = $self->cgi->search_term;
+        $self->dont_use_cached_result_set();
+    }
+    elsif ($self->cgi->defined('orig_search_term')) {
+        $search_term = $self->cgi->orig_search_term;
+    }
+    else {
+        die "no search term?!";
+    }
+
+    $self->hub->log->debug("performing search for $search_term");
+
+    # load the search result which may or may not be cached. 
+    $self->result_set(
+        $self->get_result_set(
+            search_term => $search_term,
+            scope       => $scope,
+        )
+    );
+
+    my $uri_escaped_search_term = $self->uri_escape($search_term);
 
     st_log()
-        ->info( "SEARCH,WORKSPACE,term:'"
-            . ($search_term || '')
-            . "',num_results:"
-            . $self->result_set->{hits}
+        ->info( "SEARCH,WORKSPACE,term:'$search_term',"
+            . "num_results:" . $self->result_set->{hits}
             . ',[' . $timer->elapsed . ']');
 
     use constant PAGE_SIZE => 10;
@@ -95,25 +102,20 @@ sub search {
     }
 
     $self->display_results(
-        \%sortdir,
-        sortby => $self->sortby || 'Relevance',
+        $self->sortdir,
+        sortby => $self->sortby,
         allow_relevance => 1,
-        search_term => $self->cgi->search_term
-            || $self->cgi->orig_search_term,
-        scope => $scope || '',
+        search_term => $search_term,
+        scope => $scope,
         show_workspace =>
-            (          ( $scope ne '_' )
-                    || ( $self->cgi->search_term      =~ /\bworkspaces:\S+/ )
-                    || ( $self->cgi->orig_search_term =~ /\bworkspaces:\S+/ )
-                    || 0 ),
+            ( ($scope ne '_') || ($search_term =~ /\bworkspaces:\S+/) || 0 ),
         feeds => $self->_feeds(
             $self->hub->current_workspace, 
             search_term => $search_term,
             scope => $scope,
         ),
-        title      => loc('Search Results'),
-        unplug_uri => "?action=unplug;search_term="
-            . $uri_escaped_search_term,
+        title => loc('Search Results'),
+        unplug_uri => "?action=unplug;search_term=$uri_escaped_search_term",
         unplug_phrase =>
             loc('Click this button to save the pages from this search to your computer for offline use'),
         Socialtext::Pageset->new(
@@ -157,27 +159,36 @@ sub _feeds {
 sub search_for_term {
     my ( $self, %query )  = @_;
     my $search_term = $query{search_term};
+    my $scope = $query{scope} || '_';
+    $self->{_current_search_term} = $search_term;
+    $self->{_current_scope} = $scope;
     $self->hub->log->debug("searchquery '" . $search_term . "'");
 
     Socialtext::Timer->Continue('search_for_term');
-    $self->result_set( $self->new_result_set );
+    $self->result_set($self->new_result_set);
+    my $result_set = $self->result_set;
     eval {
-        @{ $self->result_set->{rows} } = $self->_new_search(%query);
-        $self->title_search( $search_term =~ s/^=// );
-        $self->hub->log->debug("hitcount " . scalar @{ $self->result_set->{rows} });
-        foreach my $row ( @{ $self->result_set->{rows} } ) {
+        my @rows = $self->_new_search(%query);
+        $self->title_search($search_term =~ s/^=//);
+        $self->hub->log->debug("hitcount " . scalar @rows);
+        foreach my $row (@rows) {
             $self->hub->log->debug("hitrow $row->{page_uri}")
                 if exists $row->{page_uri};
-            $self->hub->log->debug("hitkeys @{ [keys %$row ] }");
+            $self->hub->log->debug("hitkeys @{[keys %$row]}");
         }
-        $self->result_set->{hits}          = scalar @{ $self->result_set->{rows} };
+
+        $result_set->{hits} = scalar @rows;
+        $result_set->{rows} = \@rows;
 
         if( $self->title_search ) {
-            $self->result_set->{display_title} = loc("Titles containing \'[_1]\'", $search_term);
+            $result_set->{display_title} = 
+                loc("Titles containing \'[_1]\'", $search_term);
         } else {
-            $self->result_set->{display_title} = loc("Pages containing \'[_1]\'", $search_term);
+            $result_set->{display_title} = 
+                loc("Pages containing \'[_1]\'", $search_term);
         }
-        $self->result_set->{predicate} = 'action=search';
+        $result_set->{predicate} = 'action=search';
+
         $self->write_result_set;
     };
     if ($@) {
@@ -207,6 +218,8 @@ sub _new_search {
     my ( $self, %query ) = @_;
 
     Socialtext::Timer->Continue('search_on_behalf');
+    $self->{_current_search_term} = $query{search_term};
+    $self->{_current_scope} = $query{scope} || '_';
     my @hits = search_on_behalf(
         $self->hub->current_workspace->name,
         $query{search_term},
@@ -368,12 +381,48 @@ sub _make_row {
 sub get_result_set {
     my ( $self, %query ) = @_;
     my %sortdir = %{$self->sortdir};
-    $self->search_for_term(%query);
+    $self->{_current_search_term} = $query{search_term};
+    $self->{_current_scope} = $query{scope};
+    $self->result_set($self->read_result_set());
     return $self->sorted_result_set(\%sortdir);
+}
+
+sub default_result_set {
+    my $self = shift;
+    die "default_result_set called without a _current_search_term"
+        unless $self->{_current_search_term};
+    $self->search_for_term(
+        search_term => $self->{_current_search_term},
+        scope => $self->{_current_scope},
+    );
+    return $self->result_set;
+}
+
+sub read_result_set {
+    my $self = shift;
+
+    # try to get the cached result
+    my $result_set = $self->SUPER::read_result_set(@_);
+
+    # if we get one, make sure it's for the right search
+    if ($result_set && 
+        defined($result_set->{search_term}) && 
+        $result_set->{search_term} eq $self->{_current_search_term} &&
+        defined($result_set->{scope}) &&
+        $result_set->{scope} eq $self->{_current_scope})
+    {
+        return $result_set;
+    }
+    else {
+        # should do a new search
+        return $self->default_result_set;
+    }
 }
 
 sub write_result_set {
     my $self = shift;
+    $self->result_set->{search_term} = $self->{_current_search_term};
+    $self->result_set->{scope} = $self->{_current_scope};
     eval { $self->SUPER::write_result_set(@_); };
     if ($@) {
         unless ( $@ =~ /lock_store.al/ ) {

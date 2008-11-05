@@ -124,11 +124,7 @@ sub _all_workspaces {
         push @workspaces, $current_workspace;
     }
 
-    my %uniq = ();
-    foreach my $w ( @workspaces ) {
-        $uniq{$w}++;
-    }
-
+    my %uniq = map {$_=>1} @workspaces;
     @workspaces = keys %uniq;
 }
 

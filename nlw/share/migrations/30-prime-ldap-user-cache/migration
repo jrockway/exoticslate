@@ -1,0 +1,2 @@
+#!/bin/bash -e
+st-refresh-ldap-users --verbose

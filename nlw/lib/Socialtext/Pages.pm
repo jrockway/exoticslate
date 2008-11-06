@@ -346,6 +346,43 @@ sub html_for_page_in_workspace {
     return $html;
 }
 
+# Grab the wikitext from a spreadsheet and put it in a page object.
+# Used by BackLinksPlugin.
+sub page_with_spreadsheet_wikitext {
+    my $self = shift;
+    my $page = shift;
+
+    my $new = $self->hub->pages->new_from_name($page->id);
+    my $wikitext = '';
+    my $text = $new->content;
+
+    OUTER: while (1) {
+        $text =~ s/.*?\n--SocialCalcSpreadsheetControlSave\n//s
+            or last; 
+        $text =~ s/(.*?)\n--SocialCalcSpreadsheetControlSave\n//s;
+        my $section = $1;
+        my @parts = ($section =~ /part:(.*)/g);
+        while (my $part = shift @parts) {
+            last if $part eq 'sheet';
+            $text =~ s/.*?\n--SocialCalcSpreadsheetControlSave\n//s
+                or last OUTER;
+        }
+        $text =~ s/(.*?)\n--SocialCalcSpreadsheetControlSave\n//s;
+        $section = $1 or last;
+        $section =~ /^valueformat:(\d+):text-wiki$/m or last;
+        my $num = $1;
+        my @lines = ($section =~ /\ncell:.+?:.+?:(.*?):.*tvf:$num/g);
+        $wikitext = join "\n", map {
+            s/\\c/:/g;
+            s/\\n/\n/g;
+            s/\\t/\t/g;
+            "$_\n";
+        } @lines;
+    }
+    $new->content($wikitext);
+    return $new;
+}
+
 ################################################################################
 package Socialtext::Pages::Formatter;
 

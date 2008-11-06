@@ -114,7 +114,9 @@ sub _make_result_set {
 sub update {
     my $self = shift;
     my $page = shift;
-    return if $page->metadata->Type eq 'spreadsheet';
+
+    $page = $self->hub->pages->page_with_spreadsheet_wikitext($page)
+        if $page->metadata->Type eq 'spreadsheet';
 
     # XXX The formmatter uses current
     # REVIEW this can probably come out in new style?

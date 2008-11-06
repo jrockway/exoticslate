@@ -136,7 +136,11 @@ Account_skins: {
         'reset_skin sets the skins of account workspaces'
     );
 
-    
+    is_deeply( [], $test->custom_workspace_skins, 'custom workspace skins is empty.');
+    $ws->update( skin_name => 's3' );
+    is_deeply( ['s3'], $test->custom_workspace_skins, 'custom workspace skins updated.');
+    my $mess = $test->custom_workspace_skins( include_workspaces => 1 );
+    is( $ws_name, $mess->{s3}[0]{name}, 'custom skins with workspaces.');
 }
 
 my $export_file;

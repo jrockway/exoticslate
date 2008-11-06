@@ -71,6 +71,26 @@ sub skin_name {
     return $self->{skin_name} || get_system_setting('default-skin');
 }
 
+sub custom_workspace_skins {
+    my $self = shift;
+    my %p    = @_;
+
+    my $workspaces = $self->workspaces;
+    my %skins_hash = ();
+    while ( my $ws = $workspaces->next ) {
+        my $ws_skin = $ws->skin_name;
+        unless ( $ws_skin eq $self->skin_name  || $ws_skin eq '' ) {
+           $skins_hash{ $ws_skin } = []
+               unless defined $skins_hash{ $ws_skin };
+
+           push @{ $skins_hash{ $ws_skin } }, $ws;
+        }
+    }
+
+    return \%skins_hash if $p{include_workspaces};
+    return [ keys %skins_hash ];
+}
+
 sub reset_skin {
     my ($self, $skin) = @_;
     
@@ -678,6 +698,23 @@ it has any workspaces.
 =item $account->name()
 
 =item $account->skin_name()
+
+=item $account->custom_workspace_skins(PARAMS)
+
+PARAMS can include:
+
+=over 8
+
+=item * include_workspaces - can be 1 or 0
+
+=back
+
+Return an array ref containing the names of all the workspace-level
+custom skins that are used in this account.
+
+If include_workspaces is set to 1, this method will return a hashref
+with workspace-level skin names as keys and an arrayref of the
+workspaces that use that skin.
 
 =item $account->is_system_created()
 

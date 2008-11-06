@@ -8,7 +8,7 @@ use Socialtext::Migration::Utils qw/ensure_socialtext_schema/;
 use Socialtext::Schema;
 use Socialtext::System qw/shell_run/;
 
-ensure_socialtext_schema( 10 );
+ensure_socialtext_schema( 12 );
 
 my %params = Socialtext::Schema->connect_params();
 my $migration_script = $FindBin::Bin . '/migration.sql';

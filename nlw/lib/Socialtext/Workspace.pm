@@ -975,10 +975,15 @@ sub permissions {
 
     sub add_user {
         my $self = shift;
-        my %p = validate( @_, $spec );
+        my %p    = validate( @_, $spec );
+        my $user = $p{user};
+
         $p{role} ||= Socialtext::Role->Member();
 
         $self->assign_role_to_user( is_selected => 1, %p );
+
+        $user->primary_account( $self->account )
+            if $user->workspace_count == 1;
     }
 }
 

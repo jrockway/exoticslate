@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 7;
+use Test::Socialtext tests => 8;
 fixtures( 'rdbms_clean' );
 
 use IO::String;
@@ -22,6 +22,8 @@ my $user = Socialtext::User->create(
     username      => 'dbowie@example.com',
     email_address => 'dbowie@example.com',,
 );
+
+$user->primary_account( Socialtext::Account->Unknown() );
 
 ADD_USER:
 {
@@ -42,6 +44,9 @@ ADD_USER:
 
     is( $ws->role_for_user( user => $user )->role_id(), $role->role_id(),
         'user has the member role in the workspace' );
+
+    # When we add a user to thier first workspace, we reassign thier account.
+    is( $user->primary_account->name, 'Socialtext', 'user account changed.' );
 
     my $log_msg = 'ASSIGN,USER_ROLE,role:'
         . $role->name

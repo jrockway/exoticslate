@@ -12,7 +12,7 @@
         <span id="st-wikinav-help"> - <a href="/help/index.cgi" target="_blank">[% loc('Help') %]</a></span>
     </div>
     <div id="st-home">
-        <a id="st-home-link" href="[% home_href | decorate('home_href') %]">[% loc('Home') %]</a>
+        <a id="st-home-link" href="[% wiki.uri %]index.cgi">[% loc('Home') %]</a>
     </div>
     [% search_box_snippet %]
     <br clear="both" />

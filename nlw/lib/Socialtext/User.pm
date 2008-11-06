@@ -8,6 +8,7 @@ our $VERSION = '0.01';
 use Socialtext::Exceptions qw( data_validation_error param_error );
 use Socialtext::Validate qw( validate SCALAR_TYPE BOOLEAN_TYPE ARRAYREF_TYPE WORKSPACE_TYPE USER_TYPE);
 use Socialtext::AppConfig;
+use Socialtext::Log qw(st_log);
 use Socialtext::MultiCursor;
 use Socialtext::SQL qw(sql_execute sql_selectrow);
 use Socialtext::TT2::Renderer;
@@ -754,13 +755,31 @@ EOSQL
 
 sub is_authenticated {
     my $self = shift;
+    my $username = $self->username;
 
-    return 1
-        if $self->username() ne $GuestUsername
-           and $self->has_valid_password()
-            and not $self->requires_confirmation();
+    # Yes, this is a whole lot wordier than it needs to be, but it leaves us a
+    # breadcrumb for helping figure out why users are having trouble accessing
+    # the system.
 
-    return 0;
+    # Guest user isn't an authenticated user (they're the *Guest*)
+    return 0 if ($username eq $GuestUsername);
+
+    # If they don't have a valid password, we don't treat them as
+    # Authenticated.
+    unless ($self->has_valid_password()) {
+        st_log->info( "user $username has invalid password; not treating as authenticated" );
+        return 0;
+    }
+
+    # If they have an outstanding e-mail confirmation, we don't treat them as
+    # Authenticated.
+    if ($self->requires_confirmation()) {
+        st_log->info( "user $username has oustanding email confirmation; not treating as authenticated" );
+        return 0;
+    }
+
+    # Looks good.
+    return 1;
 }
 
 sub is_guest {

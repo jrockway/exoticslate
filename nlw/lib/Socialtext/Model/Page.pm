@@ -52,6 +52,7 @@ sub to_result {
             workspace_title => $self->workspace->title,
             workspace_name => $self->workspace->name,
         ) : (),
+        is_spreadsheet => $self->is_spreadsheet,
     };
 
     return $result;

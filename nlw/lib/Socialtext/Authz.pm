@@ -162,7 +162,7 @@ sub plugin_enabled_for_user_in_account {
                  $Socialtext::User::Default::Factory::SystemUsername);
 
     my $user_id = $user->user_id;
-    my $account_id = $account->account_id;
+    my $account_id = ref($account) ? $account->account_id : $account;
 
     my $cache = Socialtext::Cache->cache('authz_plugin');
     my $cache_key = "user_acct:$user_id\0$account_id\0$plugin_name";

@@ -1,15 +1,14 @@
-| *Comment* | Test Case: Public |  |
-| st-logout |  |  |
-| wait_for_element_visible_ok | password | 30000 |
-| wait_for_element_visible_ok | login_btn | 30000 |
+| *Comment* | Test Case: Public. Log out |  |
+
+| click_and_wait | link=Log out |  |
 
 | set | auth_w | test-case-public-%%start_time%% |
 
-| *Comment* | Test Case: Public. Create a public workspace |  |
+| *Comment* | Test Case: Public. Create a public workspace with no members |  |
 | st-admin | create-workspace --n %%auth_w%% --t "Test Case Public %%start_time%%" |  |
 | st-admin | set-permissions --w %%auth_w%% --p public |  |
 
-| *Comment* | Test Case: Public. Verify guest can edit |  |
+| *Comment* | Test Case: Public. Open Public workspace |  |
 | open_ok | /%%auth_w%%/index.cgi |  |
 
 | *Comment* | Test Case: Public. Verify buttons and links page top |  |
@@ -31,7 +30,7 @@
 | text_like | bottomButtons | Edit |
 | text_like | bottomButtons | Comment |
 
-| *Comment* | Test Case: Public. |  |
+| *Comment* | Test Case: Public. Verify Guest can edit |  |
 | st-admin | update-page --w %%auth_w%% --e %%email%% --p "TC Public %%start_time%%" < %%wikitest_client_files%%wikitest.txt | has been created |
 
 | open_ok | /%%auth_w%%/?TC Public %%start_time%% |  |

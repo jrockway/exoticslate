@@ -5,8 +5,8 @@
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
-| type_ok | st-newpage-pagename-edit | Edit This Page %%start_time%% |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | st-newpage-pagename-edit | Edit This Page %%start_time%% |
 | type_ok | wikiwyg_wikitext_textarea | Edit This Page content %%start_time%% |
 | clickAndWait | st-save-button-link |  |
 
@@ -18,8 +18,10 @@
  "Edit Tips"<http://...> | Advanced edit tips window pops up with content
 
 | *Comment* | Test Case: Edit This Page verify editing buttons |  |
+| wait_for_element_visible_ok | st-edit-button-link | 30000 |
 | click_ok | st-edit-button-link |  |
 | wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
 | text_like | st-save-button-link | Save |
 | text_like | st-preview-button-link | Preview |
 | text_like | st-cancel-button-link | Cancel |
@@ -33,7 +35,6 @@
 | verify_value | wikiwyg_wikitext_textarea | Edit This Page content %%start_time%% |
 
 | *Comment* | Edit This Page Checking Preview/Edit More |  |
-| text_like | st-preview-button-link | Preview |
 
  click_ok | st-preview-button-link | |
  wait_for_text_present_ok | Edit This Page content %%start_time%% | 30000 |
@@ -50,13 +51,13 @@
 
 | *Comment* | Test Case: Edit This Page from Preview to Advanced |  |
 
- text_like | st-preview-button-link | Preview |
- click_ok | st-preview-button-link | |
- wait_for_text_present_ok | Edit This Page content %%start_time%% | 30000 |
- text_like | st-preview-button-link | Edit More |
- click_ok | st-mode-wikitext-button | Advanced |
- wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
- text_like | st-preview-button-link | Preview |
+| text_like | st-preview-button-link | Preview |
+| click_ok | st-preview-button-link |  |
+| wait_for_text_present_ok | Edit This Page content %%start_time%% | 30000 |
+| text_like | st-preview-button-link | Edit |
+| click_ok | st-mode-wikitext-button | Wiki Text |
+| wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
+| text_like | st-preview-button-link | Preview |
 
  edit the page in Advanced mode; then "Cancel Edit"<http://...> | warning pops up
  click Cancel in popup | return to editing or close edit (browser dependent) | Edits are NOT LOST 
@@ -65,12 +66,13 @@
 | *Comment* | Test Case: Edit This Page cancel edit Advanced mode |  |
 | click_ok | link=Wiki Text |  |
 
- click_ok | st-cancel-button-link | |
- wait_for_element_visible_ok | st-edit-button-link | 30000 |
- click_ok | st-edit-button-link | |
+| click_ok | st-cancel-button-link |  |
+| wait_for_element_visible_ok | st-edit-button-link | 30000 |
+| click_ok | st-edit-button-link |  |
 
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | abcdefg |
+
 | *Comment* | JUST TYPED abcdefg |  |
 | pause | 15000 |  |
 | chooseCancelOnNextConfirmation |  |  |
@@ -167,9 +169,10 @@ test Edit Tips
 | *Comment* | Test Case: Edit This Page lower left edit link |  |
 | text_like | bottomButtons | Edit |
 | click_ok | link=Edit | index=1 |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | wait_for_text_present_ok | Editing: Edit This Page %%start_time%% | 30000 |
-| wait_for_element_visible_ok | link=Save | 30000 |
-| clickAndWait | link=Save |  |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| clickAndWait | st-save-button-link |  |
 | wait_for_text_present_ok | Edit This Page %%start_time%% | 30000 |
 
 | *Comment* | Test Case: Edit This Page edit tips |  |
@@ -180,22 +183,18 @@ test Edit Tips
 | wait_for_element_not_visible_ok | link=Edit Tips | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| type_ok | wikiwyg_wikitext_textarea | Force an edit cancel dialog to come up |
 
 for some reason, the test for edit tips element visible fails in IE even though it is visible
 
+| *Comment* | Edit Tips now show up in a lightbox |  |
 | text-like | st-edit-tips | Edit Tips |
 | click_ok | st-edit-tips |  |
-| pause | 8000 |  |
+| wait_for_element_visible_ok | st-ref-card-close | 30000 |
 | text_like | qr/To Get This.+Type This/ |  |
+| click_ok | st-ref-card-close |  |
 | clickAndWait | link=Save |  |
 
- confirmation_is | Are you sure you want to Cancel?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay in the editor.
-
-| *Comment* | Edit Tips now show up in a lightbox |  |
-
 | *Comment* | Test Case: Edit This Page teardown |  |
-| open_ok | /%%workspace%%/index.cgi |  |
 | st-admin | purge-page --workspace %%workspace%% --page edit_this_page_%%start_time%% | page was purged |
 
 | *Comment* | Test Case: Edit This Page COMPLETED |  |

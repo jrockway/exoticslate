@@ -135,7 +135,7 @@ TODO: restore this test when comment form fields is reimplemented
 | text_like | Select/Deselect All |  |
 | text_like | contentRight | %%username%% |
 | check_ok | all |  |
-| click_and_wait | //input[@value='Invite'] |  |
+| click_and_wait | link=Invite |  |
 | text_like | contentRight | %%username%% |
 | st-admin | set_workspace_config --workspace %%workspace%% restrict_invitation_to_search 0 |  |
 | st-admin | set_workspace_config --workspace %%workspace%% invitation_filter "" |  |

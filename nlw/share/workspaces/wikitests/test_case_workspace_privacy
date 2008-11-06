@@ -4,12 +4,7 @@
  Choose Setting: Public-login-to-edit and Save | permission set is saved.
  logout | browser navigates to Central page. Edit button is replaced with new "Edit" button.
 
-| *Comment* | START Test Case: Workspace Privacy |  |
-
-Testing Bug 335 here is bogus and the test that was inserted here fails.
-There should be no attachments at all in a pristine /test-data workspace.
-If you want to write a test for email addresses are hidden, write a separate test.
-
+| *Comment* | Test Case: Workspace Privacy |  |
 | *Comment* | Test Case: Workspace Privacy set login to edit |  |
 | open_ok | /%%workspace%%/?action=users_settings |  |
 | clickAndWait | link=Workspace Privacy |  |
@@ -18,6 +13,7 @@ If you want to write a test for email addresses are hidden, write a separate tes
 | clickAndWait | link=Log out |  |
 
 | *Comment* | Test Case: Workspace Privacy verify login to edit button |  |
+| wait_for_element_visible_ok | st-login-to-edit-button-link | 30000 |
 | text_like | st-login-to-edit-button-link | Edit |
 
  Log in | login successful
@@ -29,8 +25,9 @@ If you want to write a test for email addresses are hidden, write a separate tes
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
 | clickAndWait | //input[@value='Log in'] |  |
-| wait_for_element_visible_ok | st-editing-title | 30000 |
-| text_like | st-editing-title | Editing |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | clickAndWait | st-save-button-link |  |
 | clickAndWait | link=Settings |  |
 | wait_for_element_visible_ok | link=Workspace Privacy |  |

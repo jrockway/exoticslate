@@ -370,15 +370,19 @@ sub accounts {
     }
 
     my $sth = sql_execute($sql, @args);
-    my @accounts;
-    while (my ($account_id) = $sth->fetchrow_array()) {
-        push @accounts, Socialtext::Account->new(account_id => $account_id);
+    my @account_ids = map {$_->[0]} @{$sth->fetchall_arrayref()};
+    if ($p{ids_only}) {
+        Socialtext::Timer->Pause('user_accts');
+        return (wantarray ? @account_ids : \@account_ids);
     }
-    @accounts = sort {$a->name cmp $b->name} @accounts;
-
-    Socialtext::Timer->Pause('user_accts');
-
-    return (wantarray ? @accounts : \@accounts);
+    else {
+        my @accounts = sort {$a->name cmp $b->name} 
+                       map {
+                           Socialtext::Account->new(account_id => $_)
+                       } @account_ids;
+        Socialtext::Timer->Pause('user_accts');
+        return (wantarray ? @accounts : \@accounts);
+    }
 }
 
 sub shared_accounts {

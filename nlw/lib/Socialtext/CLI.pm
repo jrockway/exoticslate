@@ -1056,12 +1056,30 @@ sub remove_permission {
 sub show_workspace_config {
     my $self = shift;
 
-    $self->_show_config( $self->_require_workspace );
+    my $msg = $self->_show_config( $self->_require_workspace );
+
+    $self->_success( $msg );
 }
 
 sub show_account_config {
     my $self = shift;
-    $self->_show_config( $self->_require_account );
+
+    my $account = $self->_require_account;
+    my $msg     = $self->_show_config( $account );
+
+    my @enabled         = $account->plugins_enabled;
+    my %enabled_as_hash = map { $_ => 1 } @enabled;
+    my @installed       = Socialtext::Pluggable::Adapter->new->plugin_list;
+    my $separator       = "\n" . " "x34;
+
+    $msg .= sprintf( '%-32s: ', 'modules_installed' );
+    foreach my $installed ( @installed ) {
+        $msg .= $installed;
+        $msg .= ' (enabled)' if defined $enabled_as_hash{$installed};
+        $msg .= $separator;
+    }
+
+    $self->_success( $msg );
 }
 
 sub _show_config {
@@ -1097,7 +1115,7 @@ sub _show_config {
         $msg .= "\n";
     }
 
-    $self->_success($msg);
+    return $msg;
 }
 
 sub set_account_config {

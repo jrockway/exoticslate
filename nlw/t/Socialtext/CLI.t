@@ -14,7 +14,7 @@ use t::Socialtext::CLITestUtils qw/expect_failure expect_success/;
 
 use Cwd;
 
-plan tests => 379;
+plan tests => 381;
 
 our $NEW_WORKSPACE = 'new-ws-' . $<;
 our $NEW_WORKSPACE2 = 'new-ws2-'. $<;
@@ -1352,6 +1352,19 @@ SET_WORKSPACE_CONFIG: {
     );
 }
 
+SHOW_ACCOUNT_CONFIG: {
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw/ --account Socialtext /
+                ]
+            )->show_account_config();
+        },
+        qr/modules_installed/,
+        'show-account-config success'
+    );
+}
 SET_ACCOUNT_CONFIG: {
     my $account = Socialtext::Account->new(name => 'Socialtext');
     my $ws      = $account->workspaces->next();

@@ -74,7 +74,7 @@
           [% IF workspace_present || container.type == 'peoplelist' || container.type == 'profile' %]
           <div>
             <form id="st-search-form" action="index.cgi" method="get" name="SearchForm">
-              <label>[% loc("Search:") %]</label>
+              <label>[% workspace_present ? loc("Search this workspace:") : loc("Search People:") %]</label>
               [% IF workspace_present %]
                 <input type="hidden" value="search" name="action"/>
               [% ELSE %]

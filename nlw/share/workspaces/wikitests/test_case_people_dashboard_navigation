@@ -37,6 +37,10 @@ TO DO - Add testability hooks and confirm Grey Ghost Icon
 | wait_for_element_present_ok | link=MapQuest | 30000 |
 | wait_for_element_present_ok | link=Clock & Date | 30000 |
 | wait_for_element_present_ok | link=BeTwittered | 30000 |
+| wait_for_element_present_ok | link=Youtube Video Player | 30000 |
+| wait_for_element_present_ok | link=SlideShare Feeds | 30000 |
+| wait_for_element_present_ok | link=Microsoft Outlook | 30000 |
+
 | text_like | Displays a single page from any of your workspaces within a Socialtext Widget. |  |
 
 | *comment* | Test Case: People Dashboard Navigation People has link to me, guest and system |  |

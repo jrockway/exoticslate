@@ -383,7 +383,12 @@ sub get_result_set {
     my %sortdir = %{$self->sortdir};
     $self->{_current_search_term} = $query{search_term};
     $self->{_current_scope} = $query{scope};
-    $self->result_set($self->read_result_set());
+    if (!$self->{_current_search_term}) {
+        $self->result_set($self->new_result_set());
+    }
+    else {
+        $self->result_set($self->read_result_set());
+    }
     return $self->sorted_result_set(\%sortdir);
 }
 

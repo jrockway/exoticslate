@@ -10,13 +10,18 @@
 | pause | 2000 |  |
 | *Comment* | Test Case: Widgets - Workspaces Widget |  |
 | st-add-widget | widgets/share/widgets/my_workspaces.xml | myworkspace |
-| st-wait-for-widget-load | myworkspace | 25000 |
+
+st-wait-for-widget-load | myworkspace | 25000 | Doesn't seem to work right now |
+
+| pause | 15000 | I hate pause |
 | st-widget-title-like | myworkspace | Workspaces |
 | st-select-widget-frame | myworkspace |  |
 | text_like | //body | %%title%% |
-| text_like | //body | contributions |
+| text_like | //body | changes |
 | text_like | //body | views |
 | text_like | //body | workspacewidget %%start_time%% |
+| wait_for_element_present_ok | link=new page |  |
+| click_ok | link=new page |  |
 | text_unlike | //body | Admin |
 | select-frame | relative=parent |  |
 
@@ -25,7 +30,10 @@
 | st-admin | remove-member --username %%username%% --workspace workspacewidget-%%start_time%% |  |
 | st-empty-container |  |  |
 | st-add-widget | widgets/share/widgets/my_workspaces.xml | second_myworkspace |
-| st-wait-for-widget-load | second_myworkspace | 25000 |
+
+st-wait-for-widget-load | second_myworkspace | 25000 |
+
+| pause | 15000 |  |
 | st-select-widget-frame | second_myworkspace |  |
 | text_like | //body | %%title%% |
 | text_like | //body | views |

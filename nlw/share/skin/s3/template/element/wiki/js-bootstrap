@@ -7,6 +7,7 @@ var Socialtext = Socialtext || {};
 Socialtext.version = "[% app_version %]";
 Socialtext.new_page = [% IF is_new %] true; [% ELSE %] false; [% END %]
 Socialtext.username = '[% user.username.replace('\'', '\\\'') %]';
+Socialtext.accept_encoding = '[% accept_encoding %]';
 Socialtext.userid = '[% user.userid.replace('\'', '\\\'')  %]';
 Socialtext.loc_lang = '[% loc_lang %]';
 Socialtext.wiki_id = '[% wiki.name.replace('\'', '\\\'') %]';

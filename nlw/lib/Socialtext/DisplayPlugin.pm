@@ -247,6 +247,9 @@ sub _render_display {
         template => 'view/page/display',
         vars     => {
             $self->hub->helpers->global_template_vars,
+            accept_encoding         => eval {
+                $self->hub->rest->request->header_in( 'Accept-Encoding' )
+            } || '',
             title                   => $page->title,
             page                    => $self->_get_page_info($page),
             tag_count               => scalar @{ $page->metadata->Category }, # counts recent changes!

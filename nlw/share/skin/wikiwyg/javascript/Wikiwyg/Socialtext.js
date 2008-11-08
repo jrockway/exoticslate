@@ -1041,6 +1041,38 @@ proto.editMode = function() {
     this.current_mode.enableThis();
 }
 
+proto.get_inner_html = function( cb ) {
+    if ( cb ) {
+        this.get_inner_html_async( cb );
+        return;
+    }
+
+    var result = '';
+    try {
+        result = this.get_editable_div().innerHTML;
+    } catch (e) {};
+    return result;
+}
+
+proto.set_inner_html = function(html) {
+    var self = this;
+    var doc = this.get_edit_document();
+    if ( doc.readyState == 'loading' ) {
+        setTimeout( function() {
+            self.set_inner_html(html);
+        }, 500);
+    } else {
+        try { 
+            this.get_editable_div().innerHTML = html;
+        } catch (e) {
+            setTimeout( function() {
+                self.set_inner_html(html);
+            }, 500);
+        }
+    }
+}
+
+
 /*==============================================================================
 Mode class generic overrides.
  =============================================================================*/

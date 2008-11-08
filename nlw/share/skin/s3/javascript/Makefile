@@ -11,7 +11,8 @@ S3_FILE=socialtext-s3.js
 S3_FILE_MINI=socialtext-s3-mini.js
 S3_FILE_GZIP=$(S3_FILE).gz
 
-EDITOR_FILE=$(WIKIWYG_ST)/socialtext-editor.js
+ST_EDITOR_FILE=$(WIKIWYG_ST)/socialtext-editor.js
+EDITOR_FILE=socialtext-editor.js
 EDITOR_FILE_MINI=socialtext-editor-mini.js
 EDITOR_FILE_GZIP=socialtext-editor.js.gz
 
@@ -86,6 +87,9 @@ clean:
 .js-mini.js:
 	$(MINIFY) $< > $@
 
+$(EDITOR_FILE): $(ST_EDITOR_FILE)
+	cp $< $@
+
 $(EDITOR_FILE_MINI): $(EDITOR_FILE)
 	$(MINIFY) $< > $@
 
@@ -104,7 +108,7 @@ $(S3_FILE): $(S3_SOURCE_FILES) Makefile
 	    (echo "// BEGIN $$js"; cat $$js | perl -pe 's/\r//g') >> $@; \
 	done
 
-$(EDITOR_FILE): $(ALL_EDITOR_FILES)
+$(ST_EDITOR_FILE): $(ALL_EDITOR_FILES)
 	make -C $(WIKIWYG_ST) all
 
 $(LIGHTBOX_FILE): $(LIGHTBOX_SOURCE_FILES) Makefile

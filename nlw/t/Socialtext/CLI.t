@@ -14,7 +14,7 @@ use t::Socialtext::CLITestUtils qw/expect_failure expect_success/;
 
 use Cwd;
 
-plan tests => 385;
+plan tests => 387;
 
 our $NEW_WORKSPACE = 'new-ws-' . $<;
 our $NEW_WORKSPACE2 = 'new-ws2-'. $<;
@@ -2044,6 +2044,18 @@ SHOW_MEMBERS: {
             )->show_members();
         },
         qr/^(?!.*smtest1).*smtest2\@socialtext.net \| Test2 \| User \|.*smtest3\@socialtext.net \| Test3 \| User/s,
+        'Show members has correct list'
+    );
+
+    expect_success(
+        sub {
+            $output = Socialtext::CLI->new(
+                argv => [
+                    qw( --account Unknown )
+                ]
+            )->show_members();
+        },
+        qr/^.*csvtest2\@example.com \| Jane \| Smith \|\n.*devnull5.*smtest1/s,
         'Show members has correct list'
     );
 }

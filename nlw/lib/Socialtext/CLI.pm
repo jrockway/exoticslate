@@ -1469,6 +1469,47 @@ sub show_acls {
 sub show_members {
     my $self = shift;
 
+    my %opts = do {
+        local $self->{argv} = $self->{argv};
+        $self->_get_options("account:s", "workspace:s");
+    };
+
+    if ($opts{account}) {
+        return $self->_show_account_members();
+    }
+    elsif ($opts{workspace}) {
+        return $self->_show_workspace_members();
+    }
+    else {
+        $self->_error(
+                "The command you called ($self->{command}) requires a workspace or an account\n"
+                . "to be specified.\n"
+                . "A workspace is identified by name with the --workspace option.\n"
+                . "An account is identified by name with the --account option.\n"
+        );
+        return;
+    }
+}
+
+sub _show_account_members {
+    my $self = shift;
+    my $account = $self->_require_account();
+
+    my $msg = "Members of the " . $account->name . " account\n\n";
+    $msg .= "| Email Address | First | Last |\n";
+
+    my $user_cursor =  $account->users;
+
+    while (my $user = $user_cursor->next) {
+        $msg .= '| ' . join(' | ', $user->email_address, $user->first_name, $user->last_name) . " |\n";
+    }
+
+    $self->_success($msg, "no indent");
+}
+
+sub _show_workspace_members {
+    my $self = shift;
+
     my $ws = $self->_require_workspace();
 
     my $msg = "Members of the " . $ws->name . " workspace\n\n";
@@ -2744,9 +2785,9 @@ workspace.
 Prints a table of the workspace's role/permissions matrix to standard
 output.
 
-=head2 show-members --workspace
+=head2 show-members [--workspace or --account]
 
-Prints a table of the workspace's members to standard output.
+Prints a table of the workspace/account's members to standard output.
 
 =head2 show-admins --workspace
 

@@ -380,6 +380,20 @@ sub import_account {
         "\n" . loc("[_1] account imported.", $account->name));
 }
 
+sub list_accounts {
+    my $self  = shift;
+    my %opts  = $self->_get_options('ids');
+    my $field = ($opts{ids} ? 'account_id' : 'name');
+
+    require Socialtext::Account;
+    my $all = Socialtext::Account->All();
+    while (my $account = $all->next) {
+        print $account->$field, "\n";
+    }
+
+    $self->_success();
+}
+
 sub list_workspaces {
     my $self         = shift;
     my $column       = $self->_determine_workspace_output(shift);
@@ -2531,6 +2545,7 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   ACCOUNTS
 
   create-account --name
+  list-accounts [--ids]
   give-accounts-admin [--username or --email]
   remove-accounts-admin [--username or --email]
   give-system-admin [--username or --email]

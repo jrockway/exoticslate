@@ -14,7 +14,7 @@ use t::Socialtext::CLITestUtils qw/expect_failure expect_success/;
 
 use Cwd;
 
-plan tests => 381;
+plan tests => 385;
 
 our $NEW_WORKSPACE = 'new-ws-' . $<;
 our $NEW_WORKSPACE2 = 'new-ws2-'. $<;
@@ -2238,6 +2238,21 @@ EXPORT_ACCOUNTS: {
         'importing a valid account',
     );
 }
+
+LIST_ACCOUNTS {
+    expect_success(
+        sub { Socialtext::CLI->new()->list_accounts(); },
+        (join '', map { "$_\n" } qw( FooBar Fred jebus pluggy Socialtext Unknown )),
+        'list-accounts by name'
+    );
+
+    expect_success(
+        sub { Socialtext::CLI->new( argv => ['--ids'] )->list_accounts(); },
+        qr/\A(?:\d+\n){6}\z/,
+        'list-accounts by id'
+    );
+}
+
 
 exit;
 

@@ -62,7 +62,12 @@ proto.do_roundtrip = function(wikitext) {
             passwd: 'd3vnu11l'
         }
     );
-    var wysiwygObject = this.create_wysiwyg_object();
+    
+    if (!this._wysiwyg_object) {
+        this._wysiwyg_object = this.create_wysiwyg_object();
+    }
+
+    var wysiwygObject = this._wysiwyg_object;
     wysiwygObject.fromHtml(html);
 
     var html2 = wysiwygObject.get_inner_html();

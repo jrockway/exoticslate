@@ -1,0 +1,116 @@
+This page sets a cookie in your browser that will temporarily set the repository skin server-wide for you.
+
+*WARNING:* If you set your skin to something that doesn't exist, there is a nasty error and you'll need to reset your skin by pasting this url into your location bar: javascript:document.cookie='socialtext-skin=; path=/' OR by clearing cookies.
+
+*Add a skin to this page* by putting the NEWSKIN in the skins repository or at nlw/share/skin/ in your dev env, then adding the line
+
+NEWSKIN,
+
+to the skins array below.
+
+.html
+<table id="skin_list">
+    <tr>
+        <th>Skin</th>
+        <th></th>
+    </tr>
+    <tr>
+        <td>Default</td>
+        <td><a href="javascript:set_skin()">Set</a></td>
+    </tr>
+</table>
+
+<script>
+var expiration = new Date(
+    new Date().getTime() + 25 * 365 * 24 * 60 * 60 * 1000
+).toGMTString();
+function set_skin (skin) {
+    if (skin) {
+        document.cookie = 'socialtext-skin=skin/' + escape(skin) + 
+                          '; expires=' + expiration +
+                          '; path=/';
+    }
+    else {
+        document.cookie = 'socialtext-skin=; path=/';
+    }
+    document.location.reload();
+}
+ 
+(function ($) {
+    var skins = [
+        'aclcorporate',
+        'acs',
+        'addleshaw',
+        'angel',
+        'atsu',
+        'blackwell',
+        'brainware',
+        'btglobal',
+        'cafas',
+        'cei-skin-2',
+        'clifbar',
+        'climateproject',
+        'coactive',
+        'dfj',
+        'dla-piper',
+        'dreyfus',
+        'duke_ce',
+        'dymo',
+        'emersol',
+        'euriki',
+        'fei',
+        'flow',
+        'francisco',
+        'greenmountain',
+        'humanity',
+        'icrossing',
+        'infosys',
+        'jboye',
+        'live_nation',
+        'lp',
+        'mcgraw-hill',
+        'meredith',
+        'mosaic',
+        'netel',
+        'netsuite',
+        'omidyar',
+        'omidyar_archive',
+        'osbornetrans',
+        'pbwt',
+        'pinstripe',
+        'pointroll',
+        'prodrive',
+        'rbc',
+        'scalevp',
+        'secretmachines',
+        'semiconductor',
+        'seriesa',
+        'strategyxxi',
+        'swinerton',
+        'symantec',
+        'tenacity',
+        'tetrapak',
+        'uohio',
+        'whatif',
+        'wikinomics',
+        'youtube',
+        'zehnder',
+    ];
+
+    for (i=0; i<skins.length; i++) {
+        var skin = skins[i];
+        $('#skin_list').append(
+            $('<tr></tr>').append(
+                $('<td></td>').html(skin),
+                $('<td></td>').append(                
+                    $('<a></a>')
+                        .html("Set")
+                        .attr('href', 'javascript:set_skin("' + skin + '")')
+                )
+            )
+        );
+    }
+})(jQuery);
+</script>
+.html
+

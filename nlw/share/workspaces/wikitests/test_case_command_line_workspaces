@@ -82,7 +82,7 @@ show-members
 | st-admin | create-user --email foo%%start_time%%@bar.com --password d3vnu11l |  |
 | st-admin | add-member --workspace %%cmdline_workspace%% --email devnull1@socialtext.com |  |
 | st-admin | add-member --workspace %%cmdline_workspace%% --email foo%%start_time%%@bar.com |  |
-| st-admin | show-members | qr/The command you called \(show-members\) requires a workspace to be specified/ |
+| st-admin | show-members | qr/The command you called \(show-members\) requires a workspace or an account/ |
 | st-admin | show-members --workspace %%cmdline_workspace%% | qr/Email Address.+First.+Last.+Role.+devnull1\@socialtext.com.+foo%%start_time%%\@bar.com/ |
 
 show-admins

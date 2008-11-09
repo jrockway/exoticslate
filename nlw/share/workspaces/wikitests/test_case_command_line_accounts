@@ -29,4 +29,21 @@
 | st-admin | remove-system-admin --email bad-%%start_time%%@socialtext.com | No user with the email address "bad-%%start_time%%@socialtext.com" could be found. |
 | st-admin | remove-system-admin --email %%cli_user%% | %%cli_user%% no longer has system admin access. |
 
+ set-user-account [--username or --email] --account
+ get-user-account [--username or --email]
+ mass-add-users --csv --account
+ create-account --name
+ list-accounts [--ids]
+ give-accounts-admin [--username or --email]
+ remove-accounts-admin [--username or --email]
+ set-default-account [--account]
+ get-default-account
+ export-account --account [--force]
+ import-account --directory [--overwrite] [--name] [--noindex]
+ set-account-config --account <key> <value>
+ show-account-config --account
+ reset-account-skin --account <account> --skin <skin>
+ enable-plugin [--account | --all-accounts]
+ disable-plugin [--account | --all-accounts]
+
 | *Comment* | Test Case: Command Line Tests ACCOUNTS COMPLETED |  |

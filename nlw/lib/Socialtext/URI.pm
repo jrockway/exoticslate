@@ -7,16 +7,24 @@ use warnings;
 use Socialtext::AppConfig;
 use Socialtext::HTTPPorts qw(SSL_PORT_DIFFERENCE);
 use URI::FromHash;
+use Socialtext::Cache;
 
 our $default_scheme = 'http';
-our $CachedURI;
 
 sub uri {
     # Optimize for the common case: Socialtext::URI::uri(path => ...).
     if (@_ == 2 and $_[0] eq 'path') {
-        $CachedURI ||= URI::FromHash::uri_object( _scheme_host_port() );
-        $CachedURI->path($_[1]);
-        return $CachedURI->as_string;
+        # We assume that _scheme_host_port() won't change during a request.
+        my $cache = Socialtext::Cache->cache('uri_path');
+        my $uri = $cache->get('');
+
+        if (!$uri) {
+            $uri = URI::FromHash::uri_object( _scheme_host_port() );
+            $cache->set('' => $uri);
+        }
+
+        $uri->path($_[1]);
+        return $uri->as_string;
     }
 
     URI::FromHash::uri( _scheme_host_port(), @_ );

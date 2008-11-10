@@ -34,8 +34,6 @@
  mass-add-users --csv --account
  create-account --name
  list-accounts [--ids]
- give-accounts-admin [--username or --email]
- remove-accounts-admin [--username or --email]
  set-default-account [--account]
  get-default-account
  export-account --account [--force]
@@ -43,7 +41,5 @@
  set-account-config --account <key> <value>
  show-account-config --account
  reset-account-skin --account <account> --skin <skin>
- enable-plugin [--account | --all-accounts]
- disable-plugin [--account | --all-accounts]
 
 | *Comment* | Test Case: Command Line Tests ACCOUNTS COMPLETED |  |

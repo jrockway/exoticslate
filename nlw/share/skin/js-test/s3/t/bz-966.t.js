@@ -4,6 +4,8 @@ var t = new Test.Visual();
 
 t.plan(2);
 
+var topOffset;
+
 t.runAsync([
     function() {
         t.open_iframe(
@@ -14,7 +16,7 @@ t.runAsync([
             
     function() {
         // Remember the vertical position of that button
-        var topOffset = t.$("#bottomButtons .editButton").offset().top;
+        topOffset = t.$("#bottomButtons .editButton").offset().top;
 
         // Scroll to wherever the bottom Edit button is
         t.scrollTo(topOffset - 50);
@@ -30,6 +32,10 @@ t.runAsync([
             '<div>' + imgs + '</div>'
         );
 
+        t.callNextStep(3000);
+    },
+            
+    function() {
         var newOffset = t.$("#bottomButtons .editButton").offset().top;
 
         // Ensure that it moved after the page content moved

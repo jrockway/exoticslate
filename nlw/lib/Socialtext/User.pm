@@ -1008,7 +1008,7 @@ EOSQL
     Readonly my $spec => {
         %LimitAndSortSpec,
         order_by => SCALAR_TYPE(
-            regex   => qr/^(?:username|creation_datetime|creator)$/,
+            regex   => qr/^(?:username|creation_datetime|creator|primary_account)$/,
             default => 'username',
         ),
         account_id => SCALAR_TYPE,
@@ -1036,8 +1036,8 @@ EOSQL
             $exclude_hidden_clause = 'AND NOT person.is_hidden';
         }
 
-        (my $creator_account_where = $account_where) =~ s/(\w+?ary_)/ ua.$1/g;
-        (my $creator_join_person_clause = $join_person_clause) =~ s/\buser_id\b/ua.user_id/g;
+        (my $qualified_account_where = $account_where) =~ s/(\w+?ary_)/ ua.$1/g;
+        (my $qualified_join_person_clause = $join_person_clause) =~ s/\buser_id\b/ua.user_id/g;
         Readonly my %SQL => (
             creation_datetime => <<EOSQL,
 SELECT DISTINCT user_id,
@@ -1061,8 +1061,8 @@ SELECT DISTINCT ua.user_id AS user_id,
     FROM user_account ua
          LEFT JOIN "UserMetadata" um2 ON (ua.creator_id = um2.user_id)
          LEFT JOIN users u2 ON (um2.user_id = u2.user_id)
-         $creator_join_person_clause
-    WHERE $creator_account_where
+         $qualified_join_person_clause
+    WHERE $qualified_account_where
           $exclude_hidden_clause
     ORDER BY u2.driver_username $p{sort_order}, ua.driver_username ASC
     LIMIT ? OFFSET ?
@@ -1078,6 +1078,22 @@ SELECT DISTINCT user_id,
           $exclude_hidden_clause
     ORDER BY driver_username $p{sort_order}
     LIMIT ? OFFSET ?
+EOSQL
+
+            primary_account => <<EOSQL,
+SELECT DISTINCT ua.user_id AS user_id,
+                ua.driver_key AS driver_key,
+                ua.driver_unique_id AS driver_unique_id,
+                ua.driver_username AS driver_username,
+                "Account".name AS primary_account_name
+    FROM user_account ua
+         LEFT JOIN "UserMetadata" um ON (ua.user_id = um.user_id)
+         JOIN "Account" ON "Account".account_id = um.primary_account_id
+         $qualified_join_person_clause
+    WHERE $qualified_account_where
+          $exclude_hidden_clause
+ ORDER BY "Account".name $p{sort_order}, driver_username ASC
+ LIMIT ? OFFSET ?
 EOSQL
         );
 

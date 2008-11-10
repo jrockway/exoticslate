@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 32;
+use Test::Socialtext tests => 33;
 fixtures('populated_rdbms');
 
 use Socialtext::User;
@@ -165,6 +165,17 @@ use Socialtext::User;
         [ map({ ("devnull$_\@urth.org") } 3, 4, 5, 6, 7, 1, 2),
           'guest', 'system-user' ],
         'ByAccountId() sorted by creator',
+    );
+
+    $users = Socialtext::User->ByAccountId(
+        account_id => $account_id,
+        order_by   => 'primary_account',
+    );
+    is_deeply(
+        [ map { $_->username } $users->all() ],
+        [ map({ ("devnull$_\@urth.org") } 2, 6, 3, 5, 4, 7),
+          'guest', 'system-user', 'devnull1@urth.org' ],
+        'ByAccountId() sorted by primary account',
     );
 }
 

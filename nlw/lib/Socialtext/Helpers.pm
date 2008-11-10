@@ -152,7 +152,7 @@ sub _get_workspace_list_for_template
     my @workspacelist
         =  map { +{ label => $_->title, link => "/" . $_->name } }
             @workspaces ;
-    return [ sort { $a->{label} cmp $b->{label}} @workspacelist ];
+    return [ sort { lc($a->{label}) cmp lc($b->{label})} @workspacelist ];
 }
 
 sub _get_history_list_for_template

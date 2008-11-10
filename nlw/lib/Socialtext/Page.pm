@@ -35,6 +35,7 @@ use Socialtext::SQL qw/sql_execute sql_begin_work sql_commit sql_singlevalue/;
 use Carp ();
 use Class::Field qw( field const );
 use Cwd ();
+use DateTime::Format::Strptime;
 use Email::Valid;
 use File::Path;
 use Readonly;
@@ -1855,11 +1856,12 @@ sub new_revision_id {
 }
 
 sub formatted_date {
-    my $self = shift;
-    my ($sec, $min, $hour, $mday, $mon, $year) = gmtime(time);
-    sprintf("%4d-%02d-%02d %02d:%02d:%02d GMT",
-            $year + 1901, $mon+1, $mday, $hour, $min, $sec,
-           );
+    # formats the current date/time in iso8601 format
+    my $now = DateTime->now();
+    my $fmt = DateTime::Format::Strptime->new( pattern => '%F %T %Z' );
+    my $res = $fmt->format_datetime( $now );
+    $res =~ s/UTC$/GMT/;    # refer to it as "GMT", not "UTC"
+    return $res;
 }
 
 sub active {

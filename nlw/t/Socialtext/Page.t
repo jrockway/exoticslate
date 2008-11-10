@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use DateTime;
-use Test::Socialtext tests => 41;
+use Test::Socialtext tests => 46;
 fixtures( 'clean', 'admin' );
 
 BEGIN {
@@ -188,6 +188,29 @@ CREATE_PAGE: {
     isa_ok( $page, "Socialtext::Page" );
     is $page->revision_count, 1,
         'Fresh page has exactly 1 revision id.';
+}
+
+NOW_WAFL_EXPANSION: {
+    my $hub = new_hub('admin');
+    isa_ok $hub, 'Socialtext::Hub';
+
+    # create a new page, and track the time before+after the creation
+    my $t_before = DateTime->now();
+    my $page = Socialtext::Page->new( hub => $hub )->create(
+        title   => 'now wafl test',
+        content => '{now}',
+        creator => $hub->current_user,
+    );
+    isa_ok $page, 'Socialtext::Page';
+    my $t_after = DateTime->now();
+
+    # make sure that the "{now}" wafl got expanded out to a timestamp
+    # somewhere between the before+after times
+    my $formatter = DateTime::Format::Strptime->new( pattern => '%F %T %Z' );
+    my $t_content = $formatter->parse_datetime( $page->content );
+    isa_ok $t_content, 'DateTime', 'expanded+parsed {now} wafl';
+    ok $t_content >= $t_before, '{now} was after start time';
+    ok $t_content <= $t_after, '{now} was before end time';
 }
 
 MAX_ID_LENGTH: {

@@ -280,6 +280,9 @@ sub _get_user_info {
         username    => $user->guess_real_name,
         userid      => $user->username,
         is_guest    => $user->is_guest,
+        can_use_plugin => sub {
+            $user->can_use_plugin(@_);
+        },
     };
 }
 

@@ -53,7 +53,7 @@ sub _entity_hash {
         id   => $attachment->id,
         name => $attachment->filename,
         uri  => '/data/workspaces/' . Socialtext::Base->uri_escape($self->ws) . '/attachments/'
-            . Socialtext::Base->uri_escape($attachment->page_id) . ':'
+            . $attachment->page_id . ':'
             . Socialtext::Base->uri_escape($attachment->id)
             . '/original/'
             . Socialtext::Base->uri_escape($attachment->db_filename),

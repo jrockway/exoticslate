@@ -379,6 +379,7 @@ sub _get_page_info {
         incoming    => $self->hub->backlinks->all_backlinks_for_page($page),
         caller      => ($self->cgi->caller_action || ''),
         is_active   => $page->active,
+        is_spreadsheet => $page->is_spreadsheet,
         Socialtext::BrowserDetect::safari()
                 ? (raw_wikitext => $page->content)
                 : (),

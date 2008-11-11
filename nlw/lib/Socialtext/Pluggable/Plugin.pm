@@ -184,25 +184,45 @@ sub storage {
 
 sub name {
     my $self = shift;
+
     return $self->{_name} if ref $self and $self->{_name};
 
-    (my $class = ref $self || $self) =~ s{::}{/}g;
-
-    # Here we attempt to find the lower-cased plugin name based on the
-    # last part(s) of the class name.
-    my $name = $class;
-    if ($name =~ s{^.*?/Plugin/}{}) {
-        # Turn Socialtext::Pluggable::Plugin::Foo into "foo".
-        # Turn Socialtext::Pluggable::Plugin::Foo::Bar into "foo/bar".
-        $name = lc($name);
-    }
-    else {
-        # Otherwise simply take the last component from module name.
-        $name =~ s{^.*/}{};
-    }
+    my $class = ref $self || $self;
+    my $name = $class->_transform_classname(
+        sub { lc( shift ) }
+    );
 
     $self->{_name} = $name if ref $self;
     return $name;
+}
+
+sub title {
+    my $self = shift;
+
+    return $self->{_title} if ref $self and $self->{_title};
+
+    my $class = ref $self || $self;
+    my $title = 'Socialtext ' . $class->_transform_classname(
+        sub { shift }
+    );
+
+    $self->{_title} = $title if ref $self;
+    return $title;
+}
+
+sub _transform_classname {
+    my $self     = shift;
+    my $callback = shift;
+
+    ( my $name = ref $self || $self ) =~ s{::}{/}g;
+
+    # Pull off everything from the name up to and including 'Plugin/',
+    # if we can't do that, we should just return everything after the last
+    # '/'.
+    $name =~ s{^.*/}{}
+        unless $name =~ s{^.*?/Plugin/}{}; 
+
+    return &$callback( $name );
 }
 
 sub plugins {

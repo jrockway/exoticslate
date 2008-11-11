@@ -183,7 +183,7 @@
             [% END %]
           </ul>
           [% IF checker.check_permission('edit') %]
-            [% IF current_workspace.enable_spreadsheet %]
+            [% IF current_workspace.enable_spreadsheet && user.can_use_plugin('socialcalc') %]
             <div id="newPageButton">
             <ul>
             <li class="submenu"> + [% loc("New Page") %]

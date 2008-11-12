@@ -287,7 +287,6 @@ sub _render_display {
             enable_unplugged        =>
                 $self->hub->current_workspace->enable_unplugged,
             st_page_accessories     => $st_page_accessories,
-            editor_is_expanded      => $cookies->{"editor_is_expanded"} ? 1 : 0,
         },
     );
 }

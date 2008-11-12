@@ -376,14 +376,14 @@ $(function() {
     });
 
     $("#st-pagetools-pounce").click(function() {
-        $("#st-actions-bar, #mainNav, #workspaceContainer, #header").toggleClass("collapsed");
+        $("#st-actions-bar, #mainNav, #header").toggleClass("collapsed");
         if ( $("#header").is(".collapsed") ) {
-            Cookie.set("editor_is_expanded", 1);
-            $(this).attr("title", loc("Shrink")).text(loc("Shrink"));
+            Cookie.set("ui_is_expanded", "1");
+            $("#st-edit-pagetools-pounce,#st-pagetools-pounce").attr("title", loc("Shrink")).text(loc("Shrink"));
         }
         else {
-            Cookie.set("editor_is_expanded", 0);
-            $(this).attr("title", loc("Expand")).text(loc("Expand"));
+            Cookie.del("ui_is_expanded");
+            $("#st-edit-pagetools-pounce,#st-pagetools-pounce").attr("title", loc("Expand")).text(loc("Expand"));
         }
         return false;
     });

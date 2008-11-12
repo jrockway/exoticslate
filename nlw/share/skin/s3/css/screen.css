@@ -2053,3 +2053,7 @@ body div#globalNav div input.searchText {
     display: none;
 }
 
+#st-edit-mode-container #controlsRight {
+    max-width: 64px !important;
+}
+

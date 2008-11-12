@@ -210,6 +210,7 @@ sub global_template_vars {
         }
     );
 
+    my $cookies = Apache::Cookie->fetch();
     my %result = (
         action            => $self->hub->cgi->action,
         pluggable         => $self->hub->pluggable,
@@ -233,6 +234,7 @@ sub global_template_vars {
         miki_url           => $self->miki_path,
         stax_info          => $self->hub->stax->hacks_info,
         workspaceslist     => $self->_get_workspace_list_for_template,
+        ui_is_expanded     => defined($cookies->{"ui_is_expanded"}),
         $self->hub->pluggable->hooked_template_vars,
     );
     if ($self->hub->current_user->can_use_plugin('people')) {

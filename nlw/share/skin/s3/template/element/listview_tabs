@@ -20,6 +20,13 @@
         <li class="alltags[% IF action == 'category_list' %] selected[% END %]"><a href="index.cgi?action=category_list">[% loc("All Tags") %]</a></li>
       [% END %]
       <li class="allfiles[% IF action == 'attachments_listall' %] selected[% END %]"><a href="index.cgi?action=attachments_listall">[% loc("All Files") %]</a></li>
+
+      [% IF ui_is_expanded %]
+      <li><a class="pounce" title="[% loc('Shrink') %]" id="st-pagetools-pounce" href="#">[% loc('Shrink') %]</a></li>
+      [% ELSE %]
+      <li><a class="pounce" title="[% loc('Expand') %]" id="st-pagetools-pounce" href="#">[% loc('Expand') %]</a></li>
+      [% END %]
+
     </ul>
   </div><!-- tableFilter END -->
 </div><!-- tabs END -->

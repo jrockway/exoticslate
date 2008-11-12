@@ -24,7 +24,13 @@
         </div>
 
         <div id="controlsRight">
-            &nbsp;
+            <ul class="buttonFarRight">
+                [% IF editor_is_expanded %]
+                <li><a href="#" id="st-edit-pagetools-pounce">[% loc('Shrink') %]</a></li>
+                [% ELSE %]
+                <li><a href="#" id="st-edit-pagetools-pounce">[% loc('Expand') %]</a></li>
+                [% END %]
+            </ul>
         </div><!-- controlsRight END -->
     </div><!-- controls END -->
     <div id="st-edit-mode-view">

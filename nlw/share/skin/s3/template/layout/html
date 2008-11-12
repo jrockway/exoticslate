@@ -2,7 +2,7 @@
 [%- USE html_encode -%]
 [%- USE decorate -%]
 [%- USE label_ellipsis -%]
-[%- SET collapsed = editor_is_expanded ? "collapsed" : "" -%]
+[%- SET collapsed = ui_is_expanded ? "collapsed" : "" -%]
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
@@ -164,7 +164,7 @@
 
       [% IF workspace_present %] 
       <!-- workspaceNav BEGIN -->
-      <div id="workspaceContainer" class=" [% collapsed %]">
+      <div id="workspaceContainer">
         <div id="workspaceNav">
           <ul>
             <li>[% loc("Workspace:") %]

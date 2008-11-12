@@ -1437,6 +1437,11 @@ proto.enableThis = function() {
 
     var self = this;
 
+    /* Needs this to prevent stack overflow when switching modes,
+     * as described in {bz: 1511}.
+     */
+    self._ieSelectionBookmark = null;
+
     setTimeout(function() {
         try {
             if (Wikiwyg.is_gecko) self.get_edit_window().focus();

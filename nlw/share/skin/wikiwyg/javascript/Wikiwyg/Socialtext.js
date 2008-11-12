@@ -1437,16 +1437,17 @@ proto.enableThis = function() {
 
     var self = this;
 
-    /* Needs this to prevent stack overflow when switching modes,
-     * as described in {bz: 1511}.
-     */
-    self._ieSelectionBookmark = null;
-
     setTimeout(function() {
         try {
             if (Wikiwyg.is_gecko) self.get_edit_window().focus();
             if (Wikiwyg.is_ie) { 
+                /* IE needs this to prevent stack overflow when switching modes,
+                 * as described in {bz: 1511}.
+                 */
+                self._ieSelectionBookmark = null;
+
                 jQuery(self.get_editable_div()).focus();
+
                 if (jQuery.browser.version <= 6) {
                     /* We take advantage of IE6's overflow:visible bug
                      * to make the DIV always agree with the dimensions

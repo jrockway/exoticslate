@@ -107,6 +107,10 @@ v.wiki.skin_uri = function(skin) {
   return "[% wiki.skin_uri('s3') %]";
 };
 
+[% IF ui_is_expanded %]
+v.ui_is_expanded = 1;
+[% END %]
+
 v.new_tags = [];
 [% FOREACH tag = new_tags %]
 v.new_tags.push("[% tag %]");

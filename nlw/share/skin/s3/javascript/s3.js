@@ -375,15 +375,15 @@ $(function() {
         linkText: function (i) { return i.name }
     });
 
-    $("#st-pagetools-pounce").click(function() {
+    $("#st-pagetools-expand").click(function() {
         $("#st-actions-bar, #mainNav, #header").toggleClass("collapsed");
         if ( $("#header").is(".collapsed") ) {
             Cookie.set("ui_is_expanded", "1");
-            $("#st-edit-pagetools-pounce,#st-pagetools-pounce").attr("title", loc("Shrink")).text(loc("Shrink"));
+            $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Normal View")).text(loc("Normal"));
         }
         else {
             Cookie.del("ui_is_expanded");
-            $("#st-edit-pagetools-pounce,#st-pagetools-pounce").attr("title", loc("Expand")).text(loc("Expand"));
+            $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Expanded View")).text(loc("Expand"));
         }
         return false;
     });

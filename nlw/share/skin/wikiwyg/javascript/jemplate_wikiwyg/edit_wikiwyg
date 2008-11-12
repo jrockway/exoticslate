@@ -25,10 +25,10 @@
 
         <div id="controlsRight">
             <ul class="buttonFarRight">
-                [% IF editor_is_expanded %]
-                <li><a href="#" id="st-edit-pagetools-pounce">[% loc('Shrink') %]</a></li>
+                [% IF ui_is_expanded %]
+                <li><a href="#" title="[% loc('Normal View') %]" id="st-edit-pagetools-expand">[% loc('Normal') %]</a></li>
                 [% ELSE %]
-                <li><a href="#" id="st-edit-pagetools-pounce">[% loc('Expand') %]</a></li>
+                <li><a href="#" title="[% loc('Expanded View') %]" id="st-edit-pagetools-expand">[% loc('Expand') %]</a></li>
                 [% END %]
             </ul>
         </div><!-- controlsRight END -->

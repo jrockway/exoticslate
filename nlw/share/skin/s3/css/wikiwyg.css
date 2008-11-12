@@ -38,3 +38,11 @@ td {
     font-size: 80%;
 }
 
+
+/* Same as in common/css/common.css, but with !important to override our own screen.css settings. */
+#wysiwyg-editable-div ol,
+#wysiwyg-editable-div ul,
+#wysiwyg-editable-div p {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}

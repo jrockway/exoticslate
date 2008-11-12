@@ -72,6 +72,11 @@
           [% END %]
         </ul>
       </li>
+      [% IF editor_is_expanded %]
+      <li><a class="pounce" title="[% loc('Shrink') %]" id="st-pagetools-pounce" href="#">[% loc('Shrink') %]</a></li>
+      [% ELSE %]
+      <li><a class="pounce" title="[% loc('Expand') %]" id="st-pagetools-pounce" href="#">[% loc('Expand') %]</a></li>
+      [% END %]
     </ul>
   </div><!-- controlsRight END -->
 </div><!-- controls END -->

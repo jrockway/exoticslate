@@ -2048,3 +2048,8 @@ div.pagination-container .paging-forward {
 body div#globalNav div input.searchText {
         color: black;
 }
+
+.collapsed {
+    display: none;
+}
+

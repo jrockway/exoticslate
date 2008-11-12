@@ -157,10 +157,7 @@ proto.fromHtml = function(html) {
         html = this.replace_p_with_br(html);
     }
 
-    var dom = document.createElement('div');
-    dom.innerHTML = html;
-    this.sanitize_dom(dom);
-    this.set_inner_html(dom.innerHTML);
+    Wikiwyg.Wysiwyg.prototype.fromHtml.call(this, html);
 
     this.setWidgetHandlers();
 }
@@ -251,15 +248,7 @@ proto.replace_p_with_br = function(html) {
 }
 
 proto.toHtml = function(func) {
-    var html = this.get_inner_html();
-    var br = "<br class=\"p\"/>";
-
-    html = this.remove_padding_material(html);
-    html = html
-        .replace(/\n*<p>\n?/ig, "")
-        .replace(/<\/p>/ig, br)
-
-    func(html);
+    Wikiwyg.Wysiwyg.prototype.toHtml.call(this, func);
 
     clearInterval( this._fixer_interval_id );
     delete this._fixer_interval_id;

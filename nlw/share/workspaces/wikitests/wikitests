@@ -1,0 +1,32 @@
+This is not a test page, but it is tagged testcase so that it appears in the wiki after wikitests-from-wiki is run.
+
+This is the central page for the wikitests wiki. Each code branch has its own tests checked in to the branch at nlw/share/workspaces/wikitests/, along with a standard exported tarball of wikitests.1.tar.gz which is used to instantiate wikitests on an appliance VE. These are the commands used to manipulate wikitests in a dev env:
+
+^^^ Wikitest Commands
+
+| Command | Effect |
+| wikitests-to-wiki | build a /wikitests wiki from the files in the branch |
+| wikitests-from-wiki | update the files in the branch from the /wikitests wiki |
+| tests-to-tarballs | create wikitests.1.tar.gz from the /wikitests wiki |
+
+wikitests-from-wiki and tests-to-tarballs create new versions of files that have to be commited using svn.
+
+^^^ Working with wikitest files in a dev env
+
+Working with wikitest files in a dev env is a bit tricky. In addition to observing the development practices for shared code development as outlined below, there are additional steps required to move files to and from the /wikitests wiki. *If you don't do these steps correctly, you risk overwriting new versions of tests with old versions stored in your /wikitests wiki*.
+
+^^^^ Wikitests working session protocol
+
+* cdwt (cd to nlw/share/workspaces/wikitests)
+* `wikitests-from-wiki` to dump any work that you have already performed in the wiki to the FS.
+* `svn up` to get all new versions of files and, in particular, to reveal conflicts between your work and checked in work.
+** resolve conflicts. This is important. `svn up` and repeat until there are no new files brought up.
+** `svn commit` your resolved conflicts.
+* `wikitests-to-wiki` to put all the latest files into /wikitests
+* modify files in /wikitests during your working session.
+* `wikitests-from-wiki` to copy files from /wikitests to your working copy
+* `svn up` AGAIN to fetch any work that might have occurred while you were in your working session.
+** resolve conflicts. This is important. `svn up` and repeat until there are no new files brought up.
+* `svn commit` your new work and any resolved conflicts
+* if the `svn up` brought in new work by others, repeat `wikitests-to-wiki` to move it into /wikitests
+* run `tests-to-tarballs` and `svn commit` the new tarball

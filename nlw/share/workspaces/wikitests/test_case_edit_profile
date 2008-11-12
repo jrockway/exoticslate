@@ -1,0 +1,82 @@
+* Fixture: SocialWidgets
+* HighPermissions
+
+| *Comment* | Test Case: Edit Profile |  |
+
+| set | e_user | edit.profile.%%start_time%%@ken.sociatext.net |  |
+
+| *Comment* | Test Case: Edit Profile. Create a user and access profile |  |
+| st-admin | create-user --e %%e_user%% --p 123456 --f Profile --l Editor --account Socialtext |  |
+| st-logoutin | %%e_user%% | 123456 |
+| open_ok | / |  |
+| wait_for_element_visible_ok | link=Profile | 60000 |
+| text_like | Profile Editor |  |
+| text_like | Please complete your profile now |  |
+| click_and_wait | link=Profile |  |
+
+| *Comment* | Test Case: Edit Profile. Open for editing |  |
+| st-name-widget | 1 | profile |
+| st-select-widget-frame | profile |  |
+| wait_for_element_visible_ok | link=(Edit) | 60000 |
+| click_and_wait | link=(Edit) |  |
+
+| *Comment* | Test Case: Edit Profile. Verify profile present. |  |
+| wait_for_element_present_ok | photo-upload-button | 60000 |
+| st-name-widget | 1 | profile_details |
+| st-select-widget-frame | profile_details |  |
+| text_like | //body | Name |
+| text_like | //body | Organization |
+| text_like | //body | Contact |
+| text_like | //body | IM |
+| text_like | //body | Web |
+| text_like | //body | First name: |
+| text_like | //body | Last name: |
+| verifyValue | first_name | Profile |
+| verifyValue | last_name | Editor |
+
+| *Comment* | Test Case: Edit Profile. Fill in all values |  |
+| type_ok | first_name | Profligate |
+| type_ok | last_name | Editor %%start_time%% |
+| type_ok | position | Position %%start_time%% |
+| type_ok | company | Company %%start_time%% |
+| type_ok | location | Location %%start_time%% |
+| type_ok | work_phone | 555-work-%%start_time%% |
+| type_ok | mobile_phone | 555-mobile-%%start_time%% |
+| type_ok | home_phone | 555-home-%%start_time%% |
+| type_ok | aol_sn | AOL%%start_time%% |
+| type_ok | yahoo_sn | Yahoo%%start_time%% |
+| type_ok | gtalk_sn | GTalk%%start_time%% |
+| type_ok | skype_sn | Skype%%start_time%% |
+| type_ok | sametime_sn | SameTime%%start_time%% |
+| type_ok | twitter_sn | Twitter%%start_time%% |
+| type_ok | blog | blog/%%start_time%% |
+| type_ok | personal_url | personal/%%start_time%% |
+| type_ok | linkedin_url | linkedIn/%%start_time%% |
+| type_ok | facebook_url | facebook/%%start_time%% |
+| select_ok | supervisor | System User |
+| select_ok | assistant | Guest User |
+
+| *Comment* | Test Case: Edit Profile. Upload photo |  |
+| check_ok | select-upload |  |
+| type_ok | photo-local | %%wikitest_client_files%%wikitest.jpg |
+| click_ok | photo-upload-button |  |
+
+TODO: find something solid to wait_for. wait_for_text_present_ok in the widget headers doesn't work.
+
+| *Comment* | Test Case: Edit Profile. Pause for profile to save. |  |
+| click_ok | update_profile |  |
+| pause | 5000 | I Hate Pause |
+
+| *Comment* | Test Case: Edit Profile. SELENIUM TOP FRAME IS GONE! KILL TEST MANUALLY! |  |
+
+| *Comment* | Test Case: Edit Profile. Go Home/Profile because Selenium doesn't see new profile. |  |
+| wait_for_element_visible_ok | link=Home | 60000 |
+| click_and_wait | link=Home |  |
+| wait_for_element_visible_ok | link=Profile | 60000 |
+| click_and_wait | link=Profile |  |
+| text_like | st-page-titletext | Profligate Editor %%start_time%% |
+| text_like | %%e_user%% |  |
+
+| *Comment* | Test Case: Edit Profile Teardown |  |
+
+| *Comment* | Test Case: Edit Profile COMPLETED |  |

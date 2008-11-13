@@ -605,11 +605,18 @@ proto.enable_button = function(mode_name) {
     if (mode_name == WW_PREVIEW_MODE) return;
     var button = this.modeButtonMap[mode_name];
     if (! button) return; // for when the debugging button doesn't exist
-    button.style.fontWeight = 'normal';
-    button.style.background = 'none';
-    button.style.textDecoration = 'underline';
-    button.style.color = 'blue';  // XXX should not be hardcoded
-    button.onclick = this.button_enabled_func(mode_name);
+
+    if (Socialtext.S3) {
+        jQuery(button).removeClass('disabled');
+    }
+    else {
+        button.style.fontWeight = 'normal';
+        button.style.background = 'none';
+        button.style.textDecoration = 'underline';
+        button.style.color = 'blue';  // XXX should not be hardcoded
+    }
+
+    jQuery(button).unbind('click').click(this.button_enabled_func(mode_name));
 }
 
 proto.button_enabled_func = function(mode_name) {
@@ -635,10 +642,15 @@ proto.button_enabled_func = function(mode_name) {
 proto.disable_button = function(mode_name) {
     if (mode_name == WW_PREVIEW_MODE) return;
     var button = this.modeButtonMap[mode_name];
-    button.style.fontWeight = 'bold';
-    button.style.textDecoration = 'none';
-    button.style.background = 'none';
-    button.style.color = 'black';
+    if (Socialtext.S3) {
+        jQuery(button).addClass('disabled');
+    }
+    else {
+        button.style.fontWeight = 'bold';
+        button.style.textDecoration = 'none';
+        button.style.background = 'none';
+        button.style.color = 'black';
+    }
     button.onclick = this.button_disabled_func(mode_name);
 }
 

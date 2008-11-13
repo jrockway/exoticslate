@@ -1398,6 +1398,10 @@ body div#controls div#st-editing-tools-edit ul li {
     padding-left: 10px;
 }
 
+body div#controls div#st-editing-tools-edit ul li a.disabled {
+    color: black;
+    font-weight: bold;
+}
 
 
 /* Wiki Content Styles

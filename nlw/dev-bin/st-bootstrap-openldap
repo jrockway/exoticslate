@@ -32,6 +32,7 @@ my %actions = (
     'start'     => \&start,
     'stop'      => \&stop,
     'status'    => \&status,
+    'delete'    => \&delete_dn,
 );
 my $action = shift @ARGV;
 pod2usage(1) unless ($action && exists $actions{$action});
@@ -151,6 +152,29 @@ sub status {
 }
 
 ###############################################################################
+# Delete.  Deletes an entry from the LDAP directory, by its DN.
+sub delete_dn {
+    # get the DN to delete
+    my $dn = shift @ARGV;
+    unless ($dn) {
+        die "no DN given to delete from LDAP directory.\n";
+    }
+
+    # connect to LDAP
+    my $st_ldap = Socialtext::LDAP->new();
+    unless ($st_ldap) {
+        die "unable to connect to LDAP.\n";
+    }
+
+    # delete the DN from LDAP, using direct Net::LDAP methods
+    my $mesg = $st_ldap->{ldap}->delete($dn);
+    if ($mesg->code()) {
+        die "unable to remove DN from LDAP; " . $mesg->error() . "\n";
+    }
+    print "entry removed\n";
+}
+
+###############################################################################
 # Returns the full path to the file we use to hold our PID.
 sub _pidfile {
     return "/tmp/st-bootstrap-openldap-$<.pid";
@@ -237,6 +261,7 @@ st-bootstrap-openldap - Bootstrap OpenLDAP instance for testing
         --daemonize     Daemonize, running OpenLDAP in the background
     stop            Stop any running OpenLDAP instance
     status          See if an OpenLDAP instance is running
+    delete <dn>     Delete the given DN from running OpenLDAP instance
 
   Options:
     --help/-?       Brief help message
@@ -244,6 +269,7 @@ st-bootstrap-openldap - Bootstrap OpenLDAP instance for testing
 
   Example:
     st-bootstrap-openldap start --daemonize
+    st-bootstrap-openldap delete "cn=devnull3,dc=socialtext,dc=com"
 
 =head1 DESCRIPTION
 
@@ -282,6 +308,10 @@ Stops any running OpenLDAP instance.
 =item B<status>
 
 Checks to see if an OpenLDAP instance is running.
+
+=item B<delete> E<lt>dnE<gt>
+
+Deletes the given DN from the running OpenLDAP instance.
 
 =item B<--help/-?>
 

@@ -241,6 +241,7 @@ function setup_wikiwyg() {
                 }, 2000 );
             }
 
+            Socialtext.ui_expand_setup();
             jQuery(window).trigger("resize");
         } catch(e) {
             throw(e);
@@ -312,6 +313,8 @@ function setup_wikiwyg() {
 
             ww.is_editing = false;
             ww.showScrollbars();
+
+            Socialtext.ui_expand_off();
         } catch(e) {}
         return false;
     });

@@ -254,3 +254,8 @@ html #st-editing-prefix-container {
     -height: 22px;
     -overflow: hidden;
 }
+
+#st-edit-mode-container #controlsRight ul.level1 {
+    margin-left: -64px;
+}
+

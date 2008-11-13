@@ -72,11 +72,6 @@
           [% END %]
         </ul>
       </li>
-      [% IF ui_is_expanded %]
-      <li><a title="[% loc('Normal View') %]" id="st-pagetools-expand" href="#">[% loc('Normal') %]</a></li>
-      [% ELSE %]
-      <li><a title="[% loc('Expanded View') %]" id="st-pagetools-expand" href="#">[% loc('Expand') %]</a></li>
-      [% END %]
     </ul>
   </div><!-- controlsRight END -->
 </div><!-- controls END -->

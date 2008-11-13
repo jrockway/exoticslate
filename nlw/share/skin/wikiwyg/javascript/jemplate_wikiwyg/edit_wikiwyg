@@ -24,7 +24,7 @@
         </div>
 
         <div id="controlsRight">
-            <ul class="buttonFarRight">
+            <ul class="level1">
                 [% IF ui_is_expanded %]
                 <li><a href="#" title="[% loc('Normal View') %]" id="st-edit-pagetools-expand">[% loc('Normal') %]</a></li>
                 [% ELSE %]

@@ -5,7 +5,7 @@ if (Socialtext.S3) {
     window.wikiwyg.start_nlw_wikiwyg();
 
     $("#st-edit-pagetools-expand").click(function() {
-        $("#st-pagetools-expand").click();
+        Socialtext.ui_expand_toggle();
         $(window).trigger("resize");
         return false;
     });

@@ -375,18 +375,35 @@ $(function() {
         linkText: function (i) { return i.name }
     });
 
-    $("#st-pagetools-expand").click(function() {
-        $("#st-actions-bar, #mainNav, #header").toggleClass("collapsed");
-        if ( $("#header").is(".collapsed") ) {
-            Cookie.set("ui_is_expanded", "1");
-            $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Normal View")).text(loc("Normal"));
+    Socialtext.ui_expand_on = function() {
+        $("#st-actions-bar, #mainNav, #header, #workspaceContainer").addClass("collapsed");
+        $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Normal View")).text(loc("Normal"));
+        $('#st-edit-mode-container').css({position:'absolute',top:0,left:0,width:'100%',height:'100%'});
+        return false;
+    };
+    Socialtext.ui_expand_off = function() {
+        $("#st-actions-bar, #mainNav, #header, #workspaceContainer").removeClass("collapsed");
+        $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Expanded View")).text(loc("Expand"));
+        $('#st-edit-mode-container').css({position:'',top:'',left:'',width:'',height:''});
+        return false;
+    };
+    Socialtext.ui_expand_setup = function() {
+        if (Cookie.get("ui_is_expanded"))
+            return Socialtext.ui_expand_on();
+        else
+            return Socialtext.ui_expand_off();
+    };
+    Socialtext.ui_expand_toggle = function() {
+        if (Cookie.get("ui_is_expanded")) {
+            Cookie.del("ui_is_expanded");
+            return Socialtext.ui_expand_off();
         }
         else {
-            Cookie.del("ui_is_expanded");
-            $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Expanded View")).text(loc("Expand"));
+            Cookie.set("ui_is_expanded", "1");
+            return Socialtext.ui_expand_on();
         }
-        return false;
-    });
+    };
+    $("#st-pagetools-expand").click(Socialtext.ui_expand_toggle);
 
     function makeWatchHandler (pageId) { return function(){
         var self = this;

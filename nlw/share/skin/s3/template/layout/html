@@ -2,7 +2,6 @@
 [%- USE html_encode -%]
 [%- USE decorate -%]
 [%- USE label_ellipsis -%]
-[%- SET collapsed = ui_is_expanded ? "collapsed" : "" -%]
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
@@ -48,7 +47,7 @@
   </head>
   <body id="[% id || 'socialtext-wiki' %]">
     <div id="mainWrap">
-      <div id="header" class="st-wiki-nav [% collapsed %]">
+      <div id="header" class="st-wiki-nav">
         <div id="logo"><a href="/">[% loc('Socialtext') %]</a></div><!-- logo END -->
         <div id="globalNav" class="st-wiki-nav-content">
           <ul class="st-wiki-nav-actions">
@@ -89,7 +88,7 @@
           [% END %]
         </div><!-- globalNav END -->
       </div><!-- header END -->
-      <div id="mainNav" class="st-wiki-subnav-dashboard [% collapsed %]">
+      <div id="mainNav" class="st-wiki-subnav-dashboard">
         <div id="homeLink"><a id="st-home-link" href="/">[% loc("Home") %]</a></div>
         <ul id="st-wiki-subnav-left" class="level1">
         [% IF dashboard_available %]
@@ -149,7 +148,7 @@
         </div><!-- workSpaceLink END -->
       </div><!-- mainNav END -->
 
-      <div id="st-actions-bar" class=" [% collapsed %]">
+      <div id="st-actions-bar">
           [% IF wiki.system_status %]
               <div id="st-system-status">[% wiki.system_status %]</div>
           [% END %]

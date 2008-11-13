@@ -234,16 +234,16 @@ st-bootstrap-openldap - Bootstrap OpenLDAP instance for testing
 
   Actions:
     start           Start an OpenLDAP instance for testing
+        --daemonize     Daemonize, running OpenLDAP in the background
     stop            Stop any running OpenLDAP instance
     status          See if an OpenLDAP instance is running
 
   Options:
-    --daemonize     Daemonize, running OpenLDAP in the background
     --help/-?       Brief help message
     --man           Full documentation
 
   Example:
-    st-bootstrap-openldap --daemonize start
+    st-bootstrap-openldap start --daemonize
 
 =head1 DESCRIPTION
 
@@ -254,7 +254,7 @@ When bootstrapped, the OpenLDAP instance is populated with some test data and
 Socialtext is then configured to use this instance as a user factory.
 
 This script automatically kills any running copy of itself on subsequent
-starts.  Its safe to just do C<st-bootstrap-openldap --daemonize start>
+starts.  Its safe to just do C<st-bootstrap-openldap start --daemonize>
 repeatedly; each time you'll get a brand new OpenLDAP instance.
 
 =head1 OPTIONS
@@ -265,6 +265,16 @@ repeatedly; each time you'll get a brand new OpenLDAP instance.
 
 Kills off any running OpenLDAP instance and starts a new one.
 
+=over
+
+=item --daemonize
+
+When starting an OpenLDAP instance, daemonize it and fire it off into the
+background.  Without this option, C<st-bootstrap-openldap> will pause on the
+console waiting for you to hit ^C to stop the instance.
+
+=back
+
 =item B<stop>
 
 Stops any running OpenLDAP instance.
@@ -272,12 +282,6 @@ Stops any running OpenLDAP instance.
 =item B<status>
 
 Checks to see if an OpenLDAP instance is running.
-
-=item B<--daemonize>
-
-When starting an OpenLDAP instance, daemonize it and fire it off into the
-background.  Without this option, C<st-bootstrap-openldap> will pause on the
-console waiting for you to hit ^C to stop the instance.
 
 =item B<--help/-?>
 

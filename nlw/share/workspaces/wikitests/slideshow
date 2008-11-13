@@ -1,5 +1,3 @@
-* HighPermissions
-
 This test case is an aid to visually observing each screen type in the application. The test case cycles through screens, printing out SEE instructions to the test person. The test person should observe the browser under test at each SEE point along the way. The test person may pause at any point to examine the screen visually using CTRL-Z to suspend the testing process and the unix command `fg` to resume it.
 
 TODO: Add global nav and workspace nav
@@ -463,27 +461,6 @@ Lightbox screens:
 | pause | %%pt%% |  |
 | click_ok | st-attachments-attach-closebutton |  |
 | *Comment* | SlideShow GOODBYE EDIT Upload Files LIGHTBOX |  |
-| pause | %%pt%% |  |
-
-* View actual file Upload while editing in Simple and Advanced mode.
-
-| *Comment* | SlideShow SEE Simple Mode File Upload |  |
-| wait_for_element_visible_ok | link=Rich Text | 30000 |
-| click_ok | link=Rich Text |  |
-| wait_for_element_visible_ok | st-edit-mode-uploadbutton | 30000 |
-| click_ok | st-edit-mode-uploadbutton |  |
-| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.jpg |
-| clickAndWait | st-attachments-attach-closebutton |  |
-| pause | %%pt%% |  |
-| pause | %%pt%% |  |
-
-| *Comment* | SlideShow SEE Advanced Mode File Upload |  |
-| click_ok | link=Wiki Text |  |
-| wait_for_element_visible_ok | st-edit-mode-uploadbutton | 30000 |
-| click_ok | st-edit-mode-uploadbutton |  |
-| pause | %%pt%% |  |
-| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.jpg |
-| click_ok | st-attachments-attach-closebutton |  |
 | pause | %%pt%% |  |
 
 * Add tag while editing

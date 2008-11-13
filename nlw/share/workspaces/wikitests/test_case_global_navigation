@@ -53,7 +53,7 @@ TODO: find a way to check the best full name
 | text_like | globalNav | Logged in as |
 
 | *Comment* | Test Case: Global Navigation Search |  |
-| text_like | st-search-form | Search: |
+| text_like | st-search-form | Search this workspace: |
 | type_ok | st-search-term | wiki |
 | click_and_wait | st-search-submit |  |
 | text_like | Pages containing 'wiki' |  |

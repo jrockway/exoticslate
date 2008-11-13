@@ -152,12 +152,16 @@ proto.fromHtml = function(html) {
             html += "<p> </p>"
         }
         html = this.assert_padding_between_block_elements(html);
+
+        var dom = document.createElement('div');
+        dom.innerHTML = html;
+        this.sanitize_dom(dom);
+        this.set_inner_html(dom.innerHTML);
     }
     else {
         html = this.replace_p_with_br(html);
+        Wikiwyg.Wysiwyg.prototype.fromHtml.call(this, html);
     }
-
-    Wikiwyg.Wysiwyg.prototype.fromHtml.call(this, html);
 
     this.setWidgetHandlers();
 }
@@ -248,7 +252,20 @@ proto.replace_p_with_br = function(html) {
 }
 
 proto.toHtml = function(func) {
-    Wikiwyg.Wysiwyg.prototype.toHtml.call(this, func);
+    if (Wikiwyg.is_ie) {
+        var html = this.get_inner_html();
+        var br = "<br class=\"p\"/>";
+
+        html = this.remove_padding_material(html);
+        html = html
+            .replace(/\n*<p>\n?/ig, "")
+            .replace(/<\/p>/ig, br)
+
+        func(html);
+    }
+    else {
+        Wikiwyg.Wysiwyg.prototype.toHtml.call(this, func);
+    }
 
     clearInterval( this._fixer_interval_id );
     delete this._fixer_interval_id;

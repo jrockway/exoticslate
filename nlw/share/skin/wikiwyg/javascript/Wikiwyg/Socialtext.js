@@ -241,7 +241,10 @@ function setup_wikiwyg() {
                 }, 2000 );
             }
 
-            Socialtext.ui_expand_setup();
+            if (Socialtext.ui_expand_setup) {
+                Socialtext.ui_expand_setup();
+            }
+
             jQuery(window).trigger("resize");
         } catch(e) {
             throw(e);

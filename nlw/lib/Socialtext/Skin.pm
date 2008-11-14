@@ -90,7 +90,11 @@ sub skin_info {
     my $skin_path = $self->skin_path;
 
     my $info_path = File::Spec->catfile( $skin_path, 'info.yaml' );
-    my $info = -f $info_path ? YAML::LoadFile($info_path) : {};
+    my $info = -f $info_path ? YAML::LoadFile($info_path) : {
+        parent      => 's3',
+        depends     => ['s3'],
+        cascade_css => 1,
+    };
     unless (exists $info->{parent}) {
         $info->{parent} = $DEFAULT_PARENT if $DEFAULT_PARENT ne $skin;
     }

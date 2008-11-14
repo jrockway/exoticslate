@@ -15,7 +15,6 @@ my @tests =
       [ "A skype link callto:JoeSmith\n" => qr{href="callto:JoeSmith"} ],
       [ "A skype link (phone #) callto:1-612-555-9911\n" => qr{href="callto:1-612-555-9911"} ],
       [ "An msn link msn:BillE-G\n" => qr{msn:BillE-G} ],
-      [ "An asap link asap:yomama-G\n" => qr{\Qhref="http://asap2.convoq.com/AsapLinks/Meet.aspx?l=yomama\E} ],
     );
 
 plan tests => scalar @tests;

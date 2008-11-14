@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 use YAML;
-use Test::Socialtext tests => 110;
+use Test::Socialtext tests => 108;
 
 fixtures( 'admin' );
 
@@ -383,14 +383,6 @@ PARSE_WIDGET_asis: {
     my $widget = $admin->wikiwyg->parse_widget($wafl, $widgets);
     is( $widget->{id}, 'asis', 'asis widget id' );
     is( $widget->{asis_content}, '_text_', 'asis asis_content' );
-}
-
-PARSE_WIDGET_aim: {
-    my $widgets = YAML::LoadFile($yaml_path);
-    my $wafl = "{asap: name}";
-    my $widget = $admin->wikiwyg->parse_widget($wafl, $widgets);
-    is( $widget->{id}, 'asap', 'asap widget id' );
-    is( $widget->{asap_id}, 'name', 'asap user id' );
 }
 
 PARSE_WIDGET_interworkspace_link: {

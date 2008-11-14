@@ -350,7 +350,6 @@ my %im_types = (
     callme => 'callto', 
     aim    => 'aim',
     msn    => 'msn',
-    asap   => 'asap',
 );
 my $im_re = join '|', keys %im_types;
 const pattern_start => qr/\b(?:$im_re)\:[^\s\>\)]+/;
@@ -403,12 +402,6 @@ sub _callto_link {
     my $self = shift;
     return
         qq{<a href="callto:$_[0]"><img alt="$_[0]" src="http://goodies.skype.com/graphics/skypeme_btn_small_green.gif" border="0" />$_[0]</a>};
-}
-
-sub _asap_link {
-    my $self = shift;
-    return
-        qq{<a href="http://asap2.convoq.com/AsapLinks/Meet.aspx?l=$_[0]" target="_blank"><img alt="$_[0]" src="http://asap2.convoq.com/AsapLinks/Presence.aspx?l=$_[0]" border="0" /></a>};
 }
 
 ################################################################################

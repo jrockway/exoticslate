@@ -23,7 +23,6 @@ widgets:
   - user
   - date
   - asis
-  - asap
   - new_form_page
   - ss
 
@@ -544,22 +543,6 @@ widget:
     image_text:
         - { field: default, text: "unformatted: %asis_content" }
 
-  asap:
-    id: asap
-    label: Convoq Link
-    color: cyan4
-    pattern: 'asap:%asap_id'
-    markup: ['bound_phrase', 'asap:', '']
-    field: asap_id
-    title: Call '$asap_id' using Convoq. Click to edit.
-    desc: Display a link to a Convoq name. Clicking the link will start a Convoq call with the person if your Convoq client is properly configured. Use this form to edit the properties of the Convoq link.
-    more_desc: There are no optional properties for a Convoq Link.
-    required: [asap_id]
-    image_text:
-        - { field: default, text: "Convoq: %asap_id" }
-    uneditable: true
-    on_menu: false
-
   html:
     id: html
     color: indianred
@@ -636,7 +619,6 @@ fields:
   aim_id: AIM screen name
   yahoo_id: Yahoo! ID
   skype_id: Skype name
-  asap_id: Convoq name
   relative_url: Relative URL
   search_term: Search term
   user_email: User\'s email
@@ -655,7 +637,6 @@ match:
   aim_id: '^(\S+)$'
   yahoo_id: '^(\S+)$'
   skype_id: '^(\S+)$'
-  asap_id: '^(\S+)$'
 
 regexps:
   three-part-link: '^(\S*)?\s*\[([^\]]*)\]\s*(.*?)?\s*$'

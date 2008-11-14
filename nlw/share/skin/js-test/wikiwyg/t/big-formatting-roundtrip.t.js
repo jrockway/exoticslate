@@ -74,8 +74,6 @@ See also: FormattingTest | [FormattingToDo] | [WikiwygFormattingTest] | [Wikiwyg
 * Skype
 ** skype:chrisdent
 ** callto:chrisdent
-* Convoq
-** asap:rossm
 
 ^ Header 1
 

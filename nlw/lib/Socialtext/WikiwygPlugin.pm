@@ -315,7 +315,7 @@ sub parse_widget {
 
     my @matches = ();
     if (
-        (@matches = $wafl_text =~ /^(aim|yahoo|ymsgr|skype|callme|callto|http|asap|irc|file|ftp|https):([\s\S]*?)\s*$/)
+        (@matches = $wafl_text =~ /^(aim|yahoo|ymsgr|skype|callme|callto|http|irc|file|ftp|https):([\s\S]*?)\s*$/)
         || (@matches = $wafl_text =~ /^{({(.+)})}$/) # asis
         || (@matches = $wafl_text =~ /^"(.+?)"<(.+?)>$/) # Named Links
         || (@matches = $wafl_text =~ /^(?:"(.*)")?\{(\w+):?\s*([\s\S]*?)\s*\}$/)

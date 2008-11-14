@@ -917,9 +917,6 @@ SocialtextFormatter.presence = function(w)
 		} else if(p=='skype'||p=='callto') {
 			link = 'callto:'+text;
 			src = 'http://goodies.skype.com/graphics/skypeme_btn_small_green.gif';
-		} else if(p=='asap') {
-			link = 'http://asap2.convoq.com/AsapLinks/Meet.aspx?l='+text;
-			src = 'http://asap2.convoq.com/AsapLinks/Presence.aspx?l='+text;
 		}
 		var s = createTiddlyElement(w.output,'span',null,'nlw_phrase');
 		var a = createExternalLink(s,link);
@@ -1266,8 +1263,8 @@ config.socialtext.formatters = [
 
 {
 	name: 'socialtextPresence',
-	match: '(?:aim|yahoo|ymsgr|skype|callto|asap):\\w+',
-	lookaheadRegExp: /(aim|yahoo|ymsgr|skype|callto|asap):(\w+)/mg,
+	match: '(?:aim|yahoo|ymsgr|skype|callto):\\w+',
+	lookaheadRegExp: /(aim|yahoo|ymsgr|skype|callto):(\w+)/mg,
 	handler: SocialtextFormatter.presence
 },
 

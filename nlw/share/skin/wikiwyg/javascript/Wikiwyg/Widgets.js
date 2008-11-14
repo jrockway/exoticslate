@@ -533,7 +533,7 @@ proto.parseWidget = function(widget) {
 
     widget = widget.replace(/-=/g, '-').replace(/==/g, '=');
 
-    if ((matches = widget.match(/^(aim|yahoo|ymsgr|skype|callme|callto|http|asap|irc|file|ftp|https):([\s\S]*?)\s*$/)) ||
+    if ((matches = widget.match(/^(aim|yahoo|ymsgr|skype|callme|callto|http|irc|file|ftp|https):([\s\S]*?)\s*$/)) ||
         (matches = widget.match(/^\{(\{([\s\S]+)\})\}$/)) || // AS-IS
         (matches = widget.match(/^"(.+?)"<(.+?)>$/)) || // Named Links
         (matches = widget.match(/^(?:"(.*)")?\{(\w+):?\s*([\s\S]*?)\s*\}$/)) ||

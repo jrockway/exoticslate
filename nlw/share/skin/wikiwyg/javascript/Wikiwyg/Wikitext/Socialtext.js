@@ -191,7 +191,14 @@ proto.get_lines = function() {
         selection_end - selection_start);
 
     selection_start = this.find_right(our_text, selection_start, /[^\r\n]/);
+
+    if (selection_start > selection_end)
+        selection_start = selection_end;
+
     selection_end = this.find_left(our_text, selection_end, /[^\r\n]/);
+
+    if (selection_end < selection_start)
+        selection_end = selection_start;
 
     this.selection_start = this.find_left(our_text, selection_start, /[\r\n]/);
     this.selection_end = this.find_right(our_text, selection_end, /[\r\n]/);

@@ -49,8 +49,6 @@ This WAFL will get canonicalized to tag | {category_list: }|
 | Yahoo (ymsgr) | ymsgr: |
 | Skype (skype) | skype: |
 | Skype (callme) | callme: |
-| Convoq
-This WAFL is OBSOLETE | asap: |
 |  |  |
 | date | {date} |
 | user | {user} |

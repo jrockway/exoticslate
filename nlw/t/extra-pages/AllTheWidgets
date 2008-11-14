@@ -47,8 +47,6 @@ This WAFL will get canonicalized to tag | {category_list: category_id}|
 | Yahoo (ymsgr) | ymsgr:yahoo_id |
 | Skype (skype) | skype:skype_id |
 | Skype (callme) | callme:skype_id |
-| Convoq
-This WAFL is OBSOLETE | asap:asap_id |
 |  |  |
 | date | {date: YYYY-MM-DD HH:MM:SS GMT} |
 | user | {user: email_address} |

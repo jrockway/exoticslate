@@ -1847,7 +1847,7 @@ proto.get_editable_div = function () {
 }
 
 proto.exec_command = function(command, option) {
-    if ( Wikiwyg.is_ie && command.match(/^insert/)) {
+    if ( Wikiwyg.is_ie && command.match(/^insert/) && !command.match(/^insert.*list$/)) {
         /* IE6+7 has a bug that prevents insertion at the beginning of
          * the edit document if it begins with a non-text element.
          * So we test if the selection starts at the beginning, and

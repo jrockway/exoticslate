@@ -2,8 +2,9 @@
 * HighPermissions
 
 | *Comment* | Test Case: Edit Profile |  |
+| *Comment* | Run this test via `Profile Testcases` testset to pair it with Verify Profile |  |
 
-| set | e_user | edit.profile.%%start_time%%@ken.sociatext.net |  |
+| set | e_user | edit.profile.%%start_time%%@ken.socialtext.net |  |
 
 | *Comment* | Test Case: Edit Profile. Create a user and access profile |  |
 | st-admin | create-user --e %%e_user%% --p 123456 --f Profile --l Editor --account Socialtext |  |
@@ -67,16 +68,7 @@ TODO: find something solid to wait_for. wait_for_text_present_ok in the widget h
 | click_ok | update_profile |  |
 | pause | 5000 | I Hate Pause |
 
-| *Comment* | Test Case: Edit Profile. SELENIUM TOP FRAME IS GONE! KILL TEST MANUALLY! |  |
-
-| *Comment* | Test Case: Edit Profile. Go Home/Profile because Selenium doesn't see new profile. |  |
-| wait_for_element_visible_ok | link=Home | 60000 |
-| click_and_wait | link=Home |  |
-| wait_for_element_visible_ok | link=Profile | 60000 |
-| click_and_wait | link=Profile |  |
-| text_like | st-page-titletext | Profligate Editor %%start_time%% |
-| text_like | %%e_user%% |  |
-
-| *Comment* | Test Case: Edit Profile Teardown |  |
+| *Comment* | Test Case: Edit Profile. SELENIUM TOP FRAME IS GONE! |  |
+| *Comment* | Test Case: Edit Profile. GOODBYE! |  |
 
 | *Comment* | Test Case: Edit Profile COMPLETED |  |

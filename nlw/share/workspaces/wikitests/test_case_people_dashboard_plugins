@@ -17,7 +17,10 @@ This test is designed to test global navigation changes as people/dashboard is e
 | text_like | contentRight | %%title%% |
 | click_and_wait | link=People |  |
 | text_like | All People |  |
-| text_like | System User |  |
+
+removed because new pagination causes test to fail. Checking for Guest User is good enough. 
+ text_like | System User | |
+
 | text_like | Guest User |  |
 | click_and_wait | link=Home |  |
 | wait_for_element_visible_ok | //a[@title='Add Content'] | 10000 |

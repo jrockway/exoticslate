@@ -74,7 +74,12 @@ sub DELETE {
             my $attachment = eval { $self->_get_attachment(); };
             return $self->_invalid_attachment( $rest, $@ ) if $@;
 
-            $attachment->delete( user => $rest->user );
+            if ($attachment->deleted) {
+                $attachment->purge($attachment->page);
+            }
+            else {
+                $attachment->delete( user => $rest->user );
+            }
             $rest->header( -status => HTTP_204_No_Content );
             return '';
         }

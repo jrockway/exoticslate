@@ -10,7 +10,7 @@
 
 Create a page by a different user
 
-| set | orphan_email | `_orphan.%%start_time%%@ken.socialtext.net` |
+| set | orphan_email | `aaa.orphan.%%start_time%%@ken.socialtext.net` |
 | st-admin | create-user --e %%orphan_email%% --p 123456 |  |
 | st-admin | add-member --w %%workspace%% --e %%orphan_email%% | is now a member |
 | st-admin | update-page --email %%orphan_email%% --workspace %%workspace%% --page "orphan %%start_time%% 0004" < %%wikitest_client_files%%wikitest.txt | The "orphan %%start_time%% 0004" page has been created. |

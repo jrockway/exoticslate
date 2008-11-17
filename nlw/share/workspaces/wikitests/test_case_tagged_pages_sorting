@@ -125,7 +125,7 @@ Create unique sort order for each sort:
 | *Comment* | Test Case: Tagged Page Sorting. Login as %%email%% |  |
 | st-logout |  |  |
 | open_ok | /%%sorting_workspace%%/?Search Sort 1 |  |
-| type_ok | username | %%email%% |
+| type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
 | clickAndWait | //input[@value='Log in'] |  |
 

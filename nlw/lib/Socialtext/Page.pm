@@ -1024,7 +1024,7 @@ sub size {
 
 sub _index_path {
     my $self = shift;
-    my $filename = readlink($self->file_path . '/index.txt');
+    my $filename = readlink $self->_get_index_file;
     -f $filename or return;
     return $filename;
 }
@@ -1253,10 +1253,9 @@ sub _store_preview_text {
     my $self = shift;
     my $preview_text; # Optional; defaults to $self->preview_text -- see below
 
-    my $dirpath = $self->directory_path;
-    return unless -e $dirpath;
-    my $filename = readlink "$dirpath/index.txt"
-      or die "No index.txt file for '$dirpath' - ID is: '" . $self->id . "'";
+    return unless my $index_file = $self->_get_index_file;
+
+    my $filename = readlink $index_file;
     if (not -f $filename) {
         warn "$filename is no good for _store_preview_text";
         return;
@@ -1769,6 +1768,22 @@ Loads and stores the revision specified by I<$id>.
     }
 }
 
+sub _get_index_file {
+    my $self      = shift;
+    my $dir       = $self->directory_path;
+    my $filename  = "$dir/index.txt";
+
+    return $filename if -f $filename;
+    return '' unless my @revisions = $self->all_revision_ids;
+
+    # This is adding some fault-tolerance to the system. If the index.txt file
+    # doesn not exist, we're gonna re-create it rather than throw an error.
+    my $revision_file = $self->revision_file( pop @revisions ); 
+    Socialtext::File::safe_symlink($revision_file => $filename);
+
+    return $filename;
+}
+
 # XXX split this into a getter and setter to more
 # accurately measure how often it is called as a
 # setter. In a fake-request run of 50, this is called 1100
@@ -1778,10 +1793,9 @@ sub assert_revision_id {
     my $self = shift;
     my $revision_id = $self->{revision_id};
     return $revision_id if $revision_id;
-    my $dirpath = $self->directory_path;
-    return '' unless -e $dirpath;
-    $revision_id = readlink "$dirpath/index.txt"
-      or die "No index.txt file for '$dirpath' - ID is: '" . $self->id . "'";
+    return '' unless my $index_file = $self->_get_index_file;
+
+    $revision_id = readlink $index_file;
     $revision_id =~ s/(?:.*\/)?(.*)\.txt$/$1/
       or die "$revision_id is bad file name";
     $self->revision_id($revision_id);

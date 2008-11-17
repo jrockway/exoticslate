@@ -7,7 +7,7 @@
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | Connections TestPage %%start_time%% |
 
-| type_ok | wikiwyg_wikitext_textarea | `FetchRSS Test\n{fetchrss: http://feeds.feedburner.com/ross}\nTechnorati Test\n{technorati: www.socialtext.com}\nGoogle Soap Test\n{googlesoap: socialtext}\n*AIM.* aim:example *Yahoo!* *alternatively:* ymsgr:example yahoo:example *Skype.* *alternatively:* callto:example skype:example *Convoq ASAP.* asap:example` |
+| type_ok | wikiwyg_wikitext_textarea | `FetchRSS Test\n{fetchrss: http://feeds.feedburner.com/ross}\nTechnorati Test\n{technorati: www.socialtext.com}\nGoogle Soap Test\n{googlesoap: socialtext}\n*AIM.* aim:example *Yahoo!* *alternatively:* ymsgr:example yahoo:example *Skype.* *alternatively:* callto:example skype:example` |
 | click_and_wait | st-save-button-link |  |
 
 | text_like | st-page-content | Ross Mayfield's Weblog |
@@ -16,7 +16,6 @@
 | text_like | st-page-content | AIM. |
 | text_like | st-page-content | Yahoo! alternatively: |
 | text_like | st-page-content | Skype. alternatively: |
-| text_like | st-page-content | Convoq ASAP. |
 
 | *Comment* | Test Case: Connections Teardown |  |
 | st-admin | purge-page --w %%workspace%% --p connections_testpage_%%start_time%% | was purged |

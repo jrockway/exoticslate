@@ -9,6 +9,7 @@ use Socialtext::Page;
 use Socialtext::Page::Base;
 use Socialtext::Hub;
 use Socialtext::User;
+use Socialtext::File;
 use Socialtext::AppConfig;
 use Socialtext::SQL qw/sql_execute sql_begin_work sql_commit get_dbh 
                        sql_rollback/;
@@ -104,14 +105,12 @@ sub populate {
 
 sub read_metadata {
     my $self     = shift;
-    my $page_dir = shift;
+    my $dir = shift;
 
-    # Note: This could _could_ just use Socialtext::Page objects to read and
-    # parse the page, but choose not to for about a 4x performance gain.
-    my $page_file = "$page_dir/index.txt";
-    my $pagemeta = fetch_metadata($page_file);
+    my $current_revision_file = find_current_revision( $dir );
+    my $pagemeta = fetch_metadata($current_revision_file);
 
-    my $revision_id = readlink($page_file);
+    my $revision_id = $current_revision_file;
     $revision_id =~ s#.+/(.+)\.txt$#$1#;
 
     my $tags = $pagemeta->{Category} || [];
@@ -124,7 +123,7 @@ sub read_metadata {
     my $summary = $pagemeta->{Summary} || '';
     unless ($summary) {
         my $p = Socialtext::Page->new( 
-            hub => $self->{hub}, id => $page_dir,
+            hub => $self->{hub}, id => $dir,
         );
         $summary = $p->preview_text;
         if ($p->can('_store_preview_text')) {
@@ -137,7 +136,7 @@ sub read_metadata {
         $summary = $summary->[-1];
     }
 
-    my ($num_revisions, $orig_page) = load_original_revision($page_dir);
+    my ($num_revisions, $orig_page) = load_original_revision($dir);
     # This is special case for any extremely bad data on the system
     $orig_page->{From} ||= $pagemeta->{From};
     $orig_page->{Date} ||= $pagemeta->{Date};
@@ -146,11 +145,11 @@ sub read_metadata {
     unless ($last_edit_time) {
         # Proper thing to do here is to read the timestamp of the file
         # and convert that into a date string
-        die "No Date found for $page_file, skipping\n";
+        die "No Date found for $dir, skipping\n";
     }
 
     return {
-        page_id => $page_dir,
+        page_id => $dir,
         name => $subject,
         last_editor => $pagemeta->{From},
         last_edit_time => $last_edit_time,
@@ -283,27 +282,35 @@ sub fetch_metadata {
     }
 }
 
+
+sub find_current_revision {
+    my $dir = shift;
+
+    my $page_link_name = "$dir/index.txt";
+
+    my $current_revision_file = ( -f $page_link_name )
+        ? readlink( $page_link_name )
+        : Socialtext::File::newest_directory_file( $dir );
+
+    die "Couldn't find revision page for $page_link_name, skipping."
+        unless $current_revision_file;
+
+}
+
 sub fix_relative_page_link {
     my $dir = shift;
 
-    # Check the index.txt page link for a relative link.  Rewrite
-    # them to be absolute links.
-    my $page_link_name = "$dir/index.txt";
-    my $page_link      = readlink($page_link_name)
-        or die "Couldn't readlink $page_link_name: $!";
-    unless ($page_link =~ m#^/#) {
-        my $tmp_link = "$page_link_name.tmp";
-        my $abs_page = abs_path("$dir/$page_link");
+    my $current_revision_file = find_current_revision( $dir );
+
+    unless ($current_revision_file =~ m#^/#) {
+        my $abs_page = abs_path("$dir/$current_revision_file");
         die "Could not find symlinked page ($abs_page)"
             unless -f $abs_page;
-        symlink($abs_page, $tmp_link)
-            or die "Could not symlink $abs_page, $tmp_link: $!";
-        rename $tmp_link => $page_link_name
-            or die "Could not rename $tmp_link, $page_link_name: $!";
-        warn "\nFixed relative symlink $page_link_name\n";
+        Socialtext::File::safe_symlink($abs_page, "$dir/index.txt");
+        warn "\nFixed relative symlink in $dir\n";
         
         my $mtime = (stat($abs_page))[9] || time;
-        Socialtext::Page::Base->set_mtime($mtime, $page_link_name);
+        Socialtext::Page::Base->set_mtime($mtime, "$dir/index.txt");
     }
 }
 

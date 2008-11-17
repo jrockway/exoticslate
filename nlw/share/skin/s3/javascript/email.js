@@ -77,8 +77,8 @@ proto.show = function () {
         jQuery.getJSON(this.restURL + '/users', function (data) {
             for (var i=0; i<data.length; i++) {
                 jQuery('<option />')
-                    .html(data[i].name)
-                    .attr('value', data[i].name)
+                    .html(data[i].email)
+                    .attr('value', data[i].email)
                     .appendTo('#email_source')
             }
         });

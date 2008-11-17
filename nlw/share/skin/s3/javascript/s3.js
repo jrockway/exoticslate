@@ -391,8 +391,6 @@ $(function() {
     Socialtext.ui_expand_setup = function() {
         if (Cookie.get("ui_is_expanded"))
             return Socialtext.ui_expand_on();
-        else
-            return Socialtext.ui_expand_off();
     };
     Socialtext.ui_expand_toggle = function() {
         if (Cookie.get("ui_is_expanded")) {

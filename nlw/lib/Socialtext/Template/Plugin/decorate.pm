@@ -16,10 +16,10 @@ sub init {
 }
 
 
-# As long as we're under the same context, memoize the decorated results.
+# As long as we're under the apache request, memoize the decorated results.
 # This assumes that repeated calls to [% text | decorate('name') %] will
 # yield the same result during one rendering of a template.
-my ($ActiveContext, %DecorateCache);
+my ($ActivePluggable, %DecorateCache);
 
 sub filter {
     my ($self, $text, $args, $config) = @_;
@@ -28,13 +28,13 @@ sub filter {
     my $name = $args->[0];
 
     my $cache_key = "$name.$text";
-    if ($ActiveContext == 0+$self->{_CONTEXT}) {
+    if ($ActivePluggable == 0+$pluggable) {
         if (exists $DecorateCache{$cache_key}) {
             return $DecorateCache{$cache_key};
         }
     }
     else {
-        $ActiveContext = 0+$self->{_CONTEXT};
+        $ActivePluggable = 0+$pluggable;
         %DecorateCache = ();
     }
 

@@ -18,6 +18,7 @@ use File::Spec;
 use File::Temp;
 use File::Find;
 use Encode::Guess;
+use List::Util qw/reduce/;
 
 # NOTE: Please don't add any Socialtext::* dependencies.  This module
 # should be able to be used by any other socialtext code without
@@ -395,6 +396,18 @@ sub safe_symlink {
         or die "Can't create symlink '$tmp_symlink': $!";
     rename $tmp_symlink => $symlink
         or die "Can't rename '$tmp_symlink' to '$symlink': $!";
+}
+
+sub newest_directory_file {
+    my $directory = shift;
+
+    return '' unless -e $directory;
+
+    my @files = Socialtext::File::all_directory_files( $directory );
+    return '' unless scalar( @files );
+
+    # return the newest file based on mtime
+    return reduce { ( $a cmp $b ) ? $a : $b } @files;
 }
 
 =head1 SEE ALSO

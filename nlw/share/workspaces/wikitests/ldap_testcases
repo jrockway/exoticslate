@@ -30,3 +30,7 @@ TODO: this testcases is broken until the OpenLDAP local server is implemented
 Run a fairly complex testcase logged in as the LDAP user
 
 * [Test Case: LDAP Watchlist]
+
+Make sure that the "Email this page" popup works correctly with LDAP users
+
+* [Test Case: Email page shows LDAP emails]

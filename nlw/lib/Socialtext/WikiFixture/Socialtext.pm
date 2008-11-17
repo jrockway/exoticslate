@@ -73,10 +73,8 @@ sub init {
     $self->{'skin'} = $skin;
     
     my $short_username = $self->{'username'};
-    $short_username=~/(^[\W\w\.]*\@)/;
-    $short_username = substr($1, 0, length($1)-1);
-    $self->{'short_username'} = $short_username;
-    
+    $short_username =~ s/^([\W\w\.]*)\@.+$/$1/; # truncate if email address
+    $self->{'short_username'} = $short_username || $self->{'username'};
     
     $self->SUPER::init;
 

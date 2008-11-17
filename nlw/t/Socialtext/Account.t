@@ -35,16 +35,16 @@ like( $@, qr/already in use/, 'cannot create two accounts with the same name' );
 eval { $unknown->update( name => 'new name' ) };
 like( $@, qr/cannot change/, 'cannot change the name of a system-created account' );
 
+my $ws = Socialtext::Workspace->create(
+    name       => 'testingspace',
+    title      => 'testing',
+    account_id => $test->account_id,
+);
+isa_ok( $ws, 'Socialtext::Workspace' );
+
 # Create some test data for the test account
 # 3 users, 2 in a workspace (1 hidden, 1 visible), 1 outside the workspace.
 {
-    my $ws = Socialtext::Workspace->create(
-        name       => 'testingspace',
-        title      => 'testing',
-        account_id => $test->account_id,
-    );
-    isa_ok( $ws, 'Socialtext::Workspace' );
-
     for my $n ( 1..3 ) {
         my $user = Socialtext::User->create(
             username      => "dummy$n",
@@ -54,6 +54,7 @@ like( $@, qr/cannot change/, 'cannot change the name of a system-created account
                ($n != 1 ? $test->account_id : $socialtext->account_id),
         );
         isa_ok( $user, 'Socialtext::User' );
+
         $ws->add_user( user => $user ) unless $n == 3;
     }
 }
@@ -171,6 +172,17 @@ Import_account: {
     users_are($account, [qw/dummy2 dummy3/]);
 }
 
+Wierd_corner_case: {
+    my $user = Socialtext::User->create(
+            username      => "dummy1234",
+            email_address => "devnull1234\@example.com",
+            password      => 'password',
+            primary_account_id => $unknown->account_id
+    );
+    isa_ok($user, 'Socialtext::User');
+    $ws->add_user( user => $user );
+    is($user->primary_account->name, $test->name);
+}
 exit;
 
 sub users_are {

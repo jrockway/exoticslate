@@ -16,11 +16,13 @@ sub collection_name { "Users in workspace " . $_[0]->ws }
 
 sub _user_representation {
     my ( $self, $user_info ) = @_;
-    my $user = $user_info->[0];
-    my $role = $user_info->[1];
-    my $name = $user->username;
+    my $user  = $user_info->[0];
+    my $role  = $user_info->[1];
+    my $name  = $user->username;
+    my $email = $user->email_address;
     return +{
         name               => $name,
+        email              => $email,
         is_workspace_admin => ( $role->name eq 'workspace_admin' ),
         role_name          => $role->name,
         uri                => "/data/users/$name",

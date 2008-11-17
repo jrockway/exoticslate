@@ -982,8 +982,20 @@ sub permissions {
 
         $self->assign_role_to_user( is_selected => 1, %p );
 
-        $user->primary_account( $self->account )
-            if $user->workspace_count == 1;
+        # This is needed because of older appliances where users were put in
+        # one of three accounts that are not optimal:
+        #
+        #  * Ambiguous: They should be in an account, but more than one
+        #    account seems like a good candidate.
+        #  * General: There was not a good candidate account.
+        #  * Unknown: This was an old default, move them if possible.
+        #
+        # We assume that's not where we want them to be, so assigning a user
+        # to thier first workspace is a show of intent for which account they
+        # should be in.
+        $user->primary_account($self->account)
+            if grep { $user->primary_account->name eq $_ }
+            qw/Ambiguous General Unknown/;
     }
 }
 

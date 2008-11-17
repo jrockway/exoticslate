@@ -9,8 +9,8 @@
   <table>
     <tr>
       <th width="15%">[% loc('From') %]</th>
-      <td colspan="3">
-        [% username %] &lt;[% userid %]&gt;
+      <td colspan="3" id="email_from">
+        [% username %] &lt;[% email_address %]&gt;
       </td>
     </tr>
     <tr>

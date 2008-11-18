@@ -50,11 +50,9 @@ use Socialtext::Workspace;
     );
 
     $workspaces = Socialtext::Workspace->All( order_by => 'account_name' );
-    is_deeply(
-        [ map { $_->name } $workspaces->all() ],
-        [ map { ("workspace$_") } 1, 4, 7, 2, 5, 8, 0, 3, 6, 9 ],
-        'All() sorted by account_name',
-    );
+    is join(',', map { $_->name } $workspaces->all() ),
+       join(',', map { "workspace$_" } qw/0 2 4 6 8 1 3 5 7 9/),
+       'All() sorted by account_name';
 
     $workspaces = Socialtext::Workspace->All( order_by => 'creation_datetime' );
     is_deeply(
@@ -72,12 +70,11 @@ use Socialtext::Workspace;
 }
 
 {
-    my $account_id = Socialtext::Account->Socialtext()->account_id;
-
+    my $account_id = Socialtext::Account->new(name => 'Other 1')->account_id;
     my $workspaces = Socialtext::Workspace->ByAccountId( account_id => $account_id );
     is_deeply(
         [ map { $_->name } $workspaces->all() ],
-        [ map { ("workspace$_") } 0, 3, 6, 9 ],
+        [ map { ("workspace$_") } 0, 2, 4, 6, 8 ],
         'ByAccountId() returns workspaces sorted by name by default',
     );
 
@@ -87,18 +84,18 @@ use Socialtext::Workspace;
     );
     is_deeply(
         [ map { $_->name } $workspaces->all() ],
-        [ qw( workspace0 workspace3 ) ],
+        [ qw( workspace0 workspace2 ) ],
         'ByAccountId() limit of 2',
     );
 
     $workspaces = Socialtext::Workspace->ByAccountId(
         account_id => $account_id,
         limit      => 2,
-        offset     => 1,
+        offset     => 2,
     );
     is_deeply(
         [ map { $_->name } $workspaces->all() ],
-        [ qw( workspace3 workspace6 ) ],
+        [ qw( workspace4 workspace6 ) ],
         'ByAccountId() limit of 2, offset of 2',
     );
 
@@ -108,7 +105,7 @@ use Socialtext::Workspace;
     );
     is_deeply(
         [ map { $_->name } $workspaces->all() ],
-        [ map { ("workspace$_") } 9, 6, 3, 0 ],
+        [ map { ("workspace$_") } 8, 6, 4, 2, 0 ],
         'ByAccountId() in DESC order',
     );
 
@@ -119,7 +116,7 @@ use Socialtext::Workspace;
     is_deeply(
         [ map { [$_->name, $_->user_count] } $workspaces->all() ],
         [ map { ["workspace$_->[0]", $_->[1]] } 
-            [0, 2], [3, 4], [6, 7], [9, 7] ],
+            [0, 2], [2, 4], [4, 5], [6, 7], [8, 7] ],
         'ByAccountId() sorted by user_count',
     );
 
@@ -133,7 +130,7 @@ use Socialtext::Workspace;
     is_deeply(
         [ map { [$_->name, $_->user_count] } $workspaces->all() ],
         [ map { ["workspace$_->[0]", $_->[1]] } 
-            [6, 7], [9, 7], [3, 4], [0, 2] ],
+            [6, 7], [8, 7], [4, 5], [2, 4], [0, 2] ],
         'ByAccountId() sorted by DESC user_count',
     );
 
@@ -143,7 +140,7 @@ use Socialtext::Workspace;
     );
     is_deeply(
         [ map { $_->name } $workspaces->all() ],
-        [ map { ("workspace$_") } 0, 3, 6, 9 ],
+        [ map { ("workspace$_") } 0, 2, 4, 6, 8 ],
         'ByAccountId() sorted by creation_datetime',
     );
 
@@ -153,7 +150,7 @@ use Socialtext::Workspace;
     );
     is_deeply(
         [ map { $_->name } $workspaces->all() ],
-        [ map { ("workspace$_") } 6, 3, 9, 0, ],
+        [ map { ("workspace$_") } 6, 4, 2, 8, 0 ],
         'ByAccountId() sorted by creator',
     );
 }
@@ -265,7 +262,7 @@ use Socialtext::Workspace;
     $workspaces = Socialtext::Workspace->ByName( name => '1', order_by => 'account_name' );
     is_deeply(
         [ map { $_->name } $workspaces->all() ],
-        [ qw( workspace1 workspace10 number-111  ) ],
+        [ qw( workspace10 number-111 workspace1 ) ],
         'ByName() sorted by account_name',
     );
 

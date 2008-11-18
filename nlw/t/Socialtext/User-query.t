@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 33;
+use Test::Socialtext tests => 36;
 fixtures('populated_rdbms');
 
 use Socialtext::User;
@@ -20,10 +20,8 @@ use Socialtext::User;
         'All() returns users sorted by name by default',
     );
     is( join(',', map { $_->primary_account->name } $users->all()),
-        join(',', 
-            map({ "Unknown" } ( 1 .. 7 )), 
-            map({ "Socialtext" } ( 1 .. 2 )), 
-        ),
+        'Other 1,Other 2,Other 1,Other 2,Other 1,Other 2,Other 1,'
+        . 'Socialtext,Socialtext',
         'Primary accounts are set as expected',
     );
 
@@ -82,18 +80,18 @@ use Socialtext::User;
     );
 
     my $user = Socialtext::User->Resolve( 'devnull1@urth.org' );
-    my $account = Socialtext::Account->Unknown;
+    my $account = Socialtext::Account->new(name => 'Other 1');
     $user->primary_account( $account );
     $users = Socialtext::User->All( 
         order_by   => 'primary_account',
         sort_order => 'desc'
     );
-    is_deeply(
-        [ map { $_->username } $users->all() ],
-        [ 
-            ( map { ( "devnull$_\@urth.org" ) } 1, 7, 6, 5, 4, 3, 2 ),
-            'guest', 'system-user'
-        ],
+    # Check the t/Fixtures/populated_rdbms/generate script for up-to-date
+    # info, but users are added to either the Other 1 or Other 2 accounts.
+    is( join(',', map { $_->username } $users->all() ),
+        'guest,system-user,devnull4@urth.org,devnull2@urth.org,'
+        . 'devnull6@urth.org,devnull1@urth.org,devnull3@urth.org,'
+        . 'devnull5@urth.org,devnull7@urth.org',
         'All() sorted by primary account name',
     );
 }
@@ -109,28 +107,28 @@ use Socialtext::User;
         account_id => $account_id );
     is_deeply(
         [ map { $_->username } $users->all() ],
-        [ map({ ("devnull$_\@urth.org") } 1 .. 7), 'guest', 'system-user' ],
+        [ 'guest', 'system-user' ],
         'ByAccountId() returns users sorted by name by default',
     );
 
     $users = Socialtext::User->ByAccountId(
         account_id => $account_id,
-        limit      => 2,
+        limit      => 1,
     );
     is_deeply(
         [ map { $_->username } $users->all() ],
-        [ map { ("devnull$_\@urth.org") } 1 .. 2 ],
+        [ 'guest' ],
         'ByAccountId() limit of 2',
     );
 
     $users = Socialtext::User->ByAccountId(
         account_id => $account_id,
         limit      => 2,
-        offset     => 2,
+        offset     => 1,
     );
     is_deeply(
         [ map { $_->username } $users->all() ],
-        [ map { ("devnull$_\@urth.org") } 3 .. 4 ],
+        [ 'system-user' ],
         'ByAccountId() limit of 2',
     );
 
@@ -140,8 +138,7 @@ use Socialtext::User;
     );
     is_deeply(
         [ map         { $_->username } $users->all() ],
-        [ reverse 
-            map({ ("devnull$_\@urth.org") } 1 .. 7), 'guest', 'system-user'],
+        [ 'system-user', 'guest' ],
         'ByAccountId() in DESC order',
     );
 
@@ -151,8 +148,7 @@ use Socialtext::User;
     );
     is_deeply(
         [ map { $_->username } $users->all() ],
-        [ map({ ("devnull$_\@urth.org") } 7, 6, 5, 4, 3, 2, 1),
-          'guest', 'system-user' ],
+        [ 'guest', 'system-user' ],
         'ByAccountId() sorted by creation_datetime',
     );
 
@@ -162,8 +158,7 @@ use Socialtext::User;
     );
     is_deeply(
         [ map { $_->username } $users->all() ],
-        [ map({ ("devnull$_\@urth.org") } 3, 4, 5, 6, 7, 1, 2),
-          'guest', 'system-user' ],
+        [ 'guest', 'system-user' ],
         'ByAccountId() sorted by creator',
     );
 
@@ -173,8 +168,7 @@ use Socialtext::User;
     );
     is_deeply(
         [ map { $_->username } $users->all() ],
-        [ map({ ("devnull$_\@urth.org") } 2, 6, 3, 5, 4, 7),
-          'guest', 'system-user', 'devnull1@urth.org' ],
+        [ 'guest', 'system-user' ],
         'ByAccountId() sorted by primary account',
     );
 }
@@ -188,7 +182,7 @@ use Socialtext::User;
         account_id => $account_id );
     is_deeply(
         [ map { $_->username } $users->all() ],
-        [ map({ ("devnull$_\@urth.org") } 1 .. 7) ],
+        [ ],
         'ByAccountId() returns users sorted by name by default',
     );
 
@@ -197,7 +191,7 @@ use Socialtext::User;
         account_id => $account_id );
     is_deeply(
         [ map { $_->username } $users->all() ],
-        [ map({ ("devnull$_\@urth.org") } 7, 6, 5, 4, 3, 2, 1) ],
+        [ ],
         'ByAccountId() returns users sorted by creation_datetime',
     );
 
@@ -206,7 +200,38 @@ use Socialtext::User;
         account_id => $account_id );
     is_deeply(
         [ map { $_->username } $users->all() ],
-        [ map({ ("devnull$_\@urth.org") } 3, 4, 5, 6, 7, 1, 2) ],
+        [ ],
+        'ByAccountId() returns users sorted by creator',
+    );
+}
+
+{
+    # These tests are the same as the previous block, but test the Other1
+    my $account_id = Socialtext::Account->new(name => 'Other 1')->account_id;
+
+    my $users = Socialtext::User->ByAccountId(
+        account_id => $account_id );
+    is_deeply(
+        [ map { $_->username } $users->all() ],
+        [ map({ ("devnull$_\@urth.org") } (1, 2, 3, 4, 5, 6, 7)) ],
+        'ByAccountId() returns users sorted by name by default',
+    );
+
+    $users = Socialtext::User->ByAccountId(
+        order_by   => 'creation_datetime',
+        account_id => $account_id );
+    is_deeply(
+        [ map { $_->username } $users->all() ],
+        [ map({ ("devnull$_\@urth.org") } (7, 6, 5, 4, 3, 2, 1)) ],
+        'ByAccountId() returns users sorted by creation_datetime',
+    );
+
+    $users = Socialtext::User->ByAccountId(
+        order_by   => 'creator',
+        account_id => $account_id );
+    is_deeply(
+        [ map { $_->username } $users->all() ],
+        [ map({ ("devnull$_\@urth.org") } (3, 4, 5, 6, 7, 1, 2)) ],
         'ByAccountId() returns users sorted by creator',
     );
 }

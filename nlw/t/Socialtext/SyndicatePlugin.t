@@ -4,6 +4,8 @@
 use strict;
 use warnings;
 use Test::Socialtext tests => 44;
+use Socialtext::URI;
+use Socialtext::Cache;
 fixtures( 'auth-to-edit' );
 
 use DateTime;
@@ -18,16 +20,18 @@ BEGIN {
 }
 
 my $hub = new_hub('auth-to-edit');
+Socialtext::Cache->clear();
 no warnings 'redefine';
-local *Socialtext::URI::_host = sub { host => 'local.example.com' };
-local *Socialtext::URI::_port = sub { () };
+*Socialtext::URI::_scheme_host_port = sub { 
+    host => 'local.example.com',
+    scheme => 'http',
+};
 Socialtext::Ceqlotron::clean_queue_directory();
 
 my $date = DateTime->now->add( seconds => 600 );
 
 # We have to call syndicate off the hub to initialize Socialtext::CGI :(
 my $syndicator = $hub->syndicate;
-
 
 Socialtext::Page->new(hub => $hub)->create(
     title => 'this is the title',

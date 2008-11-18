@@ -764,6 +764,10 @@ Note that the plugin still may be disabled for particular users; use C<Socialtex
 
 Enables the plugin for the specified account.
 
+=item $account->plugins_enabled()
+
+Returns an array ref for the plugins enabled.
+
 =item $account->disable_plugin($plugin)
 
 Disables the plugin for the specified account.

@@ -1,17 +1,13 @@
 #!perl
 # @COPYRIGHT@
-
 use strict;
 use warnings;
-
 use Test::Socialtext tests => 18;
-use Test::More;
 fixtures( 'populated_rdbms' );
 
 BEGIN {
     use_ok( 'Socialtext::Account' );
 }
-
 
 my $accounts = Socialtext::Account->All();
 is_deeply(
@@ -44,14 +40,14 @@ is_deeply(
 $accounts = Socialtext::Account->All( order_by => 'user_count' );
 is_deeply(
     [ map { $_->name } $accounts->all() ],
-    [ 'Unknown', 'Other 1', 'Other 2', 'Socialtext' ],
+    [ 'Socialtext', 'Unknown', 'Other 1', 'Other 2' ],
     'All() sorted in order of user_count',
 );
 
 $accounts = Socialtext::Account->All( order_by => 'workspace_count' );
 is_deeply(
     [ map { $_->name } $accounts->all() ],
-    [ 'Unknown', 'Other 1', 'Other 2', 'Socialtext' ],
+    [ 'Socialtext', 'Unknown', 'Other 1', 'Other 2', ],
     'All() sorted in order of workspace_count',
 );
 

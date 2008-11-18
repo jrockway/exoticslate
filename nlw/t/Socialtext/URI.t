@@ -8,6 +8,7 @@ use warnings;
 # config file.
 use Test::Socialtext tests => 5;
 
+use Socialtext::Cache;
 use Socialtext::AppConfig;
 use Socialtext::URI;
 use File::Path qw/mkpath/;
@@ -27,6 +28,7 @@ BASIC_TESTS: {
 }
 
 NLW_FRONTEND_PORT: {
+    Socialtext::Cache->clear();
     local $ENV{NLW_FRONTEND_PORT} = 25000;
 
     is( Socialtext::URI::uri( path => '/' ), "http://$hostname:25000/",
@@ -34,6 +36,7 @@ NLW_FRONTEND_PORT: {
 }
 
 Custom_http_port_set: {
+    Socialtext::Cache->clear();
     $appconfig->set('custom_http_port', 1234);
     $appconfig->write;
     is $appconfig->custom_http_port, 1234, 'custom port was set';

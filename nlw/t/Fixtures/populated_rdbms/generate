@@ -44,7 +44,6 @@ for my $x ( 1..7 ) {
 }
 
 my @accounts = (
-    Socialtext::Account->Socialtext(),
     Socialtext::Account->create( name => 'Other 1' ),
     Socialtext::Account->create( name => 'Other 2' ),
 );
@@ -56,7 +55,7 @@ for my $x ( 0..9 ) {
 
     next if Socialtext::Workspace->new( name => $name );
 
-    my $account = $accounts[ $x % 3 ];
+    my $account = $accounts[ $x % 2 ];
     my $creator = $users[ $#users - $x ];
 
     my $ws =

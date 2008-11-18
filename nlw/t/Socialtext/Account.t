@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 65;
+use Test::Socialtext tests => 73;
 use Test::Exception;
 use YAML qw/LoadFile/;
 

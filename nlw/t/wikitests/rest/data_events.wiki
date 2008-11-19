@@ -43,16 +43,16 @@ Test case for `/data/events`(GET and POST).
 | body-like  | qr/Guest User tagged Quick Start in Admin Wiki as taggy/              |                 |
 | body-like  | qr/Guest User tagged Announcements and Links in Admin Wiki as saggy./ |                 |
 | body-like  | qr/System User tagged Meeting agendas in Admin Wiki as taggy./        |                 |
-| body-like  | qr/System User tagged System User downer./                            |                 |
+| body-like  | qr/System User tagged Guest User downer./                            |                 |
 
-| Comment    | GET all events as text/html                                                    |                |
-| get        | /data/events                                                                   | text/html      |
-| has-header | Content-type                                                                   | qr/text\/html/ |
-| code-is    | 200                                                                            |                |
-| body-like  | qr/Guest User.*tagged.*Quick Start.*in.*Admin Wiki.*as.*taggy.*\./             |                |
-| body-like  | qr/Guest User.*tagged.*Announcements and Links.*in.*Admin Wiki.*as.*saggy.*\./ |                |
-| body-like  | qr/System User.*tagged.*Meeting agendas.*in.*Admin Wiki.*as.*taggy.*\./        |                |
-| body-like  | qr/System User.*tagged.*System User.*downer.*\./                               |                |
+| Comment    | GET all events as text/html                                                                                         |                |
+| get        | /data/events                                                                                                        | text/html      |
+| has-header | Content-type                                                                                                        | qr/text\/html/ |
+| code-is    | 200                                                                                                                 |                |
+| body-like  | qr/Guest User<\/a> tagged <b><[^>]+>Quick Start<\/a><\/b> in <a [^>]+>Admin Wiki<\/a> as <a[^>]+>taggy/             |                |
+| body-like  | qr/Guest User<\/a> tagged <b><[^>]+>Announcements and Links<\/a><\/b> in <a [^>]+>Admin Wiki<\/a> as <a[^>]+>saggy/ |                |
+| body-like  | qr/System User<\/a> tagged <b><[^>]+>Meeting agendas<\/a><\/b> in <a [^>]+>Admin Wiki<\/a> as <a[^>]+>taggy/        |                |
+| body-like  | qr/System User<\/a> tagged <[^>]+>Guest User<\/a> <a[^>]+>downer/                                                   |                |
 
 | Comment     | GET one event (limit)          |                  |
 | get         | /data/events?limit=1           | application/json |

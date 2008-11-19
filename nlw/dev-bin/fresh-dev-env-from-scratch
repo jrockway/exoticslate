@@ -55,7 +55,7 @@ set +e
 dev-bin/link-control-panel
 dev-bin/link-console
 dev-bin/link-reports
-dev-bin/link-people
+dev-bin/link-plugins widgets agile csskit dashboard people signals socialcalc
 set -e
 
 export PGUSER=`st-config echo db_user`

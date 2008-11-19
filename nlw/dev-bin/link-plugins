@@ -1,0 +1,54 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use FindBin;
+use Fatal qw/chdir mkdir symlink/;
+use lib "$FindBin::Bin/../lib";
+use File::Find 'find';
+use File::Basename qw(basename);
+use Socialtext::System qw/shell_run/;
+
+chdir "$FindBin::Bin/..";
+
+sub usage {
+    my $msg = shift;
+    warn "$msg\n" if $msg;
+    die "USAGE: $0 <plugin list>\n\n";
+}
+
+sub link_directory {
+    my ($fromdir, $todir, $subdir) = @_;
+    return unless -d "$fromdir/$subdir";
+    find({
+        wanted => sub {
+            return if basename($_) =~ m{^\.};
+            my $from = $_;
+            (my $to = $from) =~ s{^$fromdir}{$todir};
+            unless (-e $to) {
+                if (-d $from) {
+                    warn "Making directory $to\n";
+                    mkdir $to;
+                }
+                else {
+                    warn "linking $to\n";
+                    symlink $from, $to;
+                }
+            }
+        },
+        no_chdir => 1,
+    }, "$fromdir/$subdir");
+}
+
+usage unless @ARGV;
+while (my $plugin = shift) {
+    my $plugin_dir = "$FindBin::Bin/../../plugins/$plugin";
+    usage("plugin $plugin doesn't exist") unless -d $plugin_dir;
+    link_directory($plugin_dir, '.', 'lib');
+    link_directory($plugin_dir, '.', 't');
+    link_directory($plugin_dir, "$ENV{HOME}/.nlw", 'etc/socialtext/uri_map.d');
+
+    chdir $plugin_dir;
+    $Socialtext::System::SILENT_RUN = 1;
+    shell_run("make") if -f 'Makefile';
+}

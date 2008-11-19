@@ -5,13 +5,14 @@ t.plan(1);
 t.run_roundtrip('input', 'output');
 
 /* Test
-=== TODO WAFL blocks need surrounding vertical whitespace
+=== WAFL blocks need surrounding vertical whitespace
 --- input
 top
 
 foo {search: bar} baz
 
 bottom
+
 --- output
 top
 
@@ -22,4 +23,5 @@ foo
 baz
 
 bottom
+
 */

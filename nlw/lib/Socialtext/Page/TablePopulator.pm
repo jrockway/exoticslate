@@ -307,7 +307,7 @@ sub fix_relative_page_link {
         die "Could not find symlinked page ($abs_page)"
             unless -f $abs_page;
         Socialtext::File::safe_symlink($abs_page, "$dir/index.txt");
-        warn "\nFixed relative symlink in $dir\n";
+        warn "Fixed relative symlink in $dir\n";
         
         my $mtime = (stat($abs_page))[9] || time;
         Socialtext::Page::Base->set_mtime($mtime, "$dir/index.txt");

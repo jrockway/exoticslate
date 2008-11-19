@@ -68,7 +68,7 @@
         [%- CASE "edit_save" -%]
             [%- loc("[_1] edited [_2]'s profile.", actor, person) -%]
         [%- CASE "tag_add" -%]
-            [%- loc("[_1] tagged [_1] [_2].", actor, person_tag, person) -%]
+            [%- loc("[_1] tagged [_2] [_3].", actor, person, person_tag) -%]
         [%- CASE "tag_delete" -%]
             [%- loc("[_1] removed tag [_2] from [_3].", actor, person_tag, person) -%]
         [%- CASE "watch_add" -%]

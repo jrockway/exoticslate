@@ -406,8 +406,7 @@ sub newest_directory_file {
     my @files = Socialtext::File::all_directory_files( $directory );
     return '' unless scalar( @files );
 
-    # return the newest file based on mtime
-    return reduce { ( $a cmp $b ) ? $a : $b } @files;
+    return (sort @files )[$#files];
 }
 
 =head1 SEE ALSO

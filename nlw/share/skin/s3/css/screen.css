@@ -1771,6 +1771,11 @@ td.peoplelist-desc-td {
         width: 100%;
 }
 
+td.peoplelist-acct-td {
+    line-height: normal !important;
+    padding-right: 10px;
+}
+
 .form-users_invite a.saveButton, a.inviteButton {
 	display: block;
 	width: 59px;

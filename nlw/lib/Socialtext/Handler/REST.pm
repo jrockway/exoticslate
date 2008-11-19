@@ -272,6 +272,7 @@ sub postHandler {
             %headers,
             -cache_control => 'no-cache,private',
             -pragma => 'no-cache',
+            -expires => 'now',
         );
     }
 

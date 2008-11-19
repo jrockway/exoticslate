@@ -406,7 +406,8 @@ sub newest_directory_file {
     my @files = Socialtext::File::all_directory_files( $directory );
     return '' unless scalar( @files );
 
-    return (sort @files )[$#files];
+    @files = sort @files;
+    return pop @files;
 }
 
 =head1 SEE ALSO

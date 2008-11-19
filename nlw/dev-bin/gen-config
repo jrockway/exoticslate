@@ -286,7 +286,7 @@ sub main {
 # there.  Also ignore nonzero exit codes.  They don't indicate any particular
 # problem.  With this setup, root should get emailed IFF st-p-r-i hits one of
 # the die clauses; that is, either a rename() or link() call fails.
-*/1 * * * * root /usr/bin/st-process-index --type $type > /dev/null || true
+*/1 * * * * root /usr/bin/st-process-index --type $type 2>&1 >> /var/log/st-process-index.log 
 EOT
                 close CRON;
             }

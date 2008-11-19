@@ -30,6 +30,7 @@ our %EXPORT_TAGS = (
 
 ###############################################################################
 # Set up mock object
+my $Test = Test::Builder->new();
 my $Instance;
 
 sub class_id { 'logging_class' }
@@ -37,8 +38,16 @@ sub class_id { 'logging_class' }
 sub st_log {
     my $method = shift;
     unless ($Instance) {
-        $Instance = Test::MockObject->new()
-            ->set_true(qw( debug info notice warning error critical alert emergency ));
+        $Instance = Test::MockObject->new();
+
+        foreach my $level (qw(debug info notice warning error critical alert emergency)) {
+            my $logger_cb = sub {
+                my ($self, $msg) = @_;
+                $Test->diag( "[$level] $msg" ) if ($ENV{NLW_DEBUG_SCREEN});
+                return 1;
+            };
+            $Instance->mock( $level, $logger_cb );
+        }
     }
     return $method ? $Instance->$method(@_) : $Instance;
 }
@@ -53,8 +62,6 @@ sub st_timed_log {
 
 ###############################################################################
 # Testing methods
-my $Test = Test::Builder->new();
-
 sub clear_log() {
     st_log->clear();
 }

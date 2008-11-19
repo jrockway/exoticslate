@@ -211,6 +211,14 @@ CREATE TABLE event (
     tag_name text
 );
 
+CREATE TABLE noun (
+    noun_id varchar(50) NOT NULL,
+    noun_type varchar(15) NOT NULL,
+    "at" timestamptz DEFAULT now(),
+    user_id bigint NOT NULL,
+    body text
+);
+
 CREATE TABLE page (
     workspace_id bigint NOT NULL,
     page_id text NOT NULL,
@@ -393,6 +401,10 @@ ALTER TABLE ONLY account_plugin
     ADD CONSTRAINT account_plugin_pkey
             PRIMARY KEY (account_id, plugin);
 
+ALTER TABLE ONLY noun
+    ADD CONSTRAINT noun_pkey
+            PRIMARY KEY (noun_id);
+
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_pkey
             PRIMARY KEY (workspace_id, page_id);
@@ -489,6 +501,9 @@ CREATE INDEX ix_person_assistant_id
 
 CREATE INDEX ix_person_supervisor_id
 	    ON person (supervisor_id);
+
+CREATE UNIQUE INDEX noun__noun_id
+	    ON noun (noun_id);
 
 CREATE INDEX page_creator_time
 	    ON page (creator_id, create_time);
@@ -630,6 +645,11 @@ ALTER TABLE ONLY "WorkspaceRolePermission"
             FOREIGN KEY (workspace_id)
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY noun
+    ADD CONSTRAINT noun_user_id_fk
+            FOREIGN KEY (user_id)
+            REFERENCES users(user_id) ON DELETE CASCADE;
+
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_creator_id_fk
             FOREIGN KEY (creator_id)
@@ -706,4 +726,4 @@ ALTER TABLE ONLY "Workspace"
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '18');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '19');

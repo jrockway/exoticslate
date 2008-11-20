@@ -1725,12 +1725,34 @@ proto.make_table_html = function(rows, columns) {
     return '<table style="border-collapse: collapse;" class="formatter_table">' + innards + '</table>';
 }
 
-proto.do_table = function() {
+proto.do_new_table = function() {
     var result = this.prompt_for_table_dimensions();
     if (! result) return false;
 
     this.get_editable_div().focus(); // Need this before .insert_html
     this.insert_html(this.make_table_html(result[0], result[1]));
+}
+
+proto.do_table = function() {
+    var doc = this.get_edit_document();
+    jQuery("span.find-cursor", doc).remove();
+    this.get_editable_div().focus(); // Need this before .insert_html
+    this.insert_html( "<span class=\"find-cursor\">&nbsp;</span>" );
+
+    var self = this;
+    setTimeout(function() {
+        var cur = window.cur = jQuery("span.find-cursor", doc);
+
+        if (! cur.parents('td').length)
+            return self.do_new_table();
+
+        var col = cur.parents('td').prevAll("td").length + 1;
+        var row = cur.parents('tr').prevAll("tr").length + 1;
+        alert("Col: " + col + ", Row: " + row);
+
+        jQuery("span.find-cursor", doc).remove();
+    }, 100);
+
 }
 
 proto.setHeightOf = function (iframe) {

@@ -378,6 +378,7 @@ sub page_with_spreadsheet_wikitext {
             s/\\t/\t/g;
             "$_\n";
         } @lines;
+        last;
     }
     $new->content($wikitext);
     return $new;

@@ -92,10 +92,19 @@ proto.create_wysiwyg_object = function(html) {
 
 var proto = Test.Wikiwyg.Filter.prototype;
 
-proto.html_to_wikitext = function(content) {
-    var object = new Wikiwyg.Wikitext.Socialtext();
-    return object.convert_html_to_wikitext(content);
-}
+function _make_wrappers (base, methods) {
+    for (var idx in methods) {
+        (function(method){
+            proto[method] = function(content) {
+                var object = new (eval(base))();
+                return object[method](content);
+            };
+        })(methods[idx]);
+    }
+};
+
+_make_wrappers('Wikiwyg.Wysiwyg.Socialtext', ['replace_p_with_br']);
+_make_wrappers('Wikiwyg.Wikitext.Socialtext', ['html_to_wikitext']);
 
 proto.template_vars = function(content) {
     return content.replace(

@@ -1,0 +1,101 @@
+| *Comment* | Starting Test Case: Tagging Profile |  |
+
+| click_and_wait | link=Profile |  |
+
+| *Comment* | Test Case: Tagging Profile. fog tag added |  |
+| wait_for_element_visible_ok | new_tag | 30000 |
+| type_ok | new_tag | fog %%start_time%% |
+| click_ok | //input[@value='Add Tag'] |  |
+| *Comment* | Test Case: Tagging Profile. verify fog tag added |  |
+| wait_for_element_visible_ok | link=fog %%start_time%% | 30000 |
+| text_like | link=fog %%start_time%% | fog %%start_time%% |
+
+| *Comment* | Test Case: Tagging Profile. foo bar tag added |  |
+| wait_for_element_visible_ok | new_tag | 30000 |
+| type_ok | new_tag | foo bar %%start_time%% |
+| click_ok | //input[@value='Add Tag'] |  |
+| *Comment* | Test Case: Tagging Profile. verify foo bar tag added |  |
+| wait_for_element_visible_ok | link=foo bar %%start_time%% | 30000 |
+| text_like | link=foo bar %%start_time%% | foo bar %%start_time%% |
+
+| *Comment* | Test Case: Tagging Profile - special chars |  |
+| wait_for_element_visible_ok | new_tag | 30000 |
+| type_ok | new_tag | special chars @#$ %%start_time%% |
+| click_ok | //input[@value='Add Tag'] |  |
+| *Comment* | Test Case: Tagging Profile. verify special chars @#$ %%start_time%% tag added |  |
+| wait_for_element_visible_ok | link=special chars @#$ %%start_time%% | 30000 |
+| text_like | link=special chars @#$ %%start_time%% | special chars @#$ %%start_time%% |
+
+| *Comment* | Test Case: Tagging Profile - Chinese chars |  |
+| wait_for_element_visible_ok | new_tag | 30000 |
+| type_ok | new_tag | 所以 |
+| click_ok | //input[@value='Add Tag'] |  |
+| *Comment* | Test Case: Tagging Profile. verify 所以 tag added. Can't test link. |  |
+
+TODO: figure out why testing for Chinese chars in tag widget fails. Need frame select? Above tests pass??
+ text_like | 所以 | |
+
+| *Comment* | Test Case: Tagging Profile reverify fog tag link |  |
+| text_like | link=fog %%start_time%% | fog %%start_time%% |
+| *Comment* | Test Case: Tagging Profile clicking on a tag link causes Selenium to bomb, but opening tag link directly works. |  |
+| open_ok | /?action=people;tag=fog%20%%start_time%% |  |
+
+| *Comment* | Test Case: Tagging Profile list view: tag fog %%start_time%% |  |
+| wait_for_element_visible_ok | link=Summaries | 30000 |
+| click_ok | link=Summaries |  |
+| text_like | All People Tagged 'fog %%start_time%%' |  |
+| wait_for_text_present_ok | %%email%% | 10000 |
+
+| *Comment* | Test Case: Tagging Profile add the same tag to a different user |  |
+
+| *Comment* | These values must match the one in [Test Case: Edit Profile] |  |
+| set | e_user | profile.editor@ken.socialtext.net |
+| set | short_e_user | profile.editor |
+| set | fname | Profligate |
+| set | lname | Edisaurus |
+
+| *Comment* | Test Case: Tagging Profile. Access profile |  |
+| st-logout |  |
+| open_ok | / |  |
+| type_ok | username | %%e_user%% |
+| type_ok | password | %%password%% |
+| clickAndWait | //input[@value='Log in'] |  |
+
+| wait_for_element_visible_ok | link=Profile | 60000 |
+| text_like | st-editing-tools-edit | %%fname%% %%lname%% |
+| click_and_wait | link=Profile |  |
+
+| *Comment* | Test Case: Tagging Profile. fog tag added to %%short_e_user%% |  |
+| wait_for_element_visible_ok | new_tag | 30000 |
+| type_ok | new_tag | fog %%start_time%% |
+| click_ok | //input[@value='Add Tag'] |  |
+| *Comment* | Test Case: Tagging Profile. verify fog tag added |  |
+| wait_for_element_visible_ok | link=fog %%start_time%% | 30000 |
+| text_like | link=fog %%start_time%% | fog %%start_time%% |
+| open_ok | /?action=people;tag=fog%20%%start_time%% |  |
+
+| *Comment* | Test Case: Tagging Profile list view: tag fog %%start_time%% two users Summaries |  |
+| wait_for_element_visible_ok | link=Summaries | 30000 |
+| click_ok | link=Summaries |  |
+| text_like | All People Tagged 'fog %%start_time%%' |  |
+| wait_for_text_present_ok | %%short_username%% | 10000 |
+| wait_for_text_present_ok | %%email%% | 10000 |
+| wait_for_text_present_ok | %%fname%% %%lname%% | 10000 |
+| wait_for_text_present_ok | %%e_user%% | 10000 |
+
+| *Comment* | Test Case: Tagging Profile list view: tag fog %%start_time%% two users Names |  |
+| wait_for_element_visible_ok | link=Names | 30000 |
+| click_ok | link=Names |  |
+| text_like | All People Tagged 'fog %%start_time%%' |  |
+| wait_for_text_present_ok | %%short_username%% | 10000 |
+| wait_for_text_not_present_ok | %%email%% | 10000 |
+| wait_for_text_present_ok | %%fname%% %%lname%% | 10000 |
+| wait_for_text_not_present_ok | %%e_user%% | 10000 |
+
+| pause | 5000 | admire the beauty |
+
+| *Comment* | Test Case : Tagging COMPLETED |  |
+
+^ END
+
+TODO: find a way to test lookahead

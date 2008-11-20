@@ -14,6 +14,8 @@
 
 | *Comment* | Test Case: Edit Profile. Create a user and access profile. user may already exist |  |
 | st-admin | create-user --e %%e_user%% --p %%password%% |  |
+| *Comment* | Test Case: Edit Profile. Change pwd in case user already existed |  |
+| st-admin | change-password --e %%e_user%% --p %%password%% |  |
 | st-admin | set-user-names --e %%e_user%% --f %%fname%% --l %%lname%% |  |
 
 | st-logout |  |

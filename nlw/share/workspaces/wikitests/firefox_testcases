@@ -26,6 +26,7 @@ It should be the last testset in this run, but it will re-enable LDAP when it fi
 * [Default User Testcases]
 
 * [Widgets Testcases]
+* [Profile Testcases]
 
 ^ All pages tagged 'Testcase' (only a list, visit the pages above for tests)
 

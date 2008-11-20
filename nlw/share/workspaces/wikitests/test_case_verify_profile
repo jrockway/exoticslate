@@ -1,54 +1,64 @@
 * Fixture: SocialWidgets
 
 | *Comment* | Test Case: Verify Profile |  |
-| *Comment* | Run this test via `Profile Testcases` testset to pair it with Edit Profile. It expects the value of %%start_time%% to match. |  |
+| *Comment* | [Test Case: Edit Profile] should have run before Verify Profile |  |
 
-| set | e_user | edit.profile.%%start_time%%@ken.socialtext.net |  |
+| *Comment* | These values must match the one in [Test Case: Edit Profile] |  |
+| set | e_user | profile.editor@ken.socialtext.net |
+| set | short_e_user | profile.editor |
+| set | fname | Profligate |
+| set | lname | Edisaurus |
 
 | *Comment* | Test Case: Verify Profile. Access profile |  |
-| st-logoutin | %%e_user%% | 123456 |
+| st-logout |  |
 | open_ok | / |  |
+| type_ok | username | %%e_user%% |
+| type_ok | password | %%password%% |
+| clickAndWait | //input[@value='Log in'] |  |
+
 | wait_for_element_visible_ok | link=Profile | 60000 |
-| text_like | st-page-titletext | Profligate Editor %%start_time%% |
-| text_like | %%e_user%% |  |
+| text_like | st-editing-tools-edit | %%fname%% %%lname%% |
 | click_and_wait | link=Profile |  |
+| wait_for_element_visible_ok | `link=(Edit)` | 30000 |
 
 | *Comment* | Test Case: Verify Profile. Verify profile present. |  |
 | st-name-widget | 1 | profile |
 | st-select-widget-frame | profile |  |
 
-| *Comment* | Test Case: Verify Profile. Verify values |  |
-| text_like | last_name | Profligate Editor %%start_time%% |
-| text_like | position | Position %%start_time%% |
-| text_like | company | Company %%start_time%% |
-| text_like | location | Location %%start_time%% |
-| text_like | location | %%email%% |
+| *Comment* | Test Case: Verify Profile. Verify values. |
+| text_like | %%fname%% %%lname%% |
+| text_like | Position %%short_e_user%% |
+| text_like | Company %%short_e_user%% |
+| text_like | Location %%short_e_user%% |
+| text_like | %%e_user%% |
 
-| text_like | PHONE |  |
-| text_like | work_phone | Work: 555-work-%%start_time%% |
-| text_like | mobile_phone | Mobile: 555-mobile-%%start_time%% |
-| text_like | home_phone | Home: 555-home-%%start_time%% |
+| *Comment* | Headings appear uppercase via CSS: actual headings are titlecase |
+| text_like | Phone |
+| text_like | Work: 555-work-%%short_e_user%% |
+| text_like | Mobile: 555-mobile-%%short_e_user%% |
+| text_like | Home: 555-home-%%short_e_user%% |
 
-| text_like | IM |  |
-| text_like | aol_sn | AOL: AOL%%start_time%% |
-| text_like | yahoo_sn | Yahoo!: Yahoo%%start_time%% |
-| text_like | gtalk_sn | GTalk: GTalk%%start_time%% |
-| text_like | skype_sn | Skype: Skype%%start_time%% |
-| text_like | sametime_sn | SameTime: SameTime%%start_time%% |
-| text_like | twitter_sn | Twitter: Twitter%%start_time%% |
+| *Comment* | regexs needed becausing whitespace is missing in the page layout |
+| text_like | IM |
+| text_like | qr/AIM: AOL %%short_e_user%%/ |
+| text_like | qr/Yahoo!: Yahoo %%short_e_user%%/ |
+| text_like | qr/GTalk: GTalk %%short_e_user%%/ |
+| text_like | qr/Skype: Skype %%short_e_user%%/ |
+| text_like | qr/Sametime: Sametime %%short_e_user%%/ |
+| text_like | qr/Twitter: Twitter %%short_e_user%%/ |
 
-| text_like | WEB |  |
-| text_like | blog | `Blog: http://blog/%%start_time%%` |
-| text_like | personal_url | Personal: personal/%%start_time%% |
-| text_like | linkedin_url | LinkedIn: linkedIn/%%start_time%% |
-| text_like | facebook_url | Facebook: facebook/%%start_time%% |
+| text_like | Web |
+| text_like | `Blog: http://blog/%%short_e_user%%` |
+| text_like | `Personal: http://personal/%%short_e_user%%` |
+| text_like | `LinkedIn: http://linkedIn/%%short_e_user%%` |
+| text_like | `Facebook: http://facebook/%%short_e_user%%` |
 
-| text_like | MANAGER |  |
-| text_like | supervisor | System User |
-| text_like | ASSISTANT |  |
-| text_like | assistant | Guest User |
+| text_like | Manager |
+| text_like | System User |
+| text_like | Assistant |
+| text_like | Guest User |
 
 | *Comment* | Test Case: Verify Profile. PHOTO |  |
-| wait_for_element_present_ok | //img[@class='bigAvatar'] | 5000 |
+| wait_for_element_present_ok | //img[@class='bigAvatar'] | 1000 |
 
 | *Comment* | Test Case: Verify Profile COMPLETED |  |

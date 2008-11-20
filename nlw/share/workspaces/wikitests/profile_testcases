@@ -1,6 +1,13 @@
-Saving profile changes causes selenium top-level to disappear. Until we get that fixed, we split testing into two pieces that will run in two different instantiations of a Selenium browser. The first one modifies the profile, the second one verifies the modifications. They have to be run as a pair because they rely on the value of `%%start_time%%` being the same in both tests.
+Saving profile changes causes selenium top-level to disappear. Until we get that fixed, we split testing into two pieces that will run in two different instantiations of a Selenium browser. The first one modifies the profile, the second one verifies the modifications. They have to be run as a pair - Edit Profile fills in the profile and is forced to exit immediately after saving the profile, and Verify Profile checks it.
 
-You can develop Verify Profile without always having to run Edit Profile by redefining the value of `%%start_time%%` at the top of Verify Profile to be whatever it was when you last ran Edit Profile.
+I tried to hook these two tests together using %%start_time%% and other tricks to pass a username between them, but failed. So the username is always `profile.editor@ken.socialtext.net`
+
+fill in the users profile
 
 * [Test Case: Edit Profile]
+
+verify the filled in profile
+
 * [Test Case: Verify Profile]
+
+There is a further glitch in that wait_for_element_... does not seem to work for widgets. If the profile does not open immediately, the test just runs on. This may need a frame select - Matt to investigate.

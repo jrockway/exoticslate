@@ -265,6 +265,17 @@ sub st_clear_events {
 }
 
 
+=head2 st-clear-signals
+
+Delete all signals
+
+=cut
+
+sub st_clear_signals {
+    sql_execute("DELETE FROM noun WHERE noun_type = 'signal'");
+}
+
+
 =head2 st-delete-people-tags
 
 Delete all people tags.

@@ -4,12 +4,18 @@ BEGIN;
 \x
 
 CREATE TABLE noun (
-    noun_id VARCHAR(50) NOT NULL,
-    noun_type VARCHAR(15) NOT NULL,
+    noun_id bigint NOT NULL,
+    noun_type text NOT NULL,
     at timestamptz DEFAULT now(),
     user_id bigint NOT NULL,
     body text
 );
+
+CREATE SEQUENCE noun_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
 
 ALTER TABLE ONLY noun
     ADD CONSTRAINT noun_pkey
@@ -19,9 +25,6 @@ ALTER TABLE ONLY noun
     ADD CONSTRAINT noun_user_id_fk
             FOREIGN KEY (user_id)
             REFERENCES users(user_id) ON DELETE CASCADE;
-
-CREATE UNIQUE INDEX noun__noun_id
-	    ON noun (noun_id);
 
 -- finish up
 

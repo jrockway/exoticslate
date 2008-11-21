@@ -212,12 +212,18 @@ CREATE TABLE event (
 );
 
 CREATE TABLE noun (
-    noun_id varchar(50) NOT NULL,
-    noun_type varchar(15) NOT NULL,
+    noun_id bigint NOT NULL,
+    noun_type text NOT NULL,
     "at" timestamptz DEFAULT now(),
     user_id bigint NOT NULL,
     body text
 );
+
+CREATE SEQUENCE noun_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
 
 CREATE TABLE page (
     workspace_id bigint NOT NULL,
@@ -502,9 +508,6 @@ CREATE INDEX ix_person_assistant_id
 CREATE INDEX ix_person_supervisor_id
 	    ON person (supervisor_id);
 
-CREATE UNIQUE INDEX noun__noun_id
-	    ON noun (noun_id);
-
 CREATE INDEX page_creator_time
 	    ON page (creator_id, create_time);
 
@@ -724,6 +727,6 @@ ALTER TABLE ONLY "Workspace"
     ADD CONSTRAINT workspace___account___account_id___account_id___n___1___1___0
             FOREIGN KEY (account_id)
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
-
+ 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
 INSERT INTO "System" VALUES ('socialtext-schema-version', '19');

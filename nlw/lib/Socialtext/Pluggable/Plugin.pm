@@ -306,6 +306,34 @@ sub template_render {
     );
 }
 
+sub created_at {
+    my $self = shift;
+    my %p = (
+        workspace_name => undef,
+        page_name => undef,
+        @_
+    );
+
+    my $page = $self->get_page(%p);
+    return undef if (!defined($page));
+    my $original_revision = $page->original_revision;
+    return $original_revision->datetime_for_user;
+}
+
+sub created_by {
+    my $self = shift;
+    my %p = (
+        workspace_name => undef,
+        page_name => undef,
+        @_
+    );
+
+    my $page = $self->get_page(%p);
+    return undef if (!defined($page));
+    my $original_revision = $page->original_revision;
+    return $original_revision->last_edited_by;
+}
+
 sub get_page {
     my $self = shift;
     my %p = (

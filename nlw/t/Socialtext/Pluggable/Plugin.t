@@ -5,7 +5,7 @@ use warnings;
 
 BEGIN { push @INC, 't/plugin/mocked/lib' };
 
-use Test::Socialtext tests => 26;
+use Test::Socialtext tests => 32;
 use Socialtext::User;
 use Socialtext::URI;
 use Socialtext::Account;
@@ -78,9 +78,22 @@ ok defined $page, 'Page object found';
 is $page->title, 'Start here', 'Fetched page from workspace';
 $page = $plug->get_page(workspace_name => '12df', page_name => 'Start Here');
 ok ! defined $page, 'No page object on invalid workspace';
+my $page_creator = $plug->created_by(workspace_name => 'admin', page_name => 'Start Here');
+ok defined $page_creator, 'Page creator found';
+is $page_creator->username, 'system-user', 'Proper creator retrieved';
+$page_creator = $plug->created_by(workspace_name => '12df', page_name => 'Start Here');
+ok ! defined $page_creator, 'Invalid page returns undef creator';
+my $page_created_at = $plug->created_at(workspace_name => 'admin', page_name => 'Start Here');
+ok $page_created_at =~ /\w\w\w \d\d? \d\d?:\d\d[ap]m/, 'Create date retrieved';
+$page_created_at = $plug->created_at(workspace_name => '12df', page_name => 'Start Here');
+ok ! defined $page_created_at, 'Invalid page returns undef create time';
 
 # Tags
 my @tags = $plug->tags_for_page(workspace_name => 'admin', page_name => 'Start Here');
+is scalar(@tags), 1, 'Tag count is right';
+
+# Tags
+@tags = $plug->tags_for_page(workspace_name => 'admin', page_name => 'Start Here');
 is scalar(@tags), 1, 'Tag count is right';
 is $tags[0], 'Welcome', 'first tag is right';
 @tags = $plug->tags_for_page(workspace_name => '12hjs', page_name => 'Start Here');

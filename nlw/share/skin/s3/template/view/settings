@@ -41,7 +41,7 @@
               [% END %]
             </ul>
             [% IF workspace_present AND perm_admin %]
-            <h4>[% loc('This Workpace') %]</h4>
+            <h4>[% loc('This Workspace') %]</h4>
             <ul class="leftNavList">
               <li><a href="?action=workspaces_settings_appearance">[% loc('Workspace Appearance') %]</a></li>
               <li><a href="?action=workspaces_settings_features">[% loc('Workspace Features') %]</a></li>

@@ -247,18 +247,18 @@ proto.replace_p_with_br = function(html) {
     var br = "<br class=\"p\"/>";
     var doc = document.createElement("div");
     doc.innerHTML = this.assert_padding_around_block_elements(html);
-    var p_tags = doc.getElementsByTagName("p");
+    var p_tags = jQuery(doc).find("p").get();
     for(var i=0;i<p_tags.length;i++) {
         var html = p_tags[i].innerHTML;
         var prev = p_tags[i].previousSibling;
-        var prev_tag;
+        var prev_tag = null;
         if (prev && prev.tagName) {
             prev_tag = prev.tagName.toLowerCase();
         }
 
         html = html.replace(/(<br>)?\s*$/, br + br);
-        if (prev && prev_tag && prev_tag == 'div') {
-            html = html.replace(/^\n?/,br + br)
+        if (prev && prev_tag && (prev_tag == 'div' || (prev_tag == 'span' && prev.firstChild && prev.firstChild.tagName && prev.firstChild.tagName.toLowerCase() == 'div'))) {
+            html = html.replace(/^\n?[ \t]*/,br + br)
         }
         else if (prev && prev_tag && prev_tag != 'br' && prev_tag != 'p') {
             html = html.replace(/^\n?/,br)
@@ -279,7 +279,7 @@ proto.replace_p_with_br = function(html) {
             }();
 
             if (remove_br) {
-                prev.parentNode.removeChild(prev);
+                jQuery(prev).remove();
             }
         }
         else {
@@ -290,8 +290,7 @@ proto.replace_p_with_br = function(html) {
             prev.nodeValue = prev.nodeValue.replace(/\n*$/,'')
         }
 
-        jQuery(p_tags[i]).before(html);
-        p_tags[i].parentNode.removeChild(p_tags[i]);
+        jQuery(p_tags[i]).replaceWith(html);
     }
     return doc.innerHTML;
 }

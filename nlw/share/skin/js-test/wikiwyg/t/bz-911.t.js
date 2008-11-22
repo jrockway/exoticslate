@@ -2,26 +2,15 @@ var t = new Test.Wikiwyg();
 
 t.plan(1);
 
-t.run_roundtrip('input', 'output');
+t.run_roundtrip('input');
 
 /* Test
 === WAFL blocks need surrounding vertical whitespace
 --- input
-top
+top line
 
-foo {search: bar} baz
+middle {search: foo} line
 
-bottom
-
---- output
-top
-
-foo
-
-{search: bar}
-
-baz
-
-bottom
+bottom line
 
 */

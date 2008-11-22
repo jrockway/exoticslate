@@ -5,7 +5,7 @@ t.plan(1);
 t.run_roundtrip('input');
 
 /* Test
-=== WAFL blocks need surrounding vertical whitespace
+=== Inline WAFL blocks should not add extra vertical whitespace
 --- input
 top line
 

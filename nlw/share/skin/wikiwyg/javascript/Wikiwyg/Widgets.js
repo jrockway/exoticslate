@@ -151,6 +151,7 @@ proto.fromHtml = function(html) {
             html = html.replace(br_at_the_end, "")
             html += "<p> </p>"
         }
+        html = this.assert_padding_around_block_elements(html);
         html = this.assert_padding_between_block_elements(html);
 
         var dom = document.createElement('div');
@@ -202,20 +203,64 @@ proto.assert_padding_between_block_elements = function(html) {
     return doc.innerHTML;
 }
 
+proto.assert_padding_around_block_elements = function(html) {
+    var doc = jQuery('<div />').append(
+        html.replace(/<div\b/g, '<span tmp="div"')
+            .replace(/<\/div>/g, '</span>')
+    );
+
+    var el;
+    while (el = doc.find('span[tmp=div]:first')[0]) {
+        var span = jQuery(el);
+        var div = jQuery('<div />')
+            .append( span.clone().removeAttr('tmp') )
+            .html()
+            .replace(/^<span/, '<div')
+            .replace(/<\/span>$/, '</div>');
+
+        var parent_el = span.parent('p').get(0);
+        if (!parent_el) {
+            span.replaceWith(div);
+            continue;
+        }
+
+        var p = jQuery(parent_el);
+        var p_html = p.html();
+        var p_before = p_html.replace(
+            /[ \t]*<span[^>]*tmp="div"[\s\S]*/i, ''
+        );
+
+        span.remove();
+
+        p.html(
+            p.html().substr(p_before.length)
+                    .replace(/^[ \t]*/, '')
+        );
+        p.before(jQuery('<p />').html(p_before));
+        p.before(div);
+    }
+
+    return doc.html();
+}
+
 proto.replace_p_with_br = function(html) {
     var br = "<br class=\"p\"/>";
     var doc = document.createElement("div");
-    doc.innerHTML = html;
+    doc.innerHTML = this.assert_padding_around_block_elements(html);
     var p_tags = doc.getElementsByTagName("p");
     for(var i=0;i<p_tags.length;i++) {
         var html = p_tags[i].innerHTML;
         var prev = p_tags[i].previousSibling;
+        var prev_tag;
         if (prev && prev.tagName) {
-            var prev_tag = prev.tagName.toLowerCase();
+            prev_tag = prev.tagName.toLowerCase();
         }
 
         html = html.replace(/(<br>)?\s*$/, br + br);
-        if (prev && prev_tag && prev_tag != 'br' && prev_tag != 'p') {
+        if (prev && prev_tag && prev_tag == 'div') {
+            html = html.replace(/^\n?/,br + br)
+        }
+        else if (prev && prev_tag && prev_tag != 'br' && prev_tag != 'p') {
             html = html.replace(/^\n?/,br)
         }
         else if (prev && prev_tag && prev_tag == 'br') {

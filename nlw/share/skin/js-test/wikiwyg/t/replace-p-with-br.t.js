@@ -16,9 +16,9 @@ else {
 /* Test
 === {bz: 911}: Conver P to BR when inline div is present
 --- p
-<div class="wiki"><p>a</p><p><div>b</div>c</p><p>d</p></div>
+<div class="wiki"><p>a</p><p>b<div>c</div>d</p><p>e</p></div>
 
 --- br
-<div class="wiki">a<br class="p"><br class="p"><div>b</div>c<br class="p"><br class="p">d<br class="p"><br class="p"></div>
+<div class="wiki">a<br class="p"><br class="p">b<br class="p"><br class="p"><div>c</div><br class="p"><br class="p">d<br class="p"><br class="p">e<br class="p"><br class="p"></div>
 
 */

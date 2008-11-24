@@ -27,10 +27,21 @@
 | click_and_wait | st-submit-new-account-name |  |
 | text_like | The %%new_acct%% account has been created. |  |
 
+| *Comment* | Test case: Business Control Panel validate plugins are all disabled by default. checking only SC/People/Signals as other might go away |  |
+| click_and_wait | link=%%new_acct%% |  |
+| text_like | Socialtext SocialCalc (click to enable) |  |
+| text_like | Socialtext People (click to enable) |  |
+| text_like | Socialtext Signals (click to enable) |  |
+
+ *Comment* | Test case: Business Control Panel enable one plugin, click the confirmation, validate that at least one plugin is enabled. Lack of id on plugins prevents tight checking | |
+ click_ok | //a[contains(@href,'/nlw/control/submit/toggle_account_plugin?account_id=8&plugin=people' | |
+ verifyConfirmation |
+
 | *Comment* | Test case: Business Control Panel Create a new workspace in the new account |  |
 | st-admin | create-workspace --name %%new_workspace%% --title %%new_workspace%% --account "%%new_acct%%" |  |
-| clickAndWait | link=%%new_acct%% |  |
-| clickAndWait | link=%%new_workspace%% |  |
+| click_and_wait | link=Accounts |  |
+| click_and_wait | link=%%new_acct%% |  |
+| click_and_wait | link=%%new_workspace%% |  |
 | text_like | %%new_workspace%% workspace |  |
 
 | *Comment* | Test case: Business Control Panel Socialtext Search Accounts |  |

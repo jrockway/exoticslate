@@ -21,12 +21,6 @@
       [% END %]
       <li class="allfiles[% IF action == 'attachments_listall' %] selected[% END %]"><a href="index.cgi?action=attachments_listall">[% loc("All Files") %]</a></li>
 
-      [% IF ui_is_expanded %]
-      <li><a title="[% loc('Normal View') %]" id="st-pagetools-expand" href="#">[% loc('Normal') %]</a></li>
-      [% ELSE %]
-      <li><a title="[% loc('Expanded View') %]" id="st-pagetools-expand" href="#">[% loc('Expand') %]</a></li>
-      [% END %]
-
     </ul>
   </div><!-- tableFilter END -->
 </div><!-- tabs END -->

@@ -9,8 +9,6 @@ use File::Find 'find';
 use File::Basename qw(basename);
 use Socialtext::System qw/shell_run/;
 
-chdir "$FindBin::Bin/..";
-
 sub usage {
     my $msg = shift;
     warn "$msg\n" if $msg;
@@ -49,13 +47,13 @@ sub link_directory {
 
 usage unless @ARGV;
 while (my $plugin = shift) {
+    warn "Linking the $plugin plugin\n";
     my $plugin_dir = "$FindBin::Bin/../../plugins/$plugin";
     usage("plugin $plugin doesn't exist") unless -d $plugin_dir;
-    link_directory($plugin_dir, '.', 'lib');
-    link_directory($plugin_dir, '.', 't');
+    link_directory($plugin_dir, "$FindBin::Bin/..", 'lib');
+    link_directory($plugin_dir, "$FindBin::Bin/..", 't');
     link_directory($plugin_dir, "$ENV{HOME}/.nlw", 'etc/socialtext/uri_map.d');
 
-    chdir $plugin_dir;
     $Socialtext::System::SILENT_RUN = 1;
-    shell_run("make") if -f 'Makefile';
+    shell_run("cd $plugin_dir && make") if -f 'Makefile';
 }

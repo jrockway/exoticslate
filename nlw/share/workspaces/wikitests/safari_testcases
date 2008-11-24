@@ -86,6 +86,19 @@ Widget tests should run. Make sure you have socialtext dashboard turned on.
 
 * [Widgets Testcases]
 
+Profile testcases, like in Profile Testcases
+fill in the users profile
+
+* [Test Case: Edit Profile]
+
+verify the filled in profile
+
+* [Test Case: Verify Profile]
+
+test profile (People) tagging
+
+* [Test Case: Tagging Profile]
+
 Non-Safari cases
 Test Case: Edit This Page
 Test Case: Nasty Double Dashes

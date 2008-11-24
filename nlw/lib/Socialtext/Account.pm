@@ -35,7 +35,7 @@ foreach my $column ( @ACCT_COLS ) {
     field $column;
 }
 
-Readonly my @RequiredAccounts => qw( Unknown Socialtext );
+Readonly my @RequiredAccounts => qw( Unknown Socialtext Deleted );
 sub EnsureRequiredDataIsPresent {
     my $class = shift;
 
@@ -311,6 +311,7 @@ EOT
 
 sub Unknown    { $_[0]->new( name => 'Unknown' ) }
 sub Socialtext { $_[0]->new( name => 'Socialtext' ) }
+sub Deleted    { $_[0]->new( name => 'Deleted' ) }
 
 sub Default {
     my $class = shift;

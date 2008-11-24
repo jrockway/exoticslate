@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 73;
+use Test::Socialtext tests => 79;
 use Test::Exception;
 use YAML qw/LoadFile/;
 
@@ -13,16 +13,21 @@ BEGIN {
 }
 fixtures( 'rdbms_clean' );
 
-is( Socialtext::Account->Count(), 2, 'two accounts in DBMS at start' );
+is( Socialtext::Account->Count(), 3, 'three accounts in DBMS at start' );
 my $test = Socialtext::Account->create( name => 'Test Account' );
 isa_ok( $test, 'Socialtext::Account', 'create returns a new Socialtext::Account object' );
 users_are($test, []);
-is( Socialtext::Account->Count(), 3, 'Now we have three accounts' );
+is( Socialtext::Account->Count(), 4, 'Now we have four accounts' );
 
 my $unknown = Socialtext::Account->Unknown;
 isa_ok( $unknown, 'Socialtext::Account' );
 ok( $unknown->is_system_created, 'Unknown account is system-created' );
 users_are($unknown, []);
+
+my $deleted = Socialtext::Account->Deleted;
+isa_ok( $deleted, 'Socialtext::Account' );
+ok( $deleted->is_system_created, 'Deleted account is system-created' );
+users_are($deleted, []);
 
 my $socialtext = Socialtext::Account->Socialtext;
 isa_ok( $socialtext, 'Socialtext::Account' );

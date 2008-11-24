@@ -18,11 +18,11 @@
     [%- MACRO person GET event.person.id | decorate('user_link') -%]
     [%- MACRO page_tag BLOCK -%]<a href="/[% event.page.workspace_name %]/?action=category_display;category=[% event.tag_name | html_encode %]">[% event.tag_name %]</a>
     [%- END -%]
-    [%- MACRO person_tag BLOCK -%]<a target="_blank" href="/?action=people;tag=[% event.tag_name | html_encode %]">[% event.tag_name %]</a>
+    [%- MACRO person_tag BLOCK -%]<a href="/?action=people;tag=[% event.tag_name | html_encode %]">[% event.tag_name %]</a>
     [%- END -%]
-    [%- MACRO page BLOCK -%]<b><a target="_blank" href="/[% event.page.workspace_name %]?[% event.page.id %]">[% event.page.name %]</a></b>
+    [%- MACRO page BLOCK -%]<b><a href="/[% event.page.workspace_name %]?[% event.page.id %]">[% event.page.name %]</a></b>
     [%- END %]
-    [%- MACRO workspace BLOCK -%]<a target="_blank" href="/[% event.page.workspace_name %]">[% event.page.workspace_title %]</a>
+    [%- MACRO workspace BLOCK -%]<a href="/[% event.page.workspace_name %]">[% event.page.workspace_title %]</a>
     [%- END -%]
     [%- MACRO ago BLOCK -%]<span class="ago"> ([% ago_text(minutes_ago(event.at)) %] ago)</span>[%- END -%]
 [%- ELSE -%]

@@ -20,19 +20,26 @@ sub usage {
 sub link_directory {
     my ($fromdir, $todir, $subdir) = @_;
     return unless -d "$fromdir/$subdir";
+
+    if (!-d $todir) {
+        warn "Making directory $todir\n";
+        mkdir $todir or die "Cannot mkdir $todir: $!";
+    }
+
     find({
         wanted => sub {
+            return if m{/\.svn/};
             return if basename($_) =~ m{^\.};
             my $from = $_;
             (my $to = $from) =~ s{^$fromdir}{$todir};
             unless (-e $to) {
                 if (-d $from) {
                     warn "Making directory $to\n";
-                    mkdir $to;
+                    mkdir $to or die "Cannot mkdir $to: $!";
                 }
                 else {
                     warn "linking $to\n";
-                    symlink $from, $to;
+                    symlink $from, $to or die "Cannot link $from to $to: $!";
                 }
             }
         },

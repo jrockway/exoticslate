@@ -128,7 +128,6 @@ sub sync {
     $self->_display("Current schema version is $current_version\n");
     if ($current_version == 0) {
         $self->run_sql_file($self->_schema_filename);
-        $self->_add_required_data;
         $self->_display("Set up fresh schema\n");
     }
     else {
@@ -168,6 +167,8 @@ sub sync {
         }
         $self->_display("$up_msg  Schema is up-to-date.\n");
     }
+
+    $self->_add_required_data;
 }
 
 sub _add_required_data {

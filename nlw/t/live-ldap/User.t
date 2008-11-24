@@ -8,7 +8,8 @@ use Socialtext::LDAP;
 use Socialtext::User;
 use Socialtext::User::Default::Factory;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 39;
+use Test::Warn;
+use Test::Socialtext tests => 46;
 
 fixtures( 'db' );
 
@@ -134,4 +135,15 @@ auto_vivify_an_ldap_user: {
     my $homunculus = $user->homunculus();
     isa_ok $homunculus, 'Socialtext::User::LDAP', '... and LDAP homunculus';
     is $homunculus->{password}, '*no-password*', '... and *no-password*';
+}
+
+deactiveate_an_ldap_user: {
+    my $refs = bootstrap_tests();
+
+    my $user = Socialtext::User->new(
+        username => 'Ray Parker'
+    );
+    isa_ok $user, 'Socialtext::User', 'got a user';
+
+    warning_is { $user->deactivate } "LDAP users' data cannot be updated", 'warning on deactivate.' ;
 }

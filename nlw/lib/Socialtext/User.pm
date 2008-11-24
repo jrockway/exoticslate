@@ -799,6 +799,41 @@ sub default_role {
     return Socialtext::Role->Guest();
 }
 
+# revoke a user's access to everything
+sub deactivate {
+    my $self = shift;
+
+    if (   $self->user_id eq Socialtext::User->SystemUser->user_id
+        || $self->user_id eq Socialtext::User->Guest->user_id ) {
+
+        die 'You may not deactivate ' . $self->username;
+    }
+
+    if ($self->can_update_store) {
+        $self->password('*password*', no_crypt => 1);
+    }
+    else {
+        warn $self->driver_name . " users' data cannot be updated";
+    }
+
+    # remove the user from their workspaces
+    my $workspaces = $self->workspaces();
+    while ( my $workspace = $workspaces->next() ) {
+        $workspace->remove_user( user => $self );
+    }
+
+    # remove them from control and console
+    if ($self->is_business_admin()) {
+        $self->set_business_admin( 0 );
+    }
+    if ($self->is_technical_admin()) {
+        $self->set_technical_admin( 0 );
+    }
+
+    $self->primary_account(Socialtext::Account->Deleted());
+    return $self;
+}
+
 # Class methods
 
 {

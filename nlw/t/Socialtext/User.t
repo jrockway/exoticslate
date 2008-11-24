@@ -4,9 +4,8 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 25;
+use Test::Socialtext tests => 30;
 fixtures( 'rdbms_clean' );
-
 use Socialtext::User;
 
 my $user;
@@ -178,3 +177,40 @@ email_hiding_by_account :
        'person.b@socialtext.com',
        'primary = visible + secondary = visible == visible';
 }
+
+deactivate_user: {
+    # create a user in a new account
+    my $account = Socialtext::Account->create(name => "fuzz");
+    my $user = Socialtext::User->create(
+        username      => 'ronnie@ken.socialtext.net',
+        first_name    => 'Dev',
+        last_name     => 'Null',
+        email_address => 'ronnie@ken.socialtext.net',
+        password      => 'd3vnu11l'
+    );
+    $user->primary_account($account);
+    is $account->user_count(), 1, "account has correct number of users";
+
+    # add them to some workspaces
+    my $ws0 = Socialtext::Workspace->create(
+        name       => 'workspace0',
+        title      => 'Workspace0',
+        account_id => $account->account_id,
+    );
+    $ws0->add_user(user => $user);
+    my $ws1 = Socialtext::Workspace->create(
+        name       => 'workspace1',
+        title      => 'Workspace1',
+        account_id => $account->account_id,
+    );
+    $ws1->add_user(user => $user);
+    is $user->workspace_count(), 2, "user is in correct number of workspaces";
+
+    # deactivate them
+    $user->deactivate;
+    is $user->primary_account_id, Socialtext::Account->Deleted()->account_id,
+        "user is moved to Deleted account";
+    is $user->workspace_count(), 0, "user was removed from their workspaces";
+    is $user->password, '*password*', "user's password was 'deactivated'";
+}
+

@@ -14,7 +14,7 @@ use t::Socialtext::CLITestUtils qw/expect_failure expect_success/;
 
 use Cwd;
 
-plan tests => 387;
+plan tests => 388;
 
 our $NEW_WORKSPACE = 'new-ws-' . $<;
 our $NEW_WORKSPACE2 = 'new-ws2-'. $<;
@@ -616,7 +616,7 @@ ADD_REMOVE_MEMBER: {
 # need to set up the user to be in the right worksapces
 # and have the right perms so we can test that they go
 # away.
-SCRUB_USER: {
+DEACTIVATE_USER: {
     # need to create a user
     my $user = Socialtext::User->new( username  => 'test2@example.com' );
     $user->set_technical_admin( 1 );
@@ -646,11 +646,14 @@ SCRUB_USER: {
         sub {
             Socialtext::CLI->new(
                 argv => [qw( --username test2@example.com )]
-            )->scrub_user();
+            )->deactivate_user();
         },
         qr/test2\@example\.com has been removed from workspaces admin, foobar, Removed Business Admin, Removed Technical Admin/,
         'test2 was removed from the correct workspaces'
     );
+
+    is(Socialtext::Account->Deleted()->account_id, $user->primary_account_id,
+        "deactivated user moved into the Deleted account");
 
     $user = Socialtext::User->new( username  => 'guest' );
 
@@ -658,12 +661,11 @@ SCRUB_USER: {
         sub {
             Socialtext::CLI->new(
                 argv => [qw( --username guest )]
-            )->scrub_user();
+            )->deactivate_user();
         },
-        qr/You may not scrub/,
-        'The guest user cannot be scrubbed',
+        qr/You may not deactivate/,
+        'The guest user cannot be deactivated',
     );
-
 }
 
 ADD_REMOVE_WS_ADMIN: {
@@ -2254,13 +2256,13 @@ EXPORT_ACCOUNTS: {
 LIST_ACCOUNTS {
     expect_success(
         sub { Socialtext::CLI->new()->list_accounts(); },
-        (join '', map { "$_\n" } qw( FooBar Fred jebus pluggy Socialtext Unknown )),
+        (join '', map { "$_\n" } qw( Deleted FooBar Fred jebus pluggy Socialtext Unknown )),
         'list-accounts by name'
     );
 
     expect_success(
         sub { Socialtext::CLI->new( argv => ['--ids'] )->list_accounts(); },
-        qr/\A(?:\d+\n){6}\z/,
+        qr/\A(?:\d+\n){7}\z/,
         'list-accounts by id'
     );
 }

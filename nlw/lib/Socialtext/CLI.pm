@@ -656,7 +656,7 @@ sub confirm_user {
 }
 
 # revoke a user's access to everything
-sub scrub_user {
+sub deactivate_user {
     my $self = shift;
 
     my $user = $self->_require_user();
@@ -664,7 +664,7 @@ sub scrub_user {
     if (   $user->user_id eq Socialtext::User->SystemUser->user_id
         || $user->user_id eq Socialtext::User->Guest->user_id ) {
 
-        $self->_error( 'You may not scrub ' . $user->username );
+        $self->_error( 'You may not deactivate ' . $user->username );
     }
 
     my @output = ();
@@ -672,20 +672,17 @@ sub scrub_user {
     # remove the user from their workspaces
     my $workspaces = $user->workspaces();
     while ( my $workspace = $workspaces->next() ) {
-        $workspace->remove_user( user => $user );
         push @output, $workspace->name;
     }
 
-    # remove them from control and console
     if ($user->is_business_admin()) {
-        $user->set_business_admin( 0 );
         push @output, "Removed Business Admin";
     }
     if ($user->is_technical_admin()) {
-        $user->set_technical_admin( 0 );
         push @output, "Removed Technical Admin";
     }
 
+    $user->deactivate;
     if (@output) {
         $self->_success(
             $user->username . ' has been removed from workspaces ' . join ', ',

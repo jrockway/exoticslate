@@ -47,3 +47,14 @@ sn: Smith
 mail: jim.q.smith@example.com
 userPassword: 987qwe
 ou: people
+
+dn: cn=Ray Parker,dc=example,dc=com
+objectClass: inetOrgperson
+cn: Ray Parker
+gn: Ray
+sn: Parker
+mail: ray.parker@example.com
+userPassword: qwertyuiop
+ou: people
+
+

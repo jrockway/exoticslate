@@ -53,10 +53,7 @@
           <ul class="st-wiki-nav-actions">
             [% UNLESS user.is_guest %]
               <li>
-                [% loc('Logged in as [_1]:', '<b>' _ user.username _ '</b>') %]
-                [% IF people && dashboard_available %]
-                  <a id="st-wikinav-profile" href="/?profile">[% loc('Profile') %]</a>
-                [% END %]
+                [% loc('Logged in as [_1]', '<b>' _ user.username _ '</b>') | decorate('logged_in_as') %]
               </li>
             [% END %]
             [% IF miki_url %]

@@ -727,6 +727,6 @@ ALTER TABLE ONLY "Workspace"
     ADD CONSTRAINT workspace___account___account_id___account_id___n___1___1___0
             FOREIGN KEY (account_id)
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
- 
+
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
 INSERT INTO "System" VALUES ('socialtext-schema-version', '19');

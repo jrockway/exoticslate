@@ -803,14 +803,11 @@ sub default_role {
 sub deactivate {
     my $self = shift;
 
-    if (   $self->user_id eq Socialtext::User->SystemUser->user_id
-        || $self->user_id eq Socialtext::User->Guest->user_id ) {
-
-        die 'You may not deactivate ' . $self->username;
-    }
+    die 'You may not deactivate ' . $self->username
+        if $self->is_system_created;
 
     if ($self->can_update_store) {
-        $self->password('*password*', no_crypt => 1);
+        $self->update_store( password => '*password*', no_crypt => 1 );
     }
     else {
         warn $self->driver_name . " users' data cannot be updated";

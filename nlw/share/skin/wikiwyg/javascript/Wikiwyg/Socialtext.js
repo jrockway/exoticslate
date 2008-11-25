@@ -1450,6 +1450,23 @@ proto.process_command = function(command) {
     this.get_edit_window().focus();
 }
 
+proto.fix_up_relative_imgs = function() {
+    var base = location.href.replace(/(.*?:\/\/.*?\/).*/, '$1');
+    var imgs = this.get_edit_document().getElementsByTagName('img');
+    for (var ii = 0; ii < imgs.length; ++ii) {
+        if (imgs[ii].src != imgs[ii].src.replace(/^\//, base)) {
+            if ( jQuery.browser.msie && !imgs[ii].complete) {
+                jQuery(imgs[ii]).load(function(){
+                    this.src = this.src.replace(/^\//, base);
+                });
+            }
+            else {
+                imgs[ii].src = imgs[ii].src.replace(/^\//, base);
+            }
+        }
+    }
+}
+
 proto.enableThis = function() {
     Wikiwyg.Wysiwyg.prototype.enableThis.apply(this, arguments);
 

@@ -3,11 +3,17 @@
 use strict;
 use warnings;
 use Test::Socialtext tests => 18;
+use Sys::Hostname;
 fixtures( 'populated_rdbms' );
 
 BEGIN {
     use_ok( 'Socialtext::Account' );
 }
+
+# Delete the per-hostname account to make the ordering of these
+# tests much simpler.  Otherwise they would depend on the hostname.
+my $hostname = hostname();
+Socialtext::Account->new(name => $hostname)->delete;
 
 my $accounts = Socialtext::Account->All();
 is_deeply(

@@ -17,6 +17,11 @@ use Socialtext::Workspace;
 # workspace and per account. This lets us test things like workspaces
 # queries which sort by user_count.
 
+my @accounts = (
+    Socialtext::Account->create( name => 'Other 1' ),
+    Socialtext::Account->create( name => 'Other 2' ),
+);
+
 my @users;
 # We don't want the user creation datetime to be greater than that for
 # the guest & system user entries.
@@ -30,6 +35,7 @@ for my $x ( 1..7 ) {
         $x >= 3
         ? $users[-2]
         : Socialtext::User->SystemUser();
+    my $account = $accounts[ ($x-1) % 2 ];
 
     push @users,
         Socialtext::User->create(
@@ -38,15 +44,11 @@ for my $x ( 1..7 ) {
             creation_datetime  =>
                 DateTime::Format::Pg->format_timestamptz($date),
             created_by_user_id => $creator->user_id(),
+            primary_account_id => $account->account_id,
         );
 
     $date->subtract( days => 1 );
 }
-
-my @accounts = (
-    Socialtext::Account->create( name => 'Other 1' ),
-    Socialtext::Account->create( name => 'Other 2' ),
-);
 
 $date = DateTime->now();
 for my $x ( 0..9 ) {

@@ -67,7 +67,7 @@ isa_ok( $ws, 'Socialtext::Workspace' );
 Rudimentary_Plugin_Test: {
    $socialtext->enable_plugin( 'dashboard' );
    is('1', $socialtext->is_plugin_enabled('dashboard'), 'dashboard enabled.');
-   is_deeply( ( qw/dashboard/ ), $socialtext->plugins_enabled, 'enabled.');
+   is_deeply( [ $socialtext->plugins_enabled ], [ qw/dashboard widgets/ ], 'enabled.');
    $socialtext->disable_plugin( 'dashboard' );
    is('0', $socialtext->is_plugin_enabled('dashboard'), 'dashboard disabled.');
 }

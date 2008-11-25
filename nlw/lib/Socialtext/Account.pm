@@ -42,9 +42,27 @@ sub EnsureRequiredDataIsPresent {
     for my $name (@RequiredAccounts) {
         next if $class->new( name => $name );
 
-        $class->create(
+        my $acct = $class->create(
             name              => $name,
             is_system_created => 1,
+        );
+        $acct->enable_plugin('dashboard');
+        $acct->enable_plugin('widgets');
+    }
+
+    if ($class->Default->name eq 'Unknown') {
+        # Explicit requires here to avoid extra run-time dependencies
+        require Sys::Hostname;
+        my $acct = $class->create(
+            name => Sys::Hostname::hostname(),
+            is_system_created => 1,
+        );
+        $acct->enable_plugin('dashboard');
+        $acct->enable_plugin('widgets');
+
+        require Socialtext::SystemSettings;
+        Socialtext::SystemSettings::set_system_setting(
+            'default-account', $acct->account_id,
         );
     }
 }

@@ -22,7 +22,7 @@ Test case for `/data/account/:acct/users` ( GET and POST )
 | *Comment* | GET returns a 200 for a business admin |
 | get | /data/accounts/Socialtext/users |
 | code-is | 200 |
-| body-like | devnull1@socialtext.com |
+| body-like | system-user@socialtext.net |
 
 | *Comment* | GET returns 404 when no account exists. |
 | get | /data/accounts/ENOSUCHACCOUNT/users |

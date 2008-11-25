@@ -253,14 +253,11 @@ sub _create_user {
 
     # Set the default account to be Socialtext and enable all plugins for that
     # account
-    my $account_id = Socialtext::Account->Socialtext()->account_id;
-    if (get_system_setting('default-account') != $account_id) {
-        set_system_setting('default-account', $account_id);
-        my $adapter = Socialtext::Pluggable::Adapter->new;
-        Socialtext::Account->Socialtext->enable_plugin($_)
-            for grep {!/^default$/} $adapter->plugin_list;
-        Socialtext::Account->Socialtext->update(skin_name => 's3');
-    }
+    my $account = Socialtext::Account->Default;
+    my $adapter = Socialtext::Pluggable::Adapter->new;
+    $account->enable_plugin($_)
+        for grep {!/^default$/} $adapter->plugin_list;
+    $account->update(skin_name => 's3');
 
     my $user = Socialtext::User->new( username => $p{username} );
     $user ||= Socialtext::User->create(
@@ -269,6 +266,7 @@ sub _create_user {
         password        => $p{passwd},
         is_business_admin  => $p{is_business_admin},
         is_technical_admin => $p{is_technical_admin},
+        primary_account_id => $account->account_id,
     );
 
     return $user;
@@ -327,7 +325,7 @@ sub _generate_workspaces {
             name               => $name,
             title              => $title,
             created_by_user_id => $creator->user_id(),
-            account_id         => Socialtext::Account->Socialtext()->account_id,
+            account_id         => Socialtext::Account->Default->account_id,
             ($spec->{no_pages} ? (skip_default_pages => 1) : ())
         );
         $ws->add_user(

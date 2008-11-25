@@ -402,6 +402,9 @@ sub to_hash {
     my $hash = {
         map { $_ => $self->$_ } @COLUMNS
     };
+    $hash->{account_name}
+        = Socialtext::Account->new(account_id => $hash->{account_id})->name;
+
     return $hash;
 }
 

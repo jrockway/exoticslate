@@ -44,6 +44,8 @@ sub all {
             page_id => $page_id,
         )->load;
         next if $attachment->deleted;
+        next unless -f $attachment->full_path; 
+
         push @$attachment_set, $attachment;
     }
 

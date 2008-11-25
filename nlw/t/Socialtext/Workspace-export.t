@@ -10,6 +10,7 @@ fixtures( 'admin' );
 use File::Basename ();
 use File::Temp ();
 use YAML ();
+use Socialtext::Account;
 
 my $hub = new_hub('admin');
 my $admin = $hub->current_workspace;
@@ -35,7 +36,9 @@ Export_includes_logo_and_info: {
     ok( -f $ws_file, 'workspace data yaml dump exists' );
 
     my $ws_dump = YAML::LoadFile($ws_file);
-    is( $ws_dump->{account_name}, 'Socialtext', 'account_name is Socialtext in workspace dump' );
+    is( $ws_dump->{account_name}, 
+        Socialtext::Account->Default->name,
+        'account_name is Socialtext in workspace dump' );
     is( $ws_dump->{creator_username}, 'devnull1@socialtext.com',
         'check creator name in workspace dump' );
     is( $ws_dump->{logo_filename}, File::Basename::basename( $admin->logo_filename() ),

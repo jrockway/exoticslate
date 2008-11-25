@@ -788,6 +788,8 @@ is supplied, that name will be used instead of the original account name.
 
 =item Socialtext::Account->Default()
 
+=item Socialtext::Account->Deleted()
+
 Returns an account object for specified account.
 
 =item Socialtext::Account->All()

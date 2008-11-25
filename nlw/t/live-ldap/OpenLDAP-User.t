@@ -135,6 +135,10 @@ search_multiple_results: {
           email_address     => 'jim.q.smith@example.com',
           name_and_email    => 'Jim Smith <jim.q.smith@example.com>',
         },
+        { driver_name       => $factory->driver_key(),
+          email_address     => 'ray.parker@example.com',
+          name_and_email    => 'Ray Parker <ray.parker@example.com>',
+        },
     );
     cmp_deeply \@results, \@expect, '... results match expectations';
 }

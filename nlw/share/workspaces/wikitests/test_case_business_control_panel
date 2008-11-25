@@ -88,14 +88,16 @@
 | wait_for_element_visible_ok | name | 30000 |
 | type_ok | name | %%new_workspace%% |
 | st-submit |  |  |
-| clickAndWait | link=%%new_workspace%% |  |
+| click_and_wait | link=%%new_workspace%% |  |
 | text_like | %%new_workspace%% |  |
 | select_ok | account_id | label=Socialtext |
 | st-submit |  |  |
 | text_like | The %%new_workspace%% workspace is now part of the Socialtext account. |  |
+| click_and_wait | link=%%new_workspace%% |  |
+| text_like | Account: Socialtext |  |
 
 | *Comment* | Test case: Business Control Panel Search for a non-existant workspace |  |
-| clickAndWait | link=Workspaces |  |
+| click_and_wait | link=Workspaces |  |
 | wait_for_element_visible_ok | name | 30000 |
 | type_ok | name | zildjian |
 | st-submit |  |  |
@@ -116,6 +118,27 @@
 | st-submit |  |  |
 | clickAndWait | link=%%new_workspace%% |  |
 | text_like | workspace admin |  |
+
+| *Comment* | Test case: Business Control Panel exercise 'add user' button |  |
+| click_and_wait | link=Accounts |  |
+| click_and_wait | link=%%new_acct%% |  |
+| click_and_wait | link=Add User |  |
+| type_ok | email_address | bogus |
+| click_and_wait | add_user |  |
+| text_like | bogus is not a valid email address |  |
+| type_ok | email_address | foo%%start_time%%@bar.com |
+| type_ok | first_name | firstname |
+| type_ok | last_name | lastname |
+| type_ok | position | position |
+| type_ok | company | company |
+| type_ok | location | location |
+| type_ok | work_phone | work phone |
+| type_ok | mobile_phone | mobile phone |
+| type_ok | home_phone | home phone |
+| click_and_wait | add_user |  |
+| text_like | Added user foo%%start_time%%@bar.com |  |
+| click_and_wait | link=Back |  |
+| wait_for_element_present_ok | link=firstname lastname <foo%%start_time%%@bar.com> |  |
 
 | *Comment* | Test case: Business Control Panel reassign accounts for users and workspaces |  |
 | click_and_wait | link=Accounts |  |

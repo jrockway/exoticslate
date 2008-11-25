@@ -31,6 +31,9 @@ sub link_directory {
             my $from = $_;
             (my $to = $from) =~ s{^$fromdir}{$todir};
             unless (-e $to) {
+                if (-l $to) {
+                    unlink $to;
+                }
                 if (-d $from) {
                     warn "Making directory $to\n";
                     mkdir $to or die "Cannot mkdir $to: $!";
@@ -54,6 +57,6 @@ while (my $plugin = shift) {
     link_directory($plugin_dir, "$FindBin::Bin/..", 't');
     link_directory($plugin_dir, "$ENV{HOME}/.nlw", 'etc/socialtext/uri_map.d');
 
-    $Socialtext::System::SILENT_RUN = 1;
-    shell_run("cd $plugin_dir && make") if -f 'Makefile';
+    local $Socialtext::System::SILENT_RUN = 1;
+    shell_run("cd $plugin_dir && make") if -f "$plugin_dir/Makefile";
 }

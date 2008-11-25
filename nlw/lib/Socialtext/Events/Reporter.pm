@@ -177,30 +177,31 @@ my $FIELDS = <<'EOSQL';
     e.context AS context
 EOSQL
 
-my $HAS_PEOPLE_I_CAN_SEE = <<'EOSQL';
-    evt.event_class <> 'person' 
-    OR (
-        -- does the user share an account with the actor for person events
+sub visible_exists {
+    my ($plugin, $event_field) = @_;
+    return <<EOSQL;
         EXISTS (
             SELECT 1
-            FROM account_user viewer_a
+            FROM account_user viewer
             JOIN account_plugin USING (account_id)
-            JOIN account_user actr USING (account_id)
-            WHERE plugin = 'people' AND viewer_a.user_id = ?
-              AND actr.user_id = evt.actor_id
+            JOIN account_user othr USING (account_id)
+            WHERE plugin = '$plugin' AND viewer.user_id = ?
+              AND othr.user_id = evt.$event_field
         )
-        AND 
-        -- does the user share an account with the person for person events
-        EXISTS (
-            SELECT 1
-            FROM account_user viewer_b
-            JOIN account_plugin USING (account_id)
-            JOIN account_user prsn USING (account_id)
-            WHERE plugin = 'people' AND viewer_b.user_id = ?
-              AND prsn.user_id = evt.person_id
-        )
-    )
 EOSQL
+}
+
+my $VISIBILITY_SQL = join "\n",
+    '(',
+        "(evt.event_class <> 'person' OR (",
+            visible_exists('people', 'actor_id'),
+            "AND",
+            visible_exists('people', 'person_id'),
+        '))',
+        "AND ( evt.event_class <> 'signal' OR",
+            visible_exists('signals', 'actor_id'),
+        ')',
+    ')';
 
 my $VISIBLE_WORKSPACES = <<'EOSQL';
     SELECT workspace_id FROM "UserWorkspaceRole" WHERE user_id = ? 
@@ -313,7 +314,7 @@ sub _build_standard_sql {
         $I_CAN_USE_THIS_WORKSPACE => $self->viewer->user_id
     );
     $self->add_outer_condition(
-        $HAS_PEOPLE_I_CAN_SEE => ($self->viewer->user_id) x 2
+        $VISIBILITY_SQL => ($self->viewer->user_id) x 3
     );
 
     if ($opts->{followed}) {

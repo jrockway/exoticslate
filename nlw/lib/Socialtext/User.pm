@@ -1968,6 +1968,10 @@ See also C<Socialtext::Account::is_plugin_enabled>
 
 Returns a boolean indicating whether the user can use the given plugin to interact with another user, C<$buddy>.
 
+=head2 $user->deactivate()
+
+Deactivates the user, removing them from all their workspaces and preventing them from logging in.
+
 =head2 $user->avatar_is_visible()
 
 Returns a boolean indicating whether the user's avatar should be hidden or visible.

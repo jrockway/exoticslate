@@ -228,6 +228,10 @@ sub forgot_password {
         $self->session->add_error(loc("[_1] is not registered as a user. Try a different email address?", $username));
         return $self->_redirect('/nlw/forgot_password.html');
     }
+    elsif ($user->is_deactivated) {
+        $self->session->add_error(loc("The user [_1] has been deactivated.", $username));
+        return $self->_redirect('/nlw/forgot_password.html');
+    }
 
     $user->set_confirmation_info( is_password_change => 1 );
     $user->send_password_change_email();

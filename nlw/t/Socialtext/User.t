@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 30;
+use Test::Socialtext tests => 32;
 fixtures( 'rdbms_clean' );
 use Socialtext::User;
 
@@ -190,6 +190,7 @@ deactivate_user: {
     );
     $user->primary_account($account);
     is $account->user_count(), 1, "account has correct number of users";
+    ok not $user->is_deactivated;
 
     # add them to some workspaces
     my $ws0 = Socialtext::Workspace->create(
@@ -208,6 +209,7 @@ deactivate_user: {
 
     # deactivate them
     $user->deactivate;
+    ok $user->is_deactivated;
     is $user->primary_account_id, Socialtext::Account->Deleted()->account_id,
         "user is moved to Deleted account";
     is $user->workspace_count(), 0, "user was removed from their workspaces";

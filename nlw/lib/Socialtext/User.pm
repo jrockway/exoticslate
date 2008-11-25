@@ -799,6 +799,13 @@ sub default_role {
     return Socialtext::Role->Guest();
 }
 
+sub is_deactivated {
+    my $self = shift;
+    require Socialtext::Account;
+    return $self->primary_account_id
+        == Socialtext::Account->Deleted()->account_id;
+}
+
 # revoke a user's access to everything
 sub deactivate {
     my $self = shift;

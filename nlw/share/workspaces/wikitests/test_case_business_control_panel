@@ -29,13 +29,42 @@
 
 | *Comment* | Test case: Business Control Panel validate plugins are all disabled by default. checking only SC/People/Signals as other might go away |  |
 | click_and_wait | link=%%new_acct%% |  |
+| text_like | Custom Skins: Socialtext 3 default skin |  |
 | text_like | Socialtext SocialCalc (click to enable) |  |
 | text_like | Socialtext People (click to enable) |  |
 | text_like | Socialtext Signals (click to enable) |  |
 
- *Comment* | Test case: Business Control Panel enable one plugin, click the confirmation, validate that at least one plugin is enabled. Lack of id on plugins prevents tight checking | |
- click_ok | //a[contains(@href,'/nlw/control/submit/toggle_account_plugin?account_id=8&plugin=people' | |
- verifyConfirmation |
+| *Comment* | Test case: Business Control Panel plugin one at a time, click the confirmation, validate that plugin is enabled. |  |
+| click_ok | toggle_plugin_people |  |
+| verifyConfirmation | Socialtext People is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
+| wait_for_text_present_ok | Socialtext People (click to disable) | 20000 |
+| click_ok | toggle_plugin_socialcalc |  |
+| verifyConfirmation | Socialtext SocialCalc is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
+| wait_for_text_present_ok | Socialtext SocialCalc (click to disable) | 20000 |
+| click_ok | toggle_plugin_signals |  |
+| verifyConfirmation | Socialtext Signals is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
+| wait_for_text_present_ok | Socialtext Signals (click to disable) | 20000 |
+
+| *Comment* | Test case: Business Control Panel go the other way |  |
+| click_ok | toggle_plugin_people |  |
+| verifyConfirmation | You are about to disable Socialtext People \n\n Press 'OK' to disable this module or 'Cancel' to exit. |  |
+| wait_for_text_present_ok | Socialtext People (click to enable) | 20000 |
+| click_ok | toggle_plugin_socialcalc |  |
+| verifyConfirmation | You are about to disable Socialtext SocialCalc \n\n Press 'OK' to disable this module or 'Cancel' to exit. |  |
+| wait_for_text_present_ok | Socialtext SocialCalc (click to enable) | 20000 |
+| click_ok | toggle_plugin_signals |  |
+| verifyConfirmation | You are about to disable Socialtext Signals \n\n Press 'OK' to disable this module or 'Cancel' to exit. |  |
+| wait_for_text_present_ok | Socialtext Signals (click to enable) | 20000 |
+
+| *Comment* | Test case: Business Control Panel rename account |  |
+| click_and_wait | link=Rename Account |  |
+| type_ok | st-new-name | newacct%%start_time%% |
+| click_and_wait | //input[@value='Rename'] |  |
+| text_like | newacct%%start_time%% account |  |
+| click_and_wait | link=Rename Account |  |
+| type_ok | st-new-name | %%new_acct%% |
+| click_and_wait | //input[@value='Rename'] |  |
+| text_like | %%new_acct%% account |  |
 
 | *Comment* | Test case: Business Control Panel Create a new workspace in the new account |  |
 | st-admin | create-workspace --name %%new_workspace%% --title %%new_workspace%% --account "%%new_acct%%" |  |
@@ -79,7 +108,7 @@
 
 | *Comment* | Test case: Business Control Panel create a user, add as admin, verify admin |  |
 | open_ok | /nlw/control/user |  |
-| st-admin | create-user --email %%cli_user%% --password wikicli --first-name Wiki --last-name CLI | A new user with the username "%%cli_user%%" was created |
+| st-admin | create-user --email %%cli_user%% --password wikicli --first-name Wiki --last-name CLI --account '%%new_acct%%' | A new user with the username "%%cli_user%%" was created |
 | st-admin | add-workspace-admin --email %%cli_user%% --workspace %%new_workspace%% |  |
 | clickAndWait | link=Workspaces |  |
 | wait_for_element_visible_ok | name | 30000 |
@@ -88,17 +117,33 @@
 | clickAndWait | link=%%new_workspace%% |  |
 | text_like | workspace admin |  |
 
-| *Comment* | Test case: Business Control Panel give and remove account and console permissions |  |
-| st-admin | give-system-admin --email %%email%% | now has system admin access |
-| clickAndWait | link=Wiki CLI <%%cli_user%%> |  |
-| clickAndWait | //input[@value='Give Access to Socialtext Accounts'] |  |
+| *Comment* | Test case: Business Control Panel reassign accounts for users and workspaces |  |
+| click_and_wait | link=Accounts |  |
+| click_and_wait | link=%%new_acct%% |  |
+| click_and_wait | link=Wiki CLI <%%cli_user%%> |  |
+| wait_for_element_visible_ok | link=%%new_acct%% |  |
+| text_like | Primary Account: %%new_acct%% |  |
+| text_like | Socialtext Accounts Access? no |  |
+| text_like | Socialtext System Management Access? no |  |
+| click_and_Wait | //input[@value='Give Access to Socialtext Accounts'] |  |
 | text_like | Gave Socialtext Accounts access to %%cli_user%% |  |
-| clickAndWait | //input[@value='Remove Access to Socialtext Accounts'] |  |
+| text_like | Socialtext Accounts Access? yes |  |
+| click_and_wait | //input[@value='Remove Access to Socialtext Accounts'] |  |
 | text_like | Removed Socialtext Accounts access from %%cli_user%% |  |
+| text_like | Socialtext Accounts Access? no |  |
 | clickAndWait | //input[@value='Give Access to Socialtext System Management'] |  |
 | text_like | Gave Socialtext System Management access to %%cli_user%% |  |
+| text_like | Socialtext System Management Access? yes |  |
 | clickAndWait | //input[@value='Remove Access to Socialtext System Management'] |  |
 | text_like | Removed Socialtext System Management access from %%cli_user%% |  |
+| text_like | Socialtext System Management Access? no |  |
+
+| select_ok | account_id | Socialtext |
+| click_and_wait | //input[@value='Submit'] |  |
+| text_like | Primary Account: Socialtext |  |
+| select_ok | account_id | %%new_acct%% |
+| click_and_wait | //input[@value='Submit'] |  |
+| text_like | Primary Account: %%new_acct%% |  |
 
 | *Comment* | Test case: Business Control Panel search for new user |  |
 | clickAndWait | link=Users |  |

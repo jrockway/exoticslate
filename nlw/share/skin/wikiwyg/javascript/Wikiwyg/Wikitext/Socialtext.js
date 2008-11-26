@@ -1634,6 +1634,7 @@ proto.format_img = function(elem) {
             replace(/-=/g, '-').
             replace(/==/g, '=');
         var prev = elem.previousSibling;
+        var requires_preceding_space = false;
 
         if (!text.match(/\{\{.*\}\}/)) {
             if (!elem.top_level_block)
@@ -1642,7 +1643,7 @@ proto.format_img = function(elem) {
                 !(prev.nodeType == 1 && prev.nodeName == 'BR') &&
                 !prev.top_level_block) {
                 if (prev.nodeType == 3 && Wikiwyg.is_ie) {
-                    prev.nodeValue += ' ';
+                    requires_preceding_space = true;
                 } else {
                     prev.requires_trailing_space = true;
                 }
@@ -1653,6 +1654,12 @@ proto.format_img = function(elem) {
 
         if (widget.match(/^\.\w+\n/))
             text = text.replace(/\n*$/, '\n');
+
+        // Hack to emulate add trailing space to IE's #text node: {bz: 1116}
+        if (requires_preceding_space) {
+            text = ' ' + text;
+        }
+
         // Dirty hack for {{{ ... }}} wikitext
         if (Wikiwyg.is_ie) {
             if (!text.match(/\{\{\{.*\}\}/))

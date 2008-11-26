@@ -1,8 +1,5 @@
 BEGIN;
 
--- extended-mode output:
-\x
-
 CREATE TABLE noun (
     noun_id bigint NOT NULL,
     noun_type text NOT NULL,

@@ -2265,7 +2265,7 @@ LIST_ACCOUNTS {
 
     expect_success(
         sub { Socialtext::CLI->new( argv => ['--ids'] )->list_accounts(); },
-        qr/\A(?:\d+\n){7}\z/,
+        qr/\A(?:\d+\n){8}\z/,
         'list-accounts by id'
     );
 }

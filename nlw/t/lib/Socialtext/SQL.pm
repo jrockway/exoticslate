@@ -14,7 +14,7 @@ our @EXPORT_OK = qw(
     sql_convert_to_boolean sql_convert_from_boolean
     sql_parse_timestamptz sql_format_timestamptz
 
-    sql_ok sql_mock_result
+    sql_ok sql_mock_result ok_no_more_sql
 );
 our %EXPORT_TAGS = (
     'exec' => [qw(sql_execute sql_selectrow sql_singlevalue)],
@@ -23,7 +23,7 @@ our %EXPORT_TAGS = (
     'txn'  => [qw(sql_commit sql_begin_work
                   sql_rollback sql_in_transaction)],
 
-    'test' => [qw(sql_ok sql_mock_result)],
+    'test' => [qw(sql_ok sql_mock_result ok_no_more_sql)],
 );
 
 our @SQL;
@@ -35,7 +35,9 @@ sub sql_mock_result {
 }
 
 sub sql_execute {
-    push @SQL, { sql => shift, args => [@_] };
+    my $sql = shift;
+    #diag $sql;
+    push @SQL, { sql => $sql, args => [@_] };
     
     my $sth_args = shift @RETURN_VALUES;
     if (ref($sth_args) and ref($sth_args) eq 'CODE') {
@@ -48,10 +50,11 @@ sub sql_execute {
 
 sub get_dbh { }
 sub disconnect_dbh { }
-sub sql_in_transaction { 0 }
-sub sql_begin_work { }
-sub sql_commit { }
-sub sql_rollback { }
+my $in_transaction = 0;
+sub sql_in_transaction { $in_transaction }
+sub sql_begin_work { $in_transaction = 1 }
+sub sql_commit { $in_transaction = 0 }
+sub sql_rollback { $in_transaction = 0 }
 
 sub sql_selectrow { 
     my $sth = sql_execute(@_);
@@ -94,7 +97,7 @@ sub sql_ok {
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
     my $sql = shift @SQL;
-    $p{name} = $p{name} ? "$p{name} " : '';
+    $p{name} = $p{name} ? "$p{name}: " : '';
     my $expected_sql = $p{sql};
     if ($expected_sql) {
         my $observed_sql = _normalize_sql($sql->{sql});
@@ -110,7 +113,7 @@ sub sql_ok {
 
     if ($p{args}) {
         is_deeply $sql->{args}, $p{args}, $p{name} . 'SQL args match'
-            or warn Dumper($sql->{args});
+            or diag Dumper($sql->{args});
     }
 }
 
@@ -119,6 +122,16 @@ sub _normalize_sql {
     $sql =~ s/\s+/ /sg;
     $sql =~ s/\s*$//;
     return $sql;
+}
+
+sub ok_no_more_sql {
+    my $name = shift || "no more queries";
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    is (scalar(@SQL), 0, $name) or do {
+        diag "The following SQL statements were outstanding:";
+        diag Dumper(\@SQL);
+    };
+    @SQL = ();
 }
 
 package mock_sth;

@@ -95,14 +95,14 @@
           <li class="submenu"><a id="st-wiki-subnav-link-people" href="http://socialtext.com/products/features/Enable-People.php">[% loc("People") %]</a>
           [% END %]
               <ul class="level2 withimage" id="global-people-directory">
-              [% IF people %]
+              [% IF user.is_guest %]
+                  <li class="emptynotice">[% loc("...lists the people you are following. You must register or be logged in to use this feature.") %]</li>
+              [% ELSIF people %]
                 [% IF people.size %]
                     <li class="dropaction"><a href="/?action=people">[% loc("People Directory") %]...</a></li>
                     [% FOREACH people %]
                     <li><img src="[% pic_url %]"/><a href="[% link %]">[% label | label_ellipsis(30) %]</a></li>
                     [% END %]
-                [% ELSIF user.is_guest %]
-                    <li class="emptynotice">[% loc("...lists the people you are following. You must register or be logged in to use this feature.") %]</li>
                 [% ELSE %]
                     <li class="dropaction"><a href="/?action=people">[% loc("People Directory") %]...</a></li>
                     <li class="emptynotice">[% loc("You are not following anyone yet. To follow someone, go to a person's profile and click the \"Follow\" button.") %]</li>

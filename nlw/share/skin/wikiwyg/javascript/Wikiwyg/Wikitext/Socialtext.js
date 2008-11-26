@@ -1873,6 +1873,11 @@ proto.format_pre = function(elem) {
 }
 
 proto.format_a = function(elem) {
+    if (elem.innerHTML == '') {
+        /* An empty anchor should not render into <> or []: {bz: 1691} */
+        return '';
+    }
+
     this.check_start_of_block(elem);
     var label = Wikiwyg.htmlUnescape(elem.innerHTML);
     label = label.replace(/<[^>]*?>/g, ' ');

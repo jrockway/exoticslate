@@ -833,6 +833,12 @@ proto.normalizeNewlines = function(dom, tags, relation) {
 proto.normalizePhraseWhitespace = function(element) {
     if (this.elementHasComment(element)) return;
 
+    if (element.innerHTML == '') {
+        /* An empty phrase markup should not cause whitespaces: {bz: 1690} */
+        element.parentNode.removeChild(element);
+        return;
+    }
+
     var first_node = this.getFirstTextNode(element);
     var prev_node = this.getPreviousTextNode(element);
     var last_node = this.getLastTextNode(element);

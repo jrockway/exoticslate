@@ -1784,6 +1784,8 @@ workspace.
 
 =head2 $user->is_system_created()
 
+=head2 $user->is_deactivated()
+
 Returns the corresponding attribute for the user.
 
 =head2 $user->delete()

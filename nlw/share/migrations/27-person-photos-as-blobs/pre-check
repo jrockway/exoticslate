@@ -2,29 +2,4 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Socialtext::SQL qw/sql_singlevalue/;
-
-# check that ST People is installed
-eval "require Socialtext::Pluggable::Plugin::People";
-if ($@) {
-    print "Socialtext People is not installed, skipping.\n";
-    exit 1;
-}
-
-# Basically stated, this query reads: what's the datatype of the person.photo
-# field?
-my $result = sql_singlevalue( <<EOSQL);
-SELECT count(a.attname)
-  FROM pg_attribute a 
-  JOIN pg_stat_user_tables ut ON ut.relid = a.attrelid
- WHERE a.attname = 'photo_image'
-   AND ut.relname = 'person';
-EOSQL
-
-if ($result == 1) {
-    print "It looks like your 'person' table is up to date, skipping.\n";
-    exit 1;
-}
-
-print "Updating your 'person' table. This could take a while.\n";
-exit 0;
+exit 1; # skip

@@ -13,6 +13,7 @@ $schema_file =~ s#.+/(etc/socialtext.+)#$1#;
 my $schema_name = $schema->schema_name;
 
 # Re-create the base schema
+$ENV{PGDATABASE} = "NLW_$ENV{USER}";
 shell_run("pglist public "
     . " | grep -v 'COMMENT ON ' "
     . " | egrep -v 'STARTS? WITH 1' > $schema_file");

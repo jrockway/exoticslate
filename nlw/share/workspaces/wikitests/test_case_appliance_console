@@ -111,20 +111,20 @@
 | uncheck_ok | chk_5 |  |
 | uncheck_ok | chk_6 |  |
 
-| *Comment* | BUG: The checkbox labeled Sun cannot be set as the only Day checkbox |  |
+| *Comment* | Select Sunday midnight |  |
 | check_ok | chk_0 |  |
 | select_ok | hour | label=0 |
 | select_ok | minutes | label=0 |
 | click_ok | save_schedule |  |
 | wait_for_page_to_load_ok | 30000 |  |
 
-| config_is | backdays |  |
-
+| config_is | backdays | 0  |
 | config_is | backhour | 0 |
 | config_is | backminutes | 0 |
 
 | *Comment* | *Change Backup Schedule to 2,4,6* |  |
 
+| uncheck_ok | chk_0 |
 | check_ok | chk_2 |  |
 | check_ok | chk_4 |  |
 | check_ok | chk_6 |  |

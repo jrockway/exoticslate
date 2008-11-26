@@ -2066,3 +2066,48 @@ body div#globalNav div input.searchText {
     max-width: 64px !important;
 }
 
+.table-options {
+    width: 100%;
+}
+
+.table-options td {
+}
+
+.table-options .options {
+}
+
+.row.options {
+}
+
+.column.options {
+}
+
+.row-col-label {
+    vertical-align: middle !important;
+    text-align: right;
+    width: 50%;
+}
+
+.table-create input {
+    padding-top: -5px;
+}
+
+.table-create .error {
+    display: block;
+    color: #FF0000;
+}
+
+.table-create .cancel {
+    text-align: right;
+}
+.table-create .header {
+    font-weight: bold;
+    font-size: larger;
+    padding-bottom: 10px;
+}
+
+.col-number, .row-number {
+    font-weight: bold;
+    font-size: larger;
+    text-align: right;
+}

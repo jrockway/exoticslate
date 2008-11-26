@@ -1742,19 +1742,57 @@ proto.make_table_html = function(rows, columns) {
     return '<table style="border-collapse: collapse;" class="formatter_table">' + innards + '</table>';
 }
 
-proto.do_new_table = function() {
-    var result = this.prompt_for_table_dimensions();
-    if (! result) return false;
 
-    this.get_editable_div().focus(); // Need this before .insert_html
-    this.insert_html(this.make_table_html(result[0], result[1]));
+proto.do_new_table = function() {
+    var self = this;
+    var do_table = function() {
+        var $error = jQuery('.table-create .error');
+
+        var rows = jQuery('.table-create input[name=rows]').val();
+        var cols = jQuery('.table-create input[name=columns]').val();
+        if (! rows.match(/^\d+$/))
+            return $error.text('Rows is invalid.');
+        if (! cols.match(/^\d+$/))
+            return $error.text('Columns is invalid.');
+        rows = Number(rows);
+        cols = Number(cols);
+        if (! (rows && cols))
+            return $error.text('Rows and Columns must be non-zero.');
+        if (rows > 100)
+            return $error.text('Rows is too big. 100 maximum.');
+        if (cols > 35)
+            return $error.text('Columns is too big. 35 maximum.');
+        self.get_editable_div().focus(); // Need this before .insert_html
+        self.insert_html(self.make_table_html(rows, cols));
+        jQuery.hideLightbox();
+    }
+    var setup = function() {
+        jQuery('.table-create input[name=columns]').focus();
+        jQuery('.table-create input[name=columns]').select();
+        jQuery('.table-create input[name=create]')
+            .unbind("click")
+            .bind("click", function() {
+                do_table();
+            });
+        jQuery('.table-create input[name=cancel]')
+            .unbind("click")
+            .bind("click", function() {
+                jQuery.hideLightbox();
+            });
+    }
+    jQuery.showLightbox({
+        html: Jemplate.process("table-create.html"),
+        width: 300,
+        callback: setup
+    });
+    return false;
 }
 
 proto.do_table = function() {
     var doc = this.get_edit_document();
     jQuery("span.find-cursor", doc).remove();
     this.get_editable_div().focus(); // Need this before .insert_html
-    this.insert_html( "<span class=\"find-cursor\">&nbsp;</span>" );
+    this.insert_html( "<span class=\"find-cursor\"></span>" );
 
     var self = this;
     setTimeout(function() {
@@ -1763,13 +1801,213 @@ proto.do_table = function() {
         if (! cur.parents('td').length)
             return self.do_new_table();
 
-        var col = cur.parents('td').prevAll("td").length + 1;
-        var row = cur.parents('tr').prevAll("tr").length + 1;
-        alert("Col: " + col + ", Row: " + row);
+        var $cell = cur.parents("td");
+        cur.remove();
 
-        jQuery("span.find-cursor", doc).remove();
+        self.table_html = $cell.parents("table").html();
+        self.col = $cell.prevAll("td").length;
+        self.row = $cell.parents('tr').prevAll("tr").length;
+
+//         console.log($cell.prev().text());
+//         return;
+
+        jQuery.showLightbox({
+            html: Jemplate.process("table-options.html"),
+            width: 300,
+            callback: function() {
+                self._do_table_lightbox($cell);
+
+                jQuery("#lightbox").one("unload", function() {
+                    jQuery(".current-cell", doc).removeClass("current-cell");
+                });
+            }
+        });
+
     }, 100);
+}
 
+proto._do_table_lightbox = function($cell) {
+    var $opt = jQuery(".table-options");
+
+    $cell.parents("table").find('.current-cell')
+        .removeClass('current-cell');
+    $cell.addClass('current-cell');
+
+    var $table = $cell.parents("table");
+    var col = $cell.prevAll("td").length + 1;
+    var row = $cell.parents('tr').prevAll("tr").length + 1;
+    var row_head_val = $cell.parents('tr').find('td:eq(0)').text();
+    var col_head_val = $cell.parents('table').find('tr:first')
+        .find('td:eq(' + String(col - 1) + ')').text();
+
+    var snippet = function(text) {
+        text = text.replace(/^\s+/g, '');
+        text = text.replace(/\s\s+/g, ' ');
+
+        if (text.length > 15) {
+            text = text.substr(0,15);
+            text = text.replace(/\s+$/g, '');
+            text += '...';
+        }
+
+        text = text.replace(/\s+$/g, '');
+        return text;
+    }
+
+    $opt.find(".row-number").text(row);
+    $opt.find(".col-number").text(col);
+    $opt.find(".row-head").text(snippet(row_head_val));
+    $opt.find(".col-head").text(snippet(col_head_val));
+
+    var self = this;
+    $opt.find("a.delete").unbind("click").click(function() {
+        if ( $(this).is(".row") ) {
+            var $new_cell = $cell.parents('tr')
+                .next().find("td:nth-child(" + col + ")");
+            if (!$new_cell.length) {
+                $new_cell = $cell.parents('tr')
+                    .prev().find("td:nth-child(" + col + ")");
+            }
+            if ($new_cell.length) {
+                $cell.parents('tr').remove();
+                self._do_table_lightbox($new_cell);
+            }
+            else {
+                $cell.parents("table").remove();
+                jQuery.hideLightbox();
+            }
+        }
+        else if ( $(this).is(".column") ) {
+            var $new_cell = $cell.next();
+
+            if (!$new_cell.length) {
+                $new_cell = $cell.prev();
+            }
+            if ($new_cell.length) {
+                $table.find("td:nth-child(" + col + ")").remove();
+                self._do_table_lightbox($new_cell);
+            }
+            else {
+                $cell.parents("table").remove();
+                jQuery.hideLightbox();
+            }
+        }
+
+        self.get_edit_window().focus();
+        return false;
+    });
+
+    $opt.find("a.add").unbind("click").click(function() {
+        var $this = $(this);
+
+        if ( $this.is(".row") ) {
+            var r = $cell.parents("tr").clone();
+            r.find("td")
+            .removeClass("current-cell")
+            .attr("style", "")
+            .html("<span style=\"padding:0.5em\"></span>");
+
+            if ( $this.is(".above") )
+                r.insertBefore( $cell.parents("tr") );
+            else if ( $this.is(".below") )
+                r.insertAfter( $cell.parents("tr") );
+        }
+        else if ( $this.is(".column") ) {
+            var $table = $cell.parents("table");
+            if ( $this.is(".left") ) {
+                $table.find("td:nth-child(" + col + ")")
+                .before("<td><span style=\"padding:0.5em\"></span></td>");
+            }
+            else if ( $this.is(".right") ) {
+                $table.find("td:nth-child(" + col + ")")
+                .after("<td><span style=\"padding:0.5em\"></span></td>");
+            }
+        }
+
+        self.get_edit_window().focus();
+        return false;
+    });
+
+    $opt.find("a.move").unbind("click").click(function() {
+        var $this = $(this);
+
+        if ( $this.is(".row") ) {
+            var $r = $cell.parents("tr");
+
+            if ( $this.is(".up") )
+                $r.prev().insertAfter( $r );
+            else if ( $this.is(".down") )
+                $r.next().insertBefore( $r );
+        }
+        else if ( $this.is(".column") ) {
+            var $table = $cell.parents("table");
+            if ( $this.is(".left") ) {
+                $table.find("td:nth-child(" + col + ")")
+                .each(function() {
+                    var $c = jQuery(this);
+                    $c.prev().insertAfter( $c );
+                });
+            }
+            else if ( $this.is(".right") ) {
+                $table.find("td:nth-child(" + col + ")")
+                .each(function() {
+                    var $c = jQuery(this);
+                    $c.next().insertBefore( $c );
+                });
+            }
+        }
+
+        self.get_edit_window().focus();
+        self._do_table_lightbox($cell);
+        return false;
+    });
+
+
+    var doc = this.get_edit_document();
+    jQuery(doc).unbind("keypress").bind("keypress", function(e) {
+        var key = e.keyCode;
+        var $new_cell = null;
+        switch(key) {
+            case 27:
+                jQuery.hideLightbox();
+                break;
+            case 37:
+                $new_cell = $cell.prev();
+                break;
+            case 38:
+                $new_cell = $cell.parents('tr')
+                    .prev().find("td:nth-child(" + col + ")");
+                break;
+            case 39:
+                $new_cell = $cell.next();
+                break;
+            case 40:
+                $new_cell = $cell.parents('tr')
+                    .next().find("td:nth-child(" + col + ")");
+                break;
+        }
+        if ($new_cell && $new_cell.length) {
+            self._do_table_lightbox($new_cell);
+        }
+        return false;
+    });
+
+    jQuery("input[name=reset]").unbind("click").bind("click", function() {
+        var $table = $cell.parents("table").html(self.table_html);
+        setTimeout(
+            function() {
+                var $new_cell = $table
+                    .find('tr').eq(self.row)
+                    .find('td').eq(self.col);
+                self._do_table_lightbox($new_cell);
+                self.get_edit_window().focus();
+            }, 100
+        );
+    });
+
+    jQuery("input[name=close]").unbind("click").bind("click", function() {
+        jQuery.hideLightbox();
+    });
 }
 
 proto.setHeightOf = function (iframe) {

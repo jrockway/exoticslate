@@ -86,8 +86,10 @@ proto.enableThis = function() {
         self.enable_keybindings();
         self.set_clear_handler();
 
-        if (Wikiwyg.is_gecko)
+        if (Wikiwyg.is_gecko) {
             self.get_edit_document().execCommand("enableObjectResizing", false, false);
+            self.get_edit_document().execCommand("enableInlineTableEditing", false, false);
+        }
 
         self.is_ready = true;
     };

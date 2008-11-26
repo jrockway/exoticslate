@@ -13,11 +13,11 @@ BEGIN {
 }
 fixtures( 'rdbms_clean' );
 
-is( Socialtext::Account->Count(), 3, 'three accounts in DBMS at start' );
+is( Socialtext::Account->Count(), 4, 'three accounts in DBMS at start' );
 my $test = Socialtext::Account->create( name => 'Test Account' );
 isa_ok( $test, 'Socialtext::Account', 'create returns a new Socialtext::Account object' );
 users_are($test, []);
-is( Socialtext::Account->Count(), 4, 'Now we have four accounts' );
+is( Socialtext::Account->Count(), 5, 'Now we have four accounts' );
 
 my $unknown = Socialtext::Account->Unknown;
 isa_ok( $unknown, 'Socialtext::Account' );

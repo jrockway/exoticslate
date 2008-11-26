@@ -23,7 +23,7 @@ my $user = Socialtext::User->new(
     name => 'tiffany'
 );
 my $viewer = $user;
-my @viewer_args = ($viewer->user_id) x 3;
+my @viewer_args = ($viewer->user_id) x 4;
 my $ws = Socialtext::Workspace->new(
     workspace_id => 348798,
     name => 'forbao',
@@ -81,29 +81,37 @@ EOSQL
     my $tail_select = <<'EOSQL';
     ORDER BY at DESC
 ) evt
-WHERE ( 
-evt.event_class <> 'person' OR (
-    -- does the user share an account with the actor for person events
-    EXISTS (
-        SELECT 1
-        FROM account_user viewer_a
-        JOIN account_plugin USING (account_id)
-        JOIN account_user actr USING (account_id)
-        WHERE plugin = 'people' AND viewer_a.user_id = ?
-          AND actr.user_id = evt.actor_id
-    )
-    AND 
-    -- does the user share an account with the person for person events
-    EXISTS (
-        SELECT 1
-        FROM account_user viewer_b
-        JOIN account_plugin USING (account_id)
-        JOIN account_user prsn USING (account_id)
-        WHERE plugin = 'people' AND viewer_b.user_id = ?
-          AND prsn.user_id = evt.person_id
-    )
-)
-)
+WHERE ((
+        (evt.event_class <> 'person' OR (
+            EXISTS (
+                SELECT 1
+                FROM account_user viewer
+                JOIN account_plugin USING (account_id)
+                JOIN account_user othr USING (account_id)
+                WHERE plugin = 'people' AND viewer.user_id = ?
+                  AND othr.user_id = evt.actor_id
+            )
+            AND
+            EXISTS (
+                SELECT 1
+                FROM account_user viewer
+                JOIN account_plugin USING (account_id)
+                JOIN account_user othr USING (account_id)
+                WHERE plugin = 'people' AND viewer.user_id = ?
+                  AND othr.user_id = evt.person_id
+            )
+        ))
+        AND ( evt.event_class <> 'signal' OR
+            EXISTS (
+                SELECT 1
+                FROM account_user viewer
+                JOIN account_plugin USING (account_id)
+                JOIN account_user othr USING (account_id)
+                WHERE plugin = 'signals' AND viewer.user_id = ?
+                  AND othr.user_id = evt.actor_id
+            )
+        )
+    ))
 EOSQL
 
     Get_no_events: {
@@ -209,7 +217,7 @@ EOSQL
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select AND (at < ?::timestamptz) $tail_select",
-            args => [$viewer_args[0], 'now', @viewer_args[1,2]],
+            args => [$viewer_args[0], 'now', @viewer_args[1,2,3]],
         );
     }
 
@@ -218,7 +226,7 @@ EOSQL
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select AND (at > ?::timestamptz) $tail_select",
-            args => [$viewer_args[0], 'now', @viewer_args[1,2]],
+            args => [$viewer_args[0], 'now', @viewer_args[1,2,3]],
         );
     }
 
@@ -229,7 +237,7 @@ EOSQL
         sql_ok( 
             sql => "$base_select AND (at < ?::timestamptz)
                                  AND (at > ?::timestamptz) $tail_select",
-            args => [$viewer_args[0], 'then', 'now', @viewer_args[1,2]],
+            args => [$viewer_args[0], 'then', 'now', @viewer_args[1,2,3]],
         );
     }
 
@@ -238,7 +246,7 @@ EOSQL
         ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select AND (e.action = ?) $tail_select",
-            args => [$viewer_args[0], 'View', @viewer_args[1,2]],
+            args => [$viewer_args[0], 'View', @viewer_args[1,2,3]],
         );
     }
 
@@ -248,7 +256,7 @@ EOSQL
         sql_ok( 
             sql => "$base_select AND (e.event_class = ?) AND (e.action = ?)
                     $tail_select",
-            args => [$viewer_args[0], 'thingers', 'View', @viewer_args[1,2]],
+            args => [$viewer_args[0], 'thingers', 'View', @viewer_args[1,2,3]],
         );
     }
 
@@ -258,7 +266,7 @@ EOSQL
         sql_ok( 
             sql => "$base_select AND (at < ?::timestamptz) AND (e.action = ?)
                     $tail_select",
-            args => [$viewer_args[0], 'then', 'View', @viewer_args[1,2]],
+            args => [$viewer_args[0], 'then', 'View', @viewer_args[1,2,3]],
         );
     }
 
@@ -270,7 +278,7 @@ EOSQL
             name => 'Get_action_and_before_events_with_count',
             sql => "$base_select AND (at < ?::timestamptz) AND (e.action = ?)
                     $tail_select LIMIT ?",
-            args => [$viewer_args[0], 'then', 'view', @viewer_args[1,2], 5],
+            args => [$viewer_args[0], 'then', 'view', @viewer_args[1,2,3], 5],
         );
     }
 
@@ -285,7 +293,7 @@ EOSQL
                      $tail_select LIMIT ?",
             args => [
                 $viewer_args[0], 'then', 'page', 'view',
-                @viewer_args[1,2], 5
+                @viewer_args[1,2,3], 5
             ],
         );
     }

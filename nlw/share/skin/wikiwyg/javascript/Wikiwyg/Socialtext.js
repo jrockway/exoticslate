@@ -1447,7 +1447,7 @@ proto.process_command = function(command) {
         }, 100);
     }
 
-    this.get_edit_window().focus();
+    if (Wikiwyg.is_gecko) this.get_edit_window().focus();
 }
 
 proto.fix_up_relative_imgs = function() {

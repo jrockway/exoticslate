@@ -9,9 +9,9 @@ t.plan(1);
 t.run_is('html', 'text');
 
 /* Test
-=== Empty anchor elements should render into nothing
+=== Non-interesting span elements should be ignored during roundtrip
 --- html
-<table><tbody><tr><td><span>1<br/><br/>2</span></td></tr></tbody></table>
+<table><tbody><tr><td><span style="padding: 0.5em">1<br/><br/>2</span></td></tr></tbody></table>
 
 --- text
 | 1

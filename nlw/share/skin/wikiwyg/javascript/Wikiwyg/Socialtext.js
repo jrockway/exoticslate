@@ -1470,7 +1470,9 @@ proto.fix_up_relative_imgs = function() {
 proto.set_focus = function() {
     try {
         if (Wikiwyg.is_gecko) this.get_edit_window().focus();
-        if (Wikiwyg.is_ie) this.get_editable_div().focus();
+        if (Wikiwyg.is_ie && !this._hasFocus) {
+            this.get_editable_div().focus();
+        }
     } catch (e) {}
 }
 
@@ -2065,6 +2067,7 @@ proto.get_editable_div = function () {
         if ( jQuery.browser.msie ) {
             var win = self.get_edit_window();
             self._ieSelectionBookmark = null;
+            self._hasFocus = false;
 
             doc.attachEvent("onbeforedeactivate", function() {
                 self._ieSelectionBookmark = null;
@@ -2072,6 +2075,14 @@ proto.get_editable_div = function () {
                     var range = doc.selection.createRange();
                     self._ieSelectionBookmark = range.getBookmark();
                 } catch (e) {};
+            });
+
+            self.get_edit_window().attachEvent("onfocus", function() {
+                self._hasFocus = true;
+            });
+
+            self.get_edit_window().attachEvent("onblur", function() {
+                self._hasFocus = false;
             });
 
             doc.attachEvent("onactivate", function() {

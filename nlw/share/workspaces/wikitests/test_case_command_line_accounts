@@ -52,8 +52,8 @@
 | st-admin | get-default-account | The default account is account%%start_time%% |
 
 | *Comment* | Test Case: Command Line Tests ACCOUNTS set default account back to normal so later tests pass |  |
-| st-admin | set-default-account --account Socialtext | The default account is now Socialtext |
-| st-admin | get-default-account | The default account is Socialtext |
+| st-admin | set-default-account --account %%hostname%% | The default account is now %%hostname%% |
+| st-admin | get-default-account | The default account is %%hostname%% |
 
 | *Comment* | Test Case: Command Line Tests ACCOUNTS export and import |  |
 | st-admin | export-account | qr/The command you called \(export-account\) requires an account to be specified/ |

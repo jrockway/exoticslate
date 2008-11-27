@@ -197,6 +197,8 @@ SEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSE
 | text_like | contentContainer | qr/Search Sort 3.+Search Sort 2.+Search Sort 1.+Search Sort 4/ |
 
 | *Comment* | Test Case: Tagged Page Sorting. Make a more relevant page |  |
+| *Comment* | Test Case: Tagged Page Sorting. Help Safari by opening a plain page |  |
+| open_ok | /%%sorting_workspace%%/?Search Sort 4 |  |
 | open_ok | /%%sorting_workspace%%/index.cgi?action=new_page |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |

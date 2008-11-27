@@ -2092,9 +2092,14 @@ body div#globalNav div input.searchText {
     padding-top: -5px;
 }
 
-.table-create .error {
+.table-create .error, .table-options .error {
     display: block;
     color: #FF0000;
+    margin-bottom: 0px;
+}
+
+.table-create, .table-options .buttons {
+    margin-top: 5px;
 }
 
 .table-create .cancel {
@@ -2110,4 +2115,12 @@ body div#globalNav div input.searchText {
     font-weight: bold;
     font-size: larger;
     text-align: right;
+}
+
+.row-col-label {
+    font-weight: bold;
+}
+
+.row-col-label.two {
+    padding-bottom: 5px;
 }

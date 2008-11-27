@@ -1386,7 +1386,7 @@ proto.controlLabels = {
     pre: loc('Preformatted'),
     save: loc('Save'),
     strike: loc('Strike Through') + '(Ctrl+d)',
-    table: loc('Create Table'),
+    table: loc('Tables'),
     underline: loc('Underline') + '(Ctrl+u)',
     unlink: loc('Unlink'),
     unordered: loc('Bulleted List')
@@ -1769,7 +1769,7 @@ proto.do_new_table = function() {
     var setup = function() {
         jQuery('.table-create input[name=columns]').focus();
         jQuery('.table-create input[name=columns]').select();
-        jQuery('.table-create input[name=create]')
+        jQuery('.table-create input[name=save]')
             .unbind("click")
             .bind("click", function() {
                 do_table();
@@ -1781,7 +1781,7 @@ proto.do_new_table = function() {
             });
     }
     jQuery.showLightbox({
-        html: Jemplate.process("table-create.html"),
+        html: Jemplate.process("table-create.html", {"loc": loc}),
         width: 300,
         callback: setup
     });
@@ -1812,7 +1812,7 @@ proto.do_table = function() {
 //         return;
 
         jQuery.showLightbox({
-            html: Jemplate.process("table-options.html"),
+            html: Jemplate.process("table-options.html", {"loc": loc}),
             width: 300,
             callback: function() {
                 self._do_table_lightbox($cell);
@@ -1891,6 +1891,7 @@ proto._do_table_lightbox = function($cell) {
                 $cell.parents("table").remove();
                 jQuery.hideLightbox();
             }
+            col = $new_cell.prevAll("td").length + 1;
         }
 
         self.get_edit_window().focus();
@@ -1899,29 +1900,39 @@ proto._do_table_lightbox = function($cell) {
 
     $opt.find("a.add").unbind("click").click(function() {
         var $this = $(this);
+        var doc = self.get_edit_document();
 
         if ( $this.is(".row") ) {
-            var r = $cell.parents("tr").clone();
-            r.find("td")
-            .removeClass("current-cell")
-            .attr("style", "")
-            .html("<span style=\"padding:0.5em\"></span>");
+            var $tr = jQuery(doc.createElement('tr'));
 
-            if ( $this.is(".above") )
-                r.insertBefore( $cell.parents("tr") );
-            else if ( $this.is(".below") )
-                r.insertAfter( $cell.parents("tr") );
+            $cell.parents("tr").find("td").each(function() {
+                $tr.append('<td><span style=\"padding:0.5em\"></span></td>');
+            });
+
+            if ( $this.is(".above") ) {
+                $tr.insertBefore( $cell.parents("tr") );
+            }
+            else if ( $this.is(".below") ) {
+                $tr.insertAfter( $cell.parents("tr") );
+            }
         }
         else if ( $this.is(".column") ) {
             var $table = $cell.parents("table");
             if ( $this.is(".left") ) {
-                $table.find("td:nth-child(" + col + ")")
-                .before("<td><span style=\"padding:0.5em\"></span></td>");
+                $table.find("td:nth-child(" + col + ")").each(function() {
+                    var $td = jQuery(doc.createElement('td'));
+                    $td.html('<span style=\"padding:0.5em\"></span>');
+                    jQuery(this).before($td);
+                });
             }
             else if ( $this.is(".right") ) {
-                $table.find("td:nth-child(" + col + ")")
-                .after("<td><span style=\"padding:0.5em\"></span></td>");
+                $table.find("td:nth-child(" + col + ")").each(function() {
+                    var $td = jQuery(doc.createElement('td'));
+                    $td.html('<span style=\"padding:0.5em\"></span>');
+                    jQuery(this).after($td);
+                });
             }
+            col = $cell.prevAll("td").length + 1;
         }
 
         self.get_edit_window().focus();
@@ -1955,6 +1966,7 @@ proto._do_table_lightbox = function($cell) {
                     $c.next().insertBefore( $c );
                 });
             }
+            col = $cell.prevAll("td").length + 1;
         }
 
         self.get_edit_window().focus();
@@ -1962,15 +1974,11 @@ proto._do_table_lightbox = function($cell) {
         return false;
     });
 
-
     var doc = this.get_edit_document();
     jQuery(doc).unbind("keypress").bind("keypress", function(e) {
-        var key = e.keyCode;
+        var key = e.keyCode || e.which;
         var $new_cell = null;
         switch(key) {
-            case 27:
-                jQuery.hideLightbox();
-                break;
             case 37:
                 $new_cell = $cell.prev();
                 break;
@@ -1992,20 +2000,12 @@ proto._do_table_lightbox = function($cell) {
         return false;
     });
 
-    jQuery("input[name=reset]").unbind("click").bind("click", function() {
-        var $table = $cell.parents("table").html(self.table_html);
-        setTimeout(
-            function() {
-                var $new_cell = $table
-                    .find('tr').eq(self.row)
-                    .find('td').eq(self.col);
-                self._do_table_lightbox($new_cell);
-                self.get_edit_window().focus();
-            }, 100
-        );
+    jQuery("input[name=save]").unbind("click").bind("click", function() {
+        jQuery.hideLightbox();
     });
 
-    jQuery("input[name=close]").unbind("click").bind("click", function() {
+    jQuery("input[name=cancel]").unbind("click").bind("click", function() {
+        var $table = $cell.parents("table").html(self.table_html);
         jQuery.hideLightbox();
     });
 }
@@ -2238,4 +2238,3 @@ wikiwyg_run_all_formatting_tests = function() {
 }
 
 klass.run_all_formatting_tests = wikiwyg_run_all_formatting_tests;
-

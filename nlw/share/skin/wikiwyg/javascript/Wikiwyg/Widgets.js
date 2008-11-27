@@ -1214,6 +1214,7 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
     this.currentWidget.skin_path = nlw_make_s2_path('');
 
     // Give the templates direct access to loc()
+    // This should not be needed after new Jemplate release...
     this.currentWidget.loc = loc;
 
     var widget = this.currentWidget.id;

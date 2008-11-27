@@ -1,14 +1,9 @@
+<span class="title">[% loc('Table Create') %]</span>
 <form action="#" onsubmit="return false">
 <table class="table-create">
     <tr>
-        <td class="header" colspan="2">
-            Create a new table:
-        </td>
-    </tr>
-
-    <tr>
         <td class="row-col-label">
-            Columns:&nbsp;
+            [% loc('Columns:') %]&nbsp;
         </td>
         <td class="col-value">
             <input name="columns" type="text" value="3">
@@ -17,7 +12,7 @@
 
     <tr>
         <td class="row-col-label">
-            Rows:&nbsp;
+            [% loc('Rows:') %]&nbsp;
         </td>
         <td class="row-value">
             <input name="rows" type="text" value="5">
@@ -25,8 +20,12 @@
     </tr>
 
     <tr>
-        <td><input name="create" type="submit" value="Create" /></td>
-        <td class="cancel"><input name="cancel" type="button" value="Cancel" /></td>
+        <td colspan="2">
+            <div class="buttons">
+                <input name="save" type="submit" value="[% loc('Save') %]" />
+                <input name="cancel" type="button" value="[% loc('Cancel') %]" />
+            </div>
+        </td>
     </tr>
 
     <tr>

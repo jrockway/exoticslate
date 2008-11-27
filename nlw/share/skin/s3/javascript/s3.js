@@ -294,6 +294,14 @@ $(function() {
         return false;
     });
 
+    $("#st-create-content-link").unbind("click").click(function () {
+        get_lightbox(function () {
+            var create_content = new ST.CreateContent;
+            create_content.createContentLightbox();
+        });
+        return false;
+    });
+
     Socialtext._setup_editor = function () {
         $('#bootstrap-loader')
             .css('position', 'absolute')

@@ -2125,3 +2125,25 @@ body div#globalNav div input.searchText {
 .row-col-label.two {
     padding-bottom: 5px;
 }
+
+#st-create-content-lightbox #choose-page-spreadsheet, #st-create-content-lightbox #create-options {
+    width: 400px;
+    padding-left: 64px;
+}
+
+#st-create-content-lightbox #choose-page-spreadsheet .choice {
+    width: 200px;
+    border-style: solid;
+    float: left;
+}
+
+#st-create-content-lightbox #template-option {
+    padding: 0px 0px 0px 8px;
+    margin: 8px 0px 0px 24px;
+    border-style: solid;
+    border-color: gray;
+    border-width: 0px 0px 0px 8px;
+    float: left;
+}
+
+#st-create-content-lightbox

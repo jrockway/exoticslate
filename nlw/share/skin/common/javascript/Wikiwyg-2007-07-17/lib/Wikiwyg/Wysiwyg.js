@@ -87,8 +87,10 @@ proto.enableThis = function() {
         self.set_clear_handler();
 
         if (Wikiwyg.is_gecko) {
-            self.get_edit_document().execCommand("enableObjectResizing", false, false);
-            self.get_edit_document().execCommand("enableInlineTableEditing", false, false);
+            setTimeout(function() {
+                self.get_edit_document().execCommand("enableObjectResizing", false, false);
+                self.get_edit_document().execCommand("enableInlineTableEditing", false, false);
+            }, 100);
         }
 
         self.is_ready = true;

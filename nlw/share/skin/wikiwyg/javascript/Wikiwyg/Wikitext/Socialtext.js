@@ -1704,10 +1704,17 @@ proto.format_span = function(elem) {
         this.get_wiki_comment(elem)
     ) return this.handle_nlw_phrase(elem);
 
-    var style = this.squish_style_object_into_string(elem.getAttribute('style'));
-    elem.wikitext = elem.wikitext.replace(/\n/g, ' ').replace(/  */g, ' ');
-    if (!style)
+    var style = this.squish_style_object_into_string(elem.style);
+
+    /* If the style is not interesting, we pretend it's not there, instead
+     * of reducing it to a single line. -- {bz: 1704}
+     */
+    if (!style || style == '')
         return elem.wikitext;
+
+    // It has line-level style markups; we're forced to make it a single line.
+    elem.wikitext = elem.wikitext.replace(/\n/g, ' ').replace(/  */g, ' ');
+
     if (style.match(/font-weight: bold;/))
         elem.wikitext = this.format_b(elem);
     if (style.match(/font-style: italic;/))

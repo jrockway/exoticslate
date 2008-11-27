@@ -6,19 +6,46 @@ use File::Path qw/mkpath/;
 use Socialtext::File qw/set_contents/;
 use File::chdir;
 use Socialtext::File;
+use YAML;
 
 BEGIN {
-    use Test::Socialtext tests => 23;
+    use Test::Socialtext tests => 25;
     use_ok( 'Socialtext::Skin' );
     $Socialtext::Skin::CODE_BASE = 't/share';
     $Socialtext::Skin::PROD_VER = '1.0';
     fixtures( 'admin' );
 }
 
-# Cascading skin
+# Cascading S3 Skin
 {
     my $hub = new_hub('admin');
-    $hub->current_workspace->skin_name('cascades');
+    $hub->current_workspace->skin_name('cascades_s3');
+    my $info = $hub->skin->css_info;
+
+    is_deeply($info->{standard}, [
+        "/static/1.0/skin/s3/css/screen.css",
+        "/static/1.0/skin/s3/css/screen.ie.css",
+        "/static/1.0/skin/s3/css/print.css",
+        "/static/1.0/skin/s3/css/print.ie.css",
+        "/static/1.0/skin/cascades_s3/css/screen.css",
+        "/static/1.0/skin/cascades_s3/css/screen.ie.css",
+        "/static/1.0/skin/cascades_s3/css/print.css",
+        "/static/1.0/skin/cascades_s3/css/print.ie.css",
+    ], 'Custom s3 CSS is correct');
+
+    ok(!$info->{common}, "Custom s3 skin does not have common.css");
+
+    is_deeply($hub->skin->template_paths, [
+        "t/share/skin/s2/template",
+        "t/share/skin/s3/template",
+        "t/share/skin/cascades_s3/template",
+    ], 'Custom s3 skin has both template dirs');
+}
+
+# Cascading S2 skin
+{
+    my $hub = new_hub('admin');
+    $hub->current_workspace->skin_name('cascades_s2');
     my $info = $hub->skin->css_info;
 
     is_deeply($info->{standard}, [
@@ -26,10 +53,10 @@ BEGIN {
         "/static/1.0/skin/s2/css/screen.ie.css",
         "/static/1.0/skin/s2/css/print.css",
         "/static/1.0/skin/s2/css/print.ie.css",
-        "/static/1.0/skin/cascades/css/screen.css",
-        "/static/1.0/skin/cascades/css/screen.ie.css",
-        "/static/1.0/skin/cascades/css/print.css",
-        "/static/1.0/skin/cascades/css/print.ie.css",
+        "/static/1.0/skin/cascades_s2/css/screen.css",
+        "/static/1.0/skin/cascades_s2/css/screen.ie.css",
+        "/static/1.0/skin/cascades_s2/css/print.css",
+        "/static/1.0/skin/cascades_s2/css/print.ie.css",
     ], 'Cascading skin containers s2 css');
 
     is_deeply($info->{common}, [
@@ -38,11 +65,11 @@ BEGIN {
 
     is_deeply($hub->skin->template_paths, [
         "t/share/skin/s2/template",
-        "t/share/skin/cascades/template",
+        "t/share/skin/cascades_s2/template",
     ], 'Cascading skin has both template dirs');
 }
 
-# Non cascading skin
+# Non-cascading skin
 {
     my $hub = new_hub('admin');
     $hub->current_workspace->skin_name('nocascade');
@@ -73,6 +100,9 @@ BEGIN {
 
     is_deeply($info->{standard}, [
         "/static/1.0/skin/s3/css/screen.css",
+        "/static/1.0/skin/s3/css/screen.ie.css",
+        "/static/1.0/skin/s3/css/print.css",
+        "/static/1.0/skin/s3/css/print.ie.css",
     ], 'S3 skin does not include the s2 skin');
 
     ok(!$info->{common}, "S3 skin does not have common.css");
@@ -83,31 +113,17 @@ BEGIN {
     ], 'S3 skin has both template dirs');
 }
 
-# Custom s3 skin
-{
-    my $hub = new_hub('admin');
-    $hub->current_workspace->skin_name('new_s3');
-    my $info = $hub->skin->css_info;
-
-    is_deeply($info->{standard}, [
-        "/static/1.0/skin/s3/css/screen.css",
-        "/static/1.0/skin/new_s3/css/screen.css",
-    ], 'Custom s3 skin does not include the s2 skin');
-
-    ok(!$info->{common}, "Custom s3 skin does not have common.css");
-
-    is_deeply($hub->skin->template_paths, [
-        "t/share/skin/s2/template",
-        "t/share/skin/s3/template",
-        "t/share/skin/new_s3/template",
-    ], 'Custom s3 skin has both template dirs');
-}
-
-# Uploaded skin
+# Uploaded S2 skin
+my $info = 't/share/uploaded-skin/admin/info.yaml';
 {
     my $hub = new_hub('admin');
     $hub->current_workspace->skin_name('s2');
     $hub->current_workspace->uploaded_skin('1');
+
+    YAML::DumpFile($info => {
+        name => 'uploaded',
+        cascade_css => 1,
+    });
 
     my $info = $hub->skin->css_info;
 
@@ -116,7 +132,6 @@ BEGIN {
         "/static/1.0/skin/s2/css/screen.ie.css",
         "/static/1.0/skin/s2/css/print.css",
         "/static/1.0/skin/s2/css/print.ie.css",
-
         "/static/1.0/uploaded-skin/admin/css/screen.css",
     ], 'Uploaded skin css is included');
 
@@ -126,15 +141,44 @@ BEGIN {
     ], 'Uploaded templates are included in template_paths');
 }
 
+# Uploaded S3 skin
+{
+    my $hub = new_hub('admin');
+    $hub->current_workspace->skin_name('s2');
+    $hub->current_workspace->uploaded_skin('1');
+
+    YAML::DumpFile($info => {
+        parent => 's3',
+        name => 'uploaded',
+        cascade_css => 1,
+    });
+
+    my $info = $hub->skin->css_info;
+
+    is_deeply($info->{standard}, [
+        "/static/1.0/skin/s3/css/screen.css",
+        "/static/1.0/skin/s3/css/screen.ie.css",
+        "/static/1.0/skin/s3/css/print.css",
+        "/static/1.0/skin/s3/css/print.ie.css",
+        "/static/1.0/uploaded-skin/admin/css/screen.css",
+    ], 'Uploaded skin css is included');
+
+    is_deeply($hub->skin->template_paths, [
+        "t/share/skin/s2/template",
+        "t/share/skin/s3/template",
+        "t/share/uploaded-skin/admin/template",
+    ], 'Uploaded templates are included in template_paths');
+}
+
 # Socialtext::Skin works outside the hub
 {
-    my $cascades = Socialtext::Skin->new(name => 'cascades');
-    is $cascades->skin_info->{parent}, 's2', 'cascades inherits from s2';
-    is $cascades->parent->skin_info->{skin_name}, 's2', 'parent is s2';
-    is $cascades->skin_info->{cascade_css}, 1, 'cascades cascades';
-    is_deeply($cascades->template_paths, [
+    my $cascades_s2 = Socialtext::Skin->new(name => 'cascades_s2');
+    is $cascades_s2->skin_info->{parent}, 's2', 'cascades_s2 inherits from s2';
+    is $cascades_s2->parent->skin_info->{skin_name}, 's2', 'parent is s2';
+    is $cascades_s2->skin_info->{cascade_css}, 1, 'cascades_s2 cascades_s2';
+    is_deeply($cascades_s2->template_paths, [
         "t/share/skin/s2/template",
-        "t/share/skin/cascades/template",
+        "t/share/skin/cascades_s2/template",
     ], 'Cascading skin has both template dirs');
 }
 

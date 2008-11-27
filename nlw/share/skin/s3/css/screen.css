@@ -2024,6 +2024,7 @@ table.widgetUserPrefs td.widgetUserPrefsButtons {
     clear: left;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 div.pagination-container {

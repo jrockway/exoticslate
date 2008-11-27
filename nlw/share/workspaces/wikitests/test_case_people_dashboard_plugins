@@ -1,9 +1,10 @@
 * HighPermissions
 
-| *Comment* | Test Case: People Dashboard Gloabal Nav |  |
+| *Comment* | Test Case: People Dashboard Plugins |  |
 
 This test is designed to test global navigation changes as people/dashboard is enabled and disabled.
 
+| *Comment* | Test Case: People Dashboard Plugins |  |
 | *Comment* | Enable people and dashboard. See "Home" (is dashboard), "People", "Workspaces" |  |
 | st-admin | enable-plugin --plugin people --all-accounts | is now enabled |
 | st-admin | enable-plugin --plugin dashboard --all-accounts | is now enabled |
@@ -26,12 +27,14 @@ removed because new pagination causes test to fail. Checking for Guest User is g
 | wait_for_element_visible_ok | //a[@title='Add Content'] | 10000 |
 | text_like | st-editing-tools-edit | Welcome |
 
+| *Comment* | Test Case: People Dashboard Plugins |  |
 | *Comment* | Disable people. Refresh. People links to socialtext.com |  |
 | st-admin | disable-plugin --plugin people --all-accounts | Plugin people is now disabled |
 | open_ok | / |  |
 | click_and_wait | link=People |  |
 | location_like | `http://socialtext.com/products/features/Enable-People.php` |  |
 
+| *Comment* | Test Case: People Dashboard Plugins |  |
 | *Comment* | Disable dashboard. Home is workspace list. |  |
 | st-admin | disable-plugin --plugin dashboard --all-accounts | Plugin dashboard is now disabled |
 | open_ok | / |  |
@@ -41,6 +44,7 @@ removed because new pagination causes test to fail. Checking for Guest User is g
 | click_and_wait | link=Home |  |
 | location_like | /?action=workspace_list |  |
 
+| *Comment* | Test Case: People Dashboard Plugins |  |
 | *Comment* | Enable people. Illegal configuration. No People link. Home is workspace list. |  |
 | st-admin | enable-plugin --plugin people --all-accounts | Plugin people is now enabled |
 | open_ok | / |  |
@@ -49,6 +53,7 @@ removed because new pagination causes test to fail. Checking for Guest User is g
 | click_and_wait | link=Home |  |
 | text_like | contentRight | You have free access |
 
+| *Comment* | Test Case: People Dashboard Plugins |  |
 | *Comment* | Disable people, enable dashboard. Home is dashboard. |  |
 | st-admin | disable-plugin --plugin people --all-accounts | Plugin people is now disabled |
 | st-admin | enable-plugin --plugin dashboard --all-accounts | Plugin dashboard is now enabled |
@@ -61,8 +66,8 @@ removed because new pagination causes test to fail. Checking for Guest User is g
 | click_and_wait | link=People |  |
 | location_like | `http://socialtext.com/products/features/Enable-People.php` |  |
 
-| *Comment* | Test Case: People Dashboard Gloabl Nav CLEANUP |  |
+| *Comment* | Test Case: People Dashboard Plugins teardown |  |
 | st-admin | enable-plugin --plugin people --all-accounts | Plugin people is now enabled |
 | st-admin | enable-plugin --plugin dashboard --all-accounts | Plugin dashboard is now enabled |
 
-| *Comment* | Test Case: People Dashboard Gloabal Nav COMPLETED |
+| *Comment* | Test Case: People Dashboard Plugins COMPLETED |

@@ -1467,6 +1467,13 @@ proto.fix_up_relative_imgs = function() {
     }
 }
 
+proto.set_focus = function() {
+    try {
+        if (Wikiwyg.is_gecko) this.get_edit_window().focus();
+        if (Wikiwyg.is_ie) this.get_editable_div().focus();
+    } catch (e) {}
+}
+
 proto.enableThis = function() {
     Wikiwyg.Wysiwyg.prototype.enableThis.apply(this, arguments);
 

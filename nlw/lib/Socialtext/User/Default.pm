@@ -4,14 +4,10 @@ package Socialtext::User::Default;
 use strict;
 use warnings;
 
-use Socialtext::Validate qw( validate SCALAR_TYPE BOOLEAN_TYPE ARRAYREF_TYPE WORKSPACE_TYPE );
-
 our $VERSION = '0.02';
 
 use Socialtext::String;
-use Readonly;
 use Socialtext::User;
-use Socialtext::l10n qw(loc);
 use DateTime::Infinite;
 use base qw(Socialtext::User::Base);
 
@@ -38,19 +34,6 @@ sub update {
     my ($self, %p) = @_;
     my $factory = $self->_factory();
     return $factory->update( $self, %p );
-}
-
-{
-    Readonly my $spec => { password => SCALAR_TYPE };
-    sub ValidatePassword {
-        shift;
-        my %p = validate( @_, $spec );
-
-        return ( loc("Passwords must be at least 6 characters long.") )
-            unless length $p{password} >= 6;
-
-        return;
-    }
 }
 
 sub has_valid_password {
@@ -131,11 +114,6 @@ cannot change username or email_address for a row where is_system_created is
 true.
 
 This is simply a shortcut method to C<$factory-E<gt>update($self,%params)>.
-
-=item B<Socialtext::User::Default::Factory-E<gt>ValidatePassword(password=E<gt>$pw)>
-
-Given a password, this returns a list of error messages if the password is
-invalid.
 
 =item B<has_valid_password()>
 

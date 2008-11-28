@@ -4,7 +4,10 @@ use strict;
 use warnings;
 
 use Class::Field qw(field);
+use Readonly;
 use Socialtext::SQL qw(sql_parse_timestamptz);
+use Socialtext::Validate qw(validate SCALAR_TYPE);
+use Socialtext::l10n qw(loc);
 use Socialtext::User::Factory;
 
 map { field $_ } @Socialtext::User::Factory::all_fields;
@@ -67,6 +70,20 @@ sub expire {
     return Socialtext::User::Factory->ExpireUserRecord(
         user_id => $self->user_id
     );
+}
+
+# Validates passwords, to make sure that they are of required length.
+{
+    Readonly my $spec => { password => SCALAR_TYPE };
+    sub ValidatePassword {
+        my $class = shift;
+        my %p = validate( @_, $spec );
+
+        return ( loc("Passwords must be at least 6 characters long.") )
+            unless length $p{password} >= 6;
+
+        return;
+    }
 }
 
 1;
@@ -161,6 +178,11 @@ If you pass C<< force => 1 >> this will force the deletion though.
 =item B<expire()>
 
 Expires this user in the database.  May be a no-op for some homunculus types.
+
+=item B<Socialtext::User::Base-E<gt>ValidatePassword(password=E<gt>$password)>
+
+Validates the given password, returning a list of error messages if the
+password is invalid.
 
 =back
 

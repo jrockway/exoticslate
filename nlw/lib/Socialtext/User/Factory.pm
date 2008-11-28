@@ -447,7 +447,14 @@ Returns a new unique identifier for use in creating new users.
 
 =item B<ResolveId(\%params)>
 
-Uses "driver_key" and "driver_unique_id" in the params argument to obtain the user_id corresponding to those values.
+Attempts to resolve the C<user_id> for the User represented by the given
+C<\%params>.
+
+Resolution is limited to B<just> the C<driver_key> specified in the params;
+we're I<not> doing cross-driver resolution.
+
+Default implementation here attempts resolution by looking for a matching
+C<driver_unique_id>.
 
 =item B<Now()>
 

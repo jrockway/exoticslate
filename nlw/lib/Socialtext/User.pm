@@ -17,7 +17,7 @@ use Socialtext::UserMetadata;
 use Socialtext::User::Deleted;
 use Socialtext::User::EmailConfirmation;
 use Socialtext::User::Factory;
-use Socialtext::User::Default::Factory qw($SystemUsername $GuestUsername);
+use Socialtext::User::Default::Users qw(:system-user :guest-user);
 use Socialtext::Workspace;
 use Email::Address;
 use Class::Field 'field';
@@ -123,7 +123,7 @@ sub new_homunculus {
     # this prevents possible conflict with other stores having their own
     # notion of what the "guest" or "system-user" is (e.g. Active Directory
     # and its "Guest" user)
-    elsif (Socialtext::User::Default::Factory->IsDefaultUser($key => $val)) {
+    elsif (Socialtext::User::Default::Users->IsDefaultUser($key => $val)) {
         my $factory = $class->_realize('Default', 'GetUser');
         $homunculus = $factory->GetUser($key => $val);
     }

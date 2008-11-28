@@ -11,6 +11,7 @@ use Socialtext::Validate qw( validate USER_TYPE PERMISSION_TYPE WORKSPACE_TYPE )
 use Socialtext::Timer;
 use Socialtext::SQL qw/sql_singlevalue/;
 use Socialtext::Cache;
+use Socialtext::User::Default::Users qw(:system-user);
 
 # In the future this might be a factory but for now we'll just make it
 # nice and simple
@@ -75,10 +76,7 @@ sub plugin_enabled_for_user {
     my $enabled = $cache->get($cache_key);
     return $enabled if defined $enabled;
 
-    # circular ref:
-    require Socialtext::User::Default::Factory;
-    return 1 if ($user->username eq 
-                 $Socialtext::User::Default::Factory::SystemUsername);
+    return 1 if ($user->username eq $SystemUsername);
 
     my $sql = <<SQL;
         SELECT 1 
@@ -156,10 +154,7 @@ sub plugin_enabled_for_user_in_account {
     my $account = delete $p{account};
     my $plugin_name = delete $p{plugin_name};
 
-    # circular ref:
-    require Socialtext::User::Default::Factory;
-    return 1 if ($user->username eq 
-                 $Socialtext::User::Default::Factory::SystemUsername);
+    return 1 if ($user->username eq $SystemUsername);
 
     my $user_id = $user->user_id;
     my $account_id = ref($account) ? $account->account_id : $account;

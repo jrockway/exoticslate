@@ -11,7 +11,7 @@ use Socialtext::Exceptions qw( data_validation_error );
 use Socialtext::UserMetadata;
 use Socialtext::String;
 use Socialtext::User::Default;
-use Socialtext::User::Default::Factory qw($SystemUsername); # XXX
+use Socialtext::User::Default::Users qw(:system-user :guest-user);
 use Socialtext::l10n qw(loc);
 use Email::Valid;
 use Readonly;

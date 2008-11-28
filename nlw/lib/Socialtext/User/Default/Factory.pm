@@ -3,16 +3,7 @@ package Socialtext::User::Default::Factory;
 use strict;
 use warnings;
 
-# allow for the system level account usernames to be exported; ST::User will
-# use them to short-circuit user lookups into here where applicable.
-use base qw(Socialtext::User::Factory Exporter);
-our @EXPORT_OK;
-BEGIN {
-    @EXPORT_OK = qw(
-        $SystemUsername
-        $GuestUsername
-    );
-}
+use base qw(Socialtext::User::Factory);
 
 use Class::Field qw(field const);
 use Digest::SHA1 ();
@@ -22,12 +13,7 @@ use Socialtext::SQL qw(sql_execute sql_singlevalue);
 use Socialtext::User;
 use Socialtext::UserMetadata;
 use Socialtext::MultiCursor;
-
-our $SystemUsername = 'system-user';
-our $SystemEmailAddress = 'system-user@socialtext.net';
-
-our $GuestUsername  = 'guest';
-our $GuestEmailAddress = 'guest@socialtext.net';
+use Socialtext::User::Default::Users qw(:system-user :guest-user);
 
 const 'driver_name' => 'Default';
 const 'driver_key'  => 'Default';
@@ -87,26 +73,6 @@ sub new {
     my $class = ref($proto) || $proto;
     my $self  = { };
     bless $self, $class;
-}
-
-{
-    # optimized for hash-lookup; it'll be done on every user instantiation, so
-    # make it fast.
-    my %RequiredDefaultUsers = (
-        username => {
-            $SystemUsername => 1,
-            $GuestUsername  => 1,
-        },
-        email_address => {
-            $SystemEmailAddress => 1,
-            $GuestEmailAddress  => 1,
-        },
-    );
-
-    sub IsDefaultUser {
-        my ( $class, $key, $val ) = @_;
-        return $RequiredDefaultUsers{$key}{lc($val)};
-    }
 }
 
 sub Count {
@@ -262,23 +228,6 @@ Returns undef since only one Default factory can be configured per system.
 
 Inserts required users into the DBMS if they are not present.  See
 L<Socialtext::Data> fo rmore details on required data.
-
-=item B<< Socialtext::User::Default::Factory->IsDefaultUser($key, $val) >>
-
-Checks to see if the user defined by the given C<%args> is one of the users
-that B<must> reside in the Default data store (the system-level user records).
-This method returns true if the user must reside in the Default store,
-returning false otherwise.
-
-Lookups can be performed by I<one> of:
-
-=over
-
-=item * username => $username
-
-=item * email_address => $email_address
-
-=back
 
 =item B<< Socialtext::User::Default::Factory->Count() >>
 

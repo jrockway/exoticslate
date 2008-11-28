@@ -1,6 +1,12 @@
 dn: ou=people,dc=example,dc=com
 objectClass: organizationalUnit
+description: current employees
 ou: people
+
+dn: ou=terminated,dc=example,dc=com
+objectClass: organizationalUnit
+description: terminated employees go here
+ou: terminated
 
 dn: cn=John Doe,dc=example,dc=com
 objectClass: inetOrgPerson

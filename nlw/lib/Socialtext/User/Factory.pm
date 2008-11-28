@@ -10,32 +10,13 @@ use Socialtext::User::Cache;
 use Socialtext::Exceptions qw( data_validation_error );
 use Socialtext::UserMetadata;
 use Socialtext::String;
+use Socialtext::User::Base;
 use Socialtext::User::Default;
 use Socialtext::User::Default::Users qw(:system-user :guest-user);
 use Socialtext::l10n qw(loc);
 use Email::Valid;
 use Readonly;
 use Time::HiRes ();
-
-# All fields/attributes that a "Socialtext::User::Base" has.
-# These fields are used to export the user.
-Readonly our @fields => qw(
-    user_id
-    username
-    email_address
-    first_name
-    last_name
-    password
-);
-
-# additional fields, not exported
-Readonly our @other_fields => qw(
-    driver_key
-    driver_unique_id
-    cached_at
-);
-
-Readonly our @all_fields => (@fields, @other_fields);
 
 field 'driver_name';
 field 'driver_id';
@@ -60,7 +41,7 @@ sub NewHomunculus {
     my $p = shift;
 
     # create a copy of the parameters for our new User homunculus object
-    my %user = map { $_ => $p->{$_} } @all_fields;
+    my %user = map { $_ => $p->{$_} } @Socialtext::User::Base::all_fields;
 
     die "homunculi need to have a user_id, driver_key and driver_unique_id"
         unless ($user{user_id} && $user{driver_key} && $user{driver_unique_id});
@@ -188,7 +169,7 @@ sub NewUserRecord {
         unless (ref($proto_user->{cached_at}) && 
                 $proto_user->{cached_at}->isa('DateTime'));
 
-    my %insert_args = map { $_ => $proto_user->{$_} } @all_fields;
+    my %insert_args = map { $_ => $proto_user->{$_} } @Socialtext::User::Base::all_fields;
 
     $insert_args{driver_username} = $proto_user->{driver_username};
     delete $insert_args{username};
@@ -215,7 +196,7 @@ sub UpdateUserRecord {
 
     my %update_args = map { $_ => $proto_user->{$_} } 
                       grep { exists $proto_user->{$_} }
-                      @all_fields;
+                      @Socialtext::User::Base::all_fields;
 
     if ($proto_user->{driver_username}) {
         $update_args{driver_username} = $proto_user->{driver_username};

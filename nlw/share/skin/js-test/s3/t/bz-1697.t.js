@@ -2,7 +2,7 @@
 
 var t = new Test.Visual();
 
-t.plan(1);
+t.plan(2);
 
 t.checkRichTextSupport();
 

@@ -92,6 +92,7 @@ t.runAsync([
     },
 
     function() { 
+        t.$('#st-save-button-link').click();
         t.endAsync();
     }
 ]);

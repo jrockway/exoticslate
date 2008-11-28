@@ -18,27 +18,26 @@
 
     <div style="border-style: solid; border-width: 0px 0px 1px 0px"></div>
     <div id="create-options">
-      <div id="blank-div">
+      <div id="from-blank-div">
         <input id="blank-radio" value="blank" name="blank-template" type="radio" checked="checked" /><label for="blank-radio">[% loc('Blank') %]</label>
       </div>
-      <div id="options-div">
-        <div id="blank-option">
+      <div id="template-options-div">
+        <div>
           <input id="template-radio" value="template" name="blank-template" type="radio" /><label for="template-radio">[% loc('From template:') %]</label>
         </div>
         <div id="template-option">
-          <div id="template-option-from-template" style="float: left">
+          <div style="float: left">
             <div style="float: left"><input type="radio" name="template-from" id="from-template-radio" checked="checked"></div>
-            <div style="padding-left: 8px; float: left">
-              <div>
-                <label for="from-template-radio">[% loc('Use a template:') %]</label></div><div><input type="text" />
-              </div>
+            <div id="template-option-from-template" style="padding-left: 8px; float: left">
+              <div><label for="from-template-radio">[% loc('Use a template:') %]</label></div>
+              <div><input type="text" /></div>
             </div>
           </div>
-          <div id="template-option-from-existing-page" style="float: left">
+          <div style="float: left">
             <div style="float: left">
               <input type="radio" name="template-from" id="from-existing-page-radio"/>
             </div>
-            <div style="padding-left: 8px; float: left">
+            <div id="template-option-from-existing-page" style="padding-left: 8px; float: left">
               <div><label for="from-existing-page-radio">[% loc('Copy an existing page...') %]</label></div>
               <div><input type="text" value="[% loc('Start typing a page name...') %]"/></div>
             </div>

@@ -186,7 +186,7 @@ proto.open_iframe = function(url, callback, options) {
     $iframe.height(options.h || 200);
     $iframe.width(options.w || "100%");
 
-    $("div.iframe_info span").html($iframe.height() + "x" + $iframe.width());
+    $("div.iframe_info span").html($iframe.width() + "x" + $iframe.height());
     $("input.iframe_location").val(url);
 
     var self = this;

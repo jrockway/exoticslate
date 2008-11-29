@@ -19,8 +19,11 @@ t.runAsync([
     },
             
     function() { 
-        t.$('a.addTagButton').click();
-        t.callNextStep(1000);
+        t.scrollTo(t.$('#st-tags-addlink').offset().top);
+        t.$('#st-tags-addlink').click();
+        t.poll(function(){
+            return t.$('#st-tags-field').is(':visible');
+        }, function () { t.callNextStep() } );
     },
     
     function() { 

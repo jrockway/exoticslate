@@ -7,21 +7,35 @@ t.plan(3);
 var pageName = "bz_1711_" + Math.random();
 
 var doClickAddTagButton = function() { 
-    t.scrollTo(t.$('#st-tags-addlink').offset().top);
-    t.$('#st-tags-addlink').click();
-    t.poll(function(){
-        return t.$('#st-tags-field').is(':visible');
-    }, function () { t.callNextStep(1000) } );
+    return function() {
+        t.$('#st-tags-addlink').click();
+        t.poll(function(){
+            return t.$('#st-tags-field').is(':visible');
+        }, function () { t.callNextStep(1000) } );
+    };
+};
+
+var doSubmitAddTagForm = function(tag) {
+    return function() {
+        t.$('#st-tags-field').val(tag);
+        t.$('#st-tags-form').submit();
+        t.poll(function(){
+            t.scrollTo(t.$('a.addTagButton').offset().top);
+            return t.$('a.addTagButton').is(':visible');
+        }, function () { t.callNextStep() } );
+    };
 };
 
 var testOffsets = function() { 
-    t.ok(
-        t.$('#st-tags-field').offset().left
-            < t.$('#st-tags-addbutton-link').offset().left,
-        "Adding a tag: Input and button does not wrap inbetween"
-    );
-
-    t.callNextStep();
+    return function() {
+        t.scrollTo(t.$('#st-tags-field').offset().top);
+        t.ok(
+            t.$('#st-tags-field').offset().left
+                < t.$('#st-tags-addbutton-link').offset().left,
+            "Adding a tag: Input and button does not wrap inbetween"
+        );
+        t.callNextStep();
+    };
 };
 t.runAsync([
     function() {
@@ -41,30 +55,16 @@ t.runAsync([
         );
     },
 
-    doClickAddTagButton,
-    testOffsets,
+    doClickAddTagButton(),
+    testOffsets(),
+    doSubmitAddTagForm('Hello World'),
             
-    function() { 
-        t.$('#st-tags-field').val('Hello World');
-        t.$('#st-tags-form').submit();
-        t.poll(function(){
-            return t.$('a.addTagButton').is(':visible');
-        }, function () { t.callNextStep() } );
-    },
-    
-    doClickAddTagButton,
-    testOffsets,
-            
-    function() { 
-        t.$('#st-tags-field').val('xxx');
-        t.$('#st-tags-form').submit();
-        t.poll(function(){
-            return t.$('a.addTagButton').is(':visible');
-        }, function () { t.callNextStep() } );
-    },
+    doClickAddTagButton(),
+    testOffsets(),
+    doSubmitAddTagForm('xxx'),
 
-    doClickAddTagButton,
-    testOffsets,
+    doClickAddTagButton(),
+    testOffsets(),
     
     function() { 
         t.endAsync();

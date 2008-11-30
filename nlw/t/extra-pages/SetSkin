@@ -4,7 +4,7 @@ This page sets a cookie in your browser that will temporarily set the repository
 
 *Add a skin to this page* by putting the NEWSKIN in the skins repository or at nlw/share/skin/ in your dev env, then adding the line
 
-NEWSKIN,
+'NEWSKIN',
 
 to the skins array below.
 
@@ -12,7 +12,7 @@ to the skins array below.
 
 * mainNav and workspaceNav on same level: tetrapak, zehnder
 * fixed width right & left margins (instead of % width): addleshaw  blackwell emersol pointroll
-* custom JS: climateproject flow livenation tenacity greenmountain
+* custom JS: climateproject flow livenation tenacity greenmountain prodrive
 * unusual layout: jboye
 
 .html
@@ -48,20 +48,21 @@ function set_skin (skin) {
         'aclcorporate',
         'acs',
         'addleshaw',
+        'altosventures',
         'angel',
         'atsu',
         'blackwell',
         'brainware',
         'btglobal',
         'cafas',
-        'cei-skin-2',
+        'cei',
         'clifbar',
         'climateproject',
         'coactive',
         'dfj',
-        'dla-piper',
         'dreyfus',
         'duke_ce',
+        'dutchminag',
         'dymo',
         'emersol',
         'euriki',
@@ -72,8 +73,9 @@ function set_skin (skin) {
         'humanity',
         'icrossing',
         'infosys',
+        'instanttax',
         'jboye',
-        'live_nation',
+        'livenation',
         'lp',
         'mcgraw-hill',
         'meredith',
@@ -98,6 +100,7 @@ function set_skin (skin) {
         'tenacity',
         'tetrapak',
         'uohio',
+        'wharton',
         'whatif',
         'wikinomics',
         'youtube',

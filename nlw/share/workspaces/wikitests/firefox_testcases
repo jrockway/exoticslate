@@ -28,6 +28,11 @@ It should be the last testset in this run, but it will re-enable LDAP when it fi
 * [Widgets Testcases]
 * [Profile Testcases]
 
+People and Dasboard plugin tests. Keep these two cases together in alpha order.
+
+* [Test Case: People Dashboard Plugins]
+* [Test Case: People Dashboard Plugins Reset]
+
 ^ All pages tagged 'Testcase' (only a list, visit the pages above for tests)
 
 Tests do not run out of the list since it isn't really here.

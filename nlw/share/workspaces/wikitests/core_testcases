@@ -72,11 +72,6 @@ test env properly and are not testing the test-workspace
 * [Test Case: Email]
 * [Test Case: Email Attachment]
 
-People and Dasboard plugin tests. Keep these two cases together in alpha order.
-
-* [Test Case: People Dashboard Plugins]
-* [Test Case: People Dashboard Plugins Reset]
-
 Put tests that don't use the browser here
 
 * [Test Case: Command Line: USERS]

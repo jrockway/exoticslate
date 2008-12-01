@@ -349,6 +349,11 @@ CREATE SEQUENCE users___user_id
     NO MINVALUE
     CACHE 1;
 
+CREATE TABLE workspace_plugin (
+    workspace_id bigint NOT NULL,
+    plugin text NOT NULL
+);
+
 ALTER TABLE ONLY "Account"
     ADD CONSTRAINT "Account_pkey"
             PRIMARY KEY (account_id);
@@ -456,6 +461,14 @@ ALTER TABLE ONLY tag_people__person_tags
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey
             PRIMARY KEY (user_id);
+
+ALTER TABLE ONLY workspace_plugin
+    ADD CONSTRAINT workspace_plugin_pkey
+            PRIMARY KEY (workspace_id, plugin);
+
+ALTER TABLE ONLY workspace_plugin
+    ADD CONSTRAINT workspace_plugin_ukey
+            UNIQUE (plugin, workspace_id);
 
 CREATE UNIQUE INDEX "Account___name"
 	    ON "Account" (name);
@@ -748,5 +761,10 @@ ALTER TABLE ONLY "Workspace"
             FOREIGN KEY (account_id)
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY workspace_plugin
+    ADD CONSTRAINT workspace_plugin_workspace_fk
+            FOREIGN KEY (workspace_id)
+            REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
+
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '20');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '21');

@@ -8,7 +8,7 @@
 | st-admin | index-workspace | qr/The command you called \(index-workspace\) requires a workspace to be specified/ |
 | st-admin | delete-search-index | qr/The command you called \(delete-search-index\) requires a workspace to be specified/ |
 | st-admin | delete-search-index --workspace %%cmdline_workspace%% | qr/The search index for the %%cmdline_workspace%% workspace has been deleted/ |
-| st-admin | index-workspace --workspace %%cmdline_workspace%% | qr/The %%cmdline_workspace%% workspace has been indexed/ |
+| st-admin | index-workspace --workspace %%cmdline_workspace%% --sync | qr/The %%cmdline_workspace%% workspace has been indexed/ |
 
 | st-admin | index-page | qr/The command you called \(index-page\) requires a workspace to be specified/ |
 | st-admin | index-attachment | qr/The command you called \(index-attachment\) requires a workspace to be specified/ |

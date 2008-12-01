@@ -22,20 +22,20 @@
 | st-admin | create-user --email %%cli_user%% --password wikicli --first-name Wiki --last-name CLI | qr/A new user with the username "%%cli_user_escaped%%" was created/ |
 | st-admin | create-user --email %%cli_user%% --password wikicli --first-name Wiki --last-name CLI | qr/ The email address you provided, "%%cli_user_escaped%%", is already in use/ |
 
-scrub-user
+deactivate-user
 
-| st-admin | scrub-user | The command you called (scrub-user) requires a user to be specified. |
-| st-admin | create-user --email scrub%%start_time%%@ken.socialtext.net --password scrubby --first-name scrub --last-name scrub | qr/A new user with the username "scrub%%start_time&&@ken.socialtext.net" was created/ |
-| st-admin | clone-workspace --workspace test-data --target test-data-scrub1%%start_time%% | The test-data workspace has been cloned to test-data-scrub1%%start_time%%. |
-| st-admin | clone-workspace --workspace test-data --target test-data-scrub2%%start_time%% | The test-data workspace has been cloned to test-data-scrub2%%start_time%%. |
+| st-admin | deactivate-user | The command you called (deactivate-user) requires a user to be specified. |
+| st-admin | create-user --email deactivate%%start_time%%@ken.socialtext.net --password 123456 --first-name deactivate --last-name deactivate | qr/A new user with the username "deactivate%%start_time&&@ken.socialtext.net" was created/ |
+| st-admin | clone-workspace --workspace test-data --target deactivate1%%start_time%% | The test-data workspace has been cloned to deactivate1%%start_time%%. |
+| st-admin | clone-workspace --workspace test-data --target deactivate2%%start_time%% | The test-data workspace has been cloned to deactivate2%%start_time%%. |
 
-| st-admin | add-member --email scrub%%start_time%%@ken.socialtext.net --workspace test-data-scrub1%%start_time%% | scrub%%start_time%%@ken.socialtext.net is now a member of the test-data-scrub1%%start_time%% workspace. |
-| st-admin | add-member --email scrub%%start_time%%@ken.socialtext.net --workspace test-data-scrub2%%start_time%% | scrub%%start_time%%@ken.socialtext.net is now a member of the test-data-scrub2%%start_time%% workspace. |
+| st-admin | add-member --email deactivate%%start_time%%@ken.socialtext.net --workspace deactivate1%%start_time%% | deactivate%%start_time%%@ken.socialtext.net is now a member of the deactivate1%%start_time%% workspace. |
+| st-admin | add-member --email deactivate%%start_time%%@ken.socialtext.net --workspace deactivate2%%start_time%% | deactivate%%start_time%%@ken.socialtext.net is now a member of the deactivate2%%start_time%% workspace. |
 
-| st-admin | scrub-user --email scrub%%start_time%%@ken.socialtext.net | scrub%%start_time%%@ken.socialtext.net has been removed from workspaces test-data-scrub1%%start_time%%, test-data-scrub2%%start_time%% |
+| st-admin | deactivate-user --email deactivate%%start_time%%@ken.socialtext.net | deactivate%%start_time%%@ken.socialtext.net has been removed from workspaces deactivate1%%start_time%%, deactivate2%%start_time%% |
 
-| st-admin | delete-workspace --workspace test-data-scrub1%%start_time%% --no-export | The test-data-scrub1%%start_time%% workspace has been deleted. |
-| st-admin | delete-workspace --workspace test-data-scrub2%%start_time%% --no-export | The test-data-scrub2%%start_time%% workspace has been deleted. |
+| st-admin | delete-workspace --workspace deactivate1%%start_time%% --no-export | The deactivate1%%start_time%% workspace has been deleted. |
+| st-admin | delete-workspace --workspace deactivate2%%start_time%% --no-export | The deactivate2%%start_time%% workspace has been deleted. |
 
 invite-user
 confirm-user

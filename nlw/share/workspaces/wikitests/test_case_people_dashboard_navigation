@@ -43,14 +43,15 @@ TO DO - Add testability hooks and confirm Grey Ghost Icon
 
 | text_like | Displays a single page from any of your workspaces within a Socialtext Widget. |  |
 
-| *comment* | Test Case: People Dashboard Navigation People has link to me, guest and system |  |
-| click_ok | link=People |  |
-| wait_for_element_present_ok | link=Guest User | 30000 |
-| wait_for_element_present_ok | link=System User | 30000 |
+| *comment* | Test Case: People Dashboard Navigation People. |  |
+| click_and_wait | link=People |  |
+| *Comment* | Guest, System, and self users might be on any People page, depending on how many users there are. |  |
 | wait_for_element_present_ok | //a[contains(@title,'Last Page')] | 30000 |
 | click_ok | //a[contains(@title,'Last Page')] |  |
-| wait_for_element_present_ok | link=%%short_username%% | 60000 |
-| wait_for_element_present_ok | link=%%new_email_find_me%% |  |
+
+ wait_for_element_present_ok | link=%%short_username%% | 60000 |
+
+| wait_for_element_present_ok | link=%%new_email_find_me%% | 30000 |
 
 | text_unlike | //body | %%username%% |
 | wait_for_element_present_ok | link=Summaries | 30000 |
@@ -67,7 +68,7 @@ TO DO - Add testability hooks and confirm Grey Ghost Icon
 | st-select-widget-frame | profile |  |
 | text_like | //body | %%short_username%% |
 | text_like | //body | %%username%% |
-| wait_for_element_present_ok | link=(Edit) |  |
+| wait_for_element_present_ok | link=(Edit) | 30000 |
 | click_and_wait | link=(Edit) |  |
 
 | wait_for_element_present_ok | photo-upload-button | 30000 |
@@ -86,7 +87,7 @@ TO DO - Add testability hooks and confirm Grey Ghost Icon
 | *comment* | Test Case: People Dashboard Navigation - update loses context; commented out |  |
 
 | click_ok | update_profile |  |
-| wait_for_element_present_ok | link=Log out |
+| wait_for_element_present_ok | link=Log out | 30000 |
 | click_and_wait | link=Log out |
 | st-login |  |  |
 
@@ -94,7 +95,7 @@ TO DO - Add testability hooks and confirm Grey Ghost Icon
 | click_ok | link=People |  |
 | wait_for_element_present_ok | //a[contains(@title,'Last Page')] | 30000 |
 | click_ok | //a[contains(@title,'Last Page')] |  |
-| wait_for_element_present_ok | link=Wikicus Testericus |  |
+| wait_for_element_present_ok | link=Wikicus Testericus | 30000 |
 | click_and_wait | link=Wikicus Testericus |  |
 | st-name-widget | 1 | profile |
 | st-select-widget-frame | profile |  |
@@ -105,7 +106,7 @@ TO DO - Add testability hooks and confirm Grey Ghost Icon
 | click_ok | link=People |  |
 | *comment* | short_username might not be present, thanks to pagination |  |
 
-| wait_for_element_present_ok | link=%%short_username%% |  |
+| wait_for_element_present_ok | link=%%short_username%% | 30000 |
 | click_and_wait | link=%%short_username%% |
 
 | wait_for_element_present_ok | link=Home | 30000 |
@@ -134,7 +135,7 @@ click_and_wait | submit | |
 
 st-name-widget | 1 | profile |
 st-select-widget-frame | profile |
-wait_for_element_present_ok | link=(Edit) | |
+wait_for_element_present_ok | link=(Edit) | 30000 |
 click_and_wait | link=(Edit) | |
 type_ok | first_name | |
 type_ok | last_name | |

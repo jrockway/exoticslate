@@ -28,11 +28,13 @@
 | text_like | The %%new_acct%% account has been created. |  |
 
 | *Comment* | Test case: Business Control Panel validate plugins are all disabled by default. checking only SC/People/Signals as other might go away |  |
+| *Comment* | Test case: Business Control Panel Signals is not present. Restore Signals when present. |  |
 | click_and_wait | link=%%new_acct%% |  |
 | text_like | Custom Skins: Socialtext 3 default skin |  |
 | text_like | Socialtext SocialCalc (click to enable) |  |
 | text_like | Socialtext People (click to enable) |  |
-| text_like | Socialtext Signals (click to enable) |  |
+
+ text_like | Socialtext Signals (click to enable) | |
 
 | *Comment* | Test case: Business Control Panel plugin one at a time, click the confirmation, validate that plugin is enabled. |  |
 | click_ok | toggle_plugin_people |  |
@@ -41,9 +43,10 @@
 | click_ok | toggle_plugin_socialcalc |  |
 | verifyConfirmation | Socialtext SocialCalc is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
 | wait_for_text_present_ok | Socialtext SocialCalc (click to disable) | 20000 |
-| click_ok | toggle_plugin_signals |  |
-| verifyConfirmation | Socialtext Signals is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
-| wait_for_text_present_ok | Socialtext Signals (click to disable) | 20000 |
+
+ click_ok | toggle_plugin_signals | |
+ verifyConfirmation | Socialtext Signals is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. | |
+ wait_for_text_present_ok | Socialtext Signals (click to disable) | 20000 |
 
 | *Comment* | Test case: Business Control Panel go the other way |  |
 | click_ok | toggle_plugin_people |  |
@@ -52,9 +55,10 @@
 | click_ok | toggle_plugin_socialcalc |  |
 | verifyConfirmation | You are about to disable Socialtext SocialCalc \n\n Press 'OK' to disable this module or 'Cancel' to exit. |  |
 | wait_for_text_present_ok | Socialtext SocialCalc (click to enable) | 20000 |
-| click_ok | toggle_plugin_signals |  |
-| verifyConfirmation | You are about to disable Socialtext Signals \n\n Press 'OK' to disable this module or 'Cancel' to exit. |  |
-| wait_for_text_present_ok | Socialtext Signals (click to enable) | 20000 |
+
+ click_ok | toggle_plugin_signals | |
+ verifyConfirmation | You are about to disable Socialtext Signals \n\n Press 'OK' to disable this module or 'Cancel' to exit. | |
+ wait_for_text_present_ok | Socialtext Signals (click to enable) | 20000 |
 
 | *Comment* | Test case: Business Control Panel rename account |  |
 | click_and_wait | link=Rename Account |  |

@@ -180,7 +180,16 @@ sub plugin_exists {
 
 sub registered {
     my ($self, $name) = @_;
-    return exists $hooks{$name};
+    if ( my $hooks = $hooks{$name} ) {
+        return 0 unless ref $hooks eq 'ARRAY';
+        for my $hook (@$hooks) {
+            my $plugin = $hook->{obj} ||= $hook->{class}->new();
+            my $hub = $self->hub || $self->{made_hub};
+            $plugin->hub($hub);
+            return 1 if $plugin->is_hook_enabled($name);
+        }
+    }
+    return 0;
 }
 
 sub hooked_template_vars {

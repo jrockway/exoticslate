@@ -2522,7 +2522,7 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   create-user [--account] --email [--username] --password [--first-name --last-name]
   invite-user --email --workspace --from [--secure]
   confirm-user --email --password
-  scrub-user --username
+  deactivate-user [--username or --email]
   change-password [--username or --email] --password
   add-member [--username or --email] --workspace
   remove-member [--username or --email] --workspace
@@ -2650,7 +2650,7 @@ secure (https) link.
 Confirms a new user and assigns the listed password to that user.  Requires
 an email address and a password.
 
-=head2 scrub-user --username
+=head2 deactivate-user [--username or --email]
 
 Remove a user from all their workspaces. If the user is a business or
 technical admin, revoke those privileges. This is useful for when a

@@ -12,6 +12,7 @@ use File::Slurp qw(slurp write_file);
 use File::Temp qw(tempfile);
 use Fcntl qw(SEEK_SET);
 use Socialtext::AppConfig;
+use Socialtext::LDAP;
 use Socialtext::Bootstrap::OpenLDAP;
 
 ###############################################################################

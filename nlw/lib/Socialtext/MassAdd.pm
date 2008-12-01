@@ -11,6 +11,9 @@ use Socialtext::l10n qw/loc/;
 our $Has_People_Installed;
 our @Required_fields = qw/username email_address/;
 our @User_fields = qw/first_name last_name password/;
+
+# Note: these fields may not be created, now that fields are treated
+# differently.  Please do some poking around before you change these.
 our @Profile_fields
     = qw/position company location work_phone mobile_phone home_phone/;
 
@@ -156,8 +159,8 @@ sub _add_user {
             my $value = $profile[$i];
             next unless $value;
             my $field = $Profile_fields[$i];
-            next if ($p->$field() || '') eq $value;
-            $p->$field($value);
+            next if ($p->get_attr($field) || '') eq $value;
+            $p->set_attr($field => $value);
             $changed_user++;
         }
         $p->save() if ($changed_user);

@@ -13,6 +13,7 @@ sub Classes {
                UserMetadata
                UserWorkspaceRole
                Workspace
+               Pluggable::Adapter
              );
 }
 

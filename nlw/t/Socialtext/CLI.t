@@ -277,12 +277,12 @@ MASS_ADD_USERS: {
             skip 'Socialtext People is not installed', 7 unless $Socialtext::MassAdd::Has_People_Installed;
             my $profile = Socialtext::People::Profile->GetProfile($user, no_recurse => 1);
             ok $profile, '... ST People profile was created';
-            is $profile->position, 'position', '... ... position was set';
-            is $profile->company, 'company', '... ... company was set';
-            is $profile->location, 'location', '... ... location was set';
-            is $profile->work_phone, 'work_phone', '... ... work_phone was set';
-            is $profile->mobile_phone, 'mobile_phone', '... ... mobile_phone was set';
-            is $profile->home_phone, 'home_phone', '... ... home_phone was set';
+            is $profile->get_attr('position'), 'position', '... ... position was set';
+            is $profile->get_attr('company'), 'company', '... ... company was set';
+            is $profile->get_attr('location'), 'location', '... ... location was set';
+            is $profile->get_attr('work_phone'), 'work_phone', '... ... work_phone was set';
+            is $profile->get_attr('mobile_phone'), 'mobile_phone', '... ... mobile_phone was set';
+            is $profile->get_attr('home_phone'), 'home_phone', '... ... home_phone was set';
         }
 
         # verify second user was added, but presume fields were added ok
@@ -363,7 +363,7 @@ MASS_ADD_USERS: {
             skip 'Socialtext People is not installed', 2 unless $Socialtext::MassAdd::Has_People_Installed;
             my $profile = Socialtext::People::Profile->GetProfile($user, no_recurse => 1);
             ok $profile, '... ST People profile was found';
-            is $profile->position, 'u_position', '... ... position was updated';
+            is $profile->get_attr('position'), 'u_position', '... ... position was updated';
         }
     }
 

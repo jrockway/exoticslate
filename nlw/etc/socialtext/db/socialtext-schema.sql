@@ -6,16 +6,6 @@ SET client_min_messages = warning;
 
 SET search_path = public, pg_catalog;
 
-CREATE FUNCTION auto_vivify_person() RETURNS "trigger"
-    AS $$
-        BEGIN
-            INSERT INTO person (id, last_update) 
-                VALUES (NEW.user_id, '-infinity'::timestamptz);
-            RETURN NEW;
-        END
-    $$
-    LANGUAGE plpgsql;
-
 CREATE FUNCTION is_page_contribution("action" text) RETURNS boolean
     AS $$
 BEGIN
@@ -247,32 +237,6 @@ CREATE TABLE page_tag (
     tag text NOT NULL
 );
 
-CREATE TABLE person (
-    id integer NOT NULL,
-    "position" text,
-    "location" text,
-    work_phone text,
-    mobile_phone text,
-    home_phone text,
-    aol_sn text,
-    yahoo_sn text,
-    gtalk_sn text,
-    skype_sn text,
-    sametime_sn text,
-    twitter_sn text,
-    blog text,
-    personal_url text,
-    linkedin_url text,
-    facebook_url text,
-    company text,
-    supervisor_id integer,
-    assistant_id integer,
-    photo_image bytea,
-    small_photo_image bytea,
-    last_update timestamptz DEFAULT now(),
-    is_hidden boolean DEFAULT false NOT NULL
-);
-
 CREATE TABLE person_tag (
     id integer NOT NULL,
     name text
@@ -281,6 +245,38 @@ CREATE TABLE person_tag (
 CREATE TABLE person_watched_people__person (
     person_id1 integer NOT NULL,
     person_id2 integer NOT NULL
+);
+
+CREATE TABLE profile_attribute (
+    user_id bigint NOT NULL,
+    profile_field_id bigint NOT NULL,
+    value text NOT NULL
+);
+
+CREATE TABLE profile_field (
+    profile_field_id bigint NOT NULL,
+    name text NOT NULL,
+    field_class text NOT NULL,
+    CONSTRAINT profile_field_class_check
+            CHECK (field_class IN ('attribute', 'contact', 'relationship'))
+);
+
+CREATE SEQUENCE profile_field___profile_field_id
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+CREATE TABLE profile_photo (
+    user_id integer NOT NULL,
+    photo_image bytea,
+    small_photo_image bytea
+);
+
+CREATE TABLE profile_relationship (
+    user_id bigint NOT NULL,
+    profile_field_id bigint NOT NULL,
+    other_user_id bigint NOT NULL
 );
 
 CREATE TABLE search_set_workspaces (
@@ -334,16 +330,18 @@ CREATE TABLE users (
     "password" text DEFAULT '*none*' NOT NULL,
     first_name text DEFAULT '' NOT NULL,
     last_name text DEFAULT '' NOT NULL,
-    cached_at timestamptz DEFAULT '-infinity'::timestamptz NOT NULL
+    cached_at timestamptz DEFAULT '-infinity'::timestamptz NOT NULL,
+    last_profile_update timestamptz DEFAULT '-infinity'::timestamptz NOT NULL,
+    is_profile_hidden boolean DEFAULT false NOT NULL
 );
 
 CREATE VIEW user_account AS
-  SELECT DISTINCT u.user_id, u.driver_key, u.driver_unique_id, u.driver_username, um.created_by_user_id AS creator_id, um.creation_datetime, um.primary_account_id, w.account_id AS secondary_account_id
+  SELECT DISTINCT u.user_id, u.driver_key, u.driver_unique_id, u.driver_username, um.created_by_user_id AS creator_id, um.creation_datetime, um.primary_account_id, w.account_id AS secondary_account_id, u.is_profile_hidden
    FROM users u
    JOIN "UserMetadata" um USING (user_id)
    LEFT JOIN "UserWorkspaceRole" uwr USING (user_id)
    LEFT JOIN "Workspace" w USING (workspace_id)
-  ORDER BY u.user_id, u.driver_key, u.driver_unique_id, u.driver_username, um.created_by_user_id, um.creation_datetime, um.primary_account_id, w.account_id;
+  ORDER BY u.user_id, u.driver_key, u.driver_unique_id, u.driver_username, um.created_by_user_id, um.creation_datetime, um.primary_account_id, w.account_id, u.is_profile_hidden;
 
 CREATE SEQUENCE users___user_id
     INCREMENT BY 1
@@ -415,10 +413,6 @@ ALTER TABLE ONLY page
     ADD CONSTRAINT page_pkey
             PRIMARY KEY (workspace_id, page_id);
 
-ALTER TABLE ONLY person
-    ADD CONSTRAINT person_pkey
-            PRIMARY KEY (id);
-
 ALTER TABLE ONLY person_tag
     ADD CONSTRAINT person_tag_pkey
             PRIMARY KEY (id);
@@ -426,6 +420,22 @@ ALTER TABLE ONLY person_tag
 ALTER TABLE ONLY person_watched_people__person
     ADD CONSTRAINT person_watched_people__person_pkey
             PRIMARY KEY (person_id1, person_id2);
+
+ALTER TABLE ONLY profile_attribute
+    ADD CONSTRAINT profile_attribute_pkey
+            PRIMARY KEY (user_id, profile_field_id);
+
+ALTER TABLE ONLY profile_field
+    ADD CONSTRAINT profile_field_pkey
+            PRIMARY KEY (profile_field_id);
+
+ALTER TABLE ONLY profile_photo
+    ADD CONSTRAINT profile_photo_pkey
+            PRIMARY KEY (user_id);
+
+ALTER TABLE ONLY profile_relationship
+    ADD CONSTRAINT profile_relationship_pkey
+            PRIMARY KEY (user_id, profile_field_id);
 
 ALTER TABLE ONLY search_sets
     ADD CONSTRAINT search_sets_pkey
@@ -502,12 +512,6 @@ CREATE INDEX ix_page_events_contribs_actor_time
 	    ON event (actor_id, "at")
 	    WHERE ((event_class = 'page') AND is_page_contribution("action"));
 
-CREATE INDEX ix_person_assistant_id
-	    ON person (assistant_id);
-
-CREATE INDEX ix_person_supervisor_id
-	    ON person (supervisor_id);
-
 CREATE INDEX page_creator_time
 	    ON page (creator_id, create_time);
 
@@ -525,6 +529,12 @@ CREATE INDEX page_tag__workspace_tag_ix
 
 CREATE UNIQUE INDEX person_tag__name
 	    ON person_tag (name);
+
+CREATE UNIQUE INDEX profile_field_name
+	    ON profile_field (name);
+
+CREATE INDEX profile_relationship_other_user_id
+	    ON profile_relationship (other_user_id);
 
 CREATE UNIQUE INDEX search_set_workspaces___search_set_id___search_set_id___workspa
 	    ON search_set_workspaces (search_set_id, workspace_id);
@@ -557,11 +567,6 @@ CREATE UNIQUE INDEX users_lower_username_driver_key
 
 CREATE INDEX watchlist_user_workspace
 	    ON "Watchlist" (user_id, workspace_id);
-
-CREATE TRIGGER person_ins
-    AFTER INSERT ON users
-    FOR EACH ROW
-    EXECUTE PROCEDURE auto_vivify_person();
 
 ALTER TABLE ONLY account_plugin
     ADD CONSTRAINT account_plugin_account_fk
@@ -673,21 +678,6 @@ ALTER TABLE ONLY page
             FOREIGN KEY (workspace_id)
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
-ALTER TABLE ONLY person
-    ADD CONSTRAINT person_assistant_id_fk
-            FOREIGN KEY (assistant_id)
-            REFERENCES users(user_id) ON DELETE CASCADE;
-
-ALTER TABLE ONLY person
-    ADD CONSTRAINT person_id_fk
-            FOREIGN KEY (id)
-            REFERENCES users(user_id) ON DELETE CASCADE;
-
-ALTER TABLE ONLY person
-    ADD CONSTRAINT person_supervisor_id_fk
-            FOREIGN KEY (supervisor_id)
-            REFERENCES users(user_id) ON DELETE CASCADE;
-
 ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT person_tags_fk
             FOREIGN KEY (person_id)
@@ -701,6 +691,36 @@ ALTER TABLE ONLY person_watched_people__person
 ALTER TABLE ONLY person_watched_people__person
     ADD CONSTRAINT person_watched_people_inverse_fk
             FOREIGN KEY (person_id2)
+            REFERENCES users(user_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY profile_attribute
+    ADD CONSTRAINT profile_attribute_field_fk
+            FOREIGN KEY (profile_field_id)
+            REFERENCES profile_field(profile_field_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY profile_attribute
+    ADD CONSTRAINT profile_attribute_user_fk
+            FOREIGN KEY (user_id)
+            REFERENCES users(user_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY profile_photo
+    ADD CONSTRAINT profile_photo_user_id_fk
+            FOREIGN KEY (user_id)
+            REFERENCES users(user_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY profile_relationship
+    ADD CONSTRAINT profile_relationship_field_fk
+            FOREIGN KEY (profile_field_id)
+            REFERENCES profile_field(profile_field_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY profile_relationship
+    ADD CONSTRAINT profile_relationship_other_user_fk
+            FOREIGN KEY (other_user_id)
+            REFERENCES users(user_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY profile_relationship
+    ADD CONSTRAINT profile_relationship_user_fk
+            FOREIGN KEY (user_id)
             REFERENCES users(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY tag_people__person_tags
@@ -729,4 +749,4 @@ ALTER TABLE ONLY "Workspace"
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '19');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '20');

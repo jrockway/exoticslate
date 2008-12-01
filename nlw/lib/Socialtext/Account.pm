@@ -287,40 +287,26 @@ sub user_count {
     my $primary_only = shift;
     my $exclude_hidden_people = shift;
 
-    my $where = '';
+    my $account_where = 'primary_account_id = ?';
     my @bind = ($self->account_id);
     unless ($primary_only) {
-        $where = 'OR secondary_account_id = ?';
+        $account_where .= ' OR secondary_account_id = ?';
         push @bind, $self->account_id;
     }
 
     Socialtext::Timer->Continue('acct_user_count');
 
-    my ($join_person_clause, $exclude_hidden_clause) = ('', '');
+    my $exclude_hidden_clause = '';
     if ($exclude_hidden_people) {
-        $join_person_clause = 'JOIN person ON user_id = person.id';
-        $exclude_hidden_clause = 'AND NOT person.is_hidden';
+        $exclude_hidden_clause = 'AND NOT is_profile_hidden';
     }
 
-    my $sth;
-    if ($primary_only) {
-        $sth = sql_execute(<<EOT, $self->account_id);
-            SELECT COUNT(DISTINCT(user_id))
-                FROM "UserMetadata"
-                $join_person_clause
-                WHERE primary_account_id = ?
-                  $exclude_hidden_clause
-EOT
-    }
-    else {
-        $sth = sql_execute(<<EOT, $self->account_id);
-            SELECT COUNT(DISTINCT(user_id))
-                FROM account_user
-                $join_person_clause
-                WHERE account_id = ?
-                  $exclude_hidden_clause
-EOT
-    }
+    my $sth = sql_execute(<<EOSQL, @bind);
+        SELECT COUNT(DISTINCT(user_id))
+        FROM user_account
+        WHERE $account_where
+              $exclude_hidden_clause
+EOSQL
 
     my $count = $sth->fetchall_arrayref->[0][0];
     Socialtext::Timer->Pause('acct_user_count');

@@ -77,6 +77,16 @@ sub handler {
     return $res;
 }
 
+sub EnsureRequiredDataIsPresent {
+    my $class   = shift;
+    my $adapter = $class->new;
+    $adapter->make_hub(
+        Socialtext::User->SystemUser(),
+        Socialtext::NoWorkspace->new
+    );
+    $adapter->hook('nlw.set_up_data');
+}
+
 sub make_hub {
     my ($self,$user,$ws) = @_;
     my $main = Socialtext->new;

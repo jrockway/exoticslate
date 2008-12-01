@@ -184,10 +184,10 @@ Add_user_already_added: {
         is_deeply \@failures, [], 'no failure messages';
 
         my $profile = $Socialtext::People::Profile::Profiles{1};
-        is $profile->position, 'Captain', 'People position was updated';
-        is $profile->company, 'Pirates R. Us', 'People company was updated';
-        is $profile->location, 'High Seas', 'People location was updated';
-        is $profile->work_phone, '123-456-YARR', 'People work_phone was updated';
+        is $profile->get_attr('position'), 'Captain', 'People position was updated';
+        is $profile->get_attr('company'), 'Pirates R. Us', 'People company was updated';
+        is $profile->get_attr('location'), 'High Seas', 'People location was updated';
+        is $profile->get_attr('work_phone'), '123-456-YARR', 'People work_phone was updated';
     }
 
     Update_with_no_people_installed: {

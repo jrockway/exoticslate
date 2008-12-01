@@ -2,11 +2,11 @@
 # @COPYRIGHT@
 use warnings;
 use strict;
-use Test::More tests => 69;
+use Test::More tests => 72;
 use Test::Exception;
 use mocked 'Socialtext::Headers';
 use mocked 'Socialtext::CGI';
-use mocked 'Socialtext::SQL', 'sql_ok';
+use mocked 'Socialtext::SQL', ':test';
 use mocked 'Socialtext::Workspace';
 use mocked 'Socialtext::Page';
 use mocked 'Socialtext::User';
@@ -173,119 +173,118 @@ EOSQL
             }
         ], 'found event';
 
-        is scalar(@Socialtext::SQL::SQL), 2, 'correct # of sql left';
         sql_ok( 
             sql => "$base_select $tail_select",
             args => [@viewer_args],
         );
-        sql_ok( 
-            sql => "SELECT * FROM person WHERE id = ?",
+        sql_ok( # profile lookup
+            sql => qr/SELECT .+ FROM users WHERE user_id = \?/,
             args => [1234],
         );
+        ok_no_more_sql();
     }
 
     Get_limited_events: {
         my $events = Socialtext::Events->Get($viewer, limit => 32);
         is_deeply $events, [], "no spurious events";
-        ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select $tail_select LIMIT ?",
             args => [@viewer_args, 32],
         );
+        ok_no_more_sql();
     }
 
     Get_offset_events: {
         Socialtext::Events->Get($viewer, offset => 5);
-        ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select $tail_select OFFSET ?",
             args => [@viewer_args, 5],
         );
+        ok_no_more_sql();
     }
 
     Get_limit_and_offset_events: {
         Socialtext::Events->Get($viewer, limit => 5, offset => 10);
-        ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select $tail_select LIMIT ? OFFSET ?",
             args => [@viewer_args, 5, 10],
         );
+        ok_no_more_sql();
     }
 
     Get_before_events: {
         Socialtext::Events->Get($viewer, before => 'now');
-        ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select AND (at < ?::timestamptz) $tail_select",
             args => [$viewer_args[0], 'now', @viewer_args[1,2,3]],
         );
+        ok_no_more_sql();
     }
 
     Get_after_events: {
         Socialtext::Events->Get($viewer, after => 'now');
-        ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select AND (at > ?::timestamptz) $tail_select",
             args => [$viewer_args[0], 'now', @viewer_args[1,2,3]],
         );
+        ok_no_more_sql();
     }
 
     Get_before_and_after: {
         # If both before and after, before wins
         Socialtext::Events->Get($viewer, before => 'then', after => 'now');
-        ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select AND (at < ?::timestamptz)
                                  AND (at > ?::timestamptz) $tail_select",
             args => [$viewer_args[0], 'then', 'now', @viewer_args[1,2,3]],
         );
+        ok_no_more_sql();
     }
 
     Get_action_events: {
         Socialtext::Events->Get($viewer,  action => 'View' );
-        ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select AND (e.action = ?) $tail_select",
             args => [$viewer_args[0], 'View', @viewer_args[1,2,3]],
         );
+        ok_no_more_sql();
     }
 
     Get_action_events_for_class: {
         Socialtext::Events->Get($viewer,  action => 'View', event_class => 'thingers' );
-        ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select AND (e.event_class = ?) AND (e.action = ?)
                     $tail_select",
             args => [$viewer_args[0], 'thingers', 'View', @viewer_args[1,2,3]],
         );
+        ok_no_more_sql();
     }
 
     Get_action_and_before_events: {
         Socialtext::Events->Get($viewer,  action => 'View', before => 'then' );
-        ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             sql => "$base_select AND (at < ?::timestamptz) AND (e.action = ?)
                     $tail_select",
             args => [$viewer_args[0], 'then', 'View', @viewer_args[1,2,3]],
         );
+        ok_no_more_sql();
     }
 
     Get_action_and_before_events_with_count: {
         # count and limit are synonyms
         Socialtext::Events->Get($viewer, action => 'view', before => 'then', count => 5);
-        ok @Socialtext::SQL::SQL == 1;
         sql_ok( 
             name => 'Get_action_and_before_events_with_count',
             sql => "$base_select AND (at < ?::timestamptz) AND (e.action = ?)
                     $tail_select LIMIT ?",
             args => [$viewer_args[0], 'then', 'view', @viewer_args[1,2,3], 5],
         );
+        ok_no_more_sql();
     }
 
     Get_action_and_before_events_with_count_and_class: {
         Socialtext::Events->Get($viewer, action => 'view', before => 'then', count => 5,
                                 event_class => 'page');
-        ok @Socialtext::SQL::SQL == 1;
         sql_ok(
             name => 'Get_action_and_before_events_with_count_and_class',
             sql  => "$base_select AND (at < ?::timestamptz) 
@@ -296,6 +295,7 @@ EOSQL
                 @viewer_args[1,2,3], 5
             ],
         );
+        ok_no_more_sql();
     }
 }
 
@@ -316,7 +316,7 @@ Creating_events: {
                 local $ev{$key} = undef;
                 Socialtext::Events->Record(\%ev);
             } 'no event_class parameter';
-            ok @Socialtext::SQL::SQL == 0, "no events recorded";
+            ok_no_more_sql();
         }
 
         $ev{event_class} = 'person';
@@ -326,7 +326,7 @@ Creating_events: {
         dies_ok {
             Socialtext::Events->Record(\%ev);
         } 'no person parameter';
-        ok @Socialtext::SQL::SQL == 0, "no events recorded";
+        ok_no_more_sql();
 
 
         $ev{person} = 2;
@@ -335,7 +335,7 @@ Creating_events: {
         dies_ok {
             Socialtext::Events->Record(\%ev);
         } 'invalid json';
-        ok @Socialtext::SQL::SQL == 0, "no events recorded";
+        ok_no_more_sql();
     }
 
 
@@ -348,13 +348,13 @@ Creating_events: {
             workspace   => 22,
             event_class => 'page',
         });
-        ok @Socialtext::SQL::SQL == 1;
         sql_ok(
             name => "Record valid event",
             sql => $insert_re,
             args => [ 'whenevs', 'page', 'view', 1, undef,
                       'hello_world', 22, undef, undef ],
         );
+        ok_no_more_sql();
     }
 
     Record_page_object: {
@@ -370,6 +370,7 @@ Creating_events: {
                      undef, 'example_page',  348798, undef,
                      '{"revision_id":"abcd","revision_count":56}'],
         );
+        ok_no_more_sql();
     }
 
     Record_event_specified_timestamp: {
@@ -388,6 +389,7 @@ Creating_events: {
             args => ['yesterday', 'page', 'tag', 4376, undef,
                      'woot_woot',  832, undef, '{"a":"b"}'],
         );
+        ok_no_more_sql();
     }
 
     Record_event_with_user_object: {
@@ -407,6 +409,7 @@ Creating_events: {
             args => ['yesterday', 'page', 'tag', 42, 123,
                      'yee_haw', 832111, undef, '[{"c":"d"}]'],
         );
+        ok_no_more_sql();
     }
 }
 

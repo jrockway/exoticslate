@@ -1,5 +1,4 @@
 | *Comment* | Starting Test Case: Tagging Profile |  |
-
 | click_and_wait | link=Profile |  |
 
 | *Comment* | Test Case: Tagging Profile. fog tag added |  |
@@ -49,8 +48,7 @@ TODO: figure out why testing for Chinese chars in tag widget fails. Need frame s
 | *Comment* | Test Case: Tagging Profile add the same tag to a different user |  |
 
 | *Comment* | These values must match the one in [Test Case: Edit Profile] |  |
-| set | e_user | profile.editor@ken.socialtext.net |
-| set | short_e_user | profile.editor |
+| set | e_user | `profile.editor@ken.socialtext.net` |
 | set | fname | Profligate |
 | set | lname | Edisaurus |
 
@@ -65,7 +63,7 @@ TODO: figure out why testing for Chinese chars in tag widget fails. Need frame s
 | text_like | st-editing-tools-edit | %%fname%% %%lname%% |
 | click_and_wait | link=Profile |  |
 
-| *Comment* | Test Case: Tagging Profile. fog tag added to %%short_e_user%% |  |
+| *Comment* | Test Case: Tagging Profile. fog tag added to %%e_user%% |  |
 | wait_for_element_visible_ok | new_tag | 30000 |
 | type_ok | new_tag | fog %%start_time%% |
 | click_ok | //input[@value='Add Tag'] |  |
@@ -92,10 +90,31 @@ TODO: figure out why testing for Chinese chars in tag widget fails. Need frame s
 | wait_for_text_present_ok | %%fname%% %%lname%% | 10000 |
 | wait_for_text_not_present_ok | %%e_user%% | 10000 |
 
-| pause | 5000 | admire the beauty |
+| *Comment* | Make and tag a new user |  |
+| set | tag_user | `tagger.%%start_time%%@ken.socialtext.net` |
+| set | fname | Tigger |
+| set | lname | The Tagger |
+
+| st-admin | create-user --e %%tag_user%% --p %%password%% --f "%%fname%%" --l "%%lname%%" --account %%hostname%% | A new user with the username "%%tag_user%%" was created |
+| st-logoutin | %%tag_user%% | %%password%% |
+| wait_for_element_visible_ok | link=Profile | 30000 |
+| click_and_wait | link=Profile |  |
+| wait_for_element_visible_ok | new_tag | 30000 |
+| type_ok | new_tag | tagger %%start_time%% |
+| click_ok | //input[@value='Add Tag'] |  |
+| wait_for_element_visible_ok | link=tagger %%start_time%% | 30000 |
+| text_like | link=tagger %%start_time%% | tagger %%start_time%% |
+
+| *Comment* | Test Case: Tagging Profile. Add tag to me |  |
+| st-admin | set-user-names --e %%email%% --f "" --l "" |  |
+| st-logoutin |  |  |
+| open_ok | /?action=people;tag=tagger%20%%start_time%% |  |
+| wait_for_element_visible_ok | link=%%fname%% %%lname%% | 30000 |
+| wait_for_element_visible_ok | link=Tools | 30000 |
+| click_ok | link=Add this tag to me |  |
+| wait_for_element_visible_ok | link=%%short_username%% | 30000 |
+| text_like | link=%%short_username%% | %%short_username%% |
 
 | *Comment* | Test Case : Tagging COMPLETED |  |
 
-^ END
-
-TODO: find a way to test lookahead
+TODO: find a way to test lookahead. Add this tag to someone only works with lookahead.

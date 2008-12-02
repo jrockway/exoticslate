@@ -216,63 +216,94 @@ sub set_default_account {
     $self->_success(loc("The default account is now [_1].", $account->name));
 }
 
-sub enable_plugin {
-    my $self = shift;
+sub _set_plugin_enabled_for_workspace {
+    my ($self, $enabled, $plugin, $workspace) = @_;
 
-    my $plugin  = $self->_require_plugin;
-    $self->{account} ||= $self->_require_account;
+    if ($enabled) {
+        $workspace->enable_plugin($plugin);
+    }
+    else {
+        $workspace->disable_plugin($plugin);
+    }
 
-    my $enabler = sub {
-        my $account = shift;
+    my $msg = $enabled ? "Plugin [_1] is now enabled for workspace [_2]." :
+                         "Plugin [_1] is now disabled for workspace [_2].";
+    return loc($msg, $plugin, $workspace->name);
+}
+
+sub _set_plugin_enabled_for_account {
+    my ($self, $enabled, $plugin, $account) = @_;
+
+    if ($enabled) {
         $account->enable_plugin($plugin);
-        return loc("Plugin [_1] is now enabled for account [_2].",
-            $plugin,
-            $account->name,
-        );
-    };
-    my $msg = $self->_account_plugin_action($enabler);
-    
+    }
+    else {
+        $account->disable_plugin($plugin);
+    }
+
+    my @msgs;
+
     # Plugin business logic - maybe this should live somewhere else
     if ($plugin eq 'people' or $plugin eq 'dashboard') {
-        $plugin = $self->_require_plugin('widgets');
-        $msg .= $self->_account_plugin_action($enabler);
+        $self->_require_plugin('widgets');
+        push @msgs, $self->_set_plugin_enabled_for_account(
+            $enabled, 'widgets', $account
+        );
     }
-    $self->_success( $msg );
+
+    my $msg = $enabled ? "Plugin [_1] is now enabled for account [_2]." :
+                         "Plugin [_1] is now disabled for account [_2].";
+    push @msgs, loc($msg, $plugin, $account->name);
+    return @msgs;
+}
+
+sub _set_plugin_enabled {
+    my ($self, $plugin, $enabled) = @_;
+
+    my %opts = $self->_get_options('account:s', 'all-accounts', 'workspace:s');
+
+    my @msgs;
+
+    if ($opts{'all-accounts'}) {
+        my $all = Socialtext::Account->All;
+        while (my $account = $all->next) {
+            push @msgs, $self->_set_plugin_enabled_for_account(
+                $enabled, $plugin, $account
+            );
+        }
+    }
+    elsif ($opts{account}) {
+        my $account = $self->_load_account($opts{account});
+        push @msgs, $self->_set_plugin_enabled_for_account(
+            $enabled, $plugin, $account
+        );
+    }
+    elsif ($opts{workspace}) {
+        my $workspace = Socialtext::Workspace->new( name => $opts{workspace} );
+        push @msgs, $self->_set_plugin_enabled_for_workspace(
+            $enabled, $plugin, $workspace
+        );
+    }
+    else {
+        $self->_error(
+            loc("The command you called ([_1]) requires an account or a "
+                . "workspace to be specified.", $self->{command}),
+        );
+    }
+
+    $self->_success( join "\n", @msgs );
+}
+
+sub enable_plugin {
+    my $self = shift;
+    my $plugin  = $self->_require_plugin;
+    return $self->_set_plugin_enabled($plugin => 1);
 }
 
 sub disable_plugin {
     my $self = shift;
-    
     my $plugin  = $self->_require_plugin;
-    $self->{account} ||= $self->_require_account;
-
-    my $disabler = sub {
-        my $account = shift;
-        $account->disable_plugin($plugin);
-        return loc("Plugin [_1] is now disabled for account [_2].",
-            $plugin,
-            $account->name,
-        );
-    };
-    my $msg = $self->_account_plugin_action($disabler);
-    $self->_success( $msg );
-}
-
-sub _account_plugin_action {
-    my $self = shift;
-    my $callback = shift;
-
-    my @messages;
-    if ($self->{account}) {
-        push @messages, $callback->( $self->{account} );
-    }
-    else {
-        my $all = Socialtext::Account->All();
-        while (my $account = $all->next) {
-            push @messages, $callback->( $account );
-        }
-    }
-    return join("\n", @messages) . "\n";
+    return $self->_set_plugin_enabled($plugin => 0);
 }
 
 sub _require_plugin {
@@ -2212,9 +2243,11 @@ sub _require_user {
 sub _require_workspace {
     my $self = shift;
     my $key  = shift || 'workspace';
+    my $optional = shift;
 
     my %opts = $self->_get_options("$key:s");
 
+    return if $optional and !$opts{$key};
     unless ( $opts{$key} ) {
         $self->_error(
             "The command you called ($self->{command}) requires a workspace to be specified.\n"
@@ -2597,9 +2630,9 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
 
   PLUGINS
 
-  enable-plugin  [--account | --all-accounts] 
+  enable-plugin  [--account | --all-accounts | --workspace]
                  --plugin [ people | dashboard | socialcalc ]
-  disable-plugin [--account | --all-accounts]
+  disable-plugin [--account | --all-accounts | --workspace]
                  --plugin [ people | dashboard | socialcalc ]
 
   EMAIL
@@ -3030,14 +3063,6 @@ Exports the specified account to a directory in the temp workspace.
 =head2 import-account --directory [--overwrite] [--name] [--noindex]
 
 Imports an account from the specified directory.
-
-=head2 enable-plugin [--account | --all-accounts] --plugin  [ people | dashboard | socialcalc ]
-
-Enables plugin for all users in an account
-
-=head2 disable-plugin [--account | --all-accounts] --plugin [ people | dashboard | socialcalc ]
-
-Disables plugin for all users in an account
 
 =head2 from-input < <list of commands>
 

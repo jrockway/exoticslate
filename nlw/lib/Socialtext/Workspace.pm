@@ -951,6 +951,38 @@ sub ping_uris {
     }
 }
 
+sub is_plugin_enabled {
+    my ($self, $plugin) = @_;
+    my $sql = q{
+        SELECT COUNT(*) FROM workspace_plugin
+        WHERE workspace_id = ? AND plugin = ?
+    };
+    return sql_singlevalue($sql, $self->workspace_id, $plugin);
+}
+
+sub enable_plugin {
+    my ($self, $plugin) = @_;
+
+    if (!$self->is_plugin_enabled($plugin)) {
+        sql_execute(q{
+            INSERT INTO workspace_plugin VALUES (?,?)
+        }, $self->workspace_id, $plugin);
+
+        Socialtext::Cache->clear('authz_plugin');
+    }
+}
+
+sub disable_plugin {
+    my ($self, $plugin) = @_;
+
+    sql_execute(q{
+        DELETE FROM workspace_plugin
+        WHERE workspace_id = ? AND plugin = ?
+    }, $self->workspace_id, $plugin);
+
+    Socialtext::Cache->clear('authz_plugin');
+}
+
 sub comment_form_custom_fields {
     my $self = shift;
 
@@ -2172,6 +2204,18 @@ permissions according to the definition of that set.
 The valid set names and the permissions they give are shown below.
 Additionally, all permission sets give the same permissions as C<member> plus
 C<impersonate> to the C<impersonator> role.
+
+=head2 $workspace->is_plugin_enabled($plugin)
+
+Returns true if the specified plugin is enabled for this workspace.
+
+=item $workspace->enable_plugin($plugin)
+
+Enables the plugin for the specified workspace.
+
+=item $workspace->disable_plugin($plugin)
+
+Disables the plugin for the specified workspace.
 
 =over 4
 

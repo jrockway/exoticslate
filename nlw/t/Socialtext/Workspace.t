@@ -1,7 +1,7 @@
 #!perl
 # @COPYRIGHT@
 use mocked qw(Socialtext::l10n system_locale); # Has to come firstest.
-use Test::Socialtext tests => 112;
+use Test::Socialtext tests => 114;
 use strict;
 use warnings;
 
@@ -717,6 +717,18 @@ EXPORT_WITH_MISSING_DIR: {
         qr/Export Directory .+ does not exist./i,
         'Non-existent export directory generates expected error message'
     );
+}
+
+Rudimentary_Plugin_Test: {
+    my $ws = Socialtext::Workspace->create(
+        name       => 'pluggy',
+        title      =>  'Export Workspace',
+        account_id => Socialtext::Account->Socialtext()->account_id,
+    );
+   $ws->enable_plugin( 'socialcalc' );
+   is($ws->is_plugin_enabled('socialcalc'), '1', 'socialcalc enabled.');
+   $ws->disable_plugin( 'socialcalc' );
+   is($ws->is_plugin_enabled('socialcalc'), '0', 'socialcalc disabled.');
 }
 
 exit;

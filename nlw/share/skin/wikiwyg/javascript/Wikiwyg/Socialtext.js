@@ -1700,7 +1700,7 @@ if (Wikiwyg.is_ie) {
 
         html += "</a>";
 
-        this.get_editable_div().focus(); // Need this before .insert_html
+        this.set_focus(); // Need this before .insert_html
         this.insert_html(html);
     }
 }
@@ -1771,7 +1771,7 @@ proto.do_new_table = function() {
             return $error.text('Rows is too big. 100 maximum.');
         if (cols > 35)
             return $error.text('Columns is too big. 35 maximum.');
-        self.get_editable_div().focus(); // Need this before .insert_html
+        self.set_focus(); // Need this before .insert_html
         self.insert_html(self.make_table_html(rows, cols));
         jQuery.hideLightbox();
     }
@@ -1800,7 +1800,7 @@ proto.do_new_table = function() {
 proto.do_table = function() {
     var doc = this.get_edit_document();
     jQuery("span.find-cursor", doc).remove();
-    this.get_editable_div().focus(); // Need this before .insert_html
+    this.set_focus(); // Need this before .insert_html
     this.insert_html( "<span class=\"find-cursor\"></span>" );
 
     var self = this;
@@ -2149,7 +2149,7 @@ proto.exec_command = function(command, option) {
          * prepends a temporary space so the insert can work. -- {bz: 1451}
          */
 
-        this.get_editable_div().focus(); // Need this before .insert_html
+        this.set_focus(); // Need this before .insert_html
 
         var range = this.__range
                  || this.get_edit_document().selection.createRange();

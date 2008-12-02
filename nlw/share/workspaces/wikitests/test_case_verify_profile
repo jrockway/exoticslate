@@ -54,9 +54,9 @@
 | text_like | `Facebook: http://facebook/%%short_e_user%%` |
 
 | text_like | Manager |
-| text_like | System User |
+| text_like | user one |
 | text_like | Assistant |
-| text_like | Guest User |
+| text_like | user two |
 
 | *Comment* | Test Case: Verify Profile. PHOTO |  |
 | wait_for_element_present_ok | //img[@class='bigAvatar'] | 1000 |

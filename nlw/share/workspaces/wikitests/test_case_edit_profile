@@ -69,8 +69,10 @@
 | type_ok | personal_url | personal/%%short_e_user%% |
 | type_ok | linkedin_url | linkedIn/%%short_e_user%% |
 | type_ok | facebook_url | facebook/%%short_e_user%% |
-| select_ok | supervisor | System User |
-| select_ok | assistant | Guest User |
+
+| *Comment* | Test Case: Edit Profile. Need to select users in a common account |  |
+| select_ok | supervisor | user one |
+| select_ok | assistant | user two |
 
 | *Comment* | Test Case: Edit Profile. Upload photo |  |
 | check_ok | select-upload |  |

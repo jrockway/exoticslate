@@ -73,5 +73,3 @@ else
 fi
 
 st-admin set-workspace-config --workspace admin skin_name s3
-
-st-socialcalc enable

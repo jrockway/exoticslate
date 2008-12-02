@@ -114,17 +114,11 @@ foreach my $column (@COLUMNS) {
     field $column;
 }
 
-field enable_spreadsheet =>
-    -init => '$self->_set_workspace_option("enable_spreadsheet")';
-
-sub _set_workspace_option {
+# XXX: This is here to support the non-plugin method of checking whether
+# socialcalc is enabled or not.
+sub enable_spreadsheet {
     my ($self, $option) = @_;
-    return -e File::Spec->catdir(  
-        Socialtext::AppConfig->config_dir(),
-        "workspace_options",
-        $self->name,
-        $option
-    );
+    return $self->is_plugin_enabled('socialcalc');
 }
 
 # Special case the "help" workspace.  Since existing Wikitext (and rarely used

@@ -78,11 +78,7 @@ proto.setup = function () {
     jQuery('#st-create-content-lightbox #st-create-content-form')
         .unbind('submit')
         .submit(function () {
-            var urls = {
-                page: "?action=new_page",
-                spreadsheet: "?action=new_page;page_type=spreadsheet"
-            };
-            var url = urls[self.selected_page_type()];
+            var url = self.create_url();
             alert(url);
             if (url)
                 document.location = url;    
@@ -91,3 +87,18 @@ proto.setup = function () {
 
 }
 
+proto.set_incipient_title = function (title) {
+    this._incipient_title = title;
+}
+
+proto.create_url = function () {
+    var type = this.selected_page_type();
+    if (this._incipient_title) {
+        return "?action=display;is_incipient=1"
+            + ';page_name=' + this._incipient_title
+            + ';page_type=' + type;
+    }
+    else {
+        return "?action=new_page;page_type=" + type;
+    }
+}

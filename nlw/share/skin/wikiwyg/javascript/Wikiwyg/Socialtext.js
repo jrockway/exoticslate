@@ -751,12 +751,21 @@ proto.newpage_save = function(page_name, pagename_editfield) {
 }
 
 proto.saveContent = function() {
-    jQuery('#st-editing-tools-edit ul').hide()
+    if (jQuery('#st-editing-tools-edit ul').is(':hidden')) {
+        // Don't allow "Save" to be clicked while saving: {bz: 1718}
+        return;
+    }
+
+    jQuery('#st-editing-tools-edit ul').hide();
     jQuery('<div id="saving-message" />')
         .html(loc('Saving...'))
         .css('color', 'red')
         .appendTo('#st-editing-tools-edit');
-    this.saveChanges();
+
+    var self = this;
+    setTimeout(function(){
+        self.saveChanges();
+    }, 1);
 }
 
 

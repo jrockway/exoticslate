@@ -202,15 +202,32 @@ sub registered {
     return 0;
 }
 
+sub content_types {
+    my $self = shift;
+    my @ct;
+    for my $plug_class ($self->plugins) {
+        my $plugin = $self->{_plugins}{$plug_class} || $plug_class->new;
+        unless ($self->hub) {
+            $self->make_hub($self->rest->user);
+        }
+        $plugin->hub($self->hub);
+        if ($plugin->is_plugin_enabled) {
+            push @ct, $plugin->content_types;
+        }
+    }
+    return @ct;
+}
+
 sub hooked_template_vars {
     my $self = shift;
     return if $self->hub->current_user->is_guest();
     my %vars;
-    my $hooks = $hook_types{template_var} || [];
-    for my $hook (@$hooks) {
+    my $tt_hooks = $hook_types{template_var} || [];
+    for my $hook (@$tt_hooks) {
         my ($key) = $hook->{name} =~ m{template_var\.(.*)};
         $vars{$key} = $self->hook($hook->{name});
     }
+    $vars{content_types} = [ $self->content_types ];
     return %vars;
 }
 
@@ -221,12 +238,13 @@ sub hook {
         return unless ref $hooks eq 'ARRAY';
         for my $hook (@$hooks) {
             my $method = $hook->{method};
-            my $plugin = $hook->{obj} ||= $hook->{class}->new();
+            my $plug_class = $hook->{class};
+            my $plugin = $self->{_plugins}{$plug_class} || $plug_class->new;
             my $hub = $self->hub || $self->{made_hub};
             $plugin->hub($hub);
             $plugin->rest( $self->{_rest_handler} );
 
-            my $enabled = $plugin->is_hook_enabled($name);
+            my $enabled = $plugin->is_plugin_enabled($name);
             next unless $enabled;
                          
             eval {

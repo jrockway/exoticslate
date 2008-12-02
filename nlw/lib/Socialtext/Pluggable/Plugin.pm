@@ -23,6 +23,7 @@ my $code_base = Socialtext::AppConfig->code_base;
 # Class Methods
 
 my %hooks;
+my %content_types;
 my %rest_hooks;
 my %rests;
 
@@ -144,10 +145,24 @@ sub add_hook {
     };
 }
 
+sub add_content_type {
+    my ($self,$name) = @_;
+    my $class = ref($self) || $self;
+    my $types = $content_types{$class};
+    push @{$content_types{$class}}, $name
+        unless grep { $_ eq $name } @{$content_types{$class}};
+}
+
 sub hooks {
     my $self = shift;
     my $class = ref($self) || $self;
     return $hooks{$class} ? @{$hooks{$class}} : ();
+}
+
+sub content_types {
+    my $self = shift;
+    my $class = ref($self) || $self;
+    return $content_types{$class} ? @{$content_types{$class}} : ();
 }
 
 sub rest_hooks {

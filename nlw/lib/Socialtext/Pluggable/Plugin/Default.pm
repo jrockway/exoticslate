@@ -20,6 +20,8 @@ sub register {
     $class->add_hook('template.user_small_photo.content' => 'user_photo');
     $class->add_hook('template.user_photo.content'       => 'user_photo');
     $class->add_hook('wafl.user'                         => 'user_name');
+
+    $class->add_content_type('page');
 }
 
 sub root {
@@ -48,5 +50,6 @@ sub user_href { '' }
 sub user_photo { '' }
 
 sub is_hook_enabled { 1 }
+sub is_plugin_enabled { 1 }
 
 1;

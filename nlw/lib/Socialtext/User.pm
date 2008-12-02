@@ -817,7 +817,12 @@ sub deactivate {
         $self->update_store( password => '*password*', no_crypt => 1 );
     }
     else {
-        warn $self->driver_name . " users' data cannot be updated";
+        warn loc(<<EMSG, $self->driver_name);
+
+The user has been removed from workspaces and directories.
+Login information is controlled by the [_1] directory administrator.
+
+EMSG
     }
 
     # remove the user from their workspaces

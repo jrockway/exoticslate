@@ -140,10 +140,13 @@ auto_vivify_an_ldap_user: {
 deactiveate_an_ldap_user: {
     my $refs = bootstrap_tests();
 
-    my $user = Socialtext::User->new(
-        username => 'Ray Parker'
-    );
+    my $user = Socialtext::User->new(username => 'Ray Parker');
     isa_ok $user, 'Socialtext::User', 'got a user';
 
-    warning_is { $user->deactivate } "LDAP users' data cannot be updated", 'warning on deactivate.' ;
+    warnings_like { $user->deactivate }
+        [
+            qr/The user has been removed from workspaces and directories/,
+            qr/Login information is controlled by the LDAP directory administrator./
+        ],
+        'warning on deactivate.';
 }

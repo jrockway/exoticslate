@@ -817,8 +817,8 @@ sub deactivate {
         $self->update_store( password => '*password*', no_crypt => 1 );
     }
     else {
-        warn "\n" . loc("The user has been removed from workspaces and directories.")
-           . "\n" . loc("Login information is controlled by the [_1] directory administrator.", $self->driver_name) . "\n\n";
+        warn loc("The user has been removed from workspaces and directories.") . "\n";
+        warn loc("Login information is controlled by the [_1] directory administrator.", $self->driver_name) . "\n\n";
     }
 
     # remove the user from their workspaces

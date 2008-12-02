@@ -66,6 +66,7 @@ sub new_page {
     if ($self->cgi->template) {
         $uri .= ';template=' . $self->cgi->template;
         for my $tag (@{ $page->metadata->Category }) {
+            next if $tag =~ /^template$/i;
             $uri .= ";add_tag=$tag";
         }
     }

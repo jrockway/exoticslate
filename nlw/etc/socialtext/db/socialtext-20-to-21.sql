@@ -1,4 +1,3 @@
-
 BEGIN;
 
 -- Make a table to store workspace-plugin associations.

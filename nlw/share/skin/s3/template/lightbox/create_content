@@ -2,44 +2,41 @@
 <div class="lightbox" id="st-create-content-lightbox">
   <form id="st-create-content-form">
     <div class="title">[% loc('Create Content') %]</div>
+
     <br />
+
+    [% IF content_types.size() > 1 %]
     <div>
       [% FOR ct = content_types %]
       <div class="choice [% ct %]">
-        <input id="[% ct %]-radio" name="content_type" type="radio" checked="checked" />
+        <input id="[% ct %]-radio" name="content_type" type="radio" name="create_content" checked="checked" />
         <label for="[% ct %]-radio">[% loc(ct) %]</label>
       </div>
       [% END %]
     <br/>
-    <br/>
-
     <div style="border-style: solid; border-width: 0px 0px 1px 0px"></div>
-    <div id="create-options">
-      <div id="from-blank-div">
-        <input id="blank-radio" value="blank" name="blank-template" type="radio" checked="checked" /><label for="blank-radio">[% loc('Blank') %]</label>
+    [% END %]
+
+    <div>
+      <div id="create-content-from-blank">
+        <input type="radio" name="create_content" checked="checked" />
+        <label for="blank-radio">[% loc('Blank') %]</label>
       </div>
-      <div id="template-options-div">
-        <div>
-          <input id="template-radio" value="template" name="blank-template" type="radio" /><label for="template-radio">[% loc('From template:') %]</label>
-        </div>
-        <div id="template-option">
-          <div style="float: left">
-            <div style="float: left"><input type="radio" name="template-from" id="from-template-radio" checked="checked"></div>
-            <div id="template-option-from-template" style="padding-left: 8px; float: left">
-              <div><label for="from-template-radio">[% loc('Use a template:') %]</label></div>
-              <div><input type="text" /></div>
-            </div>
-          </div>
-          <div style="float: left">
-            <div style="float: left">
-              <input type="radio" name="template-from" id="from-existing-page-radio"/>
-            </div>
-            <div id="template-option-from-existing-page" style="padding-left: 8px; float: left">
-              <div><label for="from-existing-page-radio">[% loc('Copy an existing page...') %]</label></div>
-              <div><input type="text" value="[% loc('Start typing a page name...') %]"/></div>
-            </div>
-          </div>
-        </div>
+
+      <div id="create-content-from-template">
+        <input type="radio" name="create_content" checked="checked" />
+        <label for="use-template-radio">
+          [% loc('Use a template:') %]
+        </label>
+        <select></select>
+      </div>
+
+      <div id="create-content-from-page">
+        <input type="radio" name="create_content" checked="checked" />
+        <label for="copy-page-radio">
+          [% loc('Copy an existing page...') %]
+        </label>
+          <input />
       </div>
     </div>
 

@@ -2146,8 +2146,6 @@ body div#globalNav div input.searchText {
     float: left;
 }
 
-#st-create-content-lightbox
-
 /* fix some buttons with too large hotspots in ie6 start */
 
 * html a.editButton, * html ul li a.commentButton, * html a.saveButton, 

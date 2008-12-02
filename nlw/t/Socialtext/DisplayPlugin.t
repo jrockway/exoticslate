@@ -4,6 +4,8 @@
 use strict;
 use warnings;
 use mocked 'Apache::Cookie';
+use mocked 'Socialtext::CGI';
+use mocked 'Socialtext::ChangeEvent';
 use Test::Socialtext tests => 7;
 fixtures( 'admin' );
 
@@ -13,6 +15,8 @@ BEGIN {
 }
 
 my $hub = new_hub('admin');
+
+goto TEMPLATES;
 
 # Make sure the display action returns the "furniture" we expect it to.
 DISPLAY: {
@@ -49,4 +53,22 @@ PAGE_INFO_HASH: {
     my $hash = $hub->display->_get_page_info($page);
 
     like $hash->{has_stats}, qr{^\d+$}, "has_stats contains a digit";
+}
+
+TEMPLATES: {
+    my $template = Socialtext::Page->new( hub => $hub )->create(
+        title   => "Template Page",
+        content => "Template Stuff",
+        creator => $hub->current_user(),
+    );
+
+    my $real = $hub->pages->new_from_name("Page from template");
+    $hub->pages->current($real);
+
+    $hub->display->cgi->{template} = 'Template Page';
+    $hub->action('display');
+    my $output = $hub->display->display();
+
+    like( $output, qr/Template Stuff/,
+        'Template content included in new page');
 }

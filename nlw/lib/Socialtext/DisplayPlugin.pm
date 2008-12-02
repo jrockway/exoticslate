@@ -63,6 +63,13 @@ sub new_page {
     my $page = $self->hub->pages->new_from_name($title);
     my $uri = 'action=display';
 
+    if ($self->cgi->template) {
+        $uri .= ';template=' . $self->cgi->template;
+        for my $tag (@{ $page->metadata->Category }) {
+            $uri .= ";add_tag=$tag";
+        }
+    }
+
     foreach ($self->_new_tags_to_add()) {
         $uri .= ";add_tag=$_";
     }
@@ -170,6 +177,13 @@ sub display {
             $self->cgi->page_type eq 'spreadsheet' && 'spreadsheet' || 'wiki'
         );
         push @new_tags, $self->_new_tags_to_add();
+
+        if (my $template = $self->cgi->template) {
+            my $tmpl_page = $self->hub->pages->new_from_name($template);
+            if ($tmpl_page->exists) {
+                $page->content($tmpl_page->content);
+            }
+        }
     }
     else {
         $page->add_tags( $self->_new_tags_to_add() );
@@ -503,6 +517,7 @@ use Socialtext::CGI qw( cgi );
 cgi 'new_category';
 cgi 'caller_action';
 cgi 'page_type';
+cgi 'template';
 cgi 'wiki_text';
 cgi 'js';
 cgi 'attachment_error';

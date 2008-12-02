@@ -295,17 +295,11 @@ $(function() {
     });
 
     $("#st-create-content-link, .incipient").unbind("click").click(function () {
-        $.showLightbox({
-            content:'#st-create-content-lightbox',
-            close:'#st-create-content-cancellink'
-        });
-        try {
         var create_content = new ST.CreateContent;
-        create_content.setup();
+        create_content.show();
         if (jQuery(this).hasClass('incipient')) {
             create_content.set_incipient_title(jQuery(this).text());
         }
-        }catch(e) { console.log(e) }
         return false;
     });
 

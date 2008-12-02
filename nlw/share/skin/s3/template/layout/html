@@ -181,32 +181,15 @@
             [% END %]
             [% END %]
           </ul>
-          [% IF checker.check_permission('edit') %]
-            [% IF current_workspace.enable_spreadsheet && user.can_use_plugin('socialcalc') %]
-            <div id="newPageButton">
-            <ul>
-            <li class="submenu"> + [% loc("New Page") %]
-              <ul class="level2">
-                <li>
-                  <a title="[% loc('Create New Wiki Page') %]" href="?action=new_page">[% loc('Create New Wiki Page') %]</a>
-                </li>
-                <li>
-                  <a title="[% loc('Create New Spreadsheet') %]" id="st-pagetools-newspreadsheet" href="?action=new_page;page_type=spreadsheet">[% loc('Create New Spreadsheet') %]</a>
-                </li>
-              </ul>
-            </li>
-            </ul>
-            </div>
+            [% IF checker.check_permission('edit') %]
+              <div id="newPageButton">
+                <a id="st-create-content-link" href="/[% current_workspace.name %]?action=new_page">+ [% loc("New Page") %]</a>
+              </div>
             [% ELSE %]
-            <div id="newPageButton">
-              <a href="/[% current_workspace.name %]?action=new_page">+ [% loc("New Page") %]</a>
-            </div>
+              <div id="newPageButton" class="disabled">
+              &nbsp;
+              </div>
             [% END %]
-          [% ELSE %]
-            <div id="newPageButton" class="disabled">
-            &nbsp;
-            </div>
-          [% END %]
         </div>
       </div>
       <!-- workspaceNav END -->
@@ -248,5 +231,6 @@
         </div><!-- footer END -->
       </div><!-- contentWrap END -->
     </div><!-- mainWrap END -->
+    [% INCLUDE lightbox/create_content %]
   </body>
 </html>

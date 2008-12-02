@@ -295,10 +295,12 @@ $(function() {
     });
 
     $("#st-create-content-link").unbind("click").click(function () {
-        get_lightbox(function () {
-            var create_content = new ST.CreateContent;
-            create_content.createContentLightbox();
+        $.showLightbox({
+            content:'#st-create-content-lightbox',
+            close:'#st-create-content-cancellink'
         });
+        var create_content = new ST.CreateContent;
+        create_content.setup();
         return false;
     });
 

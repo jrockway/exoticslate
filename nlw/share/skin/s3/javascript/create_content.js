@@ -2,80 +2,92 @@ var ST = ST || {};
 ST.CreateContent = function () {}
 var proto = ST.CreateContent.prototype = {};
 
-proto.createContentLightbox = function () {
-    var self = this;
-    this.process('create_content_lightbox.tt2');
-    this.sel = '#st-create-content-lightbox';
-    this.show(
-        false,
-        self.callback
-    );
+// toggle enabling and disabling mutually exclusive options
+proto.enable_and_disable = function(enable_id, disable_id) {
+    jQuery('#st-create-content-lightbox ' + disable_id + ' input')
+        .attr('disabled', 'disabled');
+    jQuery('#st-create-content-lightbox ' + enable_id + ' input')
+        .attr('disabled', '');
 }
 
-proto.callback = function () { }
-
-proto.process = function (template) {
-    Socialtext.loc = loc;
-    jQuery('body').append(
-        Jemplate.process(template, Socialtext)
-    );
+proto.enable_blank = function() {
+    this.enable_and_disable('#blank-option', '#template-option');
 }
 
-proto.show = function (do_redirect, callback) {
+proto.enable_from_template = function() {
+    this.enable_and_disable('#template-option', '#blank-option');
+    // enable the section for whichever radio is selected
+    if (jQuery('#st-create-content-lightbox #from-template-radio')
+        .is(':checked')) {
+        this.enable_use_template();
+    } else {
+        this.enable_copy_existing();
+    }
+}
+
+proto.enable_use_template = function () {
+    this.enable_and_disable('#template-option-from-template',
+        '#template-option-from-existing-page');
+}
+
+proto.enable_copy_existing = function() {
+    this.enable_and_disable('#template-option-from-existing-page',
+        '#template-option-from-template');
+}
+
+proto.selected_page_type = function () {
+    if (jQuery('#st-create-content-lightbox #page-radio')
+            .is(":checked"))
+        return "page";
+    else if (
+        jQuery('#st-create-content-lightbox #spreadsheet-radio')
+            .is(":checked"))
+        return "spreadsheet";
+}
+
+proto.setup = function () {
     var self = this;
-    jQuery.showLightbox({
-        content: this.sel,
-        close: this.sel + ' .close',
-        callback: callback 
-    });
 
     // Clear errors from the previous time around: {bz: 1039}
-    jQuery(self.sel + ' .error').html('');
+    jQuery('#st-create-content-lightbox .error').html('');
 
-    // toggle enabling and disabling mutually exclusive options
-    var enable_and_disable = function(enable_id, disable_id) {
-        jQuery('#st-create-content-lightbox ' + disable_id + ' input')
-            .attr('disabled', 'disabled');
-        jQuery('#st-create-content-lightbox ' + enable_id + ' input')
-            .attr('disabled', '');
-    }
-    var enable_blank = function() {
-        enable_and_disable('#blank-option', '#template-option');
-    }
-    var enable_from_template = function() {
-        enable_and_disable('#template-option', '#blank-option');
-    }
-    var enable_use_template = function() {
-        enable_and_disable('#template-option-from-template',
-            '#template-option-from-existing-page');
-    }
-    var enable_copy_existing = function() {
-        enable_and_disable('#template-option-from-existing-page',
-            '#template-option-from-template');
-    }
+    // Bind radio buttons
     jQuery('#st-create-content-lightbox #blank-radio')
     .unbind('click').click(function () {
-        enable_blank();
+        self.enable_blank();
     });
     jQuery('#st-create-content-lightbox #template-radio')
     .unbind('click').click(function () {
-        enable_from_template();
-        // enable the section for whichever radio is selected
-        if (jQuery('#st-create-content-lightbox #from-template-radio')
-            .is(':checked')) {
-            enable_use_template();
-        } else {
-            enable_copy_existing();
-        }
+        self.enable_from_template();
     });
     jQuery('#st-create-content-lightbox #from-template-radio')
     .unbind('click').click(function () {
-        enable_use_template();
+        self.enable_use_template();
     });
     jQuery('#st-create-content-lightbox #from-existing-page-radio')
     .unbind('click').click(function () {
-        enable_copy_existing();
+        self.enable_copy_existing();
     });
+    if (jQuery('#st-create-content-lightbox #blank-radio').is(':checked')) {
+        this.enable_blank();
+    }
+    else {
+        this.enable_from_template();
+    }
 
-    enable_blank();
+    jQuery('#st-create-content-lightbox #st-create-content-form')
+        .unbind('submit')
+        .submit(function () {
+            var urls = {
+                page: "?action=new_page",
+                spreadsheet: "?action=new_page;page_type=spreadsheet"
+            };
+            var url = urls[self.selected_page_type()];
+            alert(url);
+            if (url)
+                document.location = url;    
+            return false;
+        });
+
 }
+

@@ -1,18 +1,15 @@
 [%# vim: set et sts=2 sw=2: %]
 <div class="lightbox" id="st-create-content-lightbox">
-  <form>
+  <form id="st-create-content-form">
     <div class="title">[% loc('Create Content') %]</div>
     <br />
-    <div id="choose-page-spreadsheet">
-      <div class="choice page">
-        <input id="page-radio" name="page-spreadsheet" type="radio" checked="checked" />
-        <label for="page-radio">[% loc('Page') %]</label>
+    <div>
+      [% FOR ct = content_types %]
+      <div class="choice [% ct %]">
+        <input id="[% ct %]-radio" name="content_type" type="radio" checked="checked" />
+        <label for="[% ct %]-radio">[% loc(ct) %]</label>
       </div>
-      <div class="choice spreadsheet">
-        <input id="spreadsheet-radio" name="page-spreadsheet" type="radio" />
-        <label for="spreadsheet-radio">[% loc('Spreadsheet') %]</label>
-      </div>
-    </div>
+      [% END %]
     <br/>
     <br/>
 

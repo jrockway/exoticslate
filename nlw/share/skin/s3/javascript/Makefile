@@ -27,7 +27,6 @@ LIGHTBOX_TEMPLATES= \
 		     template/duplicate_lightbox.tt2 \
 		     template/rename_lightbox.tt2 \
 		     template/copy_lightbox.tt2 \
-		     template/create_content_lightbox.tt2 \
 
 ALL_EDITOR_FILES:=$(shell find $(WIKIWYG_ST) $(COMMON_JAVASCRIPT) -type f | grep -v .svn | grep -v editor.js)
 ALL_JEMPLATE_PLUGINS:=$(shell find JemplatePlugin -name \*.js)
@@ -48,6 +47,7 @@ S3_SOURCE_FILES= \
 		lightbox.js \
 		pageview.js \
 		pageattachments.js \
+		create_content.js \
 		s3.js \
 
 LIGHTBOX_SOURCE_FILES= \
@@ -56,7 +56,6 @@ LIGHTBOX_SOURCE_FILES= \
 		comment.js \
 		email.js \
 		move.js \
-		create_content.js \
 
 all: \
     timestamp.js \

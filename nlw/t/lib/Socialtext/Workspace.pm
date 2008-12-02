@@ -14,6 +14,7 @@ sub new {
     return $self;
 }
 
+sub is_plugin_enabled { $_[0]->{is_plugin_enabled}{$_[1]} }
 sub title { $_[0]->{title} || 'mock_workspace_title' }
 sub name { $_[0]->{name} || $_[0]->{title} || 'mock_workspace_name' }
 sub workspace_id { $_[0]->{workspace_id} || 'mock_workspace_id' }

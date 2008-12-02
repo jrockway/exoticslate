@@ -2203,11 +2203,11 @@ C<impersonate> to the C<impersonator> role.
 
 Returns true if the specified plugin is enabled for this workspace.
 
-=item $workspace->enable_plugin($plugin)
+=head2 $workspace->enable_plugin($plugin)
 
 Enables the plugin for the specified workspace.
 
-=item $workspace->disable_plugin($plugin)
+=head2 $workspace->disable_plugin($plugin)
 
 Disables the plugin for the specified workspace.
 

@@ -80,10 +80,22 @@ sub handler {
 sub EnsureRequiredDataIsPresent {
     my $class   = shift;
     my $adapter = $class->new;
-    $adapter->make_hub(
-        Socialtext::User->SystemUser(),
-        Socialtext::NoWorkspace->new
-    );
+#     $adapter->make_hub(
+#         Socialtext::User->SystemUser(),
+#         Socialtext::NoWorkspace->new
+#     );
+    my @plugins = sort { $b->priority <=> $a->priority }
+                  $adapter->plugins;
+
+    for my $plugin (@plugins) {
+        for my $hook ($plugin->hooks) {
+            next unless $hook->{name} eq 'nlw.set_up_data';
+            $hook->{once} = 0; # force it to not run "once"
+            push @{$hook_types{nlw}}, $hook;
+            push @{$hooks{'nlw.set_up_data'}}, $hook;
+        }
+    }
+
     $adapter->hook('nlw.set_up_data');
 }
 
@@ -150,6 +162,10 @@ sub register {
 
     for my $plugin (@plugins) {
         for my $hook ($plugin->hooks) {
+            # this hook could have been "registered" before;  avoid
+            # registering it again here
+            next if $hook->{name} eq 'nlw.set_up_data';
+
             my ($type, @parts) = split /\./, $hook->{name};
 
             if ($type eq 'wafl') {

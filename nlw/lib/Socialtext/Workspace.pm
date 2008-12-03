@@ -957,6 +957,9 @@ sub is_plugin_enabled {
 sub enable_plugin {
     my ($self, $plugin) = @_;
 
+    die "cannot enable plugin '$plugin' on a per-workspace basis"
+        unless $plugin eq 'socialcalc';
+
     if (!$self->is_plugin_enabled($plugin)) {
         sql_execute(q{
             INSERT INTO workspace_plugin VALUES (?,?)
@@ -968,6 +971,9 @@ sub enable_plugin {
 
 sub disable_plugin {
     my ($self, $plugin) = @_;
+
+    die "cannot disable plugin '$plugin' on a per-workspace basis"
+        unless $plugin eq 'socialcalc';
 
     sql_execute(q{
         DELETE FROM workspace_plugin

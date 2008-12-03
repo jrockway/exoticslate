@@ -1,7 +1,8 @@
 #!perl
 # @COPYRIGHT@
 use mocked qw(Socialtext::l10n system_locale); # Has to come firstest.
-use Test::Socialtext tests => 114;
+use Test::Socialtext tests => 118;
+use Test::Exception;
 use strict;
 use warnings;
 
@@ -725,10 +726,15 @@ Rudimentary_Plugin_Test: {
         title      =>  'Export Workspace',
         account_id => Socialtext::Account->Socialtext()->account_id,
     );
-   $ws->enable_plugin( 'socialcalc' );
-   is($ws->is_plugin_enabled('socialcalc'), '1', 'socialcalc enabled.');
-   $ws->disable_plugin( 'socialcalc' );
-   is($ws->is_plugin_enabled('socialcalc'), '0', 'socialcalc disabled.');
+    $ws->enable_plugin('socialcalc');
+    is($ws->is_plugin_enabled('socialcalc'), '1', 'socialcalc enabled.');
+    $ws->disable_plugin('socialcalc');
+    is($ws->is_plugin_enabled('socialcalc'), '0', 'socialcalc disabled.');
+
+    dies_ok { $ws->enable_plugin('people') } 'cannot enable people';
+    ok(!$ws->is_plugin_enabled('people'), 'people did not get enabled');
+    dies_ok { $ws->enable_plugin('whatevs') } 'cannot enable whatevs';
+    ok(!$ws->is_plugin_enabled('whatevs'), 'fake plugin did not get enabled');
 }
 
 exit;

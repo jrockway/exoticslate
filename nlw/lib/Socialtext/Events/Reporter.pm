@@ -186,7 +186,7 @@ sub visible_exists {
             JOIN account_plugin USING (account_id)
             JOIN account_user othr USING (account_id)
             WHERE plugin = '$plugin' AND viewer.user_id = ?
-              AND othr.user_id = evt.$event_field
+              AND othr.user_id = $event_field
         )
 EOSQL
 }
@@ -194,12 +194,12 @@ EOSQL
 my $VISIBILITY_SQL = join "\n",
     '(',
         "(evt.event_class <> 'person' OR (",
-            visible_exists('people', 'actor_id'),
+            visible_exists('people', 'evt.actor_id'),
             "AND",
-            visible_exists('people', 'person_id'),
+            visible_exists('people', 'evt.person_id'),
         '))',
         "AND ( evt.event_class <> 'signal' OR",
-            visible_exists('signals', 'actor_id'),
+            visible_exists('signals', 'evt.actor_id'),
         ')',
     ')';
 

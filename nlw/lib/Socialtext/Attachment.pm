@@ -35,6 +35,7 @@ field 'Received';
 field 'Content_MD5';
 field 'Content_Length';
 field 'Content_type';
+field 'temporary';
 
 sub new {
     my $self = shift;
@@ -329,7 +330,12 @@ sub store {
     open my $out, '>', "$file_path.txt"
         or die "Can't open output file: $!";
     binmode($out, ':utf8');
-    print $out "Control: Deleted\n" if $self->deleted;
+    if ($self->deleted) {
+        print $out "Control: Deleted\n";
+    }
+    elsif ($self->temporary) {
+        print $out "Control: Temporary\n";
+    }
     print $out "Content-type: ", $self->Content_type, "\n"
         if $self->Content_type;
     print $out $self->utf8_decode(<<"QUOTEDTEXT");
@@ -413,6 +419,14 @@ sub deleted {
     $self->{deleted} = $self->Control eq 'Deleted' ? 1 : 0;
 }
 
+sub temporary {
+    my $self = shift;
+    return $self->{temporary} = shift if @_;
+    return $self->{temporary} if defined $self->{temporary};
+    $self->load;
+    $self->{temporary} = $self->Control eq 'Temporary' ? 1 : 0;
+}
+
 sub delete {
     my $self = shift;
     my %p = @_;
@@ -423,6 +437,17 @@ sub delete {
     $self->deleted(1);
     $self->store(%p);
     $self->hub->attachments->index->delete($self);
+}
+
+sub make_permanent {
+    my $self = shift;
+    my %p = @_;
+    Carp::confess('no user given to Socialtext::Attachment->delete')
+        unless $p{user};
+
+    $self->load;
+    $self->temporary(0);
+    $self->store(%p);
 }
 
 sub exists {

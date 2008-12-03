@@ -107,9 +107,6 @@ sub edit_content {
     for my $a (@attach) {
         my ($id, $page_id) = split ':', $a;
 
-        # Don't move attachments that were uploaded to the correct page
-        next if $page_id eq $self->hub->pages->current->id;
-
         my $source = $self->hub->attachments->new_attachment(
             id => $id,
             page_id => $page_id
@@ -119,15 +116,20 @@ sub edit_content {
             id => $source->id,
             filename => $source->filename,
         );
-        my $target_dir = $self->hub->attachments->plugin_directory;
-        $target->copy($source, $target, $target_dir);
-        $target->store(
-            user => $self->hub->current_user,
-            dir => $target_dir,
-        );
-        $source->delete(
-            user => $self->hub->current_user
-        );
+
+        # move attachments that were uploaded to the incorrect page
+        if ($page_id ne $self->hub->pages->current->id) {
+            my $target_dir = $self->hub->attachments->plugin_directory;
+            $target->copy($source, $target, $target_dir);
+            $target->store(
+                user => $self->hub->current_user,
+                dir => $target_dir,
+            );
+            $source->purge($source->page);
+        }
+
+        # Remove the temporary flag from the new file
+        $target->make_permanent(user => $self->hub->current_user);
     }
 
     return $self->to_display($page);

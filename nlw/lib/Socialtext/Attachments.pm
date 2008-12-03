@@ -73,6 +73,7 @@ sub new_attachment {
         creator      => USER_TYPE,
         embed        => BOOLEAN_TYPE( default => 0 ),
         Content_type => SCALAR_TYPE( default => undef ),
+        temporary    => SCALAR_TYPE( default => 0 ),
     };
     sub create {
         my $self = shift;

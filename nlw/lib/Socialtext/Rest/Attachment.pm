@@ -74,7 +74,7 @@ sub DELETE {
             my $attachment = eval { $self->_get_attachment(); };
             return $self->_invalid_attachment( $rest, $@ ) if $@;
 
-            if ($attachment->deleted) {
+            if ($attachment->temporary) {
                 $attachment->purge($attachment->page);
             }
             else {

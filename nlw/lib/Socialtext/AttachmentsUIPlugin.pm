@@ -118,7 +118,6 @@ sub attachments_upload {
 
     my @files = $self->cgi->file;
     my @embeds = $self->cgi->embed unless $self->cgi->editmode;
-
     my $error = $self->process_attachments_upload(
         files  => \@files,
         embed  => \@embeds,
@@ -178,12 +177,14 @@ sub save_attachment {
     $embed = 0
         if ($self->hub->pages->current->metadata->Type eq 'spreadsheet');
 
+
     my $filename;
     eval {
         $filename = $file->{filename} . '';
         my @files = $self->hub->attachments->create(
             fh     => $file->{handle},
             embed  => $embed ? 1 : 0,
+            temporary => $self->cgi->editmode,
 
             # this stringification is to remove tied weirdness:
             filename => $filename,

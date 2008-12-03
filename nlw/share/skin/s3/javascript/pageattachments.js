@@ -29,11 +29,10 @@ Attachments = {
         ).join(', ')
     },
 
-    deleteAttachments: function (list, purge) {
+    deleteAttachments: function (list) {
         var file;
         while (file = list.pop()) {
             this.delAttachment(file.uri);
-            if (purge) this.delAttachment(file.uri);
         }
         Page.refreshPageContent(true);
         this.refreshAttachments();
@@ -44,7 +43,7 @@ Attachments = {
     },
 
     deleteNewAttachments: function (cb) {
-        this.deleteAttachments(this._newAttachmentList, true);
+        this.deleteAttachments(this._newAttachmentList);
     },
 
     refreshAttachments: function (cb) {

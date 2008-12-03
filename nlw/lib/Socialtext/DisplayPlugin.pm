@@ -65,10 +65,6 @@ sub new_page {
 
     if ($self->cgi->template) {
         $uri .= ';template=' . $self->cgi->template;
-        for my $tag (@{ $page->metadata->Category }) {
-            next if $tag =~ /^template$/i;
-            $uri .= ";add_tag=$tag";
-        }
     }
 
     foreach ($self->_new_tags_to_add()) {
@@ -182,6 +178,8 @@ sub display {
         if (my $template = $self->cgi->template) {
             my $tmpl_page = $self->hub->pages->new_from_name($template);
             if ($tmpl_page->exists) {
+                push @new_tags, grep { $_ !~ /^template$/i }
+                                @{ $tmpl_page->metadata->Category };
                 $page->content($tmpl_page->content);
             }
         }

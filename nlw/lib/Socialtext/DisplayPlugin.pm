@@ -169,7 +169,6 @@ sub display {
     ) ? 0 : 1;
 
     my @new_tags = ();
-    my @new_attachments = ();
     if ($is_new_page) {
         $page->metadata->Type(
             $self->cgi->page_type eq 'spreadsheet' && 'spreadsheet' || 'wiki'

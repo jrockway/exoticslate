@@ -13,7 +13,7 @@ sub create_account {
     my $acct = Socialtext::Account->create(
         name => $name,
     );
-    $acct->enable_plugin($_) for qw/people dashboard widgets socialcalc/;
+    $acct->enable_plugin($_) for qw/people dashboard widgets socialcalc signals/;
     diag "Created account $name";
 }
 

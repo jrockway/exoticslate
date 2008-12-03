@@ -169,6 +169,7 @@ sub display {
     ) ? 0 : 1;
 
     my @new_tags = ();
+    my @new_attachments = ();
     if ($is_new_page) {
         $page->metadata->Type(
             $self->cgi->page_type eq 'spreadsheet' && 'spreadsheet' || 'wiki'
@@ -250,10 +251,10 @@ sub _render_display {
     use Socialtext::Rest::Attachments;
     my $rest_object = Socialtext::Rest::Attachments->new($self->hub->rest,
         { ws => $self->hub->current_workspace->name });
+
     my $all_attachments = [
-        map {
-            $rest_object->_entity_hash($_);
-        } @{$self->hub->attachments->all(page_id => $page->id)}
+        map { $rest_object->_entity_hash($_) }
+        @{$self->hub->attachments->all(page_id => $page->id)},
     ];
 
     return $self->template_render(

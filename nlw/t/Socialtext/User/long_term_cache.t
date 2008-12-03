@@ -91,14 +91,16 @@ autovivify_cache_value: {
     ok $cached, "got a cached user";
     $cached_at = delete $cached->{cached_at};
     is_deeply $cached, {
-        user_id => $user_id,
-        driver_username => $username,
-        driver_key => $driver_key,
-        driver_unique_id => $dn,
-        email_address => $email,
-        first_name => 'Onlyuse',
-        last_name => 'Once',
-        password => '*no-password*',
+        user_id             => $user_id,
+        driver_username     => $username,
+        driver_key          => $driver_key,
+        driver_unique_id    => $dn,
+        email_address       => $email,
+        first_name          => 'Onlyuse',
+        last_name           => 'Once',
+        password            => '*no-password*',
+        last_profile_update => '-infinity',
+        is_profile_hidden   => '0',
     };
 
     # not strictly necessary, but a nice sanity check:
@@ -258,14 +260,16 @@ sub db_cache_ok {
     my $cached = get_cache(user_id => $user_id);
     delete $cached->{cached_at};
     is_deeply $cached, {
-        user_id          => $user_id,
-        driver_key       => $driver_key,
-        driver_username  => $TEST_USERS[$user_num]{cn},
-        driver_unique_id => $TEST_USERS[$user_num]{dn},
-        email_address    => $TEST_USERS[$user_num]{mail},
-        first_name       => $TEST_USERS[$user_num]{gn},
-        last_name        => $TEST_USERS[$user_num]{sn},
-        password         => '*no-password*',
+        user_id             => $user_id,
+        driver_key          => $driver_key,
+        driver_username     => $TEST_USERS[$user_num]{cn},
+        driver_unique_id    => $TEST_USERS[$user_num]{dn},
+        email_address       => $TEST_USERS[$user_num]{mail},
+        first_name          => $TEST_USERS[$user_num]{gn},
+        last_name           => $TEST_USERS[$user_num]{sn},
+        password            => '*no-password*',
+        last_profile_update => '-infinity',
+        is_profile_hidden   => '0',
     };
 }
 

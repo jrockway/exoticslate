@@ -15,7 +15,7 @@ Visit in IE 6 and IE 7
 | set_default | wikititle | %%title%% | defaults to the test workspace |
 | set_default | pt | 5000 | defaults to five seconds |
 | set_default | popup | 8000 | cancel popups in 8 seconds |
-| include | `[Disable LDAP]` |  |
+| include | `[Disable LDAP]` |  | disable LDAP |
 
 TODO: eliminate wikititle and use title link ID once you have one
 
@@ -24,7 +24,6 @@ TODO: eliminate wikititle and use title link ID once you have one
 
 | *Comment* | SlideShow: enabling unplugged and expanding sidebar |  |
 | st-admin | set-workspace-config --workspace %%wiki%% enable_unplugged 1 |  |
-| st-admin | set-workspace-config --workspace %%wiki%% homepage_is_dashboard 1 |  |
 | st-admin | set-workspace-config --workspace %%wiki%% allows_skin_upload 1 |  |
 
 | open_ok | /%%wiki%%/ |  |
@@ -132,15 +131,14 @@ Post by Email popup
 
 | type | st-search-term | wiki |
 | clickAndWait | st-search-submit |  |
-| *Comment* | SlideShow SEE search results |  |
-
+| *Comment* | SlideShow SEE search results with %%wiki%% only |  |
 | pause | %%pt%% |  |
 
 * an interwiki search result
 
 | type | st-search-term | `wiki workspaces:*` |
 | clickAndWait | st-search-submit |  |
-| *Comment* | SlideShow SEE interwiki search results with workspace names |  |
+| *Comment* | SlideShow SEE interwiki search results with multiple workspace names |  |
 | pause | %%pt%% |  |
 
 * Mobile
@@ -218,14 +216,14 @@ Post by Email popup
 
 | st_login |  |
 
-* Simple/Advanced/Edit Tips/Preview/Edit More/Cancel
+* Rich/Wiki/Edit Tips/Preview/Edit More/Cancel
 
 | open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |  |
 | click_ok | st-edit-button-link |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| *Comment* | SlideShow SEE Advanced Mode |  |
+| *Comment* | SlideShow SEE Wiki Text Mode |  |
 | pause | %%pt%% |  |
 
 | click_ok | link=Preview |  |
@@ -233,7 +231,7 @@ Post by Email popup
 | pause | %%pt%% |  |
 
 | click_ok | link=Edit More |  |
-| *Comment* | SlideShow SEE Editing Mode |  |
+| *Comment* | SlideShow SEE Wiki Text Mode |  |
 | pause | %%pt%% |  |
 
 | click_ok | link=Cancel |  |
@@ -251,7 +249,7 @@ Popup and pulldown dialogs:
 
 * all dialogs in the Tools menu EXCEPT Email
 
-| *Comment* | adding user to admin wiki (ok on appliance, too) to show Copy Page to Workspace |
+| *Comment* | adding user to admin wiki (ok on appliance, too) to show Copy Page to Workspace |  |
 | st-admin | add-member --w admin --e %%email%% |  |
 | open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |  |
 
@@ -263,7 +261,7 @@ Popup and pulldown dialogs:
 | *Comment* | SlideShow CANCEL Rename Page popup |  |
 | pause | %%popup%% |  |
 
-| *Comment* | Skipping Delete Page - can't seem to get the popup right |
+| *Comment* | Skipping Delete Page - can't seem to get the popup right |  |
 
 | click_ok | link=Copy Page to Workspace |  |
 | *Comment* | SlideShow CANCEL Copy Page popup |  |
@@ -271,15 +269,12 @@ Popup and pulldown dialogs:
 
 | click_ok | link=Export as HTML |  |
 | *Comment* | SlideShow SEE Exported HTML |  |
-| *Comment* | CTRL-W HTML ON WINDOWS |  |
-| *Comment* | APPLE-W HTML ON MAC |  |
+| *Comment* | IF SEPARATE WINDOW, CTRL-W HTML ON WINDOWS |  |
+| *Comment* | IF SEPARATE WINDOW, APPLE-W HTML ON MAC |  |
 | pause | %%popup%% |  |
 | pause | %%pt%% | some extra time to close HTML window |
 
-| *Comment* | moved PDF and RTF EXPORT to end because IE has problems with it in SlideShow |  |
-
 | open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |  |
-
 | wait_for_element_visible_ok | st-pagetools-print | 30000 |
 | click_ok | st-pagetools-print |  |
 | *Comment* | SlideShow CANCEL Print popup |  |
@@ -505,8 +500,8 @@ Lightbox screens:
 
 | open_ok | /help |  |
 | *Comment* | SlideShow SEE HELP |  |
-| *Comment* | CTRL-W HTML ON WINDOWS |  |
-| *Comment* | APPLE-W HTML ON MAC |  |
+| *Comment* | IF SEPARATE WINDOW, CTRL-W HTML ON WINDOWS |  |
+| *Comment* | IF SEPARATE WINDOW, APPLE-W HTML ON MAC |  |
 | pause | %%popup%% |  |
 | pause | %%pt%% | some extra time to close HTML window |
 
@@ -554,8 +549,6 @@ Lightbox screens:
 | *Comment* | SlideShow CANCEL WEBLOG PRINT popup |  |
 | pause | %%popup%% |  |
 
-| open_ok | /%%wiki%%/index.cgi?action=weblog_display;category=welcome |  |
-
 | click_ok | link=Save the 50 most recent pages |  |
 | *Comment* | SlideShow CANCEL WEBLOG UNPLUG popup |  |
 | pause | %%popup%% |  |
@@ -565,25 +558,29 @@ Lightbox screens:
 
 | open_ok | /%%wiki%%/index.cgi?Advanced Getting Around |  |
 | click_ok | //img[contains(@src,'plug.png')] |  |
-| *Comment* | SlideShow CANCEL UNPLUGGED POPUP |  |
+| *Comment* | SlideShow CANCEL PAGE UNPLUGGED POPUP |  |
 | pause | %%popup%% |  |
 | pause | %%popup%% |  |
 
 | open_ok | /%%wiki%%/ |  |
 | *Comment* | SlideShow SEE Global Navigation Home People Workspaces |  |
 | pause | %%pt%% |  |
-| click_and_wait | st-home-link |  |
+| click_and_wait | link=Home |  |
 | *Comment* | SlideShow SEE Default widgets |  |
 | pause | %%pt%% |  |
-| click_and_wait | st-wiki-subnav-link-workspaces |
+| click_and_wait | link=Workspaces |  |
 | *Comment* | SlideShow SEE default workspaces |  |
-| pause | %%pt%% |  |  |
-| click_and_wait | st-wiki-subnav-link-people |
-| *Comment* | SlideShow SEE List of People |  |
+| pause | %%pt%% |  |
+| click_and_wait | link=People |  |
+| *Comment* | SlideShow SEE Names of People |  |
+| pause | %%pt%% |  |
+| click_ok | link=Summaries |  |
+| *Comment* | SlideShow SEE Summaries of People |  |
 | pause | %%pt%% |  |
 
-| click_and_wait | link=Profile |  |
-| *Comment* | SlideShow SEE user profile |  |
+| type_ok | st-search-term | socialtext |
+| *Comment* | SlideShow SEE People matching socialtext |  |
+| *Comment* | SlideShow SEE pagination UI |  |
 | pause | %%pt%% |  |
 
 | open_ok | /%%wiki%%/ |  |
@@ -605,9 +602,24 @@ Lightbox screens:
 | click_and_wait | //a[@id='workspaceName'] |  |
 
 | click_and_wait | link=Profile |  |
+| *Comment* | SlideShow SEE user profile |  |
+| pause | %%pt%% |  |
 | click_and_wait | `link=(Edit)` |  |
 | wait_for_element_present_ok | photo-upload-button | 60000 |
 | *Comment* | SlideShow SEE EDIT user profile |  |
+| pause | %%pt%% |  |
+| pause | %%pt%% |  |
+
+| click_and_wait | link=Profile |  |
+| *Comment* | SlideShow SEE user tagging |  |
+| type_ok | new_tag | SlideShow %%start_time%% |
+| click_ok | //input[@value='Add Tag'] |  |
+| wait_for_element_visible_ok | link=SlideShow %%start_time%% | 30000 |
+| text_like | link=SlideShow %%start_time%% | SlideShow %%start_time%% |
+| *Comment* | SlideShow SEE People tag SlideShow %%start_time%% |  |
+| pause | %%pt%% |  |
+| open_ok | /?action=people;tag=SlideShow%20%%start_time%% |  |
+| *Comment* | SlideShow SEE People tagged SlideShow %%start_time%% |  |
 | pause | %%pt%% |  |
 
 moved PDF/RTF to end because IE has problems with it

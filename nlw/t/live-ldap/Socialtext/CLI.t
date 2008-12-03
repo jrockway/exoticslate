@@ -88,12 +88,12 @@ MASS_ADD_USERS: {
           skip 'Socialtext People is not installed', 7 unless $Socialtext::MassAdd::Has_People_Installed;
             my $profile = Socialtext::People::Profile->GetProfile($user, no_recurse => 1);
             ok $profile, '... ST People profile was found';
-            is $profile->position, 'position', '... ... using position from CSV';
-            is $profile->company, 'company', '... ... using company from CSV';
-            is $profile->location, 'location', '... ... using location from CSV';
-            is $profile->work_phone, 'work_phone', '... ... using work_phone from CSV';
-            is $profile->mobile_phone, 'mobile_phone', '... ... using mobile_phone from CSV';
-            is $profile->home_phone, 'home_phone', '... ... using home_phone from CSV';
+            is $profile->get_attr('position'), 'position', '... ... using position from CSV';
+            is $profile->get_attr('company'), 'company', '... ... using company from CSV';
+            is $profile->get_attr('location'), 'location', '... ... using location from CSV';
+            is $profile->get_attr('work_phone'), 'work_phone', '... ... using work_phone from CSV';
+            is $profile->get_attr('mobile_phone'), 'mobile_phone', '... ... using mobile_phone from CSV';
+            is $profile->get_attr('home_phone'), 'home_phone', '... ... using home_phone from CSV';
         }
     }
 
@@ -135,12 +135,12 @@ MASS_ADD_USERS: {
           skip 'Socialtext People is not installed', 7 unless $Socialtext::MassAdd::Has_People_Installed;
             my $profile = Socialtext::People::Profile->GetProfile($user, no_recurse => 1);
             ok $profile, '... ST People profile was found';
-            is $profile->position, 'updated_position', '... ... using position from CSV';
-            is $profile->company, 'updated_company', '... ... using company from CSV';
-            is $profile->location, 'location', '... ... using original location';
-            is $profile->work_phone, 'work_phone', '... ... using original work_phone';
-            is $profile->mobile_phone, 'mobile_phone', '... ... using original mobile_phone';
-            is $profile->home_phone, 'home_phone', '... ... using original home_phone';
+            is $profile->get_attr('position'), 'updated_position', '... ... using position from CSV';
+            is $profile->get_attr('company'), 'updated_company', '... ... using company from CSV';
+            is $profile->get_attr('location'), 'location', '... ... using original location';
+            is $profile->get_attr('work_phone'), 'work_phone', '... ... using original work_phone';
+            is $profile->get_attr('mobile_phone'), 'mobile_phone', '... ... using original mobile_phone';
+            is $profile->get_attr('home_phone'), 'home_phone', '... ... using original home_phone';
         }
     }
 }

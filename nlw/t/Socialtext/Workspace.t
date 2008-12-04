@@ -1,7 +1,7 @@
 #!perl
 # @COPYRIGHT@
 use mocked qw(Socialtext::l10n system_locale); # Has to come firstest.
-use Test::Socialtext tests => 118;
+use Test::Socialtext tests => 119;
 use Test::Exception;
 use strict;
 use warnings;
@@ -448,6 +448,7 @@ EMAIL_NOTIFICATION_FROM_ADDRESS:
 }
 
 Include_Jumpstart_pages: {
+    local $TODO = 'Not implemented yet';
     Socialtext::Workspace->create(
         name                    => 'jumpstart',
         title                   => 'Jumpstart',

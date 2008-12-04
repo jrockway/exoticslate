@@ -279,10 +279,9 @@ sub _import_users {
     my @users;
     for my $info (@$users) {
         delete $info->{primary_account_id};
-        my $user = Socialtext::User->new(
-            username => $info->{username} );
-        $user ||= Socialtext::User->Create_user_from_hash( $info );
-
+        my $user = Socialtext::User->Resolve( $info->{username} )
+                || Socialtext::User->Resolve( $info->{email_address} )
+                || Socialtext::User->Create_user_from_hash( $info );
         push @users, [ $user, $info->{role_name} ];
     }
 

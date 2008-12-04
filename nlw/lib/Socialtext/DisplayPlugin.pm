@@ -168,6 +168,7 @@ sub display {
         $self->hub->current_workspace->name,
     ) ? 0 : 1;
 
+    my @new_attachments = ();
     my @new_tags = ();
     if ($is_new_page) {
         $page->metadata->Type(
@@ -181,6 +182,23 @@ sub display {
                 push @new_tags, grep { $_ !~ /^template$/i }
                                 @{ $tmpl_page->metadata->Category };
                 $page->content($tmpl_page->content);
+        
+                my $attachments = $self->hub->attachments->all(
+                    page_id => $tmpl_page->id
+                );
+                my $plugin_dir = $self->hub->attachments->plugin_directory;
+                for my $a (@$attachments) {
+                    my $target = $self->hub->attachments->new_attachment(
+                        id => $a->id,
+                        filename => $a->filename,
+                    );
+                    $target->copy($a, $target, $plugin_dir);
+                    $target->temporary(1);
+                    $target->store(user => $self->hub->current_user);
+
+                    # Keep track of temporary attachments for deletion
+                    push @new_attachments, $target;
+                }
             }
         }
     }
@@ -203,7 +221,7 @@ sub display {
     }
 
     return $self->_render_display($page, $is_new_page, $start_in_edit_mode,
-                                  \@new_tags);
+                                  \@new_tags, \@new_attachments);
 }
 
 sub _render_display {
@@ -212,6 +230,7 @@ sub _render_display {
     my $is_new_page = shift;
     my $start_in_edit_mode = shift;
     my $new_tags = shift;
+    my $new_attachments = shift;
 
     my $include_recent_changes
         = $self->preferences->include_in_pages->value;
@@ -278,6 +297,9 @@ sub _render_display {
             start_in_edit_mode      => $start_in_edit_mode,
             new_tags                => $new_tags,
             attachments             => $all_attachments,
+            new_attachments         => [
+                map { $rest_object->_entity_hash($_) } @$new_attachments
+            ],
             watching                => $self->hub->watchlist->page_watched,
             login_and_edit_path => '/challenge?'
                 . $self->uri_escape(

@@ -105,6 +105,7 @@ sub edit_content {
     # Move attachments uploaded to 'Untitled Page' to the actual page
     my @attach = $self->cgi->attachment;
     for my $a (@attach) {
+        warn $a;
         my ($id, $page_id) = split ':', $a;
 
         my $source = $self->hub->attachments->new_attachment(

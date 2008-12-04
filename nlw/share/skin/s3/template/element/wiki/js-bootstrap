@@ -67,6 +67,7 @@ function nlw_make_plugin_path(rest) {
 
 [% DEFAULT attachments = [] %]
 Socialtext.attachments = [% attachments.json %];
+Socialtext.new_attachments = [% new_attachments.json %];
 
 Socialtext.page_id = '[% page.id %]';
 

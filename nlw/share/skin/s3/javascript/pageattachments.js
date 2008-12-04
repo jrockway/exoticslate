@@ -5,7 +5,7 @@ Attachments = {
     _attachmentList: [],
 
     resetNewAttachments: function () {
-        this._newAttachmentList = [];
+        this._newAttachmentList = Socialtext.new_attachments || [];
     },
 
     addNewAttachment: function (file) {

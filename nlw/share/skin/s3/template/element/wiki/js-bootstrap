@@ -66,6 +66,7 @@ function nlw_make_plugin_path(rest) {
 [% USE JSON %]
 
 [% DEFAULT attachments = [] %]
+[% DEFAULT new_attachments = [] %]
 Socialtext.attachments = [% attachments.json %];
 Socialtext.new_attachments = [% new_attachments.json %];
 

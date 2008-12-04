@@ -17,16 +17,59 @@ sub create_account {
     diag "Created account $name";
 }
 
+sub account_config {
+    my $self = shift;
+    my $account_name = shift;
+    my $key = shift;
+    my $val = shift;
+    my $acct = Socialtext::Account->new(
+        name => $account_name,
+    );
+    $acct->update($key => $val);
+    diag "Set account $account_name config: $key to $val";
+}
+
+sub workspace_config {
+    my $self = shift;
+    my $ws_name = shift;
+    my $key = shift;
+    my $val = shift;
+    my $ws = Socialtext::Workspace->new(
+        name => $ws_name,
+    );
+    $ws->update($key => $val);
+    diag "Set workspace $ws_name config: $key to $val";
+}
+
+sub disable_account_plugin {
+    my $self = shift;
+    my $account_name = shift;
+    my $plugin = shift;
+
+    my $acct = Socialtext::Account->new(
+        name => $account_name,
+    );
+    $acct->disable_plugin($plugin);
+    diag "Disabled plugin $plugin in account $account_name";
+}
+
 sub create_user {
     my $self = shift;
     my $email = shift;
     my $password = shift;
     my $account = shift;
+    my $name = shift || ' ';
 
-    Socialtext::User->create(
+    my ($first_name,$last_name) = split(' ',$name,2);
+    $first_name ||= '';
+    $last_name ||= '';
+
+    my $user = Socialtext::User->create(
         email_address => $email,
         username      => $email,
         password      => $password,
+        first_name    => $first_name,
+        last_name     => $last_name,
         (
             $account
             ? (primary_account_id =>
@@ -34,7 +77,7 @@ sub create_user {
             : ()
         )
     );
-    diag "Created user $email";
+    diag "Created user ".$user->email_address. ", name ".$user->guess_real_name;
 }
 
 sub create_workspace {

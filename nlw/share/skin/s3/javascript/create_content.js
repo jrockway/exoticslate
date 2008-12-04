@@ -88,6 +88,9 @@ proto.show = function () {
         self.from_page_text().attr('disabled', '');
     });
 
+    jQuery('#st-create-content-lightbox #page-radio')
+        .attr("checked", "checked")
+
     var default_from_page_text = loc('Start typing a page name...');
     this.from_page_text()
         .val(default_from_page_text)

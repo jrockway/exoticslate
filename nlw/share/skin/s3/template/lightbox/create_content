@@ -7,9 +7,9 @@
 
     [% IF content_types.size() > 1 %]
     <div>
-      [% FOR ct = content_types %]
+      [% FOR ct = content_types.sort() %]
       <div class="choice [% ct %]">
-        <input id="[% ct %]-radio" name="content_type" type="radio" name="create_content" checked="checked" />
+        <input id="[% ct %]-radio" name="content_type" type="radio" name="create_content" />
         <label for="[% ct %]-radio">[% loc(ct) %]</label>
       </div>
       [% END %]
@@ -19,12 +19,12 @@
 
     <div>
       <div id="create-content-from-blank">
-        <input type="radio" name="create_content" checked="checked" />
+        <input id="blank-radio" type="radio" name="create_content" checked="checked" />
         <label for="blank-radio">[% loc('Blank') %]</label>
       </div>
 
       <div id="create-content-from-template">
-        <input type="radio" name="create_content" checked="checked" />
+        <input id="use-template-radio" type="radio" name="create_content" checked="checked" />
         <label for="use-template-radio">
           [% loc('Use a template:') %]
         </label>
@@ -32,7 +32,7 @@
       </div>
 
       <div id="create-content-from-page">
-        <input type="radio" name="create_content" checked="checked" />
+        <input id="copy-page-radio" type="radio" name="create_content" checked="checked" />
         <label for="copy-page-radio">
           [% loc('Copy an existing page...') %]
         </label>
@@ -40,7 +40,6 @@
       </div>
     </div>
 
-    <br/><br/>
     <div class="buttons">
       <input id="st-create-content-savelink" type="submit" value="[% loc('Create') %]" />
       <input class="close" id="st-create-content-cancellink" type="button" value="[% loc('Cancel') %]"/>

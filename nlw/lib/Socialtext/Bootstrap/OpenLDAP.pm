@@ -391,7 +391,7 @@ sub add_ldif {
         }
         return 1;
     };
-    return $self->_ldif_update( $ldif_filename, $cb );
+    return $self->_ldif_update( $cb, $ldif_filename );
 }
 
 sub remove_ldif {
@@ -407,11 +407,11 @@ sub remove_ldif {
         }
         return 1;
     };
-    return $self->_ldif_update( $ldif_filename, $cb );
+    return $self->_ldif_update( $cb, $ldif_filename );
 }
 
 sub _ldif_update {
-    my ($self, $filename, $callback) = @_;
+    my ($self, $callback, $filename) = @_;
 
     # Open up the LDIF file
     my $ldif = Net::LDAP::LDIF->new( $filename, 'r', onerror => undef );

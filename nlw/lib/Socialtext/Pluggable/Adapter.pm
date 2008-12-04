@@ -35,7 +35,7 @@ BEGIN {
 sub AUTOLOAD {
     my ($self,$rest_handler,$args) = @_;
     my $type = ref($self)
-        or die "$self is not an object in " . __PACKAGE__ . "\n";
+        or return; # it's a class method call
 
     my $name = $AUTOLOAD;
     $name =~ s/.*://;    # strip fully-qualified portion
@@ -77,26 +77,31 @@ sub handler {
     return $res;
 }
 
+sub _CallPluginClassMethod {
+    my $class   = shift;
+    my $method = shift;
+    my $plugin_name = shift;
+
+    my $adapter = $class->new;
+    my @plugins = grep { $_->name eq $plugin_name } $adapter->plugins;
+    $_->$method(@_) for grep {$_->can($method)} @plugins;
+}
+
 sub EnsureRequiredDataIsPresent {
     my $class   = shift;
     my $adapter = $class->new;
-#     $adapter->make_hub(
-#         Socialtext::User->SystemUser(),
-#         Socialtext::NoWorkspace->new
-#     );
-    my @plugins = sort { $b->priority <=> $a->priority }
-                  $adapter->plugins;
+    $_->EnsureRequiredDataIsPresent(@_) 
+        for grep {$_->can('EnsureRequiredDataIsPresent')} $adapter->plugins;
+}
 
-    for my $plugin (@plugins) {
-        for my $hook ($plugin->hooks) {
-            next unless $hook->{name} eq 'nlw.set_up_data';
-            $hook->{once} = 0; # force it to not run "once"
-            push @{$hook_types{nlw}}, $hook;
-            push @{$hooks{'nlw.set_up_data'}}, $hook;
-        }
-    }
+sub EnablePlugin {
+    my $class   = shift;
+    $class->_CallPluginClassMethod('EnablePlugin',@_);
+}
 
-    $adapter->hook('nlw.set_up_data');
+sub DisablePlugin {
+    my $class   = shift;
+    $class->_CallPluginClassMethod('DisablePlugin',@_);
 }
 
 sub make_hub {

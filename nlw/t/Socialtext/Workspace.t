@@ -447,19 +447,19 @@ EMAIL_NOTIFICATION_FROM_ADDRESS:
         "$page_dir does not exist after workspace is created with skip_default_pages flag" );
 }
 
-Include_Jumpstart_pages: {
-    local $TODO = 'Not implemented yet';
-    Socialtext::Workspace->create(
-        name                    => 'jumpstart',
-        title                   => 'Jumpstart',
-        account_id              => Socialtext::Account->Default()->account_id,
-        include_jumpstart_pages => 1
-    );
-
-    my $page_dir = Socialtext::File::catdir(
-        Socialtext::Paths::page_data_directory('jumpstart'), 'ENOSUCHPAGE');
-    ok( -d $page_dir, "$page_dir exists in a jumpstarted workspace." );
-}
+# Include_Jumpstart_pages: {
+#     local $TODO = 'Not implemented yet';
+#     Socialtext::Workspace->create(
+#         name                    => 'jumpstart',
+#         title                   => 'Jumpstart',
+#         account_id              => Socialtext::Account->Default()->account_id,
+#         include_jumpstart_pages => 1
+#     );
+# 
+#     my $page_dir = Socialtext::File::catdir(
+#         Socialtext::Paths::page_data_directory('jumpstart'), 'ENOSUCHPAGE');
+#     ok( -d $page_dir, "$page_dir exists in a jumpstarted workspace." );
+# }
 
 NON_ASCII_WS_NAME: {
     eval { Socialtext::Workspace->create(

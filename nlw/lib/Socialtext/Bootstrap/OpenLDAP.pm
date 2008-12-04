@@ -378,7 +378,7 @@ sub teardown {
     }
 }
 
-sub add {
+sub add_ldif {
     my ($self, $ldif_filename) = @_;
     my $cb = sub {
         my ($ldap, $entry) = @_;
@@ -394,7 +394,7 @@ sub add {
     return $self->_ldif_update( $ldif_filename, $cb );
 }
 
-sub remove {
+sub remove_ldif {
     my ($self, $ldif_filename) = @_;
     my $cb = sub {
         my ($ldap, $entry) = @_;
@@ -465,8 +465,8 @@ Socialtext::Bootstrap::OpenLDAP - Bootstrap OpenLDAP instances
   $openldap->start();
 
   # manipulate contents of LDAP directory
-  $openldap->add($ldif_filename);
-  $openldap->remove($ldif_filename);
+  $openldap->add_ldif($ldif_filename);
+  $openldap->remove_ldif($ldif_filename);
 
   # get LDAP config object
   $config = $openldap->ldap_config();
@@ -622,13 +622,13 @@ Cleans up after ourselves, removing the data directory entirely when we're done.
 Called automatically by C<DESTROY()>; its B<not> necessary for you to ever call
 this method.
 
-=item B<add($ldif_filename)>
+=item B<add_ldif($ldif_filename)>
 
 Adds items to the OpenLDAP instance from the LDIF in the specified file.
 Returns true if we're able to add all of the LDIF entries successfully, false
 on error.
 
-=item B<remove($ldif_filename)>
+=item B<remove_ldif($ldif_filename)>
 
 Removes items from the OpenLDAP instance based on their entries in the given
 LDIF file.  Returns true if we're able to remove all of the LDIF entries

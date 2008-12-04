@@ -90,8 +90,8 @@ authentication_failure: {
     ok $rc, 'saved LDAP config to YAML';
 
     # populate OpenLDAP with some data
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
 
     # attempt to authenticate, using wrong password
     clear_log();
@@ -117,8 +117,8 @@ authentication_ok: {
     ok $rc, 'saved LDAP config to YAML';
 
     # populate OpenLDAP with some data
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
 
     # attempt to authenticate, using a known username/password
     my %opts = (
@@ -142,8 +142,8 @@ search_no_results: {
     ok $rc, 'saved LDAP config to YAML';
 
     # populate OpenLDAP with some data
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
 
     # search should execute ok, but have no results
     my $ldap = Socialtext::LDAP->new();
@@ -170,8 +170,8 @@ search_with_results: {
     ok $rc, 'saved LDAP config to YAML';
 
     # populate OpenLDAP with some data
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
 
     # searches should execute ok, and contain correct number of results
     my $ldap = Socialtext::LDAP->new();
@@ -205,9 +205,9 @@ search_without_filter_gets_users_and_contacts: {
     ok $rc, 'saved LDAP config to YAML';
 
     # populate OpenLDAP with some data
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
-    ok $openldap->add('t/test-data/ldap/contacts.ldif'), 'added data; contacts';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
+    ok $openldap->add_ldif('t/test-data/ldap/contacts.ldif'), 'added data; contacts';
 
     # check to make sure that LDAP config has -NO- filter in it
     my $ldap = Socialtext::LDAP->new();
@@ -244,9 +244,9 @@ search_with_filter_gets_users_only: {
     ok $rc, 'saved LDAP config to YAML';
 
     # populate OpenLDAP with some data
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
-    ok $openldap->add('t/test-data/ldap/contacts.ldif'), 'added data; contacts';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
+    ok $openldap->add_ldif('t/test-data/ldap/contacts.ldif'), 'added data; contacts';
 
     # filtered results should have single result (an inetOrgPerson)
     my $ldap = Socialtext::LDAP->new();

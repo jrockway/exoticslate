@@ -43,8 +43,8 @@ deleted_ldap_user_shouldnt_prevent_workspace_import: {
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP';
 
     # populate OpenLDAP
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), '... added data: base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), '... added data: people';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), '... added data: base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), '... added data: people';
 
     # save LDAP config, and set up user_factories to use this LDAP server
     my $openldap_cfg = $openldap->ldap_config();
@@ -124,8 +124,8 @@ deleted_ldap_user_shouldnt_prevent_workspace_import: {
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP';
 
     # populate OpenLDAP
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), '... added data: base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), '... added data: people';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), '... added data: base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), '... added data: people';
 
     # save LDAP config, and set up user_factories to use the new LDAP server
     $openldap_cfg = $openldap->ldap_config();

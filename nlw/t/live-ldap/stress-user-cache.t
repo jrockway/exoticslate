@@ -61,8 +61,8 @@ bootstrap_openldap: {
     ok $rc, 'saved LDAP config';
 
     # populate OpenLDAP with users
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added LDAP data; base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), 'added LDAP data; people';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added LDAP data; base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added LDAP data; people';
 
     # add the LDAP directory to our "user_factories"
     my $appconfig = Socialtext::AppConfig->new();

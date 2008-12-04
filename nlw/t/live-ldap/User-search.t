@@ -36,8 +36,8 @@ search_no_results: {
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
     # populate OpenLDAP with users
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
 
     # save LDAP config to YAML
     my $config = $openldap->ldap_config();
@@ -63,8 +63,8 @@ search_single_result_from_db: {
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
     # populate OpenLDAP with users
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
 
     # save LDAP config to YAML
     my $config = $openldap->ldap_config();
@@ -94,8 +94,8 @@ search_single_result_from_ldap: {
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
     # populate OpenLDAP with users
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
 
     # save LDAP config to YAML
     my $config = $openldap->ldap_config();
@@ -125,8 +125,8 @@ search_multiple_results: {
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
     # populate OpenLDAP with users
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
 
     # save LDAP config to YAML
     my $config = $openldap->ldap_config();

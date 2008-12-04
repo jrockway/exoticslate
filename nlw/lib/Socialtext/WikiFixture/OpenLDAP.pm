@@ -48,14 +48,14 @@ sub add_ldif_data {
     my $self = shift;
     my $ldif = shift;
     diag "add ldif data: $ldif";
-    $self->{ldap}->add($ldif);
+    $self->{ldap}->add_ldif($ldif);
 }
 
 sub remove_ldif_data {
     my $self = shift;
     my $ldif = shift;
     diag "remove ldif data: $ldif";
-    $self->{ldap}->remove($ldif);
+    $self->{ldap}->remove_ldif($ldif);
 }
 
 1;

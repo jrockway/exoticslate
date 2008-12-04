@@ -28,10 +28,10 @@ isa_ok $rhs, 'Test::Socialtext::Bootstrap::OpenLDAP', 'referral RHS';
 # generate some LDIF data that'll put the LDAP servers in an infinite referral
 # loop, and add that data to the directories
 generate_ldif('t/tmp/recurse-lhs.ldif', $rhs->host(), $rhs->port());
-ok $lhs->add('t/tmp/recurse-lhs.ldif'), 'added recursing LDIF to LHS';
+ok $lhs->add_ldif('t/tmp/recurse-lhs.ldif'), 'added recursing LDIF to LHS';
 
 generate_ldif('t/tmp/recurse-rhs.ldif', $lhs->host(), $lhs->port());
-ok $rhs->add('t/tmp/recurse-rhs.ldif'), 'added recursing LDIF to RHS';
+ok $rhs->add_ldif('t/tmp/recurse-rhs.ldif'), 'added recursing LDIF to RHS';
 
 ###############################################################################
 # save LDAP config for the referral *source*; only need one of them to trigger

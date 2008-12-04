@@ -92,7 +92,7 @@ sub start {
     my $ldif_fh = tempfile();
     $ldif_fh->print($ldif_data);
     seek $ldif_fh, 0, SEEK_SET;
-    $openldap->add($ldif_fh) || die "can't add data to LDAP server\n";
+    $openldap->add_ldif($ldif_fh) || die "can't add data to LDAP server\n";
     $ldif_fh->close();
 
     # configure ldap.yaml based on this bootstrapped OpenLDAP instance

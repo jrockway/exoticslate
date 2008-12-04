@@ -23,8 +23,8 @@ sub setup {
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
 
     # populate OpenLDAP
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), '... added data: base_dn';
-    ok $openldap->add('t/test-data/ldap/people.ldif'), '... added data: people';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), '... added data: base_dn';
+    ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), '... added data: people';
 
     # get LDAP config, make sure its set to "username => cn", and save to YAML
     my $config  = $openldap->ldap_config();

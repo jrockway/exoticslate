@@ -19,8 +19,8 @@ isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDA
 my $rc = Socialtext::LDAP::Config->save($openldap->ldap_config());
 ok $rc, 'saved LDAP config to YAML';
 
-ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
-ok $openldap->add('t/test-data/ldap/people.ldif'), 'added data; people';
+ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
 
 my $factory = Socialtext::User::LDAP::Factory->new();
 isa_ok $factory, 'Socialtext::User::LDAP::Factory';

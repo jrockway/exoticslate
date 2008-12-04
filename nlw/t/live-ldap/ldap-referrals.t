@@ -122,8 +122,8 @@ sub setup_ldap_servers_with_referrals {
     is $appconfig->user_factories(), $factories, 'user_factories set to LDAP, then Default';
 
     # populate OpenLDAP servers with data
-    ok $openldap_target->add('t/test-data/ldap/base_dn.ldif'), 'added base_dn to referral target';
-    ok $openldap_target->add('t/test-data/ldap/people.ldif'),  'added people to referral target';
+    ok $openldap_target->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added base_dn to referral target';
+    ok $openldap_target->add_ldif('t/test-data/ldap/people.ldif'),  'added people to referral target';
 
     # return the OpenLDAP instances back to the caller
     return ($openldap_source, $openldap_target);

@@ -44,8 +44,8 @@ sub bootstrap_tests {
     ok $rc, 'saved LDAP config to YAML';
 
     # populate OpenLDAP with users
-    ok $openldap->add('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
-    ok $openldap->add("t/test-data/ldap/$populate.ldif"), 'added data; people';
+    ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
+    ok $openldap->add_ldif("t/test-data/ldap/$populate.ldif"), 'added data; people';
 
     # set ordering of "user_factories"; LDAP first, Pg second
     my $appconfig = Socialtext::AppConfig->new();

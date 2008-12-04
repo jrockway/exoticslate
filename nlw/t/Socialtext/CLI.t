@@ -15,7 +15,7 @@ use Sys::Hostname;
 
 use Cwd;
 
-plan tests => 394;
+plan tests => 396;
 
 our $NEW_WORKSPACE = 'new-ws-' . $<;
 our $NEW_WORKSPACE2 = 'new-ws2-'. $<;
@@ -2217,7 +2217,21 @@ PLUGINS: {
         qr/requires an account or a workspace/,
         'missing workspace name',
     );
+
     expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --workspace pluggy --plugin socialcalc )
+                ]
+            )->enable_plugin();
+        },
+        qr/Plugin socialcalc is now enabled for workspace pluggy/,
+        'enable valid plugin for workspace pluggy',
+    );
+
+    # onlu certain plugins can be enabled on a per-workspace basis.
+    expect_failure(
         sub {
             Socialtext::CLI->new(
                 argv => [
@@ -2225,8 +2239,8 @@ PLUGINS: {
                 ]
             )->enable_plugin();
         },
-        qr/Plugin test is now enabled for workspace pluggy/,
-        'enable plugin for workspace pluggy',
+        qr/cannot enable plugin 'test' on a per-workspace basis/,
+        'enable invalid plugin for workspace pluggy',
     );
 }
 

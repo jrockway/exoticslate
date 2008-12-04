@@ -220,7 +220,8 @@ sub _set_plugin_enabled_for_workspace {
     my ($self, $enabled, $plugin, $workspace) = @_;
 
     if ($enabled) {
-        $workspace->enable_plugin($plugin);
+        eval{ $workspace->enable_plugin($plugin) };
+        $self->_error($@) if ($@);
     }
     else {
         $workspace->disable_plugin($plugin);

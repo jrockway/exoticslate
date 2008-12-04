@@ -957,7 +957,7 @@ sub is_plugin_enabled {
 sub enable_plugin {
     my ($self, $plugin) = @_;
 
-    die "cannot enable plugin '$plugin' on a per-workspace basis"
+    die loc("cannot enable plugin '[_1]' on a per-workspace basis", $plugin)
         unless $plugin eq 'socialcalc';
 
     if (!$self->is_plugin_enabled($plugin)) {

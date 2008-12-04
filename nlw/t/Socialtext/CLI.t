@@ -2242,6 +2242,31 @@ PLUGINS: {
         qr/cannot enable plugin 'test' on a per-workspace basis/,
         'enable invalid plugin for workspace pluggy',
     );
+
+    # Disable worksapce plugins.
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --workspace pluggy --plugin sociacalc )
+                ]
+            )->disable_plugin();
+        },
+        qr/Plugin socialcalc is now disabled for workspace pluggy./,
+        'disable valid plugin',
+    );
+
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --workspace pluggy --plugin test )
+                ]
+            )->disable_plugin();
+        },
+        qr/Cannot disable plugin 'test' on a per-workspace basis/,
+        'disable invalid plugin',
+    );
 }
 
 EXPORT_ACCOUNTS: {

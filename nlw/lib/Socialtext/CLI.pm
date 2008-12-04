@@ -224,7 +224,8 @@ sub _set_plugin_enabled_for_workspace {
         $self->_error($@) if ($@);
     }
     else {
-        $workspace->disable_plugin($plugin);
+        eval{ $workspace->disable_plugin($plugin) };
+        $self->_error($@) if ($@);
     }
 
     my $msg = $enabled ? "Plugin [_1] is now enabled for workspace [_2]." :

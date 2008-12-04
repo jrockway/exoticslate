@@ -2184,6 +2184,8 @@ sub from_input {
     my $self  = shift;
     my $class = ref $self;
 
+    my %opts = $self->_get_options( 'from-fixture' );
+
     {
         no warnings 'redefine';
         *_exit          = sub { };
@@ -2199,6 +2201,11 @@ sub from_input {
             $class->new( argv => \@argv )->run();
         };
         $errors .= $@ if $@;
+
+        if ($opts{'from-fixture'}) {
+            print "Errors: $@" if $@;
+            print "Completed $input\n";
+        }
     }
 
     die $errors if $errors;

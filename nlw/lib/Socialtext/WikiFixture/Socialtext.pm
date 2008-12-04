@@ -7,9 +7,12 @@ use base 'Socialtext::WikiFixture::SocialBase';
 use Socialtext::System qw/shell_run/;
 use Socialtext::Workspace;
 use Sys::Hostname;
+use IPC::Run qw(start pump);
 use Test::More;
 use Cwd;
 use Socialtext::AppConfig;
+
+my ($h, $in, $out, $err);
 
 =head1 NAME
 
@@ -456,7 +459,28 @@ sub st_admin {
     }
 
     diag "st-admin $options";
-    _run_command("st-admin $options", $verify);
+
+    unless ($h) {
+         $h = start(
+             ['st-admin', 'from-input', '--from-fixture'],
+             '<pty<', \$in,
+             '>pty>', \$out,
+         );
+    }
+
+    $out = '';
+    $in = join("\0", split(' ', $options)) . "\n";
+    pump $h until $out =~ /Completed $in/;
+    if ($out =~ /Errors:/) {
+        die $out;
+    }
+    else {
+        print $out;
+    }
+
+    if ($verify and $verify ne 'ignore output') {
+        like $out, $verify, $options;
+    }
 
     if ($ENV{ST_SKIN_NAME} and $options =~ /^\s*create.workspace/ ) {
         $options =~ /--n(?:ame)?\s+(\S*)/;   # extract the workspace name

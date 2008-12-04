@@ -3,6 +3,7 @@
 
 use strict;
 use warnings;
+use File::Temp qw();
 use Socialtext::Account;
 use Socialtext::AppConfig;
 use Socialtext::LDAP;
@@ -57,7 +58,8 @@ ok $ws->has_user( $user );
 
 ###############################################################################
 # Export the Workspace, then nuke it outright.
-my $tarball = $ws->export_to_tarball( dir => '/tmp' );
+my $tmpdir  = File::Temp::tempdir(CLEANUP => 1);
+my $tarball = $ws->export_to_tarball(dir => $tmpdir);
 ok ( -f $tarball );
 
 $ws->delete;

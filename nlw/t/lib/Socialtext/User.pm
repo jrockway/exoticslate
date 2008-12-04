@@ -158,7 +158,12 @@ sub MaskEmailAddress {
 
 sub primary_account {
     my $self = shift;
-    return $self->{primary_account} || Socialtext::Account->Default;
+    $self->{primary_account} ||= Socialtext::Account->Default;
+    return $self->{primary_account};
+}
+sub primary_account_id { 
+    my $self = shift;
+    $self->primary_account->account_id 
 }
 
 sub can_use_plugin { 1 } 

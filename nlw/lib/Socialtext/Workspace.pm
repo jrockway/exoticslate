@@ -57,6 +57,7 @@ use Socialtext::WorkspaceBreadcrumb;
 use Socialtext::Page;
 use Socialtext::Workspace::Permissions;
 use Socialtext::Timer;
+use Socialtext::Pluggable::Adapter;
 use URI;
 use YAML;
 use Encode qw(decode_utf8);
@@ -961,6 +962,8 @@ sub enable_plugin {
         unless $plugin eq 'socialcalc';
 
     if (!$self->is_plugin_enabled($plugin)) {
+        Socialtext::Pluggable::Adapter->EnablePlugin($plugin => $self);
+
         sql_execute(q{
             INSERT INTO workspace_plugin VALUES (?,?)
         }, $self->workspace_id, $plugin);
@@ -974,6 +977,8 @@ sub disable_plugin {
 
     die "cannot disable plugin '$plugin' on a per-workspace basis"
         unless $plugin eq 'socialcalc';
+
+    Socialtext::Pluggable::Adapter->DisablePlugin($plugin => $self);
 
     sql_execute(q{
         DELETE FROM workspace_plugin

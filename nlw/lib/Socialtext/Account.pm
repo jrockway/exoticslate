@@ -19,6 +19,7 @@ use Socialtext::l10n qw(loc);
 use Socialtext::SystemSettings qw( get_system_setting );
 use Socialtext::Skin;
 use Socialtext::Timer;
+use Socialtext::Pluggable::Adapter;
 use YAML qw/DumpFile LoadFile/;
 
 Readonly our @ACCT_COLS => (
@@ -170,6 +171,8 @@ sub enable_plugin {
     my ($self, $plugin) = @_;
 
     if (!$self->is_plugin_enabled($plugin)) {
+        Socialtext::Pluggable::Adapter->EnablePlugin($plugin => $self);
+
         sql_execute(q{
             INSERT INTO account_plugin VALUES (?,?)
         }, $self->account_id, $plugin);
@@ -180,6 +183,8 @@ sub enable_plugin {
 
 sub disable_plugin {
     my ($self, $plugin) = @_;
+
+    Socialtext::Pluggable::Adapter->DisablePlugin($plugin => $self);
 
     sql_execute(q{
         DELETE FROM account_plugin

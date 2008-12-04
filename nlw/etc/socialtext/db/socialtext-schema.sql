@@ -257,6 +257,7 @@ CREATE TABLE profile_field (
     profile_field_id bigint NOT NULL,
     name text NOT NULL,
     field_class text NOT NULL,
+    account_id bigint NOT NULL,
     CONSTRAINT profile_field_class_check
             CHECK (field_class IN ('attribute', 'contact', 'relationship'))
 );
@@ -544,7 +545,7 @@ CREATE UNIQUE INDEX person_tag__name
 	    ON person_tag (name);
 
 CREATE UNIQUE INDEX profile_field_name
-	    ON profile_field (name);
+	    ON profile_field (account_id, name);
 
 CREATE INDEX profile_relationship_other_user_id
 	    ON profile_relationship (other_user_id);
@@ -716,6 +717,11 @@ ALTER TABLE ONLY profile_attribute
             FOREIGN KEY (user_id)
             REFERENCES users(user_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY profile_field
+    ADD CONSTRAINT profile_field_account_fk
+            FOREIGN KEY (account_id)
+            REFERENCES "Account"(account_id);
+
 ALTER TABLE ONLY profile_photo
     ADD CONSTRAINT profile_photo_user_id_fk
             FOREIGN KEY (user_id)
@@ -767,4 +773,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '21');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '22');

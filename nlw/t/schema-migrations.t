@@ -10,7 +10,7 @@ my $schema_dir  = "$FindBin::Bin/../etc/socialtext/db/";
 my $schema_file = "$schema_dir/socialtext-schema.sql";
 my @sql_patches = glob("$schema_dir/*-to-*.sql");
 
-plan tests => @sql_patches * 3 + 5;
+plan tests => @sql_patches * 3 + 6;
 
 Schema_is_okay: {
     ok -d $schema_dir;
@@ -35,13 +35,29 @@ Schema_is_okay: {
     like $schema,
         qr/CREATE INDEX ix_page_events_contribs_actor_time\b/,
         "index on the is_page_contribution function didn't get accidentally dropped";
+
+    Truncate_trouble: {
+        # We take advantage of TRUNCATE during appliance restore.  We should
+        # make sure to not add new dependencies on the `page` table without
+        # updating the appliance restore code.  If this test fails, make sure
+        # appliance is updated before you fix this test.
+        my @page_deps;
+        while($schema =~ m/ALTER TABLE ONLY (\w+)[^;]+ REFERENCES page\(/smg) {
+            push @page_deps, $1;
+        }
+        is join(', ', @page_deps), 'event, page_tag',
+            'page table dependencies match appliance expectations';
+    }
 }
 
-for my $s (@sql_patches) {
-    (my $name = $s) =~ s#.+/##;
-    my $contents = get_contents($s);
-    like $contents, qr/^BEGIN;/is,  "$s starts with BEGIN";
-    like $contents, qr/COMMIT;$/is, "$s ends with COMMIT";
-    like $contents, qr/socialtext-schema-version/,
-        'patch file mentions the version number';
+Migrations_are_okay: {
+    for my $s (@sql_patches) {
+        (my $name = $s) =~ s#.+/##;
+        my $contents = get_contents($s);
+        like $contents, qr/^BEGIN;/is,  "$s starts with BEGIN";
+        like $contents, qr/COMMIT;$/is, "$s ends with COMMIT";
+        like $contents, qr/socialtext-schema-version/,
+            'patch file mentions the version number';
+    }
 }
+

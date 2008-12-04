@@ -420,6 +420,20 @@ sub _ldif_update {
         return;
     }
 
+    # Grab all of the entries out of LDIF
+    my @entries;
+    while (not $ldif->eof()) {
+        push @entries, $ldif->read_entry();
+    }
+    $ldif->done();
+
+    # Feed the data to the LDAP server
+    return $self->_update( $callback, \@entries );
+}
+
+sub _update {
+    my ($self, $callback, $values_aref) = @_;
+
     # Connect to the LDAP server
     my $ldap = Net::LDAP->new( $self->host(), port => $self->port() );
     unless ($ldap) {
@@ -427,6 +441,7 @@ sub _ldif_update {
         return;
     }
 
+    # Bind to the LDAP connection
     my $mesg = $ldap->bind( $self->root_dn(), password => $self->root_pw() );
     if ($mesg->code()) {
         warn "# unable to bind to LDAP server\n";
@@ -434,13 +449,10 @@ sub _ldif_update {
         return;
     }
 
-    # Feed the data to the LDAP server
-    while (not $ldif->eof()) {
-        my $entry = $ldif->read_entry();
-        return unless $callback->( $ldap, $entry );
+    # Do the update, firing all the values through to the CB
+    foreach my $val (@{$values_aref}) {
+        return unless $callback->($ldap, $val);
     }
-    $ldif->done();
-
     return 1;
 }
 

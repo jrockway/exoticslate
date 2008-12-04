@@ -6,7 +6,7 @@ use warnings;
 use Socialtext::AppConfig;
 use Socialtext::User;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 33;
+use Test::Socialtext tests => 29;
 
 # FIXTURE: db
 #
@@ -39,11 +39,6 @@ search_no_results: {
     ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
     ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
 
-    # save LDAP config to YAML
-    my $config = $openldap->ldap_config();
-    my $rc = Socialtext::LDAP::Config->save($config);
-    ok $rc, 'saved LDAP config to YAML';
-
     # add our OpenLDAP instance to our "user_factories"
     my $appconfig = Socialtext::AppConfig->new();
     $appconfig->set( 'user_factories' => 'LDAP;Default' );
@@ -65,11 +60,6 @@ search_single_result_from_db: {
     # populate OpenLDAP with users
     ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
     ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
-
-    # save LDAP config to YAML
-    my $config = $openldap->ldap_config();
-    my $rc = Socialtext::LDAP::Config->save($config);
-    ok $rc, 'saved LDAP config to YAML';
 
     # add our OpenLDAP instance to our "user_factories"
     my $appconfig = Socialtext::AppConfig->new();
@@ -97,11 +87,6 @@ search_single_result_from_ldap: {
     ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
     ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
 
-    # save LDAP config to YAML
-    my $config = $openldap->ldap_config();
-    my $rc = Socialtext::LDAP::Config->save($config);
-    ok $rc, 'saved LDAP config to YAML';
-
     # add our OpenLDAP instance to our "user_factories"
     my $appconfig = Socialtext::AppConfig->new();
     $appconfig->set( 'user_factories' => 'LDAP;Default' );
@@ -127,11 +112,6 @@ search_multiple_results: {
     # populate OpenLDAP with users
     ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
     ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';
-
-    # save LDAP config to YAML
-    my $config = $openldap->ldap_config();
-    my $rc = Socialtext::LDAP::Config->save($config);
-    ok $rc, 'saved LDAP config to YAML';
 
     # add our OpenLDAP instance to our "user_factories"
     my $appconfig = Socialtext::AppConfig->new();

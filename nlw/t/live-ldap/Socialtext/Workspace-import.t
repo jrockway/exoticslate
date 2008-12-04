@@ -7,11 +7,10 @@ use Archive::Tar;
 use File::Temp qw();
 use Socialtext::AppConfig;
 use Socialtext::LDAP;
-use Socialtext::LDAP::Config;
 use Socialtext::Workspace;
 use Socialtext::Workspace;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 31;
+use Test::Socialtext tests => 29;
 use Test::Exception;
 
 ###############################################################################
@@ -46,12 +45,8 @@ deleted_ldap_user_shouldnt_prevent_workspace_import: {
     ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), '... added data: base_dn';
     ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), '... added data: people';
 
-    # save LDAP config, and set up user_factories to use this LDAP server
-    my $openldap_cfg = $openldap->ldap_config();
-    my $rc = Socialtext::LDAP::Config->save($openldap_cfg);
-    ok $rc, 'saved LDAP config to YAML';
-
-    my $openldap_id = $openldap_cfg->id();
+    # set up user_factories to use this LDAP server
+    my $openldap_id = $openldap->ldap_config->id();
     my $user_factories = "LDAP:$openldap_id;Default";
     my $appconfig = Socialtext::AppConfig->new();
     $appconfig->set( 'user_factories' => $user_factories );
@@ -127,12 +122,8 @@ deleted_ldap_user_shouldnt_prevent_workspace_import: {
     ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), '... added data: base_dn';
     ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), '... added data: people';
 
-    # save LDAP config, and set up user_factories to use the new LDAP server
-    $openldap_cfg = $openldap->ldap_config();
-    $rc = Socialtext::LDAP::Config->save($openldap_cfg);
-    ok $rc, 'saved LDAP config to YAML';
-
-    $openldap_id = $openldap_cfg->id();
+    # set up user_factories to use the new LDAP server
+    $openldap_id = $openldap->ldap_config->id();
     $user_factories = "LDAP:$openldap_id;Default";
     $appconfig = Socialtext::AppConfig->new();
     $appconfig->set( 'user_factories' => $user_factories );

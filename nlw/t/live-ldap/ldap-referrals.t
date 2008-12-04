@@ -4,9 +4,8 @@
 use strict;
 use warnings;
 use File::Slurp qw(slurp write_file);
-use Socialtext::LDAP::Config;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 34;
+use Test::Socialtext tests => 30;
 
 ###############################################################################
 # FIXTURE: db
@@ -44,10 +43,8 @@ authenticate_no_referrals: {
     my ($ldap_src, $ldap_tgt) = setup_ldap_servers_with_referrals();
 
     # update LDAP config, disabling support for LDAP referrals
-    my $config = Socialtext::LDAP::Config->load();
-    $config->follow_referrals(0);
-    my $rc = Socialtext::LDAP::Config->save($config);
-    ok $rc, 'disabled LDAP referrals in LDAP config';
+    $ldap_src->ldap_config->follow_referrals(0);
+    ok $ldap_src->add_to_ldap_config(), 'disabled LDAP referrals in LDAP config';
 
     # find user record; should fail
     my $user = Socialtext::User->new( username => 'John Doe' );
@@ -77,10 +74,8 @@ search_no_referrals: {
     my ($ldap_src, $ldap_tgt) = setup_ldap_servers_with_referrals();
 
     # update LDAP config, disabling support for LDAP referrals
-    my $config = Socialtext::LDAP::Config->load();
-    $config->follow_referrals(0);
-    my $rc = Socialtext::LDAP::Config->save($config);
-    ok $rc, 'disabled LDAP referrals in LDAP config';
+    $ldap_src->ldap_config->follow_referrals(0);
+    ok $ldap_src->add_to_ldap_config(), 'disabled LDAP referrals in LDAP config';
 
     # search for users; should return empty handed
     my @users = Socialtext::User->Search('john');
@@ -107,14 +102,12 @@ sub setup_ldap_servers_with_referrals {
     );
     isa_ok $openldap_source, 'Test::Socialtext::Bootstrap::OpenLDAP', 'referral source';
 
-    # save LDAP config for the referral *source*; the only way we get to the
-    # target is through a referral (*not* through our config)
-    my $ldap_config = $openldap_source->ldap_config();
-    my $rc = Socialtext::LDAP::Config->save($ldap_config);
-    ok $rc, 'saved LDAP config to YAML';
+    # remove the LDAP config for the referral *target*; the only way we get
+    # there is through a referral (*not* through our config)
+    $openldap_target->remove_from_ldap_config();
 
     # set user_factories to use the LDAP server first, Default second
-    my $ldap_id = $ldap_config->id();
+    my $ldap_id = $openldap_source->ldap_config->id();
     my $factories = "LDAP:$ldap_id;Default";
     my $appconfig = Socialtext::AppConfig->new();
     $appconfig->set( 'user_factories' => $factories );

@@ -5,10 +5,9 @@ use strict;
 use warnings;
 use Socialtext::AppConfig;
 use Socialtext::LDAP;
-use Socialtext::LDAP::Config;
 use Socialtext::Workspace;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 25;
+use Test::Socialtext tests => 24;
 
 ###############################################################################
 # FIXTURE: foobar
@@ -35,12 +34,8 @@ disappearing_ldap_user_store: {
     ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), '... added data: base_dn';
     ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), '... added data: people';
 
-    # save LDAP config, and set up our user_factories to use the LDAP server
-    my $openldap_cfg = $openldap->ldap_config();
-    my $rc = Socialtext::LDAP::Config->save($openldap_cfg);
-    ok $rc, 'saved LDAP config to YAML';
-
-    my $openldap_id    = $openldap_cfg->id();
+    # set up our user_factories to use the LDAP server
+    my $openldap_id    = $openldap->ldap_config->id();
     my $user_factories = "LDAP:$openldap_id;Default";
     my $appconfig = Socialtext::AppConfig->new();
     $appconfig->set( 'user_factories' => $user_factories );
@@ -94,7 +89,6 @@ disappearing_ldap_user_store: {
     @deleted_users = grep { ref($_->homunculus) eq 'Socialtext::User::Deleted' } @entries;
     is scalar @deleted_users, 1, '... one of which is a Deleted user';
     is $deleted_users[0]->user_id, $user->user_id, '... ... our test user';
-
 
     # lookup the user by other means
     my $maybe_deleted = Socialtext::User->new(username => $user->username);

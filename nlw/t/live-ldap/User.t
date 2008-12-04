@@ -40,8 +40,7 @@ sub bootstrap_tests {
         $config->filter($filter);
         is $config->filter, $filter, '... set filter';
     }
-    my $rc = Socialtext::LDAP::Config->save($config);
-    ok $rc, 'saved LDAP config to YAML';
+    ok $openldap->add_to_ldap_config(), 'saved custom LDAP config to YAML';
 
     # populate OpenLDAP with users
     ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';

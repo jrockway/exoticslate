@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 335;
+use Test::Socialtext tests => 334;
 use Socialtext::AppConfig;
 use Socialtext::LDAP;
 use Socialtext::LDAP::Base;
@@ -54,11 +54,6 @@ bootstrap_openldap: {
     # fire up OpenLDAP
     $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
     isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
-
-    # save out the LDAP config
-    my $config = $openldap->ldap_config();
-    my $rc = Socialtext::LDAP::Config->save($config);
-    ok $rc, 'saved LDAP config';
 
     # populate OpenLDAP with users
     ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added LDAP data; base_dn';

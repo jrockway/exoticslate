@@ -34,6 +34,7 @@ field 'slapd';
 field 'schemadir';
 field 'moduledir';
 field 'conffile';
+field 'ldap_config', -init => '$self->_ldap_config';
 
 my %ports = (
     ldap    => 389,
@@ -73,6 +74,7 @@ sub new {
     # start OpenLDAP
     $self->setup() or return;
     $self->start() or return;
+    $self->add_to_ldap_config() or return;
 
     # return newly created object
     return $self;
@@ -202,6 +204,8 @@ sub _autodetect_module_dir {
 
 sub DESTROY {
     my $self = shift;
+    # remove ourselves from the LDAP config
+    $self->remove_from_ldap_config();
     # shut down and cleanup after ourselves
     $self->stop();
     $self->teardown();
@@ -294,7 +298,7 @@ sub running {
     return ($pid and kill(0,$pid));
 }
 
-sub ldap_config {
+sub _ldap_config {
     my $self = shift;
     # create ST::LDAP::Config object based on our config
     my $config = Socialtext::LDAP::Config->new(
@@ -316,6 +320,31 @@ sub ldap_config {
     $self->root_pw() && $config->bind_password( $self->root_pw() );
     # return ST::LDAP::Config
     return $config;
+}
+
+sub add_to_ldap_config {
+    my $self = shift;
+
+    # load the existing LDAP config, and strip our config out of it
+    # (so we don't add ourselves again as a duplicate)
+    my @ldap_config =
+        grep { $_->id() ne $self->ldap_config->id }
+        Socialtext::LDAP::Config->load();
+
+    # save the LDAP configs
+    Socialtext::LDAP::Config->save(@ldap_config, $self->ldap_config());
+}
+
+sub remove_from_ldap_config {
+    my $self = shift;
+
+    # load the existing LDAP config, and strip our config out of it
+    my @ldap_config =
+        grep { $_->id() ne $self->ldap_config->id }
+        Socialtext::LDAP::Config->load();
+
+    # save the remaining LDAP configs back out
+    Socialtext::LDAP::Config->save(@ldap_config);
 }
 
 sub setup {
@@ -483,6 +512,10 @@ Socialtext::Bootstrap::OpenLDAP - Bootstrap OpenLDAP instances
   # get LDAP config object
   $config = $openldap->ldap_config();
 
+  # modify and re-save the LDAP configuration
+  $openldap->ldap_config->bind_user( undef );
+  $openldap->add_to_ldap_config();
+
   # query config of the OpenLDAP instance
   #
   # realistically, you should only ever need a minimum of these (if
@@ -608,6 +641,9 @@ it.
 
 Stops the OpenLDAP instance.
 
+This is called automatically during object cleanup; when the bootstrap object
+goes out of scope OpenLDAP will be shut down automatically.
+
 =item B<running($pid)>
 
 Checks to see if the OpenLDAP instance is running.  An optional C<$pid> may be
@@ -621,6 +657,26 @@ C<Socialtext::LDAP::Config> object.
 
 Useful for bootstrapping OpenLDAP, then saving the configuration out to YAML
 so that it can be used by the rest of your testing.
+
+=item B<add_to_ldap_config()>
+
+Adds configuration for B<this> LDAP instance to the LDAP configuration file.
+
+This is called automatically by C<new()>, so you only need to call this if
+you've gone in and changed the LDAP configuration or if you have explicitly
+removed the LDAP configuration and want to add it back in.
+
+Care is already taken to ensure that you don't get duplicate instances of the
+LDAP configuration in the YAML file; don't worry about having to remove the
+config before adding it again.
+
+=item B<remove_from_ldap_config()>
+
+Removes the configuration for B<this> LDAP instance from the LDAP
+configuration file.
+
+This is called automatically during object cleanup; when the bootstrap object
+goes out of scope it'll de-register itself from the LDAP configuration.
 
 =item B<setup()>
 

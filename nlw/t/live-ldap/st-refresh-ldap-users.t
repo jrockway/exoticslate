@@ -24,12 +24,8 @@ sub set_up_openldap {
     $openldap->add_ldif('t/test-data/ldap/base_dn.ldif');
     $openldap->add_ldif('t/test-data/ldap/people.ldif');
 
-    # save the LDAP config
-    my $config  = $openldap->ldap_config();
-    Socialtext::LDAP::Config->save($config);
-
     # add LDAP to our list of user factories
-    my $ldap_id   = $config->id();
+    my $ldap_id   = $openldap->ldap_config->id();
     my $appconfig = Socialtext::AppConfig->new();
     $appconfig->set( 'user_factories', "LDAP:$ldap_id;Default" );
     $appconfig->write();

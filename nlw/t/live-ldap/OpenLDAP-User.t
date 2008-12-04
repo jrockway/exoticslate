@@ -7,7 +7,7 @@ use mocked 'Socialtext::Log', qw(:tests);
 use Socialtext::LDAP;
 use Socialtext::User::LDAP::Factory;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 33;
+use Test::Socialtext tests => 32;
 use Test::Deep;
 
 ###############################################################################
@@ -16,8 +16,6 @@ use Test::Deep;
 ###############################################################################
 my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
 isa_ok $openldap, 'Test::Socialtext::Bootstrap::OpenLDAP', 'bootstrapped OpenLDAP';
-my $rc = Socialtext::LDAP::Config->save($openldap->ldap_config());
-ok $rc, 'saved LDAP config to YAML';
 
 ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
 ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), 'added data; people';

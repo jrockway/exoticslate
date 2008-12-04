@@ -1,16 +1,11 @@
 #!/bin/bash
 
-mkdir -p ~/.nlw/etc/socialtext/workspace_options
-cd ~/.nlw/etc/socialtext/workspace_options
-
-echo $1
+STADMIN="$ST_CURRENT/nlw/bin/st-admin"
 
 if [ "$1" == "enable" ]; then 
-    echo ENABLING socialcalc
-    for i in `$ST_CURRENT/nlw/bin/st-admin list-workspaces` ; do mkdir -p $i ; touch $i/enable_spreadsheet ; done ;
+    for i in `$STADMIN list-workspaces` ; do $STADMIN enable-plugin --w $i --plugin socialcalc ; done ;
 elif [ "$1" == "disable" ]; then
-        echo DISABLING socialcalc
-        find . -name enable_spreadsheet | xargs rm -f || true
+    for i in `$STADMIN list-workspaces` ; do $STADMIN disable-plugin --w $i --plugin socialcalc ; done ;
 else
     echo "Usage: st-socialcalc [enable|disable]"
 fi

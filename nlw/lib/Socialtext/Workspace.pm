@@ -975,7 +975,7 @@ sub enable_plugin {
 sub disable_plugin {
     my ($self, $plugin) = @_;
 
-    die "cannot disable plugin '$plugin' on a per-workspace basis"
+    die loc("Cannot disable plugin '[_1]' on a per-workspace basis", $plugin)
         unless $plugin eq 'socialcalc';
 
     Socialtext::Pluggable::Adapter->DisablePlugin($plugin => $self);

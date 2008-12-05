@@ -1,5 +1,5 @@
 [%# vim: set et sts=2 sw=2: %]
-[% IF !page.is_spreadsheet || (current_workspace.enable_spreadsheet && user.can_use_plugin('socialcalc')) %]
+[% UNLESS page.is_spreadsheet && !current_workspace.enable_spreadsheet %]
 [% IF checker.check_permission('edit') %]
   <li><a title="[% loc('Click this button to edit the page') %]" id="st-edit-button-link[% id_suffix %]" class="editButton" href="#">[% loc('Edit') %]</a></li>
 [% ELSIF checker.check_permission('edit_controls') %]

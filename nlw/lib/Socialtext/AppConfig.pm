@@ -1149,15 +1149,6 @@ Optional.
 
 =for code type => SCALAR_TYPE
 
-=head2 use_sendfile
-
-If this is true, mod_xsendfile will be used to serve attachments from apache2
-instead of the backend mod-perl/apache1 processes.
-
-Default: 1
-
-=for code type => BOOLEAN_TYPE
-
 =head2 reports_skip_file
 
 Set this to a file containing workspaces names that should not be included

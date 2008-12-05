@@ -2243,17 +2243,30 @@ PLUGINS: {
         'enable invalid plugin for workspace pluggy',
     );
 
-    # Disable worksapce plugins.
+    # Disable workspace plugins.
     expect_success(
         sub {
             Socialtext::CLI->new(
                 argv => [
-                    qw( --workspace pluggy --plugin sociacalc )
+                    qw( --workspace pluggy --plugin socialcalc )
                 ]
             )->disable_plugin();
         },
         qr/Plugin socialcalc is now disabled for workspace pluggy./,
         'disable valid plugin',
+    );
+
+    # show workspace config lists plugins enabled for that workspace
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --workspace pluggy )
+                ]
+            )->show_workspace_config();
+        },
+        qr/modules_installed\s+:/,
+        'show workspace config displays enabled plugins',
     );
 
     expect_failure(

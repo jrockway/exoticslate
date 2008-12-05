@@ -946,6 +946,17 @@ sub ping_uris {
     }
 }
 
+sub plugins_enabled {
+    my ($self) = @_;
+    my $sql = q{
+        SELECT plugin
+          FROM workspace_plugin
+         WHERE workspace_id = ?
+    };
+    my $result = sql_execute( $sql, $self->workspace_id );
+    return map { $_->[0] } @{ $result->fetchall_arrayref };
+}
+
 sub is_plugin_enabled {
     my ($self, $plugin) = @_;
     my $sql = q{

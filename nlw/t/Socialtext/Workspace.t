@@ -1,7 +1,7 @@
 #!perl
 # @COPYRIGHT@
 use mocked qw(Socialtext::l10n system_locale); # Has to come firstest.
-use Test::Socialtext tests => 119;
+use Test::Socialtext tests => 120;
 use Test::Exception;
 use strict;
 use warnings;
@@ -742,8 +742,12 @@ Rudimentary_Plugin_Test: {
     );
     $ws->enable_plugin('socialcalc');
     is($ws->is_plugin_enabled('socialcalc'), '1', 'socialcalc enabled.');
+    is_deeply([ $ws->plugins_enabled ], [ 'socialcalc' ],
+        'list enabled plugins');
     $ws->disable_plugin('socialcalc');
     is($ws->is_plugin_enabled('socialcalc'), '0', 'socialcalc disabled.');
+    is_deeply([ $ws->plugins_enabled ], [],
+        'list enabled plugins');
 
     dies_ok { $ws->enable_plugin('people') } 'cannot enable people';
     ok(!$ws->is_plugin_enabled('people'), 'people did not get enabled');

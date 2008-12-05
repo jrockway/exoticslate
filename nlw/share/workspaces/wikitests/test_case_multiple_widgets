@@ -1,0 +1,89 @@
+| *Comment* | Test Case: Multiple Widgets |  |
+
+| set | testws | widgets%%start_time%% |
+| st-admin | create-workspace --name %%testws%% --title %%testws%% |  |
+| st-admin | add-member --email %%username%% --workspace %%testws%% |  |
+
+* Fixture: SocialWidgets
+
+| *Comment* | Test Case: Multiple Widgets Add Image Widget |  |
+| open_ok | /?dashboard | 60000 |
+| st-empty-container |  |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
+| click_and_wait | //a[@title='Add Content'] |  |
+| click_and_wait | link=Image |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
+
+| st-name-widget | 1 | image_widget |
+| st-widget-title-like | image_widget | Image |
+| st-widget-settings | image_widget |  |
+| type_ok | up_src | http://www.xndev.com/matt_im_avatar.jpg |
+| type_ok | up_title | hoyZa |
+| click_and_wait | st-savebutton-%%image_widget%% |  |
+
+| *Comment* | Test Case: Multiple Widgets Add Wiki Page Widget |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
+| click_and_wait | //a[@title='Add Content'] |  |
+| click_and_wait | link=Wiki Page |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
+| *Comment* | Image is now 2nd widget, right? |  |
+| st-name-widget | 2 | image_widget |
+| st-widget-title-like | image_widget | hoyZa |
+
+| *Comment* | Test Case: Multiple Widgets Add My Workspaces Widget |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
+| click_and_wait | //a[@title='Add Content'] |  |
+| click_and_wait | //a[contains(@href,'my_workspaces.xml')] |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
+
+| *Comment* | Wiki Page is now 2nd Widget, Images are 3rd, right? |  |
+| st-name-widget | 3 | image_widget |
+| st-widget-title-like | image_widget | hoyZa |
+| st-name-widget | 2 | wiki_page |
+| type_ok | //input[contains(@name,'up_workspace_name')] | %%workspace%% |
+| type_ok | //input[contains(@name,'up_page_title')] | jabberwocky |
+| click_ok | st-savebutton-%%wiki_page%% |  |
+| pause | 2000 |  |
+| st-select-widget-frame | wiki_page |  |
+| wait_for_element_present_ok | link=Edit | 30000 |
+| wait_for_element_present_ok | link=View | 30000 |
+| pause | 2000 |  |
+| wait_for_text_present_ok | Beware the Jabberwock, my son! |  |
+| select-frame | relative=parent |  |
+
+| *Comment* | Add Workspace Tags, everything shifts by 1 |  |
+| click_and_wait | //a[@title='Add Content'] |  |
+| click_and_wait | link=Workspace Tags |  |
+| st-name-widget | 4 | image_widget |
+| st-widget-title-like | image_widget | hoyZa |
+| st-name_widget | 3 | wiki_page |
+| st-select-widget-frame | wiki_page |  |
+| wait_for_element_present_ok | link=Edit | 30000 |
+| wait_for_element_present_ok | link=View | 30000 |
+| pause | 2000 |  |
+| wait_for_text_present_ok | Beware the Jabberwock, my son! |  |
+| select-frame | relative=parent |  |
+| st-name-widget | 2 | workspaces_widget |
+| st-widget-title-like | workspaces_widget | Workspaces |
+| st-select-widget-frame | workspaces_widget |  |
+| wait_for_element_present_ok | link=new page |  |
+| wait_for_element_present_ok | link=%%testws%% |  |
+| text_like | //body | changes |
+| text_like | //body | views |
+| select-frame | relative=parent |  |
+| st-name-widget | 1 | workspace-tags |
+| st-widget-title-like | workspace-tags | Tags for help-en |
+| st-select-widget-frame | workspace-tags |  |
+| wait_for_element_visible_ok | link=Glossary |  |
+| select-frame | relative=parent |  |
+
+| *Comment* | Add RSS Viewer everyting shifts by 1 |  |
+| click_and_wait | //a[@title='Add Content'] |  |
+| click_and_wait | link=RSS Viewer |  |
+| st-name-widget | 5 | image_widget |
+| st-widget-title-like | image_widget | hoyZa |
+
+| *Comment* | Test Case: Pick and Manipulate Widgets |  |
+| *Comment* | st-select-widget-frame | image_widget |
+
+| *Comment* | Test Case: Multiple Widgets COMPLETED |  |

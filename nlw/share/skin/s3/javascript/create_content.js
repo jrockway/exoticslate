@@ -72,9 +72,10 @@ proto.update_templates = function () {
             }
             else {
                 self.from_template_radio().attr('disabled', '');
-                self.from_template_select()
-                    .attr('disabled', '')
-                    .css({'font-style': 'normal'});
+                self.from_template_select().css({'font-style': 'normal'});
+                if (self.from_template_radio().is(':checked')) {
+                    self.from_template_select().attr('disabled', '');
+                }
                 for (var i = 0,l=pages.length; i < l; i++) {
                     jQuery('<option></option>')
                         .val(pages[i].page_id)

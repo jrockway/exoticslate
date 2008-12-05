@@ -6,7 +6,7 @@ use warnings;
 use mocked 'Apache::Cookie';
 use mocked 'Socialtext::CGI';
 use mocked 'Socialtext::ChangeEvent';
-use Test::Socialtext tests => 7;
+use Test::Socialtext tests => 8;
 fixtures( 'admin' );
 
 BEGIN {
@@ -15,8 +15,6 @@ BEGIN {
 }
 
 my $hub = new_hub('admin');
-
-goto TEMPLATES;
 
 # Make sure the display action returns the "furniture" we expect it to.
 DISPLAY: {

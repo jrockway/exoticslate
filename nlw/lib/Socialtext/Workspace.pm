@@ -2233,6 +2233,10 @@ Enables the plugin for the specified workspace.
 
 Disables the plugin for the specified workspace.
 
+=head2 $account->plugins_enabled()
+
+Returns an array for the plugins enabled.
+
 =head2 $workspace->enable_spreadsheet()
 
 Check whether spreadsheets are enabled or not.

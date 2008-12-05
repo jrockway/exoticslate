@@ -3,9 +3,9 @@
 
 # If socialcalc is installed, run the migration
 if [ -d /usr/share/nlw/plugin/socialcalc ]; then
-    echo Re-initializing the profile container because it exists.
+    echo Running migration to move socialcalc file on disk to database
     exit 0
 fi
 
-echo Skipping migration because there is no profile container
+echo Skipping migration because socialcalc is not installed
 exit 1

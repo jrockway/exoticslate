@@ -12,25 +12,26 @@ use Socialtext::l10n qw(system_locale);
 sub allowed_methods { 'GET, HEAD, DELETE' }
 sub permission { +{ GET => 'read', DELETE => 'attachments' } }
 
-# REVIEW we should consider using
-#    my $file = $attachment->full_path;
-#    open my $fh, $file
-#    $self->request->send_fd($fh);
-# if we can skirt the header and content sending being done elsewhere
 sub GET {
     my ( $self, $rest ) = @_;
 
     return $self->no_workspace() unless $self->workspace;
     return $self->not_authorized() unless $self->user_can('read');
 
-    my $fh;
     my $attachment = eval { $self->_get_attachment() };
     my $file = $attachment->full_path( $self->params->{version} )
         if $attachment;
 
-    unless ( -e $file ) {
-        return $self->_invalid_attachment( $rest, $self->params->{filename}.': not found' );
+    unless (-e $file) {
+        return $self->_invalid_attachment($rest,
+            $self->params->{filename} . ': not found');
     }
+
+    unless (-r _) {
+        return $self->_invalid_attachment($rest,
+            $self->params->{filename} . ': cannot read');
+    }
+    my $file_size = -s _;
 
     eval {
         my $mime_type = $attachment->mime_type;
@@ -43,25 +44,27 @@ sub GET {
             $mime_type .= '; charset=' . $charset;
         }
 
-        $fh = new IO::File $file, 'r';
-        die "Cannot read $file: $!" unless $fh;
-
         # See Socialtext::Headers::add_attachments for the IE6/7 motivation
         # behind Pragma and Cache-control below.
         $rest->header(
-            -status           => HTTP_200_OK,
-            '-content-length' => -s $file,
-            -type             => $mime_type,
-            -pragma           => undef,
-            '-cache-control'  => undef,
-            'Content-Disposition' => 'filename="' . $attachment->filename . '"',
+            -status               => HTTP_200_OK,
+            '-content-length'     => $file_size,
+            -type                 => $mime_type,
+            -pragma               => undef,
+            '-cache-control'      => undef,
+            'Content-Disposition' => 'filename="'
+                . $attachment->filename . '"',
+            'Content-Type' => 'application/octet-stream',
+            '-X-Sendfile'  => $file,
         );
     };
     # REVIEW: would be nice to be able to toss some kind of exception
     # all the way out to the browser
     # Probably an invalid attachment id.
     return $self->_invalid_attachment( $rest, $@ ) if $@;
-    return $fh;
+
+    # The frontend mod_xsendfile will take care of sending the attachment.
+    return '';
 }
 
 sub DELETE {

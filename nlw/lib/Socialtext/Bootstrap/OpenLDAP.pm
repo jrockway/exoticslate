@@ -204,8 +204,13 @@ sub _autodetect_module_dir {
 
 sub DESTROY {
     my $self = shift;
+
     # remove ourselves from the LDAP config
-    $self->remove_from_ldap_config();
+    #
+    # wrapped in an eval in case it fails/dies (which could happen if the test
+    # environment was purged since we were started)
+    eval { $self->remove_from_ldap_config() };
+
     # shut down and cleanup after ourselves
     $self->stop();
     $self->teardown();

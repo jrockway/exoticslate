@@ -75,6 +75,7 @@ sub new {
     $self->setup() or return;
     $self->start() or return;
     $self->add_to_ldap_config() or return;
+    $self->add_to_user_factories() or return;
 
     # return newly created object
     return $self;
@@ -210,6 +211,7 @@ sub DESTROY {
     # wrapped in an eval in case it fails/dies (which could happen if the test
     # environment was purged since we were started)
     eval { $self->remove_from_ldap_config() };
+    eval { $self->remove_from_user_factories() };
 
     # shut down and cleanup after ourselves
     $self->stop();
@@ -350,6 +352,47 @@ sub remove_from_ldap_config {
 
     # save the remaining LDAP configs back out
     Socialtext::LDAP::Config->save(@ldap_config);
+}
+
+sub add_to_user_factories {
+    my $self = shift;
+
+    # get the list of existing User Factories, stripping us out of it (so we
+    # don't add ourselves again as a duplicate)
+    my $me_as_factory = $self->_user_factory();
+    my @factories =
+        grep { $_ ne $me_as_factory }
+        split /;\s*/, Socialtext::AppConfig->user_factories();
+
+    # prefix ourselves to the list of User Factories
+    my $user_factories = join ';', $me_as_factory, @factories;
+    Socialtext::AppConfig->set('user_factories' => $user_factories);
+
+    my $got_set_ok = Socialtext::AppConfig->user_factories() eq $user_factories;
+    return $got_set_ok;
+}
+
+sub remove_from_user_factories {
+    my $self = shift;
+
+    # get the list of existing User Factories, stripping us out of it
+    my $me_as_factory = $self->_user_factory();
+    my @factories =
+        grep { $_ ne $me_as_factory }
+        split /;\s*/, Socialtext::AppConfig->user_factories();
+
+    # save the remaining User Factories back out
+    my $user_factories = join ';', @factories;
+    Socialtext::AppConfig->set('user_factories' => $user_factories);
+
+    my $got_set_ok = Socialtext::AppConfig->user_factories() eq $user_factories;
+    return $got_set_ok;
+}
+
+sub _user_factory {
+    my $self = shift;
+    my $id   = $self->ldap_config->id();
+    return "LDAP:$id";
 }
 
 sub setup {
@@ -682,6 +725,23 @@ configuration file.
 
 This is called automatically during object cleanup; when the bootstrap object
 goes out of scope it'll de-register itself from the LDAP configuration.
+
+=item B<add_to_user_factories()>
+
+Adds B<this> LDAP instance to the list of known C<user_factories> in the
+Socialtext configuration file, by prefixing it to the list of existing
+C<user_factories>.
+
+This is called automatically by C<new()>, so you only need to call this if you
+have explicitly removed it from the C<user_factories> yourself.
+
+=item B<remove_from_user_factories()>
+
+Removes B<this> LDAP instance from the list of known C<user_factories> in the
+Socialtext configuration file.
+
+This is called automatically during object cleanup; when the bootstrap object
+goes out of scope it'll de-register itself from the list of C<user_factories>.
 
 =item B<setup()>
 

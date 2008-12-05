@@ -5,12 +5,11 @@ use strict;
 use warnings;
 use Archive::Tar;
 use File::Temp qw();
-use Socialtext::AppConfig;
 use Socialtext::LDAP;
 use Socialtext::Workspace;
 use Socialtext::Workspace;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 29;
+use Test::Socialtext tests => 27;
 use Test::Exception;
 
 ###############################################################################
@@ -44,14 +43,6 @@ deleted_ldap_user_shouldnt_prevent_workspace_import: {
     # populate OpenLDAP
     ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), '... added data: base_dn';
     ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), '... added data: people';
-
-    # set up user_factories to use this LDAP server
-    my $openldap_id = $openldap->ldap_config->id();
-    my $user_factories = "LDAP:$openldap_id;Default";
-    my $appconfig = Socialtext::AppConfig->new();
-    $appconfig->set( 'user_factories' => $user_factories );
-    $appconfig->write();
-    is $appconfig->user_factories(), $user_factories, 'added LDAP user factory';
 
     # instantiate a user and add him to the "foobar" workspace
     my $ws = Socialtext::Workspace->new( name => 'foobar' );
@@ -122,14 +113,6 @@ deleted_ldap_user_shouldnt_prevent_workspace_import: {
     ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), '... added data: base_dn';
     ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), '... added data: people';
 
-    # set up user_factories to use the new LDAP server
-    $openldap_id = $openldap->ldap_config->id();
-    $user_factories = "LDAP:$openldap_id;Default";
-    $appconfig = Socialtext::AppConfig->new();
-    $appconfig->set( 'user_factories' => $user_factories );
-    $appconfig->write();
-    is $appconfig->user_factories(), $user_factories, 'added LDAP user factory';
-
     ###########################################################################
     # Import the workspace
 
@@ -142,18 +125,13 @@ deleted_ldap_user_shouldnt_prevent_workspace_import: {
     my $imported_user = Socialtext::User->new( username => 'John Doe' );
     isa_ok $imported_user, 'Socialtext::User', 'test user was imported';
     isa_ok $imported_user->homunculus(), 'Socialtext::User::LDAP', '... and found in LDAP store';
-    is $imported_user->homunculus->driver_id(), $openldap_id, '... ... from our *new* LDAP store';
+    is $imported_user->homunculus->driver_id(), $openldap->ldap_config->id(), '... ... from our *new* LDAP store';
     ok $ws->has_user($imported_user), '... and is a member of our test workspace';
 
     # user data should match that of the original user
     is $imported_user->first_name(), $user->first_name(), '... has correct first name';
     is $imported_user->last_name(), $user->last_name(), '... has correct last name';
     is $imported_user->email_address(), $user->email_address(), '... has correct e-mail address';
-
-    ###########################################################################
-    # reset user_factories back to default, so we don't throw other tests out
-    $appconfig->set( 'user_factories' => 'Default' );
-    $appconfig->write();
 
     ###########################################################################
     # unlink the tarball now that we're done with it.

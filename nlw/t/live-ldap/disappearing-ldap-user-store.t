@@ -3,11 +3,10 @@
 
 use strict;
 use warnings;
-use Socialtext::AppConfig;
 use Socialtext::LDAP;
 use Socialtext::Workspace;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 24;
+use Test::Socialtext tests => 21;
 
 ###############################################################################
 # FIXTURE: foobar
@@ -34,14 +33,6 @@ disappearing_ldap_user_store: {
     ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), '... added data: base_dn';
     ok $openldap->add_ldif('t/test-data/ldap/people.ldif'), '... added data: people';
 
-    # set up our user_factories to use the LDAP server
-    my $openldap_id    = $openldap->ldap_config->id();
-    my $user_factories = "LDAP:$openldap_id;Default";
-    my $appconfig = Socialtext::AppConfig->new();
-    $appconfig->set( 'user_factories' => $user_factories );
-    $appconfig->write();
-    is $appconfig->user_factories(), $user_factories, 'user_factories set to LDAP first, then Default';
-
     # instantiate the user, and add them to the test workspace.
     my $ws = Socialtext::Workspace->new( name => $TEST_WORKSPACE );
     isa_ok $ws, 'Socialtext::Workspace', 'found workspace to test with';
@@ -67,15 +58,9 @@ disappearing_ldap_user_store: {
     my @deleted_users = grep { ref($_->homunculus) eq 'Socialtext::User::Deleted' } @entries;
     ok !@deleted_users, '... none of which are Deleted users';
 
-    # shut down OpenLDAP, and remove -ALL- of the config that pointed towards
-    # its existence.
+    # shut down OpenLDAP, which automatically removes *ALL* of the config that
+    # pointed towards its existence.
     undef $openldap;
-    unlink Socialtext::LDAP::Config->config_filename();
-    ok !-e Socialtext::LDAP::Config->config_filename(), 'removed LDAP configuration file';
-
-    $appconfig->set( 'user_factories' => 'Default' );
-    $appconfig->write();
-    ok $appconfig->is_default('user_factories'), 'user_factories returned to default value';
 
     # enumerate the users in the test workspace again; we should still be able
     # to do so, but now the user from the LDAP store is a "Deleted" user.
@@ -102,7 +87,4 @@ disappearing_ldap_user_store: {
     $maybe_deleted = Socialtext::User->new(driver_unique_id => $dn);
     ok $maybe_deleted, "got the user by driver_unique_id";
     isa_ok $maybe_deleted->homunculus, 'Socialtext::User::Deleted', "... but it's deleted";
-
-    # cleanup; purge the test user from the system.
-    #$user->delete(force=>1);
 }

@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use File::Slurp qw(slurp write_file);
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 30;
+use Test::Socialtext tests => 26;
 
 ###############################################################################
 # FIXTURE: db
@@ -104,15 +104,8 @@ sub setup_ldap_servers_with_referrals {
 
     # remove the LDAP config for the referral *target*; the only way we get
     # there is through a referral (*not* through our config)
+    $openldap_target->remove_from_user_factories();
     $openldap_target->remove_from_ldap_config();
-
-    # set user_factories to use the LDAP server first, Default second
-    my $ldap_id = $openldap_source->ldap_config->id();
-    my $factories = "LDAP:$ldap_id;Default";
-    my $appconfig = Socialtext::AppConfig->new();
-    $appconfig->set( 'user_factories' => $factories );
-    $appconfig->write();
-    is $appconfig->user_factories(), $factories, 'user_factories set to LDAP, then Default';
 
     # populate OpenLDAP servers with data
     ok $openldap_target->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added base_dn to referral target';

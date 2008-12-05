@@ -19,18 +19,9 @@ fixtures( 'db' );
 # Sets up OpenLDAP, adds some test data, and adds the OpenLDAP server to our
 # list of user factories.
 sub set_up_openldap {
-    # bootstrap OpenLDAP, populate with data.
     my $openldap = Test::Socialtext::Bootstrap::OpenLDAP->new();
     $openldap->add_ldif('t/test-data/ldap/base_dn.ldif');
     $openldap->add_ldif('t/test-data/ldap/people.ldif');
-
-    # add LDAP to our list of user factories
-    my $ldap_id   = $openldap->ldap_config->id();
-    my $appconfig = Socialtext::AppConfig->new();
-    $appconfig->set( 'user_factories', "LDAP:$ldap_id;Default" );
-    $appconfig->write();
-
-    # done
     return $openldap;
 }
 

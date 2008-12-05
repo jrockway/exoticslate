@@ -3,10 +3,9 @@
 
 use strict;
 use warnings;
-use Socialtext::AppConfig;
 use Socialtext::User;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 23;
+use Test::Socialtext tests => 21;
 
 ###############################################################################
 # FIXTURE: db
@@ -28,12 +27,6 @@ sub setup {
     # get LDAP config, make sure its set to "username => cn", and save to YAML
     $openldap->ldap_config->attr_map->{username} = $name_attr;
     ok $openldap->add_to_ldap_config(), 'saved custom LDAP config to YAML';
-
-    # set our user_factories to use the LDAP server
-    my $appconfig = Socialtext::AppConfig->new();
-    $appconfig->set( 'user_factories' => 'LDAP;Default' );
-    $appconfig->write();
-    is $appconfig->user_factories(), 'LDAP;Default', 'user_factories set to LDAP;Default';
 
     return $openldap;
 }

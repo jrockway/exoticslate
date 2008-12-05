@@ -5,9 +5,8 @@ use strict;
 use warnings;
 use File::Slurp qw(write_file);
 use mocked 'Socialtext::Log', qw(:tests);
-use Socialtext::AppConfig;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 9;
+use Test::Socialtext tests => 8;
 
 ###############################################################################
 # FIXTURE: db
@@ -35,16 +34,8 @@ ok $rhs->add_ldif('t/tmp/recurse-rhs.ldif'), 'added recursing LDIF to RHS';
 ###############################################################################
 # remove the LDAP config for the referral *target*; we only need one of these
 # to be present in the config in order to trigger the referral loop.
+$rhs->remove_from_user_factories();
 $rhs->remove_from_ldap_config();
-
-###############################################################################
-# set user_factories to use LDAP first, Default second
-my $ldap_id   = $lhs->ldap_config->id();
-my $factories = "LDAP:$ldap_id;Default";
-my $appconfig = Socialtext::AppConfig->new();
-$appconfig->set( 'user_factories' => $factories );
-$appconfig->write();
-is $appconfig->user_factories(), $factories, 'user_factories set to LDAP, then Default';
 
 ###############################################################################
 # TEST: Authenticate, with looping LDAP referrals; should fail

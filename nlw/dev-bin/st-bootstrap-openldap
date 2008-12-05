@@ -11,7 +11,6 @@ use Pod::Usage;
 use File::Slurp qw(slurp write_file);
 use File::Temp qw(tempfile);
 use Fcntl qw(SEEK_SET);
-use Socialtext::AppConfig;
 use Socialtext::LDAP;
 use Socialtext::Bootstrap::OpenLDAP;
 
@@ -93,13 +92,6 @@ sub start {
     seek $ldif_fh, 0, SEEK_SET;
     $openldap->add_ldif($ldif_fh) || die "can't add data to LDAP server\n";
     $ldif_fh->close();
-
-    # configure user_factories so OpenLDAP can be used as a user source
-    my $ldap_id   = $openldap->ldap_config->id();
-    my $factories = "LDAP:$ldap_id;Default";
-    my $appconfig = Socialtext::AppConfig->new();
-    $appconfig->set( 'user_factories', $factories );
-    $appconfig->write();
 
     # update PID file to show that *we* are running.
     #

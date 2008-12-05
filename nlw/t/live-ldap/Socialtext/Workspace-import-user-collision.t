@@ -5,14 +5,13 @@ use strict;
 use warnings;
 use File::Temp qw();
 use Socialtext::Account;
-use Socialtext::AppConfig;
 use Socialtext::LDAP;
 use Socialtext::LDAP::Config;
 use Socialtext::SQL::Builder qw/:all/;
 use Socialtext::User;
 use Socialtext::Workspace;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 11;
+use Test::Socialtext tests => 10;
 
 ###############################################################################
 # FIXTURE:  db
@@ -72,13 +71,6 @@ isa_ok $ldap, 'Test::Socialtext::Bootstrap::OpenLDAP';
 # ... populate OpenLDAP
 ok $ldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added base_dn';
 ok $ldap->add_ldif('t/test-data/ldap/people.ldif'), 'added people';
-
-# ... add LDAP to our list of known user_factories
-my $factories = "LDAP:" . $ldap->ldap_config->id . ";Default";
-my $app = Socialtext::AppConfig->new();
-$app->set( 'user_factories' => $factories );
-$app->write;
-is $app->user_factories, $factories, 'enabled LDAP users.';
 
 ###############################################################################
 # MANUALLY migrate the User in the DB, using a process similar to what's done

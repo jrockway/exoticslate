@@ -3,13 +3,12 @@
 
 use strict;
 use warnings;
-use Socialtext::AppConfig;
 use Socialtext::LDAP;
 use Socialtext::User;
 use Socialtext::User::Default::Factory;
 use Test::Socialtext::Bootstrap::OpenLDAP;
 use Test::Warn;
-use Test::Socialtext tests => 46;
+use Test::Socialtext tests => 41;
 
 fixtures( 'db' );
 
@@ -46,13 +45,7 @@ sub bootstrap_tests {
     ok $openldap->add_ldif('t/test-data/ldap/base_dn.ldif'), 'added data; base_dn';
     ok $openldap->add_ldif("t/test-data/ldap/$populate.ldif"), 'added data; people';
 
-    # set ordering of "user_factories"; LDAP first, Pg second
-    my $appconfig = Socialtext::AppConfig->new();
-    $appconfig->set( 'user_factories' => 'LDAP;Default' );
-    $appconfig->write();
-    is $appconfig->user_factories(), 'LDAP;Default', 'user_factories set';
-
-    return [$openldap, $config, $appconfig];
+    return [$openldap, $config];
 }
 
 ###############################################################################

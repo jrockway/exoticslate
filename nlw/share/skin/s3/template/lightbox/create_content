@@ -2,8 +2,8 @@
 <div class="lightbox" id="st-create-content-lightbox">
   <form id="st-create-content-form">
     <div class="title">[% loc('Create Content') %]</div>
-
     <br />
+    <div class="error"></div>
 
     [% IF content_types.size() > 1 %]
     <div>

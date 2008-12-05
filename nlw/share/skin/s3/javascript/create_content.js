@@ -29,6 +29,10 @@ proto.choices = function () {
     return jQuery('#st-create-content-lightbox .choice input');
 }
 
+proto.error = function () {
+    return jQuery('#st-create-content-lightbox .error');
+}
+
 proto.get_from_page = function() {
     if (this.from_page_radio().is(':checked')) {
         return this.from_page_text().val();
@@ -44,7 +48,6 @@ proto.get_from_page = function() {
 proto.update_templates = function () {
     var self = this;
     var type = this.selected_page_type();
-    var visible_type = self.visible_types[type] || type;
     var template = loc('template');
     jQuery.ajax({
         url: Page.workspaceUrl() + '/tags/' + template + '/pages?type=' + type,
@@ -108,6 +111,11 @@ proto.selected_page_type = function () {
     return page_type;
 }
 
+proto.selected_visible_type = function () {
+    var type = this.selected_page_type();
+    return this.visible_types[type] || type;
+}
+
 proto.show = function () {
     var self = this;
 
@@ -147,12 +155,7 @@ proto.show = function () {
 
     jQuery('#st-create-content-lightbox #st-create-content-form')
         .unbind('submit')
-        .submit(function () {
-            var url = self.create_url();
-            if (url)
-                document.location = url;    
-            return false;
-        });
+        .submit(function () { self.create_new_page(); return false });
 
     jQuery.showLightbox({
         content:'#st-create-content-lightbox',
@@ -161,11 +164,24 @@ proto.show = function () {
 
 }
 
+proto.create_new_page = function () {
+    var self = this;
+    try {
+        var url = this.create_url();
+        if (url) document.location = url;    
+    }
+    catch (e) {
+        this.error().show().html(e.message).show();
+        setTimeout(function () { self.error().hide(); }, 4000);
+    }
+}
+
 proto.set_incipient_title = function (title) {
     this._incipient_title = title;
 }
 
 proto.create_url = function () {
+    var self = this;
     var type = this.selected_page_type();
     var url;
     if (this._incipient_title) {
@@ -180,6 +196,24 @@ proto.create_url = function () {
     var template = this.get_from_page();
     if (template) {
         url += ';template=' + template;
+
+        jQuery.ajax({
+            url: Page.workspaceUrl() + '/pages/' + template,
+            async: false,
+            dataType: 'json',
+            success: function (page) {
+                if (page.type != type) {
+                    throw new Error(loc(
+                        "'[_1]' exists, but is not a [_2]",
+                        template,
+                        self.selected_visible_type()
+                    ));
+                }
+            },
+            error: function () {
+                throw new Error(loc("No page named '[_1]' exists", template));
+            }
+        });
     }
 
     return url;

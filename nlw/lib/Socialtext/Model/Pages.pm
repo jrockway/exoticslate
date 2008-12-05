@@ -246,6 +246,13 @@ sub Minimal_by_name {
     $page_filter = '\\m' . $page_filter;
 
     my @bind = ($workspace_id, $page_filter);
+
+    my $and_type = '';
+    if ($p{type}) {
+        $and_type = 'AND page_type = ?';
+        push @bind, $p{type};
+    }
+
     if ($limit) {
         push @bind, $limit;
         $limit = "LIMIT ?";
@@ -261,6 +268,7 @@ SELECT * FROM (
      WHERE deleted = 'false'::bool 
        AND workspace_id = ? 
        AND name ~* ?
+       $and_type
      ORDER BY last_edit_time
       $limit
 ) AS X ORDER BY name

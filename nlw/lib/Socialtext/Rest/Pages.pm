@@ -33,7 +33,8 @@ sub get_resource {
         return Socialtext::Model::Pages->Minimal_by_name(
             workspace_id => $self->hub->current_workspace->workspace_id,
             page_filter => $page_filter,
-            limit => 100
+            limit => 100,
+            type => $self->rest->query->param('type'),
         );
     }
 

@@ -146,11 +146,10 @@ sub add_hook {
 }
 
 sub add_content_type {
-    my ($self,$name) = @_;
+    my ($self,$name,$visible_name) = @_;
     my $class = ref($self) || $self;
     my $types = $content_types{$class};
-    push @{$content_types{$class}}, $name
-        unless grep { $_ eq $name } @{$content_types{$class}};
+    $content_types{$class}{$name} = $visible_name;
 }
 
 sub hooks {
@@ -162,7 +161,7 @@ sub hooks {
 sub content_types {
     my $self = shift;
     my $class = ref($self) || $self;
-    return $content_types{$class} ? @{$content_types{$class}} : ();
+    return $content_types{$class}
 }
 
 sub rest_hooks {

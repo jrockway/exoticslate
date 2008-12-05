@@ -225,18 +225,20 @@ sub registered {
 
 sub content_types {
     my $self = shift;
-    my @ct;
+    my %ct;
     for my $plug_class ($self->plugins) {
-        my $plugin = $self->{_plugins}{$plug_class} || $plug_class->new;
-        unless ($self->hub) {
-            $self->make_hub($self->rest->user);
-        }
-        $plugin->hub($self->hub);
-        if ($plugin->is_plugin_enabled) {
-            push @ct, $plugin->content_types;
+        if (my $types = $plug_class->content_types) {
+            my $plugin = $self->{_plugins}{$plug_class} || $plug_class->new;
+            unless ($self->hub) {
+                $self->make_hub($self->rest->user);
+            }
+            $plugin->hub($self->hub);
+            if ($plugin->is_plugin_enabled) {
+                $ct{$_} = $types->{$_} for keys %$types;
+            }
         }
     }
-    return @ct;
+    return \%ct;
 }
 
 sub hooked_template_vars {
@@ -248,7 +250,7 @@ sub hooked_template_vars {
         my ($key) = $hook->{name} =~ m{template_var\.(.*)};
         $vars{$key} = $self->hook($hook->{name});
     }
-    $vars{content_types} = [ $self->content_types ];
+    $vars{content_types} = $self->content_types;
     return %vars;
 }
 

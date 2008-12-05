@@ -21,7 +21,7 @@ sub register {
     $class->add_hook('template.user_photo.content'       => 'user_photo');
     $class->add_hook('wafl.user'                         => 'user_name');
 
-    $class->add_content_type('page');
+    $class->add_content_type('wiki', 'Page');
 }
 
 sub root {

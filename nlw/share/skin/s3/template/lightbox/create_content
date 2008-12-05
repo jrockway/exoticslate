@@ -7,10 +7,10 @@
 
     [% IF content_types.size() > 1 %]
     <div>
-      [% FOR ct = content_types.sort() %]
-      <div class="choice [% ct %]">
-        <input id="[% ct %]-radio" name="content_type" type="radio" [% IF ct == "page" %]checked="checked" [% END %]/>
-        <label for="[% ct %]-radio">[% loc(ct) %]</label>
+      [% FOR ct = content_types.keys %]
+      <div class="choice">
+        <input id="[% ct %]-radio" value="[% ct %]" name="content_type" type="radio" [% IF ct == "wiki" %]checked="checked" [% END %]/>
+        <label for="[% ct %]-radio">[% loc(content_types.$ct) %]</label>
       </div>
       [% END %]
     <br/>

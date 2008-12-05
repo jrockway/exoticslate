@@ -457,34 +457,12 @@ sub teardown {
 
 sub add_ldif {
     my ($self, $ldif_filename) = @_;
-    my $cb = sub {
-        my ($ldap, $entry) = @_;
-        my $mesg = $ldap->add( $entry );
-        if ($mesg->code()) {
-            warn "# error adding from LDIF:\n"
-               . "#\t" . $mesg->code() . ': ' . $mesg->error() . "\n";
-            $entry->dump(*STDERR);
-            return;
-        }
-        return 1;
-    };
-    return $self->_ldif_update( $cb, $ldif_filename );
+    return $self->_ldif_update( \&_cb_add_entry, $ldif_filename );
 }
 
 sub remove_ldif {
     my ($self, $ldif_filename) = @_;
-    my $cb = sub {
-        my ($ldap, $entry) = @_;
-        my $mesg = $ldap->delete( $entry->dn() );
-        if ($mesg->code()) {
-            warn "# error removing from LDIF:\n"
-               . "#\t" . $mesg->code() . ': ' . $mesg->error() . "\n";
-            $entry->dump(*STDERR);
-            return;
-        }
-        return 1;
-    };
-    return $self->_ldif_update( $cb, $ldif_filename );
+    return $self->_ldif_update( \&_cb_remove_entry, $ldif_filename );
 }
 
 sub _ldif_update {
@@ -529,6 +507,30 @@ sub _update {
     # Do the update, firing all the values through to the CB
     foreach my $val (@{$values_aref}) {
         return unless $callback->($ldap, $val);
+    }
+    return 1;
+}
+
+sub _cb_add_entry {
+    my ($net_ldap, $entry) = @_;
+    my $mesg = $net_ldap->add($entry);
+    if ($mesg->code()) {
+        warn "# error adding to LDAP:\n"
+           . "#\t" . $mesg->code() . ': ' . $mesg->error() . "\n";
+       $entry->dump(*STDERR);
+       return;
+    }
+    return 1;
+}
+
+sub _cb_remove_entry {
+    my ($net_ldap, $entry) = @_;
+    my $mesg = $net_ldap->delete($entry->dn());
+    if ($mesg->code()) {
+        warn "# error removing from LDAP:\n"
+           . "#\t" . $mesg->code() . ': ' . $mesg->error() . "\n";
+        $entry->dump(*STDERR);
+        return;
     }
     return 1;
 }

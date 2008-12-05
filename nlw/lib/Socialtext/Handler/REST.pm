@@ -382,7 +382,7 @@ sub _getContent {
     # N.B.: SUPER::getRequestMethod returns the underlying HTTP request
     # method, even if we're tunneling.
     if ( $self->getRealRequestMethod() eq 'POST' ) {
-        $self->query->param('POSTDATA');
+        return $self->query->param('POSTDATA');
     }
     else {
         # REVIEW: this is problematic for very large attachments

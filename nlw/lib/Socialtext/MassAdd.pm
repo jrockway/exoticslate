@@ -13,7 +13,8 @@ our @Required_fields = qw/username email_address/;
 our @User_fields = qw/first_name last_name password/;
 
 # Note: these fields may not be created, now that fields are treated
-# differently.  Please do some poking around before you change these.
+# differently.  Please do some poking around before you change these. (See:
+# Socialtext::People::Fields).
 our @Profile_fields
     = qw/position company location work_phone mobile_phone home_phone/;
 
@@ -153,6 +154,7 @@ sub _add_user {
     }
 
     if ($Has_People_Installed) {
+        local $Socialtext::People::Fields::AutomaticStockFields = 1;
         my $p = Socialtext::People::Profile->GetProfile($user,
             no_recurse => 1);
         for (my $i = 0; $i < @Profile_fields; $i++) {

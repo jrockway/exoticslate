@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+use Socialtext::AppConfig;
+
+system 'st-admin disable-plugin --all-accounts --plugin socialcalc';
+
+my @enabled = glob(join('/',
+    Socialtext::AppConfig->config_dir(),
+    "workspace_options",
+    '*',
+    'enable_spreadsheet',
+));
+
+for my $file (@enabled) {
+    my ($workspace) = $file =~ m{workspace_options/(.*)/enable_spreadsheet};
+    system "st-admin enable-plugin --workspace $workspace --plugin socialcalc";
+    unlink $file;
+}
+

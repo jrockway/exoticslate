@@ -1,0 +1,11 @@
+#!/bin/sh
+# @COPYRIGHT@
+
+# If socialcalc is installed, run the migration
+if [ -d /usr/share/nlw/plugin/socialcalc ]; then
+    echo Re-initializing the profile container because it exists.
+    exit 0
+fi
+
+echo Skipping migration because there is no profile container
+exit 1

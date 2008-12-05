@@ -30,7 +30,7 @@ BEGIN {
     delete $ENV{NLW_APPCONFIG};
 }
 
-plan tests => 65;
+plan tests => 67;
 
 my $user = getpwuid($>);
 
@@ -152,7 +152,7 @@ NOT_DEFAULT: {
 
 }
 
-{
+Defaults: {
     # Call ->new() each time to make the module not re-use an existing
     # singleton.
     like( Socialtext::AppConfig->new->data_root_dir, qr{t/tmp/root$},
@@ -187,6 +187,8 @@ NOT_DEFAULT: {
     is( Socialtext::AppConfig->_default_data_root, '/var/www/socialtext',
         'default data root is /var/www/socialtext for root' );
     Socialtext::AppConfig->_set_startup_user($>);
+
+    is( Socialtext::AppConfig->new->use_sendfile, 1, 'use_sendfile is correct');
 }
 
 CHECK_ALL_METHODS: {
@@ -229,6 +231,7 @@ CHECK_ALL_METHODS: {
         unauthorized_returns_forbidden
         web_hostname
         web_services_proxy
+        use_sendfile
     );
 
     for my $method ( @methods ) {

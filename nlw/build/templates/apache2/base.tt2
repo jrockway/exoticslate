@@ -9,6 +9,7 @@ LoadModule headers_module       [% config.module_dir %]/mod_headers.so
 LoadModule proxy_module         [% config.module_dir %]/mod_proxy.so
 LoadModule proxy_http_module    [% config.module_dir %]/mod_proxy_http.so
 LoadModule ssl_module           [% config.module_dir %]/mod_ssl.so
+LoadModule xsendfile_module     [% config.module_dir %]/mod_xsendfile.so
 
 [% IF config.is_mac %]
 # These are compiled into the apache2 binary in the Debian

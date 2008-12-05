@@ -106,7 +106,8 @@ proto.selected_page_type = function () {
     this.choices().each(function () {
         if (jQuery(this).is(":checked")) {
             page_type = jQuery(this).val();
-            self.visible_types[page_type] = loc(jQuery(this).html());
+            var label = jQuery('label[for='+this.id+']');
+            self.visible_types[page_type] = loc(label.html());
         }
     });
     return page_type;
@@ -129,12 +130,12 @@ proto.show = function () {
         self.from_page_text().attr('disabled', 'true');
     });
     this.from_template_radio().unbind('click').click(function () {
-        self.from_template_select().attr('disabled', '');
+        self.from_template_select().attr('disabled', '').focus();
         self.from_page_text().attr('disabled', 'true');
     });
     this.from_page_radio().unbind('click').click(function () {
         self.from_template_select().attr('disabled', 'true');
-        self.from_page_text().attr('disabled', '');
+        self.from_page_text().attr('disabled', '').val('').focus();
     });
     this.choices().unbind('click').click(function () {
         self.update_templates();

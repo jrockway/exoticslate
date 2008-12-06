@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MAKEFILES="$ST_CURRENT/nlw/share/skin/Makefile $ST_CURRENT/plugins/socialcalc/share/javascript/Makefile $ST_CURRENT/plugins/people/Makefile $ST_CURRENT/plugins/widgets/Makefile"
+MAKEFILES="$ST_CURRENT/nlw/share/skin/Makefile $ST_CURRENT/plugins/socialcalc/share/javascript/Makefile $ST_CURRENT/plugins/people/Makefile $ST_CURRENT/plugins/widgets/Makefile $ST_CURRENT/plugins/signals/Makefile"
 
 # REMOVED MAKING JS-TEST SINCE IT SEEMS TO BREAK SUBSEQUENT rb COMMANDS:
 # $ST_CURRENT/nlw/share/skin/js-test/Makefile

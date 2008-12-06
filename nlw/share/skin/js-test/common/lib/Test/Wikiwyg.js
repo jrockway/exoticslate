@@ -50,18 +50,7 @@ proto.run_roundtrip_sync = function(section_name, section_name2) {
 }
 
 proto.do_roundtrip = function(wikitext) {
-    var url = '/admin/index.cgi';
-    var postdata = 'action=wikiwyg_wikitext_to_html;content=' +
-        encodeURIComponent(wikitext);
-    var html = Ajax.post(
-        url,
-        postdata,
-        null,
-        {
-            userid: 'devnull1@socialtext.com',
-            passwd: 'd3vnu11l'
-        }
-    );
+    var html = Test.Wikiwyg.Filter.prototype.wikitext_to_html(wikitext);
     
     if (!this._wysiwyg_object) {
         this._wysiwyg_object = this.create_wysiwyg_object();
@@ -90,6 +79,24 @@ proto.create_wysiwyg_object = function(html) {
 }
 
 
+proto.run_like = function(x, y) {
+    try {
+        this.compile();
+        var blocks =  this.state.blocks;
+        for (var i = 0; i < blocks.length; i++) {
+            var block = blocks[i];
+            if (! this.verify_block(block, x, y)) continue;
+            this.like(block.data[x], block.data[y], block.name);
+        }
+    }
+    catch(e) {
+        // alert(e);
+        throw(e);
+    }
+}
+
+
+
 var proto = Test.Wikiwyg.Filter.prototype;
 
 function _make_wrappers (base, methods) {
@@ -113,6 +120,23 @@ _make_wrappers(
     'Wikiwyg.Wikitext.Socialtext',
     { html_to_wikitext: 'convert_html_to_wikitext' }
 );
+
+proto.wikitext_to_html = function(wikitext) {
+    var url = '/admin/index.cgi';
+    var postdata = 'action=wikiwyg_wikitext_to_html;content=' +
+        encodeURIComponent(wikitext);
+
+    return Ajax.post(
+        url,
+        postdata,
+        null,
+        {
+            userid: 'devnull1@socialtext.com',
+            passwd: 'd3vnu11l'
+        }
+    );
+}
+
 
 proto.template_vars = function(content) {
     return content.replace(

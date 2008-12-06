@@ -299,6 +299,7 @@ use Class::Field qw( const field );
 
 const formatter_id    => 'td';
 const table_blocks    => [qw(wafl_block hr hx wafl_p ol ul indent p empty_p)];
+const table_single_line_blocks => [qw(hx ol ul indent)];
 field contains_blocks => [];
 field contains_phrases => [];
 
@@ -327,6 +328,10 @@ sub match {
         $self->text( $new_text . "\n" )
             unless $new_text =~ /\n\z/;
         $self->contains_blocks( $self->table_blocks );
+    }
+    elsif ($new_text =~ /^(?:[*#]|>+|\^+)\s/ ) {
+        $self->text( $new_text . "\n" );
+        $self->contains_blocks( $self->table_single_line_blocks );
     }
     else {
         $self->contains_phrases( $self->table_phrases );

@@ -14,12 +14,12 @@ GetOptions( \%opts,
     'all',
     'recreate',
 ) or usage();
-usage() unless $opts{workspace_name} or $opts{all};
+usage() unless $opts{workspace} or $opts{all};
 
 
-if ($opts{workspace_name}) {
+if ($opts{workspace}) {
     populate_workspace(
-        Socialtext::Workspace->new( name => $opts{workspace_name}));
+        Socialtext::Workspace->new( name => $opts{workspace}));
 }
 elsif ($opts{all}) {
     my $wksp_iter = Socialtext::Workspace->All;

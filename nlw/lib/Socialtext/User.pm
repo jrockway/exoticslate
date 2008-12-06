@@ -95,6 +95,7 @@ sub new_homunculus {
     # ids, we must short-circuit and immediately go to the driver
     # associated with that system id
     if ($key eq 'user_id') {
+        return undef if $val =~ /\D/;
         my ($driver_key, $driver_username, $driver_unique_id) = 
             sql_selectrow(
                 q{SELECT driver_key, driver_username, driver_unique_id

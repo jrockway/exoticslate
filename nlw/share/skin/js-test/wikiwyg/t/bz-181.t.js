@@ -4,7 +4,7 @@ t.filters({
     text: ['wikitext_to_html']
 });
 
-t.plan(4);
+t.plan(6);
 
 t.run_like('text', 'html');
 
@@ -29,6 +29,16 @@ t.run_like('text', 'html');
 --- text
 | # foo
 # bar |
+--- html
+<ol>
+=== Single-line table formatting: UL UL
+--- text
+| ** foo |
+--- html
+<ul>
+=== Single-line table formatting: OL OL
+--- text
+| ## foo |
 --- html
 <ol>
 */

@@ -49,6 +49,7 @@ STADMIN=$(abs_path `which st-admin`)
 DELETE="$STADMIN delete-workspace --workspace $WS_NAME --no-export --ceqlotron"
 IMPORT="$STADMIN import-workspace --tarball $TARBALL"
 ENABLESC="$STADMIN enable-plugin --p socialcalc --workspace $WS_NAME"
+SETACCT="$STADMIN set-workspace-config --workspace $WS_NAME account_name $HOSTNAME"
 
 # Check that we found the st-admin command.
 if [ ! -x "$STADMIN" ]; then
@@ -61,6 +62,7 @@ if [ -n "$DRYRUN" ]; then
     DELETE="echo $DELETE"
     IMPORT="echo $IMPORT"
     ENABLESC="echo $ENABLESC"
+    SETACCT="echo $SETACCT"
 fi
 
 echo "Deleting workspace $WS_NAME."
@@ -73,6 +75,9 @@ rm $TARBALL
 
 echo "Enabling Socialcalc for $WS_NAME."
 $ENABLESC
+
+echo "Setting account to $HOSTNAME for $WS_NAME."
+$SETACCT
 
 echo "Done updating workspace $WS_NAME."
 exit 0

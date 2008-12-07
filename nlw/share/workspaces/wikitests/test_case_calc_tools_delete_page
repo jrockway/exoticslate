@@ -32,7 +32,7 @@
 | text_like | contentContainer | qr/Revision 1.+Revision 1/ |
 
 | *Comment* | Calc Tools: Delete Page: Teardown |  |
-| st-admin | purge-page --workspace %%workspace%% --page "delete_spreadsheet_%%start_time%%" | was purged |
-| st-admin | purge-page --workspace %%workspace%% --page "to_be_deleted_spreadsheet_%%start_time%%" | was purged |
+| st-admin | purge-page --workspace %%workspace%% --page delete_spreadsheet_%%start_time%% | was purged |
+| st-admin | purge-page --workspace %%workspace%% --page to_be_deleted_spreadsheet_%%start_time%% | was purged |
 
 | *Comment* | Test Case: Calc Tools: Delete Page COMPLETED |

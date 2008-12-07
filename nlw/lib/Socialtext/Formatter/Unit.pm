@@ -329,7 +329,7 @@ sub match {
             unless $new_text =~ /\n\z/;
         $self->contains_blocks( $self->table_blocks );
     }
-    elsif ($new_text =~ /^(?:[*#]|>+|\^+)\s/ ) {
+    elsif ($new_text =~ /^(?:\*+|#+|>+|\^+)\s/ ) {
         $self->text( $new_text . "\n" );
         $self->contains_blocks( $self->table_single_line_blocks );
     }

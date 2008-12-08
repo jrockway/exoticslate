@@ -115,7 +115,12 @@ sub sql_insert {
     my $sql = "INSERT INTO $table ($fields) VALUES ($placeholders)";
 
     local $Socialtext::SQL::Level = $Socialtext::SQL::Level + 1;
-    return sql_execute($sql, (map {$p->{$_}} @keys));
+    my $sth;
+    eval { $sth = sql_execute($sql, (map {$p->{$_}} @keys)) };
+    if ($@) {
+        croak $@;
+    }
+    return $sth;
 }
 
 1;

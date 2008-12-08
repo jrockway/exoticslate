@@ -460,6 +460,12 @@ sub st_admin {
 
     diag "st-admin $options";
 
+    # update-page will lock up wikitests if we don't shell out.
+    if ($options =~ m/^update-page/) {
+        _run_command("st-admin $options", $verify);
+        return;
+    }
+
     unless ($h) {
          $h = start(
              ['st-admin', 'from-input', '--from-fixture'],

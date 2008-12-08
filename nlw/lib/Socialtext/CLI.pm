@@ -1046,7 +1046,12 @@ sub set_permissions {
     my $ws       = $self->_require_workspace();
     my $set_name = $self->_require_string('permissions');
 
-    $ws->permissions->set( set_name => $set_name );
+    eval {
+        $ws->permissions->set( set_name => $set_name );
+    };
+    if ($@) {
+        $self->_error(loc("The '[_1]' permission does not exist.", $set_name));
+    }
 
     $self->_success( 'The permissions for the '
             . $ws->name()

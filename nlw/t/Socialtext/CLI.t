@@ -1045,7 +1045,7 @@ SET_PERMISSIONS: {
                 ->set_permissions();
         },
         qr/\QThe permissions for the admin workspace have been changed to public-read-only.\E/,
-        'create-account success message'
+        'set-permissions success message'
     );
 
     my $ws = Socialtext::Workspace->new( name => 'admin' );
@@ -1062,6 +1062,17 @@ SET_PERMISSIONS: {
             permission => Socialtext::Permission->new( name => 'edit' ),
         ),
         'guest does not have edit permission'
+    );
+
+    # Rainy day
+    expect_failure(
+        sub {
+            Socialtext::CLI->new( argv =>
+                    [qw( --workspace admin --permissions monkeys-only )] )
+                ->set_permissions();
+        },
+        qr/\QThe 'monkeys-only' permission does not exist.\E/,
+        'set-permissions error message'
     );
 }
 

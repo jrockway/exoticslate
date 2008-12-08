@@ -723,7 +723,7 @@ ALTER TABLE ONLY profile_attribute
 ALTER TABLE ONLY profile_field
     ADD CONSTRAINT profile_field_account_fk
             FOREIGN KEY (account_id)
-            REFERENCES "Account"(account_id);
+            REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY profile_photo
     ADD CONSTRAINT profile_photo_user_id_fk

@@ -52,7 +52,7 @@ ALTER TABLE profile_field ALTER COLUMN account_id SET NOT NULL;
 ALTER TABLE profile_field 
     ADD CONSTRAINT profile_field_account_fk 
     FOREIGN KEY (account_id) 
-    REFERENCES "Account" (account_id);
+    REFERENCES "Account" (account_id) ON DELETE CASCADE;
 
 UPDATE "System"
    SET value = 22

@@ -17,8 +17,8 @@
 | st-name-widget | 1 | image_widget |
 | st-widget-title-like | image_widget | Image |
 | st-widget-settings | image_widget |  |
-| type_ok | up_src | http://www.xndev.com/matt_im_avatar.jpg |
-| type_ok | up_title | hoyZa |
+| type_ok | up_src | http://www.socialtext.com/images/people/r-mayfield.jpg |
+| type_ok | up_title | Chairman |
 | click_and_wait | st-savebutton-%%image_widget%% |  |
 
 | *Comment* | Test Case: Multiple Widgets Add Wiki Page Widget |  |
@@ -28,7 +28,7 @@
 | wait_for_element_visible_ok | //a[@title='Add Content'] |  |
 | *Comment* | Image is now 2nd widget, right? |  |
 | st-name-widget | 2 | image_widget |
-| st-widget-title-like | image_widget | hoyZa |
+| st-widget-title-like | image_widget | Chairman |
 
 | *Comment* | Test Case: Multiple Widgets Add My Workspaces Widget |  |
 | wait_for_element_visible_ok | //a[@title='Add Content'] |  |
@@ -38,7 +38,7 @@
 
 | *Comment* | Wiki Page is now 2nd Widget, Images are 3rd, right? |  |
 | st-name-widget | 3 | image_widget |
-| st-widget-title-like | image_widget | hoyZa |
+| st-widget-title-like | image_widget | Chairman |
 | st-name-widget | 2 | wiki_page |
 | type_ok | //input[contains(@name,'up_workspace_name')] | %%workspace%% |
 | type_ok | //input[contains(@name,'up_page_title')] | jabberwocky |
@@ -55,7 +55,7 @@
 | click_and_wait | //a[@title='Add Content'] |  |
 | click_and_wait | link=Workspace Tags |  |
 | st-name-widget | 4 | image_widget |
-| st-widget-title-like | image_widget | hoyZa |
+| st-widget-title-like | image_widget | Chairman |
 | st-name_widget | 3 | wiki_page |
 | st-select-widget-frame | wiki_page |  |
 | wait_for_element_present_ok | link=Edit | 30000 |
@@ -81,7 +81,7 @@
 | click_and_wait | //a[@title='Add Content'] |  |
 | click_and_wait | link=RSS Viewer |  |
 | st-name-widget | 5 | image_widget |
-| st-widget-title-like | image_widget | hoyZa |
+| st-widget-title-like | image_widget | Chairman |
 
 | *Comment* | Test Case: Pick and Manipulate Widgets |  |
 | *Comment* | st-select-widget-frame | image_widget |

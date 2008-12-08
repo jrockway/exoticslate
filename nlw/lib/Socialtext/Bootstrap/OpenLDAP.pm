@@ -486,6 +486,27 @@ sub _ldif_update {
     return $self->_update( $callback, \@entries );
 }
 
+sub add {
+    my ($self, $dn, %attrs) = @_;
+
+    my $entry = Net::LDAP::Entry->new();
+    $entry->changetype('add');
+    $entry->dn($dn);
+    $entry->add(%attrs);
+
+    return $self->_update( \&_cb_add_entry, [$entry] );
+}
+
+sub remove {
+    my ($self, $dn) = @_;
+
+    my $entry = Net::LDAP::Entry->new();
+    $entry->changetype('delete');
+    $entry->dn($dn);
+
+    return $self->_update( \&_cb_remove_entry, [$entry] );
+}
+
 sub _update {
     my ($self, $callback, $values_aref) = @_;
 
@@ -555,9 +576,13 @@ Socialtext::Bootstrap::OpenLDAP - Bootstrap OpenLDAP instances
   $openldap->stop();
   $openldap->start();
 
-  # manipulate contents of LDAP directory
+  # manipulate contents of LDAP directory, from LDIF file
   $openldap->add_ldif($ldif_filename);
   $openldap->remove_ldif($ldif_filename);
+
+  # manipulate contents of LDAP directory, directly
+  $openldap->add($dn, %ldap_attrs);
+  $openldap->remove($dn);
 
   # get LDAP config object
   $config = $openldap->ldap_config();
@@ -767,6 +792,18 @@ on error.
 
 Removes items from the OpenLDAP instance based on their entries in the given
 LDIF file.  Returns true if we're able to remove all of the LDIF entries
+successfully, false on error.
+
+=item B<add($dn, %attrs)>
+
+Adds an entry to the OpenLDAP instance, using the given C<$dn> and LDAP
+C<%attrs>.  Returns true if we're able to add the entry to LDAP successfully,
+false on error.
+
+=item B<remove($dn)>
+
+Removes the LDAP entry pointed to by the given C<$dn> from the OpenLDAP
+instance.  Returns true if we're able to remove the entry from LDAP
 successfully, false on error.
 
 =item B<host()>

@@ -15,7 +15,7 @@ use Sys::Hostname;
 
 use Cwd;
 
-plan tests => 402;
+plan tests => 404;
 
 our $NEW_WORKSPACE = 'new-ws-' . $<;
 our $NEW_WORKSPACE2 = 'new-ws2-'. $<;
@@ -2250,7 +2250,7 @@ PLUGINS: {
                 ]
             )->enable_plugin();
         },
-        qr/Cannot enable plugin 'test' on a per-workspace basis/,
+        qr/The test plugin can not be set at the workspace scope/,
         'enable invalid plugin for workspace pluggy',
     );
 
@@ -2288,7 +2288,7 @@ PLUGINS: {
                 ]
             )->disable_plugin();
         },
-        qr/Cannot disable plugin 'test' on a per-workspace basis/,
+        qr/The test plugin can not be set at the workspace scope/,
         'disable invalid plugin',
     );
 }

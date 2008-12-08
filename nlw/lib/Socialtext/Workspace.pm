@@ -966,12 +966,19 @@ sub is_plugin_enabled {
     return sql_singlevalue($sql, $self->workspace_id, $plugin);
 }
 
+sub _check_plugin_scope {
+    my $self = shift;
+    my $plugin = shift;
+    my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
+    die loc("The [_1] plugin can not be set at the workspace scope",
+        $plugin) . "\n"
+        unless $plugin_class->scope eq 'workspace';
+}
+
+
 sub enable_plugin {
     my ($self, $plugin) = @_;
-
-    my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
-    die loc("The [_1] plugin can not be enabled at the workspace scope", $plugin)
-        . "\n" unless $plugin_class->scope eq 'workspace';
+    $self->_check_plugin_scope($plugin);
 
     if (!$self->is_plugin_enabled($plugin)) {
         Socialtext::Pluggable::Adapter->EnablePlugin($plugin => $self);
@@ -986,6 +993,7 @@ sub enable_plugin {
 
 sub disable_plugin {
     my ($self, $plugin) = @_;
+    $self->_check_plugin_scope($plugin);
 
     Socialtext::Pluggable::Adapter->DisablePlugin($plugin => $self);
 

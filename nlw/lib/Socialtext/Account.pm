@@ -170,6 +170,10 @@ sub plugins_enabled {
 sub enable_plugin {
     my ($self, $plugin) = @_;
 
+    my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
+    die loc("The [_1] plugin can not be enabled at the account scope", $plugin)
+        . "\n" unless $plugin_class->scope eq 'account';
+
     if (!$self->is_plugin_enabled($plugin)) {
         Socialtext::Pluggable::Adapter->EnablePlugin($plugin => $self);
 

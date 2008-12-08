@@ -32,6 +32,8 @@ field hub => -weak;
 field 'rest';
 field 'declined';
 
+sub scope { 'account' }
+
 # perldoc Socialtext::URI for arguments
 #    path = '' & query => {}
 
@@ -467,24 +469,23 @@ sub search {
     return $self->hub->search->result_set;
 }
 
-sub is_plugin_enabled {
-    my $self = shift;
-    return 1 unless $self->hub;
-    if (my $ws = $self->hub->current_workspace) {
-        return 1 if $ws->real and $ws->is_plugin_enabled($self->name);
-    }
-    return $self->hub->current_user->can_use_plugin($self->name);
-}
-
 sub is_hook_enabled {
     my $self = shift;
-    my $hook_name = shift;
-
-    return 1 unless $self->hub;
-    if (my $ws = $self->hub->current_workspace) {
-        return 1 if $ws->real and $ws->is_plugin_enabled($self->name);
+    my $hook_name = shift; # throw away here
+    if ($self->scope eq 'workspace') {
+        my $ws = $self->hub ? $self->hub->current_workspace : undef;
+        return 1 if $ws and  $ws->real and $ws->is_plugin_enabled($self->name);
     }
-    return $self->hub->current_user->can_use_plugin($self->name);
+    elsif ($self->scope eq 'account') {
+        my $user;
+        eval {
+            $user = $self->hub ? $self->hub->current_user : $self->rest->user;
+        };
+        return $user->can_use_plugin($self->name) if $user;
+    }
+    else {
+        die 'Unknown scope: ' . $self->scope;
+    }
 }
 
 sub format_link {

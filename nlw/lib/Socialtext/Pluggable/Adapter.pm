@@ -209,6 +209,13 @@ sub plugin_exists {
     return $list{$name};
 }
 
+sub plugin_class {
+    my ($class_or_self, $name) = @_;
+    for my $plugin ($class_or_self->plugins) {
+        return $plugin if $plugin->name eq $name;
+    }
+}
+
 sub registered {
     my ($self, $name) = @_;
     if ( my $hooks = $hooks{$name} ) {
@@ -233,7 +240,7 @@ sub content_types {
                 $self->make_hub($self->rest->user);
             }
             $plugin->hub($self->hub);
-            if ($plugin->is_plugin_enabled) {
+            if ($plugin->is_hook_enabled) {
                 $ct{$_} = $types->{$_} for keys %$types;
             }
         }
@@ -267,7 +274,7 @@ sub hook {
             $plugin->hub($hub);
             $plugin->rest( $self->{_rest_handler} );
 
-            my $enabled = $plugin->is_plugin_enabled($name);
+            my $enabled = $plugin->is_hook_enabled($name);
             next unless $enabled;
                          
             eval {

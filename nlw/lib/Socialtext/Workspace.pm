@@ -969,8 +969,9 @@ sub is_plugin_enabled {
 sub enable_plugin {
     my ($self, $plugin) = @_;
 
-    die loc("Cannot enable plugin '[_1]' on a per-workspace basis", $plugin)
-        unless $plugin eq 'socialcalc';
+    my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
+    die loc("The [_1] plugin can not be enabled at the workspace scope", $plugin)
+        . "\n" unless $plugin_class->scope eq 'workspace';
 
     if (!$self->is_plugin_enabled($plugin)) {
         Socialtext::Pluggable::Adapter->EnablePlugin($plugin => $self);
@@ -985,9 +986,6 @@ sub enable_plugin {
 
 sub disable_plugin {
     my ($self, $plugin) = @_;
-
-    die loc("Cannot disable plugin '[_1]' on a per-workspace basis", $plugin)
-        unless $plugin eq 'socialcalc';
 
     Socialtext::Pluggable::Adapter->DisablePlugin($plugin => $self);
 

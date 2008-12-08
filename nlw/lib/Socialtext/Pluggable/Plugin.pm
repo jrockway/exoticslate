@@ -149,6 +149,7 @@ sub add_content_type {
     my ($self,$name,$visible_name) = @_;
     my $class = ref($self) || $self;
     my $types = $content_types{$class};
+    $visible_name ||= ucfirst $name;
     $content_types{$class}{$name} = $visible_name;
 }
 

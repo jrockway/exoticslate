@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More tests => 10;
 use File::Basename qw/dirname/;
 BEGIN {
     use_ok 'Socialtext::Schema';
@@ -19,17 +19,21 @@ Update_scripts: {
     All: {
         my @scripts = $s->_update_scripts;
         is scalar(@scripts), 4;
+        is $s->ultimate_version, 5;
     }
     From: {
         my @scripts = $s->_update_scripts( from => 3 );
         is scalar(@scripts), 2;
+        is $s->ultimate_version, 5;
     }
     To: {
         my @scripts = $s->_update_scripts( to => 3 );
         is scalar(@scripts), 2;
+        is $s->ultimate_version, 5;
     }
     From_and_to: {
         my @scripts = $s->_update_scripts( from => 2, to => 4 );
         is scalar(@scripts), 2;
+        is $s->ultimate_version, 5;
     }
 }

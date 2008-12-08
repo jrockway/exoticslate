@@ -404,12 +404,12 @@ ALTER TABLE ONLY "Workspace"
             PRIMARY KEY (workspace_id);
 
 ALTER TABLE ONLY account_plugin
-    ADD CONSTRAINT acccount_plugin_ukey
-            UNIQUE (plugin, account_id);
-
-ALTER TABLE ONLY account_plugin
     ADD CONSTRAINT account_plugin_pkey
             PRIMARY KEY (account_id, plugin);
+
+ALTER TABLE ONLY account_plugin
+    ADD CONSTRAINT account_plugin_ukey
+            UNIQUE (plugin, account_id);
 
 ALTER TABLE ONLY noun
     ADD CONSTRAINT noun_pkey

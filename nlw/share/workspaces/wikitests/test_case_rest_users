@@ -68,7 +68,7 @@ Test set up:
 | body_like | "is_business_admin":"0" |  |
 | body_like | "creator_username":"system-user" |  |
 | body_like | "created_by_user_id":"1" |  |
-| body_like | "primary_account_name":"Socialtext" |  |
+| body_like | "primary_account_name":"%%hostname%%" |  |
 | body_like | "first_name":"" |  |
 | body_like | "is_system_created":"0" |  |
 | body_like | "username":"%%test_user%%" |  |

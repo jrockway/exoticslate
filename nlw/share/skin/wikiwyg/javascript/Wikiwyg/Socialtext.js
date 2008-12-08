@@ -169,7 +169,14 @@ function setup_wikiwyg() {
 
     // XXX start_nlw_wikiwyg goes in the object because display_edit.js
     // wants it there.
+    ww.starting_edit = false;
     ww.start_nlw_wikiwyg = function() {
+        if (ww.starting_edit) {
+            return;
+        }
+
+        ww.starting_edit = true;
+
         try {
             if (Wikiwyg.is_safari) {
                 delete ww.current_wikitext;
@@ -246,9 +253,13 @@ function setup_wikiwyg() {
             }
 
             jQuery(window).trigger("resize");
+
+            ww.starting_edit = false;
         } catch(e) {
+            ww.starting_edit = false;
             throw(e);
-        }
+        };
+
         return false;
     }
 
@@ -1141,8 +1152,6 @@ proto.enableFinished = function() {
 
 var WW_ERROR_TABLE_SPEC_BAD =
     loc("That doesn't appear to be a valid number.");
-var WW_ERROR_TABLE_SPEC_TOO_BIG =
-    loc("That seems like a bit too large for a table.");
 var WW_ERROR_TABLE_SPEC_HAS_ZERO =
     loc("Can't have a 0 for a size.");
 proto.parse_input_as_table_spec = function(input) {
@@ -1150,11 +1159,8 @@ proto.parse_input_as_table_spec = function(input) {
     if (match == null)
         return [ false, WW_ERROR_TABLE_SPEC_BAD ];
     var one = match[1], two = match[2];
-    function tooBig(x) { return x > 50 };
     function tooSmall(x) { return x.match(/^0+$/) ? true : false };
     if (two == null) two = ''; // IE hack
-    if (tooBig(one) || (two != null) && tooBig(two))
-        return [ false, WW_ERROR_TABLE_SPEC_TOO_BIG ];
     if (tooSmall(one) || (two && tooSmall(two)))
         return [ false, WW_ERROR_TABLE_SPEC_HAS_ZERO ];
     return [ true, one, two ];
@@ -1177,6 +1183,9 @@ proto.prompt_for_table_dimensions = function() {
 
         if (errorText)
             promptText = errorText + "\n" + promptText;
+
+        errorText = null;
+
         var answer = prompt(promptText, '3');
         if (!answer)
             return null;
@@ -1190,6 +1199,15 @@ proto.prompt_for_table_dimensions = function() {
         }
         else {
             columns = result[1];
+        }
+
+        if (rows && rows > 100) {
+            errorText = loc('Rows is too big. 100 maximum.');
+            rows = null;
+        }
+        if (columns && columns > 35) {
+            errorText = loc('Columns is too big. 35 maximum.');
+            columns = null;
         }
     }
     return [ rows, columns ];
@@ -1760,6 +1778,11 @@ proto.make_table_html = function(rows, columns) {
     return '<table style="border-collapse: collapse;" class="formatter_table">' + innards + '</table>';
 }
 
+proto.closeTableDialog = function() {
+    var doc = this.get_edit_document();
+    jQuery(doc).unbind("keypress");
+    jQuery.hideLightbox();
+}
 
 proto.do_new_table = function() {
     var self = this;
@@ -1769,20 +1792,20 @@ proto.do_new_table = function() {
         var rows = jQuery('.table-create input[name=rows]').val();
         var cols = jQuery('.table-create input[name=columns]').val();
         if (! rows.match(/^\d+$/))
-            return $error.text('Rows is invalid.');
+            return $error.text(loc('Rows is invalid.'));
         if (! cols.match(/^\d+$/))
-            return $error.text('Columns is invalid.');
+            return $error.text(loc('Columns is invalid.'));
         rows = Number(rows);
         cols = Number(cols);
         if (! (rows && cols))
-            return $error.text('Rows and Columns must be non-zero.');
+            return $error.text(loc('Rows and Columns must be non-zero.'));
         if (rows > 100)
-            return $error.text('Rows is too big. 100 maximum.');
+            return $error.text(loc('Rows is too big. 100 maximum.'));
         if (cols > 35)
-            return $error.text('Columns is too big. 35 maximum.');
+            return $error.text(loc('Columns is too big. 35 maximum.'));
         self.set_focus(); // Need this before .insert_html
         self.insert_html(self.make_table_html(rows, cols));
-        jQuery.hideLightbox();
+        self.closeTableDialog();
     }
     var setup = function() {
         jQuery('.table-create input[name=columns]').focus();
@@ -1795,7 +1818,7 @@ proto.do_new_table = function() {
         jQuery('.table-create input[name=cancel]')
             .unbind("click")
             .bind("click", function() {
-                jQuery.hideLightbox();
+                self.closeTableDialog();
             });
     }
     jQuery.showLightbox({
@@ -1808,7 +1831,7 @@ proto.do_new_table = function() {
 
 proto.do_table = function() {
     var doc = this.get_edit_document();
-    jQuery("span.find-cursor", doc).remove();
+    jQuery("span.find-cursor", doc).removeClass('find-cursor');
     this.set_focus(); // Need this before .insert_html
     this.insert_html( "<span class=\"find-cursor\"></span>" );
 
@@ -1835,7 +1858,14 @@ proto.do_table = function() {
             callback: function() {
                 self._do_table_lightbox($cell);
 
-                jQuery("#lightbox").one("unload", function() {
+                jQuery("#lightbox").css('opacity', 0.75).one("unload", function() {
+                    jQuery('#lightbox').css('opacity', '');
+                    if (jQuery.browser.version <= 6) {
+                        var $editor = jQuery( self.get_editable_div() );
+                        if ($editor.css('overflow') != 'visible') {
+                            $editor.css('overflow', 'visible');
+                        }
+                    }
                     jQuery(".current-cell", doc).removeClass("current-cell");
                 });
             }
@@ -1844,12 +1874,63 @@ proto.do_table = function() {
     }, 100);
 }
 
+proto._scroll_to_center = function($cell) {
+    var $editor;
+    var eHeight, eWidth;
+
+    if (Wikiwyg.is_ie) {
+        $editor = jQuery( this.get_editable_div() );
+        if (jQuery.browser.version <= 6) {
+            if ($editor.css('overflow') != 'auto') {
+                $editor.css('overflow', 'auto');
+            }
+        }
+
+        eHeight = $editor.height();
+        eWidth = $editor.width();
+    }
+    else {
+        var doc = this.get_edit_document();
+        eHeight = doc.body.clientHeight;
+        eWidth = doc.body.clientWidth;
+    }
+
+    var cHeight = $cell.height();
+    var cWidth = $cell.width();
+
+    var cTop, cLeft;
+    if (Wikiwyg.is_ie) {
+        cTop = $cell.offset().top + $editor.scrollTop();
+        cLeft = $cell.offset().left + $editor.scrollLeft();
+    }
+    else {
+        cTop = $cell.position().top;
+        cLeft = $cell.position().left;
+    }
+
+    var sLeft = cLeft + (cWidth - eWidth) / 2;
+    var sTop = cTop + (cHeight - eHeight) / 2;
+
+    if (sLeft < 0) sLeft = 0;
+    if (sTop < 0) sTop = 0;
+
+    if (Wikiwyg.is_ie) {
+        $editor.scrollLeft(sLeft).scrollTop(sTop);
+    }
+    else {
+        var win = this.get_edit_window();
+        win.scrollTo(sLeft, sTop);
+    }
+}
+
 proto._do_table_lightbox = function($cell) {
     var $opt = jQuery(".table-options");
 
     $cell.parents("table").find('.current-cell')
         .removeClass('current-cell');
     $cell.addClass('current-cell');
+
+    this._scroll_to_center($cell);
 
     var $table = $cell.parents("table");
     var col = $cell.prevAll("td").length + 1;
@@ -1892,7 +1973,7 @@ proto._do_table_lightbox = function($cell) {
             }
             else {
                 $cell.parents("table").remove();
-                jQuery.hideLightbox();
+                self.closeTableDialog();
             }
         }
         else if ( $(this).is(".column") ) {
@@ -1907,7 +1988,7 @@ proto._do_table_lightbox = function($cell) {
             }
             else {
                 $cell.parents("table").remove();
-                jQuery.hideLightbox();
+                self.closeTableDialog();
             }
             col = $new_cell.prevAll("td").length + 1;
         }
@@ -1954,6 +2035,7 @@ proto._do_table_lightbox = function($cell) {
         }
 
         self.get_edit_window().focus();
+        self._do_table_lightbox($cell);
         return false;
     });
 
@@ -2019,12 +2101,12 @@ proto._do_table_lightbox = function($cell) {
     });
 
     jQuery("input[name=save]").unbind("click").bind("click", function() {
-        jQuery.hideLightbox();
+        self.closeTableDialog();
     });
 
     jQuery("input[name=cancel]").unbind("click").bind("click", function() {
         var $table = $cell.parents("table").html(self.table_html);
-        jQuery.hideLightbox();
+        self.closeTableDialog();
     });
 }
 

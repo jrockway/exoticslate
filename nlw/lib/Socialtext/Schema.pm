@@ -168,7 +168,10 @@ sub sync {
         $self->_display("$up_msg  Schema is up-to-date.\n");
     }
 
-    $self->_add_required_data;
+    # Only add the required data if we're at the very latest schema version
+    if ($self->current_version == $self->ultimate_version) {
+        $self->_add_required_data;
+    }
 }
 
 sub _add_required_data {
@@ -197,22 +200,23 @@ sub _update_scripts {
     my $schema_dir = $self->schema_dir;
     my $schema_name = $self->schema_name;
     my @all_scripts = 
-        map { $_->{name} }
         sort { $a->{from} <=> $b->{from} }
-        map { m/-(\d+)-to-\d+\.sql/; { name => $_, from => $1 } }
+        map { m/-(\d+)-to-(\d+)\.sql/; { name => $_, from => $1, to => $2 } }
         glob("$schema_dir/$schema_name-*-to-*.sql");
 
+    my $last_script = $all_scripts[-1];
+    if ($last_script) {
+        $self->{ultimate_version} = $last_script->{to};
+    }
 
     my @to_run;
     for my $s (@all_scripts) {
-        next unless $s =~ m#/$schema_name-(\d+)-to-(\d+)\.sql$#;
-        my ($s_from, $s_to) = ($1, $2);
-        next if $from_version and $s_from < $from_version;
-        last if $to_version   and $s_to > $to_version;
+        next if $from_version and $s->{from} < $from_version;
+        last if $to_version   and $s->{to} > $to_version;
         push @to_run, {
-            name => $s,
-            from => $s_from,
-            to => $s_to,
+            name => $s->{name},
+            from => $s->{from},
+            to => $s->{to},
         };
     }
     return @to_run;
@@ -286,6 +290,15 @@ sub current_version {
     return 0 if $self->_is_fresh_database;
     return 1;
 }
+
+=head2 ultimate_version()
+
+Returns the highest schema version number available.  This is not necessarily
+the version we're upgrading to.
+
+=cut
+
+sub ultimate_version { shift->{ultimate_version} }
 
 # This method allows us to do special things when migrating from systems
 # before this module was refactored.

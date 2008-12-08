@@ -298,7 +298,12 @@ $(function() {
         var create_content = new ST.CreateContent;
         create_content.show();
         if (jQuery(this).hasClass('incipient')) {
-            create_content.set_incipient_title(jQuery(this).text());
+            if (jQuery(this).attr('href').match(/page_name=([^;#]+)/)) {
+                create_content.set_incipient_title(RegExp.$1);
+            }
+            else {
+                create_content.set_incipient_title(jQuery(this).text());
+            }
         }
         return false;
     });

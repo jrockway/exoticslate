@@ -284,6 +284,7 @@ sub _render_display {
             } || '',
             title                   => $page->title,
             page                    => $self->_get_page_info($page),
+            template_name           => $self->cgi->template || '',
             tag_count               => scalar @{ $page->metadata->Category }, # counts recent changes!
             tags                    => $self->_getCurrentTags($page),
             initialtags             => $self->_getCurrentTagsJSON($page),

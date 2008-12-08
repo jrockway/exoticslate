@@ -169,7 +169,10 @@ sub NewUserRecord {
         unless (ref($proto_user->{cached_at}) && 
                 $proto_user->{cached_at}->isa('DateTime'));
 
-    my %insert_args = map { $_ => $proto_user->{$_} } @Socialtext::User::Base::all_fields;
+    my %insert_args
+        = map { $_ => $proto_user->{$_} } @Socialtext::User::Base::all_fields;
+    $insert_args{first_name} ||= '';
+    $insert_args{last_name}  ||= '';
 
     $insert_args{driver_username} = $proto_user->{driver_username};
     delete $insert_args{username};

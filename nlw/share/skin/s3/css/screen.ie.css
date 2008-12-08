@@ -259,3 +259,12 @@ html #st-editing-prefix-container {
     margin-left: -64px;
 }
 
+div.pagination-container .paging-back {
+    -width: 15em;
+}
+div.pagination-container .paging-numbers {
+    -width: 13em;
+}
+div.pagination-container .paging-forward {
+    -width: 15em;
+}

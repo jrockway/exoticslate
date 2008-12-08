@@ -39,4 +39,4 @@ $evil_ws = Socialtext::Workspace->new( name => 'evil-workspace' );
 
 # The workspace should still exist when we delete the user.
 isa_ok $evil_ws, 'Socialtext::Workspace';
-ok $evil_ws->created_by_user_id, Socialtext::User->SystemUser()->user_id();
+is $evil_ws->created_by_user_id, Socialtext::User->SystemUser()->user_id();

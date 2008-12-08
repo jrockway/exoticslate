@@ -405,6 +405,15 @@ sub shared_accounts {
         Socialtext::Exception->throw( error => 'You cannot delete a user.' )
             unless $p{force};
 
+        # Reassign all workspaces created by this user to the system-user
+        sql_execute( <<EOT,
+UPDATE "Workspace" 
+    SET created_by_user_id = ? 
+  WHERE created_by_user_id = ?
+EOT
+            Socialtext::User->SystemUser->user_id, $self->user_id
+        );
+
         # There are two parts of the user that need to be deleted and cleaned
         # up: the "details" and the "metadata".  Order is important, to ensure
         # that referential integrity is preserved.

@@ -447,6 +447,9 @@ sub html {
         url_prefix => $self->url_prefix,
     );
 
+    my $page = Socialtext::Page->new(id => $page_uri, hub => $self->hub);
+    my $page_type = $page->metadata->Type;
+
     my $edit_url;
     if ($edit_perm) {
         eval {
@@ -455,11 +458,12 @@ sub html {
                 workspace  => $workspace_name,
                 page_uri   => $page_uri_for_url,
                 url_prefix => $self->url_prefix,
+                page_type  => $page_type,
             );
         };
     }
 
-    my $incipient_class = $page_exists ? "" : "class=\"incipient\"";
+    my $incipient_class = $page_exists ? '' : ' class="incipient"';
 
     my $link = qq(<a href="$view_url" $incipient_class>$page_title</a>);
 
@@ -474,16 +478,15 @@ sub html {
         else {
             $edit = "$edit";
         }
-        $edit_icon = $self->edit_icon($edit_url, $incipient_class, $edit);
+        $edit_icon = $self->edit_icon($edit_url, $page_exists, $edit);
     }
 
-    my $class = (Socialtext::Page->new( 
-        id => $page_uri,
-        hub => $self->hub 
-    )->metadata->Type eq 'spreadsheet') ? ' spreadsheet' : '';
+    my $activity_class = $page_type eq 'spreadsheet'
+        ? "st-include-activity$page_type"
+        : "st-include-activity";
     my $activity =
         $self->hub->current_workspace->enable_spreadsheet
-        ? qq{<span class="st-include-activity$class">&nbsp;</span>}
+        ? qq{<span class="$activity_class">&nbsp;</span>}
         : '';
     return qq(<div class="wiki-include-page">\n)
         . qq(<div class="wiki-include-title">$activity$link $edit_icon</div>\n)
@@ -491,9 +494,11 @@ sub html {
 }
 
 sub edit_icon {
-    my $self = shift;
-    my ($edit_url, $incipient_class, $edit) = @_;
-    return qq(<a class='wiki-include-edit-link' href="$edit_url" $incipient_class>$edit</a>);
+    my ($self, $edit_url, $page_exists, $edit) = @_;
+    my $class = $page_exists
+        ? "wiki-include-edit-link"
+        : 'wiki-include-edit-link incipient';
+    return qq(<a class="$class" href="$edit_url">$edit</a>);
 }
 
 sub _included_page_exists {
@@ -537,13 +542,6 @@ use Socialtext::l10n qw( loc );
 use pQuery::DOM;
 
 const wafl_id => 'ss';
-
-sub edit_icon {
-    my $self = shift;
-    my ($edit_url, $incipient_class, $edit) = @_;
-    $edit_url =~ s/\?([^=]+)#edit$/?page_name=$1;page_type=spreadsheet#edit/;
-    return "<a class='wiki-include-edit-link' href='$edit_url' $incipient_class>$edit</a>";
-}
 
 sub html {
     my $self = shift;

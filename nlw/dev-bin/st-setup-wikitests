@@ -29,9 +29,6 @@ else
     [ "$wikitest" == "y" ] && $NLW_BIN/st-admin import-workspace --tarball $ST_CURRENT/nlw/share/workspaces/wikitests/wikitests.1.tar.gz  
 fi
 
-echo ENABLING Socialcalc for all workspaces
-$NLW_DEVBIN/st-socialcalc enable
-
 echo Removing all ceqlotron tasks to stop unnecessary indexing
 $NLW_BIN/ceq-rm /.+/
 

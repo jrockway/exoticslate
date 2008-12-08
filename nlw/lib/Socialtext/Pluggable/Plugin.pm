@@ -472,7 +472,10 @@ sub search {
 sub is_hook_enabled {
     my $self = shift;
     my $hook_name = shift; # throw away here
-    if ($self->scope eq 'workspace') {
+    if ($self->scope eq 'always') {
+        return 1;
+    }
+    elsif ($self->scope eq 'workspace') {
         my $ws = $self->hub ? $self->hub->current_workspace : undef;
         return 1 if $ws and  $ws->real and $ws->is_plugin_enabled($self->name);
     }

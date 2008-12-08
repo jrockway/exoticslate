@@ -8,6 +8,8 @@ use base 'Socialtext::Pluggable::Plugin';
 use Class::Field 'const';
 const priority => 0;
 
+sub scope { 'always' }
+
 sub register {
     my $class = shift;
     $class->add_hook('root'                              => 'root');
@@ -48,8 +50,5 @@ sub user_name {
 
 sub user_href { '' }
 sub user_photo { '' }
-
-sub is_hook_enabled { 1 }
-sub is_plugin_enabled { 1 }
 
 1;

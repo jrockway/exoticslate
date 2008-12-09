@@ -61,7 +61,11 @@ sub add_tags {
 sub metadata { shift } # hack - return ourself
 sub Subject { $_[0]->{title} }
 sub Type { $_[0]->{type} || 'page' }
-sub Revision { $_[0]->{revision} || 'page_rev' }
-sub Category { $_[0]->{category} || ['mock_category'] }
+sub Revision { $_[0]{revision} || 'page_rev' }
+sub Category { $_[0]{category} || $_[0]{tags} || ['mock_category'] }
+
+sub original_revision { shift } # hack - return ourself
+sub datetime_for_user { 'Mon 12 12:00am' }
+sub last_edited_by { Socialtext::User->new(username => 'mocked_user') }
 
 1;

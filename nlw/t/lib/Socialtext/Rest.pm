@@ -2,12 +2,13 @@ package Socialtext::Rest;
 # @COPYRIGHT@
 use strict;
 use warnings;
+
+use Socialtext::Hub;
+
 use unmocked 'Exporter';
 use unmocked 'Exporter::Heavy';
 use unmocked 'Test::More';
 use base 'Socialtext::MockBase', 'Exporter';
-use mocked 'Socialtext::User';
-use mocked 'Socialtext::Hub';
 use unmocked 'Socialtext::HTTP', ':codes';
 
 our $VERSION = 0.01;
@@ -49,6 +50,17 @@ sub header {
     return %{$self->{header}};
 }
 
+sub headers_in {
+    my $self = shift;
+    $self->{headers_in} ||= {};
+    return %{$self->{headers_in}};
+}
+
+sub header_in {
+    my ($self, $header) = @_;
+    return $self->{headers_in}{$header};
+}
+
 sub user {
     my $self = shift;
     if (exists $self->{user}) {
@@ -59,6 +71,8 @@ sub user {
 
 sub query { $_[0]->{query} }
 sub params { $_[0]->{params} || +{} }
+
+sub request { $_[0] }
 
 sub if_authorized { 
     my ( $self, $method, $perl_method, @args ) = @_;
@@ -84,6 +98,7 @@ sub not_authorized {
 }
 
 sub getContent { return $_[0]->{_content} }
+sub getContentPrefs { return $_[0]->{_contentprefs} }
 
 our $AUTOLOAD;
 

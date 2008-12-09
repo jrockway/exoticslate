@@ -30,10 +30,10 @@ sub link_directory {
             return if basename($_) =~ m{^\.};
             my $from = $_;
             (my $to = $from) =~ s{^$fromdir}{$todir};
+            if (-d $from and -l $to) {
+                unlink $to;
+            }
             unless (-e $to) {
-                if (-l $to) {
-                    unlink $to;
-                }
                 if (-d $from) {
                     warn "Making directory $to\n";
                     mkdir $to or die "Cannot mkdir $to: $!";

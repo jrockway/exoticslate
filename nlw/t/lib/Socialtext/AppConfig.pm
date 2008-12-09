@@ -5,15 +5,20 @@ use warnings;
 use base 'Socialtext::MockBase';
 
 our $DEFAULT_WORKSPACE = 'default';
+our $CODE_BASE = '/codebase';
+our $SCRIPT_NAME = '/scripts';
 
-sub db_connect_params {}
+sub db_connect_params {+{
+    db_name => "NLW_$ENV{USER}_testing",
+    user => $ENV{USER},
+}}
 
 sub syslog_level { 1 }
 
 sub default_workspace { $DEFAULT_WORKSPACE }
 
-sub code_base { '/codebase' }
-sub script_name { '/scripts' }
+sub code_base { $CODE_BASE }
+sub script_name { $SCRIPT_NAME }
 
 sub user_factories { 'Default' }
 

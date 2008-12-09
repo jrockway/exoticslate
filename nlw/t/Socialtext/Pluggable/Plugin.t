@@ -3,89 +3,80 @@
 use strict;
 use warnings;
 
-BEGIN { push @INC, 't/plugin/mocked/lib' };
+BEGIN { push @INC, 't/share/plugin/fakeplugin/lib' }
 
-use Test::Socialtext tests => 32;
-use Socialtext::User;
-use Socialtext::URI;
-use Socialtext::Account;
-use Socialtext::Workspace;
-use Socialtext::AppConfig;
-fixtures( 'admin' );
+use Test::More qw(no_plan);
+use mocked 'Socialtext::SQL';
+use mocked 'Socialtext::Authz';
+use mocked 'Socialtext::AppConfig';
+use mocked 'Socialtext::Hub';
 
 use_ok 'Socialtext::Pluggable::Plugin';
 use_ok 'Socialtext::Pluggable::Adapter';
 
-my $code_base = Socialtext::AppConfig->code_base;
-my $hub = new_hub('admin');
-my $system_user = Socialtext::User->SystemUser;
-my $adapter = Socialtext::Pluggable::Adapter->new;
 my $plug = Socialtext::Pluggable::Plugin->new;
-my $ws = Socialtext::Workspace->new(name => 'magic') ||
-    Socialtext::Workspace->create(
-        name       => 'magic',
-        title      => 'Magical Title',
-        account_id => Socialtext::Account->Socialtext()->account_id,
-    );
-$plug->hub($adapter->make_hub($system_user, $ws));
-$plug->hub->rest(Rest->new);
+my $hub = Socialtext::Hub->new;
+$plug->hub($hub);
 
 # Config
-is $plug->uri, Socialtext::URI::uri(path => 'magic/index.cgi'), 'uri';
-is $plug->code_base, $code_base, 'code_base';
+$Socialtext::AppConfig::CODE_BASE = 't/share';
+$Socialtext::AppConfig::SCRIPT_NAME = '/index.cgi';
+$plug->hub->current_workspace->{uri} = 'http://hostname/magic';
+is $plug->uri, 'http://hostname/magic/index.cgi', 'uri';
+is $plug->code_base, $Socialtext::AppConfig::CODE_BASE, 'code_base';
 
 # CGI
-%Query::p = (a => 1, b => 2);
+$Socialtext::CGI::QUERY = {a => 1, b => 2};
 is $plug->query_string, 'a=1;b=2', 'query_string';
 is $plug->query->param('a'), 1, 'query 1';
 is $plug->query->param('b'), 2, 'query 2';
+
+$hub->rest->{_content} = 'content';
 is $plug->getContent, 'content', 'getContent';
+$hub->rest->{_contentprefs} = { content => 'prefs' };
 is_deeply $plug->getContentPrefs, { content => 'prefs' }, 'getContentPrefs';
 
 # User stuff
-is_deeply $plug->user, $system_user, 'user';
-is $plug->username, $system_user->username, 'username';
-is $plug->best_full_name($system_user->username),
-   $system_user->best_full_name(workspace => $ws),
-   'best_full_name';
+$hub->{current_user} = Socialtext::User->new(username => 'billy');
+is_deeply $plug->user, {username => 'billy'}, 'user';
+is $plug->username, 'billy', 'username';
+is $plug->best_full_name('billy'), 'Mocked First Mocked Last', 'best_full_name';
 
 # Headers
 $plug->header_out('Content_Type' => 'text/html');
 my %header_out = $plug->header_out;
 is $header_out{Content_Type}, 'text/html', 'header_out';
-%Request::in = ( Accept => 'text/html' );
+$hub->rest->{headers_in} = { Accept => 'text/html' };
 is $plug->header_in('Accept'), 'text/html', 'header_in';
-my %in = $plug->header_in;
-is_deeply \%in, {Accept=>'text/html'}, 'header_in';
+is_deeply {$plug->header_in}, {Accept=>'text/html'}, 'header_in';
 
 # Cache stuff
 $plug->cache_value(key => 'a', value => 1);
 is $plug->value_from_cache('a'), 1, 'can retrieve cache value';
 
 # Workspace
-is $plug->current_workspace, $ws->name, 'current_workspace';
+is $plug->current_workspace, 'current', 'current_workspace';
 
 # Plugin functions
 my %plugins = map { $_ => 1 } $plug->plugins;
-ok $plugins{mocked}, 'Mocked plugin exists';
-is $plug->plugin_dir('mocked'), "$code_base/plugin/mocked",
+ok $plugins{fakeplugin}, 'Fakeplugin plugin exists';
+is $plug->plugin_dir('mocked'), "$Socialtext::AppConfig::CODE_BASE/plugin/mocked",
    'Mocked directory is correct';
 
 # Page stuff
-$plug->{hub} = $hub;
 my $page = $plug->get_page(workspace_name => 'admin', page_name => 'Start Here');
 ok defined $page, 'Page object found';
-is $page->title, 'Start here', 'Fetched page from workspace';
-$page = $plug->get_page(workspace_name => '12df', page_name => 'Start Here');
+is $page->title, 'Mock page title', 'Fetched page from workspace';
+$page = $plug->get_page(workspace_name => 'bad_workspace', page_name => 'Start Here');
 ok ! defined $page, 'No page object on invalid workspace';
 my $page_creator = $plug->created_by(workspace_name => 'admin', page_name => 'Start Here');
 ok defined $page_creator, 'Page creator found';
-is $page_creator->username, 'system-user', 'Proper creator retrieved';
-$page_creator = $plug->created_by(workspace_name => '12df', page_name => 'Start Here');
+is $page_creator->username, 'mocked_user', 'Proper creator retrieved';
+$page_creator = $plug->created_by(workspace_name => 'bad_workspace', page_name => 'Start Here');
 ok ! defined $page_creator, 'Invalid page returns undef creator';
 my $page_created_at = $plug->created_at(workspace_name => 'admin', page_name => 'Start Here');
 ok $page_created_at =~ /\w\w\w \d\d? \d\d?:\d\d[ap]m/, 'Create date retrieved';
-$page_created_at = $plug->created_at(workspace_name => '12df', page_name => 'Start Here');
+$page_created_at = $plug->created_at(workspace_name => 'bad_workspace', page_name => 'Start Here');
 ok ! defined $page_created_at, 'Invalid page returns undef create time';
 
 # Tags
@@ -95,8 +86,8 @@ is scalar(@tags), 1, 'Tag count is right';
 # Tags
 @tags = $plug->tags_for_page(workspace_name => 'admin', page_name => 'Start Here');
 is scalar(@tags), 1, 'Tag count is right';
-is $tags[0], 'Welcome', 'first tag is right';
-@tags = $plug->tags_for_page(workspace_name => '12hjs', page_name => 'Start Here');
+is $tags[0], 'mock_category', 'first tag is right';
+@tags = $plug->tags_for_page(workspace_name => 'bad_workspace', page_name => 'Start Here');
 is scalar(@tags), 0, 'Non-existant page has an empty tag list';
 
 # Page Caching
@@ -110,35 +101,3 @@ my $before_count = scalar(@tags);
 $page->add_tags('t1', 't2');
 @tags = $plug->tags_for_page(workspace_name => 'admin', page_name => 'Start Here');
 ok scalar(@tags) > $before_count, 'Plugin used cached page';
-
-package Rest;
-use strict;
-use warnings;
-our %query;
-sub new { bless {}, $_[0] }
-sub getContent { 'content' }
-sub getContentPrefs { +{content => 'prefs'} }
-sub query { Query->new }
-sub request { Request->new }
-sub header {
-    my ($self, %headers) = @_;
-    $self->{out} ||= {};
-    $self->{out}{$_} = $headers{$_} for keys %headers;
-    return %{$self->{out}};
-}
-
-package Request;
-use strict;
-use warnings;
-our %in;
-sub new { bless {}, $_[0] }
-sub header_in { $in{$_[1]} }
-sub headers_in { %in }
-
-package Query;
-use strict;
-use warnings;
-our %p;
-sub new { bless {}, $_[0] }
-sub param { $p{$_[1]} }
-sub query_string { join ';', map { "$_=$p{$_}" } keys %p }

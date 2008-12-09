@@ -18,7 +18,6 @@ use Socialtext::Formatter::Parser;
 use Socialtext::Cache;
 use Socialtext::Authz::SimpleChecker;
 my $prod_ver = Socialtext->product_version;
-my $code_base = Socialtext::AppConfig->code_base;
 
 # Class Methods
 
@@ -252,7 +251,7 @@ sub plugins {
 sub plugin_dir {
     my $self = shift;
     my $name = shift || $self->name;
-    return "$code_base/plugin/$name";
+    return $self->code_base . "/plugin/$name";
 }
 
 sub cgi_vars {
@@ -299,7 +298,7 @@ sub template_render {
     my $name = $self->name;
     my $plugin_dir = $self->plugin_dir;
     my $paths = $self->hub->skin->template_paths;
-    push @$paths, glob("$code_base/plugin/*/template");
+    push @$paths, glob($self->code_base . "/plugin/*/template");
 
     my $renderer = Socialtext::TT2::Renderer->instance;
     return $renderer->render(
@@ -365,7 +364,6 @@ sub get_page {
     my $cache_key = "page $p{workspace_name} $page_id";
     my $page = $self->value_from_cache($cache_key);
     return $page if ($page);
-
 
     my $workspace = Socialtext::Workspace->new( name => $p{workspace_name} );
     return undef if (!defined($workspace));

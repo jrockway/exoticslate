@@ -1,4 +1,4 @@
-package Socialtext::Pluggable::Plugin::Mocked;
+package Socialtext::Pluggable::Plugin::FakePlugin;
 # @COPYRIGHT@
 use strict;
 use warnings;

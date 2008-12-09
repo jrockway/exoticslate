@@ -11,6 +11,7 @@ sub new {
     return if @_ == 2 and ! defined $_[1];
     my $self = { @_ };
     bless $self, $class;
+    return if $self->{name} and $self->{name} =~ m{^bad};
     return $self;
 }
 

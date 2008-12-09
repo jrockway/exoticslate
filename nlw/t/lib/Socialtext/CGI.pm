@@ -11,8 +11,21 @@ our @EXPORT_OK = qw/cgi/;
 field 'class';
 field 'action';
 
+our $QUERY = {};
+
 sub class_id { 'cgi' }
 sub full_uri { 'full_uri' }
+
+sub query { return $_[0] }
+
+sub query_string {
+    return join ';', map { "$_=$QUERY->{$_}" } sort keys %$QUERY;
+}
+
+sub param {
+    my ($self, $key) = @_;
+    return $QUERY->{$key};
+}
 
 sub cgi {
     my $package = caller;

@@ -11,6 +11,12 @@ use Test::Socialtext tests => 32;
 use Test::Deep;
 
 ###############################################################################
+# Fixtures: db
+#
+# Need the database running, but don't care what's in it.
+fixtures( 'db' );
+
+###############################################################################
 ### BOOTSTRAP OPENLDAP; none of these tests modify any of the data in the
 ### directory, so we can run them all against a single OpenLDAP instance.
 ###############################################################################

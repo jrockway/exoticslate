@@ -11,6 +11,12 @@ use Test::Socialtext tests => 55;
 use_ok 'Socialtext::LDAP::OpenLDAP';
 
 ###############################################################################
+# Fixtures: db
+#
+# Need the database running, but don't care what's in it.
+fixtures( 'db' );
+
+###############################################################################
 # Instantiation; connecting to a live OpenLDAP server.
 instantiation_ok: {
     # bootstrap OpenLDAP

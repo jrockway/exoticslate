@@ -463,7 +463,7 @@ sub html {
         };
     }
 
-    my $incipient_class = $page_exists ? '' : ' class="incipient"';
+    my $incipient_class = $page_exists ? '' : 'class="incipient"';
 
     my $link = qq(<a href="$view_url" $incipient_class>$page_title</a>);
 

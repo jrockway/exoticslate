@@ -79,5 +79,5 @@ my $incipient_content = $page_incipient->to_html_or_default;
 like $incipient_content,
     qr{<a href="/admin/index.cgi\?this%20page%20isn't%20cool" class="incipient">}, 'href is double quoted';
 like $incipient_content,
-    qr{href="/admin/index.cgi\?is_incipient=1;page_name=this%20page%20isn't%20cool#edit"}, 'href edit link is double quoted';
+    qr{href="/admin/index.cgi\?is_incipient=1;page_name=this%20page%20isn't%20cool;page_type=wiki#edit"}, 'href edit link is double quoted';
 

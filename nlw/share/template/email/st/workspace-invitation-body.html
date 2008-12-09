@@ -35,7 +35,10 @@
 [% IF app_name; a = 'a'; ELSE; a = 'an'; END %]
 <p>
 [% loc("Because you already have [_1] [_2] account, the password is the same as the password you use for your other [_3] workspaces.", a, app_name, app_name) %]
-[% loc("If you don't remember it, just <a href=\"[_4]\">click here to select a new password</a>.", forgot_password_uri) %]
+[% loc("If you don't remember it, follow this link to select a new password:") %]
+[% forgot_password_uri %]
+
+
 </p>
 [% END %]
 <p>

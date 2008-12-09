@@ -331,6 +331,7 @@ sub _ldap_config {
 
 sub add_to_ldap_config {
     my $self = shift;
+    verbose( "# adding LDAP instance to ldap.yaml" );
 
     # load the existing LDAP config, and strip our config out of it
     # (so we don't add ourselves again as a duplicate)
@@ -339,11 +340,16 @@ sub add_to_ldap_config {
         Socialtext::LDAP::Config->load();
 
     # save the LDAP configs
-    Socialtext::LDAP::Config->save(@ldap_config, $self->ldap_config());
+    my $rc = Socialtext::LDAP::Config->save(@ldap_config, $self->ldap_config());
+    unless ($rc) {
+        warn "# unable to save ldap.yaml; $!\n";
+    }
+    return $rc;
 }
 
 sub remove_from_ldap_config {
     my $self = shift;
+    verbose( "# removing LDAP instance from ldap.yaml" );
 
     # load the existing LDAP config, and strip our config out of it
     my @ldap_config =
@@ -351,11 +357,16 @@ sub remove_from_ldap_config {
         Socialtext::LDAP::Config->load();
 
     # save the remaining LDAP configs back out
-    Socialtext::LDAP::Config->save(@ldap_config);
+    my $rc = Socialtext::LDAP::Config->save(@ldap_config);
+    unless ($rc) {
+        warn "# unable to save ldap.yaml; $!\n";
+    }
+    return $rc;
 }
 
 sub add_to_user_factories {
     my $self = shift;
+    verbose( "# adding LDAP instance to user_factories" );
 
     # get the list of existing User Factories, stripping us out of it (so we
     # don't add ourselves again as a duplicate)
@@ -370,11 +381,15 @@ sub add_to_user_factories {
     Socialtext::AppConfig->write();
 
     my $got_set_ok = Socialtext::AppConfig->user_factories() eq $user_factories;
+    unless ($got_set_ok) {
+        warn "# unable to add LDAP instance to user_factories\n";
+    }
     return $got_set_ok;
 }
 
 sub remove_from_user_factories {
     my $self = shift;
+    verbose( "# removing LDAP instance from user_factories" );
 
     # get the list of existing User Factories, stripping us out of it
     my $me_as_factory = $self->_user_factory();
@@ -388,6 +403,9 @@ sub remove_from_user_factories {
     Socialtext::AppConfig->write();
 
     my $got_set_ok = Socialtext::AppConfig->user_factories() eq $user_factories;
+    unless ($got_set_ok) {
+        warn "# unable to remove LDAP instance from user_factories\n";
+    }
     return $got_set_ok;
 }
 

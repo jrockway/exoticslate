@@ -367,6 +367,7 @@ sub add_to_user_factories {
     # prefix ourselves to the list of User Factories
     my $user_factories = join ';', $me_as_factory, @factories;
     Socialtext::AppConfig->set('user_factories' => $user_factories);
+    Socialtext::AppConfig->write();
 
     my $got_set_ok = Socialtext::AppConfig->user_factories() eq $user_factories;
     return $got_set_ok;

@@ -225,6 +225,32 @@ sub cache_ttl {
     return DateTime::Duration->new( seconds => $self->ldap_config->ttl );
 }
 
+sub ResolveId {
+    my $class = shift;
+    my $p = shift;
+
+    # in LDAP, any of these fields *could* be considered a unique identifier
+    # for the User.  They all have to be unique in LDAP, but they're all also
+    # subject to change; a user _could_ have their DN or e-mail changed.
+    my @possible_ldap_identifiers
+        = qw(driver_unique_id driver_username email_address);
+
+    # some of the fields are also case IN-sensitive
+    my %case_insensitive_identifier
+        = map { $_ => 1 } qw(driver_username email_address);
+
+    foreach my $field (@possible_ldap_identifiers) {
+        my $sql = $case_insensitive_identifier{$field}
+            ?  qq{SELECT user_id FROM users WHERE driver_key=? AND LOWER($field) = LOWER(?)}
+            :  qq{SELECT user_id FROM users WHERE driver_key=? AND $field = ?};
+        my $user_id = sql_singlevalue( $sql, $p->{driver_key}, $p->{$field} );
+        return $user_id if $user_id;
+    }
+
+    # nope, couldn't find the user.
+    return;
+}
+
 sub _vivify {
     my ($self, $proto_user) = @_;
 
@@ -413,6 +439,31 @@ user attributes.
 
 Returns a C<DateTime::Duration> object representing the TTL for this Factory's
 LDAP data.
+
+=item B<ResolveId(\%params)>
+
+Attempts to resolve the C<user_id> for the User represented by the given
+C<\%params>.
+
+For LDAP Users, we do an extended lookup to see if we can find the User by any
+one (or more) of:
+
+=over
+
+=item * driver_unique_id (their dn)
+
+=item * driver_username
+
+=item * email_address
+
+=back
+
+If any one of these match and can be found, we can be confident that we've
+found a matching User (we're still limiting ourselves to B<just> Users from
+this LDAP factory instance, so we're not doing cross-factory resolution).
+
+If the LDAP administrator re-uses somebodies username or e-mail address for a
+completely different User we'll mismatch, but that's the risk we take.
 
 =item B<GetUser($key, $val)>
 

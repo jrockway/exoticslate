@@ -2,8 +2,8 @@
 package Socialtext::WikiFixture::Socialtext;
 use strict;
 use warnings;
-use base 'Socialtext::WikiFixture::Selenese';
 use base 'Socialtext::WikiFixture::SocialBase';
+use base 'Socialtext::WikiFixture::Selenese';
 use Socialtext::System qw/shell_run/;
 use Socialtext::Workspace;
 use Sys::Hostname;
@@ -77,6 +77,7 @@ sub init {
     $self->{'short_username'} = $short_username || $self->{'username'};
     
     $self->SUPER::init;
+    Socialtext::WikiFixture::Selenese::init($self); # how to do this better?
 
     { # Talc/Topaz are configured to allow emailing into specific dev-envs
         (my $host = $self->{browser_url}) =~ s#^http.?://(.+):\d+#$1#;
@@ -86,6 +87,25 @@ sub init {
     diag "Browser url is ".$self->{browser_url};
     $self->st_login;
 }
+
+=head2 handle_command( @row )
+
+Run the command.  Subclasses can override this.
+
+=cut
+
+sub handle_command {
+    my $self = shift;
+    
+    # Try the SocialBase commands first
+    my @args = $self->_munge_command_and_opts(@_);
+    eval { $self->SUPER::_handle_command(@args) };
+    return unless $@;
+
+    # Fallback to Selenese command processing
+    $self->SUPER::handle_command(@_);
+}
+
 
 =head2 todo()
 

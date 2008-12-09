@@ -104,11 +104,13 @@ sub new_homunculus {
             );
         return undef unless $driver_key;
 
+        # if driver doesn't exist any more, we don't have an instance of it to
+        # query.  e.g. customer removed an LDAP data store.
         my $driver = eval {$class->_realize($driver_key, 'GetUser')};
         if ($driver) {
-            # if driver doesn't exist any more, we don't have an instance of
-            # it to query.  e.g. customer removed an LDAP data store.
-            $homunculus = $driver->GetUser(username => $driver_username);
+            # look the user up by *user_id*; *ALL* factories must support this
+            # lookup.
+            $homunculus = $driver->GetUser( $key, $val );
         }
 
         $homunculus ||= Socialtext::User::Deleted->new(

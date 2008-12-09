@@ -10,6 +10,7 @@ use Class::Field qw(field const);
 use Socialtext::LDAP;
 use Socialtext::User::LDAP;
 use Socialtext::Log qw(st_log);
+use Socialtext::SQL qw(sql_selectrow);
 use Net::LDAP::Util qw(escape_filter_value);
 use Socialtext::SQL qw(sql_execute sql_singlevalue);
 use Readonly;
@@ -124,8 +125,33 @@ sub lookup {
 
     # SANITY CHECK: lookup term is acceptable
     return unless ($valid_get_user_terms{$key});
-    # We can't check the LDAP server for user_id's, though
-    return if $key eq 'user_id';
+
+    # SANITY CHECK: given a value to lookup
+    return unless ((defined $val) && ($val ne ''));
+
+    # EDGE CASE: lookup by user_id
+    #
+    # The 'user_id' is internal to ST and isn't stored/held in the LDAP
+    # server, so we handle this as a special case; grab the data we've got on
+    # this user out of the DB and recursively look the user up by each of the
+    # possible unique identifiers.
+    if ($key eq 'user_id') {
+        return if ($val =~ /\D/);   # id *must* be numeric
+
+        my ($unique_id, $username, $email) =
+            sql_selectrow(
+                q{SELECT driver_unique_id, driver_username, email_address
+                   FROM users
+                  WHERE driver_key=? AND user_id=?
+                },
+                $self->driver_key, $val,
+            );
+
+        my $user = $self->lookup( driver_unique_id => $unique_id )
+                || $self->lookup( username => $username )
+                || $self->lookup( email_address => $email );
+        return $user;
+    }
 
     # search LDAP directory for our record
     my $mesg = $self->_find_user($key => $val);
@@ -420,15 +446,13 @@ User lookups can be performed by I<one> of:
 
 =back
 
-user_id lookups will only search the long-term cache.
-
 =item B<lookup($key, $val)>
 
 Looks up a user in the LDAP data store and returns a hash-ref of data on that
 user.
 
 Lookups can be performed using the same criteria as listed for C<GetUser()>
-above with the exception that 'user_id' lookups are not available.
+above.
 
 The long-term cache is B<not> consulted when using this method.
 

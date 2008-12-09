@@ -115,7 +115,7 @@ get_user_valid_search_terms: {
     my $user = $factory->GetUser(username=>'First Last');
     isa_ok $user, 'Socialtext::User::LDAP', 'username; valid search term';
 
-    # this query only works if the long-term cache has the entry
+    # "user_id" is a valid search term (but only if User is already in the DB)
     $user = $factory->GetUser(user_id => $user->user_id);
     isa_ok $user, 'Socialtext::User::LDAP', 'user_id; valid search term';
 
@@ -258,7 +258,7 @@ get_user_via_email_address_is_subtree: {
 ###############################################################################
 # User retrieval via "driver_unique_id" is optimized to be done as an exact
 # search
-get_user_via_user_id_is_exact: {
+get_user_via_driver_unique_id_is_exact: {
     Net::LDAP->set_mock_behaviour(
         search_results => [ $TEST_USERS[0] ],
         );
@@ -275,8 +275,8 @@ get_user_via_user_id_is_exact: {
     $mock->called_pos_ok( 1, 'bind' );
     $mock->called_pos_ok( 2, 'search' );
     my ($self, %opts) = $mock->call_args(2);
-    is $opts{'scope'}, 'base', 'user_id search is exact';
-    is $opts{'base'}, $dn, 'user_id search base is DN';
+    is $opts{'scope'}, 'base', 'driver_unique_id search is exact';
+    is $opts{'base'}, $dn, 'driver_unique_id search base is DN';
 
     # cleanup; *can't* leave users lying around at the end of a test
     $user->delete(force=>1);

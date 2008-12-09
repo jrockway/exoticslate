@@ -18,7 +18,11 @@ Navigate to a page known to have zero incoming links | system displays "There ar
  Click non-existent link | new page appears ready for editing 
  edit and save new page | existing page appears in new page incoming links
 
-| clickAndWait | link=TC Incoming Links New Page %%start_time%% |  |
+| click_ok | link=TC Incoming Links New Page %%start_time%% |  |
+| wait_for_element_visible_ok | blank-radio | 20000 |
+| click_ok | blank-radio |  |
+| wait_for_element_visible_ok | st-create-content-savelink | 20000 |
+| click_and_wait | st-create-content-savelink |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | TC Incoming Links New Page %%start_time%% content |
 | clickAndWait | st-save-button-link |  |

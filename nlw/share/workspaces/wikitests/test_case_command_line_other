@@ -18,19 +18,17 @@
 
 | st-admin | disable-plugin --plugin dashboard --all-accounts | qr/Plugin dashboard is now disabled for account Socialtext/ |
 | st-admin | disable-plugin --plugin dashboard --all-accounts | qr/Plugin dashboard is now disabled for account %%cmdline_account%%/ |
-| st-admin | disable-plugin --plugin socialcalc --all-accounts | qr/Plugin socialcalc is now disabled for account Socialtext/ |
-| st-admin | disable-plugin --plugin socialcalc --all-accounts | qr/Plugin socialcalc is now disabled for account %%cmdline_account%%/ |
 
 | *Comment* | Test Case: Command Line Tests OTHER test enable/disable for one account |  |
 | st-admin | enable-plugin --account %%cmdline_account%% --plugin people | qr/Plugin people is now enabled for account %%cmdline_account%%/ |
 | st-admin | enable-plugin --account %%cmdline_account%% --plugin widgets | qr/Plugin widgets is now enabled for account %%cmdline_account%%/ |
 | st-admin | enable-plugin --account %%cmdline_account%% --plugin dashboard | qr/Plugin dashboard is now enabled for account %%cmdline_account%%/ |
-| st-admin | enable-plugin --account %%cmdline_account%% --plugin socialcalc | qr/Plugin socialcalc is now enabled for account %%cmdline_account%%/ |
+| st-admin | enable-plugin --workspace %%cmdline_workspace%% --plugin socialcalc | qr/Plugin socialcalc is now enabled for workspace %%cmdline_workspace%%/ |
 
 | st-admin | disable-plugin --account %%cmdline_account%% --plugin people | qr/Plugin people is now disabled for account %%cmdline_account%%/ |
 | st-admin | disable-plugin --account %%cmdline_account%% --plugin widgets | qr/Plugin widgets is now disabled for account %%cmdline_account%%/ |
 | st-admin | disable-plugin --account %%cmdline_account%% --plugin dashboard | qr/Plugin dashboard is now disabled for account %%cmdline_account%%/ |
-| st-admin | disable-plugin --account %%cmdline_account%% --plugin socialcalc | qr/Plugin socialcalc is now disabled for account %%cmdline_account%%/ |
+| st-admin | disable-plugin --workspace %%cmdline_workspace%% --plugin socialcalc | qr/Plugin socialcalc is now disabled for workspace %%cmdline_workspace%%/ |
 
 | *Comment* | Test Case: Command Line Tests OTHER test enable for all accounts |  |
 | st-admin | enable-plugin --plugin people --all-accounts | qr/Plugin people is now enabled for account Socialtext/ |
@@ -40,8 +38,8 @@
 
 | st-admin | enable-plugin --plugin dashboard --all-accounts | qr/Plugin dashboard is now enabled for account Socialtext/ |
 | st-admin | enable-plugin --plugin dashboard --all-accounts | qr/Plugin dashboard is now enabled for account %%cmdline_account%%/ |
-| st-admin | enable-plugin --plugin socialcalc --all-accounts | qr/Plugin socialcalc is now enabled for account Socialtext/ |
-| st-admin | enable-plugin --plugin socialcalc --all-accounts | qr/Plugin socialcalc is now enabled for account %%cmdline_account%%/ |
+| st-admin | enable-plugin --plugin socialcalc --all-accounts | qr/The socialcalc plugin can not be enabled at the account scope/ |
+| st-admin | enable-plugin --plugin socialcalc --workspace %%cmdline_workspace%% | qr/Plugin socialcalc is now enabled for workspace %%cmdline_workspace%%/ |
 
 | st-admin | --help | qr/plugin/ |
 

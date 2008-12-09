@@ -385,6 +385,7 @@ sub remove_from_user_factories {
     # save the remaining User Factories back out
     my $user_factories = join ';', @factories;
     Socialtext::AppConfig->set('user_factories' => $user_factories);
+    Socialtext::AppConfig->write();
 
     my $got_set_ok = Socialtext::AppConfig->user_factories() eq $user_factories;
     return $got_set_ok;

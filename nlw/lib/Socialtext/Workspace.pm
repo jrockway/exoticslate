@@ -177,7 +177,8 @@ sub create {
     my %p = @_;
     my $timer = Socialtext::Timer->new;
 
-    my $skip_pages = delete $p{skip_default_pages};
+    my $skip_pages       = delete $p{skip_default_pages};
+    my $clone_pages_from = delete $p{clone_pages_from};
 
     my $self;
     eval {
@@ -213,8 +214,16 @@ EOSQL
     }
 
     $self->_make_fs_paths();
-    $self->_copy_default_pages()
-        unless $skip_pages;
+
+    unless ( $skip_pages ) {
+        if ($clone_pages_from) {
+            $self->_clone_workspace_pages($clone_pages_from);
+        }
+        else {
+            $self->_copy_default_pages()
+        }
+    }
+
     $self->_update_aliases_file();
 
     my $msg = 'CREATE,WORKSPACE,workspace:' . $self->name  
@@ -236,6 +245,14 @@ sub help_workspace {
     return $ws;
 }
 
+sub _clone_workspace_pages {
+    my $self    = shift;
+    my $ws_name = shift;
+
+    $self->_add_workspace_pages( () );
+    # xxx set homepage
+}
+
 sub _copy_default_pages {
     my $self = shift;
     my ( $main, $hub ) = $self->_main_and_hub();
@@ -251,6 +268,15 @@ sub _copy_default_pages {
     # Get all the default pages from the help workspace
     my @pages = $help_hub->category->get_pages_for_category( loc("Welcome") );
     push @pages, $help_hub->category->get_pages_for_category( loc("Top Page") );
+
+    $self->_add_workspace_pages( @pages );
+}
+
+sub _add_workspace_pages {
+    my $self = shift;
+    my @pages = @_;
+
+    my ( $main, $hub ) = $self->_main_and_hub();
 
     # Duplicate the pages
     for my $page (@pages) {

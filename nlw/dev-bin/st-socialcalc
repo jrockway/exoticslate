@@ -1,0 +1,11 @@
+#!/bin/bash
+
+STADMIN="$ST_CURRENT/nlw/bin/st-admin"
+
+if [ "$1" == "enable" ]; then 
+    for i in `$STADMIN list-workspaces` ; do $STADMIN enable-plugin --w $i --plugin socialcalc ; done ;
+elif [ "$1" == "disable" ]; then
+    for i in `$STADMIN list-workspaces` ; do $STADMIN disable-plugin --w $i --plugin socialcalc ; done ;
+else
+    echo "Usage: st-socialcalc [enable|disable]"
+fi

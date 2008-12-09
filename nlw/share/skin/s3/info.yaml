@@ -12,7 +12,6 @@ depends:
   - common
   - wikiwyg
 focus_field:
-  default_field: '#st-search-term'
   workspaces_create: dl.form > dd > input:eq(0)
   users_settings: input[name="first_name"]
   users_invitation: textarea[name="users_new_ids"]

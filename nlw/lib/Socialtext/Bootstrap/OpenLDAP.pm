@@ -210,8 +210,8 @@ sub DESTROY {
     #
     # wrapped in an eval in case it fails/dies (which could happen if the test
     # environment was purged since we were started)
-    eval { $self->remove_from_ldap_config() };
     eval { $self->remove_from_user_factories() };
+    eval { $self->remove_from_ldap_config() };
 
     # shut down and cleanup after ourselves
     $self->stop();

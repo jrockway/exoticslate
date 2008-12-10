@@ -2,17 +2,25 @@ package Socialtext::Storage;
 # @COPYRIGHT@
 use strict;
 use warnings;
+use Carp qw(croak);
 
 our %DATA;
+our $ALLOW_NOT_PRELOADED = {};
 
 sub new {
     my ($class, $id) = @_;
-    return bless { id => $id }, $class;
+    return bless {
+        id => $id,
+        _preloaded => {},
+    }, $class;
 }
 
 sub id { $_[0]{id} }
 
-sub preload {}
+sub preload {
+    my $self = shift;
+    $self->{_preloaded} = { map { $_ => 1 } @_ };
+}
 
 sub Search {
     my ($class, %terms) = @_;
@@ -32,6 +40,16 @@ sub exists {
 
 sub get {
     my ($self, $key) = @_;
+
+    # Socialtext::Storage works a lot better if all required values are 
+    # preloaded using Socialtext::Storage::preload. This means that all the 
+    # important key/value pairs are fetched in one statement instead of one 
+    # per key. The unmocked Socialtext::Storage doesn't die here, so to get
+    # around this check, just add the key to $ALLOW_NOT_PRELOADED, or fix the
+    # code to preload the value.
+    # unless ($self->{_preloaded}{$key} or $ALLOW_NOT_PRELOADED->{$key}) {
+    #    croak "$key was not preloaded!";
+    # }
     return $DATA{$self->{id}}{$key};
 }
 

@@ -34,6 +34,7 @@ sub link_directory {
                 unlink $to;
             }
             unless (-e $to) {
+                unlink $to if -l $to;
                 if (-d $from) {
                     warn "Making directory $to\n";
                     mkdir $to or die "Cannot mkdir $to: $!";

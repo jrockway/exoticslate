@@ -7,6 +7,7 @@ use base 'Socialtext::Plugin';
 
 use Class::Field qw( const );
 use Socialtext::String;
+use Socialtext::Encode;
 use Socialtext::l10n qw( loc );
 
 sub class_id { 'revision' }
@@ -268,6 +269,10 @@ sub compare_chunk {
     my @before = $self->split_into_words($before);
     my @after = $self->split_into_words($after);
 
+    # Turn off SvUTF8 flag as Algorithm::Diff::XS doesn't do Unicode.
+    Encode::_utf8_off($_) for @before;
+    Encode::_utf8_off($_) for @after;
+
     my @cdiffs = Algorithm::Diff::XS::compact_diff(\@before, \@after);
     my $html   = '';
 
@@ -290,6 +295,9 @@ sub compare_chunk {
             $html .= join '', @before[ $cdiffs[$ii] .. $cdiffs[ $ii + 2 ] - 1 ];
         }
     }
+
+    # Now put the SvUTF8 flag back on.
+    $html = Socialtext::Encode::ensure_is_utf8($html);
 
     # XXX need to refactor this (and add a unit test - not necessarily in that
     # order)

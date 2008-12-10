@@ -1,0 +1,4 @@
+---
+widgets:
+  - location: file:t/share/plugin/fakeplugin/widget_one.xml
+    col: 0

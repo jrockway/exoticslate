@@ -35,7 +35,8 @@ t.runAsync([
     function() {
         t.open_iframe(
             "/admin/index.cgi?bz_1697",
-            t.nextStep()
+            t.nextStep(),
+            {w: 1024}
         );
     },
 
@@ -50,20 +51,19 @@ t.runAsync([
     function() { 
         t.$('#st-edit-pagetools-expand').click();
 
-        var $editArea = $(
-            t.$('#st-page-editing-wysiwyg').get(0)
-             .contentWindow.document.documentElement
-        );
+        var $editArea = t.$('iframe#st-page-editing-wysiwyg');
         t.ok(
-            $editArea.width() < t.$('#st-edit-mode-view').width(),
-            "Edit area is less than edit area's width"
+            ($editArea.offset().left + $editArea.width())
+                < (t.$('#st-edit-mode-view').offset().left + t.$('#st-edit-mode-view').width()),
+            "Edit area's right edge does not go beyond the page"
         );
 
         t.$('#st-save-button-link').click();
 
         t.open_iframe(
             "/admin/index.cgi?bz_1697",
-            t.nextStep()
+            t.nextStep(),
+            {w: 1024}
         );
     },
 
@@ -76,13 +76,11 @@ t.runAsync([
     },
 
     function() { 
-        var $editArea = $(
-            t.$('#st-page-editing-wysiwyg').get(0)
-             .contentWindow.document.documentElement
-        );
+        var $editArea = t.$('iframe#st-page-editing-wysiwyg');
         t.ok(
-            $editArea.width() < t.$('#st-edit-mode-view').width(),
-            "Edit area is less than edit area's width"
+            ($editArea.offset().left + $editArea.width())
+                < (t.$('#st-edit-mode-view').offset().left + t.$('#st-edit-mode-view').width()),
+            "Edit area's right edge does not go beyond the page"
         );
 
         t.$('#st-save-button-link').click();

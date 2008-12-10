@@ -390,15 +390,25 @@ $(function() {
     });
 
     Socialtext.ui_expand_on = function() {
+        if (Socialtext.page_type == "wiki" && $.browser.msie && $.browser.version < 7) {
+            $('#st-edit-mode-container').parent().css("width", "auto");
+        }
         $("#st-actions-bar, #mainNav, #header, #workspaceContainer").addClass("collapsed");
         $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Normal View")).text(loc("Normal"));
         $('#st-edit-mode-container').css({position:'absolute',top:0,left:0,width:'100%',height:'100%'});
+        $("iframe#st-page-editing-wysiwyg").width( $('#st-page-editing').width() - 24 );
+
         return false;
     };
     Socialtext.ui_expand_off = function() {
+        if (Socialtext.page_type == "wiki" && $.browser.msie && $.browser.version < 7) {
+            $('#st-edit-mode-container').parent().css("width", "");
+        }
+
         $("#st-actions-bar, #mainNav, #header, #workspaceContainer").removeClass("collapsed");
         $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Expanded View")).text(loc("Expand"));
         $('#st-edit-mode-container').css({position:'',top:'',left:'',width:'',height:''});
+        $("iframe#st-page-editing-wysiwyg").width( $('#st-page-editing').width() - 24 );
 
         return false;
     };
@@ -409,15 +419,10 @@ $(function() {
     Socialtext.ui_expand_toggle = function() {
         if (Cookie.get("ui_is_expanded")) {
             Cookie.del("ui_is_expanded");
-
-            if (Socialtext.page_type == "wiki" && $.browser.msie && $.browser.version < 7)
-                $('#st-edit-mode-container').parent().css("width", "");
             return Socialtext.ui_expand_off();
         }
         else {
             Cookie.set("ui_is_expanded", "1");
-            if (Socialtext.page_type == "wiki" && $.browser.msie && $.browser.version < 7)
-                $('#st-edit-mode-container').parent().css("width", "auto");
             return Socialtext.ui_expand_on();
         }
     };

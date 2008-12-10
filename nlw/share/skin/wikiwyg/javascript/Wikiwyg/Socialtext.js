@@ -546,10 +546,14 @@ proto.resizeEditor = function () {
         return;
     }
 
-    if ($iframe.is(":visible"))
+    if ($iframe.is(":visible")) {
         jQuery("#st-editing-prefix-container").width($iframe.width()+2);
-    else if ($textarea.is(":visible"))
+        $iframe.width( jQuery('#st-page-editing').width() - 24 );
+    }
+    else if ($textarea.is(":visible")) {
         jQuery("#st-editing-prefix-container").width($textarea.width());
+    }
+
 
     self.__resizing = false;
 }
@@ -2209,6 +2213,7 @@ proto.get_editable_div = function () {
             setTimeout(function() {
                 try {
                     if (doc.body) {
+                        jQuery("iframe#st-page-editing-wysiwyg").width( jQuery('#st-page-editing').width() - 24 );
                         doc.body.appendChild(self._editable_div);
                         tryFocusDiv(100);
                     }

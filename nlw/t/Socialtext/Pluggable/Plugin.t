@@ -5,7 +5,7 @@ use warnings;
 
 BEGIN { push @INC, 't/share/plugin/fakeplugin/lib' }
 
-use Test::More qw(no_plan);
+use Test::More tests => 32;
 use mocked 'Socialtext::SQL';
 use mocked 'Socialtext::Authz';
 use mocked 'Socialtext::AppConfig';

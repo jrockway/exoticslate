@@ -46,15 +46,6 @@ t.runAsync([
             function() { t.callNextStep() }
         );
     },
-            
-    function() { 
-        if (richtextModeIsReady()) {
-             t.callNextStep(0);
-             return;
-        }
-        t.$('#st-mode-wysiwyg-button').click();
-        t.poll(richtextModeIsReady, function() {t.callNextStep();});
-    },
 
     function() { 
         t.$('#st-edit-pagetools-expand').click();
@@ -77,21 +68,23 @@ t.runAsync([
     },
 
     function() { 
-         t.$('#st-edit-button-link').click();
-         t.poll(
+        t.$('#st-edit-button-link').click();
+        t.poll(
             function() { return wikiwyg_started() },
             function() { t.callNextStep() }
         );
     },
 
     function() { 
+        var $editArea = $(
+            t.$('#st-page-editing-wysiwyg').get(0)
+             .contentWindow.document.documentElement
+        );
         t.ok(
             $editArea.width() < t.$('#st-edit-mode-view').width(),
             "Edit area is less than edit area's width"
         );
-    },
 
-    function() { 
         t.$('#st-save-button-link').click();
         t.endAsync();
     }

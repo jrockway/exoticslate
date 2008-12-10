@@ -79,7 +79,7 @@
 | text_like | Notepad entry for %%start_time%% |  |
 
 | *Comment* | Test Case: Workspace Navigation new wiki page |  |
-| click_ok | link=Create New Wiki Page |  |
+| click_ok | link=+ New Page |  |
 | wait_for_element_visible_ok | blank-radio | 20000 |
 | click_ok | blank-radio |  |
 | wait_for_element_visible_ok | st-create-content-savelink | 20000 |

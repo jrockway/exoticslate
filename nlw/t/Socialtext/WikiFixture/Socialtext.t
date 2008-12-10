@@ -4,6 +4,9 @@ use strict;
 use warnings;
 use Test::More;
 use Test::Exception;
+use Socialtext::WikiFixture::TestUtils;
+use Data::Dumper;
+use mocked 'Socialtext::User';
 
 BEGIN {
     my $test_it = $ENV{ST_RUN_WIKIFIXTURE_TESTS};
@@ -14,11 +17,13 @@ BEGIN {
         # from bothering Socialtext developers, but keep them around
         # for when we need to hack the fixture.
     }
+    else {
+        plan tests => 338;
+    }
     use_ok 'Socialtext::WikiObject::TestPlan';
     exit unless $test_it;
 }
 
-plan tests => 401;
 
 # avoid calling ok(0) for an intentionally failing test
 local $ENV{ST_WF_TEST} = 1;
@@ -44,12 +49,12 @@ st_fixture_ok(
 EOT
     tests => [
         [ 'click_ok' => ['id=logout_btn', 'log out']],
-        [ 'wait_for_page_to_load_ok' => [10000 , 'log out']],
+        [ 'wait_for_page_to_load_ok' => 10000],
         [ 'open_ok', '/nlw/login.html?redirect_to=%2Ffoo%2Findex.cgi' ],
         [ 'type_ok', ['username' => 'testuser']],
         [ 'type_ok', ['password' => 'password']],
         [ 'click_ok', [q{id=login_btn}, 'log in']],
-        [ 'wait_for_page_to_load_ok' => [10000, 'log in']],
+        [ 'wait_for_page_to_load_ok' => 10000],
     ],
 );
 
@@ -112,18 +117,18 @@ EOT
     ],
     tests => [
         [ 'get_attribute' => 
-          q{//table[@id='st-watchlist-content']/tbody/tr[2]/td[2]/img/@alt} ],
+          q{//div[@id='st-watchlist-content']/div[2]/div[2]/img/@alt} ],
         [ 'get_attribute' => 
-          q{//table[@id='st-watchlist-content']/tbody/tr[3]/td[2]/img/@alt} ],
+          q{//div[@id='st-watchlist-content']/div[3]/div[2]/img/@alt} ],
         [ 'click_ok' => 
-          [ q{//table[@id='st-watchlist-content']/tbody/tr[3]/td[2]/img},
+          [ q{//div[@id='st-watchlist-content']/div[3]/div[2]/img},
             'clicking watch button'] ],
         [ 'get_attribute' => 
-          q{//table[@id='st-watchlist-content']/tbody/tr[3]/td[2]/img/@src}],
+          q{//div[@id='st-watchlist-content']/div[3]/div[2]/img/@src}],
         [ 'get_attribute' => 
-          q{//table[@id='st-watchlist-content']/tbody/tr[3]/td[2]/img/@src}],
+          q{//div[@id='st-watchlist-content']/div[3]/div[2]/img/@src}],
         [ 'get_attribute' => 
-          q{//table[@id='st-watchlist-content']/tbody/tr[3]/td[2]/img/@src}],
+          q{//div[@id='st-watchlist-content']/div[3]/div[2]/img/@src}],
     ],
 );
 
@@ -139,14 +144,14 @@ EOT
     ],
     tests => [
         [ 'get_attribute' => 
-          q{//table[@id='st-watchlist-content']/tbody/tr[2]/td[2]/img/@alt} ],
+          q{//div[@id='st-watchlist-content']/div[2]/div[2]/img/@alt} ],
         [ 'click_ok' => 
-          [ q{//table[@id='st-watchlist-content']/tbody/tr[2]/td[2]/img},
+          [ q{//div[@id='st-watchlist-content']/div[2]/div[2]/img},
             'clicking watch button'] ],
         [ 'get_attribute' => 
-          q{//table[@id='st-watchlist-content']/tbody/tr[2]/td[2]/img/@src}],
+          q{//div[@id='st-watchlist-content']/div[2]/div[2]/img/@src}],
         [ 'get_attribute' => 
-          q{//table[@id='st-watchlist-content']/tbody/tr[2]/td[2]/img/@src}],
+          q{//div[@id='st-watchlist-content']/div[2]/div[2]/img/@src}],
     ],
 );
 
@@ -178,9 +183,9 @@ EOT
     ],
     tests => [
         [ 'get_attribute' => 
-          q{//table[@id='st-watchlist-content']/tbody/tr[2]/td[2]/img/@alt} ],
+          q{//div[@id='st-watchlist-content']/div[2]/div[2]/img/@alt} ],
         [ 'get_attribute' => 
-          q{//table[@id='st-watchlist-content']/tbody/tr[3]/td[2]/img/@alt} ],
+          q{//div[@id='st-watchlist-content']/div[3]/div[2]/img/@alt} ],
     ],
 );
 
@@ -302,7 +307,7 @@ EOT
         [ type_ok => ['username', 'foo']],
         [ type_ok => ['password', 'bar']],
         [ click_ok => [q{id=login_btn}, 'log in']],
-        [ wait_for_page_to_load_ok => [10000, 'log in']],
+        [ wait_for_page_to_load_ok => 10000],
     ],
 );
 
@@ -313,7 +318,7 @@ st_fixture_ok(
 EOT
     tests => [
         [ click_ok => [q{//input[@value='Submit']}, 'click submit button']],
-        [ wait_for_page_to_load_ok => [10000, 'click submit button']],
+        [ wait_for_page_to_load_ok => 10000],
     ],
 );
 
@@ -627,6 +632,16 @@ EOT
     is $ok_args[1], 'reset password checkbox not checked';
 }
 
+st_fixture_ok(
+    plan => <<EOT,
+| select_and_wait | sort-picker | label=Title (↓) |
+EOT
+    tests => [
+        [ 'select_ok' => ['sort-picker', 'label=Title (↓)' ]],
+        [ wait_for_page_to_load_ok => 10000 ],
+    ],
+);
+
 
 
 
@@ -638,14 +653,11 @@ sub st_fixture_ok {
 
     my $tests = $args{tests};
     unshift @$tests, 
-      [ open => 'http://server' ],
-      [ get_eval => '*' ],
       [ open_ok => '/nlw/login.html?redirect_to=%2Ffoo%2Findex.cgi' ],
       [ type_ok => ['username', 'testuser']],
       [ type_ok => ['password', 'password']],
       [ click_ok => [q{id=login_btn}, 'log in']],
-      [ wait_for_page_to_load_ok => [$timeout, 'log in']],
-      [ open_ok => '/foo' ];
+      [ wait_for_page_to_load_ok => $timeout];
 
     Socialtext::WikiFixture::TestUtils::fixture_ok(
         name => $name,

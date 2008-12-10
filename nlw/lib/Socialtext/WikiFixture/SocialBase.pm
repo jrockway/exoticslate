@@ -47,8 +47,7 @@ sub _handle_command {
     my $self = shift;
     my ($command, @opts) = @_;
 
-    if ($self->can($command)) {
-        use Data::Dumper;
+    if (__PACKAGE__->can($command)) {
         return $self->$command(@opts);
     }
     if ($self->{http}->can($command)) {

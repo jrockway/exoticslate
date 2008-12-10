@@ -59,7 +59,12 @@ sub handle_command {
         return Socialtext::WikiFixture::Socialtext::st_ldap($self, @opts);
     }
 
-    return $self->SUPER::_handle_command($command, @opts);
+    eval { $self->SUPER::_handle_command($command, @opts) };
+    return unless $@;
+
+    if ($self->can($command)) {
+        return $self->$command(@opts);
+    }
     die "Unknown command for the fixture: ($command)\n";
 
 }

@@ -27,6 +27,10 @@ sub set_return_value {
 
 sub method_args_ok {
     my ($self, $name, $expected) = @_;
+#    warn Data::Dumper::Dumper $self;
+    unless (defined $self->{$name}) {
+        die "$name is not defined!";
+    }
     unless (ref($self->{$name}) eq 'ARRAY') {
         die "$name is a $self->{$name}";
     }

@@ -20,6 +20,19 @@ Tests for creating a workspace via the REST API
 | code-is    | 200                                            |                               |
 | body-like  | "name":"%%workspace%%","title":"%%workspace%%" |                               |
 
+| Comment | Create a workspace from content in another workspace |  |
+| set | page1 | monkey |
+| set | content | Things Monkeys Love |
+| edit-page | %%workspace%% | %%page1%% | %%content%% |
+| code-is | 201 |
+| set | cloned | c%%start_time%% |
+| POST | /data/workspaces | Content-Type=application/json | {"name":"%%cloned%%", "title":"%%cloned%%", "account_id":"1", "clone_pages_from":"%%workspace%%"} |
+| code-is | 201 | |
+| add-member | %%username%% | %%cloned%% |
+| GET | /data/workspaces/%%cloned%%/pages/%%page1%% | |
+| code-is | 200 |
+| body-like | %%content%% | |
+
 | Comment | Workspace already exists |                               |                                                                     |
 | POST    | /data/workspaces        | Content-Type=application/json | {"name":"%%workspace%%", "title":"%%workspace%%", "account_id":"1"} |
 | code-is    | 409                                            |                               |
@@ -34,7 +47,3 @@ Tests for creating a workspace via the REST API
 | set | workspace | w%%start_time%%w3 |
 | POST    | /data/workspaces        | Content-Type=application/json | {"name":"%%workspace%%", "title":"%%workspace%%", "account_id":"1"} |
 | code-is | 401 |  |
-
-^^ To Test
-
-* create a workspace from content in another workspace

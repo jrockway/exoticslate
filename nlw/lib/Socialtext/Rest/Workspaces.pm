@@ -154,8 +154,11 @@ sub _create_workspace {
             $p{show_welcome_message_below_logo},
         show_title_below_logo => $p{show_title_below_logo},
         header_logo_link_uri  => $p{header_logo_link_uri},
+
+        ( $p{clone_pages_from} 
+            ? ( clone_pages_from => $p{clone_pages_from} )
+            : () ),
     );
-    # $new_workspace->set_logo_from_uri( uri => $p{logo_uri} );
 
     return ($new_workspace);
 }

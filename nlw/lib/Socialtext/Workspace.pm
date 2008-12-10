@@ -249,8 +249,14 @@ sub _clone_workspace_pages {
     my $self    = shift;
     my $ws_name = shift;
 
-    $self->_add_workspace_pages( () );
-    # xxx set homepage
+    my $ws = Socialtext::Workspace->new( name => $ws_name ) || return;
+    my $clone_hub = $self->_hub_for_workspace( $ws_name );
+    my @pages = $clone_hub->pages->all();
+
+    my ( $main, $hub ) = $self->_main_and_hub();
+    my $homepage = $hub->pages->new_from_name( $ws->title )->id;
+
+    $self->_add_workspace_pages( $homepage, @pages );
 }
 
 sub _copy_default_pages {
@@ -258,37 +264,48 @@ sub _copy_default_pages {
     my ( $main, $hub ) = $self->_main_and_hub();
 
     # Load up the help workspace, and a corresponding hub.
-    my $help      = Socialtext::Workspace->help_workspace() || return;
-    my $help_hub = Socialtext->new->load_hub(
-        current_workspace => $help,
-        current_user      => $hub->current_user,
-    );
-    $help_hub->registry->load;
+    my $help     = Socialtext::Workspace->help_workspace()->name || return;
+    my $help_hub = $self->_hub_for_workspace( $help );
 
     # Get all the default pages from the help workspace
     my @pages = $help_hub->category->get_pages_for_category( loc("Welcome") );
     push @pages, $help_hub->category->get_pages_for_category( loc("Top Page") );
 
-    $self->_add_workspace_pages( @pages );
+    my $homepage_id = ( system_locale() eq 'ja' )
+        ? '%E3%83%88%E3%83%83%E3%83%97%E3%83%9A%E3%83%BC%E3%82%B8'
+        : 'top_page';
+
+    $self->_add_workspace_pages( $homepage_id,  @pages );
 }
 
+sub _hub_for_workspace {
+    my $self      = shift;
+    my $ws_name   = shift;
+
+    my $ws = Socialtext::Workspace->new( name => $ws_name );
+    my $hub = Socialtext->new->load_hub(
+        current_workspace => $ws,
+        current_user      => Socialtext::User->SystemUser,
+    );
+
+    $hub->registry->load;
+
+    return $hub;
+}
+
+# Top Page is special.  We need to name the page after the current
+# workspace, not "Top Page", and we need to add the current workspace
+# title to the page content (there's some TT2 in the wikitext).
 sub _add_workspace_pages {
-    my $self = shift;
-    my @pages = @_;
+    my $self        = shift;
+    my $top_page_id = shift;
+    my @pages       = @_;
 
     my ( $main, $hub ) = $self->_main_and_hub();
 
     # Duplicate the pages
     for my $page (@pages) {
         my $title = $page->title;
-
-        # Top Page is special.  We need to name the page after the current
-        # workspace, not "Top Page", and we need to add the current workspace
-        # title to the page content (there's some TT2 in the wikitext).
-        my $top_page_id = 'top_page';
-        if ( system_locale() eq 'ja' ) {
-            $top_page_id = '%E3%83%88%E3%83%83%E3%83%97%E3%83%9A%E3%83%BC%E3%82%B8';
-        }
 
         if ( $page->id eq $top_page_id ) {
             $title = $self->title;
@@ -2057,6 +2074,8 @@ PARAMS can include:
 =item * created_by_user_id - defaults to Socialtext::User->SystemUser()->user_id()
 
 =item * skip_default_pages - defaults to false
+
+=item * clone_pages_from - clone pages from another workspace, defaults to false
 
 =item * enable_unplugged - defaults to 0
 

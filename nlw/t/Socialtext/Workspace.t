@@ -1,7 +1,7 @@
 #!perl
 # @COPYRIGHT@
 use mocked qw(Socialtext::l10n system_locale); # Has to come firstest.
-use Test::Socialtext tests => 120;
+use Test::Socialtext tests => 122;
 use Test::Exception;
 use strict;
 use warnings;
@@ -447,19 +447,41 @@ EMAIL_NOTIFICATION_FROM_ADDRESS:
         "$page_dir does not exist after workspace is created with skip_default_pages flag" );
 }
 
-# Include_Jumpstart_pages: {
-#     local $TODO = 'Not implemented yet';
-#     Socialtext::Workspace->create(
-#         name                    => 'jumpstart',
-#         title                   => 'Jumpstart',
-#         account_id              => Socialtext::Account->Default()->account_id,
-#         include_jumpstart_pages => 1
-#     );
-# 
-#     my $page_dir = Socialtext::File::catdir(
-#         Socialtext::Paths::page_data_directory('jumpstart'), 'ENOSUCHPAGE');
-#     ok( -d $page_dir, "$page_dir exists in a jumpstarted workspace." );
-# }
+Clone_from_workspace: {
+    # put some non-default content in an empty workspace.
+    my $to_clone_hub = new_hub('no-pages');
+    my $page = Socialtext::Page->new( hub => $to_clone_hub )->create(
+        title   => 'Monkey Favorites',
+        content => 'Bananas, Trees, Jungles',
+        creator => $to_clone_hub->current_user
+    );
+
+    # make sure we have a title page for later tests.
+    my $title_page = Socialtext::Page->new( hub => $to_clone_hub )->create(
+        title   => 'No Pages',
+        content => 'There are no pages.',
+        creator => $to_clone_hub->current_user
+    );
+
+    my $ws = Socialtext::Workspace->create(
+        name             => 'cloned',
+        title            => 'Cloned from',
+        account_id       => Socialtext::Account->Socialtext()->account_id,
+        clone_pages_from => 'no-pages'
+    );
+
+    # make sure that content is in the new workspace.
+    my $page_dir = Socialtext::File::catdir(
+        Socialtext::Paths::page_data_directory('cloned'), 'monkey_favorites');
+    ok( -d $page_dir, "$page_dir exists in a jumpstarted workspace." );
+
+    # Make sure the new workspace 'inherits' the homepage.
+    my $cloned_hub = new_hub( 'cloned' );
+    my $cloned_title_page = $cloned_hub->pages->new_from_name( $ws->title );
+    like $cloned_title_page->content(), qr/There are no pages/, 
+        'New workspace inherits the homepage.';
+
+}
 
 NON_ASCII_WS_NAME: {
     eval { Socialtext::Workspace->create(

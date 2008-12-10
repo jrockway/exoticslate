@@ -18,7 +18,7 @@ BEGIN {
         # for when we need to hack the fixture.
     }
     else {
-        plan tests => 338;
+        plan tests => 330;
     }
     use_ok 'Socialtext::WikiObject::TestPlan';
     exit unless $test_it;
@@ -631,17 +631,6 @@ EOT
     is $ok_args[0], 1;
     is $ok_args[1], 'reset password checkbox not checked';
 }
-
-st_fixture_ok(
-    plan => <<EOT,
-| select_and_wait | sort-picker | label=Title (↓) |
-EOT
-    tests => [
-        [ 'select_ok' => ['sort-picker', 'label=Title (↓)' ]],
-        [ wait_for_page_to_load_ok => 10000 ],
-    ],
-);
-
 
 
 

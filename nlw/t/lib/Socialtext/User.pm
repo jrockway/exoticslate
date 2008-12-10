@@ -9,6 +9,7 @@ use unmocked 'Socialtext::Exceptions', qw/data_validation_error/;
 use unmocked 'Socialtext::Account';
 
 our $WORKSPACES = [ [ 1 ] ];
+our %CAN_USE_PLUGIN = ();
 
 our %Users;
 
@@ -166,7 +167,10 @@ sub primary_account_id {
     $self->primary_account->account_id 
 }
 
-sub can_use_plugin { 1 } 
+sub can_use_plugin {
+    my ($self, $plugin) = @_;
+    return exists $CAN_USE_PLUGIN{$plugin} ? $CAN_USE_PLUGIN{$plugin} : 1;
+}
 
 sub profile_is_visible_to { 1 }
 

@@ -215,13 +215,11 @@ EOSQL
 
     $self->_make_fs_paths();
 
-    unless ( $skip_pages ) {
-        if ($clone_pages_from) {
-            $self->_clone_workspace_pages($clone_pages_from);
-        }
-        else {
-            $self->_copy_default_pages()
-        }
+    if ( $skip_pages ) {
+        $self->_copy_default_pages;
+    } else {
+       $self->_clone_workspace_pages( $clone_pages_from )
+           if $clone_pages_from;
     }
 
     $self->_update_aliases_file();

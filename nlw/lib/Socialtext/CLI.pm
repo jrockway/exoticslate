@@ -955,6 +955,12 @@ sub create_workspace {
         );
     }
 
+    if ( $ws{'clone-pages-from'} and !Socialtext::Workspace->new( name => $ws{'clone-pages-from'} ) ) {
+        $self->_error(
+            qq|The workspace name you provided, "$ws{'clone-pages-from'}", does not exist.|
+        );
+    }
+
     my $account = Socialtext::Account->Default();
     if (my $name = delete $ws{account}) {
         $account = $self->_load_account($name);
@@ -962,8 +968,11 @@ sub create_workspace {
     $ws{account_id} = $account->account_id();
 
     my $ws = eval {
-        my @skip = delete( $ws{empty} ) ? ( skip_default_pages => 1 ) : ();
-        Socialtext::Workspace->create( %ws, @skip );
+        my @extra_args;
+        push @extra_args, delete($ws{empty}) ? (skip_default_pages => 1) : ();
+        push @extra_args,
+            delete($ws{'clone-pages-from'}) ? (clone_pages_from => 1) : ();
+        Socialtext::Workspace->create( %ws, @extra_args );
     };
 
     if ( my $e
@@ -992,6 +1001,7 @@ sub _require_create_workspace_params {
         'name:s',
         'title:s',
         'account:s',
+        'clone-pages-from:s',
         'empty',
     );
 }
@@ -2601,7 +2611,7 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   show-impersonators --workspace
   set-workspace-config --workspace <key> <value>
   show-workspace-config --workspace
-  create-workspace --name --title --account [--empty]
+  create-workspace --name --title --account [--empty] [--clone-pages-from]
   delete-workspace --workspace [--dir] [no-export]
   export-workspace --workspace [--dir] [--name]
   import-workspace --tarball [--overwrite] [--name] [--noindex]

@@ -15,7 +15,7 @@ use Sys::Hostname;
 
 use Cwd;
 
-plan tests => 404;
+plan tests => 414;
 
 our $NEW_WORKSPACE = 'new-ws-' . $<;
 our $NEW_WORKSPACE2 = 'new-ws2-'. $<;
@@ -872,6 +872,73 @@ CREATE_WORKSPACE: {
         qr/\QThere is no account named "NoSuchThing".\E/,
         'create-workspace failed with invalid account name'
     );
+
+    # Test --clone-pages-from.  Real tests for this feature are in
+    # t/wikitests/rest/workspace-create.wiki
+    # To know if it worked, we'll delete a page from the <from> workspace
+    # and make sure it doesn't exist on the new workspace.
+    my $from_ws = "$NEW_WORKSPACE-from";
+    my $to_ws = "$NEW_WORKSPACE-to";
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => ['--workspace', $NEW_WORKSPACE, '--target', $from_ws],
+            )->clone_workspace();
+        },
+        qr{The $NEW_WORKSPACE workspace has been cloned to $from_ws},
+        'clone-workspace success message',
+    );
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --workspace ) => $from_ws,
+                    qw( --page start_here )] )
+                ->purge_page();
+        },
+        qr/\QThe Start here page was purged from the $from_ws workspace.\E/,
+        'purge-page success'
+    );
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --account Socialtext --name) => $to_ws,
+                    qw( --title ) => 'New Workspace',
+                    qw( --clone-pages-from ) => $from_ws,
+
+                ]
+            )->create_workspace();
+        },
+        qr/\QA new workspace named "$to_ws" was created.\E/,
+        'create-workspace success message'
+    );
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --workspace ) => $to_ws,
+                    qw( --page start_here )] )
+                ->purge_page();
+        },
+        qr/\QThere is no page with the id "start_here" in the $to_ws workspace.\E/,
+        'workspace was created with the correct pages',
+    );
+
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [
+                    qw( --name ) => "$to_ws-2",
+                    qw( --title ) => 'New Workspace',
+                    qw( --clone-pages-from ) => 'invalid-no-existy',
+                ]
+            )->create_workspace();
+        },
+        qr/\QThe workspace name you provided, "invalid-no-existy", does not exist.\E/,
+        'create-workspace failed with invalid clone-pages-from workspace'
+    );
+
 }
 
 EXPORT_WORKSPACE: {

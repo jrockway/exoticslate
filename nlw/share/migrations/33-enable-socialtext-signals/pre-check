@@ -1,0 +1,11 @@
+#!/bin/sh
+# @COPYRIGHT@
+
+# If signals is installed, run the migration
+if [ -d /usr/share/nlw/plugin/signals ]; then
+    echo Running migration to enable signals
+    exit 0
+fi
+
+echo Skipping migration because signals is not installed
+exit 1

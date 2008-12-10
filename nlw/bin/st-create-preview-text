@@ -22,18 +22,26 @@ Socialtext::CLI->_drop_privs();
 
 my $FORCE = 0;
 my $FIX_MOJIBAKE = 0;
+my $FIX_MIXED_MOJIBAKE = 0;
 my $REBUILD_INDEX = 0;
 my $REBUILD_MOJIBAKE_INDEX = 0;
+my $PAGE_MATCHES = 0;
 GetOptions(
     'f|force' => \$FORCE,
     'h|help'  => \&usage,
     'fix-mojibake' => \$FIX_MOJIBAKE,
+    'fix-mixed-mojibake' => \$FIX_MIXED_MOJIBAKE,
     'rebuild-index' => \$REBUILD_INDEX,
     'rebuild-mojibake-index' => \$REBUILD_MOJIBAKE_INDEX,
+    'page-matches=s'  => \$PAGE_MATCHES,
 ) or usage();
 
 die "--fix-mojibake must be used with --force!\n"
     if $FIX_MOJIBAKE and not $FORCE;
+die "--fix-mixed-mojibake must be used with --force!\n"
+    if $FIX_MIXED_MOJIBAKE and not $FORCE;
+
+$FIX_MOJIBAKE = 1 if $FIX_MIXED_MOJIBAKE;
 
 if ( @ARGV ) {
     for my $ws_name ( @ARGV ) {
@@ -53,7 +61,11 @@ exit;
 
 sub usage {
     warn <<EOT;
-Usage: $0 [--force [--fix-mojibake]] [--rebuild-index | --rebuild-mojibake-index] <workspaces>
+Usage: $0
+          [--force [--fix-mojibake | --fix-mixed-mojibake]]
+          [--rebuild-index | --rebuild-mojibake-index]
+          [--page-matches <regex>]
+          <workspaces>
 
 Generate preview text for the specified workspaces.
 
@@ -64,6 +76,8 @@ EOT
 
 sub process_workspace {
     my $wksp = shift;
+    return unless length $wksp->name;
+
     print "Storing preview text for workspace " . $wksp->name . ": ";
     my $hub = Socialtext::Hub->new(current_workspace => $wksp);
     my $workspace_dir = Socialtext::Paths::page_data_directory($wksp->name);
@@ -72,6 +86,7 @@ sub process_workspace {
     while (my $dir = readdir($dfh)) {
         next unless -d $dir;
         next if $dir =~ m/^\./;
+        next if $PAGE_MATCHES and not $dir =~ /$PAGE_MATCHES/o;
 
         # Ignore really old pages that have invalid page_ids
         next unless Socialtext::Encode::is_valid_utf8($dir);
@@ -190,11 +205,14 @@ sub fix_mojibake_in_file {
                 $is_mojibake = 1;
                 $bytes;
             }
-            else {
+            elsif (not $FIX_MIXED_MOJIBAKE) {
                 # If we've seen one valid non-mojibake UTF8 sequence,
                 # then get out of here.
                 $is_mojibake = 0;
                 last FIX;
+            }
+            else {
+                $1;
             }
         }ego;
     }

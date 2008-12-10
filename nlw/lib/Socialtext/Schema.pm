@@ -129,6 +129,7 @@ sub sync {
     if ($current_version == 0) {
         $self->run_sql_file($self->_schema_filename);
         $self->_display("Set up fresh schema\n");
+        $self->_add_required_data;
     }
     else {
         my @scripts = $self->_update_scripts(
@@ -165,12 +166,13 @@ sub sync {
             $self->_display("Not all updates applied.  $up_msg\n");
             return;
         }
-        $self->_display("$up_msg  Schema is up-to-date.\n");
-    }
 
-    # Only add the required data if we're at the very latest schema version
-    if ($self->current_version == $self->ultimate_version) {
-        $self->_add_required_data;
+        # Only add the required data if we're at the very latest schema version
+        if ($self->current_version == $self->ultimate_version) {
+            $self->_add_required_data;
+        }
+
+        $self->_display("$up_msg  Schema is up-to-date.\n");
     }
 }
 

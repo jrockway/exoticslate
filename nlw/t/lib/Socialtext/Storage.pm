@@ -1,4 +1,5 @@
 package Socialtext::Storage;
+# @COPYRIGHT@
 use strict;
 use warnings;
 

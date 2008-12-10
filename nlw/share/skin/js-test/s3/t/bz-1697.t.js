@@ -36,13 +36,15 @@ t.runAsync([
         t.open_iframe(
             "/admin/index.cgi?bz_1697",
             t.nextStep(),
-            {w: 1024}
+            {w: 1024, h:768}
         );
     },
 
     function() { 
-         t.$('#st-edit-button-link').click();
-         t.poll(
+        t.win.Cookie.del("ui_is_expanded");
+        t.$('#st-edit-button-link').click();
+
+        t.poll(
             function() { return wikiwyg_started() },
             function() { t.callNextStep() }
         );
@@ -63,7 +65,7 @@ t.runAsync([
         t.open_iframe(
             "/admin/index.cgi?bz_1697",
             t.nextStep(),
-            {w: 1024}
+            {w: 1024, h:768}
         );
     },
 
@@ -83,6 +85,7 @@ t.runAsync([
             "Edit area's right edge does not go beyond the page"
         );
 
+        t.win.Cookie.del("ui_is_expanded");
         t.$('#st-save-button-link').click();
         t.endAsync();
     }

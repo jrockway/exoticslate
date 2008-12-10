@@ -16,8 +16,8 @@
                 <th colspan="1">[% section %]</th>
             </tr>
             [% FOREACH widget IN widgets.$section %]
+            [% NEXT IF widget.error OR NOT widget.is_authorized %]
             <tr>
-                [% NEXT IF widget.error %]
                 <td class="description">
                     <a href="?action=add_widget;location=[% widget.location | uri %]">
                         [% widget.module_prefs.title %]

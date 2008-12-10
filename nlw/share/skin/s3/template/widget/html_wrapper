@@ -1,5 +1,6 @@
 <li[% IF !gadget.fixed %] class="draggable"[% END %]>
 <div class="[% IF gadget.fixed %]widgetTan[% ELSE %]widget[% END %]" id="[% gadget.id %]">
+[% IF gadget.is_authorized %]
     <div class="widgetHeader">
         <div class="widgetHeaderButtons">
         [% IF !gadget.fixed %]
@@ -41,5 +42,6 @@
         </div>
     </div><!-- widgetContent END -->
     <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
+[% END %]
 </div><!-- widget END -->
 </li>

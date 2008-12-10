@@ -36,7 +36,7 @@ t.runAsync([
         t.open_iframe(
             "/admin/index.cgi?bz_1697",
             t.nextStep(),
-            {w: 1024, h:768}
+            {w: 1024}
         );
     },
 
@@ -46,7 +46,7 @@ t.runAsync([
 
         t.poll(
             function() { return wikiwyg_started() },
-            function() { t.callNextStep() }
+            function() { t.callNextStep(5000) }
         );
     },
 
@@ -65,7 +65,7 @@ t.runAsync([
         t.open_iframe(
             "/admin/index.cgi?bz_1697",
             t.nextStep(),
-            {w: 1024, h:768}
+            {w: 1024}
         );
     },
 
@@ -73,7 +73,7 @@ t.runAsync([
         t.$('#st-edit-button-link').click();
         t.poll(
             function() { return wikiwyg_started() },
-            function() { t.callNextStep() }
+            function() { t.callNextStep(5000) }
         );
     },
 

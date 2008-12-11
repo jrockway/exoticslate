@@ -349,6 +349,12 @@ sub export_account {
     my $self = shift;
     my $account = $self->_require_account;
     my %opts     = $self->_get_options('force');
+
+    my ( $hub, $main ) = $self->_make_hub(
+        Socialtext::NoWorkspace->new(),
+        Socialtext::User->SystemUser(),
+    );
+
     (my $short_name = lc($account->name)) =~ s#\W#_#g;
     my $dir = $self->_export_dir_base
         . "/$short_name.id-"
@@ -367,7 +373,7 @@ sub export_account {
     mkdir $dir;
 
     print loc("Exporting account [_1] ...", $account->name) . "\n";
-    $account->export( dir => $dir );
+    $account->export( dir => $dir, hub => $hub );
 
     my $workspaces = $account->workspaces;
     while (my $wksp = $workspaces->next) {
@@ -389,11 +395,17 @@ sub import_account {
     $self->_error(loc("No import directory specified.") . "\n") unless $dir;
     $self->_error(loc("Directory [_1] does not exist.", $dir) . "\n") unless -d $dir;
 
+    my ( $hub, $main ) = $self->_make_hub(
+        Socialtext::NoWorkspace->new(),
+        Socialtext::User->SystemUser(),
+    );
+
     print loc("Importing users ..."), "\n";
     my $account = Socialtext::Account->import_file(
         file => "$dir/account.yaml",
         name => $opts{name},
         force => $opts{overwrite},
+        hub => $hub,
     );
 
     for my $tarball (glob "$dir/*.1.tar.gz") {
@@ -519,12 +531,12 @@ sub _get_profile {
     my $user = shift;
 
     unless ($user->can_use_plugin( 'people' )) {
-        $self->_error("The People plugin is not available.");
+        $self->_error(loc("The People plugin is not available."));
     }
 
     my $adapter = Socialtext::Pluggable::Adapter->new;
     unless ($adapter->plugin_exists('people')) {
-        return $self->_error("The People plugin is not installed.");
+        return $self->_error(loc("The People plugin is not installed."));
     }
 
     require Socialtext::People::Profile;
@@ -2195,6 +2207,55 @@ sub invite_user {
     );
 }
 
+sub add_profile_field {
+    my $self = shift;
+
+    my $acct = $self->_require_account('optional');
+    $acct ||= Socialtext::Account->Default();
+
+    my $adapter = Socialtext::Pluggable::Adapter->new;
+    unless ($adapter->plugin_exists('people')) {
+        return $self->_error(loc("The People plugin is not installed."));
+    }
+
+    require Socialtext::People::Fields;
+    my $fields = Socialtext::People::Fields->new(
+        account_id => $acct->account_id
+    );
+
+    my %opts = $self->_get_options(
+        'name:s',
+        'title:s',
+        'field-class:s',
+    );
+
+    my $field;
+    eval {
+        $field = $fields->create_field(
+            name => $opts{name},
+            title => $opts{title},
+            field_class => $opts{'field-class'},
+        );
+    };
+    if (my $err = $@) {
+        if ($err =~ /reserved field name/) {
+            $self->_error(loc("Cannot create field: The field name '[_1]' is reserved for Socialtext", $opts{name}));
+        }
+        elsif ($err =~ /duplicate field name/) {
+            $self->_error(loc("Cannot create field: The field name '[_1]' is already used in account '[_2]'", $opts{name}, $acct->name));
+        }
+        elsif ($err =~ /invalid field_class/) {
+            $self->_error(loc("Cannot create field: invalid field-class '[_1]'", $opts{'field-class'}));
+        }
+        else {
+            $self->_error(loc("Unable to create field."));
+        }
+    }
+
+    $self->_success(loc("Created profile field '[_1]' for account '[_2]'",
+                        $field->title, $acct->name));
+}
+
 # Called by Socialtext::Ceqlotron
 sub from_input {
     my $self  = shift;
@@ -2300,8 +2361,14 @@ sub _require_hub {
     my $self = shift;
 
     my $user = shift || Socialtext::User->SystemUser();
-
     my $ws = $self->_require_workspace();
+    return $self->_make_hub($user, $ws);
+}
+
+sub _make_hub {
+    my $self = shift;
+    my $ws = shift;
+    my $user = shift;
 
     require Socialtext;
     my $main = Socialtext->new();

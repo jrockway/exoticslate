@@ -149,9 +149,15 @@ Account_skins: {
     is( $ws_name, $mess->{s3}[0]{name}, 'custom skins with workspaces.');
 }
 
+use Test::MockObject;
+my $mock_adapter = Test::MockObject->new({});
+$mock_adapter->mock('hook', sub {});
+my $mock_hub = Test::MockObject->new({});
+$mock_hub->mock('pluggable', sub { $mock_adapter });
+
 my $export_file;
 Exporting_account_people: {
-    $export_file = $test->export( dir => 't' );
+    $export_file = $test->export( dir => 't', hub => $mock_hub );
     ok -e $export_file, "exported file $export_file exists";
     my $data = LoadFile($export_file);
     is $data->{name}, 'Test Account', 'name is in export';
@@ -171,6 +177,7 @@ Import_account: {
     my $account = Socialtext::Account->import_file( 
         file => $export_file,
         name => 'Imported account',
+        hub => $mock_hub,
     );
     is $account->name, 'Imported account', 'new name was set';
     is $account->workspace_count, 0, "import doesn't import workspace data";

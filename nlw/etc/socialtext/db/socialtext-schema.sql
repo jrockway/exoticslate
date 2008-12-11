@@ -258,6 +258,7 @@ CREATE TABLE profile_field (
     name text NOT NULL,
     field_class text NOT NULL,
     account_id bigint NOT NULL,
+    title text NOT NULL,
     CONSTRAINT profile_field_class_check
             CHECK (field_class IN ('attribute', 'contact', 'relationship'))
 );
@@ -776,4 +777,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '23');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '24');

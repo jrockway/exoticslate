@@ -202,16 +202,20 @@ sub export {
     my $self = shift;
     my %opts = @_;
     my $dir = $opts{dir};
+    my $hub = $opts{hub};
 
     my $export_file = $opts{file} || "$dir/account.yaml";
-    DumpFile($export_file, {
-            name => $self->name,
-            is_system_created => $self->is_system_created,
-            skin_name => $self->skin_name,
-            email_addresses_are_hidden => $self->email_addresses_are_hidden,
-            users => $self->users_as_hash,
-        }
-    );
+
+    my $data = {
+        name => $self->name,
+        is_system_created => $self->is_system_created,
+        skin_name => $self->skin_name,
+        email_addresses_are_hidden => $self->email_addresses_are_hidden,
+        users => $self->users_as_hash,
+    };
+    $hub->pluggable->hook('nlw.export_account', $self, $data);
+
+    DumpFile($export_file, $data);
     return $export_file;
 }
 
@@ -245,6 +249,7 @@ sub import_file {
     my %opts = @_;
     my $import_file = $opts{file};
     my $import_name = $opts{name};
+    my $hub = $opts{hub};
 
     my $hash = LoadFile($import_file);
     my $name = $import_name || $hash->{name};
@@ -273,6 +278,8 @@ sub import_file {
             push @profiles, $profile;
         }
     }
+
+    $hub->pluggable->hook('nlw.import_account', $account, $hash);
 
     # Create all the profiles after so that user references resolve.
     eval "require Socialtext::People::Profile";

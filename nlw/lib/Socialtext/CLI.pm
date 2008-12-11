@@ -237,6 +237,9 @@ sub enable_plugin {
     }
     elsif ($opts{workspace}) {
         my $workspace = Socialtext::Workspace->new( name => $opts{workspace} );
+        $self->_error(
+           loc("The workspace [_1] does not exist", $opts{workspace}) )
+           unless $workspace;
         $workspace->enable_plugin($plugin);
         return $self->_success(loc(
             "The [_1] plugin is now enabled for workspace [_2]",

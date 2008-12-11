@@ -90,9 +90,8 @@ sub password_is_correct {
 sub can_update_store { 1 }
 sub update_store {
     my $self = shift;
-    my $field = shift;
-    my $value = shift;
-    $self->{$field} = $value;
+    my %args = @_;
+    $self->{$_} = $args{$_} for keys %args;
 }
 
 sub default_role { 

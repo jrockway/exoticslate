@@ -10,7 +10,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 57;
+    plan tests => 62;
 }
 
 use mocked 'Socialtext::People::Profile';
@@ -22,8 +22,6 @@ use_ok 'Socialtext::MassAdd';
 Add_from_hash: {
     clear_log();
     $Socialtext::User::Users{ronnie} = undef;
-    my @successes;
-    my @failures;
     my %userinfo = (
         username      => 'ronnie',
         email_address => 'ronnie@mrshow.example.com',
@@ -37,18 +35,47 @@ Add_from_hash: {
         mobile_phone  => '',
         home_phone    => ''
     );
-    my $mass_add = Socialtext::MassAdd->new(
-        pass_cb => sub { push @successes, shift },
-        fail_cb => sub { push @failures,  shift },
-    );
-    $mass_add->add_user(%userinfo);
-    is_deeply \@successes, ['Added user ronnie'], 'success message ok';
-    logged_like 'info', qr/Added user ronnie/, '... message also logged';
-    is_deeply \@failures, [], 'no failure messages';
-    is delete $Socialtext::User::Confirmation_info{ronnie}, undef,
-        'confirmation is not set';
-    is delete $Socialtext::User::Sent_email{ronnie}, undef,
-        'confirmation email not sent';
+
+    happy_path: {
+        my @successes;
+        my @failures;
+        my $mass_add = Socialtext::MassAdd->new(
+            pass_cb => sub { push @successes, shift },
+            fail_cb => sub { push @failures,  shift },
+        );
+        $mass_add->add_user(%userinfo);
+        is_deeply \@successes, ['Added user ronnie'], 'success message ok';
+        logged_like 'info', qr/Added user ronnie/, '... message also logged';
+        is_deeply \@failures, [], 'no failure messages';
+        is delete $Socialtext::User::Confirmation_info{ronnie}, undef,
+            'confirmation is not set';
+        is delete $Socialtext::User::Sent_email{ronnie}, undef,
+            'confirmation email not sent';
+    }
+
+    bad_profile_field: {
+        no warnings 'redefine';
+        local *Socialtext::People::Profile::valid_attr = sub {
+            return $_[1] eq 'badfield' ? 0 : 1;
+        };
+        $userinfo{badfield} = 'badvalue';
+
+        my @successes;
+        my @failures;
+        my $mass_add = Socialtext::MassAdd->new(
+            pass_cb => sub { push @successes, shift },
+            fail_cb => sub { push @failures,  shift },
+        );
+        $mass_add->add_user(%userinfo);
+        is scalar(@failures), 1, "just one failure";
+        like $failures[0], qr/Profile field "badfield" does not exist/;
+        logged_like 'error',
+            qr/Profile field "badfield" does not exist/,
+            '... message also logged';
+
+        is_deeply \@successes, ['Added user ronnie'], 'success message ok';
+        logged_like 'info', qr/Added user ronnie/, '... message also logged';
+    }
 }
 
 my $PIRATE_CSV = <<'EOT';

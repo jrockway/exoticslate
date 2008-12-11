@@ -7,6 +7,7 @@ use Socialtext::Encode;
 use Socialtext::Log qw(st_log);
 use Socialtext::User;
 use Socialtext::l10n qw/loc/;
+use List::MoreUtils qw/mesh/;
 
 our $Has_People_Installed;
 our @Required_fields = qw/username email_address/;
@@ -17,6 +18,9 @@ our @User_fields = qw/first_name last_name password/;
 # Socialtext::People::Fields).
 our @Profile_fields
     = qw/position company location work_phone mobile_phone home_phone/;
+
+our @All_fields = (@Required_fields, @User_fields, @Profile_fields);
+our %Non_profile_fields = map {$_ => 1} (@Required_fields, @User_fields);
 
 BEGIN {
     eval "require Socialtext::People::Profile";
@@ -56,129 +60,198 @@ LINE:
             $self->_fail($msg);
             next LINE;
         }
-        $self->_add_user(@fields);
+        # mesh: missing values still have keys (value is undef)
+        $self->add_user(mesh(@All_fields, @fields));
     }
+
+    # TODO: link relationship profile fields
+    # $self->finish_up();
 }
 
 sub add_user {
     my $self = shift;
     my %args = @_;
-    $self->_add_user(
-        map { $args{$_} } (@Required_fields, @User_fields, @Profile_fields)
-    );
-}
 
-sub _add_user {
-    my $self = shift;
-
-    # extract field data from the parsed line
-    my ($username, $email, $first_name, $last_name, $password, @profile)
-        = map { defined $_ ? $_ : '' } @_;
-    my @userdata = ($first_name, $last_name, $password);
-
-    # sanity check the parsed data, to make sure that fields we *know* are
-    # required are really present
-    unless ($username) {
-        my $msg = loc("[_1] is a required field, but it is not present.", 'username');
-        $self->_fail($msg);
-        return; # used to be 'next LINE;'
-    }
-    unless ($email) {
-        my $msg = loc("[_1] is a required field, but it is not present.", 'email');
-        $self->_fail($msg);
-        return; # used to be 'next LINE;'
-    }
-    if (length($password)) {
-        my $result
-            = Socialtext::User->ValidatePassword(password => $password);
-        if ($result) {
-            $self->_fail($result);
-            return; # used to be 'next LINE;'
-        }
-    }
+    return unless $self->_validate_args(\%args);
 
     # see if we've got an existing record for this user, and add/update as
     # necessary.
-    my $user;
     my $changed_user = 0;
     my $added_user = 0;
-    eval { $user = Socialtext::User->Resolve($username) };
+
+    my $user = eval { Socialtext::User->Resolve($args{username}) };
     if ($user) {
         # Update the user's primary account if one is specified
-        $user->primary_account($self->{account}) if $self->{account};
+        if ($self->{account} && 
+            $user->primary_account_id != $self->{account}->account_id) 
+        {
+            $user->primary_account($self->{account});
+            $changed_user++;
+        }
     }
     else {
-        eval {
-            $user = Socialtext::User->create(
-                username      => $username,
-                email_address => $email,
-                ($password ? (password => $password) : ()),
-                first_name    => $first_name,
-                last_name     => $last_name,
-                ($self->{account} ? (primary_account_id => $self->{account}->account_id) : ()),
-            );
-            $added_user++;
-        };
-        my $err = $@;
-        if (my $e = Exception::Class->caught('Socialtext::Exception::DataValidation')) {
-            foreach my $m ($e->messages) {
-                $self->_fail($m);
-            }
-            return; # used to be 'next LINE;'
-        }
-        elsif ($err) {
-            $self->_fail($err);
-            return; # used to be 'next LINE;'
-        }
-
-        # Send the user a confirmation email, if they don't have a pw
-        unless ( $user->has_valid_password ) {
-            $user->set_confirmation_info( is_password_change => 0 );
-            $user->send_confirmation_email();
-        }
+        $user = $self->_create_user(%args);
+        return unless $user; # failed
+        $added_user++;
     }
 
     if ($user->can_update_store) {
-        for (my $i = 0; $i < @User_fields; $i++) {
-            my $field = $User_fields[$i];
-            my $value = $userdata[$i];
-            my $uptodate = sub { $user->$field() eq $value };
-            if ($field eq 'password') {
-                $uptodate = sub { $user->password_is_correct($value) };
-            }
-            if (length($userdata[$i]) and not $uptodate->()) {
-                $user->update_store( $field => $value );
-                $changed_user++;
-            }
-        }
+        $changed_user += $self->_update_user_store($user, %args);
     }
 
     if ($Has_People_Installed) {
-        local $Socialtext::People::Fields::AutomaticStockFields = 1;
-        my $p = Socialtext::People::Profile->GetProfile($user,
-            no_recurse => 1);
-        for (my $i = 0; $i < @Profile_fields; $i++) {
-            my $value = $profile[$i];
-            next unless $value;
-            my $field = $Profile_fields[$i];
-            next if ($p->get_attr($field) || '') eq $value;
-            $p->set_attr($field => $value);
-            $changed_user++;
-        }
-        $p->save() if ($changed_user);
+        my @prof_args = map {$_ => $args{$_}} 
+                        grep {!$Non_profile_fields{$_}} keys %args;
+        $changed_user += $self->_update_profile($user, @prof_args)
+            if @prof_args;
     }
+
     if ($added_user) {
-        my $msg = loc("Added user [_1]", $username);
+        my $msg = loc("Added user [_1]", $args{username});
         $self->_pass($msg);
     }
     elsif ($changed_user) {
-        my $msg = loc("Updated user [_1]", $username);
+        my $msg = loc("Updated user [_1]", $args{username});
         $self->_pass($msg);
     }
     else {
-        my $msg = loc("No changes for user [_1]", $username);
+        my $msg = loc("No changes for user [_1]", $args{username});
         $self->_pass($msg);
     }
+}
+
+sub _validate_args {
+    my $self = shift;
+    my $args = shift;
+
+    my $f;
+    for $f (@Required_fields, @User_fields) {
+        $args->{$_} = '' unless defined $args->{$_};
+    }
+
+    # sanity check the parsed data, to make sure that fields we *know* are
+    # required are really present
+    for $f ('username','email_address') {
+        next if $args->{$f};
+        my $mfield = ($f eq 'email_address') ? 'email' : $f;
+        my $msg = loc("[_1] is a required field, but it is not present.", $mfield);
+        $self->_fail($msg);
+        return;
+    }
+
+    if (length($args->{password})) {
+        my $result
+            = Socialtext::User->ValidatePassword(password => $args->{password});
+        if ($result) {
+            $self->_fail($result);
+            return;
+        }
+    }
+
+    return 1;
+}
+
+sub _create_user {
+    my $self = shift;
+    my %args = @_;
+    my $user;
+    eval {
+        $user = Socialtext::User->create(
+            username      => $args{username},
+            email_address => $args{email_address},
+            ($args{password} ? (password => $args{password}) : ()),
+            first_name    => $args{first_name},
+            last_name     => $args{last_name},
+            ($self->{account} ? (primary_account_id => $self->{account}->account_id) : ()),
+        );
+    };
+    my $err = $@;
+    if (my $e = Exception::Class->caught('Socialtext::Exception::DataValidation')) {
+        foreach my $m ($e->messages) {
+            $self->_fail($m);
+        }
+        return;
+    }
+    elsif ($err) {
+        $self->_fail($err);
+        return;
+    }
+
+    # Send the user a confirmation email, if they don't have a pw
+    unless ($user->has_valid_password) {
+        $user->set_confirmation_info(is_password_change => 0);
+        $user->send_confirmation_email();
+    }
+
+    return $user;
+}
+
+sub _update_user_store {
+    my $self = shift;
+    my $user = shift;
+    my %args = @_;
+
+    my %update_slice = map { $_ => $args{$_} } @User_fields;
+
+    if ($user->password_is_correct($args{password})) {
+        delete $update_slice{password};
+    }
+
+    foreach my $field (keys %update_slice) {
+        if (length($args{$field}) && 
+            $user->$field() eq $args{$field}) 
+        {
+            delete $update_slice{$field};
+        }
+        # else: needs updating
+    }
+
+    if (keys %update_slice) {
+        $user->update_store(%update_slice);
+        return 1;
+    }
+    return 0;
+}
+
+sub _update_profile {
+    my $self = shift;
+    my $user = shift;
+    my %profile_args = @_;
+    my $changed_user = 0;
+
+    local $Socialtext::People::Fields::AutomaticStockFields = 1;
+
+    my $p = Socialtext::People::Profile->GetProfile($user, no_recurse => 1);
+    return 0 unless $p;
+
+    while (my ($field, $value) = each %profile_args) {
+        next unless $value;
+        if ($p->valid_attr($field)) {
+            my $old_value = $p->get_attr($field);
+            $old_value = '' unless defined $old_value;
+            next if ($old_value eq $value);
+            $p->set_attr($field => $value);
+            $changed_user++;
+        }
+        # TODO: link profile relationship fields
+#         elsif ($p->valid_reln($field)) {
+#             # relationship updates must be deferred until after we've loaded
+#             # everyone
+#             $self->{_profile_reln_update} ||= [];
+#             push @{$self->{_profile_reln_update}}, {
+#                 prof => $prof,
+#                 field => $field,
+#                 value => $value
+#             };
+#             $changed_user++; # well, it's maybe changed
+#         }
+        else {
+            $self->_fail(loc('Profile field "[_1]" does not exist for this account', $field));
+        }
+    }
+
+    $p->save() if $changed_user;
+    return $changed_user;
 }
 
 sub _pass {

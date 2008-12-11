@@ -81,6 +81,22 @@ sub Resolve {
     return $account;
 }
 
+sub EnablePluginForAll {
+    my ($class, $plugin) = @_;
+    my $all = $class->All;
+    while (my $account = $all->next) {
+        $account->enable_plugin($plugin);
+    }
+}
+
+sub DisablePluginForAll {
+    my ($class, $plugin) = @_;
+    my $all = $class->All;
+    while (my $account = $all->next) {
+        $account->disable_plugin($plugin);
+    }
+}
+
 sub skin_name {
     my ($self, $skin) = @_;
 
@@ -169,14 +185,13 @@ sub plugins_enabled {
 
 sub enable_plugin {
     my ($self, $plugin) = @_;
-    my @msg;
 
     my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
     die loc("The [_1] plugin can not be enabled at the account scope", $plugin)
         . "\n" unless $plugin_class->scope eq 'account';
 
     for my $dep ($plugin_class->dependencies) {
-        push @msg, $self->enable_plugin($dep);
+        $self->enable_plugin($dep);
     }
 
     if (!$self->is_plugin_enabled($plugin)) {
@@ -188,9 +203,6 @@ sub enable_plugin {
 
         Socialtext::Cache->clear('authz_plugin');
     }
-    push @msg, loc("The [_1] plugin is now enabled for account [_2]",
-                   $plugin, $self->name);
-    return join "\n", @msg;
 }
 
 sub disable_plugin {
@@ -849,6 +861,14 @@ Returns a count of all accounts.
 
 Inserts required accounts into the DBMS if they are not present. See
 L<Socialtext::Data> for more details on required data.
+
+=item Socialtext::Account->EnablePluginForAll($plugin)
+
+Enables a plugin for all accounts
+
+=item Socialtext::Account->DisablePluginForAll($plugin)
+
+Disables a plugin for all accounts
 
 =item Socialtext::Account::ByName()
 

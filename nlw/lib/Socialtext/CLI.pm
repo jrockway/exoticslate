@@ -221,17 +221,27 @@ sub enable_plugin {
     my $plugin  = $self->_require_plugin;
     my %opts = $self->_get_options('account:s', 'all-accounts', 'workspace:s');
 
-    my $msg;
     if ($opts{'all-accounts'}) {
-        $msg = Socialtext::Account->enable_plugin_for_all_accounts($plugin);
+        Socialtext::Account->EnablePluginForAll($plugin);
+        $self->_success(loc(
+            "The [_1] plugin is now enabled for all accounts", $plugin
+        ));
     }
     elsif ($opts{account}) {
         my $account = $self->_load_account($opts{account});
-        $msg = $account->enable_plugin($plugin);
+        $account->enable_plugin($plugin);
+        $self->_success(loc(
+            "The [_1] plugin is now enabled for account [_2]",
+            $plugin, $opts{account},
+        ));
     }
     elsif ($opts{workspace}) {
         my $workspace = Socialtext::Workspace->new( name => $opts{workspace} );
-        $msg = $workspace->enable_plugin($plugin);
+        $workspace->enable_plugin($plugin);
+        return $self->_success(loc(
+            "The [_1] plugin is now enabled for workspace [_2]",
+            $plugin, $opts{workspace},
+        ));
     }
     else {
         $self->_error(
@@ -239,7 +249,6 @@ sub enable_plugin {
                 . "workspace to be specified.", $self->{command}),
         );
     }
-    $self->_success($msg);
 }
 
 sub disable_plugin {
@@ -248,27 +257,25 @@ sub disable_plugin {
     my %opts = $self->_get_options('account:s', 'all-accounts', 'workspace:s');
 
     if ($opts{'all-accounts'}) {
-        Socialtext::Account->disable_plugin_for_all_accounts($plugin);
-        $self->_success(loc(
-            "Plugin [_1] is now disabled for all accounts", $plugin
+        Socialtext::Account->DisablePluginForAll($plugin);
+        return $self->_success(loc(
+            "The [_1] plugin is now disabled for all accounts", $plugin
         ));
     }
     elsif ($opts{account}) {
         my $account = $self->_load_account($opts{account});
         $account->disable_plugin($plugin);
-        $self->_success(loc(
-            "Plugin [_1] is now disabled for account [_2]",
-            $plugin,
-            $opts{account}
+        return $self->_success(loc(
+            "The [_1] plugin is now disabled for account [_2]",
+            $plugin, $opts{account},
         ));
     }
     elsif ($opts{workspace}) {
         my $workspace = Socialtext::Workspace->new( name => $opts{workspace} );
         $workspace->disable_plugin($plugin);
-        $self->_success(loc(
-            "Plugin [_1] is now disabled for workspace [_2]",
-            $plugin,
-            $opts{workspace},
+        return $self->_success(loc(
+            "The [_1] plugin is now disabled for workspace [_2]",
+            $plugin, $opts{workspace},
         ));
     }
     else {

@@ -1,7 +1,7 @@
 [%# @COPYRIGHT@ -%]
 [% WRAPPER layout/html content_id = 'st-listview' box_javascript = 0 actions = 'element/listview/actionbar' subnav = 'element/wiki/subnav-listview' %]
 <div id="st-page-wiki-title">[% wiki.title %]</div>
-<form id="st-listview-form" method="get" action="index.cgi">
+<form id="st-listview-form" method="post" action="index.cgi">
 <input id="st-listview-action" name="action" value="" type="hidden">
 <input id="st-listview-filename" name="filename" value="" type="hidden">
 

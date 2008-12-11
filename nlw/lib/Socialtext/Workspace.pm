@@ -1019,7 +1019,13 @@ sub _check_plugin_scope {
 
 sub enable_plugin {
     my ($self, $plugin) = @_;
+    my @msg;
     $self->_check_plugin_scope($plugin);
+
+    my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
+    for my $dep ($plugin_class->dependencies) {
+        push @msg, $self->enable_plugin($dep);
+    }
 
     if (!$self->is_plugin_enabled($plugin)) {
         Socialtext::Pluggable::Adapter->EnablePlugin($plugin => $self);
@@ -1030,11 +1036,20 @@ sub enable_plugin {
 
         Socialtext::Cache->clear('authz_plugin');
     }
+    push @msg, loc("The [_1] plugin is now enabled for workspace [_2]",
+                   $plugin, $self->name);
+    return join "\n", @msg;
 }
 
 sub disable_plugin {
     my ($self, $plugin) = @_;
     $self->_check_plugin_scope($plugin);
+    my @msg;
+
+    my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
+    for my $dep ($plugin_class->dependencies) {
+        push @msg, $self->enable_plugin($dep);
+    }
 
     Socialtext::Pluggable::Adapter->DisablePlugin($plugin => $self);
 
@@ -1044,6 +1059,9 @@ sub disable_plugin {
     }, $self->workspace_id, $plugin);
 
     Socialtext::Cache->clear('authz_plugin');
+    push @msg, loc("The [_1] plugin is now enabled for workspace [_2]",
+                   $plugin, $self->name);
+    return join "\n", @msg;
 }
 
 sub comment_form_custom_fields {

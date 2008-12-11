@@ -69,14 +69,6 @@
             application/json:   [Socialtext::Rest::Version, GET_json]
         '*': [Socialtext::Rest::Version, bad_method]
 -
-    '/data/changes':
-        GET:
-            '*/*':     &default [Socialtext::Rest::Changes, GET_html]
-            'application/json': [Socialtext::Rest::Changes, GET_json]
-            'text/html': *default
-            'text/plain':       [Socialtext::Rest::Changes, GET_text]
-        '*': [Socialtext::Rest::Changes, bad_method]
--
     '/data/workspaces/:ws/pages/:pname/tags/:tag':
         'GET':   
             '*/*':     &default [Socialtext::Rest::PageTag, GET_html]

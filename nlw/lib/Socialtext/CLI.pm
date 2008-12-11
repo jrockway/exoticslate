@@ -229,7 +229,11 @@ sub enable_plugin {
     }
     elsif ($opts{account}) {
         my $account = $self->_load_account($opts{account});
-        $account->enable_plugin($plugin);
+        $self->_error(
+           loc("The account [_1] does not exist", $opts{account}) )
+           unless $account;
+        eval { $account->enable_plugin($plugin); };
+        $self->_error($@) if $@;
         $self->_success(loc(
             "The [_1] plugin is now enabled for account [_2]",
             $plugin, $opts{account},
@@ -237,11 +241,18 @@ sub enable_plugin {
     }
     elsif ($opts{workspace}) {
         my $workspace = Socialtext::Workspace->new( name => $opts{workspace} );
-        $workspace->enable_plugin($plugin);
-        return $self->_success(loc(
-            "The [_1] plugin is now enabled for workspace [_2]",
-            $plugin, $opts{workspace},
-        ));
+        $self->_error(
+           loc("The workspace [_1] does not exist", $opts{workspace}) )
+           unless $workspace;
+        eval { $workspace->enable_plugin($plugin); };
+        $self->_error($@) if $@;
+
+        return $self->_success(
+            loc(
+                "The [_1] plugin is now enabled for workspace [_2]",
+                $plugin, $opts{workspace},
+            )
+        );
     }
     else {
         $self->_error(
@@ -1661,7 +1672,7 @@ sub _export_workspace {
     my $msg = '';
     eval { $msg = $ws->export_to_tarball( dir => $dir, name => $name ); };
     if ( my $e = $@ ) {
-	$self->_error($e);
+       $self->_error($e);
     }
 
     return $msg;

@@ -5,6 +5,10 @@ proto.visible_types = {
     wiki: loc('Page')
 };
 
+proto.type_radio = function (type) {
+    return jQuery("#st-create-content-lightbox #"+type+"-radio")
+}
+
 proto.from_blank_radio = function () { 
     return jQuery('#create-content-from-blank input[type=radio]');
 }
@@ -72,7 +76,9 @@ proto.update_templates = function () {
             }
             else {
                 self.from_template_radio().attr('disabled', '');
-                self.from_template_select().css({'font-style': 'normal'});
+                self.from_template_select()
+                    .attr('disabled', '')
+                    .css({'font-style': 'normal'});
                 if (self.from_template_radio().is(':checked')) {
                     self.from_template_select().attr('disabled', '');
                 }
@@ -126,19 +132,25 @@ proto.show = function () {
 
     // Bind radio buttons
     this.from_blank_radio().unbind('click').click(function () {
-        self.from_template_select().attr('disabled', 'true');
-        self.from_page_text().attr('disabled', 'true');
     });
     this.from_template_radio().unbind('click').click(function () {
-        self.from_template_select().attr('disabled', '').focus();
-        self.from_page_text().attr('disabled', 'true');
+        self.from_template_select();
     });
     this.from_page_radio().unbind('click').click(function () {
-        self.from_template_select().attr('disabled', 'true');
-        self.from_page_text().attr('disabled', '').val('').focus();
+         self.from_page_text().val('');
     });
     this.choices().unbind('click').click(function () {
         self.update_templates();
+        self.create_page_lookahead();
+    });
+    this.from_template_select().unbind('click').click(function () {
+        self.from_template_radio().click();
+    });
+    this.from_template_select().unbind('click').click(function () {
+        self.from_template_radio().click();
+    });
+    this.from_page_text().unbind('focus').focus(function () {
+        self.from_page_radio().click();
     });
 
     var default_from_page_text = loc('Start typing a page name...');
@@ -151,6 +163,7 @@ proto.show = function () {
         })
 
     // Set the defaults
+    this.type_radio('wiki').click();
     this.from_blank_radio().click();
     this.update_templates();
     this.create_page_lookahead();
@@ -174,7 +187,6 @@ proto.create_new_page = function () {
     }
     catch (e) {
         this.error().show().html(e.message).show();
-        setTimeout(function () { self.error().hide(); }, 4000);
     }
 }
 

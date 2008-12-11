@@ -126,7 +126,7 @@ sub _validate_args {
 
     my $f;
     for $f (@Required_fields, @User_fields) {
-        $args->{$_} = '' unless defined $args->{$_};
+        $args->{$f} = '' unless defined $args->{$f};
     }
 
     # sanity check the parsed data, to make sure that fields we *know* are

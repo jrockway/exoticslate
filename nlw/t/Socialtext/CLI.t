@@ -2244,10 +2244,7 @@ PLUGINS: {
                 ]
             )->disable_plugin();
         },
-        [ qr/The test plugin is now disabled for account pluggy\./,
-          qr/The test plugin is now disabled for account Socialtext\./,
-          qr/The test plugin is now disabled for account Unknown\./,
-        ],
+        qr/The test plugin is now disabled for all accounts/,
         'disable plugin for all account',
     );
     expect_success(
@@ -2258,10 +2255,7 @@ PLUGINS: {
                 ]
             )->enable_plugin();
         },
-        [ qr/The test plugin is now enabled for account pluggy\./,
-          qr/The test plugin is now enabled for account Socialtext\./,
-          qr/The test plugin is now enabled for account Unknown\./,
-        ],
+        qr/The test plugin is now enabled for all accounts/,
         'enable plugin for all account',
     );
     expect_failure(

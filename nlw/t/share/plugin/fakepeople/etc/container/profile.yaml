@@ -1,0 +1,11 @@
+---
+name: profile
+global: 1
+templates:
+  links: profile_links
+  hello: profile_user
+path_args:
+  - owner_person
+widgets:
+  - location: file:t/share/plugin/fakeplugin/widget_two.xml
+    col: 1

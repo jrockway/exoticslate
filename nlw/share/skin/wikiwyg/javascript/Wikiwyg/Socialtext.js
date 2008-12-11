@@ -1350,6 +1350,9 @@ proto._do_link = function(widget_element) {
     // area to close lightbox, widget_editing will still be set to false.
     jQuery('#lightbox').unload(function(){
         Wikiwyg.Widgets.widget_editing = 0;
+        if (wikiwyg.current_mode.set_focus) {
+            wikiwyg.current_mode.set_focus();
+        }
     });
 
     this.load_add_a_link_focus_handlers("add-wiki-link");

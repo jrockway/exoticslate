@@ -1276,13 +1276,16 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
         }
     });
 
+    var self = this;
+    var form = jQuery('#widget-' + widget + ' form').get(0);
+
     // When the lightbox is closed, decrement widget_editing so lightbox can pop up again. 
     jQuery('#lightbox').unload(function(){
         Wikiwyg.Widgets.widget_editing--;
+        if (self.wikiwyg.current_mode.set_focus) {
+            self.wikiwyg.current_mode.set_focus();
+        }
     });
-
-    var self = this;
-    var form = jQuery('#widget-' + widget + ' form').get(0);
 
     var intervalId = setInterval(function () {
         jQuery('#'+widget+'_wafl_text')
@@ -1340,9 +1343,6 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
         .click(function () {
             clearInterval(intervalId);
             jQuery.hideLightbox();
-            if (wikiwyg.current_mode.set_focus) {
-                wikiwyg.current_mode.set_focus();
-            }
         });
 
     this.hookLookaheads();

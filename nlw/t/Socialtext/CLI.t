@@ -2222,7 +2222,7 @@ PLUGINS: {
                 ]
             )->enable_plugin();
         },
-        qr/Plugin test is now enabled for account pluggy/,
+        qr/The test plugin is now enabled for account pluggy/,
         'enable plugin for account',
     );
     expect_success(
@@ -2233,7 +2233,7 @@ PLUGINS: {
                 ]
             )->disable_plugin();
         },
-        qr/Plugin test is now disabled for account pluggy/,
+        qr/The test plugin is now disabled for account pluggy/,
         'disable plugin for account',
     );
     expect_success(
@@ -2244,9 +2244,9 @@ PLUGINS: {
                 ]
             )->disable_plugin();
         },
-        [ qr/Plugin test is now disabled for account pluggy\./,
-          qr/Plugin test is now disabled for account Socialtext\./,
-          qr/Plugin test is now disabled for account Unknown\./,
+        [ qr/The test plugin is now disabled for account pluggy\./,
+          qr/The test plugin is now disabled for account Socialtext\./,
+          qr/The test plugin is now disabled for account Unknown\./,
         ],
         'disable plugin for all account',
     );
@@ -2258,9 +2258,9 @@ PLUGINS: {
                 ]
             )->enable_plugin();
         },
-        [ qr/Plugin test is now enabled for account pluggy\./,
-          qr/Plugin test is now enabled for account Socialtext\./,
-          qr/Plugin test is now enabled for account Unknown\./,
+        [ qr/The test plugin is now enabled for account pluggy\./,
+          qr/The test plugin is now enabled for account Socialtext\./,
+          qr/The test plugin is now enabled for account Unknown\./,
         ],
         'enable plugin for all account',
     );
@@ -2304,7 +2304,7 @@ PLUGINS: {
                 ]
             )->enable_plugin();
         },
-        qr/Plugin socialcalc is now enabled for workspace pluggy/,
+        qr/The socialcalc plugin is now enabled for workspace pluggy/,
         'enable valid plugin for workspace pluggy',
     );
 
@@ -2330,7 +2330,7 @@ PLUGINS: {
                 ]
             )->disable_plugin();
         },
-        qr/Plugin socialcalc is now disabled for workspace pluggy./,
+        qr/The socialcalc plugin is now disabled for workspace pluggy/,
         'disable valid plugin',
     );
 

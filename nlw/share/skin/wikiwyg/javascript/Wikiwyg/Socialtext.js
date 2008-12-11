@@ -1003,6 +1003,9 @@ proto.disableLinkConfirmations = function() {
         if (links[i].onclick == this.confirmLinkFromEdit)
             links[i].onclick = null;
     }
+
+    // Disable the Home confirmLinkFromEdit trigger explicitly. -- {bz: 1735}
+    jQuery('#st-home-link').unbind('click');
 }
 
 proto.contentIsModified = function() {

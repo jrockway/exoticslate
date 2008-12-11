@@ -78,6 +78,9 @@ sub process_workspace {
     my $wksp = shift;
     return unless length $wksp->name;
 
+    my $cache_root = Socialtext::AppConfig->formatter_cache_dir;
+    my $cache_dir  = "$cache_root/".$wksp->workspace_id;
+
     print "Storing preview text for workspace " . $wksp->name . ": ";
     my $hub = Socialtext::Hub->new(current_workspace => $wksp);
     my $workspace_dir = Socialtext::Paths::page_data_directory($wksp->name);
@@ -115,6 +118,12 @@ sub process_workspace {
 
                     my $date = $page->metadata->Date;
                     $page->set_mtime(str2time($date), $filename);
+
+                    my $formatter_cache_file = "$cache_dir/".$page->id;
+                    if (-e $formatter_cache_file) {
+                        unlink $formatter_cache_file
+                            or warn "Error removing cache file $formatter_cache_file: $!";
+                    }
                 }
 
 		$page->_store_preview_text;

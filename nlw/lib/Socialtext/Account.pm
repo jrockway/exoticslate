@@ -87,6 +87,10 @@ sub EnablePluginForAll {
     while (my $account = $all->next) {
         $account->enable_plugin($plugin);
     }
+    require Socialtext::SystemSettings;
+    Socialtext::SystemSettings::set_system_setting(
+        "$plugin-enabled-all", 1,
+    );
 }
 
 sub DisablePluginForAll {
@@ -95,6 +99,10 @@ sub DisablePluginForAll {
     while (my $account = $all->next) {
         $account->disable_plugin($plugin);
     }
+    require Socialtext::SystemSettings;
+    Socialtext::SystemSettings::set_system_setting(
+        "$plugin-enabled-all", 0,
+    );
 }
 
 sub skin_name {
@@ -397,7 +405,16 @@ sub create {
     exists $p{is_system_created} ? $class->_create_full(%p)
                                  : $class->_create_from_name(%p);
 
-    return $class->new(%p);
+    my $self = $class->new(%p);
+    require Socialtext::SystemSettings;
+    for (Socialtext::Pluggable::Adapter->plugins) {
+        my $plugin = $_->name;
+        $self->enable_plugin($plugin)
+            if Socialtext::SystemSettings::get_system_setting(
+                "$plugin-enabled-all"
+            );
+    }
+    return $self;
 }
 
 sub _create_full {

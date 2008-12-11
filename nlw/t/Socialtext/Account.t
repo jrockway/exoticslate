@@ -3,9 +3,13 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 79;
+use Test::Socialtext tests => 85;
 use Test::Exception;
 use YAML qw/LoadFile/;
+
+BEGIN { push @INC, 't/share/plugin/fakeplugin/lib' }
+
+use Socialtext::Pluggable::Plugin::FakePlugin;
 
 BEGIN {
     use_ok( 'Socialtext::Account' );
@@ -195,6 +199,25 @@ Wierd_corner_case: {
     $ws->add_user( user => $user );
     is($user->primary_account->name, $test->name);
 }
+
+Plugins_enabled_for_all: {
+    Socialtext::Account->DisablePluginForAll('fakeplugin');
+
+    my $account1 = Socialtext::Account->create(name => "new_account_$^T");
+    ok !$account1->is_plugin_enabled('fakeplugin'),
+       'fakeplugin is not enabled by default';
+
+    Socialtext::Account->EnablePluginForAll('fakeplugin');
+    ok Socialtext::SystemSettings::get_system_setting('fakeplugin-enabled-all'),
+       'System entry created for enabled plugin';
+    ok $account1->is_plugin_enabled('fakeplugin'),
+        'fakeplugin is now after EnablePluginForAll';
+
+    my $account2 = Socialtext::Account->create(name => "newer_account_$^T");
+    ok $account2->is_plugin_enabled('fakeplugin'),
+       'fakeplugin is enabled for new accounts after EnablePluginForAll';
+}
+
 exit;
 
 sub users_are {

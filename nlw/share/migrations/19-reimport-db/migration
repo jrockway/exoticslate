@@ -61,7 +61,7 @@ for table in $TABLES; do
 done
 
 # Import the data into the new database
-su - postgres -c "psql $NEWDB -f /tmp/$OLDDB-dump.sql"
+su - postgres -c "psql $NEWDB -f /tmp/$OLDDB-dump.sql" >/tmp/migration-19-reimport.log 2>&1
 
 # Build a summary of the data in the new database. We will compare this
 # to the old database and make sure no key data is gone.
@@ -72,11 +72,14 @@ DIFF=`diff /tmp/$OLDDB-before-$$ /tmp/$OLDDB-after-$$`
 # Force this to fail for now.
 if [ -n "$DIFF" ]; then
   echo "Databases Differ!"
+  cat /tmp/migration-19-reimport.log
 
   # We will exit 0 here because we haven't changed anything, so let's let
   # the post-check fail.
   exit 0
 fi 
+
+rm -f /tmp/migration-19-reimport.log
 
 # Delete the old database and rename the new one
 su - postgres -c "psql -c \"DROP DATABASE \\\"$OLDDB\\\"\""

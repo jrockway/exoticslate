@@ -139,7 +139,7 @@ sub create_users {
 
 sub print_nlw_log {
     #Add all users to workspaces
-    my @dates = ('Dec 30','Dec 11','Jan 10','Jan 11','Jan 12', 'Jan 13', 'Feb 1');
+    my @dates = ('Dec 30 2007','Dec 11 2007','Jan 10 2008','Jan 11 2008','Jan 12 2008', 'Jan 13 2008', 'Feb 1 2008');
     my $date_count = 0;
     my ($raWorkspaces, $rausers, $nlw) = @_;
     my $page = 'a';
@@ -186,20 +186,20 @@ sub create_and_delete_thirty_pages {
         my $month = 'Mar';
         my $page = 'blue' . $idx;
         $add_delete .= create_page_nlw_entry($rausers->[0], $raWorkspaces->[-0], $month.' 1',$page);   
-        $add_delete .= $month .  ' 2 13:03:08 qa2 nlw[21556]: [33] ACTION,EDIT_CONTENT,page_name:'.$page.',WORKSPACE:'.
+        $add_delete .= $month .  ' 2 2008 13:03:08 qa2 nlw[21556]: [33] ACTION,EDIT_CONTENT,page_name:'.$page.',WORKSPACE:'.
                                  $raWorkspaces->[0]->workspace_id . ',USER:'.$rausers->[0]->user_id . ',PAGE:'  
                                  . $raWorkspaces->[0]->name . ',[drop_workspace_breadcrumb:0.003885,overall:0.021291]' . "\n";
 
-        $add_delete .= $month . ' 2 13:03:23 qa2 nlw[21558]: [33] ACTION,DISPLAY,page_name:'.$page.',WORKSPACE:' .
+        $add_delete .= $month . ' 2 2008 13:03:23 qa2 nlw[21558]: [33] ACTION,DISPLAY,page_name:'.$page.',WORKSPACE:' .
                                   $raWorkspaces->[0]->workspace_id . ',USER:'.$rausers->[0]->user_id .
                                   ',PAGE:blue,[drop_workspace_breadcrumb:0.002642,overall:0.243288]' . "\n";
  
-        $add_delete .= $month . ' 2 13:07:05 qa2 nlw[21563]: [33] DELETE,PAGE,workspace:' . $raWorkspaces->[0]->name . '(' .
+        $add_delete .= $month . ' 2 2008 13:07:05 qa2 nlw[21563]: [33] DELETE,PAGE,workspace:' . $raWorkspaces->[0]->name . '(' .
                                    $raWorkspaces->[0]->workspace_id . ')' .
                                  ',page:blue,user:'. $rausers->[0]->email_address . 
                                  '(' . $rausers->[0]->user_id . '),[NA]' . "\n";
   
-         $add_delete .= $month . ' 2 13:07:05 qa2 nlw[21563]: [33] ACTION,DELETE_PAGE,page_name:'.$page.',WORKSPACE:'
+         $add_delete .= $month . ' 2 2008 13:07:05 qa2 nlw[21563]: [33] ACTION,DELETE_PAGE,page_name:'.$page.',WORKSPACE:'
                                   . $raWorkspaces->[0]->workspace_id . ',USER:'.$rausers->[0]->user_id . 
                                   'PAGE:blue,[drop_workspace_breadcrumb:0.005555,overall:0.143584]' . "\n";
     }
@@ -328,8 +328,7 @@ sub Process_Access_Log {
 
 sub create_workspace_nlw_entry {
     my ($ws) = @_;
-    my $str = "Dec 01 13:20:15 talc nlw[30088]: [2013] CREATE,WORKSPACE,workspace:" . $ws->name . '(' . $ws->workspace_id . '),[0.449366]' . "\n";
-    print "Here is the create\n";
+    my $str = "Dec 01 2007 13:20:15 talc nlw[30088]: [2013] CREATE,WORKSPACE,workspace:" . $ws->name . '(' . $ws->workspace_id . '),[0.449366]' . "\n";
     return $str;
 
 }
@@ -339,7 +338,9 @@ sub create_page_nlw_entry {
     my ($user, $ws, $date, $page) = @_;
    my $user_id = $user->user_id;
 
-    my $str = "$date 13:57:00 qa2 nlw[7636]: [33] CREATE,PAGE,workspace:" . $ws->name . '(' . $ws->workspace_id . ')' . ',page:'.$page .',user:' . $user->email_address . '(' . $user_id . '),[0.035587]' . "\n"; 
+    my $str = "$date 13:57:00 qa2 nlw[7636]: [33] CREATE,PAGE,workspace:";
+    $str.=$ws->name . '(' . $ws->workspace_id . ')';
+    $str.=',page:'.$page .',user:' . $user->email_address . '(' . $user_id . '),[0.035587]' . "\n"; 
     $str.="$date 13:57:00 qa2 nlw[7635]: [33] DISPLAY_PAGE,workspace:" . $ws->name . '(' . $ws->workspace_id . ')' . ',page:'.$page .',user:' . $user->email_address . '(' . $user_id .  '),[0.035587]' . "\n";
     return $str;
 }
@@ -349,9 +350,9 @@ sub create_user_nlw_entry {
    my ($user, $ws) = @_;
    my $email = $user->email_address;
    my $user_id = $user->user_id;
-   my @monthArr = ('Dec','Dec','Jan','Jan','Feb','Feb');
+   my @monthArr = ('Dec 01 2007','Dec 01 2007','Jan 01 2008','Jan 01 2008','Feb 01 2008','Feb 01 2008');
    my $month = $monthArr[$iMonth];
-   my $str = $month . " 01 12:00:00 talc nlw[30088]: [2013] ASSIGN,USER_ROLE,role:member,user:$email" .
+   my $str = $month . " 12:00:00 talc nlw[30088]: [2013] ASSIGN,USER_ROLE,role:member,user:$email" .
              '(' . $user_id . ')' . ",workspace:" . $ws->name .'('.$ws->workspace_id.'),[0.001709]'."\n";
    
    $iMonth++;

@@ -1856,9 +1856,6 @@ proto.do_table = function() {
         cur.remove();
 
         self.table_html = $cell.parents("table").html();
-        self.col = $cell.prevAll("td").length;
-        self.row = $cell.parents('tr').prevAll("tr").length;
-
 //         console.log($cell.prev().text());
 //         return;
 
@@ -1877,6 +1874,7 @@ proto.do_table = function() {
                         }
                     }
                     jQuery(".current-cell", doc).removeClass("current-cell");
+                    self.set_focus();
                 });
             }
         });
@@ -1933,6 +1931,19 @@ proto._scroll_to_center = function($cell) {
     }
 }
 
+proto._find_column_index = function($cell) {
+    $cell.addClass('find-cell');
+    var tds = $cell.parents('tr:first').find('td');
+    for (var i = 0; i < tds.length; i++) {
+        if ($(tds[i]).hasClass('find-cell')) {
+            $cell.removeClass('find-cell');
+            return i+1;
+        }
+    }
+    $cell.removeClass('find-cell');
+    return 0;
+}
+
 proto._do_table_lightbox = function($cell) {
     var $opt = jQuery(".table-options");
 
@@ -1943,7 +1954,8 @@ proto._do_table_lightbox = function($cell) {
     this._scroll_to_center($cell);
 
     var $table = $cell.parents("table");
-    var col = $cell.prevAll("td").length + 1;
+    var col = this._find_column_index($cell);
+
     var row = $cell.parents('tr').prevAll("tr").length + 1;
     var row_head_val = $cell.parents('tr').find('td:eq(0)').text();
     var col_head_val = $cell.parents('table').find('tr:first')
@@ -2000,7 +2012,7 @@ proto._do_table_lightbox = function($cell) {
                 $cell.parents("table").remove();
                 self.closeTableDialog();
             }
-            col = $new_cell.prevAll("td").length + 1;
+            col = self._find_column_index($new_cell);
         }
 
         self.get_edit_window().focus();
@@ -2041,7 +2053,7 @@ proto._do_table_lightbox = function($cell) {
                     jQuery(this).after($td);
                 });
             }
-            col = $cell.prevAll("td").length + 1;
+            col = self._find_column_index($cell);
         }
 
         self.get_edit_window().focus();
@@ -2076,7 +2088,7 @@ proto._do_table_lightbox = function($cell) {
                     $c.next().insertBefore( $c );
                 });
             }
-            col = $cell.prevAll("td").length + 1;
+            col = self._find_column_index($cell);
         }
 
         self.get_edit_window().focus();

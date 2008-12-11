@@ -548,7 +548,7 @@ proto.resizeEditor = function () {
 
     if ($iframe.is(":visible")) {
         jQuery("#st-editing-prefix-container").width($iframe.width()+2);
-        $iframe.width( jQuery('#st-page-editing').width() - 24 );
+        $iframe.width( jQuery('#st-edit-mode-view').width() - 48 );
     }
     else if ($textarea.is(":visible")) {
         jQuery("#st-editing-prefix-container").width($textarea.width());
@@ -1870,7 +1870,7 @@ proto.do_table = function() {
 
                 jQuery("#lightbox").css('opacity', 0.75).one("unload", function() {
                     jQuery('#lightbox').css('opacity', '');
-                    if (jQuery.browser.version <= 6) {
+                    if (Wikiwyg.is_ie && jQuery.browser.version <= 6) {
                         var $editor = jQuery( self.get_editable_div() );
                         if ($editor.css('overflow') != 'visible') {
                             $editor.css('overflow', 'visible');
@@ -2219,7 +2219,7 @@ proto.get_editable_div = function () {
             setTimeout(function() {
                 try {
                     if (doc.body) {
-                        jQuery("iframe#st-page-editing-wysiwyg").width( jQuery('#st-page-editing').width() - 24 );
+                        jQuery("iframe#st-page-editing-wysiwyg").width( jQuery('#st-edit-mode-view').width() - 48 );
                         doc.body.appendChild(self._editable_div);
                         tryFocusDiv(100);
                     }

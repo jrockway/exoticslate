@@ -31,6 +31,8 @@ field hub => -weak;
 field 'rest';
 field 'declined';
 
+sub dependencies { }
+
 sub scope { 'account' }
 
 # perldoc Socialtext::URI for arguments

@@ -270,4 +270,12 @@ sub _fail {
     $self->{fail_cb}->($msg);
 }
 
+sub ProfileFieldsForAccount {
+    my $class = shift;
+    my $account = shift;
+    return unless $Has_People_Installed;
+    local $Socialtext::People::Fields::AutomaticStockFields = 1;
+    return Socialtext::People::Fields->new(account_id => $account->account_id);
+}
+
 1;

@@ -247,7 +247,7 @@ sub tr_start {
     # how wide the cells will be so we just divide the page by the
     # number of cells to come up with the TWIPS per page.
     @cells = $node->find_by_tag_name('td');
-    my $width = int((6.5 * 1440) / scalar(@cells));
+    my $width = int((6.5 * 1440) / (scalar(@cells) || 1));
     my $tr_decl
         = RTF::Writer::TableRowDecl->new( widths => [ map {$width} @cells ] );
 

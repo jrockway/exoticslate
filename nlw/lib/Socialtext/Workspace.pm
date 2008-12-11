@@ -262,7 +262,7 @@ sub _copy_default_pages {
     my ( $main, $hub ) = $self->_main_and_hub();
 
     # Load up the help workspace, and a corresponding hub.
-    my $help     = Socialtext::Workspace->help_workspace()->name || return;
+    my $help     = (Socialtext::Workspace->help_workspace() || return)->name || return;
     my $help_hub = $self->_hub_for_workspace( $help );
 
     # Get all the default pages from the help workspace

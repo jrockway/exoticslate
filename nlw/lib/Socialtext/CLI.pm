@@ -2340,7 +2340,7 @@ sub _require_hub {
 
     my $user = shift || Socialtext::User->SystemUser();
     my $ws = $self->_require_workspace();
-    return $self->_make_hub($user, $ws);
+    return $self->_make_hub($ws, $uer);
 }
 
 sub _make_hub {

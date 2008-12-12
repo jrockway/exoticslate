@@ -1,0 +1,17 @@
+* Fixture: SocialRest
+
+| set | page | my_page_%%start_time%%                            |
+| set | url  | /data/workspaces/admin/pages/%%page%%/attachments |
+| set | hdrs | Content-Type=text/plain |
+
+| edit-page | admin                      | %%page%%         | Hello there |
+| post      | %%url%%?name=test.txt      | %%hdrs%%         | Hi You      |
+| body-like |                            |                  |             |
+| get       | %%url%%                    | application/json |             |
+| body-like | content-type":"text/plain" |                  |             |
+| body-like | "name":"test.txt"          |                  |             |
+
+| set-from-content | file_url     | qr/"uri":"([^"]+)"/ |
+| get              | %%file_url%% |                     |
+| body-like        | Hi You       |                     |
+| has-header       | Content-type | text/plain          |

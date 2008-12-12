@@ -54,7 +54,6 @@ sub GET {
             '-cache-control'      => undef,
             'Content-Disposition' => 'filename="'
                 . $attachment->filename . '"',
-            'Content-Type' => 'application/octet-stream',
             '-X-Sendfile'  => $file,
         );
     };

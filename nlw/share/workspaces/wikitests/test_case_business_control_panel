@@ -26,13 +26,18 @@
 | type_ok | st-new-account-name | %%new_acct%% |
 | click_and_wait | st-submit-new-account-name |  |
 | text_like | The %%new_acct%% account has been created. |  |
+| st-admin | disable-plugin --p dashboard --acc "%%new_acct%%" | The dashboard plugin is now disabled for account %%new_acct%% |
+| st-admin | disable-plugin --p people --acc "%%new_acct%%" | The people plugin is now disabled for account %%new_acct%% |
+| st-admin | disable-plugin --p signals --acc "%%new_acct%%" | The signals plugin is now disabled for account %%new_acct%% |
 
-| *Comment* | Test case: Business Control Panel validate plugins are all disabled by default. checking only SC/People/Signals as other might go away |  |
-| *Comment* | Test case: Business Control Panel create new account |  |
+| *Comment* | Test case: Business Control Panel validate plugins are disabled. |  |
+| *Comment* | Test case: Business Control Panel show new account |  |
 | click_and_wait | link=%%new_acct%% |  |
 | text_like | Custom Skins: Socialtext 3 default skin |  |
 | text_like | Socialtext People (click to enable) |  |
 | text_like | Socialtext Signals (click to enable) |  |
+
+| *Comment* | TODO: add check for Dashboard once {bz: 1782} is fixed |  |
 
 | *Comment* | Test case: Business Control Panel plugin one at a time, click the confirmation, validate that plugin is enabled. |  |
 | click_ok | toggle_plugin_people |  |
@@ -91,7 +96,7 @@
 | click_and_wait | link=%%new_workspace%% |  |
 | text_like | Account: Socialtext |  |
 
-| *Comment* | Test case: Business Control Panel Search for a non-existant workspace |  |
+| *Comment* | Test case: Business Control Panel Search for a non-existent workspace |  |
 | click_and_wait | link=Workspaces |  |
 | wait_for_element_visible_ok | name | 30000 |
 | type_ok | name | zildjian |

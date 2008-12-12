@@ -184,7 +184,10 @@ sub register {
                 my $action = $parts[0];
                 my $sub = "${class}::$action";
 
-                *{$sub} = sub { return $_[0]->hook($hook->{name}) };
+                {
+                    no warnings 'redefine';
+                    *{$sub} = sub { return $_[0]->hook($hook->{name}) };
+                }
                 $registry->add(action => $action);
             }
 

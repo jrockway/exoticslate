@@ -1,4 +1,0 @@
-#!/bin/sh
-# @COPYRIGHT@
-
-st-admin enable-plugin --all-accounts --plugin signals

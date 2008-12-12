@@ -20,7 +20,7 @@ our @Profile_fields
     = qw/position company location work_phone mobile_phone home_phone/;
 
 our @All_fields = (@Required_fields, @User_fields, @Profile_fields);
-our %Non_profile_fields = map {$_ => 1} (@Required_fields, @User_fields);
+our %Non_profile_fields = map {$_ => 1} (@Required_fields, @User_fields, 'account_id');
 
 BEGIN {
     eval "require Socialtext::People::Profile";
@@ -194,6 +194,9 @@ sub _update_user_store {
     my %update_slice = map { $_ => $args{$_} } @User_fields;
 
     if ($user->password_is_correct($args{password})) {
+        delete $update_slice{password};
+    }
+    elsif (length $args{password} == 0 and not $user->has_valid_password) {
         delete $update_slice{password};
     }
 

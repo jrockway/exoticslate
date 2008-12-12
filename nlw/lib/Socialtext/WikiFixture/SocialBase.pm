@@ -8,6 +8,7 @@ use Test::More;
 use Test::HTTP;
 use Socialtext::SQL qw/sql_execute/;
 use Socialtext::JSON qw/decode_json/;
+use Socialtext::File;
 
 =head1 NAME
 
@@ -458,6 +459,83 @@ sub edit_page {
     my $code = $self->{http}->response->code;
     ok( (($code == 201) or ($code == 204)), "Code is $code");
     diag "Edited page [$page_name]/$workspace";
+}
+
+=head2 st_deliver_email( )
+
+Imitates sending an email to a workspace
+
+=cut
+
+sub deliver_email {
+    my ($self, $workspace, $email_name) = @_;
+
+    my $in = Socialtext::File::get_contents("t/test-data/email/$email_name");
+    $in =~ s{^Subject: (.*)}{Subject: $1 $^T}m;
+
+    my ($out, $err);
+    my @command = ('bin/st-admin', 'deliver-email', '--workspace', $workspace);
+
+    IPC::Run::run \@command, \$in, \$out, \$err;
+    $self->{_deliver_email_result} = $? >> 8;
+    $self->{_deliver_email_err} = $err;
+    diag "Delivered $email_name email to the $workspace workspace";
+}
+
+sub deliver_email_result_is {
+    my ($self, $result) = @_;
+    is $self->{_deliver_email_result}, $result, 
+        "Delivering email returns $result";
+}
+
+sub deliver_email_error_like {
+    my ($self, $regex) = @_;
+    $regex = $self->quote_as_regex($regex);
+    like $self->{_deliver_email_err}, $regex, 
+        "Delivering email stderr matches $regex";
+}
+
+sub set_from_subject {
+    my $self = shift;
+    my $name = shift || die "email-name is mandatory for set-from-email";
+    my $email_name = shift || die "name is mandatory for set-from-email";
+    my $in = Socialtext::File::get_contents("t/test-data/email/$email_name");
+    if ($in =~ m{^Subject: (.*)}m) {
+        ($self->{$name} = "$1 $^T") =~ s{^Re: }{};
+    }
+    else {
+        die "Can't find subject in $email_name";
+    }
+}
+
+sub remove_workspace_permission {
+    my ($self, $workspace, $role, $permission) = @_;
+
+    require Socialtext::Role;
+    require Socialtext::Permission;
+
+    my $ws = Socialtext::Workspace->new(name => $workspace);
+    my $perms = $ws->permissions;
+    $perms->remove(
+        role => Socialtext::Role->$role,
+        permission => Socialtext::Permission->new( name => $permission ),
+    );
+    diag "Removed $permission permission for $workspace workspace $role role";
+}
+
+sub add_workspace_permission {
+    my ($self, $workspace, $role, $permission) = @_;
+
+    require Socialtext::Role;
+    require Socialtext::Permission;
+
+    my $ws = Socialtext::Workspace->new(name => $workspace);
+    my $perms = $ws->permissions;
+    $perms->add(
+        role => Socialtext::Role->$role,
+        permission => Socialtext::Permission->new( name => $permission ),
+    );
+    diag "Added $permission permission for $workspace workspace $role role";
 }
 
 1;

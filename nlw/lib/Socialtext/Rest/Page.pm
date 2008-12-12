@@ -113,6 +113,7 @@ sub GET_json {
         'GET',
         sub {
             my $verbose = $rest->query->param('verbose');
+            my $metadata = $rest->query->param('metadata');
 
             my $link_dictionary = $self->_link_dictionary($rest);
             my $page = $self->page;
@@ -148,6 +149,8 @@ sub GET_json {
                     $page_hash->{workspace} =
                         $self->hub->current_workspace->to_hash;
                 }
+
+                $page_hash->{metadata} = $page->metadata->to_hash if $metadata;
 
                 $self->_record_view($page);
                 return encode_json($page_hash);

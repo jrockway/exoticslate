@@ -391,7 +391,10 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/Socialtext/Template/Plugin/label_ellipsis.t \
 	t/Socialtext/ArchiveExtractor.t \
 	t/schema-migrations.t \
+	t/Socialtext/People/Directories.t \
+	t/Socialtext/People/Fields.t \
 	t/Socialtext/People/Profile.t \
+	t/Socialtext/People/Profile-lazy-field-init.t \
 	t/Socialtext/Template/Plugin/html_encode.t \
 	t/Socialtext/Validate.t \
 	t/Socialtext/Exceptions.t \

@@ -971,8 +971,11 @@ sub create_workspace {
     my $ws = eval {
         my @extra_args;
         push @extra_args, delete($ws{empty}) ? (skip_default_pages => 1) : ();
+
         push @extra_args,
-            delete($ws{'clone-pages-from'}) ? (clone_pages_from => 1) : ();
+            (clone_pages_from => delete($ws{'clone-pages-from'}))
+            if $ws{'clone-pages-from'};
+
         Socialtext::Workspace->create( %ws, @extra_args );
     };
 

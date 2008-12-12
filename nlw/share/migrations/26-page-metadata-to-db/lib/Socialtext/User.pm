@@ -37,7 +37,7 @@ my @user_store_interface =
 my @user_metadata_interface =
     qw( creation_datetime last_login_datetime email_address_at_import
         created_by_user_id is_business_admin is_technical_admin
-        is_system_created primary_account_id );
+        is_system_created);
 my @minimal_interface
     = ( 'user_id', @user_store_interface, @user_metadata_interface );
 
@@ -352,14 +352,6 @@ sub creator {
     $_[0]->metadata->creator( @_[ 1 .. $#_ ] );
 }
 
-sub primary_account {
-    $_[0]->metadata->primary_account( @_[ 1 .. $#_ ] );
-}
-
-sub primary_account_id {
-    $_[0]->metadata->primary_account->account_id;
-}
-
 sub accounts {
     my $self = shift;
     my %p = @_;
@@ -436,11 +428,6 @@ sub to_hash {
         $hash->{$attr} = "$value";
     }
     $hash->{creator_username} = $self->creator->username;
-
-    # There is a _tiny_ possiblilty that there will not be a primary account.
-    $hash->{primary_account_name} = ( $self->primary_account_id ) 
-        ? $self->primary_account->name
-        : undef;
 
     return $hash;
 }
@@ -988,72 +975,6 @@ EOSQL
             $SQL{ $p{order_by} },
             [qw( limit offset )], %p
         );
-    }
-}
-
-{
-    Readonly my $spec => {
-        %LimitAndSortSpec,
-        order_by => SCALAR_TYPE(
-            regex   => qr/^(?:username|creation_datetime|creator)$/,
-            default => 'username',
-        ),
-        account_id => SCALAR_TYPE,
-        primary_only => BOOLEAN_TYPE( default => 0 ),
-    };
-    sub ByAccountId {
-        # Returns an iterator of Socialtext::User objects
-        my $class = shift;
-        my %p = validate( @_, $spec );
-
-        # We're supposed to default to DESCending if we're creation_datetime.
-        $p{sort_order} ||= $p{order_by} eq 'creation_datetime' ? 'DESC' : 'ASC';
-
-        my @bind = qw( account_id limit offset );
-        my $account_where = 'primary_account_id = ?';
-        unless ($p{primary_only}) {
-            $account_where .= ' OR secondary_account_id = ?';
-            unshift @bind, 'account_id';
-        }
-        (my $creator_account_where = $account_where) =~ s/(\w+?ary_)/ ua.$1/g;
-        Readonly my %SQL => (
-            creation_datetime => <<EOSQL,
-SELECT DISTINCT system_unique_id,
-                driver_key,
-                driver_unique_id,
-                driver_username,
-                creation_datetime
-    FROM user_account
-    WHERE $account_where
-    ORDER BY creation_datetime $p{sort_order}, driver_username ASC
-    LIMIT ? OFFSET ?
-EOSQL
-            creator => <<EOSQL,
-SELECT DISTINCT ua.system_unique_id AS system_unique_id,
-                ua.driver_key AS driver_key,
-                ua.driver_unique_id AS driver_unique_id,
-                ua.driver_username AS driver_username,
-                u2.driver_username AS creator
-    FROM user_account ua
-         LEFT JOIN "UserMetadata" um2 ON (ua.creator_id = um2.user_id)
-         LEFT JOIN "UserId" u2 ON (um2.user_id = u2.system_unique_id)
-    WHERE $creator_account_where
-    ORDER BY u2.driver_username $p{sort_order}, ua.driver_username ASC
-    LIMIT ? OFFSET ?
-EOSQL
-            username => <<EOSQL,
-SELECT DISTINCT system_unique_id,
-                driver_key,
-                driver_unique_id,
-                driver_username
-    FROM user_account
-    WHERE $account_where
-    ORDER BY driver_username $p{sort_order}
-    LIMIT ? OFFSET ?
-EOSQL
-        );
-
-        return $class->_UserCursor( $SQL{ $p{order_by} }, \@bind, %p );
     }
 }
 
@@ -1878,15 +1799,6 @@ system, but cannot be looked up for some reason.
 
 Returns the default role for the user absent an explicit role
 assignment. This will be either "guest" or "authenticated_user".
-
-=head2 $user->primary_account( $account )
-
-Sets the primary account this user is assigned to if $account is 
-supplied, otherwise it returns the primary account for this user.
-
-=head2 $user->primary_account_id()
-
-Returns the primary account ID for this user.
 
 =head2 $user->can_use_plugin( $name )
 

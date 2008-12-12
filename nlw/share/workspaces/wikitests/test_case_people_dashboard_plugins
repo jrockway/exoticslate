@@ -27,14 +27,14 @@ This test is designed to test global navigation changes as people/dashboard is e
 
 | *Comment* | Test Case: People Dashboard Plugins |  |
 | *Comment* | Disable people. Refresh. People links to socialtext.com |  |
-| st-admin | disable-plugin --plugin people --all-accounts | Plugin people is now disabled |
+| st-admin | disable-plugin --plugin people --all-accounts | The people plugin is now disabled for all accounts |
 | open_ok | / |  |
 | click_and_wait | link=People |  |
-| location_like | `http://socialtext.com/products/features/Enable-People.php` |  |
+| location_like | `http://www.socialtext.com/products/socialnetworking.php` |  |
 
 | *Comment* | Test Case: People Dashboard Plugins |  |
 | *Comment* | Disable dashboard. Home is workspace list. |  |
-| st-admin | disable-plugin --plugin dashboard --all-accounts | Plugin dashboard is now disabled |
+| st-admin | disable-plugin --plugin dashboard --all-accounts | The dashboard plugin is now disabled for all accounts |
 | open_ok | / |  |
 | text_like | contentRight | Workspaces you belong to |
 | text_like | contentRight | You have free access |
@@ -62,7 +62,7 @@ This test is designed to test global navigation changes as people/dashboard is e
 | wait_for_element_visible_ok | //a[@title='Add Content'] | 10000 |
 | text_like | st-editing-tools-edit | Welcome |
 | click_and_wait | link=People |  |
-| location_like | `http://socialtext.com/products/features/Enable-People.php` |  |
+| location_like | `http://www.socialtext.com/products/socialnetworking.php` |  |
 
 | *Comment* | Test Case: People Dashboard Plugins teardown |  |
 | st-admin | enable-plugin --plugin people --all-accounts | Plugin people is now enabled |

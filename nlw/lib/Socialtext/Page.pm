@@ -1697,15 +1697,20 @@ sub read_and_decode_file {
     die "File path contains '..', which is not allowed."
         if $filename =~ /\.\./;
 
-    my $buffer;
-    open(my $fh, '<:raw', $filename)
+    # Note: avoid using '<:raw' here, it sucks for performance
+    open(my $fh, '<', $filename)
         or die "Can't open $filename: $!";
+    binmode($fh); # will Encode bytes to characters later
+
+    my $buffer;
     {
+        # slurp in the header only:
         local $/ = "\n\n";
         $buffer = <$fh>;
     }
 
     if ($return_content) { 
+        # slurp in the rest of the file:
         local $/ = undef;
         $buffer = <$fh> || '';
     }

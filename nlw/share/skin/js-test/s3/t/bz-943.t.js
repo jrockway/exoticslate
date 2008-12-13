@@ -4,6 +4,8 @@ var t = new Test.Visual();
 
 t.plan(1);
 
+t.skipAll("TODO - Not ready for 12-12");
+
 t.checkRichTextSupport();
 
 var iframeHeight;

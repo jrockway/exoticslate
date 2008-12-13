@@ -304,4 +304,4 @@ sub hook {
     return @output == 1 ? $output[0] : join("\n", @output);
 }
 
-return 1;
+1;

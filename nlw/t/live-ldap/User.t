@@ -8,7 +8,7 @@ use Socialtext::User;
 use Socialtext::User::Default::Factory;
 use Test::Socialtext::Bootstrap::OpenLDAP;
 use Test::Warn;
-use Test::Socialtext tests => 50;
+use Test::Socialtext tests => 41;
 
 fixtures( 'db' );
 

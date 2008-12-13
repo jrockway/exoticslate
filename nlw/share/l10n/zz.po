@@ -726,8 +726,8 @@ msgstr "4RcHiV3 dIr3c70Ry"
 
 #: lib/Socialtext/AppConfig.pm
 #.  
-msgid "As a Socialtext customer, you have access to the <a href=\"<http://www.socialtext.net/exchange/>\">Socialtext Customer Exchange</a>. It is where you can share tips and best practices with other Socialtext customers."
-msgstr "4S 4 S0Ci4l73X7 cUs70M3R, y0u h4v3 4cC3Ss 70 7h3 <a href=\"<h77P://WwW.S0Ci4l73X7.n37/3XcH4Ng3/>\">S0Ci4l73X7 cUs70M3R 3xCh4nG3</4>. I7 iS Wh3r3 Y0U C4N Sh4r3 7iPs 4Nd 83s7 Pr4c7iC3S Wi7h 07h3r s0cI4L73x7 CuS70m3rS."
+msgid "As a Socialtext customer, you have access to the <a href=\"http://www.socialtext.net/exchange/\">Socialtext Customer Exchange</a>. It is where you can share tips and best practices with other Socialtext customers."
+msgstr "4S 4 S0Ci4l73X7 cUs70M3R, y0u h4v3 4cC3Ss 70 7h3 <a href=\"H77p://wWw.s0cI4L73x7.N37/3xCh4nG3/\">S0Ci4l73X7 cUs70M3R 3xCh4nG3</4>. I7 iS Wh3r3 Y0U C4N Sh4r3 7iPs 4Nd 83s7 Pr4c7iC3S Wi7h 07h3r s0cI4L73x7 CuS70m3rS."
 
 #: share/template/control/workspace.html
 #.  
@@ -869,7 +869,7 @@ msgstr "c4lL '%1' uSiNg sKyP3. ClIcK 70 3Di7."
 msgid "Can't remove privileges of the last admin"
 msgstr "c4n'7 r3m0v3 PrIvIl3g3s 0F 7h3 L4S7 4DmIn"
 
-#: share/console-template/template/popup.html share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/s3/template/lightbox/create_content
+#: share/console-template/template/popup.html share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/s3/template/lightbox/create_content
 #.  
 msgid "Cancel"
 msgstr "c4nC3L"
@@ -2539,7 +2539,7 @@ msgstr "0U7G0InG M4Il s3rV3R"
 msgid "Overview"
 msgstr "0V3RvI3W"
 
-#: share/skin/s3/javascript/create_content.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/paging
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/create_content.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/paging
 #.  
 msgid "Page"
 msgstr "p4g3"
@@ -3119,7 +3119,7 @@ msgstr "s4mPl3 W38l0g"
 msgid "Sat"
 msgstr "s47"
 
-#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
 #.  
 msgid "Save"
 msgstr "s4v3"
@@ -3411,8 +3411,8 @@ msgstr "s0cI4L73x7 C4N Cr3473 4 sKiN 70 cUs70MiZ3 7H3 l00K 4nD F33l 0F Y0Ur w0rK
 
 #: share/template/control/add_users.html
 #.  
-msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here. Complete documentation about adding multiple users is available here: <a href=\"<http://www.socialtext.net/appliance-manual/index.cgi?adding_users_to_socialtext#adding_multiple_users>\">Adding Multiple Users to Socialtext</a>"
-msgstr "s0cI4L73x7 3n48L3S Y0U 70 4Dd mUl7iPl3 Us3rS 70 y0uR 4cC0Un7. 70 4dD MuL7IpL3 uS3Rs, D0WnL04d 7H3 s4mPl3 D474 fIl3, 4Nd 4Dd y0uR Us3r d474. 7H3N UpL04d 7H3 fIl3 H3R3. C0MpL373 d0cUm3n747i0n 480U7 4DdInG MuL7IpL3 uS3Rs iS 4v4iL48l3 H3R3: <a href=\"<h77P://WwW.S0Ci4l73X7.n37/4PpLi4nC3-m4nU4L/InD3X.CgI?4dDiNg_uS3Rs_70_S0Ci4l73X7#4DdInG_MuL7IpL3_uS3Rs>\">4dDiNg mUl7iPl3 Us3rS 70 s0cI4L73x7</4>"
+msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here.  Complete documentation about adding multiple users is available here: <a href=\"http://www.socialtext.net/appliance-manual/index.cgi?adding_users_to_socialtext#adding_multiple_users\">Adding Multiple Users to Socialtext</a>"
+msgstr "s0cI4L73x7 3n48L3S Y0U 70 4Dd mUl7iPl3 Us3rS 70 y0uR 4cC0Un7. 70 4dD MuL7IpL3 uS3Rs, D0WnL04d 7H3 s4mPl3 D474 fIl3, 4Nd 4Dd y0uR Us3r d474. 7H3N UpL04d 7H3 fIl3 H3R3.  c0mPl373 D0CuM3N747I0N 480u7 4dDiNg mUl7iPl3 Us3rS Is 4V4Il48L3 h3r3: <a href=\"h77P://WwW.S0Ci4l73X7.n37/4PpLi4nC3-m4nU4L/InD3X.CgI?4dDiNg_uS3Rs_70_S0Ci4l73X7#4DdInG_MuL7IpL3_uS3Rs\">4DdInG MuL7IpL3 uS3Rs 70 S0Ci4l73X7</4>"
 
 #: share/template/authen/forgot_password.html
 #.  
@@ -3518,11 +3518,6 @@ msgstr "s0r7 3n7rI3S 8y l4s7 UpD473D 7iM3"
 #.  
 msgid "Source View"
 msgstr "s0uRc3 Vi3w"
-
-#: share/skin/s3/template/lightbox/create_content
-#.  
-msgid "Spreadsheet"
-msgstr "sPr34DsH337"
 
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
@@ -3699,6 +3694,11 @@ msgstr "7H3 p30Pl3 PlUgIn iS N07 InS74lL3D."
 msgid "The Workspace is easy to use. Click links to browse through the pages."
 msgstr "7H3 w0rKsP4C3 iS 34Sy 70 Us3. cLiCk lInKs 70 8r0wS3 7Hr0uGh 7H3 p4g3s."
 
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The account %1 does not exist"
+msgstr "7H3 4Cc0uN7 %1 D03s n07 3XiS7"
+
 #: lib/Socialtext/Account.pm
 #. (
 msgid "The account name you chose, %1, is already in use."
@@ -3838,6 +3838,11 @@ msgstr "7H3 uS3R %1 h4s 833N D34c7iV473D."
 #.  
 msgid "The user has been removed from workspaces and directories."
 msgstr "7H3 uS3R H4S 833n r3m0v3d fR0M W0RkSp4c3s 4Nd dIr3c70Ri3s."
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The workspace %1 does not exist"
+msgstr "7H3 w0rKsP4C3 %1 D03s n07 3XiS7"
 
 #: lib/Socialtext/Workspace.pm
 #. (
@@ -4439,7 +4444,7 @@ msgstr "wHiCh l4nGu4g3 D0 y0u uS3?"
 msgid "Who can send email to this workspace?"
 msgstr "wH0 c4n s3nD 3m4iL 70 7HiS W0RkSp4c3?"
 
-#: share/skin/s3/template/view/listview
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/template/view/listview
 #.  
 msgid "Workspace"
 msgstr "w0rKsP4C3"
@@ -4761,8 +4766,8 @@ msgstr "y0u mUs7 Sp3cIfY 4 PlUgIn."
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
-msgid "You selected a homepage as weblog, but did not select a weblog name. Your changes were not saved"
-msgstr "y0u s3l3c73D 4 H0M3P4G3 4S W38l0g, 8u7 DiD N07 S3L3C7 4 w38L0G N4M3. Y0Ur cH4Ng3s w3r3 N07 S4V3D"
+msgid "You selected a homepage as weblog, but did not select a weblog name.  Your changes were not saved"
+msgstr "y0u s3l3c73D 4 H0M3P4G3 4S W38l0g, 8u7 DiD N07 S3L3C7 4 w38L0G N4M3.  y0uR Ch4nG3S W3R3 n07 s4v3d"
 
 #: share/console-template/template/popup.html
 #.  
@@ -4906,8 +4911,8 @@ msgstr "c0n7rI8U73d 8Y {uS3R: %1} 0N {d473: %2}"
 
 #: lib/Socialtext/MassAdd.pm
 #.  
-msgid "could not be parsed. Skipping this user."
-msgstr "c0uLd n07 83 P4Rs3d. SkIpPiNg 7HiS Us3r."
+msgid "could not be parsed.  Skipping this user."
+msgstr "c0uLd n07 83 P4Rs3d.  sKiPpInG 7hIs uS3R."
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  

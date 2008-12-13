@@ -39,12 +39,22 @@ msgstr "%1 WEBLOG"
 msgid "%1 Workspace Growth Report"
 msgstr "%1 WORKSPACE GROWTH REPORT"
 
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#. (
+msgid "%1 Workspace Total"
+msgstr "%1 WORKSPACE TOTAL"
+
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#. (
+msgid "%1 Workspace Usage - %2 - past week"
+msgstr "%1 WORKSPACE USUJ - %2 - PAST WEEK"
+
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "%1 Workspace Usage Report"
 msgstr "%1 WORKSPACE USUJ REPORT"
 
-#: share/template/control/account.html share/template/control/add_user.html share/template/control/add_users.html
+#: share/template/control/account.html share/template/control/add_user.html share/template/control/add_users.html share/template/control/rename-account.html
 #. (
 msgid "%1 account"
 msgstr "%1 ACCOUNT"
@@ -79,12 +89,12 @@ msgstr "%1 DOEZ NOT HAVE ANY HEADERZ."
 msgid "%1 hours"
 msgstr "%1 HOURZ"
 
-#: lib/Socialtext/MassAdd.pm lib/Socialtext/MassAdd.pm
+#: lib/Socialtext/MassAdd.pm
 #. (
 msgid "%1 is a required field, but it is not present."
 msgstr "%1 AR TEH REQUIRED FIELD, BUT IT AR TEH NOT PRESENT."
 
-#: lib/Socialtext/User/Default/Factory.pm
+#: lib/Socialtext/User/Factory.pm
 #. (
 msgid "%1 is a required field."
 msgstr "%1 AR TEH REQUIRED FIELD."
@@ -94,7 +104,7 @@ msgstr "%1 AR TEH REQUIRED FIELD."
 msgid "%1 is not a valid archive filename. Skin files must end with .zip, .tar.gz or .tgz."
 msgstr "%1 AR TEH NOT VALID ARCHIVE FILENAME. SKIN FILEZ MUST END WITH .ZIP, .TAR.GZ OR .TGZ."
 
-#: lib/Socialtext/User/Default/Factory.pm
+#: lib/Socialtext/User/Factory.pm
 #. (
 msgid "%1 is not a valid email address."
 msgstr "%1 AR TEH NOT VALID EMAIL ADDRESZ."
@@ -123,6 +133,11 @@ msgstr "%1 MONTHZ"
 #. (
 msgid "%1 seconds"
 msgstr "%1 SECONDZ"
+
+#: share/template/control/account.html
+#. (
+msgid "%1 skin: workspace-level skin for '%2' workspace(s)"
+msgstr "%1 SKIN: WORKSPACE-LEVEL SKIN FOR %2 WORKSPACE(Z)"
 
 #: lib/Socialtext/Page.pm
 #. (
@@ -429,7 +444,7 @@ msgstr " PUJ MUST HAVE BODY TO BE SAVED."
 msgid "A page must have a title to be saved."
 msgstr " PUJ MUST HAVE TITLE TO BE SAVED."
 
-#: lib/Socialtext/User/Default/Factory.pm
+#: lib/Socialtext/User/Factory.pm
 #.  
 msgid "A password is required to create a new user."
 msgstr " PASSWORD AR TEH REQUIRED 2 CREATE NEW USR."
@@ -558,6 +573,16 @@ msgstr "ALL MUH WORKSPACEZ"
 #.  
 msgid "All Pages"
 msgstr "ALL PUJZ"
+
+#: lib/Socialtext/Pluggable/Plugin/People.pm
+#.  
+msgid "All People"
+msgstr "ALL PEOPLE"
+
+#: lib/Socialtext/Pluggable/Plugin/People.pm
+#. (
+msgid "All People Tagged '%1'"
+msgstr "ALL PEOPLE TAGGED %1"
 
 #: share/skin/s3/template/view/page/revision share/skin/s3/template/view/page/revision_compare
 #.  
@@ -734,7 +759,7 @@ msgstr "AUGUST"
 msgid "Automatic Backup Schedule"
 msgstr "AUTOMATIC BACKUP SCHEDULE"
 
-#: share/template/control/add_user.html share/template/control/add_users.html
+#: share/template/control/add_user.html share/template/control/add_users.html share/template/control/rename-account.html
 #.  
 msgid "Back"
 msgstr "BACK"
@@ -790,6 +815,11 @@ msgid "Backup destination updated"
 msgstr "BACKUP DESTINASHUN UPDATED"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
+#.  
+msgid "Backup failed ..."
+msgstr "BACKUP FAILED .."
+
+#: lib/Socialtext/Appliance/Model/Backup.pm
 #. (
 msgid "Backup is in progress - started at %1"
 msgstr "BACKUP AR TEH IN PROGRESZ - STARTED AT %1"
@@ -798,6 +828,11 @@ msgstr "BACKUP AR TEH IN PROGRESZ - STARTED AT %1"
 #.  
 msgid "Backup is in progress - started at never"
 msgstr "BACKUP AR TEH IN PROGRESZ - STARTED AT NEVR"
+
+#: share/skin/s3/template/lightbox/create_content
+#.  
+msgid "Blank"
+msgstr "BLANK"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
 #.  
@@ -826,11 +861,6 @@ msgstr "BY:"
 
 #: lib/Socialtext/Widget_resource.pm
 #. (
-msgid "Call '%1' using Convoq. Click to edit."
-msgstr "CALL %1 USIN CONVOQ. CLICK TO EDIT."
-
-#: lib/Socialtext/Widget_resource.pm
-#. (
 msgid "Call '%1' using Skype. Click to edit."
 msgstr "CALL %1 USIN SKYPE. CLICK TO EDIT."
 
@@ -839,10 +869,25 @@ msgstr "CALL %1 USIN SKYPE. CLICK TO EDIT."
 msgid "Can't remove privileges of the last admin"
 msgstr "CANT REMUUV PRIVILEGEZ OF TEH LAST ADMIN"
 
-#: share/console-template/template/popup.html share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
+#: share/console-template/template/popup.html share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/s3/template/lightbox/create_content
 #.  
 msgid "Cancel"
 msgstr "CANCEL"
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "Cannot create field: The field name '%1' is already used in account '%2'"
+msgstr "CANNOT CREATE FIELD: TEH FIELD NAME %1 AR TEH ALREDDY USED IN ACCOUNT %2"
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "Cannot create field: The field name '%1' is reserved for Socialtext"
+msgstr "CANNOT CREATE FIELD: TEH FIELD NAME %1 AR TEH RESERVED FR SOCIALTEXT"
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "Cannot create field: invalid field-class '%1'"
+msgstr "CANNOT CREATE FIELD: INVALID FIELD-CLASZ %1"
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #. (
@@ -979,6 +1024,11 @@ msgstr "CLICK THIZ BUTTON TO SAVE THIZ PUJ 2 UR COMPUTR FOAR OFFLINE USE."
 msgid "Close"
 msgstr "CLOSE"
 
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#. (
+msgid "Collaborativeness: %1 - Unique contributors as a percent of unique visitors"
+msgstr "COLLABORATIVENESZ: %1 - UNIQUE CONTRIBUTORZ AZ PERCENT OF UNIQUE VISITORZ"
+
 #: share/skin/s3/template/view/page/revision_compare
 #.  
 msgid "Color View (Unformatted)"
@@ -989,15 +1039,15 @@ msgstr "COLOR VIEW (UNFORMATTED)"
 msgid "Comment"
 msgstr "COMMENT"
 
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#.  
+msgid "Comments"
+msgstr "COMMENTZ"
+
 #: share/skin/s3/template/layout/html
 #.  
 msgid "Community"
 msgstr "COMMUNITY"
-
-#: share/template/control/add_user.html
-#.  
-msgid "Company:"
-msgstr "COMPANY:"
 
 #: share/skin/s3/template/view/page_revision_list
 #.  
@@ -1029,15 +1079,15 @@ msgstr "CONTACT SOCIALTEXT SUPPORT"
 msgid "Contents"
 msgstr "CONTENTZ"
 
-#: lib/Socialtext/Widget_resource.pm
-#. (
-msgid "Convoq: %1"
-msgstr "CONVOQ: %1"
-
 #: share/skin/s3/template/view/page/display
 #.  
 msgid "Copy Page to Workspace"
 msgstr "COPY PUJ TO WORKSPACE"
+
+#: share/skin/s3/template/lightbox/create_content
+#.  
+msgid "Copy an existing page..."
+msgstr "COPY AN EXISTIN PUJ.."
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
@@ -1049,7 +1099,7 @@ msgstr "COULD NOT EXTRACT FILEZ FROM TEH SKIN ARCHIVE. THIZ AR TEH MOST LIKESLY 
 msgid "Could not open %1"
 msgstr "COULD NOT OPEN %1"
 
-#: share/template/control/report.html
+#: share/skin/s3/template/lightbox/create_content share/template/control/report.html
 #.  
 msgid "Create"
 msgstr "CREATE"
@@ -1059,25 +1109,20 @@ msgstr "CREATE"
 msgid "Create A Weblog"
 msgstr "CREATE WEBLOG"
 
+#: share/skin/s3/template/lightbox/create_content
+#.  
+msgid "Create Content"
+msgstr "CREATE CONTENT"
+
 #: share/console-template/template/setup.html share/console-template/template/setup.html
 #.  
 msgid "Create Initial Workspace"
 msgstr "CREATE INITIAL WORKSPACE"
 
-#: share/skin/s3/template/layout/html
-#.  
-msgid "Create New Spreadsheet"
-msgstr "CREATE NEW SPREADSHEET"
-
 #: lib/Socialtext/WeblogPlugin.pm share/skin/s3/template/view/settings
 #.  
 msgid "Create New Weblog"
 msgstr "CREATE NEW WEBLOG"
-
-#: share/skin/s3/template/layout/html
-#.  
-msgid "Create New Wiki Page"
-msgstr "CREATE NEW WIKI PUJ"
 
 #: share/skin/s3/template/view/settings
 #.  
@@ -1124,6 +1169,11 @@ msgstr "CREATED BY"
 msgid "Created by %1 on %2."
 msgstr "CREATED BY %1 ON %2."
 
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "Created profile field '%1' for account '%2'"
+msgstr "CREATED PROFILE FIELD %1 FOR ACCOUNT %2"
+
 #: lib/Socialtext/Page.pm
 #.  
 msgid "Creating a New Spreadsheet..."
@@ -1143,6 +1193,11 @@ msgstr "CURRENTLY, YU IS NOT MEMBR OF ANY WORKSPACEZ."
 #.  
 msgid "Custom Skin Support"
 msgstr "CUSTOM SKIN SUPPORT"
+
+#: share/template/control/account.html
+#. (
+msgid "Custom Skins: %1"
+msgstr "CUSTOM SKINZ: %1"
 
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
 #.  
@@ -1178,6 +1233,11 @@ msgstr "DATE UPLOADED"
 #.  
 msgid "Date:"
 msgstr "DATE:"
+
+#: share/template/control/user.html
+#.  
+msgid "Deactivate user"
+msgstr "DEACTIVATE USR"
 
 #: share/template/control/report.html
 #.  
@@ -1338,6 +1398,11 @@ msgstr "EDIT THIZ POST"
 #.  
 msgid "Edited By"
 msgstr "EDITED BY"
+
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#.  
+msgid "Edits"
+msgstr "EDITZ"
 
 #: share/skin/s3/template/element/settings/users_settings_section share/skin/s3/template/view/page/display
 #.  
@@ -1554,6 +1619,11 @@ msgstr "EXPORTIN WORKSPACE %1 .."
 msgid "Extract this attachment"
 msgstr "EXTRACT THIZ ATTACHMENT"
 
+#: share/template/control/account.html
+#.  
+msgid "Features And Skins"
+msgstr "FEACHURZ AND SKINZ"
+
 #: share/template/control/report.html
 #.  
 msgid "February"
@@ -1683,11 +1753,6 @@ msgstr "HELP"
 #.  
 msgid "Home"
 msgstr "HUM"
-
-#: share/template/control/add_user.html
-#.  
-msgid "Home phone:"
-msgstr "HUM FONE:"
 
 #: lib/Socialtext/WatchlistPlugin.pm
 #.  
@@ -2104,11 +2169,6 @@ msgstr "LOADIN.."
 msgid "Locale for %1 is now %2"
 msgstr "LOCALE FR %1 AR TEH NOW %2"
 
-#: share/template/control/add_user.html
-#.  
-msgid "Location:"
-msgstr "LOCASHUN:"
-
 #: lib/Socialtext/Lite.pm share/skin/s3/template/layout/html share/skin/s3/template/layout/html share/template/authen/element/login_form
 #.  
 msgid "Log in"
@@ -2136,13 +2196,18 @@ msgstr "LOG OUT"
 
 #: share/skin/s3/template/layout/html
 #. (
-msgid "Logged in as %1:"
-msgstr "LOGGED IN AZ %1:"
+msgid "Logged in as %1"
+msgstr "LOGGED IN AZ %1"
 
 #: share/template/authen/login.html
 #.  
 msgid "Login"
 msgstr "LOGIN"
+
+#: lib/Socialtext/User.pm
+#. (
+msgid "Login information is controlled by the %1 directory administrator."
+msgstr "LOGIN INFRMASHUN AR TEH CONTROLLED BY TEH %1 DIRECTORY ADMINISTRATOR."
 
 #: lib/Socialtext/Workspace.pm
 #.  
@@ -2199,10 +2264,10 @@ msgstr "MAY"
 msgid "Mobile"
 msgstr "MOBILE"
 
-#: share/template/control/add_user.html
-#.  
-msgid "Mobile phone:"
-msgstr "MOBILE FONE:"
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Module has been %1."
+msgstr "MODULE HAZ BEEN %1."
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -2264,7 +2329,7 @@ msgstr "NAVIGASHUN TABZ TO SELECT DIFFERENT SECSHUNZ OV TEH CONTROL PANEL."
 msgid "Never"
 msgstr "NEVR"
 
-#: share/skin/s3/template/layout/html share/skin/s3/template/layout/html
+#: share/skin/s3/template/layout/html
 #.  
 msgid "New Page"
 msgstr "NEW PUJ"
@@ -2389,7 +2454,12 @@ msgstr "NO STATZ FOR THIZ PUJ YET"
 msgid "No users entered"
 msgstr "NO USERZ ENTERED"
 
-#: share/skin/s3/template/view/page/revision
+#: share/template/control/account.html
+#.  
+msgid "None"
+msgstr "NONE"
+
+#: share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/page/revision
 #.  
 msgid "Normal View"
 msgstr "NORMAL VIEW"
@@ -2444,6 +2514,11 @@ msgstr "ONLY REGISTERED USERZ CAN SEND EMAIL TO %1."
 msgid "Only workspace members can send email to %1."
 msgstr "ONLY WORKSPACE MEMBERZ CAN SEND EMAIL TO %1."
 
+#: share/template/control/account.html
+#.  
+msgid "Optional modules installed:"
+msgstr "OPSHUNAL MODULEZ INSTALLED:"
+
 #: share/skin/s3/template/workspaces_created_section.html
 #. (
 msgid "Or you may continue to work in this workspace, and visit \"%1\" later."
@@ -2464,7 +2539,7 @@ msgstr "OUTGOIN MAIL SERVR"
 msgid "Overview"
 msgstr "OVERVIEW"
 
-#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/paging
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/create_content.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/paging
 #.  
 msgid "Page"
 msgstr "PUJ"
@@ -2549,7 +2624,7 @@ msgstr "PASSWORD"
 msgid "Password:"
 msgstr "PASSWORD:"
 
-#: lib/Socialtext/User.pm lib/Socialtext/User/Default.pm
+#: lib/Socialtext/User.pm lib/Socialtext/User/Base.pm
 #.  
 msgid "Passwords must be at least 6 characters long."
 msgstr "PASSWORDZ MUST BE AT LEAST 6 CHARACTERZ LONG."
@@ -2563,6 +2638,11 @@ msgstr "PEOPLE"
 #.  
 msgid "People Directory"
 msgstr "PEOPLE DIRECTORY"
+
+#: lib/Socialtext/Pluggable/Plugin/People.pm
+#. (
+msgid "People matching '%1'"
+msgstr "PEOPLE MATCHIN %1"
 
 #: share/console-template/template/backup.html
 #.  
@@ -2649,21 +2729,6 @@ msgstr "PLEEZ WAIT UNTIL TEH RESTORE FINISHEZ, THEN RETRY."
 msgid "Plugin %1 does not exist!"
 msgstr "PLUGIN %1 DOEZ NOT EXIST!"
 
-#: lib/Socialtext/CLI.pm
-#. (
-msgid "Plugin %1 is now disabled for account %2."
-msgstr "PLUGIN %1 AR TEH NOW DISABLED FR ACCOUNT %2."
-
-#: lib/Socialtext/CLI.pm
-#. (
-msgid "Plugin %1 is now enabled for account %2."
-msgstr "PLUGIN %1 AR TEH NOW ENABLED FR ACCOUNT %2."
-
-#: share/template/control/add_user.html
-#.  
-msgid "Position:"
-msgstr "POSISHUN:"
-
 #: share/skin/s3/template/element/category_display/action_post_by_email
 #.  
 msgid "Post to this tag by email:"
@@ -2693,6 +2758,16 @@ msgstr "PREFERENCEZ SAVED"
 #. (
 msgid "Preferences: %1"
 msgstr "PREFERENCEZ: %1"
+
+#: share/template/control/account.html
+#.  
+msgid "Press 'OK' to disable this module or 'Cancel' to exit."
+msgstr "PRESZ KAY TO DISABLE THIZ MODULE OR CANCEL 2 EXIT."
+
+#: share/template/control/account.html
+#.  
+msgid "Press 'OK' to enable this module or 'Cancel' to exit."
+msgstr "PRESZ KAY TO ENABLE THIZ MODULE OR CANCEL 2 EXIT."
 
 #: share/skin/s3/template/view/paging share/skin/s3/template/view/paging
 #.  
@@ -2734,10 +2809,15 @@ msgstr "PRINTR FRIENDLY REPORT"
 msgid "Private"
 msgstr "PRIVATE"
 
-#: share/skin/s3/template/layout/html
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #.  
 msgid "Profile"
 msgstr "PROFILE"
+
+#: lib/Socialtext/MassAdd.pm
+#. (
+msgid "Profile field \"%1\" does not exist for this account"
+msgstr "PROFILE FIELD \"%1\" DOEZ NOT EXIST FOR THIZ ACCOUNT"
 
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
 #.  
@@ -2839,6 +2919,21 @@ msgstr "REDIRECTIN TO %1"
 msgid "Refresh file list"
 msgstr "REFRESH FILE LIST"
 
+#: lib/Socialtext/Appliance/Model/Backup.pm
+#.  
+msgid "Refresh is in progress, please wait ..."
+msgstr "REFRESH AR TEH IN PROGRESZ, PLEEZ WAIT .."
+
+#: share/console-template/template/backup.html
+#.  
+msgid "Refresh this page"
+msgstr "REFRESH THIZ PUJ"
+
+#: lib/Socialtext/Appliance/Model/Backup.pm
+#.  
+msgid "Refreshing the backup list ..."
+msgstr "REFRESHIN TEH BACKUP LIST .."
+
 #: share/skin/s3/template/layout/html share/skin/s3/template/layout/html share/template/authen/element/register_form share/template/authen/register.html
 #.  
 msgid "Register"
@@ -2884,7 +2979,7 @@ msgstr "REMOVED SOCIALTEXT ACCOUNTZ ACCESZ FROM %1"
 msgid "Removed Socialtext System Management access from %1"
 msgstr "REMOVED SOCIALTEXT SYSTEM MANUJMENT ACCESZ FROM %1"
 
-#: share/template/control/account.html
+#: share/template/control/account.html share/template/control/rename-account.html
 #.  
 msgid "Rename Account"
 msgstr "RENAME ACCOUNT"
@@ -2899,7 +2994,7 @@ msgstr "RENAME PUJ"
 msgid "Replace existing page"
 msgstr "REPLACE EXISTIN PUJ"
 
-#: lib/Socialtext/Page.pm share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js
+#: lib/Socialtext/Page.pm share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js
 #.  
 msgid "Replace this text with your own."
 msgstr "REPLACE THIZ TEXT WITH YUR OWN."
@@ -2913,6 +3008,11 @@ msgstr "REPORT BUG"
 #.  
 msgid "Report Period:"
 msgstr "REPORT PERIOD:"
+
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#. (
+msgid "Report timeframe: week ending %1"
+msgstr "REPORT TIMEFRAME: WEEK ENDIN %1"
 
 #: share/template/control/account.html
 #.  
@@ -3019,7 +3119,7 @@ msgstr "SAMPLE WEBLOG"
 msgid "Sat"
 msgstr "SAT"
 
-#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
 #.  
 msgid "Save"
 msgstr "SAVE"
@@ -3048,6 +3148,11 @@ msgstr "SEARCH"
 #. (
 msgid "Search Google for '%1'. Click to edit."
 msgstr "SEARCH GOOGLE FR %1. CLICK TO EDIT."
+
+#: share/skin/s3/template/layout/html
+#.  
+msgid "Search People:"
+msgstr "SEARCH PEOPLE:"
 
 #: lib/Socialtext/SearchPlugin.pm share/skin/s3/template/element/settings/users_invite_search_section
 #.  
@@ -3096,8 +3201,8 @@ msgstr "SEARCH FOR \"%1\""
 
 #: share/skin/s3/template/layout/html
 #.  
-msgid "Search:"
-msgstr "SEARCH:"
+msgid "Search this workspace:"
+msgstr "SEARCH THIZ WORKSPACE:"
 
 #: lib/Socialtext/Widget_resource.pm
 #. (
@@ -3306,8 +3411,8 @@ msgstr "SOCIALTEXT CAN CREATE SKIN 2 CUSTOMIZE TEH LOK AND FEEL OV YOAR WORKSPAC
 
 #: share/template/control/add_users.html
 #.  
-msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here.  Complete documentation about adding multiple users is available here: <a href=\"http://www.socialtext.net/appliance-manual/index.cgi?adding_multiple_users_to_socialtext\">Adding Multiple Users to Socialtext</a>"
-msgstr "SOCIALTEXT ENABLEZ YOUZ T ADD MULTIPLE USERZ T YUR ACCOUNT. 2 ADD MULTIPLE USERZ, DOWNLOAD TEH SAMPLE DATA FILE, AND ADD YOAR USR DATA. THEN UPLOAD TEH FILE HERE. COMPLETE DOCUMENTASHUN ABOUT ADDINS MULTIPLE USERZ AR TEH AVAILABLE HERE: < HREF=\"HTTP://WWW.SOCIALTEXT.NET/APPLIANCE-MANUAL/INDEX.CGI?ADDING_MULTIPLE_USERS_TO_SOCIALTEXT\">ADDIN MULTIPLE USERZ TO SOCIALTEXT</>"
+msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here.  Complete documentation about adding multiple users is available here: <a href=\"http://www.socialtext.net/appliance-manual/index.cgi?adding_users_to_socialtext#adding_multiple_users\">Adding Multiple Users to Socialtext</a>"
+msgstr "SOCIALTEXT ENABLEZ YOUZ T ADD MULTIPLE USERZ T YUR ACCOUNT. 2 ADD MULTIPLE USERZ, DOWNLOAD TEH SAMPLE DATA FILE, AND ADD YOAR USR DATA. THEN UPLOAD TEH FILE HERE. COMPLETE DOCUMENTASHUN ABOUT ADDINS MULTIPLE USERZ AR TEH AVAILABLE HERE: < HREF=\"HTTP://WWW.SOCIALTEXT.NET/APPLIANCE-MANUAL/INDEX.CGI?ADDING_USERS_TO_SOCIALTEXT#ADDING_MULTIPLE_USERZ\">ADDIN MULTIPLE USERZ TO SOCIALTEXT</>"
 
 #: share/template/authen/forgot_password.html
 #.  
@@ -3504,6 +3609,46 @@ msgstr "TECHNORATI: %1"
 msgid "The %1 account has been created."
 msgstr "TEH %1 ACCOUNT HAZ BEEN CREATED."
 
+#: lib/Socialtext/Account.pm
+#. (
+msgid "The %1 plugin can not be enabled at the account scope"
+msgstr "TEH %1 PLUGIN CAN NOT BE ENABLED AT TEH ACCOUNT SCOPE"
+
+#: lib/Socialtext/Workspace.pm
+#. (
+msgid "The %1 plugin can not be set at the workspace scope"
+msgstr "TEH %1 PLUGIN CAN NOT BE SET AT TEH WORKSPACE SCOPE"
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The %1 plugin is now disabled for account %2"
+msgstr "TEH %1 PLUGIN AR TEH NOW DISABLED FR ACCOUNT %2"
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The %1 plugin is now disabled for all accounts"
+msgstr "TEH %1 PLUGIN AR TEH NOW DISABLED FR ALL ACCOUNTZ"
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The %1 plugin is now disabled for workspace %2"
+msgstr "TEH %1 PLUGIN AR TEH NOW DISABLED FR WORKSPACE %2"
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The %1 plugin is now enabled for account %2"
+msgstr "TEH %1 PLUGIN AR TEH NOW ENABLED FR ACCOUNT %2"
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The %1 plugin is now enabled for all accounts"
+msgstr "TEH %1 PLUGIN AR TEH NOW ENABLED FR ALL ACCOUNTZ"
+
+#: lib/Socialtext/CLI.pm lib/Socialtext/Workspace.pm
+#. (
+msgid "The %1 plugin is now enabled for workspace %2"
+msgstr "TEH %1 PLUGIN AR TEH NOW ENABLED FR WORKSPACE %2"
+
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "The %1 user is now part of the %2 account."
@@ -3524,15 +3669,35 @@ msgstr "TEH %1 WORKSPACE HAZ BEEN EXPORTED TO %2."
 msgid "The %1 workspace is now part of the %2 account."
 msgstr "TEH %1 WORKSPACE AR TEH NOW PART OV TEH %2 ACCOUNT."
 
-#: lib/Socialtext/User/Default/Factory.pm
+#: lib/Socialtext/User/Factory.pm
 #. (
 msgid "The %1 you provided (%2) is already in use."
 msgstr "TEH %1 YOUZ PROVIDED (%2) AR TEH ALREDDY IN USE."
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The '%1' permission does not exist."
+msgstr "TEH %1 PERMISSHUN DOEZ NOT EXIST."
+
+#: lib/Socialtext/CLI.pm
+#.  
+msgid "The People plugin is not available."
+msgstr "TEH PEOPLE PLUGIN AR TEH NOT AVAILABLE."
+
+#: lib/Socialtext/CLI.pm lib/Socialtext/CLI.pm
+#.  
+msgid "The People plugin is not installed."
+msgstr "TEH PEOPLE PLUGIN AR TEH NOT INSTALLED."
 
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "The Workspace is easy to use. Click links to browse through the pages."
 msgstr "TEH WORKSPACE AR TEH EASY 2 USE. CLICK LINKZ T BROWSE THROUGH TEH PUJZ."
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The account %1 does not exist"
+msgstr "TEH ACCOUNT %1 DOEZ NOT EXIST"
 
 #: lib/Socialtext/Account.pm
 #. (
@@ -3553,6 +3718,11 @@ msgstr "TEH ACCOUNT_ID YU SPECIFIED, %1, DOEZ NOT EXIST."
 #.  
 msgid "The appliance can store backup files on a Windows- or SMB-compatible shared directory/folder on another computer. Set the backup server, directory and username here."
 msgstr "TEH APPLIANCE CAN STORE BACKUP FILEZ ON WINDOWZ- OR SMB-COMPATIBLE SHRD DIRECTORY/FOLDR ON ANUDDR COMPUTR. SET TEH BACKUP SERVR, DIRECTORY AND USERNAME HERE."
+
+#: lib/Socialtext/CLI.pm lib/Socialtext/CLI.pm
+#. (
+msgid "The command you called (%1) requires an account or a"
+msgstr "TEH COMMAND YU CALLED (%1) REQUIREZ AN ACCOUNT OR "
 
 #: lib/Socialtext/CLI.pm
 #. (
@@ -3659,6 +3829,21 @@ msgstr "TEH SKIN YU SPECIFIED, %1, DOEZ NOT EXIST."
 msgid "The uploaded skin does not contain info.yaml!"
 msgstr "TEH UPLOADED SKIN DOEZ NOT CONTAIN INFO.YAML!"
 
+#: lib/Socialtext/Handler/Authen.pm
+#. (
+msgid "The user %1 has been deactivated."
+msgstr "TEH USR %1 HAZ BEEN DEACTIVATED."
+
+#: lib/Socialtext/User.pm
+#.  
+msgid "The user has been removed from workspaces and directories."
+msgstr "TEH USR HAZ BEEN REMOVED FROM WORKSPACEZ AND DIRECTORIEZ."
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The workspace %1 does not exist"
+msgstr "TEH WORKSPACE %1 DOEZ NOT EXIST"
+
 #: lib/Socialtext/Workspace.pm
 #. (
 msgid "The workspace name you chose, %1, is already in use as an email alias."
@@ -3684,6 +3869,11 @@ msgstr "THERE IS NO TAGZ FOR THIZ PUJ."
 msgid "There is already a '%1' weblog. Please choose a different name."
 msgstr "THERE AR TEH ALREDDY %1 WEBLOG. PLEEZ CHOOSE DIFFERENT NAME."
 
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "There was a problem deactivating user %1"
+msgstr "THERE WAZ PROBLEM DEACTIVATIN USR %1"
+
 #: lib/Socialtext/Hub.pm
 #.  
 msgid "There was an error with your request"
@@ -3691,8 +3881,8 @@ msgstr "THERE WAZ AN ERROR WITH YUR REQUEST"
 
 #: share/skin/s3/template/view/settings
 #.  
-msgid "This Workpace"
-msgstr "THIZ WORKPACE"
+msgid "This Workspace"
+msgstr "THIZ WORKSPACE"
 
 #: lib/Socialtext/HitCounterPlugin.pm
 #.  
@@ -3839,6 +4029,26 @@ msgstr "TOP PUJ"
 msgid "Top of page"
 msgstr "TOP OF PUJ"
 
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#.  
+msgid "Total"
+msgstr "TOTAL"
+
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#. (
+msgid "Total members (current): %1"
+msgstr "TOTAL MEMBERZ (CURRENT): %1"
+
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#. (
+msgid "Total unique contributors: %1"
+msgstr "TOTAL UNIQUE CONTRIBUTORZ: %1"
+
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#. (
+msgid "Total unique visitors: %1"
+msgstr "TOTAL UNIQUE VISITORZ: %1"
+
 #: share/skin/s3/template/layout/html
 #.  
 msgid "Try Socialtext People"
@@ -3858,6 +4068,11 @@ msgstr "TYPE NEW PASSWORD AGAIN:"
 #.  
 msgid "URI"
 msgstr "URI"
+
+#: lib/Socialtext/CLI.pm
+#.  
+msgid "Unable to create field."
+msgstr "UNABLE TO CREATE FIELD."
 
 #: lib/Socialtext/Appliance/PhoneHome.pm
 #. (
@@ -3884,7 +4099,7 @@ msgstr "UNSUBSCRIBE"
 msgid "Unsubscribe from the %1 workspace"
 msgstr "UNSUBSCRIBE FROM TEH %1 WORKSPACE"
 
-#: lib/Socialtext/DisplayPlugin.pm lib/Socialtext/Page.pm share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-s3.js
+#: lib/Socialtext/DisplayPlugin.pm lib/Socialtext/Page.pm share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-s3.js
 #.  
 msgid "Untitled Page"
 msgstr "UNTITLED PUJ"
@@ -3974,6 +4189,11 @@ msgstr "USUJ ENDIN MIDNITE OV:"
 msgid "Use %1 to generate a form. Click to edit."
 msgstr "USE %1 TO GENERATE FOARM. CLICK 2 EDIT."
 
+#: share/skin/s3/template/lightbox/create_content
+#.  
+msgid "Use a template:"
+msgstr "USE TEMPLATE:"
+
 #: share/console-template/template/popup.html
 #.  
 msgid "Use the email address you entered above as the username, and <strong>password</strong> as the password. You can change your password later."
@@ -3983,6 +4203,16 @@ msgstr "USE TEH EMAIL ADDRESZ YU ENTERED ABOVE AZ TEH USERNAME, AND <STRONG>PASS
 #.  
 msgid "Use your email address and new password to log in again."
 msgstr "USE UR EMAIL ADDRESZ AND NEW PASSWORD TO LOG IN AGAIN."
+
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#.  
+msgid "User"
+msgstr "USR"
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "User %1 has been deactivated."
+msgstr "USR %1 HAZ BEEN DEACTIVATED."
 
 #: lib/Socialtext/CLI.pm lib/Socialtext/CLI.pm
 #. (
@@ -4063,6 +4293,11 @@ msgstr "VIEW FORMATTED"
 #.  
 msgid "View Revision"
 msgstr "VIEW REVISHUN"
+
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#.  
+msgid "Views"
+msgstr "VIEWZ"
 
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
 #.  
@@ -4209,12 +4444,7 @@ msgstr "WHICH LANGUUJ DO YU USE?"
 msgid "Who can send email to this workspace?"
 msgstr "HOO CAN SEND EMAIL TO THIZ WORKSPACE?"
 
-#: share/template/control/add_user.html
-#.  
-msgid "Work phone:"
-msgstr "WORK FONE:"
-
-#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/listview
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/template/view/listview
 #.  
 msgid "Workspace"
 msgstr "WORKSPACE"
@@ -4278,6 +4508,11 @@ msgstr "WORKSPACE SKIN"
 #.  
 msgid "Workspace Title"
 msgstr "WORKSPACE TITLE"
+
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#.  
+msgid "Workspace Usage Blog"
+msgstr "WORKSPACE USUJ BLOG"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
 #.  
@@ -4389,6 +4624,11 @@ msgstr "YAHOO! IM: %1"
 msgid "Yes"
 msgstr "YEZ"
 
+#: share/template/control/account.html
+#.  
+msgid "You are about to disable"
+msgstr "YU AR ABOUT 2 DISABLE"
+
 #: share/skin/s3/template/view/workspace_list
 #. (
 msgid "You are logged in as %1"
@@ -4439,7 +4679,7 @@ msgstr "YU CAN SYNCHRONIZE TEH APPLIANCE CLOCK WITH ANUDDR COMPUTR USINS TEH INT
 msgid "You cannot change is_system_created for an account after it has been created."
 msgstr "YU CANNOT CHANGE IS_SYSTEM_CREATED FR AN ACCOUNT AFTR IT HAZ BEEN CREATED."
 
-#: lib/Socialtext/User/Default/Factory.pm
+#: lib/Socialtext/User/Factory.pm
 #.  
 msgid "You cannot change the email address of a system-created user."
 msgstr "YU CANNOT CHANGE TEH EMAIL ADDRESZ OV SYSTEM-CREATED USR."
@@ -4449,7 +4689,7 @@ msgstr "YU CANNOT CHANGE TEH EMAIL ADDRESZ OV SYSTEM-CREATED USR."
 msgid "You cannot change the name of a system-created account."
 msgstr "YU CANNOT CHANGE TEH NAME OV SYSTEM-CREATED ACCOUNT."
 
-#: lib/Socialtext/User/Default/Factory.pm
+#: lib/Socialtext/User/Factory.pm
 #.  
 msgid "You cannot change the name of a system-created user."
 msgstr "YU CANNOT CHANGE TEH NAME OV SYSTEM-CREATED USR."
@@ -4473,6 +4713,11 @@ msgstr "YU HAVE FREE ACCESZ 2 VIEW AND CONTRIBUTE T ANY OV THEEZ PUBLIC WIKIZ:"
 #. (
 msgid "You have just created \"%1\", a brand new Socialtext Workspace. You are the administrator. The web address of the new workspace is %2."
 msgstr "YOUZ HAVE JUS CREATED \"%1\", BRAND NEW SOCIALTEXT WORKSPACE. U IS TEH ADMINISTRATOR. TEH WEB ADDRESZ OV TEH NEW WORKSPACE AR TEH %2.  KTHX."
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#.  
+msgid "You may not delete yourself."
+msgstr "YU MAY NOT DELETE URSELF."
 
 #: share/template/email/email-address-confirmation-completed.html share/template/email/email-address-confirmation-completed.txt
 #.  
@@ -4649,6 +4894,16 @@ msgstr "CATEGORY"
 msgid "click to create page"
 msgstr "CLICK TO CREATE PUJ"
 
+#: share/template/control/account.html
+#.  
+msgid "click to disable"
+msgstr "CLICK TO DISABLE"
+
+#: share/template/control/account.html
+#.  
+msgid "click to enable"
+msgstr "CLICK TO ENABLE"
+
 #: lib/Socialtext/Page.pm
 #. (
 msgid "contributed by {user: %1} on {date: %2}"
@@ -4763,6 +5018,11 @@ msgstr "INTR-WORKSPACE LINK: %1"
 #.  
 msgid "intranet"
 msgstr "INTRANET"
+
+#: share/template/control/account.html
+#.  
+msgid "is a paid option. For more information about fees, contact your sales representative."
+msgstr "AR TEH PAID OPSHUN. FR MOAR INFOARMASHUN ABOUT FEEZ, CONTACT UR SALEZ REPRESENTATIVE."
 
 #: share/skin/s3/template/layout/html
 #.  

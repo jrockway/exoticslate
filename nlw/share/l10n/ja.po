@@ -869,7 +869,7 @@ msgstr "'%1' と Skype 通話を開始します。クリックして編集して
 msgid "Can't remove privileges of the last admin"
 msgstr "前回の管理者の権限を削除できません。"
 
-#: share/console-template/template/popup.html share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/s3/template/lightbox/create_content
+#: share/console-template/template/popup.html share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/s3/template/lightbox/create_content
 #.  
 msgid "Cancel"
 msgstr "キャンセル"
@@ -2539,7 +2539,7 @@ msgstr "発信メールサーバー"
 msgid "Overview"
 msgstr "概要"
 
-#: share/skin/s3/javascript/create_content.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/paging
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/create_content.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/paging
 #.  
 msgid "Page"
 msgstr ""
@@ -3119,7 +3119,7 @@ msgstr "サンプル ウェブログ"
 msgid "Sat"
 msgstr "土"
 
-#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
 #.  
 msgid "Save"
 msgstr "保存"
@@ -3694,6 +3694,11 @@ msgstr ""
 msgid "The Workspace is easy to use. Click links to browse through the pages."
 msgstr "ワークスペースを使うのは簡単。リンクをクリックして、ページを閲覧してください。"
 
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The account %1 does not exist"
+msgstr ""
+
 #: lib/Socialtext/Account.pm
 #. (
 msgid "The account name you chose, %1, is already in use."
@@ -3832,6 +3837,11 @@ msgstr ""
 #: lib/Socialtext/User.pm
 #.  
 msgid "The user has been removed from workspaces and directories."
+msgstr ""
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The workspace %1 does not exist"
 msgstr ""
 
 #: lib/Socialtext/Workspace.pm
@@ -4434,7 +4444,7 @@ msgstr "使用する言語"
 msgid "Who can send email to this workspace?"
 msgstr "このワークスペースに Email を送ることができる人を設定してください。"
 
-#: share/skin/s3/template/view/listview
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/template/view/listview
 #.  
 msgid "Workspace"
 msgstr "ワークスペース"

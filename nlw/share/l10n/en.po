@@ -726,7 +726,7 @@ msgstr ""
 
 #: lib/Socialtext/AppConfig.pm
 #.  
-msgid "As a Socialtext customer, you have access to the <a href=\"<http://www.socialtext.net/exchange/>\">Socialtext Customer Exchange</a>. It is where you can share tips and best practices with other Socialtext customers."
+msgid "As a Socialtext customer, you have access to the <a href=\"http://www.socialtext.net/exchange/\">Socialtext Customer Exchange</a>. It is where you can share tips and best practices with other Socialtext customers."
 msgstr ""
 
 #: share/template/control/workspace.html
@@ -869,7 +869,7 @@ msgstr ""
 msgid "Can't remove privileges of the last admin"
 msgstr ""
 
-#: share/console-template/template/popup.html share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/s3/template/lightbox/create_content
+#: share/console-template/template/popup.html share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/s3/template/lightbox/create_content
 #.  
 msgid "Cancel"
 msgstr ""
@@ -2539,7 +2539,7 @@ msgstr ""
 msgid "Overview"
 msgstr ""
 
-#: share/skin/s3/javascript/create_content.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/paging
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/create_content.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/paging
 #.  
 msgid "Page"
 msgstr ""
@@ -3119,7 +3119,7 @@ msgstr ""
 msgid "Sat"
 msgstr ""
 
-#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
 #.  
 msgid "Save"
 msgstr ""
@@ -3411,7 +3411,7 @@ msgstr ""
 
 #: share/template/control/add_users.html
 #.  
-msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here. Complete documentation about adding multiple users is available here: <a href=\"<http://www.socialtext.net/appliance-manual/index.cgi?adding_users_to_socialtext#adding_multiple_users>\">Adding Multiple Users to Socialtext</a>"
+msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here.  Complete documentation about adding multiple users is available here: <a href=\"http://www.socialtext.net/appliance-manual/index.cgi?adding_users_to_socialtext#adding_multiple_users\">Adding Multiple Users to Socialtext</a>"
 msgstr ""
 
 #: share/template/authen/forgot_password.html
@@ -3517,11 +3517,6 @@ msgstr ""
 #: share/skin/s3/template/view/page/revision
 #.  
 msgid "Source View"
-msgstr ""
-
-#: share/skin/s3/template/lightbox/create_content
-#.  
-msgid "Spreadsheet"
 msgstr ""
 
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
@@ -3699,6 +3694,11 @@ msgstr ""
 msgid "The Workspace is easy to use. Click links to browse through the pages."
 msgstr ""
 
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The account %1 does not exist"
+msgstr ""
+
 #: lib/Socialtext/Account.pm
 #. (
 msgid "The account name you chose, %1, is already in use."
@@ -3837,6 +3837,11 @@ msgstr ""
 #: lib/Socialtext/User.pm
 #.  
 msgid "The user has been removed from workspaces and directories."
+msgstr ""
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "The workspace %1 does not exist"
 msgstr ""
 
 #: lib/Socialtext/Workspace.pm
@@ -4439,7 +4444,7 @@ msgstr ""
 msgid "Who can send email to this workspace?"
 msgstr ""
 
-#: share/skin/s3/template/view/listview
+#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/template/view/listview
 #.  
 msgid "Workspace"
 msgstr ""
@@ -4761,7 +4766,7 @@ msgstr ""
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
-msgid "You selected a homepage as weblog, but did not select a weblog name. Your changes were not saved"
+msgid "You selected a homepage as weblog, but did not select a weblog name.  Your changes were not saved"
 msgstr ""
 
 #: share/console-template/template/popup.html
@@ -4906,7 +4911,7 @@ msgstr ""
 
 #: lib/Socialtext/MassAdd.pm
 #.  
-msgid "could not be parsed. Skipping this user."
+msgid "could not be parsed.  Skipping this user."
 msgstr ""
 
 #: lib/Socialtext/TimeZonePlugin.pm

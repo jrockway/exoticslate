@@ -10,8 +10,10 @@ t.runAsync([
     },
 
     function() {
+        t.$('#st-create-content-link').click();
+
         t.ok(
-            t.$("#st-pagetools-newspreadsheet").length,
+            t.$("#spreadsheet-radio").length,
             "SocialCalc is enabled for the admin workspace"
         );
 

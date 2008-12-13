@@ -137,7 +137,11 @@ proto.show = function () {
         self.from_template_select();
     });
     this.from_page_radio().unbind('click').click(function () {
-         self.from_page_text().val('');
+        self.from_page_text().val('');
+        self.from_page_text().unbind('focus').focus().select();
+        self.from_page_text().unbind('focus').focus(function () {
+            self.from_page_radio().click();
+        });
     });
     this.choices().unbind('click').click(function () {
         self.update_templates();

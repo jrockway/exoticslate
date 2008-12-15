@@ -24,12 +24,19 @@ html body#dashBoard div#controls div#controlsRight {
 }
 
 /* Fix IE7 top offset shift for controlsRight dashboard buttons */
-html body#dashBoard div#controls div#controlsRight ul.level1 li {
+html body#dashBoard div#controls div#controlsRight ul.profile-links li {
     margin-top: -11px;
     -margin-top: 0px;
 }
+
 html body#dashBoard div#controls div#controlsRight ul li a {
+    white-space: normal;
+}
+
+html body#dashBoard div#controls div#controlsRight ul.profile-links li a,
+html body#dashBoard div#controls div#controlsRight ul.dashboard-links li a {
     vertical-align: top;
+    white-space: nowrap;
 }
 
 /* The right-hand controls are always empty during wiki edit. */

@@ -1830,6 +1830,9 @@ proto.do_new_table = function() {
             .bind("click", function() {
                 self.closeTableDialog();
             });
+        jQuery("#lightbox").one("unload", function() {
+            self.set_focus();
+        });
     }
     jQuery.showLightbox({
         html: Jemplate.process("table-create.html", {"loc": loc}),

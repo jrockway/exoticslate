@@ -283,7 +283,8 @@ sub disable_plugin {
     }
     elsif ($opts{workspace}) {
         my $workspace = Socialtext::Workspace->new( name => $opts{workspace} );
-        $workspace->disable_plugin($plugin);
+        eval { $workspace->disable_plugin($plugin); };
+        $self->_error($@) if $@;
         return $self->_success(loc(
             "The [_1] plugin is now disabled for workspace [_2]",
             $plugin, $opts{workspace},

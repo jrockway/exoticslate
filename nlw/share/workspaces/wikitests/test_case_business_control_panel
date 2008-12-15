@@ -26,39 +26,35 @@
 | type_ok | st-new-account-name | %%new_acct%% |
 | click_and_wait | st-submit-new-account-name |  |
 | text_like | The %%new_acct%% account has been created. |  |
+| st-admin | disable-plugin --p dashboard --acc "%%new_acct%%" | The dashboard plugin is now disabled for account %%new_acct%% |
+| st-admin | disable-plugin --p people --acc "%%new_acct%%" | The people plugin is now disabled for account %%new_acct%% |
+| st-admin | disable-plugin --p signals --acc "%%new_acct%%" | The signals plugin is now disabled for account %%new_acct%% |
 
-| *Comment* | Test case: Business Control Panel validate plugins are all disabled by default. checking only SC/People/Signals as other might go away |  |
-| *Comment* | Test case: Business Control Panel Signals is not present. Restore Signals when present. |  |
+| *Comment* | Test case: Business Control Panel validate plugins are disabled. |  |
+| *Comment* | Test case: Business Control Panel show new account |  |
 | click_and_wait | link=%%new_acct%% |  |
 | text_like | Custom Skins: Socialtext 3 default skin |  |
-| text_like | Socialtext SocialCalc (click to enable) |  |
 | text_like | Socialtext People (click to enable) |  |
+| text_like | Socialtext Signals (click to enable) |  |
 
- text_like | Socialtext Signals (click to enable) | |
+| *Comment* | TODO: add check for Dashboard once {bz: 1782} is fixed |  |
 
 | *Comment* | Test case: Business Control Panel plugin one at a time, click the confirmation, validate that plugin is enabled. |  |
 | click_ok | toggle_plugin_people |  |
 | verifyConfirmation | Socialtext People is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
 | wait_for_text_present_ok | Socialtext People (click to disable) | 20000 |
-| click_ok | toggle_plugin_socialcalc |  |
-| verifyConfirmation | Socialtext SocialCalc is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
-| wait_for_text_present_ok | Socialtext SocialCalc (click to disable) | 20000 |
 
- click_ok | toggle_plugin_signals | |
- verifyConfirmation | Socialtext Signals is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. | |
- wait_for_text_present_ok | Socialtext Signals (click to disable) | 20000 |
+| click_ok | toggle_plugin_signals |  |
+| verifyConfirmation | Socialtext Signals is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
+| wait_for_text_present_ok | Socialtext Signals (click to disable) | 20000 |
 
 | *Comment* | Test case: Business Control Panel go the other way |  |
 | click_ok | toggle_plugin_people |  |
 | verifyConfirmation | You are about to disable Socialtext People \n\n Press 'OK' to disable this module or 'Cancel' to exit. |  |
 | wait_for_text_present_ok | Socialtext People (click to enable) | 20000 |
-| click_ok | toggle_plugin_socialcalc |  |
-| verifyConfirmation | You are about to disable Socialtext SocialCalc \n\n Press 'OK' to disable this module or 'Cancel' to exit. |  |
-| wait_for_text_present_ok | Socialtext SocialCalc (click to enable) | 20000 |
-
- click_ok | toggle_plugin_signals | |
- verifyConfirmation | You are about to disable Socialtext Signals \n\n Press 'OK' to disable this module or 'Cancel' to exit. | |
- wait_for_text_present_ok | Socialtext Signals (click to enable) | 20000 |
+| click_ok | toggle_plugin_signals |  |
+| verifyConfirmation | You are about to disable Socialtext Signals \n\n Press 'OK' to disable this module or 'Cancel' to exit. |  |
+| wait_for_text_present_ok | Socialtext Signals (click to enable) | 20000 |
 
 | *Comment* | Test case: Business Control Panel rename account |  |
 | click_and_wait | link=Rename Account |  |
@@ -100,7 +96,7 @@
 | click_and_wait | link=%%new_workspace%% |  |
 | text_like | Account: Socialtext |  |
 
-| *Comment* | Test case: Business Control Panel Search for a non-existant workspace |  |
+| *Comment* | Test case: Business Control Panel Search for a non-existent workspace |  |
 | click_and_wait | link=Workspaces |  |
 | wait_for_element_visible_ok | name | 30000 |
 | type_ok | name | zildjian |

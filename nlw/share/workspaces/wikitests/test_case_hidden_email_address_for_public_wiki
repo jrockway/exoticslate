@@ -1,90 +1,115 @@
 * HighPermissions
 
 | *Comment* | Test Case: Hidden Email Address |  |
-| *Comment* | When P/D are enabled for an account, the @hidden syntax is no longer used. Revisit this test when the story that takes account email address hiding is implemented. |  |
-| *Comment* | Test Case: Hidden Email Address COMPLETED |  |
 
-TODO: Revisit this test when the story that takes account email address hiding is implemented.
-
-^ END
-
-| *Comment* | Upload File so that you can verify hidden address in All Files, similarly add comments, create blog etc |  |
 | *Comment* | wikitest files should be in %%wikitest_files%% on the browser server |  |
 | *Comment* | *This test only works if selenium_browser has higher powers, i.e. *chrome for firefox* |  |
 
-| *Comment* | Test Case: Hidden Email Address Set the permission |  |
-| click_and_wait | link=Settings |  |
-| click_and_wait | link=Workspace Privacy |  |
-| click_ok | document.forms[1].permission_set_name[2] |  |
-| click_and_wait | link=Save |  |
+| *Comment* | Test Case: Hidden Email Address setup workspace and user |  |
+
+| set | he_ws | hidden-email-%%start_time%% |
+| set | he_mail | `hidden.email.%%start_time%%@ken.socialtext.net` |
+| set | he_hidden | `hidden.email.%%start_time%%@hidden` |
+| set | he_regex | qr/hidden\.email\.%%start_time%%\@ken\.socialtext\.net/ |
+| set | he_name | hidden email %%start_time%% |
+
+| st-admin | create-workspace --n %%he_ws%% --t "Hidden Email %%start_time%%" | created |
+| st-admin | create-user --e %%he_mail%% --p %%password%% |  |
+| st-admin | add-workspace-admin --w %%he_ws%% --e %%he_mail%% | is now a workspace admin |
+| open-ok | /%%he_ws%% |  |
+| type_ok | username | %%he_mail%% |
+| type_ok | password | %%password%% |
+| click_and_wait | //input[@value="Log in"] |  |
 
 | *Comment* | Test Case: Hidden Email Address Upload File so that you can verify hidden address in All Files |  |
-| open_ok | /%%workspace%%/index.cgi?action=new_page |  |
-| wait_for_element_visible_ok | link=Wiki Text | 10000 |
-| click_ok | link=Wiki Text |  |
-| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 10000 |
-| type_ok | st-newpage-pagename-edit | Hidden email %%start_time%% |
-| click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
 | click_ok | st-attachments-uploadbutton |  |
-| wait_for_text_present_ok | Click "Browse" | 30000 |
 | wait_for_element_visible_ok | st-attachments-attach-filename |  |
 | type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.txt |
-| click_ok | st-attachments-attach-closebutton |  |
+| wait_for_text_present_ok | Uploaded files: wikitest.txt | 30000 |
+| wait_for_element_visible_ok | st-attachments-attach-closebutton | 30000 |
+| click_and_wait | st-attachments-attach-closebutton |  |
 
-| *Comment* | Test Case: Hidden Email Address verify it in all tabs such as whats new, all pages, all files etc |  |
-| click_and_wait | st-wiki-subnav-link-whats-new |  |
-| text_like | Changes in Last |  |
-| text_like | contentContainer | qr/\@hidden/ |
-| click_and_wait | link=All Files |  |
-| text_like | contentContainer | qr/\@hidden/ |
-| click_and_wait | link=All Pages |  |
-| text_like | contentContainer | qr/\@hidden/ |
-| click_and_wait | link=Orphaned Pages |  |
-| text_like | contentContainer | qr/\@hidden/ |
-| click_and_wait | link=Recently Viewed |  |
-| text_like | contentContainer | qr/\@hidden/ |
+| *Comment* | Test Case: Hidden email verify user WAFL |  |
+| wait_for_element_visible_ok | link=Edit | 30000 |
+| click_ok | link=Edit |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| type_ok | wikiwyg_wikitext_textarea | `{user: %%he_mail%%}` |
+| click_and_wait | st-save-button-link |  |
 
-| *Comment* | Test Case: Hidden email Add Comments to verify that it shows comments added with hidden email |  |
-| open_ok | /%%workspace%%/index.cgi?Hidden_email_%%start_time%% |  |
-| click_ok | st-comment-button-link |  |
-| open_ok | /%%workspace%%/index.cgi?action=enter_comment;page_name=Hidden_email_%%start_time%%;caller_action=display |  |
-| wait_for_element_visible_ok | st-commentui-textarea | 30000 |
-| type_ok | st-commentui-textarea | Comment 1 %%start_time%% |
-| click_and_wait | st-commentui-savelink |  |
-| open_ok | /%%workspace%%/index.cgi?Hidden_email__%%start_time%% |  |
-| text_like | contentContainer | Comment 1 %%start_time%% |
-| text_like | contentContainer | qr/contributed by.+\@hidden/ |
+| *Comment* | Test Case: Hidden email create comment |  |
+| wait_for_element_visible_ok | link=Comment | 30000 |
+| click_ok | link=Comment |  |
+| wait_for_element_visible_ok | comment | 30000 |
+| type_ok | comment | Hidden Email Comment %%start_time%% |
+| click_ok | link=Save |  |
+| st-admin | index-page --workspace %%he_ws%% --p hidden_email_%%start_time%% |  |
 
-| *Comment* | Test Case: Hidden email at weblog |  |
+| *Comment* | Test Case: Hidden email create weblog |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Create New Weblog |  |
-| type_ok | weblog_title | test_%%start_time%%_weblog |
+| type_ok | weblog_title | Hidden Email %%start_time%% |
 | click_and_wait | link=Save |  |
-| text_like | qr/\@hidden/ |  |
+
+| *Comment* | Test Case: Hidden Email Address verify it in listviews |  |
+| st-logout |  |  |
+| st-admin | set-permissions --w %%he_ws%% --p public-read-only | have been changed to public-read-only |
+| open-ok | /%%he_ws%% |  |
+| click_and_wait | link=What's New |  |
+| text_like | Changes in Last |  |
+| text_like | contentContainer | %%he_name%% |
+| text_unlike | contentContainer | %%he_regex%% |
+| click_and_wait | link=All Files |  |
+| text_like | contentContainer | %%he_name%% |
+| text_unlike | contentContainer | %%he_regex%% |
+| click_and_wait | link=All Pages |  |
+| text_like | contentContainer | %%he_name%% |
+| text_unlike | contentContainer | %%he_regex%% |
+| click_and_wait | link=Orphaned Pages |  |
+| text_like | contentContainer | %%he_name%% |
+| text_unlike | contentContainer | %%he_regex%% |
+| click_and_wait | link=Recently Viewed |  |
+| text_like | contentContainer | %%he_name%% |
+| text_unlike | contentContainer | %%he_regex%% |
+
+| *Comment* | Test Case: Hidden email verify Comment |  |
+| open_ok | /%%he_ws%%/?Hidden email %%start_time%% |  |
+| text_like | contentContainer | Hidden Email Comment %%start_time%% |
+| text_like | contentContainer | qr/contributed by.+%%he_name%%/ |
+| text_unlike | contentContainer | %%he_regex%% |
+
+| *Comment* | Test Case: Hidden email verify user WAFL |  |
+| text_like | st-page-content | %%he_name%% |
+| text_unlike | st-page-content | %%he_regex%% |
+
+| *Comment* | Test Case: Hidden email verify weblog |  |
+| click_and_wait | link=Weblogs |  |
+| text_like | %%he_name%% |  |
+| text_unlike | contentContainer | %%he_regex%% |
 
 | *Comment* | Test Case: Hidden email at revision pages |  |
-| open_ok | /%%workspace%%/index.cgi?action=revision_list;page_name=Hidden_email_%%start_time%% |  |
-| text_like | contentContainer | Revision 3 |
+| open_ok | /%%he_ws%%/index.cgi?action=revision_list;page_name=hidden_email_%%start_time%% |  |
 | text_like | contentContainer | Revision 2 |
 | text_like | contentContainer | Revision 1 |
-| text_unlike | contentContainer | Revision 4 |
-| text_like | contentContainer | qr/\@hidden/ |
+| text_like | contentContainer | %%he_name%% |
+| text_unlike | contentContainer | %%he_regex%% |
 
 | *Comment* | Test Case: Hidden email address in searched pages |  |
-| st-admin | index-workspace --workspace %%workspace%% --sync |  |
-| type_ok | st-search-term | Comment 1 %%start_time%% |
+| type_ok | st-search-term | Hidden Email Comment %%start_time%% |
 | click_and_wait | st-search-submit |  |
-| text_like | contentContainer | qr/\@hidden/ |
+| text_like | contentContainer | %%he_name%% |
+| text_unlike | contentContainer | %%he_regex%% |
 
-| *Comment* | Test Case: Hidden email address in home page |  |
-| open_ok | /%%workspace%%/ |  |
-| text_like | qr/\@hidden/ |  |
+| *Comment* | Test Case: Hidden email address in user list |  |
+| *Comment* | Authenticated user should see `@hidden` |  |
+| st-login |  |  |
+| open_ok | /%%he_ws%%/?action=users_listall |  |
+| text_unlike | contentContainer | %%he_name%% |
+| text_like | contentContainer | %%he_hidden%% |
 
 | *Comment* | Test Case: Hidden Email Address Teardown |  |
-| st-logout |  |  |
-| st-admin | set-permissions --workspace %%workspace%% --permissions member-only |  |
-| st-admin | purge-page --workspace %%workspace%% --page hidden_email_%%start_time%% | page was purged |
-| st-admin | purge-page --workspace %%workspace%% --page first_post_in_test_%%start_time%%_weblog | page was purged |
+| st-admin | delete-workspace --workspace %%he_ws%% --no-export | deleted |
 
 | *Comment* | Test Case: Hidden Email Address COMPLETED |

@@ -178,9 +178,11 @@ proto.show = function () {
 
     jQuery.showLightbox({
         content:'#st-create-content-lightbox',
-        close:'#st-create-content-cancellink'
+        close:'#st-create-content-cancellink',
+        callback: function() {
+            self.from_blank_radio().focus();
+        }
     });
-
 }
 
 proto.create_new_page = function () {

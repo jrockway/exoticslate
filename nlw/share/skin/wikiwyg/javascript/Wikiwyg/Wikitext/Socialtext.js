@@ -1709,8 +1709,20 @@ proto.format_span = function(elem) {
     /* If the style is not interesting, we pretend it's not there, instead
      * of reducing it to a single line. -- {bz: 1704}
      */
-    if (!style || style == '')
-        return elem.wikitext;
+    if (!style || style == '') {
+        if ((elem.parentNode.nodeName == 'P')
+         && (elem.parentNode.className == 'MsoNormal')
+        ) {
+            /* However, MS-Office <p class="MsoNormal"><span>...</span></p> 
+             * chunks do need to be squished into a single line.
+             * See js-test/wikiwyg/t/wordpaste.t.js for details.
+             */
+        }
+        else {
+            return elem.wikitext;
+        }
+    }
+
 
     // It has line-level style markups; we're forced to make it a single line.
     elem.wikitext = elem.wikitext.replace(/\n/g, ' ').replace(/  */g, ' ');

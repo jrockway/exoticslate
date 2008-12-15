@@ -1488,16 +1488,21 @@ proto.walk = function(elem) {
 }
 
 proto.assert_trailing_space = function(part, text) {
-    if ((! part.previousSibling) ||
-        (! part.previousSibling.requires_trailing_space) ||
-        this.wikitext.match(/ $/)
+    if ((! part.requires_preceding_space) && (
+            (! part.previousSibling) 
+         || (! part.previousSibling.requires_trailing_space)
+        )
     ) return;
+
+    if (this.wikitext.match(/ $/)) return;
+
     if (this.wikitext.match(/\n$/)) {
         if (part.previousSibling &&
             part.previousSibling.nodeName == 'BR'
         ) return;
         this.wikitext = this.wikitext.replace(/\n$/, '');
     }
+
     if (! text.match(/^\s/))
         this.wikitext += ' ';
 }
@@ -1643,7 +1648,7 @@ proto.format_img = function(elem) {
                 !(prev.nodeType == 1 && prev.nodeName == 'BR') &&
                 !prev.top_level_block) {
                 if (prev.nodeType == 3 && Wikiwyg.is_ie) {
-                    requires_preceding_space = true;
+                    elem.requires_preceding_space = true;
                 } else {
                     prev.requires_trailing_space = true;
                 }
@@ -1654,11 +1659,6 @@ proto.format_img = function(elem) {
 
         if (widget.match(/^\.\w+\n/))
             text = text.replace(/\n*$/, '\n');
-
-        // Hack to emulate add trailing space to IE's #text node: {bz: 1116}
-        if (requires_preceding_space) {
-            text = ' ' + text;
-        }
 
         // Dirty hack for {{{ ... }}} wikitext
         if (Wikiwyg.is_ie) {

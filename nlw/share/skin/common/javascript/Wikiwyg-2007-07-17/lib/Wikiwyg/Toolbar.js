@@ -87,6 +87,7 @@ proto.initializeObject = function() {
         );
     }
 
+    this.button_container = this.div;
     var config = this.config;
     for (var i = 0; i < config.controlLayout.length; i++) {
         var action = config.controlLayout[i];
@@ -103,6 +104,10 @@ proto.initializeObject = function() {
             this.add_help_button(action, label);
         else if (action == '|')
             this.add_separator();
+        else if (action == '{')
+            this.add_div_open();
+        else if (action == '}')
+            this.add_div_close();
         else if (action == '/')
             this.add_break();
         else
@@ -111,11 +116,11 @@ proto.initializeObject = function() {
 }
 
 proto.enableThis = function() {
-    this.div.style.display = 'block';
+    this.button_container.style.display = 'block';
 }
 
 proto.disableThis = function() {
-    this.div.style.display = 'none';
+    this.button_container.style.display = 'none';
 }
 
 proto.setup_widgets_pulldown = function(title) {
@@ -144,7 +149,8 @@ proto.setup_widgets_pulldown = function(title) {
 
 proto.make_button = function(type, label) {
     var base = this.config.imagesLocation;
-    var ext = this.config.imagesExtension;
+    var ext = type.match(/\.png$/) ? '' : this.config.imagesExtension;
+    type = type.replace(/\.png$/, '');
     return Wikiwyg.createElementWithAttrs(
         'img', {
             'class': 'wikiwyg_button',
@@ -162,7 +168,7 @@ proto.add_button = function(type, label) {
     img.onclick = function() {
         self.wikiwyg.current_mode.process_command(type);
     };
-    this.div.appendChild(img);
+    this.button_container.appendChild(img);
 }
 
 proto.add_help_button = function(type, label) {
@@ -174,13 +180,13 @@ proto.add_help_button = function(type, label) {
         }
     );
     a.appendChild(img);
-    this.div.appendChild(a);
+    this.button_container.appendChild(a);
 }
 
 proto.add_separator = function() {
     var base = this.config.imagesLocation;
     var ext = this.config.imagesExtension;
-    this.div.appendChild(
+    this.button_container.appendChild(
         Wikiwyg.createElementWithAttrs(
             'img', {
                 'class': 'wikiwyg_separator',
@@ -190,6 +196,18 @@ proto.add_separator = function() {
             }
         )
     );
+}
+
+proto.add_div_open = function() {
+    var base = this.config.imagesLocation;
+    var ext = this.config.imagesExtension;
+    var $div = jQuery('<span class="table_buttons"></span>');
+    jQuery(this.button_container).append($div);
+    this.button_container = $div[0];
+}
+
+proto.add_div_close = function() {
+    this.button_container  = this.div;
 }
 
 proto.addControlItem = function(text, method) {

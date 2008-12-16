@@ -1397,7 +1397,12 @@ proto.controlLayout = [
     'bold', 'italic', 'strike', '|',
     'h1', 'h2', 'h3', 'h4', 'p', '|',
     'ordered', 'unordered', 'outdent', 'indent', '|',
-    'link', 'image', 'table'
+    'link', 'image', '|',
+    '{', 'table',
+    'add-col-right.png', 'add-col-left.png', 'add-row-below.png', 'add-row-above.png',
+    'del-row.png', 'del-col.png',
+    'move-col-left.png', 'move-col-right.png', 'add-row-above.png', 'add-row-below.png',
+    '}'
 ];
 
 proto.controlLabels = {

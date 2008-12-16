@@ -55,6 +55,7 @@ our %EXPORT_TAGS = (
 
 our $DEBUG = 0;
 our $TRACE_SQL = 0;
+our $PROFILE_SQL = 0;
 our %DBH;
 our $Level = 0;
 
@@ -124,6 +125,17 @@ sub sql_execute {
         warn "Preparing ($statement) "
             . _list_bindings(\@_)
             . " from $file line $line\n";
+    }
+    if ($PROFILE_SQL) {
+        my (undef, $file, $line) = caller($Level);
+        warn "Profiling ($statement) "
+            . _list_bindings(\@_)
+            . " from $file line $line\n";
+        my $explain = "EXPLAIN ANALYZE $statement";
+        my $esth = $dbh->prepare($explain);
+        $esth->execute(@_);
+        my $lines = $esth->fetchall_arrayref();
+        warn map { "$_->[0]\n" } @$lines;
     }
     eval {
         Socialtext::Timer->Continue('sql_prepare');

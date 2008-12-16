@@ -1428,9 +1428,7 @@ proto.controlLabels = {
     pre: loc('Preformatted'),
     save: loc('Save'),
     strike: loc('Strike Through') + '(Ctrl+d)',
-    table: loc('New Table'),
-    add-col-left: loc('Add Table Column to Left'),
-    add-col-right: loc('Add Table Column to Right'),
+    table: loc('Tables'),
     underline: loc('Underline') + '(Ctrl+u)',
     unlink: loc('Unlink'),
     unordered: loc('Bulleted List')

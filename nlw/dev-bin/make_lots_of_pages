@@ -7,6 +7,10 @@ use lib "$FindBin::Bin/../lib";
 use Test::Socialtext;
 use Socialtext::User;
 use Getopt::Long;
+use Time::HiRes qw/tv_interval gettimeofday/;
+
+$| = 1;
+srand(time);
 
 my $hub = new_hub('admin');
 my $page;
@@ -20,22 +24,26 @@ GetOptions(
 ) or usage();
 
 
+my $overall_start = [gettimeofday];
 for ( 1 .. $pages ) {
-    warn "Creating page $_\n";
+    my $tags = random_tags();
+    print "Creating Page $_ with " . scalar(@$tags) . " tags ... ";
+    my $start = [gettimeofday];
     $page = Socialtext::Page->new( hub => $hub )->create(
         title   => "Page $_",
         content => 'First Paragraph',
         creator => Socialtext::User->SystemUser,
         categories => random_tags(),
     );
+    print tv_interval($start), "\n";
 }
+print "Created $pages pages in " . tv_interval($overall_start) . "ms\n";
 
 exit;
 
 sub random_tags {
     my $min = 0;
     my $max = $tags_per_page * 2;
-    srand(time);
     my $num = $min + rand($max - $min);
     return [] unless $num > 0;
     return [ map { "tag $_" } 1 .. $num ];

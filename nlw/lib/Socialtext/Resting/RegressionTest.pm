@@ -24,7 +24,7 @@ sub new {
     my $class = shift;
 
     return Socialtext::Resting->new(                                           
-        server => 'http://www2.socialtext.net',
+        server => 'https://www2.socialtext.net',
         username => 'tester@ken.socialtext.net',
         password => 'wikitest',
         workspace => 'regression-test',

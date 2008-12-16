@@ -440,10 +440,7 @@ function setup_wikiwyg() {
     }
 
     jQuery('#st-edit-mode-uploadbutton').click(function () {
-        jQuery.showLightbox({
-            content:'#st-attachments-attachinterface',
-            close:'#st-attachments-attach-closebutton'
-        });
+        Attachments.showUploadInterface();
         $('#st-attachments-attach-editmode').val(1);
         return false;
     });

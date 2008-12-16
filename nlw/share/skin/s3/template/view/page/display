@@ -162,15 +162,21 @@
             <li>
             <a title="[% loc("Uploaded by [_1] on [_2]. ([_3] bytes)", file.uploader, file.date, displaylength) | html_entity %]" href="[% file.uri %]">[% file.name %]</a>
             [% IF file.name.match('\.(zip|tar|tar.gz|tgz)$') %]
-            <a href="#" onclick="$(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif'); Attachments.extractAttachment('[% file.id %]'); return false"><img
-                src="/static/skin/common/images/extract.png"
-                width="16" height="16" border="0" alt="[% loc('Extract this attachment') %]" title="[% loc('Extract this attachment') %]"
-            /></a>
+            <a name="[% file.id %]" href="#" class="extract_attachment">
+              <img src="/static/skin/common/images/extract.png"
+                width="16" height="16" border="0"
+                alt="[% loc('Extract this attachment') %]"
+                title="[% loc('Extract this attachment') %]"
+              />
+            </a>
             [% END %]
-            <a href="#" title="[% loc('Delete this attachment') %]" onclick="$(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif'); Attachments.delAttachment($(this).prevAll('a[href!=#]').attr('href'), true); return false"><img
-                src="[% wiki.skin_uri('s3') %]/images/delete.png"
-                width="16" height="16" border="0" alt="[% loc('Delete this attachment') %]" title="[% loc('Delete this attachment') %]"
-            /></a>
+            <a href="#" title="[% loc('Delete this attachment') %]" class="delete_attachment">
+            <img src="[% wiki.skin_uri('s3') %]/images/delete.png"
+                width="16" height="16" border="0"
+                alt="[% loc('Delete this attachment') %]"
+                title="[% loc('Delete this attachment') %]"
+              />
+            </a>
             </li>
           [% END %]
           </ul>
@@ -268,33 +274,5 @@
   </div><!-- bottomButtons -->
   <div class="clear">&nbsp;</div>
 </div><!-- contentContainer -->
-
-<div class="lightbox" id="st-attachments-attachinterface">
-  <iframe style="display:none" id="st-attachments-attach-formtarget" class="st-action-formtarget" name="st-attachments-attach-formtarget" src="[% wiki.static_path %]/html/blank.html"></iframe>
-  <form id="st-attachments-attach-form" name="attachForm" method="post" action="index.cgi" enctype="multipart/form-data" target="st-attachments-attach-formtarget">
-    <input type="hidden" name="page_name" value="[% page.id %]"/>
-    <input type="hidden" name="action" value="attachments_upload"/>
-    <div class="title" id="st-attachments-attach-title">[% loc('Upload Files') %]</div>
-
-    <p id="st-attachments-attach-message">
-    [% loc('Click "Browse" and select an image or file to upload.') %]
-    <br />
-    [% loc('Click "Done" to close this window.') %]
-    </p>
-    <p class="hint" id="st-attachments-attach-limit">[% loc('Maximum file size: 50MB') %]</p>
-    <p class="fileprompt" id="st-attachments-attach-fileprompt">
-      <input id="st-attachments-attach-filename" size="45" type="file" name="file"/>
-    </p>
-    <input type="hidden" id="st-attachments-attach-editmode" name="editmode" value="0"/>
-    <input type="hidden" id="st-attachments-attach-embed" name="embed" value="1"/>
-    <div class="error" id="st-attachments-attach-error">&nbsp;</div>
-    <div class="message" id="st-attachments-attach-uploadmessage">&nbsp;</div>
-    <div class="list" id="st-attachments-attach-list"></div>
-    <div class="buttons" id="st-attachments-attach-buttons">
-      <input id="st-attachments-attach-closebutton" type="button" value="[% loc('Done') %]"/>
-    </div>
-    <div style="clear:both;">&nbsp;</div>
-  </form>
-</div>
 
 [% END %]

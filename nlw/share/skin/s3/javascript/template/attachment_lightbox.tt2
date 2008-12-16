@@ -1,0 +1,28 @@
+<div class="lightbox" id="st-attachments-attachinterface">
+  <iframe style="display:none" id="st-attachments-attach-formtarget" class="st-action-formtarget" name="st-attachments-attach-formtarget" src="[% wiki.static_path %]/html/blank.html"></iframe>
+  <form id="st-attachments-attach-form" name="attachForm" method="post" action="index.cgi" enctype="multipart/form-data" target="st-attachments-attach-formtarget">
+    <input type="hidden" name="page_name" value="[% page_id %]"/>
+    <input type="hidden" name="action" value="attachments_upload"/>
+    <div class="title" id="st-attachments-attach-title">[% loc('Upload Files') %]</div>
+
+    <p id="st-attachments-attach-message">
+    [% loc('Click "Browse" and select an image or file to upload.') %]
+    <br />
+    [% loc('Click "Done" to close this window.') %]
+    </p>
+    <p class="hint" id="st-attachments-attach-limit">[% loc('Maximum file size: 50MB') %]</p>
+    <p class="fileprompt" id="st-attachments-attach-fileprompt">
+      <input id="st-attachments-attach-filename" size="45" type="file" name="file"/>
+    </p>
+    <input type="hidden" id="st-attachments-attach-editmode" name="editmode" value="0"/>
+    <input type="hidden" id="st-attachments-attach-embed" name="embed" value="1"/>
+    <div class="error" id="st-attachments-attach-error">&nbsp;</div>
+    <div class="message" id="st-attachments-attach-uploadmessage">&nbsp;</div>
+    <div class="list" id="st-attachments-attach-list"></div>
+    <div class="buttons" id="st-attachments-attach-buttons">
+      <input id="st-attachments-attach-closebutton" type="button" value="[% loc('Done') %]"/>
+    </div>
+    <div style="clear:both;">&nbsp;</div>
+  </form>
+</div>
+

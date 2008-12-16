@@ -2,6 +2,7 @@
 
 COMMON_JAVASCRIPT=../../common/javascript
 S2_JAVASCRIPT=../../s2/javascript
+S3_JAVASCRIPT=../../s3/javascript
 
 EDITOR_FILE=socialtext-editor.js
 EDITOR_SOURCE_FILES= \

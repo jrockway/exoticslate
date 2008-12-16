@@ -28,6 +28,7 @@ LIGHTBOX_TEMPLATES= \
 		     template/rename_lightbox.tt2 \
 		     template/copy_lightbox.tt2 \
 		     template/create_content_lightbox.tt2 \
+		     template/attachment_lightbox.tt2 \
 
 ALL_EDITOR_FILES:=$(shell find $(WIKIWYG_ST) $(COMMON_JAVASCRIPT) -type f | grep -v .svn | grep -v editor.js)
 ALL_JEMPLATE_PLUGINS:=$(shell find JemplatePlugin -name \*.js)
@@ -45,19 +46,19 @@ S3_SOURCE_FILES= \
 		loc.js \
 		cookie.js \
 		lookahead.js \
-		lightbox.js \
 		pageview.js \
-		pageattachments.js \
 		email.js \
 		s3.js \
 
 LIGHTBOX_SOURCE_FILES= \
+		lightbox.js \
 		timestamp.js \
 		$(LIGHTBOX_JEMPLATE) \
 		comment.js \
 		email-lightbox.js \
 		move.js \
 		create_content.js \
+		pageattachments.js \
 
 all: \
     timestamp.js \
@@ -90,8 +91,9 @@ clean:
 .js-mini.js:
 	$(MINIFY) $< > $@
 
-$(EDITOR_FILE): $(ST_EDITOR_FILE)
-	cp $< $@
+$(EDITOR_FILE): $(LIGHTBOX_FILE) $(ST_EDITOR_FILE)
+	rm -f $@;
+	cat $(LIGHTBOX_FILE) $(ST_EDITOR_FILE) >> $@
 
 $(EDITOR_FILE_MINI): $(EDITOR_FILE)
 	$(MINIFY) $< > $@
@@ -124,7 +126,7 @@ info.js: ../info.yaml
 	perl -MYAML -MTemplate -e \
 	    'Template->new->process("template/$@", YAML::LoadFile("$<"))' > $@
 
-timestamp.js: $(EDITOR_FILE) $(S3_SOURCE_FILES:timestamp.js%=%) $(LIGHTBOX_SOURCE_FILES:timestamp.js%=%)
+timestamp.js: $(ST_EDITOR_FILE) $(S3_SOURCE_FILES:timestamp.js%=%) $(LIGHTBOX_SOURCE_FILES:timestamp.js%=%)
 	echo 'var Socialtext = Socialtext || {};' > $@
 	perl -le 'print "Socialtext.make_time = \"" . time . "\";"' >> $@
 

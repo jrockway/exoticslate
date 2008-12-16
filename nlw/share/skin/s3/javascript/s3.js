@@ -100,92 +100,32 @@ $(function() {
         });
 
     $('#st-attachments-uploadbutton').unbind('click').click(function () {
-        $('#st-attachments-attach-list').html('').hide();
-        $.showLightbox({
-            content:'#st-attachments-attachinterface',
-            close:'#st-attachments-attach-closebutton'
+        get_lightbox(function () {
+            $('#st-attachments-attach-list').html('').hide();
+            Attachments.showUploadInterface();
         });
         return false;
     });
 
-    $('#st-attachments-attach-filename')
-        .val('')
-        .bind('change', function () {
-            var filename = $(this).val();
-            if (!filename) {
-                $('#st-attachments-attach-uploadmessage').html(
-                    loc("Please click browse and select a file to upload.")
-                );
-                return false;
-            }
-
-            var filename = filename.replace(/^.*\\|\/:/, '');
-
-            if (encodeURIComponent(filename).length > 255 ) {
-                $('#st-attachments-attach-uploadmessage').html(
-                    loc("Filename is too long after URL encoding.")
-                );
-                return false;
-            }
-
-            var basename = filename.match(/[^\\\/]+$/);
-
-            $('#st-attachments-attach-uploadmessage').html(
-                loc('Uploading [_1]...', basename)
-            );
-
-            $('#st-attachments-attach-formtarget')
-                .one('load', function () {
-                    $('#st-attachments-attach-uploadmessage').html(
-                        loc('Upload Complete')
-                    );
-                    $('#st-attachments-attach-filename').attr(
-                        'disabled', false
-                    ).val('');
-                    $('#st-attachments-attach-closebutton').attr(
-                        'disabled', false
-                    );
-
-                    Attachments.refreshAttachments(function (list) {
-                        // Add the freshly-uploaded file to the
-                        // newAttachmentList queue.
-
-                        for (var i=0; i< list.length; i++) {
-                            var item = list[i];
-
-                            // Compare basename, because FF2 would use the
-                            // full pathname but item.name is basename-only.
-                            if (basename == item.name) {
-                                Attachments.addNewAttachment(item);
-                            }
-                        }
-
-                        $('#st-attachments-attach-list')
-                            .show()
-                            .html('')
-                            .append(
-                                $('<span />')
-                                    .attr(
-                                        'class',
-                                        'st-attachments-attach-listlabel'
-                                    )
-                                    .html(
-                                        loc('Uploaded files:') + 
-                                        '&nbsp;' +
-                                        Attachments.attachmentList()
-                                    )
-                            );
-                    });
-                    Page.refreshPageContent();
-                });
-
-            $('#st-attachments-attach-form').submit();
-            $('#st-attachments-attach-closebutton').attr('disabled', true);
-            $(this).attr('disabled', true);
-
-            return false;
+    $('.extract_attachment').unbind('click').click(function () {
+        get_lightbox(function() {
+            $(this).children('img')
+                .attr('src', '/static/skin/common/images/ajax-loader.gif');
+                Attachments.extractAttachment($(this).attr('name'));
+                return false
         });
+    });
 
+    $('.delete_attachment').unbind('click').click(function () {
+        get_lightbox(function() {
+            $(this).children('img')
+                .attr('src', '/static/skin/common/images/ajax-loader.gif');
+            Attachments.delAttachment(
+                $(this).prevAll('a[href!=#]').attr('href'), true
+            );
+        });
+        return false
+    });
 
     var _gz = '';
 
@@ -203,9 +143,14 @@ $(function() {
             .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time);
 
     function get_lightbox (cb) {
-        $.ajaxSettings.cache = true;
-        $.getScript(lightbox_uri, cb);
-        $.ajaxSettings.cache = false;
+        if ($.isFunction($.showLightbox)) {
+            cb();
+        }
+        else {
+            $.ajaxSettings.cache = true;
+            $.getScript(lightbox_uri, cb);
+            $.ajaxSettings.cache = false;
+        }
     }
 
     $("#st-comment-button-link, #bottomButtons .commentButton")

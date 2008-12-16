@@ -124,8 +124,17 @@ proto.selected_visible_type = function () {
     return this.visible_types[type] || type;
 }
 
+proto.process = function (template) {
+    Socialtext.loc = loc;
+    jQuery('body').append(
+        Jemplate.process(template, Socialtext)
+    );
+}
+
 proto.show = function () {
     var self = this;
+
+    this.process('create_content_lightbox.tt2');
 
     // Clear errors from the previous time around: {bz: 1039}
     jQuery('#st-create-content-lightbox .error').html('');

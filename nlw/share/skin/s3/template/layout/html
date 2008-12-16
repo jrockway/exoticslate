@@ -231,6 +231,5 @@
         </div><!-- footer END -->
       </div><!-- contentWrap END -->
     </div><!-- mainWrap END -->
-    [% INCLUDE lightbox/create_content %]
   </body>
 </html>

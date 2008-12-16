@@ -285,25 +285,26 @@ $(function() {
         return false;
     });
 
+    $("#st-create-content-link, .incipient").unbind("click").click(function () {
+        get_lightbox(function () {
+            var create_content = new ST.CreateContent;
+            create_content.show();
+            if (jQuery(this).hasClass('incipient')) {
+                if (jQuery(this).attr('href').match(/page_name=([^;#]+)/)) {
+                    create_content.set_incipient_title(RegExp.$1);
+                }
+                else {
+                    create_content.set_incipient_title(jQuery(this).text());
+                }
+            }
+        });
+        return false;
+    });
 
     $("#st-pagetools-delete").click(function () {
         if (confirm(loc("Are you sure you want to delete this page?"))) {
             var page = Socialtext.page_id;
             document.location = "index.cgi?action=delete_page;page_name=" + page;
-        }
-        return false;
-    });
-
-    $("#st-create-content-link, .incipient").unbind("click").click(function () {
-        var create_content = new ST.CreateContent;
-        create_content.show();
-        if (jQuery(this).hasClass('incipient')) {
-            if (jQuery(this).attr('href').match(/page_name=([^;#]+)/)) {
-                create_content.set_incipient_title(RegExp.$1);
-            }
-            else {
-                create_content.set_incipient_title(jQuery(this).text());
-            }
         }
         return false;
     });

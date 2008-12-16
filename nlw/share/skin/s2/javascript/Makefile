@@ -3,7 +3,7 @@
 COMMON_JAVASCRIPT=../../common/javascript
 S3_JAVASCRIPT=../../s3/javascript
 WIKIWYG_ST=../../wikiwyg/javascript
-WIKIWYG_PATH=$(COMMON_JAVASCRIPT)/Wikiwyg-2007-07-17
+WIKIWYG_PATH=../../wikiwyg/javascript
 MINIFY=perl -MJavaScript::Minifier::XS -0777 -e 'print JavaScript::Minifier::XS::minify(scalar <>);'
 # MINIFY=cat
 

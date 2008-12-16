@@ -34,24 +34,24 @@
 
 | *Comment* | Headings appear uppercase via CSS: actual headings are titlecase |
 | text_like | Phone |
-| text_like | Work: 555-work-%%short_e_user%% |
-| text_like | Mobile: 555-mobile-%%short_e_user%% |
-| text_like | Home: 555-home-%%short_e_user%% |
+| text_like | Work phone: 555-work-%%short_e_user%% |
+| text_like | Mobile phone: 555-mobile-%%short_e_user%% |
+| text_like | Home phone: 555-home-%%short_e_user%% |
 
 | *Comment* | regexs needed becausing whitespace is missing in the page layout |
 | text_like | IM |
-| text_like | qr/AIM: AOL %%short_e_user%%/ |
-| text_like | qr/Yahoo!: Yahoo %%short_e_user%%/ |
-| text_like | qr/GTalk: GTalk %%short_e_user%%/ |
-| text_like | qr/Skype: Skype %%short_e_user%%/ |
-| text_like | qr/Sametime: Sametime %%short_e_user%%/ |
-| text_like | qr/Twitter: Twitter %%short_e_user%%/ |
+| text_like | qr/IM AIM.+AOL %%short_e_user%%/ |
+| text_like | qr/Yahoo!.+Yahoo %%short_e_user%%/ |
+| text_like | qr/GTalk.+GTalk %%short_e_user%%/ |
+| text_like | qr/Skype.+Skype %%short_e_user%%/ |
+| text_like | qr/Sametime.+Sametime %%short_e_user%%/ |
+| text_like | qr/Twitter.+Twitter %%short_e_user%%/ |
 
 | text_like | Web |
 | text_like | `Blog: http://blog/%%short_e_user%%` |
 | text_like | `Personal: http://personal/%%short_e_user%%` |
-| text_like | `LinkedIn: http://linkedIn/%%short_e_user%%` |
-| text_like | `Facebook: http://facebook/%%short_e_user%%` |
+| text_like | qr/Linked.+http\:\/\/linkedIn\/%%short_e_user%%/ |
+| text_like | qr/Facebook.+http\:\/\/facebook\/%%short_e_user%%/ |
 
 | text_like | Manager |
 | text_like | user one |

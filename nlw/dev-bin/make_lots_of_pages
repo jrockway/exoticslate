@@ -6,16 +6,48 @@ use FindBin;
 use lib "$FindBin::Bin/../lib";
 use Test::Socialtext;
 use Socialtext::User;
+use Getopt::Long;
 
 my $hub = new_hub('admin');
 my $page;
-my $max_pages = shift || 5000;
+my $pages = 5000;
+my $tags  = 100;
+my $tags_per_page = 3;
+GetOptions(
+    'pages=s' => \$pages,
+    'tags=s'  => \$tags,
+    'tags-per-page=s' => \$tags_per_page,
+) or usage();
 
-for ( 1 .. $max_pages ) {
+
+for ( 1 .. $pages ) {
     warn "Creating page $_\n";
     $page = Socialtext::Page->new( hub => $hub )->create(
         title   => "Page $_",
         content => 'First Paragraph',
         creator => Socialtext::User->SystemUser,
+        categories => random_tags(),
     );
+}
+
+exit;
+
+sub random_tags {
+    my $min = 0;
+    my $max = $tags_per_page * 2;
+    srand(time);
+    my $num = $min + rand($max - $min);
+    return [] unless $num > 0;
+    return [ map { "tag $_" } 1 .. $num ];
+}
+
+
+sub usage {
+    die <<EOT;
+USAGE: $0 [--pages=30] [--tags=8] [--tags-per-page=3]
+
+Creates a bunch of pages.
+
+tags per page is a weighted average.
+EOT
 }

@@ -132,11 +132,18 @@ sub get_resource {
     return $events;
 }
 
+sub code_base {
+   return Socialtext::AppConfig->code_base;
+}
+
 sub template_render {
     my ($self, $tmpl, $vars) = @_;
     my $renderer = Socialtext::TT2::Renderer->instance;
+    my $paths = $self->hub->skin->template_paths;
+    push @$paths, glob($self->code_base . "/plugin/*/template");
     return $renderer->render(
         template => $tmpl,
+        paths => $paths,
         vars => {
             collection_name => $self->collection_name,
             link => Socialtext::URI::uri(path => $self->rest->request->uri),

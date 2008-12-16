@@ -211,7 +211,7 @@ SEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSE
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | simple simple more simple most simple |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
-| click_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 | st-admin | index-page --w %%sorting_workspace%% --p search_sort_5 | The Search Sort 5 page in the %%sorting_workspace%% workspace has been indexed. |
 
 | *Comment* | Test Case: Tagged Page Sorting. Sorting search results. Do the SEARCH again. |  |

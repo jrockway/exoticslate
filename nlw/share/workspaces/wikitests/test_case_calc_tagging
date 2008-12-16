@@ -3,7 +3,7 @@
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag%20page%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| click_ok | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
 
@@ -66,7 +66,7 @@
 
 | *Comment* | Test Case: Calc Tagging reverify foo bar link |  |
 | text_like | link=foo bar %%start_time%% | foo bar %%start_time%% |
-| clickAndWait | link=foo bar %%start_time%% |  |
+| click_and_wait | link=foo bar %%start_time%% |  |
 
 | *Comment* | Test Case: Calc Tagging tag list view: tag foo bar %%start_time%% |  |
 | text_like | link=foo bar %%start_time%% as a weblog | foo bar %%start_time%% as a weblog |
@@ -79,7 +79,7 @@ Add any other tag to three different pages | tag is added
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag%20page%201%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| clickAndWait | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
 | wait_for_element_visible_ok | link=Tag | 30000 |
 | click_ok | link=Tag |  |
@@ -95,7 +95,7 @@ Add any other tag to three different pages | tag is added
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag%20page%202%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| clickAndWait | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
 | click_ok | link=Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
@@ -112,7 +112,7 @@ Add any other tag to three different pages | tag is added
 | open_ok | %%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=tag%20page%203%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | pause | 5000 | I hate pause; needed for entire page load |
-| clickAndWait | st-save-button-link |  |
+| click_and_wait | st-save-button-link |  |
 | wait_for_element_visible_ok | st-tags-addlink | 30000 |
 
 | click_ok | link=Tag |  |
@@ -128,7 +128,7 @@ Add any other tag to three different pages | tag is added
 
 | *Comment* | Test Case: Calc Tagging checking revisions |  |
 
-| clickAndWait | controls-right-revisions |
+| click_and_wait | controls-right-revisions |
 | open_ok | /%%workspace%%/?tag page 2 %%start_time%% |
 | wait_for_element_present_ok | //a[@class='delete_tag'] | 30000 |
 | click_ok | //a[@class='delete_tag'] |  |
@@ -140,9 +140,9 @@ Observe that tag | tag is still in list
 Click that tag | Tag list page appears with two remaining tagged pages
 
 | open_ok | /%%workspace%%/?action=recent_changes |  |
-| clickAndWait | link=All Tags |  |
+| click_and_wait | link=All Tags |  |
 | text_like | contentContainer | tagtest %%start_time%% |
-| clickAndWait | link=tagtest %%start_time%% |  |
+| click_and_wait | link=tagtest %%start_time%% |  |
 | text_like | contentContainer | tag page 1 %%start_time%% |
 | text_like | contentContainer | tag page 3 %%start_time%% |
 
@@ -151,8 +151,6 @@ Click that tag | Tag list page appears with two remaining tagged pages
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_1_%%start_time%% |  |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_2_%%start_time%% |  |
 | st-admin | purge-page --workspace %%workspace%% --page tag_page_3_%%start_time%% |  |
-
-| clickAndWait | st-home-link | set up for next included test |
 
 | *Comment* | Test Case: Calc Tagging COMPLETED |  |
 

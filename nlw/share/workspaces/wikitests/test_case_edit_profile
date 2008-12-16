@@ -45,8 +45,8 @@
 | text_like | //body | Contact |
 | text_like | //body | IM |
 | text_like | //body | Web |
-| text_like | //body | First name: |
-| text_like | //body | Last name: |
+| text_like | //body | First Name |
+| text_like | //body | Last Name |
 | verifyValue | first_name | %%fname%% |
 | verifyValue | last_name | %%lname%% |
 
@@ -71,8 +71,8 @@
 | type_ok | facebook_url | facebook/%%short_e_user%% |
 
 | *Comment* | Test Case: Edit Profile. Need to select users in a common account |  |
-| select_ok | supervisor | user one |
-| select_ok | assistant | user two |
+| select_ok | field_supervisor | user one |
+| select_ok | field_assistant | user two |
 
 | *Comment* | Test Case: Edit Profile. Upload photo |  |
 | check_ok | select-upload |  |

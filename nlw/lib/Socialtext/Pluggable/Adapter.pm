@@ -16,6 +16,7 @@ use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
                       search_dirs => \@libs;
 use Socialtext::Pluggable::WaflPhrase;
 use Socialtext::Log 'st_timed_log';
+use List::Util qw(first);
 
 # These hook types are executed only once, all other types are called as many
 # times as they are registered
@@ -208,15 +209,14 @@ sub plugin_list {
 
 sub plugin_exists {
     my ($class_or_self, $name) = @_;
-    my %list = map { $_ => 1 } $class_or_self->plugin_list;
-    return $list{$name};
+    my $match = $class_or_self->plugin_class($name);
+    return $match ? 1 : 0;
 }
 
 sub plugin_class {
     my ($class_or_self, $name) = @_;
-    for my $plugin ($class_or_self->plugins) {
-        return $plugin if $plugin->name eq $name;
-    }
+    my $match = first {$_->name eq $name} $class_or_self->plugins;
+    return $match;
 }
 
 sub registered {

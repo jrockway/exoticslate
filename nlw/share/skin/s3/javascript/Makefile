@@ -48,13 +48,14 @@ S3_SOURCE_FILES= \
 		lightbox.js \
 		pageview.js \
 		pageattachments.js \
+		email.js \
 		s3.js \
 
 LIGHTBOX_SOURCE_FILES= \
 		timestamp.js \
 		$(LIGHTBOX_JEMPLATE) \
 		comment.js \
-		email.js \
+		email-lightbox.js \
 		move.js \
 		create_content.js \
 

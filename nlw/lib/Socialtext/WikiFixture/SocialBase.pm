@@ -9,6 +9,7 @@ use Test::HTTP;
 use Socialtext::SQL qw/sql_execute/;
 use Socialtext::JSON qw/decode_json/;
 use Socialtext::File;
+use Time::HiRes qw/gettimeofday tv_interval/;
 
 =head1 NAME
 
@@ -537,5 +538,23 @@ sub add_workspace_permission {
     );
     diag "Added $permission permission for $workspace workspace $role role";
 }
+
+sub start_timer {
+    my $self = shift;
+    my $name = shift || 'default';
+
+    $self->{_timer}{$name} = [ gettimeofday ];
+}
+
+sub faster_than {
+    my $self = shift;
+    my $ms = shift or die "faster_than requires a time in ms!";
+    my $name = shift || 'default';
+    my $start = $self->{_timer}{$name} || die "$name is not a valid timer!";
+
+    my $elapsed = tv_interval($start);
+    cmp_ok $elapsed, '<=', $ms, "$name timer was faster than $ms";
+}
+
 
 1;

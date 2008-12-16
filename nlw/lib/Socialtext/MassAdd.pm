@@ -23,8 +23,11 @@ our @All_fields = (@Required_fields, @User_fields, @Profile_fields);
 our %Non_profile_fields = map {$_ => 1} (@Required_fields, @User_fields, 'account_id');
 
 BEGIN {
-    eval "require Socialtext::People::Profile";
-    $Has_People_Installed = !$@;
+    unless (defined $Has_People_Installed) {
+        require Socialtext::Pluggable::Adapter;
+        $Has_People_Installed = 
+            Socialtext::Pluggable::Adapter->plugin_exists('people');
+    }
 }
 
 sub new {
@@ -220,41 +223,20 @@ sub _update_profile {
     my $self = shift;
     my $user = shift;
     my %profile_args = @_;
-    my $changed_user = 0;
 
     local $Socialtext::People::Fields::AutomaticStockFields = 1;
 
-    my $p = Socialtext::People::Profile->GetProfile($user, no_recurse => 1);
-    return 0 unless $p;
+    my $people = Socialtext::Pluggable::Adapter->plugin_class('people');
+    return 0 unless $people;
 
-    while (my ($field, $value) = each %profile_args) {
-        next unless $value;
-        if ($p->valid_attr($field)) {
-            my $old_value = $p->get_attr($field);
-            $old_value = '' unless defined $old_value;
-            next if ($old_value eq $value);
-            $p->set_attr($field => $value);
-            $changed_user++;
-        }
-        # TODO: link profile relationship fields
-#         elsif ($p->valid_reln($field)) {
-#             # relationship updates must be deferred until after we've loaded
-#             # everyone
-#             $self->{_profile_reln_update} ||= [];
-#             push @{$self->{_profile_reln_update}}, {
-#                 prof => $prof,
-#                 field => $field,
-#                 value => $value
-#             };
-#             $changed_user++; # well, it's maybe changed
-#         }
-        else {
-            $self->_fail(loc('Profile field "[_1]" does not exist for this account', $field));
-        }
+    my ($changed_user, $failed) = 
+        $people->UpdateProfileFields($user => \%profile_args);
+
+    foreach my $field (@$failed) {
+        $self->_fail(loc('Profile field "[_1]" does not exist for this account', $field));
     }
 
-    $p->save() if $changed_user;
-    return $changed_user;
+    return $changed_user ? 1 : 0;
 }
 
 sub _pass {
@@ -276,9 +258,10 @@ sub _fail {
 sub ProfileFieldsForAccount {
     my $class = shift;
     my $account = shift;
-    return unless $Has_People_Installed;
+    my $people = Socialtext::Pluggable::Adapter->plugin_class('people');
+    return unless $people;
     local $Socialtext::People::Fields::AutomaticStockFields = 1;
-    return Socialtext::People::Fields->new(account_id => $account->account_id);
+    return $people->FieldsForAccount($account);
 }
 
 1;

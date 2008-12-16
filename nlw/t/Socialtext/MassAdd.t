@@ -408,3 +408,11 @@ EOT
         'correct failure message';
     is_deeply \@successes, ['Added user guybrush'], 'continued on to add next user';
 }
+
+Fields_for_account: {
+    no warnings 'redefine';
+    local *Socialtext::People::Fields::new = sub { "dummy" };
+    my $acct = Socialtext::Account->Default;
+    my $fields = Socialtext::MassAdd->ProfileFieldsForAccount($acct);
+    is $fields, "dummy";
+}

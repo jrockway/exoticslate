@@ -1,5 +1,6 @@
 .PHONY: all clean split-js
 
+COMMON_JAVASCRIPT=../../common/javascript
 S2_JAVASCRIPT=../../s2/javascript
 
 EDITOR_FILE=socialtext-editor.js
@@ -8,23 +9,27 @@ EDITOR_SOURCE_FILES= \
 		$(S2_JAVASCRIPT)/md5.js \
 		$(JEMPLATE_WIKIWYG_MODULE) \
 		$(JEMPLATE_MODULE) \
-		lib/Wikiwyg.js \
-		lib/Wikiwyg/Toolbar.js \
-		lib/Wikiwyg/Preview.js \
-		lib/Wikiwyg/Wysiwyg.js \
-		lib/Wikiwyg/HTML.js \
-		Wikiwyg/Socialtext.js \
+		$(WIKIWYG_PATH)/lib/Wikiwyg.js \
+		$(WIKIWYG_PATH)/lib/Wikiwyg/Toolbar.js \
+		$(WIKIWYG_PATH)/lib/Wikiwyg/Preview.js \
+		$(WIKIWYG_PATH)/lib/Wikiwyg/Wysiwyg.js \
+		$(WIKIWYG_PATH)/lib/Wikiwyg/HTML.js \
+		$(WIKIWYG_ST)/Wikiwyg/Socialtext.js \
 		Widgets.js \
-		Wikiwyg/Widgets.js \
-		Wikiwyg/MessageCenter.js \
-		Wikiwyg/Wikitext/Socialtext.js \
-		Wikiwyg/DataValidator.js \
+		$(WIKIWYG_ST)/Wikiwyg/Widgets.js \
+		$(WIKIWYG_ST)/Wikiwyg/MessageCenter.js \
+		$(WIKIWYG_ST)/Wikiwyg/Wikitext/Socialtext.js \
+		$(WIKIWYG_ST)/Wikiwyg/DataValidator.js \
 		wikiwyg.js \
 
 JEMPLATE_WIKIWYG_MODULE=jemplate_wikiwyg.js
 ALL_WIKIWYG_JEMPLATES:=$(shell find jemplate_wikiwyg)
 
-WIDGETS_YAML=Widgets.yaml
+# Use Wikiwyg-dev when developing Wikiwyg
+WIKIWYG_PATH=$(COMMON_JAVASCRIPT)/Wikiwyg-2007-07-17
+WIKIWYG_ST=.
+
+WIDGETS_YAML=$(WIKIWYG_ST)/Widgets.yaml
 ALL_EDIT_JEMPLATES:=$(shell perl -MYAML -e 'my $$y = YAML::LoadFile("$(WIDGETS_YAML)"); my $$w = $$y->{widgets}; print join " ", map "jemplate/widget_$${_}_edit.html", @$$w')
 ALL_JEMPLATES=$(ALL_EDIT_JEMPLATES) jemplate/insert_widget_menu
 JEMPLATE_GENERATOR=bin/generate-widget-jemplate.pl

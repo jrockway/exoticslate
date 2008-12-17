@@ -69,6 +69,15 @@
             application/json:   [Socialtext::Rest::Version, GET_json]
         '*': [Socialtext::Rest::Version, bad_method]
 -
+    '/data/workspaces/:ws/pages/:pname/events':
+        'GET':
+            '*/*':           &default [Socialtext::Rest::Events::Page, GET_html]
+            'text/html':              *default
+            'application/json':       [Socialtext::Rest::Events::Page, GET_json]
+            'application/atom+xml':   [Socialtext::Rest::Events::Page, GET_atom]
+            'text/plain':             [Socialtext::Rest::Events::Page, GET_text]
+        '*':                    [Socialtext::Rest::Events::Page, bad_method]
+-
     '/data/workspaces/:ws/pages/:pname/tags/:tag':
         'GET':   
             '*/*':     &default [Socialtext::Rest::PageTag, GET_html]

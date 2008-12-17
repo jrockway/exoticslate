@@ -19,8 +19,6 @@ use Socialtext::URI;
 use constant MAX_EVENT_COUNT => 500;
 use constant DEFAULT_EVENT_COUNT => 25;
 
-field 'ws'; # get rid of "no method" warnings
-
 sub allowed_methods { 'GET' }
 sub collection_name { loc('Events') }
 sub events_auth_method { 'default' }

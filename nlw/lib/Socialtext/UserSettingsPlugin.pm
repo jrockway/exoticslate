@@ -108,7 +108,9 @@ sub get_admins {
     my @admins;
     my $users_with_roles = $workspace->users_with_roles();
 
-    while ( my ( $user, $role ) = $users_with_roles->next ) {
+    while ( my $tuple = $users_with_roles->next ) {
+        my $user = $tuple->[0];
+        my $role = $tuple->[1];
         if ( $role->name eq 'workspace_admin' ) {
             push( @admins, $user->email_address );
         }

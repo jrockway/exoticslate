@@ -91,6 +91,13 @@ New Post
 | *Comment* | SlideShow SEE Untitled Page open for editing |  |
 | pause | %%pt%% |  |
 | pause | %%pt%% | extra pause for editing |
+| click_ok | link=Expand |  |
+| pause | %%pt%% |  |
+| *Comment* | SlideShow SEE Untitled Page - Expanded and open for editing |  |
+| pause | %%pt%% |  |
+| click_ok | link=Normal |  |
+| pause | %%pt%% |  |
+| *Comment* | SlideShow SEE Untitled Page - Normal and open for editing |  |
 
 Post by Email popup
 

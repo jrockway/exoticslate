@@ -11,8 +11,13 @@ use Pod::Usage;
 use File::Slurp qw(slurp write_file);
 use File::Temp qw(tempfile);
 use Fcntl qw(SEEK_SET);
+use Socialtext::AppConfig;
+use Socialtext::System qw(shell_run);
 use Socialtext::LDAP;
-use Socialtext::Bootstrap::OpenLDAP;
+
+###############################################################################
+# Hang onto the command line arguments, in case we need to sudo.
+my @ORIGINAL_ARGV = @ARGV;
 
 ###############################################################################
 # Read in our command line arguments.
@@ -25,6 +30,18 @@ GetOptions(
 ) || pod2usage(1);
 pod2usage(1) if ($help);
 pod2usage( -exitstatus=>0, -verbose=>2 ) if ($man);
+
+###############################################################################
+# On appliances, this *must* be run as "root".
+if (Socialtext::AppConfig->is_appliance() && $>) {
+    shell_run('sudo', $^X, $0, @ORIGINAL_ARGV);
+    exit;
+}
+
+###############################################################################
+# Load the OpenLDAP bootstrapper.  Has to be done *after* we sudo, though;
+# ST::Hub can't load on an appliance as a human User.
+require Socialtext::Bootstrap::OpenLDAP;
 
 ###############################################################################
 # Perform the action specified on the command line

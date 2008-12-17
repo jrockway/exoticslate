@@ -1879,8 +1879,10 @@ proto._do_table_manip = function(callback) {
                 self.get_edit_window().getSelection().collapse( $new_cell.find("span").get(0), 0 );
             }
             else if (jQuery.browser.msie) {
-                // var r = self.get_edit_document().body.createTextRange();
-                // alert(r);
+                var r = self.get_edit_document().selection.createRange();
+                r.moveToElementText( $new_cell.get(0) );
+                r.collapse(true);
+                r.select();
             }
         }
     }, 100);

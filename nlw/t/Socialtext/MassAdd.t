@@ -10,7 +10,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 62;
+    plan tests => 63;
 }
 
 use mocked 'Socialtext::People::Profile';

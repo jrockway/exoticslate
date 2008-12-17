@@ -5,6 +5,7 @@ use warnings;
 
 use Socialtext::Storage;
 use Socialtext::AppConfig;
+use Socialtext::CGI;
 use unmocked 'Cwd';
 use unmocked 'File::Glob';
 
@@ -18,6 +19,11 @@ my %rests;
 
 sub rest_hooks {}
 sub add_content_type {}
+
+sub query {
+    my $self = shift;
+    return $self->{_cgi} ||= Socialtext::CGI->new;
+}
 
 sub name {
     my $self = shift;

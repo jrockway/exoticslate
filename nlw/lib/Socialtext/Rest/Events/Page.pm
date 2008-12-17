@@ -8,21 +8,29 @@ use Socialtext::l10n 'loc';
 
 sub collection_name {
     my $self = shift;
-    return loc("Events for Page [_1]", $self->pname);
+    return loc("Events for [_1] in [_2]", 
+                $self->hub->pages->current->title,
+                $self->hub->current_workspace->title);
 }
 
 sub events_auth_method { 'page' }
 
-sub get_resouce {
+sub get_resource {
     my $self = shift;
     my $rest = shift;
     my $content_type = shift;
 
-    my @args = $self->extract_common_args;
-    push @args, 'page.id' => $self->pname;
-    push @args, 'page.workspace_id' => $self->ws;
+    warn "page get resource";
 
-    my $events = Socialtext::Events->Get($self->rest->user, @args);
+    my %args = $self->extract_common_args;
+
+    $args{page_id} = $self->hub->pages->current->id;
+    $args{page_workspace_id} = $self->hub->current_workspace->workspace_id;
+    $args{event_class} = 'page';
+
+    use XXX; WWW \%args;
+
+    my $events = Socialtext::Events::Reporter->new(viewer => $self->hub->current_user)->get_events(%args);
     $events ||= [];
     return $events;
 }

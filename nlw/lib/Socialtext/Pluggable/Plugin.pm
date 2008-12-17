@@ -352,6 +352,44 @@ sub created_by {
     return $original_revision->last_edited_by;
 }
 
+sub get_revision {
+    my $self = shift;
+    my %p = (
+        workspace_name => undef,
+        page_name => undef,
+        revision_id => undef,
+        @_
+    );
+
+    return undef if (!$p{workspace_name} || !$p{revision_id} || !$p{page_name});
+
+    my $page_id = $self->name_to_id($p{page_name});
+    my $cache_key = "page $p{workspace_name} $page_id revision $p{revision_id}";
+    my $revision = $self->value_from_cache($cache_key);
+    return $revision if ($revision);
+
+    my $workspace = Socialtext::Workspace->new( name => $p{workspace_name} );
+    return undef if (!defined($workspace));
+    my $auth_check = Socialtext::Authz::SimpleChecker->new(
+        user => $self->hub->current_user,
+        workspace => $workspace,
+    );
+    my $hub = $self->_hub_for_workspace($workspace);
+    return undef unless defined($hub);
+    if ($auth_check->check_permission('read')) {
+        $revision = $hub->pages->new_page($page_id);
+        $revision->revision_id($p{revision_id});
+        $self->cache_value(
+            key => $cache_key,
+            value => $revision,
+        );
+    }
+    else {
+        return undef;
+    }
+    return $revision;
+}
+
 sub get_page {
     my $self = shift;
     my %p = (

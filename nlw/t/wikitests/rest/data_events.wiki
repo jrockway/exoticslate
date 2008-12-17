@@ -65,6 +65,7 @@ Test case for `/data/events`(GET and POST).
 | body-like  | "id":"page_three"      |                  |
 | body-like  | "id":"page_two"        |                  |
 
+
 | Comment    | GET all events as text/plain                                     |                 |
 | get        | /data/events                                                     | text/plain      |
 | has-header | Content-type                                                     | qr/text\/plain/ |
@@ -82,6 +83,7 @@ Test case for `/data/events`(GET and POST).
 | body-like  | qr/Tester One<\/a> tagged <b><[^>]+>Page Two<\/a><\/b> in <a [^>]+>%%test_workspace%%<\/a> as <a[^>]+>saggy/   |                |
 | body-like  | qr/Tester Two<\/a> tagged <b><[^>]+>Page Three<\/a><\/b> in <a [^>]+>%%test_workspace%%<\/a> as <a[^>]+>taggy/ |                |
 | body-like  | qr/Tester Two<\/a> tagged <[^>]+>Tester One<\/a> <a[^>]+>downer/                                               |                |
+
 
 | Comment     | GET one event (limit) |                  |
 | get         | /data/events?limit=1  | application/json |
@@ -310,6 +312,14 @@ Test case for `/data/events`(GET and POST).
 | get            | /data/events?event_class=person                                    | application/json |
 | code-is        | 403                                                                |                  |
 | st-admin       | enable-plugin --plugin people --account Socialtext                 |                  |
+
+| *Comment* | ensure that madlibs from signals are evaluated |
+| st-clear-events | | |
+| post-json | /data/events | {"actor":{"id":%%tester1_id%%},"event_class":"signal","action":"signal", "context":{"body":"foo"}}  |
+| get        | /data/events                                                                                                   | text/html      |
+| has-header | Content-type                                                                                                   | qr/text\/html/ |
+| code-is    | 200                                                                                                            |                |
+| body-like  | "foo" |                  |
 
 ^^ TODO Test
 

@@ -2,28 +2,13 @@ package Socialtext::Rest::Events::Awesome;
 # @COPYRIGHT@
 use strict;
 use warnings;
-use base 'Socialtext::Rest::Events';
+use base 'Socialtext::Rest::EventsBase';
 
 use Socialtext::l10n 'loc';
-use Socialtext::Events::Reporter;
 
-sub allowed_methods { 'GET' }
 sub collection_name { loc("Followed People Events") }
 
-sub if_authorized {
-    my $self = shift;
-    my $method = shift;
-    my $perl_method = shift;
-
-    my $user = $self->rest->user;
-    return $self->not_authorized 
-        unless ($user && $user->is_authenticated());
-
-    return $self->not_authorized
-        unless $user->can_use_plugin('people');
-
-    return $self->$perl_method(@_);
-}
+sub events_auth_method { 'people' };
 
 sub get_resource {
     my ($self, $rest) = @_;

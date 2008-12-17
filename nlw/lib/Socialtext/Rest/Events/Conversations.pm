@@ -2,13 +2,10 @@ package Socialtext::Rest::Events::Conversations;
 # @COPYRIGHT@
 use strict;
 use warnings;
-use base 'Socialtext::Rest::Events';
+use base 'Socialtext::Rest::EventsBase';
 
 use Socialtext::l10n 'loc';
-use Socialtext::Events;
-use Socialtext::User;
 
-sub allowed_methods {'GET'}
 sub collection_name { loc("My Conversations") }
 
 sub get_resource {

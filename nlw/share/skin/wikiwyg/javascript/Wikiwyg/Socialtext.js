@@ -1860,7 +1860,7 @@ proto.do_new_table = function() {
 proto._do_table_manip = function(callback) {
     var doc = this.get_edit_document();
     jQuery("span.find-cursor", doc).removeClass('find-cursor');
-    this.set_focus(); // Need this before .insert_html
+    this.set_focus();
     this.insert_html( "<span class=\"find-cursor\"></span>" );
 
     var self = this;
@@ -1871,7 +1871,18 @@ proto._do_table_manip = function(callback) {
         var $cell = cur.parents("td");
         cur.remove();
 
-        callback.call(self, $cell);
+        var $new_cell = callback.call(self, $cell);
+
+        if ($new_cell) {
+            self.set_focus();
+            if (jQuery.browser.mozilla) {
+                self.get_edit_window().getSelection().collapse( $new_cell.find("span").get(0), 0 );
+            }
+            else if (jQuery.browser.msie) {
+                // var r = self.get_edit_document().body.createTextRange();
+                // alert(r);
+            }
+        }
     }, 100);
 }
 
@@ -1940,11 +1951,12 @@ proto.do_del_row = function() {
         }
         if ($new_cell.length) {
             $cell.parents('tr').remove();
+            return $new_cell;
         }
         else {
             $cell.parents("table").remove();
+            return;
         }
-        $new_cell.focus(); // XXX This doesn't work :\
     });
 }
 
@@ -1953,18 +1965,21 @@ proto.do_del_col = function() {
     this._do_table_manip(function($cell) {
         var $table = $cell.parents("table");
         var col = self._find_column_index($cell);
-        var $new_cell = $cell.next();
 
+        var $new_cell = $cell.next();
         if (!$new_cell.length) {
             $new_cell = $cell.prev();
         }
+
         if ($new_cell.length) {
             $table.find("td:nth-child(" + col + ")").remove();
+            return $new_cell;
         }
         else {
             $cell.parents("table").remove();
+            return;
         }
-        $new_cell.focus(); // XXX This doesn't work :\
+
     });
 }
 

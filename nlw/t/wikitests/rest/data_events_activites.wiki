@@ -43,6 +43,14 @@ This test case assumes a logged in user.
 | code-is   | 200                                             |
 | body-like | []                                              |
 
+| comment         | check that signals are included in activities |                                                                                                      |
+| post-json       | /data/events                                  | {"event_class":"signal", "action":"signal", "person":{"id":"%%user_id%%"}, "context":{"body":"foo"}} |
+| code-is         | 201                                           |                                                                                                      |
+| get             | /data/events/activities/%%username%%          | application/json                                                                                     |
+| code-is         | 200                                           |                                                                                                      |
+| body-like       | "foo"                                         |                                                                                                      |
+| st-clear-events |                                               |                                                                                                      |
+
 | comment | post a person event | . | .. |
 | post-json | /data/events | {"event_class":"person", "action":"edit_save", "person":{"id":"%%user_id%%"}, "context":{"testkey":"1"}} |
 | code-is | 201 |  |  |

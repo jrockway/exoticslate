@@ -201,7 +201,7 @@ proto.add_separator = function() {
 proto.add_div_open = function() {
     var base = this.config.imagesLocation;
     var ext = this.config.imagesExtension;
-    var $div = jQuery('<span class="table_buttons"></span>');
+    var $div = jQuery('<div class="table_buttons"></div>');
     jQuery(this.button_container).append($div);
     this.button_container = $div[0];
 }

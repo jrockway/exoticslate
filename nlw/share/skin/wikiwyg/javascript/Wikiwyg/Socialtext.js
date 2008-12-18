@@ -1393,10 +1393,12 @@ proto = new Subclass('Wikiwyg.Toolbar.Socialtext', 'Wikiwyg.Toolbar');
 proto.imagesExtension = '.png';
 
 proto.controlLayout = [
+    '{',
     'bold', 'italic', 'strike', '|',
     'h1', 'h2', 'h3', 'h4', 'p', '|',
     'ordered', 'unordered', 'outdent', 'indent', '|',
     'link', 'image', 'table', '|',
+    '}',
     '{',
     'add-row-below', 'add-row-above',
     'move-row-down', 'move-row-up',
@@ -1446,12 +1448,6 @@ proto.controlLabels = {
     unlink: loc('Unlink'),
     unordered: loc('Bulleted List')
 };
-
-proto.add_separator = function() {
-    var base = this.config.imagesLocation;
-    var ext = this.config.imagesExtension;
-    jQuery(this.div).append("&nbsp;&nbsp;&nbsp;");
-}
 
 proto.resetModeSelector = function() {
     this.wikiwyg.disable_button(this.wikiwyg.first_mode.classname);

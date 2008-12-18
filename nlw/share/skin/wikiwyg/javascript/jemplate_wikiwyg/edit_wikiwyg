@@ -55,17 +55,21 @@
                 <div id="st-page-editing">
                     <div id="st-editing-prefix-container">
                     <div id="st-page-editing-toolbar-container">
-                    <div id="st-page-editing-toolbar"></div>
-                     <div id="st-page-editing-widget-menu">
-                        [% INCLUDE insert_widget_menu %]
+                    <div id="st-page-editing-toolbar">
                     </div>
                     <div id="st-page-editing-toolbar-closer"></div>
-                    <div id="st-page-editing-tagbutton">
-                        <a id="st-edit-mode-tagbutton" class="button" href="#" title="[% loc('Click this button to add a tag to the page') %]">[% loc('Add tags...') %]</a>
+                    <div class="st-page-editing-group">
+                        <div id="st-page-editing-widget-menu">
+                            [% INCLUDE insert_widget_menu %]
+                        </div>
+                        <div id="st-page-editing-tagbutton">
+                            <a id="st-edit-mode-tagbutton" class="button" href="#" title="[% loc('Click this button to add a tag to the page') %]">[% loc('Add tags...') %]</a>
+                        </div>
+                        <div id="st-page-editing-uploadbutton">
+                            <a id="st-edit-mode-uploadbutton" class="button" href="#" title="[% loc('Click this button to upload a file to the page') %]">[% loc('Upload files...') %]</a>
+                        </div>
                     </div>
-                    <div id="st-page-editing-uploadbutton">
-                        <a id="st-edit-mode-uploadbutton" class="button" href="#" title="[% loc('Click this button to upload a file to the page') %]">[% loc('Upload files...') %]</a>
-                    </div>
+
                     </div>
                     </div>
                     <form style="clear: both; margin-top: 15px" id="st-page-editing-form" name="st-page-editing-form" method="post" enctype="multipart/form-data" action="index.cgi">

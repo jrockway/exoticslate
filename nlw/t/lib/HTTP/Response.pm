@@ -1,4 +1,5 @@
 package HTTP::Response;
+# @COPYRIGHT@
 use strict;
 use warnings;
 use unmocked 'HTTP::Status';

@@ -1,4 +1,5 @@
 package LWP::UserAgent;
+# @COPYRIGHT@
 use strict;
 use warnings;
 use HTTP::Response;

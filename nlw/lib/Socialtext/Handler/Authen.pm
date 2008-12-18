@@ -232,6 +232,12 @@ sub forgot_password {
         $self->session->add_error(loc("The user [_1] has been deactivated.", $username));
         return $self->_redirect('/nlw/forgot_password.html');
     }
+    elsif ($user->driver_name ne 'Default') {
+        $self->session->add_error(
+            loc("Since your password is stored in the directory for your organization, there is no way to reset your password within the Socialtext system. Please contact your directory administrator for assistance.")
+        );
+        return $self->_redirect('/nlw/forgot_password.html');
+    }
 
     $user->set_confirmation_info( is_password_change => 1 );
     $user->send_password_change_email();

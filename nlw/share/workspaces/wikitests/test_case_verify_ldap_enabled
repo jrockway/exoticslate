@@ -17,9 +17,12 @@ This testcase traverses the UI to all the places that differ from the Default UI
 | wait_for_element_visible_ok | username | 30000 |
 | text_like | Username: |  |
 
-| *Comment* | Test Case: Verify LDAP Enabled: I forgot my Password (no pwd reset) |
+| *Comment* | Test Case: Verify LDAP Enabled: I forgot my Password (LDAP users can't reset pwd) |
 | click_and_wait | link=I don't know my password. |  |
-| text_like | there is no way to reset your password |  |
+| text_like | Socialtext password help | |
+| type_ok | username | %%username%% |
+| click_and_wait | //input[@value='Submit'] | |
+| st-message | there is no way to reset your password |  |
 | click_and_wait | link=Log in to Socialtext |  |
 
 | *Comment* | Test Case: Verify LDAP Enabled: Attempt to register with an LDAP email address should fail |  |

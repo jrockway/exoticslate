@@ -1,0 +1,89 @@
+#!/usr/bin/perl
+eval 'exec /usr/bin/perl  -S $0 ${1+"$@"}'
+    if 0; # not running under some shell
+# @COPYRIGHT@
+use warnings;
+use strict;
+
+use FindBin;
+use Fatal qw(open close);
+
+my $CLI = "$FindBin::Bin/../lib/Socialtext/CLI.pm";
+
+open my $fh, '<', $CLI;
+my @headings = grep /^=head2/, <$fh>;
+close $fh;
+
+my @cmds;
+my %opts;
+
+chomp @headings;
+foreach my $h (@headings) {
+    $h =~ s/^=head2\s+//;
+    $h =~ s/^'(.+)'$/$1/;
+    $h =~ s/[\[\]]//g; # erase square brackets
+    $h =~ s/\s+or\s+/ /g;
+    $h =~ s/--/-/g;
+    $h =~ s/< .+$//g;
+    $h =~ s/<[^>]+>//g; # die, spaceships
+    my @words = split /\s+/,$h;
+    my $cmd = shift @words;
+    my %word_set = map { $_ => 1 } map { fixup_option($_) } grep /^-/, @words;
+
+    my @args = sort keys %word_set;
+                         
+    #print "$cmd @args\n";
+    push @cmds, $cmd;
+    $opts{$cmd} = join ' ',@args;
+}
+
+sub fixup_option {
+    my $option = shift;
+    my @results;
+    if ($option eq '-email') {
+        $option = '-email-address';
+    }
+
+    my $short = substr $option, 0, 2;
+    return "-$option", $short;
+}
+
+sub cmd_switch {
+    my $cmd = shift;
+    return <<EOT;
+        $cmd)
+            opts="$opts{$cmd}"
+            ;;
+EOT
+}
+
+@cmds = sort @cmds;
+
+my $all_cmds = join ' ', @cmds;
+my $all_opts = join("\n", map { cmd_switch($_) } @cmds);
+
+print <<EOBASH;
+_st_admin_comp()
+{
+    local cur cmds opts
+    COMPREPLY=()
+    cur=\${COMP_WORDS[COMP_CWORD]}
+
+    cmds='$all_cmds'
+
+    if [[ \$COMP_CWORD -eq 1 ]] ; then
+            COMPREPLY=( \$( compgen -W "\$cmds" -- \$cur ) )
+            return 0
+    fi
+    
+    case \${COMP_WORDS[1]} in
+$all_opts
+        *)
+            ;;
+    esac
+
+    COMPREPLY=( \$( compgen -W "\$opts" -- \$cur ) )
+}
+
+complete -F _st_admin_comp -o default st-admin
+EOBASH

@@ -1390,19 +1390,21 @@ Socialtext Wikiwyg Toolbar subclass
  =============================================================================*/
 proto = new Subclass('Wikiwyg.Toolbar.Socialtext', 'Wikiwyg.Toolbar');
 
+proto.imagesExtension = '.png';
+
 proto.controlLayout = [
     'bold', 'italic', 'strike', '|',
     'h1', 'h2', 'h3', 'h4', 'p', '|',
     'ordered', 'unordered', 'outdent', 'indent', '|',
     'link', 'image', 'table', '|',
     '{',
-    'add-row-below.png', 'add-row-above.png',
-    'move-row-down.png', 'move-row-up.png',
-    'del-row.png',
+    'add-row-below', 'add-row-above',
+    'move-row-down', 'move-row-up',
+    'del-row',
     '|',
-    'add-col-left.png', 'add-col-right.png',
-    'move-col-left.png', 'move-col-right.png',
-    'del-col.png',
+    'add-col-left', 'add-col-right',
+    'move-col-left', 'move-col-right',
+    'del-col',
     '}'
 ];
 
@@ -1490,8 +1492,7 @@ proto = new Subclass(WW_SIMPLE_MODE, 'Wikiwyg.Wysiwyg');
 
 proto.process_command = function(command) {
     command = command
-        .replace(/-/g, '_')
-        .replace(/\.png$/, '');
+        .replace(/-/g, '_');
     if (this['do_' + command])
         this['do_' + command](command);
 

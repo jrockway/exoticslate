@@ -311,6 +311,12 @@ sub _require_plugin {
     return $plugin;
 }
 
+sub list_plugins {
+    my $self = shift;
+    my $adapter = Socialtext::Pluggable::Adapter->new;
+    print "$_\n" for $adapter->plugin_list;
+}
+
 sub _require_account {
     my $self     = shift;
     my $optional = shift;
@@ -2715,10 +2721,11 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
 
   PLUGINS
 
+  list-plugins
   enable-plugin  [--account | --all-accounts | --workspace]
-                 --plugin [ people | dashboard | socialcalc ]
+                 --plugin <name>
   disable-plugin [--account | --all-accounts | --workspace]
-                 --plugin [ people | dashboard | socialcalc ]
+                 --plugin <name>
 
   EMAIL
 
@@ -2933,7 +2940,7 @@ Deletes the specified categories from the given workspace. You can
 specify a single category by name with C<--category> or all categories
 matching a string with C<--search>.
 
-=head2 create-workspace --name --title --account [--empty]
+=head2 create-workspace --name --title --account [--empty] [--clone-pages-from]
 
 Creates a new workspace with the given settings.  The usual account is
 Socialtext. Accounts are used for billing.  If --empty is given then no pages
@@ -3170,6 +3177,22 @@ that account.
 =head2 reset-account-skin --account --skin <skin>
 
 Set the skin for the specified account and its workspaces.
+
+=head2 list-plugins
+
+List all installed plugins.
+
+=head2 enable-plugin --plugin [--account | --all-accounts | --workspace ]
+
+Enable a plugin for the specified account (perhaps all) or workspace.
+
+Enabling for all accounts will also enable the plugin for accounts created in the future.
+
+=head2 disable-plugin --plugin [--account | --all-accounts | --workspace ]
+
+Disable a plugin for the specified account (perhaps all) or workspace.
+
+Disabling for all accounts will also disable the plugin for accounts created in the future.
 
 =head2 version
 

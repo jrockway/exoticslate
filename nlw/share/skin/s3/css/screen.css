@@ -734,10 +734,7 @@ div#bootstrap-loader {
 .wikiwyg_button:active {
     border: 1px inset;
 }
-.wikiwyg_separator {
-    height: 24px;
-    line-height: 24px;
-}
+
 #st-page-editing-uploadbutton {
     font-size: 9pt;
     margin-top: 4px;

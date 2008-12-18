@@ -28,8 +28,6 @@ sub get_resource {
     $args{page_workspace_id} = $self->hub->current_workspace->workspace_id;
     $args{event_class} = 'page';
 
-    use XXX; WWW \%args;
-
     my $events = Socialtext::Events::Reporter->new(viewer => $self->hub->current_user)->get_events(%args);
     $events ||= [];
     return $events;

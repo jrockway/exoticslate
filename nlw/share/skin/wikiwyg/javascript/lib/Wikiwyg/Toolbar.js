@@ -104,8 +104,8 @@ proto.initializeObject = function() {
             this.add_help_button(action, label);
         else if (action == '|')
             this.add_separator();
-        else if (action == '{')
-            this.add_div_open();
+        else if (action.match(/^\{/))
+            this.add_div_open(action);
         else if (action == '}')
             this.add_div_close();
         else if (action == '/')
@@ -198,10 +198,11 @@ proto.add_separator = function() {
     );
 }
 
-proto.add_div_open = function() {
+proto.add_div_open = function(action) {
+    var klass = action.replace(/^\{/, '');
     var base = this.config.imagesLocation;
     var ext = this.config.imagesExtension;
-    var $div = jQuery('<div class="table_buttons"></div>');
+    var $div = jQuery('<div class="' + klass + '"></div>');
     jQuery(this.button_container).append($div);
     this.button_container = $div[0];
 }

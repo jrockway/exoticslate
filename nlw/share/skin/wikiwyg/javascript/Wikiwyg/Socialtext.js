@@ -1393,13 +1393,13 @@ proto = new Subclass('Wikiwyg.Toolbar.Socialtext', 'Wikiwyg.Toolbar');
 proto.imagesExtension = '.png';
 
 proto.controlLayout = [
-    '{',
+    '{other_buttons',
     'bold', 'italic', 'strike', '|',
     'h1', 'h2', 'h3', 'h4', 'p', '|',
     'ordered', 'unordered', 'outdent', 'indent', '|',
     'link', 'image', 'table', '|',
     '}',
-    '{',
+    '{table_buttons disabled',
     'add-row-below', 'add-row-above',
     'move-row-down', 'move-row-up',
     'del-row',
@@ -1564,6 +1564,31 @@ proto.enableThis = function() {
         }
         catch(e) { }
     }, 1);
+
+    if (!this.__toolbar_styling_interval)
+        this.__toolbar_styling_interval = setInterval(function() {self.toolbarStyling() }, 1000);
+}
+
+proto.toolbarStyling = function() {
+    if (this.busy_styling)
+        return;
+    this.busy_styling = true;
+    try {
+        var selection = this.get_edit_document().selection
+            ? this.get_edit_document().selection
+            : this.get_edit_window().getSelection();
+        var anchor = selection.anchorNode
+            ? selection.anchorNode
+            : selection.createRange().parentElement();
+
+        if( jQuery(anchor, this.get_edit_window()).parents("table").size() > 0 ) {
+            jQuery(".table_buttons").removeClass("disabled");
+        }
+        else {
+            jQuery(".table_buttons").addClass("disabled");
+        }
+    } catch(e) {}
+    this.busy_styling = false;
 }
 
 proto.set_clear_handler = function () {

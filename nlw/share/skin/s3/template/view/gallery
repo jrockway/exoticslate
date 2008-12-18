@@ -22,7 +22,7 @@
                         [% widget.title %]
                     </a>
                     <br/>
-                    [% widget.description %]
+                    [% widget.desc %]
                 </td>
             </tr>
             [% END %]

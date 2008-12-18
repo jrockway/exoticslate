@@ -169,7 +169,8 @@ sub template_render {
 
 sub resource_to_text {
     my ($self, $events) = @_;
-    my $out = $self->template_render('data/events.txt', { events => $events });
+    my $out
+        = $self->template_render('data/events.txt', { events => $events });
     return $out;
 }
 
@@ -180,22 +181,38 @@ sub resource_to_html {
 
 sub resource_to_atom {
     my ($self, $events) = @_;
+
     # Format dates for atom
     $_->{at} =~ s{^(\d+-\d+-\d+) (\d+:\d+:\d+).\d+Z$}{$1T$2+0} for @$events;
     $self->template_render('data/events.atom.xml', { events => $events });
 }
 
+sub htmlize_event {
+    my ($self, $event) = @_;
+    my $renderized = $self->template_render(
+        'data/event',
+        { event => $event, out => 'html' }
+    );
+    $event->{html} = $renderized;
+    return $event;
+}
+
+sub resource_to_json {
+    my ($self, $events) = @_;
+    my @htmlevents = map { $self->htmlize_event($_) } @$events;
+    encode_json(\@htmlevents);
+}
+
 {
     no warnings 'once';
-    *GET_html = Socialtext::Rest::Collection::_make_getter(
-        \&resource_to_html, 'text/html'
-    );
-    *GET_text = Socialtext::Rest::Collection::_make_getter(
-        \&resource_to_text, 'text/plain'
-    );
-    *GET_atom = Socialtext::Rest::Collection::_make_getter(
-        \&resource_to_atom, 'application/atom+xml'
-    );
+    *GET_html = Socialtext::Rest::Collection::_make_getter(\&resource_to_html,
+        'text/html');
+    *GET_text = Socialtext::Rest::Collection::_make_getter(\&resource_to_text,
+        'text/plain');
+    *GET_atom = Socialtext::Rest::Collection::_make_getter(\&resource_to_atom,
+        'application/atom+xml');
+    *GET_json = Socialtext::Rest::Collection::_make_getter(\&resource_to_json,
+        'application/json');
 }
 
 1;

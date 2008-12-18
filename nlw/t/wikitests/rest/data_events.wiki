@@ -64,6 +64,7 @@ Test case for `/data/events`(GET and POST).
 | body-like  | "id":"page_one"        |                  |
 | body-like  | "id":"page_three"      |                  |
 | body-like  | "id":"page_two"        |                  |
+| body-like  | "html":"<a href=\"/?profile/%%tester1_id%%\"> |                  |
 
 
 | Comment    | GET all events as text/plain                                     |                 |

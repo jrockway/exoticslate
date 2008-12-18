@@ -8,7 +8,7 @@
             <tbody>
                 [% FOR event = events %]
                 <tr class="event_row">
-                    <td [% IF event == events.last() %]class="last"[% END %]>
+                    <td class="timestamped[% IF event == events.last() %] last[% END %]">
                         [% INCLUDE data/event e=event out='html' %]
                     </td>
                 </tr>

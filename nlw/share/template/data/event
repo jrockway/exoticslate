@@ -24,7 +24,7 @@
     [%- END %]
     [%- MACRO workspace BLOCK -%]<a href="/[% event.page.workspace_name %]">[% event.page.workspace_title %]</a>
     [%- END -%]
-    [%- MACRO ago BLOCK -%]<span class="ago"> ([% ago_text(minutes_ago(event.at)) %])</span>[%- END -%]
+    [%- MACRO ago BLOCK -%]<span class="ago_raw" style="display:none">[% event.at %]</span><span class="ago"> (<span class="ago_text">[% ago_text(minutes_ago(event.at)) %]</span>)</span>[%- END -%]
 [%- ELSE -%]
     [%- MACRO actor GET event.actor.best_full_name %]
     [%- MACRO person GET event.person.best_full_name %]

@@ -224,7 +224,7 @@ proto.create_url = function () {
 
     var template = this.get_from_page();
     if (template) {
-        url += ';template=' + template;
+        url += ';template=' + nlw_name_to_id(template);
 
         jQuery.ajax({
             url: Page.workspaceUrl() + '/pages/' + template,

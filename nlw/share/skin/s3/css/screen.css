@@ -2153,3 +2153,8 @@ body div#globalNav div input.searchText {
 	line-height: 22px;
 }
 /* fix some buttons with too large hotspots in ie6 end */
+
+/* Capitalize all guess_real_name fields in People: {bz: 1784} */
+.realName {
+    text-transform: capitalize;
+}

@@ -1488,16 +1488,21 @@ proto.walk = function(elem) {
 }
 
 proto.assert_trailing_space = function(part, text) {
-    if ((! part.previousSibling) ||
-        (! part.previousSibling.requires_trailing_space) ||
-        this.wikitext.match(/ $/)
+    if ((! part.requires_preceding_space) && (
+            (! part.previousSibling) 
+         || (! part.previousSibling.requires_trailing_space)
+        )
     ) return;
+
+    if (this.wikitext.match(/ $/)) return;
+
     if (this.wikitext.match(/\n$/)) {
         if (part.previousSibling &&
             part.previousSibling.nodeName == 'BR'
         ) return;
         this.wikitext = this.wikitext.replace(/\n$/, '');
     }
+
     if (! text.match(/^\s/))
         this.wikitext += ' ';
 }
@@ -1643,7 +1648,7 @@ proto.format_img = function(elem) {
                 !(prev.nodeType == 1 && prev.nodeName == 'BR') &&
                 !prev.top_level_block) {
                 if (prev.nodeType == 3 && Wikiwyg.is_ie) {
-                    requires_preceding_space = true;
+                    elem.requires_preceding_space = true;
                 } else {
                     prev.requires_trailing_space = true;
                 }
@@ -1654,11 +1659,6 @@ proto.format_img = function(elem) {
 
         if (widget.match(/^\.\w+\n/))
             text = text.replace(/\n*$/, '\n');
-
-        // Hack to emulate add trailing space to IE's #text node: {bz: 1116}
-        if (requires_preceding_space) {
-            text = ' ' + text;
-        }
 
         // Dirty hack for {{{ ... }}} wikitext
         if (Wikiwyg.is_ie) {
@@ -1709,8 +1709,20 @@ proto.format_span = function(elem) {
     /* If the style is not interesting, we pretend it's not there, instead
      * of reducing it to a single line. -- {bz: 1704}
      */
-    if (!style || style == '')
-        return elem.wikitext;
+    if (!style || style == '') {
+        if ((elem.parentNode.nodeName == 'P')
+         && (elem.parentNode.className == 'MsoNormal')
+        ) {
+            /* However, MS-Office <p class="MsoNormal"><span>...</span></p> 
+             * chunks do need to be squished into a single line.
+             * See js-test/wikiwyg/t/wordpaste.t.js for details.
+             */
+        }
+        else {
+            return elem.wikitext;
+        }
+    }
+
 
     // It has line-level style markups; we're forced to make it a single line.
     elem.wikitext = elem.wikitext.replace(/\n/g, ' ').replace(/  */g, ' ');

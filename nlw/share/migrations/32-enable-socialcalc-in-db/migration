@@ -14,8 +14,9 @@ my @enabled = glob(join('/',
 ));
 
 for my $file (@enabled) {
-    my ($workspace) = $file =~ m{workspace_options/(.*)/enable_spreadsheet};
-    system "st-admin enable-plugin --workspace $workspace --plugin socialcalc";
-    unlink $file;
+    my ($workspace) = $file =~ m{workspace_options/(.*?)/enable_spreadsheet};
+    my $rc = system(
+        qw(st-admin enable-plugin --plugin socialcalc --workspace), $workspace);
+    unlink $file if ($rc == 0);
 }
 

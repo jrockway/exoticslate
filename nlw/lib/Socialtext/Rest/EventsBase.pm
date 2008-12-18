@@ -15,6 +15,7 @@ use Socialtext::Exceptions;
 use Socialtext::AppConfig;
 use Socialtext::TT2::Renderer;
 use Socialtext::URI;
+use Socialtext::JSON qw/encode_json/;
 
 use constant MAX_EVENT_COUNT => 500;
 use constant DEFAULT_EVENT_COUNT => 25;

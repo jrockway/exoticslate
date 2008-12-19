@@ -40,7 +40,10 @@ sub _aggregate {
     my $method = shift;
     my @collection;
     for my $driver ($self->_drivers) {
-        push @collection, $self->_realize($driver, $method)->$method(@_);
+        my $subclass = $self->_realize($driver, $method);
+        if ($subclass) {
+            push @collection, $subclass->$method(@_);
+        }
     }
     return @collection;
 }

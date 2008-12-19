@@ -105,16 +105,22 @@ sub DisablePlugin {
     $class->_CallPluginClassMethod('DisablePlugin',@_);
 }
 
-sub make_hub {
-    my ($self,$user,$ws) = @_;
-    my $main = Socialtext->new;
-    $main->load_hub(
-        current_user => $user,
-        current_workspace => $ws || Socialtext::NoWorkspace->new,
-    );
-    $main->hub->registry->load;
-    $main->debug;
-    $self->hub( $self->{made_hub} = $main->hub );
+{
+    # $main Needs to be in global scope so it stays around for the life of the
+    # request.  This is due to Class::Field's -weak reference from the hub to
+    # the $main.
+    my $main;
+    sub make_hub {
+        my ($self,$user,$ws) = @_;
+        $main = Socialtext->new;
+        $main->load_hub(
+            current_user => $user,
+            current_workspace => $ws || Socialtext::NoWorkspace->new,
+        );
+        $main->hub->registry->load;
+        $main->debug;
+        $self->hub( $self->{made_hub} = $main->hub );
+    }
 }
 
 sub class_id { 'pluggable' };

@@ -11,8 +11,7 @@ use Socialtext::Hub;
 use Socialtext::User;
 use Socialtext::File;
 use Socialtext::AppConfig;
-use Socialtext::SQL qw/sql_execute sql_begin_work sql_commit get_dbh 
-                       sql_rollback/;
+use Socialtext::SQL qw(get_dbh :exec :txn);
 use Fatal qw/opendir closedir chdir open/;
 use Cwd   qw/abs_path/;
 
@@ -37,8 +36,8 @@ sub populate {
     my $workspace_name = $self->{workspace_name};
 
     # Start a transaction, and delete everything for this workspace
-    eval { sql_begin_work() };
-    my $already_in_txn = $@;
+    my $already_in_txn = sql_in_transaction();
+    sql_begin_work() unless $already_in_txn;
     eval {
         sql_execute(
             'DELETE FROM page WHERE workspace_id = ?',

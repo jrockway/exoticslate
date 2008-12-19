@@ -1,6 +1,7 @@
 [%# vim: set et sts=2 sw=2: %]
 [% USE html_encode %]
 [% USE Number.Format %]
+[%- USE decorate -%]
 
 [% WRAPPER layout/html id="contentPage" %]
 <div id="controls">
@@ -23,6 +24,7 @@
 
   <div id="controlsRight">
     <ul class="level1">
+      [% FILTER decorate('page_menu') %] 
       [% IF page.revisions && page.revisions > 0 %]
         <li><a class="revision" id="controls-right-revisions" href="?action=revision_list;page_name=[% page.id %]">[% loc('[quant,_1,Revision]', page.revisions) %]</a></li>
       [% END %]
@@ -72,6 +74,7 @@
           [% END %]
         </ul>
       </li>
+      [% END %]
     </ul>
   </div><!-- controlsRight END -->
 </div><!-- controls END -->

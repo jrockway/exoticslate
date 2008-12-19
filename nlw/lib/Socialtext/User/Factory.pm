@@ -225,15 +225,6 @@ sub UpdateUserRecord {
     Socialtext::User::Cache->Remove( user_id => $proto_user->{user_id} );
 }
 
-sub DeleteUserRecord {
-    my $self = shift;
-    my %p = @_;
-    return unless $p{force};
-    return unless $p{user_id};
-    sql_execute('DELETE FROM users WHERE user_id = ?', $p{user_id});
-    Socialtext::User::Cache->Remove( user_id => $p{user_id} );
-}
-
 sub ExpireUserRecord {
     my $self = shift;
     my %p = @_;
@@ -504,17 +495,6 @@ accuracy) is used.
 
 Fields not specified by keys in the C<\%proto_user> will not be changed.  Any
 keys who's value is undef will be set to NULL in the database.
-
-=item B<DeleteUserRecord(user_id => 42)>
-
-Obliterates a user record from the system.
-
-B<DANGER:> In almost all cases, users should B<not> be deleted as there are
-foreign keys for far too many other tables, and even if a user is no longer
-active they are still likely needed when looking up page authors, history, or
-other information.
-
-Unless you pass C<< force => 1 >> this class method will do nothing.
 
 =item B<ExpireUserRecord(user_id => 42)>
 

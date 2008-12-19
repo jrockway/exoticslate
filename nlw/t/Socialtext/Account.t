@@ -4,6 +4,7 @@
 use strict;
 use warnings;
 use Test::Socialtext tests => 83;
+use Test::Socialtext::User;
 use Test::Exception;
 use YAML qw/LoadFile/;
 
@@ -175,8 +176,8 @@ Exporting_account_people: {
 }
 
 # Now blow the account and users away for the re-import
-Socialtext::User->Resolve('dummy1')->delete( force => 1 );
-Socialtext::User->Resolve('dummy2')->delete( force => 1 );
+Test::Socialtext::User->delete_recklessly( Socialtext::User->Resolve('dummy1') );
+Test::Socialtext::User->delete_recklessly( Socialtext::User->Resolve('dummy2') );
 
 Import_account: {
     my $account = Socialtext::Account->import_file( 

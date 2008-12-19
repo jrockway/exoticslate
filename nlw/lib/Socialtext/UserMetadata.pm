@@ -106,20 +106,6 @@ sub create {
     return $class->new( user_id => $p{user_id} );
 }
 
-sub delete {
-    my ( $self ) = @_;
-
-    my $sth = sql_execute(
-        'DELETE FROM "UserMetadata" WHERE user_id=?',
-        $self->user_id
-    );
-
-    # flush cache; removed a UserMetadata from the DB
-    $self->_cache->clear();
-
-    return $sth;
-}
-
 # "update" methods: set_technical_admin, set_business_admin
 sub set_technical_admin {
     my ( $self, $value ) = @_;
@@ -258,10 +244,6 @@ it. This is particularly useful when user information is obtained outside the
 RDBMS.
 
 $user is typically an instance of one of the Socialtext::User user factories.
-
-=head2 $md->delete()
-
-Delete the metadata record from the database.
 
 =head2 $md->creation_datetime()
 

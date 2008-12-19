@@ -4,6 +4,7 @@
 use strict;
 use warnings;
 use Test::Socialtext tests => 29;
+use Test::Socialtext::User;
 use Socialtext::User;
 
 fixtures( 'db' );
@@ -27,7 +28,7 @@ create_user_all_fields_present: {
     isa_ok $user, 'Socialtext::User';
 
     # Cleanup
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################
@@ -60,7 +61,7 @@ optional_field_password: {
     isa_ok $user, 'Socialtext::User';
 
     # Cleanup
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################
@@ -85,7 +86,7 @@ cleanup_username_trim: {
     is $user->username, $TEST_DATA{username}, 'cleanup: "username" is trimmed';
 
     # Cleanup
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################
@@ -99,7 +100,7 @@ cleanup_username_lc: {
     is $user->username, $TEST_DATA{username}, 'cleanup: "username" is lower-cased';
 
     # Cleanup
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################
@@ -113,7 +114,7 @@ cleanup_email_address_trim: {
     is $user->email_address, $TEST_DATA{email_address}, 'cleanup: "email_address" is trimmed';
 
     # Cleanup
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################
@@ -127,7 +128,7 @@ cleanup_email_address_lc: {
     is $user->email_address, $TEST_DATA{email_address}, 'cleanup: "email_address" is lower-cased';
 
     # Cleanup
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################
@@ -140,7 +141,7 @@ cleanup_password_encrypted: {
     isnt $user->password, $TEST_DATA{password}, 'cleanup: "password" is encrypted';
 
     # Cleanup
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################
@@ -154,7 +155,7 @@ cleanup_password_disable_encryption: {
     is $user->password, $TEST_DATA{password}, 'cleanup: "password" encryption can be disabled';
 
     # Cleanup
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################
@@ -181,7 +182,7 @@ constraint_password_length: {
     isa_ok $user, 'Socialtext::User';
 
     # Cleanup
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################
@@ -197,7 +198,7 @@ constraint_username_unique: {
     like $@, qr/username.*already in use/, 'constraint: "username" must be unique';
 
     # Cleanup
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################
@@ -213,7 +214,7 @@ constraint_email_address_unique: {
     like $@, qr/email.*already in use/, 'constraint: "email_address" must be unique';
 
     # Cleanup
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################

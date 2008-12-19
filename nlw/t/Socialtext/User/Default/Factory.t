@@ -4,6 +4,7 @@
 use strict;
 use warnings;
 use Test::Socialtext tests => 121;
+use Test::Socialtext::User;
 use Socialtext::User;
 use Socialtext::SQL qw(sql_execute);
 
@@ -115,7 +116,7 @@ create_new_user: {
     # delete the user, make sure count goes down correctly.
     my $st_user = Socialtext::User->new( user_id => $user->user_id );
     isa_ok $st_user, 'Socialtext::User', '... main user object';
-    $st_user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($st_user);
     is $factory->Count(), $orig_count, '... ... user count decremented when user deleted';
 }
 

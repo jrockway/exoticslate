@@ -71,16 +71,6 @@ sub to_hash {
     return $hash;
 }
 
-# Removes all traces of the user from the users table
-sub delete {
-    my $self = shift;
-    require Socialtext::User::Factory;  # avoid circular "use" dependency
-    return Socialtext::User::Factory->DeleteUserRecord(
-        @_, 
-        user_id => $self->user_id
-    );
-}
-
 # Expires the user, so that any cached data is no longer considered fresh.
 sub expire {
     my $self = shift;
@@ -181,17 +171,6 @@ and should usually be removed before passing the hash over the threshold.
 
 Create a new homunculus from a hash-ref of parameters.  Uses the C<driver_key>
 to determine the class of the homunculus.
-
-=item B<delete()>
-
-Obliterates the user record for this homunculus from the system.
-
-B<DANGER:> In almost all cases, users should B<not> be deleted as there are
-foreign keys for far too many other tables, and even if a user is no longer
-active they are still likely needed when looking up page authors, history, or
-other information.
-
-If you pass C<< force => 1 >> this will force the deletion though.
 
 =item B<expire()>
 

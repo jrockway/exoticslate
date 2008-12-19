@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 16;
+use Test::Socialtext::User;
 fixtures( 'admin', 'destructive' );
 
 my $hub = new_hub('admin');
@@ -41,7 +42,7 @@ $admin->delete();
 
 # Deleting the user is important so that we know that both user and
 # workspace data is restored
-$user->delete( force => 1 );
+Test::Socialtext::User->delete_recklessly($user);
 
 Socialtext::Workspace->ImportFromTarball( tarball => $tarball );
 

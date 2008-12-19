@@ -395,60 +395,6 @@ sub shared_accounts {
     return grep { $mine{$_->account_id} } $user->accounts;
 }
 
-{
-    # You *REALLY* don't want to be deleting Users.
-    #
-    # This function exists *SOLELY* for the purposes of testing and explicit
-    # data cleanup by Socialtext.  Anyone/everyone else should steer clear of
-    # this method.
-    Readonly my $spec => { force => BOOLEAN_TYPE( default => 0 ) };
-    sub delete {
-        my $self = shift;
-        my %p = validate( @_, $spec );
-
-        Socialtext::Exception->throw( error => 'You cannot delete a user.' )
-            unless $p{force};
-
-        my $system_user = Socialtext::User->SystemUser;
-
-        # Reassign all workspaces "created by" this user to the system-user
-        sql_execute( <<EOT,
-UPDATE "Workspace" 
-    SET created_by_user_id = ? 
-  WHERE created_by_user_id = ?
-EOT
-            $system_user->user_id, $self->user_id
-        );
-
-        # Reassign all Pages "created by" this user to the system-user
-        sql_execute( <<EOT,
-UPDATE page
-   SET creator_id = ?
- WHERE creator_id = ?
-EOT
-            $system_user->user_id, $self->user_id
-        );
-
-        # Reassign all Pages "last edited by" this user to the system-user
-        sql_execute( <<EOT,
-UPDATE page
-   SET last_editor_id = ?
- WHERE last_editor_id = ?
-EOT
-            $system_user->user_id, $self->user_id
-        );
-
-        # There are two parts of the user that need to be deleted and cleaned
-        # up: the "details" and the "metadata".  Order is important, to ensure
-        # that referential integrity is preserved.
-        $self->metadata->delete();
-        $self->homunculus->delete(force => 1);
-
-        # remove the user from the cache
-        Socialtext::User::Cache->Remove($self->homunculus);
-    }
-}
-
 sub to_hash {
     my $self = shift;
     my $hash = {};
@@ -1815,20 +1761,6 @@ workspace.
 =head2 $user->is_deactivated()
 
 Returns the corresponding attribute for the user.
-
-=head2 $user->delete()
-
-You B<REALLY DON'T> want to be calling this method.
-
-Deleting a User causes all information relating to that User to either be
-purged from the system or re-assigned to the system-user.  This is an
-B<irreversible> process!  B<Expect> unusual things to happen if you delete
-Users; they're still needed when doing lookups for page authors, history, and
-other information.
-
-If your intent is to block a User from being able to log in, you can do this
-by setting their password to an arbitrary string and pass C<< no_crypt => 1 >>
-to C<update()>.
 
 =head2 $user->accounts()
 

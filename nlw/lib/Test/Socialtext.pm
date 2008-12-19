@@ -10,6 +10,7 @@ use Test::Base 0.52 -Base;
 use Socialtext::Base;
 use Test::Builder;
 use Test::Socialtext::Environment;
+use Test::Socialtext::User;
 use YAML;
 use File::Temp qw/tempdir/;
 use File::Spec;
@@ -263,7 +264,7 @@ sub _teardown_cleanup {
                 my $user_id  = $user->user_id();
                 my $username = $user->username();
                 Test::More::diag( "CLEANUP: removing user '$driver:$user_id ($username)'; your test left it behind" );
-                $user->delete(force=>1);
+                Test::Socialtext::User->delete_recklessly($user);
             }
         }
     }

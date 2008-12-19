@@ -33,11 +33,6 @@ sub password_is_correct {
     return 0;
 }
 
-sub delete {
-    # no-op; can't delete a missing/incomplete user record, but we do want to
-    # let the local data caches/stores get deleted.  Thus, no-op it.
-}
-
 1;
 
 __END__
@@ -124,10 +119,6 @@ password.
 =item B<password_is_correct()>
 
 Returns 0, no matter what is passed in.
-
-=item B<delete()>
-
-Does nothing.  See perhaps L<Socialtext::User::Factory>'s C<DeleteUserRecord> method.
 
 =back
 

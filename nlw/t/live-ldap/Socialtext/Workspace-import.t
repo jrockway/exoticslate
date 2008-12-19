@@ -10,6 +10,7 @@ use Socialtext::Workspace;
 use Socialtext::Workspace;
 use Test::Socialtext::Bootstrap::OpenLDAP;
 use Test::Socialtext tests => 27;
+use Test::Socialtext::User;
 use Test::Exception;
 
 ###############################################################################
@@ -87,7 +88,7 @@ deleted_ldap_user_shouldnt_prevent_workspace_import: {
     ok -e $tarball, 'workspace exported to tarball';
 
     $ws->delete();
-    $user->delete(force => 1); # we're re-importing him later
+    Test::Socialtext::User->delete_recklessly($user);
     $ws = undef;
 
     my $archive = Archive::Tar->new($tarball, 1);

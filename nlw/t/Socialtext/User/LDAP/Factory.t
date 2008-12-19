@@ -4,7 +4,8 @@ use strict;
 use warnings FATAL => 'all';
 use mocked 'Net::LDAP';
 use mocked 'Socialtext::Log', qw(:tests);
-use Test::Socialtext tests => 49;
+use Test::Socialtext tests => 48;
+use Test::Socialtext::User;
 
 # FIXTURE:  ldap_*
 #
@@ -118,16 +119,16 @@ get_user_valid_search_terms: {
     # "user_id" is a valid search term (but only if User is already in the DB)
     $user = $factory->GetUser(user_id => $user->user_id);
     isa_ok $user, 'Socialtext::User::LDAP', 'user_id; valid search term';
-
-    $user->delete(force=>1); # clear the long-term cache
+    # ... clear the long-term cache
+    Test::Socialtext::User->delete_recklessly($user);
 
     # "driver_unique_id" is valid search term
     my $dn = 'cn=First Last, dc=example,dc=com';
     $user = $factory->GetUser(driver_unique_id => $dn);
     isa_ok $user, 'Socialtext::User::LDAP',
         'driver_unique_id; valid search term';
-
-    $user->delete(force=>1); # clear the long-term cache
+    # ... clear the long-term cache
+    Test::Socialtext::User->delete_recklessly($user);
 
     # "email_address" is valid search term
     $user = $factory->GetUser(email_address=>'user@example.com');
@@ -144,12 +145,7 @@ get_user_valid_search_terms: {
     ok !defined $missing_user, 'cn; INVALID search term';
 
     # cleanup; *can't* leave users lying around at the end of a test
-    my $user_id = $user->user_id;
-    $user->delete(force=>1);
-
-    $user = $factory->GetUser(user_id => $user->user_id);
-    ok !$user,
-        "sanity check: deleting the user causes lookup by user_id failure";
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################
@@ -228,7 +224,7 @@ get_user_via_username_is_subtree: {
     is $opts{'scope'}, 'sub', 'username search is sub-tree';
 
     # cleanup; *can't* leave users lying around at the end of a test
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################
@@ -252,7 +248,7 @@ get_user_via_email_address_is_subtree: {
     is $opts{'scope'}, 'sub', 'email_address search is sub-tree';
 
     # cleanup; *can't* leave users lying around at the end of a test
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
 
 ###############################################################################
@@ -279,6 +275,5 @@ get_user_via_driver_unique_id_is_exact: {
     is $opts{'base'}, $dn, 'driver_unique_id search base is DN';
 
     # cleanup; *can't* leave users lying around at the end of a test
-    $user->delete(force=>1);
+    Test::Socialtext::User->delete_recklessly($user);
 }
-

@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Test::Socialtext::Bootstrap::OpenLDAP;
 use Test::Socialtext tests => 32;
+use Test::Socialtext::User;
 use File::Slurp qw(write_file);
 use Benchmark qw(timeit timestr);
 use Socialtext::SQL qw(sql_execute);
@@ -68,7 +69,7 @@ test_ldap_users_all_fresh: {
     is $ldap_homey->cached_at->epoch, $refreshed_homey->cached_at->epoch, 'user was not refreshed; was already fresh';
 
     # cleanup; don't want to pollute other tests
-    $ldap_user->delete( force => 1 );
+    Test::Socialtext::User->delete_recklessly($ldap_user);
 }
 
 ###############################################################################
@@ -142,7 +143,7 @@ test_refresh_stale_users: {
     isnt $ldap_homey->username, 'bogus_username', '... username was refreshed';
 
     # cleanup; don't want to pollute other tests
-    $ldap_user->delete( force => 1 );
+    Test::Socialtext::User->delete_recklessly($ldap_user);
 }
 
 ###############################################################################
@@ -189,7 +190,7 @@ test_force_refresh: {
     ok $refreshed_at < $time_after_refresh, '... by st-refresh-ldap-users';
 
     # cleanup; don't want to pollute other tests
-    $ldap_user->delete( force => 1 );
+    Test::Socialtext::User->delete_recklessly($ldap_user);
 }
 
 ###############################################################################
@@ -265,7 +266,7 @@ ENDLDIF
         $t = timeit(1, sub {
             foreach my $email (@emails) {
                 my $user = Socialtext::User->new( email_address => $email );
-                $user->delete( force => 1 );
+                Test::Socialtext::User->delete_recklessly($user);
             }
         } );
         diag "... " . timestr($t);

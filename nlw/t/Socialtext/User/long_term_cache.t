@@ -221,8 +221,6 @@ TODO: {
     }
 }
 
-$user->delete(force => 1);
-
 exit;
 
 sub get_cache {

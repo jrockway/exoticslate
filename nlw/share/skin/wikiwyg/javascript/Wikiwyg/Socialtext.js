@@ -1883,19 +1883,31 @@ proto.do_new_table = function() {
     return false;
 }
 
-proto._do_table_manip = function(callback) {
+proto.find_table_cell_with_cursor = function() {
     var doc = this.get_edit_document();
     jQuery("span.find-cursor", doc).removeClass('find-cursor');
-    this.set_focus();
-    this.insert_html( "<span class=\"find-cursor\"></span>" );
 
+    this.set_focus();
+    this.insert_html("<span class=\"find-cursor\"></span>");
+
+    var cursor = jQuery("span.find-cursor", doc);
+    if (! cursor.parents('td').length)
+        return;
+    var $cell = cursor.parents("td");
+
+    cursor.remove();
+    $cell.html($cell.html()
+        .replace(/<span style="padding: [^;]*;">(.*?)<\/span>/g, '$1')
+    );
+
+    return $cell;
+}
+
+proto._do_table_manip = function(callback) {
     var self = this;
     setTimeout(function() {
-        var cur = window.cur = jQuery("span.find-cursor", doc);
-        if (! cur.parents('td').length)
-            return false;
-        var $cell = cur.parents("td");
-        cur.remove();
+        var $cell = self.find_table_cell_with_cursor();
+        if (! $cell) return;
 
         var $new_cell = callback.call(self, $cell);
 
@@ -2061,8 +2073,8 @@ proto.do_table = function() {
 
     var self = this;
     setTimeout(function() {
-        var cur = window.cur = jQuery("span.find-cursor", doc);
-        if (! cur.parents('td').length)
+        var $cell = self.find_table_cell_with_cursor();
+        if (! $cell)
             return self.do_new_table();
         return;
     }, 100);

@@ -17,6 +17,14 @@ if (Socialtext.S3) {
                 $('#st-save-button-link').show();
             }, 100);
         }
+        else if ($.browser.mozilla) {
+            setTimeout(function() {
+                wikiwyg.current_mode.get_edit_document()
+                    .execCommand("enableObjectResizing", false, false);
+                wikiwyg.current_mode.get_edit_document()
+                    .execCommand("enableInlineTableEditing", false, false);
+            }, 100);
+        }
 
         return false;
     });

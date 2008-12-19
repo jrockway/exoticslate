@@ -1,0 +1,56 @@
+| *Comment* | STARTING Test case: Signals Widget |
+
+* Fixture: SocialWidgets
+
+| *Comment* | Test Case: Signals Widget |  |
+| open_ok | /?dashboard | 60000 |
+| st-empty-container |  |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
+| click_and_wait | //a[@title='Add Content'] |  |
+| click_and_wait | link=Signals |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
+
+| st-name-widget | 1 | signals_widget |
+| st-widget-title-like | signals_widget | My Colleagues' Signals |
+| st-select-widget-frame | signals_widget |  |
+| type_ok | signal-field | She rocks in the treehouse, all the day long |
+| click_ok | post |  |
+| pause | 1000 |  |
+| type_ok | signal-field | Rockin' and a bopin' and a singing her song |
+| click_ok | post |  |
+| pause | 1000 |  |
+| type_ok | signal-field | All the little birds on j-bird street |
+| click_ok | post |  |
+| pause | 1000 |  |
+| type_ok | signal-field | Love it hear the robin' going tweet, tweet, tweet |
+| click_ok | post |  |
+| pause | 1000 |  |
+| text_like | //body | She rocks in the treehouse, all the day long |
+| text_like | //body | Rockin' and a bopin' and a singing her song |
+| text_like | //body | All the little birds on j-bird street |
+| text_like | //body | Love it hear the robin' going tweet, tweet, tweet |
+| select-frame | relative=parent |  |
+| click_and_wait | link=Profile |  |
+| pause | 10000 |  |
+| st-name-widget | 4 | profile_updates |
+| st-select-widget-frame | profile_updates |  |
+| text_like | //body | She rocks in the treehouse, all the day long |
+| text_like | //body | Rockin' and a bopin' and a singing her song |
+| text_like | //body | All the little birds on j-bird street |
+| text_like | //body | %%short_username%% "Love it hear the robin' going tweet, tweet, tweet" |
+
+| *Comment* | Test Case: ToDo Widget Mini-timing test plus (sadly) brittle performance test |
+| text_like | //body | (one minute ago) |
+| text_unlike | //body | (2 minutes ago) |
+| pause | 55000 |
+| pause | 30000 |
+| text_like | //body | (2 minutes ago) |
+| select-frame | relative=parent |  |
+| pause | 25000 |  |
+
+| *Comment* | Test Case: ToDo Widget Teardown |  |
+| st-empty-container |  |  |
+
+| *Comment* | Test Case: ToDo Widget COMPLETED |  |
+
+Replace this text with your own.

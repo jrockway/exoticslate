@@ -31,7 +31,26 @@ Test case for `/data/events`(GET and POST).
 | edit-page        | %%test_workspace%%                                                     | Page Two                     | Page Two Content   |
 | edit-page        | %%test_workspace%%                                                     | Page Three                   | Page Three Content |
 
+| *Comment*       | ensure that madlibs from signals are evaluated |                                                                                                    |
+| http-user-pass  | %%tester1%%                                    | password                                                                                           |
+| st-clear-events |                                                |                                                                                                    |
+| post-json       | /data/events                                   | {"actor":{"id":%%tester1_id%%},"event_class":"signal","action":"signal", "context":{"body":"foo"}} |
+| code-is         | 201                                            |                                                                                                    |
+| get             | /data/events                                   | text/html                                                                                          |
+| has-header      | Content-type                                   | qr/text\/html/                                                                                     |
+| code-is         | 200                                            |                                                                                                    |
+| body-like       | "foo"                                          |                                                                                                    |
+
+| *Comment*      | ensure that signals are appearing in 'followed' api  |                                    |
+| http-user-pass | %%tester2%%                                          | password                           |
+| post-json      | /data/people/%%tester2_id%%/watchlist                | {"person":{"id":"%%tester1_id%%"}} |
+| code-is        | 204                                                  |                                    |
+| get            | /data/events/followed/%%tester2_id%%                 | application/json                   |
+| body-like      | "body":"foo"                                         |                                    |
+| delete         | /data/people/%%tester2_id%%/watchlist/%%tester1_id%% |                                    |
+
 | *Comment*       | Clear all events |                  |
+| http-user-pass  | %%tester1%%      | password         |
 | st-clear-events |                  |                  |
 | get             | /data/events     | application/json |
 | code-is         | 200              |                  |
@@ -185,7 +204,7 @@ Test case for `/data/events`(GET and POST).
 | get       | /data/events?event_class=person&followed=1          | application/json                   |
 | code-is   | 200                                                 |                                    |
 | body-like | "tag_name":"downer"                                 |                                    |
-| delete    | /data/people/%%tester1_id%%/watchlist/%%teter2_id%% |                                    |
+| delete    | /data/people/%%tester1_id%%/watchlist/%%tester2_id%% |                                    |
 
 | Comment     | Filter by action              |                  |
 | get         | /data/events?action=tag_add   | application/json |
@@ -313,14 +332,6 @@ Test case for `/data/events`(GET and POST).
 | get            | /data/events?event_class=person                                    | application/json |
 | code-is        | 403                                                                |                  |
 | st-admin       | enable-plugin --plugin people --account Socialtext                 |                  |
-
-| *Comment* | ensure that madlibs from signals are evaluated |
-| st-clear-events | | |
-| post-json | /data/events | {"actor":{"id":%%tester1_id%%},"event_class":"signal","action":"signal", "context":{"body":"foo"}}  |
-| get        | /data/events                                                                                                   | text/html      |
-| has-header | Content-type                                                                                                   | qr/text\/html/ |
-| code-is    | 200                                                                                                            |                |
-| body-like  | "foo" |                  |
 
 ^^ TODO Test
 

@@ -251,6 +251,8 @@ my $CONTRIBUTIONS = <<'EOSQL';
     (event_class = 'page' AND 
      action IN ('edit_save','tag_add','comment',
                 'rename','duplicate','delete'))
+    OR
+    (event_class = 'signal') 
 EOSQL
 
 sub _process_before_after {
@@ -324,7 +326,7 @@ sub _build_standard_sql {
             $FOLLOWED_PEOPLE_ONLY => ($self->viewer->user_id) x 2
         );
         # limiting to these event types will give a bit of a perf boost:
-        $opts->{event_class} = ['person','page'];
+        $opts->{event_class} = ['person','page', 'signal'];
     }
 
     # filter for contributions-type events

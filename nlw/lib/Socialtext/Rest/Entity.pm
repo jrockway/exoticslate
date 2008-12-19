@@ -147,6 +147,8 @@ sub _put_or_post_error {
             -type   => 'text/plain' 
         );
     }
+    warn "Error in ST::Rest::Entity $error";
+    ($error) = split "\n", $error;
     return $error;
 }
 

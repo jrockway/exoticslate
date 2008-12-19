@@ -396,9 +396,11 @@ sub shared_accounts {
 }
 
 {
-    # REVIEW - maybe this is overkill and can be handled through good
-    # documentation saying "you probably don't want to delete users,
-    # we mean it."
+    # You *REALLY* don't want to be deleting Users.
+    #
+    # This function exists *SOLELY* for the purposes of testing and explicit
+    # data cleanup by Socialtext.  Anyone/everyone else should steer clear of
+    # this method.
     Readonly my $spec => { force => BOOLEAN_TYPE( default => 0 ) };
     sub delete {
         my $self = shift;
@@ -407,13 +409,33 @@ sub shared_accounts {
         Socialtext::Exception->throw( error => 'You cannot delete a user.' )
             unless $p{force};
 
-        # Reassign all workspaces created by this user to the system-user
+        my $system_user = Socialtext::User->SystemUser;
+
+        # Reassign all workspaces "created by" this user to the system-user
         sql_execute( <<EOT,
 UPDATE "Workspace" 
     SET created_by_user_id = ? 
   WHERE created_by_user_id = ?
 EOT
-            Socialtext::User->SystemUser->user_id, $self->user_id
+            $system_user->user_id, $self->user_id
+        );
+
+        # Reassign all Pages "created by" this user to the system-user
+        sql_execute( <<EOT,
+UPDATE page
+   SET creator_id = ?
+ WHERE creator_id = ?
+EOT
+            $system_user->user_id, $self->user_id
+        );
+
+        # Reassign all Pages "last edited by" this user to the system-user
+        sql_execute( <<EOT,
+UPDATE page
+   SET last_editor_id = ?
+ WHERE last_editor_id = ?
+EOT
+            $system_user->user_id, $self->user_id
         );
 
         # There are two parts of the user that need to be deleted and cleaned
@@ -1796,16 +1818,17 @@ Returns the corresponding attribute for the user.
 
 =head2 $user->delete()
 
-B<DANGER:> In almost all cases, users should B<not> be deleted as there are
-foreign keys for far too many other tables, and even if a user is no longer
-active they are still likely needed when looking up page authors, history, or
+You B<REALLY DON'T> want to be calling this method.
+
+Deleting a User causes all information relating to that User to either be
+purged from the system or re-assigned to the system-user.  This is an
+B<irreversible> process!  B<Expect> unusual things to happen if you delete
+Users; they're still needed when doing lookups for page authors, history, and
 other information.
 
-If you pass C<< force => 1 >> this will force the deletion through.
-
-As an alternative to deletion, you can block a user from logging in by
-setting their password to some string and passing C<< no_crypt => 1 >>
-to C<update()>
+If your intent is to block a User from being able to log in, you can do this
+by setting their password to an arbitrary string and pass C<< no_crypt => 1 >>
+to C<update()>.
 
 =head2 $user->accounts()
 

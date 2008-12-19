@@ -5,6 +5,7 @@ use strict;
 
 use FindBin;
 use Fatal qw(open close);
+use Template;
 
 my $CLI = "$FindBin::Bin/../lib/Socialtext/CLI.pm";
 
@@ -18,30 +19,22 @@ my %opts;
 chomp @headings;
 foreach my $h (@headings) {
     $h =~ s/^=head2\s+//;
-    $h =~ s/^'(.+)'$/$1/;
-    $h =~ s/[\[\]]//g; # erase square brackets
-    $h =~ s/\s+or\s+/ /g;
-    $h =~ s/--/-/g;
-    $h =~ s/< .+$//g;
-    $h =~ s/<[^>]+>//g; # die, spaceships
+
+    $h =~ s/^'(.+)'$/$1/; # some options have quotes that aren't needed
+    $h =~ s/[\[\]]//g; # optional args are in square brackets
+    $h =~ s/\s+or\s+/ /g; # alternatives specified with 'or'
+    $h =~ s/--/-/g; # sometimes there's just one dash; normalize it down
+    $h =~ s/< .+$//g; # piped-in filenames
+    $h =~ s/<[^>]+>//g; # for no good reason, some words have angle brackets
+
     my @words = split /\s+/,$h;
     my $cmd = shift @words;
-    my %word_set = map { $_ => 1 } map { fixup_option($_) } grep /^-/, @words;
+    my %word_set = map { $_ => 1 } map { "-$_" } grep /^-/, @words;
 
     my @args = sort keys %word_set;
                          
-    #print "$cmd @args\n";
     push @cmds, $cmd;
     $opts{$cmd} = join ' ',@args;
-}
-
-sub fixup_option {
-    my $option = shift;
-    my @results;
-#     if ($option eq '-email') {
-#         $option = '-email-address';
-#     }
-    return "-$option";
 }
 
 sub cmd_switch {
@@ -56,101 +49,17 @@ EOT
 @cmds = sort @cmds;
 
 my $all_cmds = join ' ', @cmds;
-my $all_opts = join("\n", map { cmd_switch($_) } @cmds);
 
-print <<EOBASH;
-_st_admin_list_comp()
-{
-    local tmplist age now mod_time oldmask
-    tmplist="/tmp/.st-\${USER}-\$1.list"
+my $template_options = {
+    INCLUDE_PATH => ["$FindBin::Bin/../build/templates/socialtext"],
+    TOLERANT     => 0,
+    UNICODE      => 1,
+};
 
-    # check for freshness
-    if [ -f \$tmplist ]; then
-        now=`date +\%s`
-        mod_time=`stat \$tmplist -c"+\%Y" | sed 's,+,,'`
-        age=`expr \$now - \$mod_time`
-        if [[ \$age -gt 20 ]]; then
-            rm -f \$tmplist
-        fi
-    fi
+my $template = Template->new( $template_options );
 
-    # re-generate the list (using a safe umask)
-    if [ ! -f \$tmplist ]; then
-        oldmask=`umask -p`
-        umask 0077
-        st-admin list-\$1 > \$tmplist
-        eval \$oldmask
-    fi
-
-    COMPREPLY=( `egrep "^\$2" \$tmplist` ) 
-    if [[ \${#COMPREPLY} == 0 ]] ; then
-        COMPREPLY=( `cat \$tmplist` )
-    fi
-}
-
-_st_admin_comp()
-{
-    local cur prev cmds opts word
-
-    COMPREPLY=()
-    cur=\${COMP_WORDS[COMP_CWORD]}
-    prev=\${COMP_WORDS[COMP_CWORD-1]}
-
-    cmds='$all_cmds'
-
-    if [[ \$COMP_CWORD -eq 1 ]] ; then
-        COMPREPLY=( \$( compgen -W "\$cmds" -- \$cur ) )
-        return 0
-    fi
-    
-    case \$prev in
-        --workspace|--target|--clone-pages-from)
-            _st_admin_list_comp workspaces "\$cur"
-            return 0
-            ;;
-
-        --account)
-            _st_admin_list_comp accounts "\$cur"
-            return 0
-            ;;
-
-        --plugin)
-            _st_admin_list_comp plugins "\$cur"
-            return 0
-            ;;
-
-        --username|--email|--name|--title|--prefix)
-            COMPREPLY=(" ")
-            return 0
-            ;;
-
-        --dir)
-            COMPREPLY=( \$( compgen -d -- \$cur ) )
-            return 0
-            ;;
-        --file|--csv)
-            COMPREPLY=( \$( compgen -f -- \$cur ) )
-            return 0
-            ;;
-        *)
-            ;;
-    esac
-
-    case \${COMP_WORDS[1]} in
-$all_opts
-        *)
-            ;;
-    esac
-
-    # remove options that have already been used
-    for (( i=2; i<=\$COMP_CWORD-1; ++i )) ; do
-        word=\${COMP_WORDS[\$i]}
-        opts=" \$opts "
-        opts=\${opts/\${word} /}
-    done
-
-    COMPREPLY=( \$( compgen -W "\$opts" -- \$cur ) )
-}
-
-complete -F _st_admin_comp -o default st-admin
-EOBASH
+$template->process('bash_completion.tt2', {
+    cmds => \@cmds,
+    all_cmds => $all_cmds,
+    opts => \%opts,
+}) or die $template->error;

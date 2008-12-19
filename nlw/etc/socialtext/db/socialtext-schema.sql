@@ -616,11 +616,6 @@ ALTER TABLE ONLY "WorkspaceRolePermission"
             FOREIGN KEY (role_id)
             REFERENCES "Role"(role_id) ON DELETE CASCADE;
 
-ALTER TABLE ONLY "Workspace"
-    ADD CONSTRAINT fk_251eb1be4c68e78c9e4b7799c9eed357
-            FOREIGN KEY (created_by_user_id)
-            REFERENCES users(user_id) ON DELETE CASCADE;
-
 ALTER TABLE ONLY "UserWorkspaceRole"
     ADD CONSTRAINT fk_2d35adae0767c6ef9bd03ed923bd2380
             FOREIGN KEY (user_id)
@@ -679,12 +674,12 @@ ALTER TABLE ONLY noun
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_creator_id_fk
             FOREIGN KEY (creator_id)
-            REFERENCES users(user_id) ON DELETE CASCADE;
+            REFERENCES users(user_id) ON DELETE RESTRICT;
 
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_last_editor_id_fk
             FOREIGN KEY (last_editor_id)
-            REFERENCES users(user_id) ON DELETE CASCADE;
+            REFERENCES users(user_id) ON DELETE RESTRICT;
 
 ALTER TABLE ONLY page_tag
     ADD CONSTRAINT page_tag_workspace_id_page_id_fkey
@@ -771,10 +766,15 @@ ALTER TABLE ONLY "Workspace"
             FOREIGN KEY (account_id)
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY "Workspace"
+    ADD CONSTRAINT workspace_created_by_user_id_fk
+            FOREIGN KEY (created_by_user_id)
+            REFERENCES users(user_id) ON DELETE RESTRICT;
+
 ALTER TABLE ONLY workspace_plugin
     ADD CONSTRAINT workspace_plugin_workspace_fk
             FOREIGN KEY (workspace_id)
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '24');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '25');

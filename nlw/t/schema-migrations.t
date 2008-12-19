@@ -10,7 +10,7 @@ my $schema_dir  = "$FindBin::Bin/../etc/socialtext/db/";
 my $schema_file = "$schema_dir/socialtext-schema.sql";
 my @sql_patches = glob("$schema_dir/*-to-*.sql");
 
-plan tests => @sql_patches * 3 + 6;
+plan tests => @sql_patches * 3 + 9;
 
 Schema_is_okay: {
     ok -d $schema_dir;
@@ -35,6 +35,18 @@ Schema_is_okay: {
     like $schema,
         qr/CREATE INDEX ix_page_events_contribs_actor_time\b/,
         "index on the is_page_contribution function didn't get accidentally dropped";
+
+    like $schema,
+        qr/ADD CONSTRAINT workspace_created_by_user_id_fk[^;]+ON DELETE RESTRICT;/,
+        "foreign key on Workspace.created_by_user_id doesn't cascade deletes";
+
+    like $schema,
+        qr/ADD CONSTRAINT page_creator_id_fk[^;]+ON DELETE RESTRICT;/,
+        "foreign key on page.creator_id doesn't cascade deletes";
+
+    like $schema,
+        qr/ADD CONSTRAINT page_last_editor_id_fk[^;]+ON DELETE RESTRICT;/,
+        "foreign key on page.last_editor_id doesn't cascade deletes";
 
     Truncate_trouble: {
         # We take advantage of TRUNCATE during appliance restore.  We should

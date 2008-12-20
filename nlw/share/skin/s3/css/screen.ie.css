@@ -111,10 +111,15 @@ div#st-pagetools ul ul li {
     width: 14em !important;
 }
 
-/* Remove most of the whitespace between the toolbar and the editing area */
-
 #st-page-editing-toolbar {
-    margin-top: 5px !important;
+    width:auto;
+    margin:0 8px 0 0;
+    position:relative;
+}
+
+#st-page-editing-widget-menu {
+    width:60px;
+    overflow:hidden;
 }
 
 /* This selector makes for about 2px of blank space on the right side of the

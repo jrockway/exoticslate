@@ -118,8 +118,13 @@ div#st-pagetools ul ul li {
 }
 
 #st-page-editing-widget-menu {
-    width:60px;
     overflow:hidden;
+}
+
+#st-page-editing-button-toolbar {
+    float: none;
+    position: relative;
+    left: 650px;
 }
 
 /* This selector makes for about 2px of blank space on the right side of the

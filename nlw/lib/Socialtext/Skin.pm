@@ -19,7 +19,7 @@ our $CODE_BASE = Socialtext::AppConfig->code_base;
 our $PROD_VER = Socialtext->product_version();
 our $DEFAULT_PARENT = 's2';
 my %css_files = (
-    standard => [qw(screen.css screen.ie.css print.css print.ie.css)],
+    standard => [qw(screen.css screen.ie.css screen.ie7.css print.css print.ie.css)],
     popup    => [qw(popup.css popup.ie.css)],
     wikiwyg  => [qw(wikiwyg.css)],
 );

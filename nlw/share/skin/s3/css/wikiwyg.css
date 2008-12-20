@@ -4,6 +4,12 @@ body {
     background-color: #FFFFDD;
 }
 
+body.wiki {
+    padding: 0 !important;
+    line-height: normal !important;
+    font-size: 11px !important;
+}
+
 table {
     border: 1px solid black;
 }

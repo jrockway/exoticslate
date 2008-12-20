@@ -332,7 +332,9 @@ $(function() {
             if (!$.browser.msie) {
                 var lnk = $('link[rel=stylesheet][media=screen]');
                 lnk.clone()
-                    .attr('href', nlw_make_s3_path('/css/wikiwyg.css'))
+                    .attr('href', nlw_make_s3_path('/css/wikiwyg.css')
+                        .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time)
+                    )
                     .attr('media', 'wikiwyg')
                     .appendTo('head');
             }

@@ -532,7 +532,7 @@ sub _get_profile {
 
     my $adapter = Socialtext::Pluggable::Adapter->new;
     unless ($adapter->plugin_exists('people')) {
-        return $self->_error(loc("The People plugin is not installed."));
+        $self->_error(loc("The People plugin is not installed."));
     }
 
     require Socialtext::People::Profile;
@@ -2206,53 +2206,122 @@ sub invite_user {
     );
 }
 
-sub add_profile_field {
+sub _require_field_options {
     my $self = shift;
-
-    my $acct = $self->_require_account('optional');
-    $acct ||= Socialtext::Account->Default();
 
     my $adapter = Socialtext::Pluggable::Adapter->new;
     unless ($adapter->plugin_exists('people')) {
-        return $self->_error(loc("The People plugin is not installed."));
+        $self->_error(loc("The People plugin is not installed."));
     }
 
-    require Socialtext::People::Fields;
-    my $fields = Socialtext::People::Fields->new(
-        account_id => $acct->account_id
-    );
+    my $acct = $self->_require_account('optional');
+    $acct ||= Socialtext::Account->Default();
 
     my %opts = $self->_get_options(
         'name:s',
         'title:s',
         'field-class:s',
+        'source:s',
     );
+    $opts{field_class} = delete $opts{'field-class'};
+
+    $opts{name} = lc Socialtext::String::trim($opts{name})
+        if defined $opts{name};
+
+    $opts{_account} = $acct;
+
+    require Socialtext::People::Fields;
+    my $fields = Socialtext::People::Fields->new(
+        account_id => $acct->account_id
+    );
+    $opts{_fields} = $fields;
+
+    return %opts;
+}
+
+sub add_profile_field {
+    my $self = shift;
+
+    my %opts = $self->_require_field_options();
+
+    my $acct = delete $opts{_account};
+    my $fields = delete $opts{_fields};
+
+    my $is_user_editable = 1;
+    $opts{source} ||= 'user';
+
+    if ($opts{source} eq 'external') {
+        $is_user_editable = 0;
+    }
+    elsif ($opts{source} ne 'user') {
+        $self->_error(
+            loc("Cannot create field: invalid field source '[_1]'", $opts{source}));
+    }
 
     my $field;
     eval {
         $field = $fields->create_field(
             name => $opts{name},
             title => $opts{title},
-            field_class => $opts{'field-class'},
+            field_class => $opts{field_class},
+            is_user_editable => $is_user_editable,
         );
     };
     if (my $err = $@) {
         if ($err =~ /reserved field name/) {
-            $self->_error(loc("Cannot create field: The field name '[_1]' is reserved for Socialtext", $opts{name}));
+            $self->_error(loc("Cannot create profile field: The field name '[_1]' is reserved for Socialtext", $opts{name}));
         }
         elsif ($err =~ /duplicate field name/) {
-            $self->_error(loc("Cannot create field: The field name '[_1]' is already used in account '[_2]'", $opts{name}, $acct->name));
+            $self->_error(loc("Cannot create profile field: The field name '[_1]' is already used in account '[_2]'", $opts{name}, $acct->name));
         }
         elsif ($err =~ /invalid field_class/) {
-            $self->_error(loc("Cannot create field: invalid field-class '[_1]'", $opts{'field-class'}));
+            $self->_error(loc("Cannot create profile field: invalid field-class '[_1]'", $opts{field_class}));
         }
         else {
-            $self->_error(loc("Unable to create field."));
+            $self->_error(loc("Unable to create profile field."));
         }
     }
 
     $self->_success(loc("Created profile field '[_1]' for account '[_2]'",
                         $field->title, $acct->name));
+}
+
+sub set_profile_field {
+    my $self = shift;
+
+    my %opts = $self->_require_field_options();
+    
+    my $acct = delete $opts{_account};
+    my $fields = delete $opts{_fields};
+
+    unless ($opts{name} || length($opts{name})) {
+        $self->_error(loc("Must specify the name of the field to change"));
+        return;
+    }
+
+    my $field = $fields->by_name($opts{name});
+    if (!$field) {
+        $self->_error(loc("Profile field '[_1]' does not exist for account '[_2]'", $opts{name}, $acct->name));
+        return;
+    }
+
+    my $old_title = $field->title;
+
+    eval {
+        $fields->update_field(%opts);
+    };
+    if ( $@) {
+        if ($@ =~ /^cannot convert field class from '(.*?)' to '(.*?)'/i) {
+            my ($from_class, $to_class) = ($1,$2);
+            $self->_error(loc("Cannot convert field class from '[_1]' to '[_2]'", $from_class, $to_class));
+        }
+        else {
+            $self->_error(loc("Unable to change profile field."));
+        }
+    }
+
+    $self->_success(loc("Profile field '[_1]' updated for account '[_2]'",
+                        $old_title, $acct->name));
 }
 
 # Called by Socialtext::Ceqlotron
@@ -2742,6 +2811,11 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   remove-workspace-from-search-set --name --workspace [--username or --email]
   list-workspaces-in-search-set --name [--username or --email]
 
+  PROFILE (only available with Socialtext People)
+
+  add-profile-field --name [--account] [--title --field-class --source]
+  set-profile-field --name [--account] [--title --field-class --source]
+
   OTHER
 
   set-logo-from-file --workspace --file /path/to/file.jpg
@@ -3193,6 +3267,20 @@ Enabling for all accounts will also enable the plugin for accounts created in th
 Disable a plugin for the specified account (perhaps all) or workspace.
 
 Disabling for all accounts will also disable the plugin for accounts created in the future.
+
+=head2 add-profile-field --name [--account] [--title] [--field-class] [--source]
+
+Set up a profile field for use under the specified account.  If the account name is not specified, the system default account is used.
+
+If C<--field-class> is omitted, a regular text attribute will be created.  Valid classes include: attribute, contact, relationship (reference to another person).
+
+If C<--source> is omitted, it defaults to "user".  Fields marked "external" cannot be changed by the user and will be set by some external data source (for example, an LDAP directory).
+
+=head2 set-profile-field --name [--account] [--title] [--field-class] [--source]
+
+Changes an exiting profile field identified by name to have new properties.  Options that are omitted preserve the existing value of that property.  See add-profile-field above for more details.
+
+Note: A field's class cannot currently be changed to or from the 'relationship' class.
 
 =head2 version
 

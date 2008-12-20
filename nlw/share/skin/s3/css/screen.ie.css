@@ -116,7 +116,7 @@ div#st-pagetools ul ul li {
 #st-page-editing-toolbar {
     margin-top: 5px !important;
 }
- 
+
 /* This selector makes for about 2px of blank space on the right side of the
  * popup because IE sucks, we should look in to fixing this. Adding an
  * expression that checks for a scrollbar may fix this.

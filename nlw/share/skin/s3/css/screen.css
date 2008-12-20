@@ -446,11 +446,11 @@ html>body #st-page-details {
 
 #st-page-editing-widget-menu {
     float: left;
-    margin-top: 1px;
-    padding: 0 5px 0 5px;
+    margin: 4px 0px 0 0;
     font-size: 9pt;
     font-weight: bold;
     font-family: Helvetica,Arial,sans-serif;
+    width: 60px;
 }
 
 #st-editing-insert-menu li a {
@@ -706,19 +706,13 @@ div#bootstrap-loader {
 
 /* pagetools : the top right New Page, Print, Email, and Tools items at top right */
 
-
 #st-page-editing-toolbar {
-    overflow: hidden;
     float: left;
-    margin-top: 0px;
-    padding-bottom: 0px;
+    margin: 0 250px -24px 0;
 }
 #wikiwyg_toolbar {
     display: none;
-    /*
-    margin-left: 25px;
-    margin-bottom: -3px;
-    */
+    float: left;
 }
 .wikiwyg_button {
     border: 1px solid #F3F3F3;
@@ -744,9 +738,8 @@ div#bootstrap-loader {
 }
 #st-page-editing-tagbutton {
     z-index: 1500;
-    margin-top: 4px;
+    margin: 4px 0 0 0;
     float: left;
-    padding: 0 20px 0 8px;
     font-size: 9pt;
     font-weight: bold;
 }
@@ -1301,7 +1294,6 @@ div#workspaceNav ul.level2 li a:hover {
 }
 
 html body div#st-page-editing-toolbar-container {
-        height: 50px;
 }
 
 body#simple-html {
@@ -2162,10 +2154,6 @@ body div#globalNav div input.searchText {
     text-transform: capitalize;
 }
 
-#wikiwyg_toolbar {
-    float: left;
-}
-
 .other_buttons, 
 .table_buttons {
     float: left;
@@ -2175,7 +2163,9 @@ body div#globalNav div input.searchText {
     filter: alpha(opacity = 30);
 }
 
-.st-page-editing-group {
-    float: left;
+#st-page-editing-button-toolbar {
+    float: right;
+    margin: 0 0 -24px 0;
+    width: 250px;
 }
 

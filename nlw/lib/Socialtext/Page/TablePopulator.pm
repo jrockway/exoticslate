@@ -52,40 +52,49 @@ sub populate {
         opendir(my $dfh, $workspace_dir);
         my @pages;
         my @page_tags;
+      PAGE:
         while (my $dir = readdir($dfh)) {
-            next unless -d $dir;
-            next if $dir =~ m/^\./;
+            next PAGE unless -d $dir;
+            next PAGE if $dir =~ m/^\./;
 
             # Ignore really old pages that have invalid page_ids
-            next unless Socialtext::Encode::is_valid_utf8($dir);
+            next PAGE unless Socialtext::Encode::is_valid_utf8($dir);
 
+            # Fix up relative links in the filesystem
             eval { fix_relative_page_link($dir) };
             if ($@) {
                 warn "Error fixing relative link: $@";
-                next;
+                next PAGE;
             }
 
+            # Get all the data we want on a page
+            my ($page, $last_editor, $first_editor);
+            my $workspace_id = $workspace->workspace_id;
+
             eval {
-                my $page = $self->read_metadata($dir);
-                my $workspace_id = $workspace->workspace_id;
-
-                my $last_editor = editor_to_id($page->{last_editor});
-                my $first_editor = editor_to_id($page->{creator_name});
-
-                push @pages, [
-                    $workspace_id,        $page->{page_id}, $page->{name},
-                    $last_editor,         $page->{last_edit_time},
-                    $first_editor,        $page->{create_time},
-                    $page->{revision_id}, $page->{revision_count},
-                    $page->{revision_num},
-                    $page->{type}, $page->{deleted}, $page->{summary},
-                ];
-
-                for my $t (@{ $page->{tags} }) {
-                    push @page_tags, [ $workspace_id, $page->{page_id}, $t ];
-                }
+                $page = $self->read_metadata($dir);
+                $last_editor  = editor_to_id($page->{last_editor});
+                $first_editor = editor_to_id($page->{creator_name});
             };
-            warn "Error populating $workspace_name: $@" if $@;
+            if ($@) {
+                warn "Error populating $workspace_name: $@";
+                next PAGE;
+            }
+
+            # Add this page (and its tags) to the list of things to add to the
+            # DB.
+            push @pages, [
+                $workspace_id,        $page->{page_id}, $page->{name},
+                $last_editor,         $page->{last_edit_time},
+                $first_editor,        $page->{create_time},
+                $page->{revision_id}, $page->{revision_count},
+                $page->{revision_num},
+                $page->{type}, $page->{deleted}, $page->{summary},
+            ];
+
+            for my $t (@{ $page->{tags} }) {
+                push @page_tags, [ $workspace_id, $page->{page_id}, $t ];
+            }
         }
         closedir($dfh);
 

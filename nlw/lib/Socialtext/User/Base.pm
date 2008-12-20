@@ -24,6 +24,7 @@ Readonly our @other_fields => qw(
     cached_at
 );
 Readonly our @all_fields => (@fields, @other_fields);
+Readonly our %all_fields => map {$_=>1} @all_fields;
 
 # set up our fields
 map { field $_ } @all_fields;

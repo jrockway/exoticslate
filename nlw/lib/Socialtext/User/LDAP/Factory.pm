@@ -14,6 +14,7 @@ use Socialtext::SQL qw(sql_selectrow);
 use Net::LDAP::Util qw(escape_filter_value);
 use Socialtext::SQL qw(sql_execute sql_singlevalue);
 use Readonly;
+use List::MoreUtils qw(part);
 
 # Flag to allow for the long-term caching of LDAP user data in the DB to be
 # disabled.
@@ -258,23 +259,32 @@ sub _vivify {
 
     # NOTE: *always* use the driver_unique_id to update LDAP user records
 
-    $proto_user->{driver_username} = delete $proto_user->{username};
     $proto_user->{cached_at} = 'now'; # auto-set to 'now'
     $proto_user->{password} = '*no-password*';
 
     my $user_id = $self->ResolveId($proto_user);
 
+    my ($user_keys, $extra_keys) = 
+        part { $Socialtext::User::Base::all_fields{$_} ? 0 : 1 }
+        keys %$proto_user;
+    my %user_attrs = map { $_ => $proto_user->{$_} } @$user_keys;
+    my %extra_attrs = map { $_ => $proto_user->{$_} } @$extra_keys;
+
+    $user_attrs{driver_username} = delete $user_attrs{username};
+
     if ($user_id) {
         # update cache
-        $proto_user->{user_id} = $user_id;
-        $self->UpdateUserRecord($proto_user);
+        $user_attrs{user_id} = $user_id;
+        $self->UpdateUserRecord(\%user_attrs);
     }
     else {
         # will add a user_id to $proto_user:
-        $self->NewUserRecord($proto_user);
+        $self->NewUserRecord(\%user_attrs);
     }
 
-    $proto_user->{username} = delete $proto_user->{driver_username};
+    $user_attrs{username} = delete $user_attrs{driver_username};
+    $user_attrs{extra_attrs} = \%extra_attrs;
+    %$proto_user = %user_attrs;
 }
 
 sub Search {

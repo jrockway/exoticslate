@@ -55,6 +55,10 @@ sub NewHomunculus {
 
     my $homunculus = $driver_class->new(\%user);
 
+    if ($p->{extra_attrs} && $homunculus->can('extra_attrs')) {
+        $homunculus->extra_attrs($p->{extra_attrs});
+    }
+
     # Remove password fields for users, where the password is over-ridden by
     # the User driver (Default, LDAP, etc) and where the resulting password is
     # *NOT* of any use.  No point keeping a bunk/bogus/useless password

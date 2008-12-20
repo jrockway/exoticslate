@@ -5,8 +5,11 @@ use strict;
 use warnings;
 use Socialtext::LDAP;
 use base qw(Socialtext::User::Base);
+use Class::Field qw/field/;
 
 our $VERSION = '0.03';
+
+field 'extra_attrs';
 
 sub password {
     return '*no-password*';

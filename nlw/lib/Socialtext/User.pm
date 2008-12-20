@@ -146,6 +146,19 @@ sub new_homunculus {
     return $homunculus;
 }
 
+sub _update_profile {
+    my $self = shift;
+    my $homunculus = $self->homunculus;
+    return unless $homunculus->can('extra_attrs');
+    my $attrs = $homunculus->extra_attrs;
+    return unless $attrs;
+    $homunculus->extra_attrs(undef);
+
+    my $people = Socialtext::Pluggable::Adapter->plugin_class('people');
+    $people->UpdateProfileFields($self => $attrs)
+        if $people;
+}
+
 sub new {
     my $class = shift;
     my $user = bless {}, $class;
@@ -159,6 +172,7 @@ sub new {
 
     $user->homunculus($homunculus);
     $user->metadata(Socialtext::UserMetadata->create_if_necessary($user));
+    $user->_update_profile();
 
     Socialtext::Timer->Pause('user_new');
 
@@ -190,6 +204,8 @@ sub create {
     $metadata_p{email_address_at_import} = $user->email_address;
     my $metadata = Socialtext::UserMetadata->create(%metadata_p);
     $user->metadata($metadata);
+
+    $user->_update_profile();
 
     return $user;
 }

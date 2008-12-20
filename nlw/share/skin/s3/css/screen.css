@@ -178,31 +178,31 @@ div.widget ul.widgetButton li a.addTagButton {
     width: 87px;
 }
 
-div.wiki ol, div.wiki ul {
+.wiki ol, .wiki ul {
     padding-left: 25px;
 }
 
-div.wiki ol {
+.wiki ol {
     list-style: decimal outside none;
 }
 
-div.wiki ul {
+.wiki ul {
     list-style: disc outside none;
 }
 
-div.wiki ul ul, div.wiki ol ul {
+.wiki ul ul, .wiki ol ul {
     list-style-type: circle;
 }
 
-div.wiki ol ol ul, div.wiki ol ul ul, div.wiki ul ol ul, div.wiki ul ul ul {
+.wiki ol ol ul, .wiki ol ul ul, .wiki ul ol ul, .wiki ul ul ul {
     list-style-type: square;
 }
 
-div.wiki li {
+.wiki li {
     padding: 3px 0px;
 }
 
-div.wiki td, div.wiki th {
+.wiki td, .wiki th {
     vertical-align: top;
 }
 /* Done overloads */
@@ -338,7 +338,7 @@ ul li a.followPersonButton {
     text-decoration: underline;
 }
 
-div.wiki-include-content {
+.wiki-include-content {
     margin-left: 6px;
 }
 
@@ -400,7 +400,7 @@ html>body #st-page-details {
     padding-top: 3px;
 }
 
-#wysiwyg-editable-div div.wiki {
+#wysiwyg-editable-div .wiki {
     margin:0; padding:0;
 }
 
@@ -1028,7 +1028,7 @@ body#contentPage div#st-editing-tools-edit ul#revision-tools li a {
     width: auto;
 }
 
-/* Same as: div.widget div.widgetContent div.wiki em */
+/* Same as: div.widget div.widgetContent .wiki em */
 div#contentColumns div#st-page-maincontent em {
 	font-size: 10px;
 	color: #000000;
@@ -1037,7 +1037,7 @@ div#contentColumns div#st-page-maincontent em {
 	font-style: italic;
 }
 
-/* Same as: div.widget div.widgetContent div.wiki p strong */
+/* Same as: div.widget div.widgetContent .wiki p strong */
 div#contentColumns div#st-page-maincontent p strong {
 	font-weight: bold;
 }

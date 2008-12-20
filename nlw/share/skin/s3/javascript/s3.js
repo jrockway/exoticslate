@@ -343,27 +343,25 @@ $(function() {
 
     Socialtext.ui_expand_on = function() {
         if (Socialtext.page_type == "wiki" && $.browser.msie && $.browser.version < 7) {
-            $('#st-edit-mode-container').parent().css("width", "auto");
+            $('#mainWrap').css("width", "");
         }
-        $("#st-actions-bar, #mainNav, #header, #workspaceContainer").addClass("collapsed");
         $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Normal View")).text(loc("Normal"));
-        $('#st-edit-mode-container').css({position:'absolute',top:0,left:0,width:'100%',height:'100%'});
+        $('#st-edit-mode-container, #mainWrap').addClass("expanded");
 
         $("iframe#st-page-editing-wysiwyg").width( $('#st-edit-mode-view').width() - 48 );
-
         return false;
     };
     Socialtext.ui_expand_off = function() {
-        if (Socialtext.page_type == "wiki" && $.browser.msie && $.browser.version < 7) {
-            $('#st-edit-mode-container').parent().css("width", "");
+        $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Expanded View")).text(loc("Expand"));
+        $('#st-edit-mode-container, #mainWrap').removeClass("expanded");
+
+        // Force ie6 to "repaint" the document after #mainWrap width change.
+        if (Socialtext.page_type == "wiki"  && $.browser.msie && $.browser.version < 7) {
+            var w = $("#mainWrap").width();
+            $("#mainWrap").width(w-1).width(w);
         }
 
-        $("#st-actions-bar, #mainNav, #header, #workspaceContainer").removeClass("collapsed");
-        $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Expanded View")).text(loc("Expand"));
-        $('#st-edit-mode-container').css({position:'',top:'',left:'',width:'',height:''});
-
         $("iframe#st-page-editing-wysiwyg").width( $('#st-edit-mode-view').width() - 48 );
-
         return false;
     };
     Socialtext.ui_expand_setup = function() {

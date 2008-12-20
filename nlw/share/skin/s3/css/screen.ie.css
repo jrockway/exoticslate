@@ -285,3 +285,9 @@ div.pagination-container .paging-numbers {
 div.pagination-container .paging-forward {
     -width: 15em;
 }
+
+#mainWrap.expanded {
+    width: auto;
+    width: 100%;
+}
+

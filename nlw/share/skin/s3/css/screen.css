@@ -707,7 +707,6 @@ div#bootstrap-loader {
 /* pagetools : the top right New Page, Print, Email, and Tools items at top right */
 
 #st-page-editing-toolbar {
-    float: left;
     margin: 0 250px -24px 0;
 }
 #wikiwyg_toolbar {

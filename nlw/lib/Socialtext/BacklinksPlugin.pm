@@ -264,9 +264,15 @@ sub get_orphaned_pages {
 sub _assert_database {
     my $self = shift;
     return unless Socialtext::File::directory_is_empty( $self->_storage_directory );
+
     for my $page ($self->hub->pages->all) {
         $self->update($page);
     }
+
+    # avoid trying to initialize the backlinks directory if no pages actually
+    # have any backlinks while retaining "rm -f" compatibility:
+    Socialtext::File::set_contents(
+        $self->_storage_directory . '/.initialized', '');
 }
 
 sub _storage_directory {

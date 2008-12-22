@@ -1886,11 +1886,29 @@ proto.do_new_table = function() {
     return false;
 }
 
+proto.deselect = function() {
+    if (Wikiwyg.is_ie) {
+        /* TODO - This works but the cursor state is wrong after insert_html(). 
+
+        var r = this.get_edit_document().selection.createRange();
+        r.collapse(true);
+        r.select();
+
+        this.__range = undefined;
+        */
+    }
+    else {
+        this.get_edit_window().getSelection().collapseToStart();
+    }
+}
+
 proto.find_table_cell_with_cursor = function() {
     var doc = this.get_edit_document();
+
     jQuery("span.find-cursor", doc).removeClass('find-cursor');
 
     this.set_focus();
+    this.deselect();
     this.insert_html("<span class=\"find-cursor\"></span>");
 
     var cursor = jQuery("span.find-cursor", doc);
@@ -1958,12 +1976,11 @@ proto.do_add_col_left = function() {
     var self = this;
     this._do_table_manip(function($cell) {
         var doc = this.get_edit_document();
-        var $table = $cell.parents("table");
-        var col = self._find_column_index($cell);
-        $table.find("td:nth-child(" + col + ")").each(function() {
-            var $td = jQuery(doc.createElement('td'));
-            $td.html('<span style=\"padding:0.5em\"></span>');
-            jQuery(this).before($td);
+        self._traverse_column($cell, function($td) {
+            $td.before(
+                $(doc.createElement('td'))
+                    .html('<span style=\"padding:0.5em\"></span>')
+            );
         });
     });
 }
@@ -1972,12 +1989,11 @@ proto.do_add_col_right = function() {
     var self = this;
     this._do_table_manip(function($cell) {
         var doc = this.get_edit_document();
-        var $table = $cell.parents("table");
-        var col = self._find_column_index($cell);
-        $table.find("td:nth-child(" + col + ")").each(function() {
-            var $td = jQuery(doc.createElement('td'));
-            $td.html('<span style=\"padding:0.5em\"></span>');
-            jQuery(this).after($td);
+        self._traverse_column($cell, function($td) {
+            $td.after(
+                $(doc.createElement('td'))
+                    .html('<span style=\"padding:0.5em\"></span>')
+            );
         });
     });
 }
@@ -2003,26 +2019,56 @@ proto.do_del_row = function() {
     });
 }
 
+proto._traverse_column_with_prev = function($cell, callback) {
+    this._traverse_column($cell, callback, -1);
+}
+
+proto._traverse_column_with_next = function($cell, callback) {
+    this._traverse_column($cell, callback, +1);
+}
+
+proto._traverse_column = function($cell, callback, offset) {
+    var $table = $cell.parents("table");
+    var col = this._find_column_index($cell);
+    var trs = $table.find('tr');
+    for (var i = 0; i < trs.length; i++) {
+        var tds = $(trs[i]).find('td');
+        if (tds.length >= col) {
+            var $td = $(tds.get(col-1));
+            if (offset) {
+                if (tds.length >= col+offset && col+offset >= 1) {
+                    var $td2 = $(tds.get(col+offset-1));
+                    callback($td, $td2);
+                }
+            }
+            else {
+                callback($td);
+            }
+        }
+    }
+}
+
 proto.do_del_col = function() {
     var self = this;
     this._do_table_manip(function($cell) {
-        var $table = $cell.parents("table");
-        var col = self._find_column_index($cell);
-
-        var $new_cell = $cell.next();
-        if (!$new_cell.length) {
-            $new_cell = $cell.prev();
-        }
-
-        if ($new_cell.length) {
-            $table.find("td:nth-child(" + col + ")").remove();
-            return $new_cell;
-        }
-        else {
+        if ($cell.parents('tr:first').find('td').length <= 1) {
             $cell.parents("table").remove();
             return;
         }
 
+        var $tr = $cell.parents('tr:first');
+        var col = self._find_column_index($cell);
+        self._traverse_column($cell, function($td) {
+            $td.remove();
+        });
+
+        var tds = $tr.find('td');
+        if (tds.length >= col) {
+            return $(tds[col-1]);
+        }
+        else {
+            return $(tds[col-2]);
+        }
     });
 }
 
@@ -2045,12 +2091,8 @@ proto.do_move_row_down = function() {
 proto.do_move_col_left = function() {
     var self = this;
     this._do_table_manip(function($cell) {
-        var $table = $cell.parents("table");
-        var col = self._find_column_index($cell);
-        $table.find("td:nth-child(" + col + ")")
-        .each(function() {
-            var $c = jQuery(this);
-            $c.prev().insertAfter( $c );
+        self._traverse_column_with_prev($cell, function($td, $prev) {
+            $prev.insertAfter($td);
         });
     });
 }
@@ -2058,12 +2100,8 @@ proto.do_move_col_left = function() {
 proto.do_move_col_right = function() {
     var self = this;
     this._do_table_manip(function($cell) {
-        var $table = $cell.parents("table");
-        var col = self._find_column_index($cell);
-        $table.find("td:nth-child(" + col + ")")
-        .each(function() {
-            var $c = jQuery(this);
-            $c.next().insertBefore( $c );
+        self._traverse_column_with_next($cell, function($td, $next) {
+            $next.insertBefore($td);
         });
     });
 }

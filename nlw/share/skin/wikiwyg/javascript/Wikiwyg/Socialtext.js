@@ -1885,8 +1885,14 @@ proto.do_new_table = function() {
 
 proto.deselect = function() {
     if (Wikiwyg.is_ie) {
-        this._ieSelectionBookmark = null;
-        this.get_edit_document().selection.empty();
+        /* TODO - This works but the cursor state is wrong after insert_html(). 
+
+        var r = this.get_edit_document().selection.createRange();
+        r.collapse(true);
+        r.select();
+
+        this.__range = undefined;
+        */
     }
     else {
         this.get_edit_window().getSelection().collapseToStart();

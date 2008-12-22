@@ -1955,12 +1955,11 @@ proto.do_add_col_left = function() {
     var self = this;
     this._do_table_manip(function($cell) {
         var doc = this.get_edit_document();
-        var $table = $cell.parents("table");
-        var col = self._find_column_index($cell);
-        $table.find("td:nth-child(" + col + ")").each(function() {
-            var $td = jQuery(doc.createElement('td'));
-            $td.html('<span style=\"padding:0.5em\"></span>');
-            jQuery(this).before($td);
+        self._traverse_column($cell, function($td) {
+            $td.before(
+                $(doc.createElement('td'))
+                    .html('<span style=\"padding:0.5em\"></span>')
+            );
         });
     });
 }
@@ -1969,12 +1968,11 @@ proto.do_add_col_right = function() {
     var self = this;
     this._do_table_manip(function($cell) {
         var doc = this.get_edit_document();
-        var $table = $cell.parents("table");
-        var col = self._find_column_index($cell);
-        $table.find("td:nth-child(" + col + ")").each(function() {
-            var $td = jQuery(doc.createElement('td'));
-            $td.html('<span style=\"padding:0.5em\"></span>');
-            jQuery(this).after($td);
+        self._traverse_column($cell, function($td) {
+            $td.after(
+                $(doc.createElement('td'))
+                    .html('<span style=\"padding:0.5em\"></span>')
+            );
         });
     });
 }
@@ -2000,26 +1998,39 @@ proto.do_del_row = function() {
     });
 }
 
+proto._traverse_column = function($cell, callback) {
+    var $table = $cell.parents("table");
+    var col = this._find_column_index($cell);
+    var trs = $table.find('tr');
+    for (var i = 0; i < trs.length; i++) {
+        var $td = $($(trs[i]).find('td').get(col-1));
+        if ($td.length) {
+            callback($td);
+        }
+    }
+}
+
 proto.do_del_col = function() {
     var self = this;
     this._do_table_manip(function($cell) {
-        var $table = $cell.parents("table");
-        var col = self._find_column_index($cell);
-
-        var $new_cell = $cell.next();
-        if (!$new_cell.length) {
-            $new_cell = $cell.prev();
-        }
-
-        if ($new_cell.length) {
-            $table.find("td:nth-child(" + col + ")").remove();
-            return $new_cell;
-        }
-        else {
+        if ($cell.parents('tr:first').find('td').length <= 1) {
             $cell.parents("table").remove();
             return;
         }
 
+        var $tr = $cell.parents('tr:first');
+        var col = self._find_column_index($cell);
+        self._traverse_column($cell, function($td) {
+            $td.remove();
+        });
+
+        var tds = $tr.find('td');
+        if (tds.length >= col) {
+            return $(tds[col-1]);
+        }
+        else {
+            return $(tds[col-2]);
+        }
     });
 }
 

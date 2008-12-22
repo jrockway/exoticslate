@@ -3194,6 +3194,11 @@ workspace. The user argument sets the author of the page.
 Deliver an email to the specified workspace. The email message should
 be provided on STDIN.
 
+=head2 list-accounts [--ids]
+
+List accounts on this machine.  Alternatively, give the account IDs instead of
+the names.
+
 =head2 create-account --name
 
 Creates a new account with the given name.

@@ -128,7 +128,7 @@ proto.delAttachment = function (url, refresh) {
     }
 };
 
-proto.onTargetLoad = function () {
+proto.onTargetLoad = function (basename) {
     var self = this;
 
     jQuery('#st-attachments-attach-uploadmessage').html(loc('Upload Complete'));
@@ -189,7 +189,7 @@ proto.onChangeFilename = function () {
     );
 
     jQuery('#st-attachments-attach-formtarget')
-        .one('load', function () { self.onTargetLoad() });
+        .one('load', function () { self.onTargetLoad(basename) });
 
     jQuery('#st-attachments-attach-form').submit();
     jQuery('#st-attachments-attach-closebutton').attr('disabled', true);

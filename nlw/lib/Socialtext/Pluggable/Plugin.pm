@@ -26,14 +26,16 @@ my %content_types;
 my %rest_hooks;
 my %rests;
 
-const priority => 100;
 field hub => -weak;
 field 'rest';
 field 'declined';
 
-sub dependencies { }
+const priority => 100;
+const scope => 'account';
+const hidden => 1; # hidden to admins
+const read_only => 0; # cannot be disabled/enabled in the control panel
 
-sub scope { 'account' }
+sub dependencies { }
 
 # perldoc Socialtext::URI for arguments
 #    path = '' & query => {}

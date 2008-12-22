@@ -5,7 +5,8 @@ use warnings;
 use Socialtext::BrowserDetect;
 
 use base 'Socialtext::Pluggable::Plugin';
-use Class::Field 'const';
+use Class::Field qw(const field);
+
 const priority => 0;
 
 sub scope { 'always' }

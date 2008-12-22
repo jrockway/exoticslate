@@ -1393,11 +1393,24 @@ Socialtext Wikiwyg Toolbar subclass
  =============================================================================*/
 proto = new Subclass('Wikiwyg.Toolbar.Socialtext', 'Wikiwyg.Toolbar');
 
+proto.imagesExtension = '.png';
+
 proto.controlLayout = [
+    '{other_buttons',
     'bold', 'italic', 'strike', '|',
     'h1', 'h2', 'h3', 'h4', 'p', '|',
     'ordered', 'unordered', 'outdent', 'indent', '|',
-    'link', 'image', 'table'
+    'link', 'image', 'table', '|',
+    '}',
+    '{table_buttons disabled',
+    'add-row-below', 'add-row-above',
+    'move-row-down', 'move-row-up',
+    'del-row',
+    '|',
+    'add-col-left', 'add-col-right',
+    'move-col-left', 'move-col-right',
+    'del-col',
+    '}'
 ];
 
 proto.controlLabels = {
@@ -1423,17 +1436,21 @@ proto.controlLabels = {
     pre: loc('Preformatted'),
     save: loc('Save'),
     strike: loc('Strike Through') + '(Ctrl+d)',
-    table: loc('Tables'),
+    table: loc('New Table'),
+    'add-row-above': loc('Add Table Row Above Current Row'),
+    'add-row-below': loc('Add Table Row Below Current Row'),
+    'add-col-left': loc('Add Table Column to the Left'),
+    'add-col-right': loc('Add Table Column to the Right'),
+    'del-row': loc('Delete Current Table Row'),
+    'del-col': loc('Delete Current Table Column'),
+    'move-row-up': loc('Move Current Table Row Up'),
+    'move-row-down': loc('Move Current Table Row Down'),
+    'move-col-left': loc('Move Current Table Column to the Left'),
+    'move-col-right': loc('Move Current Table Column to the Right'),
     underline: loc('Underline') + '(Ctrl+u)',
     unlink: loc('Unlink'),
     unordered: loc('Bulleted List')
 };
-
-proto.add_separator = function() {
-    var base = this.config.imagesLocation;
-    var ext = this.config.imagesExtension;
-    jQuery(this.div).append("&nbsp;&nbsp;&nbsp;");
-}
 
 proto.resetModeSelector = function() {
     this.wikiwyg.disable_button(this.wikiwyg.first_mode.classname);
@@ -1473,6 +1490,8 @@ Socialtext Wysiwyg subclass.
 proto = new Subclass(WW_SIMPLE_MODE, 'Wikiwyg.Wysiwyg');
 
 proto.process_command = function(command) {
+    command = command
+        .replace(/-/g, '_');
     if (this['do_' + command])
         this['do_' + command](command);
 
@@ -1548,6 +1567,31 @@ proto.enableThis = function() {
         }
         catch(e) { }
     }, 1);
+
+    if (!this.__toolbar_styling_interval)
+        this.__toolbar_styling_interval = setInterval(function() {self.toolbarStyling() }, 1000);
+}
+
+proto.toolbarStyling = function() {
+    if (this.busy_styling)
+        return;
+    this.busy_styling = true;
+    try {
+        var selection = this.get_edit_document().selection
+            ? this.get_edit_document().selection
+            : this.get_edit_window().getSelection();
+        var anchor = selection.anchorNode
+            ? selection.anchorNode
+            : selection.createRange().parentElement();
+
+        if( jQuery(anchor, this.get_edit_window()).parents("table").size() > 0 ) {
+            jQuery(".table_buttons").removeClass("disabled");
+        }
+        else {
+            jQuery(".table_buttons").addClass("disabled");
+        }
+    } catch(e) {}
+    this.busy_styling = false;
 }
 
 proto.set_clear_handler = function () {
@@ -1842,6 +1886,188 @@ proto.do_new_table = function() {
     return false;
 }
 
+proto.find_table_cell_with_cursor = function() {
+    var doc = this.get_edit_document();
+    jQuery("span.find-cursor", doc).removeClass('find-cursor');
+
+    this.set_focus();
+    this.insert_html("<span class=\"find-cursor\"></span>");
+
+    var cursor = jQuery("span.find-cursor", doc);
+    if (! cursor.parents('td').length)
+        return;
+    var $cell = cursor.parents("td");
+
+    cursor.remove();
+    $cell.html($cell.html()
+        .replace(/<span style="padding: [^;]*;">(.*?)<\/span>/g, '$1')
+    );
+
+    return $cell;
+}
+
+proto._do_table_manip = function(callback) {
+    var self = this;
+    setTimeout(function() {
+        var $cell = self.find_table_cell_with_cursor();
+        if (! $cell) return;
+
+        var $new_cell = callback.call(self, $cell);
+
+        if ($new_cell) {
+            self.set_focus();
+            if (jQuery.browser.mozilla) {
+                self.get_edit_window().getSelection().collapse( $new_cell.find("span").get(0), 0 );
+            }
+            else if (jQuery.browser.msie) {
+                var r = self.get_edit_document().selection.createRange();
+                r.moveToElementText( $new_cell.get(0) );
+                r.collapse(true);
+                r.select();
+            }
+        }
+    }, 100);
+}
+
+proto.do_add_row_below = function() {
+    var self = this;
+    this._do_table_manip(function($cell) {
+        var doc = this.get_edit_document();
+        var $tr = jQuery(doc.createElement('tr'));
+        $cell.parents("tr").find("td").each(function() {
+            $tr.append('<td><span style=\"padding:0.5em\"></span></td>');
+        });
+        $tr.insertAfter( $cell.parents("tr") );
+    });
+}
+
+proto.do_add_row_above = function() {
+    var self = this;
+    this._do_table_manip(function($cell) {
+        var doc = this.get_edit_document();
+        var $tr = jQuery(doc.createElement('tr'));
+
+        $cell.parents("tr").find("td").each(function() {
+            $tr.append('<td><span style=\"padding:0.5em\"></span></td>');
+        });
+        $tr.insertBefore( $cell.parents("tr") );
+    });
+}
+
+proto.do_add_col_left = function() {
+    var self = this;
+    this._do_table_manip(function($cell) {
+        var doc = this.get_edit_document();
+        var $table = $cell.parents("table");
+        var col = self._find_column_index($cell);
+        $table.find("td:nth-child(" + col + ")").each(function() {
+            var $td = jQuery(doc.createElement('td'));
+            $td.html('<span style=\"padding:0.5em\"></span>');
+            jQuery(this).before($td);
+        });
+    });
+}
+
+proto.do_add_col_right = function() {
+    var self = this;
+    this._do_table_manip(function($cell) {
+        var doc = this.get_edit_document();
+        var $table = $cell.parents("table");
+        var col = self._find_column_index($cell);
+        $table.find("td:nth-child(" + col + ")").each(function() {
+            var $td = jQuery(doc.createElement('td'));
+            $td.html('<span style=\"padding:0.5em\"></span>');
+            jQuery(this).after($td);
+        });
+    });
+}
+
+proto.do_del_row = function() {
+    var self = this;
+    this._do_table_manip(function($cell) {
+        var col = self._find_column_index($cell);
+        var $new_cell = $cell.parents('tr')
+            .next().find("td:nth-child(" + col + ")");
+        if (!$new_cell.length) {
+            $new_cell = $cell.parents('tr')
+                .prev().find("td:nth-child(" + col + ")");
+        }
+        if ($new_cell.length) {
+            $cell.parents('tr').remove();
+            return $new_cell;
+        }
+        else {
+            $cell.parents("table").remove();
+            return;
+        }
+    });
+}
+
+proto.do_del_col = function() {
+    var self = this;
+    this._do_table_manip(function($cell) {
+        var $table = $cell.parents("table");
+        var col = self._find_column_index($cell);
+
+        var $new_cell = $cell.next();
+        if (!$new_cell.length) {
+            $new_cell = $cell.prev();
+        }
+
+        if ($new_cell.length) {
+            $table.find("td:nth-child(" + col + ")").remove();
+            return $new_cell;
+        }
+        else {
+            $cell.parents("table").remove();
+            return;
+        }
+
+    });
+}
+
+proto.do_move_row_up = function() {
+    var self = this;
+    this._do_table_manip(function($cell) {
+        var $r = $cell.parents("tr");
+        $r.prev().insertAfter( $r );
+    });
+}
+
+proto.do_move_row_down = function() {
+    var self = this;
+    this._do_table_manip(function($cell) {
+        var $r = $cell.parents("tr");
+        $r.next().insertBefore( $r );
+    });
+}
+
+proto.do_move_col_left = function() {
+    var self = this;
+    this._do_table_manip(function($cell) {
+        var $table = $cell.parents("table");
+        var col = self._find_column_index($cell);
+        $table.find("td:nth-child(" + col + ")")
+        .each(function() {
+            var $c = jQuery(this);
+            $c.prev().insertAfter( $c );
+        });
+    });
+}
+
+proto.do_move_col_right = function() {
+    var self = this;
+    this._do_table_manip(function($cell) {
+        var $table = $cell.parents("table");
+        var col = self._find_column_index($cell);
+        $table.find("td:nth-child(" + col + ")")
+        .each(function() {
+            var $c = jQuery(this);
+            $c.next().insertBefore( $c );
+        });
+    });
+}
+
 proto.do_table = function() {
     var doc = this.get_edit_document();
     jQuery("span.find-cursor", doc).removeClass('find-cursor');
@@ -1850,38 +2076,10 @@ proto.do_table = function() {
 
     var self = this;
     setTimeout(function() {
-        var cur = window.cur = jQuery("span.find-cursor", doc);
-
-        if (! cur.parents('td').length)
+        var $cell = self.find_table_cell_with_cursor();
+        if (! $cell)
             return self.do_new_table();
-
-        var $cell = cur.parents("td");
-        cur.remove();
-
-        self.table_html = $cell.parents("table").html();
-//         console.log($cell.prev().text());
-//         return;
-
-        jQuery.showLightbox({
-            html: Jemplate.process("table-options.html", {"loc": loc}),
-            width: 300,
-            callback: function() {
-                self._do_table_lightbox($cell);
-
-                jQuery("#lightbox").css('opacity', 0.75).one("unload", function() {
-                    jQuery('#lightbox').css('opacity', '');
-                    if (Wikiwyg.is_ie && jQuery.browser.version <= 6) {
-                        var $editor = jQuery( self.get_editable_div() );
-                        if ($editor.css('overflow') != 'visible') {
-                            $editor.css('overflow', 'visible');
-                        }
-                    }
-                    jQuery(".current-cell", doc).removeClass("current-cell");
-                    self.set_focus();
-                });
-            }
-        });
-
+        return;
     }, 100);
 }
 
@@ -1945,194 +2143,6 @@ proto._find_column_index = function($cell) {
     }
     $cell.removeClass('find-cell');
     return 0;
-}
-
-proto._do_table_lightbox = function($cell) {
-    var $opt = jQuery(".table-options");
-
-    $cell.parents("table").find('.current-cell')
-        .removeClass('current-cell');
-    $cell.addClass('current-cell');
-
-    this._scroll_to_center($cell);
-
-    var $table = $cell.parents("table");
-    var col = this._find_column_index($cell);
-
-    var row = $cell.parents('tr').prevAll("tr").length + 1;
-    var row_head_val = $cell.parents('tr').find('td:eq(0)').text();
-    var col_head_val = $cell.parents('table').find('tr:first')
-        .find('td:eq(' + String(col - 1) + ')').text();
-
-    var snippet = function(text) {
-        text = text.replace(/^\s+/g, '');
-        text = text.replace(/\s\s+/g, ' ');
-
-        if (text.length > 15) {
-            text = text.substr(0,15);
-            text = text.replace(/\s+$/g, '');
-            text += '...';
-        }
-
-        text = text.replace(/\s+$/g, '');
-        return text;
-    }
-
-    $opt.find(".row-number").text(row);
-    $opt.find(".col-number").text(col);
-    $opt.find(".row-head").text(snippet(row_head_val));
-    $opt.find(".col-head").text(snippet(col_head_val));
-
-    var self = this;
-    $opt.find("a.delete").unbind("click").click(function() {
-        if ( $(this).is(".row") ) {
-            var $new_cell = $cell.parents('tr')
-                .next().find("td:nth-child(" + col + ")");
-            if (!$new_cell.length) {
-                $new_cell = $cell.parents('tr')
-                    .prev().find("td:nth-child(" + col + ")");
-            }
-            if ($new_cell.length) {
-                $cell.parents('tr').remove();
-                self._do_table_lightbox($new_cell);
-            }
-            else {
-                $cell.parents("table").remove();
-                self.closeTableDialog();
-            }
-        }
-        else if ( $(this).is(".column") ) {
-            var $new_cell = $cell.next();
-
-            if (!$new_cell.length) {
-                $new_cell = $cell.prev();
-            }
-            if ($new_cell.length) {
-                $table.find("td:nth-child(" + col + ")").remove();
-                self._do_table_lightbox($new_cell);
-            }
-            else {
-                $cell.parents("table").remove();
-                self.closeTableDialog();
-            }
-            col = self._find_column_index($new_cell);
-        }
-
-        self.get_edit_window().focus();
-        return false;
-    });
-
-    $opt.find("a.add").unbind("click").click(function() {
-        var $this = $(this);
-        var doc = self.get_edit_document();
-
-        if ( $this.is(".row") ) {
-            var $tr = jQuery(doc.createElement('tr'));
-
-            $cell.parents("tr").find("td").each(function() {
-                $tr.append('<td><span style=\"padding:0.5em\"></span></td>');
-            });
-
-            if ( $this.is(".above") ) {
-                $tr.insertBefore( $cell.parents("tr") );
-            }
-            else if ( $this.is(".below") ) {
-                $tr.insertAfter( $cell.parents("tr") );
-            }
-        }
-        else if ( $this.is(".column") ) {
-            var $table = $cell.parents("table");
-            if ( $this.is(".left") ) {
-                $table.find("td:nth-child(" + col + ")").each(function() {
-                    var $td = jQuery(doc.createElement('td'));
-                    $td.html('<span style=\"padding:0.5em\"></span>');
-                    jQuery(this).before($td);
-                });
-            }
-            else if ( $this.is(".right") ) {
-                $table.find("td:nth-child(" + col + ")").each(function() {
-                    var $td = jQuery(doc.createElement('td'));
-                    $td.html('<span style=\"padding:0.5em\"></span>');
-                    jQuery(this).after($td);
-                });
-            }
-            col = self._find_column_index($cell);
-        }
-
-        self.get_edit_window().focus();
-        self._do_table_lightbox($cell);
-        return false;
-    });
-
-    $opt.find("a.move").unbind("click").click(function() {
-        var $this = $(this);
-
-        if ( $this.is(".row") ) {
-            var $r = $cell.parents("tr");
-
-            if ( $this.is(".up") )
-                $r.prev().insertAfter( $r );
-            else if ( $this.is(".down") )
-                $r.next().insertBefore( $r );
-        }
-        else if ( $this.is(".column") ) {
-            var $table = $cell.parents("table");
-            if ( $this.is(".left") ) {
-                $table.find("td:nth-child(" + col + ")")
-                .each(function() {
-                    var $c = jQuery(this);
-                    $c.prev().insertAfter( $c );
-                });
-            }
-            else if ( $this.is(".right") ) {
-                $table.find("td:nth-child(" + col + ")")
-                .each(function() {
-                    var $c = jQuery(this);
-                    $c.next().insertBefore( $c );
-                });
-            }
-            col = self._find_column_index($cell);
-        }
-
-        self.get_edit_window().focus();
-        self._do_table_lightbox($cell);
-        return false;
-    });
-
-    var doc = this.get_edit_document();
-    jQuery(doc).unbind("keypress").bind("keypress", function(e) {
-        var key = e.keyCode || e.which;
-        var $new_cell = null;
-        switch(key) {
-            case 37:
-                $new_cell = $cell.prev();
-                break;
-            case 38:
-                $new_cell = $cell.parents('tr')
-                    .prev().find("td:nth-child(" + col + ")");
-                break;
-            case 39:
-                $new_cell = $cell.next();
-                break;
-            case 40:
-                $new_cell = $cell.parents('tr')
-                    .next().find("td:nth-child(" + col + ")");
-                break;
-        }
-        if ($new_cell && $new_cell.length) {
-            self._do_table_lightbox($new_cell);
-        }
-        return false;
-    });
-
-    jQuery("input[name=save]").unbind("click").bind("click", function() {
-        self.closeTableDialog();
-    });
-
-    jQuery("input[name=cancel]").unbind("click").bind("click", function() {
-        var $table = $cell.parents("table").html(self.table_html);
-        self.closeTableDialog();
-    });
 }
 
 proto.setHeightOf = function (iframe) {

@@ -75,6 +75,10 @@ proto.enableThis = function() {
     }
 }
 
+proto.enableStarted = function() {
+    jQuery(".table_buttons").addClass("disabled");
+}
+
 proto.setHeightOfEditor = function() {
     var config = this.config;
     var adjust = config.editHeightAdjustment;

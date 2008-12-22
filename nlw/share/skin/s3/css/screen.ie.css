@@ -111,12 +111,22 @@ div#st-pagetools ul ul li {
     width: 14em !important;
 }
 
-/* Remove most of the whitespace between the toolbar and the editing area */
-
 #st-page-editing-toolbar {
-    margin-top: 5px !important;
+    width:auto;
+    margin:0 8px 0 0;
+    position:relative;
 }
- 
+
+#st-page-editing-widget-menu {
+    overflow:hidden;
+}
+
+#st-page-editing-button-toolbar {
+    float: none;
+    position: relative;
+    left: 650px;
+}
+
 /* This selector makes for about 2px of blank space on the right side of the
  * popup because IE sucks, we should look in to fixing this. Adding an
  * expression that checks for a scrollbar may fix this.
@@ -275,3 +285,9 @@ div.pagination-container .paging-numbers {
 div.pagination-container .paging-forward {
     -width: 15em;
 }
+
+#mainWrap.expanded {
+    width: auto;
+    width: 100%;
+}
+

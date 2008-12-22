@@ -1998,14 +1998,31 @@ proto.do_del_row = function() {
     });
 }
 
-proto._traverse_column = function($cell, callback) {
+proto._traverse_column_with_prev = function($cell, callback) {
+    this._traverse_column($cell, callback, -1);
+}
+
+proto._traverse_column_with_next = function($cell, callback) {
+    this._traverse_column($cell, callback, +1);
+}
+
+proto._traverse_column = function($cell, callback, offset) {
     var $table = $cell.parents("table");
     var col = this._find_column_index($cell);
     var trs = $table.find('tr');
     for (var i = 0; i < trs.length; i++) {
-        var $td = $($(trs[i]).find('td').get(col-1));
-        if ($td.length) {
-            callback($td);
+        var tds = $(trs[i]).find('td');
+        if (tds.length >= col) {
+            var $td = $(tds.get(col-1));
+            if (offset) {
+                if (tds.length >= col+offset && col+offset >= 1) {
+                    var $td2 = $(tds.get(col+offset-1));
+                    callback($td, $td2);
+                }
+            }
+            else {
+                callback($td);
+            }
         }
     }
 }
@@ -2053,12 +2070,8 @@ proto.do_move_row_down = function() {
 proto.do_move_col_left = function() {
     var self = this;
     this._do_table_manip(function($cell) {
-        var $table = $cell.parents("table");
-        var col = self._find_column_index($cell);
-        $table.find("td:nth-child(" + col + ")")
-        .each(function() {
-            var $c = jQuery(this);
-            $c.prev().insertAfter( $c );
+        self._traverse_column_with_prev($cell, function($td, $prev) {
+            $prev.insertAfter($td);
         });
     });
 }
@@ -2066,12 +2079,8 @@ proto.do_move_col_left = function() {
 proto.do_move_col_right = function() {
     var self = this;
     this._do_table_manip(function($cell) {
-        var $table = $cell.parents("table");
-        var col = self._find_column_index($cell);
-        $table.find("td:nth-child(" + col + ")")
-        .each(function() {
-            var $c = jQuery(this);
-            $c.next().insertBefore( $c );
+        self._traverse_column_with_next($cell, function($td, $next) {
+            $next.insertBefore($td);
         });
     });
 }

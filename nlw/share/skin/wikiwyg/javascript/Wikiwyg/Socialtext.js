@@ -1883,11 +1883,23 @@ proto.do_new_table = function() {
     return false;
 }
 
+proto.deselect = function() {
+    if (Wikiwyg.is_ie) {
+        this._ieSelectionBookmark = null;
+        this.get_edit_document().selection.empty();
+    }
+    else {
+        this.get_edit_window().getSelection().collapseToStart();
+    }
+}
+
 proto.find_table_cell_with_cursor = function() {
     var doc = this.get_edit_document();
+
     jQuery("span.find-cursor", doc).removeClass('find-cursor');
 
     this.set_focus();
+    this.deselect();
     this.insert_html("<span class=\"find-cursor\"></span>");
 
     var cursor = jQuery("span.find-cursor", doc);

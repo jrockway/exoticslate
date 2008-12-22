@@ -4,6 +4,13 @@ use strict;
 use warnings;
 use base 'Socialtext::MockBase';
 
+use unmocked 'Class::Field';
+
+Class::Field::field 'skin_name';
+Class::Field::field 'uploaded_skin';
+Class::Field::field 'name';
+Class::Field::field 'title';
+
 our @BREADCRUMBS = ();
 
 sub new {
@@ -12,19 +19,24 @@ sub new {
     my $self = { @_ };
     bless $self, $class;
     return if $self->{name} and $self->{name} =~ m{^bad};
+
+    $self->name($self->{name} || 'mock_workspace_name');
+    $self->title($self->{title} || 'mock_workspace_title');
+
     return $self;
 }
 
+sub update {
+    my ($self, $key, $val) = @_;
+    $self->$key($val);
+}
+
 sub is_plugin_enabled { $_[0]->{is_plugin_enabled}{$_[1]} }
-sub title { $_[0]->{title} || 'mock_workspace_title' }
-sub name { $_[0]->{name} || $_[0]->{title} || 'mock_workspace_name' }
 sub workspace_id { $_[0]->{workspace_id} || 'mock_workspace_id' }
 
 sub homepage_is_dashboard { $_[0]->{homepage_is_dashboard} }
 
 sub homepage_weblog { $_[0]->{homepage_weblog} }
-
-sub skin_name { $_[0]->{skin_name} || 's2' }
 
 sub logo_uri_or_default { 'logo_uri_or_default' }
 
@@ -36,8 +48,6 @@ sub uri { $_[0]->{uri} ||
             . '/' }
 
 sub cascade_css { $_[0]->{cascade_css} || 1 }
-
-sub uploaded_skin { $_[0]->{uploaded_skin} || 0 }
 
 sub email_in_address { 'mock_workspace_email_in_address' }
 

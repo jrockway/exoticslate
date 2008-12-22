@@ -8,23 +8,25 @@ use File::chdir;
 use Socialtext::File;
 use YAML;
 
+use mocked 'Socialtext::Hub';
+
 BEGIN {
     use Test::Socialtext tests => 25;
     use_ok( 'Socialtext::Skin' );
     $Socialtext::Skin::CODE_BASE = 't/share';
     $Socialtext::Skin::PROD_VER = '1.0';
-    fixtures( 'admin' );
 }
 
 # Cascading S3 Skin
 {
-    my $hub = new_hub('admin');
+    my $hub = Socialtext::Hub->new;
     $hub->current_workspace->skin_name('cascades_s3');
     my $info = $hub->skin->css_info;
 
     is_deeply($info->{standard}, [
         "/static/1.0/skin/s3/css/screen.css",
         "/static/1.0/skin/s3/css/screen.ie.css",
+        "/static/1.0/skin/s3/css/screen.ie7.css",
         "/static/1.0/skin/s3/css/print.css",
         "/static/1.0/skin/s3/css/print.ie.css",
         "/static/1.0/skin/cascades_s3/css/screen.css",
@@ -44,7 +46,7 @@ BEGIN {
 
 # Cascading S2 skin
 {
-    my $hub = new_hub('admin');
+    my $hub = Socialtext::Hub->new;
     $hub->current_workspace->skin_name('cascades_s2');
     my $info = $hub->skin->css_info;
 
@@ -71,7 +73,7 @@ BEGIN {
 
 # Non-cascading skin
 {
-    my $hub = new_hub('admin');
+    my $hub = Socialtext::Hub->new;
     $hub->current_workspace->skin_name('nocascade');
     my $info = $hub->skin->css_info;
 
@@ -94,13 +96,14 @@ BEGIN {
 
 # S3 skin
 {
-    my $hub = new_hub('admin');
+    my $hub = Socialtext::Hub->new;
     $hub->current_workspace->skin_name('s3');
     my $info = $hub->skin->css_info;
 
     is_deeply($info->{standard}, [
         "/static/1.0/skin/s3/css/screen.css",
         "/static/1.0/skin/s3/css/screen.ie.css",
+        "/static/1.0/skin/s3/css/screen.ie7.css",
         "/static/1.0/skin/s3/css/print.css",
         "/static/1.0/skin/s3/css/print.ie.css",
     ], 'S3 skin does not include the s2 skin');
@@ -114,13 +117,15 @@ BEGIN {
 }
 
 # Uploaded S2 skin
-my $info = 't/share/uploaded-skin/admin/info.yaml';
+my $info_file = 't/share/uploaded-skin/admin/info.yaml';
 {
-    my $hub = new_hub('admin');
+    my $hub = Socialtext::Hub->new;
+    $hub->{current_workspace} =
+        Socialtext::Workspace->new(name => 'admin');
     $hub->current_workspace->skin_name('s2');
     $hub->current_workspace->uploaded_skin('1');
 
-    YAML::DumpFile($info => {
+    YAML::DumpFile($info_file => {
         name => 'uploaded',
         cascade_css => 1,
     });
@@ -143,11 +148,13 @@ my $info = 't/share/uploaded-skin/admin/info.yaml';
 
 # Uploaded S3 skin
 {
-    my $hub = new_hub('admin');
+    my $hub = Socialtext::Hub->new;
+    $hub->{current_workspace} =
+        Socialtext::Workspace->new(name => 'admin');
     $hub->current_workspace->skin_name('s2');
     $hub->current_workspace->uploaded_skin('1');
 
-    YAML::DumpFile($info => {
+    YAML::DumpFile($info_file => {
         parent => 's3',
         name => 'uploaded',
         cascade_css => 1,
@@ -158,6 +165,7 @@ my $info = 't/share/uploaded-skin/admin/info.yaml';
     is_deeply($info->{standard}, [
         "/static/1.0/skin/s3/css/screen.css",
         "/static/1.0/skin/s3/css/screen.ie.css",
+        "/static/1.0/skin/s3/css/screen.ie7.css",
         "/static/1.0/skin/s3/css/print.css",
         "/static/1.0/skin/s3/css/print.ie.css",
         "/static/1.0/uploaded-skin/admin/css/screen.css",
@@ -201,3 +209,4 @@ my $info = 't/share/uploaded-skin/admin/info.yaml';
         t/share/skin/s3/javascript
     )], "s3 make_dirs";
 }
+

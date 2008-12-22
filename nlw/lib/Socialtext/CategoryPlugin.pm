@@ -12,16 +12,15 @@ use POSIX ();
 use Readonly;
 use Socialtext::Permission qw( ST_ADMIN_WORKSPACE_PERM );
 use Socialtext::Validate qw( validate SCALAR_TYPE USER_TYPE );
-use Socialtext::Indexes ();
 use URI::Escape ();
 use Socialtext::l10n qw(loc);
 use Socialtext::Timer;
+use Socialtext::SQL qw/:exec/;
+use Socialtext::Model::Pages;
 
 sub class_id {'category'}
 const class_title => 'Category Managment';
 const cgi_class   => 'Socialtext::Category::CGI';
-field 'all';
-field 'categories';
 
 sub Decode_category_email {
     my $class = shift;
@@ -61,16 +60,16 @@ sub register {
 
 sub category_list {
     my $self = shift;
-    $self->load;
-    my $categories = $self->all;
+    my %weighted = $self->weight_categories;
+    my $tags = $weighted{tags};
 
     my @rows = grep { $_->{page_count} > 0 } map {
         {
-            display    => $categories->{$_},
-            escaped    => $self->uri_escape( $categories->{$_} ),
-            page_count => $self->page_count( $categories->{$_} ),
+            display    => $_->{name},
+            escaped    => $self->uri_escape( $_->{name} ),
+            page_count => $_->{page_count},
         }
-    } sort ( grep ( $_ ne 'recent changes', keys %$categories ) );
+    } sort { $a->{name} cmp $b->{name} } @$tags;
 
     my $is_admin = $self->hub->authz->user_has_permission_for_workspace(
         user       => $self->hub->current_user,
@@ -98,33 +97,50 @@ sub category_delete_from_page {
     $page->delete_tag($category);
     $page->metadata->update(user => $self->hub->current_user);
     $page->store( user => $self->hub->current_user );
-
-    if ($self->page_count($category) == 0) {
-        $self->delete(
-            category => $category,
-            user     => $self->hub->current_user,
-        );
-    }
 }
 
-sub all_visible_categories {
+sub all {
     my $self = shift;
-    grep { $_ ne 'Recent Changes' } $self->all_categories();
+
+    my $dbh = sql_execute(<<EOT, 
+SELECT tag FROM page_tag
+    WHERE workspace_id = ?
+    GROUP BY tag
+    ORDER BY tag
+EOT
+        $self->hub->current_workspace->workspace_id,
+    );
+
+    my $tags = $dbh->fetchall_arrayref;
+    return map { $_->[0] } @$tags;
 }
 
-sub all_categories {
+sub add_workspace_tag {
     my $self = shift;
-    $self->load;
-    values %{ $self->all };
+    my $tag  = shift;
+
+    sql_execute(<<EOT,
+INSERT INTO page_tag VALUES (?, NULL, ?)
+EOT
+        $self->hub->current_workspace->workspace_id, $tag,
+    );
+
 }
+
 
 sub exists {
     my $self = shift;
-    my $cat  = shift;
+    my $tag  = shift;
 
-    $self->load;
-
-    return exists $self->all->{ lc $cat };
+    my $result = sql_singlevalue(<<EOT,
+SELECT 1 FROM page_tag
+    WHERE workspace_id = ?
+      AND LOWER(tag) = LOWER(?)
+EOT
+        $self->hub->current_workspace->workspace_id,
+        $tag,
+    );
+    return $result;
 }
 
 sub category_display {
@@ -298,105 +314,50 @@ sub _gen_sort_closure {
     }
 }
 
-sub index {
-    my $self = shift;
-    $self->{index}
-        ||= Socialtext::Indexes->new_for_class( $self->hub, $self->class_id );
-}
-
 sub page_count {
     my $self = shift;
-    my $category = lc shift;
+    my $tag  = shift;
 
-    my $index = $self->index->read($category);
-    return scalar keys %$index;
+    my $result = sql_singlevalue(<<EOT,
+SELECT count(page_id) FROM page_tag
+    WHERE workspace_id = ?
+      AND LOWER(tag) = LOWER(?)
+EOT
+        $self->hub->current_workspace->workspace_id,
+        $tag,
+    );
+    return 0+$result;
 }
 
 sub get_pages_for_category {
     my $self = shift;
-    my ( $category, $limit, $sort_style ) = @_;
-    $category = lc($category);
+    my ( $tag, $limit, $sort_style ) = @_;
+    $tag = lc($tag);
     $sort_style ||= 'update';
-    my $sort_method = "get_pages_for_category_by_$sort_style";
-    my $index       = $self->index->read($category);
-    my @pages       = $self->$sort_method( $index, $limit );
-    return @pages;
-}
+    my $order_by = $sort_style eq 'update' 
+                        ? 'last_edit_time DESC' 
+                        : 'create_time DESC';
 
-sub get_pages_by_seconds_limit {
-    my $self = shift;
-    my $category    = shift;
-    my $seconds     = shift;
-    my $max_returns = shift;
-    my $limit       = time - $seconds;
-    Socialtext::Timer->Continue('get_pages_by_seconds_limit');
-    # XXX If we use some other module for this, we don't have to load
-    # the massive POSIX library in Apache.
-    my $date_limit_string = POSIX::strftime( '%Y%m%d%H%M%S', gmtime($limit) );
-
-    # XXX consider some exception handling here
-    my $index = $self->index->read($category);
-
-    my @pages;
-
-    # REVIEW: use map grep whoo ha here?
-PAGE:
-    for my $page_id ( sort { $index->{$b} cmp $index->{$a} || $a cmp $b }
-        ( keys(%$index) ) ) {
-
-        my $page = $self->hub->pages->new_page($page_id);
-        next PAGE unless $page->active;
-
-        last PAGE if ( defined $max_returns and --$max_returns < 0 );
-
-        # only pay attention to date if we've not asked for a limited
-        # number of returns
-        if ( not defined($max_returns) ) {
-            my $page_date = $index->{$page_id};
-
-            # sometimes the index is bad, so don't use its info
-            next PAGE unless ( $page_date && $page_date =~ /\A\d{14}\z/ );
-            last PAGE unless $page_date > $date_limit_string;
-        }
-        push @pages, $page;
+    # Load from the database, and then map into old-school page objects
+    my $model_pages = [];
+    if (lc($tag) eq 'recent changes') {
+        $model_pages = Socialtext::Model::Pages->All_active(
+            hub          => $self->hub,
+            workspace_id => $self->hub->current_workspace->workspace_id,
+            order_by     => $order_by,
+            ($limit ? (limit => $limit) : ()),
+        );
     }
-    Socialtext::Timer->Pause('get_pages_by_seconds_limit');
-    return \@pages;
-}
-
-sub get_pages_for_category_by_update {
-    my $self = shift;
-    my ( $index, $limit ) = @_;
-
-    # sorts by date: value of index is Date: header in page
-    my @page_ids = sort { $index->{$b} cmp $index->{$a} } keys %$index;
-    my @pages;
-    for my $page_id (@page_ids) {
-        my $page = $self->hub->pages->new_page($page_id);
-        next unless $page->active;
-        $page->load;
-        push @pages, $page;
-        last unless --$limit;
+    else {
+        $model_pages = Socialtext::Model::Pages->By_tag(
+            hub          => $self->hub,
+            workspace_id => $self->hub->current_workspace->workspace_id,
+            tag          => $tag,
+            order_by     => $order_by,
+            ($limit ? (limit => $limit) : ()),
+        );
     }
-    return @pages;
-}
-
-sub get_pages_for_category_by_create {
-    my $self = shift;
-    my ( $index, $limit ) = @_;
-    my @pages = sort {
-        my $orig_b = $b->original_revision;
-        my $orig_a = $a->original_revision;
-        $orig_b->revision_id <=> $orig_a->revision_id
-        }
-        grep { $_->active }
-        map  { $self->hub->pages->new_page($_) }
-        keys %$index;
-    my $num_entries =
-          $limit - 1 > $#pages
-        ? $#pages
-        : $limit - 1;
-    return @pages[ 0 .. $num_entries ];
+    return map { $self->hub->pages->new_page($_->id) } @$model_pages;
 }
 
 sub get_pages_numeric_range {
@@ -412,117 +373,33 @@ sub get_pages_numeric_range {
     return @pages;
 }
 
-sub load {
-    my $self = shift;
-    my $categories = {};
-    $self->all($categories);
-    my $filename = $self->_dot_categories_file();
-    if ( -e $filename ) {
-        map {
-            chomp;
-            $categories->{ lc($_) } = $_;
-        } Socialtext::File::get_contents_utf8($filename);
-    }
-    return $self;
-}
-
-sub _dot_categories_file {
-    my $self = shift;
-    return Socialtext::File::catfile(
-        Socialtext::Paths::page_data_directory(
-            $self->hub->current_workspace->name
-        ),
-        '.categories'
-    );
-}
-
-sub save {
-    my $self = shift;
-    return unless $self->merge(@_);
-    $self->_save;
-}
-
-sub merge {
-    my $self = shift;
-    $self->load;
-    my $categories = $self->all;
-    my $changed    = 0;
-    for my $category (@_) {
-        next if exists $categories->{ lc($category) };
-        $categories->{ lc($category) } = $category;
-        $changed++;
-    }
-    $self->categories($categories);
-    $changed;
-}
-
-sub _save {
-    my $self = shift;
-    # Need to save this filehandle so the lock sticks around until
-    # we're done writing.
-    my $fh = Socialtext::File::write_lock( $self->_lock_file );
-
-    my $categories = $self->categories;
-    Socialtext::File::set_contents_utf8(
-        $self->_dot_categories_file(),
-        join '', ( map { $categories->{$_} . "\n" }
-                   # XXX - why is this ever undefined?
-                   grep { defined $categories->{$_} }
-                   sort keys %$categories ) );
-
-    close $fh;
-}
-
-sub _lock_file {
-    my $self = shift;
-    return Socialtext::File::catfile(
-        Socialtext::Paths::page_data_directory(
-            $self->hub->current_workspace->name
-        ),
-        '.categories_lock'
-    );
-}
-
 {
     Readonly my $spec => {
-        category => SCALAR_TYPE,
-        user     => USER_TYPE,
+        tag  => SCALAR_TYPE,
+        user => USER_TYPE,
     };
 
     sub delete {
         my $self = shift;
         my %p    = validate( @_, $spec );
 
-        $self->load;
-        my $categories = $self->all;
-
-        unless ( defined $categories->{ lc $p{category} } ) {
-            warn "Category not found\n";
-            return;
-        }
-
-        # This should all be a transaction.
-        $self->index->delete( $p{category} );
-
-        for my $page_id ( $self->hub->pages->all_ids ) {
-            my $page = $self->hub->pages->new_page($page_id);
-            next
-                unless grep { $_ eq $p{category} }
-                @{ $page->metadata->Category };
+        # Delete the tag on each page
+        for my $page ( $self->get_pages_for_category($p{tag}) ) {
             $page->metadata->Category(
-                [
-                    grep { $_ ne $p{category} } @{ $page->metadata->Category }
+                [ grep { $_ ne $p{tag} } @{ $page->metadata->Category }
                 ]
             );
             $page->store( user => $p{user} );
         }
 
-        # This needs to come after messing with pages, because
-        # $page->store calls this class's save() method
-        delete $categories->{ lc $p{category} };
-        $self->categories($categories);
-
-        $self->_save;
+        # Delete any workspace tags
+        sql_execute( <<EOT,
+DELETE FROM page_tag 
+    WHERE workspace_id = ?
+      AND tag = ?
+EOT
+            $self->hub->current_workspace->workspace_id, $p{tag},
+        );
     }
 }
 
@@ -530,85 +407,38 @@ sub match_categories {
     my $self  = shift;
     my $match = shift;
 
-    $self->load;
-
-    return sort grep { /\Q$match\E/i } values %{ $self->all };
+    return sort grep { /\Q$match\E/i } $self->all;
 }
 
 sub weight_categories {
     my $self = shift;
-    my @categories = @_;
+    my @tags = map {lc($_) } @_;
+    my %data = (
+        maxCount => 0,
+        tags => [],
+    );
 
-    my %data = ();
+    my $tag_args = join(',', map { '?' } @tags);
+    my $tag_in = @tags ? "AND LOWER(tag) IN ($tag_args)" : '';
+    my $dbh = sql_execute(<<EOT, 
+SELECT tag AS name, count(page_id) AS page_count 
+    FROM page_tag
+    WHERE workspace_id = ?
+      $tag_in
+    GROUP BY tag
+    ORDER BY count(page_id) DESC, tag
+EOT
+        $self->hub->current_workspace->workspace_id, @tags,
+    );
 
-    %data = ( tags => [] );
-    my $tag_db = $self->index->read_only_hash;
-
-    my $max_count = 0;
-    foreach my $tag (@categories) {
-        next if ( lc($tag) eq 'recent changes' );
-        my $count = keys %{ $tag_db->{lc $tag} };
-        push @{ $data{tags} },
-            {
-            'name'   => $tag,
-            'page_count' => $count,
-            };
-        $max_count = $count if $max_count < $count;
+    $data{tags} = $dbh->fetchall_arrayref({});
+    my $max = 0;
+    for (map { $_->{page_count} } @{ $data{tags} }) { 
+        $max = $_ if $_ > $max;
+        $_ += 0; # cast to number
     }
-
-    @{ $data{tags} } = sort {
-        if ( $b->{page_count} == $a->{page_count} ) {
-            return lc( $a->{tag} ) cmp lc( $b->{tag} );
-        }
-        else {
-            return $b->{page_count} <=> $a->{page_count};
-        }
-    } @{ $data{tags} };
-
-    $data{maxCount} = $max_count;
-
+    $data{maxCount} = $max;
     return %data;
-}
-
-sub index_generate {
-    my $self = shift;
-    my $hash = {};
-    for my $page_id ( $self->hub->pages->all_ids ) {
-        my $page = $self->hub->pages->new_page($page_id);
-        my $date_time = join '', ( $page->metadata->Date =~ /(\d+)/g );
-        for my $category ( @{ $page->metadata->Category }, 'Recent Changes' ) {
-            $hash->{ lc($category) }{$page_id} = $date_time;
-        }
-    }
-    return $hash;
-}
-
-sub index_update {
-    my $self = shift;
-    my ( $index, $page_id, $date, $old_categories, $new_categories ) = @_;
-    my $date_time = join '', ( $date =~ /(\d+)/g );
-
-    for my $category (@$old_categories) {
-        my $lcat = lc($category);
-        my $entry = $index->{$lcat} || {};
-        delete $entry->{$page_id};
-        $index->{$lcat} = $entry;
-    }
-    if (scalar(grep { lc($_) eq 'recent changes'} @$new_categories) == 0) {
-        push @$new_categories, 'Recent Changes';
-    }
-    for my $category (@$new_categories) {
-        my $lcat = lc($category);
-        my $entry = $index->{$lcat} || {};
-        $entry->{$page_id}  = $date_time;
-        $index->{$lcat} = $entry;
-    }
-}
-
-sub index_delete {
-    my $self = shift;
-    my ( $index, $category ) = @_;
-    delete $index->{ lc($category) };
 }
 
 sub email_address {

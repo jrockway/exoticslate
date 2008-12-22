@@ -48,7 +48,6 @@ sub sql_execute {
     return $mock;
 }
 
-sub get_dbh { }
 sub disconnect_dbh { }
 my $in_transaction = 0;
 sub sql_in_transaction { $in_transaction }
@@ -135,6 +134,19 @@ sub ok_no_more_sql {
     @SQL = ();
 }
 
+# DBH methods
+
+sub get_dbh { 
+    bless {}, __PACKAGE__;
+}
+
+sub prepare {
+    my $dbh = shift;
+    my $sql = shift;
+    push @SQL, { sql => $sql };
+    return mock_sth->new;
+}
+
 package mock_sth;
 use strict;
 use warnings;
@@ -166,6 +178,11 @@ sub fetchrow_hashref {
 sub rows {
     my $self = shift;
     return scalar(@{$self->{return}});
+}
+
+sub execute {
+    my $self = shift;
+    push @{ $Socialtext::SQL::SQL[-1]->{args} }, \@_;
 }
 
 1;

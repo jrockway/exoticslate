@@ -4,7 +4,9 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 1;
+BEGIN { $ENV{NLW_LIVE_DANGEROUSLY} = 1 }
+
+use Test::Socialtext tests => 4;
 fixtures( 'admin' );
 use Socialtext::Pages;
 use DateTime;
@@ -20,34 +22,30 @@ my $hub = new_hub('admin');
             content => "page content $i",
             date => $date,
             creator => $hub->current_user,
+            categories => ['rad', ($i % 2 ? 'odd' : 'even')],
         );
         $date->add( seconds => 2 );
     }
 }
 
 # get ten of them and see which ones you have
-{
-    my @pages = $hub->category->get_pages_for_category(
-        'Recent Changes',
-        10,
-    );
-
+Get_with_limit: {
+    my @pages = $hub->category->get_pages_for_category( 'rad', 10 );
     my @ids = map {$_->id} @pages;
     my @numbers = map {$_ =~ /_(\d+)$/; $1} @ids;
 
-    ok(is_sequence(\@numbers), "pages returned are a sequence");
+    is join(',', @numbers), join(',', reverse 11 .. 20), 'pages returned in sequence';
+    is scalar(@numbers), 10, 'got 10 pages';
+}
+
+Get: {
+    my @pages = $hub->category->get_pages_for_category( 'even' );
+    my @ids = map {$_->id} @pages;
+    my @numbers = map {$_ =~ /_(\d+)$/; $1} @ids;
+
+    is join(',', @numbers), join(',', grep { !($_ % 2) } reverse 1 .. 20),
+        'pages returned in sequence';
+    is scalar(@numbers), 10, 'got 10 pages';
 }
 
 
-sub is_sequence {
-    my $numbers = shift;
-
-    my $prev;
-    foreach my $number (sort {$a <=> $b} @$numbers) {
-        if (defined($prev)) {
-            return 0 unless ($prev + 1) == $number;
-        }
-        $prev = $number;
-    }
-    return 1;
-}

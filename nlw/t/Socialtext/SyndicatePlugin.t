@@ -85,9 +85,8 @@ sub generate_feed {
 __DATA__
 
 ===
---- method: _syndicate_category
+--- method: _syndicate_changes
 --- type: Atom
---- argument: Recent Changes
 --- match
 type="xhtml"
 Auth-to-edit Wiki: Recent Changes</title>
@@ -99,9 +98,8 @@ this is the ugly one in base 64</title>
 this is bad xhtml</title>
 
 ===
---- method: _syndicate_category
+--- method: _syndicate_changes
 --- type: RSS20
---- argument: Recent Changes
 --- match
 rss version="2.0"
 <title><![CDATA[Auth-to-edit Wiki: Recent Changes]]></title>

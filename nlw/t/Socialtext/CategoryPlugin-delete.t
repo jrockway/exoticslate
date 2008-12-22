@@ -16,11 +16,14 @@ my $pages = $admin_hub->pages;
 
 {
     my $page = $pages->new_from_name('Admin');
-    $page->metadata->Category( [ @{$page->metadata->Category}, 'Category Delete Test' ] );
-    $page->store( user => $user );
+    $page->content('test content');
+    $page->metadata->Category(
+        [ @{ $page->metadata->Category }, 'Category Delete Test' ]);
+    $page->store(user => $user);
 
-    is( ( scalar grep { $_->is_in_category('Category Delete Test') } $pages->all ), 1,
-        'There is one page in the "Category Delete Test" category' );
+    is( ( scalar grep { $_->is_in_category('Category Delete Test') }
+                $pages->all),
+        1, 'There is one page in the "Category Delete Test" category');
 
     my $categories = $admin_hub->category;
     $categories->delete(
@@ -28,13 +31,13 @@ my $pages = $admin_hub->pages;
         user     => $user,
     );
 
-    is( ( scalar grep { $_->is_in_category('Category Delete Test') } $pages->all ), 0,
-        'There are no pages in the "Category Delete Test" category' );
+    is( ( scalar grep { $_->is_in_category('Category Delete Test') }
+                $pages->all),
+        0, 'There are no pages in the "Category Delete Test" category');
 
-    $categories->load;
     my %cats = map { $_ => 1 } $categories->all;
-    ok( ! $cats{'Category Delete Test'},
-        'Categories object no longer contains reference to "Category Delete Test"' );
+    ok( !$cats{'Category Delete Test'},
+        'Categories object no longer contains reference to deleted tag');
 }
 
 {
@@ -58,7 +61,6 @@ my $pages = $admin_hub->pages;
     is( ( scalar grep { $_->is_in_category('Category Delete Test 2') } $pages->all ), 0,
         'There are no pages in the "Category Delete Test 2" category' );
 
-    $categories->load;
     my %cats = map { $_ => 1 } $categories->all;
     ok( ! $cats{'Category Delete Test 2'},
         'Categories object no longer contains reference to "Category Delete Test 2"' );

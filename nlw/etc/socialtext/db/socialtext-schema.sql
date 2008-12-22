@@ -233,7 +233,7 @@ CREATE TABLE page (
 
 CREATE TABLE page_tag (
     workspace_id bigint NOT NULL,
-    page_id text NOT NULL,
+    page_id text,
     tag text NOT NULL
 );
 

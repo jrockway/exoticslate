@@ -1,15 +1,13 @@
 package Socialtext::HomepagePlugin;
 # @COPYRIGHT@
-
 use strict;
 use warnings;
 
 use base 'Socialtext::Plugin';
-
+use Socialtext::Model::Pages;
 use Socialtext::Watchlist;
 use Socialtext::l10n qw( loc );
 use URI::Escape;
-# XXX This code has no documentation
 
 my $did_you_know_title;
 my $did_you_know_text;
@@ -115,14 +113,10 @@ sub _get_personal_notes_info {
 
 sub _get_whats_new_info {
     my ($self) = @_;
+    
+    my $pages = $self->hub->recent_changes->by_seconds_limit();
     return {
-        pages => [
-            map $self->_get_whats_new_page_info($_),
-            $self->hub->category->get_pages_for_category(
-                'recent changes',
-                $self->hub->recent_changes->preferences->sidebox_changes_depth->value,
-            )
-        ],
+        pages => [ map { $self->_get_whats_new_page_info($_) } @$pages ],
     };
 }
 
@@ -206,12 +200,13 @@ sub _get_wikis_info {
 }
 
 sub _get_changes_count_for_wiki {
-    my ($self, $wiki) = @_;
-    my $current = $self->hub->current_workspace;
-    $self->hub->current_workspace($wiki);
-    my $seconds = $self->hub->recent_changes->preferences->changes_depth->value * 1440 * 60;
-    my $count   = @{$self->hub->category->get_pages_by_seconds_limit('recent changes', $seconds)};
-    $self->hub->current_workspace($current);
+    my ($self, $workspace) = @_;
+
+    my $pages = Socialtext::Model::Pages->By_seconds_limit(
+        workspace_id => $workspace->workspace_id,
+    );
+    my $count = @$pages;
+    
     return $count;
 }
 

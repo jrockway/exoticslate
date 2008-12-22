@@ -3,6 +3,7 @@
 
 use strict;
 use warnings;
+BEGIN { $ENV{NLW_LIVE_DANGEROUSLY} = 1 }
 use Test::Socialtext tests => 7;
 # This test suite *needs* to have no pages in the admin workspace when its
 # run.
@@ -38,9 +39,7 @@ WEIGHTED_CATEGORIES_FOR_PAGE: {
 }
 
 WEIGHTED_CATEGORIES_FOR_WORKSPACE: {
-    my @workspace_tags = grep !/recent changes/,
-        values %{ $hub->category->load->all };
-    my %tags = $hub->category->weight_categories(@workspace_tags);
+    my %tags = $hub->category->weight_categories();
 
     is $tags{maxCount}, 2, 'the maxCount should be 2';
     is $tags{tags}->[0]->{page_count}, 2,

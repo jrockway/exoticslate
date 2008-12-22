@@ -9,7 +9,7 @@
       <li><a href="[% feeds.rss.page.url %]"><img src="[% wiki.skin_uri('s3') %]/images/rss.png" />[% loc('Subscribe to Feed') %]</a></li>
       <li><a href="JavaScript:window.print()"><img src="[% wiki.skin_uri('s3') %]/images/printIcon.png" />[% loc('Print') %]</a></li>
       [% IF hub.current_workspace.enable_unplugged %]
-      <li ><img src="[% wiki.skin_uri('s3') %]/images/plug.png" /><a href="?action=unplug;tag=[% category_escaped %]">[% loc('Save the 50 most recent pages') %]</a></li>
+      <li ><img src="[% wiki.skin_uri('s3') %]/images/plug.png" /><a href="?action=unplug;tag=[% tag_escaped %]">[% loc('Save the 50 most recent pages') %]</a></li>
       [% END %]
       <li class="noBorder">  
     <form action="[% script_name %]">
@@ -17,7 +17,7 @@
       <span>[% loc('Go to:') %]<select name="category" onchange="this.form.submit()" id="page-control-category-selector">
           [% FOREACH blog = blogs %]
             [% display_string = blog.display | html %]
-            <option[% IF blog.display == category %] selected="true"[% END %] value="[% blog.escape_html %]">[% IF display_string == 'Recent Changes' %] [% loc('Recent Changes') %] [% ELSE %] [% display_string %] [% END %]</option>
+            <option[% IF blog.display == tag %] selected="true"[% END %] value="[% blog.escape_html %]">[% IF display_string == 'Recent Changes' %] [% loc('Recent Changes') %] [% ELSE %] [% display_string %] [% END %]</option>
           [% END %]
           </select>
         </span>
@@ -28,11 +28,11 @@
   <div id="controlsRight">
       <div class="goTo">
         [% IF checker.check_permission('edit') %]
-        <a id="st-weblog-newpost-button" class="newPostButton" href="[% script_name %]?action=new_page;add_tag=[% category_escaped %];caller_action=weblog_display" title="[% loc('Click this button to create a new blog post') %]">[% loc('New Post') %]</a>
+        <a id="st-weblog-newpost-button" class="newPostButton" href="[% script_name %]?action=new_page;add_tag=[% tag_escaped %];caller_action=weblog_display" title="[% loc('Click this button to create a new blog post') %]">[% loc('New Post') %]</a>
         [% END %]
       </div>
-    [% IF is_real_category AND checker.check_permission('edit') %]
-    <div class="goTo postByEmail"> <a href="mailto:[% email_category_address %]">[% loc('or post by email') %]</a></div>
+    [% IF is_real_tag AND checker.check_permission('edit') %]
+    <div class="goTo postByEmail"> <a href="mailto:[% email_tag_address %]">[% loc('or post by email') %]</a></div>
     [% END %]
   </div><!-- controlsRight END -->
 </div><!-- controls END -->
@@ -71,7 +71,7 @@
               -
             [% END %]
             [% IF checker.check_permission('edit') %]
-              <a href="[% script_name %]?action=display;page_name=[% entry.page_uri %];caller_action=[% caller_action %];category=[% category | uri %];js=show_edit_div#edit">[% loc('Edit this post') %]</a>
+              <a href="[% script_name %]?action=display;page_name=[% entry.page_uri %];caller_action=[% caller_action %];tag=[% tag | uri %];js=show_edit_div#edit">[% loc('Edit this post') %]</a>
               -
             [% END %]
             <a href="[% script_name %]?[%entry.page_uri%]">[% loc('Permalink') %]</a>
@@ -106,7 +106,7 @@
             [% FOREACH month = archive.$year.keys.nsort.reverse %]
               [% NEXT IF !archive.$year.$month %]
               <li>
-                <a href="[% script_name %]?action=weblog_display;category=[% category %];start=[% archive.$year.$month.start %];limit=[% archive.$year.$month.limit %]">
+                <a href="[% script_name %]?action=weblog_display;tag=[% tag %];start=[% archive.$year.$month.start %];limit=[% archive.$year.$month.limit %]">
                   [% hub.helpers.format_date(year,month) %]
                 </a>
               </li>

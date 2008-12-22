@@ -24,6 +24,7 @@ Dashboard: {
     my $mock_hub = Socialtext::Hub->new(
         current_workspace => Socialtext::Workspace->new(
             homepage_is_dashboard => 1,
+            workspace_id => 1,
         ),
     );
     my $hp = Socialtext::HomepagePlugin->new( hub => $mock_hub );
@@ -37,6 +38,7 @@ Weblog: {
     my $mock_hub = Socialtext::Hub->new(
         current_workspace => Socialtext::Workspace->new(
             homepage_weblog => 'monkey',
+            workspace_id => 1,
         ),
     );
     my $hp = Socialtext::HomepagePlugin->new( hub => $mock_hub );

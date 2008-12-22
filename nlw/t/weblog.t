@@ -58,12 +58,12 @@ basics_and_ordering: {
     assert_dot_com_order("default to 'update' order", \@update_order, 10);
     assert_dot_com_order("limit", [@update_order[0,1]], 2);
 
-    my @create_order = @update_order[1,0,2];
+    my @create_order = ($third_post, $second_post, $first_post);
     assert_dot_com_order("'create' order", \@create_order, 10, 'create');
 }
 
 sub assert_dot_com_order {
-    local $Test::Builder::Level = $Test::Builder::Level - 1;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
     my $name       = shift;
     my $expected   = shift;
     my $limit      = shift;
@@ -77,7 +77,7 @@ sub assert_dot_com_order {
 
     my @expected_ids = map { $_->id } @$expected;
     my @actual_ids   = map { $_->id } @actual;
-    is_deeply( \@actual_ids, \@expected_ids, $name );
+    is join(',', @actual_ids), join(',', @expected_ids), $name;
 }
 
 compute_redirect: {

@@ -3,7 +3,7 @@
 use strict;
 use warnings FATAL => 'all';
 
-use Test::More tests => 24;
+use Test::More tests => 33;
 use Test::Exception;
 use mocked 'Socialtext::SQL', ':test';
 
@@ -78,4 +78,28 @@ insert_works: {
         name => 'sql_insert works',
     );
     ok !@Socialtext::SQL::SQL, 'no more sql';
+}
+
+insert_many: {
+    my $args = [ [qw/a b c/], [qw/d e f/], [qw/g h i/] ];
+    sql_insert_many(
+        'mytable_3',
+        [ qw/foo bar baz/ ],
+        $args,
+    );
+    sql_ok(
+        sql => q{INSERT INTO mytable_3 (foo,bar,baz) VALUES (?,?,?)},
+        args => $args,
+        name => 'sql_insert_many works',
+    );
+    ok !@Socialtext::SQL::SQL, 'no more sql';
+}
+
+insert_many_fail: {
+    dies_ok sub { sql_insert_many('') };
+    dies_ok sub { sql_insert_many('table') };
+    dies_ok sub { sql_insert_many('table', []) };
+    dies_ok sub { sql_insert_many('table', [], []) };
+    dies_ok sub { sql_insert_many('table', [1], []) };
+    dies_ok sub { sql_insert_many('table', [], [1]) };
 }

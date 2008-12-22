@@ -38,7 +38,7 @@ sub _add_tag {
 
     $self->_clean_tag(\$tag);
 
-    $self->hub->category->save($tag);
+    $self->hub->category->add_workspace_tag($tag);
 }
 
 # REVIEW: this sure looks a lot like _add_tag
@@ -49,7 +49,7 @@ sub _delete_tag {
     $self->_clean_tag( \$tag );
 
     my $hub = $self->hub;
-    $hub->category->delete( user => $hub->current_user, category => $tag );
+    $hub->category->delete( user => $hub->current_user, tag => $tag );
 }
 
 =head1 AUTHOR

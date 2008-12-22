@@ -161,6 +161,7 @@ sub new_changes {
     my $count = $p{count};
     my $category = $p{category};
 
+    Socialtext::Timer->Continue('RCP_new_changes');
     $self->result_set($self->new_result_set($type));
 
     my $display_title;
@@ -176,15 +177,10 @@ sub new_changes {
         my $depth = $self->preferences->changes_depth;
         my $last_changes_time = loc($depth->value_label);
         $display_title = loc('Changes in [_1]', $last_changes_time);
-        my $days = $depth->value;
-        my $minutes = $days * 1440;
 
-        $pages_ref = Socialtext::Model::Pages->By_seconds_limit(
-            hub => $self->hub,
+        $pages_ref = $self->by_seconds_limit(
             $category ? ( tag => $category ) : (),
-            seconds => $minutes * 60,
             count => $count,
-            workspace_id => $self->hub->current_workspace->workspace_id,
         );
     }
 
@@ -196,6 +192,24 @@ sub new_changes {
 
     my $hits = $self->result_set->{hits} = @{$self->result_set->{rows}};
     $self->result_set->{display_title} = "$display_title ($hits)";
+    Socialtext::Timer->Pause('RCP_new_changes');
+}
+
+sub by_seconds_limit {
+    my $self = shift;
+    my %args = @_;
+
+    my $prefs = $self->hub->recent_changes->preferences;
+    my $seconds = $prefs->changes_depth->value * 1440 * 60;
+    my $pages = Socialtext::Model::Pages->By_seconds_limit(
+        seconds          => $seconds,
+        hub              => $self->hub,
+        workspace_id     => $self->hub->current_workspace->workspace_id,
+        count            => $self->preferences->sidebox_changes_depth->value,
+        do_not_need_tags => 1,
+        %args,
+    );
+    return $pages;
 }
 
 sub new_result_set {

@@ -54,6 +54,13 @@ sub _entity_hash {
     my $self = shift;
     my $tag  = shift;
 
+    if (ref($tag) eq 'HASH') {
+        $tag->{value} ||= lc $tag->{name};
+        $tag->{uri} = $self->_uri_for_tag($tag->{name});
+        $tag->{page_count} += 0;
+        return $tag;
+    }
+
     return +{
         value => lc($tag),
         name => $tag,

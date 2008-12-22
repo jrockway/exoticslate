@@ -15,7 +15,7 @@ use Sys::Hostname;
 
 use Cwd;
 
-plan tests => 406;
+plan tests => 410;
 
 our $NEW_WORKSPACE = 'new-ws-' . $<;
 our $NEW_WORKSPACE2 = 'new-ws2-'. $<;
@@ -57,21 +57,21 @@ ARGV_PROCESSING: {
     expect_failure(
         sub {
             Socialtext::CLI->new(
-                argv => [qw( --workspace admin --category nomatch )] )
-                ->_require_categories($hub);
+                argv => [qw( --workspace admin --tag nomatch )] )
+                ->_require_tags($hub);
         },
-        qr/\QThere is no category "nomatch" in the admin workspace.\E/,
-        'require category no match for --category',
+        qr/\QThere is no tag "nomatch" in the admin workspace.\E/,
+        'require tag no match for --tag',
     );
 
     expect_failure(
         sub {
             Socialtext::CLI->new(
                 argv => [qw( --workspace admin --search nomatch )] )
-                ->_require_categories($hub);
+                ->_require_tags($hub);
         },
-        qr/\QNo categories matching "nomatch" were found in the admin workspace.\E/,
-        'require category for --search',
+        qr/\QNo tags matching "nomatch" were found in the admin workspace.\E/,
+        'require tag for --search',
     );
 
     expect_failure(
@@ -774,15 +774,25 @@ CHANGE_PASSWORD: {
     );
 }
 
-DELETE_CATEGORY: {
+DELETE_TAG: {
     expect_success(
         sub {
             Socialtext::CLI->new(
-                argv => [qw( --workspace admin --category Welcome )] )
-                ->delete_category();
+                argv => [qw( --workspace admin --tag Welcome )] )
+                ->delete_tag();
         },
-        qr/The following categories were deleted from the admin workspace:\s+\* Welcome\s*\z/s,
-        'delete one category successfully',
+        qr/The following tags were deleted from the admin workspace:\s+\* Welcome\s*\z/s,
+        'delete one tag successfully',
+    );
+
+    expect_failure(
+        sub {
+            Socialtext::CLI->new(
+                argv => [qw( --workspace admin --tag Welcome )] )
+                ->delete_tag();
+        },
+        qr/\QThere is no tag "Welcome" in the admin workspace.\E/,
+        'delete non-existent tag',
     );
 
     expect_failure(
@@ -791,22 +801,31 @@ DELETE_CATEGORY: {
                 argv => [qw( --workspace admin --category Welcome )] )
                 ->delete_category();
         },
-        qr/\QThere is no category "Welcome" in the admin workspace.\E/,
-        'delete non-existent category',
+        qr/There is no tag "Welcome" in the admin workspace\./,
+        'delete one tag using --category',
     );
 
     expect_success(
         sub {
             Socialtext::CLI->new(
                 argv => [qw( --workspace foobar --search e )] )
-                ->delete_category();
+                ->delete_tag();
         },
-        qr/The following categories were deleted from the foobar workspace:\s+(\s+\* [\w\s]+[eE][\w\s]+\s+)+\z/s,
-        'delete multiple categories successfully',
+        qr/The following tags were deleted from the foobar workspace:\s+(\s+\* [\w\s]+[eE][\w\s]+\s+)+\z/s,
+        'delete multiple tags successfully',
     );
 }
 
-SEARCH_CATEGORIES: {
+SEARCH_TAGS: {
+    expect_success(
+        sub {
+            Socialtext::CLI->new(
+                argv => [qw( --workspace public --search e )] )
+                ->search_tags();
+        },
+        qr/(\s+\* [\w\s]+[eE][\w\s]+\s+)+/,
+        'search tag found matches',
+    );
     expect_success(
         sub {
             Socialtext::CLI->new(
@@ -814,7 +833,7 @@ SEARCH_CATEGORIES: {
                 ->search_categories();
         },
         qr/(\s+\* [\w\s]+[eE][\w\s]+\s+)+/,
-        'search category found matches',
+        'search tag found matches',
     );
 }
 
@@ -826,7 +845,7 @@ DISABLE_EMAIL_NOTIFY: {
                 ->disable_email_notify();
         },
         qr/Email notify has been disabled for devnull1\@socialtext\.com in the admin workspace\./,
-        'search category found matches',
+        'email notify is disabled',
     );
 }
 

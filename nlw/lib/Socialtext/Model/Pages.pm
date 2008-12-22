@@ -17,6 +17,7 @@ sub By_seconds_limit {
     my $limit         = $p{count} || $p{limit};
     my $tag           = $p{tag} || $p{category};
     my $hub           = $p{hub};
+    my $no_tags       = $p{do_not_need_tags};
 
     Socialtext::Timer->Continue('By_seconds_limit');
     my $where;
@@ -40,8 +41,9 @@ sub By_seconds_limit {
         limit        => $limit,
         tag          => $tag,
         bind         => \@bind,
-        order_by     => 'page.last_edit_time',
+        order_by     => 'page.last_edit_time DESC',
         workspace_id => $workspace_id,
+        do_not_need_tags => $no_tags,
     );
     Socialtext::Timer->Pause('By_seconds_limit');
     return $pages;
@@ -53,12 +55,17 @@ sub All_active {
     my $hub          = $p{hub};
     my $limit        = $p{count} || $p{limit};
     my $workspace_id = $p{workspace_id};
+    my $no_tags      = $p{do_not_need_tags};
+    my $order_by     = $p{order_by};
+    $limit = 500 unless defined $limit;
 
     Socialtext::Timer->Continue('All_active');
     my $pages = $class->_fetch_pages(
         hub          => $hub,
         limit        => $limit,
         workspace_id => $workspace_id,
+        do_not_need_tags => $no_tags,
+        ($order_by ? (order_by => "page.$order_by") : ()),
     );
     Socialtext::Timer->Pause('All_active');
     return $pages;
@@ -71,6 +78,8 @@ sub By_tag {
     my $workspace_id = $p{workspace_id};
     my $limit        = $p{count} || $p{limit};
     my $tag          = $p{tag};
+    my $order_by     = $p{order_by} || 'last_edit_time DESC';
+    my $no_tags      = $p{do_not_need_tags};
 
     Socialtext::Timer->Continue('By_category');
     my $pages = $class->_fetch_pages(
@@ -78,7 +87,8 @@ sub By_tag {
         workspace_id => $workspace_id,
         limit        => $limit,
         tag          => $tag,
-        order_by     => 'page.last_edit_time',
+        order_by     => "page.$order_by",
+        do_not_need_tags => $no_tags,
     );
     Socialtext::Timer->Pause('By_category');
     return $pages;
@@ -114,7 +124,10 @@ sub By_id {
         bind             => $bind,
         do_not_need_tags => $do_not_need_tags,
     );
-    die "No page found for ($workspace_id, $page_id)" unless @$pages;
+    unless (@$pages) {
+        my $pg_ids = join(',', (ref($page_id) ? @$page_id : ($page_id)));
+        die "No page(s) found for ($workspace_id, $pg_ids)"
+    }
     Socialtext::Timer->Pause('By_id');
     return @$pages == 1 ? $pages->[0] : $pages;
 }
@@ -159,7 +172,7 @@ sub _fetch_pages {
 
     my $order_by = '';
     if ( $p{order_by} ) {
-        $order_by = "ORDER BY $p{order_by} DESC";
+        $order_by = "ORDER BY $p{order_by}";
     }
 
     my $limit = '';
@@ -226,8 +239,8 @@ SELECT workspace_id, page_id, tag
     FROM page_tag 
     $pagetag_workspace_filter
 EOT
-    while ( my $row = $sth->fetchrow_arrayref ) {
-        next unless $row;
+    my $data = $sth->fetchall_arrayref;
+    for my $row (@$data) {
         my $key = "$row->[0]-$row->[1]";
         if ( my $page = $ids{$key} ) {
             push @{ $page->{tags} }, $row->[2];

@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 55;
+use Test::More tests => 67;
 use mocked 'Socialtext::SQL', qw/sql_ok/;
 use mocked 'Socialtext::Page';
 use mocked 'Socialtext::User';
@@ -64,6 +64,34 @@ SELECT workspace_id, page_id, tag
     WHERE page_tag.workspace_id = ?
 EOT
             args => [9],
+        );
+    }
+
+    Without_tags: {
+        local @Socialtext::SQL::RETURN_VALUES = (
+            {
+                return => [{workspace_id => 9, page_id => 'page_id'}],
+            },
+        );
+        Socialtext::Model::Pages->By_seconds_limit(
+            seconds          => 88,
+            where            => 'cows fly',
+            count            => 20,
+            tag              => 'foo',
+            workspace_id     => 9,
+            do_not_need_tags => 1,
+        );
+        sql_ok(
+            name => 'by_seconds_limit',
+            sql => <<EOT,
+$COMMON_SELECT
+        JOIN page_tag USING (page_id, workspace_id) 
+    WHERE page.deleted = ?::bool 
+      AND page.workspace_id = ? 
+      AND last_edit_time > 'now'::timestamptz - ?::interval 
+      AND LOWER(page_tag.tag) = LOWER(?) ORDER BY page.last_edit_time DESC LIMIT ?
+EOT
+            args => [0,9,'88 seconds','foo', 20],
         );
     }
 
@@ -307,6 +335,81 @@ EOT
             args => [0,0,20],
         );
     }
+
+    No_tags: {
+        local @Socialtext::SQL::RETURN_VALUES = (
+            {
+                return => [{workspace_id => 9, page_id => 'page_id'}],
+            },
+        );
+        Socialtext::Model::Pages->All_active(
+            hub => 'hub',
+            count => 20,
+            workspace_id => 9,
+            do_not_need_tags => 1,
+        );
+        sql_ok(
+            name => 'all_active',
+            sql => <<EOT,
+$COMMON_SELECT
+    WHERE page.deleted = ?::bool 
+      AND page.workspace_id = ? 
+    LIMIT ?
+EOT
+            args => [0,9,20],
+        );
+    }
+
+    No_workspace_filter: {
+        local @Socialtext::SQL::RETURN_VALUES = (
+            {
+                return => [{workspace_id => 9, page_id => 'page_id'}],
+            },
+        );
+        Socialtext::Model::Pages->All_active(
+            hub => 'hub',
+            count => 20,
+        );
+        sql_ok(
+            name => 'all_active',
+            sql => <<EOT,
+$COMMON_SELECT
+    WHERE page.deleted = ?::bool 
+    LIMIT ?
+EOT
+            args => [0,20],
+        );
+        sql_ok(
+            name => 'all_active',
+            sql => <<EOT,
+SELECT workspace_id, page_id, tag 
+    FROM page_tag 
+EOT
+            args => [],
+        );
+    }
+    NoWorkspace: {
+        # Workspace 0 exists, but it should never have pages.
+        local @Socialtext::SQL::RETURN_VALUES = (
+            {
+                return => [],
+            },
+        );
+        Socialtext::Model::Pages->All_active(
+            count => 20,
+            workspace_id => 0,
+        );
+        sql_ok(
+            name => 'all_active',
+            sql => <<EOT,
+$COMMON_SELECT
+    WHERE page.deleted = ?::bool 
+      AND page.workspace_id = ? 
+    LIMIT ?
+EOT
+            args => [0,0,20],
+        );
+    }
 }
 
 By_tag: {
@@ -340,6 +443,31 @@ SELECT workspace_id, page_id, tag
     WHERE page_tag.workspace_id = ?
 EOT
             args => [9],
+        );
+    }
+
+    No_tags: {
+        local @Socialtext::SQL::RETURN_VALUES = (
+            {
+                return => [{workspace_id => 9, page_id => 'page_id'}],
+            },
+        );
+        Socialtext::Model::Pages->By_tag(
+            workspace_id => 9,
+            limit => 33,
+            tag => 'foo',
+            do_not_need_tags => 1,
+        );
+        sql_ok(
+            name => 'by_tag',
+            sql => <<EOT,
+$COMMON_SELECT
+        JOIN page_tag USING (page_id, workspace_id) 
+    WHERE page.deleted = ?::bool 
+      AND page.workspace_id = ? 
+      AND LOWER(page_tag.tag) = LOWER(?) ORDER BY page.last_edit_time DESC LIMIT ?
+EOT
+            args => [0,9,'foo',33],
         );
     }
 }

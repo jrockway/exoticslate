@@ -316,8 +316,7 @@ sub _add_workspace_pages {
             $page->content($content_formatted);
             $page->metadata->Category([]);
         } else {
-            $page->metadata->delete_category("Top Page");
-            $page->metadata->add_category("Recent Changes");
+            $page->delete_tag("Top Page");
         }
 
         $page->duplicate(

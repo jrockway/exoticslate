@@ -39,7 +39,7 @@ ADD_TAG_SCOPE: {
 }
 
 ALL_CATEGORIES: {
-    my @categories = new_hub('admin')->category->all_visible_categories();
+    my @categories = new_hub('admin')->category->all();
     ok( grep ( { $_ eq $TAG } @categories ),
         "all categories have $TAG after save" );
 }
@@ -62,7 +62,7 @@ ADD_UTF8_TAG_SCOPE: {
 }
 
 ALL_CATEGORIES_UTF8: {
-    my @categories = new_hub('admin')->category->all_visible_categories();
+    my @categories = new_hub('admin')->category->all();
     ok( grep ( { $_ eq $UTF8_TAG } @categories ),
         "all categories have $UTF8_TAG after save" );
 }

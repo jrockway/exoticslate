@@ -913,42 +913,47 @@ sub set_locale {
     );
 }
 
-sub delete_category {
+sub delete_tag {
     my $self = shift;
 
     my ( $hub, $main ) = $self->_require_hub();
-    my @categories = $self->_require_categories($hub)
+    my @tags = $self->_require_tags($hub)
         or return;
 
-    for my $cat (@categories) {
-        $hub->category()->delete(
-            category => $cat,
-            user     => $hub->current_user(),
+    for my $cat (@tags) {
+        $hub->category->delete(
+            tag  => $cat,
+            user => $hub->current_user(),
         );
     }
 
-    my $msg = 'The following categories were deleted from the ';
+    my $msg = 'The following tags were deleted from the ';
     $msg .= $hub->current_workspace()->name() . " workspace:\n";
-    $msg .= "  * $_\n" for @categories;
+    $msg .= "  * $_\n" for @tags;
 
     $self->_success($msg);
 }
 {
     no warnings 'once';
-    *delete_categories = \&delete_category;
+    *delete_categories = \&delete_tag;
+    *delete_category   = \&delete_tag;
 }
 
-sub search_categories {
+sub search_tags {
     my $self = shift;
 
     my ( $hub, $main ) = $self->_require_hub();
-    my @categories = $self->_require_categories($hub)
+    my @tags = $self->_require_tags($hub)
         or return;
 
-    my $msg = "Matched the following categories:\n";
-    $msg .= "  * $_\n" for @categories;
+    my $msg = "Matched the following tags:\n";
+    $msg .= "  * $_\n" for @tags;
 
     $self->_success($msg);
+}
+{
+    no warnings 'once';
+    *search_categories = \&search_tags;
 }
 
 sub create_workspace {
@@ -2449,34 +2454,35 @@ sub _make_hub {
     return ( $main->hub(), $main );
 }
 
-sub _require_categories {
+sub _require_tags {
     my $self = shift;
     my $hub  = shift;
 
-    my %opts = $self->_get_options( 'category:s', 'search:s' );
+    my %opts = $self->_get_options( 'tag:s', 'category:s', 'search:s' );
+    $opts{tag} ||= $opts{category};
 
-    unless ( grep { defined and length } @opts{ 'category', 'search' } ) {
+    unless ( grep { defined and length } @opts{ 'tag', 'search' } ) {
         $self->_error(
-            "The command you called ($self->{command}) requires one or more categories to be specified.\n"
-                . "You can specify a category by name (--category) or by a search string (--search)."
+            "The command you called ($self->{command}) requires one or more tags to be specified.\n"
+                . "You can specify a tag by name (--tag) or by a search string (--search)."
         );
     }
 
-    if ( $opts{category} ) {
-        unless ( $hub->category()->exists( $opts{category} ) ) {
-            $self->_error( qq|There is no category "$opts{category}" in the |
+    if ( $opts{tag} ) {
+        unless ( $hub->category->exists( $opts{tag} ) ) {
+            $self->_error( qq|There is no tag "$opts{tag}" in the |
                     . $hub->current_workspace()->name()
                     . ' workspace.' );
         }
 
-        return $opts{category};
+        return $opts{tag};
     }
     else {
         my @matches = $hub->category->match_categories( $opts{search} );
 
         unless (@matches) {
             $self->_error(
-                qq|No categories matching "$opts{search}" were found in the |
+                qq|No tags matching "$opts{search}" were found in the |
                     . $hub->current_workspace()->name()
                     . ' workspace.' );
         }
@@ -2757,8 +2763,8 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   mass-copy-pages --workspace --target [--prefix]
   purge-page --workspace --page
   purge-attachment --workspace --page --attachment
-  search-categories --workspace --search
-  delete-category --workspace [--category or --search]
+  search-tags --workspace --search
+  delete-tag --workspace [--tag or --search]
   add-users-from --workspace --target
   customjs --workspace
   set-customjs --workspace [--uri or --name]
@@ -3004,14 +3010,14 @@ the command line.
 Prints all of the specified workspace's configuration values to
 standard output.
 
-=head2 search-categories --workspace --search
+=head2 search-tags --workspace --search
 
-Lists all categories matching the specified string.
+Lists all tags matching the specified string.
 
-=head2 delete-category --workspace [--category or --search]
+=head2 delete-tag --workspace [--tag or --search]
 
-Deletes the specified categories from the given workspace. You can
-specify a single category by name with C<--category> or all categories
+Deletes the specified tags from the given workspace. You can
+specify a single tag by name with C<--tag> or all tags
 matching a string with C<--search>.
 
 =head2 create-workspace --name --title --account [--empty] [--clone-pages-from]

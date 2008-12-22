@@ -284,14 +284,11 @@ sub _pages_for_category {
     my $self = shift;
     my $category = shift;
 
-    my $title = "Category $category";
-
     my $rows = $self->hub->category->get_page_info_for_category($category);
-
     return $self->_process_template(
         $CATEGORY_TEMPLATE,
         workspace_name => $self->hub->current_workspace->name,
-        title          => $title,
+        title          => loc("Category [_1]", $category),
         rows           => $rows,
         category       => $category,
     );
@@ -300,14 +297,10 @@ sub _pages_for_category {
 sub _all_categories {
     my $self = shift;
 
-    my $categories = [ grep !/^recent changes$/,
-        sort $self->hub->category->all_categories ];
-    my $title = 'Categories';
-
     return $self->_process_template(
         $CATEGORY_TEMPLATE,
-        title          => $title,
-        categories     => $categories,
+        title          => loc('Categories'),
+        categories     => [ $self->hub->category->all ],
         workspace_name => $self->hub->current_workspace->name,
     );
 }

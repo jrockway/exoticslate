@@ -30,7 +30,8 @@ use Socialtext::WikiText::Parser;
 use Socialtext::WikiText::Emitter::SearchSnippets;
 use Socialtext::String;
 use Socialtext::Events;
-use Socialtext::SQL qw/sql_execute sql_begin_work sql_commit sql_singlevalue/;
+use Socialtext::SQL qw/:exec :txn get_dbh/;
+use Socialtext::SQL::Builder qw/sql_insert_many/;
 
 use Carp ();
 use Class::Field qw( field const );
@@ -636,6 +637,7 @@ sub add_tags {
 Removes the given tag string from the Categories on the page.
 
 =cut
+
 sub delete_tag {
     my $self = shift;
     my $tag = shift;
@@ -748,12 +750,6 @@ sub store {
         $metadata->Control('Deleted');
     }
     $self->write_file($self->headers, $body);
-
-    $self->hub->category->save(@{$self->metadata->Category});
-    $self->hub->category->index->update(
-        $self->id, $self->metadata->Date,
-        $original_categories, $self->metadata->Category,
-    );
     $self->_perform_store_actions();
 }
 
@@ -846,12 +842,14 @@ INSSQL
     }
     sql_execute($insert_or_update, @args);
 
-    for my $tag (@{ $self->metadata->Category }) {
-        sql_execute(
-            'INSERT INTO page_tag VALUES (?,?,?)',
-            $wksp_id, $pg_id, $tag,
+    my $tags = $self->metadata->Category;
+    if (@$tags) {
+        sql_insert_many( 
+            page_tag => [qw/workspace_id page_id tag/],
+            [ map { [$wksp_id, $pg_id, $_] } @$tags ],
         );
     }
+
     sql_commit();
 }
 
@@ -1192,13 +1190,6 @@ sub purge {
     my $attachment_path = join '/', $self->hub->attachments->plugin_directory, $self->id;
     File::Path::rmtree($attachment_path)
       if -e $attachment_path;
-
-    $self->hub->category->save();
-    $self->hub->category->index->update(
-        $self->id, $self->metadata->Date,
-        $self->metadata->Category, [],
-    );
-
     File::Path::rmtree($page_path);
 
     my $hash    = $self->hash_representation;

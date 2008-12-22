@@ -2,13 +2,13 @@ package Socialtext::SQL::Builder;
 # @COPYRIGHT@
 use strict;
 use base 'Exporter';
-use Socialtext::SQL qw(:exec);
+use Socialtext::SQL qw(:exec get_dbh);
 use Carp qw/croak cluck/;
 
 our @EXPORT = ();
 our @EXPORT_OK = qw(
     sql_nextval
-    sql_update sql_insert
+    sql_update sql_insert sql_insert_many
 );
 our %EXPORT_TAGS = (
     'all' => \@EXPORT_OK,
@@ -117,6 +117,43 @@ sub sql_insert {
     local $Socialtext::SQL::Level = $Socialtext::SQL::Level + 1;
     my $sth;
     eval { $sth = sql_execute($sql, (map {$p->{$_}} @keys)) };
+    if ($@) {
+        croak $@;
+    }
+    return $sth;
+}
+
+=head2 sql_insert_many ($table, \@cols, \@values )
+
+Insert into the specified table using the provided columns and values
+
+B<Caution>: No validation is done on the columns or values.
+
+=cut
+
+sub sql_insert_many {
+    my $table = shift;
+    my $cols  = shift;
+    my $rows  = shift;
+
+    die "no table name" unless $table;
+    die "no columns to update" unless $cols and @$cols;
+    die "no data to update" unless $rows and @$rows;
+
+    my $fields = join(',', @$cols);
+    my $placeholders = '?,' x @$cols;
+    chop $placeholders;
+
+    my $sql = "INSERT INTO $table ($fields) VALUES ($placeholders)";
+    local $Socialtext::SQL::Level = $Socialtext::SQL::Level + 1;
+    my $sth;
+    my $dbh = get_dbh();
+    eval { 
+        my $sth = $dbh->prepare($sql);
+        for (@$rows) {
+            $sth->execute(@$_);
+        }
+    };
     if ($@) {
         croak $@;
     }

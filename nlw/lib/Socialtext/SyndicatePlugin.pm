@@ -43,7 +43,7 @@ on those parameters.
 sub class_id { 'syndicate' }
 const class_title => loc('Syndicate');
 const cgi_class => 'Socialtext::Syndicate::CGI';
-const default_category => 'Recent Changes';
+const default_tag => 'Recent Changes';
 const default_type => 'RSS20';
 const feed_redirect_path => '/feed/workspace/';
 
@@ -80,11 +80,11 @@ performed and the pages in the results are returned in the feed.
 If 'page' is defined and it is the name of an existing L<Socialtext::Page>
 a feed containing the contents of that one page is returned.
 
-If 'category' is defined a feed for all pages in that category
-is returned.
+If 'tag' is defined a feed for all pages in that tag
+is returned. ('category' is deprecated.)
 
-Finally, if none of search_term, page or category are defined,
-a feed for the default category, 'recent changes', is returned.
+Finally, if none of search_term, page or tag are defined,
+a feed for the default tag, 'recent changes', is returned.
 
 =cut
 sub syndicate {
@@ -92,8 +92,8 @@ sub syndicate {
     my $type = $self->cgi->type || $self->default_type;
 
     my $count = $self->cgi->count || $self->preference('syndication_depth');
-    my $category = $self->cgi->category;
-    $category = '' if $category and $category eq $self->default_category;
+    my $tag = $self->cgi->tag_or_category;
+    $tag = '' if $tag and lc($tag) eq lc($self->default_tag);
     if ( my $search = $self->cgi->search_term ) {
         return $self->_syndicate_search( $type, $search );
     }
@@ -103,8 +103,8 @@ sub syndicate {
     elsif ( $self->cgi->watchlist ) {
         return $self->_syndicate_watchlist( $type, $self->cgi->watchlist );
     }
-    elsif ( $category ) {
-        return $self->_syndicate_category( $type, $category, $count );
+    elsif ( $tag ) {
+        return $self->_syndicate_tag( $type, $tag, $count );
     }
     else {
         return $self->_syndicate_changes( $type, $count );
@@ -123,8 +123,8 @@ sub rss20 {
     my $self = shift;
     my $query_string = '';
 
-    $query_string = '?category=' . $self->uri_escape( $self->cgi->category )
-        if $self->cgi->category;
+    my $tag = $self->cgi->tag_or_category;
+    $query_string = '?tag=' . $self->uri_escape($tag) if $tag;
 
     $self->redirect( $self->feed_redirect_path
             . $self->hub->current_workspace->name
@@ -217,20 +217,20 @@ sub _syndicate_page_named {
     return $feed;
 }
 
-sub _syndicate_category {
-    my $self = shift;
-    my $type = shift;
-    my $category = shift;
+sub _syndicate_tag {
+    my $self  = shift;
+    my $type  = shift;
+    my $tag   = shift;
     my $count = shift;
 
-    Socialtext::Timer->Continue('_syndicate_category');
+    Socialtext::Timer->Continue('_syndicate_tag');
     my $feed = $self->_syndicate(
-        title => $self->_category_feed_title($category),
-        link  => $self->_category_html_link($category),
-        pages => $self->_category_get_items($category, $count),
+        title => $self->_tag_feed_title($tag),
+        link  => $self->_tag_html_link($tag),
+        pages => $self->_tag_get_items($tag, $count),
         type  => $type,
     );
-    Socialtext::Timer->Pause('_syndicate_category');
+    Socialtext::Timer->Pause('_syndicate_tag');
     return $feed;
 }
 
@@ -283,7 +283,7 @@ sub _canonicalize_type {
     return $type;
 }
 
-sub _category_get_items {
+sub _tag_get_items {
     my $self = shift;
     my $tag = shift;
     my $count = shift;
@@ -343,11 +343,11 @@ sub _search_get_items {
     return \@pages;
 }
 
-sub _category_feed_title {
+sub _tag_feed_title {
     my $self = shift;
-    my $category = shift;
+    my $tag  = shift;
 
-    return $self->hub->current_workspace->title . ': ' . $category;
+    return $self->hub->current_workspace->title . ": $tag";
 }
 
 sub _changes_feed_title {
@@ -377,14 +377,14 @@ sub _page_feed_title {
         . $page->metadata->Subject;
 }
 
-sub _category_html_link {
+sub _tag_html_link {
     my $self = shift;
-    my $category = shift;
+    my $tag  = shift;
 
     return $self->hub->current_workspace->uri .
            Socialtext::AppConfig->script_name .
-           '?action=weblog_display;category=' .
-           $self->uri_escape($category);
+           '?action=weblog_display;tag=' .
+           $self->uri_escape($tag);
 }
 
 sub _changes_html_link {
@@ -426,12 +426,18 @@ package Socialtext::Syndicate::CGI;
 use base 'Socialtext::CGI';
 use Socialtext::CGI qw( cgi );
 
-cgi 'category';
+cgi 'tag';
+cgi 'category'; # deprecated
 cgi 'search_term';
 cgi 'type';
 cgi 'page';
 cgi 'watchlist';
 cgi 'count';
+
+sub tag_or_category {
+    my $self = shift;
+    return $self->tag || $self->category;
+}
 
 1;
 

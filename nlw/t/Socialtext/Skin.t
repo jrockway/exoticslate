@@ -25,6 +25,7 @@ BEGIN {
     is_deeply($info->{standard}, [
         "/static/1.0/skin/s3/css/screen.css",
         "/static/1.0/skin/s3/css/screen.ie.css",
+        "/static/1.0/skin/s3/css/screen.ie7.css",
         "/static/1.0/skin/s3/css/print.css",
         "/static/1.0/skin/s3/css/print.ie.css",
         "/static/1.0/skin/cascades_s3/css/screen.css",
@@ -101,6 +102,7 @@ BEGIN {
     is_deeply($info->{standard}, [
         "/static/1.0/skin/s3/css/screen.css",
         "/static/1.0/skin/s3/css/screen.ie.css",
+        "/static/1.0/skin/s3/css/screen.ie7.css",
         "/static/1.0/skin/s3/css/print.css",
         "/static/1.0/skin/s3/css/print.ie.css",
     ], 'S3 skin does not include the s2 skin');
@@ -158,6 +160,7 @@ my $info = 't/share/uploaded-skin/admin/info.yaml';
     is_deeply($info->{standard}, [
         "/static/1.0/skin/s3/css/screen.css",
         "/static/1.0/skin/s3/css/screen.ie.css",
+        "/static/1.0/skin/s3/css/screen.ie7.css",
         "/static/1.0/skin/s3/css/print.css",
         "/static/1.0/skin/s3/css/print.ie.css",
         "/static/1.0/uploaded-skin/admin/css/screen.css",

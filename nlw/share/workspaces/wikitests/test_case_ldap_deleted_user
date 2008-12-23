@@ -9,11 +9,16 @@ This test case assumes the following:
 * OpenLDAP fixture has been bootstrapped and is running
 * test workspace has been configured as "member-only"
 
+Also, you need base_dn.ldif and people.ldif in your wikitest_files directory.
+
 | *Comment* | Test Case: LDAP Deleted User |  |
 
+| *Comment* | Setup: turn LDAP caching off, otherwise this test takes forever to run |  |
+| ldap-config | ttl | 0 |
+
 | *Comment* | Setup: add users from LDAP store, and choose one for testing |  |
-| add-ldif-data | t/test-data/ldap/base_dn.ldif |  |
-| add-ldif-data | t/test-data/ldap/people.ldif |  |
+| add-ldif-data | %%wikitest_files%%base_dn.ldif |  |
+| add-ldif-data | %%wikitest_files%%people.ldif |  |
 | set | test_email | john.doe@example.com |
 | set | test_username | John Doe |
 | set | test_password | foobar |
@@ -31,7 +36,7 @@ This test case assumes the following:
 | wait_for_element_visible_ok | st-wikinav-logout | 30000 |
 
 | *Comment* | DELETE user from LDAP directory |  |
-| remove-ldif-data | t/test-data/ldap/people.ldif |  |
+| remove-ldif-data | %%wikitest_files%%people.ldif |  |
 
 | *Comment* | Test case: now deleted user should be treated as *not* logged in |  |
 | refresh |  |  |
@@ -47,7 +52,7 @@ trying to remove the user from the workspace; otherwise st-admin can't
 instantiate a User object to find his memberships.
 
 | *Comment* | Teardown: remove the user and the new page we created |  |
-| add-ldif-data | t/test-data/ldap/people.ldif |  |
+| add-ldif-data | %%wikitest_files%%people.ldif |  |
 | st-admin | remove-member --email %%test_email%% --workspace %%workspace%% | no longer a member |
 | st-admin | purge-page --workspace %%workspace%% --page "eraseme_%%start_time%%" | page was purged |
 

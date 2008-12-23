@@ -1932,8 +1932,33 @@ proto._do_table_manip = function(callback) {
 
         if ($new_cell) {
             self.set_focus();
-            if (jQuery.browser.mozilla) {
-                self.get_edit_window().getSelection().collapse( $new_cell.find("span").get(0), 0 );
+            if ($.browser.mozilla) {
+                if (parseFloat($.browser.version) >= 1.9) {
+                    // FF3+ has a natural .collapse(parentNode) method.
+                    self.get_edit_window().getSelection().collapse(
+                        $new_cell.find("span").get(0), 0
+                    );
+                }
+                else {
+                    // FF2 needs a complex dance here: {bz: 1815}
+                    var $span = $new_cell.find("span");
+                    if ($span.length > 0) {
+                        if ($span.html() == '') {
+                            $span.html('&nbsp;');
+                        }
+                    }
+                    else {
+                        $span = $new_cell;
+                    }
+
+                    var r = self.get_edit_document().createRange();
+                    r.setStart( $span.get(0), 0 );
+                    r.setEnd( $span.get(0), 0 );
+
+                    var s = self.get_edit_window().getSelection();
+                    s.removeAllRanges();
+                    s.addRange(r);
+                }
             }
             else if (jQuery.browser.msie) {
                 var r = self.get_edit_document().selection.createRange();

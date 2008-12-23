@@ -118,6 +118,7 @@ sub sql_ok {
 
 sub _normalize_sql {
     my $sql = shift || '';
+    $sql =~ s/-- .*$//mg; # strip out SQL comments
     $sql =~ s/\s+/ /sg;
     $sql =~ s/\s+$//;
     $sql =~ s/^\s+//;

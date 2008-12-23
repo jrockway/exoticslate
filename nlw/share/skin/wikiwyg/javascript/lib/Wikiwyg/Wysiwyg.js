@@ -47,7 +47,6 @@ proto.initializeObject = function() {
     var self = this;
     this.get_edit_window().onload = function() {
         self.is_ready = true;
-        self.get_edit_document().body.className = 'wiki';
     }
 }
 

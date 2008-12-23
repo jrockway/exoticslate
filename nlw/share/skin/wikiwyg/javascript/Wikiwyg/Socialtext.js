@@ -508,7 +508,7 @@ if (window.wikiwyg_nlw_debug)
 
 proto.placeToolbar = function(toolbar_div) {
     jQuery('#st-page-editing-toolbar')
-        .append(toolbar_div);
+        .prepend(toolbar_div);
 }
 
 proto.hideScrollbars = function () {
@@ -1885,14 +1885,11 @@ proto.do_new_table = function() {
 
 proto.deselect = function() {
     if (Wikiwyg.is_ie) {
-        /* TODO - This works but the cursor state is wrong after insert_html(). 
-
         var r = this.get_edit_document().selection.createRange();
         r.collapse(true);
         r.select();
 
         this.__range = undefined;
-        */
     }
     else {
         this.get_edit_window().getSelection().collapseToStart();
@@ -1904,7 +1901,8 @@ proto.find_table_cell_with_cursor = function() {
 
     jQuery("span.find-cursor", doc).removeClass('find-cursor');
 
-    this.set_focus();
+    // Note that we explicitly don't call set_focus() here, otherwise
+    // IE will move the cursor to the next cell -- See {bz: 1692}.
     this.deselect();
     this.insert_html("<span class=\"find-cursor\"></span>");
 
@@ -1931,8 +1929,33 @@ proto._do_table_manip = function(callback) {
 
         if ($new_cell) {
             self.set_focus();
-            if (jQuery.browser.mozilla) {
-                self.get_edit_window().getSelection().collapse( $new_cell.find("span").get(0), 0 );
+            if ($.browser.mozilla) {
+                if (parseFloat($.browser.version) >= 1.9) {
+                    // FF3+ has a natural .collapse(parentNode) method.
+                    self.get_edit_window().getSelection().collapse(
+                        $new_cell.find("span").get(0), 0
+                    );
+                }
+                else {
+                    // FF2 needs a complex dance here: {bz: 1815}
+                    var $span = $new_cell.find("span");
+                    if ($span.length > 0) {
+                        if ($span.html() == '') {
+                            $span.html('&nbsp;');
+                        }
+                    }
+                    else {
+                        $span = $new_cell;
+                    }
+
+                    var r = self.get_edit_document().createRange();
+                    r.setStart( $span.get(0), 0 );
+                    r.setEnd( $span.get(0), 0 );
+
+                    var s = self.get_edit_window().getSelection();
+                    s.removeAllRanges();
+                    s.addRange(r);
+                }
             }
             else if (jQuery.browser.msie) {
                 var r = self.get_edit_document().selection.createRange();

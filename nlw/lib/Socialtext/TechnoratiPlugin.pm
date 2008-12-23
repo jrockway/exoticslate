@@ -37,7 +37,8 @@ sub get_technorati_cosmos {
 
     return $cosmos if $cosmos;
 
-    if ($self->hub->fetchrss->error =~ /Cannot detect feed type/) {
+    if ($self->hub->fetchrss->error) {
+        warn "Error fetching Tecnorati feed: " . $self->hub->fetchrss->error;
         $self->hub->fetchrss->error(
             'Bad technorati key or invalid response from technorati'
         );

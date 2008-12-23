@@ -111,20 +111,8 @@ div#st-pagetools ul ul li {
     width: 14em !important;
 }
 
-#st-page-editing-toolbar {
-    width:auto;
-    margin:0 8px 0 0;
-    position:relative;
-}
-
 #st-page-editing-widget-menu {
     overflow:hidden;
-}
-
-#st-page-editing-button-toolbar {
-    float: none;
-    position: relative;
-    left: 650px;
 }
 
 /* This selector makes for about 2px of blank space on the right side of the
@@ -291,3 +279,6 @@ div.pagination-container .paging-forward {
     width: 100%;
 }
 
+.table_buttons.disabled {
+    filter: alpha(opacity = 30);
+}

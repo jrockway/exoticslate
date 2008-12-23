@@ -58,6 +58,17 @@ sub remove_ldif_data {
     $self->{ldap}->remove_ldif($ldif);
 }
 
+sub ldap_config {
+    my $self = shift;
+    my $param = shift;
+    my $value = shift;
+    diag "configure ldap: $param => $value";
+
+    my $ldap_cfg = $self->{ldap}->ldap_config();
+    $ldap_cfg->{$param} = $value;
+    Socialtext::LDAP::Config->save($ldap_cfg);
+}
+
 1;
 
 =head1 NAME

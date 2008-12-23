@@ -111,10 +111,10 @@ div#st-pagetools ul ul li {
     width: 14em !important;
 }
 
+/*
 #st-page-editing-toolbar {
     width:auto;
     margin:0 8px 0 0;
-    position:relative;
 }
 
 #st-page-editing-widget-menu {
@@ -126,6 +126,7 @@ div#st-pagetools ul ul li {
     position: relative;
     left: 650px;
 }
+*/
 
 /* This selector makes for about 2px of blank space on the right side of the
  * popup because IE sucks, we should look in to fixing this. Adding an
@@ -289,5 +290,9 @@ div.pagination-container .paging-forward {
 #mainWrap.expanded {
     width: auto;
     width: 100%;
+}
+
+.table_buttons.disabled {
+    filter: alpha(opacity = 30);
 }
 

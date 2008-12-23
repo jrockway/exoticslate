@@ -3,6 +3,13 @@
 
 /* overloads */
 
+.spacer {
+    clear: both;
+    height: 0px;
+    margin: 0;
+    padding: 0;
+}
+
 html body {
     line-height: normal;
 }
@@ -445,8 +452,7 @@ html>body #st-page-details {
 }
 
 #st-page-editing-widget-menu {
-    float: left;
-    margin: 4px 0 0 0;
+    margin: 0;
     font-size: 9pt;
     font-weight: bold;
     font-family: Helvetica,Arial,sans-serif;
@@ -706,12 +712,10 @@ div#bootstrap-loader {
 
 /* pagetools : the top right New Page, Print, Email, and Tools items at top right */
 
-#st-page-editing-toolbar {
-    margin: 0 250px -24px 0;
-}
 #wikiwyg_toolbar {
     display: none;
-    float: left;
+    float: none;
+    border-bottom:1px solid #fff;
 }
 .wikiwyg_button {
     border: 1px solid #F3F3F3;
@@ -730,15 +734,15 @@ div#bootstrap-loader {
 
 #st-page-editing-uploadbutton {
     font-size: 9pt;
-    margin-top: 4px;
+    margin: 0;
     font-weight: bold;
     z-index: 1500;
-    float: left;
+    float: left; 
+    width: 10em;
 }
 #st-page-editing-tagbutton {
     z-index: 1500;
-    margin: 4px 0 0 0;
-    float: left;
+    margin: 0;
     font-size: 9pt;
     font-weight: bold;
 }
@@ -750,11 +754,8 @@ div#bootstrap-loader {
 }
 
 #st-editing-prefix-container {
-    border-collapse: collapse;
-    width: 100%;
     padding: 0px;
     margin: 0px;
-    margin-bottom: -35px;
 }
 
 #st-editing-prefix-container a.button {
@@ -1367,9 +1368,8 @@ body#settingsPage div#controls div#controlsRight {
 }
 
 body div#mainWrap {
-    min-width: 865px;
+    min-width: 947px;
 }
-
 
 ul li a.previewButton {
         display: block;
@@ -2153,19 +2153,10 @@ body div#globalNav div input.searchText {
     text-transform: capitalize;
 }
 
-.other_buttons, 
-.table_buttons {
-    float: left;
-}
+.other_buttons, .table_buttons { }
+
 .table_buttons.disabled {
     opacity: 0.3;
-    filter: alpha(opacity = 30);
-}
-
-#st-page-editing-button-toolbar {
-    float: right;
-    margin: 0 0 -24px 0;
-    width: 250px;
 }
 
 #st-edit-mode-container.expanded {
@@ -2173,6 +2164,27 @@ body div#globalNav div input.searchText {
     top:0;
     left:0;
     width:100%;
-    height:'100%';
+    height:100%;
+}
+
+/* toolbar refactor */
+#st-page-editing-button-toolbar {
+    width: 20em;
+    float: right;
+}
+
+#st-page-editing-toolbar {
+    margin-right: 20em;
+}
+
+#st-page-editing-widget-menu {
+    float: left;
+    width: 60px;
+    overflow:hidden;
+}
+
+#wikiwyg_toolbar .other_buttons,
+#wikiwyg_toolbar .table_buttons {
+    float: left;
 }
 

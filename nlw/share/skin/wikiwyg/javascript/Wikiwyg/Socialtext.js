@@ -511,7 +511,7 @@ if (window.wikiwyg_nlw_debug)
 
 proto.placeToolbar = function(toolbar_div) {
     jQuery('#st-page-editing-toolbar')
-        .append(toolbar_div);
+        .prepend(toolbar_div);
 }
 
 proto.hideScrollbars = function () {

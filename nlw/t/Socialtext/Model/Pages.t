@@ -17,9 +17,11 @@ SELECT page.workspace_id,
        page.page_id, 
        page.name, 
        page.last_editor_id AS last_editor_id, 
-       page.last_edit_time AT TIME ZONE 'GMT' AS last_edit_time, 
+       -- _utc suffix is to prevent performance-impacing naming collisions:
+       page.last_edit_time AT TIME ZONE 'UTC' AS last_edit_time_utc, 
        page.creator_id, 
-       page.create_time AT TIME ZONE 'GMT' AS create_time, 
+       -- _utc suffix is to prevent performance-impacing naming collisions:
+       page.create_time AT TIME ZONE 'UTC' AS create_time_utc, 
        page.current_revision_id, 
        page.current_revision_num, 
        page.revision_count, 
@@ -585,7 +587,7 @@ Minimal_by_filtered_name: {
 SELECT * FROM (
     SELECT page_id, 
            name, 
-           last_edit_time AT TIME ZONE 'GMT' AS last_edit_time, 
+           last_edit_time AT TIME ZONE 'UTC' AS last_edit_time_utc, 
            page_type
         FROM page
         WHERE deleted = 'false'::bool 
@@ -611,7 +613,7 @@ EOT
 SELECT * FROM (
     SELECT page_id, 
            name, 
-           last_edit_time AT TIME ZONE 'GMT' AS last_edit_time, 
+           last_edit_time AT TIME ZONE 'UTC' AS last_edit_time_utc, 
            page_type
         FROM page
         WHERE deleted = 'false'::bool 

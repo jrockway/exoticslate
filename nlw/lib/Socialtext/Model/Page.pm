@@ -26,6 +26,8 @@ sub new_from_row {
     my $class = shift;
     my $db_row = shift;
     bless $db_row, $class;
+    $db_row->{last_edit_time} = delete $db_row->{last_edit_time_utc};
+    $db_row->{create_time} = delete $db_row->{create_time_utc};
     return $db_row;
 }
 

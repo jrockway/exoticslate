@@ -191,10 +191,12 @@ SELECT page.workspace_id,
        "Workspace".name AS workspace_name, 
        page.page_id, 
        page.name, 
-       page.last_editor_id AS last_editor_id,
-       page.last_edit_time AT TIME ZONE 'GMT' AS last_edit_time, 
+       page.last_editor_id AS last_editor_id, 
+       -- _utc suffix is to prevent performance-impacing naming collisions:
+       page.last_edit_time AT TIME ZONE 'UTC' AS last_edit_time_utc,
        page.creator_id,
-       page.create_time AT TIME ZONE 'GMT' AS create_time, 
+       -- _utc suffix is to prevent performance-impacing naming collisions:
+       page.create_time AT TIME ZONE 'UTC' AS create_time_utc,
        page.current_revision_id, 
        page.current_revision_num, 
        page.revision_count, 
@@ -275,7 +277,8 @@ sub Minimal_by_name {
 SELECT * FROM (
     SELECT page_id, 
            name, 
-           last_edit_time AT TIME ZONE 'GMT' AS last_edit_time, 
+           -- _utc suffix is to prevent performance-impacing naming collisions:
+           last_edit_time AT TIME ZONE 'UTC' AS last_edit_time_utc, 
            page_type 
       FROM page
      WHERE deleted = 'false'::bool 
@@ -288,6 +291,9 @@ SELECT * FROM (
 EOT
 
     my $pages = $sth->fetchall_arrayref( {} );
+    foreach my $page (@$pages) {
+        $page->{last_edit_time} = delete $page->{last_edit_time_utc};
+    }
     return $pages;
 }
 

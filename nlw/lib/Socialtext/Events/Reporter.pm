@@ -155,6 +155,8 @@ sub decorate_event_set {
 
         delete $row->{person} 
             if (!defined($row->{person}) and $row->{event_class} ne 'person');
+        
+        $row->{at} = delete $row->{at_utc};
 
         push @$result, $row;
     }
@@ -163,7 +165,7 @@ sub decorate_event_set {
 }
 
 my $FIELDS = <<'EOSQL';
-    e.at AT TIME ZONE 'UTC' || 'Z' AS at,
+    e.at AT TIME ZONE 'UTC' || 'Z' AS at_utc,
     e.event_class AS event_class,
     e.action AS action,
     e.actor_id AS actor_id, 

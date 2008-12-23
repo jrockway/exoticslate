@@ -49,7 +49,7 @@ test_get_events: {
     my $base_select = <<'EOSQL';
 SELECT * FROM (
     SELECT
-        e.at AT TIME ZONE 'UTC' || 'Z' AS at,
+        e.at AT TIME ZONE 'UTC' || 'Z' AS at_utc,
         e.event_class AS event_class,
         e.action AS action,
         e.actor_id AS actor_id, 
@@ -131,7 +131,8 @@ EOSQL
             last_name => 'Foo',
         );
         my %event = ( 
-            at => '2008-06-25 11:39:21.509539Z', 
+            at_utc => '2008-06-25 11:39:21.509539Z', 
+            at => 'whatever',
             event_class => 'page',
             action => 'view',
             actor_id => 1234,
@@ -149,7 +150,7 @@ EOSQL
         my $events = Socialtext::Events->Get($viewer);
         is_deeply $events, [
             {
-                at => $event{at},
+                at => $event{at_utc},
                 event_class => 'page',
                 action => 'view',
                 actor => {

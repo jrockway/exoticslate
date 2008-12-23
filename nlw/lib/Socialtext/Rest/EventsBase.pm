@@ -200,8 +200,8 @@ sub htmlize_event {
 
 sub resource_to_json {
     my ($self, $events) = @_;
-    my @htmlevents = map { $self->htmlize_event($_) } @$events;
-    encode_json(\@htmlevents);
+    $self->htmlize_event($_) for @$events
+    encode_json($events);
 }
 
 {

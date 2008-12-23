@@ -1888,14 +1888,11 @@ proto.do_new_table = function() {
 
 proto.deselect = function() {
     if (Wikiwyg.is_ie) {
-        /* TODO - This works but the cursor state is wrong after insert_html(). 
-
         var r = this.get_edit_document().selection.createRange();
         r.collapse(true);
         r.select();
 
         this.__range = undefined;
-        */
     }
     else {
         this.get_edit_window().getSelection().collapseToStart();
@@ -1907,7 +1904,8 @@ proto.find_table_cell_with_cursor = function() {
 
     jQuery("span.find-cursor", doc).removeClass('find-cursor');
 
-    this.set_focus();
+    // Note that we explicitly don't call set_focus() here, otherwise
+    // IE will move the cursor to the next cell -- See {bz: 1692}.
     this.deselect();
     this.insert_html("<span class=\"find-cursor\"></span>");
 

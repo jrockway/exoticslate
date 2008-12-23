@@ -403,6 +403,10 @@ html>body #st-page-details {
 }
 
 /* Wikiwyg */
+#st-page-editing-form {
+    clear: both;
+}
+
 #st-page-editing-wysiwyg {
     padding-top: 3px;
 }
@@ -2180,11 +2184,14 @@ body div#globalNav div input.searchText {
 #st-page-editing-widget-menu {
     float: left;
     width: 60px;
-    overflow:hidden;
 }
 
 #wikiwyg_toolbar .other_buttons,
 #wikiwyg_toolbar .table_buttons {
     float: left;
+}
+#st-edit-mode-toolbar {
+    clear: both;
+    margin-top: 5px;
 }
 

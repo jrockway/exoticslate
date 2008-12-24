@@ -143,10 +143,11 @@ $(function() {
             .replace(/(\d+\.\d+\.\d+\.\d+)/, '$1.' + Socialtext.make_time);
 
     function get_lightbox (cb) {
-        if ($.isFunction($.showLightbox)) {
+        if (Socialtext.lightbox_loaded) {
             cb();
         }
         else {
+            Socialtext.lightbox_loaded = true;
             $.ajaxSettings.cache = true;
             $.getScript(lightbox_uri, cb);
             $.ajaxSettings.cache = false;

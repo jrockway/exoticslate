@@ -351,9 +351,9 @@ proto.setWidgetHandlers = function() {
     var win = this.get_edit_window();
     var doc = this.get_edit_document();
 
-    jQuery(doc, win)
-    .bind("mouseup", function(e) {
-        if (!jQuery(e.target).is("img[widget]")) return true;
+    var $$ = jQuery;
+    jQuery(doc, win).mouseup(function(e) {
+        if (!$$(e.target).is("img[widget]")) return true;
         self.currentWidget = self.parseWidgetElement(e.target);
         var id = self.currentWidget.id;  
         if (widget_data[id] && widget_data[id].uneditable) {

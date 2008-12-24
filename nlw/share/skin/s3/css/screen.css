@@ -741,10 +741,12 @@ div#bootstrap-loader {
     margin: 0;
     font-weight: bold;
     z-index: 1500;
-    float: left; 
+    float: left;
     width: 10em;
 }
 #st-page-editing-tagbutton {
+    float: left;
+    width: 90px;
     z-index: 1500;
     margin: 0;
     font-size: 9pt;

@@ -35,9 +35,10 @@ sub _user_id_or_username {
 sub _get_cookie_value {
     my $name = shift;
     my $cookies = CGI::Cookie->raw_fetch;
-    my $value = $cookies->{$name};
-    my %user_data = split(/[&;]/, $value);
-    return %user_data;
+    my $value = $cookies->{$name} || '';
+    my @user_data = split(/[&;]/, $value);
+    push @user_data, undef if (@user_data % 2 == 1);
+    return @user_data;
 }
 
 1;

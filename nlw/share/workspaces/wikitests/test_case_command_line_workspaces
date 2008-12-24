@@ -222,11 +222,11 @@ TODO: figure out a way to calculate the attachment ID
 
 | *Comment* | Test Case: Command Line Tests WORKSPACE search-categories and delete-categories have some odd capitalization schemes for "Welcome" tag |  |
 | st-admin | search-categories | qr/The command you called \(search-categories\) requires a workspace to be specified/ |
-| st-admin | search-categories --workspace %%cmdline_workspace%% | qr/The command you called \(search-categories\) requires one or more categories to be specified.+You can specify a category by name \(--category\) or by a search string \(--search\)/ |
-| st-admin | search-categories --workspace %%cmdline_workspace%% --search welcome | qr/Matched the following categories.+Welcome/ |
-| st-admin | search-categories --workspace %%cmdline_workspace%% --category welcome | qr/Matched the following categories.+welcome/ |
-| st-admin | delete-category --workspace %%cmdline_workspace%% --search welcome | qr/The following categories were deleted from the %%cmdline_workspace%% workspace.+Welcome/ |
-| st-admin | delete-category --workspace %%cmdline_workspace%% --search welcome | qr/No categories matching "welcome" were found in the %%cmdline_workspace%% workspace/ |
+| st-admin | search-categories --workspace %%cmdline_workspace%% | qr/The command you called \(search-categories\) requires one or more tags to be specified.+You can specify a tag by name \(--tag\) or by a search string \(--search\)/ |
+| st-admin | search-categories --workspace %%cmdline_workspace%% --search welcome | qr/Matched the following tags.+Welcome/ |
+| st-admin | search-categories --workspace %%cmdline_workspace%% --tag welcome | qr/Matched the following tags.+welcome/ |
+| st-admin | delete-category --workspace %%cmdline_workspace%% --search welcome | qr/The following tags were deleted from the %%cmdline_workspace%% workspace.+Welcome/ |
+| st-admin | delete-category --workspace %%cmdline_workspace%% --search welcome | qr/No tags matching "welcome" were found in the %%cmdline_workspace%% workspace/ |
 
 | *Comment* | Test Case: Command Line Tests WORKSPACE customjs tests |  |
 | st-admin | set-customjs | qr/The command you called \(set-customjs\) requires a workspace to be specified./ |

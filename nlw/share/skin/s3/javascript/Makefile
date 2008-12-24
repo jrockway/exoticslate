@@ -38,6 +38,7 @@ S3_SOURCE_FILES= \
 		info.js \
 		Debug.js \
 		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
+		lightbox.js \
 		jquery-patch.js \
 		jquery-plugin.js \
 		jquery.tablesorter.js \
@@ -51,7 +52,6 @@ S3_SOURCE_FILES= \
 		s3.js \
 
 LIGHTBOX_SOURCE_FILES= \
-		lightbox.js \
 		timestamp.js \
 		$(LIGHTBOX_JEMPLATE) \
 		comment.js \

@@ -1587,6 +1587,10 @@ proto.toolbarStyling = function() {
         else {
             jQuery(".table_buttons").addClass("disabled");
         }
+
+        if (Wikiwyg.is_gecko) {
+            this.get_edit_document().execCommand("enableInlineTableEditing", false, false);
+        }
     } catch(e) {}
     this.busy_styling = false;
 }

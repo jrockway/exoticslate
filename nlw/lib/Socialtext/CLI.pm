@@ -2241,6 +2241,19 @@ sub _require_field_options {
     );
     $opts{_fields} = $fields;
 
+    if (defined $opts{source}) {
+        my $source = delete $opts{source};
+        if ($source eq 'user') {
+            $opts{is_user_editable} = 1;
+        }
+        elsif ($source eq 'external') {
+            $opts{is_user_editable} = 0;
+        }
+        else {
+            $self->_error(loc("Invalid field source '[_1]'", $source));
+        }
+    }
+
     return %opts;
 }
 
@@ -2252,25 +2265,9 @@ sub add_profile_field {
     my $acct = delete $opts{_account};
     my $fields = delete $opts{_fields};
 
-    my $is_user_editable = 1;
-    $opts{source} ||= 'user';
-
-    if ($opts{source} eq 'external') {
-        $is_user_editable = 0;
-    }
-    elsif ($opts{source} ne 'user') {
-        $self->_error(
-            loc("Cannot create field: invalid field source '[_1]'", $opts{source}));
-    }
-
     my $field;
     eval {
-        $field = $fields->create_field(
-            name => $opts{name},
-            title => $opts{title},
-            field_class => $opts{field_class},
-            is_user_editable => $is_user_editable,
-        );
+        $field = $fields->create_field(%opts);
     };
     if (my $err = $@) {
         if ($err =~ /reserved field name/) {

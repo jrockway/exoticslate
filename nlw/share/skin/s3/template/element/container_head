@@ -2,6 +2,8 @@
 
 <script src="[% share %]/javascript/shindig/container-default.js.gz"></script>
 
+[% INCLUDE syndicator %]
+
 [% FOR script = container.features %]
     <script src="[% script %]"></script>
 [% END %]

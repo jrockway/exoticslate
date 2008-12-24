@@ -5,6 +5,7 @@
         [% FOR script = features %]
             <script src="[% script %]"></script>
         [% END %]
+        [% INCLUDE syndicator %]
 
         <script>
             var msgs = [% as_json(messages) %];

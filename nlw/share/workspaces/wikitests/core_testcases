@@ -71,6 +71,7 @@ test env properly and are not testing the test-workspace
 * [Test Case: Single Dash]
 * [Test Case: Email]
 * [Test Case: Email Attachment]
+* [Test Case: Include Page]
 
 Put tests that don't use the browser here
 

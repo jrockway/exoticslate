@@ -7,7 +7,8 @@ use Socialtext::User;
 use Test::More;
 use Test::HTTP;
 use Socialtext::SQL qw/sql_execute/;
-use Socialtext::JSON qw/decode_json/;
+use Socialtext::JSON qw/decode_json encode_json/;
+use URI::Escape qw(uri_unescape uri_escape);
 use Socialtext::File;
 use Time::HiRes qw/gettimeofday tv_interval/;
 
@@ -198,6 +199,24 @@ sub add_member {
 
     $ws->add_user( user => $user );
     diag "Added user $email to $workspace";
+}
+
+sub set_json_from_perl {
+    my ($self, $name, $value) = @_;
+    $self->{$name} = encode_json(eval $value);
+    diag "Set $name to $self->{$name}";
+}
+
+sub set_json_from_string {
+    my ($self, $name, $value) = @_;
+    $self->{$name} = encode_json($value);
+    diag "Set $name to $self->{$name}";
+}
+
+sub set_uri_escaped {
+    my ($self, $name, $value) = @_;
+    $self->{$name} = uri_escape($value);
+    diag "Set $name to $self->{$name}";
 }
 
 sub set_user_id {

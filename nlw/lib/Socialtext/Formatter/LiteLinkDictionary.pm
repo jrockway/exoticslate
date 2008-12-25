@@ -10,6 +10,7 @@ use Class::Field qw'field';
 field free         => '%{page_uri}';
 field interwiki    => '/lite/page/%{workspace}/%{page_uri}%{section}';
 field interwiki_edit    => '/lite/page/%{workspace}/%{page_uri}%{section}?action=edit';
+field interwiki_edit_incipient    => '/lite/page/%{workspace}/%{page_uri}%{section}?action=edit;is_incipient=1';
 field search_query =>
     '/lite/search/%{workspace}?search_term=%{search_term}';
 field category_query =>

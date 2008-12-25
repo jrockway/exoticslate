@@ -4,8 +4,6 @@ var t = new Test.Visual();
 
 t.plan(1);
 
-var iframeHeight;
-
 function wikiwyg_started() {
     return (t.win.wikiwyg && t.win.wikiwyg.is_editing);
 }

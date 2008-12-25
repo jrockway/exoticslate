@@ -63,3 +63,7 @@ table tr td, table tr th {
 table tr.even, table tr.w-st-even-row {
     background-color: #f2f6f1;
 }
+
+span.external {
+    color: #aaa;
+}

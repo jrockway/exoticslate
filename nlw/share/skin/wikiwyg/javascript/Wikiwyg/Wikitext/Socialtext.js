@@ -1638,10 +1638,12 @@ proto.format_img = function(elem) {
             elem.top_level_block = true;
         else
             elem.is_widget = true;
-            this.check_start_of_block(elem);
-        var text = Wikiwyg.htmlUnescape(widget).
-            replace(/-=/g, '-').
-            replace(/==/g, '=');
+
+        this.check_start_of_block(elem);
+
+        var text = widget
+            .replace(/-=/g, '-')
+            .replace(/==/g, '=');
         var prev = elem.previousSibling;
         var requires_preceding_space = false;
 

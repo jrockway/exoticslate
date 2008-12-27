@@ -58,7 +58,6 @@ t.runAsync([
             "Inserting a table should result in random editable divs"
         );
 
-        t.$('#st-save-button-link').click();
         t.endAsync();
     }
 ]);

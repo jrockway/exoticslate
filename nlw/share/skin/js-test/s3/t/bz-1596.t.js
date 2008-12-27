@@ -39,7 +39,6 @@ t.runAsync([
     
     function() { 
         t.ok('No javascript errors after adding a tag and editing a page');
-        t.$('#st-save-button-link').click();
 
         t.endAsync();
     }

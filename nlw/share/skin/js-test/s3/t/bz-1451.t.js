@@ -42,8 +42,6 @@ t.runAsync([
             "Horizontal line should be inserted before the WAFL"
         );
 
-        t.$('#st-save-button-link').click();
-
         t.endAsync();
     }
 ]);

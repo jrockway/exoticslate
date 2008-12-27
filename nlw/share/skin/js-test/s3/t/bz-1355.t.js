@@ -39,12 +39,6 @@ t.runAsync([
             "Creating a new link on an empty page should work"
         );
 
-        t.$('#st-save-button-link').click();
-        t.callNextStep(3000);
-
-    },
-            
-    function() { 
         t.endAsync();
     }
 ]);

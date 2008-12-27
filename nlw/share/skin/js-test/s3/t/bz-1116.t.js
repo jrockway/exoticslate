@@ -29,9 +29,6 @@ t.runAsync([
             t.$('#wikiwyg_wikitext_textarea').val(),
             /^\n\{file: bz_1116\}\ntest/
         );
-
-        t.$('#st-mode-wysiwyg-button').click();
-        t.$('#st-save-button-link').click();
         t.endAsync();
     }
 ]);

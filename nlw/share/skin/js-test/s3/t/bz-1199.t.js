@@ -27,10 +27,7 @@ t.runAsync([
         t.callNextStep(5000);
     },
 
-    function() { 
-        t.$('#st-save-button-link').click();
-        t.callNextStep(5000);
-    },
+    t.doSavePage(),
 
     function() { 
         t.is(

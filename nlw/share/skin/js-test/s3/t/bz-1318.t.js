@@ -40,8 +40,12 @@ t.runAsync([
 
         t.$('#st-widget-cancelbutton').click();
 
-        t.$('#st-save-button-link').click();
+        t.callNextStep();
+    },
 
+    t.doSavePage(),
+
+    function() { 
         t.ok(
             true,
             "Dismissing the TOC image did not raise javascript errors"

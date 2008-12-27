@@ -46,8 +46,12 @@ t.runAsync([
             "Edit area's right edge does not go beyond the page"
         );
 
-        t.$('#st-save-button-link').click();
+        t.callNextStep();
+    },
 
+    t.doSavePage(),
+
+    function() { 
         t.open_iframe(
             "/admin/index.cgi?bz_1697",
             t.nextStep(),
@@ -66,7 +70,6 @@ t.runAsync([
         );
 
         t.win.Cookie.del("ui_is_expanded");
-        t.$('#st-save-button-link').click();
         t.endAsync();
     }
 ]);

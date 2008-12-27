@@ -32,8 +32,6 @@ t.runAsync([
             "Wikitext mode should not cripple ampersand and semicolons in .html widgets"
         );
 
-        t.$('#st-mode-wysiwyg-button').click();
-        t.$('#st-save-button-link').click();
         t.endAsync();
     }
 ]);

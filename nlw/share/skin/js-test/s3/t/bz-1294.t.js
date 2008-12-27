@@ -43,8 +43,6 @@ t.runAsync([
             'Heading styles are in effect for rich text edit'
         );
 
-        t.$('#st-save-button-link').click();
-
         t.endAsync();
     }
 ]);

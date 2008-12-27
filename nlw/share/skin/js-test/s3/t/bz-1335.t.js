@@ -6,7 +6,7 @@ t.plan(1);
 
 var iframeHeight;
 
-var pageName = 'bz_1335_' + Date.now();
+var pageName = 'bz_1335_' + t.gensym();
 
 t.runAsync([
     function() {

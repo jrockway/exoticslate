@@ -4,7 +4,7 @@ var t = new Test.Visual();
 
 t.plan(1);
 
-var name = "bz_1596_" + Date.now();
+var name = "bz_1596_" + t.gensym();
 
 t.runAsync([
     function() {
@@ -29,7 +29,7 @@ t.runAsync([
     },
     
     function() { 
-        t.$('#st-tags-field').val('bz_1596_' + Date.now());
+        t.$('#st-tags-field').val('bz_1596_' + t.gensym());
         t.$('#st-tags-form').submit();
         t.callNextStep(1500);
     },

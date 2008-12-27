@@ -26,7 +26,7 @@ t.runAsync([
             t.skip("This browser has no activeElement support");
         }
 
-        t.$('#st-newpage-save-pagename').val('bz_1517_' + Date.now());
+        t.$('#st-newpage-save-pagename').val('bz_1517_' + t.gensym());
         t.$('#st-newpage-save-savebutton').click();
 
         t.endAsync();

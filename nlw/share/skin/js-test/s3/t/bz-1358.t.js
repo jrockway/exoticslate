@@ -11,7 +11,7 @@ var iframeHeight;
 t.runAsync([
     function() {
         t.open_iframe(
-            "/admin/index.cgi?bz_1358_" + Date.now(),
+            "/admin/index.cgi?bz_1358_" + t.gensym(),
             t.nextStep(5000),
             { h: '600px' }
         );

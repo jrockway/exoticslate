@@ -23,7 +23,7 @@ t.runAsync([
 
         var imgs = '';
         for (var i = 0 ; i < 40; i++) {
-            imgs += '<img src="/static/skin/s3/images/logo.png?_=' + Date.now() + ' />'
+            imgs += '<img src="/static/skin/s3/images/logo.png?_=' + t.gensym() + ' />'
             + '<br /><br /><br /><br /><br />';
         }
 

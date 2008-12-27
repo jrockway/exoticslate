@@ -4,7 +4,7 @@ var t = new Test.Visual();
 
 t.plan(3);
 
-var pageName = "bz_1711_" + Date.now();
+var pageName = "bz_1711_" + t.gensym();
 
 var doClickAddTagButton = function() { 
     return function() {

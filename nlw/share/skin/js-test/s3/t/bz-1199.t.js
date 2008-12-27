@@ -7,7 +7,7 @@ t.plan(1);
 if (jQuery.browser.msie)
     t.skipAll("Skipping this insanity on IE for now");
 
-var tag = "bz_1199_" + Date.now();
+var tag = "bz_1199_" + t.gensym();
 t.runAsync([
     function() {
         t.open_iframe("/admin/?action=display;add_tag="+tag+";page_name=Untitled Page#edit", t.nextStep(5000));

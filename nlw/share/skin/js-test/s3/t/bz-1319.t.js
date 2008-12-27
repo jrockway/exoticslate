@@ -6,7 +6,7 @@ t.plan(1);
 
 t.runAsync([
     function() {
-        t.open_iframe("/admin/index.cgi?bz_1319_" + Date.now(), t.nextStep(3000), { w: '500px' });
+        t.open_iframe("/admin/index.cgi?bz_1319_" + t.gensym(), t.nextStep(3000), { w: '500px' });
     },
             
     function() { 

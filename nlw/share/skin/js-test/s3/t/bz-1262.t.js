@@ -5,8 +5,8 @@ var t = new Test.Visual();
 t.plan(1);
 
 var name = "bz_1262_really_long_"
-    + Date.now() + Date.now() + Date.now() + Date.now()
-    + Date.now() + Date.now() + Date.now() + Date.now();
+    + t.gensym() + t.gensym() + t.gensym() + t.gensym()
+    + t.gensym() + t.gensym() + t.gensym() + t.gensym();
 
 t.runAsync([
     function() {

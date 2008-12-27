@@ -4,14 +4,14 @@ var t = new Test.Visual();
 
 t.plan(3);
 
-var name = "bz_1453_" + Date.now();
+var name = "bz_1453_" + t.gensym();
 
 t.runAsync([
     function() {
         t.put_page({
             workspace: 'admin',
             page_name: name,
-            content: "[bz_1453_incipient_"+Date.now()+"]",
+            content: "[bz_1453_incipient_"+t.gensym()+"]",
             callback: t.nextStep()
         });
     },

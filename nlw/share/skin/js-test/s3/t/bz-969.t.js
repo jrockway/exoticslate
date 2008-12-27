@@ -8,7 +8,7 @@ t.runAsync([
     function() {
         t.open_iframe(
             "/admin/index.cgi?action=weblog_display&category=TEST" +
-                Date.now(),
+                t.gensym(),
             t.nextStep()
         );
     },

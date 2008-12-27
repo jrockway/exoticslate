@@ -4,7 +4,7 @@ var t = new Test.Visual();
 
 t.plan(2);
 
-var incipient = "bz_1838_" + Date.now();
+var incipient = "bz_1838_" + t.gensym();
 
 t.runAsync([
     function() {

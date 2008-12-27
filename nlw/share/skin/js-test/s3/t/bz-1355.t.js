@@ -14,7 +14,7 @@ t.runAsync([
     },
             
     function() { 
-        t.$('#st-newpage-pagename-edit').val('bz_1355_'+Date.now());
+        t.$('#st-newpage-pagename-edit').val('bz_1355_'+t.gensym());
         t.$('#st-newpage-pagename-edit').focus();
         t.$('a[do=do_widget_link2_hyperlink]').click();
 

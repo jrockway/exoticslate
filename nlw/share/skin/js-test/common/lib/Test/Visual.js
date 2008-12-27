@@ -396,6 +396,38 @@ proto.checkRichTextSupport = function () {
     }
 }
 
+proto.wikiwyg_started = function () {
+    return (this.win.wikiwyg && this.win.wikiwyg.is_editing);
+}
+
+proto.richtextModeIsReady = function () {
+    return (
+        (this.win.wikiwyg.current_mode.classtype == 'wysiwyg') &&
+        $(
+            this.$('#st-page-editing-wysiwyg').get(0)
+             .contentWindow.document.documentElement
+        ).find('h1').is(':visible')
+    );
+};
+
+proto.doRichtextEdit = function() {
+    var t = this;
+    return function() { 
+        t.$('#st-edit-button-link').click();
+        t.poll(
+            function() { return t.wikiwyg_started() },
+            function() {
+                if (t.richtextModeIsReady()) {
+                    t.callNextStep(0);
+                    return;
+                }
+                t.$('#st-mode-wysiwyg-button').click();
+                t.poll(t.richtextModeIsReady, function() {t.callNextStep();});
+            }
+        );
+    };
+};
+
 })(jQuery);
 
 // XXX Local patch to make diagnostic output render correctly

@@ -282,3 +282,20 @@ div.pagination-container .paging-forward {
 .table_buttons.disabled {
     filter: alpha(opacity = 30);
 }
+
+#quickLinks form {
+    margin-top: -3px;
+    padding: 0;
+}
+
+#quickLinks form span {
+    vertical-align: middle;
+}
+#quickLinks form select {
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+    z-index: 10;
+}
+

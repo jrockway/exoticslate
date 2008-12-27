@@ -6,7 +6,7 @@ t.plan(4);
 
 t.runAsync([
     function() {
-        for (var id = 1; id <= 3; id++) {
+        for (var id = 6; id <= 8; id++) {
             jQuery.ajax({
                 url:'/data/people/devnull1@socialtext.com/watchlist',
                 type:'POST',
@@ -20,7 +20,7 @@ t.runAsync([
             });
         }
 
-        t.open_iframe("http://topaz.socialtext.net:22021/?profile", t.nextStep());
+        t.open_iframe("/?profile", t.nextStep());
     },
             
     function() { 

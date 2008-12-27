@@ -30,7 +30,7 @@ t.runAsync([
         t.$('#st-preview-button-link').click();
         t.is(t.$('div.wafl_items a').text(), '1', "No extra paren on toc wafl");
 
-        t.$('#st-newpage-pagename-edit').val('bz_1532_' + Math.random());
+        t.$('#st-newpage-pagename-edit').val('bz_1532_' + Date.now());
 
         t.endAsync();
     }

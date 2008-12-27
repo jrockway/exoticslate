@@ -6,7 +6,7 @@ t.plan(1);
 
 var iframeHeight;
 
-var pageName = 'bz_1335_' + Math.random();
+var pageName = 'bz_1335_' + Date.now();
 
 t.runAsync([
     function() {

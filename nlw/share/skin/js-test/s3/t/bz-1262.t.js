@@ -5,8 +5,8 @@ var t = new Test.Visual();
 t.plan(1);
 
 var name = "bz_1262_really_long_"
-    + Math.random() + Math.random() + Math.random() + Math.random()
-    + Math.random() + Math.random() + Math.random() + Math.random();
+    + Date.now() + Date.now() + Date.now() + Date.now()
+    + Date.now() + Date.now() + Date.now() + Date.now();
 
 t.runAsync([
     function() {

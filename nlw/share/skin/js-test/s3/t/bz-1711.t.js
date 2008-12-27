@@ -4,7 +4,7 @@ var t = new Test.Visual();
 
 t.plan(3);
 
-var pageName = "bz_1711_" + Math.random();
+var pageName = "bz_1711_" + Date.now();
 
 var doClickAddTagButton = function() { 
     return function() {

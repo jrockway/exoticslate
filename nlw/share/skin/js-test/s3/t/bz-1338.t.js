@@ -10,8 +10,8 @@ t.runAsync([
     function() {
         t.open_iframe(
             "/admin/index.cgi?action=weblog_display;category=bz_1338_really_long_"
-                + Math.random() + Math.random() + Math.random() + Math.random()
-                + Math.random() + Math.random() + Math.random() + Math.random(),
+                + Date.now() + Date.now() + Date.now() + Date.now()
+                + Date.now() + Date.now() + Date.now() + Date.now(),
             t.nextStep()
         );
     },

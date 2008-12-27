@@ -4,18 +4,20 @@ var t = new Test.Visual();
 
 t.plan(3);
 
+var name = "bz_1453_" + Date.now();
+
 t.runAsync([
     function() {
         t.put_page({
             workspace: 'admin',
-            page_name: "bz_1453",
-            content: "[bz_1453_incipient_"+Math.random()+"]",
+            page_name: name,
+            content: "[bz_1453_incipient_"+Date.now()+"]",
             callback: t.nextStep()
         });
     },
 
     function() {
-        t.open_iframe("/admin/?bz_1453", t.nextStep());
+        t.open_iframe("/admin/?" + name, t.nextStep());
     },
             
     function() { 

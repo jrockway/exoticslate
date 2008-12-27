@@ -410,6 +410,13 @@ proto.richtextModeIsReady = function () {
     );
 };
 
+proto.wikitextModeIsReady = function () {
+    return (
+        (this.win.wikiwyg.current_mode.classtype == 'wikitext') &&
+        this.$('#wikiwyg_wikitext_textarea').is(':visible')
+    );
+}
+
 proto.doRichtextEdit = function() {
     var t = this;
     return function() { 
@@ -422,7 +429,25 @@ proto.doRichtextEdit = function() {
                     return;
                 }
                 t.$('#st-mode-wysiwyg-button').click();
-                t.poll(t.richtextModeIsReady, function() {t.callNextStep();});
+                t.poll(function() { return t.richtextModeIsReady() }, function() {t.callNextStep();});
+            }
+        );
+    };
+};
+
+proto.doWikitextEdit = function() {
+    var t = this;
+    return function() { 
+        t.$('#st-edit-button-link').click();
+        t.poll(
+            function() { return t.wikiwyg_started() },
+            function() {
+                if (t.wikitextModeIsReady()) {
+                    t.callNextStep(0);
+                    return;
+                }
+                t.$('#st-mode-wikitext-button').click();
+                t.poll(function(){ return t.wikitextModeIsReady() }, function() {t.callNextStep();});
             }
         );
     };

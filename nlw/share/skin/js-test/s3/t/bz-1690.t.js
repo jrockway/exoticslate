@@ -35,22 +35,7 @@ t.runAsync([
         );
     },
 
-    function() { 
-         t.$('#st-edit-button-link').click();
-         t.poll(
-            function() { return wikiwyg_started() },
-            function() { t.callNextStep(2000) }
-        );
-    },
-            
-    function() { 
-        if (wikitextModeIsReady()) {
-             t.callNextStep(0);
-             return;
-        }
-        t.$('#st-mode-wikitext-button').click();
-        t.poll(wikitextModeIsReady, function() {t.callNextStep(2000);});
-    },
+    t.doWikitextEdit(),
 
     function() { 
         t.like(

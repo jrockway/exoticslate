@@ -8,20 +8,6 @@ t.checkRichTextSupport();
 
 var iframeHeight;
 
-function wikiwyg_started() {
-    return (t.win.wikiwyg && t.win.wikiwyg.is_editing);
-}
-
-function richtextModeIsReady() {
-    return (
-        (t.win.wikiwyg.current_mode.classtype == 'wysiwyg') &&
-        $(
-            t.$('#st-page-editing-wysiwyg').get(0)
-             .contentWindow.document.documentElement
-        ).find('h1').is(':visible')
-    );
-};
-
 t.runAsync([
     function() {
         t.put_page({
@@ -45,7 +31,7 @@ t.runAsync([
         t.$('#st-edit-button-link').click();
 
         t.poll(
-            function() { return wikiwyg_started() },
+            function() { return t.wikiwyg_started() },
             function() { t.callNextStep(5000) }
         );
     },
@@ -69,13 +55,7 @@ t.runAsync([
         );
     },
 
-    function() { 
-        t.$('#st-edit-button-link').click();
-        t.poll(
-            function() { return wikiwyg_started() },
-            function() { t.callNextStep(5000) }
-        );
-    },
+    t.doRichtextEdit(),
 
     function() { 
         var $editArea = t.$('iframe#st-page-editing-wysiwyg');

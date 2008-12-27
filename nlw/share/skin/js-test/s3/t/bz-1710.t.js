@@ -4,17 +4,6 @@ var t = new Test.Visual();
 
 t.plan(1);
 
-function wikiwyg_started() {
-    return (t.win.wikiwyg && t.win.wikiwyg.is_editing);
-}
-
-function wikitextModeIsReady() {
-    return (
-        (t.win.wikiwyg.current_mode.classtype == 'wikitext') &&
-        t.$('#wikiwyg_wikitext_textarea').is(':visible')
-    );
-}
-
 t.runAsync([
     function() {
         t.put_page({
@@ -34,22 +23,7 @@ t.runAsync([
         );
     },
 
-    function() { 
-         t.$('#st-edit-button-link').click();
-         t.poll(
-            function() { return wikiwyg_started() },
-            function() { t.callNextStep(2000) }
-        );
-    },
-            
-    function() { 
-        if (wikitextModeIsReady()) {
-             t.callNextStep(0);
-             return;
-        }
-        t.$('#st-mode-wikitext-button').click();
-        t.poll(wikitextModeIsReady, function() {t.callNextStep(2000);});
-    },
+    t.doWikitextEdit(),
 
     function() { 
         t.unlike(

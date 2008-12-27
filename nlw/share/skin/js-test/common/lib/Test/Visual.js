@@ -466,6 +466,23 @@ proto._savePage = function(cb) {
     );
 };
 
+proto.now = function() {
+    if (Date.now) {
+        return Date.now();
+    }
+    return (new Date()).getTime();
+}
+
+proto._gensym_serial = 0;
+
+proto.gensym = function() {
+    proto._gensym_serial++;
+    return location.href.replace(/.*\//, '')
+                        .replace(/\..*/, '')
+                        .replace(/\W/g, '_')
+            + '_' + this.now() + '_' + proto._gensym_serial;
+}
+
 })(jQuery);
 
 // XXX Local patch to make diagnostic output render correctly

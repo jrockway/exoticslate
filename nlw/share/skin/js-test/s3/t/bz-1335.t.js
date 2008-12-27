@@ -29,7 +29,7 @@ t.runAsync([
         t.scrollTo(200);
         t.win.Page.setPageContent('Replace me');
         t.$('#st-attachment-listing li:first a').click();
-        t.callNextStep(3000);
+        t.callNextStep(10000);
     },
 
     function() { 

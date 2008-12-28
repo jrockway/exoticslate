@@ -447,16 +447,16 @@ proto.doWikitextEdit = function() {
     return this._doEdit(this.wikitextModeIsReady, '#st-mode-wikitext-button');
 };
 
-proto.doCreatePage = function(content) {
+proto.doCreatePage = function(content, opts) {
     var t = this;
     var name = t.gensym();
     return function() {
         t.put_page({
             workspace: 'admin',
             page_name: name,
-            content: content,
+            content: content || "\n"+name+"\n",
             callback: function() {
-                t.open_iframe( "/admin/?" + name, t.nextStep() );
+                t.open_iframe( "/admin/?" + name, t.nextStep(), opts );
             }
         });
     };

@@ -40,10 +40,10 @@ clean:
 purge: clean
 	rm Makefile config.yaml
 
-%.t.html: $(TEST_LOCAL)
+%.t.html: $(TEST_LOCAL) config.yaml
 	perl $(RENDERER) $(notdir $<) $(@:%.t.html=t/%.t.js) > $@
 
-index.html: $(INDEX_LOCAL) t/*.t.js
+index.html: $(INDEX_LOCAL) t/*.t.js config.yaml
 	perl $(RENDERER) $(notdir $<) $(@:%.t.html=t/%.t.js) > $@
 
 lib/Test/Base.js: lib/Test

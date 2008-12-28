@@ -1,4 +1,4 @@
-index_title: Socialtext Javascript Testing
+index_title: Socialtext Performance Testing
 import_libs:
   - ../../common/javascript/prototype-1.4.0/dist/prototype.js
   - ../../s2/javascript/pageview.js
@@ -7,3 +7,5 @@ import_libs:
   - ../../common/javascript/Subclass-0.10/lib/Subclass.js
   - lib/Test/Performance.js
   - ../../s2/javascript/Debug.js
+template_include_path:
+  - ../common/template

@@ -423,7 +423,7 @@ proto.wikitextModeIsReady = function () {
 proto._doEdit = function(check, button) {
     var t = this;
     return function() {
-        jQuery(t.doc.getElementById('st-edit-button-link')).click();
+        t.$('#st-edit-button-link').click();
         t.poll(
             function() { return t.wikiwyg_started() },
             function() {
@@ -431,7 +431,7 @@ proto._doEdit = function(check, button) {
                     t.callNextStep(0);
                     return;
                 }
-                jQuery(t.doc.getElementById(button)).click();
+                t.$(button).click();
                 t.poll(function() { return check.apply(t) }, function() { t.callNextStep() });
             }
         );
@@ -439,11 +439,26 @@ proto._doEdit = function(check, button) {
 };
 
 proto.doRichtextEdit = function() {
-    return this._doEdit(this.richtextModeIsReady, 'st-mode-wysiwyg-button');
+    return this._doEdit(this.richtextModeIsReady, '#st-mode-wysiwyg-button');
 };
 
 proto.doWikitextEdit = function() {
-    return this._doEdit(this.wikitextModeIsReady, 'st-mode-wikitext-button');
+    return this._doEdit(this.wikitextModeIsReady, '#st-mode-wikitext-button');
+};
+
+proto.doCreatePage = function(content) {
+    var t = this;
+    var name = t.gensym();
+    return function() {
+        t.put_page({
+            workspace: 'admin',
+            page_name: name,
+            content: content,
+            callback: function() {
+                t.open_iframe( "/admin/?" + name, t.nextStep() );
+            }
+        });
+    };
 };
 
 proto.doSavePage = function() {
@@ -459,17 +474,20 @@ proto._savePage = function(cb) {
         return cb.call(t);
     }
     t.doRichtextEdit();
-    jQuery(t.doc.getElementById('st-save-button-link')).click();
+    t.$('#st-save-button-link').click();
     t.poll(
         function() { 
-            var el = t.doc.getElementById('st-display-mode-container');
-            return (
-                el && 
-                el.type != 'hidden' && 
-                el.style &&
-                    el.style.display != 'none' &&
-                    el.style.visibility != 'hidden'
-            );
+            if ($.browser.msie) {
+                var el = t.doc.getElementById('st-display-mode-container');
+                return (
+                    el && 
+                    el.type != 'hidden' && 
+                    el.style &&
+                        el.style.display != 'none' &&
+                        el.style.visibility != 'hidden'
+                );
+            }
+            return(t.$('#st-display-mode-container').is(':visible'));
         },
         function() { return cb.call(t) }
     );

@@ -439,6 +439,7 @@ proto._doEdit = function(check, button) {
 };
 
 proto.doRichtextEdit = function() {
+    this.checkRichTextSupport();
     return this._doEdit(this.richtextModeIsReady, '#st-mode-wysiwyg-button');
 };
 
@@ -473,7 +474,9 @@ proto._savePage = function(cb) {
     if (!t.wikiwyg_started()) {
         return cb.call(t);
     }
-    t.doRichtextEdit();
+    if (!jQuery.browser.safari) {
+        t.doRichtextEdit();
+    }
     t.$('#st-save-button-link').click();
     t.poll(
         function() { 

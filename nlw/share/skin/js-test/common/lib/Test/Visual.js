@@ -480,17 +480,7 @@ proto._savePage = function(cb) {
     t.$('#st-save-button-link').click();
     t.poll(
         function() { 
-            if ($.browser.msie) {
-                var el = t.doc.getElementById('st-display-mode-container');
-                return (
-                    el && 
-                    el.type != 'hidden' && 
-                    el.style &&
-                        el.style.display != 'none' &&
-                        el.style.visibility != 'hidden'
-                );
-            }
-            return(t.$('#st-display-mode-container').is(':visible'));
+            return($('#st-display-mode-container', t.win.document).is(':visible'));
         },
         function() { return cb.call(t) }
     );

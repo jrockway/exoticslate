@@ -232,16 +232,24 @@ $(function() {
     });
 
     $("#st-create-content-link, .incipient").unbind("click").click(function () {
+        var $anchor = jQuery(this);
+
+        var title;
+        if ($anchor.hasClass('incipient')) {
+            var match = $anchor.attr('href').match(/page_name=([^;#]+)/);
+            if (match) {
+                title = match[1];
+            }
+            else {
+                title = $anchor.text();
+            }
+        }
+
         get_lightbox(function () {
             var create_content = new ST.CreateContent;
             create_content.show();
-            if (jQuery(this).hasClass('incipient')) {
-                if (jQuery(this).attr('href').match(/page_name=([^;#]+)/)) {
-                    create_content.set_incipient_title(RegExp.$1);
-                }
-                else {
-                    create_content.set_incipient_title(jQuery(this).text());
-                }
+            if (title) {
+                create_content.set_incipient_title(title);
             }
         });
         return false;

@@ -112,7 +112,7 @@
           <ul id="st-tags-addlink" class="widgetButton">
             <li><a class="addTagButton" href="#">[% loc('Tag') %]</a></li>
           </ul>
-          <form id="st-tags-form" onsubmit="return false;">
+          <form id="st-tags-form" onsubmit="return false;" style="clear: both">
             <input style="margin:10px; display:none; float: left" id="st-tags-field" name="tagfield" type="text" />
             <input style="display:none" id="st-tags-addbutton" type="submit" />
             <a style="display: none" class="addButton" id="st-tags-addbutton-link" href="#" onclick="$('#st-tags-form').trigger('submit'); return false">[% loc("Add") %]</a>

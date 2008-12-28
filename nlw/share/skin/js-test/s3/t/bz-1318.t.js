@@ -4,28 +4,10 @@ var t = new Test.Visual();
 
 t.plan(2);
 
-t.checkRichTextSupport();
-
 t.runAsync([
-    function() {
-        t.put_page({
-            workspace: 'admin',
-            page_name: "bz_1318",
-            content: "{toc}\n",
-            callback: t.nextStep()
-        });
-    },
+    t.doCreatePage("{toc}\n"),
+    t.doRichtextEdit(),
 
-    function() {
-        t.open_iframe("/admin/index.cgi?bz_1318", t.nextStep());
-    },
-            
-    function() { 
-        t.$('#st-edit-button-link').click();
-
-        t.callNextStep(10000);
-    },
-            
     function() { 
         var ww = t.iframe.contentWindow.Wikiwyg.Wysiwyg.Socialtext.prototype;
         var img = $(

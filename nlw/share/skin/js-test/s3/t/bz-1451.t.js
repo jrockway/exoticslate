@@ -4,27 +4,10 @@ var t = new Test.Visual();
 
 t.plan(1);
 
-t.checkRichTextSupport();
-
 t.runAsync([
-    function() {
-        t.put_page({
-            workspace: 'admin',
-            page_name: "bz_1451",
-            content: "{image: x} x",
-            callback: t.nextStep()
-        });
-    },
+    t.doCreatePage("{image: x} x"),
+    t.doRichtextEdit(),
 
-    function() {
-        t.open_iframe("/admin/index.cgi?bz_1451", t.nextStep());
-    },
-            
-    function() { 
-        t.$('#st-edit-button-link').click();
-        t.callNextStep(5000);
-    },
-            
     function() { 
         t.$('a[do=do_hr]').click();
         t.callNextStep(1500);

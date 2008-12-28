@@ -4,10 +4,6 @@ var t = new Test.Visual();
 
 t.plan(1);
 
-t.checkRichTextSupport();
-
-var iframeHeight;
-
 t.runAsync([
     function() {
         t.put_page({

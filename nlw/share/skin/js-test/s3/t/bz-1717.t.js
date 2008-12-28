@@ -4,27 +4,10 @@ var t = new Test.Visual();
 
 t.plan(1);
 
-t.checkRichTextSupport();
-
 var editableDivCount;
 
 t.runAsync([
-    function() {
-        t.put_page({
-            workspace: 'admin',
-            page_name: "bz_1717",
-            content: "^ Test\n",
-            callback: t.nextStep()
-        });
-    },
-
-    function() {
-        t.open_iframe(
-            "/admin/index.cgi?bz_1717",
-            t.nextStep()
-        );
-    },
-
+    t.doCreatePage(),
     t.doRichtextEdit(),
 
     function() { 

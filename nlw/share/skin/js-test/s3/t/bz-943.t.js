@@ -6,27 +6,8 @@ t.plan(1);
 
 t.skipAll("TODO - To be implemented in the 2009-01-16 iteation");
 
-t.checkRichTextSupport();
-
-var iframeHeight;
-
 t.runAsync([
-    function() {
-        t.put_page({
-            workspace: 'admin',
-            page_name: "bz_943",
-            content: "<http://socialtext.net/>",
-            callback: t.nextStep()
-        });
-    },
-
-    function() {
-        t.open_iframe(
-            "/admin/index.cgi?bz_943",
-            t.nextStep()
-        );
-    },
-
+    t.doCreatePage('<http://socialtext.net/>'),
     t.doRichtextEdit(),
 
     function() { 

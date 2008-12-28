@@ -1343,12 +1343,14 @@ proto._do_link = function(widget_element) {
         close: '#st-widget-link-cancelbutton'
     })
 
+    var self = this;
+
     // Set the unload handle explicitly so when user clicks the overlay gray
     // area to close lightbox, widget_editing will still be set to false.
     jQuery('#lightbox').unload(function(){
         Wikiwyg.Widgets.widget_editing = 0;
-        if (wikiwyg.current_mode.set_focus) {
-            wikiwyg.current_mode.set_focus();
+        if (self.wikiwyg && self.wikiwyg.current_mode && self.wikiwyg.current_mode.set_focus) {
+            self.wikiwyg.current_mode.set_focus();
         }
     });
 
@@ -1356,7 +1358,6 @@ proto._do_link = function(widget_element) {
     this.load_add_a_link_focus_handlers("add-web-link");
     this.load_add_a_link_focus_handlers("add-section-link");
 
-    var self = this;
     var callback = function(element) {
         var form    = jQuery("#add-a-link-form").get(0);
     }

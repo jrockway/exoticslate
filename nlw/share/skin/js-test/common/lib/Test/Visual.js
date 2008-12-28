@@ -423,7 +423,7 @@ proto.wikitextModeIsReady = function () {
 proto._doEdit = function(check, button) {
     var t = this;
     return function() {
-        t.doc.getElementById('st-edit-button-link').click();
+        jQuery(t.doc.getElementById('st-edit-button-link')).click();
         t.poll(
             function() { return t.wikiwyg_started() },
             function() {
@@ -431,7 +431,7 @@ proto._doEdit = function(check, button) {
                     t.callNextStep(0);
                     return;
                 }
-                t.doc.getElementById(button).click();
+                jQuery(t.doc.getElementById(button)).click();
                 t.poll(function() { return check.apply(t) }, function() { t.callNextStep() });
             }
         );
@@ -459,7 +459,7 @@ proto._savePage = function(cb) {
         return cb.call(t);
     }
     t.doRichtextEdit();
-    t.doc.getElementById('st-save-button-link').click();
+    jQuery(t.doc.getElementById('st-save-button-link')).click();
     t.poll(
         function() { 
             var el = t.doc.getElementById('st-display-mode-container');

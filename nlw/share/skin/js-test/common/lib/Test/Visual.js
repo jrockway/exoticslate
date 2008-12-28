@@ -423,7 +423,7 @@ proto.wikitextModeIsReady = function () {
 proto._doEdit = function(check, button) {
     var t = this;
     return function() {
-        t.$('#st-edit-button-link').click();
+        t.doc.getElementById('st-edit-button-link').click();
         t.poll(
             function() { return t.wikiwyg_started() },
             function() {
@@ -431,7 +431,7 @@ proto._doEdit = function(check, button) {
                     t.callNextStep(0);
                     return;
                 }
-                t.$(button).click();
+                t.doc.getElementById(button).click();
                 t.poll(function() { return check.apply(t) }, function() { t.callNextStep() });
             }
         );
@@ -439,11 +439,11 @@ proto._doEdit = function(check, button) {
 };
 
 proto.doRichtextEdit = function() {
-    return this._doEdit(this.richtextModeIsReady, '#st-mode-wysiwyg-button');
+    return this._doEdit(this.richtextModeIsReady, 'st-mode-wysiwyg-button');
 };
 
 proto.doWikitextEdit = function() {
-    return this._doEdit(this.wikitextModeIsReady, '#st-mode-wikitext-button');
+    return this._doEdit(this.wikitextModeIsReady, 'st-mode-wikitext-button');
 };
 
 proto.doSavePage = function() {
@@ -459,9 +459,18 @@ proto._savePage = function(cb) {
         return cb.call(t);
     }
     t.doRichtextEdit();
-    t.$('#st-save-button-link').click();
+    t.doc.getElementById('st-save-button-link').click();
     t.poll(
-        function() { return t.$('#st-display-mode-container').is(':visible') },
+        function() { 
+            var el = t.doc.getElementById('st-display-mode-container');
+            return (
+                el && 
+                el.type != 'hidden' && 
+                el.style &&
+                    el.style.display != 'none' &&
+                    el.style.visibility != 'hidden'
+            );
+        },
         function() { return cb.call(t) }
     );
 };

@@ -428,11 +428,11 @@ proto._doEdit = function(check, button) {
             function() { return t.wikiwyg_started() },
             function() {
                 if (check.apply(t)) {
-                    t.callNextStep(0);
+                    t.callNextStep(1000);
                     return;
                 }
                 t.$(button).click();
-                t.poll(function() { return check.apply(t) }, function() { t.callNextStep() });
+                t.poll(function() { return check.apply(t) }, function() { t.callNextStep(1000) });
             }
         );
     };
@@ -465,7 +465,7 @@ proto.doCreatePage = function(content, opts) {
 proto.doSavePage = function() {
     var t = this;
     return function() {
-        t._savePage(function() { t.callNextStep() });
+        t._savePage(function() { t.callNextStep(1000) });
     };
 };
 

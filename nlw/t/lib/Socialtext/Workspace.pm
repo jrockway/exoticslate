@@ -2,9 +2,9 @@ package Socialtext::Workspace;
 # @COPYRIGHT@
 use strict;
 use warnings;
+use unmocked 'Data::Dumper';
 use base 'Socialtext::MockBase';
 use mocked 'Socialtext::Account';
-
 use unmocked 'Class::Field';
 
 Class::Field::field 'skin_name';

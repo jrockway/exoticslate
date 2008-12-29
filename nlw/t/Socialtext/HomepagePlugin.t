@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use mocked 'Apache::Cookie';
 use mocked 'Socialtext::Search::Set';
 use mocked 'Socialtext::Search::Config';
@@ -20,7 +20,22 @@ Central_page: {
     is $Socialtext::Headers::REDIRECT, 'full_uri?current';
 }
 
-Dashboard: {
+S2_Dashboard: {
+    my $mock_hub = Socialtext::Hub->new(
+        current_workspace => Socialtext::Workspace->new(
+            homepage_is_dashboard => 1,
+            workspace_id => 1,
+            skin_name => 's2',
+        ),
+    );
+    my $hp = Socialtext::HomepagePlugin->new( hub => $mock_hub );
+    {
+        no strict 'refs'; no warnings 'redefine', 'once';
+        like $hp->homepage, qr/Dashboard/;
+    }
+}
+
+S3_Dashboard: {
     my $mock_hub = Socialtext::Hub->new(
         current_workspace => Socialtext::Workspace->new(
             homepage_is_dashboard => 1,
@@ -30,7 +45,7 @@ Dashboard: {
     my $hp = Socialtext::HomepagePlugin->new( hub => $mock_hub );
     {
         no strict 'refs'; no warnings 'redefine', 'once';
-        like $hp->homepage, qr/Dashboard/;
+        is $hp->homepage, ''; # redirect
     }
 }
 

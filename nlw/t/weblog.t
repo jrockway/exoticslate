@@ -2,8 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-
-use Test::Socialtext tests => 12;
+use Test::Socialtext tests => 13;
 fixtures( 'admin' );
 
 use DateTime;
@@ -91,8 +90,13 @@ compute_redirect: {
         },  
         {
             caller_action => 'weblog_donkey',
+            tag => 'Donkey Blog',
+            expected => "index.cgi?action=weblog_donkey;tag=Donkey%20Blog#$page_uri"
+        },  
+        {
+            caller_action => 'weblog_donkey',
             category => 'Donkey Blog',
-            expected => "index.cgi?action=weblog_donkey;category=Donkey%20Blog#$page_uri"
+            expected => "index.cgi?action=weblog_donkey;tag=Donkey%20Blog#$page_uri"
         },  
         {
             caller_action => 'i_do_not_begin_with_weblog',
@@ -103,15 +107,17 @@ compute_redirect: {
         my $actual = Socialtext::WeblogPlugin->compute_redirection_destination(
             page => $page,
             caller_action => $case->{caller_action},
-            category => $case->{category},
+            ($case->{tag}
+                ? (tag      => $case->{tag})
+                : (category => $case->{category})),
         );
         is $actual, $case->{expected}, 'compute_redirection_destination';
     }
 
     my $path = $hub->weblog->compute_redirection_destination_from_url(
-        'http://foo.socialtext.com/bar/index.cgi?action=display;page_name=baz;caller_action=weblog_display;category=buckle;js=show_edit_div#'
+        'http://foo.socialtext.com/bar/index.cgi?action=display;page_name=baz;caller_action=weblog_display;tag=buckle;js=show_edit_div#'
     );
-    is $path, 'index.cgi?action=weblog_display;category=buckle#baz',
+    is $path, 'index.cgi?action=weblog_display;tag=buckle#baz',
         'compute_redirection_destination_from_url';
 
 }

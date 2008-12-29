@@ -552,17 +552,18 @@ sub compute_redirection_destination_from_url {
 }
 
 sub compute_redirection_destination {
-    my $self = shift;
-    my %p = @_;  # tried Socialtext::Validate, but giving up after much hassle
+    my $self          = shift;
+    my %p             = @_;
     my $page          = $p{page};
     my $caller_action = $p{caller_action};
+    my $tag           = $p{tag} || $p{category};
 
     return '' unless $page;
 
     return $page->uri unless $caller_action;
     my $path = $p{caller_action} =~ /^weblog_/
         ? "action=$caller_action"
-            . ($p{tag} ? ";tag=" . $self->uri_escape($p{tag}) : '') 
+            . ($tag ? ";tag=" . $self->uri_escape($tag) : '') 
             . '#' . $page->uri
         : "action=$caller_action";
     return "index.cgi?$path";

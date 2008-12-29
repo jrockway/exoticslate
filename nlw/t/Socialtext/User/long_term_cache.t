@@ -138,6 +138,7 @@ ldap_user_comes_from_cache_if_fresh: {
             # the resolution of times in Pg; ignore it for the moment
             local $cached_user->{homunculus}{cached_at};
             local $user->{homunculus}{cached_at};
+            $cached_user->{homunculus}{extra_attrs} = undef;
             is_deeply $user, $cached_user, '... matches original user';
         }
 

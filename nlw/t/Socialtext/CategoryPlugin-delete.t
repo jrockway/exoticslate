@@ -27,8 +27,8 @@ my $pages = $admin_hub->pages;
 
     my $categories = $admin_hub->category;
     $categories->delete(
-        category => 'Category Delete Test',
-        user     => $user,
+        tag  => 'Category Delete Test',
+        user => $user,
     );
 
     is( ( scalar grep { $_->is_in_category('Category Delete Test') }
@@ -54,8 +54,8 @@ my $pages = $admin_hub->pages;
 
     my $categories = $admin_hub->category;
     $categories->delete(
-        category => 'Category Delete Test 2',
-        user     => $user,
+        tag  => 'Category Delete Test 2',
+        user => $user,
     );
 
     is( ( scalar grep { $_->is_in_category('Category Delete Test 2') } $pages->all ), 0,

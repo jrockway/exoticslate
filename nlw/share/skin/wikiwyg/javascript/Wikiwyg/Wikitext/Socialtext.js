@@ -1807,9 +1807,7 @@ proto.format_table = function(elem) {
 }
 
 proto.format_tr = function(elem) {
-    elem.wikitext += '|\n';
-    elem.wikitext = elem.wikitext.replace(/(\S)\|/g, '$1 |');
-    return elem.wikitext;
+    return elem.wikitext + '|\n';
 }
 
 proto.format_td = function(elem) {
@@ -1832,7 +1830,7 @@ proto.format_td = function(elem) {
     if (elem.wikitext.match(/\n/) ||
         (elem.firstChild && elem.firstChild.top_level_block)
     ) {
-        elem.wikitext = elem.wikitext.replace(/\n$/, ' ');
+        elem.wikitext = elem.wikitext.replace(/\s?$/, ' ');
         return '| ' + elem.wikitext;
     }
     else {

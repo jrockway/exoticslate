@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use Test::More;
+use Data::Dumper; # needed by mocked hub
 use mocked 'Socialtext::Hub';
 use Socialtext::File qw/get_contents/;
 

@@ -1807,12 +1807,9 @@ proto.format_table = function(elem) {
 }
 
 proto.format_tr = function(elem) {
-    if (elem.wikitext.match(/\s$/)) {
-        return elem.wikitext + '|\n';
-    }
-    else {
-        return elem.wikitext + ' |\n';
-    }
+    elem.wikitext += '|\n';
+    elem.wikitext = elem.wikitext.replace(/(\S)\|/g, '$1 |');
+    return elem.wikitext;
 }
 
 proto.format_td = function(elem) {

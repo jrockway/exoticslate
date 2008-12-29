@@ -28,7 +28,7 @@ sub filter {
     my $name = $args->[0];
 
     my $cache_key = "$name.$text";
-    if ($ActivePluggable == 0+$pluggable) {
+    if (defined $ActivePluggable and $ActivePluggable == 0+$pluggable) {
         if (exists $DecorateCache{$cache_key}) {
             return $DecorateCache{$cache_key};
         }

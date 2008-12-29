@@ -11,6 +11,7 @@ use Socialtext::JSON qw/decode_json encode_json/;
 use URI::Escape qw(uri_unescape uri_escape);
 use Socialtext::File;
 use Time::HiRes qw/gettimeofday tv_interval/;
+use Socialtext::System qw/shell_run/;
 
 =head1 NAME
 
@@ -575,5 +576,19 @@ sub faster_than {
     cmp_ok $elapsed, '<=', $ms, "$name timer was faster than $ms";
 }
 
+sub parse_logs {
+    my $self = shift;
+    my $file = shift;
+    
+    die "File doesn't exist!" unless -e $file;
+    my $report_perl = "$^X -I$ENV{ST_CURRENT}/socialtext-reports/lib"
+        . " -I$ENV{ST_CURRENT}/nlw/lib $ENV{ST_CURRENT}/socialtext-reports";
+    shell_run("$report_perl/bin/st-reports-consume-access-log $file");
+}
+
+sub clear_reports {
+    my $self = shift;
+    shell_run("cd $ENV{ST_CURRENT}/socialtext-reports; ./setup-dev-env");
+}
 
 1;

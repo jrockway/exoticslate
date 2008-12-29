@@ -16,6 +16,6 @@ t.run_is('html', 'text');
 --- text
 | 1
 
-2|
+2 |
 
 */

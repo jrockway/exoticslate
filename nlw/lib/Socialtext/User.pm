@@ -155,7 +155,7 @@ sub _update_profile {
     $homunculus->extra_attrs(undef);
 
     my $people = Socialtext::Pluggable::Adapter->plugin_class('people');
-    $people->UpdateProfileFields($self => $attrs)
+    $people->UpdateProfileFields($self => $attrs, {source => 'directory'})
         if $people;
 }
 

@@ -1807,7 +1807,12 @@ proto.format_table = function(elem) {
 }
 
 proto.format_tr = function(elem) {
-    return elem.wikitext + '|\n';
+    if (elem.wikitext.match(/\s$/)) {
+        return elem.wikitext + '|\n';
+    }
+    else {
+        return elem.wikitext + ' |\n';
+    }
 }
 
 proto.format_td = function(elem) {

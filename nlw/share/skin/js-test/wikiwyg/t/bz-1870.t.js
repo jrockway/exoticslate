@@ -4,7 +4,7 @@ t.filters({
     html: ['html_to_wikitext']
 });
 
-t.plan(3);
+t.plan(4);
 
 t.run_is('html', 'text');
 
@@ -29,5 +29,12 @@ t.run_is('html', 'text');
 
 --- text
 | {toc: } | {toc: } |
+
+=== Space preserved around WAFLs in TDs -- from Wysiwyg with as-is WAFL
+--- html
+<span></span><div class="wiki"><table style="border-collapse: collapse;" class="formatter_table"><tbody><tr><td style="border: 1px solid black; padding: 0.2em;"><img src="/static/3.2.0.1/widgets/3e34be9a86c2efb6bb4a55602c0c0371.png" widget="{{ || }}" title="Unformatted Content"/></td></tr></tbody></table></div>
+
+--- text
+| {{ || }} |
 
 */

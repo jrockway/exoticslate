@@ -38,9 +38,7 @@ sub homepage {
             return $self->dashboard;
         }
     }
-    else {
-        return $self->central_page;
-    }
+    return $self->central_page;
 }
 
 sub central_page {

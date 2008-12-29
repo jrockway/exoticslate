@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use warnings FATAL => 'all';
 use strict;
-use Test::More tests => 30;
+use Test::More tests => 31;
 use URI::Escape qw/uri_escape/;
 use Socialtext::JSON qw/encode_json decode_json/;
 use Socialtext::CGI::Scrubbed;
@@ -53,13 +53,17 @@ JSON_GET_an_item: {
         count => 42,
         offset => 25,
     );
-    local @Socialtext::Events::Events = [{item=>'first'}];
+    local @Socialtext::Events::Events
+        = [ { item => 'first', minutes => 3, at => 9 } ];
     my ($rest, $result) = do_get(%args);
 
     is_status $rest, '200 OK', "request succeeded";
     my $events = decode_json($result);
     ok($events, "decoded the result");
-    is_deeply $events, [{item=>'first'}], "mock result returned";
+    my $html = delete $events->[0]{html};
+    ok $html, 'html version of event is included';
+    is_deeply $events, [ { item => 'first', minutes => 3, at => 9 } ],
+        "mock result returned";
     is_deeply \@Socialtext::Events::GetArgs, [[ 
         $actor,
         count => 42,

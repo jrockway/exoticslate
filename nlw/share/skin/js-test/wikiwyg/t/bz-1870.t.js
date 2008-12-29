@@ -4,7 +4,7 @@ t.filters({
     html: ['html_to_wikitext']
 });
 
-t.plan(2);
+t.plan(3);
 
 t.run_is('html', 'text');
 
@@ -22,5 +22,12 @@ t.run_is('html', 'text');
 
 --- text
 | {toc: } |
+
+=== Space preserved around WAFLs in TDs -- from Display with 2 TDs
+--- html
+<span></span><div class="wiki"><table style="border-collapse: collapse;" class="formatter_table"><tbody><tr><td style="border: 1px solid black; padding: 0.2em;"><div class="nlw_phrase"><table class="wafl_container"><tbody><tr><td><div class="wafl_box"><a href="/admin/index.cgi?admin_wiki">Admin Wiki</a> does not have any headers. </div></td></tr></tbody></table><!-- wiki: {toc: } --></div></td><td style="border: 1px solid black; padding: 0.2em;"><div class="nlw_phrase"><table class="wafl_container"><tbody><tr><td><div class="wafl_box"><a href="/admin/index.cgi?admin_wiki">Admin Wiki</a> does not have any headers. </div></td></tr></tbody></table><!-- wiki: {toc: } --></div></td></tr></tbody></table></div> 
+
+--- text
+| {toc: } | {toc: } |
 
 */

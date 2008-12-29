@@ -12,6 +12,7 @@ use Socialtext::Search::Set;
 use Socialtext::TT2::Renderer;
 use Socialtext::l10n qw/loc/;
 use Socialtext::Stax;
+use Apache::Cookie;
 
 sub class_id { 'helpers' }
 
@@ -209,6 +210,7 @@ sub global_template_vars {
             )->all],
         }
     );
+
 
     my $cookies = Apache::Cookie->fetch();
     my %result = (

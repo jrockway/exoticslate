@@ -32,7 +32,10 @@ sub new {
     return $self;
 }
 
-sub _initialize {}
+sub _initialize {
+    my $self = shift;
+    $self->{params}{uri} ||= '/fake/uri';
+}
 
 sub rest { $_[0]->{rest} }
 

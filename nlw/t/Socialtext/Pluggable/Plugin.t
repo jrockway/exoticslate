@@ -22,6 +22,7 @@ $plug->hub($hub);
 $Socialtext::AppConfig::CODE_BASE = 't/share';
 $Socialtext::AppConfig::SCRIPT_NAME = '/index.cgi';
 $plug->hub->current_workspace->{uri} = 'http://hostname/magic';
+$plug->hub->current_workspace->{name} = 'current';
 is $plug->uri, 'http://hostname/magic/index.cgi', 'uri';
 is $plug->code_base, $Socialtext::AppConfig::CODE_BASE, 'code_base';
 

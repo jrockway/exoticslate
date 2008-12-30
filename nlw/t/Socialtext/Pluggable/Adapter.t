@@ -6,6 +6,7 @@ use warnings;
 BEGIN { push @INC, 't/share/plugin/fakeplugin/lib' };
 
 use Test::More tests => 7;
+use mocked 'Socialtext::User';
 use mocked 'Socialtext::Registry';
 use mocked 'Socialtext::Hub';
 use Socialtext::Pluggable::Adapter;

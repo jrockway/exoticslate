@@ -151,8 +151,8 @@ sub _update_profile {
     my $homunculus = $self->homunculus;
     return unless $homunculus->can('extra_attrs');
     my $attrs = $homunculus->extra_attrs;
-    return unless $attrs;
     $homunculus->extra_attrs(undef);
+    return unless ($attrs && %$attrs);
 
     my $people = Socialtext::Pluggable::Adapter->plugin_class('people');
     $people->UpdateProfileFields($self => $attrs, {source => 'directory'})

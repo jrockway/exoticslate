@@ -95,6 +95,7 @@ proto.show = function () {
         width: '760px',
         callback: function() {
             jQuery('input[name="email_page_subject"]').select().focus();
+            jQuery('#email_send').attr('disabled', false);
         }
     });
 }

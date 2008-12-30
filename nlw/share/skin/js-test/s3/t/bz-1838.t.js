@@ -24,7 +24,7 @@ t.runAsync([
 
     function() { 
         t.open_iframe(
-            $('a.incipient', t.doc).attr('href'),
+            "/lite/page/admin/" + $('a.incipient', t.doc).attr('href'),
             t.nextStep()
         );
     },
@@ -54,8 +54,6 @@ t.runAsync([
 
         t.callNextStep();
     },
-
-    t.doSavePage(),
 
     function() { 
         t.endAsync();

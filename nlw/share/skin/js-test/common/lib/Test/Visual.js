@@ -474,16 +474,24 @@ proto._savePage = function(cb) {
     if (!t.wikiwyg_started()) {
         return cb.call(t);
     }
-    if (!jQuery.browser.safari) {
-        t.doRichtextEdit();
+
+    var doit = function() {
+        t.$('#st-save-button-link').click();
+        t.poll(
+            function() { 
+                return($('#st-display-mode-container', t.win.document).is(':visible'));
+            },
+            function() { return cb.call(t) }
+        );
+    };
+
+    if (jQuery.browser.safari || t.richtextModeIsReady()) {
+        doit();
     }
-    t.$('#st-save-button-link').click();
-    t.poll(
-        function() { 
-            return($('#st-display-mode-container', t.win.document).is(':visible'));
-        },
-        function() { return cb.call(t) }
-    );
+    else {
+        t.$('#st-mode-wysiwyg-button').click();
+        t.poll(function(){ return t.richtextModeIsReady() }, doit);
+    }
 };
 
 proto.now = function() {

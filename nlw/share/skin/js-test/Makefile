@@ -2,7 +2,6 @@ default: all
 
 all clean:
 	make -C wikiwyg $@
-	make -C s2 $@
 	make -C s3 $@
 	make -C widgets $@
 	make -C performance $@

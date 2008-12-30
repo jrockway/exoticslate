@@ -23,6 +23,11 @@ html body#dashBoard div#controls div#controlsRight {
     white-space: nowrap;
 }
 
+/* IE6-only fix for {bz: 1743} - Force wrapping of Tools menu items */
+html body#dashBoard div#controls div#controlsRight.peoplelist {
+    -width: 200px !important;
+}
+
 /* Fix IE7 top offset shift for controlsRight dashboard buttons */
 html body#dashBoard div#controls div#controlsRight ul.profile-links li {
     margin-top: -11px;

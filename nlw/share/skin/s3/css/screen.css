@@ -2166,8 +2166,8 @@ body div#globalNav div input.searchText {
 }
 
 #st-edit-mode-container {
-    position: fixed;
-    width: 90%;
+    position: absolute;
+    width: 95%;
 }
 
 #st-edit-mode-container.preview {

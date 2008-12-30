@@ -2371,6 +2371,14 @@ Socialtext Preview subclass.
  =============================================================================*/
 proto = new Subclass(WW_PREVIEW_MODE, 'Wikiwyg.Preview');
 
+proto.enableStarted = function() {
+    jQuery('#st-edit-mode-container').addClass('preview');
+}
+
+proto.disableFinished = function() {
+    jQuery('#st-edit-mode-container').removeClass('preview');
+}
+
 proto.fromHtml = function(html) {
     if (this.wikiwyg.previous_mode.classname.match(/Wysiwyg/)) {
         var wikitext_mode = this.wikiwyg.modeByName(WW_ADVANCED_MODE);

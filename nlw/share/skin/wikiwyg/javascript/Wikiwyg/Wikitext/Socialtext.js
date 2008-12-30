@@ -1830,7 +1830,7 @@ proto.format_td = function(elem) {
     if (elem.wikitext.match(/\n/) ||
         (elem.firstChild && elem.firstChild.top_level_block)
     ) {
-        elem.wikitext = elem.wikitext.replace(/\n$/, ' ');
+        elem.wikitext = elem.wikitext.replace(/\s?$/, ' ');
         return '| ' + elem.wikitext;
     }
     else {

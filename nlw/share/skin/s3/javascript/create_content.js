@@ -227,7 +227,7 @@ proto.create_url = function () {
         url += ';template=' + nlw_name_to_id(template);
 
         jQuery.ajax({
-            url: Page.workspaceUrl() + '/pages/' + template,
+            url: Page.workspaceUrl() + '/pages/' + nlw_name_to_id(template),
             async: false,
             dataType: 'json',
             success: function (page) {

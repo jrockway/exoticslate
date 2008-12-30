@@ -19,10 +19,12 @@ if (Socialtext.S3) {
         }
         else if ($.browser.mozilla) {
             setTimeout(function() {
-                wikiwyg.current_mode.get_edit_document()
-                    .execCommand("enableObjectResizing", false, false);
-                wikiwyg.current_mode.get_edit_document()
-                    .execCommand("enableInlineTableEditing", false, false);
+                if (window.wikiwyg.current_mode && window.wikiwyg.current_mode.get_edit_document) {
+                    window.wikiwyg.current_mode.get_edit_document()
+                        .execCommand("enableObjectResizing", false, false);
+                    window.wikiwyg.current_mode.get_edit_document()
+                        .execCommand("enableInlineTableEditing", false, false);
+                }
             }, 100);
         }
 

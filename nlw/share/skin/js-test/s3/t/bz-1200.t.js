@@ -4,8 +4,8 @@ t.plan(2);
 
 t.runAsync([
     t.doCreatePage(
-        "{toc:}\n\n" +
-        '^^ "Foo"<http://foo.com>\n\n'
+        "{toc:}\n\n"
+      + '^^ "Foo"<http://foo.com>\n\n'
     ),
 
     function() { 

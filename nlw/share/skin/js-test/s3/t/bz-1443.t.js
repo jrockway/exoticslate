@@ -1,5 +1,3 @@
-(function($) {
-
 var t = new Test.Visual();
 
 t.plan(1);
@@ -27,5 +25,3 @@ t.runAsync([
         t.endAsync();
     }
 ]);
-
-})(jQuery);

@@ -1,12 +1,10 @@
-(function($) {
-
 var t = new Test.Visual();
 
 t.plan(1);
 
 t.runAsync([
     function() {
-        t.open_iframe("/admin/index.cgi?bz_1319_" + t.gensym(), t.nextStep(3000), { w: '500px' });
+        t.open_iframe("/admin/?" + t.gensym(), t.nextStep(3000), { w: '500px' });
     },
             
     function() { 
@@ -19,5 +17,3 @@ t.runAsync([
         t.endAsync();
     }
 ]);
-
-})(jQuery);

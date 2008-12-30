@@ -1,30 +1,19 @@
-(function($) {
-
 var t = new Test.Visual();
 
 t.plan(2);
 
+var v = "VeryLongLineVeryLongLine"
+      + "VeryLongLineVeryLongLine"
+      + "VeryLongLine ";
+
 t.runAsync([
-    function() {
-        var v = "VeryLongLineVeryLongLine"
-              + "VeryLongLineVeryLongLine"
-              + "VeryLongLine ";
+    t.doCreatePage(
+        v + v + v + v + v + "\n\n"
+      + ".pre\n"
+      + v + v + v + v + "\n"
+      + ".pre\n"
+    ),
 
-        t.put_page({
-            workspace: 'admin',
-            page_name: "bz_1471",
-            content: v + v + v + v + v + "\n\n"
-                   + ".pre\n"
-                   + v + v + v + v + "\n"
-                   + ".pre\n",
-            callback: t.nextStep()
-        });
-    },
-
-    function() {
-        t.open_iframe("/admin/index.cgi?bz_1471", t.nextStep());
-    },
-            
     function() { 
         t.is(
             t.$('#contentLeft').offset().top,
@@ -41,5 +30,3 @@ t.runAsync([
         t.endAsync();
     }
 ]);
-
-})(jQuery);

@@ -1,5 +1,3 @@
-(function($) {
-
 var t = new Test.Visual();
 
 t.plan(1);
@@ -9,19 +7,8 @@ if (!$.browser.safari) {
 }
 
 t.runAsync([
-    function() {
-        t.put_page({
-            workspace: 'admin',
-            page_name: "bz_1459",
-            content: "NotVeryLongLine",
-            callback: t.nextStep()
-        });
-    },
+    t.doCreatePage("NotVeryLongLine"),
 
-    function() {
-        t.open_iframe("/admin/index.cgi?bz_1459", t.nextStep());
-    },
-            
     function() { 
         t.is(
             t.$('#contentLeft').css('overflow-y'),
@@ -32,5 +19,3 @@ t.runAsync([
         t.endAsync();
     }
 ]);
-
-})(jQuery);

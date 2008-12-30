@@ -1,5 +1,3 @@
-(function($) {
-
 var t = new Test.Visual();
 
 t.plan(1);
@@ -20,8 +18,8 @@ t.runAsync([
 
     function() {
         t.open_iframe(
-            "/admin/index.cgi?" + name + "#edit",
-            t.nextStep(3000)
+            "/admin/?" + name,
+            t.doRichtextEdit()
         );
     },
             
@@ -34,5 +32,3 @@ t.runAsync([
         t.endAsync();
     }
 ]);
-
-})(jQuery);

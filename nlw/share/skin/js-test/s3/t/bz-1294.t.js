@@ -1,26 +1,9 @@
-(function($) {
-
 var t = new Test.Visual();
 
 t.plan(1);
 
 t.runAsync([
-    function() {
-        t.put_page({
-            workspace: 'admin',
-            page_name: "bz_1294",
-            content: "^ H1\n\n^^ H2",
-            callback: t.nextStep()
-        });
-    },
-
-    function() {
-        t.open_iframe(
-            "/admin/index.cgi?bz_1294",
-            t.nextStep()
-        );
-    },
-
+    t.doCreatePage("^ H1\n\n^^ H2"),
     t.doRichtextEdit(),
 
     function() { 
@@ -42,5 +25,3 @@ t.runAsync([
         t.endAsync();
     }
 ]);
-
-})(jQuery);

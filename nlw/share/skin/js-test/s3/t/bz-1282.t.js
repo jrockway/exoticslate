@@ -1,23 +1,10 @@
-(function($) {
-
 var t = new Test.Visual();
 
 // t.plan(2);
 t.plan(1);
 
 t.runAsync([
-    function() {
-        t.put_page({
-            workspace: 'admin',
-            page_name: "em",
-            content: "^^ foo _bar_ there\n",
-            callback: t.nextStep()
-        });
-    },
-
-    function() {
-        t.open_iframe("/admin/index.cgi?em", t.nextStep());
-    },
+    t.doCreatePage("^^ foo _bar_ there\n"),
 
     function() {
         t.scrollTo(150);
@@ -35,5 +22,3 @@ t.runAsync([
         t.endAsync();
     }
 ]);
-
-})(jQuery);

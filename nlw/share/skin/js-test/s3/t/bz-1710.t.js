@@ -1,28 +1,14 @@
-(function($) {
-
 var t = new Test.Visual();
 
 t.plan(1);
 
 t.runAsync([
-    function() {
-        t.put_page({
-            workspace: 'admin',
-            page_name: "bz_1710",
-            content: ".html\n"
-                   + "X&nbsp;Y\n"
-                   + ".html\n",
-            callback: t.nextStep()
-        });
-    },
-
-    function() {
-        t.open_iframe(
-            "/admin/index.cgi?bz_1710",
-            t.nextStep()
-        );
-    },
-
+    t.doCreatePage(
+        ".html\n" +
+        "X&nbsp;Y\n" +
+        ".html\n"
+    ),
+    t.doRichtextEdit(),
     t.doWikitextEdit(),
 
     function() { 
@@ -35,5 +21,3 @@ t.runAsync([
         t.endAsync();
     }
 ]);
-
-})(jQuery);

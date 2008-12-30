@@ -44,7 +44,7 @@ This test is designed to test global navigation changes as people/dashboard is e
 
 | *Comment* | Test Case: People Dashboard Plugins |  |
 | *Comment* | Enable people. Illegal configuration. No People link. Home is workspace list. |  |
-| st-admin | enable-plugin --plugin people --all-accounts | Plugin people is now enabled |
+| st-admin | enable-plugin --plugin people --all-accounts | The people plugin is now enabled for all accounts |
 | open_ok | / |  |
 | text_like | contentRight | Workspaces you belong to |
 | wait_for_element_not_present_ok | link=People | 4000 |
@@ -53,8 +53,8 @@ This test is designed to test global navigation changes as people/dashboard is e
 
 | *Comment* | Test Case: People Dashboard Plugins |  |
 | *Comment* | Disable people, enable dashboard. Home is dashboard. |  |
-| st-admin | disable-plugin --plugin people --all-accounts | Plugin people is now disabled |
-| st-admin | enable-plugin --plugin dashboard --all-accounts | Plugin dashboard is now enabled |
+| st-admin | disable-plugin --plugin people --all-accounts | The people plugin is now disabled for all accounts |
+| st-admin | enable-plugin --plugin dashboard --all-accounts | The dashboard plugin is now enabled for all accounts |
 | open_ok | / |  |
 | wait_for_element_visible_ok | //a[@title='Add Content'] | 10000 |
 | text_like | st-editing-tools-edit | Welcome |
@@ -65,7 +65,7 @@ This test is designed to test global navigation changes as people/dashboard is e
 | location_like | `http://www.socialtext.com/products/socialnetworking.php` |  |
 
 | *Comment* | Test Case: People Dashboard Plugins teardown |  |
-| st-admin | enable-plugin --plugin people --all-accounts | Plugin people is now enabled |
-| st-admin | enable-plugin --plugin dashboard --all-accounts | Plugin dashboard is now enabled |
+| st-admin | enable-plugin --plugin people --all-accounts | The people plugin is now enabled for all accounts |
+| st-admin | enable-plugin --plugin dashboard --all-accounts | The dashboard plugin is now enabled for all accounts |
 
 | *Comment* | Test Case: People Dashboard Plugins COMPLETED |

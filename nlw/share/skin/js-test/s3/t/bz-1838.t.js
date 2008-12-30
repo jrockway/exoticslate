@@ -10,7 +10,7 @@ t.runAsync([
         t.put_page({
             workspace: 'admin',
             page_name: original,
-            content: "{include: [" + incipient + "]}\n",
+            content: "[" + incipient + "]\n",
             callback: t.nextStep()
         });
     },
@@ -24,7 +24,7 @@ t.runAsync([
 
     function() { 
         t.open_iframe(
-            $('a.wiki-include-edit-link', t.doc).attr('href'),
+            $('a.incipient', t.doc).attr('href'),
             t.nextStep()
         );
     },
@@ -52,6 +52,12 @@ t.runAsync([
             "Page text for incipient pages created from /lite/ stays the same in full view"
         );
 
+        t.callNextStep();
+    },
+
+    t.doSavePage(),
+
+    function() { 
         t.endAsync();
     }
 ]);

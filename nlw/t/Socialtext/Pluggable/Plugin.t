@@ -9,6 +9,7 @@ use Test::More tests => 32;
 use mocked 'Socialtext::SQL';
 use mocked 'Socialtext::Authz';
 use mocked 'Socialtext::AppConfig';
+use mocked 'Socialtext::User';
 use mocked 'Socialtext::Hub';
 
 use_ok 'Socialtext::Pluggable::Plugin';

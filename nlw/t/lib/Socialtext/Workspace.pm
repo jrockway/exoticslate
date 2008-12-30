@@ -2,15 +2,14 @@ package Socialtext::Workspace;
 # @COPYRIGHT@
 use strict;
 use warnings;
-use unmocked 'Data::Dumper';
 use base 'Socialtext::MockBase';
-use mocked 'Socialtext::Account';
-use unmocked 'Class::Field';
+use unmocked 'Socialtext::Account';
+use unmocked 'Class::Field', qw/field/;
 
-Class::Field::field 'skin_name';
-Class::Field::field 'uploaded_skin';
-Class::Field::field 'name';
-Class::Field::field 'title';
+field 'skin_name';
+field 'uploaded_skin';
+field 'name';
+field 'title';
 
 our @BREADCRUMBS = ();
 

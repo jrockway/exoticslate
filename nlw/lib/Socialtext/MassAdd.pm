@@ -7,6 +7,7 @@ use Socialtext::Encode;
 use Socialtext::Log qw(st_log);
 use Socialtext::User;
 use Socialtext::l10n qw/loc/;
+use Socialtext::Pluggable::Adapter;
 use List::MoreUtils qw/mesh/;
 
 our $Has_People_Installed;
@@ -24,7 +25,6 @@ our %Non_profile_fields = map {$_ => 1} (@Required_fields, @User_fields, 'accoun
 
 BEGIN {
     unless (defined $Has_People_Installed) {
-        require Socialtext::Pluggable::Adapter;
         $Has_People_Installed = 
             Socialtext::Pluggable::Adapter->plugin_exists('people');
     }
@@ -230,10 +230,11 @@ sub _update_profile {
     return 0 unless $people;
 
     my ($changed_user, $failed) = 
-        $people->UpdateProfileFields($user => \%profile_args);
+        $people->UpdateProfileFields($user => \%profile_args,
+                                     {source => 'mass-add'});
 
     foreach my $field (@$failed) {
-        $self->_fail(loc('Profile field "[_1]" does not exist for this account', $field));
+        $self->_fail(loc('Profile field "[_1]" could not be updated', $field));
     }
 
     return $changed_user ? 1 : 0;

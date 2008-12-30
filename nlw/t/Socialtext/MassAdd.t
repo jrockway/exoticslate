@@ -10,31 +10,33 @@ BEGIN {
         exit;
     }
     
-    plan tests => 63;
+    plan tests => 68;
 }
 
 use mocked 'Socialtext::People::Profile';
 use mocked 'Socialtext::Log', qw(:tests);
 use mocked 'Socialtext::User';
 $Socialtext::MassAdd::Has_People_Installed = 1;
+
 use_ok 'Socialtext::MassAdd';
+
+my %userinfo = (
+    username      => 'ronnie',
+    email_address => 'ronnie@mrshow.example.com',
+    first_name    => 'Ronnie',
+    last_name     => 'Dobbs',
+    password      => 'brut4liz3',
+    position      => 'Criminal',
+    company       => 'FUZZ',
+    location      => '',
+    work_phone    => '',
+    mobile_phone  => '',
+    home_phone    => ''
+);
 
 Add_from_hash: {
     clear_log();
     $Socialtext::User::Users{ronnie} = undef;
-    my %userinfo = (
-        username      => 'ronnie',
-        email_address => 'ronnie@mrshow.example.com',
-        first_name    => 'Ronnie',
-        last_name     => 'Dobbs',
-        password      => 'brut4liz3',
-        position      => 'Criminal',
-        company       => 'FUZZ',
-        location      => '',
-        work_phone    => '',
-        mobile_phone  => '',
-        home_phone    => ''
-    );
 
     happy_path: {
         my @successes;
@@ -55,10 +57,8 @@ Add_from_hash: {
 
     bad_profile_field: {
         no warnings 'redefine';
-        local *Socialtext::People::Profile::valid_attr = sub {
-            return $_[1] eq 'badfield' ? 0 : 1;
-        };
-        $userinfo{badfield} = 'badvalue';
+        local %Socialtext::People::Fields::InvalidFields = ( badfield => 1);
+        local $userinfo{badfield} = 'badvalue';
 
         my @successes;
         my @failures;
@@ -68,9 +68,9 @@ Add_from_hash: {
         );
         $mass_add->add_user(%userinfo);
         is scalar(@failures), 1, "just one failure";
-        like $failures[0], qr/Profile field "badfield" does not exist/;
+        like $failures[0], qr/Profile field "badfield" could not be updated/;
         logged_like 'error',
-            qr/Profile field "badfield" does not exist/,
+            qr/Profile field "badfield" could not be updated/,
             '... message also logged';
 
         is_deeply \@successes, ['Added user ronnie'], 'success message ok';
@@ -107,6 +107,27 @@ Add_user_already_added: {
     local $Socialtext::User::Users{guybrush} = Socialtext::User->new(
         username => 'guybrush',
     );
+
+    uneditable_profile_field: {
+        local @Socialtext::People::Fields::UneditableNames = qw/mobile_phone/;
+        local $userinfo{mobile_phone} = '1-877-AVAST-YE';
+
+        my @successes;
+        my @failures;
+        my $mass_add = Socialtext::MassAdd->new(
+            pass_cb => sub { push @successes, shift },
+            fail_cb => sub { push @failures,  shift },
+        );
+        $mass_add->add_user(%userinfo);
+        is scalar(@failures), 1, "just one failure";
+        like $failures[0], qr/Profile field "mobile_phone" could not be updated/;
+        logged_like 'error',
+            qr/Profile field "mobile_phone" could not be updated/,
+            '... message also logged';
+
+        is_deeply \@successes, ['Added user ronnie'], 'success message ok';
+        logged_like 'info', qr/Added user ronnie/, '... message also logged';
+    }
 
     Profile_data_needs_update: {
         clear_log();
@@ -410,7 +431,7 @@ EOT
 }
 
 Fields_for_account: {
-    no warnings 'redefine';
+    no warnings 'redefine', 'once';
     local *Socialtext::People::Fields::new = sub { "dummy" };
     my $acct = Socialtext::Account->Default;
     my $fields = Socialtext::MassAdd->ProfileFieldsForAccount($acct);

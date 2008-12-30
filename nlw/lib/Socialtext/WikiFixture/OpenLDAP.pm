@@ -109,6 +109,11 @@ Adds data in the given C<$ldif> file to the LDAP directory.
 
 Removes data in the given C<$ldif> file from the LDAP directory.
 
+=item B<ldap_config($param, $value)>
+
+Tweaks the configuration of the bootstrapped OpenLDAP server, changing
+C<$param> to C<$value>.
+
 =back
 
 =head1 AUTHOR

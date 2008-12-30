@@ -22,6 +22,13 @@
 #       email_address: mail
 #       first_name: givenName
 #       last_name: sn
+#       company: o
+#       home_phone: homeTelephoneNumber
+#       location: l
+#       mobile_phone: mobile
+#       position: title
+#       supervisor: manager
+#       work_phone: telephoneNumber
 #   ---
 #   id: 1529909304
 #   name: Our Active Directory server
@@ -36,3 +43,11 @@
 #       email_address: mail
 #       first_name: givenName
 #       last_name: sn
+#       company: company
+#       home_phone: homeTelephoneNumber
+#       location: physicalDeliveryOfficeName
+#       mobile_phone: mobile
+#       personal_url: wWWHomePage
+#       position: title
+#       supervisor: manager
+#       work_phone: telephoneNumber

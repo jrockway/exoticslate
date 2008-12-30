@@ -11,7 +11,7 @@
 | st-empty-container |  |  |
 | wait_for_element_visible_ok | //a[@title='Add Content'] |  |
 | click_and_wait | //a[@title='Add Content'] |  |
-| click_and_wait | link=Image |  |
+| click_and_wait | link=One Image |  |
 | wait_for_element_visible_ok | //a[@title='Add Content'] |  |
 
 | st-name-widget | 1 | image_widget |

@@ -7,9 +7,8 @@ use Test::Exception;
 use mocked 'Socialtext::Headers';
 use mocked 'Socialtext::CGI';
 use mocked 'Socialtext::SQL', ':test';
-use mocked 'Socialtext::Workspace';
-use mocked 'Socialtext::Page';
 use mocked 'Socialtext::User';
+use mocked 'Socialtext::Page';
 use mocked 'Socialtext::Hub';
 
 BEGIN {

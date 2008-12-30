@@ -25,7 +25,7 @@ t.runAsync([
     function(widget) {
         t.scrollTo(150);
         t.$('a.settings').click();
-        t.$('div.widgetContent select option:first').text(
+        t.$('div.widgetContent input.workspace_setting').val(
             "VeryLongNameVeryLongNameVeryLongNameVeryLongName" +
             "VeryLongNameVeryLongNameVeryLongNameVeryLongName" +
             "VeryLongNameVeryLongNameVeryLongNameVeryLongName" +

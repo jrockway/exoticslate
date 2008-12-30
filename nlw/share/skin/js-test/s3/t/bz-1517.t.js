@@ -10,7 +10,7 @@ t.runAsync([
     function() { 
         t.poll(function(){
             return t.$('#st-newpage-pagename-edit').is(':visible');
-        }, t.nextStep());
+        }, t.nextStep(3000));
     },
 
     function() { 

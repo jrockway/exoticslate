@@ -4,8 +4,7 @@ use strict;
 use warnings;
 use Test::More tests => 7;
 use mocked 'Apache::Cookie';
-use mocked 'Socialtext::Search::Set';
-use mocked 'Socialtext::Search::Config';
+use mocked 'Socialtext::User';
 use mocked 'Socialtext::Hub';
 
 BEGIN {

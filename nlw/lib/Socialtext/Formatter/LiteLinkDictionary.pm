@@ -22,4 +22,28 @@ field weblog             =>
     '/lite/changes/%{workspace}/%{category}';
 # special_http and file and image are default
 
+sub format_link {
+    my $self   = shift;
+    my %p      = @_;
+    my $method = $p{link};
+
+    # Fix {bz: 1838}: Normal link dictionary uses "is_incipient=1" to signify
+    # incipient pages meant for editing, but in Lite mode we should simply
+    # enter Edit mode with "?action=edit".
+    if ($method eq 'free') {
+        $p{page_uri} =~ s{
+            ^
+            (.*[;&])?
+            page_name=([^;&]+)
+            .*
+        }{
+            (index($1, 'is_incipient=1') >= 0)
+                ? "$2?action=edit"
+                : $2
+        }sex;
+    }
+
+    $self->SUPER::format_link(%p);
+}
+
 1;

@@ -9,9 +9,8 @@ use Socialtext::CGI::Scrubbed;
 use Socialtext::HTTP qw/:codes/;
 
 use mocked 'Apache::Cookie';
+use mocked 'Socialtext::User';
 use mocked 'Socialtext::Events', 'event_ok', 'is_event_count';
-use mocked 'Socialtext::SQL', 'sql_ok';
-use mocked 'Socialtext::Workspace';
 use mocked 'Socialtext::Rest', 'is_status';
 
 BEGIN {

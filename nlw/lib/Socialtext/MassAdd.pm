@@ -36,6 +36,7 @@ sub new {
     $self->{pass_cb} = delete $opts{pass_cb} or die "pass_cb is mandatory!";
     $self->{fail_cb} = delete $opts{fail_cb} or die "fail_cb is mandatory!";
     $self->{account} = delete $opts{account};
+    $self->{failed_fields} = {};
     return $self;
 }
 
@@ -234,6 +235,8 @@ sub _update_profile {
                                      {source => 'mass-add'});
 
     foreach my $field (@$failed) {
+        next if ($self->{failed_fields}{$field});
+        $self->{failed_fields}{$field} = 1;
         $self->_fail(loc('Profile field "[_1]" could not be updated', $field));
     }
 

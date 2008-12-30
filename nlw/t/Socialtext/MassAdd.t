@@ -10,10 +10,10 @@ BEGIN {
         exit;
     }
     
-    plan tests => 68;
+    plan tests => 75;
 }
 
-use mocked 'Socialtext::People::Profile';
+use mocked 'Socialtext::People::Profile', qw(save_ok);
 use mocked 'Socialtext::Log', qw(:tests);
 use mocked 'Socialtext::User';
 $Socialtext::MassAdd::Has_People_Installed = 1;
@@ -101,7 +101,6 @@ Add_one_user_csv: {
     is delete $Socialtext::User::Sent_email{guybrush}, undef,
         'confirmation email not sent';
 }
-
 
 Add_user_already_added: {
     local $Socialtext::User::Users{guybrush} = Socialtext::User->new(
@@ -436,4 +435,37 @@ Fields_for_account: {
     my $acct = Socialtext::Account->Default;
     my $fields = Socialtext::MassAdd->ProfileFieldsForAccount($acct);
     is $fields, "dummy";
+}
+
+my $FLEET_CSV = <<'EOT';
+guybrush,guybrush@example.com,Guybrush,Threepwood,password,Captain,Pirates R. Us,High Seas,123-456-YARR,mobile1,123-HIGH-SEA
+bluebeard,bluebeard@example.com,Blue,Beard,password,Captain,Pirates R. Us,High Seas,123-456-YARR,mobile2,123-HIGH-SEA
+EOT
+
+Add_multiple_users_faillure: {
+    @Socialtext::People::Profile::Saved = ();
+    local @Socialtext::People::Fields::UneditableNames = qw/mobile_phone/;
+
+    # Explicitly set this user to undef, so we don't return a default mocked user
+    $Socialtext::User::Users{guybrush} = undef;
+    $Socialtext::User::Users{bluebeard} = undef;
+    clear_log();
+    my @successes;
+    my @failures;
+    my $mass_add = Socialtext::MassAdd->new(
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+    $mass_add->from_csv($FLEET_CSV);
+    is_deeply \@successes, ['Added user guybrush','Added user bluebeard'], 'success message ok';
+    logged_like 'info', qr/Added user guybrush/, '... message also logged';
+    logged_like 'info', qr/Added user bluebeard/, '... message also logged';
+    is scalar(@failures), 1, 'only one error message per field updating failure';
+    like $failures[0],
+        qr/Profile field "mobile_phone" could not be updated/,
+
+    my $profile1 = shift @Socialtext::People::Profile::Saved;
+    isnt $profile1->{mobile_phone}, 'mobile1';
+    my $profile2 = shift @Socialtext::People::Profile::Saved;
+    isnt $profile2->{mobile_phone}, 'mobile2';
 }

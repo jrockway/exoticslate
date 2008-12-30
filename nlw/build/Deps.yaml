@@ -120,7 +120,6 @@ SOAP::Lite: 0.67
 SOAP::Transport::HTTP: 0
 Storable: 2.15
 Sys::Hostname: 1.11
-Sys::Load: 0.2
 Template: 2.19
 Template::Plugin::FillInForm: 0.04
 Template::Plugin::JSON: 0

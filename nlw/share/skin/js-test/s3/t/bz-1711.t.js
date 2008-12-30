@@ -1,10 +1,6 @@
-(function($) {
-
 var t = new Test.Visual();
 
 t.plan(3);
-
-var pageName = "bz_1711_" + t.gensym();
 
 var doClickAddTagButton = function() { 
     return function() {
@@ -38,22 +34,7 @@ var testOffsets = function() {
     };
 };
 t.runAsync([
-    function() {
-        t.put_page({
-            workspace: 'admin',
-            page_name: pageName,
-            content: "fnord\n",
-            callback: t.nextStep()
-        });
-    },
-
-    function() {
-        t.open_iframe(
-            "/admin/index.cgi?" + pageName,
-            t.nextStep(),
-            {w: '1024px'}
-        );
-    },
+    t.doCreatePage('fnord', {w: '1024px'}),
 
     doClickAddTagButton(),
     testOffsets(),
@@ -70,5 +51,3 @@ t.runAsync([
         t.endAsync();
     }
 ]);
-
-})(jQuery);

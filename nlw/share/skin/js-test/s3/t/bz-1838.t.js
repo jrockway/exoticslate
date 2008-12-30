@@ -1,16 +1,15 @@
-(function($) {
-
 var t = new Test.Visual();
 
 t.plan(2);
 
-var incipient = "bz_1838_" + t.gensym();
+var original = t.gensym();
+var incipient = t.gensym();
 
 t.runAsync([
     function() {
         t.put_page({
             workspace: 'admin',
-            page_name: "bz_1838",
+            page_name: original,
             content: "{include: [" + incipient + "]}\n",
             callback: t.nextStep()
         });
@@ -18,7 +17,7 @@ t.runAsync([
 
     function() {
         t.open_iframe(
-            "/lite/page/admin/bz_1838",
+            "/lite/page/admin/" + original,
             t.nextStep()
         );
     },
@@ -56,5 +55,3 @@ t.runAsync([
         t.endAsync();
     }
 ]);
-
-})(jQuery);

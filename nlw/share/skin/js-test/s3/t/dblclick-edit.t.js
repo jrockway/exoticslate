@@ -1,22 +1,9 @@
-(function($) {
-
 var t = new Test.Visual();
 
 t.plan(5);
 
 t.runAsync([
-    function() {
-        t.put_page({
-            workspace: 'admin',
-            page_name: "dblclick-edit",
-            content: "dblclick-edit",
-            callback: t.nextStep()
-        });
-    },
-
-    function() {
-        t.open_iframe("/admin/index.cgi?dblclick-edit", t.nextStep());
-    },
+    t.doCreatePage(),
 
     function() {
         t.scrollTo(100);
@@ -56,5 +43,3 @@ t.runAsync([
         t.endAsync();
     }
 ]);
-
-})(jQuery);

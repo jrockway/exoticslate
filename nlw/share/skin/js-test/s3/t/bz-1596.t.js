@@ -1,24 +1,9 @@
-(function($) {
-
 var t = new Test.Visual();
 
 t.plan(1);
 
-var name = "bz_1596_" + t.gensym();
-
 t.runAsync([
-    function() {
-        t.put_page({
-            workspace: 'admin',
-            page_name: name,
-            content: "fnord\n",
-            callback: t.nextStep()
-        });
-    },
-
-    function() {
-        t.open_iframe("/admin/index.cgi?" + name, t.nextStep());
-    },
+    t.doCreatePage(),
             
     function() { 
         t.scrollTo(t.$('#st-tags-addlink').offset().top);
@@ -45,5 +30,3 @@ t.runAsync([
         t.endAsync();
     }
 ]);
-
-})(jQuery);

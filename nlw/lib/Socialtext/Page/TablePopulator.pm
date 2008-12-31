@@ -32,6 +32,8 @@ sub new {
 
 sub populate {
     my $self = shift;
+    my %opts = @_;
+    my $recreate = $opts{recreate};
     my $workspace = $self->{workspace};
     my $workspace_name = $self->{workspace_name};
 
@@ -39,11 +41,16 @@ sub populate {
     my $already_in_txn = sql_in_transaction();
     sql_begin_work() unless $already_in_txn;
     eval {
-        sql_execute(
-            'DELETE FROM page WHERE workspace_id = ?',
-            $workspace->workspace_id,
-        );
+        # if we're recreating the workspace from scratch, clean it out *first*
+        if ($recreate) {
+            sql_execute(
+                'DELETE FROM page WHERE workspace_id = ?',
+                $workspace->workspace_id,
+            );
+        }
 
+        # Grab all the Pages in the Workspace, figure out which ones we need
+        # to add to the DB, then add them all.
         my $workspace_dir
             = Socialtext::Paths::page_data_directory($workspace_name);
         my $hub = $self->{hub}
@@ -80,6 +87,13 @@ sub populate {
                 warn "Error populating $workspace_name: $@";
                 next PAGE;
             }
+
+            # Skip this page if it already exists in the DB
+            my $page_exists_already = page_exists_in_db(
+                workspace_id => $workspace_id,
+                page_id      => $page->{page_id},
+            );
+            next PAGE if $page_exists_already;
 
             # Add this page (and its tags) to the list of things to add to the
             # DB.
@@ -216,6 +230,21 @@ EOT
             . join(', ', @$row) . ') - '
             . $sth->errstr;
     }
+}
+
+sub page_exists_in_db {
+    my %opts = @_;
+    my $ws_id   = $opts{workspace_id} || die "workspace_id is required";
+    my $page_id = $opts{page_id}      || die "page_id is required";
+
+    my $exists_already = sql_singlevalue( q{
+        SELECT true
+          FROM page
+         WHERE workspace_id = ?
+           AND page_id = ?
+        }, $ws_id, $page_id
+    );
+    return defined $exists_already ? 1 : 0;
 }
 
 sub load_original_revision {

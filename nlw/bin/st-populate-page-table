@@ -35,21 +35,12 @@ sub populate_workspace {
     my $wksp = shift;
 
     eval {
-        if ($opts{recreate}) {
-            sql_begin_work();
-            sql_execute('DELETE FROM page WHERE workspace_id = ?',
-                $wksp->workspace_id);
-        }
-
         my $populator = Socialtext::Page::TablePopulator->new(
-            workspace_name => $wksp->name );
-        $populator->populate;
-
-        sql_commit() if $opts{recreate};
+            workspace_name => $wksp->name);
+        $populator->populate(recreate => $opts{recreate});
     };
     if ($@) {
-        sql_rollback() if $opts{recreate};
-        warn "Error populating pages for workspace '" . $wksp->name . "': $@";
+        warn $@;
     }
 }
 

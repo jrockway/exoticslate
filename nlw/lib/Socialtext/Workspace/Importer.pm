@@ -265,7 +265,7 @@ sub _populate_db_metadata {
     Socialtext::Timer->Continue('populate_db');
     my $populator = Socialtext::Page::TablePopulator->new(
         workspace_name => $self->{new_name} );
-    $populator->populate;
+    $populator->populate( recreate => 1 );
     Socialtext::Timer->Pause('populate_db');
 }
 

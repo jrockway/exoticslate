@@ -123,13 +123,14 @@ sub match {
 
 sub html {
     my $self = shift;
-    my $text = $self->escape_html( $self->asis_text );
+    my $text = $self->asis_text;
     my $space = $self->extra_space;
     # Avoid two { or } chars in a row, it screws up xgettext.pl
     $self->hub->wikiwyg->generate_widget_image("{"."{$text}"."}");
-    my $escaped_text = $text;
-    $escaped_text =~ s/-/-=/g;
-    return qq(<span class="nlw_phrase">$text<!-- wiki: {) . qq({$escaped_text}) .  qq(} --></span>$space);
+    my $escaped_text = $self->escape_html( $text );
+    my $commented_text = $text;
+    $commented_text =~ s/-/-=/g;
+    return qq(<span class="nlw_phrase">$escaped_text<!-- wiki: {) . qq({$commented_text}) .  qq(} --></span>$space);
 }
 
 ################################################################################

@@ -87,7 +87,7 @@ my $hub = new_hub('admin');
 
     my $html = $viewer->text_to_html($text);
 
-    like( $html, qr{page_name=hello%20moto},
+    like( $html, qr{hello%20moto\?action=edit},
         'free link formats as expected' );
     like( $html, qr{"/lite/page/admin/junkie#farter"},
         'interwiki link formats as expected' );

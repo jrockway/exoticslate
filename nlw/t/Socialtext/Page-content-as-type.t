@@ -59,7 +59,7 @@ CONTENT_LINK_DICTIONARY: {
         type            => 'text/html',
         link_dictionary => 'Lite'
     );
-    like( $html_content, qr{href="[^"]+page_name=your%20time".*>your time</a>},
+    like( $html_content, qr{href="your%20time\?action=edit".*>your time</a>},
         "html content has expected link" );
 }
 

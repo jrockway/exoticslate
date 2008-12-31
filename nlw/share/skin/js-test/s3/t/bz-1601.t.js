@@ -1,5 +1,3 @@
-(function($) {
-
 var t = new Test.Visual();
 
 t.plan(1);
@@ -11,11 +9,10 @@ t.runAsync([
             
     function() { 
         t.ok(
-            t.doc.getElementsByTagName('a').length,
+            $('a', t.doc).length,
             "REST search with a single hit displayed correctly"
         );
+
         t.endAsync();
     }
 ]);
-
-})(jQuery);

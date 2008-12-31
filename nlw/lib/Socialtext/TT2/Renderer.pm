@@ -114,6 +114,7 @@ sub _maybe_fetch {
 
         if ( my $e = $@ ) {
             warn "$output\n" if $output;
+            warn "Template Toolkit error:\n$e";
             die "Template Toolkit error:\n$e";
         }
 

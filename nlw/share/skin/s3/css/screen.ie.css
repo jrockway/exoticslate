@@ -39,6 +39,12 @@ html body#dashBoard div#controls div#controlsRight ul.dashboard-links li a {
     white-space: nowrap;
 }
 
+/* Removing this caused {bz: 1888} and {bz: 1889} */
+#st-edit-mode-container {
+    position: static;
+    width: 100%;
+}
+
 /* The right-hand controls are always empty during wiki edit. */
 html body div#st-edit-mode-container div#controls div#controlsRight {
     width: 10px !important;

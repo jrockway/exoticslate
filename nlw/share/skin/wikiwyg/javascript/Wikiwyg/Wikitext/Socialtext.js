@@ -1342,7 +1342,7 @@ proto.convert_html_to_wikitext = function(html) {
 
         // Try to find an user-pasted paragraph. With extra gecko-introduced \n
         // characters in there, which we need to remove.
-            $dom.contents().each(function() {
+            var cleanup_newlines = function() {
                 if (this.nodeType == 3 ) {
                     if (this.previousSibling && this.previousSibling.nodeType == 1 && this.previousSibling.nodeName != 'BR' ) {
                         return;
@@ -1358,15 +1358,11 @@ proto.convert_html_to_wikitext = function(html) {
                     .replace(/\n/g, ' ');
 
                 }
-                else if ( $(this).is("p") ) {
-                    if ( this.childNodes.length == 1 && this.childNodes[0].nodeType == 3) {
-                        this.childNodes[0].nodeValue = this.childNodes[0].nodeValue
-                            .replace(/^\n/, '')
-                            .replace(/\n$/, '')
-                            .replace(/\n/g, ' ');
-                    }
+                else if ( $(this).is(':not(pre,plain)') ) {
+                    $(this).contents().each(cleanup_newlines);
                 }
-            });
+            }
+            $dom.contents().each(cleanup_newlines);;
             html = $dom.html();
         }
     })(jQuery);

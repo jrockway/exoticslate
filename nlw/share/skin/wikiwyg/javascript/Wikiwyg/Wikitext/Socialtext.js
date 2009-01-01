@@ -1343,20 +1343,28 @@ proto.convert_html_to_wikitext = function(html) {
         // Try to find an user-pasted paragraph. With extra gecko-introduced \n
         // characters in there, which we need to remove.
             var cleanup_newlines = function() {
-                if (this.nodeType == 3 ) {
+                if (this.nodeType == 3) {
                     if (this.previousSibling && this.previousSibling.nodeType == 1 && this.previousSibling.nodeName != 'BR' ) {
-                        return;
+                        if (this.previousSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
+                            return;
+                        }
+                        this.nodeValue = this.nodeValue.replace(/^\n/, ' ');
+                    }
+                    else {
+                        this.nodeValue = this.nodeValue.replace(/^\n/, '');
                     }
 
                     if (this.nextSibling && this.nextSibling.nodeType == 1 && this.nextSibling.nodeName != 'BR' ) {
-                        return;
+                        if (this.nextSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
+                            return;
+                        }
+                        this.nodeValue = this.nodeValue.replace(/\n$/, ' ');
+                    }
+                    else {
+                        this.nodeValue = this.nodeValue.replace(/\n$/, '');
                     }
 
-                    this.nodeValue = this.nodeValue
-                    .replace(/^\n/, '')
-                    .replace(/\n$/, '')
-                    .replace(/\n/g, ' ');
-
+                    this.nodeValue = this.nodeValue.replace(/\n/g, ' ');
                 }
                 else if ( $(this).is(':not(pre,plain)') ) {
                     $(this).contents().each(cleanup_newlines);

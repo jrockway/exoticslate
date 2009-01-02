@@ -77,6 +77,7 @@ proto.enableThis = function() {
 
 proto.enableStarted = function() {
     jQuery(".table_buttons").addClass("disabled");
+    jQuery('#st-mode-wikitext-button').addClass('disabled');
 }
 
 proto.setHeightOfEditor = function() {

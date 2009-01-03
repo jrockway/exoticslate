@@ -478,6 +478,10 @@ sub do_generate_widget_image {
     my $file_name = Digest::MD5::md5_hex($text) . '.png';
     my $image_file = "$widgets_path/$file_name";
 
+    if (!-d $widgets_path) {
+        mkdir $widgets_path or die "Cannot create $widgets_path: $!";
+    }
+
     return if -f $image_file;
     Encode::_utf8_on($text);
 

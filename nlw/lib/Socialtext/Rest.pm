@@ -161,8 +161,22 @@ sub _check_on_behalf_of {
             $current_user->username, 'attempted to impersonate',
             $behalf_user,            'without impersonate permission'
         );
-        Socialtext::Exception::Auth->throw(
-            $current_user->username . ' may not impersonate');
+
+        if ($self->rest->user->is_guest) {
+            # {bz: 1665}: Because "guest" is usually due to cred extractor
+            # failure, we fail with the same error as not_authorized instead
+            # of the terribly misleading "guest may not impersonate".
+            $self->rest->header(
+                -status => HTTP_401_Unauthorized,
+                -WWW_Authenticate => 'Basic realm="Socialtext"',
+            );
+
+            Socialtext::Exception::Auth->throw('User not authorized');
+        }
+        else {
+            Socialtext::Exception::Auth->throw(
+                $current_user->username . ' may not impersonate');
+        }
     }
 }
 

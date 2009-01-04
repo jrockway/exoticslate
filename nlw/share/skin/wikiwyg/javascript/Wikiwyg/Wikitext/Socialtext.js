@@ -1899,9 +1899,15 @@ proto.format_a = function(elem) {
         return '';
     }
 
+    /* {bz: 176}: For <a><span style="..."></span></a>, merge the inner tag's style into A's. */
+    if (elem.childNodes.length == 1 && elem.childNodes[0].nodeType == 1) {
+        var additional_styles = elem.childNodes[0].getAttribute("style");
+        elem.setAttribute('style', elem.getAttribute('style') + ';' + additional_styles);
+    }
+
     this.check_start_of_block(elem);
     var label = Wikiwyg.htmlUnescape(elem.innerHTML);
-    label = label.replace(/<[^>]*?>/g, ' ');
+    label = label.replace(/<[^>]*>/g, ' ');
     label = label.replace(/\s+/g, ' ');
     label = label.replace(/^\s+/, '');
     label = label.replace(/\s+$/, '');

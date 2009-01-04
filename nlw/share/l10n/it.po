@@ -504,7 +504,7 @@ msgstr "Utenti"
 msgid "Accounts matching \"%1\""
 msgstr "Utenti che corrispondono a \"%1\""
 
-#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/view/page/display share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Add"
 msgstr "Aggiungi"
@@ -829,11 +829,6 @@ msgstr "Backup in corso - iniziato alle %1"
 msgid "Backup is in progress - started at never"
 msgstr "Backup in corso - iniziato alle %1"
 
-#: share/skin/s3/template/lightbox/create_content
-#.  
-msgid "Blank"
-msgstr ""
-
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "Bottom of page"
@@ -869,24 +864,29 @@ msgstr "Chiama '%1' via Skype. Clicca per modificare."
 msgid "Can't remove privileges of the last admin"
 msgstr "Non è possibile rimuovere i privilegi all'unica Amministratore"
 
-#: share/console-template/template/popup.html share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/s3/template/lightbox/create_content
+#: share/console-template/template/popup.html share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/create_content_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Cancel"
 msgstr "Annulla"
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "Cannot create field: The field name '%1' is already used in account '%2'"
+msgid "Cannot convert field class from '%1' to '%2'"
 msgstr ""
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "Cannot create field: The field name '%1' is reserved for Socialtext"
+msgid "Cannot create profile field: The field name '%1' is already used in account '%2'"
 msgstr ""
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "Cannot create field: invalid field-class '%1'"
+msgid "Cannot create profile field: The field name '%1' is reserved for Socialtext"
+msgstr ""
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "Cannot create profile field: invalid field-class '%1'"
 msgstr ""
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
@@ -907,6 +907,16 @@ msgstr "Non è possibile annullare la cancellazione di una pagina che ha una sol
 #: lib/Socialtext/Workspace.pm
 #. (
 msgid "Cannot write export file %1, aborting.\n"
+msgstr ""
+
+#: lib/Socialtext/Lite.pm
+#.  
+msgid "Categories"
+msgstr ""
+
+#: lib/Socialtext/Lite.pm
+#. (
+msgid "Category %1"
 msgstr ""
 
 #: share/skin/s3/template/element/settings/workspaces_settings_appearance_section
@@ -959,16 +969,6 @@ msgstr "Cronologico (prima i più vecchi)"
 msgid "Cleaning is not implemented."
 msgstr ""
 
-#: share/skin/s3/template/view/page/display
-#.  
-msgid "Click \"Browse\" and select an image or file to upload."
-msgstr "Premi \"Sfoglia\" e seleziona un'immagine o un file da caricare."
-
-#: share/skin/s3/template/view/page/display
-#.  
-msgid "Click \"Done\" to close this window."
-msgstr "Premi \"Eseguito\" per chiudere questa finestra."
-
 #: share/skin/s3/template/element/page/display/comment-button
 #.  
 msgid "Click this button to add a comment to the page"
@@ -1019,7 +1019,7 @@ msgstr "Fai click su questo pulsante per salvare le pagine che stai vedendo, per
 msgid "Click this button to save this page to your computer for offline use."
 msgstr "Fai click su questo pulsante per salvare la questa pagina sul tuo computer per usarla quando sei offline."
 
-#: share/console-template/template/popup.html
+#: share/console-template/template/popup.html share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Close"
 msgstr "Chiudi"
@@ -1084,11 +1084,6 @@ msgstr "Contenuti"
 msgid "Copy Page to Workspace"
 msgstr "Copia la pagina nello Spazio di lavoro"
 
-#: share/skin/s3/template/lightbox/create_content
-#.  
-msgid "Copy an existing page..."
-msgstr ""
-
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
 msgid "Could not extract files from the skin archive. This is most likely caused by a corrupt archive file. Please check your file and try the upload again."
@@ -1099,7 +1094,7 @@ msgstr "Non è stato possibile estrarre i file dall'archivio della skin. questo 
 msgid "Could not open %1"
 msgstr "Non è stato possibile aprire %1"
 
-#: share/skin/s3/template/lightbox/create_content share/template/control/report.html
+#: share/skin/s3/javascript/template/create_content_lightbox.tt2 share/template/control/report.html
 #.  
 msgid "Create"
 msgstr "Crea"
@@ -1108,11 +1103,6 @@ msgstr "Crea"
 #.  
 msgid "Create A Weblog"
 msgstr "Crea un weblog"
-
-#: share/skin/s3/template/lightbox/create_content
-#.  
-msgid "Create Content"
-msgstr ""
 
 #: share/console-template/template/setup.html share/console-template/template/setup.html
 #.  
@@ -1259,7 +1249,7 @@ msgstr "Cancella pagina"
 msgid "Delete Selected Attachments"
 msgstr "Cancella gli allegati selezionati"
 
-#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
 #.  
 msgid "Delete this attachment"
 msgstr ""
@@ -1354,11 +1344,6 @@ msgstr "Vuoi davvero chiudere l'applicazione?"
 msgid "Do you want to set up this workspace as:"
 msgstr "Imposta questo spazio di lavoro come:"
 
-#: share/skin/s3/template/view/page/display
-#.  
-msgid "Done"
-msgstr "Eseguito"
-
 #: lib/Socialtext/WikiwygPlugin.pm
 #.  
 msgid "Double-click to edit a page?"
@@ -1414,7 +1399,7 @@ msgstr "Email"
 msgid "Email Address"
 msgstr "Indirizzo email"
 
-#: lib/Socialtext/Authen.pm share/template/authen/element/register_form share/template/authen/forgot_password.html
+#: lib/Socialtext/Authen.pm share/template/authen/element/register_form
 #.  
 msgid "Email Address:"
 msgstr "Indirizzo email:"
@@ -1488,6 +1473,16 @@ msgstr "Errore durante l'aggiornamento dal timeserver %1"
 #.  
 msgid "Error:<pre>No pages selected for export</pre>\n"
 msgstr "Errore:<pre>Nessuna pagina da esportare selezionata</pre>\n"
+
+#: lib/Socialtext/Rest/EventsBase.pm
+#.  
+msgid "Events"
+msgstr ""
+
+#: lib/Socialtext/Rest/Events/Page.pm
+#. (
+msgid "Events for %1 in %2"
+msgstr ""
 
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
@@ -1614,7 +1609,7 @@ msgstr ""
 msgid "Exporting workspace %1 ..."
 msgstr ""
 
-#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
 #.  
 msgid "Extract this attachment"
 msgstr ""
@@ -1964,6 +1959,11 @@ msgstr "Intranet"
 msgid "Invalid character '/' in changes parameter"
 msgstr "Carattere '/' invalido fra i parametri di modifica"
 
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "Invalid field source '%1'"
+msgstr ""
+
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
 msgid "Invalid host: %1"
@@ -2159,7 +2159,7 @@ msgstr "Elenca tutti gli utenti"
 msgid "Loaded users from %1"
 msgstr ""
 
-#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page/display share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Loading..."
 msgstr "Caricamento..."
@@ -2249,11 +2249,6 @@ msgstr ""
 msgid "March"
 msgstr "Marzo"
 
-#: share/skin/s3/template/view/page/display
-#.  
-msgid "Maximum file size: 50MB"
-msgstr "Dimensione massima del file: 50MB"
-
 #: share/template/control/report.html
 #.  
 msgid "May"
@@ -2273,6 +2268,11 @@ msgstr ""
 #.  
 msgid "Mon"
 msgstr "Lun"
+
+#: lib/Socialtext/CLI.pm
+#.  
+msgid "Must specify the name of the field to change"
+msgstr ""
 
 #: lib/Socialtext/Rest/Events/Followed.pm
 #.  
@@ -2454,12 +2454,12 @@ msgstr "Non ci sono ancora statistiche per questa pagina"
 msgid "No users entered"
 msgstr "Nessun utente inserito"
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "None"
 msgstr ""
 
-#: share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/page/revision
+#: share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/page/revision share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Normal View"
 msgstr "Vista Normale"
@@ -2514,7 +2514,7 @@ msgstr "Solo gli utenti registrati possono spedire email a %1."
 msgid "Only workspace members can send email to %1."
 msgstr "Solo gli utenti dello spazio di lavoro possono spedire email a %1."
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "Optional modules installed:"
 msgstr ""
@@ -2539,7 +2539,7 @@ msgstr "Mail server in uscita"
 msgid "Overview"
 msgstr "Vista d'insieme"
 
-#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/create_content.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/paging
+#: share/skin/s3/javascript/create_content.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/paging
 #.  
 msgid "Page"
 msgstr "Pagina"
@@ -2759,12 +2759,12 @@ msgstr "Preferenze salvate"
 msgid "Preferences: %1"
 msgstr "Preferenze: %1"
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "Press 'OK' to disable this module or 'Cancel' to exit."
 msgstr ""
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "Press 'OK' to enable this module or 'Cancel' to exit."
 msgstr ""
@@ -2814,9 +2814,19 @@ msgstr "Privato"
 msgid "Profile"
 msgstr ""
 
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "Profile field '%1' does not exist for account '%2'"
+msgstr ""
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "Profile field '%1' updated for account '%2'"
+msgstr ""
+
 #: lib/Socialtext/MassAdd.pm
 #. (
-msgid "Profile field \"%1\" does not exist for this account"
+msgid "Profile field \"%1\" could not be updated"
 msgstr ""
 
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
@@ -2864,7 +2874,7 @@ msgstr "Riavviare l'appliance?"
 msgid "Reboot Now"
 msgstr "Riavvia ora"
 
-#: lib/Socialtext/Lite.pm lib/Socialtext/SyndicatePlugin.pm lib/Socialtext/WeblogPlugin.pm share/skin/s3/template/view/weblog
+#: lib/Socialtext/Lite.pm lib/Socialtext/SyndicatePlugin.pm lib/Socialtext/WeblogPlugin.pm lib/Socialtext/WeblogPlugin.pm lib/Socialtext/WeblogPlugin.pm lib/Socialtext/WeblogPlugin.pm share/skin/s3/template/view/weblog
 #.  
 msgid "Recent Changes"
 msgstr "Modifiche recenti"
@@ -3119,7 +3129,7 @@ msgstr "Esempio di Weblog"
 msgid "Sat"
 msgstr "Sab"
 
-#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Save"
 msgstr "Salva"
@@ -3329,7 +3339,7 @@ msgstr "Spegni"
 msgid "Shutdown Appliance?"
 msgstr "Spegnere l'Appliance?"
 
-#: share/template/authen/forgot_password.html
+#: lib/Socialtext/Handler/Authen.pm
 #.  
 msgid "Since your password is stored in the directory for your organization, there is no way to reset your password within the Socialtext system. Please contact your directory administrator for assistance."
 msgstr ""
@@ -4071,7 +4081,12 @@ msgstr "URI"
 
 #: lib/Socialtext/CLI.pm
 #.  
-msgid "Unable to create field."
+msgid "Unable to change profile field."
+msgstr ""
+
+#: lib/Socialtext/CLI.pm
+#.  
+msgid "Unable to create profile field."
 msgstr ""
 
 #: lib/Socialtext/Appliance/PhoneHome.pm
@@ -4099,7 +4114,7 @@ msgstr "Annulla l'iscrizione"
 msgid "Unsubscribe from the %1 workspace"
 msgstr "Annulla l'iscrizione allo spazio di lavoro %1"
 
-#: lib/Socialtext/DisplayPlugin.pm lib/Socialtext/Page.pm share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-s3.js
+#: lib/Socialtext/DisplayPlugin.pm lib/Socialtext/Page.pm share/skin/s3/javascript/s3.js share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/javascript/socialtext-s3.js
 #.  
 msgid "Untitled Page"
 msgstr "Pagina senza titolo"
@@ -4144,7 +4159,7 @@ msgstr "Carica"
 msgid "Upload An Image"
 msgstr "Carica un'immagine"
 
-#: share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/template/attachment_lightbox.tt2 share/skin/s3/template/view/page/display
 #.  
 msgid "Upload Files"
 msgstr "Carica file"
@@ -4164,7 +4179,7 @@ msgstr "Caricato da"
 msgid "Uploaded by"
 msgstr "Caricato da"
 
-#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display
 #. (
 msgid "Uploaded by %1 on %2. (%3 bytes)"
 msgstr ""
@@ -4188,11 +4203,6 @@ msgstr "Termine dell'utilizzo mezzanotte del:"
 #. (
 msgid "Use %1 to generate a form. Click to edit."
 msgstr "Usa %1 per generare un modulo. Fai click per modificare."
-
-#: share/skin/s3/template/lightbox/create_content
-#.  
-msgid "Use a template:"
-msgstr ""
 
 #: share/console-template/template/popup.html
 #.  
@@ -4444,7 +4454,7 @@ msgstr "Che lingua vuoi usare?"
 msgid "Who can send email to this workspace?"
 msgstr "Chi può spedire email a questo spazio di lavoro?"
 
-#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/template/view/listview
+#: share/skin/s3/template/view/listview
 #.  
 msgid "Workspace"
 msgstr "Spazio di lavoro"
@@ -4624,7 +4634,7 @@ msgstr "IM Yahoo!: %1"
 msgid "Yes"
 msgstr "Sì"
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "You are about to disable"
 msgstr ""
@@ -4894,12 +4904,12 @@ msgstr "categoria"
 msgid "click to create page"
 msgstr "fai click per creare una pagina"
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "click to disable"
 msgstr ""
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "click to enable"
 msgstr ""
@@ -5019,7 +5029,7 @@ msgstr "link interno allo spazio di lavoro: %1"
 msgid "intranet"
 msgstr "intranet"
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "is a paid option. For more information about fees, contact your sales representative."
 msgstr ""
@@ -5114,7 +5124,7 @@ msgstr "pubblico-solo-commenti"
 msgid "public-read-only"
 msgstr "pubblico-solo-lettura"
 
-#: lib/Socialtext/WeblogPlugin.pm lib/Socialtext/Widget_resource.pm
+#: lib/Socialtext/Widget_resource.pm
 #.  
 msgid "recent changes"
 msgstr "cambiamenti recenti"

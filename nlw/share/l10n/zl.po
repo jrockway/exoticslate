@@ -504,7 +504,7 @@ msgstr "ACCOUNTZ"
 msgid "Accounts matching \"%1\""
 msgstr "ACCOUNTZ MATCHIN \"%1\""
 
-#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/view/page/display share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Add"
 msgstr "ADD"
@@ -829,11 +829,6 @@ msgstr "BACKUP AR TEH IN PROGRESZ - STARTED AT %1"
 msgid "Backup is in progress - started at never"
 msgstr "BACKUP AR TEH IN PROGRESZ - STARTED AT NEVR"
 
-#: share/skin/s3/template/lightbox/create_content
-#.  
-msgid "Blank"
-msgstr "BLANK"
-
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "Bottom of page"
@@ -869,25 +864,30 @@ msgstr "CALL %1 USIN SKYPE. CLICK TO EDIT."
 msgid "Can't remove privileges of the last admin"
 msgstr "CANT REMUUV PRIVILEGEZ OF TEH LAST ADMIN"
 
-#: share/console-template/template/popup.html share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/s3/template/lightbox/create_content
+#: share/console-template/template/popup.html share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/create_content_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Cancel"
 msgstr "CANCEL"
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "Cannot create field: The field name '%1' is already used in account '%2'"
-msgstr "CANNOT CREATE FIELD: TEH FIELD NAME %1 AR TEH ALREDDY USED IN ACCOUNT %2"
+msgid "Cannot convert field class from '%1' to '%2'"
+msgstr "CANNOT CONVERT FIELD CLASZ FROM %1 TO %2"
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "Cannot create field: The field name '%1' is reserved for Socialtext"
-msgstr "CANNOT CREATE FIELD: TEH FIELD NAME %1 AR TEH RESERVED FR SOCIALTEXT"
+msgid "Cannot create profile field: The field name '%1' is already used in account '%2'"
+msgstr "CANNOT CREATE PROFILE FIELD: TEH FIELD NAME %1 AR TEH ALREDDY USED IN ACCOUNT %2"
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "Cannot create field: invalid field-class '%1'"
-msgstr "CANNOT CREATE FIELD: INVALID FIELD-CLASZ %1"
+msgid "Cannot create profile field: The field name '%1' is reserved for Socialtext"
+msgstr "CANNOT CREATE PROFILE FIELD: TEH FIELD NAME %1 AR TEH RESERVED FR SOCIALTEXT"
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "Cannot create profile field: invalid field-class '%1'"
+msgstr "CANNOT CREATE PROFILE FIELD: INVALID FIELD-CLASZ %1"
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #. (
@@ -908,6 +908,16 @@ msgstr "CANNOT UNDELETE PUJ WITH ONLY ONE REVISHUN. RETURNIN TO FRONT PUJ."
 #. (
 msgid "Cannot write export file %1, aborting.\n"
 msgstr "CANNOT WRITE EXPORT FILE %1, ABORTIN.\n"
+
+#: lib/Socialtext/Lite.pm
+#.  
+msgid "Categories"
+msgstr "CATEGORIEZ"
+
+#: lib/Socialtext/Lite.pm
+#. (
+msgid "Category %1"
+msgstr "CATEGORY %1"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_appearance_section
 #.  
@@ -959,16 +969,6 @@ msgstr "CHRONOLOGICALLY (OLDEST FIRST)"
 msgid "Cleaning is not implemented."
 msgstr "CLEANIN AR TEH NOT IMPLEMENTED."
 
-#: share/skin/s3/template/view/page/display
-#.  
-msgid "Click \"Browse\" and select an image or file to upload."
-msgstr "CLICK \"BROWSE\" AND SELECT AN IMUJ OR FILE TO UPLOAD."
-
-#: share/skin/s3/template/view/page/display
-#.  
-msgid "Click \"Done\" to close this window."
-msgstr "CLICK \"DONE\" TO CLOSE THIZ WINDOW."
-
 #: share/skin/s3/template/element/page/display/comment-button
 #.  
 msgid "Click this button to add a comment to the page"
@@ -1019,7 +1019,7 @@ msgstr "CLICK THIZ BUTTON 2 SAVE TEH PUJZ YURE WATCHIN FOAR OFFLINE USE."
 msgid "Click this button to save this page to your computer for offline use."
 msgstr "CLICK THIZ BUTTON TO SAVE THIZ PUJ 2 UR COMPUTR FOAR OFFLINE USE."
 
-#: share/console-template/template/popup.html
+#: share/console-template/template/popup.html share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Close"
 msgstr "CLOSE"
@@ -1084,11 +1084,6 @@ msgstr "CONTENTZ"
 msgid "Copy Page to Workspace"
 msgstr "COPY PUJ TO WORKSPACE"
 
-#: share/skin/s3/template/lightbox/create_content
-#.  
-msgid "Copy an existing page..."
-msgstr "COPY AN EXISTIN PUJ.."
-
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
 msgid "Could not extract files from the skin archive. This is most likely caused by a corrupt archive file. Please check your file and try the upload again."
@@ -1099,7 +1094,7 @@ msgstr "COULD NOT EXTRACT FILEZ FROM TEH SKIN ARCHIVE. THIZ AR TEH MOST LIKESLY 
 msgid "Could not open %1"
 msgstr "COULD NOT OPEN %1"
 
-#: share/skin/s3/template/lightbox/create_content share/template/control/report.html
+#: share/skin/s3/javascript/template/create_content_lightbox.tt2 share/template/control/report.html
 #.  
 msgid "Create"
 msgstr "CREATE"
@@ -1108,11 +1103,6 @@ msgstr "CREATE"
 #.  
 msgid "Create A Weblog"
 msgstr "CREATE WEBLOG"
-
-#: share/skin/s3/template/lightbox/create_content
-#.  
-msgid "Create Content"
-msgstr "CREATE CONTENT"
 
 #: share/console-template/template/setup.html share/console-template/template/setup.html
 #.  
@@ -1259,7 +1249,7 @@ msgstr "DELETE PUJ"
 msgid "Delete Selected Attachments"
 msgstr "DELETE SELECTED ATTACHMENTZ"
 
-#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
 #.  
 msgid "Delete this attachment"
 msgstr "DELETE THIZ ATTACHMENT"
@@ -1354,11 +1344,6 @@ msgstr "DO YU RILLEY WANTZ 2 SHUTDOWN TEH APPLIANCE?"
 msgid "Do you want to set up this workspace as:"
 msgstr "DO YU WANTZ 2 SET UP THIZ WORKSPACE AZ:"
 
-#: share/skin/s3/template/view/page/display
-#.  
-msgid "Done"
-msgstr "DONE"
-
 #: lib/Socialtext/WikiwygPlugin.pm
 #.  
 msgid "Double-click to edit a page?"
@@ -1414,7 +1399,7 @@ msgstr "EMAIL"
 msgid "Email Address"
 msgstr "EMAIL ADDRESZ"
 
-#: lib/Socialtext/Authen.pm share/template/authen/element/register_form share/template/authen/forgot_password.html
+#: lib/Socialtext/Authen.pm share/template/authen/element/register_form
 #.  
 msgid "Email Address:"
 msgstr "EMAIL ADDRESZ:"
@@ -1488,6 +1473,16 @@ msgstr "ERROR UPDATIN FROM TIMESERVR %1"
 #.  
 msgid "Error:<pre>No pages selected for export</pre>\n"
 msgstr "ERROR:<PRE>NO PUJZ SELECTED FOR EXPORT</PRE>\n"
+
+#: lib/Socialtext/Rest/EventsBase.pm
+#.  
+msgid "Events"
+msgstr "EVENTZ"
+
+#: lib/Socialtext/Rest/Events/Page.pm
+#. (
+msgid "Events for %1 in %2"
+msgstr "EVENTZ FOR %1 IN %2"
 
 #: lib/Socialtext/EmailNotifyPlugin.pm
 #.  
@@ -1614,7 +1609,7 @@ msgstr "EXPORTIN ACCOUNT %1 .."
 msgid "Exporting workspace %1 ..."
 msgstr "EXPORTIN WORKSPACE %1 .."
 
-#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
 #.  
 msgid "Extract this attachment"
 msgstr "EXTRACT THIZ ATTACHMENT"
@@ -1964,6 +1959,11 @@ msgstr "INTRANET"
 msgid "Invalid character '/' in changes parameter"
 msgstr "INVALID CHARACTR / IN CHANGEZ PARAMETR"
 
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "Invalid field source '%1'"
+msgstr "INVALID FIELD SOURCE %1"
+
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
 msgid "Invalid host: %1"
@@ -2159,7 +2159,7 @@ msgstr "LIST ALL USERZ"
 msgid "Loaded users from %1"
 msgstr "LOADED USERZ FROM %1"
 
-#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page/display share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Loading..."
 msgstr "LOADIN.."
@@ -2249,11 +2249,6 @@ msgstr "MANUJ FILEZ"
 msgid "March"
 msgstr "MARCH"
 
-#: share/skin/s3/template/view/page/display
-#.  
-msgid "Maximum file size: 50MB"
-msgstr "MAXIMUM FILE SIZE: 50MB"
-
 #: share/template/control/report.html
 #.  
 msgid "May"
@@ -2273,6 +2268,11 @@ msgstr "MODULE HAZ BEEN %1."
 #.  
 msgid "Mon"
 msgstr "MON"
+
+#: lib/Socialtext/CLI.pm
+#.  
+msgid "Must specify the name of the field to change"
+msgstr "MUST SPECIFY TEH NAME OV TEH FIELD TO CHANGE"
 
 #: lib/Socialtext/Rest/Events/Followed.pm
 #.  
@@ -2454,12 +2454,12 @@ msgstr "NO STATZ FOR THIZ PUJ YET"
 msgid "No users entered"
 msgstr "NO USERZ ENTERED"
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "None"
 msgstr "NONE"
 
-#: share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/page/revision
+#: share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/page/revision share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Normal View"
 msgstr "NORMAL VIEW"
@@ -2514,7 +2514,7 @@ msgstr "ONLY REGISTERED USERZ CAN SEND EMAIL TO %1."
 msgid "Only workspace members can send email to %1."
 msgstr "ONLY WORKSPACE MEMBERZ CAN SEND EMAIL TO %1."
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "Optional modules installed:"
 msgstr "OPSHUNAL MODULEZ INSTALLED:"
@@ -2539,7 +2539,7 @@ msgstr "OUTGOIN MAIL SERVR"
 msgid "Overview"
 msgstr "OVERVIEW"
 
-#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/create_content.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/paging
+#: share/skin/s3/javascript/create_content.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/paging
 #.  
 msgid "Page"
 msgstr "PUJ"
@@ -2759,12 +2759,12 @@ msgstr "PREFERENCEZ SAVED"
 msgid "Preferences: %1"
 msgstr "PREFERENCEZ: %1"
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "Press 'OK' to disable this module or 'Cancel' to exit."
 msgstr "PRESZ KAY TO DISABLE THIZ MODULE OR CANCEL 2 EXIT."
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "Press 'OK' to enable this module or 'Cancel' to exit."
 msgstr "PRESZ KAY TO ENABLE THIZ MODULE OR CANCEL 2 EXIT."
@@ -2814,10 +2814,20 @@ msgstr "PRIVATE"
 msgid "Profile"
 msgstr "PROFILE"
 
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "Profile field '%1' does not exist for account '%2'"
+msgstr "PROFILE FIELD %1 DOEZ NOT EXIST FOR ACCOUNT %2"
+
+#: lib/Socialtext/CLI.pm
+#. (
+msgid "Profile field '%1' updated for account '%2'"
+msgstr "PROFILE FIELD %1 UPDATED FOR ACCOUNT %2"
+
 #: lib/Socialtext/MassAdd.pm
 #. (
-msgid "Profile field \"%1\" does not exist for this account"
-msgstr "PROFILE FIELD \"%1\" DOEZ NOT EXIST FOR THIZ ACCOUNT"
+msgid "Profile field \"%1\" could not be updated"
+msgstr "PROFILE FIELD \"%1\" COULD NOT BE UPDATED"
 
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
 #.  
@@ -2864,7 +2874,7 @@ msgstr "REBOOT APPLIANCE?"
 msgid "Reboot Now"
 msgstr "REBOOT NOW"
 
-#: lib/Socialtext/Lite.pm lib/Socialtext/SyndicatePlugin.pm lib/Socialtext/WeblogPlugin.pm share/skin/s3/template/view/weblog
+#: lib/Socialtext/Lite.pm lib/Socialtext/SyndicatePlugin.pm lib/Socialtext/WeblogPlugin.pm lib/Socialtext/WeblogPlugin.pm lib/Socialtext/WeblogPlugin.pm lib/Socialtext/WeblogPlugin.pm share/skin/s3/template/view/weblog
 #.  
 msgid "Recent Changes"
 msgstr "RECENT CHANGEZ"
@@ -3119,7 +3129,7 @@ msgstr "SAMPLE WEBLOG"
 msgid "Sat"
 msgstr "SAT"
 
-#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Save"
 msgstr "SAVE"
@@ -3329,7 +3339,7 @@ msgstr "SHUTDOWN"
 msgid "Shutdown Appliance?"
 msgstr "SHUTDOWN APPLIANCE?"
 
-#: share/template/authen/forgot_password.html
+#: lib/Socialtext/Handler/Authen.pm
 #.  
 msgid "Since your password is stored in the directory for your organization, there is no way to reset your password within the Socialtext system. Please contact your directory administrator for assistance."
 msgstr "SINCE YUR PASSWORD AR TEH STORED IN TEH DIRECTORY FR YUR ORGANIZASHUN, THERE AR TEH NO WAY T RESET YOAR PASSWORD WITHIN TEH SOCIALTEXT SYSTEM. PLEEZ CONTACT YOAR DIRECTORY ADMINISTRATOR FUR ASSISTANCE."
@@ -4071,8 +4081,13 @@ msgstr "URI"
 
 #: lib/Socialtext/CLI.pm
 #.  
-msgid "Unable to create field."
-msgstr "UNABLE TO CREATE FIELD."
+msgid "Unable to change profile field."
+msgstr "UNABLE TO CHANGE PROFILE FIELD."
+
+#: lib/Socialtext/CLI.pm
+#.  
+msgid "Unable to create profile field."
+msgstr "UNABLE TO CREATE PROFILE FIELD."
 
 #: lib/Socialtext/Appliance/PhoneHome.pm
 #. (
@@ -4099,7 +4114,7 @@ msgstr "UNSUBSCRIBE"
 msgid "Unsubscribe from the %1 workspace"
 msgstr "UNSUBSCRIBE FROM TEH %1 WORKSPACE"
 
-#: lib/Socialtext/DisplayPlugin.pm lib/Socialtext/Page.pm share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-s3.js
+#: lib/Socialtext/DisplayPlugin.pm lib/Socialtext/Page.pm share/skin/s3/javascript/s3.js share/skin/s3/javascript/s3.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/javascript/socialtext-s3.js
 #.  
 msgid "Untitled Page"
 msgstr "UNTITLED PUJ"
@@ -4144,7 +4159,7 @@ msgstr "UPLOAD"
 msgid "Upload An Image"
 msgstr "UPLOAD AN IMUJ"
 
-#: share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/template/attachment_lightbox.tt2 share/skin/s3/template/view/page/display
 #.  
 msgid "Upload Files"
 msgstr "UPLOAD FILEZ"
@@ -4164,7 +4179,7 @@ msgstr "UPLOADED BY"
 msgid "Uploaded by"
 msgstr "UPLOADED BY"
 
-#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-s3.js share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display
 #. (
 msgid "Uploaded by %1 on %2. (%3 bytes)"
 msgstr "UPLOADED BY %1 ON %2. (%3 BYTEZ)"
@@ -4188,11 +4203,6 @@ msgstr "USUJ ENDIN MIDNITE OV:"
 #. (
 msgid "Use %1 to generate a form. Click to edit."
 msgstr "USE %1 TO GENERATE FOARM. CLICK 2 EDIT."
-
-#: share/skin/s3/template/lightbox/create_content
-#.  
-msgid "Use a template:"
-msgstr "USE TEMPLATE:"
 
 #: share/console-template/template/popup.html
 #.  
@@ -4444,7 +4454,7 @@ msgstr "WHICH LANGUUJ DO YU USE?"
 msgid "Who can send email to this workspace?"
 msgstr "HOO CAN SEND EMAIL TO THIZ WORKSPACE?"
 
-#: share/skin/s3/javascript/Wikiwyg/Jemplate.js share/skin/s3/template/view/listview
+#: share/skin/s3/template/view/listview
 #.  
 msgid "Workspace"
 msgstr "WORKSPACE"
@@ -4624,7 +4634,7 @@ msgstr "YAHOO! IM: %1"
 msgid "Yes"
 msgstr "YEZ"
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "You are about to disable"
 msgstr "YU AR ABOUT 2 DISABLE"
@@ -4894,12 +4904,12 @@ msgstr "CATEGORY"
 msgid "click to create page"
 msgstr "CLICK TO CREATE PUJ"
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "click to disable"
 msgstr "CLICK TO DISABLE"
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "click to enable"
 msgstr "CLICK TO ENABLE"
@@ -5019,7 +5029,7 @@ msgstr "INTR-WORKSPACE LINK: %1"
 msgid "intranet"
 msgstr "INTRANET"
 
-#: share/template/control/account.html
+#: share/template/control/plugins
 #.  
 msgid "is a paid option. For more information about fees, contact your sales representative."
 msgstr "AR TEH PAID OPSHUN. FR MOAR INFOARMASHUN ABOUT FEEZ, CONTACT UR SALEZ REPRESENTATIVE."
@@ -5114,7 +5124,7 @@ msgstr "PUBLIC-COMMENT-ONLY"
 msgid "public-read-only"
 msgstr "PUBLIC-REDD-ONLY"
 
-#: lib/Socialtext/WeblogPlugin.pm lib/Socialtext/Widget_resource.pm
+#: lib/Socialtext/Widget_resource.pm
 #.  
 msgid "recent changes"
 msgstr "RECENT CHANGEZ"

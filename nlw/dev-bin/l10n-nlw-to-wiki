@@ -22,6 +22,9 @@ my @files = get_files(
         "lib/", 
         "share/skin/s3/template", 
         "share/skin/s3/javascript", 
+        "share/skin/s3/javascript/template", 
+        "share/skin/wikiwyg/javascript/jemplate_wikiwyg/",
+        "share/skin/wikiwyg/javascript/jemplate_wikiwyg/element/",
         "share/console-template", 
         "build/templates/socialtext",
         "share/template/authen",
@@ -33,6 +36,8 @@ my @files = get_files(
     includes => [
         qr#\.(?:pm|js|tt2)$#, 
         qr#share/skin/s3/template#,
+        qr#share/skin/s3/javascript#,
+        qr#share/skin/wikiwyg/javascript#,
         qr#share/template/control#,
         qr#share/template/email#,
         qr#share/template/authen#,
@@ -56,8 +61,12 @@ exit;
 
 sub update_enterprise_features {
     for my $dir (qw/appliance control/) {
-        my $fulldir = readlink "$ENV{ST_CURRENT}/$dir";
-        if ($ENV{SVN_COMMAND} eq 'svk') {
+        my $dirname = "$ENV{ST_CURRENT}/$dir";
+        my $fulldir = -d $dirname ? $dirname : readlink $dirname;
+        if (-d "$fulldir/.git") {
+            shell_run("cd $fulldir; git pull --rebase");
+        }
+        elsif ($ENV{SVN_COMMAND} eq 'svk') {
             shell_run("svk up -s $fulldir");
         }
         else {

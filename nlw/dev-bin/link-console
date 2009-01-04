@@ -32,6 +32,10 @@ else {
     die "Appliance repo is not checked out to $appliance_base" unless -d $appliance_base;
 }
 
+if (!-d $console_dir && -d "$appliance_base/.git") {
+    $console_dir = "$appliance_base/libsocialtext-appliance-perl";
+}
+
 unless (-d $console_dir) {
     warn "Couldn't find console branch '$console_dir' - using trunk";
     $console_dir = "$appliance_base/trunk/libsocialtext-appliance-perl";

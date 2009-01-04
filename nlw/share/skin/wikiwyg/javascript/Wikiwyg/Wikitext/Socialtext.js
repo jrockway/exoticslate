@@ -1371,7 +1371,16 @@ proto.convert_html_to_wikitext = function(html) {
                     $(this).contents().each(cleanup_newlines);
                 }
             }
-            $dom.contents().each(cleanup_newlines);;
+            var contents = $dom.find('div.wiki').contents();
+            if (contents.length > 0) {
+                if (contents[0].nodeType == 3) {
+                    contents[0].nodeValue = contents[0].nodeValue.replace(/^\n/, '');
+                }
+                if (contents[contents.length-1].nodeType == 3) {
+                    contents[contents.length-1].nodeValue = contents[contents.length-1].nodeValue.replace(/\n$/, '');
+                }
+                contents.each(cleanup_newlines);
+            }
             html = $dom.html();
         }
     })(jQuery);

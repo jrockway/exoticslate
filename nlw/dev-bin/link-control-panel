@@ -21,6 +21,10 @@ print "Linking in control panel from $branch...\n\n";
 my $control_base = "$ENV{HOME}/src/st/control";
 my $control_dir = "$control_base/$branch";
 
+if (!-d $control_dir && -d "$control_base/.git") {
+    $control_dir = $control_base
+}
+
 # Look for a symlink to the control panel area beside nlw/
 my $possible_dir = "$FindBin::Bin/../../control";
 if (!$branch_arg and -d $possible_dir) {

@@ -231,10 +231,11 @@ $(function() {
         return false;
     });
 
-    $("#st-create-content-link, .incipient").unbind("click").click(function () {
+    $("#st-create-content-link, .incipient").unbind("click").click(function (e, data) {
         var $anchor = jQuery(this);
 
         var title;
+
         if ($anchor.hasClass('incipient')) {
             var match = $anchor.attr('href').match(/page_name=([^;#]+)/);
             if (match) {
@@ -243,6 +244,9 @@ $(function() {
             else {
                 title = $anchor.text();
             }
+        }
+        else if (data) {
+            title = data.title
         }
 
         get_lightbox(function () {
@@ -429,7 +433,10 @@ $(function() {
         );
     });
 
-    if (Socialtext.new_page ||
+    if ( Socialtext.new_page && Socialtext.page_title != loc("Untitled Page") && !location.href.toString().match(/action=display;/)) {
+        $("#st-create-content-link").trigger("click", { title: Socialtext.page_title })
+    }
+    else if (Socialtext.new_page||
         Socialtext.start_in_edit_mode ||
         location.hash.toLowerCase() == '#edit' ) {
         setTimeout(function() {

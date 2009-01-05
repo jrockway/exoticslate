@@ -439,6 +439,11 @@ sub _create_from_name {
 sub delete {
     my ($self) = @_;
 
+    my $workspaces = $self->workspaces;
+    while ( my $ws = $workspaces->next ) {
+        $ws->delete();
+    }
+
     sql_execute( 'DELETE FROM "Account" WHERE account_id=?',
         $self->account_id );
 }

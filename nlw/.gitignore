@@ -66,6 +66,7 @@ lib/Socialtext/Noun/Signal.pm
 # share excludes
 share/console-template/
 share/template/control
+share/widgets/*.png
 
 # t excludes
 t/Socialtext/CLI-profile-fields.t
@@ -78,3 +79,4 @@ t/widget/
 t/wikitests/people/
 t/wikitests/signals/
 t/wikitests/widgets/
+t/Socialtext/User/LDAP-profile-fields.t

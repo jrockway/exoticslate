@@ -31,7 +31,7 @@
         <a id="st-weblog-newpost-button" class="newPostButton" href="[% script_name %]?action=new_page;add_tag=[% tag_escaped %];caller_action=weblog_display" title="[% loc('Click this button to create a new blog post') %]">[% loc('New Post') %]</a>
         [% END %]
       </div>
-    [% IF is_real_tag AND checker.check_permission('edit') %]
+    [% IF is_real_category AND checker.check_permission('edit') %]
     <div class="goTo postByEmail"> <a href="mailto:[% email_tag_address %]">[% loc('or post by email') %]</a></div>
     [% END %]
   </div><!-- controlsRight END -->

@@ -123,8 +123,8 @@ sub current_page {
 }
 
 sub current_workspace {
-  my $self = shift;
-  return $self->hub->current_workspace->name;
+    my $self = shift;
+    return $self->hub->current_workspace;
 }
 
 sub add_rest {

@@ -8,10 +8,13 @@ our $DEFAULT_WORKSPACE = 'default';
 our $CODE_BASE = '/codebase';
 our $SCRIPT_NAME = '/scripts';
 
-sub db_connect_params {+{
-    db_name => "NLW_$ENV{USER}_testing",
-    user => $ENV{USER},
-}}
+sub db_connect_params {
+    my %params = (
+        db_name => "NLW_$ENV{USER}_testing",
+        user => $ENV{USER},
+    );
+    return wantarray ? %params : \%params;
+}
 
 sub syslog_level { 1 }
 

@@ -63,7 +63,15 @@ sub update_enterprise_features {
     for my $dir (qw/appliance control/) {
         my $dirname = "$ENV{ST_CURRENT}/$dir";
         my $fulldir = -d $dirname ? $dirname : readlink $dirname;
-        shell_run("cd $fulldir; git pull --rebase");
+        if (-d "$fulldir/.git") {
+            shell_run("cd $fulldir; git pull --rebase");
+        }
+        elsif ($ENV{SVN_COMMAND} eq 'svk') {
+            shell_run("svk up -s $fulldir");
+        }
+        else {
+            shell_run("svn up $fulldir");
+        }
     }
 }
 

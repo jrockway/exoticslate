@@ -77,6 +77,7 @@ proto.enableThis = function() {
 
 proto.enableStarted = function() {
     jQuery(".table_buttons").addClass("disabled");
+    jQuery('#st-mode-wikitext-button').addClass('disabled');
 }
 
 proto.setHeightOfEditor = function() {
@@ -1370,7 +1371,16 @@ proto.convert_html_to_wikitext = function(html) {
                     $(this).contents().each(cleanup_newlines);
                 }
             }
-            $dom.contents().each(cleanup_newlines);;
+            var contents = $dom.find('div.wiki').contents();
+            if (contents.length > 0) {
+                if (contents[0].nodeType == 3) {
+                    contents[0].nodeValue = contents[0].nodeValue.replace(/^\n/, '');
+                }
+                if (contents[contents.length-1].nodeType == 3) {
+                    contents[contents.length-1].nodeValue = contents[contents.length-1].nodeValue.replace(/\n$/, '');
+                }
+                contents.each(cleanup_newlines);
+            }
             html = $dom.html();
         }
     })(jQuery);
@@ -1708,12 +1718,7 @@ proto.handle_include = function(text, elem) {
     return text;
 }
 
-proto.format_span = function(elem) {
-    if (
-        (elem.className == 'nlw_phrase') ||
-        this.get_wiki_comment(elem)
-    ) return this.handle_nlw_phrase(elem);
-
+proto._format_one_line = function(elem) {
     var style = this.squish_style_object_into_string(elem.style);
 
     /* If the style is not interesting, we pretend it's not there, instead
@@ -1744,6 +1749,15 @@ proto.format_span = function(elem) {
     if (style.match(/text-decoration: line-through;/))
         elem.wikitext = this.format_strike(elem);
     return elem.wikitext;
+}
+
+proto.format_span = function(elem) {
+    if (
+        (elem.className == 'nlw_phrase') ||
+        this.get_wiki_comment(elem)
+    ) return this.handle_nlw_phrase(elem);
+
+    return this._format_one_line(elem);
 }
 
 proto.format_indent = function(elem) {
@@ -1856,40 +1870,18 @@ proto.format_tbody = function(elem) {
     return elem.wikitext;
 }
 
-proto.format_h1 = function(elem) {
-    elem.top_level_block = true;
-    var text = '^ ' + elem.wikitext;
-    return text.replace(/\n*$/, '\n');
-}
-
-proto.format_h2 = function(elem) {
-    elem.top_level_block = true;
-    var text = '^^ ' + elem.wikitext;
-    return text.replace(/\n*$/, '\n');
-}
-
-proto.format_h3 = function(elem) {
-    elem.top_level_block = true;
-    var text = '^^^ ' + elem.wikitext;
-    return text.replace(/\n*$/, '\n');
-}
-
-proto.format_h4 = function(elem) {
-    elem.top_level_block = true;
-    var text = '^^^^ ' + elem.wikitext;
-    return text.replace(/\n*$/, '\n');
-}
-
-proto.format_h5 = function(elem) {
-    elem.top_level_block = true;
-    var text = '^^^^^ ' + elem.wikitext;
-    return text.replace(/\n*$/, '\n');
-}
-
-proto.format_h6 = function(elem) {
-    elem.top_level_block = true;
-    var text = '^^^^^^ ' + elem.wikitext;
-    return text.replace(/\n*$/, '\n');
+for (var i = 1; i <= 6; i++) {
+    var padding = ' ';
+    for (var j = 1; j <= i; j++) {
+        padding = '^' + padding;
+    }
+    (function(p){
+        proto['format_h'+i] = function(elem) {
+            elem.top_level_block = true;
+            var text = p + this._format_one_line(elem);
+            return text.replace(/\n*$/, '\n');
+        };
+    })(padding);
 }
 
 proto.format_pre = function(elem) {
@@ -1907,9 +1899,15 @@ proto.format_a = function(elem) {
         return '';
     }
 
+    /* {bz: 176}: For <a><span style="..."></span></a>, merge the inner tag's style into A's. */
+    if (elem.childNodes.length == 1 && elem.childNodes[0].nodeType == 1) {
+        var additional_styles = elem.childNodes[0].getAttribute("style");
+        elem.setAttribute('style', elem.getAttribute('style') + ';' + additional_styles);
+    }
+
     this.check_start_of_block(elem);
     var label = Wikiwyg.htmlUnescape(elem.innerHTML);
-    label = label.replace(/<[^>]*?>/g, ' ');
+    label = label.replace(/<[^>]*>/g, ' ');
     label = label.replace(/\s+/g, ' ');
     label = label.replace(/^\s+/, '');
     label = label.replace(/\s+$/, '');
@@ -1937,7 +1935,9 @@ proto.format_a = function(elem) {
 
     elem.fixup = 'strip_ears';
 
-    return link;
+    elem.wikitext = link;
+
+    return this._format_one_line(elem);
 }
 
 // Remove < > (ears) from links if possible

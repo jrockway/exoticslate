@@ -117,11 +117,12 @@ $(function() {
     });
 
     $('.delete_attachment').unbind('click').click(function () {
+        var self = this;
         get_lightbox(function() {
-            $(this).children('img')
+            $(self).children('img')
                 .attr('src', '/static/skin/common/images/ajax-loader.gif');
             Attachments.delAttachment(
-                $(this).prevAll('a[href!=#]').attr('href'), true
+                $(self).prevAll('a[href!=#]').attr('href'), true
             );
         });
         return false

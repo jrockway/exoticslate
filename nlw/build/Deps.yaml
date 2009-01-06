@@ -38,9 +38,9 @@ DateTime::Format::HTTP: 0.36
 DateTime::Format::Mail: 0.2901
 DateTime::Format::Pg: 0.10
 DateTime::Format::Strptime: 1.0700
-DBD::Pg: 1.43
+DBD::Pg: 2.11.7 
 DB_File::Lock: 0.05
-DBI: 1.48
+DBI: 1.607
 Digest::MD5: 2.33
 Digest::SHA1: 0
 # 1.884 fixes major bugs in the output of ->format, which we use in ST::Workspace

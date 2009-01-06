@@ -43,6 +43,8 @@ edit a page to include a link to an orphan sheet | link appears in page
 
 | *Comment* | Test Case: Calc Orphans List. Create a link to the second orphan sheet |  |
 | open_ok | /%%workspace%%/index.cgi?orphan page 1 %%start_time%% |  |
+| wait_for_element_visible_ok | st-create-content-savelink |  |
+| click_ok | st-create-content-savelink |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |

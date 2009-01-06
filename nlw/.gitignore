@@ -123,3 +123,7 @@ etc/socialtext/uri_map.d/people.yaml
 t/Socialtext/Noun/Signal.t
 t/wikitests/signals/data_signals.wiki
 etc/socialtext/uri_map.d/signals.yaml
+
+# log excludes
+dev-bin/test_access.log
+dev-bin/test_nlw.log

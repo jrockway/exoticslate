@@ -50,8 +50,8 @@
 
  st-admin | deactivate-user --username %%cli_user%% | qr/%%cli_user%% has been removed from workspaces.+%%cmdline_workspace%%(,.+%%workspace%%)?/ |
 
-| *Comment* | Test Case: Command Line LDAP user Add member BACK to %%workspace%% |  |
-| st-admin | add-workspace-admin --username %%cli_user%% --workspace %%workspace%% | %%cli_user%% is now a workspace admin for the %%workspace%% workspace. |
+ *Comment* | Test Case: Command Line LDAP user Add member BACK to %%workspace%% | |
+ st-admin | add-workspace-admin --username %%cli_user%% --workspace %%workspace%% | %%cli_user%% is now a workspace admin for the %%workspace%% workspace. |
 
 | *Comment* | Test Case: Command Line LDAP USERS commands should fail |  |
 | st-admin | create-user --username %%cli_user%% | The username you provided, "%%cli_user%%", is already in use. |

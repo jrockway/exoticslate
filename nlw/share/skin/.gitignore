@@ -1,0 +1,13 @@
+# most everything in this directory is ignorable
+*
+
+# list things to *not* exclude here:
+!.gitignore
+!Makefile
+!s3/*
+!blues3/*
+!reds3/*
+!common/*
+!js-test/*
+!st/*
+!wikiwyg/*

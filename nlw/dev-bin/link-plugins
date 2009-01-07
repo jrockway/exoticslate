@@ -43,6 +43,12 @@ sub link_directory {
                     warn "linking $to\n";
                     symlink $from, $to or die "Cannot link $from to $to: $!";
                 }
+
+                # add an entry to the local .gitignore if it's missing
+                $to =~ s{^$todir/}{};
+                unless (`grep $to .gitignore`) {
+                    system("echo $to >> .gitignore");
+                }
             }
         },
         no_chdir => 1,

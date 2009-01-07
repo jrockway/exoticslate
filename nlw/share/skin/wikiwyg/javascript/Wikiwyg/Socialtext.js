@@ -1562,12 +1562,82 @@ proto.enableThis = function() {
                 }
                 self.set_clear_handler();
             }
+
+            return; // XXX - Disable Paste until it is a little bit more stable.
+
+            self.pastebin = jQuery("#pastebin").get(0).contentWindow;
+            self.pastebin.document.designMode = "on";
+
+            try {
+                self.pastebin.document.body.innerHTML = "";
+            } catch(e) { };
+
+            jQuery( self.get_edit_document() ).bind("keydown", function(e) {
+                if (e.ctrlKey && e.keyCode == 86) {
+                    self.pastebin.focus();
+
+                    setTimeout(function() {
+                        var html = self.pastebin.document.body.innerHTML;
+                        self.pastebin.document.body.innerHTML = "";
+
+                        self.on_pasted(html);
+                    }, 500);
+                }
+            });
         }
         catch(e) { }
     }, 1);
 
-    if (!this.__toolbar_styling_interval)
-        this.__toolbar_styling_interval = setInterval(function() {self.toolbarStyling() }, 1000);
+    if (!this.__toolbar_styling_interval) {
+        this.__toolbar_styling_interval = setInterval(
+            function() {
+                try {
+                    self.toolbarStyling()
+                }
+                catch(e) { }
+            }, 1000
+        );
+    }
+}
+
+proto.on_pasted = function(html) {
+    var self = this;
+
+    if (this.paste_buffer_is_simple(html)) {
+        self.insert_html( html );
+        return;
+    }
+
+    var wikitext = self.wikiwyg.mode_objects[WW_ADVANCED_MODE].convert_html_to_wikitext(html);
+
+    jQuery.showLightbox({ html: "pasting...", overlayBackground: "transparent", speed: 1 });
+
+    jQuery.ajax({
+        type: 'post',
+        url: 'index.cgi',
+        data: {
+            action: 'wikiwyg_wikitext_to_html',
+            content: wikitext
+        },
+        success: function(html) {
+            html = html.replace(/^<div class="wiki">\n*/i, '').replace(/\n*<br\/><\/div>\n*$/i, '');
+
+            self.insert_html( html );
+
+            jQuery.hideLightbox();
+        },
+        error: function(xhr) {
+            jQuery.hideLightbox();
+        }
+    });
+
+}
+
+proto.paste_buffer_is_simple = function(buffer) {
+    return (
+        (buffer.indexOf("<") < 0 && buffer.indexOf(">") < 0) ||
+        (!buffer.match(/<(font|script|applet|object|div|p|br)/i))
+    );
 }
 
 proto.toolbarStyling = function() {

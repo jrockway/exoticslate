@@ -1562,12 +1562,66 @@ proto.enableThis = function() {
                 }
                 self.set_clear_handler();
             }
+
+            self.pastebin = jQuery("#pastebin").get(0).contentWindow;
+            self.pastebin.document.designMode = "on";
+            self.pastebin.document.body.innerHTML = "";
+
+            jQuery( self.get_edit_document() ).bind("keydown", function(e) {
+                if (e.ctrlKey && e.keyCode == 86) {
+                    jQuery(self.pastebin).focus();
+
+                    setTimeout(function() {
+                        var html = self.pastebin.document.body.innerHTML;
+                        self.pastebin.document.body.innerHTML = "";
+
+                        self.on_pasted(html);
+                    }, 500);
+                }
+            });
         }
         catch(e) { }
     }, 1);
 
     if (!this.__toolbar_styling_interval)
         this.__toolbar_styling_interval = setInterval(function() {self.toolbarStyling() }, 1000);
+}
+
+proto.on_pasted = function(html) {
+    var self = this;
+
+    if (this.paste_buffer_is_simple(html)) {
+        self.insert_html( html );
+        return;
+    }
+
+    var wikitext = self.wikiwyg.mode_objects[WW_ADVANCED_MODE].convert_html_to_wikitext(html);
+
+    jQuery.showLightbox("pasting...");
+
+    jQuery.ajax({
+        type: 'post',
+        url: 'index.cgi',
+        data: {
+            action: 'wikiwyg_wikitext_to_html',
+            content: wikitext
+        },
+        success: function(html) {
+            self.insert_html( html );
+
+            jQuery.hideLightbox();
+        },
+        error: function(xhr) {
+            jQuery.hideLightbox();
+        }
+    });
+
+}
+
+proto.paste_buffer_is_simple = function(buffer) {
+    return
+        (buffer.indexOf("<") < 0 && buffer.indexOf(">") < 0) ||
+        !buffer.match(/<(font|script|applet|object)/i);
 }
 
 proto.toolbarStyling = function() {

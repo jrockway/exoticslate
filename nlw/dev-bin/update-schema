@@ -14,7 +14,7 @@ $schema_file =~ s#.+/(etc/socialtext.+)#$1#;
 my $schema_name = $schema->schema_name;
 
 # Get a virgin base schema
-shell_run("scm revert $nlw_base/$schema_file");
+shell_run("git co $nlw_base/$schema_file");
 copy_schema_files_to_dev_env();
 
 # Set up the fresh schema from socialtext-schema.sql

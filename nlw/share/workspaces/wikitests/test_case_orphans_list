@@ -73,7 +73,7 @@ Create a page by a different user
 
 | *Comment* | Test Case: Orphans List. Orphan page has no incoming links |  |
 | text_like | contentRight | qr/There are no pages that link to this page yet/i |
-| open | /%%workspace%%/?orphan %%start_time%% 0001 |  |
+| open_ok | /%%workspace%%/?orphan %%start_time%% 0001 |  |
 | text_like | contentRight | qr/There are no pages that link to this page yet/i |
 
 edit a page to include a link to an orphan page | link appears in page

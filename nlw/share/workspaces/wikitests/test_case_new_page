@@ -30,8 +30,14 @@
 | click_and_wait | st-cancel-button-link |  |
 
 | *Comment* | Test Case: New Page. cancel ends up at home eventually |  |
-| pause | 8000 |  |
-| text_like | This is the home page for %%title%% |  |
+| wait_for_text_present_ok | This is the home page for %%title%% | 30000 |
+
+| *Comment* | Test Case: New Page. New Page from incipient title in URL |  |
+| open_ok | /%%workspace%%/index.cgi?np %%start_time%% 3 |  |
+| wait_for_element_visible_ok | st-create-content-savelink | 30000 |
+| click_and_wait | st-create-content-savelink |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| text_like | st-editing-title | np %%start_time%% 3 |
 
 | *Comment* | Test Case: New Page. Teardown |  |
 

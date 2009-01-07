@@ -67,6 +67,7 @@ lib/Socialtext/Noun/Signal.pm
 share/console-template/
 share/template/control
 share/widgets/*.png
+share/uploaded-skin/
 
 # t excludes
 t/Socialtext/CLI-profile-fields.t

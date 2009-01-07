@@ -1563,13 +1563,18 @@ proto.enableThis = function() {
                 self.set_clear_handler();
             }
 
+            return; // XXX - Disable Paste until it is a little bit more stable.
+
             self.pastebin = jQuery("#pastebin").get(0).contentWindow;
             self.pastebin.document.designMode = "on";
-            self.pastebin.document.body.innerHTML = "";
+
+            try {
+                self.pastebin.document.body.innerHTML = "";
+            } catch(e) { };
 
             jQuery( self.get_edit_document() ).bind("keydown", function(e) {
                 if (e.ctrlKey && e.keyCode == 86) {
-                    jQuery(self.pastebin).focus();
+                    self.pastebin.focus();
 
                     setTimeout(function() {
                         var html = self.pastebin.document.body.innerHTML;

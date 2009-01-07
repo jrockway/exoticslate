@@ -32,7 +32,7 @@
         [% END %]
       </div>
     [% IF is_real_category AND checker.check_permission('edit') %]
-    <div class="goTo postByEmail"> <a href="mailto:[% email_tag_address %]">[% loc('or post by email') %]</a></div>
+    <div class="goTo postByEmail"> <a href="mailto:[% email_category_address %]">[% loc('or post by email') %]</a></div>
     [% END %]
   </div><!-- controlsRight END -->
 </div><!-- controls END -->

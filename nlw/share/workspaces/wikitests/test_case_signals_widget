@@ -13,44 +13,56 @@
 | st-name-widget | 1 | signals_widget |
 | st-widget-title-like | signals_widget | Socialtext Signals |
 | st-select-widget-frame | signals_widget |  |
-| type_ok | signal-field | She rocks in the treehouse, all the day long |
+| type_ok | signal-field | She rocks in the treehouse, %%start_time%% |
 | click_ok | post |  |
 | pause | 1000 |  |
-| type_ok | signal-field | Rockin' and a bopin' and a singing her song |
+| type_ok | signal-field | Rockin' and a bopin' %%start_time%% |
 | click_ok | post |  |
 | pause | 1000 |  |
-| type_ok | signal-field | All the little birds on j-bird street |
+| type_ok | signal-field | All the little birds %%start_time%% |
 | click_ok | post |  |
 | pause | 1000 |  |
-| type_ok | signal-field | Love it hear the robin' going tweet, tweet, tweet |
+| type_ok | signal-field | Love to hear the robin' going %%start_time%% |
 | click_ok | post |  |
 | pause | 1000 |  |
-| text_like | //body | She rocks in the treehouse, all the day long |
-| text_like | //body | Rockin' and a bopin' and a singing her song |
-| text_like | //body | All the little birds on j-bird street |
-| text_like | //body | Love it hear the robin' going tweet, tweet, tweet |
+| text_like | //body | She rocks in the treehouse, %%start_time%% |
+| text_like | //body | Rockin' and a bopin' %%start_time%% |
+| text_like | //body | All the little birds %%start_time%% |
+| text_like | //body | Love to hear the robin' going %%start_time%% |
 | select-frame | relative=parent |  |
+
+| *Comment* | Test case: Signals Widget. Wait for Signal to appear in Updates |  |
 | click_and_wait | link=Profile |  |
-| pause | 10000 |  |
 | st-name-widget | 4 | profile_updates |
 | st-select-widget-frame | profile_updates |  |
-| text_like | //body | She rocks in the treehouse, all the day long |
-| text_like | //body | Rockin' and a bopin' and a singing her song |
-| text_like | //body | All the little birds on j-bird street |
-| text_like | //body | %%short_username%% "Love it hear the robin' going tweet, tweet, tweet" |
+| wait_for_text_present_ok | She rocks in the treehouse, %%start_time%% | 120000 |
+| wait_for_text_present_ok | Rockin' and a bopin' %%start_time%% | 120000 |
+| wait_for_text_present_ok | All the little birds %%start_time%% | 120000 |
+| wait_for_text_present_ok | %%short_username%% "Love to hear the robin' going %%start_time%%" | 120000 |
 
-| *Comment* | Test Case: ToDo Widget Mini-timing test plus (sadly) brittle performance test |
-| text_like | //body | (one minute ago) |
+| *Comment* | Test Case: Signals widget. Wait for automatic refresh in Updates |  |
+| wait_for_text_present_ok | (one minute ago) | 120000 |
 | text_unlike | //body | (2 minutes ago) |
-| pause | 55000 |
-| pause | 30000 |
-| text_like | //body | (2 minutes ago) |
+| select-frame | relative=parent |  |
+
+| *Comment* | Test case: Signals Widget. Check Dashboard, then wait for auto refresh |  |
+| open_ok | / |  |
+| st-name-widget | 1 | signals_widget |
+| st-widget-title-like | signals_widget | Socialtext Signals |
+| st-select-widget-frame | signals_widget |  |
+
+| wait_for_text_present_ok | She rocks in the treehouse, %%start_time%% | 120000 |
+| wait_for_text_present_ok | Rockin' and a bopin' %%start_time%% | 120000 |
+| wait_for_text_present_ok | All the little birds %%start_time%% | 120000 |
+| wait_for_text_present_ok | Love to hear the robin' going %%start_time%% | 120000 |
+| wait_for_text_present_ok | 2 minutes ago | 120000 |
+
 | select-frame | relative=parent |  |
 | pause | 25000 |  |
 
-| *Comment* | Test Case: ToDo Widget Teardown |  |
+| *Comment* | Test Case: Signals Widget Teardown |  |
 | st-empty-container |  |  |
 
-| *Comment* | Test Case: ToDo Widget COMPLETED |  |
+| *Comment* | Test Case: Signals Widget COMPLETED |  |
 
-Replace this text with your own.
+TODO: write a second TC that exercises all signals, signals from followers only, older, newer, newest

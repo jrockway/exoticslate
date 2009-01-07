@@ -1,3 +1,2 @@
-| *Comment* | try a HighPermissions op in IE - should fail |  |
-| open_ok | / |  |
-| location_like | Should Fail |  |
+| *Comment* | scratch page |  |
+| text_like | `qr/(feel)\ | (like)/` |  |

@@ -23,11 +23,7 @@ fi
 
 cd $(dirname $0)/..
 
-for skin in `ls ../socialtext-skins/skin`; do
-    target=../../../socialtext-skins/skin/$skin
-    link=share/skin/$skin
-    [ -s $link ] || ln -sf $target $link
-done
+./dev-bin/create-skinlinks
 
 set -x
 PORT=$(($START_PORT+$UID)) ./configure --dev=1 --apache-proxy=$FDEFS_PROXY --server-admin=support@socialtext.com

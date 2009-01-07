@@ -4,6 +4,7 @@ etc/init.d/ceqlotron
 etc/init.d/st-apache
 lib/Socialtext/Build/ConfigureValues.pm
 build/tmp/
+share/skin/.gitignore
 share/html/500.html
 share/html/502.html.en
 share/html/502.html.html

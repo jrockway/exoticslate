@@ -1583,8 +1583,16 @@ proto.enableThis = function() {
         catch(e) { }
     }, 1);
 
-    if (!this.__toolbar_styling_interval)
-        this.__toolbar_styling_interval = setInterval(function() {self.toolbarStyling() }, 1000);
+    if (!this.__toolbar_styling_interval) {
+        this.__toolbar_styling_interval = setInterval(
+            function() {
+                try {
+                    self.toolbarStyling()
+                }
+                catch(e) { }
+            }, 1000
+        );
+    }
 }
 
 proto.on_pasted = function(html) {
@@ -1597,7 +1605,7 @@ proto.on_pasted = function(html) {
 
     var wikitext = self.wikiwyg.mode_objects[WW_ADVANCED_MODE].convert_html_to_wikitext(html);
 
-    jQuery.showLightbox("pasting...");
+    jQuery.showLightbox({ html: "pasting...", overlayBackground: "transparent", speed: 1 });
 
     jQuery.ajax({
         type: 'post',
@@ -1607,6 +1615,8 @@ proto.on_pasted = function(html) {
             content: wikitext
         },
         success: function(html) {
+            html = html.replace(/^<div class="wiki">\n*/i, '').replace(/\n*<br\/><\/div>\n*$/i, '');
+
             self.insert_html( html );
 
             jQuery.hideLightbox();
@@ -1619,9 +1629,10 @@ proto.on_pasted = function(html) {
 }
 
 proto.paste_buffer_is_simple = function(buffer) {
-    return
+    return (
         (buffer.indexOf("<") < 0 && buffer.indexOf(">") < 0) ||
-        !buffer.match(/<(font|script|applet|object)/i);
+        (!buffer.match(/<(font|script|applet|object|div|p|br)/i))
+    );
 }
 
 proto.toolbarStyling = function() {

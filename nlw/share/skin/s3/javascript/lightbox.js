@@ -38,13 +38,19 @@
 
         var pageScroll = _getPageScroll();
 
+        if ( opts.overlayBackground == null )
+            opts.overlayBackground = "#000";
+
+        if (opts.speed == null)
+            opts.speed = 500;
+
         if (!$('#overlay').size()) {
             $('<div id="overlay" />')
                 .click(function () { $.hideLightbox() })
                 .css({
                     display: 'none',
                     position: 'absolute',
-                    background: "#000",
+                    background: opts.overlayBackground,
                     opacity: "0.5",
                     filter: "alpha(opacity=50)",
                     zIndex: 2000,
@@ -111,7 +117,7 @@
                 width: $(window).width(),
                 height: $(window).height()
             })
-            .fadeIn(function () {
+            .fadeIn(opts.speed, function () {
                 $('#lightbox').fadeIn(function() {
                     $(opts.focus).focus();
                     if ($.isFunction(opts.callback))
@@ -125,7 +131,7 @@
             $('#lightbox').trigger('unload');
             if (opts.content)
                 $(opts.content).hide().appendTo('body');
-            $('#overlay').fadeOut();
+            $('#overlay').fadeOut(opts.speed);
             $('#lightbox').html('').hide();
             $('html').css('overflow', opts._originalHTMLOverflow);
             $('body').css('overflow', opts._originalBodyOverflow);

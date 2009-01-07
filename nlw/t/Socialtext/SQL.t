@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 11;
+use Test::Socialtext tests => 13;
 
 # Fixtures: db
 #
@@ -13,7 +13,7 @@ fixtures( 'db' );
 BEGIN {
     use_ok 'Socialtext::Schema';
     use_ok 'Socialtext::SQL', qw( 
-        sql_execute
+        sql_execute sql_execute_array
         sql_convert_to_boolean sql_convert_from_boolean 
     );
 }
@@ -32,6 +32,29 @@ sql_execute: {
         local $SIG{__WARN__} = sub { };
         sql_execute('DROP TABLE foo');
         eval { sql_execute('SELECT * FROM foo') };
+        ok $@, "table was deleted";
+    }
+}
+
+sql_execute_array: {
+    my $sth;
+    sql_execute('CREATE TABLE bar (name text, value text)');
+
+    sql_execute_array(
+        q{INSERT INTO bar VALUES (?,?)},
+        {},
+        [ map { "name $_" } 0 .. 10 ],
+        [ map { "value $_" } 0 .. 10 ],
+    );
+    $sth = sql_execute('SELECT * FROM bar');
+    is_deeply $sth->fetchall_arrayref, [ 
+        map { ["name $_", "value $_"] } 0 .. 10 
+    ], 'data found in table';
+
+    { 
+        local $SIG{__WARN__} = sub { };
+        sql_execute('DROP TABLE bar');
+        eval { sql_execute('SELECT * FROM bar') };
         ok $@, "table was deleted";
     }
 }

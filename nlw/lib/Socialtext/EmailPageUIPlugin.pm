@@ -19,7 +19,7 @@ sub register {
     $registry->add(action => 'email_page');
 }
 
-Readonly my $MAX_USERS_IN_SELECT => 300;
+Readonly my $MAX_USERS_IN_SELECT => 500;
 sub email_page_popup {
     my $self = shift;
     my $page = $self->hub->pages->current;

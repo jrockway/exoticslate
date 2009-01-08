@@ -56,7 +56,7 @@ sub _contact {
 sub _author {
     my $self = shift;
     my $page = shift;
-    my $user = $page->last_edited_by;
+    my $user = $page->last_edited_by or return '';
     return $user->best_full_name( workspace => $page->hub->current_workspace );
 }
 

@@ -5,7 +5,7 @@ use warnings;
 
 BEGIN { push @INC, 't/share/plugin/fakeplugin/lib' }
 
-use Test::More tests => 32;
+use Test::More tests => 33;
 use mocked 'Socialtext::SQL';
 use mocked 'Socialtext::Authz';
 use mocked 'Socialtext::AppConfig';
@@ -57,7 +57,8 @@ $plug->cache_value(key => 'a', value => 1);
 is $plug->value_from_cache('a'), 1, 'can retrieve cache value';
 
 # Workspace
-is $plug->current_workspace, 'current', 'current_workspace';
+isa_ok $plug->current_workspace, 'Socialtext::Workspace', 'current_workspace';
+is $plug->current_workspace->name, 'current', 'current_workspace';
 
 # Plugin functions
 my %plugins = map { $_ => 1 } $plug->plugins;

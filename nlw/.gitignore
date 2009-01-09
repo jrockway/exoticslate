@@ -120,10 +120,12 @@ t/wikitests/people/person_links
 t/wikitests/people/person_links/person_links.wiki
 t/lib/Socialtext/People/Profile.pm
 t/lib/Socialtext/People/Fields.pm
-etc/socialtext/uri_map.d
-etc/socialtext/uri_map.d/people.yaml
 t/Socialtext/Noun/Signal.t
 t/wikitests/signals/data_signals.wiki
+t/tmp/
+
+etc/socialtext/uri_map.d
+etc/socialtext/uri_map.d/people.yaml
 etc/socialtext/uri_map.d/signals.yaml
 
 # log excludes

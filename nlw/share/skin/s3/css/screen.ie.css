@@ -44,6 +44,7 @@ html body#dashBoard div#controls div#controlsRight ul.dashboard-links li a {
     white-space: nowrap;
 }
 
+<<<<<<< HEAD:nlw/share/skin/s3/css/screen.ie.css
 #st-edit-mode-container {
     position: static;
     width: 100%;
@@ -53,6 +54,12 @@ html body#dashBoard div#controls div#controlsRight ul.dashboard-links li a {
     position: absolute;
     top: 0;
     left: 0;
+=======
+/* Removing this caused {bz: 1888} and {bz: 1889} */
+#st-edit-mode-container {
+    position: static;
+    width: 100%;
+>>>>>>> release-3.2.0.5-1:nlw/share/skin/s3/css/screen.ie.css
 }
 
 /* The right-hand controls are always empty during wiki edit. */

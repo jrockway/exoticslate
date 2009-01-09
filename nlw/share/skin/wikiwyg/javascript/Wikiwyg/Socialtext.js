@@ -526,33 +526,23 @@ proto.resizeEditor = function () {
     if (this.__resizing) return;
     this.__resizing = true;
 
-    this.modeByName(WW_SIMPLE_MODE).setHeightOf(this.modeByName(WW_SIMPLE_MODE).edit_iframe);
-    this.modeByName(WW_ADVANCED_MODE).setHeightOfEditor();
-
     var $iframe = jQuery('#st-page-editing-wysiwyg');
     var $textarea = jQuery('#wikiwyg_wikitext_textarea');
-
-    var self = this;
-    if (
-        jQuery(window).width() > $iframe.width() * 3  ||
-        jQuery(window).width() > $textarea.width() * 3 
-    ) {
-        // console.log("iframe/textarea is too small to make sense, wait a little bit");
-        self.__resizing = false;
-        setTimeout( function() { self.resizeEditor() }, 100 );
-        return;
-    }
 
     if ($iframe.is(":visible")) {
         jQuery("#st-editing-prefix-container").width($iframe.width()+2);
         $iframe.width( jQuery('#st-edit-mode-view').width() - 48 );
+
+        this.modeByName(WW_SIMPLE_MODE).setHeightOf(
+            this.modeByName(WW_SIMPLE_MODE).edit_iframe
+        );
     }
     else if ($textarea.is(":visible")) {
         jQuery("#st-editing-prefix-container").width($textarea.width());
+        this.modeByName(WW_ADVANCED_MODE).setHeightOfEditor();
     }
 
-
-    self.__resizing = false;
+    this.__resizing = false;
 }
 
 proto.preview_link_text = loc('Preview');
@@ -1121,7 +1111,7 @@ Mode class generic overrides.
 proto = Wikiwyg.Mode.prototype;
 
 // magic constant to make sure edit window does not scroll off page
-proto.footer_offset = Wikiwyg.is_ie? 15 : 10;
+proto.footer_offset = Wikiwyg.is_ie ? 0 : 20;
 
 proto.get_offset_top = function (e) {
     var offset = jQuery(e).offset();

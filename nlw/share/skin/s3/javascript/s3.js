@@ -272,6 +272,10 @@ $(function() {
         $('#st-create-content-link').click();
     }
 
+    if (location.hash.toLowerCase() == '#new_page') {
+        $('#st-create-content-link').click();
+    }
+
     Socialtext._setup_editor = function () {
         $('#bootstrap-loader')
             .css('position', 'absolute')

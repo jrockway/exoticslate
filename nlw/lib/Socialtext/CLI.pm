@@ -2228,31 +2228,13 @@ sub _require_field_options {
         'field-class:s',
         'source:s',
     );
+    $opts{_plugin} = $adapter->plugin_class('people');
     $opts{field_class} = delete $opts{'field-class'};
 
     $opts{name} = lc Socialtext::String::trim($opts{name})
         if defined $opts{name};
 
     $opts{_account} = $acct;
-
-    require Socialtext::People::Fields;
-    my $fields = Socialtext::People::Fields->new(
-        account_id => $acct->account_id
-    );
-    $opts{_fields} = $fields;
-
-    if (defined $opts{source}) {
-        my $source = delete $opts{source};
-        if ($source eq 'user') {
-            $opts{is_user_editable} = 1;
-        }
-        elsif ($source eq 'external') {
-            $opts{is_user_editable} = 0;
-        }
-        else {
-            $self->_error(loc("Invalid field source '[_1]'", $source));
-        }
-    }
 
     return %opts;
 }
@@ -2261,29 +2243,17 @@ sub add_profile_field {
     my $self = shift;
 
     my %opts = $self->_require_field_options();
-
+    my $plugin = delete $opts{_plugin};
     my $acct = delete $opts{_account};
-    my $fields = delete $opts{_fields};
 
     my $field;
     eval {
-        $field = $fields->create_field(%opts);
+        $field = $plugin->AddProfileField({
+            %opts,
+            account => $acct,
+        });
     };
-    if (my $err = $@) {
-        if ($err =~ /reserved field name/) {
-            $self->_error(loc("Cannot create profile field: The field name '[_1]' is reserved for Socialtext", $opts{name}));
-        }
-        elsif ($err =~ /duplicate field name/) {
-            $self->_error(loc("Cannot create profile field: The field name '[_1]' is already used in account '[_2]'", $opts{name}, $acct->name));
-        }
-        elsif ($err =~ /invalid field_class/) {
-            $self->_error(loc("Cannot create profile field: invalid field-class '[_1]'", $opts{field_class}));
-        }
-        else {
-            $self->_error(loc("Unable to create profile field."));
-        }
-    }
-
+    $self->_error($@) if $@;
     $self->_success(loc("Created profile field '[_1]' for account '[_2]'",
                         $field->title, $acct->name));
 }
@@ -2292,36 +2262,17 @@ sub set_profile_field {
     my $self = shift;
 
     my %opts = $self->_require_field_options();
-    
+    my $plugin = delete $opts{_plugin};
     my $acct = delete $opts{_account};
-    my $fields = delete $opts{_fields};
 
-    unless ($opts{name} || length($opts{name})) {
-        $self->_error(loc("Must specify the name of the field to change"));
-        return;
-    }
-
-    my $field = $fields->by_name($opts{name});
-    if (!$field) {
-        $self->_error(loc("Profile field '[_1]' does not exist for account '[_2]'", $opts{name}, $acct->name));
-        return;
-    }
-
-    my $old_title = $field->title;
-
+    my ($field, $old_title);
     eval {
-        $fields->update_field(%opts);
+        ($field, $old_title) = $plugin->SetProfileField({
+            %opts,
+            account => $acct,
+        });
     };
-    if ( $@) {
-        if ($@ =~ /^cannot convert field class from '(.*?)' to '(.*?)'/i) {
-            my ($from_class, $to_class) = ($1,$2);
-            $self->_error(loc("Cannot convert field class from '[_1]' to '[_2]'", $from_class, $to_class));
-        }
-        else {
-            $self->_error(loc("Unable to change profile field."));
-        }
-    }
-
+    $self->_error($@) if $@;
     $self->_success(loc("Profile field '[_1]' updated for account '[_2]'",
                         $old_title, $acct->name));
 }

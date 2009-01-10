@@ -8,6 +8,7 @@ use base 'Socialtext::Rest';
 use IO::File;
 use Socialtext::HTTP ':codes';
 use Socialtext::l10n qw(system_locale);
+use Socialtext::BrowserDetect;
 
 sub allowed_methods { 'GET, HEAD, DELETE' }
 sub permission { +{ GET => 'read', DELETE => 'attachments' } }
@@ -33,6 +34,8 @@ sub GET {
     }
     my $file_size = -s _;
 
+    my $fh = '';
+    
     eval {
         my $mime_type = $attachment->mime_type;
 
@@ -42,6 +45,14 @@ sub GET {
                 $charset = 'UTF8';
             }
             $mime_type .= '; charset=' . $charset;
+        }
+
+        if (Socialtext::BrowserDetect::ie()) {
+            # mod_xsendfile insists on sending the Last-Modified header,
+            # so cannot use it for IE without breaking the caching behaviour.
+            # Please see {bz: 1931} for details.
+            $fh = new IO::File $file, 'r';
+            die "Cannot read $file: $!" unless $fh;
         }
 
         # See Socialtext::Headers::add_attachments for the IE6/7 motivation
@@ -54,16 +65,18 @@ sub GET {
             '-cache-control'      => undef,
             'Content-Disposition' => 'filename="'
                 . $attachment->filename . '"',
-            '-X-Sendfile'  => $file,
+            ($fh ? () : ('-X-Sendfile'  => $file)),
         );
     };
+
     # REVIEW: would be nice to be able to toss some kind of exception
     # all the way out to the browser
     # Probably an invalid attachment id.
     return $self->_invalid_attachment( $rest, $@ ) if $@;
 
     # The frontend mod_xsendfile will take care of sending the attachment.
-    return '';
+    # (This happens when $fh is set to '', which is the default for non-IE.)
+    return $fh;
 }
 
 sub DELETE {

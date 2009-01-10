@@ -151,6 +151,7 @@ sub logged_not_like($$;$) {
 
 sub _generic_log_like {
     my ($level, $rgx, $name, $match_result, $no_match_result) = @_;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
 
     my $offset = 0;
     while (1) {

@@ -79,7 +79,8 @@ Add_from_hash: {
 }
 
 my $PIRATE_CSV = <<'EOT';
-guybrush,guybrush@example.com,Guybrush,Threepwood,password,Captain,Pirates R. Us,High Seas,123-456-YARR,,123-HIGH-SEA
+username,email_address,first_name,last_name,password,position,company,location,work_phone,mobile_phone,home_phone
+guybrush,guybrush@example.com,Guybrush,Threepwood,my_password,Captain,Pirates R. Us,High Seas,123-456-YARR,,123-HIGH-SEA
 EOT
 
 Add_one_user_csv: {
@@ -181,14 +182,14 @@ Add_user_already_added: {
         $mass_add->from_csv($PIRATE_CSV);
         is_deeply \@successes, ['Updated user guybrush'], 'success message ok';
         is_deeply \@failures, [], 'no failure messages';
-        is $Socialtext::User::Users{guybrush}->password, 'password',
+        is $Socialtext::User::Users{guybrush}->password, 'my_password',
             'password was updated';
     }
 
     First_last_name_update: {
         local $Socialtext::User::Users{guybrush} = Socialtext::User->new(
             username => 'guybrush',
-            password => 'password',
+            password => 'my_password',
             first_name => 'Herman',
             last_name => 'Toothrot'
         );
@@ -255,8 +256,9 @@ Add_user_already_added: {
 Quoted_csv: {
     local $Socialtext::User::Users{lechuck} = undef;
     my $quoted_csv = <<"EOT";
-"lechuck","ghost\@lechuck.example.com","Ghost Pirate","LeChuck","password","Ghost","Ghost Pirates Inc","Netherworld","","",""
-$PIRATE_CSV
+username,email_address,first_name,last_name,password,position,company,location,work_phone,mobile_phone,home_phone
+"lechuck","ghost\@lechuck.example.com","Ghost Pirate","LeChuck","my_password","Ghost","Ghost Pirates Inc","Netherworld","","",""
+guybrush,guybrush\@example.com,Guybrush,Threepwood,my_password,Captain,Pirates R. Us,High Seas,123-456-YARR,,123-HIGH-SEA
 EOT
     my @successes;
     my @failures;
@@ -272,6 +274,7 @@ EOT
 Contains_utf8: {
     local $Socialtext::User::Users{yamadat} = undef;
     my $utf8_csv = <<'EOT';
+username,email_address,first_name,last_name,password,position,company,location,work_phone,mobile_phone,home_phone
 yamadat,yamadat@example.com,太郎,山田,パスワード太,社長,日本電気株式会社,location,+81 3 3333 4444,+81 70 1234 5678,
 EOT
     my @successes;
@@ -288,7 +291,7 @@ EOT
 Bad_email_address: {
     local $Socialtext::User::Users{lechuck} = undef;
     my $bad_csv = $PIRATE_CSV . <<'EOT';
-lechuck,example.com,Ghost Pirate,LeChuck,password,Ghost,Ghost Pirates Inc,Netherworld,,,
+lechuck,example.com,Ghost Pirate,LeChuck,my_password,Ghost,Ghost Pirates Inc,Netherworld,,,
 EOT
     clear_log();
     my @successes;
@@ -300,10 +303,10 @@ EOT
     $mass_add->from_csv($bad_csv);
     is_deeply \@successes, ['Added user guybrush'], 'success message ok';
     is_deeply \@failures,
-        ['Line 2: example.com is not a valid email address'],
+        ['Line 3: example.com is not a valid email address'],
         'correct failure message';
     logged_like 'error',
-        qr/\QLine 2: example.com is not a valid email address/,
+        qr/\QLine 3: example.com is not a valid email address/,
         '... message also logged';
 }
 
@@ -318,12 +321,12 @@ Duplicate_email_address: {
     );
     $mass_add->from_csv($csv);
     is_deeply \@successes, [], 'user was not added';
-    is_deeply \@failures, ['Line 1: The email address you provided (duplicate@example.com) is already in use.'], 'correct failure message';
+    is_deeply \@failures, ['Line 2: The email address you provided (duplicate@example.com) is already in use.'], 'correct failure message';
 }
 
 No_password: {
     # strip out the password from the csv line
-    (my $csv = $PIRATE_CSV) =~ s/password//;
+    (my $csv = $PIRATE_CSV) =~ s/my_password//;
     my @successes;
     my @failures;
     my $mass_add = Socialtext::MassAdd->new(
@@ -341,7 +344,7 @@ No_password: {
 
 Bad_password: {
     # Change the password to something too small
-    (my $csv = $PIRATE_CSV) =~ s/password/pw/;
+    (my $csv = $PIRATE_CSV) =~ s/my_password/pw/;
     clear_log();
     my @successes;
     my @failures;
@@ -352,7 +355,7 @@ Bad_password: {
     $mass_add->from_csv($csv);
     is_deeply \@successes, [], 'user was not added';
     is_deeply \@failures,
-        ['Line 1: Passwords must be at least 6 characters long.'],
+        ['Line 2: Passwords must be at least 6 characters long.'],
         'correct failure message';
     logged_like 'error', qr/Passwords must be at least 6 characters long/, '... message also logged';
 }
@@ -387,7 +390,7 @@ EOT
     $mass_add->from_csv($bad_csv);
     is_deeply \@successes, ['Added user guybrush'], 'success message ok';
     is_deeply \@failures,
-        ['Line 2: username is a required field, but it is not present.'],
+        ['Line 3: username is a required field, but it is not present.'],
         'correct failure message';
 }
 
@@ -404,15 +407,16 @@ EOT
     $mass_add->from_csv($bad_csv);
     is_deeply \@successes, ['Added user guybrush'], 'success message ok';
     is_deeply \@failures,
-        ['Line 2: email is a required field, but it is not present.'],
+        ['Line 3: email is a required field, but it is not present.'],
         'correct failure message';
 }
 
 Bogus_csv: {
     my $bad_csv = <<"EOT";
+username,email_address,first_name,last_name,password,position,company,location,work_phone,mobile_phone,home_phone
 This line isn't CSV but we're going to try to parse/process it anyways
 lechuck\tghost\@lechuck.example.com\tGhost Pirate\tLeChuck\tpassword\tGhost\tGhost Pirates Inc\tNetherworld\t\t\t
-$PIRATE_CSV
+guybrush,guybrush\@example.com,Guybrush,Threepwood,password,Captain,Pirates R. Us,High Seas,123-456-YARR,,123-HIGH-SEA
 EOT
     my @successes;
     my @failures;
@@ -422,8 +426,8 @@ EOT
     );
     $mass_add->from_csv($bad_csv);
     is_deeply \@failures,
-        ['Line 1: could not be parsed.  Skipping this user.',
-         'Line 2: could not be parsed.  Skipping this user.',
+        ['Line 2: could not be parsed.  Skipping this user.',
+         'Line 3: could not be parsed.  Skipping this user.',
         ],
         'correct failure message';
     is_deeply \@successes, ['Added user guybrush'], 'continued on to add next user';
@@ -438,6 +442,7 @@ Fields_for_account: {
 }
 
 my $FLEET_CSV = <<'EOT';
+username,email_address,first_name,last_name,password,position,company,location,work_phone,mobile_phone,home_phone
 guybrush,guybrush@example.com,Guybrush,Threepwood,password,Captain,Pirates R. Us,High Seas,123-456-YARR,mobile1,123-HIGH-SEA
 bluebeard,bluebeard@example.com,Blue,Beard,password,Captain,Pirates R. Us,High Seas,123-456-YARR,mobile2,123-HIGH-SEA
 EOT

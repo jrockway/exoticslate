@@ -47,11 +47,21 @@ sub from_csv {
     # make sure that we're working with UTF8; if we don't set this then
     # Text::CSV_XS isn't going to parse UTF8 properly
     $csv = Socialtext::Encode::ensure_is_utf8($csv);
+
+    # create a CSV parser, and set up our parse state
     my $parser = Text::CSV_XS->new();
-    my @lines = split "\n", $csv;
     $self->{line} = 0;
     $self->{from_csv} = 1;
 
+    # split up the CSV data into individual _lines_ so that they can be parsed
+    # individually.
+    #
+    # XXX: does this handle *both* Unix _and_ DOS formatted files?
+    my @lines = split "\n", $csv;
+
+    # parse the CSV data
+    my $have_parsed_header = 0;
+    my @header_fields;
 LINE:
     for my $user_record (@lines) {
         $self->{line}++;
@@ -59,17 +69,59 @@ LINE:
         # parse the next line, choking if its not valid.
         my $parsed_ok = $parser->parse($user_record);
         my @fields    = $parser->fields();
-        unless ($parsed_ok and (scalar @fields >= scalar @Required_fields)) {
+
+        unless ($parsed_ok) {
+            unless ($have_parsed_header) {
+                my $msg = loc("could not be parsed.  CSV header invalid; aborting.");
+                $self->_fail($msg);
+                last LINE;
+            }
             my $msg = loc("could not be parsed.  Skipping this user.");
             $self->_fail($msg);
             next LINE;
         }
+
+        ### CSV header *must* be the first thing in the file
+        unless ($have_parsed_header) {
+            # lower-case all of the header fields; case INsensitive lookups
+            @header_fields = map { _clean_csv_header($_) } @fields;
+            my %available  = map { $_=>1 } @header_fields;
+
+            # SANITY CHECK: do we have all the required fields?
+            my @missing_fields = grep { !exists $available{$_} } @Required_fields;
+            if (@missing_fields) {
+                my $msg = loc("could not be parsed.  The file was missing the following required fields (@missing_fields).  The file must have a header row listing the field headers.");
+                $self->_fail($msg);
+                last LINE;
+            }
+
+            # header looks good...
+            $have_parsed_header++;
+            next LINE;
+        }
+
+        ### everything after the CSV header are User records
+
+        if (scalar @fields < scalar @header_fields) {
+            # user data is missing fields that were defined in the header
+            my $msg = loc("could not be parsed.  Skipping this user.");
+            $self->_fail($msg);
+            next LINE;
+        }
+
         # mesh: missing values still have keys (value is undef)
-        $self->add_user(mesh(@All_fields, @fields));
+        $self->add_user(mesh(@header_fields, @fields));
     }
 
     # TODO: link relationship profile fields
     # $self->finish_up();
+}
+
+sub _clean_csv_header {
+    my $header = shift;
+    $header = lc($_);       # lower-case
+    $header =~ s/\W+/_/g;   # non-word chars become underscores
+    return $header;
 }
 
 sub add_user {

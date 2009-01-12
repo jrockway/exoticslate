@@ -71,6 +71,8 @@
 
 | *Comment* | Test Case: Workspace Navigation edit Notepad |  |
 | open_ok | /%%workspace%%/?Notepad for %%start_time%% |  |
+| wait_for_element_visible_ok | st-create-content-savelink | 30000 |
+| click_and_wait | st-create-content-savelink |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |

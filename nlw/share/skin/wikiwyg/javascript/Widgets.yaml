@@ -70,7 +70,7 @@ widget:
     input:
        workspace_id: radio
        page_title: radio
-    title: Link to '$section_name' in '$page_title'. Click to edit.
+    title: Link to $workspace_id: '$page_title' $section_name. Click to edit.
     desc: Use this form to edit the properties of the link to a page section.
     more_desc: Optional properties include the text to display for the link, and the title of a different page.
     parse:

@@ -1,5 +1,5 @@
 [% USE flatten %]
-[% WRAPPER $gadget.templates.wrapper %]
+[% WRAPPER widget/html_wrapper %]
     [% overflow = "hidden" %]
     [% scrolling = "no" %]
     [% height = gadget.module_prefs.height || 100 %]

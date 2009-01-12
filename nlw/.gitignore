@@ -147,3 +147,4 @@ bin/po.xsd
 bin/validate_gadget
 bin/st-widgets
 bin/get-sample-data
+lib/Socialtext/Rest/Gadget.pm

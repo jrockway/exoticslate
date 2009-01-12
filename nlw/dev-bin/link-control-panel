@@ -53,6 +53,12 @@ for my $f (@libs) {
     }
     unlink $f;
     symlink "$control_dir/$f", $f or die "Can't symlink $control_dir/$f, $f: $!";
+
+    # add an entry to the local .gitignore if it's missing
+    unless (`grep $f .gitignore`) {
+        print "adding entry for $f to .gitignore\n";
+        system("echo $f >> .gitignore");
+    }
 }
 
 print "Linking in control templates...\n";

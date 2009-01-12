@@ -219,7 +219,8 @@ CREATE TABLE container_type_gadget (
     src text NOT NULL,
     col integer NOT NULL,
     "row" integer NOT NULL,
-    fixed boolean DEFAULT false
+    fixed boolean DEFAULT false,
+    default_prefs text [][]
 );
 
 CREATE TABLE event (

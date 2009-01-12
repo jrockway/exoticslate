@@ -83,7 +83,10 @@ CREATE TABLE container_type_gadget (
     "row" INTEGER NOT NULL,
     
     -- determines whether the gadget is moveable
-    fixed BOOLEAN DEFAULT FALSE
+    fixed BOOLEAN DEFAULT FALSE,
+
+    -- default preferences
+    default_prefs TEXT [][]
 );
 
 ALTER TABLE ONLY container_type_gadget

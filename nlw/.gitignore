@@ -133,3 +133,8 @@ etc/socialtext/uri_map.d/signals.yaml
 # log excludes
 dev-bin/test_access.log
 dev-bin/test_nlw.log
+lib/Socialtext/Gadgets/XML.pm
+t/widget/Test1.xml
+t/widget/Test2.xml
+t/widget/lang/Test_en.xml
+t/widget/lang/Test_es.xml

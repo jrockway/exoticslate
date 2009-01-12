@@ -189,6 +189,39 @@ UNION ALL
  SELECT "UserMetadata".primary_account_id AS account_id, "UserMetadata".user_id
    FROM "UserMetadata";
 
+CREATE TABLE container (
+    container_id bigint NOT NULL,
+    container_type text NOT NULL,
+    user_id bigint,
+    workspace_id bigint,
+    account_id bigint,
+    path_args text,
+    CONSTRAINT container_scope_ptr
+            CHECK (((user_id IS NOT NULL) <> (workspace_id IS NOT NULL)) <> (account_id IS NOT NULL))
+);
+
+CREATE SEQUENCE container_id
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+CREATE TABLE container_type (
+    container_type text NOT NULL,
+    path_args text[],
+    links_template text,
+    hello_template text,
+    layout_template text
+);
+
+CREATE TABLE container_type_gadget (
+    container_type text NOT NULL,
+    src text NOT NULL,
+    col integer NOT NULL,
+    "row" integer NOT NULL,
+    fixed boolean DEFAULT false
+);
+
 CREATE TABLE event (
     "at" timestamptz NOT NULL,
     "action" text NOT NULL,
@@ -200,6 +233,74 @@ CREATE TABLE event (
     person_id integer,
     tag_name text
 );
+
+CREATE TABLE gadget (
+    gadget_id bigint NOT NULL,
+    src text NOT NULL,
+    plugin text,
+    href text NOT NULL,
+    last_update timestamptz DEFAULT '2009-01-12 12:48:04.996358-08'::timestamptz NOT NULL,
+    content_type text NOT NULL,
+    features text[],
+    preloads text[],
+    content text,
+    title text,
+    thumbnail text,
+    scrolling boolean DEFAULT false,
+    height integer
+);
+
+CREATE SEQUENCE gadget_id
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+CREATE TABLE gadget_instance (
+    gadget_instance_id bigint NOT NULL,
+    container_id bigint NOT NULL,
+    gadget_id bigint NOT NULL,
+    col integer NOT NULL,
+    "row" integer NOT NULL,
+    minimized boolean DEFAULT false,
+    fixed boolean DEFAULT false
+);
+
+CREATE SEQUENCE gadget_instance_id
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+CREATE TABLE gadget_instance_user_pref (
+    gadget_instance_id bigint NOT NULL,
+    user_pref_id bigint NOT NULL,
+    value text
+);
+
+CREATE TABLE gadget_message (
+    gadget_id bigint NOT NULL,
+    lang text NOT NULL,
+    "key" text NOT NULL,
+    value text NOT NULL
+);
+
+CREATE TABLE gadget_user_pref (
+    user_pref_id bigint NOT NULL,
+    gadget_id bigint NOT NULL,
+    name text NOT NULL,
+    datatype text,
+    display_name text,
+    default_value text,
+    options text[],
+    required boolean DEFAULT false
+);
+
+CREATE SEQUENCE gadget_user_pref_id
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
 
 CREATE TABLE noun (
     noun_id bigint NOT NULL,
@@ -413,6 +514,38 @@ ALTER TABLE ONLY account_plugin
     ADD CONSTRAINT account_plugin_ukey
             UNIQUE (plugin, account_id);
 
+ALTER TABLE ONLY container
+    ADD CONSTRAINT container_pk
+            PRIMARY KEY (container_id);
+
+ALTER TABLE ONLY container_type
+    ADD CONSTRAINT container_type_pk
+            PRIMARY KEY (container_type);
+
+ALTER TABLE ONLY gadget_instance
+    ADD CONSTRAINT gadget_instace_pk
+            PRIMARY KEY (gadget_instance_id);
+
+ALTER TABLE ONLY gadget_instance_user_pref
+    ADD CONSTRAINT gadget_instance_user_pref_pk
+            PRIMARY KEY (gadget_instance_id, user_pref_id);
+
+ALTER TABLE ONLY gadget_message
+    ADD CONSTRAINT gadget_message_pk
+            PRIMARY KEY (gadget_id, lang, "key");
+
+ALTER TABLE ONLY gadget
+    ADD CONSTRAINT gadget_pk
+            PRIMARY KEY (gadget_id);
+
+ALTER TABLE ONLY gadget
+    ADD CONSTRAINT gadget_src
+            UNIQUE (src);
+
+ALTER TABLE ONLY gadget_user_pref
+    ADD CONSTRAINT gadget_user_pref_pk
+            PRIMARY KEY (user_pref_id);
+
 ALTER TABLE ONLY noun
     ADD CONSTRAINT noun_pkey
             PRIMARY KEY (noun_id);
@@ -592,6 +725,31 @@ ALTER TABLE ONLY account_plugin
             FOREIGN KEY (account_id)
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY container
+    ADD CONSTRAINT container_account_id_fk
+            FOREIGN KEY (account_id)
+            REFERENCES "Account"(account_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY container_type_gadget
+    ADD CONSTRAINT container_type_fk
+            FOREIGN KEY (container_type)
+            REFERENCES container_type(container_type) ON DELETE CASCADE;
+
+ALTER TABLE ONLY container
+    ADD CONSTRAINT container_type_fk
+            FOREIGN KEY (container_type)
+            REFERENCES container_type(container_type) ON DELETE CASCADE;
+
+ALTER TABLE ONLY container
+    ADD CONSTRAINT container_user_id_fk
+            FOREIGN KEY (user_id)
+            REFERENCES users(user_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY container
+    ADD CONSTRAINT container_workspace_id_fk
+            FOREIGN KEY (workspace_id)
+            REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
+
 ALTER TABLE ONLY event
     ADD CONSTRAINT event_actor_id_fk
             FOREIGN KEY (actor_id)
@@ -666,6 +824,36 @@ ALTER TABLE ONLY "WorkspaceRolePermission"
     ADD CONSTRAINT fk_d9034c52d2999d62d24bd2cfa30ac457
             FOREIGN KEY (workspace_id)
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY gadget_instance
+    ADD CONSTRAINT gadget_instance_container_fk
+            FOREIGN KEY (container_id)
+            REFERENCES container(container_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY gadget_instance
+    ADD CONSTRAINT gadget_instance_gadget_fk
+            FOREIGN KEY (gadget_id)
+            REFERENCES gadget(gadget_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY gadget_instance_user_pref
+    ADD CONSTRAINT gadget_instance_user_pref_gadget_instance_fk
+            FOREIGN KEY (gadget_instance_id)
+            REFERENCES gadget_instance(gadget_instance_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY gadget_instance_user_pref
+    ADD CONSTRAINT gadget_instance_user_pref_user_pref_fk
+            FOREIGN KEY (user_pref_id)
+            REFERENCES gadget_user_pref(user_pref_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY gadget_message
+    ADD CONSTRAINT gadget_message_gadget_fk
+            FOREIGN KEY (gadget_id)
+            REFERENCES gadget(gadget_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY gadget_user_pref
+    ADD CONSTRAINT gadget_user_pref_gadget_fk
+            FOREIGN KEY (gadget_id)
+            REFERENCES gadget(gadget_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY noun
     ADD CONSTRAINT noun_user_id_fk
@@ -778,4 +966,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '26');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '27');

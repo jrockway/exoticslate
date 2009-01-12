@@ -1371,11 +1371,7 @@ proto.convert_html_to_wikitext = function(html) {
                     $(this).contents().each(cleanup_newlines);
                 }
             }
-            if ($dom.find('div.wiki').length == 0) {
-                /* No div.wiki -- Probably within js-test. */
-                $dom.contents().each(cleanup_newlines);
-            }
-            else {
+            if (Socialtext && Socialtext.wiki_id) {
                 var contents = $dom.find('div.wiki').contents();
                 if (contents.length > 0) {
                     if (contents[0].nodeType == 3) {
@@ -1386,6 +1382,10 @@ proto.convert_html_to_wikitext = function(html) {
                     }
                     contents.each(cleanup_newlines);
                 }
+            }
+            else {
+                /* Probably within js-test. */
+                $dom.contents().each(cleanup_newlines);
             }
             html = $dom.html();
         }

@@ -1238,7 +1238,7 @@ proto._do_link = function(widget_element) {
             var ws_title = this.lookupTitle( "workspace_id", ws_id );
             dummy_widget.title_and_id.workspace_id.id    = ws_id;
             dummy_widget.title_and_id.workspace_id.title = ws_title || "";
-            jQuery("#st-widget-workspace_id").val(ws_title || ws_id || "");
+            jQuery("#st-widget-workspace_id").val(ws_id || "");
 
             jQuery("#st-widget-page_title").val(widget.page_title || "");
             jQuery("#wiki-link-section").val(widget.section_name || "");

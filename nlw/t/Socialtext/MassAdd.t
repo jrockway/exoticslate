@@ -468,6 +468,7 @@ Add_multiple_users_faillure: {
     is scalar(@failures), 1, 'only one error message per field updating failure';
     like $failures[0],
         qr/Profile field "mobile_phone" could not be updated/,
+        '... correct failure message';
 
     my $profile1 = shift @Socialtext::People::Profile::Saved;
     isnt $profile1->{mobile_phone}, 'mobile1';

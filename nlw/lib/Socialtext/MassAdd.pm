@@ -105,7 +105,14 @@ LINE:
 
         if (scalar @fields < scalar @header_fields) {
             # user data is missing fields that were defined in the header
-            my $msg = loc("could not be parsed.  Skipping this user.");
+            my $msg = loc("could not be parsed (missing fields).  Skipping this user.");
+            $self->_fail($msg);
+            next LINE;
+        }
+
+        if (scalar @fields > scalar @header_fields) {
+            # user data contains fields that were NOT defined in the header
+            my $msg = loc("could not be parsed (extra fields).  Skipping this user.");
             $self->_fail($msg);
             next LINE;
         }

@@ -10,7 +10,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 84;
+    plan tests => 90;
 }
 
 use mocked 'Socialtext::People::Profile', qw(save_ok);
@@ -426,8 +426,8 @@ EOT
     );
     $mass_add->from_csv($bad_csv);
     is_deeply \@failures,
-        ['Line 2: could not be parsed.  Skipping this user.',
-         'Line 3: could not be parsed.  Skipping this user.',
+        ['Line 2: could not be parsed (missing fields).  Skipping this user.',
+         'Line 3: could not be parsed (missing fields).  Skipping this user.',
         ],
         'correct failure message';
     is_deeply \@successes, ['Added user guybrush'], 'continued on to add next user';
@@ -562,4 +562,72 @@ EOT
         'Line 1: could not be parsed.  The file was missing the following required fields (username, email_address).  The file must have a header row listing the field headers.'
         ], '... correct failure message';
     is scalar(@failures), 1, '... and ONLY ONE error message recorded';
+}
+
+Csv_header_has_more_columns_than_data: {
+    my $BOGUS_CSV = <<'EOT';
+username,email_address,first_name,last_name,password
+guybrush,guybrush@example.com,Guybrush,Threepwood
+lechuck,ghost@lechuck.example.com,Ghost Pirate,LeChuck
+EOT
+
+    clear_log();
+
+    # set up the MassAdd-er
+    my @successes;
+    my @failures;
+    my $mass_add = Socialtext::MassAdd->new(
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+
+    # try to add the user
+    $mass_add->from_csv($BOGUS_CSV);
+
+    # make sure we failed, and *why*
+    is scalar @successes, 0,
+        'failed to add User(s) with missing data columns';
+    is_deeply \@failures,
+        [
+        'Line 2: could not be parsed (missing fields).  Skipping this user.',
+        'Line 3: could not be parsed (missing fields).  Skipping this user.'
+        ],
+        '... correct failure messages';
+    is scalar(@failures), 2, '... one error message per User failure';
+}
+
+Csv_header_has_less_columns_than_data: {
+    my $BOGUS_CSV = <<'EOT';
+username,email_address,first_name,last_name
+guybrush,guybrush@example.com,Guybrush,Threepwood,guybrush_password
+lechuck,ghost@lechuck.example.com,Ghost Pirate,LeChuck,lechuck_password
+EOT
+
+    clear_log();
+
+    # Set up fake Users, so that we don't get mocked ones by accident
+    local $Socialtext::User::Users{guybrush} = undef;
+    local $Socialtext::User::Users{lechuck}  = undef;
+
+    # set up the MassAdd-er
+    my @successes;
+    my @failures;
+    my $mass_add = Socialtext::MassAdd->new(
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+
+    # try to add the user
+    $mass_add->from_csv($BOGUS_CSV);
+
+    # make sure we failed, and *why*
+    is scalar @successes, 0,
+        'failed to add User(s) with *extra* data columns';
+    is_deeply \@failures,
+        [
+        'Line 2: could not be parsed (extra fields).  Skipping this user.',
+        'Line 3: could not be parsed (extra fields).  Skipping this user.'
+        ],
+        '... correct failure messages';
+    is scalar(@failures), 2, '... one error message per User failure';
 }

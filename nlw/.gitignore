@@ -148,3 +148,4 @@ bin/validate_gadget
 bin/st-widgets
 bin/get-sample-data
 lib/Socialtext/Rest/Gadget.pm
+etc/socialtext/uri_map.d/widgets.yaml

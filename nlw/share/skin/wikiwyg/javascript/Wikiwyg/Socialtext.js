@@ -1263,8 +1263,7 @@ proto._do_link = function(widget_element) {
     jQuery('#st-widget-page_title')
         .lookahead({
             url: function () {
-                var ws = jQuery('#st-widget-workspace_id').val() ||
-                         Socialtext.wiki_id;
+                var ws = jQuery('#st-widget-workspace_id').val() || Socialtext.wiki_id;
                 return '/data/workspaces/' + ws + '/pages';
             },
             params: { minimal_pages: 1 },
@@ -1288,6 +1287,11 @@ proto._do_link = function(widget_element) {
             url: '/data/workspaces',
             linkText: function (i) {
                 return [ i.title + ' (' + i.name + ')', i.name ];
+            },
+            onAccept: function(ws_id, value) {
+                dummy_widget.title_and_id.workspace_id.id = ws_id;
+                var ws_title = self.lookupTitle( "workspace_id", ws_id );
+                dummy_widget.title_and_id.workspace_id.title = ws_title || "";
             }
         });
 
@@ -1779,15 +1783,18 @@ proto.add_web_link = function() {
 proto.insert_link_wafl_widget = function(wafl, widget_element) {
     var widget_text = this.getWidgetImageText(wafl);
     var self = this;
-    Jemplate.Ajax.post(
-        location.pathname,
-        'action=wikiwyg_generate_widget_image;' +
-        'widget=' + encodeURIComponent(widget_text) +
-        ';widget_string=' + encodeURIComponent(wafl),
-        function() {
+    jQuery.ajax({
+        type: 'post',
+        url: location.pathname,
+        data: {
+            action: "wikiwyg_generate_widget_image",
+            widget: widget_text,
+            widget_string: wafl
+        },
+        success: function() {
             self.insert_widget(wafl, widget_element);
         }
-    );
+    });
 }
 
 proto.make_wiki_link = function(page_name, link_text) {

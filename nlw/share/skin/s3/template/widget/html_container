@@ -2,13 +2,13 @@
 [% WRAPPER widget/html_wrapper %]
     [% overflow = "hidden" %]
     [% scrolling = "no" %]
-    [% height = gadget.module_prefs.height || 100 %]
-    [% IF gadget.module_prefs.scrolling == "true" %]
+    [% height = gadget.height || 100 %]
+    [% IF gadget.scrolling == "true" %]
         [% overflow = "auto" %]
         [% scrolling = "yes" %]
     [% END %]
     <iframe src="[% gadget.href %]"
-            class="[% gadget.module_prefs.title | flatten %]"
+            class="[% gadget.title | flatten %]"
             noresize="noresize"
             frameborder="0"
             border="0"

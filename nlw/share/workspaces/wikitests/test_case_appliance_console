@@ -25,7 +25,7 @@
 | is_element_present_ok | link=Backup |  |
 | is_element_present_ok | link=Setup |  |
 | is_element_present_ok | link=Shutdown |  |
-| is_element_present_ok | link=Help |  |
+| is_element_present_ok | link=Report a Problem |  |
 | is_element_present_ok | link=Socialtext Accounts Admin |  |
 | is_element_present_ok | link=Socialtext, Inc. |  |
 
@@ -36,7 +36,7 @@
 | is_element_present_ok | link=Overview |
 | is_element_present_ok | link=Setup |
 | is_element_present_ok | link=Shutdown |
-| is_element_present_ok | link=Help |
+| is_element_present_ok | link=Report a Problem |
 | is_element_present_ok | link=Socialtext, Inc. |
 | is_text_present_ok | Perform Backup Now |
 | is_element_present_ok | backup_now |
@@ -118,7 +118,7 @@
 | click_ok | save_schedule |  |
 | wait_for_page_to_load_ok | 30000 |  |
 
-| config_is | backdays | 0  |
+| config_is | backdays | 0 |
 | config_is | backhour | 0 |
 | config_is | backminutes | 0 |
 
@@ -140,14 +140,15 @@
 | config_is | smbshare | test_dir |
 | config_is | smbuser | test_user |
 
-| *Comment* | * Setup Tab* |  |
+| *Comment* | 
+* Setup Tab* |  |
 
 | click_ok | link=Setup |  |
 | wait_for_page_to_load_ok | 10000 |  |
 | is_element_present_ok | link=Overview |  |
 | is_element_present_ok | link=Backup |  |
 | is_element_present_ok | link=Shutdown |  |
-| is_element_present_ok | link=Help |  |
+| is_element_present_ok | link=Report a Problem |  |
 | is_element_present_ok | link=Socialtext, Inc. |  |
 | is_text_present_ok | Internet Time Server |  |
 | is_text_present_ok | Appliance clock when this screen was generated: |  |
@@ -202,9 +203,9 @@
 | wait_for_page_to_load_ok | 30000 |  |
 | value_is | timeserver | ntp.ubuntu.org | make sure the default setting is ntp.ubuntu.org |
 
-| *Comment* | *Help tab* |  |
+| *Comment* | *Report a Problem tab* |  |
 
-| click_ok | link=Help |
+| click_ok | link=Report a Problem |
 | wait_for_page_to_load_ok | 30000 |
 | is_element_present_ok | link=Overview |
 | is_element_present_ok | link=Backup |
@@ -217,6 +218,13 @@
 | is_text_present_ok | Contact Socialtext Support |
 | is_element_present_ok | link=support@socialtext.com |
 
+| type_ok | tarball_email | bogus_qa_email@ken.socialtext.com |
+| type_ok | tarball_desc | THIS REPORT GENERATED FROM APPLIANCE WIKITESTS RUN BY QA. PLEASE IGNORE OR FORWARD TO QA. |
+| click_ok | tarball_button |  |
+| wait_for_element_visible_ok | tarball_message | 60000 |
+| wait_for_text_present_ok | Tarball Built, Upload Complete. Your message has been submitted to Socialtext Support. | 60000 |
+| text_like | tarball_message | Tarball Built, Upload Complete. Your message has been submitted to Socialtext Support. |
+
 | *Comment* | *Shutdown tab* |  |
 
 | click_ok | link=Shutdown |  |
@@ -224,7 +232,7 @@
 | is_element_present_ok | link=Overview |  |
 | is_element_present_ok | link=Backup |  |
 | is_element_present_ok | link=Setup |  |
-| is_element_present_ok | link=Help |  |
+| is_element_present_ok | link=Report a Problem |  |
 | is_element_present_ok | link=Socialtext, Inc. |  |
 | is_text_present_ok | Shut Down Appliance |  |
 | is_element_present_ok | shutdown |  |

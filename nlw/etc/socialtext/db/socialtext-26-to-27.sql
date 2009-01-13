@@ -100,8 +100,7 @@ CREATE TABLE container (
     container_type TEXT NOT NULL,
     user_id BIGINT,
     workspace_id BIGINT,
-    account_id BIGINT,
-    path_args TEXT
+    account_id BIGINT
 );
 
 CREATE SEQUENCE container_id

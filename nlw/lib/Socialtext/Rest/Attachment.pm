@@ -46,9 +46,9 @@ sub GET {
             $mime_type .= '; charset=' . $charset;
         }
 
-        if ( $mime_type =~ /^image\b/ ) {
+        if ( $mime_type =~ /^(?:image|video|audio)\b/ ) {
             # mod_xsendfile insists on sending the Last-Modified header,
-            # so cannot use it for images without breaking the caching behaviour.
+            # so cannot use it for media files without breaking the caching behaviour.
             # Please see {bz: 1931} for details.
             $fh = new IO::File $file, 'r';
             die "Cannot read $file: $!" unless $fh;
@@ -74,7 +74,7 @@ sub GET {
     return $self->_invalid_attachment( $rest, $@ ) if $@;
 
     # The frontend mod_xsendfile will take care of sending the attachment.
-    # (This happens when $fh is set to '', which is the default except for images.)
+    # (This happens when $fh is set to '', which is the default except for media files.)
     return $fh;
 }
 

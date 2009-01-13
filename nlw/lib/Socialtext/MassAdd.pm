@@ -90,7 +90,8 @@ LINE:
             # SANITY CHECK: do we have all the required fields?
             my @missing_fields = grep { !exists $available{$_} } @Required_fields;
             if (@missing_fields) {
-                my $msg = loc("could not be parsed.  The file was missing the following required fields (@missing_fields).  The file must have a header row listing the field headers.");
+                my $missing = join ', ', @missing_fields;
+                my $msg = loc("could not be parsed.  The file was missing the following required fields ($missing).  The file must have a header row listing the field headers.");
                 $self->_fail($msg);
                 last LINE;
             }

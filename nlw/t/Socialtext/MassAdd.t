@@ -10,7 +10,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 75;
+    plan tests => 84;
 }
 
 use mocked 'Socialtext::People::Profile', qw(save_ok);
@@ -474,4 +474,92 @@ Add_multiple_users_faillure: {
     isnt $profile1->{mobile_phone}, 'mobile1';
     my $profile2 = shift @Socialtext::People::Profile::Saved;
     isnt $profile2->{mobile_phone}, 'mobile2';
+}
+
+Missing_username_in_csv_header: {
+    my $BOGUS_CSV = <<'EOT';
+email_address,first_name,last_name,password
+guybrush@example.com,Guybrush,Threepwood,guybrush_password
+ghost@lechuck.example.com,Ghost Pirate,LeChuck,lechuck_password
+EOT
+
+    clear_log();
+
+    # set up the MassAdd-er
+    my @successes;
+    my @failures;
+    my $mass_add = Socialtext::MassAdd->new(
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+
+    # try to add the user
+    $mass_add->from_csv($BOGUS_CSV);
+
+    # make sure we failed, and *why*
+    is scalar @successes, 0,
+        'failed to add User(s) when missing username in CSV header';
+    is_deeply \@failures,
+        [
+        'Line 1: could not be parsed.  The file was missing the following required fields (username).  The file must have a header row listing the field headers.'
+        ], '... correct failure message';
+    is scalar(@failures), 1, '... and ONLY ONE error message recorded';
+}
+
+Missing_email_in_csv_header: {
+    my $BOGUS_CSV = <<'EOT';
+username,first_name,last_name
+guybrush,Guybrush,Threepwood
+lechuck,Ghost Pirate,LeChuck
+EOT
+
+    clear_log();
+
+    # set up the MassAdd-er
+    my @successes;
+    my @failures;
+    my $mass_add = Socialtext::MassAdd->new(
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+
+    # try to add the user
+    $mass_add->from_csv($BOGUS_CSV);
+
+    # make sure we failed, and *why*
+    is scalar @successes, 0,
+        'failed to add User(s) when missing email address in CSV header';
+    is_deeply \@failures,
+        [
+        'Line 1: could not be parsed.  The file was missing the following required fields (email_address).  The file must have a header row listing the field headers.'
+        ], '... correct failure message';
+    is scalar(@failures), 1, '... and ONLY ONE error message recorded';
+}
+
+Missing_csv_header: {
+    my $BOGUS_CSV = <<'EOT';
+guybrush,guybrush@example.com,Guybrush,Threepwood,guybrush_password
+lechuck,ghost@lechuck.example.com,Ghost Pirate,LeChuck,lechuck_password
+EOT
+
+    clear_log();
+
+    # set up the MassAdd-er
+    my @successes;
+    my @failures;
+    my $mass_add = Socialtext::MassAdd->new(
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+
+    # try to add the user
+    $mass_add->from_csv($BOGUS_CSV);
+
+    # make sure we failed, and *why*
+    is scalar @successes, 0, 'failed to add User(s) when missing CSV header';
+    is_deeply \@failures,
+        [
+        'Line 1: could not be parsed.  The file was missing the following required fields (username, email_address).  The file must have a header row listing the field headers.'
+        ], '... correct failure message';
+    is scalar(@failures), 1, '... and ONLY ONE error message recorded';
 }

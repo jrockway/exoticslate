@@ -75,7 +75,8 @@ ALTER TABLE ONLY container_type
         PRIMARY KEY (container_type);
 
 -- Mapping of a container type and its default gadgets
-CREATE TABLE container_type_gadget (
+CREATE TABLE default_gadget (
+    default_gadget_id BIGINT NOT NULL,
     container_type TEXT NOT NULL,
     src TEXT NOT NULL,
 
@@ -89,7 +90,16 @@ CREATE TABLE container_type_gadget (
     default_prefs TEXT [][]
 );
 
-ALTER TABLE ONLY container_type_gadget
+CREATE SEQUENCE
+    default_gadget_id
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+ALTER TABLE ONLY default_gadget
+    ADD CONSTRAINT default_gadget_pk
+        PRIMARY KEY (default_gadget_id),
     ADD CONSTRAINT container_type_fk
         FOREIGN KEY (container_type)
         REFERENCES container_type(container_type) ON DELETE CASCADE;
@@ -131,15 +141,13 @@ ALTER TABLE ONLY container
 CREATE TABLE gadget_instance (
     gadget_instance_id BIGINT NOT NULL,
     container_id BIGINT NOT NULL,
+    default_gadget_id BIGINT,
     gadget_id BIGINT NOT NULL,
 
     "col" INTEGER NOT NULL,
     "row" INTEGER NOT NULL,
 
-    minimized BOOLEAN DEFAULT FALSE,
-
-    -- determines whether the gadget is moveable
-    fixed BOOLEAN DEFAULT FALSE
+    minimized BOOLEAN DEFAULT FALSE
 );
 
 CREATE SEQUENCE gadget_instance_id
@@ -151,6 +159,10 @@ CREATE SEQUENCE gadget_instance_id
 ALTER TABLE ONLY gadget_instance
     ADD CONSTRAINT gadget_instace_pk
         PRIMARY KEY (gadget_instance_id),
+    ADD CONSTRAINT default_gadget_id_fk
+        FOREIGN KEY (default_gadget_id)
+        REFERENCES default_gadget(default_gadget_id)
+        ON DELETE CASCADE,
     ADD CONSTRAINT gadget_instance_container_fk
         FOREIGN KEY (container_id)
         REFERENCES container(container_id) ON DELETE CASCADE,

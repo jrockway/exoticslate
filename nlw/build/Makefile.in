@@ -425,7 +425,6 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/Socialtext/WikiText/Parser.t \
 	t/Socialtext/FetchRSSPlugin.t \
 	t/Socialtext/EmailReceiver-local-address.t \
-	t/Socialtext/Rest/Changes.t \
 	t/Socialtext/CategoryPlugin-email-address-encoding.t \
 	t/Socialtext/Date/l10n.t \
 	t/formatter-escape-comments.t \

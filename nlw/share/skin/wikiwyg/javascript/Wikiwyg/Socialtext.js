@@ -1560,14 +1560,11 @@ proto.enableThis = function() {
             return; // XXX - Disable Paste until it is a little bit more stable.
 
             self.pastebin = jQuery("#pastebin").get(0).contentWindow;
+            self.pastebin.document.body.innerHTML = "";
             self.pastebin.document.designMode = "on";
 
-            try {
-                self.pastebin.document.body.innerHTML = "";
-            } catch(e) { };
-
             jQuery( self.get_edit_document() ).bind("keydown", function(e) {
-                if (e.ctrlKey && e.keyCode == 86) {
+                if ((e.ctrlKey || e.metaKey) && e.keyCode == 86) {
                     self.pastebin.focus();
 
                     setTimeout(function() {
@@ -1575,7 +1572,7 @@ proto.enableThis = function() {
                         self.pastebin.document.body.innerHTML = "";
 
                         self.on_pasted(html);
-                    }, 500);
+                    }, 100);
                 }
             });
         }
@@ -1604,7 +1601,8 @@ proto.on_pasted = function(html) {
 
     var wikitext = self.wikiwyg.mode_objects[WW_ADVANCED_MODE].convert_html_to_wikitext(html);
 
-    jQuery.showLightbox({ html: "pasting...", overlayBackground: "transparent", speed: 1 });
+// XXX - Lightboxing causes insert to be in wrong place
+//     jQuery.showLightbox({ html: "pasting...", overlayBackground: "transparent", speed: 1 });
 
     jQuery.ajax({
         type: 'post',
@@ -1614,14 +1612,17 @@ proto.on_pasted = function(html) {
             content: wikitext
         },
         success: function(html) {
-            html = html.replace(/^<div class="wiki">\n*/i, '').replace(/\n*<br\/><\/div>\n*$/i, '');
+            html = html
+                .replace(/^<div class="wiki">\n*/i, '')
+                .replace(/\n*<br\/><\/div>\n*$/i, '')
+                .replace(/^<p>([\s\S]*?)<\/p>/, '$1');
 
             self.insert_html( html );
 
-            jQuery.hideLightbox();
+//             jQuery.hideLightbox();
         },
         error: function(xhr) {
-            jQuery.hideLightbox();
+//             jQuery.hideLightbox();
         }
     });
 
@@ -2430,6 +2431,9 @@ proto.exec_command = function(command, option) {
         }
     }
 
+    if ((command == 'inserthtml') && (typeof(option) != 'string') || option.length == 0) {
+        return true;
+    }
     return(this.get_edit_document().execCommand(command, false, option));
 };
 

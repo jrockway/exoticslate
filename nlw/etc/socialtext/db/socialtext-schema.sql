@@ -650,6 +650,21 @@ CREATE UNIQUE INDEX "Workspace___lower___name"
 CREATE INDEX "Workspace_account_id"
 	    ON "Workspace" (account_id);
 
+CREATE INDEX container_account_id
+	    ON container (account_id);
+
+CREATE INDEX container_container_type
+	    ON container (container_type);
+
+CREATE INDEX container_user_id
+	    ON container (user_id);
+
+CREATE INDEX container_workspace_id
+	    ON container (workspace_id);
+
+CREATE INDEX gadget_instance_user_pref__user_pref_id
+	    ON gadget_instance_user_pref (user_pref_id);
+
 CREATE INDEX ix_event_actor_time
 	    ON event (actor_id, "at");
 

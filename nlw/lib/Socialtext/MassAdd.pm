@@ -8,6 +8,7 @@ use Socialtext::Log qw(st_log);
 use Socialtext::User;
 use Socialtext::l10n qw/loc/;
 use Socialtext::Pluggable::Adapter;
+use Socialtext::String;
 use List::MoreUtils qw/mesh/;
 
 our $Has_People_Installed;
@@ -127,9 +128,7 @@ LINE:
 
 sub _clean_csv_header {
     my $header = shift;
-    $header = lc($_);       # lower-case
-    $header =~ s/^\s+//g;   # strip leading whitespace
-    $header =~ s/\s+$//g;   # strip trailing whitespace
+    $header = lc Socialtext::String::trim($header);
     $header =~ s/\W+/_/g;   # non-word chars become underscores
     return $header;
 }

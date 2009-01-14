@@ -10,7 +10,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 95;
+    plan tests => 97;
 }
 
 use mocked 'Socialtext::People::Profile', qw(save_ok);
@@ -268,6 +268,33 @@ EOT
     );
     $mass_add->from_csv($quoted_csv);
     is_deeply \@successes, ['Added user lechuck', 'Added user guybrush'], 'success message ok';
+    is_deeply \@failures, [], 'no failure messages';
+}
+
+Csv_field_order_unimportant: {
+    my $ODD_ORDER_CSV = <<'EOT';
+last_name,first_name,username,email_address
+Threepwood,Guybrush,guybrush,guybrush@example.com
+EOT
+
+    clear_log();
+
+    # set up a fake User so we don't get a mocked one
+    local $Socialtext::User::Users{guybrush} = undef;
+
+    # set up the MassAdd-er
+    my @successes;
+    my @failures;
+    my $mass_add = Socialtext::MassAdd->new(
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+
+    # try to add the user
+    $mass_add->from_csv($ODD_ORDER_CSV);
+
+    # make sure we were able to add the user
+    is_deeply \@successes, ['Added user guybrush'], 'success message ok';
     is_deeply \@failures, [], 'no failure messages';
 }
 

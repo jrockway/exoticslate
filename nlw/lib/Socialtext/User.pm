@@ -1247,6 +1247,18 @@ EOSQL
     }
 }
 
+sub ByUserIds {
+    my $class = shift;
+    my $ids   = shift;
+    return Socialtext::MultiCursor->new(
+        iterables => $ids,
+        apply     => sub {
+            my $id = shift;
+            return $class->new( user_id => $id );
+        }
+    );
+}
+
 {
     Readonly my $spec => {
         %LimitAndSortSpec,

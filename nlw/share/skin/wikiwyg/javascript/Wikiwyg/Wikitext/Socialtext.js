@@ -1596,6 +1596,17 @@ proto.check_start_of_block = function(elem) {
     ) this.wikitext += '\n';
 }
 
+proto._get_next_node = function(elem) {
+    if (elem.nextSibling) {
+        /* The next node is also whitespace -- look further */
+        if (elem.nextSibling.nodeType == 3 && elem.nextSibling.wikitext.match(/^[\xa0\s]*$/)) {
+            return this._get_next_node(elem.nextSibling);
+        }
+        return elem.nextSibling;
+    }
+    return this._get_next_node(elem.parentNode);
+}
+
 proto.format_text = function(elem) {
     if (elem.previousSibling &&
         elem.previousSibling.nodeName == 'P' &&
@@ -1609,12 +1620,15 @@ proto.format_text = function(elem) {
         replace(/^\n+/, '').
         replace(/[\xa0 ]+/g, ' ');
 
-    if (text.match(/^\n+$/) && !elem.nextSibling) return '';
-
-    if (text.match(/^[\xa0\s]+$/)
-        && elem.nextSibling
-        && elem.nextSibling.nodeType == 1
-        && elem.nextSibling.nodeName == 'BR') return '';
+    if (text.match(/^[\xa0\s]+$/)) {
+        var next = this._get_next_node(elem);
+        if (!next) return '';
+        if (next.nodeType == 1 && next.nodeName.match(
+            /^(?:BR|UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)
+        ) return '';
+        console.log(elem);
+        console.log(next);
+    }
 
     text = text.replace(/\xa0 /g,' ');
     text = text.replace(/\xa0/g,' ');

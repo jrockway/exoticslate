@@ -10,7 +10,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 90;
+    plan tests => 95;
 }
 
 use mocked 'Socialtext::People::Profile', qw(save_ok);
@@ -630,4 +630,50 @@ EOT
         ],
         '... correct failure messages';
     is scalar(@failures), 2, '... one error message per User failure';
+}
+
+Csv_header_cleanup: {
+    # CSV with:
+    #   a)  CamelCase headers,
+    #   b)  Leading/trailing whitespace (which should be ignored)
+    #   c)  Embedded whitespace (which should be turned into "_"s)
+    my $CAMEL_CSV = <<'EOT';
+Username , Email Address , First Name , Last Name , Password, Position , Company , Location
+guybrush,guybrush@example.com,Guybrush,Threepwood,my_password,Captain,Pirates R. Us,High Seas
+EOT
+
+    clear_log();
+
+    # Set up a fake User, so we don't get a mocked one by accident.
+    local $Socialtext::User::Users{guybrush} = undef;
+
+    # create a fake Profile so we can capture/verify the changes (and make
+    # sure that they matched up correctly with the field names).
+    local $Socialtext::People::Profile::Profiles{1}
+        = Socialtext::People::Profile->new(
+            position => 'Chef',
+            company  => 'Scumm Bar',
+            location => 'Monkey Island',
+        );
+
+    # set up the MassAdd-er
+    my @successes;
+    my @failures;
+    my $mass_add = Socialtext::MassAdd->new(
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+
+    # add the user
+    $mass_add->from_csv($CAMEL_CSV);
+
+    # make sure the User got added ok, and that the Profile was updated
+    # properly
+    is_deeply \@successes, ['Added user guybrush'], 'success message ok';
+    is_deeply \@failures, [], 'no failure messages';
+
+    my $profile = $Socialtext::People::Profile::Profiles{1};
+    is $profile->get_attr('position'), 'Captain',       'People position was updated';
+    is $profile->get_attr('company'),  'Pirates R. Us', 'People company was updated';
+    is $profile->get_attr('location'), 'High Seas',     'People location was updated';
 }

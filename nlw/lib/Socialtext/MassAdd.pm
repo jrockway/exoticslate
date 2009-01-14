@@ -128,6 +128,8 @@ LINE:
 sub _clean_csv_header {
     my $header = shift;
     $header = lc($_);       # lower-case
+    $header =~ s/^\s+//g;   # strip leading whitespace
+    $header =~ s/\s+$//g;   # strip trailing whitespace
     $header =~ s/\W+/_/g;   # non-word chars become underscores
     return $header;
 }

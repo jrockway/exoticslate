@@ -92,12 +92,15 @@ sub next {
     my $next = $self->_next($iter);
 
     if (defined $next) {
-        return (defined $self->apply) ? $self->apply->($next) : $next;
+        return (defined $self->apply) 
+            ? $self->apply->($next) 
+            : $next;
     }
     else {
-        if ($i == $#{$self->iterables}) {
+        if ($i >= $#{$self->iterables}) {
             return undef;
-        } else {
+        }
+        else {
             $self->current_iterable($i + 1);
             $self->current_iterable_index(0);
             return $self->next;
@@ -111,14 +114,21 @@ sub _next {
     if (ref $iterable eq 'ARRAY') {
         my $index = $self->current_iterable_index;
         $self->current_iterable_index($index + 1);
-        return $index > $#$iterable ? undef: $iterable->[$index];
+
+        return ( $index > $#$iterable 
+            ? undef 
+            : $iterable->[$index]);
     }
     elsif (ref $iterable) {  # assume it's an object
         my @next = $iterable->next;
-        return @next > 1 ? [@next] : $next[0];
+
+        return (@next > 1 
+            ? [@next] 
+            : $next[0]);
     }
     else {
-        return $iterable
+        $self->current_iterable( $self->current_iterable + 1 );
+        return $iterable || undef;
     }
 }
 

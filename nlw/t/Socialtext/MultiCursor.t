@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 25;
+use Test::Socialtext tests => 26;
 
 BEGIN {
     use_ok( 'Socialtext::MultiCursor' );
@@ -87,6 +87,13 @@ mc_all_with_scalars: {
 
     my $item = $mc->next;
     is($item, 'one', 'scalar context fetches the next element');
+
+    $mc->next; # two
+    $mc->next; # three
+
+    my $eol = $mc->next;
+    ok( (!$eol), 'scalar context properly returns end of list.');
+
     ok( $mc->reset, 'scalar resets properly' );
 
     my @result = $mc->all;

@@ -4,8 +4,9 @@ use strict;
 use warnings;
 
 use Socialtext::Storage;
-use Socialtext::AppConfig;
 use Socialtext::CGI;
+use Class::Field qw(const field);
+use unmocked 'Socialtext::AppConfig';
 use unmocked 'Cwd';
 use unmocked 'File::Glob';
 
@@ -13,6 +14,12 @@ use unmocked 'File::Glob';
 
 my %hooks;
 my %rests;
+
+sub dependencies { }
+const priority => 100;
+const scope => 'account';
+const hidden => 1; # hidden to admins
+const read_only => 0; # cannot be disabled/enabled in the control panel
 
 # perldoc Socialtext::URI for arguments
 #    path = '' & query => {}

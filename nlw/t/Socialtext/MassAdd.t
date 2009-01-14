@@ -447,7 +447,7 @@ guybrush,guybrush@example.com,Guybrush,Threepwood,password,Captain,Pirates R. Us
 bluebeard,bluebeard@example.com,Blue,Beard,password,Captain,Pirates R. Us,High Seas,123-456-YARR,mobile2,123-HIGH-SEA
 EOT
 
-Add_multiple_users_faillure: {
+Add_multiple_users_failure: {
     @Socialtext::People::Profile::Saved = ();
     local @Socialtext::People::Fields::UneditableNames = qw/mobile_phone/;
 

@@ -1362,31 +1362,21 @@ proto.convert_html_to_wikitext = function(html) {
         // characters in there, which we need to remove.
             var cleanup_newlines = function() {
                 if (this.nodeType == 3) {
-                    if (this.previousSibling && this.previousSibling.nodeType == 1) {
-                        if ( this.previousSibling.nodeName == 'BR' ) {
-                            this.nodeValue = this.nodeValue.replace(/^\s+/, '');
+                    if (this.previousSibling && this.previousSibling.nodeType == 1 && this.previousSibling.nodeName != 'BR' ) {
+                        if (this.previousSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
+                            return;
                         }
-                        else {
-                            if (this.previousSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
-                                return;
-                            }
-                            this.nodeValue = this.nodeValue.replace(/^\n/, ' ');
-                        }
+                        this.nodeValue = this.nodeValue.replace(/^\n/, ' ');
                     }
                     else {
                         this.nodeValue = this.nodeValue.replace(/^\n/, '');
                     }
 
-                    if (this.nextSibling && this.nextSibling.nodeType == 1) {
-                        if ( this.nextSibling.nodeName == 'BR' ) {
-                            this.nodeValue = this.nodeValue.replace(/\s+$/, '');
+                    if (this.nextSibling && this.nextSibling.nodeType == 1 && this.nextSibling.nodeName != 'BR' ) {
+                        if (this.nextSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
+                            return;
                         }
-                        else {
-                            if (this.nextSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
-                                return;
-                            }
-                            this.nodeValue = this.nodeValue.replace(/\n$/, ' ');
-                        }
+                        this.nodeValue = this.nodeValue.replace(/\n$/, ' ');
                     }
                     else {
                         this.nodeValue = this.nodeValue.replace(/\n$/, '');
@@ -1597,9 +1587,11 @@ proto.check_start_of_block = function(elem) {
 }
 
 proto._get_next_node = function(elem) {
+    if (!elem) { return elem; }
+
     if (elem.nextSibling) {
         /* The next node is also whitespace -- look further */
-        if (elem.nextSibling.nodeType == 3 && elem.nextSibling.wikitext.match(/^[\xa0\s]*$/)) {
+        if (elem.nextSibling.nodeType == 3 && elem.nextSibling.nodeValue.match(/^[\xa0\s]*$/)) {
             return this._get_next_node(elem.nextSibling);
         }
         return elem.nextSibling;
@@ -1626,6 +1618,14 @@ proto.format_text = function(elem) {
         if (next.nodeType == 1 && next.nodeName.match(
             /^(?:BR|UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)
         ) return '';
+    }
+
+    if (text.match(/^\s+/) && elem.previousSibling && elem.previousSibling.nodeType == 1 && elem.previousSibling.nodeName == 'BR') {
+        text = text.replace(/^\s+/, '');
+    }
+
+    if (text.match(/\s+$/) && elem.nextSibling && elem.nextSibling.nodeType == 1 && elem.nextSibling.nodeName == 'BR') {
+        text = text.replace(/\s+$/, '');
     }
 
     text = text.replace(/\xa0 /g,' ');

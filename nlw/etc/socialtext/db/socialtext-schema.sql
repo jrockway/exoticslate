@@ -527,6 +527,15 @@ CREATE INDEX ix_event_tag
 CREATE INDEX ix_event_workspace_page
 	    ON event (page_workspace_id, page_id);
 
+CREATE INDEX ix_noun_at
+	    ON noun ("at");
+
+CREATE INDEX ix_noun_at_user
+	    ON noun ("at", user_id);
+
+CREATE INDEX ix_noun_user_at
+	    ON noun (user_id, "at");
+
 CREATE INDEX ix_page_events_contribs_actor_time
 	    ON event (actor_id, "at")
 	    WHERE ((event_class = 'page') AND is_page_contribution("action"));
@@ -778,4 +787,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '26');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '27');

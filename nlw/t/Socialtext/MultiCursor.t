@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 22;
+use Test::Socialtext tests => 25;
 
 BEGIN {
     use_ok( 'Socialtext::MultiCursor' );
@@ -82,6 +82,13 @@ mc_all_with_scalars: {
         apply     => sub { shift }
     );
 
+    my $count = $mc->count;
+    is($count, 3, 'scalar context is counted correctly');
+
+    my $item = $mc->next;
+    is($item, 'one', 'scalar context fetches the next element');
+    ok( $mc->reset, 'scalar resets properly' );
+
     my @result = $mc->all;
-    is_deeply( \@result, [ 'one', 'two', 'three' ], 'All elements applied properly in scalar context');  
+    is_deeply( \@result, [ 'one', 'two', 'three' ], 'All elements applied properly in scalar context');
 }

@@ -62,7 +62,7 @@ sub reset {
     $self->current_iterable_index(0);
 
     foreach my $iterable (@{$self->iterables}) {
-        $iterable->reset unless ref $iterable eq 'ARRAY';
+        $iterable->reset unless ref $iterable eq 'ARRAY' or ! ref $iterable;
     }
     return $self;
 }
@@ -76,7 +76,11 @@ sub count {
 sub _count {
     my ( $self, $iterable ) = @_;
 
-    return ref $iterable eq 'ARRAY' ? scalar @$iterable : $iterable->count;
+    return ref $iterable eq 'ARRAY' 
+        ? scalar @$iterable  
+        : ( ref $iterable )
+            ? $iterable->count
+            : 1;
 }
 
 sub next {
@@ -109,9 +113,12 @@ sub _next {
         $self->current_iterable_index($index + 1);
         return $index > $#$iterable ? undef: $iterable->[$index];
     }
-    else {
+    elsif (ref $iterable) {  # assume it's an object
         my @next = $iterable->next;
         return @next > 1 ? [@next] : $next[0];
+    }
+    else {
+        return $iterable
     }
 }
 

@@ -8,7 +8,6 @@ use base 'Socialtext::Rest';
 use IO::File;
 use Socialtext::HTTP ':codes';
 use Socialtext::l10n qw(system_locale);
-use Socialtext::BrowserDetect;
 
 sub allowed_methods { 'GET, HEAD, DELETE' }
 sub permission { +{ GET => 'read', DELETE => 'attachments' } }
@@ -47,9 +46,9 @@ sub GET {
             $mime_type .= '; charset=' . $charset;
         }
 
-        if (Socialtext::BrowserDetect::ie()) {
+        if ( $mime_type =~ /^(?:image|video|audio)\b/ ) {
             # mod_xsendfile insists on sending the Last-Modified header,
-            # so cannot use it for IE without breaking the caching behaviour.
+            # so cannot use it for media files without breaking the caching behaviour.
             # Please see {bz: 1931} for details.
             $fh = new IO::File $file, 'r';
             die "Cannot read $file: $!" unless $fh;
@@ -75,7 +74,7 @@ sub GET {
     return $self->_invalid_attachment( $rest, $@ ) if $@;
 
     # The frontend mod_xsendfile will take care of sending the attachment.
-    # (This happens when $fh is set to '', which is the default for non-IE.)
+    # (This happens when $fh is set to '', which is the default except for media files.)
     return $fh;
 }
 

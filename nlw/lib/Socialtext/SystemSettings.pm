@@ -5,7 +5,7 @@ use warnings;
 use base 'Exporter';
 use Socialtext::SQL qw/sql_begin_work sql_execute sql_commit sql_singlevalue/;
 
-our @EXPORT_OK = qw/get_system_setting set_system_setting/;
+our @EXPORT_OK = qw/exists_system_setting get_system_setting set_system_setting/;
 
 # This hook allows settings to have custom code run when they're fetched
 # from the database.
@@ -13,6 +13,15 @@ our %Get_setting_hooks = (
     'default-account' => \&default_account,
     'default-skin' => \&default_skin,
 );
+
+sub exists_system_setting {
+    my $name = shift;
+    my $value = sql_singlevalue(<<EOT, $name);
+SELECT COUNT(*) FROM "System"
+    WHERE field = ?
+EOT
+    return $value;
+}
 
 # The field may not exist, so we'll need to be careful.
 sub get_system_setting {

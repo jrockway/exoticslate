@@ -24,10 +24,10 @@
         <div class="widgetHeaderTitle">
             <h4 id="[% gadget.id %]-title" class="widgetHeaderTitleBox">
                 [% IF !gadget.fixed %]
-                <img  src="[% gadget.module_prefs.thumbnail || "$share/images/iconContent.png" %]" />
+                <img  src="[% gadget.thumbnail || "$share/images/iconContent.png" %]" />
                 [% END %]
-                <span id="[% gadget.id %]-title-text" class="widgetHeaderTitleText" title="[% gadget.module_prefs.title %]">
-                    [% gadget.module_prefs.title %]
+                <span id="[% gadget.id %]-title-text" class="widgetHeaderTitleText" title="[% gadget.title %]">
+                    [% gadget.title %]
                 </span>
             </h4>
         </div>

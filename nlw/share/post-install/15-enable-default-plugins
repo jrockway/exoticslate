@@ -1,0 +1,20 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use warnings;
+use strict;
+use Socialtext::Account;
+use Socialtext::SystemSettings qw(exists_system_setting);
+
+enable_first_time('signals');
+exit 0;
+
+sub enable_first_time {
+    my $name = shift;
+
+    if (-d "/usr/share/nlw/plugin/$name") {
+        return if exists_system_setting("$name-enabled-all");
+
+        print "Enabling plugin $name for all accounts.\n";
+        Socialtext::Account->EnablePluginForAll($name);
+    }
+}

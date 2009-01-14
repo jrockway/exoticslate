@@ -133,3 +133,19 @@ etc/socialtext/uri_map.d/signals.yaml
 # log excludes
 dev-bin/test_access.log
 dev-bin/test_nlw.log
+lib/Socialtext/Gadgets/XML.pm
+t/widget/Test1.xml
+t/widget/Test2.xml
+t/widget/lang/Test_en.xml
+t/widget/lang/Test_es.xml
+lib/Socialtext/Gadgets/ContainerType.pm
+bin/copy_from_shindig
+bin/generate-feature
+bin/guanxi_import.pl
+bin/po.xml
+bin/po.xsd
+bin/validate_gadget
+bin/st-widgets
+bin/get-sample-data
+lib/Socialtext/Rest/Gadget.pm
+etc/socialtext/uri_map.d/widgets.yaml

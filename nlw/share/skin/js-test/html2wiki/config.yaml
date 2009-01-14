@@ -1,0 +1,23 @@
+index_title: Socialtext HTML-to-Wikitext Testing
+import_libs:
+  - ../../s3/javascript/Debug.js
+  - ../../common/javascript/jquery-1.2.6.js
+  - ../../s3/javascript/loc.js 
+  - ../../s2/javascript/Cookie.js
+  - ../../common/javascript/prototype-1.4.0/dist/prototype.js
+  - ../../common/javascript/WebToolkit-base64-2007-09-25.js
+  - ../../common/javascript/Ajax-0.11/lib/Ajax.js
+  - ../common/lib/Test/Wikiwyg.js
+  - ../../s2/javascript/main.js
+  - ../../s2/javascript/md5.js
+  - ../../s2/javascript/Cookie.js
+  - ../../s2/javascript/pageview.js
+#   - ../../common/javascript/DOM.Events-0.02/lib/DOM/Events.js
+#   - ../../common/javascript/YAML-0.11/lib/YAML.js
+#   - ../../common/javascript/Widget.Lightbox-0.06/lib/Widget/Lightbox.js
+  - ../../wikiwyg/javascript/lib/Wikiwyg.js
+  - ../../wikiwyg/javascript/lib/Wikiwyg/Wysiwyg.js
+  - ../../wikiwyg/javascript/Wikiwyg/Socialtext.js
+  - ../../wikiwyg/javascript/Widgets.js 
+  - ../../wikiwyg/javascript/Wikiwyg/Widgets.js
+  - ../../wikiwyg/javascript/Wikiwyg/Wikitext/Socialtext.js

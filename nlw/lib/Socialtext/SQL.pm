@@ -39,13 +39,14 @@ Provides methods with extra error checking and connections to the database.
 
 our @EXPORT_OK = qw(
     get_dbh disconnect_dbh
-    sql_execute sql_selectrow sql_singlevalue 
+    sql_execute sql_execute_array sql_selectrow sql_singlevalue 
     sql_commit sql_begin_work sql_rollback sql_in_transaction
     sql_convert_to_boolean sql_convert_from_boolean
     sql_parse_timestamptz sql_format_timestamptz
 );
 our %EXPORT_TAGS = (
-    'exec' => [qw(sql_execute sql_selectrow sql_singlevalue)],
+    'exec' => [qw(sql_execute sql_execute_array
+                  sql_selectrow sql_singlevalue)],
     'time' => [qw(sql_parse_timestamptz sql_format_timestamptz)],
     'bool' => [qw(sql_convert_to_boolean sql_convert_from_boolean)],
     'txn'  => [qw(sql_commit sql_begin_work
@@ -111,6 +112,17 @@ Returns a statement handle.
 sub sql_execute {
     my $statement = shift;
     # rest of @_ are bindings, prevent making copies
+    _sql_execute($statement, 'execute', \@_);
+}
+
+sub sql_execute_array {
+    my $statement = shift;
+    # rest of @_ are bindings, prevent making copies
+    _sql_execute($statement, 'execute_array', \@_);
+}
+
+sub _sql_execute {
+    my ($statement, $exec_sub, $bind) = @_;
 
     my $dbh = get_dbh();
     Socialtext::Timer->Continue('sql_execute');
@@ -123,17 +135,17 @@ sub sql_execute {
     if ($DEBUG or $TRACE_SQL) {
         my (undef, $file, $line) = caller($Level);
         warn "Preparing ($statement) "
-            . _list_bindings(\@_)
+            . _list_bindings($bind)
             . " from $file line $line\n";
     }
     if ($PROFILE_SQL) {
         my (undef, $file, $line) = caller($Level);
         warn "Profiling ($statement) "
-            . _list_bindings(\@_)
+            . _list_bindings($bind)
             . " from $file line $line\n";
         my $explain = "EXPLAIN ANALYZE $statement";
         my $esth = $dbh->prepare($explain);
-        $esth->execute(@_);
+        $esth->$exec_sub(@$bind);
         my $lines = $esth->fetchall_arrayref();
         warn map { "$_->[0]\n" } @$lines;
     }
@@ -141,12 +153,12 @@ sub sql_execute {
         Socialtext::Timer->Continue('sql_prepare');
         $sth = $dbh->prepare($statement);
         Socialtext::Timer->Pause('sql_prepare');
-        $sth->execute(@_) ||
-            die "execute failed: " . $sth->errstr;
+        $sth->$exec_sub(@$bind) ||
+            die "$exec_sub failed: " . $sth->errstr;
     };
     if (my $err = $@) {
         my $msg = "Error during sql_execute():\n$statement\n";
-        $msg .= _list_bindings(\@_);
+        $msg .= _list_bindings($bind);
         unless ($in_tx) {
             warn "Rolling back in sql_execute()" if $DEBUG;
             sql_rollback();

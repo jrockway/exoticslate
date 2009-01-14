@@ -27,6 +27,8 @@ if (-e $root_dir) {
 
 mkdir($root_dir) or die "unable to create $root_dir";
 
+$ENV{NLW_DEV_MODE} = 1;
+
 Test::Socialtext::Environment->CreateEnvironment(
     root_dir       => $root_dir,
     base_dir       => $base_dir,

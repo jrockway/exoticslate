@@ -136,7 +136,7 @@ proto.convertWikitextToHtml = function(wikitext, func) {
 }
 
 proto.convertHtmlToWikitext = function(html, func) {
-    func(this.convert_html_to_wikitext(html));
+    func(this.convert_html_to_wikitext(html, true));
 }
 
 proto.get_keybinding_area = function() {
@@ -710,7 +710,13 @@ proto.strip_msword_gunk = function(html) {
         replace(
             /<(span|\w:\w+)[^>]*>(\s*&nbsp;\s*)+<\/\1>/gi,
             function(m) {
-                return m.match(/ugly-ie-css-hack/) ? m : '';
+                return m.match(/ugly-ie-css-hack/) ? m : ' ';
+            }
+        ).
+        replace(
+            /<(span|\w:\w+)[^>]*><font[^>]*>(\s*&nbsp;\s*)+<\/font><\/\1>/gi,
+            function(m) {
+                return m.match(/ugly-ie-css-hack/) ? m : ' ';
             }
         ).
         replace(/<\/?(xml|st\d+:\w+|[ovwxp]:\w+)[^>]*>/gi, '');
@@ -1010,6 +1016,20 @@ proto.check_style_for_attribute = function(style, attribute) {
     return string.match("\\b" + attribute + "\\b");
 }
 
+proto._for_interesting_attributes = function(cb) {
+    var interesting_attributes = [
+        [ 'font', 'weight' ],
+        [ 'font', 'style' ],
+        [ 'text', 'decoration' ]
+    ];
+    for (var i = 0; i < interesting_attributes.length; i++) {
+        var pair = interesting_attributes[i];
+        var css = pair[0] + '-' + pair[1];
+        var js = pair[0] + pair[1].ucFirst();
+        cb(js, css);
+    }
+}
+
 proto.squish_style_object_into_string = function(style) {
     if (! style) return;
     if ((style.constructor+'').match('String'))
@@ -1020,13 +1040,10 @@ proto.squish_style_object_into_string = function(style) {
         [ 'text', 'decoration' ]
     ];
     var string = '';
-    for (var i = 0; i < interesting_attributes.length; i++) {
-        var pair = interesting_attributes[i];
-        var css = pair[0] + '-' + pair[1];
-        var js = pair[0] + pair[1].ucFirst();
+    this._for_interesting_attributes(function(js, css){
         if (style[js])
             string += css + ': ' + style[js] + '; ';
-    }
+    });
     return string;
 }
 
@@ -1310,7 +1327,7 @@ if (! window.Page) {
     };
 }
 
-proto.convert_html_to_wikitext = function(html) {
+proto.convert_html_to_wikitext = function(html, isWholeDocument) {
     html = this.strip_msword_gunk(html);
 
     (function ($) {
@@ -1371,20 +1388,23 @@ proto.convert_html_to_wikitext = function(html) {
                     $(this).contents().each(cleanup_newlines);
                 }
             }
-            if (Socialtext && Socialtext.wiki_id) {
+
+            if (isWholeDocument) {
                 var contents = $dom.find('div.wiki').contents();
-                if (contents.length > 0) {
-                    if (contents[0].nodeType == 3) {
-                        contents[0].nodeValue = contents[0].nodeValue.replace(/^\n/, '');
-                    }
-                    if (contents[contents.length-1].nodeType == 3) {
-                        contents[contents.length-1].nodeValue = contents[contents.length-1].nodeValue.replace(/\n$/, '');
-                    }
-                    contents.each(cleanup_newlines);
+                if (contents.length == 0) {
+                    contents = $dom.contents();
                 }
+
+                if (contents[0].nodeType == 3) {
+                    contents[0].nodeValue = contents[0].nodeValue.replace(/^\n/, '');
+                }
+                if (contents[contents.length-1].nodeType == 3) {
+                    contents[contents.length-1].nodeValue = contents[contents.length-1].nodeValue.replace(/\n$/, '');
+                }
+                contents.each(cleanup_newlines);
             }
             else {
-                /* Probably within js-test. */
+                /* Probably within js-test or paste. */
                 $dom.contents().each(cleanup_newlines);
             }
             html = $dom.html();
@@ -1538,6 +1558,9 @@ proto.no_descend = function(elem) {
         if (elem.style.marginLeft.match(/^(\d+)px/)) {
             elem.is_indented = Number(RegExp.$1);
         }
+        else if (elem.style.marginLeft.match(/^([\.\d]+)in/)) {
+            elem.is_indented = Number(RegExp.$1) * 80;
+        }
     }
 
     return Boolean(
@@ -1566,6 +1589,19 @@ proto.check_start_of_block = function(elem) {
     ) this.wikitext += '\n';
 }
 
+proto._get_next_node = function(elem) {
+    if (!elem) { return elem; }
+
+    if (elem.nextSibling) {
+        /* The next node is also whitespace -- look further */
+        if (elem.nextSibling.nodeType == 3 && elem.nextSibling.nodeValue.match(/^[\xa0\s]*$/)) {
+            return this._get_next_node(elem.nextSibling);
+        }
+        return elem.nextSibling;
+    }
+    return this._get_next_node(elem.parentNode);
+}
+
 proto.format_text = function(elem) {
     if (elem.previousSibling &&
         elem.previousSibling.nodeName == 'P' &&
@@ -1579,9 +1615,21 @@ proto.format_text = function(elem) {
         replace(/^\n+/, '').
         replace(/[\xa0 ]+/g, ' ');
 
-    if (text.match(/^[\xa0\s]+$/) && (
-        !elem.nextSibling || elem.nextSibling.nodeName == 'BR'
-    )) return '';
+    if (text.match(/^[\xa0\s]+$/)) {
+        var next = this._get_next_node(elem);
+        if (!next) return '';
+        if (next.nodeType == 1 && next.nodeName.match(
+            /^(?:BR|UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)
+        ) return '';
+    }
+
+    if (text.match(/^\s+/) && elem.previousSibling && elem.previousSibling.nodeType == 1 && elem.previousSibling.nodeName == 'BR') {
+        text = text.replace(/^\s+/, '');
+    }
+
+    if (text.match(/\s+$/) && elem.nextSibling && elem.nextSibling.nodeType == 1 && elem.nextSibling.nodeName == 'BR') {
+        text = text.replace(/\s+$/, '');
+    }
 
     text = text.replace(/\xa0 /g,' ');
     text = text.replace(/\xa0/g,' ');
@@ -1908,7 +1956,18 @@ proto.format_a = function(elem) {
     /* {bz: 176}: For <a><span style="..."></span></a>, merge the inner tag's style into A's. */
     if (elem.childNodes.length == 1 && elem.childNodes[0].nodeType == 1) {
         var additional_styles = elem.childNodes[0].getAttribute("style");
-        elem.setAttribute('style', elem.getAttribute('style') + ';' + additional_styles);
+        if (additional_styles) {
+            if ((additional_styles.constructor+'').match('String')) {
+                elem.setAttribute('style', elem.getAttribute('style') + ';' + additional_styles);
+            }
+            else {
+                this._for_interesting_attributes(function(js){
+                    if (additional_styles[js]) {
+                        elem.style[js] = additional_styles[js];
+                    }
+                });
+            }
+        }
     }
 
     this.check_start_of_block(elem);
@@ -2063,6 +2122,10 @@ proto.get_wiki_comment = function(elem) {
 }
 
 proto.format_br = function(elem) {
+    if (elem.style.pageBreakBefore == 'always') {
+        return this.format_hr(elem);
+    }
+
     if (Wikiwyg.is_ie) 
        this.wikitext = this.wikitext.replace(/\xA0/, "");
     return (this.wikitext && !this.wikitext.match(/\n\n$/)) ? '\n' : '';

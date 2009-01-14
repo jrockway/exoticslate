@@ -49,8 +49,11 @@ sub code_base {
 }
 
 sub current_workspace {
-  my $self = shift;
-  return 'admin';
+    my $self = shift;
+    if (@_) {
+        $self->{_workspace} = shift;
+    }
+    return $self->{_workspace};
 }
 
 sub add_rest {
@@ -89,6 +92,7 @@ sub new {
     # is actually instantiated deep inside nlw we can't just use that data
     my $self = {
 #        %args,
+        _workspace => Socialtext::Workspace->new(name => 'admin'),
     };
     bless $self, $class;
     return $self;

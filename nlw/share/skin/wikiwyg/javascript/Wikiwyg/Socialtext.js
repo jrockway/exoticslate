@@ -530,7 +530,6 @@ proto.resizeEditor = function () {
     var $textarea = jQuery('#wikiwyg_wikitext_textarea');
 
     if ($iframe.is(":visible")) {
-        jQuery("#st-editing-prefix-container").width($iframe.width()+2);
         $iframe.width( jQuery('#st-edit-mode-view').width() - 48 );
 
         this.modeByName(WW_SIMPLE_MODE).setHeightOf(
@@ -538,7 +537,6 @@ proto.resizeEditor = function () {
         );
     }
     else if ($textarea.is(":visible")) {
-        jQuery("#st-editing-prefix-container").width($textarea.width());
         this.modeByName(WW_ADVANCED_MODE).setHeightOfEditor();
     }
 
@@ -1560,14 +1558,16 @@ proto.enableThis = function() {
             return; // XXX - Disable Paste until it is a little bit more stable.
 
             self.pastebin = jQuery("#pastebin").get(0).contentWindow;
+            self.pastebin.document.body.innerHTML = "";
             self.pastebin.document.designMode = "on";
 
-            try {
-                self.pastebin.document.body.innerHTML = "";
-            } catch(e) { };
+            var event_name = "keydown";
+            if (jQuery.browser.mozilla && navigator.oscpu.match(/Mac/)) {
+                event_name = "keypress";
+            }
 
-            jQuery( self.get_edit_document() ).bind("keydown", function(e) {
-                if (e.ctrlKey && e.keyCode == 86) {
+            jQuery( self.get_edit_document() ).bind(event_name, function(e) {
+                if ((e.ctrlKey || e.metaKey) && (e.which == 86 || e.which == 118)) {
                     self.pastebin.focus();
 
                     setTimeout(function() {
@@ -1575,7 +1575,7 @@ proto.enableThis = function() {
                         self.pastebin.document.body.innerHTML = "";
 
                         self.on_pasted(html);
-                    }, 500);
+                    }, 100);
                 }
             });
         }
@@ -1597,6 +1597,9 @@ proto.enableThis = function() {
 proto.on_pasted = function(html) {
     var self = this;
 
+    // XXX: for testing purpose.
+    // html = html.toUpperCase();
+
     if (this.paste_buffer_is_simple(html)) {
         self.insert_html( html );
         return;
@@ -1604,7 +1607,8 @@ proto.on_pasted = function(html) {
 
     var wikitext = self.wikiwyg.mode_objects[WW_ADVANCED_MODE].convert_html_to_wikitext(html);
 
-    jQuery.showLightbox({ html: "pasting...", overlayBackground: "transparent", speed: 1 });
+// XXX - Lightboxing causes insert to be in wrong place
+//     jQuery.showLightbox({ html: "pasting...", overlayBackground: "transparent", speed: 1 });
 
     jQuery.ajax({
         type: 'post',
@@ -1614,14 +1618,17 @@ proto.on_pasted = function(html) {
             content: wikitext
         },
         success: function(html) {
-            html = html.replace(/^<div class="wiki">\n*/i, '').replace(/\n*<br\/><\/div>\n*$/i, '');
+            html = html
+                .replace(/^<div class="wiki">\n*/i, '')
+                .replace(/\n*<br\/><\/div>\n*$/i, '')
+                .replace(/^<p>([\s\S]*?)<\/p>/, '$1');
 
             self.insert_html( html );
 
-            jQuery.hideLightbox();
+//             jQuery.hideLightbox();
         },
         error: function(xhr) {
-            jQuery.hideLightbox();
+//             jQuery.hideLightbox();
         }
     });
 
@@ -2430,6 +2437,9 @@ proto.exec_command = function(command, option) {
         }
     }
 
+    if ((command == 'inserthtml') && (typeof(option) != 'string') || option.length == 0) {
+        return true;
+    }
     return(this.get_edit_document().execCommand(command, false, option));
 };
 

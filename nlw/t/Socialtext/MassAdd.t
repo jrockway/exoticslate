@@ -10,7 +10,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 95;
+    plan tests => 97;
 }
 
 use mocked 'Socialtext::People::Profile', qw(save_ok);
@@ -271,6 +271,33 @@ EOT
     is_deeply \@failures, [], 'no failure messages';
 }
 
+Csv_field_order_unimportant: {
+    my $ODD_ORDER_CSV = <<'EOT';
+last_name,first_name,username,email_address
+Threepwood,Guybrush,guybrush,guybrush@example.com
+EOT
+
+    clear_log();
+
+    # set up a fake User so we don't get a mocked one
+    local $Socialtext::User::Users{guybrush} = undef;
+
+    # set up the MassAdd-er
+    my @successes;
+    my @failures;
+    my $mass_add = Socialtext::MassAdd->new(
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+
+    # try to add the user
+    $mass_add->from_csv($ODD_ORDER_CSV);
+
+    # make sure we were able to add the user
+    is_deeply \@successes, ['Added user guybrush'], 'success message ok';
+    is_deeply \@failures, [], 'no failure messages';
+}
+
 Contains_utf8: {
     local $Socialtext::User::Users{yamadat} = undef;
     my $utf8_csv = <<'EOT';
@@ -447,7 +474,7 @@ guybrush,guybrush@example.com,Guybrush,Threepwood,password,Captain,Pirates R. Us
 bluebeard,bluebeard@example.com,Blue,Beard,password,Captain,Pirates R. Us,High Seas,123-456-YARR,mobile2,123-HIGH-SEA
 EOT
 
-Add_multiple_users_faillure: {
+Add_multiple_users_failure: {
     @Socialtext::People::Profile::Saved = ();
     local @Socialtext::People::Fields::UneditableNames = qw/mobile_phone/;
 

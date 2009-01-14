@@ -8,7 +8,7 @@
         &nbsp;
         <ul>
         [% FOR gadget = container.gadgets.0 %]
-            [% INCLUDE $gadget.templates.container gadget=gadget %]
+            [% INCLUDE 'widget/html_container' gadget=gadget %]
         [% END %]
         </ul>
     </div>

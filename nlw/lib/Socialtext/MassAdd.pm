@@ -257,24 +257,22 @@ sub _update_user_store {
     my $user = shift;
     my %args = @_;
 
-    my %update_slice = map { $_ => $args{$_} } @User_fields;
+    # build a list of fields to update; only those fields that we were
+    # actually given a value for *and* that are different are suitable for
+    # update.
+    my %update_slice =
+        map { $_ => $args{$_} }             # field and its updated value
+        grep { $user->$_() ne $args{$_} }   # different than current value
+        grep { length($args{$_}) > 0 }      # only fields with a value
+        @User_fields;
 
+    # SPECIAL CASE: password; have to call a fcn to check to see if its the
+    # same as what we've got already.
     if ($user->password_is_correct($args{password})) {
         delete $update_slice{password};
     }
-    elsif (length $args{password} == 0 and not $user->has_valid_password) {
-        delete $update_slice{password};
-    }
 
-    foreach my $field (keys %update_slice) {
-        if (length($args{$field}) && 
-            $user->$field() eq $args{$field}) 
-        {
-            delete $update_slice{$field};
-        }
-        # else: needs updating
-    }
-
+    # if we actually have stuff to update, update the User record.
     if (keys %update_slice) {
         $user->update_store(%update_slice);
         return 1;

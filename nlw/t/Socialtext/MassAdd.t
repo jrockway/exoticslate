@@ -10,7 +10,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 97;
+    plan tests => 102;
 }
 
 use mocked 'Socialtext::People::Profile', qw(save_ok);
@@ -162,7 +162,7 @@ Add_user_already_added: {
         is_deeply \@failures, [], 'no failure messages';
     }
 
-    Password_needs_update: {
+    Password_gets_updated: {
         local $Socialtext::User::Users{guybrush} = Socialtext::User->new(
             username => 'guybrush',
             password => 'elaine',
@@ -178,6 +178,34 @@ Add_user_already_added: {
         is_deeply \@failures, [], 'no failure messages';
         is $Socialtext::User::Users{guybrush}->password, 'my_password',
             'password was updated';
+    }
+
+    Password_untouched: {
+        local $Socialtext::User::Users{guybrush} = Socialtext::User->new(
+            username    => 'guybrush',
+            first_name  => 'to-be-overwritten',
+            password    => 'elaine',
+        );
+        my @successes;
+        my @failures;
+        my $mass_add = Socialtext::MassAdd->new(
+            pass_cb => sub { push @successes, shift },
+            fail_cb => sub { push @failures,  shift },
+        );
+
+        my $NO_PASSWORD_CSV = <<'EOT';
+Username,Email Address,First Name
+guybrush,guybrush@example.com,Guybrush
+EOT
+        $mass_add->from_csv($NO_PASSWORD_CSV);
+        is_deeply \@successes, ['Updated user guybrush'], 'success message ok';
+        is_deeply \@failures, [], 'no failure messages';
+        is $Socialtext::User::Users{guybrush}->password, 'elaine',
+            'password was untouched';
+        is $Socialtext::User::Users{guybrush}->first_name, 'Guybrush',
+            'first_name was updated';
+        ok !exists $Socialtext::User::Sent_email{guybrush},
+            'NO confirmation email sent';
     }
 
     First_last_name_update: {

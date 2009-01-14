@@ -710,7 +710,7 @@ proto.strip_msword_gunk = function(html) {
         replace(
             /<(span|\w:\w+)[^>]*>(\s*&nbsp;\s*)+<\/\1>/gi,
             function(m) {
-                return m.match(/ugly-ie-css-hack/) ? m : '';
+                return m.match(/ugly-ie-css-hack/) ? m : ' ';
             }
         ).
         replace(/<\/?(xml|st\d+:\w+|[ovwxp]:\w+)[^>]*>/gi, '');
@@ -1360,23 +1360,23 @@ proto.convert_html_to_wikitext = function(html) {
                         if (this.previousSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
                             return;
                         }
-                        this.nodeValue = this.nodeValue.replace(/^\n/, ' ');
+                        this.nodeValue = this.nodeValue.replace(/^\s/, ' ');
                     }
                     else {
-                        this.nodeValue = this.nodeValue.replace(/^\n/, '');
+                        this.nodeValue = this.nodeValue.replace(/^\s/, '');
                     }
 
                     if (this.nextSibling && this.nextSibling.nodeType == 1 && this.nextSibling.nodeName != 'BR' ) {
                         if (this.nextSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
                             return;
                         }
-                        this.nodeValue = this.nodeValue.replace(/\n$/, ' ');
+                        this.nodeValue = this.nodeValue.replace(/\s$/, ' ');
                     }
                     else {
-                        this.nodeValue = this.nodeValue.replace(/\n$/, '');
+                        this.nodeValue = this.nodeValue.replace(/\s$/, '');
                     }
 
-                    this.nodeValue = this.nodeValue.replace(/\n/g, ' ');
+                    this.nodeValue = this.nodeValue.replace(/\s/g, ' ');
                 }
                 else if ( $(this).is(':not(pre,plain)') ) {
                     $(this).contents().each(cleanup_newlines);
@@ -1548,6 +1548,9 @@ proto.no_descend = function(elem) {
     else if (elem.nodeName.match(/^(P|DIV)$/)) {
         if (elem.style.marginLeft.match(/^(\d+)px/)) {
             elem.is_indented = Number(RegExp.$1);
+        }
+        else if (elem.style.marginLeft.match(/^([\.\d]+)in/)) {
+            elem.is_indented = Number(RegExp.$1) * 80;
         }
     }
 
@@ -2083,6 +2086,10 @@ proto.get_wiki_comment = function(elem) {
 }
 
 proto.format_br = function(elem) {
+    if (elem.style.pageBreakBefore == 'always') {
+        return this.format_hr(elem);
+    }
+
     if (Wikiwyg.is_ie) 
        this.wikitext = this.wikitext.replace(/\xA0/, "");
     return (this.wikitext && !this.wikitext.match(/\n\n$/)) ? '\n' : '';

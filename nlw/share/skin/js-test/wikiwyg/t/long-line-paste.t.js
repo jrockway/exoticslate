@@ -78,9 +78,9 @@ Lorem Ipsum foobar. Lorem Ipsum foobar.. Lorem Ipsum foobar.. Lorem Ipsum foobar
 * Lorem Ipsum foobar..
 * Lorem Ipsum foobar.. | Lorem Ipsum foobar..Lorem Ipsum foobar.. |
 
-| Lorem Ipsum foobar.. Lorem Ipsum foobar.. | Lorem Ipsum foobar.. 
- Lorem Ipsum foobar..v Lorem Ipsum foobar..
- Lorem Ipsum foobar.. | Lorem Ipsum foobar..Lorem Ipsum foobar.. |
+| Lorem Ipsum foobar.. Lorem Ipsum foobar.. | Lorem Ipsum foobar..
+Lorem Ipsum foobar..v Lorem Ipsum foobar..
+Lorem Ipsum foobar.. | Lorem Ipsum foobar..Lorem Ipsum foobar.. |
 
 lkadfla
 

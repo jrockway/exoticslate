@@ -530,7 +530,6 @@ proto.resizeEditor = function () {
     var $textarea = jQuery('#wikiwyg_wikitext_textarea');
 
     if ($iframe.is(":visible")) {
-        jQuery("#st-editing-prefix-container").width($iframe.width()+2);
         $iframe.width( jQuery('#st-edit-mode-view').width() - 48 );
 
         this.modeByName(WW_SIMPLE_MODE).setHeightOf(
@@ -538,7 +537,6 @@ proto.resizeEditor = function () {
         );
     }
     else if ($textarea.is(":visible")) {
-        jQuery("#st-editing-prefix-container").width($textarea.width());
         this.modeByName(WW_ADVANCED_MODE).setHeightOfEditor();
     }
 

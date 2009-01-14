@@ -167,12 +167,6 @@ Add_user_already_added: {
             username => 'guybrush',
             password => 'elaine',
         );
-        local $Socialtext::People::Profile::Profiles{1}
-            = Socialtext::People::Profile->new(
-                position     => 'Captain',   company    => 'Pirates R. Us',
-                location     => 'High Seas', work_phone => '123-456-YARR',
-                mobile_phone => '',          home_phone => '123-HIGH-SEA',
-            );
         my @successes;
         my @failures;
         my $mass_add = Socialtext::MassAdd->new(

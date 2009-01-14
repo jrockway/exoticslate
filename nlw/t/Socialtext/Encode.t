@@ -3,9 +3,9 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 17;
-fixtures( 'admin' );
-use Socialtext::Encode;
+use Test::Socialtext tests => 19;
+fixtures( 'admin_no_pages' );
+use_ok 'Socialtext::Encode';
 
 binmode STDERR, 'utf8'; # So diagnostics don't complain
 
@@ -66,4 +66,11 @@ symlink "123.txt", "$bad_utf8_dir/index.txt";
     my $str2 = Socialtext::Encode::ensure_is_utf8($str);
     ok Encode::is_utf8($str2), "ensure_is_utf8 is idempotent";
     is $str, $str2, "both strings are equal";
+}
+
+{
+    my $orig = "\x83\x8d\x83\x7b\x83\x67"; # shift-jis for ロボト
+    my $expected = Encode::decode_utf8("ロボト");
+    my $actual = Socialtext::Encode::guess_decode($orig);
+    is $actual, $expected, "guessed shift-jis encoding";
 }

@@ -61,6 +61,7 @@ while (my $plugin = shift) {
     my $plugin_dir = "$FindBin::Bin/../../plugins/$plugin";
     usage("plugin $plugin doesn't exist") unless -d $plugin_dir;
     link_directory($plugin_dir, "$FindBin::Bin/..", 'lib');
+    link_directory($plugin_dir, "$FindBin::Bin/..", 'bin');
     link_directory($plugin_dir, "$FindBin::Bin/..", 't');
     link_directory($plugin_dir, "$ENV{HOME}/.nlw", 'etc/socialtext/uri_map.d');
 

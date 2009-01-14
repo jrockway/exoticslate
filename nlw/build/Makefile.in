@@ -425,7 +425,6 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/Socialtext/WikiText/Parser.t \
 	t/Socialtext/FetchRSSPlugin.t \
 	t/Socialtext/EmailReceiver-local-address.t \
-	t/Socialtext/Rest/Changes.t \
 	t/Socialtext/CategoryPlugin-email-address-encoding.t \
 	t/Socialtext/Date/l10n.t \
 	t/formatter-escape-comments.t \
@@ -460,7 +459,6 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/chunks.t \
 	t/copyright.t \
 	t/Socialtext/RtfExportPlugin-gif-to-png.t \
-	t/Socialtext/Skin.t \
 	t/Socialtext/Session.t \
 	t/Socialtext/UserSettingsPlugin-email-address-parse.t \
 	t/Socialtext/User/LDAP.t \

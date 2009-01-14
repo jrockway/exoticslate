@@ -4,8 +4,11 @@ use strict;
 use warnings;
 
 use Encode;
-use Encode::Guess qw(latin1);
+use Encode::Guess;
 use Socialtext::Validate qw[validate SCALAR_TYPE];
+use Carp qw/carp croak/;
+
+our @GUESSES = qw(latin1 cp1252 shiftjis big5);
 
 sub is_valid_utf8 {
     my $copy = shift;
@@ -18,14 +21,7 @@ sub noisy_decode {
         input => SCALAR_TYPE,
         blame => SCALAR_TYPE,
     };
-    if ( Socialtext::Encode::is_valid_utf8( $args{input} ) ) {
-        return Encode::decode( 'utf8', $args{input} );
-    } else {
-        warn "$args{blame}: doesn't seem to be valid utf-8";
-        my $guess = Encode::Guess->guess( $args{input} );
-        warn "$args{blame}: Treating as " . $guess->name;
-        return $guess->decode( $args{input} );
-    }
+    return guess_decode($args{input}, $args{blame}, 'noisy');
 }
 
 sub ensure_is_utf8 {
@@ -34,6 +30,36 @@ sub ensure_is_utf8 {
         Encode::is_utf8($bytes)
             ? $bytes
             : Encode::decode_utf8($bytes);
+}
+
+sub guess_decode {
+    my $bytes = shift;
+    my $blame = shift || join (':',caller);
+    my $noisy = shift || 0;
+
+    # it's "probably" utf8
+    if (is_valid_utf8($bytes)) {
+        return Encode::decode_utf8($bytes);
+    }
+    else {
+        carp "$blame: doesn't seem to be valid utf-8" if $noisy;
+        my $guess = Encode::Guess::guess_encoding($bytes, @GUESSES);
+
+        unless (ref($guess)) {
+            if ($guess =~ /^(\S+) or /) {
+                my $best_guess = $1;
+                carp "$blame: Treating as $best_guess" if $noisy;
+                return Encode::decode($best_guess,$bytes);
+            }
+            else {
+                carp "$blame: non decodable bytes:". 
+                    join('',map {sprintf '%02x',$_} unpack('C*',$bytes));
+                croak "$blame: bad string encoding: $guess";
+            }
+        }
+        carp "$blame: Treating as " . $guess->name if $noisy;
+        return $guess->decode($bytes);
+    }
 }
 
 1;

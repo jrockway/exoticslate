@@ -18,7 +18,7 @@
             [% FOREACH widget IN widgets.$section %]
             <tr>
                 <td class="description">
-                    <a href="?action=add_widget;location=[% widget.location | uri %]">
+                    <a href="?action=add_widget;src=[% widget.src | uri %]">
                         [% widget.title %]
                     </a>
                     <br/>

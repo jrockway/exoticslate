@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 36;
+use Test::Socialtext tests => 37;
 fixtures('populated_rdbms');
 
 use Socialtext::User;
@@ -95,7 +95,15 @@ use Socialtext::User;
         'All() sorted by primary account name',
     );
 }
+{
+    my $ids = [ 1, 2, 3 ];
+    my $users = Socialtext::User->ByUserIds( $ids );
 
+    is( join(',', map { $_->username } $users->all() ),
+        'system-user,guest,devnull1@urth.org',
+        'ByUserIds() returns users in the order that IDs are passed.'
+    );
+}
 {
     # ByAccountId should return users watching either of these criteria:
     # 1) User's primary account is the specified account

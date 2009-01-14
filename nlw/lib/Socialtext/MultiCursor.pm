@@ -43,7 +43,11 @@ sub all {
 sub _all_rows {
     my ($self, $iterable) = @_;
 
-    return (ref $iterable eq 'ARRAY') ? @$iterable : $iterable->all_rows;
+    return (ref $iterable eq 'ARRAY') 
+        ? @$iterable 
+        : ( ref $iterable  )
+            ? $iterable->all_rows
+            : $iterable;
 }
 
 {

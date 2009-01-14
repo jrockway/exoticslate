@@ -195,7 +195,6 @@ CREATE TABLE container (
     user_id bigint,
     workspace_id bigint,
     account_id bigint,
-    path_args text,
     CONSTRAINT container_scope_ptr
             CHECK (((user_id IS NOT NULL) <> (workspace_id IS NOT NULL)) <> (account_id IS NOT NULL))
 );
@@ -214,13 +213,27 @@ CREATE TABLE container_type (
     layout_template text
 );
 
-CREATE TABLE container_type_gadget (
+CREATE SEQUENCE ctype_gadget_id
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+CREATE TABLE default_gadget (
+    default_gadget_id bigint NOT NULL,
     container_type text NOT NULL,
     src text NOT NULL,
     col integer NOT NULL,
     "row" integer NOT NULL,
-    fixed boolean DEFAULT false
+    fixed boolean DEFAULT false,
+    default_prefs text[]
 );
+
+CREATE SEQUENCE default_gadget_id
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
 
 CREATE TABLE event (
     "at" timestamptz NOT NULL,
@@ -239,7 +252,7 @@ CREATE TABLE gadget (
     src text NOT NULL,
     plugin text,
     href text NOT NULL,
-    last_update timestamptz DEFAULT '2009-01-12 12:48:04.996358-08'::timestamptz NOT NULL,
+    last_update timestamptz DEFAULT '2009-01-13 14:45:28.166893-08'::timestamptz NOT NULL,
     content_type text NOT NULL,
     features text[],
     preloads text[],
@@ -259,11 +272,11 @@ CREATE SEQUENCE gadget_id
 CREATE TABLE gadget_instance (
     gadget_instance_id bigint NOT NULL,
     container_id bigint NOT NULL,
+    default_gadget_id bigint,
     gadget_id bigint NOT NULL,
     col integer NOT NULL,
     "row" integer NOT NULL,
-    minimized boolean DEFAULT false,
-    fixed boolean DEFAULT false
+    minimized boolean DEFAULT false
 );
 
 CREATE SEQUENCE gadget_instance_id
@@ -522,6 +535,10 @@ ALTER TABLE ONLY container_type
     ADD CONSTRAINT container_type_pk
             PRIMARY KEY (container_type);
 
+ALTER TABLE ONLY default_gadget
+    ADD CONSTRAINT default_gadget_pk
+            PRIMARY KEY (default_gadget_id);
+
 ALTER TABLE ONLY gadget_instance
     ADD CONSTRAINT gadget_instace_pk
             PRIMARY KEY (gadget_instance_id);
@@ -660,6 +677,15 @@ CREATE INDEX ix_event_tag
 CREATE INDEX ix_event_workspace_page
 	    ON event (page_workspace_id, page_id);
 
+CREATE INDEX ix_noun_at
+	    ON noun ("at");
+
+CREATE INDEX ix_noun_at_user
+	    ON noun ("at", user_id);
+
+CREATE INDEX ix_noun_user_at
+	    ON noun (user_id, "at");
+
 CREATE INDEX ix_page_events_contribs_actor_time
 	    ON event (actor_id, "at")
 	    WHERE ((event_class = 'page') AND is_page_contribution("action"));
@@ -730,7 +756,7 @@ ALTER TABLE ONLY container
             FOREIGN KEY (account_id)
             REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
-ALTER TABLE ONLY container_type_gadget
+ALTER TABLE ONLY default_gadget
     ADD CONSTRAINT container_type_fk
             FOREIGN KEY (container_type)
             REFERENCES container_type(container_type) ON DELETE CASCADE;
@@ -749,6 +775,11 @@ ALTER TABLE ONLY container
     ADD CONSTRAINT container_workspace_id_fk
             FOREIGN KEY (workspace_id)
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY gadget_instance
+    ADD CONSTRAINT default_gadget_id_fk
+            FOREIGN KEY (default_gadget_id)
+            REFERENCES default_gadget(default_gadget_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY event
     ADD CONSTRAINT event_actor_id_fk

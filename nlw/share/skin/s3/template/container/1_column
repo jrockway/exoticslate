@@ -8,13 +8,13 @@
 
 <div id="controls">
     <div id="st-editing-tools-edit">
-        [% IF container.templates.hello %] 
-            [% INCLUDE $container.templates.hello %]
+        [% IF container.hello_template %]
+            [% INCLUDE $container.hello_template %]
         [% END %]
     </div><!-- controlsLeft END -->
     <div id="controlsRight">
-        [% IF container.templates.links %] 
-            [% INCLUDE $container.templates.links %]
+        [% IF container.links_template %]
+            [% INCLUDE $container.links_template %]
         [% END %]
     </div><!-- controlsRight END -->
 </div><!-- controls END -->
@@ -25,7 +25,7 @@
             <div id="columnMiddle" style="width:90%" class="widgetCol" name="1">
                 <ul>
                 [% FOR gadget = container.gadgets.0 %]
-                    [% INCLUDE $gadget.templates.container gadget=gadget %]
+                    [% INCLUDE 'widget/html_container' gadget=gadget %]
                 [% END %]
                 </ul>
             </div><!-- columnMiddle END -->

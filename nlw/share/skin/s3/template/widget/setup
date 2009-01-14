@@ -1,13 +1,13 @@
 <form onsubmit="gadgets.container.save('[% gadget.id %]', this);return false">
 
-    [% FOR pref = gadget.user_prefs %]
+    [% FOR pref = gadget.preferences %]
         [% IF pref.datatype == 'hidden' %]
-            <input name="up_[% pref.name %]" type="hidden" value="[% pref.val %]"/>
+            <input name="up_[% pref.name %]" type="hidden" value="[% pref.value %]"/>
         [% END %]
     [% END %]
 
     <table class="widgetUserPrefs">
-        [% FOR pref = gadget.user_prefs %]
+        [% FOR pref = gadget.preferences %]
             [% IF pref.datatype == 'hidden' %]
                 [% NEXT %]
             [% END %]
@@ -19,22 +19,22 @@
                     <select name="up_[% pref.name %]">
                         [% FOR item = pref.options %]
                             [% selected = '' %]
-                            [% IF pref.val == item.value %]
+                            [% IF pref.value == item.0 %]
                                 [% selected = 'selected="1"' %]
                             [% END %]
-                            <option value="[% item.value %]" [% selected %]>
-                                [% item.display_value || item.value %]
+                            <option value="[% item.0 %]" [% selected %]>
+                                [% item.1 || item.0 %]
                             </option>
                         [% END %]
                     </select>
                 [% ELSIF pref.datatype == 'workspace' %]
-                    <input value="[% pref.val %]" name="up_[% pref.name %]" class="workspace_setting"/>
+                    <input value="[% pref.value %]" name="up_[% pref.name %]" class="workspace_setting"/>
                 [% ELSIF pref.datatype == 'page' %]
-                    <input value="[% pref.val %]" name="up_[% pref.name %]" class="page_setting"/>
+                    <input value="[% pref.value %]" name="up_[% pref.name %]" class="page_setting"/>
                 [% ELSIF pref.datatype == 'bool' %]
-                    <input name="up_[% pref.name %]" type="checkbox" value="[% pref.val %]"/>
+                    <input name="up_[% pref.name %]" type="checkbox" value="[% pref.value %]"/>
                 [% ELSE %]
-                    <input name="up_[% pref.name %]" type="text" value="[% pref.val %]"/>
+                    <input name="up_[% pref.name %]" type="text" value="[% pref.value %]"/>
                 [% END %]
                 </td>
             [% END %]

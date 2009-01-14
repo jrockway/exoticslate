@@ -1626,8 +1626,6 @@ proto.format_text = function(elem) {
         if (next.nodeType == 1 && next.nodeName.match(
             /^(?:BR|UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)
         ) return '';
-        console.log(elem);
-        console.log(next);
     }
 
     text = text.replace(/\xa0 /g,' ');

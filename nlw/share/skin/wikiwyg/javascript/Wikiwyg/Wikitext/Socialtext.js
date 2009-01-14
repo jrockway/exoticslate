@@ -1395,13 +1395,15 @@ proto.convert_html_to_wikitext = function(html, isWholeDocument) {
                     contents = $dom.contents();
                 }
 
-                if (contents[0].nodeType == 3) {
-                    contents[0].nodeValue = contents[0].nodeValue.replace(/^\n/, '');
+                if (contents.length > 0) {
+                    if (contents[0].nodeType == 3) {
+                        contents[0].nodeValue = contents[0].nodeValue.replace(/^\n/, '');
+                    }
+                    if (contents[contents.length-1].nodeType == 3) {
+                        contents[contents.length-1].nodeValue = contents[contents.length-1].nodeValue.replace(/\n$/, '');
+                    }
+                    contents.each(cleanup_newlines);
                 }
-                if (contents[contents.length-1].nodeType == 3) {
-                    contents[contents.length-1].nodeValue = contents[contents.length-1].nodeValue.replace(/\n$/, '');
-                }
-                contents.each(cleanup_newlines);
             }
             else {
                 /* Probably within js-test or paste. */

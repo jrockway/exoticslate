@@ -136,7 +136,7 @@ proto.convertWikitextToHtml = function(wikitext, func) {
 }
 
 proto.convertHtmlToWikitext = function(html, func) {
-    func(this.convert_html_to_wikitext(html));
+    func(this.convert_html_to_wikitext(html, true));
 }
 
 proto.get_keybinding_area = function() {
@@ -1327,7 +1327,7 @@ if (! window.Page) {
     };
 }
 
-proto.convert_html_to_wikitext = function(html) {
+proto.convert_html_to_wikitext = function(html, isWholeDocument) {
     html = this.strip_msword_gunk(html);
 
     (function ($) {
@@ -1388,20 +1388,23 @@ proto.convert_html_to_wikitext = function(html) {
                     $(this).contents().each(cleanup_newlines);
                 }
             }
-            if (Socialtext && Socialtext.wiki_id) {
+
+            if (isWholeDocument) {
                 var contents = $dom.find('div.wiki').contents();
-                if (contents.length > 0) {
-                    if (contents[0].nodeType == 3) {
-                        contents[0].nodeValue = contents[0].nodeValue.replace(/^\n/, '');
-                    }
-                    if (contents[contents.length-1].nodeType == 3) {
-                        contents[contents.length-1].nodeValue = contents[contents.length-1].nodeValue.replace(/\n$/, '');
-                    }
-                    contents.each(cleanup_newlines);
+                if (contents.length == 0) {
+                    contents = $dom.contents();
                 }
+
+                if (contents[0].nodeType == 3) {
+                    contents[0].nodeValue = contents[0].nodeValue.replace(/^\n/, '');
+                }
+                if (contents[contents.length-1].nodeType == 3) {
+                    contents[contents.length-1].nodeValue = contents[contents.length-1].nodeValue.replace(/\n$/, '');
+                }
+                contents.each(cleanup_newlines);
             }
             else {
-                /* Probably within js-test. */
+                /* Probably within js-test or paste. */
                 $dom.contents().each(cleanup_newlines);
             }
             html = $dom.html();

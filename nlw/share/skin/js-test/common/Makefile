@@ -14,7 +14,7 @@ TEST_LOCAL_MD5=$(word 1,$(shell $(MD5SUM) $(TEST_LOCAL)))
 INDEX_TEMPLATE_MD5=$(word 1,$(shell $(MD5SUM) $(INDEX_TEMPLATE)))
 INDEX_LOCAL_MD5=$(word 1,$(shell $(MD5SUM) $(INDEX_LOCAL)))
 
-ALL_T_HTML:=$(shell ls -1 t/*.t.js | perl -pe 's/js$$/html/;s/^t\///')
+ALL_T_HTML:=$(shell test -f Build && perl Build; ls -1 t/*.t.js | perl -pe 's/js$$/html/;s/^t\///')
 
 ALL_DIRS:=lib template
 
@@ -29,6 +29,7 @@ ALL_LIBS= \
 all: $(ALL_DIRS) $(ALL_TARGETS) $(ALL_LIBS)
 
 clean:
+	test -f Build && perl Build --clean
 	rm -fr *.t.html index.html $(ALL_LIBS)
 	if [ "$(TEST_TEMPLATE_MD5)" = \
      "$(TEST_LOCAL_MD5)" ]; then rm -f $(TEST_LOCAL); fi

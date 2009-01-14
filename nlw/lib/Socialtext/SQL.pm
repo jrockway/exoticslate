@@ -138,7 +138,7 @@ sub _sql_execute {
             . _list_bindings($bind)
             . " from $file line $line\n";
     }
-    if ($PROFILE_SQL) {
+    if ($PROFILE_SQL && $statement =~ /^\W*SELECT/i) {
         my (undef, $file, $line) = caller($Level);
         warn "Profiling ($statement) "
             . _list_bindings($bind)

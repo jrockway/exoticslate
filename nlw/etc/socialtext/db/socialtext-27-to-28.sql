@@ -212,6 +212,18 @@ ALTER TABLE ONLY gadget_instance_user_pref
         FOREIGN KEY (user_pref_id)
         REFERENCES gadget_user_pref(user_pref_id) ON DELETE CASCADE;
 
+CREATE INDEX gadget_instance_user_pref__user_pref_id
+    ON gadget_instance_user_pref(user_pref_id);
+
+CREATE INDEX container_user_id
+    ON container (user_id);
+CREATE INDEX container_workspace_id
+    ON container (workspace_id);
+CREATE INDEX container_account_id
+    ON container (account_id);
+CREATE INDEX container_container_type
+    ON container (container_type);
+
 -- Update schema version
 UPDATE "System"
    SET value = '28'

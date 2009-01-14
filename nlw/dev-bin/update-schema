@@ -31,7 +31,7 @@ shell_run("st-db recreate --force --schema socialtext");
 shell_run("st-db sync --schema socialtext ");
 
 if ($opts{sql}) {
-    shell_run("psql -f $opts{sql}");
+    shell_run("st-db --schema socialtext run_sql_file $opts{sql}");
 }
 
 shell_run("$FindBin::Bin/dump-schema");

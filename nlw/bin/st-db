@@ -21,7 +21,8 @@ GetOptions( \%opts,
 my $command = shift @ARGV;
 usage("No command supplied!") unless $command;
 my %valid_command = map { $_ => 1 } 
-    qw/sync recreate dump createdb dropdb version escalate_privs revoke_privs/;
+    qw/sync recreate dump createdb dropdb version escalate_privs revoke_privs
+       run_sql_file/;
 usage("Invalid command: $command\n") unless $valid_command{$command};
 
 if ($command eq 'recreate' and !$opts{force}) {
@@ -44,7 +45,7 @@ for my $schema_config_file (@schemas) {
         verbose => delete $opts{verbose},
         output  => delete $opts{output},
     );
-    $schema->$command();
+    $schema->$command(@ARGV);
 }
 exit;
 

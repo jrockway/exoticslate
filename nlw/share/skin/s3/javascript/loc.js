@@ -1,6 +1,10 @@
 if (typeof LocalizedStrings == 'undefined')
     LocalizedStrings = {};
 
+// TODO: this needs to be able to do 'quant' like TT's loc()
+// Example: loc('[quant,_1,user]', '1') == '1 user'
+//          loc('[quant,_1,user]', '2') == '2 users'
+
 function loc() {
     var locale = Socialtext.loc_lang;
     var dict = LocalizedStrings[locale] || new Array;

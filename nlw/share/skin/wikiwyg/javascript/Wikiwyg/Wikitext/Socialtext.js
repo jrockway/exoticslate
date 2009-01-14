@@ -1010,6 +1010,20 @@ proto.check_style_for_attribute = function(style, attribute) {
     return string.match("\\b" + attribute + "\\b");
 }
 
+proto._for_interesting_attributes = function(cb) {
+    var interesting_attributes = [
+        [ 'font', 'weight' ],
+        [ 'font', 'style' ],
+        [ 'text', 'decoration' ]
+    ];
+    for (var i = 0; i < interesting_attributes.length; i++) {
+        var pair = interesting_attributes[i];
+        var css = pair[0] + '-' + pair[1];
+        var js = pair[0] + pair[1].ucFirst();
+        cb(js, css);
+    }
+}
+
 proto.squish_style_object_into_string = function(style) {
     if (! style) return;
     if ((style.constructor+'').match('String'))
@@ -1020,13 +1034,10 @@ proto.squish_style_object_into_string = function(style) {
         [ 'text', 'decoration' ]
     ];
     var string = '';
-    for (var i = 0; i < interesting_attributes.length; i++) {
-        var pair = interesting_attributes[i];
-        var css = pair[0] + '-' + pair[1];
-        var js = pair[0] + pair[1].ucFirst();
+    this._for_interesting_attributes(function(js, css){
         if (style[js])
             string += css + ': ' + style[js] + '; ';
-    }
+    });
     return string;
 }
 
@@ -1908,7 +1919,16 @@ proto.format_a = function(elem) {
     /* {bz: 176}: For <a><span style="..."></span></a>, merge the inner tag's style into A's. */
     if (elem.childNodes.length == 1 && elem.childNodes[0].nodeType == 1) {
         var additional_styles = elem.childNodes[0].getAttribute("style");
-        elem.setAttribute('style', elem.getAttribute('style') + ';' + additional_styles);
+        if ((additional_styles.constructor+'').match('String')) {
+            elem.setAttribute('style', elem.getAttribute('style') + ';' + additional_styles);
+        }
+        else {
+            this._for_interesting_attributes(function(js){
+                if (additional_styles[js]) {
+                    elem.style[js] = additional_styles[js];
+                }
+            });
+        }
     }
 
     this.check_start_of_block(elem);

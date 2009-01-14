@@ -351,7 +351,7 @@ Duplicate_email_address: {
     is_deeply \@failures, ['Line 2: The email address you provided (duplicate@example.com) is already in use.'], 'correct failure message';
 }
 
-No_password: {
+No_password_causes_email_to_be_sent: {
     # strip out the password from the csv line
     (my $csv = $PIRATE_CSV) =~ s/my_password//;
     my @successes;

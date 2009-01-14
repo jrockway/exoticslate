@@ -140,14 +140,14 @@ sub _sql_execute {
     }
     if ($PROFILE_SQL && $statement =~ /^\W*SELECT/i) {
         my (undef, $file, $line) = caller($Level);
-        warn "Profiling ($statement) "
-            . _list_bindings($bind)
-            . " from $file line $line\n";
         my $explain = "EXPLAIN ANALYZE $statement";
         my $esth = $dbh->prepare($explain);
         $esth->$exec_sub(@$bind);
         my $lines = $esth->fetchall_arrayref();
-        warn map { "$_->[0]\n" } @$lines;
+        warn "Profiling ($statement) "
+            . _list_bindings($bind)
+            . " from $file line $line\n"
+            . join('', map { "$_->[0]\n" } @$lines);
     }
     eval {
         Socialtext::Timer->Continue('sql_prepare');

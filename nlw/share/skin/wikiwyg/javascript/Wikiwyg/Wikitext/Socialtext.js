@@ -713,6 +713,12 @@ proto.strip_msword_gunk = function(html) {
                 return m.match(/ugly-ie-css-hack/) ? m : ' ';
             }
         ).
+        replace(
+            /<(span|\w:\w+)[^>]*><font[^>]*>(\s*&nbsp;\s*)+<\/font><\/\1>/gi,
+            function(m) {
+                return m.match(/ugly-ie-css-hack/) ? m : ' ';
+            }
+        ).
         replace(/<\/?(xml|st\d+:\w+|[ovwxp]:\w+)[^>]*>/gi, '');
 }
 
@@ -1603,9 +1609,12 @@ proto.format_text = function(elem) {
         replace(/^\n+/, '').
         replace(/[\xa0 ]+/g, ' ');
 
-    if (text.match(/^[\xa0\s]+$/) && (
-        !elem.nextSibling || elem.nextSibling.nodeName == 'BR'
-    )) return '';
+    if (text.match(/^\n+$/) && !elem.nextSibling) return '';
+
+    if (text.match(/^[\xa0\s]+$/)
+        && elem.nextSibling
+        && elem.nextSibling.nodeType == 1
+        && elem.nextSibling.nodeName == 'BR') return '';
 
     text = text.replace(/\xa0 /g,' ');
     text = text.replace(/\xa0/g,' ');
@@ -1932,15 +1941,17 @@ proto.format_a = function(elem) {
     /* {bz: 176}: For <a><span style="..."></span></a>, merge the inner tag's style into A's. */
     if (elem.childNodes.length == 1 && elem.childNodes[0].nodeType == 1) {
         var additional_styles = elem.childNodes[0].getAttribute("style");
-        if ((additional_styles.constructor+'').match('String')) {
-            elem.setAttribute('style', elem.getAttribute('style') + ';' + additional_styles);
-        }
-        else {
-            this._for_interesting_attributes(function(js){
-                if (additional_styles[js]) {
-                    elem.style[js] = additional_styles[js];
-                }
-            });
+        if (additional_styles) {
+            if ((additional_styles.constructor+'').match('String')) {
+                elem.setAttribute('style', elem.getAttribute('style') + ';' + additional_styles);
+            }
+            else {
+                this._for_interesting_attributes(function(js){
+                    if (additional_styles[js]) {
+                        elem.style[js] = additional_styles[js];
+                    }
+                });
+            }
         }
     }
 

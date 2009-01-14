@@ -1563,8 +1563,13 @@ proto.enableThis = function() {
             self.pastebin.document.body.innerHTML = "";
             self.pastebin.document.designMode = "on";
 
-            jQuery( self.get_edit_document() ).bind("keydown", function(e) {
-                if ((e.ctrlKey || e.metaKey) && e.keyCode == 86) {
+            var event_name = "keydown";
+            if (jQuery.browser.mozilla && navigator.oscpu.match(/Mac/)) {
+                event_name = "keypress";
+            }
+
+            jQuery( self.get_edit_document() ).bind(event_name, function(e) {
+                if ((e.ctrlKey || e.metaKey) && (e.which == 86 || e.which == 118)) {
                     self.pastebin.focus();
 
                     setTimeout(function() {
@@ -1593,6 +1598,9 @@ proto.enableThis = function() {
 
 proto.on_pasted = function(html) {
     var self = this;
+
+    // XXX: for testing purpose.
+    // html = html.toUpperCase();
 
     if (this.paste_buffer_is_simple(html)) {
         self.insert_html( html );

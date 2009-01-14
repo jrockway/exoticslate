@@ -1356,27 +1356,37 @@ proto.convert_html_to_wikitext = function(html) {
         // characters in there, which we need to remove.
             var cleanup_newlines = function() {
                 if (this.nodeType == 3) {
-                    if (this.previousSibling && this.previousSibling.nodeType == 1 && this.previousSibling.nodeName != 'BR' ) {
-                        if (this.previousSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
-                            return;
+                    if (this.previousSibling && this.previousSibling.nodeType == 1) {
+                        if ( this.previousSibling.nodeName == 'BR' ) {
+                            this.nodeValue = this.nodeValue.replace(/^\s+/, '');
                         }
-                        this.nodeValue = this.nodeValue.replace(/^\s/, ' ');
+                        else {
+                            if (this.previousSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
+                                return;
+                            }
+                            this.nodeValue = this.nodeValue.replace(/^\n/, ' ');
+                        }
                     }
                     else {
-                        this.nodeValue = this.nodeValue.replace(/^\s/, '');
+                        this.nodeValue = this.nodeValue.replace(/^\n/, '');
                     }
 
-                    if (this.nextSibling && this.nextSibling.nodeType == 1 && this.nextSibling.nodeName != 'BR' ) {
-                        if (this.nextSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
-                            return;
+                    if (this.nextSibling && this.nextSibling.nodeType == 1) {
+                        if ( this.nextSibling.nodeName == 'BR' ) {
+                            this.nodeValue = this.nodeValue.replace(/\s+$/, '');
                         }
-                        this.nodeValue = this.nodeValue.replace(/\s$/, ' ');
+                        else {
+                            if (this.nextSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
+                                return;
+                            }
+                            this.nodeValue = this.nodeValue.replace(/\n$/, ' ');
+                        }
                     }
                     else {
-                        this.nodeValue = this.nodeValue.replace(/\s$/, '');
+                        this.nodeValue = this.nodeValue.replace(/\n$/, '');
                     }
 
-                    this.nodeValue = this.nodeValue.replace(/\s/g, ' ');
+                    this.nodeValue = this.nodeValue.replace(/\n/g, ' ');
                 }
                 else if ( $(this).is(':not(pre,plain)') ) {
                     $(this).contents().each(cleanup_newlines);

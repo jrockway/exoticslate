@@ -6,6 +6,12 @@ use FindBin;
 use lib "$FindBin::Bin/../lib";
 use Socialtext::Schema;
 use Socialtext::System qw/shell_run/;
+use Getopt::Long;
+
+my %opts;
+GetOptions( \%opts,
+    'sql=s',
+);
 
 my $nlw_base = "$FindBin::Bin/..";
 my $schema = Socialtext::Schema->new;
@@ -23,6 +29,10 @@ shell_run("st-db recreate --force --schema socialtext");
 
 # Sync to the latest version (what you just wrote - X-to-Y.sql)
 shell_run("st-db sync --schema socialtext ");
+
+if ($opts{sql}) {
+    shell_run("psql -f $opts{sql}");
+}
 
 shell_run("$FindBin::Bin/dump-schema");
 

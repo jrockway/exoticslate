@@ -412,14 +412,16 @@ sub match_categories {
 
 sub weight_categories {
     my $self = shift;
-    my @tags = map {lc($_) } @_;
+    my %orig_tags = map { lc($_) => $_ } @_;
+
+    my @lower_tags = keys %orig_tags;
     my %data = (
         maxCount => 0,
         tags => [],
     );
 
-    my $tag_args = join(',', map { '?' } @tags);
-    my $tag_in = @tags ? "AND LOWER(tag) IN ($tag_args)" : '';
+    my $tag_args = join(',', map { '?' } @lower_tags);
+    my $tag_in = @lower_tags ? "AND LOWER(tag) IN ($tag_args)" : '';
     my $dbh = sql_execute(<<EOT, 
 SELECT tag AS name, count(page_id) AS page_count 
     FROM page_tag
@@ -428,16 +430,27 @@ SELECT tag AS name, count(page_id) AS page_count
     GROUP BY tag
     ORDER BY count(page_id) DESC, tag
 EOT
-        $self->hub->current_workspace->workspace_id, @tags,
+        $self->hub->current_workspace->workspace_id, @lower_tags,
     );
 
     $data{tags} = $dbh->fetchall_arrayref({});
     my $max = 0;
-    for (map { $_->{page_count} } @{ $data{tags} }) { 
-        $max = $_ if $_ > $max;
-        $_ += 0; # cast to number
+    my %seen_tags;
+    my @keepers;
+    for (@{ $data{tags} }) {
+        # If we were given a list of tags, then we should only return
+        # tags in that list
+        if (%orig_tags) {
+            next if $seen_tags{ lc $_->{name} }++;
+            $_->{name} = $orig_tags{ lc $_->{name} };
+        }
+
+        $max = $_->{page_count} if $_->{page_count} > $max;
+        $_->{page_count} += 0; # cast to number
+        push @keepers, $_;
     }
     $data{maxCount} = $max;
+    $data{tags} = \@keepers;
     return %data;
 }
 

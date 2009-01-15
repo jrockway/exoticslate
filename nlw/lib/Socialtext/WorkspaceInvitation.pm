@@ -89,10 +89,10 @@ sub invite_admin_notify {
 
     my $renderer = Socialtext::TT2::Renderer->instance();
 
-    my %vars = {
+    my %vars = (
         workspace_title => $workspace->title,
         workspace_uri   => $workspace->uri,
-    };
+    );
 
     my $text_body = $renderer->render(
         template => "email/$template_dir/workspace-admin-invitation.txt",

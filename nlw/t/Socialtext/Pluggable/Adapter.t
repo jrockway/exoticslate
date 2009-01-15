@@ -5,8 +5,10 @@ use warnings;
 
 BEGIN { push @INC, 't/share/plugin/fakeplugin/lib' };
 
-use Test::More tests => 7;
-use mocked 'Socialtext::User';
+use Test::More tests => 25;
+use Socialtext::SQL;
+use Socialtext::Account;
+use Socialtext::User;
 use mocked 'Socialtext::Registry';
 use mocked 'Socialtext::Hub';
 use Socialtext::Pluggable::Adapter;
@@ -19,11 +21,12 @@ my $hub = Socialtext::Hub->new;
 $hub->{pluggable} = $adapt;
 $adapt->{hub} = $hub;
 $registry->hub($hub);
+my $email = "bob.".time.'@ken.socialtext.net';
+$hub->{current_user} = Socialtext::User->create(
+    email_address => $email, username => $email
+);
 
-{ # force plugins to always be enabled
-    no warnings 'redefine';
-    *Socialtext::Account::is_plugin_enabled = sub {1};
-}
+Socialtext::Account->Default->enable_plugin('fakeplugin');
 
 # Setup hooks before register
 Socialtext::Pluggable::Plugin::FakePlugin->test_hooks(
@@ -52,3 +55,75 @@ is $registry->call('wafl', 'test_wafl'), 'wafl contents',
 is $registry->call('action', 'test_action'), 'action contents',
    "action hooks autovivify and can be called through registry";
 
+# Test plugin dependencies and optional_dependencies
+my $default = Socialtext::Account->Default;
+
+{
+    $default->disable_plugin($_) for qw(a b c);
+    $default->enable_plugin('a');
+    ok $default->is_plugin_enabled('a'), "enabling a enables a";
+    ok $default->is_plugin_enabled('b'), "enabling a enables b";
+    ok $default->is_plugin_enabled('c'), "enabling a enables b enables c";
+}
+
+{
+    $default->disable_plugin($_) for qw(a b c);
+    $default->enable_plugin('b');
+    ok $default->is_plugin_enabled('b'), "enabling b enables b";
+    ok $default->is_plugin_enabled('a'), "enabling b enables a";
+    ok $default->is_plugin_enabled('c'), "enabling b enables c";
+}
+
+{
+    $default->disable_plugin($_) for qw(a b c);
+    $default->enable_plugin('c');
+    ok $default->is_plugin_enabled('c'), "enabling c enables c";
+    ok $default->is_plugin_enabled('b'), "enabling c enables b";
+    ok $default->is_plugin_enabled('a'), "enabling c enables b enables a";
+}
+
+{
+    $default->enable_plugin($_) for qw(a b c);
+    $default->disable_plugin('a');
+    ok !$default->is_plugin_enabled('a'), "disabling a disables a";
+    ok !$default->is_plugin_enabled('b'), "disabling a disables b";
+    ok !$default->is_plugin_enabled('c'), "disabling a disables b -> c";
+}
+
+{
+    $default->enable_plugin($_) for qw(a b c);
+    $default->disable_plugin('b');
+    ok !$default->is_plugin_enabled('b'), "disabling b disables b";
+    ok $default->is_plugin_enabled('a'), "disabling b doesn't disable a";
+    ok !$default->is_plugin_enabled('c'), "disabling b disables c";
+}
+
+{
+    $default->enable_plugin($_) for qw(a b c);
+    $default->disable_plugin('c');
+    ok !$default->is_plugin_enabled('c'), "disabling c disables c";
+    ok !$default->is_plugin_enabled('b'), "disabling c disables b";
+    ok $default->is_plugin_enabled('a'), "disabling c doesn't disable a";
+}
+
+# Plugins for dependency tests
+package Socialtext::Pluggable::Plugin::A; # like people
+use strict;
+use warnings;
+use base 'Socialtext::Pluggable::Plugin';
+sub register {}
+sub enables { qw(b) }
+
+package Socialtext::Pluggable::Plugin::B; # like signals
+use strict;
+use warnings;
+use base 'Socialtext::Pluggable::Plugin';
+sub register {}
+sub dependencies { qw(a c) }
+
+package Socialtext::Pluggable::Plugin::C; # just for the circular dep
+use strict;
+use warnings;
+use base 'Socialtext::Pluggable::Plugin';
+sub register {}
+sub dependencies { qw(b) } # circular dependency

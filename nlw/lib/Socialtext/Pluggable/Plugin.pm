@@ -35,7 +35,8 @@ const scope => 'account';
 const hidden => 1; # hidden to admins
 const read_only => 0; # cannot be disabled/enabled in the control panel
 
-sub dependencies { }
+sub dependencies { } # Enable/Disable dependencies
+sub enables {} # Enable only dependencies
 
 # perldoc Socialtext::URI for arguments
 #    path = '' & query => {}

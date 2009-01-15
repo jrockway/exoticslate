@@ -17,7 +17,7 @@ our @EXPORT_OK = qw(
     sql_ok sql_mock_result ok_no_more_sql
 );
 our %EXPORT_TAGS = (
-    'exec' => [qw(sql_execute sql_selectrow sql_singlevalue)],
+    'exec' => [qw(sql_execute sql_execute_array sql_selectrow sql_singlevalue)],
     'time' => [qw(sql_parse_timestamptz sql_format_timestamptz)],
     'bool' => [qw(sql_convert_to_boolean sql_convert_from_boolean)],
     'txn'  => [qw(sql_commit sql_begin_work
@@ -48,6 +48,10 @@ sub sql_execute {
 
     my $mock = mock_sth->new(%{ $sth_args || {} });
     return $mock;
+}
+sub sql_execute_array {
+    # mock can be the same as sql_execute
+    sql_execute( @_ );
 }
 
 sub disconnect_dbh { }

@@ -195,8 +195,7 @@ sub enable_plugin {
     my ($self, $plugin) = @_;
 
     my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
-    die loc("The [_1] plugin can not be enabled at the account scope", $plugin)
-        . "\n" unless $plugin_class->scope eq 'account';
+    $self->_check_plugin_scope($plugin);
 
     # Don't even bother enabling deps if the plugin is already enabled
     return if $self->is_plugin_enabled($plugin);
@@ -216,9 +215,11 @@ sub enable_plugin {
 
 sub disable_plugin {
     my ($self, $plugin) = @_;
+    $self->_check_plugin_scope($plugin);
 
     # Don't even bother disabling deps if the plugin is already enabled
     return unless $self->is_plugin_enabled($plugin);
+    my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
 
     Socialtext::Pluggable::Adapter->DisablePlugin($plugin => $self);
 
@@ -228,15 +229,20 @@ sub disable_plugin {
     }, $self->account_id, $plugin);
 
     # Disable any reverse depended packages
-    for my $pclass (Socialtext::Pluggable::Adapter->plugins) {
-        for my $dep ($pclass->dependencies) {
-            if ($dep eq $plugin) {
-                $self->disable_plugin($pclass->name);
-            }
-        }
+    for my $rdep ($plugin_class->reverse_dependencies) {
+        $self->disable_plugin($rdep);
     }
 
     Socialtext::Cache->clear('authz_plugin');
+}
+
+sub _check_plugin_scope {
+    my $self = shift;
+    my $plugin = shift;
+    my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
+    die loc("The [_1] plugin can not be set at the account scope",
+        $plugin) . "\n"
+        unless $plugin_class->scope eq 'account';
 }
 
 sub export {

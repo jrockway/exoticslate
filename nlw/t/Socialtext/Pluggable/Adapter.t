@@ -5,7 +5,7 @@ use warnings;
 
 BEGIN { push @INC, 't/share/plugin/fakeplugin/lib' };
 
-use Test::More tests => 25;
+use Test::More tests => 43;
 use Socialtext::SQL;
 use Socialtext::Account;
 use Socialtext::User;
@@ -56,74 +56,93 @@ is $registry->call('action', 'test_action'), 'action contents',
    "action hooks autovivify and can be called through registry";
 
 # Test plugin dependencies and optional_dependencies
-my $default = Socialtext::Account->Default;
+my $acct = Socialtext::Account->Default;
+my $wksp = Socialtext::Workspace->create(
+    name       => "test-$^T",
+    title      => "Test $^T",
+    account_id => $acct->account_id,
+    skip_default_pages => 1,
+);
+my %things = (account => $acct, workspace => $wksp);
 
-{
-    $default->disable_plugin($_) for qw(a b c);
-    $default->enable_plugin('a');
-    ok $default->is_plugin_enabled('a'), "enabling a enables a";
-    ok $default->is_plugin_enabled('b'), "enabling a enables b";
-    ok $default->is_plugin_enabled('c'), "enabling a enables b enables c";
+sub set_plugin_scope {
+    my $scope = shift;
+    for my $p (qw(A B C)) {
+        my $pclass = "Socialtext::Pluggable::Plugin::$p";
+        $pclass->scope($scope);
+    }
 }
 
-{
-    $default->disable_plugin($_) for qw(a b c);
-    $default->enable_plugin('b');
-    ok $default->is_plugin_enabled('b'), "enabling b enables b";
-    ok $default->is_plugin_enabled('a'), "enabling b enables a";
-    ok $default->is_plugin_enabled('c'), "enabling b enables c";
-}
+for my $t (keys %things) {
+    set_plugin_scope($t);
 
-{
-    $default->disable_plugin($_) for qw(a b c);
-    $default->enable_plugin('c');
-    ok $default->is_plugin_enabled('c'), "enabling c enables c";
-    ok $default->is_plugin_enabled('b'), "enabling c enables b";
-    ok $default->is_plugin_enabled('a'), "enabling c enables b enables a";
-}
+    $things{$t}->disable_plugin($_) for qw(a b c);
+    $things{$t}->enable_plugin('a');
+    ok $things{$t}->is_plugin_enabled('a'), "enabling a enables a";
+    ok $things{$t}->is_plugin_enabled('b'), "enabling a enables b";
+    ok $things{$t}->is_plugin_enabled('c'), "enabling a enables b -> c";
 
-{
-    $default->enable_plugin($_) for qw(a b c);
-    $default->disable_plugin('a');
-    ok !$default->is_plugin_enabled('a'), "disabling a disables a";
-    ok !$default->is_plugin_enabled('b'), "disabling a disables b";
-    ok !$default->is_plugin_enabled('c'), "disabling a disables b -> c";
-}
+    $things{$t}->disable_plugin($_) for qw(a b c);
+    $things{$t}->enable_plugin('b');
+    ok $things{$t}->is_plugin_enabled('b'), "enabling b enables b";
+    ok $things{$t}->is_plugin_enabled('a'), "enabling b enables a";
+    ok $things{$t}->is_plugin_enabled('c'), "enabling b enables c";
 
-{
-    $default->enable_plugin($_) for qw(a b c);
-    $default->disable_plugin('b');
-    ok !$default->is_plugin_enabled('b'), "disabling b disables b";
-    ok $default->is_plugin_enabled('a'), "disabling b doesn't disable a";
-    ok !$default->is_plugin_enabled('c'), "disabling b disables c";
-}
+    $things{$t}->disable_plugin($_) for qw(a b c);
+    $things{$t}->enable_plugin('c');
+    ok $things{$t}->is_plugin_enabled('c'), "enabling c enables c";
+    ok $things{$t}->is_plugin_enabled('b'), "enabling c enables b";
+    ok $things{$t}->is_plugin_enabled('a'), "enabling c enables b -> a";
 
-{
-    $default->enable_plugin($_) for qw(a b c);
-    $default->disable_plugin('c');
-    ok !$default->is_plugin_enabled('c'), "disabling c disables c";
-    ok !$default->is_plugin_enabled('b'), "disabling c disables b";
-    ok $default->is_plugin_enabled('a'), "disabling c doesn't disable a";
+    $things{$t}->enable_plugin($_) for qw(a b c);
+    $things{$t}->disable_plugin('a');
+    ok !$things{$t}->is_plugin_enabled('a'), "disabling a disables a";
+    ok !$things{$t}->is_plugin_enabled('b'), "disabling a disables b";
+    ok !$things{$t}->is_plugin_enabled('c'), "disabling a disables b -> c";
+
+    $things{$t}->enable_plugin($_) for qw(a b c);
+    $things{$t}->disable_plugin('b');
+    ok !$things{$t}->is_plugin_enabled('b'), "disabling b disables b";
+    ok $things{$t}->is_plugin_enabled('a'), "disabling b doesn't disable a";
+    ok !$things{$t}->is_plugin_enabled('c'), "disabling b disables c";
+
+    $things{$t}->enable_plugin($_) for qw(a b c);
+    $things{$t}->disable_plugin('c');
+    ok !$things{$t}->is_plugin_enabled('c'), "disabling c disables c";
+    ok !$things{$t}->is_plugin_enabled('b'), "disabling c disables b";
+    ok $things{$t}->is_plugin_enabled('a'), "disabling c doesn't disable a";
 }
 
 # Plugins for dependency tests
-package Socialtext::Pluggable::Plugin::A; # like people
-use strict;
-use warnings;
-use base 'Socialtext::Pluggable::Plugin';
-sub register {}
-sub enables { qw(b) }
+{
+    package Socialtext::Pluggable::Plugin::A; # like people
+    use strict;
+    use warnings;
+    use base 'Socialtext::Pluggable::Plugin';
+    my $SCOPE;
+    sub scope { $SCOPE = $_[1] if @_ > 1; return $SCOPE };
+    sub register {}
+    sub enables { qw(b) }
+}
 
-package Socialtext::Pluggable::Plugin::B; # like signals
-use strict;
-use warnings;
-use base 'Socialtext::Pluggable::Plugin';
-sub register {}
-sub dependencies { qw(a c) }
+{
+    package Socialtext::Pluggable::Plugin::B; # like signals
+    use strict;
+    use warnings;
+    use base 'Socialtext::Pluggable::Plugin';
+    my $SCOPE;
+    sub scope { $SCOPE = $_[1] if @_ > 1; return $SCOPE };
+    sub register {}
+    sub dependencies { qw(a c) }
+}
 
-package Socialtext::Pluggable::Plugin::C; # just for the circular dep
-use strict;
-use warnings;
-use base 'Socialtext::Pluggable::Plugin';
-sub register {}
-sub dependencies { qw(b) } # circular dependency
+{
+    package Socialtext::Pluggable::Plugin::C; # just for the circular dep
+    use strict;
+    use warnings;
+    use base 'Socialtext::Pluggable::Plugin';
+    my $SCOPE;
+    sub scope { $SCOPE = $_[1] if @_ > 1; return $SCOPE };
+    sub register {}
+    sub dependencies { qw(b) } # circular dependency
+}

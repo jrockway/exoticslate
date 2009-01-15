@@ -61,6 +61,8 @@ sub current_user { $_[0]{current_user} || Socialtext::User->new }
 
 sub checker { shift }
 
+sub action {}
+
 sub best_locale { 'en' }
 
 # for "simplicity" main just returns ourself

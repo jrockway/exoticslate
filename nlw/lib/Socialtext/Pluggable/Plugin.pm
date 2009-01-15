@@ -17,6 +17,7 @@ use URI::Escape ();
 use Socialtext::Formatter::Parser;
 use Socialtext::Cache;
 use Socialtext::Authz::SimpleChecker;
+use Socialtext::Pluggable::Adapter;
 my $prod_ver = Socialtext->product_version;
 
 # Class Methods
@@ -37,6 +38,17 @@ const read_only => 0; # cannot be disabled/enabled in the control panel
 
 sub dependencies { } # Enable/Disable dependencies
 sub enables {} # Enable only dependencies
+
+sub reverse_dependencies {
+    my $class = shift;
+    my @rdeps;
+    for my $pclass (Socialtext::Pluggable::Adapter->plugins) {
+        for my $dep ($pclass->dependencies) {
+            push @rdeps, $pclass->name if $dep eq $class->name;
+        }
+    }
+    return @rdeps;
+}
 
 # perldoc Socialtext::URI for arguments
 #    path = '' & query => {}

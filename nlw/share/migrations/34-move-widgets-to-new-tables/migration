@@ -1,0 +1,88 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use strict;
+use warnings;
+
+use Socialtext::Storage;
+use Socialtext::SQL qw(sql_execute);
+use Socialtext::URI;
+use Socialtext;
+use Socialtext::User;
+use Socialtext::Workspace;
+
+use Socialtext::Pluggable::Plugin::Widgets;
+use Socialtext::Gadgets::XML;
+
+my $main = Socialtext->new();
+my $hub  = $main->load_hub(
+    current_workspace => Socialtext::NoWorkspace->new,
+    current_user      => Socialtext::User->SystemUser(),
+);
+$hub->registry()->load();
+my $plug = Socialtext::Pluggable::Plugin::Widgets->new;
+$plug->hub($hub);
+
+(my $uri = Socialtext::URI::uri) =~ s{/$}{};
+
+sub transform_url {
+    my $src = shift;
+    if ($src =~ m{$uri/nlw/plugin/([^/]+)/(.*)}) {
+        return "file:$1/share/$2";
+    }
+    return $src;
+}
+
+# Iterate over each widget and install them using st-widgets
+#    check for duplicate widgets, and store gadget_id
+{
+    my $sth = sql_execute("
+        SELECT distinct(value)
+          FROM storage
+         WHERE key = 'url'
+    ");
+    while (my $row = $sth->fetchrow_hashref) {
+        my $src = transform_url($row->{value});
+        warn "Installing $src";
+        #Socialtext::XML->Install($src);
+    }
+}
+
+# Iterate over each container in the storage table
+#    create the container
+#    for each widget
+#       create the gadget_instance
+my $sth = sql_execute("
+    SELECT distinct(class) as class, user_id
+      FROM storage
+     WHERE class LIKE 'container:%'
+       AND key = 'type'
+       AND value = 'dashboard'
+");
+while (my $row = $sth->fetchrow_hashref) {
+    my $container_store = Socialtext::Storage->new($row->{class});
+    my $gadgets = $container_store->get('gadgets');
+
+    my $container = Socialtext::Gadgets::Container->new($plug,
+        type => 'dashboard',
+        user_id => $row->{user_id},
+        no_gadgets => 0,
+    );
+    $container->clear_gadgets;
+
+    for my $g (sort { $b->{pos}[1] <=> $a->{pos}[1] } values %$gadgets) {
+        warn "Will insert gadget $g->{id} at $g->{pos}[0]/$g->{pos}[1]\n";
+        my $gstore = Socialtext::Storage->new("gadget:$g->{id}");
+        $gstore->preload(qw(user_prefs url));
+        my $url = transform_url($gstore->get('url'));
+        my $user_prefs = $gstore->get('user_prefs');
+        delete $user_prefs->{base_uri};
+
+        my $gadget = $container->install_gadget(
+            src => $url,
+            col => $g->{pos}[0],
+            default_prefs => [
+                map { [ $_, $user_prefs->{$_} ] } keys %$user_prefs,
+            ],
+        );
+    }
+}

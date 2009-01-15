@@ -1555,8 +1555,6 @@ proto.enableThis = function() {
                 self.set_clear_handler();
             }
 
-            return; // XXX - Disable Paste until it is a little bit more stable.
-
             self.pastebin = jQuery("#pastebin").get(0).contentWindow;
             self.pastebin.document.body.innerHTML = "";
             self.pastebin.document.designMode = "on";

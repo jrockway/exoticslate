@@ -7,6 +7,10 @@ use Socialtext::Workspace;
 use Socialtext::User;
 use Socialtext::Hub;
 use Socialtext::Page;
+use Socialtext::CLI;
+
+# Need to run as www-data when modifying files on the system.
+Socialtext::CLI->Check_and_drop_privs();
 
 Remove_duplicate_tags: {
     my $sth = sql_execute(<<EOT);

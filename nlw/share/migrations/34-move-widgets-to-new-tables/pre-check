@@ -2,6 +2,7 @@
 # @COPYRIGHT@
 use warnings;
 use strict;
+use Socialtext::Migration::Utils qw/ensure_socialtext_schema/;
 
 # If socialcalc is installed, run the migration
 unless (-d '/usr/share/nlw/plugin/widgets') {
@@ -9,5 +10,6 @@ unless (-d '/usr/share/nlw/plugin/widgets') {
     exit 1;
 }
 
+ensure_schema_version(28);
 print "Running migration to move widgets to the new db layout";
 exit 0;

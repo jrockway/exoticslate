@@ -22,13 +22,13 @@
     };
 
     $.hideLightbox = function() {
-        $(this).hideLightbox();
+        this.fn.hideLightbox();
     };
 
     $.showLightbox = function(args) {
         // Allow $.showLightbox(string) and $.showLightbox(options)
         opts = typeof(args) == 'string' ? { html: args } : args;
-        $(this).showLightbox();
+        this.fn.showLightbox();
     };
 
     $.fn.showLightbox = function() {

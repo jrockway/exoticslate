@@ -1327,7 +1327,17 @@ if (! window.Page) {
     };
 }
 
+proto._is_block_level_node = function(node) {
+    return (
+        node &&
+        node.nodeName &&
+        node.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)
+    );
+}
+
+
 proto.convert_html_to_wikitext = function(html, isWholeDocument) {
+    var self = this;
     html = this.strip_msword_gunk(html);
 
     (function ($) {
@@ -1363,7 +1373,7 @@ proto.convert_html_to_wikitext = function(html, isWholeDocument) {
             var cleanup_newlines = function() {
                 if (this.nodeType == 3) {
                     if (this.previousSibling && this.previousSibling.nodeType == 1 && this.previousSibling.nodeName != 'BR' ) {
-                        if (this.previousSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
+                        if (self._is_block_level_node(this.previousSibling)) {
                             return;
                         }
                         this.nodeValue = this.nodeValue.replace(/^\n/, ' ');
@@ -1373,7 +1383,7 @@ proto.convert_html_to_wikitext = function(html, isWholeDocument) {
                     }
 
                     if (this.nextSibling && this.nextSibling.nodeType == 1 && this.nextSibling.nodeName != 'BR' ) {
-                        if (this.nextSibling.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
+                        if (self._is_block_level_node(this.nextSibling)) {
                             return;
                         }
                         this.nodeValue = this.nodeValue.replace(/\n$/, ' ');
@@ -1518,7 +1528,7 @@ proto.walk = function(elem) {
                         break;
                     }
 
-                    if (node.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
+                    if (this._is_block_level_node(node)) {
                         break;
                     }
                 }
@@ -1641,9 +1651,8 @@ proto.format_text = function(elem) {
     if (text.match(/^[\xa0\s]+$/)) {
         var next = this._get_next_node(elem);
         if (!next) return '';
-        if (next.nodeType == 1 && next.nodeName.match(
-            /^(?:BR|UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)
-        ) return '';
+        if (next.nodeType == 1
+            && (next.nodeName == 'BR' || this._is_block_level_node(next))) return '';
     }
 
     if (text.match(/^\s+/) && elem.previousSibling && elem.previousSibling.nodeType == 1 && elem.previousSibling.nodeName == 'BR') {

@@ -9,7 +9,7 @@ use unmocked 'DateTime::Format::Pg';
 
 our @EXPORT_OK = qw(
     get_dbh disconnect_dbh
-    sql_execute sql_selectrow sql_singlevalue
+    sql_execute sql_execute_array sql_selectrow sql_singlevalue
     sql_commit sql_begin_work sql_rollback sql_in_transaction
     sql_convert_to_boolean sql_convert_from_boolean
     sql_parse_timestamptz sql_format_timestamptz
@@ -33,6 +33,8 @@ our $Level = 0;
 sub sql_mock_result {
     push @RETURN_VALUES, {'return'=>[@_]};
 }
+
+sub sql_execute_array { sql_execute(@_) }
 
 sub sql_execute {
     my $sql = shift;

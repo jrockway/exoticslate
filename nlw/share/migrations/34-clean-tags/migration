@@ -3,6 +3,10 @@
 use warnings;
 use strict;
 use Socialtext::SQL qw/sql_execute sql_singlevalue/;
+use Socialtext::Workspace;
+use Socialtext::User;
+use Socialtext::Hub;
+use Socialtext::Page;
 
 Remove_duplicate_tags: {
     my $sth = sql_execute(<<EOT);
@@ -34,25 +38,30 @@ EOT
             $row->{tag},
         );
 
-        my @tags = sort map { $_->[0] } 
+        my @tags_to_rm = sort map { $_->[0] } 
                    @{ $tag_sth->fetchall_arrayref };
-        my $to_keep = shift @tags;
+        my $to_keep = shift @tags_to_rm;
 
         print "  Keeping tag '$to_keep' ($row->{workspace_id}, $row->{page_id}),"
-              . " dropping: " . join(', ', map { "'$_'" } @tags) . "\n";
-        sql_execute('
-            DELETE FROM page_tag
-             WHERE workspace_id = ?
-               AND page_id = ?
-               AND lower(tag) = lower(?)',
-            $row->{workspace_id}, $row->{page_id},
-            $to_keep
-       );
-       sql_execute('
-           INSERT INTO page_tag VALUES (?, ?, ?)',
-            $row->{workspace_id}, $row->{page_id},
-            $to_keep,
-       );
+              . " dropping: " . join(', ', map {"'$_'"} @tags_to_rm) . "\n";
+
+       # Clean the tags from the page
+        my $hub = Socialtext::Hub->new(
+            current_workspace => Socialtext::Workspace->new(
+                workspace_id => $row->{workspace_id}
+            ),
+            current_user => Socialtext::User->SystemUser,
+        );
+
+        my $page = Socialtext::Page->new(
+            hub => $hub, id => $row->{page_id},
+        );
+        my @page_tags = @{ $page->metadata->{Category} };
+        for my $tag (@tags_to_rm) {
+            @page_tags = grep { $_ ne $tag } @page_tags;
+        }
+        $page->metadata->{Category} = \@page_tags;
+        $page->store( user => $hub->current_user );
     }
 }
 

@@ -7,3 +7,4 @@ all clean:
 	make -C performance $@
 	make -C socialcalc $@
 	make -C sample $@
+	make -C html2wiki $@

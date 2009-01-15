@@ -1,6 +1,6 @@
 [% loc('Congratulations!') %]
 
-[% loc('You have been invited as an administrator to "[_1]", a brand new Socialtext Workspace. You are the administrator.', workspace_name) %]
+[% loc('You have been invited as an administrator to "[_1]", a brand new Socialtext Workspace. You are the administrator.', workspace_title) %]
 
 [% loc('The web address of the new workspace is [_1]', workspace_uri) %]
 
@@ -13,4 +13,4 @@
 ** [% loc('Workspace Features') %]
 ** [% loc('Workspace Privacy') %]
 
-[% loc('Or you may continue to work in this workspace, and visit "[_1]" later.', workspace_name) %]
+[% loc('Or you may continue to work in this workspace, and visit "[_1]" later.', workspace_title) %]

@@ -1511,9 +1511,18 @@ proto.walk = function(elem) {
                 continue;
             }
 
-            if (this.wikitext &&
-                part.top_level_block
-            ) this.wikitext = this.wikitext.replace(/ *\n*$/, '\n\n');
+            if (this.wikitext) {
+                for (var node = part; node; node = node.firstChild) {
+                    if (node.top_level_block) {
+                        this.wikitext = this.wikitext.replace(/ *\n*$/, '\n\n');
+                        break;
+                    }
+
+                    if (node.nodeName.match(/^(?:UL|LI|OL|P|H\d+|HR|TABLE|TD|TR|TH|THEAD|TBODY|BLOCKQUOTE)$/)) {
+                        break;
+                    }
+                }
+            }
             if (part.widget_on_widget) {
                 this.wikitext = this.wikitext.replace(/\n*$/, '\n');
             }

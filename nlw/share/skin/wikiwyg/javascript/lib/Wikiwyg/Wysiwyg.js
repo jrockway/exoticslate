@@ -106,7 +106,7 @@ proto.clear_inner_html = function() {
     var clear = this.config.clearRegex;
     var res = inner_html.match(clear) ? 'true' : 'false';
     if (clear && inner_html.match(clear))
-        this.set_inner_html('');
+        this.set_inner_html('<div class="wiki"></div>');
 }
 
 proto.set_clear_handler = function () {

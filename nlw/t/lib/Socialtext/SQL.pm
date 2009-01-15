@@ -49,10 +49,6 @@ sub sql_execute {
     my $mock = mock_sth->new(%{ $sth_args || {} });
     return $mock;
 }
-sub sql_execute_array {
-    # mock can be the same as sql_execute
-    sql_execute( @_ );
-}
 
 sub disconnect_dbh { }
 my $in_transaction = 0;

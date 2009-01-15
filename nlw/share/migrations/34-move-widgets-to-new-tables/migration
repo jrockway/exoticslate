@@ -32,20 +32,6 @@ sub transform_url {
     return $src;
 }
 
-# Iterate over each widget and install them using st-widgets
-#    check for duplicate widgets, and store gadget_id
-{
-    my $sth = sql_execute("
-        SELECT distinct(value)
-          FROM storage
-         WHERE key = 'url'
-    ");
-    while (my $row = $sth->fetchrow_hashref) {
-        my $src = transform_url($row->{value});
-        warn "Installing $src";
-        #Socialtext::XML->Install($src);
-    }
-}
 
 # Iterate over each container in the storage table
 #    create the container

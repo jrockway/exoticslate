@@ -106,7 +106,9 @@ sub populate {
                 $page->{type}, $page->{deleted}, $page->{summary},
             ];
 
-            for my $t (@{ $page->{tags} }) {
+            my %tags;
+            for my $t (grep { length } @{ $page->{tags} }) {
+                next if $tags{lc($t)}++; # avoid duplicate tags
                 push @page_tags, [ $workspace_id, $page->{page_id}, $t ];
             }
         }

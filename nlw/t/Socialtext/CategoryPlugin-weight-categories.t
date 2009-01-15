@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 BEGIN { $ENV{NLW_LIVE_DANGEROUSLY} = 1 }
-use Test::Socialtext tests => 7;
+use Test::Socialtext tests => 8;
 # This test suite *needs* to have no pages in the admin workspace when its
 # run.
 fixtures('admin_no_pages');
@@ -44,6 +44,21 @@ WEIGHTED_CATEGORIES_FOR_WORKSPACE: {
     is $tags{maxCount}, 2, 'the maxCount should be 2';
     is $tags{tags}->[0]->{page_count}, 2,
         'the count of tag tag1 should be 2 for the workspace';
+}
+
+Cannot_create_empty_tag: {
+    my $five = create_page_with_tags( 'five', 'empty', '' );
+    my %tags = $hub->category->weight_categories(
+        @{ $five->metadata->Category } );
+    is_deeply \%tags, {
+        maxCount => 1,
+        tags => [
+            {
+                name => 'empty',
+                page_count => 1,
+            }
+        ],
+    }, 'empty tag is not added';
 }
 
 sub create_page_with_tags {

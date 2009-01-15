@@ -1396,12 +1396,24 @@ proto.convert_html_to_wikitext = function(html, isWholeDocument) {
                 }
 
                 if (contents.length > 0) {
-                    if (contents[0].nodeType == 3) {
-                        contents[0].nodeValue = contents[0].nodeValue.replace(/^\n/, '');
+                    for (var i = 0; i < contents.length; i++) {
+                        var firstNode = contents[i];
+                        if (firstNode.nodeType == 1 && firstNode.innerHTML == '') continue;
+                        if (firstNode.nodeType == 3) {
+                            firstNode.nodeValue = firstNode.nodeValue.replace(/^\n/, '');
+                        }
+                        break;
                     }
-                    if (contents[contents.length-1].nodeType == 3) {
-                        contents[contents.length-1].nodeValue = contents[contents.length-1].nodeValue.replace(/\n$/, '');
+
+                    for (var i = contents.length-1; i >= 0; i--) {
+                        var lastNode = contents[i];
+                        if (lastNode.nodeType == 1 && lastNode.innerHTML == '') continue;
+                        if (lastNode.nodeType == 3) {
+                            lastNode.nodeValue = lastNode.nodeValue.replace(/\n$/, '');
+                        }
+                        break;
                     }
+
                     contents.each(cleanup_newlines);
                 }
             }

@@ -71,10 +71,10 @@ sub _invite_one_user {
     );
 
     $self->_log_action( "INVITE_USER", $user->email_address );
-    $self->_invite_notify( $user );
+    $self->invite_notify( $user );
 }
 
-sub _invite_notify {
+sub invite_notify {
     my $self       = shift;
     my $user       = shift;
     my $extra_text = $self->{extra_text};

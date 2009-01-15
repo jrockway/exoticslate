@@ -1,0 +1,16 @@
+[% loc('Congratulations!') %]
+
+[% loc('You have been invited as an administrator to "[_1]", a brand new Socialtext Workspace. You are the administrator.', w.name) %]
+
+[% loc('The web address of the new workspace is [_1]', w.url) %]
+
+[% loc("You're ready to set up your new workspace, if you want to. Choose your next step:") %]
+
+* [% loc('Go to the test confirmation message home page.') %]
+* [% loc('Invite other people to test confirmation message.') %]
+* [% loc('Review or change the settings for test confirmation message:') %]
+** [% loc('Workspace Appearance') %]
+** [% loc('Workspace Features') %]
+** [% loc('Workspace Privacy') %]
+
+[% loc('Or you may continue to work in this workspace, and visit "[_1]" later.', w.name) %]

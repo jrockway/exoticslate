@@ -74,6 +74,41 @@ sub _invite_one_user {
     $self->invite_notify( $user );
 }
 
+# TODO: refactor this with and fold it into invite_notify
+sub invite_admin_notify {
+    my $self         = shift;
+    my $user         = shift;
+    my $workspace    = $self->{workspace};
+    my $from_user    = $self->{from_user};
+    my $template_dir = $workspace->invitation_template;
+
+    my $subject = loc( 
+        "I'm inviting you to the [_1] workspace", 
+        $workspace->title
+    );
+
+    my $renderer = Socialtext::TT2::Renderer->instance();
+
+    my %vars = {
+        workspace_title => $workspace->title,
+        workspace_uri   => $workspace->uri,
+    };
+
+    my $text_body = $renderer->render(
+        template => "email/$template_dir/workspace-admin-invitation.txt",
+        vars     => \%vars,
+    );
+
+    my $locale = system_locale();
+    my $email_sender = Socialtext::EmailSender::Factory->create($locale);
+    $email_sender->send(
+        from      => $self->{from_user}->name_and_email,
+        to        => $user->email_address,
+        subject   => $subject,
+        text_body => $text_body,
+    );
+}
+
 sub invite_notify {
     my $self       = shift;
     my $user       = shift;

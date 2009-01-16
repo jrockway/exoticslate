@@ -1522,6 +1522,32 @@ proto.set_focus = function() {
     } catch (e) {}
 }
 
+proto.set_paste_handler = function() {
+    var self = this;
+
+    self.pastebin = jQuery("#pastebin").get(0).contentWindow;
+    self.pastebin.document.body.innerHTML = "";
+    self.pastebin.document.designMode = "on";
+
+    var event_name = "keydown";
+    if (jQuery.browser.mozilla && navigator.oscpu.match(/Mac/)) {
+        event_name = "keypress";
+    }
+
+    jQuery( self.get_edit_document() ).unbind(event_name).bind(event_name, function(e) {
+        if ((e.ctrlKey || e.metaKey) && (e.which == 86 || e.which == 118)) {
+            self.pastebin.focus();
+
+            setTimeout(function() {
+                var html = self.pastebin.document.body.innerHTML;
+                self.pastebin.document.body.innerHTML = "";
+
+                self.on_pasted(html);
+            }, 100);
+        }
+    });
+}
+
 proto.enableThis = function() {
     Wikiwyg.Wysiwyg.prototype.enableThis.apply(this, arguments);
 
@@ -1555,27 +1581,7 @@ proto.enableThis = function() {
                 self.set_clear_handler();
             }
 
-            self.pastebin = jQuery("#pastebin").get(0).contentWindow;
-            self.pastebin.document.body.innerHTML = "";
-            self.pastebin.document.designMode = "on";
-
-            var event_name = "keydown";
-            if (jQuery.browser.mozilla && navigator.oscpu.match(/Mac/)) {
-                event_name = "keypress";
-            }
-
-            jQuery( self.get_edit_document() ).bind(event_name, function(e) {
-                if ((e.ctrlKey || e.metaKey) && (e.which == 86 || e.which == 118)) {
-                    self.pastebin.focus();
-
-                    setTimeout(function() {
-                        var html = self.pastebin.document.body.innerHTML;
-                        self.pastebin.document.body.innerHTML = "";
-
-                        self.on_pasted(html);
-                    }, 100);
-                }
-            });
+            self.set_paste_handler();
         }
         catch(e) { }
     }, 1);
@@ -1672,6 +1678,9 @@ proto.set_clear_handler = function () {
     var clean = function() {
         self.clear_inner_html();
         jQuery(editor).unbind();
+
+        /* We've just unbound the paste handler, so re-enable it here */
+        self.set_paste_handler();
     };
 
     try {
@@ -1910,6 +1919,7 @@ proto.closeTableDialog = function() {
     var doc = this.get_edit_document();
     jQuery(doc).unbind("keypress");
     jQuery.hideLightbox();
+    this.set_paste_handler();
 }
 
 proto.do_new_table = function() {

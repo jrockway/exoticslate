@@ -109,7 +109,8 @@ sub recreate {
     eval { $self->dump } unless $opts{no_dump};
     $self->dropdb;
     $self->createdb;
-    $self->run_sql_file($self->_schema_filename);
+    my $file = $opts{'schema-file'} || $self->_schema_filename;
+    $self->run_sql_file($file);
     $self->_add_required_data;
 }
 

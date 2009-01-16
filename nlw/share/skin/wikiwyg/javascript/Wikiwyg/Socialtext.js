@@ -112,9 +112,9 @@ function setup_wikiwyg() {
 
     var clearRichText = new RegExp(
         ( "^"
-        + "\\s*(</?(span|br|div)\\b[^>]*>)*\\s*"
+        + "\\s*(</?(span|br|div)\\b[^>]*>\\s*)*"
         + loc("Replace this text with your own.")
-        + "\\s*(</?(span|br|div)\\b[^>]*>)*\\s*"
+        + "\\s*(</?(span|br|div)\\b[^>]*>\\s*)*"
         + "$"
         ), "i"
     );

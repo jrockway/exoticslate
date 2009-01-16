@@ -149,3 +149,6 @@ bin/st-widgets
 bin/get-sample-data
 lib/Socialtext/Rest/Gadget.pm
 etc/socialtext/uri_map.d/widgets.yaml
+t/Socialtext/REST
+t/Socialtext/REST/Gadget.t
+t/Socialtext/Rest/Gadget.t

@@ -48,6 +48,7 @@ MASS_ADD_USERS: {
             (File::Temp::tempfile(SUFFIX=>'.csv', OPEN=>0))[1]
         );
         write_file $csvfile,
+            join(',', qw{username email_address first_name last_name password position company location work_phone mobile_phone home_phone}) . "\n",
             join(',', 'John Doe', qw(ignored@example.com ignored_first ignored_last ignored_password position company location work_phone mobile_phone home_phone));
 
         # do mass-add
@@ -95,6 +96,7 @@ MASS_ADD_USERS: {
             (File::Temp::tempfile(SUFFIX=>'.csv', OPEN=>0))[1]
         );
         write_file $csvfile,
+            join(',', qw{username email_address first_name last_name password position company}) . "\n",
             join(',', 'John Doe', qw(updated@example.com updated_first updated_last updated_password updated_position updated_company));
 
         # do mass-add

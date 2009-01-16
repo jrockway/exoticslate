@@ -245,6 +245,7 @@ MASS_ADD_USERS: {
             (File::Temp::tempfile(SUFFIX=>'.csv', OPEN=>0))[1]
         );
         write_file $csvfile,
+            join(',', qw{username email_address first_name last_name password position company location work_phone mobile_phone home_phone}) . "\n",
             join(',', qw{csvtest1 csvtest1@example.com John Doe passw0rd position company location work_phone mobile_phone home_phone}) . "\n",
             join(',', qw{csvtest2 csvtest2@example.com Jane Smith password2 position2 company2 location2 work_phone2 mobile_phone2 home_phone2}) . "\n";
 
@@ -296,6 +297,7 @@ MASS_ADD_USERS: {
             (File::Temp::tempfile(SUFFIX=>'.csv', OPEN=>0))[1]
         );
         write_file $csvfile,
+            join(',', qw{username email_address first_name last_name password position company location work_phone mobile_phone home_phone}) . "\n",
             join(',', qw{csvtest3 csvtest3@example.com John Doe passw0rd position company location work_phone mobile_phone home_phone}) . "\n";
 
         # Get rid of any existing default account
@@ -330,6 +332,7 @@ MASS_ADD_USERS: {
             (File::Temp::tempfile(SUFFIX=>'.csv', OPEN=>0))[1]
         );
         write_file $csvfile,
+            join(',', qw{username email_address first_name last_name password position}) . "\n",
             join(',', qw(csvtest1 email@example.com u_John u_Doe u_passw0rd u_position));
 
         # make sure that the user really does exist
@@ -374,6 +377,7 @@ MASS_ADD_USERS: {
             (File::Temp::tempfile(SUFFIX=>'.csv', OPEN=>0))[1]
         );
         write_file $csvfile,
+            join(',', qw{username email_address first_name last_name password}) . "\n",
             join(',', qw(csv_email_clash devnull1@socialtext.com John Doe passw0rd));
 
         # make sure that the user really does exist
@@ -387,7 +391,7 @@ MASS_ADD_USERS: {
                     argv => ['--csv', $csvfile],
                 )->mass_add_users();
             },
-            qr/Line 1: The email address you provided \(devnull1\@socialtext.com\) is already in use./,
+            qr/Line 2: The email address you provided \(devnull1\@socialtext.com\) is already in use./,
             'mass-add-users does not add user if email in use'
         );
         unlink $csvfile;
@@ -411,7 +415,8 @@ MASS_ADD_USERS: {
             (File::Temp::tempfile(SUFFIX=>'.csv', OPEN=>0))[1]
         );
         write_file $csvfile,
-            join(' ', qw{csvtest1 csvtest1@example.com John Doe passw0rd position company location work_phone mobile_phone home_phone}) . "\n";
+            join(',', qw{username email_address first_name last_name password}) . "\n",
+            join(' ', qw{csvtest1 csvtest1@example.com John Doe passw0rd}) . "\n";
 
         # do mass-add
         expect_failure(
@@ -420,7 +425,7 @@ MASS_ADD_USERS: {
                     argv => ['--csv', $csvfile]
                 )->mass_add_users();
             },
-            qr/\QLine 1: could not be parsed.  Skipping this user.\E/,
+            qr/\QLine 2: could not be parsed (missing fields).  Skipping this user.\E/,
             'mass-add-users failed with invalid file'
         );
         unlink $csvfile;

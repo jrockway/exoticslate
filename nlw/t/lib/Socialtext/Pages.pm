@@ -22,6 +22,8 @@ sub all_ids { }
 
 sub show_mouseover { 1 }
 
+sub title_to_uri { return $_[1] }
+
 field current => -init => '$self->new_page("welcome")';
 
 {

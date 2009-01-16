@@ -32,12 +32,14 @@ sub update {
 }
 
 sub is_plugin_enabled { $_[0]->{is_plugin_enabled}{$_[1]} }
-sub workspace_id { $_[0]->{workspace_id} || 'mock_workspace_id' }
+sub workspace_id { $_[0]->{workspace_id} || 1 }
 
 sub homepage_is_dashboard { $_[0]->{homepage_is_dashboard} }
 
+sub unmasked_email_domain { 'foo.com' }
 sub homepage_weblog { $_[0]->{homepage_weblog} }
 
+sub email_addresses_are_hidden { 1 }
 sub logo_uri_or_default { 'logo_uri_or_default' }
 
 sub is_public { $_[0]->{is_public} }

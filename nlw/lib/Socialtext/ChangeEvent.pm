@@ -152,16 +152,17 @@ sub _log_page_action {
     my $self   = shift;
     my $object = shift;
 
+    my $action = $object->hub->action || '';
     return if $object->hub->rest->query->param('clobber')
-        || $object->hub->action eq 'submit_comment'
-        || $object->hub->action eq 'attachments_upload';
+        || $action eq 'submit_comment'
+        || $action eq 'attachments_upload';
 
-    if ( $object->hub->action eq 'edit_content' ||
-         $object->hub->action eq 'rename_page' ) {
+    if ( $action eq 'edit_content' ||
+         $action eq 'rename_page' ) {
          return unless $object->restored || $object->revision_count == 1;
     }
 
-    my $action = ($object->hub->action eq 'delete_page') ? 'DELETE' : 'CREATE';
+    $action = ($action eq 'delete_page') ? 'DELETE' : 'CREATE';
     my $ws     = $object->hub->current_workspace;
     my $user   = $object->hub->current_user;
     my $page   = $object->hub->pages->current;

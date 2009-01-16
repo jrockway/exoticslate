@@ -57,7 +57,7 @@ sub cgi { $_[0]{cgi} || Socialtext::CGI->new }
 sub preferences_object { $_[0]{preferences} || Socialtext::Preferences->new }
 sub preferences        { $_[0]->preferences_object }
 
-sub current_user { $_[0]{current_user} || Socialtext::User->new }
+sub current_user { $_[0]{current_user} || Socialtext::User->new(user_id => 1) }
 
 sub checker { shift }
 
@@ -136,7 +136,7 @@ sub formatter {
 }
 
 sub attachments {
-    return $_[0]{formatter} ||= Socialtext::Attachments->new(hub => $_[0]);
+    return $_[0]{attachments} ||= Socialtext::Attachments->new(hub => $_[0]);
 }
 
 sub breadcrumbs {

@@ -217,6 +217,7 @@ sub _there_is_an_edit_contention {
     my $page = shift;
     my $original_revision = shift;
 
+    return 0 unless defined $original_revision;
     return 0 unless $page->exists;
     return 0 if $page->deleted;
     return 0 if ($page->revision_id eq $original_revision);

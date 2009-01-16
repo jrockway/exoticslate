@@ -4,9 +4,11 @@ use strict;
 use warnings;
 use Test::More tests => 10;
 use Data::Dumper;
+use mocked 'Apache::Cookie';
 use mocked 'Socialtext::Events', qw/event_ok/;
 use mocked 'Socialtext::WeblogPlugin';
 use mocked 'Socialtext::Hub';
+use Socialtext::Attachments;
 
 BEGIN { use_ok 'Socialtext::EditPlugin' }
 

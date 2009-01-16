@@ -115,6 +115,12 @@ sub sql_execute {
     _sql_execute($statement, 'execute', \@_);
 }
 
+=head2 sql_execute_array( $SQL, @BIND )
+
+Like sql_execute(), but pass in an array of array of bind values.
+
+=cut
+
 sub sql_execute_array {
     my $statement = shift;
     # rest of @_ are bindings, prevent making copies

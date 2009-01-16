@@ -2081,6 +2081,14 @@ This accepts the same parameters as C<< Socialtext::User->All() >>,
 but requires an additional "username" parameter. Any users containing
 the specified string anywhere in their username will be returned.
 
+=head2 Socialtext::User->ByUserIds(PARAMS)
+
+Returns a cursor for all the users with the specified user IDs.
+
+This accepts the same parameters as C<< Socialtext::User->All() >>,
+but requires an additional "ids" parameter. This parameter should be
+an array ref containing the specified user ids to be returned.
+
 =head2 Socialtext::User->Count()
 
 Returns a count of all users.

@@ -104,8 +104,12 @@ whose value is the id of the widget (ie the value of __MODULE_ID__)
 
 sub st_add_widget {
     my ($self, $widgetpath, $logical) = @_;
+
+    # backwards compat:
+    $widgetpath = "file:$widgetpath" unless $widgetpath =~ m{^\w+:};
+
     my $location = $self->_adjust_location(action => "add_widget", 
-                                           location => $widgetpath);
+                                           src => $widgetpath);
     eval {
         my @widgetsbefore = $self->_getWidgetList;
         $self->{selenium}->open($location);

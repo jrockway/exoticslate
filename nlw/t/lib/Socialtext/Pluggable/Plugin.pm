@@ -16,6 +16,7 @@ my %hooks;
 my %rests;
 
 sub dependencies { }
+sub enables {}
 const priority => 100;
 const scope => 'account';
 const hidden => 1; # hidden to admins

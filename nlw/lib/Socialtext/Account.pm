@@ -195,26 +195,31 @@ sub enable_plugin {
     my ($self, $plugin) = @_;
 
     my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
-    die loc("The [_1] plugin can not be enabled at the account scope", $plugin)
-        . "\n" unless $plugin_class->scope eq 'account';
+    $self->_check_plugin_scope($plugin);
 
-    for my $dep ($plugin_class->dependencies) {
+    # Don't even bother enabling deps if the plugin is already enabled
+    return if $self->is_plugin_enabled($plugin);
+
+    Socialtext::Pluggable::Adapter->EnablePlugin($plugin => $self);
+
+    sql_execute(q{
+        INSERT INTO account_plugin VALUES (?,?)
+    }, $self->account_id, $plugin);
+
+    for my $dep ($plugin_class->dependencies, $plugin_class->enables) {
         $self->enable_plugin($dep);
     }
 
-    if (!$self->is_plugin_enabled($plugin)) {
-        Socialtext::Pluggable::Adapter->EnablePlugin($plugin => $self);
-
-        sql_execute(q{
-            INSERT INTO account_plugin VALUES (?,?)
-        }, $self->account_id, $plugin);
-
-        Socialtext::Cache->clear('authz_plugin');
-    }
+    Socialtext::Cache->clear('authz_plugin');
 }
 
 sub disable_plugin {
     my ($self, $plugin) = @_;
+    $self->_check_plugin_scope($plugin);
+
+    # Don't even bother disabling deps if the plugin is already enabled
+    return unless $self->is_plugin_enabled($plugin);
+    my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
 
     Socialtext::Pluggable::Adapter->DisablePlugin($plugin => $self);
 
@@ -223,7 +228,21 @@ sub disable_plugin {
         WHERE account_id = ? AND plugin = ?
     }, $self->account_id, $plugin);
 
+    # Disable any reverse depended packages
+    for my $rdep ($plugin_class->reverse_dependencies) {
+        $self->disable_plugin($rdep);
+    }
+
     Socialtext::Cache->clear('authz_plugin');
+}
+
+sub _check_plugin_scope {
+    my $self = shift;
+    my $plugin = shift;
+    my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
+    die loc("The [_1] plugin can not be set at the account scope",
+        $plugin) . "\n"
+        unless $plugin_class->scope eq 'account';
 }
 
 sub export {

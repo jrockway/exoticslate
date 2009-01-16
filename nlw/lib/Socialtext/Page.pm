@@ -609,9 +609,10 @@ sub uri {
 Adds the given tags string to the Categories on the page.
 
 =cut
+
 sub add_tags {
     my $self = shift;
-    my @tags  = @_;
+    my @tags  = grep { length } @_;
     return unless @tags;
 
     if ( $self->hub->checker->check_permission('edit') ) {

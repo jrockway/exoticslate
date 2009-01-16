@@ -196,6 +196,7 @@ EOSQL
 
         $self = $class->new( name => $p{name} );
 
+
         my $creator = $self->creator;
         unless ( $creator->is_system_created ) {
             $self->add_user(
@@ -1019,35 +1020,32 @@ sub _check_plugin_scope {
 
 sub enable_plugin {
     my ($self, $plugin) = @_;
-    $self->_check_plugin_scope($plugin);
 
     my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
-    for my $dep ($plugin_class->dependencies) {
+    $self->_check_plugin_scope($plugin);
+
+    return if $self->is_plugin_enabled($plugin);
+
+    Socialtext::Pluggable::Adapter->EnablePlugin($plugin => $self);
+
+    sql_execute(q{
+        INSERT INTO workspace_plugin VALUES (?,?)
+    }, $self->workspace_id, $plugin);
+
+    for my $dep ($plugin_class->dependencies, $plugin_class->enables) {
         $self->enable_plugin($dep);
     }
 
-    if (!$self->is_plugin_enabled($plugin)) {
-        Socialtext::Pluggable::Adapter->EnablePlugin($plugin => $self);
-
-        sql_execute(q{
-            INSERT INTO workspace_plugin VALUES (?,?)
-        }, $self->workspace_id, $plugin);
-
-        Socialtext::Cache->clear('authz_plugin');
-    }
-    my $msg = loc("The [_1] plugin is now enabled for workspace [_2]",
-                  $plugin, $self->name);
-    warn "$msg\n";
+    Socialtext::Cache->clear('authz_plugin');
 }
 
 sub disable_plugin {
     my ($self, $plugin) = @_;
     $self->_check_plugin_scope($plugin);
 
+    # Don't even bother disabling deps if the plugin is already enabled
+    return unless $self->is_plugin_enabled($plugin);
     my $plugin_class = Socialtext::Pluggable::Adapter->plugin_class($plugin);
-    for my $dep ($plugin_class->dependencies) {
-        $self->enable_plugin($dep);
-    }
 
     Socialtext::Pluggable::Adapter->DisablePlugin($plugin => $self);
 
@@ -1055,6 +1053,11 @@ sub disable_plugin {
         DELETE FROM workspace_plugin
         WHERE workspace_id = ? AND plugin = ?
     }, $self->workspace_id, $plugin);
+
+    # Disable any reverse depended packages
+    for my $rdep ($plugin_class->reverse_dependencies) {
+        $self->disable_plugin($rdep);
+    }
 
     Socialtext::Cache->clear('authz_plugin');
 }

@@ -358,7 +358,7 @@ sub _find_user {
     else {
         # all other searches are done as sub-tree under Base DN
         $val = escape_filter_value($val);
-        $options{'base'}    = $self->ldap_config->base(),
+        $options{'base'}    = $self->ldap_config->base();
         $options{'scope'}   = 'sub';
         $options{'filter'}  = "($search_attr=$val)";
     }

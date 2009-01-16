@@ -45,6 +45,9 @@ ALTER TABLE ONLY gadget
     ADD CONSTRAINT gadget_src
         UNIQUE (src);
 
+CREATE INDEX gadget__src
+    ON gadget(src);
+
 -- gadget localization table
 CREATE TABLE gadget_message (
     gadget_id BIGINT NOT NULL,
@@ -103,6 +106,9 @@ ALTER TABLE ONLY default_gadget
     ADD CONSTRAINT container_type_fk
         FOREIGN KEY (container_type)
         REFERENCES container_type(container_type) ON DELETE CASCADE;
+
+CREATE INDEX default_gadget_container_type
+    ON default_gadget(container_type);
 
 -- Container that holds gadget
 CREATE TABLE container (
@@ -194,6 +200,9 @@ ALTER TABLE ONLY gadget_user_pref
     ADD CONSTRAINT gadget_user_pref_gadget_fk
         FOREIGN KEY (gadget_id)
         REFERENCES gadget(gadget_id) ON DELETE CASCADE;
+
+CREATE INDEX gadget_user_pref_gadget_id
+    ON gadget_user_pref(gadget_id);
 
 -- Table to store actual user pref settings for a gadget instance
 CREATE TABLE gadget_instance_user_pref (

@@ -671,6 +671,9 @@ CREATE INDEX default_gadget__container_type
 CREATE INDEX gadget__src
 	    ON gadget (src);
 
+CREATE INDEX gadget_instance__container_id
+	    ON gadget_instance (container_id);
+
 CREATE INDEX gadget_instance_user_pref__user_pref_id
 	    ON gadget_instance_user_pref (user_pref_id);
 

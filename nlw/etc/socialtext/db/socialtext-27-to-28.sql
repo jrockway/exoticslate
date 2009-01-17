@@ -176,6 +176,9 @@ ALTER TABLE ONLY gadget_instance
         FOREIGN KEY (gadget_id)
         REFERENCES gadget(gadget_id) ON DELETE CASCADE;
 
+CREATE INDEX gadget_instance__container_id
+    ON gadget_instance(container_id);
+
 -- List of valid user preferences for a given gadget
 CREATE TABLE gadget_user_pref (
     user_pref_id BIGINT NOT NULL,

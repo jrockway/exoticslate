@@ -11,6 +11,7 @@ use Socialtext::AppConfig;
 use Socialtext::Skin;
 use Socialtext::Pluggable::Adapter;
 use Socialtext::Workspace;
+use Socialtext::System qw(shell_run);
 use Fcntl ':flock';
 use Socialtext::User::Cache;
 
@@ -28,6 +29,7 @@ sub handler {
                 _regen_combined_js($r);
                 Socialtext::Pluggable::Adapter->make;
             }
+            shell_run '-st-widgets update-all --noremote';
         }
     }
 

@@ -1735,6 +1735,7 @@ proto.format_p = function(elem) {
 proto.format_img = function(elem) {
     var widget = elem.getAttribute('widget');
     if (widget) {
+        if (Wikiwyg.is_ie) widget = Wikiwyg.htmlUnescape( widget );
         if (widget.match(/^\.\w+\n/))
             elem.top_level_block = true;
         else

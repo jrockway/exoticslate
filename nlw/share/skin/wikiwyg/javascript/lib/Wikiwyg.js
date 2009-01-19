@@ -289,6 +289,14 @@ Wikiwyg.liveUpdate = function(method, url, query, callback) {
     throw("Bad method: " + method + " passed to Wikiwyg.liveUpdate");
 }
 
+Wikiwyg.htmlEscape = function(str) {
+    return str
+        .replace(/&/g, "&amp;")
+        .replace(/"/g,"&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+}
+
 Wikiwyg.htmlUnescape = function(escaped) {
     // thanks to Randal Schwartz for the correct solution to this one
     // (from CGI.pm, CGI::unescapeHTML())

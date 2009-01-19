@@ -147,8 +147,12 @@ sub sql_execute_array {
     if ($@) {
         my $msg = "Error during sql_execute():\n$statement\n";
         $msg .= _list_bindings($bind);
-        my $err = join("\n", map { $_->[1] } grep { ref $_ } @status);
-        croak "${msg}\nErrors:\n$err\n";
+        my %dups;
+        my @errors = map { $_->[1] }
+                    grep { ref $_ and !$dups{$_->[1]}++ }
+                         @status;
+        my $err = join("\n", @errors);
+        croak "${msg}\nErrors: $@\n$err\n";
     }
     return $sth;
 }

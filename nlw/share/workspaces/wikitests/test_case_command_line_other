@@ -31,12 +31,12 @@
 | st-admin | enable-plugin --plugin widgets --all-accounts | The widgets plugin is now enabled for all accounts |
 | st-admin | enable-plugin --plugin dashboard --all-accounts | The dashboard plugin is now enabled for all accounts |
 
-| st-admin | enable-plugin --plugin socialcalc --all-accounts | qr/The socialcalc plugin can not be enabled at the account scope/ |
+| st-admin | enable-plugin --plugin socialcalc --all-accounts | qr/The socialcalc plugin can not be set at the account scope/ |
 | st-admin | enable-plugin --plugin socialcalc --workspace %%cmdline_workspace%% | The socialcalc plugin is now enabled for workspace %%cmdline_workspace%% |
 
 | st-admin | --help | qr/plugin/ |
 
- set-logo-from-file --workspace --file /path/to/file.jpg
+set-logo-from-file --workspace --file /path/to/file.jpg
 
 | *Comment* | Test Case: Command Line Tests OTHER set-logo-from-file |  |
 | *Comment* | Test Case: Command Line Tests OTHER set-logo-from file needs %%wikitest_files%%/wikitest.jpg on the CLIENT, not the server |  |
@@ -52,28 +52,28 @@
 | st-admin | set-comment-form-custom-fields | qr/The command you called \(set-comment-form-custom-fields\) requires a workspace to be specified/ |
 | st-admin | set-comment-form-custom-fields --workspace %%cmdline_workspace%% | qr/The custom comment form fields for the %%cmdline_workspace%% workspace have been updated/ |
 
- set-ping-uris --workspace <uri> <uri>
+set-ping-uris --workspace <uri> <uri>
 
 | *Comment* | Test Case: Command Line Tests OTHER set-ping-uris succeeds with no arguments |  |
 
 | st-admin | set-ping-uris | qr/The command you called \(set-ping-uris\) requires a workspace to be specified/ |
 | st-admin | set-ping-uris --workspace %%cmdline_workspace%% | qr/The ping uris for the %%cmdline_workspace%% workspace have been updated/ |
 
- send-weblog-pings --workspace --page
+send-weblog-pings --workspace --page
 
 | st-admin | send-weblog-pings | qr/The command you called \(send-weblog-pings\) requires a workspace to be specified/ |
 | st-admin | send-weblog-pings --workspace %%cmdline_workspace%% | qr/The %%cmdline_workspace%% workspace has no ping uris/ |
 
- update-page --workspace --page [--username or --email] < page-body.txt
+update-page --workspace --page [--username or --email] < page-body.txt
 
 | st-admin | update-page | qr/The command you called \(update-page\) requires a workspace to be specified/ |
 | st-admin | update-page --workspace %%cmdline_workspace%% | qr/The command you called \(update-page\) requires a user to be specified/ |
 | st-admin | update-page --workspace %%cmdline_workspace%% --page nosuchpage | qr/The command you called \(update-page\) requires a user to be specified/ |
 | st-admin | update-page --workspace %%cmdline_workspace%% --user %%cli_user%% | qr/The command you called \(update-page\) requires a page to be specified/ |
 
- from-input < <list of commands>
- version
- help
+from-input < <list of commands>
+version
+help
 
 | *Comment* | Test Case: Command Line Tests OTHER from-input requires STDIN |  |
 | st-admin | version | qr/Socialtext v.+Copyright 2004-200.+ Socialtext, Inc./ |

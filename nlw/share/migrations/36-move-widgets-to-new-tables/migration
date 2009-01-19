@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use File::Basename qw(basename);
 use Socialtext::Storage;
 use Socialtext::SQL qw(sql_execute);
 use Socialtext::URI;
@@ -22,16 +23,21 @@ $hub->registry()->load();
 my $plug = Socialtext::Pluggable::Plugin::Widgets->new;
 $plug->hub($hub);
 
-(my $uri = Socialtext::URI::uri) =~ s{/$}{};
+my %third_party = (
+    'MSOutlookWidget.xml' => 'http://andyast.googlepages.com/MSOutlookWidget.xml',
+    'googlecalendarviewer.xml' => 'http://ralph.feedback.googlepages.com/googlecalendarviewer.xml',
+    'ig-check.xml' => 'http://ralph.feedback.googlepages.com/googlecalendarviewer.xml',
+    'flickr_google.xml' => 'http://chinsonyeh.googlepages.com/flickr_google.xml',
+);
 
 sub transform_url {
     my $src = shift;
-    if ($src =~ m{$uri/nlw/plugin/([^/]+)/(.*)}) {
-        return "file:$1/share/$2";
+    if (my ($plugin, $file) = $src =~ m{^https?://(?:[^/]+)/nlw/plugin/([^/]+)/(.*)}) {
+        my $base = basename($file);
+        $src = $third_party{$base} ? $third_party{$base} : "file:$plugin/share/$file";
     }
     return $src;
 }
-
 
 # Iterate over each container in the storage table
 #    create the container
@@ -56,19 +62,23 @@ while (my $row = $sth->fetchrow_hashref) {
     $container->clear_gadgets;
 
     for my $g (sort { $b->{pos}[1] <=> $a->{pos}[1] } values %$gadgets) {
-        warn "Will insert gadget $g->{id} at $g->{pos}[0]/$g->{pos}[1]\n";
         my $gstore = Socialtext::Storage->new("gadget:$g->{id}");
         $gstore->preload(qw(user_prefs url));
-        my $url = transform_url($gstore->get('url'));
-        my $user_prefs = $gstore->get('user_prefs');
-        delete $user_prefs->{base_uri};
+        if (my $url = $gstore->get('url')) {
+            $url = transform_url($url);
+            my $user_prefs = $gstore->get('user_prefs');
+            delete $user_prefs->{base_uri};
 
-        my $gadget = $container->install_gadget(
-            src => $url,
-            col => $g->{pos}[0],
-            default_prefs => [
-                map { [ $_, $user_prefs->{$_} ] } keys %$user_prefs,
-            ],
-        );
+            my $gadget = $container->install_gadget(
+                src => $url,
+                col => $g->{pos}[0],
+                default_prefs => [
+                    map { [ $_, $user_prefs->{$_} ] } keys %$user_prefs,
+                ],
+            );
+        }
+        else {
+            warn "Missing gadget with id=$g->{id}"
+        }
     }
 }

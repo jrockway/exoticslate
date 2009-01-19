@@ -717,6 +717,9 @@ CREATE INDEX page_tag__tag_ix
 CREATE INDEX page_tag__workspace_ix
 	    ON page_tag (workspace_id);
 
+CREATE INDEX page_tag__workspace_lower_tag_ix
+	    ON page_tag (workspace_id, lower(tag));
+
 CREATE INDEX page_tag__workspace_tag_ix
 	    ON page_tag (workspace_id, tag);
 
@@ -1012,4 +1015,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '28');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '29');

@@ -112,7 +112,17 @@ Returns a statement handle.
 sub sql_execute {
     my $statement = shift;
     # rest of @_ are bindings, prevent making copies
-    _sql_execute($statement, 'execute', \@_);
+    my $bind = \@_;
+
+    my $sth;
+    eval { $sth = _sql_execute($statement, 'execute', $bind) };
+
+    if (my $err = $@) {
+        my $msg = "Error during sql_execute():\n$statement\n";
+        $msg .= _list_bindings($bind);
+        croak "${msg}Error: $err";
+    }
+    return $sth;
 }
 
 =head2 sql_execute_array( $SQL, @BIND )
@@ -123,8 +133,24 @@ Like sql_execute(), but pass in an array of array of bind values.
 
 sub sql_execute_array {
     my $statement = shift;
+    my $opts = shift;
     # rest of @_ are bindings, prevent making copies
-    _sql_execute($statement, 'execute_array', \@_);
+    my $bind = \@_;
+
+    my @status;
+    $opts->{ArrayTupleStatus} = \@status;
+    unshift @$bind, $opts;
+
+    my $sth;
+    eval { $sth = _sql_execute($statement, 'execute_array', $bind) };
+
+    if ($@) {
+        my $msg = "Error during sql_execute():\n$statement\n";
+        $msg .= _list_bindings($bind);
+        my $err = join("\n", map { $_->[1] } grep { ref $_ } @status);
+        croak "${msg}\nErrors:\n$err\n";
+    }
+    return $sth;
 }
 
 sub _sql_execute {
@@ -155,22 +181,22 @@ sub _sql_execute {
             . " from $file line $line\n"
             . join('', map { "$_->[0]\n" } @$lines);
     }
+
     eval {
         Socialtext::Timer->Continue('sql_prepare');
         $sth = $dbh->prepare($statement);
         Socialtext::Timer->Pause('sql_prepare');
         $sth->$exec_sub(@$bind) ||
-            die "$exec_sub failed: " . $sth->errstr;
+            die "$exec_sub failed: " . $sth->errstr . "\n";
     };
+
     if (my $err = $@) {
-        my $msg = "Error during sql_execute():\n$statement\n";
-        $msg .= _list_bindings($bind);
         unless ($in_tx) {
             warn "Rolling back in sql_execute()" if $DEBUG;
             sql_rollback();
         }
         Socialtext::Timer->Pause('sql_execute');
-        croak "${msg}Error: $err";
+        die "$@\n";
     }
 
     # Unless the caller has explicitly specified a transaction via

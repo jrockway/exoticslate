@@ -1,0 +1,20 @@
+#!/bin/bash
+echo "Cleaning caches ...";
+
+CACHE=/var/cache/socialtext
+
+# Clean these out
+if [ -d "$CACHE/formatter" ]; then
+    find $CACHE/formatter -type f | xargs rm -f
+fi
+if [ -d "$CACHE/tt2" ]; then
+    find $CACHE/tt2       -type f | xargs rm -f
+fi
+
+# No longer used
+if [ -e "$CACHE/mason" ]; then
+    rm -rf $CACHE/mason
+fi
+
+# Clean up apt cache to save disk space
+apt-get clean

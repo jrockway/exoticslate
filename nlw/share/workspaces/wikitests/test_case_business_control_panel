@@ -44,6 +44,11 @@
 | verifyConfirmation | Socialtext People is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
 | wait_for_text_present_ok | Socialtext People (click to disable) | 20000 |
 
+| *Comment* | As of 01/09, Signals is enabled when People is enabled |  |
+| text_like | Socialtext Signals (click to disable) |  |
+| click_ok | toggle_plugin_signals |  |
+| verifyConfirmation | You are about to disable Socialtext Signals \n\n Press 'OK' to disable this module or 'Cancel' to exit. |  |
+| wait_for_text_present_ok | Socialtext Signals (click to enable) |  |
 | click_ok | toggle_plugin_signals |  |
 | verifyConfirmation | Socialtext Signals is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
 | wait_for_text_present_ok | Socialtext Signals (click to disable) | 20000 |
@@ -53,8 +58,8 @@
 | verifyConfirmation | You are about to disable Socialtext People \n\n Press 'OK' to disable this module or 'Cancel' to exit. |  |
 | wait_for_text_present_ok | Socialtext People (click to enable) | 20000 |
 | click_ok | toggle_plugin_signals |  |
-| verifyConfirmation | You are about to disable Socialtext Signals \n\n Press 'OK' to disable this module or 'Cancel' to exit. |  |
-| wait_for_text_present_ok | Socialtext Signals (click to enable) | 20000 |
+| verifyConfirmation | Socialtext Signals is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
+| wait_for_text_present_ok | Socialtext Signals (click to disable) | 20000 |
 
 | *Comment* | Test case: Business Control Panel rename account |  |
 | click_and_wait | link=Rename Account |  |

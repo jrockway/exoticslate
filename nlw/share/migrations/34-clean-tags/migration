@@ -64,7 +64,7 @@ EOT
         my $page = Socialtext::Page->new(
             hub => $hub, id => $row->{page_id},
         );
-        my @page_tags = @{ $page->metadata->{Category} };
+        my @page_tags = @{ $page->metadata->{Category} || [] };
         for my $tag (@tags_to_rm) {
             @page_tags = grep { $_ ne $tag } @page_tags;
         }

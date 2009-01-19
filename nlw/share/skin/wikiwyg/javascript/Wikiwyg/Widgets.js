@@ -333,6 +333,8 @@ proto.toHtml = function(func) {
 proto.setWidgetHandlers = function() {
     var self = this;
     var doc = this.get_edit_document();
+
+    // XXX: this setTimeout make several wikiwyg js-test meaningless.. :(
     if (Wikiwyg.is_ie) {
         if (! (doc && doc.body && doc.body.innerHTML) ){
             setTimeout(function() { self.setWidgetHandlers() }, 500);
@@ -785,7 +787,7 @@ proto.replace_widget = function(elem) {
     widget_image = Wikiwyg.createElementWithAttrs('img',
         {
             'src': src,
-            'widget': widget
+            'widget': Wikiwyg.is_ie? Wikiwyg.htmlEscape(widget) : widget
         }
     );
     elem.parentNode.replaceChild(widget_image, elem);

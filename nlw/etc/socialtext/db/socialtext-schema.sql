@@ -294,6 +294,7 @@ CREATE TABLE gadget_instance_user_pref (
 CREATE TABLE gadget_message (
     gadget_id bigint NOT NULL,
     lang text NOT NULL,
+    country text default '',
     "key" text NOT NULL,
     value text NOT NULL
 );
@@ -549,7 +550,7 @@ ALTER TABLE ONLY gadget_instance_user_pref
 
 ALTER TABLE ONLY gadget_message
     ADD CONSTRAINT gadget_message_pk
-            PRIMARY KEY (gadget_id, lang, "key");
+            PRIMARY KEY (gadget_id, lang, country, "key");
 
 ALTER TABLE ONLY gadget
     ADD CONSTRAINT gadget_pk

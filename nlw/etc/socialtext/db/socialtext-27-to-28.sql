@@ -52,13 +52,14 @@ CREATE INDEX gadget__src
 CREATE TABLE gadget_message (
     gadget_id BIGINT NOT NULL,
     lang TEXT NOT NULL,
+    country TEXT DEFAULT '',
     key TEXT NOT NULL,
     value TEXT NOT NULL
 );
 
 ALTER TABLE ONLY gadget_message
     ADD CONSTRAINT gadget_message_pk
-        PRIMARY KEY (gadget_id, lang, key),
+        PRIMARY KEY (gadget_id, lang, country, key),
     ADD CONSTRAINT gadget_message_gadget_fk
         FOREIGN KEY (gadget_id)
         REFERENCES gadget(gadget_id) ON DELETE CASCADE;

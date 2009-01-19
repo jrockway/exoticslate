@@ -7,6 +7,7 @@ BEGIN { push @INC, 't/share/plugin/fakeplugin/lib' }
 
 use Test::More tests => 33;
 use mocked 'Socialtext::SQL';
+use mocked 'Socialtext::Page';
 use mocked 'Socialtext::Authz';
 use mocked 'Socialtext::AppConfig';
 use mocked 'Socialtext::User';

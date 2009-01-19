@@ -4,6 +4,9 @@ BEGIN;
 CREATE INDEX page_tag__workspace_lower_tag_ix 
     ON page_tag (workspace_id, lower(tag));
 
+ALTER TABLE profile_field
+    ADD COLUMN is_hidden boolean NOT NULL DEFAULT false;
+
 -- Update schema version
 UPDATE "System"
    SET value = '29'

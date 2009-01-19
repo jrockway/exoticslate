@@ -719,7 +719,7 @@ proto.strip_msword_gunk = function(html) {
                 return m.match(/ugly-ie-css-hack/) ? m : ' ';
             }
         ).
-        replace(/<!--\[if\s+gte\s+mso[\w\W]*?<!\[endif\]-->/gi, '').
+        replace(/<!--\[if\s[\w\W]*?<!\[endif\]-->/gi, '').
         replace(/<\/?(xml|st\d+:\w+|[ovwxp]:\w+)[^>]*>/gi, '');
 }
 

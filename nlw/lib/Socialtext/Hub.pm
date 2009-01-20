@@ -358,6 +358,7 @@ BEGIN {
             Socialtext::CategoryPlugin
             Socialtext::CommentUIPlugin
             Socialtext::DeletePagePlugin
+            Socialtext::DevEnvPlugin
             Socialtext::DisplayPlugin
             Socialtext::DuplicatePagePlugin
             Socialtext::EditPlugin

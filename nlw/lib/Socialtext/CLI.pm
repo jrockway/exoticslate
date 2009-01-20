@@ -2796,7 +2796,9 @@ Socialtext::CLI - Provides the implementation for the st-admin CLI script
   PROFILE (only available with Socialtext People)
 
   add-profile-field --name [--account] [--title --field-class --source]
+                    [--hidden | --visible]
   set-profile-field --name [--account] [--title --field-class --source]
+                    [--hidden | --visible]
 
   OTHER
 
@@ -3255,7 +3257,7 @@ Disable a plugin for the specified account (perhaps all) or workspace.
 
 Disabling for all accounts will also disable the plugin for accounts created in the future.
 
-=head2 add-profile-field --name [--account] [--title] [--field-class] [--source]
+=head2 add-profile-field --name [--account] [--title] [--field-class] [--source] [--visible | --hidden]
 
 Set up a profile field for use under the specified account.  If the account name is not specified, the system default account is used.
 
@@ -3263,7 +3265,9 @@ If C<--field-class> is omitted, a regular text attribute will be created.  Valid
 
 If C<--source> is omitted, it defaults to "user".  Fields marked "external" cannot be changed by the user and will be set by some external data source (for example, an LDAP directory).
 
-=head2 set-profile-field --name [--account] [--title] [--field-class] [--source]
+If C<--hidden> and C<--visible> are omitted, C<--visible> is the default.  Using C<--hidden> will hide this field from the UI for end-users.  ReST API queries will still include hidden fields and values.
+
+=head2 set-profile-field --name [--account] [--title] [--field-class] [--source] [--visible | --hidden]
 
 Changes an exiting profile field identified by name to have new properties.  Options that are omitted preserve the existing value of that property.  See add-profile-field above for more details.
 

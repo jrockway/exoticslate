@@ -461,6 +461,7 @@ html>body #st-page-details {
     font-weight: bold;
     font-family: Helvetica,Arial,sans-serif;
     width: 60px;
+    float: left;
 }
 
 #st-editing-insert-menu li a {
@@ -480,7 +481,9 @@ html>body #st-page-details {
 }
 
 #st-editing-insert-menu li ul {
+    float: left;
     position: absolute;
+    z-index: 1500;
     left: -999em;
     height: auto;
     width: 12.5em;
@@ -523,6 +526,10 @@ html>body #st-page-details {
 #st-editing-insert-menu li:hover,
 #st-editing-insert-menu li.sfhover {
         background: #ccc;
+}
+
+#st-editing-insert-menu>li {
+    width: 60px;
 }
 
 
@@ -742,7 +749,7 @@ div#bootstrap-loader {
     font-weight: bold;
     z-index: 1500;
     float: left;
-    width: 10em;
+    width: 9em;
 }
 #st-page-editing-tagbutton {
     float: left;
@@ -753,12 +760,6 @@ div#bootstrap-loader {
     font-weight: bold;
 }
 
-#st-page-editing-toolbar-closer {
-    float: right;
-    height: 29px;
-    width: 20px;
-}
-
 #st-editing-prefix-container {
     padding: 0px;
     margin: 0px;
@@ -767,7 +768,7 @@ div#bootstrap-loader {
 #st-editing-prefix-container a.button {
     display:block;
     padding: 1px 5px;
-    margin: 0;
+    margin: 2px 0 0 0 ;
     color: #000;
     line-height: 20px;
     vertical-align: middle;
@@ -2180,17 +2181,12 @@ body div#globalNav div input.searchText {
 
 /* toolbar refactor */
 #st-page-editing-button-toolbar {
-    width: 20em;
+    width: 198px;
     float: right;
 }
 
 #st-page-editing-toolbar {
-    margin-right: 20em;
-}
-
-#st-page-editing-widget-menu {
-    float: left;
-    width: 60px;
+    margin-right: 198p;;
 }
 
 #wikiwyg_toolbar .other_buttons,
@@ -2201,3 +2197,12 @@ body div#globalNav div input.searchText {
     clear: both;
     margin-top: 5px;
 }
+
+#st-editing-prefix-container #st-page-editing-tagbutton {
+    width: auto;
+}
+
+#st-page-editing-toolbar {
+    margin-right: 10em;
+}
+

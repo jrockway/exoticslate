@@ -9,10 +9,12 @@ use mocked 'Socialtext::Events', qw/event_ok/;
 use mocked 'Socialtext::WeblogPlugin';
 use mocked 'Socialtext::Hub';
 use Socialtext::Attachments;
+use File::Path qw/mkpath/;
 
 BEGIN { use_ok 'Socialtext::EditPlugin' }
 
 my $hub = Socialtext::Hub->new;
+mkpath "t/tmp/log";
 
 Edit_save_event: {
     my $ep = setup_plugin();

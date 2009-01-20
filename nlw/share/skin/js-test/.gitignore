@@ -13,3 +13,5 @@ socialcalc/template/
 widgets/lib/
 wikiwyg/lib/
 
+html2wiki/lib/
+html2wiki/t/

@@ -19,11 +19,11 @@
                     <select name="up_[% pref.name %]">
                         [% FOR item = pref.options %]
                             [% selected = '' %]
-                            [% IF pref.value == item.0 %]
+                            [% IF pref.value == item.value %]
                                 [% selected = 'selected="1"' %]
                             [% END %]
-                            <option value="[% item.0 %]" [% selected %]>
-                                [% item.1 || item.0 %]
+                            <option value="[% item.value %]" [% selected %]>
+                                [% item.display %]
                             </option>
                         [% END %]
                     </select>

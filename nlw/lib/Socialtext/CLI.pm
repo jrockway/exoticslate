@@ -2241,11 +2241,21 @@ sub _require_field_options {
     $acct ||= Socialtext::Account->Default();
 
     my %opts = $self->_get_options(
-        'name:s',
-        'title:s',
-        'field-class:s',
-        'source:s',
+        'name=s',
+        'title=s',
+        'field-class=s',
+        'source=s',
+        'hidden',
+        'visible',
     );
+
+    $self->_error(loc("Can only specify one of --visible or --hidden"))
+        if ($opts{hidden} && $opts{visible});
+
+    if ($opts{hidden} || $opts{visible}) {
+        $opts{is_hidden} = $opts{hidden} ? 1 : 0;
+    }
+
     $opts{_plugin} = $adapter->plugin_class('people');
     $opts{field_class} = delete $opts{'field-class'};
 

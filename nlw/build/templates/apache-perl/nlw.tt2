@@ -61,7 +61,7 @@
 [% END %]
 
     PerlCleanupHandler  +Socialtext::Handler::Cleanup
-#    PerlPostReadRequestHandler +Socialtext::Apache::ForwardedFor
+    PerlPostReadRequestHandler +Socialtext::Apache::ForwardedFor
 
 # Order is important in these next three sections
     <Location />

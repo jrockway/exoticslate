@@ -3,7 +3,8 @@
 
 use strict;
 use warnings;
-use Test::Socialtext tests => 13;
+use Test::Exception;
+use Test::Socialtext tests => 15;
 
 # Fixtures: db
 #
@@ -57,6 +58,28 @@ sql_execute_array: {
         eval { sql_execute('SELECT * FROM bar') };
         ok $@, "table was deleted";
     }
+}
+
+sql_execute_array_errors: {
+    sql_execute('CREATE TABLE parent (id integer)');
+    sql_execute(
+        'ALTER TABLE parent ADD CONSTRAINT parent_id_pk PRIMARY KEY (id)'
+    );
+    sql_execute('CREATE TABLE child (id integer, dad integer)');
+    sql_execute('
+        ALTER TABLE child ADD CONSTRAINT parent_id_fk
+         FOREIGN KEY (dad) REFERENCES parent(id)
+    ');
+
+    sql_execute_array('INSERT INTO parent values (?)', {}, [1,2,3,4,5]);
+    dies_ok {
+        sql_execute_array(
+            'INSERT INTO child values (?, ?)', {},
+            [1,2,3,4,5], [1,2,3,7,5],
+        );
+    } "foreign key constraint violation";
+    like $@, qr{violates foreign key constraint "parent_id_fk"},
+         "Eror is propogated";
 }
 
 Transactions: {

@@ -294,6 +294,7 @@ CREATE TABLE gadget_instance_user_pref (
 CREATE TABLE gadget_message (
     gadget_id bigint NOT NULL,
     lang text NOT NULL,
+    country text default '',
     "key" text NOT NULL,
     value text NOT NULL
 );
@@ -550,7 +551,7 @@ ALTER TABLE ONLY gadget_instance_user_pref
 
 ALTER TABLE ONLY gadget_message
     ADD CONSTRAINT gadget_message_pk
-            PRIMARY KEY (gadget_id, lang, "key");
+            PRIMARY KEY (gadget_id, lang, country, "key");
 
 ALTER TABLE ONLY gadget
     ADD CONSTRAINT gadget_pk
@@ -651,6 +652,9 @@ CREATE UNIQUE INDEX "Workspace___lower___name"
 CREATE INDEX "Workspace_account_id"
 	    ON "Workspace" (account_id);
 
+CREATE INDEX container__user_id__type
+	    ON container (container_type, user_id);
+
 CREATE INDEX container_account_id
 	    ON container (account_id);
 
@@ -663,8 +667,20 @@ CREATE INDEX container_user_id
 CREATE INDEX container_workspace_id
 	    ON container (workspace_id);
 
+CREATE INDEX default_gadget__container_type
+	    ON default_gadget (container_type);
+
+CREATE INDEX gadget__src
+	    ON gadget (src);
+
+CREATE INDEX gadget_instance__container_id
+	    ON gadget_instance (container_id);
+
 CREATE INDEX gadget_instance_user_pref__user_pref_id
 	    ON gadget_instance_user_pref (user_pref_id);
+
+CREATE INDEX gadget_user_pref__gadget_id
+	    ON gadget_user_pref (gadget_id);
 
 CREATE INDEX ix_event_actor_time
 	    ON event (actor_id, "at");

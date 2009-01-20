@@ -1,0 +1,6 @@
+#!/bin/bash
+# @COPYRIGHT@
+
+if [ -d /usr/share/nlw/plugin/widgets ]; then
+    st-widgets update-all
+fi

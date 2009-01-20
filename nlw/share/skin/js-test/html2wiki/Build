@@ -34,9 +34,16 @@ my $tmpl = <DATA>;
 
 # For each test/browser combination in input dir, create a correspond test
 for my $dir (sort keys %subdirs) {
-    my $wikitext = $subdirs{$dir};
     for my $input (<$dir/*.html>) {
+        my $wikitext = $subdirs{$dir};
         my $name = $dir . "-" . (split(/\./, basename($input)))[0];
+
+        my $browser_specific_wikitext = $input;
+        $browser_specific_wikitext =~ s/html$/txt/;
+        if (-f $browser_specific_wikitext) {
+            open my $in, '<', $browser_specific_wikitext or die "Can't open $browser_specific_wikitext $!";
+            $wikitext = <$in>;
+        }
 
         open my $in, '<', $input or die "Can't open $input: $!";
         my $html = <$in>;

@@ -2,7 +2,7 @@
 [% WRAPPER widget/html_wrapper %]
     [% overflow = "hidden" %]
     [% scrolling = "no" %]
-    [% height = gadget.height || 100 %]
+    [% height = gadget.height || 180 %]
     [% IF gadget.scrolling == "true" %]
         [% overflow = "auto" %]
         [% scrolling = "yes" %]

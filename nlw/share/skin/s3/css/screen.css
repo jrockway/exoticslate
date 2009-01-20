@@ -2170,6 +2170,7 @@ body div#globalNav div input.searchText {
     width: 100%;
 }
 #st-edit-mode-container.expanded {
+    background: #fff;
     position: absolute;
     top:0;
     left:0;

@@ -113,6 +113,7 @@ POSIX: 1.08
 pQuery: 0
 Readonly: 1.03
 Readonly::XS: 1.03
+Regexp::Common: 2.120
 REST::Application: 0.992
 RTF::Writer: 0
 Scalar::Util: 1.18

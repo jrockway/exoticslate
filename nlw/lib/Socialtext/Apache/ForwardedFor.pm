@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Apache::Constants qw(OK DECLINED);
 use List::MoreUtils qw(uniq);
+use Regexp::Common qw(net);
 
 sub handler {
     my $r = shift;
@@ -19,9 +20,7 @@ sub handler {
     push @ips, $r->connection->remote_ip;
 
     # trim the list to a unique list of valid IPs
-    #
-    # XXX: should use Regexp::Common's $RE{net}{IPv4} here
-    @ips = uniq grep { /^\d+\.\d+\.\d+\.\d+$/ } @ips;
+    @ips = uniq grep { /^$RE{net}{IPv4}$/ } @ips;
 
     # set the connection remote_ip to the IP address that's closest to the
     # end-user.

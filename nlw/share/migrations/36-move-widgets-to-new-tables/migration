@@ -69,13 +69,16 @@ while (my $row = $sth->fetchrow_hashref) {
             my $user_prefs = $gstore->get('user_prefs');
             delete $user_prefs->{base_uri};
 
-            my $gadget = $container->install_gadget(
-                src => $url,
-                col => $g->{pos}[0],
-                default_prefs => [
-                    map { [ $_, $user_prefs->{$_} ] } keys %$user_prefs,
-                ],
-            );
+            eval {
+                $container->install_gadget(
+                    src => $url,
+                    col => $g->{pos}[0],
+                    default_prefs => [
+                        map { [ $_, $user_prefs->{$_} ] } keys %$user_prefs,
+                    ],
+                );
+            };
+            warn $@ if $@;
         }
         else {
             warn "Missing gadget with id=$g->{id}"

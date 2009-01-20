@@ -61,11 +61,14 @@ while (my $row = $sth->fetchrow_hashref) {
     );
     $container->clear_gadgets;
 
+    my %failed;
+
     for my $g (sort { $b->{pos}[1] <=> $a->{pos}[1] } values %$gadgets) {
         my $gstore = Socialtext::Storage->new("gadget:$g->{id}");
         $gstore->preload(qw(user_prefs url));
         if (my $url = $gstore->get('url')) {
             $url = transform_url($url);
+            next if $failed{$url};
             my $user_prefs = $gstore->get('user_prefs');
             delete $user_prefs->{base_uri};
 
@@ -78,7 +81,10 @@ while (my $row = $sth->fetchrow_hashref) {
                     ],
                 );
             };
-            warn $@ if $@;
+            if ($@) {
+                $failed{$url} = 1;
+                warn $@;
+            }
         }
         else {
             warn "Missing gadget with id=$g->{id}"

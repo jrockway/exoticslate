@@ -89,7 +89,7 @@
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | click_and_wait | link=Cancel |  |
-
+| confirmation_like | Are you sure you want to Cancel?\n\nYou have unsaved changes.\n\nPress OK to continue, or Cancel to stay in the editor. |  |
 | *Comment* | Test Case: Workspace Navigation new spreadsheet not tested because of dialog for title |  |
 
 | *Comment* | Test Case: Workspace Navigation Teardown |  |

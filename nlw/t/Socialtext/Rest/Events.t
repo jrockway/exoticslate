@@ -9,8 +9,8 @@ use Socialtext::CGI::Scrubbed;
 use Socialtext::HTTP qw/:codes/;
 
 use mocked 'Apache::Cookie';
-use mocked 'Socialtext::User';
 use mocked 'Socialtext::Events', 'event_ok', 'is_event_count';
+use mocked 'Socialtext::User';
 use mocked 'Socialtext::Rest', 'is_status';
 
 BEGIN {
@@ -73,7 +73,7 @@ JSON_GET_an_item: {
         action => 'tag_add',
         tag_name => 'Some Tag',
         actor_id => 156,
-        page_workspace_id => 'mock_workspace_id',
+        page_workspace_id => 1,
         page_id => 'quick_start',
     ]], "expected parameters passed";
 }
@@ -104,7 +104,7 @@ POSTing_an_event: {
         event_class => 'page',
         action => 'edit_begin',
         page => 'formattingtest',
-        workspace => 'mock_workspace_id',
+        workspace => 1,
         context => {"page_rev"=>"123456789"},
     );
 }
@@ -135,7 +135,7 @@ POSTing_without_actor: {
         event_class => 'page',
         action => 'edit_cancel',
         page => 'qvick_stvrt',
-        workspace => 'mock_workspace_id',
+        workspace => 1,
         context => {"page_rev"=>"187654321"},
     );
 }

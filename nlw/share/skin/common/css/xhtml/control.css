@@ -1,6 +1,5 @@
 #control-menu {
 
-
 }
 
 #control-menu ul {
@@ -66,4 +65,13 @@ table tr.even, table tr.w-st-even-row {
 
 span.external {
     color: #aaa;
+}
+
+tbody tr th { 
+    font-weight: normal;
+    text-align: right;
+}
+
+tr.is-hidden td {
+    color: #ccc;
 }

@@ -11,7 +11,7 @@ t.runAsync([
             async: false
         });
         $.ajax({
-            url: "/?action=add_widget;location=widgets/share/widgets/recent_conversations.xml",
+            url: "/?action=add_widget;src=file:widgets/share/widgets/recent_conversations.xml",
             async: false
         });
         t.open_iframe("/", t.nextStep(), {w: 600});

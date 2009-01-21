@@ -45,13 +45,16 @@ foreach my $cfg (@configs) {
     my $value     = escape_filter_value($email ? $email : $username);
     my $filter    = "($attribute=$value)";
 
-    # search for this User in LDAP
-    my $mesg = $ldap->search(
+    my %opts = (
         base    => $cfg->base,
         scope   => 'sub',
         filter  => $filter,
         attrs   => ['*'],
     );
+    delete $opts{base} unless defined $cfg->base;
+
+    # search for this User in LDAP
+    my $mesg = $ldap->search(%opts);
     unless ($mesg) {
         die "unable to query LDAP";
     }

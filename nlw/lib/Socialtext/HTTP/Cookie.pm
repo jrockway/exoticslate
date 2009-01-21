@@ -4,7 +4,7 @@ package Socialtext::HTTP::Cookie;
 # Required inclusions.
 use strict;
 use warnings;
-use Digest::SHA1 qw(sha1_base64);
+use Digest::SHA qw(sha1_base64);
 use Socialtext::AppConfig;
 
 ###############################################################################

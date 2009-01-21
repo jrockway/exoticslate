@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Socialtext::SQL qw/sql_execute/;
 use Socialtext::AppConfig;
-use Digest::SHA1;
+use Digest::SHA;
 use DateTime;
 use DateTime::Format::Pg;
 use Carp qw/croak/;
@@ -111,7 +111,7 @@ EOSQL
 # user was invited to multiple workspaces.
 sub _generate_confirmation_hash {
     my $user_id = shift;
-    return Digest::SHA1::sha1_base64(
+    return Digest::SHA::sha1_base64(
         $user_id, time,
         Socialtext::AppConfig->MAC_secret
     );

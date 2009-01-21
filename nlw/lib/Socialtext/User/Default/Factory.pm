@@ -6,7 +6,7 @@ use warnings;
 use base qw(Socialtext::User::Factory);
 
 use Class::Field qw(field const);
-use Digest::SHA1 ();
+use Digest::SHA ();
 use Socialtext::User::Cache;
 use Socialtext::Data;
 use Socialtext::SQL qw(sql_execute sql_singlevalue);

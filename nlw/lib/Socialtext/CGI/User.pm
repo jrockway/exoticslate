@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use base 'Exporter';
 our @EXPORT_OK = qw/get_current_user/;
-use Digest::SHA1;
+use Digest::SHA;
 use CGI::Cookie;
 use Socialtext::Apache::User;
 use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);

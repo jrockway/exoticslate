@@ -8,7 +8,7 @@ use Apache::Constants;
 use mocked 'Apache::Request', qw/get_log_reasons/;
 use mocked 'Apache::Cookie';
 
-use Digest::SHA1;
+use Digest::SHA;
 use MIME::Base64;
 use Test::Socialtext;
 use Socialtext::AppConfig;
@@ -45,7 +45,7 @@ COOKIE_AUTHENTICATED: {
         USER_DATA_COOKIE() => Apache::Cookie->new(
             value => {
                 user_id => 'devnull1@socialtext.com',
-                MAC     => Digest::SHA1::sha1_base64(
+                MAC     => Digest::SHA::sha1_base64(
                     'devnull1@socialtext.com',
                     Socialtext::AppConfig->MAC_secret
                 ),

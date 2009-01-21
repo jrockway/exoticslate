@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Apache::Cookie;
-use Digest::SHA1 ();
+use Digest::SHA ();
 use Socialtext::AppConfig;
 use Socialtext::CredentialsExtractor;
 use Socialtext::User;

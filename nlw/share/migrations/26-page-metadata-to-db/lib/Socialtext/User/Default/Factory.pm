@@ -16,7 +16,7 @@ BEGIN {
 
 use Socialtext::Exceptions qw( data_validation_error );
 
-use Digest::SHA1 ();
+use Digest::SHA ();
 use Email::Valid;
 use Socialtext::User::Cache;
 use Socialtext::Data;

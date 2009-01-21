@@ -171,7 +171,9 @@ sub _check_on_behalf_of {
                 -WWW_Authenticate => 'Basic realm="Socialtext"',
             );
 
-            Socialtext::Exception::Auth->throw('User not authorized');
+            Socialtext::Exception::Auth->throw(
+                "Master Account has wrong email address or password - please try again."
+            );
         }
         else {
             Socialtext::Exception::Auth->throw(

@@ -1,4 +1,3 @@
-Makefile
 bin/copy_from_shindig
 bin/generate-feature
 bin/get-sample-data
@@ -74,6 +73,7 @@ lib/Socialtext/Rest/Gadgets
 lib/Socialtext/Rest/Gadgets/Gadget.pm
 lib/Socialtext/Rest/Signals.pm
 lib/Socialtext/WikiFixture/ApplianceConfig.pm
+Makefile
 share/console-template/
 share/html/500.html
 share/html/502.html.en

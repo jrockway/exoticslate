@@ -2,6 +2,11 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
+
+# Need this line before Test::Mock::LWP loads; otherwise WWW::Mechanize
+# will complain HTTP::Request's mocked version is not new enough.
+use WWW::Mechanize ();
+
 use Test::More;
 use Test::Exception;
 use Socialtext::WikiFixture::TestUtils;

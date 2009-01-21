@@ -172,7 +172,7 @@ sub _check_on_behalf_of {
             );
 
             Socialtext::Exception::Auth->throw(
-                "Master Account has wrong email address or password - please try again."
+                "Master Account has wrong ID or password - please try again."
             );
         }
         else {

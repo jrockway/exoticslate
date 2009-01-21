@@ -147,8 +147,8 @@ bin/po.xsd
 bin/validate_gadget
 bin/st-widgets
 bin/get-sample-data
-lib/Socialtext/Rest/Gadget.pm
 etc/socialtext/uri_map.d/widgets.yaml
-t/Socialtext/REST
-t/Socialtext/REST/Gadget.t
-t/Socialtext/Rest/Gadget.t
+lib/Socialtext/Rest/Gadgets
+lib/Socialtext/Rest/Gadgets/Gadget.pm
+t/Socialtext/Rest/Gadgets
+t/Socialtext/Rest/Gadgets/Gadget.t

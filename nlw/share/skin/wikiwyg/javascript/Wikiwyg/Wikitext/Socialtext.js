@@ -710,13 +710,13 @@ proto.strip_msword_gunk = function(html) {
         replace(
             /<(span|\w:\w+)[^>]*>(\s*&nbsp;\s*)+<\/\1>/gi,
             function(m) {
-                return m.match(/ugly-ie-css-hack/) ? m : ' ';
+                return m.match(/ugly-ie-css-hack/) ? m : '&nbsp;';
             }
         ).
         replace(
             /<(span|\w:\w+)[^>]*><font[^>]*>(\s*&nbsp;\s*)+<\/font><\/\1>/gi,
             function(m) {
-                return m.match(/ugly-ie-css-hack/) ? m : ' ';
+                return m.match(/ugly-ie-css-hack/) ? m : '&nbsp;';
             }
         ).
         replace(/<!--\[if\s+gte\s+mso[\w\W]*?<!\[endif\]-->/gi, '').

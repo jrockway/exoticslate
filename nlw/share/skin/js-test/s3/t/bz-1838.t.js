@@ -32,9 +32,12 @@ t.runAsync([
     function() { 
         $('#edit_textarea', t.doc).val('fnord');
 
-        var old_location = t.win.location;
+        var old_location = t.win.location.href;
         t.poll(function(){
-            return(t.win.location != old_location);
+            return(
+                t.win && t.win.location && t.win.location.href &&
+                (t.win.location.href != old_location)
+            );
         }, function(){
             t.open_iframe(
                 "/admin/?" + incipient,

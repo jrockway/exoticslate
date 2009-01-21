@@ -194,7 +194,7 @@ sub process_opts {
         'verbose|v'     => \$opts{verbose},
         'dump|D'        => \$opts{dump},
         'help|h'        => \$opts{help},
-        'dev=i'         => \$opts{dev},
+        'dev'           => \$opts{dev},
     ) or exit 1;
 
     $opts{verbose} ||= 0;

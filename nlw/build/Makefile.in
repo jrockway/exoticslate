@@ -330,8 +330,15 @@ uninstall: remove-old-install clean-temps
 	$(RM) /etc/init.d/ceqlotron
 	$(RM) /etc/aliases.deliver
 
+dev-cpan:
+	$(SUDO) cpan -i $(shell $(PERL) dev-bin/list-module-deps -u --dev | cut -d ' ' -f 1)
+
+dev-check-deps: dev-check-dependencies
+dev-check-dependencies:
+	$(PERL) dev-bin/list-module-deps -u --dev
+
 cpan:
-	$(SUDO) cpan $(shell $(PERL) dev-bin/list-module-deps -u | awk '{print $1}')
+	$(SUDO) cpan -i $(shell $(PERL) dev-bin/list-module-deps -u | cut -d ' ' -f 1)
 
 check-deps: check-dependencies
 check-dependencies:
@@ -533,6 +540,9 @@ critic:
         realclean                \
         wipe                     \
         uninstall                \
+        dev-cpan                 \
+        dev-check-deps           \
+        dev-check-dependencies   \
         cpan                     \
         check-deps               \
         check-dependencies       \

@@ -237,11 +237,11 @@ TODO: RESTORE THE FOLLOWING TWO TESTS AFTER {bz: 472} IS FIXED
 | *Comment* | RESTORE THE FOLLOWING TWO TESTS AFTER {bz: 472} IS FIXED |  |
 | clickAndWait | link=Number of Users |  |
 
- text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_time%%.+0-sort-3-workspace2-%%start_time%%/ | |
+text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_time%%.+0-sort-3-workspace2-%%start_time%%/ | |
 
 | clickAndWait | link=Number of Users |  |
 
- text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_time%%.+0-sort-3-workspace2-%%start_time%%/ | |
+text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_time%%.+0-sort-3-workspace2-%%start_time%%/ | |
 
 | clickAndWait | link=Account |  |
 | text_like | qr/0 sort 1 account %%start_time%%.+0 sort 2 account %%start_time%%.+0 sort 3 account %%start_time%%/ |  |
@@ -278,6 +278,67 @@ TODO: RESTORE THE FOLLOWING TWO TESTS AFTER {bz: 472} IS FIXED
 
 | clickAndWait | link=Invited By |  |
 | text_like | qr/devnull1.+system/ |  |
+
+| *Comment* | Test case: Business Control Panel check the elements on the page |  |
+| text_like | selected-users | 0 users selected |
+| text_like | clear-selected-users | Clear Selection |
+| text_like | invite-users | Invite to Workspace(s) |
+
+| *Comment* | Test case: Business Control Panel all all the users and none of the users. pause is necessary because number of users is unknown |  |
+| click_ok | toggle_all_users |  |
+| click_ok | toggle_all_users |  |
+| wait_for_text_present_ok | 0 users selected |  |
+| text_like | selected-users | 0 users selected |
+| *Comment* | Test case: Business Control Panel check Clear Selection |  |
+| click_ok | toggle_all_users |  |
+| click_ok | clear-selected-users |  |
+| wait_for_text_present_ok | 0 users selected |  |
+| text_like | selected-users | 0 users selected |
+
+| *Comment* | Test case: Business Control Panel invite everyone to a workspace |  |
+
+| click_ok | invite-users |  |
+
+| verifyAlert | No users selected, please select at least one user and try again. |  |
+
+| click_ok | toggle_all_users |  |
+| click_and_wait | invite-users |  |
+
+| text_like | Title |  |
+| text_like | Name |  |
+| text_like | Account |  |
+| text_like | Administrators |  |
+| text_like | Available Workspaces |  |
+| text_like | Create a new workspace |
+| text_like | Invite To existing workspace(s) |
+
+| *Comment* | Test case: Business Control Panel invite to new workspace |  |
+
+| click_ok | todo-invite |  |
+| click_ok | todo-create |  |
+
+| select_ok | account_id | 0 sort 3 account %%start_time%% |
+
+| *Comment* | Test case: Business Control Panel create admins |  |
+| addSelection | members | label=0_sort_2_user1@%%start_time%%.com |
+| addSelection | members | label=0_sort_3_user1@%%start_time%%.com |
+| click_ok | add-selected |  |
+| click_ok | remove-selected |  |
+| click_ok | add-all |  |
+| click_ok | remove-all |  |
+| addSelection | members | label=0_sort_3_user1@%%start_time%%.com |
+| click_ok | invite-button |  |
+| verifyAlert | Error: Workspace title is a required field. |  |
+| verifyAlert | Error: Workspace name is a required field. |  |
+| verifyAlert | You must choose at least one administrator. |  |
+
+| type_ok | workspace-title | ws-t%%start_time%% |
+| type_ok | workspace-name | ws-n%%start_time%% |
+| addSelection | members | label=0_sort_3_user1@%%start_time%%.com |
+| click_ok | add-selected |  |
+
+| click_and_wait | invite-button |  |
+| text_like | errors-and-messages | qr/Congratulations! You successfully created a new workspace with \d+ users. They will receive an invitation message with a link to ws-n%%start_time%%./ |
 
 | *Comment* | Test case: Business Control Panel teardown. Let %%username%% keep accounts admin privileges. |  |
 | st-admin | remove-system-admin --email %%email%% | no longer has system admin access |

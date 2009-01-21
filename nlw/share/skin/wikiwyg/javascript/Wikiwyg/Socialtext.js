@@ -2445,7 +2445,7 @@ proto.exec_command = function(command, option) {
         }
     }
 
-    if ((command == 'inserthtml') && (typeof(option) != 'string') || option.length == 0) {
+    if ((command == 'inserthtml') && ((typeof(option) != 'string') || option.length == 0)) {
         return true;
     }
     return(this.get_edit_document().execCommand(command, false, option));

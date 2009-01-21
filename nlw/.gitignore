@@ -10,6 +10,7 @@ share/html/502.html.en
 share/html/502.html.html
 share/html/502.html.ja
 t/test-data/ja/mecabif
+share/l10n/mecab/
 
 # lib excludes
 lib/Socialtext/AccessHandler/IsBusinessAdmin.pm
@@ -133,6 +134,7 @@ etc/socialtext/uri_map.d/signals.yaml
 # log excludes
 dev-bin/test_access.log
 dev-bin/test_nlw.log
+
 lib/Socialtext/Gadgets/XML.pm
 t/widget/Test1.xml
 t/widget/Test2.xml

@@ -7,6 +7,7 @@ t.runAsync([
         ".html\n"
       + "foo\n"
       + ".html\n"
+      + "\n"
       + "bar\n"
     ),
     t.doRichtextEdit(),

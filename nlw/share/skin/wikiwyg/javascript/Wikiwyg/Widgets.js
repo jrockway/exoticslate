@@ -353,6 +353,8 @@ proto.setWidgetHandlers = function() {
     var win = this.get_edit_window();
     var doc = this.get_edit_document();
 
+    if (jQuery(doc, win).data("mouseup_handler_set")) return;
+
     var $$ = jQuery;
     jQuery(doc, win).mouseup(function(e) {
         if (!$$(e.target).is("img[widget]")) return true;
@@ -364,7 +366,7 @@ proto.setWidgetHandlers = function() {
         else {
             self.getWidgetInput(e.target, false, false);
         }
-    });
+    }).data("mouseup_handler_set", true);
 }
 
 proto.setWidgetHandler = function(img) {

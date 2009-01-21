@@ -42,6 +42,7 @@ DBD::Pg: 2.11.7
 DB_File::Lock: 0.05
 DBI: 1.607
 Digest::MD5: 2.33
+Digest::SHA: 0
 Digest::SHA1: 0
 # 1.884 fixes major bugs in the output of ->format, which we use in ST::Workspace
 Email::Address: 1.884

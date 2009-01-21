@@ -10,6 +10,13 @@ t.plan(1);
 
 t.runAsync([
     function() {
+        $.ajax({
+            url: "/?action=clear_widgets",
+            async: false
+        });
+    },
+
+    function() {
         t.open_iframe("/", t.nextStep());
     },
 

@@ -14,9 +14,7 @@ t.runAsync([
             url: "/?action=clear_widgets",
             async: false
         });
-    },
 
-    function() {
         t.open_iframe("/", t.nextStep());
     },
 

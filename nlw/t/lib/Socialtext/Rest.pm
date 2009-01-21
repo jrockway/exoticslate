@@ -37,7 +37,11 @@ sub _initialize {
     $self->{params}{uri} ||= '/fake/uri';
 }
 
-sub rest { $_[0]->{rest} }
+sub rest {
+    my $self = shift;
+    $self->{rest} = shift if @_;
+    return $self->{rest};
+}
 
 our @HUB_ARGS;
 sub hub { Socialtext::Hub->new(@HUB_ARGS) }

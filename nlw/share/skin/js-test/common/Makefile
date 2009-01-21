@@ -29,7 +29,7 @@ ALL_LIBS= \
 all: $(ALL_DIRS) $(ALL_TARGETS) $(ALL_LIBS)
 
 clean:
-	test -f Build && perl Build --clean
+	-test -f Build && perl Build --clean
 	rm -fr *.t.html index.html $(ALL_LIBS)
 	if [ "$(TEST_TEMPLATE_MD5)" = \
      "$(TEST_LOCAL_MD5)" ]; then rm -f $(TEST_LOCAL); fi

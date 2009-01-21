@@ -15,6 +15,17 @@ etc/socialtext/uri_map.d
 etc/socialtext/uri_map.d/people.yaml
 etc/socialtext/uri_map.d/signals.yaml
 etc/socialtext/uri_map.d/widgets.yaml
+lib/Socialtext/Build/ConfigureValues.pm
+build/tmp/
+share/skin/.gitignore
+share/html/500.html
+share/html/502.html.en
+share/html/502.html.html
+share/html/502.html.ja
+t/test-data/ja/mecabif
+tmp/
+messages.mo
+nlw-en.po
 lib/Socialtext/AccessHandler/IsBusinessAdmin.pm
 lib/Socialtext/Agile/Story.pm
 lib/Socialtext/Appliance/BackupCleanup.pm

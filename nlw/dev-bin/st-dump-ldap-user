@@ -65,9 +65,12 @@ foreach my $cfg (@configs) {
     # dump the info from all of the results
     foreach my $result ($mesg->all_entries) {
         print "=" x 70 . "\n";
+        print "SERVER NAME: " . $cfg->name . "\n";
         foreach my $attr ($result->attributes) {
             my $val_ref = $result->get_value( $attr, asref => 1 );
-            print "$attr: " . join("\n\t", @{$val_ref}) . "\n";
+            foreach my $val (@$val_ref) {
+                print "$attr: $val\n";
+            }
         }
     }
 }

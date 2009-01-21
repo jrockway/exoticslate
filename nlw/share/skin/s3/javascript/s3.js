@@ -360,9 +360,6 @@ $(function() {
     });
 
     Socialtext.ui_expand_on = function() {
-        if (Socialtext.page_type == "wiki" && $.browser.msie && $.browser.version < 7) {
-            $('#mainWrap').css("width", "");
-        }
         $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Normal View")).text(loc("Normal"));
         $('#st-edit-mode-container, #mainWrap').addClass("expanded");
 
@@ -373,13 +370,10 @@ $(function() {
         $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Expanded View")).text(loc("Expand"));
         $('#st-edit-mode-container, #mainWrap').removeClass("expanded");
 
-        // Force ie6 to "repaint" the document after #mainWrap width change.
-        if (Socialtext.page_type == "wiki"  && $.browser.msie && $.browser.version < 7) {
-            var w = $("#mainWrap").width();
-            $("#mainWrap").width(w-1).width(w);
-        }
-
         $("iframe#st-page-editing-wysiwyg").width( $('#st-edit-mode-view').width() - 48 );
+
+        // Force ie6 to "repaint" the document after #mainWrap width change.
+        $(window).trigger("resize");
         return false;
     };
     Socialtext.ui_expand_setup = function() {

@@ -708,6 +708,16 @@ proto.markup_line_alone = function(markup_array) {
 proto.strip_msword_gunk = function(html) {
     return html.
         replace(
+            /<SPAN\s+style="[^"]*\bmso-list:\s+Ignore\b[^"]*">[\w\W]*?<\/SPAN>/ig, function(m) {
+                return '<!--[if !supportLists]-->' + m + '<!--[endif]-->';
+            }
+        ).
+        replace(
+            /<!--\[if\s+!supportLists\]-->([\w\W]*?)<!(--)?\[endif\]-->/ig, function(m, $1) {
+                return '<!--[SocialtextBulletBegin]-->' + $1 + '<!--[SocialtextBulletEnd]-->';
+            }
+        ).
+        replace(
             /<(span|\w:\w+)[^>]*>(\s*&nbsp;\s*)+<\/\1>/gi,
             function(m) {
                 return m.match(/ugly-ie-css-hack/) ? m : ' ';
@@ -719,7 +729,7 @@ proto.strip_msword_gunk = function(html) {
                 return m.match(/ugly-ie-css-hack/) ? m : ' ';
             }
         ).
-        replace(/<!--\[if\s[\w\W]*?<!\[endif\]-->/gi, '').
+        replace(/<!(--)?\[if\s+[^!][\w\W]*?<!(--)?\[endif\]-->/gi, '').
         replace(/<\/?(xml|st\d+:\w+|[ovwxp]:\w+)[^>]*>/gi, '');
 }
 
@@ -1336,6 +1346,61 @@ proto._is_block_level_node = function(node) {
     );
 }
 
+// Turn up MS-Office list-as-paragraphs into actual lists.
+proto.build_msoffice_list = function(top) {
+    var self = this;
+    return (function ($) {
+        var $top = $(top);
+        var firstHtml = $top.html();
+
+        if (!firstHtml.match(/<!--\[SocialtextBulletBegin\]-->[\w\W]*?<!--\[SocialtextBulletEnd\]-->/)) {
+            return;
+        }
+
+        firstHtml = firstHtml.replace(
+            /<!--\[SocialtextBulletBegin\]-->([\w\W]*?)<!--\[SocialtextBulletEnd\]-->/, ''
+        );
+        var bulletText = RegExp.$1;
+        var listType = $(bulletText).text().match(/^\d+\./) ? 'ol' : 'ul';
+
+        var cur = top;
+        var newHtml = '<li>' + firstHtml + '</li>';
+        var toRemove = [];
+        while (cur = $(cur).next(
+            'p.ListParagraphCxSpMiddle, p.ListParagraphCxSpLast,' +
+            'p.MsoListParagraphCxSpMiddle, p.MsoListParagraphCxSpLast'
+        )[0]) {
+            var $cur = $(cur);
+            if ($cur.hasClass('_st_walked')) continue;
+
+            var topIndent = self._css_to_px($top.css('margin-left')) || 0;
+            var curIndent = self._css_to_px($cur.css('margin-left')) || 0;
+
+            if (curIndent < topIndent) {
+                /* Outdent -- We're outta here. */
+                break;
+            }
+            else if (curIndent > topIndent) {
+                /* Nest some more! */
+                newHtml += self.build_msoffice_list(cur);
+            }
+            else {
+                newHtml += '<li>' + $cur.html().replace(
+                    /<!--\[SocialtextBulletBegin\]-->[\w\W]*?<!--\[SocialtextBulletEnd\]-->/, ''
+                ) + '</li>';
+            }
+
+            $cur.addClass('_st_walked');
+            toRemove.push($cur);
+        }
+
+        for (var i = 0; i < toRemove.length; i++) {
+            toRemove[i].remove();
+        }
+
+        return '<'+listType+'>'+newHtml+'</'+listType+'>';
+    })(jQuery);
+}
 
 proto.convert_html_to_wikitext = function(html, isWholeDocument) {
     var self = this;
@@ -1344,6 +1409,13 @@ proto.convert_html_to_wikitext = function(html, isWholeDocument) {
     (function ($) {
         var dom = document.createElement("div");
         dom.innerHTML = html;
+
+        var cur;
+        while (cur = $(dom).find(
+            'p.ListParagraphCxSpFirst:first, p.MsoListParagraphCxSpFirst:first'
+        )[0]) {
+            $(cur).replaceWith( self.build_msoffice_list(cur) );
+        }
 
         // This needs to be done by hand for IE.
         // jQuery().replaceWith considered dangerous in IE.
@@ -1585,15 +1657,32 @@ proto.assert_trailing_space = function(part, text) {
         this.wikitext += ' ';
 }
 
+proto._css_to_px = function(val) {
+    if (val.match(/^-?([\.\d]+)px/)) {
+        return Number(RegExp.$1);
+    }
+    else if (val.match(/^-?([\.\d]+)in/)) {
+        return Number(RegExp.$1) * 80;
+    }
+    else if (val.match(/^-?([\.\d]+)cm/)) {
+        return Number(RegExp.$1) * 28;
+    }
+    else if (val.match(/^-?([\.\d]+)em/)) {
+        return Number(RegExp.$1) * 10;
+    }
+    else if (val.match(/^-?([\.\d]+)ex/)) {
+        return Number(RegExp.$1) * 6;
+    }
+    return undefined;
+}
+
 proto.no_descend = function(elem) {
     if (elem.nodeName == 'BLOCKQUOTE')
         elem.is_indented = true;
     else if (elem.nodeName.match(/^(P|DIV)$/)) {
-        if (elem.style.marginLeft.match(/^(\d+)px/)) {
-            elem.is_indented = Number(RegExp.$1);
-        }
-        else if (elem.style.marginLeft.match(/^([\.\d]+)in/)) {
-            elem.is_indented = Number(RegExp.$1) * 80;
+        var indent = this._css_to_px(elem.style.marginLeft);
+        if (indent != undefined) {
+            elem.is_indented = indent;
         }
     }
 

@@ -9,6 +9,7 @@ our $VERSION = '0.02';
 use Socialtext::String;
 use Socialtext::User;
 use DateTime::Infinite;
+use Digest::SHA ();
 use base qw(Socialtext::User::Base);
 
 sub new {
@@ -46,13 +47,34 @@ sub has_valid_password {
 sub password_is_correct {
     my $self = shift;
     my $pw   = shift;
-
-    my $db_pw = $self->password;
-    my $crypt_pw = $self->_crypt( Socialtext::String::trim($pw), $db_pw );
-    return $crypt_pw eq $db_pw;
+    return $self->_verify_password( $pw, $self->password );
 }
 
 # Helper methods
+sub _verify_password {
+    my $self     = shift;
+    my $pw       = shift;
+    my $db_pw    = shift;
+
+    $pw = Socialtext::String::trim($pw);
+
+    if (length $db_pw == 13) {
+        # Legacy password using crypt()
+        return $self->_crypt( $pw, $db_pw ) eq $db_pw;
+    }
+    else {
+        # Modern password using hmac_sha256_hex()
+        return $self->_sha256( $pw, $db_pw ) eq $db_pw;
+    }
+}
+
+sub _encode_password {
+    my $self = shift;
+    my $pw   = shift;
+
+    return $self->_sha256($pw, time());
+}
+
 sub _crypt {
     shift;
     my $pw   = shift;
@@ -62,6 +84,19 @@ sub _crypt {
     $pw = Encode::encode_utf8($pw) if Encode::is_utf8($pw);
 
     return crypt( $pw, $salt );
+}
+
+sub _sha256 {
+    shift;
+    my $pw   = shift;
+    my $salt = shift;
+
+    $salt =~ s/:.*//;
+
+    $pw = Encode::encode_utf8($pw) if Encode::is_utf8($pw);
+    my $sha256 = Digest::SHA::hmac_sha256_hex($pw, $salt);
+
+    return "$salt:SHA256:$sha256";
 }
 
 sub expire { 

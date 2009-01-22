@@ -1706,7 +1706,8 @@ PARAMS can include:
 =item * password - see below for default
 
 Normally, the value for "password" should be provided in unencrypted
-form.  It will be stored in the DBMS in C<crypt()>ed form.  If you
+form.  It will be stored in the DBMS in an encrypted form using SHA-256,
+keyed with the current timestamp using the HMAC algorithm.  If you
 must pass in a crypted password, you can also pass C<< no_crypt => 1
 >> to the method.
 

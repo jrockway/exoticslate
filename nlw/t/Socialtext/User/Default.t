@@ -3,9 +3,14 @@
 
 use strict;
 use warnings FATAL => 'all';
-use Test::Socialtext tests => 15;
+use Test::Socialtext tests => 31;
 
 use_ok 'Socialtext::User::Default';
+
+my $legacy_password = Socialtext::User::Default->_crypt('foodbart', 'random-salt');
+my $modern_password = Socialtext::User::Default->_encode_password('foodbart');
+
+for my $password ($legacy_password, $modern_password) {
 
 ###############################################################################
 ### TEST DATA
@@ -16,7 +21,7 @@ my %TEST_USER = (
     email_address   => 'test-user@example.com',
     first_name      => 'First',
     last_name       => 'Last',
-    password        => Socialtext::User::Default->_crypt('foobar', 'random-salt'),
+    password        => $password,
     driver_name     => 'Default',
 );
 
@@ -70,8 +75,17 @@ can_access_password: {
 verify_users_password: {
     my $user = Socialtext::User::Default->new( %TEST_USER );
     isa_ok $user, 'Socialtext::User::Default';
-    ok  $user->password_is_correct('foobar'),  'verify password; success';
-    ok !$user->password_is_correct('bleargh'), 'verify password; failure';
+    ok  $user->password_is_correct('foodbart'), 'verify password; success';
+    ok !$user->password_is_correct('bleargh!'), 'verify password; failure';
+
+    if ($password eq $legacy_password) {
+        ok $user->password_is_correct('foodbart-EXTRA-CHARS'),
+            'verify password with 8+ chars; success with _crypt()';
+    }
+    else {
+        ok !$user->password_is_correct('foodbart-EXTRA-CHARS'), 
+            'verify password with 8+ chars; failure with _encode_password()';
+    }
 
 }
 
@@ -85,4 +99,6 @@ to_hash: {
     my @fields  = qw(user_id username email_address first_name last_name password);
     my %expected = map { $_=>$TEST_USER{$_} } @fields;
     is_deeply $hashref, \%expected, 'converted user to hash, with right structure';
+}
+
 }

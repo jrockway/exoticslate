@@ -369,7 +369,7 @@ sub ExpireUserRecord {
         # we don't care about different salt per-user - we crypt to
         # obscure passwords from ST admins, not for real protection (in
         # which case we would not use crypt)
-        $p->{password} = Socialtext::User::Default->_crypt( $p->{password}, 'salty' )
+        $p->{password} = Socialtext::User::Default->_encode_password( $p->{password} )
             if exists $p->{password} && ! delete $p->{no_crypt};
 
         # unless we were told which User was creating this user, default it to

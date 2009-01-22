@@ -132,7 +132,7 @@ create_new_user_unencrypted_password: {
 
     # create the new user record and verify the results
     my $password = 
-        Socialtext::User::Default->_crypt('password', 'random-salt');
+        Socialtext::User::Default->_encode_password('password');
     my $username = next_username();
     my $user = create_a_user(
         factory => $factory,
@@ -177,7 +177,7 @@ get_user_valid_search_terms: {
         username      => $username,
         email_address => $username,
         password      =>
-            Socialtext::User::Default->_crypt('password', 'random-salt'),
+            Socialtext::User::Default->_encode_password('password'),
         no_crypt => 1,
     );
     my ($factory, $user) = create_a_user(%opts);

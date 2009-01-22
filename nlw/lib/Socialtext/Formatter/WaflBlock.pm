@@ -86,6 +86,13 @@ sub escape_html {
 
 sub _pretty_print_html {
     my $self = shift;
+
+    # Fix {bz: 1979}: Allow nesting <embed> within <object> for YouTube.
+    local %HTML::TreeBuilder::isHeadOrBodyElement = (
+        %HTML::TreeBuilder::isHeadOrBodyElement,
+        embed => 1,
+    );
+
     # guts can return undef
     my $html = HTML::TreeBuilder->new_from_content(shift)->guts;
     return '' unless ( defined($html) && $html =~ /\S/ );

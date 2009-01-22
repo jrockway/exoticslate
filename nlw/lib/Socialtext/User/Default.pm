@@ -91,7 +91,8 @@ sub _sha256 {
     my $pw   = shift;
     my $salt = shift;
 
-    $salt =~ s/:.*//;
+    # Use the text before the first : as the salt.
+    $salt =~ s/:.*//s;
 
     $pw = Encode::encode_utf8($pw) if Encode::is_utf8($pw);
     my $sha256 = Digest::SHA::hmac_sha256_hex($pw, $salt);

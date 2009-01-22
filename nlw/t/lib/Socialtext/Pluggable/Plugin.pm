@@ -25,6 +25,16 @@ const read_only => 0; # cannot be disabled/enabled in the control panel
 # perldoc Socialtext::URI for arguments
 #    path = '' & query => {}
 
+sub TestUser {
+    my ($class, $name) = @_;
+    my $email = "user.$^T.$name\@ken.socialtext.net";
+    return Socialtext::User->new( username => $email ) ||
+           Socialtext::User->create(
+               email_address => $email,
+               username => $email,
+           );
+}
+
 sub rest_hooks {}
 sub add_content_type {}
 
@@ -156,23 +166,8 @@ sub redirect {
 
 sub template_render {
     my ($self, $template, %args) = @_;
-
-    my %template_vars = (); #$self->hub->main ?
-    #$self->hub->helpers->global_template_vars :
-    #                    ();
-
-    warn "NO MAIN!!" unless %template_vars;
-
-    #my $renderer = Socialtext::TT2::Renderer->instance;
-    #return $renderer->render(
-    #    template => $template,
-    #    paths => [ $self->plugin_dir . "/template" ],
-    #    vars     => {
-    #        as_json => sub { encode_json($_[0]) },
-    #        %template_vars,
-    #        %args,
-    #    },
-    #);
+    $args{template} = $template;
+    return join "\n", map { $args{$_} ||= ''; "$_=$args{$_}" } keys %args;
 }
 
 1;

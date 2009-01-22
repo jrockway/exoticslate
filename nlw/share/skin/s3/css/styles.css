@@ -824,6 +824,13 @@ body#contentPage div#controls div#controlsRight ul li,body#dashBoard div#control
 	line-height: 44px;
 	} 	
 	
+body#contentPage div#controls div#controlsRight ul li a {
+	float: left;
+	color: #333;
+	font-weight: bold;
+	font-size: 9px;
+	}			
+
 div#controls div#controlsRight ul.blogControls {
 	float: right;
 	}
@@ -867,15 +874,14 @@ div#controls div#controlsRight ul li a.print {
 }
 
 div#controls div#controlsRight ul li a.revision {
-       background: url(../images/revisionIcon.png) no-repeat center left;
-       padding:0 10px 0 26px;
+	background: url(../images/revisionIcon.png) no-repeat center left;
+	padding:0 10px 0 28px;
 }
 
 div#controls div#controlsRight ul li a.watch {
        background: url(../images/watchIcon.png) no-repeat center left;
        padding:0 10px 0 28px;
 }
-
 
 div#controls div#controlsRight ul li a.email {
 	background: url(../images/emailIcon.png) no-repeat center left;
@@ -984,6 +990,36 @@ div#contentColumns div#contentLeft h3 {
 	line-height: 38px;
 	font-weight: normal;
 }
+
+div#contentColumns div#contentLeft h4 {
+	font-size: 14px;
+	color: #0a94df;
+	line-height: 30px;
+	font-weight: normal;
+}
+
+
+div#contentColumns div#contentLeft div.widgetHeader h4 {
+color:#505156;
+float:left;
+font-size:14px;
+font-weight:normal;
+line-height:35px;
+}
+
+div#contentColumns div#contentLeft div.widgetContent div#myContent h4 {
+	float:left;
+	font-size:16px;
+	line-height:24px;
+	margin-left:16px;
+	color:#333;
+}
+
+div#contentColumns div#contentLeft h5 {
+	line-height: 30px;
+	font-size: 13px;
+}
+
 
 body#blog div#contentColumns div#contentLeft h3 {
 	margin-top: 20px;

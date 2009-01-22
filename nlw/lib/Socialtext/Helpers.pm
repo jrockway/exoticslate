@@ -281,11 +281,12 @@ sub _get_user_info {
     my ($self) = @_;
     my $user = $self->hub->current_user;
     return {
-        username        => $user->guess_real_name,
-        userid          => $user->username,
-        email_address   => $user->email_address,
-        is_guest        => $user->is_guest,
-        can_use_plugin  => sub {
+        username          => $user->guess_real_name,
+        userid            => $user->username,
+        email_address     => $user->email_address,
+        is_guest          => $user->is_guest,
+        is_business_admin => $user->is_business_admin,
+        can_use_plugin    => sub {
             $user->can_use_plugin(@_);
         },
     };

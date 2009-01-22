@@ -1,7 +1,7 @@
 #!perl
 # @COPYRIGHT@
-use warnings;
 use strict;
+use warnings;
 
 use Test::HTTP::Socialtext tests => 40;
 

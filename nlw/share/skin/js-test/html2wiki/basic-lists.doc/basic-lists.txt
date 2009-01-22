@@ -1,8 +1,8 @@
-We like to list things.  The top reasons why:
+We like to list things. The top reasons why:
 
 # You can itemize your things
 # Ideas are chunked for easy consumption
-# You don't have to write complete
+# You don’t have to write complete
 
 Sometimes, we just want a grocery list:
 
@@ -13,9 +13,9 @@ Sometimes, we just want a grocery list:
 Other times, we want a funky outline:
 
 * Rome
-*# Wasn't built in a day
-*# Render unto Caesar
-*# Pizza not invented here
+## Wasn’t built in a day
+## Render unto Caesar
+## Pizza not invented here
 * Paris
 ** The one in Texas
 ** Harry Dean Stanton at his best

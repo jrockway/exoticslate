@@ -709,7 +709,7 @@ proto.strip_msword_gunk = function(html) {
     return html.
         replace(
             /<SPAN\s+style="[^"]*\bmso-list:\s+Ignore\b[^"]*">[\w\W]*?<\/SPAN>/ig, function(m) {
-                return '<!--[if !supportLists]-->' + m + '<!--[endif]-->';
+                return '<!--[SocialtextBulletBegin]-->' + m + '<!--[SocialtextBulletEnd]-->';
             }
         ).
         replace(

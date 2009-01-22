@@ -484,7 +484,7 @@ div#controls div#st-editing-tools-edit ul li a {
 
 body#contentPage div#st-editing-tools-edit ul li a,body#dashBoard div#st-editing-tools-edit ul li a,body#settingsPage div#st-editing-tools-edit ul li a {
 	top: 13px;
-}
+
 ul li a.genericBlueButton {
 	display: block;
 	color: #fff;
@@ -817,13 +817,22 @@ div#controls div#controlsRight ul {
 	
 div#controls div#controlsRight ul li {
 	float: left;
+	background: url(../images/controlsRightDivider.png) no-repeat center left;
 	line-height: 41px;
+	padding-left: 14px;
 	}
 	
 body#contentPage div#controls div#controlsRight ul li,body#dashBoard div#controls div#controlsRight ul li,body#settingsPage div#controls div#controlsRight ul li {
 	line-height: 44px;
 	} 	
 	
+div#controls div#controlsRight ul li a {
+	float: left;
+	color: #333;
+	font-weight: bold;
+	font-size: 9px;
+	}			
+
 div#controls div#controlsRight ul.blogControls {
 	float: right;
 	}
@@ -891,6 +900,10 @@ div#controls div#controlsRight ul li.last a.tools {
 	padding:0 0 0 26px;
 }
 
+div#controls div#controlsRight ul li a:hover {
+	color: #33a8ff;
+}
+	
 
 /* controls End */
 

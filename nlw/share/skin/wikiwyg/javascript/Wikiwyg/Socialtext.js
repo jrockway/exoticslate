@@ -1610,7 +1610,8 @@ proto.on_pasted = function(html) {
         return;
     }
 
-    var wikitext = self.wikiwyg.mode_objects[WW_ADVANCED_MODE].convert_html_to_wikitext(html);
+    // The "false" here for isWholeDocument means we're dealing with HTML fragments.
+    var wikitext = self.wikiwyg.mode_objects[WW_ADVANCED_MODE].convert_html_to_wikitext(html, false);
 
 // XXX - Lightboxing causes insert to be in wrong place
 //     jQuery.showLightbox({ html: "pasting...", overlayBackground: "transparent", speed: 1 });

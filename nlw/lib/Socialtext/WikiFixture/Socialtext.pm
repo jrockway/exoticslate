@@ -63,11 +63,11 @@ sub init {
     }
    
     #Get the workspace skin if the workspace attribute is set
-    #Otherwise, default to s2
+    #Otherwise, default to s3
     my $ws = Socialtext::Workspace->new( name => $self->{workspace} );
-    my $skin = 's2';
+    my $skin = 's3';
     if (defined($ws)) {
-        $skin = $ws->skin_name();
+        $skin = $ws->skin_name() || 's3';
     }
   
     $self->{'skin'} = $skin;

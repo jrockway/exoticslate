@@ -80,7 +80,21 @@ sub install_deps {
         print "The following modules are missing, or you may have older versions:\n\n";
         print_cols( @missing );
         print "\n";
-        my $ans = prompt("Install these missing dependencies from CPAN?", "y");
+        if ($ENV{ST_GIT} || $ENV{ST_HAXORS}) {
+            print <<COMPLAINT;
+YOU SEEM TO BE A SOCIALTEXT EMPLOYEE...
+
+If you aren't, please unset ST_GIT and ST_HAXORS in your environment and try
+again.
+
+If you are, please package up and install these dependencies as debian packages.
+
+COMPLAINT
+
+            return;
+        }
+
+        my $ans = prompt("Install these missing dependencies from CPAN?", "n");
         if ( $ans =~ /^y(es)?$/i ) {
             s/\s.*// for @missing; # Chomp the trailing version number
             system( 'sudo', $^X, '-MCPAN', '-e', 'CPAN::Shell->install(@ARGV)',

@@ -24,10 +24,14 @@ my $plug = Socialtext::Pluggable::Plugin::Widgets->new;
 $plug->hub($hub);
 
 my %third_party = (
-    'MSOutlookWidget.xml' => 'http://andyast.googlepages.com/MSOutlookWidget.xml',
-    'googlecalendarviewer.xml' => 'http://ralph.feedback.googlepages.com/googlecalendarviewer.xml',
-    'ig-check.xml' => 'http://ralph.feedback.googlepages.com/googlecalendarviewer.xml',
-    'flickr_google.xml' => 'http://chinsonyeh.googlepages.com/flickr_google.xml',
+    'MSOutlookWidget.xml'
+        => 'http://andyast.googlepages.com/MSOutlookWidget.xml',
+    'googlecalendarviewer.xml'
+        => 'http://www.google.com/ig/modules/calendar3.xml',
+    'ig-check.xml'
+        => 'http://www.google.com/ig/modules/calendar3.xml',
+    'flickr_google.xml'
+        => 'http://chinsonyeh.googlepages.com/flickr_google.xml',
 );
 
 sub transform_url {

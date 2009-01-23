@@ -5,10 +5,10 @@ CACHE=/var/cache/socialtext
 
 # Clean these out
 if [ -d "$CACHE/formatter" ]; then
-    find $CACHE/formatter -print0 -mindepth 1 | xargs -0 rm -rf
+    find $CACHE/formatter -mindepth 1 -print0 | xargs -0 rm -rf
 fi
 if [ -d "$CACHE/tt2" ]; then
-    find $CACHE/tt2       -print0 -mindepth 1 | xargs -0 rm -f
+    find $CACHE/tt2       -mindepth 1 -print0 | xargs -0 rm -rf
 fi
 
 # No longer used

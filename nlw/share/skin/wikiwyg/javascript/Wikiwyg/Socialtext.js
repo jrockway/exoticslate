@@ -1042,7 +1042,8 @@ proto.get_current_wikitext = function() {
 }
 
 proto.get_wikitext_from_html = function(html) {
-    return eval(WW_ADVANCED_MODE).prototype.convert_html_to_wikitext(html);
+    // {bz: 1985}: Need the "true" below for the isWholeDocument flag.
+    return eval(WW_ADVANCED_MODE).prototype.convert_html_to_wikitext(html, true);
 }
 
 proto.set_edit_tips_span_display = function(display) {
@@ -1609,7 +1610,8 @@ proto.on_pasted = function(html) {
         return;
     }
 
-    var wikitext = self.wikiwyg.mode_objects[WW_ADVANCED_MODE].convert_html_to_wikitext(html);
+    // The "false" here for isWholeDocument means we're dealing with HTML fragments.
+    var wikitext = self.wikiwyg.mode_objects[WW_ADVANCED_MODE].convert_html_to_wikitext(html, false);
 
 // XXX - Lightboxing causes insert to be in wrong place
 //     jQuery.showLightbox({ html: "pasting...", overlayBackground: "transparent", speed: 1 });
@@ -2445,7 +2447,7 @@ proto.exec_command = function(command, option) {
         }
     }
 
-    if ((command == 'inserthtml') && (typeof(option) != 'string') || option.length == 0) {
+    if ((command == 'inserthtml') && ((typeof(option) != 'string') || option.length == 0)) {
         return true;
     }
     return(this.get_edit_document().execCommand(command, false, option));

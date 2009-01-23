@@ -4,6 +4,9 @@ var t = new Test.Visual();
 
 t.plan(2);
 
+if (jQuery.browser.msie)
+    t.skipAll("Skipping this insanity on IE for now");
+
 t.runAsync([
     function() {
         t.open_iframe("/data/workspaces/admin/attachments/admin_wiki:0-0-0/original/VeryBad", t.nextStep());

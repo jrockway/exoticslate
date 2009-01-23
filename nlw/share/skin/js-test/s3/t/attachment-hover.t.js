@@ -13,10 +13,16 @@ t.runAsync([
     },
 
     function() {
+        t.poll(function(){
+            return(t.$('#st-attachment-listing') && t.$('#st-attachment-listing').length > 0)
+        }, t.nextStep());
+    },
+
+    function() {
         // Scroll to wherever the attachment widget is
         t.scrollTo(t.$("#st-attachment-listing").offset().top - 50);
 
-        var hoverText = t.$("#st-attachment-listing li:eq(0) a:eq(0)").attr("title");
+        var hoverText = t.$("#st-attachment-listing li:first a:first").attr("title");
         t.like(hoverText, /Uploaded by (.+) on (.+)\.\d+(K|M| bytes)/, "Attachment hover text contains uploader, date and size info.");
 
         t.endAsync();

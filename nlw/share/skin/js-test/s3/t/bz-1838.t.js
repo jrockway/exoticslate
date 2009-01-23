@@ -31,12 +31,21 @@ t.runAsync([
 
     function() { 
         $('#edit_textarea', t.doc).val('fnord');
-        $('form', t.doc).submit();
 
-        t.open_iframe(
-            "/admin/?" + incipient,
-            t.nextStep()
-        );
+        var old_location = t.win.location.href;
+        t.poll(function(){
+            return(
+                t.win && t.win.location && t.win.location.href &&
+                (t.win.location.href != old_location)
+            );
+        }, function(){
+            t.open_iframe(
+                "/admin/?" + incipient,
+                t.nextStep()
+            );
+        });
+
+        $('form', t.doc).submit();
     },
 
     function() { 

@@ -10,14 +10,14 @@ t.runAsync([
     },
 
     function() {
-        t.open_iframe_with_socialcalc("/admin/index.cgi?action=display;page_type=spreadsheet;page_name=banana#edit", t.nextStep());
+        t.open_iframe_with_socialcalc("/admin/index.cgi?action=display;page_type=spreadsheet;page_name="+t.gensym()+"#edit", t.nextStep());
     },
 
     function() {
-        t.iframe.contentWindow.onbeforeunload = null;
         var val = t.callEventHandler("#st-color-button-link", "click");
         t.is(val, false, "Event handler returns false");
 
+        t.callEventHandler("#st-save-button-link", "click");
         t.endAsync();
     }
 ]);

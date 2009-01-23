@@ -15,7 +15,7 @@ t.runAsync([
     function() {
         var widget = WID = t.setup_one_widget(
             {
-                url: "/?action=add_widget;location=widgets/share/widgets/tag_cloud.xml",
+                url: "/?action=add_widget;src=file:widgets/share/widgets/tag_cloud.xml",
                 noPoll: true
             },
             t.nextStep()

@@ -17,7 +17,7 @@ t.runAsync([
         ).find('#wysiwyg-editable-div').length;
 
         t.$('#wikiwyg_button_table').click();
-        t.callNextStep(2000);
+        t.callNextStep(4000);
     },
 
     function() { 

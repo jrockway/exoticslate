@@ -199,8 +199,7 @@ Incipient include works in browser and MIKI
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| text_like | st-editing-title | `Editing:` |
-| verifyValue | st-newpage-pagename-edit | %%tcipii%% |
+| text_like | st-editing-title | `Editing: %%tcipii%%` |
 | verifyValue | wikiwyg_wikitext_textarea | qr/Replace this text with your own/ |
 
 | *Comment* | Test Case: Include Page. Open the incipient included page for editing using the link |  |
@@ -211,8 +210,7 @@ Incipient include works in browser and MIKI
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| text_like | st-editing-title | `Editing:` |
-| verifyValue | st-newpage-pagename-edit | %%tcipii%% |
+| text_like | st-editing-title | `Editing: %%tcipii%%` |
 | verifyValue | wikiwyg_wikitext_textarea | qr/Replace this text with your own/ |
 
 repeat in Miki
@@ -225,27 +223,24 @@ repeat in Miki
 
 | *Comment* | Test Case: Include Page MIKI. Open the incipient included page for editing using the Edit button |  |
 | *Comment* | Test Case: Include Page MIKI. Page opens for editing |  |
-
-| *Comment* | TODO: RESTORE THESE TESTS WHEN {bz: 1874} IS FIXED |  |
-
- click_and_wait | //img[contains(@src,'edit-icon.gif')] | |
- wait_for_element_visible_ok | edit_textarea | 30000 |
- wait_for_element_visible_ok | link=Cancel Edit | 30000 |
- verifyValue | edit_textarea | qr/^$/ |
- click_and_wait | link=Cancel Edit | |
+| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| wait_for_element_visible_ok | edit_textarea | 30000 |
+| wait_for_element_visible_ok | link=Cancel Edit | 30000 |
+| verifyValue | edit_textarea | qr/^$/ |
+| click_and_wait | link=Cancel Edit |  |
 
 | *Comment* | Test Case: Include Page MIKI. Open the incipient included page for editing using the link |  |
 | *Comment* | Test Case: Include Page MIKI. Page appears but not in edit mode. Use Edit link. |  |
 
- open_ok | /lite/page/%%tcipw%%/tc_include_page_%%start_time%% | |
- click_and_wait | link=%%tcipii%% | |
- text_like | qr/Replace this text with your own/ | |
- click_and_wait | link=Edit | |
- wait_for_element_visible_ok | edit_textarea | 30000 |
- type_ok | edit_textarea | %%tcipii%% Hello From Miki |
- click_and_wait | //input[@value='Save'] | |
- wait_for_element_visible_ok | link=Edit | 30000 |
- text_like | %%tcipii%% Hello From Miki | |
+| open_ok | /lite/page/%%tcipw%%/tc_include_page_%%start_time%% |  |
+| click_and_wait | link=%%tcipii%% |  |
+| text_like | qr/Replace this text with your own/ |  |
+| click_and_wait | link=Edit |  |
+| wait_for_element_visible_ok | edit_textarea | 30000 |
+| type_ok | edit_textarea | %%tcipii%% Hello From Miki |
+| click_and_wait | //input[@value='Save'] |  |
+| wait_for_element_visible_ok | link=Edit | 30000 |
+| text_like | %%tcipii%% Hello From Miki |  |
 
 Include a page from a different workspace. This test assumes the existence of help-en
 

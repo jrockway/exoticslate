@@ -23,6 +23,11 @@
     </div><!-- controlsRight END -->
 </div><!-- controls END -->
 
+<div class="notice">
+[% FILTER decorate('notice') %]
+[% END %]
+</div>
+
 <div id="contentContainer">
     <div id="contentColumns">
         <ul class="widgetColumn" id="leftList">

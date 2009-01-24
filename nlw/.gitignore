@@ -69,6 +69,7 @@ lib/Socialtext/Pluggable/Plugin/People.pm
 lib/Socialtext/Pluggable/Plugin/Signals.pm
 lib/Socialtext/Pluggable/Plugin/SocialCalc.pm
 lib/Socialtext/Pluggable/Plugin/Widgets.pm
+lib/Socialtext/Rest/Gadget.pm
 lib/Socialtext/Rest/Gadgets
 lib/Socialtext/Rest/Gadgets/Gadget.pm
 lib/Socialtext/Rest/Signals.pm
@@ -107,9 +108,12 @@ t/Socialtext/People/Rest
 t/Socialtext/People/Rest/Profile.t
 t/Socialtext/People/Search.t
 t/Socialtext/People/Tags.t
+t/Socialtext/REST
 t/Socialtext/Rest/Gadgets
 t/Socialtext/Rest/Gadgets/Container.t
 t/Socialtext/Rest/Gadgets/Gadget.t
+t/Socialtext/Rest/Gadget.t
+t/Socialtext/REST/Gadget.t
 t/Socialtext/User/LDAP-profile-fields.t
 t/test-data/ja/mecabif
 t/tmp/
@@ -122,6 +126,7 @@ t/widget/lang/01_de.xml
 t/widget/lang/01_en.xml
 t/widget/lang/Test_en.xml
 t/widget/lang/Test_es.xml
+t/widget/lang/Test_fallback.xml
 t/widget/Test1.xml
 t/widget/Test2.xml
 t/wikitests/people/

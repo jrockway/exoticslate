@@ -114,7 +114,7 @@ $(S3_FILE): $(S3_SOURCE_FILES) Makefile
 	done
 
 $(ST_EDITOR_FILE): $(ALL_EDITOR_FILES)
-	make -C $(WIKIWYG_ST) all
+	make -C $(WIKIWYG_ST) clean all
 
 $(LIGHTBOX_FILE): $(LIGHTBOX_SOURCE_FILES) Makefile
 	rm -f $@;

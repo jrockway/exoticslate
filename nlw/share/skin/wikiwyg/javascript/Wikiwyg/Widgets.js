@@ -581,7 +581,9 @@ proto.setTitleAndId = function (widget) {
 }
 
 proto.parseWidgetElement = function(element) {
-    return this.parseWidget(element.getAttribute('widget'));
+    var widget = element.getAttribute('widget');
+    if (Wikiwyg.is_ie) widget = Wikiwyg.htmlUnescape( widget );
+    return this.parseWidget(widget);
 }
 
 proto.parseWidget = function(widget) {

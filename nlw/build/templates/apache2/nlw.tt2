@@ -95,6 +95,19 @@
         FileETag none
     </LocationMatch>
 
+    <Location "/nlw/plugin/widgets/rpc_relay.html">
+        ExpiresDefault "access plus 1 seconds"
+        FileETag none
+    </Location>
+    <Location "/nlw/plugin/widgets/ifpc_relay.html">
+        ExpiresDefault "access plus 1 seconds"
+        FileETag none
+    </Location>
+    <Location "/ig/ifpc_relay">
+        ExpiresDefault "access plus 1 seconds"
+        FileETag none
+    </Location>
+
 [% IF config.is_dev %]
     Redirect 301 /favicon.ico http://www.socialtext.net/favicon.ico
 [% END %]

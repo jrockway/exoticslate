@@ -82,23 +82,16 @@ from Recent Changes list view page: click a revisions link for a page with at le
 | clickAndWait | link=Compare Revisions |  |
 | text_like | qr/Revision 1.+Revision 4.+one.+four/s |  |
 
- edit a page and Save | creates a new revision | revisions count should increment
- click Revisions at top of sidebar | new entry in All Revisions | verify correctness of new entry
-
-NOTE: validated when creating data for this test
-
- select the same revision in both columns, click Compare Revisions | Popup: you cannot compare a revision to itself
-
 | *Comment* | Test Case: Revisions: Comparing revision to itself |  |
 | clickAndWait | link=All Revisions |  |
-| wait_for_element_present_ok | //a[@class='compareButton'] | 30000 |
+| wait_for_element_visible_ok | //a[@class='compareButton'] | 30000 |
 | click_ok | document.revisions.old_revision_id[2] |  |
 | click_ok | document.revisions.new_revision_id[2] |  |
 
 | *Comment* | Test Case: Revisions. Cheshire Cat button |  |
-| wait_for_element_present_ok | //a[@class='compareButton' and @style='display: none;'] | 30000 |
+| wait_for_element_not_visible_ok | //a[@class='compareButton'] | 30000 |
 | click_ok | document.revisions.new_revision_id[1] |  |
-| wait_for_element_present_ok | //a[@class='compareButton' and @style='display: block;'] | 30000 |
+| wait_for_element_visible_ok | //a[@class='compareButton'] | 30000 |
 
 Compare Revisions: older vs. younger | page appears with correct revisions. Diffs are reasonable and correct. | older on left, younger on right
 
@@ -169,7 +162,7 @@ Find the same page using search, What's New list, and Revisions link. Observe re
 | text_like | `//a[contains(@href,'action=revision_list')]` | qr/5.+Revisions/ |
 
  from All Revisions, click an older version | older version appears
- from Compare Revisions, click the link above the older version | older version appears
+from Compare Revisions, click the link above the older version | older version appears
 
  All Revisions | All Revisions page appears
 

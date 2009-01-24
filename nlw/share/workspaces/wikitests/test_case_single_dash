@@ -23,6 +23,6 @@ Set test_string to such a string, then make a widget with that as the link text,
 | click_and_wait | st-save-button-link |  |
 
 | *Comment* | The last line of the page should contain only %%test_string%% |  |
-| text_like | contentContainer | qr/^\s*%%test_string_escaped%%\s*$/m |
+| text_like | st-page-content | qr/^\s*%%test_string_escaped%%\s*$/m |
 
 | *Comment* | Test Case: Single Dash COMPLETED |  |

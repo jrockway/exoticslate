@@ -33,7 +33,7 @@
 
 | *Comment* | Test case: Signals Widget. Wait for Signal to appear in Updates |  |
 | click_and_wait | link=Profile |  |
-| st-name-widget | 2 | profile_updates |
+| st-name-widget | 4 | profile_updates |
 | st-select-widget-frame | profile_updates |  |
 | wait_for_text_present_ok | She rocks in the treehouse, %%start_time%% | 120000 |
 | wait_for_text_present_ok | Rockin' and a bopin' %%start_time%% | 120000 |

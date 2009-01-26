@@ -112,9 +112,9 @@ function setup_wikiwyg() {
 
     var clearRichText = new RegExp(
         ( "^"
-        + "\\s*(</?(span|br|div)\\b[^>]*>)*\\s*"
+        + "\\s*(</?(span|br|div)\\b[^>]*>\\s*)*"
         + loc("Replace this text with your own.")
-        + "\\s*(</?(span|br|div)\\b[^>]*>)*\\s*"
+        + "\\s*(</?(span|br|div)\\b[^>]*>\\s*)*"
         + "$"
         ), "i"
     );
@@ -1044,7 +1044,8 @@ proto.get_current_wikitext = function() {
 }
 
 proto.get_wikitext_from_html = function(html) {
-    return eval(WW_ADVANCED_MODE).prototype.convert_html_to_wikitext(html);
+    // {bz: 1985}: Need the "true" below for the isWholeDocument flag.
+    return eval(WW_ADVANCED_MODE).prototype.convert_html_to_wikitext(html, true);
 }
 
 proto.set_edit_tips_span_display = function(display) {

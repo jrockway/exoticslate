@@ -1,6 +1,6 @@
 | *Comment* | Test Case: Create Content |  |
 | set | select_template | `//div[@id='create-content-from-template']/select` |
-| set | copy_from | `//div[@id='create-content-from-page']/input[@autocomplete='off']` |
+| set | copy_from | `//div[@id='create-content-from-page']/input[2]` |
 
 | st-admin | disable-plugin --w %%workspace%% --plugin socialcalc | The socialcalc plugin is now disabled for workspace %%workspace%% |
 
@@ -74,6 +74,10 @@
 | click_ok | link=+ New Page |  |
 | wait_for_element_visible_ok | copy-page-radio | 5000 |
 | check_ok | copy-page-radio |  |
+| wait_for_element_visible_ok | %%copy_from%% | 5000 |
+
+| *Comment* | Test Case: Create Content: the next click_ok makes this work in IE |  |
+| click_ok | %%copy_from%% |  |
 | type_ok | %%copy_from%% | Create Page %%start_time%% |
 | click_and_wait | st-create-content-savelink |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |

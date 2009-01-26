@@ -138,13 +138,15 @@ Compare Revisions: older vs. younger | page appears with correct revisions. Diff
 | text_like | st-revision-display | four |
 | text_like | st-revision-display | five |
 
-| clickAndWait | //strong |  |
-| text_like | qr/Revision 4.+revision number four/ |  |
+| clickAndWait | link=Revision 4 |  |
+| text_like | Revision 4 |  |
+| text_like | revision number four |  |
 
 | clickAndWait | link=All Revisions |  |
 | clickAndWait | link=Compare Revisions |  |
 | clickAndWait | link=Revision 5 |  |
-| text_like | qr/Revision 5.+revision number five/ |  |
+| text_like | Revision 5 |  |
+| text_like | revision number five |  |
 
 Find the same page using search, What's New list, and Revisions link. Observe revision count. | Count should be correct and identical in all three results
 

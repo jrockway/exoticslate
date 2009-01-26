@@ -31,6 +31,7 @@
 | *Comment* | Test Case: My Conversations Widget Login as convwidget |  |
 | st-logoutin | convwidget@matt.socialtext.net | %%password%% |
 
+| *Comment* | Test Case: My Conversations Widget Edit a page |  |
 | open_ok | /%%workspace%%/?My Conversations Edit %%start_time%% |  |
 | wait_for_element_visible_ok | st-edit-button-link |  |
 | click_ok | st-edit-button-link |  |
@@ -38,8 +39,9 @@
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | Don't forget to foo the bar |
-| click_and_wait | st-save-button-link |  |
+| click_and_wait | link=Save |  |
 
+| *Comment* | Test Case: My Conversations Widget comment on a page |  |
 | open_ok | /%%workspace%%/?My Conversations Comment %%start_time%% |  |
 | wait_for_element_visible_ok | link=Comment | 30000 |
 | click_ok | link=Comment |  |
@@ -48,6 +50,7 @@
 | click_ok | link=Save |  |
 | pause | 5000 |  |
 
+| *Comment* | Test Case: My Conversations Widget make another comment |  |
 | open_ok | /%%workspace%%/?My Conversations Watch %%start_time%% |  |
 | wait_for_element_visible_ok | link=Comment | 30000 |
 | click_ok | link=Comment |  |
@@ -58,6 +61,7 @@
 | st-login |  |  |
 
 | open_ok | /?dashboard | 60000 |
+| wait_for_text_present_ok | Welcome, New User | 30000 |
 | st-empty-container |  |  |
 | st-add-widget | widgets/share/widgets/recent_conversations.xml | my_conversations |
 | st_wait_for_widget_load | my_conversations | 45000 |

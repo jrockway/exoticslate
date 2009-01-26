@@ -1,10 +1,3 @@
-* HighPermissions
-
-| *Comment* | Test Case: Hidden Email Address |  |
-
-| *Comment* | wikitest files should be in %%wikitest_files%% on the browser server |  |
-| *Comment* | *This test only works if selenium_browser has higher powers, i.e. *chrome for firefox* |  |
-
 | *Comment* | Test Case: Hidden Email Address setup workspace and user |  |
 
 | set | he_ws | hidden-email-%%start_time%% |
@@ -21,14 +14,7 @@
 | type_ok | password | %%password%% |
 | click_and_wait | //input[@value="Log in"] |  |
 
-| *Comment* | Test Case: Hidden Email Address Upload File so that you can verify hidden address in All Files |  |
-| wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
-| click_ok | st-attachments-uploadbutton |  |
-| wait_for_element_visible_ok | st-attachments-attach-filename |  |
-| type_ok | st-attachments-attach-filename | %%wikitest_files%%wikitest.txt |
-| wait_for_text_present_ok | Uploaded files: wikitest.txt | 30000 |
-| wait_for_element_visible_ok | st-attachments-attach-closebutton | 30000 |
-| click_and_wait | st-attachments-attach-closebutton |  |
+| *Comment* | Test Case: Hidden Email Address. Removed file upload test so IE and Safari will succeed. |  |
 
 | *Comment* | Test Case: Hidden email verify user WAFL |  |
 | wait_for_element_visible_ok | link=Edit | 30000 |
@@ -59,9 +45,6 @@
 | open-ok | /%%he_ws%% |  |
 | click_and_wait | link=What's New |  |
 | text_like | Changes in Last |  |
-| text_like | contentContainer | %%he_name%% |
-| text_unlike | contentContainer | %%he_regex%% |
-| click_and_wait | link=All Files |  |
 | text_like | contentContainer | %%he_name%% |
 | text_unlike | contentContainer | %%he_regex%% |
 | click_and_wait | link=All Pages |  |

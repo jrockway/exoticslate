@@ -5,6 +5,7 @@ use warnings;
 
 use base 'Socialtext::Plugin';
 
+use XML::Simple ();
 use Class::Field qw( const );
 
 # XXX this class should stop using Socialtext::FetchRSSPlugin for 
@@ -25,6 +26,38 @@ sub register {
     $registry->add(wafl => technorati => 'Socialtext::TechnoratiPhrase::Wafl');
 }
 
+sub _transform_tapi_to_rss20 {
+    my $self = shift;
+    my $content = shift or return;
+
+    my $in = XML::Simple::XMLin($content);
+    my $result_url = $in->{document}{result}{url}
+        or die "$in->{document}{result}{error}\n";
+
+    my @items;
+    foreach my $item (@{ $in->{document}{item} || []}) {
+        push @items, {
+            title       => $item->{title} || ($item->{weblog} or next)->{name},
+            link        => $item->{nearestpermalink} || ($item->{weblog} or next)->{url},
+            description => $item->{excerpt},
+        };
+    }
+
+    my $out = {
+        title   => "Blog reactions to $result_url",
+        item    => \@items,
+    };
+
+    my $rss = XML::Simple::XMLout($out, NoAttr => 1, RootName => 'channel');
+
+    return << ".";
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+$rss
+</rss>
+.
+}
+
 sub get_technorati_cosmos {
     my $self = shift;
     my $url = shift;
@@ -32,13 +65,19 @@ sub get_technorati_cosmos {
     my $search_url = $self->uri_escape($url);
     $self->hub->fetchrss->timeout($self->default_technorati_timeout);
 
-    my $cosmos = $self->hub->fetchrss->get_feed(
-        $self->_techno_url($search_url), $self->default_cache_expire);
-
+    my $fetchrss = $self->hub->fetchrss;
+    my $techno_url = $self->_techno_url($search_url);
+    my $feed = $fetchrss->_fetch_feed(
+        $techno_url, $self->default_cache_expire
+    );
+    my $cosmos = eval { $fetchrss->_parse_feed(
+        $techno_url, $self->_transform_tapi_to_rss20($feed)
+    ) };
     return $cosmos if $cosmos;
 
-    if ($self->hub->fetchrss->error) {
-        warn "Error fetching Tecnorati feed: " . $self->hub->fetchrss->error;
+    my $error = ($@ || $self->hub->fetchrss->error);
+    if ($error) {
+        warn "Error fetching Technorati feed: " . $error;
         $self->hub->fetchrss->error(
             'Bad technorati key or invalid response from technorati'
         );
@@ -57,7 +96,7 @@ sub _techno_url {
     my $technorati_key = $self->hub->technorati->key;
     return $self->technorati_base_url .
         "?key=$technorati_key&url=$url&" .
-        'type=link&format=rss&limit=10';
+        'type=link&limit=10';
 }
 
 ##########################################################################

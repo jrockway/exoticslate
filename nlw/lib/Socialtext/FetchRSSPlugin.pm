@@ -48,7 +48,7 @@ sub get_feed {
     return $feed;
 }
 
-sub _get_feed {
+sub _fetch_feed {
     my $self = shift;
     my $url = shift;
     my $expire = shift;
@@ -63,6 +63,22 @@ sub _get_feed {
     if ( !defined($content) or !length($content) ) {
         $content = $self->_get_content($url);
     }
+    return $content;
+}
+
+sub _get_feed {
+    my $self = shift;
+    my $url = shift;
+    my $expire = shift;
+
+    my $feed = $self->_fetch_feed($url, $expire);
+    return $self->_parse_feed($url, $feed);
+}
+
+sub _parse_feed {
+    my $self = shift;
+    my $url = shift;
+    my $content = shift;
 
     if (defined($content) and length($content)) {
         my $feed = XML::Feed->parse(\$content) or

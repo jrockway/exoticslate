@@ -148,5 +148,6 @@ XML::Atom: 0.22
 XML::Feed: 0.12
 XML::RSS: 1.05
 XML::SAX: 0.12
+XML::Simple: 0
 YAML: 0.58
 YAML::XS 0.26

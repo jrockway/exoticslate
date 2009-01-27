@@ -996,6 +996,10 @@ function setup_wikiwyg() {
         var template = Socialtext.S3 ? 'edit_wikiwyg' : 'layout/edit_wikiwyg';
         var html = Jemplate.process(template, Socialtext.wikiwyg_variables);
 
+        if (jQuery.browser.mozilla || (jQuery.browser.version == 6 && jQuery.browser.msie)) {
+            html = html.replace(/scrolling="no"><\/iframe>/, "></iframe>");
+        }
+
         jQuery(html).insertBefore('#st-display-mode-container');
 
         if (!Socialtext.wikiwyg_variables.hub.current_workspace.enable_spreadsheet) {

@@ -294,6 +294,6 @@ proto.setTextArea = function(text) {
 }
 
 //------------------------------------------------------------------------------
-proto = Subclass('Wikiwyg.Analyzer', 'Wikiwyg.Socialtext');
+proto = Subclass('Wikiwyg.Analyzer', 'Wikiwyg');
 
 proto.enableLinkConfirmations = function() {};

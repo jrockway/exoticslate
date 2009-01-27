@@ -16,6 +16,7 @@ import_libs:
 #   - ../../common/javascript/YAML-0.11/lib/YAML.js
 #   - ../../common/javascript/Widget.Lightbox-0.06/lib/Widget/Lightbox.js
   - ../../wikiwyg/javascript/lib/Wikiwyg.js
+  - ../../wikiwyg/javascript/lib/Wikiwyg/Toolbar.js
   - ../../wikiwyg/javascript/lib/Wikiwyg/Wysiwyg.js
   - ../../wikiwyg/javascript/Widgets.js 
   - ../../wikiwyg/javascript/Wikiwyg/Widgets.js

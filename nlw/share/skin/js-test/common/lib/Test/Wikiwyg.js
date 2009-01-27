@@ -68,7 +68,7 @@ proto.do_roundtrip = function(wikitext) {
 }
 
 proto.create_wysiwyg_object = function(html) {
-    var wikiwyg = new Wikiwyg.Socialtext();
+    var wikiwyg = new Wikiwyg();
     wikiwyg.set_config();
     var wysiwyg = new Wikiwyg.Wysiwyg.Socialtext();
     wysiwyg.show_messages = function() {};

@@ -368,7 +368,6 @@ BEGIN {
             Socialtext::FetchRSSPlugin
             Socialtext::HitCounterPlugin
             Socialtext::HomepagePlugin
-            Socialtext::NewFormPagePlugin
             Socialtext::PageAnchorsPlugin
             Socialtext::PdfExportPlugin
             Socialtext::RecentChangesPlugin

@@ -8,3 +8,4 @@ alert(
   + "\n"
   + "in skin/ and skin/js-test/."
 );
+

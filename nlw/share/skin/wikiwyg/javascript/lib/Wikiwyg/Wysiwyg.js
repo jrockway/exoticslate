@@ -587,6 +587,10 @@ function setup_wikiwyg() {
         if (!Socialtext.wikiwyg_variables.hub.current_workspace.enable_spreadsheet) {
             jQuery('a[do="do_widget_ss"]').parent("li").remove()
         }
+
+        if (jQuery.browser.mozilla) {
+            jQuery("iframe#st-page-editing-wysiwyg").attr("scrolling", "auto");
+        }
     }
 
     // The div that holds the page HTML

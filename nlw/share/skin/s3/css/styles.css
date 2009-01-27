@@ -475,7 +475,7 @@ body#contentPage div#controls div#st-editing-tools-edit ul li,body#dashBoard div
 	line-height: 44px;
 }
 
-div#controls div#st-editing-tools-edit ul li a {
+div#controls div#st-editing-tools-edit ul li {
 	float: left;
 	position: relative;
 	top: 10px;
@@ -483,8 +483,8 @@ div#controls div#st-editing-tools-edit ul li a {
 }
 
 body#contentPage div#st-editing-tools-edit ul li a,body#dashBoard div#st-editing-tools-edit ul li a,body#settingsPage div#st-editing-tools-edit ul li a {
-	top: 13px;
 }
+
 ul li a.genericBlueButton {
 	display: block;
 	color: #fff;
@@ -539,13 +539,17 @@ ul li a.addButton:hover {
 	text-decoration: none;
 }
 
-ul li a.newPageButton {
+a.editButton {
 	display: block;
-	width: 96px;
+	color: #fff;
+	font-weight: bold;
 	height: 22px;
-	background: url(../images/newPageButton.png) no-repeat;
-	background-position: top left;
-	text-indent: -9999px;
+	padding-right: 14px;
+	background: url(../images/editButton.png) no-repeat;
+	background-position: bottom left;
+	line-height:20px;
+	text-indent: 28px;
+	/* text-indent: -9999px; */
 }
 
 ul li a.addContentButton {
@@ -566,9 +570,7 @@ ul li a.compareButton {
 	text-indent: -9999px;
 }
 
-ul li a.newPageButton:hover {
-	background-position: top right;
-}
+
 
 ul li a.addContentButton:hover {
 	background-position: top right;
@@ -615,18 +617,11 @@ ul li a.compareButton:hover {
 	background-position: top right;
 }
 
-a.editButton {
-	display: block;
-	width: 67px;
-	height: 22px;
-	background: url(../images/editButton.png) no-repeat;
-	background-position: top right;
-	text-indent: -9999px;
-}
+
 
 a.saveButton {
 	display: block;
-	width: 56px;
+	width: 44px;
 	height: 22px;
 	background: url(../images/saveButton.png) no-repeat;
 	background-position: top right;
@@ -639,7 +634,7 @@ a.saveButton:hover {
 
 a.cancelButton {
 	display: block;
-	width: 66px;
+	width: 59px;
 	height: 22px;
 	background: url(../images/cancelButton.png) no-repeat;
 	background-position: top right;
@@ -674,21 +669,58 @@ li.flexButtonBlue:hover {
 	background: url(../images/flexButtonBlue.png) no-repeat;
 	background-position: top right;
 }
+
+a.editButton {
+	display: block;
+	color: #fff;
+	font-weight: bold;
+	height: 22px;
+	padding-right: 14px;
+	background: url(../images/editButton.png) no-repeat;
+	background-position: bottom left;
+	line-height:20px;
+	text-indent: 28px;
+	/* text-indent: -9999px; */
+}
+
 a.editButton:hover {
 	background-position: top left;
+	text-decoration: none;
 }
 
 ul li a.commentButton {
 	display: block;
-	width: 106px;
+	text-indent: 32px;
+	padding-right: 14px;
+	color: #fff;
 	height: 22px;
+	line-height:20px;
+	font-weight: bold;
 	background: url(../images/commentButton.png) no-repeat;
-	background-position: top right;
-	text-indent: -9999px;
+	background-position: bottom left;
 }
 
 ul li a.commentButton:hover {
 	background-position: top left;
+	text-decoration: none;
+}
+
+
+ul li a.previewButton {
+	display: block;
+	text-indent: 32px;
+	padding-right: 14px;
+	color: #fff;
+	height: 22px;
+	line-height:20px;
+	font-weight: bold;
+	background: url(../images/commentButton.png) no-repeat;
+	background-position: bottom left;
+}
+
+ul li a.previewButton:hover {
+	background-position: top left;
+	text-decoration: none;
 }
 
 ul li a.watchButton {
@@ -758,11 +790,19 @@ div#controls div#controlsRight {
        height: 100%;
 }
 
-body#contentPage div#controls div#controlsRight,body#dashBoard div#controls div#controlsRight,body#settingsPage div#controls div#controlsRight {
+body#dashBoard div#controls div#controlsRight,body#contentPage div#controls div#controlsRight,body#settingsPage div#controls div#controlsRight {
 	background: url(../images/contentControlsRight.png) no-repeat top right;
 	height: 44px;
-	width: auto !important;
+	width: 600px !important;
 }
+
+div#controlsRightEmpty {
+	background: url(../images/contentControlsRight.png) no-repeat top right;
+	height: 44px;
+	width: 10px;
+	float: right;
+}
+
 
 body#workSpace div#controls div#controlsRight {
 	background: url(../images/dashControlsRight.png) no-repeat top right;
@@ -815,9 +855,11 @@ div#controls div#controlsRight ul {
 	}
 		
 	
-div#controls div#controlsRight ul li {
+body#contentPage div#controls div#controlsRight ul li {
 	float: left;
+	background: url(../images/controlsRightDivider.png) no-repeat center left;
 	line-height: 41px;
+	padding-left: 14px;
 	}
 	
 body#contentPage div#controls div#controlsRight ul li,body#dashBoard div#controls div#controlsRight ul li,body#settingsPage div#controls div#controlsRight ul li {
@@ -879,8 +921,8 @@ div#controls div#controlsRight ul li a.revision {
 }
 
 div#controls div#controlsRight ul li a.watch {
-       background: url(../images/watchIcon.png) no-repeat center left;
-       padding:0 10px 0 28px;
+	background: url(../images/watchIcon.png) no-repeat center left;
+	padding:0 10px 0 24px;
 }
 
 div#controls div#controlsRight ul li a.email {
@@ -897,6 +939,10 @@ div#controls div#controlsRight ul li.last a.tools {
 	padding:0 0 0 26px;
 }
 
+body#contentPage div#controls div#controlsRight ul li a:hover {
+	color: #33a8ff;
+}
+	
 
 /* controls End */
 
@@ -1038,6 +1084,10 @@ body#dashBoard div#contentColumns div#contentLeft p {
 }
 
 div#contentColumns div#contentLeft em {
+	font-size: 10px;
+	color: #000000;
+	line-height: 18px;
+	margin-top: 20px;
 	font-style: italic;
 }
 
@@ -1337,7 +1387,7 @@ div.widget ul.widgetButton li {
 div.widget ul.widgetButton li a.addTagButton {
 	display: block;
 	text-indent: -9999px;
-	width: 59px;
+	width: 87px;
 	height: 21px;
 	background: url(../images/addTagButton.png) no-repeat;
 	background-position: top left;
@@ -1771,10 +1821,42 @@ table.dataTable td img {
 	border: #afafaf 2px solid;
 }
 
+table.dataTable td img.icon {
+	margin: 14px 5px 0 0;
+	float: left;
+	border:none;
+	vertical-align: bottom;
+}
+
+table.dataTable td img.smallAvatar {
+	margin: 6px 5px 0 0;
+	float: none;
+	border: #afafaf 1px solid;
+	width: 20px;
+	height: 20px;
+}
+
 
 table.dataTable td.person a {
 	position: relative;
 	top: 21px;	
+}
+
+
+table.dataTable td.peopleInfo ul {
+	margin-top: 5px;
+}
+
+table.dataTable td.peopleInfo ul li {
+	line-height: 20px;
+
+}
+
+table.dataTable td.profileUpdate {
+	white-space: nowrap;
+	padding-right: 18px;
+	color: #666;
+	font-style: italic;
 }
 
 table.dataTable tr.oddRow td {
@@ -1848,9 +1930,8 @@ dl.form dd label {
 	margin-right: 10px;
 }
 
-
-
 /* forms End */
+
 
 /* bottomButtons Start */
 
@@ -1866,13 +1947,13 @@ div#bottomButtons ul {
 
 div#bottomButtons ul li {
 	float: left;
+	margin-right: 10px;
+	position: relative;
+	top: 10px;
 }
 
 div#bottomButtons ul li a {
 	float: left;
-	margin-right: 10px;
-	position: relative;
-	top: 10px;
 }
 
 div#bottomButtons ul.buttonRight {
@@ -1959,6 +2040,40 @@ div#footerGlobal ul li.first {
 
 
 
+
+/* content list Styles Start */
+
+ul.contentList {
+	list-style: disc;
+	margin-left: 18px;
+}
+
+
+ul.contentList li {
+	line-height: 20px;
+}
+
+div#contentColumns div#contentLeft ul.contentList li p {
+	margin-bottom: 10px;
+	margin-top: 0px;
+}
+
+ul.contentList li img {
+	margin-right: 4px;
+	vertical-align: text-bottom;
+}
+
+ul.contentList ul {
+	list-style: circle;
+	margin-left: 28px;
+}
+
+ul.contentList strong {
+	font-weight: bold;	
+}
+
+
+/* content list Styles End */
 
 
 

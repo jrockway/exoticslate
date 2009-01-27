@@ -62,64 +62,13 @@ proto.clear_inner_text = function() {
     }
 }
 
-proto.enableThis = function() {
-    Wikiwyg.Mode.prototype.enableThis.call(this);
-    this.textarea.style.width = Wikiwyg.is_ie ? '98%' : '99%';
-    this.setHeightOfEditor();
-    this.enable_keybindings();
-    this.textarea.focus();
-
-    if (Wikiwyg.is_gecko) {
-        this.textarea.selectionStart = 0;
-        this.textarea.selectionEnd = 0;
-    }
-}
-
 proto.enableStarted = function() {
     jQuery(".table_buttons").addClass("disabled");
     jQuery('#st-mode-wikitext-button').addClass('disabled');
 }
 
-proto.setHeightOfEditor = function() {
-    var config = this.config;
-    var adjust = config.editHeightAdjustment;
-    var area   = this.textarea;
-
-    if ( Wikiwyg.is_safari) return area.setAttribute('rows', 25);
-
-    var text   = this.getTextArea() ;
-    var rows   = text.split(/\n/).length;
-
-    var height = parseInt(rows * adjust);
-    if (height < config.editHeightMinimum)
-        height = config.editHeightMinimum;
-
-    area.setAttribute('rows', height);
-}
-
 proto.toWikitext = function() {
     return this.getTextArea();
-}
-
-proto.toHtml = function(func) {
-    var wikitext = this.canonicalText();
-    this.convertWikitextToHtml(wikitext, func);
-}
-
-proto.canonicalText = function() {
-    var wikitext = this.getTextArea();
-    if (wikitext[wikitext.length - 1] != '\n')
-        wikitext += '\n';
-    return wikitext;
-}
-
-proto.fromHtml = function(html) {
-    this.setTextArea('Loading...');
-    var self = this;
-    this.convertHtmlToWikitext(
-        html,
-        function(value) { self.setTextArea(value) }
-    );
 }
 
 proto.getTextArea = function() {
@@ -128,11 +77,6 @@ proto.getTextArea = function() {
 
 proto.setTextArea = function(text) {
     this.textarea.value = text;
-}
-
-proto.convertWikitextToHtml = function(wikitext, func) {
-    alert('Wikitext changes cannot be converted to HTML\nWikiwyg.Wikitext.convertWikitextToHtml is not implemented here');
-    func(this.copyhtml);
 }
 
 proto.convertHtmlToWikitext = function(html, func) {
@@ -527,7 +471,6 @@ proto.do_h6 = klass.make_do('h6');
 proto.do_ordered = klass.make_do('ordered');
 proto.do_unordered = klass.make_do('unordered');
 proto.do_hr = klass.make_do('hr');
-proto.do_table = klass.make_do('table');
 proto.do_link = klass.make_do('link');
 
 proto.add_section_link = function() {
@@ -604,22 +547,6 @@ proto.get_selection_text = function() {
     } else {
         return "";
     }
-}
-
-proto.do_www = function() {
-    var  url =  prompt("Please enter a link", "Type in your link here");
-    var old = this.config.markupRules.www[1];
-    this.config.markupRules.www[1] += url + " ";
-
-    // do the transformation
-    var markup = this.config.markupRules['www'];
-    var handler = markup[0];
-    if (! this['markup_' + handler])
-        die('No handler for markup: "' + handler + '"');
-    this['markup_' + handler](markup);
-
-    // reset
-    this.config.markupRules.www[1] = old;
 }
 
 proto.selection_mangle = function(method) {
@@ -966,7 +893,6 @@ proto.format_bgsound = proto.skip;
 proto.format_big = proto.pass;
 proto.format_blink = proto.pass;
 proto.format_body = proto.pass;
-proto.format_br = proto.skip;
 proto.format_button = proto.skip;
 proto.format_caption = proto.pass;
 proto.format_center = proto.pass;
@@ -1015,7 +941,6 @@ proto.format_script = proto.skip;
 proto.format_sub = proto.pass;
 proto.format_submit = proto.skip;
 proto.format_sup = proto.pass;
-proto.format_tbody = proto.pass;
 proto.format_textarea = proto.skip;
 proto.format_tfoot = proto.pass;
 proto.format_thead = proto.pass;
@@ -1056,18 +981,6 @@ proto.squish_style_object_into_string = function(style) {
             string += css + ': ' + style[js] + '; ';
     });
     return string;
-}
-
-proto.COMMENT_NODE_TYPE = 8;
-proto.get_wiki_comment = function(element) {
-    for (var node = element.firstChild; node; node = node.nextSibling) {
-        if (node.nodeType == this.COMMENT_NODE_TYPE
-            && node.data.match(/^\s*wiki/)
-        ) {
-            return node;
-        }
-    }
-    return null;
 }
 
 proto.href_is_wiki_link = function(href) {
@@ -1197,7 +1110,9 @@ for (var ii in proto.markupRules) {
 }
 
 proto.canonicalText = function() {
-    var wikitext = Wikiwyg.Wikitext.prototype.canonicalText.call(this);
+    var wikitext = this.getTextArea();
+    if (wikitext[wikitext.length - 1] != '\n')
+        wikitext += '\n';
     return this.convert_tsv_sections(wikitext);
 }
 
@@ -1221,15 +1136,26 @@ proto.detab_table = function(text) {
 
 proto.enableThis = function() {
     this.wikiwyg.set_edit_tips_span_display('inline');
-    Wikiwyg.Wikitext.prototype.enableThis.call(this);
+
+    Wikiwyg.Mode.prototype.enableThis.call(this);
+    this.textarea.style.width = Wikiwyg.is_ie ? '98%' : '99%';
+    this.setHeightOfEditor();
+    this.enable_keybindings();
+    this.textarea.focus();
+
+    if (Wikiwyg.is_gecko) {
+        this.textarea.selectionStart = 0;
+        this.textarea.selectionEnd = 0;
+    }
+
     if (jQuery('#contentRight').is(':visible')) {
         jQuery('#st-page-maincontent').css('marginRight', '240px');
     }
 }
 
 proto.toHtml = function(func) {
-    this.wikiwyg.current_wikitext = this.canonicalText();
-    Wikiwyg.Wikitext.prototype.toHtml.call(this, func);
+    var wikitext = this.wikiwyg.current_wikitext = this.canonicalText();
+    this.convertWikitextToHtml(wikitext, func);
 }
 
 proto.fromHtml = function(html) {
@@ -1240,12 +1166,18 @@ proto.fromHtml = function(html) {
             return this.setTextArea(jQuery('#st-raw-wikitext-textarea').val());
         }
     }
-    Wikiwyg.Wikitext.prototype.fromHtml.call(this, html);
+
+    this.setTextArea('Loading...');
+    var self = this;
+    this.convertHtmlToWikitext(
+        html,
+        function(value) { self.setTextArea(value) }
+    );
 }
 
 proto.disableThis = function() {
     this.wikiwyg.set_edit_tips_span_display('none');
-    Wikiwyg.Wikitext.prototype.disableThis.call(this);
+    Wikiwyg.Mode.prototype.disableThis.call(this);
 }
 
 proto.setHeightOfEditor = function() {
@@ -2233,6 +2165,7 @@ proto.handle_wiki_link = function(label, href, elem) {
     }
 }
 
+proto.COMMENT_NODE_TYPE = 8;
 proto.get_wiki_comment = function(elem) {
     for (var node = elem.firstChild; node; node = node.nextSibling) {
         if (node.nodeType == this.COMMENT_NODE_TYPE

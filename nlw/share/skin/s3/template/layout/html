@@ -163,7 +163,7 @@
       <div id="workspaceContainer">
         <div id="workspaceNav">
           <ul>
-            <li>[% loc("Workspace:") %]
+            <li>[% loc("Workspace") %]:
               [% IF current_workspace.title != current_page.title || action %]
               <a href="/[% current_workspace.name %]" id="workspaceName" class="here">[% current_workspace.title %]</a>
               [% ELSE %]

@@ -543,7 +543,7 @@ if (! window.wikiwyg_nlw_debug)
 
 var WW_SIMPLE_MODE = 'Wikiwyg.Wysiwyg.Socialtext';
 var WW_ADVANCED_MODE = 'Wikiwyg.Wikitext';
-var WW_PREVIEW_MODE = 'Wikiwyg.Preview.Socialtext';
+var WW_PREVIEW_MODE = 'Wikiwyg.Preview';
 var WW_HTML_MODE = 'Wikiwyg.HTML';
 
 Wikiwyg.browserIsSupported = (
@@ -2950,46 +2950,6 @@ proto.exec_command = function(command, option) {
     }
     return(this.get_edit_document().execCommand(command, false, option));
 };
-
-/*==============================================================================
-Socialtext Preview subclass.
- =============================================================================*/
-proto = new Subclass(WW_PREVIEW_MODE, 'Wikiwyg.Preview');
-
-proto.enableStarted = function() {
-    jQuery('#st-edit-mode-container').addClass('preview');
-}
-
-proto.disableFinished = function() {
-    jQuery('#st-edit-mode-container').removeClass('preview');
-}
-
-proto.fromHtml = function(html) {
-    if (this.wikiwyg.previous_mode.classname.match(/Wysiwyg/)) {
-        var wikitext_mode = this.wikiwyg.modeByName(WW_ADVANCED_MODE);
-        var self = this;
-        wikitext_mode.convertHtmlToWikitext(
-            html,
-            function(wikitext) {
-                wikitext_mode.convertWikitextToHtml(
-                    wikitext,
-                    function(new_html) {
-                        self.wikiwyg.enable_edit_more();
-                        self.div.innerHTML = new_html;
-                        self.div.style.display = 'block';
-                        self.wikiwyg.enableLinkConfirmations();
-                    }
-                );
-            }
-        );
-    }
-    else {
-        this.wikiwyg.enable_edit_more();
-        this.div.innerHTML = html;
-        this.div.style.display = 'block';
-        this.wikiwyg.enableLinkConfirmations();
-    }
-}
 
 /*==============================================================================
 Socialtext Debugging code

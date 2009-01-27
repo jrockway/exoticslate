@@ -542,7 +542,7 @@ if (! window.wikiwyg_nlw_debug)
     window.wikiwyg_nlw_debug = false;
 
 var WW_SIMPLE_MODE = 'Wikiwyg.Wysiwyg.Socialtext';
-var WW_ADVANCED_MODE = 'Wikiwyg.Wikitext.Socialtext';
+var WW_ADVANCED_MODE = 'Wikiwyg.Wikitext';
 var WW_PREVIEW_MODE = 'Wikiwyg.Preview.Socialtext';
 var WW_HTML_MODE = 'Wikiwyg.HTML';
 
@@ -3004,7 +3004,7 @@ klass.run_formatting_test = function(div) {
     var html_text = pre_elements[0].innerHTML;
     var wiki_text = pre_elements[1].innerHTML;
     html_text = Wikiwyg.htmlUnescape(html_text);
-    var wikitext = new Wikiwyg.Wikitext.Socialtext();
+    var wikitext = new Wikiwyg.Wikitext();
     var result = wikitext.convert_html_to_wikitext(html_text);
     result = klass.ensure_newline_at_end_of_string(result);
     wiki_text = klass.ensure_newline_at_end_of_string(wiki_text);

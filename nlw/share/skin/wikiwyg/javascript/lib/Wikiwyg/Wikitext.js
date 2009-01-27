@@ -1113,7 +1113,7 @@ proto.initializeObject = function() {
 /*==============================================================================
 Socialtext Wikitext subclass.
  =============================================================================*/
-proto = new Subclass(WW_ADVANCED_MODE, 'Wikiwyg.Wikitext');
+// proto = new Subclass(WW_ADVANCED_MODE, 'Wikiwyg.Wikitext');
 
 /* Begin Widget */
 eval(WW_ADVANCED_MODE).prototype.setup_widgets = function() {

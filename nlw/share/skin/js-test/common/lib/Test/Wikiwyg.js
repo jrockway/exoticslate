@@ -60,7 +60,7 @@ proto.do_roundtrip = function(wikitext) {
     wysiwygObject.fromHtml(html);
 
     var html2 = wysiwygObject.get_inner_html();
-    var wikitextObject = new Wikiwyg.Wikitext.Socialtext();
+    var wikitextObject = new Wikiwyg.Wikitext();
     wikitextObject.wikiwyg = wysiwygObject.wikiwyg;
     wikitextObject.set_config();
     wikitextObject.initializeObject();
@@ -117,7 +117,7 @@ _make_wrappers(
     { replace_p_with_br: null }
 );
 _make_wrappers(
-    'Wikiwyg.Wikitext.Socialtext',
+    'Wikiwyg.Wikitext',
     { html_to_wikitext: 'convert_html_to_wikitext' }
 );
 
@@ -152,7 +152,7 @@ proto.dom_sanitize  = function(content) {
     var html = content;
     var dom = document.createElement('div');
     dom.innerHTML = html;
-    (new Wikiwyg.Wikitext.Socialtext()).normalizeDomStructure(dom);
+    (new Wikiwyg.Wikitext()).normalizeDomStructure(dom);
     var html2 = dom.innerHTML;
     if (! html2.match(/\n$/))
         html2 += '\n';

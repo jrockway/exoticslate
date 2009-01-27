@@ -9,7 +9,7 @@ t.runAsync([
     t.doRichtextEdit(),
 
     function() { 
-        var ww = t.iframe.contentWindow.Wikiwyg.Wysiwyg.Socialtext.prototype;
+        var ww = t.iframe.contentWindow.Wikiwyg.Wysiwyg.prototype;
         var img = $(
             t.$('#st-page-editing-wysiwyg').get(0).contentWindow.document.documentElement
         ).find('img').get(0);

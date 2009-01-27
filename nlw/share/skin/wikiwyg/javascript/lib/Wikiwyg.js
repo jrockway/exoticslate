@@ -78,7 +78,7 @@ proto = new Subclass('Wikiwyg');
 
 Wikiwyg.VERSION = '3.00';
 
-var WW_SIMPLE_MODE = 'Wikiwyg.Wysiwyg.Socialtext';
+var WW_SIMPLE_MODE = 'Wikiwyg.Wysiwyg';
 var WW_ADVANCED_MODE = 'Wikiwyg.Wikitext';
 var WW_PREVIEW_MODE = 'Wikiwyg.Preview';
 var WW_HTML_MODE = 'Wikiwyg.HTML';

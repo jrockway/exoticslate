@@ -161,16 +161,15 @@ proto.fromHtml = function(html) {
         }
         html = this.assert_padding_around_block_elements(html);
         html = this.assert_padding_between_block_elements(html);
-
-        var dom = document.createElement('div');
-        dom.innerHTML = html;
-        this.sanitize_dom(dom);
-        this.set_inner_html(dom.innerHTML);
     }
     else {
         html = this.replace_p_with_br(html);
-        Wikiwyg.Wysiwyg.prototype.fromHtml.call(this, html);
     }
+
+    var dom = document.createElement('div');
+    dom.innerHTML = html;
+    this.sanitize_dom(dom);
+    this.set_inner_html(dom.innerHTML);
 
     this.setWidgetHandlers();
 }
@@ -316,7 +315,7 @@ proto.toHtml = function(func) {
         func(html);
     }
     else {
-        Wikiwyg.Wysiwyg.prototype.toHtml.call(this, func);
+        func(this.get_inner_html());
     }
 
     clearInterval( this._fixer_interval_id );
@@ -425,7 +424,7 @@ proto.revert_widget_images = function() {
 }
 
 proto.sanitize_dom = function(dom) {
-    Wikiwyg.Wysiwyg.prototype.sanitize_dom.call(this, dom);
+    Wikiwyg.Mode.prototype.sanitize_dom.call(this, dom);
     this.widget_walk(dom);
 }
 

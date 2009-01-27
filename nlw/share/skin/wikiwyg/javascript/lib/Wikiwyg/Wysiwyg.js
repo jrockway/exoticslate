@@ -50,13 +50,6 @@ proto.initializeObject = function() {
     }
 }
 
-proto.fromHtml = function(html) {
-    var dom = document.createElement('div');
-    dom.innerHTML = html;
-    this.sanitize_dom(dom);
-    this.set_inner_html(dom.innerHTML);
-}
-
 proto.toHtml = function(func) {
     func(this.get_inner_html());
 }
@@ -69,36 +62,6 @@ proto.fix_up_relative_imgs = function() {
     var imgs = this.get_edit_document().getElementsByTagName('img');
     for (var ii = 0; ii < imgs.length; ++ii)
         imgs[ii].src = imgs[ii].src.replace(/^\//, base);
-}
-
-proto.enableThis = function() {
-    Wikiwyg.Mode.prototype.enableThis.call(this);
-    this.edit_iframe.style.border = '1px black solid';
-    this.edit_iframe.width = '99%';
-    this.setHeightOf(this.edit_iframe);
-    this.fix_up_relative_imgs();
-
-    var self = this;
-    var ready = function() {
-        if (!self.is_ready)
-            self.fromHtml( self.wikiwyg.div.innerHTML );
-        self.get_edit_document().designMode = 'on';
-        self.enable_keybindings();
-        self.set_clear_handler();
-
-        if (Wikiwyg.is_gecko) {
-            setTimeout(function() {
-                self.get_edit_document().execCommand("enableObjectResizing", false, false);
-                self.get_edit_document().execCommand("enableInlineTableEditing", false, false);
-            }, 100);
-        }
-
-        self.is_ready = true;
-    };
-    if (self.is_ready)
-        ready();
-    else
-        self.get_edit_window().onload = ready;
 }
 
 proto.clear_inner_html = function() {
@@ -541,7 +504,6 @@ General Public License for more details.
 /*==============================================================================
 Socialtext Wysiwyg subclass.
  =============================================================================*/
-proto = new Subclass(WW_SIMPLE_MODE, 'Wikiwyg.Wysiwyg');
 
 proto.process_command = function(command) {
     command = command
@@ -613,9 +575,33 @@ proto.set_paste_handler = function() {
 }
 
 proto.enableThis = function() {
-    Wikiwyg.Wysiwyg.prototype.enableThis.apply(this, arguments);
+    Wikiwyg.Mode.prototype.enableThis.call(this);
+    this.edit_iframe.style.border = '1px black solid';
+    this.edit_iframe.width = '99%';
+    this.setHeightOf(this.edit_iframe);
+    this.fix_up_relative_imgs();
 
     var self = this;
+    var ready = function() {
+        if (!self.is_ready)
+            self.fromHtml( self.wikiwyg.div.innerHTML );
+        self.get_edit_document().designMode = 'on';
+        self.enable_keybindings();
+        self.set_clear_handler();
+
+        if (Wikiwyg.is_gecko) {
+            setTimeout(function() {
+                self.get_edit_document().execCommand("enableObjectResizing", false, false);
+                self.get_edit_document().execCommand("enableInlineTableEditing", false, false);
+            }, 100);
+        }
+
+        self.is_ready = true;
+    };
+    if (self.is_ready)
+        ready();
+    else
+        self.get_edit_window().onload = ready;
 
     setTimeout(function() {
         try {
@@ -755,7 +741,10 @@ proto.set_clear_handler = function () {
 
 proto.fromHtml = function(html) {
     this.show_messages(html);
-    Wikiwyg.Wysiwyg.prototype.fromHtml.call(this, html);
+    var dom = document.createElement('div');
+    dom.innerHTML = html;
+    this.sanitize_dom(dom);
+    this.set_inner_html(dom.innerHTML);
 }
 
 proto.show_messages = function(html) {

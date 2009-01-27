@@ -70,7 +70,7 @@ proto.do_roundtrip = function(wikitext) {
 proto.create_wysiwyg_object = function(html) {
     var wikiwyg = new Wikiwyg();
     wikiwyg.set_config();
-    var wysiwyg = new Wikiwyg.Wysiwyg.Socialtext();
+    var wysiwyg = new Wikiwyg.Wysiwyg();
     wysiwyg.show_messages = function() {};
     wysiwyg.config.iframeId = "wikiwyg_iframe";
     wysiwyg.wikiwyg = wikiwyg;
@@ -113,7 +113,7 @@ function _make_wrappers (base, methods) {
 };
 
 _make_wrappers(
-    'Wikiwyg.Wysiwyg.Socialtext',
+    'Wikiwyg.Wysiwyg',
     { replace_p_with_br: null }
 );
 _make_wrappers(

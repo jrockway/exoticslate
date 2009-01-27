@@ -54,16 +54,6 @@ proto.toHtml = function(func) {
     func(this.get_inner_html());
 }
 
-// This is needed to work around the broken IMGs in Firefox design mode.
-// Works harmlessly on IE, too.
-// TODO - IMG URLs that don't match /^\//
-proto.fix_up_relative_imgs = function() {
-    var base = location.href.replace(/(.*?:\/\/.*?\/).*/, '$1');
-    var imgs = this.get_edit_document().getElementsByTagName('img');
-    for (var ii = 0; ii < imgs.length; ++ii)
-        imgs[ii].src = imgs[ii].src.replace(/^\//, base);
-}
-
 proto.clear_inner_html = function() {
     var inner_html = this.get_inner_html();
     var clear = this.config.clearRegex;
@@ -71,21 +61,6 @@ proto.clear_inner_html = function() {
     if (clear && inner_html.match(clear))
         this.set_inner_html('\n');
 }
-
-proto.set_clear_handler = function () {
-    var self = this;
-    this.get_edit_iframe().contentWindow.addEventListener(
-        'click',
-        function () { self.clear_inner_html() },
-        false
-    );
-    this.get_edit_iframe().contentWindow.addEventListener(
-        'keydown',
-        function () { self.clear_inner_html() },
-        false
-    );
-}
-
 
 proto.get_keybinding_area = function() {
     return this.get_edit_document();
@@ -208,16 +183,6 @@ proto.apply_linked_stylesheet = function(style, head) {
     head.appendChild(link);
 }
 
-proto.process_command = function(command) {
-    if (this['do_' + command])
-        this['do_' + command](command);
-    this.get_edit_window().focus();
-}
-
-proto.exec_command = function(command, option) {
-    this.get_edit_document().execCommand(command, false, option);
-}
-
 proto.format_command = function(command) {
     this.exec_command('formatblock', '<' + command + '>');
 }
@@ -247,19 +212,6 @@ proto.do_h4 = proto.format_command;
 proto.do_h5 = proto.format_command;
 proto.do_h6 = proto.format_command;
 proto.do_pre = proto.format_command;
-proto.do_p = proto.format_command;
-
-proto.do_table = function() {
-    var html =
-        '<table><tbody>' +
-        '<tr><td>A</td>' +
-            '<td>B</td>' +
-            '<td>C</td></tr>' +
-        '<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>' +
-        '<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>' +
-        '</tbody></table>';
-    this.insert_html(html);
-}
 
 proto.insert_html = function(html) { // See IE
     this.get_edit_window().focus();
@@ -267,21 +219,6 @@ proto.insert_html = function(html) { // See IE
 }
 
 proto.do_unlink = proto.exec_command;
-
-proto.do_link = function() {
-    var selection = this.get_link_selection_text();
-    if (! selection) return;
-    var url;
-    var match = selection.match(/(.*?)\b((?:http|https|ftp|irc|file):\/\/\S+)(.*)/);
-    if (match) {
-        if (match[1] || match[3]) return null;
-        url = match[2];
-    }
-    else {
-        url = '?' + escape(selection);
-    }
-    this.exec_command('createlink', url);
-}
 
 proto.do_www = function() {
     var selection = this.get_link_selection_text();
@@ -293,15 +230,6 @@ proto.do_www = function() {
 
 proto.get_selection_text = function() { // See IE, below
     return this.get_edit_window().getSelection().toString();
-}
-
-proto.get_link_selection_text = function() {
-    var selection = this.get_selection_text();
-    if (! selection) {
-        alert("Please select the text you would like to turn into a link.");
-        return;
-    }
-    return selection;
 }
 
 /*==============================================================================
@@ -345,12 +273,6 @@ proto.remove_padding_material = function(html) {
 
     return dom.innerHTML;
 }
-
-proto.process_command = function(command) {
-    if (this['do_' + command])
-        this['do_' + command](command);
-}
-
 
 proto.get_edit_window = function() {
     return this.edit_iframe;

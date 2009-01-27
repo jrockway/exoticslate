@@ -106,8 +106,10 @@ Wikiwyg.is_konqueror = (
 )
 Wikiwyg.browserIsSupported = (
     Wikiwyg.is_gecko ||
-    Wikiwyg.is_ie
+    Wikiwyg.is_ie ||
+    Wikiwyg.is_safari
 );
+
 
 // Wikiwyg environment setup public methods
 proto.createWikiwygArea = function(div, config) {
@@ -960,12 +962,6 @@ String.prototype.ucFirst = function () {
     return this.substr(0,1).toUpperCase() + this.substr(1,this.length);
 }
 
-Wikiwyg.browserIsSupported = (
-    Wikiwyg.is_gecko ||
-    Wikiwyg.is_ie ||
-    Wikiwyg.is_safari
-);
-
 Wikiwyg.is_old_firefox = (
     Wikiwyg.ua.indexOf('firefox/1.0.7') != -1 &&
     Wikiwyg.ua.indexOf('safari') == -1 &&
@@ -1483,8 +1479,6 @@ proto.display_unsupported_toolbar_buttons = function(display) {
     }
 }
 
-proto.enableStarted = function() {}
-proto.enableFinished = function() {}
 proto.disableStarted = function() {}
 proto.disableFinished = function() {}
 
@@ -1527,17 +1521,6 @@ proto.get_key_press_function = function() {
             self.process_command(command);
         }
     };
-}
-
-proto.get_edit_height = function() {
-    var height = parseInt(
-        this.wikiwyg.divHeight *
-        this.config.editHeightAdjustment
-    );
-    var min = this.config.editHeightMinimum;
-    return height < min
-        ? min
-        : height;
 }
 
 proto.setHeightOf = function(elem) {
@@ -1608,7 +1591,6 @@ proto.sanitize_dom = function(dom) {
 /*==============================================================================
 Mode class generic overrides.
  =============================================================================*/
-proto = Wikiwyg.Mode.prototype;
 
 // magic constant to make sure edit window does not scroll off page
 proto.footer_offset = Wikiwyg.is_ie ? 0 : 20;

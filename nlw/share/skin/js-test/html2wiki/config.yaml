@@ -17,7 +17,6 @@ import_libs:
 #   - ../../common/javascript/Widget.Lightbox-0.06/lib/Widget/Lightbox.js
   - ../../wikiwyg/javascript/lib/Wikiwyg.js
   - ../../wikiwyg/javascript/lib/Wikiwyg/Wysiwyg.js
-  - ../../wikiwyg/javascript/Wikiwyg/Socialtext.js
   - ../../wikiwyg/javascript/Widgets.js 
   - ../../wikiwyg/javascript/Wikiwyg/Widgets.js
-  - ../../wikiwyg/javascript/Wikiwyg/Wikitext/Socialtext.js
+  - ../../wikiwyg/javascript/lib/Wikiwyg/Wikitext.js

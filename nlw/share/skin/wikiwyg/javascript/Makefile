@@ -15,11 +15,10 @@ EDITOR_SOURCE_FILES= \
 		lib/Wikiwyg/Preview.js \
 		lib/Wikiwyg/Wysiwyg.js \
 		lib/Wikiwyg/HTML.js \
-		Wikiwyg/Socialtext.js \
 		Widgets.js \
 		Wikiwyg/Widgets.js \
 		Wikiwyg/MessageCenter.js \
-		Wikiwyg/Wikitext/Socialtext.js \
+		lib/Wikiwyg/Wikitext.js \
 		Wikiwyg/DataValidator.js \
 		wikiwyg.js \
 

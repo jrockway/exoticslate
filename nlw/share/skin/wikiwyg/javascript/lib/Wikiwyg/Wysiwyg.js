@@ -997,7 +997,7 @@ Socialtext Wikiwyg subclass
 proto = new Subclass('Wikiwyg.Socialtext', 'Wikiwyg');
 
 proto.default_config = {
-    toolbarClass: 'Wikiwyg.Toolbar.Socialtext',
+    toolbarClass: 'Wikiwyg.Toolbar',
     modeClasses: [ WW_SIMPLE_MODE, WW_ADVANCED_MODE, WW_PREVIEW_MODE ]
 }
 
@@ -1876,102 +1876,6 @@ proto.create_link_wafl = function(label, workspace, pagename, section) {
     wafl += "}";
     return wafl;
 }
-
-/*==============================================================================
-Socialtext Wikiwyg Toolbar subclass
- =============================================================================*/
-proto = new Subclass('Wikiwyg.Toolbar.Socialtext', 'Wikiwyg.Toolbar');
-
-proto.imagesExtension = '.png';
-
-proto.controlLayout = [
-    '{other_buttons',
-    'bold', 'italic', 'strike', '|',
-    'h1', 'h2', 'h3', 'h4', 'p', '|',
-    'ordered', 'unordered', 'outdent', 'indent', '|',
-    'link', 'image', 'table', '|',
-    '}',
-    '{table_buttons disabled',
-    'add-row-below', 'add-row-above',
-    'move-row-down', 'move-row-up',
-    'del-row',
-    '|',
-    'add-col-left', 'add-col-right',
-    'move-col-left', 'move-col-right',
-    'del-col',
-    '}'
-];
-
-proto.controlLabels = {
-    attach: loc('Link to Attachment'),
-    bold: loc('Bold') + ' (Ctrl+b)',
-    cancel: loc('Cancel'),
-    h1: loc('Heading 1'),
-    h2: loc('Heading 2'),
-    h3: loc('Heading 3'),
-    h4: loc('Heading 4'),
-    h5: loc('Heading 5'),
-    h6: loc('Heading 6'),
-    help: loc('About Wikiwyg'),
-    hr: loc('Horizontal Rule'),
-    image: loc('Include an Image'),
-    indent: loc('More Indented'),
-    italic: loc('Italic') + '(Ctrl+i)',
-    label: loc('[Style]'),
-    link: loc('Create Link'),
-    ordered: loc('Numbered List'),
-    outdent: loc('Less Indented'),
-    p: loc('Normal Text'),
-    pre: loc('Preformatted'),
-    save: loc('Save'),
-    strike: loc('Strike Through') + '(Ctrl+d)',
-    table: loc('New Table'),
-    'add-row-above': loc('Add Table Row Above Current Row'),
-    'add-row-below': loc('Add Table Row Below Current Row'),
-    'add-col-left': loc('Add Table Column to the Left'),
-    'add-col-right': loc('Add Table Column to the Right'),
-    'del-row': loc('Delete Current Table Row'),
-    'del-col': loc('Delete Current Table Column'),
-    'move-row-up': loc('Move Current Table Row Up'),
-    'move-row-down': loc('Move Current Table Row Down'),
-    'move-col-left': loc('Move Current Table Column to the Left'),
-    'move-col-right': loc('Move Current Table Column to the Right'),
-    underline: loc('Underline') + '(Ctrl+u)',
-    unlink: loc('Unlink'),
-    unordered: loc('Bulleted List')
-};
-
-proto.resetModeSelector = function() {
-    this.wikiwyg.disable_button(this.wikiwyg.first_mode.classname);
-}
-
-proto.add_styles = function() {
-    var options = this.config.styleSelector;
-    var labels = this.config.controlLabels;
-
-    this.styleSelect = document.createElement('select');
-    this.styleSelect.className = 'wikiwyg_selector';
-    if (this.config.selectorWidth)
-        this.styleSelect.style.width = this.config.selectorWidth;
-
-    for (var i = 0; i < options.length; i++) {
-        var value = options[i];
-        var option = Wikiwyg.createElementWithAttrs(
-            'option', { 'value': value }
-        );
-        var labelValue = labels[value] || value;
-        var labelValue = labelValue.replace(/\\'/g, "'"); 
-        var text = loc(labelValue);
-        option.appendChild(document.createTextNode(text));
-        this.styleSelect.appendChild(option);
-    }
-    var self = this;
-    this.styleSelect.onchange = function() { 
-        self.set_style(this.value) 
-    };
-    this.div.appendChild(this.styleSelect);
-}
-
 
 /*==============================================================================
 Socialtext Wysiwyg subclass.

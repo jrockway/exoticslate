@@ -228,15 +228,6 @@ proto.addControlItem = function(text, method) {
     this.div.appendChild(span);
 }
 
-proto.resetModeSelector = function() {
-    if (this.firstModeRadio) {
-        var temp = this.firstModeRadio.onclick;
-        this.firstModeRadio.onclick = null;
-        this.firstModeRadio.click();
-        this.firstModeRadio.onclick = temp;
-    }
-}
-
 proto.addModeSelector = function() {
     var span = document.createElement('span');
 
@@ -280,6 +271,77 @@ proto.add_break = function() {
     this.div.appendChild(document.createElement('br'));
 }
 
+proto.set_style = function(style_name) {
+    var idx = this.styleSelect.selectedIndex;
+    // First one is always a label
+    if (idx != 0)
+        this.wikiwyg.current_mode.process_command(style_name);
+    this.styleSelect.selectedIndex = 0;
+}
+
+proto.imagesExtension = '.png';
+
+proto.controlLayout = [
+    '{other_buttons',
+    'bold', 'italic', 'strike', '|',
+    'h1', 'h2', 'h3', 'h4', 'p', '|',
+    'ordered', 'unordered', 'outdent', 'indent', '|',
+    'link', 'image', 'table', '|',
+    '}',
+    '{table_buttons disabled',
+    'add-row-below', 'add-row-above',
+    'move-row-down', 'move-row-up',
+    'del-row',
+    '|',
+    'add-col-left', 'add-col-right',
+    'move-col-left', 'move-col-right',
+    'del-col',
+    '}'
+];
+
+proto.controlLabels = {
+    attach: loc('Link to Attachment'),
+    bold: loc('Bold') + ' (Ctrl+b)',
+    cancel: loc('Cancel'),
+    h1: loc('Heading 1'),
+    h2: loc('Heading 2'),
+    h3: loc('Heading 3'),
+    h4: loc('Heading 4'),
+    h5: loc('Heading 5'),
+    h6: loc('Heading 6'),
+    help: loc('About Wikiwyg'),
+    hr: loc('Horizontal Rule'),
+    image: loc('Include an Image'),
+    indent: loc('More Indented'),
+    italic: loc('Italic') + '(Ctrl+i)',
+    label: loc('[Style]'),
+    link: loc('Create Link'),
+    ordered: loc('Numbered List'),
+    outdent: loc('Less Indented'),
+    p: loc('Normal Text'),
+    pre: loc('Preformatted'),
+    save: loc('Save'),
+    strike: loc('Strike Through') + '(Ctrl+d)',
+    table: loc('New Table'),
+    'add-row-above': loc('Add Table Row Above Current Row'),
+    'add-row-below': loc('Add Table Row Below Current Row'),
+    'add-col-left': loc('Add Table Column to the Left'),
+    'add-col-right': loc('Add Table Column to the Right'),
+    'del-row': loc('Delete Current Table Row'),
+    'del-col': loc('Delete Current Table Column'),
+    'move-row-up': loc('Move Current Table Row Up'),
+    'move-row-down': loc('Move Current Table Row Down'),
+    'move-col-left': loc('Move Current Table Column to the Left'),
+    'move-col-right': loc('Move Current Table Column to the Right'),
+    underline: loc('Underline') + '(Ctrl+u)',
+    unlink: loc('Unlink'),
+    unordered: loc('Bulleted List')
+};
+
+proto.resetModeSelector = function() {
+    this.wikiwyg.disable_button(this.wikiwyg.first_mode.classname);
+}
+
 proto.add_styles = function() {
     var options = this.config.styleSelector;
     var labels = this.config.controlLabels;
@@ -290,11 +352,14 @@ proto.add_styles = function() {
         this.styleSelect.style.width = this.config.selectorWidth;
 
     for (var i = 0; i < options.length; i++) {
-        value = options[i];
+        var value = options[i];
         var option = Wikiwyg.createElementWithAttrs(
             'option', { 'value': value }
         );
-        option.appendChild(document.createTextNode(labels[value] || value));
+        var labelValue = labels[value] || value;
+        var labelValue = labelValue.replace(/\\'/g, "'"); 
+        var text = loc(labelValue);
+        option.appendChild(document.createTextNode(text));
         this.styleSelect.appendChild(option);
     }
     var self = this;
@@ -302,12 +367,4 @@ proto.add_styles = function() {
         self.set_style(this.value) 
     };
     this.div.appendChild(this.styleSelect);
-}
-
-proto.set_style = function(style_name) {
-    var idx = this.styleSelect.selectedIndex;
-    // First one is always a label
-    if (idx != 0)
-        this.wikiwyg.current_mode.process_command(style_name);
-    this.styleSelect.selectedIndex = 0;
 }

@@ -67,7 +67,7 @@ Wikiwyg.Widgets.mapMultipleSameWidgets = function(widget_parse) {
 }
 
 // Shortcut globals.
-proto = Wikiwyg.Toolbar.Socialtext.prototype;
+proto = Wikiwyg.Toolbar.prototype;
 
 proto.setup_widgets = function() {
     this.setup_widgets_menu(loc('Insert'));

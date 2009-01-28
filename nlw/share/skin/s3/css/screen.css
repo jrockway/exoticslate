@@ -2199,3 +2199,11 @@ body div#globalNav div input.searchText {
     text-align: center;
     display: none;
 }
+
+ul li.flexButtonBlue a.addButton {
+    background: url(../images/addFlexButtonBlue.png) no-repeat;
+}
+
+ul li.flexButtonBlue a.addButton:hover {
+    background-position: bottom left;
+}

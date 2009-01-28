@@ -90,6 +90,10 @@ Wikiwyg.is_ie = (
     Wikiwyg.ua.indexOf("opera") == -1 && 
     Wikiwyg.ua.indexOf("webtv") == -1
 );
+Wikiwyg.is_ie7 = (
+    Wikiwyg.is_ie &&
+    Wikiwyg.ua.indexOf("7.0") != -1
+);
 Wikiwyg.is_gecko = (
     Wikiwyg.ua.indexOf('gecko') != -1 &&
     Wikiwyg.ua.indexOf('safari') == -1 &&

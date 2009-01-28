@@ -368,3 +368,78 @@ proto.add_styles = function() {
     };
     this.div.appendChild(this.styleSelect);
 }
+
+proto.setup_widgets = function() {
+    this.setup_widgets_menu(loc('Insert'));
+}
+
+proto.setup_widgets_menu = function(title) {
+    jQuery("#st-editing-insert-menu > li")
+        .find("li:has('ul') > a")
+        .addClass('daddy');
+    if (jQuery.browser.msie) {
+        jQuery("#st-editing-insert-menu li")
+            .hover(
+                function () { jQuery(this).addClass('sfhover') }, 
+                function () { jQuery(this).removeClass('sfhover') }
+            );
+    }
+
+    var self = this;
+    if (jQuery.browser.msie) {
+        jQuery("#st-editing-insert-menu > li > ul a").mouseover(function(){
+            if (self.wikiwyg.current_mode.get_editable_div) {
+                self._currentModeHadFocus = wikiwyg.current_mode._hasFocus;
+            }
+        });
+    }
+    jQuery("#st-editing-insert-menu > li > ul a").click(
+        function(e) {
+            var action = jQuery(this).attr("do");
+            if (action == null) {
+                return false;
+            }
+
+            if (jQuery.isFunction( self.wikiwyg.current_mode[action] ) ) {
+                if (jQuery.browser.msie &&
+                    self.wikiwyg.current_mode.get_editable_div
+                ) {
+                    if (!self._currentModeHadFocus) {
+                        self.wikiwyg.current_mode.set_focus();
+                    }
+                }
+
+                self.wikiwyg.current_mode[action]
+                    .apply(self.wikiwyg.current_mode);
+
+                self.focus_link_menu(action, e.target.innerHTML)
+
+                return false;
+            }
+
+            var self2 = this;
+            setTimeout(function() {
+                alert("'" +
+                    jQuery(self2).text() +
+                    "' is not supported in this mode"
+                );
+            }, 50);
+            return false;
+        }
+    );
+}
+
+proto.focus_link_menu = function(action, label) {
+    if (! (
+        action.match(/^do_widget_link2/)
+        &&
+        label.match(/^(Wiki|Web|Section)/)
+    )) return;
+
+    type = RegExp.$1.toLowerCase();
+    jQuery("#add-" + type + "-link")
+        .attr("checked", "checked");
+    jQuery("#add-" + type + "-link-section")
+        .find('input[type="text"]:eq(0)').focus().end()
+        .find('input[type="text"][value]:eq(0)').focus().select();
+}

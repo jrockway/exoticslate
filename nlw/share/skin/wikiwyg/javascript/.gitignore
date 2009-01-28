@@ -1,5 +1,6 @@
 Widgets.js
 !Wikiwyg/Widget.js
+!lib/Wikiwyg/Widgets.js
 
 WikiwygJemplate.js
 jemplate/insert_widget_menu

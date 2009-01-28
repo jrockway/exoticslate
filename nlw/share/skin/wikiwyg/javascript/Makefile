@@ -11,12 +11,12 @@ EDITOR_SOURCE_FILES= \
 		$(JEMPLATE_WIKIWYG_MODULE) \
 		$(JEMPLATE_MODULE) \
 		lib/Wikiwyg.js \
+		Widgets.js \
+		lib/Wikiwyg/Widgets.js \
 		lib/Wikiwyg/Toolbar.js \
 		lib/Wikiwyg/Preview.js \
 		lib/Wikiwyg/Wysiwyg.js \
 		lib/Wikiwyg/HTML.js \
-		Widgets.js \
-		Wikiwyg/Widgets.js \
 		Wikiwyg/MessageCenter.js \
 		lib/Wikiwyg/Wikitext.js \
 		Wikiwyg/DataValidator.js \

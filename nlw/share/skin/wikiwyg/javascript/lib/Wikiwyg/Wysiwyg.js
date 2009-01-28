@@ -661,14 +661,6 @@ proto.set_clear_handler = function () {
     } catch (e) {};
 }
 
-proto.fromHtml = function(html) {
-    this.show_messages(html);
-    var dom = document.createElement('div');
-    dom.innerHTML = html;
-    this.sanitize_dom(dom);
-    this.set_inner_html(dom.innerHTML);
-}
-
 proto.show_messages = function(html) {
     var advanced_link = this.advanced_link_html();
     var message_titles = {
@@ -1481,7 +1473,6 @@ var widgets_list = Wikiwyg.Widgets.widgets;
 var widget_data = Wikiwyg.Widgets.widget;
 
 proto.fromHtml = function(html) {
-    // TODO Move this to Wikiwyg.Wysiwyg
     if (Wikiwyg.is_ie) {
         html = html.replace(/<DIV class=wiki>([\s\S]*)<\/DIV>/gi, "$1");
 

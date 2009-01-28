@@ -516,10 +516,21 @@ sub tags_for_page {
 
 sub search {
     my $self = shift;
-    my $term = shift;
+    my %p = (
+        search_term => undef,
+        sortby => 'Relevance',
+        @_
+    );
 
-    $self->hub->search->search_for_term(search_term => $term);
-    return $self->hub->search->result_set;
+    $p{sortby} ||= 'Relevance';
+    $self->hub->search->sortby( $p{sortby} );
+    # load the search result which may or may not be cached.
+    my $set =  $self->hub->search->get_result_set(
+       search_term => $p{search_term},
+       scope       => '_',
+    );
+    my $rset = $self->hub->search->result_set($set);
+    return $rset;
 }
 
 sub is_hook_enabled {

@@ -1397,7 +1397,6 @@ body div#controls div#st-editing-tools-edit ul li a.disabled {
 /* Default font settings.
 The font-size percentage is of 16px. (0.75 * 16px = 12px) */
 .wiki {
-    color: #222;
     font-size:110% ! important;
     line-height: 1.2 ! important;
 }

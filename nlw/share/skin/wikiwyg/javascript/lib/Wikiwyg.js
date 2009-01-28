@@ -299,6 +299,18 @@ proto.resizeEditor = function () {
         this.modeByName(WW_SIMPLE_MODE).setHeightOf(
             this.modeByName(WW_SIMPLE_MODE).edit_iframe
         );
+
+        if (jQuery.browser.msie) {
+            setTimeout(function() {
+                try {
+                    var s = $iframe.get(0).contentWindow.document.body.style;
+                    s.zoom = 0;
+                    s.zoom = 1;
+                } catch(e) {
+                    setTimeout(arguments.callee, 1000);
+                }
+            }, 1);
+        }
     }
     else if ($textarea.is(":visible")) {
         this.modeByName(WW_ADVANCED_MODE).setHeightOfEditor();

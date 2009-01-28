@@ -363,7 +363,7 @@ $(function() {
         $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Normal View")).text(loc("Normal"));
         $('#st-edit-mode-container, #mainWrap').addClass("expanded");
 
-        $("iframe#st-page-editing-wysiwyg").width( $('#st-edit-mode-view').width() - 48 );
+        $(window).trigger("resize");
         return false;
     };
     Socialtext.ui_expand_off = function() {
@@ -372,7 +372,6 @@ $(function() {
 
         $("iframe#st-page-editing-wysiwyg").width( $('#st-edit-mode-view').width() - 48 );
 
-        // Force ie6 to "repaint" the document after #mainWrap width change.
         $(window).trigger("resize");
         return false;
     };

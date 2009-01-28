@@ -1,7 +1,7 @@
 [%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% USE JSON %]
-<script charset="utf-8" type="text/javascript" language="JavaScript">
+<script charset="utf-8" type="text/javascript">
 
 var Socialtext = Socialtext || {};
 Socialtext.version = "[% app_version %]";
@@ -93,7 +93,7 @@ function createPageObject() {
 }
 [% END %]
 
-<script>
+<script type="text/javascript">
 (function() {
 var v = Socialtext.wikiwyg_variables = {};
 v.dropshadow = "[% dropshadow %]";

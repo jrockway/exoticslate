@@ -1342,12 +1342,31 @@ proto.convert_html_to_wikitext = function(html, isWholeDocument) {
         var dom = document.createElement("div");
         dom.innerHTML = html;
 
+        /* Turn visual LIs (bullet chars) into real LIs */
         var cur;
         while (cur = $(dom).find(
             'p.ListParagraphCxSpFirst:first, p.MsoListParagraphCxSpFirst:first'
         )[0]) {
             $(cur).replaceWith( self.build_msoffice_list(cur) );
         }
+        $(dom).find('._st_walked').removeClass('_st_walked');
+
+        /* Turn visual BRs (P[margin-bottom < 1px]) into real BRs */
+        while (cur = $(dom).find('p:not(._st_walked)')[0]) {
+            var $cur = $(cur);
+            if (self._css_to_px($cur.css('margin-bottom')) < 1) {
+                var next = self._get_next_node(cur);
+                if (next && next.nodeType == 1 && next.nodeName == 'P') {
+                    var $next = $(next);
+                    $cur.css('margin-bottom', $next.css('margin-bottom'));
+                    $cur.append('<br />' + $next.html());
+                    $next.remove();
+                    continue;
+                }
+            }
+            $cur.addClass('_st_walked');
+        }
+        $(dom).find('._st_walked').removeClass('_st_walked');
 
         // This needs to be done by hand for IE.
         // jQuery().replaceWith considered dangerous in IE.
@@ -1604,6 +1623,9 @@ proto._css_to_px = function(val) {
     }
     else if (val.match(/^-?([\.\d]+)ex/)) {
         return Number(RegExp.$1) * 6;
+    }
+    else if (val.match(/^-?([\.\d]+)pt/)) {
+        return Number(RegExp.$1) * 4 / 3;
     }
     return undefined;
 }

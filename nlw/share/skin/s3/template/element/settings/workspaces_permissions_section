@@ -13,6 +13,7 @@
     <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "member-only" %]checked="1"[% END %] value="member-only" />
     <strong>[% loc('Private') %]</strong> - [% loc('only invited users can access the workspace') %]
   </dd>
+  <dd>
     <input type="radio" name="permission_set_name" [% IF current_permission_set_name == "public-authenticate-to-edit" %]checked="1"[% END %] value="public-authenticate-to-edit" />
     <strong>[% loc('Public login-to-edit') %]</strong> - [% loc('anybody can see the workspace, users can register to be able to edit') %]
   </dd>

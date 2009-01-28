@@ -670,6 +670,25 @@ li.flexButtonBlue:hover {
 	background-position: top right;
 }
 
+li.flexButtonGrey {
+	background: url(../images/flexButtonGrey.png) no-repeat;
+	background-position: bottom right;
+        margin-left: 10px;
+}
+
+ul li a.greyButton {
+        display: block;
+        color: #fff;
+        font-weight: bold;
+        height: 22px;
+        padding-right: 14px;
+        background: url(../images/greyButton.png) no-repeat;
+        background-position: bottom left;
+        line-height:20px;
+        margin-left: -5px;
+        text-indent: 10px;
+}
+
 a.editButton {
 	display: block;
 	color: #fff;

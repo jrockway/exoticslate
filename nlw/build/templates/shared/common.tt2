@@ -100,7 +100,6 @@ AddDefaultCharset utf-8
     # Detect mobile browsers and set appropriate ENV var that is used later on
     # both in the Apache config and within the application.
     BrowserMatch "^BlackBerry"      NLW_MOBILE_BROWSER
-    BrowserMatch "iPhone"           NLW_MOBILE_BROWSER
     BrowserMatch "^Nokia"           NLW_MOBILE_BROWSER
     BrowserMatch "Palm"             NLW_MOBILE_BROWSER
     BrowserMatch "SymbianOS"        NLW_MOBILE_BROWSER

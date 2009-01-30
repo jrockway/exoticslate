@@ -181,6 +181,10 @@ div.goTo {
 }
 
 
+div.widget ul.widgetButton li a.addTagButton {
+    width: 87px;
+}
+
 .wiki ol, .wiki ul {
     padding-left: 25px;
 }
@@ -1347,6 +1351,23 @@ a.incipient {
     border-bottom: 1px dashed;
 }
 
+.addButton {
+        display: block;
+        width: 30px;
+        height: 22px;
+        background: url(../images/addButton.png) no-repeat;
+        background-position: top left;
+        text-indent: -9999px;
+        float: left;
+        margin-top: 9px;
+        vertical-align: bottom;
+}
+
+.addButton:hover {
+        background-position: top right;
+}
+
+
 body#contentPage div#controls div#controlsRight,
 body#dashBoard div#controls div#controlsRight,
 body#settingsPage div#controls div#controlsRight {
@@ -1355,17 +1376,6 @@ body#settingsPage div#controls div#controlsRight {
 
 body div#mainWrap {
     min-width: 947px;
-}
-
-.smallAddButton {
-    background:transparent url(../images/smallAddButton.png) no-repeat scroll left top;
-    display:block;
-    float:left;
-    height:22px;
-    margin-top:9px;
-    text-indent:-9999px;
-    vertical-align:bottom;
-    width:30px;
 }
 
 ul li a.previewButton {
@@ -1383,6 +1393,10 @@ ul li a.previewButton:hover {
 
 body div#controls div#st-editing-tools-edit ul li a {
     margin-left: 0px;
+}
+
+body div#controls div#st-editing-tools-edit ul li {
+    padding-left: 10px;
 }
 
 body div#controls div#st-editing-tools-edit ul li a.disabled {

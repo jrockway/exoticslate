@@ -1,8 +1,4 @@
 [%# vim: set et sts=2 sw=2: %]
 [% IF checker.check_permission('comment') %]
-  <li class="flexButton">
-    <a id="st-comment-button-link[% id_suffix %]" class="commentButton" href="#" title="[% loc('Click this button to add a comment to the page') %]">
-      [% loc('Comment') %]
-    </a>
-  </li>
+  <li><a id="st-comment-button-link[% id_suffix %]" class="commentButton" href="#" title="[% loc('Click this button to add a comment to the page') %]">[% loc('Comment') %]</a></li>
 [% END %]

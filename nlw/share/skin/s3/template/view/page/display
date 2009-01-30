@@ -187,9 +187,7 @@
           </ul>
           [% IF checker.check_permission('attachments') %]
           <ul class="widgetButton">
-            <li class="flexButtonGrey">
-              <a id="st-attachments-uploadbutton" class="greyButton" href="#">[% loc('Upload Files') %]</a>
-            </li>
+            <li><a id="st-attachments-uploadbutton" class="uploadButton" href="#">[% loc('Upload Files') %]</a></li>
             <!--<li><a id="st-attachments-managebutton" class="manageButton" href="#">[% loc('Manage Files') %]</a></li>-->
           </ul>
           [% END %]

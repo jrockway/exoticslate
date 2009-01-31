@@ -30,7 +30,7 @@
   <h2 class="tableTitle">[% display_title %]: <a href="[% "${script_name}?${page_uri}" %]">[% loc("Back To Current Revision") %]</a></h2>
   <form name='revisions' id="compare_revisions" onsubmit="return check_revisions(this);">
     <input type="hidden" name="action" value="revision_compare" />
-    <input type="hidden" name="page_name" value="[% page_name %]" />
+    <input type="hidden" name="page_name" value="[% page_uri %]" />
     <input type="hidden" name="mode" value="source" />
   <table class="dataTable">
     <tbody>

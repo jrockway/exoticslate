@@ -690,11 +690,11 @@ proto.newpage_duplicate_keyupHandler = function(event) {
 
 proto.newpage_display_duplicate_dialog = function(page_name) {
     jQuery('#st-newpage-duplicate-suggest')
-        .html(Socialtext.username + ': ' + page_name);
-    jQuery('#st-newpage-duplicate-appendname').html(page_name);
+        .text(Socialtext.username + ': ' + page_name);
+    jQuery('#st-newpage-duplicate-appendname').text(page_name);
 
     jQuery('#st-newpage-duplicate-link')
-        .html(page_name)
+        .text(page_name)
         .attr('href', '/' + Socialtext.wiki_id + '/index.cgi?' + page_name)
         .attr('target', page_name);
     
@@ -798,7 +798,7 @@ proto.newpage_duplicate_ok = function() {
             }
             break;
         case 'suggest':
-            var name = jQuery('#st-newpage-duplicate-suggest').html();
+            var name = jQuery('#st-newpage-duplicate-suggest').text();
             if (this.newpage_save(name)) {
                 jQuery.hideLightbox();
             }
@@ -806,7 +806,7 @@ proto.newpage_duplicate_ok = function() {
         case 'append':
             jQuery('#st-page-editing-append').val('bottom');
             jQuery('#st-page-editing-pagename').val(
-                jQuery('#st-newpage-duplicate-appendname').html()
+                jQuery('#st-newpage-duplicate-appendname').text()
             );
             jQuery.hideLightbox();
             this.saveContent();

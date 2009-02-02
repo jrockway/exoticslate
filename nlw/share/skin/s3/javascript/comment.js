@@ -148,8 +148,19 @@ GuiEdit.prototype.markup_is_on = function(start, finish) {
 }
 
 GuiEdit.prototype.setTextandSelection = function(text, start, end) {
-    this.area.value = text
-    this.area.setSelectionRange(start, end)
+    this.area.value = text;
+
+    if (this.area.createTextRange) {
+        var range = this.area.createTextRange();
+
+        range.moveEnd("textedit", -1);
+        range.moveEnd("character", end);
+        range.moveStart("character", start);
+        range.select();
+    }
+    else if (this.area.setSelectionRange) {
+        this.area.setSelectionRange(start, end)
+    }
 }
 
 GuiEdit.prototype.cleanRE = function(string) {
@@ -215,7 +226,11 @@ GuiEdit.prototype.getWords = function() {
     t = this.area
     var selection_start = t.selectionStart
     var selection_end = t.selectionEnd
-    if (selection_start == null || selection_end == null)
+
+    if (selection_start == null && selection_end != null)
+        selection_start = selection_end;
+
+    else if (selection_start == null || selection_end == null)
         return false
         
     var our_text = t.value.replace(/\r/g, '')

@@ -181,6 +181,11 @@ GuiEdit.prototype.toggle_same_format = function(start, finish) {
     return false
 }
 
+GuiEdit.prototype.clean_selection = function(start, finish) {
+    this.sel = this.sel.replace(start, '');
+    this.sel = this.sel.replace(finish, '');
+}
+
 GuiEdit.prototype.addMarkupWords =
 function(markup_start, markup_finish, example) {
     if (this.toggle_same_format(markup_start, markup_finish)) {

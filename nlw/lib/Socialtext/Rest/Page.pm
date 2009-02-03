@@ -262,6 +262,7 @@ sub PUT_json {
         content => $object->{content},
         from    => $object->{from},
         date    => $self->make_date_time_date($object->{date}),
+        edit_summary => $object->{edit_summary},
         $object->{tags} ? (tags => $object->{tags}) : (),
     );
 

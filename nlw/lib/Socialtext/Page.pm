@@ -182,6 +182,7 @@ sub update_from_remote {
     my $revision_id = $self->utf8_decode($p{revision_id});
     my $revision    = $self->utf8_decode($p{revision});
     my $subject     = $self->utf8_decode($p{subject});
+    my $edit_summary = $self->utf8_decode($p{edit_summary});
     my $tags        = $p{tags};
 
     if ($tags) {
@@ -211,6 +212,7 @@ sub update_from_remote {
     $revision_id  ||= $self->revision_id;
     $revision     ||= $self->metadata->Revision || 0;
     $subject      ||= $self->title,
+    $edit_summary ||= '';
 
     $self->load;
 
@@ -233,6 +235,7 @@ sub update_from_remote {
         subject          => $subject,
         categories       => $tags,
         user             => $user,
+        edit_summary     => $edit_summary,
         $p{date} ? ( date => $p{date} ) : (),
     );
 
@@ -400,6 +403,7 @@ sub hash_representation {
         revision_id    => $self->revision_id,
         revision_count => $self->revision_count,
         workspace_name => $self->hub->current_workspace->name,
+        edit_summary => $self->edit_summary,
 
         type => $self->metadata->Type,
     };

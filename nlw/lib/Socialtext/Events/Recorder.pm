@@ -27,6 +27,8 @@ sub _unbox_objects {
     _translate_ref_to_id($p, 'target_workspace' => 'workspace_id');
     _translate_ref_to_id($p, 'target_page' => 'id');
 
+    # signal
+    _translate_ref_to_id($p, 'signal' => 'signal_id');
 }
 
 sub _validate_insert_params {
@@ -59,6 +61,16 @@ sub _validate_insert_params {
         die "person parameter is missing for a person event"
             unless $p->{person};
     }
+    elsif ($class eq 'signal') {
+        die "signal parameter is missing for signal event"
+            unless $p->{signal};
+        unless ($p->{_checked_context} &&
+                defined $p->{_checked_context}{body} &&
+                length $p->{_checked_context}{body}
+        ) {
+            die "body missing from context for signal event";
+        }
+    }
     else {
         die "must specify a both a page and a workspace OR leave both blank"
             if ($p->{page} xor $p->{workspace});
@@ -86,10 +98,11 @@ sub record_event {
 
     $self->_unbox_objects($p);
 
-    delete $p->{_checked_context};
+    local $p->{_checked_context};
     if (ref $p->{context}) {
+        my $ctx = $p->{context};
         $p->{context} = encode_json($p->{context});
-        $p->{_checked_context} = 1;
+        $p->{_checked_context} = $ctx;
     }
 
     eval {
@@ -108,6 +121,7 @@ sub record_event {
         [ person_id         => $p->{person},      '?', ],
         [ page_id           => $p->{page},        '?', ],
         [ page_workspace_id => $p->{workspace},   '?', ],
+        [ signal_id         => $p->{signal},      '?', ],
         [ tag_name          => $p->{tag_name},    '?', ],
         [ context           => $p->{context},     '?', ],
     );

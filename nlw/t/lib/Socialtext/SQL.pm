@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Test::More;
 use base 'Exporter';
+use unmocked 'Socialtext::Date';
 use unmocked 'Data::Dumper';
 use unmocked 'DateTime::Format::Pg';
 
@@ -12,7 +13,7 @@ our @EXPORT_OK = qw(
     sql_execute sql_execute_array sql_selectrow sql_singlevalue
     sql_commit sql_begin_work sql_rollback sql_in_transaction
     sql_convert_to_boolean sql_convert_from_boolean
-    sql_parse_timestamptz sql_format_timestamptz
+    sql_parse_timestamptz sql_format_timestamptz sql_timestamptz_now
 
     sql_ok sql_mock_result ok_no_more_sql
 );
@@ -89,6 +90,10 @@ sub sql_parse_timestamptz {
 sub sql_format_timestamptz {
     my $dt = shift;
     return DateTime::Format::Pg->format_timestamptz($dt);
+}
+
+sub sql_timestamptz_now {
+    return sql_format_timestamptz(Socialtext::Date->now(hires=>1));
 }
 
 sub sql_ok {

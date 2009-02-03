@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Class::Field qw(field);
+use Socialtext::Date;
 use Socialtext::SQL qw(:exec :time);
 use Socialtext::SQL::Builder qw(:all);
 use Socialtext::User::Cache;
@@ -16,7 +17,6 @@ use Socialtext::User::Default::Users qw(:system-user :guest-user);
 use Socialtext::l10n qw(loc);
 use Email::Valid;
 use Readonly;
-use Time::HiRes ();
 
 field 'driver_name';
 field 'driver_id';
@@ -89,7 +89,7 @@ sub ResolveId {
 }
 
 sub Now {
-    return DateTime->from_epoch(epoch => Time::HiRes::time());
+    return Socialtext::Date->now(hires=>1);
 }
 
 sub GetHomunculus {

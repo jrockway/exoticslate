@@ -1,14 +1,13 @@
 package Socialtext::Date;
 # @COPYRIGHT@
-
+use warnings;
 use strict;
 use base qw( DateTime );
 
 use Encode;
 use DateTime::Format::Strptime;
 use DateTime::TimeZone;
-
-sub rebless { bless $_[1], $_[0] }
+use Time::HiRes ();
 
 sub parse {
     my ( $class, $format, $date ) = @_;
@@ -36,7 +35,13 @@ sub strptime {
 
 sub now {
     my ( $class, %opt ) = @_;
-    my $self = $class->SUPER::now();
+    my $self;
+    if ($opt{hires}) {
+        $self = $class->SUPER::from_epoch(epoch => Time::HiRes::time());
+    }
+    else {
+        $self = $class->SUPER::now();
+    }
 
     # Default timezone should be set from server pref.
     my $tz = $opt{timezone} || 'local';

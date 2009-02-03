@@ -54,6 +54,8 @@ dev-bin/link-reports
 dev-bin/link-plugins widgets agile csskit dashboard people signals socialcalc
 set -e
 
+(cd ../plugins; make clean all);
+
 export PGUSER=`st-config echo db_user`
 echo "Adding special dev-env SQL hacks"
 psql -f etc/socialtext/db/dev.sql

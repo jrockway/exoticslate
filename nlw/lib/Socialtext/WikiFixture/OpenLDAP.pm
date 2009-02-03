@@ -147,6 +147,16 @@ Adds data in the given C<$ldif> file to the LDAP directory.
 
 Removes data in the given C<$ldif> file from the LDAP directory.
 
+=item B<add_ldap_user($username)>
+
+Given a unique C<$username>, creates a minimal LDAP record describing
+that user and adds it to the LDAP directory.
+
+=item B<remove_ldap_user($username)>
+
+Removes a record previously added with C<add_ldap_user> and belonging 
+to C<$username> from the LDAP directory.
+
 =item B<ldap_config($param, $value)>
 
 Tweaks the configuration of the bootstrapped OpenLDAP server, changing

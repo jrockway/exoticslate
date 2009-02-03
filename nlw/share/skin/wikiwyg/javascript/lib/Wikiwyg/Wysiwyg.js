@@ -470,6 +470,29 @@ proto.set_focus = function() {
     } catch (e) {}
 }
 
+proto.on_key_enter = function(e) {
+    var win = this.get_edit_window();
+    var doc = this.get_edit_document();
+    var sel, node;
+
+    if (win.getSelection) {
+        sel = win.getSelection();
+        if (!sel) return;
+        node = sel.anchorNode;
+    }
+    else if (doc.selection) {
+        sel = doc.selection;
+        if (!sel) return;
+        node = sel.createRange().parentElement();
+    }
+
+    if (!node) return;
+
+    if (jQuery(node).is("li")) {
+        jQuery(node).find("br:last-child").remove();
+    }
+}
+
 proto.set_paste_handler = function() {
     var self = this;
 
@@ -492,6 +515,9 @@ proto.set_paste_handler = function() {
 
                 self.on_pasted(html);
             }, 100);
+        }
+        else if (e.which == 13) {;
+             self.on_key_enter(e);
         }
     });
 }

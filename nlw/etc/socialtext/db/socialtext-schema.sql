@@ -213,12 +213,6 @@ CREATE TABLE container_type (
     layout_template text
 );
 
-CREATE SEQUENCE ctype_gadget_id
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
 CREATE TABLE default_gadget (
     default_gadget_id bigint NOT NULL,
     container_type text NOT NULL,
@@ -252,7 +246,7 @@ CREATE TABLE gadget (
     src text NOT NULL,
     plugin text,
     href text NOT NULL,
-    last_update timestamptz DEFAULT '2009-01-13 14:45:28.166893-08'::timestamptz NOT NULL,
+    last_update timestamptz DEFAULT now() NOT NULL,
     content_type text NOT NULL,
     features text[],
     preloads text[],

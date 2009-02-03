@@ -12,7 +12,7 @@ CREATE TABLE gadget (
     href TEXT NOT NULL,
 
     -- Field used for knowing whether to reinstall the gadget from XML
-    last_update timestamptz NOT NULL DEFAULT 'now'::timestamptz,
+    last_update timestamptz NOT NULL DEFAULT now(),
 
     -- url/html/html-inline
     content_type TEXT NOT NULL,

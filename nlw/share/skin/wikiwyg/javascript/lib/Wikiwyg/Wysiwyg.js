@@ -493,7 +493,7 @@ proto.on_key_enter = function(e) {
     }
 }
 
-proto.set_paste_handler = function() {
+proto.set_key_interception_handler = function() {
     var self = this;
 
     self.pastebin = jQuery("#pastebin").get(0).contentWindow;
@@ -579,7 +579,7 @@ proto.enableThis = function() {
                 self.set_clear_handler();
             }
 
-            self.set_paste_handler();
+            self.set_key_interception_handler();
         }
         catch(e) { }
     }, 1);
@@ -687,7 +687,7 @@ proto.set_clear_handler = function () {
         jQuery(editor).unbind();
 
         /* We've just unbound the paste handler, so re-enable it here */
-        self.set_paste_handler();
+        self.set_key_interception_handler();
     };
 
     try {
@@ -921,7 +921,7 @@ proto.closeTableDialog = function() {
     var doc = this.get_edit_document();
     jQuery(doc).unbind("keypress");
     jQuery.hideLightbox();
-    this.set_paste_handler();
+    this.set_key_interception_handler();
 }
 
 proto.do_new_table = function() {

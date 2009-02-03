@@ -30,6 +30,9 @@ BEGIN;
     ALTER INDEX "ix_noun_at_user" RENAME TO "ix_signal_at_user";
     ALTER INDEX "ix_noun_user_at" RENAME TO "ix_signal_user_at";
 
+    -- think of this as RENAME SEQUENCE
+    ALTER TABLE noun_id_seq RENAME TO signal_id_seq;
+
 -- make the event table refer to the signal table explicitly.  A data
 -- migration will pull the "noun_id" out of the context blob to complete the
 -- linking

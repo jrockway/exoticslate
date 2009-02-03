@@ -311,12 +311,6 @@ CREATE SEQUENCE gadget_user_pref_id
     NO MINVALUE
     CACHE 1;
 
-CREATE SEQUENCE noun_id_seq
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
 CREATE TABLE page (
     workspace_id bigint NOT NULL,
     page_id text NOT NULL,
@@ -415,6 +409,12 @@ CREATE TABLE signal (
     user_id bigint NOT NULL,
     body text NOT NULL
 );
+
+CREATE SEQUENCE signal_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
 
 CREATE TABLE "storage" (
     user_id bigint NOT NULL,

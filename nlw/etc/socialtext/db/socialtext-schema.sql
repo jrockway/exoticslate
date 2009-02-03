@@ -213,12 +213,6 @@ CREATE TABLE container_type (
     layout_template text
 );
 
-CREATE SEQUENCE ctype_gadget_id
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
 CREATE TABLE default_gadget (
     default_gadget_id bigint NOT NULL,
     container_type text NOT NULL,
@@ -252,7 +246,7 @@ CREATE TABLE gadget (
     src text NOT NULL,
     plugin text,
     href text NOT NULL,
-    last_update timestamptz DEFAULT '2009-01-13 14:45:28.166893-08'::timestamptz NOT NULL,
+    last_update timestamptz DEFAULT now() NOT NULL,
     content_type text NOT NULL,
     features text[],
     preloads text[],
@@ -653,34 +647,34 @@ CREATE UNIQUE INDEX "Workspace___lower___name"
 CREATE INDEX "Workspace_account_id"
 	    ON "Workspace" (account_id);
 
-CREATE INDEX container__user_id__type
+CREATE INDEX ix_container_user_id_type
 	    ON container (container_type, user_id);
 
-CREATE INDEX container_account_id
+CREATE INDEX ix_container_account_id
 	    ON container (account_id);
 
-CREATE INDEX container_container_type
+CREATE INDEX ix_container_container_type
 	    ON container (container_type);
 
-CREATE INDEX container_user_id
+CREATE INDEX ix_container_user_id
 	    ON container (user_id);
 
-CREATE INDEX container_workspace_id
+CREATE INDEX ix_container_workspace_id
 	    ON container (workspace_id);
 
-CREATE INDEX default_gadget__container_type
+CREATE INDEX ix_default_gadget__container_type
 	    ON default_gadget (container_type);
 
-CREATE INDEX gadget__src
+CREATE INDEX ix_gadget__src
 	    ON gadget (src);
 
-CREATE INDEX gadget_instance__container_id
+CREATE INDEX ix_gadget_instance__container_id
 	    ON gadget_instance (container_id);
 
-CREATE INDEX gadget_instance_user_pref__user_pref_id
+CREATE INDEX ix_gadget_instance_user_pref__user_pref_id
 	    ON gadget_instance_user_pref (user_pref_id);
 
-CREATE INDEX gadget_user_pref__gadget_id
+CREATE INDEX ix_gadget_user_pref_gadget_id
 	    ON gadget_user_pref (gadget_id);
 
 CREATE INDEX ix_event_actor_time

@@ -236,6 +236,9 @@ CREATE INDEX container_account_id
     ON container (account_id);
 CREATE INDEX container_container_type
     ON container (container_type);
+CREATE INDEX container__user_id__type
+    ON container (container_type, user_id);
+
 
 -- Update schema version
 UPDATE "System"

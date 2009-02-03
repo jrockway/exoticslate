@@ -568,6 +568,14 @@ proto.enableThis = function() {
             }, 1000
         );
     }
+    jQuery(self.get_edit_window())
+        .bind("mousedown", function() {
+            jQuery("#st-edit-summary").hide();
+        });
+    jQuery( self.get_edit_document(), self.get_edit_window())
+        .bind("mousedown", function() {
+            jQuery("#st-edit-summary").hide(); 
+        });
 }
 
 proto.on_pasted = function(html) {

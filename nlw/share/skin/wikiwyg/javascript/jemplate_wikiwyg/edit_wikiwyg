@@ -2,7 +2,7 @@
     <div id="controls">
         <div id="st-editing-tools-edit">
             <ul>
-                <li><a title="[% loc('Click this button to save the page') %]" id="st-save-button-link" class="saveButton" href="#">[% loc('Save') %]</a></li>
+                <li><a id="st-save-button-link" class="saveButton" href="#">[% loc('Save') %]</a></li>
                 <li><a class="previewButton" id="st-preview-button-link" href="#">[% loc('Preview') %]</a></li>
                 <li><a class="cancelButton" id="st-cancel-button-link" href="#">[% loc('Cancel') %]</a></li>
             </ul>
@@ -36,6 +36,7 @@
     <div id="st-edit-mode-view">
         <div id="contentContainer">
             <div id="contentTitle">
+                [% INCLUDE element/edit_summary.html.tt2 %]
                 [% IF is_new && !is_incipient %]
                     <h2 id="st-editing-title" class="tableTitle">
                         [% loc('Editing:') %]

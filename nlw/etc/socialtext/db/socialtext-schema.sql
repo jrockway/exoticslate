@@ -238,7 +238,8 @@ CREATE TABLE event (
     page_id text,
     page_workspace_id bigint,
     person_id integer,
-    tag_name text
+    tag_name text,
+    signal_id bigint
 );
 
 CREATE TABLE gadget (
@@ -309,14 +310,6 @@ CREATE SEQUENCE gadget_user_pref_id
     NO MAXVALUE
     NO MINVALUE
     CACHE 1;
-
-CREATE TABLE noun (
-    noun_id bigint NOT NULL,
-    noun_type text NOT NULL,
-    "at" timestamptz DEFAULT now(),
-    user_id bigint NOT NULL,
-    body text
-);
 
 CREATE SEQUENCE noun_id_seq
     INCREMENT BY 1
@@ -414,6 +407,13 @@ CREATE TABLE sessions (
     id character(32) NOT NULL,
     a_session text NOT NULL,
     last_updated timestamptz NOT NULL
+);
+
+CREATE TABLE signal (
+    signal_id bigint NOT NULL,
+    "at" timestamptz DEFAULT now(),
+    user_id bigint NOT NULL,
+    body text NOT NULL
 );
 
 CREATE TABLE "storage" (
@@ -560,10 +560,6 @@ ALTER TABLE ONLY gadget_user_pref
     ADD CONSTRAINT gadget_user_pref_pk
             PRIMARY KEY (user_pref_id);
 
-ALTER TABLE ONLY noun
-    ADD CONSTRAINT noun_pkey
-            PRIMARY KEY (noun_id);
-
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_pkey
             PRIMARY KEY (workspace_id, page_id);
@@ -599,6 +595,10 @@ ALTER TABLE ONLY search_sets
 ALTER TABLE ONLY sessions
     ADD CONSTRAINT sessions_pkey
             PRIMARY KEY (id);
+
+ALTER TABLE ONLY signal
+    ADD CONSTRAINT signal_pkey
+            PRIMARY KEY (signal_id);
 
 ALTER TABLE ONLY "System"
     ADD CONSTRAINT system_pkey
@@ -697,6 +697,9 @@ CREATE INDEX ix_event_person_time
 	    ON event (person_id, "at")
 	    WHERE (event_class = 'person');
 
+CREATE INDEX ix_event_signal_id_at
+	    ON event (signal_id, "at");
+
 CREATE INDEX ix_event_tag
 	    ON event (tag_name, "at")
 	    WHERE ((event_class = 'page') OR (event_class = 'person'));
@@ -704,18 +707,18 @@ CREATE INDEX ix_event_tag
 CREATE INDEX ix_event_workspace_page
 	    ON event (page_workspace_id, page_id);
 
-CREATE INDEX ix_noun_at
-	    ON noun ("at");
-
-CREATE INDEX ix_noun_at_user
-	    ON noun ("at", user_id);
-
-CREATE INDEX ix_noun_user_at
-	    ON noun (user_id, "at");
-
 CREATE INDEX ix_page_events_contribs_actor_time
 	    ON event (actor_id, "at")
 	    WHERE ((event_class = 'page') AND is_page_contribution("action"));
+
+CREATE INDEX ix_signal_at
+	    ON signal ("at");
+
+CREATE INDEX ix_signal_at_user
+	    ON signal ("at", user_id);
+
+CREATE INDEX ix_signal_user_at
+	    ON signal (user_id, "at");
 
 CREATE INDEX page_creator_time
 	    ON page (creator_id, create_time);
@@ -826,6 +829,11 @@ ALTER TABLE ONLY event
             FOREIGN KEY (person_id)
             REFERENCES users(user_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY event
+    ADD CONSTRAINT event_signal_id_fk
+            FOREIGN KEY (signal_id)
+            REFERENCES signal(signal_id) ON DELETE CASCADE;
+
 ALTER TABLE ONLY "WorkspacePingURI"
     ADD CONSTRAINT fk_040b7e8582f72e5921dc071311fc4a5f
             FOREIGN KEY (workspace_id)
@@ -916,11 +924,6 @@ ALTER TABLE ONLY gadget_user_pref
             FOREIGN KEY (gadget_id)
             REFERENCES gadget(gadget_id) ON DELETE CASCADE;
 
-ALTER TABLE ONLY noun
-    ADD CONSTRAINT noun_user_id_fk
-            FOREIGN KEY (user_id)
-            REFERENCES users(user_id) ON DELETE CASCADE;
-
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_creator_id_fk
             FOREIGN KEY (creator_id)
@@ -991,6 +994,11 @@ ALTER TABLE ONLY profile_relationship
             FOREIGN KEY (user_id)
             REFERENCES users(user_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY signal
+    ADD CONSTRAINT signal_user_id_fk
+            FOREIGN KEY (user_id)
+            REFERENCES users(user_id) ON DELETE CASCADE;
+
 ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT tag_people_fk
             FOREIGN KEY (tag_id)
@@ -1027,4 +1035,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '29');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '30');

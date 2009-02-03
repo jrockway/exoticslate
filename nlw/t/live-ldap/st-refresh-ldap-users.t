@@ -31,6 +31,7 @@ sub set_up_openldap {
 test_no_ldap_users: {
     my $results = `st-refresh-ldap-users --verbose 2>&1`;
     is $?, 0, 'st-refresh-ldap-users ran successfully';
+    diag $results if $?;
     like $results, qr/found 0 LDAP users/, 'no LDAP users present';
 }
 
@@ -53,6 +54,7 @@ test_ldap_users_all_fresh: {
     # refresh LDAP users
     my $results = `st-refresh-ldap-users --verbose 2>&1`;
     is $?, 0, 'st-refresh-ldap-users ran successfully';
+    diag $results if $?;
     like $results, qr/found 1 LDAP users/, 'one LDAP user present';
 
     # get the refreshed LDAP user record
@@ -118,6 +120,7 @@ test_refresh_stale_users: {
 
         my $results = `st-refresh-ldap-users --verbose 2>&1`;
         is $?, 0, 'st-refresh-ldap-users ran successfully';
+        diag $results if $?;
         like $results, qr/found 1 LDAP users/, 'one LDAP user present';
 
         sleep 2;
@@ -171,6 +174,7 @@ test_force_refresh: {
 
         my $results = `st-refresh-ldap-users --verbose --force 2>&1`;
         is $?, 0, 'st-refresh-ldap-users ran successfully';
+        diag $results if $?;
         like $results, qr/found 1 LDAP users/, 'one LDAP user present';
 
         sleep 2;

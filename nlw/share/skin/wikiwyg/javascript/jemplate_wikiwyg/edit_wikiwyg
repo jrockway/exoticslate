@@ -81,6 +81,7 @@
                     <input id="st-page-editing-pagebody"  type="hidden" name="page_body" value="" />
                     <input id="st-page-editing-action" type="hidden" name="action" value="edit_content" />
                     <input id="st-page-editing-caller" type="hidden" name="caller_action" value="[% page.caller %]" />
+                    <input id="st-page-editing-summary" type="hidden" name="edit_summary" />
                     [% FOREACH tag = new_tags %]
                     <input type="hidden" name="add_tag" value="[% tag %]" />
                     [% END %]

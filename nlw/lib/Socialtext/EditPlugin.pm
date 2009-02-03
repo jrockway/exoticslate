@@ -11,6 +11,8 @@ use Socialtext::Pages;
 use Socialtext::Exceptions qw( data_validation_error );
 use Socialtext::l10n qw(loc);
 use Socialtext::Events;
+use Socialtext::String;
+use Socialtext::Log qw(st_log);
 
 sub class_id { 'edit' }
 const class_title => 'Editing Page';
@@ -73,10 +75,14 @@ sub edit_content {
 
     my $metadata = $page->metadata;
 
+    st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
+        if $self->cgi->edit_summary;
     $metadata->loaded(1);
     $metadata->update( user => $self->hub->current_user );
     $metadata->Subject($page_name);
     $metadata->Type($self->cgi->page_type);
+    $metadata->RevisionSummary(
+        Socialtext::String::trim($self->cgi->edit_summary || ''));
 
     $page->name($page_name);
     if ($append_mode eq 'bottom') {
@@ -105,7 +111,6 @@ sub edit_content {
     # Move attachments uploaded to 'Untitled Page' to the actual page
     my @attach = $self->cgi->attachment;
     for my $a (@attach) {
-        warn $a;
         my ($id, $page_id) = split ':', $a;
 
         my $source = $self->hub->attachments->new_attachment(
@@ -174,6 +179,8 @@ sub save {
         Socialtext::Exception::DataValidation->throw(
             errors => [loc('A page must have a body to be saved.')] );
     }
+    st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
+        if $self->cgi->edit_summary;
 
     my @categories =
       sort keys %{+{map {($_, 1)} split /[\n\r]+/, $self->cgi->header}};
@@ -186,6 +193,7 @@ sub save {
         categories       => \@categories,
         subject          => $subject,
         user             => $self->hub->current_user,
+        edit_summary     => $self->cgi->edit_summary || '',
     );
     Socialtext::Events->Record({
         event_class => 'page',
@@ -271,5 +279,6 @@ cgi 'type';
 cgi 'page_title';
 cgi 'add_tag';
 cgi 'attachment';
+cgi 'edit_summary';
 
 1;

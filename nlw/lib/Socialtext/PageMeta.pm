@@ -19,6 +19,8 @@ field Revision  => '';
 field Type      => 'wiki';  # Page type - (wiki|spreadsheet)
 field Summary   => '';
 field MessageID => '';
+field RevisionSummary => '';
+
 field Category  => [];
 field Encoding  => '';
 
@@ -38,6 +40,7 @@ sub key_order {
         MessageID
         Category
         Encoding
+        RevisionSummary
     )
 }
 

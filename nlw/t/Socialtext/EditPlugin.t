@@ -6,7 +6,7 @@ use warnings;
 
 use mocked 'Apache';
 use mocked 'Apache::Cookie';
-use Test::Socialtext tests => 23;
+use Test::Socialtext tests => 29;
 fixtures( 'admin' );
 
 BEGIN {
@@ -201,4 +201,48 @@ SAVE_contention: {
     my $page = Socialtext::Page->new(hub => $hub, id => 'save_page')->load();
     is($page->revision_count, 2, '2 Revisions');
     is($page->content, "Hello\n", 'New content not saved');
+    $save_revision_id = $page->revision_id;
+}
+
+EDIT_SUMMARY: {
+    my $hub = new_hub('admin');
+    my $cgi = $hub->rest->query;
+    $cgi->param('page_name', 'save_page');
+    $cgi->param('revision_id', $save_revision_id);
+    $cgi->param('page_body', 'testing summaries');
+    $cgi->param('action', 'edit_save');
+    $cgi->param('caller_action', '');
+    $cgi->param('append_mode', '');
+    $cgi->param('page_body_decoy', 'Hello');
+    $cgi->param('edit_summary', ' i suck at typing  ');
+
+    my $return = $hub->edit->edit_content;
+    my $page = Socialtext::Page->new(hub => $hub, id => 'save_page')->load();
+    is($page->content, "testing summaries\n");
+
+    is($page->metadata->RevisionSummary, 'i suck at typing', "edit summary was saved");
+    is($page->edit_summary, 'i suck at typing', 'proxy method works');
+    $save_revision_id = $page->revision_id;
+}
+
+EDIT_SUMMARY_VIA_SAVE: {
+    my $hub = new_hub('admin');
+    my $cgi = $hub->rest->query;
+    $cgi->param('page_name', 'save_page');
+    $cgi->param('revision_id', $save_revision_id);
+    $cgi->param('page_body', 'testing summaries via save');
+    $cgi->param('action', 'edit_save');
+    $cgi->param('caller_action', '');
+    $cgi->param('append_mode', '');
+    $cgi->param('page_body_decoy', 'Hello');
+    $cgi->param('original_page_id', 'save_page');
+    $cgi->param('subject', 'save_page');
+    $cgi->param('edit_summary', '   i really suck at typing   ');
+
+    my $return = $hub->edit->save;
+    my $page = Socialtext::Page->new(hub => $hub, id => 'save_page')->load();
+    is($page->content, "testing summaries via save\n");
+
+    is($page->metadata->RevisionSummary, 'i really suck at typing', "edit summary was saved");
+    is($page->edit_summary, 'i really suck at typing', 'proxy method works');
 }

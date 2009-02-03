@@ -343,7 +343,8 @@ CREATE TABLE page (
     revision_count integer NOT NULL,
     page_type text NOT NULL,
     deleted boolean NOT NULL,
-    summary text
+    summary text,
+    edit_summary text
 );
 
 CREATE TABLE page_tag (

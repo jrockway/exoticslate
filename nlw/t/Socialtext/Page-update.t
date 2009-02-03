@@ -6,6 +6,7 @@ use strict;
 use DateTime;
 
 use Test::Socialtext tests => 19;
+use Socialtext::SQL;
 fixtures( 'admin' );
 
 BEGIN {

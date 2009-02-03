@@ -259,6 +259,7 @@ various places where this has been done in the past.
         subject          => SCALAR_TYPE,
         user             => USER_TYPE,
         date             => { can  => [qw(strftime)], default => undef },
+        edit_summary     => { type => SCALAR,    default => '' },
     };
     sub update {
         my $self = shift;
@@ -277,6 +278,7 @@ various places where this has been done in the past.
         $metadata->Revision($revision);
         $metadata->Received(undef);
         $metadata->MessageID('');
+        $metadata->RevisionSummary(Socialtext::String::trim($args{edit_summary}));
         $metadata->loaded(1);
         foreach (@{$args{categories}}) {
             $metadata->add_category($_);
@@ -797,7 +799,9 @@ sub update_db_metadata {
         $creator_id, $create_time,
         $hash->{revision_id}, $self->metadata->Revision,
         $hash->{revision_count},
-        $hash->{type}, $self->deleted ? '1' : '0', $self->metadata->Summary,
+        $hash->{type}, $self->deleted ? '1' : '0', 
+        $self->metadata->Summary,
+        $self->metadata->RevisionSummary,
         $wksp_id, $pg_id
     );
     my $insert_or_update;
@@ -809,7 +813,7 @@ sub update_db_metadata {
                 creator_id = ?, create_time = ?,
                 current_revision_id = ?, current_revision_num = ?,
                 revision_count = ?,
-                page_type = ?, deleted = ?, summary = ?
+                page_type = ?, deleted = ?, summary = ?, edit_summary = ?
             WHERE
                 workspace_id = ? AND page_id = ?
 UPDSQL
@@ -827,7 +831,7 @@ UPDSQL
                 creator_id, create_time,
                 current_revision_id, current_revision_num, 
                 revision_count,
-                page_type, deleted, summary,
+                page_type, deleted, summary, edit_summary,
                 workspace_id, page_id
             )
             VALUES (
@@ -836,7 +840,7 @@ UPDSQL
                 ?, ?::timestamptz,
                 ?, ?, 
                 ?, 
-                ?, ?, ?,
+                ?, ?, ?, ?,
                 ?, ?
             )
 INSSQL
@@ -1894,7 +1898,8 @@ sub is_bad_page_title {
     return 0;
 }
 
-sub summary { $_[0]->metadata->{Summary} }
+sub summary { $_[0]->metadata->Summary }
+sub edit_summary { $_[0]->metadata->RevisionSummary }
 
 # This is called by Socialtext::Query::Plugin::push_result
 sub to_result {

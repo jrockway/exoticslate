@@ -272,6 +272,15 @@ sub _vivify {
 
     $user_attrs{driver_username} = delete $user_attrs{username};
 
+    # XXX: some fields are explicitly set to '' elsewhere
+    # (ST:U:Def:Factory:create, ST:U:Factory:NewUserRecord), and we're going
+    # to do the same here.  Yes, this should be refactored and cleaned up, no,
+    # I'm not doing that just yet.
+    $user_attrs{first_name} ||= '';
+    $user_attrs{last_name}  ||= '';
+
+    # depending on whether or not we've got a User Id, we're either updating
+    # an existing User record in the DB or creating a new one.
     if ($user_id) {
         # update cache
         $user_attrs{user_id} = $user_id;

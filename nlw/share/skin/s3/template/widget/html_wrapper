@@ -24,7 +24,7 @@
         <div class="widgetHeaderTitle">
             <h4 id="[% gadget.id %]-title" class="widgetHeaderTitleBox">
                 [% IF !gadget.fixed %]
-                <img  src="[% gadget.thumbnail || "$share/images/iconContent.png" %]" />
+                <img src="[% share %]/images/[% gadget.icon %].png" />
                 [% END %]
                 <span id="[% gadget.id %]-title-text" class="widgetHeaderTitleText" title="[% gadget.title %]">
                     [% gadget.title %]

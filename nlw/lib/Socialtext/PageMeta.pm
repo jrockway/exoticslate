@@ -5,6 +5,7 @@ use warnings;
 
 use base 'Socialtext::Base';
 use Socialtext::Indexes ();
+use Socialtext::String;
 
 use Class::Field qw( field );
 
@@ -42,6 +43,18 @@ sub key_order {
         Encoding
         RevisionSummary
     )
+}
+
+our @EXPORT_OK = qw(
+    ProcessEditSummary
+    EDIT_SUMMARY_MAXLENGTH
+);
+our @EXPORT = @EXPORT_OK;
+sub EDIT_SUMMARY_MAXLENGTH { 250 }
+
+sub ProcessEditSummary {
+    my $edit_summary = Socialtext::String::trim(shift || '');
+    return substr $edit_summary, 0, EDIT_SUMMARY_MAXLENGTH;
 }
 
 sub add_category {

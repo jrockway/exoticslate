@@ -13,6 +13,7 @@ use Socialtext::l10n qw(loc);
 use Socialtext::Events;
 use Socialtext::String;
 use Socialtext::Log qw(st_log);
+use Socialtext::PageMeta qw( ProcessEditSummary );
 
 sub class_id { 'edit' }
 const class_title => 'Editing Page';
@@ -75,14 +76,15 @@ sub edit_content {
 
     my $metadata = $page->metadata;
 
+    my $edit_summary = ProcessEditSummary($self->cgi->edit_summary);
     st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
-        if $self->cgi->edit_summary;
+        if $edit_summary;
+
     $metadata->loaded(1);
     $metadata->update( user => $self->hub->current_user );
     $metadata->Subject($page_name);
     $metadata->Type($self->cgi->page_type);
-    $metadata->RevisionSummary(
-        Socialtext::String::trim($self->cgi->edit_summary || ''));
+    $metadata->RevisionSummary($edit_summary);
 
     $page->name($page_name);
     if ($append_mode eq 'bottom') {
@@ -179,8 +181,10 @@ sub save {
         Socialtext::Exception::DataValidation->throw(
             errors => [loc('A page must have a body to be saved.')] );
     }
+
+    my $edit_summary = ProcessEditSummary($self->cgi->edit_summary);
     st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
-        if $self->cgi->edit_summary;
+        if $edit_summary;
 
     my @categories =
       sort keys %{+{map {($_, 1)} split /[\n\r]+/, $self->cgi->header}};
@@ -193,7 +197,7 @@ sub save {
         categories       => \@categories,
         subject          => $subject,
         user             => $self->hub->current_user,
-        edit_summary     => $self->cgi->edit_summary || '',
+        edit_summary     => $edit_summary,
     );
     Socialtext::Events->Record({
         event_class => 'page',

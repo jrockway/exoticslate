@@ -288,7 +288,7 @@ CREATE TABLE gadget_instance_user_pref (
 CREATE TABLE gadget_message (
     gadget_id bigint NOT NULL,
     lang text NOT NULL,
-    country text default '',
+    country text DEFAULT '' NOT NULL,
     "key" text NOT NULL,
     value text NOT NULL
 );

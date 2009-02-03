@@ -154,7 +154,7 @@ that user and adds it to the LDAP directory.
 
 =item B<remove_ldap_user($username)>
 
-Removes a record previously added with C<add_ldap_user> and belonging 
+Removes a record previously added with C<add_ldap_user> and belonging
 to C<$username> from the LDAP directory.
 
 =item B<ldap_config($param, $value)>

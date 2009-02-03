@@ -45,7 +45,7 @@ ALTER TABLE ONLY gadget
     ADD CONSTRAINT gadget_src
         UNIQUE (src);
 
-CREATE INDEX gadget__src
+CREATE INDEX ix_gadget__src
     ON gadget(src);
 
 -- gadget localization table
@@ -108,7 +108,7 @@ ALTER TABLE ONLY default_gadget
         FOREIGN KEY (container_type)
         REFERENCES container_type(container_type) ON DELETE CASCADE;
 
-CREATE INDEX default_gadget_container_type
+CREATE INDEX ix_default_gadget__container_type
     ON default_gadget(container_type);
 
 -- Container that holds gadget
@@ -177,7 +177,7 @@ ALTER TABLE ONLY gadget_instance
         FOREIGN KEY (gadget_id)
         REFERENCES gadget(gadget_id) ON DELETE CASCADE;
 
-CREATE INDEX gadget_instance__container_id
+CREATE INDEX ix_gadget_instance__container_id
     ON gadget_instance(container_id);
 
 -- List of valid user preferences for a given gadget
@@ -205,7 +205,7 @@ ALTER TABLE ONLY gadget_user_pref
         FOREIGN KEY (gadget_id)
         REFERENCES gadget(gadget_id) ON DELETE CASCADE;
 
-CREATE INDEX gadget_user_pref_gadget_id
+CREATE INDEX ix_gadget_user_pref_gadget_id
     ON gadget_user_pref(gadget_id);
 
 -- Table to store actual user pref settings for a gadget instance
@@ -225,18 +225,18 @@ ALTER TABLE ONLY gadget_instance_user_pref
         FOREIGN KEY (user_pref_id)
         REFERENCES gadget_user_pref(user_pref_id) ON DELETE CASCADE;
 
-CREATE INDEX gadget_instance_user_pref__user_pref_id
+CREATE INDEX ix_gadget_instance_user_pref__user_pref_id
     ON gadget_instance_user_pref(user_pref_id);
 
-CREATE INDEX container_user_id
+CREATE INDEX ix_container_user_id
     ON container (user_id);
-CREATE INDEX container_workspace_id
+CREATE INDEX ix_container_workspace_id
     ON container (workspace_id);
-CREATE INDEX container_account_id
+CREATE INDEX ix_container_account_id
     ON container (account_id);
-CREATE INDEX container_container_type
+CREATE INDEX ix_container_container_type
     ON container (container_type);
-CREATE INDEX container__user_id__type
+CREATE INDEX ix_container_user_id_type
     ON container (container_type, user_id);
 
 

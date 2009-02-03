@@ -6,6 +6,7 @@ use Test::Socialtext::Bootstrap::OpenLDAP;
 use Socialtext::AppConfig;
 use Socialtext::LDAP::Config;
 use Test::More;
+use File::Temp;
 use base qw(Socialtext::WikiFixture::Socialtext);
 
 sub init {
@@ -57,6 +58,43 @@ sub remove_ldif_data {
     diag "remove ldif data: $ldif";
     $self->{ldap}->remove_ldif($ldif);
 }
+
+sub add_ldap_user {
+    my $self = shift;
+    my $username = shift;
+
+    add_ldif_data($self, _ldif_fh_for($username)->filename);
+}
+
+sub remove_ldap_user {
+    my $self = shift;
+    my $username = shift;
+
+    remove_ldif_data($self, _ldif_fh_for($username)->filename);
+}
+
+
+# XXX: file::Temp usage is uuuugly; need to refactor
+sub _ldif_fh_for {
+    my $username = shift;
+
+    my $temp_fh = new File::Temp(UNLINK => 1, SUFFIX => '.ldif');
+
+    print $temp_fh join("\n",
+        "dn: cn=$username LdapUser,dc=example,dc=com",
+        "objectClass: inetOrgPerson",
+        "cn: $username LdapUser",
+        "gn: $username",
+        "sn: LdapUser",
+        "mail: $username\@example.com",
+        "userPassword: ldapd3v",
+        "ou: people"
+    );
+
+    close $temp_fh;      # ensure file's flushed to disk
+    return $temp_fh;
+}
+
 
 sub ldap_config {
     my $self = shift;

@@ -9,7 +9,7 @@
                 <a class="close-window" href="#"><img src="[% wiki.skin_uri('s3') %]/images/closeWindow.png" /></a>
             </div>
             <div>
-                <input type="text" class="input">
+                <input type="text" maxlength="250" class="input">
             </div>
             [%# <div>
                 <div class="signal">

@@ -21,6 +21,7 @@ EDITOR_SOURCE_FILES= \
 		lib/Wikiwyg/Wikitext.js \
 		Wikiwyg/DataValidator.js \
 		wikiwyg.js \
+#		lib/Wikiwyg/Console.js \
 
 JEMPLATE_WIKIWYG_MODULE=jemplate_wikiwyg.js
 ALL_WIKIWYG_JEMPLATES:=$(shell find jemplate_wikiwyg)

@@ -9,7 +9,7 @@ This test case assumes the following:
 * OpenLDAP fixture has been bootstrapped and is running
 * test workspace has been configured as "member-only"
 
-Also, you need base_dn.ldif and people.ldif in your wikitest_files directory.
+Also, you need base_dn.ldif in your wikitest_files directory.
 
 | *Comment* | Test Case: LDAP Deleted User |  |
 
@@ -48,12 +48,7 @@ Also, you need base_dn.ldif and people.ldif in your wikitest_files directory.
 | st-login | %%test_username%% | %%test_password%% |
 | st-message | Wrong email address or password - please try again. |  |
 
-*NOTE:* we _have_ to add the LDIF data back into the LDAP directory before
-trying to remove the user from the workspace; otherwise st-admin can't
-instantiate a User object to find his memberships.
-
 | *Comment* | Teardown: remove the user and the new page we created |  |
-| add-ldif-data | %%wikitest_files%%people.ldif |  |
 | st-admin | remove-member --email %%test_email%% --workspace %%workspace%% | no longer a member |
 | st-admin | purge-page --workspace %%workspace%% --page "eraseme_%%start_time%%" | page was purged |
 

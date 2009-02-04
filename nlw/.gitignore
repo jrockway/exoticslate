@@ -159,3 +159,4 @@ t/wikitests/widgets/
 t/wikitests/widgets/proxy.wiki
 lib/Socialtext/Signal.pm
 t/Socialtext/Signal.t
+t/Socialtext/Events-signal.t

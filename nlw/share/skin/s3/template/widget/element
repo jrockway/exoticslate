@@ -38,7 +38,7 @@
             [% INCLUDE widget/setup %]
         </div>
         <div id="[% gadget.id %]-content" class="[% IF gadget.incomplete %]hidden[% ELSE %]visible[% END %]">
-            [% content %]
+            [% INCLUDE widget/iframe %]
         </div>
     </div><!-- widgetContent END -->
     <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                

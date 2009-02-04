@@ -23,14 +23,6 @@ sub create_grammar {
     return $grammar;
 }
 
-# 1: ~
-# 2: link
-# 3: 'admin [Foo]'
-# begin: 10
-# end: 29
-# text: ~
-# type: waflphrase
-
 sub handle_waflphrase {
     my $self = shift;
     my $match = shift; 
@@ -48,7 +40,7 @@ sub handle_waflphrase {
             return;
         }
     }
-    return $self->unknown_wafl($match);
+    $self->unknown_wafl($match);
 }
 
 sub name_to_id {
@@ -58,5 +50,15 @@ sub name_to_id {
     return $text;
 }
 
+sub unknown_wafl {
+    my $self = shift;
+    my $match = shift; 
+    my $func = $match->{2};
+    my $args = $match->{3};
+    my $output = "{$func";
+    $output .= ": $args" if $args;
+    $output .= '}';
+    $self->{receiver}->insert({output => $output});
+}
 
 1;

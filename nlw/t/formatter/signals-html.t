@@ -40,3 +40,27 @@ __DATA__
 --- wikitext: Check out {link: admin [Foo]} FTW!
 --- html: Check out <a href="/admin/index.cgi?foo">Foo</a> FTW!
 
+=== Invalid wafl phrase with arguments
+--- wikitext: The wafl {foo: bar baz} is invalid.
+--- html: The wafl {foo: bar baz} is invalid.
+
+=== Invalid wafl phrase without arguments
+--- wikitext: The wafl {toc} is invalid.
+--- html: The wafl {toc} is invalid.
+
+=== Invalid wafl phrase without arguments, but with colon and spaces
+--- wikitext: The wafl {toc  :    } is invalid.
+--- html: The wafl {toc} is invalid.
+
+=== Wikitext with extra spaces
+--- SKIP
+Fix later...
+--- wikitext: The    time   is  now.
+--- html: The time is now.
+
+=== Link with many words
+--- SKIP
+name_to_id should call real method in Socialtext::Page(s)
+--- wikitext: Read {link: admin [The Page Name]} now
+--- html: Read <a href="/admin/index.cgi?the_page_name">The Page Name</a> now
+

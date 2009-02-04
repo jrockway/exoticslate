@@ -37,6 +37,7 @@ my @TEST_USERS = (
     },
 );
 
+###############################################################################
 # set up LDAP as a viable user factory (otherwise ST:User->new doesn't
 # pull from LDAP)
 my $appconfig = Socialtext::AppConfig->new();
@@ -46,28 +47,32 @@ $appconfig->write();
 is $appconfig->user_factories, $user_factories,
     'Configured to use LDAP user factory';
 
+###############################################################################
 # create an LDAP factory to test with
 my $factory = Socialtext::User::LDAP::Factory->new();
 isa_ok $factory, 'Socialtext::User::LDAP::Factory';
 my $driver_key = $factory->driver_key;
 
+###############################################################################
 # select a test user, and set up our mocked LDAP connection to return that
 # to us on searches.
 Net::LDAP->set_mock_behaviour(
     search_results => [ $TEST_USERS[0] ],
 );
-my $dn = $TEST_USERS[0]{dn};
+my $dn       = $TEST_USERS[0]{dn};
 my $username = $TEST_USERS[0]{cn};
-my $email = $TEST_USERS[0]{mail};
+my $email    = $TEST_USERS[0]{mail};
 
-# make sure that test User does *NOT* exist in the DB yet
+###############################################################################
+# TEST: make sure that test User does *NOT* exist in the DB yet
 check_no_userid_yet: {
     ok !get_cache(driver_username => $username);
     ok !get_cache(driver_unique_id => $dn);
 }
 
-# instantiate the user (which auto-vivifies him), and make sure that we've
-# got the appropriate bits in the DB.
+###############################################################################
+# TEST: instantiate the user (which auto-vivifies him), and make sure that
+# we've got the appropriate bits in the DB.
 my $user;
 my $user_id;
 my $cached_at;
@@ -86,6 +91,8 @@ auto_vivification: {
         '... cached_at is finite (not +/- infinity)';
 }
 
+###############################################################################
+# TEST: check long-term cache to make sure it has the right stuff for this User
 autovivify_cache_value: {
     my $cached = get_cache(driver_username => $username);
     ok $cached, "got a cached user";
@@ -111,18 +118,21 @@ autovivify_cache_value: {
 }
 
 my %user_tests = (
-    user_id => $user_id,
-    username => $username,
-    email_address => $email,
+    user_id          => $user_id,
+    username         => $username,
+    email_address    => $email,
     driver_unique_id => $dn
 );
 
+###############################################################################
 # pretend that the LDAP user is removed from the LDAP directory; we should
 # get back the *cached* user data (so long as the cache is valid);
 Net::LDAP->set_mock_behaviour(
     search_results => [],
 );
 
+###############################################################################
+# TEST: use the cached copy of the User if its still fresh; don't hit LDAP
 ldap_user_comes_from_cache_if_fresh: {
     foreach my $key (sort keys %user_tests) {
         my $val = $user_tests{$key};
@@ -151,12 +161,15 @@ ldap_user_comes_from_cache_if_fresh: {
     }
 }
 
+###############################################################################
 # expire the cached LDAP user; we'll go back to LDAP and refresh our
 # cached copy of the user based on the data we get back.
 Net::LDAP->set_mock_behaviour(
     search_results => [ $TEST_USERS[1] ],
 );
 
+###############################################################################
+# TEST: once expired, the User should be fetched from LDAP
 expired_ldap_user_comes_from_ldap: {
     foreach my $key (sort keys %user_tests) {
         my $val = $user_tests{$key};
@@ -169,11 +182,14 @@ expired_ldap_user_comes_from_ldap: {
     }
 }
 
+###############################################################################
 # delete the user from the LDAP store
 Net::LDAP->set_mock_behaviour(
     search_results => [ ],
 );
 
+###############################################################################
+# TEST: if User no longer exists in LDAP, they're a "Deleted User"
 expired_ldap_user_is_Deleted_if_missing: {
     foreach my $key (sort keys %user_tests) {
         my $val = $user_tests{$key};
@@ -189,19 +205,22 @@ expired_ldap_user_is_Deleted_if_missing: {
     }
 }
 
+###############################################################################
 # update the plan to user 2
 Net::LDAP->set_mock_behaviour(
     search_results => [ $TEST_USERS[2] ],
 );
-$username = $TEST_USERS[2]{cn};
-$email = $TEST_USERS[2]{mail};
+$username   = $TEST_USERS[2]{cn};
+$email      = $TEST_USERS[2]{mail};
 %user_tests = (
-    user_id => $user_id,
-    username => $username,
-    email_address => $email,
+    user_id          => $user_id,
+    username         => $username,
+    email_address    => $email,
     driver_unique_id => $dn
 );
 
+###############################################################################
+# TEST: fetching User from LDAP is possible even if some of the data changes
 expired_user_can_change_identity: {
     foreach my $key (sort keys %user_tests) {
         my $val = $user_tests{$key};
@@ -215,6 +234,8 @@ expired_user_can_change_identity: {
     }
 }
 
+###############################################################################
+# TODO: authentication bypasses the cache and goes directly to LDAP
 TODO: {
     local $TODO = "haven't built this test yet";
     authentication_does_not_use_cache: {

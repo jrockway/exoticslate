@@ -35,8 +35,8 @@
     </div><!-- controls END -->
     <div id="st-edit-mode-view">
         <div id="contentContainer">
+            [% INCLUDE element/edit_summary.html.tt2 %]
             <div id="contentTitle">
-                [% INCLUDE element/edit_summary.html.tt2 %]
                 [% IF is_new && !is_incipient %]
                     <h2 id="st-editing-title" class="tableTitle">
                         [% loc('Editing:') %]

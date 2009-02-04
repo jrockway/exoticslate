@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+# @COPYRIGHT@
+use warnings;
+use strict;
+
+use Test::More qw/no_plan/;
+use Socialtext::SQL qw/:exec/;
+
+diag "checking signal events";
+
+my $linked_up_signals = sql_singlevalue(q{
+    SELECT count(*)
+    FROM event
+    WHERE event_class = 'signal'
+      AND signal_id IS NULL
+});
+is $linked_up_signals, 0, 'no dangling events';
+
+my $bad_fks = sql_singlevalue(q{
+    SELECT count(*)
+    FROM event 
+    LEFT JOIN signal USING (signal_id)
+    WHERE event.event_class = 'signal'
+      AND signal.signal_id IS NULL -- due to LEFT JOIN
+});
+is $bad_fks, 0, 'no bad fks';

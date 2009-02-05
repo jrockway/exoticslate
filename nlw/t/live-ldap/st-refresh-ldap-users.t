@@ -4,11 +4,11 @@
 use strict;
 use warnings;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 56;
+use Test::Socialtext tests => 64;
 use Test::Socialtext::User;
 use File::Slurp qw(write_file);
 use Benchmark qw(timeit timestr);
-use Socialtext::SQL qw(sql_execute);
+use Socialtext::SQL qw(:exec);
 
 ###############################################################################
 # FIXTURE: db
@@ -334,6 +334,54 @@ test_ldap_missing_last_name: {
 
     # make sure that the User now has a blank/empty last name
     is $refreshed_homey->last_name, '', '... last_name is blank/empty';
+
+    # cleanup; don't want to pollute other tests
+    Test::Socialtext::User->delete_recklessly($ldap_user);
+}
+
+###############################################################################
+# TEST: e-mail address is missing; should warn about error, leave DB record
+# untouched, and continue to run.
+test_ldap_missing_email_address: {
+    my $ldap = set_up_openldap();
+
+    my $user_dn = 'cn=John Doe,dc=example,dc=com';
+
+    # modify the LDAP config, so that the "email_address" field gets mapped to
+    # an LDAP attribute that could be blank/empty.
+    $ldap->ldap_config->{attr_map}{email_address} = 'title';
+    $ldap->add_to_ldap_config();
+
+    # modify the test User record in LDAP so that it *has* an email address
+    my $rc = $ldap->modify( $user_dn, add => { title => 'john.doe@example.com' } );
+    ok $rc, 'modified LDAP user, giving them an email_address';
+
+    # add an LDAP user to our DB cache
+    my $ldap_user = Socialtext::User->new( username => 'John Doe' );
+    isa_ok $ldap_user, 'Socialtext::User', 'LDAP user missing email address';
+
+    my $ldap_homey = $ldap_user->homunculus;
+    isa_ok $ldap_homey, 'Socialtext::User::LDAP', 'LDAP homunculus';
+
+    # modify the test User record in LDAP, clearing their email address
+    $rc = $ldap->modify( $user_dn, delete => [qw(title)] );
+    ok $rc, 'cleared the users email address in LDAP';
+
+    # expire the user, so that they'll get refreshed
+    $ldap_homey->expire();
+
+    # refresh LDAP users
+    my $results = `st-refresh-ldap-users --verbose 2>&1`;
+    is $?, 0, 'st-refresh-ldap-users ran successfully';
+    diag $results if $?;
+    like $results, qr/found 1 LDAP users/, 'one LDAP user present';
+    like $results, qr/user missing email address/, 'warning present stating User is missing email address';
+
+    # make sure that the User was *NOT* refreshed by st-refresh-ldap-users
+    my $cached_at = sql_singlevalue( qq{
+        SELECT cached_at FROM users WHERE user_id=?
+        }, $ldap_homey->user_id );
+    is $cached_at, '-infinity', 'user record *not* refreshed, but left as-is';
 
     # cleanup; don't want to pollute other tests
     Test::Socialtext::User->delete_recklessly($ldap_user);

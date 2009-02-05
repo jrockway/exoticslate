@@ -77,7 +77,7 @@
         </th>
         <script language="javascript">
           var query_start = "?[% predicate %];scope=[% scope %];"
-                          + "orig_search_term=[% search_term.replace('"', '\"') %];"
+                          + "orig_search_term=[% search_term %];"
                           + "summaries=[% summaries %]";
           function sort_by() {
             var selected = jQuery('select#sort-picker').val();

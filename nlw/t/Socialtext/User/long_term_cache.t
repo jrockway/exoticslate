@@ -60,8 +60,8 @@ Net::LDAP->set_mock_behaviour(
     search_results => [ $TEST_USERS[0] ],
 );
 my $dn       = $TEST_USERS[0]{dn};
-my $username = $TEST_USERS[0]{cn};
-my $email    = $TEST_USERS[0]{mail};
+my $username = lc( $TEST_USERS[0]{cn} );    # stored internally as lower-case
+my $email    = lc( $TEST_USERS[0]{mail} );  # stored internally as lower-case
 
 ###############################################################################
 # TEST: make sure that test User does *NOT* exist in the DB yet
@@ -210,8 +210,8 @@ expired_ldap_user_is_Deleted_if_missing: {
 Net::LDAP->set_mock_behaviour(
     search_results => [ $TEST_USERS[2] ],
 );
-$username   = $TEST_USERS[2]{cn};
-$email      = $TEST_USERS[2]{mail};
+$username   = lc( $TEST_USERS[2]{cn} );     # stored internally as lower-case
+$email      = lc( $TEST_USERS[2]{mail} );   # stored internally as lower-case
 %user_tests = (
     user_id          => $user_id,
     username         => $username,
@@ -266,8 +266,8 @@ sub reset_user {
         }, 
         $TEST_USERS[0]{gn},
         $TEST_USERS[0]{sn},
-        $TEST_USERS[0]{mail},
-        $TEST_USERS[0]{cn},
+        lc($TEST_USERS[0]{mail}),   # stored internally as lower-case
+        lc($TEST_USERS[0]{cn}),     # stored internally as lower-case
         $user_id,
     );
 }
@@ -282,9 +282,9 @@ sub db_cache_ok {
     is_deeply $cached, {
         user_id             => $user_id,
         driver_key          => $driver_key,
-        driver_username     => $TEST_USERS[$user_num]{cn},
+        driver_username     => lc($TEST_USERS[$user_num]{cn}),      # stored internally as lower-case
         driver_unique_id    => $TEST_USERS[$user_num]{dn},
-        email_address       => $TEST_USERS[$user_num]{mail},
+        email_address       => lc($TEST_USERS[$user_num]{mail}),    # stored internally as lower-case
         first_name          => $TEST_USERS[$user_num]{gn},
         last_name           => $TEST_USERS[$user_num]{sn},
         password            => '*no-password*',
@@ -300,8 +300,8 @@ sub user_fields_ok {
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
     is $new_user->user_id, $user_id, '... matches original user_id';
-    is $new_user->username          => $TEST_USERS[$user_num]{cn};
-    is $new_user->email_address     => $TEST_USERS[$user_num]{mail};
+    is $new_user->username          => lc($TEST_USERS[$user_num]{cn});      # stored internally as lower-case
+    is $new_user->email_address     => lc($TEST_USERS[$user_num]{mail});    # stored internally as lower-case
     is $new_user->first_name        => $TEST_USERS[$user_num]{gn};
     is $new_user->last_name         => $TEST_USERS[$user_num]{sn};
 

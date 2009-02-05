@@ -259,18 +259,16 @@ sub _vivify {
 
     # NOTE: *always* use the driver_unique_id to update LDAP user records
 
-    $proto_user->{cached_at} = 'now'; # auto-set to 'now'
-    $proto_user->{password} = '*no-password*';
+    $proto_user->{cached_at} = 'now';           # auto-set to 'now'
+    $proto_user->{password}  = '*no-password*'; # placeholder password
 
     my $user_id = $self->ResolveId($proto_user);
 
     my ($user_keys, $extra_keys) = 
         part { $Socialtext::User::Base::all_fields{$_} ? 0 : 1 }
         keys %$proto_user;
-    my %user_attrs = map { $_ => $proto_user->{$_} } @$user_keys;
+    my %user_attrs  = map { $_ => $proto_user->{$_} } @$user_keys;
     my %extra_attrs = map { $_ => $proto_user->{$_} } @$extra_keys;
-
-    $user_attrs{driver_username} = delete $user_attrs{username};
 
     # XXX: some fields are explicitly set to '' elsewhere
     # (ST:U:Def:Factory:create, ST:U:Factory:NewUserRecord), and we're going
@@ -279,15 +277,30 @@ sub _vivify {
     $user_attrs{first_name} ||= '';
     $user_attrs{last_name}  ||= '';
 
+    # don't encrypt the placeholder password; just store it as-is
+    $user_attrs{no_crypt} = 1;
+
     # depending on whether or not we've got a User Id, we're either updating
     # an existing User record in the DB or creating a new one.
     if ($user_id) {
-        # update cache
+        # validate/clean the data we got from LDAP
         $user_attrs{user_id} = $user_id;
+        # ... grab proto-user from the DB; the last known state for this User
+        my @user_drivers = Socialtext::User->_drivers();
+        my $proto_user = $self->GetHomunculus('user_id', $user_id, \@user_drivers, 1);
+        # ... validate the data against the proto-user
+        $self->ValidateAndCleanData($proto_user, \%user_attrs);
+
+        # update cached data for User
+        $user_attrs{driver_username} = delete $user_attrs{username};
         $self->UpdateUserRecord(\%user_attrs);
     }
     else {
-        # will add a user_id to $proto_user:
+        # validate/clean the data we got from LDAP
+        $self->ValidateAndCleanData(undef, \%user_attrs);
+
+        # create User record, and update cached data
+        $user_attrs{driver_username} = delete $user_attrs{username};
         $self->NewUserRecord(\%user_attrs);
     }
 

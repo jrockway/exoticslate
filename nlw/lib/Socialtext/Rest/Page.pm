@@ -36,6 +36,7 @@ sub make_GETter {
                     return $self->pname . ' not found';
                 }
                 else {
+                    $self->hub->pages->current($page);
                     my @etag = ();
 
                     if ( $content_type eq 'text/x.socialtext-wiki' ) {

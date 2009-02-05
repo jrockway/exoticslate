@@ -34,6 +34,7 @@ sub revision_list {
         my $row = {};
         $row->{id}     = $revision_id;
         $row->{number} = $revision->metadata->Revision;
+        $row->{edit_summary} = $revision->metadata->RevisionSummary;
         $row->{date}   = $revision->datetime_for_user;
         $row->{from}   = $revision->metadata->From;
         $row->{class} = @$rows % 2 ? 'trbg-odd' : 'trbg-even';
@@ -67,11 +68,15 @@ sub revision_view {
       : $page->to_html;
 
     my $revision = $page->metadata->Revision;
+    my $edit_summary = $page->metadata->RevisionSummary;
+    my $from = $page->metadata->From;
 
     $self->screen_template('view/page/revision');
     $self->render_screen(
         $page->all,
+        from => $from,
         human_readable_revision => $revision,
+        edit_summary => $edit_summary,
         display_title    => $self->html_escape( $page->title ),
         display_title_decorator  => loc("Revision [_1]", $revision),
         print                   => $output,

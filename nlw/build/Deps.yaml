@@ -104,6 +104,7 @@ Log::Dispatch::Syslog: 1.18
 LWP::UserAgent: 2.033
 Number::Format: 1.40
 Mail::Address: 1.67
+MIME::Base64: 3.07
 MIME::Parser: 5.417
 MIME::Types: 1.15
 MLDBM: 2.01

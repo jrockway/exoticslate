@@ -21,6 +21,7 @@ EDITOR_SOURCE_FILES= \
 		lib/Wikiwyg/Wikitext.js \
 		Wikiwyg/DataValidator.js \
 		wikiwyg.js \
+#		lib/Wikiwyg/Console.js \
 
 JEMPLATE_WIKIWYG_MODULE=jemplate_wikiwyg.js
 ALL_WIKIWYG_JEMPLATES:=$(shell find jemplate_wikiwyg)
@@ -63,7 +64,7 @@ jemplate/insert_widget_menu: $(WIDGETS_YAML) $(JEMPLATE_GENERATOR) template/widg
 	    --template=widget_menu.tt2
 
 Widgets.js: $(WIDGETS_YAML)
-	perl -MYAML -I../../../../lib -I../../../lib -MSocialtext::JSON -e 'print "Wikiwyg.Widgets =\n"; print encode_json(YAML::LoadFile(shift(@ARGV))); print ";\n"' \
+	perl -MYAML -I../../../../lib -I../../../lib -MJSON::XS -e 'print "Wikiwyg.Widgets =\n"; print encode_json(YAML::LoadFile(shift(@ARGV))); print ";\n"' \
 		$< > $@
 
 split-js:

@@ -12,7 +12,8 @@ to the skins array below.
 
 * mainNav and workspaceNav on same level: tetrapak, zehnder
 * fixed width right & left margins (instead of % width): addleshaw blackwell emersol pointroll
-* custom JS: climateproject flow livenation tenacity greenmountain prodrive
+* custom Buttons: greenmountain clifbar netsuite
+* custom JS: flow livenation tenacity prodrive
 * unusual layout: jboye
 
 .html

@@ -323,6 +323,8 @@ proto.preview_link_text = loc('Preview');
 proto.preview_link_more = loc('Edit More');
 
 proto.preview_link_action = function() {
+    jQuery("#st-edit-summary").hide();
+
     var preview = this.modeButtonMap[WW_PREVIEW_MODE];
     var current = this.current_mode;
 
@@ -466,11 +468,11 @@ proto.newpage_duplicate_keyupHandler = function(event) {
 
 proto.newpage_display_duplicate_dialog = function(page_name) {
     jQuery('#st-newpage-duplicate-suggest')
-        .html(Socialtext.username + ': ' + page_name);
-    jQuery('#st-newpage-duplicate-appendname').html(page_name);
+        .text(Socialtext.username + ': ' + page_name);
+    jQuery('#st-newpage-duplicate-appendname').text(page_name);
 
     jQuery('#st-newpage-duplicate-link')
-        .html(page_name)
+        .text(page_name)
         .attr('href', '/' + Socialtext.wiki_id + '/index.cgi?' + page_name)
         .attr('target', page_name);
     
@@ -574,7 +576,7 @@ proto.newpage_duplicate_ok = function() {
             }
             break;
         case 'suggest':
-            var name = jQuery('#st-newpage-duplicate-suggest').html();
+            var name = jQuery('#st-newpage-duplicate-suggest').text();
             if (this.newpage_save(name)) {
                 jQuery.hideLightbox();
             }
@@ -582,7 +584,7 @@ proto.newpage_duplicate_ok = function() {
         case 'append':
             jQuery('#st-page-editing-append').val('bottom');
             jQuery('#st-page-editing-pagename').val(
-                jQuery('#st-newpage-duplicate-appendname').html()
+                jQuery('#st-newpage-duplicate-appendname').text()
             );
             jQuery.hideLightbox();
             this.saveContent();
@@ -647,6 +649,10 @@ proto.saveNewPage = function() {
 
 proto.saveChanges = function() {
     this.disableLinkConfirmations();
+
+    jQuery('#st-page-editing-summary')
+        .val(this.edit_summary());
+
     var submit_changes = function(wikitext) {
         /*
         if ( Wikiwyg.is_safari ) {
@@ -1106,6 +1112,12 @@ function setup_wikiwyg() {
         ww.starting_edit = true;
 
         try {
+            // if `Cancel` and then `Edit` buttons are clicked, we need
+            // to set a timer to prevent the edit summary box from displaying
+            // immediately
+            ok_to_show_summary = false;
+            setTimeout(function() { ok_to_show_summary = true }, 2000);
+
             if (Wikiwyg.is_safari) {
                 delete ww.current_wikitext;
             }
@@ -1253,12 +1265,91 @@ function setup_wikiwyg() {
             //do_post_cancel_tidying();
             ww.disableLinkConfirmations();
 
+            hide_edit_summary();
+            jQuery('#st-edit-summary .input').val('')
+
             ww.is_editing = false;
             ww.showScrollbars();
 
             Socialtext.ui_expand_off();
         } catch(e) {}
         return false;
+    });
+
+    // Begin - Edit Summary Logic
+
+    var ok_to_show_summary = false;
+
+    var show_edit_summary = function () {
+        if (! ok_to_show_summary) return;
+        if (! jQuery('#st-edit-summary').is(':hidden')) return;
+        var $input = jQuery('#st-edit-summary .input');
+        if (ww.edit_summary() == '')
+            $input.val('');
+        jQuery('#st-edit-summary').show();
+        $input.focus();
+    }
+
+    var hide_edit_summary = function () {
+        jQuery('#st-edit-summary').hide();
+        return false;
+    }
+
+    ww.edit_summary = function () {
+        var val = jQuery('#st-edit-summary .input').val()
+            .replace(/\s+/g, ' ')
+            .replace(/^\s*(.*?)\s*$/, '$1');
+        return val;
+    }
+
+    jQuery('#st-save-button-link')
+        .unbind('hover')
+        .hover(
+            function() {
+                setTimeout(show_edit_summary, 100);
+            },
+            function () {
+                ok_to_show_summary = false;
+                setTimeout(function() { ok_to_show_summary = true }, 200);
+            }
+        );
+    
+    jQuery('#st-edit-summary form')
+        .unbind('submit')
+        .submit(function () {
+            jQuery('#st-save-button-link').click();
+            return false;    
+        });
+
+    jQuery('#st-edit-summary-minor-checkbox')
+        .unbind('click')
+        .click(
+            function () {
+                jQuery('#st-edit-summary-signal-checkbox')[0].checked =
+                    ! jQuery('#st-edit-summary-minor-checkbox')[0].checked;
+                jQuery('#st-edit-summary .anyway').css(
+                    'display',
+                    jQuery('#st-edit-summary-minor-checkbox')[0].checked
+                    ? 'inline' : 'none'
+                );
+            }
+        );
+
+    jQuery('#st-edit-summary .close-window')
+        .unbind('click')
+        .click(hide_edit_summary);
+
+    jQuery('#st-edit-summary .explain a')
+        .unbind('click')
+        .click(function() {
+            alert(Jemplate.process('element/edit_summary_explanation'));
+            jQuery('#st-edit-summary .input').focus();
+        });
+
+    jQuery("body").mousedown(function(e) {
+        if ( jQuery(e.target).parents("#st-edit-summary").size() > 0 ) return;
+        if ( jQuery(e.target).is("#st-edit-summary") ) return;
+        hide_edit_summary();
     });
 
     jQuery('#st-preview-button-link')

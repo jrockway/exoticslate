@@ -32,17 +32,17 @@
     <div id="contentColumns">
         <ul class="widgetColumn" id="leftList">
         [% FOR gadget = container.gadgets.0 %]
-            [% INCLUDE 'widget/html_container' gadget=gadget %]
+            [% INCLUDE 'widget/element' gadget=gadget %]
         [% END %]
         </ul>
         <ul class="widgetColumn" id="middleList">
         [% FOR gadget = container.gadgets.1 %]
-            [% INCLUDE 'widget/html_container' gadget=gadget %]
+            [% INCLUDE 'widget/element' gadget=gadget %]
         [% END %]
         </ul>
         <ul class="widgetColumn" id="rightList">
         [% FOR gadget = container.gadgets.2 %]
-            [% INCLUDE 'widget/html_container' gadget=gadget %]
+            [% INCLUDE 'widget/element' gadget=gadget %]
         [% END %]
         </ul>
     </div><!-- columnColumns END -->

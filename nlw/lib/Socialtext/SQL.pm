@@ -1,6 +1,7 @@
 # @COPYRIGHT@
 package Socialtext::SQL;
 use strict;
+use Socialtext::Date;
 use Socialtext::AppConfig;
 use Socialtext::Timer;
 use DateTime::Format::Pg;
@@ -42,12 +43,13 @@ our @EXPORT_OK = qw(
     sql_execute sql_execute_array sql_selectrow sql_singlevalue 
     sql_commit sql_begin_work sql_rollback sql_in_transaction
     sql_convert_to_boolean sql_convert_from_boolean
-    sql_parse_timestamptz sql_format_timestamptz
+    sql_parse_timestamptz sql_format_timestamptz sql_timestamptz_now
 );
 our %EXPORT_TAGS = (
     'exec' => [qw(sql_execute sql_execute_array
                   sql_selectrow sql_singlevalue)],
-    'time' => [qw(sql_parse_timestamptz sql_format_timestamptz)],
+    'time' => [qw(sql_parse_timestamptz sql_format_timestamptz 
+                  sql_timestamptz_now)],
     'bool' => [qw(sql_convert_to_boolean sql_convert_from_boolean)],
     'txn'  => [qw(sql_commit sql_begin_work
                   sql_rollback sql_in_transaction)],
@@ -355,6 +357,17 @@ sub sql_format_timestamptz {
         $fmt =~ s/infinite$/infinity/g;
     }
     return $fmt;
+}
+
+
+=head2 sql_timestamptz_now()
+
+Return the current time as a hires, formatted, timestamptz string.
+
+=cut
+
+sub sql_timestamptz_now {
+    return sql_format_timestamptz(Socialtext::Date->now(hires=>1));
 }
 
 1;

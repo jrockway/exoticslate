@@ -105,9 +105,9 @@
         [% IF row.is_attachment %]
           <a class="titleLink" href="/data/workspaces/[% row.workspace_name || current_workspace.name %]/attachments/[% row.page_uri %]:[% row.id %]/original/[% row.document_title %]">[% row.document_title %],</a>
           [% loc('attached to page') %]
-          <a href="/[% row.workspace_name || current_workspace.name %]/index.cgi?[% row.page_uri %]">[% row.Subject %]</a>
+          <a href="/[% row.workspace_name || current_workspace.name %]/index.cgi?[% row.page_uri %]">[% row.Subject | html %]</a>
         [% ELSE %]
-          <a class="titleLink" href="/[% row.workspace_name || current_workspace.name %]/index.cgi?[% row.page_uri %]">[% row.Subject %]</a>
+          <a class="titleLink" href="/[% row.workspace_name || current_workspace.name %]/index.cgi?[% row.page_uri %]">[% row.Subject | html %]</a>
         [% END %]
         [% IF row.workspace_title %][% loc('in') %] <a href="/[% row.workspace_name %]">[% row.workspace_title %]</a>[% END %]
         [% IF summaries %]

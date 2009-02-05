@@ -1,0 +1,69 @@
+| *Comment* | Test Case: Socialtext Gadgets |  |
+| set_default | clear_socialtext | `?action=clear_widgets` |
+
+| open_ok | /%%clear_socialtext%% |  |
+
+| *Comment* | Test Case: Socialtext Gadgets. All People Tags |  |
+
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=All People Tags | 30000 |
+| click_and_wait | link=All People Tags |  |
+
+| *Comment* | Test Case: Socialtext Gadgets. Recent Conversations |  |
+
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Recent Conversations | 30000 |
+| click_and_wait | link=Recent Conversations |  |
+
+| *Comment* | Test Case: Socialtext Gadgets. Workspaces |  |
+
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | //a[contains(@href,'my_workspaces')] | 30000 |
+| click_and_wait | //a[contains(@href,'my_workspaces')] |  |
+
+| *Comment* | Test Case: Socialtext Gadgets. Wiki Page |  |
+
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Wiki Page | 30000 |
+| click_and_wait | link=Wiki Page |  |
+
+| *Comment* | Test Case: Socialtext Gadgets. One Image |  |
+
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=One Image | 30000 |
+| click_and_wait | link=One Image |  |
+
+| *Comment* | Test Case: Socialtext Gadgets. RSS Viewer |  |
+
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=RSS Viewer | 30000 |
+| click_and_wait | link=RSS Viewer |  |
+
+| *Comment* | Test Case: Socialtext Gadgets. Workspace Tags |  |
+
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Workspace Tags | 30000 |
+| click_and_wait | link=Workspace Tags |  |
+
+| *Comment* | Test Case: Socialtext Gadgets. Signals |  |
+
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Signals | 30000 |
+| click_and_wait | link=Signals |  |
+
+| *Comment* | Test Case: Socialtext Gadgets COMPLETED |  |

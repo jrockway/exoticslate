@@ -470,7 +470,30 @@ proto.set_focus = function() {
     } catch (e) {}
 }
 
-proto.set_paste_handler = function() {
+proto.on_key_enter = function(e) {
+    var win = this.get_edit_window();
+    var doc = this.get_edit_document();
+    var sel, node;
+
+    if (win.getSelection) {
+        sel = win.getSelection();
+        if (!sel) return;
+        node = sel.anchorNode;
+    }
+    else if (doc.selection) {
+        sel = doc.selection;
+        if (!sel) return;
+        node = sel.createRange().parentElement();
+    }
+
+    if (!node) return;
+
+    if (jQuery(node).is("li")) {
+        jQuery(node).find("br:last-child").remove();
+    }
+}
+
+proto.set_key_interception_handler = function() {
     var self = this;
 
     self.pastebin = jQuery("#pastebin").get(0).contentWindow;
@@ -492,6 +515,9 @@ proto.set_paste_handler = function() {
 
                 self.on_pasted(html);
             }, 100);
+        }
+        else if (e.which == 13) {;
+             self.on_key_enter(e);
         }
     });
 }
@@ -553,7 +579,7 @@ proto.enableThis = function() {
                 self.set_clear_handler();
             }
 
-            self.set_paste_handler();
+            self.set_key_interception_handler();
         }
         catch(e) { }
     }, 1);
@@ -568,6 +594,14 @@ proto.enableThis = function() {
             }, 1000
         );
     }
+    jQuery(self.get_edit_window())
+        .bind("mousedown", function() {
+            jQuery("#st-edit-summary").hide();
+        });
+    jQuery( self.get_edit_document(), self.get_edit_window())
+        .bind("mousedown", function() {
+            jQuery("#st-edit-summary").hide(); 
+        });
 }
 
 proto.on_pasted = function(html) {
@@ -653,7 +687,7 @@ proto.set_clear_handler = function () {
         jQuery(editor).unbind();
 
         /* We've just unbound the paste handler, so re-enable it here */
-        self.set_paste_handler();
+        self.set_key_interception_handler();
     };
 
     try {
@@ -887,7 +921,7 @@ proto.closeTableDialog = function() {
     var doc = this.get_edit_document();
     jQuery(doc).unbind("keypress");
     jQuery.hideLightbox();
-    this.set_paste_handler();
+    this.set_key_interception_handler();
 }
 
 proto.do_new_table = function() {

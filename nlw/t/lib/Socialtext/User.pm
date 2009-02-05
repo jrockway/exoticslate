@@ -77,6 +77,8 @@ sub last_name { $_[0]->{last_name} ||= 'Mocked Last' }
 sub is_authenticated { ! $_[0]->is_guest() }
 
 sub is_guest { $_[0]->{is_guest} || 0 }
+sub is_business_admin { $_[0]->{is_business_admin} || 0 }
+
 
 sub user_id { $_[0]->{user_id} || 1 }
 

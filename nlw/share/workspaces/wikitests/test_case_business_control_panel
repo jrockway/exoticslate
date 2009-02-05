@@ -340,6 +340,64 @@ text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_t
 | click_and_wait | invite-button |  |
 | text_like | errors-and-messages | qr/Congratulations! You successfully created a new workspace with \d+ users. They will receive an invitation message with a link to ws-n%%start_time%%./ |
 
+| *Comment* | TC: BCP This section tests the custom Profile fields |  |
+| click_and_wait | link=Accounts |  |
+| click_and_wait | link=0 sort 3 account %%start_time%% |  |
+| click_ok | toggle_plugin_people |  |
+| verifyConfirmation | Socialtext People is a paid option. For more information about fees, contact your sales representative. |  |
+| wait_for_element_visible_ok | link=Profile Fields | 5000 |
+
+| *Comment* | TC: BCP check all the Profile Fields info |  |
+| click_and_wait | link=Profile Fields |  |
+| text_like | qr/Field Title.+Field Name.+Field Type.+Hidden.+Source.+Actions/ |  |
+| text_like | qr/AIM™.+(Edit).+aol_sn/ |  |
+| text_like | qr/Assistant.+(Edit).+assistant/ |  |
+| text_like | qr/Blog.+(Edit).+blog/ |  |
+| text_like | qr/Company.+(Edit).+company/ |  |
+| text_like | qr/Facebook™.+(Edit).+facebook_url/ |  |
+| text_like | qr/GTalk.+(Edit).+gtalk_sn/ |  |
+| text_like | qr/Home phone.+(Edit).+home_phone/ |  |
+| text_like | qr/Linkedin®.+(Edit).+linkedin_url/ |  |
+| text_like | qr/Location.+(Edit).+location/ |  |
+| text_like | qr/Mobile phone.+(Edit).+mobile_phone/ |  |
+| text_like | qr/Personal.+(Edit).+personal_url/ |  |
+| text_like | qr/Position.+(Edit).+position/ |  |
+| text_like | qr/Sametime®.+(Edit).+sametime_sn/ |  |
+| text_like | qr/Skype™.+(Edit).+skype_sn/ |  |
+| text_like | qr/Manager.+(Edit).+supervisor/ |  |
+| text_like | qr/Twitter.+(Edit).+twitter_sn/ |  |
+| text_like | qr/Work phone.+(Edit).+work_phone/ |  |
+| text_like | qr/Yahoo!™.+(Edit).+yahoo_sn/ |  |
+
+| *Comment* | TC: BCP because Edit buttons are indistinguishable, only check that one works and don't worry which one. Note that the existence of the buttons is checked above. |  |
+| click_and_wait | link=Edit |  |
+| text_like | qr/Field Title.+Field Name.+Data Source.+Field Type.+Hidden/ |  |
+| select_ok | data-source-select | label=External |
+| select_ok | field-type-select | label=Regular |
+| click_ok | //input[@name='is_hidden' and @value='1'] |  |
+| click_and_wait | //input[@value='Cancel'] |  |
+
+| *Comment* | TC: BCP check Cancel, then check Save Field. We don't care about setting the fields back. Setting them at all proves the controls work, so no need to set them back. |  |
+| click_and_wait | link=Edit |  |
+| text_like | qr/Field Title.+Field Name.+Data Source.+Field Type.+Hidden/ |  |
+| select_ok | data-source-select | label=External |
+| select_ok | field-type-select | label=Regular |
+| click_ok | //input[@name='is_hidden' and @value='1'] |  |
+| click_and_wait | //input[@value='Save Field'] |  |
+| text_like | qr/ Updated profile field.+The value of this field will be updated from the external source when user data is refreshed. This field is now hidden from users' profiles./ |  |
+| text_like | un-hide |  |
+
+| *Comment* | TC:BCP make new custom fields |  |
+| click_and_wait | link=Create New Field |  |
+| type_ok | field-title-input | ft %%start_time%% |
+| type_ok | field-name-input | fn_%%start_time%% |
+| select_ok | data-source-select | label=External |
+| select | field-type-select | label=Contact |
+| click | //input[@name='is_hidden' and @value='1'] |  |
+| click_and_wait | //input[@value='Create New Field'] |  |
+| text_like | Created profile field "ft %%start_time%%" The value of this field will be updated from the external source when user data is refreshed. This field is now hidden from users' profiles. |  |
+| text_like | qr/ft %%start_time%%.+fn_%%start_time%%.+Contact.+Yes.+External.+(un-hide)/ |  |
+
 | *Comment* | Test case: Business Control Panel teardown. Let %%username%% keep accounts admin privileges. |  |
 | st-admin | remove-system-admin --email %%email%% | no longer has system admin access |
 | st-admin | delete-workspace --workspace 0-sort-1-workspace1-%%start_time%% --no-export |  |

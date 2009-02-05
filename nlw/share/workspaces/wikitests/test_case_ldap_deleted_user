@@ -9,19 +9,20 @@ This test case assumes the following:
 * OpenLDAP fixture has been bootstrapped and is running
 * test workspace has been configured as "member-only"
 
-Also, you need base_dn.ldif and people.ldif in your wikitest_files directory.
+Also, you need base_dn.ldif in your wikitest_files directory.
 
 | *Comment* | Test Case: LDAP Deleted User |  |
 
 | *Comment* | Setup: turn LDAP caching off, otherwise this test takes forever to run |  |
 | ldap-config | ttl | 0 |
 
-| *Comment* | Setup: add users from LDAP store, and choose one for testing |  |
+| *Comment* | Setup: add framework to LDAP store; create arbitrary user in LDAP |  |
 | add-ldif-data | %%wikitest_files%%base_dn.ldif |  |
-| add-ldif-data | %%wikitest_files%%people.ldif |  |
-| set | test_email | john.doe@example.com |
-| set | test_username | John Doe |
-| set | test_password | foobar |
+| set | test_user | user_%%start_time%% |
+| add-ldap-user | %%test_user%% |  |
+| set | test_email | %%test_user%%@example.com |
+| set | test_username | %%test_user%% LdapUser |
+| set | test_password | ldapd3v |
 
 | *Comment* | Setup: add the user to the workspace and create a page to test against |  |
 | st-admin | add-member --email %%test_email%% --workspace %%workspace%% |  |
@@ -36,7 +37,7 @@ Also, you need base_dn.ldif and people.ldif in your wikitest_files directory.
 | wait_for_element_visible_ok | st-wikinav-logout | 30000 |
 
 | *Comment* | DELETE user from LDAP directory |  |
-| remove-ldif-data | %%wikitest_files%%people.ldif |  |
+| remove-ldap-user | %%test_user%% |  |
 
 | *Comment* | Test case: now deleted user should be treated as *not* logged in |  |
 | refresh |  |  |
@@ -47,12 +48,7 @@ Also, you need base_dn.ldif and people.ldif in your wikitest_files directory.
 | st-login | %%test_username%% | %%test_password%% |
 | st-message | Wrong email address or password - please try again. |  |
 
-*NOTE:* we _have_ to add the LDIF data back into the LDAP directory before
-trying to remove the user from the workspace; otherwise st-admin can't
-instantiate a User object to find his memberships.
-
 | *Comment* | Teardown: remove the user and the new page we created |  |
-| add-ldif-data | %%wikitest_files%%people.ldif |  |
 | st-admin | remove-member --email %%test_email%% --workspace %%workspace%% | no longer a member |
 | st-admin | purge-page --workspace %%workspace%% --page "eraseme_%%start_time%%" | page was purged |
 

@@ -11,6 +11,8 @@ use Socialtext::JSON;
 use Readonly;
 use Socialtext::HTTP ':codes';
 use Socialtext::Events;
+use Socialtext::Log qw( st_log );
+use Socialtext::PageMeta qw( ProcessEditSummary );
 
 Readonly my $DEFAULT_LINK_DICTIONARY => 'REST';
 Readonly my $S2_LINK_DICTIONARY      => 'S2';
@@ -258,10 +260,15 @@ sub PUT_json {
     my $content = $rest->getContent();
     my $object = decode_json( $content );
 
+    my $edit_summary = ProcessEditSummary($object->{edit_summary});
+    st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
+        if $edit_summary;
+
     $page->update_from_remote(
         content => $object->{content},
         from    => $object->{from},
         date    => $self->make_date_time_date($object->{date}),
+        edit_summary => $edit_summary,
         $object->{tags} ? (tags => $object->{tags}) : (),
     );
 

@@ -2206,3 +2206,75 @@ ul li.flexButtonBlue a.addButton {
 ul li.flexButtonBlue a.addButton:hover {
     background-position: bottom left;
 }
+
+#st-edit-summary {
+    width: 400px;
+    background: #e8e8e8;
+    padding: 10px 14px 10px 10px;
+    border: 1px solid black;
+    z-index: 1;
+    position: absolute;
+    display: none;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+#st-edit-summary .input {
+    background: #fff;
+    width:400px;
+    /* margin-bottom: 8px; */
+}
+
+#st-edit-summary .explain {
+    font-size: smaller;
+}
+
+#st-edit-summary .signal {
+    float: left;
+    width: 200px;
+}
+
+#st-edit-summary .minor {
+    text-align: right;
+    float: right;
+    width: 150px;
+}
+
+#st-edit-summary .title-area {
+    float: left;
+    margin-bottom: 5px;
+}
+
+#st-edit-summary .title {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+#st-edit-summary .close-area {
+    float: right;
+}
+
+#st-edit-summary .close-window {
+    padding: 0;
+    margin: 0;
+}
+
+#lightbox .edit-summary-explanation {
+    text-align: left;
+    padding: 10px;
+}
+
+#lightbox .edit-summary-explanation p {
+    margin-bottom: 1em;
+}
+
+#lightbox .edit-summary-explanation .title-area {
+    font-size: 120%;
+    font-weight: bold;
+    float: left;
+}
+
+#lightbox .edit-summary-explanation .close-area {
+    float: right;
+}

@@ -385,7 +385,7 @@ Delete all signals
 =cut
 
 sub st_clear_signals {
-    sql_execute("DELETE FROM noun WHERE noun_type = 'signal'");
+    sql_execute("DELETE FROM signal");
 }
 
 

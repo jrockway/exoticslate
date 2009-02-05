@@ -6,6 +6,7 @@ use Test::Socialtext::Bootstrap::OpenLDAP;
 use Socialtext::AppConfig;
 use Socialtext::LDAP::Config;
 use Test::More;
+use File::Temp;
 use base qw(Socialtext::WikiFixture::Socialtext);
 
 sub init {
@@ -58,6 +59,43 @@ sub remove_ldif_data {
     $self->{ldap}->remove_ldif($ldif);
 }
 
+sub add_ldap_user {
+    my $self = shift;
+    my $username = shift;
+
+    add_ldif_data($self, _ldif_fh_for($username)->filename);
+}
+
+sub remove_ldap_user {
+    my $self = shift;
+    my $username = shift;
+
+    remove_ldif_data($self, _ldif_fh_for($username)->filename);
+}
+
+
+# XXX: file::Temp usage is uuuugly; need to refactor
+sub _ldif_fh_for {
+    my $username = shift;
+
+    my $temp_fh = new File::Temp(UNLINK => 1, SUFFIX => '.ldif');
+
+    print $temp_fh join("\n",
+        "dn: cn=$username LdapUser,dc=example,dc=com",
+        "objectClass: inetOrgPerson",
+        "cn: $username LdapUser",
+        "gn: $username",
+        "sn: LdapUser",
+        "mail: $username\@example.com",
+        "userPassword: ldapd3v",
+        "ou: people"
+    );
+
+    close $temp_fh;      # ensure file's flushed to disk
+    return $temp_fh;
+}
+
+
 sub ldap_config {
     my $self = shift;
     my $param = shift;
@@ -108,6 +146,16 @@ Adds data in the given C<$ldif> file to the LDAP directory.
 =item B<remove_ldif_data($ldif)>
 
 Removes data in the given C<$ldif> file from the LDAP directory.
+
+=item B<add_ldap_user($username)>
+
+Given a unique C<$username>, creates a minimal LDAP record describing
+that user and adds it to the LDAP directory.
+
+=item B<remove_ldap_user($username)>
+
+Removes a record previously added with C<add_ldap_user> and belonging
+to C<$username> from the LDAP directory.
 
 =item B<ldap_config($param, $value)>
 

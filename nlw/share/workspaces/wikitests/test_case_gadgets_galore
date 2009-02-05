@@ -1,0 +1,11 @@
+| *Comment* | Test Case: Gadgets Galore |  |
+
+| *Comment* | Test Case: Gadgets Galore. Make one of each |  |
+
+| set | clear_socialtext | `?action=clear_widgets` |
+| set | clear_external | `?action=dashboard` |
+
+| include | [Test Case: Socialtext Gadgets] |
+| include | [Test Case: External Gadgets] |
+
+| *Comment* | Test Case: Gadgets Galore COMPLETED |  |

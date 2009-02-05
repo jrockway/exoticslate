@@ -213,12 +213,6 @@ CREATE TABLE container_type (
     layout_template text
 );
 
-CREATE SEQUENCE ctype_gadget_id
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
 CREATE TABLE default_gadget (
     default_gadget_id bigint NOT NULL,
     container_type text NOT NULL,
@@ -244,7 +238,8 @@ CREATE TABLE event (
     page_id text,
     page_workspace_id bigint,
     person_id integer,
-    tag_name text
+    tag_name text,
+    signal_id bigint
 );
 
 CREATE TABLE gadget (
@@ -252,7 +247,7 @@ CREATE TABLE gadget (
     src text NOT NULL,
     plugin text,
     href text NOT NULL,
-    last_update timestamptz DEFAULT '2009-01-13 14:45:28.166893-08'::timestamptz NOT NULL,
+    last_update timestamptz DEFAULT now() NOT NULL,
     content_type text NOT NULL,
     features text[],
     preloads text[],
@@ -316,20 +311,6 @@ CREATE SEQUENCE gadget_user_pref_id
     NO MINVALUE
     CACHE 1;
 
-CREATE TABLE noun (
-    noun_id bigint NOT NULL,
-    noun_type text NOT NULL,
-    "at" timestamptz DEFAULT now(),
-    user_id bigint NOT NULL,
-    body text
-);
-
-CREATE SEQUENCE noun_id_seq
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
 CREATE TABLE page (
     workspace_id bigint NOT NULL,
     page_id text NOT NULL,
@@ -343,7 +324,8 @@ CREATE TABLE page (
     revision_count integer NOT NULL,
     page_type text NOT NULL,
     deleted boolean NOT NULL,
-    summary text
+    summary text,
+    edit_summary text
 );
 
 CREATE TABLE page_tag (
@@ -420,6 +402,19 @@ CREATE TABLE sessions (
     a_session text NOT NULL,
     last_updated timestamptz NOT NULL
 );
+
+CREATE TABLE signal (
+    signal_id bigint NOT NULL,
+    "at" timestamptz DEFAULT now(),
+    user_id bigint NOT NULL,
+    body text NOT NULL
+);
+
+CREATE SEQUENCE signal_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
 
 CREATE TABLE "storage" (
     user_id bigint NOT NULL,
@@ -565,10 +560,6 @@ ALTER TABLE ONLY gadget_user_pref
     ADD CONSTRAINT gadget_user_pref_pk
             PRIMARY KEY (user_pref_id);
 
-ALTER TABLE ONLY noun
-    ADD CONSTRAINT noun_pkey
-            PRIMARY KEY (noun_id);
-
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_pkey
             PRIMARY KEY (workspace_id, page_id);
@@ -604,6 +595,10 @@ ALTER TABLE ONLY search_sets
 ALTER TABLE ONLY sessions
     ADD CONSTRAINT sessions_pkey
             PRIMARY KEY (id);
+
+ALTER TABLE ONLY signal
+    ADD CONSTRAINT signal_pkey
+            PRIMARY KEY (signal_id);
 
 ALTER TABLE ONLY "System"
     ADD CONSTRAINT system_pkey
@@ -652,35 +647,23 @@ CREATE UNIQUE INDEX "Workspace___lower___name"
 CREATE INDEX "Workspace_account_id"
 	    ON "Workspace" (account_id);
 
-CREATE INDEX container__user_id__type
-	    ON container (container_type, user_id);
-
-CREATE INDEX container_account_id
+CREATE INDEX ix_container_account_id
 	    ON container (account_id);
 
-CREATE INDEX container_container_type
+CREATE INDEX ix_container_container_type
 	    ON container (container_type);
 
-CREATE INDEX container_user_id
+CREATE INDEX ix_container_user_id
 	    ON container (user_id);
 
-CREATE INDEX container_workspace_id
+CREATE INDEX ix_container_user_id_type
+	    ON container (container_type, user_id);
+
+CREATE INDEX ix_container_workspace_id
 	    ON container (workspace_id);
 
-CREATE INDEX default_gadget__container_type
+CREATE INDEX ix_default_gadget__container_type
 	    ON default_gadget (container_type);
-
-CREATE INDEX gadget__src
-	    ON gadget (src);
-
-CREATE INDEX gadget_instance__container_id
-	    ON gadget_instance (container_id);
-
-CREATE INDEX gadget_instance_user_pref__user_pref_id
-	    ON gadget_instance_user_pref (user_pref_id);
-
-CREATE INDEX gadget_user_pref__gadget_id
-	    ON gadget_user_pref (gadget_id);
 
 CREATE INDEX ix_event_actor_time
 	    ON event (actor_id, "at");
@@ -702,6 +685,9 @@ CREATE INDEX ix_event_person_time
 	    ON event (person_id, "at")
 	    WHERE (event_class = 'person');
 
+CREATE INDEX ix_event_signal_id_at
+	    ON event (signal_id, "at");
+
 CREATE INDEX ix_event_tag
 	    ON event (tag_name, "at")
 	    WHERE ((event_class = 'page') OR (event_class = 'person'));
@@ -709,18 +695,30 @@ CREATE INDEX ix_event_tag
 CREATE INDEX ix_event_workspace_page
 	    ON event (page_workspace_id, page_id);
 
-CREATE INDEX ix_noun_at
-	    ON noun ("at");
+CREATE INDEX ix_gadget__src
+	    ON gadget (src);
 
-CREATE INDEX ix_noun_at_user
-	    ON noun ("at", user_id);
+CREATE INDEX ix_gadget_instance__container_id
+	    ON gadget_instance (container_id);
 
-CREATE INDEX ix_noun_user_at
-	    ON noun (user_id, "at");
+CREATE INDEX ix_gadget_instance_user_pref__user_pref_id
+	    ON gadget_instance_user_pref (user_pref_id);
+
+CREATE INDEX ix_gadget_user_pref_gadget_id
+	    ON gadget_user_pref (gadget_id);
 
 CREATE INDEX ix_page_events_contribs_actor_time
 	    ON event (actor_id, "at")
 	    WHERE ((event_class = 'page') AND is_page_contribution("action"));
+
+CREATE INDEX ix_signal_at
+	    ON signal ("at");
+
+CREATE INDEX ix_signal_at_user
+	    ON signal ("at", user_id);
+
+CREATE INDEX ix_signal_user_at
+	    ON signal (user_id, "at");
 
 CREATE INDEX page_creator_time
 	    ON page (creator_id, create_time);
@@ -831,6 +829,11 @@ ALTER TABLE ONLY event
             FOREIGN KEY (person_id)
             REFERENCES users(user_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY event
+    ADD CONSTRAINT event_signal_id_fk
+            FOREIGN KEY (signal_id)
+            REFERENCES signal(signal_id) ON DELETE CASCADE;
+
 ALTER TABLE ONLY "WorkspacePingURI"
     ADD CONSTRAINT fk_040b7e8582f72e5921dc071311fc4a5f
             FOREIGN KEY (workspace_id)
@@ -921,11 +924,6 @@ ALTER TABLE ONLY gadget_user_pref
             FOREIGN KEY (gadget_id)
             REFERENCES gadget(gadget_id) ON DELETE CASCADE;
 
-ALTER TABLE ONLY noun
-    ADD CONSTRAINT noun_user_id_fk
-            FOREIGN KEY (user_id)
-            REFERENCES users(user_id) ON DELETE CASCADE;
-
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_creator_id_fk
             FOREIGN KEY (creator_id)
@@ -996,6 +994,11 @@ ALTER TABLE ONLY profile_relationship
             FOREIGN KEY (user_id)
             REFERENCES users(user_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY signal
+    ADD CONSTRAINT signal_user_id_fk
+            FOREIGN KEY (user_id)
+            REFERENCES users(user_id) ON DELETE CASCADE;
+
 ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT tag_people_fk
             FOREIGN KEY (tag_id)
@@ -1032,4 +1035,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '29');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '30');

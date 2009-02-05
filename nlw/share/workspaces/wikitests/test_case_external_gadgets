@@ -1,0 +1,90 @@
+| *Comment* | Test Case: External Gadgets |  |
+| set_default | clear_external | `?action=clear_widgets` |
+
+| open_ok | /%%clear_external%% |  |
+
+| *Comment* | Test Case: External Gadgets. Microsoft Outlook |  |
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Microsoft Outlook | 30000 |
+| click_and_wait | link=Microsoft Outlook |  |
+
+| *Comment* | Test Case: External Gadgets. Google Calendar |  |
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Google Calendar | 30000 |
+| click_and_wait | link=Google Calendar |  |
+
+| *Comment* | Test Case: External Gadgets. YouTube Video Player |  |
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=YouTube Video Player | 30000 |
+| click_and_wait | link=YouTube Video Player |  |
+
+| *Comment* | Test Case: External Gadgets. SlideShare Feeds |  |
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=SlideShare Feeds | 30000 |
+| click_and_wait | link=SlideShare Feeds |  |
+
+| *Comment* | Test Case: External Gadgets. BeTwittered |  |
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=BeTwittered | 30000 |
+| click_and_wait | link=BeTwittered |  |
+
+| *Comment* | Test Case: External Gadgets. My del.icio.us |  |
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=My del.icio.us | 30000 |
+| click_and_wait | link=My del.icio.us |  |
+
+| *Comment* | Test Case: External Gadgets. MapQuest |  |
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=MapQuest | 30000 |
+| click_and_wait | link=MapQuest |  |
+
+| *Comment* | Test Case: External Gadgets. Wikipedia |  |
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Wikipedia | 30000 |
+| click_and_wait | link=Wikipedia |  |
+
+| *Comment* | Test Case: External Gadgets. Flickr Photos |  |
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Flickr Photos | 30000 |
+| click_and_wait | link=Flickr Photos |  |
+
+| *Comment* | Test Case: External Gadgets. LabPixies Calculator |  |
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=LabPixies Calculator | 30000 |
+| click_and_wait | link=LabPixies Calculator |  |
+
+| *Comment* | Test Case: External Gadgets. Clock & Date |  |
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Clock & Date | 30000 |
+| click_and_wait | link=Clock & Date |  |
+
+| *Comment* | Test Case: External Gadgets. LabPixies ToDo |  |
+| open_ok | / |  |
+| wait_for_element_visible_ok | //a[@title='Add Content'] | 30000 |
+| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=LabPixies ToDo | 30000 |
+| click_and_wait | link=LabPixies ToDo |  |
+
+| *Comment* | Test Case: External Gadgets COMPLETED |  |

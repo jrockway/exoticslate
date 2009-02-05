@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 use Test::Socialtext::Bootstrap::OpenLDAP;
-use Test::Socialtext tests => 64;
+use Test::Socialtext tests => 65;
 use Test::Socialtext::User;
 use File::Slurp qw(write_file);
 use Benchmark qw(timeit timestr);
@@ -359,6 +359,7 @@ test_ldap_missing_email_address: {
     # add an LDAP user to our DB cache
     my $ldap_user = Socialtext::User->new( username => 'John Doe' );
     isa_ok $ldap_user, 'Socialtext::User', 'LDAP user missing email address';
+    my $username  = $ldap_user->username();
 
     my $ldap_homey = $ldap_user->homunculus;
     isa_ok $ldap_homey, 'Socialtext::User::LDAP', 'LDAP homunculus';
@@ -375,7 +376,8 @@ test_ldap_missing_email_address: {
     is $?, 0, 'st-refresh-ldap-users ran successfully';
     diag $results if $?;
     like $results, qr/found 1 LDAP users/, 'one LDAP user present';
-    like $results, qr/user missing email address/, 'warning present stating User is missing email address';
+    like $results, qr/Unable to refresh LDAP user '$username'/, '... unable to refresh the LDAP user';
+    like $results, qr/Email address is a required field/, '... LDAP user is missing e-mail address';
 
     # make sure that the User was *NOT* refreshed by st-refresh-ldap-users
     my $cached_at = sql_singlevalue( qq{

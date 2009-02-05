@@ -1419,7 +1419,7 @@ proto.convert_html_to_wikitext = function(html, isWholeDocument) {
                     this.nodeValue = this.nodeValue.replace(/\n/g, ' ');
                 }
                 else if ( $(this).is(':not(pre,plain)') ) {
-                    $(this).contents().each(cleanup_newlines);
+                    $(this).contents().not('iframe').each(cleanup_newlines);
                 }
             }
 

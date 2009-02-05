@@ -31,7 +31,7 @@ my $plug = Socialtext::Pluggable::Plugin->new;
 $plug->{hub} = $hub;
 
 #search
-my $pages = $plug->search('tag:welcome');
+my $pages = $plug->search(search_term => 'tag:welcome');
 
 # 'central_page_templates' maybe got removed?
 my @expected = qw(

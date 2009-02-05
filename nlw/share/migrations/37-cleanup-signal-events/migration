@@ -6,8 +6,9 @@ use strict;
 # 
 # This migration basically does the equivalent of a 
 #
+#   DELETE FROM event WHERE event_class='signal';
 #   INSERT INTO event (...)
-#   SELECT FROM signal
+#   SELECT FROM signal ...;
 #
 # But since there's no JSON encoder in plpgsql, we've got to do it in perl.
 # 
@@ -21,7 +22,7 @@ use Socialtext::JSON qw/encode_json/;
 my $dbh = get_dbh();
 
 $dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
+$dbh->{AutoCommit} = 0; # start a transaction
 
 $dbh->do(q{DELETE FROM event WHERE event_class='signal'});
 

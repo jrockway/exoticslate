@@ -3,10 +3,18 @@
 use warnings;
 use strict;
 
-use Test::More qw/no_plan/;
+use Test::More tests => 3;
+
 use Socialtext::SQL qw/:exec/;
 
 diag "checking signal events";
+
+my $empty_signals = sql_singlevalue(q{
+    SELECT count(*)
+    FROM signals
+    WHERE body IS NULL
+});
+is $empty_signals, 0, 'no empty signals';
 
 my $linked_up_signals = sql_singlevalue(q{
     SELECT count(*)

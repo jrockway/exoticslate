@@ -1368,23 +1368,6 @@ body div#mainWrap {
     width:30px;
 }
 
-ul li a.previewButton {
-        display: block;
-        width: 98px;
-        height: 22px;
-        background: url(../images/previewButton.png) no-repeat;
-        background-position: top right;
-        text-indent: -9999px;
-}
-
-ul li a.previewButton:hover {
-        background-position: top left;
-}
-
-body div#controls div#st-editing-tools-edit ul li a {
-    margin-left: 0px;
-}
-
 body div#controls div#st-editing-tools-edit ul li a.disabled {
     color: black;
     font-weight: bold;
@@ -2131,14 +2114,6 @@ body div#globalNav div input.searchText {
     border-width: 0px 0px 0px 8px;
     float: left;
 }
-
-/* fix some buttons with too large hotspots in ie6 start */
-
-* html a.editButton, * html ul li a.commentButton, * html a.saveButton, 
-* html ul li a.previewButton, * html a.cancelButton, * html ul li a.compareButton, * html ul li a.addContentButton {
-	line-height: 22px;
-}
-/* fix some buttons with too large hotspots in ie6 end */
 
 /* Capitalize all guess_real_name fields in People: {bz: 1784} */
 .realName {

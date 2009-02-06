@@ -1990,7 +1990,10 @@ table.widgetUserPrefs td.widgetUserPrefsButtons {
 }
 
 #st-tags-field {
-    width: 70%;
+    width: 50%;
+    margin:10px;
+    display:none;
+    float: left;
 }
 
 #st-tags-listing a.tag_name {

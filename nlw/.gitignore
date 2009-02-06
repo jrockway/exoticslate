@@ -164,3 +164,6 @@ bin/get-sample-data
 lib/Socialtext/Signal.pm
 t/Socialtext/Events-signal.t
 t/Socialtext/Signal.t
+lib/Socialtext/Appliance/Model/SupportTarball.pm
+lib/Socialtext/Appliance/SupportRequest.pm
+etc/socialtext/uri_map.d/widgets.yaml

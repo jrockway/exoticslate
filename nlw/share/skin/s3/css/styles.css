@@ -676,6 +676,12 @@ li.flexButtonGrey {
         margin-left: 10px;
 }
 
+li.flexButtonGrey:hover {
+        background-color: #FFF;
+        color: #FFF;
+        opacity: .7;
+}
+
 ul li a.greyButton {
         display: block;
         color: #fff;
@@ -687,6 +693,10 @@ ul li a.greyButton {
         line-height:20px;
         margin-left: -5px;
         text-indent: 10px;
+}
+
+ul li a.greyButton:hover {
+        text-decoration: none;
 }
 
 a.editButton {

@@ -36,9 +36,10 @@
     <tbody>
     <tr>
       <th colspan="2" class="selectColumn">[% loc("Select") %]</th>
-      <th>[% loc("View Revision") %]</th>
+      <th>[% loc("Revision") %]</th>
       <th>[% loc("Edited By") %]</th>
       <th>[% loc("Date") %]</th>
+      <th>[% loc("Edit Summary") %]</th>
     </tr>
     [% FOREACH row IN rows;
       PROCESS revision_row id = row.id,
@@ -47,7 +48,8 @@
                 check_new = loop.index == 0,
                 revision  = row.number,
                 from      = row.from,
-                date      = row.date;
+                date      = row.date,
+                edit_summary = row.edit_summary;
     END %]
     </tbody>
   </table><!-- dataTable END -->
@@ -95,6 +97,7 @@
       </a>
     </td>
     <td class="person">[% from | decorate('user_avatar') %]</td>
-    <td>[% date %]</td>
+    <td class="date">[% date %]</td>
+    <td class="edit-summary">[% edit_summary | label_ellipsis(edit_summary_maxlength) %]</td>
   </tr>
 [% END %]

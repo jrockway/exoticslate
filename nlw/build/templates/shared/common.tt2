@@ -5,10 +5,13 @@ ScoreBoardFile  [% config.pid_dir %]/[% config.app_prefix %][% config.apache_sho
 Timeout 90
 TraceEnable off
 
-# XXX Consider turning this to off if doing so on prod helps lockups
+[% IF keepalives == 'off' %]
+KeepAlive               Off
+[% ELSE %]
 KeepAlive               On
 MaxKeepAliveRequests    100
 KeepAliveTimeout        15
+[% END %]
 
 MinSpareServers     [% config.servers.min_spare %]
 MaxSpareServers     [% config.servers.max_spare %]

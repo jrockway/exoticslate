@@ -124,6 +124,14 @@ table.dataTable {
     width:98%;
 }
 
+table.dataTable .date {
+    white-space: nowrap;
+}
+
+table.dataTable span.person {
+    white-space: nowrap;
+}
+
 table.dataTable span.summary strong {
     font-weight:bold;
     background:#ffc;
@@ -2233,6 +2241,23 @@ ul li.flexButtonBlue a.addButton:hover {
 #st-edit-summary .close-window {
     padding: 0;
     margin: 0;
+}
+
+#st-page-title .st-edit-summary {
+    border: solid black;
+    border-width: 0px 0px 1px;
+    width: 95%;
+    padding-bottom: 8px;
+}
+
+#st-page-title .st-edit-summary .text {
+    margin-left: 33px;
+}
+
+#st-page-title .st-edit-summary .person img {
+    float: left;
+    vertical-align: top;
+    margin-right: 4px;
 }
 
 #lightbox .edit-summary-explanation {

@@ -10,6 +10,16 @@ share/html/502.html.en
 share/html/502.html.html
 share/html/502.html.ja
 t/test-data/ja/mecabif
+blib
+share/l10n/mecab/char.bin
+share/l10n/mecab/dicrc
+share/l10n/mecab/dicsrc/
+share/l10n/mecab/left-id.def
+share/l10n/mecab/matrix.bin
+share/l10n/mecab/rewrite.def
+share/l10n/mecab/right-id.def
+share/l10n/mecab/sys.dic
+share/l10n/mecab/unk.dic
 
 # lib excludes
 lib/Socialtext/Handler/ControlPanel.pm
@@ -133,3 +143,24 @@ lib/Socialtext/Agile/Iteration.pm
 t/Socialtext/Pluggable/Plugin
 t/Socialtext/Agile
 t/Socialtext/Agile/Iteration.t
+lib/Socialtext/Rest/Gadgets
+lib/Socialtext/Rest/Gadgets/Container.pm
+lib/Socialtext/Rest/Gadgets/Gadget.pm
+lib/Socialtext/Rest/Gadgets/Proxy.pm
+lib/Socialtext/Rest/Signals/Feed.pm
+lib/Socialtext/Gadgets/ContainerType.pm
+lib/Socialtext/Gadgets/XML.pm
+lib/Socialtext/Gadgets/Proxy.pm
+bin/copy_from_shindig
+bin/generate-feature
+bin/st-widgets
+bin/po.xml
+bin/po.xsd
+bin/validate_gadget
+t/Socialtext/Rest/Gadgets
+t/Socialtext/Rest/Gadgets/Container.t
+t/Socialtext/Rest/Gadgets/Gadget.t
+bin/get-sample-data
+lib/Socialtext/Signal.pm
+t/Socialtext/Events-signal.t
+t/Socialtext/Signal.t

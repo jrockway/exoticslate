@@ -105,7 +105,7 @@ sub search {
         $self->sortdir,
         sortby => $self->sortby,
         allow_relevance => 1,
-        search_term => $search_term,
+        search_term => $uri_escaped_search_term,
         scope => $scope,
         show_workspace =>
             ( ($scope ne '_') || ($search_term =~ /\bworkspaces:\S+/) || 0 ),

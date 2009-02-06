@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 33;
+use Test::More tests => 34;
 use File::Temp qw/tempdir/;
 
 my $gen_config = "dev-bin/gen-config";
@@ -74,6 +74,14 @@ Less_memory: {
         StartServers        => 7,
         MaxClients          => 11,
         MaxRequestsPerChild => 1000,
+    );
+}
+
+No_backend_keepalive: {
+    run_test("--quiet --root $test_root --ports-start-at 20000 "
+        . "--apache-proxy=1 --socialtext-open=0 --dev=0");
+    check_apache_config(
+        KeepAlive     => 'Off',
     );
 }
 

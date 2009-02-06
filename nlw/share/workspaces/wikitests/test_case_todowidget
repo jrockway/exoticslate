@@ -5,10 +5,10 @@
 | *Comment* | Test Case: ToDo Widget |  |
 | open_ok | /?dashboard | 60000 |
 | st-empty-container |  |  |
-| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
-| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_present_ok | link=Add Content |
+| click_and_wait | link=Add Content |
 | click_and_wait | link=LabPixies ToDo |  |
-| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Add Content |
 
 | st-name-widget | 1 | todo_widget |
 | st-widget-title-like | todo_widget | ToDo |

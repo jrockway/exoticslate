@@ -6,7 +6,7 @@ use warnings;
 
 use mocked 'Apache';
 use mocked 'Apache::Cookie';
-use Test::Socialtext tests => 35;
+use Test::Socialtext tests => 29;
 fixtures( 'admin' );
 
 BEGIN {
@@ -225,27 +225,6 @@ EDIT_SUMMARY: {
     $save_revision_id = $page->revision_id;
 }
 
-EDIT_SUMMARY_TRUNCATE: {
-    my $hub = new_hub('admin');
-    my $cgi = $hub->rest->query;
-    $cgi->param('page_name', 'save_page');
-    $cgi->param('revision_id', $save_revision_id);
-    $cgi->param('page_body', 'testing summaries');
-    $cgi->param('action', 'edit_save');
-    $cgi->param('caller_action', '');
-    $cgi->param('append_mode', '');
-    $cgi->param('page_body_decoy', 'Hello');
-    $cgi->param('edit_summary', 'a'x247 . 'ronnie');
-
-    my $return = $hub->edit->edit_content;
-    my $page = Socialtext::Page->new(hub => $hub, id => 'save_page')->load();
-    is($page->content, "testing summaries\n");
-
-    is($page->metadata->RevisionSummary, 'a'x247 . 'ron', "edit summary was saved");
-    is($page->edit_summary, 'a'x247 . 'ron', 'edit summary truncated');
-    $save_revision_id = $page->revision_id;
-}
-
 EDIT_SUMMARY_VIA_SAVE: {
     my $hub = new_hub('admin');
     my $cgi = $hub->rest->query;
@@ -267,26 +246,4 @@ EDIT_SUMMARY_VIA_SAVE: {
     is($page->metadata->RevisionSummary, 'i really suck at typing', "edit summary was saved");
     is($page->edit_summary, 'i really suck at typing', 'proxy method works');
     $save_revision_id = $page->revision_id;
-}
-
-EDIT_SUMMARY_VIA_SAVE_TRUNCATE: {
-    my $hub = new_hub('admin');
-    my $cgi = $hub->rest->query;
-    $cgi->param('page_name', 'save_page');
-    $cgi->param('revision_id', $save_revision_id);
-    $cgi->param('page_body', 'testing summaries via save');
-    $cgi->param('action', 'edit_save');
-    $cgi->param('caller_action', '');
-    $cgi->param('append_mode', '');
-    $cgi->param('page_body_decoy', 'Hello');
-    $cgi->param('original_page_id', 'save_page');
-    $cgi->param('subject', 'save_page');
-    $cgi->param('edit_summary', 'a'x247 . 'daryll');
-
-    my $return = $hub->edit->save;
-    my $page = Socialtext::Page->new(hub => $hub, id => 'save_page')->load();
-    is($page->content, "testing summaries via save\n");
-
-    is($page->metadata->RevisionSummary, 'a'x247 . 'dar', "edit summary was saved");
-    is($page->edit_summary, 'a'x247 . 'dar', 'proxy method works');
 }

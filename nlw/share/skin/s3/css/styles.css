@@ -1775,10 +1775,9 @@ table.dataTable {
 
 
 table.dataTable th {
-	line-height: 30px;
 	background: #d0e6f6;
 	border-right: #fff 3px solid;
-	padding:0 10px 0 6px;
+	padding:10px 10px 10px 6px;
 	color: #005295;
 	font-weight: bold;
 	padding-right: 15px;
@@ -1811,9 +1810,10 @@ table.dataTable th.sort {
 }
 
 table.dataTable td {
-	line-height: 27px;
 	vertical-align: middle;
 	padding-left: 8px;
+        padding-top: 8px;
+        padding-bottom: 6px;
 }
 
 

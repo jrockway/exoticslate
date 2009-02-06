@@ -480,9 +480,15 @@ proto.set_inner_html = function(html) {
     if ( doc.readyState == 'loading' ) {
         setTimeout( function() {
             self.set_inner_html(html);
-        }, 50);
-    } else {
-        this.get_editable_div().innerHTML = html;
+        }, 500);      
+    } else {          
+        try {
+            this.get_editable_div().innerHTML = html;
+        } catch (e) {
+            setTimeout( function() {
+                self.set_inner_html(html);
+            }, 500);
+        }
     }
 }
 

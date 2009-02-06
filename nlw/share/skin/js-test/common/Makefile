@@ -1,8 +1,8 @@
 .PHONY: all clean purge
 
-RENDERER:=$(shell echo `js-cpan Test/Base/bin/render-template`)
-TEST_TEMPLATE:=$(shell echo `js-cpan Test/Base/template/test.html`)
-INDEX_TEMPLATE:=$(shell echo `js-cpan Test/Base/template/index.html`)
+RENDERER:=$(shell echo `js-cpan Test/Base/bin/render-template | tail -n 1`)
+TEST_TEMPLATE:=$(shell echo `js-cpan Test/Base/template/test.html | tail -n 1`)
+INDEX_TEMPLATE:=$(shell echo `js-cpan Test/Base/template/index.html | tail -n 1`)
 TEST_LOCAL=template/test.html
 INDEX_LOCAL=template/index.html
 
@@ -48,17 +48,17 @@ index.html: $(INDEX_LOCAL) t/*.t.js config.yaml
 	perl $(RENDERER) $(notdir $<) $(@:%.t.html=t/%.t.js) > $@
 
 lib/Test/Base.js: lib/Test
-	cp -f `js-cpan Test.Base` $@
+	cp -f `js-cpan Test.Base | tail -n 1` $@
 # 	ln -s ../../../lib/Test/Base.js $@
 
 lib/Test/Builder.js: lib/Test
-	cp -f `js-cpan Test.Builder` $@
+	cp -f `js-cpan Test.Builder | tail -n 1` $@
 
 lib/Test/Harness.js: lib/Test
-	cp -f `js-cpan Test.Harness` $@
+	cp -f `js-cpan Test.Harness | tail -n 1` $@
 
 lib/Test/Harness/Browser.js: lib/Test/Harness
-	cp -f `js-cpan Test.Harness.Browser` $@
+	cp -f `js-cpan Test.Harness.Browser | tail -n 1` $@
 
 lib lib/Test lib/Test/Harness:
 	mkdir -p $@

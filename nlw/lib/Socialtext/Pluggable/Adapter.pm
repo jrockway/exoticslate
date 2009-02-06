@@ -263,8 +263,12 @@ sub hooked_template_vars {
     my %vars;
     my $tt_hooks = $hook_types{template_var} || [];
     for my $hook (@$tt_hooks) {
-        my ($key) = $hook->{name} =~ m{template_var\.(.*)};
-        $vars{$key} = $self->hook($hook->{name});
+        my $name = $hook->{name};
+        my ($key) = $name =~ m{template_var\.(.*)};
+
+        # lazy call the template variables, for performance.
+        my $cache_val;
+        $vars{$key} = sub { $cache_val ||= $self->hook($name) };
     }
     $vars{content_types} = $self->content_types;
     return %vars;

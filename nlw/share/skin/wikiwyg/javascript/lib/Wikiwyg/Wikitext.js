@@ -1426,6 +1426,7 @@ proto.convert_html_to_wikitext = function(html, isWholeDocument) {
             if (isWholeDocument) {
                 var contents = $dom.find('div.wiki').contents();
                 if (contents.length == 0) {
+                    $dom.find('iframe').remove();
                     contents = $dom.contents();
                 }
 

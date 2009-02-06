@@ -241,7 +241,12 @@ sub global_template_vars {
     );
     if ($self->hub->current_user->can_use_plugin('people')) {
         require Socialtext::People::Profile;
-        $result{people} = $self->_get_people_watchlist_for_people;
+        # This is expensive, and often not even needed (for /data/*, say)
+        my $cache;
+        $result{people} = sub { 
+            $cache ||= $self->_get_people_watchlist_for_people;
+            return $cache;
+        };
     };
 
     if ($self->hub->current_user->can_use_plugin('dashboard')) {

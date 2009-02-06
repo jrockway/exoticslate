@@ -44,17 +44,18 @@
     </Proxy>
 
     ProxyPreserveHost On
+    ExpiresActive On
+    RewriteEngine On
 
     # Have the Apache2 frontend serve the profile photos, but pass-thru
     # to the backend if the photo doesn't exist.
-    RewriteEngine On
-    RewriteCond %{REQUEST_URI} ^/data/people/([^/]+)/small_photo
     RewriteCond %{REQUEST_METHOD} ^GET$
+    RewriteCond %{REQUEST_URI} ^/data/people/([^/]+)/small_photo
     RewriteCond [% config.data_root_dir %]/storage/avatar/%1-small.png -f
     RewriteRule ^/data/people/([^/]+)/small_photo /nlw/avatar/$1-small.png [PT]
 
-    RewriteCond %{REQUEST_URI} ^/data/people/([^/]+)/photo
     RewriteCond %{REQUEST_METHOD} ^GET$
+    RewriteCond %{REQUEST_URI} ^/data/people/([^/]+)/photo
     RewriteCond [% config.data_root_dir %]/storage/avatar/%1-large.png -f
     RewriteRule ^/data/people/([^/]+)/photo /nlw/avatar/$1-large.png [PT]
 
@@ -63,6 +64,11 @@
         Order allow,deny
         Allow from all
     </Location>
+    <LocationMatch ^/nlw/avatar/>
+        # Header set Expires "now + 5 minutes"
+        ExpiresByType image/png "now plus 5 minutes"
+        Header set Cache-Control "max-age=300, must-revalidate"
+    </LocationMatch>
 
 [%# The rewrite file must come before any of the redirect confs below %]
 [% PROCESS 'shared/rewrite.tt2' %]
@@ -89,7 +95,6 @@
 
     # Do not set ExpiresDefault!  That will cause firefox to cache redirects
 
-    ExpiresActive On
     <Location /static>
         ExpiresDefault "access plus 1 years"
         FileETag none
@@ -145,7 +150,6 @@ Listen [% config.custom_http_port %]
 
 <VirtualHost *:[% config.ports.http %]>
 [% IF config.custom_http_port AND !config.is_dev %]
-    RewriteEngine On
     RewriteCond %{REQUEST_METHOD} ^TRACE
     RewriteRule .* - [F,L]
     RewriteRule ^(.*) http://%{SERVER_NAME}:[% config.custom_http_port %]$1 [R,L,NE]
@@ -154,7 +158,6 @@ Listen [% config.custom_http_port %]
 <VirtualHost *:[% config.custom_http_port %]> 
 [% END %]
 [% IF config.ssl_only %]
-    RewriteEngine On
     RewriteCond %{REQUEST_METHOD} ^TRACE
     RewriteRule .* - [F,L]
     RewriteRule ^(.*) https://%{SERVER_NAME}:[% config.ports.https %]$1 [R,L,NE]

@@ -45,6 +45,25 @@
 
     ProxyPreserveHost On
 
+    # Have the Apache2 frontend serve the profile photos, but pass-thru
+    # to the backend if the photo doesn't exist.
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} ^/data/people/([^/]+)/small_photo
+    RewriteCond %{REQUEST_METHOD} ^GET$
+    RewriteCond [% config.data_root_dir %]/storage/avatar/%1-small.png -f
+    RewriteRule ^/data/people/([^/]+)/small_photo /nlw/avatar/$1-small.png [PT]
+
+    RewriteCond %{REQUEST_URI} ^/data/people/([^/]+)/photo
+    RewriteCond %{REQUEST_METHOD} ^GET$
+    RewriteCond [% config.data_root_dir %]/storage/avatar/%1-large.png -f
+    RewriteRule ^/data/people/([^/]+)/photo /nlw/avatar/$1-large.png [PT]
+
+    Alias /nlw/avatar [% config.data_root_dir %]/storage/avatar
+    <Location /nlw/avatar>
+        Order allow,deny
+        Allow from all
+    </Location>
+
 [%# The rewrite file must come before any of the redirect confs below %]
 [% PROCESS 'shared/rewrite.tt2' %]
 

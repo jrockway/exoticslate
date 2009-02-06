@@ -21,7 +21,10 @@ sub main {
 sub all_modules {
     open my $find, 'find lib -name \*.pm |' or die "find: $!";
 
-    map { path2module() } <$find>;
+    my @paths = <$find>;
+    chomp @paths;
+    @paths = grep { -e $_ } @paths;
+    return map { path2module() } @paths;
 }
 
 # Translate a pathname to a module name.

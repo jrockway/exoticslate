@@ -109,7 +109,8 @@ sub st_add_widget {
     $widgetpath = "file:$widgetpath" unless $widgetpath =~ m{^\w+:};
 
     my $location = $self->_adjust_location(action => "add_widget", 
-                                           src => $widgetpath);
+                                           src => $widgetpath,
+                                           container_id => $self->_containerID);
     eval {
         my @widgetsbefore = $self->_getWidgetList;
         $self->{selenium}->open($location);
@@ -334,6 +335,13 @@ sub _getWidgetList {
     my ($self) = @_;
     my $widgetlist = $self->{selenium}->get_value("id=widgetList");
     return split(/,/, $widgetlist);
+}
+
+sub _containerID {
+    my $self = shift;
+    return $self->{_container_id} if $self->{_container_id};
+    my $sel = $self->{selenium};
+    return $self->{_container_id} = $sel->get_value("id=containerID");
 }
 
 sub _listDiff {

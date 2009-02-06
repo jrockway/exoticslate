@@ -13,7 +13,6 @@ use Socialtext::l10n qw(loc);
 use Socialtext::Events;
 use Socialtext::String;
 use Socialtext::Log qw(st_log);
-use Socialtext::PageMeta qw( ProcessEditSummary );
 
 sub class_id { 'edit' }
 const class_title => 'Editing Page';
@@ -76,7 +75,7 @@ sub edit_content {
 
     my $metadata = $page->metadata;
 
-    my $edit_summary = ProcessEditSummary($self->cgi->edit_summary);
+    my $edit_summary = Socialtext::String::trim($self->cgi->edit_summary || '');
     st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
         if $edit_summary;
 
@@ -182,7 +181,7 @@ sub save {
             errors => [loc('A page must have a body to be saved.')] );
     }
 
-    my $edit_summary = ProcessEditSummary($self->cgi->edit_summary);
+    my $edit_summary = Socialtext::String::trim($self->cgi->edit_summary || '');
     st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
         if $edit_summary;
 

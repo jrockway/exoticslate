@@ -12,7 +12,7 @@ use Readonly;
 use Socialtext::HTTP ':codes';
 use Socialtext::Events;
 use Socialtext::Log qw( st_log );
-use Socialtext::PageMeta qw( ProcessEditSummary );
+use Socialtext::PageMeta qw( EDIT_SUMMARY_MAXLENGTH );
 
 Readonly my $DEFAULT_LINK_DICTIONARY => 'REST';
 Readonly my $S2_LINK_DICTIONARY      => 'S2';
@@ -261,7 +261,7 @@ sub PUT_json {
     my $content = $rest->getContent();
     my $object = decode_json( $content );
 
-    my $edit_summary = ProcessEditSummary($object->{edit_summary});
+    my $edit_summary = $object->{edit_summary} || '';
     st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
         if $edit_summary;
 

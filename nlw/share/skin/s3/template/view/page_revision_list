@@ -98,6 +98,6 @@
     </td>
     <td class="person">[% from | decorate('user_avatar') %]</td>
     <td class="date">[% date %]</td>
-    <td class="edit-summary">[% edit_summary %]</td>
+    <td class="edit-summary">[% edit_summary | label_ellipsis(edit_summary_maxlength) %]</td>
   </tr>
 [% END %]

@@ -36,7 +36,7 @@
   <div id="st-page-title">
     <h2 class="tableTitle">[% display_title %]
     [% IF display_title_decorator %]: <span class="st-page-title-decorator">[% display_title_decorator %]</span>[% END %]</h2>
-    [%- IF edit_summary %]<div class="st-edit-summary">[% from | decorate('user_avatar') %] <div id="st-edit-summary-text" class="text">[% loc('"[_1]"', edit_summary) %]</div></div>[% END -%]
+    [%- IF edit_summary %][% edit_summary = edit_summary | label_ellipsis(edit_summary_maxlength) %]<div class="st-edit-summary">[% from | decorate('user_avatar') %] <div id="st-edit-summary-text" class="text">[% loc('"[_1]"', edit_summary) %]</div></div>[% END -%]
   </div>
   <div id="st-revision-display">
   <div id="contentColumns">

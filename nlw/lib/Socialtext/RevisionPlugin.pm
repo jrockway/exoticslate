@@ -9,6 +9,7 @@ use Class::Field qw( const );
 use Socialtext::String;
 use Socialtext::Encode;
 use Socialtext::l10n qw( loc );
+use Socialtext::PageMeta qw( EDIT_SUMMARY_MAXLENGTH );
 
 sub class_id { 'revision' }
 const cgi_class => 'Socialtext::Revision::CGI';
@@ -47,6 +48,7 @@ sub revision_list {
     $self->screen_template('view/page_revision_list');
     $self->render_screen(
         revision_count => $page->revision_count,
+        edit_summary_maxlength => EDIT_SUMMARY_MAXLENGTH,
         $page->all,
         page           => $page,
         display_title  => $self->html_escape( $page->title ),
@@ -77,6 +79,7 @@ sub revision_view {
         from => $from,
         human_readable_revision => $revision,
         edit_summary => $edit_summary,
+        edit_summary_maxlength => EDIT_SUMMARY_MAXLENGTH,
         display_title    => $self->html_escape( $page->title ),
         display_title_decorator  => loc("Revision [_1]", $revision),
         print                   => $output,

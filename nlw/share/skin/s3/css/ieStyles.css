@@ -39,13 +39,26 @@ ul li a.genericBlueButton:hover {
 }
 
 ul li a.genericOrangeButton {
+	display: inline;
+	color: #fff;
+	position: relative;
+	right: 0;
+	font-weight: bold;
+	float: left;
+	height: 22px;
+	padding: 0 25px 0 0;
+	background: url(../images/genericOrangeButton.png) no-repeat;
 	background-position: bottom left;
+	line-height: 17px;
+	text-indent: 15px;
+	margin-right: -37px;
+	white-space: nowrap;
 }
 
 ul li a.genericOrangeButton:hover {
-	background-position: bottom left;
-	text-decoration: underline;
 	color: #fff;
+        text-decoration: none;
+	background-position: top left;
 }
 
 ul li a.addButton {
@@ -71,7 +84,7 @@ ul.widgetButton li a.addButton {
 
 ul li a.addButton:hover {
 	background-position: top left;
-	text-decoration: underline;
+	text-decoration: none;
 	color: #fff;
 }
 
@@ -92,8 +105,8 @@ a.editButton {
 }
 
 a.editButton:hover {
-	background-position: bottom left;
-	text-decoration: underline;
+	background-position: top left;
+	text-decoration: none;
 	color: #fff;
 }
 
@@ -114,35 +127,9 @@ ul li a.commentButton {
 	}
 
 ul li a.commentButton:hover {
-	background-position: bottom left;
-	text-decoration: underline;
+	background-position: top left;
+	text-decoration: none;
 	color: #fff;
-}
-
-li.flexButton {
-	background: url(../images/flexButton.png) no-repeat;
-	background-position: bottom right;
-	height: 22px;
-	padding: 0;
-	margin: 0;
-}
-
-li.flexButton:hover {
-	background: url(../images/flexButtonBlue.png) no-repeat;
-	background-position: bottom right;
-}
-
-li.flexButtonBlue {
-	background: url(../images/flexButtonBlue.png) no-repeat;
-	background-position: bottom right;
-	height: 22px;
-	padding: 0;
-	margin: 0;
-}
-
-li.flexButtonBlue:hover {
-	background: url(../images/flexButtonBlue.png) no-repeat;
-	background-position: bottom right;
 }
 
 div#bottomButtons ul {

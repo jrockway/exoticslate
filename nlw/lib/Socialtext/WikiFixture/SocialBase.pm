@@ -263,6 +263,27 @@ sub get {
     $self->_get($uri, [Accept => $accept]);
 }
 
+=head2 cond_get ( uri, accept, ims, inm )
+
+GET a URI, specifying Accept, If-Modified-Since and If-None-Match headers.
+
+Accept defaults to text/html.
+
+The IMS and INS headers aren't sent unless specified and non-zero.
+
+=cut
+
+sub cond_get {
+    my ($self, $uri, $accept, $ims, $inm) = @_;
+    $accept ||= 'text/html';
+    my @headers = ( Accept => $accept );
+    push @headers, 'If-Modified-Since', $ims if $ims;
+    push @headers, 'If-None-Match', $inm if $inm;
+
+    warn "Calling get on $uri";
+    $self->{http}->get($self->{browser_url} . $uri, \@headers);
+}
+
 =head2 delete ( uri, accept )
 
 DELETE a URI, with the specified accept type.  

@@ -367,6 +367,27 @@ sub set_from_content {
     }
 }
 
+=head2 set_from_header ( name, header )
+
+Set a variable from a header in the last response.
+
+=cut
+
+sub set_from_header {
+    my $self = shift;
+    my $name = shift || die "name is mandatory for set-from-header";
+    my $header = shift || die "header is mandatory for set-from-header";
+    my $content = $self->{http}->response->header($header);
+
+    if (defined $content) {
+        $self->{$name} = $content;
+        warn "# Set $name to '$content' from response header\n";
+    }
+    else {
+        die "Could not set $name - header $header not present\n";
+    }
+}
+
 =head2 st-clear-events
 
 Delete all events
@@ -589,6 +610,25 @@ sub parse_logs {
 sub clear_reports {
     my $self = shift;
     shell_run("cd $ENV{ST_CURRENT}/socialtext-reports; ./setup-dev-env");
+}
+
+=head2 header_isnt ( header, value )
+
+Asserts that a header in the response does not contain the specified value.
+
+=cut
+
+sub header_isnt {
+    my $self = shift;
+    if ($self->{http}->can('header_isnt')) {
+        return $self->{http}->header_isnt(@_);
+    }
+    else {
+        my $header = shift;
+        my $expected = shift;
+        my $value = $self->{http}->response->header($header);
+        isnt($value, $expected, "header $header");
+    }
 }
 
 1;

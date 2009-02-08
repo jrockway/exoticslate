@@ -439,7 +439,15 @@ proto.get_inner_html = function( cb ) {
         this.get_inner_html_async( cb );
         return;
     }
-    return this.get_editable_div().innerHTML;
+
+    var html = null;
+    try {
+        html = this.get_editable_div().innerHTML;
+    } catch (e) {
+        html = '';
+    }
+
+    return html;
 }
 
 proto.get_editable_div = function () {

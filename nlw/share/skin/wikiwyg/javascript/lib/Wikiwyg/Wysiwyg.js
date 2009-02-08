@@ -347,10 +347,11 @@ Support for Internet Explorer in Wikiwyg.Wysiwyg
 if (Wikiwyg.is_ie) {
 
 proto.toHtml = function(func) {
+    var self = this;
     this.get_inner_html_async(function(html){
         var br = "<br class=\"p\"/>";
 
-        html = this.remove_padding_material(html);
+        html = self.remove_padding_material(html);
         html = html
             .replace(/\n*<p>\n?/ig, "")
             .replace(/<\/p>/ig, br)

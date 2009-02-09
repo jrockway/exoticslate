@@ -1,6 +1,7 @@
 [%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% USE decorate %]
+[% USE label_ellipsis %]
 [% WRAPPER layout/html id="contentPage" title = loc("[_1]: All Revisions", display_title) %]
 <script language="javascript"><!--
     function preventSameRevisionCompare () {

@@ -1,6 +1,7 @@
 [%# vim: set et sts=2 sw=2: %]
 [%# @COPYRIGHT@ -%]
 [% USE decorate %]
+[% USE label_ellipsis %]
 [% WRAPPER layout/html id="contentPage" title="${display_title}: ${display_title_decorator}" %]
 <div id="controls">
   <div id="st-editing-tools-edit">

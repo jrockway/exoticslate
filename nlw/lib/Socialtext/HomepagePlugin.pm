@@ -200,11 +200,10 @@ sub _get_wikis_info {
 sub _get_changes_count_for_wiki {
     my ($self, $workspace) = @_;
 
-    my $pages = Socialtext::Model::Pages->By_seconds_limit(
+    my $pages = $self->hub->recent_changes->by_seconds_limit(
         workspace_id => $workspace->workspace_id,
     );
     my $count = @$pages;
-    
     return $count;
 }
 

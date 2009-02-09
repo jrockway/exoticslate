@@ -198,13 +198,13 @@ sub new_changes {
 sub by_seconds_limit {
     my $self = shift;
     my %args = @_;
+    $args{workspace_id} ||= $self->hub->current_workspace->workspace_id;
 
     my $prefs = $self->hub->recent_changes->preferences;
     my $seconds = $prefs->changes_depth->value * 1440 * 60;
     my $pages = Socialtext::Model::Pages->By_seconds_limit(
         seconds          => $seconds,
         hub              => $self->hub,
-        workspace_id     => $self->hub->current_workspace->workspace_id,
         count            => $self->preferences->sidebox_changes_depth->value,
         do_not_need_tags => 1,
         %args,

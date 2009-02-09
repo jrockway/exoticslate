@@ -183,6 +183,44 @@ proto.apply_linked_stylesheet = function(style, head) {
     head.appendChild(link);
 }
 
+proto.exec_command = function(command, option) {
+    if ( Wikiwyg.is_ie && command.match(/^insert/) && !command.match(/^insert.*list$/)) {
+        /* IE6+7 has a bug that prevents insertion at the beginning of
+         * the edit document if it begins with a non-text element.
+         * So we test if the selection starts at the beginning, and
+         * prepends a temporary space so the insert can work. -- {bz: 1451}
+         */
+
+        this.set_focus(); // Need this before .insert_html
+
+        var range = this.__range
+                 || this.get_edit_document().selection.createRange();
+
+        if (range.boundingLeft == 1 && range.boundingTop <= 20) {
+            var doc = this.get_edit_document();
+            var div = doc.getElementsByTagName('div')[0];
+
+            var randomString = Math.random();
+            var stub = doc.createTextNode(' ');
+
+            div.insertBefore(stub, div.firstChild);
+
+            var stubRange = doc.body.createTextRange();
+            stubRange.findText(' ');
+            stubRange.select();
+        }
+        else {
+            range.collapse();
+            range.select();
+        }
+    }
+
+    if ((command == 'inserthtml') && ((typeof(option) != 'string') || option.length == 0)) {
+        return true;
+    }
+    return(this.get_edit_document().execCommand(command, false, option));
+};
+
 proto.format_command = function(command) {
     this.exec_command('formatblock', '<' + command + '>');
 }
@@ -1439,44 +1477,6 @@ proto.get_editable_div = function () {
     }
     return this._editable_div;
 }
-
-proto.exec_command = function(command, option) {
-    if ( Wikiwyg.is_ie && command.match(/^insert/) && !command.match(/^insert.*list$/)) {
-        /* IE6+7 has a bug that prevents insertion at the beginning of
-         * the edit document if it begins with a non-text element.
-         * So we test if the selection starts at the beginning, and
-         * prepends a temporary space so the insert can work. -- {bz: 1451}
-         */
-
-        this.set_focus(); // Need this before .insert_html
-
-        var range = this.__range
-                 || this.get_edit_document().selection.createRange();
-
-        if (range.boundingLeft == 1 && range.boundingTop <= 20) {
-            var doc = this.get_edit_document();
-            var div = doc.getElementsByTagName('div')[0];
-
-            var randomString = Math.random();
-            var stub = doc.createTextNode(' ');
-
-            div.insertBefore(stub, div.firstChild);
-
-            var stubRange = doc.body.createTextRange();
-            stubRange.findText(' ');
-            stubRange.select();
-        }
-        else {
-            range.collapse();
-            range.select();
-        }
-    }
-
-    if ((command == 'inserthtml') && ((typeof(option) != 'string') || option.length == 0)) {
-        return true;
-    }
-    return(this.get_edit_document().execCommand(command, false, option));
-};
 
 /*==============================================================================
 Socialtext Debugging code

@@ -672,14 +672,13 @@ li.flexButtonBlue:hover {
 
 li.flexButtonGrey {
 	background: url(../images/flexButtonGrey.png) no-repeat;
-	background-position: bottom right;
+	background-position: top right;
         margin-left: 10px;
 }
 
 li.flexButtonGrey:hover {
-        background-color: #FFF;
-        color: #FFF;
-        opacity: .7;
+	background: url(../images/flexButtonGrey.png) no-repeat;
+	background-position: bottom right;
 }
 
 ul li a.greyButton {
@@ -689,13 +688,15 @@ ul li a.greyButton {
         height: 22px;
         padding-right: 14px;
         background: url(../images/greyButton.png) no-repeat;
-        background-position: bottom left;
+        background-position: top left;
         line-height:20px;
         margin-left: -5px;
         text-indent: 10px;
 }
 
 ul li a.greyButton:hover {
+	background: url(../images/greyButton.png) no-repeat;
+	background-position: bottom left;
         text-decoration: none;
 }
 

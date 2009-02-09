@@ -1,3 +1,29 @@
 @import url('ieStyles.css');
 
-.flexButtonGrey { width: 10px;
+ul li a.greyButton {
+	display: inline;
+	color: #fff;
+	position: relative;
+	right: 0;
+	font-weight: bold;
+	float: left;
+	height: 22px;
+	padding: 0 25px 0 0;
+        background: url(../images/greyButton.png) no-repeat;
+        background-position: top left;
+	line-height: 17px;
+	text-indent: 8px;
+	margin-right: -18px;
+	white-space: nowrap;
+}
+
+ul li a.greyButton:hover {
+        color: #fff;
+        text-decoration: none;
+}
+
+li.flexButtonGrey:hover {
+        background-color: #FFF;
+        color: #FFF;
+}
+

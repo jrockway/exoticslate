@@ -33,7 +33,7 @@ ul li a.genericBlueButton {
 }
 
 ul li a.genericBlueButton:hover {
-	background-position: top left;
+	background-position: bottom left;
 	text-decoration: underline;
 	color: #fff;
 }
@@ -46,19 +46,18 @@ ul li a.genericOrangeButton {
 	font-weight: bold;
 	float: left;
 	height: 22px;
-	padding: 0 25px 0 0;
+	padding: 0 0 0 15px;
 	background: url(../images/genericOrangeButton.png) no-repeat;
 	background-position: bottom left;
 	line-height: 17px;
-	text-indent: 15px;
-	margin-right: -37px;
-	white-space: nowrap;
+        text-indent: 0;
+        margin: 0;
 }
 
 ul li a.genericOrangeButton:hover {
-	color: #fff;
-        text-decoration: none;
 	background-position: top left;
+	text-decoration: none;
+	color: #fff;
 }
 
 ul li a.addButton {
@@ -96,12 +95,12 @@ a.editButton {
 	font-weight: bold;
 	float: left;
 	height: 22px;
-	padding: 0 6px 0 0;
+	padding: 0 0 0 25px;
 	background: url(../images/editButton.png) no-repeat;
 	background-position: bottom left;
 	line-height: 17px;
-	text-indent: 32px;
-	margin-right: -37px;
+        text-indent: 0;
+        margin: 0;
 }
 
 a.editButton:hover {

@@ -183,13 +183,57 @@ proto.apply_linked_stylesheet = function(style, head) {
     head.appendChild(link);
 }
 
+proto.exec_command = function(command, option) {
+    if ( Wikiwyg.is_ie && command.match(/^insert/) && !command.match(/^insert.*list$/)) {
+        /* IE6+7 has a bug that prevents insertion at the beginning of
+         * the edit document if it begins with a non-text element.
+         * So we test if the selection starts at the beginning, and
+         * prepends a temporary space so the insert can work. -- {bz: 1451}
+         */
+
+        this.set_focus(); // Need this before .insert_html
+
+        var range = this.__range
+                 || this.get_edit_document().selection.createRange();
+
+        if (range.boundingLeft == 1 && range.boundingTop <= 20) {
+            var doc = this.get_edit_document();
+            var div = doc.getElementsByTagName('div')[0];
+
+            var randomString = Math.random();
+            var stub = doc.createTextNode(' ');
+
+            div.insertBefore(stub, div.firstChild);
+
+            var stubRange = doc.body.createTextRange();
+            stubRange.findText(' ');
+            stubRange.select();
+        }
+        else {
+            range.collapse();
+            range.select();
+        }
+    }
+
+    if ((command == 'inserthtml') && ((typeof(option) != 'string') || option.length == 0)) {
+        return true;
+    }
+    return(this.get_edit_document().execCommand(command, false, option));
+};
+
 proto.format_command = function(command) {
     this.exec_command('formatblock', '<' + command + '>');
 }
 
-proto.do_bold = proto.exec_command;
-proto.do_italic = proto.exec_command;
-proto.do_underline = proto.exec_command;
+proto.do_bold = function() {
+    this.exec_command('bold');
+}
+proto.do_italic = function() {
+    this.exec_command('italic');
+}
+proto.do_underline = function() {
+    this.exec_command('underline');
+}
 proto.do_strike = function() {
     this.exec_command('strikethrough');
 }
@@ -202,8 +246,12 @@ proto.do_ordered = function() {
 proto.do_unordered = function() {
     this.exec_command('insertunorderedlist');
 }
-proto.do_indent = proto.exec_command;
-proto.do_outdent = proto.exec_command;
+proto.do_indent = function() {
+    this.exec_command('indent');
+}
+proto.do_outdent = function() {
+    this.exec_command('outdent');
+}
 
 proto.do_h1 = proto.format_command;
 proto.do_h2 = proto.format_command;
@@ -218,7 +266,9 @@ proto.insert_html = function(html) { // See IE
     this.exec_command('inserthtml', html);
 }
 
-proto.do_unlink = proto.exec_command;
+proto.do_unlink = function() {
+    this.exec_command('unlink');
+}
 
 proto.do_www = function() {
     var selection = this.get_link_selection_text();
@@ -1453,44 +1503,6 @@ proto.get_editable_div = function () {
     }
     return this._editable_div;
 }
-
-proto.exec_command = function(command, option) {
-    if ( Wikiwyg.is_ie && command.match(/^insert/) && !command.match(/^insert.*list$/)) {
-        /* IE6+7 has a bug that prevents insertion at the beginning of
-         * the edit document if it begins with a non-text element.
-         * So we test if the selection starts at the beginning, and
-         * prepends a temporary space so the insert can work. -- {bz: 1451}
-         */
-
-        this.set_focus(); // Need this before .insert_html
-
-        var range = this.__range
-                 || this.get_edit_document().selection.createRange();
-
-        if (range.boundingLeft == 1 && range.boundingTop <= 20) {
-            var doc = this.get_edit_document();
-            var div = doc.getElementsByTagName('div')[0];
-
-            var randomString = Math.random();
-            var stub = doc.createTextNode(' ');
-
-            div.insertBefore(stub, div.firstChild);
-
-            var stubRange = doc.body.createTextRange();
-            stubRange.findText(' ');
-            stubRange.select();
-        }
-        else {
-            range.collapse();
-            range.select();
-        }
-    }
-
-    if ((command == 'inserthtml') && ((typeof(option) != 'string') || option.length == 0)) {
-        return true;
-    }
-    return(this.get_edit_document().execCommand(command, false, option));
-};
 
 /*==============================================================================
 Socialtext Debugging code

@@ -187,9 +187,15 @@ proto.format_command = function(command) {
     this.exec_command('formatblock', '<' + command + '>');
 }
 
-proto.do_bold = proto.exec_command;
-proto.do_italic = proto.exec_command;
-proto.do_underline = proto.exec_command;
+proto.do_bold = function() {
+    this.exec_command('bold');
+}
+proto.do_italic = function() {
+    this.exec_command('italic');
+}
+proto.do_underline = function() {
+    this.exec_command('underline');
+}
 proto.do_strike = function() {
     this.exec_command('strikethrough');
 }
@@ -202,8 +208,12 @@ proto.do_ordered = function() {
 proto.do_unordered = function() {
     this.exec_command('insertunorderedlist');
 }
-proto.do_indent = proto.exec_command;
-proto.do_outdent = proto.exec_command;
+proto.do_indent = function() {
+    this.exec_command('indent');
+}
+proto.do_outdent = function() {
+    this.exec_command('outdent');
+}
 
 proto.do_h1 = proto.format_command;
 proto.do_h2 = proto.format_command;
@@ -218,7 +228,9 @@ proto.insert_html = function(html) { // See IE
     this.exec_command('inserthtml', html);
 }
 
-proto.do_unlink = proto.exec_command;
+proto.do_unlink = function() {
+    this.exec_command('unlink');
+}
 
 proto.do_www = function() {
     var selection = this.get_link_selection_text();

@@ -283,7 +283,7 @@ ul.normal ul ul {
 /* Additional People Profiles styles */
 ul li a.followPersonButton {
     line-height: 16px;
-    height: 22px;
+    height: 28px;
     background: url(../images/followIcon.png) no-repeat top left;
     padding-left: 25px;
     color:#333333;

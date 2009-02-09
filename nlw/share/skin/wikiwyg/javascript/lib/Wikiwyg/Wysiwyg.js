@@ -347,10 +347,11 @@ Support for Internet Explorer in Wikiwyg.Wysiwyg
 if (Wikiwyg.is_ie) {
 
 proto.toHtml = function(func) {
+    var self = this;
     this.get_inner_html_async(function(html){
         var br = "<br class=\"p\"/>";
 
-        html = this.remove_padding_material(html);
+        html = self.remove_padding_material(html);
         html = html
             .replace(/\n*<p>\n?/ig, "")
             .replace(/<\/p>/ig, br)
@@ -439,7 +440,15 @@ proto.get_inner_html = function( cb ) {
         this.get_inner_html_async( cb );
         return;
     }
-    return this.get_editable_div().innerHTML;
+
+    var html = null;
+    try {
+        html = this.get_editable_div().innerHTML;
+    } catch (e) {
+        html = '';
+    }
+
+    return html;
 }
 
 proto.get_editable_div = function () {
@@ -466,7 +475,7 @@ proto.get_inner_html_async = function( cb, tries ) {
     var doc = this.get_edit_document();
     if ( doc.readyState == 'loading' ) {
         setTimeout( function() {
-            self.get_inner_html(cb, 1 );
+            self.get_inner_html(cb);
         }, 500);
     } else {
         var html = null;
@@ -500,9 +509,18 @@ proto.set_inner_html = function(html) {
         try {
             this.get_editable_div().innerHTML = html;
         } catch (e) {
+            if (self._editable_div) {
+                try {
+                    jQuery(self._editable_div).remove();
+                } catch(e){}
+            }
+
+            self._editable_div = null;
+            self.get_editable_div();
+
             setTimeout( function() {
                 self.set_inner_html(html);
-            }, 500);
+            }, 1000);
         }
     }
 }

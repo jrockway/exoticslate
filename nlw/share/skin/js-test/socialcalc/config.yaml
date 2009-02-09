@@ -6,4 +6,5 @@ import_libs:
   - ../common/lib/Test/Visual.js
   - ../common/lib/Test/SocialCalc.js
 template_include_path:
+  - ./template
   - ../common/template

@@ -1295,6 +1295,55 @@ function setup_wikiwyg() {
         return false;
     }
 
+    ww.update_edit_summary_preview = function () {
+        if (jQuery('#st-edit-summary .preview').is(':hidden')) return true;
+        setTimeout(function () {
+            var page = Socialtext.page_title;
+            var workspace = Socialtext.wiki_title;
+            var name = Socialtext.username;
+
+            var summary = ww.edit_summary();
+            summary = ww.word_truncate(summary, 140);
+            var html = ' <strong>' + name + '</strong>';
+            if (!summary)
+                html += ' ' + loc('wants you to know about an edit of') + ' <strong>' + page + '</strong> ' + loc('in') + ' ' + workspace;
+            else
+                html += ', ' + loc('"[_1]"', summary) + ' (' + loc('edited') + ' <strong>' + page + '</strong> ' + loc('in') + ' ' + workspace + ')';
+
+            jQuery('#st-edit-summary .preview .text')
+                .html(html);
+        }, 5);
+        return true;
+    }
+
+    jQuery('#st-edit-summary .input')
+        .change(ww.update_edit_summary_preview)
+        .keypress(ww.update_edit_summary_preview)
+        .click(ww.update_edit_summary_preview);
+
+    ww.word_truncate = function (s, len) {
+        if (!s || !len) return '';
+        if (s.length <= len) return s
+
+        var truncated = "";
+        var parts = s.split(' ');
+        if (parts.length == 1) {
+            truncated = s.slice(0, len);
+        }
+        else {
+            for (var i=0,l=parts.length; i < l; i++) {
+                if ((truncated.length + parts[i].length) > len) break;
+                truncated += parts[i] + ' ';
+            }
+            // if the first part is really huge we won't have any parts in
+            // truncated so we will slice the first part
+            if (truncated.length == 0) {
+                truncated = parts[0].slice(0, len);
+            }
+        }
+        return truncated.replace(/ +$/, '') + '&hellip;';
+    }
+
     ww.edit_summary = function () {
         var val = jQuery('#st-edit-summary .input').val()
             .replace(/\s+/g, ' ')
@@ -1321,19 +1370,19 @@ function setup_wikiwyg() {
             return false;    
         });
 
-    jQuery('#st-edit-summary-minor-checkbox')
-        .unbind('click')
-        .click(
-            function () {
-                jQuery('#st-edit-summary-signal-checkbox')[0].checked =
-                    ! jQuery('#st-edit-summary-minor-checkbox')[0].checked;
-                jQuery('#st-edit-summary .anyway').css(
-                    'display',
-                    jQuery('#st-edit-summary-minor-checkbox')[0].checked
-                    ? 'inline' : 'none'
-                );
+    jQuery('#st-edit-summary-signal-checkbox')
+        .click(function () {
+            if (jQuery(this)[0].checked) {
+                jQuery('#st-edit-summary .preview').show();
+                jQuery('#st-edit-summary .truncate-message').show();
+                ww.update_edit_summary_preview();
             }
-        );
+            else {
+                jQuery('#st-edit-summary .preview').hide();
+                jQuery('#st-edit-summary .truncate-message').hide();
+            }
+            return true;
+        });
 
     jQuery('#st-edit-summary .close-window')
         .unbind('click')

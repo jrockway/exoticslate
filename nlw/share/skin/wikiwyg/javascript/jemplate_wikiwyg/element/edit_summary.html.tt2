@@ -3,7 +3,7 @@
         <form action="#">
             <div class="title-area">
                 <span class="title">Edit Summary (optional)</span>
-                <span class="explain"><a href="#"> (What is this?)</a></span>
+                <span class="explain"> <a href="#">(What is this?)</a></span>
             </div>
             <div class="close-area">
                 <a class="close-window" href="#"><img src="[% wiki.skin_uri('s3') %]/images/closeWindow.png" /></a>
@@ -11,14 +11,15 @@
             <div>
                 <input type="text" maxlength="250" class="input">
             </div>
-            [%# <div>
+            <div>
                 <div class="signal">
-                    <input checked id="st-edit-summary-signal-checkbox" type="checkbox" /><label for="st-edit-summary-signal-checkbox">Signal this edit<span class="anyway" style="display: none"> anyway</span></label>
+                    <div class="preview" style="display: none;">Your summary will appear as:<div class="text"></div></div>
+                    <input id="st-edit-summary-signal-checkbox" type="checkbox" /><label for="st-edit-summary-signal-checkbox">Signal this summary (140 characters maximum)</label>
                 </div>
-                <div class="minor">
+             [%#    <div class="minor">
                     <input id="st-edit-summary-minor-checkbox" type="checkbox" /><label for="st-edit-summary-minor-checkbox">Minor edit</label>&nbsp;&nbsp;
-                </div>
-            </div> %]
+                </div> %]
+            </div>
         </form>
     </div>
 </div>

@@ -2254,7 +2254,10 @@ ul li.flexButtonBlue a.addButton:hover {
 
 #st-edit-summary .signal {
     float: left;
-    width: 200px;
+}
+
+#st-edit-summary .preview {
+    padding: 4px 0px 4px 0px;
 }
 
 #st-edit-summary .minor {

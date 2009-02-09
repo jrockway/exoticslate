@@ -475,7 +475,7 @@ proto.get_inner_html_async = function( cb, tries ) {
     var doc = this.get_edit_document();
     if ( doc.readyState == 'loading' ) {
         setTimeout( function() {
-            self.get_inner_html(cb, 1 );
+            self.get_inner_html(cb);
         }, 500);
     } else {
         var html = null;
@@ -509,9 +509,18 @@ proto.set_inner_html = function(html) {
         try {
             this.get_editable_div().innerHTML = html;
         } catch (e) {
+            if (self._editable_div) {
+                try {
+                    jQuery(self._editable_div).remove();
+                } catch(e){}
+            }
+
+            self._editable_div = null;
+            self.get_editable_div();
+
             setTimeout( function() {
                 self.set_inner_html(html);
-            }, 500);
+            }, 1000);
         }
     }
 }

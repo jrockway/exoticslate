@@ -195,7 +195,7 @@ CREATE TABLE container (
     user_id bigint,
     workspace_id bigint,
     account_id bigint,
-    name text,
+    name text NOT NULL DEFAULT '',
     page_id text,
     CONSTRAINT container_scope_ptr
             CHECK ((((user_id IS NOT NULL) <> (workspace_id IS NOT NULL)) <> (account_id IS NOT NULL)) <> (page_id IS NOT NULL))

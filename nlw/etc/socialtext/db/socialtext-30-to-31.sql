@@ -1,7 +1,7 @@
 BEGIN;
 
 ALTER TABLE container
-  ADD COLUMN name text,
+  ADD COLUMN name text NOT NULL DEFAULT '',
   ADD COLUMN page_id text,
  DROP CONSTRAINT container_scope_ptr,
   ADD CONSTRAINT container_scope_ptr

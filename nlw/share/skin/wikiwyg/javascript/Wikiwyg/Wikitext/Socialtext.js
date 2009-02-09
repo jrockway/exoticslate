@@ -1399,7 +1399,6 @@ proto.convert_html_to_wikitext = function(html, isWholeDocument) {
                     $(this).contents().not('iframe').each(cleanup_newlines);
                 }
             }
-
             if (isWholeDocument) {
                 var contents = $dom.find('div.wiki').contents();
                 if (contents.length == 0) {

@@ -305,15 +305,17 @@ proto.replace_p_with_br = function(html) {
 
 proto.toHtml = function(func) {
     if (Wikiwyg.is_ie) {
-        var html = this.get_inner_html();
-        var br = "<br class=\"p\"/>";
+        var self = this;
+        this.get_inner_html_async(function(html){
+            var br = "<br class=\"p\"/>";
 
-        html = this.remove_padding_material(html);
-        html = html
-            .replace(/\n*<p>\n?/ig, "")
-            .replace(/<\/p>/ig, br)
+            html = self.remove_padding_material(html);
+            html = html
+                .replace(/\n*<p>\n?/ig, "")
+                .replace(/<\/p>/ig, br)
 
-        func(html);
+            func(html);
+        });
     }
     else {
         Wikiwyg.Wysiwyg.prototype.toHtml.call(this, func);

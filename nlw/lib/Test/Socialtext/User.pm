@@ -12,15 +12,18 @@ sub delete_recklessly {
     my ($class, $user_or_homunculus) = @_;
     my $system_user = Socialtext::User->SystemUser;
 
-    # Resolve the User, so we know we've got a `ST::User` object.  This allows
-    # for us to be called with a homunculus, and we'll still DTRT.
-    # 
-    # DON'T use `ST::User->Resolve()`, though, as that's a bit *too* flexible
-    # for our needs.
-    my $user = Socialtext::User->new( user_id => $user_or_homunculus->user_id );
+    # Get the User Id for the User (which we'll need for doing DB updates
+    # below).
+    #
+    # DON'T instantiate a User object, though, as that may trigger other
+    # behaviour (e.g. refreshing LDAP data) that may have troubles.  This *is*
+    # to be run in a test environment, so trigger as little external behaviour
+    # as is possible.
+    my $user_id = $user_or_homunculus->user_id;
 
     # Don't allow for system created Users to be deleted
-    if ($user->is_system_created()) {
+    my $metadata = Socialtext::UserMetadata->new( user_id => $user_id );
+    if ($metadata && $metadata->is_system_created()) {
         croak "can't delete system created users, even recklessly";
     }
 
@@ -30,7 +33,7 @@ sub delete_recklessly {
         UPDATE "Workspace"
            SET created_by_user_id = ?
          WHERE created_by_user_id = ?
-        }, $system_user->user_id, $user->user_id
+        }, $system_user->user_id, $user_id
     );
 
     # Re-assign all Pages that were "created by" this User so that they're now
@@ -39,7 +42,7 @@ sub delete_recklessly {
         UPDATE page
            SET creator_id = ?
          WHERE creator_id = ?
-        }, $system_user->user_id, $user->user_id
+        }, $system_user->user_id, $user_id
     );
 
     # Re-assign all Pages that were "last edited by" this User so that they're
@@ -48,7 +51,7 @@ sub delete_recklessly {
         UPDATE page
            SET last_editor_id = ?
          WHERE last_editor_id = ?
-        }, $system_user->user_id, $user->user_id
+        }, $system_user->user_id, $user_id
     );
 
     # Delete the User from the DB, and let this cascade across all other DB
@@ -56,7 +59,7 @@ sub delete_recklessly {
     sql_execute( q{
         DELETE FROM users
          WHERE user_id = ?
-        }, $user->user_id
+        }, $user_id
     );
 
     # Clear any User cache(s) that may be in use

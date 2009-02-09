@@ -64,7 +64,17 @@ while (my $row = $sth->fetchrow_arrayref()) {
     # if we're forcing the refresh of all users
     local $Socialtext::User::LDAP::Factory::CacheEnabled = 0 if ($force);
     $log->debug( "... refreshing: $driver_username\n" );
-    my $homunculus = $factory->GetUser( driver_unique_id => $driver_unique_id );
+    my $homunculus = eval {
+        $factory->GetUser( driver_unique_id => $driver_unique_id )
+    };
+    if (my $e = Exception::Class->caught('Socialtext::Exception::DataValidation')) {
+        my $msg = "Unable to refresh LDAP user '$driver_username':\n";
+        map { $msg .= " * $_\n" } $e->messages;
+        $log->error( $msg );
+    }
+    else {
+        $log->error(@_);
+    }
 }
 $sth->finish();
 

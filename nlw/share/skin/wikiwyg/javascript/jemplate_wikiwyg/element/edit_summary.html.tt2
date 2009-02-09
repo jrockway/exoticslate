@@ -6,10 +6,10 @@
                 <span class="explain"> <a href="#">(What is this?)</a></span>
             </div>
             <div class="close-area">
-                <a class="close-window" href="#"><img src="[% wiki.skin_uri('s3') %]/images/closeWindow.png" /></a>
+                <a class="close-window" href="#"><img id="st-close-edit-summaries" src="[% wiki.skin_uri('s3') %]/images/closeWindow.png" /></a>
             </div>
             <div>
-                <input type="text" maxlength="250" class="input">
+                <input type="text" id="st-edit-summary-text-area" maxlength="250" class="input">
             </div>
             <div>
                 <div class="signal">

@@ -67,7 +67,7 @@ MASS_ADD_USERS: {
         my $user = Socialtext::User->new(username => 'John Doe');
         ok $user, 'found test user';
         isa_ok $user->homunculus, 'Socialtext::User::LDAP', '... which is an LDAP user';
-        is $user->username, 'John Doe', '... using username from LDAP';
+        is $user->username, 'john doe', '... using username from LDAP';
         is $user->first_name, 'John', '... using first_name from LDAP';
         is $user->last_name, 'Doe', '... using last_name from LDAP';
         is $user->password, '*no-password*', '... using password from LDAP';
@@ -115,7 +115,7 @@ MASS_ADD_USERS: {
         my $user = Socialtext::User->new(username => 'John Doe');
         ok $user, 'found test user';
         isa_ok $user->homunculus, 'Socialtext::User::LDAP', '... which is an LDAP user';
-        is $user->username, 'John Doe', '... using username from LDAP';
+        is $user->username, 'john doe', '... using username from LDAP';
         is $user->first_name, 'John', '... using first_name from LDAP';
         is $user->last_name, 'Doe', '... using last_name from LDAP';
         is $user->password, '*no-password*', '... using password from LDAP';

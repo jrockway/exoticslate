@@ -38,7 +38,7 @@ instantiate_known_user_by_driver_unique_id: {
 
     # verify that all fields were extracted properly
     is $user->driver_unique_id, 'cn=John Doe,dc=example,dc=com',    '... driver_unique_id';
-    is $user->username,         'John Doe',                         '... username';
+    is $user->username,         'john doe',                         '... username';
     is $user->first_name,       'John',                             '... first_name';
     is $user->last_name,        'Doe',                              '... last_name';
     is $user->email_address,    'john.doe@example.com',             '... mail';
@@ -54,7 +54,7 @@ instantiate_known_user_by_username: {
 
     # verify that all fields were extracted properly
     is $user->driver_unique_id, 'cn=Jane Smith,dc=example,dc=com',  '... driver_unique_id';
-    is $user->username,         'Jane Smith',                       '... username';
+    is $user->username,         'jane smith',                       '... username';
     is $user->first_name,       'Jane',                             '... first_name';
     is $user->last_name,        'Smith',                            '... last_name';
     is $user->email_address,    'jane.smith@example.com',           '... email_address';
@@ -70,7 +70,7 @@ instantiate_known_user_by_email_address: {
 
     # verify that all fields were extracted properly
     is $user->driver_unique_id, 'cn=John Doe,dc=example,dc=com',    '... driver_unique_id';
-    is $user->username,         'John Doe',                         '... username';
+    is $user->username,         'john doe',                         '... username';
     is $user->first_name,       'John',                             '... first_name';
     is $user->last_name,        'Doe',                              '... last_name';
     is $user->email_address,    'john.doe@example.com',             '... email_address';

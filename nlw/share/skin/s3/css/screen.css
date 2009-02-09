@@ -286,6 +286,10 @@ ul li a.followPersonButton {
     height: 22px;
     background: url(../images/followIcon.png) no-repeat top left;
     padding-left: 25px;
+    color:#333333;
+    float:left;
+    font-size:9px;
+    font-weight:bold;
 }
 
 /* Wafl Boxes */

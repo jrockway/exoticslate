@@ -10,6 +10,7 @@ use Socialtext::User::Cache;
 use Socialtext::Exceptions qw( data_validation_error );
 use Socialtext::UserMetadata;
 use Socialtext::String;
+use Socialtext::Data;
 use Socialtext::User::Base;
 use Socialtext::User::Default;
 use Socialtext::User::Default::Users qw(:system-user :guest-user);
@@ -97,6 +98,7 @@ sub GetHomunculus {
     my $id_key = shift;
     my $id_val = shift;
     my $driver_key = shift;
+    my $return_raw_proto_user = shift || 0;
 
     my $where;
     if ($id_key eq 'user_id' || $id_key eq 'driver_unique_id') {
@@ -154,7 +156,7 @@ sub GetHomunculus {
     $row->{driver_key} = $driver_key;
 
     $row->{username} = delete $row->{driver_username};
-    return $class->NewHomunculus($row);
+    return ($return_raw_proto_user) ? $row : $class->NewHomunculus($row);
 }
 
 sub NewUserRecord {
@@ -241,109 +243,75 @@ sub ExpireUserRecord {
     Socialtext::User::Cache->Remove( user_id => $p{user_id} );
 }
 
-# Validates User data, and cleans it up where appropriate.  If the data isn't
-# valid, this method throws a Socialtext::Exception::DataValidation exception.
+# Validates a hash-ref of User data, cleaning it up where appropriate.  If the
+# data isn't valid, this method throws a Socialtext::Exception::DataValidation
+# exception.
 {
     Readonly my @required_fields   => qw(username email_address);
+    Readonly my @unique_fields     => qw(username email_address);
     Readonly my @lowercased_fields => qw(username email_address);
     sub ValidateAndCleanData {
-        my $self = shift;
-        my $user = shift;
-        my $p = shift;
-        my $metadata;
+        my ($self, $user, $p) = @_;
         my @errors;
+        my @buffer;
 
-        # are we validating for the "creation of a new user", or for "updating
-        # an existing user" ?
+        # are we "creating a new user", or "updating an existing user"?
         my $is_create = defined $user ? 0 : 1;
 
-        # if we're creating a new User, make sure that he's got a "user_id"
-        if ($is_create) {
-            $p->{user_id} ||= $self->NewUserId();
-        }
+        # New user's *have* to have a User Id
+        $self->_validate_assign_user_id($p) if ($is_create);
 
-        # if we're updating an existing User, make sure that we've got a copy
-        # of their metadata; we'll need it later.
-        if (not $is_create) {
+        # When updating a User, we'll need their Metadata
+        my $metadata;
+        unless ($is_create) {
             $metadata = Socialtext::UserMetadata->new(
-                user_id => $user->user_id
+                user_id => $user->{user_id},
             );
         }
 
         # Lower-case any fields that require it
-        map { $p->{$_} = lc($p->{$_}) }
-            grep { defined $p->{$_} }
-            @lowercased_fields;
+        $self->_validate_lowercase_values($p);
 
-        # Check for required fields, and make sure that they're not in use by
-        # another User record right now.
-        foreach my $field_name (@required_fields) {
-            # trim the field, removing leading/trailing spaces
-            if (defined $p->{$field_name}) {
-                $p->{$field_name}
-                    = Socialtext::String::trim($p->{$field_name});
+        # Trim fields, removing leading/trailing whitespace
+        $self->_validate_trim_values($p);
+
+        # Check for presence of required fields
+        foreach my $field (@required_fields) {
+            # field is required if either (a) we're creating a new User
+            # record, or (b) we were given a value to update with
+            if ($is_create or exists $p->{$field}) {
+                @buffer = $self->_validate_check_required_field($field, $p);
+                push @errors, @buffer if (@buffer);
             }
+        }
 
-            # make sure we have a value for this; its a *required* field
-            if (exists $p->{$field_name} or $is_create) {
-                unless (defined $p->{$field_name} and length($p->{$field_name})) {
-                    push @errors,
-                        loc('[_1] is a required field.',
-                            ucfirst Socialtext::Data::humanize_column_name($field_name)
-                        );
-                }
-            }
-
-            # make sure that we've got a unique value, and its not in use by
-            # any other User records
-            if (defined $p->{$field_name}) {
-                my $field_value = $p->{$field_name};
-
-                # if we're creating a new User, *or* we're changing the value
-                # in an existing User
-                if ($is_create or ($field_value ne $user->$field_name())) {
-
-                    # make sure there isn't an existing User with that value
-                    if (Socialtext::User->new_homunculus($field_name => $field_value)) {
-                        push @errors,
-                            loc("The [_1] you provided ([_2]) is already in use.",
-                                Socialtext::Data::humanize_column_name($field_name),
-                                $field_value
-                            );
-                    }
+        # Make sure that unique fields are in fact unique
+        foreach my $field (@unique_fields) {
+            # value has to be unique if either (a) we're creating a new User,
+            # or (b) we're changing the value for an existing User.
+            if (defined $p->{$field}) {
+                if ($is_create or ($p->{$field} ne $user->{$field})) {
+                    @buffer = $self->_validate_check_unique_value($field, $p);
+                    push @errors, @buffer if (@buffer);
                 }
             }
         }
 
-        # make sure that the e-mail address is valid
-        if (defined $p->{email_address}
-            and length $p->{email_address}
-            and !Email::Valid->address($p->{email_address}))
-        {
-            push @errors,
-                loc("[_1] is not a valid email address.",
-                    $p->{email_address}
-                );
+        # Ensure that any provided e-mail address is valid
+        @buffer = $self->_validate_email_is_valid($p);
+        push @errors, @buffer if (@buffer);
+
+        # Ensure that any provided password is valid
+        @buffer = $self->_validate_password_is_valid($p);
+        push @errors, @buffer if (@buffer);
+
+        # When creating a new User, we MAY require that a password be provided
+        if (delete $p->{require_password} and $is_create) {
+            @buffer = $self->_validate_password_is_required($p);
+            push @errors, @buffer if (@buffer);
         }
 
-        # make sure that the password is valid
-        if (defined $p->{password}) {
-            my $password_error = Socialtext::User::Default->ValidatePassword(
-                    password => $p->{password}
-                );
-            push @errors, $password_error if $password_error;
-        }
-
-        # if we're creating a new User, password could be required
-        if (delete $p->{require_password}
-            and $is_create
-            and not defined $p->{password})
-        {
-            push @errors, loc('A password is required to create a new user.');
-        }
-
-        # there are certain things you just can't change on a system-created
-        # User.
+        # Can't change the username/email for a system-created User
         if (!$is_create and $metadata and $metadata->is_system_created) {
             push @errors,
                 loc("You cannot change the name of a system-created user.")
@@ -354,30 +322,126 @@ sub ExpireUserRecord {
                 if $p->{email_address};
         }
 
-        # if we found any errors, throw an exception.
-        data_validation_error errors => \@errors if @errors;
+        ### IF DATA FAILED TO VALIDATE, THROW AN EXCEPTION!
+        if (@errors) {
+            data_validation_error errors => \@errors;
+        }
 
-        # if we're creating a new User and we weren't given a password, assign
-        # a placeholder.
-        if ($is_create
-            and not(defined $p->{password} and length $p->{password}))
-        {
+        # when creating a new User, assign a placeholder password unless one
+        # was provided.
+        $self->_validate_assign_placeholder_password($p) if ($is_create);
+
+        # encrypt any provided password
+        $self->_validate_encrypt_password($p);
+
+        # ensure that we're noting who created this User
+        $self->_validate_assign_created_by($p) if ($is_create);
+
+    }
+
+    sub _validate_assign_user_id {
+        my ($self, $p) = @_;
+        $p->{user_id} ||= $self->NewUserId();
+        return;
+    }
+    sub _validate_lowercase_values {
+        my ($self, $p) = @_;
+        map { $p->{$_} = lc($p->{$_}) }
+            grep { defined $p->{$_} }
+            @lowercased_fields;
+        return;
+    }
+    sub _validate_trim_values {
+        my ($self, $p) = @_;
+        map { $p->{$_} = Socialtext::String::trim($p->{$_}) }
+            grep { defined $p->{$_} }
+            @Socialtext::User::Base::all_fields;
+        return;
+    }
+    sub _validate_check_required_field {
+        my ($self, $field, $p) = @_;
+        unless ((defined $p->{$field}) and (length($p->{$field}))) {
+            return loc('[_1] is a required field.',
+                ucfirst Socialtext::Data::humanize_column_name($field)
+            );
+        }
+        return;
+    }
+    sub _validate_check_unique_value {
+        my ($self, $field, $p) = @_;
+        my $value = $p->{$field};
+        my $isnt_unique = Socialtext::User->_first('lookup', $field => $value);
+        if ($isnt_unique) {
+            # User lookup found _something_.
+            # 
+            # If what we found wasn't "us" (the User data we're checking for
+            # unique-ness), fail.
+            my $driver_uid   = $p->{driver_unique_id};
+            my $existing_uid = $isnt_unique->{driver_unique_id};
+            if (!$driver_uid || ($driver_uid ne $existing_uid)) {
+                return loc("The [_1] you provided ([_2]) is already in use.",
+                        Socialtext::Data::humanize_column_name($field), $value
+                    );
+            }
+        }
+        return;
+    }
+    sub _validate_email_is_valid {
+        my ($self, $p) = @_;
+        my $email = $p->{email_address};
+        if (defined $email) {
+            unless (length($email) and Email::Valid->address($email)) {
+                return loc("[_1] is not a valid email address.", $email);
+            }
+        }
+        return;
+    }
+    sub _validate_password_is_valid {
+        my ($self, $p) = @_;
+        my $password = $p->{password};
+        if (defined $password) {
+            return Socialtext::User::Default->ValidatePassword(
+                password => $password,
+            );
+        }
+        return;
+    }
+    sub _validate_password_is_required {
+        my ($self, $p) = @_;
+        unless (defined $p->{password}) {
+            return loc('A password is required to create a new user.');
+        }
+        return;
+    }
+    sub _validate_assign_placeholder_password {
+        my ($self, $p) = @_;
+        my $password = $p->{password};
+        unless (defined $password and length($password)) {
             $p->{password} = '*none*';
             $p->{no_crypt} = 1;
         }
-
-        # we don't care about different salt per-user - we crypt to
-        # obscure passwords from ST admins, not for real protection (in
-        # which case we would not use crypt)
-        $p->{password} = Socialtext::User::Default->_encode_password( $p->{password} )
-            if exists $p->{password} && ! delete $p->{no_crypt};
-
-        # unless we were told which User was creating this user, default it to
-        # the system user.
-        if ( $is_create and $p->{username} ne $SystemUsername ) {
-            # this will not exist when we are making the system user!
+        return;
+    }
+    sub _validate_encrypt_password {
+        my ($self, $p) = @_;
+        if ((exists $p->{password}) and (not delete $p->{no_crypt})) {
+            # NOTE: doesn't matter if we have/use a different salt per-user;
+            # we're encrypting to obscure passwords from ST admins, not for
+            # _real_ protection (in which case we wouldn't be using 'crypt()'
+            # in the first place).
+            $p->{password} =
+                Socialtext::User::Default->_crypt( $p->{password}, 'salty' );
+        }
+        return;
+    }
+    sub _validate_assign_created_by {
+        my ($self, $p) = @_;
+        if ($p->{username} ne $SystemUsername) {
+            # unless we were told who is creating this User, presume that it's
+            # being created by the System-User.
             $p->{created_by_user_id} ||= Socialtext::User->SystemUser()->user_id;
         }
+        return;
     }
 }
 

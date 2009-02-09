@@ -88,6 +88,11 @@ sub GetUser {
     return $self->get_homunculus($id_key, $id_val);
 }
 
+sub lookup {
+    my ($self, $key, $val) = @_;
+    return $self->GetHomunculus($key, $val, $self->driver_key, 1);
+}
+
 sub create {
     my ( $self, %p ) = @_;
 
@@ -253,6 +258,14 @@ User lookups can be performed by I<one> of:
 =item * email_address => $email_address
 
 =back
+
+=item B<lookup($key, $val)>
+
+Looks up a user in the Default data store and returns a hash-ref of data on
+that user.
+
+Lookups can be performed using the same criteria as listed for C<GetUser()>
+above.
 
 =item B<create(%params)>
 

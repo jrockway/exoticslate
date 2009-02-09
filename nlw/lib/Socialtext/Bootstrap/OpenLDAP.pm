@@ -527,6 +527,21 @@ sub remove {
     return $self->_update( \&_cb_remove_entry, [$entry] );
 }
 
+sub modify {
+    my ($self, $dn, $action, $attr_ref) = @_;
+
+    # NOTE: this doesn't follow the general model for passing through a
+    #       Net::LDAP::Entry object like 'add()' and 'remove()' do, but there
+    #       isn't a nice/quick/simple way to extract the hash of attrs again
+    #       from a Net::LDAP::Entry object without iterating over the
+    #       attributes individually and grabbing their values.
+    #
+    #       Was a whole lot simpler/easier to just pass through the attrs *as*
+    #       the hash we've already got, rather than "wrap it up, then unwrap
+    #       it again (the long way)".
+    return $self->_update( \&_cb_modify_entry, [[$dn, $action, $attr_ref]] );
+}
+
 sub _update {
     my ($self, $callback, $values_aref) = @_;
 
@@ -576,6 +591,21 @@ sub _cb_remove_entry {
     return 1;
 }
 
+sub _cb_modify_entry {
+    my ($net_ldap, $entry) = @_;
+    # NOTE: see note in 'modify()' above, for why this doesn't follow the same
+    #       parameter convention as the 'add/remove' callbacks.
+    my ($dn, $action, $attr_ref) = @{$entry};
+    my $mesg = $net_ldap->modify( $dn, $action => $attr_ref );
+    if ($mesg->code()) {
+        warn "# error modifying record in LDAP:\n"
+            . "#\t" . $mesg->code() . ': ' . $mesg->error() . "\n";
+        $entry->dump(*STDERR);
+        return;
+    }
+    return 1;
+}
+
 1;
 
 =head1 NAME
@@ -603,6 +633,10 @@ Socialtext::Bootstrap::OpenLDAP - Bootstrap OpenLDAP instances
   # manipulate contents of LDAP directory, directly
   $openldap->add($dn, %ldap_attrs);
   $openldap->remove($dn);
+  $openldap->modify($dn, add => { attr => 'val' });
+  $openldap->modify($dn, replace => { attr => 'newval' });
+  $openldap->modify($dn, delete => [qw(attr attr attr)]);
+  $openldap->modify($dn, delete => { attr => 'val-to-remove' });
 
   # get LDAP config object
   $config = $openldap->ldap_config();
@@ -825,6 +859,47 @@ false on error.
 Removes the LDAP entry pointed to by the given C<$dn> from the OpenLDAP
 instance.  Returns true if we're able to remove the entry from LDAP
 successfully, false on error.
+
+=item B<modify($dn, $action, \%attr_ref)>
+
+Modifies an existing entry in the OpenLDAP instance, as pointed to by the
+given C<$dn>.
+
+The following C<$action> syntaxes are supported:
+
+=over
+
+=item add => { attr => 'val' }
+
+Adds a new LDAP attribute to the entry, using the provided value.
+
+=item add => { attr => [val, val] }
+
+Adds a new LDAP attribute to the entry, using the provided list of values.
+
+=item replace => { attr => 'newval' }
+
+Replaces an existing LDAP attribute on the entry, changing its value to the
+provided value.
+
+=item replace => { attr => [newval, newval] }
+
+Replaces an existing LDAP attribute on the entry, changing its value to the
+provided list of values.
+
+=item delete => { attr => 'val' }
+
+Removes the specified value from the LDAP attribute on the entry.
+
+=item delete => { attr => [val, val] }
+
+Removes all of the specified values from the LDAP attribute on the entry.
+
+=item delete => [qw(attr attr)]
+
+Removes one or more LDAP attributes from the entry.
+
+=back
 
 =item B<host()>
 

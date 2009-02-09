@@ -41,6 +41,13 @@ our %user_attrs = (
 );
 
 ###############################################################################
+# List of ST fields that are stored internally as *lower-case*.
+our %is_lower_cased_internally = (
+    email_address   => 1,
+    username        => 1,
+);
+
+###############################################################################
 # Helper; bootstrap OpenLDAP and set up our DCs and OUs
 sub bootstrap_openldap {
     # bootstrap OpenLDAP
@@ -115,9 +122,17 @@ sub test_ldap_data_changes {
         # in a homunculus, the LDAP "user_id" is the "driver_unique_id"
         $st_field = 'driver_unique_id' if ($st_field eq 'user_id');
 
+        # Get the value that we're expecting.
+        #
+        # *Some* fields, its stored internally as lower-case.
+        my $value = $expected_results{$ldap_attr};
+        if ($is_lower_cased_internally{$st_field}) {
+            $value = lc($value);
+        }
+
         # ok... do they match?
-        is $changed_homey->$st_field, $expected_results{$ldap_attr},
-            "... $st_field is as expected; $expected_results{$ldap_attr}";
+        is $changed_homey->$st_field, $value,
+            "... $st_field is as expected; $value";
     }
 }
 

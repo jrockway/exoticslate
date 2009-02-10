@@ -4,6 +4,8 @@ use warnings;
 
 use base 'WikiText::Socialtext::Parser';
 
+use Socialtext::Page;
+
 sub create_grammar {
     my $self = shift;
     my $grammar = $self->SUPER::create_grammar();
@@ -62,8 +64,7 @@ sub handle_waflphrase {
 sub name_to_id {
     my $self = shift;
     my $text = shift;
-    $text = lc($text);
-    return $text;
+    return Socialtext::Page->name_to_id($text);
 }
 
 sub unknown_wafl {

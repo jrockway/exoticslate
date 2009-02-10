@@ -57,14 +57,14 @@ __DATA__
 --- html: The wafl {toc} is invalid.
 
 === Wikitext with extra spaces
---- SKIP
-Fix later...
 --- wikitext: The    time   is  now.
 --- html: The time is now.
 
 === Link with many words
---- SKIP
-name_to_id should call real method in Socialtext::Page(s)
+--- wikitext: Read {link: admin [The Page Name]} now
+--- html: Read <a href="/admin/index.cgi?the_page_name">The Page Name</a> now
+
+=== Link with many words
 --- wikitext: Read {link: admin [The Page Name]} now
 --- html: Read <a href="/admin/index.cgi?the_page_name">The Page Name</a> now
 

@@ -3,14 +3,12 @@ package Socialtext::Image;
 use strict;
 use warnings;
 
+use Socialtext::System qw(shell_run);
 use Carp ();
 use Readonly;
 use IO::Handle;
 use IO::File;
 use Socialtext::Validate qw( validate SCALAR_TYPE OPTIONAL_INT_TYPE HANDLE_TYPE );
-
-use constant HAS_IM => eval { require Image::Magick; 1 };
-
 
 {
     Readonly my $spec => {
@@ -22,50 +20,18 @@ use constant HAS_IM => eval { require Image::Magick; 1 };
         blob       => SCALAR_TYPE( default => '' ),
     };
 
-
     sub resize {
         my %p = validate( @_, $spec );
 
-        die "Filename or blob is required"
-            unless $p{filename} || $p{blob};
+        my $file = $p{filename} || die "Filename is required";
 
-        my $img = defined $p{filename} 
-            ? get_image_from_file($p{filename})
-            : get_image_from_blob($p{blob});
-
-        $p{img_height} = $img->Get('height');
-        $p{img_width} = $img->Get('width');
+        ($p{img_width}, $p{img_height}) = split ' ', `identify -format '\%w \%h' $file`;
         my ($new_width, $new_height) = get_proportions(%p);
 
         if ($new_width and $new_height) {
-            _check_magick_error( $img->Scale(
-                height => $new_height,
-                width  => $new_width,
-            ) );
+            shell_run("convert $file -scale ${new_width}x${new_height} $file");
         }
-
-        _check_magick_error( $img->Write( filename => $p{filename} ) );
     }
-}
-
-sub get_image_from_file {
-    my $filename = shift;
-    unless ( HAS_IM ) {
-        warn "Image::Magick is not installed, so we cannot resize images."
-             . " Copying image to $filename.\n";
-        return;
-    }
-    my $img = Image::Magick->new;
-    my $fh = IO::File->new($filename, "r");
-    _check_magick_error( $img->Read( file => $fh ) );
-    return $img;
-}
-
-sub get_image_from_blob {
-    my $blob = shift;
-
-    my $img = Image::Magick->new;
-    _check_magick_error( $img->BlobToImage($blob));
 }
 
 sub shrink {
@@ -112,8 +78,7 @@ sub process_profile_image {
         die "Invalid size '$size'";
     }
 
-    my $h = $img->Get('height');
-    my $w = $img->Get('width');
+    my ($w, $h) = split ' ', `identify -format '\%w \%h' $img`;
 
     if ($h > $max_h && $w > $max_w) {
         my ($new_w, $new_h) = Socialtext::Image::get_proportions(
@@ -122,62 +87,43 @@ sub process_profile_image {
             max_width  => $max_w,
             max_height => $max_h
         );
-        Socialtext::Image::_check_magick_error(
-            $img->Scale(
-                width  => $new_w,
-                height => $new_h
-            )
-        );
-        Socialtext::Image::_check_magick_error(
-            $img->Border(
-                width  => int(.5 + ($max_w - $new_w) / 2),
-                height => int(.5 + ($max_h - $new_h) / 2),
-                color  => '#FFFFFF'
-            )
+        my $border_w = int(.5 + ($max_w - $new_w) / 2);
+        my $border_h = int(.5 + ($max_h - $new_h) / 2);
+
+        shell_run(
+            "convert $img -scale ${new_w}x${new_h}! "
+           ."-bordercolor #FFFFFF "
+           ."-border ${border_w}x${border_h} $img"
         );
     }
     elsif ($h > $max_h) {
-        my %crop_geometry = crop_geometry(
-            width     => $w,     height     => $h,
-            max_width => $max_w, max_height => $max_h
-        );
-
-        # crop and pad edges
-        Socialtext::Image::_check_magick_error($img->Crop(%crop_geometry));
-        Socialtext::Image::_check_magick_error(
-            $img->Border(
-                width  => ($max_w - $w) / 2,
-                height => 0, color => '#FFFFFF'
-            )
+        my $border_w = int($max_w - $w) / 2;
+        my $border_h = 0;
+        shell_run(
+            "convert $img -crop ${max_w}x${max_h}! "
+           ."-bordercolor #FFFFFF "
+           ."-border ${border_w}x${border_h} $img"
         );
     }
     elsif ($w > $max_w) {
-        my %crop_geometry = crop_geometry(
-            width     => $w,     height      => $h,
-            max_width => $max_w, max_height => $max_h
-        );
-
-        # crop and pad edges
-        Socialtext::Image::_check_magick_error($img->Crop(%crop_geometry));
-        Socialtext::Image::_check_magick_error(
-            $img->Border(
-                height => ($max_h - $h) / 2,
-                width  => 0, color => BORDER_COLOUR
-            )
+        my $border_w = 0;
+        my $border_h = ($max_h - $h) / 2;
+        shell_run(
+            "convert $img -crop ${max_w}x${max_h}! "
+           ."-bordercolor #FFFFFF "
+           ."-border ${border_w}x${border_h} $img"
         );
     }
     else {
         # image is smaller than our maximum bounds, so lets create a border
         # around it to pad the edges. this will have the nice side effect of
         # centering the image
-        
         my ($bw, $bh) = (($max_w - $w) / 2, ($max_h - $h) / 2);
-        Socialtext::Image::_check_magick_error(
-            $img->Border(width => $bw, height => $bh, color => BORDER_COLOUR)
+        shell_run(
+            "convert -bordercolor #FFFFFF "
+           ."-border ${bw}x${bh} $img"
         );
     }
-
-    return $img;
 }
 
 sub crop_geometry {
@@ -235,15 +181,5 @@ sub get_proportions {
 
     return ($width,$height);
 }
-
-# Image::Magick returns undef on success, a string on error.
-sub _check_magick_error {
-    my $err = shift;
-
-    return unless defined $err and length $err;
-
-    Carp::croak($err);
-}
-
 
 1;

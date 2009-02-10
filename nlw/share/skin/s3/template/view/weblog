@@ -93,7 +93,9 @@
           [% box_content_filled %]
           [% IF hub.checker.check_permission('edit') %]
           <ul class="widgetButton">
-            <li><a class="smallEditButton" href="[% hub.weblog.page_edit_path %]#edit">[% loc('edit') %]</a></li>
+            <li class="flexButtonGrey">
+              <a class="greyButton" href="[% hub.weblog.page_edit_path %]#edit">[% loc('Edit') %]</a>
+            </li>
           </ul>
           [% END %]
           <div class="clear"></div>

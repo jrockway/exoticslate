@@ -1,4 +1,156 @@
-@import url('ieStyles.css');
+/*
+
+Socialtext ie 6 specific Style Sheet
+Author: Mark Schuber :: Araucaria Design
+Date: 05/12/2008
+
+*/
+
+div.widget div.widgetBottom {
+	background: url(../images/widgetBottom.png) no-repeat 1px bottom;
+	height: 10px;
+}
+
+div#controls div#st-editing-tools-edit ul li a {
+	margin-left: 12px;
+}
+
+ul li a.genericBlueButton {
+	display: inline;
+	color: #fff;
+	position: relative;
+	right: 0;
+	font-weight: bold;
+	float: left;
+	height: 22px;
+	padding: 0 25px 0 0;
+	background: url(../images/genericBlueButton.png) no-repeat;
+	background-position: top left;
+	line-height: 17px;
+	text-indent: 15px;
+	margin-right: -9px;
+	white-space: nowrap;
+}
+
+ul li a.genericBlueButton:hover {
+	background-position: bottom left;
+	text-decoration: underline;
+	color: #fff;
+}
+
+ul li a.genericOrangeButton {
+	display: inline;
+	color: #fff;
+	position: relative;
+	right: 0;
+	font-weight: bold;
+	float: left;
+	height: 22px;
+	padding: 0 0 0 15px;
+	background: url(../images/genericOrangeButton.png) no-repeat;
+	background-position: bottom left;
+	line-height: 17px;
+        text-indent: 0;
+        margin: 0;
+}
+
+ul li a.genericOrangeButton:hover {
+	background-position: top left;
+	text-decoration: none;
+	color: #fff;
+}
+
+ul li a.addButton {
+	display: inline;
+	color: #fff;
+	position: relative;
+	right: 0;
+	font-weight: bold;
+	float: left;
+	height: 22px;
+	padding: 0 6px 0 0;
+	background: url(../images/addButton.png) no-repeat;
+	background-position: top left;
+	line-height: 17px;
+	text-indent: 25px;
+	margin-right: -10px;
+}
+
+
+ul.widgetButton li a.addButton {
+	padding: 0 20px 0 0;
+}
+
+ul li a.addButton:hover {
+	background-position: top left;
+	text-decoration: none;
+	color: #fff;
+}
+
+a.editButton {
+	display: inline;
+	color: #fff;
+	position: relative;
+	right: 0;
+	font-weight: bold;
+	float: left;
+	height: 22px;
+	padding: 0 0 0 25px;
+	background: url(../images/editButton.png) no-repeat;
+	background-position: bottom left;
+	line-height: 17px;
+        text-indent: 0;
+        margin: 0;
+}
+
+a.editButton:hover {
+	background-position: top left;
+	text-decoration: none;
+	color: #fff;
+}
+
+ul li a.commentButton {
+	display: inline;
+	text-indent:32px;
+	padding-right: 0;
+	float: left;
+	color: #fff;
+	height: 22px;
+	position: relative;
+	right: 0;
+	line-height: 17px;
+	font-weight: bold;
+	background: url(../images/commentButton.png) no-repeat;
+	background-position: bottom left;
+	margin-right: -34px;
+	}
+
+ul li a.commentButton:hover {
+	background-position: top left;
+	text-decoration: none;
+	color: #fff;
+}
+
+div#bottomButtons ul {
+	margin-right: -10px;
+}
+
+div#bottomButtons ul.buttonRight {
+	margin-right: 0;
+}
+
+
+div#bottomButtons ul li a {
+	padding-right:14px;
+}
+
+div#bottomButtons ul li a.genericBlueButton {
+	padding-right:34px;
+}
+
+div#st-editing-tools-edit ul.buttonRight {
+	padding:0;
+}
 
 ul li a.greyButton {
 	display: inline;

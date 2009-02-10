@@ -481,7 +481,15 @@ proto._savePage = function(cb) {
             function() { 
                 return($('#st-display-mode-container', t.win.document).is(':visible'));
             },
-            function() { return cb.call(t) }
+            function() {
+                // saving page refresh the iframe.
+                // On IE: without doing these it shows:  Can't execute code from a freed script 
+                t.win = t.iframe.contentWindow;
+                t.doc = t.iframe.contentDocument || t.win.document;
+                t.$ = t.win.jQuery;
+
+                return cb.call(t)
+            }
         );
     };
 

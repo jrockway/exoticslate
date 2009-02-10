@@ -203,6 +203,7 @@ sub get_page_info_for_category {
             username       => $page->last_edited_by->username,
             revision_count => $page->revision_count,
             is_spreadsheet => $page->is_spreadsheet,
+            edit_summary   => $page->edit_summary,
         };
     }
 

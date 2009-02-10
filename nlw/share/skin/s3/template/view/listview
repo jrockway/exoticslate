@@ -112,6 +112,9 @@
         [% IF row.workspace_title %][% loc('in') %] <a href="/[% row.workspace_name %]">[% row.workspace_title %]</a>[% END %]
         [% IF summaries %]
           <span class="summary">[% row.Summary %]</span>
+          [% IF row.edit_summary %]
+            <span class="edit_summary">[% loc('Edit summary') %]: [% row.edit_summary %]</span><br />
+          [% END %]
         [% END %]
         <em>(<a href="/[% row.workspace_name || current_workspace.name %]/index.cgi?action=revision_list;page_name=[% row.page_uri %]">[% row.revision_count %]</a> [% loc('Revisions') %])
         [% loc('Last updated by') %] [% row.username | decorate('user_avatar') %] [% loc('on') %] [% row.DateLocal %]</em></td>

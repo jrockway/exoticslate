@@ -176,3 +176,5 @@ lib/Socialtext/Appliance/Model/SupportTarball.pm
 lib/Socialtext/Appliance/SupportRequest.pm
 etc/socialtext/uri_map.d/widgets.yaml
 t/wikitests/people/avatar-cache.wiki
+t/widget/lang/Test_fallback.xml
+t/Socialtext/Signal/PageTopic.t

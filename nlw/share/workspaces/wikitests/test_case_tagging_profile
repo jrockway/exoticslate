@@ -32,7 +32,7 @@
 | *Comment* | Test Case: Tagging Profile. verify 所以 tag added. Can't test link. |  |
 
 TODO: figure out why testing for Chinese chars in tag widget fails. Need frame select? Above tests pass??
- text_like | 所以 | |
+text_like | 所以 | |
 
 | *Comment* | Test Case: Tagging Profile reverify fog tag link |  |
 | text_like | link=fog %%start_time%% | fog %%start_time%% |
@@ -43,7 +43,7 @@ TODO: figure out why testing for Chinese chars in tag widget fails. Need frame s
 | wait_for_element_visible_ok | link=Summaries | 30000 |
 | click_ok | link=Summaries |  |
 | text_like | All People Tagged 'fog %%start_time%%' |  |
-| wait_for_text_present_ok | %%email%% | 10000 |
+| wait_for_text_present_ok | %%email%% | 30000 |
 
 | *Comment* | Test Case: Tagging Profile add the same tag to a different user |  |
 
@@ -54,7 +54,7 @@ TODO: figure out why testing for Chinese chars in tag widget fails. Need frame s
 
 | *Comment* | Test Case: Tagging Profile. Access profile |  |
 | st-logout |  |
-| open_ok | / |  |
+| wait_for_element_visible_ok | username | 60000 |
 | type_ok | username | %%e_user%% |
 | type_ok | password | %%password%% |
 | clickAndWait | //input[@value='Log in'] |  |
@@ -76,19 +76,19 @@ TODO: figure out why testing for Chinese chars in tag widget fails. Need frame s
 | wait_for_element_visible_ok | link=Summaries | 30000 |
 | click_ok | link=Summaries |  |
 | text_like | All People Tagged 'fog %%start_time%%' |  |
-| wait_for_text_present_ok | %%short_username%% | 10000 |
-| wait_for_text_present_ok | %%email%% | 10000 |
-| wait_for_text_present_ok | %%fname%% %%lname%% | 10000 |
-| wait_for_text_present_ok | %%e_user%% | 10000 |
+| wait_for_text_present_ok | %%short_username%% | 30000 |
+| wait_for_text_present_ok | %%email%% | 30000 |
+| wait_for_text_present_ok | %%fname%% %%lname%% | 30000 |
+| wait_for_text_present_ok | %%e_user%% | 30000 |
 
 | *Comment* | Test Case: Tagging Profile list view: tag fog %%start_time%% two users Names |  |
 | wait_for_element_visible_ok | link=Names | 30000 |
 | click_ok | link=Names |  |
 | text_like | All People Tagged 'fog %%start_time%%' |  |
-| wait_for_text_present_ok | %%short_username%% | 10000 |
-| wait_for_text_not_present_ok | %%email%% | 10000 |
-| wait_for_text_present_ok | %%fname%% %%lname%% | 10000 |
-| wait_for_text_not_present_ok | %%e_user%% | 10000 |
+| wait_for_text_present_ok | %%short_username%% | 30000 |
+| wait_for_text_not_present_ok | %%email%% | 30000 |
+| wait_for_text_present_ok | %%fname%% %%lname%% | 30000 |
+| wait_for_text_not_present_ok | %%e_user%% | 30000 |
 
 | *Comment* | Make and tag a new user |  |
 | set | tag_user | `tagger.%%start_time%%@ken.socialtext.net` |

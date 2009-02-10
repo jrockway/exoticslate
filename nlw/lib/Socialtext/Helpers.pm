@@ -211,6 +211,13 @@ sub global_template_vars {
         }
     );
 
+    my $plugins_enabled = [
+        map { $_->name }
+        grep {
+            $self->hub->current_workspace->is_plugin_enabled($_->name) ||
+            $self->hub->current_user->can_use_plugin($_->name)
+        } Socialtext::Pluggable::Adapter->plugins
+    ];
 
     my $cookies = Apache::Cookie->fetch();
     my %result = (
@@ -237,6 +244,7 @@ sub global_template_vars {
         stax_info          => $self->hub->stax->hacks_info,
         workspaceslist     => $self->_get_workspace_list_for_template,
         ui_is_expanded     => defined($cookies->{"ui_is_expanded"}),
+        plugins_enabled    => $plugins_enabled,
         $self->hub->pluggable->hooked_template_vars,
     );
     if ($self->hub->current_user->can_use_plugin('people')) {

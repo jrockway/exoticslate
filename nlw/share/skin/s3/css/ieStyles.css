@@ -28,7 +28,7 @@ ul li a.genericBlueButton {
 	background-position: top left;
 	line-height: 17px;
 	text-indent: 15px;
-	margin-right: -37px;
+	margin-right: -9px;
 	white-space: nowrap;
 }
 
@@ -72,8 +72,8 @@ ul li a.addButton {
 	background: url(../images/addButton.png) no-repeat;
 	background-position: top left;
 	line-height: 17px;
-	text-indent: 32px;
-	margin-right: -37px;
+	text-indent: 25px;
+	margin-right: -10px;
 }
 
 

@@ -434,7 +434,7 @@ body#workSpace div#controls div#st-editing-tools-edit h1,body#blog div#controls 
 	font-size: 20px;
 	margin:21px 0 0 21px;}
 	
-body#workSpace div#controls div#st-editing-tools-edit ul#quickLinks,body#blog div#controls div#st-editing-tools-edit ul#quickLinks {
+body#workSpace div#controls div#st-editing-tools-edit ul#quickLinks {
 	margin: 15px 0 0 12px;
 }	
 
@@ -888,8 +888,7 @@ div#controlsRight div#frame img {
 div#controls div#controlsRight ul {
 	float: right;
 	margin-right: 20px;
-	}
-		
+}
 	
 body#contentPage div#controls div#controlsRight ul li {
 	float: left;
@@ -930,8 +929,11 @@ div#controls div#controlsRight ul.blogControls li a {
 div#controls div#controlsRight div.goTo {
 	float: right;
 	clear: both;
-	margin:15px 20px 0 0;
+	margin: 15px 0 0 0;
 }	
+div#controls div#controlsRight .postByEmail {
+        padding-right: 28px;
+}
 
 div#controls div#controlsRight div.goTo a.newPostButton,div#controls div#controlsRight div.goTo span {
 	float: right;

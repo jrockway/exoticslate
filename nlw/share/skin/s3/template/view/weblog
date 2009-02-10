@@ -28,7 +28,11 @@
   <div id="controlsRight">
       <div class="goTo">
         [% IF checker.check_permission('edit') %]
-        <a id="st-weblog-newpost-button" class="newPostButton" href="[% script_name %]?action=new_page;add_tag=[% tag_escaped %];caller_action=weblog_display" title="[% loc('Click this button to create a new blog post') %]">[% loc('New Post') %]</a>
+        <ul>
+          <li class="flexButtonBlue">
+            <a id="st-weblog-newpost-button" class="addButton" href="[% script_name %]?action=new_page;add_tag=[% tag_escaped %];caller_action=weblog_display" title="[% loc('Click this button to create a new blog post') %]">[% loc('New Post') %]</a>
+          </li>
+        </ul>
         [% END %]
       </div>
     [% IF is_real_category AND checker.check_permission('edit') %]

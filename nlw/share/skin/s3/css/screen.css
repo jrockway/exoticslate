@@ -138,6 +138,11 @@ table.dataTable span.summary strong {
     padding:1px 2px;
 }
 
+table.dataTable span.edit_summary {
+    font-weight:bold;
+    line-height: 18px;
+}
+
 div#bottomButtons {
     width: 100%;
 }

@@ -76,4 +76,41 @@ sub double_space_harden {
     return $str;
 }
 
+=head2 word_truncate ($str, $length)
+
+Return a truncated I<$str> to a maximum of I<$length> characters and append
+I<$ellipsis> if text was truncated.  C<word_truncate> breaks on whitespace, so
+that words are not chopped in half.
+
+=cut
+
+sub word_truncate {
+    my ($string, $length, $ellipsis) = @_;
+    $ellipsis ||= '...';
+    return $ellipsis if !$length;
+
+    my $new_string = '';
+
+    return $string if (length($string) <= $length);
+    return $ellipsis if (0 == $length);
+
+    my @parts = split / /, $string;
+
+    if (scalar(@parts) == 1) {
+        $new_string = substr $string, 0, $length;
+    }
+    else {
+        foreach my $part (@parts) {
+            last if ((length($new_string) + length($part)) > $length);
+            $new_string .= $part . ' ';
+        }
+        $new_string = substr($parts[0], 0, $length) if (length($new_string) == 0);
+
+    }
+
+    $new_string =~ s/\s+$//;
+    $new_string .= $ellipsis;
+    return $new_string;
+}
+
 1;

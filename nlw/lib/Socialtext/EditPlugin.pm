@@ -47,6 +47,30 @@ sub _validate_pagename_length {
     }
 }
 
+sub _signal_edit_summary {
+    my ($self, $edit_summary, $page) = @_;
+    my $user = $self->hub->current_user;
+    return unless $user->can_use_plugin('signals');
+    require Socialtext::Signal;
+    my $workspace = $page->hub->current_workspace;
+
+    $edit_summary = Socialtext::String::word_truncate($edit_summary, 140);
+    my $body = $edit_summary
+        ? loc('[_1], "[_2]" (edited [_3] in [_4])',
+            $user->best_full_name, $edit_summary, $page->title, $workspace->title)
+        : loc('[_1] wants you to know about an edit of [_2] in [_3]',
+            $user->best_full_name, $page->title, $workspace->title);
+
+    my $signal = Socialtext::Signal->Create(
+        user_id => $user->user_id,
+        body    => $body,
+        topic   => {
+            page_id      => $page->id,
+            workspace_id => $workspace->workspace_id,
+        }
+    );
+}
+
 sub edit_content {
     my $self = shift;
     my $page_name = $self->cgi->page_name;
@@ -76,6 +100,8 @@ sub edit_content {
     my $metadata = $page->metadata;
 
     my $edit_summary = Socialtext::String::trim($self->cgi->edit_summary || '');
+    $self->_signal_edit_summary($edit_summary, $page)
+        if $self->cgi->signal_edit_summary;
     st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
         if $edit_summary;
 
@@ -181,7 +207,10 @@ sub save {
             errors => [loc('A page must have a body to be saved.')] );
     }
 
-    my $edit_summary = Socialtext::String::trim($self->cgi->edit_summary || '');
+    my $edit_summary
+        = Socialtext::String::trim($self->cgi->edit_summary || '');
+    $self->_signal_edit_summary($edit_summary, $page)
+        if $self->cgi->signal_edit_summary;
     st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
         if $edit_summary;
 
@@ -283,5 +312,6 @@ cgi 'page_title';
 cgi 'add_tag';
 cgi 'attachment';
 cgi 'edit_summary';
+cgi 'signal_edit_summary';
 
 1;

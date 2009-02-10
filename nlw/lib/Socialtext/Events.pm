@@ -37,6 +37,9 @@ sub Record {
         $ev->{context} ||= {};
         $ev->{context}{revision_count} ||= $page->revision_count;
         $ev->{context}{revision_id} ||= $page->revision_id;
+        if (my $es = $page->edit_summary) {
+            $ev->{context}{edit_summary} ||= $es;
+        }
 
         my $t_page = delete $ev->{target_page};
         my $t_page_workspace = delete $ev->{target_workspace};

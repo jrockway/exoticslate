@@ -13,8 +13,8 @@
             </div>
             <div>
                 <div class="signal">
-                    <div class="preview" style="display: none;">Your summary will appear as:<div class="text"></div></div>
-                    <input id="st-edit-summary-signal-checkbox" type="checkbox" /><label for="st-edit-summary-signal-checkbox">Signal this summary (140 characters maximum)</label>
+                    <div class="preview" style="display: none;">Your Signal will appear as:<div id="st-edit-summary-signal-preview" class="text"></div></div>
+                    <input id="st-edit-summary-signal-checkbox" type="checkbox" /><label for="st-edit-summary-signal-checkbox">Signal this edit (maximum of 140 characters)</label>
                 </div>
              [%#    <div class="minor">
                     <input id="st-edit-summary-minor-checkbox" type="checkbox" /><label for="st-edit-summary-minor-checkbox">Minor edit</label>&nbsp;&nbsp;

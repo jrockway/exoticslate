@@ -1,3 +1,5 @@
+[%# ft=tt2html
+%]
 <div id="st-edit-mode-container" style="display: none">
     <div id="controls">
         <div id="st-editing-tools-edit">
@@ -83,6 +85,7 @@
                     <input id="st-page-editing-action" type="hidden" name="action" value="edit_content" />
                     <input id="st-page-editing-caller" type="hidden" name="caller_action" value="[% page.caller %]" />
                     <input id="st-page-editing-summary" type="hidden" name="edit_summary" />
+                    <input id="st-page-editing-signal-summary" type="hidden" name="signal_edit_summary" value="0" />
                     [% FOREACH tag = new_tags %]
                     <input type="hidden" name="add_tag" value="[% tag %]" />
                     [% END %]

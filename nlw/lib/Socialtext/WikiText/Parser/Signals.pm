@@ -10,7 +10,7 @@ sub create_grammar {
     my $blocks = $grammar->{_all_blocks};
     @$blocks = ('line');
     my $phrases = $grammar->{_all_phrases};
-    @$phrases = ('waflphrase');
+    @$phrases = ('waflphrase', 'b');
     $grammar->{line} = {
         match => qr/^(.*)$/s,
         phrases => $phrases,
@@ -18,9 +18,25 @@ sub create_grammar {
             chomp;
             die "Signal text cannot contain newline:\n>$_<"
               if /\n/;
-        },
+        }
     };
+#     $grammar->{b} = {
+#         match => re_huggy(q{\*}),
+#         phrases => $phrases,
+#     };
     return $grammar;
+}
+
+sub re_huggy {
+    my $brace1 = shift;
+    my $brace2 = shift || $brace1;
+    my $ALPHANUM = '\p{Letter}\p{Number}\pM';
+
+    qr/
+        (?:^|(?<=[^{$ALPHANUM}$brace1]))($brace1(?=\S)(?!$brace2)
+        .*?
+        $brace2)(?=[^{$ALPHANUM}$brace2]|\z)
+    /x;
 }
 
 sub handle_waflphrase {

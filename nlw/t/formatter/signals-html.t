@@ -18,7 +18,7 @@ run_is wikitext => 'html';
 sub format {
     my $parser = Socialtext::WikiText::Parser::Signals->new(
        receiver => Socialtext::WikiText::Emitter::Signals::HTML->new,
-#        receiver => WikiText::WikiByte::Emitter->new,
+#       receiver => WikiText::WikiByte::Emitter->new,
     );
     return $parser->parse($_);
 }
@@ -27,6 +27,10 @@ __DATA__
 === Strikethrough phrase wikitext not supported
 --- wikitext: I mean to say -hello- goodbye.
 --- html: I mean to say -hello- goodbye.
+
+=== Bold actually does work here
+--- wikitext: I mean to say *hello* goodbye.
+--- html: I mean to say <b>*hello*</b> goodbye.
 
 === Plain is plain
 --- wikitext: Plain text is plain text!

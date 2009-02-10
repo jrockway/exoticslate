@@ -78,6 +78,7 @@ lib/Socialtext/People/Rest/Tags.pm
 lib/Socialtext/People/Rest/Watchers.pm
 lib/Socialtext/People/Rest/Watchlist.pm
 lib/Socialtext/Noun/Signal.pm
+lib/Socialtext/Signal/PageTopic.pm
 
 # share excludes
 share/console-template/
@@ -140,6 +141,7 @@ etc/socialtext/uri_map.d/people.yaml
 t/Socialtext/Noun/Signal.t
 t/wikitests/signals/data_signals.wiki
 etc/socialtext/uri_map.d/signals.yaml
+t/Socialtext/Signal
 
 # log excludes
 dev-bin/test_access.log

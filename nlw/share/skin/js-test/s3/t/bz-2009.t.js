@@ -36,7 +36,7 @@ t.runAsync([
 
         t.unlike(
             t.$('#st-page-titletext').text(),
-            /gt/,
+            /lt/,
             "Less-than sign should not be escaped in page title"
         );
 

@@ -14,9 +14,7 @@ html body#settingsPage div#controls div#controlsRight {
 }
 
 /* IE6-only fix for {bz: 1424} - Force alignment to the right */
-html body#workSpace div#controls div#controlsRight,
-/* IE6-only fix for {bz: 1393} - Force alignment to the right */
-html body#dashBoard div#controls div#controlsRight {
+html body#workSpace div#controls div#controlsRight {
     -width: 10px !important;
     white-space: nowrap;
 }
@@ -30,10 +28,6 @@ html body#dashBoard div#controls div#controlsRight.peoplelist {
 html body#dashBoard div#controls div#controlsRight ul.profile-links li {
     margin-top: -11px;
     -margin-top: 0px;
-}
-
-html body#dashBoard div#controls div#controlsRight ul li a {
-    white-space: normal;
 }
 
 html body#dashBoard div#controls div#controlsRight ul.profile-links li a,
@@ -184,7 +178,6 @@ div#mainNav ul ul.level2.withimage {
     -padding-top: 9px !important;
     -padding-bottom: 9px !important;
 }
-
 
 /* IE6-specific parts of {bz: 1338} */
 

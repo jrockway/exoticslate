@@ -96,10 +96,9 @@ body#dashBoard div#controls div#frame {
 body#dashBoard div#controls div#frame img {
     margin: 3px 3px 0 0;
 }
-body#dashBoard div#controls span.welcome {
-    margin-top: 14px;
+body#dashBoard div#controls .welcome {
+    margin-top: 6px;
     font-size: 12px;
-    display: block;
     line-height: 16px;
     float: left;
     padding-left: 10px;

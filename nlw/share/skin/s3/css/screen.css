@@ -1422,59 +1422,6 @@ div.widget ul.widgetButton li {
 	margin-right: 10px;
 }
 
-div.widget ul.widgetButton li a.addTagButton {
-	display: block;
-	text-indent: -9999px;
-	width: 87px;
-	height: 21px;
-	background: url(../images/addTagButton.png) no-repeat;
-	background-position: top left;
-}
-
-div.widget ul.widgetButton li a.addTagButton:hover {
-	background-position: top right;
-	}
-
-
-div.widget ul.widgetButton li a.smallEditButton {
-	display: block;
-	text-indent: -9999px;
-	width: 41px;
-	height: 21px;
-	background: url(../images/smallEditButton.png) no-repeat;
-	background-position: top left;
-}
-
-div.widget ul.widgetButton li a.smallEditButton:hover {
-	background-position: top right;
-	}
-
-div.widget ul.widgetButton li a.uploadButton {
-	display: block;
-	text-indent: -9999px;
-	width: 84px;
-	height: 21px;
-	background: url(../images/uploadButton.png) no-repeat;
-	background-position: top left;
-}
-
-div.widget ul.widgetButton li a.uploadButton:hover {
-	background-position: top right;
-}
-
-div.widget ul.widgetButton li a.manageButton {
-	display: block;
-	text-indent: -9999px;
-	width: 85px;
-	height: 21px;
-	background: url(../images/manageButton.png) no-repeat;
-	background-position: top left;
-}
-
-div.widget ul.widgetButton li a.manageButton:hover {
-	background-position: top right;
-}
-
 div.subHeader h5 {
 	float: left;
 	font-size: 16px;
@@ -1535,8 +1482,6 @@ div.dashNewPage a {
 	background: url(../images/newPageIcon.png) no-repeat center left;
 	
 }
-
-
 
 div.widgetContent div#profile {
 	width: 99%;

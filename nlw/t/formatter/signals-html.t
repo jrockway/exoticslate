@@ -68,3 +68,7 @@ __DATA__
 --- wikitext: Read {link: admin [The Page Name]} now
 --- html: Read <a href="/admin/index.cgi?the_page_name">The Page Name</a> now
 
+=== Hyperlink
+--- wikitext: Go to "Google"<http://google.com>!
+--- html: Go to <a href="http://google.com">Google</a>!
+

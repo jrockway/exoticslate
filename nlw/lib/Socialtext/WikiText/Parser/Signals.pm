@@ -12,7 +12,8 @@ sub create_grammar {
     my $blocks = $grammar->{_all_blocks};
     @$blocks = ('line');
     my $phrases = $grammar->{_all_phrases};
-    @$phrases = ('waflphrase', 'b');
+
+    @$phrases = ('waflphrase', 'a', 'b');
     $grammar->{line} = {
         match => qr/^(.*)$/s,
         phrases => $phrases,

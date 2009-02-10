@@ -26,23 +26,29 @@ sub begin_node {
     my $self = shift;
     my $match = shift;
     return if ($match->{type} eq 'line');
-    if ($match->{type} eq 'b') {
+    if ($match->{type} eq 'a') {
+        $self->{output} .= qq{<a href="$match->{attributes}{href}">};
+    }
+    elsif ($match->{type} eq 'b') {
         $self->{output} .= "<b>*";
-        return;
-    };
-
-    $self->{output} .= " ";
+    }
+    else {
+        $self->{output} .= " ";
+    }
 }
 
 sub end_node {
     my $self = shift;
     my $match = shift;
-    if ($match->{type} eq 'b') {
+    if ($match->{type} eq 'a') {
+        $self->{output} .= "</a>";
+    }
+    elsif ($match->{type} eq 'b') {
         $self->{output} .= "*</b>";
-        return;
-    };
-
-    $self->{output} .= " ";
+    }
+    else {
+        $self->{output} .= " ";
+    }
 }
 
 sub text_node {

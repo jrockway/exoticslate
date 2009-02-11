@@ -22,6 +22,11 @@ sub insert {
     $self->{output} .= $ast->{output} || '';
 }
 
+my $markup = {
+    'b' => ['<b>*', '*</b>'],
+    'i' => ['<i>_', '_</i>'],
+    'del' => ['<del>-', '-</del>'],
+};
 sub begin_node {
     my $self = shift;
     my $match = shift;
@@ -29,8 +34,8 @@ sub begin_node {
     if ($match->{type} eq 'a') {
         $self->{output} .= qq{<a href="$match->{attributes}{href}">};
     }
-    elsif ($match->{type} eq 'b') {
-        $self->{output} .= "<b>*";
+    elsif (exists $markup->{$match->{type}}) {
+        $self->{output} .= $markup->{$match->{type}}->[0];
     }
     else {
         $self->{output} .= " ";
@@ -43,8 +48,8 @@ sub end_node {
     if ($match->{type} eq 'a') {
         $self->{output} .= "</a>";
     }
-    elsif ($match->{type} eq 'b') {
-        $self->{output} .= "*</b>";
+    elsif (exists $markup->{$match->{type}}) {
+        $self->{output} .= $markup->{$match->{type}}->[1];
     }
     else {
         $self->{output} .= " ";
@@ -55,6 +60,9 @@ sub text_node {
     my $self = shift;
     my $text = shift;
     $text =~ s/\s+/ /g;
+    $text =~ s/&/&amp;/g;
+    $text =~ s/</&lt;/g;
+    $text =~ s/>/&gt;/g;
 #     $text =~ s/^\s?(.*)s?/$1/g;
 #     $text =~ s/\n/ /g;
     $self->{output} .= "$text";

@@ -1123,6 +1123,9 @@ function setup_wikiwyg() {
 
             if (Wikiwyg.is_safari) {
                 delete ww.current_wikitext;
+
+                // To fix the tab focus order, remove the (unused) iframes.
+                jQuery("#st-page-editing-wysiwyg, #pastebin").remove();
             }
             if (Wikiwyg.is_safari || Wikiwyg.is_old_firefox) {
                 jQuery("#st-page-editing-uploadbutton").hide();

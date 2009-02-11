@@ -55,11 +55,11 @@ sub _signal_edit_summary {
     my $workspace = $page->hub->current_workspace;
 
     $edit_summary = Socialtext::String::word_truncate($edit_summary, 140);
+    my $page_link = sprintf "{link: %s [%s]}", $workspace->name, $page->title;
     my $body = $edit_summary
-        ? loc('"[_1]" (edited [_2] in [_3])',
-            $edit_summary, $page->title, $workspace->title)
-        : loc('wants you to know about an edit of [_1] in [_2]',
-            $page->title, $workspace->title);
+        ? loc('"[_1]" (edited [_2] in [_3])', $edit_summary, $page_link, $workspace->title)
+        : loc('wants you to know about an edit of [_1] in [_2]', $page_link, $workspace->title);
+
 
     my $signal = Socialtext::Signal->Create(
         user_id => $user->user_id,

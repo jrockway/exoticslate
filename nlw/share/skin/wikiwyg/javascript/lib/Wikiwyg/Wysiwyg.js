@@ -440,22 +440,29 @@ proto.set_inner_html = function(html) {
         setTimeout( function() {
             self.set_inner_html(html);
         }, 500);      
-    } else {          
+    } else if (!self._editable_div) {
+        // First time running get_editable_div() -- give it 1.6sec
+        // The heuristic here is to allow 3 tries of tryAppendDiv to pass.
+        self.get_editable_div();
+        setTimeout( function() {
+            self.set_inner_html(html);
+        }, 1600);      
+    } else {
         try {
-            this.get_editable_div().innerHTML = html;
+            this._editable_div.innerHTML = html;
         } catch (e) {
-            if (self._editable_div) {
-                try {
-                    jQuery(self._editable_div).remove();
-                } catch(e){}
-            }
+            try {
+                 self._editable_div.parentNode.removeChild(self._editable_div);
+	    } catch (e) {}
 
             self._editable_div = null;
             self.get_editable_div();
 
+	    // 1.6sec clearly not enough -- give it another 5.1sec
+            // The heuristic here is to allow 10 tries of tryAppendDiv to pass.
             setTimeout( function() {
                 self.set_inner_html(html);
-            }, 1000);
+            }, 5100);
         }
     }
 }

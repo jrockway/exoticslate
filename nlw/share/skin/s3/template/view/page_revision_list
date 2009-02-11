@@ -67,6 +67,12 @@
   </div><!-- bottomButtons -->
 </div><!-- contentContainer -->  
 
+<script language="javascript"><!--
+  // in the case that the the table grows beyond the bounds of the container,
+  // resize the container
+  if ($('.dataTable').width() > $('#mainWrap').width())
+    $('#mainWrap').width($('.dataTable').width() + 100);
+--></script>
 [% END %]
 
 [% BLOCK compare_revisions %]

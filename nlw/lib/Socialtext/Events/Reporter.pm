@@ -237,7 +237,8 @@ EOSQL
 my $ACTIVITIES_FOR_A_USER = <<'EOSQL';
     (event_class = 'person' AND 
      action IN ('tag_add', 'edit_save') AND 
-     person_id = ?) 
+     (person_id = ? OR actor_id = ?)
+    )
     OR
     (event_class = 'page' AND 
      action IN ('edit_save','tag_add','comment',
@@ -383,7 +384,7 @@ sub get_events_activities {
     my $user = Socialtext::User->Resolve($maybe_user);
     my $user_id = $user->user_id;
 
-    $self->add_condition($ACTIVITIES_FOR_A_USER, ($user_id) x 3);
+    $self->add_condition($ACTIVITIES_FOR_A_USER, ($user_id) x 4);
     return $self->get_events(@_)
 }
 

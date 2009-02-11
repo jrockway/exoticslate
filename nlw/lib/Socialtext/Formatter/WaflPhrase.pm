@@ -487,8 +487,7 @@ sub html {
 sub edit_icon {
     my ($self, $edit_url, $page_exists) = @_;
     my $edit_text = loc('Edit');
-    return qq{<a href="$edit_url" title="$edit_text">}
-         . qq{<div class="smallEditButton"></div></a>}
+    return qq{<a class="smallEditButton" href="$edit_url" title="$edit_text">&nbsp</a>}
          . qq{<div class="clear"></div>}
 }
 

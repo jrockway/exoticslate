@@ -363,6 +363,10 @@ sub html {
 
     my $method = "_$im_types{$scheme}_link";
 
+    # {bz: 2041}: This can happen when a cached parsetree containing removed
+    # im_type was cached on disk.
+    return $match unless $self->can($method);
+
     $self->_enspan_nlw_link(
         $scheme,
         $recipient,

@@ -3,22 +3,25 @@
         <form action="#">
             <div class="title-area">
                 <span class="title">Edit Summary (optional)</span>
-                <span class="explain"><a href="#"> (What is this?)</a></span>
+                <span class="explain"> <a href="#">(What is this?)</a></span>
             </div>
             <div class="close-area">
-                <a class="close-window" href="#"><img src="[% wiki.skin_uri('s3') %]/images/closeWindow.png" /></a>
+                <a class="close-window" href="#"><img id="st-close-edit-summaries" src="[% wiki.skin_uri('s3') %]/images/closeWindow.png" /></a>
             </div>
             <div>
-                <input type="text" maxlength="250" class="input">
+                <input type="text" id="st-edit-summary-text-area" maxlength="250" class="input">
             </div>
-            [%# <div>
+            <div>
+                [% IF plugins_enabled.grep("signals").size -%]
                 <div class="signal">
-                    <input checked id="st-edit-summary-signal-checkbox" type="checkbox" /><label for="st-edit-summary-signal-checkbox">Signal this edit<span class="anyway" style="display: none"> anyway</span></label>
+                    <div class="preview" style="display: none;">Your Signal will appear as:<div id="st-edit-summary-signal-preview" class="text"></div></div>
+                    <input id="st-edit-summary-signal-checkbox" type="checkbox" /><label for="st-edit-summary-signal-checkbox">Signal this edit (maximum of 140 characters)</label>
                 </div>
-                <div class="minor">
+                [%- END %]
+             [%#    <div class="minor">
                     <input id="st-edit-summary-minor-checkbox" type="checkbox" /><label for="st-edit-summary-minor-checkbox">Minor edit</label>&nbsp;&nbsp;
-                </div>
-            </div> %]
+                </div> %]
+            </div>
         </form>
     </div>
 </div>

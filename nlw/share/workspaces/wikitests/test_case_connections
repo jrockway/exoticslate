@@ -7,17 +7,12 @@
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | Connections TestPage %%start_time%% |
 
-| *Comment* | Test Case: Connections. Restore Technorati test after {bz: 1923} is fixed |
+| *Comment* | Test Case: Connections. Restored Technorati test after {bz: 1923} was fixed |
 
- type_ok | wikiwyg_wikitext_textarea | `FetchRSS Test\n{fetchrss: http://feeds.feedburner.com/ross}\nTechnorati Test\n{technorati: www.socialtext.com}\nGoogle Soap Test\n{googlesoap: socialtext}\n*AIM.* aim:example *Yahoo!* *alternatively:* ymsgr:example yahoo:example *Skype.* *alternatively:* callto:example skype:example` |
-
-| type_ok | wikiwyg_wikitext_textarea | `FetchRSS Test\n{fetchrss: http://feeds.feedburner.com/ross}\nGoogle Soap Test\n{googlesoap: socialtext}\n*AIM.* aim:example *Yahoo!* *alternatively:* ymsgr:example yahoo:example *Skype.* *alternatively:* callto:example skype:example` |
+| type_ok | wikiwyg_wikitext_textarea | `FetchRSS Test\n{fetchrss: http://feeds.feedburner.com/ross}\nTechnorati Test\n{technorati: www.socialtext.com}\nGoogle Soap Test\n{googlesoap: socialtext}\n*AIM.* aim:example *Yahoo!* *alternatively:* ymsgr:example yahoo:example *Skype.* *alternatively:* callto:example skype:example` |
 | click_and_wait | st-save-button-link |  |
-
 | text_like | st-page-content | Ross Mayfield's Weblog |
-
- text_like | st-page-content | Blog reactions to www.socialtext.com |
-
+| text_like | st-page-content | qr/Blog reactions to .+www.socialtext.com/ |
 | text_like | st-page-content | Search for "socialtext" |
 | text_like | st-page-content | AIM. |
 | text_like | st-page-content | Yahoo! alternatively: |

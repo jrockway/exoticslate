@@ -18,7 +18,7 @@ run_is wikitext => 'html';
 sub format {
     my $parser = Socialtext::WikiText::Parser::Signals->new(
        receiver => Socialtext::WikiText::Emitter::Signals::HTML->new,
-#        receiver => WikiText::WikiByte::Emitter->new,
+#       receiver => WikiText::WikiByte::Emitter->new,
     );
     return $parser->parse($_);
 }
@@ -27,6 +27,10 @@ __DATA__
 === Strikethrough phrase wikitext not supported
 --- wikitext: I mean to say -hello- goodbye.
 --- html: I mean to say -hello- goodbye.
+
+=== Bold actually does work here
+--- wikitext: I mean to say *hello* goodbye.
+--- html: I mean to say <b>*hello*</b> goodbye.
 
 === Plain is plain
 --- wikitext: Plain text is plain text!
@@ -53,14 +57,18 @@ __DATA__
 --- html: The wafl {toc} is invalid.
 
 === Wikitext with extra spaces
---- SKIP
-Fix later...
 --- wikitext: The    time   is  now.
 --- html: The time is now.
 
 === Link with many words
---- SKIP
-name_to_id should call real method in Socialtext::Page(s)
 --- wikitext: Read {link: admin [The Page Name]} now
 --- html: Read <a href="/admin/index.cgi?the_page_name">The Page Name</a> now
+
+=== Link with many words
+--- wikitext: Read {link: admin [The Page Name]} now
+--- html: Read <a href="/admin/index.cgi?the_page_name">The Page Name</a> now
+
+=== Hyperlink
+--- wikitext: Go to "Google"<http://google.com>!
+--- html: Go to <a href="http://google.com">Google</a>!
 

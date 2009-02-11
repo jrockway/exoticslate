@@ -10,7 +10,7 @@
     </div><!-- controlsRight END -->
   </div><!-- controls END -->
   <div id="contentContainer">
-    <h2 class="tableTitle">[% display_title | html %]</h2>
+    <h2 class="tableTitle" title="[% display_title | html %]">[% display_title | html %]</h2>
     [% IF checker.check_permission('delete') %]
       <form action="[% script_name %]" method="post">
     [% END %]

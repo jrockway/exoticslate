@@ -17,12 +17,10 @@ Visit in IE 6 and IE 7
 | set_default | popup | 8000 | cancel popups in 8 seconds |
 | include | `[Disable LDAP]` |  | disable LDAP |
 
-TODO: eliminate wikititle and use title link ID once you have one
+| TODO: eliminate wikititle and use title link ID once you have one
 
 * Enable unplugged.
-* Enable Recent Changes and Recently Viewed in Sidebar
-
-| *Comment* | SlideShow: enabling unplugged and expanding sidebar |  |
+* Enable Recent Changes and Recently Viewed in Sidebar | *Comment* | SlideShow: enabling unplugged and expanding sidebar |  |
 | st-admin | set-workspace-config --workspace %%wiki%% enable_unplugged 1 |  |
 | st-admin | set-workspace-config --workspace %%wiki%% allows_skin_upload 1 |  |
 
@@ -177,11 +175,11 @@ Post by Email popup
 | pause | %%pt%% |
 
 | clickAndWait | link=Recent changes in Welcome category |
-| *Comment* | SlideShow SEE MIKI All Pages in welcome |
+| *Comment* | SlideShow SEE Recent changes in welcome |
 | pause | %%pt%% |
 
 | clickAndWait | link=All Pages in Welcome |
-| *Comment* | SlideShow SEE MIKI Recent changes in Welcome category |
+| *Comment* | SlideShow SEE MIKI ALL pagesges in Welcome category |
 | pause | %%pt%% |
 
 | clickAndWait | link=Search |
@@ -358,6 +356,25 @@ Popup and pulldown dialogs:
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| wait_for_element_visible_ok | st-save-button-link |
+| pause | %%pt%% |  |
+| MouseOver | st-save-button-link |  |
+| *Comment* | SlideShow SEE Edit Summaries Dialog |  |
+| wait_for_element_visible_ok | st-edit-summary-text-area | 5000 |
+| click_ok | st-edit-summary-text-area |  |
+| type_ok | st-edit-summary-text-area | Edit Summary In |
+| pause | %%pt%% |  |
+| *Comment* | SlideShow SEE Edit Summaries Disappear when I click the X |  |
+| wait_for_element_visible_ok | st-close-edit-summaries |  |
+| click_ok | st-close-edit-summaries |  |
+| pause | %%pt%% |  |
+| *Comment* | SlideShow SEE Edit Summaries re-appears when it gains focus |  |
+| MouseOver | st-save-button-link |  |
+| wait_for_element_visible_ok | st-edit-summary-text-area | 5000 |
+| click_ok | st-edit-summary-text-area |  |
+| type_ok | st-edit-summary-text-area | Edit Summary In Slideshow |
+| *Comment* | SlideShow SEE Edit Summaries full sentance "Edit Summary In Slideshow" |  |
+| pause | %%pt%% |  |
 | clickAndWait | link=Save |  |
 | clickAndWait | //a[contains(@href,'?action=revision_list')] |  |
 | *Comment* | SlideShow: SEE Revisions List |  |

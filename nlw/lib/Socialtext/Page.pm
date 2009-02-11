@@ -1925,6 +1925,7 @@ sub to_result {
         $self->_store_preview_text($text);
         $result->{Summary} = $text;
     }
+    $result->{edit_summary} = $self->edit_summary;
     return $result;
 }
 

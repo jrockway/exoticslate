@@ -306,3 +306,7 @@ div.pagination-container .paging-forward {
     z-index: 10;
 }
 
+#controlsRight ul.level2 {
+    width: 11em;
+}
+

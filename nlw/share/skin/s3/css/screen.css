@@ -2211,6 +2211,11 @@ table.dataTable span.summary strong {
     padding:1px 2px;
 }
 
+table.dataTable span.edit_summary {
+    font-weight:bold;
+    line-height: 18px;
+}
+
 div#bottomButtons {
     width: 100%;
 }
@@ -2241,6 +2246,10 @@ div#contentContainer h2.tableTitle {
 
 div#contentContainer h2.tableTitle {
     width: 90%;
+}
+
+div#contentContainer h2.tableTitle.wrap {
+    white-space: normal;
 }
 
 div#controls div#st-editing-tools-edit {
@@ -4284,7 +4293,10 @@ ul li.flexButtonBlue a.addButton:hover {
 
 #st-edit-summary .signal {
     float: left;
-    width: 200px;
+}
+
+#st-edit-summary .preview {
+    padding: 4px 0px 4px 0px;
 }
 
 #st-edit-summary .minor {

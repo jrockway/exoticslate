@@ -437,6 +437,12 @@ CREATE TABLE tag_people__person_tags (
     tag_id integer NOT NULL
 );
 
+CREATE TABLE topic_signal_page (
+    signal_id integer NOT NULL,
+    workspace_id integer NOT NULL,
+    page_id text NOT NULL
+);
+
 CREATE TABLE users (
     user_id bigint NOT NULL,
     driver_key text NOT NULL,
@@ -610,6 +616,10 @@ ALTER TABLE ONLY tag_people__person_tags
     ADD CONSTRAINT tag_people__person_tags_pkey
             PRIMARY KEY (person_id, tag_id);
 
+ALTER TABLE ONLY topic_signal_page
+    ADD CONSTRAINT topic_signal_page_pk
+            PRIMARY KEY (signal_id, workspace_id, page_id);
+
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey
             PRIMARY KEY (user_id);
@@ -721,6 +731,12 @@ CREATE INDEX ix_signal_at_user
 
 CREATE INDEX ix_signal_user_at
 	    ON signal (user_id, "at");
+
+CREATE INDEX ix_topic_signal_page_forward
+	    ON topic_signal_page (workspace_id, page_id);
+
+CREATE INDEX ix_topic_signal_page_reverse
+	    ON topic_signal_page (signal_id);
 
 CREATE INDEX page_creator_time
 	    ON page (creator_id, create_time);
@@ -1006,6 +1022,16 @@ ALTER TABLE ONLY tag_people__person_tags
             FOREIGN KEY (tag_id)
             REFERENCES person_tag(id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY topic_signal_page
+    ADD CONSTRAINT topic_signal_page_forward
+            FOREIGN KEY (workspace_id, page_id)
+            REFERENCES page(workspace_id, page_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY topic_signal_page
+    ADD CONSTRAINT topic_signal_page_reverse
+            FOREIGN KEY (signal_id)
+            REFERENCES signal(signal_id) ON DELETE CASCADE;
+
 ALTER TABLE ONLY "UserMetadata"
     ADD CONSTRAINT usermeta_account_fk
             FOREIGN KEY (primary_account_id)
@@ -1037,4 +1063,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '31');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '32');

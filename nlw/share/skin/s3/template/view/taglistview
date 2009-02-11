@@ -11,7 +11,7 @@
     </div><!-- controlsRight END -->
   </div><!-- controls END -->
   <div id="contentContainer">
-    <h2 class="tableTitle">[% display_title | html %]</h2>
+    <h2 class="tableTitle" title="[% display_title | html %]">[% display_title | html %]</h2>
 
     <script language="javascript"><!--
       // Make the table sortable: [0,0] means the default is first column ascending.

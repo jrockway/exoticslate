@@ -131,8 +131,16 @@ sub _entities_for_query {
         @entities = $self->_searched_pages($search_query);
     }
     else {
+        # Specify ordering to Model::Pages, as it only returns 500 items.
+        # We want it to return the *correct* 500.
+        my $order_by = undef;
+        my $order = $self->rest->query->param('order') || '';
+        if ($order eq 'newest') {
+            $order_by = 'last_edit_time DESC',
+        }
         @entities = @{Socialtext::Model::Pages->All_active(
             workspace_id => $self->hub->current_workspace->workspace_id,
+            order_by => $order_by,
         ) || []};
     }
 

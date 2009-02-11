@@ -65,9 +65,12 @@
         Allow from all
     </Location>
     <LocationMatch ^/nlw/avatar/>
-        # Header set Expires "now + 5 minutes"
-        ExpiresByType image/png "now plus 5 minutes"
-        Header set Cache-Control "max-age=300, must-revalidate"
+         # Set these once we figure out how to get "user updates their own avatar" to
+         # re-cache properly:
+         #        ExpiresByType image/png "now plus 5 minutes"
+         #        Header append Cache-Control "public, must-revalidate, max-age=300, pre-check=300, post-check=300"
+         Header set Expires -1
+         Header append Cache-Control "public, must-revalidate, max-age=0, pre-check=0, post-check=0"
     </LocationMatch>
 
 [%# The rewrite file must come before any of the redirect confs below %]

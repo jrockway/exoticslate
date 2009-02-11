@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use Template::Plugin::Filter;
+use Socialtext::String;
 use base qw( Template::Plugin::Filter );
 
 my $ellipsis = '...';
@@ -20,37 +21,11 @@ sub init {
     return $self;
 }
 
-sub _label_ellipsis {
-    my ($string, $length) = @_;
-    $length = 32 unless (defined $length);
-    
-    my $new_string = '';
-
-    return $string if (length($string) <= $length);
-    return $ellipsis if (0 == $length);
-
-    my @parts = split / /, $string;
-
-    if (scalar(@parts) == 1) {
-        $new_string = substr $string, 0, $length;
-    }
-    else {
-        foreach my $part (@parts) {
-            last if ((length($new_string) + length($part)) > $length);
-            $new_string .= $part . ' ';
-        }
-        $new_string = substr($parts[0], 0, $length) if (length($new_string) == 0);
-
-    }
-
-    $new_string =~ s/\s+$//;
-    $new_string .= $ellipsis;
-    return $new_string;
-}
-
 sub filter {
     my ($self, $text, $args, $config) = @_;
-    return _label_ellipsis( $text, $args->[0] );
+    my $length = defined $args->[0] ? $args->[0] : 32;
+    return Socialtext::String::word_truncate($text, $length,
+        $ellipsis);
 }
 
 1;

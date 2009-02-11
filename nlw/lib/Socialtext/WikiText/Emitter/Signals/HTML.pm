@@ -23,18 +23,40 @@ sub insert {
 }
 
 sub begin_node {
+    my $self = shift;
+    my $match = shift;
+    return if ($match->{type} eq 'line');
+    if ($match->{type} eq 'a') {
+        $self->{output} .= qq{<a href="$match->{attributes}{href}">};
+    }
+    elsif ($match->{type} eq 'b') {
+        $self->{output} .= "<b>*";
+    }
+    else {
+        $self->{output} .= " ";
+    }
 }
 
 sub end_node {
     my $self = shift;
     my $match = shift;
-    $self->{output} .= " ";
+    if ($match->{type} eq 'a') {
+        $self->{output} .= "</a>";
+    }
+    elsif ($match->{type} eq 'b') {
+        $self->{output} .= "*</b>";
+    }
+    else {
+        $self->{output} .= " ";
+    }
 }
 
 sub text_node {
     my $self = shift;
     my $text = shift;
-    $text =~ s/\n/ /g;
+    $text =~ s/\s+/ /g;
+#     $text =~ s/^\s?(.*)s?/$1/g;
+#     $text =~ s/\n/ /g;
     $self->{output} .= "$text";
 }
 

@@ -1,8 +1,10 @@
+widget-as-a-wafl-migration.sql
 # generated files
 Makefile
 etc/init.d/ceqlotron
 etc/init.d/st-apache
 lib/Socialtext/Build/ConfigureValues.pm
+tmp/
 build/tmp/
 share/skin/.gitignore
 share/html/500.html
@@ -20,6 +22,8 @@ share/l10n/mecab/rewrite.def
 share/l10n/mecab/right-id.def
 share/l10n/mecab/sys.dic
 share/l10n/mecab/unk.dic
+messages.mo
+nlw-en.po
 
 # lib excludes
 lib/Socialtext/Handler/ControlPanel.pm
@@ -34,6 +38,7 @@ lib/Socialtext/Rest/Signals.pm
 lib/Socialtext/WikiFixture/ApplianceConfig.pm
 lib/Socialtext/AccessHandler/IsBusinessAdmin.pm
 lib/Socialtext/Appliance.pm
+lib/Socialtext/Appliance/
 lib/Socialtext/Appliance/BackupCleanup.pm
 lib/Socialtext/Appliance/BackupList.pm
 lib/Socialtext/Appliance/BackupStore.pm
@@ -73,6 +78,7 @@ lib/Socialtext/People/Rest/Tags.pm
 lib/Socialtext/People/Rest/Watchers.pm
 lib/Socialtext/People/Rest/Watchlist.pm
 lib/Socialtext/Noun/Signal.pm
+lib/Socialtext/Signal/PageTopic.pm
 
 # share excludes
 share/console-template/
@@ -135,6 +141,7 @@ etc/socialtext/uri_map.d/people.yaml
 t/Socialtext/Noun/Signal.t
 t/wikitests/signals/data_signals.wiki
 etc/socialtext/uri_map.d/signals.yaml
+t/Socialtext/Signal
 
 # log excludes
 dev-bin/test_access.log
@@ -153,6 +160,7 @@ lib/Socialtext/Gadgets/XML.pm
 lib/Socialtext/Gadgets/Proxy.pm
 bin/copy_from_shindig
 bin/generate-feature
+bin/guanxi_import.pl
 bin/st-widgets
 bin/po.xml
 bin/po.xsd
@@ -167,3 +175,6 @@ t/Socialtext/Signal.t
 lib/Socialtext/Appliance/Model/SupportTarball.pm
 lib/Socialtext/Appliance/SupportRequest.pm
 etc/socialtext/uri_map.d/widgets.yaml
+t/wikitests/people/avatar-cache.wiki
+t/widget/lang/Test_fallback.xml
+t/Socialtext/Signal/PageTopic.t

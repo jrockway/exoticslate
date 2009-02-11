@@ -202,7 +202,8 @@ SELECT page.workspace_id,
        page.revision_count, 
        page.page_type, 
        page.deleted, 
-       page.summary
+       page.summary,
+       page.edit_summary
     FROM page 
         JOIN "Workspace" USING (workspace_id)
         $more_join

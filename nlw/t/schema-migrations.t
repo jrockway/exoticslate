@@ -10,7 +10,7 @@ my $schema_dir  = "$FindBin::Bin/../etc/socialtext/db/";
 my $schema_file = "$schema_dir/socialtext-schema.sql";
 my @sql_patches = glob("$schema_dir/*-to-*.sql");
 
-plan tests => @sql_patches * 3 + 9;
+plan tests => @sql_patches * 4 + 9;
 
 Schema_is_okay: {
     ok -d $schema_dir;
@@ -65,11 +65,18 @@ Schema_is_okay: {
 Migrations_are_okay: {
     for my $s (@sql_patches) {
         (my $name = $s) =~ s#.+/##;
+        (my $to_version = $name ) =~ s#socialtext-\d+-to-(\d+)\.sql#$1#;
         my $contents = get_contents($s);
         like $contents, qr/^BEGIN;/is,  "$s starts with BEGIN";
         like $contents, qr/COMMIT;$/is, "$s ends with COMMIT";
         like $contents, qr/socialtext-schema-version/,
             'patch file mentions the version number';
+
+        # Single quotes are optional for the value field.
+        like $contents, 
+             qr/(?:SET\s+value\s+=\s+'?$to_version'?
+                 |\('socialtext-schema-version',\s+'?$to_version'?\))/x,
+            'patch updates socialtext-schema-version to correct number.';
     }
 }
 

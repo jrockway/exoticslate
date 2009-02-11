@@ -183,13 +183,57 @@ proto.apply_linked_stylesheet = function(style, head) {
     head.appendChild(link);
 }
 
+proto.exec_command = function(command, option) {
+    if ( Wikiwyg.is_ie && command.match(/^insert/) && !command.match(/^insert.*list$/)) {
+        /* IE6+7 has a bug that prevents insertion at the beginning of
+         * the edit document if it begins with a non-text element.
+         * So we test if the selection starts at the beginning, and
+         * prepends a temporary space so the insert can work. -- {bz: 1451}
+         */
+
+        this.set_focus(); // Need this before .insert_html
+
+        var range = this.__range
+                 || this.get_edit_document().selection.createRange();
+
+        if (range.boundingLeft == 1 && range.boundingTop <= 20) {
+            var doc = this.get_edit_document();
+            var div = doc.getElementsByTagName('div')[0];
+
+            var randomString = Math.random();
+            var stub = doc.createTextNode(' ');
+
+            div.insertBefore(stub, div.firstChild);
+
+            var stubRange = doc.body.createTextRange();
+            stubRange.findText(' ');
+            stubRange.select();
+        }
+        else {
+            range.collapse();
+            range.select();
+        }
+    }
+
+    if ((command == 'inserthtml') && ((typeof(option) != 'string') || option.length == 0)) {
+        return true;
+    }
+    return(this.get_edit_document().execCommand(command, false, option));
+};
+
 proto.format_command = function(command) {
     this.exec_command('formatblock', '<' + command + '>');
 }
 
-proto.do_bold = proto.exec_command;
-proto.do_italic = proto.exec_command;
-proto.do_underline = proto.exec_command;
+proto.do_bold = function() {
+    this.exec_command('bold');
+}
+proto.do_italic = function() {
+    this.exec_command('italic');
+}
+proto.do_underline = function() {
+    this.exec_command('underline');
+}
 proto.do_strike = function() {
     this.exec_command('strikethrough');
 }
@@ -202,8 +246,12 @@ proto.do_ordered = function() {
 proto.do_unordered = function() {
     this.exec_command('insertunorderedlist');
 }
-proto.do_indent = proto.exec_command;
-proto.do_outdent = proto.exec_command;
+proto.do_indent = function() {
+    this.exec_command('indent');
+}
+proto.do_outdent = function() {
+    this.exec_command('outdent');
+}
 
 proto.do_h1 = proto.format_command;
 proto.do_h2 = proto.format_command;
@@ -218,7 +266,9 @@ proto.insert_html = function(html) { // See IE
     this.exec_command('inserthtml', html);
 }
 
-proto.do_unlink = proto.exec_command;
+proto.do_unlink = function() {
+    this.exec_command('unlink');
+}
 
 proto.do_www = function() {
     var selection = this.get_link_selection_text();
@@ -238,15 +288,17 @@ Support for Internet Explorer in Wikiwyg.Wysiwyg
 if (Wikiwyg.is_ie) {
 
 proto.toHtml = function(func) {
-    var html = this.get_inner_html();
-    var br = "<br class=\"p\"/>";
+    var self = this;
+    this.get_inner_html_async(function(html){
+        var br = "<br class=\"p\"/>";
 
-    html = this.remove_padding_material(html);
-    html = html
-        .replace(/\n*<p>\n?/ig, "")
-        .replace(/<\/p>/ig, br)
+        html = self.remove_padding_material(html);
+        html = html
+            .replace(/\n*<p>\n?/ig, "")
+            .replace(/<\/p>/ig, br)
 
-    func(html);
+        func(html);
+    });
 }
 
 proto.remove_padding_material = function(html) {
@@ -323,7 +375,15 @@ proto.get_inner_html = function( cb ) {
         this.get_inner_html_async( cb );
         return;
     }
-    return this.get_editable_div().innerHTML;
+
+    var html = null;
+    try {
+        html = this.get_editable_div().innerHTML;
+    } catch (e) {
+        html = '';
+    }
+
+    return html;
 }
 
 proto.get_editable_div = function () {
@@ -345,17 +405,31 @@ proto.get_editable_div = function () {
     return this._editable_div;
 }
 
-proto.get_inner_html_async = function( cb ) {
+proto.get_inner_html_async = function( cb, tries ) {
     var self = this;
     var doc = this.get_edit_document();
     if ( doc.readyState == 'loading' ) {
         setTimeout( function() {
             self.get_inner_html(cb);
-        }, 50);
+        }, 500);
     } else {
-        var html = this.get_editable_div().innerHTML;
-        cb(html);
-        return html;
+        var html = null;
+        try {
+            html = this.get_editable_div().innerHTML;
+        } catch (e) {
+            if (tries < 20) {
+                setTimeout( function() {
+                    self.get_inner_html_async( cb, tries + 1 );
+                }, 500);
+            }
+            else {
+                html = loc('Sorry, an edit error occured; please re-edit this page.');
+            }
+        }
+        if (html != null) {
+            cb(html);
+            return html;
+        }
     }
 }
 
@@ -365,9 +439,31 @@ proto.set_inner_html = function(html) {
     if ( doc.readyState == 'loading' ) {
         setTimeout( function() {
             self.set_inner_html(html);
-        }, 50);
+        }, 1600);      
+    } else if (!self._editable_div) {
+        // First time running get_editable_div() -- give it 1.6sec
+        // The heuristic here is to allow 3 tries of tryAppendDiv to pass.
+        self.get_editable_div();
+        setTimeout( function() {
+            self.set_inner_html(html);
+        }, 1600);      
     } else {
-        this.get_editable_div().innerHTML = html;
+        try {
+            this._editable_div.innerHTML = html;
+        } catch (e) {
+            try {
+                 self._editable_div.parentNode.removeChild(self._editable_div);
+	    } catch (e) {}
+
+            self._editable_div = null;
+            self.get_editable_div();
+
+	    // 1.6sec clearly not enough -- give it another 10.1sec
+            // The heuristic here is to allow 10 tries of tryAppendDiv to pass.
+            setTimeout( function() {
+                self.set_inner_html(html);
+            }, 10100);
+        }
     }
 }
 
@@ -1415,44 +1511,6 @@ proto.get_editable_div = function () {
     return this._editable_div;
 }
 
-proto.exec_command = function(command, option) {
-    if ( Wikiwyg.is_ie && command.match(/^insert/) && !command.match(/^insert.*list$/)) {
-        /* IE6+7 has a bug that prevents insertion at the beginning of
-         * the edit document if it begins with a non-text element.
-         * So we test if the selection starts at the beginning, and
-         * prepends a temporary space so the insert can work. -- {bz: 1451}
-         */
-
-        this.set_focus(); // Need this before .insert_html
-
-        var range = this.__range
-                 || this.get_edit_document().selection.createRange();
-
-        if (range.boundingLeft == 1 && range.boundingTop <= 20) {
-            var doc = this.get_edit_document();
-            var div = doc.getElementsByTagName('div')[0];
-
-            var randomString = Math.random();
-            var stub = doc.createTextNode(' ');
-
-            div.insertBefore(stub, div.firstChild);
-
-            var stubRange = doc.body.createTextRange();
-            stubRange.findText(' ');
-            stubRange.select();
-        }
-        else {
-            range.collapse();
-            range.select();
-        }
-    }
-
-    if ((command == 'inserthtml') && ((typeof(option) != 'string') || option.length == 0)) {
-        return true;
-    }
-    return(this.get_edit_document().execCommand(command, false, option));
-};
-
 /*==============================================================================
 Socialtext Debugging code
  =============================================================================*/
@@ -1660,15 +1718,17 @@ proto.replace_p_with_br = function(html) {
 
 proto.toHtml = function(func) {
     if (Wikiwyg.is_ie) {
-        var html = this.get_inner_html();
-        var br = "<br class=\"p\"/>";
+        var self = this;
+        this.get_inner_html_async(function(html){
+            var br = "<br class=\"p\"/>";
 
-        html = this.remove_padding_material(html);
-        html = html
-            .replace(/\n*<p>\n?/ig, "")
-            .replace(/<\/p>/ig, br)
+            html = self.remove_padding_material(html);
+            html = html
+                .replace(/\n*<p>\n?/ig, "")
+                .replace(/<\/p>/ig, br)
 
-        func(html);
+            func(html);
+        });
     }
     else {
         func(this.get_inner_html());

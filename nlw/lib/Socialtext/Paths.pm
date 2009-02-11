@@ -142,4 +142,19 @@ sub log_directory {
     return '/var/log';
 }
 
+=head2 cache_directory ($dir)
+
+Returns the location of a specific directory for caching files.
+
+=cut
+
+sub cache_directory {
+    my $subdir = shift;
+    $subdir = "" unless defined $subdir;
+    return Socialtext::File::catdir(
+        Socialtext::AppConfig::_cache_root_dir(),
+        $subdir
+    );
+}
+
 1;

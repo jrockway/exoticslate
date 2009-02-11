@@ -1,0 +1,20 @@
+| *Comment* | Test case: Edit Summaries |  |
+
+| *Comment* | create a page from file, because we can't type newlines with type_ok |  |
+| st-admin | update-page --workspace %%workspace%% --email %%email%% --page "Edit Summaries %%start_time%%" < %%wikitest_client_files%%wikitest_toc.txt | The "Edit Summaries %%start_time%%" page has been created. |
+
+| open_ok | /%%workspace%%/index.cgi?Edit Summaries %%start_time%% |  |
+| click_ok | st-edit-button-link |  |
+| wait_for_text_present_ok | Editing: Edit Summaries %%start_time%% | 30000 |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| MouseOver | st-save-button-link |  |
+| wait_for_element_visible_ok | st-edit-summary-text-area | 5000 |
+| type_ok | st-edit-summary-text-area | Quick Summary for my friends |
+| click_ok | st-edit-summary-text-area |  |
+| pause | 30000 |  |
+
+| *Comment* | Test Case: Edit Summaries teardown |  |
+| st-admin | purge-page --workspace %%workspace%% --page edit_summaries_%%start_time%% | page was purged |
+
+| *Comment* | Test case: Edit Summaries COMPLETED |  |  |  |

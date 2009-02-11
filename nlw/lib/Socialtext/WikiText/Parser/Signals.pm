@@ -4,13 +4,16 @@ use warnings;
 
 use base 'WikiText::Socialtext::Parser';
 
+use Socialtext::Page;
+
 sub create_grammar {
     my $self = shift;
     my $grammar = $self->SUPER::create_grammar();
     my $blocks = $grammar->{_all_blocks};
     @$blocks = ('line');
     my $phrases = $grammar->{_all_phrases};
-    @$phrases = ('waflphrase');
+
+    @$phrases = ('waflphrase', 'a', 'b');
     $grammar->{line} = {
         match => qr/^(.*)$/s,
         phrases => $phrases,
@@ -18,9 +21,25 @@ sub create_grammar {
             chomp;
             die "Signal text cannot contain newline:\n>$_<"
               if /\n/;
-        },
+        }
     };
+#     $grammar->{b} = {
+#         match => re_huggy(q{\*}),
+#         phrases => $phrases,
+#     };
     return $grammar;
+}
+
+sub re_huggy {
+    my $brace1 = shift;
+    my $brace2 = shift || $brace1;
+    my $ALPHANUM = '\p{Letter}\p{Number}\pM';
+
+    qr/
+        (?:^|(?<=[^{$ALPHANUM}$brace1]))($brace1(?=\S)(?!$brace2)
+        .*?
+        $brace2)(?=[^{$ALPHANUM}$brace2]|\z)
+    /x;
 }
 
 sub handle_waflphrase {
@@ -46,8 +65,7 @@ sub handle_waflphrase {
 sub name_to_id {
     my $self = shift;
     my $text = shift;
-    $text = lc($text);
-    return $text;
+    return Socialtext::Page->name_to_id($text);
 }
 
 sub unknown_wafl {

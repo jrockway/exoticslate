@@ -175,6 +175,10 @@ div#contentContainer h2.tableTitle {
     width: 90%;
 }
 
+div#contentContainer h2.tableTitle.wrap {
+    white-space: normal;
+}
+
 div#controls div#st-editing-tools-edit {
     max-width: 80%;
     display: block;

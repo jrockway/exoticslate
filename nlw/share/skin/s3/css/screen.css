@@ -526,18 +526,16 @@ ul li a.genericOrangeButton:hover {
         float: left;
 }
 .smallEditButton {
-        line-height: 15px;
-        height: 15px;
-        width: 20px;
-        margin: 4px 0 4px 10px;
+        line-height: 19px;
+        height: 19px;
+        width: 17px;
+        margin: 4px 0 0 8px;
         float: left;
 	background: url(../images/smallEditButton.png) no-repeat;
-	background-position: top left;
 }
 
-.smallEditButton:hover {
-	background-position: bottom left;
-        text-decoration: none !important;
+a.smallEditButton:hover {
+	text-decoration: none !important;
 }
 
 ul li a.addButton {

@@ -56,10 +56,10 @@ sub _signal_edit_summary {
 
     $edit_summary = Socialtext::String::word_truncate($edit_summary, 140);
     my $body = $edit_summary
-        ? loc('[_1], "[_2]" (edited [_3] in [_4])',
-            $user->best_full_name, $edit_summary, $page->title, $workspace->title)
-        : loc('[_1] wants you to know about an edit of [_2] in [_3]',
-            $user->best_full_name, $page->title, $workspace->title);
+        ? loc('"[_1]" (edited [_2] in [_3])',
+            $edit_summary, $page->title, $workspace->title)
+        : loc('wants you to know about an edit of [_1] in [_2]',
+            $page->title, $workspace->title);
 
     my $signal = Socialtext::Signal->Create(
         user_id => $user->user_id,

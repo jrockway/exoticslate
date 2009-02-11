@@ -38,7 +38,7 @@
     [% FOR col IN header %]
       <td class="revision-compare-table-header">
       <div class=st-revision-view-link">
-        <h2 class="tableTitle">[% col.link %]</h2>
+        <h2 class="tableTitle" title="[% col.link %]">[% col.link %]</h2>
       </div>
       <div class="st-revision-tags">
         [% loc('Tags:') %][% col.tags %]

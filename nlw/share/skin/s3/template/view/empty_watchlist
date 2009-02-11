@@ -29,7 +29,7 @@
     </div><!-- controlsRight END -->
   </div><!-- controls END -->
   <div id="contentContainer">
-    <h2 class="tableTitle">[% display_title | html %]</h2>
+    <h2 class="tableTitle" title="[% display_title | html %]">[% display_title | html %]</h2>
     <dl class="form">
       <dt><label>[% loc("Pages You're Watching") %]</label></dt>
       <dd>[% empty_message %]</dt>

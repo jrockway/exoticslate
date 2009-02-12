@@ -343,7 +343,13 @@ print "\n";
 }
 
 {
-    print "Generating some signals...";
+    print "Generating $SIGNALS signals";
+
+    my $sig_sth = $dbh->prepare_cached(q{
+        INSERT INTO signal (
+            signal_id, user_id, body
+        ) VALUES ( nextval('signal_id_seq'), ?, ? )
+    });
 
     my $ev_sth = $dbh->prepare_cached(q{
         INSERT INTO event (
@@ -352,41 +358,37 @@ print "\n";
             actor_id, person_id, page_workspace_id, page_id, signal_id
         ) VALUES (
             ?::timestamptz + ?::interval,
-            ?, ?, ?, ?, ?, ?, ?
+            ?, ?, ?, ?, ?, ?, currval('signal_id_seq')
         )
-    });
-
-    my $sig_sth = $dbh->prepare_cached(q{
-        INSERT INTO signal (
-            signal_id, user_id, body
-        ) VALUES ( ?, ?, ? )
     });
 
     my $topic_sth = $dbh->prepare_cached(q{
         INSERT INTO topic_signal_page (
             signal_id, workspace_id, page_id
-        ) VALUES ( ?, ?, ? )
+        ) VALUES ( currval('signal_id_seq'), ?, ? )
     });
 
     for ( my $i = 0; $i < $SIGNALS; $i++ ) {
-         my $is_page_edit = int(rand(2));
-         my $user         = $users[int(rand(scalar @users))];
-         my $page         = $pages[int(rand(scalar @pages))];
-         my $action       = ( $is_page_edit ) ? 'edit_save' : 'signal';
+        my $is_page_edit = int(rand(2));
+        my $user         = $users[int(rand(scalar @users))];
+        my $page         = $pages[int(rand(scalar @pages))];
+        my $action       = ( $is_page_edit ) ? 'edit_save' : 'signal';
 
-         my $id = 1_000_000 + $i;
-         $sig_sth->execute( $id, $user, "booty $is_page_edit");
+        $sig_sth->execute($user, "booty $is_page_edit");
 
-         $topic_sth->execute( $id, $page->[0], $page->[1] )
-             if $is_page_edit;
+        $topic_sth->execute($page->[0], $page->[1])
+            if $is_page_edit;
 
-         $ev_sth->execute( $create_ts, int(rand($PAGES)) . ' seconds',
-             'signal', $action, $user,
-             $user, $page->[0], $page->[1], $id );
+        $ev_sth->execute(
+            $create_ts, int(rand($PAGES)) . ' seconds',
+            'signal', $action,    $user,
+            $user,    $page->[0], $page->[1]
+        );
+
+        $writes++;
+        maybe_commit();
     }
 
-    $writes++;
-    maybe_commit();
     print " done!\n";
 }
 

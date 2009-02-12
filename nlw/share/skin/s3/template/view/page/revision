@@ -27,7 +27,7 @@
       </li>
       [% IF checker.check_permission('edit') %]
       <li class="flexButtonBlue">
-          <a class="genericBlueButton" id="st-revision-restorebutton" onclick="jQuery('#restore-form').submit(); return false">
+          <a href="#" class="genericBlueButton" id="st-revision-restorebutton" onclick="jQuery('#restore-form').submit(); return false">
             [% loc("Restore Revision [_1]", human_readable_revision) %]
           </a>
       </li>

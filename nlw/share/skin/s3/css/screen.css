@@ -363,7 +363,7 @@ div#controls {
 	background: url(../images/controlsTile.png) repeat-x top left;
 }
 
-body#contentPage div#controls,body#settingsPage div#controls,body#dashBoard div#controls {
+body#contentPage div#controls,body#settingsPage div#controls,body#dashBoard div#controls, body#revisions div#controls,body#settingsPage div#controls {
 	height: 44px;
 	background: url(../images/contentControlsTile.png) repeat-x top left;
 }
@@ -385,7 +385,7 @@ div#controls div#st-editing-tools-edit {
        width: auto !important;
 }
 
-body#contentPage div#controls div#st-editing-tools-edit,body#dashBoard div#controls div#st-editing-tools-edit,body#settingsPage div#controls div#st-editing-tools-edit {
+body#revisions div#controls div#st-editing-tools-edit, body#contentPage div#controls div#st-editing-tools-edit,body#dashBoard div#controls div#st-editing-tools-edit,body#settingsPage div#controls div#st-editing-tools-edit {
 	background: url(../images/contentControlsLeft.png) no-repeat top left;
 	height: 44px;
 	padding-left: 8px;
@@ -708,7 +708,13 @@ div#controls div#controlsRight {
        height: 100%;
 }
 
-body#dashBoard div#controls div#controlsRight,body#contentPage div#controls div#controlsRight,body#settingsPage div#controls div#controlsRight {
+body#revisions div#controls div#controlsRight {
+	background: url(../images/contentControlsRight.png) no-repeat top right;
+}
+
+body#dashBoard div#controls div#controlsRight,
+body#contentPage div#controls div#controlsRight,
+body#settingsPage div#controls div#controlsRight {
 	background: url(../images/contentControlsRight.png) no-repeat top right;
 	height: 44px;
 	width: 600px !important;

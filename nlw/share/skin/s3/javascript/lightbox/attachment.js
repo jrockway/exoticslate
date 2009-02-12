@@ -1,6 +1,10 @@
-var ST = ST || {};
+(function ($) {
+
+var ST = window.ST = window.ST || {};
+
 ST.Attachments = function () {}
-var proto = ST.Attachments.prototype = {};
+var proto = ST.Attachments.prototype = new ST.Lightbox;
+
 proto._newAttachmentList = [];
 proto._attachmentList = [];
 
@@ -53,40 +57,40 @@ proto.refreshAttachments = function (cb) {
         cache: false,
         dataType: 'json',
         success: function (list) {
-            jQuery('#st-attachment-listing').html('');
+            $('#st-attachment-listing').html('');
             for (var i=0; i< list.length; i++) {
                 var item = list[i];
                 self._attachmentList.push(item);
                 var extractLink = '';
                 if (item.name.match(/\.(zip|tar|tar.gz|tgz)$/)) {
                     var attach_id = item.id;
-                    extractLink = jQuery('<a href="#" />')
+                    extractLink = $('<a href="#" />')
                         .html('<img src="/static/skin/common/images/extract.png" width="16" height="16" border="0" />')
                         .attr('name', item.uri)
                         .attr('alt', loc('Extract this attachment'))
                         .attr('title', loc('Extract this attachment'))
                         .bind('click', function () {
-                            jQuery(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif');
+                            $(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif');
                             self.extractAttachment(attach_id);
                             return false;
                         });
                 }
-                jQuery('#st-attachment-listing').append(
-                    jQuery('<li />').append(
-                        jQuery('<a />')
+                $('#st-attachment-listing').append(
+                    $('<li />').append(
+                        $('<a />')
                             .html(item.name)
                             .attr('title', loc("Uploaded by [_1] on [_2]. ([_3] bytes)", item.uploader, item.date, Page._format_bytes(item['content-length'])))
                             .attr('href', item.uri),
                         ' ',
                         extractLink,
                         ' ',
-                        jQuery('<a href="#" />')
+                        $('<a href="#" />')
                             .html('<img src="'+nlw_make_s3_path('/images/delete.png')+'"width="16" height="16" border="0" />')
                             .attr('name', item.uri)
                             .attr('alt', loc('Delete this attachment'))
                             .attr('title', loc('Delete this attachment'))
                             .bind('click', function () {
-                                jQuery(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif');
+                                $(this).children('img').attr('src', '/static/skin/common/images/ajax-loader.gif');
                                 self.delAttachment(this.name, true);
                                 return false;
                             })
@@ -131,9 +135,9 @@ proto.delAttachment = function (url, refresh) {
 proto.onTargetLoad = function (basename) {
     var self = this;
 
-    jQuery('#st-attachments-attach-uploadmessage').html(loc('Upload Complete'));
-    jQuery('#st-attachments-attach-filename').attr('disabled', false).val('');
-    jQuery('#st-attachments-attach-closebutton').attr('disabled', false);
+    $('#st-attachments-attach-uploadmessage').html(loc('Upload Complete'));
+    $('#st-attachments-attach-filename').attr('disabled', false).val('');
+    $('#st-attachments-attach-closebutton').attr('disabled', false);
 
     this.refreshAttachments(function (list) {
         // Add the freshly-uploaded file to the
@@ -149,11 +153,11 @@ proto.onTargetLoad = function (basename) {
             }
         }
 
-        jQuery('#st-attachments-attach-list')
+        $('#st-attachments-attach-list')
             .show()
             .html('')
             .append(
-                jQuery('<span />')
+                $('<span />')
                     .attr('class', 'st-attachments-attach-listlabel')
                     .html(loc('Uploaded files:') + 
                         '&nbsp;' + self.attachmentList()
@@ -165,9 +169,9 @@ proto.onTargetLoad = function (basename) {
 
 proto.onChangeFilename = function () {
     var self = this;
-    var filename = jQuery('#st-attachments-attach-filename').val();
+    var filename = $('#st-attachments-attach-filename').val();
     if (!filename) {
-        jQuery('#st-attachments-attach-uploadmessage').html(
+        $('#st-attachments-attach-uploadmessage').html(
             loc("Please click browse and select a file to upload.")
         );
         return false;
@@ -176,7 +180,7 @@ proto.onChangeFilename = function () {
     var filename = filename.replace(/^.*\\|\/:/, '');
 
     if (encodeURIComponent(filename).length > 255 ) {
-        jQuery('#st-attachments-attach-uploadmessage').html(
+        $('#st-attachments-attach-uploadmessage').html(
             loc("Filename is too long after URL encoding.")
         );
         return false;
@@ -184,30 +188,23 @@ proto.onChangeFilename = function () {
 
     var basename = filename.match(/[^\\\/]+$/);
 
-    jQuery('#st-attachments-attach-uploadmessage').html(
+    $('#st-attachments-attach-uploadmessage').html(
         loc('Uploading [_1]...', basename)
     );
 
-    jQuery('#st-attachments-attach-formtarget')
+    $('#st-attachments-attach-formtarget')
         .one('load', function () { self.onTargetLoad(basename) });
 
-    jQuery('#st-attachments-attach-form').submit();
-    jQuery('#st-attachments-attach-closebutton').attr('disabled', true);
-    jQuery(this).attr('disabled', true);
-}
-
-proto.process = function (template) {
-    Socialtext.loc = loc;
-    jQuery('body').append(
-        Jemplate.process(template, Socialtext)
-    );
+    $('#st-attachments-attach-form').submit();
+    $('#st-attachments-attach-closebutton').attr('disabled', true);
+    $(this).attr('disabled', true);
 }
 
 proto.showUploadInterface = function () {
     var self = this;
-    if (!jQuery('#st-attachments-attachinterface').size()) {
-        this.process('attachment_lightbox.tt2');
-        jQuery('#st-attachments-attach-filename')
+    if (!$('#st-attachments-attachinterface').size()) {
+        this.process('attachment.tt2');
+        $('#st-attachments-attach-filename')
             .val('')
             .unbind('change')
             .bind('change', function () {
@@ -226,5 +223,7 @@ proto.delete_new_attachments = proto.deleteNewAttachments;
 proto.delete_all_attachments = proto.deleteAllAttachments;
 proto.reset_new_attachments = proto.resetNewAttachments;
 proto.get_new_attachments = proto.getNewAttachments;
+
+})(jQuery);
 
 window.Attachments = window.Attachments || new ST.Attachments;

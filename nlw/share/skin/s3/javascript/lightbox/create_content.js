@@ -1,40 +1,44 @@
-var ST = ST || {};
+(function ($) {
+
+var ST = window.ST = window.ST || {};
+
 ST.CreateContent = function () {}
-var proto = ST.CreateContent.prototype = {};
+var proto = ST.CreateContent.prototype = new ST.Lightbox;
+
 proto.visible_types = {
     wiki: loc('Page')
 };
 
 proto.type_radio = function (type) {
-    return jQuery("#st-create-content-lightbox #"+type+"-radio")
+    return $("#st-create-content-lightbox #"+type+"-radio")
 }
 
 proto.from_blank_radio = function () { 
-    return jQuery('#create-content-from-blank input[type=radio]');
+    return $('#create-content-from-blank input[type=radio]');
 }
 
 proto.from_template_radio = function () { 
-    return jQuery('#create-content-from-template input[type=radio]');
+    return $('#create-content-from-template input[type=radio]');
 }
 
 proto.from_template_select = function () { 
-    return jQuery('#create-content-from-template select');
+    return $('#create-content-from-template select');
 }
 
 proto.from_page_radio = function () { 
-    return jQuery('#create-content-from-page input[type=radio]');
+    return $('#create-content-from-page input[type=radio]');
 }
 
 proto.from_page_text = function () { 
-    return jQuery('#create-content-from-page input[type=text]');
+    return $('#create-content-from-page input[type=text]');
 }
 
 proto.choices = function () {
-    return jQuery('#st-create-content-lightbox .choice input');
+    return $('#st-create-content-lightbox .choice input');
 }
 
 proto.error = function () {
-    return jQuery('#st-create-content-lightbox .error');
+    return $('#st-create-content-lightbox .error');
 }
 
 proto.get_from_page = function() {
@@ -53,7 +57,7 @@ proto.update_templates = function () {
     var self = this;
     var type = this.selected_page_type();
     var template = loc('template');
-    jQuery.ajax({
+    $.ajax({
         url: Page.workspaceUrl() + '/tags/' + template + '/pages?type=' + type,
         cache: false,
         dataType: 'json',
@@ -83,7 +87,7 @@ proto.update_templates = function () {
                     self.from_template_select().attr('disabled', '');
                 }
                 for (var i = 0,l=pages.length; i < l; i++) {
-                    jQuery('<option></option>')
+                    $('<option></option>')
                         .val(pages[i].page_id)
                         .html(pages[i].name)
                         .appendTo(self.from_template_select());
@@ -110,9 +114,9 @@ proto.selected_page_type = function () {
     var self = this;
     var page_type = 'wiki';
     this.choices().each(function () {
-        if (jQuery(this).is(":checked")) {
-            page_type = jQuery(this).val();
-            var label = jQuery('label[for='+this.id+']');
+        if ($(this).is(":checked")) {
+            page_type = $(this).val();
+            var label = $('label[for='+this.id+']');
             self.visible_types[page_type] = loc(label.html());
         }
     });
@@ -124,20 +128,13 @@ proto.selected_visible_type = function () {
     return this.visible_types[type] || type;
 }
 
-proto.process = function (template) {
-    Socialtext.loc = loc;
-    jQuery('body').append(
-        Jemplate.process(template, Socialtext)
-    );
-}
-
 proto.show = function () {
     var self = this;
 
-    this.process('create_content_lightbox.tt2');
+    this.process('create_content.tt2');
 
     // Clear errors from the previous time around: {bz: 1039}
-    jQuery('#st-create-content-lightbox .error').html('');
+    $('#st-create-content-lightbox .error').html('');
 
     // Bind radio buttons
     this.from_blank_radio().unbind('click').click(function () {
@@ -170,8 +167,8 @@ proto.show = function () {
     this.from_page_text()
         .val(default_from_page_text)
         .unbind('click').click(function () {
-            if (jQuery(this).val() == default_from_page_text) {
-                jQuery(this).val('');
+            if ($(this).val() == default_from_page_text) {
+                $(this).val('');
             }
         })
 
@@ -181,11 +178,11 @@ proto.show = function () {
     this.update_templates();
     this.create_page_lookahead();
 
-    jQuery('#st-create-content-lightbox #st-create-content-form')
+    $('#st-create-content-lightbox #st-create-content-form')
         .unbind('submit')
         .submit(function () { self.create_new_page(); return false });
 
-    jQuery.showLightbox({
+    $.showLightbox({
         content:'#st-create-content-lightbox',
         close:'#st-create-content-cancellink',
         callback: function() {
@@ -226,7 +223,7 @@ proto.create_url = function () {
     if (template) {
         url += ';template=' + nlw_name_to_id(template);
 
-        jQuery.ajax({
+        $.ajax({
             url: Page.workspaceUrl() + '/pages/' + nlw_name_to_id(template),
             async: false,
             dataType: 'json',
@@ -247,3 +244,5 @@ proto.create_url = function () {
 
     return url;
 }
+
+})(jQuery);

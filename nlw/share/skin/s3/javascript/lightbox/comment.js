@@ -41,7 +41,7 @@ GuiEdit.prototype.show = function () {
     Socialtext.s2_path = nlw_make_s2_path;
 
     this.container.append(
-        Jemplate.process('comment_lightbox.tt2', Socialtext)
+        Jemplate.process('comment.tt2', Socialtext)
     );
 
     jQuery('.commentWrapper', this.container).bind('dblclick', function () {

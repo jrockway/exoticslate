@@ -15,9 +15,10 @@ my $ACCOUNTS = 1000;
 my $USERS = 2000; # _Must_ be bigger than $ACCOUNTS
 my $PAGES = 1000;
 my $MAX_WS_ASSIGN = 50; # must be much smaller than accounts (at least 20x smaller)
-my $PAGE_VIEW_EVENTS = 450_000;
-my $OTHER_EVENTS = 50_000;
+my $PAGE_VIEW_EVENTS = 4500;
+my $OTHER_EVENTS = 5000;
 my $WRITES_PER_COMMIT = 2500;
+my $SIGNALS = 10_000;
 
 my $create_ts = '2007-01-01 00:00:00+0000';
 my @accounts;
@@ -275,6 +276,7 @@ print "\n";
 
 {
     print "generating $PAGE_VIEW_EVENTS page view events";
+
     my $ev_sth = $dbh->prepare_cached(q{
         INSERT INTO event (
             at, event_class, action, 
@@ -337,6 +339,54 @@ print "\n";
         $writes++;
         maybe_commit();
     }
+    print " done!\n";
+}
+
+{
+    print "Generating some signals...";
+
+    my $ev_sth = $dbh->prepare_cached(q{
+        INSERT INTO event (
+            at,
+            event_class, action,
+            actor_id, person_id, page_workspace_id, page_id, signal_id
+        ) VALUES (
+            ?::timestamptz + ?::interval,
+            ?, ?, ?, ?, ?, ?, ?
+        )
+    });
+
+    my $sig_sth = $dbh->prepare_cached(q{
+        INSERT INTO signal (
+            signal_id, user_id, body
+        ) VALUES ( ?, ?, ? )
+    });
+
+    my $topic_sth = $dbh->prepare_cached(q{
+        INSERT INTO topic_signal_page (
+            signal_id, workspace_id, page_id
+        ) VALUES ( ?, ?, ? )
+    });
+
+    for ( my $i = 0; $i < $SIGNALS; $i++ ) {
+         my $is_page_edit = int(rand(2));
+         my $user         = $users[int(rand(scalar @users))];
+         my $page         = $pages[int(rand(scalar @pages))];
+         my $action       = ( $is_page_edit ) ? 'edit_save' : 'signal';
+
+         my $id = 1_000_000 + $i;
+         $sig_sth->execute( $id, $user, "booty $is_page_edit");
+
+         $topic_sth->execute( $id, $page->[0], $page->[1] )
+             if $is_page_edit;
+
+         $ev_sth->execute( $create_ts, int(rand($PAGES)) . ' seconds',
+             'signal', $action, $user,
+             $user, $page->[0], $page->[1], $id );
+    }
+
+    $writes++;
+    maybe_commit();
     print " done!\n";
 }
 

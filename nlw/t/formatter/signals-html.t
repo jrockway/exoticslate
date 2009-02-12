@@ -5,9 +5,9 @@ use warnings;
 
 # use Test::Socialtext tests => 12;
 use Test::Base;
-use Socialtext::WikiText::Parser::Signals;
-use Socialtext::WikiText::Emitter::Signals::HTML;
-use WikiText::WikiByte::Emitter;
+use Socialtext::WikiText::Parser::Messages;
+use Socialtext::WikiText::Emitter::Messages::HTML;
+# use WikiText::WikiByte::Emitter;
 
 filters {
     wikitext => 'format',
@@ -16,17 +16,17 @@ filters {
 run_is wikitext => 'html';
 
 sub format {
-    my $parser = Socialtext::WikiText::Parser::Signals->new(
-       receiver => Socialtext::WikiText::Emitter::Signals::HTML->new,
+    my $parser = Socialtext::WikiText::Parser::Messages->new(
+       receiver => Socialtext::WikiText::Emitter::Messages::HTML->new,
 #       receiver => WikiText::WikiByte::Emitter->new,
     );
     return $parser->parse($_);
 }
 
 __DATA__
-=== Strikethrough phrase wikitext not supported
+=== Strikethrough phrase wikitext supported
 --- wikitext: I mean to say -hello- goodbye.
---- html: I mean to say -hello- goodbye.
+--- html: I mean to say <del>-hello-</del> goodbye.
 
 === Bold actually does work here
 --- wikitext: I mean to say *hello* goodbye.

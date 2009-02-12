@@ -61,7 +61,8 @@ sub _maybe_fetch {
     # REVIEW - why not just call $context->template to load a
     # template?
     foreach my $provider ( @{ $context->{LOAD_TEMPLATES} } ) {
-        $provider->fetch($_) if -f $File::Find::name;
+        local $provider->{ ABSOLUTE } = 1;
+        $provider->fetch($File::Find::name);
     }
 }
 

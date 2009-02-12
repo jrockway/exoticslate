@@ -76,16 +76,18 @@
 [% END %]
 
 [% BLOCK compare_revisions %]
-    <li>
-      <a class="compareButton" href="#" 
-         [% IF rows.size > 1 %]
-             onclick="document.getElementById('compare_revisions').submit(); return false"
-         [% ELSE %]
-             onclick="alert('You cannot compare a revision to itself.'); return false;"
-         [% END %]
-        ><span>[% loc("Compare Revisions") %]</span>
-      </a>
-    </li>
+    [% IF rows.size > 1;
+        onclick="document.getElementById('compare_revisions').submit(); return false";
+       ELSE;
+        onclick="alert('You cannot compare a revision to itself.'); return false;";
+       END %]
+    <ul class="widgetButton">
+      <li class="flexButtonBlue">
+        <a class="genericBlueButton" href="#" onclick="[% onclick %]" >
+          [% loc("Compare Revisions") %]
+        </a>
+      </li>
+    </ul>
 [% END %]
 
 [% BLOCK revision_row %]

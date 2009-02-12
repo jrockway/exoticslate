@@ -586,6 +586,7 @@ li.flexButton:hover {
 li.flexButtonBlue {
 	background: url(../images/flexButtonBlue.png) no-repeat;
 	background-position: bottom right;
+        white-space: nowrap;
 }
 
 li.flexButtonBlue:hover {

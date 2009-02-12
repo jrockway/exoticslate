@@ -29,7 +29,8 @@ use Socialtext::Validate qw( validate SCALAR_TYPE OPTIONAL_INT_TYPE HANDLE_TYPE 
         my ($new_width, $new_height) = get_proportions(%p);
 
         if ($new_width and $new_height) {
-            shell_run("convert $file -scale ${new_width}x${new_height} $file");
+            local $Socialtext::System::SILENT_RUN = 1;
+            shell_run("convert -quiet $file -scale ${new_width}x${new_height} $file");
         }
     }
 }
@@ -80,6 +81,8 @@ sub process_profile_image {
 
     my ($w, $h) = split ' ', `identify -format '\%w \%h' $img`;
 
+    local $Socialtext::System::SILENT_RUN = 1;
+
     if ($h > $max_h && $w > $max_w) {
         my ($new_w, $new_h) = Socialtext::Image::get_proportions(
             new_width  => $w,
@@ -91,7 +94,7 @@ sub process_profile_image {
         my $border_h = int(.5 + ($max_h - $new_h) / 2);
 
         shell_run(
-            "convert $img -scale ${new_w}x${new_h}! "
+            "convert -quiet $img -scale ${new_w}x${new_h}! "
            ."-bordercolor #FFFFFF "
            ."-border ${border_w}x${border_h} $img"
         );
@@ -100,7 +103,7 @@ sub process_profile_image {
         my $border_w = int($max_w - $w) / 2;
         my $border_h = 0;
         shell_run(
-            "convert $img -crop ${max_w}x${max_h}! "
+            "convert -quiet $img -crop ${max_w}x${max_h}! "
            ."-bordercolor #FFFFFF "
            ."-border ${border_w}x${border_h} $img"
         );
@@ -109,7 +112,7 @@ sub process_profile_image {
         my $border_w = 0;
         my $border_h = ($max_h - $h) / 2;
         shell_run(
-            "convert $img -crop ${max_w}x${max_h}! "
+            "convert -quiet $img -crop ${max_w}x${max_h}! "
            ."-bordercolor #FFFFFF "
            ."-border ${border_w}x${border_h} $img"
         );
@@ -120,7 +123,7 @@ sub process_profile_image {
         # centering the image
         my ($bw, $bh) = (($max_w - $w) / 2, ($max_h - $h) / 2);
         shell_run(
-            "convert -bordercolor #FFFFFF "
+            "convert -quiet -bordercolor #FFFFFF "
            ."-border ${bw}x${bh} $img"
         );
     }

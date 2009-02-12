@@ -29,6 +29,7 @@ sub handler {
                 _regen_combined_js($r);
                 Socialtext::Pluggable::Adapter->make;
             }
+            local $Socialtext::System::SILENT_RUN = 1;
             shell_run '-st-widgets update-all --noremote';
         }
     }

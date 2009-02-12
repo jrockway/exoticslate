@@ -1,4 +1,4 @@
-package Socialtext::WikiText::Emitter::Signals::HTML;
+package Socialtext::WikiText::Emitter::Messages::HTML;
 use strict;
 use warnings;
 

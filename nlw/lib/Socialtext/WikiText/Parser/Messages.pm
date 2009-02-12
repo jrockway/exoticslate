@@ -1,4 +1,4 @@
-package Socialtext::WikiText::Parser::Signals;
+package Socialtext::WikiText::Parser::Messages;
 use strict;
 use warnings;
 
@@ -19,7 +19,7 @@ sub create_grammar {
         phrases => $phrases,
         filter => sub {
             chomp;
-            die "Signal text cannot contain newline:\n>$_<"
+            die "Message text cannot contain newline:\n>$_<"
               if /\n/;
         }
     };

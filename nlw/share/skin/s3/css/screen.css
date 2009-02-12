@@ -576,6 +576,7 @@ body#workSpace div.widget a.editButton,body#dashBoard div.widget a.editButton {
 li.flexButton {
 	background: url(../images/flexButton.png) no-repeat;
 	background-position: bottom right;
+        white-space: nowrap;
 }
 
 li.flexButton:hover {
@@ -602,6 +603,7 @@ li.flexButtonGrey {
 	background: url(../images/flexButtonGrey.png) no-repeat;
 	background-position: top right;
         margin-left: 5px;
+        white-space: nowrap;
 }
 
 li.flexButtonGrey:hover {

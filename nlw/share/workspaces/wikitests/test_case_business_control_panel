@@ -50,9 +50,11 @@
 | text_like | Socialtext Signals (click to disable) |  |
 | click_ok | toggle_plugin_signals |  |
 | verifyConfirmation | You are about to disable Socialtext Signals \n\n Press 'OK' to disable this module or 'Cancel' to exit. |  |
-| wait_for_text_present_ok | Socialtext Signals (click to enable) |  |
-| click_ok | toggle_plugin_signals |  |
-| verifyConfirmation | Socialtext Signals is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
+
+ wait_for_text_present_ok | Socialtext Signals (click to enable) | |
+click_ok | toggle_plugin_signals | |
+verifyConfirmation | Socialtext Signals is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. | |
+
 | wait_for_text_present_ok | Socialtext Signals (click to disable) | 20000 |
 
 | *Comment* | Test case: Business Control Panel go the other way |  |
@@ -185,8 +187,19 @@
 | *Comment* | Test case: Business Control Panel Set up data for sorting |  |
 
 | st-admin | create-account --name "0 sort 1 account %%start_time%%" |  |
+
+ st-admin | enable-plugin --plugin dashboard --account "0 sort 1 account %%start_time%%" | |
+st-admin | enable-plugin --plugin people --account "0 sort 1 account %%start_time%%" | |
+
 | st-admin | create-account --name "0 sort 2 account %%start_time%%" |  |
+
+ st-admin | enable-plugin --plugin dashboard --account "0 sort 2 account %%start_time%%" | |
+st-admin | enable-plugin --plugin people --account "0 sort 2 account %%start_time%%" | |
+
 | st-admin | create-account --name "0 sort 3 account %%start_time%%" |  |
+
+ st-admin | enable-plugin --plugin dashboard --account "0 sort 3 account %%start_time%%" | |
+st-admin | enable-plugin --plugin people --account "0 sort 3 account %%start_time%%" | |
 
 | st-admin | create-workspace --name 0-sort-1-workspace1-%%start_time%% --title "0 sort 1 workspace1 %%start_time%%" --account "0 sort 1 account %%start_time%%" |  |
 | st-admin | create-workspace --name 0-sort-2-workspace1-%%start_time%% --title "0 sort 2 workspace1 %%start_time%%" --account "0 sort 2 account %%start_time%%" |  |
@@ -346,7 +359,7 @@ text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_t
 | click_and_wait | link=Accounts |  |
 | click_and_wait | link=0 sort 3 account %%start_time%% |  |
 | click_ok | toggle_plugin_people |  |
-| verifyConfirmation | Socialtext People is a paid option. For more information about fees, contact your sales representative. |  |
+| verifyConfirmation | Socialtext People is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
 | wait_for_element_visible_ok | link=Profile Fields | 5000 |
 
 | *Comment* | TC: BCP check all the Profile Fields info |  |

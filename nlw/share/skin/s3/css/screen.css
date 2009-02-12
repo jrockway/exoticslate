@@ -568,99 +568,6 @@ a.editButton {
 	/* text-indent: -9999px; */
 }
 
-ul li a.addContentButton {
-	display: block;
-	width: 117px;
-	height: 22px;
-	background: url(../images/addContentButton.png) no-repeat;
-	background-position: top left;
-	text-indent: -9999px;
-}
-
-ul li a.compareButton {
-	display: block;
-	width: 96px;
-	height: 22px;
-	background: url(../images/newPageButton.png) no-repeat;
-	background-position: top left;
-	text-indent: -9999px;
-}
-
-
-
-ul li a.addContentButton:hover {
-	background-position: top right;
-}
-
-ul li a.newPostButton {
-	display: block;
-	width: 96px;
-	height: 22px;
-	background: url(../images/newPostButton.png) no-repeat;
-	background-position: top left;
-	text-indent: -9999px;
-}
-
-a.newPostButton {
-	display: block;
-	width: 96px;
-	height: 22px;
-	background: url(../images/newPostButton.png) no-repeat;
-	background-position: top left;
-	text-indent: -9999px;
-}
-
-
-ul li a.newPostButton:hover {
-	background-position: top right;
-}
-
-a.newPostButton:hover {
-	background-position: top right;
-}
-
-
-ul li a.compareButton {
-	display: block;
-	width: 136px;
-	height: 22px;
-	background: url(../images/compareButton.png) no-repeat;
-	background-position: top left;
-	text-indent: -9999px;
-}
-
-ul li a.compareButton:hover {
-	background-position: top right;
-}
-
-
-
-a.saveButton {
-	display: block;
-	width: 44px;
-	height: 22px;
-	background: url(../images/saveButton.png) no-repeat;
-	background-position: top right;
-	text-indent: -9999px;
-}
-
-a.saveButton:hover {
-	background-position: top left;
-}
-
-a.cancelButton {
-	display: block;
-	width: 59px;
-	height: 22px;
-	background: url(../images/cancelButton.png) no-repeat;
-	background-position: top right;
-	text-indent: -9999px;
-}
-
-a.cancelButton:hover {
-	background-position: top left;
-}
-
 body#workSpace div.widget a.editButton,body#dashBoard div.widget a.editButton {
 	float: right;
 	margin-right: 15px;
@@ -774,35 +681,6 @@ ul li a.previewButton:hover {
 	text-decoration: none;
 }
 
-ul li a.watchButton {
-	display: block;
-	width: 146px;
-	height: 22px;
-	background: url(../images/watchButton.png) no-repeat;
-	background-position: top left;
-	text-indent: -9999px;
-}
-
-ul li a.watchButton:hover {
-	background-position: top right;
-}
-
-
-ul li a.watchPersonButton {
-	display: block;
-	width: 159px;
-	height: 22px;
-	background: url(../images/watchPersonButton.png) no-repeat;
-	background-position: top left;
-	text-indent: -9999px;
-}
-
-ul li a.watchPersonButton:hover {
-	background-position: top right;
-}
-
-
-
 ul li a.addTagButton {
 	display: block;
 	width: 87px;
@@ -813,20 +691,6 @@ ul li a.addTagButton {
 }
 
 ul li a.addTagButton:hover {
-	background-position: top right;
-}
-
-
-ul li a.stopWatchButton {
-	display: block;
-	width: 138px;
-	height: 22px;
-	background: url(../images/stopWatchButton.png) no-repeat;
-	background-position: top left;
-	text-indent: -9999px;
-}
-
-ul li a.stopWatchButton:hover {
 	background-position: top right;
 }
 

@@ -18,7 +18,7 @@ my $MAX_WS_ASSIGN = 50; # must be much smaller than accounts (at least 20x small
 my $PAGE_VIEW_EVENTS = 4500;
 my $OTHER_EVENTS = 5000;
 my $WRITES_PER_COMMIT = 2500;
-my $SIGNALS = 10_000;
+my $SIGNALS = 100_000;
 
 my $create_ts = '2007-01-01 00:00:00+0000';
 my @accounts;

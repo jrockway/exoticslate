@@ -2,6 +2,7 @@ package Socialtext::Events::Reporter;
 # @COPYRIGHT@
 use warnings;
 use strict;
+use Socialtext::Encode ();
 use Socialtext::SQL qw/sql_execute/;
 use Socialtext::JSON qw/decode_json/;
 use Socialtext::User;
@@ -134,6 +135,8 @@ sub _expand_context {
     my $row = shift;
     my $c = $row->{context};
     if ($c) {
+        local $@;
+        $c = Encode::encode_utf8(Socialtext::Encode::ensure_is_utf8($c));
         $c = eval { decode_json($c) };
         warn $@ if $@;
     }

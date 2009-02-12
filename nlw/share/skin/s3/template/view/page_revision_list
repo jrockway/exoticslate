@@ -72,22 +72,29 @@
   // resize the container
   if ($('.dataTable').width() > $('#mainWrap').width())
     $('#mainWrap').width($('.dataTable').width() + 100);
+
+  jQuery('.compareRevisions').click(function() {
+    var old_rev = jQuery('input[name=old_revision_id]:checked').val();
+    var new_rev = jQuery('input[name=new_revision_id]:checked').val();
+    if (old_rev == new_rev) {
+      alert(loc("You cannot compare a revision to itself."));
+    }
+    else {
+      document.getElementById('compare_revisions').submit();
+    }
+    return false;
+  });
 --></script>
 [% END %]
 
 [% BLOCK compare_revisions %]
-    [% IF rows.size > 1;
-        onclick="document.getElementById('compare_revisions').submit(); return false";
-       ELSE;
-        onclick="alert('You cannot compare a revision to itself.'); return false;";
-       END %]
-    <ul class="widgetButton">
-      <li class="flexButtonBlue">
-        <a class="genericBlueButton" href="#" onclick="[% onclick %]" >
-          [% loc("Compare Revisions") %]
-        </a>
-      </li>
-    </ul>
+  <ul class="widgetButton">
+    <li class="flexButtonBlue">
+      <a class="compareRevisions genericBlueButton" href="#">
+        [% loc("Compare Revisions") %]
+      </a>
+    </li>
+  </ul>
 [% END %]
 
 [% BLOCK revision_row %]

@@ -514,13 +514,11 @@ proto.set_inner_html = function(html) {
         }, 1600);      
     } else {
         try {
-            this.get_editable_div().innerHTML = html;
+            this._editable_div.innerHTML = html;
         } catch (e) {
-            if (self._editable_div) {
-                try {
-                    jQuery(self._editable_div).remove();
-                } catch(e){}
-            }
+            try {
+                 self._editable_div.parentNode.removeChild(self._editable_div);
+	    } catch (e) {}
 
             self._editable_div = null;
             self.get_editable_div();

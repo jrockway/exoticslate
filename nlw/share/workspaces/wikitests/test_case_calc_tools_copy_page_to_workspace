@@ -14,12 +14,12 @@
 | click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: Calc Tools: Copy Page to Workspace. Add Tag |  |
-| wait_for_element_visible_ok | link=Tag | 30000 |
-| click_ok | link=Tag |  |
+| wait_for_element_visible_ok | link=Add Tag | 30000 |
+| click_ok | link=Add Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | Copy Spreadsheet Tag %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 20000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 20000 |
+| click_ok | st-tags-plusbutton-link |  |
 | wait_for_element_visible_ok | link=Copy Spreadsheet Tag %%start_time%% | 30000 |
 
 | *Comment* | Test Case: Calc Tools: Copy Page to Workspace. Copy the page |  |
@@ -49,8 +49,8 @@ NOT the target WS |  |
 | click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | Copy Spreadsheet Tag 2 %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 20000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 20000 |
+| click_ok | st-tags-plusbutton-link |  |
 | wait_for_element_visible_ok | link=Copy Spreadsheet Tag 2 %%start_time%% | 30000 |
 
 | *Comment* | Test Case: Calc Tools: Copy Page to Workspace. Overwrite old page with new content. |  |

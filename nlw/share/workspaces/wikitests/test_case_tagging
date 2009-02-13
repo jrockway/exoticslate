@@ -16,12 +16,12 @@ Look ahead: start to type "fo" | sidebar autosuggests "foo", "foo bar", "foster 
 | clickAndWait | st-save-button-link |  |
 
 | *Comment* | Test Case: Tagging. fog tag added |  |
-| wait_for_element_visible_ok | link=Tag | 30000 |
-| click_ok | link=Tag |  |
+| wait_for_element_visible_ok | link=Add Tag | 30000 |
+| click_ok | link=Add Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | fog %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case: Tagging. verify fog tag added |  |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |
@@ -29,10 +29,10 @@ Look ahead: start to type "fo" | sidebar autosuggests "foo", "foo bar", "foster 
 | text_like | link=fog %%start_time%% | fog %%start_time%% |
 
 | *Comment* | Test Case: Tagging - Chinese chars |  |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | 所以 |
-| click_ok | st-tags-addbutton-link |  |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case: Tagging. verify Chinese chars |  |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |
@@ -40,10 +40,10 @@ Look ahead: start to type "fo" | sidebar autosuggests "foo", "foo bar", "foster 
 | text_like | st-tags-listing | 所以 |
 
 | *Comment* | Test Case: Tagging. foo bar tag added |  |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | foo bar %%start_time%% |
-| click_ok | st-tags-addbutton-link |  |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case: Tagging. verify foo bar tag added |  |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |
@@ -51,10 +51,10 @@ Look ahead: start to type "fo" | sidebar autosuggests "foo", "foo bar", "foster 
 | text_like | link=foo bar %%start_time%% | foo bar %%start_time%% |
 
 | *Comment* | Test Case: Tagging - special chars |  |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | special chars @#$ %%start_time%% |
-| click_ok | st-tags-addbutton-link |  |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case: Tagging. verify special chars @#$ %%start_time%% tag added |  |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |
@@ -62,10 +62,10 @@ Look ahead: start to type "fo" | sidebar autosuggests "foo", "foo bar", "foster 
 | text_like | link=special chars @#$ %%start_time%% | special chars @#$ %%start_time%% |
 
 | *Comment* | Test Case: Tagging. foster City tag added |  |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | foster City %%start_time%% |
-| click_ok | st-tags-addbutton-link |  |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case: Tagging. verify foster City tag added |  |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |
@@ -89,12 +89,12 @@ Add any other tag to three different pages | tag is added
 
 | *Comment* | Tag Page 1 |  |
 | open_ok | /%%workspace%%/?tag page 1 %%start_time%% |  |
-| wait_for_element_visible_ok | link=Tag | 30000 |
-| click_ok | link=Tag |  |
+| wait_for_element_visible_ok | link=Add Tag | 30000 |
+| click_ok | link=Add Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tagtest %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case: Tagging. verify tagtest tag added |  |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |
@@ -103,12 +103,12 @@ Add any other tag to three different pages | tag is added
 
 | *Comment* | Tag Page 2 |  |
 | open_ok | /%%workspace%%/?tag page 2 %%start_time%% |  |
-| wait_for_element_visible_ok | link=Tag | 30000 |
-| click_ok | link=Tag |  |
+| wait_for_element_visible_ok | link=Add Tag | 30000 |
+| click_ok | link=Add Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tagtest %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case: Tagging. verify tagtest tag added |  |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |
@@ -117,12 +117,12 @@ Add any other tag to three different pages | tag is added
 
 | *Comment* | Tag Page 3 |  |
 | open_ok | /%%workspace%%/?tag page 3 %%start_time%% |  |
-| wait_for_element_visible_ok | link=Tag | 30000 |
-| click_ok | link=Tag |  |
+| wait_for_element_visible_ok | link=Add Tag | 30000 |
+| click_ok | link=Add Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tagtest %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case: Tagging. verify tagtest tag added |  |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |
@@ -217,7 +217,7 @@ TODO: find a way to test lookahead
 
 | *Comment* | Test Case: Tagging use lookahead to add a tag |  |
 | click_ok | link=foster city %%start_time%% |  |
-| wait_for_element_visible_ok | link=Tag | 30000 |
+| wait_for_element_visible_ok | link=Add Tag | 30000 |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |
 | wait_for_text_present_ok | foster City %%start_time%% | 30000 |
 | text_like | st-tags-listing | foster City %%start_time%% |

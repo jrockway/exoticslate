@@ -91,7 +91,7 @@ TOO: restore the following test when tag listview sorting is implemented
  *Comment* | Test Case: Tags Checking tag sorting | |
  open_ok | /%%workspace%%/index.cgi?action=category_list | |
  text_like | qr/Tag 1 %%start_time%%.+Tag 2 %%start_time%%/ | |
- click_ok | link=Tag | |
+ click_ok | link=Add Tag | |
  text_like | qr/Tag 2 %%start_time%%.+Tag 1 %%start_time%%/ | |
 
 Delete tag from pages until tag is gone from all pages.

@@ -47,12 +47,12 @@ Set default values if they are not defined by the caller
 | text_like | st-tags-listing | %%test_string%% tag 1 |
 
 | *Comment* | Test Case: String Use: add tag 2 |  |
-| wait_for_element_visible_ok | link=Tag | 30000 |
-| click_ok | link=Tag |  |
+| wait_for_element_visible_ok | link=Add Tag | 30000 |
+| click_ok | link=Add Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | %%test_string%% tag 2 |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |
 | wait_for_element_visible_ok | link=%%test_string%% tag 2 | 30000 |
 | text_like | st-tags-listing | %%test_string%% tag 2 |

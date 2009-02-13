@@ -10,8 +10,8 @@
 | click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tag1 %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case Calc: Tags. Wait for the tag to reappear |  |
 | wait_for_element_visible_ok | link=tag1 %%start_time%% | 30000 |
@@ -27,8 +27,8 @@
 | click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tag1 %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case Calc: Tags. Wait for the tag to reappear |  |
 | wait_for_element_visible_ok | link=tag1 %%start_time%% | 30000 |
@@ -44,8 +44,8 @@
 | click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | tag2 %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case Calc: Tags. Wait for the tag to reappear |  |
 | wait_for_element_visible_ok | link=tag2 %%start_time%% | 30000 |
@@ -82,9 +82,9 @@ click on several page links | Pages appear; each page has its that tag displayed
 
 TODO: test fancy table headers that sort
 
- click_ok | link=Tag | |
+ click_ok | link=Add Tag | |
  text_like | qr/tag2 %%start_time%%.+tag1 %%start_time%%/ | |
- click_ok | link=Tag | |
+ click_ok | link=Add Tag | |
  text_like | qr/tag1 %%start_time%%.+tag2 %%start_time%%/ | |
 
 Delete tag from pages until tag is gone from all pages.

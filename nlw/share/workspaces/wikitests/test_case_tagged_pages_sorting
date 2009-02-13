@@ -47,12 +47,12 @@ Create unique sort order for each sort:
 | clickAndWait | //input[@value='Log in'] |  |
 
 | *Comment* | Test Case: Tagged Page Sorting . Add Tagged Page %%start_time%% to 4 pages |  |
-| wait_for_element_visible_ok | link=Tag | 30000 |
-| click_ok | link=Tag |  |
+| wait_for_element_visible_ok | link=Add Tag | 30000 |
+| click_ok | link=Add Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | Tagged Page %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case: Tagged Page Sorting . Add Tagged Page %%start_time%% to 4 pages |  |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |
@@ -67,12 +67,12 @@ Create unique sort order for each sort:
 | type_ok | username | %%user_4%% |
 | type_ok | password | 123456 |
 | clickAndWait | //input[@value='Log in'] |  |
-| wait_for_element_visible_ok | link=Tag | 30000 |
-| click_ok | link=Tag |  |
+| wait_for_element_visible_ok | link=Add Tag | 30000 |
+| click_ok | link=Add Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | Tagged Page %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case: Tagged Page Sorting . Add Tagged Page %%start_time%% to 4 pages |  |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |
@@ -88,12 +88,12 @@ Create unique sort order for each sort:
 | type_ok | username | %%user_1%% |
 | type_ok | password | 123456 |
 | clickAndWait | //input[@value='Log in'] |  |
-| wait_for_element_visible_ok | link=Tag | 30000 |
-| click_ok | link=Tag |  |
+| wait_for_element_visible_ok | link=Add Tag | 30000 |
+| click_ok | link=Add Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | Tagged Page %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case: Tagged Page Sorting . Add Tagged Page %%start_time%% to 4 pages |  |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |
@@ -110,12 +110,12 @@ Create unique sort order for each sort:
 | type_ok | username | %%user_2%% |
 | type_ok | password | 123456 |
 | clickAndWait | //input[@value='Log in'] |  |
-| wait_for_element_visible_ok | link=Tag | 30000 |
-| click_ok | link=Tag |  |
+| wait_for_element_visible_ok | link=Add Tag | 30000 |
+| click_ok | link=Add Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | Tagged Page %%start_time%% |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 
 | *Comment* | Test Case: Tagged Page Sorting . Add Tagged Page %%start_time%% to 4 pages |  |
 | wait_for_element_visible_ok | st-tags-listing | 30000 |

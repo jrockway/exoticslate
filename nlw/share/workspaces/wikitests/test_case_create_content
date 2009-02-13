@@ -40,8 +40,8 @@
 | click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | Template |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 | wait_for_element_visible_ok | link=Template | 30000 |
 
 | *Comment* | Test Case: Create Content: use Template |  |
@@ -66,8 +66,8 @@
 | click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | Template |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 | wait_for_element_visible_ok | link=Template | 30000 |
 
 | *Comment* | Test Case: Create Content: Copy |  |
@@ -96,8 +96,8 @@
 | click_ok | st-tags-addlink |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
 | type_ok | st-tags-field | Template |
-| wait_for_element_visible_ok | st-tags-addbutton-link | 30000 |
-| click_ok | st-tags-addbutton-link |  |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
 | wait_for_element_visible_ok | link=Template | 30000 |
 
 | *Comment* | Test Case: Create Content. Spreadsheet |  |

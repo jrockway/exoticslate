@@ -100,8 +100,6 @@ sub edit_content {
     my $metadata = $page->metadata;
 
     my $edit_summary = Socialtext::String::trim($self->cgi->edit_summary || '');
-    $self->_signal_edit_summary($edit_summary, $page)
-        if $self->cgi->signal_edit_summary;
     st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
         if $edit_summary;
 
@@ -134,6 +132,9 @@ sub edit_content {
             page => $page,
         });
     }
+
+    $self->_signal_edit_summary($edit_summary, $page)
+        if $edit_summary;
 
     # Move attachments uploaded to 'Untitled Page' to the actual page
     my @attach = $self->cgi->attachment;

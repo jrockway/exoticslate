@@ -51,15 +51,15 @@
     # to the backend if the photo doesn't exist.
     RewriteCond %{REQUEST_METHOD} ^GET$
     RewriteCond %{REQUEST_URI} ^/data/people/([^/]+)/small_photo
-    RewriteCond [% config.data_root_dir %]/storage/avatar/%1-small.png -f
+    RewriteCond [% config.cache_dir %]/avatar/%1-small.png -f
     RewriteRule ^/data/people/([^/]+)/small_photo /nlw/avatar/$1-small.png [PT]
 
     RewriteCond %{REQUEST_METHOD} ^GET$
     RewriteCond %{REQUEST_URI} ^/data/people/([^/]+)/photo
-    RewriteCond [% config.data_root_dir %]/storage/avatar/%1-large.png -f
+    RewriteCond [% config.cache_dir %]/avatar/%1-large.png -f
     RewriteRule ^/data/people/([^/]+)/photo /nlw/avatar/$1-large.png [PT]
 
-    Alias /nlw/avatar [% config.data_root_dir %]/storage/avatar
+    Alias /nlw/avatar [% config.cache_dir %]/avatar
     <Location /nlw/avatar>
         Order allow,deny
         Allow from all

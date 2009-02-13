@@ -370,7 +370,7 @@ sub _get_search_config_version {
 sub local_dirs {
     my $root_dir = shift;
 
-    my %dirs = map { ($_, File::Spec->catdir( $root_dir, $_ )) } qw( etc run lock root );
+    my %dirs = map { ($_, File::Spec->catdir( $root_dir, $_ )) } qw( etc run lock root cache );
 
     %dirs = (
         %dirs,
@@ -409,6 +409,7 @@ sub sitewide_dirs {
         lock                 => get_prefixed_dir('httpd_lockdir'),
         root                 => get_prefixed_dir('webroot'),
         ssl_base             => get_prefixed_dir('ssldir'),
+        cache                => get_prefixed_dir('cachedir'),
     );
 }
 
@@ -806,6 +807,7 @@ sub standard_params {
 	|| $config{nlw_server_hostname};
 
     $config{data_root_dir} = $dirs{root};
+    $config{cache_dir} = $dirs{cache};
     $config{ssl_base_dir} = $dirs{ssl_base};
 
     $config{apache2_port} = _frontend_ports()->{http};

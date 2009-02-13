@@ -178,3 +178,8 @@ etc/socialtext/uri_map.d/widgets.yaml
 t/wikitests/people/avatar-cache.wiki
 t/widget/lang/Test_fallback.xml
 t/Socialtext/Signal/PageTopic.t
+t/Socialtext/Gadgets/Container-admin.t
+t/widget/Test1.xml
+t/widget/Test2.xml
+t/widget/lang/Test_en.xml
+t/widget/lang/Test_es.xml

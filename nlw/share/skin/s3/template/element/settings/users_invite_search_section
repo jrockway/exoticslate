@@ -29,8 +29,12 @@
   [% IF users.size %]
   <dd>
     [% IF users.size > 20 %]
-        <a class="inviteButton" href="#" onclick="jQuery('input[name=Button]').val('Invite'); jQuery('form[name=settings]').submit(); return false">[% loc('Invite') %]</a>
-        <br />
+      <ul class="formButtons">
+        <li class="flexButton">
+          <a class="genericOrangeButton" href="#" onclick="jQuery('input[name=Button]').val('Invite'); jQuery('form[name=settings]').submit(); return false">[% loc('Invite') %]</a>
+        </li>
+      </ul>
+      <br />
     [% END %]
 <script language="Javascript">
 function toggle_all() {
@@ -50,8 +54,11 @@ function toggle_all() {
     [% FOREACH user = users %]
         <input type="checkbox" name="email_addresses" value="[% user.email_address %]"/> [% user.name_and_email | html %]<br/>
     [% END %]
-        <br />
-        <a class="inviteButton" href="#" onclick="jQuery('input[name=Button]').val('Invite'); jQuery('form[name=settings]').submit(); return false">[% loc('Invite') %]</a>
+        <ul class="formButtons">
+          <li class="flexButton">
+            <a class="genericOrangeButton" href="#" onclick="jQuery('input[name=Button]').val('Invite'); jQuery('form[name=settings]').submit(); return false">[% loc('Invite') %]</a>
+          </li>
+        </ul>
   </dd>
   [% ELSE %]
   <dd>

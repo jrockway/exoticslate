@@ -45,6 +45,15 @@
     border-spacing: 0px;
 }
 
+.lightbox .additional {
+    border-top: 1px solid black;
+    clear: both;
+}
+
+.lightbox .additional .hint {
+    margin-left: 25px;
+}
+
 .lightbox .st-widgets-optionstable tr, .lightbox .st-widgets-optionstable td {
     vertical-align: middle;
 }

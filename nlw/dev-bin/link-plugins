@@ -30,19 +30,19 @@ sub link_directory {
             return if basename($_) =~ m{^\.};
             my $from = $_;
             (my $to = $from) =~ s{^$fromdir}{$todir};
-            if (-d $from and -l $to) {
-                unlink $to;
-            }
-            unless (-e $to) {
-                unlink $to if -l $to;
-                if (-d $from) {
+
+            if (-d $from) {
+                if (!-d $to) {
                     warn "Making directory $to\n";
+                    unlink $to if -l $to;
                     mkdir $to or die "Cannot mkdir $to: $!";
                 }
-                else {
-                    warn "linking $to\n";
-                    symlink $from, $to or die "Cannot link $from to $to: $!";
-                }
+            }
+            else {
+                unlink $to if -l $to;
+                die "$to already exists and is a file! Remove it first\n" if -e $to;
+
+                symlink $from, $to or die "Cannot link $from to $to: $!";
 
                 # add an entry to the local .gitignore if it's missing
                 $to =~ s{^$todir/}{};

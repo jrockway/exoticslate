@@ -465,26 +465,11 @@ sub html {
 
     my $incipient_class = $page_exists ? '' : 'class="incipient"';
 
-    my $link = qq(<a href="$view_url" $incipient_class>$page_title</a>);
+    my $link = qq(<a class="wiki-include-title-link" href="$view_url" $incipient_class>$page_title</a>);
 
     my $edit_icon = '';
     if ($edit_url) {
-        my $edit = loc('edit');
-        if ($edit eq 'edit') {
-            my $img_path = $self->hub->skin->skin_uri();
-            my $icon_url;
-            if (-e $self->hub->skin->skin_path('images', 'edit-icon.gif')) {
-                $icon_url = "$img_path/images/edit-icon.gif";
-            }
-            else {
-                $icon_url = "$img_path/images/st/homepage/edit-icon.gif";
-            }
-            $edit = "<img src='$icon_url' border='0'/>";
-        }
-        else {
-            $edit = "$edit";
-        }
-        $edit_icon = $self->edit_icon($edit_url, $page_exists, $edit);
+        $edit_icon = $self->edit_icon($edit_url, $page_exists);
     }
 
     my $activity_class = $page_type eq 'spreadsheet'
@@ -500,11 +485,10 @@ sub html {
 }
 
 sub edit_icon {
-    my ($self, $edit_url, $page_exists, $edit) = @_;
-    my $class = $page_exists
-        ? "wiki-include-edit-link"
-        : 'wiki-include-edit-link incipient';
-    return qq(<a class="$class" href="$edit_url">$edit</a>);
+    my ($self, $edit_url, $page_exists) = @_;
+    my $edit_text = loc('Edit');
+    return qq{<a class="smallEditButton" href="$edit_url" title="$edit_text">&nbsp</a>}
+         . qq{<div class="clear"></div>}
 }
 
 sub _included_page_exists {

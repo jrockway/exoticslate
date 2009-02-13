@@ -1,8 +1,16 @@
 [%# vim: set et sts=2 sw=2: %]
 [% UNLESS page.is_spreadsheet && !current_workspace.enable_spreadsheet %]
 [% IF checker.check_permission('edit') %]
-  <li><a title="[% loc('Click this button to edit the page') %]" id="st-edit-button-link[% id_suffix %]" class="editButton" href="#">[% loc('Edit') %]</a></li>
+  <li class="flexButton">
+    <a title="[% loc('Click this button to edit the page') %]" id="st-edit-button-link[% id_suffix %]" class="editButton" href="#">
+      [% loc('Edit') %]
+    </a>
+  </li>
 [% ELSIF checker.check_permission('edit_controls') %]
-  <li><a title="[% loc('Click this button to edit the page') %]" id="st-login-to-edit-button-link[% id_suffix %]" class="editButton" href="[% login_and_edit_path %]">[% loc('Edit') %]</a></li>
+  <li class="flexButton">
+    <a title="[% loc('Click this button to edit the page') %]" id="st-login-to-edit-button-link[% id_suffix %]" class="editButton" href="[% login_and_edit_path %]">
+      [% loc('Edit') %]
+    </a>
+  </li>
 [% END %]
 [% END %]

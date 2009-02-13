@@ -110,12 +110,20 @@
           </ul>
           [% IF checker.check_permission('edit') %]
           <ul id="st-tags-addlink" class="widgetButton">
-            <li><a class="addTagButton" href="#">[% loc('Tag') %]</a></li>
+            <li class="flexButtonGrey">
+              <a class="greyButton" href="#">[% loc('Add Tag') %]</a>
+            </li>
           </ul>
           <form id="st-tags-form" onsubmit="return false;" style="clear: both">
-            <input style="margin:10px; display:none; float: left" id="st-tags-field" name="tagfield" type="text" />
+            <input  id="st-tags-field" name="tagfield" type="text" />
+            <span style="float:left;display: none" id="st-tags-addbutton-link">
+              <ul class="widgetButton">
+                <li class="flexButtonGrey">
+                  <a class="greyButton" href="#" onclick="$('#st-tags-form').trigger('submit'); return false">[% loc('&nbsp;+') %]</a>
+                </li>
+              </ul>
+            </span>
             <input style="display:none" id="st-tags-addbutton" type="submit" />
-            <a style="display: none" class="addButton" id="st-tags-addbutton-link" href="#" onclick="$('#st-tags-form').trigger('submit'); return false">[% loc("Add") %]</a>
           </form>
           <div id="st-tags-message"></div>
           <div style="display:none" id="st-tags-suggestion">
@@ -185,7 +193,9 @@
           </ul>
           [% IF checker.check_permission('attachments') %]
           <ul class="widgetButton">
-            <li><a id="st-attachments-uploadbutton" class="uploadButton" href="#">[% loc('Upload Files') %]</a></li>
+            <li class="flexButtonGrey">
+              <a id="st-attachments-uploadbutton" class="greyButton" href="#">[% loc('Upload Files') %]</a>
+            </li>
             <!--<li><a id="st-attachments-managebutton" class="manageButton" href="#">[% loc('Manage Files') %]</a></li>-->
           </ul>
           [% END %]

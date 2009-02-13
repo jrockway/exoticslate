@@ -32,8 +32,11 @@
           <input type="hidden" name="page_name" value="[% page_uri %]" />
           <input type="hidden" name="caller_action" value="[% caller_action %]" />
           <ul class="formButtons" id="[% ns %]-controls">
-            <li><a class="saveButton" id="[% ns %]-savelink" href="#" onclick="submit_comment(); return false">Save</a></li>
-            <li><a class="cancelButton" id="[% ns %]-cancellink" href="#" onclick="cancel_comment(); return false">Cancel</a></li>
+            <li class="flexButton">
+              <a class="genericOrangeButton" id="[% ns %]-savelink" href="#" onclick="submit_comment(); return false">Saver</a>
+            <li class="flexButton">
+              <a class="genericOrangeButton" id="[% ns %]-cancellink" href="#" onclick="cancel_comment(); return false">Cancels</a>
+            </li>
           </ul>
         </form>
       </div>

@@ -4,9 +4,15 @@
     <div id="controls">
         <div id="st-editing-tools-edit">
             <ul>
-                <li><a id="st-save-button-link" class="saveButton" href="#">[% loc('Save') %]</a></li>
-                <li><a class="previewButton" id="st-preview-button-link" href="#">[% loc('Preview') %]</a></li>
-                <li><a class="cancelButton" id="st-cancel-button-link" href="#">[% loc('Cancel') %]</a></li>
+                <li class="flexButton">
+                    <a class="genericOrangeButton" id="st-save-button-link" href="#">[% loc('Save') %]</a>
+                </li>
+                <li class="flexButton">
+                    <a class="genericOrangeButton" id="st-preview-button-link" href="#">[% loc('Preview') %]</a>
+                </li>
+                <li class="flexButton">
+                    <a class="genericOrangeButton" id="st-cancel-button-link" href="#">[% loc('Cancel') %]</a></li>
+                </li>
             </ul>
             <ul class="buttonRight">        
                 <li><a href="#" id="st-mode-wysiwyg-button" onclick="return false;">[% loc('Rich Text') %]</a></li>

@@ -20,8 +20,8 @@
   </div>
   <textarea name="comment" wrap="virtual"></textarea>
   <ul class="formButtons">
-    <li><a class="saveButton" href="#">[% loc('Save') %]</a></li>
-    <li><a class="cancelButton" href="#">[% loc('Cancel') %]</a></li>
+    <li class="flexButton"><a class="saveButton genericOrangeButton" href="#">[% loc('Save') %]</a></li>
+    <li class="flexButton"><a class="cancelButton genericOrangeButton" href="#">[% loc('Cancel') %]</a></li>
   </ul>
 </div>
 </div>

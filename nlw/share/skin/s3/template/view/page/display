@@ -119,7 +119,7 @@
             <span style="float:left;display: none" id="st-tags-addbutton-link">
               <ul class="widgetButton">
                 <li class="flexButtonGrey">
-                  <a class="greyButton" href="#" onclick="$('#st-tags-form').trigger('submit'); return false">[% loc('&nbsp;+') %]</a>
+                  <a class="greyButton" id="st-tags-plusbutton-link" href="#" onclick="$('#st-tags-form').trigger('submit'); return false">[% loc('&nbsp;+') %]</a>
                 </li>
               </ul>
             </span>

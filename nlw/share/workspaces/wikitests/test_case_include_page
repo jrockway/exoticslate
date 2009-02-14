@@ -25,7 +25,7 @@ Repeat test using Miki/Lite access.
 | text_like | //div[@class='wiki-include-content'] | This quick tour |
 
 | *Comment* | Test Case: Include Page. Open the included page for editing |  |
-| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| click_and_wait | //a[@class="smallEditButton"] |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | click_ok | link=Wiki Text |  |
@@ -45,7 +45,7 @@ Repeat test using Miki/Lite access.
 | text_like | //div[@class='wiki-include-content'] | This quick tour |
 
 | *Comment* | Test Case: Include Page. Open the included page for editing |  |
-| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| click_and_wait | //a[@class="smallEditButton"] |  |
 | wait_for_element_visible_ok | edit_textarea | 30000 |
 | wait_for_element_visible_ok | link=Cancel Edit | 30000 |
 | verifyValue | edit_textarea | qr/.+This quick tour.+/ |
@@ -62,7 +62,7 @@ Repeat test using Miki/Lite access.
 | text_like | //div[@class='wiki-include-content'] | This quick tour |
 
 | *Comment* | Test Case: Include Page. PUBLIC Open the included page for editing |  |
-| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| click_and_wait | //a[@class="smallEditButton"] |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | click_ok | link=Wiki Text |  |
@@ -77,7 +77,7 @@ Repeat test using Miki/Lite access.
 | text_like | //div[@class='wiki-include-content'] | This quick tour |
 
 | *Comment* | Test Case: Include Page. PUBLIC MIKI Open the included page for editing |  |
-| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| click_and_wait | //a[@class="smallEditButton"] |  |
 | wait_for_element_visible_ok | edit_textarea | 30000 |
 | wait_for_element_visible_ok | link=Cancel Edit | 30000 |
 | verifyValue | edit_textarea | qr/.+This quick tour.+/ |
@@ -98,7 +98,7 @@ Repeat test using Miki/Lite access.
 | text_like | //div[@class='wiki-include-content'] | This quick tour |
 
 | *Comment* | Test Case: Include Page. PUBLIC LOGGED OUT. Open the included page for editing |  |
-| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| click_and_wait | //a[@class="smallEditButton"] |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
@@ -113,7 +113,7 @@ Repeat test using Miki/Lite access.
 | text_like | //div[@class='wiki-include-content'] | This quick tour |
 
 | *Comment* | Test Case: Include Page. PUBLIC MIKI LOGGED OUT. Open the included page for editing |  |
-| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| click_and_wait | //a[@class="smallEditButton"] |  |
 | wait_for_element_visible_ok | edit_textarea | 30000 |
 | wait_for_element_visible_ok | link=Cancel Edit | 30000 |
 | verifyValue | edit_textarea | qr/.+This quick tour.+/ |
@@ -128,7 +128,7 @@ Repeat test using Miki/Lite access.
 | text_like | //div[@class='wiki-include-content'] | This quick tour |
 
 | *Comment* | Test Case: Include Page. AUTH Open the included page for editing |  |
-| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| click_and_wait | //a[@class="smallEditButton"] |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
@@ -142,7 +142,7 @@ Repeat test using Miki/Lite access.
 | text_like | //div[@class='wiki-include-content'] | This quick tour |
 
 | *Comment* | Test Case: Include Page. AUTH MIKI Open the included page for editing |  |
-| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| click_and_wait | //a[@class="smallEditButton"] |  |
 | wait_for_element_visible_ok | edit_textarea | 30000 |
 | wait_for_element_visible_ok | link=Cancel Edit | 30000 |
 | verifyValue | edit_textarea | qr/.+This quick tour.+/ |
@@ -163,7 +163,7 @@ Repeat test using Miki/Lite access.
 | text_like | //div[@class='wiki-include-content'] | This quick tour |
 
 | *Comment* | Test Case: Include Page. AUTH LOGGED OUT. CANNOT Open the included page for editing |  |
-| wait_for_element_not_present_ok | //img[contains(@src,'edit-icon.gif')] | 10000 |
+| wait_for_element_not_present_ok | //a[@class="smallEditButton"] | 10000 |
 
 | *Comment* | Test Case: Include Page. AUTH MIKI LOGGED OUT. Run the same test in Miki |  |
 | open_ok | /lite/page/%%tcipw%%/tc_include_page_%%start_time%% |  |
@@ -173,7 +173,7 @@ Repeat test using Miki/Lite access.
 | text_like | //div[@class='wiki-include-content'] | This quick tour |
 
 | *Comment* | Test Case: Include Page. AUTH MIKI LOGGED OUT. CANNOT Open the included page for editing |  |
-| wait_for_element_not_present_ok | //img[contains(@src,'edit-icon.gif')] | 10000 |
+| wait_for_element_not_present_ok | //a[@class="smallEditButton"] | 10000 |
 
 Incipient include works in browser and MIKI
 
@@ -193,7 +193,7 @@ Incipient include works in browser and MIKI
 | text_like | //div[@class='wiki-include-content'] | qr/Replace this text with your own/ |
 
 | *Comment* | Test Case: Include Page. Open the incipient included page for editing using the Edit button |  |
-| click_ok | //img[contains(@src,'edit-icon.gif')] |  |
+| click_ok | //a[@class="smallEditButton"] |  |
 | wait_for_element_visible_ok | st-create-content-savelink | 30000 |
 | click_ok | st-create-content-savelink |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
@@ -223,7 +223,7 @@ repeat in Miki
 
 | *Comment* | Test Case: Include Page MIKI. Open the incipient included page for editing using the Edit button |  |
 | *Comment* | Test Case: Include Page MIKI. Page opens for editing |  |
-| click_and_wait | //img[contains(@src,'edit-icon.gif')] |  |
+| click_and_wait | //a[@class="smallEditButton"] |  |
 | wait_for_element_visible_ok | edit_textarea | 30000 |
 | wait_for_element_visible_ok | link=Cancel Edit | 30000 |
 | verifyValue | edit_textarea | qr/^$/ |

@@ -42,7 +42,7 @@
 | click_and_wait | link=Invite New Users |  |
 | type_ok | users_new_ids | invite_%%start_time%%@ken.socialtext.net |
 | text_like | contentContainer | If you wish |
-| click_and_wait | link=Save |  |
+| click_and_wait | link=Invite |  |
 | st-logoutin | invite_%%start_time%%@ken.socialtext.net |  |
 | text_like | errors-and-messages | You need to confirm |
 | st-login |  |  |

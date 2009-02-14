@@ -71,7 +71,7 @@ from Recent Changes list view page: click a revisions link for a page with at le
 
 | *Comment* | Test Case: Revisions: test bottom button |  |
 | clickAndWait | link=All Revisions |  |
-| clickAndWait | //a[@class='compareButton'][1] |  |
+| clickAndWait | //a[@class='compareRevisions genericBlueButton'][1] |  |
 | text_like | qr/Revision 4.+Revision 5.+four.+five/s |  |
 
  Compare two other revisions | compare page appears & correct
@@ -84,14 +84,13 @@ from Recent Changes list view page: click a revisions link for a page with at le
 
 | *Comment* | Test Case: Revisions: Comparing revision to itself |  |
 | clickAndWait | link=All Revisions |  |
-| wait_for_element_visible_ok | //a[@class='compareButton'] | 30000 |
+| wait_for_element_visible_ok | //a[@class='compareRevisions genericBlueButton'] | 30000 |
 | click_ok | document.revisions.old_revision_id[2] |  |
 | click_ok | document.revisions.new_revision_id[2] |  |
+| click_ok | link=Compare Revisions |  |
 
-| *Comment* | Test Case: Revisions. Cheshire Cat button |  |
-| wait_for_element_not_visible_ok | //a[@class='compareButton'] | 30000 |
-| click_ok | document.revisions.new_revision_id[1] |  |
-| wait_for_element_visible_ok | //a[@class='compareButton'] | 30000 |
+| *Comment* | Test Case: Revisions. cannot compare revision to itself |  |
+| verifyAlert | You cannot compare a revision to itself. |  |
 
 Compare Revisions: older vs. younger | page appears with correct revisions. Diffs are reasonable and correct. | older on left, younger on right
 

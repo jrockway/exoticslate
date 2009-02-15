@@ -2,7 +2,7 @@
 <div id="controls">
     <div id="st-editing-tools-edit">
         <h1 id="st-wiki-title">Widget Gallery</h1>
-        <ul id="quickLinks">
+        <ul id="quickLinks" class="description">
             <li class="noBorder">Click a widget link to install it:</li>
         </ul>
     </div>

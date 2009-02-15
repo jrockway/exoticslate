@@ -9,10 +9,10 @@
 | *Comment* | Test Case: Multiple Widgets Add Image Widget |  |
 | open_ok | /?dashboard | 60000 |
 | st-empty-container |  |  |
-| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
-| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Add Content |  |
+| click_and_wait | link=Add Content |  |
 | click_and_wait | link=One Image |  |
-| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Add Content |  |
 
 | st-name-widget | 1 | image_widget |
 | st-widget-title-like | image_widget | Image |
@@ -22,19 +22,19 @@
 | click_and_wait | st-savebutton-%%image_widget%% |  |
 
 | *Comment* | Test Case: Multiple Widgets Add Wiki Page Widget |  |
-| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
-| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Add Content |  |
+| click_and_wait | link=Add Content |  |
 | click_and_wait | link=Wiki Page |  |
-| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Add Content |  |
 | *Comment* | Image is now 2nd widget, right? |  |
 | st-name-widget | 2 | image_widget |
 | st-widget-title-like | image_widget | Chairman |
 
 | *Comment* | Test Case: Multiple Widgets Add My Workspaces Widget |  |
-| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
-| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Add Content |  |
+| click_and_wait | link=Add Content |  |
 | click_and_wait | //a[contains(@href,'my_workspaces.xml')] |  |
-| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Add Content |  |
 
 | *Comment* | Wiki Page is now 2nd Widget, Images are 3rd, right? |  |
 | st-name-widget | 3 | image_widget |
@@ -52,7 +52,7 @@
 | select-frame | relative=parent |  |
 
 | *Comment* | Add Workspace Tags, everything shifts by 1 |  |
-| click_and_wait | //a[@title='Add Content'] |  |
+| click_and_wait | link=Add Content |  |
 | click_and_wait | link=Workspace Tags |  |
 | st-name-widget | 4 | image_widget |
 | st-widget-title-like | image_widget | Chairman |
@@ -78,7 +78,7 @@
 | select-frame | relative=parent |  |
 
 | *Comment* | Add RSS Viewer everyting shifts by 1 |  |
-| click_and_wait | //a[@title='Add Content'] |  |
+| click_and_wait | link=Add Content |  |
 | click_and_wait | link=RSS Viewer |  |
 | st-name-widget | 5 | image_widget |
 | st-widget-title-like | image_widget | Chairman |

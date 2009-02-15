@@ -5,10 +5,10 @@
 | *Comment* | Test Case: Signals Widget |  |
 | open_ok | /?dashboard | 60000 |
 | st-empty-container |  |  |
-| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
-| click_and_wait | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Add Content |  |
+| click_and_wait | link=Add Content |  |
 | click_and_wait | link=Signals |  |
-| wait_for_element_visible_ok | //a[@title='Add Content'] |  |
+| wait_for_element_visible_ok | link=Add Content |  |
 
 | st-name-widget | 1 | signals_widget |
 | st-widget-title-like | signals_widget | Socialtext Signals |

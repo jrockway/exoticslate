@@ -393,7 +393,7 @@ proto.setup_widgets_menu = function(title) {
             }
         });
     }
-    jQuery("#st-editing-insert-menu > li > ul a").click(
+    jQuery("#st-editing-insert-menu > li > ul a, #st-editing-insert-menu > li > ul > li > ul > li > a").click(
         function(e) {
             var action = jQuery(this).attr("do");
             if (action == null) {

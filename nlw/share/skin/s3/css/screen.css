@@ -531,6 +531,7 @@ ul li a.genericOrangeButton:hover {
         width: 17px;
         margin: 4px 0 0 8px;
         float: left;
+	text-indent: -9999px;
 	background: url(../images/smallEditButton.png) no-repeat;
 }
 

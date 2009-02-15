@@ -438,6 +438,10 @@ body#workSpace div#controls div#st-editing-tools-edit ul#quickLinks {
 	margin: 15px 0 0 12px;
 }	
 
+body#workSpace div#controls div#st-editing-tools-edit ul#quickLinks.description {
+	margin: 0px;
+}
+
 
 body#workSpace div#mainWrap div#st-display-mode-container div#controls div#st-editing-tools-edit ul#quickLinks,body#blog div#mainWrap div#st-display-mode-container div#controls div#st-editing-tools-edit ul#quickLinks {
        height: auto;

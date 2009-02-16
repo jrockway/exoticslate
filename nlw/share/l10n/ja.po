@@ -54,7 +54,7 @@ msgstr ""
 msgid "%1 Workspace Usage Report"
 msgstr ""
 
-#: share/template/control/account.html share/template/control/add_user.html share/template/control/add_users.html share/template/control/rename-account.html
+#: share/template/control/account.html share/template/control/add_profile_field.html share/template/control/add_user.html share/template/control/add_users.html share/template/control/edit_profile_field.html share/template/control/fields-account.html share/template/control/rename-account.html
 #. (
 msgid "%1 account"
 msgstr ""
@@ -134,9 +134,19 @@ msgstr "%1 ヶ月前"
 msgid "%1 seconds"
 msgstr "%1 秒前"
 
+#: lib/Socialtext/Rest/Signals/Feed.pm
+#. (
+msgid "%1 signalled"
+msgstr ""
+
 #: share/template/control/account.html
 #. (
-msgid "%1 skin: workspace-level skin for '%2' workspace(s)"
+msgid "%1 skin: workspace-level skin for \\\\"
+msgstr ""
+
+#: share/template/control/user_table
+#. (
+msgid "%1 users selected"
 msgstr ""
 
 #: lib/Socialtext/Page.pm
@@ -158,6 +168,21 @@ msgstr ""
 #. (
 msgid "%1's Notepad"
 msgstr "%1のノートパッド"
+
+#: lib/Socialtext/Rest/Signals/Feed.pm
+#. (
+msgid "%1's avatar"
+msgstr ""
+
+#: share/console-template/template/help.html
+#. (
+msgid "%1, Upload Complete. Your message has been submitted to %2."
+msgstr ""
+
+#: share/console-template/template/help.html
+#. (
+msgid "%1, Uploading Tarball to Socialtext..."
+msgstr ""
 
 #: share/skin/s3/template/view/page_revision_list
 #. (
@@ -188,6 +213,11 @@ msgstr "%quant(%1,リビジョン,リビジョンズ)"
 #. (
 msgid "%quant(%1,view)"
 msgstr "%quant(%1,ビュー,ビュー)"
+
+#: share/skin/s3/template/view/page/display
+#.  
+msgid "&nbsp;+"
+msgstr ""
 
 #: lib/Socialtext/Workspace.pm
 #. (
@@ -221,8 +251,8 @@ msgstr ""
 
 #: share/console-template/template/help.html
 #.  
-msgid "(contact <a href=\"mailto:support@socialtext.com\">Socialtext Support</a> if you need access)"
-msgstr "(必要ならば<a href=\"mailto:support@socialtext.com\">Socialtext サポート</a> に連絡してください。)"
+msgid "(contact <a href=\\\"mailto:support@socialtext.com\\\">Socialtext Support</a> if you need access)"
+msgstr ""
 
 #: share/console-template/template/setup.html
 #.  
@@ -411,18 +441,18 @@ msgstr "<ここにあなたのプライベートメッセージが入ります�
 
 #: share/skin/s3/template/workspaces_created_section.html
 #. (
-msgid "<a href=\"/%1/?action=users_invitation\">Invite</a> other people to %2."
-msgstr "他の人を%2へ<a href=\"/%1/?action=users_invitation\">招待する</a>。"
+msgid "<a href=\\\"/%1/?action=users_invitation\\\">Invite</a> other people to %2."
+msgstr ""
 
 #: share/skin/s3/template/workspaces_created_section.html
 #. (
-msgid "<a href=\"/%1/\">Go to</a> the %2 home page."
-msgstr "%2 ホームページ<a href=\"/%1/\">に行く</a>。"
+msgid "<a href=\\\"/%1/\\\">Go to</a> the %2 home page."
+msgstr ""
 
 #: lib/Socialtext/FavoritesPlugin.pm
-#.  
-msgid "<p>This is where you set the title of the page you would like to see in the \"Your Notepad\" panel.</p><p>Some choose to use an existing page, and others make a new page, such as \"Rupert Jee's Notepad\".</p>"
-msgstr "<p>ここに\" あなたのノートパッド \"パネルに表示させたいタイトルを設定してください。 </p><p>既存のページ名を使用する人もいますし、\" Rupert Jee's Notepad \"のように新規作成する人もいます。</p>"
+#. (
+msgid "<p>This is where you set the title of the page you would like to see in the \\\"Your Notepad\\\" panel.</p><p>Some choose to use an existing page, and others make a new page, such as \\\"Rupert Jee\\\\"
+msgstr ""
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
@@ -431,8 +461,8 @@ msgstr ""
 
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #. (
-msgid "A filter has been set on this workspace. All candidate email addresses must match this pattern: <span style=\"color: red\"> %1 </span>"
-msgstr "フィルターがこのワークスペースに設定されています。すべてのEmail アドレスは以下のパターンと一致する必要があります。: <span style=\"color: red\"> %1 </span>"
+msgid "A filter has been set on this workspace. All candidate email addresses must match this pattern: <span style=\\\"color: red\\\"> %1 </span>"
+msgstr ""
 
 #: lib/Socialtext/EditPlugin.pm
 #.  
@@ -469,7 +499,7 @@ msgstr "AIM: %1"
 msgid "Access a Community of Peers"
 msgstr ""
 
-#: share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
+#: share/template/control/workspace.html share/template/control/workspace_invite.html share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Account"
 msgstr ""
@@ -489,6 +519,11 @@ msgstr ""
 msgid "Account ID was not supplied!"
 msgstr ""
 
+#: share/template/control/fields-account.html
+#.  
+msgid "Account Profile Fields"
+msgstr ""
+
 #: lib/Socialtext/Account.pm
 #.  
 msgid "Account name is a required field."
@@ -501,10 +536,15 @@ msgstr ""
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
-msgid "Accounts matching \"%1\""
+msgid "Accounts matching \\\"%1\\\""
 msgstr ""
 
-#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/view/page/display share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
+#: share/template/control/fields-account.html
+#.  
+msgid "Actions"
+msgstr ""
+
+#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/template/control/workspace_invite.html
 #.  
 msgid "Add"
 msgstr "追加"
@@ -514,10 +554,20 @@ msgstr "追加"
 msgid "Add Administrator"
 msgstr "管理者を追加"
 
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Add All"
+msgstr ""
+
 #: share/console-template/template/setup.html
 #.  
 msgid "Add Appliance Administrators"
 msgstr "アプライアンス管理者を追加"
+
+#: share/skin/s3/template/view/page/display
+#.  
+msgid "Add Tag"
+msgstr ""
 
 #: share/template/control/account.html share/template/control/add_user.html
 #.  
@@ -543,6 +593,11 @@ msgstr ""
 #.  
 msgid "Admin"
 msgstr "管理者"
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Administrators"
+msgstr ""
 
 #: lib/Socialtext/Rest/Events.pm
 #.  
@@ -601,8 +656,13 @@ msgstr "ワークスペースにあるすべてのタグ"
 
 #: lib/Socialtext/BacklinksPlugin.pm
 #. (
-msgid "All backlinks for \"%1\""
-msgstr "\"%1\" のすべてのバックリンク"
+msgid "All backlinks for \\\"%1\\\""
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/SupportTarball.pm
+#.  
+msgid "Already started!"
+msgstr ""
 
 #: share/template/email/workspace-invitation.html
 #. (
@@ -726,7 +786,7 @@ msgstr "アーカイブディレクトリ"
 
 #: lib/Socialtext/AppConfig.pm
 #.  
-msgid "As a Socialtext customer, you have access to the <a href=\"http://www.socialtext.net/exchange/\">Socialtext Customer Exchange</a>. It is where you can share tips and best practices with other Socialtext customers."
+msgid "As a Socialtext customer, you have access to the <a href=\\\"http://www.socialtext.net/exchange/\\\">Socialtext Customer Exchange</a>. It is where you can share tips and best practices with other Socialtext customers."
 msgstr ""
 
 #: share/template/control/workspace.html
@@ -759,7 +819,12 @@ msgstr ""
 msgid "Automatic Backup Schedule"
 msgstr "自動バックアップスケジュール"
 
-#: share/template/control/add_user.html share/template/control/add_users.html share/template/control/rename-account.html
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Available Workspaces"
+msgstr ""
+
+#: share/template/control/add_user.html share/template/control/add_users.html share/template/control/fields-account.html share/template/control/rename-account.html
 #.  
 msgid "Back"
 msgstr ""
@@ -771,7 +836,17 @@ msgstr "現在のリビジョンに戻る"
 
 #: share/template/authen/forgot_password.html
 #. (
-msgid "Back to <a href=\"%1\">Log in to Socialtext</a>."
+msgid "Back to <a href=\\\"%1\\\">Log in to Socialtext</a>."
+msgstr ""
+
+#: share/template/control/edit_profile_field.html
+#.  
+msgid "Back to Account"
+msgstr ""
+
+#: share/template/control/add_profile_field.html
+#.  
+msgid "Back to Account Fields"
 msgstr ""
 
 #: share/template/control/growth_report.html share/template/control/report.html
@@ -849,6 +924,11 @@ msgstr ""
 msgid "Bug Dump"
 msgstr "バグダンプ"
 
+#: share/console-template/template/help.html
+#.  
+msgid "Building Diagnostic Tarball..."
+msgstr ""
+
 #: share/skin/s3/template/view/page/revision_compare
 #.  
 msgid "By:"
@@ -859,32 +939,47 @@ msgstr ""
 msgid "Call '%1' using Skype. Click to edit."
 msgstr "'%1' と Skype 通話を開始します。クリックして編集してください。"
 
+#: lib/Socialtext/CLI.pm
+#.  
+msgid "Can only specify one of --visible or --hidden"
+msgstr ""
+
 #: lib/Socialtext/UserSettingsPlugin.pm
 #.  
 msgid "Can't remove privileges of the last admin"
 msgstr "前回の管理者の権限を削除できません。"
 
-#: share/console-template/template/popup.html share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/create_content_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
+#: share/console-template/template/popup.html share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/create_content_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/template/control/field_form
 #.  
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #. (
 msgid "Cannot convert field class from '%1' to '%2'"
 msgstr ""
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
+#. (
+msgid "Cannot create profile field: The field name '%1' (derived from title '%2') is already used in account '%3'"
+msgstr ""
+
+#: lib/Socialtext/Pluggable/Plugin/People.pm
+#. (
+msgid "Cannot create profile field: The field name '%1' (derived from title '%2') is reserved for Socialtext"
+msgstr ""
+
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #. (
 msgid "Cannot create profile field: The field name '%1' is already used in account '%2'"
 msgstr ""
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #. (
 msgid "Cannot create profile field: The field name '%1' is reserved for Socialtext"
 msgstr ""
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #. (
 msgid "Cannot create profile field: invalid field-class '%1'"
 msgstr ""
@@ -967,6 +1062,11 @@ msgstr "古い順"
 #: lib/Socialtext/Appliance/BackupCleanup.pm
 #.  
 msgid "Cleaning is not implemented."
+msgstr ""
+
+#: share/template/control/user_table_header
+#.  
+msgid "Clear Selection"
 msgstr ""
 
 #: share/skin/s3/template/element/page/display/comment-button
@@ -1069,6 +1169,21 @@ msgstr ""
 msgid "Congratulations!"
 msgstr ""
 
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Congratulations! You successfully added %quant(%1,user) to %quant(%2,workspace). They will receive an invitation message to each workspace."
+msgstr ""
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Congratulations! You successfully created a new workspace with %quant(%1,user). They will receive an invitation message with a link to %2."
+msgstr ""
+
+#: share/template/control/field_common
+#.  
+msgid "Contact"
+msgstr ""
+
 #: share/console-template/template/help.html
 #.  
 msgid "Contact Socialtext Support"
@@ -1094,6 +1209,11 @@ msgstr ""
 msgid "Could not open %1"
 msgstr ""
 
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Cound not create workspace %1"
+msgstr ""
+
 #: share/skin/s3/javascript/template/create_content_lightbox.tt2 share/template/control/report.html
 #.  
 msgid "Create"
@@ -1108,6 +1228,11 @@ msgstr "ウェブログを作成する"
 #.  
 msgid "Create Initial Workspace"
 msgstr "最初のワークスペースを作成する"
+
+#: share/template/control/add_profile_field.html share/template/control/field_form share/template/control/fields-account.html
+#.  
+msgid "Create New Field"
+msgstr ""
 
 #: lib/Socialtext/WeblogPlugin.pm share/skin/s3/template/view/settings
 #.  
@@ -1139,6 +1264,11 @@ msgstr "あなたの自己紹介を作成"
 msgid "Create a New Account"
 msgstr ""
 
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Create a new workspace"
+msgstr ""
+
 #: share/template/control/user.html share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Created"
@@ -1162,6 +1292,11 @@ msgstr "%2 に %1 が作成"
 #: lib/Socialtext/CLI.pm
 #. (
 msgid "Created profile field '%1' for account '%2'"
+msgstr ""
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Created profile field \\\"%1\\\""
 msgstr ""
 
 #: lib/Socialtext/Page.pm
@@ -1189,6 +1324,11 @@ msgstr ""
 msgid "Custom Skins: %1"
 msgstr ""
 
+#: share/template/control/fields-account.html
+#.  
+msgid "Custom fields"
+msgstr ""
+
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Custom privacy setting"
@@ -1208,6 +1348,11 @@ msgstr ""
 #.  
 msgid "Dashboard"
 msgstr "ダッシュボード"
+
+#: share/template/control/field_form
+#.  
+msgid "Data Source"
+msgstr ""
 
 #: share/skin/s3/template/view/listview share/skin/s3/template/view/page_revision_list
 #.  
@@ -1261,8 +1406,8 @@ msgstr ""
 
 #: lib/Socialtext/DeletePagePlugin.pm
 #. (
-msgid "Deleted \"%1\""
-msgstr "\"%1\"を削除しました"
+msgid "Deleted \\\\"
+msgstr ""
 
 #: lib/Socialtext/CLI.pm
 #. (
@@ -1279,6 +1424,11 @@ msgstr "誤って削除してしまった場合は、元に戻すことができ
 msgid "Directory %1 does not exist."
 msgstr ""
 
+#: share/template/control/fields-account.html
+#.  
+msgid "Disabled"
+msgstr ""
+
 #: share/console-template/template/overview.html
 #.  
 msgid "Disk Usage"
@@ -1291,8 +1441,8 @@ msgstr "ユーザのタイムゾーンで '%1' を表示します。クリック
 
 #: lib/Socialtext/BreadCrumbsPlugin.pm
 #. (
-msgid "Display \\\"%1\\\" side pane box?"
-msgstr "横のボックス \\\"%1\\\" を表示しますか？"
+msgid "Display \\\\\\\"%1\\\\\\\" side pane box?"
+msgstr ""
 
 #: lib/Socialtext/RecentChangesPlugin.pm
 #.  
@@ -1369,10 +1519,25 @@ msgstr ""
 msgid "Earlier entries"
 msgstr "以前の投稿"
 
-#: lib/Socialtext/Lite.pm share/skin/s3/template/element/page/display/edit-button share/skin/s3/template/element/page/display/edit-button
+#: lib/Socialtext/Formatter/WaflPhrase.pm lib/Socialtext/Lite.pm share/skin/s3/template/element/page/display/edit-button share/skin/s3/template/element/page/display/edit-button share/skin/s3/template/view/weblog share/template/control/fields-account.html
 #.  
 msgid "Edit"
 msgstr "編集"
+
+#: share/template/control/edit_profile_field.html
+#.  
+msgid "Edit Field"
+msgstr ""
+
+#: share/skin/s3/template/view/page_revision_list
+#.  
+msgid "Edit Summary"
+msgstr ""
+
+#: share/skin/s3/template/view/listview
+#.  
+msgid "Edit summary"
+msgstr ""
 
 #: share/skin/s3/template/view/weblog
 #.  
@@ -1424,6 +1589,11 @@ msgstr "このワークスペースに Email を送る"
 msgid "Email address for testing:"
 msgstr "テスト用 Email アドレス:"
 
+#: share/console-template/template/help.html
+#.  
+msgid "Email and description are required!"
+msgstr ""
+
 #: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/view/page/display
 #.  
 msgid "Email this page"
@@ -1468,6 +1638,26 @@ msgstr ""
 #. (
 msgid "Error updating from timeserver %1"
 msgstr "%1 タイムサーバから更新するエラー"
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Error: Workspace name is a required field."
+msgstr ""
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Error: Workspace name must be between 3 and 30 characters long, and must contain only lower-case letters, numbers, underscores, and dashes and may not begin with a '-'."
+msgstr ""
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Error: Workspace title is a required field."
+msgstr ""
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Error: Workspace title must be between 2 and 64 characters long and may not begin with a '-'."
+msgstr ""
 
 #: lib/Socialtext/PdfExportPlugin.pm
 #.  
@@ -1536,8 +1726,8 @@ msgstr "例: Acme Widgets 製品開発"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_appearance_section
 #.  
-msgid "Example: C:\\My Pictures\\socialtext-logo-30.gif"
-msgstr "例: C:\\My Pictures\\socialtext-logo-30.gif"
+msgid "Example: C:\\\\My Pictures\\\\socialtext-logo-30.gif"
+msgstr ""
 
 #: share/skin/s3/template/element/settings/weblog_create
 #.  
@@ -1609,6 +1799,16 @@ msgstr ""
 msgid "Exporting workspace %1 ..."
 msgstr ""
 
+#: share/template/control/field_form share/template/control/fields-account.html
+#.  
+msgid "External"
+msgstr ""
+
+#: share/template/control/field_form
+#.  
+msgid "External Person fields are not currently supported"
+msgstr ""
+
 #: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
 #.  
 msgid "Extract this attachment"
@@ -1622,6 +1822,21 @@ msgstr ""
 #: share/template/control/report.html
 #.  
 msgid "February"
+msgstr ""
+
+#: share/template/control/field_form share/template/control/fields-account.html
+#.  
+msgid "Field Name"
+msgstr ""
+
+#: share/template/control/field_form share/template/control/fields-account.html
+#.  
+msgid "Field Title"
+msgstr ""
+
+#: share/template/control/field_form share/template/control/fields-account.html
+#.  
+msgid "Field Type"
 msgstr ""
 
 #: share/skin/s3/template/element/settings/workspaces_settings_skin_section
@@ -1739,10 +1954,15 @@ msgstr ""
 msgid "Hello,"
 msgstr ""
 
-#: share/console-template/template/console_wrapper.tmpl share/skin/s3/template/layout/html share/skin/s3/template/layout/html
+#: share/skin/s3/template/layout/html share/skin/s3/template/layout/html
 #.  
 msgid "Help"
 msgstr "ヘルプ"
+
+#: share/template/control/field_form share/template/control/fields-account.html
+#.  
+msgid "Hidden"
+msgstr ""
 
 #: lib/Socialtext/Lite.pm share/skin/s3/template/layout/html
 #.  
@@ -1804,6 +2024,11 @@ msgstr ""
 msgid "I'm inviting you into the %1 workspace"
 msgstr "ワークスペース %1 にあなたをご招待します"
 
+#: lib/Socialtext/WorkspaceInvitation.pm
+#. (
+msgid "I'm inviting you to the %1 workspace"
+msgstr ""
+
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "If there is already an existing page with that title, where should the body of the email be added?"
@@ -1826,7 +2051,7 @@ msgstr ""
 
 #: share/template/email/password-change.html
 #. (
-msgid "If you have any questions, please feel free to send email to <a href=\"mailto:%1\">%2</a>."
+msgid "If you have any questions, please feel free to send email to <a href=\\\"mailto:%1\\\">%2</a>."
 msgstr ""
 
 #: share/template/email/standard-footer.html
@@ -1850,9 +2075,9 @@ msgid "If you have questions, please contact your wiki support at %1."
 msgstr ""
 
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
-#.  
-msgid "If you see something you'd like to add to or change, click the \"Edit\" link at the top of each page."
-msgstr "追加したり、変更したい内容がある場合は、各ページの一番上にある\"編集\"をクリックしてください。"
+#. (
+msgid "If you see something you'd like to add to or change, click the \\\\"
+msgstr ""
 
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
@@ -1959,7 +2184,7 @@ msgstr "イントラネット"
 msgid "Invalid character '/' in changes parameter"
 msgstr "パラメーター変更に無効な文字 '/' が含まれます。"
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #. (
 msgid "Invalid field source '%1'"
 msgstr ""
@@ -1974,7 +2199,7 @@ msgstr "無効なホスト: %1"
 msgid "Invitation to join %1"
 msgstr "%1 に招待する"
 
-#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section share/template/control/workspace_invite.html
 #.  
 msgid "Invite"
 msgstr "招待"
@@ -1994,7 +2219,17 @@ msgstr "他のユーザを招待する"
 msgid "Invite Others"
 msgstr ""
 
-#: share/template/control/user_table
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Invite To existing workspace(s)"
+msgstr ""
+
+#: share/template/control/selected_user_table_header share/template/control/user_table_header
+#.  
+msgid "Invite to Workspace(s)"
+msgstr ""
+
+#: share/template/control/selected_user_table_header share/template/control/user_table_header
 #.  
 msgid "Invited"
 msgstr ""
@@ -2004,7 +2239,7 @@ msgstr ""
 msgid "Invited (to system)"
 msgstr ""
 
-#: share/template/control/user_table
+#: share/template/control/selected_user_table_header share/template/control/user_table_header share/template/control/user_table_header
 #.  
 msgid "Invited By"
 msgstr ""
@@ -2126,8 +2361,8 @@ msgstr ""
 
 #: lib/Socialtext/Widget_resource.pm
 #. (
-msgid "Link to '%1' in '%2'. Click to edit."
-msgstr "'%2' の '%1' へのリンクです。 クリックして編集してください。"
+msgid "Link to %1: '%2' %3. Click to edit."
+msgstr ""
 
 #: lib/Socialtext/Widget_resource.pm lib/Socialtext/Widget_resource.pm
 #. (
@@ -2157,6 +2392,11 @@ msgstr "ユーザ一覧"
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "Loaded users from %1"
+msgstr ""
+
+#: share/template/control/selected_user_table_header share/template/control/user_table_header
+#.  
+msgid "Loading selected users"
 msgstr ""
 
 #: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page/display share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
@@ -2221,8 +2461,8 @@ msgstr ""
 
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
-msgid "Make your contributions in the text box, then click \"Save\"."
-msgstr "追加、変更したい内容をテキストボックスに記述し、\"保存\"をクリックしてください。"
+msgid "Make your contributions in the text box, then click \\\"Save\\\"."
+msgstr ""
 
 #: lib/Socialtext/Hub.pm
 #.  
@@ -2269,9 +2509,14 @@ msgstr ""
 msgid "Mon"
 msgstr "月"
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #.  
 msgid "Must specify the name of the field to change"
+msgstr ""
+
+#: share/template/control/field_form
+#.  
+msgid "Must supply a field title"
 msgstr ""
 
 #: lib/Socialtext/Rest/Events/Followed.pm
@@ -2304,7 +2549,7 @@ msgstr ""
 msgid "My Workspaces"
 msgstr "参加ワークスペース"
 
-#: share/skin/s3/template/element/settings/users_settings_section share/template/control/account_table share/template/control/user_table share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
+#: share/skin/s3/template/element/settings/users_settings_section share/template/control/account_table share/template/control/selected_user_table_header share/template/control/user_table_header share/template/control/user_table_header share/template/control/workspace.html share/template/control/workspace_invite.html share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Name"
 msgstr "名前の登録"
@@ -2384,7 +2629,7 @@ msgstr ""
 msgid "Next Page"
 msgstr ""
 
-#: share/skin/s3/template/element/settings/workspaces_settings_features_section
+#: share/skin/s3/template/element/settings/workspaces_settings_features_section share/template/control/fields-account.html
 #.  
 msgid "No"
 msgstr "いいえ"
@@ -2454,6 +2699,11 @@ msgstr "このページに stats はまだありません。"
 msgid "No users entered"
 msgstr "ユーザが入力されていません。"
 
+#: share/template/control/user_table
+#.  
+msgid "No users selected, please select at least one user and try again."
+msgstr ""
+
 #: share/template/control/plugins
 #.  
 msgid "None"
@@ -2479,7 +2729,7 @@ msgstr ""
 msgid "Number of Users"
 msgstr ""
 
-#: share/template/control/account_table share/template/control/user_table share/template/control/user_table share/template/control/workspace.html
+#: share/template/control/account_table share/template/control/selected_user_table_header share/template/control/user_table_header share/template/control/user_table_header share/template/control/workspace.html
 #.  
 msgid "Number of Workspaces"
 msgstr ""
@@ -2521,8 +2771,8 @@ msgstr ""
 
 #: share/skin/s3/template/workspaces_created_section.html
 #. (
-msgid "Or you may continue to work in this workspace, and visit \"%1\" later."
-msgstr "あるいは、このワークスペースで作業を続け、あとで \"%1\" を訪問することもできます。"
+msgid "Or you may continue to work in this workspace, and visit \\\"%1\\\" later."
+msgstr ""
 
 #: lib/Socialtext/BacklinksPlugin.pm lib/Socialtext/BacklinksPlugin.pm share/skin/s3/template/element/listview_tabs share/skin/s3/template/view/empty_watchlist
 #.  
@@ -2644,6 +2894,11 @@ msgstr ""
 msgid "People matching '%1'"
 msgstr ""
 
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "People plugin must be enabled for account %1"
+msgstr ""
+
 #: share/console-template/template/backup.html
 #.  
 msgid "Perform Backup Now"
@@ -2657,6 +2912,11 @@ msgstr "復元を行う"
 #: share/skin/s3/template/view/weblog
 #.  
 msgid "Permalink"
+msgstr ""
+
+#: share/template/control/field_common
+#.  
+msgid "Person"
 msgstr ""
 
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
@@ -2686,7 +2946,7 @@ msgstr "Email アドレスを入力してください。"
 
 #: share/template/email/email-address-confirmation.html
 #. (
-msgid "Please follow <a href=\"%1\">this link to confirm your email address</a>. and update your information."
+msgid "Please follow <a href=\\\"%1\\\">this link to confirm your email address</a>. and update your information."
 msgstr ""
 
 #: lib/Socialtext/User.pm
@@ -2700,9 +2960,9 @@ msgid "Please follow this link to confirm your address and update your informati
 msgstr ""
 
 #: share/skin/s3/template/element/settings/weblog_create
-#.  
-msgid "Please give your weblog a name. If the name you provide does not end with \"Blog\" or \"Weblog\", the system will add \"Blog\" to the name you provide. After you click \"Create\", you'll be taken right to the new weblog."
-msgstr "あなたのウェブログに名前を付けてください。名前が \"ウェブログ\" で終わらない場合は、あなたの付けた名前に \"ウェブログ\"が自動的に追加されます。\"作成\"をクリックすると、新しいウェブログが表示されます。"
+#. (
+msgid "Please give your weblog a name. If the name you provide does not end with \\\"Blog\\\" or \\\"Weblog\\\", the system will add \\\"Blog\\\" to the name you provide. After you click \\\"Create\\\", you\\\\"
+msgstr ""
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -2711,8 +2971,8 @@ msgstr ""
 
 #: lib/Socialtext/Hub.pm
 #. (
-msgid "Please send email to <a href=\"mailto:%1\">%1</a> if you think it should have worked."
-msgstr "修正したい場合は、<a href=\"mailto:%1\">%1</a>に Email を送ってください。"
+msgid "Please send email to <a href=\\\"mailto:%1\\\">%1</a> if you think it should have worked."
+msgstr ""
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -2779,14 +3039,14 @@ msgstr ""
 msgid "Previous Page"
 msgstr ""
 
-#: share/template/control/user.html share/template/control/user_table share/template/control/workspace.html
+#: share/template/control/selected_user_table_header share/template/control/user.html share/template/control/user_table_header share/template/control/user_table_header share/template/control/workspace.html
 #.  
 msgid "Primary Account"
 msgstr ""
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "Primary account for \"%1\" is %2."
+msgid "Primary account for \\\"%1\\\" is %2."
 msgstr ""
 
 #: share/skin/s3/template/view/page/display share/skin/s3/template/view/weblog
@@ -2809,12 +3069,27 @@ msgstr ""
 msgid "Private"
 msgstr "非公開"
 
+#: share/console-template/template/help.html
+#.  
+msgid "Problem description:"
+msgstr ""
+
 #: lib/Socialtext/Pluggable/Plugin/People.pm
 #.  
 msgid "Profile"
 msgstr ""
 
-#: lib/Socialtext/CLI.pm
+#: share/template/control/account.html
+#.  
+msgid "Profile Fields"
+msgstr ""
+
+#: share/template/control/fields-account.html
+#.  
+msgid "Profile Section"
+msgstr ""
+
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #. (
 msgid "Profile field '%1' does not exist for account '%2'"
 msgstr ""
@@ -2824,9 +3099,14 @@ msgstr ""
 msgid "Profile field '%1' updated for account '%2'"
 msgstr ""
 
+#: lib/Socialtext/Pluggable/Plugin/People.pm
+#. (
+msgid "Profile field ID '%1' does not exist for account '%2'"
+msgstr ""
+
 #: lib/Socialtext/MassAdd.pm
 #. (
-msgid "Profile field \"%1\" could not be updated"
+msgid "Profile field \\\"%1\\\" could not be updated"
 msgstr ""
 
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
@@ -2949,6 +3229,11 @@ msgstr ""
 msgid "Register"
 msgstr "登録"
 
+#: share/template/control/field_common
+#.  
+msgid "Regular"
+msgstr ""
+
 #: share/skin/s3/template/view/listview
 #.  
 msgid "Relevance"
@@ -2959,7 +3244,7 @@ msgstr ""
 msgid "Remember me on this computer."
 msgstr ""
 
-#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/element/settings/users_listall_section
+#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/element/settings/users_listall_section share/template/control/workspace_invite.html
 #.  
 msgid "Remove"
 msgstr "削除"
@@ -2972,6 +3257,11 @@ msgstr ""
 #: share/template/control/user.html
 #.  
 msgid "Remove Access to Socialtext System Management"
+msgstr ""
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Remove All"
 msgstr ""
 
 #: share/skin/s3/template/element/settings/workspaces_settings_skin_section
@@ -3019,6 +3309,11 @@ msgstr "バグを報告"
 msgid "Report Period:"
 msgstr ""
 
+#: share/console-template/template/console_wrapper.tmpl
+#.  
+msgid "Report a Problem"
+msgstr ""
+
 #: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
 #. (
 msgid "Report timeframe: week ending %1"
@@ -3033,6 +3328,11 @@ msgstr ""
 #. (
 msgid "Request to invite new users to the %1 workspace"
 msgstr "%1 ワークスペースに新しいユーザを招待するリクエスト"
+
+#: share/template/control/fields-account.html
+#.  
+msgid "Required"
+msgstr ""
 
 #: share/skin/s3/template/element/settings/users_listall_section
 #.  
@@ -3099,6 +3399,11 @@ msgstr "新しい順"
 msgid "Review or change the settings for %1:"
 msgstr "%1の設定を確認する、または、変更する:"
 
+#: share/skin/s3/template/view/page_revision_list
+#.  
+msgid "Revision"
+msgstr ""
+
 #: lib/Socialtext/RevisionPlugin.pm lib/Socialtext/RevisionPlugin.pm share/skin/s3/template/view/page_revision_list
 #. (
 msgid "Revision %1"
@@ -3138,6 +3443,11 @@ msgstr "保存"
 #.  
 msgid "Save Backup Schedule"
 msgstr "バックアップスケジュールを保存する"
+
+#: share/template/control/field_form
+#.  
+msgid "Save Field"
+msgstr ""
 
 #: share/skin/s3/template/view/weblog
 #.  
@@ -3206,8 +3516,8 @@ msgstr "招待するユーザを検索する"
 
 #: lib/Socialtext/SOAPGoogle.pm
 #. (
-msgid "Search for \"%1\""
-msgstr "\"%1\" を検索する。"
+msgid "Search for \\\"%1\\\""
+msgstr ""
 
 #: share/skin/s3/template/layout/html
 #.  
@@ -3229,6 +3539,11 @@ msgstr "選択"
 msgid "Select a workspace skin:"
 msgstr ""
 
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Select one or more of the users below to become administrators of your new workspace."
+msgstr ""
+
 #: share/template/control/add_users.html
 #.  
 msgid "Select the CSV file containing users to add:"
@@ -3237,6 +3552,16 @@ msgstr ""
 #: share/skin/s3/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "Select the ZIP or TGZ file that contains the customized skin files:"
+msgstr ""
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Select the account the new workspace should belong to."
+msgstr ""
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#.  
+msgid "Selected Users"
 msgstr ""
 
 #: share/console-template/template/setup.html share/console-template/template/setup.html
@@ -3268,6 +3593,11 @@ msgstr "Email の設定をする"
 #.  
 msgid "Set Time Server"
 msgstr "タイムサーバーを設定する"
+
+#: share/template/control/add_user.html
+#.  
+msgid "Set by external Directory"
+msgstr ""
 
 #: share/skin/s3/template/layout/html share/skin/s3/template/layout/html share/skin/s3/template/view/settings
 #.  
@@ -3384,6 +3714,11 @@ msgstr "Socialtext アプライアンス テスト Email"
 msgid "Socialtext People"
 msgstr ""
 
+#: share/console-template/template/help.html
+#.  
+msgid "Socialtext Support"
+msgstr ""
+
 #: share/template/control/user.html
 #.  
 msgid "Socialtext System Management Access?"
@@ -3396,7 +3731,7 @@ msgstr ""
 
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
 #.  
-msgid "Socialtext Unplugged allows users to read and edit workspace pages while offline. Users can \"unplug\" one or more pages to read and edit. Changes can be synchronized with the workspace."
+msgid "Socialtext Unplugged allows users to read and edit workspace pages while offline. Users can \\\"unplug\\\" one or more pages to read and edit. Changes can be synchronized with the workspace."
 msgstr ""
 
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
@@ -3409,11 +3744,6 @@ msgstr ""
 msgid "Socialtext Unplugged enabled"
 msgstr ""
 
-#: share/template/control/wrapper
-#. (
-msgid "Socialtext Workspace<sup>&trade;</sup> %1"
-msgstr ""
-
 #: share/skin/s3/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "Socialtext can create a skin to customize the look and feel of your workspace. You can use the default skin supplied by Socialtext or a customized skin."
@@ -3421,7 +3751,7 @@ msgstr ""
 
 #: share/template/control/add_users.html
 #.  
-msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here.  Complete documentation about adding multiple users is available here: <a href=\"http://www.socialtext.net/appliance-manual/index.cgi?adding_users_to_socialtext#adding_multiple_users\">Adding Multiple Users to Socialtext</a>"
+msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here.  Complete documentation about adding multiple users is available here: <a href=\\\"http://www.socialtext.net/appliance-manual/index.cgi?adding_users_to_socialtext#adding_multiple_users\\\">Adding Multiple Users to Socialtext</a>"
 msgstr ""
 
 #: share/template/authen/forgot_password.html
@@ -3524,6 +3854,11 @@ msgstr "最初に投稿された時間で並べ替える"
 msgid "Sort entries by last updated time"
 msgstr "最後に更新された時間で並べ替える"
 
+#: share/template/control/fields-account.html
+#.  
+msgid "Source"
+msgstr ""
+
 #: share/skin/s3/template/view/page/revision
 #.  
 msgid "Source View"
@@ -3534,12 +3869,17 @@ msgstr "ソース表示"
 msgid "Standard Welcome Message"
 msgstr "標準的な招待メッセージ"
 
+#: share/template/control/fields-account.html
+#.  
+msgid "Stock fields"
+msgstr ""
+
 #: share/skin/s3/template/view/listview share/skin/s3/template/view/page/display
 #.  
 msgid "Stop watching"
 msgstr ""
 
-#: share/template/authen/element/choose_password_form share/template/authen/element/forgot_password_form share/template/control/accounts.html share/template/control/accounts.html share/template/control/assign_to_account share/template/control/users.html share/template/control/workspaces.html
+#: share/console-template/template/help.html share/template/authen/element/choose_password_form share/template/authen/element/forgot_password_form share/template/control/accounts.html share/template/control/accounts.html share/template/control/assign_to_account share/template/control/users.html share/template/control/workspaces.html
 #.  
 msgid "Submit"
 msgstr "送信"
@@ -3589,7 +3929,7 @@ msgstr "システムをシャットダウン中 ..."
 msgid "Table of contents for '%1'. Click to edit."
 msgstr "'%1' の目次。クリックして編集してください。"
 
-#: share/skin/s3/template/view/page/display share/skin/s3/template/view/taglistview
+#: share/skin/s3/template/view/taglistview
 #.  
 msgid "Tag"
 msgstr "タグ"
@@ -3609,6 +3949,11 @@ msgstr "タグ"
 msgid "Tags:"
 msgstr "タグ:"
 
+#: share/console-template/template/help.html
+#.  
+msgid "Tarball Built"
+msgstr ""
+
 #: lib/Socialtext/Widget_resource.pm
 #. (
 msgid "Technorati: %1"
@@ -3621,7 +3966,7 @@ msgstr ""
 
 #: lib/Socialtext/Account.pm
 #. (
-msgid "The %1 plugin can not be enabled at the account scope"
+msgid "The %1 plugin can not be set at the account scope"
 msgstr ""
 
 #: lib/Socialtext/Workspace.pm
@@ -3654,7 +3999,7 @@ msgstr ""
 msgid "The %1 plugin is now enabled for all accounts"
 msgstr ""
 
-#: lib/Socialtext/CLI.pm lib/Socialtext/Workspace.pm
+#: lib/Socialtext/CLI.pm
 #. (
 msgid "The %1 plugin is now enabled for workspace %2"
 msgstr ""
@@ -3769,6 +4114,11 @@ msgstr "%1 さんの Email アドレスは確認済みです。"
 msgid "The email we will send you will come from <strong>%1</strong>. To ensure you receive it, please add <strong>%1</strong> to your address book or safe list."
 msgstr ""
 
+#: share/template/control/field_form
+#.  
+msgid "The field name is used as a unique identifier.  If left blank, it will be derrived from the title"
+msgstr ""
+
 #: lib/Socialtext/AttachmentsUIPlugin.pm
 #.  
 msgid "The file you are trying to upload does not exist"
@@ -3821,12 +4171,12 @@ msgstr "%1のパーミッションは%2に設定されています。"
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "The profile for \"%1\" is no longer hidden."
+msgid "The profile for \\\"%1\\\" is no longer hidden."
 msgstr ""
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "The profile for \"%1\" is now hidden."
+msgid "The profile for \\\"%1\\\" is now hidden."
 msgstr ""
 
 #: lib/Socialtext/Account.pm lib/Socialtext/Workspace.pm
@@ -3847,6 +4197,11 @@ msgstr ""
 #: lib/Socialtext/User.pm
 #.  
 msgid "The user has been removed from workspaces and directories."
+msgstr ""
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#.  
+msgid "The value of this field will be updated from the external source when user data is refreshed."
 msgstr ""
 
 #: lib/Socialtext/CLI.pm
@@ -3909,6 +4264,21 @@ msgstr "このアクションは、このアプライアンス上ですでに存
 msgid "This email was sent from the Socialtext Appliance."
 msgstr "この Email は Socialtext アプライアンスから送付されました。"
 
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "This field is now hidden from users\\\\"
+msgstr ""
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "This field is now visible in users\\\\"
+msgstr ""
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "This is a short unique identifier used as  part of your workspace's web address and email address. It must consist of 3-30 lowercase letters, numbers, underscores, or dashes."
+msgstr ""
+
 #: share/skin/s3/template/element/settings/workspaces_create_section
 #.  
 msgid "This is a short unique identifier used as part of your workspace's web address and email address."
@@ -3924,7 +4294,7 @@ msgstr "これは %1 の最初の投稿です。新しく投稿するには *新
 msgid "This is the title of your workspace. It may be changed at any time."
 msgstr "あなたのワークスペースのタイトルです。いつでも変更できます。"
 
-#: share/skin/s3/template/element/settings/workspaces_create_section
+#: share/skin/s3/template/element/settings/workspaces_create_section share/template/control/workspace_invite.html
 #.  
 msgid "This is the title of your workspace. It may be changed later if you want."
 msgstr "あなたのワークスペースのタイトルです。後で変更できます。"
@@ -3964,7 +4334,7 @@ msgstr "日付と時刻"
 msgid "Time each day:"
 msgstr "各日の時間"
 
-#: share/skin/s3/template/view/listview
+#: share/skin/s3/template/view/listview share/template/control/workspace_invite.html
 #.  
 msgid "Title"
 msgstr "タイトル"
@@ -4001,8 +4371,8 @@ msgstr ""
 
 #: share/console-template/template/overview.html
 #.  
-msgid "To see a list of all the workspaces and users on the system, go to the <a href=\"/nlw/control/\">Socialtext Accounts Admin</a> tool."
-msgstr "システム上のすべてのワークスペースとユーザの一覧を見るには、 <a href=\"/nlw/control/\">Socialtext アカウント管理者</a> ツールにアクセスしてください。"
+msgid "To see a list of all the workspaces and users on the system, go to the <a href=\\\"/nlw/control/\\\">Socialtext Accounts Admin</a> tool."
+msgstr ""
 
 #: share/template/email/recent-changes.txt
 #. (
@@ -4011,7 +4381,7 @@ msgstr ""
 
 #: share/template/email/recent-changes.html
 #. (
-msgid "To stop receiving or change how often you receive emails about changes to %1, you can <a href=\"%2\">change your preferences</a>."
+msgid "To stop receiving or change how often you receive emails about changes to %1, you can <a href=\\\"%2\\\">change your preferences</a>."
 msgstr ""
 
 #: share/template/email/watchlist.txt
@@ -4021,7 +4391,7 @@ msgstr ""
 
 #: share/template/email/watchlist.html
 #. (
-msgid "To stop receiving or change how often you receive emails about changes to your watchlist in %1, you can <a href=\"%2\">change your preferences</a>."
+msgid "To stop receiving or change how often you receive emails about changes to your watchlist in %1, you can <a href=\\\"%2\\\">change your preferences</a>."
 msgstr ""
 
 #: share/skin/s3/template/view/page/display
@@ -4079,12 +4449,12 @@ msgstr ""
 msgid "URI"
 msgstr ""
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #.  
 msgid "Unable to change profile field."
 msgstr ""
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #.  
 msgid "Unable to create profile field."
 msgstr ""
@@ -4103,6 +4473,11 @@ msgstr "ロゴファイルを処理できません。画像ファイルですか
 #.  
 msgid "Unformatted Content"
 msgstr "レイアウトなしテキスト"
+
+#: share/console-template/template/help.html
+#. (
+msgid "Unknown: %1"
+msgstr ""
 
 #: share/skin/s3/template/element/settings/workspaces_unsubscribe_section share/skin/s3/template/view/settings
 #.  
@@ -4139,6 +4514,11 @@ msgstr "%1 へのメールサーバーを更新しました"
 msgid "Updated mail server to use built-in server"
 msgstr "ビルトインサーバーを使用するメールサーバーを更新しました"
 
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Updated profile field \\\"%1\\\""
+msgstr ""
+
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
 msgid "Updated time from %1"
@@ -4163,6 +4543,11 @@ msgstr "画像のアップロード"
 #.  
 msgid "Upload Files"
 msgstr "ファイルのアップロード"
+
+#: share/console-template/template/help.html
+#.  
+msgid "Upload a Support Tarball to Socialtext"
+msgstr ""
 
 #: share/skin/s3/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -4214,7 +4599,7 @@ msgstr "上で入力した Email アドレスをユーザ名として、<strong>
 msgid "Use your email address and new password to log in again."
 msgstr "再ログイン時には、 Email アドレスと新しいパスワードを使用してください。"
 
-#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm share/template/control/field_form share/template/control/fields-account.html
 #.  
 msgid "User"
 msgstr ""
@@ -4226,7 +4611,7 @@ msgstr ""
 
 #: lib/Socialtext/CLI.pm lib/Socialtext/CLI.pm
 #. (
-msgid "User \"%1\" was updated."
+msgid "User \\\"%1\\\" was updated."
 msgstr ""
 
 #: share/template/control/user.html
@@ -4261,7 +4646,7 @@ msgstr ""
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
-msgid "Users matching \"%1\""
+msgid "Users matching \\\"%1\\\""
 msgstr ""
 
 #: lib/Socialtext/OpenIdPlugin.pm lib/Socialtext/UserSettingsPlugin.pm lib/Socialtext/UserSettingsPlugin.pm lib/Socialtext/UserSettingsPlugin.pm
@@ -4298,11 +4683,6 @@ msgstr "閲覧"
 #.  
 msgid "View Formatted"
 msgstr "レイアウト表示 （ハイライト表示なし）"
-
-#: share/skin/s3/template/view/page_revision_list
-#.  
-msgid "View Revision"
-msgstr "リビジョンを見る"
 
 #: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
 #.  
@@ -4395,9 +4775,9 @@ msgid "What order would you like the updates to be sorted?"
 msgstr "どの順番で更新を並び替えますか？"
 
 #: lib/Socialtext/RecentChangesPlugin.pm
-#.  
-msgid "What time interval should \"What's New\" display?"
-msgstr "”更新情報” をいつから表示させるか選択してください。"
+#. (
+msgid "What time interval should \\\"What\\\\"
+msgstr ""
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
@@ -4426,12 +4806,12 @@ msgstr "ワークスペースが Email を受信したら、その Email の主�
 
 #: share/skin/s3/template/element/settings/workspaces_settings_appearance_section
 #. (
-msgid "When users click on the title of a workspace, they go to the central page of the workspace. This page has the same title as the workspace (\"%1\")."
+msgid "When users click on the title of a workspace, they go to the central page of the workspace. This page has the same title as the workspace (\\\"%1\\\")."
 msgstr ""
 
 #: share/template/email/password-change.html
 #. (
-msgid "When you <a href=\"%1\">click on this link</a>, you will be taken to a page which allows you to choose a new password."
+msgid "When you <a href=\\\"%1\\\">click on this link</a>, you will be taken to a page which allows you to choose a new password."
 msgstr ""
 
 #: share/template/email/password-change.txt
@@ -4454,7 +4834,7 @@ msgstr "使用する言語"
 msgid "Who can send email to this workspace?"
 msgstr "このワークスペースに Email を送ることができる人を設定してください。"
 
-#: share/skin/s3/template/view/listview
+#: share/skin/s3/template/layout/html share/skin/s3/template/view/listview
 #.  
 msgid "Workspace"
 msgstr "ワークスペース"
@@ -4559,11 +4939,6 @@ msgstr "URL のエンコード処理を行うと、ワークスペースタイ�
 msgid "Workspace title must be between 2 and 64 characters long and may not begin with a -."
 msgstr ""
 
-#: share/skin/s3/template/layout/html
-#.  
-msgid "Workspace:"
-msgstr ""
-
 #: lib/Socialtext/Handler/ControlPanel.pm share/console-template/template/overview.html share/skin/s3/template/element/settings/workspaces_listall_section share/skin/s3/template/layout/html share/skin/s3/template/view/settings share/template/control/wrapper
 #.  
 msgid "Workspaces"
@@ -4581,7 +4956,7 @@ msgstr "ワークスペースが初期化されました。 <br>ログ: %1"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
-msgid "Workspaces matching \"%1\""
+msgid "Workspaces matching \\\"%1\\\""
 msgstr ""
 
 #: share/skin/s3/template/element/workspace_list/my_workspaces
@@ -4629,7 +5004,7 @@ msgstr "Email あるいは、パスワードが間違っています。再入力
 msgid "Yahoo! IM: %1"
 msgstr "Yahoo! IM: %1"
 
-#: share/skin/s3/template/element/settings/workspaces_settings_features_section
+#: share/skin/s3/template/element/settings/workspaces_settings_features_section share/template/control/fields-account.html
 #.  
 msgid "Yes"
 msgstr "はい"
@@ -4645,8 +5020,8 @@ msgid "You are logged in as %1"
 msgstr ""
 
 #: share/skin/s3/template/layout/html
-#.  
-msgid "You are not following anyone yet. To follow someone, go to a person's profile and click the \"Follow\" button."
+#. (
+msgid "You are not following anyone yet. To follow someone, go to a person's profile and click the \\\\"
 msgstr ""
 
 #: share/skin/s3/template/element/settings/workspaces_settings_appearance_section
@@ -4704,6 +5079,11 @@ msgstr "システムが作成したアカウント名は変更することがで
 msgid "You cannot change the name of a system-created user."
 msgstr "システムが作成したユーザ名は変更することができません。"
 
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page_revision_list
+#.  
+msgid "You cannot compare a revision to itself."
+msgstr "同じリビジョンと比較することはできません。"
+
 #: lib/Socialtext/AttachmentsUIPlugin.pm
 #.  
 msgid "You dont have permission to upload attachments"
@@ -4721,7 +5101,7 @@ msgstr ""
 
 #: share/skin/s3/template/workspaces_created_section.html
 #. (
-msgid "You have just created \"%1\", a brand new Socialtext Workspace. You are the administrator. The web address of the new workspace is %2."
+msgid "You have just created \\\"%1\\\", a brand new Socialtext Workspace. You are the administrator. The web address of the new workspace is %2."
 msgstr ""
 
 #: lib/Socialtext/Handler/ControlPanel.pm
@@ -4732,6 +5112,16 @@ msgstr ""
 #: share/template/email/email-address-confirmation-completed.html share/template/email/email-address-confirmation-completed.txt
 #.  
 msgid "You may want to keep this email for future reference."
+msgstr ""
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "You must choose at least one administrator."
+msgstr ""
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "You must choose at least one workspace"
 msgstr ""
 
 #: lib/Socialtext/OpenIdPlugin.pm
@@ -4781,8 +5171,8 @@ msgstr ""
 
 #: share/console-template/template/popup.html
 #.  
-msgid "You will be asked to log into the Console after you click \"Initialize Workspaces\"."
-msgstr "\"ワークスペースを初期化\" をクリックすると、コンソールへログインするように求められます。"
+msgid "You will be asked to log into the Console after you click \\\"Initialize Workspaces\\\"."
+msgstr ""
 
 #: share/skin/s3/template/workspaces_created_section.html
 #.  
@@ -4814,6 +5204,11 @@ msgstr ""
 msgid "Your email address, %1, has been confirmed. Please login."
 msgstr "あなたの Email アドレス %1 が確認されました。ログインしてください。"
 
+#: share/console-template/template/help.html
+#.  
+msgid "Your email address:"
+msgstr ""
+
 #: lib/Socialtext/Handler/Authen.pm
 #.  
 msgid "Your password has been set and you can now login."
@@ -4834,10 +5229,25 @@ msgstr ""
 msgid "Your settings cannot be changed via the Socialtext settings UI."
 msgstr "Socialtext からは設定を変更することができません。"
 
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page/revision
+#. (
+msgid "\\\"%1\\\""
+msgstr ""
+
+#: lib/Socialtext/EditPlugin.pm
+#. (
+msgid "\\\"%1\\\" (edited %2 in %3)"
+msgstr ""
+
+#: share/console-template/template/help.html share/skin/s3/javascript/email-lightbox.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js
+#. (
+msgid "\\\"%1\\\" is not a valid email address."
+msgstr ""
+
 #: lib/Socialtext/Handler/Authen.pm
 #. (
-msgid "\"%1\" is not a valid email address. Please use your email address to log in."
-msgstr "\"%1\" は有効な Email アドレスではありません。ご自分の Email アドレスでログインしてください。"
+msgid "\\\"%1\\\" is not a valid email address. Please use your email address to log in."
+msgstr ""
 
 #: share/skin/s3/template/element/settings/workspaces_create_section
 #.  
@@ -4921,7 +5331,27 @@ msgstr "{date: %2} に {user: %1} がコメント"
 
 #: lib/Socialtext/MassAdd.pm
 #.  
+msgid "could not be parsed (extra fields).  Skipping this user."
+msgstr ""
+
+#: lib/Socialtext/MassAdd.pm
+#.  
+msgid "could not be parsed (missing fields).  Skipping this user."
+msgstr ""
+
+#: lib/Socialtext/MassAdd.pm
+#.  
+msgid "could not be parsed.  CSV header invalid; aborting."
+msgstr ""
+
+#: lib/Socialtext/MassAdd.pm
+#.  
 msgid "could not be parsed.  Skipping this user."
+msgstr ""
+
+#: lib/Socialtext/MassAdd.pm
+#.  
+msgid "could not be parsed.  The file was missing the following required fields ($missing).  The file must have a header row listing the field headers."
 msgstr ""
 
 #: lib/Socialtext/TimeZonePlugin.pm
@@ -4943,11 +5373,6 @@ msgstr "日: %1"
 #.  
 msgid "e-mail address was not supplied!"
 msgstr ""
-
-#: lib/Socialtext/Formatter/WaflPhrase.pm share/skin/s3/template/view/weblog
-#.  
-msgid "edit"
-msgstr "編集"
 
 #: share/skin/s3/template/element/settings/start
 #.  
@@ -4994,7 +5419,7 @@ msgstr ""
 msgid "friend"
 msgstr ""
 
-#: share/skin/s3/template/view/page/display
+#: share/skin/s3/template/view/page/display share/template/control/fields-account.html
 #.  
 msgid "hide"
 msgstr ""
@@ -5009,7 +5434,7 @@ msgstr "これに設定すると、ワークスペースはスパム攻撃を受
 msgid "image: %1"
 msgstr "画像: %1"
 
-#: share/skin/s3/template/view/listview
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/listview
 #.  
 msgid "in"
 msgstr ""
@@ -5219,6 +5644,11 @@ msgstr "目次: %1"
 msgid "total"
 msgstr "合計"
 
+#: share/template/control/fields-account.html
+#.  
+msgid "un-hide"
+msgstr ""
+
 #: lib/Socialtext/Widget_resource.pm
 #. (
 msgid "unformatted: %1"
@@ -5232,6 +5662,11 @@ msgstr "ユーザ: %1"
 #: share/template/control/account_link share/template/control/user_link share/template/control/workspace_link
 #. (
 msgid "view %1"
+msgstr ""
+
+#: lib/Socialtext/EditPlugin.pm
+#. (
+msgid "wants you to know about an edit of %1 in %2"
 msgstr ""
 
 #: share/skin/s3/template/element/settings/start

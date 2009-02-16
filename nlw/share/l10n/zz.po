@@ -54,7 +54,7 @@ msgstr "%1 W0RkSp4c3 Us4g3 - %2 - p4s7 W33k"
 msgid "%1 Workspace Usage Report"
 msgstr "%1 W0RkSp4c3 Us4g3 R3P0R7"
 
-#: share/template/control/account.html share/template/control/add_user.html share/template/control/add_users.html share/template/control/rename-account.html
+#: share/template/control/account.html share/template/control/add_profile_field.html share/template/control/add_user.html share/template/control/add_users.html share/template/control/edit_profile_field.html share/template/control/fields-account.html share/template/control/rename-account.html
 #. (
 msgid "%1 account"
 msgstr "%1 4cC0Un7"
@@ -134,10 +134,20 @@ msgstr "%1 M0N7Hs"
 msgid "%1 seconds"
 msgstr "%1 S3C0NdS"
 
+#: lib/Socialtext/Rest/Signals/Feed.pm
+#. (
+msgid "%1 signalled"
+msgstr "%1 SiGn4lL3D"
+
 #: share/template/control/account.html
 #. (
-msgid "%1 skin: workspace-level skin for '%2' workspace(s)"
-msgstr "%1 SkIn: W0RkSp4c3-L3V3L SkIn f0r '%2' W0RkSp4c3(S)"
+msgid "%1 skin: workspace-level skin for \\\\"
+msgstr "%1 SkIn: W0RkSp4c3-L3V3L SkIn f0r \\\\"
+
+#: share/template/control/user_table
+#. (
+msgid "%1 users selected"
+msgstr "%1 Us3rS S3L3C73d"
 
 #: lib/Socialtext/Page.pm
 #. (
@@ -158,6 +168,21 @@ msgstr "%1'S 4c7iVi7y"
 #. (
 msgid "%1's Notepad"
 msgstr "%1'S N073P4D"
+
+#: lib/Socialtext/Rest/Signals/Feed.pm
+#. (
+msgid "%1's avatar"
+msgstr "%1'S 4v474r"
+
+#: share/console-template/template/help.html
+#. (
+msgid "%1, Upload Complete. Your message has been submitted to %2."
+msgstr "%1, uPl04D C0MpL373. Y0Ur m3sS4G3 h4s 833N Su8mI773D 70 %2."
+
+#: share/console-template/template/help.html
+#. (
+msgid "%1, Uploading Tarball to Socialtext..."
+msgstr "%1, uPl04DiNg 74r84Ll 70 S0Ci4l73X7..."
 
 #: share/skin/s3/template/view/page_revision_list
 #. (
@@ -188,6 +213,11 @@ msgstr "%quant(%1,r3vIsI0N)"
 #. (
 msgid "%quant(%1,view)"
 msgstr "%quant(%1,vI3W)"
+
+#: share/skin/s3/template/view/page/display
+#.  
+msgid "&nbsp;+"
+msgstr "&N8Sp;+"
 
 #: lib/Socialtext/Workspace.pm
 #. (
@@ -221,8 +251,8 @@ msgstr "(8y %1 0n %2)"
 
 #: share/console-template/template/help.html
 #.  
-msgid "(contact <a href=\"mailto:support@socialtext.com\">Socialtext Support</a> if you need access)"
-msgstr "(C0N74c7 <a href=\"M4Il70:sUpP0R7@s0cI4L73x7.C0M\">S0Ci4l73X7 sUpP0R7</4> iF Y0U N33d 4Cc3sS)"
+msgid "(contact <a href=\\\"mailto:support@socialtext.com\\\">Socialtext Support</a> if you need access)"
+msgstr "(C0N74c7 <a href=\\\"M4Il70:sUpP0R7@s0cI4L73x7.C0M\\\">S0Ci4l73X7 sUpP0R7</4> iF Y0U N33d 4Cc3sS)"
 
 #: share/console-template/template/setup.html
 #.  
@@ -411,18 +441,18 @@ msgstr "<Y0Ur p3rS0N4L M3Ss4g3 G03s h3r3.>"
 
 #: share/skin/s3/template/workspaces_created_section.html
 #. (
-msgid "<a href=\"/%1/?action=users_invitation\">Invite</a> other people to %2."
-msgstr "<a href=\"/%1/?4c7i0n=uS3Rs_iNvI747I0N\">InVi73</4> 07h3r p30Pl3 70 %2."
+msgid "<a href=\\\"/%1/?action=users_invitation\\\">Invite</a> other people to %2."
+msgstr "<a href=\\\"/%1/?4c7i0n=uS3Rs_iNvI747I0N\\\">InVi73</4> 07h3r p30Pl3 70 %2."
 
 #: share/skin/s3/template/workspaces_created_section.html
 #. (
-msgid "<a href=\"/%1/\">Go to</a> the %2 home page."
-msgstr "<a href=\"/%1/\">G0 70</4> 7h3 %2 h0m3 P4G3."
+msgid "<a href=\\\"/%1/\\\">Go to</a> the %2 home page."
+msgstr "<a href=\\\"/%1/\\\">G0 70</4> 7h3 %2 h0m3 P4G3."
 
 #: lib/Socialtext/FavoritesPlugin.pm
-#.  
-msgid "<p>This is where you set the title of the page you would like to see in the \"Your Notepad\" panel.</p><p>Some choose to use an existing page, and others make a new page, such as \"Rupert Jee's Notepad\".</p>"
-msgstr "<P>7hIs iS Wh3r3 Y0U S37 7h3 7i7l3 0f 7H3 p4g3 Y0U W0UlD LiK3 70 S33 In 7H3 \"y0uR N073P4D\" P4N3L.</P><p>s0m3 Ch00S3 70 Us3 4n 3XiS7InG P4G3, 4nD 07H3Rs m4k3 4 N3W P4G3, SuCh 4S \"RuP3R7 j33's n073p4d\".</p>"
+#. (
+msgid "<p>This is where you set the title of the page you would like to see in the \\\"Your Notepad\\\" panel.</p><p>Some choose to use an existing page, and others make a new page, such as \\\"Rupert Jee\\\\"
+msgstr "<P>7hIs iS Wh3r3 Y0U S37 7h3 7i7l3 0f 7H3 p4g3 Y0U W0UlD LiK3 70 S33 In 7H3 \\\"y0uR N073P4D\\\" P4N3L.</P><p>s0m3 Ch00S3 70 Us3 4n 3XiS7InG P4G3, 4nD 07H3Rs m4k3 4 N3W P4G3, SuCh 4S \\\"RuP3R7 j33\\\\"
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
@@ -431,8 +461,8 @@ msgstr "4 cUs70M SkIn fIl3 W4S N07 UpL04d3d."
 
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #. (
-msgid "A filter has been set on this workspace. All candidate email addresses must match this pattern: <span style=\"color: red\"> %1 </span>"
-msgstr "4 fIl73R H4S 833n s37 0N 7hIs w0rKsP4C3. 4lL C4NdId473 3m4iL 4dDr3sS3S MuS7 m47Ch 7HiS P4773rN: <Sp4n s7yL3=\"c0l0r: R3D\"> %1 </Sp4n>"
+msgid "A filter has been set on this workspace. All candidate email addresses must match this pattern: <span style=\\\"color: red\\\"> %1 </span>"
+msgstr "4 fIl73R H4S 833n s37 0N 7hIs w0rKsP4C3. 4lL C4NdId473 3m4iL 4dDr3sS3S MuS7 m47Ch 7HiS P4773rN: <Sp4n s7yL3=\\\"c0l0r: R3D\\\"> %1 </Sp4n>"
 
 #: lib/Socialtext/EditPlugin.pm
 #.  
@@ -469,7 +499,7 @@ msgstr "4Im: %1"
 msgid "Access a Community of Peers"
 msgstr "4Cc3sS 4 C0MmUnI7Y 0f p33Rs"
 
-#: share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
+#: share/template/control/workspace.html share/template/control/workspace_invite.html share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Account"
 msgstr "4Cc0uN7"
@@ -489,6 +519,11 @@ msgstr "4Cc0uN7 %1 R3N4M3D 70 %2"
 msgid "Account ID was not supplied!"
 msgstr "4Cc0uN7 iD W4S N07 SuPpLi3d!"
 
+#: share/template/control/fields-account.html
+#.  
+msgid "Account Profile Fields"
+msgstr "4Cc0uN7 pR0FiL3 fI3LdS"
+
 #: lib/Socialtext/Account.pm
 #.  
 msgid "Account name is a required field."
@@ -501,10 +536,15 @@ msgstr "4Cc0uN7S"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
-msgid "Accounts matching \"%1\""
-msgstr "4Cc0uN7S M47cHiNg \"%1\""
+msgid "Accounts matching \\\"%1\\\""
+msgstr "4Cc0uN7S M47cHiNg \\\"%1\\\""
 
-#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/view/page/display share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
+#: share/template/control/fields-account.html
+#.  
+msgid "Actions"
+msgstr "4C7I0Ns"
+
+#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/template/control/workspace_invite.html
 #.  
 msgid "Add"
 msgstr "4Dd"
@@ -514,10 +554,20 @@ msgstr "4Dd"
 msgid "Add Administrator"
 msgstr "4Dd 4DmInIs7r470r"
 
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Add All"
+msgstr "4Dd 4Ll"
+
 #: share/console-template/template/setup.html
 #.  
 msgid "Add Appliance Administrators"
 msgstr "4Dd 4PpLi4nC3 4DmInIs7r470rS"
+
+#: share/skin/s3/template/view/page/display
+#.  
+msgid "Add Tag"
+msgstr "4Dd 74g"
 
 #: share/template/control/account.html share/template/control/add_user.html
 #.  
@@ -543,6 +593,11 @@ msgstr "4Dd3d uS3R %1"
 #.  
 msgid "Admin"
 msgstr "4DmIn"
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Administrators"
+msgstr "4DmInIs7r470rS"
 
 #: lib/Socialtext/Rest/Events.pm
 #.  
@@ -601,8 +656,13 @@ msgstr "4Ll 74gS In w0rKsP4C3"
 
 #: lib/Socialtext/BacklinksPlugin.pm
 #. (
-msgid "All backlinks for \"%1\""
-msgstr "4Ll 84cKlInKs f0r \"%1\""
+msgid "All backlinks for \\\"%1\\\""
+msgstr "4Ll 84cKlInKs f0r \\\"%1\\\""
+
+#: lib/Socialtext/Appliance/Model/SupportTarball.pm
+#.  
+msgid "Already started!"
+msgstr "4Lr34Dy s74R73d!"
 
 #: share/template/email/workspace-invitation.html
 #. (
@@ -726,8 +786,8 @@ msgstr "4RcHiV3 dIr3c70Ry"
 
 #: lib/Socialtext/AppConfig.pm
 #.  
-msgid "As a Socialtext customer, you have access to the <a href=\"http://www.socialtext.net/exchange/\">Socialtext Customer Exchange</a>. It is where you can share tips and best practices with other Socialtext customers."
-msgstr "4S 4 S0Ci4l73X7 cUs70M3R, y0u h4v3 4cC3Ss 70 7h3 <a href=\"H77p://wWw.s0cI4L73x7.N37/3xCh4nG3/\">S0Ci4l73X7 cUs70M3R 3xCh4nG3</4>. I7 iS Wh3r3 Y0U C4N Sh4r3 7iPs 4Nd 83s7 Pr4c7iC3S Wi7h 07h3r s0cI4L73x7 CuS70m3rS."
+msgid "As a Socialtext customer, you have access to the <a href=\\\"http://www.socialtext.net/exchange/\\\">Socialtext Customer Exchange</a>. It is where you can share tips and best practices with other Socialtext customers."
+msgstr "4S 4 S0Ci4l73X7 cUs70M3R, y0u h4v3 4cC3Ss 70 7h3 <a href=\\\"H77p://wWw.s0cI4L73x7.N37/3xCh4nG3/\\\">S0Ci4l73X7 cUs70M3R 3xCh4nG3</4>. I7 iS Wh3r3 Y0U C4N Sh4r3 7iPs 4Nd 83s7 Pr4c7iC3S Wi7h 07h3r s0cI4L73x7 CuS70m3rS."
 
 #: share/template/control/workspace.html
 #.  
@@ -759,7 +819,12 @@ msgstr "4UgUs7"
 msgid "Automatic Backup Schedule"
 msgstr "4U70m47Ic 84cKuP ScH3DuL3"
 
-#: share/template/control/add_user.html share/template/control/add_users.html share/template/control/rename-account.html
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Available Workspaces"
+msgstr "4V4Il48L3 w0rKsP4C3S"
+
+#: share/template/control/add_user.html share/template/control/add_users.html share/template/control/fields-account.html share/template/control/rename-account.html
 #.  
 msgid "Back"
 msgstr "84cK"
@@ -771,8 +836,18 @@ msgstr "84cK 70 cUrR3N7 r3vIsI0N"
 
 #: share/template/authen/forgot_password.html
 #. (
-msgid "Back to <a href=\"%1\">Log in to Socialtext</a>."
-msgstr "84cK 70 <a href=\"%1\">L0G In 70 S0Ci4l73X7</4>."
+msgid "Back to <a href=\\\"%1\\\">Log in to Socialtext</a>."
+msgstr "84cK 70 <a href=\\\"%1\\\">L0G In 70 S0Ci4l73X7</4>."
+
+#: share/template/control/edit_profile_field.html
+#.  
+msgid "Back to Account"
+msgstr "84cK 70 4Cc0uN7"
+
+#: share/template/control/add_profile_field.html
+#.  
+msgid "Back to Account Fields"
+msgstr "84cK 70 4Cc0uN7 fI3LdS"
 
 #: share/template/control/growth_report.html share/template/control/report.html
 #.  
@@ -849,6 +924,11 @@ msgstr "8R0Ws3 ..."
 msgid "Bug Dump"
 msgstr "8Ug dUmP"
 
+#: share/console-template/template/help.html
+#.  
+msgid "Building Diagnostic Tarball..."
+msgstr "8UiLdInG Di4gN0S7Ic 74r84Ll..."
+
 #: share/skin/s3/template/view/page/revision_compare
 #.  
 msgid "By:"
@@ -859,32 +939,47 @@ msgstr "8Y:"
 msgid "Call '%1' using Skype. Click to edit."
 msgstr "c4lL '%1' uSiNg sKyP3. ClIcK 70 3Di7."
 
+#: lib/Socialtext/CLI.pm
+#.  
+msgid "Can only specify one of --visible or --hidden"
+msgstr "c4n 0NlY Sp3cIfY 0n3 0f --vIsI8L3 0R --HiDd3n"
+
 #: lib/Socialtext/UserSettingsPlugin.pm
 #.  
 msgid "Can't remove privileges of the last admin"
 msgstr "c4n'7 r3m0v3 PrIvIl3g3s 0F 7h3 L4S7 4DmIn"
 
-#: share/console-template/template/popup.html share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/create_content_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
+#: share/console-template/template/popup.html share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/create_content_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/template/control/field_form
 #.  
 msgid "Cancel"
 msgstr "c4nC3L"
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #. (
 msgid "Cannot convert field class from '%1' to '%2'"
 msgstr "c4nN07 C0Nv3r7 Fi3lD Cl4sS Fr0m '%1' 70 '%2'"
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
+#. (
+msgid "Cannot create profile field: The field name '%1' (derived from title '%2') is already used in account '%3'"
+msgstr "c4nN07 Cr3473 pR0FiL3 fI3Ld: 7h3 Fi3lD N4M3 '%1' (d3rIv3d fR0M 7i7l3 '%2') Is 4Lr34Dy uS3D In 4Cc0uN7 '%3'"
+
+#: lib/Socialtext/Pluggable/Plugin/People.pm
+#. (
+msgid "Cannot create profile field: The field name '%1' (derived from title '%2') is reserved for Socialtext"
+msgstr "c4nN07 Cr3473 pR0FiL3 fI3Ld: 7h3 Fi3lD N4M3 '%1' (d3rIv3d fR0M 7i7l3 '%2') Is r3s3rV3D F0R S0Ci4l73X7"
+
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #. (
 msgid "Cannot create profile field: The field name '%1' is already used in account '%2'"
 msgstr "c4nN07 Cr3473 pR0FiL3 fI3Ld: 7h3 Fi3lD N4M3 '%1' Is 4Lr34Dy uS3D In 4Cc0uN7 '%2'"
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #. (
 msgid "Cannot create profile field: The field name '%1' is reserved for Socialtext"
 msgstr "c4nN07 Cr3473 pR0FiL3 fI3Ld: 7h3 Fi3lD N4M3 '%1' Is r3s3rV3D F0R S0Ci4l73X7"
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #. (
 msgid "Cannot create profile field: invalid field-class '%1'"
 msgstr "c4nN07 Cr3473 pR0FiL3 fI3Ld: InV4LiD Fi3lD-Cl4sS '%1'"
@@ -968,6 +1063,11 @@ msgstr "cHr0n0l0gIc4lLy (0lD3S7 fIrS7)"
 #.  
 msgid "Cleaning is not implemented."
 msgstr "cL34nInG Is n07 iMpL3M3N73d."
+
+#: share/template/control/user_table_header
+#.  
+msgid "Clear Selection"
+msgstr "cL34r s3l3c7i0n"
 
 #: share/skin/s3/template/element/page/display/comment-button
 #.  
@@ -1069,6 +1169,21 @@ msgstr "c0nFiRm uS3R"
 msgid "Congratulations!"
 msgstr "c0nGr47Ul47I0Ns!"
 
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Congratulations! You successfully added %quant(%1,user) to %quant(%2,workspace). They will receive an invitation message to each workspace."
+msgstr "c0nGr47Ul47I0Ns! Y0U SuCc3sSfUlLy 4Dd3d %quant(%1,uS3R) 70 %quant(%2,W0RkSp4c3). 7h3y wIlL R3C3Iv3 4n iNvI747I0N M3Ss4g3 70 34cH W0RkSp4c3."
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Congratulations! You successfully created a new workspace with %quant(%1,user). They will receive an invitation message with a link to %2."
+msgstr "c0nGr47Ul47I0Ns! Y0U SuCc3sSfUlLy cR3473d 4 n3w w0rKsP4C3 wI7H %quant(%1,Us3r). 7H3Y WiLl r3c3iV3 4N InVi747i0n m3sS4G3 wI7H 4 LiNk 70 %2."
+
+#: share/template/control/field_common
+#.  
+msgid "Contact"
+msgstr "c0n74C7"
+
 #: share/console-template/template/help.html
 #.  
 msgid "Contact Socialtext Support"
@@ -1094,6 +1209,11 @@ msgstr "c0uLd n07 3X7R4C7 fIl3s fR0M 7h3 SkIn 4RcHiV3. 7hIs iS M0S7 lIk3lY C4Us3
 msgid "Could not open %1"
 msgstr "c0uLd n07 0P3N %1"
 
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Cound not create workspace %1"
+msgstr "c0uNd n07 cR3473 W0RkSp4c3 %1"
+
 #: share/skin/s3/javascript/template/create_content_lightbox.tt2 share/template/control/report.html
 #.  
 msgid "Create"
@@ -1108,6 +1228,11 @@ msgstr "cR3473 4 W38l0g"
 #.  
 msgid "Create Initial Workspace"
 msgstr "cR3473 InI7I4L W0RkSp4c3"
+
+#: share/template/control/add_profile_field.html share/template/control/field_form share/template/control/fields-account.html
+#.  
+msgid "Create New Field"
+msgstr "cR3473 N3W Fi3lD"
 
 #: lib/Socialtext/WeblogPlugin.pm share/skin/s3/template/view/settings
 #.  
@@ -1139,6 +1264,11 @@ msgstr "cR3473 Y0Ur pR0FiL3"
 msgid "Create a New Account"
 msgstr "cR3473 4 N3W 4cC0Un7"
 
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Create a new workspace"
+msgstr "cR3473 4 N3W W0RkSp4c3"
+
 #: share/template/control/user.html share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Created"
@@ -1163,6 +1293,11 @@ msgstr "cR3473d 8Y %1 0N %2."
 #. (
 msgid "Created profile field '%1' for account '%2'"
 msgstr "cR3473d pR0FiL3 fI3Ld '%1' F0R 4cC0Un7 '%2'"
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Created profile field \\\"%1\\\""
+msgstr "cR3473d pR0FiL3 fI3Ld \\\"%1\\\""
 
 #: lib/Socialtext/Page.pm
 #.  
@@ -1189,6 +1324,11 @@ msgstr "cUs70M SkIn sUpP0R7"
 msgid "Custom Skins: %1"
 msgstr "cUs70M SkInS: %1"
 
+#: share/template/control/fields-account.html
+#.  
+msgid "Custom fields"
+msgstr "cUs70M Fi3lDs"
+
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Custom privacy setting"
@@ -1208,6 +1348,11 @@ msgstr "cUs70MiZ3D SkIn."
 #.  
 msgid "Dashboard"
 msgstr "d4sH804Rd"
+
+#: share/template/control/field_form
+#.  
+msgid "Data Source"
+msgstr "d474 S0UrC3"
 
 #: share/skin/s3/template/view/listview share/skin/s3/template/view/page_revision_list
 #.  
@@ -1261,8 +1406,8 @@ msgstr "d3l373 7hIs 74g"
 
 #: lib/Socialtext/DeletePagePlugin.pm
 #. (
-msgid "Deleted \"%1\""
-msgstr "d3l373d \"%1\""
+msgid "Deleted \\\\"
+msgstr "d3l373d \\\\"
 
 #: lib/Socialtext/CLI.pm
 #. (
@@ -1279,6 +1424,11 @@ msgstr "dId y0u d3l373 7hIs p4g3 In 3Rr0r? If s0, y0u c4n r3s70R3 7H3 p4g3."
 msgid "Directory %1 does not exist."
 msgstr "dIr3c70Ry %1 D03s n07 3XiS7."
 
+#: share/template/control/fields-account.html
+#.  
+msgid "Disabled"
+msgstr "dIs48L3D"
+
 #: share/console-template/template/overview.html
 #.  
 msgid "Disk Usage"
@@ -1291,8 +1441,8 @@ msgstr "dIsPl4y '%1' In r34D3R'S 7iM3 z0n3. cLiCk 70 3dI7."
 
 #: lib/Socialtext/BreadCrumbsPlugin.pm
 #. (
-msgid "Display \\\"%1\\\" side pane box?"
-msgstr "dIsPl4y \\\"%1\\\" SiD3 p4n3 80X?"
+msgid "Display \\\\\\\"%1\\\\\\\" side pane box?"
+msgstr "dIsPl4y \\\\\\\"%1\\\\\\\" SiD3 p4n3 80X?"
 
 #: lib/Socialtext/RecentChangesPlugin.pm
 #.  
@@ -1369,10 +1519,25 @@ msgstr "3-m4iL 4dDr3sS MuS7 83 Sp3cIfI3D"
 msgid "Earlier entries"
 msgstr "34rLi3r 3N7Ri3s"
 
-#: lib/Socialtext/Lite.pm share/skin/s3/template/element/page/display/edit-button share/skin/s3/template/element/page/display/edit-button
+#: lib/Socialtext/Formatter/WaflPhrase.pm lib/Socialtext/Lite.pm share/skin/s3/template/element/page/display/edit-button share/skin/s3/template/element/page/display/edit-button share/skin/s3/template/view/weblog share/template/control/fields-account.html
 #.  
 msgid "Edit"
 msgstr "3Di7"
+
+#: share/template/control/edit_profile_field.html
+#.  
+msgid "Edit Field"
+msgstr "3Di7 Fi3lD"
+
+#: share/skin/s3/template/view/page_revision_list
+#.  
+msgid "Edit Summary"
+msgstr "3Di7 SuMm4rY"
+
+#: share/skin/s3/template/view/listview
+#.  
+msgid "Edit summary"
+msgstr "3Di7 SuMm4rY"
 
 #: share/skin/s3/template/view/weblog
 #.  
@@ -1424,6 +1589,11 @@ msgstr "3M4Il 70 7hIs w0rKsP4C3"
 msgid "Email address for testing:"
 msgstr "3M4Il 4DdR3Ss f0r 73s7iNg:"
 
+#: share/console-template/template/help.html
+#.  
+msgid "Email and description are required!"
+msgstr "3M4Il 4Nd d3sCrIp7i0n 4R3 r3qUiR3D!"
+
 #: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/view/page/display
 #.  
 msgid "Email this page"
@@ -1468,6 +1638,26 @@ msgstr "3Rr0r - 3Xp0r7 DiR3C70rY %1 4Lr34Dy 3XiS7S!"
 #. (
 msgid "Error updating from timeserver %1"
 msgstr "3Rr0r uPd47InG Fr0m 7Im3s3rV3R %1"
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Error: Workspace name is a required field."
+msgstr "3Rr0r: W0RkSp4c3 N4M3 iS 4 R3QuIr3d fI3Ld."
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Error: Workspace name must be between 3 and 30 characters long, and must contain only lower-case letters, numbers, underscores, and dashes and may not begin with a '-'."
+msgstr "3Rr0r: W0RkSp4c3 N4M3 mUs7 83 837W33n 3 4Nd 30 Ch4r4c73Rs l0nG, 4Nd mUs7 C0N74iN 0nLy l0w3r-c4s3 L3773rS, nUm83Rs, UnD3RsC0R3S, 4Nd d4sH3S 4nD M4Y N07 83GiN Wi7h 4 '-'."
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Error: Workspace title is a required field."
+msgstr "3Rr0r: W0RkSp4c3 7i7l3 Is 4 r3qUiR3D Fi3lD."
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Error: Workspace title must be between 2 and 64 characters long and may not begin with a '-'."
+msgstr "3Rr0r: W0RkSp4c3 7i7l3 MuS7 83 837w33N 2 4nD 64 cH4R4C73rS L0Ng 4Nd m4y n07 83gIn wI7H 4 '-'."
 
 #: lib/Socialtext/PdfExportPlugin.pm
 #.  
@@ -1536,8 +1726,8 @@ msgstr "3X4MpL3: 4cM3 wIdG37s pR0DuC7 d3v3l0pM3N7"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_appearance_section
 #.  
-msgid "Example: C:\\My Pictures\\socialtext-logo-30.gif"
-msgstr "3X4MpL3: C:\\My pIc7uR3S\\s0cI4L73x7-L0G0-30.GiF"
+msgid "Example: C:\\\\My Pictures\\\\socialtext-logo-30.gif"
+msgstr "3X4MpL3: C:\\\\My pIc7uR3S\\\\s0cI4L73x7-L0G0-30.GiF"
 
 #: share/skin/s3/template/element/settings/weblog_create
 #.  
@@ -1609,6 +1799,16 @@ msgstr "3Xp0r7iNg 4Cc0uN7 %1 ..."
 msgid "Exporting workspace %1 ..."
 msgstr "3Xp0r7iNg w0rKsP4C3 %1 ..."
 
+#: share/template/control/field_form share/template/control/fields-account.html
+#.  
+msgid "External"
+msgstr "3X73rN4L"
+
+#: share/template/control/field_form
+#.  
+msgid "External Person fields are not currently supported"
+msgstr "3X73rN4L P3Rs0n fI3LdS 4r3 N07 CuRr3n7lY SuPp0r73D"
+
 #: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
 #.  
 msgid "Extract this attachment"
@@ -1623,6 +1823,21 @@ msgstr "f347uR3S 4nD SkInS"
 #.  
 msgid "February"
 msgstr "f38Ru4rY"
+
+#: share/template/control/field_form share/template/control/fields-account.html
+#.  
+msgid "Field Name"
+msgstr "fI3Ld n4m3"
+
+#: share/template/control/field_form share/template/control/fields-account.html
+#.  
+msgid "Field Title"
+msgstr "fI3Ld 7I7L3"
+
+#: share/template/control/field_form share/template/control/fields-account.html
+#.  
+msgid "Field Type"
+msgstr "fI3Ld 7Yp3"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -1739,10 +1954,15 @@ msgstr "gR0W7H R3P0R7S"
 msgid "Hello,"
 msgstr "h3lL0,"
 
-#: share/console-template/template/console_wrapper.tmpl share/skin/s3/template/layout/html share/skin/s3/template/layout/html
+#: share/skin/s3/template/layout/html share/skin/s3/template/layout/html
 #.  
 msgid "Help"
 msgstr "h3lP"
+
+#: share/template/control/field_form share/template/control/fields-account.html
+#.  
+msgid "Hidden"
+msgstr "hIdD3N"
 
 #: lib/Socialtext/Lite.pm share/skin/s3/template/layout/html
 #.  
@@ -1804,6 +2024,11 @@ msgstr "i d0n'7 kN0W My p4sSw0rD."
 msgid "I'm inviting you into the %1 workspace"
 msgstr "i'm iNvI7InG Y0U In70 7H3 %1 W0RkSp4c3"
 
+#: lib/Socialtext/WorkspaceInvitation.pm
+#. (
+msgid "I'm inviting you to the %1 workspace"
+msgstr "i'm iNvI7InG Y0U 70 7H3 %1 W0RkSp4c3"
+
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
 #.  
 msgid "If there is already an existing page with that title, where should the body of the email be added?"
@@ -1826,8 +2051,8 @@ msgstr "iF Y0U H4V3 4Ny qU3S7I0Ns, Pl34S3 f33L Fr33 70 S3Nd 3M4Il 70 %1."
 
 #: share/template/email/password-change.html
 #. (
-msgid "If you have any questions, please feel free to send email to <a href=\"mailto:%1\">%2</a>."
-msgstr "iF Y0U H4V3 4Ny qU3S7I0Ns, Pl34S3 f33L Fr33 70 S3Nd 3M4Il 70 <a href=\"M4Il70:%1\">%2</4>."
+msgid "If you have any questions, please feel free to send email to <a href=\\\"mailto:%1\\\">%2</a>."
+msgstr "iF Y0U H4V3 4Ny qU3S7I0Ns, Pl34S3 f33L Fr33 70 S3Nd 3M4Il 70 <a href=\\\"M4Il70:%1\\\">%2</4>."
 
 #: share/template/email/standard-footer.html
 #. (
@@ -1850,9 +2075,9 @@ msgid "If you have questions, please contact your wiki support at %1."
 msgstr "iF Y0U H4V3 qU3S7I0Ns, Pl34S3 c0n74C7 y0uR WiKi sUpP0R7 47 %1."
 
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
-#.  
-msgid "If you see something you'd like to add to or change, click the \"Edit\" link at the top of each page."
-msgstr "iF Y0U S33 S0M37hInG Y0U'D LiK3 70 4dD 70 0R Ch4nG3, ClIcK 7h3 \"3dI7\" lInK 47 7H3 70p 0F 34Ch p4g3."
+#. (
+msgid "If you see something you'd like to add to or change, click the \\\\"
+msgstr "iF Y0U S33 S0M37hInG Y0U'D LiK3 70 4dD 70 0R Ch4nG3, ClIcK 7h3 \\\\"
 
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
@@ -1959,7 +2184,7 @@ msgstr "iN7R4N37"
 msgid "Invalid character '/' in changes parameter"
 msgstr "iNv4lId cH4R4C73r '/' iN Ch4nG3S P4R4M373R"
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #. (
 msgid "Invalid field source '%1'"
 msgstr "iNv4lId fI3Ld s0uRc3 '%1'"
@@ -1974,7 +2199,7 @@ msgstr "iNv4lId h0s7: %1"
 msgid "Invitation to join %1"
 msgstr "iNvI747I0N 70 j0iN %1"
 
-#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
+#: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section share/template/control/workspace_invite.html
 #.  
 msgid "Invite"
 msgstr "iNvI73"
@@ -1994,7 +2219,17 @@ msgstr "iNvI73 07H3R Us3rS"
 msgid "Invite Others"
 msgstr "iNvI73 07H3Rs"
 
-#: share/template/control/user_table
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Invite To existing workspace(s)"
+msgstr "iNvI73 70 3XiS7InG W0RkSp4c3(S)"
+
+#: share/template/control/selected_user_table_header share/template/control/user_table_header
+#.  
+msgid "Invite to Workspace(s)"
+msgstr "iNvI73 70 w0rKsP4C3(s)"
+
+#: share/template/control/selected_user_table_header share/template/control/user_table_header
 #.  
 msgid "Invited"
 msgstr "iNvI73d"
@@ -2004,7 +2239,7 @@ msgstr "iNvI73d"
 msgid "Invited (to system)"
 msgstr "iNvI73d (70 sYs73M)"
 
-#: share/template/control/user_table
+#: share/template/control/selected_user_table_header share/template/control/user_table_header share/template/control/user_table_header
 #.  
 msgid "Invited By"
 msgstr "iNvI73d 8Y"
@@ -2126,8 +2361,8 @@ msgstr "lIn3 %1:"
 
 #: lib/Socialtext/Widget_resource.pm
 #. (
-msgid "Link to '%1' in '%2'. Click to edit."
-msgstr "lInK 70 '%1' In '%2'. cLiCk 70 3dI7."
+msgid "Link to %1: '%2' %3. Click to edit."
+msgstr "lInK 70 %1: '%2' %3. ClIcK 70 3Di7."
 
 #: lib/Socialtext/Widget_resource.pm lib/Socialtext/Widget_resource.pm
 #. (
@@ -2158,6 +2393,11 @@ msgstr "lIs7 4lL Us3rS"
 #. (
 msgid "Loaded users from %1"
 msgstr "l04D3D Us3rS Fr0m %1"
+
+#: share/template/control/selected_user_table_header share/template/control/user_table_header
+#.  
+msgid "Loading selected users"
+msgstr "l04DiNg s3l3c73D Us3rS"
 
 #: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page/display share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
@@ -2221,8 +2461,8 @@ msgstr "l00K F0R"
 
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
-msgid "Make your contributions in the text box, then click \"Save\"."
-msgstr "m4k3 Y0Ur c0n7rI8U7I0Ns iN 7h3 73X7 80x, 7h3n cLiCk \"s4v3\"."
+msgid "Make your contributions in the text box, then click \\\"Save\\\"."
+msgstr "m4k3 Y0Ur c0n7rI8U7I0Ns iN 7h3 73X7 80x, 7h3n cLiCk \\\"s4v3\\\"."
 
 #: lib/Socialtext/Hub.pm
 #.  
@@ -2269,10 +2509,15 @@ msgstr "m0dUl3 H4S 833n %1."
 msgid "Mon"
 msgstr "m0n"
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #.  
 msgid "Must specify the name of the field to change"
 msgstr "mUs7 Sp3cIfY 7h3 N4M3 0F 7h3 Fi3lD 70 cH4Ng3"
+
+#: share/template/control/field_form
+#.  
+msgid "Must supply a field title"
+msgstr "mUs7 SuPpLy 4 fI3Ld 7I7L3"
 
 #: lib/Socialtext/Rest/Events/Followed.pm
 #.  
@@ -2304,7 +2549,7 @@ msgstr "mY W47cHlIs7"
 msgid "My Workspaces"
 msgstr "mY W0RkSp4c3s"
 
-#: share/skin/s3/template/element/settings/users_settings_section share/template/control/account_table share/template/control/user_table share/template/control/workspace.html share/template/control/workspace_table share/template/control/workspace_table
+#: share/skin/s3/template/element/settings/users_settings_section share/template/control/account_table share/template/control/selected_user_table_header share/template/control/user_table_header share/template/control/user_table_header share/template/control/workspace.html share/template/control/workspace_invite.html share/template/control/workspace_table share/template/control/workspace_table
 #.  
 msgid "Name"
 msgstr "n4m3"
@@ -2384,7 +2629,7 @@ msgstr "n3x7"
 msgid "Next Page"
 msgstr "n3x7 P4G3"
 
-#: share/skin/s3/template/element/settings/workspaces_settings_features_section
+#: share/skin/s3/template/element/settings/workspaces_settings_features_section share/template/control/fields-account.html
 #.  
 msgid "No"
 msgstr "n0"
@@ -2454,6 +2699,11 @@ msgstr "n0 S747S F0R 7hIs p4g3 Y37"
 msgid "No users entered"
 msgstr "n0 Us3rS 3n73R3D"
 
+#: share/template/control/user_table
+#.  
+msgid "No users selected, please select at least one user and try again."
+msgstr "n0 Us3rS S3L3C73d, Pl34S3 s3l3c7 47 l34S7 0N3 uS3R 4nD 7rY 4g4iN."
+
 #: share/template/control/plugins
 #.  
 msgid "None"
@@ -2479,7 +2729,7 @@ msgstr "n0v3m383r"
 msgid "Number of Users"
 msgstr "nUm83R 0f uS3Rs"
 
-#: share/template/control/account_table share/template/control/user_table share/template/control/user_table share/template/control/workspace.html
+#: share/template/control/account_table share/template/control/selected_user_table_header share/template/control/user_table_header share/template/control/user_table_header share/template/control/workspace.html
 #.  
 msgid "Number of Workspaces"
 msgstr "nUm83R 0f w0rKsP4C3S"
@@ -2521,8 +2771,8 @@ msgstr "0P7I0N4L M0DuL3S InS74lL3D:"
 
 #: share/skin/s3/template/workspaces_created_section.html
 #. (
-msgid "Or you may continue to work in this workspace, and visit \"%1\" later."
-msgstr "0R Y0U M4Y C0N7InU3 70 W0Rk iN 7hIs w0rKsP4C3, 4nD ViSi7 \"%1\" l473r."
+msgid "Or you may continue to work in this workspace, and visit \\\"%1\\\" later."
+msgstr "0R Y0U M4Y C0N7InU3 70 W0Rk iN 7hIs w0rKsP4C3, 4nD ViSi7 \\\"%1\\\" l473r."
 
 #: lib/Socialtext/BacklinksPlugin.pm lib/Socialtext/BacklinksPlugin.pm share/skin/s3/template/element/listview_tabs share/skin/s3/template/view/empty_watchlist
 #.  
@@ -2644,6 +2894,11 @@ msgstr "p30Pl3 DiR3C70rY"
 msgid "People matching '%1'"
 msgstr "p30Pl3 M47cHiNg '%1'"
 
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "People plugin must be enabled for account %1"
+msgstr "p30Pl3 PlUgIn mUs7 83 3N48l3d f0r 4Cc0uN7 %1"
+
 #: share/console-template/template/backup.html
 #.  
 msgid "Perform Backup Now"
@@ -2658,6 +2913,11 @@ msgstr "p3rF0Rm r3s70R3"
 #.  
 msgid "Permalink"
 msgstr "p3rM4LiNk"
+
+#: share/template/control/field_common
+#.  
+msgid "Person"
+msgstr "p3rS0N"
 
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
@@ -2686,8 +2946,8 @@ msgstr "pL34s3 3n73R 4n 3M4Il 4DdR3Ss."
 
 #: share/template/email/email-address-confirmation.html
 #. (
-msgid "Please follow <a href=\"%1\">this link to confirm your email address</a>. and update your information."
-msgstr "pL34s3 F0Ll0w <a href=\"%1\">7hIs lInK 70 c0nFiRm y0uR 3m4iL 4dDr3sS</4>. 4Nd uPd473 Y0Ur iNf0rM47i0n."
+msgid "Please follow <a href=\\\"%1\\\">this link to confirm your email address</a>. and update your information."
+msgstr "pL34s3 F0Ll0w <a href=\\\"%1\\\">7hIs lInK 70 c0nFiRm y0uR 3m4iL 4dDr3sS</4>. 4Nd uPd473 Y0Ur iNf0rM47i0n."
 
 #: lib/Socialtext/User.pm
 #.  
@@ -2700,9 +2960,9 @@ msgid "Please follow this link to confirm your address and update your informati
 msgstr "pL34s3 F0Ll0w 7HiS LiNk 70 C0NfIrM Y0Ur 4DdR3Ss 4Nd uPd473 Y0Ur iNf0rM47i0n:"
 
 #: share/skin/s3/template/element/settings/weblog_create
-#.  
-msgid "Please give your weblog a name. If the name you provide does not end with \"Blog\" or \"Weblog\", the system will add \"Blog\" to the name you provide. After you click \"Create\", you'll be taken right to the new weblog."
-msgstr "pL34s3 GiV3 y0uR W38l0g 4 n4m3. iF 7h3 N4M3 y0u pR0ViD3 d03S N07 3nD Wi7h \"8L0G\" 0r \"w38L0G\", 7H3 sYs73M WiLl 4Dd \"8L0G\" 70 7H3 n4m3 Y0U Pr0vId3. 4F73r y0u cLiCk \"cR3473\", y0u'lL 83 74k3n rIgH7 70 7h3 N3W W38l0g."
+#. (
+msgid "Please give your weblog a name. If the name you provide does not end with \\\"Blog\\\" or \\\"Weblog\\\", the system will add \\\"Blog\\\" to the name you provide. After you click \\\"Create\\\", you\\\\"
+msgstr "pL34s3 GiV3 y0uR W38l0g 4 n4m3. iF 7h3 N4M3 y0u pR0ViD3 d03S N07 3nD Wi7h \\\"8L0G\\\" 0r \\\"w38L0G\\\", 7H3 sYs73M WiLl 4Dd \\\"8L0G\\\" 70 7H3 n4m3 Y0U Pr0vId3. 4F73r y0u cLiCk \\\"cR3473\\\", y0u\\\\"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -2711,8 +2971,8 @@ msgstr "pL34s3 S3L3C7 4 84cKuP 70 r3s70R3"
 
 #: lib/Socialtext/Hub.pm
 #. (
-msgid "Please send email to <a href=\"mailto:%1\">%1</a> if you think it should have worked."
-msgstr "pL34s3 S3Nd 3M4Il 70 <a href=\"M4Il70:%1\">%1</4> iF Y0U 7hInK I7 sH0UlD H4V3 w0rK3D."
+msgid "Please send email to <a href=\\\"mailto:%1\\\">%1</a> if you think it should have worked."
+msgstr "pL34s3 S3Nd 3M4Il 70 <a href=\\\"M4Il70:%1\\\">%1</4> iF Y0U 7hInK I7 sH0UlD H4V3 w0rK3D."
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -2779,15 +3039,15 @@ msgstr "pR3Vi0uS"
 msgid "Previous Page"
 msgstr "pR3Vi0uS P4G3"
 
-#: share/template/control/user.html share/template/control/user_table share/template/control/workspace.html
+#: share/template/control/selected_user_table_header share/template/control/user.html share/template/control/user_table_header share/template/control/user_table_header share/template/control/workspace.html
 #.  
 msgid "Primary Account"
 msgstr "pRiM4Ry 4Cc0uN7"
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "Primary account for \"%1\" is %2."
-msgstr "pRiM4Ry 4Cc0uN7 f0r \"%1\" Is %2."
+msgid "Primary account for \\\"%1\\\" is %2."
+msgstr "pRiM4Ry 4Cc0uN7 f0r \\\"%1\\\" Is %2."
 
 #: share/skin/s3/template/view/page/display share/skin/s3/template/view/weblog
 #.  
@@ -2809,12 +3069,27 @@ msgstr "pRiN73r fRi3nDlY R3P0R7"
 msgid "Private"
 msgstr "pRiV473"
 
+#: share/console-template/template/help.html
+#.  
+msgid "Problem description:"
+msgstr "pR08l3m d3sCrIp7i0n:"
+
 #: lib/Socialtext/Pluggable/Plugin/People.pm
 #.  
 msgid "Profile"
 msgstr "pR0FiL3"
 
-#: lib/Socialtext/CLI.pm
+#: share/template/control/account.html
+#.  
+msgid "Profile Fields"
+msgstr "pR0FiL3 fI3LdS"
+
+#: share/template/control/fields-account.html
+#.  
+msgid "Profile Section"
+msgstr "pR0FiL3 s3c7i0n"
+
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #. (
 msgid "Profile field '%1' does not exist for account '%2'"
 msgstr "pR0FiL3 fI3Ld '%1' D03s n07 3XiS7 f0r 4Cc0uN7 '%2'"
@@ -2824,10 +3099,15 @@ msgstr "pR0FiL3 fI3Ld '%1' D03s n07 3XiS7 f0r 4Cc0uN7 '%2'"
 msgid "Profile field '%1' updated for account '%2'"
 msgstr "pR0FiL3 fI3Ld '%1' UpD473D F0R 4cC0Un7 '%2'"
 
+#: lib/Socialtext/Pluggable/Plugin/People.pm
+#. (
+msgid "Profile field ID '%1' does not exist for account '%2'"
+msgstr "pR0FiL3 fI3Ld iD '%1' d03S N07 3xIs7 F0R 4cC0Un7 '%2'"
+
 #: lib/Socialtext/MassAdd.pm
 #. (
-msgid "Profile field \"%1\" could not be updated"
-msgstr "pR0FiL3 fI3Ld \"%1\" C0UlD N07 83 uPd473d"
+msgid "Profile field \\\"%1\\\" could not be updated"
+msgstr "pR0FiL3 fI3Ld \\\"%1\\\" C0UlD N07 83 uPd473d"
 
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
 #.  
@@ -2949,6 +3229,11 @@ msgstr "r3fR3ShInG 7h3 84CkUp lIs7 ..."
 msgid "Register"
 msgstr "r3gIs73R"
 
+#: share/template/control/field_common
+#.  
+msgid "Regular"
+msgstr "r3gUl4r"
+
 #: share/skin/s3/template/view/listview
 #.  
 msgid "Relevance"
@@ -2959,7 +3244,7 @@ msgstr "r3l3v4nC3"
 msgid "Remember me on this computer."
 msgstr "r3m3m83R M3 0N 7hIs c0mPu73R."
 
-#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/element/settings/users_listall_section
+#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/element/settings/users_listall_section share/template/control/workspace_invite.html
 #.  
 msgid "Remove"
 msgstr "r3m0v3"
@@ -2973,6 +3258,11 @@ msgstr "r3m0v3 4cC3Ss 70 S0Ci4l73X7 4Cc0uN7S"
 #.  
 msgid "Remove Access to Socialtext System Management"
 msgstr "r3m0v3 4cC3Ss 70 S0Ci4l73X7 sYs73M M4N4G3M3N7"
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Remove All"
+msgstr "r3m0v3 4lL"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -3019,6 +3309,11 @@ msgstr "r3p0r7 8uG"
 msgid "Report Period:"
 msgstr "r3p0r7 P3Ri0d:"
 
+#: share/console-template/template/console_wrapper.tmpl
+#.  
+msgid "Report a Problem"
+msgstr "r3p0r7 4 Pr08L3M"
+
 #: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
 #. (
 msgid "Report timeframe: week ending %1"
@@ -3033,6 +3328,11 @@ msgstr "r3p0r7s"
 #. (
 msgid "Request to invite new users to the %1 workspace"
 msgstr "r3qU3S7 70 InVi73 n3w uS3Rs 70 7h3 %1 w0rKsP4C3"
+
+#: share/template/control/fields-account.html
+#.  
+msgid "Required"
+msgstr "r3qUiR3D"
 
 #: share/skin/s3/template/element/settings/users_listall_section
 #.  
@@ -3099,6 +3399,11 @@ msgstr "r3v3rS3 cHr0n0l0gIc4lLy"
 msgid "Review or change the settings for %1:"
 msgstr "r3vI3W 0r cH4Ng3 7h3 S377InGs f0r %1:"
 
+#: share/skin/s3/template/view/page_revision_list
+#.  
+msgid "Revision"
+msgstr "r3vIsI0N"
+
 #: lib/Socialtext/RevisionPlugin.pm lib/Socialtext/RevisionPlugin.pm share/skin/s3/template/view/page_revision_list
 #. (
 msgid "Revision %1"
@@ -3138,6 +3443,11 @@ msgstr "s4v3"
 #.  
 msgid "Save Backup Schedule"
 msgstr "s4v3 84CkUp sCh3dUl3"
+
+#: share/template/control/field_form
+#.  
+msgid "Save Field"
+msgstr "s4v3 Fi3lD"
 
 #: share/skin/s3/template/view/weblog
 #.  
@@ -3206,8 +3516,8 @@ msgstr "s34RcH F0R Us3rS 70 iNvI73"
 
 #: lib/Socialtext/SOAPGoogle.pm
 #. (
-msgid "Search for \"%1\""
-msgstr "s34RcH F0R \"%1\""
+msgid "Search for \\\"%1\\\""
+msgstr "s34RcH F0R \\\"%1\\\""
 
 #: share/skin/s3/template/layout/html
 #.  
@@ -3229,6 +3539,11 @@ msgstr "s3l3c7"
 msgid "Select a workspace skin:"
 msgstr "s3l3c7 4 W0RkSp4c3 SkIn:"
 
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Select one or more of the users below to become administrators of your new workspace."
+msgstr "s3l3c7 0n3 0r m0r3 0f 7H3 uS3Rs 83l0w 70 83C0M3 4DmInIs7r470rS 0f y0uR N3W W0RkSp4c3."
+
 #: share/template/control/add_users.html
 #.  
 msgid "Select the CSV file containing users to add:"
@@ -3238,6 +3553,16 @@ msgstr "s3l3c7 7h3 CsV FiL3 c0n74InInG Us3rS 70 4Dd:"
 #.  
 msgid "Select the ZIP or TGZ file that contains the customized skin files:"
 msgstr "s3l3c7 7h3 ZiP 0r 7Gz fIl3 7h47 c0n74InS 7h3 CuS70mIz3d sKiN FiL3S:"
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "Select the account the new workspace should belong to."
+msgstr "s3l3c7 7h3 4cC0Un7 7h3 N3W W0RkSp4c3 Sh0uLd 83l0nG 70."
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#.  
+msgid "Selected Users"
+msgstr "s3l3c73D Us3rS"
 
 #: share/console-template/template/setup.html share/console-template/template/setup.html
 #.  
@@ -3268,6 +3593,11 @@ msgstr "s37 3M4Il c0nFiGuR47i0n"
 #.  
 msgid "Set Time Server"
 msgstr "s37 7Im3 S3Rv3r"
+
+#: share/template/control/add_user.html
+#.  
+msgid "Set by external Directory"
+msgstr "s37 8Y 3x73Rn4l dIr3c70Ry"
 
 #: share/skin/s3/template/layout/html share/skin/s3/template/layout/html share/skin/s3/template/view/settings
 #.  
@@ -3384,6 +3714,11 @@ msgstr "s0cI4L73x7 4pPlI4Nc3 73S7 3M4Il"
 msgid "Socialtext People"
 msgstr "s0cI4L73x7 P30pL3"
 
+#: share/console-template/template/help.html
+#.  
+msgid "Socialtext Support"
+msgstr "s0cI4L73x7 SuPp0r7"
+
 #: share/template/control/user.html
 #.  
 msgid "Socialtext System Management Access?"
@@ -3396,8 +3731,8 @@ msgstr "s0cI4L73x7 UnPlUgG3D"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
 #.  
-msgid "Socialtext Unplugged allows users to read and edit workspace pages while offline. Users can \"unplug\" one or more pages to read and edit. Changes can be synchronized with the workspace."
-msgstr "s0cI4L73x7 UnPlUgG3D 4lL0Ws uS3Rs 70 R34d 4Nd 3Di7 W0RkSp4c3 P4G3S WhIl3 0fFlIn3. uS3Rs c4n \"uNpLuG\" 0n3 0r m0r3 P4G3S 70 r34D 4nD 3dI7. Ch4nG3S C4N 83 sYnChR0NiZ3D Wi7h 7H3 w0rKsP4C3."
+msgid "Socialtext Unplugged allows users to read and edit workspace pages while offline. Users can \\\"unplug\\\" one or more pages to read and edit. Changes can be synchronized with the workspace."
+msgstr "s0cI4L73x7 UnPlUgG3D 4lL0Ws uS3Rs 70 R34d 4Nd 3Di7 W0RkSp4c3 P4G3S WhIl3 0fFlIn3. uS3Rs c4n \\\"uNpLuG\\\" 0n3 0r m0r3 P4G3S 70 r34D 4nD 3dI7. Ch4nG3S C4N 83 sYnChR0NiZ3D Wi7h 7H3 w0rKsP4C3."
 
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
 #.  
@@ -3409,11 +3744,6 @@ msgstr "s0cI4L73x7 UnPlUgG3D DiS48l3d"
 msgid "Socialtext Unplugged enabled"
 msgstr "s0cI4L73x7 UnPlUgG3D 3n48L3D"
 
-#: share/template/control/wrapper
-#. (
-msgid "Socialtext Workspace<sup>&trade;</sup> %1"
-msgstr "s0cI4L73x7 W0RkSp4c3<SuP>&7R4D3;</sUp> %1"
-
 #: share/skin/s3/template/element/settings/workspaces_settings_skin_section
 #.  
 msgid "Socialtext can create a skin to customize the look and feel of your workspace. You can use the default skin supplied by Socialtext or a customized skin."
@@ -3421,8 +3751,8 @@ msgstr "s0cI4L73x7 C4N Cr3473 4 sKiN 70 cUs70MiZ3 7H3 l00K 4nD F33l 0F Y0Ur w0rK
 
 #: share/template/control/add_users.html
 #.  
-msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here.  Complete documentation about adding multiple users is available here: <a href=\"http://www.socialtext.net/appliance-manual/index.cgi?adding_users_to_socialtext#adding_multiple_users\">Adding Multiple Users to Socialtext</a>"
-msgstr "s0cI4L73x7 3n48L3S Y0U 70 4Dd mUl7iPl3 Us3rS 70 y0uR 4cC0Un7. 70 4dD MuL7IpL3 uS3Rs, D0WnL04d 7H3 s4mPl3 D474 fIl3, 4Nd 4Dd y0uR Us3r d474. 7H3N UpL04d 7H3 fIl3 H3R3.  c0mPl373 D0CuM3N747I0N 480u7 4dDiNg mUl7iPl3 Us3rS Is 4V4Il48L3 h3r3: <a href=\"h77P://WwW.S0Ci4l73X7.n37/4PpLi4nC3-m4nU4L/InD3X.CgI?4dDiNg_uS3Rs_70_S0Ci4l73X7#4DdInG_MuL7IpL3_uS3Rs\">4DdInG MuL7IpL3 uS3Rs 70 S0Ci4l73X7</4>"
+msgid "Socialtext enables you to add multiple users to your account. To add multiple users, download the sample data file, and add your user data. Then upload the file here.  Complete documentation about adding multiple users is available here: <a href=\\\"http://www.socialtext.net/appliance-manual/index.cgi?adding_users_to_socialtext#adding_multiple_users\\\">Adding Multiple Users to Socialtext</a>"
+msgstr "s0cI4L73x7 3n48L3S Y0U 70 4Dd mUl7iPl3 Us3rS 70 y0uR 4cC0Un7. 70 4dD MuL7IpL3 uS3Rs, D0WnL04d 7H3 s4mPl3 D474 fIl3, 4Nd 4Dd y0uR Us3r d474. 7H3N UpL04d 7H3 fIl3 H3R3.  c0mPl373 D0CuM3N747I0N 480u7 4dDiNg mUl7iPl3 Us3rS Is 4V4Il48L3 h3r3: <a href=\\\"h77P://WwW.S0Ci4l73X7.n37/4PpLi4nC3-m4nU4L/InD3X.CgI?4dDiNg_uS3Rs_70_S0Ci4l73X7#4DdInG_MuL7IpL3_uS3Rs\\\">4DdInG MuL7IpL3 uS3Rs 70 S0Ci4l73X7</4>"
 
 #: share/template/authen/forgot_password.html
 #.  
@@ -3524,6 +3854,11 @@ msgstr "s0r7 3n7rI3S 8y fIrS7 p0s73D 7iM3"
 msgid "Sort entries by last updated time"
 msgstr "s0r7 3n7rI3S 8y l4s7 UpD473D 7iM3"
 
+#: share/template/control/fields-account.html
+#.  
+msgid "Source"
+msgstr "s0uRc3"
+
 #: share/skin/s3/template/view/page/revision
 #.  
 msgid "Source View"
@@ -3534,12 +3869,17 @@ msgstr "s0uRc3 Vi3w"
 msgid "Standard Welcome Message"
 msgstr "s74Nd4rD W3Lc0m3 M3Ss4g3"
 
+#: share/template/control/fields-account.html
+#.  
+msgid "Stock fields"
+msgstr "s70Ck fI3LdS"
+
 #: share/skin/s3/template/view/listview share/skin/s3/template/view/page/display
 #.  
 msgid "Stop watching"
 msgstr "s70P W47cHiNg"
 
-#: share/template/authen/element/choose_password_form share/template/authen/element/forgot_password_form share/template/control/accounts.html share/template/control/accounts.html share/template/control/assign_to_account share/template/control/users.html share/template/control/workspaces.html
+#: share/console-template/template/help.html share/template/authen/element/choose_password_form share/template/authen/element/forgot_password_form share/template/control/accounts.html share/template/control/accounts.html share/template/control/assign_to_account share/template/control/users.html share/template/control/workspaces.html
 #.  
 msgid "Submit"
 msgstr "sU8Mi7"
@@ -3589,7 +3929,7 @@ msgstr "sYs73M ShU77iNg d0wN ..."
 msgid "Table of contents for '%1'. Click to edit."
 msgstr "748L3 0F C0N73n7s f0r '%1'. cLiCk 70 3dI7."
 
-#: share/skin/s3/template/view/page/display share/skin/s3/template/view/taglistview
+#: share/skin/s3/template/view/taglistview
 #.  
 msgid "Tag"
 msgstr "74g"
@@ -3609,6 +3949,11 @@ msgstr "74gS"
 msgid "Tags:"
 msgstr "74gS:"
 
+#: share/console-template/template/help.html
+#.  
+msgid "Tarball Built"
+msgstr "74r84Ll 8UiL7"
+
 #: lib/Socialtext/Widget_resource.pm
 #. (
 msgid "Technorati: %1"
@@ -3621,8 +3966,8 @@ msgstr "7H3 %1 4cC0Un7 H4S 833n cR3473d."
 
 #: lib/Socialtext/Account.pm
 #. (
-msgid "The %1 plugin can not be enabled at the account scope"
-msgstr "7H3 %1 PlUgIn c4n n07 83 3n48L3D 47 7H3 4Cc0uN7 sC0P3"
+msgid "The %1 plugin can not be set at the account scope"
+msgstr "7H3 %1 PlUgIn c4n n07 83 S37 47 7H3 4Cc0uN7 sC0P3"
 
 #: lib/Socialtext/Workspace.pm
 #. (
@@ -3654,7 +3999,7 @@ msgstr "7H3 %1 PlUgIn iS N0W 3n48L3D F0R 4cC0Un7 %2"
 msgid "The %1 plugin is now enabled for all accounts"
 msgstr "7H3 %1 PlUgIn iS N0W 3n48L3D F0R 4lL 4cC0Un7s"
 
-#: lib/Socialtext/CLI.pm lib/Socialtext/Workspace.pm
+#: lib/Socialtext/CLI.pm
 #. (
 msgid "The %1 plugin is now enabled for workspace %2"
 msgstr "7H3 %1 PlUgIn iS N0W 3n48L3D F0R W0RkSp4c3 %2"
@@ -3769,6 +4114,11 @@ msgstr "7H3 3M4Il 4DdR3Ss f0r %1 H4S 4lR34dY 833n c0nFiRm3d."
 msgid "The email we will send you will come from <strong>%1</strong>. To ensure you receive it, please add <strong>%1</strong> to your address book or safe list."
 msgstr "7H3 3M4Il w3 WiLl s3nD Y0U WiLl c0m3 Fr0m <S7R0Ng>%1</s7r0nG>. 70 3NsUr3 Y0U R3C3Iv3 I7, Pl34S3 4Dd <S7R0Ng>%1</s7r0nG> 70 Y0Ur 4DdR3Ss 800K 0r s4f3 LiS7."
 
+#: share/template/control/field_form
+#.  
+msgid "The field name is used as a unique identifier.  If left blank, it will be derrived from the title"
+msgstr "7H3 fI3Ld n4m3 Is uS3D 4s 4 uNiQu3 Id3n7iFi3r.  iF L3F7 8L4Nk, I7 wIlL 83 d3rRiV3D Fr0m 7H3 7I7L3"
+
 #: lib/Socialtext/AttachmentsUIPlugin.pm
 #.  
 msgid "The file you are trying to upload does not exist"
@@ -3821,13 +4171,13 @@ msgstr "7H3 p3rMiSsI0Ns f0r %1 H4V3 833N S37 70 %2."
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "The profile for \"%1\" is no longer hidden."
-msgstr "7H3 pR0FiL3 f0r \"%1\" Is n0 L0Ng3r hIdD3N."
+msgid "The profile for \\\"%1\\\" is no longer hidden."
+msgstr "7H3 pR0FiL3 f0r \\\"%1\\\" Is n0 L0Ng3r hIdD3N."
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "The profile for \"%1\" is now hidden."
-msgstr "7H3 pR0FiL3 f0r \"%1\" Is n0w hIdD3N."
+msgid "The profile for \\\"%1\\\" is now hidden."
+msgstr "7H3 pR0FiL3 f0r \\\"%1\\\" Is n0w hIdD3N."
 
 #: lib/Socialtext/Account.pm lib/Socialtext/Workspace.pm
 #. (
@@ -3848,6 +4198,11 @@ msgstr "7H3 uS3R %1 h4s 833N D34c7iV473D."
 #.  
 msgid "The user has been removed from workspaces and directories."
 msgstr "7H3 uS3R H4S 833n r3m0v3d fR0M W0RkSp4c3s 4Nd dIr3c70Ri3s."
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#.  
+msgid "The value of this field will be updated from the external source when user data is refreshed."
+msgstr "7H3 v4lU3 0F 7hIs fI3Ld wIlL 83 uPd473d fR0M 7h3 3x73Rn4l s0uRc3 Wh3n uS3R D474 iS R3Fr3sH3D."
 
 #: lib/Socialtext/CLI.pm
 #. (
@@ -3909,6 +4264,21 @@ msgstr "7HiS 4c7i0n wIlL D3L373 4Ll 3XiS7InG W0RkSp4c3s 4Nd uS3Rs 0N 7hIs 4PpLi4
 msgid "This email was sent from the Socialtext Appliance."
 msgstr "7HiS 3m4iL W4S S3N7 fR0M 7h3 S0Ci4l73X7 4PpLi4nC3."
 
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "This field is now hidden from users\\\\"
+msgstr "7HiS Fi3lD Is n0w hIdD3N Fr0m uS3Rs\\\\"
+
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "This field is now visible in users\\\\"
+msgstr "7HiS Fi3lD Is n0w vIsI8L3 iN Us3rS\\\\"
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "This is a short unique identifier used as  part of your workspace's web address and email address. It must consist of 3-30 lowercase letters, numbers, underscores, or dashes."
+msgstr "7HiS Is 4 sH0R7 uNiQu3 Id3n7iFi3r uS3D 4s  P4R7 0F Y0Ur w0rKsP4C3's w38 4DdR3Ss 4Nd 3M4Il 4DdR3Ss. I7 mUs7 C0NsIs7 0f 3-30 L0W3Rc4s3 L3773rS, nUm83Rs, UnD3RsC0R3S, 0R D4Sh3s."
+
 #: share/skin/s3/template/element/settings/workspaces_create_section
 #.  
 msgid "This is a short unique identifier used as part of your workspace's web address and email address."
@@ -3924,7 +4294,7 @@ msgstr "7HiS Is 7H3 fIrS7 p0s7 In %1. cLiCk *N3W P0S7* 70 4Dd 4N07h3r p0s7."
 msgid "This is the title of your workspace. It may be changed at any time."
 msgstr "7HiS Is 7H3 7I7L3 0F Y0Ur w0rKsP4C3. I7 m4y 83 Ch4nG3D 47 4Ny 7Im3."
 
-#: share/skin/s3/template/element/settings/workspaces_create_section
+#: share/skin/s3/template/element/settings/workspaces_create_section share/template/control/workspace_invite.html
 #.  
 msgid "This is the title of your workspace. It may be changed later if you want."
 msgstr "7HiS Is 7H3 7I7L3 0F Y0Ur w0rKsP4C3. I7 m4y 83 Ch4nG3D L473R If y0u w4n7."
@@ -3964,7 +4334,7 @@ msgstr "7Im3"
 msgid "Time each day:"
 msgstr "7Im3 34Ch d4y:"
 
-#: share/skin/s3/template/view/listview
+#: share/skin/s3/template/view/listview share/template/control/workspace_invite.html
 #.  
 msgid "Title"
 msgstr "7I7L3"
@@ -4001,8 +4371,8 @@ msgstr "70 Pr0c33D, pL34s3 Ch00S3 4 p4sSw0rD."
 
 #: share/console-template/template/overview.html
 #.  
-msgid "To see a list of all the workspaces and users on the system, go to the <a href=\"/nlw/control/\">Socialtext Accounts Admin</a> tool."
-msgstr "70 S33 4 LiS7 0F 4lL 7h3 W0RkSp4c3s 4Nd uS3Rs 0N 7h3 SyS73m, G0 70 7h3 <a href=\"/nLw/c0n7r0l/\">S0Ci4l73X7 4Cc0uN7S 4dMiN</4> 700l."
+msgid "To see a list of all the workspaces and users on the system, go to the <a href=\\\"/nlw/control/\\\">Socialtext Accounts Admin</a> tool."
+msgstr "70 S33 4 LiS7 0F 4lL 7h3 W0RkSp4c3s 4Nd uS3Rs 0N 7h3 SyS73m, G0 70 7h3 <a href=\\\"/nLw/c0n7r0l/\\\">S0Ci4l73X7 4Cc0uN7S 4dMiN</4> 700l."
 
 #: share/template/email/recent-changes.txt
 #. (
@@ -4011,8 +4381,8 @@ msgstr "70 S70p r3c3iViNg 0R Ch4nG3 h0w 0F73n y0u r3c3iV3 3M4IlS 480u7 Ch4nG3S 7
 
 #: share/template/email/recent-changes.html
 #. (
-msgid "To stop receiving or change how often you receive emails about changes to %1, you can <a href=\"%2\">change your preferences</a>."
-msgstr "70 S70p r3c3iViNg 0R Ch4nG3 h0w 0F73n y0u r3c3iV3 3M4IlS 480u7 Ch4nG3S 70 %1, y0u c4n <a href=\"%2\">Ch4nG3 y0uR Pr3f3r3nC3S</4>."
+msgid "To stop receiving or change how often you receive emails about changes to %1, you can <a href=\\\"%2\\\">change your preferences</a>."
+msgstr "70 S70p r3c3iViNg 0R Ch4nG3 h0w 0F73n y0u r3c3iV3 3M4IlS 480u7 Ch4nG3S 70 %1, y0u c4n <a href=\\\"%2\\\">Ch4nG3 y0uR Pr3f3r3nC3S</4>."
 
 #: share/template/email/watchlist.txt
 #. (
@@ -4021,8 +4391,8 @@ msgstr "70 S70p r3c3iViNg 0R Ch4nG3 h0w 0F73n y0u r3c3iV3 3M4IlS 480u7 Ch4nG3S 7
 
 #: share/template/email/watchlist.html
 #. (
-msgid "To stop receiving or change how often you receive emails about changes to your watchlist in %1, you can <a href=\"%2\">change your preferences</a>."
-msgstr "70 S70p r3c3iViNg 0R Ch4nG3 h0w 0F73n y0u r3c3iV3 3M4IlS 480u7 Ch4nG3S 70 y0uR W47cHlIs7 In %1, y0u c4n <a href=\"%2\">Ch4nG3 y0uR Pr3f3r3nC3S</4>."
+msgid "To stop receiving or change how often you receive emails about changes to your watchlist in %1, you can <a href=\\\"%2\\\">change your preferences</a>."
+msgstr "70 S70p r3c3iViNg 0R Ch4nG3 h0w 0F73n y0u r3c3iV3 3M4IlS 480u7 Ch4nG3S 70 y0uR W47cHlIs7 In %1, y0u c4n <a href=\\\"%2\\\">Ch4nG3 y0uR Pr3f3r3nC3S</4>."
 
 #: share/skin/s3/template/view/page/display
 #.  
@@ -4079,12 +4449,12 @@ msgstr "7Yp3 N3W P4SsW0Rd 4G4In:"
 msgid "URI"
 msgstr "uRi"
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #.  
 msgid "Unable to change profile field."
 msgstr "uN48l3 70 cH4Ng3 Pr0fIl3 Fi3lD."
 
-#: lib/Socialtext/CLI.pm
+#: lib/Socialtext/Pluggable/Plugin/People.pm
 #.  
 msgid "Unable to create profile field."
 msgstr "uN48l3 70 cR3473 Pr0fIl3 Fi3lD."
@@ -4103,6 +4473,11 @@ msgstr "uN48l3 70 pR0C3Ss l0g0 FiL3. Is i7 4n iM4G3?"
 #.  
 msgid "Unformatted Content"
 msgstr "uNf0rM4773d c0n73N7"
+
+#: share/console-template/template/help.html
+#. (
+msgid "Unknown: %1"
+msgstr "uNkN0Wn: %1"
 
 #: share/skin/s3/template/element/settings/workspaces_unsubscribe_section share/skin/s3/template/view/settings
 #.  
@@ -4139,6 +4514,11 @@ msgstr "uPd473d m4iL S3Rv3r 70 %1"
 msgid "Updated mail server to use built-in server"
 msgstr "uPd473d m4iL S3Rv3r 70 Us3 8uIl7-In s3rV3R"
 
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Updated profile field \\\"%1\\\""
+msgstr "uPd473d pR0FiL3 fI3Ld \\\"%1\\\""
+
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
 msgid "Updated time from %1"
@@ -4163,6 +4543,11 @@ msgstr "uPl04D 4n iM4G3"
 #.  
 msgid "Upload Files"
 msgstr "uPl04D FiL3S"
+
+#: share/console-template/template/help.html
+#.  
+msgid "Upload a Support Tarball to Socialtext"
+msgstr "uPl04D 4 SuPp0r7 74R84lL 70 s0cI4L73x7"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_skin_section
 #.  
@@ -4214,7 +4599,7 @@ msgstr "uS3 7H3 3M4Il 4DdR3Ss y0u 3N73r3d 480V3 4S 7h3 Us3rN4M3, 4nD <s7r0nG>P4S
 msgid "Use your email address and new password to log in again."
 msgstr "uS3 y0uR 3m4iL 4dDr3sS 4nD N3W P4SsW0Rd 70 L0G In 4G4In."
 
-#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
+#: lib/Socialtext/Appliance/WorkspaceUsageReport.pm share/template/control/field_form share/template/control/fields-account.html
 #.  
 msgid "User"
 msgstr "uS3R"
@@ -4226,8 +4611,8 @@ msgstr "uS3R %1 h4s 833N D34c7iV473D."
 
 #: lib/Socialtext/CLI.pm lib/Socialtext/CLI.pm
 #. (
-msgid "User \"%1\" was updated."
-msgstr "uS3R \"%1\" w4s uPd473d."
+msgid "User \\\"%1\\\" was updated."
+msgstr "uS3R \\\"%1\\\" w4s uPd473d."
 
 #: share/template/control/user.html
 #.  
@@ -4261,8 +4646,8 @@ msgstr "uS3Rs (%1)"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
-msgid "Users matching \"%1\""
-msgstr "uS3Rs m47ChInG \"%1\""
+msgid "Users matching \\\"%1\\\""
+msgstr "uS3Rs m47ChInG \\\"%1\\\""
 
 #: lib/Socialtext/OpenIdPlugin.pm lib/Socialtext/UserSettingsPlugin.pm lib/Socialtext/UserSettingsPlugin.pm lib/Socialtext/UserSettingsPlugin.pm
 #.  
@@ -4298,11 +4683,6 @@ msgstr "vI3W"
 #.  
 msgid "View Formatted"
 msgstr "vI3W F0Rm4773D"
-
-#: share/skin/s3/template/view/page_revision_list
-#.  
-msgid "View Revision"
-msgstr "vI3W R3ViSi0n"
 
 #: lib/Socialtext/Appliance/WorkspaceUsageReport.pm
 #.  
@@ -4395,9 +4775,9 @@ msgid "What order would you like the updates to be sorted?"
 msgstr "wH47 0rD3R W0UlD Y0U LiK3 7H3 uPd473s 70 83 s0r73D?"
 
 #: lib/Socialtext/RecentChangesPlugin.pm
-#.  
-msgid "What time interval should \"What's New\" display?"
-msgstr "wH47 7iM3 iN73rV4L Sh0uLd \"wH47'S N3W\" DiSpL4Y?"
+#. (
+msgid "What time interval should \\\"What\\\\"
+msgstr "wH47 7iM3 iN73rV4L Sh0uLd \\\"wH47\\\\"
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
@@ -4426,13 +4806,13 @@ msgstr "wH3N 7h3 W0RkSp4c3 R3C3Iv3s 4N 3m4iL, 7H3 sU8J3C7 0F 7h3 3m4iL 83C0M3S 7
 
 #: share/skin/s3/template/element/settings/workspaces_settings_appearance_section
 #. (
-msgid "When users click on the title of a workspace, they go to the central page of the workspace. This page has the same title as the workspace (\"%1\")."
-msgstr "wH3N Us3rS ClIcK 0n 7H3 7I7L3 0F 4 W0RkSp4c3, 7H3Y G0 70 7h3 C3N7R4L P4G3 0F 7h3 W0RkSp4c3. 7HiS P4G3 h4s 7H3 s4m3 7i7l3 4s 7H3 w0rKsP4C3 (\"%1\")."
+msgid "When users click on the title of a workspace, they go to the central page of the workspace. This page has the same title as the workspace (\\\"%1\\\")."
+msgstr "wH3N Us3rS ClIcK 0n 7H3 7I7L3 0F 4 W0RkSp4c3, 7H3Y G0 70 7h3 C3N7R4L P4G3 0F 7h3 W0RkSp4c3. 7HiS P4G3 h4s 7H3 s4m3 7i7l3 4s 7H3 w0rKsP4C3 (\\\"%1\\\")."
 
 #: share/template/email/password-change.html
 #. (
-msgid "When you <a href=\"%1\">click on this link</a>, you will be taken to a page which allows you to choose a new password."
-msgstr "wH3N Y0U <a href=\"%1\">cLiCk 0N 7hIs lInK</4>, y0u wIlL 83 74k3n 70 4 P4G3 wHiCh 4Ll0wS Y0U 70 cH00s3 4 N3W P4SsW0Rd."
+msgid "When you <a href=\\\"%1\\\">click on this link</a>, you will be taken to a page which allows you to choose a new password."
+msgstr "wH3N Y0U <a href=\\\"%1\\\">cLiCk 0N 7hIs lInK</4>, y0u wIlL 83 74k3n 70 4 P4G3 wHiCh 4Ll0wS Y0U 70 cH00s3 4 N3W P4SsW0Rd."
 
 #: share/template/email/password-change.txt
 #.  
@@ -4454,7 +4834,7 @@ msgstr "wHiCh l4nGu4g3 D0 y0u uS3?"
 msgid "Who can send email to this workspace?"
 msgstr "wH0 c4n s3nD 3m4iL 70 7HiS W0RkSp4c3?"
 
-#: share/skin/s3/template/view/listview
+#: share/skin/s3/template/layout/html share/skin/s3/template/view/listview
 #.  
 msgid "Workspace"
 msgstr "w0rKsP4C3"
@@ -4559,11 +4939,6 @@ msgstr "w0rKsP4C3 7I7L3 iS 700 L0Ng 4F73r uRl 3Nc0dInG"
 msgid "Workspace title must be between 2 and 64 characters long and may not begin with a -."
 msgstr "w0rKsP4C3 7I7L3 mUs7 83 837W33n 2 4Nd 64 Ch4r4c73Rs l0nG 4nD M4Y N07 83GiN Wi7h 4 -."
 
-#: share/skin/s3/template/layout/html
-#.  
-msgid "Workspace:"
-msgstr "w0rKsP4C3:"
-
 #: lib/Socialtext/Handler/ControlPanel.pm share/console-template/template/overview.html share/skin/s3/template/element/settings/workspaces_listall_section share/skin/s3/template/layout/html share/skin/s3/template/view/settings share/template/control/wrapper
 #.  
 msgid "Workspaces"
@@ -4581,8 +4956,8 @@ msgstr "w0rKsP4C3S InI7I4LiZ3D.<8R>L0G: %1"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
-msgid "Workspaces matching \"%1\""
-msgstr "w0rKsP4C3S M47cHiNg \"%1\""
+msgid "Workspaces matching \\\"%1\\\""
+msgstr "w0rKsP4C3S M47cHiNg \\\"%1\\\""
 
 #: share/skin/s3/template/element/workspace_list/my_workspaces
 #.  
@@ -4629,7 +5004,7 @@ msgstr "wR0Ng 3M4Il 4DdR3Ss 0R P4SsW0Rd - pL34s3 7rY 4g4iN."
 msgid "Yahoo! IM: %1"
 msgstr "y4h00! Im: %1"
 
-#: share/skin/s3/template/element/settings/workspaces_settings_features_section
+#: share/skin/s3/template/element/settings/workspaces_settings_features_section share/template/control/fields-account.html
 #.  
 msgid "Yes"
 msgstr "y3s"
@@ -4645,9 +5020,9 @@ msgid "You are logged in as %1"
 msgstr "y0u 4R3 l0gG3D In 4S %1"
 
 #: share/skin/s3/template/layout/html
-#.  
-msgid "You are not following anyone yet. To follow someone, go to a person's profile and click the \"Follow\" button."
-msgstr "y0u 4R3 n07 f0lL0WiNg 4Ny0n3 Y37. 70 F0Ll0w s0m30N3, G0 70 4 P3Rs0n's pR0FiL3 4Nd cLiCk 7H3 \"f0lL0W\" 8u770n."
+#. (
+msgid "You are not following anyone yet. To follow someone, go to a person's profile and click the \\\\"
+msgstr "y0u 4R3 n07 f0lL0WiNg 4Ny0n3 Y37. 70 F0Ll0w s0m30N3, G0 70 4 P3Rs0n's pR0FiL3 4Nd cLiCk 7H3 \\\\"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_appearance_section
 #.  
@@ -4704,6 +5079,11 @@ msgstr "y0u c4nN07 Ch4nG3 7H3 n4m3 0f 4 sYs73M-Cr3473D 4cC0Un7."
 msgid "You cannot change the name of a system-created user."
 msgstr "y0u c4nN07 Ch4nG3 7H3 n4m3 0f 4 sYs73M-Cr3473D Us3r."
 
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page_revision_list
+#.  
+msgid "You cannot compare a revision to itself."
+msgstr "y0u c4nN07 C0Mp4r3 4 R3ViSi0n 70 I7S3Lf."
+
 #: lib/Socialtext/AttachmentsUIPlugin.pm
 #.  
 msgid "You dont have permission to upload attachments"
@@ -4721,8 +5101,8 @@ msgstr "y0u h4v3 Fr33 4Cc3sS 70 vI3W 4nD C0N7Ri8u73 70 4nY 0f 7H3S3 pU8LiC WiKiS
 
 #: share/skin/s3/template/workspaces_created_section.html
 #. (
-msgid "You have just created \"%1\", a brand new Socialtext Workspace. You are the administrator. The web address of the new workspace is %2."
-msgstr "y0u h4v3 JuS7 cR3473d \"%1\", 4 8R4Nd n3w s0cI4L73x7 W0RkSp4c3. y0u 4R3 7H3 4DmInIs7r470r. 7h3 W38 4dDr3sS 0f 7H3 n3w w0rKsP4C3 iS %2."
+msgid "You have just created \\\"%1\\\", a brand new Socialtext Workspace. You are the administrator. The web address of the new workspace is %2."
+msgstr "y0u h4v3 JuS7 cR3473d \\\"%1\\\", 4 8R4Nd n3w s0cI4L73x7 W0RkSp4c3. y0u 4R3 7H3 4DmInIs7r470r. 7h3 W38 4dDr3sS 0f 7H3 n3w w0rKsP4C3 iS %2."
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #.  
@@ -4733,6 +5113,16 @@ msgstr "y0u m4y n07 d3l373 Y0UrS3Lf."
 #.  
 msgid "You may want to keep this email for future reference."
 msgstr "y0u m4y w4n7 70 k33P 7hIs 3M4Il f0r fU7Ur3 R3F3R3Nc3."
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "You must choose at least one administrator."
+msgstr "y0u mUs7 Ch00S3 47 L34s7 0n3 4dMiNiS7R470R."
+
+#: share/template/control/workspace_invite.html
+#.  
+msgid "You must choose at least one workspace"
+msgstr "y0u mUs7 Ch00S3 47 L34s7 0n3 W0RkSp4c3"
 
 #: lib/Socialtext/OpenIdPlugin.pm
 #.  
@@ -4781,8 +5171,8 @@ msgstr "y0u s3l3c73D 4 H0M3P4G3 4S W38l0g, 8u7 DiD N07 S3L3C7 4 w38L0G N4M3.  y0
 
 #: share/console-template/template/popup.html
 #.  
-msgid "You will be asked to log into the Console after you click \"Initialize Workspaces\"."
-msgstr "y0u wIlL 83 4Sk3d 70 L0G In70 7H3 c0nS0L3 4F73r y0u cLiCk \"iNi7i4lIz3 W0RkSp4c3s\"."
+msgid "You will be asked to log into the Console after you click \\\"Initialize Workspaces\\\"."
+msgstr "y0u wIlL 83 4Sk3d 70 L0G In70 7H3 c0nS0L3 4F73r y0u cLiCk \\\"iNi7i4lIz3 W0RkSp4c3s\\\"."
 
 #: share/skin/s3/template/workspaces_created_section.html
 #.  
@@ -4814,6 +5204,11 @@ msgstr "y0uR 3m4iL 4dDr3sS H4S 833n c0nFiRm3d"
 msgid "Your email address, %1, has been confirmed. Please login."
 msgstr "y0uR 3m4iL 4dDr3sS, %1, h4s 833N C0NfIrM3D. pL34s3 L0GiN."
 
+#: share/console-template/template/help.html
+#.  
+msgid "Your email address:"
+msgstr "y0uR 3m4iL 4dDr3sS:"
+
 #: lib/Socialtext/Handler/Authen.pm
 #.  
 msgid "Your password has been set and you can now login."
@@ -4834,10 +5229,25 @@ msgstr "y0uR S34rCh r37UrN3D N0 r3sUl7s."
 msgid "Your settings cannot be changed via the Socialtext settings UI."
 msgstr "y0uR S377InGs c4nN07 83 cH4Ng3d vI4 7H3 s0cI4L73x7 S377InGs uI."
 
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/page/revision
+#. (
+msgid "\\\"%1\\\""
+msgstr "\\\"%1\\\""
+
+#: lib/Socialtext/EditPlugin.pm
+#. (
+msgid "\\\"%1\\\" (edited %2 in %3)"
+msgstr "\\\"%1\\\" (3Di73D %2 iN %3)"
+
+#: share/console-template/template/help.html share/skin/s3/javascript/email-lightbox.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js
+#. (
+msgid "\\\"%1\\\" is not a valid email address."
+msgstr "\\\"%1\\\" Is n07 4 v4lId 3M4Il 4DdR3Ss."
+
 #: lib/Socialtext/Handler/Authen.pm
 #. (
-msgid "\"%1\" is not a valid email address. Please use your email address to log in."
-msgstr "\"%1\" Is n07 4 v4lId 3M4Il 4DdR3Ss. Pl34S3 uS3 y0uR 3m4iL 4dDr3sS 70 l0g iN."
+msgid "\\\"%1\\\" is not a valid email address. Please use your email address to log in."
+msgstr "\\\"%1\\\" Is n07 4 v4lId 3M4Il 4DdR3Ss. Pl34S3 uS3 y0uR 3m4iL 4dDr3sS 70 l0g iN."
 
 #: share/skin/s3/template/element/settings/workspaces_create_section
 #.  
@@ -4921,8 +5331,28 @@ msgstr "c0n7rI8U73d 8Y {uS3R: %1} 0N {d473: %2}"
 
 #: lib/Socialtext/MassAdd.pm
 #.  
+msgid "could not be parsed (extra fields).  Skipping this user."
+msgstr "c0uLd n07 83 P4Rs3d (3x7r4 Fi3lDs).  SkIpPiNg 7HiS Us3r."
+
+#: lib/Socialtext/MassAdd.pm
+#.  
+msgid "could not be parsed (missing fields).  Skipping this user."
+msgstr "c0uLd n07 83 P4Rs3d (MiSsInG Fi3lDs).  SkIpPiNg 7HiS Us3r."
+
+#: lib/Socialtext/MassAdd.pm
+#.  
+msgid "could not be parsed.  CSV header invalid; aborting."
+msgstr "c0uLd n07 83 P4Rs3d.  cSv h34D3R InV4LiD; 480R7InG."
+
+#: lib/Socialtext/MassAdd.pm
+#.  
 msgid "could not be parsed.  Skipping this user."
 msgstr "c0uLd n07 83 P4Rs3d.  sKiPpInG 7hIs uS3R."
+
+#: lib/Socialtext/MassAdd.pm
+#.  
+msgid "could not be parsed.  The file was missing the following required fields ($missing).  The file must have a header row listing the field headers."
+msgstr "c0uLd n07 83 P4Rs3d.  7H3 fIl3 W4S MiSsInG 7h3 F0Ll0wInG R3QuIr3d fI3LdS ($MiSsInG).  7H3 fIl3 MuS7 h4v3 4 H34d3r r0w lIs7iNg 7H3 fI3Ld h34D3Rs."
 
 #: lib/Socialtext/TimeZonePlugin.pm
 #.  
@@ -4943,11 +5373,6 @@ msgstr "d473: %1"
 #.  
 msgid "e-mail address was not supplied!"
 msgstr "3-m4iL 4dDr3sS W4S N07 SuPpLi3d!"
-
-#: lib/Socialtext/Formatter/WaflPhrase.pm share/skin/s3/template/view/weblog
-#.  
-msgid "edit"
-msgstr "3Di7"
 
 #: share/skin/s3/template/element/settings/start
 #.  
@@ -4994,7 +5419,7 @@ msgstr "fR33"
 msgid "friend"
 msgstr "fRi3nD"
 
-#: share/skin/s3/template/view/page/display
+#: share/skin/s3/template/view/page/display share/template/control/fields-account.html
 #.  
 msgid "hide"
 msgstr "hId3"
@@ -5009,7 +5434,7 @@ msgstr "iF Y0U Us3 7hIs s377iNg, 7h3 W0RkSp4c3 Is lIk3lY 70 83 Sp4mM3D"
 msgid "image: %1"
 msgstr "iM4G3: %1"
 
-#: share/skin/s3/template/view/listview
+#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/template/view/listview
 #.  
 msgid "in"
 msgstr "iN"
@@ -5219,6 +5644,11 @@ msgstr "70c: %1"
 msgid "total"
 msgstr "7074l"
 
+#: share/template/control/fields-account.html
+#.  
+msgid "un-hide"
+msgstr "uN-HiD3"
+
 #: lib/Socialtext/Widget_resource.pm
 #. (
 msgid "unformatted: %1"
@@ -5233,6 +5663,11 @@ msgstr "uS3R: %1"
 #. (
 msgid "view %1"
 msgstr "vI3W %1"
+
+#: lib/Socialtext/EditPlugin.pm
+#. (
+msgid "wants you to know about an edit of %1 in %2"
+msgstr "w4n7s y0u 70 Kn0w 480U7 4N 3dI7 0F %1 iN %2"
 
 #: share/skin/s3/template/element/settings/start
 #.  

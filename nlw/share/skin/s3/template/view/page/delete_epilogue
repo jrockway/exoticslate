@@ -20,7 +20,14 @@
       <form method="post" action="[% script_name %]">
         <input type="hidden" name="action" value="undelete_page" />
         <input type="hidden" name="page_id" value="[% page_id %]" />
-        <input type="submit" value="[% loc('Restore Page') %]" />
+        <ul class="formButtons" style="float:left">
+          <li class="flexButton">
+            <a class="genericOrangeButton" href="#" onclick="jQuery(this).parents('form').submit()">
+              [% loc('Restore Page') %]
+            </a>
+          </li>
+        </ul>
+        <div class="clear"></div>
       </form>
       <br />
       [% backlinks_description %]

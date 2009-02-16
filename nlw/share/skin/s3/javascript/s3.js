@@ -263,10 +263,10 @@ $(function() {
     });
 
     $("#st-pagetools-delete").click(function () {
-        if (confirm(loc("Are you sure you want to delete this page?"))) {
-            var page = Socialtext.page_id;
-            document.location = "index.cgi?action=delete_page;page_name=" + page;
-        }
+        get_lightbox('delete', function () {
+            var del = new ST.Delete;
+            del.deleteLightbox();
+        });
         return false;
     });
 

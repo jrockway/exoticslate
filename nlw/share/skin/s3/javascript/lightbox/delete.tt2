@@ -1,0 +1,29 @@
+[%# vim: set et sts=2 sw=2: %]
+<div class="lightbox" id="st-delete-lightbox">
+  <form id="st-delete-form" action="index.cgi" method="GET">
+    <input type="hidden" name="action" value="delete_page" />
+    <input type="hidden" name="page_name" value="[% page_title | html_encode %]" />
+    <div class="title">
+      [% loc('Delete Page') %]
+    </div>
+
+    <br/>
+    <p>
+      [% loc('Are you sure you want to delete "[_1]"?', page_title) %]
+    </p>
+
+    <div class="buttons">
+        <ul class="widgetButton" style="float:left; padding:10px">
+          <li class="flexButton">
+              <a id="st-delete-deletelink" class="submit genericOrangeButton" href="#">[% loc('Delete') %]</a>
+          </li>
+        </ul>
+        <ul class="widgetButton" style="float:left; padding:10px">
+          <li class="flexButton">
+              <a id="st-delete-cancellink" class="close genericOrangeButton" href="#">[% loc('Cancel') %]</a>
+          </li>
+        </ul>
+    </div>
+  </form>
+</div>
+

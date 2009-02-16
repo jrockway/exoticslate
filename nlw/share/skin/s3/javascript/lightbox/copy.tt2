@@ -7,8 +7,9 @@
     <div class="title">
       [% loc('Copy the page [_1] to another workspace?', page_title) %]
     </div>
-    <div class="error" id="st-copy-error">&nbsp;</div>
 
+    <br/>
+    <div class="error" id="st-copy-error">&nbsp;</div>
     <p>
       [% loc('New workspace') %]:
       <select id="st-copy-workspace" name="target_workspace_id">
@@ -28,8 +29,16 @@
     <br />
 
     <div class="buttons">
-      <input id="st-copy-savelink" type="submit" value="[% loc('Copy') %]" />
-      <input class="close" id="st-copy-cancellink" type="button" value="[% loc('Cancel') %]"/>
+        <ul class="widgetButton" style="float:left; padding:10px">
+          <li class="flexButton">
+              <a id="st-copy-savelink" class="submit genericOrangeButton" href="#">[% loc('Copy') %]</a>
+          </li>
+        </ul>
+        <ul class="widgetButton" style="float:left; padding:10px">
+          <li class="flexButton">
+              <a class="close genericOrangeButton" id="st-copy-cancellink" href="#">[% loc('Cancel') %]</a>
+          </li>
+        </ul>
     </div>
   </form>
 </div>

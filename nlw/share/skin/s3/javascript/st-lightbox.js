@@ -26,6 +26,10 @@ ST.Lightbox.prototype = {
             callback: callback 
         });
 
+        $(self.sel + ' .submit').click(function () {
+                $(this).parents('form').submit();
+        });
+
         // Clear errors from the previous time around: {bz: 1039}
         $(self.sel + ' .error').html('');
 

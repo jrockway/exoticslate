@@ -182,9 +182,13 @@ proto.show = function () {
         .unbind('submit')
         .submit(function () { self.create_new_page(); return false });
 
+    $('#st-create-content-lightbox .submit').click(function () {
+        $(this).parents('form').submit();
+    });
+
     $.showLightbox({
         content:'#st-create-content-lightbox',
-        close:'#st-create-content-cancellink',
+        close:'#st-create-content-lightbox .close',
         callback: function() {
             self.from_blank_radio().focus();
         }

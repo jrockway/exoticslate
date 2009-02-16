@@ -64,7 +64,15 @@
   </table>
 
   <div class="buttons">
-    <input id="email_send" type="submit" value="[% loc('Send') %]" />
-    <input id="email_cancel" type="button" value="[% loc('Cancel') %]" />
+      <ul class="widgetButton" style="float:left; padding:10px">
+        <li class="flexButton">
+            <a id="email_send" class="submit genericOrangeButton" href="#">[% loc('Send') %]</a>
+        </li>
+      </ul>
+      <ul class="widgetButton" style="float:left; padding:10px">
+        <li class="flexButton">
+            <a id="email_cancel" class="close genericOrangeButton" href="#">[% loc('Cancel') %]</a>
+        </li>
+      </ul>
   </div>
 </form>

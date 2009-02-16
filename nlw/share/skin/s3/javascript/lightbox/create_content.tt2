@@ -41,8 +41,16 @@
     </div>
 
     <div class="buttons">
-      <input id="st-create-content-savelink" type="submit" value="[% loc('Create') %]" />
-      <input class="close" id="st-create-content-cancellink" type="button" value="[% loc('Cancel') %]"/>
+        <ul class="widgetButton" style="float:left; padding:10px">
+          <li class="flexButton">
+              <a id="st-create-content-savelink" class="submit genericOrangeButton" href="#">[% loc('Create') %]</a>
+          </li>
+        </ul>
+        <ul class="widgetButton" style="float:left; padding:10px">
+          <li class="flexButton">
+              <a class="close genericOrangeButton" id="st-create-content-cancellink" href="#">[% loc('Cancel') %]</a>
+          </li>
+        </ul>
     </div>
   </form>
 </div>

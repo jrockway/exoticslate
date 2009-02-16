@@ -21,8 +21,16 @@
     <br />
 
     <div class="buttons">
-      <input id="st-rename-savelink" type="submit" value="[% loc('Rename') %]"/>
-      <input class="close" id="st-rename-cancellink" type="button" value="[% loc('Cancel') %]"/>
+        <ul class="widgetButton" style="float:left; padding:10px">
+          <li class="flexButton">
+              <a id="st-rename-savelink" class="submit genericOrangeButton" href="#">[% loc('Rename') %]</a>
+          </li>
+        </ul>
+        <ul class="widgetButton" style="float:left; padding:10px">
+          <li class="flexButton">
+              <a id="st-rename-cancellink" class="close genericOrangeButton" href="#">[% loc('Cancel') %]</a>
+          </li>
+        </ul>
     </div>
   </form>
 </div>

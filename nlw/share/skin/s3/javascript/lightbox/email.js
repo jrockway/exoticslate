@@ -89,6 +89,11 @@ proto.show = function () {
             return false;
         });
     }
+
+    $('#st-email-lightbox .submit').click(function () {
+        $(this).parents('form').submit();
+    });
+
     jQuery.showLightbox({
         content: '#st-email-lightbox',
         close: '#email_cancel',

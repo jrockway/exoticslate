@@ -19,8 +19,13 @@
     <div class="error" id="st-attachments-attach-error">&nbsp;</div>
     <div class="message" id="st-attachments-attach-uploadmessage">&nbsp;</div>
     <div class="list" id="st-attachments-attach-list"></div>
+
     <div class="buttons" id="st-attachments-attach-buttons">
-      <input id="st-attachments-attach-closebutton" type="button" value="[% loc('Done') %]"/>
+        <ul class="widgetButton" style="float:left; padding:10px">
+            <li class="flexButton">
+                <a class="genericOrangeButton" id="st-attachments-attach-closebutton" href="#">[% loc('Done') %]</a>
+            </li>
+        </ul>
     </div>
     <div style="clear:both;">&nbsp;</div>
   </form>

@@ -27,8 +27,16 @@
     <div class="hint">([% loc('The main window will navigate to the new page name after you click "Duplicate".') %])</div>
 
     <div class="buttons">
-      <input id="st-duplicate-submit" type="submit" value="[% loc('Duplicate') %]" />
-      <input class="close" id="st-duplicate-cancel" type="button" value="[% loc('Cancel') %]" />
+        <ul class="widgetButton" style="float:left; padding:10px">
+          <li class="flexButton">
+              <a id="st-duplicate-savelink" class="submit genericOrangeButton" href="#">[% loc('Duplicate') %]</a>
+          </li>
+        </ul>
+        <ul class="widgetButton" style="float:left; padding:10px">
+          <li class="flexButton">
+              <a class="close genericOrangeButton" id="st-duplicate-cancellink" href="#">[% loc('Cancel') %]</a>
+          </li>
+        </ul>
     </div>
 
   </form>

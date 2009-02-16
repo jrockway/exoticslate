@@ -102,7 +102,7 @@ info.js: ../info.yaml
 	perl -MYAML -MTemplate -e \
 	    'Template->new->process("template/$@", YAML::LoadFile("$<"))' > $@
 
-timestamp.js: $(ST_EDITOR_FILE) $(S3_SOURCE_FILES:timestamp.js%=%)
+timestamp.js: $(ST_EDITOR_FILE) $(S3_SOURCE_FILES:timestamp.js%=%) $(LIGHTBOX_OUTPUT)
 	echo 'var Socialtext = Socialtext || {};' > $@
 	perl -le 'print "Socialtext.make_time = \"" . time . "\";"' >> $@
 

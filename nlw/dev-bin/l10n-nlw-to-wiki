@@ -81,13 +81,11 @@ sub link_enterprise_features {
 }
 
 sub _call_link_control_panel {
-    my $branch_name = _get_branch_name(); 
-    shell_run("dev-bin/link-control-panel $branch_name");
+    shell_run("dev-bin/link-control-panel");
 }
 
 sub _call_link_console {
-    my $branch_name = _get_branch_name(); 
-    shell_run("dev-bin/link-console $branch_name");
+    shell_run("dev-bin/link-console");
 }
 
 sub _get_branch_name {

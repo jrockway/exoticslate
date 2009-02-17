@@ -6,6 +6,18 @@ SET client_min_messages = warning;
 
 SET search_path = public, pg_catalog;
 
+CREATE FUNCTION cleanup_sessions() RETURNS "trigger"
+    AS $$
+    BEGIN
+        -- if this is too slow, randomize running the delete
+        -- e.g. IF (RANDOM() * 5)::integer = 0 THEN ...
+        DELETE FROM sessions
+        WHERE last_updated < 'now'::timestamptz - '28 days'::interval;
+        RETURN NULL; -- after trigger
+    END
+$$
+    LANGUAGE plpgsql;
+
 CREATE FUNCTION is_page_contribution("action" text) RETURNS boolean
     AS $$
 BEGIN
@@ -723,6 +735,9 @@ CREATE INDEX ix_page_events_contribs_actor_time
 	    ON event (actor_id, "at")
 	    WHERE ((event_class = 'page') AND is_page_contribution("action"));
 
+CREATE INDEX ix_session_last_updated
+	    ON sessions (last_updated);
+
 CREATE INDEX ix_signal_at
 	    ON signal ("at");
 
@@ -796,6 +811,11 @@ CREATE UNIQUE INDEX users_lower_username_driver_key
 
 CREATE INDEX watchlist_user_workspace
 	    ON "Watchlist" (user_id, workspace_id);
+
+CREATE TRIGGER sessions_insert
+    AFTER INSERT ON sessions
+    FOR EACH STATEMENT
+    EXECUTE PROCEDURE cleanup_sessions();
 
 ALTER TABLE ONLY account_plugin
     ADD CONSTRAINT account_plugin_account_fk
@@ -1063,4 +1083,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '32');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '33');

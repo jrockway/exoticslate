@@ -25,6 +25,7 @@ It should be the last testset in this run, but it will re-enable LDAP when it fi
 * [Default User Testcases]
 
 * [Widgets Testcases]
+* [Test Case: Gadgets Galore]
 
 IE 7 uses the RSS Icons High Permissions test case
 

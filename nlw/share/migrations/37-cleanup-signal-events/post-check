@@ -11,7 +11,7 @@ diag "checking signal events";
 
 my $empty_signals = sql_singlevalue(q{
     SELECT count(*)
-    FROM signals
+    FROM signal
     WHERE body IS NULL
 });
 is $empty_signals, 0, 'no empty signals';

@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+
+DIR=/usr/share/libsocialtext-appliance-perl
+cp $DIR/appliance-repo $DIR/appliance-repo.installed

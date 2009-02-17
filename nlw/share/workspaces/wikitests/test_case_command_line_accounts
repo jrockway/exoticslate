@@ -37,7 +37,7 @@
 | st-admin | list-accounts | qr/account%%start_time%%/ |
 
  set-user-account [--username or --email] --account
- get-user-account [--username or --email]
+get-user-account [--username or --email]
 
 | *Comment* | Test Case: Command Line Tests ACCOUNTS set user and default |  |
 | st-admin | set-user-account | qr/ The command you called \(set-user-account\) requires a user to be specified.+A user can be identified by username \(--username\) or email address \(--email\)\./ |
@@ -84,5 +84,8 @@
 | *Comment* | Test Case: Command Line Tests ACCOUNTS need to deal with the file for mass-add of users |  |
 
  mass-add-users --csv --account
+
+| *Comment* | Test Case: Command Line Tests ACCOUNTS teardown |  |
+| st-admin | delete-workspace --w ws%%start_time%% --no-export | has been deleted |
 
 | *Comment* | Test Case: Command Line Tests ACCOUNTS COMPLETED |  |

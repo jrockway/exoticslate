@@ -86,4 +86,7 @@
 | *Comment* | Test Case: Pick and Manipulate Widgets |  |
 | *Comment* | st-select-widget-frame | image_widget |
 
+| *Comment* | Test Case: Multiple Widgets teardown |  |
+| st-admin | delete-workspace --w %%testws%% --no-export | has been deleted |
+
 | *Comment* | Test Case: Multiple Widgets COMPLETED |  |

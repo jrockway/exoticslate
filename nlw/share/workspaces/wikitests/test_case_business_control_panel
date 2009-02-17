@@ -45,17 +45,12 @@
 | click_ok | toggle_plugin_people |  |
 | verifyConfirmation | Socialtext People is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
 | wait_for_text_present_ok | Socialtext People (click to disable) | 20000 |
-
 | *Comment* | As of 01/09, Signals is enabled when People is enabled |  |
 | text_like | Socialtext Signals (click to disable) |  |
+
 | click_ok | toggle_plugin_signals |  |
 | verifyConfirmation | You are about to disable Socialtext Signals \n\n Press 'OK' to disable this module or 'Cancel' to exit. |  |
-
- wait_for_text_present_ok | Socialtext Signals (click to enable) | |
-click_ok | toggle_plugin_signals | |
-verifyConfirmation | Socialtext Signals is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. | |
-
-| wait_for_text_present_ok | Socialtext Signals (click to disable) | 20000 |
+| wait_for_text_present_ok | Socialtext Signals (click to enable) | 20000 |
 
 | *Comment* | Test case: Business Control Panel go the other way |  |
 | click_ok | toggle_plugin_people |  |
@@ -186,20 +181,9 @@ verifyConfirmation | Socialtext Signals is a paid option. For more information a
 
 | *Comment* | Test case: Business Control Panel Set up data for sorting |  |
 
-| st-admin | create-account --name "0 sort 1 account %%start_time%%" |  |
-
- st-admin | enable-plugin --plugin dashboard --account "0 sort 1 account %%start_time%%" | |
-st-admin | enable-plugin --plugin people --account "0 sort 1 account %%start_time%%" | |
-
-| st-admin | create-account --name "0 sort 2 account %%start_time%%" |  |
-
- st-admin | enable-plugin --plugin dashboard --account "0 sort 2 account %%start_time%%" | |
-st-admin | enable-plugin --plugin people --account "0 sort 2 account %%start_time%%" | |
-
-| st-admin | create-account --name "0 sort 3 account %%start_time%%" |  |
-
- st-admin | enable-plugin --plugin dashboard --account "0 sort 3 account %%start_time%%" | |
-st-admin | enable-plugin --plugin people --account "0 sort 3 account %%start_time%%" | |
+| st-admin | create-account --name "0 sort 1 account %%start_time%%" | was created |
+| st-admin | create-account --name "0 sort 2 account %%start_time%%" | was created |
+| st-admin | create-account --name "0 sort 3 account %%start_time%%" | was created |
 
 | st-admin | create-workspace --name 0-sort-1-workspace1-%%start_time%% --title "0 sort 1 workspace1 %%start_time%%" --account "0 sort 1 account %%start_time%%" |  |
 | st-admin | create-workspace --name 0-sort-2-workspace1-%%start_time%% --title "0 sort 2 workspace1 %%start_time%%" --account "0 sort 2 account %%start_time%%" |  |
@@ -261,7 +245,7 @@ text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_t
 | clickAndWait | link=Account |  |
 | text_like | qr/0 sort 1 account %%start_time%%.+0 sort 2 account %%start_time%%.+0 sort 3 account %%start_time%%/ |  |
 | clickAndWait | link=Account |  |
-| text_like | qr/0 sort 3 account %%start_time%%.+0 sort 2 account %%start_time%%.+0 sort 1 account %%start_time%%/ |
+| text_like | qr/0 sort 3 account %%start_time%%.+0 sort 2 account %%start_time%%.+0 sort 1 account %%start_time%%/ |  |
 
 | clickAndWait | link=Created |  |
 | text_like | qr/0-sort-3-workspace3-%%start_time%%.+0-sort-2-workspace2-%%start_time%%.+0-sort-1-workspace1-%%start_time%%/ |  |
@@ -311,11 +295,8 @@ text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_t
 | text_like | selected-users | 0 users selected |
 
 | *Comment* | Test case: Business Control Panel invite everyone to a workspace |  |
-
 | click_ok | invite-users |  |
-
 | verifyAlert | No users selected, please select at least one user and try again. |  |
-
 | click_ok | toggle_all_users |  |
 | click_and_wait | invite-users |  |
 
@@ -328,10 +309,8 @@ text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_t
 | text_like | Invite To existing workspace(s) |
 
 | *Comment* | Test case: Business Control Panel invite to new workspace |  |
-
 | click_ok | todo-invite |  |
 | click_ok | todo-create |  |
-
 | select_ok | account_id | 0 sort 3 account %%start_time%% |
 
 | *Comment* | Test case: Business Control Panel create admins |  |
@@ -355,12 +334,11 @@ text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_t
 | click_and_wait | invite-button |  |
 | text_like | errors-and-messages | qr/Congratulations! You successfully created a new workspace with \d+ users. They will receive an invitation message with a link to ws-n%%start_time%%./ |
 
-| *Comment* | TC: BCP This section tests the custom Profile fields |  |
+| *Comment* | TC: BCP This section tests the custom Profile fields. |  |
 | click_and_wait | link=Accounts |  |
+| st-admin | enable-plugin --p people --account "0 sort 3 account %%start_time%%" | The people plugin is now enabled for account 0 sort 3 account %%start_time%% |
 | click_and_wait | link=0 sort 3 account %%start_time%% |  |
-| click_ok | toggle_plugin_people |  |
-| verifyConfirmation | Socialtext People is a paid option. For more information about fees, contact your sales representative.\n\nPress 'OK' to enable this module or 'Cancel' to exit. |  |
-| wait_for_element_visible_ok | link=Profile Fields | 5000 |
+| wait_for_element_visible_ok | link=Profile Fields | 30000 |
 
 | *Comment* | TC: BCP check all the Profile Fields info |  |
 | click_and_wait | link=Profile Fields |  |
@@ -415,12 +393,13 @@ text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_t
 
 | *Comment* | Test case: Business Control Panel teardown. Let %%username%% keep accounts admin privileges. |  |
 | st-admin | remove-system-admin --email %%email%% | no longer has system admin access |
-| st-admin | delete-workspace --workspace 0-sort-1-workspace1-%%start_time%% --no-export |  |
-| st-admin | delete-workspace --workspace 0-sort-2-workspace1-%%start_time%% --no-export |  |
-| st-admin | delete-workspace --workspace 0-sort-3-workspace1-%%start_time%% --no-export |  |
-| st-admin | delete-workspace --workspace 0-sort-2-workspace2-%%start_time%% --no-export |  |
-| st-admin | delete-workspace --workspace 0-sort-3-workspace2-%%start_time%% --no-export |  |
-| st-admin | delete-workspace --workspace 0-sort-3-workspace3-%%start_time%% --no-export |  |
-| st-admin | delete-workspace --workspace %%new_workspace%% --no-export |  |
+| st-admin | delete-workspace --workspace 0-sort-1-workspace1-%%start_time%% --no-export | workspace has been deleted |
+| st-admin | delete-workspace --workspace 0-sort-2-workspace1-%%start_time%% --no-export | workspace has been deleted |
+| st-admin | delete-workspace --workspace 0-sort-3-workspace1-%%start_time%% --no-export | workspace has been deleted |
+| st-admin | delete-workspace --workspace 0-sort-2-workspace2-%%start_time%% --no-export | workspace has been deleted |
+| st-admin | delete-workspace --workspace 0-sort-3-workspace2-%%start_time%% --no-export | workspace has been deleted |
+| st-admin | delete-workspace --workspace 0-sort-3-workspace3-%%start_time%% --no-export | workspace has been deleted |
+| st-admin | delete-workspace --workspace %%new_workspace%% --no-export | workspace has been deleted |
+| st-admin | delete-workspace --workspace ws-n%%start_time%% --no-export | workspace has been deleted |
 
 | *Comment* | Test case: Business Control Panel COMPLETED |  |

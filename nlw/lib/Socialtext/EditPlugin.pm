@@ -134,7 +134,7 @@ sub edit_content {
     }
 
     $self->_signal_edit_summary($edit_summary, $page)
-        if $edit_summary;
+        if $self->cgi->signal_edit_summary;
 
     # Move attachments uploaded to 'Untitled Page' to the actual page
     my @attach = $self->cgi->attachment;

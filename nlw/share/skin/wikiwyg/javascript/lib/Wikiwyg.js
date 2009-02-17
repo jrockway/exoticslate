@@ -1474,20 +1474,23 @@ function setup_wikiwyg() {
 
         if ( skip ) { return false; }
 
-        jQuery('<input type="hidden" name="add_tag" />')
-            .attr('id', 'st-tagqueue-'+rand)
-            .attr('value', tag)
-            .appendTo('#st-page-editing-files');
+        jQuery("#st-page-editing-files")
+            .append('<input type="hidden" name="add_tag" id="st-tagqueue-' + rand + '" value="' + tag + '" />');
 
         jQuery('#st-tagqueue-list').show();
-        jQuery('<span class="st-tagqueue-taglist-name" />')
-            .attr('id', 'st-taglist-'+rand)
+
+        jQuery("#st-tagqueue-list")
             .append(
-                jQuery('.st-tagqueue-taglist-name').size() ? ', ' : '',
-                tag,
-                jQuery('<a class="st-tagqueue-taglist-delete" />')
+                '<span class="st-tagqueue-taglist-name" id="st-taglist-'+rand+'">'
+                + (jQuery('.st-tagqueue-taglist-name').size() ? ', ' : '')
+                + tag
+                + '</span>'
+            );
+
+        jQuery("#st-taglist-" + rand)
+            .append(
+                jQuery('<a href="#" class="st-tagqueue-taglist-delete" />')
                     .attr('title', loc("Remove [_1] from the queue", tag))
-                    .attr('href', '#')
                     .click(function () {
                         jQuery('#st-taglist-'+rand).remove();
                         jQuery('#st-tagqueue-'+rand).remove();
@@ -1499,9 +1502,9 @@ function setup_wikiwyg() {
                         ? '<img src="/static/skin/common/images/delete.png" width="16" height="16" border="0" />'
                         : '[x]'
                     )
-            )
-            .appendTo('#st-tagqueue-list');
-        return false;
+            );
+
+       return false;
     };
 
     if (Socialtext.S3) {

@@ -109,7 +109,7 @@
 </div><!-- controls END -->
 
 <div class="lightbox" id="st-tagqueue-interface">
-    <form id="st-tagqueue" onsubmit="return false">
+    <form id="st-tagqueue">
         <div class="title" id="st-tagqueue-title">[% loc('Add Tags') %]</div>
         <p id="st-tagqueue-tagprompt">
             [% loc('Tag:') %] <input id="st-tagqueue-field" class="st-tagqueue-input" type="text" name="tagfield"/>

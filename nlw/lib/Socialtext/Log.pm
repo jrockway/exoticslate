@@ -86,10 +86,11 @@ sub st_timed_log {
     my $method = shift;
     my $command = shift;
     my $name = shift;
+    my $user = shift;
     my $data = shift || {};
     my $times = shift || {};
 
-    my $message = uc($command) . ',' . uc($name) . ',';
+    my $message = uc($command) . ',' . uc($name) . ',' . 'ACTOR_ID:' . $user->user_id . ',';
 
     $message .= join(',', map { $_.':'.$data->{$_} } sort keys %$data);
 

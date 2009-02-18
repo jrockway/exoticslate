@@ -142,6 +142,7 @@ sub log_timings {
             'info',
             'WEB',
             $message,
+            $handler->user,
             $data,
             Socialtext::Timer->Report()
         );

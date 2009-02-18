@@ -2653,7 +2653,9 @@ sub _success {
         args => join ' ', @ARGV,
     };
     st_timed_log(
-        'info', 'CLI', $self->{command}, $data,
+        'info', 'CLI', $self->{command},
+        Socialtext::User->SystemUser(),
+        $data,
         Socialtext::Timer->Report()
     );
 

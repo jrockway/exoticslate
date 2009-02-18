@@ -90,8 +90,6 @@ sub st_timed_log {
     my $times = shift || {};
 
     my $message = uc($command) . ',' . uc($name) . ',';
-    my $key;
-    my $value;
 
     $message .= join(',', map { $_.':'.$data->{$_} } sort keys %$data);
 

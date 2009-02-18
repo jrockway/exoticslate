@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Socialtext::Migration::Utils qw/ensure_socialtext_schema/;
 use File::Basename qw(basename);
 use Socialtext::Storage;
 use Socialtext::SQL qw(sql_execute);
@@ -13,6 +14,8 @@ use Socialtext::Workspace;
 
 use Socialtext::Pluggable::Plugin::Widgets;
 use Socialtext::Gadgets::XML;
+
+ensure_socialtext_schema( 31 );
 
 my $main = Socialtext->new();
 my $hub  = $main->load_hub(

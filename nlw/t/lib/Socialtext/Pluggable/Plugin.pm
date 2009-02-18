@@ -15,6 +15,7 @@ use unmocked 'File::Glob';
 my %hooks;
 my %rests;
 
+sub reverse_dependencies { }
 sub dependencies { }
 sub enables {}
 const priority => 100;

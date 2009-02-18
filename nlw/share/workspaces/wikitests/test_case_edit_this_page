@@ -31,7 +31,7 @@
 | click_ok | st-preview-button-link |  |
 | wait_for_element_visible_ok | st-page-preview | 30000 |
 | text_like | st-page-preview | Edit This Page content %%start_time%% |
-| text_like | st-preview-button-link | Edit |
+| text_like | st-preview-button-link | Edit More |
 | click_ok | st-preview-button-link |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | verify_value | wikiwyg_wikitext_textarea | Edit This Page content %%start_time%% |
@@ -40,17 +40,23 @@
 | *Comment* | Test Case: Edit This Page from Preview to Simple |  |
 | click_ok | st-preview-button-link |  |
 | wait_for_element_visible_ok | st-page-preview | 30000 |
-| text_like | st-preview-button-link | Edit |
+| text_like | st-preview-button-link | Edit More |
 | click_ok | link=Rich Text |  |
+
+| *Comment* | Test Case: Edit This Page. No choice but to wait for Rich Text mode to render |  |
+| pause | 5000 | Don't take this out or IE will fail |
 | wait_for_element_visible_ok | st-page-editing-toolbar | 30000 |
 
 | *Comment* | Test Case: Edit This Page from Preview to Advanced |  |
 | text_like | st-preview-button-link | Preview |
 | click_ok | st-preview-button-link |  |
 | wait_for_element_visible_ok | st-page-preview | 30000 |
-| text_like | st-preview-button-link | Edit |
+| text_like | st-preview-button-link | Edit More |
 | click_ok | link=Wiki Text |  |
+
+| *Comment* | Test Case: Edit This Page. No choice but to wait for Wiki Text mode to render |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| pause | 5000 | Don't take this out or IE will fail |
 | verify_value | wikiwyg_wikitext_textarea | Edit This Page content %%start_time%% |
 | text_like | st-preview-button-link | Preview |
 | click_and_wait | st-save-button-link |  |

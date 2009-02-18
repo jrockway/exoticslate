@@ -30,12 +30,13 @@
 | pause | 60000 |
 
 | *Comment* | Test Case: Email attachment email Check Reception |  |
+
+| st-admin | index-workspace --workspace %%workspace%% --sync |  |
 | open_ok | /%%workspace%%/index.cgi?Email subject %%start_time%% |  |
 | text_like | st-page-titletext | Email subject %%start_time%% |
 | text_like | contentContainer | Note %%start_time%% from Test Case: Email |
 | type_ok | st-search-term | "Note %%start_time%%" |
 | click_and_wait | st-search-submit |  |
-| pause | 5000 |
 | text_like | contentContainer | Email subject %%start_time%% in %%title%% |
 | text_like | contentContainer | qr/attached to page Email subject %%start_time%%/i |
 
@@ -47,7 +48,6 @@
 | st-admin | index-workspace --workspace %%workspace%% --sync |  |
 | type_ok | st-search-term | "Note %%start_time%%" |
 | click_and_wait | st-search-submit |  |
-| pause | 5000 |
 | text_like | contentContainer | Email subject %%start_time%% |
 | text_unlike | contentContainer | qr/attached to page Email subject %%start_time%%/i |
 

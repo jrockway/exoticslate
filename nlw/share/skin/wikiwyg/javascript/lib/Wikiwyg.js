@@ -1322,12 +1322,22 @@ function setup_wikiwyg() {
 
     jQuery('#st-edit-summary .input')
         .change(ww.update_edit_summary_preview)
-        .keypress(ww.update_edit_summary_preview)
+        .keydown(ww.update_edit_summary_preview)
         .click(ww.update_edit_summary_preview);
+
+    /***
+     * For {bz: 2088}: Using our default text display, we can fit
+     * about 44 "M" chars, the widest displaying character, in a line
+     * of preview text. Let's add a <wbr> tag to let the browser wrap
+     * if it wants to.
+     ***/
+    ww.force_break = function (str) {
+        return str.replace(/(.{44})/g, '$1<wbr>');
+    }
 
     ww.word_truncate = function (s, len) {
         if (!s || !len) return '';
-        if (s.length <= len) return s
+        if (s.length <= len) return ww.force_break(s);
 
         var truncated = "";
         var parts = s.split(' ');
@@ -1345,6 +1355,7 @@ function setup_wikiwyg() {
                 truncated = parts[0].slice(0, len);
             }
         }
+        truncated = ww.force_break(truncated);
         return truncated.replace(/ +$/, '') + '&hellip;';
     }
 
@@ -1474,20 +1485,24 @@ function setup_wikiwyg() {
 
         if ( skip ) { return false; }
 
-        jQuery('<input type="hidden" name="add_tag" />')
-            .attr('id', 'st-tagqueue-'+rand)
-            .attr('value', tag)
-            .appendTo('#st-page-editing-files');
+        jQuery("#st-page-editing-files")
+            .append(jQuery('<input type="hidden" name="add_tag" id="st-tagqueue-' + rand +'" />').val(tag));
 
         jQuery('#st-tagqueue-list').show();
-        jQuery('<span class="st-tagqueue-taglist-name" />')
-            .attr('id', 'st-taglist-'+rand)
+
+        jQuery("#st-tagqueue-list")
             .append(
-                jQuery('.st-tagqueue-taglist-name').size() ? ', ' : '',
-                tag,
-                jQuery('<a class="st-tagqueue-taglist-delete" />')
+                jQuery('<span class="st-tagqueue-taglist-name" id="st-taglist-'+rand+'" />')
+                .text(
+                    (jQuery('.st-tagqueue-taglist-name').size() ? ', ' : '')
+                    + tag
+                )
+            );
+
+        jQuery("#st-taglist-" + rand)
+            .append(
+                jQuery('<a href="#" class="st-tagqueue-taglist-delete" />')
                     .attr('title', loc("Remove [_1] from the queue", tag))
-                    .attr('href', '#')
                     .click(function () {
                         jQuery('#st-taglist-'+rand).remove();
                         jQuery('#st-tagqueue-'+rand).remove();
@@ -1499,9 +1514,9 @@ function setup_wikiwyg() {
                         ? '<img src="/static/skin/common/images/delete.png" width="16" height="16" border="0" />'
                         : '[x]'
                     )
-            )
-            .appendTo('#st-tagqueue-list');
-        return false;
+            );
+
+       return false;
     };
 
     if (Socialtext.S3) {

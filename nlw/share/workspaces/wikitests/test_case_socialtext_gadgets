@@ -1,7 +1,7 @@
 | *Comment* | Test Case: Socialtext Gadgets |  |
-| set_default | clear_socialtext | `?action=clear_widgets` |
 
-| open_ok | /%%clear_socialtext%% |  |
+| set_timeout | 60000 | Widgets slow down open / a lot |
+| open_ok | /?action=clear_widgets |  |
 
 | *Comment* | Test Case: Socialtext Gadgets. All People Tags |  |
 

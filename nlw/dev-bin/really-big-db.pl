@@ -15,9 +15,9 @@ my $ACCOUNTS = 1000;
 my $USERS = 2000; # _Must_ be bigger than $ACCOUNTS
 my $PAGES = 1000;
 my $MAX_WS_ASSIGN = 50; # must be much smaller than accounts (at least 20x smaller)
-my $PAGE_VIEW_EVENTS = 4500;
-my $OTHER_EVENTS = 5000;
-my $WRITES_PER_COMMIT = 2500;
+my $PAGE_VIEW_EVENTS = 45000;
+my $OTHER_EVENTS = 50000;
+my $WRITES_PER_COMMIT = 5000;
 my $SIGNALS = 100_000;
 
 my $create_ts = '2007-01-01 00:00:00+0000';
@@ -290,7 +290,7 @@ print "\n";
         my $actor = $users[int(rand(scalar @users))];
         my $page = $pages[int(rand(scalar @pages))];
         $ev_sth->execute(
-            $create_ts, rand(int($PAGES)).' seconds', 
+            $create_ts, sprintf('%0.6f', rand($PAGES)).' seconds', 
             $actor, $page->[0], $page->[1]
         );
         $writes++;
@@ -346,9 +346,8 @@ print "\n";
     print "Generating $SIGNALS signals";
 
     my $sig_sth = $dbh->prepare_cached(q{
-        INSERT INTO signal (
-            signal_id, user_id, body
-        ) VALUES ( nextval('signal_id_seq'), ?, ? )
+        INSERT INTO signal (signal_id, user_id, body, at) 
+        VALUES (nextval('signal_id_seq'), ?, ?, 'now'::timestamptz + ?::interval)
     });
 
     my $ev_sth = $dbh->prepare_cached(q{
@@ -363,9 +362,8 @@ print "\n";
     });
 
     my $topic_sth = $dbh->prepare_cached(q{
-        INSERT INTO topic_signal_page (
-            signal_id, workspace_id, page_id
-        ) VALUES ( currval('signal_id_seq'), ?, ? )
+        INSERT INTO topic_signal_page (signal_id, workspace_id, page_id) 
+        VALUES (currval('signal_id_seq'), ?, ?)
     });
 
     for ( my $i = 0; $i < $SIGNALS; $i++ ) {
@@ -373,19 +371,23 @@ print "\n";
         my $user         = $users[int(rand(scalar @users))];
         my $page         = $pages[int(rand(scalar @pages))];
         my $action       = ( $is_page_edit ) ? 'edit_save' : 'signal';
+        my $interval     = rand(int($SIGNALS)).' seconds';
 
-        $sig_sth->execute($user, "booty $is_page_edit");
+        $sig_sth->execute($user, "booty $is_page_edit", $interval);
+        $writes++;
 
-        $topic_sth->execute($page->[0], $page->[1])
-            if $is_page_edit;
+        if ($is_page_edit) {
+            $topic_sth->execute($page->[0], $page->[1]);
+            $writes++;
+        }
 
         $ev_sth->execute(
-            $create_ts, int(rand($PAGES)) . ' seconds',
+            $create_ts, $interval,
             'signal', $action,    $user,
             $user,    $page->[0], $page->[1]
         );
-
         $writes++;
+
         maybe_commit();
     }
 

@@ -77,13 +77,14 @@ LDAP Testcases will Enable LDAP and use a known LDAP user instead of a Default u
 
 Removed Default User Testcases from Safari since one of those testcases requires high permissions and it is sufficient to test Default User Testcases in the other browsers.
 
-Widget tests should run. Make sure you have socialtext dashboard turned on.
-
-* [Widgets Testcases]
-
 Profile testcases
 
 * [Profile Testcases]
+
+Widgets testcases
+
+* [Safari Widgets Testcases]
+* [Test Case: Gadgets Galore]
 
 Non-Safari cases
 Test Case: Edit This Page
@@ -94,5 +95,6 @@ Test Case: Link Interface
 Test Case: Preview Format
 Test Case: RSS Icons
 Calc Testcases
+Default User Testcases
 
 Cannot run File Testcases because Safari does not display a file textbox and only allows file browsing

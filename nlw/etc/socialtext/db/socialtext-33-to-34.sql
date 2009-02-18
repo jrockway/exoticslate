@@ -1,37 +1,65 @@
 BEGIN;
 
-CREATE TABLE gallery (
-    account_id bigint NOT NULL,
-    last_update timestamptz DEFAULT now() NOT NULL
+-- create a simple user signal rollup table.  This can be used to work around
+-- some degenerate behaviour, as well as providing some fast summaries :)
+
+CREATE TABLE rollup_user_signal (
+    user_id bigint NOT NULL,
+    sent_latest timestamptz NOT NULL DEFAULT '-infinity'::timestamptz,
+    sent_earliest timestamptz NOT NULL DEFAULT 'infinity'::timestamptz,
+    sent_count bigint NOT NULL DEFAULT 0
 );
+CREATE INDEX ix_rollup_user_signal_user ON rollup_user_signal (user_id);
+ALTER TABLE rollup_user_signal
+    ADD CONSTRAINT "rollup_user_signal_user_id_fk"
+    FOREIGN KEY (user_id)
+    REFERENCES users (user_id)
+    ON DELETE CASCADE;
 
-CREATE TABLE gallery_gadget (
-    gadget_id bigint NOT NULL,
-    account_id bigint NOT NULL,
-    position INTEGER NOT NULL,
-    socialtext BOOLEAN NOT NULL
-);
-    
-ALTER TABLE ONLY gallery
-    ADD CONSTRAINT gallery_pk
-            PRIMARY KEY (account_id),
-    ADD CONSTRAINT gallery_account_fk
-            FOREIGN KEY (account_id)
-            REFERENCES "Account"(account_id) ON DELETE CASCADE;
+-- populate the rollup as follows:
+INSERT INTO rollup_user_signal (user_id, sent_latest, sent_earliest, sent_count)
+SELECT user_id, MAX(at) AS sent_latest, MIN(at) AS sent_earliest, COUNT(1) AS sent_count
+  FROM signal
+GROUP BY user_id;
 
-ALTER TABLE ONLY gallery_gadget
-    ADD CONSTRAINT gallery_gadget_fk
-            FOREIGN KEY (gadget_id)
-            REFERENCES gadget(gadget_id) ON DELETE CASCADE,
-    ADD CONSTRAINT gallery_gadget_account_fk
-            FOREIGN KEY (account_id)
-            REFERENCES gallery(account_id) ON DELETE CASCADE;
+-- create a trigger to add a rollup entry for each user
+CREATE FUNCTION auto_vivify_user_rollups() RETURNS "trigger"
+AS $$
+    BEGIN
+        INSERT INTO rollup_user_signal (user_id) VALUES (NEW.user_id);
+        RETURN NULL; -- trigger return val is ignored
+    END
+$$ LANGUAGE plpgsql;
 
-ALTER TABLE ONLY gadget
-    ADD COLUMN description TEXT;
+CREATE TRIGGER users_insert
+    AFTER INSERT ON users
+    FOR EACH ROW
+    EXECUTE PROCEDURE auto_vivify_user_rollups();
+
+-- create a trigger to update the rollup entry for each signal added
+CREATE FUNCTION signal_sent() RETURNS "trigger"
+AS $$
+    BEGIN
+
+        UPDATE rollup_user_signal
+           SET sent_count = sent_count + 1,
+               sent_latest = GREATEST(NEW."at", sent_latest),
+               sent_earliest = LEAST(NEW."at", sent_earliest)
+         WHERE user_id = NEW.user_id;
+
+        NOTIFY new_signal; -- not strictly needed yet
+
+        RETURN NULL; -- trigger return val is ignored
+    END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER signal_insert
+    AFTER INSERT ON signal
+    FOR EACH ROW
+    EXECUTE PROCEDURE signal_sent();
 
 UPDATE "System"
-    SET value = '33'
+    SET value = 34
     WHERE field = 'socialtext-schema-version';
 
 COMMIT;

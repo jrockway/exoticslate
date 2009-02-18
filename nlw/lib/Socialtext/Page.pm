@@ -726,6 +726,12 @@ sub store {
     Carp::confess('no user given to Socialtext::Page->store')
         unless $p{user};
 
+    # Fix for {bz 2099} -- guard against storing an "Untitled Page".
+    if ($self->id eq 'untitled_page') {
+        die loc('"[_1]" is a reserved name. Please use a different name.',
+            'Untitled Page');
+    }
+
     # Make sure we have minimal metadata needed to store a page
     $self->metadata->update( user => $p{user} )
         unless $self->metadata->Revision;

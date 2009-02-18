@@ -780,6 +780,10 @@ proto.set_clear_handler = function () {
 
         /* We've just unbound the paste handler, so re-enable it here */
         self.set_key_interception_handler();
+
+        /* Re-enable clicking out of edit summary popup {bz: 2094} */
+        jQuery(editor)
+            .bind("mousedown", function () { jQuery('#st-edit-summary').hide(); });
     };
 
     try {
@@ -1052,7 +1056,7 @@ proto.do_new_table = function() {
             .bind("click", function() {
                 self.closeTableDialog();
             });
-        jQuery("#lightbox").one("unload", function() {
+        jQuery("#lightbox").one("lightbox-unload", function() {
             self.set_focus();
         });
     }
@@ -2697,7 +2701,7 @@ proto.getWidgetInput = function(widget_element, selection, new_widget) {
     var form = jQuery('#widget-' + widget + ' form').get(0);
 
     // When the lightbox is closed, decrement widget_editing so lightbox can pop up again. 
-    jQuery('#lightbox').unload(function(){
+    jQuery('#lightbox').bind("lightbox-unload", function(){
         Wikiwyg.Widgets.widget_editing--;
         if (self.wikiwyg && self.wikiwyg.current_mode && self.wikiwyg.current_mode.set_focus) {
             self.wikiwyg.current_mode.set_focus();

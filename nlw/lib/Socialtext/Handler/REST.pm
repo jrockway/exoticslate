@@ -133,10 +133,18 @@ sub log_timings {
             ? scalar( $handler->request->args )
             : '';
 
-        my $data
-            = { %template_vars, ( $query_string ? (q => $query_string) : () ) };
+        my $data = {
+            %template_vars,
+            ( $query_string ? (q => $query_string) : () )
+        };
 
-        st_timed_log( 'info', 'WEB', $message, $data, Socialtext::Timer->Report() );
+        st_timed_log(
+            'info',
+            'WEB',
+            $message,
+            $data,
+            Socialtext::Timer->Report()
+        );
     }
 }
 
@@ -179,7 +187,7 @@ sub run {
 #
 # Without this, file uploads do not work with CGI.pm 3.10
 # Once we upgrade CGI.pm, we can remove this function and go back to calling
-# defaultQueryObject. 
+# defaultQueryObject.
 #
 # It might be the problem fixed in CGI.pm 3.29 where file handles were not
 # being reset to zero each time CGI->new is called.
@@ -262,7 +270,7 @@ sub postHandler {
     # We check on existence rather than definedness, because someone might
     # have set a header to undef on purpose, so at to indicate not printing it
     # at all.
-    
+
     unless (exists $headers{'-cache_control'} ||
             exists $headers{'-Cache-control'} ||
             exists $headers{'-pragma'} ||
@@ -286,7 +294,7 @@ sub postHandler {
     # 204 and 205 responses *must not* have a message-body, according to RFC 2616.
     if (($headers{'-status'} && $headers{'-status'} =~ /^20[45]/) ||
         !defined($$resultref) ||
-        (!ref($$resultref) && length($$resultref) == 0)) 
+        (!ref($$resultref) && length($$resultref) == 0))
     {
         $$resultref = undef;
         delete $headers{$_} for (grep /^-?content[-_]length$/i, keys %headers);

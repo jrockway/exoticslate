@@ -123,7 +123,7 @@
 
     $.fn.hideLightbox = function() {
         if (opts) {
-            $('#lightbox').trigger('unload');
+            $('#lightbox').trigger('lightbox-unload');
             if (opts.content)
                 $(opts.content).hide().appendTo('body');
             $('#overlay').fadeOut(opts.speed);

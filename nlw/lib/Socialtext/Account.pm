@@ -909,6 +909,10 @@ Returns a count of all accounts.
 Inserts required accounts into the DBMS if they are not present. See
 L<Socialtext::Data> for more details on required data.
 
+=item Socialtext::Account->PluginsEnabledForAny()
+
+Plugin(s) enabled for any account
+
 =item Socialtext::Account->EnablePluginForAll($plugin)
 
 Enables a plugin for all accounts

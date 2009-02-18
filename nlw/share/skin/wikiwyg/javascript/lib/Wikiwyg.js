@@ -1288,6 +1288,14 @@ function setup_wikiwyg() {
         if (! ok_to_show_summary) return;
         if (! jQuery('#st-edit-summary').is(':hidden')) return;
         var $input = jQuery('#st-edit-summary .input');
+
+        // position cursor at the end of the input field
+        var r = $input[0].createTextRange && $input[0].createTextRange();
+        if (r) {
+            r.collapse(true);
+            r.select();
+        }
+
         if (ww.edit_summary() == '')
             $input.val('');
         jQuery('#st-edit-summary').show();

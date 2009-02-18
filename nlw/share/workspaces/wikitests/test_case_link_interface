@@ -63,6 +63,11 @@
 | click_ok | st-widget-link-cancelbutton |  |
 | wait_for_element_not_visible_ok | add-wiki-link | 30000 |
 
+| *Comment* | Test Case: Link Interface try setting the focus |  |
+| click_ok | link=Wiki Text |  |
+| click_ok | link=Rich Text |  |
+| pause | 5000 |  |
+
 | *Comment* | Test Case: Link Interface make a Web link |  |
 | wait_for_element_visible_ok | wikiwyg_button_link | 30000 |
 | click_ok | wikiwyg_button_link |  |

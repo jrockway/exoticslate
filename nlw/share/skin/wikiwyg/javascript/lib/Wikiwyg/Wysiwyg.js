@@ -780,6 +780,10 @@ proto.set_clear_handler = function () {
 
         /* We've just unbound the paste handler, so re-enable it here */
         self.set_key_interception_handler();
+
+        /* Re-enable clicking out of edit summary popup {bz: 2094} */
+        jQuery(editor)
+            .bind("mousedown", function () { jQuery('#st-edit-summary').hide(); });
     };
 
     try {

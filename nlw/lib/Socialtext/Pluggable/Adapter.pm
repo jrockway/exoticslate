@@ -15,7 +15,6 @@ use File::chdir;
 use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
                       search_dirs => \@libs;
 use Socialtext::Pluggable::WaflPhrase;
-use Socialtext::Log 'st_timed_log';
 use List::Util qw(first);
 
 # These hook types are executed only once, all other types are called as many
@@ -70,11 +69,6 @@ sub handler {
         $res = $self->hook('root', $rest);
         $rest->header($self->hub->rest->header);
     }
-
-#     st_timed_log(
-#         'info', 'ADAPTER', $action, {},
-#         Socialtext::Timer->Report()
-#     );
     return $res;
 }
 

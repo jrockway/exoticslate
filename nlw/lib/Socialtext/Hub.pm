@@ -16,7 +16,6 @@ use Socialtext::Challenger;
 use Socialtext::l10n qw(loc);
 use Socialtext::WebApp;
 use Socialtext::Plugin;
-use Socialtext::Log 'st_timed_log';
 use Socialtext::Timer;
 
 sub class_id { 'hub' }

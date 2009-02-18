@@ -6,6 +6,15 @@ SET client_min_messages = warning;
 
 SET search_path = public, pg_catalog;
 
+CREATE FUNCTION auto_vivify_user_rollups() RETURNS "trigger"
+    AS $$
+        BEGIN
+            INSERT INTO rollup_user_signal (user_id) VALUES (NEW.user_id);
+            RETURN NULL; -- after trigger
+        END
+    $$
+    LANGUAGE plpgsql;
+
 CREATE FUNCTION cleanup_sessions() RETURNS "trigger"
     AS $$
     BEGIN
@@ -29,6 +38,23 @@ BEGIN
 END;
 $$
     LANGUAGE plpgsql IMMUTABLE;
+
+CREATE FUNCTION signal_sent() RETURNS "trigger"
+    AS $$
+        BEGIN
+
+            UPDATE rollup_user_signal
+               SET sent_count = sent_count + 1,
+                   sent_latest = GREATEST(NEW."at", sent_latest),
+                   sent_earliest = LEAST(NEW."at", sent_earliest)
+             WHERE user_id = NEW.user_id;
+
+            NOTIFY new_signal;
+
+            RETURN NULL;
+        END
+    $$
+    LANGUAGE plpgsql;
 
 CREATE AGGREGATE array_accum (
     BASETYPE = anyelement,
@@ -394,6 +420,13 @@ CREATE TABLE profile_relationship (
     other_user_id bigint NOT NULL
 );
 
+CREATE TABLE rollup_user_signal (
+    user_id bigint NOT NULL,
+    sent_latest timestamptz DEFAULT '-infinity'::timestamptz NOT NULL,
+    sent_earliest timestamptz DEFAULT 'infinity'::timestamptz NOT NULL,
+    sent_count bigint DEFAULT 0 NOT NULL
+);
+
 CREATE TABLE search_set_workspaces (
     search_set_id bigint NOT NULL,
     workspace_id bigint NOT NULL
@@ -735,6 +768,9 @@ CREATE INDEX ix_page_events_contribs_actor_time
 	    ON event (actor_id, "at")
 	    WHERE ((event_class = 'page') AND is_page_contribution("action"));
 
+CREATE INDEX ix_rollup_user_signal_user
+	    ON rollup_user_signal (user_id);
+
 CREATE INDEX ix_session_last_updated
 	    ON sessions (last_updated);
 
@@ -816,6 +852,16 @@ CREATE TRIGGER sessions_insert
     AFTER INSERT ON sessions
     FOR EACH STATEMENT
     EXECUTE PROCEDURE cleanup_sessions();
+
+CREATE TRIGGER signal_insert
+    AFTER INSERT ON signal
+    FOR EACH ROW
+    EXECUTE PROCEDURE signal_sent();
+
+CREATE TRIGGER users_insert
+    AFTER INSERT ON users
+    FOR EACH ROW
+    EXECUTE PROCEDURE auto_vivify_user_rollups();
 
 ALTER TABLE ONLY account_plugin
     ADD CONSTRAINT account_plugin_account_fk
@@ -1032,6 +1078,11 @@ ALTER TABLE ONLY profile_relationship
             FOREIGN KEY (user_id)
             REFERENCES users(user_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY rollup_user_signal
+    ADD CONSTRAINT rollup_user_signal_user_id_fk
+            FOREIGN KEY (user_id)
+            REFERENCES users(user_id) ON DELETE CASCADE;
+
 ALTER TABLE ONLY signal
     ADD CONSTRAINT signal_user_id_fk
             FOREIGN KEY (user_id)
@@ -1083,4 +1134,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '33');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '34');

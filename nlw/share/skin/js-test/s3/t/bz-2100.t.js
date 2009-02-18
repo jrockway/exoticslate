@@ -21,14 +21,19 @@ t.runAsync([
     t.doSavePage(),
 
     function() { 
-        t.is(
+        var texts = [
             t.$('a.tag_name:first').text(),
+            t.$('a.tag_name:last').text()
+        ].sort();
+
+        t.is(
+            texts[0],
             'double " quote',
             "Double quote works when added as a tag in rich text mode"
         );
 
         t.is(
-            t.$('a.tag_name:last').text(),
+            texts[1],
             'left < caret',
             "Left caret works when added as a tag in rich text mode"
         );

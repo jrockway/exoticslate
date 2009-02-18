@@ -1486,16 +1486,17 @@ function setup_wikiwyg() {
         if ( skip ) { return false; }
 
         jQuery("#st-page-editing-files")
-            .append('<input type="hidden" name="add_tag" id="st-tagqueue-' + rand + '" value="' + tag + '" />');
+            .append(jQuery('<input type="hidden" name="add_tag" id="st-tagqueue-' + rand +'" />').val(tag));
 
         jQuery('#st-tagqueue-list').show();
 
         jQuery("#st-tagqueue-list")
             .append(
-                '<span class="st-tagqueue-taglist-name" id="st-taglist-'+rand+'">'
-                + (jQuery('.st-tagqueue-taglist-name').size() ? ', ' : '')
-                + tag
-                + '</span>'
+                jQuery('<span class="st-tagqueue-taglist-name" id="st-taglist-'+rand+'" />')
+                .text(
+                    (jQuery('.st-tagqueue-taglist-name').size() ? ', ' : '')
+                    + tag
+                )
             );
 
         jQuery("#st-taglist-" + rand)

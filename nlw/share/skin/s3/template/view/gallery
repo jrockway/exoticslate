@@ -9,25 +9,39 @@
 <div id="controlsRight"></div>
 </div>
 <div id="contentContainer">
+    <table class="gallery_section">
+        <tr>
+            <th colspan="1">[% loc('Socialtext') %]</th>
+        </tr>
+        [% FOREACH widget IN widgets %]
+        [% NEXT UNLESS widget.plugin %]
+        <tr>
+            <td class="description">
+                <a href="?action=add_widget;src=[% widget.src | uri %];container_id=[% container_id %][% IF target_id %];target_id=[% target_id %][% END %]">
+                    [% widget.title %]
+                </a>
+                <br/>
+                [% widget.description %]
+            </td>
+        </tr>
+        [% END %]
 
-    [% FOR section IN ['Socialtext', 'Third party'] %]
-        <table class="gallery_section">
-            <tr>
-                <th colspan="1">[% section %]</th>
-            </tr>
-            [% FOREACH widget IN widgets.$section %]
-            <tr>
-                <td class="description">
-                    <a href="?action=add_widget;src=[% widget.src | uri %];container_id=[% container_id %][% IF target_id %];target_id=[% target_id %][% END %]">
-                        [% widget.title %]
-                    </a>
-                    <br/>
-                    [% widget.desc %]
-                </td>
-            </tr>
-            [% END %]
-        </table>
-    [% END %]
+        <tr>
+            <th colspan="1">[% loc('Third Party') %]</th>
+        </tr>
+        [% FOREACH widget IN widgets %]
+        [% NEXT IF widget.plugin %]
+        <tr>
+            <td class="description">
+                <a href="?action=add_widget;src=[% widget.src | uri %];container_id=[% container_id %][% IF target_id %];target_id=[% target_id %][% END %]">
+                    [% widget.title %]
+                </a>
+                <br/>
+                [% widget.description %]
+            </td>
+        </tr>
+        [% END %]
+    </table>
 </div>
 [% END %]
 

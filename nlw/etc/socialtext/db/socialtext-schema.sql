@@ -195,7 +195,7 @@ CREATE TABLE container (
     user_id bigint,
     workspace_id bigint,
     account_id bigint,
-    name text NOT NULL DEFAULT '',
+    name text DEFAULT '' NOT NULL,
     page_id text,
     CONSTRAINT container_scope_ptr
             CHECK ((((user_id IS NOT NULL) <> (workspace_id IS NOT NULL)) <> (account_id IS NOT NULL)) <> (page_id IS NOT NULL))
@@ -257,7 +257,8 @@ CREATE TABLE gadget (
     title text,
     thumbnail text,
     scrolling boolean DEFAULT false,
-    height integer
+    height integer,
+    description text
 );
 
 CREATE SEQUENCE gadget_id
@@ -312,6 +313,18 @@ CREATE SEQUENCE gadget_user_pref_id
     NO MAXVALUE
     NO MINVALUE
     CACHE 1;
+
+CREATE TABLE gallery (
+    account_id bigint NOT NULL,
+    last_update timestamptz DEFAULT now() NOT NULL
+);
+
+CREATE TABLE gallery_gadget (
+    gadget_id bigint NOT NULL,
+    account_id bigint NOT NULL,
+    "position" integer NOT NULL,
+    socialtext boolean NOT NULL
+);
 
 CREATE TABLE page (
     workspace_id bigint NOT NULL,
@@ -567,6 +580,10 @@ ALTER TABLE ONLY gadget
 ALTER TABLE ONLY gadget_user_pref
     ADD CONSTRAINT gadget_user_pref_pk
             PRIMARY KEY (user_pref_id);
+
+ALTER TABLE ONLY gallery
+    ADD CONSTRAINT gallery_pk
+            PRIMARY KEY (account_id);
 
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_pkey
@@ -942,6 +959,21 @@ ALTER TABLE ONLY gadget_user_pref
             FOREIGN KEY (gadget_id)
             REFERENCES gadget(gadget_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY gallery
+    ADD CONSTRAINT gallery_account_fk
+            FOREIGN KEY (account_id)
+            REFERENCES "Account"(account_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY gallery_gadget
+    ADD CONSTRAINT gallery_gadget_account_fk
+            FOREIGN KEY (account_id)
+            REFERENCES gallery(account_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY gallery_gadget
+    ADD CONSTRAINT gallery_gadget_fk
+            FOREIGN KEY (gadget_id)
+            REFERENCES gadget(gadget_id) ON DELETE CASCADE;
+
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_creator_id_fk
             FOREIGN KEY (creator_id)
@@ -1063,4 +1095,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '32');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '33');
